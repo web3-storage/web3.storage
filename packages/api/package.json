@@ -1,11 +1,23 @@
 {
   "name": "filecoin.storage-api",
-  "private": true,
   "version": "0.0.0",
-  "main": "index.js",
+  "private": true,
+  "type": "module",
+  "license": "(Apache-2.0 AND MIT)",
+  "main": "dist/main.js",
   "scripts": {
+    "start": "wrangler dev --env $(whoami)",
+    "dev": "wrangler dev --env $(whoami)",
+    "publish": "wrangler publish --env $(whoami)",
+    "build": "webpack",
+    "format": "prettier --write '**/*.{js,css,json,md}'",
     "test": "say sorry"
   },
-  "author": "",
-  "license": "(Apache-2.0 AND MIT)"
+  "devDependencies": {
+    "webpack": "^5.39.1",
+    "webpack-cli": "^4.7.2"
+  },
+  "dependencies": {
+    "itty-router": "^2.3.10"
+  }
 }
