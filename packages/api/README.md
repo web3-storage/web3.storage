@@ -1,5 +1,31 @@
 # filecoin.storage API
 
+The HTTP interface implemented as a Cloudflare Worker
+
+## Getting started
+
+One time set up of your cloudflare worker subdomain for dev:
+
+- `npm install` - Install the project dependencies
+- Sign up to Cloudflare and log in with your default browser.
+- `npm i @cloudflare/wrangler -g` - Install the Cloudflare wrangler CLI
+- `wrangler login` - Authenticate your wrangler cli; it'll open your browser.
+- Copy your cloudflare account id from `wrangler whoami`
+- Update `wrangler.toml` with a new `env`. Set your env name to be the value of `whoami` on your system you can use `npm start` to run the worker in dev mode for you.
+
+[**wrangler.toml**](./wrangler.toml)
+
+```toml
+[env.bobbytables]
+workers_dev = true
+account_id = "<what does the `wrangler whoami` say>"
+```
+
+- `npm run publish` - Publish the worker under your env. An alias for `wrangler publish --env $(whoami)`
+- `npm start` - Run the worker in dev mode. An alias for `wrangler dev --env $(whoami)
+
+You only need to `npm start` for subsequent runs. PR your env config to the wrangler.toml, to celebrate 🎉
+
 ## API
 
 ### 🔐 `PUT /car/:cid`
@@ -8,12 +34,28 @@ Upload a CAR for a root CID. _Authenticated_
 
 ### `GET /car/:cid`
 
-Fetch a CAR by CID.
+Get the CAR file containing all blocks in the tree starting at the root `:cid`
+
+```console
+$ curl -sD - 'http://127.0.0.1:8787/car/bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'
+HTTP/1.1 200 OK
+date: Mon, 14 Jun 2021 09:12:41 GMT
+content-type: application/car
+cache-control: public, max-age=10
+content-disposition: attachment; filename="bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.car"
+```
 
 ### `HEAD /car/:cid`
 
-Fetch headers like content-length for a given CAR.
+Get the size of a CAR file for all blocks in the tree starting at the root `:cid` as the
+
+```console
+$ curl -I 'http://127.0.0.1:8787/car/bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'
+HTTP/1.1 200 OK
+date: Mon, 14 Jun 2021 08:30:56 GMT
+content-length: 564692
+```
 
 ### `GET /root/:cid/deals`
 
-Get filecoin deals info. (*TBD*) We need to define what info we want here to find the right status.
+Get filecoin deals info. (_TBD_) We need to define what info we want here to find the right status.
