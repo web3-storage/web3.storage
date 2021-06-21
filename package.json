@@ -1,0 +1,13 @@
+{
+  "name": "filecoin.storage",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "say sorry"
+  },
+  "license": "(Apache-2.0 AND MIT)",
+  "workspaces": [
+    "packages/api",
+    "packages/client"
+  ]
+}

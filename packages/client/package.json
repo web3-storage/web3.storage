@@ -1,0 +1,19 @@
+{
+  "name": "filecoin.storage",
+  "version": "0.0.0",
+  "description": "API client for filecoin.storage",
+  "main": "index.js",
+  "scripts": {
+    "test": "say sorry"
+  },
+  "license": "(Apache-2.0 AND MIT)",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/filecoin-storage/filecoin.storage.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/filecoin-storage/filecoin.storage/issues"
+  },
+  "homepage": "https://github.com/filecoin-storage/filecoin.storage#readme"
+}
