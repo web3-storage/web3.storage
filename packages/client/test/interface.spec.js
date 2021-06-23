@@ -7,6 +7,5 @@ describe('interface', () => {
     const client = new FilecoinStorage({ token: 'secret' })
     assert.ok(client instanceof FilecoinStorage)
     assert.equal(typeof client.store, 'function')
-    assert.equal(typeof client.status, 'function')
   })
 })

@@ -8,10 +8,27 @@ const { CarReader } = require('@ipld/car')
  * @param {{ params: Record<string, string>, files: MultrFile[] }} request
  */
 module.exports = async ({ body, headers }) => {
-  const car = await CarReader.fromBytes(body)
+  if (!headers.authorization || headers.authorization === 'Bearer bad') {
+    return {
+      statusCode: !headers.authorization ? 401 : 403,
+    }
+  }
+  let car
+  try {
+    car = await CarReader.fromBytes(body)
+  } catch (err) {
+    return {
+      statusCode: 400,
+      body: {
+        ok: false,
+        error: {
+          message: 'Request body not a valid CAR file',
+        },
+      },
+    }
+  }
   const [root] = await car.getRoots()
   const carRootCid = root.toString()
-  // @ts-ignore
   const { cid, bytes } = await car.get(root)
   return {
     statusCode: 200,
