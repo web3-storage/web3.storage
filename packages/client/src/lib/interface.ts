@@ -27,10 +27,9 @@ export interface API {
    */
   store(service: Service, content: Blob | File): Promise<CIDString>
   /**
-   * Returns current status of the stored NFT by its CID. Note the NFT must
-   * have previously been stored by this account.
+   * Get files for a root CID packed as a CAR file
    */
-  status(service: Service, cid: string): Promise<StatusResult>
+  get(service: Service, cid: CIDString): Promise<Blob | null>
 }
 
 export interface StatusResult {

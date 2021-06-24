@@ -1,8 +1,6 @@
 import * as assert from 'uvu/assert'
-import { FilecoinStorage, Blob } from 'filecoin.storage'
+import { FilecoinStorage } from 'filecoin.storage'
 import { pack } from 'ipfs-car/pack'
-
-const DWEB_LINK = 'dweb.link'
 
 describe('store', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
