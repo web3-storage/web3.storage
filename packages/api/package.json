@@ -11,9 +11,12 @@
     "publish": "wrangler publish --env $(whoami)",
     "build": "webpack",
     "format": "prettier --write '**/*.{js,css,json,md}'",
-    "test": "say sorry"
+    "test": "playwright-test \"test/**/*.spec.js\" --sw src/index.js"
   },
   "devDependencies": {
+    "@types/mocha": "^8.2.2",
+    "assert": "^2.0.0",
+    "playwright-test": "^5.0.0",
     "webpack": "^5.39.1",
     "webpack-cli": "^4.7.2"
   },
