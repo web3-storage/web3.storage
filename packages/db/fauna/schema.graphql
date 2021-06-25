@@ -1,0 +1,189 @@
+type User {
+  email: String!
+  issuer: String! @unique
+  github: String
+
+  """
+  User authentification keys.
+  """
+  keys: [AuthKey!]! @relation
+}
+
+type AuthKey {
+  """
+  User assigned name.
+  """
+  name: String!
+
+  """
+  Secret that corresponds to this key.
+  """
+  secret: String! @index
+
+  """
+  Uploads made using this key.
+  """
+  uploads: [Upload!]! @relation
+
+  """
+  User this key belongs to.
+  """
+  user: User! @relation
+}
+
+type Asset {
+  """
+  CID that corresponds to this asset.
+  """
+  cid: String! @unique
+
+  """
+  Deals referencing this asset.
+  """
+  deals: [Deal!]! @relation
+
+  """
+  Size of the DAG that makes up this asset.
+  """
+  dagSize: Int!
+
+  """
+  Pin status of this asset.
+  """
+  pinStatus: PinStatus! @index
+}
+
+enum PinStatus {
+  Undefined
+  ClusterError
+  PinError
+  UnpinError
+  Pinned
+  Pinning
+  Unpinned
+  Remote
+  PinQueued
+  UnpinQueued
+  Sharded
+}
+
+type Upload {
+  """
+  User that uploaded this content.
+  """
+  user: User! @relation @index
+
+  """
+  User auth key that was used to upload this content.
+  """
+  authKey: AuthKey
+
+  """
+  Asset representing the root of the uploaded content.
+  """
+  asset: Asset! @relation
+
+  created: Time! @index
+
+  deleted: Time
+}
+
+type Deal {
+  """
+  CIDs in this deal.
+  """
+  assets: [Asset!]! @relation @index
+
+  """
+  ID of miner this deal was made with.
+  """
+  miner: String
+
+  """
+  Filecoin network deal is made on.
+  """
+  network: String
+
+  """
+  Piece CID.
+  """
+  pieceCid: String
+
+  """
+  CID of the root of the batch data.
+  """
+  batchRootCid: String
+
+  """
+  Identifier for the deal stored on chain.
+  """
+  chainDealId: Int
+
+  """
+  Selector for extracting stored data from the batch root.
+  """
+  dataModelSelector: String
+
+  """
+  Time when deal will be active.
+  """
+  activation: Time
+
+  """
+  Time when deal has expired and will renew.
+  """
+  renewal: Time
+
+  """
+  Current deal status.
+  """
+  status: DealStatus!
+
+  """
+  Human readable reason for the current status.
+  """
+  statusReason: String
+
+  """
+  Last time this deal was updated.
+  """
+  updated: Time!
+}
+
+enum DealStatus {
+  Queued
+  Proposing
+  Accepted
+  Failed
+  Published
+  Active
+  Terminated
+}
+
+input FindUploadsInput {
+  before: Time!
+}
+
+type Query {
+  findUploads(where: FindUploadsInput): [Upload!]! @resolver(paginated: true)
+}
+
+type Mutation {
+  importCar(input: ImportCarInput): Upload! @resolver
+  updateAsset(input: AssetInput): Asset! @resolver
+}
+
+input UserInput {
+  email: String!
+}
+
+input ImportCarInput {
+  cid: String!
+  created: Time!
+}
+
+input AssetInput {
+  cid: String!
+  pinStatus: PinStatus
+  dagSize: Int
+}
