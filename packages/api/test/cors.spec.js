@@ -1,11 +1,13 @@
+/* eslint-env mocha, browser */
 import assert from 'assert'
 
 const endpoint = 'http://testing.filecoin.storage'
+const cid = 'bafkqaaa'
 
 describe('CORS', () => {
-  it('sets CORS headers for OPTIONS request', async () => {
-    const res = await fetch(endpoint, { method: 'OPTIONS' })
-    console.log(res.status)
+  it('sets CORS headers', async () => {
+    const res = await fetch(new URL(`car/${cid}`, endpoint).toString())
     assert(res.ok)
+    assert.strictEqual(res.headers.get('Access-Control-Allow-Origin'), '*')
   })
 })
