@@ -9,10 +9,11 @@ describe('get', () => {
   it('get a CAR', async () => {
     const client = new FilecoinStorage({ token, endpoint })
     const cid = 'bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e'
-    const blob = await client.get(cid)
-    assert.ok(blob)
+    const res = await client.get(cid)
+    assert.ok(res.ok)
+    assert.ok(res.getFiles)
     assert.is(
-      blob.type,
+      res.blob().type,
       'application/car',
       `car type should be set correctly ${blob.type}`
     )

@@ -120,7 +120,11 @@ class FilecoinStorage {
         throw new Error(`${res.status} ${res.statusText}`)
       }
     }
-    return res.blob()
+    return {
+      cid,
+      getFiles: () => 'not yet',
+      getCar: () => res.blob(),
+    }
   }
 
   // Just a sugar so you don't have to pass around endpoint and token around.

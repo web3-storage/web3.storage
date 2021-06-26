@@ -14,14 +14,16 @@
   "homepage": "https://github.com/filecoin-storage/filecoin.storage#readme",
   "scripts": {
     "test": "npm-run-all -p -r mock:api test:all",
-    "test:all": "run-s test:web test:cjs test:es",
+    "test:all": "run-s test:web test:cjs test:es test:size",
+    "test:size": "bundlesize",
     "test:web": "API_PORT=1337 playwright-test test/*.spec.js",
     "test:cjs": "API_PORT=1337 mocha dist/test/*.spec.cjs --exit",
-    "test:es": "API_PORT=1337 hundreds mocha test/*.spec.js --exit",
+    "test:esm": "API_PORT=1337 hundreds mocha test/*.spec.js --exit",
     "mock:api": "smoke -p 1337 --hooks test/mocks/hooks.js test/mocks/api",
     "build": "run-p build:*",
-    "build:ts": "tsc --build",
     "build:cjs": "rollup --config --silent rollup.config.js",
+    "build:esm": "rollup --config rollup.esm.config.js",
+    "build:ts": "tsc --build",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov",
     "typedoc": "typedoc --entryPoints src  --out ../../docs/client",
     "prepare": "npm run build"
@@ -32,7 +34,10 @@
     "@web-std/fetch": "^2.0.1"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
     "@types/mocha": "8.2.2",
+    "bundlesize": "^0.18.1",
     "hundreds": "0.0.9",
     "ipfs-car": "^0.2.4",
     "mocha": "8.3.2",
@@ -42,6 +47,7 @@
     "playwright-test": "^4.1.0",
     "rollup": "2.50.1",
     "rollup-plugin-multi-input": "1.3.1",
+    "rollup-plugin-terser": "^7.0.2",
     "smoke": "^3.1.1",
     "typedoc": "0.20.36",
     "uvu": "0.5.1"
@@ -63,5 +69,11 @@
   },
   "browser": {
     "./src/platform.js": "./src/platform.web.js"
-  }
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/bundle.esm.min.js",
+      "maxSize": "200 kB"
+    }
+  ]
 }
