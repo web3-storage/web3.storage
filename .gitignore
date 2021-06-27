@@ -31,7 +31,7 @@ yarn-error.log*
 dist
 node_modules
 worker
-package-lock.json
+yarn.lock
 site/public
 .cluster
 *.http
