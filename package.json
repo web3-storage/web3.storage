@@ -8,7 +8,7 @@
     "packages/client"
   ],
   "scripts": {
-    "test": "say sorry",
+    "test": "npm run test --workspaces",
     "format": "prettier --write '**/*.{js,jsx,ts,tsx}'"
   },
   "devDependencies": {

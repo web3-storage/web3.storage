@@ -14,7 +14,7 @@
   "homepage": "https://github.com/filecoin-storage/filecoin.storage#readme",
   "scripts": {
     "test": "npm-run-all -p -r mock:api test:all",
-    "test:all": "run-s test:web test:cjs test:es test:size",
+    "test:all": "run-s test:web test:cjs test:esm test:size",
     "test:size": "bundlesize",
     "test:web": "API_PORT=1337 playwright-test test/*.spec.js",
     "test:cjs": "API_PORT=1337 mocha dist/test/*.spec.cjs --exit",
@@ -23,7 +23,7 @@
     "build": "run-p build:*",
     "build:cjs": "rollup --config --silent rollup.config.js",
     "build:esm": "rollup --config rollup.esm.config.js",
-    "build:ts": "tsc --build",
+    "build:tsc": "tsc --build",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov",
     "typedoc": "typedoc --entryPoints src  --out ../../docs/client",
     "prepare": "npm run build"

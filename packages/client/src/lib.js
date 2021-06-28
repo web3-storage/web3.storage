@@ -15,6 +15,8 @@
  */
 import * as API from './lib/interface.js'
 import { fetch, Blob } from './platform.js'
+import { CarReader } from '@ipld/car/reader'
+import { unpack } from 'ipfs-car/unpack'
 
 /**
  * @implements API.Service
@@ -121,8 +123,12 @@ class FilecoinStorage {
       }
     }
     return {
+      ok: true,
       cid,
-      getFiles: () => 'not yet',
+      getFiles: async function* () {
+        const carReader = await CarReader.fromIterable(res.body)
+        yield* unpack(carReader)
+      },
       getCar: () => res.blob(),
     }
   }

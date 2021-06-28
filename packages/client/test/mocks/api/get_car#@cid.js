@@ -24,7 +24,9 @@ module.exports = async ({ params }) => {
     headers: {
       'Content-Type': 'application/car',
     },
-    body: fs.readFileSync(path.join(__dirname, '../../fixtures/hello.car')),
+    body: fs.readFileSync(
+      path.join(__dirname, '../../fixtures/hello-world.car')
+    ),
   }
 }
 
