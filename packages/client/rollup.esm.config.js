@@ -9,7 +9,7 @@ export default {
     {
       file: 'dist/bundle.esm.min.js',
       format: 'esm',
-      // plugins: [terser()],
+      plugins: [terser()],
       sourcemap: true,
     },
   ],

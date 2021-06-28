@@ -1,6 +1,6 @@
+import { UnixFSEntry } from '@vascosantos/ipfs-unixfs-exporter'
 import type { CID } from 'multiformats'
-
-export type { CID }
+export type { CID , UnixFSEntry }
 
 /**
  * Define nominal type of U based on type of T. Similar to Opaque types in Flow
@@ -30,6 +30,15 @@ export interface API {
    * Get files for a root CID packed as a CAR file
    */
   get(service: Service, cid: CIDString): Promise<Blob | null>
+}
+
+export interface IpfsFile extends File {
+  cid: CIDString,  
+}
+
+export interface CarResponse extends Response {
+  filesIterator: () => AsyncIterable<IpfsFile>
+  files: () => Promise<[IpfsFile]>
 }
 
 export interface StatusResult {
