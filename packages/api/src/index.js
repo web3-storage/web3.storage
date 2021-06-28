@@ -1,12 +1,14 @@
 import { Router } from 'itty-router'
+import { withCorsHeaders, corsOptions } from './cors.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 
 const router = Router()
 
-router.get('/car/:cid', carGet)
-router.head('/car/:cid', carHead)
-router.put('/car/:cid', carPut)
-router.post('/car', carPost)
+router.options('*', corsOptions)
+router.get('/car/:cid', withCorsHeaders(carGet))
+router.head('/car/:cid', withCorsHeaders(carHead))
+router.put('/car/:cid', withCorsHeaders(carPut))
+router.post('/car', withCorsHeaders(carPost))
 
 router.get('/', () => {
   return new Response(
