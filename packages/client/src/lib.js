@@ -186,17 +186,15 @@ async function toIpfsFile(e) {
   for await (const chunk of e.content()) {
     chunks.push(chunk)
   }
+
   // A Blob in File clothing
   const file = Object.assign(new Blob(chunks), {
     cid: e.cid.toString(),
     name: e.name,
     relativePath: e.path,
     webkitRelativePath: e.path,
-    // @ts-ignore mtime should exist
-    lastModified: e.mtime
-      ? /* c8 ignore next */ // @ts-ignore
-        e.mtime.secs * 1000
-      : Date.now(),
+    // TODO: mtime may be available on UnixFSEntry... need to investigate ts weirdness.
+    lastModified: Date.now(),
   })
   return file
 }
