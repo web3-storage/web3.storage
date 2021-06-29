@@ -206,20 +206,24 @@ async function toIpfsFile(e) {
  */
 function toCarResponse(res) {
   const response = Object.assign(res, {
-    filesIterator: async function* () {
+    unixFsIterator: async function* () {
       /* c8 ignore next 3 */
       if (!res.body) {
         throw new Error('No body on response')
       }
       const carReader = await CarReader.fromIterable(asAsyncIterable(res.body))
       for await (const entry of unpack(carReader)) {
-        yield toIpfsFile(entry)
+        yield entry
       }
     },
     files: async () => {
       const files = []
       // @ts-ignore we're using the enriched response here
-      for await (const file of res.filesIterator()) {
+      for await (const entry of response.unixFsIterator()) {
+        if (entry.type === 'directory') {
+          continue
+        }
+        const file = await toIpfsFile(entry)
         files.push(file)
       }
       return files

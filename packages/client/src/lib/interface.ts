@@ -37,6 +37,6 @@ export interface IpfsFile extends File {
 }
 
 export interface CarResponse extends Response {
-  filesIterator: () => AsyncIterable<IpfsFile>
+  unixFsIterator: () => AsyncIterable<UnixFSEntry>
   files: () => Promise<Array<IpfsFile>>
 }

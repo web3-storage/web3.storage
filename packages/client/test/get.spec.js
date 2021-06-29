@@ -42,6 +42,15 @@ describe('get', () => {
     assert.is(files.length, 1, 'should contain 1 file')
   })
 
+  it('get dirs', async () => {
+    const client = new FilecoinStorage({ token, endpoint })
+    const cid = 'bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'
+    const res = await client.get(cid)
+    assert.ok(res.ok)
+    const files = await res.files()
+    assert.is(files.length, 3, 'should contain 3 files')
+  })
+
   it('returns null on 404', async () => {
     const client = new FilecoinStorage({ token, endpoint })
     const cid = 'bafkreieq5jui4j25lacwomsqgjeswwl3y5zcdrresptwgmfylxo2depppq'
