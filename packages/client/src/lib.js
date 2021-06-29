@@ -160,12 +160,12 @@ class FilecoinStorage {
 }
 
 /**
- * Upgrade a ReadableStream to an AsyncIterable if it itn't already
+ * Upgrade a ReadableStream to an AsyncIterable if it isn't already
  *
  * ReadableStream (e.g res.body) is asyncIterable in node, but not in chrome, yet.
  * see: https://bugs.chromium.org/p/chromium/issues/detail?id=929585
  *
- * @param {ReadableStream<Uint8Array> | ReadableStream<Uint8Array> & AsyncIterable<Uint8Array>} readable
+ * @param {ReadableStream<Uint8Array>} readable
  * @returns {AsyncIterable<Uint8Array>}
  */
 function asAsyncIterable(readable) {
