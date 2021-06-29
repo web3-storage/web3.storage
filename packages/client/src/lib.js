@@ -15,7 +15,7 @@
  */
 import * as API from './lib/interface.js'
 import { fetch, Blob } from './platform.js'
-import { CarReader } from '@ipld/car'
+import { CarReader } from '@ipld/car/reader'
 import { unpack } from 'ipfs-car/unpack'
 import toIterable from 'browser-readablestream-to-it'
 
@@ -165,11 +165,11 @@ class FilecoinStorage {
  * ReadableStream (e.g res.body) is asyncIterable in node, but not in chrome, yet.
  * see: https://bugs.chromium.org/p/chromium/issues/detail?id=929585
  *
- * @param {ReadableStream<Uint8Array> | AsyncIterable<Uint8Array>} readable
+ * @param {ReadableStream<Uint8Array> | ReadableStream<Uint8Array> & AsyncIterable<Uint8Array>} readable
  * @returns {AsyncIterable<Uint8Array>}
  */
 function asAsyncIterable(readable) {
-  // @ts-ignore i have no idea.
+  // @ts-ignore how to tell tsc that we are checking the type here?
   return Symbol.asyncIterator in readable
     ? readable
     : /* c8 ignore next */
@@ -187,18 +187,17 @@ async function toIpfsFile(e) {
     chunks.push(chunk)
   }
   // A Blob in File clothing
-  const file = new Blob(chunks)
-  // @ts-ignore we're enriching the Blob
-  file.cid = e.cid.toString()
-  // @ts-ignore we're enriching the Blob
-  file.name = e.name
-  // @ts-ignore we're enriching the Blob
-  file.webkitRelativePath = e.path
-  // @ts-ignore we're enriching the Blob
-  file.lastModified = e.mtime
-    ? /* c8 ignore next */ e.mtime.secs * 1000
-    : Date.now()
-  // @ts-ignore we're enriching the Blob
+  const file = Object.assign(new Blob(chunks), {
+    cid: e.cid.toString(),
+    name: e.name,
+    relativePath: e.path,
+    webkitRelativePath: e.path,
+    // @ts-ignore mtime should exist
+    lastModified: e.mtime
+      ? /* c8 ignore next */ // @ts-ignore
+        e.mtime.secs * 1000
+      : Date.now(),
+  })
   return file
 }
 
@@ -208,30 +207,27 @@ async function toIpfsFile(e) {
  * @returns {import('./lib/interface.js').CarResponse}
  */
 function toCarResponse(res) {
-  // @ts-ignore we're enriching the Response object here.
-  res.fileIterator = async function* () {
-    /* c8 ignore next 3 */
-    if (!res.body) {
-      throw new Error('No body on response')
-    }
-    const carReader = await CarReader.fromIterable(asAsyncIterable(res.body))
-    for await (const entry of unpack(carReader)) {
-      yield toIpfsFile(entry)
-    }
-  }
-
-  // @ts-ignore we're enriching the Response object here.
-  res.files = async () => {
-    const files = []
-    // @ts-ignore we're using the enriched response here
-    for await (const file of res.fileIterator()) {
-      files.push(file)
-    }
-    return files
-  }
-
-  // @ts-ignore we're enriching the Response object here.
-  return res
+  const response = Object.assign(res, {
+    filesIterator: async function* () {
+      /* c8 ignore next 3 */
+      if (!res.body) {
+        throw new Error('No body on response')
+      }
+      const carReader = await CarReader.fromIterable(asAsyncIterable(res.body))
+      for await (const entry of unpack(carReader)) {
+        yield toIpfsFile(entry)
+      }
+    },
+    files: async () => {
+      const files = []
+      // @ts-ignore we're using the enriched response here
+      for await (const file of res.filesIterator()) {
+        files.push(file)
+      }
+      return files
+    },
+  })
+  return response
 }
 
 export { FilecoinStorage, Blob }
