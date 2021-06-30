@@ -49,7 +49,11 @@ export async function carGet(request, env, ctx) {
 }
 
 export async function carPost(request, env, ctx) {
-  return new Response(`${request.method} /car no can has`, { status: 501 })
+  const { user, authKey } = request.auth
+
+  // return new Response(`${request.method} /car no can has`, { status: 501 })
+
+
 }
 
 export async function carPut(request, env, ctx) {

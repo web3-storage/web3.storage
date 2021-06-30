@@ -1,12 +1,21 @@
 type User {
+  name: String!
+  picture: String
   email: String!
   issuer: String! @unique
+  """
+  GitHub user handle, may be null if user logged in via email.
+  """
   github: String
-
+  """
+  Cryptographic public address of the Magic User.
+  """
+  publicAddress: String!
   """
   User authentification keys.
   """
   keys: [AuthKey!]! @relation
+  created: Time!
 }
 
 type AuthKey {
@@ -18,17 +27,17 @@ type AuthKey {
   """
   Secret that corresponds to this key.
   """
-  secret: String! @index
+  secret: String!
 
   """
   Uploads made using this key.
   """
-  uploads: [Upload!]! @relation
+  uploads: [Upload!]! @relation @index
 
   """
   User this key belongs to.
   """
-  user: User! @relation
+  user: User! @relation @index
 }
 
 type Asset {
@@ -51,6 +60,11 @@ type Asset {
   Pin status of this asset.
   """
   pinStatus: PinStatus! @index
+
+  """
+  Identifier for the known location where this asset is pinned.
+  """
+  pinLocation: String!
 }
 
 enum PinStatus {
@@ -160,29 +174,46 @@ enum DealStatus {
   Terminated
 }
 
+type Query {
+  findUploads(where: FindUploadsInput): [Upload!]! @resolver(paginated: true)
+  findAssetByCid(cid: String!): Asset @resolver
+  findUserByIssuer(issuer: String!): User @resolver
+  findAuthKeys(user: ID!): [AuthKey!]! @resolver
+}
+
+type Mutation {
+  createOrUpdateUser(input: CreateUserInput!): User! @resolver
+  createAuthKey(input: CreateAuthKeyInput!): AuthKey! @resolver
+  createUpload(input: CreateUploadInput!): Upload! @resolver
+  updateAsset(input: UpdateAssetInput!): Asset! @resolver
+}
+
 input FindUploadsInput {
   before: Time!
 }
 
-type Query {
-  findUploads(where: FindUploadsInput): [Upload!]! @resolver(paginated: true)
-}
-
-type Mutation {
-  importCar(input: ImportCarInput): Upload! @resolver
-  updateAsset(input: AssetInput): Asset! @resolver
-}
-
-input UserInput {
+input CreateUserInput {
+  name: String!
+  picture: String
   email: String!
+  issuer: String!
+  github: String
+  publicAddress: String!
 }
 
-input ImportCarInput {
+input CreateAuthKeyInput {
+  user: ID!
+  name: String!
+  secret: String!
+}
+
+input CreateUploadInput {
+  user: ID!
   cid: String!
-  created: Time!
+  dagSize: Int
 }
 
-input AssetInput {
+input UpdateAssetInput {
   cid: String!
   pinStatus: PinStatus
   dagSize: Int
