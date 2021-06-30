@@ -11,17 +11,21 @@ const {
   Get,
   Exists,
   If,
-  Update
+  Update,
+  Let,
+  IsNonEmpty
 } = fauna
 
 const name = 'findAssetByCid'
 const body = Query(
   Lambda(
     ["cid"],
-    Get(
-      Match(
-        Index("unique_Asset_cid"),
-        Var("cid")
+    Let(
+      { match: Match(Index("unique_Asset_cid"), Var("cid")) },
+      If(
+        IsNonEmpty(Var("match")),
+        Get(Var("match")),
+        null
       )
     )
   )

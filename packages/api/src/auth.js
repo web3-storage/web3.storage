@@ -2,9 +2,11 @@ import { gql } from '@web3-storage/db'
 import * as JWT from './utils/jwt.js'
 
 /**
- * @typedef {Request & {
- *  auth: { user: { _id: string, issuer: string }, authKey?: { _id: string } }
- * }} AuthenticatedRequest
+ * @typedef {{
+ *   user: { _id: string, issuer: string }
+ *   authKey?: { _id: string, name: string }
+ * }} Auth
+ * @typedef {Request & { auth: Auth }} AuthenticatedRequest
  */
 
 /**
@@ -41,13 +43,9 @@ async function loginOrRegister(request, env) {
       : parseMagic(metadata)
 
   const res = await env.db.query(gql`
-    mutation ($input: CreateUserInput!) {
+    mutation CreateOrUpdateUser($input: CreateOrUpdateUserInput!) {
       createOrUpdateUser(input: $input) {
-        name
-        picture
         issuer
-        email
-        publicAddress
       }
     }
   `, { input: parsed })
@@ -105,18 +103,22 @@ export async function withAuth(handler) {
     // validate access tokens
     if (await JWT.verify(token, env.SALT)) {
       const decoded = JWT.parse(token)
-      const user = await getUser(decoded.sub)
-      if (!user) {
-        throw new Error('user not found')
+      const res = await env.db.query(gql`
+        query VerifyAuthKey ($issuer: String!, $secret: String!) {
+          verifyAuthKey(issuer: $issuer, secret: $secret) {
+            _id
+            name
+          }
+        }
+      `, { issuer: decoded.sub, secret: token })
+
+      const authKey = res.verifyAuthKey
+      if (!authKey) {
+        throw new Error('invalid token')
       }
 
-      const tokenName = matchToken(user, token)
-      if (typeof tokenName === 'string') {
-
-      } else {
-        throw new ErrorTokenNotFound()
-      }
       request.auth = { user, authKey }
+      return handler(request, env, ctx)
     }
 
     // validate magic id tokens
@@ -147,12 +149,12 @@ export async function withAuth(handler) {
   const secret = await JWT.sign({ sub, iss, iat: Date.now(), name }, secret)
 
   await env.db.query(gql`
-    mutation ($input: CreateAuthKeyInput!) {
-      createAuthKey(input: $input) {
+    mutation CreateAuthKey($data: AuthKeyInput!) {
+      createAuthKey(data: $data) {
         _id
       }
     }
-  `, { input: { user: _id, name, secret } })
+  `, { data: { user: { connect: _id }, name, secret } })
 
   return new Response()
 }

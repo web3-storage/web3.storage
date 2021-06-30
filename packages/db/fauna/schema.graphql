@@ -1,23 +1,33 @@
+"""
+A user of web3.storage.
+"""
 type User {
   name: String!
   picture: String
   email: String!
   issuer: String! @unique
+
   """
   GitHub user handle, may be null if user logged in via email.
   """
   github: String
+
   """
   Cryptographic public address of the Magic User.
   """
   publicAddress: String!
+
   """
   User authentification keys.
   """
   keys: [AuthKey!]! @relation
+
   created: Time!
 }
 
+"""
+API authentication keys.
+"""
 type AuthKey {
   """
   User assigned name.
@@ -40,6 +50,9 @@ type AuthKey {
   user: User! @relation @index
 }
 
+"""
+Details of a file/directory stored on web3.storage.
+"""
 type Asset {
   """
   CID that corresponds to this asset.
@@ -81,6 +94,9 @@ enum PinStatus {
   Sharded
 }
 
+"""
+An upload created by a user.
+"""
 type Upload {
   """
   User that uploaded this content.
@@ -102,6 +118,9 @@ type Upload {
   deleted: Time
 }
 
+"""
+Filecoin deal for an asset.
+"""
 type Deal {
   """
   CIDs in this deal.
@@ -177,22 +196,22 @@ enum DealStatus {
 type Query {
   findUploads(where: FindUploadsInput): [Upload!]! @resolver(paginated: true)
   findAssetByCid(cid: String!): Asset @resolver
-  findUserByIssuer(issuer: String!): User @resolver
-  findAuthKeys(user: ID!): [AuthKey!]! @resolver
+  """
+  Verify the User with the passed issuer owns the AuthKey with the passed secret.
+  """
+  verifyAuthKey(issuer: String!, secret: String!): AuthKey @resolver
 }
 
 type Mutation {
-  createOrUpdateUser(input: CreateUserInput!): User! @resolver
-  createAuthKey(input: CreateAuthKeyInput!): AuthKey! @resolver
-  createUpload(input: CreateUploadInput!): Upload! @resolver
-  updateAsset(input: UpdateAssetInput!): Asset! @resolver
+  createOrUpdateUser(input: CreateOrUpdateUserInput!): User! @resolver
+  importCar(input: ImportCarInput!): Upload! @resolver
 }
 
 input FindUploadsInput {
   before: Time!
 }
 
-input CreateUserInput {
+input CreateOrUpdateUserInput {
   name: String!
   picture: String
   email: String!
@@ -201,20 +220,8 @@ input CreateUserInput {
   publicAddress: String!
 }
 
-input CreateAuthKeyInput {
-  user: ID!
-  name: String!
-  secret: String!
-}
-
-input CreateUploadInput {
+input ImportCarInput {
   user: ID!
   cid: String!
-  dagSize: Int
-}
-
-input UpdateAssetInput {
-  cid: String!
-  pinStatus: PinStatus
   dagSize: Int
 }
