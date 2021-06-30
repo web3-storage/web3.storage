@@ -9,10 +9,10 @@ _This module is under developement and is not published yet._
 ## Usage
 
 ```js
-import FilecoinStorage from 'web3.storage'
+import { WebStorage } from 'web3.storage'
 
 // Construct with token and endpoint
-const client = new FilecoinStorage({ token: apiKey })
+const client = new WebStorage({ token: apiKey })
 
 // Pack files into a CAR
 client.pack(files: Iterable<File>): Promise<{car: Blob, root: CIDString}>
