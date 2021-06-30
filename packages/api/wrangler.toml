@@ -1,6 +1,6 @@
-# filecoin.storage wrangler config.
+# web3.storage wrangler config.
 
-name = "filecoin-storage"
+name = "web3-storage"
 # `javascript` means our we'll send pre-built javascript code. 
 #  ...as opposed to `webpack` where wrangler builds our code for us.
 type = "javascript"
@@ -16,7 +16,7 @@ format = "service-worker"
 
 # PROD!
 [env.production]
-# name = "filecoin-storage-production"
+# name = "web3-storage-production"
 account_id = "?"
 
 # Add your env here. Override the the values you need to change.
@@ -27,7 +27,7 @@ account_id = "4fe12d085474d33bdcfd8e9bed4d8f95"
 
 [env.oli]
 # NOTE: wrangler automatically assings each env the root `name` with the env name suffixed on the end
-# name = "filecoin-storage-oli"
+# name = "web3-storage-oli"
 # NOTE: wrangler tries to find an account_id defined at the root if workers_dev = true is not provided on your env.
 workers_dev = true
 account_id = "6e5a2aed80cd37d77e8d0c797a75ebbd"

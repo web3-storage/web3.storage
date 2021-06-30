@@ -1,6 +1,6 @@
-# filecoin.storage client
+# web3.storage client
 
-API client for filecoin.storage
+API client for web3.storage
 
 ## Getting started
 
@@ -9,7 +9,7 @@ _This module is under developement and is not published yet._
 ## Usage
 
 ```js
-import FilecoinStorage from 'filecoin.storage'
+import FilecoinStorage from 'web3.storage'
 
 // Construct with token and endpoint
 const client = new FilecoinStorage({ token: apiKey })

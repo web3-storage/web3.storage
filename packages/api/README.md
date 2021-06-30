@@ -1,4 +1,4 @@
-# filecoin.storage API
+# web3.storage API
 
 The HTTP interface implemented as a Cloudflare Worker
 

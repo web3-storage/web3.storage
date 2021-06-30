@@ -1,7 +1,7 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 
-const endpoint = 'http://testing.filecoin.storage'
+const endpoint = 'http://testing.web3.storage'
 const cid = 'bafkqaaa'
 
 describe('CORS', () => {
