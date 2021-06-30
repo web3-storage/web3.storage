@@ -1,0 +1,12 @@
+{
+  "name": "filecoin-storage-examples",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Examples of using filecoin.storage in Node.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vasco Santos",
+  "license": "(Apache-2.0 AND MIT)"
+}

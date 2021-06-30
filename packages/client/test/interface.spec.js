@@ -6,6 +6,6 @@ describe('interface', () => {
     assert.equal(typeof Web3Storage, 'function')
     const client = new Web3Storage({ token: 'secret' })
     assert.ok(client instanceof Web3Storage)
-    assert.equal(typeof client.store, 'function')
+    assert.equal(typeof client.put, 'function')
   })
 })

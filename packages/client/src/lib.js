@@ -13,11 +13,23 @@
  * ```
  * @module
  */
+import { transform } from 'streaming-iterables'
+import pRetry from 'p-retry'
+import { pack } from 'ipfs-car/pack'
+import { TreewalkCarSplitter } from 'carbites/treewalk'
 import * as API from './lib/interface.js'
-import { fetch, Blob } from './platform.js'
+import {
+  fetch,
+  Blob,
+  Blockstore
+} from './platform.js'
 import { CarReader } from '@ipld/car/reader'
 import { unpack } from 'ipfs-car/unpack'
 import toIterable from 'browser-readablestream-to-it'
+
+const MAX_ADD_RETRIES = 5
+const MAX_CONCURRENT_UPLOADS = 3
+const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 
 /**
  * @implements API.Service
@@ -75,33 +87,66 @@ class Web3Storage {
 
   /**
    * @param {API.Service} service
-   * @param {Blob} blob
+   * @param {Iterable<API.Web3File>} files
+   * @param {{onStoredChunk?: (size: number) => void}} [options]
    * @returns {Promise<API.CIDString>}
    */
-  static async store({ endpoint, token }, blob) {
+  static async put({ endpoint, token }, files, { onStoredChunk } = {}) {
     const url = new URL(`/car`, endpoint)
+    const headers = Web3Storage.headers(token)
+    const targetSize = MAX_CHUNK_SIZE
 
-    if (blob.size === 0) {
-      throw new Error('Content size is 0, make sure to provide some content')
-    }
-
-    const car =
-      blob.type !== 'application/car'
-        ? blob.slice(0, blob.size, 'application/car')
-        : blob
-
-    const request = await fetch(url.toString(), {
-      method: 'POST',
-      headers: Web3Storage.headers(token),
-      body: car,
+    const blockstore = new Blockstore()
+    const { out } = await pack({
+      input: files,
+      blockstore
     })
-    const result = await request.json()
+    const splitter = await TreewalkCarSplitter.fromIterable(out, targetSize)
 
-    if (result.ok) {
-      return result.value.cid
-    } else {
-      throw new Error(result.error.message)
+    const upload = transform(
+      MAX_CONCURRENT_UPLOADS,
+      async (/** @type {AsyncIterable<Uint8Array>} */ car) => {
+        const carParts = []
+        for await (const part of car) {
+          carParts.push(part)
+        }
+
+        const carFile = new Blob(carParts, {
+          type: 'application/car',
+        })
+
+        const res = await pRetry(
+          async () => {
+            const request = await fetch(url.toString(), {
+              method: 'POST',
+              headers,
+              body: carFile,
+            })
+            const result = await request.json()
+
+            if (result.ok) {
+              return result.value.cid
+            } else {
+              throw new Error(result.error.message)
+            }
+          },
+          { retries: MAX_ADD_RETRIES }
+        )
+        onStoredChunk && onStoredChunk(carFile.size)
+        return res
+      }
+    )
+
+    let root
+    for await (const cid of upload(splitter.cars())) {
+      root = cid
     }
+
+    // Destroy Blockstore
+    await blockstore.destroy()
+
+    // @ts-ignore there will always be a root, or carbites will fail
+    return root
   }
 
   /**
@@ -130,9 +175,7 @@ class Web3Storage {
   // Just a sugar so you don't have to pass around endpoint and token around.
 
   /**
-   * Stores files encoded as a single [Content Addressed Archive
-   * (CAR)](https://github.com/ipld/specs/blob/master/block-layer/content-addressable-archives.md).
-   *
+   * Puts files.
    * Takes a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob/Blob)
    *
    * Returns the corresponding Content Identifier (CID).
@@ -144,10 +187,11 @@ class Web3Storage {
    * const cid = await client.store(car)
    * console.assert(cid === root)
    * ```
-   * @param {Blob} blob
+   * @param {Iterable<API.Web3File>} files
+   * @param {{onStoredChunk?: (size: number) => void}} [options]
    */
-  store(blob) {
-    return Web3Storage.store(this, blob)
+  put(files, options) {
+    return Web3Storage.put(this, files, options)
   }
 
   /**

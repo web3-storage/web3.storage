@@ -29,6 +29,20 @@ module.exports = async ({ body, headers }) => {
   }
   const [root] = await car.getRoots()
   const carRootCid = root.toString()
+
+  // Testing Failure
+  if (carRootCid === 'bafkreiexwhcktnzbtn2ops3qdqfljsh223uubnslqrexsfkqzppqsg6i6u') {
+    return {
+      statusCode: 400,
+      body: {
+        ok: false,
+        error: {
+          message: 'Request body not a valid CAR file',
+        },
+      },
+    }
+  }
+
   const { cid, bytes } = await car.get(root)
   return {
     statusCode: 200,
