@@ -9,8 +9,9 @@ describe('get', () => {
   it('get a CAR', async () => {
     const client = new FilecoinStorage({ token, endpoint })
     const cid = 'bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e'
-    const blob = await client.get(cid)
-    assert.ok(blob)
+    const res = await client.get(cid)
+    assert.ok(res.ok)
+    const blob = await res.blob()
     assert.is(
       blob.type,
       'application/car',
@@ -18,11 +19,43 @@ describe('get', () => {
     )
   })
 
+  it('get files', async () => {
+    const client = new FilecoinStorage({ token, endpoint })
+    const cid = 'bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e'
+    const res = await client.get(cid)
+    assert.ok(res.ok)
+    const files = await res.files()
+    for (const file of files) {
+      assert.is(
+        file.cid,
+        cid,
+        'in a CAR with 1 file, the file name should match the CAR root'
+      )
+      assert.is(
+        file.webkitRelativePath,
+        cid,
+        `webkitRelativePath (${file.webkitRelativePath}) should be (${cid})`
+      )
+      assert.ok(file.lastModified)
+      assert.is(await file.text(), 'hello world')
+    }
+    assert.is(files.length, 1, 'should contain 1 file')
+  })
+
+  it('get dirs', async () => {
+    const client = new FilecoinStorage({ token, endpoint })
+    const cid = 'bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'
+    const res = await client.get(cid)
+    assert.ok(res.ok)
+    const files = await res.files()
+    assert.is(files.length, 3, 'should contain 3 files')
+  })
+
   it('returns null on 404', async () => {
     const client = new FilecoinStorage({ token, endpoint })
     const cid = 'bafkreieq5jui4j25lacwomsqgjeswwl3y5zcdrresptwgmfylxo2depppq'
-    const blob = await client.get(cid)
-    assert.not.ok(blob, 'blob should be null')
+    const res = await client.get(cid)
+    assert.not.ok(res, 'res should be null')
   })
 
   it('throws on invalid cid', async () => {

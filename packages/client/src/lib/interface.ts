@@ -1,6 +1,6 @@
+import type { UnixFSEntry } from 'ipfs-car/unpack'
 import type { CID } from 'multiformats'
-
-export type { CID }
+export type { CID , UnixFSEntry }
 
 /**
  * Define nominal type of U based on type of T. Similar to Opaque types in Flow
@@ -29,97 +29,14 @@ export interface API {
   /**
    * Get files for a root CID packed as a CAR file
    */
-  get(service: Service, cid: CIDString): Promise<Blob | null>
+  get(service: Service, cid: CIDString): Promise<CarResponse | null>
 }
 
-export interface StatusResult {
-  cid: string
-  size: number
-  deals: Deal[]
-  pin: Pin
-  created: Date
+export interface IpfsFile extends File {
+  cid: CIDString,  
 }
 
-export type Deal =
-  | QueuedDeal
-  | PendingDeal
-  | FailedDeal
-  | PublishedDeal
-  | FinalizedDeal
-
-export interface DealInfo {
-  lastChanged: Date
-  /**
-   * Miner ID
-   */
-  miner: string
-
-  /**
-   * Filecoin network for this Deal
-   */
-  network?: 'nerpanet' | 'mainnet'
-  /**
-   * Piece CID string
-   */
-  pieceCid: CIDString
-  /**
-   * CID string
-   */
-  batchRootCid: CIDString
+export interface CarResponse extends Response {
+  unixFsIterator: () => AsyncIterable<UnixFSEntry>
+  files: () => Promise<Array<IpfsFile>>
 }
-
-export interface QueuedDeal {
-  status: 'queued'
-  /**
-   * Timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: YYYY-MM-DDTHH:MM:SSZ.
-   */
-  lastChanged: Date
-}
-
-export interface PendingDeal extends DealInfo {
-  status: 'proposing' | 'accepted'
-}
-
-export interface FailedDeal extends DealInfo {
-  status: 'failed'
-  /**
-   * Reason deal failed.
-   */
-  statusText: string
-}
-
-export interface PublishedDeal extends DealInfo {
-  status: 'published'
-  /**
-   * Identifier for the deal stored on chain.
-   */
-  chainDealID: number
-}
-
-export interface FinalizedDeal extends DealInfo {
-  status: 'active' | 'terminated'
-  /**
-   * Identifier for the deal stored on chain.
-   */
-  chainDealID: number
-
-  /**
-   * Deal Activation
-   */
-  dealActivation: Date
-  /**
-   * Deal Expiraction
-   */
-  dealExpiration: Date
-}
-
-export interface Pin {
-  // Pinata does not provide this
-  // requestid: string
-  cid: CIDString
-  name?: string
-  status: PinStatus
-  created: Date
-}
-
-export type PinStatus = 'queued' | 'pinning' | 'pinned' | 'failed'
