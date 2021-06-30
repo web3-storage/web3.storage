@@ -1,17 +1,17 @@
 {
-  "name": "filecoin.storage",
+  "name": "web3.storage",
   "version": "0.0.0",
-  "description": "API client for filecoin.storage",
+  "description": "API client for web3.storage",
   "type": "module",
   "license": "(Apache-2.0 AND MIT)",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/filecoin-storage/filecoin.storage.git"
+    "url": "git+ssh://git@github.com/web3-storage/web3.storage.git"
   },
   "bugs": {
-    "url": "https://github.com/filecoin-storage/filecoin.storage/issues"
+    "url": "https://github.com/web3-storage/web3.storage/issues"
   },
-  "homepage": "https://github.com/filecoin-storage/filecoin.storage#readme",
+  "homepage": "https://github.com/web3-storage/web3.storage#readme",
   "scripts": {
     "test": "npm-run-all -p -r mock:api test:all",
     "test:all": "run-s test:web test:cjs test:esm test:size",

@@ -1,4 +1,4 @@
-import { FilecoinStorage } from 'filecoin.storage'
+import { FilecoinStorage } from 'web3.storage'
 import * as assert from 'uvu/assert'
 
 describe('interface', () => {

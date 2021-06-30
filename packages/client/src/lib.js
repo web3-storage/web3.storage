@@ -1,12 +1,12 @@
 /**
- * A client library for the https://filecoin.storage/ service. It provides a convenient
- * interface for working with the [Raw HTTP API](https://filecoin.storage/#api-docs)
+ * A client library for the https://web3.storage/ service. It provides a convenient
+ * interface for working with the [Raw HTTP API](https://web3.storage/#api-docs)
  * from a web browser or [Node.js](https://nodejs.org/) and comes bundled with
  * TS for out-of-the box type inference and better IntelliSense.
  *
  * @example
  * ```js
- * import { FilecoinStorage, Blob } from "filecoin.storage"
+ * import { FilecoinStorage, Blob } from "web3.storage"
  * const client = new FilecoinStorage({ token: API_TOKEN })
  *
  * const cid = await client.storeBlob(new Blob(['hello world']))
@@ -29,7 +29,7 @@ class FilecoinStorage {
    *
    * @example
    * ```js
-   * import { FilecoinStorage, Blob } from "filecoin.storage"
+   * import { FilecoinStorage, Blob } from "web3.storage"
    * const client = new FilecoinStorage({ token: API_TOKEN })
    * const { car, rootCid } = await client.pack(new Blob(['hello world']))
    * const cid = await client.store(car)
@@ -38,7 +38,7 @@ class FilecoinStorage {
    * Optionally you could pass an alternative API endpoint (e.g. for testing)
    * @example
    * ```js
-   * import { FilecoinStorage } from "filecoin.storage"
+   * import { FilecoinStorage } from "web3.storage"
    * const client = new FilecoinStorage({
    *   token: API_TOKEN
    *   endpoint: new URL('http://localhost:8080/')
@@ -47,7 +47,7 @@ class FilecoinStorage {
    *
    * @param {{token: string, endpoint?:URL}} options
    */
-  constructor({ token, endpoint = new URL('https://api.filecoin.storage') }) {
+  constructor({ token, endpoint = new URL('https://api.web3.storage') }) {
     /**
      * Authorization token.
      *
@@ -69,7 +69,7 @@ class FilecoinStorage {
     if (!token) throw new Error('missing token')
     return {
       Authorization: `Bearer ${token}`,
-      'X-Client': 'filecoin.storage',
+      'X-Client': 'web3.storage',
     }
   }
 

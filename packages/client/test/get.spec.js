@@ -1,5 +1,5 @@
 import * as assert from 'uvu/assert'
-import { FilecoinStorage, Blob } from 'filecoin.storage'
+import { FilecoinStorage, Blob } from 'web3.storage'
 
 describe('get', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
