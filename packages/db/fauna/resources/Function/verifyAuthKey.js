@@ -32,7 +32,7 @@ const body = Query(
             user: Get(Var('userMatch')),
             keyMatch: Match(
               Index('authKey_user_by_user'),
-              Select('_id', Var('user'))
+              Select('id', Var('user'))
             ),
           },
           If(
@@ -43,7 +43,10 @@ const body = Query(
                   Var('keyMatch'),
                   Lambda(
                     'authKey',
-                    Equals(Select('secret', Var('authKey')), Var('secret'))
+                    And(
+                      Equals(Select('secret', Var('authKey')), Var('secret')),
+                      Equals(Select('deleted', Var('authKey')), null),
+                    )
                   )
                 ),
               },

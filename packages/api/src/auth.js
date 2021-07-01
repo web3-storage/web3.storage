@@ -43,12 +43,12 @@ async function loginOrRegister(request, env) {
       : parseMagic(metadata)
 
   const res = await env.db.query(gql`
-    mutation CreateOrUpdateUser($input: CreateOrUpdateUserInput!) {
-      createOrUpdateUser(input: $input) {
+    mutation CreateOrUpdateUser($data: CreateOrUpdateUserInput!) {
+      createOrUpdateUser(data: $data) {
         issuer
       }
     }
-  `, { input: parsed })
+  `, { data: parsed })
 
   return res.createOrUpdateUser
 }
@@ -149,12 +149,12 @@ export async function withAuth(handler) {
   const secret = await JWT.sign({ sub, iss, iat: Date.now(), name }, secret)
 
   await env.db.query(gql`
-    mutation CreateAuthKey($data: AuthKeyInput!) {
+    mutation CreateAuthKey($data: CreateAuthKeyInput!) {
       createAuthKey(data: $data) {
         _id
       }
     }
-  `, { data: { user: { connect: _id }, name, secret } })
+  `, { data: { user: _id, name, secret } })
 
   return new Response()
 }

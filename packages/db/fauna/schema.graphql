@@ -48,6 +48,9 @@ type AuthKey {
   User this key belongs to.
   """
   user: User! @relation @index
+
+  created: Time!
+  deleted: Time
 }
 
 """
@@ -60,6 +63,11 @@ type Pin {
   cid: String! @unique
 
   """
+  Pinning services pinning this pin.
+  """
+  locations: [PinLocation]! @relation
+
+  """
   Deals referencing this pin.
   """
   deals: [Deal!]! @relation
@@ -68,16 +76,28 @@ type Pin {
   Size of the DAG.
   """
   dagSize: Int!
+}
+
+"""
+Location of a pin.
+"""
+type PinLocation {
+  pin: Pin! @relation
 
   """
-  Pinning status.
+  Identifier for the service that is pinning this pin.
+  """
+  name: String!
+
+  """
+  Pinning status at this location.
   """
   status: PinStatus!
 
   """
-  Identifier for the known location where this pin is pinned.
+  Last time the status was updated.
   """
-  location: String!
+  updated: Time!
 }
 
 enum PinStatus {
@@ -203,8 +223,9 @@ type Query {
 }
 
 type Mutation {
-  createOrUpdateUser(input: CreateOrUpdateUserInput!): User! @resolver
-  importCar(input: ImportCarInput!): Upload! @resolver
+  createOrUpdateUser(data: CreateOrUpdateUserInput!): User! @resolver
+  createAuthKey(data: CreateAuthKeyInput): AuthKey! @resolver
+  importCar(data: ImportCarInput!): Upload! @resolver
 }
 
 input FindUploadsInput {
@@ -220,8 +241,14 @@ input CreateOrUpdateUserInput {
   publicAddress: String!
 }
 
-input ImportCarInput {
+input CreateAuthKeyInput {
   user: ID!
+  name: String!
+  secret: String!
+}
+
+input ImportCarInput {
+  authKey: ID!
   cid: String!
   dagSize: Int
 }
