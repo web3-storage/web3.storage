@@ -56,38 +56,41 @@ type AuthKey {
 """
 Details of the root of a file/directory stored on web3.storage.
 """
-type Pin {
+type Content {
   """
-  Root CID that corresponds to this pin.
+  Root CID for this content.
   """
   cid: String! @unique
 
   """
-  Pinning services pinning this pin.
+  Pinning services pinning this content.
   """
-  locations: [PinLocation]! @relation
+  pins: [Pin]! @relation
 
   """
-  Deals referencing this pin.
+  Deals referencing this content.
   """
   deals: [Deal!]! @relation
 
   """
   Size of the DAG.
+  COMMENT ON HOW THIS WORKS
   """
-  dagSize: Int!
+  dagSize: Int
+
+  created: Time!
 }
 
 """
 Location of a pin.
 """
-type PinLocation {
-  pin: Pin! @relation
+type Pin {
+  content: Content! @relation
 
   """
   Identifier for the service that is pinning this pin.
   """
-  name: String!
+  location: PinLocation! @relation
 
   """
   Pinning status at this location.
@@ -98,6 +101,15 @@ type PinLocation {
   Last time the status was updated.
   """
   updated: Time!
+}
+
+type PinLocation {
+  pins: [Pin]! @relation
+
+  """
+  Identifier for the service that is pinning this pin.
+  """
+  name: String!
 }
 
 enum PinStatus {
@@ -126,7 +138,9 @@ type Upload {
   """
   User auth key that was used to upload this content.
   """
-  authKey: AuthKey
+  authKey: AuthKey!
+
+  files
 
   """
   Pin representing the root of the uploaded content.
