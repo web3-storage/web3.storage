@@ -32,7 +32,7 @@ describe('put', () => {
   it('erros with a File that will not be parsed by the Cluster', async function () {
     const client = new Web3Storage({ token, endpoint })
     try {
-      await client.put([Web3File.fromString('test-put-fail')], { maxRetries: 1 })
+      await client.put([Web3File.fromText('test-put-fail', 'file.txt')], { maxRetries: 1 })
       assert.unreachable('should have thrown')
     } catch (err) {
       assert.match(err.message, /Request body not a valid CAR file/)
@@ -43,7 +43,7 @@ describe('put', () => {
     const client = new Web3Storage({ token, endpoint })
     const files = prepareFiles()
     const cid = await client.put(files)
-    assert.equal(cid, 'bafybeialuxcnfcv24flsf5rc7fhge72gjyttearypmonhmri466zaslqqe', 'returned cid matches the CAR root')
+    assert.equal(cid, 'bafybeic2rh2it5qegfxbctenw5req2kqxleujl2zu352nmtb6qx3pmji6e', 'returned cid matches the CAR')
   })
 
   it('adds Big Files', async function () {
@@ -65,29 +65,29 @@ describe('put', () => {
 })
 
 function prepareFiles () {
-  const data = 'Hello filecoin.storage!'
-  const data2 = 'Hello nft.storage!'
+  const data = 'Hello web3.storage!'
+  const data2 = 'Hello web3.storage!!'
 
   return [
-    Web3File.fromBytes(
-      new TextEncoder().encode(data),
+    Web3File.fromText(
+      data,
       'data.zip',
       { path: '/dir/data.zip' }
     ),
-    Web3File.fromBytes(
-      new TextEncoder().encode(data2),
+    Web3File.fromText(
+      data2,
       'data2.zip',
       { path: '/dir/data2.zip' }
     ),
-    Web3File.fromBytes(
-      new TextEncoder().encode(data),
+    Web3File.fromText(
+      data,
       'data.zip',
-      { path: '/dir/dir/data.zip' }
+      { path: '/dir/otherdir/data.zip' }
     ),
-    Web3File.fromBytes(
-      new TextEncoder().encode(data2),
+    Web3File.fromText(
+      data2,
       'data2.zip',
-      { path: '/dir/dir/data2.zip' }
+      { path: '/dir/otherdir/data2.zip' }
     )
   ]
 }

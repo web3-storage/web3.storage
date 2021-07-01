@@ -19,25 +19,25 @@ function prepareFiles () {
   const data2 = 'Hello web3.storage!!'
 
   return [
-    Web3File.fromBytes(
-      new TextEncoder().encode(data),
+    Web3File.fromText(
+      data,
       'data.zip',
       { path: '/dir/data.zip' }
     ),
-    Web3File.fromBytes(
-      new TextEncoder().encode(data2),
+    Web3File.fromText(
+      data2,
       'data2.zip',
       { path: '/dir/data2.zip' }
     ),
-    Web3File.fromBytes(
-      new TextEncoder().encode(data),
+    Web3File.fromText(
+      data,
       'data.zip',
-      { path: '/dir/dir/data.zip' }
+      { path: '/dir/otherdir/data.zip' }
     ),
-    Web3File.fromBytes(
-      new TextEncoder().encode(data2),
+    Web3File.fromText(
+      data2,
       'data2.zip',
-      { path: '/dir/dir/data2.zip' }
+      { path: '/dir/otherdir/data2.zip' }
     )
   ]
 }
