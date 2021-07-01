@@ -1,5 +1,5 @@
 import * as assert from 'uvu/assert'
-import { FilecoinStorage, Blob } from 'web3.storage'
+import { Web3Storage, Blob } from 'web3.storage'
 import { pack } from 'ipfs-car/pack'
 
 describe('store', () => {
@@ -9,7 +9,7 @@ describe('store', () => {
 
   it('errors without token', async () => {
     // @ts-ignore
-    const client = new FilecoinStorage({ endpoint })
+    const client = new Web3Storage({ endpoint })
     const { car } = await createCarBlobFromString('hello')
     try {
       await client.store(car)
@@ -20,7 +20,7 @@ describe('store', () => {
   })
 
   it('errors without content', async () => {
-    const client = new FilecoinStorage({ endpoint, token })
+    const client = new Web3Storage({ endpoint, token })
     try {
       await client.store(new Blob([]))
       assert.unreachable('should have thrown')
@@ -30,7 +30,7 @@ describe('store', () => {
   })
 
   it('errors with not a CAR', async () => {
-    const client = new FilecoinStorage({ endpoint, token })
+    const client = new Web3Storage({ endpoint, token })
     try {
       await client.store(new Blob(['hello']))
       assert.unreachable('should have thrown')
@@ -40,14 +40,14 @@ describe('store', () => {
   })
 
   it('uploads a CAR', async () => {
-    const client = new FilecoinStorage({ token, endpoint })
+    const client = new Web3Storage({ token, endpoint })
     const { car, root } = await createCarBlobFromString('hello')
     const cid = await client.store(car)
     assert.equal(cid, root.toString(), 'returned cid matches the CAR root')
   })
 
   it('upload CAR with a blob lacking blob.type', async () => {
-    const client = new FilecoinStorage({ token, endpoint })
+    const client = new Web3Storage({ token, endpoint })
     const { root, out } = await pack({
       input: [new TextEncoder().encode('hello world')],
     })

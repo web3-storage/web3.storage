@@ -6,8 +6,8 @@
  *
  * @example
  * ```js
- * import { FilecoinStorage, Blob } from "web3.storage"
- * const client = new FilecoinStorage({ token: API_TOKEN })
+ * import { Web3Storage, Blob } from "web3.storage"
+ * const client = new Web3Storage({ token: API_TOKEN })
  *
  * const cid = await client.storeBlob(new Blob(['hello world']))
  * ```
@@ -22,15 +22,15 @@ import toIterable from 'browser-readablestream-to-it'
 /**
  * @implements API.Service
  */
-class FilecoinStorage {
+class Web3Storage {
   /**
    * Constructs a client bound to the given `options.token` and
    * `options.endpoint`.
    *
    * @example
    * ```js
-   * import { FilecoinStorage, Blob } from "web3.storage"
-   * const client = new FilecoinStorage({ token: API_TOKEN })
+   * import { Web3Storage, Blob } from "web3.storage"
+   * const client = new Web3Storage({ token: API_TOKEN })
    * const { car, rootCid } = await client.pack(new Blob(['hello world']))
    * const cid = await client.store(car)
    * console.assert(cid === rootCid, 'The service should store the files with the `rootCid` I created')
@@ -38,8 +38,8 @@ class FilecoinStorage {
    * Optionally you could pass an alternative API endpoint (e.g. for testing)
    * @example
    * ```js
-   * import { FilecoinStorage } from "web3.storage"
-   * const client = new FilecoinStorage({
+   * import { Web3Storage } from "web3.storage"
+   * const client = new Web3Storage({
    *   token: API_TOKEN
    *   endpoint: new URL('http://localhost:8080/')
    * })
@@ -92,7 +92,7 @@ class FilecoinStorage {
 
     const request = await fetch(url.toString(), {
       method: 'POST',
-      headers: FilecoinStorage.headers(token),
+      headers: Web3Storage.headers(token),
       body: car,
     })
     const result = await request.json()
@@ -113,7 +113,7 @@ class FilecoinStorage {
     const url = new URL(`/car/${cid}`, endpoint)
     const res = await fetch(url.toString(), {
       method: 'GET',
-      headers: FilecoinStorage.headers(token),
+      headers: Web3Storage.headers(token),
     })
     if (!res.ok) {
       // TODO: I'm assuming that an error for "CID isn't there (yet)" would be unergonomic. Need to verify.
@@ -147,7 +147,7 @@ class FilecoinStorage {
    * @param {Blob} blob
    */
   store(blob) {
-    return FilecoinStorage.store(this, blob)
+    return Web3Storage.store(this, blob)
   }
 
   /**
@@ -155,7 +155,7 @@ class FilecoinStorage {
    * @param {string} cid
    */
   get(cid) {
-    return FilecoinStorage.get(this, cid)
+    return Web3Storage.get(this, cid)
   }
 }
 
@@ -232,11 +232,11 @@ function toCarResponse(res) {
   return response
 }
 
-export { FilecoinStorage, Blob }
+export { Web3Storage, Blob }
 
 /**
  * Just to verify API compatibility.
  * @type {API.API}
  */
-const api = FilecoinStorage
+const api = Web3Storage
 void api
