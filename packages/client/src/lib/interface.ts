@@ -1,7 +1,7 @@
 import type { UnixFSEntry } from 'ipfs-car/unpack'
 import type { CID } from 'multiformats'
 import type { Web3File } from 'web3-file'
-export type { CID , UnixFSEntry, Web3File }
+export type { CID, UnixFSEntry, Web3File }
 
 
 /**

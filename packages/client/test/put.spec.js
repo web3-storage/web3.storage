@@ -49,7 +49,7 @@ describe('put', () => {
   it('adds Big Files', async function () {
     this.timeout(25e3)
     const client = new Web3Storage({ token, endpoint })
-    let uploadedChunks = 100
+    let uploadedChunks = 0
 
     const files =[
       Web3File.fromBytes(randomBytes(1024e6))
