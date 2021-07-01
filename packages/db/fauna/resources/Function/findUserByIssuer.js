@@ -13,20 +13,16 @@ const {
   If,
   Update,
   Let,
-  IsNonEmpty
+  IsNonEmpty,
 } = fauna
 
 const name = 'findUserByIssuer'
 const body = Query(
   Lambda(
-    ["issuer"],
+    ['issuer'],
     Let(
-      { match: Match(Index("unique_User_issuer"), Var("issuer")) },
-      If(
-        IsNonEmpty(Var("match")),
-        Get(Var("match")),
-        null
-      )
+      { match: Match(Index('unique_User_issuer'), Var('issuer')) },
+      If(IsNonEmpty(Var('match')), Get(Var('match')), null)
     )
   )
 )

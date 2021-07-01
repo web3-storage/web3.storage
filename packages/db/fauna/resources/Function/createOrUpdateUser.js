@@ -17,19 +17,24 @@ const {
   Exists,
   Merge,
   Now,
-  Get
+  Get,
 } = fauna
 
 const name = 'createOrUpdateUser'
 const body = Query(
   Lambda(
-    ["data"],
+    ['data'],
     Let(
-      { match: Match(Index("unique_User_issuer"), Select("issuer", Var("data"))) },
+      {
+        match: Match(
+          Index('unique_User_issuer'),
+          Select('issuer', Var('data'))
+        ),
+      },
       If(
-        IsEmpty(Var("match")),
-        Create("User", { data: Merge(Var("data"), { created: Now() }) }),
-        Update(Select("ref", Get(Var("match"))), { data: Var("data") })
+        IsEmpty(Var('match')),
+        Create('User', { data: Merge(Var('data'), { created: Now() }) }),
+        Update(Select('ref', Get(Var('match'))), { data: Var('data') })
       )
     )
   )

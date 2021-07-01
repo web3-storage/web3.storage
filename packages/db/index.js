@@ -5,9 +5,9 @@ const ENDPOINT = 'https://graphql.fauna.com/graphql'
 export { gql }
 
 export class DBClient {
-  constructor ({ endpoint = ENDPOINT, token }) {
+  constructor({ endpoint = ENDPOINT, token }) {
     this._client = new GraphQLClient(endpoint, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
   }
 
@@ -18,7 +18,7 @@ export class DBClient {
    * @param {V} variables
    * @returns {Promise<T>}
    */
-  query (document, variables) {
+  query(document, variables) {
     return this._client.request(document, variables)
   }
 }

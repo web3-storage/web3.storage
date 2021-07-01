@@ -1,7 +1,7 @@
-import fauna from "faunadb"
-import fs from "fs/promises"
-import path from "path"
-import dotenv from "dotenv"
+import fauna from 'faunadb'
+import fs from 'fs/promises'
+import path from 'path'
+import dotenv from 'dotenv'
 
 dotenv.config({ path: '.env.local' })
 

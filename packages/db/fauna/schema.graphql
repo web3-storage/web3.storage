@@ -51,33 +51,33 @@ type AuthKey {
 }
 
 """
-Details of a file/directory stored on web3.storage.
+Details of the root of a file/directory stored on web3.storage.
 """
-type Asset {
+type Pin {
   """
-  CID that corresponds to this asset.
+  Root CID that corresponds to this pin.
   """
   cid: String! @unique
 
   """
-  Deals referencing this asset.
+  Deals referencing this pin.
   """
   deals: [Deal!]! @relation
 
   """
-  Size of the DAG that makes up this asset.
+  Size of the DAG.
   """
   dagSize: Int!
 
   """
-  Pin status of this asset.
+  Pinning status.
   """
-  pinStatus: PinStatus! @index
+  status: PinStatus!
 
   """
-  Identifier for the known location where this asset is pinned.
+  Identifier for the known location where this pin is pinned.
   """
-  pinLocation: String!
+  location: String!
 }
 
 enum PinStatus {
@@ -109,23 +109,23 @@ type Upload {
   authKey: AuthKey
 
   """
-  Asset representing the root of the uploaded content.
+  Pin representing the root of the uploaded content.
   """
-  asset: Asset! @relation
+  pin: Pin! @relation
 
-  created: Time! @index
+  created: Time!
 
   deleted: Time
 }
 
 """
-Filecoin deal for an asset.
+Filecoin deal for a pin.
 """
 type Deal {
   """
   CIDs in this deal.
   """
-  assets: [Asset!]! @relation @index
+  pins: [Pin!]! @relation @index
 
   """
   ID of miner this deal was made with.
@@ -195,7 +195,7 @@ enum DealStatus {
 
 type Query {
   findUploads(where: FindUploadsInput): [Upload!]! @resolver(paginated: true)
-  findAssetByCid(cid: String!): Asset @resolver
+  findPinByCid(cid: String!): Pin @resolver
   """
   Verify the User with the passed issuer owns the AuthKey with the passed secret.
   """
