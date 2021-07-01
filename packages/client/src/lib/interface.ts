@@ -3,7 +3,6 @@ import type { CID } from 'multiformats'
 import type { Web3File } from 'web3-file'
 export type { CID, UnixFSEntry, Web3File }
 
-
 /**
  * Define nominal type of U based on type of T. Similar to Opaque types in Flow
  */
@@ -32,7 +31,7 @@ export interface API {
     files: Iterable<Web3File>,
     options?: PutOptions
   ): Promise<CIDString>
-    
+
   /**
    * Get files for a root CID packed as a CAR file
    */
@@ -45,10 +44,10 @@ export type PutOptions = {
 }
 
 export interface IpfsFile extends File {
-  cid: CIDString,  
+  cid: CIDString,
 }
 
 export interface CarResponse extends Response {
   unixFsIterator: () => AsyncIterable<UnixFSEntry>
-  files: () => Promise<Array<IpfsFile>>
+  files: () => Promise<Array<Web3File>>
 }

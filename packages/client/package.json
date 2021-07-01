@@ -20,13 +20,14 @@
     "test:cjs": "API_PORT=1337 mocha dist/test/*.spec.cjs --exit",
     "test:esm": "API_PORT=1337 hundreds mocha test/*.spec.js --exit",
     "mock:api": "smoke -p 1337 --hooks test/mocks/hooks.js test/mocks/api",
-    "build": "run-p build:*",
+    "build": "run-s clean build:*",
     "build:cjs": "rollup --config --silent rollup.config.js",
     "build:esm": "rollup --config rollup.esm.config.js",
     "build:tsc": "tsc --build",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov",
     "typedoc": "typedoc --entryPoints src  --out ../../docs/client",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "clean": "del dist"
   },
   "dependencies": {
     "@ipld/car": "^3.1.2",
@@ -45,6 +46,7 @@
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@types/mocha": "8.2.2",
     "bundlesize": "^0.18.1",
+    "del-cli": "^4.0.0",
     "hundreds": "0.0.9",
     "mocha": "8.3.2",
     "multiformats": "^7.0.0",

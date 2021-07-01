@@ -207,29 +207,6 @@ class Web3Storage {
 }
 
 /**
- * map a UnixFSEntry to a ~Blob~ File with benefits
- * @param {import('./lib/interface.js').UnixFSEntry} e
- * @returns {Promise<import('./lib/interface.js').IpfsFile>}
- */
-async function toIpfsFile(e) {
-  const chunks = []
-  for await (const chunk of e.content()) {
-    chunks.push(chunk)
-  }
-
-  // A Blob in File clothing
-  const file = Object.assign(new Blob(chunks), {
-    cid: e.cid.toString(),
-    name: e.name,
-    relativePath: e.path,
-    webkitRelativePath: e.path,
-    // TODO: mtime may be available on UnixFSEntry... need to investigate ts weirdness.
-    lastModified: Date.now(),
-  })
-  return file
-}
-
-/**
  * Add car unpacking smarts to the response object,
  * @param {Response} res
  * @returns {import('./lib/interface.js').CarResponse}
@@ -254,7 +231,9 @@ function toCarResponse(res) {
         if (entry.type === 'directory') {
           continue
         }
-        const file = await toIpfsFile(entry)
+        const file = new Web3File(entry.content(), entry.name, {
+          path: entry.path,
+        })
         files.push(file)
       }
       return files
