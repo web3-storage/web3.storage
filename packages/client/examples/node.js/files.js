@@ -1,5 +1,4 @@
-import { Web3Storage } from '../../src/lib.js'
-import { Web3File } from 'web3-file'
+import { Web3Storage, Web3File } from '../../src/lib.js'
 
 // TODO
 const endpoint = 'https://api.web3.storage' // the default

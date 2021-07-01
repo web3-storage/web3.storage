@@ -30,13 +30,18 @@ export interface API {
   put(
     service: Service,
     files: Iterable<Web3File>,
-    options?: { onStoredChunk?: (size: number) => void }
+    options?: PutOptions
   ): Promise<CIDString>
     
   /**
    * Get files for a root CID packed as a CAR file
    */
   get(service: Service, cid: CIDString): Promise<CarResponse | null>
+}
+
+export type PutOptions = {
+  onStoredChunk?: (size: number) => void,
+  maxRetries?: number
 }
 
 export interface IpfsFile extends File {

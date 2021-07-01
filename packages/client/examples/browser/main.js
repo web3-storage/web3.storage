@@ -1,5 +1,4 @@
-import { Web3Storage } from 'web3.storage'
-import { Web3File } from 'web3-file'
+import { Web3Storage, Web3File } from 'web3.storage'
 
 const endpoint = 'https://api.web3.storage' // the default
 const token =

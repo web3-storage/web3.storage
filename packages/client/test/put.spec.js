@@ -1,7 +1,6 @@
 import * as assert from 'uvu/assert'
 import randomBytes from 'randombytes'
-import { Web3Storage } from 'web3.storage'
-import { Web3File } from 'web3-file'
+import { Web3Storage, Web3File } from 'web3.storage'
 
 describe('put', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
@@ -31,11 +30,9 @@ describe('put', () => {
   })
 
   it('erros with a File that will not be parsed by the Cluster', async function () {
-    this.timeout(35e10) // This needs to happen because of retry...
-    // We need the test for coverage
     const client = new Web3Storage({ token, endpoint })
     try {
-      await client.put([Web3File.fromString('test-put-fail')])
+      await client.put([Web3File.fromString('test-put-fail')], { maxRetries: 1 })
       assert.unreachable('should have thrown')
     } catch (err) {
       assert.match(err.message, /Request body not a valid CAR file/)

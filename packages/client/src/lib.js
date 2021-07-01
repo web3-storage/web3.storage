@@ -17,6 +17,7 @@ import { transform } from 'streaming-iterables'
 import pRetry from 'p-retry'
 import { pack } from 'ipfs-car/pack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
+import { Web3File } from 'web3-file'
 import * as API from './lib/interface.js'
 import {
   fetch,
@@ -27,7 +28,7 @@ import { CarReader } from '@ipld/car/reader'
 import { unpack } from 'ipfs-car/unpack'
 import toIterable from 'browser-readablestream-to-it'
 
-const MAX_ADD_RETRIES = 5
+const MAX_PUT_RETRIES = 5
 const MAX_CONCURRENT_UPLOADS = 3
 const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 
@@ -88,10 +89,10 @@ class Web3Storage {
   /**
    * @param {API.Service} service
    * @param {Iterable<API.Web3File>} files
-   * @param {{onStoredChunk?: (size: number) => void}} [options]
+   * @param {API.PutOptions} [options]
    * @returns {Promise<API.CIDString>}
    */
-  static async put({ endpoint, token }, files, { onStoredChunk } = {}) {
+  static async put({ endpoint, token }, files, { onStoredChunk, maxRetries = MAX_PUT_RETRIES } = {}) {
     const url = new URL(`/car`, endpoint)
     const headers = Web3Storage.headers(token)
     const targetSize = MAX_CHUNK_SIZE
@@ -130,7 +131,7 @@ class Web3Storage {
               throw new Error(result.error.message)
             }
           },
-          { retries: MAX_ADD_RETRIES }
+          { retries: maxRetries }
         )
         onStoredChunk && onStoredChunk(carFile.size)
         return res
@@ -189,7 +190,7 @@ class Web3Storage {
    * console.assert(cid === root)
    * ```
    * @param {Iterable<API.Web3File>} files
-   * @param {{onStoredChunk?: (size: number) => void}} [options]
+   * @param {API.PutOptions} [options]
    */
   put(files, options) {
     return Web3Storage.put(this, files, options)
@@ -277,7 +278,7 @@ function toCarResponse(res) {
   return response
 }
 
-export { Web3Storage, Blob }
+export { Web3Storage, Blob, Web3File }
 
 /**
  * Just to verify API compatibility.
