@@ -14,7 +14,7 @@ async function main() {
   console.log('added', cid)
 }
 
-// TODO: Read a fixstures folder instead
+// TODO: Read a fixtures folder instead
 function prepareFiles () {
   const data = 'Hello web3.storage!'
   const data2 = 'Hello web3.storage!!'

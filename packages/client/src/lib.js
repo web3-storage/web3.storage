@@ -175,7 +175,8 @@ class Web3Storage {
   // Just a sugar so you don't have to pass around endpoint and token around.
 
   /**
-   * Puts files.
+   * Uploads files to web3.storage. Files are hashed in the client and uploaded as a single 
+   * [Content Addressed Archive(CAR)](https://github.com/ipld/specs/blob/master/block-layer/content-addressable-archives.md).
    * Takes a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob/Blob)
    *
    * Returns the corresponding Content Identifier (CID).

@@ -10,7 +10,7 @@ async function main() {
 
   const files = prepareFiles()
 
-  // send the files to tbd.storage
+  // send the files to web3.storage
   const cid = await storage.put(files)
 
   // TODO
