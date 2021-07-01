@@ -16,6 +16,7 @@
 import { transform } from 'streaming-iterables'
 import pRetry from 'p-retry'
 import { pack } from 'ipfs-car/pack'
+import { unpackStream } from 'ipfs-car/unpack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
 import { Web3File } from 'web3-file'
 import * as API from './lib/interface.js'
@@ -24,9 +25,6 @@ import {
   Blob,
   Blockstore
 } from './platform.js'
-import { CarReader } from '@ipld/car/reader'
-import { unpack } from 'ipfs-car/unpack'
-import toIterable from 'browser-readablestream-to-it'
 
 const MAX_PUT_RETRIES = 5
 const MAX_CONCURRENT_UPLOADS = 3
@@ -209,23 +207,6 @@ class Web3Storage {
 }
 
 /**
- * Upgrade a ReadableStream to an AsyncIterable if it isn't already
- *
- * ReadableStream (e.g res.body) is asyncIterable in node, but not in chrome, yet.
- * see: https://bugs.chromium.org/p/chromium/issues/detail?id=929585
- *
- * @param {ReadableStream<Uint8Array>} readable
- * @returns {AsyncIterable<Uint8Array>}
- */
-function asAsyncIterable(readable) {
-  // @ts-ignore how to tell tsc that we are checking the type here?
-  return Symbol.asyncIterator in readable
-    ? readable
-    : /* c8 ignore next */
-      toIterable(readable)
-}
-
-/**
  * map a UnixFSEntry to a ~Blob~ File with benefits
  * @param {import('./lib/interface.js').UnixFSEntry} e
  * @returns {Promise<import('./lib/interface.js').IpfsFile>}
@@ -260,10 +241,11 @@ function toCarResponse(res) {
       if (!res.body) {
         throw new Error('No body on response')
       }
-      const carReader = await CarReader.fromIterable(asAsyncIterable(res.body))
-      for await (const entry of unpack(carReader)) {
+      const blockstore = new Blockstore()
+      for await (const entry of unpackStream(res.body, {blockstore})) {
         yield entry
       }
+      await blockstore.destroy()
     },
     files: async () => {
       const files = []
