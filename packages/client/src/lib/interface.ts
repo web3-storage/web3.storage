@@ -30,7 +30,7 @@ export interface API {
     files: Iterable<Filelike>,
     options?: PutOptions
   ): Promise<CIDString>
-    
+
   /**
    * Get files for a root CID packed as a CAR file
    */
@@ -47,11 +47,11 @@ export type PutOptions = {
   maxRetries?: number
 }
 
-export interface IpfsFile extends File {
-  cid: CIDString,  
+export interface Web3File extends File {
+  cid: CID,
 }
 
 export interface CarResponse extends Response {
   unixFsIterator: () => AsyncIterable<UnixFSEntry>
-  files: () => Promise<Array<IpfsFile>>
+  files: () => Promise<Array<Web3File>>
 }

@@ -16,16 +16,15 @@
 import { transform } from 'streaming-iterables'
 import pRetry from 'p-retry'
 import { pack } from 'ipfs-car/pack'
+import { unpackStream } from 'ipfs-car/unpack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
 import * as API from './lib/interface.js'
 import {
   fetch,
+  File,
   Blob,
   Blockstore
 } from './platform.js'
-import { CarReader } from '@ipld/car/reader'
-import { unpack } from 'ipfs-car/unpack'
-import toIterable from 'browser-readablestream-to-it'
 
 const MAX_PUT_RETRIES = 5
 const MAX_CONCURRENT_UPLOADS = 3
@@ -211,43 +210,30 @@ class Web3Storage {
 }
 
 /**
- * Upgrade a ReadableStream to an AsyncIterable if it isn't already
- *
- * ReadableStream (e.g res.body) is asyncIterable in node, but not in chrome, yet.
- * see: https://bugs.chromium.org/p/chromium/issues/detail?id=929585
- *
- * @param {ReadableStream<Uint8Array>} readable
- * @returns {AsyncIterable<Uint8Array>}
+ * Map a UnixFSEntry to a File with a cid property
+ * @param {import('./lib/interface.js').UnixFSEntry} entry
+ * @returns {Promise<import('./lib/interface.js').Web3File>}
  */
-function asAsyncIterable(readable) {
-  // @ts-ignore how to tell tsc that we are checking the type here?
-  return Symbol.asyncIterator in readable
-    ? readable
-    : /* c8 ignore next */
-      toIterable(readable)
+async function toWeb3File({content, path, cid}) {
+  const chunks = []
+  for await (const chunk of content()) {
+    chunks.push(chunk)
+  }
+  const file = new File(chunks, toFilenameWithPath(path))
+  return Object.assign(file, { cid })
 }
 
 /**
- * map a UnixFSEntry to a ~Blob~ File with benefits
- * @param {import('./lib/interface.js').UnixFSEntry} e
- * @returns {Promise<import('./lib/interface.js').IpfsFile>}
+ * Trim the root cid from the path if there is anyting after it.
+ * bafy...ic2q/path/to/pinpie.jpg => path/to/pinpie.jpg
+ *         bafy...ic2q/pinpie.jpg => pinpie.jpg
+ *                    bafk...52zy => bafk...52zy
+ * @param {string} unixFsPath
+ * @returns {string}
  */
-async function toIpfsFile(e) {
-  const chunks = []
-  for await (const chunk of e.content()) {
-    chunks.push(chunk)
-  }
-
-  // A Blob in File clothing
-  const file = Object.assign(new Blob(chunks), {
-    cid: e.cid.toString(),
-    name: e.name,
-    relativePath: e.path,
-    webkitRelativePath: e.path,
-    // TODO: mtime may be available on UnixFSEntry... need to investigate ts weirdness.
-    lastModified: Date.now(),
-  })
-  return file
+function toFilenameWithPath(unixFsPath) {
+  const slashIndex = unixFsPath.indexOf('/')
+  return slashIndex === -1 ? unixFsPath : unixFsPath.substring(slashIndex + 1)
 }
 
 /**
@@ -262,9 +248,13 @@ function toCarResponse(res) {
       if (!res.body) {
         throw new Error('No body on response')
       }
-      const carReader = await CarReader.fromIterable(asAsyncIterable(res.body))
-      for await (const entry of unpack(carReader)) {
-        yield entry
+      const blockstore = new Blockstore()
+      try {
+        for await (const entry of unpackStream(res.body, {blockstore})) {
+          yield entry
+        }
+      } finally {
+        await blockstore.destroy()
       }
     },
     files: async () => {
@@ -274,7 +264,7 @@ function toCarResponse(res) {
         if (entry.type === 'directory') {
           continue
         }
-        const file = await toIpfsFile(entry)
+        const file = await toWeb3File(entry)
         files.push(file)
       }
       return files
@@ -283,7 +273,7 @@ function toCarResponse(res) {
   return response
 }
 
-export { Web3Storage, Blob }
+export { Web3Storage, File, Blob }
 
 /**
  * Just to verify API compatibility.
