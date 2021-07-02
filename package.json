@@ -5,7 +5,8 @@
   "license": "(Apache-2.0 AND MIT)",
   "workspaces": [
     "packages/api",
-    "packages/client"
+    "packages/client",
+    "packages/w3"
   ],
   "scripts": {
     "test": "npm run test --workspaces",
