@@ -49,6 +49,15 @@ describe('get', () => {
     assert.ok(res.ok)
     const files = await res.files()
     assert.is(files.length, 3, 'should contain 3 files')
+    assert.is(files[0].name, 'dr-is-tired.jpg')
+    assert.is(files[0].cid.toString(), 'bafkreiabltrd5zm73pvi7plq25pef3hm7jxhbi3kv4hapegrkfpkqtkbme')
+    assert.is(files[0].size, 94482)
+    assert.is(files[1].name, 'not-distributed.jpg')
+    assert.is(files[1].cid.toString(), 'bafybeicklkqcnlvtiscr2hzkubjwnwjinvskffn4xorqeduft3wq7vm5u4')
+    assert.is(files[1].size, 414201)
+    assert.is(files[2].name, 'youareanonsense.jpg')
+    assert.is(files[2].cid.toString(), 'bafkreiaqv66m5nd6mwgkk7h5lwqnjzj54s4f7knmnrjhb7ylzqfg2vdo54')
+    assert.is(files[2].size, 55415)
   })
 
   it('returns null on 404', async () => {
