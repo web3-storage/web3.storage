@@ -43,6 +43,7 @@ export interface Filelike {
 }
 
 export type PutOptions = {
+  onCarCreated?: (cid: CIDString) => void,
   onStoredChunk?: (size: number) => void,
   maxRetries?: number
 }

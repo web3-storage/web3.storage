@@ -44,8 +44,13 @@ describe('put', () => {
   it('adds Files', async () => {
     const client = new Web3Storage({ token, endpoint })
     const files = prepareFiles()
-    const cid = await client.put(files)
-    assert.equal(cid, 'bafybeifkc773a2s6gerq7ip7tikahlfflxe4fvagyxf74zfkr33j2yu5li', 'returned cid matches the CAR')
+    const expectedCid = 'bafybeifkc773a2s6gerq7ip7tikahlfflxe4fvagyxf74zfkr33j2yu5li'
+    const cid = await client.put(files, {
+      onCarCreated: (cid) => {
+        assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+      }
+    })
+    assert.equal(cid, expectedCid, 'returned cid matches the CAR')
   })
 
   it('adds Big Files', async function () {
