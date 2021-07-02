@@ -32,8 +32,13 @@
     "@ipld/car": "^3.1.2",
     "@web-std/blob": "^2.1.0",
     "@web-std/fetch": "^2.0.1",
+    "@web-std/file": "^1.1.0",
     "browser-readablestream-to-it": "^1.0.2",
-    "ipfs-car": "^0.3.5"
+    "carbites": "^1.0.6",
+    "ipfs-car": "^0.4.1",
+    "p-retry": "^4.5.0",
+    "streaming-iterables": "^6.0.0",
+    "web3-file": "^0.2.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",

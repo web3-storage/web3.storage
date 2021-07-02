@@ -1,6 +1,8 @@
 import type { UnixFSEntry } from 'ipfs-car/unpack'
 import type { CID } from 'multiformats'
-export type { CID , UnixFSEntry }
+import type { Web3File } from 'web3-file'
+export type { CID, UnixFSEntry, Web3File }
+
 
 /**
  * Define nominal type of U based on type of T. Similar to Opaque types in Flow
@@ -23,13 +25,23 @@ export type CIDString = Tagged<string, CID>
 
 export interface API {
   /**
-   * Stores a single file and returns a corresponding CID.
+   * Stores files and returns a corresponding CID.
    */
-  store(service: Service, content: Blob | File): Promise<CIDString>
+  put(
+    service: Service,
+    files: Iterable<Web3File>,
+    options?: PutOptions
+  ): Promise<CIDString>
+    
   /**
    * Get files for a root CID packed as a CAR file
    */
   get(service: Service, cid: CIDString): Promise<CarResponse | null>
+}
+
+export type PutOptions = {
+  onStoredChunk?: (size: number) => void,
+  maxRetries?: number
 }
 
 export interface IpfsFile extends File {
