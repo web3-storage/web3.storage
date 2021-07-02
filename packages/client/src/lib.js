@@ -91,7 +91,7 @@ class Web3Storage {
    * @param {API.PutOptions} [options]
    * @returns {Promise<API.CIDString>}
    */
-  static async put({ endpoint, token }, files, { onCarCreated, onStoredChunk, maxRetries = MAX_PUT_RETRIES } = {}) {
+  static async put({ endpoint, token }, files, { onRootCidReady, onStoredChunk, maxRetries = MAX_PUT_RETRIES } = {}) {
     const url = new URL(`/car`, endpoint)
     const headers = Web3Storage.headers(token)
     const targetSize = MAX_CHUNK_SIZE
@@ -109,7 +109,7 @@ class Web3Storage {
       })
       carRoot = root.toString()
 
-      onCarCreated && onCarCreated(carRoot)
+      onRootCidReady && onRootCidReady(carRoot)
 
       const splitter = await TreewalkCarSplitter.fromIterable(out, targetSize)
 

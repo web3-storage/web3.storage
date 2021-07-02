@@ -46,7 +46,7 @@ describe('put', () => {
     const files = prepareFiles()
     const expectedCid = 'bafybeifkc773a2s6gerq7ip7tikahlfflxe4fvagyxf74zfkr33j2yu5li'
     const cid = await client.put(files, {
-      onCarCreated: (cid) => {
+      onRootCidReady: (cid) => {
         assert.equal(cid, expectedCid, 'returned cid matches the CAR')
       }
     })
