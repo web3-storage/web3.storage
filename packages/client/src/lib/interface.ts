@@ -43,6 +43,7 @@ export interface Filelike {
 }
 
 export type PutOptions = {
+  onRootCidReady?: (cid: CIDString) => void,
   onStoredChunk?: (size: number) => void,
   maxRetries?: number
 }

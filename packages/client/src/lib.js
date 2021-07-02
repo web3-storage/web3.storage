@@ -90,22 +90,26 @@ class Web3Storage {
    * @param {API.PutOptions} [options]
    * @returns {Promise<API.CIDString>}
    */
-  static async put({ endpoint, token }, files, { onStoredChunk, maxRetries = MAX_PUT_RETRIES } = {}) {
+  static async put({ endpoint, token }, files, { onRootCidReady, onStoredChunk, maxRetries = MAX_PUT_RETRIES } = {}) {
     const url = new URL(`/car`, endpoint)
     const headers = Web3Storage.headers(token)
     const targetSize = MAX_CHUNK_SIZE
 
-    let root
+    let carRoot
     const blockstore = new Blockstore()
 
     try {
-      const { out } = await pack({
+      const { out, root } = await pack({
         input: Array.from(files).map((f) => ({
           path: f.name,
           content: f.stream()
         })),
         blockstore
       })
+      carRoot = root.toString()
+
+      onRootCidReady && onRootCidReady(carRoot)
+
       const splitter = await TreewalkCarSplitter.fromIterable(out, targetSize)
 
       const upload = transform(
@@ -142,16 +146,13 @@ class Web3Storage {
         }
       )
 
-      for await (const cid of upload(splitter.cars())) {
-        root = cid
-      }
+      for await (const _ of upload(splitter.cars())) {}
     } finally {
       // Destroy Blockstore
       await blockstore.destroy()
     }
 
-    // @ts-ignore there will always be a root, or carbites will fail
-    return root
+    return carRoot
   }
 
   /**
