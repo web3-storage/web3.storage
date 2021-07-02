@@ -35,7 +35,7 @@
     "@web-std/file": "^1.1.0",
     "browser-readablestream-to-it": "^1.0.2",
     "carbites": "^1.0.6",
-    "ipfs-car": "^0.3.5",
+    "ipfs-car": "^0.4.1",
     "p-retry": "^4.5.0",
     "streaming-iterables": "^6.0.0",
     "web3-file": "^0.2.0"

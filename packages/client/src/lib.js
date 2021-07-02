@@ -97,54 +97,57 @@ class Web3Storage {
     const headers = Web3Storage.headers(token)
     const targetSize = MAX_CHUNK_SIZE
 
-    const blockstore = new Blockstore()
-    const { out } = await pack({
-      input: files,
-      blockstore
-    })
-    const splitter = await TreewalkCarSplitter.fromIterable(out, targetSize)
-
-    const upload = transform(
-      MAX_CONCURRENT_UPLOADS,
-      async (/** @type {AsyncIterable<Uint8Array>} */ car) => {
-        const carParts = []
-        for await (const part of car) {
-          carParts.push(part)
-        }
-
-        const carFile = new Blob(carParts, {
-          type: 'application/car',
-        })
-
-        const res = await pRetry(
-          async () => {
-            const request = await fetch(url.toString(), {
-              method: 'POST',
-              headers,
-              body: carFile,
-            })
-            const result = await request.json()
-
-            if (result.ok) {
-              return result.value.cid
-            } else {
-              throw new Error(result.error.message)
-            }
-          },
-          { retries: maxRetries }
-        )
-        onStoredChunk && onStoredChunk(carFile.size)
-        return res
-      }
-    )
-
     let root
-    for await (const cid of upload(splitter.cars())) {
-      root = cid
-    }
+    const blockstore = new Blockstore()
 
-    // Destroy Blockstore
-    await blockstore.destroy()
+    try {
+      const { out } = await pack({
+        input: files,
+        blockstore
+      })
+      const splitter = await TreewalkCarSplitter.fromIterable(out, targetSize)
+
+      const upload = transform(
+        MAX_CONCURRENT_UPLOADS,
+        async (/** @type {AsyncIterable<Uint8Array>} */ car) => {
+          const carParts = []
+          for await (const part of car) {
+            carParts.push(part)
+          }
+
+          const carFile = new Blob(carParts, {
+            type: 'application/car',
+          })
+
+          const res = await pRetry(
+            async () => {
+              const request = await fetch(url.toString(), {
+                method: 'POST',
+                headers,
+                body: carFile,
+              })
+              const result = await request.json()
+
+              if (result.ok) {
+                return result.value.cid
+              } else {
+                throw new Error(result.error.message)
+              }
+            },
+            { retries: maxRetries }
+          )
+          onStoredChunk && onStoredChunk(carFile.size)
+          return res
+        }
+      )
+
+      for await (const cid of upload(splitter.cars())) {
+        root = cid
+      }
+    } finally {
+      // Destroy Blockstore
+      await blockstore.destroy()
+    }
 
     // @ts-ignore there will always be a root, or carbites will fail
     return root
