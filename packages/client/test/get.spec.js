@@ -26,16 +26,15 @@ describe('get', () => {
     assert.ok(res.ok)
     const files = await res.files()
     for (const file of files) {
-      // TODO: add support for cid on web3 file
-      // assert.is(
-      //   file.cid,
-      //   cid,
-      //   'in a CAR with 1 file, the file name should match the CAR root'
-      // )
       assert.is(
-        file.path,
+        file.cid.toString(),
         cid,
-        `webkitRelativePath (${file.webkitRelativePath}) should be (${cid})`
+        'in a CAR with 1 file, the file name should match the CAR root'
+      )
+      assert.is(
+        file.name,
+        cid,
+        `name (${file.name}) should be (${cid})`
       )
       assert.ok(file.lastModified)
       assert.is(await file.text(), 'hello world')

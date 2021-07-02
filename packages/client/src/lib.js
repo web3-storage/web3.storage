@@ -21,6 +21,7 @@ import { TreewalkCarSplitter } from 'carbites/treewalk'
 import * as API from './lib/interface.js'
 import {
   fetch,
+  File,
   Blob,
   Blockstore
 } from './platform.js'
@@ -209,6 +210,33 @@ class Web3Storage {
 }
 
 /**
+ * Map a UnixFSEntry to a File with a cid property
+ * @param {import('./lib/interface.js').UnixFSEntry} entry
+ * @returns {Promise<import('./lib/interface.js').Web3File>}
+ */
+ async function toWeb3File({content, path, cid}) {
+  const chunks = []
+  for await (const chunk of content()) {
+    chunks.push(chunk)
+  }
+  const file = new File(chunks, toFilenameWithPath(path))
+  return Object.assign(file, { cid })
+}
+
+/**
+ * Trim the root cid from the path if there is anyting after it.
+ * bafy...ic2q/path/to/pinpie.jpg => path/to/pinpie.jpg
+ *         bafy...ic2q/pinpie.jpg => pinpie.jpg
+ *                    bafk...52zy => bafk...52zy
+ * @param {string} unixFsPath
+ * @returns {string}
+ */
+function toFilenameWithPath(unixFsPath) {
+  const slashIndex = unixFsPath.indexOf('/')
+  return slashIndex === -1 ? unixFsPath : unixFsPath.substring(slashIndex + 1)
+}
+
+/**
  * Add car unpacking smarts to the response object,
  * @param {Response} res
  * @returns {import('./lib/interface.js').CarResponse}
@@ -221,10 +249,13 @@ function toCarResponse(res) {
         throw new Error('No body on response')
       }
       const blockstore = new Blockstore()
-      for await (const entry of unpackStream(res.body, {blockstore})) {
-        yield entry
+      try {
+        for await (const entry of unpackStream(res.body, {blockstore})) {
+          yield entry
+        }
+      } finally {
+        await blockstore.destroy()
       }
-      await blockstore.destroy()
     },
     files: async () => {
       const files = []
@@ -233,9 +264,7 @@ function toCarResponse(res) {
         if (entry.type === 'directory') {
           continue
         }
-        const file = new Web3File(entry.content(), entry.name, {
-          path: entry.path,
-        })
+        const file = await toWeb3File(entry)
         files.push(file)
       }
       return files
@@ -244,7 +273,7 @@ function toCarResponse(res) {
   return response
 }
 
-export { Web3Storage, Blob }
+export { Web3Storage, File, Blob }
 
 /**
  * Just to verify API compatibility.

@@ -47,8 +47,8 @@ export type PutOptions = {
   maxRetries?: number
 }
 
-export interface IpfsFile extends File {
-  cid: CIDString,
+export interface Web3File extends File {
+  cid: CID,
 }
 
 export interface CarResponse extends Response {
