@@ -1,4 +1,4 @@
-import { Web3Storage, Web3File } from '../../src/lib.js'
+import { Web3Storage } from '../../src/lib.js'
 
 // TODO
 const endpoint = 'https://api.web3.storage' // the default
@@ -19,25 +19,21 @@ function prepareFiles () {
   const data2 = 'Hello web3.storage!!'
 
   return [
-    Web3File.fromText(
-      data,
-      'data.txt',
-      { path: '/dir/data.txt' }
+    new File(
+      [data],
+      '/dir/data.txt'
     ),
-    Web3File.fromText(
-      data2,
-      'data2.txt',
-      { path: '/dir/data2.txt' }
+    new File(
+      [data2],
+      '/dir/data2.txt'
     ),
-    Web3File.fromText(
-      data,
-      'data.txt',
-      { path: '/dir/otherdir/data.txt' }
+    new File(
+      [data],
+      '/dir/otherdir/data.txt'
     ),
-    Web3File.fromText(
-      data2,
-      'data2.txt',
-      { path: '/dir/otherdir/data2.txt' }
+    new File(
+      [data2],
+      '/dir/otherdir/data2.txt'
     )
   ]
 }
