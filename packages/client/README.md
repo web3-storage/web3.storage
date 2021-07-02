@@ -1,6 +1,6 @@
 # web3.storage client
 
-API client for web3.storage
+API client for [web3.storage](https://web3.storage)
 
 ## Getting started
 
@@ -14,26 +14,18 @@ import { Web3Storage } from 'web3.storage'
 // Construct with token and endpoint
 const client = new Web3Storage({ token: apiKey })
 
-// Pack files into a CAR
-client.pack(files: Iterable<File>): Promise<{car: Blob, root: CIDString}>
-
-// Store a CAR
-client.store(car: Blob): Promise<CIDString>
-
-// Send the files, packing them into a CAR under the hood
-client.packAndStore(files: Iterable<File>): Promise<CIDString>
+// Pack files into a CAR and send to web3.storage
+const rootCid = await client.put(fileInput.files) // Promise<CIDString>
 
 // Get info on the Filecoin deals that the CID is stored in
-client.status(cid: string): Promise<Metadata>
+const info = await client.status(rootCid) // :Promise<Metadata>
 
-// Fetch a CAR over http
-client.get(cid: string): Promise<Blob | null>
-
-// Unpack and verify a CAR
-client.unpack(car: Blob): AsyncIterable<?>
-
-// Fetch, verify and unpack the CID to files
-client.getAndUnpack(cid: string): AsyncIterable<?>
+// Fetch and verify files from web3.storage
+const res = await client.get(rootCid) // :Promise<Web3Response>
+const files = await res.files() // :Promise<[]Web3File>
+for (const file of files) {
+  console.log(`${file.cid} ${file.name} ${file.size}`)
+}
 ```
 
 ## Testing

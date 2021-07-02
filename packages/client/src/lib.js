@@ -158,7 +158,7 @@ class Web3Storage {
   /**
    * @param {API.Service} service
    * @param {string} cid
-   * @returns {Promise<import('./lib/interface.js').CarResponse | null>}
+   * @returns {Promise<import('./lib/interface.js').Web3Response | null>}
    */
   static async get({ endpoint, token }, cid) {
     const url = new URL(`/car/${cid}`, endpoint)
@@ -175,7 +175,7 @@ class Web3Storage {
         throw new Error(`${res.status} ${res.statusText}`)
       }
     }
-    return toCarResponse(res)
+    return toWeb3Response(res)
   }
 
   // Just a sugar so you don't have to pass around endpoint and token around.
@@ -240,9 +240,9 @@ function toFilenameWithPath(unixFsPath) {
 /**
  * Add car unpacking smarts to the response object,
  * @param {Response} res
- * @returns {import('./lib/interface.js').CarResponse}
+ * @returns {import('./lib/interface.js').Web3Response}
  */
-function toCarResponse(res) {
+function toWeb3Response(res) {
   const response = Object.assign(res, {
     unixFsIterator: async function* () {
       /* c8 ignore next 3 */

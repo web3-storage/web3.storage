@@ -34,7 +34,7 @@ export interface API {
   /**
    * Get files for a root CID packed as a CAR file
    */
-  get(service: Service, cid: CIDString): Promise<CarResponse | null>
+  get(service: Service, cid: CIDString): Promise<Web3Response | null>
 }
 
 export interface Filelike {
@@ -52,7 +52,7 @@ export interface Web3File extends File {
   cid: CID,
 }
 
-export interface CarResponse extends Response {
+export interface Web3Response extends Response {
   unixFsIterator: () => AsyncIterable<UnixFSEntry>
   files: () => Promise<Array<Web3File>>
 }
