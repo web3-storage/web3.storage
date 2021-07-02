@@ -214,7 +214,7 @@ class Web3Storage {
  * @param {import('./lib/interface.js').UnixFSEntry} entry
  * @returns {Promise<import('./lib/interface.js').Web3File>}
  */
- async function toWeb3File({content, path, cid}) {
+async function toWeb3File({content, path, cid}) {
   const chunks = []
   for await (const chunk of content()) {
     chunks.push(chunk)
