@@ -19,15 +19,23 @@
 
 A registered user in the system.
 
-### `AuthKey`
+### `AuthToken`
 
 An auth key (API key) used to authenticate user actions.
 
-### `Asset`
+### `Content`
 
-A file that is being recorded by the system, essentially a root CID. It may have been uploaded by multiple users.
+A file/directory that is being recorded by the system, essentially a root CID. It may have been uploaded by multiple users.
 
-It's DAG size and pinning status are cached here and it contains references to [deals](#deal) it appears in.
+It's DAG size is cached here and it contains references to [pins](#pin) (IPFS nodes that are pinning it) and the [deals](#deal) (Filecoin deals it appears in).
+
+### `Pin`
+
+A CID for content that is pinned in IPFS.
+
+### `PinLocation`
+
+Location of a pin - libp2p peer ID and optionally a name.
 
 ### `Upload`
 

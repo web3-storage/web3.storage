@@ -17,9 +17,10 @@ const {
   Filter,
   Equals,
   Select,
+  And
 } = fauna
 
-const name = 'verifyAuthKey'
+const name = 'verifyAuthToken'
 const body = Query(
   Lambda(
     ['issuer', 'secret'],
@@ -31,9 +32,9 @@ const body = Query(
           {
             user: Get(Var('userMatch')),
             keyMatch: Match(
-              Index('authKey_user_by_user'),
-              Select('id', Var('user'))
-            ),
+              Index('authToken_user_by_user'),
+              Select('ref', Var('user'))
+            )
           },
           If(
             IsNonEmpty(Var('keyMatch')),
@@ -42,13 +43,16 @@ const body = Query(
                 filterKeyMatch: Filter(
                   Var('keyMatch'),
                   Lambda(
-                    'authKey',
-                    And(
-                      Equals(Select('secret', Var('authKey')), Var('secret')),
-                      Equals(Select('deleted', Var('authKey')), null),
+                    'authTokenRef',
+                    Let(
+                      { authToken: Get(Var('authTokenRef')) },
+                      And(
+                        Equals(Select(['data', 'secret'], Var('authToken')), Var('secret')),
+                        Equals(Select(['data', 'deleted'], Var('authToken'), null), null)
+                      )
                     )
                   )
-                ),
+                )
               },
               If(
                 IsNonEmpty(Var('filterKeyMatch')),

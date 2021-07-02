@@ -6,7 +6,7 @@ dotenv.config({ path: '.env.local' })
 
 const main = async () => {
   if (!process.env.FAUNA_KEY) {
-    throw new Error(`missing FAUNA_KEY environment variable`)
+    throw new Error('missing FAUNA_KEY environment variable')
   }
   await uploadSchema()
 }
@@ -19,13 +19,13 @@ const uploadSchema = async () => {
   const response = await fetch('https://graphql.fauna.com/import', {
     method: 'POST',
     headers: { authorization: `Bearer ${process.env.FAUNA_KEY}` },
-    body: content,
+    body: content
   })
   if (!response.ok) {
     const reason = await response.text()
     throw new Error(`failed to import schema: ${response.status} ${reason}`)
   }
-  console.log(`🎉 GraphQL schema import succeeded`)
+  console.log('🎉 GraphQL schema import succeeded')
 }
 
 main()

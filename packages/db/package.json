@@ -24,6 +24,7 @@
   "devDependencies": {
     "@web-std/fetch": "^2.0.1",
     "dotenv": "^10.0.0",
-    "faunadb": "^4.3.0"
+    "faunadb": "^4.3.0",
+    "standard": "^16.0.3"
   }
 }

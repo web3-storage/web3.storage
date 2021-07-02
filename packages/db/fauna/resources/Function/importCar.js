@@ -11,15 +11,15 @@ const {
   Select,
   Var,
   If,
-  IsEmpty,
   Create,
   Update,
   Exists,
-  Merge,
   Now,
   Get,
   Ref,
-  IsNonEmpty
+  IsNonEmpty,
+  Abort,
+  Collection
 } = fauna
 
 const name = 'importCar'
@@ -28,39 +28,40 @@ const body = Query(
     ['data'],
     Let(
       {
-        authKeyRef: Ref(Collection('AuthKey'), Select('authKey', Var('data'))),
+        authTokenRef: Ref(Collection('AuthToken'), Select('authToken', Var('data'))),
         cid: Select('cid', Var('data')),
-        pinMatch: Match(Index('unique_Pin_cid'), Var('cid'))
+        contentMatch: Match(Index('unique_Content_cid'), Var('cid'))
       },
       If(
-        Exists(Var('authKeyRef')),
+        Exists(Var('authTokenRef')),
         If(
-          IsNonEmpty(Var('pinMatch')),
+          IsNonEmpty(Var('contentMatch')),
           Create('Upload', {
             data: {
-              user: Select('user', Get(Var('authKeyRef'))),
-              authKey: Var('authKeyRef'),
+              user: Select('user', Get(Var('authTokenRef'))),
+              authToken: Var('authTokenRef'),
               cid: Var('cid'),
-              pin: Ref(Collection('Pin'), Select('id', Get(Var('pinMatch')))),
+              content: Ref(Collection('Content'), Select('id', Get(Var('contentMatch')))),
               created: Now()
             }
           }),
           Let(
             {
-              pin: Create('Pin', {
+              content: Create('Content', {
                 data: {
                   cid: Var('cid'),
+                  name: Select('name', Var('data'), 0),
                   dagSize: Select('dagSize', Var('data'), 0),
                   created: Now()
                 }
-              }),
+              })
             },
             Create('Upload', {
               data: {
-                user: Select('user', Get(Var('authKeyRef'))),
-                authKey: Var('authKeyRef'),
+                user: Select('user', Get(Var('authTokenRef'))),
+                authToken: Var('authTokenRef'),
                 cid: Var('cid'),
-                pin: Select('ref', Var('pin')),
+                content: Select('ref', Var('content')),
                 created: Now()
               }
             })

@@ -17,7 +17,7 @@ const {
   Exists,
   Merge,
   Now,
-  Get,
+  Get
 } = fauna
 
 const name = 'createOrUpdateUser'
@@ -29,7 +29,7 @@ const body = Query(
         match: Match(
           Index('unique_User_issuer'),
           Select('issuer', Var('data'))
-        ),
+        )
       },
       If(
         IsEmpty(Var('match')),

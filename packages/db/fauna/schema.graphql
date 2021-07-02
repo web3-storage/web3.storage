@@ -20,36 +20,46 @@ type User {
   """
   User authentification keys.
   """
-  keys: [AuthKey!]! @relation
+  keys: [AuthToken!]! @relation
 
+  """
+  Creation date.
+  """
   created: Time!
 }
 
 """
-API authentication keys.
+API authentication tokens.
 """
-type AuthKey {
+type AuthToken {
   """
   User assigned name.
   """
   name: String!
 
   """
-  Secret that corresponds to this key.
+  Secret that corresponds to this token.
   """
   secret: String!
 
   """
-  Uploads made using this key.
+  Uploads made using this token.
   """
   uploads: [Upload!]! @relation @index
 
   """
-  User this key belongs to.
+  User this token belongs to.
   """
   user: User! @relation @index
 
+  """
+  Creation date.
+  """
   created: Time!
+
+  """
+  Deletion date.
+  """
   deleted: Time
 }
 
@@ -63,28 +73,34 @@ type Content {
   cid: String! @unique
 
   """
-  Pinning services pinning this content.
+  IPFS nodes pinning this content.
   """
   pins: [Pin]! @relation
 
   """
-  Deals referencing this content.
+  Filecoin deals referencing this content.
   """
   deals: [Deal!]! @relation
 
   """
-  Size of the DAG.
-  COMMENT ON HOW THIS WORKS
+  Size of the DAG in bytes. Set if known on upload or for partials is set when
+  content is fully pinned in at least one location.
   """
   dagSize: Int
 
+  """
+  Creation date.
+  """
   created: Time!
 }
 
 """
-Location of a pin.
+Information for piece of content pinned in IPFS.
 """
 type Pin {
+  """
+  The content being pinned.
+  """
   content: Content! @relation
 
   """
@@ -98,18 +114,29 @@ type Pin {
   status: PinStatus!
 
   """
-  Last time the status was updated.
+  Last time the status was last updated.
   """
   updated: Time!
 }
 
+"""
+Location of a pin.
+"""
 type PinLocation {
+  """
+  Known pins at this location.
+  """
   pins: [Pin]! @relation
 
   """
-  Identifier for the service that is pinning this pin.
+  Libp2p peer ID of the node pinning this pin.
   """
-  name: String!
+  peerId: String! @unique
+
+  """
+  Name of the peer pinning this pin.
+  """
+  peerName: String
 }
 
 enum PinStatus {
@@ -136,19 +163,28 @@ type Upload {
   user: User! @relation @index
 
   """
-  User auth key that was used to upload this content.
+  User authentication token that was used to upload this content.
   """
-  authKey: AuthKey!
+  authToken: AuthToken!
 
-  files
+  """
+  User provided name for this upload.
+  """
+  name: String
 
   """
   Pin representing the root of the uploaded content.
   """
   pin: Pin! @relation
 
+  """
+  Creation date.
+  """
   created: Time!
 
+  """
+  Deletion date.
+  """
   deleted: Time
 }
 
@@ -159,7 +195,7 @@ type Deal {
   """
   CIDs in this deal.
   """
-  pins: [Pin!]! @relation @index
+  contents: [Content!]! @relation @index
 
   """
   ID of miner this deal was made with.
@@ -229,16 +265,17 @@ enum DealStatus {
 
 type Query {
   findUploads(where: FindUploadsInput): [Upload!]! @resolver(paginated: true)
-  findPinByCid(cid: String!): Pin @resolver
+  findContentByCid(cid: String!): Content @resolver
+  findUserByIssuer(issuer: String!): User @resolver
   """
-  Verify the User with the passed issuer owns the AuthKey with the passed secret.
+  Verify the User with the passed issuer owns the AuthToken with the passed secret.
   """
-  verifyAuthKey(issuer: String!, secret: String!): AuthKey @resolver
+  verifyAuthToken(issuer: String!, secret: String!): AuthToken @resolver
 }
 
 type Mutation {
   createOrUpdateUser(data: CreateOrUpdateUserInput!): User! @resolver
-  createAuthKey(data: CreateAuthKeyInput): AuthKey! @resolver
+  createAuthToken(data: CreateAuthTokenInput): AuthToken! @resolver
   importCar(data: ImportCarInput!): Upload! @resolver
 }
 
@@ -255,14 +292,15 @@ input CreateOrUpdateUserInput {
   publicAddress: String!
 }
 
-input CreateAuthKeyInput {
+input CreateAuthTokenInput {
   user: ID!
   name: String!
   secret: String!
 }
 
 input ImportCarInput {
-  authKey: ID!
+  authToken: ID!
   cid: String!
+  name: String
   dagSize: Int
 }

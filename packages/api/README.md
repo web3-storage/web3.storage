@@ -21,6 +21,15 @@ workers_dev = true
 account_id = "<what does the `wrangler whoami` say>"
 ```
 
+- `npm run build` - Build the bundle
+- Add secrets
+
+    ```sh
+    wrangler secret put MAGIC_SECRET_KEY --env $(whoami) # Get from magic.link account
+    wrangler secret put SALT --env $(whoami) # open `https://csprng.xyz/v1/api` in the browser and use the value of `Data`
+    wrangler secret put FAUNA_KEY --env $(whoami) # Get from fauna.com after creating a dev DB
+    ```
+
 - `npm run publish` - Publish the worker under your env. An alias for `wrangler publish --env $(whoami)`
 - `npm start` - Run the worker in dev mode. An alias for `wrangler dev --env $(whoami)
 

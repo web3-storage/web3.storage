@@ -13,21 +13,24 @@ const {
   Update,
   Exists,
   Now,
+  Ref,
+  Abort,
+  Collection
 } = fauna
 
-const name = 'createAuthKey'
+const name = 'createAuthToken'
 const body = Query(
   Lambda(
     ['data'],
     Let(
       {
-        user: Ref('User', Select('user', Var('data'))),
+        user: Ref(Collection('User'), Select('user', Var('data'))),
         name: Select('name', Var('data')),
-        secret: Select('secret', Var('data')),
+        secret: Select('secret', Var('data'))
       },
       If(
         Exists(Var('user')),
-        Create('AuthKey', {
+        Create('AuthToken', {
           data: {
             user: Var('user'),
             name: Var('name'),

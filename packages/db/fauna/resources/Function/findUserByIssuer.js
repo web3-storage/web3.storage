@@ -13,7 +13,7 @@ const {
   If,
   Update,
   Let,
-  IsNonEmpty,
+  IsNonEmpty
 } = fauna
 
 const name = 'findUserByIssuer'

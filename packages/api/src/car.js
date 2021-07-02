@@ -1,4 +1,5 @@
 import { GATEWAY } from './constants.js'
+import { JSONResponse } from './utils/json-response.js'
 
 // TODO: ipfs should let us ask the size of a CAR file.
 // This consumes the CAR response from ipfs to find the content-length.
@@ -48,12 +49,14 @@ export async function carGet(request, env, ctx) {
   return res
 }
 
+/**
+ * @param {import('./user').AuthenticatedRequest} request
+ */
 export async function carPost(request, env, ctx) {
-  const { user, authKey } = request.auth
-
-  // return new Response(`${request.method} /car no can has`, { status: 501 })
-
-
+  const { user, authToken } = request.auth
+  console.log('User ID', user._id)
+  console.log('Auth Token ID', authToken && authToken._id)
+  return new JSONResponse({})
 }
 
 export async function carPut(request, env, ctx) {

@@ -7,7 +7,7 @@ dotenv.config({ path: '.env.local' })
 
 const main = async () => {
   if (!process.env.FAUNA_KEY) {
-    throw new Error(`missing FAUNA_KEY environment variable`)
+    throw new Error('missing FAUNA_KEY environment variable')
   }
   await uploadFunctions()
 }
@@ -19,6 +19,7 @@ const uploadFunctions = async () => {
   const client = new fauna.Client({ secret: process.env.FAUNA_KEY })
   const files = await fs.readdir(base)
   for (const file of files) {
+    if (file.startsWith('.')) continue
     const expr = await import(path.join(base, file))
     console.log(`🛠 Uploading function ${file.split('.')[0]}`)
     await client.query(expr, {})

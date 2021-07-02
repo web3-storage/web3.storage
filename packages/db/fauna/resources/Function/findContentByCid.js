@@ -13,15 +13,15 @@ const {
   If,
   Update,
   Let,
-  IsNonEmpty,
+  IsNonEmpty
 } = fauna
 
-const name = 'findPinByCid'
+const name = 'findContentByCid'
 const body = Query(
   Lambda(
     ['cid'],
     Let(
-      { match: Match(Index('unique_Pin_cid'), Var('cid')) },
+      { match: Match(Index('unique_Content_cid'), Var('cid')) },
       If(IsNonEmpty(Var('match')), Get(Var('match')), null)
     )
   )

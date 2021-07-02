@@ -7,7 +7,7 @@ import { DBClient } from '@web3-storage/db'
  * @param {Request} _
  * @param {Env} env
  */
-export function envAll(_, env) {
+export function envAll (_, env) {
   const getConfig = s => env[s] || globalThis[s]
 
   env.magic = new Magic(getConfig('MAGIC_SECRET_KEY'))
