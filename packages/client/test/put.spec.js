@@ -1,6 +1,7 @@
 import * as assert from 'uvu/assert'
 import randomBytes from 'randombytes'
-import { Web3Storage, Web3File } from 'web3.storage'
+import { Web3Storage } from 'web3.storage'
+import { File } from '../src/platform.js'
 
 describe('put', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
@@ -32,9 +33,10 @@ describe('put', () => {
   it('erros with a File that will not be parsed by the Cluster', async function () {
     const client = new Web3Storage({ token, endpoint })
     try {
-      await client.put([Web3File.fromText('test-put-fail', 'file.txt')], { maxRetries: 1 })
+      await client.put([new File(['test-put-fail'], 'file.txt')], { maxRetries: 1 })
       assert.unreachable('should have thrown')
     } catch (err) {
+      console.log('err', err.message)
       assert.match(err.message, /Request body not a valid CAR file/)
     }
   })
@@ -52,7 +54,7 @@ describe('put', () => {
     let uploadedChunks = 0
 
     const files =[
-      Web3File.fromBytes(randomBytes(1024e6))
+      new File([randomBytes(1024e6)], '102mb.txt')
     ]
 
     await client.put(files, {
@@ -69,25 +71,21 @@ function prepareFiles () {
   const data2 = 'Hello web3.storage!!'
 
   return [
-    Web3File.fromText(
-      data,
-      'data.txt',
-      { path: '/dir/data.txt' }
+    new File(
+      [data],
+      '/dir/data.txt'
     ),
-    Web3File.fromText(
-      data2,
-      'data2.txt',
-      { path: '/dir/data2.txt' }
+    new File(
+      [data2],
+      '/dir/data2.txt'
     ),
-    Web3File.fromText(
-      data,
-      'data.txt',
-      { path: '/dir/otherdir/data.txt' }
+    new File(
+      [data],
+      '/dir/otherdir/data.txt'
     ),
-    Web3File.fromText(
-      data2,
-      'data2.txt',
-      { path: '/dir/otherdir/data2.txt' }
+    new File(
+      [data2],
+      '/dir/otherdir/data2.txt'
     )
   ]
 }

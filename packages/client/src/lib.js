@@ -18,7 +18,6 @@ import pRetry from 'p-retry'
 import { pack } from 'ipfs-car/pack'
 import { unpackStream } from 'ipfs-car/unpack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
-import { Web3File } from 'web3-file'
 import * as API from './lib/interface.js'
 import {
   fetch,
@@ -86,7 +85,7 @@ class Web3Storage {
 
   /**
    * @param {API.Service} service
-   * @param {Iterable<API.Web3File>} files
+   * @param {Iterable<API.Filelike>} files
    * @param {API.PutOptions} [options]
    * @returns {Promise<API.CIDString>}
    */
@@ -100,7 +99,10 @@ class Web3Storage {
 
     try {
       const { out } = await pack({
-        input: files,
+        input: Array.from(files).map((f) => ({
+          path: f.name,
+          content: f.stream()
+        })),
         blockstore
       })
       const splitter = await TreewalkCarSplitter.fromIterable(out, targetSize)
@@ -190,7 +192,7 @@ class Web3Storage {
    * const cid = await client.store(car)
    * console.assert(cid === root)
    * ```
-   * @param {Iterable<API.Web3File>} files
+   * @param {Iterable<API.Filelike>} files
    * @param {API.PutOptions} [options]
    */
   put(files, options) {
@@ -242,7 +244,7 @@ function toCarResponse(res) {
   return response
 }
 
-export { Web3Storage, Blob, Web3File }
+export { Web3Storage, Blob }
 
 /**
  * Just to verify API compatibility.
