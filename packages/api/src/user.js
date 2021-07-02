@@ -155,7 +155,7 @@ export function withAuth (handler) {
  * @param {import('./env').Env} env
  * @returns {Response}
  */
-export async function userKeysPost (request, env) {
+export async function userTokensPost (request, env) {
   const { name } = await request.json()
   const { _id, issuer } = request.auth.user
   const sub = issuer
@@ -163,8 +163,8 @@ export async function userKeysPost (request, env) {
   const secret = await JWT.sign({ sub, iss, iat: Date.now(), name }, env.SALT)
 
   await env.db.query(gql`
-    mutation CreateAuthKey($data: CreateAuthKeyInput!) {
-      createAuthKey(data: $data) {
+    mutation CreateAuthToken($data: CreateAuthTokenInput!) {
+      createAuthToken(data: $data) {
         _id
       }
     }

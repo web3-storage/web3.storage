@@ -2,7 +2,7 @@ import { Router } from 'itty-router'
 import { withCorsHeaders, corsOptions } from './cors.js'
 import { envAll } from './env.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
-import { userLoginPost, userKeysPost, withAuth } from './user.js'
+import { userLoginPost, userTokensPost, withAuth } from './user.js'
 
 const router = Router()
 
@@ -13,7 +13,7 @@ router.head('/car/:cid', withCorsHeaders(carHead))
 router.put('/car/:cid', withCorsHeaders(withAuth(carPut)))
 router.post('/car', withCorsHeaders(withAuth(carPost)))
 router.post('/user/login', withCorsHeaders(userLoginPost))
-router.post('/user/keys', withCorsHeaders(withAuth(userKeysPost)))
+router.post('/user/tokens', withCorsHeaders(withAuth(userTokensPost)))
 
 router.get('/', () => {
   return new Response(
