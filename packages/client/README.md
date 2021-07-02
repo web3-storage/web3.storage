@@ -21,7 +21,7 @@ const rootCid = await client.put(fileInput.files) // Promise<CIDString>
 const info = await client.status(rootCid) // :Promise<Metadata>
 
 // Fetch and verify files from web3.storage
-const res = await client.get(rootCid) // :Promise<CarResponse>
+const res = await client.get(rootCid) // :Promise<Web3Response>
 const files = await res.files() // :Promise<[]Web3File>
 for (const file of files) {
   console.log(`${file.cid} ${file.name} ${file.size}`)
