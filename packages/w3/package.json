@@ -1,0 +1,28 @@
+{
+  "name": "web3.storage-cli",
+  "version": "0.0.0",
+  "description": "Save your things in web3",
+  "type": "module",
+  "bin": {
+    "w3": "bin.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/web3-storage/web3.storage.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/web3-storage/web3.storage/issues"
+  },
+  "homepage": "https://github.com/web3-storage/web3.storage#readme",
+  "dependencies": {
+    "ipfs-car": "^0.4.2",
+    "meow": "^10.0.1"
+  },
+  "devDependencies": {},
+  "main": "index.js"
+}
