@@ -165,7 +165,7 @@ type Upload {
   """
   User authentication token that was used to upload this content.
   """
-  authToken: AuthToken!
+  authToken: AuthToken! @relation
 
   """
   User provided name for this upload.
