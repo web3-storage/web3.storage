@@ -31,7 +31,7 @@ It's DAG size is cached here and it contains references to [pins](#pin) (IPFS no
 
 ### `Pin`
 
-A CID for content that is pinned in IPFS.
+Information for piece of content pinned in IPFS - it's pinning status and location.
 
 ### `PinLocation`
 

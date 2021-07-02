@@ -50,8 +50,8 @@ const body = Query(
               content: Create('Content', {
                 data: {
                   cid: Var('cid'),
-                  name: Select('name', Var('data'), 0),
-                  dagSize: Select('dagSize', Var('data'), 0),
+                  name: Select('name', Var('data'), null),
+                  dagSize: Select('dagSize', Var('data'), null),
                   created: Now()
                 }
               })

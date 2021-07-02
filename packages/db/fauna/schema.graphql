@@ -173,9 +173,9 @@ type Upload {
   name: String
 
   """
-  Pin representing the root of the uploaded content.
+  The root of the uploaded content.
   """
-  pin: Pin! @relation
+  content: Content! @relation
 
   """
   Creation date.
