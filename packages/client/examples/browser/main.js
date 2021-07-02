@@ -26,23 +26,23 @@ function prepareFiles () {
   return [
     Web3File.fromText(
       data,
-      'data.zip',
-      { path: '/dir/data.zip' }
+      'data.txt',
+      { path: '/dir/data.txt' }
     ),
     Web3File.fromText(
       data2,
-      'data2.zip',
-      { path: '/dir/data2.zip' }
+      'data2.txt',
+      { path: '/dir/data2.txt' }
     ),
     Web3File.fromText(
       data,
-      'data.zip',
-      { path: '/dir/otherdir/data.zip' }
+      'data.txt',
+      { path: '/dir/otherdir/data.txt' }
     ),
     Web3File.fromText(
       data2,
-      'data2.zip',
-      { path: '/dir/otherdir/data2.zip' }
+      'data2.txt',
+      { path: '/dir/otherdir/data2.txt' }
     )
   ]
 }

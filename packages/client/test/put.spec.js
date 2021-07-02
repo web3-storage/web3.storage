@@ -43,7 +43,7 @@ describe('put', () => {
     const client = new Web3Storage({ token, endpoint })
     const files = prepareFiles()
     const cid = await client.put(files)
-    assert.equal(cid, 'bafybeic2rh2it5qegfxbctenw5req2kqxleujl2zu352nmtb6qx3pmji6e', 'returned cid matches the CAR')
+    assert.equal(cid, 'bafybeifkc773a2s6gerq7ip7tikahlfflxe4fvagyxf74zfkr33j2yu5li', 'returned cid matches the CAR')
   })
 
   it('adds Big Files', async function () {
@@ -71,23 +71,23 @@ function prepareFiles () {
   return [
     Web3File.fromText(
       data,
-      'data.zip',
-      { path: '/dir/data.zip' }
+      'data.txt',
+      { path: '/dir/data.txt' }
     ),
     Web3File.fromText(
       data2,
-      'data2.zip',
-      { path: '/dir/data2.zip' }
+      'data2.txt',
+      { path: '/dir/data2.txt' }
     ),
     Web3File.fromText(
       data,
-      'data.zip',
-      { path: '/dir/otherdir/data.zip' }
+      'data.txt',
+      { path: '/dir/otherdir/data.txt' }
     ),
     Web3File.fromText(
       data2,
-      'data2.zip',
-      { path: '/dir/otherdir/data2.zip' }
+      'data2.txt',
+      { path: '/dir/otherdir/data2.txt' }
     )
   ]
 }
