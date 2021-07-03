@@ -19,6 +19,9 @@ export default {
   resolve: {
     fallback: {
       stream: require.resolve('stream-browserify')
+    },
+    alias: {
+      'node-fetch': path.resolve(__dirname, 'src', 'utils', 'fetch.js')
     }
   }
 }
