@@ -3,6 +3,7 @@ import { withCorsHeaders, corsOptions } from './cors.js'
 import { envAll } from './env.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { userLoginPost, userTokensPost, withAuth } from './user.js'
+import { JSONResponse } from './utils/json-response.js'
 
 const router = Router()
 
@@ -35,12 +36,13 @@ router.get('/', () => {
   )
 })
 
-router.all('*', () => new Response('Not Found.', { status: 404 }))
+router.all('*', () => new JSONResponse('Not Found.', { status: 404 }))
 
-async function serverError(error) {
-  return new Response(error.message || 'Server Error', {
-    status: error.status || 500,
-  })
+function serverError(error) {
+  console.error(error.stack)
+  const message = error.message || 'Server Error'
+  const status = error.status || 500
+  return new JSONResponse({ message }, { status })
 }
 
 addEventListener('fetch', (event) =>
