@@ -1,0 +1,30 @@
+{
+  "name": "@web3-storage/db",
+  "version": "0.0.0",
+  "description": "Database schema and tools.",
+  "private": "true",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "import": "npm run import:fql && npm run import:gql",
+    "import:fql": "node tools/import-fql-resources.js",
+    "import:gql": "node tools/import-graphql-schema.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "fauna",
+    "db",
+    "database"
+  ],
+  "author": "Alan Shaw",
+  "license": "(Apache-2.0 AND MIT)",
+  "dependencies": {
+    "graphql-request": "^3.4.0"
+  },
+  "devDependencies": {
+    "@web-std/fetch": "^2.0.1",
+    "dotenv": "^10.0.0",
+    "faunadb": "^4.3.0",
+    "standard": "^16.0.3"
+  }
+}

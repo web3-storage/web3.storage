@@ -1,0 +1,311 @@
+"""
+A user of web3.storage.
+"""
+type User {
+  name: String!
+  picture: String
+  email: String!
+  issuer: String! @unique
+
+  """
+  GitHub user handle, may be null if user logged in via email.
+  """
+  github: String
+
+  """
+  Cryptographic public address of the Magic User.
+  """
+  publicAddress: String!
+
+  """
+  User authentification keys.
+  """
+  keys: [AuthToken!]! @relation
+
+  """
+  Creation date.
+  """
+  created: Time!
+}
+
+"""
+API authentication tokens.
+"""
+type AuthToken {
+  """
+  User assigned name.
+  """
+  name: String!
+
+  """
+  Secret that corresponds to this token.
+  """
+  secret: String!
+
+  """
+  Uploads made using this token.
+  """
+  uploads: [Upload!]! @relation @index
+
+  """
+  User this token belongs to.
+  """
+  user: User! @relation @index
+
+  """
+  Creation date.
+  """
+  created: Time!
+
+  """
+  Deletion date.
+  """
+  deleted: Time
+}
+
+"""
+Details of the root of a file/directory stored on web3.storage.
+"""
+type Content {
+  """
+  Root CID for this content.
+  """
+  cid: String! @unique
+
+  """
+  IPFS nodes pinning this content.
+  """
+  pins: [Pin]! @relation
+
+  """
+  Filecoin deals referencing this content.
+  """
+  deals: [Deal!]! @relation
+
+  """
+  Size of the DAG in bytes. Set if known on upload or for partials is set when
+  content is fully pinned in at least one location.
+  """
+  dagSize: Int
+
+  """
+  Creation date.
+  """
+  created: Time!
+}
+
+"""
+Information for piece of content pinned in IPFS.
+"""
+type Pin {
+  """
+  The content being pinned.
+  """
+  content: Content! @relation
+
+  """
+  Identifier for the service that is pinning this pin.
+  """
+  location: PinLocation! @relation
+
+  """
+  Pinning status at this location.
+  """
+  status: PinStatus!
+
+  """
+  Last time the status was updated.
+  """
+  updated: Time!
+}
+
+"""
+Location of a pin.
+"""
+type PinLocation {
+  """
+  Known pins at this location.
+  """
+  pins: [Pin]! @relation
+
+  """
+  Libp2p peer ID of the node pinning this pin.
+  """
+  peerId: String! @unique
+
+  """
+  Name of the peer pinning this pin.
+  """
+  peerName: String
+
+  """
+  Geographic region this node resides in.
+  """
+  region: String
+}
+
+enum PinStatus {
+  Undefined
+  ClusterError
+  PinError
+  UnpinError
+  Pinned
+  Pinning
+  Unpinned
+  Remote
+  PinQueued
+  UnpinQueued
+  Sharded
+}
+
+"""
+An upload created by a user.
+"""
+type Upload {
+  """
+  User that uploaded this content.
+  """
+  user: User! @relation @index
+
+  """
+  User authentication token that was used to upload this content.
+  """
+  authToken: AuthToken! @relation
+
+  """
+  User provided name for this upload.
+  """
+  name: String
+
+  """
+  The root of the uploaded content.
+  """
+  content: Content! @relation
+
+  """
+  Creation date.
+  """
+  created: Time!
+
+  """
+  Deletion date.
+  """
+  deleted: Time
+}
+
+"""
+Filecoin deal for a pin.
+"""
+type Deal {
+  """
+  CIDs in this deal.
+  """
+  contents: [Content!]! @relation @index
+
+  """
+  ID of miner this deal was made with.
+  """
+  miner: String
+
+  """
+  Filecoin network deal is made on.
+  """
+  network: String
+
+  """
+  Piece CID.
+  """
+  pieceCid: String
+
+  """
+  CID of the root of the batch data.
+  """
+  batchRootCid: String
+
+  """
+  Identifier for the deal stored on chain.
+  """
+  chainDealId: Int
+
+  """
+  Selector for extracting stored data from the batch root.
+  """
+  dataModelSelector: String
+
+  """
+  Time when deal will be active.
+  """
+  activation: Time
+
+  """
+  Time when deal has expired and will renew.
+  """
+  renewal: Time
+
+  """
+  Current deal status.
+  """
+  status: DealStatus!
+
+  """
+  Human readable reason for the current status.
+  """
+  statusReason: String
+
+  """
+  Last time this deal was updated.
+  """
+  updated: Time!
+}
+
+enum DealStatus {
+  Queued
+  Proposing
+  Accepted
+  Failed
+  Published
+  Active
+  Terminated
+}
+
+type Query {
+  findUploads(where: FindUploadsInput): [Upload!]! @resolver(paginated: true)
+  findContentByCid(cid: String!): Content @resolver
+  findUserByIssuer(issuer: String!): User @resolver
+  """
+  Verify the User with the passed issuer owns the AuthToken with the passed secret.
+  """
+  verifyAuthToken(issuer: String!, secret: String!): AuthToken @resolver
+}
+
+type Mutation {
+  createOrUpdateUser(data: CreateOrUpdateUserInput!): User! @resolver
+  createAuthToken(data: CreateAuthTokenInput): AuthToken! @resolver
+  importCar(data: ImportCarInput!): Upload! @resolver
+}
+
+input FindUploadsInput {
+  before: Time!
+}
+
+input CreateOrUpdateUserInput {
+  name: String!
+  picture: String
+  email: String!
+  issuer: String!
+  github: String
+  publicAddress: String!
+}
+
+input CreateAuthTokenInput {
+  user: ID!
+  name: String!
+  secret: String!
+}
+
+input ImportCarInput {
+  authToken: ID!
+  cid: String!
+  name: String
+  dagSize: Int
+}

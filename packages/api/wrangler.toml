@@ -21,7 +21,7 @@ account_id = "?"
 
 # Add your env here. Override the the values you need to change.
 
-[env.alanshaw]
+[env.alan]
 workers_dev = true
 account_id = "4fe12d085474d33bdcfd8e9bed4d8f95"
 
