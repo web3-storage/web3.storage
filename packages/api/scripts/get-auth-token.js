@@ -1,8 +1,16 @@
+/**
+ * Temporary utility to obtain an auth token for using the API.
+ *
+ * It creates a new user and token in your Fauna database.
+ *
+ * Usage:
+ *     SALT=<SECRET> FAUNA_KEY=<SECRET> node get-auth-token.js
+ */
 import { DBClient, gql } from '@web3-storage/db'
 import * as JWT from '../src/utils/jwt.js'
-import subtle from 'subtle'
+import { webcrypto as crypto } from 'crypto'
 
-global.crypto = { subtle }
+global.crypto = crypto
 
 async function main () {
   const { FAUNA_KEY, SALT } = process.env
