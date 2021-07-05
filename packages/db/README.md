@@ -13,7 +13,9 @@
     npm run import
     ```
 
-## Collections
+## Schema
+
+[![web3.storage schema](https://user-images.githubusercontent.com/152863/124463647-16f0bb00-dd8b-11eb-9a71-d710f5d77078.jpg)](https://user-images.githubusercontent.com/152863/124463647-16f0bb00-dd8b-11eb-9a71-d710f5d77078.jpg)
 
 ### `User`
 
@@ -35,7 +37,7 @@ Information for piece of content pinned in IPFS - it's pinning status and locati
 
 ### `PinLocation`
 
-Location of a pin - libp2p peer ID and optionally a name.
+Location of a pin - libp2p peer ID, an optional name and a geographic region.
 
 ### `Upload`
 
