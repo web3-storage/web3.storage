@@ -114,7 +114,7 @@ type Pin {
   status: PinStatus!
 
   """
-  Last time the status was last updated.
+  Last time the status was updated.
   """
   updated: Time!
 }
