@@ -272,6 +272,7 @@ type Query {
   findUploads(where: FindUploadsInput): [Upload!]! @resolver(paginated: true)
   findContentByCid(cid: String!): Content @resolver
   findUserByIssuer(issuer: String!): User @resolver
+  findAuthTokensByUser(user: ID!): [AuthToken!]! @resolver(paginated: true)
   """
   Verify the User with the passed issuer owns the AuthToken with the passed secret.
   """
