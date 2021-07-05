@@ -137,6 +137,11 @@ type PinLocation {
   Name of the peer pinning this pin.
   """
   peerName: String
+
+  """
+  Geographic region this node resides in.
+  """
+  region: String
 }
 
 enum PinStatus {
