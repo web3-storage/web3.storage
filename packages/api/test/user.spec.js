@@ -61,7 +61,7 @@ describe('DELETE /user/tokens/:id', () => {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
     })
-    assert.strictEqual(res.status, 410)
+    assert(res.ok)
     const { _id } = await res.json()
     assert(_id)
   })

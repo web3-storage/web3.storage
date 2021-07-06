@@ -219,5 +219,5 @@ export async function userTokensDelete (request, env) {
     }
   `, { user: request.auth.user._id, authToken: request.params.id })
 
-  return new JSONResponse(res.deleteAuthToken, { status: 410 })
+  return new JSONResponse(res.deleteAuthToken)
 }
