@@ -100,6 +100,7 @@ export function withAuth (handler) {
    */
   return async (request, env, ctx) => {
     const auth = request.headers.get('Authorization') || ''
+    // TODO: Should this throw if no auth token with meaningful error?
     const token = env.magic.utils.parseAuthorizationHeader(auth)
 
     // validate access tokens

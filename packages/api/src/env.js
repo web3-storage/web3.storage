@@ -1,5 +1,6 @@
 import { Magic } from '@magic-sdk/admin'
 import { DBClient } from '@web3-storage/db'
+import { Cluster } from '@nftstorage/ipfs-cluster'
 
 /** @typedef {{ magic: Magic, db: DBClient, SALT: string }} Env */
 
@@ -16,4 +17,8 @@ export function envAll (_, env) {
   })
 
   env.SALT = env.SALT || SALT
+
+  env.cluster = new Cluster(env.CLUSTER_API_URL || CLUSTER_API_URL, {
+    headers: { Authorization: `Basic ${env.CLUSTER_BASIC_AUTH_TOKEN || CLUSTER_BASIC_AUTH_TOKEN}` }
+  })
 }

@@ -21,6 +21,9 @@ One time set up of your cloudflare worker subdomain for dev:
     account_id = "<what does the `wrangler whoami` say>"
     ```
 
+TODO: Add Cluster
+TODO: Add tunnel
+
 - `npm run build` - Build the bundle
 - Add secrets
 
