@@ -14,7 +14,7 @@
     "test": "npm run test:e2e",
     "test:e2e": "npm-run-all -p -r test:e2e:**",
     "test:e2e:mock:db": "smoke -p 9086 test/mocks/db",
-    "test:e2e:playwright": "playwright-test \"test/**/*.spec.js\" --sw src/index.js --debug"
+    "test:e2e:playwright": "playwright-test \"test/**/*.spec.js\" --sw src/index.js"
   },
   "devDependencies": {
     "@types/mocha": "^8.2.2",
