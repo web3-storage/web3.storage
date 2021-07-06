@@ -64,18 +64,11 @@ export async function carGet(request, env, ctx) {
  */
 export async function carPost(request, env) {
   const { authToken } = request.auth
-
   const { headers } = request
-  const contentType = headers.get('content-type')
 
-  if (!contentType.includes('application/car')) {
-    return new Response(`${request.method} /car did not receive a car content type`, { status: 400 })
-  }
-
-  let name = headers.get('name')
+  let name = headers.get('x-name')
   if (!name || typeof name !== 'string') {
-    // throw new Error('invalid name') // Is it required?
-    name = 'testname'
+    name = `Upload at ${new Date().toISOString()}`
   }
 
   const blob = await request.blob()

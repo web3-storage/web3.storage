@@ -27,7 +27,7 @@ describe('POST /car', () => {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/car',
-        Name: name
+        'X-Name': name
       },
       body: car,
     })
@@ -37,26 +37,6 @@ describe('POST /car', () => {
     const { ok, value } = await res.json()
     assert(ok, 'Server response payload has `ok` property')
     assert.strictEqual(value.cid, cid, 'Server responded with expected CID')
-    assert.strictEqual(value.name, name, 'Server responded with expected CID')
-  })
-
-  it('should error when not receiving a car content type', async () => {
-    // Create token
-    const token = await getTestJWT()
-
-    // Create Car
-    const { car } = await createCar('hello world!')
-
-    const res = await fetch(new URL('car', endpoint).toString(), {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: car,
-    })
-
-    assert(res, 'Server responded')
-    assert(res.status, 400)
+    assert(value.name, name, 'Server responded with expected CID')
   })
 })

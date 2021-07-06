@@ -9,7 +9,7 @@ const gqlOkResponse = data => gqlResponse(200, { data })
  */
 module.exports = ({ body }) => {
   if (body.query.includes('importCar')) {
-    return gqlOkResponse({ importCar: { _id: 'test-auth-token' } })
+    return gqlOkResponse({ importCar: { _id: 'test-upload-id' } })
   }
 
   if (body.query.includes('verifyAuthToken')) {
