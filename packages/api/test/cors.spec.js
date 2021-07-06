@@ -1,7 +1,7 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
+import { endpoint } from './scripts/constants.js'
 
-const endpoint = 'http://testing.web3.storage'
 const cid = 'bafkqaaa'
 
 describe('CORS', () => {

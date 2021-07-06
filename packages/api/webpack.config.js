@@ -1,7 +1,9 @@
 import { createRequire } from 'module'
 import webpack from 'webpack'
+import path from 'path'
 
-const require = createRequire(import.meta.url)
+const __dirname = path.dirname(new URL(import.meta.url).pathname)
+const require = createRequire(__dirname)
 
 export default {
   target: 'webworker',

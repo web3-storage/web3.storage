@@ -1,6 +1,7 @@
 import { gql } from '@web3-storage/db'
 import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
+import { JWT_ISSUER } from './constants.js'
 
 /**
  * @typedef {{
@@ -157,9 +158,13 @@ export function withAuth (handler) {
  */
 export async function userTokensPost (request, env) {
   const { name } = await request.json()
+  if (!name || typeof name !== 'string') {
+    throw new Error('invalid name')
+  }
+
   const { _id, issuer } = request.auth.user
   const sub = issuer
-  const iss = 'web3-storage'
+  const iss = JWT_ISSUER
   const secret = await JWT.sign({ sub, iss, iat: Date.now(), name }, env.SALT)
 
   await env.db.query(gql`
@@ -171,4 +176,29 @@ export async function userTokensPost (request, env) {
   `, { data: { user: _id, name, secret } })
 
   return new JSONResponse()
+}
+
+/**
+ * Retrieve user auth tokens.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userTokensGet (request, env) {
+  const res = await env.db.query(gql`
+    query FindAuthTokensByUser($user: ID!) {
+      # Paginated but users are probably not going to have tons of these.
+      # Note: 100,000 is the max page size.
+      findAuthTokensByUser(user: $user, _size: 100000) {
+        data {
+          _id
+          name
+          secret
+          created
+        }
+      }
+    }
+  `, { data: { user: request.auth.user._id } })
+
+  return new JSONResponse(res.findAuthTokensByUser.data)
 }
