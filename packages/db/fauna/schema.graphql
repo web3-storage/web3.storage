@@ -225,7 +225,7 @@ type Deal {
   """
   Identifier for the deal stored on chain.
   """
-  chainDealId: Int
+  chainDealId: Int @unique
 
   """
   Selector for extracting stored data from the batch root.
