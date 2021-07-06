@@ -11,7 +11,7 @@ export default {
   devtool: 'cheap-module-source-map', // avoid "eval": Workers environment doesn't allow it
   plugins: [
     new webpack.ProvidePlugin({
-      process: 'process/browser',
+      process: 'process/browser.js',
       Buffer: ['buffer', 'Buffer']
     })
   ],
