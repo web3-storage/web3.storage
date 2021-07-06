@@ -7,7 +7,8 @@
     "packages/api",
     "packages/client",
     "packages/db",
-    "packages/w3"
+    "packages/w3",
+    "packages/website"
   ],
   "scripts": {
     "test": "npm run test --workspaces",
