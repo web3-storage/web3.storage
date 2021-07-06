@@ -11,10 +11,9 @@
     "publish": "wrangler publish --env $(whoami)",
     "build": "webpack",
     "format": "prettier --write '**/*.{js,css,json,md}'",
-    "test": "npm run test:e2e",
-    "test:e2e": "npm-run-all -p -r test:e2e:**",
-    "test:e2e:mock:db": "smoke -p 9086 test/mocks/db",
-    "test:e2e:playwright": "playwright-test \"test/**/*.spec.js\" --sw src/index.js"
+    "test": "npm-run-all -p -r mock:api test:e2e",
+    "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js"
+    "mock:db": "smoke -p 9086 test/mocks/db",
   },
   "devDependencies": {
     "@types/mocha": "^8.2.2",
