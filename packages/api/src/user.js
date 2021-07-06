@@ -159,7 +159,7 @@ export function withAuth (handler) {
 export async function userTokensPost (request, env) {
   const { name } = await request.json()
   if (!name || typeof name !== 'string') {
-    throw new Error('invalid name')
+    throw Object.assign(new Error('invalid name'), { status: 400 })
   }
 
   const { _id, issuer } = request.auth.user
@@ -167,7 +167,7 @@ export async function userTokensPost (request, env) {
   const iss = JWT_ISSUER
   const secret = await JWT.sign({ sub, iss, iat: Date.now(), name }, env.SALT)
 
-  await env.db.query(gql`
+  const res = await env.db.query(gql`
     mutation CreateAuthToken($data: CreateAuthTokenInput!) {
       createAuthToken(data: $data) {
         _id
@@ -175,7 +175,7 @@ export async function userTokensPost (request, env) {
     }
   `, { data: { user: _id, name, secret } })
 
-  return new JSONResponse()
+  return new JSONResponse(res.createAuthToken, { status: 201 })
 }
 
 /**
@@ -198,7 +198,26 @@ export async function userTokensGet (request, env) {
         }
       }
     }
-  `, { data: { user: request.auth.user._id } })
+  `, { user: request.auth.user._id })
 
   return new JSONResponse(res.findAuthTokensByUser.data)
+}
+
+/**
+ * Delete a user auth token. This actually raises a tombstone rather than
+ * deleting it entirely.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userTokensDelete (request, env) {
+  const res = await env.db.query(gql`
+    mutation DeleteAuthToken($user: ID!, $authToken: ID!) {
+      deleteAuthToken(user: $user, authToken: $authToken) {
+        _id
+      }
+    }
+  `, { user: request.auth.user._id, authToken: request.params.id })
+
+  return new JSONResponse(res.deleteAuthToken, { status: 410 })
 }

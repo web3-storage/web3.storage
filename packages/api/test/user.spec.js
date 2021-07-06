@@ -36,7 +36,9 @@ describe('POST /user/tokens', () => {
       body: JSON.stringify({ name: 'test' })
     })
     assert(res.ok)
-    // no response data expected
+    assert.strictEqual(res.status, 201)
+    const { _id } = await res.json()
+    assert(_id)
   })
 
   it('requires valid name', async () => {
@@ -49,5 +51,18 @@ describe('POST /user/tokens', () => {
     assert(!res.ok)
     const { message } = await res.json()
     assert.strictEqual(message, 'invalid name')
+  })
+})
+
+describe('DELETE /user/tokens/:id', () => {
+  it('removes a token', async () => {
+    const token = await getTestJWT()
+    const res = await fetch(new URL('user/tokens/xyz', endpoint).toString(), {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert.strictEqual(res.status, 410)
+    const { _id } = await res.json()
+    assert(_id)
   })
 })
