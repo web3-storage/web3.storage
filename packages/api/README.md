@@ -43,7 +43,8 @@ One time set up of your cloudflare worker subdomain for dev:
     ```sh
     wrangler secret put MAGIC_SECRET_KEY --env $(whoami) # Get from magic.link account
     wrangler secret put SALT --env $(whoami) # open `https://csprng.xyz/v1/api` in the browser and use the value of `Data`
-    wrangler secret put FAUNA_KEY --env $(whoami) # Get from fauna.com after creating a dev DB
+    wrangler secret put FAUNA_KEY --env $(whoami) # Get from fauna.com after creating a dev Classic DB
+    wrangler secret put CLUSTER_BASIC_AUTH_TOKEN --env $(whoami) # Get from web3.storage vault in 1password
     ```
 
 - `npm run publish` - Publish the worker under your env. An alias for `wrangler publish --env $(whoami)`

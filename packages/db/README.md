@@ -3,7 +3,7 @@
 ## Getting Started
 
 1. Sign up at https://fauna.com.
-2. Create a database and then obtain an API key.
+2. Create a `classic` database and then obtain an API key.
 3. Add a `.env.local` to the project root with the following content:
     ```sh
     FAUNA_KEY="<YOUR_FAUNA_API_KEY>"

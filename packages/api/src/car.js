@@ -63,7 +63,7 @@ export async function carGet(request, env, ctx) {
  * @param {import('./env').Env} env
  */
 export async function carPost(request, env) {
-  const { authToken } = request.auth
+  const { _id } = request.auth.authToken
   const { headers } = request
 
   let name = headers.get('x-name')
@@ -86,14 +86,14 @@ export async function carPost(request, env) {
 
   // Store in DB
   await env.db.query(gql`
-    mutation importCar($data: importCarInput!) {
+    mutation importCar($data: ImportCarInput!) {
       importCar(data: $data) {
-        _id
+        name
       }
     }
   `, {
     data: { 
-      authToken,
+      authToken: _id,
       cid,
       name
       // dagSize: undefined // TODO: should we default to chunk car behavior?

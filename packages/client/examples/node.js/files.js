@@ -1,8 +1,11 @@
-import { Web3Storage } from '../../src/lib.js'
+import { Web3Storage, File } from '../../src/lib.js'
 
 // TODO
-const endpoint = 'https://api.web3.storage' // the default
-const token = 'API_KEY' // your API key from https://web3.storage/manage
+// const endpoint = 'https://api.web3.storage' // the default
+// const token = 'API_KEY' // your API key from https://web3.storage/manage
+
+const endpoint = 'http://127.0.0.1:8787'
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJpc3N1ZXItMTYyNTU5Mjk3MjgwNiIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYyNTU5Mjk3MzIzNywibmFtZSI6InRva2VuLTE2MjU1OTI5NzI4MDYifQ.FxhcrVxOOqiy6jzyLywq6p34hzFk4V1xC_WufLd7E7s'
 
 async function main() {
   const storage = new Web3Storage({ endpoint, token }) 
