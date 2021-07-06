@@ -186,7 +186,7 @@ export async function userTokensPost (request, env) {
  */
 export async function userTokensGet (request, env) {
   const res = await env.db.query(gql`
-    mutation FindAuthTokensByUser($user: ID!) {
+    query FindAuthTokensByUser($user: ID!) {
       # Paginated but users are probably not going to have tons of these.
       # Note: 100,000 is the max page size.
       findAuthTokensByUser(user: $user, _size: 100000) {

@@ -11,7 +11,7 @@
     "publish": "wrangler publish --env $(whoami)",
     "build": "webpack",
     "format": "prettier --write '**/*.{js,css,json,md}'",
-    "test": "npm-run-all -p -r mock:api test:e2e",
+    "test": "npm-run-all -p -r mock:db test:e2e",
     "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js",
     "mock:db": "smoke -p 9086 test/mocks/db"
   },
