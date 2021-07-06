@@ -57,6 +57,8 @@ export async function carGet(request, env, ctx) {
 }
 
 /**
+ * Post a CAR file.
+ *
  * @param {import('./user').AuthenticatedRequest} request
  * @param {import('./env').Env} env
  */
