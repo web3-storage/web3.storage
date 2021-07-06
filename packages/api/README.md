@@ -13,13 +13,13 @@ One time set up of your cloudflare worker subdomain for dev:
 - Copy your cloudflare account id from `wrangler whoami`
 - Update `wrangler.toml` with a new `env`. Set your env name to be the value of `whoami` on your system you can use `npm start` to run the worker in dev mode for you.
 
-[**wrangler.toml**](./wrangler.toml)
+    [**wrangler.toml**](./wrangler.toml)
 
-```toml
-[env.bobbytables]
-workers_dev = true
-account_id = "<what does the `wrangler whoami` say>"
-```
+    ```toml
+    [env.bobbytables]
+    workers_dev = true
+    account_id = "<what does the `wrangler whoami` say>"
+    ```
 
 - `npm run build` - Build the bundle
 - Add secrets
