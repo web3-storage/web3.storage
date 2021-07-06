@@ -28,20 +28,15 @@ export async function userLoginPost (request, env) {
 async function loginOrRegister (request, env) {
   const data = await request.json()
   const auth = request.headers.get('Authorization') || ''
-  console.log('auth header=', auth)
 
   const token = env.magic.utils.parseAuthorizationHeader(auth)
   env.magic.token.validate(token)
-
-  console.log('token valid!')
 
   const metadata = await env.magic.users.getMetadataByToken(token)
   const { issuer, email, publicAddress } = metadata
   if (!issuer || !email || !publicAddress) {
     throw new Error('missing required metadata')
   }
-
-  console.log('got metadata', JSON.stringify(metadata))
 
   const parsed = data.type === 'github'
     ? parseGitHub(data.data, metadata)
