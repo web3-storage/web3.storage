@@ -13,11 +13,21 @@ watch_dir = "src"
 format = "service-worker"
 
 # ---- Environment specific overrides below ! ----
+# NOTE: wrangler automatically assigns each env the root `name` with the env name suffixed on the end
+# NOTE: wrangler tries to find an account_id defined at the root if workers_dev = true is not provided on your env.
 
 # PROD!
 [env.production]
 # name = "web3-storage-production"
-account_id = "?"
+workers_dev = true
+account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
+route = "api.web3.storage/*"
+
+[env.staging]
+# name = "web3-storage-staging"
+workers_dev = true
+account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
+route = "api-staging.web3.storage/*"
 
 # Add your env here. Override the the values you need to change.
 
@@ -26,9 +36,6 @@ workers_dev = true
 account_id = "4fe12d085474d33bdcfd8e9bed4d8f95"
 
 [env.oli]
-# NOTE: wrangler automatically assings each env the root `name` with the env name suffixed on the end
-# name = "web3-storage-oli"
-# NOTE: wrangler tries to find an account_id defined at the root if workers_dev = true is not provided on your env.
 workers_dev = true
 account_id = "6e5a2aed80cd37d77e8d0c797a75ebbd"
 
