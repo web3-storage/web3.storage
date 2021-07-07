@@ -26,7 +26,7 @@ import {
   Blockstore
 } from './platform.js'
 
-const MAX_PUT_RETRIES = 1
+const MAX_PUT_RETRIES = 5
 const MAX_CONCURRENT_UPLOADS = 3
 const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 
@@ -90,10 +90,18 @@ class Web3Storage {
    * @param {API.PutOptions} [options]
    * @returns {Promise<API.CIDString>}
    */
-  static async put({ endpoint, token }, files, { onRootCidReady, onStoredChunk, maxRetries = MAX_PUT_RETRIES } = {}) {
+  static async put({ endpoint, token }, files, { onRootCidReady, onStoredChunk, maxRetries = MAX_PUT_RETRIES, name } = {}) {
     const url = new URL(`/car`, endpoint)
-    const headers = Web3Storage.headers(token)
     const targetSize = MAX_CHUNK_SIZE
+    let headers = Web3Storage.headers(token)
+
+    if (name) {
+      headers = {
+        ...headers,
+        // @ts-ignore 'X-Name' does not exist in type inferred
+        'X-Name': name
+      }
+    }
 
     let carRoot
     const blockstore = new Blockstore()
@@ -136,7 +144,7 @@ class Web3Storage {
               if (result.ok) {
                 return result.value.cid
               } else {
-                throw new Error(result.message)
+                throw new Error(result.error.message)
               }
             },
             { retries: maxRetries }

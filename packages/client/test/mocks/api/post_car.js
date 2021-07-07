@@ -51,6 +51,7 @@ module.exports = async ({ body, headers }) => {
       value: {
         cid: carRootCid,
         size: bytes.length,
+        name: headers['X-Name']
       },
     },
   }
