@@ -39,16 +39,11 @@ module.exports = async ({ body, headers }) => {
     }
   }
 
-  const { cid, bytes } = await car.get(root)
   return {
     statusCode: 200,
     body: {
       ok: true,
-      car: {
-        cid: carRootCid,
-        size: bytes.length,
-        name: headers['X-Name']
-      },
+      cid: carRootCid,
     },
   }
 }

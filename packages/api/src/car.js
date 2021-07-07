@@ -101,7 +101,7 @@ export async function carPost(request, env) {
   })
 
   // TODO: Improve response type with pin information
-  return new JSONResponse({ car: { cid, name }}, { status: 200 })
+  return new JSONResponse({ cid })
 }
 
 export async function carPut(request, env, ctx) {

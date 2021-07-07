@@ -142,7 +142,7 @@ class Web3Storage {
               const res = await request.json()
 
               if (request.ok) {
-                return res.car.cid
+                return res.cid
               } else {
                 throw new Error(res.message)
               }

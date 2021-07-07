@@ -19,8 +19,8 @@ describe('POST /car', () => {
     const { root, car: carBody } = await createCar('hello world!')
 
     // expected CID for the above data
-    const cid = 'bafkreidvbhs33ighmljlvr7zbv2ywwzcmp5adtf4kqvlly67cy56bdtmve'
-    assert.strictEqual(root.toString(), cid, 'car file has correct root')
+    const expectedCid = 'bafkreidvbhs33ighmljlvr7zbv2ywwzcmp5adtf4kqvlly67cy56bdtmve'
+    assert.strictEqual(root.toString(), expectedCid, 'car file has correct root')
 
     const res = await fetch(new URL('car', endpoint).toString(), {
       method: 'POST',
@@ -34,9 +34,8 @@ describe('POST /car', () => {
 
     assert(res, 'Server responded')
     assert(res.ok, 'Server response ok')
-    const { car } = await res.json()
-    assert(car, 'Server response payload has `car` property')
-    assert.strictEqual(car.cid, cid, 'Server responded with expected CID')
-    assert(car.name, name, 'Server responded with expected CID')
+    const { cid } = await res.json()
+    assert(cid, 'Server response payload has `cid` property')
+    assert.strictEqual(cid, cid, 'Server responded with expected CID')
   })
 })
