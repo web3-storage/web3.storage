@@ -15,7 +15,7 @@ on:
   push:
     branches:
       - main
-name: release
+name: Release
 jobs:
   changeFinder:
     runs-on: ubuntu-latest
