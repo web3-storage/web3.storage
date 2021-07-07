@@ -26,7 +26,7 @@ import {
   Blockstore
 } from './platform.js'
 
-const MAX_PUT_RETRIES = 5
+const MAX_PUT_RETRIES = 1
 const MAX_CONCURRENT_UPLOADS = 3
 const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 
@@ -139,12 +139,12 @@ class Web3Storage {
                 headers,
                 body: carFile,
               })
-              const result = await request.json()
+              const res = await request.json()
 
-              if (result.ok) {
-                return result.value.cid
+              if (request.ok) {
+                return res.car.cid
               } else {
-                throw new Error(result.error.message)
+                throw new Error(res.message)
               }
             },
             { retries: maxRetries }

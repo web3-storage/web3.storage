@@ -16,7 +16,7 @@ describe('POST /car', () => {
     const token = await getTestJWT()
 
     // Create Car
-    const { root, car } = await createCar('hello world!')
+    const { root, car: carBody } = await createCar('hello world!')
 
     // expected CID for the above data
     const cid = 'bafkreidvbhs33ighmljlvr7zbv2ywwzcmp5adtf4kqvlly67cy56bdtmve'
@@ -29,14 +29,14 @@ describe('POST /car', () => {
         'Content-Type': 'application/car',
         'X-Name': name
       },
-      body: car,
+      body: carBody,
     })
 
     assert(res, 'Server responded')
     assert(res.ok, 'Server response ok')
-    const { ok, value } = await res.json()
-    assert(ok, 'Server response payload has `ok` property')
-    assert.strictEqual(value.cid, cid, 'Server responded with expected CID')
-    assert(value.name, name, 'Server responded with expected CID')
+    const { car } = await res.json()
+    assert(car, 'Server response payload has `car` property')
+    assert.strictEqual(car.cid, cid, 'Server responded with expected CID')
+    assert(car.name, name, 'Server responded with expected CID')
   })
 })

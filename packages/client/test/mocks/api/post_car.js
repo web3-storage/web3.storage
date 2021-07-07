@@ -21,9 +21,7 @@ module.exports = async ({ body, headers }) => {
       statusCode: 400,
       body: {
         ok: false,
-        error: {
-          message: 'Request body not a valid CAR file',
-        },
+        message: 'Request body not a valid CAR file',
       },
     }
   }
@@ -36,9 +34,7 @@ module.exports = async ({ body, headers }) => {
       statusCode: 400,
       body: {
         ok: false,
-        error: {
-          message: 'Request body not a valid CAR file',
-        },
+        message: 'Request body not a valid CAR file',
       },
     }
   }
@@ -48,7 +44,7 @@ module.exports = async ({ body, headers }) => {
     statusCode: 200,
     body: {
       ok: true,
-      value: {
+      car: {
         cid: carRootCid,
         size: bytes.length,
         name: headers['X-Name']
