@@ -221,3 +221,49 @@ export async function userTokensDelete (request, env) {
 
   return new JSONResponse(res.deleteAuthToken)
 }
+
+/**
+ * Retrieve a page of user uploads.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userUploadsGet (request, env) {
+  const { searchParams } = new URL(request.url)
+
+  let size = 25
+  if (searchParams.has('size')) {
+    const parsedSize = parseInt(searchParams.get('size'))
+    if (isNaN(parsedSize) || parsedSize <= 0 || parsedSize > 1000) {
+      throw Object.assign(new Error('invalid page size'), { status: 400 })
+    }
+    size = parsedSize
+  }
+
+  let before = new Date()
+  if (searchParams.has('before')) {
+    const parsedBefore = new Date(searchParams.get('before'))
+    if (isNaN(parsedBefore.getTime())) {
+      throw Object.assign(new Error('invalid before date'), { status: 400 })
+    }
+    before = parsedBefore
+  }
+
+  const res = await env.db.query(gql`
+    query FindUploads($where: FindUploadsInput!, $size: Int!) {
+      findUploads(where: $where, _size: $size) {
+        data {
+          _id
+          name
+          content {
+            cid
+            dagSize
+          }
+          created
+        }
+      }
+    }
+  `, { where: { before: before.toISOString(), user: request.auth.user._id }, size })
+
+  return new JSONResponse(res.findAuthTokensByUser.data)
+}
