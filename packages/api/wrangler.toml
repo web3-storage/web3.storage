@@ -19,15 +19,13 @@ format = "service-worker"
 # PROD!
 [env.production]
 # name = "web3-storage-production"
-workers_dev = true
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
-route = "api.web3.storage/*"
+route = "https://api.web3.storage/*"
 
 [env.staging]
 # name = "web3-storage-staging"
-workers_dev = true
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
-route = "api-staging.web3.storage/*"
+route = "https://api-staging.web3.storage/*"
 
 # Add your env here. Override the the values you need to change.
 
