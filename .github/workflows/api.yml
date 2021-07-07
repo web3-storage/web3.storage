@@ -37,7 +37,7 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - name: Publish api worker
         # workaround for https://github.com/cloudflare/wrangler-action/issues/59 to use node 16
-        uses: web3-storage/wrangler-action@78130c1d1e3ceb6ee3bb7613d7753431ce6bb479
+        uses: web3-storage/wrangler-action@node16
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           workingDirectory: 'packages/api'
