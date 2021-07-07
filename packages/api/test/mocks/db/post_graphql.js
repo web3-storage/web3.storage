@@ -35,7 +35,11 @@ module.exports = ({ body }) => {
   }
 
   if (body.query.includes('createAuthToken')) {
-    return gqlOkResponse({ createAuthToken: {} })
+    return gqlOkResponse({ createAuthToken: { _id: 'test-auth-token' } })
+  }
+
+  if (body.query.includes('deleteAuthToken')) {
+    return gqlOkResponse({ deleteAuthToken: { _id: 'test-auth-token' } })
   }
 
   return gqlResponse(400, {

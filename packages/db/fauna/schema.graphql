@@ -283,6 +283,7 @@ type Mutation {
   createOrUpdateUser(data: CreateOrUpdateUserInput!): User! @resolver
   createAuthToken(data: CreateAuthTokenInput): AuthToken! @resolver
   importCar(data: ImportCarInput!): Upload! @resolver
+  deleteAuthToken(user: ID!, authToken: ID!): AuthToken! @resolver
 }
 
 input FindUploadsInput {
