@@ -15,16 +15,20 @@ format = "service-worker"
 # ---- Environment specific overrides below ! ----
 # NOTE: wrangler automatically assigns each env the root `name` with the env name suffixed on the end
 # NOTE: wrangler tries to find an account_id defined at the root if workers_dev = true is not provided on your env.
+# NOTE: set BOTH a `route` template and `zone_id` to deploy to a custom domain.
+# NOTE: set worker_dev to true to deploy to a ${name}.${zone}.workers.dev
 
 # PROD!
 [env.production]
 # name = "web3-storage-production"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
+zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api.web3.storage/*"
 
 [env.staging]
 # name = "web3-storage-staging"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
+zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api-staging.web3.storage/*"
 
 # Add your env here. Override the the values you need to change.
