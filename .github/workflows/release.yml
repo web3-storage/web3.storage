@@ -1,0 +1,123 @@
+# I create and update Release PRs for each package when changes are merged to main.
+#
+# The `changeFinder` job scrapes the list of changed files from the git diff of 
+# main from the previous latest release.
+#
+# Google's `release-please` then does the work of creating PRs with CHANGELOGS derived
+# from the commit log, where messages should follow semantic-commit (fix: patch, feat: minor, fix!: major).
+# `release-please` is also smart enough to automatically increment the package.version
+# and create tags, prefixed with the package name (when `monorepo-tags: true`)
+#
+# We then add on our custom steps for deploying the thing to the end of the `release` job.
+# - When a `client` release PR is merged, the package is publshed to npm.
+# - When an `api` release PR is merged, the prod worker is published to Cloudflare.
+on:
+  push:
+    branches:
+      - main
+name: Release
+jobs:
+  changeFinder:
+    runs-on: ubuntu-latest
+    outputs:
+      nodePaths: ${{ steps.interrogate.outputs.nodePaths }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Find changes from git diff from main
+        id: interrogate
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const {execSync} = require('child_process');
+            const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+            const latestRelease = await github.repos.getLatestRelease({
+              owner,
+              repo
+            });
+            console.log(`latest release: ${JSON.stringify(latestRelease.data)}`);
+            execSync('git pull --tags');
+            execSync(`git reset --hard ${latestRelease.data.tag_name}`);
+            const status = execSync(`git diff --name-only origin/main`, { encoding: 'utf-8'});
+            console.log(status);
+            const changes = status.split('\n');
+            let nodePaths = new Set();
+            for (const change of changes) {
+              if (change.startsWith('packages/')) {
+                  const library = change.split('/')[1];
+                  nodePaths.add(library);
+              };
+            }
+            nodePaths = Array.from(nodePaths);
+            if(nodePaths.length === 0){
+              console.log(`::warning::No changes found, release will be skipped.`)
+            }
+            console.log(`::set-output name=nodePaths::${JSON.stringify(nodePaths)}`);
+
+  release-pr:
+    runs-on: ubuntu-latest
+    needs: changeFinder
+    if: ${{ fromJson(needs.changeFinder.outputs.nodePaths)[0] != '' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{fromJson(needs.changeFinder.outputs.nodePaths)}}
+    steps:
+      - name: Create Release PR
+        uses: google-github-actions/release-please-action@v2
+        id: release-please
+        with:
+          path: packages/${{ matrix.package }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          package-name: ${{ matrix.package }}
+          monorepo-tags: true
+          command: release-pr
+
+  release:
+    runs-on: ubuntu-latest
+    needs: changeFinder
+    if: ${{ fromJson(needs.changeFinder.outputs.nodePaths)[0] != '' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{fromJson(needs.changeFinder.outputs.nodePaths)}}
+    steps:
+      - name: Handle Release PR Merge
+      - uses: GoogleCloudPlatform/release-please-action@v2
+        id: tag-release
+        with:
+          path: packages/${{ matrix.package }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          monorepo-tags: true
+          package-name: ${{ matrix.package }}
+          command: github-release
+
+      - uses: actions/checkout@v2
+        if: ${{ steps.tag-release.outputs.release_created }}
+
+      - uses: actions/setup-node@v2
+        if: ${{ steps.tag-release.outputs.release_created }}
+        with:
+          node-version: '16'
+          registry-url: 'https://registry.npmjs.org'
+
+      - uses: bahmutov/npm-install@v1
+        if: ${{ steps.tag-release.outputs.release_created }}
+
+      # --- Client deploy steps  ---------------------------------------------
+      - name: Client - NPM Publish
+        if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'client' }}
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+        run: npm publish --workspace packages/client
+
+      # --- API deploy steps -------------------------------------------------
+      - name: API - Deploy to Cloudflare
+        if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'api' }}
+        uses: cloudflare/wrangler-action@1.3.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          workingDirectory: 'packages/api'
+          environment: 'production'
