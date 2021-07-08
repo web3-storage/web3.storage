@@ -12,7 +12,7 @@ import Loading from '../components/loading.js'
 export function getStaticProps() {
   return {
     props: {
-      title: 'Manage API Tokens - NFT Storage',
+      title: 'Manage API Tokens - web3.storage',
       navBgColor: 'nsgreen',
       redirectTo: '/',
       needsUser: true,
