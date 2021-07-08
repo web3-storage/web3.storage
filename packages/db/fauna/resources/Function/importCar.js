@@ -20,7 +20,8 @@ const {
   IsNonEmpty,
   Abort,
   Collection,
-  IsNull
+  IsNull,
+  Not
 } = fauna
 
 const name = 'importCar'
@@ -37,7 +38,8 @@ const body = Query(
         )
       },
       If(
-        Exists(Var('userRef')),
+        Not(Exists(Var('userRef'))),
+        Abort('user not found'),
         Let(
           {
             cid: Select('cid', Var('data')),
@@ -92,8 +94,7 @@ const body = Query(
               })
             )
           )
-        ),
-        Abort('user not found')
+        )
       )
     )
   )
