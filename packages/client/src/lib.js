@@ -26,7 +26,7 @@ import {
   Blockstore
 } from './platform.js'
 
-const MAX_PUT_RETRIES = 1
+const MAX_PUT_RETRIES = 5
 const MAX_CONCURRENT_UPLOADS = 3
 const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 
