@@ -23,7 +23,7 @@ router.get('/', () => {
   return new Response(
     `
 <body style="font-family: -apple-system, system-ui">
-  <h1>📦</h1>
+  <h1>⁂</h1>
   <p>try
     <a href='/car/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy'>
       /car/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy
