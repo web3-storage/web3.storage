@@ -234,7 +234,7 @@ export async function userUploadsGet (request, env) {
   let size = 25
   if (searchParams.has('size')) {
     const parsedSize = parseInt(searchParams.get('size'))
-    if (isNaN(parsedSize) || parsedSize <= 0 || parsedSize > 1000) {
+    if (isNaN(parsedSize) || parsedSize <= 0 || parsedSize > 100) {
       throw Object.assign(new Error('invalid page size'), { status: 400 })
     }
     size = parsedSize
@@ -265,5 +265,5 @@ export async function userUploadsGet (request, env) {
     }
   `, { where: { before: before.toISOString(), user: request.auth.user._id }, size })
 
-  return new JSONResponse(res.findAuthTokensByUser.data)
+  return new JSONResponse(res.findUploads.data)
 }
