@@ -45,12 +45,12 @@ type AuthToken {
   """
   Uploads made using this token.
   """
-  uploads: [Upload!]! @relation @index
+  uploads: [Upload!]! @relation
 
   """
   User this token belongs to.
   """
-  user: User! @relation @index
+  user: User! @relation
 
   """
   Creation date.
@@ -165,7 +165,7 @@ type Upload {
   """
   User that uploaded this content.
   """
-  user: User! @relation @index
+  user: User! @relation
 
   """
   User authentication token that was used to upload this content.
@@ -200,7 +200,7 @@ type Deal {
   """
   CIDs in this deal.
   """
-  contents: [Content!]! @relation @index
+  contents: [Content!]! @relation
 
   """
   ID of miner this deal was made with.
