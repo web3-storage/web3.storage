@@ -169,8 +169,9 @@ type Upload {
 
   """
   User authentication token that was used to upload this content.
+  Note: nullable, because the user may have used a Magic.link token.
   """
-  authToken: AuthToken! @relation
+  authToken: AuthToken @relation
 
   """
   User provided name for this upload.
@@ -307,7 +308,8 @@ input CreateAuthTokenInput {
 }
 
 input ImportCarInput {
-  authToken: ID!
+  user: ID!
+  authToken: ID
   cid: String!
   name: String
   dagSize: Int

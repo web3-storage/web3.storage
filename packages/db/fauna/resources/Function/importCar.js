@@ -19,7 +19,8 @@ const {
   Ref,
   IsNonEmpty,
   Abort,
-  Collection
+  Collection,
+  IsNull
 } = fauna
 
 const name = 'importCar'
@@ -28,15 +29,19 @@ const body = Query(
     ['data'],
     Let(
       {
-        authTokenRef: Ref(Collection('AuthToken'), Select('authToken', Var('data')))
+        userRef: Ref(Collection('User'), Select('user', Var('data'))),
+        authTokenRef: If(
+          IsNull(Select('authToken', Var('data'), null)),
+          null,
+          Ref(Collection('AuthToken'), Select('authToken', Var('data')))
+        )
       },
       If(
-        Exists(Var('authTokenRef')),
+        Exists(Var('userRef')),
         Let(
           {
             cid: Select('cid', Var('data')),
-            contentMatch: Match(Index('unique_Content_cid'), Var('cid')),
-            userRef: Select(['data', 'user'], Get(Var('authTokenRef')))
+            contentMatch: Match(Index('unique_Content_cid'), Var('cid'))
           },
           If(
             IsNonEmpty(Var('contentMatch')),
