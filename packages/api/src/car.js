@@ -33,26 +33,26 @@ export async function carGet(request, env, ctx) {
   // gateway does not support `carversion` yet.
   // using it now means we can skip the cache if it is supported in the future
   const url = new URL(`/api/v0/dag/export?arg=${cid}&carversion=1`, GATEWAY)
-  console.log(url.toString())
   res = await fetch(url, { method: 'POST' })
   if (!res.ok) {
     // bail early. dont cache errors.
     return res
   }
-  // TODO: these headers should be upstreamed to ipfs impls
+  // Clone the response so that it's no longer immutable. Ditch the original headers.
+  // Note: keeping the original headers seems to prevent the carHead function from setting Content-Length
+  res = new Response(res.body)
+  res.headers.set('Content-Type', 'application/car')
+  // cache for 1 year, the max max-age value.
+  res.headers.set('Cache-Control', 'public, max-age=31536000')
   // without the content-disposition, firefox describes them as DMS files.
-  const headers = {
-    'Cache-Control': 'public, max-age=31536000',  // max max-age is 1 year
-    'Content-Type': 'application/car',
-    'Content-Disposition': `attachment; filename="${cid}.car"`,
-  }
+  res.headers.set('Content-Disposition', `attachment; filename="${cid}.car"`)
+  // always https pls.
+  res.headers.set('Strict-Transport-Security', `max-age=31536000; includeSubDomains; preload"`)
   // // compress if asked for? is it worth it?
   // if (request.headers.get('Accept-Encoding').match('gzip')) {
   //   headers['Content-Encoding'] = 'gzip'
   // }
-  res = new Response(res.body, { ...res, headers })
   ctx.waitUntil(cache.put(request, res.clone()))
-
   return res
 }
 
@@ -116,6 +116,8 @@ export async function sizeOf(response) {
     if (done) {
       break
     }
+    // this should be ok up to about 9 Petabytes.
+    // Number.MAX_SAFE_INTEGER = 9,007,199,254,740,991
     size += value.byteLength
   }
   return size
