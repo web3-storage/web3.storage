@@ -19,7 +19,9 @@ const {
   Ref,
   IsNonEmpty,
   Abort,
-  Collection
+  Collection,
+  IsNull,
+  Not
 } = fauna
 
 const name = 'importCar'
@@ -28,47 +30,71 @@ const body = Query(
     ['data'],
     Let(
       {
-        authTokenRef: Ref(Collection('AuthToken'), Select('authToken', Var('data'))),
-        cid: Select('cid', Var('data')),
-        contentMatch: Match(Index('unique_Content_cid'), Var('cid'))
+        userRef: Ref(Collection('User'), Select('user', Var('data'))),
+        authTokenRef: If(
+          IsNull(Select('authToken', Var('data'), null)),
+          null,
+          Ref(Collection('AuthToken'), Select('authToken', Var('data')))
+        )
       },
       If(
-        Exists(Var('authTokenRef')),
-        If(
-          IsNonEmpty(Var('contentMatch')),
-          Create('Upload', {
-            data: {
-              user: Select(['data', 'user'], Get(Var('authTokenRef'))),
-              authToken: Var('authTokenRef'),
-              cid: Var('cid'),
-              content: Select('ref', Get(Var('contentMatch'))),
-              created: Now(),
-              name: Select('name', Var('data'), null)
-            }
-          }),
-          Let(
-            {
-              content: Create('Content', {
+        Not(Exists(Var('userRef'))),
+        Abort('user not found'),
+        Let(
+          {
+            cid: Select('cid', Var('data')),
+            contentMatch: Match(Index('unique_Content_cid'), Var('cid'))
+          },
+          If(
+            IsNonEmpty(Var('contentMatch')),
+            Let(
+              {
+                content: Get(Var('contentMatch')),
+                uploadMatch: Match(
+                  Index('upload_by_user_and_content'),
+                  Var('userRef'),
+                  Select('ref', Var('content')),
+                  true
+                )
+              },
+              If(
+                IsNonEmpty(Var('uploadMatch')),
+                Get(Var('uploadMatch')),
+                Create('Upload', {
+                  data: {
+                    user: Var('userRef'),
+                    authToken: Var('authTokenRef'),
+                    cid: Var('cid'),
+                    content: Select('ref', Var('content')),
+                    name: Select('name', Var('data'), null),
+                    created: Now()
+                  }
+                })
+              )
+            ),
+            Let(
+              {
+                content: Create('Content', {
+                  data: {
+                    cid: Var('cid'),
+                    dagSize: Select('dagSize', Var('data'), null),
+                    created: Now()
+                  }
+                })
+              },
+              Create('Upload', {
                 data: {
+                  user: Var('userRef'),
+                  authToken: Var('authTokenRef'),
                   cid: Var('cid'),
-                  dagSize: Select('dagSize', Var('data'), null),
+                  content: Select('ref', Var('content')),
+                  name: Select('name', Var('data'), null),
                   created: Now()
                 }
               })
-            },
-            Create('Upload', {
-              data: {
-                user: Select(['data', 'user'], Get(Var('authTokenRef'))),
-                authToken: Var('authTokenRef'),
-                cid: Var('cid'),
-                content: Select('ref', Var('content')),
-                created: Now(),
-                name: Select('name', Var('data'), null)
-              }
-            })
+            )
           )
-        ),
-        Abort('auth key not found')
+        )
       )
     )
   )

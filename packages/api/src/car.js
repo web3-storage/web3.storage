@@ -63,7 +63,7 @@ export async function carGet(request, env, ctx) {
  * @param {import('./env').Env} env
  */
 export async function carPost(request, env) {
-  const { _id } = request.auth.authToken
+  const { user, authToken } = request.auth
   const { headers } = request
 
   let name = headers.get('x-name')
@@ -92,8 +92,9 @@ export async function carPost(request, env) {
       }
     }
   `, {
-    data: { 
-      authToken: _id,
+    data: {
+      user: user._id,
+      authToken: authToken?._id,
       cid,
       name
       // dagSize: undefined // TODO: should we default to chunk car behavior?

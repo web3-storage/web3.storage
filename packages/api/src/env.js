@@ -20,6 +20,6 @@ export function envAll (_, env) {
   env.SALT = env.SALT || SALT
 
   const clusterAuthToken = env.CLUSTER_BASIC_AUTH_TOKEN || (typeof CLUSTER_BASIC_AUTH_TOKEN === 'undefined' ? undefined : CLUSTER_BASIC_AUTH_TOKEN)
-  const headers = clusterAuthToken ? { Authorization: `Basic ${clusterAuthToken}` } : null
+  const headers = clusterAuthToken ? { Authorization: `Basic ${clusterAuthToken}` } : {}
   env.cluster = new Cluster(env.CLUSTER_API_URL || CLUSTER_API_URL, { headers })
 }
