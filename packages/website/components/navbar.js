@@ -22,8 +22,8 @@ export default function Navbar({ bgColor = 'white', user }) {
   return (
     <nav className={`bg-${bgColor}`}>
       <div className="flex items-center justify-between ph3 ph5-ns pv3 center mw9">
-        <Link href="/">
-          Web3 Storage
+        <Link href="/" >
+          <a className="link f3" title="Web3 Storage">⁂</a>
         </Link>
         <div>
           {user ? (
