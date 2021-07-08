@@ -35,6 +35,11 @@ export interface API {
    * Get files for a root CID packed as a CAR file
    */
   get(service: Service, cid: CIDString): Promise<Web3Response | null>
+
+  /**
+   * Remove a users record of an upload. Does not make CID unavailable.
+   */
+  delete(service: Service, cid: CIDString): Promise<CIDString>
 }
 
 export interface Filelike {
