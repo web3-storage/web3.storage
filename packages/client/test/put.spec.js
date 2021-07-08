@@ -36,7 +36,6 @@ describe('put', () => {
       await client.put([new File(['test-put-fail'], 'file.txt')], { maxRetries: 1 })
       assert.unreachable('should have thrown')
     } catch (err) {
-      console.log('err', err.message)
       assert.match(err.message, /Request body not a valid CAR file/)
     }
   })
@@ -46,6 +45,7 @@ describe('put', () => {
     const files = prepareFiles()
     const expectedCid = 'bafybeifkc773a2s6gerq7ip7tikahlfflxe4fvagyxf74zfkr33j2yu5li'
     const cid = await client.put(files, {
+      name: 'web3-storage-dir',
       onRootCidReady: (cid) => {
         assert.equal(cid, expectedCid, 'returned cid matches the CAR')
       }
@@ -54,7 +54,7 @@ describe('put', () => {
   })
 
   it('adds Big Files', async function () {
-    this.timeout(25e3)
+    this.timeout(30e3)
     const client = new Web3Storage({ token, endpoint })
     let uploadedChunks = 0
 

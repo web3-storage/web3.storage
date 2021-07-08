@@ -45,7 +45,8 @@ export interface Filelike {
 export type PutOptions = {
   onRootCidReady?: (cid: CIDString) => void,
   onStoredChunk?: (size: number) => void,
-  maxRetries?: number
+  maxRetries?: number,
+  name?: string
 }
 
 export interface Web3File extends File {
