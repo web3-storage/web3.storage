@@ -93,7 +93,7 @@ const body = Query(
             )
           )
         ),
-        Abort('auth token not found')
+        Abort('user not found')
       )
     )
   )
