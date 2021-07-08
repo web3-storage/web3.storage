@@ -19,6 +19,10 @@ export default {
   resolve: {
     fallback: {
       stream: require.resolve('stream-browserify')
+    },
+    alias: {
+      // node-fetch causes TypeError: Illegal invocation in Cloudflare Workers
+      'node-fetch': path.resolve(__dirname, 'src', 'utils', 'fetch.js')
     }
   }
 }

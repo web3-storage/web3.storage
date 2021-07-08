@@ -55,7 +55,7 @@ export default function NewFile() {
           await client.storeBlob(file)
         }
       } finally {
-        await queryClient.invalidateQueries('get-nfts')
+        await queryClient.invalidateQueries('get-uploads')
         setUploading(false)
         router.push('/files')
       }

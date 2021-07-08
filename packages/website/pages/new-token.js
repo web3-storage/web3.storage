@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useQueryClient } from 'react-query'
-import Box from '../components/box.js'
 import Button from '../components/button.js'
 import { createToken } from '../lib/api.js'
 
@@ -21,7 +20,7 @@ export function getStaticProps() {
   }
 }
 
-export default function NewKey() {
+export default function NewToken() {
   const router = useRouter()
   const queryClient = useQueryClient()
   const [creating, setCreating] = useState(false)
@@ -40,7 +39,7 @@ export default function NewKey() {
       } finally {
         await queryClient.invalidateQueries('get-tokens')
         setCreating(false)
-        router.push('/manage')
+        router.push('/tokens')
       }
     }
   }
@@ -48,11 +47,7 @@ export default function NewKey() {
   return (
     <main className="bg-nsgreen">
       <div className="mw9 center pv3 ph3 ph5-ns min-vh-100">
-        <Box
-          bgColor="nsgray"
-          borderColor="nspink"
-          wrapperClassName="center mv4 mw6"
-        >
+        <div className="center mv4 mw6">
           <h1 className="chicagoflf f4 fw4">New API Key</h1>
           <form onSubmit={handleCreateToken}>
             <div className="mv3">
@@ -62,7 +57,7 @@ export default function NewKey() {
               <input
                 id="name"
                 name="name"
-                placeholder="Give this API key a name"
+                placeholder="Give this API token a name"
                 className="db ba b--black w5 pa2"
                 required
               />
@@ -72,13 +67,13 @@ export default function NewKey() {
                 className="bg-nslime"
                 type="submit"
                 disabled={creating}
-                id="create-new-key"
+                id="create-new-token"
               >
                 {creating ? 'Creating...' : 'Create'}
               </Button>
             </div>
           </form>
-        </Box>
+        </div>
       </div>
     </main>
   )

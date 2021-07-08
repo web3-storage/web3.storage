@@ -37,16 +37,15 @@ export async function getTokens() {
 /**
  * Delete Token
  *
- * @param {string} name
+ * @param {string} _id
  */
-export async function deleteToken(name) {
-  const res = await fetch(API + '/user/tokens', {
+export async function deleteToken(_id) {
+  const res = await fetch(`${API}/user/tokens/${_id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + (await getToken()),
-    },
-    body: JSON.stringify({ name }),
+    }
   })
 
   if (!res.ok) {
@@ -79,12 +78,12 @@ export async function createToken(name) {
 /**
  * Get files
  *
- * @param {{limit: number, before: string }} query
+ * @param {{ size: number, before: string }} query
  * @returns
  */
-export async function getFiles({ limit, before }) {
-  const params = new URLSearchParams({ before, limit: String(limit) })
-  const res = await fetch(`${API}/user/files?${params}`, {
+export async function getUploads({ size, before }) {
+  const params = new URLSearchParams({ before, size: String(size) })
+  const res = await fetch(`${API}/user/uploads?${params}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -93,7 +92,7 @@ export async function getFiles({ limit, before }) {
   })
 
   if (!res.ok) {
-    throw new Error(`failed to get files: ${await res.text()}`)
+    throw new Error(`failed to get uploads: ${await res.text()}`)
   }
 
   return res.json()

@@ -4,7 +4,7 @@ import filesize from 'filesize'
 import { Web3Storage } from 'web3.storage'
 import Button from '../components/button.js'
 import Loading from '../components/loading'
-import { getFiles, getToken, API } from '../lib/api.js'
+import { getUploads, getToken, API } from '../lib/api.js'
 import { When } from 'react-if'
 
 /**
@@ -31,26 +31,26 @@ export function getStaticProps() {
  */
 export default function Files({ user }) {
   const [deleting, setDeleting] = useState('')
-  const [limit] = useState(25)
+  const [size] = useState(25)
   const [befores, setBefores] = useState([new Date().toISOString()])
   const queryClient = useQueryClient()
-  const queryParams = { before: befores[0], limit }
-  /** @type {[string, { before: string, limit: number }]} */
-  const queryKey = ['get-nfts', queryParams]
+  const queryParams = { before: befores[0], size }
+  /** @type {[string, { before: string, size: number }]} */
+  const queryKey = ['get-uploads', queryParams]
   const { status, data } = useQuery(
     queryKey,
-    (ctx) => getFiles(ctx.queryKey[1]),
+    (ctx) => getUploads(ctx.queryKey[1]),
     {
       enabled: !!user,
     }
   )
   /** @type {any[]} */
-  const files = data || []
+  const uploads = data || []
 
   /**
    * @param {import('react').ChangeEvent<HTMLFormElement>} e
    */
-  async function handleDeleteFile(e) {
+  async function handleDelete(e) {
     e.preventDefault()
     const data = new FormData(e.target)
     const cid = data.get('cid')
@@ -66,7 +66,7 @@ export default function Files({ user }) {
         })
         await client.delete(cid)
       } finally {
-        await queryClient.invalidateQueries('get-nfts')
+        await queryClient.invalidateQueries('get-uploads')
         setDeleting('')
       }
     }
@@ -78,11 +78,11 @@ export default function Files({ user }) {
   }
 
   function handleNextClick() {
-    if (files.length === 0) return
-    setBefores([files[files.length - 1].created, ...befores])
+    if (uploads.length === 0) return
+    setBefores([uploads[uploads.length - 1].created, ...befores])
   }
 
-  const hasZeroNfts = files.length === 0 && befores.length === 1
+  const hasZeroNfts = uploads.length === 0 && befores.length === 1
 
   return (
     <main className="bg-nsyellow">
@@ -115,7 +115,7 @@ export default function Files({ user }) {
                           Date
                         </th>
                         <th className="pa2 tl bg-nsgray br b--black w-33">
-                          CID
+                          Name
                         </th>
                         <th className="pa2 tl bg-nsgray br b--black w-33">
                           Size
@@ -124,32 +124,32 @@ export default function Files({ user }) {
                       </tr>
                     </thead>
                     <tbody>
-                      {files.map(
-                        (/** @type {any} */ nft, /** @type {number} */ i) => (
-                          <tr className="bb b--black" key={`nft-${i}`}>
+                      {uploads.map(
+                        (/** @type {any} */ upload, /** @type {number} */ i) => (
+                          <tr className="bb b--black" key={upload.content.cid}>
                             <td className="pa2 br b--black">
-                              {nft.created.split('T')[0]}
+                              {upload.created.split('T')[0]}
                             </td>
                             <td className="pa2 br b--black">
-                              <GatewayLink cid={nft.cid} />
+                              <GatewayLink cid={upload.content.cid} name={upload.name} />
                             </td>
                             <td className="pa2 br b--black mw7">
-                              {filesize(nft.size || 0)}
+                              {upload.content.dagSize ? filesize(upload.content.dagSize) : 'Calculating...'}
                             </td>
                             <td className="pa2">
-                              <form onSubmit={handleDeleteFile}>
+                              <form onSubmit={handleDelete}>
                                 <input
                                   type="hidden"
                                   name="cid"
-                                  value={nft.cid}
+                                  value={upload.content.cid}
                                 />
                                 <Button
-                                  className="bg-nsorange white"
+                                  className="bg-red white"
                                   type="submit"
                                   disabled={Boolean(deleting)}
-                                  id="delete-nft"
+                                  id="delete-upload"
                                 >
-                                  {deleting === nft.cid
+                                  {deleting === upload.content.cid
                                     ? 'Deleting...'
                                     : 'Delete'}
                                 </Button>
@@ -166,16 +166,16 @@ export default function Files({ user }) {
                       wrapperClassName="mh2"
                       disabled={befores.length === 1}
                       onClick={handlePrevClick}
-                      id="files-previous"
+                      id="uploads-previous"
                     >
                       ← Previous
                     </Button>
                     <Button
                       className="black"
                       wrapperClassName="mh2"
-                      disabled={files.length < limit}
+                      disabled={uploads.length < size}
                       onClick={handleNextClick}
-                      id="files-next"
+                      id="uploads-next"
                     >
                       Next →
                     </Button>
@@ -193,15 +193,15 @@ export default function Files({ user }) {
 /**
  * Gateway Link Component
  *
- * @param {{cid: string}} props
+ * @param {{cid: string, name?: string}} props
  */
-function GatewayLink({ cid }) {
+function GatewayLink({ cid, name }) {
   const href = cid.startsWith('Qm')
     ? `https://ipfs.io/ipfs/${cid}`
     : `https://${cid}.ipfs.dweb.link`
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" className="black">
-      {cid}
+      {name || cid}
     </a>
   )
 }

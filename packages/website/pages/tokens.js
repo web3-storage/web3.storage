@@ -12,7 +12,7 @@ import Loading from '../components/loading.js'
 export function getStaticProps() {
   return {
     props: {
-      title: 'Manage API Keys - NFT Storage',
+      title: 'Manage API Tokens - web3.storage',
       navBgColor: 'nsgreen',
       redirectTo: '/',
       needsUser: true,
@@ -25,12 +25,13 @@ export function getStaticProps() {
  * @param {import('../components/types.js').LayoutChildrenProps} props
  * @returns
  */
-export default function ManageKeys({ user }) {
+export default function Tokens({ user }) {
   const [deleting, setDeleting] = useState('')
   const [copied, setCopied] = useState('')
   const queryClient = useQueryClient()
-  const { status, data } = useQuery('get-tokens', getTokens, {
+  const { status, data: tokens } = useQuery('get-tokens', getTokens, {
     enabled: !!user,
+    placeholderData: []
   })
   useEffect(() => {
     if (!copied) return
@@ -43,16 +44,16 @@ export default function ManageKeys({ user }) {
   async function handleDeleteToken(e) {
     e.preventDefault()
     const data = new FormData(e.target)
-    const name = data.get('name')
-    if (name && typeof name === 'string') {
-      if (!confirm('Are you sure? Deleted keys cannot be recovered!')) {
+    const _id = data.get('id')
+    if (_id && typeof _id === 'string') {
+      if (!confirm('Are you sure? Deleted tokens cannot be recovered!')) {
         return
       }
 
-      setDeleting(name)
+      setDeleting(_id)
 
       try {
-        await deleteToken(name)
+        await deleteToken(_id)
       } finally {
         await queryClient.invalidateQueries('get-tokens')
         setDeleting('')
@@ -65,13 +66,11 @@ export default function ManageKeys({ user }) {
    */
   async function handleCopyToken(e) {
     e.preventDefault()
-    const key = e.target.dataset.value
-    if (!key) throw new Error('missing key value')
-    await navigator.clipboard.writeText(key)
-    setCopied(key)
+    const secret = e.target.dataset.value
+    if (!secret) throw new Error('missing token value')
+    await navigator.clipboard.writeText(secret)
+    setCopied(secret)
   }
-
-  const keys = Object.entries(data || {})
 
   return (
     <main className="bg-nsgreen">
@@ -82,12 +81,12 @@ export default function ManageKeys({ user }) {
           </Then>
           <Else>
             <div className="flex mb3 items-center">
-              <h1 className="chicagoflf mv4 flex-auto">API Keys</h1>
-              <Button href="/new-key" className="flex-none" id="new-key">
-                + New Key
+              <h1 className="chicagoflf mv4 flex-auto">API Tokens</h1>
+              <Button href="/new-token" className="flex-none" id="new-token">
+                + New Token
               </Button>
             </div>
-            <When condition={keys.length > 0}>
+            <When condition={tokens.length > 0}>
               <table className="bg-white ba b--black w-100 collapse mb4">
                 <thead>
                   <tr className="bb b--black">
@@ -97,26 +96,26 @@ export default function ManageKeys({ user }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {keys.map((t, k) => (
+                  {tokens.map((t, k) => (
                     <tr className="bb b--black" key={k}>
-                      <td className="pa2 br b--black">{t[0]}</td>
+                      <td className="pa2 br b--black">{t.name}</td>
                       <td className="pa2 br b--black mw7">
                         <input
                           disabled
                           className="w-100 h2"
                           type="text"
-                          id={`value-${t[0]}`}
-                          value={t[1]}
+                          id={`value-${t._id}`}
+                          value={t.secret}
                         />
                       </td>
                       <td className="pa2">
-                        <form data-value={t[1]} onSubmit={handleCopyToken}>
+                        <form data-value={t.secret} onSubmit={handleCopyToken}>
                           <Button
                             className="bg-white black"
                             type="submit"
                             id="copy-key"
                           >
-                            {copied === t[1] ? 'Copied!' : 'Copy'}
+                            {copied === t._id ? 'Copied!' : 'Copy'}
                           </Button>
                         </form>
                       </td>
@@ -124,17 +123,17 @@ export default function ManageKeys({ user }) {
                         <form onSubmit={handleDeleteToken}>
                           <input
                             type="hidden"
-                            name="name"
-                            id={`token-${t[0]}`}
-                            value={t[0]}
+                            name="id"
+                            id={`token-${t._id}`}
+                            value={t._id}
                           />
                           <Button
-                            className="bg-nsorange white"
+                            className="bg-red white"
                             type="submit"
                             disabled={Boolean(deleting)}
-                            id="delete-key"
+                            id="delete-token"
                           >
-                            {deleting === t[0] ? 'Deleting...' : 'Delete'}
+                            {deleting === t._id ? 'Deleting...' : 'Delete'}
                           </Button>
                         </form>
                       </td>
@@ -143,11 +142,11 @@ export default function ManageKeys({ user }) {
                 </tbody>
               </table>
             </When>
-            <When condition={keys.length === 0}>
+            <When condition={tokens.length === 0}>
               <p className="tc mv5">
                 <span className="f1 dib mb3">😢</span>
                 <br />
-                No API keys
+                No API tokens
               </p>
             </When>
           </Else>
