@@ -18,13 +18,13 @@ const {
  * Usage:
  *
  * Match(
- *   Index('upload_sort_by_created_desc'),
+ *   Index('upload_by_user_sort_by_created_desc'),
  *   Ref(Collection('user'), Var('id')),
  *   true // not_deleted
  * )
  */
 const index = {
-  name: 'upload_sort_by_created_desc',
+  name: 'upload_by_user_sort_by_created_desc',
   source: [{
     collection: Collection('Upload'),
     fields: {
