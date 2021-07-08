@@ -92,7 +92,7 @@ export async function getUploads({ size, before }) {
   })
 
   if (!res.ok) {
-    throw new Error(`failed to get uplaods: ${await res.text()}`)
+    throw new Error(`failed to get uploads: ${await res.text()}`)
   }
 
   return res.json()
