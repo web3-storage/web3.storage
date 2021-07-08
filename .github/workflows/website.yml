@@ -10,7 +10,7 @@ on:
     branches:
       - main
     paths:
-      - 'packages/api/**'
+      - 'packages/website/**'
       - '.github/workflows/website.yml'
 jobs:
   test:
