@@ -84,7 +84,7 @@ jobs:
         package: ${{fromJson(needs.changeFinder.outputs.nodePaths)}}
     steps:
       - name: Handle Release PR Merge
-      - uses: GoogleCloudPlatform/release-please-action@v2
+        uses: GoogleCloudPlatform/release-please-action@v2
         id: tag-release
         with:
           path: packages/${{ matrix.package }}
