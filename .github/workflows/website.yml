@@ -33,10 +33,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
-      # - uses: bahmutov/npm-install@v1
-      - run: node -v
-      - run: npm -v
-      - run: npm ci
+      - uses: bahmutov/npm-install@v1
+      - run: npm run build -w packages/client
       - run: npm run build -w packages/website
 
       # TODO: replace with adding to web3.storage
