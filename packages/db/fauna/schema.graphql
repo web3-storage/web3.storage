@@ -288,7 +288,7 @@ type Mutation {
 
 input FindUploadsInput {
   user: ID
-  before: Time!
+  createdBefore: Time!
 }
 
 input CreateOrUpdateUserInput {

@@ -37,7 +37,7 @@ const body = Query(
           ),
           Lambda(
             ['created', 'ref'],
-            LT(Var('created'), Select('before', Var('where')))
+            LT(Var('created'), Select('createdBefore', Var('where')))
           )
         ),
         page: If(

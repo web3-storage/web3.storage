@@ -263,7 +263,7 @@ export async function userUploadsGet (request, env) {
         }
       }
     }
-  `, { where: { before: before.toISOString(), user: request.auth.user._id }, size })
+  `, { where: { createdBefore: before.toISOString(), user: request.auth.user._id }, size })
 
   return new JSONResponse(res.findUploads.data)
 }
