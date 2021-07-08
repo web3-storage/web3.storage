@@ -21,9 +21,7 @@ module.exports = async ({ body, headers }) => {
       statusCode: 400,
       body: {
         ok: false,
-        error: {
-          message: 'Request body not a valid CAR file',
-        },
+        message: 'Request body not a valid CAR file',
       },
     }
   }
@@ -36,22 +34,16 @@ module.exports = async ({ body, headers }) => {
       statusCode: 400,
       body: {
         ok: false,
-        error: {
-          message: 'Request body not a valid CAR file',
-        },
+        message: 'Request body not a valid CAR file',
       },
     }
   }
 
-  const { cid, bytes } = await car.get(root)
   return {
     statusCode: 200,
     body: {
       ok: true,
-      value: {
-        cid: carRootCid,
-        size: bytes.length,
-      },
+      cid: carRootCid,
     },
   }
 }

@@ -90,10 +90,18 @@ class Web3Storage {
    * @param {API.PutOptions} [options]
    * @returns {Promise<API.CIDString>}
    */
-  static async put({ endpoint, token }, files, { onRootCidReady, onStoredChunk, maxRetries = MAX_PUT_RETRIES } = {}) {
+  static async put({ endpoint, token }, files, { onRootCidReady, onStoredChunk, maxRetries = MAX_PUT_RETRIES, name } = {}) {
     const url = new URL(`/car`, endpoint)
-    const headers = Web3Storage.headers(token)
     const targetSize = MAX_CHUNK_SIZE
+    let headers = Web3Storage.headers(token)
+
+    if (name) {
+      headers = {
+        ...headers,
+        // @ts-ignore 'X-Name' does not exist in type inferred
+        'X-Name': name
+      }
+    }
 
     let carRoot
     const blockstore = new Blockstore()
@@ -131,12 +139,12 @@ class Web3Storage {
                 headers,
                 body: carFile,
               })
-              const result = await request.json()
+              const res = await request.json()
 
-              if (result.ok) {
-                return result.value.cid
+              if (request.ok) {
+                return res.cid
               } else {
-                throw new Error(result.error.message)
+                throw new Error(res.message)
               }
             },
             { retries: maxRetries }

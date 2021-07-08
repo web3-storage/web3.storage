@@ -38,11 +38,12 @@ const body = Query(
           IsNonEmpty(Var('contentMatch')),
           Create('Upload', {
             data: {
-              user: Select('user', Get(Var('authTokenRef'))),
+              user: Select(['data', 'user'], Get(Var('authTokenRef'))),
               authToken: Var('authTokenRef'),
               cid: Var('cid'),
-              content: Ref(Collection('Content'), Select('id', Get(Var('contentMatch')))),
-              created: Now()
+              content: Select('ref', Get(Var('contentMatch'))),
+              created: Now(),
+              name: Select('name', Var('data'), null)
             }
           }),
           Let(
@@ -50,7 +51,6 @@ const body = Query(
               content: Create('Content', {
                 data: {
                   cid: Var('cid'),
-                  name: Select('name', Var('data'), null),
                   dagSize: Select('dagSize', Var('data'), null),
                   created: Now()
                 }
@@ -58,11 +58,12 @@ const body = Query(
             },
             Create('Upload', {
               data: {
-                user: Select('user', Get(Var('authTokenRef'))),
+                user: Select(['data', 'user'], Get(Var('authTokenRef'))),
                 authToken: Var('authTokenRef'),
                 cid: Var('cid'),
                 content: Select('ref', Var('content')),
-                created: Now()
+                created: Now(),
+                name: Select('name', Var('data'), null)
               }
             })
           )

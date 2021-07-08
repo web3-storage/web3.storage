@@ -49,14 +49,5 @@ function serverError (error) {
 }
 
 addEventListener('fetch', (event) => {
-  const respond = () => event.respondWith(router.handle(event.request, {}, event).catch(serverError))
-  // when testing just respond to the fake testing domain
-  if (typeof process !== 'undefined' && process.env.PW_TEST) {
-    const url = new URL(event.request.url)
-    if (url.hostname === 'testing.web3.storage') {
-      respond()
-    }
-  } else {
-    respond()
-  }
+  event.respondWith(router.handle(event.request, {}, event).catch(serverError))
 })

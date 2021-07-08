@@ -15,40 +15,50 @@ format = "service-worker"
 # ---- Environment specific overrides below ! ----
 # NOTE: wrangler automatically assigns each env the root `name` with the env name suffixed on the end
 # NOTE: wrangler tries to find an account_id defined at the root if workers_dev = true is not provided on your env.
+# NOTE: set BOTH a `route` template and `zone_id` to deploy to a custom domain.
+# NOTE: set worker_dev to true to deploy to a ${name}.${zone}.workers.dev
+# NOTE: `vars` are not inherited by envs. You need to declare all of them in each env.
 
 # PROD!
 [env.production]
 # name = "web3-storage-production"
-workers_dev = true
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
-route = "api.web3.storage/*"
+zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
+route = "https://api.web3.storage/*"
+vars = { CLUSTER_API_URL = "https://filecoin.storage.ipfscluster.io/api/" }
 
 [env.staging]
 # name = "web3-storage-staging"
-workers_dev = true
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
-route = "api-staging.web3.storage/*"
-
-# Add your env here. Override the the values you need to change.
+zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
+route = "https://api-staging.web3.storage/*"
+vars = { CLUSTER_API_URL = "https://filecoin.storage.ipfscluster.io/api/" }
 
 [env.alan]
 workers_dev = true
 account_id = "4fe12d085474d33bdcfd8e9bed4d8f95"
+vars = { CLUSTER_API_URL = "https://alan-cluster-api-web3-storage.loca.lt" }
 
 [env.oli]
 workers_dev = true
 account_id = "6e5a2aed80cd37d77e8d0c797a75ebbd"
+vars = { CLUSTER_API_URL = "https://oli-cluster-api-web3-storage.loca.lt" }
 
 [env.yusef]
 workers_dev = true
 account_id = "8c3da25233263bd7a26c0e2e04569ded"
+vars = { CLUSTER_API_URL = "https://yusef-cluster-api-web3-storage.loca.lt" }
 
 [env.vsantos]
 workers_dev = true
 account_id = "7ec0b7cf2ec201b2580374e53ba5f37b"
+vars = { CLUSTER_API_URL = "https://vsantos-cluster-api-web3-storage.loca.lt" }
+
+# Add your env here. Override the the values you need to change.
 
 # Create your env name as the value of `whoami` on your system, so you can run `npm start` to run in dev mode.
 # Copy this template and fill out the values
 # [env.${whoami}]
 # workers_dev = true
 # account_id = "<get me from `wrangler whoami`"
+# vars = { CLUSTER_API_URL = "https://<your ${whoami} here>-cluster-api-web3-storage.loca.lt" }
