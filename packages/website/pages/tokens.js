@@ -96,6 +96,7 @@ export default function Tokens({ user }) {
                   </tr>
                 </thead>
                 <tbody>
+                  { /* @ts-ignore fixme! */ }
                   {tokens.map((t, k) => (
                     <tr className="bb b--black" key={k}>
                       <td className="pa2 br b--black">{t.name}</td>

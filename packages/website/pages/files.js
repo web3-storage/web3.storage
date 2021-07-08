@@ -125,7 +125,7 @@ export default function Files({ user }) {
                     </thead>
                     <tbody>
                       {uploads.map(
-                        (/** @type {any} */ upload, /** @type {number} */ i) => (
+                        (/** @type {any} */ upload, /** @type {number} */ _) => (
                           <tr className="bb b--black" key={upload.content.cid}>
                             <td className="pa2 br b--black">
                               {upload.created.split('T')[0]}

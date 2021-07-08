@@ -1,0 +1,54 @@
+name: Website
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/website/**'
+      - '.github/workflows/website.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'packages/website/**'
+      - '.github/workflows/website.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - uses: bahmutov/npm-install@v1
+      - run: npm test --workspace packages/website
+
+  deploy-staging:
+    name: Deploy Staging Website
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - uses: bahmutov/npm-install@v1
+
+      # TODO: replace with adding to web3.storage
+      # Pin the built site to ipfs-cluster, output the cid as `steps.ipfs.outputs.cid`
+      # ...then use the cid to set the dnslink 🚀
+      - uses: ipfs-shipyard/ipfs-github-action@v2
+        id: ipfs
+        with:
+          path_to_add: public
+          cluster_host: /dnsaddr/filecoin.storage.ipfscluster.io
+          cluster_user: ${{ secrets.CLUSTER_USER }}
+          cluster_password: ${{ secrets.CLUSTER_PASSWORD }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: echo /ipfs/${{ steps.ipfs.outputs.cid }}
+      - run: npx dnslink-cloudflare --record staging --domain web3.storage --link /ipfs/${{ steps.ipfs.outputs.cid }}
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}

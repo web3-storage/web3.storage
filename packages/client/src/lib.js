@@ -186,6 +186,17 @@ class Web3Storage {
     return toWeb3Response(res)
   }
 
+  /**
+   * @param {API.Service} service
+   * @param {string} cid 
+   * @returns {Promise<API.CIDString>}
+   */
+  /* c8 ignore next 4 */
+  static async delete({ endpoint, token }, cid) {
+    console.log('Not deleteing', cid, endpoint, token)
+    throw Error(".delete not implemented yet")
+  }
+
   // Just a sugar so you don't have to pass around endpoint and token around.
 
   /**
@@ -215,6 +226,15 @@ class Web3Storage {
    */
   get(cid) {
     return Web3Storage.get(this, cid)
+  }
+
+  /**
+   * 
+   * @param {string} cid 
+   */
+  /* c8 ignore next 3 */
+  delete(cid) {
+    return Web3Storage.delete(this, cid)
   }
 }
 
