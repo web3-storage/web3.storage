@@ -113,6 +113,6 @@ export async function deleteUpload (_id) {
   })
 
   if (!res.ok) {
-    throw new Error(`failed to delete auth token: ${await res.text()}`)
+    throw new Error(`failed to delete upload: ${await res.text()}`)
   }
 }
