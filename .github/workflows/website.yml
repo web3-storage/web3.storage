@@ -58,3 +58,5 @@ jobs:
       - run: npx dnslink-cloudflare --record staging --domain web3.storage --link /ipfs/${{ steps.ipfs.outputs.cid }}
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+      
+      - run: echo "https://staging.web3.storage dnslink updated 🔗"
