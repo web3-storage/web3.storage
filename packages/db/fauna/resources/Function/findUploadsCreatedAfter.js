@@ -22,12 +22,12 @@ const {
 const name = 'findUploadsCreatedAfter'
 const body = Query(
   Lambda(
-    ['when', 'size', 'after', 'before'],
+    ['since', 'size', 'after', 'before'],
     Let(
       {
         range: Range(
           Match(Index('upload_sort_by_created_asc'), true),
-          Var('when'),
+          Var('since'),
           null
         ),
         page: If(

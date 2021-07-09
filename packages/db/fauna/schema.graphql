@@ -302,7 +302,7 @@ enum DealStatus {
 }
 
 type Query {
-  findUploadsCreatedAfter(when: Time!): [Upload!]! @resolver(paginated: true)
+  findUploadsCreatedAfter(since: Time!): [Upload!]! @resolver(paginated: true)
   findUploadsByUser(where: FindUploadsByUserInput!): [Upload!]! @resolver(paginated: true)
   findContentByCid(cid: String!): Content @resolver
   findUserByIssuer(issuer: String!): User @resolver
@@ -319,27 +319,21 @@ type Mutation {
   importCar(data: ImportCarInput!): Upload! @resolver
   deleteAuthToken(user: ID!, authToken: ID!): AuthToken! @resolver
   createBatch(data: CreateBatchInput!): Batch! @resolver
-  createDeal(data: CreateDealInput!): Deal! @resolver
-  updateDeal(data: UpdateDealInput!): Deal! @resolver
+  createOrUpdateDeal(data: CreateOrUpdateDealInput!): Deal! @resolver
 }
 
 input CreateBatchInput {
-  cid: String!
+  batchCid: String!
   pieceCid: String!
   entries: [BatchEntryInput!]!
 }
 
 input BatchEntryInput {
-  cid: String!
+  batchCid: String!
   dataModelSelector: String
 }
 
-input CreateDealInput {
-  batchCid: String!
-  status: DealStatus!
-}
-
-input UpdateDealInput {
+input CreateOrUpdateDealInput {
   batchCid: String!
   miner: String
   network: String
