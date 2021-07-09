@@ -293,9 +293,6 @@ type Deal {
 
 enum DealStatus {
   Queued
-  Proposing
-  Accepted
-  Failed
   Published
   Active
   Terminated
