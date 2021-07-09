@@ -22,22 +22,21 @@ const {
 const name = 'deleteUserUpload'
 const body = Query(
   Lambda(
-    ['uploadId', 'authTokenId'],
+    ['userId', 'uploadId'],
     Let(
       {
-        authTokenRef: Ref(Collection('AuthToken'), Var('authTokenId')),
         uploadRef: Ref(Collection('Upload'), Var('uploadId')),
       },
       If(
-        // make sure the token exists
-        Exists(Var('authTokenRef')),
+        // make sure the upload exists
+        Exists(Var('uploadRef')),
         If(
           // make sure the user owns this upload
           Equals(
-            Select(['data', 'authToken', 'id'], Get(Var('uploadRef'))),
-            Var('authTokenId')
+            Select(['data', 'user', 'id'], Get(Var('uploadRef'))),
+            Var('userId')
           ),
-          Update(Var('uploadRef'), { data: { deleted: Now() }}),
+          Update(Var('uploadRef'), { data: { deleted: Now() } }),
           Abort('unauthorized')
         ),
         Abort('not found')

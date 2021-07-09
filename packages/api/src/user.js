@@ -277,16 +277,16 @@ export async function userUploadsGet (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userUploadsDelete (request, env) {
-  const { _id } = request.auth.authToken
-  const uploadId = request.params.id
+  const user = request.auth.user._id
+  const upload = request.params.id
 
   const res = await env.db.query(gql`
-    mutation DeleteUserUpload($uploadId: ID!, $authToken: ID!) {
-      deleteUserUpload(upload: $uploadId, authToken: $authToken) {
+    mutation DeleteUserUpload($user: ID!, $upload: ID!) {
+      deleteUserUpload(user: $user, upload: $upload) {
         _id
       }
     }
-  `, { upload: uploadId, authToken: _id })
+  `, { upload, user })
 
   return new JSONResponse(res.deleteUserUpload)
 }
