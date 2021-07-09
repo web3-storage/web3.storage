@@ -25,8 +25,7 @@ jobs:
       - run: npm test --workspace packages/website
 
   deploy-staging:
-    name: Deploy Staging Website
-    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -43,7 +42,8 @@ jobs:
 
       # TODO: replace with adding to web3.storage
       # Pin the built site to ipfs-cluster, output the cid as `steps.ipfs.outputs.cid`
-      - uses: ipfs-shipyard/ipfs-github-action@fix-status
+      - name: Add to IPFS
+        uses: ipfs-shipyard/ipfs-github-action@v2.1.0
         id: ipfs
         with:
           path_to_add: packages/website/out
@@ -53,10 +53,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      # ...then use the cid to set the dnslink on the domain 🚀
-      - run: echo /ipfs/${{ steps.ipfs.outputs.cid }}
-      - run: npx dnslink-cloudflare --record staging --domain web3.storage --link /ipfs/${{ steps.ipfs.outputs.cid }}
+      - run: echo ${{ steps.ipfs.outputs.url }}
+      
+      # Publish to the staging domain if it's a change on main 🚀
+      - name: Update https://staging.web3.storage
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npx dnslink-cloudflare --record staging --domain web3.storage --link /ipfs/${{ steps.ipfs.outputs.cid }}
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-      
-      - run: echo "https://staging.web3.storage dnslink updated 🔗"
