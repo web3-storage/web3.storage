@@ -329,7 +329,7 @@ input CreateBatchInput {
 }
 
 input BatchEntryInput {
-  batchCid: String!
+  cid: String!
   dataModelSelector: String
 }
 
