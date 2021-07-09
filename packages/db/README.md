@@ -13,6 +13,8 @@
     npm run import
     ```
 
+Note: the `import` task imports both the GraphQL schema and the FaunaQL functions and Indexes for you. If you run them separately you need to run `import:gql` first to create the Collections **before** running `import:fql` which include references to those Collections.
+
 ## Schema
 
 [![web3.storage schema](https://user-images.githubusercontent.com/152863/124463647-16f0bb00-dd8b-11eb-9a71-d710f5d77078.jpg)](https://user-images.githubusercontent.com/152863/124463647-16f0bb00-dd8b-11eb-9a71-d710f5d77078.jpg)

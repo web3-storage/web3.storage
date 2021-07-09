@@ -6,9 +6,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "import": "npm run import:fql && npm run import:gql",
-    "import:fql": "node tools/import-fql-resources.js",
+    "import": "npm run import:gql && npm run import:fql",
     "import:gql": "node tools/import-graphql-schema.js",
+    "import:fql": "node tools/import-fql-resources.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
