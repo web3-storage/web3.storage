@@ -60,7 +60,7 @@ jobs:
   # Publish to the staging domain if it's a change on main 🚀
   deploy:
     name: Deploy https://staging.web3.storage
-    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     steps:
