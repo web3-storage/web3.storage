@@ -313,6 +313,7 @@ type Query {
   Verify the User with the passed issuer owns the AuthToken with the passed secret.
   """
   verifyAuthToken(issuer: String!, secret: String!): AuthToken @resolver
+  findMetrics: Metrics! @resolver
 }
 
 type Mutation {
@@ -323,6 +324,21 @@ type Mutation {
   deleteUserUpload(user: ID!, cid: String!): Upload! @resolver
   createBatch(data: CreateBatchInput!): Batch! @resolver
   createOrUpdateDeal(data: CreateOrUpdateDealInput!): Deal! @resolver
+}
+
+type Metrics {
+  usersTotal: Int!
+  uploadsTotal: Int!
+  contentTotal: Int!
+  contentTotalBytes: Int!
+  dealsActiveTotal: Int!
+  dealsQueuedTotal: Int!
+  pinsTotal: Int!
+  pinsTotalBytes: Int!
+  pinsQueuedTotal: Int!
+  pinsPinningTotal: Int!
+  pinsPinnedTotal: Int!
+  pinsFailedTotal: Int!
 }
 
 input CreateBatchInput {
