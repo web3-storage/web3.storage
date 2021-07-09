@@ -81,13 +81,7 @@ type Content {
   Content for deals is aggregated into batches. Each batch has many entries.
   These are the entries that this content appears in.
   """
-  dealBatchEntries: [BatchEntry!]! @relation
-
-  """
-  Filecoin deals this content appears in. This is a convenience relation to
-  avoid having to traverse to deals through dealBatchEntries -> batch -> deal.
-  """
-  deals: [Deal!]! @relation
+  batchEntries: [BatchEntry!]! @relation
 
   """
   Size of the DAG in bytes. Set if known on upload or for partials is set when
@@ -250,20 +244,11 @@ type BatchEntry {
 Filecoin deal for a batch of content.
 """
 type Deal {
-  """
-  Identifier for the deal stored on chain.
-  """
-  chainDealId: Int @unique
 
   """
   Content batch for this deal.
   """
   batch: Batch! @relation
-
-  """
-  CIDs in the deal batch.
-  """
-  contents: [Content!]! @relation
 
   """
   ID of miner this deal was made with.
@@ -274,6 +259,11 @@ type Deal {
   Filecoin network deal is made on.
   """
   network: String
+
+  """
+  Identifier for the deal stored on chain.
+  """
+  chainDealId: Int @unique
 
   """
   Time when deal will be active.
@@ -328,6 +318,36 @@ type Mutation {
   createAuthToken(data: CreateAuthTokenInput): AuthToken! @resolver
   importCar(data: ImportCarInput!): Upload! @resolver
   deleteAuthToken(user: ID!, authToken: ID!): AuthToken! @resolver
+  createBatch(data: CreateBatchInput!): Batch! @resolver
+  createDeal(data: CreateDealInput!): Deal! @resolver
+  updateDeal(data: UpdateDealInput!): Deal! @resolver
+}
+
+input CreateBatchInput {
+  cid: String!
+  pieceCid: String!
+  entries: [BatchEntryInput!]!
+}
+
+input BatchEntryInput {
+  cid: String!
+  dataModelSelector: String
+}
+
+input CreateDealInput {
+  batchCid: String!
+  status: DealStatus!
+}
+
+input UpdateDealInput {
+  batchCid: String!
+  miner: String
+  network: String
+  chainDealId: Int
+  activation: Time
+  renewal: Time
+  status: DealStatus!
+  statusReason: String
 }
 
 input FindUploadsByUserInput {
