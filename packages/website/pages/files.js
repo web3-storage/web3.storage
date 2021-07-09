@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import filesize from 'filesize'
-import { Web3Storage } from 'web3.storage'
 import Button from '../components/button.js'
 import Loading from '../components/loading'
-import { getUploads, getToken, API } from '../lib/api.js'
+import { getUploads, deleteUpload } from '../lib/api.js'
 import { When } from 'react-if'
 
 /**
@@ -60,11 +59,12 @@ export default function Files({ user }) {
       }
       setDeleting(cid)
       try {
-        const client = new Web3Storage({
-          token: await getToken(),
-          endpoint: new URL(API),
-        })
-        await client.delete(cid)
+        // const client = new Web3Storage({
+        //   token: await getToken(),
+        //   endpoint: new URL(API),
+        // })
+        // await client.delete(cid)
+        console.log('DELETE', data, data.get('id'))
       } finally {
         await queryClient.invalidateQueries('get-uploads')
         setDeleting('')

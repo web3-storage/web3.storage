@@ -97,3 +97,22 @@ export async function getUploads({ size, before }) {
 
   return res.json()
 }
+
+/**
+ * Deletes upload
+ *
+ * @param {string} _id
+ */
+export async function deleteUpload (_id) {
+  const res = await fetch(`${API}/user/uploads/${_id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + (await getToken()),
+    }
+  })
+
+  if (!res.ok) {
+    throw new Error(`failed to delete auth token: ${await res.text()}`)
+  }
+}

@@ -2,7 +2,7 @@ import { Router } from 'itty-router'
 import { withCorsHeaders, corsOptions } from './cors.js'
 import { envAll } from './env.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
-import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, withAuth } from './user.js'
+import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, withAuth } from './user.js'
 import { JSONResponse } from './utils/json-response.js'
 
 const router = Router()
@@ -18,6 +18,7 @@ router.get('/user/tokens', withCorsHeaders(withAuth(userTokensGet)))
 router.post('/user/tokens', withCorsHeaders(withAuth(userTokensPost)))
 router.delete('/user/tokens/:id', withCorsHeaders(withAuth(userTokensDelete)))
 router.get('/user/uploads', withCorsHeaders(withAuth(userUploadsGet)))
+router.delete('/user/uploads/:id', withCorsHeaders(withAuth(userUploadsDelete)))
 
 router.get('/', () => {
   return new Response(
