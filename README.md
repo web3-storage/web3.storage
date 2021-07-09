@@ -1,6 +1,5 @@
-# web3.storage
-
-The simple file storage service for IPFS & Filecoin
+<h1 align="center">⁂<br/>web3.storage</h1>
+<p align="center">The simple file storage service for IPFS &amp; Filecoin.</p>
 
 ## Getting started
 
