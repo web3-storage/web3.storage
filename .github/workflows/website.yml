@@ -43,7 +43,7 @@ jobs:
 
       # TODO: replace with adding to web3.storage
       # Pin the built site to ipfs-cluster, output the cid as `steps.ipfs.outputs.cid`
-      - uses: ipfs-shipyard/ipfs-github-action@v2.0.0
+      - uses: ipfs-shipyard/ipfs-github-action@fix-status
         id: ipfs
         with:
           path_to_add: packages/website/out
