@@ -251,8 +251,8 @@ export async function userUploadsGet (request, env) {
   }
 
   const res = await env.db.query(gql`
-    query FindUploads($where: FindUploadsInput!, $size: Int!) {
-      findUploads(where: $where, _size: $size) {
+    query FindUploadsByUser($where: FindUploadsByUserInput!, $size: Int!) {
+      findUploadsByUser(where: $where, _size: $size) {
         data {
           _id
           name
@@ -266,5 +266,5 @@ export async function userUploadsGet (request, env) {
     }
   `, { where: { createdBefore: before.toISOString(), user: request.auth.user._id }, size })
 
-  return new JSONResponse(res.findUploads.data)
+  return new JSONResponse(res.findUploadsByUser.data)
 }

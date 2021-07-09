@@ -78,7 +78,14 @@ type Content {
   pins: [Pin]! @relation
 
   """
-  Filecoin deals referencing this content.
+  Content for deals is aggregated into batches. Each batch has many entries.
+  These are the entries that this content appears in.
+  """
+  dealBatchEntries: [BatchEntry!]! @relation
+
+  """
+  Filecoin deals this content appears in. This is a convenience relation to
+  avoid having to traverse to deals through dealBatchEntries -> batch -> deal.
   """
   deals: [Deal!]! @relation
 
@@ -195,11 +202,66 @@ type Upload {
 }
 
 """
-Filecoin deal for a pin.
+A batch of content for inclusion in a Filecoin deal.
+"""
+type Batch {
+  """
+  CID of the root of the batch data.
+  """
+  cid: String
+
+  """
+  Piece CID.
+  """
+  pieceCid: String
+
+  """
+  Deals this batch can be found in.
+  """
+  deals: [Deal!]! @relation
+
+  """
+  Entries included in this batch.
+  """
+  entries: [BatchEntry!]! @relation
+}
+
+"""
+Information about an entry included in a batch.
+"""
+type BatchEntry {
+  """
+  The content this entry is for.
+  """
+  content: Content! @relation
+
+  """
+  The batch this entry resides in.
+  """
+  batch: Batch! @relation
+
+  """
+  Selector for extracting stored data from the batch root.
+  """
+  dataModelSelector: String
+}
+
+"""
+Filecoin deal for a batch of content.
 """
 type Deal {
   """
-  CIDs in this deal.
+  Identifier for the deal stored on chain.
+  """
+  chainDealId: Int @unique
+
+  """
+  Content batch for this deal.
+  """
+  batch: Batch! @relation
+
+  """
+  CIDs in the deal batch.
   """
   contents: [Content!]! @relation
 
@@ -212,26 +274,6 @@ type Deal {
   Filecoin network deal is made on.
   """
   network: String
-
-  """
-  Piece CID.
-  """
-  pieceCid: String
-
-  """
-  CID of the root of the batch data.
-  """
-  batchRootCid: String
-
-  """
-  Identifier for the deal stored on chain.
-  """
-  chainDealId: Int @unique
-
-  """
-  Selector for extracting stored data from the batch root.
-  """
-  dataModelSelector: String
 
   """
   Time when deal will be active.
@@ -270,7 +312,8 @@ enum DealStatus {
 }
 
 type Query {
-  findUploads(where: FindUploadsInput!): [Upload!]! @resolver(paginated: true)
+  findUploadsCreatedAfter(when: Time!): [Upload!]! @resolver(paginated: true)
+  findUploadsByUser(where: FindUploadsByUserInput!): [Upload!]! @resolver(paginated: true)
   findContentByCid(cid: String!): Content @resolver
   findUserByIssuer(issuer: String!): User @resolver
   findAuthTokensByUser(user: ID!): [AuthToken!]! @resolver(paginated: true)
@@ -287,8 +330,8 @@ type Mutation {
   deleteAuthToken(user: ID!, authToken: ID!): AuthToken! @resolver
 }
 
-input FindUploadsInput {
-  user: ID
+input FindUploadsByUserInput {
+  user: ID!
   createdBefore: Time!
 }
 
