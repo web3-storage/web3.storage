@@ -14,8 +14,8 @@ on:
       - '.github/workflows/website.yml'
 jobs:
   test:
-    runs-on: ubuntu-latest
     name: Test
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -24,9 +24,11 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - run: npm test --workspace packages/website
 
-  deploy-staging:
-    name: Deploy
+  build:
+    name: Build & Add to IPFS
     runs-on: ubuntu-latest
+    outputs:
+      cid: ${{ steps.ipfs.outputs.cid }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -54,10 +56,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - run: echo ${{ steps.ipfs.outputs.url }}
-      
-      # Publish to the staging domain if it's a change on main 🚀
-      - name: Update https://staging.web3.storage
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: npx dnslink-cloudflare --record staging --domain web3.storage --link /ipfs/${{ steps.ipfs.outputs.cid }}
+  
+  # Publish to the staging domain if it's a change on main 🚀
+  deploy:
+    name: Deploy https://staging.web3.storage
+    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: npx dnslink-cloudflare --record staging --domain web3.storage --link /ipfs/${{ needs.build.outputs.cid }}
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
