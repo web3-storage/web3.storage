@@ -1,7 +1,7 @@
 {
   "name": "web3.storage-cli",
   "version": "0.0.0",
-  "description": "Save your things in web3",
+  "description": "Save your things in web3 ⁂",
   "type": "module",
   "bin": {
     "w3": "bin.js"
@@ -20,9 +20,13 @@
   },
   "homepage": "https://github.com/web3-storage/web3.storage#readme",
   "dependencies": {
+    "err-code": "^3.0.1",
     "ipfs-car": "^0.4.2",
+    "it-glob": "^0.0.13",
     "meow": "^10.0.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "standard": "^16.0.3"
+  },
   "main": "index.js"
 }
