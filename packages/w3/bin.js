@@ -12,7 +12,7 @@ const cli = meow(
     flags: {
       api: {
         type: 'string',
-        default: 'https://api-staging.web3.storage'
+        default: 'https://api.web3.storage'
       },
       token: {
         type: 'string',
