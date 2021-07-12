@@ -39,16 +39,20 @@ export async function put (path, opts) {
     for await (const file of globSource(p)) {
       totalSize += file.size
       files.push(file)
-      spinner.text = `Packing ${files.length} file${files.length === 1 ? '' : 's'}`
+      spinner.text = `Packing ${files.length} file${files.length === 1 ? '' : 's'} (${filesize(totalSize)})`
     }
   }
   let rootCid = ''
   const root = await client.put(files, {
     onRootCidReady: (cid) => {
       rootCid = cid
-      spinner.stopAndPersist({ symbol: '#', text: `Packed ${files.length} file${files.length === 1 ? '' : 's'}` })
+      spinner.stopAndPersist({ symbol: '#', text: `Packed ${files.length} file${files.length === 1 ? '' : 's'} (${filesize(totalSize)})` })
       console.log(`# ${rootCid}`)
-      spinner.start('Storing')
+      if (totalSize > 1024 * 1024 * 10) {
+        spinner.start('Chunking')
+      } else {
+        spinner.start('Storing')
+      }
     },
     onStoredChunk: (size) => {
       totalSent += size
@@ -57,4 +61,9 @@ export async function put (path, opts) {
   })
   spinner.stopAndPersist({ symbol: '⁂', text: `Stored ${files.length} file${files.length === 1 ? '' : 's'}` })
   console.log(`⁂ https://dweb.link/ipfs/${root}`)
+}
+
+function filesize (bytes) {
+  const size = bytes / 1024 / 1024
+  return `${size.toFixed(1)}MB`
 }
