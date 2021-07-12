@@ -46,6 +46,10 @@ module.exports = ({ body }) => {
     return gqlOkResponse({ deleteAuthToken: { _id: 'test-auth-token' } })
   }
 
+  if (body.query.includes('deleteUserUpload')) {
+    return gqlOkResponse({ deleteUserUpload: { _id: 'test-delete-user-upload' } })
+  }
+
   return gqlResponse(400, {
     errors: [{ message: `unexpected query: ${body.query}` }]
   })

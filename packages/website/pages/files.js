@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import filesize from 'filesize'
-import { Web3Storage } from 'web3.storage'
 import Button from '../components/button.js'
 import Loading from '../components/loading'
-import { getUploads, getToken, API } from '../lib/api.js'
+import { getUploads, deleteUpload } from '../lib/api.js'
 import { When } from 'react-if'
 
 /**
@@ -53,18 +52,14 @@ export default function Files({ user }) {
   async function handleDelete(e) {
     e.preventDefault()
     const data = new FormData(e.target)
-    const cid = data.get('cid')
-    if (cid && typeof cid === 'string') {
+    const id = data.get('_id')
+    if (id && typeof id === 'string') {
       if (!confirm('Are you sure? Deleted files cannot be recovered!')) {
         return
       }
-      setDeleting(cid)
+      setDeleting(id)
       try {
-        const client = new Web3Storage({
-          token: await getToken(),
-          endpoint: new URL(API),
-        })
-        await client.delete(cid)
+        await deleteUpload(id)
       } finally {
         await queryClient.invalidateQueries('get-uploads')
         setDeleting('')
@@ -82,7 +77,7 @@ export default function Files({ user }) {
     setBefores([uploads[uploads.length - 1].created, ...befores])
   }
 
-  const hasZeroNfts = uploads.length === 0 && befores.length === 1
+  const hasZeroUploads = uploads.length === 0 && befores.length === 1
 
   return (
     <main className="bg-nsyellow">
@@ -99,14 +94,14 @@ export default function Files({ user }) {
               </Button>
             </div>
             <div className="table-responsive">
-              <When condition={hasZeroNfts}>
+              <When condition={hasZeroUploads}>
                 <p className="tc mv5">
                   <span className="f1 dib mb3">😢</span>
                   <br />
                   No files
                 </p>
               </When>
-              <When condition={!hasZeroNfts}>
+              <When condition={!hasZeroUploads}>
                 <>
                   <table className="bg-white ba b--black w-100 collapse">
                     <thead>
@@ -140,8 +135,8 @@ export default function Files({ user }) {
                               <form onSubmit={handleDelete}>
                                 <input
                                   type="hidden"
-                                  name="cid"
-                                  value={upload.content.cid}
+                                  name="_id"
+                                  value={upload._id}
                                 />
                                 <Button
                                   className="bg-red white"
@@ -149,7 +144,7 @@ export default function Files({ user }) {
                                   disabled={Boolean(deleting)}
                                   id="delete-upload"
                                 >
-                                  {deleting === upload.content.cid
+                                  {deleting === upload._id
                                     ? 'Deleting...'
                                     : 'Delete'}
                                 </Button>
