@@ -36,6 +36,6 @@ describe('POST /car', () => {
     assert(res.ok, 'Server response ok')
     const { cid } = await res.json()
     assert(cid, 'Server response payload has `cid` property')
-    assert.strictEqual(cid, cid, 'Server responded with expected CID')
+    assert.strictEqual(cid, expectedCid, 'Server responded with expected CID')
   })
 })
