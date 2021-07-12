@@ -1,6 +1,6 @@
 {
   "name": "web3.storage",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "API client for web3.storage",
   "type": "module",
   "license": "(Apache-2.0 AND MIT)",

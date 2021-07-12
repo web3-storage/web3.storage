@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.0.1](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v1.0.0...web3.storage-v1.0.1) (2021-07-12)
+
+
+### Bug Fixes
+
+* usage examples ([#58](https://www.github.com/web3-storage/web3.storage/issues/58)) ([0f5c23b](https://www.github.com/web3-storage/web3.storage/commit/0f5c23b57abded860f4dcffc2e7bef4265821cb0))
+
 ## 1.0.0 (2021-07-09)
 
 
