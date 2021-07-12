@@ -1,18 +1,25 @@
-# web3.storage client
-
-API client for [web3.storage](https://web3.storage)
+<h1 align="center">⁂<br/>web3.storage</h1>
+<p align="center">The JavaScript API client for <a href="https://web3.storage">https://web3.storage</a></p>
 
 ## Getting started
 
-_This module is under developement and is not published yet._
+Install the package using npm
+
+```console
+npm install web3.storage
+```
 
 ## Usage
+
+The code below shows how you create a new we3.storage api client, and use it to `put` your files to web3, and `get` them back again.
+
+Sign in to <https://web3.storage>, create an API token, and use it in place of `API_TOKEN` when creating your instance of the client.
 
 ```js
 import { Web3Storage } from 'web3.storage'
 
 // Construct with token and endpoint
-const client = new Web3Storage({ token: apiKey })
+const client = new Web3Storage({ token: API_TOKEN })
 
 const fileInput = document.querySelector('input[type="file"]')
 
