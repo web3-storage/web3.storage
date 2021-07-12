@@ -1,0 +1,32 @@
+name: DB
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/db/**'
+      - '.github/workflows/db.yml'
+
+  # Nothing to do on PR yet, but having the check appear on the PR serves as a reminder 
+  # that we don't have proper tests for db changes yet, and that merging it will deploy.
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'packages/db/**'
+      - '.github/workflows/db.yml'
+jobs:
+  deploy-staging:
+    name: Deploy Staging DB
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - uses: bahmutov/npm-install@v1
+      - name: Update FaunaDB resources
+        run: npm run import -w packages/db
+        env:
+          FAUNA_KEY: ${{ secrets.STAGING_FAUNA_KEY }}
