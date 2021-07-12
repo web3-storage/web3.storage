@@ -66,3 +66,16 @@ describe('DELETE /user/tokens/:id', () => {
     assert(_id)
   })
 })
+
+describe('DELETE /user/uploads/:id', () => {
+  it('removes an upload', async () => {
+    const token = await getTestJWT()
+    const res = await fetch(new URL('user/uploads/xyz', endpoint).toString(), {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(res.ok)
+    const { _id } = await res.json()
+    assert(_id)
+  })
+})

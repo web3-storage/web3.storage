@@ -268,3 +268,25 @@ export async function userUploadsGet (request, env) {
 
   return new JSONResponse(res.findUploadsByUser.data)
 }
+
+/**
+ * Delete an user upload. This actually raises a tombstone rather than
+ * deleting it entirely.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userUploadsDelete (request, env) {
+  const user = request.auth.user._id
+  const upload = request.params.id
+
+  const res = await env.db.query(gql`
+    mutation DeleteUserUpload($user: ID!, $upload: ID!) {
+      deleteUserUpload(user: $user, upload: $upload) {
+        _id
+      }
+    }
+  `, { upload, user })
+
+  return new JSONResponse(res.deleteUserUpload)
+}

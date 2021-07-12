@@ -6,10 +6,10 @@
  *
  * @example
  * ```js
- * import { Web3Storage, Blob } from "web3.storage"
+ * import { Web3Storage, File } from 'web3.storage'
  * const client = new Web3Storage({ token: API_TOKEN })
  *
- * const cid = await client.storeBlob(new Blob(['hello world']))
+ * const cid = await client.put([new File(['hello world'], 'hello.txt', { type: 'text/plain' })])
  * ```
  * @module
  */
@@ -40,20 +40,8 @@ class Web3Storage {
    *
    * @example
    * ```js
-   * import { Web3Storage, Blob } from "web3.storage"
+   * import { Web3Storage } from 'web3.storage'
    * const client = new Web3Storage({ token: API_TOKEN })
-   * const { car, rootCid } = await client.pack(new Blob(['hello world']))
-   * const cid = await client.store(car)
-   * console.assert(cid === rootCid, 'The service should store the files with the `rootCid` I created')
-   * ```
-   * Optionally you could pass an alternative API endpoint (e.g. for testing)
-   * @example
-   * ```js
-   * import { Web3Storage } from "web3.storage"
-   * const client = new Web3Storage({
-   *   token: API_TOKEN
-   *   endpoint: new URL('http://localhost:8080/')
-   * })
    * ```
    *
    * @param {{token: string, endpoint?:URL}} options
@@ -208,10 +196,8 @@ class Web3Storage {
    *
    * @example
    * ```js
-   * const data = 'Hello world'
-   * const {root, car} = client.pack('Hello world')
-   * const cid = await client.store(car)
-   * console.assert(cid === root)
+   * const file = new File(['hello world'], 'hello.txt', { type: 'text/plain' })
+   * const cid = await client.put([file])
    * ```
    * @param {Iterable<API.Filelike>} files
    * @param {API.PutOptions} [options]
@@ -221,7 +207,7 @@ class Web3Storage {
   }
 
   /**
-   * Fetch the Content Addressed Archive by it's root CID
+   * Fetch the Content Addressed Archive by it's root CID.
    * @param {string} cid
    */
   get(cid) {
@@ -229,7 +215,6 @@ class Web3Storage {
   }
 
   /**
-   * 
    * @param {string} cid 
    */
   /* c8 ignore next 3 */
