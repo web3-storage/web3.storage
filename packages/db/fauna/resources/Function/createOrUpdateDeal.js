@@ -66,18 +66,23 @@ const body = Query(
         ),
         Let(
           {
-            deal: Get(Var('dealMatch'))
+            deal: Get(Var('dealMatch')),
+            currMiner: Select(['data', 'miner'], Var('deal'), null),
+            currNetwork: Select(['data', 'network'], Var('deal'), null),
+            currActivation: Select(['data', 'activation'], Var('deal'), null),
+            currRenewal: Select(['data', 'renewal'], Var('deal'), null),
+            currStatusReason: Select(['data', 'statusReason'], Var('deal'), null)
           },
           Update(
             Select('ref', Var('deal')),
             {
               data: {
-                miner: Select('miner', Var('data'), Select(['data', 'miner'], Var('deal'), null)),
-                network: Select('network', Var('data'), Select(['data', 'network'], Var('deal'), null)),
-                activation: Select('activation', Var('data'), Select(['data', 'activation'], Var('deal'), null)),
-                renewal: Select('renewal', Var('data'), Select(['data', 'renewal'], Var('deal'), null)),
+                miner: Select('miner', Var('data'), Var('currMiner')),
+                network: Select('network', Var('data'), Var('currNetwork')),
+                activation: Select('activation', Var('data'), Var('currActivation')),
+                renewal: Select('renewal', Var('data'), Var('currRenewal')),
                 status: Select('status', Var('data')),
-                statusReason: Select('statusReason', Var('data'), Select(['data', 'statusReason'], Var('deal'), null)),
+                statusReason: Select('statusReason', Var('data'), Var('currStatusReason')),
                 updated: Now()
               }
             }
