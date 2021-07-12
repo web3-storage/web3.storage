@@ -1,6 +1,6 @@
 import Path from 'path'
-import { promises as fsp } from 'fs'
-import fs from 'fs'
+import fs, { promises as fsp } from 'fs'
+
 import glob from 'it-glob'
 import errCode from 'err-code'
 
@@ -71,6 +71,7 @@ export async function * globSource (paths, options) {
       prefix,
       mode,
       mtime,
+      size: stat.size,
       preserveMode: options.preserveMode,
       preserveMtime: options.preserveMtime
     }, globSourceOptions)
@@ -78,17 +79,18 @@ export async function * globSource (paths, options) {
 }
 
 // @ts-ignore
-async function * toGlobSource ({ path, type, prefix, mode, mtime, preserveMode, preserveMtime }, options) {
+async function * toGlobSource ({ path, type, prefix, mode, mtime, size, preserveMode, preserveMtime }, options) {
   options = options || {}
 
   const baseName = Path.basename(path)
 
   if (type === 'file') {
     yield {
-      name: `${baseName.replace(prefix, '')}`,
+      name: `/${baseName.replace(prefix, '')}`,
       stream: () => fs.createReadStream(Path.isAbsolute(path) ? path : Path.join(process.cwd(), path)),
       mode,
-      mtime
+      mtime,
+      size
     }
 
     return
@@ -123,7 +125,8 @@ async function * toGlobSource ({ path, type, prefix, mode, mtime, preserveMode, 
       name: toPosix(p.replace(prefix, '')),
       stream: () => fs.createReadStream(p),
       mode,
-      mtime
+      mtime,
+      size: stat.size
     }
   }
 }

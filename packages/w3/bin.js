@@ -17,7 +17,7 @@ cli.command('get <cid>')
   .example('get bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy -o room-guardian.jpg')
   .action(get)
 
-cli.command('put <path>')
+cli.command('put <path...>')
   .describe('Upload files to web3.storage')
   .action(put)
 
