@@ -234,7 +234,7 @@ async function toWeb3File({content, path, cid}) {
     chunks.push(chunk)
   }
   const file = new File(chunks, toFilenameWithPath(path))
-  return Object.assign(file, { cid })
+  return Object.assign(file, { cid: cid.toString() })
 }
 
 /**
