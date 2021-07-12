@@ -15,7 +15,7 @@ on:
 jobs:
   deploy-staging:
     name: Deploy Staging DB
-    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
