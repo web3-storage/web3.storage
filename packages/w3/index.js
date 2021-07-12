@@ -28,7 +28,6 @@ export async function get (cid, opts) {
  * @param {string[]} opts._ additonal paths to add
  */
 export async function put (path, opts) {
-  console.log(opts)
   const client = new Web3Storage({ token: opts.token, endpoint: new URL(opts.api) })
   const spinner = ora('Packing files').start()
   const paths = [path, ...opts._]
