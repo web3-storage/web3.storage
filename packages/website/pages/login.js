@@ -40,30 +40,30 @@ export default function Login() {
     }
   }
   return (
-    <main className="bg-nsorange">
-      <div className="mw9 center pv3 ph5 min-vh-100">
-        <form onSubmit={onSubmit} className="tc">
-          <label className="f5 db mb2">
-            <h2>Log in</h2>
+    <main>
+      <div className="py-4 px-16 mt-32 mx-auto max-w-screen-2xl">
+        <form onSubmit={onSubmit} className="text-center">
+          <label>
+            <h2 className="mb-6">Log in</h2>
           </label>
           <input
             type="email"
             name="email"
             required
             placeholder="Enter your email"
-            className="input-reset ba b--black pa2 mb2 w5 center db"
+            className="border border-black rounded-md p-2 w-64"
           />
 
-          <Button type="submit" disabled={disabled} wrapperClassName="w5">
+          <Button type="submit" disabled={disabled} wrapperClassName="w-64 mt-2 mx-auto">
             Sign Up / Login
           </Button>
 
           {errorMsg && <p className="error">{errorMsg}</p>}
 
-          <h4>Or with</h4>
+          <h4 className="my-8">Or with</h4>
 
           <Button
-            wrapperClassName="w5"
+            wrapperClassName="w-64 mx-auto"
             onClick={() => {
               setIsRedirecting(true)
               loginSocial('github')

@@ -31,7 +31,7 @@ export default function Layout({
   const shouldWaitForUser = needsUser && status === 'loading'
 
   return (
-    <div className="sans-serif">
+    <div>
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
