@@ -1,0 +1,30 @@
+name: DB
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/db/**'
+      - '.github/workflows/db.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'packages/db/**'
+      - '.github/workflows/db.yml'
+jobs:
+  deploy-staging:
+    name: Deploy Staging DB
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - uses: bahmutov/npm-install@v1
+      - name: Update FuanaDB resources
+        run: npm run import -w packages/db
+        env:
+          FAUNA_KEY: ${{ secrets.STAGING_FAUNA_KEY }}
