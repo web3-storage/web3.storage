@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 16
       - uses: bahmutov/npm-install@v1
-      - name: Update FuanaDB resources
+      - name: Update FaunaDB resources
         run: npm run import -w packages/db
         env:
           FAUNA_KEY: ${{ secrets.STAGING_FAUNA_KEY }}
