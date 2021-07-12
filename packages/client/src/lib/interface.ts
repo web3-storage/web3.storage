@@ -55,7 +55,7 @@ export type PutOptions = {
 }
 
 export interface Web3File extends File {
-  cid: CID,
+  cid: CIDString,
 }
 
 export interface Web3Response extends Response {
