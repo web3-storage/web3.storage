@@ -23,10 +23,7 @@
     "err-code": "^3.0.1",
     "ipfs-car": "^0.4.2",
     "it-glob": "^0.0.13",
-    "meow": "^10.0.1"
-  },
-  "devDependencies": {
-    "standard": "^16.0.3"
+    "sade": "^1.7.4"
   },
   "main": "index.js"
 }

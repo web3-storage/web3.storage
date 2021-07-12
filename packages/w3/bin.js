@@ -1,41 +1,24 @@
 #!/usr/bin/env node
-import meow from 'meow'
-import w3 from './index.js'
 
-const cli = meow(
-  `Usage
-    --get bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu --output pics --api http://127.0.0.1:8787
-    --put /path/to/files
-  `,
-  {
-    importMeta: import.meta,
-    flags: {
-      api: {
-        type: 'string',
-        default: 'https://api.web3.storage'
-      },
-      token: {
-        type: 'string',
-      },
-      get: {
-        type: 'string',
-      },
-      put: {
-        type: 'string',
-      },
-      output: {
-        type: 'string',
-        alias: 'o',
-      }
-    },
-  }
-)
+import sade from 'sade'
+import { get, put } from './index.js'
 
-if (!cli.flags.get && !cli.flags.put) {
-  cli.showHelp()
-}
-if (cli.flags.get && cli.flags.put) {
-  cli.showHelp()
-}
+const cli = sade('w3')
 
-w3(cli)
+cli
+  .option('--api', 'URL for API to use')
+  .option('--token', 'API token to use')
+  .example('put path/to/files')
+  .example('get bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy -o room-guardian.jpg')
+
+cli.command('get <cid>')
+  .describe('Fetch and verify files from web3.storage')
+  .option('-o, --output', 'Write to the output file name')
+  .example('get bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy -o room-guardian.jpg')
+  .action(get)
+
+cli.command('put <path>')
+  .describe('Upload a file or directory to web3.storage')
+  .action(put)
+
+cli.parse(process.argv)
