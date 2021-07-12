@@ -12,13 +12,13 @@ cli
   .example('get bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy -o room-guardian.jpg')
 
 cli.command('get <cid>')
-  .describe('Get and verify files from web3.storage')
+  .describe('Fetch and verify files from web3.storage')
   .option('-o, --output', 'Write to the output file name')
   .example('get bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy -o room-guardian.jpg')
   .action(get)
 
-cli.command('put <path...>')
-  .describe('Upload files to web3.storage')
+cli.command('put <path>')
+  .describe('Upload a file or directory to web3.storage')
   .action(put)
 
 cli.parse(process.argv)
