@@ -15,9 +15,10 @@ const {
   Create,
   Update,
   Exists,
-  Merge,
-  Now,
-  Get
+  Collection,
+  Abort,
+  Get,
+  Now
 } = fauna
 
 const name = 'createOrUpdateDeal'
@@ -26,15 +27,62 @@ const body = Query(
     ['data'],
     Let(
       {
-        match: Match(
-          Index('deal_by_batch'),
-          Select('issuer', Var('data'))
+        dealMatch: Match(
+          Index('unique_Deal_chainDealId'),
+          Select('chainDealId', Var('data'))
         )
       },
       If(
-        IsEmpty(Var('match')),
-        Create('User', { data: Merge(Var('data'), { created: Now() }) }),
-        Update(Select('ref', Get(Var('match'))), { data: Var('data') })
+        IsEmpty(Var('dealMatch')),
+        Let(
+          {
+            batchMatch: Match(
+              Index('unique_Batch_cid'),
+              Select('batchCid', Var('data'))
+            ),
+            batchRef: If(
+              IsEmpty(Var('batchMatch')),
+              Abort('batch not found'),
+              Select('ref', Get(Var('batchMatch')))
+            )
+          },
+          Create(
+            Collection('Deal'),
+            {
+              data: {
+                batch: Var('batchRef'),
+                miner: Select('miner', Var('data'), null),
+                network: Select('network', Var('data'), null),
+                chainDealId: Select('chainDealId', Var('data')),
+                activation: Select('activation', Var('data'), null),
+                renewal: Select('renewal', Var('data'), null),
+                status: Select('status', Var('data')),
+                statusReason: Select('statusReason', Var('data'), null),
+                created: Now(),
+                updated: Now()
+              }
+            }
+          )
+        ),
+        Let(
+          {
+            deal: Get(Var('dealMatch'))
+          },
+          Update(
+            Select('ref', Var('deal')),
+            {
+              data: {
+                miner: Select('miner', Var('data'), Select(['data', 'miner'], Var('deal'), null)),
+                network: Select('network', Var('data'), Select(['data', 'network'], Var('deal'), null)),
+                activation: Select('activation', Var('data'), Select(['data', 'activation'], Var('deal'), null)),
+                renewal: Select('renewal', Var('data'), Select(['data', 'renewal'], Var('deal'), null)),
+                status: Select('status', Var('data')),
+                statusReason: Select('statusReason', Var('data'), Select(['data', 'statusReason'], Var('deal'), null)),
+                updated: Now()
+              }
+            }
+          )
+        )
       )
     )
   )

@@ -202,7 +202,7 @@ type Batch {
   """
   CID of the root of the batch data.
   """
-  cid: String
+  cid: String! @unique
 
   """
   Piece CID.
@@ -286,6 +286,11 @@ type Deal {
   statusReason: String
 
   """
+  Creation date.
+  """
+  created: Time!
+
+  """
   Last time this deal was updated.
   """
   updated: Time!
@@ -331,10 +336,13 @@ input BatchEntryInput {
 }
 
 input CreateOrUpdateDealInput {
-  batchCid: String!
+  """
+  CID of the batch included in this deal. Required for create, ignored for update.
+  """
+  batchCid: String
   miner: String
   network: String
-  chainDealId: Int
+  chainDealId: Int!
   activation: Time
   renewal: Time
   status: DealStatus!
