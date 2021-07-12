@@ -11,7 +11,7 @@ npm install web3.storage
 
 ## Usage
 
-The code below shows how you create a new we3.storage api client, and use it to `put` your files to web3, and `get` them back again.
+The code below shows how you create a new web3.storage api client, and use it to `put` your files to web3, and `get` them back again.
 
 Sign in to <https://web3.storage>, create an API token, and use it in place of `API_TOKEN` when creating your instance of the client.
 
