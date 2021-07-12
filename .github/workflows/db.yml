@@ -6,6 +6,9 @@ on:
     paths:
       - 'packages/db/**'
       - '.github/workflows/db.yml'
+
+  # Nothing to do on PR yet, but having the check appear on the PR serves as a reminder 
+  # that we don't have proper tests for db changes yet, and that merging it will deploy.
   pull_request:
     branches:
       - main
