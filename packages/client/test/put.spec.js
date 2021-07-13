@@ -44,7 +44,7 @@ describe('put', () => {
   it('adds Files', async () => {
     const client = new Web3Storage({ token, endpoint })
     const files = prepareFiles()
-    const expectedCid = 'bafybeifkc773a2s6gerq7ip7tikahlfflxe4fvagyxf74zfkr33j2yu5li'
+    const expectedCid = 'bafybeiep3t2chy6e3dxk3fktnshm7tpopjrns6wevo4uwpnnz5aq352se4'
     const cid = await client.put(files, {
       name: 'web3-storage-dir',
       onRootCidReady: (cid) => {
