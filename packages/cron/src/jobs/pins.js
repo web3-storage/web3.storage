@@ -1,17 +1,56 @@
 import debug from 'debug'
+import { gql } from '@web3-storage/db'
 
 const log = debug('pins:updatePinStatuses')
 
+const FIND_PINS_QUERY = gql`
+  query FindPinsByStatus($after: String) {
+    findPinsByStatus(statuses: [Unpinned, PinQueued, Pinning], _size: 1000, _after: $after) {
+      data {
+        _id
+        content {
+          _id
+          cid
+          dagSize
+        }
+        location {
+          peerId
+        }
+        status
+      }
+      after
+    }
+  }
+`
+
 /**
- * Updates pin status and size in the PINS table by consuming records in the
- * FOLLOWUPS table and retrieving updated status from cluster.
- *
  * @param {{
  *   cluster: import('@nftstorage/ipfs-cluster').Cluster
+ *   db: import('@web3-storage/db').DBClient
+ *   env: Record<string, string|undefined>
  *   ipfs: import('../lib/ipfs').IPFS
  * }} config
  */
-export async function updatePinStatuses({ cf, env, cluster, ipfs }) {
+export async function updatePinStatuses ({ cluster, db, env, ipfs }) {
+  if (!log.enabled) {
+    console.log('Enable logging by setting DEBUG=pins:updatePinStatuses')
+  }
+
+  let queryRes, after
+  while (true) {
+    queryRes = await db.query(FIND_PINS_QUERY, { after })
+    const updates = []
+    for (const pin of queryRes.findPinsByStatus.data) {
+      const { peerMap } = await cluster.status(pin.content.cid)
+      for (const [peerId, { status }] of Object.entries(peerMap)) {
+
+      }
+    }
+    after = queryRes.findPinsByStatus.after
+    if (!after) break
+  }
+  log('🎉 Done')
+
   const namespaces = await cf.fetchKVNamespaces()
   const followupsNs = findNs(namespaces, env, 'FOLLOWUPS')
   const pinsNs = findNs(namespaces, env, 'PINS')
