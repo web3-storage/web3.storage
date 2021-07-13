@@ -21,7 +21,10 @@ const {
   Abort,
   Collection,
   IsNull,
-  Not
+  Not,
+  Do,
+  Call,
+  Foreach
 } = fauna
 
 const name = 'importCar'
@@ -60,16 +63,33 @@ const body = Query(
               If(
                 IsNonEmpty(Var('uploadMatch')),
                 Get(Var('uploadMatch')),
-                Create('Upload', {
-                  data: {
-                    user: Var('userRef'),
-                    authToken: Var('authTokenRef'),
-                    cid: Var('cid'),
-                    content: Select('ref', Var('content')),
-                    name: Select('name', Var('data'), null),
-                    created: Now()
-                  }
-                })
+                Let(
+                  {
+                    upload: Create('Upload', {
+                      data: {
+                        user: Var('userRef'),
+                        authToken: Var('authTokenRef'),
+                        content: Select('ref', Var('content')),
+                        name: Select('name', Var('data'), null),
+                        created: Now()
+                      }
+                    })
+                  },
+                  Do(
+                    Foreach(
+                      Select('pins', Var('data')),
+                      Lambda(
+                        ['pin'],
+                        Call('createPinAndLocation', {
+                          content: Select('ref', Var('content')),
+                          status: Select('status', Var('pin')),
+                          location: Select('location', Var('pin'))
+                        })
+                      )
+                    ),
+                    Var('upload')
+                  )
+                )
               )
             ),
             Let(
@@ -80,18 +100,31 @@ const body = Query(
                     dagSize: Select('dagSize', Var('data'), null),
                     created: Now()
                   }
+                }),
+                upload: Create('Upload', {
+                  data: {
+                    user: Var('userRef'),
+                    authToken: Var('authTokenRef'),
+                    content: Select('ref', Var('content')),
+                    name: Select('name', Var('data'), null),
+                    created: Now()
+                  }
                 })
               },
-              Create('Upload', {
-                data: {
-                  user: Var('userRef'),
-                  authToken: Var('authTokenRef'),
-                  cid: Var('cid'),
-                  content: Select('ref', Var('content')),
-                  name: Select('name', Var('data'), null),
-                  created: Now()
-                }
-              })
+              Do(
+                Foreach(
+                  Select('pins', Var('data')),
+                  Lambda(
+                    ['pin'],
+                    Call('createPinAndLocation', {
+                      content: Select('ref', Var('content')),
+                      status: Select('status', Var('pin')),
+                      location: Select('location', Var('pin'))
+                    })
+                  )
+                ),
+                Var('upload')
+              )
             )
           )
         )

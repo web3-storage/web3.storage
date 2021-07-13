@@ -325,6 +325,7 @@ type Mutation {
   deleteUserUpload(user: ID!, upload: ID!): Upload! @resolver
   createBatch(data: CreateBatchInput!): Batch! @resolver
   createOrUpdateDeal(data: CreateOrUpdateDealInput!): Deal! @resolver
+  createPinAndLocation(data: CreatePinAndLocationInput): Pin! @resolver
 }
 
 input CreateBatchInput {
@@ -389,4 +390,10 @@ input PinLocationInput {
   peerId: String!,
   peerName: String
   region: String
+}
+
+input CreatePinAndLocationInput {
+  content: ID!
+  status: PinStatus!
+  location: PinLocationInput!
 }
