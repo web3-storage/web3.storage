@@ -25,14 +25,21 @@ import {
   Blockstore
 } from './platform.js'
 
-/** @typedef {{import('./lib/interface.js').API}} API */
-
 const MAX_PUT_RETRIES = 5
 const MAX_CONCURRENT_UPLOADS = 3
 const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 
+/** @typedef { import('./lib/interface.js').API } API */
+/** @typedef { import('./lib/interface.js').Service } Service */
+/** @typedef { import('./lib/interface.js').Filelike } Filelike */
+/** @typedef { import('./lib/interface.js').CIDString} CIDString */
+/** @typedef { import('./lib/interface.js').Web3File} Web3File */
+/** @typedef { import('./lib/interface.js').PutOptions} PutOptions */
+/** @typedef { import('./lib/interface.js').UnixFSEntry} UnixFSEntry */
+/** @typedef { import('./lib/interface.js').Web3Response} Web3Response */
+
 /**
- * @implements API.Service
+ * @implements Service
  */
 class Web3Storage {
   /**
@@ -74,10 +81,10 @@ class Web3Storage {
   }
 
   /**
-   * @param {API.Service} service
-   * @param {Iterable<API.Filelike>} files
-   * @param {API.PutOptions} [options]
-   * @returns {Promise<API.CIDString>}
+   * @param {Service} service
+   * @param {Iterable<Filelike>} files
+   * @param {PutOptions} [options]
+   * @returns {Promise<CIDString>}
    */
   static async put ({ endpoint, token }, files, { onRootCidReady, onStoredChunk, maxRetries = MAX_PUT_RETRIES, name } = {}) {
     const url = new URL('/car', endpoint)
@@ -153,9 +160,9 @@ class Web3Storage {
   }
 
   /**
-   * @param {API.Service} service
+   * @param {Service} service
    * @param {string} cid
-   * @returns {Promise<import('./lib/interface.js').Web3Response | null>}
+   * @returns {Promise<Web3Response | null>}
    */
   static async get ({ endpoint, token }, cid) {
     const url = new URL(`/car/${cid}`, endpoint)
@@ -176,9 +183,9 @@ class Web3Storage {
   }
 
   /**
-   * @param {API.Service} service
+   * @param {Service} service
    * @param {string} cid
-   * @returns {Promise<API.CIDString>}
+   * @returns {Promise<CIDString>}
    */
   /* c8 ignore next 4 */
   static async delete ({ endpoint, token }, cid) {
@@ -200,8 +207,8 @@ class Web3Storage {
    * const file = new File(['hello world'], 'hello.txt', { type: 'text/plain' })
    * const cid = await client.put([file])
    * ```
-   * @param {Iterable<API.Filelike>} files
-   * @param {API.PutOptions} [options]
+   * @param {Iterable<Filelike>} files
+   * @param {PutOptions} [options]
    */
   put (files, options) {
     return Web3Storage.put(this, files, options)
@@ -226,8 +233,8 @@ class Web3Storage {
 
 /**
  * Map a UnixFSEntry to a File with a cid property
- * @param {import('./lib/interface.js').UnixFSEntry} entry
- * @returns {Promise<import('./lib/interface.js').Web3File>}
+ * @param {UnixFSEntry} entry
+ * @returns {Promise<Web3File>}
  */
 async function toWeb3File ({ content, path, cid }) {
   const chunks = []
@@ -254,7 +261,7 @@ function toFilenameWithPath (unixFsPath) {
 /**
  * Add car unpacking smarts to the response object,
  * @param {Response} res
- * @returns {import('./lib/interface.js').Web3Response}
+ * @returns {Web3Response}
  */
 function toWeb3Response (res) {
   const response = Object.assign(res, {
@@ -293,7 +300,7 @@ export { Web3Storage, File, Blob }
 /**
  * Just to verify API compatibility.
  * TODO: convert lib to a regular class that can be type checked.
- * @type {API.API}
+ * @type {API}
  */
 const api = Web3Storage
 void api // eslint-disable-line no-void
