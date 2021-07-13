@@ -17,7 +17,7 @@ Note: the `import` task imports both the GraphQL schema and the FaunaQL function
 
 ## Schema
 
-[![web3.storage schema](https://user-images.githubusercontent.com/152863/124463647-16f0bb00-dd8b-11eb-9a71-d710f5d77078.jpg)](https://user-images.githubusercontent.com/152863/124463647-16f0bb00-dd8b-11eb-9a71-d710f5d77078.jpg)
+[![web3.storage schema](https://user-images.githubusercontent.com/152863/125276207-dc959980-e307-11eb-99fb-3f0c81d61b8f.jpg)](https://user-images.githubusercontent.com/152863/125276207-dc959980-e307-11eb-99fb-3f0c81d61b8f.jpg)
 
 ### `User`
 
@@ -31,7 +31,7 @@ An auth key (API key) used to authenticate user actions.
 
 A file/directory that is being recorded by the system, essentially a root CID. It may have been uploaded by multiple users.
 
-It's DAG size is cached here and it contains references to [pins](#pin) (IPFS nodes that are pinning it) and the [deals](#deal) (Filecoin deals it appears in).
+It's DAG size is cached here and it contains references to [pins](#pin) (IPFS nodes that are pinning it) and the [batchEntries](#batchentry) (Filecoin deal batches it appears in).
 
 ### `Pin`
 
@@ -47,4 +47,13 @@ Content that was uploaded to the system by a user.
 
 ### `Deal`
 
-Information for Filecoin deals that an asset appears in.
+Information about a Filecoin deal for a [batch](#batch) of content.
+
+### `Batch`
+
+A aggregation of content that appears in a Filecoin deal. Content is assembled into [batch entries](#batchentry) which reference the [content](#content) and describe how to access the data within the batch (via a `dataModelSelector`).
+
+### `BatchEntry`
+
+Information about [content](#content) that is included in a [batch](#batch). 
+
