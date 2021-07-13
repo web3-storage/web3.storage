@@ -207,7 +207,7 @@ type Batch {
   """
   Piece CID.
   """
-  pieceCid: String
+  pieceCid: String!
 
   """
   Deals this batch can be found in.
@@ -218,6 +218,11 @@ type Batch {
   Entries included in this batch.
   """
   entries: [BatchEntry!]! @relation
+
+  """
+  Creation date.
+  """
+  created: Time!
 }
 
 """
@@ -253,17 +258,12 @@ type Deal {
   """
   ID of miner this deal was made with.
   """
-  miner: String
-
-  """
-  Filecoin network deal is made on.
-  """
-  network: String
+  miner: String!
 
   """
   Identifier for the deal stored on chain.
   """
-  chainDealId: Int @unique
+  chainDealId: Int! @unique
 
   """
   Time when deal will be active.
@@ -341,8 +341,7 @@ input CreateOrUpdateDealInput {
   CID of the batch included in this deal. Required for create, ignored for update.
   """
   batchCid: String
-  miner: String
-  network: String
+  miner: String!
   chainDealId: Int!
   activation: Time
   renewal: Time

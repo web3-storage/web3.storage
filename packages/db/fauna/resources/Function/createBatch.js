@@ -12,14 +12,14 @@ const {
   Create,
   Update,
   Exists,
-  Collection,
   Foreach,
   Index,
   IsEmpty,
   Abort,
   Match,
   Do,
-  Get
+  Get,
+  Now
 } = fauna
 
 const name = 'createBatch'
@@ -30,15 +30,13 @@ const body = Query(
       {
         batchCid: Select('batchCid', Var('data')),
         pieceCid: Select('pieceCid', Var('data')),
-        batch: Create(
-          Collection('Batch'),
-          {
-            data: {
-              cid: Var('batchCid'),
-              pieceCid: Var('pieceCid')
-            }
+        batch: Create('Batch', {
+          data: {
+            cid: Var('batchCid'),
+            pieceCid: Var('pieceCid'),
+            created: Now()
           }
-        ),
+        }),
         batchRef: Select('ref', Var('batch')),
         entries: Select('entries', Var('data'))
       },
@@ -54,16 +52,13 @@ const body = Query(
               If(
                 IsEmpty(Var('contentMatch')),
                 Abort('missing content CID'),
-                Create(
-                  Collection('BatchEntry'),
-                  {
-                    data: {
-                      content: Select('ref', Get(Var('contentMatch'))),
-                      batch: Var('batchRef'),
-                      dataModelSelector: Select('dataModelSelector', Var('data'), null)
-                    }
+                Create('BatchEntry', {
+                  data: {
+                    content: Select('ref', Get(Var('contentMatch'))),
+                    batch: Var('batchRef'),
+                    dataModelSelector: Select('dataModelSelector', Var('data'), null)
                   }
-                )
+                })
               )
             )
           )
