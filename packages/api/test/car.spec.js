@@ -20,7 +20,7 @@ describe('POST /car', () => {
     const { root, car: carBody } = await createCar('hello world!')
 
     // expected CID for the above data
-    const expectedCid = 'bafkreidvbhs33ighmljlvr7zbv2ywwzcmp5adtf4kqvlly67cy56bdtmve'
+    const expectedCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
     assert.strictEqual(root.toString(), expectedCid, 'car file has correct root')
 
     const res = await fetch(new URL('car', endpoint).toString(), {
