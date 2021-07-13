@@ -12,15 +12,14 @@
   ],
   "scripts": {
     "test": "npm run test --workspaces",
-    "format": "prettier --write '**/*.{js,jsx,ts,tsx}'"
+    "lint": "standard --fix '**/*.js'"
   },
   "devDependencies": {
-    "prettier": "^2.3.1"
+    "standard": "^16.0.3"
   },
-  "prettier": {
-    "trailingComma": "es5",
-    "tabWidth": 2,
-    "semi": false,
-    "singleQuote": true
+  "standard": {
+    "ignore": [
+      "packages/website"
+    ]
   }
 }
