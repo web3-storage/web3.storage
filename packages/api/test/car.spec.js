@@ -1,3 +1,4 @@
+/* global describe it fetch */
 import assert from 'assert'
 import { endpoint } from './scripts/constants.js'
 import * as JWT from '../src/utils/jwt.js'
@@ -29,7 +30,7 @@ describe('POST /car', () => {
         'Content-Type': 'application/car',
         'X-Name': name
       },
-      body: carBody,
+      body: carBody
     })
 
     assert(res, 'Server responded')

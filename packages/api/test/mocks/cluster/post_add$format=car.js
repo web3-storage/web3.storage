@@ -12,15 +12,15 @@ module.exports = async ({ query, files }) => {
   const { cid, bytes } = await car.get(roots[0])
   const result = {
     cid: {
-      '/': cid.toString(),
+      '/': cid.toString()
     },
     name: files[0].originalname,
     // car uploads may not be unixfs, so get a bytes property instead of `size` https://github.com/ipfs/ipfs-cluster/issues/1362
-    bytes: bytes.length,
+    bytes: bytes.length
   }
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: query['stream-channels'] === 'false' ? [result] : result,
+    body: query['stream-channels'] === 'false' ? [result] : result
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-env serviceworker */
 import { gql } from '@web3-storage/db'
 import { GATEWAY } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
@@ -6,7 +7,7 @@ const LOCAL_ADD_THRESHOLD = 1024 * 1024 * 2.5
 
 // TODO: ipfs should let us ask the size of a CAR file.
 // This consumes the CAR response from ipfs to find the content-length.
-export async function carHead(request, env, ctx) {
+export async function carHead (request, env, ctx) {
   // cache the thing. can't cache a HEAD request, so make a new one.
   const get = new Request(request.url, { method: 'GET' })
   // add the router params
@@ -19,7 +20,7 @@ export async function carHead(request, env, ctx) {
   return new Response(null, { headers })
 }
 
-export async function carGet(request, env, ctx) {
+export async function carGet (request, env, ctx) {
   const cache = caches.default
   let res = await cache.match(request)
 
@@ -28,7 +29,7 @@ export async function carGet(request, env, ctx) {
   }
 
   const {
-    params: { cid },
+    params: { cid }
   } = request
   // gateway does not support `carversion` yet.
   // using it now means we can skip the cache if it is supported in the future
@@ -47,7 +48,7 @@ export async function carGet(request, env, ctx) {
   // without the content-disposition, firefox describes them as DMS files.
   res.headers.set('Content-Disposition', `attachment; filename="${cid}.car"`)
   // always https pls.
-  res.headers.set('Strict-Transport-Security', `max-age=31536000; includeSubDomains; preload"`)
+  res.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload"')
   // // compress if asked for? is it worth it?
   // if (request.headers.get('Accept-Encoding').match('gzip')) {
   //   headers['Content-Encoding'] = 'gzip'
@@ -62,7 +63,7 @@ export async function carGet(request, env, ctx) {
  * @param {import('./user').AuthenticatedRequest} request
  * @param {import('./env').Env} env
  */
-export async function carPost(request, env) {
+export async function carPost (request, env) {
   const { user, authToken } = request.auth
   const { headers } = request
 
@@ -81,7 +82,7 @@ export async function carPost(request, env) {
     // When >2.5MB, use local add, because waiting for blocks to be sent to
     // other cluster nodes can take a long time. Replication to other nodes
     // will be done async by bitswap instead.
-    local: blob.size > LOCAL_ADD_THRESHOLD,
+    local: blob.size > LOCAL_ADD_THRESHOLD
   })
 
   // Store in DB
@@ -105,11 +106,11 @@ export async function carPost(request, env) {
   return new JSONResponse({ cid })
 }
 
-export async function carPut(request, env, ctx) {
+export async function carPut (request, env, ctx) {
   return new Response(`${request.method} /car no can has`, { status: 501 })
 }
 
-export async function sizeOf(response) {
+export async function sizeOf (response) {
   const reader = response.body.getReader()
   let size = 0
   while (true) {

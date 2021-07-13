@@ -4,8 +4,8 @@ import { Web3Storage, File } from '../../src/lib.js'
 const endpoint = 'https://api.web3.storage' // the default
 const token = 'API_KEY' // your API key from https://web3.storage/manage
 
-async function main() {
-  const storage = new Web3Storage({ endpoint, token }) 
+async function main () {
+  const storage = new Web3Storage({ endpoint, token })
 
   const files = prepareFiles()
   const cid = await storage.put(files)

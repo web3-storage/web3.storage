@@ -1,3 +1,4 @@
+/* eslint-env serviceworker */
 export class JSONResponse extends Response {
   /**
    * @param {BodyInit} body

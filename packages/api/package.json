@@ -12,7 +12,6 @@
     "dev": "wrangler dev --env $(whoami)",
     "publish": "wrangler publish --env $(whoami)",
     "build": "webpack",
-    "format": "prettier --write '**/*.{js,css,json,md}'",
     "test": "npm-run-all -p -r mock:cluster mock:db test:e2e",
     "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js",
     "mock:cluster": "smoke -p 9094 test/mocks/cluster",

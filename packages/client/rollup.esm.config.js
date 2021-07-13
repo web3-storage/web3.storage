@@ -10,13 +10,13 @@ export default {
       file: 'dist/bundle.esm.min.js',
       format: 'esm',
       plugins: [terser()],
-      sourcemap: true,
-    },
+      sourcemap: true
+    }
   ],
   plugins: [
     commonjs(),
     resolve({
-      browser: true,
-    }),
-  ],
+      browser: true
+    })
+  ]
 }

@@ -25,7 +25,7 @@ const body = Query(
     ['userId', 'uploadId'],
     Let(
       {
-        uploadRef: Ref(Collection('Upload'), Var('uploadId')),
+        uploadRef: Ref(Collection('Upload'), Var('uploadId'))
       },
       If(
         // make sure the upload exists

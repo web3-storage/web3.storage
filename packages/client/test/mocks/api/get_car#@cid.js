@@ -6,7 +6,7 @@ const fixtures = {
   bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e:
     '../../fixtures/hello-world.car',
   bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu:
-    '../../fixtures/dir.car',
+    '../../fixtures/dir.car'
 }
 
 module.exports = async ({ params }) => {
@@ -14,29 +14,29 @@ module.exports = async ({ params }) => {
   if (!isValisCid(cid)) {
     return {
       statusCode: 400,
-      body: null,
+      body: null
     }
   }
   const carPath = fixtures[cid]
   if (!carPath) {
     return {
       statusCode: 404,
-      body: null,
+      body: null
     }
   }
   return {
     statusCode: 200,
     buffer: true,
     headers: {
-      'Content-Type': 'application/car',
+      'Content-Type': 'application/car'
     },
-    body: fs.readFileSync(path.join(__dirname, carPath)),
+    body: fs.readFileSync(path.join(__dirname, carPath))
   }
 }
 
-function isValisCid(str) {
+function isValisCid (str) {
   try {
-    const cid = CID.parse(str)
+    CID.parse(str)
     return true
   } catch {
     return false

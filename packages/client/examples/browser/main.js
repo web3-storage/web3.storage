@@ -1,10 +1,11 @@
+/* global File */
 import { Web3Storage } from 'web3.storage'
 
 const endpoint = 'https://api.web3.storage' // the default
 const token =
   new URLSearchParams(window.location.search).get('key') || 'API_KEY' // your API key from https://web3.storage/manage
 
-async function main() {
+async function main () {
   const storage = new Web3Storage({ endpoint, token })
 
   const files = prepareFiles()

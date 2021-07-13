@@ -11,16 +11,17 @@
     "packages/website"
   ],
   "scripts": {
-    "test": "npm run test --workspaces",
-    "format": "prettier --write '**/*.{js,jsx,ts,tsx}'"
+    "test": "npm run lint && npm run test --workspaces",
+    "lint": "standard --verbose | snazzy",
+    "lint:fix": "standard --fix "
   },
   "devDependencies": {
-    "prettier": "^2.3.1"
+    "snazzy": "^9.0.0",
+    "standard": "^16.0.3"
   },
-  "prettier": {
-    "trailingComma": "es5",
-    "tabWidth": 2,
-    "semi": false,
-    "singleQuote": true
+  "standard": {
+    "ignore": [
+      "packages/website"
+    ]
   }
 }

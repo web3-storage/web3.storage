@@ -1,3 +1,4 @@
+/* eslint-env serviceworker */
 import { Router } from 'itty-router'
 import { withCorsHeaders, corsOptions } from './cors.js'
 import { envAll } from './env.js'
@@ -34,8 +35,8 @@ router.get('/', () => {
     {
       status: 200,
       headers: {
-        'content-type': 'text/html; charset=UTF-8',
-      },
+        'content-type': 'text/html; charset=UTF-8'
+      }
     }
   )
 })

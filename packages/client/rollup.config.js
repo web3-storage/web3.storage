@@ -3,7 +3,7 @@ import multiInput from 'rollup-plugin-multi-input'
 
 const config = [
   ['src', 'dist/src'],
-  ['test', 'dist/test'],
+  ['test', 'dist/test']
 ].map(([base, dest]) => ({
   input: [`${base}/**/*.js`],
   output: {
@@ -11,8 +11,8 @@ const config = [
     preserveModules: true,
     sourcemap: true,
     format: 'cjs',
-    entryFileNames: '[name].cjs',
+    entryFileNames: '[name].cjs'
   },
-  plugins: [multiInput({ relative: base })],
+  plugins: [multiInput({ relative: base })]
 }))
 export default config
