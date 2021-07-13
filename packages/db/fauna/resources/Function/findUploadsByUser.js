@@ -23,7 +23,7 @@ const {
   Let
 } = fauna
 
-const name = 'findUploads'
+const name = 'findUploadsByUser'
 const body = Query(
   Lambda(
     ['where', 'size', 'after', 'before'],

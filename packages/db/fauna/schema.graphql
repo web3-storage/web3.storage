@@ -78,9 +78,10 @@ type Content {
   pins: [Pin]! @relation
 
   """
-  Filecoin deals referencing this content.
+  Content for deals is aggregated into batches. Each batch has many entries.
+  These are the entries that this content appears in.
   """
-  deals: [Deal!]! @relation
+  batchEntries: [BatchEntry!]! @relation
 
   """
   Size of the DAG in bytes. Set if known on upload or for partials is set when
@@ -195,43 +196,74 @@ type Upload {
 }
 
 """
-Filecoin deal for a pin.
+A batch of content for inclusion in a Filecoin deal.
 """
-type Deal {
+type Batch {
   """
-  CIDs in this deal.
+  CID of the root of the batch data.
   """
-  contents: [Content!]! @relation
-
-  """
-  ID of miner this deal was made with.
-  """
-  miner: String
-
-  """
-  Filecoin network deal is made on.
-  """
-  network: String
+  cid: String! @unique
 
   """
   Piece CID.
   """
-  pieceCid: String
+  pieceCid: String!
 
   """
-  CID of the root of the batch data.
+  Deals this batch can be found in.
   """
-  batchRootCid: String
+  deals: [Deal!]! @relation
 
   """
-  Identifier for the deal stored on chain.
+  Entries included in this batch.
   """
-  chainDealId: Int @unique
+  entries: [BatchEntry!]! @relation
+
+  """
+  Creation date.
+  """
+  created: Time!
+}
+
+"""
+Information about an entry included in a batch.
+"""
+type BatchEntry {
+  """
+  The content this entry is for.
+  """
+  content: Content! @relation
+
+  """
+  The batch this entry resides in.
+  """
+  batch: Batch! @relation
 
   """
   Selector for extracting stored data from the batch root.
   """
   dataModelSelector: String
+}
+
+"""
+Filecoin deal for a batch of content.
+"""
+type Deal {
+
+  """
+  Content batch for this deal.
+  """
+  batch: Batch! @relation
+
+  """
+  ID of miner this deal was made with.
+  """
+  miner: String!
+
+  """
+  Identifier for the deal stored on chain.
+  """
+  chainDealId: Int! @unique
 
   """
   Time when deal will be active.
@@ -254,6 +286,11 @@ type Deal {
   statusReason: String
 
   """
+  Creation date.
+  """
+  created: Time!
+
+  """
   Last time this deal was updated.
   """
   updated: Time!
@@ -261,16 +298,14 @@ type Deal {
 
 enum DealStatus {
   Queued
-  Proposing
-  Accepted
-  Failed
   Published
   Active
   Terminated
 }
 
 type Query {
-  findUploads(where: FindUploadsInput!): [Upload!]! @resolver(paginated: true)
+  findUploadsCreatedAfter(since: Time!): [Upload!]! @resolver(paginated: true)
+  findUploadsByUser(where: FindUploadsByUserInput!): [Upload!]! @resolver(paginated: true)
   findContentByCid(cid: String!): Content @resolver
   findUserByIssuer(issuer: String!): User @resolver
   findAuthTokensByUser(user: ID!): [AuthToken!]! @resolver(paginated: true)
@@ -286,10 +321,36 @@ type Mutation {
   importCar(data: ImportCarInput!): Upload! @resolver
   deleteAuthToken(user: ID!, authToken: ID!): AuthToken! @resolver
   deleteUserUpload(user: ID!, upload: ID!): Upload! @resolver
+  createBatch(data: CreateBatchInput!): Batch! @resolver
+  createOrUpdateDeal(data: CreateOrUpdateDealInput!): Deal! @resolver
 }
 
-input FindUploadsInput {
-  user: ID
+input CreateBatchInput {
+  batchCid: String!
+  pieceCid: String!
+  entries: [BatchEntryInput!]!
+}
+
+input BatchEntryInput {
+  cid: String!
+  dataModelSelector: String
+}
+
+input CreateOrUpdateDealInput {
+  """
+  CID of the batch included in this deal. Required for create, ignored for update.
+  """
+  batchCid: String
+  miner: String
+  chainDealId: Int!
+  activation: Time
+  renewal: Time
+  status: DealStatus!
+  statusReason: String
+}
+
+input FindUploadsByUserInput {
+  user: ID!
   createdBefore: Time!
 }
 
