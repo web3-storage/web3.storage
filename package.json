@@ -12,10 +12,11 @@
   ],
   "scripts": {
     "test": "npm run lint && npm run test --workspaces",
-    "lint": "standard --fix '**/*.js'",
-    "lint:fix":"standard '**/*.js' --fix "
+    "lint": "standard --verbose | snazzy",
+    "lint:fix": "standard --fix "
   },
   "devDependencies": {
+    "snazzy": "^9.0.0",
     "standard": "^16.0.3"
   },
   "standard": {

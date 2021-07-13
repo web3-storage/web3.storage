@@ -8,6 +8,7 @@ on:
       - main
 jobs:
   lint:
+    name: Standard JS
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
