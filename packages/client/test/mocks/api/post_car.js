@@ -10,7 +10,7 @@ const { CarReader } = require('@ipld/car')
 module.exports = async ({ body, headers }) => {
   if (!headers.authorization || headers.authorization === 'Bearer bad') {
     return {
-      statusCode: !headers.authorization ? 401 : 403,
+      statusCode: !headers.authorization ? 401 : 403
     }
   }
   let car
@@ -21,8 +21,8 @@ module.exports = async ({ body, headers }) => {
       statusCode: 400,
       body: {
         ok: false,
-        message: 'Request body not a valid CAR file',
-      },
+        message: 'Request body not a valid CAR file'
+      }
     }
   }
   const [root] = await car.getRoots()
@@ -34,8 +34,8 @@ module.exports = async ({ body, headers }) => {
       statusCode: 400,
       body: {
         ok: false,
-        message: 'Request body not a valid CAR file',
-      },
+        message: 'Request body not a valid CAR file'
+      }
     }
   }
 
@@ -43,7 +43,7 @@ module.exports = async ({ body, headers }) => {
     statusCode: 200,
     body: {
       ok: true,
-      cid: carRootCid,
-    },
+      cid: carRootCid
+    }
   }
 }

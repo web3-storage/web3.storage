@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import * as assert from 'uvu/assert'
 import { Web3Storage } from 'web3.storage'
 
@@ -71,7 +72,7 @@ describe('get', () => {
     const client = new Web3Storage({ token, endpoint })
     const cid = 'bafkreieq'
     try {
-      const blob = await client.get(cid)
+      await client.get(cid)
       assert.unreachable('sholud have thrown')
     } catch (err) {
       assert.match(err, /400/)

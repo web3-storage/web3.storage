@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import { Web3Storage } from 'web3.storage'
 import * as assert from 'uvu/assert'
 

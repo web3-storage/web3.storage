@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import * as assert from 'uvu/assert'
 import randomBytes from 'randombytes'
 import { Web3Storage } from 'web3.storage'
@@ -58,7 +59,7 @@ describe('put', () => {
     const client = new Web3Storage({ token, endpoint })
     let uploadedChunks = 0
 
-    const files =[
+    const files = [
       new File([randomBytes(1024e6)], '102mb.txt')
     ]
 

@@ -17,8 +17,8 @@ module.exports = {
   before: [
     bodyParser.raw({
       limit: '101MB', // Cloudflare limit is 100MB so larger than that and you're gonna have a bad time anyway.
-      type: ['application/car', 'application/octet-stream'],
-    }),
+      type: ['application/car', 'application/octet-stream']
+    })
   ],
-  after: [], // middlewares to be executed after the request has been processed
+  after: [] // middlewares to be executed after the request has been processed
 }

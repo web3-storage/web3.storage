@@ -1,9 +1,9 @@
-
+/* eslint-env serviceworker */
 /**
  * @param {Request} request
  * @returns {Response}
  */
-export function corsOptions(request) {
+export function corsOptions (request) {
   const headers = request.headers
   // Make sure the necessary headers are present for this to be a valid pre-flight request
   if (
@@ -21,17 +21,17 @@ export function corsOptions(request) {
       // Allow all future content Request headers to go back to browser
       // such as Authorization (Bearer) or X-Client-Name-Version
       'Access-Control-Allow-Headers':
-        headers.get('Access-Control-Request-Headers') || '',
+        headers.get('Access-Control-Request-Headers') || ''
     }
 
     return new Response(null, {
       status: 204,
-      headers: respHeaders,
+      headers: respHeaders
     })
   } else {
     return new Response('Non CORS options request not allowed', {
       status: 405,
-      statusText: 'Method Not Allowed',
+      statusText: 'Method Not Allowed'
     })
   }
 }
@@ -40,7 +40,7 @@ export function corsOptions(request) {
  * @param {import('itty-router').RouteHandler} handler
  * @returns {import('itty-router').RouteHandler}
  */
-export function withCorsHeaders(handler) {
+export function withCorsHeaders (handler) {
   /**
    * @param {Request} request
    * @returns {Response}

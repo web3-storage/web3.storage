@@ -1,18 +1,21 @@
+/* eslint-env serviceworker */
+/* global crypto */
+
 /** @type {Record<string, HmacImportParams>} */
 const algorithms = {
   HS256: {
     name: 'HMAC',
     hash: {
-      name: 'SHA-256',
-    },
-  },
+      name: 'SHA-256'
+    }
+  }
 }
 
 // Adapted from https://chromium.googlesource.com/chromium/blink/+/master/LayoutTests/crypto/subtle/hmac/sign-verify.html
-var Base64URL = {
+const Base64URL = {
   stringify: function (/** @type {Uint8Array} */ a) {
     // @ts-ignore
-    var base64string = btoa(String.fromCharCode.apply(0, a))
+    const base64string = btoa(String.fromCharCode.apply(0, a))
     return base64string
       .replace(/=/g, '')
       .replace(/\+/g, '-')
@@ -26,20 +29,20 @@ var Base64URL = {
         return c.charCodeAt(0)
       })
     )
-  },
+  }
 }
 
 /**
  * @param {any} s
  */
-function isString(s) {
+function isString (s) {
   return typeof s === 'string'
 }
 
 /**
  * @param {string | number | boolean} str
  */
-function utf8ToUint8Array(str) {
+function utf8ToUint8Array (str) {
   str = btoa(unescape(encodeURIComponent(str)))
   return Base64URL.parse(str)
 }
@@ -47,7 +50,7 @@ function utf8ToUint8Array(str) {
 /**
  * @param {null} arg
  */
-function isObject(arg) {
+function isObject (arg) {
   return arg !== null && typeof arg === 'object'
 }
 
@@ -56,7 +59,7 @@ function isObject(arg) {
  * @param {string} secret
  * @param {string} alg
  */
-export async function verify(token, secret, alg = 'HS256') {
+export async function verify (token, secret, alg = 'HS256') {
   if (!isString(token)) {
     throw new Error('token must be a string')
   }
@@ -69,13 +72,13 @@ export async function verify(token, secret, alg = 'HS256') {
     throw new Error('alg must be a string')
   }
 
-  var tokenParts = token.split('.')
+  const tokenParts = token.split('.')
 
   if (tokenParts.length !== 3) {
     return false
   }
 
-  var importAlgorithm = algorithms[alg]
+  const importAlgorithm = algorithms[alg]
 
   if (!importAlgorithm) {
     throw new Error('algorithm not found')
@@ -105,7 +108,7 @@ export async function verify(token, secret, alg = 'HS256') {
  * @param {string} secret
  * @param {string} alg
  */
-export async function sign(payload, secret, alg = 'HS256') {
+export async function sign (payload, secret, alg = 'HS256') {
   if (!isObject(payload)) {
     throw new Error('payload must be an object')
   }
@@ -118,7 +121,7 @@ export async function sign(payload, secret, alg = 'HS256') {
     throw new Error('alg must be a string')
   }
 
-  var importAlgorithm = algorithms[alg]
+  const importAlgorithm = algorithms[alg]
 
   if (!importAlgorithm) {
     throw new Error('algorithm not found')
@@ -150,8 +153,8 @@ export async function sign(payload, secret, alg = 'HS256') {
 /**
  * @param {string} token
  */
-export function decode(token) {
-  var output = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')
+export function decode (token) {
+  let output = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')
   switch (output.length % 4) {
     case 0:
       break
@@ -162,10 +165,10 @@ export function decode(token) {
       output += '='
       break
     default:
-      throw 'Illegal base64url string!'
+      throw new Error('Illegal base64url string!')
   }
 
-  var result = atob(output)
+  const result = atob(output)
 
   try {
     return decodeURIComponent(escape(result))
@@ -180,7 +183,7 @@ export function decode(token) {
  * @param {string} token
  * @returns {JWT}
  */
-export function parse(token) {
+export function parse (token) {
   // TODO: Handle when decodeJWT fails.
   // TODO: Handle when JSON.parse fails.
   return JSON.parse(decode(token))

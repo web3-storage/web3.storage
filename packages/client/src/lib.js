@@ -18,13 +18,14 @@ import pRetry from 'p-retry'
 import { pack } from 'ipfs-car/pack'
 import { unpackStream } from 'ipfs-car/unpack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
-import * as API from './lib/interface.js'
 import {
   fetch,
   File,
   Blob,
   Blockstore
 } from './platform.js'
+
+/** @typedef {{import('./lib/interface.js').API}} API */
 
 const MAX_PUT_RETRIES = 5
 const MAX_CONCURRENT_UPLOADS = 3
@@ -46,7 +47,7 @@ class Web3Storage {
    *
    * @param {{token: string, endpoint?:URL}} options
    */
-  constructor({ token, endpoint = new URL('https://api.web3.storage') }) {
+  constructor ({ token, endpoint = new URL('https://api.web3.storage') }) {
     /**
      * Authorization token.
      *
@@ -64,11 +65,11 @@ class Web3Storage {
    * @hidden
    * @param {string} token
    */
-  static headers(token) {
+  static headers (token) {
     if (!token) throw new Error('missing token')
     return {
       Authorization: `Bearer ${token}`,
-      'X-Client': 'web3.storage',
+      'X-Client': 'web3.storage'
     }
   }
 
@@ -78,8 +79,8 @@ class Web3Storage {
    * @param {API.PutOptions} [options]
    * @returns {Promise<API.CIDString>}
    */
-  static async put({ endpoint, token }, files, { onRootCidReady, onStoredChunk, maxRetries = MAX_PUT_RETRIES, name } = {}) {
-    const url = new URL(`/car`, endpoint)
+  static async put ({ endpoint, token }, files, { onRootCidReady, onStoredChunk, maxRetries = MAX_PUT_RETRIES, name } = {}) {
+    const url = new URL('/car', endpoint)
     const targetSize = MAX_CHUNK_SIZE
     let headers = Web3Storage.headers(token)
 
@@ -117,7 +118,7 @@ class Web3Storage {
           }
 
           const carFile = new Blob(carParts, {
-            type: 'application/car',
+            type: 'application/car'
           })
 
           const res = await pRetry(
@@ -125,7 +126,7 @@ class Web3Storage {
               const request = await fetch(url.toString(), {
                 method: 'POST',
                 headers,
-                body: carFile,
+                body: carFile
               })
               const res = await request.json()
 
@@ -142,7 +143,7 @@ class Web3Storage {
         }
       )
 
-      for await (const _ of upload(splitter.cars())) {}
+      for await (const _ of upload(splitter.cars())) {} // eslint-disable-line
     } finally {
       // Destroy Blockstore
       await blockstore.destroy()
@@ -156,11 +157,11 @@ class Web3Storage {
    * @param {string} cid
    * @returns {Promise<import('./lib/interface.js').Web3Response | null>}
    */
-  static async get({ endpoint, token }, cid) {
+  static async get ({ endpoint, token }, cid) {
     const url = new URL(`/car/${cid}`, endpoint)
     const res = await fetch(url.toString(), {
       method: 'GET',
-      headers: Web3Storage.headers(token),
+      headers: Web3Storage.headers(token)
     })
     if (!res.ok) {
       // TODO: I'm assuming that an error for "CID isn't there (yet)" would be unergonomic. Need to verify.
@@ -176,19 +177,19 @@ class Web3Storage {
 
   /**
    * @param {API.Service} service
-   * @param {string} cid 
+   * @param {string} cid
    * @returns {Promise<API.CIDString>}
    */
   /* c8 ignore next 4 */
-  static async delete({ endpoint, token }, cid) {
+  static async delete ({ endpoint, token }, cid) {
     console.log('Not deleteing', cid, endpoint, token)
-    throw Error(".delete not implemented yet")
+    throw Error('.delete not implemented yet')
   }
 
   // Just a sugar so you don't have to pass around endpoint and token around.
 
   /**
-   * Uploads files to web3.storage. Files are hashed in the client and uploaded as a single 
+   * Uploads files to web3.storage. Files are hashed in the client and uploaded as a single
    * [Content Addressed Archive(CAR)](https://github.com/ipld/specs/blob/master/block-layer/content-addressable-archives.md).
    * Takes a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob/Blob)
    *
@@ -202,7 +203,7 @@ class Web3Storage {
    * @param {Iterable<API.Filelike>} files
    * @param {API.PutOptions} [options]
    */
-  put(files, options) {
+  put (files, options) {
     return Web3Storage.put(this, files, options)
   }
 
@@ -210,15 +211,15 @@ class Web3Storage {
    * Fetch the Content Addressed Archive by it's root CID.
    * @param {string} cid
    */
-  get(cid) {
+  get (cid) {
     return Web3Storage.get(this, cid)
   }
 
   /**
-   * @param {string} cid 
+   * @param {string} cid
    */
   /* c8 ignore next 3 */
-  delete(cid) {
+  delete (cid) {
     return Web3Storage.delete(this, cid)
   }
 }
@@ -228,7 +229,7 @@ class Web3Storage {
  * @param {import('./lib/interface.js').UnixFSEntry} entry
  * @returns {Promise<import('./lib/interface.js').Web3File>}
  */
-async function toWeb3File({content, path, cid}) {
+async function toWeb3File ({ content, path, cid }) {
   const chunks = []
   for await (const chunk of content()) {
     chunks.push(chunk)
@@ -245,7 +246,7 @@ async function toWeb3File({content, path, cid}) {
  * @param {string} unixFsPath
  * @returns {string}
  */
-function toFilenameWithPath(unixFsPath) {
+function toFilenameWithPath (unixFsPath) {
   const slashIndex = unixFsPath.indexOf('/')
   return slashIndex === -1 ? unixFsPath : unixFsPath.substring(slashIndex + 1)
 }
@@ -255,16 +256,16 @@ function toFilenameWithPath(unixFsPath) {
  * @param {Response} res
  * @returns {import('./lib/interface.js').Web3Response}
  */
-function toWeb3Response(res) {
+function toWeb3Response (res) {
   const response = Object.assign(res, {
-    unixFsIterator: async function* () {
+    unixFsIterator: async function * () {
       /* c8 ignore next 3 */
       if (!res.body) {
         throw new Error('No body on response')
       }
       const blockstore = new Blockstore()
       try {
-        for await (const entry of unpackStream(res.body, {blockstore})) {
+        for await (const entry of unpackStream(res.body, { blockstore })) {
           yield entry
         }
       } finally {
@@ -282,7 +283,7 @@ function toWeb3Response(res) {
         files.push(file)
       }
       return files
-    },
+    }
   })
   return response
 }
@@ -291,7 +292,8 @@ export { Web3Storage, File, Blob }
 
 /**
  * Just to verify API compatibility.
+ * TODO: convert lib to a regular class that can be type checked.
  * @type {API.API}
  */
 const api = Web3Storage
-void api
+void api // eslint-disable-line no-void
