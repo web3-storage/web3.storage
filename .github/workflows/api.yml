@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: 16
       - uses: bahmutov/npm-install@v1
+      - run: npm run build --workspace packages/api
       - run: npm test --workspace packages/api
 
   deploy-staging:
