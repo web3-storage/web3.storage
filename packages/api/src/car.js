@@ -85,6 +85,18 @@ export async function carPost (request, env) {
     local: blob.size > LOCAL_ADD_THRESHOLD
   })
 
+  // Retrieve current pin status and info about the nodes pinning the content.
+  const { peerMap } = await env.cluster.status(cid)
+
+  const pins = Object.entries(peerMap).map((peerId, { peerName, status }) => ({
+    status: toPinStatusEnum(status),
+    location: { peerId, peerName }
+  }))
+
+  if (!pins.length) { // should not happen
+    throw new Error('not pinning on any node')
+  }
+
   // Store in DB
   await env.db.query(gql`
     mutation importCar($data: ImportCarInput!) {
@@ -97,8 +109,9 @@ export async function carPost (request, env) {
       user: user._id,
       authToken: authToken?._id,
       cid,
-      name
+      name,
       // dagSize: undefined // TODO: should we default to chunk car behavior?
+      pins
     }
   })
 
@@ -123,4 +136,27 @@ export async function sizeOf (response) {
     size += value.byteLength
   }
   return size
+}
+
+/**
+ * Converts from cluster status string to DB pin status enum string.
+ * @param {import('@nftstorage/ipfs-cluster').TrackerStatus} trackerStatus
+ */
+function toPinStatusEnum (trackerStatus) {
+  const status = {
+    undefined: 'Undefined',
+    cluster_error: 'ClusterError',
+    pin_error: 'PinError',
+    unpin_error: 'UnpinError',
+    pinned: 'Pinned',
+    pinning: 'Pinning',
+    unpinning: 'Unpinning',
+    unpinned: 'Unpinned',
+    remote: 'Remote',
+    pin_queued: 'PinQueued',
+    unpin_queued: 'UnpinQueued',
+    sharded: 'Sharded'
+  }[trackerStatus]
+  if (!status) throw new Error(`unknown tracker status: ${trackerStatus}`)
+  return status
 }

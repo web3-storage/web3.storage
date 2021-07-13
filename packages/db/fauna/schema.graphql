@@ -152,6 +152,7 @@ enum PinStatus {
   UnpinError
   Pinned
   Pinning
+  Unpinning
   Unpinned
   Remote
   PinQueued
@@ -313,6 +314,7 @@ type Query {
   Verify the User with the passed issuer owns the AuthToken with the passed secret.
   """
   verifyAuthToken(issuer: String!, secret: String!): AuthToken @resolver
+  findPinsByStatus(statuses: [PinStatus!]!): [Pin!]! @resolver(paginated: true)
 }
 
 type Mutation {
@@ -375,4 +377,16 @@ input ImportCarInput {
   cid: String!
   name: String
   dagSize: Int
+  pins: [PinInput!]!
+}
+
+input PinInput {
+  status: PinStatus!
+  location: PinLocationInput!
+}
+
+input PinLocationInput {
+  peerId: String!,
+  peerName: String
+  region: String
 }
