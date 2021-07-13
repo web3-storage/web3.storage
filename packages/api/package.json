@@ -12,7 +12,8 @@
     "dev": "wrangler dev --env $(whoami)",
     "publish": "wrangler publish --env $(whoami)",
     "build": "webpack",
-    "test": "npm-run-all -p -r mock:cluster mock:db test:e2e",
+    "test": "npm-run-all -p -r mock:cluster mock:db test:e2e -s test:size",
+    "test:size": "bundlesize",
     "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js",
     "mock:cluster": "smoke -p 9094 test/mocks/cluster",
     "mock:db": "smoke -p 9086 test/mocks/db"
@@ -37,5 +38,12 @@
     "@magic-sdk/admin": "^1.3.0",
     "@web3-storage/db": "^0.0.0",
     "itty-router": "^2.3.10"
-  }
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/main.js",
+      "maxSize": "1 MB",
+      "compression": "none"
+    }
+  ]
 }
