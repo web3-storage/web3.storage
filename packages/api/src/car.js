@@ -88,7 +88,7 @@ export async function carPost (request, env) {
   // Retrieve current pin status and info about the nodes pinning the content.
   const { peerMap } = await env.cluster.status(cid)
 
-  const pins = Object.entries(peerMap).map((peerId, { peerName, status }) => ({
+  const pins = Object.entries(peerMap).map(([peerId, { peerName, status }]) => ({
     status: toPinStatusEnum(status),
     location: { peerId, peerName }
   }))
@@ -143,6 +143,10 @@ export async function sizeOf (response) {
  * @param {import('@nftstorage/ipfs-cluster').TrackerStatus} trackerStatus
  */
 function toPinStatusEnum (trackerStatus) {
+  if (typeof trackerStatus !== 'string') {
+    throw new Error(`invalid tracker status: ${trackerStatus}`)
+  }
+
   const status = {
     undefined: 'Undefined',
     cluster_error: 'ClusterError',
@@ -157,6 +161,9 @@ function toPinStatusEnum (trackerStatus) {
     unpin_queued: 'UnpinQueued',
     sharded: 'Sharded'
   }[trackerStatus]
-  if (!status) throw new Error(`unknown tracker status: ${trackerStatus}`)
+
+  if (!status) {
+    throw new Error(`unknown tracker status: ${trackerStatus}`)
+  }
   return status
 }

@@ -325,6 +325,9 @@ type Mutation {
   deleteUserUpload(user: ID!, upload: ID!): Upload! @resolver
   createBatch(data: CreateBatchInput!): Batch! @resolver
   createOrUpdateDeal(data: CreateOrUpdateDealInput!): Deal! @resolver
+  """
+  Creates a new pin object and either refs an existing location or creates it.
+  """
   createPinAndLocation(data: CreatePinAndLocationInput): Pin! @resolver
 }
 

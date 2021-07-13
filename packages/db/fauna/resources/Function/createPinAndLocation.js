@@ -1,4 +1,4 @@
-import fauna, { Match } from 'faunadb'
+import fauna from 'faunadb'
 
 const {
   Function,
@@ -19,7 +19,8 @@ const {
   Not,
   Index,
   IsEmpty,
-  Get
+  Get,
+  Match
 } = fauna
 
 /**
