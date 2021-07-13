@@ -13,17 +13,14 @@ const {
  * Usage:
  *
  * Match(
- *   Index('deals'),
+ *   Index('deals_by_status'),
  *   StatusString // Queued, Proposing, Accepted, Active, Terminated
  * )
  */
 const index = {
-  name: 'deals',
+  name: 'deals_by_status',
   source: Collection('Deal'),
   terms: [
-    { field: ['data', 'status'] }
-  ],
-  values: [
     { field: ['data', 'status'] }
   ]
 }
