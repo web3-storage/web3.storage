@@ -8,6 +8,7 @@ export interface LayoutProps {
   title?: string
   description?: string
   navBgColor?: string
+  data?: any
 }
 
 export interface LayoutChildrenProps {
@@ -15,5 +16,6 @@ export interface LayoutChildrenProps {
     issuer: string | null
     publicAddress: string | null
     email: string | null
-  }
+  },
+  data: any
 }

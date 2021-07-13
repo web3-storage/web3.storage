@@ -10,13 +10,16 @@
   },
   "dependencies": {
     "@magic-ext/oauth": "^0.7.0",
+    "@tailwindcss/typography": "^0.4.1",
     "clsx": "^1.1.1",
     "filesize": "^6.1.0",
+    "gray-matter": "^4.0.3",
     "magic-sdk": "^4.2.1",
     "next": "^11.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-if": "^4.0.1",
+    "react-markdown": "^6.0.2",
     "react-query": "^3.13.9"
   },
   "devDependencies": {

@@ -42,34 +42,33 @@ export default function Login() {
   return (
     <main>
       <div className="py-4 px-16 mt-32 mx-auto max-w-screen-2xl">
-        <form onSubmit={onSubmit} className="text-center">
+        <form onSubmit={onSubmit} className="text-center w-80 mx-auto">
           <label>
-            <h2 className="mb-6">Log in</h2>
+            <h3 className="mb-6">Log in</h3>
           </label>
           <input
             type="email"
             name="email"
             required
             placeholder="Enter your email"
-            className="border border-black rounded-md p-2 w-64"
+            className="w-full border border-black rounded-md p-2"
           />
 
-          <Button type="submit" disabled={disabled} wrapperClassName="w-64 mt-2 mx-auto">
+          <Button type="submit" disabled={disabled} wrapperClassName="mt-2">
             Sign Up / Login
           </Button>
 
           {errorMsg && <p className="error">{errorMsg}</p>}
 
-          <h4 className="my-8">Or with</h4>
+          <h3 className="my-8">Or with</h3>
 
           <Button
-            wrapperClassName="w-64 mx-auto"
             onClick={() => {
               setIsRedirecting(true)
               loginSocial('github')
             }}
           >
-            {isRedirecting ? 'Redirecting...' : 'Github'}
+            {isRedirecting ? 'Redirecting...' : 'GitHub'}
           </Button>
           <br />
           <br />
