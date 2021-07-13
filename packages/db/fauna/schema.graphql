@@ -341,7 +341,7 @@ input CreateOrUpdateDealInput {
   CID of the batch included in this deal. Required for create, ignored for update.
   """
   batchCid: String
-  miner: String!
+  miner: String
   chainDealId: Int!
   activation: Time
   renewal: Time
