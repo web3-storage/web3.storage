@@ -1,5 +1,5 @@
 name: Lint
-on:
+on: 
   push:
     branches:
       - main
@@ -15,10 +15,4 @@ jobs:
         with:
           node-version: 16
       - uses: bahmutov/npm-install@v1
-      - name: StandardJS lint checks
-        uses: goto-bus-stop/standard-action@v1.0.3
-        with:
-          # show errors in the the github diff UI
-          annotate: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm run lint

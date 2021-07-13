@@ -11,8 +11,9 @@
     "packages/website"
   ],
   "scripts": {
-    "test": "npm run test --workspaces",
-    "lint": "standard --fix '**/*.js'"
+    "test": "npm run lint && npm run test --workspaces",
+    "lint": "standard --fix '**/*.js'",
+    "lint:fix":"standard '**/*.js' --fix "
   },
   "devDependencies": {
     "standard": "^16.0.3"
