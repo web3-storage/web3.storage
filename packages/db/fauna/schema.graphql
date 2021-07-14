@@ -326,9 +326,9 @@ type Mutation {
   createBatch(data: CreateBatchInput!): Batch! @resolver
   createOrUpdateDeal(data: CreateOrUpdateDealInput!): Deal! @resolver
   """
-  Creates a new pin object and either refs an existing location or creates it.
+  Creates a new pin object (and location) or updates an existing pin object.
   """
-  createPinAndLocation(data: CreatePinAndLocationInput): Pin! @resolver
+  createOrUpdatePin(data: CreateOrUpdatePinInput): Pin! @resolver
 }
 
 input CreateBatchInput {
@@ -395,7 +395,7 @@ input PinLocationInput {
   region: String
 }
 
-input CreatePinAndLocationInput {
+input CreateOrUpdatePinInput {
   content: ID!
   status: PinStatus!
   location: PinLocationInput!
