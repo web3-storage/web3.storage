@@ -12,13 +12,10 @@ const {
 /**
  * Usage:
  *
- * Match(
- *   Index('pins_by_status'),
- *   StatusString // Pinned, Pinning, PinQueued, ...
- * )
+ * Match(Index('pin_by_status'), "Pinning")
  */
 const index = {
-  name: 'pins_by_status',
+  name: 'pin_by_status',
   source: Collection('Pin'),
   terms: [
     { field: ['data', 'status'] }

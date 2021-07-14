@@ -55,19 +55,19 @@ const body = Query(
           ))
         ),
         pinsQueuedTotal: Count(Match(
-          Index('pins_by_status'),
+          Index('pin_by_status'),
           'PinQueued'
         )),
         pinsPinningTotal: Count(Match(
-          Index('pins_by_status'),
+          Index('pin_by_status'),
           'Pinning'
         )),
         pinsPinnedTotal: Count(Match(
-          Index('pins_by_status'),
+          Index('pin_by_status'),
           'Pinned'
         )),
         pinsFailedTotal: Count(Match(
-          Index('pins_by_status'),
+          Index('pin_by_status'),
           'PinError'
         ))
       }
