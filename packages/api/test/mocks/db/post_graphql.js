@@ -51,8 +51,6 @@ module.exports = ({ body }) => {
   }
 
   if (body.query.includes('findContentByCid')) {
-    console.log(body.query)
-    console.log(body.variables.cid)
     if (body.variables.cid === 'unknown') {
       return gqlResponse(200, require('../../fixtures/find-content-by-cid-unknown.json'))
     }
@@ -62,7 +60,7 @@ module.exports = ({ body }) => {
     if (body.variables.cid === 'nodeal') {
       return gqlResponse(200, require('../../fixtures/find-content-by-cid-no-deal.json'))
     }
-    return gqlResponse(200, (require('../../fixtures/find-content-by-cid.json'))
+    return gqlResponse(200, require('../../fixtures/find-content-by-cid.json'))
   }
 
   return gqlResponse(400, {

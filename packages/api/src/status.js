@@ -94,7 +94,7 @@ export async function statusGet (request, env) {
         dataModelSelector
       }))
   }).reduce((a, b) => a.concat(b), []) // flatten array of arrays.
-  
+
   const { dagSize, created } = raw
 
   const status = {

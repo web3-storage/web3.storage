@@ -10,14 +10,14 @@ describe('GET /status/:cid', () => {
     const json = await res.json()
     assert.deepStrictEqual(json, {
       cid: 'testcid',
-      created: "2021-07-14T19:27:14.934572Z",
+      created: '2021-07-14T19:27:14.934572Z',
       dagSize: 101,
       pins: [{
         peerId: '12D3KooWR1Js',
         peerName: 'who?',
         region: 'where?',
         status: 'Pinned',
-        updated: "2021-07-14T19:27:14.934572Z"
+        updated: '2021-07-14T19:27:14.934572Z'
       }],
       deals: [{
         dealId: 12345,
@@ -27,8 +27,8 @@ describe('GET /status/:cid', () => {
         dataCid: 'bafy',
         dataModelSelector: 'Links/0/Links',
         activation: '<iso timestamp>',
-        created: "2021-07-14T19:27:14.934572Z",
-        updated: "2021-07-14T19:27:14.934572Z"
+        created: '2021-07-14T19:27:14.934572Z',
+        updated: '2021-07-14T19:27:14.934572Z'
       }]
     })
   })
@@ -40,7 +40,7 @@ describe('GET /status/:cid', () => {
     const json = await res.json()
     assert.deepStrictEqual(json, {
       cid,
-      created: "2021-07-14T19:27:14.934572Z",
+      created: '2021-07-14T19:27:14.934572Z',
       dagSize: 101,
       pins: [{
         peerId: '12D3KooWR1Js',
@@ -64,7 +64,7 @@ describe('GET /status/:cid', () => {
     const json = await res.json()
     assert.deepStrictEqual(json, {
       cid,
-      created: "2021-07-14T19:27:14.934572Z",
+      created: '2021-07-14T19:27:14.934572Z',
       dagSize: 101,
       pins: [{
         peerId: '12D3KooWR1Js',
