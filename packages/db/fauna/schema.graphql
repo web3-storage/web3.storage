@@ -320,7 +320,7 @@ type Mutation {
   createAuthToken(data: CreateAuthTokenInput): AuthToken! @resolver
   importCar(data: ImportCarInput!): Upload! @resolver
   deleteAuthToken(user: ID!, authToken: ID!): AuthToken! @resolver
-  deleteUserUpload(user: ID!, upload: ID!): Upload! @resolver
+  deleteUserUpload(user: ID!, cid: String!): Upload! @resolver
   createBatch(data: CreateBatchInput!): Batch! @resolver
   createOrUpdateDeal(data: CreateOrUpdateDealInput!): Deal! @resolver
 }

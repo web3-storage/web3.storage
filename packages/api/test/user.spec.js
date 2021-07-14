@@ -67,10 +67,10 @@ describe('DELETE /user/tokens/:id', () => {
   })
 })
 
-describe('DELETE /user/uploads/:id', () => {
+describe('DELETE /user/uploads/:cid', () => {
   it('removes an upload', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('user/uploads/xyz', endpoint).toString(), {
+    const res = await fetch(new URL('user/uploads/bafybeibq5kfbnbvjgjg6bop4anhhaqopkc7t6mp2v3er3fkcv6ezhgvavg', endpoint).toString(), {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
     })

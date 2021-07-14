@@ -101,10 +101,10 @@ export async function getUploads({ size, before }) {
 /**
  * Deletes upload
  *
- * @param {string} _id
+ * @param {string} cid
  */
-export async function deleteUpload (_id) {
-  const res = await fetch(`${API}/user/uploads/${_id}`, {
+export async function deleteUpload (cid) {
+  const res = await fetch(`${API}/user/uploads/${cid}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
