@@ -1,6 +1,6 @@
 /* eslint-env serviceworker */
 import { Router } from 'itty-router'
-import { withCorsHeaders, corsOptions } from './cors.js'
+import { addCorsHeaders, withCorsHeaders, corsOptions } from './cors.js'
 import { envAll } from './env.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, withAuth } from './user.js'
@@ -41,15 +41,19 @@ router.get('/', () => {
   )
 })
 
-router.all('*', () => new JSONResponse({ message: 'Not Found' }, { status: 404 }))
+router.get('/error', () => { throw new Error('A deliberate error!') })
+router.all('*', withCorsHeaders(() => new JSONResponse({ message: 'Not Found' }, { status: 404 })))
 
-function serverError (error) {
+function serverError (request, error) {
   console.error(error.stack)
   const message = error.message || 'Server Error'
   const status = error.status || 500
-  return new JSONResponse({ message }, { status })
+  return addCorsHeaders(request, new JSONResponse({ message }, { status }))
 }
 
 addEventListener('fetch', (event) => {
-  event.respondWith(router.handle(event.request, {}, event).catch(serverError))
+  event.respondWith(router
+    .handle(event.request, {}, event)
+    .catch((e) => serverError(event.request, e))
+  )
 })
