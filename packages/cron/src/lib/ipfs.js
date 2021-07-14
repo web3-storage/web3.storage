@@ -28,6 +28,7 @@ export class IPFS {
     )
     try {
       const response = await fetch(url.toString(), {
+        method: 'POST',
         headers: this.headers,
         // @ts-ignore
         signal: controller.signal

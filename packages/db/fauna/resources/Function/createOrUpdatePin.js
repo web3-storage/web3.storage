@@ -20,7 +20,9 @@ const {
   Index,
   IsEmpty,
   Get,
-  Match
+  Match,
+  IsNull,
+  Equals
 } = fauna
 
 const name = 'createOrUpdatePin'
@@ -57,10 +59,11 @@ const body = Query(
               Index('pin_by_content_and_location'),
               Var('contentRef'),
               Select('ref', Var('loc'))
-            )
+            ),
+            pin: If(IsEmpty(Var('pinsMatch')), null, Get(Var('pinsMatch')))
           },
           If(
-            IsEmpty(Var('pinsMatch')),
+            IsNull(Var('pin')),
             Create('Pin', {
               data: {
                 content: Var('contentRef'),
@@ -69,12 +72,16 @@ const body = Query(
                 updated: Now()
               }
             }),
-            Update(Select('ref', Get(Var('pinsMatch'))), {
-              data: {
-                status: Var('status'),
-                updated: Now()
-              }
-            })
+            If(
+              Equals(Select(['data', 'status'], Var('pin')), Var('status')),
+              Var('pin'),
+              Update(Select('ref', Get(Var('pinsMatch'))), {
+                data: {
+                  status: Var('status'),
+                  updated: Now()
+                }
+              })
+            )
           )
         )
       )

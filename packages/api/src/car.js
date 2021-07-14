@@ -1,9 +1,35 @@
 /* eslint-env serviceworker */
 import { gql } from '@web3-storage/db'
+import { CarReader } from '@ipld/car'
+import { Block } from 'multiformats/block'
+import * as raw from 'multiformats/codecs/raw'
+import * as cbor from '@ipld/dag-cbor'
+import * as pb from '@ipld/dag-pb'
 import { GATEWAY } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
+import { toPinStatusEnum } from './utils/pin.js'
 
 const LOCAL_ADD_THRESHOLD = 1024 * 1024 * 2.5
+const DAG_SIZE_CALC_LIMIT = 1024 * 1024 * 9
+
+const IMPORT_CAR = gql`
+  mutation importCar($data: ImportCarInput!) {
+    importCar(data: $data) {
+      content {
+        _id
+        dagSize
+      }
+    }
+  }
+`
+
+const UPDATE_DAG_SIZE = gql`
+  mutation UpdateContentDagSize($content: ID!, $dagSize: Int!) {
+    updateContentDagSize(content: $content, dagSize: $dagSize) {
+      _id
+    }
+  }
+`
 
 // TODO: ipfs should let us ask the size of a CAR file.
 // This consumes the CAR response from ipfs to find the content-length.
@@ -63,7 +89,7 @@ export async function carGet (request, env, ctx) {
  * @param {import('./user').AuthenticatedRequest} request
  * @param {import('./env').Env} env
  */
-export async function carPost (request, env) {
+export async function carPost (request, env, ctx) {
   const { user, authToken } = request.auth
   const { headers } = request
 
@@ -98,13 +124,7 @@ export async function carPost (request, env) {
   }
 
   // Store in DB
-  await env.db.query(gql`
-    mutation importCar($data: ImportCarInput!) {
-      importCar(data: $data) {
-        name
-      }
-    }
-  `, {
+  const { importCar: upload } = await env.db.query(IMPORT_CAR, {
     data: {
       user: user._id,
       authToken: authToken?._id,
@@ -114,6 +134,20 @@ export async function carPost (request, env) {
       pins
     }
   })
+
+  // Partial CARs are chunked at ~10MB so anything less than this is probably complete.
+  if (ctx.waitUntil && upload.content.dagSize == null && blob.size < DAG_SIZE_CALC_LIMIT) {
+    ctx.waitUntil((async () => {
+      let dagSize
+      try {
+        dagSize = await getDagSize(blob)
+      } catch (err) {
+        console.error(`could not determine DAG size: ${err.stack}`)
+        return
+      }
+      await env.db.query(UPDATE_DAG_SIZE, { content: upload.content._id, dagSize })
+    })())
+  }
 
   // TODO: Improve response type with pin information
   return new JSONResponse({ cid })
@@ -139,31 +173,32 @@ export async function sizeOf (response) {
 }
 
 /**
- * Converts from cluster status string to DB pin status enum string.
- * @param {import('@nftstorage/ipfs-cluster').TrackerStatus} trackerStatus
+ * Returns the DAG size of the CAR but only if the graph is complete.
+ * @param {Blob} car
  */
-function toPinStatusEnum (trackerStatus) {
-  if (typeof trackerStatus !== 'string') {
-    throw new Error(`invalid tracker status: ${trackerStatus}`)
+async function getDagSize (car) {
+  const decoders = [pb, raw, cbor]
+  const bytes = new Uint8Array(await car.arrayBuffer())
+  const reader = await CarReader.fromBytes(bytes)
+  const rootCid = (await reader.getRoots())[0]
+
+  const getBlock = async cid => {
+    const rawBlock = await reader.get(cid)
+    if (!rawBlock) throw new Error(`missing block for ${cid}`)
+    const { bytes } = rawBlock
+    const decoder = decoders.find(d => d.code === cid.code)
+    if (!decoder) throw new Error(`missing decoder for ${cid.code}`)
+    return new Block({ cid, bytes, value: decoder.decode(bytes) })
   }
 
-  const status = {
-    undefined: 'Undefined',
-    cluster_error: 'ClusterError',
-    pin_error: 'PinError',
-    unpin_error: 'UnpinError',
-    pinned: 'Pinned',
-    pinning: 'Pinning',
-    unpinning: 'Unpinning',
-    unpinned: 'Unpinned',
-    remote: 'Remote',
-    pin_queued: 'PinQueued',
-    unpin_queued: 'UnpinQueued',
-    sharded: 'Sharded'
-  }[trackerStatus]
-
-  if (!status) {
-    throw new Error(`unknown tracker status: ${trackerStatus}`)
+  const getSize = async cid => {
+    const block = await getBlock(cid)
+    let size = block.bytes.byteLength
+    for (const [, cid] of block.links()) {
+      size += await getSize(cid)
+    }
+    return size
   }
-  return status
+
+  return getSize(rootCid)
 }

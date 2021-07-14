@@ -19,7 +19,6 @@
     "mock:db": "smoke -p 9086 test/mocks/db"
   },
   "devDependencies": {
-    "@ipld/car": "^3.1.4",
     "@nftstorage/ipfs-cluster": "^3.1.2",
     "@types/mocha": "^8.2.2",
     "assert": "^2.0.0",
@@ -34,10 +33,14 @@
     "webpack-cli": "^4.7.2"
   },
   "dependencies": {
+    "@ipld/car": "^3.1.4",
+    "@ipld/dag-cbor": "^6.0.3",
+    "@ipld/dag-pb": "^2.0.2",
     "@magic-ext/oauth": "^0.8.0",
     "@magic-sdk/admin": "^1.3.0",
     "@web3-storage/db": "^0.0.0",
-    "itty-router": "^2.3.10"
+    "itty-router": "^2.3.10",
+    "multiformats": "^9.0.4"
   },
   "bundlesize": [
     {
