@@ -13,29 +13,13 @@ const PIN_STATUS = new Set([
   'PinQueued'
 ])
 
-/*
-returns:
-```
-{
-  "cid": "bafy",
-  "dagSize": 101,
-  "pins": [{
-    "peerId": "12D3KooWR1Js",
-    "peerName": "who?",
-    "region": "where?",
-    "status": "Pinned"
-  }],
-  "deals": [{
-    "dealId": 12345,
-    "miner": "f99",
-    "status": "active",
-    "activation": "<iso timestamp>",
-    "pieceCid":  "baga",
-    "dataCid":  "bafy",
-    "dataModelSelector": "Links/0/Links"
-  }]
-}
-```
+/**
+ * Returns pin and deal status info for a given CID.
+ *
+ * @see {@link ../test/fixtures/status.json|Exmple resonse}
+ * @param {Request} request
+ * @param {import('./env').Env} env
+ * @returns {Response}
  */
 export async function statusGet (request, env) {
   const cid = request.params.cid
