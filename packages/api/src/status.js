@@ -62,15 +62,15 @@ export async function statusGet (request, env) {
     }
   `, { cid })
 
-  if (!result.findContentByCid) {
+  const { findContentByCid: raw } = result
+
+  if (!raw) {
     return notFound()
   }
 
-  const { findContentByCid: raw } = result
-
   const pins = raw.pins.data
     .filter(({ status }) => PIN_STATUS.has(status))
-    .map(({ status, location }) => ({ status, ...location }))
+    .map(({ status, updated, location }) => ({ status, updated, ...location }))
 
   const deals = raw.batchEntries.data.map(({ dataModelSelector, batch }) => {
     const { pieceCid, cid: dataCid, deals } = batch
@@ -84,14 +84,16 @@ export async function statusGet (request, env) {
     }
     return deals.data
       .filter(({ status }) => DEAL_STATUS.has(status))
-      .map(({ chainDealId: dealId, miner, activation, status }) => ({
+      .map(({ chainDealId: dealId, miner, status, activation, created, updated }) => ({
         dealId,
         miner,
         status,
-        activation,
         pieceCid,
         dataCid,
-        dataModelSelector
+        dataModelSelector,
+        activation,
+        created,
+        updated
       }))
   }).reduce((a, b) => a.concat(b), []) // flatten array of arrays.
 

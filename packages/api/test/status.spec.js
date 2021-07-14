@@ -6,7 +6,8 @@ describe('GET /status/:cid', () => {
   it('get pin and deal status', async () => {
     const cid = 'testcid'
     const res = await fetch(new URL(`status/${cid}`, endpoint))
-    assert(res.ok, 'http response should be ok')
+    console.error(res)
+    assert(res.ok, `${JSON.stringify(res)}`)
     const json = await res.json()
     assert.deepStrictEqual(json, {
       cid: 'testcid',
@@ -46,7 +47,8 @@ describe('GET /status/:cid', () => {
         peerId: '12D3KooWR1Js',
         peerName: 'who?',
         region: 'where?',
-        status: 'Pinned'
+        status: 'Pinned',
+        updated: '2021-07-14T19:27:14.934572Z'
       }],
       deals: [{
         status: 'Queued',
@@ -70,7 +72,8 @@ describe('GET /status/:cid', () => {
         peerId: '12D3KooWR1Js',
         peerName: 'who?',
         region: 'where?',
-        status: 'Pinned'
+        status: 'Pinned',
+        updated: '2021-07-14T19:27:14.934572Z'
       }],
       deals: []
     })
