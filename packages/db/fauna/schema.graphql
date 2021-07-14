@@ -322,13 +322,16 @@ type Mutation {
   deleteAuthToken(user: ID!, authToken: ID!): AuthToken! @resolver
   deleteUserUpload(user: ID!, cid: String!): Upload! @resolver
   createBatch(data: CreateBatchInput!): Batch! @resolver
+  """
+  Adds new entries to the batch, existing entries are ignored.
+  """
+  addBatchEntries(batchCid: String!, entries: [BatchEntryInput!]!): Batch! @resolver
   createOrUpdateDeal(data: CreateOrUpdateDealInput!): Deal! @resolver
 }
 
 input CreateBatchInput {
   batchCid: String!
   pieceCid: String!
-  entries: [BatchEntryInput!]!
 }
 
 input BatchEntryInput {
