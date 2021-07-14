@@ -16,7 +16,7 @@ const PIN_STATUS = new Set([
 /**
  * Returns pin and deal status info for a given CID.
  *
- * @see {@link ../test/fixtures/status.json|Exmple resonse}
+ * @see {@link ../test/fixtures/status.json|Example response}
  * @param {Request} request
  * @param {import('./env').Env} env
  * @returns {Response}
