@@ -24,5 +24,8 @@ export default {
       // node-fetch causes TypeError: Illegal invocation in Cloudflare Workers
       'node-fetch': path.resolve(__dirname, 'src', 'utils', 'fetch.js')
     }
+  },
+  optimization: {
+    minimize: true
   }
 }
