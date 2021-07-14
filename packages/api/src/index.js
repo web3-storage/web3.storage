@@ -1,14 +1,24 @@
 /* eslint-env serviceworker */
 import { Router } from 'itty-router'
+import { HTTPError } from './errors.js'
 import { addCorsHeaders, withCorsHeaders, corsOptions } from './cors.js'
 import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, withAuth } from './user.js'
 import { metricsGet } from './metrics.js'
-import { JSONResponse, notFound } from './utils/json-response.js'
+import { notFound } from './utils/json-response.js'
 
-const router = Router()
+// Extended itty router for custom error handler
+const ThrowableRouter = (options = {}) =>
+  new Proxy(Router(options), {
+    get: (obj, prop) => (...args) =>
+      prop === 'handle'
+        ? obj[prop](...args).catch((err) => serverError(err, ...args))
+        : obj[prop](...args)
+  })
+
+const router = ThrowableRouter()
 
 router.options('*', corsOptions)
 router.all('*', envAll)
@@ -50,19 +60,20 @@ router.get('/', () => {
 router.get('/error', () => { throw new Error('A deliberate error!') })
 router.all('*', withCorsHeaders(() => notFound()))
 
-function serverError (request, error) {
+/**
+ * @param {Error} error
+ * @param {Request} request
+ * @param {import('./env').Env} env
+ */
+function serverError (error, request, env) {
   console.error(error.stack)
-  const message = error.message || 'Server Error'
-  const status = error.status || 500
-  return addCorsHeaders(request, new JSONResponse({ message }, { status }))
+  env.sentry.captureException(error)
+  return addCorsHeaders(request, HTTPError.respond(error, env))
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent
 /** @typedef {{ waitUntil(p: Promise): void }} Ctx */
 
 addEventListener('fetch', (event) => {
-  event.respondWith(router
-    .handle(event.request, {}, event)
-    .catch((e) => serverError(event.request, e))
-  )
+  event.respondWith(router.handle(event.request, {}, event))
 })

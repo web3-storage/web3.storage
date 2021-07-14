@@ -49,7 +49,7 @@ describe('POST /user/tokens', () => {
       body: JSON.stringify({ name: null })
     })
     assert(!res.ok)
-    const { message } = await res.json()
+    const { error: { message } } = await res.json()
     assert.strictEqual(message, 'invalid name')
   })
 })
