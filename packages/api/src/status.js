@@ -26,6 +26,7 @@ export async function statusGet (request, env) {
   const result = await env.db.query(
     gql`query FindContentByCid($cid: String!) {
       findContentByCid(cid: $cid) {
+        created
         dagSize
         batchEntries {
           data {
@@ -37,8 +38,10 @@ export async function statusGet (request, env) {
                 data {
                   miner
                   chainDealId
-                  activation
                   status
+                  activation
+                  created
+                  updated
                 }
               }
             }
@@ -47,6 +50,7 @@ export async function statusGet (request, env) {
         pins {
           data {
             status
+            updated
             location {
               peerId
               peerName
@@ -58,12 +62,11 @@ export async function statusGet (request, env) {
     }
   `, { cid })
 
-  const { findContentByCid: raw } = result.data
-  const { dagSize } = raw
-
-  if (raw.pins.data.length === 0 && raw.batchEntries.data.length === 0) {
+  if (!result.findContentByCid) {
     return notFound()
   }
+
+  const { findContentByCid: raw } = result
 
   const pins = raw.pins.data
     .filter(({ status }) => PIN_STATUS.has(status))
@@ -91,9 +94,12 @@ export async function statusGet (request, env) {
         dataModelSelector
       }))
   }).reduce((a, b) => a.concat(b), []) // flatten array of arrays.
+  
+  const { dagSize, created } = raw
 
   const status = {
     cid,
+    created,
     dagSize,
     pins,
     deals
