@@ -19,7 +19,7 @@ router.get('/user/tokens', withCorsHeaders(withAuth(userTokensGet)))
 router.post('/user/tokens', withCorsHeaders(withAuth(userTokensPost)))
 router.delete('/user/tokens/:id', withCorsHeaders(withAuth(userTokensDelete)))
 router.get('/user/uploads', withCorsHeaders(withAuth(userUploadsGet)))
-router.delete('/user/uploads/:id', withCorsHeaders(withAuth(userUploadsDelete)))
+router.delete('/user/uploads/:cid', withCorsHeaders(withAuth(userUploadsDelete)))
 
 router.get('/', () => {
   return new Response(
