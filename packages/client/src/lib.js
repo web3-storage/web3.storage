@@ -152,8 +152,8 @@ class Web3Storage {
 
       for await (const _ of upload(splitter.cars())) {} // eslint-disable-line
     } finally {
-      // Destroy Blockstore
-      await blockstore.destroy()
+      // Close Blockstore
+      await blockstore.close()
     }
 
     return carRoot
@@ -276,7 +276,7 @@ function toWeb3Response (res) {
           yield entry
         }
       } finally {
-        await blockstore.destroy()
+        await blockstore.close()
       }
     },
     files: async () => {
