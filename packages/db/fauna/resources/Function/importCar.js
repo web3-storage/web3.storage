@@ -80,7 +80,7 @@ const body = Query(
                       Select('pins', Var('data')),
                       Lambda(
                         ['pin'],
-                        Call('createPinAndLocation', {
+                        Call('createOrUpdatePin', {
                           content: Select(['ref', 'id'], Var('content')),
                           status: Select('status', Var('pin')),
                           location: Select('location', Var('pin'))
@@ -116,7 +116,7 @@ const body = Query(
                   Select('pins', Var('data')),
                   Lambda(
                     ['pin'],
-                    Call('createPinAndLocation', {
+                    Call('createOrUpdatePin', {
                       content: Select(['ref', 'id'], Var('content')),
                       status: Select('status', Var('pin')),
                       location: Select('location', Var('pin'))
