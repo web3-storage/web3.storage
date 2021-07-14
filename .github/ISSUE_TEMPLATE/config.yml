@@ -1,4 +1,8 @@
 blank_issues_enabled: true
+new_issue: 
+  - name: New Issue
+    url: https://github.com/web3-storage/web3.storage/issues/new
+    about: File a bug or feature request!
 contact_links:
   - name: Account Limit Increase Request
     url: https://mailxto.com/xy5ijb
