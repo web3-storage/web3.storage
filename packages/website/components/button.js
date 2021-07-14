@@ -11,6 +11,7 @@ import clsx from 'clsx'
  * @prop {import('react').ReactChildren | string} children
  * @prop {boolean} [disabled]
  * @prop {string} [id]
+ * @prop {'dark' | 'light'} [variant]
  */
 
 /**
@@ -27,20 +28,22 @@ export default function Button({
   type = 'button',
   children,
   disabled = false,
+  variant = 'dark'
 }) {
   const buttonStyle = { minWidth: '8rem', minHeight: '3.25rem' }
+  const variantClasses = variant === 'dark' ? 'bg-black text-white' : 'bg-transparent text-black'
+
   const btn = (
     <button
       type={type}
       className={clsx(
+        variantClasses,
         'w-full',
         'border',
         'border-black',
         'rounded-md',
         'px-4',
         { pointer: !disabled },
-        'bg-black',
-        'text-white',
         'typography-cta',
         className
       )}

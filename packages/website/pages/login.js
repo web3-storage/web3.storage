@@ -32,7 +32,7 @@ export default function Login() {
     try {
       await loginEmail(e.currentTarget.email.value)
       await queryClient.invalidateQueries('magic-user')
-      Router.push('/files')
+      Router.push('/profile')
     } catch (error) {
       setDisabled(false)
       console.error('An unexpected error happened occurred:', error)
