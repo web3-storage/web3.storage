@@ -21,13 +21,13 @@ describe('put', () => {
     }
   })
 
-  it.skip('errors without content', async () => {
+  it('errors without content', async () => {
     const client = new Web3Storage({ endpoint, token })
     try {
       await client.put([])
       assert.unreachable('should have thrown')
     } catch (err) {
-      assert.match(err.message, /input could not be parsed correctly/)
+      assert.match(err.message, /missing input file/)
     }
   })
 
