@@ -5,7 +5,7 @@ import { gql } from '@web3-storage/db'
  * https://prometheus.io/docs/instrumenting/exposition_formats/
  * @returns {Promise<string>}
  */
-export async function metricsGet(request, env) {
+export async function metricsGet (request, env) {
   const { findMetrics } = await env.db.query(gql`
     query findMetrics {
       findMetrics {
@@ -24,7 +24,7 @@ export async function metricsGet(request, env) {
     }
     `)
 
-  return new Response(
+  return new globalThis.Response(
     [
       '# HELP web3storage_users_total Total users registered.',
       '# TYPE web3storage_users_total counter',
@@ -68,7 +68,7 @@ export async function metricsGet(request, env) {
 
       '# HELP web3storage_pins_status_failed_total Total number of pins that are failed.',
       '# TYPE web3storage_pins_status_failed_total counter',
-      `web3storage_pins_status_failed_total ${findMetrics.pinsFailedTotal}`,
+      `web3storage_pins_status_failed_total ${findMetrics.pinsFailedTotal}`
     ].join('\n')
   )
 }

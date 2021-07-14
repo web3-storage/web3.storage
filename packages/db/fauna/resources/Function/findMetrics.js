@@ -27,49 +27,49 @@ const body = Query(
     [],
     {
       data: {
-        usersTotal: Count(Documents(Collection("User"))),
-        uploadsTotal: Count(Documents(Collection("Upload"))),
-        contentTotal: Count(Documents(Collection("Content"))),
-        contentTotalBytes: Sum(Match(Index("content_sizes"))),
+        usersTotal: Count(Documents(Collection('User'))),
+        uploadsTotal: Count(Documents(Collection('Upload'))),
+        contentTotal: Count(Documents(Collection('Content'))),
+        contentTotalBytes: Sum(Match(Index('content_sizes'))),
         dealsActiveTotal: Count(Match(
-          Index("deals_by_status"),
+          Index('deals_by_status'),
           'Active'
         )),
         dealsQueuedTotal: Count(Match(
-          Index("deals_by_status"),
+          Index('deals_by_status'),
           'Queued'
         )),
-        pinsTotal: Count(Documents(Collection("Pin"))),
+        pinsTotal: Count(Documents(Collection('Pin'))),
         pinsTotalBytes: Sum(
           Select('data', Map(
             Paginate(
               Match(
-                Index("pins_content_by_status"),
+                Index('pins_content_by_status'),
                 'Pinned'
               )
             ),
             Lambda(
-              "pin",
-              Select(["data", "dagSize"], Get(Var("pin")))
+              'pin',
+              Select(['data', 'dagSize'], Get(Var('pin')))
             )
           ))
         ),
         pinsQueuedTotal: Count(Match(
-          Index("pins_by_status"),
+          Index('pins_by_status'),
           'PinQueued'
         )),
         pinsPinningTotal: Count(Match(
-          Index("pins_by_status"),
+          Index('pins_by_status'),
           'Pinning'
         )),
         pinsPinnedTotal: Count(Match(
-          Index("pins_by_status"),
+          Index('pins_by_status'),
           'Pinned'
         )),
         pinsFailedTotal: Count(Match(
-          Index("pins_by_status"),
+          Index('pins_by_status'),
           'PinError'
-        )),
+        ))
       }
     }
   )
