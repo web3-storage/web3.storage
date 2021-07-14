@@ -1,5 +1,5 @@
 import { gql } from '@web3-storage/db'
-import { JSONResponse } from './utils/json-response.js'
+import { JSONResponse, notFound } from './utils/json-response.js'
 
 const DEAL_STATUS = new Set([
   'Queued',
@@ -60,6 +60,10 @@ export async function statusGet (request, env) {
 
   const { findContentByCid: raw } = result.data
   const { dagSize } = raw
+
+  if (raw.pins.data.length === 0 && raw.batchEntries.data.length === 0) {
+    return notFound()
+  }
 
   const pins = raw.pins.data
     .filter(({ status }) => PIN_STATUS.has(status))

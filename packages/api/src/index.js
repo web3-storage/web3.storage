@@ -5,7 +5,7 @@ import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, withAuth } from './user.js'
-import { JSONResponse } from './utils/json-response.js'
+import { JSONResponse, notFound } from './utils/json-response.js'
 
 const router = Router()
 
@@ -43,7 +43,7 @@ router.get('/', () => {
   )
 })
 
-router.all('*', () => new JSONResponse({ message: 'Not Found' }, { status: 404 }))
+router.all('*', () => notFound())
 
 function serverError (error) {
   console.error(error.stack)
