@@ -1,0 +1,34 @@
+{
+  "data": {
+    "findContentByCid": {
+      "dagSize": 101,
+      "batchEntries": {
+        "data": [{
+          "dataModelSelector": "Links/0/Links",
+          "batch": {
+            "cid": "bafy",
+            "pieceCid": "baga",
+            "deals": {
+              "data" : [ {
+                "miner": "f99",
+                "chainDealId": 12345,
+                "activation": "<iso timestamp>",
+                "status": "Active"
+              }]
+            }
+          }
+        }]
+      },
+      "pins": {
+        "data": [{
+          "status": "Pinned",
+          "location": {
+            "peerId": "12D3KooWR1Js",
+            "peerName": "who?",
+            "region": "where?"
+          }
+        }]
+      }
+    }
+  }
+}
