@@ -1,12 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================================================================================
+   Fonts
+   ================================================================================ */
+
+@font-face {
+    font-family: "Space Grotesk";
+    font-weight: 400;
+    font-style: normal;
+    src: url("/fonts/space-grotesk/space-grotesk-regular.woff2") format("woff2");
+    src: url("/fonts/space-grotesk/space-grotesk-regular.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Space Grotesk";
+    font-weight: 500;
+    font-style: normal;
+    src: url("/fonts/space-grotesk/space-grotesk-medium.woff2") format("woff2");
+    src: url("/fonts/space-grotesk/space-grotesk-medium.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Helvetica";
+    font-weight: 400;
+    font-style: normal;
+    src: url("/fonts/helvetica/helvetica.woff2") format("woff2");
+    src: url("/fonts/helvetica/helvetica.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Helvetica";
+    font-weight: 700;
+    font-style: normal;
+    src: url("/fonts/helvetica/helvetica-bold.woff2") format("woff2");
+    src: url("/fonts/helvetica/helvetica-bold.woff") format("woff");
+}
+
+/* ================================================================================
+   Typography
+   ================================================================================ */
+
+.space-grotesk {
+  font-family: "Space Grotesk", sans-serif;
+  letter-spacing: normal;
+}
+
+.typography-hero-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 3.5rem;
+  letter-spacing: normal;
+}
+
+.typography-hero-subtitle {
+  font-family: "Helvetica";
+  font-size: 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+.typography-section-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 2.25rem;
+  letter-spacing: normal;
+}
+
+.typography-body-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.375rem;
+  letter-spacing: normal;
+}
+
+.typography-cta {
+  font-family: "Helvetica";
+  font-weight: 700;
+  font-size: 0.9375rem; /* 15px */
+  letter-spacing: 0.02em;
+}
+
+h1 {
+  @apply typography-hero-title;
+}
+
+h2 {
+  @apply typography-section-title;
+}
+
+h3 {
+  @apply typography-body-title;
+  @apply font-medium;
+}
+
+body {
+  font-family: "Helvetica";
+  font-size: 1.125rem;
+  line-height: 1.875em;
+  letter-spacing: 0.02em;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
 .loading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  .table-responsive {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.table-responsive {
     display: block;
     width: 100%;
     overflow-x: auto;
-  }
-  
+}

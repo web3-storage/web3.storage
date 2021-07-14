@@ -1,13 +1,13 @@
 import Link from 'next/link'
 export default function Footer() {
   return (
-    <footer className="bg-black db db-m flex-ns items-center justify-between f7 white pv3 ph5">
+    <footer className="flex items-center justify-between py-8 max-w-screen-2xl mx-auto mt-auto w-full">
       <div>
-        <span className="db db-m dib-ns mv3">
+        <span className="text-lg">
           Made with ❤️ by{' '}
           <a
             href="https://protocol.ai/"
-            className="white underline-hover no-underline"
+            className="font-bold no-underline hover:underline"
           >
             Protocol Labs
           </a>
@@ -17,36 +17,26 @@ export default function Footer() {
         <span className="db db-m dib-ns mv3">
           <a
             href="https://status.web3.storage/"
-            className="white no-underline underline-hover v-mid"
+            className="font-bold no-underline hover:underline mr-6"
             target="_blank"
             rel="noreferrer"
           >
             Status
           </a>
         </span>
-        <Dot />
-        <span className="db db-m dib-ns mv3">
-          <Link href="/terms">
-            <a className="white no-underline underline-hover v-mid">
-              Terms of Service
-            </a>
-          </Link>
-        </span>
-        <Dot />
-        <span className="db db-m dib-ns mv3">
-          Need Help?{' '}
-          <a
-            href="https://github.com/web3-storage/web3.storage/issues/new"
-            className="white underline-hover no-underline"
-          >
-            Open an Issue
+        <Link href="/terms">
+          <a className="font-bold no-underline hover:underline mr-8">
+            Terms of Service
           </a>
-        </span>
+        </Link>
+        <span>Need Help?{' '}</span>
+        <a
+          href="https://github.com/web3-storage/web3.storage/issues/new"
+          className="font-bold no-underline hover:underline"
+        >
+          Open an Issue
+        </a>
       </div>
     </footer>
   )
-}
-
-function Dot() {
-  return <span className="mh2 b dn dn-m dib-ns mv3">•</span>
 }

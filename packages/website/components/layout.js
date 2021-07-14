@@ -22,6 +22,7 @@ export default function Layout({
   title = 'Web3 Storage - The simple file storage service for IPFS & Filecoin.',
   description = 'Web3 Storage',
   navBgColor = 'white',
+  data = null,
 }) {
   const { user, status } = useUser({
     redirectTo,
@@ -31,7 +32,7 @@ export default function Layout({
   const shouldWaitForUser = needsUser && status === 'loading'
 
   return (
-    <div className="sans-serif">
+    <div>
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
@@ -53,12 +54,12 @@ export default function Layout({
       ) : callback ? (
         <>
           <Loading />
-          {children({ user })}
+          {children({ user, data })}
         </>
       ) : (
         <>
           <Navbar bgColor={navBgColor} user={user} />
-          {children({ user })}
+          {children({ user, data })}
           <Footer />
         </>
       )}
