@@ -50,6 +50,10 @@ module.exports = ({ body }) => {
     return gqlOkResponse({ deleteUserUpload: { _id: 'test-delete-user-upload' } })
   }
 
+  if (body.query.includes('findContentByCid')) {
+    return gqlOkResponse(require('../../fixtures/find-content-by-cid.json'))
+  }
+
   return gqlResponse(400, {
     errors: [{ message: `unexpected query: ${body.query}` }]
   })
