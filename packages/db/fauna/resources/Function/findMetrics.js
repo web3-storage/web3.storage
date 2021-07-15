@@ -31,14 +31,6 @@ const body = Query(
         uploadsTotal: Count(Documents(Collection('Upload'))),
         contentTotal: Count(Documents(Collection('Content'))),
         contentTotalBytes: Sum(Match(Index('content_sizes'))),
-        dealsActiveTotal: Count(Match(
-          Index('deals_by_status'),
-          'Active'
-        )),
-        dealsQueuedTotal: Count(Match(
-          Index('deals_by_status'),
-          'Queued'
-        )),
         pinsTotal: Count(Documents(Collection('Pin'))),
         pinsTotalBytes: Sum(
           Select('data', Map(
@@ -46,7 +38,10 @@ const body = Query(
               Match(
                 Index('pins_content_by_status'),
                 'Pinned'
-              )
+              ),
+              {
+                size: 100000
+              }
             ),
             Lambda(
               'pin',

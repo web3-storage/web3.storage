@@ -331,8 +331,6 @@ type Metrics {
   uploadsTotal: Int!
   contentTotal: Int!
   contentTotalBytes: Int!
-  dealsActiveTotal: Int!
-  dealsQueuedTotal: Int!
   pinsTotal: Int!
   pinsTotalBytes: Int!
   pinsQueuedTotal: Int!
