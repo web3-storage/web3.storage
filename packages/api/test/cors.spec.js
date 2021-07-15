@@ -6,7 +6,7 @@ const cid = 'bafkqaaa'
 
 describe('CORS', () => {
   it('sets CORS headers', async () => {
-    const res = await fetch(new URL(`car/${cid}`, endpoint).toString())
+    const res = await fetch(new URL(`car/${cid}`, endpoint))
     assert(res.ok)
     assert.strictEqual(res.headers.get('Access-Control-Allow-Origin'), '*')
   })
