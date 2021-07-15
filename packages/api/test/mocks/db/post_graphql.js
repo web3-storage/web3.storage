@@ -52,15 +52,15 @@ module.exports = ({ body }) => {
 
   if (body.query.includes('findContentByCid')) {
     if (body.variables.cid === 'unknown') {
-      return gqlOkResponse(require('../../fixtures/find-content-by-cid-unknown.json'))
+      return gqlResponse(200, require('../../fixtures/find-content-by-cid-unknown.json'))
     }
     if (body.variables.cid === 'nobatch') {
-      return gqlOkResponse(require('../../fixtures/find-content-by-cid-no-batch.json'))
+      return gqlResponse(200, require('../../fixtures/find-content-by-cid-no-batch.json'))
     }
     if (body.variables.cid === 'nodeal') {
-      return gqlOkResponse(require('../../fixtures/find-content-by-cid-no-deal.json'))
+      return gqlResponse(200, require('../../fixtures/find-content-by-cid-no-deal.json'))
     }
-    return gqlOkResponse(require('../../fixtures/find-content-by-cid.json'))
+    return gqlResponse(200, require('../../fixtures/find-content-by-cid.json'))
   }
 
   return gqlResponse(400, {

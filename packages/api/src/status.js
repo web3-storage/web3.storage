@@ -26,6 +26,7 @@ export async function statusGet (request, env) {
   const result = await env.db.query(
     gql`query FindContentByCid($cid: String!) {
       findContentByCid(cid: $cid) {
+        created
         dagSize
         batchEntries {
           data {
@@ -37,8 +38,10 @@ export async function statusGet (request, env) {
                 data {
                   miner
                   chainDealId
-                  activation
                   status
+                  activation
+                  created
+                  updated
                 }
               }
             }
@@ -47,6 +50,7 @@ export async function statusGet (request, env) {
         pins {
           data {
             status
+            updated
             location {
               peerId
               peerName
@@ -58,16 +62,15 @@ export async function statusGet (request, env) {
     }
   `, { cid })
 
-  const { findContentByCid: raw } = result.data
-  const { dagSize } = raw
+  const { findContentByCid: raw } = result
 
-  if (raw.pins.data.length === 0 && raw.batchEntries.data.length === 0) {
+  if (!raw) {
     return notFound()
   }
 
   const pins = raw.pins.data
     .filter(({ status }) => PIN_STATUS.has(status))
-    .map(({ status, location }) => ({ status, ...location }))
+    .map(({ status, updated, location }) => ({ status, updated, ...location }))
 
   const deals = raw.batchEntries.data.map(({ dataModelSelector, batch }) => {
     const { pieceCid, cid: dataCid, deals } = batch
@@ -81,19 +84,24 @@ export async function statusGet (request, env) {
     }
     return deals.data
       .filter(({ status }) => DEAL_STATUS.has(status))
-      .map(({ chainDealId: dealId, miner, activation, status }) => ({
+      .map(({ chainDealId: dealId, miner, status, activation, created, updated }) => ({
         dealId,
         miner,
         status,
-        activation,
         pieceCid,
         dataCid,
-        dataModelSelector
+        dataModelSelector,
+        activation,
+        created,
+        updated
       }))
   }).reduce((a, b) => a.concat(b), []) // flatten array of arrays.
 
+  const { dagSize, created } = raw
+
   const status = {
     cid,
+    created,
     dagSize,
     pins,
     deals

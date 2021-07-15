@@ -1,13 +1,5 @@
 {
   "data": {
-    "findContentByCid": {
-      "dagSize": null,
-      "batchEntries": {
-        "data": []
-      },
-      "pins": {
-        "data": []
-      }
-    }
+    "findContentByCid": null
   }
 }

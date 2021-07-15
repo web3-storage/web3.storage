@@ -1,6 +1,7 @@
 {
   "data": {
     "findContentByCid": {
+      "created": "2021-07-14T19:27:14.934572Z",
       "dagSize": 101,
       "batchEntries": {
         "data": [{
@@ -12,8 +13,10 @@
               "data" : [ {
                 "miner": "f99",
                 "chainDealId": 12345,
+                "status": "Active",
                 "activation": "<iso timestamp>",
-                "status": "Active"
+                "created": "2021-07-14T19:27:14.934572Z",
+                "updated": "2021-07-14T19:27:14.934572Z"
               }]
             }
           }
@@ -22,6 +25,7 @@
       "pins": {
         "data": [{
           "status": "Pinned",
+          "updated": "2021-07-14T19:27:14.934572Z",
           "location": {
             "peerId": "12D3KooWR1Js",
             "peerName": "who?",
