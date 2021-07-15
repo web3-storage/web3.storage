@@ -130,7 +130,7 @@ class Web3Storage {
 
           const res = await pRetry(
             async () => {
-              const request = await fetch(url.toString(), {
+              const request = await fetch(url, {
                 method: 'POST',
                 headers,
                 body: carFile
@@ -161,12 +161,12 @@ class Web3Storage {
 
   /**
    * @param {Service} service
-   * @param {string} cid
+   * @param {CIDString} cid
    * @returns {Promise<Web3Response | null>}
    */
   static async get ({ endpoint, token }, cid) {
     const url = new URL(`/car/${cid}`, endpoint)
-    const res = await fetch(url.toString(), {
+    const res = await fetch(url, {
       method: 'GET',
       headers: Web3Storage.headers(token)
     })
@@ -184,13 +184,33 @@ class Web3Storage {
 
   /**
    * @param {Service} service
-   * @param {string} cid
+   * @param {CIDString} cid
    * @returns {Promise<CIDString>}
    */
   /* c8 ignore next 4 */
   static async delete ({ endpoint, token }, cid) {
     console.log('Not deleteing', cid, endpoint, token)
     throw Error('.delete not implemented yet')
+  }
+
+  /**
+   * @param {Service} service
+   * @param {CIDString} cid
+   * @returns {Promise<CIDString>}
+   */
+  static async status ({ endpoint, token }, cid) {
+    const url = new URL(`/status/${cid}`, endpoint)
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: Web3Storage.headers(token)
+    })
+    if (res.status === 404) {
+      return undefined
+    }
+    if (!res.ok) {
+      throw new Error(res.statusText)
+    }
+    return res.json()
   }
 
   // Just a sugar so you don't have to pass around endpoint and token around.
@@ -216,18 +236,26 @@ class Web3Storage {
 
   /**
    * Fetch the Content Addressed Archive by it's root CID.
-   * @param {string} cid
+   * @param {CIDString} cid
    */
   get (cid) {
     return Web3Storage.get(this, cid)
   }
 
   /**
-   * @param {string} cid
+   * @param {CIDString} cid
    */
   /* c8 ignore next 3 */
   delete (cid) {
     return Web3Storage.delete(this, cid)
+  }
+
+  /**
+   * Fetch info on Filecoin deals and IPFS pins that a given CID is replicated in.
+   * @param {CIDString} cid
+   */
+  status (cid) {
+    return Web3Storage.status(this, cid)
   }
 }
 
