@@ -47,13 +47,22 @@ export function withCorsHeaders (handler) {
    */
   return async (request, ...rest) => {
     const response = await handler(request, ...rest)
-    const origin = request.headers.get('origin')
-    if (origin) {
-      response.headers.set('Access-Control-Allow-Origin', origin)
-      response.headers.set('Vary', 'Origin')
-    } else {
-      response.headers.set('Access-Control-Allow-Origin', '*')
-    }
-    return response
+    return addCorsHeaders(request, response)
   }
+}
+
+/**
+ * @param {Request} request
+ * @param {Response} response
+ * @returns {Response}
+ */
+export function addCorsHeaders (request, response) {
+  const origin = request.headers.get('origin')
+  if (origin) {
+    response.headers.set('Access-Control-Allow-Origin', origin)
+    response.headers.set('Vary', 'Origin')
+  } else {
+    response.headers.set('Access-Control-Allow-Origin', '*')
+  }
+  return response
 }
