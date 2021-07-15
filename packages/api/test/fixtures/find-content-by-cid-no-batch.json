@@ -1,0 +1,20 @@
+{
+  "data": {
+    "findContentByCid": {
+      "dagSize": 101,
+      "batchEntries": {
+        "data": []
+      },
+      "pins": {
+        "data": [{
+          "status": "Pinned",
+          "location": {
+            "peerId": "12D3KooWR1Js",
+            "peerName": "who?",
+            "region": "where?"
+          }
+        }]
+      }
+    }
+  }
+}

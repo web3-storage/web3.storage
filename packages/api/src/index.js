@@ -2,9 +2,10 @@
 import { Router } from 'itty-router'
 import { addCorsHeaders, withCorsHeaders, corsOptions } from './cors.js'
 import { envAll } from './env.js'
+import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, withAuth } from './user.js'
-import { JSONResponse } from './utils/json-response.js'
+import { JSONResponse, notFound } from './utils/json-response.js'
 
 const router = Router()
 
@@ -14,6 +15,7 @@ router.get('/car/:cid', withCorsHeaders(carGet))
 router.head('/car/:cid', withCorsHeaders(carHead))
 router.put('/car/:cid', withCorsHeaders(withAuth(carPut)))
 router.post('/car', withCorsHeaders(withAuth(carPost)))
+router.get('/status/:cid', withCorsHeaders(statusGet))
 router.post('/user/login', withCorsHeaders(userLoginPost))
 router.get('/user/tokens', withCorsHeaders(withAuth(userTokensGet)))
 router.post('/user/tokens', withCorsHeaders(withAuth(userTokensPost)))
@@ -42,7 +44,7 @@ router.get('/', () => {
 })
 
 router.get('/error', () => { throw new Error('A deliberate error!') })
-router.all('*', withCorsHeaders(() => new JSONResponse({ message: 'Not Found' }, { status: 404 })))
+router.all('*', withCorsHeaders(() => notFound()))
 
 function serverError (request, error) {
   console.error(error.stack)
