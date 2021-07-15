@@ -4,7 +4,7 @@ import { endpoint } from './scripts/constants.js'
 
 describe('GET /metrics', () => {
   it('retrieves metrics', async () => {
-    const res = await fetch(new URL('metrics/', endpoint).toString())
+    const res = await fetch(new URL('metrics/', endpoint))
     assert(res.ok)
 
     const text = await res.text()
