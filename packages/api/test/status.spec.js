@@ -6,7 +6,6 @@ describe('GET /status/:cid', () => {
   it('get pin and deal status', async () => {
     const cid = 'testcid'
     const res = await fetch(new URL(`status/${cid}`, endpoint))
-    console.error(res)
     assert(res.ok, `${JSON.stringify(res)}`)
     const json = await res.json()
     assert.deepStrictEqual(json, {
