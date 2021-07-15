@@ -14,15 +14,6 @@ export class HTTPError extends Error {
   }
 
   /**
-   * @param {string} message
-   * @param {number} [status]
-   * @returns {never}
-   */
-  static throw (message, status) {
-    throw new this(message, status)
-  }
-
-  /**
    * @param {Error & {status?: number;code?: string;}} err
    * @param {import('./env').Env} env
    */
