@@ -23,7 +23,7 @@ const PIN_STATUS = new Set([
  */
 export async function statusGet (request, env) {
   const cid = request.params.cid
-  const result = await env.db.query(
+  const data = await env.db.query(
     gql`query FindContentByCid($cid: String!) {
       findContentByCid(cid: $cid) {
         created
@@ -62,7 +62,7 @@ export async function statusGet (request, env) {
     }
   `, { cid })
 
-  const { findContentByCid: raw } = result
+  const { findContentByCid: raw } = data
 
   if (!raw) {
     return notFound()
