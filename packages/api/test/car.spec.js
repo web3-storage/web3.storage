@@ -23,7 +23,7 @@ describe('POST /car', () => {
     const expectedCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
     assert.strictEqual(root.toString(), expectedCid, 'car file has correct root')
 
-    const res = await fetch(new URL('car', endpoint).toString(), {
+    const res = await fetch(new URL('car', endpoint), {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,

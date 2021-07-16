@@ -63,6 +63,10 @@ module.exports = ({ body }) => {
     return gqlResponse(200, require('../../fixtures/find-content-by-cid.json'))
   }
 
+  if (body.query.includes('findMetrics')) {
+    return gqlOkResponse(require('../../fixtures/find-metrics.json'))
+  }
+
   return gqlResponse(400, {
     errors: [{ message: `unexpected query: ${body.query}` }]
   })

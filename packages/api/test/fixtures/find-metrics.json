@@ -1,0 +1,15 @@
+{
+  "findMetrics": {
+    "usersTotal": 10,
+    "uploadsTotal": 3000,
+    "contentTotalBytes": 100000203,
+    "dealsActiveTotal": 60,
+    "dealsQueuedTotal": 1,
+    "pinsTotal": 61,
+    "pinsTotalBytes": 50000020,
+    "pinsQueuedTotal": 2,
+    "pinsPinningTotal": 3,
+    "pinsPinnedTotal": 66,
+    "pinsFailedTotal": 0
+  }
+}
