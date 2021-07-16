@@ -97,6 +97,10 @@ h3 {
   @apply font-medium;
 }
 
+html, body, #__next {
+  height: 100%;
+}
+
 body {
   font-family: "Open Sans", sans-serif;
   font-size: 1.125rem;

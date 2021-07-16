@@ -2,11 +2,12 @@ import type { ReactChildren } from 'react'
 
 export interface LayoutProps {
   callback?: boolean
-  needsUser: boolean
+  needsUser?: boolean
   redirectTo?: string
   redirectIfFound?: boolean
   title?: string
   description?: string
+  pageBgColor?: string,
   navBgColor?: string
   data?: any
 }
