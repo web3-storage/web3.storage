@@ -14,7 +14,7 @@ cli
 cli.command('token')
   .option('--api', 'URL for API to use')
   .option('--token', 'API token to use')
-  .describe('Save an API token use for all requests')
+  .describe('Save an API token to use for all requests')
   .action(token)
 
 cli.command('status <cid>')
