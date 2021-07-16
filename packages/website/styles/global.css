@@ -12,6 +12,7 @@
     font-style: normal;
     src: url("/fonts/space-grotesk/space-grotesk-regular.woff2") format("woff2");
     src: url("/fonts/space-grotesk/space-grotesk-regular.woff") format("woff");
+    font-display: swap;
 }
 
 @font-face {
@@ -20,22 +21,25 @@
     font-style: normal;
     src: url("/fonts/space-grotesk/space-grotesk-medium.woff2") format("woff2");
     src: url("/fonts/space-grotesk/space-grotesk-medium.woff") format("woff");
+    font-display: swap;
 }
 
 @font-face {
-    font-family: "Helvetica";
+    font-family: "Open Sans";
     font-weight: 400;
     font-style: normal;
-    src: url("/fonts/helvetica/helvetica.woff2") format("woff2");
-    src: url("/fonts/helvetica/helvetica.woff") format("woff");
+    src: url("/fonts/open-sans/open-sans.woff2") format("woff2");
+    src: url("/fonts/open-sans/open-sans.woff") format("woff");
+    font-display: swap;
 }
 
 @font-face {
-    font-family: "Helvetica";
-    font-weight: 700;
+    font-family: "Open Sans";
+    font-weight: 600;
     font-style: normal;
-    src: url("/fonts/helvetica/helvetica-bold.woff2") format("woff2");
-    src: url("/fonts/helvetica/helvetica-bold.woff") format("woff");
+    src: url("/fonts/open-sans/open-sans-semi-bold.woff2") format("woff2");
+    src: url("/fonts/open-sans/open-sans-semi-bold.woff") format("woff");
+    font-display: swap;
 }
 
 /* ================================================================================
@@ -49,12 +53,14 @@
 
 .typography-hero-title {
   font-family: "Space Grotesk", sans-serif;
-  font-size: 3.5rem;
+  font-size: 5rem;
   letter-spacing: normal;
+  font-weight: 500;
+  line-height: 7rem;
 }
 
 .typography-hero-subtitle {
-  font-family: "Helvetica";
+  font-family: "Open Sans", sans-serif;
   font-size: 1.5rem;
   letter-spacing: 0.02em;
 }
@@ -72,8 +78,8 @@
 }
 
 .typography-cta {
-  font-family: "Helvetica";
-  font-weight: 700;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
   font-size: 0.9375rem; /* 15px */
   letter-spacing: 0.02em;
 }
@@ -92,7 +98,7 @@ h3 {
 }
 
 body {
-  font-family: "Helvetica";
+  font-family: "Open Sans", sans-serif;
   font-size: 1.125rem;
   line-height: 1.875em;
   letter-spacing: 0.02em;
