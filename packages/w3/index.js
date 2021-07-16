@@ -1,4 +1,4 @@
-import { globSource } from './utils/glob-source.js'
+import { globToFiles } from 'glob-to-files'
 import { writeFiles } from 'ipfs-car/unpack/fs'
 import { Web3Storage } from 'web3.storage'
 import enquirer from 'enquirer'
@@ -105,7 +105,7 @@ export async function put (path, opts) {
   let totalSize = 0
   let totalSent = 0
   for (const p of paths) {
-    for await (const file of globSource(p)) {
+    for await (const file of globToFiles(p)) {
       totalSize += file.size
       files.push(file)
       spinner.text = `Packing ${files.length} file${files.length === 1 ? '' : 's'} (${filesize(totalSize)})`
