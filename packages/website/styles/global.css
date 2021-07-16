@@ -97,7 +97,7 @@ h3 {
   @apply font-medium;
 }
 
-html, body, #__next {
+html, body {
   height: 100%;
 }
 

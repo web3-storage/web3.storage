@@ -34,7 +34,7 @@ export default function Layout({
   const shouldWaitForUser = needsUser && status === 'loading'
 
   return (
-    <div className={clsx(pageBgColor, 'h-full')}>
+    <div className={clsx(pageBgColor, 'min-h-screen')}>
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
