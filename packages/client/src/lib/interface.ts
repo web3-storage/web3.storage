@@ -44,7 +44,7 @@ export interface API {
   /**
    * Get info on Filecoin deals and IPFS pins that a CID is replicated in.
    */
-  status(service: Service, cid: CIDString): Promise<CIDString>
+  status(service: Service, cid: CIDString): Promise<Status | undefined>
 }
 
 export interface Filelike {
@@ -66,4 +66,31 @@ export interface Web3File extends File {
 export interface Web3Response extends Response {
   unixFsIterator: () => AsyncIterable<UnixFSEntry>
   files: () => Promise<Array<Web3File>>
+}
+
+export interface Pin {
+  peerId: string,
+  peerName: string,
+  region: string,
+  status: 'Pinned' | 'Pinning' | 'PinQueued'
+}
+
+export interface Deal {
+  dealId: number,
+  miner: string,
+  status: 'Queued' | 'Published' | 'Active'
+  pieceCid: string,
+  dealCid: string,
+  dataModelSelector: string,
+  activation: string,
+  created: string
+  updated: string
+}
+
+export interface Status {
+  cid: string
+  dagSize: number,
+  created: string,
+  pins: Array<Pin>
+  deals: Array<Deal>
 }

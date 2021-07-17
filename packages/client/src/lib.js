@@ -30,10 +30,11 @@ const MAX_CONCURRENT_UPLOADS = 3
 const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 
 /** @typedef { import('./lib/interface.js').API } API */
+/** @typedef { import('./lib/interface.js').Status} Status */
 /** @typedef { import('./lib/interface.js').Service } Service */
+/** @typedef { import('./lib/interface.js').Web3File} Web3File */
 /** @typedef { import('./lib/interface.js').Filelike } Filelike */
 /** @typedef { import('./lib/interface.js').CIDString} CIDString */
-/** @typedef { import('./lib/interface.js').Web3File} Web3File */
 /** @typedef { import('./lib/interface.js').PutOptions} PutOptions */
 /** @typedef { import('./lib/interface.js').UnixFSEntry} UnixFSEntry */
 /** @typedef { import('./lib/interface.js').Web3Response} Web3Response */
@@ -130,7 +131,7 @@ class Web3Storage {
 
           const res = await pRetry(
             async () => {
-              const request = await fetch(url, {
+              const request = await fetch(url.toString(), {
                 method: 'POST',
                 headers,
                 body: carFile
@@ -166,7 +167,7 @@ class Web3Storage {
    */
   static async get ({ endpoint, token }, cid) {
     const url = new URL(`/car/${cid}`, endpoint)
-    const res = await fetch(url, {
+    const res = await fetch(url.toString(), {
       method: 'GET',
       headers: Web3Storage.headers(token)
     })
@@ -196,11 +197,11 @@ class Web3Storage {
   /**
    * @param {Service} service
    * @param {CIDString} cid
-   * @returns {Promise<CIDString>}
+   * @returns {Promise<Status | undefined>}
    */
   static async status ({ endpoint, token }, cid) {
     const url = new URL(`/status/${cid}`, endpoint)
-    const res = await fetch(url, {
+    const res = await fetch(url.toString(), {
       method: 'GET',
       headers: Web3Storage.headers(token)
     })

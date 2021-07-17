@@ -32,7 +32,7 @@
   "dependencies": {
     "@ipld/car": "^3.1.4",
     "@web-std/blob": "^2.1.0",
-    "@web-std/fetch": "^2.0.1",
+    "@web-std/fetch": "^2.0.2",
     "@web-std/file": "^1.1.0",
     "browser-readablestream-to-it": "^1.0.2",
     "carbites": "^1.0.6",
