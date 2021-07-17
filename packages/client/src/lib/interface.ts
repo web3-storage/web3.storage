@@ -72,7 +72,8 @@ export interface Pin {
   peerId: string,
   peerName: string,
   region: string,
-  status: 'Pinned' | 'Pinning' | 'PinQueued'
+  status: 'Pinned' | 'Pinning' | 'PinQueued',
+  updated: string
 }
 
 export interface Deal {
@@ -80,7 +81,7 @@ export interface Deal {
   miner: string,
   status: 'Queued' | 'Published' | 'Active'
   pieceCid: string,
-  dealCid: string,
+  dataCid: string,
   dataModelSelector: string,
   activation: string,
   created: string
@@ -88,7 +89,7 @@ export interface Deal {
 }
 
 export interface Status {
-  cid: string
+  cid: CIDString
   dagSize: number,
   created: string,
   pins: Array<Pin>
