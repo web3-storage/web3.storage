@@ -16,7 +16,7 @@ export function getStaticProps() {
       title: 'Login - Web3 Storage',
       redirectTo: '/files',
       redirectIfFound: true,
-      pageBgColor: 'bg-w3storage-red-dark',
+      pageBgColor: 'bg-w3storage-red',
     },
   }
 }
