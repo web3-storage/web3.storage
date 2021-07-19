@@ -18,6 +18,9 @@ import pRetry from 'p-retry'
 import { pack } from 'ipfs-car/pack'
 import { unpackStream } from 'ipfs-car/unpack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
+// import { filesFromPath, getFilesFromPath } from 'files-from-path'
+const filesFromPath = () => {}
+const getFilesFromPath = () => {}
 import {
   fetch,
   File,
@@ -324,7 +327,7 @@ function toWeb3Response (res) {
   return response
 }
 
-export { Web3Storage, File, Blob }
+export { Web3Storage, File, Blob, filesFromPath, getFilesFromPath }
 
 /**
  * Just to verify API compatibility.

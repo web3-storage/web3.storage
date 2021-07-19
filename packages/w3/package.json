@@ -24,8 +24,7 @@
     "enquirer": "^2.3.6",
     "err-code": "^3.0.1",
     "ipfs-car": "^0.5.1",
-    "sade": "^1.7.4",
-    "files-from-path": "^0.1.0"
+    "sade": "^1.7.4"
   },
   "main": "index.js"
 }
