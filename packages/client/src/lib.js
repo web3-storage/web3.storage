@@ -18,9 +18,7 @@ import pRetry from 'p-retry'
 import { pack } from 'ipfs-car/pack'
 import { unpackStream } from 'ipfs-car/unpack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
-// import { filesFromPath, getFilesFromPath } from 'files-from-path'
-const filesFromPath = () => {}
-const getFilesFromPath = () => {}
+import { filesFromPath, getFilesFromPath } from 'files-from-path'
 import {
   fetch,
   File,
