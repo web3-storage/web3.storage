@@ -130,7 +130,6 @@ export async function carPost (request, env, ctx) {
       authToken: authToken?._id,
       cid,
       name,
-      // dagSize: undefined // TODO: should we default to chunk car behavior?
       pins
     }
   })
@@ -180,7 +179,7 @@ async function getDagSize (car) {
   const decoders = [pb, raw, cbor]
   const bytes = new Uint8Array(await car.arrayBuffer())
   const reader = await CarReader.fromBytes(bytes)
-  const rootCid = (await reader.getRoots())[0]
+  const [rootCid] = await reader.getRoots()
 
   const getBlock = async cid => {
     const rawBlock = await reader.get(cid)

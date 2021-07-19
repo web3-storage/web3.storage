@@ -1,6 +1,6 @@
 import debug from 'debug'
 import { gql } from '@web3-storage/db'
-import { toPinStatusEnum } from '../../../api/src/utils/pin.js'
+import { toPinStatusEnum } from 'web3.storage-api/src/utils/pin.js'
 
 const log = debug('pins:updatePinStatuses')
 
