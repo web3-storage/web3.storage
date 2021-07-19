@@ -17,7 +17,7 @@ export interface PublicService {
 }
 
 /**
- * CID in string representation
+ * CID in string representation.
  */
 export type CIDString = Tagged<string, CID>
 
@@ -48,18 +48,43 @@ export interface API {
 }
 
 export interface Filelike {
-  name: string,
+  /**
+   * Name of the file. May include path information.
+   */
+  name: string
+  /**
+   * Returns a ReadableStream which upon reading returns the data contained
+   * within the File.
+   */
   stream: () => ReadableStream
 }
 
 export type PutOptions = {
-  onRootCidReady?: (cid: CIDString) => void,
-  onStoredChunk?: (size: number) => void,
+  /**
+   * Callback called after the data has been assembled into a DAG, but before
+   * any upload requests begin. It is passed the CID of the root node of the 
+   * graph.
+   */
+  onRootCidReady?: (cid: CIDString) => void
+  /**
+   * Callback called after each chunk of data has been uploaded. It is passed
+   * the chunk size in bytes.
+   */
+  onStoredChunk?: (size: number) => void
+  /**
+   * Maximum times to retry a failed upload.
+   */
   maxRetries?: number,
+  /**
+   * Human readable name for this upload, for use in file listings.
+   */
   name?: string
 }
 
 export interface Web3File extends File {
+  /**
+   * Content Identifier for the file data.
+   */
   cid: CIDString,
 }
 
@@ -69,29 +94,86 @@ export interface Web3Response extends Response {
 }
 
 export interface Pin {
-  peerId: string,
-  peerName: string,
-  region: string,
+  /**
+   * Libp2p peer ID of the node pinning the data.
+   */
+  peerId: string
+  /**
+   * Human readable name for the peer pinning the data.
+   */
+  peerName: string
+  /**
+   * Approximate geographical region of the node pinning the data.
+   */
+  region: string
+  /**
+   * Pinning status on this peer.
+   */
   status: 'Pinned' | 'Pinning' | 'PinQueued',
+  /**
+   * Updated date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+   */
   updated: string
 }
 
 export interface Deal {
-  dealId: number,
-  miner: string,
+  /**
+   * On-chain ID of the deal.
+   */
+  dealId: number
+  /**
+   * Address of the miner storing this data.
+   */
+  miner: string
+  /**
+   * Current deal status.
+   */
   status: 'Queued' | 'Published' | 'Active'
-  pieceCid: string,
-  dataCid: string,
-  dataModelSelector: string,
-  activation: string,
+  /**
+   * Filecoin [Piece CID](https://spec.filecoin.io/systems/filecoin_files/piece/) of the data in the deal.
+   */
+  pieceCid: string
+  /**
+   * CID of the data aggregated in this deal.
+   */
+  dataCid: string
+  /**
+   * Selector for extracting stored data from the aggregated data root.
+   */
+  dataModelSelector: string
+  /**
+   * Date when the deal will become active in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+   */
+  activation: string
+  /**
+   * Creation date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+   */
   created: string
+  /**
+   * Updated date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+   */
   updated: string
 }
 
 export interface Status {
+  /**
+   * Content Identifier for the data.
+   */
   cid: CIDString
-  dagSize: number,
-  created: string,
+  /**
+   * Total size of the DAG in bytes.
+   */
+  dagSize: number
+  /**
+   * Creation date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+   */
+  created: string
+  /**
+   * IPFS peers this data is being pinned on.
+   */
   pins: Array<Pin>
+  /**
+   * Filecoin deals this data appears in.
+   */
   deals: Array<Deal>
 }
