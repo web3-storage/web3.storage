@@ -149,7 +149,6 @@ export async function carPost (request, env, ctx) {
     })())
   }
 
-  // TODO: Improve response type with pin information
   return new JSONResponse({ cid })
 }
 
