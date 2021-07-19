@@ -36,7 +36,14 @@ function getClient ({
  * @param {string} [opts.api]
  * @param {string} [opts.token]
  */
-export async function token ({ token, api = API }) {
+export async function token ({ delete: del, token, api = API }) {
+  if (del) {
+    config.delete('token')
+    config.delete('api')
+    console.log('⁂ API token deleted')
+    return
+  }
+
   const url = new URL(api)
   if (!token) {
     const response = await enquirer.prompt({
