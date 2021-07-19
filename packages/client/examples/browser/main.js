@@ -6,11 +6,11 @@ const token =
 
 const storage = new Web3Storage({ endpoint, token })
 
-document.getElementById("filepicker").addEventListener("change", async function (event) {
+document.getElementById('filepicker').addEventListener('change', async function (event) {
   console.log('Using endpoint:', endpoint)
 
-  let cidP = document.getElementById("cid")
-  let files = event.target.files
+  const cidP = document.getElementById('cid')
+  const files = event.target.files
 
   const cid = await storage.put(files)
 
