@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
+import { useDropzone } from 'react-dropzone'
 import filesize from 'filesize'
 import Button from '../components/button.js'
 import Loading from '../components/loading'
@@ -46,6 +47,12 @@ export default function Files({ user }) {
   /** @type {any[]} */
   const uploads = data || []
 
+  const onDrop = useCallback(acceptedFiles => {
+    // Do something with the files
+    console.log(acceptedFiles)
+  }, [])
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
   /**
    * @param {import('react').ChangeEvent<HTMLFormElement>} e
    */
@@ -80,7 +87,15 @@ export default function Files({ user }) {
   const hasZeroUploads = uploads.length === 0 && befores.length === 1
 
   return (
-    <main className="bg-nsyellow">
+    <main className="bg-nsyellow" {...getRootProps()}>
+      <input {...getInputProps()} />
+      { !isDragActive && (
+        <div className='absolute top-0 left-0 right-0 bottom-0 bg-gray-800 bg-opacity-40 flex justify-center items-center'>
+          <div className='bg-white p-4 border rounded'>
+            <div className='bg-blue-100 bg-opacity-80 p-4 border-2 border-gray-300 border-dashed'>Drag your files here to start uploading.</div>
+          </div>
+        </div>
+      )}
       <div className="mw9 center pv3 ph3 ph5-ns min-vh-100">
         <When condition={status === 'loading'}>
           <Loading />
