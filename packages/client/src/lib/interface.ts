@@ -74,7 +74,7 @@ export type PutOptions = {
   /**
    * Maximum times to retry a failed upload.
    */
-  maxRetries?: number,
+  maxRetries?: number
   /**
    * Human readable name for this upload, for use in file listings.
    */
@@ -85,7 +85,7 @@ export interface Web3File extends File {
   /**
    * Content Identifier for the file data.
    */
-  cid: CIDString,
+  cid: CIDString
 }
 
 export interface Web3Response extends Response {
@@ -109,7 +109,7 @@ export interface Pin {
   /**
    * Pinning status on this peer.
    */
-  status: 'Pinned' | 'Pinning' | 'PinQueued',
+  status: 'Pinned' | 'Pinning' | 'PinQueued'
   /**
    * Updated date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
    */
