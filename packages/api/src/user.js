@@ -254,7 +254,6 @@ export async function userUploadsGet (request, env) {
     query FindUploadsByUser($where: FindUploadsByUserInput!, $size: Int!) {
       findUploadsByUser(where: $where, _size: $size) {
         data {
-          _id
           name
           content {
             cid
@@ -266,7 +265,13 @@ export async function userUploadsGet (request, env) {
     }
   `, { where: { createdBefore: before.toISOString(), user: request.auth.user._id }, size })
 
-  return new JSONResponse(res.findUploadsByUser.data)
+  const { data: raw } = res.findUploadsByUser
+  const uploads = raw.map(({ name, content, created }) => ({
+    name,
+    ...content,
+    created
+  }))
+  return new JSONResponse(uploads)
 }
 
 /**

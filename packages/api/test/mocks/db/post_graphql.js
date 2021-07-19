@@ -67,6 +67,10 @@ module.exports = ({ body }) => {
     return gqlOkResponse(require('../../fixtures/find-metrics.json'))
   }
 
+  if (body.query.includes('findUploadsByUser')) {
+    return gqlResponse(200, require('../../fixtures/get-user-uploads/find-uploads-by-user.json'))
+  }
+
   return gqlResponse(400, {
     errors: [{ message: `unexpected query: ${body.query}` }]
   })
