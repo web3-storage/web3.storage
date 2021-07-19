@@ -12,7 +12,7 @@ function getTestJWT (sub = 'test', name = 'test') {
 describe('GET /user/tokens', () => {
   it('retrieves user tokens', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('user/tokens', endpoint).toString(), {
+    const res = await fetch(new URL('user/tokens', endpoint), {
       headers: { Authorization: `Bearer ${token}` }
     })
     assert(res.ok)
@@ -30,7 +30,7 @@ describe('GET /user/tokens', () => {
 describe('POST /user/tokens', () => {
   it('creates a new token', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('user/tokens', endpoint).toString(), {
+    const res = await fetch(new URL('user/tokens', endpoint), {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
       body: JSON.stringify({ name: 'test' })
@@ -43,7 +43,7 @@ describe('POST /user/tokens', () => {
 
   it('requires valid name', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('user/tokens', endpoint).toString(), {
+    const res = await fetch(new URL('user/tokens', endpoint), {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
       body: JSON.stringify({ name: null })
@@ -57,7 +57,7 @@ describe('POST /user/tokens', () => {
 describe('DELETE /user/tokens/:id', () => {
   it('removes a token', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('user/tokens/xyz', endpoint).toString(), {
+    const res = await fetch(new URL('user/tokens/xyz', endpoint), {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -67,10 +67,10 @@ describe('DELETE /user/tokens/:id', () => {
   })
 })
 
-describe('DELETE /user/uploads/:id', () => {
+describe('DELETE /user/uploads/:cid', () => {
   it('removes an upload', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('user/uploads/xyz', endpoint).toString(), {
+    const res = await fetch(new URL('user/uploads/bafybeibq5kfbnbvjgjg6bop4anhhaqopkc7t6mp2v3er3fkcv6ezhgvavg', endpoint), {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
     })

@@ -1,15 +1,22 @@
 import { useState } from 'react'
 import Router from 'next/router'
+import { useQueryClient } from 'react-query'
 import { loginEmail, loginSocial } from '../lib/magic.js'
 import Button from '../components/button.js'
-import { useQueryClient } from 'react-query'
+import GithubIcon from '../icons/github.js'
 
+/**
+ * Static Props
+ *
+ * @returns {{ props: import('../components/types.js').LayoutProps}}
+ */
 export function getStaticProps() {
   return {
     props: {
       title: 'Login - Web3 Storage',
       redirectTo: '/files',
       redirectIfFound: true,
+      pageBgColor: 'bg-w3storage-red',
     },
   }
 }
@@ -32,7 +39,7 @@ export default function Login() {
     try {
       await loginEmail(e.currentTarget.email.value)
       await queryClient.invalidateQueries('magic-user')
-      Router.push('/files')
+      Router.push('/profile')
     } catch (error) {
       setDisabled(false)
       console.error('An unexpected error happened occurred:', error)
@@ -40,36 +47,36 @@ export default function Login() {
     }
   }
   return (
-    <main className="bg-nsorange">
-      <div className="mw9 center pv3 ph5 min-vh-100">
-        <form onSubmit={onSubmit} className="tc">
-          <label className="f5 db mb2">
-            <h2>Log in</h2>
+    <main>
+      <div className="p-4 sm:px-16 mt-4 sm:mt-32 mx-auto max-w-screen-2xl text-w3storage-purple">
+        <form onSubmit={onSubmit} className="text-center w-100 sm:w-80 mx-auto">
+          <label>
+            <h3 className="mb-6">Log in</h3>
           </label>
           <input
             type="email"
             name="email"
             required
             placeholder="Enter your email"
-            className="input-reset ba b--black pa2 mb2 w5 center db"
+            className="w-full border border-black px-4 py-3 placeholder-black"
           />
 
-          <Button type="submit" disabled={disabled} wrapperClassName="w5">
+          <Button type="submit" disabled={disabled} wrapperClassName="mt-2">
             Sign Up / Login
           </Button>
 
           {errorMsg && <p className="error">{errorMsg}</p>}
 
-          <h4>Or with</h4>
+          <h3 className="my-8">Or with</h3>
 
           <Button
-            wrapperClassName="w5"
             onClick={() => {
               setIsRedirecting(true)
               loginSocial('github')
             }}
+            Icon={GithubIcon}
           >
-            {isRedirecting ? 'Redirecting...' : 'Github'}
+            {isRedirecting ? 'Redirecting...' : 'GitHub'}
           </Button>
           <br />
           <br />

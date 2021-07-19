@@ -30,10 +30,11 @@ const MAX_CONCURRENT_UPLOADS = 3
 const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 
 /** @typedef { import('./lib/interface.js').API } API */
+/** @typedef { import('./lib/interface.js').Status} Status */
 /** @typedef { import('./lib/interface.js').Service } Service */
+/** @typedef { import('./lib/interface.js').Web3File} Web3File */
 /** @typedef { import('./lib/interface.js').Filelike } Filelike */
 /** @typedef { import('./lib/interface.js').CIDString} CIDString */
-/** @typedef { import('./lib/interface.js').Web3File} Web3File */
 /** @typedef { import('./lib/interface.js').PutOptions} PutOptions */
 /** @typedef { import('./lib/interface.js').UnixFSEntry} UnixFSEntry */
 /** @typedef { import('./lib/interface.js').Web3Response} Web3Response */
@@ -152,8 +153,8 @@ class Web3Storage {
 
       for await (const _ of upload(splitter.cars())) {} // eslint-disable-line
     } finally {
-      // Destroy Blockstore
-      await blockstore.destroy()
+      // Close Blockstore
+      await blockstore.close()
     }
 
     return carRoot
@@ -161,7 +162,7 @@ class Web3Storage {
 
   /**
    * @param {Service} service
-   * @param {string} cid
+   * @param {CIDString} cid
    * @returns {Promise<Web3Response | null>}
    */
   static async get ({ endpoint, token }, cid) {
@@ -184,13 +185,33 @@ class Web3Storage {
 
   /**
    * @param {Service} service
-   * @param {string} cid
+   * @param {CIDString} cid
    * @returns {Promise<CIDString>}
    */
   /* c8 ignore next 4 */
   static async delete ({ endpoint, token }, cid) {
     console.log('Not deleteing', cid, endpoint, token)
     throw Error('.delete not implemented yet')
+  }
+
+  /**
+   * @param {Service} service
+   * @param {CIDString} cid
+   * @returns {Promise<Status | undefined>}
+   */
+  static async status ({ endpoint, token }, cid) {
+    const url = new URL(`/status/${cid}`, endpoint)
+    const res = await fetch(url.toString(), {
+      method: 'GET',
+      headers: Web3Storage.headers(token)
+    })
+    if (res.status === 404) {
+      return undefined
+    }
+    if (!res.ok) {
+      throw new Error(res.statusText)
+    }
+    return res.json()
   }
 
   // Just a sugar so you don't have to pass around endpoint and token around.
@@ -216,18 +237,26 @@ class Web3Storage {
 
   /**
    * Fetch the Content Addressed Archive by it's root CID.
-   * @param {string} cid
+   * @param {CIDString} cid
    */
   get (cid) {
     return Web3Storage.get(this, cid)
   }
 
   /**
-   * @param {string} cid
+   * @param {CIDString} cid
    */
   /* c8 ignore next 3 */
   delete (cid) {
     return Web3Storage.delete(this, cid)
+  }
+
+  /**
+   * Fetch info on Filecoin deals and IPFS pins that a given CID is replicated in.
+   * @param {CIDString} cid
+   */
+  status (cid) {
+    return Web3Storage.status(this, cid)
   }
 }
 
@@ -276,7 +305,7 @@ function toWeb3Response (res) {
           yield entry
         }
       } finally {
-        await blockstore.destroy()
+        await blockstore.close()
       }
     },
     files: async () => {

@@ -20,8 +20,10 @@
   },
   "homepage": "https://github.com/web3-storage/web3.storage#readme",
   "dependencies": {
+    "conf": "^10.0.1",
+    "enquirer": "^2.3.6",
     "err-code": "^3.0.1",
-    "ipfs-car": "^0.4.2",
+    "ipfs-car": "^0.5.1",
     "it-glob": "^0.0.13",
     "sade": "^1.7.4"
   },

@@ -10,3 +10,7 @@ export class JSONResponse extends Response {
     super(JSON.stringify(body), init)
   }
 }
+
+export function notFound (message = 'Not Found') {
+  return new JSONResponse({ message }, { status: 404 })
+}

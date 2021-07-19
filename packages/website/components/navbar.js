@@ -20,39 +20,42 @@ export default function Navbar({ bgColor = 'white', user }) {
   }
 
   return (
-    <nav className={`bg-${bgColor}`}>
-      <div className="flex items-center justify-between ph3 ph5-ns pv3 center mw9">
-        <Link href="/" >
-          <a className="link f3" title="Web3 Storage">⁂</a>
+    <nav className={`bg-${bgColor} w-full border border-gray-400`}>
+      <div className="flex items-center justify-between py-3 mx-auto max-w-screen-2xl">
+        <Link href="/">
+          <a title="Web3 Storage">⁂</a>
         </Link>
         <div>
-          {user ? (
-            <>
-              <Link href="/files">
-                <a className="f4 black no-underline underline-hover v-mid">
-                  Files
-                </a>
-              </Link>
-              <span className="mh2 v-mid b black">•</span>
-              <Link href="/tokens">
-                <a className="f4 black no-underline underline-hover v-mid">
-                  API Tokens
-                </a>
-              </Link>
-              <span className="mh2 v-mid b black">•</span>
-            </>
-          ) : null}
-          <Link href="/#docs">
-            <a className="f4 black no-underline underline-hover v-mid mr3">
-              Docs
+          <Link href="/about">
+            <a className="text-black font-bold no-underline hover:underline align-middle mr-12">
+              About
+            </a>
+          </Link>
+          <Link href="/docs">
+            <a className="text-black font-bold no-underline hover:underline align-middle mr-12">
+              Documentation
             </a>
           </Link>
           {user ? (
-            <Button onClick={logout} id="logout">
+            <>
+              <Link href="/files">
+                <a className="text-black font-bold no-underline hover:underline align-middle mr-12">
+                  Files
+                </a>
+              </Link>
+              <Link href="/account">
+                <a className="text-black font-bold no-underline hover:underline align-middle mr-12">
+                  Profile
+                </a>
+              </Link>
+            </>
+          ) : null}
+          {user ? (
+            <Button onClick={logout} id="logout" wrapperClassName="inline-block">
               Logout
             </Button>
           ) : (
-            <Button href="/login" id="login">
+            <Button href="/login" id="login" wrapperClassName="inline-block" rounded>
               Login
             </Button>
           )}

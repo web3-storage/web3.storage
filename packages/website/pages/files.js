@@ -52,14 +52,14 @@ export default function Files({ user }) {
   async function handleDelete(e) {
     e.preventDefault()
     const data = new FormData(e.target)
-    const id = data.get('_id')
-    if (id && typeof id === 'string') {
+    const cid = data.get('cid')
+    if (cid && typeof cid === 'string') {
       if (!confirm('Are you sure? Deleted files cannot be recovered!')) {
         return
       }
-      setDeleting(id)
+      setDeleting(cid)
       try {
-        await deleteUpload(id)
+        await deleteUpload(cid)
       } finally {
         await queryClient.invalidateQueries('get-uploads')
         setDeleting('')
@@ -135,8 +135,8 @@ export default function Files({ user }) {
                               <form onSubmit={handleDelete}>
                                 <input
                                   type="hidden"
-                                  name="_id"
-                                  value={upload._id}
+                                  name="cid"
+                                  value={upload.content.cid}
                                 />
                                 <Button
                                   className="bg-red white"
@@ -144,7 +144,7 @@ export default function Files({ user }) {
                                   disabled={Boolean(deleting)}
                                   id="delete-upload"
                                 >
-                                  {deleting === upload._id
+                                  {deleting === upload.content.cid
                                     ? 'Deleting...'
                                     : 'Delete'}
                                 </Button>

@@ -315,6 +315,7 @@ type Query {
   """
   verifyAuthToken(issuer: String!, secret: String!): AuthToken @resolver
   findPinsByStatus(statuses: [PinStatus!]!): [Pin!]! @resolver(paginated: true)
+  findMetrics: Metrics! @resolver
 }
 
 type Mutation {
@@ -322,8 +323,12 @@ type Mutation {
   createAuthToken(data: CreateAuthTokenInput): AuthToken! @resolver
   importCar(data: ImportCarInput!): Upload! @resolver
   deleteAuthToken(user: ID!, authToken: ID!): AuthToken! @resolver
-  deleteUserUpload(user: ID!, upload: ID!): Upload! @resolver
+  deleteUserUpload(user: ID!, cid: String!): Upload! @resolver
   createBatch(data: CreateBatchInput!): Batch! @resolver
+  """
+  Adds new entries to the batch, existing entries are ignored.
+  """
+  addBatchEntries(batchCid: String!, entries: [BatchEntryInput!]!): Batch! @resolver
   createOrUpdateDeal(data: CreateOrUpdateDealInput!): Deal! @resolver
   """
   Creates a new pin object (and location) or updates an existing pin object.
@@ -332,10 +337,22 @@ type Mutation {
   updateContentDagSize(content: ID!, dagSize: Int!): Content! @resolver
 }
 
+type Metrics {
+  usersTotal: Int!
+  uploadsTotal: Int!
+  contentTotal: Int!
+  contentTotalBytes: Int!
+  pinsTotal: Int!
+  pinsTotalBytes: Int!
+  pinsQueuedTotal: Int!
+  pinsPinningTotal: Int!
+  pinsPinnedTotal: Int!
+  pinsFailedTotal: Int!
+}
+
 input CreateBatchInput {
   batchCid: String!
   pieceCid: String!
-  entries: [BatchEntryInput!]!
 }
 
 input BatchEntryInput {

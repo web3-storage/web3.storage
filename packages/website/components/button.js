@@ -11,6 +11,9 @@ import clsx from 'clsx'
  * @prop {import('react').ReactChildren | string} children
  * @prop {boolean} [disabled]
  * @prop {string} [id]
+ * @prop {'dark' | 'light'} [variant]
+ * @prop {boolean} [rounded] If the button should have border-radius
+ * @prop {import('react').FunctionComponent} [Icon] Icon component to prefix
  */
 
 /**
@@ -27,50 +30,50 @@ export default function Button({
   type = 'button',
   children,
   disabled = false,
+  variant = 'dark',
+  rounded,
+  Icon,
 }) {
-  wrapperClassName = clsx(
-    'dib',
-    'bg-nsgray',
-    'ba',
-    'b-black',
-    { grow: !disabled, 'o-50': disabled },
-    wrapperClassName
-  )
-  const wrapperStyle = { minWidth: '8rem' }
-  const btnStyle = { top: 3, left: 3 }
+  const buttonStyle = { minWidth: '8rem', minHeight: '3.25rem' }
+  const variantClasses = variant === 'dark' ? 'bg-w3storage-purple text-white' : 'bg-transparent text-black'
+
   const btn = (
     <button
       type={type}
       className={clsx(
-        'button-reset',
-        'relative',
-        'w-100',
-        'ba',
-        'b--black',
-        'pv2',
-        'ph3',
-        'chicagoflf',
-        'f5',
+        variantClasses,
+        'flex',
+        'items-center',
+        'justify-center',
+        'w-full',
+        'border',
+        'border-transparent',
+        'hover:opacity-90',
+        'focus:opacity-90',
+        'focus:border-white',
+        rounded && 'rounded-md',
+        'px-4',
         { pointer: !disabled },
-        'bg-white',
+        'typography-cta',
         className
       )}
-      style={btnStyle}
+      style={buttonStyle}
       onClick={onClick}
       disabled={disabled}
       id={id}
     >
+      { Icon && <Icon className="w-7 mr-2 fill-current"/> }
       {children}
     </button>
   )
   return href ? (
     <Link href={href}>
-      <a className={wrapperClassName} style={wrapperStyle}>
+      <a className={wrapperClassName}>
         {btn}
       </a>
     </Link>
   ) : (
-    <div className={wrapperClassName} style={wrapperStyle}>
+    <div className={wrapperClassName}>
       {btn}
     </div>
   )

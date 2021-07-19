@@ -29,7 +29,7 @@ module.exports = async ({ body, headers }) => {
   const carRootCid = root.toString()
 
   // Testing Failure
-  if (carRootCid === 'bafkreiexwhcktnzbtn2ops3qdqfljsh223uubnslqrexsfkqzppqsg6i6u') {
+  if (carRootCid === 'bafybeid7s4osysgv2cq7rpngnigcbdqlmaz3rbm52zefmzin64zf5b5zga') {
     return {
       statusCode: 400,
       body: {

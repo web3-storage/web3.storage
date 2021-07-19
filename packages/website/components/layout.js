@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import clsx from 'clsx'
 import Footer from './footer.js'
 import Navbar from './navbar.js'
 import Loading from './loading'
@@ -22,6 +23,8 @@ export default function Layout({
   title = 'Web3 Storage - The simple file storage service for IPFS & Filecoin.',
   description = 'Web3 Storage',
   navBgColor = 'white',
+  pageBgColor = 'bg-white',
+  data = null,
 }) {
   const { user, status } = useUser({
     redirectTo,
@@ -31,7 +34,7 @@ export default function Layout({
   const shouldWaitForUser = needsUser && status === 'loading'
 
   return (
-    <div className="sans-serif">
+    <div className={clsx(pageBgColor, 'flex flex-col min-h-screen')}>
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
@@ -53,12 +56,12 @@ export default function Layout({
       ) : callback ? (
         <>
           <Loading />
-          {children({ user })}
+          {children({ user, data })}
         </>
       ) : (
         <>
           <Navbar bgColor={navBgColor} user={user} />
-          {children({ user })}
+          {children({ user, data })}
           <Footer />
         </>
       )}

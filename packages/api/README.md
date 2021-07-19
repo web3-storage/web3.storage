@@ -82,6 +82,16 @@ date: Mon, 14 Jun 2021 08:30:56 GMT
 content-length: 564692
 ```
 
-### `GET /root/:cid/deals`
+### `GET /status/:cid`
 
-Get filecoin deals info. (_TBD_) We need to define what info we want here to find the right status.
+Get pinning status and filecoin deals info for a CID.
+
+```console
+$ curl 'http://127.0.0.1:8787/status/bafybeidwfngv7n5y7ydbzotrwl3gohgr2lv2g7vn6xggwcjzrf5emknrki' -s | jq
+{
+  "cid": "bafybeidwfngv7n5y7ydbzotrwl3gohgr2lv2g7vn6xggwcjzrf5emknrki",
+  "created": "2021-07-14T19:55:49.409306Z",
+  "dagSize": null,
+  "pins": [],
+  "deals": []
+}

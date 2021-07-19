@@ -52,6 +52,23 @@ module.exports = ({ body }) => {
     return gqlOkResponse({ deleteUserUpload: { _id: 'test-delete-user-upload' } })
   }
 
+  if (body.query.includes('findContentByCid')) {
+    if (body.variables.cid === 'unknown') {
+      return gqlResponse(200, require('../../fixtures/find-content-by-cid-unknown.json'))
+    }
+    if (body.variables.cid === 'nobatch') {
+      return gqlResponse(200, require('../../fixtures/find-content-by-cid-no-batch.json'))
+    }
+    if (body.variables.cid === 'nodeal') {
+      return gqlResponse(200, require('../../fixtures/find-content-by-cid-no-deal.json'))
+    }
+    return gqlResponse(200, require('../../fixtures/find-content-by-cid.json'))
+  }
+
+  if (body.query.includes('findMetrics')) {
+    return gqlOkResponse(require('../../fixtures/find-metrics.json'))
+  }
+
   return gqlResponse(400, {
     errors: [{ message: `unexpected query: ${body.query}` }]
   })
