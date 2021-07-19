@@ -4,7 +4,7 @@ import { toPinStatusEnum } from 'web3.storage-api/src/utils/pin.js'
 
 const log = debug('pins:updatePinStatuses')
 
-const FIND_PINS = gql`
+const FIND_PENDING_PINS = gql`
   query FindPinsByStatus($after: String) {
     findPinsByStatus(statuses: [Unpinned, PinQueued, Pinning], _size: 1000, _cursor: $after) {
       data {
@@ -55,7 +55,7 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
   let queryRes, after
   let i = 0
   while (true) {
-    queryRes = await db.query(FIND_PINS, { after })
+    queryRes = await db.query(FIND_PENDING_PINS, { after })
     log(`📥 Processing ${i} -> ${i + queryRes.findPinsByStatus.data.length}`)
     for (const pin of queryRes.findPinsByStatus.data) {
       const { peerMap } = await cluster.status(pin.content.cid)
