@@ -25,7 +25,7 @@
     "err-code": "^3.0.1",
     "ipfs-car": "^0.5.1",
     "sade": "^1.7.4",
-    "glob-to-files": "https://gitpkg.now.sh/web3-storage/glob-to-files?main"
+    "files-from-path": "^0.1.0"
   },
   "main": "index.js"
 }
