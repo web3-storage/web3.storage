@@ -20,9 +20,11 @@
     "react-dom": "^17.0.2",
     "react-if": "^4.0.1",
     "react-markdown": "^6.0.2",
-    "react-query": "^3.13.9"
+    "react-query": "^3.13.9",
+    "web3.storage": "^1.0.0"
   },
   "devDependencies": {
+    "@svgr/webpack": "^5.5.0",
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.9",
     "autoprefixer": "^10.2.6",

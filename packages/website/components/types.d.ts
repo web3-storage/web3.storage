@@ -7,7 +7,7 @@ export interface LayoutProps {
   redirectIfFound?: boolean
   title?: string
   description?: string
-  pageBgColor?: string,
+  pageBgColor?: string
   navBgColor?: string
   data?: any
 }
