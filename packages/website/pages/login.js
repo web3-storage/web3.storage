@@ -1,15 +1,22 @@
 import { useState } from 'react'
 import Router from 'next/router'
+import { useQueryClient } from 'react-query'
 import { loginEmail, loginSocial } from '../lib/magic.js'
 import Button from '../components/button.js'
-import { useQueryClient } from 'react-query'
+import GithubIcon from '../icons/github.js'
 
+/**
+ * Static Props
+ *
+ * @returns {{ props: import('../components/types.js').LayoutProps}}
+ */
 export function getStaticProps() {
   return {
     props: {
       title: 'Login - Web3 Storage',
       redirectTo: '/files',
       redirectIfFound: true,
+      pageBgColor: 'bg-w3storage-red',
     },
   }
 }
@@ -41,8 +48,8 @@ export default function Login() {
   }
   return (
     <main>
-      <div className="py-4 px-16 mt-32 mx-auto max-w-screen-2xl">
-        <form onSubmit={onSubmit} className="text-center w-80 mx-auto">
+      <div className="p-4 sm:px-16 mt-4 sm:mt-32 mx-auto max-w-screen-2xl text-w3storage-purple">
+        <form onSubmit={onSubmit} className="text-center w-100 sm:w-80 mx-auto">
           <label>
             <h3 className="mb-6">Log in</h3>
           </label>
@@ -51,7 +58,7 @@ export default function Login() {
             name="email"
             required
             placeholder="Enter your email"
-            className="w-full border border-black rounded-md p-2"
+            className="w-full border border-black px-4 py-3 placeholder-black"
           />
 
           <Button type="submit" disabled={disabled} wrapperClassName="mt-2">
@@ -67,6 +74,7 @@ export default function Login() {
               setIsRedirecting(true)
               loginSocial('github')
             }}
+            Icon={GithubIcon}
           >
             {isRedirecting ? 'Redirecting...' : 'GitHub'}
           </Button>

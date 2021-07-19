@@ -55,7 +55,7 @@ export default function Navbar({ bgColor = 'white', user }) {
               Logout
             </Button>
           ) : (
-            <Button href="/login" id="login" wrapperClassName="inline-block">
+            <Button href="/login" id="login" wrapperClassName="inline-block" rounded>
               Login
             </Button>
           )}
