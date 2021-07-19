@@ -57,6 +57,9 @@ function serverError (request, error) {
   return addCorsHeaders(request, new JSONResponse({ message }, { status }))
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent
+/** @typedef {{ waitUntil(p: Promise): void }} Ctx */
+
 addEventListener('fetch', (event) => {
   event.respondWith(router
     .handle(event.request, {}, event)

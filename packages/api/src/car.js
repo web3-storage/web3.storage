@@ -88,6 +88,7 @@ export async function carGet (request, env, ctx) {
  *
  * @param {import('./user').AuthenticatedRequest} request
  * @param {import('./env').Env} env
+ * @param {import('./index').Ctx} ctx
  */
 export async function carPost (request, env, ctx) {
   const { user, authToken } = request.auth
