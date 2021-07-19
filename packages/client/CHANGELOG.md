@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.0.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v1.0.0...web3.storage-v2.0.0) (2021-07-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* cid prop on web3file is a string
+
+### Features
+
+* client.status(cid) ([#95](https://www.github.com/web3-storage/web3.storage/issues/95)) ([b0a7d63](https://www.github.com/web3-storage/web3.storage/commit/b0a7d639ad28eccdbfd7a33a16a0a5004774533d))
+
+
+### Bug Fixes
+
+* cid prop on web3file is a string ([46dfe2f](https://www.github.com/web3-storage/web3.storage/commit/46dfe2fb26948dabc82e1b7c645f58bfb1d4a407))
+* usage examples ([#58](https://www.github.com/web3-storage/web3.storage/issues/58)) ([0f5c23b](https://www.github.com/web3-storage/web3.storage/commit/0f5c23b57abded860f4dcffc2e7bef4265821cb0))
+
 ## 1.0.0 (2021-07-09)
 
 
