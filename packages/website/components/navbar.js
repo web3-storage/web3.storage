@@ -11,7 +11,7 @@ import Button from './button.js'
  * @param {string} [props.bgColor]
  * @param {any} [props.user]
  */
-export default function Navbar({ bgColor, user }) {
+export default function Navbar({ bgColor = '', user }) {
   const queryClient = useQueryClient()
   async function logout() {
     await getMagic().user.logout()

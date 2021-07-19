@@ -47,8 +47,8 @@ export default function Login() {
     }
   }
   return (
-    <main>
-      <div className="p-4 sm:px-16 mt-4 sm:mt-32 mx-auto max-w-screen-2xl text-w3storage-purple">
+    <main className="layout-margins">
+      <div className="py-4 mt-4 sm:mt-32 text-w3storage-purple">
         <form onSubmit={onSubmit} className="text-center w-100 sm:w-80 mx-auto">
           <label>
             <h3 className="mb-6">Log in</h3>
