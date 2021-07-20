@@ -32,7 +32,7 @@ export async function statusGet (request, env) {
           data {
             dataModelSelector
             aggregate {
-              cid
+              dataCid
               pieceCid
               deals {
                 data {
