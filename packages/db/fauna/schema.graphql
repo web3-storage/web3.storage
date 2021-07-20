@@ -208,7 +208,7 @@ type Aggregate {
   """
   CID of the root of the aggregate data.
   """
-  cid: String! @unique
+  dataCid: String! @unique
 
   """
   Piece CID.
@@ -269,7 +269,7 @@ type Deal {
   """
   Identifier for the deal stored on chain.
   """
-  chainDealId: Int! @unique
+  dealId: Int! @unique
 
   """
   Time when deal will be active.
@@ -371,7 +371,7 @@ input CreateOrUpdateDealInput {
   """
   dataCid: String
   miner: String
-  chainDealId: Int!
+  dealId: Int!
   activation: Time
   renewal: Time
   status: DealStatus!

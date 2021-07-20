@@ -21,19 +21,19 @@ const {
   Get
 } = fauna
 
-const name = 'addBatchEntries'
+const name = 'addAggregateEntries'
 const body = Query(
   Lambda(
-    ['batchCid', 'entries'],
+    ['dataCid', 'entries'],
     Let(
       {
-        batchMatch: Match(Index('unique_Batch_cid'), Var('batchCid')),
-        batch: If(
-          IsEmpty(Var('batchMatch')),
-          Abort('batch not found'),
-          Get(Var('batchMatch'))
+        aggregateMatch: Match(Index('unique_Aggregate_dataCid'), Var('dataCid')),
+        aggregate: If(
+          IsEmpty(Var('aggregateMatch')),
+          Abort('aggregate not found'),
+          Get(Var('aggregateMatch'))
         ),
-        batchRef: Select('ref', Var('batch'))
+        aggregateRef: Select('ref', Var('aggregate'))
       },
       Do(
         Foreach(
@@ -49,17 +49,17 @@ const body = Query(
                   Get(Var('contentMatch'))
                 ),
                 entryMatch: Match(
-                  Index('batchEntry_by_batch_and_content'),
-                  Var('batchRef'),
+                  Index('aggregateEntry_by_aggregate_and_content'),
+                  Var('aggregateRef'),
                   Select('ref', Var('content'))
                 )
               },
               If(
                 IsEmpty(Var('entryMatch')),
-                Create('BatchEntry', {
+                Create('AggregateEntry', {
                   data: {
                     content: Select('ref', Var('content')),
-                    batch: Var('batchRef'),
+                    aggregate: Var('aggregateRef'),
                     dataModelSelector: Select('dataModelSelector', Var('data'), null)
                   }
                 }),
@@ -68,7 +68,7 @@ const body = Query(
             )
           )
         ),
-        Var('batch')
+        Var('aggregate')
       )
     )
   )

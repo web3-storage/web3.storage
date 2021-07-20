@@ -27,29 +27,29 @@ const body = Query(
     Let(
       {
         dealMatch: Match(
-          Index('unique_Deal_chainDealId'),
-          Select('chainDealId', Var('data'))
+          Index('unique_Deal_dealId'),
+          Select('dealId', Var('data'))
         )
       },
       If(
         IsEmpty(Var('dealMatch')),
         Let(
           {
-            batchMatch: Match(
-              Index('unique_Batch_cid'),
-              Select('batchCid', Var('data'))
+            aggregateMatch: Match(
+              Index('unique_Aggregate_dataCid'),
+              Select('dataCid', Var('data'))
             ),
-            batchRef: If(
-              IsEmpty(Var('batchMatch')),
-              Abort('batch not found'),
-              Select('ref', Get(Var('batchMatch')))
+            aggregateRef: If(
+              IsEmpty(Var('aggregateMatch')),
+              Abort('aggregate not found'),
+              Select('ref', Get(Var('aggregateMatch')))
             )
           },
           Create('Deal', {
             data: {
-              batch: Var('batchRef'),
+              aggregate: Var('aggregateRef'),
               miner: Select('miner', Var('data')),
-              chainDealId: Select('chainDealId', Var('data')),
+              dealId: Select('dealId', Var('data')),
               activation: Select('activation', Var('data'), null),
               renewal: Select('renewal', Var('data'), null),
               status: Select('status', Var('data')),

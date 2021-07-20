@@ -14,13 +14,13 @@ const {
   Now
 } = fauna
 
-const name = 'createBatch'
+const name = 'createAggregate'
 const body = Query(
   Lambda(
     ['data'],
-    Create('Batch', {
+    Create('Aggregate', {
       data: {
-        cid: Select('batchCid', Var('data')),
+        dataCid: Select('dataCid', Var('data')),
         pieceCid: Select('pieceCid', Var('data')),
         created: Now()
       }

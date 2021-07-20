@@ -13,16 +13,16 @@ const {
  * Usage:
  *
  * Match(
- *   Index('batchEntry_by_batch_and_content'),
- *   Ref(Collection('Batch'), Var('batchId')),
+ *   Index('aggregateEntry_by_aggregate_and_content'),
+ *   Ref(Collection('Aggregate'), Var('aggregateId')),
  *   Ref(Collection('Content'), Var('contentId'))
  * )
  */
 const index = {
-  name: 'batchEntry_by_batch_and_content',
-  source: Collection('BatchEntry'),
+  name: 'aggregateEntry_by_aggregate_and_content',
+  source: Collection('AggregateEntry'),
   terms: [
-    { field: ['data', 'batch'] },
+    { field: ['data', 'aggregate'] },
     { field: ['data', 'content'] }
   ]
 }

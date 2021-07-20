@@ -12,7 +12,7 @@
             "deals": {
               "data" : [ {
                 "miner": "f99",
-                "chainDealId": 12345,
+                "dealId": 12345,
                 "status": "Active",
                 "activation": "<iso timestamp>",
                 "created": "2021-07-14T19:27:14.934572Z",

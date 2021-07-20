@@ -20,7 +20,7 @@ Prior to termination, Protocol Labs will provide 90 days notice to users via ema
 
 ### Filecoin deals
 
-Data stored in [Web3.Storage](http://web3.storage) is guaranteed to be available in IPFS upon completion of a successful upload. Please note that once replication in IPFS is complete (at a minimum of 3 copies being stored), data is also pushed to be stored on Filecoin. Given content is batched into deals on Filecoin, it is expected that there may be a delay between the content being uploaded to the service and eventually making it into a deal on Filecoin. You may query the status of any CID uploaded through [Web3.Storage](http://web3.storage) using the [Status API](/) (updated every five minutes) for the latest information regarding an individual CID's pin status or deal status.
+Data stored in [Web3.Storage](http://web3.storage) is guaranteed to be available in IPFS upon completion of a successful upload. Please note that once replication in IPFS is complete (at a minimum of 3 copies being stored), data is also pushed to be stored on Filecoin. Given content is aggregated into deals on Filecoin, it is expected that there may be a delay between the content being uploaded to the service and eventually making it into a deal on Filecoin. You may query the status of any CID uploaded through [Web3.Storage](http://web3.storage) using the [Status API](/) (updated every five minutes) for the latest information regarding an individual CID's pin status or deal status.
 
 For reference, the following parameters and strategies are used to ensure highly redundant storage on the Filecoin network:
 
