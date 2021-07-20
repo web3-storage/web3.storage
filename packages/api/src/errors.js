@@ -25,23 +25,23 @@ export class HTTPError extends Error {
     let status = err.status || 500
 
     switch (err.code) {
-      case ErrorUserNotFound.CODE:
-      case ErrorTokenNotFound.CODE:
+      case UserNotFoundError.CODE:
+      case TokenNotFoundError.CODE:
         break
 
       // Magic SDK errors
       case MagicErrors.TokenExpired:
         status = 401
-        error.message = 'API Key has expired.'
+        error.message = 'API token has expired.'
         break
       case MagicErrors.ExpectedBearerString:
         status = 401
         error.message =
-          'API Key is missing, make sure the `Authorization` header has a value in the following format `Bearer {api key}`.'
+          'API token is missing, make sure the `Authorization` header has a value in the following format `Bearer {token}`.'
         break
       case MagicErrors.MalformedTokenError:
         status = 401
-        error.message = 'API Key is malformed or failed to parse.'
+        error.message = 'API token is malformed or failed to parse.'
         break
       case MagicErrors.TokenCannotBeUsedYet:
       case MagicErrors.IncorrectSignerAddress:
@@ -75,28 +75,28 @@ export class HTTPError extends Error {
         break
     }
 
-    return new JSONResponse({ error }, { status })
+    return new JSONResponse(error, { status })
   }
 }
 
-export class ErrorUserNotFound extends Error {
+export class UserNotFoundError extends Error {
   constructor (msg = 'User not found.') {
     super(msg)
     this.name = 'UserNotFound'
     this.status = 401
-    this.code = ErrorUserNotFound.CODE
+    this.code = UserNotFoundError.CODE
   }
 }
 
-ErrorUserNotFound.CODE = 'ERROR_USER_NOT_FOUND'
+UserNotFoundError.CODE = 'ERROR_USER_NOT_FOUND'
 
-export class ErrorTokenNotFound extends Error {
-  constructor (msg = 'API Key not found.') {
+export class TokenNotFoundError extends Error {
+  constructor (msg = 'API token not found.') {
     super(msg)
     this.name = 'TokenNotFound'
     this.status = 401
-    this.code = ErrorTokenNotFound.CODE
+    this.code = TokenNotFoundError.CODE
   }
 }
 
-ErrorTokenNotFound.CODE = 'ERROR_TOKEN_NOT_FOUND'
+TokenNotFoundError.CODE = 'ERROR_TOKEN_NOT_FOUND'

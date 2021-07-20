@@ -2,7 +2,7 @@ import { gql } from '@web3-storage/db'
 import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
-import { ErrorUserNotFound, ErrorTokenNotFound } from './errors.js'
+import { UserNotFoundError, TokenNotFoundError } from './errors.js'
 
 /**
  * @typedef {{
@@ -122,7 +122,7 @@ export function withAuth (handler) {
 
       const authToken = res.verifyAuthToken
       if (!authToken) {
-        throw new ErrorTokenNotFound()
+        throw new TokenNotFoundError()
       }
 
       env.sentry.setUser(authToken.user)
@@ -144,7 +144,7 @@ export function withAuth (handler) {
 
     const user = res.findUserByIssuer
     if (!user) {
-      throw new ErrorUserNotFound()
+      throw new UserNotFoundError()
     }
 
     env.sentry.setUser(user)
