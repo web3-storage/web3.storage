@@ -73,7 +73,7 @@ export async function statusGet (request, env) {
     .map(({ status, updated, location }) => ({ status, updated, ...location }))
 
   const deals = raw.aggregateEntries.data.map(({ dataModelSelector, aggregate }) => {
-    const { pieceCid, cid: dataCid, deals } = aggregate
+    const { pieceCid, dataCid, deals } = aggregate
     if (deals.data.length === 0) {
       return [{
         status: 'Queued',
