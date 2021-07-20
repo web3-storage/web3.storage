@@ -1,6 +1,6 @@
 import process from 'process'
 import minimist from 'minimist'
-import { Web3Storage, File } from 'web3.storage'
+import { Web3Storage, getFilesFromPath } from 'web3.storage'
 
 const endpoint = 'https://api.web3.storage'
 
@@ -15,34 +15,10 @@ async function main () {
 
   const storage = new Web3Storage({ endpoint, token })
 
-  const files = prepareFiles()
+  const files = await getFilesFromPath('./fixtures')
   const cid = await storage.put(files)
 
   console.log('Content added with CID:', cid)
 }
 
 main()
-
-function prepareFiles () {
-  const data = 'Hello web3.storage!'
-  const data2 = 'Hello web3.storage! 😎'
-
-  return [
-    new File(
-      [data],
-      '/dir/data.txt'
-    ),
-    new File(
-      [data2],
-      '/dir/data2.txt'
-    ),
-    new File(
-      [data],
-      '/dir/otherdir/data.txt'
-    ),
-    new File(
-      [data2],
-      '/dir/otherdir/data2.txt'
-    )
-  ]
-}
