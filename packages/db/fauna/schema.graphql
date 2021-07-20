@@ -78,10 +78,10 @@ type Content {
   pins: [Pin]! @relation
 
   """
-  Content for deals is aggregated into batches. Each batch has many entries.
+  Content for deals is aggregated together. Each aggregation has many entries.
   These are the entries that this content appears in.
   """
-  batchEntries: [BatchEntry!]! @relation
+  aggregateEntries: [AggregateEntry!]! @relation
 
   """
   Size of the DAG in bytes. Set if known on upload or for partials is set when
@@ -118,6 +118,11 @@ type Pin {
   Last time the status was updated.
   """
   updated: Time!
+
+  """
+  Creation date.
+  """
+  created: Time!
 }
 
 """
@@ -197,11 +202,11 @@ type Upload {
 }
 
 """
-A batch of content for inclusion in a Filecoin deal.
+An aggregate of content for inclusion in a Filecoin deal.
 """
-type Batch {
+type Aggregate {
   """
-  CID of the root of the batch data.
+  CID of the root of the aggregate data.
   """
   cid: String! @unique
 
@@ -211,14 +216,14 @@ type Batch {
   pieceCid: String!
 
   """
-  Deals this batch can be found in.
+  Deals this aggregation can be found in.
   """
   deals: [Deal!]! @relation
 
   """
-  Entries included in this batch.
+  Entries included in this aggregate.
   """
-  entries: [BatchEntry!]! @relation
+  entries: [AggregateEntry!]! @relation
 
   """
   Creation date.
@@ -227,34 +232,34 @@ type Batch {
 }
 
 """
-Information about an entry included in a batch.
+Information about an entry included in an aggregate.
 """
-type BatchEntry {
+type AggregateEntry {
   """
   The content this entry is for.
   """
   content: Content! @relation
 
   """
-  The batch this entry resides in.
+  The aggregate this entry resides in.
   """
-  batch: Batch! @relation
+  aggregate: Aggregate! @relation
 
   """
-  Selector for extracting stored data from the batch root.
+  Selector for extracting stored data from the aggregate data root.
   """
   dataModelSelector: String
 }
 
 """
-Filecoin deal for a batch of content.
+Filecoin deal for an aggregation of content.
 """
 type Deal {
 
   """
-  Content batch for this deal.
+  Content aggregate for this deal.
   """
-  batch: Batch! @relation
+  aggregate: Aggregate! @relation
 
   """
   ID of miner this deal was made with.
@@ -324,11 +329,11 @@ type Mutation {
   importCar(data: ImportCarInput!): Upload! @resolver
   deleteAuthToken(user: ID!, authToken: ID!): AuthToken! @resolver
   deleteUserUpload(user: ID!, cid: String!): Upload! @resolver
-  createBatch(data: CreateBatchInput!): Batch! @resolver
+  createAggregate(data: CreateAggregateInput!): Aggregate! @resolver
   """
-  Adds new entries to the batch, existing entries are ignored.
+  Adds new entries to the aggregate, existing entries are ignored.
   """
-  addBatchEntries(batchCid: String!, entries: [BatchEntryInput!]!): Batch! @resolver
+  addAggregateEntries(dataCid: String!, entries: [AggregateEntryInput!]!): Aggregate! @resolver
   createOrUpdateDeal(data: CreateOrUpdateDealInput!): Deal! @resolver
   """
   Creates a new pin object (and location) or updates an existing pin object.
@@ -350,21 +355,21 @@ type Metrics {
   pinsFailedTotal: Int!
 }
 
-input CreateBatchInput {
-  batchCid: String!
+input CreateAggregateInput {
+  dataCid: String!
   pieceCid: String!
 }
 
-input BatchEntryInput {
+input AggregateEntryInput {
   cid: String!
   dataModelSelector: String
 }
 
 input CreateOrUpdateDealInput {
   """
-  CID of the batch included in this deal. Required for create, ignored for update.
+  CID of the aggregate included in this deal. Required for create, ignored for update.
   """
-  batchCid: String
+  dataCid: String
   miner: String
   chainDealId: Int!
   activation: Time

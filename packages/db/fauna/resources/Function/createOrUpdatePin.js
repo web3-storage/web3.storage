@@ -69,7 +69,8 @@ const body = Query(
                 content: Var('contentRef'),
                 location: Select('ref', Var('loc')),
                 status: Var('status'),
-                updated: Now()
+                updated: Now(),
+                created: Now()
               }
             }),
             If(

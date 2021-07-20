@@ -3,10 +3,10 @@
     "findContentByCid": {
       "created": "2021-07-14T19:27:14.934572Z",
       "dagSize": 101,
-      "batchEntries": {
+      "aggregateEntries": {
         "data": [{
           "dataModelSelector": "Links/0/Links",
-          "batch": {
+          "aggregate": {
             "cid": "bafy",
             "pieceCid": "baga",
             "deals": {
