@@ -22,7 +22,7 @@ export function getCluster (env) {
 export function getClusterIPFSProxy (env) {
   const ipfsApiUrl = env.CLUSTER_IPFS_PROXY_API_URL
   if (!ipfsApiUrl) throw new Error('missing CLUSTER_IPFS_PROXY_API_URL environment var')
-  const basicAuthToken = env.CLUSTER_BASIC_AUTH_TOKEN
+  const basicAuthToken = env.CLUSTER_IPFS_PROXY_BASIC_AUTH_TOKEN
   return new IPFS(ipfsApiUrl, {
     headers: basicAuthToken ? { Authorization: `Basic ${basicAuthToken}` } : {}
   })
