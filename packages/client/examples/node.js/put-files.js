@@ -11,7 +11,7 @@ async function main () {
   const endpoint = args.endpoint || defaultEndpoint
 
   if (!token) {
-    console.error('A token is needed. You can create one on https://web3.storage/manage')
+    console.error('A token is needed. You can create one on https://web3.storage')
     return
   }
 
