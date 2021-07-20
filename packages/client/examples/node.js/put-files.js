@@ -2,7 +2,6 @@ import process from 'process'
 import minimist from 'minimist'
 import { Web3Storage, File } from 'web3.storage'
 
-
 async function main () {
   const args = minimist(process.argv.slice(2))
   const token = args.token
