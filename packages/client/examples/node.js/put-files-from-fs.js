@@ -2,7 +2,6 @@ import process from 'process'
 import minimist from 'minimist'
 import { Web3Storage, getFilesFromPath } from 'web3.storage'
 
-const endpoint = 'https://api.web3.storage'
 
 async function main () {
   const args = minimist(process.argv.slice(2))
@@ -13,7 +12,7 @@ async function main () {
     return
   }
 
-  const storage = new Web3Storage({ endpoint, token })
+  const storage = new Web3Storage({ token })
 
   const files = await getFilesFromPath('./fixtures')
   const cid = await storage.put(files)
