@@ -7,10 +7,7 @@
   "type": "module",
   "scripts": {
     "start": "npm run start:pins",
-    "start:pins": "node src/bin/pins.js",
-    "lt": "npm run lt:cluster & npm run lt:ipfs-proxy",
-    "lt:cluster": "npx localtunnel --port 9094 --subdomain \"$(whoami)-cluster-api-web3-storage\"",
-    "lt:ipfs-proxy": "npx localtunnel --port 9095 --subdomain \"$(whoami)-ipfs-proxy-api-web3-storage\""
+    "start:pins": "node src/bin/pins.js"
   },
   "author": "Alan Shaw",
   "license": "(Apache-2.0 AND MIT)",

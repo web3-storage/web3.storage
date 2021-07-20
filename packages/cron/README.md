@@ -4,22 +4,29 @@ Resist chaos! Periodically update the db with exciting new facts about the size 
 
 ## Getting started
 
-Ensure you have all the dependencies, but running `npm i` in the parent project.
+Ensure you have all the dependencies, by running `npm i` in the parent project.
 
-The following jobs are available
+The following jobs are available:
 
 ### pins
 
-To run this locally you will need the following ENV
+To run this locally you will need the following in your `packages/cron/.env` file:
 
 ```ini
-ENV="dev"
-CLUSTER_API_URL="https://$(whoami)-cluster-api-web3-storage.loca.lt"
-CLUSTER_IPFS_PROXY_API_URL="https://$(whoami)-ipfs-proxy-api-web3-storage.loca.lt"
+ENV=dev
+CLUSTER_API_URL=http://127.0.0.1:9094/
+CLUSTER_IPFS_PROXY_API_URL=http://127.0.0.1:9095/api/v0/
 DEV_FAUNA_KEY="<your key here>"
 ```
 
-and that means, you also need to have
+You also need to have:
+
 - a local ipfs-cluster node running as per https://cluster.ipfs.io/documentation/quickstart/
 - a dev account and db set up on FaunaDB with the latest schema imported as per [../db/README.md](../db/README.md)
 - a dev api running so you can create some test data as per [../api/README.md](../api/README.md)
+
+Run the job:
+
+```sh
+npm run start:pins
+```
