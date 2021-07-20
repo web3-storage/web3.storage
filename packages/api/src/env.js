@@ -14,8 +14,7 @@ import pkg from '../package.json'
  * @param {FetchEvent} event
  */
 export function envAll (_, env, event) {
-  console.log('sentry', env.SENTRY_DSN || SENTRY_DSN)
-  env.sentry = new Toucan({
+  env.sentry = (env.SENTRY_DSN || typeof SENTRY_DSN !== 'undefined') && new Toucan({
     dsn: env.SENTRY_DSN || SENTRY_DSN,
     event,
     allowedHeaders: ['user-agent'],

@@ -5,7 +5,6 @@ export const caches = {
   }
 }
 
-export const SENTRY_DSN = 'https://test@test.ingest.sentry.io/0000000'
 export const SALT = 'test-salt'
 export const FAUNA_ENDPOINT = 'http://localhost:9086/graphql'
 export const FAUNA_KEY = 'test-fauna-key'

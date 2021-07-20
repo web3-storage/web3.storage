@@ -4,21 +4,6 @@ The HTTP interface implemented as a Cloudflare Worker
 
 ## Getting started
 
-### Local env vars
-
-Inside the `/packages/api` folder create a file called `.env.local` with the following content.
-
-Note: tokens can be created here https://sentry.io/settings/account/api/auth-tokens/ and need the following scopes `event:admin` `event:read` `member:read` `org:read` `project:read` `project:releases` `team:read`.
-
-```ini
-SENTRY_TOKEN=<sentry user auth token>
-SENTRY_UPLOAD=false # toggle for sentry source/sourcemaps upload (capture will still work)
-```
-
-Production vars should be set in Github Actions secrets.
-
-### Cloudflare worker
-
 One time set up of your cloudflare worker subdomain for dev:
 
 - `npm install` - Install the project dependencies
@@ -60,7 +45,7 @@ One time set up of your cloudflare worker subdomain for dev:
     wrangler secret put SALT --env $(whoami) # open `https://csprng.xyz/v1/api` in the browser and use the value of `Data`
     wrangler secret put FAUNA_KEY --env $(whoami) # Get from fauna.com after creating a dev Classic DB
     wrangler secret put CLUSTER_BASIC_AUTH_TOKEN --env $(whoami) # Get from web3.storage vault in 1password (not required for dev)
-    wrangler secret put SENTRY_DSN --env $(whoami) # Get from Sentry
+    wrangler secret put SENTRY_DSN --env $(whoami) # Get from Sentry (not required for dev)
     ```
 
 - `npm run publish` - Publish the worker under your env. An alias for `wrangler publish --env $(whoami)`
@@ -111,3 +96,17 @@ $ curl 'http://127.0.0.1:8787/status/bafybeidwfngv7n5y7ydbzotrwl3gohgr2lv2g7vn6x
   "pins": [],
   "deals": []
 }
+```
+
+## Setup Sentry
+
+Inside the `/packages/api` folder create a file called `.env.local` with the following content.
+
+Note: tokens can be created here https://sentry.io/settings/account/api/auth-tokens/ and need the following scopes `event:admin` `event:read` `member:read` `org:read` `project:read` `project:releases` `team:read`.
+
+```ini
+SENTRY_TOKEN=<sentry user auth token>
+SENTRY_UPLOAD=false # toggle for sentry source/sourcemaps upload (capture will still work)
+```
+
+Production vars should be set in Github Actions secrets.

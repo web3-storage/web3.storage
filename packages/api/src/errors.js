@@ -50,12 +50,12 @@ export class HTTPError extends Error {
         status = 401
         error.code = 'AUTH_ERROR'
         error.message = 'Authentication failed.'
-        sentry.captureException(err)
+        sentry && sentry.captureException(err)
         break
       case MagicErrors.ServiceError:
         status = 500
         error.code = 'SERVER_ERROR'
-        sentry.captureException(err)
+        sentry && sentry.captureException(err)
         break
       default:
         // catch all server errors
@@ -64,7 +64,7 @@ export class HTTPError extends Error {
             code: err.name,
             message: err.message || 'Server Error'
           }
-          sentry.captureException(err)
+          sentry && sentry.captureException(err)
         } else {
           // Custom HTTPError
           error = {

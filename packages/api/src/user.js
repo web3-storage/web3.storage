@@ -125,7 +125,7 @@ export function withAuth (handler) {
         throw new TokenNotFoundError()
       }
 
-      env.sentry.setUser(authToken.user)
+      env.sentry && env.sentry.setUser(authToken.user)
       request.auth = { user: authToken.user, authToken }
       return handler(request, env, ctx)
     }
@@ -147,7 +147,7 @@ export function withAuth (handler) {
       throw new UserNotFoundError()
     }
 
-    env.sentry.setUser(user)
+    env.sentry && env.sentry.setUser(user)
     request.auth = { user }
     return handler(request, env, ctx)
   }
