@@ -5,6 +5,7 @@ import { addCorsHeaders, withCorsHeaders, corsOptions } from './cors.js'
 import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
+import { uploadPost } from './upload.js'
 import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, withAuth } from './user.js'
 import { metricsGet } from './metrics.js'
 import { notFound } from './utils/json-response.js'
@@ -17,6 +18,7 @@ router.get('/car/:cid', withCorsHeaders(carGet))
 router.head('/car/:cid', withCorsHeaders(carHead))
 router.put('/car/:cid', withCorsHeaders(withAuth(carPut)))
 router.post('/car', withCorsHeaders(withAuth(carPost)))
+router.post('/upload', withCorsHeaders(withAuth(uploadPost)))
 router.get('/status/:cid', withCorsHeaders(statusGet))
 router.post('/user/login', withCorsHeaders(userLoginPost))
 router.get('/user/tokens', withCorsHeaders(withAuth(userTokensGet)))
