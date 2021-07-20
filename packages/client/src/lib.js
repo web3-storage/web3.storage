@@ -18,13 +18,12 @@ import pRetry from 'p-retry'
 import { pack } from 'ipfs-car/pack'
 import { unpackStream } from 'ipfs-car/unpack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
+import { filesFromPath, getFilesFromPath } from 'files-from-path'
 import {
   fetch,
   File,
   Blob,
-  Blockstore,
-  filesFromPath,
-  getFilesFromPath
+  Blockstore
 } from './platform.js'
 
 const MAX_PUT_RETRIES = 5
