@@ -188,6 +188,11 @@ type PinRequest {
   Last time attempts was updated
   """
   updated: Time!
+
+  """
+  When the PinRequest was created
+  """
+  created: Time!
 }
 
 """
@@ -346,6 +351,7 @@ type Query {
   verifyAuthToken(issuer: String!, secret: String!): AuthToken @resolver
   findPinsByStatus(statuses: [PinStatus!]!): [Pin!]! @resolver(paginated: true)
   findMetrics: Metrics! @resolver
+  findAllPinRequests: [PinRequest!]! @resolver(paginated: true)
 }
 
 type Mutation {

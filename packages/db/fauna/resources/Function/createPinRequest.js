@@ -52,7 +52,8 @@ const body = Query(
                 cid: Var('cid'),
                 content: Var('contentRef'),
                 attempts: 0,
-                updated: Now()
+                updated: Now(),
+                created: Now()
               }
             }),
             Var('pinRequest')

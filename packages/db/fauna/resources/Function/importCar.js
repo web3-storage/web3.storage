@@ -115,7 +115,8 @@ const body = Query(
                     cid: Var('cid'),
                     content: Select('ref', Var('content')),
                     attempts: 0,
-                    updated: Now()
+                    updated: Now(),
+                    created: Now()
                   }
                 })
               },
