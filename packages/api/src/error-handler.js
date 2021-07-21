@@ -12,11 +12,7 @@ export function errorHandler (err) {
   }
   let status = err.status || 500
 
-  if (err instanceof HTTPError) {
-    return new JSONResponse(error, { status })
-  }
-
-  if (err instanceof UserNotFoundError || err instanceof TokenNotFoundError) {
+  if (err instanceof HTTPError || err instanceof UserNotFoundError || err instanceof TokenNotFoundError) {
     return new JSONResponse(error, { status })
   }
 
