@@ -1,6 +1,6 @@
 /* eslint-env serviceworker */
 import { Router } from 'itty-router'
-import { HTTPError } from './errors.js'
+import { errorHandler } from './error-handler.js'
 import { addCorsHeaders, withCorsHeaders, corsOptions } from './cors.js'
 import { envAll } from './env.js'
 import { statusGet } from './status.js'
@@ -9,16 +9,7 @@ import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUpl
 import { metricsGet } from './metrics.js'
 import { notFound } from './utils/json-response.js'
 
-// Extended itty router for custom error handler
-const ThrowableRouter = (options = {}) =>
-  new Proxy(Router(options), {
-    get: (obj, prop) => (...args) =>
-      prop === 'handle'
-        ? obj[prop](...args).catch((err) => serverError(err, ...args))
-        : obj[prop](...args)
-  })
-
-const router = ThrowableRouter()
+const router = Router()
 
 router.options('*', corsOptions)
 router.all('*', envAll)
@@ -68,12 +59,16 @@ router.all('*', withCorsHeaders(() => notFound()))
 function serverError (error, request, env) {
   console.error(error.stack)
   env.sentry && env.sentry.captureException(error)
-  return addCorsHeaders(request, HTTPError.respond(error, env))
+  return addCorsHeaders(request, errorHandler(error, env))
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent
 /** @typedef {{ waitUntil(p: Promise): void }} Ctx */
 
 addEventListener('fetch', (event) => {
-  event.respondWith(router.handle(event.request, {}, event))
+  const env = {}
+  event.respondWith(router
+    .handle(event.request, env, event)
+    .catch((e) => serverError(e, event.request, env))
+  )
 })
