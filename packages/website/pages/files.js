@@ -6,6 +6,16 @@ import Checkbox from '../components/checkbox'
 import Loading from '../components/loading'
 import { getUploads, deleteUpload } from '../lib/api.js'
 import { When } from 'react-if'
+import clsx from 'clsx'
+
+/** @typedef {object} Upload
+ *  @property {string} cid
+ *  @property {string} created
+ *  @property {string} name
+ *  @property {object} content
+ *  @property {string} content.cid
+ *  @property {number} content.dagSize
+*/
 
 /**
  * Static Props
@@ -38,6 +48,50 @@ const formatTimestamp = (timestamp) => {
 }
 
 /**
+ * @param {Object} props
+ * @param {Object} [props.children]
+ * @param {number} [props.index]
+ * @param {boolean} [props.checked]
+*/
+const TableElement = ({ children, index = 0, checked }) => (
+  <td className={clsx('px-2 border-2 border-w3storage-red break-all', index % 2 === 0 ? 'bg-white' : 'bg-gray-100', checked && 'bg-w3storage-red-accent bg-opacity-20')}>
+    { children }
+  </td>
+)
+
+
+/**
+ * @param {Object} props
+ * @param {Upload} props.upload
+ * @param {number} props.index
+ * @param {function} props.toggle
+ * @param {string[]} props.selectedFiles
+ */
+const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
+  const checked = selectedFiles.includes(upload?.content?.cid);
+
+  const sharedArgs = { index, checked }
+
+   return <tr>
+      <td>
+        <Checkbox className="mr-2" checked={checked} onChange={() => toggle(upload.content.cid)}/>
+      </td>
+      <TableElement {...sharedArgs}> {formatTimestamp(upload.created)} </TableElement>
+      <TableElement {...sharedArgs}> {upload.name} </TableElement>
+      <TableElement {...sharedArgs}> {upload.name} </TableElement>
+      <TableElement {...sharedArgs}> <GatewayLink cid={upload.content.cid} /> </TableElement>
+
+      <TableElement {...sharedArgs}> TBD </TableElement>
+      <TableElement {...sharedArgs}> TBD </TableElement>
+      <TableElement {...sharedArgs}> TBD </TableElement>
+
+      <TableElement {...sharedArgs}> 
+        {upload.content.dagSize ? filesize(upload.content.dagSize) : 'Calculating...'}
+      </TableElement>
+    </tr>
+}
+
+/**
  * Files Page
  *
  * @param {import('../components/types.js').LayoutChildrenProps} props
@@ -61,14 +115,7 @@ export default function Files({ user }) {
       enabled: !!user,
     }
   )
-  /** @typedef {object} Upload
-   *  @property {string} cid
-   *  @property {string} created
-   *  @property {string} name
-   *  @property {object} content
-   *  @property {string} content.cid
-   *  @property {number} content.dagSize
-  */
+
   /** @type {Upload[]} */
   const uploads = data || []
 
@@ -108,16 +155,6 @@ export default function Files({ user }) {
     <th className="px-2 border-2 border-w3storage-red bg-w3storage-red-background">
       { children }
     </th>
-  )
-
-  /**
-   * @param {Object} props
-   * @param {Object} [props.children]
-   */
-  const TableElement = ({ children }) => (
-    <td className="px-2 border-2 border-w3storage-red bg-white break-all">
-      { children }
-    </td>
   )
 
   /**
@@ -182,26 +219,8 @@ export default function Files({ user }) {
                       </tr>
                     </thead>
                     <tbody>
-                      {uploads.map(
-                        (upload, _) => (
-                          <tr key={upload.content.cid}>
-                            <td>
-                              <Checkbox className="mr-2" checked={selectedFiles.includes(upload?.content?.cid)} onChange={() => toggle(upload.content.cid)}/>
-                            </td>
-                            <TableElement>{formatTimestamp(upload.created)}</TableElement>
-                            <TableElement>{upload.name}</TableElement>
-                            <TableElement>{upload.name}</TableElement>
-                            <TableElement><GatewayLink cid={upload.content.cid} /></TableElement>
-
-                            <TableElement>TBD</TableElement>
-                            <TableElement>TBD</TableElement>
-                            <TableElement>TBD</TableElement>
-
-                            <TableElement>
-                              {upload.content.dagSize ? filesize(upload.content.dagSize) : 'Calculating...'}
-                            </TableElement>
-                          </tr>
-                        )
+                      {uploads.map((upload, index) =>
+                        <UploadItem key={upload.content.cid} upload={upload} index={index} toggle={toggle} selectedFiles={selectedFiles}/>
                       )}
                     </tbody>
                   </table>
