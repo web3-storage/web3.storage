@@ -1,12 +1,13 @@
 /* eslint-env serviceworker */
 import { Router } from 'itty-router'
+import { errorHandler } from './error-handler.js'
 import { addCorsHeaders, withCorsHeaders, corsOptions } from './cors.js'
 import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, withAuth } from './user.js'
 import { metricsGet } from './metrics.js'
-import { JSONResponse, notFound } from './utils/json-response.js'
+import { notFound } from './utils/json-response.js'
 
 const router = Router()
 
@@ -50,19 +51,22 @@ router.get('/', () => {
 router.get('/error', () => { throw new Error('A deliberate error!') })
 router.all('*', withCorsHeaders(() => notFound()))
 
-function serverError (request, error) {
-  console.error(error.stack)
-  const message = error.message || 'Server Error'
-  const status = error.status || 500
-  return addCorsHeaders(request, new JSONResponse({ message }, { status }))
+/**
+ * @param {Error} error
+ * @param {Request} request
+ * @param {import('./env').Env} env
+ */
+function serverError (error, request, env) {
+  return addCorsHeaders(request, errorHandler(error, env))
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent
 /** @typedef {{ waitUntil(p: Promise): void }} Ctx */
 
 addEventListener('fetch', (event) => {
+  const env = {}
   event.respondWith(router
-    .handle(event.request, {}, event)
-    .catch((e) => serverError(event.request, e))
+    .handle(event.request, env, event)
+    .catch((e) => serverError(e, event.request, env))
   )
 })

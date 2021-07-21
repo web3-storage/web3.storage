@@ -39,6 +39,8 @@ jobs:
       - name: Publish api worker
         # workaround for https://github.com/cloudflare/wrangler-action/issues/59 to use node 16
         uses: web3-storage/wrangler-action@node16
+        env:
+          SENTRY_TOKEN: ${{ secrets.STAGING_SENTRY_TOKEN}}
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           workingDirectory: 'packages/api'
