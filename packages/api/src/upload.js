@@ -38,20 +38,24 @@ export async function uploadPost (request, env) {
     const files = /** @type {File[]} */ (form.getAll('file'))
     const dirSize = files.reduce((total, f) => total + f.size, 0)
 
-    const dir = await env.cluster.addDirectory(files, {
-      metadata: { size: dirSize.toString() }
+    const entries = await env.cluster.addDirectory(files, {
+      metadata: { size: dirSize.toString() },
+      // When >2.5MB, use local add, because waiting for blocks to be sent to
+      // other cluster nodes can take a long time. Replication to other nodes
+      // will be done async by bitswap instead.
+      local: dirSize > LOCAL_ADD_THRESHOLD
     })
-    const { cid: cCId, size } = dir[dir.length - 1]
+    const dir = entries[entries.length - 1]
 
-    cid = cCId
-    dagSize = size
+    cid = dir.cid
+    dagSize = dir.size
   } else {
     const blob = await request.blob()
     if (blob.size === 0) {
       throw new Error('Empty payload')
     }
 
-    const { cid: cCId, size } = await env.cluster.add(blob, {
+    const entry = await env.cluster.add(blob, {
       metadata: { size: blob.size.toString() },
       // When >2.5MB, use local add, because waiting for blocks to be sent to
       // other cluster nodes can take a long time. Replication to other nodes
@@ -59,10 +63,8 @@ export async function uploadPost (request, env) {
       local: blob.size > LOCAL_ADD_THRESHOLD
     })
 
-    cid = cCId
-    dagSize = size
-
-    return new JSONResponse({ cid })
+    cid = entry.cid
+    dagSize = entry.size
   }
 
   // Retrieve current pin status and info about the nodes pinning the content.
