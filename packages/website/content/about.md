@@ -6,7 +6,7 @@ Web3.Storage aims to make leveraging the power of decentralized storage for web3
 
 Content uploaded to [Web3.Storage](http://web3.storage) is pinned redundantly in an [IPFS Cluster](https://cluster.ipfs.io/) of 3 geographically distributed nodes. When 32GiB of content is made available, a request is made to pin a new batch of content into a separate IPFS cluster - where a 32GiB [CAR file](https://ipld.io/specs/transport/car/carv2/#summary) is generated to store the data. Once this 32GiB CAR file is ready, a queue of geographically distributed miners - selected for performance and availability - bid for the right to store these deals, with the Web3.Storage client making a minimum of 5 deals with the various miners. Please see the [documentation](/) for how one can use the Status API to query for information regarding pin status and deal status for your uploaded content.
 
-Once the deals are active, the [Web3.Storage](http://web3.storage) client polls to ensure that the relevant sectors are still available. In the event of an early termination (or a miner going offline), the W[eb3.Storage](http://web3.storage) client will automatically add the relevant deals into the queue of upcoming deals to ensure at all times there are always a minimum of 5 copies of data being stored with Filecoin Miners.
+Once the deals are active, the [Web3.Storage](http://web3.storage) client polls to ensure that the relevant sectors are still available. In the event of an early termination (or a miner going offline), the [Web3.Storage](http://web3.storage) client will automatically add the relevant deals into the queue of upcoming deals to ensure at all times there are always a minimum of 5 copies of data being stored with Filecoin Miners.
 
 In the future, we hope to expand this service to offer a variety of options for storing data - including purely protocol based approaches (e.g. via smart contracts) as well as other hosted options (e.g. HTTP end points). We also aim to provide more native tooling for automated deal management via tools like Data DAOs - which may augment the offerings of this service in the future. Our aim today is to provide a user friendly experience that massively reduces the burden for onboarding new use cases into the web3 ecosystem today - while providing an upgrade path for further decentralization.
 
@@ -26,7 +26,7 @@ For reference, the following parameters and strategies are used to ensure highly
 
 - Deals with miners are set to last 18 months with deal renewals being automatically managed by [Web3.Storage](http://web3.storage).
 - Each piece of content is stored with a minimum of 5 miners, typically exceeding this minimum (the specific list of miners being provided via the [Status API](/)).
-- In the event of a miner going offline, [web3.storage](http://web3.storage) will automatically store an additional copy to meet the minimum of 5 copies being stored on the Filecoin network.
+- In the event of a miner going offline, [Web3.Storage](http://web3.storage) will automatically store an additional copy to meet the minimum of 5 copies being stored on the Filecoin network.
 
 It is recommended that you do not rely on Filecoin deals directly for performant retrieval, and instead you allow [Web3.Storage](http://web3.storage) to make the data available in IPFS. Retrieving data over the IPFS network is the recommended means of accessing [Web3.Storage](http://web3.storage) data.
 
