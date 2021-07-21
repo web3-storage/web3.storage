@@ -6,8 +6,9 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "npm run start:pins",
-    "start:pins": "node src/bin/pins.js"
+    "start": "run-s start:*",
+    "start:pins": "node src/bin/pins.js",
+    "start:pinata": "node src/bin/pinata.js"
   },
   "author": "Alan Shaw",
   "license": "(Apache-2.0 AND MIT)",
@@ -16,9 +17,13 @@
     "@web-std/fetch": "^2.0.1",
     "@web3-storage/db": "^0.0.0",
     "debug": "^4.3.1",
-    "dotenv": "^9.0.2"
+    "dotenv": "^9.0.2",
+    "limiter": "2.0.1",
+    "node-fetch": "^2.6.1",
+    "p-retry": "^4.6.1"
   },
   "devDependencies": {
-    "@types/node": "^16.3.1"
+    "@types/node": "^16.3.1",
+    "npm-run-all": "^4.1.5"
   }
 }
