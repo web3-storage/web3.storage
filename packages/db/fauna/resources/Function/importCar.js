@@ -109,6 +109,14 @@ const body = Query(
                     name: Select('name', Var('data'), null),
                     created: Now()
                   }
+                }),
+                pinRequest: Create('PinRequest', {
+                  data: {
+                    cid: Var('cid'),
+                    content: Select('ref', Var('content')),
+                    attempts: 0,
+                    updated: Now()
+                  }
                 })
               },
               Do(
