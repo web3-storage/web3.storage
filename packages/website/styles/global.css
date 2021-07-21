@@ -42,6 +42,15 @@
     font-display: swap;
 }
 
+@font-face {
+  font-family: "Space Mono";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/fonts/space-mono/space-mono-regular.woff2") format("woff2");
+  src: url("/fonts/space-mono/space-mono-regular.woff") format("woff");
+  font-display: swap;
+}
+
 /* ================================================================================
    Typography
    ================================================================================ */
@@ -53,10 +62,10 @@
 
 .typography-hero-title {
   font-family: "Space Grotesk", sans-serif;
-  font-size: 5rem;
+  font-size: 3rem;
   letter-spacing: normal;
   font-weight: 500;
-  line-height: 7rem;
+  line-height: 1.4em;
 }
 
 .typography-hero-subtitle {
@@ -67,13 +76,15 @@
 
 .typography-section-title {
   font-family: "Space Grotesk", sans-serif;
-  font-size: 2.25rem;
+  font-size: 1.75rem;
+  font-weight: 500;
   letter-spacing: normal;
+  line-height: 1.395em;
 }
 
 .typography-body-title {
   font-family: "Space Grotesk", sans-serif;
-  font-size: 1.375rem;
+  font-size: 1.625rem;
   letter-spacing: normal;
 }
 
@@ -82,6 +93,22 @@
   font-weight: 600;
   font-size: 0.9375rem; /* 15px */
   letter-spacing: 0.02em;
+}
+
+@screen md {
+  .typography-hero-title {
+    font-size: 3.6rem;
+  }
+
+  .typography-section-title {
+    font-size: 2.375rem;
+  }
+}
+
+@screen lg {
+  .typography-hero-title {
+    font-size: 5rem;
+  }
 }
 
 h1 {
@@ -94,7 +121,7 @@ h2 {
 
 h3 {
   @apply typography-body-title;
-  @apply font-medium;
+  @apply font-bold;
 }
 
 html, body {
@@ -125,7 +152,7 @@ body {
 }
 
 /* 1440 max width + 58px left & right padding */
-@media only screen and (min-width: 1556px) {
+@media only screen and (min-width: 1680px) {
   .layout-margins {
       @apply max-w-screen-2xl mx-auto;
   }

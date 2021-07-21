@@ -21,12 +21,14 @@
     "react-if": "^4.0.1",
     "react-markdown": "^6.0.2",
     "react-query": "^3.13.9",
+    "react-syntax-highlighter": "^11.0.3",
     "web3.storage": "^2.0.1"
   },
   "devDependencies": {
     "@svgr/webpack": "^5.5.0",
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.9",
+    "@types/react-syntax-highlighter": "^13.5.2",
     "autoprefixer": "^10.2.6",
     "eslint": "^7.24.0",
     "eslint-config-next": "^11.0.1",

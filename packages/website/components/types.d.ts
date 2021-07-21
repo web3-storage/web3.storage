@@ -9,7 +9,9 @@ export interface LayoutProps {
   description?: string
   pageBgColor?: string
   navBgColor?: string
+  footerBgColor?: string
   data?: any
+  highlightMessage?: string
 }
 
 export interface LayoutChildrenProps {
