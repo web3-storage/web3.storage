@@ -48,7 +48,7 @@ describe('POST /upload', () => {
     body.append('file', file2, 'name2')
 
     // expected CID for the above data
-    const expectedCid = 'bafkreidsnixyep54glvcz2ocszbokylqalkio2eintcio5tix2vrbmaatu'
+    const expectedCid = 'bafkreidekh6xmx5iqumo63i2fipsdtjmpzj4liok7wzptv4tvmnj2ptu6u'
 
     const res = await fetch(new URL('upload', endpoint), {
       method: 'POST',
