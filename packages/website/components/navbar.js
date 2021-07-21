@@ -31,11 +31,9 @@ export default function Navbar({ bgColor = 'white', user }) {
               About
             </a>
           </Link>
-          <Link href="/docs">
-            <a className="text-black font-bold no-underline hover:underline align-middle mr-12">
-              Documentation
-            </a>
-          </Link>
+          <a href="https://web3-storage-docs.on.fleek.co/" className="text-black font-bold no-underline hover:underline align-middle mr-12">
+            Documentation
+          </a>
           {user ? (
             <>
               <Link href="/files">
@@ -43,7 +41,7 @@ export default function Navbar({ bgColor = 'white', user }) {
                   Files
                 </a>
               </Link>
-              <Link href="/account">
+              <Link href="/profile">
                 <a className="text-black font-bold no-underline hover:underline align-middle mr-12">
                   Profile
                 </a>
