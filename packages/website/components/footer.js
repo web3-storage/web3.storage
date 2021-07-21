@@ -13,7 +13,7 @@ export default function Footer() {
           </a>
         </div>
         <div className="flex flex-col sm:flex-row">
-          <Link href="https://status.web3.storage/">
+          <Link href="https://web3-storage.statuspage.io/">
             <a className="font-bold no-underline hover:underline mr-6 md:mr-12">
               Status
             </a>

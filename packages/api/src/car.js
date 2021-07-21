@@ -24,7 +24,7 @@ const IMPORT_CAR = gql`
 `
 
 const UPDATE_DAG_SIZE = gql`
-  mutation UpdateContentDagSize($content: ID!, $dagSize: Int!) {
+  mutation UpdateContentDagSize($content: ID!, $dagSize: Long!) {
     updateContentDagSize(content: $content, dagSize: $dagSize) {
       _id
     }

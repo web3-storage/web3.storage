@@ -87,7 +87,7 @@ type Content {
   Size of the DAG in bytes. Set if known on upload or for partials is set when
   content is fully pinned in at least one location.
   """
-  dagSize: Int
+  dagSize: Long
 
   """
   Creation date.
@@ -299,7 +299,7 @@ type Deal {
   """
   Identifier for the deal stored on chain.
   """
-  dealId: Int! @unique
+  dealId: Long! @unique
 
   """
   Time when deal will be active.
@@ -370,7 +370,7 @@ type Mutation {
   Creates a new pin object (and location) or updates an existing pin object.
   """
   createOrUpdatePin(data: CreateOrUpdatePinInput): Pin! @resolver
-  updateContentDagSize(content: ID!, dagSize: Int!): Content! @resolver
+  updateContentDagSize(content: ID!, dagSize: Long!): Content! @resolver
   createPinRequest(cid: String!): PinRequest! @resolver
   incrementPinRequestAttempts(pinRequest: ID!): PinRequest! @resolver
 }
@@ -379,9 +379,9 @@ type Metrics {
   usersTotal: Int!
   uploadsTotal: Int!
   contentTotal: Int!
-  contentTotalBytes: Int!
+  contentTotalBytes: Long!
   pinsTotal: Int!
-  pinsTotalBytes: Int!
+  pinsTotalBytes: Long!
   pinsQueuedTotal: Int!
   pinsPinningTotal: Int!
   pinsPinnedTotal: Int!
@@ -404,7 +404,7 @@ input CreateOrUpdateDealInput {
   """
   dataCid: String
   miner: String
-  dealId: Int!
+  dealId: Long!
   activation: Time
   renewal: Time
   status: DealStatus!
@@ -436,7 +436,7 @@ input ImportCarInput {
   authToken: ID
   cid: String!
   name: String
-  dagSize: Int
+  dagSize: Long
   pins: [PinInput!]!
 }
 
