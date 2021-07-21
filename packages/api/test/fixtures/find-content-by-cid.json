@@ -11,7 +11,7 @@
             "pieceCid": "baga",
             "deals": {
               "data" : [ {
-                "miner": "f99",
+                "storageProvider": "f99",
                 "dealId": 12345,
                 "status": "Active",
                 "activation": "<iso timestamp>",

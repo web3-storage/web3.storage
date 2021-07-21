@@ -21,7 +21,7 @@ describe('GET /status/:cid', () => {
       }],
       deals: [{
         dealId: 12345,
-        miner: 'f99',
+        storageProvider: 'f99',
         status: 'Active',
         pieceCid: 'baga',
         dataCid: 'bafy',

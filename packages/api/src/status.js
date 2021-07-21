@@ -36,7 +36,7 @@ export async function statusGet (request, env) {
               pieceCid
               deals {
                 data {
-                  miner
+                  storageProvider
                   dealId
                   status
                   activation
@@ -84,9 +84,9 @@ export async function statusGet (request, env) {
     }
     return deals.data
       .filter(({ status }) => DEAL_STATUS.has(status))
-      .map(({ dealId, miner, status, activation, created, updated }) => ({
+      .map(({ dealId, storageProvider, status, activation, created, updated }) => ({
         dealId,
-        miner,
+        storageProvider,
         status,
         pieceCid,
         dataCid,
