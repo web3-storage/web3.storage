@@ -44,9 +44,12 @@ const formatTimestamp = (timestamp) => {
  * @returns
  */
 export default function Files({ user }) {
+  /** @type string[] */
+  const initialFiles = [];
+
+  const [selectedFiles, setSelectedFiles] = useState(/** @type string[] */ initialFiles)
   const [size] = useState(25)
   const [befores, setBefores] = useState([new Date().toISOString()])
-  const [selectedFiles, setSelectedFiles] = useState(Array())
   const queryClient = useQueryClient()
   const queryParams = { before: befores[0], size }
   /** @type {[string, { before: string, size: number }]} */
@@ -58,7 +61,15 @@ export default function Files({ user }) {
       enabled: !!user,
     }
   )
-  /** @type {any[]} */
+  /** @typedef {object} Upload
+   *  @property {string} cid
+   *  @property {string} created
+   *  @property {string} name
+   *  @property {object} content
+   *  @property {string} content.cid
+   *  @property {number} content.dagSize
+  */
+  /** @type {Upload[]} */
   const uploads = data || []
 
   function handleDelete() {
@@ -88,8 +99,6 @@ export default function Files({ user }) {
   }
 
   const hasZeroUploads = uploads.length === 0 && befores.length === 1
-
-  const tableClass = 'px-2 border-2 border-w3storage-red bg-white'
 
   /**
    * @param {Object} props
@@ -174,7 +183,7 @@ export default function Files({ user }) {
                     </thead>
                     <tbody>
                       {uploads.map(
-                        (/** @type {any} */ upload, /** @type {number} */ _) => (
+                        (upload, _) => (
                           <tr key={upload.content.cid}>
                             <td>
                               <Checkbox className="mr-2" checked={selectedFiles.includes(upload?.content?.cid)} onChange={() => toggle(upload.content.cid)}/>

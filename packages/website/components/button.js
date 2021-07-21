@@ -36,7 +36,7 @@ export default function Button({
   rounded,
   Icon,
 }) {
-  const buttonStyle = small ? {} : { minWidth: '8rem', minHeight: '3.25rem' }
+  const buttonStyle = small ? {} : { minWidth: '8rem', minHeight: '3.25rem' }
   const variantClasses = variant === 'dark' ? 'bg-w3storage-purple text-white' : 'bg-transparent text-black'
 
   const btn = (
