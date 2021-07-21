@@ -3,16 +3,16 @@
     "findContentByCid": {
       "created": "2021-07-14T19:27:14.934572Z",
       "dagSize": 101,
-      "batchEntries": {
+      "aggregateEntries": {
         "data": [{
           "dataModelSelector": "Links/0/Links",
-          "batch": {
-            "cid": "bafy",
+          "aggregate": {
+            "dataCid": "bafy",
             "pieceCid": "baga",
             "deals": {
               "data" : [ {
                 "miner": "f99",
-                "chainDealId": 12345,
+                "dealId": 12345,
                 "status": "Active",
                 "activation": "<iso timestamp>",
                 "created": "2021-07-14T19:27:14.934572Z",

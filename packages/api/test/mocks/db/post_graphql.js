@@ -56,8 +56,8 @@ module.exports = ({ body }) => {
     if (body.variables.cid === 'unknown') {
       return gqlResponse(200, require('../../fixtures/find-content-by-cid-unknown.json'))
     }
-    if (body.variables.cid === 'nobatch') {
-      return gqlResponse(200, require('../../fixtures/find-content-by-cid-no-batch.json'))
+    if (body.variables.cid === 'noaggregate') {
+      return gqlResponse(200, require('../../fixtures/find-content-by-cid-no-aggregate.json'))
     }
     if (body.variables.cid === 'nodeal') {
       return gqlResponse(200, require('../../fixtures/find-content-by-cid-no-deal.json'))

@@ -28,16 +28,16 @@ export async function statusGet (request, env) {
       findContentByCid(cid: $cid) {
         created
         dagSize
-        batchEntries {
+        aggregateEntries {
           data {
             dataModelSelector
-            batch {
-              cid
+            aggregate {
+              dataCid
               pieceCid
               deals {
                 data {
                   miner
-                  chainDealId
+                  dealId
                   status
                   activation
                   created
@@ -72,8 +72,8 @@ export async function statusGet (request, env) {
     .filter(({ status }) => PIN_STATUS.has(status))
     .map(({ status, updated, location }) => ({ status, updated, ...location }))
 
-  const deals = raw.batchEntries.data.map(({ dataModelSelector, batch }) => {
-    const { pieceCid, cid: dataCid, deals } = batch
+  const deals = raw.aggregateEntries.data.map(({ dataModelSelector, aggregate }) => {
+    const { pieceCid, dataCid, deals } = aggregate
     if (deals.data.length === 0) {
       return [{
         status: 'Queued',
@@ -84,7 +84,7 @@ export async function statusGet (request, env) {
     }
     return deals.data
       .filter(({ status }) => DEAL_STATUS.has(status))
-      .map(({ chainDealId: dealId, miner, status, activation, created, updated }) => ({
+      .map(({ dealId, miner, status, activation, created, updated }) => ({
         dealId,
         miner,
         status,
