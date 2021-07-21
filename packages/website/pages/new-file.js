@@ -9,7 +9,6 @@ export function getStaticProps() {
   return {
     props: {
       title: 'New File - Web3 Storage',
-      navBgColor: 'nsyellow',
       redirectTo: '/',
       needsUser: true,
     },

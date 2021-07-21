@@ -11,7 +11,7 @@ import Button from './button.js'
  * @param {string} [props.bgColor]
  * @param {any} [props.user]
  */
-export default function Navbar({ bgColor = 'white', user }) {
+export default function Navbar({ bgColor = '', user }) {
   const queryClient = useQueryClient()
   async function logout() {
     await getMagic().user.logout()
@@ -20,31 +20,32 @@ export default function Navbar({ bgColor = 'white', user }) {
   }
 
   return (
-    <nav className={`bg-${bgColor} w-full border border-gray-400`}>
+    <nav className={`${bgColor} w-full z-10`}>
       <div className="flex items-center justify-between py-3 mx-auto max-w-screen-2xl">
         <Link href="/">
           <a title="Web3 Storage">⁂</a>
         </Link>
         <div>
           <Link href="/about">
-            <a className="text-black font-bold no-underline hover:underline align-middle mr-12">
+            <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12">
               About
             </a>
           </Link>
-          <Link href="/docs">
-            <a className="text-black font-bold no-underline hover:underline align-middle mr-12">
-              Documentation
+          {/* TODO: change docs link before going live */}
+          <Link href="https://web3-storage-docs.on.fleek.co/">
+            <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12">
+              Docs
             </a>
           </Link>
           {user ? (
             <>
               <Link href="/files">
-                <a className="text-black font-bold no-underline hover:underline align-middle mr-12">
+                <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12">
                   Files
                 </a>
               </Link>
-              <Link href="/account">
-                <a className="text-black font-bold no-underline hover:underline align-middle mr-12">
+              <Link href="/profile">
+                <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12">
                   Profile
                 </a>
               </Link>

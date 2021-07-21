@@ -30,8 +30,4 @@ For reference, the following parameters and strategies are used to ensure highly
 
 It is recommended that you do not rely on Filecoin deals directly for performant retrieval, and instead you allow [Web3.Storage](http://web3.storage) to make the data available in IPFS. Retrieving data over the IPFS network is the recommended means of accessing [Web3.Storage](http://web3.storage) data.
 
-### Terms of service
-
-The following terms and conditions govern all use of the web3.storage website (the “Website”) and all content, services and products available at or through the Website. The Website is offered subject to your acceptance without modification of all of the terms and conditions contained herein. As all data uploaded to web3.storage will be stored on IPFS, this website incorporates the Terms of Service of [IPFS.io](http://ipfs.io/).
-
-If you do not agree to all the terms and conditions of this agreement, then you may not access the Website or use any services.
+### [Terms of service](/terms)

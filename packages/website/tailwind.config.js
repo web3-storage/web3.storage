@@ -23,7 +23,33 @@ module.exports = {
         "w3storage-blue-desaturated": '#2d2d65',
         "w3storage-blue-bright": '#00a7ff',
         "w3storage-white": '#ffffff',
-      }
+        "w3storage-background": '#fff2ec'
+      },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            color: theme('colors.w3storage-purple'),
+            h1: {
+              color: false,
+              fontSize: false,
+              fontWeight: false,
+            },
+            h2: {
+              color: false,
+              fontSize: false,
+              fontWeight: false,
+            },
+            h3: {
+              color: false,
+              fontSize: false,
+              fontWeight: false,
+            },
+            a: {
+              color: theme('colors.w3storage-purple'),
+            }
+          }
+        }
+      })
     },
   },
   variants: {

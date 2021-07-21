@@ -22,8 +22,8 @@ export default function Layout({
   redirectIfFound = false,
   title = 'Web3 Storage - The simple file storage service for IPFS & Filecoin.',
   description = 'Web3 Storage',
-  navBgColor = 'white',
-  pageBgColor = 'bg-white',
+  pageBgColor = 'bg-w3storage-background',
+  navBgColor,
   data = null,
 }) {
   const { user, status } = useUser({
@@ -60,7 +60,7 @@ export default function Layout({
         </>
       ) : (
         <>
-          <Navbar bgColor={navBgColor} user={user} />
+          <Navbar user={user} bgColor={navBgColor} />
           {children({ user, data })}
           <Footer />
         </>

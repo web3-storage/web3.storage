@@ -13,7 +13,6 @@ export function getStaticProps() {
   return {
     props: {
       title: 'Manage API Tokens - web3.storage',
-      navBgColor: 'nsgreen',
       redirectTo: '/',
       needsUser: true,
     },
