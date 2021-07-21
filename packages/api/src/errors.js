@@ -13,9 +13,8 @@ export class HTTPError extends Error {
 
 export class UserNotFoundError extends HTTPError {
   constructor (msg = 'User not found.') {
-    super(msg)
+    super(msg, 401)
     this.name = 'UserNotFound'
-    this.status = 401
     this.code = UserNotFoundError.CODE
   }
 }
@@ -24,9 +23,8 @@ UserNotFoundError.CODE = 'ERROR_USER_NOT_FOUND'
 
 export class TokenNotFoundError extends HTTPError {
   constructor (msg = 'API token not found.') {
-    super(msg)
+    super(msg, 401)
     this.name = 'TokenNotFound'
-    this.status = 401
     this.code = TokenNotFoundError.CODE
   }
 }

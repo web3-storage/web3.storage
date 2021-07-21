@@ -1,18 +1,24 @@
 import { ErrorCode as MagicErrors } from '@magic-sdk/admin'
 import { JSONResponse } from './utils/json-response.js'
-import { HTTPError, UserNotFoundError, TokenNotFoundError } from './errors.js'
+import { HTTPError } from './errors.js'
 
 /**
  * @param {Error & {status?: number;code?: string;}} err
+ * @param {import('./env').Env} env
  */
-export function errorHandler (err) {
+export function errorHandler (err, { sentry }) {
+  console.error(err.stack)
+
   let error = {
     code: err.code,
     message: err.message
   }
   let status = err.status || 500
 
-  if (err instanceof HTTPError || err instanceof UserNotFoundError || err instanceof TokenNotFoundError) {
+  if (err instanceof HTTPError) {
+    if (sentry && status >= 500) {
+      sentry.captureException(err)
+    }
     return new JSONResponse(error, { status })
   }
 
@@ -50,6 +56,10 @@ export function errorHandler (err) {
         message: err.message || 'Server Error'
       }
       break
+  }
+
+  if (sentry && status >= 500) {
+    sentry.captureException(err)
   }
 
   return new JSONResponse(error, { status })

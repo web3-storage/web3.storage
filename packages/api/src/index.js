@@ -57,8 +57,6 @@ router.all('*', withCorsHeaders(() => notFound()))
  * @param {import('./env').Env} env
  */
 function serverError (error, request, env) {
-  console.error(error.stack)
-  env.sentry && env.sentry.captureException(error)
   return addCorsHeaders(request, errorHandler(error, env))
 }
 
