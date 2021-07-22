@@ -262,6 +262,24 @@ export async function userUploadsGet (request, env) {
           content {
             cid
             dagSize
+            aggregateEntries {
+              data {
+                aggregate {
+                  deals {
+                    data {
+                      miner
+                      renewal
+                      dealId
+                    }
+                  }
+                }
+              }
+            }
+            pins {
+              data {
+                status
+              }
+            }
           }
           created
         }

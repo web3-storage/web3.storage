@@ -7,15 +7,7 @@ import Loading from '../components/loading'
 import { getUploads, deleteUpload } from '../lib/api.js'
 import { When } from 'react-if'
 import clsx from 'clsx'
-
-/** @typedef {object} Upload
- *  @property {string} cid
- *  @property {string} created
- *  @property {string} name
- *  @property {object} content
- *  @property {string} content.cid
- *  @property {number} content.dagSize
-*/
+import adaptUploadData from '../utils/adapters/files'
 
 /**
  * Static Props
@@ -41,8 +33,13 @@ export function getStaticProps() {
 const formatTimestamp = (timestamp) => {
   const date = new Date(timestamp)
   const today = new Date();
-  if(date.getUTCDay() === today.getUTCDay() && date.getUTCMonth() === today.getUTCMonth() && date.getFullYear() === today.getFullYear()) {
-    return timestamp.split('T')[1].split('.')[0]
+  const isSameDay = date.getUTCDay() === today.getUTCDay() && date.getUTCMonth() === today.getUTCMonth() && date.getFullYear() === today.getFullYear()
+
+  if(!isSameDay) {
+    return new Date(timestamp).toLocaleTimeString(undefined, {
+      hour: '2-digit',
+      minute:'2-digit',
+    })
   }
   return timestamp.split('T')[0]
 }
@@ -52,9 +49,17 @@ const formatTimestamp = (timestamp) => {
  * @param {Object} [props.children]
  * @param {number} [props.index]
  * @param {boolean} [props.checked]
+ * @param {boolean} [props.breakAll]
+ * @param {boolean} [props.centered]
+ * @param {boolean} [props.important]
 */
-const TableElement = ({ children, index = 0, checked }) => (
-  <td className={clsx('px-2 border-2 border-w3storage-red break-all', index % 2 === 0 ? 'bg-white' : 'bg-gray-100', checked && 'bg-w3storage-red-accent bg-opacity-20')}>
+const TableElement = ({ children, index = 0, checked, breakAll = true, centered, important }) => (
+  <td className={clsx('px-2 border-2 border-w3storage-red',
+     index % 2 === 0 ? 'bg-white' : 'bg-gray-100',
+     checked && 'bg-w3storage-red-accent bg-opacity-20',
+     breakAll && 'break-all',
+     centered && 'text-center'
+    )} style={{ minWidth: important ?  150 : 0 }}>
     { children }
   </td>
 )
@@ -62,7 +67,7 @@ const TableElement = ({ children, index = 0, checked }) => (
 
 /**
  * @param {Object} props
- * @param {Upload} props.upload
+ * @param {import('../utils/adapters/files').Upload} props.upload
  * @param {number} props.index
  * @param {function} props.toggle
  * @param {string[]} props.selectedFiles
@@ -77,16 +82,21 @@ const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
         <Checkbox className="mr-2" checked={checked} onChange={() => toggle(upload.content.cid)}/>
       </td>
       <TableElement {...sharedArgs}> {formatTimestamp(upload.created)} </TableElement>
-      <TableElement {...sharedArgs}> {upload.name} </TableElement>
-      <TableElement {...sharedArgs}> {upload.name} </TableElement>
-      <TableElement {...sharedArgs}> <GatewayLink cid={upload.content.cid} /> </TableElement>
+      <TableElement {...sharedArgs} important> {upload.name} </TableElement>
+      <TableElement {...sharedArgs} important> <GatewayLink cid={upload.content.cid} /> </TableElement>
 
-      <TableElement {...sharedArgs}> TBD </TableElement>
-      <TableElement {...sharedArgs}> TBD </TableElement>
-      <TableElement {...sharedArgs}> TBD </TableElement>
+      <TableElement {...sharedArgs} centered> { upload.pinStatus ?? '-' }</TableElement>
+      <TableElement {...sharedArgs} breakAll={false}> {
+        upload.minersList.map(miner => (
+          <a className="underline" href={miner.link} key={miner.id} target="_blank" rel="noreferrer">
+            { miner.id }
+          </a>
+        ))
+      }</TableElement>
+      <TableElement {...sharedArgs} breakAll={false}> { upload.renewalBy } </TableElement>
 
-      <TableElement {...sharedArgs}> 
-        {upload.content.dagSize ? filesize(upload.content.dagSize) : 'Calculating...'}
+      <TableElement {...sharedArgs} centered> 
+        {upload.content.dagSize ? filesize(upload.content.dagSize) : '-'}
       </TableElement>
     </tr>
 }
@@ -116,8 +126,7 @@ export default function Files({ user }) {
     }
   )
 
-  /** @type {Upload[]} */
-  const uploads = data || []
+  const uploads = adaptUploadData(data || [])
 
   function handleDelete() {
     if (!confirm('Are you sure? Deleted files cannot be recovered!')) return
@@ -195,9 +204,9 @@ export default function Files({ user }) {
                     <Button small disabled={selectedFiles.length === 0} onClick={handleDelete}>
                       Delete
                     </Button>
-                    <Button small className="ml-2">
+                    {/* <Button small className="ml-2">
                       Export Deals
-                    </Button>
+                    </Button> */}
                     <div className="w-35 ml-auto">
                       <Button href="/new-file" small id="upload">Upload File</Button>
                     </div>
@@ -209,7 +218,6 @@ export default function Files({ user }) {
                           <Checkbox className="mr-2" checked={selectedFiles.length === uploads.length} onChange={toggleAll}/>
                         </th>
                         <TableHeader>Timestamp</TableHeader>
-                        <TableHeader>API key name</TableHeader>
                         <TableHeader>Name</TableHeader>
                         <TableHeader>CiD</TableHeader>
                         <TableHeader>Pin Status</TableHeader>
