@@ -27,7 +27,7 @@ const {
   Foreach
 } = fauna
 
-const name = 'importCar'
+const name = 'createUpload'
 const body = Query(
   Lambda(
     ['data'],
@@ -71,6 +71,7 @@ const body = Query(
                         authToken: Var('authTokenRef'),
                         content: Select('ref', Var('content')),
                         name: Select('name', Var('data'), null),
+                        type: Select('type', Var('data')),
                         created: Now()
                       }
                     })
@@ -107,6 +108,7 @@ const body = Query(
                     authToken: Var('authTokenRef'),
                     content: Select('ref', Var('content')),
                     name: Select('name', Var('data'), null),
+                    type: Select('type', Var('data')),
                     created: Now()
                   }
                 })
