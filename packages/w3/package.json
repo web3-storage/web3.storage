@@ -1,7 +1,7 @@
 {
-  "name": "web3.storage-cli",
+  "name": "@web3-storage/w3",
   "version": "0.0.0",
-  "description": "Save your things in web3 ⁂",
+  "description": "The CLI to save your things in web3.storage ⁂",
   "type": "module",
   "bin": {
     "w3": "bin.js"
@@ -11,14 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/web3-storage/web3.storage.git"
+    "url": "git+https://github.com/web3-storage/web3.storage.git",
+    "directory": "packages/w3"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/web3-storage/web3.storage/issues"
   },
-  "homepage": "https://github.com/web3-storage/web3.storage#readme",
+  "homepage": "https://web3.storage",
   "dependencies": {
     "conf": "^10.0.1",
     "enquirer": "^2.3.6",
