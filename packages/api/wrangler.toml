@@ -25,14 +25,14 @@ format = "service-worker"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api.web3.storage/*"
-vars = { CLUSTER_API_URL = "https://filecoin.storage.ipfscluster.io/api/" }
+vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/" }
 
 [env.staging]
 # name = "web3-storage-staging"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api-staging.web3.storage/*"
-vars = { CLUSTER_API_URL = "https://filecoin.storage.ipfscluster.io/api/" }
+vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/" }
 
 [env.alan]
 workers_dev = true
