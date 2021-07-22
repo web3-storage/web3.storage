@@ -18,7 +18,11 @@ const {
   Abort,
   Match,
   Do,
-  Get
+  Get,
+  And,
+  Not,
+  IsNull,
+  GT
 } = fauna
 
 const name = 'addAggregateEntries'
@@ -36,6 +40,7 @@ const body = Query(
         aggregateRef: Select('ref', Var('aggregate'))
       },
       Do(
+        // Create each entry in the DB if not exists.
         Foreach(
           Var('entries'),
           Lambda(
@@ -48,22 +53,39 @@ const body = Query(
                   Abort('missing content CID'),
                   Get(Var('contentMatch'))
                 ),
+                dagSize: Select('dagSize', Var('data'), null),
                 entryMatch: Match(
                   Index('aggregateEntry_by_aggregate_and_content'),
                   Var('aggregateRef'),
                   Select('ref', Var('content'))
                 )
               },
-              If(
-                IsEmpty(Var('entryMatch')),
-                Create('AggregateEntry', {
-                  data: {
-                    content: Select('ref', Var('content')),
-                    aggregate: Var('aggregateRef'),
-                    dataModelSelector: Select('dataModelSelector', Var('data'), null)
-                  }
-                }),
-                null
+              Do(
+                // Update content dagSize if this was provided and not already set.
+                If(
+                  And(
+                    Not(IsNull(Var('dagSize'))),
+                    GT(Var('dagSize'), 0),
+                    IsNull(Select(['data', 'dagSize'], Var('content'), null))
+                  ),
+                  Update(
+                    Select('ref', Var('content')),
+                    { data: { dagSize: Var('dagSize') } }
+                  ),
+                  null
+                ),
+                // Create the aggregate entry.
+                If(
+                  IsEmpty(Var('entryMatch')),
+                  Create('AggregateEntry', {
+                    data: {
+                      content: Select('ref', Var('content')),
+                      aggregate: Var('aggregateRef'),
+                      dataModelSelector: Select('dataModelSelector', Var('data'), null)
+                    }
+                  }),
+                  null
+                )
               )
             )
           )
