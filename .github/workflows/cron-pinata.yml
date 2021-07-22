@@ -1,0 +1,34 @@
+name: Cron Pinata
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+
+jobs:
+  update:
+    name: Backup pins to pinata
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # env: ['staging', 'production']
+        env: ['staging']
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Run job
+        env:
+          DEBUG: '*'
+          ENV: ${{ matrix.env }}
+          FAUNA_KEY: ${{ secrets.FAUNA_KEY }}
+          STAGING_FAUNA_KEY: ${{ secrets.STAGING_FAUNA_KEY }}
+          PINATA_JWT: ${{ secrets.PINATA_JWT }}
+        run: npm run start:pinata -w packages/cron
