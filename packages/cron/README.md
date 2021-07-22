@@ -1,4 +1,5 @@
-# cron jobs for web3.storage
+<h1 align="center">⁂<br/>web3.storage</h1>
+<p align="center">The cron jobs for housekeeping ✨</p>
 
 Resist chaos! Periodically update the db with exciting new facts about the size of pins and anything else that doesn't need to be on the critical path.
 
@@ -29,4 +30,26 @@ Run the job:
 
 ```sh
 npm run start:pins
+```
+
+### pinata
+
+Fetch the oldest 600 PinRequests from the DB and pin them on Piñata
+
+To run this locally you will need the following in your `packages/cron/.env` file:
+
+```ini
+ENV=dev
+DEV_FAUNA_KEY="<your key here>"
+PINATA_JWT="<your jwt here>"
+```
+
+You also need to have:
+
+- a dev account and db set up on FaunaDB with the latest schema imported as per [../db/README.md](../db/README.md)
+
+Run the job:
+
+```sh
+npm run start:pinata
 ```

@@ -166,6 +166,36 @@ enum PinStatus {
 }
 
 """
+Tracks requests to replicate content to more nodes.
+"""
+type PinRequest {
+  """
+  Root CID to Pin.
+  """
+  cid: String! @unique
+
+  """
+  The content that we want replicated.
+  """
+  content: Content! @relation
+
+  """
+  Number of times we have tried to pin this CID
+  """
+  attempts: Int!
+
+  """
+  Last time attempts was updated
+  """
+  updated: Time!
+
+  """
+  When the PinRequest was created
+  """
+  created: Time!
+}
+
+"""
 An upload created by a user.
 """
 type Upload {
@@ -344,6 +374,7 @@ type Query {
   verifyAuthToken(issuer: String!, secret: String!): AuthToken @resolver
   findPinsByStatus(statuses: [PinStatus!]!): [Pin!]! @resolver(paginated: true)
   findMetrics: Metrics! @resolver
+  findAllPinRequests: [PinRequest!]! @resolver(paginated: true)
 }
 
 type Mutation {
@@ -363,6 +394,8 @@ type Mutation {
   """
   createOrUpdatePin(data: CreateOrUpdatePinInput): Pin! @resolver
   updateContentDagSize(content: ID!, dagSize: Long!): Content! @resolver
+  createPinRequest(cid: String!): PinRequest! @resolver
+  incrementPinRequestAttempts(pinRequest: ID!): PinRequest! @resolver
 }
 
 type Metrics {
