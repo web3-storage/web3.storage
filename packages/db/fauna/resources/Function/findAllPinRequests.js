@@ -25,7 +25,7 @@ const body = Query(
     ['size', 'after', 'before'],
     Let(
       {
-        match: Match(Index('pinrequest_sort_by_created_asc'), true),
+        match: Match(Index('pinrequest_sort_by_created_asc')),
         page: If(
           Equals(Var('before'), null),
           If(
