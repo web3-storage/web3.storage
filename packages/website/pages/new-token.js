@@ -41,7 +41,7 @@ export default function NewToken() {
       } finally {
         await queryClient.invalidateQueries('get-tokens')
         setCreating(false)
-        router.push('/profile')
+        router.push('/tokens')
       }
     }
   }

@@ -1,10 +1,9 @@
 /* eslint-env browser */
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import Link from 'next/link'
 import { getTokens } from '../lib/api'
 import Button from '../components/button.js'
-import Modal from '../components/modal.js'
 import VerticalLines from '../illustrations/vertical-lines.js'
 // import emailContent from '../content/file-a-request.json'
 
@@ -49,10 +48,8 @@ export default function Profile({ user }) {
     setCopied(secret)
   }
 
-  const [showModal, setShowModal] = useState(false)
   // const { mail, subject, body } = emailContent
   // const mailTo = `mailto:${mail}?subject=${subject}&body=${encodeURIComponent(body.join('\n'))}`
-  const openModal = useCallback(() => setShowModal(true), [])
 
   return (
     <div className="relative overflow-hidden">
@@ -102,9 +99,9 @@ export default function Profile({ user }) {
           </div>
           <div className="mt-28">
             <h3 id="api-tokens">API Tokens</h3>
-            <div className="flex gap-x-14 mt-10">
+            <div className="flex flex-wrap gap-x-14 mt-10">
               <Link href='/new-token'>
-                <button type="button" className="flex items-center justify-center text-center bg-w3storage-pink border-w3storage-red w-64 h-60 p-9 hover:bg-w3storage-white">
+                <button type="button" className="flex items-center justify-center text-center bg-w3storage-pink border-w3storage-red w-64 h-60 mb-12 p-9 hover:bg-w3storage-white">
                   <p className="typography-body-title px-8">Create an API Token</p>
                 </button>
               </Link>
@@ -113,27 +110,17 @@ export default function Profile({ user }) {
                   key={t._id}
                   data-value={t.secret}
                   onSubmit={handleCopyToken}
-                  className="flex flex-col justify-between items-center text-center bg-white border border-w3storage-red w-64 h-60 p-9"
+                  className="flex flex-col justify-between items-center text-center bg-white border border-w3storage-red w-64 h-60 mb-12 p-9"
                 >
                   <p className="typography-body-title px-8">{t.name}</p>
                   <Button type="submit">{copied === t.secret ? 'Copied!' : 'Copy'}</Button>
                 </form>
               ))}
             </div>
-          </div>
-          <Modal onClose={() => setShowModal(false)} show={showModal}>
-            <div className="flex flex-col justify-between items-center h-full">
-              <div>
-                <p>
-                  Please confirm the API token you want to delete.
-                </p>
-                <input className="w-full mt-8 border border-black rounded-md p-2" placeholder="Enter the name of your API Token" />
-              </div>
-              <Button variant="light" className="w-48">
-                Delete API token
-              </Button>
+            <div className="w-64">
+              <Button href="/tokens">Manage Tokens</Button>
             </div>
-          </Modal>
+          </div>
         </main>
         <div className="absolute top-48 left-0 w-full pointer-events-none" style={{ minWidth: '1536px' }}>
           <div className="w-min ml-auto">

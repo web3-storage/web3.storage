@@ -12,6 +12,7 @@ import clsx from 'clsx'
  * @prop {boolean} [disabled]
  * @prop {string} [id]
  * @prop {'dark' | 'light'} [variant]
+ * @prop {boolean} [small] If the button should have min-width & height or not
  * @prop {boolean} [rounded] If the button should have border-radius
  * @prop {import('react').FunctionComponent} [Icon] Icon component to prefix
  */
@@ -31,10 +32,11 @@ export default function Button({
   children,
   disabled = false,
   variant = 'dark',
+  small,
   rounded,
   Icon,
 }) {
-  const buttonStyle = { minWidth: '8rem', minHeight: '3.25rem' }
+  const buttonStyle = small ? {} : { minWidth: '8rem', minHeight: '3.25rem' }
   const variantClasses = variant === 'dark' ? 'bg-w3storage-purple text-white' : 'bg-transparent text-black'
 
   const btn = (
@@ -45,16 +47,15 @@ export default function Button({
         'flex',
         'items-center',
         'justify-center',
-        'w-full',
         'border',
         'border-transparent',
-        'hover:opacity-90',
-        'focus:opacity-90',
-        'focus:border-white',
         rounded && 'rounded-md',
         'px-4',
-        { pointer: !disabled },
+        disabled ? 
+          'cursor-auto opacity-50' :
+          'hover:opacity-90 focus:opacity-90 focus:border-white',
         'typography-cta',
+        !small && 'w-full',
         className
       )}
       style={buttonStyle}
