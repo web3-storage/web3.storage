@@ -8,9 +8,9 @@ const gqlOkResponse = data => gqlResponse(200, { data })
  * @param {{ body: GraphQLRequest }} request
  */
 module.exports = ({ body }) => {
-  if (body.query.includes('importCar')) {
+  if (body.query.includes('createUpload')) {
     return gqlOkResponse({
-      importCar: { content: { _id: 'test-content' } }
+      createUpload: { content: { _id: 'test-content' } }
     })
   }
 

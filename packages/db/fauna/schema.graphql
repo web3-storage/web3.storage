@@ -216,6 +216,11 @@ type Upload {
   name: String
 
   """
+  Type of received upload data.
+  """
+  type: UploadType!
+
+  """
   The root of the uploaded content.
   """
   content: Content! @relation
@@ -229,6 +234,24 @@ type Upload {
   Deletion date.
   """
   deleted: Time
+}
+
+"""
+Type of received upload data.
+"""
+enum UploadType {
+  """
+  A CAR file upload.
+  """
+  Car
+  """
+  A raw blob upload in the request body.
+  """
+  Blob
+  """
+  A multi file upload using a multipart request.
+  """
+  Multipart
 }
 
 """
@@ -357,7 +380,7 @@ type Query {
 type Mutation {
   createOrUpdateUser(data: CreateOrUpdateUserInput!): User! @resolver
   createAuthToken(data: CreateAuthTokenInput): AuthToken! @resolver
-  importCar(data: ImportCarInput!): Upload! @resolver
+  createUpload(data: CreateUploadInput!): Upload! @resolver
   deleteAuthToken(user: ID!, authToken: ID!): AuthToken! @resolver
   deleteUserUpload(user: ID!, cid: String!): Upload! @resolver
   createAggregate(data: CreateAggregateInput!): Aggregate! @resolver
@@ -432,10 +455,11 @@ input CreateAuthTokenInput {
   secret: String!
 }
 
-input ImportCarInput {
+input CreateUploadInput {
   user: ID!
   authToken: ID
   cid: String!
+  type: UploadType!
   name: String
   dagSize: Long
   pins: [PinInput!]!
