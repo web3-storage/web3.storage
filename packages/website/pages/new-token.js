@@ -36,8 +36,6 @@ export default function NewToken() {
       setCreating(true)
       try {
         await createToken(name)
-      } catch (err) {
-        console.error(err)
       } finally {
         await queryClient.invalidateQueries('get-tokens')
         setCreating(false)
