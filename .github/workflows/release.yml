@@ -113,6 +113,13 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
         run: npm publish --workspace packages/client
 
+      # --- w3 cli deploy steps  ---------------------------------------------
+      - name: w3 cli - NPM Publish
+        if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'w3' }}
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+        run: npm publish --workspace packages/w3
+
       # --- API deploy steps -------------------------------------------------
       - name: API - Deploy to Cloudflare
         if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'api' }}
@@ -124,3 +131,41 @@ jobs:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           workingDirectory: 'packages/api'
           environment: 'production'
+
+      # --- DB deploy steps -------------------------------------------------
+      - name: Update FaunaDB resources
+        if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'db' }}
+        run: npm run import -w packages/db
+        env:
+          FAUNA_KEY: ${{ secrets.PROD_FAUNA_KEY }}
+
+      # --- Website deploy steps ----------------------------------------------
+      - run: npm run build -w packages/client
+        if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'website' }}
+      - run: npm run build -w packages/website
+        if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'website' }}
+        env:
+          NEXT_PUBLIC_ENV: production
+          NEXT_PUBLIC_API: https://api.web3.storage
+          NEXT_PUBLIC_MAGIC: ${{ secrets.PROD_MAGIC_PUBLIC_KEY }}
+
+      # TODO: replace with adding to web3.storage
+      # Pin the built site to ipfs-cluster, output the cid as `steps.ipfs.outputs.cid`
+      - name: Add to IPFS
+        if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'website' }}
+        uses: ipfs-shipyard/ipfs-github-action@v2.1.0
+        id: ipfs
+        with:
+          path_to_add: packages/website/out
+          cluster_host: /dnsaddr/filecoin.storage.ipfscluster.io
+          cluster_user: ${{ secrets.CLUSTER_USER }}
+          cluster_password: ${{ secrets.CLUSTER_PASSWORD }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy https://web3.storage
+        if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'website' }}
+        # TODO: replace `--record preview` with `--record _dnslink` when we are ready!
+        run: npx dnslink-cloudflare --record preview --domain web3.storage --link /ipfs/${{ steps.ipfs.outputs.cid }}
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
