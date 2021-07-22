@@ -113,6 +113,13 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
         run: npm publish --workspace packages/client
 
+      # --- w3 cli deploy steps  ---------------------------------------------
+      - name: w3 cli - NPM Publish
+        if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'w3' }}
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+        run: npm publish --workspace packages/w3
+
       # --- API deploy steps -------------------------------------------------
       - name: API - Deploy to Cloudflare
         if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'api' }}
