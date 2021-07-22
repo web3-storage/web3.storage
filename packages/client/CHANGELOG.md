@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.0.1](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v2.0.0...web3.storage-v2.0.1) (2021-07-22)
+
+
+### Bug Fixes
+
+* types in example ([1662d85](https://www.github.com/web3-storage/web3.storage/commit/1662d856ef7886dbd686355276c57d45fadd2105))
+
 ## [2.0.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v1.0.0...web3.storage-v2.0.0) (2021-07-19)
 
 
