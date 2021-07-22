@@ -5,9 +5,9 @@ import debug from 'debug'
 
 const log = debug('fetchJSON')
 
-const REQUEST_TIMEOUT = 60000
-const RETRY_INTERVAL = 60000
-const RETRY_ATTEMPTS = 5
+const REQUEST_TIMEOUT = 10000
+const RETRY_INTERVAL = 5000
+const RETRY_ATTEMPTS = 3
 
 /**
  * @param {import('limiter').RateLimiter} limiter

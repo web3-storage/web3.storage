@@ -35,7 +35,7 @@ const DELETE_ONE = gql`
 
 const INCREMENT_ATTEMPTS = gql`
   mutation IncrementPinRequestAttempts($_id: ID!) {
-    incrementPinRequestAttempts(id: $_id) {
+    incrementPinRequestAttempts(pinRequest: $_id) {
       _id
       cid
       attempts
