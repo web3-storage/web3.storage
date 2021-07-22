@@ -262,9 +262,9 @@ type Deal {
   aggregate: Aggregate! @relation
 
   """
-  ID of miner this deal was made with.
+  ID of storage provider this deal was made with.
   """
-  miner: String!
+  storageProvider: String!
 
   """
   Identifier for the deal stored on chain.
@@ -363,6 +363,7 @@ input CreateAggregateInput {
 input AggregateEntryInput {
   cid: String!
   dataModelSelector: String
+  dagSize: Long
 }
 
 input CreateOrUpdateDealInput {
@@ -370,7 +371,7 @@ input CreateOrUpdateDealInput {
   CID of the aggregate included in this deal. Required for create, ignored for update.
   """
   dataCid: String
-  miner: String
+  storageProvider: String
   dealId: Long!
   activation: Time
   renewal: Time

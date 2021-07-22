@@ -87,7 +87,7 @@ function mockAggregateEntry (cid) {
  */
 function mockDeal (dataCid) {
   const status = ['Queued', 'Published', 'Active'][randomInt(0, 3)]
-  const miner = `f0${randomInt(1000, 100000)}`
+  const storageProvider = `f0${randomInt(1000, 100000)}`
   const dealId = randomInt(1000, 1000000)
 
   if (status === 'Queued') {
@@ -97,12 +97,12 @@ function mockDeal (dataCid) {
   if (status === 'Published') {
     const activation = new Date(Date.now() + randomInt(0, 5000000))
     const renewal = new Date(activation.getTime() + randomInt(0, 5000000))
-    return { dataCid, miner, dealId, activation: activation.toISOString(), renewal: renewal.toISOString(), status }
+    return { dataCid, storageProvider, dealId, activation: activation.toISOString(), renewal: renewal.toISOString(), status }
   }
 
   const activation = new Date(Date.now() - randomInt(0, 5000000))
   const renewal = new Date(Date.now() + randomInt(0, 5000000))
-  return { dataCid, miner, dealId, activation: activation.toISOString(), renewal: renewal.toISOString(), status }
+  return { dataCid, storageProvider, dealId, activation: activation.toISOString(), renewal: renewal.toISOString(), status }
 }
 
 async function main () {
