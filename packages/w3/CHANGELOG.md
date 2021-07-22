@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.0.1](https://www.github.com/web3-storage/web3.storage/compare/w3-v1.0.0...w3-v1.0.1) (2021-07-22)
+
+
+### Bug Fixes
+
+* set npm publish access to public ([e1ddc56](https://www.github.com/web3-storage/web3.storage/commit/e1ddc56ca014dfe52bdb37c2f5f76b6fb0fee15d))
+
 ## 1.0.0 (2021-07-22)
 
 
