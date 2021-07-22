@@ -31,7 +31,11 @@ const body = Query(
       {
         cid: Select('cid', Var('data')),
         content: Call('findContentByCid', Var('cid')),
-        contentRef: Select('ref', Var('content')),
+        contentRef: If(
+          IsNull(Var('content')),
+          Abort('content not found'),
+          Select('ref', Var('content'))
+        )
         attempts: Select('attempts', Var('data'), null)
       },
       If(

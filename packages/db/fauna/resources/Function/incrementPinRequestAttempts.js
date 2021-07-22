@@ -23,7 +23,7 @@ const body = Query(
     ['id'],
     Let(
       {
-        pinRequestRef: Ref(Collection('PinRequests'), Var('id')),
+        pinRequestRef: Ref(Collection('PinRequest'), Var('id')),
         pinRequest: Get(Var('pinRequestRef'))
       },
       Update(Var('pinRequestRef'), {
