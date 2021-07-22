@@ -9,9 +9,9 @@ import { GATEWAY, LOCAL_ADD_THRESHOLD, DAG_SIZE_CALC_LIMIT } from './constants.j
 import { JSONResponse } from './utils/json-response.js'
 import { toPinStatusEnum } from './utils/pin.js'
 
-const IMPORT_CAR = gql`
-  mutation importCar($data: ImportCarInput!) {
-    importCar(data: $data) {
+const CREATE_UPLOAD = gql`
+  mutation CreateUpload($data: CreateUploadInput!) {
+    createUpload(data: $data) {
       content {
         _id
         dagSize
@@ -122,12 +122,13 @@ export async function carPost (request, env, ctx) {
   }
 
   // Store in DB
-  const { importCar: upload } = await env.db.query(IMPORT_CAR, {
+  const { createUpload: upload } = await env.db.query(CREATE_UPLOAD, {
     data: {
       user: user._id,
       authToken: authToken?._id,
       cid,
       name,
+      type: 'Car',
       pins
     }
   })
