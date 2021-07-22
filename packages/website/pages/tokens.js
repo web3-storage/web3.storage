@@ -100,6 +100,7 @@ export default function Tokens({ user }) {
   const { isLoading, isFetching, data } = useQuery('get-tokens', getTokens, {
     enabled: !!user
   })
+  /** @type Token[] */
   const tokens = data || []
   useEffect(() => {
     if (!copied) return

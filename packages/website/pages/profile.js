@@ -27,10 +27,11 @@ import VerticalLines from '../illustrations/vertical-lines.js'
  */
 export default function Profile({ user }) {
   const [copied, setCopied] = useState('')
-  const { status, data: tokens } = useQuery('get-tokens', getTokens, {
-    enabled: !!user,
-    placeholderData: []
+  const { data } = useQuery('get-tokens', getTokens, {
+    enabled: !!user
   })
+  /** @type {import('./tokens').Token[]} */
+  const tokens = data || []
   useEffect(() => {
     if (!copied) return
     const timer = setTimeout(() => setCopied(''), 5000)
