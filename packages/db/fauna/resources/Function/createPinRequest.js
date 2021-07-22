@@ -35,29 +35,25 @@ const body = Query(
           Abort('content not found'),
           Select('ref', Var('content'))
         ),
-        attempts: Select('attempts', Var('data'), null)
+        attempts: Select('attempts', Var('data'), null),
+        pinRequestMatch: Match(
+          Index('unique_PinRequest_cid'),
+          Var('cid')
+        ),
+        pinRequest: If(IsEmpty(Var('pinRequestMatch')), null, Get(Var('pinRequestMatch')))
       },
-      Let(
-        {
-          pinRequestMatch: Match(
-            Index('unique_PinRequest_cid'),
-            Var('cid')
-          ),
-          pinRequest: If(IsEmpty(Var('pinRequestMatch')), null, Get(Var('pinRequestMatch')))
-        },
-        If(
-          IsNull(Var('pinRequest')),
-          Create('PinRequest', {
-            data: {
-              cid: Var('cid'),
-              content: Var('contentRef'),
-              attempts: 0,
-              updated: Now(),
-              created: Now()
-            }
-          }),
-          Var('pinRequest')
-        )
+      If(
+        IsNull(Var('pinRequest')),
+        Create('PinRequest', {
+          data: {
+            cid: Var('cid'),
+            content: Var('contentRef'),
+            attempts: 0,
+            updated: Now(),
+            created: Now()
+          }
+        }),
+        Var('pinRequest')
       )
     )
   )
