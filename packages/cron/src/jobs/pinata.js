@@ -14,7 +14,7 @@ const MAX_ATTEMPTS = 100
 const MAX_PIN_REQUESTS_PER_RUN = 600
 
 const FIND_BATCH = gql`
-  query FindAllPinRequests($size: Int) {
+  query FindAllPinRequests($size: Int!) {
     findAllPinRequests(_size: $size) {
       data {
         _id
@@ -26,7 +26,7 @@ const FIND_BATCH = gql`
 `
 
 const DELETE_ONE = gql`
-  mutation DeletePinRequest($_id: String) {
+  mutation DeletePinRequest($_id: ID!) {
     deletePinRequest(id: $_id){
       _id
     }
@@ -34,7 +34,7 @@ const DELETE_ONE = gql`
 `
 
 const INCREMENT_ATTEMPTS = gql`
-  mutation IncrementPinRequestAttempts($_id: String) {
+  mutation IncrementPinRequestAttempts($_id: ID!) {
     incrementPinRequestAttempts(id: $_id) {
       _id
       cid
@@ -52,7 +52,6 @@ const INCREMENT_ATTEMPTS = gql`
 async function getPinRequests (db) {
   const size = MAX_PIN_REQUESTS_PER_RUN
   const res = await db.query(FIND_BATCH, { size })
-  console.log(res)
   return res.findAllPinRequests.data
 }
 
