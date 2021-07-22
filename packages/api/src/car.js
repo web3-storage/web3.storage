@@ -5,12 +5,9 @@ import { Block } from 'multiformats/block'
 import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
-import { GATEWAY } from './constants.js'
+import { GATEWAY, LOCAL_ADD_THRESHOLD, DAG_SIZE_CALC_LIMIT } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { toPinStatusEnum } from './utils/pin.js'
-
-const LOCAL_ADD_THRESHOLD = 1024 * 1024 * 2.5
-const DAG_SIZE_CALC_LIMIT = 1024 * 1024 * 9
 
 const IMPORT_CAR = gql`
   mutation importCar($data: ImportCarInput!) {

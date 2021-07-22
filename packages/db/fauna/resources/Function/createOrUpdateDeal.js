@@ -48,7 +48,7 @@ const body = Query(
           Create('Deal', {
             data: {
               aggregate: Var('aggregateRef'),
-              miner: Select('miner', Var('data')),
+              storageProvider: Select('storageProvider', Var('data')),
               dealId: Select('dealId', Var('data')),
               activation: Select('activation', Var('data'), null),
               renewal: Select('renewal', Var('data'), null),
@@ -62,14 +62,14 @@ const body = Query(
         Let(
           {
             deal: Get(Var('dealMatch')),
-            currMiner: Select(['data', 'miner'], Var('deal')),
+            currStorageProvider: Select(['data', 'storageProvider'], Var('deal')),
             currActivation: Select(['data', 'activation'], Var('deal'), null),
             currRenewal: Select(['data', 'renewal'], Var('deal'), null),
             currStatusReason: Select(['data', 'statusReason'], Var('deal'), null)
           },
           Update(Select('ref', Var('deal')), {
             data: {
-              miner: Select('miner', Var('data'), Var('currMiner')),
+              storageProvider: Select('storageProvider', Var('data'), Var('currStorageProvider')),
               activation: Select('activation', Var('data'), Var('currActivation')),
               renewal: Select('renewal', Var('data'), Var('currRenewal')),
               status: Select('status', Var('data')),

@@ -122,9 +122,9 @@ export interface Deal {
    */
   dealId: number
   /**
-   * Address of the miner storing this data.
+   * Address of the provider storing this data.
    */
-  miner: string
+  storageProvider: string
   /**
    * Current deal status.
    */
