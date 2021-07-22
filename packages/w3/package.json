@@ -28,5 +28,8 @@
     "sade": "^1.7.4",
     "web3.storage": "^2.0.0"
   },
-  "main": "index.js"
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  }
 }
