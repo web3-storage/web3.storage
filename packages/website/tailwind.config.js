@@ -14,6 +14,7 @@ module.exports = {
         "w3storage-red-dark": '#c94332',
         "w3storage-red-accent": '#d7362e',
         "w3storage-red-light": '#fff5f4',
+        "w3storage-pink": '#FFE6E5',
         "w3storage-red-background": '#ffe6e5',
         "w3storage-neutral-red": '#fff2ec',
         "w3storage-green": '#37b667',

@@ -1,7 +1,11 @@
-import { useCallback, useState } from 'react';
+/* eslint-env browser */
+import React, { useState, useEffect } from 'react'
+import { useQuery } from 'react-query'
+import Link from 'next/link'
+import { getTokens } from '../lib/api'
 import Button from '../components/button.js'
-import Modal from '../components/modal.js'
-import emailContent from '../content/file-a-request.json'
+import VerticalLines from '../illustrations/vertical-lines.js'
+// import emailContent from '../content/file-a-request.json'
 
 /**
  * Static Props
@@ -18,23 +22,42 @@ import emailContent from '../content/file-a-request.json'
     }
 }
 
-export default function Profile() {
-    const [showModal, setShowModal] = useState(false);
+/**
+ * @param {import('../components/types.js').LayoutChildrenProps} props
+ */
+export default function Profile({ user }) {
+  const [copied, setCopied] = useState('')
+  const { data } = useQuery('get-tokens', getTokens, {
+    enabled: !!user
+  })
+  /** @type {import('./tokens').Token[]} */
+  const tokens = data || []
+  useEffect(() => {
+    if (!copied) return
+    const timer = setTimeout(() => setCopied(''), 5000)
+    return () => clearTimeout(timer)
+  }, [copied])
 
-    const { mail, subject, body } = emailContent;
-    const mailTo = `mailto:${mail}?subject=${subject}&body=${encodeURIComponent(body.join('\n'))}`
+  /**
+   * @param {import('react').ChangeEvent<HTMLFormElement>} e
+   */
+  async function handleCopyToken(e) {
+    e.preventDefault()
+    const secret = e.target.dataset.value
+    if (!secret) throw new Error('missing token value')
+    await navigator.clipboard.writeText(secret)
+    setCopied(secret)
+  }
 
-    const openModal = useCallback(
-      () => {
-        setShowModal(true)
-      },
-      [],
-    )
+  // const { mail, subject, body } = emailContent
+  // const mailTo = `mailto:${mail}?subject=${subject}&body=${encodeURIComponent(body.join('\n'))}`
 
-    return (
-        <main className="max-w-screen-2xl mx-auto my-14">
-          <div>
-            <h3 className="mb-8">Your profile</h3>
+  return (
+    <div className="relative overflow-hidden">
+      <div className="layout-margins">
+        <main className="max-w-screen-lg mx-auto my-4 lg:my-16 text-w3storage-purple">
+          <h3 className="mb-8">Your Profile</h3>
+          {/* <div>
             <div className="typography-body-title font-medium">
               Storage Capacity: <span className="font-normal ml-2">300 GiB / 1 TiB</span>
             </div>
@@ -49,60 +72,63 @@ export default function Profile() {
                 </span>
               </a>
             </p>
-          </div>
+          </div> */}
           <div className="mt-10">
-            <h3>Getting started</h3>
+            <h3>Getting Started</h3>
             <div className="flex gap-x-10 mt-10">
-              <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-gray-200 border border-black rounded-md py-12 px-10 text-center">
-                <h3>Create your first API key</h3>
+              {tokens.length ? null : (
+                <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
+                  <h3>Create your first API Token</h3>
+                  <p>
+                    Generate an API Token to embed into your projects!
+                  </p>
+                  <Button href='/new-token'>
+                    Create an API Token
+                  </Button>
+                </div>
+              )}
+              <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
+                <h3>Start Building</h3>
                 <p>
-                  Generate an API key to embed into your projects!
+                  Start storing and retrieving files using our client library! See the docs for guides and walkthroughs!
                 </p>
-                <Button href="/" variant="light">
-                  Create an API key
-                </Button>
-              </div>
-              <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-gray-200 border border-black rounded-md py-12 px-10 text-center">
-                <h3>Start building</h3>
-                <p>
-                Start storing and retrieving files using our client library! See the docs for guides and walkthroughs!
-                </p>
-                <Button href="/" variant="light">
+                <Button href="https://docs.web3.storage">
                   Explore the docs
                 </Button>
               </div>
             </div>
           </div>
           <div className="mt-28">
-            <h3>API keys</h3>
-            <div className="flex gap-x-14 mt-10">
-              <div className="flex items-center justify-center text-center text-gray-500 bg-gray-200 border rounded-md w-64 h-60 p-9">
-                <p className="typography-body-title px-8">Create an API key</p>
-              </div>
-              <div className="flex flex-col justify-between items-center text-center bg-gray-200 border border-black rounded-md w-64 h-60 p-9">
-                <p className="typography-body-title px-8">API key #1</p>
-                <Button variant="light" onClick={ openModal }>
-                  Delete API key
-                </Button>
-              </div>
+            <h3 id="api-tokens">API Tokens</h3>
+            <div className="flex flex-wrap gap-x-14 mt-10">
+              <Link href='/new-token'>
+                <button type="button" className="flex items-center justify-center text-center bg-w3storage-pink border-w3storage-red w-64 h-60 mb-12 p-9 hover:bg-w3storage-white">
+                  <p className="typography-body-title px-8">Create an API Token</p>
+                </button>
+              </Link>
+              {tokens.slice(0, 5).map(t => (
+                <form
+                  key={t._id}
+                  data-value={t.secret}
+                  onSubmit={handleCopyToken}
+                  className="flex flex-col justify-between items-center text-center bg-white border border-w3storage-red w-64 h-60 mb-12 p-9"
+                >
+                  <p className="typography-body-title px-8">{t.name}</p>
+                  <Button type="submit">{copied === t.secret ? 'Copied!' : 'Copy'}</Button>
+                </form>
+              ))}
+            </div>
+            <div className="w-64">
+              <Button href="/tokens">Manage Tokens</Button>
             </div>
           </div>
-          <Modal
-            onClose={() => setShowModal(false)}
-            show={showModal}
-          >
-            <div className="flex flex-col justify-between items-center h-full">
-              <div>
-                <p>
-                  Please confirm the API key you want to delete.
-                </p>
-                <input className="w-full mt-8 border border-black rounded-md p-2" placeholder="Enter the name of your API key" />
-              </div>
-              <Button variant="light" className="w-48">
-                Delete API key
-              </Button>
-            </div>
-          </Modal>
         </main>
-    )
+        <div className="absolute top-48 left-0 w-full pointer-events-none" style={{ minWidth: '1536px' }}>
+          <div className="w-min ml-auto">
+            <VerticalLines />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
