@@ -37,6 +37,9 @@ const formatTimestamp = (timestamp) => {
 
   if(!isSameDay) {
     return new Date(timestamp).toLocaleTimeString(undefined, {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
       hour: '2-digit',
       minute:'2-digit',
     })
@@ -81,19 +84,21 @@ const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
       <td>
         <Checkbox className="mr-2" checked={checked} onChange={() => toggle(upload.content.cid)}/>
       </td>
-      <TableElement {...sharedArgs}> {formatTimestamp(upload.created)} </TableElement>
+      <TableElement {...sharedArgs}><span title={upload.created}>{formatTimestamp(upload.created)}</span></TableElement>
       <TableElement {...sharedArgs} important> {upload.name} </TableElement>
       <TableElement {...sharedArgs} important> <GatewayLink cid={upload.content.cid} /> </TableElement>
 
       <TableElement {...sharedArgs} centered> { upload.pinStatus ?? '-' }</TableElement>
-      <TableElement {...sharedArgs} breakAll={false}> {
-        upload.minersList.map(miner => (
-          <a className="underline" href={miner.link} key={miner.id} target="_blank" rel="noreferrer">
-            { miner.id }
-          </a>
-        ))
+      <TableElement {...sharedArgs} breakAll={false}>{
+        upload.deals.length ? (
+          upload.deals.map(deal => (
+            <a className="underline" href={deal.link} key={deal.storageProvider} target="_blank" rel="noreferrer">
+              {deal.storageProvider}
+            </a>
+          ))
+        ) : '-'
       }</TableElement>
-      <TableElement {...sharedArgs} breakAll={false}> { upload.renewalBy } </TableElement>
+      <TableElement {...sharedArgs} breakAll={false}>{upload.renewalBy ??  '-'}</TableElement>
 
       <TableElement {...sharedArgs} centered> 
         {upload.content.dagSize ? filesize(upload.content.dagSize) : '-'}
@@ -118,7 +123,7 @@ export default function Files({ user }) {
   const queryParams = { before: befores[0], size }
   /** @type {[string, { before: string, size: number }]} */
   const queryKey = ['get-uploads', queryParams]
-  const { status, data } = useQuery(
+  const { isLoading, isFetching, data } = useQuery(
     queryKey,
     (ctx) => getUploads(ctx.queryKey[1]),
     {
@@ -181,20 +186,20 @@ export default function Files({ user }) {
   return (
     <main className="p-4 sm:px-16 mt-4 sm:mt-32 text-w3storage-purple">
       <div className="mw9 pv3 ph3 ph5-ns min-vh-100">
-        <When condition={status === 'loading'}>
+        <div className="flex mb3 pb-10">
+          <h1 className="text-2xl mv4 flex-auto">Files</h1>
+        </div>
+        <When condition={isLoading || isFetching}>
           <Loading />
         </When>
-        <When condition={status !== 'loading'}>
+        <When condition={!isLoading && !isFetching}>
           <>
-            <div className="flex mb3 pb-10">
-              <h1 className="text-2xl mv4 flex-auto">Files</h1>
-            </div>
             <div className="table-responsive">
               <When condition={hasZeroUploads}>
-                <p className="flex justify-center font-black mt-10">
+                <p className="flex justify-center font-black my-10">
                   No files
                 </p>
-                <div className="w-35 ml-auto">
+                <div className="w-36 m-auto">
                   <Button href="/new-file" id="upload">Upload File</Button>
                 </div>
               </When>
@@ -215,13 +220,13 @@ export default function Files({ user }) {
                     <thead>
                       <tr className="bb b--black">
                         <th>
-                          <Checkbox className="mr-2" checked={selectedFiles.length === uploads.length} onChange={toggleAll}/>
+                          <Checkbox className="mr-2" checked={selectedFiles.length === uploads.length} onChange={toggleAll} />
                         </th>
                         <TableHeader>Timestamp</TableHeader>
                         <TableHeader>Name</TableHeader>
-                        <TableHeader>CiD</TableHeader>
+                        <TableHeader>CID</TableHeader>
                         <TableHeader>Pin Status</TableHeader>
-                        <TableHeader>Miner list</TableHeader>
+                        <TableHeader>Storage Providers</TableHeader>
                         <TableHeader>Renewal By</TableHeader>
                         <TableHeader>Size</TableHeader>
                       </tr>
