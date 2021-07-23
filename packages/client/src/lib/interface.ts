@@ -76,6 +76,18 @@ export type PutOptions = {
    */
   maxRetries?: number
   /**
+   * Should input files be wrapped with a directory. 
+   * Enabling it preserves the input filenames in DAG as they become
+   * directory entries in the generated wrapping dir. 
+   * 
+   * The trade off is your root CID will be that of the wrapping dir, 
+   * rather than the input file itself. 
+   * 
+   * so for a single file. e.g. `cat.png` its ipfs path would be 
+   * `<wrapping dir cid>/cat.png` rather than just `<cid for cat.png>`
+   */
+  wrapWithDirectory?: boolean
+  /**
    * Human readable name for this upload, for use in file listings.
    */
   name?: string

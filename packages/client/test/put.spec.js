@@ -31,7 +31,7 @@ describe('put', () => {
     }
   })
 
-  it('erros with a File that will not be parsed by the Cluster', async function () {
+  it('errors with a file that will not be parsed by the Cluster', async function () {
     const client = new Web3Storage({ token, endpoint })
     try {
       await client.put([new File(['test-put-fail'], 'file.txt')], { maxRetries: 1 })
@@ -41,7 +41,7 @@ describe('put', () => {
     }
   })
 
-  it('adds Files', async () => {
+  it('adds files', async () => {
     const client = new Web3Storage({ token, endpoint })
     const files = prepareFiles()
     const expectedCid = 'bafybeiep3t2chy6e3dxk3fktnshm7tpopjrns6wevo4uwpnnz5aq352se4'
@@ -54,7 +54,21 @@ describe('put', () => {
     assert.equal(cid, expectedCid, 'returned cid matches the CAR')
   })
 
-  it('adds Big Files', async function () {
+  it('adds files {wrapWithDirectory: false}', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const files = prepareFiles()
+    const expectedCid = 'bafybeifkc773a2s6gerq7ip7tikahlfflxe4fvagyxf74zfkr33j2yu5li'
+    const cid = await client.put(files, {
+      wrapWithDirectory: false,
+      name: 'web3-storage-dir-no-wrap',
+      onRootCidReady: (cid) => {
+        assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+      }
+    })
+    assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+  })
+
+  it('adds big files', async function () {
     this.timeout(30e3)
     const client = new Web3Storage({ token, endpoint })
     let uploadedChunks = 0
