@@ -81,7 +81,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
   const sharedArgs = { index, checked }
 
    return <tr>
-      <td>
+      <td className="w-8">
         <Checkbox className="mr-2" checked={checked} onChange={() => toggle(upload.content.cid)}/>
       </td>
       <TableElement {...sharedArgs}><span title={upload.created}>{formatTimestamp(upload.created)}</span></TableElement>
@@ -117,7 +117,8 @@ export default function Files({ user }) {
   const initialFiles = [];
 
   const [selectedFiles, setSelectedFiles] = useState(/** @type string[] */ initialFiles)
-  const [size] = useState(25)
+  const [isNextDisabled, setNextDisabled] = useState('')
+  const [size] = useState(2)
   const [befores, setBefores] = useState([new Date().toISOString()])
   const queryClient = useQueryClient()
   const queryParams = { before: befores[0], size }
@@ -130,6 +131,12 @@ export default function Files({ user }) {
       enabled: !!user,
     }
   )
+
+  const reachedEndOfPagination = data?.length === 0 && befores.length > 1
+  if (reachedEndOfPagination) {
+    setNextDisabled(befores[1])
+    setBefores(befores.slice(1))
+  }
 
   const uploads = adaptUploadData(data || [])
 
@@ -205,7 +212,7 @@ export default function Files({ user }) {
               </When>
               <When condition={!hasZeroUploads}>
                 <>
-                  <div className="flex ml-6">
+                  <div className="flex ml-7 md:ml-8">
                     <Button small disabled={selectedFiles.length === 0} onClick={handleDelete}>
                       Delete
                     </Button>
@@ -218,8 +225,8 @@ export default function Files({ user }) {
                   </div>
                   <table className="w-full mt-4">
                     <thead>
-                      <tr className="bb b--black">
-                        <th>
+                      <tr>
+                        <th className="w-8">
                           <Checkbox className="mr-2" checked={selectedFiles.length === uploads.length} onChange={toggleAll} />
                         </th>
                         <TableHeader>Timestamp</TableHeader>
@@ -237,7 +244,7 @@ export default function Files({ user }) {
                       )}
                     </tbody>
                   </table>
-                  <div className="mt-4 flex justify-between ml-6">
+                  <div className="mt-4 flex justify-between ml-7 md:ml-8">
                     <When condition={befores.length !== 1}>
                       <Button
                         className="black"
@@ -251,9 +258,10 @@ export default function Files({ user }) {
                     <When condition={uploads.length >= size}>
                       <Button
                         className="black"
-                        wrapperClassName="m-h-2"
+                        wrapperClassName="m-h-2 ml-auto"
                         onClick={handleNextClick}
                         id="uploads-next"
+                        disabled={isNextDisabled === befores[0]}
                       >
                         Next →
                       </Button>
