@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.1.1](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v2.1.0...web3.storage-v2.1.1) (2021-07-23)
+
+
+### Bug Fixes
+
+* remove dev files from published client ([e02a349](https://www.github.com/web3-storage/web3.storage/commit/e02a349f0020b37767311241cbeece8e61e8017a))
+
 ## [2.1.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v2.0.1...web3.storage-v2.1.0) (2021-07-23)
 
 
