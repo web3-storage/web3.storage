@@ -11,7 +11,7 @@ export default function Footer({ bgColor = '' }) {
     <footer className={`${bgColor} mt-auto text-w3storage-purple`}>
       <div className="layout-margins flex flex-col xl:flex-row items-left xl:items-center justify-between py-8">
         <div className="text-lg mt-4 order-2 xl:order-1 xl:mt-0">
-          Made with 💙 by{' '}
+          Made with 💛 by{' '}
           <a
             href="https://protocol.ai/"
             className="font-bold no-underline hover:underline"

@@ -23,11 +23,13 @@ export default function Navbar({ bgColor = '', user }) {
     <nav className={`${bgColor} w-full z-50`}>
       <div className="flex items-center justify-between py-3 layout-margins">
         <Link href="/">
-          <a title="Web3 Storage">⁂</a>
+          <a title="Web3 Storage" className="flex">
+            <img src="/w3storage-logo.svg" style={{ height: '2.4rem' }} />
+            <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-3xl hidden xl:inline-block">Web3.Storage</span>
+          </a>
         </Link>
         <div>
-          {/* TODO: change docs link before going live */}
-          <Link href="https://web3-storage-docs.on.fleek.co/">
+          <Link href="https://docs.web3.storage/">
             <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12">
               Docs
             </a>
@@ -52,7 +54,7 @@ export default function Navbar({ bgColor = '', user }) {
             </>
           ) : null}
           {user ? (
-            <Button onClick={logout} id="logout" wrapperClassName="inline-block">
+            <Button onClick={logout} id="logout" wrapperClassName="inline-block" variant="outlined">
               Logout
             </Button>
           ) : (
