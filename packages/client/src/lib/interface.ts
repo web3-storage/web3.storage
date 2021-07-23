@@ -67,8 +67,9 @@ export type PutOptions = {
    */
   onRootCidReady?: (cid: CIDString) => void
   /**
-   * Callback called after each chunk of data has been uploaded. It is passed
-   * the chunk size in bytes.
+   * Callback called after each chunk of data has been uploaded. By default,
+   * data is split into chunks of around 10MB. It is passed the actual chunk
+   * size in bytes.
    */
   onStoredChunk?: (size: number) => void
   /**
