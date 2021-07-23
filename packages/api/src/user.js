@@ -253,8 +253,6 @@ export async function userUploadsGet (request, env) {
     before = parsedBefore
   }
 
-  console.log(request.auth.user._id)
-
   const res = await env.db.query(gql`
     query FindUploadsByUser($where: FindUploadsByUserInput!, $size: Int!) {
       findUploadsByUser(where: $where, _size: $size) {
