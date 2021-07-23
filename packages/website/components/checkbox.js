@@ -18,8 +18,8 @@ const Checkbox = ({ className, label, disabled, checked, onChange, ...props }) =
    */
   const change = (event) => onChange && onChange(event?.target?.checked)
 
-  return <label className={clsx('block', className)} {...props }>
-        <input className='absolute top-0 left-0 pointer opacity-0' type='checkbox' checked={checked} disabled={disabled} onChange={change} />
+  return <label className={clsx('block relative', className)} {...props }>
+        <input className='absolute top-0 left-0 pointer hidden' type='checkbox' checked={checked} disabled={disabled} onChange={change} />
         <div className={ clsx('relative w-4 h-4 border border-w3storage-red',
           disabled ? 'bg-gray-400' : 'bg-w3storage-red-background cursor-pointer')
         }>
