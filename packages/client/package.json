@@ -83,5 +83,11 @@
       "path": "./dist/bundle.esm.min.js",
       "maxSize": "200 kB"
     }
+  ],
+  "files": [
+    "src",
+    "!src/test",
+    "dist",
+    "!dist/test"
   ]
 }
