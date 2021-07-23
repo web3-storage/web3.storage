@@ -233,7 +233,8 @@ export async function userTokensDelete (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userUploadsGet (request, env) {
-  const { searchParams } = new URL(request.url)
+  const requestUrl = new URL(request.url)
+  const { searchParams } = requestUrl
 
   let size = 25
   if (searchParams.has('size')) {
@@ -257,7 +258,6 @@ export async function userUploadsGet (request, env) {
     query FindUploadsByUser($where: FindUploadsByUserInput!, $size: Int!) {
       findUploadsByUser(where: $where, _size: $size) {
         data {
-          _id
           name
           content {
             cid
@@ -287,7 +287,17 @@ export async function userUploadsGet (request, env) {
     }
   `, { where: { createdBefore: before.toISOString(), user: request.auth.user._id }, size })
 
-  return new JSONResponse(res.findUploadsByUser.data)
+  const { data: raw } = res.findUploadsByUser
+  const uploads = raw.map(({ name, content, created }) => ({
+    name,
+    ...content,
+    created
+  }))
+  const oldest = uploads[uploads.length - 1]
+  const headers = uploads.length === size
+    ? { Link: `<${requestUrl.pathname}?size=${size}&before=${oldest.created}>; rel="next"` }
+    : undefined
+  return new JSONResponse(uploads, { headers })
 }
 
 /**
