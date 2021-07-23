@@ -99,6 +99,30 @@ describe('GET /user/uploads', () => {
     ]
     assert.deepStrictEqual(uploads, expected)
   })
+
+  it('paginates', async () => {
+    const token = await getTestJWT()
+    const size = 1
+    const res = await fetch(new URL(`/user/uploads?size=${size}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(res.ok)
+    // TODO: import from fixture
+    const expected = [
+      {
+        name: 'Upload at 2021-07-09T16:20:32.658Z',
+        cid: 'bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae',
+        dagSize: null,
+        created: '2021-07-09T16:20:33.946845Z'
+      }
+    ]
+    const link = res.headers.get('Link')
+    assert(link, 'has a Link header for the next page')
+    assert.strictEqual(link, `</user/uploads?size=${size}&before=${expected[0].created}>; rel="next"`)
+    const uploads = await res.json()
+    assert.deepStrictEqual(uploads, expected)
+  })
 })
 
 describe('DELETE /user/uploads/:cid', () => {

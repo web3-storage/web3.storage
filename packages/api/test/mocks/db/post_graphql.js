@@ -70,7 +70,15 @@ module.exports = ({ body }) => {
   }
 
   if (body.query.includes('findUploadsByUser')) {
-    return gqlResponse(200, require('../../fixtures/get-user-uploads/find-uploads-by-user.json'))
+    const res = require('../../fixtures/get-user-uploads/find-uploads-by-user.json')
+    const size = body.variables.size
+    if (size && size < 3) {
+      const trimmed = JSON.parse(JSON.stringify(res))
+      // trim it down to the expected number
+      trimmed.data.findUploadsByUser.data = trimmed.data.findUploadsByUser.data.slice(0, size)
+      return gqlResponse(200, trimmed)
+    }
+    return gqlResponse(200, res)
   }
 
   return gqlResponse(400, {
