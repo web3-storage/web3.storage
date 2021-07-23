@@ -7,7 +7,9 @@
     "w3": "bin.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "./bin.js",
+    "test": "mocha test/*.spec.js --ignore test/e2e.spec.js --exit",
+    "test:e2e": "mocha test/e2e.spec.js --exit"
   },
   "repository": {
     "type": "git",
@@ -27,6 +29,10 @@
     "ora": "^5.4.1",
     "sade": "^1.7.4",
     "web3.storage": "^2.0.0"
+  },
+  "devDependencies": {
+    "execa": "^5.1.1",
+    "mocha": "^8.3.2"
   },
   "main": "index.js",
   "publishConfig": {
