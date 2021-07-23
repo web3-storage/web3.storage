@@ -73,9 +73,25 @@ export type PutOptions = {
    */
   onStoredChunk?: (size: number) => void
   /**
-   * Maximum times to retry a failed upload.
+   * Maximum times to retry a failed upload. Default: 5
    */
   maxRetries?: number
+  /**
+   * Should input files be wrapped with a directory? Default: true
+   * 
+   * It is enabled by default as it preserves the input filenames in DAG;
+   * the filenames become directory entries in the generated wrapping dir.
+   * 
+   * The trade off is your root CID will be that of the wrapping dir, 
+   * rather than the input file itself.
+   * 
+   * For a single file e.g. `cat.png` it's IPFS path would be
+   * `<wrapping dir cid>/cat.png` rather than just `<cid for cat.png>`
+   *
+   * Wrapping with a directory is required when passing multiple files
+   * that do not share the same root.
+   */
+  wrapWithDirectory?: boolean
   /**
    * Human readable name for this upload, for use in file listings.
    */

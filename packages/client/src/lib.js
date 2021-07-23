@@ -88,7 +88,13 @@ class Web3Storage {
    * @param {PutOptions} [options]
    * @returns {Promise<CIDString>}
    */
-  static async put ({ endpoint, token }, files, { onRootCidReady, onStoredChunk, maxRetries = MAX_PUT_RETRIES, name } = {}) {
+  static async put ({ endpoint, token }, files, {
+    onRootCidReady,
+    onStoredChunk,
+    maxRetries = MAX_PUT_RETRIES,
+    wrapWithDirectory = true,
+    name
+  } = {}) {
     const url = new URL('/car', endpoint)
     const targetSize = MAX_CHUNK_SIZE
     let headers = Web3Storage.headers(token)
@@ -110,7 +116,8 @@ class Web3Storage {
           path: f.name,
           content: f.stream()
         })),
-        blockstore
+        blockstore,
+        wrapWithDirectory
       })
       carRoot = root.toString()
 

@@ -94,6 +94,7 @@ export async function get (cid, opts) {
  * @param {object} opts
  * @param {string} [opts.api]
  * @param {string} [opts.token]
+ * @param {string} [opts.wrap] wrap with directory
  * @param {string[]} opts._ additonal paths to add
  */
 export async function put (path, opts) {
@@ -112,6 +113,7 @@ export async function put (path, opts) {
   }
   let rootCid = ''
   const root = await client.put(files, {
+    wrapWithDirectory: opts.wrap,
     onRootCidReady: (cid) => {
       rootCid = cid
       spinner.stopAndPersist({ symbol: '#', text: `Packed ${files.length} file${files.length === 1 ? '' : 's'} (${filesize(totalSize)})` })

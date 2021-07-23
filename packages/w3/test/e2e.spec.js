@@ -17,6 +17,11 @@ describe('w3 put <path>', () => {
     const { stdout } = execa.sync('./bin.js', ['put', fixturesPath, ...authArgs])
     assert.match(stdout, new RegExp(fixturesCid))
   }).timeout(60000)
+
+  it('puts a dir --no-wrap', () => {
+    const { stdout } = execa.sync('./bin.js', ['put', fixturesPath, ...authArgs, '--no-wrap'])
+    assert.match(stdout, /bafybeifpw7nrh374rzfcxpaw3bkp6fr7djmujg5wvib6ma7i7n76t3k53q/)
+  }).timeout(60000)
 })
 
 // FIXME: was working but now getting a 500 server error!

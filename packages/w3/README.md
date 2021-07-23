@@ -24,9 +24,13 @@ $ w3 token
 
 Upload files to web3.storage. The IPFS Content ID (CID) for your files is calculated on your machine, and sent up along with your files. web3.storage makes your content available on the IPFS network
 
+- `--no-wrap` Dont wrap input files with a directory.
+
 ### `w3 get <cid>`
 
 Fetch files by CID. They are verified on your machine to ensure you got the eact bytes for the given CID.
+
+- `--output` The path to write the files to.
 
 ### `w3 token`
 
