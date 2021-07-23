@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v2.0.1...web3.storage-v2.1.0) (2021-07-23)
+
+
+### Features
+
+* user option for wrapWithDirectory ([#143](https://www.github.com/web3-storage/web3.storage/issues/143)) ([b08be84](https://www.github.com/web3-storage/web3.storage/commit/b08be84e7efcd610c21ff56b0cc129a11faf3840))
+
 ### [2.0.1](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v2.0.0...web3.storage-v2.0.1) (2021-07-22)
 
 
