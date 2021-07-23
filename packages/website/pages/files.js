@@ -234,7 +234,7 @@ export default function Files({ user }) {
                   No files
                 </p>
                 <div className="w-36 m-auto">
-                  <Button href="/new-file" id="upload">Upload File</Button>
+                  <Button href="/upload" id="upload">Upload File</Button>
                 </div>
               </When>
               <When condition={!hasZeroUploads}>
@@ -247,7 +247,7 @@ export default function Files({ user }) {
                       Export Deals
                     </Button> */}
                     <div className="w-35 ml-auto">
-                      <Button href="/new-file" small id="upload">Upload File</Button>
+                      <Button href="/upload" small id="upload">Upload File</Button>
                     </div>
                   </div>
                   <table className="w-full mt-4">
