@@ -66,11 +66,11 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
 
       const status = toPinStatusEnum(peerMap[pin.location.peerId].status)
       if (status === pin.status) {
-        log(`🙅‍♂️ ${pin.content.cid}: No status change for ${pin.content.cid}`)
+        log(`🙅‍♂️ ${pin.content.cid}@${pin.location.peerId}: No status change (${status})`)
         continue
       }
 
-      log(`📌 ${pin.content.cid}: ${pin.status} => ${status}`)
+      log(`📌 ${pin.content.cid}@${pin.location.peerId}: ${pin.status} => ${status}`)
       await db.query(CREATE_OR_UPDATE_PIN, {
         data: {
           content: pin.content._id,
@@ -88,10 +88,10 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
         try {
           // Note: this will timeout for large DAGs
           dagSize = await ipfs.dagSize(pin.content.cid, { timeout: 10 * 60000 })
-          log(`🛄 ${pin.content.cid}: ${dagSize} bytes`)
+          log(`🛄 ${pin.content.cid}@${pin.location.peerId}: ${dagSize} bytes`)
           await db.query(UPDATE_CONTENT_DAG_SIZE, { content: pin.content._id, dagSize })
         } catch (err) {
-          log(`💥 ${pin.content.cid}: Failed to update DAG size`)
+          log(`💥 ${pin.content.cid}@${pin.location.peerId}: Failed to update DAG size`)
           log(err)
         }
       }
