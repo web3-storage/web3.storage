@@ -1,0 +1,502 @@
+openapi: '3.0.2'
+info:
+  title: Web3 Storage API
+  version: '1.0'
+
+servers:
+  - url: https://api.web3.storage
+
+tags:
+  - name: Web3 Storage
+paths:
+  /car:
+    post:
+      tags:
+        - Web3 Storage
+      summary: Upload and store the IPFS DAG contained in a CAR file.
+      description: |
+        Upload a CAR (Content Addressable Archive) file and store the IPFS DAG
+        (Directed Acyclic Graph) it contains. Supports partial DAGs, so multiple
+        CAR files with the same root (but with different sub-trees) can be sent.
+      operationId: store-car
+      requestBody:
+        required: true
+        content:
+          application/car:
+            schema:
+              type: string
+              format: binary
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+        '400':
+          $ref: '#/components/responses/badRequest' 
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+  /upload:
+    post:
+      tags:
+        - Web3 Storage
+      summary: Upload and store one or more files.
+      description: |
+        Upload data for files in a multipart request.
+      operationId: store-multipart
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+        '400':
+          $ref: '#/components/responses/badRequest' 
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+  /:
+    get:
+      tags:
+        - NFT Storage
+      summary: List all stored files
+      operationId: list
+      parameters:
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ListResponse'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+  /{cid}:
+    get:
+      tags:
+        - NFT Storage
+      summary: Get information for the stored file CID
+      description: Includes the IPFS pinning state and the Filecoin deal state.
+      operationId: status
+      parameters:
+        - name: cid
+          in: path
+          description: CID for the NFT
+          required: true
+          schema:
+            $ref: '#/components/schemas/CID'
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/GetResponse'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+    delete:
+      tags:
+        - NFT Storage
+      summary: Stop storing the content with the passed CID
+      description: |
+        Stop storing the content with the passed CID on nft.storage.
+        - Unpin the item from the underlying IPFS pinning service.
+        - Cease renewals for expired Filecoin deals involving the CID.  
+
+        ⚠️ This does not remove the content from the network.
+
+        - Does not terminate any established Filecoin deal.
+        - Does not remove the content from other IPFS nodes in the network that already cached or pinned the CID.  
+
+        Note: the content will remain available if another user has stored the CID with nft.storage.
+      operationId: delete
+      parameters:
+        - name: cid
+          in: path
+          description: CID for the NFT
+          required: true
+          schema:
+            $ref: '#/components/schemas/CID'
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+  /check/{cid}:
+    get:
+      tags:
+        - NFT Storage
+      summary: Check if a CID of an NFT is being stored by nft.storage.
+      description: Includes the IPFS pinning state and the Filecoin deal state.
+      operationId: check
+      security: []
+      parameters:
+        - name: cid
+          in: path
+          description: CID for the NFT
+          required: true
+          schema:
+            $ref: '#/components/schemas/CID'
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/CheckResponse'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+
+components:
+  schemas:
+    NFT:
+      type: object
+      properties:
+        cid:
+          $ref: '#/components/schemas/CID'
+        size:
+          description: Size in bytes of the NFT data.
+          type: number
+          default: 132614
+        created:
+          $ref: '#/components/schemas/Date'
+        type:
+          type: string
+          enum: [directory, image/jpeg, application/json, other mime types]
+          example: image/jpeg
+          description: MIME type of the upload file or 'directory' when uploading multiple files.
+        scope:
+          description: Name of the JWT token used to create this NFT.
+          type: string
+          default: default
+        pin:
+          $ref: '#/components/schemas/Pin'
+        files:
+          $ref: '#/components/schemas/Files'
+        deals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Deal'
+    Links:
+      type: object
+      properties:
+        ipfs:
+          type: string
+          example: ipfs://bafkreidivzimqfqtoqxkrpge6bjyhlvxqs3rhe73owtmdulaxr5do5in7u
+        http:
+          type: string
+          example: http://bafkreidivzimqfqtoqxkrpge6bjyhlvxqs3rhe73owtmdulaxr5do5in7u.ipfs.dweb.link
+        file:
+          type: array
+          items:
+            type: object
+            properties:
+              ipfs:
+                type: string
+                example: ipfs://bafkreidivzimqfqtoqxkrpge6bjyhlvxqs3rhe73owtmdulaxr5do5in7u/image.jpg
+              http:
+                type: string
+                example: http://bafkreidivzimqfqtoqxkrpge6bjyhlvxqs3rhe73owtmdulaxr5do5in7u.ipfs.dweb.link/image.jpg
+    Files:
+      description: Files in the directory (only if this NFT is a directory).
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            example: logo.jpg
+          type:
+            type: string
+            example: image/jpeg
+    Deal:
+      type: object
+      properties:
+        batchRootCid:
+          type: string
+          example: bafkreidivzimqfqtoqxkrpge6bjyhlvxqs3rhe73owtmdulaxr5do5in7u
+        lastChange:
+          type: string
+          example: '2021-03-18T11:46:50.000Z'
+          description: 'This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: YYYY-MM-DDTHH:MM:SSZ.'
+        miner:
+          description: Miner ID
+          type: string
+          example: f05678
+        network:
+          description: Filecoin network for this Deal
+          type: string
+          enum:
+            - nerpanet
+            - mainnet
+        pieceCid:
+          description: Piece CID string
+          type: string
+          example: bafkreidivzimqfqtoqxkrpge6bjyhlvxqs3rhe73owtmdulaxr5do5in7u
+        status:
+          description: Deal status
+          type: string
+          enum:
+            - queued
+            - proposing
+            - accepted
+            - failed
+            - active
+            - published
+            - terminated
+        statusText:
+          type: string
+          example: miner rejected my data
+          description: Deal status description.
+        chainDealID:
+          type: number
+          example: 138
+          description: Identifier for the deal stored on chain.
+        dealActivation:
+          type: string
+          example: '2021-03-18T11:46:50.000Z'
+          description: 'This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: YYYY-MM-DDTHH:MM:SSZ.'
+        dealExpiration:
+          type: string
+          example: '2021-03-18T11:46:50.000Z'
+          description: 'This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: YYYY-MM-DDTHH:MM:SSZ.'
+      required:
+        - status
+        - lastChange
+    Date:
+      type: string
+      format: date-time
+      example: '2021-03-12T17:03:07.787Z'
+      description: 'This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: YYYY-MM-DDTHH:MM:SSZ.'
+    CID:
+      type: string
+      example: bafkreidivzimqfqtoqxkrpge6bjyhlvxqs3rhe73owtmdulaxr5do5in7u
+      description: Self-describing content-addressed identifiers for distributed systems. Check [spec](https://github.com/multiformats/cid) for more info.
+    PinStatus:
+      type: string
+      enum:
+        - queued
+        - pinning
+        - pinned
+        - failed
+    Pin:
+      type: object
+      properties:
+        cid:
+          $ref: '#/components/schemas/CID'
+        name:
+          type: string
+          example: pin name
+        meta:
+          type: object
+        status:
+          $ref: '#/components/schemas/PinStatus'
+        created:
+          $ref: '#/components/schemas/Date'
+        size:
+          type: number
+          example: 132614
+    UploadResponse:
+      type: object
+      properties:
+        cid:
+          $ref: '#/components/schemas/CID'
+    ListResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          default: true
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/NFT'
+    GetResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          default: true
+        value:
+          type: object
+          $ref: '#/components/schemas/NFT'
+    CheckResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          default: true
+        value:
+          type: object
+          properties:
+            cid:
+              $ref: '#/components/schemas/CID'
+            pin:
+              $ref: '#/components/schemas/Pin'
+            deals:
+              type: array
+              items:
+                $ref: '#/components/schemas/Deal'
+    DeleteResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+    ErrorResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          default: false
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+            message:
+              type: string
+    UnauthorizedErrorResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          default: false
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              default: HTTP Error
+            message:
+              type: string
+              default: Unauthorized
+    ForbiddenErrorResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          default: false
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              default: HTTP Error
+            message:
+              type: string
+              enum: [Token is not valid, Session expired]
+
+  securitySchemes:
+    bearerAuth:
+      description: |
+        The NFT Storage API uses *Bearer Tokens* to authenticate requests. You can view and manage your tokens in the [NFT Storage Dashboard](https://nft.storage).   
+
+        Your tokens carry many privileges, so be sure to keep them secure! Do not share your *secret tokens* in publicly accessible areas such as GitHub, client-side code, and so forth.   
+
+        **Bearer authentication** (also called token authentication) is an HTTP authentication scheme that involves security tokens called bearer tokens. The name “Bearer authentication” can be understood as “give access to the bearer of this token.” The bearer token is a cryptic string, usually generated by the server in response to a login request. The client must send this token in the Authorization header when making requests to protected resources:
+
+        ```js
+        Authorization: Bearer <token>
+        ```
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    unauthorized:
+      description: Unauthorized
+      content:
+        'application/json':
+          schema:
+            $ref: '#/components/schemas/UnauthorizedErrorResponse'
+    forbidden:
+      description: Forbidden
+      content:
+        'application/json':
+          schema:
+            $ref: '#/components/schemas/ForbiddenErrorResponse'
+    notFound:
+      description: Not Found
+      content:
+        'application/json':
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    internalServerError:
+      description: Internal Server Error
+      content:
+        'application/json':
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    badRequest:
+      description: Bad Request
+      content:
+        'application/json':
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    before:
+      description: Return results created before provided timestamp
+      name: before
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date-time  # RFC 3339, section 5.6
+      example: "2020-07-27T17:32:28Z"
+    limit:
+      description: Max records to return
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 100
+        default: 10
+security:
+  - bearerAuth: []
