@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://www.github.com/web3-storage/web3.storage/compare/w3-v1.0.1...w3-v1.1.0) (2021-07-23)
+
+
+### Features
+
+* user option for wrapWithDirectory ([#143](https://www.github.com/web3-storage/web3.storage/issues/143)) ([b08be84](https://www.github.com/web3-storage/web3.storage/commit/b08be84e7efcd610c21ff56b0cc129a11faf3840))
+
+
+### Bug Fixes
+
+* add missing ora dep and add tests ([#134](https://www.github.com/web3-storage/web3.storage/issues/134)) ([718c327](https://www.github.com/web3-storage/web3.storage/commit/718c327b87b4143358d9c6de5d69a83d8dcb65e0))
+
 ### [1.0.1](https://www.github.com/web3-storage/web3.storage/compare/w3-v1.0.0...w3-v1.0.1) (2021-07-22)
 
 
