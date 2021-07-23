@@ -20,13 +20,11 @@ export default function Upload() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [uploading, setUploading] = useState(false);
-  const [inputFile, setInputFile] = useState(null);
-  const inputRef = useRef();
+  const [/** @type {string|null} */ inputFile, setInputFile] = useState({ name: '' });
+  const /** @type {React.MutableRefObject<HTMLInputElement|null>} */ inputRef = useRef(null);
   const [percentComplete, setPercentComplete] = useState(0);
 
-  /**
-   * @param {import('react').ChangeEvent<HTMLFormElement>} e
-   */
+  /** @param {import('react').ChangeEvent<HTMLFormElement>} e */
   async function handleUploadSubmit(e) {
     e.preventDefault();
     const data = new FormData(e.target);
@@ -36,6 +34,7 @@ export default function Upload() {
     }
   }
 
+  /** @param {File} file */
   async function uploadFile(file) {
     const client = new Web3Storage({
       token: await getToken(),
@@ -58,10 +57,22 @@ export default function Upload() {
     }
   }
 
+  /** @param {File[]} acceptedFiles */
   const onDrop = (acceptedFiles) => uploadFile(acceptedFiles[0]);
   const { getRootProps, isDragActive } = useDropzone({ onDrop, multiple: false });
 
-  const openInput = () => inputRef.current.click()
+  const openInput = () => { 
+    const fileInput = inputRef?.current;
+    fileInput && fileInput.click()
+  }
+
+  const onInputChange = () => {
+    const fileInput = inputRef?.current;
+    if(!fileInput || !fileInput.files || !fileInput.files[0]) return;
+
+    const file = fileInput.files[0]
+    setInputFile({ name: file.name })
+  }
 
   return (
     <main className="p-4 sm:px-16 mt-4 sm:mt-16 text-w3storage-purple">
@@ -80,11 +91,11 @@ export default function Upload() {
                 type="file"
                 className="hidden"
                 required
-                onChange={(ev) => setInputFile(ev.target.files[0])}
+                onChange={onInputChange}
               />
               <div className="flex items-center border-w3storage-red border-dashed border-2 p-3">
-                <Button variant='white' className='border border-w3storage-purple focus:border-w3storage-purple' onClick={openInput}>Choose File</Button>
-                <p className="px-4">{ inputFile ? inputFile.name : 'No file chosen'}</p>
+                <Button variant='light' className='border border-w3storage-purple focus:border-w3storage-purple' onClick={openInput}>Choose File</Button>
+                <p className="px-4">{ inputFile.name.length > 0 ? inputFile.name : 'No file chosen'}</p>
               </div>
             </div>
             {isDragActive && (
