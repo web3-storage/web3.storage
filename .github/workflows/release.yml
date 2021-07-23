@@ -149,17 +149,16 @@ jobs:
           NEXT_PUBLIC_API: https://api.web3.storage
           NEXT_PUBLIC_MAGIC: ${{ secrets.PROD_MAGIC_PUBLIC_KEY }}
 
-      # TODO: replace with adding to web3.storage
-      # Pin the built site to ipfs-cluster, output the cid as `steps.ipfs.outputs.cid`
-      - name: Add to IPFS
+      # Add the site to web3.storage, output the cid as `steps.ipfs.outputs.cid`
+      - name: Add to web3.storage
         if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'website' }}
-        uses: ipfs-shipyard/ipfs-github-action@v2.1.0
+        uses: web3-storage/add-to-web3@v1
         id: ipfs
         with:
           path_to_add: packages/website/out
-          cluster_host: /dnsaddr/web3.storage.ipfscluster.io
-          cluster_user: ${{ secrets.CLUSTER_USER }}
-          cluster_password: ${{ secrets.CLUSTER_PASSWORD }}
+          web3_token: ${{ secrets.WEB3_TOKEN }}
+          # TODO: move to prod once we can get a token
+          web3_api: https://api-staging.web3.storage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
