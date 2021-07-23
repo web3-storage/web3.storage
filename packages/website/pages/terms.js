@@ -1,44 +1,41 @@
-import HashLink from '../components/hashlink.js'
+import matter from 'gray-matter'
+import ReactMarkdown from "react-markdown";
+import VerticalLines from '../illustrations/vertical-lines.js'
+
+ export async function getStaticProps() {
+   // @ts-ignore
+   const content = await import ('../content/terms.md')
+   const data = matter(content.default)
+
+    return {
+      props: {
+        title: 'Terms of Service - Web3 Storage',
+        needsUser: false,
+        data: data.content,
+      },
+    }
+  }
+
 
 /**
- * @returns {{ props: import('../components/types.js').LayoutProps}}
+ * About Page
+ *
+ * @param {import('../components/types.js').LayoutChildrenProps} props
+ * @returns
  */
-export function getStaticProps() {
-  return {
-    props: {
-      title: 'Terms of Service - Web3 Storage',
-      needsUser: false,
-    },
-  }
-}
-
-export default function TermsOfService() {
-  return (
-    <main className="bg-nspeach">
-      <div className="mw9 center pa4 pa5-ns">
-        <h1 className="chicagoflf">
-          <HashLink id="terms-of-service">Terms of Service</HashLink>
-        </h1>
-        <p className="lh-copy">
-          The following terms and conditions govern all use of the{' '}
-          <a className="black" href="https://web3.storage">
-            web3.storage
-          </a>{' '}
-          website (the “Website”) and all content, services and products
-          available at or through the Website. The Website is offered subject to
-          your acceptance without modification of all of the terms and
-          conditions contained herein. As all data uploaded to nft.storage will
-          be stored on IPFS, this website incorporates the{' '}
-          <a className="black" href="https://discuss.ipfs.io/tos">
-            Terms of Service of IPFS.io
-          </a>
-          .
-        </p>
-        <p className="lh-copy">
-          If you do not agree to all the terms and conditions of this agreement,
-          then you may not access the Website or use any services.
-        </p>
+export default function TermsOfService({ data }) {
+    return (
+      <div className="relative">
+        <div className="layout-margins">
+          <ReactMarkdown className="prose max-w-screen-lg mx-auto text-w3storage-purple my-4 lg:my-32">
+           { data }
+          </ReactMarkdown>
+          <div className="absolute top-10 left-0 h-full w-full pointer-events-none">
+            <div className="w-min ml-auto h-full">
+              <VerticalLines className="h-full" style={{ maxWidth: 200 }}/>
+            </div>
+          </div>
+        </div>
       </div>
-    </main>
-  )
+    )
 }
