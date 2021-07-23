@@ -157,7 +157,7 @@ jobs:
         id: ipfs
         with:
           path_to_add: packages/website/out
-          cluster_host: /dnsaddr/filecoin.storage.ipfscluster.io
+          cluster_host: /dnsaddr/web3.storage.ipfscluster.io
           cluster_user: ${{ secrets.CLUSTER_USER }}
           cluster_password: ${{ secrets.CLUSTER_PASSWORD }}
         env:
