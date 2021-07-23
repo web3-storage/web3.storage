@@ -17,11 +17,12 @@ cli.command('token')
 
 cli.command('put <path>')
   .describe('Upload a file or directory to web3.storage')
+  .option('--no-wrap', 'Dont wrap input files with a directory.')
   .action(put)
 
 cli.command('get <cid>')
   .describe('Fetch and verify files from web3.storage')
-  .option('-o, --output', 'Write to the output file name')
+  .option('-o, --output', 'The path to write the files to')
   .example('get bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy -o room-guardian.jpg')
   .action(get)
 

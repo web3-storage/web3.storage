@@ -1,6 +1,6 @@
 {
   "name": "web3.storage",
-  "version": "2.0.0",
+  "version": "2.1.1",
   "description": "API client for web3.storage",
   "type": "module",
   "license": "(Apache-2.0 AND MIT)",
@@ -36,7 +36,8 @@
     "@web-std/file": "^1.1.0",
     "browser-readablestream-to-it": "^1.0.2",
     "carbites": "^1.0.6",
-    "ipfs-car": "^0.5.1",
+    "files-from-path": "^0.2.0",
+    "ipfs-car": "^0.5.2",
     "p-retry": "^4.5.0",
     "streaming-iterables": "^6.0.0"
   },
@@ -82,5 +83,11 @@
       "path": "./dist/bundle.esm.min.js",
       "maxSize": "200 kB"
     }
+  ],
+  "files": [
+    "src",
+    "!src/test",
+    "dist",
+    "!dist/test"
   ]
 }

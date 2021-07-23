@@ -1,6 +1,7 @@
 /* eslint-disable react/no-children-prop */
 import matter from 'gray-matter'
 import ReactMarkdown from "react-markdown";
+import VerticalLines from '../illustrations/vertical-lines.js'
 
  export async function getStaticProps() {
    // @ts-ignore
@@ -25,8 +26,15 @@ import ReactMarkdown from "react-markdown";
  */
 export default function About({ data }) {
     return (
-        <>
-          <ReactMarkdown className="prose max-w-screen-lg mx-auto my-32" children={data} />
-        </>
+      <div className="relative overflow-hidden">
+        <div className="layout-margins">
+          <ReactMarkdown className="prose max-w-screen-lg mx-auto text-w3storage-purple my-4 lg:my-32" children={data} />
+          <div className="absolute top-48 left-0 w-full pointer-events-none" style={{ minWidth: '1536px' }}>
+            <div className="w-min ml-auto">
+              <VerticalLines />
+            </div>
+          </div>
+        </div>
+      </div>
     )
 }

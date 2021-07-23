@@ -21,7 +21,7 @@ describe('GET /status/:cid', () => {
       }],
       deals: [{
         dealId: 12345,
-        miner: 'f99',
+        storageProvider: 'f99',
         status: 'Active',
         pieceCid: 'baga',
         dataCid: 'bafy',
@@ -58,8 +58,8 @@ describe('GET /status/:cid', () => {
     })
   })
 
-  it('get shows no deals before batch is ready', async () => {
-    const cid = 'nobatch'
+  it('get shows no deals before aggregate is ready', async () => {
+    const cid = 'noaggregate'
     const res = await fetch(new URL(`status/${cid}`, endpoint))
     assert(res.ok)
     const json = await res.json()

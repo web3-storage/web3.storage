@@ -2,6 +2,7 @@ import { gql } from '@web3-storage/db'
 import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
+import { UserNotFoundError, TokenNotFoundError } from './errors.js'
 
 /**
  * @typedef {{
@@ -121,9 +122,10 @@ export function withAuth (handler) {
 
       const authToken = res.verifyAuthToken
       if (!authToken) {
-        throw new Error('invalid token')
+        throw new TokenNotFoundError()
       }
 
+      env.sentry && env.sentry.setUser(authToken.user)
       request.auth = { user: authToken.user, authToken }
       return handler(request, env, ctx)
     }
@@ -142,9 +144,10 @@ export function withAuth (handler) {
 
     const user = res.findUserByIssuer
     if (!user) {
-      throw new Error('user not found')
+      throw new UserNotFoundError()
     }
 
+    env.sentry && env.sentry.setUser(user)
     request.auth = { user }
     return handler(request, env, ctx)
   }
@@ -230,7 +233,8 @@ export async function userTokensDelete (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userUploadsGet (request, env) {
-  const { searchParams } = new URL(request.url)
+  const requestUrl = new URL(request.url)
+  const { searchParams } = requestUrl
 
   let size = 25
   if (searchParams.has('size')) {
@@ -254,11 +258,28 @@ export async function userUploadsGet (request, env) {
     query FindUploadsByUser($where: FindUploadsByUserInput!, $size: Int!) {
       findUploadsByUser(where: $where, _size: $size) {
         data {
-          _id
           name
           content {
             cid
             dagSize
+            aggregateEntries {
+              data {
+                aggregate {
+                  deals {
+                    data {
+                      storageProvider
+                      renewal
+                      dealId
+                    }
+                  }
+                }
+              }
+            }
+            pins {
+              data {
+                status
+              }
+            }
           }
           created
         }
@@ -266,7 +287,17 @@ export async function userUploadsGet (request, env) {
     }
   `, { where: { createdBefore: before.toISOString(), user: request.auth.user._id }, size })
 
-  return new JSONResponse(res.findUploadsByUser.data)
+  const { data: raw } = res.findUploadsByUser
+  const uploads = raw.map(({ name, content, created }) => ({
+    name,
+    ...content,
+    created
+  }))
+  const oldest = uploads[uploads.length - 1]
+  const headers = uploads.length === size
+    ? { Link: `<${requestUrl.pathname}?size=${size}&before=${oldest.created}>; rel="next"` }
+    : undefined
+  return new JSONResponse(uploads, { headers })
 }
 
 /**

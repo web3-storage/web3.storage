@@ -1,5 +1,26 @@
 # Changelog
 
+### [2.1.1](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v2.1.0...web3.storage-v2.1.1) (2021-07-23)
+
+
+### Bug Fixes
+
+* remove dev files from published client ([e02a349](https://www.github.com/web3-storage/web3.storage/commit/e02a349f0020b37767311241cbeece8e61e8017a))
+
+## [2.1.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v2.0.1...web3.storage-v2.1.0) (2021-07-23)
+
+
+### Features
+
+* user option for wrapWithDirectory ([#143](https://www.github.com/web3-storage/web3.storage/issues/143)) ([b08be84](https://www.github.com/web3-storage/web3.storage/commit/b08be84e7efcd610c21ff56b0cc129a11faf3840))
+
+### [2.0.1](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v2.0.0...web3.storage-v2.0.1) (2021-07-22)
+
+
+### Bug Fixes
+
+* types in example ([1662d85](https://www.github.com/web3-storage/web3.storage/commit/1662d856ef7886dbd686355276c57d45fadd2105))
+
 ## [2.0.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v1.0.0...web3.storage-v2.0.0) (2021-07-19)
 
 

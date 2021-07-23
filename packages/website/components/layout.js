@@ -22,9 +22,11 @@ export default function Layout({
   redirectIfFound = false,
   title = 'Web3 Storage - The simple file storage service for IPFS & Filecoin.',
   description = 'Web3 Storage',
-  navBgColor = 'white',
-  pageBgColor = 'bg-white',
+  pageBgColor = 'bg-w3storage-background',
+  navBgColor,
+  footerBgColor,
   data = null,
+  highlightMessage,
 }) {
   const { user, status } = useUser({
     redirectTo,
@@ -44,7 +46,7 @@ export default function Layout({
         <meta property="og:url" content="https://web3.storage" />
         <meta
           property="og:image"
-          content="https://web3.storage/images/social.png"
+          content="https://web3.storage/images/social-card.png"
         />
 
         <meta name="twitter:card" content="summary_large_image" />
@@ -60,9 +62,12 @@ export default function Layout({
         </>
       ) : (
         <>
-          <Navbar bgColor={navBgColor} user={user} />
+          { highlightMessage &&
+            <div className="w-full bg-w3storage-purple text-white typography-cta text-center py-1" dangerouslySetInnerHTML={{ __html: highlightMessage }} />
+          }
+          <Navbar user={user} bgColor={navBgColor} />
           {children({ user, data })}
-          <Footer />
+          <Footer bgColor={footerBgColor} />
         </>
       )}
     </div>

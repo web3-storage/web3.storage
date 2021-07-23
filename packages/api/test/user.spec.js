@@ -67,6 +67,64 @@ describe('DELETE /user/tokens/:id', () => {
   })
 })
 
+describe('GET /user/uploads', () => {
+  it('lists uploads', async () => {
+    const token = await getTestJWT()
+    const res = await fetch(new URL('/user/uploads', endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(res.ok)
+    const uploads = await res.json()
+    // TODO: import from fixture
+    const expected = [
+      {
+        name: 'Upload at 2021-07-09T16:20:32.658Z',
+        cid: 'bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae',
+        dagSize: null,
+        created: '2021-07-09T16:20:33.946845Z'
+      },
+      {
+        name: 'week-in-web3-2021-07-02.mov',
+        cid: 'bafybeigc4fntpegrqzgzhxyc7hzu25ykqqai7nzllov2jn55wvzjju7pwu',
+        dagSize: null,
+        created: '2021-07-09T10:40:35.408884Z'
+      },
+      {
+        name: 'pinpie.jpg',
+        cid: 'bafkreiajkbmpugz75eg2tmocmp3e33sg5kuyq2amzngslahgn6ltmqxxfa',
+        dagSize: null,
+        created: '2021-07-09T10:36:05.862862Z'
+      }
+    ]
+    assert.deepStrictEqual(uploads, expected)
+  })
+
+  it('paginates', async () => {
+    const token = await getTestJWT()
+    const size = 1
+    const res = await fetch(new URL(`/user/uploads?size=${size}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(res.ok)
+    // TODO: import from fixture
+    const expected = [
+      {
+        name: 'Upload at 2021-07-09T16:20:32.658Z',
+        cid: 'bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae',
+        dagSize: null,
+        created: '2021-07-09T16:20:33.946845Z'
+      }
+    ]
+    const link = res.headers.get('Link')
+    assert(link, 'has a Link header for the next page')
+    assert.strictEqual(link, `</user/uploads?size=${size}&before=${expected[0].created}>; rel="next"`)
+    const uploads = await res.json()
+    assert.deepStrictEqual(uploads, expected)
+  })
+})
+
 describe('DELETE /user/uploads/:cid', () => {
   it('removes an upload', async () => {
     const token = await getTestJWT()

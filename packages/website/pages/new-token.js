@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useQueryClient } from 'react-query'
 import Button from '../components/button.js'
 import { createToken } from '../lib/api.js'
+import VerticalLines from '../illustrations/vertical-lines.js'
 
 /**
  * Static Props
@@ -12,8 +13,7 @@ import { createToken } from '../lib/api.js'
 export function getStaticProps() {
   return {
     props: {
-      title: 'New API Key - NFT Storage',
-      navBgColor: 'nsgreen',
+      title: 'New API Token - Web3 Storage',
       needsUser: true,
       redirectTo: '/',
     },
@@ -45,36 +45,42 @@ export default function NewToken() {
   }
 
   return (
-    <main className="bg-nsgreen">
-      <div className="mw9 center pv3 ph3 ph5-ns min-vh-100">
-        <div className="center mv4 mw6">
-          <h1 className="chicagoflf f4 fw4">New API Key</h1>
-          <form onSubmit={handleCreateToken}>
-            <div className="mv3">
-              <label htmlFor="name" className="dib mb2">
-                Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                placeholder="Give this API token a name"
-                className="db ba b--black w5 pa2"
-                required
-              />
-            </div>
-            <div>
-              <Button
-                className="bg-nslime"
-                type="submit"
-                disabled={creating}
-                id="create-new-token"
-              >
-                {creating ? 'Creating...' : 'Create'}
-              </Button>
-            </div>
-          </form>
+    <div className="relative overflow-hidden">
+      <div className="layout-margins">
+        <main className="max-w-screen-lg mx-auto my-4 lg:my-16 text-w3storage-purple">
+          <div className="flex flex-col items-center justify-between mx-auto w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
+            <h3>New API Token</h3>
+            <form onSubmit={handleCreateToken}>
+              <div className="my-6">
+                <div className="text-left mb-3">
+                  <label htmlFor="name">Name</label>
+                </div>
+                <input
+                  id="name"
+                  name="name"
+                  placeholder="Give this API Token a name"
+                  className="w-full border border-black px-4 py-3 placeholder-black"
+                  required
+                />
+              </div>
+              <div>
+                <Button
+                  type="submit"
+                  disabled={creating}
+                  id="create-new-token"
+                >
+                  {creating ? 'Creating...' : 'Create'}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </main>
+        <div className="absolute top-48 left-0 w-full pointer-events-none" style={{ minWidth: '1536px' }}>
+          <div className="w-min ml-auto">
+            <VerticalLines />
+          </div>
         </div>
       </div>
-    </main>
+    </div>
   )
 }

@@ -11,7 +11,7 @@ import Button from './button.js'
  * @param {string} [props.bgColor]
  * @param {any} [props.user]
  */
-export default function Navbar({ bgColor = 'white', user }) {
+export default function Navbar({ bgColor = '', user }) {
   const queryClient = useQueryClient()
   async function logout() {
     await getMagic().user.logout()
@@ -20,42 +20,45 @@ export default function Navbar({ bgColor = 'white', user }) {
   }
 
   return (
-    <nav className={`bg-${bgColor} w-full border border-gray-400`}>
-      <div className="flex items-center justify-between py-3 mx-auto max-w-screen-2xl">
+    <nav className={`${bgColor} w-full z-50`}>
+      <div className="flex items-center justify-between py-3 layout-margins">
         <Link href="/">
-          <a title="Web3 Storage">⁂</a>
+          <a title="Web3 Storage" className="flex">
+            <img src="/w3storage-logo.svg" style={{ height: '2.4rem' }} />
+            <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-3xl hidden xl:inline-block">Web3.Storage</span>
+          </a>
         </Link>
         <div>
-          <Link href="/about">
-            <a className="text-black font-bold no-underline hover:underline align-middle mr-12">
-              About
+          <Link href="https://docs.web3.storage/">
+            <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12">
+              Docs
             </a>
           </Link>
-          <Link href="/docs">
-            <a className="text-black font-bold no-underline hover:underline align-middle mr-12">
-              Documentation
+          <Link href="/about">
+            <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12">
+              About
             </a>
           </Link>
           {user ? (
             <>
               <Link href="/files">
-                <a className="text-black font-bold no-underline hover:underline align-middle mr-12">
+                <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12">
                   Files
                 </a>
               </Link>
-              <Link href="/account">
-                <a className="text-black font-bold no-underline hover:underline align-middle mr-12">
+              <Link href="/profile">
+                <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12">
                   Profile
                 </a>
               </Link>
             </>
           ) : null}
           {user ? (
-            <Button onClick={logout} id="logout" wrapperClassName="inline-block">
+            <Button onClick={logout} id="logout" wrapperClassName="inline-block" variant="outlined">
               Logout
             </Button>
           ) : (
-            <Button href="/login" id="login" wrapperClassName="inline-block" rounded>
+            <Button href="/login" id="login" wrapperClassName="inline-block">
               Login
             </Button>
           )}

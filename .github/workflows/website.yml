@@ -44,7 +44,7 @@ jobs:
 
       # Add the site to web3.storage, output the cid as `steps.ipfs.outputs.cid`
       - name: Add to web3.storage
-        uses: web3-storage/add-to-web3@mvp
+        uses: web3-storage/add-to-web3@v1
         id: ipfs
         with:
           path_to_add: packages/website/out

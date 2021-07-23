@@ -1,31 +1,41 @@
 {
-  "name": "web3.storage-cli",
-  "version": "0.0.0",
-  "description": "Save your things in web3 ⁂",
+  "name": "@web3-storage/w3",
+  "version": "1.0.1",
+  "description": "The CLI to save your things in web3.storage ⁂",
   "type": "module",
   "bin": {
     "w3": "bin.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "./bin.js",
+    "test": "mocha test/*.spec.js --ignore test/e2e.spec.js --exit",
+    "test:e2e": "mocha test/e2e.spec.js --exit"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/web3-storage/web3.storage.git"
+    "url": "git+https://github.com/web3-storage/web3.storage.git",
+    "directory": "packages/w3"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/web3-storage/web3.storage/issues"
   },
-  "homepage": "https://github.com/web3-storage/web3.storage#readme",
+  "homepage": "https://web3.storage",
   "dependencies": {
     "conf": "^10.0.1",
     "enquirer": "^2.3.6",
-    "err-code": "^3.0.1",
     "ipfs-car": "^0.5.1",
-    "it-glob": "^0.0.13",
-    "sade": "^1.7.4"
+    "ora": "^5.4.1",
+    "sade": "^1.7.4",
+    "web3.storage": "^2.0.0"
   },
-  "main": "index.js"
+  "devDependencies": {
+    "execa": "^5.1.1",
+    "mocha": "^8.3.2"
+  },
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  }
 }

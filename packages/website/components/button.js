@@ -11,8 +11,8 @@ import clsx from 'clsx'
  * @prop {import('react').ReactChildren | string} children
  * @prop {boolean} [disabled]
  * @prop {string} [id]
- * @prop {'dark' | 'light'} [variant]
- * @prop {boolean} [rounded] If the button should have border-radius
+ * @prop {'dark' | 'light' | 'outlined' } [variant]
+ * @prop {boolean} [small] If the button should have min-width & height or not
  * @prop {import('react').FunctionComponent} [Icon] Icon component to prefix
  */
 
@@ -31,12 +31,24 @@ export default function Button({
   children,
   disabled = false,
   variant = 'dark',
-  rounded,
+  small,
   Icon,
 }) {
-  const buttonStyle = { minWidth: '8rem', minHeight: '3.25rem' }
-  const variantClasses = variant === 'dark' ? 'bg-w3storage-purple text-white' : 'bg-transparent text-black'
+  const buttonStyle = small ? {} : { minWidth: '8rem', minHeight: '3.25rem' }
+  let variantClasses = '';
+  switch(variant) {
+    case 'dark':
+      variantClasses = 'bg-w3storage-purple text-white border border-transparent'
+      break
 
+    case 'light':
+      variantClasses = 'bg-white text-w3storage-purple border border-transparent'
+      break
+
+    case 'outlined':
+      variantClasses = 'bg-transparent border-2 border-w3storage-purple text-w3storage-purple'
+      break
+  }
   const btn = (
     <button
       type={type}
@@ -45,16 +57,15 @@ export default function Button({
         'flex',
         'items-center',
         'justify-center',
-        'w-full',
-        'border',
-        'border-transparent',
         'hover:opacity-90',
         'focus:opacity-90',
         'focus:border-white',
-        rounded && 'rounded-md',
         'px-4',
-        { pointer: !disabled },
+        disabled ?
+          'cursor-auto opacity-50' :
+          'hover:opacity-90 focus:opacity-90 focus:border-white',
         'typography-cta',
+        !small && 'w-full',
         className
       )}
       style={buttonStyle}

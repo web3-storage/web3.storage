@@ -1,6 +1,5 @@
-import { globSource } from './utils/glob-source.js'
 import { writeFiles } from 'ipfs-car/unpack/fs'
-import { Web3Storage } from 'web3.storage'
+import { Web3Storage, filesFromPath } from 'web3.storage'
 import enquirer from 'enquirer'
 import Conf from 'conf'
 import ora from 'ora'
@@ -95,6 +94,7 @@ export async function get (cid, opts) {
  * @param {object} opts
  * @param {string} [opts.api]
  * @param {string} [opts.token]
+ * @param {string} [opts.wrap] wrap with directory
  * @param {string[]} opts._ additonal paths to add
  */
 export async function put (path, opts) {
@@ -105,7 +105,7 @@ export async function put (path, opts) {
   let totalSize = 0
   let totalSent = 0
   for (const p of paths) {
-    for await (const file of globSource(p)) {
+    for await (const file of filesFromPath(p)) {
       totalSize += file.size
       files.push(file)
       spinner.text = `Packing ${files.length} file${files.length === 1 ? '' : 's'} (${filesize(totalSize)})`
@@ -113,6 +113,7 @@ export async function put (path, opts) {
   }
   let rootCid = ''
   const root = await client.put(files, {
+    wrapWithDirectory: opts.wrap,
     onRootCidReady: (cid) => {
       rootCid = cid
       spinner.stopAndPersist({ symbol: '#', text: `Packed ${files.length} file${files.length === 1 ? '' : 's'} (${filesize(totalSize)})` })

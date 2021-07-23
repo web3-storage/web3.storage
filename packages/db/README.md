@@ -31,7 +31,7 @@ An auth key (API key) used to authenticate user actions.
 
 A file/directory that is being recorded by the system, essentially a root CID. It may have been uploaded by multiple users.
 
-It's DAG size is cached here and it contains references to [pins](#pin) (IPFS nodes that are pinning it) and the [batchEntries](#batchentry) (Filecoin deal batches it appears in).
+It's DAG size is cached here and it contains references to [pins](#pin) (IPFS nodes that are pinning it) and the [aggregateEntries](#aggregateentry) (Filecoin deal aggregations it appears in).
 
 ### `Pin`
 
@@ -47,13 +47,13 @@ Content that was uploaded to the system by a user.
 
 ### `Deal`
 
-Information about a Filecoin deal for a [batch](#batch) of content.
+Information about a Filecoin deal for a [aggregate](#aggregate) of content.
 
-### `Batch`
+### `Aggregate`
 
-A aggregation of content that appears in a Filecoin deal. Content is assembled into [batch entries](#batchentry) which reference the [content](#content) and describe how to access the data within the batch (via a `dataModelSelector`).
+A aggregation of content that appears in a Filecoin deal. Content is assembled into [aggregate entries](#aggregateentry) which reference the [content](#content) and describe how to access the data within the aggregate (via a `dataModelSelector`).
 
-### `BatchEntry`
+### `AggregateEntry`
 
-Information about [content](#content) that is included in a [batch](#batch). 
+Information about [content](#content) that is included in a [aggregate](#aggregate). 
 

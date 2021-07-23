@@ -18,6 +18,7 @@ import pRetry from 'p-retry'
 import { pack } from 'ipfs-car/pack'
 import { unpackStream } from 'ipfs-car/unpack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
+import { filesFromPath, getFilesFromPath } from 'files-from-path'
 import {
   fetch,
   File,
@@ -87,7 +88,13 @@ class Web3Storage {
    * @param {PutOptions} [options]
    * @returns {Promise<CIDString>}
    */
-  static async put ({ endpoint, token }, files, { onRootCidReady, onStoredChunk, maxRetries = MAX_PUT_RETRIES, name } = {}) {
+  static async put ({ endpoint, token }, files, {
+    onRootCidReady,
+    onStoredChunk,
+    maxRetries = MAX_PUT_RETRIES,
+    wrapWithDirectory = true,
+    name
+  } = {}) {
     const url = new URL('/car', endpoint)
     const targetSize = MAX_CHUNK_SIZE
     let headers = Web3Storage.headers(token)
@@ -109,7 +116,8 @@ class Web3Storage {
           path: f.name,
           content: f.stream()
         })),
-        blockstore
+        blockstore,
+        wrapWithDirectory
       })
       carRoot = root.toString()
 
@@ -324,7 +332,7 @@ function toWeb3Response (res) {
   return response
 }
 
-export { Web3Storage, File, Blob }
+export { Web3Storage, File, Blob, filesFromPath, getFilesFromPath }
 
 /**
  * Just to verify API compatibility.
