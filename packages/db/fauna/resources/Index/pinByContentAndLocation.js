@@ -13,17 +13,17 @@ const {
  * Usage:
  *
  * Match(
- *   Index('batchEntry_by_batch_and_content'),
- *   Ref(Collection('Batch'), Var('batchId')),
+ *   Index('pin_by_content_and_location'),
  *   Ref(Collection('Content'), Var('contentId'))
+ *   Ref(Collection('PinLocation'), Var('locationId'))
  * )
  */
 const index = {
-  name: 'batchEntry_by_batch_and_content',
-  source: Collection('BatchEntry'),
+  name: 'pin_by_content_and_location',
+  source: Collection('Pin'),
   terms: [
-    { field: ['data', 'batch'] },
-    { field: ['data', 'content'] }
+    { field: ['data', 'content'] },
+    { field: ['data', 'location'] }
   ]
 }
 

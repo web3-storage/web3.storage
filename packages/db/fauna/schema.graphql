@@ -78,16 +78,16 @@ type Content {
   pins: [Pin]! @relation
 
   """
-  Content for deals is aggregated into batches. Each batch has many entries.
+  Content for deals is aggregated together. Each aggregation has many entries.
   These are the entries that this content appears in.
   """
-  batchEntries: [BatchEntry!]! @relation
+  aggregateEntries: [AggregateEntry!]! @relation
 
   """
   Size of the DAG in bytes. Set if known on upload or for partials is set when
   content is fully pinned in at least one location.
   """
-  dagSize: Int
+  dagSize: Long
 
   """
   Creation date.
@@ -118,6 +118,11 @@ type Pin {
   Last time the status was updated.
   """
   updated: Time!
+
+  """
+  Creation date.
+  """
+  created: Time!
 }
 
 """
@@ -152,11 +157,42 @@ enum PinStatus {
   UnpinError
   Pinned
   Pinning
+  Unpinning
   Unpinned
   Remote
   PinQueued
   UnpinQueued
   Sharded
+}
+
+"""
+Tracks requests to replicate content to more nodes.
+"""
+type PinRequest {
+  """
+  Root CID to Pin.
+  """
+  cid: String! @unique
+
+  """
+  The content that we want replicated.
+  """
+  content: Content! @relation
+
+  """
+  Number of times we have tried to pin this CID
+  """
+  attempts: Int!
+
+  """
+  Last time attempts was updated
+  """
+  updated: Time!
+
+  """
+  When the PinRequest was created
+  """
+  created: Time!
 }
 
 """
@@ -180,6 +216,11 @@ type Upload {
   name: String
 
   """
+  Type of received upload data.
+  """
+  type: UploadType!
+
+  """
   The root of the uploaded content.
   """
   content: Content! @relation
@@ -196,13 +237,31 @@ type Upload {
 }
 
 """
-A batch of content for inclusion in a Filecoin deal.
+Type of received upload data.
 """
-type Batch {
+enum UploadType {
   """
-  CID of the root of the batch data.
+  A CAR file upload.
   """
-  cid: String! @unique
+  Car
+  """
+  A raw blob upload in the request body.
+  """
+  Blob
+  """
+  A multi file upload using a multipart request.
+  """
+  Multipart
+}
+
+"""
+An aggregate of content for inclusion in a Filecoin deal.
+"""
+type Aggregate {
+  """
+  CID of the root of the aggregate data.
+  """
+  dataCid: String! @unique
 
   """
   Piece CID.
@@ -210,14 +269,14 @@ type Batch {
   pieceCid: String!
 
   """
-  Deals this batch can be found in.
+  Deals this aggregation can be found in.
   """
   deals: [Deal!]! @relation
 
   """
-  Entries included in this batch.
+  Entries included in this aggregate.
   """
-  entries: [BatchEntry!]! @relation
+  entries: [AggregateEntry!]! @relation
 
   """
   Creation date.
@@ -226,44 +285,44 @@ type Batch {
 }
 
 """
-Information about an entry included in a batch.
+Information about an entry included in an aggregate.
 """
-type BatchEntry {
+type AggregateEntry {
   """
   The content this entry is for.
   """
   content: Content! @relation
 
   """
-  The batch this entry resides in.
+  The aggregate this entry resides in.
   """
-  batch: Batch! @relation
+  aggregate: Aggregate! @relation
 
   """
-  Selector for extracting stored data from the batch root.
+  Selector for extracting stored data from the aggregate data root.
   """
   dataModelSelector: String
 }
 
 """
-Filecoin deal for a batch of content.
+Filecoin deal for an aggregation of content.
 """
 type Deal {
 
   """
-  Content batch for this deal.
+  Content aggregate for this deal.
   """
-  batch: Batch! @relation
+  aggregate: Aggregate! @relation
 
   """
-  ID of miner this deal was made with.
+  ID of storage provider this deal was made with.
   """
-  miner: String!
+  storageProvider: String!
 
   """
   Identifier for the deal stored on chain.
   """
-  chainDealId: Int! @unique
+  dealId: Long! @unique
 
   """
   Time when deal will be active.
@@ -313,53 +372,63 @@ type Query {
   Verify the User with the passed issuer owns the AuthToken with the passed secret.
   """
   verifyAuthToken(issuer: String!, secret: String!): AuthToken @resolver
+  findPinsByStatus(statuses: [PinStatus!]!): [Pin!]! @resolver(paginated: true)
   findMetrics: Metrics! @resolver
+  findAllPinRequests: [PinRequest!]! @resolver(paginated: true)
 }
 
 type Mutation {
   createOrUpdateUser(data: CreateOrUpdateUserInput!): User! @resolver
   createAuthToken(data: CreateAuthTokenInput): AuthToken! @resolver
-  importCar(data: ImportCarInput!): Upload! @resolver
+  createUpload(data: CreateUploadInput!): Upload! @resolver
   deleteAuthToken(user: ID!, authToken: ID!): AuthToken! @resolver
   deleteUserUpload(user: ID!, cid: String!): Upload! @resolver
-  createBatch(data: CreateBatchInput!): Batch! @resolver
+  createAggregate(data: CreateAggregateInput!): Aggregate! @resolver
   """
-  Adds new entries to the batch, existing entries are ignored.
+  Adds new entries to the aggregate, existing entries are ignored.
   """
-  addBatchEntries(batchCid: String!, entries: [BatchEntryInput!]!): Batch! @resolver
+  addAggregateEntries(dataCid: String!, entries: [AggregateEntryInput!]!): Aggregate! @resolver
   createOrUpdateDeal(data: CreateOrUpdateDealInput!): Deal! @resolver
+  """
+  Creates a new pin object (and location) or updates an existing pin object.
+  """
+  createOrUpdatePin(data: CreateOrUpdatePinInput): Pin! @resolver
+  updateContentDagSize(content: ID!, dagSize: Long!): Content! @resolver
+  createPinRequest(cid: String!): PinRequest! @resolver
+  incrementPinRequestAttempts(pinRequest: ID!): PinRequest! @resolver
 }
 
 type Metrics {
   usersTotal: Int!
   uploadsTotal: Int!
   contentTotal: Int!
-  contentTotalBytes: Int!
+  contentTotalBytes: Long!
   pinsTotal: Int!
-  pinsTotalBytes: Int!
+  pinsTotalBytes: Long!
   pinsQueuedTotal: Int!
   pinsPinningTotal: Int!
   pinsPinnedTotal: Int!
   pinsFailedTotal: Int!
 }
 
-input CreateBatchInput {
-  batchCid: String!
+input CreateAggregateInput {
+  dataCid: String!
   pieceCid: String!
 }
 
-input BatchEntryInput {
+input AggregateEntryInput {
   cid: String!
   dataModelSelector: String
+  dagSize: Long
 }
 
 input CreateOrUpdateDealInput {
   """
-  CID of the batch included in this deal. Required for create, ignored for update.
+  CID of the aggregate included in this deal. Required for create, ignored for update.
   """
-  batchCid: String
-  miner: String
-  chainDealId: Int!
+  dataCid: String
+  storageProvider: String
+  dealId: Long!
   activation: Time
   renewal: Time
   status: DealStatus!
@@ -386,10 +455,29 @@ input CreateAuthTokenInput {
   secret: String!
 }
 
-input ImportCarInput {
+input CreateUploadInput {
   user: ID!
   authToken: ID
   cid: String!
+  type: UploadType!
   name: String
-  dagSize: Int
+  dagSize: Long
+  pins: [PinInput!]!
+}
+
+input PinInput {
+  status: PinStatus!
+  location: PinLocationInput!
+}
+
+input PinLocationInput {
+  peerId: String!,
+  peerName: String
+  region: String
+}
+
+input CreateOrUpdatePinInput {
+  content: ID!
+  status: PinStatus!
+  location: PinLocationInput!
 }

@@ -12,6 +12,9 @@ import clsx from 'clsx'
  * @prop {boolean} [disabled]
  * @prop {string} [id]
  * @prop {'dark' | 'light'} [variant]
+ * @prop {boolean} [small] If the button should have min-width & height or not
+ * @prop {boolean} [rounded] If the button should have border-radius
+ * @prop {import('react').FunctionComponent} [Icon] Icon component to prefix
  */
 
 /**
@@ -28,23 +31,31 @@ export default function Button({
   type = 'button',
   children,
   disabled = false,
-  variant = 'dark'
+  variant = 'dark',
+  small,
+  rounded,
+  Icon,
 }) {
-  const buttonStyle = { minWidth: '8rem', minHeight: '3.25rem' }
-  const variantClasses = variant === 'dark' ? 'bg-black text-white' : 'bg-transparent text-black'
+  const buttonStyle = small ? {} : { minWidth: '8rem', minHeight: '3.25rem' }
+  const variantClasses = variant === 'dark' ? 'bg-w3storage-purple text-white' : 'bg-transparent text-black'
 
   const btn = (
     <button
       type={type}
       className={clsx(
         variantClasses,
-        'w-full',
+        'flex',
+        'items-center',
+        'justify-center',
         'border',
-        'border-black',
-        'rounded-md',
+        'border-transparent',
+        rounded && 'rounded-md',
         'px-4',
-        { pointer: !disabled },
+        disabled ? 
+          'cursor-auto opacity-50' :
+          'hover:opacity-90 focus:opacity-90 focus:border-white',
         'typography-cta',
+        !small && 'w-full',
         className
       )}
       style={buttonStyle}
@@ -52,6 +63,7 @@ export default function Button({
       disabled={disabled}
       id={id}
     >
+      { Icon && <Icon className="w-7 mr-2 fill-current"/> }
       {children}
     </button>
   )

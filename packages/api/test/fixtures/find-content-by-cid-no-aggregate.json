@@ -3,7 +3,7 @@
     "findContentByCid": {
       "created": "2021-07-14T19:27:14.934572Z",
       "dagSize": 101,
-      "batchEntries": {
+      "aggregateEntries": {
         "data": []
       },
       "pins": {

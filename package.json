@@ -6,6 +6,7 @@
   "workspaces": [
     "packages/api",
     "packages/client",
+    "packages/cron",
     "packages/db",
     "packages/w3",
     "packages/website"

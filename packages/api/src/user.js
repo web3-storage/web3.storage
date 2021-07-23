@@ -2,6 +2,7 @@ import { gql } from '@web3-storage/db'
 import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
+import { UserNotFoundError, TokenNotFoundError } from './errors.js'
 
 /**
  * @typedef {{
@@ -121,9 +122,10 @@ export function withAuth (handler) {
 
       const authToken = res.verifyAuthToken
       if (!authToken) {
-        throw new Error('invalid token')
+        throw new TokenNotFoundError()
       }
 
+      env.sentry && env.sentry.setUser(authToken.user)
       request.auth = { user: authToken.user, authToken }
       return handler(request, env, ctx)
     }
@@ -142,9 +144,10 @@ export function withAuth (handler) {
 
     const user = res.findUserByIssuer
     if (!user) {
-      throw new Error('user not found')
+      throw new UserNotFoundError()
     }
 
+    env.sentry && env.sentry.setUser(user)
     request.auth = { user }
     return handler(request, env, ctx)
   }
@@ -258,6 +261,24 @@ export async function userUploadsGet (request, env) {
           content {
             cid
             dagSize
+            aggregateEntries {
+              data {
+                aggregate {
+                  deals {
+                    data {
+                      storageProvider
+                      renewal
+                      dealId
+                    }
+                  }
+                }
+              }
+            }
+            pins {
+              data {
+                status
+              }
+            }
           }
           created
         }

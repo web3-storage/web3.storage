@@ -8,8 +8,10 @@ const gqlOkResponse = data => gqlResponse(200, { data })
  * @param {{ body: GraphQLRequest }} request
  */
 module.exports = ({ body }) => {
-  if (body.query.includes('importCar')) {
-    return gqlOkResponse({ importCar: { _id: 'test-upload-id' } })
+  if (body.query.includes('createUpload')) {
+    return gqlOkResponse({
+      createUpload: { content: { _id: 'test-content' } }
+    })
   }
 
   if (body.query.includes('verifyAuthToken')) {
@@ -54,8 +56,8 @@ module.exports = ({ body }) => {
     if (body.variables.cid === 'unknown') {
       return gqlResponse(200, require('../../fixtures/find-content-by-cid-unknown.json'))
     }
-    if (body.variables.cid === 'nobatch') {
-      return gqlResponse(200, require('../../fixtures/find-content-by-cid-no-batch.json'))
+    if (body.variables.cid === 'noaggregate') {
+      return gqlResponse(200, require('../../fixtures/find-content-by-cid-no-aggregate.json'))
     }
     if (body.variables.cid === 'nodeal') {
       return gqlResponse(200, require('../../fixtures/find-content-by-cid-no-deal.json'))

@@ -25,14 +25,14 @@ format = "service-worker"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api.web3.storage/*"
-vars = { CLUSTER_API_URL = "https://filecoin.storage.ipfscluster.io/api/" }
+vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/" }
 
 [env.staging]
 # name = "web3-storage-staging"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api-staging.web3.storage/*"
-vars = { CLUSTER_API_URL = "https://filecoin.storage.ipfscluster.io/api/" }
+vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/" }
 
 [env.alan]
 workers_dev = true
@@ -53,6 +53,11 @@ vars = { CLUSTER_API_URL = "https://yusef-cluster-api-web3-storage.loca.lt" }
 workers_dev = true
 account_id = "7ec0b7cf2ec201b2580374e53ba5f37b"
 vars = { CLUSTER_API_URL = "https://vsantos-cluster-api-web3-storage.loca.lt" }
+
+[env.rafaelramalho]
+workers_dev = true
+account_id = "83d74d9c17d37ac07ea4f27ffa927626"
+vars = { CLUSTER_API_URL = "https://rafaelramalho-cluster-api-web3-storage.loca.lt/" }
 
 # Add your env here. Override the the values you need to change.
 

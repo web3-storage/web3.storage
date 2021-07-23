@@ -27,29 +27,29 @@ const body = Query(
     Let(
       {
         dealMatch: Match(
-          Index('unique_Deal_chainDealId'),
-          Select('chainDealId', Var('data'))
+          Index('unique_Deal_dealId'),
+          Select('dealId', Var('data'))
         )
       },
       If(
         IsEmpty(Var('dealMatch')),
         Let(
           {
-            batchMatch: Match(
-              Index('unique_Batch_cid'),
-              Select('batchCid', Var('data'))
+            aggregateMatch: Match(
+              Index('unique_Aggregate_dataCid'),
+              Select('dataCid', Var('data'))
             ),
-            batchRef: If(
-              IsEmpty(Var('batchMatch')),
-              Abort('batch not found'),
-              Select('ref', Get(Var('batchMatch')))
+            aggregateRef: If(
+              IsEmpty(Var('aggregateMatch')),
+              Abort('aggregate not found'),
+              Select('ref', Get(Var('aggregateMatch')))
             )
           },
           Create('Deal', {
             data: {
-              batch: Var('batchRef'),
-              miner: Select('miner', Var('data')),
-              chainDealId: Select('chainDealId', Var('data')),
+              aggregate: Var('aggregateRef'),
+              storageProvider: Select('storageProvider', Var('data')),
+              dealId: Select('dealId', Var('data')),
               activation: Select('activation', Var('data'), null),
               renewal: Select('renewal', Var('data'), null),
               status: Select('status', Var('data')),
@@ -62,14 +62,14 @@ const body = Query(
         Let(
           {
             deal: Get(Var('dealMatch')),
-            currMiner: Select(['data', 'miner'], Var('deal')),
+            currStorageProvider: Select(['data', 'storageProvider'], Var('deal')),
             currActivation: Select(['data', 'activation'], Var('deal'), null),
             currRenewal: Select(['data', 'renewal'], Var('deal'), null),
             currStatusReason: Select(['data', 'statusReason'], Var('deal'), null)
           },
           Update(Select('ref', Var('deal')), {
             data: {
-              miner: Select('miner', Var('data'), Var('currMiner')),
+              storageProvider: Select('storageProvider', Var('data'), Var('currStorageProvider')),
               activation: Select('activation', Var('data'), Var('currActivation')),
               renewal: Select('renewal', Var('data'), Var('currRenewal')),
               status: Select('status', Var('data')),

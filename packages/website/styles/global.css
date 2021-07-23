@@ -97,13 +97,38 @@ h3 {
   @apply font-medium;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
+  @apply antialiased;
+
   font-family: "Open Sans", sans-serif;
   font-size: 1.125rem;
   line-height: 1.875em;
   letter-spacing: 0.02em;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
+}
+
+/* ================================================================================
+   Layout
+   ================================================================================ */
+
+.layout-margins {
+  @apply mx-8;
+}
+
+@screen md {
+  .layout-margins {
+      margin: 0 4%;
+  }
+}
+
+/* 1440 max width + 58px left & right padding */
+@media only screen and (min-width: 1556px) {
+  .layout-margins {
+      @apply max-w-screen-2xl mx-auto;
+  }
 }
 
 .loading {

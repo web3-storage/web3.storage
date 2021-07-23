@@ -1,5 +1,5 @@
 {
-  "name": "web3.storage-api",
+  "name": "@web3-storage/api",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -14,30 +14,36 @@
     "build": "webpack",
     "test": "npm-run-all -p -r mock:cluster mock:db test:e2e -s test:size",
     "test:size": "bundlesize",
-    "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js",
+    "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js -b webkit",
     "mock:cluster": "smoke -p 9094 test/mocks/cluster",
     "mock:db": "smoke -p 9086 test/mocks/db"
   },
   "devDependencies": {
-    "@ipld/car": "^3.1.4",
+    "@web-std/form-data": "^2.1.0",
     "@nftstorage/ipfs-cluster": "^3.1.2",
     "@types/mocha": "^8.2.2",
     "assert": "^2.0.0",
     "buffer": "^6.0.3",
     "ipfs-car": "^0.5.1",
+    "ipfs-unixfs-importer": "^8.0.0",
     "npm-run-all": "^4.1.5",
     "playwright-test": "^7.0.1",
     "process": "^0.11.10",
     "smoke": "^3.1.1",
     "stream-browserify": "^3.0.0",
+    "toucan-js": "^2.4.1",
     "webpack": "^5.42.0",
     "webpack-cli": "^4.7.2"
   },
   "dependencies": {
+    "@ipld/car": "^3.1.4",
+    "@ipld/dag-cbor": "^6.0.3",
+    "@ipld/dag-pb": "^2.0.2",
     "@magic-ext/oauth": "^0.8.0",
     "@magic-sdk/admin": "^1.3.0",
     "@web3-storage/db": "^0.0.0",
-    "itty-router": "^2.3.10"
+    "itty-router": "^2.3.10",
+    "multiformats": "^9.0.4"
   },
   "bundlesize": [
     {

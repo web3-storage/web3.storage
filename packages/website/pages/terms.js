@@ -7,7 +7,6 @@ export function getStaticProps() {
   return {
     props: {
       title: 'Terms of Service - Web3 Storage',
-      navBgColor: 'nspeach',
       needsUser: false,
     },
   }

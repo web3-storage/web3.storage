@@ -1,0 +1,22 @@
+{
+  "cid": "bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e",
+  "created": "2021-07-14T19:27:14.934572Z",
+  "dagSize": 101,
+  "pins": [{
+    "peerId": "12D3KooWR1Js",
+    "peerName": "who?",
+    "region": "where?",
+    "status": "Pinned"
+  }],
+  "deals": [{
+    "dealId": 12345,
+    "storageProvider": "f99",
+    "status": "Active",
+    "pieceCid": "baga",
+    "dataCid": "bafy",
+    "dataModelSelector": "Links/0/Links",
+    "activation": "<iso timestamp>",
+    "created": "2021-07-14T19:27:14.934572Z",
+    "updated": "2021-07-14T19:27:14.934572Z"
+  }]
+}
