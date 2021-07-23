@@ -28,6 +28,13 @@ module.exports = {
         "w3storage-white": '#ffffff',
         "w3storage-background": '#fff2ec'
       },
+      gridTemplateRows: {
+        '3-auto': 'repeat(3, auto)',
+        '6-auto': 'repeat(6, auto)'
+      },
+      zIndex: {
+        'n1': '-1',
+      },
       typography: (theme) => ({
         DEFAULT: {
           css: {
@@ -45,7 +52,7 @@ module.exports = {
             h3: {
               color: false,
               fontSize: false,
-              fontWeight: false,
+              fontWeight: 500,
             },
             a: {
               color: theme('colors.w3storage-purple'),

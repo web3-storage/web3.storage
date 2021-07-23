@@ -24,7 +24,9 @@ export default function Layout({
   description = 'Web3 Storage',
   pageBgColor = 'bg-w3storage-background',
   navBgColor,
+  footerBgColor,
   data = null,
+  highlightMessage,
 }) {
   const { user, status } = useUser({
     redirectTo,
@@ -60,9 +62,12 @@ export default function Layout({
         </>
       ) : (
         <>
+          { highlightMessage &&
+            <div className="w-full bg-w3storage-purple text-white typography-cta text-center py-1" dangerouslySetInnerHTML={{ __html: highlightMessage }} />
+          }
           <Navbar user={user} bgColor={navBgColor} />
           {children({ user, data })}
-          <Footer />
+          <Footer bgColor={footerBgColor} />
         </>
       )}
     </div>
