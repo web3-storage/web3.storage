@@ -48,11 +48,7 @@ function WhyWeb3Storage() {
   }
   `;
 
-  const codeStyle = 'code[class*="language-"]';
   const preStyle = 'pre[class*="language-"]';
-  tomorrow[codeStyle].color = '#fff'
-  tomorrow[codeStyle].fontFamily = "'Space Mono', monospace"
-  tomorrow[codeStyle].fontSize = "0.95em"
   tomorrow[preStyle].background = '#2d2d65'
   tomorrow[preStyle].padding = '1.25rem 1.5rem'
 
@@ -95,7 +91,7 @@ function WhyWeb3Storage() {
       </div>
       <div className="relative flex flex-col xl:flex-row justify-between px-12 py-12 mt-20 bg-w3storage-purple" style={{ borderTopLeftRadius: '6rem' }}>
         <Squares className="absolute top-14 left-16" />
-        <div className="text-white pl-20 pr-5 w-full max-w-none xl:max-w-md mb-16 xl:mb-0">
+        <div className="text-white pl-20 pr-5 w-full max-w-none xl:max-w-lg mb-16 xl:mb-0">
           <h2 className="relative mb-8">
             <div className="h-6 w-0.5 absolute -left-6 top-3 bg-w3storage-red" />
             Decentralized Storage in 5 Minutes
@@ -105,7 +101,11 @@ function WhyWeb3Storage() {
           </p>
           <a href="https://docs.web3.storage/quickstart" className="font-bold">{'Learn more >'}</a>
         </div>
-        <SyntaxHighlighter language="javascript" style={tomorrow} className="my-auto">
+        <SyntaxHighlighter
+          language="javascript"
+          style={tomorrow}
+          className="my-auto"
+          codeTagProps={{ style: { color: '#fff', fontFamily: "'Space Mono', monospace", fontSize: '0.95em' } }}>
           {code}
         </SyntaxHighlighter>
       </div>

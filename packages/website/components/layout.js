@@ -46,7 +46,7 @@ export default function Layout({
         <meta property="og:url" content="https://web3.storage" />
         <meta
           property="og:image"
-          content="https://web3.storage/images/social.png"
+          content="https://web3.storage/images/social-card.png"
         />
 
         <meta name="twitter:card" content="summary_large_image" />
