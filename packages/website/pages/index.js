@@ -45,24 +45,35 @@ export default function Home() {
 
 function WhyWeb3Storage() {
   const codeSnippets = {
-    store: `
-import { getFilesFromPath, Web3Storage } from 'web3.storage'
-const token = 'your-api-token'
-const client = new Web3Storage( { token })
+    store: `import { Web3Storage, getFilesFromPath } from 'web3.storage'
 
-async function storeFiles(path) {
-  const files = await getFilesFromPath(path)
+const token = 'your-api-token'
+const client = new Web3Storage({ token })
+
+async function storeFiles () {
+  const files = await getFilesFromPath('./')
   const cid = await client.put(files)
+  console.log(cid)
 }
-    `,
-    retrieve: `
-const cid = 'bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'
-try {
+
+storeFiles()`,
+    retrieve: `import { Web3Storage } from 'web3.storage'
+
+const token = 'your-api-token'
+const client = new Web3Storage({ token })
+
+async function retrieveFiles () {
+  const cid =
+    'bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'
   const res = await client.get(cid)
-} catch (err) {
-  console.error(\`failed to get \${cid}: \`, err)
+  const files = await res.files()
+
+  for (const file of files) {
+    console.log(\`\${file.cid}: \${file.name} (\${file.size} bytes)\`)
+  }
 }
-    `
+
+retrieveFiles()`
   }
 
   const [code, setCode] = useState('store')
@@ -80,7 +91,7 @@ try {
     setTimeout(function() {
       copied.classList.remove('opacity-100')
       copied.classList.add('opacity-0')
-    }, 500);
+    }, 2000)
   }
 
   return (
@@ -142,7 +153,7 @@ try {
                 code === 'store' ?
                   "bg-w3storage-blue-desaturated text-white"
                   :
-                  "bg-white text-w3storage-blue-desaturated bg-opacity-80")}>
+                  "bg-black text-white bg-opacity-30 hover:bg-white hover:bg-opacity-10")}>
               Store
             </button>
             <button
@@ -153,7 +164,7 @@ try {
                 code === 'retrieve' ?
                   "bg-w3storage-blue-desaturated text-white"
                   :
-                  "bg-white text-w3storage-blue-desaturated bg-opacity-80")}>
+                  "bg-black text-white bg-opacity-30 hover:bg-white hover:bg-opacity-10")}>
                 Retrieve
               </button>
           </div>
