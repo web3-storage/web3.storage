@@ -218,11 +218,9 @@ export default function Files({ user }) {
   }
 
   return (
-    <main className="p-4 sm:px-16 mt-4 sm:mt-32 text-w3storage-purple">
-      <div className="mw9 pv3 ph3 ph5-ns min-vh-100">
-        <div className="flex mb3 pb-10">
-          <h1 className="text-2xl mv4 flex-auto">Files</h1>
-        </div>
+    <main className="layout-margins">
+      <div className="mx-auto my-4 lg:my-32 text-w3storage-purple">
+        <h3 className="mb-8">Files</h3>
         <When condition={isLoading || isFetching}>
           <Loading />
         </When>

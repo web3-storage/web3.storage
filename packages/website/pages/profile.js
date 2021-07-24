@@ -55,7 +55,7 @@ export default function Profile({ user }) {
   return (
     <div className="relative overflow-hidden">
       <div className="layout-margins">
-        <main className="max-w-screen-lg mx-auto my-4 lg:my-16 text-w3storage-purple">
+        <main className="max-w-screen-lg mx-auto my-4 lg:my-32 text-w3storage-purple">
           <h3 className="mb-8">Your profile</h3>
           {/* <div>
             <div className="typography-body-title font-medium">
