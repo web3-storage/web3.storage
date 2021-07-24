@@ -43,10 +43,10 @@ export function convertRawContent (raw) {
       }))
   }).reduce((a, b) => a.concat(b), []) // flatten array of arrays.
 
-  const { dagSize, created } = raw
+  const { cid, dagSize, created } = raw
 
   return {
-    cid: raw.cid,
+    cid,
     created,
     dagSize,
     pins,
