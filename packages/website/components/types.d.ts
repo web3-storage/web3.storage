@@ -20,6 +20,5 @@ export interface LayoutChildrenProps {
     publicAddress: string | null
     email: string | null
   },
-  isLoadingUser: boolean
   data: any
 }

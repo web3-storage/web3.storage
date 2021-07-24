@@ -58,15 +58,15 @@ export default function Layout({
       ) : callback ? (
         <>
           <Loading />
-          {children({ user, isLoadingUser: isLoading || isFetching, data })}
+          {children({ user, data })}
         </>
       ) : (
         <>
           { highlightMessage &&
             <div className="w-full bg-w3storage-purple text-white typography-cta text-center py-1" dangerouslySetInnerHTML={{ __html: highlightMessage }} />
           }
-          <Navbar user={user} bgColor={navBgColor} />
-          {children({ user, isLoadingUser: isLoading || isFetching, data })}
+          <Navbar user={user} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
+          {children({ user, data })}
           <Footer bgColor={footerBgColor} />
         </>
       )}

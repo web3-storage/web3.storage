@@ -10,8 +10,9 @@ import Button from './button.js'
  * @param {Object} props
  * @param {string} [props.bgColor]
  * @param {any} [props.user]
+ * @param {boolean} props.isLoadingUser
  */
-export default function Navbar({ bgColor = '', user }) {
+export default function Navbar({ bgColor = '', user, isLoadingUser }) {
   const queryClient = useQueryClient()
   async function logout() {
     await getMagic().user.logout()
@@ -28,14 +29,14 @@ export default function Navbar({ bgColor = '', user }) {
             <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-3xl hidden xl:inline-block">Web3.Storage</span>
           </a>
         </Link>
-        <div>
+        <div className="flex items-center" style={{ minHeight: 52 }}>
           <Link href="https://docs.web3.storage/">
             <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12">
               Docs
             </a>
           </Link>
           <Link href="/about">
-            <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12">
+            <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12 hidden md:inline-block">
               About
             </a>
           </Link>
@@ -53,15 +54,20 @@ export default function Navbar({ bgColor = '', user }) {
               </Link>
             </>
           ) : null}
-          {user ? (
-            <Button onClick={logout} id="logout" wrapperClassName="inline-block" variant="outlined">
-              Logout
-            </Button>
-          ) : (
-            <Button href="/login" id="login" wrapperClassName="inline-block">
-              Login
-            </Button>
-          )}
+          {isLoadingUser
+            ? null
+            : user
+              ? (
+                <Button onClick={logout} id="logout" wrapperClassName="inline-block" variant="outlined">
+                  Logout
+                </Button>
+                )
+              : (
+                <Button href="/login" id="login" wrapperClassName="inline-block">
+                  Login
+                </Button>
+                )
+          }
         </div>
       </div>
     </nav>
