@@ -124,14 +124,9 @@ export default function Upload() {
             <div>
               <p className="pt-4 text-sm">
                 You can also upload files using the{" "}
-                <a href="/#js-client" className="black underline">
+                <a href="https://www.npmjs.com/package/web3.storage" className="black underline">
                   JS Client Library
-                </a>{" "}
-                or using{" "}
-                <a href="/#raw-http-request" className="black underline">
-                  Raw HTTP Requests
-                </a>
-                .
+                </a>.
               </p>
             </div>
           </form>
