@@ -1,6 +1,10 @@
+import { useState } from 'react'
+import clsx from 'clsx'
 import Link from 'next/link'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+// @ts-ignore
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import Button from '../components/button.js'
 import Hero from '../components/hero.js'
@@ -9,6 +13,7 @@ import OpenIcon from '../icons/open.js'
 import SimpleIcon from '../icons/simple.js'
 import ProvableStorage from '../icons/provable-storage.js'
 import FreeIcon from '../icons/free.js'
+import CopyIcon from '../icons/copy.js'
 import Squares from '../illustrations/squares.js'
 import GettingStartedIllustration from '../illustrations/getting-started-illustration.js'
 
@@ -39,18 +44,44 @@ export default function Home() {
 }
 
 function WhyWeb3Storage() {
-  const code = `
-  const cid = 'bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'
-  try {
-    const res = await client.get(cid)
-  } catch (err) {
-    console.error(\`failed to get \${cid}: \`, err)
+  const codeSnippets = {
+    store: `
+import { getFilesFromPath, Web3Storage } from 'web3.storage'
+const token = 'your-api-token'
+const client = new Web3Storage( { token })
+
+async function storeFiles(path) {
+  const files = await getFilesFromPath(path)
+  const cid = await client.put(files)
+}
+    `,
+    retrieve: `
+const cid = 'bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'
+try {
+  const res = await client.get(cid)
+} catch (err) {
+  console.error(\`failed to get \${cid}: \`, err)
+}
+    `
   }
-  `;
+
+  const [code, setCode] = useState('store')
 
   const preStyle = 'pre[class*="language-"]';
   tomorrow[preStyle].background = '#2d2d65'
   tomorrow[preStyle].padding = '1.25rem 1.5rem'
+  tomorrow[preStyle].marginTop = '0'
+
+  const showCopiedMessage = () => {
+    const copied = document.getElementsByClassName('copied')[0];
+    copied.classList.remove('opacity-0')
+    copied.classList.add('opacity-100')
+
+    setTimeout(function() {
+      copied.classList.remove('opacity-100')
+      copied.classList.add('opacity-0')
+    }, 500);
+  }
 
   return (
     <div className="layout-margins pt-24">
@@ -91,7 +122,7 @@ function WhyWeb3Storage() {
       </div>
       <div className="relative flex flex-col xl:flex-row justify-between px-12 py-12 mt-20 bg-w3storage-purple" style={{ borderTopLeftRadius: '6rem' }}>
         <Squares className="absolute top-14 left-16" />
-        <div className="text-white pl-20 pr-5 w-full max-w-none xl:max-w-lg mb-16 xl:mb-0">
+        <div className="text-white pl-20 pr-5 w-full max-w-none xl:max-w-lg mb-16 mr-0 xl:mr-10 xl:mb-0">
           <h2 className="relative mb-8">
             <div className="h-6 w-0.5 absolute -left-6 top-3 bg-w3storage-red" />
             Decentralized Storage in 5 Minutes
@@ -101,13 +132,52 @@ function WhyWeb3Storage() {
           </p>
           <a href="https://docs.web3.storage/quickstart" className="font-bold">{'Learn more >'}</a>
         </div>
-        <SyntaxHighlighter
-          language="javascript"
-          style={tomorrow}
-          className="my-auto"
-          codeTagProps={{ style: { color: '#fff', fontFamily: "'Space Mono', monospace", fontSize: '0.95em' } }}>
-          {code}
-        </SyntaxHighlighter>
+        <div className="relative w-full">
+          <div className="text-white">
+            <button
+              type="button"
+              onClick={ ()=> setCode('store') }
+              className={clsx(
+                "typography-cta rounded-t-lg py-2 px-8 mr-2 transition",
+                code === 'store' ?
+                  "bg-w3storage-blue-desaturated text-white"
+                  :
+                  "bg-white text-w3storage-blue-desaturated bg-opacity-80")}>
+              Store
+            </button>
+            <button
+              type="button"
+              onClick={ ()=> setCode('retrieve') }
+              className={clsx(
+                "typography-cta rounded-t-lg py-2 px-8 transition",
+                code === 'retrieve' ?
+                  "bg-w3storage-blue-desaturated text-white"
+                  :
+                  "bg-white text-w3storage-blue-desaturated bg-opacity-80")}>
+                Retrieve
+              </button>
+          </div>
+          <SyntaxHighlighter
+            language="javascript"
+            style={tomorrow}
+            codeTagProps={{ style: { color: '#fff', fontFamily: "'Space Mono', monospace", fontSize: '0.95em' } }}>
+            {
+              // @ts-ignore
+              codeSnippets[code]
+            }
+          </SyntaxHighlighter>
+          <span className="absolute bottom-12 right-16 text-base text-white transition duration-500 ease-in-out copied opacity-0">Copied!</span>
+          <CopyToClipboard
+            onCopy={showCopiedMessage}
+            text={
+            // @ts-ignore
+            codeSnippets[code]
+            }>
+            <button className="absolute bottom-10 right-6 p-2">
+              <CopyIcon />
+            </button>
+          </CopyToClipboard>
+        </div>
       </div>
     </div>
   )
@@ -152,7 +222,7 @@ function GetStarted() {
             </div>
           </div>
         </div>
-        <GettingStartedIllustration className="absolute right-0 z-n1" clipPath="polygon(0 0, 100% 0, 100% 25%, 0 25%)" style={{ top: '-5.9rem' }} />
+        <GettingStartedIllustration className="absolute right-28" style={{ top: '-5.9rem' }} />
         <div className="absolute left-0 top-0 bg-w3storage-red w-full h-full z-n1" style={{ borderTopRightRadius: '25rem 15rem' }} />
       </div>
     </div>
