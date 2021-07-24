@@ -33,7 +33,7 @@ export default function Layout({
     redirectIfFound,
     enabled: needsUser,
   })
-  const shouldWaitForUser = needsUser && (isLoading || isFetching)
+  const shouldWaitForUser = needsUser && isLoading
 
   return (
     <div className={clsx(pageBgColor, 'flex flex-col min-h-screen')}>
