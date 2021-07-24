@@ -28,12 +28,12 @@ export default function Layout({
   data = null,
   highlightMessage,
 }) {
-  const { user, status } = useUser({
+  const { user, isLoading, isFetching } = useUser({
     redirectTo,
     redirectIfFound,
     enabled: needsUser,
   })
-  const shouldWaitForUser = needsUser && status === 'loading'
+  const shouldWaitForUser = needsUser && (isLoading || isFetching)
 
   return (
     <div className={clsx(pageBgColor, 'flex flex-col min-h-screen')}>
@@ -65,7 +65,7 @@ export default function Layout({
           { highlightMessage &&
             <div className="w-full bg-w3storage-purple text-white typography-cta text-center py-1" dangerouslySetInnerHTML={{ __html: highlightMessage }} />
           }
-          <Navbar user={user} bgColor={navBgColor} />
+          <Navbar user={user} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
           {children({ user, data })}
           <Footer bgColor={footerBgColor} />
         </>

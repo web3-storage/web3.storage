@@ -14,12 +14,12 @@ import { useRouter } from 'next/router'
  */
 export function useUser({ redirectTo, redirectIfFound, enabled } = {}) {
   const router = useRouter()
-  const { status, data, error, isFetching } = useQuery('magic-user', isLoggedIn)
+  const { status, data, error, isFetching, isLoading } = useQuery('magic-user', isLoggedIn)
   const user = data
   const hasUser = Boolean(user)
 
   useEffect(() => {
-    if (!redirectTo || status === 'loading') {
+    if (!redirectTo || isLoading || isFetching) {
       return
     }
     if (
@@ -32,5 +32,5 @@ export function useUser({ redirectTo, redirectIfFound, enabled } = {}) {
     }
   }, [redirectTo, redirectIfFound, status, hasUser, router, enabled])
 
-  return { status, user, error, isFetching }
+  return { status, user, error, isFetching, isLoading }
 }
