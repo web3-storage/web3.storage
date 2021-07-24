@@ -56,7 +56,7 @@ export default function Profile({ user }) {
     <div className="relative overflow-hidden">
       <div className="layout-margins">
         <main className="max-w-screen-lg mx-auto my-4 lg:my-16 text-w3storage-purple">
-          <h3 className="mb-8">Your Profile</h3>
+          <h3 className="mb-8">Your profile</h3>
           {/* <div>
             <div className="typography-body-title font-medium">
               Storage Capacity: <span className="font-normal ml-2">300 GiB / 1 TiB</span>
@@ -74,11 +74,11 @@ export default function Profile({ user }) {
             </p>
           </div> */}
           <div className="mt-10">
-            <h3>Getting Started</h3>
+            <h3>Getting started</h3>
             <div className="flex gap-x-10 mt-10">
               {tokens.length ? null : (
                 <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
-                  <h3>Create your first API Token</h3>
+                  <h3>Create your first API token</h3>
                   <p>
                     Generate an API Token to embed into your projects!
                   </p>
@@ -88,7 +88,7 @@ export default function Profile({ user }) {
                 </div>
               )}
               <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
-                <h3>Start Building</h3>
+                <h3>Start building</h3>
                 <p>
                   Start storing and retrieving files using our client library! See the docs for guides and walkthroughs!
                 </p>
@@ -99,11 +99,11 @@ export default function Profile({ user }) {
             </div>
           </div>
           <div className="mt-28">
-            <h3 id="api-tokens">API Tokens</h3>
+            <h3 id="api-tokens">API tokens</h3>
             <div className="flex flex-wrap gap-x-14 mt-10">
               <Link href='/new-token'>
                 <button type="button" className="flex items-center justify-center text-center bg-w3storage-pink border-w3storage-red w-64 h-60 mb-12 p-9 hover:bg-w3storage-white">
-                  <p className="typography-body-title px-8">Create an API Token</p>
+                  <p className="typography-body-title px-8">Create an API token</p>
                 </button>
               </Link>
               {tokens.slice(0, 5).map(t => (
@@ -119,7 +119,7 @@ export default function Profile({ user }) {
               ))}
             </div>
             <div className="w-64">
-              <Button href="/tokens">Manage Tokens</Button>
+              <Button href="/tokens">Manage tokens</Button>
             </div>
           </div>
         </main>
