@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { isLoggedIn } from './magic.js'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
+import constants from './constants.js'
 
 /**
  * User Hook
@@ -14,7 +15,11 @@ import { useRouter } from 'next/router'
  */
 export function useUser({ redirectTo, redirectIfFound, enabled } = {}) {
   const router = useRouter()
-  const { status, data, error, isFetching, isLoading } = useQuery('magic-user', isLoggedIn)
+  const { status, data, error, isFetching, isLoading } = useQuery('magic-user', isLoggedIn, {
+    staleTime: constants.MAGIC_TOKEN_LIFESPAN,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false
+  })
   const user = data
   const hasUser = Boolean(user)
 

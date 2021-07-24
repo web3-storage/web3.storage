@@ -3,7 +3,7 @@ import constants from './constants'
 
 export const API = constants.API
 
-const LIFESPAN = 900
+const LIFESPAN = constants.MAGIC_TOKEN_LIFESPAN / 1000
 /** @type {string | undefined} */
 let token
 let created = Date.now() / 1000
