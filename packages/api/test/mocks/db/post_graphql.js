@@ -53,16 +53,21 @@ module.exports = ({ body }) => {
   }
 
   if (body.query.includes('findContentByCid')) {
-    if (body.variables.cid === 'unknown') {
-      return gqlResponse(200, require('../../fixtures/find-content-by-cid-unknown.json'))
+    const { cid } = body.variables
+    let res
+    if (cid === 'unknown') {
+      res = require('../../fixtures/find-content-by-cid-unknown.json')
+    } else if (cid === 'noaggregate') {
+      res = require('../../fixtures/find-content-by-cid-no-aggregate.json')
+    } else if (cid === 'nodeal') {
+      res = require('../../fixtures/find-content-by-cid-no-deal.json')
+    } else {
+      res = require('../../fixtures/find-content-by-cid.json')
     }
-    if (body.variables.cid === 'noaggregate') {
-      return gqlResponse(200, require('../../fixtures/find-content-by-cid-no-aggregate.json'))
+    if (res.data.findContentByCid) {
+      res.data.findContentByCid.cid = cid
     }
-    if (body.variables.cid === 'nodeal') {
-      return gqlResponse(200, require('../../fixtures/find-content-by-cid-no-deal.json'))
-    }
-    return gqlResponse(200, require('../../fixtures/find-content-by-cid.json'))
+    return gqlResponse(200, res)
   }
 
   if (body.query.includes('findMetrics')) {

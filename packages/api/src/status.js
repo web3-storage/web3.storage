@@ -13,6 +13,47 @@ const PIN_STATUS = new Set([
   'PinQueued'
 ])
 
+export function convertRawContent (raw) {
+  const pins = raw.pins.data
+    .filter(({ status }) => PIN_STATUS.has(status))
+    .map(({ status, updated, location }) => ({ status, updated, ...location }))
+
+  const deals = raw.aggregateEntries.data.map(({ dataModelSelector, aggregate }) => {
+    const { pieceCid, dataCid, deals } = aggregate
+    if (deals.data.length === 0) {
+      return [{
+        status: 'Queued',
+        pieceCid,
+        dataCid,
+        dataModelSelector
+      }]
+    }
+    return deals.data
+      .filter(({ status }) => DEAL_STATUS.has(status))
+      .map(({ dealId, storageProvider, status, activation, created, updated }) => ({
+        dealId,
+        storageProvider,
+        status,
+        pieceCid,
+        dataCid,
+        dataModelSelector,
+        activation,
+        created,
+        updated
+      }))
+  }).reduce((a, b) => a.concat(b), []) // flatten array of arrays.
+
+  const { cid, dagSize, created } = raw
+
+  return {
+    cid,
+    created,
+    dagSize,
+    pins,
+    deals
+  }
+}
+
 /**
  * Returns pin and deal status info for a given CID.
  *
@@ -26,6 +67,7 @@ export async function statusGet (request, env) {
   const result = await env.db.query(
     gql`query FindContentByCid($cid: String!) {
       findContentByCid(cid: $cid) {
+        cid
         created
         dagSize
         aggregateEntries {
@@ -68,44 +110,5 @@ export async function statusGet (request, env) {
     return notFound()
   }
 
-  const pins = raw.pins.data
-    .filter(({ status }) => PIN_STATUS.has(status))
-    .map(({ status, updated, location }) => ({ status, updated, ...location }))
-
-  const deals = raw.aggregateEntries.data.map(({ dataModelSelector, aggregate }) => {
-    const { pieceCid, dataCid, deals } = aggregate
-    if (deals.data.length === 0) {
-      return [{
-        status: 'Queued',
-        pieceCid,
-        dataCid,
-        dataModelSelector
-      }]
-    }
-    return deals.data
-      .filter(({ status }) => DEAL_STATUS.has(status))
-      .map(({ dealId, storageProvider, status, activation, created, updated }) => ({
-        dealId,
-        storageProvider,
-        status,
-        pieceCid,
-        dataCid,
-        dataModelSelector,
-        activation,
-        created,
-        updated
-      }))
-  }).reduce((a, b) => a.concat(b), []) // flatten array of arrays.
-
-  const { dagSize, created } = raw
-
-  const status = {
-    cid,
-    created,
-    dagSize,
-    pins,
-    deals
-  }
-
-  return new JSONResponse(status)
+  return new JSONResponse(convertRawContent(raw))
 }

@@ -3,6 +3,7 @@ import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
 import { UserNotFoundError, TokenNotFoundError } from './errors.js'
+import { convertRawContent } from './status.js'
 
 /**
  * @typedef {{
@@ -270,6 +271,7 @@ export async function userUploadsGet (request, env) {
                       storageProvider
                       renewal
                       dealId
+                      status
                     }
                   }
                 }
@@ -290,7 +292,7 @@ export async function userUploadsGet (request, env) {
   const { data: raw } = res.findUploadsByUser
   const uploads = raw.map(({ name, content, created }) => ({
     name,
-    ...content,
+    ...convertRawContent(content),
     created
   }))
   const oldest = uploads[uploads.length - 1]

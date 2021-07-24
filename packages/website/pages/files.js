@@ -7,7 +7,8 @@ import Loading from '../components/loading'
 import { getUploads, deleteUpload } from '../lib/api.js'
 import { When } from 'react-if'
 import clsx from 'clsx'
-import adaptUploadData from '../utils/adapters/files'
+
+/** @typedef {{ name?: string } & import('web3.storage').Status} Upload */
 
 /**
  * Static Props
@@ -67,43 +68,68 @@ const TableElement = ({ children, index = 0, checked, breakAll = true, centered,
   </td>
 )
 
-
 /**
  * @param {Object} props
- * @param {import('../utils/adapters/files').Upload} props.upload
+ * @param {Upload} props.upload
  * @param {number} props.index
  * @param {function} props.toggle
  * @param {string[]} props.selectedFiles
  */
 const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
-  const checked = selectedFiles.includes(upload?.content?.cid);
-
+  const checked = selectedFiles.includes(upload.cid)
   const sharedArgs = { index, checked }
 
-   return <tr>
+  let pinStatus = '-'
+  if (upload.pins.length) {
+    pinStatus = upload.pins.some(p => p.status === 'Pinned')
+      ? 'Pinned'
+      : upload.pins[0].status
+  }
+
+  const deals = upload.deals
+    .filter(d => d.status !== 'Queued')
+    .map((deal, i, deals) => {
+      const url = `https://filfox.info/en/deal/${deal.dealId}`
+      return (
+        <span key={deal.dealId} title={deal.status}>
+          <a className="underline" href={url} target="_blank" rel="noreferrer">
+            {deal.storageProvider}
+          </a>
+          {i === deals.length - 1 ? '' : ', '}
+        </span>
+      )
+    })
+
+  const queuedDeals = upload.deals.filter(d => d.status === 'Queued')
+  if (queuedDeals.length) {
+    deals.push(
+      <span key={upload.cid + '-pending'}>
+        {`${deals.length ? ', ' : ''}${queuedDeals.length} pending`}
+      </span>
+    )
+  }
+
+  return (
+    <tr>
       <td className="w-8">
-        <Checkbox className="mr-2" checked={checked} onChange={() => toggle(upload.content.cid)}/>
+        <Checkbox className="mr-2" checked={checked} onChange={() => toggle(upload.cid)}/>
       </td>
-      <TableElement {...sharedArgs}><span title={upload.created}>{formatTimestamp(upload.created)}</span></TableElement>
-      <TableElement {...sharedArgs} important> {upload.name} </TableElement>
-      <TableElement {...sharedArgs} important> <GatewayLink cid={upload.content.cid} /> </TableElement>
-
-      <TableElement {...sharedArgs} centered> { upload.pinStatus ?? '-' }</TableElement>
-      <TableElement {...sharedArgs} breakAll={false}>{
-        upload.deals.length ? (
-          upload.deals.map(deal => (
-            <a className="underline" href={deal.link} key={deal.storageProvider} target="_blank" rel="noreferrer">
-              {deal.storageProvider}
-            </a>
-          ))
-        ) : '-'
-      }</TableElement>
-      <TableElement {...sharedArgs} breakAll={false}>{upload.renewalBy ??  '-'}</TableElement>
-
-      <TableElement {...sharedArgs} centered> 
-        {upload.content.dagSize ? filesize(upload.content.dagSize) : '-'}
+      <TableElement {...sharedArgs}>
+        <span title={upload.created}>{formatTimestamp(upload.created)}</span>
+      </TableElement>
+      <TableElement {...sharedArgs} important>{upload.name}</TableElement>
+      <TableElement {...sharedArgs} important>
+        <GatewayLink cid={upload.cid} />
+      </TableElement>
+      <TableElement {...sharedArgs} centered>{pinStatus}</TableElement>
+      <TableElement {...sharedArgs} breakAll={false}>
+        {deals.length ? deals : '-'}
+      </TableElement>
+      <TableElement {...sharedArgs} centered>
+        {upload.dagSize ? filesize(upload.dagSize) : '-'}
       </TableElement>
     </tr>
+  )
 }
 
 /**
@@ -138,7 +164,8 @@ export default function Files({ user }) {
     setBefores(befores.slice(1))
   }
 
-  const uploads = adaptUploadData(data || [])
+  /** @type {Upload[]} */
+  const uploads = data || []
 
   function handleDelete() {
     if (!confirm('Are you sure? Deleted files cannot be recovered!')) return
@@ -183,11 +210,11 @@ export default function Files({ user }) {
    */
   const toggle = (cid) => {
     const newSelectedFiles = selectedFiles.includes(cid) ? selectedFiles.filter(x => x !== cid) : [...selectedFiles, cid]
-    setSelectedFiles(newSelectedFiles);
+    setSelectedFiles(newSelectedFiles)
   }
 
   const toggleAll = () => {
-    selectedFiles.length >= 1 ? setSelectedFiles([]) : setSelectedFiles(uploads.map(u => u.content.cid))
+    selectedFiles.length >= 1 ? setSelectedFiles([]) : setSelectedFiles(uploads.map(u => u.cid))
   }
 
   return (
@@ -234,13 +261,12 @@ export default function Files({ user }) {
                         <TableHeader>CID</TableHeader>
                         <TableHeader>Pin Status</TableHeader>
                         <TableHeader>Storage Providers</TableHeader>
-                        <TableHeader>Renewal By</TableHeader>
                         <TableHeader>Size</TableHeader>
                       </tr>
                     </thead>
                     <tbody>
                       {uploads.map((upload, index) =>
-                        <UploadItem key={upload.content.cid} upload={upload} index={index} toggle={toggle} selectedFiles={selectedFiles}/>
+                        <UploadItem key={upload.cid} upload={upload} index={index} toggle={toggle} selectedFiles={selectedFiles} />
                       )}
                     </tbody>
                   </table>
@@ -251,7 +277,7 @@ export default function Files({ user }) {
                         wrapperClassName="m-h-2"
                         onClick={handlePrevClick}
                         id="uploads-previous"
-                        >
+                      >
                         ← Previous
                       </Button>
                     </When>
