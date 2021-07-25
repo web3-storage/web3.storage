@@ -10,6 +10,7 @@ import HeroBackgroundRight from '../illustrations/hero-background-right'
 const supports = CSS?.supports || (() => true)
 
 export default function Hero() {
+  /** @type {import('react').CSSProperties} */
   const style = supports('overflow: clip') ? { overflowX: 'clip' } : { overflow: 'hidden' }
   return (
     <div className="relative z-1" style={style}>
