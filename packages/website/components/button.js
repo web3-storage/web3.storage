@@ -34,7 +34,7 @@ export default function Button({
   small,
   Icon,
 }) {
-  const buttonStyle = small ? {} : { minWidth: '8rem', minHeight: '3.25rem' }
+  const buttonStyle = small ? {} : { minWidth: '6rem', minHeight: '3.25rem' }
   let variantClasses = '';
   switch(variant) {
     case 'dark':

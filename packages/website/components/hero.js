@@ -25,11 +25,11 @@ export default function Hero() {
             Get Started
           </Button>
         </div>
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex justify-between w-full" style={{ minWidth: '1440px' }}>
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex justify-between w-full">
           <HeroBackgroundLeft />
           <HeroBackgroundRight />
         </div>
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-w3storage-red w-full" style={{ height: '47rem', maxWidth: 'calc(100vw - 140px - 140px)', minWidth: '1160px' }} />
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-w3storage-red w-full" style={{ height: '47rem', maxWidth: 'calc(100vw - 140px - 140px)' }} />
         <SquiggleAndCircles className="absolute right-0 left-0 mx-auto" style={{ transform: 'translate3d(-38rem, -6rem, 0)' }} />
         <Wave className="absolute right-0 left-0 mx-auto" style={{ transform: 'translate3d(-26rem, 14rem, 0)' }} />
         <CircleNoise className="absolute right-0 left-0 mx-auto" style={{ transform: 'translate3d(35rem, 7rem, 0)' }} />
