@@ -35,7 +35,7 @@ export function useUser({ redirectTo, redirectIfFound, enabled } = {}) {
     ) {
       router.push(redirectTo)
     }
-  }, [redirectTo, redirectIfFound, status, hasUser, router, enabled])
+  }, [redirectTo, redirectIfFound, status, isFetching, isLoading, hasUser, router, enabled])
 
   return { status, user, error, isFetching, isLoading }
 }
