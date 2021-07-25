@@ -7,7 +7,9 @@ import HeroIllustration from '../illustrations/hero-illustration'
 import HeroBackgroundLeft from '../illustrations/hero-background-left'
 import HeroBackgroundRight from '../illustrations/hero-background-right'
 
-const supports = CSS?.supports || (() => true)
+const supports = typeof CSS !== 'undefined' && CSS.supports
+  ? CSS.supports
+  : () => true
 
 export default function Hero() {
   /** @type {import('react').CSSProperties} */
