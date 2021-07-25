@@ -133,10 +133,10 @@ retrieveFiles()`
           </p>
         </div>
       </div>
-      <div className="md:layout-margins pt-24">
-        <div className="relative flex flex-col xl:flex-row justify-between px-8 md:px-12 py-24 md:py-12 mt-20 bg-w3storage-purple" style={{ borderTopLeftRadius: '6rem' }}>
+      <div className="md:px-12 pt-24">
+        <div className="relative flex flex-col xl:flex-row justify-between py-20 md:py-12 mt-20 bg-w3storage-purple" style={{ borderTopLeftRadius: '6rem' }}>
           <Squares className="absolute top-14 left-16 hidden md:block" />
-          <div className="text-white md:pl-20 md:pr-5 w-full max-w-none xl:max-w-lg mb-16 mr-0 xl:mr-10 xl:mb-0">
+          <div className="text-white pl-12 pr-12 md:pl-32 md:pr-0 w-full max-w-none xl:max-w-lg mb-16 mr-0 xl:mr-10 xl:mb-0">
             <h2 className="relative mb-8">
               <div className="h-5 w-1 absolute -left-4 top-1 md:top-2 mt-1 bg-w3storage-red" />
               Decentralized Storage in 5 Minutes
@@ -146,10 +146,8 @@ retrieveFiles()`
             </p>
             <a href="https://docs.web3.storage/quickstart" className="font-bold">{'Learn more >'}</a>
           </div>
-        </div>
-        <div className="bg-w3storage-purple">
-          <div className="relative w-full">
-            <div className="text-white text-center md:text-left">
+          <div className="relative w-full md:mr-12">
+            <div className="text-white pl-6 xl:pl-0">
               <button
                 type="button"
                 onClick={ ()=> setCode('store') }
@@ -176,20 +174,22 @@ retrieveFiles()`
             <SyntaxHighlighter
               language="javascript"
               style={tomorrow}
-              codeTagProps={{ style: { color: '#fff', fontFamily: "'Space Mono', monospace", fontSize: '0.95em' } }}>
+              codeTagProps={{ style: { color: '#fff', fontFamily: "'Space Mono', monospace" } }}
+              className="text-sm md:text-base"
+            >
               {
                 // @ts-ignore
                 codeSnippets[code]
               }
             </SyntaxHighlighter>
-            <span className="absolute bottom-12 right-16 text-base text-white transition duration-500 ease-in-out copied opacity-0">Copied!</span>
+            <span className="absolute bottom-8 right-16 text-base text-white transition duration-500 ease-in-out copied opacity-0">Copied!</span>
             <CopyToClipboard
               onCopy={showCopiedMessage}
               text={
               // @ts-ignore
               codeSnippets[code]
               }>
-              <button className="absolute bottom-10 right-6 p-2">
+              <button className="absolute bottom-6 right-6 p-2">
                 <CopyIcon />
               </button>
             </CopyToClipboard>
