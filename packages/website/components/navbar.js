@@ -31,7 +31,7 @@ export default function Navbar({ bgColor = '', user, isLoadingUser }) {
         </Link>
         <div className="flex items-center" style={{ minHeight: 52 }}>
           <Link href="https://docs.web3.storage/">
-            <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12">
+            <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-6 md:mr-12">
               Docs
             </a>
           </Link>
@@ -43,12 +43,12 @@ export default function Navbar({ bgColor = '', user, isLoadingUser }) {
           {user ? (
             <>
               <Link href="/files">
-                <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12">
+                <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-6 md:mr-12">
                   Files
                 </a>
               </Link>
               <Link href="/profile">
-                <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12">
+                <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-6 md:mr-12">
                   Profile
                 </a>
               </Link>

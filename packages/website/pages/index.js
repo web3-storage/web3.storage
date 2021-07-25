@@ -95,11 +95,12 @@ retrieveFiles()`
   }
 
   return (
-    <div className="layout-margins pt-24">
-      <h2 className="text-w3storage-purple text-center bg-w3storage-background border-2 border-w3storage-red px-5 lg:px-10 py-3 lg:py-6 w-max max-w-full mx-auto">
-        Why build on Web3.Storage?
-      </h2>
-      <div className="grid grid-flow-row md:grid-flow-col md:grid-rows-6-auto xl:grid-rows-3-auto items-end gap-x-10 xl:gap-x-12 mt-20 text-w3storage-purple">
+    <>
+      <div className="layout-margins pt-24">
+        <h2 className="text-w3storage-purple text-center bg-w3storage-background border-2 border-w3storage-red px-5 lg:px-10 py-3 lg:py-6 w-max max-w-full mx-auto">
+          Why build on Web3.Storage?
+        </h2>
+        <div className="grid grid-flow-row md:grid-flow-col md:grid-rows-6-auto xl:grid-rows-3-auto items-end gap-x-10 xl:gap-x-12 mt-20 text-w3storage-purple">
           <SimpleIcon />
           <h3 className="relative mt-10">
             <div className="h-5 w-1 absolute -left-4 top-0 mt-1 bg-w3storage-red" />
@@ -130,67 +131,72 @@ retrieveFiles()`
           <p className="mt-8 self-start">
             Store and retrieve data from Web3.Storage for free! See our <Link href="/about"><a className="underline">About</a></Link> page for more details.
           </p>
-      </div>
-      <div className="relative flex flex-col xl:flex-row justify-between px-12 py-12 mt-20 bg-w3storage-purple" style={{ borderTopLeftRadius: '6rem' }}>
-        <Squares className="absolute top-14 left-16" />
-        <div className="text-white pl-20 pr-5 w-full max-w-none xl:max-w-lg mb-16 mr-0 xl:mr-10 xl:mb-0">
-          <h2 className="relative mb-8">
-            <div className="h-6 w-0.5 absolute -left-6 top-3 bg-w3storage-red" />
-            Decentralized Storage in 5 Minutes
-          </h2>
-          <p className="max-w-xs mb-8">
-            Build on Filecoin in just a few lines of code. Get started in minutes with this simple interface.
-          </p>
-          <a href="https://docs.web3.storage/quickstart" className="font-bold">{'Learn more >'}</a>
         </div>
-        <div className="relative w-full">
-          <div className="text-white">
-            <button
-              type="button"
-              onClick={ ()=> setCode('store') }
-              className={clsx(
-                "typography-cta rounded-t-lg py-2 px-8 mr-2 transition",
-                code === 'store' ?
-                  "bg-w3storage-blue-desaturated text-white"
-                  :
-                  "bg-black text-white bg-opacity-30 hover:bg-white hover:bg-opacity-10")}>
-              Store
-            </button>
-            <button
-              type="button"
-              onClick={ ()=> setCode('retrieve') }
-              className={clsx(
-                "typography-cta rounded-t-lg py-2 px-8 transition",
-                code === 'retrieve' ?
-                  "bg-w3storage-blue-desaturated text-white"
-                  :
-                  "bg-black text-white bg-opacity-30 hover:bg-white hover:bg-opacity-10")}>
-                Retrieve
-              </button>
+      </div>
+      <div className="md:px-12 pt-24">
+        <div className="relative flex flex-col xl:flex-row justify-between py-20 md:py-12 mt-20 bg-w3storage-purple" style={{ borderTopLeftRadius: '6rem' }}>
+          <Squares className="absolute top-14 left-16 hidden md:block" />
+          <div className="text-white pl-12 pr-12 md:pl-32 md:pr-0 w-full max-w-none xl:max-w-lg mb-16 mr-0 xl:mr-10 xl:mb-0">
+            <h2 className="relative mb-8">
+              <div className="h-5 w-1 absolute -left-4 top-1 md:top-2 mt-1 bg-w3storage-red" />
+              Decentralized Storage in 5 Minutes
+            </h2>
+            <p className="max-w-xs mb-8">
+              Build on Filecoin in just a few lines of code. Get started in minutes with this simple interface.
+            </p>
+            <a href="https://docs.web3.storage/quickstart" className="font-bold">{'Learn more >'}</a>
           </div>
-          <SyntaxHighlighter
-            language="javascript"
-            style={tomorrow}
-            codeTagProps={{ style: { color: '#fff', fontFamily: "'Space Mono', monospace", fontSize: '0.95em' } }}>
-            {
+          <div className="relative w-full md:mr-12">
+            <div className="text-white pl-6 xl:pl-0">
+              <button
+                type="button"
+                onClick={ ()=> setCode('store') }
+                className={clsx(
+                  "typography-cta rounded-t-lg py-2 px-8 mr-2 transition",
+                  code === 'store' ?
+                    "bg-w3storage-blue-desaturated text-white"
+                    :
+                    "bg-black text-white bg-opacity-30 hover:bg-white hover:bg-opacity-10")}>
+                Store
+              </button>
+              <button
+                type="button"
+                onClick={ ()=> setCode('retrieve') }
+                className={clsx(
+                  "typography-cta rounded-t-lg py-2 px-8 transition",
+                  code === 'retrieve' ?
+                    "bg-w3storage-blue-desaturated text-white"
+                    :
+                    "bg-black text-white bg-opacity-30 hover:bg-white hover:bg-opacity-10")}>
+                  Retrieve
+                </button>
+            </div>
+            <SyntaxHighlighter
+              language="javascript"
+              style={tomorrow}
+              codeTagProps={{ style: { color: '#fff', fontFamily: "'Space Mono', monospace" } }}
+              className="text-sm md:text-base"
+            >
+              {
+                // @ts-ignore
+                codeSnippets[code]
+              }
+            </SyntaxHighlighter>
+            <span className="absolute bottom-8 right-16 text-base text-white transition duration-500 ease-in-out copied opacity-0">Copied!</span>
+            <CopyToClipboard
+              onCopy={showCopiedMessage}
+              text={
               // @ts-ignore
               codeSnippets[code]
-            }
-          </SyntaxHighlighter>
-          <span className="absolute bottom-12 right-16 text-base text-white transition duration-500 ease-in-out copied opacity-0">Copied!</span>
-          <CopyToClipboard
-            onCopy={showCopiedMessage}
-            text={
-            // @ts-ignore
-            codeSnippets[code]
-            }>
-            <button className="absolute bottom-10 right-6 p-2">
-              <CopyIcon />
-            </button>
-          </CopyToClipboard>
+              }>
+              <button className="absolute bottom-6 right-6 p-2">
+                <CopyIcon />
+              </button>
+            </CopyToClipboard>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
