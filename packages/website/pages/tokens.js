@@ -138,11 +138,13 @@ export default function Tokens({ user }) {
     <div className="layout-margins">
       <main className="max-w-screen-lg mx-auto my-4 lg:my-16 text-w3storage-purple">
         <h3>API Tokens</h3>
-        <div className="flex ml-6">
-          <div className="w-35 ml-auto">
-            <Button href="/new-token" small>New API Token</Button>
+        <When condition={tokens.length > 0}>
+          <div className="flex ml-6">
+            <div className="w-35 ml-auto">
+              <Button href="/new-token" small>New API Token</Button>
+            </div>
           </div>
-        </div>
+        </When>
         <If condition={isLoading || isFetching}>
           <Then>
             <Loading />
@@ -174,9 +176,14 @@ export default function Tokens({ user }) {
               </table>
             </When>
             <When condition={tokens.length === 0}>
-              <p className="flex justify-center font-black mt-10">
-                No API Tokens
-              </p>
+              <div className="flex flex-col items-center">
+                <p className="font-black mt-10">
+                  No API Tokens
+                </p>
+                <div className="w-35 mt-10">
+                  <Button href="/new-token" small>New API Token</Button>
+                </div>
+              </div>
             </When>
           </Else>
         </If>
