@@ -61,19 +61,28 @@ describe('get', () => {
     assert.is(files[2].size, 55415)
   })
 
-  it('returns null on 404', async () => {
+  it('res.files throws on 404', async () => {
     const client = new Web3Storage({ token, endpoint })
     const cid = 'bafkreieq5jui4j25lacwomsqgjeswwl3y5zcdrresptwgmfylxo2depppq'
-    const res = await client.get(cid)
-    assert.not.ok(res, 'res should be null')
+    try {
+      const res = await client.get(cid)
+      assert.not.ok(res.ok)
+      await res.files()
+      assert.unreachable('res.files() should have thrown')
+    } catch (err) {
+      assert.match(err, /404/)
+    }
   })
 
-  it('throws on invalid cid', async () => {
+  it('res.unixFsIteratory throws on invalid cid', async () => {
     const client = new Web3Storage({ token, endpoint })
     const cid = 'bafkreieq'
     try {
-      await client.get(cid)
-      assert.unreachable('sholud have thrown')
+      const res = await client.get(cid)
+      assert.not.ok(res.ok)
+      for await (const _ of res.unixFsIterator()) { // eslint-disable-line
+        assert.unreachable('res.unixFsIterator() should have thrown')
+      }
     } catch (err) {
       assert.match(err, /400/)
     }
