@@ -32,7 +32,7 @@ export function getStaticProps() {
  * @returns {string}
  */
 const formatTimestamp = (timestamp) => {
-  return new Date(timestamp).toLocaleDateString('pt-pt', {
+  return new Date(timestamp).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
