@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.0.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v2.1.1...web3.storage-v3.0.0) (2021-07-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* make unixfs importer on ipfs-car use same defaults as lotus (#170)
+
+### Features
+
+* make unixfs importer on ipfs-car use same defaults as lotus ([#170](https://www.github.com/web3-storage/web3.storage/issues/170)) ([06f6948](https://www.github.com/web3-storage/web3.storage/commit/06f6948ce36b5e2a87f31b9bfac41e9465cb901b))
+
+
+### Bug Fixes
+
+* throw on 404 from /get ([#159](https://www.github.com/web3-storage/web3.storage/issues/159)) ([2fce1ac](https://www.github.com/web3-storage/web3.storage/commit/2fce1ac1db52dbb41910367ffc6394483908528d))
+
 ### [2.1.1](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v2.1.0...web3.storage-v2.1.1) (2021-07-23)
 
 
