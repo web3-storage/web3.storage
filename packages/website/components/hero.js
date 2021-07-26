@@ -7,13 +7,9 @@ import HeroIllustration from '../illustrations/hero-illustration'
 import HeroBackgroundLeft from '../illustrations/hero-background-left'
 import HeroBackgroundRight from '../illustrations/hero-background-right'
 
-const supports = typeof CSS !== 'undefined' && CSS.supports
-  ? CSS.supports
-  : () => true
-
 export default function Hero() {
   /** @type {import('react').CSSProperties} */
-  const style = supports('overflow: clip') ? { overflowX: 'clip' } : { overflow: 'hidden' }
+  const style = { overflowX: 'clip' , overflow: 'hidden' }
   return (
     <div className="relative z-1" style={style}>
       <HeroIllustration className="absolute left-1/2 transform -translate-x-1/2 top-0" />
