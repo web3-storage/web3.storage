@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.0.1](https://www.github.com/web3-storage/web3.storage/compare/api-v1.0.0...api-v1.0.1) (2021-07-26)
+
+
+### Bug Fixes
+
+* files listing ([#155](https://www.github.com/web3-storage/web3.storage/issues/155)) ([bde495c](https://www.github.com/web3-storage/web3.storage/commit/bde495c334874c742d09f3224854324ebaa24e38))
+
 ## 1.0.0 (2021-07-23)
 
 
