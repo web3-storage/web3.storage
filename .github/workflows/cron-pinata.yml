@@ -28,7 +28,7 @@ jobs:
         env:
           DEBUG: '*'
           ENV: ${{ matrix.env }}
-          FAUNA_KEY: ${{ secrets.FAUNA_KEY }}
+          FAUNA_KEY: ${{ secrets.PROD_FAUNA_KEY }}
           STAGING_FAUNA_KEY: ${{ secrets.STAGING_FAUNA_KEY }}
           PINATA_JWT: ${{ secrets.PINATA_JWT }}
         run: npm run start:pinata -w packages/cron
