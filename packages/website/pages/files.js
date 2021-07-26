@@ -217,6 +217,30 @@ export default function Files({ user }) {
     selectedFiles.length >= 1 ? setSelectedFiles([]) : setSelectedFiles(uploads.map(u => u.cid))
   }
 
+  const FilesTable = () => (
+    <table className="w-full mt-4">
+      <thead>
+        <tr>
+          { uploads.length > 0 && (
+          <th className="w-8">
+            <Checkbox className="mr-2" checked={selectedFiles.length === uploads.length} onChange={toggleAll} />
+          </th> )}
+          <TableHeader>Timestamp</TableHeader>
+          <TableHeader>Name</TableHeader>
+          <TableHeader>CID</TableHeader>
+          <TableHeader>Pin Status</TableHeader>
+          <TableHeader>Storage Providers</TableHeader>
+          <TableHeader>Size</TableHeader>
+        </tr>
+      </thead>
+      <tbody>
+        {uploads.map((upload, index) =>
+          <UploadItem key={upload.cid} upload={upload} index={index} toggle={toggle} selectedFiles={selectedFiles} />
+        )}
+      </tbody>
+    </table>
+  )
+
   return (
     <main className="layout-margins">
       <div className="mx-auto my-4 lg:my-32 text-w3storage-purple">
@@ -228,7 +252,8 @@ export default function Files({ user }) {
           <>
             <div className="table-responsive">
               <When condition={hasZeroUploads}>
-                <p className="flex justify-center font-black my-10">
+                <FilesTable />
+                <p className="flex justify-center font-black mt-4 mb-10">
                   No files
                 </p>
                 <div className="w-36 m-auto">
@@ -248,26 +273,7 @@ export default function Files({ user }) {
                       <Button href="/upload" small id="upload">Upload File</Button>
                     </div>
                   </div>
-                  <table className="w-full mt-4">
-                    <thead>
-                      <tr>
-                        <th className="w-8">
-                          <Checkbox className="mr-2" checked={selectedFiles.length === uploads.length} onChange={toggleAll} />
-                        </th>
-                        <TableHeader>Timestamp</TableHeader>
-                        <TableHeader>Name</TableHeader>
-                        <TableHeader>CID</TableHeader>
-                        <TableHeader>Pin Status</TableHeader>
-                        <TableHeader>Storage Providers</TableHeader>
-                        <TableHeader>Size</TableHeader>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {uploads.map((upload, index) =>
-                        <UploadItem key={upload.cid} upload={upload} index={index} toggle={toggle} selectedFiles={selectedFiles} />
-                      )}
-                    </tbody>
-                  </table>
+                  <FilesTable />
                   <div className="mt-4 flex justify-between ml-7 md:ml-8">
                     <When condition={befores.length !== 1}>
                       <Button
