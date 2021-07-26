@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.1.2](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v2.1.1...web3.storage-v2.1.2) (2021-07-26)
+
+
+### Bug Fixes
+
+* throw on 404 from /get ([#159](https://www.github.com/web3-storage/web3.storage/issues/159)) ([2fce1ac](https://www.github.com/web3-storage/web3.storage/commit/2fce1ac1db52dbb41910367ffc6394483908528d))
+
 ### [2.1.1](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v2.1.0...web3.storage-v2.1.1) (2021-07-23)
 
 
