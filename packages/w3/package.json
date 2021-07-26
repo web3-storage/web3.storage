@@ -25,7 +25,7 @@
   "dependencies": {
     "conf": "^10.0.1",
     "enquirer": "^2.3.6",
-    "ipfs-car": "web3-storage/ipfs-car#feat/support-custom-max-children-per-node",
+    "ipfs-car": "^0.5.3",
     "ora": "^5.4.1",
     "sade": "^1.7.4",
     "web3.storage": "^2.0.0"
