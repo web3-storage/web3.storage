@@ -180,13 +180,7 @@ class Web3Storage {
       headers: Web3Storage.headers(token)
     })
     if (!res.ok) {
-      // TODO: I'm assuming that an error for "CID isn't there (yet)" would be unergonomic. Need to verify.
-      // I'm thinking null means, nope, not yet, no can has. Anything else is _AN ERROR_
-      if (res.status === 404) {
-        return null
-      } else {
-        throw new Error(`${res.status} ${res.statusText}`)
-      }
+      throw new Error(`${res.status} ${res.statusText}`)
     }
     return toWeb3Response(res)
   }

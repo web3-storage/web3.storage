@@ -61,11 +61,15 @@ describe('get', () => {
     assert.is(files[2].size, 55415)
   })
 
-  it('returns null on 404', async () => {
+  it('throws on 404', async () => {
     const client = new Web3Storage({ token, endpoint })
     const cid = 'bafkreieq5jui4j25lacwomsqgjeswwl3y5zcdrresptwgmfylxo2depppq'
-    const res = await client.get(cid)
-    assert.not.ok(res, 'res should be null')
+    try {
+      await client.get(cid)
+      assert.unreachable('sholud have thrown')
+    } catch (err) {
+      assert.match(err, /404/)
+    }
   })
 
   it('throws on invalid cid', async () => {
