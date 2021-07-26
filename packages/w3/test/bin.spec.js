@@ -11,6 +11,11 @@ describe('w3', () => {
       assert.match(err.stderr, /No command specified./)
     }
   })
+
+  it('--version', () => {
+    const { stdout } = execa.sync('./bin.js', ['--version'])
+    assert.match(stdout, /w3, \d.\d.\d/)
+  })
 })
 
 describe('w3 put', () => {
