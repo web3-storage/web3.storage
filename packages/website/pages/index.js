@@ -134,7 +134,7 @@ retrieveFiles()`
         </div>
       </div>
       <div className="md:px-12 pt-24">
-        <div className="relative flex flex-col xl:flex-row justify-between py-20 md:py-12 mt-20 bg-w3storage-purple" style={{ borderTopLeftRadius: '6rem' }}>
+        <div className="relative flex flex-col xl:flex-row justify-between py-20 md:py-12 mt-20 bg-w3storage-blue-dark" style={{ borderTopLeftRadius: '6rem' }}>
           <Squares className="absolute top-14 left-16 hidden md:block" />
           <div className="text-white pl-12 pr-12 md:pl-32 md:pr-0 w-full max-w-none xl:max-w-lg mb-16 mr-0 xl:mr-10 xl:mb-0">
             <h2 className="relative mb-8">
@@ -142,7 +142,7 @@ retrieveFiles()`
               Decentralized Storage in 5 Minutes
             </h2>
             <p className="max-w-xs mb-8">
-              Build on Filecoin in just a few lines of code. Get started in minutes with this simple interface.
+              Build applications with data persisted by Filecoin and available over IPFS. Get started in minutes with this simple interface.
             </p>
             <a href="https://docs.web3.storage/#quickstart" className="font-bold">{'Learn more >'}</a>
           </div>
@@ -207,7 +207,9 @@ function GetStarted() {
         <div className="layout-margins py-32 z-10">
           <h2>Get Started with Web3.Storage</h2>
           <p className="text-lg mt-8">
-            Build on decentralized storage in 3 steps, it’s that easy.
+            Storing data on open, public infrastructure shouldn’t be a battle.
+            <br/>
+            Start building applications backed by Filecoin in 3 steps, it’s that easy.  
           </p>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-4 xl:gap-x-12 mt-20">
             <div className="flex flex-col border-4 border-white p-10 mb-10 lg:mb-0">

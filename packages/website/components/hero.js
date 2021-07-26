@@ -21,7 +21,7 @@ export default function Hero() {
         <div className="mx-auto max-w-4xl text-center z-10">
           <hgroup className="text-w3storage-purple mb-14">
             <h1 className="mb-14">Decentralized Storage Made Simple</h1>
-            <h2 className="typography-hero-subtitle mb-5">Build on Filecoin, no infrastructure required.</h2>
+            <h2 className="typography-hero-subtitle mb-5">Build apps backed by Filecoin, no infrastructure required.</h2>
           </hgroup>
           <Button
             href="/login"
