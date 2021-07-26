@@ -133,7 +133,7 @@ retrieveFiles()`
           </p>
         </div>
       </div>
-      <div className="layout-margins pt-24">
+      <div className="md:layout-margins pt-24">
         <div className="relative flex flex-col xl:flex-row justify-between py-20 md:py-12 mt-20 bg-w3storage-blue-dark" style={{ borderTopLeftRadius: '6rem' }}>
           <Squares className="absolute top-14 left-16 hidden md:block" />
           <div className="text-white pl-12 pr-12 md:pl-32 md:pr-0 w-full max-w-none xl:max-w-lg mb-16 mr-0 xl:mr-10 xl:mb-0">

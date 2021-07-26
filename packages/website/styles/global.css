@@ -149,6 +149,10 @@ body {
   .layout-margins {
       margin: 0 4%;
   }
+
+  .md\:layout-margins {
+    @apply mx-8;
+  }
 }
 
 /* 1440 max width + 58px left & right padding */
