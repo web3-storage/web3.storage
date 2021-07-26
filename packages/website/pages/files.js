@@ -136,7 +136,6 @@ export default function Files({ user }) {
   const initialFiles = [];
 
   const [selectedFiles, setSelectedFiles] = useState(/** @type string[] */ initialFiles)
-  const [isNextDisabled, setNextDisabled] = useState('')
   const [size] = useState(25)
   const [befores, setBefores] = useState([new Date().toISOString()])
   const queryClient = useQueryClient()
@@ -151,14 +150,8 @@ export default function Files({ user }) {
     }
   )
 
-  const reachedEndOfPagination = data?.length === 0 && befores.length > 1
-  if (reachedEndOfPagination) {
-    setNextDisabled(befores[1])
-    setBefores(befores.slice(1))
-  }
-
   /** @type {Upload[]} */
-  const uploads = data || []
+  const uploads = data?.length === size ? data.concat().splice(0, size - 1) : (data || [])
 
   function handleDelete() {
     if (!confirm('Are you sure? Deleted files cannot be recovered!')) return
@@ -278,13 +271,12 @@ export default function Files({ user }) {
                         ← Previous
                       </Button>
                     </When>
-                    <When condition={uploads.length >= size}>
+                    <When condition={data?.length === size }>
                       <Button
                         className="black"
                         wrapperClassName="m-h-2 ml-auto"
                         onClick={handleNextClick}
                         id="uploads-next"
-                        disabled={isNextDisabled === befores[0]}
                       >
                         Next →
                       </Button>
