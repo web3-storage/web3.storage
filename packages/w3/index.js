@@ -1,3 +1,4 @@
+import fs from 'fs'
 import { writeFiles } from 'ipfs-car/unpack/fs'
 import { Web3Storage, filesFromPath } from 'web3.storage'
 import enquirer from 'enquirer'
@@ -5,7 +6,11 @@ import Conf from 'conf'
 import ora from 'ora'
 
 const API = 'https://api.web3.storage'
-const config = new Conf()
+
+const config = new Conf({
+  projectName: 'w3',
+  projectVersion: getPkg().version
+})
 
 /**
  * Get a new API client configured either from opts or config
@@ -136,4 +141,8 @@ export async function put (path, opts) {
 function filesize (bytes) {
   const size = bytes / 1024 / 1024
   return `${size.toFixed(1)}MB`
+}
+
+export function getPkg () {
+  return JSON.parse(fs.readFileSync(new URL('./package.json', import.meta.url)))
 }

@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 import sade from 'sade'
-import { get, put, status, token } from './index.js'
+import { get, put, status, token, getPkg } from './index.js'
 
 const cli = sade('w3')
 
 cli
+  .version(getPkg().version)
   .example('put path/to/files')
   .example('get bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy -o room-guardian.jpg')
 
