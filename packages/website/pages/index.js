@@ -156,7 +156,7 @@ retrieveFiles()`
                   code === 'store' ?
                     "bg-w3storage-blue-desaturated text-white"
                     :
-                    "bg-black text-white bg-opacity-30 hover:bg-white hover:bg-opacity-10")}>
+                    "bg-w3storage-blue-desaturated-bright text-white hover:bg-white hover:bg-opacity-20")}>
                 Store
               </button>
               <button
@@ -167,7 +167,7 @@ retrieveFiles()`
                   code === 'retrieve' ?
                     "bg-w3storage-blue-desaturated text-white"
                     :
-                    "bg-black text-white bg-opacity-30 hover:bg-white hover:bg-opacity-10")}>
+                    "bg-w3storage-blue-desaturated-bright text-white hover:bg-white hover:bg-opacity-20")}>
                   Retrieve
                 </button>
             </div>
