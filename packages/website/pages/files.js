@@ -36,16 +36,17 @@ const formatTimestamp = (timestamp) => {
   const today = new Date();
   const isSameDay = date.getUTCDay() === today.getUTCDay() && date.getUTCMonth() === today.getUTCMonth() && date.getFullYear() === today.getFullYear()
 
-  if(!isSameDay) {
+  if(isSameDay) {
     return new Date(timestamp).toLocaleTimeString(undefined, {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
       hour: '2-digit',
       minute:'2-digit',
     })
   }
-  return timestamp.split('T')[0]
+  return new Date(timestamp).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  }) 
 }
 
 /**
