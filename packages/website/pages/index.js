@@ -144,7 +144,7 @@ retrieveFiles()`
             <p className="max-w-xs mb-8">
               Build on Filecoin in just a few lines of code. Get started in minutes with this simple interface.
             </p>
-            <a href="https://docs.web3.storage/quickstart" className="font-bold">{'Learn more >'}</a>
+            <a href="https://docs.web3.storage/#quickstart" className="font-bold">{'Learn more >'}</a>
           </div>
           <div className="relative w-full md:mr-12">
             <div className="text-white pl-6 xl:pl-0">
@@ -223,7 +223,7 @@ function GetStarted() {
               <h3 className="mb-12 font-medium">2. Install the library</h3>
               <div className="flex flex-col flex-grow justify-between">
                 <p>Grab the client library using NPM.</p>
-                <Button href="https://docs.web3.storage/quickstart" variant="light" wrapperClassName="w-max mt-12">
+                <Button href="https://docs.web3.storage/#quickstart" variant="light" wrapperClassName="w-max mt-12">
                   {'Install >'}
                 </Button>
               </div>
