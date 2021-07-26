@@ -32,20 +32,12 @@ export function getStaticProps() {
  * @returns {string}
  */
 const formatTimestamp = (timestamp) => {
-  const date = new Date(timestamp)
-  const today = new Date();
-  const isSameDay = date.getUTCDay() === today.getUTCDay() && date.getUTCMonth() === today.getUTCMonth() && date.getFullYear() === today.getFullYear()
-
-  if(isSameDay) {
-    return new Date(timestamp).toLocaleTimeString(undefined, {
-      hour: '2-digit',
-      minute:'2-digit',
-    })
-  }
-  return new Date(timestamp).toLocaleDateString(undefined, {
+  return new Date(timestamp).toLocaleDateString('pt-pt', {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
   }) 
 }
 
@@ -116,7 +108,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
         <Checkbox className="mr-2" checked={checked} onChange={() => toggle(upload.cid)}/>
       </td>
       <TableElement {...sharedArgs}>
-        <span title={upload.created}>{formatTimestamp(upload.created)}</span>
+        <span title={upload.created} className="break-normal">{formatTimestamp(upload.created)}</span>
       </TableElement>
       <TableElement {...sharedArgs} important>{upload.name}</TableElement>
       <TableElement {...sharedArgs} important>
