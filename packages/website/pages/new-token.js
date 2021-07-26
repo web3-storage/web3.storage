@@ -58,7 +58,7 @@ export default function NewToken() {
                 <input
                   id="name"
                   name="name"
-                  placeholder="Give this API Token a name"
+                  placeholder="Name your token"
                   className="w-full border border-black px-4 py-3 placeholder-black"
                   required
                 />
