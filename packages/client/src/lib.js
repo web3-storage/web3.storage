@@ -179,9 +179,6 @@ class Web3Storage {
       method: 'GET',
       headers: Web3Storage.headers(token)
     })
-    if (!res.ok) {
-      throw new Error(`${res.status} ${res.statusText}`)
-    }
     return toWeb3Response(res)
   }
 
@@ -297,6 +294,9 @@ function toFilenameWithPath (unixFsPath) {
 function toWeb3Response (res) {
   const response = Object.assign(res, {
     unixFsIterator: async function * () {
+      if (!res.ok) {
+        throw new Error(`Response was not ok: ${res.status} ${res.statusText} - Check for { "ok": false } on the Response object before calling .unixFsIterator`)
+      }
       /* c8 ignore next 3 */
       if (!res.body) {
         throw new Error('No body on response')
@@ -311,6 +311,9 @@ function toWeb3Response (res) {
       }
     },
     files: async () => {
+      if (!res.ok) {
+        throw new Error(`Response was not ok: ${res.status} ${res.statusText} - Check for { "ok": false } on the Response object before calling .files`)
+      }
       const files = []
       // @ts-ignore we're using the enriched response here
       for await (const entry of response.unixFsIterator()) {
