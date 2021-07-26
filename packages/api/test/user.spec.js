@@ -76,7 +76,6 @@ describe('GET /user/uploads', () => {
     })
     assert(res.ok)
     const uploads = await res.json()
-    console.log(uploads)
     // TODO: import from fixture
     const expected = [
       {
