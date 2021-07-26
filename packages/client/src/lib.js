@@ -117,7 +117,9 @@ class Web3Storage {
           content: f.stream()
         })),
         blockstore,
-        wrapWithDirectory
+        wrapWithDirectory,
+        maxChunkSize: 1048576,
+        maxChildrenPerNode: 1024
       })
       carRoot = root.toString()
 
