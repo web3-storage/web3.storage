@@ -149,7 +149,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
       <TableElement {...sharedArgs} important>
         <div className="flex items-center justify-center">
           <GatewayLink cid={upload.cid} />
-          <CopyToClipboard text={upload.cid} onCopy={showCopiedMessage}>
+          <CopyToClipboard text={upload.cid} onCopy={() => showCopiedMessage()}>
             <CopyIcon className="ml-2 cursor-pointer hover:opacity-80" width="16" fill="currentColor"/>
           </CopyToClipboard>
         </div>
