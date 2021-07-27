@@ -45,26 +45,34 @@ export default function Home() {
 
 function WhyWeb3Storage() {
   const codeSnippets = {
-    store: `import { Web3Storage, getFilesFromPath } from 'web3.storage'
+    store: `// Name the file \`store.mjs\` so you can use \`import\` with nodejs 
+// Run \`npm i web3.storage\` to install this package
+import { Web3Storage, getFilesFromPath } from 'web3.storage'
 
-const token = 'your-api-token'
+const token = process.env.API_TOKEN
 const client = new Web3Storage({ token })
 
 async function storeFiles () {
-  const files = await getFilesFromPath('./')
+  const files = await getFilesFromPath('/path/to/file')
   const cid = await client.put(files)
   console.log(cid)
 }
 
-storeFiles()`,
-    retrieve: `import { Web3Storage } from 'web3.storage'
+storeFiles()
+// Now run it with 
+// API_TOKEN=YOUR_TOKEN_HERE node ./store.mjs
+`,
+    retrieve: `// Name the file \`retrieve.mjs\` so you can use \`import\` with nodejs  
+// Run \`npm i web3.storage\` to install this package
+import { Web3Storage } from 'web3.storage'
 
-const token = 'your-api-token'
+const token = process.env.API_TOKEN
 const client = new Web3Storage({ token })
 
 async function retrieveFiles () {
   const cid =
     'bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'
+  // You can fetch data using any CID, even from IPFS Nodes or Gateway URLs!
   const res = await client.get(cid)
   const files = await res.files()
 
@@ -73,7 +81,10 @@ async function retrieveFiles () {
   }
 }
 
-retrieveFiles()`
+retrieveFiles()
+// Now run it with 
+// API_TOKEN=YOUR_TOKEN_HERE node ./retrieve.mjs 
+`
   }
 
   const [code, setCode] = useState('store')
