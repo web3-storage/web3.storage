@@ -1,9 +1,14 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import filesize from 'filesize'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
+
 import Button from '../components/button.js'
 import Checkbox from '../components/checkbox'
 import Loading from '../components/loading'
+import Tooltip from '../components/tooltip'
+
+import CopyIcon from '../icons/copy'
 import { getUploads, deleteUpload } from '../lib/api.js'
 import { When } from 'react-if'
 import clsx from 'clsx'
@@ -24,6 +29,27 @@ export function getStaticProps() {
       needsUser: true,
     },
   }
+}
+
+const QuestionMark = () => (
+  <div className="relative flex items-center justify-center ml-3 text-sm text-w3storage-red cursor-pointer">
+    <div className="absolute rounded-full border w-4 h-4 border-w3storage-red" />
+    ?
+  </div>
+)
+
+const TOOLTIPS = {
+  PIN_STATUS: (<span>Reports the status of a file or piece of data within the Web3.Storage lifecycle.</span>),
+
+  CID: (<span>
+    The <strong>c</strong>ontent <strong>id</strong>entifier for a file or a piece of data.<span> </span>
+    <a href="https://docs.web3.storage/concepts/content-addressing/" target="_blank" className="underline" rel="noreferrer">Learn more</a>
+  </span>),
+
+  STORAGE_PROVIDERS: (<span>
+    Computers on the Filecoin network with storage space available for rent. <span> </span>
+    <a href="https://docs.web3.storage/concepts/decentralized-storage/" target="_blank" className="underline" rel="noreferrer">Learn more</a> 
+  </span>),
 }
 
 /**
@@ -120,7 +146,12 @@ const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
       </TableElement>
       <TableElement {...sharedArgs} important>{upload.name}</TableElement>
       <TableElement {...sharedArgs} important>
-        <GatewayLink cid={upload.cid} />
+        <div className="flex items-center justify-center">
+          <GatewayLink cid={upload.cid} />
+          <CopyToClipboard text={upload.cid} >
+            <CopyIcon className="ml-2 cursor-pointer hover:opacity-80" fill="currentColor"/>
+          </CopyToClipboard>
+        </div>
       </TableElement>
       <TableElement {...sharedArgs} centered>{pinStatus}</TableElement>
       <TableElement {...sharedArgs} breakAll={false}>{deals}</TableElement>
@@ -219,9 +250,27 @@ export default function Files({ user }) {
           </th> )}
           <TableHeader>Timestamp</TableHeader>
           <TableHeader>Name</TableHeader>
-          <TableHeader>CID</TableHeader>
-          <TableHeader>Pin Status</TableHeader>
-          <TableHeader>Storage Providers</TableHeader>
+          <TableHeader>
+            <span className="flex w-100 justify-center items-center">CID 
+              <Tooltip placement='top' overlay={TOOLTIPS.CID} overlayClassName='table-tooltip'>
+                { QuestionMark() }
+              </Tooltip>
+            </span>
+          </TableHeader>
+          <TableHeader>
+            <span className="flex w-100 justify-center">Pin Status
+              <Tooltip placement='top' overlay={TOOLTIPS.PIN_STATUS} overlayClassName='table-tooltip'>
+                {QuestionMark()}
+              </Tooltip>
+            </span>
+          </TableHeader>
+          <TableHeader>
+            <span className="flex w-100 justify-center">Storage Providers
+              <Tooltip placement='top' overlay={TOOLTIPS.STORAGE_PROVIDERS} overlayClassName='table-tooltip'>
+                {QuestionMark()}
+              </Tooltip>
+            </span>
+          </TableHeader>
           <TableHeader>Size</TableHeader>
         </tr>
       </thead>
@@ -234,7 +283,7 @@ export default function Files({ user }) {
   )
 
   return (
-    <main className="layout-margins">
+    <main className="px-4 md:px-8 lg:px-14">
       <div className="mx-auto my-4 lg:my-32 text-w3storage-purple">
         <h3 className="mb-8">Files</h3>
         <When condition={isLoading || isFetching}>
@@ -249,7 +298,7 @@ export default function Files({ user }) {
                   No files
                 </p>
                 <div className="w-36 m-auto">
-                  <Button href="/upload" id="upload">Upload File</Button>
+                  <Button href="/upload" id="upload">Upload Files</Button>
                 </div>
               </When>
               <When condition={!hasZeroUploads}>
@@ -262,7 +311,7 @@ export default function Files({ user }) {
                       Export Deals
                     </Button> */}
                     <div className="w-35 ml-auto">
-                      <Button href="/upload" small id="upload">Upload File</Button>
+                      <Button href="/upload" small id="upload">Upload More Files</Button>
                     </div>
                   </div>
                   <FilesTable />

@@ -175,3 +175,16 @@ body {
     width: 100%;
     overflow-x: auto;
 }
+
+.table-tooltip.rc-tooltip {
+  opacity: 1;
+}
+
+.table-tooltip .rc-tooltip-content {
+  position: relative;
+  bottom: 4px;
+}
+
+.table-tooltip .rc-tooltip-content .rc-tooltip-arrow {
+  border-top-color: #fc6553;
+}

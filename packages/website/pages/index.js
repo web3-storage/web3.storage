@@ -190,7 +190,7 @@ retrieveFiles()`
               codeSnippets[code]
               }>
               <button className="absolute bottom-6 right-6 p-2">
-                <CopyIcon />
+                <CopyIcon fill="#FFF" />
               </button>
             </CopyToClipboard>
           </div>
