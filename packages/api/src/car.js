@@ -5,7 +5,7 @@ import { Block } from 'multiformats/block'
 import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
-import { GATEWAY, LOCAL_ADD_THRESHOLD, DAG_SIZE_CALC_LIMIT } from './constants.js'
+import { GATEWAY, PUBLIC_GATEWAY, LOCAL_ADD_THRESHOLD, DAG_SIZE_CALC_LIMIT } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { toPinStatusEnum } from './utils/pin.js'
 
@@ -28,6 +28,14 @@ const UPDATE_DAG_SIZE = gql`
   }
 `
 
+const FIND_CONTENT_BY_CID = gql`
+  query FindContentByCid($cid: String!) {
+    findContentByCid(cid: $cid) {
+      dagSize
+    }
+  }
+`
+
 // Duration between status check polls in ms.
 const PIN_STATUS_CHECK_INTERVAL = 50
 // Max time in ms to spend polling for an OK status.
@@ -38,19 +46,25 @@ const PIN_OK_STATUS = ['Pinned', 'Pinning', 'PinQueued']
 // TODO: ipfs should let us ask the size of a CAR file.
 // This consumes the CAR response from ipfs to find the content-length.
 export async function carHead (request, env, ctx) {
-  // cache the thing. can't cache a HEAD request, so make a new one.
-  const get = new Request(request.url, { method: 'GET' })
-  // add the router params
-  get.params = request.params
-  const res = await carGet(get, env, ctx)
-  const size = await sizeOf(res)
-  const headers = new Headers(res.headers)
-  headers.set('Content-Length', size)
+  const { getContentByCid: content } = await env.db.query(FIND_CONTENT_BY_CID, {
+    cid: request.params.cid
+  })
+
+  let size = content?.dagSize
+  if (!size) {
+    // cache the thing. can't cache a HEAD request, so make a new one.
+    const get = new Request(request.url, { method: 'GET' })
+    // add the router params
+    get.params = request.params
+    const res = await fetchCar(content ? GATEWAY : PUBLIC_GATEWAY, get, ctx)
+    size = await sizeOf(res)
+  }
+
   // skip the body, it's a HEAD.
-  return new Response(null, { headers })
+  return new Response(null, { headers: { 'Content-Length': size } })
 }
 
-export async function carGet (request, env, ctx) {
+async function fetchCar (gateway, request, ctx, init = {}) {
   const cache = caches.default
   let res = await cache.match(request)
 
@@ -63,8 +77,8 @@ export async function carGet (request, env, ctx) {
   } = request
   // gateway does not support `carversion` yet.
   // using it now means we can skip the cache if it is supported in the future
-  const url = new URL(`/api/v0/dag/export?arg=${cid}&carversion=1`, GATEWAY)
-  res = await fetch(url, { method: 'POST' })
+  const url = new URL(`/api/v0/dag/export?arg=${cid}&carversion=1`, gateway)
+  res = await fetch(url, { method: 'POST', ...init })
   if (!res.ok) {
     // bail early. dont cache errors.
     return res
@@ -85,6 +99,18 @@ export async function carGet (request, env, ctx) {
   // }
   ctx.waitUntil(cache.put(request, res.clone()))
   return res
+}
+
+/**
+ * @param {Request} request
+ * @param {import('./env').Env} env
+ * @param {import('./index').Ctx} ctx
+ */
+export async function carGet (request, env, ctx) {
+  const { cid } = request.params
+  const { findContentByCid: content } = await env.db.query(FIND_CONTENT_BY_CID, { cid })
+  const gateway = content ? GATEWAY : PUBLIC_GATEWAY
+  return fetchCar(gateway, request, ctx)
 }
 
 /**
@@ -165,10 +191,6 @@ export async function carPost (request, env, ctx) {
   }
 
   return new JSONResponse({ cid })
-}
-
-export async function carPut (request, env, ctx) {
-  return new Response(`${request.method} /car no can has`, { status: 501 })
 }
 
 export async function sizeOf (response) {
