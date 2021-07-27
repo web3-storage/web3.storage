@@ -28,6 +28,11 @@ const UPDATE_DAG_SIZE = gql`
   }
 `
 
+// Duration between status check poll.
+const PIN_STATUS_CHECK_INTERVAL = 50
+// Pin statuses considered OK.
+const PIN_OK_STATUS = ['PinQueued', 'Pinning', 'Pinned']
+
 // TODO: ipfs should let us ask the size of a CAR file.
 // This consumes the CAR response from ipfs to find the content-length.
 export async function carHead (request, env, ctx) {
@@ -109,16 +114,22 @@ export async function carPost (request, env, ctx) {
     local: blob.size > LOCAL_ADD_THRESHOLD
   })
 
+  /** @type {ReturnType<toPins>[]} */
+  let pins
   // Retrieve current pin status and info about the nodes pinning the content.
-  const { peerMap } = await env.cluster.status(cid)
+  // Keep querying Cluster until one of the nodes reports something other than
+  // Unpinned i.e. PinQueued or Pinning or Pinned.
+  while (true) {
+    const { peerMap } = await env.cluster.status(cid)
 
-  const pins = Object.entries(peerMap).map(([peerId, { peerName, status }]) => ({
-    status: toPinStatusEnum(status),
-    location: { peerId, peerName }
-  }))
+    pins = toPins(peerMap)
+    if (!pins.length) { // should not happen
+      throw new Error('not pinning on any node')
+    }
 
-  if (!pins.length) { // should not happen
-    throw new Error('not pinning on any node')
+    const isOk = pins.some(p => PIN_OK_STATUS.includes(p.status))
+    if (isOk) break
+    await new Promise(resolve => setTimeout(resolve, PIN_STATUS_CHECK_INTERVAL))
   }
 
   // Store in DB
@@ -198,4 +209,14 @@ async function getDagSize (car) {
   }
 
   return getSize(rootCid)
+}
+
+/**
+ * @param {import('@nftstorage/ipfs-cluster').StatusResponse['peerMap']} peerMap
+ */
+function toPins (peerMap) {
+  return Object.entries(peerMap).map(([peerId, { peerName, status }]) => ({
+    status: toPinStatusEnum(status),
+    location: { peerId, peerName }
+  }))
 }
