@@ -7,17 +7,13 @@ import HeroIllustration from '../illustrations/hero-illustration'
 import HeroBackgroundLeft from '../illustrations/hero-background-left'
 import HeroBackgroundRight from '../illustrations/hero-background-right'
 
-const supports = typeof CSS !== 'undefined' && CSS.supports
-  ? CSS.supports
-  : () => true
-
 export default function Hero() {
   /** @type {import('react').CSSProperties} */
-  const style = supports('overflow: clip') ? { overflowX: 'clip' } : { overflow: 'hidden' }
+  const style = { overflow: 'hidden', overflowX: 'clip', overflowY: 'visible' }
   return (
     <div className="relative z-1" style={style}>
       <HeroIllustration className="absolute left-1/2 transform -translate-x-1/2 top-0" />
-      <div className="layout-margins flex items-center" style={{ height: '47rem' }}>
+      <div className="md:layout-margins flex items-center" style={{ height: '47rem' }}>
         <div className="mx-auto max-w-4xl text-center z-10">
           <hgroup className="text-w3storage-purple mb-14">
             <h1 className="mb-14">Decentralized Storage Made Simple</h1>
