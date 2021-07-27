@@ -42,6 +42,7 @@
     "@magic-ext/oauth": "^0.8.0",
     "@magic-sdk/admin": "^1.3.0",
     "@web3-storage/db": "^1.0.0",
+    "@web3-storage/multipart-parser": "^1.0.0",
     "itty-router": "^2.3.10",
     "multiformats": "^9.0.4"
   },
