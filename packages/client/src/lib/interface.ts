@@ -194,3 +194,7 @@ export interface Status {
    */
   deals: Array<Deal>
 }
+
+export interface Upload extends Status {
+  name: string
+}

@@ -27,7 +27,6 @@
     "enquirer": "^2.3.6",
     "ipfs-car": "^0.5.3",
     "ora": "^5.4.1",
-    "parse-link-header": "^1.0.1",
     "sade": "^1.7.4",
     "web3.storage": "^3.0.0"
   },

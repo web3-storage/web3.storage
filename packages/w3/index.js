@@ -1,6 +1,5 @@
 import { Web3Storage, filesFromPath } from 'web3.storage'
 import { writeFiles } from 'ipfs-car/unpack/fs'
-import parseLink from 'parse-link-header'
 import enquirer from 'enquirer'
 import Conf from 'conf'
 import ora from 'ora'
@@ -14,35 +13,27 @@ const config = new Conf({
 })
 
 /**
- * Get the API client config
+ * Get a new API client configured either from opts or config
  * @param {object} opts
  * @param {string} [opts.api]
  * @param {string} [opts.token]
+ * @param {boolean} [opts.json]
  */
-function getClientOpts ({
+function getClient ({
   api = config.get('api') || API,
-  token = config.get('token')
+  token = config.get('token'),
+  json = false
 }) {
   if (!token) {
     console.log('! run `w3 token` to set an API token to use')
     process.exit(-1)
   }
   const endpoint = new URL(api)
-  if (api !== API) {
+  if (api !== API && !json) {
     // note if we're using something other than prod.
     console.log(`⁂ using ${endpoint.hostname}`)
   }
-  return { token, endpoint }
-}
-
-/**
- * Get a new API client configured either from opts or config
- * @param {object} opts
- * @param {string} [opts.api]
- * @param {string} [opts.token]
- */
-function getClient (opts) {
-  return new Web3Storage(getClientOpts(opts))
+  return new Web3Storage({ token, endpoint })
 }
 
 /**
@@ -113,42 +104,30 @@ export async function get (cid, opts) {
  * @param {string} [opts.before] list items uploaded before this iso date string
  */
 export async function list (opts = {}) {
+  const client = getClient(opts)
   let count = 0
-  for await (const res of paginator(Web3Storage.list, opts)) {
-    if (!res.ok) {
-      throw new Error(`${res.status} ${res.statusText}`)
+  let bytes = 0
+  for await (const item of client.listIterator({ size: 100 })) {
+    if (opts.json) {
+      console.log(JSON.stringify(item))
+    } else if (opts.cid) {
+      console.log(item.cid)
+    } else {
+      if (count === 0) {
+        console.log(`  Content ID${Array.from(item.cid).slice(0, -10).fill(' ').join('')}  Name`)
+      }
+      console.log(`⁂ ${item.cid}  ${item.name}`)
     }
-    const page = await res.json()
-    if (page.length === 0) {
+    bytes += item.dagSize
+    count++
+  }
+  if (!opts.json && !opts.cid) {
+    if (count === 0) {
       console.log('⁂ No uploads!')
       console.log('⁂ Try out `w3 put <path to files>` to upload some')
-      break
+    } else {
+      console.log(`  ${count} item${count === 1 ? '' : 's'} – ${filesize(bytes)} strored `)
     }
-    if (count === 0 && !opts.json && !opts.cid) {
-      console.log(`  Content ID${Array.from(page[0].cid).slice(0, -10).fill(' ').join('')} Name`)
-    }
-    for (const item of page) {
-      count++
-      if (opts.json) {
-        console.log(JSON.stringify(item))
-      } else if (opts.cid) {
-        console.log(item.cid)
-      } else {
-        console.log(`⁂ ${item.cid} ${item.name}`)
-      }
-    }
-  }
-}
-
-async function * paginator (fn, opts) {
-  const service = getClientOpts(opts)
-  let res = await fn(service, opts)
-  yield res
-  let link = parseLink(res.headers.get('Link'))
-  while (link && link.next) {
-    res = await fn(service, link.next)
-    yield res
-    link = parseLink(res.headers.get('Link'))
   }
 }
 

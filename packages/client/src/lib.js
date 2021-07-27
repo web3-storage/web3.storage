@@ -16,6 +16,7 @@
 import { transform } from 'streaming-iterables'
 import pRetry from 'p-retry'
 import { pack } from 'ipfs-car/pack'
+import parseLink from 'parse-link-header'
 import { unpackStream } from 'ipfs-car/unpack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
 import { filesFromPath, getFilesFromPath } from 'files-from-path'
@@ -32,6 +33,7 @@ const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 
 /** @typedef { import('./lib/interface.js').API } API */
 /** @typedef { import('./lib/interface.js').Status} Status */
+/** @typedef { import('./lib/interface.js').Upload} Upload */
 /** @typedef { import('./lib/interface.js').Service } Service */
 /** @typedef { import('./lib/interface.js').Web3File} Web3File */
 /** @typedef { import('./lib/interface.js').Filelike } Filelike */
@@ -218,9 +220,39 @@ class Web3Storage {
   /**
    * @param {Service} service
    * @param {{before: string, size: number}} opts
+   * @returns {AsyncIterable<Upload>}
+   */
+  static async * listIterator (service, opts) {
+    for await (const res of paginator(Web3Storage.listPage, service, opts)) {
+      if (!res.ok) {
+        throw new Error(`${res.status} ${res.statusText}`)
+      }
+      const page = await res.json()
+      for (const upload of page) {
+        yield upload
+      }
+    }
+  }
+
+  /**
+   * @param {Service} service
+   * @param {{before: string, size: number}} opts
+   * @returns {Promise<Array<Upload>>}
+   */
+  static async list (service, opts) {
+    const uploads = []
+    for await (const item of Web3Storage.listIterator(service, opts)) {
+      uploads.push(item)
+    }
+    return uploads
+  }
+
+  /**
+   * @param {Service} service
+   * @param {{before: string, size: number}} opts
    * @returns {Promise<Response>}
    */
-  static async list ({ endpoint, token }, { before = new Date().toISOString(), size = 25 }) {
+  static async listPage ({ endpoint, token }, { before = new Date().toISOString(), size = 25 }) {
     const search = new URLSearchParams({ before, size: size.toString() })
     const url = new URL(`/user/uploads?${search}`, endpoint)
     return fetch(url.toString(), {
@@ -276,10 +308,16 @@ class Web3Storage {
 
   /**
    * @param {{before: string, size: number}} opts
-   * @returns {Promise<Response>}
    */
   list (opts) {
     return Web3Storage.list(this, opts)
+  }
+
+  /**
+  * @param {{before: string, size: number}} opts
+  */
+  listIterator (opts) {
+    return Web3Storage.listIterator(this, opts)
   }
 }
 
@@ -351,6 +389,26 @@ function toWeb3Response (res) {
     }
   })
   return response
+}
+
+/**
+ * Follow Link headers on a Response, to fetch all the things.
+ *
+ * @param {(service: Service, opts: any) => Promise<Response>} fn
+ * @param {Service} service
+ * @param {{}} opts
+ */
+async function * paginator (fn, service, opts) {
+  let res = await fn(service, opts)
+  yield res
+  let link = parseLink(res.headers.get('Link') || '')
+  // @ts-ignore
+  while (link && link.next) {
+    // @ts-ignore
+    res = await fn(service, link.next)
+    yield res
+    link = parseLink(res.headers.get('Link') || '')
+  }
 }
 
 export { Web3Storage, File, Blob, filesFromPath, getFilesFromPath }
