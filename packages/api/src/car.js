@@ -114,7 +114,7 @@ export async function carPost (request, env, ctx) {
     local: blob.size > LOCAL_ADD_THRESHOLD
   })
 
-  /** @type {ReturnType<toPins>[]} */
+  /** @type {ReturnType<toPins>} */
   let pins
   // Retrieve current pin status and info about the nodes pinning the content.
   // Keep querying Cluster until one of the nodes reports something other than
