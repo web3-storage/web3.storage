@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.0.1](https://www.github.com/web3-storage/web3.storage/compare/website-v1.0.0...website-v1.0.1) (2021-07-27)
+
+
+### Bug Fixes
+
+* two docs links to quickstart ([#168](https://www.github.com/web3-storage/web3.storage/issues/168)) ([dff14f4](https://www.github.com/web3-storage/web3.storage/commit/dff14f4d1d3a533342e60d924c963d553ede2295))
+
 ## 1.0.0 (2021-07-26)
 
 
