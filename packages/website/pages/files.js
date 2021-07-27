@@ -62,6 +62,21 @@ const TableElement = ({ children, index = 0, checked, breakAll = true, centered,
 )
 
 /**
+ * @param {import('web3.storage/src/lib/interface').Pin[]} pins
+ * @returns {import('web3.storage/src/lib/interface').Pin['status'] | 'Queuing'}
+ */
+const getBestPinStatus = pins => {
+  const pin = pins.find(byStatus('Pinned')) || pins.find(byStatus('Pinning')) || pins.find(byStatus('PinQueued'))
+  return pin ? pin.status : 'Queuing'
+}
+
+/**
+ * @param {import('web3.storage/src/lib/interface').Pin['status']} status
+ * @returns {(pin: import('web3.storage/src/lib/interface').Pin) => boolean}
+ */
+const byStatus = status => pin => pin.status === status
+
+/**
  * @param {Object} props
  * @param {Upload} props.upload
  * @param {number} props.index
@@ -71,13 +86,7 @@ const TableElement = ({ children, index = 0, checked, breakAll = true, centered,
 const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
   const checked = selectedFiles.includes(upload.cid)
   const sharedArgs = { index, checked }
-
-  let pinStatus = '-'
-  if (upload.pins.length) {
-    pinStatus = upload.pins.some(p => p.status === 'Pinned')
-      ? 'Pinned'
-      : upload.pins[0].status
-  }
+  const pinStatus = getBestPinStatus(upload.pins)
 
   const deals = upload.deals
     .filter(d => d.status !== 'Queued')
