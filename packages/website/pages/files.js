@@ -136,7 +136,7 @@ export default function Files({ user }) {
   const initialFiles = [];
 
   const [selectedFiles, setSelectedFiles] = useState(/** @type string[] */ initialFiles)
-  const [size] = useState(25)
+  const [size] = useState(25 + 1)
   const [befores, setBefores] = useState([new Date().toISOString()])
   const queryClient = useQueryClient()
   const queryParams = { before: befores[0], size }
