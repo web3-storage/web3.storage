@@ -14,7 +14,7 @@ const config = new Conf({
 })
 
 /**
- * Get a the API client config
+ * Get the API client config
  * @param {object} opts
  * @param {string} [opts.api]
  * @param {string} [opts.token]
@@ -106,13 +106,13 @@ export async function get (cid, opts) {
 /**
  * Print out all the uploads in your account by data created
  *
- * @param {object} opts
+ * @param {object} [opts]
  * @param {string} [opts.api]
  * @param {string} [opts.token]
  * @param {number} [opts.size] number of results to return per page
  * @param {string} [opts.before] list items uploaded before this iso date string
  */
-export async function list (opts) {
+export async function list (opts = {}) {
   let count = 0
   for await (const res of paginator(Web3Storage.list, opts)) {
     if (!res.ok) {
