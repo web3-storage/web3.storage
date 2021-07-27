@@ -104,8 +104,8 @@ const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
 
   if (!upload.deals.length) {
     deals.push(
-      <span key='enqueuing' title='Upload is being added to an aggregate and waiting to join the deal queue.'>
-        Enqueuing
+      <span key='queuing' title='Upload is being added to an aggregate and waiting to join the deal queue.'>
+        Queuing
       </span>
     )
   }
