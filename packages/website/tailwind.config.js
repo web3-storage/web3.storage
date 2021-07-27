@@ -24,6 +24,7 @@ module.exports = {
         "w3storage-black": '#1f1817',
         "w3storage-blue-dark": '#0b0a45',
         "w3storage-blue-desaturated": '#2d2d65',
+        "w3storage-blue-desaturated-bright": '#3f3f75',
         "w3storage-blue-bright": '#00a7ff',
         "w3storage-white": '#ffffff',
         "w3storage-background": '#fff2ec'
