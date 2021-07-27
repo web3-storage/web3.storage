@@ -4,7 +4,12 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import Layout from '../components/layout.js'
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 60 * 1000 } },
+  defaultOptions: { 
+    queries: { 
+      refetchOnWindowFocus: false,
+      staleTime: 60 * 1000
+    }
+  },
 })
 
 /**
