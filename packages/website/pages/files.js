@@ -245,7 +245,7 @@ export default function Files({ user }) {
 
   const showCopiedMessage = () => {
     setCopied(true)
-    setTimeout(() => setCopied(false), 8000)
+    setTimeout(() => setCopied(false), 2 * 1000)
   }
 
   const FilesTable = () => (
