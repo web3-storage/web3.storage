@@ -245,7 +245,7 @@ export default function Files({ user }) {
 
   const showCopiedMessage = () => {
     setCopied(true)
-    setTimeout(() => setCopied(false), 2 * 1000)
+    setTimeout(() => setCopied(false), 4 * 1000)
   }
 
   const FilesTable = () => (
@@ -354,7 +354,7 @@ export default function Files({ user }) {
         </When>
       </div>
       <div className={clsx(
-        'fixed bottom-0 left-0 right-0 bg-w3storage-blue-dark text-w3storage-white p-4 text-center appear-bottom', 
+        'fixed bottom-0 left-0 right-0 bg-w3storage-blue-dark text-w3storage-white p-4 text-center appear-bottom-then-go-away', 
         !copied && 'hidden')
       }>
         Copied CID to clipboard!
