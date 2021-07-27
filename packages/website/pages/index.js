@@ -35,7 +35,7 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <main className="z-10">
+      <main className="z-10 transform-gpu">
         <WhyWeb3Storage />
         <GetStarted />
       </main>
@@ -107,7 +107,7 @@ retrieveFiles()
 
   return (
     <>
-      <div className="layout-margins pt-24">
+      <div className="layout-margins mt-24 bg-w3storage-background">
         <h2 className="text-w3storage-purple text-center bg-w3storage-background border-2 border-w3storage-red px-5 lg:px-10 py-3 lg:py-6 w-max max-w-full mx-auto">
           Why build on Web3.Storage?
         </h2>
@@ -155,7 +155,9 @@ retrieveFiles()
             <p className="max-w-xs mb-8">
               Build applications with data persisted by Filecoin and available over IPFS. Get started in minutes with this simple interface.
             </p>
-            <a href="https://docs.web3.storage/#quickstart" className="font-bold">{'Learn more >'}</a>
+            <a href="https://docs.web3.storage/#quickstart" className="font-bold underline" target="_blank" rel="noreferrer">
+              Follow the Quickstart Guide
+            </a>
           </div>
           <div className="relative w-full md:mr-12">
             <div className="text-white pl-6 xl:pl-0">

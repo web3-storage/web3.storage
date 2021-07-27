@@ -147,7 +147,8 @@ body {
 
 @screen md {
   .layout-margins {
-      margin: 0 4%;
+      margin-left: 4%;
+      margin-right: 4%;
   }
 
   .md\:layout-margins {
