@@ -199,3 +199,9 @@ body {
 .appear-bottom-then-go-away {
   animation: appear-bottom-then-go-away 3s ease-in-out both;
 }
+
+.prose h1 > a,
+.prose h2 > a,
+.prose h3 > a {
+  text-decoration: none;
+}
