@@ -127,6 +127,8 @@ jobs:
         uses: web3-storage/wrangler-action@node16
         env:
           SENTRY_TOKEN: ${{ secrets.PROD_SENTRY_TOKEN}}
+          SENTRY_TOKEN: ${{ secrets.PROD_SENTRY_PROJECT}}
+          SENTRY_TOKEN: ${{ secrets.PROD_SENTRY_UPLOAD}}
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           workingDirectory: 'packages/api'
