@@ -6,7 +6,7 @@ import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { uploadPost } from './upload.js'
-import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, withAuth } from './user.js'
+import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userStorageGet, withAuth } from './user.js'
 import { metricsGet } from './metrics.js'
 import { notFound } from './utils/json-response.js'
 
@@ -26,6 +26,7 @@ router.post('/user/tokens', withCorsHeaders(withAuth(userTokensPost)))
 router.delete('/user/tokens/:id', withCorsHeaders(withAuth(userTokensDelete)))
 router.get('/user/uploads', withCorsHeaders(withAuth(userUploadsGet)))
 router.delete('/user/uploads/:cid', withCorsHeaders(withAuth(userUploadsDelete)))
+router.get('/user/storage', withCorsHeaders(withAuth(userStorageGet)))
 
 // Monitoring
 router.get('/metrics', withCorsHeaders(metricsGet))

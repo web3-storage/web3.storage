@@ -88,7 +88,8 @@ export async function uploadPost (request, env) {
       name,
       type,
       pins,
-      dagSize
+      dagSize,
+      chunkSize: dagSize
     }
   })
 
