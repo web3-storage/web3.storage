@@ -28,10 +28,12 @@ const UPDATE_DAG_SIZE = gql`
   }
 `
 
-// Duration between status check poll.
+// Duration between status check polls in ms.
 const PIN_STATUS_CHECK_INTERVAL = 50
+// Max time in ms to spend polling for an OK status.
+const MAX_PIN_STATUS_CHECK_TIME = 5000
 // Pin statuses considered OK.
-const PIN_OK_STATUS = ['PinQueued', 'Pinning', 'Pinned']
+const PIN_OK_STATUS = ['Pinned', 'Pinning', 'PinQueued']
 
 // TODO: ipfs should let us ask the size of a CAR file.
 // This consumes the CAR response from ipfs to find the content-length.
@@ -119,6 +121,7 @@ export async function carPost (request, env, ctx) {
   // Retrieve current pin status and info about the nodes pinning the content.
   // Keep querying Cluster until one of the nodes reports something other than
   // Unpinned i.e. PinQueued or Pinning or Pinned.
+  const start = Date.now()
   while (true) {
     const { peerMap } = await env.cluster.status(cid)
 
@@ -129,6 +132,9 @@ export async function carPost (request, env, ctx) {
 
     const isOk = pins.some(p => PIN_OK_STATUS.includes(p.status))
     if (isOk) break
+
+    // If it has been more than 5 seconds, take whatever status is going.
+    if (Date.now() - start > MAX_PIN_STATUS_CHECK_TIME) break
     await new Promise(resolve => setTimeout(resolve, PIN_STATUS_CHECK_INTERVAL))
   }
 
