@@ -14,7 +14,7 @@ export default function Hero() {
     <div className="relative w-full z-0" style={style}>
       <div className="md:layout-margins" style={{ height: '40rem' }}>
         <div className="absolute top-0 right-0 left-0 bottom-0 flex items-center z-n1">
-          <HeroIllustration className="absolute left-1/2 transform -translate-x-1/2 top-0"/>
+          <HeroIllustration className="absolute left-1/2 transform -translate-x-1/2 top-0 w-screen"/>
           <HeroBackgroundLeft className="absolute left-0 bottom-0 h-full"/>
           <HeroBackgroundRight className="absolute right-0 bottom-0 h-full "/>
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 bg-w3storage-red w-full h-full" style={{ maxWidth: 'calc(100vw - 200px)' }} />
