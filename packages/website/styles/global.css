@@ -157,7 +157,8 @@ body {
 
 /* 1440 max width + 58px left & right padding */
 @media only screen and (min-width: 1680px) {
-  .layout-margins {
+  .layout-margins,
+  .md\:layout-margins {
       @apply max-w-screen-2xl mx-auto;
   }
 }
