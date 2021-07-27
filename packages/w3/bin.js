@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import sade from 'sade'
-import { get, put, status, token, getPkg } from './index.js'
+import { get, list, put, status, token, getPkg } from './index.js'
 
 const cli = sade('w3')
 
@@ -20,6 +20,12 @@ cli.command('put <path>')
   .describe('Upload a file or directory to web3.storage')
   .option('--no-wrap', 'Dont wrap input files with a directory.')
   .action(put)
+
+cli.command('list')
+  .describe('list all the uploads in your account')
+  .option('--json', 'Format as newline delimted JSON')
+  .option('--cid', 'Only print the root cid per upload')
+  .action(list)
 
 cli.command('get <cid>')
   .describe('Fetch and verify files from web3.storage')

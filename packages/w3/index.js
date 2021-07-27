@@ -1,9 +1,10 @@
-import fs from 'fs'
-import { writeFiles } from 'ipfs-car/unpack/fs'
 import { Web3Storage, filesFromPath } from 'web3.storage'
+import { writeFiles } from 'ipfs-car/unpack/fs'
+import parseLink from 'parse-link-header'
 import enquirer from 'enquirer'
 import Conf from 'conf'
 import ora from 'ora'
+import fs from 'fs'
 
 const API = 'https://api.web3.storage'
 
@@ -13,12 +14,12 @@ const config = new Conf({
 })
 
 /**
- * Get a new API client configured either from opts or config
+ * Get a the API client config
  * @param {object} opts
  * @param {string} [opts.api]
  * @param {string} [opts.token]
  */
-function getClient ({
+function getClientOpts ({
   api = config.get('api') || API,
   token = config.get('token')
 }) {
@@ -31,7 +32,17 @@ function getClient ({
     // note if we're using something other than prod.
     console.log(`⁂ using ${endpoint.hostname}`)
   }
-  return new Web3Storage({ token, endpoint })
+  return { token, endpoint }
+}
+
+/**
+ * Get a new API client configured either from opts or config
+ * @param {object} opts
+ * @param {string} [opts.api]
+ * @param {string} [opts.token]
+ */
+function getClient (opts) {
+  return new Web3Storage(getClientOpts(opts))
 }
 
 /**
@@ -90,6 +101,55 @@ export async function get (cid, opts) {
   const client = getClient(opts)
   const res = await client.get(cid)
   await writeFiles(res.unixFsIterator(), opts.output)
+}
+
+/**
+ * Print out all the uploads in your account by data created
+ *
+ * @param {object} opts
+ * @param {string} [opts.api]
+ * @param {string} [opts.token]
+ * @param {number} [opts.size] number of results to return per page
+ * @param {string} [opts.before] list items uploaded before this iso date string
+ */
+export async function list (opts) {
+  let count = 0
+  for await (const res of paginator(Web3Storage.list, opts)) {
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.statusText}`)
+    }
+    const page = await res.json()
+    if (page.length === 0) {
+      console.log('⁂ No uploads!')
+      console.log('⁂ Try out `w3 put <path to files>` to upload some')
+      break
+    }
+    if (count === 0 && !opts.json && !opts.cid) {
+      console.log(`  Content ID${Array.from(page[0].cid).slice(0, -10).fill(' ').join('')} Name`)
+    }
+    for (const item of page) {
+      count++
+      if (opts.json) {
+        console.log(JSON.stringify(item))
+      } else if (opts.cid) {
+        console.log(item.cid)
+      } else {
+        console.log(`⁂ ${item.cid} ${item.name}`)
+      }
+    }
+  }
+}
+
+async function * paginator (fn, opts) {
+  const service = getClientOpts(opts)
+  let res = await fn(service, opts)
+  yield res
+  let link = parseLink(res.headers.get('Link'))
+  while (link && link.next) {
+    res = await fn(service, link.next)
+    yield res
+    link = parseLink(res.headers.get('Link'))
+  }
 }
 
 /**

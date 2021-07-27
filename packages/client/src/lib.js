@@ -215,6 +215,20 @@ class Web3Storage {
     return res.json()
   }
 
+  /**
+   * @param {Service} service
+   * @param {{before: string, size: number}} opts
+   * @returns {Promise<Response>}
+   */
+  static async list ({ endpoint, token }, { before = new Date().toISOString(), size = 25 }) {
+    const search = new URLSearchParams({ before, size: size.toString() })
+    const url = new URL(`/user/uploads?${search}`, endpoint)
+    return fetch(url.toString(), {
+      method: 'GET',
+      headers: Web3Storage.headers(token)
+    })
+  }
+
   // Just a sugar so you don't have to pass around endpoint and token around.
 
   /**
@@ -258,6 +272,14 @@ class Web3Storage {
    */
   status (cid) {
     return Web3Storage.status(this, cid)
+  }
+
+  /**
+   * @param {{before: string, size: number}} opts
+   * @returns {Promise<Response>}
+   */
+  list (opts) {
+    return Web3Storage.list(this, opts)
   }
 }
 
