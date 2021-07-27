@@ -96,8 +96,16 @@ const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
   const queuedDeals = upload.deals.filter(d => d.status === 'Queued')
   if (queuedDeals.length) {
     deals.push(
-      <span key={upload.cid + '-pending'}>
+      <span key={upload.cid + '-pending'} title={`Upload is queued in ${queuedDeals.length} aggregate${queuedDeals.length > 1 ? 's' : ''} for deals.`}>
         {`${deals.length ? ', ' : ''}${queuedDeals.length} pending`}
+      </span>
+    )
+  }
+
+  if (!upload.deals.length) {
+    deals.push(
+      <span key='enqueuing' title='Upload is being added to an aggregate and waiting to join the deal queue.'>
+        Enqueuing
       </span>
     )
   }
@@ -115,9 +123,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
         <GatewayLink cid={upload.cid} />
       </TableElement>
       <TableElement {...sharedArgs} centered>{pinStatus}</TableElement>
-      <TableElement {...sharedArgs} breakAll={false}>
-        {deals.length ? deals : '-'}
-      </TableElement>
+      <TableElement {...sharedArgs} breakAll={false}>{deals}</TableElement>
       <TableElement {...sharedArgs} centered>
         {upload.dagSize ? filesize(upload.dagSize) : '-'}
       </TableElement>
