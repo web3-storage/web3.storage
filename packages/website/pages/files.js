@@ -182,12 +182,11 @@ export default function Files({ user }) {
   const queryParams = { before: befores[0], size }
   /** @type {[string, { before: string, size: number }]} */
   const queryKey = ['get-uploads', queryParams]
-  const { isLoading, isFetching, data } = useQuery(
+  const { isLoading, isFetching, data, refetch } = useQuery(
     queryKey,
     (ctx) => getUploads(ctx.queryKey[1]),
     {
       enabled: !!user,
-      refetchInterval: /* Every minute */ 60 * 1000 
     }
   )
 
@@ -321,7 +320,11 @@ export default function Files({ user }) {
                     {/* <Button small className="ml-2">
                       Export Deals
                     </Button> */}
+                    
                     <div className="w-35 ml-auto">
+                      <Button small onClick={() => refetch()}>Refresh</Button>
+                    </div>
+                    <div className="w-35 ml-4">
                       <Button href="/upload" small id="upload">Upload More Files</Button>
                     </div>
                   </div>
