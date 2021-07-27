@@ -175,3 +175,27 @@ body {
     width: 100%;
     overflow-x: auto;
 }
+
+.table-tooltip.rc-tooltip {
+  opacity: 1;
+}
+
+.table-tooltip .rc-tooltip-content {
+  position: relative;
+  bottom: 4px;
+}
+
+.table-tooltip .rc-tooltip-content .rc-tooltip-arrow {
+  border-top-color: #fc6553;
+}
+
+@keyframes appear-bottom-then-go-away {
+  from   { opacity: 1; transform: translateY(100%)  }
+  20%    { opacity: 1; transform: translateY(0)     }
+  80%    { opacity: 1; transform: translateY(0)     }
+  100%   { opacity: 0; transform: translateY(100%)  }
+}
+
+.appear-bottom-then-go-away {
+  animation: appear-bottom-then-go-away 3s ease-in-out both;
+}
