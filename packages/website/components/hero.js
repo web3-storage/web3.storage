@@ -9,7 +9,7 @@ import HeroBackgroundRight from '../illustrations/hero-background-right'
 
 export default function Hero() {
   /** @type {import('react').CSSProperties} */
-  const style = { overflowX: 'clip' , overflow: 'hidden' }
+  const style = { overflowX: 'clip' , overflow: 'hidden', overflowY: 'visible' }
   return (
     <div className="relative z-1" style={style}>
       <HeroIllustration className="absolute left-1/2 transform -translate-x-1/2 top-0" />
