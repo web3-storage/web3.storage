@@ -75,7 +75,7 @@ export default function Upload() {
   }
 
   return (
-    <main className="p-4 sm:px-16 mt-4 sm:mt-16 text-w3storage-purple h-full" {...getRootProps()}>
+    <main className="p-4 sm:px-16 mt-4 sm:mt-16 text-w3storage-purple h-full flex-grow" {...getRootProps()}>
       <div className="mw9 pv3 ph3 ph5-ns min-vh-100 flex flex-col items-center">
         <div className="p-6">
           <h2>Upload File</h2>

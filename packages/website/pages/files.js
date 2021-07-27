@@ -39,7 +39,7 @@ const QuestionMark = () => (
 )
 
 const TOOLTIPS = {
-  PIN_STATUS: (<span>Reports the status of a file or piece of data within the Web3.Storage lifecycle.</span>),
+  PIN_STATUS: (<span>Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes.</span>),
 
   CID: (<span>
     The <strong>c</strong>ontent <strong>id</strong>entifier for a file or a piece of data.<span> </span>
@@ -47,7 +47,7 @@ const TOOLTIPS = {
   </span>),
 
   STORAGE_PROVIDERS: (<span>
-    Computers on the Filecoin network with storage space available for rent. <span> </span>
+    Service providers offering storage capacity to the Filecoin network.<span> </span>
     <a href="https://docs.web3.storage/concepts/decentralized-storage/" target="_blank" className="underline" rel="noreferrer">Learn more</a> 
   </span>),
 }
@@ -93,8 +93,9 @@ const TableElement = ({ children, index = 0, checked, breakAll = true, centered,
  * @param {number} props.index
  * @param {function} props.toggle
  * @param {string[]} props.selectedFiles
+ * @param {function} props.showCopiedMessage
  */
-const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
+const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage }) => {
   const checked = selectedFiles.includes(upload.cid)
   const sharedArgs = { index, checked }
 
@@ -148,13 +149,13 @@ const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
       <TableElement {...sharedArgs} important>
         <div className="flex items-center justify-center">
           <GatewayLink cid={upload.cid} />
-          <CopyToClipboard text={upload.cid} >
-            <CopyIcon className="ml-2 cursor-pointer hover:opacity-80" fill="currentColor"/>
+          <CopyToClipboard text={upload.cid} onCopy={showCopiedMessage}>
+            <CopyIcon className="ml-2 cursor-pointer hover:opacity-80" width="16" fill="currentColor"/>
           </CopyToClipboard>
         </div>
       </TableElement>
       <TableElement {...sharedArgs} centered>{pinStatus}</TableElement>
-      <TableElement {...sharedArgs} breakAll={false}>{deals}</TableElement>
+      <TableElement {...sharedArgs} centered breakAll={false}>{deals}</TableElement>
       <TableElement {...sharedArgs} centered>
         {upload.dagSize ? filesize(upload.dagSize) : 'Calculating...'}
       </TableElement>
@@ -174,6 +175,8 @@ export default function Files({ user }) {
 
   const [selectedFiles, setSelectedFiles] = useState(/** @type string[] */ initialFiles)
   const [size] = useState(25 + 1)
+  const [copied, setCopied] = useState(false);
+
   const [befores, setBefores] = useState([new Date().toISOString()])
   const queryClient = useQueryClient()
   const queryParams = { before: befores[0], size }
@@ -240,6 +243,11 @@ export default function Files({ user }) {
     selectedFiles.length >= 1 ? setSelectedFiles([]) : setSelectedFiles(uploads.map(u => u.cid))
   }
 
+  const showCopiedMessage = () => {
+    setCopied(true)
+    setTimeout(() => setCopied(false), 8000)
+  }
+
   const FilesTable = () => (
     <table className="w-full mt-4">
       <thead>
@@ -276,7 +284,9 @@ export default function Files({ user }) {
       </thead>
       <tbody>
         {uploads.map((upload, index) =>
-          <UploadItem key={upload.cid} upload={upload} index={index} toggle={toggle} selectedFiles={selectedFiles} />
+          <UploadItem key={upload.cid} upload={upload} index={index} toggle={toggle}
+            selectedFiles={selectedFiles} showCopiedMessage={showCopiedMessage}
+          />
         )}
       </tbody>
     </table>
@@ -342,6 +352,12 @@ export default function Files({ user }) {
             </div>
           </>
         </When>
+      </div>
+      <div className={clsx(
+        'fixed bottom-0 left-0 right-0 bg-w3storage-blue-dark text-w3storage-white p-4 text-center appear-bottom', 
+        !copied && 'hidden')
+      }>
+        Copied CID to clipboard!
       </div>
     </main>
   )

@@ -188,3 +188,12 @@ body {
 .table-tooltip .rc-tooltip-content .rc-tooltip-arrow {
   border-top-color: #fc6553;
 }
+
+@keyframes appear-bottom {
+  from  { transform: translateY(100%) }
+  to    { transform: translateY(0)    }
+}
+
+.appear-bottom {
+  animation: appear-bottom 0.4s ease-in-out both;
+}
