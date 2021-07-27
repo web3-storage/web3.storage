@@ -187,6 +187,7 @@ export default function Files({ user }) {
     (ctx) => getUploads(ctx.queryKey[1]),
     {
       enabled: !!user,
+      refetchInterval: /* Every minute */ 60 * 1000 
     }
   )
 
