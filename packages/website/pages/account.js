@@ -15,7 +15,7 @@ import VerticalLines from '../illustrations/vertical-lines.js'
  export function getStaticProps() {
     return {
       props: {
-        title: 'Profile - Web3 Storage',
+        title: 'Account - Web3 Storage',
         redirectTo: '/',
         needsUser: true,
       },
@@ -25,7 +25,7 @@ import VerticalLines from '../illustrations/vertical-lines.js'
 /**
  * @param {import('../components/types.js').LayoutChildrenProps} props
  */
-export default function Profile({ user }) {
+export default function Account({ user }) {
   const [copied, setCopied] = useState('')
   const { data } = useQuery('get-tokens', getTokens, {
     enabled: !!user
@@ -56,7 +56,7 @@ export default function Profile({ user }) {
     <div className="relative overflow-hidden">
       <div className="layout-margins">
         <main className="max-w-screen-lg mx-auto my-4 lg:my-32 text-w3storage-purple">
-          <h3 className="mb-8">Your profile</h3>
+          <h3 className="mb-8">Your account</h3>
           {/* <div>
             <div className="typography-body-title font-medium">
               Storage Capacity: <span className="font-normal ml-2">300 GiB / 1 TiB</span>
