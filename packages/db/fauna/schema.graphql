@@ -26,6 +26,11 @@ type User {
   Creation date.
   """
   created: Time!
+
+  """
+  Used storage in bytes.
+  """
+  usedStorage: Long
 }
 
 """
@@ -462,6 +467,7 @@ input CreateUploadInput {
   type: UploadType!
   name: String
   dagSize: Long
+  chunkSize: Long!
   pins: [PinInput!]!
 }
 

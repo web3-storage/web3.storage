@@ -74,6 +74,10 @@ module.exports = ({ body }) => {
     return gqlOkResponse(require('../../fixtures/find-metrics.json'))
   }
 
+  if (body.query.includes('findUserByID')) {
+    return gqlOkResponse(require('../../fixtures/find-storage-by-user.json'))
+  }
+
   if (body.query.includes('findUploadsByUser')) {
     const res = require('../../fixtures/get-user-uploads/find-uploads-by-user.json')
     const size = body.variables.size

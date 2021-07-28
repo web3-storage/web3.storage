@@ -8,6 +8,7 @@ const {
   Let,
   Var,
   If,
+  Do,
   Update,
   Exists,
   Now,
@@ -17,8 +18,10 @@ const {
   Get,
   Match,
   IsNonEmpty,
+  IsNumber,
   Select,
-  Index
+  Index,
+  Subtract
 } = fauna
 
 const name = 'deleteUserUpload'
@@ -35,20 +38,41 @@ const body = Query(
         Let(
           {
             content: Get(Var('contentMatch')),
-            uploadMatch: Match(
-              Index('upload_by_user_and_content'),
-              Var('userRef'),
-              Select('ref', Var('content')),
-              true
-            )
+            dagSize: Select(['data', 'dagSize'], Var('content'))
           },
           If(
-            IsNonEmpty(Var('uploadMatch')),
-            Update(
-              Select(['ref'], Get(Var('uploadMatch'))),
-              { data: { deleted: Now() } }
+            IsNumber(Var('dagSize')),
+            Let(
+              {
+                uploadMatch: Match(
+                  Index('upload_by_user_and_content'),
+                  Var('userRef'),
+                  Select('ref', Var('content')),
+                  true
+                )
+              },
+              If(
+                IsNonEmpty(Var('uploadMatch')),
+                Do(
+                  // Update user storage size
+                  Update(Var('userRef'), {
+                    data: {
+                      usedStorage: Subtract(
+                        Select(['data', 'usedStorage'], Get(Var('userRef'))),
+                        Var('dagSize')
+                      )
+                    }
+                  }),
+                  // Flag upload as deleted
+                  Update(
+                    Select(['ref'], Get(Var('uploadMatch'))),
+                    { data: { deleted: Now() } }
+                  )
+                ),
+                Abort('upload not found')
+              )
             ),
-            Abort('not found')
+            Abort('dagSize not yet calculated')
           )
         ),
         Abort('not found')

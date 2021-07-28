@@ -146,6 +146,7 @@ export async function carPost (request, env, ctx) {
       cid,
       name,
       type: 'Car',
+      chunkSize: await getBlocksSize(blob),
       pins
     }
   })
@@ -183,6 +184,22 @@ export async function sizeOf (response) {
     // Number.MAX_SAFE_INTEGER = 9,007,199,254,740,991
     size += value.byteLength
   }
+  return size
+}
+
+/**
+ * Returns the sum of all block sizes in the received Car.
+ * @param {Blob} car
+ */
+async function getBlocksSize (car) {
+  const bytes = new Uint8Array(await car.arrayBuffer())
+  const reader = await CarReader.fromBytes(bytes)
+
+  let size = 0
+  for await (const block of reader.blocks()) {
+    size += block.bytes.byteLength
+  }
+
   return size
 }
 
