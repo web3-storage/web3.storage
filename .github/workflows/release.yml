@@ -168,7 +168,6 @@ jobs:
 
       - name: Deploy https://web3.storage
         if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'website' }}
-        # TODO: replace `--record preview` with `--record _dnslink` when we are ready!
-        run: npx dnslink-cloudflare --record preview --domain web3.storage --link /ipfs/${{ steps.ipfs.outputs.cid }}
+        run: npx dnslink-cloudflare --record _dnslink --domain web3.storage --link /ipfs/${{ steps.ipfs.outputs.cid }}
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
