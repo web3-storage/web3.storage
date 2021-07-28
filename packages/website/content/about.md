@@ -20,7 +20,7 @@ Our aim today is to provide a user-friendly experience that massively reduces th
 
 ### [Storage term and data limits](#storage-term-and-data-limits)
 
-Web3.Storage supports uploads up to 32GiB in size per request, and currently has a cap of 1TiB of storage per account. Data limits can be increased at no cost by submitting a request via your Profile page when logged in. Data stored via Web3.Storage will be stored at no cost to the user on IPFS indefinitely for as long as Protocol Labs, Inc. continues to operate the service, and stored Filecoin until the expiry of the respective deals (see below for details).This service is operated for free relying on public infrastructure maintained by Protocol Labs and [Filecoin Plus](https://docs.filecoin.io/store/filecoin-plus/) to fund storage deals.
+Web3.Storage supports uploads up to 32GiB in size per request, and currently has a cap of 1TiB of storage per account. Data limits can be increased at no cost by submitting a request via your Account page when logged in. Data stored via Web3.Storage will be stored at no cost to the user on IPFS indefinitely for as long as Protocol Labs, Inc. continues to operate the service, and stored Filecoin until the expiry of the respective deals (see below for details).This service is operated for free relying on public infrastructure maintained by Protocol Labs and [Filecoin Plus](https://docs.filecoin.io/store/filecoin-plus/) to fund storage deals.
 
 Protocol Labs, Inc. reserves the right to terminate Web3.Storage at its sole discretion or to transfer management of deals to a third party or smart contract.
 
