@@ -219,46 +219,39 @@ class Web3Storage {
 
   /**
    * @param {Service} service
-   * @param {{before: string, size: number}} opts
+   * @param {object} [opts]
+   * @param {string} [opts.before] list items uploaded before this ISO 8601 date string
+   * @param {number} [opts.maxResults] maximum number of results to return
    * @returns {AsyncIterable<Upload>}
    */
-  static async * listIterator (service, opts) {
-    for await (const res of paginator(Web3Storage.listPage, service, opts)) {
-      if (!res.ok) {
-        throw new Error(`${res.status} ${res.statusText}`)
-      }
-      const page = await res.json()
-      for (const upload of page) {
-        yield upload
-      }
-    }
-  }
-
-  /**
-   * @param {Service} service
-   * @param {{before: string, size: number}} opts
-   * @returns {Promise<Array<Upload>>}
-   */
-  static async list (service, opts) {
-    const uploads = []
-    for await (const item of Web3Storage.listIterator(service, opts)) {
-      uploads.push(item)
-    }
-    return uploads
-  }
-
+  static async * list (service, { before = new Date().toISOString(), maxResults = Infinity } = {}) {
   /**
    * @param {Service} service
    * @param {{before: string, size: number}} opts
    * @returns {Promise<Response>}
    */
-  static async listPage ({ endpoint, token }, { before = new Date().toISOString(), size = 25 }) {
-    const search = new URLSearchParams({ before, size: size.toString() })
-    const url = new URL(`/user/uploads?${search}`, endpoint)
-    return fetch(url.toString(), {
-      method: 'GET',
-      headers: Web3Storage.headers(token)
-    })
+    function listPage ({ endpoint, token }, { before, size }) {
+      const search = new URLSearchParams({ before, size: size.toString() })
+      const url = new URL(`/user/uploads?${search}`, endpoint)
+      return fetch(url.toString(), {
+        method: 'GET',
+        headers: Web3Storage.headers(token)
+      })
+    }
+    let count = 0
+    const size = maxResults > 100 ? 100 : maxResults
+    for await (const res of paginator(listPage, service, { before, size })) {
+      if (!res.ok) {
+        throw new Error(`${res.status} ${res.statusText}`)
+      }
+      const page = await res.json()
+      for (const upload of page) {
+        if (++count > maxResults) {
+          return
+        }
+        yield upload
+      }
+    }
   }
 
   // Just a sugar so you don't have to pass around endpoint and token around.
@@ -307,17 +300,23 @@ class Web3Storage {
   }
 
   /**
-   * @param {{before: string, size: number}} opts
+   * Find all uploads for this account. Use a `for await...of` loop to fetch them all.
+   * @example
+   * Fetch all the uploads
+   * ```js
+   * const uploads = []
+   * for await (const item of client.list()) {
+   *    uploads.push(item)
+   * }
+   * ```
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of
+   * @param {object} [opts]
+   * @param {string} [opts.before] list items uploaded before this ISO 8601 date string
+   * @param {number} [opts.maxResults] maximum number of results to return
+   * @returns {AsyncIterable<Upload>}
    */
   list (opts) {
     return Web3Storage.list(this, opts)
-  }
-
-  /**
-  * @param {{before: string, size: number}} opts
-  */
-  listIterator (opts) {
-    return Web3Storage.listIterator(this, opts)
   }
 }
 

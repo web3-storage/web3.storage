@@ -107,7 +107,7 @@ export async function list (opts = {}) {
   const client = getClient(opts)
   let count = 0
   let bytes = 0
-  for await (const item of client.listIterator({ size: 100 })) {
+  for await (const item of client.list()) {
     if (opts.json) {
       console.log(JSON.stringify(item))
     } else if (opts.cid) {

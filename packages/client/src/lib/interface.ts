@@ -45,6 +45,20 @@ export interface API {
    * Get info on Filecoin deals and IPFS pins that a CID is replicated in.
    */
   status(service: Service, cid: CIDString): Promise<Status | undefined>
+
+  /**
+   * Find all uploads for this account. Use a `for await...of` loop to fetch them all.
+   * @example
+   * Fetch all the uploads
+   * ```js
+   * const uploads = []
+   * for await (const item of client.list()) {
+   *    uploads.push(item)
+   * }
+   * ```
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of}
+   */
+  list(service: Service, opts: {before?: string, maxResults?: number}):  AsyncIterable<Upload>
 }
 
 export interface Filelike {
