@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.1.1](https://www.github.com/web3-storage/web3.storage/compare/website-v1.1.0...website-v1.1.1) (2021-07-28)
+
+
+### Bug Fixes
+
+* capitalizations ([befeab0](https://www.github.com/web3-storage/web3.storage/commit/befeab0ed7aa889d3ef4c92156f8be991a0c2021))
+
 ## [1.1.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.0.0...website-v1.1.0) (2021-07-28)
 
 
