@@ -78,17 +78,15 @@ export default function Account({ user }) {
             <div className="mt-10">
               <h3>Getting started</h3>
               <div className="flex gap-x-10 mt-10">
-                {tokens.length ? null : (
-                  <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
-                    <h3>Create your first API token</h3>
-                    <p>
-                      Generate an API Token to embed into your projects!
-                    </p>
-                    <Button href='/new-token'>
-                      Create an API Token
-                    </Button>
-                  </div>
-                )}
+                <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
+                  <h3>Create your first API token</h3>
+                  <p>
+                    Generate an API Token to embed into your projects!
+                  </p>
+                  <Button href='/new-token'>
+                    Create an API Token
+                  </Button>
+                </div>
                 <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
                   <h3>Start building</h3>
                   <p>
