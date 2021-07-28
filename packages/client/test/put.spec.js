@@ -41,6 +41,16 @@ describe('put', () => {
     }
   })
 
+  it('errors with a received CID that is not the same as generated in the client', async function () {
+    const client = new Web3Storage({ token, endpoint })
+    try {
+      await client.put([new File(['test-compromised-service'], 'file.txt')], { maxRetries: 1 })
+      assert.unreachable('should have thrown')
+    } catch (err) {
+      assert.match(err.message, /root CID mismatch/)
+    }
+  })
+
   it('adds files', async () => {
     const client = new Web3Storage({ token, endpoint })
     const files = prepareFiles()

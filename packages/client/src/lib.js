@@ -109,6 +109,7 @@ class Web3Storage {
       }
     }
 
+    /** @type {string} */
     let carRoot
     const blockstore = new Blockstore()
 
@@ -150,11 +151,15 @@ class Web3Storage {
               })
               const res = await request.json()
 
-              if (request.ok) {
-                return res.cid
-              } else {
+              if (!request.ok) {
                 throw new Error(res.message)
               }
+
+              if (res.cid !== carRoot) {
+                throw new Error(`root CID mismatch, expected: ${carRoot}, received: ${res.cid}`)
+              }
+
+              return res.cid
             },
             { retries: maxRetries }
           )

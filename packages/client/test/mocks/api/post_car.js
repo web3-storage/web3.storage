@@ -39,6 +39,17 @@ module.exports = async ({ body, headers }) => {
     }
   }
 
+  // Simulate compromised service
+  if (carRootCid === 'bafybeibftjdtqsawgb76focdainjcahnnjikyco4h3kqnrnkgdbqufhoyq') {
+    return {
+      statusCode: 200,
+      body: {
+        ok: true,
+        cid: 'bafybeid7s4osysgv2cq7rpngnigcbdqlmaz3rbm52zefmzin64zf5b5zga'
+      }
+    }
+  }
+
   return {
     statusCode: 200,
     body: {
