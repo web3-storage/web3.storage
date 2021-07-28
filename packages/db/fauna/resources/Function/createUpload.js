@@ -78,15 +78,6 @@ const body = Query(
                     })
                   },
                   Do(
-                    // Update user storage size
-                    Update(Var('userRef'), {
-                      data: {
-                        usedStorage: Add(
-                          Select(['usedStorage'], Get(Var('userRef')), 0),
-                          Select(['chunkSize'], Var('data'))
-                        )
-                      }
-                    }),
                     Foreach(
                       Select('pins', Var('data')),
                       Lambda(
@@ -98,6 +89,15 @@ const body = Query(
                         })
                       )
                     ),
+                    // Update user storage size
+                    Update(Var('userRef'), {
+                      data: {
+                        usedStorage: Add(
+                          Select(['usedStorage'], Get(Var('userRef')), 0),
+                          Select(['chunkSize'], Var('data'))
+                        )
+                      }
+                    }),
                     Var('upload')
                   )
                 )
@@ -133,15 +133,6 @@ const body = Query(
                 })
               },
               Do(
-                // Update user storage size
-                Update(Var('userRef'), {
-                  data: {
-                    usedStorage: Add(
-                      Select(['data', 'usedStorage'], Get(Var('userRef')), 0),
-                      Select(['chunkSize'], Var('data'))
-                    )
-                  }
-                }),
                 Foreach(
                   Select('pins', Var('data')),
                   Lambda(
@@ -153,6 +144,15 @@ const body = Query(
                     })
                   )
                 ),
+                // Update user storage size
+                Update(Var('userRef'), {
+                  data: {
+                    usedStorage: Add(
+                      Select(['data', 'usedStorage'], Get(Var('userRef')), 0),
+                      Select(['chunkSize'], Var('data'))
+                    )
+                  }
+                }),
                 Var('upload')
               )
             )

@@ -56,17 +56,21 @@ const body = Query(
                 IsNonEmpty(Var('uploadMatch')),
                 Do(
                   // Update user storage size
-                  Subtract(
-                    Select(['data', 'usedStorage'], Get(Var('userRef'))),
-                    Var('dagSize')
-                  ),
+                  Update(Var('userRef'), {
+                    data: {
+                      usedStorage: Subtract(
+                        Select(['data', 'usedStorage'], Get(Var('userRef'))),
+                        Var('dagSize')
+                      )
+                    }
+                  }),
                   // Flag upload as deleted
                   Update(
                     Var('upload'),
                     { data: { deleted: Now() } }
                   )
                 ),
-                Abort('not found')
+                Abort('upload not found')
               )
             ),
             Abort('dagSize not yet calculated')
