@@ -149,7 +149,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
   return (
     <tr>
       <td className="w-8">
-        <Checkbox className="mr-2" checked={checked} onChange={() => toggle(upload.cid)}/>
+        <Checkbox className="mr-2" checked={checked} disabled={!upload.dagSize} disabledText='You may only delete after the upload is complete' onChange={() => toggle(upload.cid)}/>
       </td>
       <TableElement {...sharedArgs}>
         <span title={upload.created} className="break-normal">{formatTimestamp(upload.created)}</span>
@@ -249,7 +249,9 @@ export default function Files({ user }) {
   }
 
   const toggleAll = () => {
-    selectedFiles.length >= 1 ? setSelectedFiles([]) : setSelectedFiles(uploads.map(u => u.cid))
+    selectedFiles.length >= 1
+      ? setSelectedFiles([])
+      : setSelectedFiles(uploads.filter(u => Boolean(u.dagSize)).map(u => u.cid))
   }
 
   const showCopiedMessage = () => {
@@ -263,7 +265,7 @@ export default function Files({ user }) {
         <tr>
           { uploads.length > 0 && (
           <th className="w-8">
-            <Checkbox className="mr-2" checked={selectedFiles.length === uploads.length} onChange={toggleAll} />
+            <Checkbox className="mr-2" checked={selectedFiles.length === uploads.filter(u => Boolean(u.dagSize)).length} disabled={uploads.every(upload => !upload.dagSize)} onChange={toggleAll} />
           </th> )}
           <TableHeader>Timestamp</TableHeader>
           <TableHeader>Name</TableHeader>
