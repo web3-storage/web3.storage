@@ -19,11 +19,14 @@
     "mock:db": "smoke -p 9086 test/mocks/db"
   },
   "devDependencies": {
-    "@web-std/form-data": "^2.1.0",
     "@nftstorage/ipfs-cluster": "^3.1.2",
+    "@sentry/webpack-plugin": "^1.16.0",
     "@types/mocha": "^8.2.2",
+    "@web-std/form-data": "^2.1.0",
     "assert": "^2.0.0",
     "buffer": "^6.0.3",
+    "dotenv": "^10.0.0",
+    "git-revision-webpack-plugin": "^5.0.0",
     "ipfs-car": "^0.5.3",
     "ipfs-unixfs-importer": "^8.0.0",
     "npm-run-all": "^4.1.5",

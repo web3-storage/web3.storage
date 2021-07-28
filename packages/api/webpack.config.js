@@ -1,20 +1,40 @@
+import dotenv from 'dotenv'
 import { createRequire } from 'module'
+import SentryWebpackPlugin from '@sentry/webpack-plugin'
+import { GitRevisionPlugin } from 'git-revision-webpack-plugin'
 import webpack from 'webpack'
 import path from 'path'
 
+dotenv.config({
+  path: path.resolve(process.cwd(), '.env.local')
+})
+
+const gitRevisionPlugin = new GitRevisionPlugin()
 const __dirname = path.dirname(new URL(import.meta.url).pathname)
 const require = createRequire(__dirname)
 
 export default {
   target: 'webworker',
   mode: 'development',
-  devtool: 'cheap-module-source-map', // avoid "eval": Workers environment doesn't allow it
+  devtool: 'source-map',
   plugins: [
     new webpack.ProvidePlugin({
       process: 'process/browser.js',
       Buffer: ['buffer', 'Buffer']
-    })
-  ],
+    }),
+    new webpack.DefinePlugin({
+      VERSION: JSON.stringify(gitRevisionPlugin.version())
+    }),
+    process.env.SENTRY_UPLOAD === 'true' &&
+      new SentryWebpackPlugin({
+        release: gitRevisionPlugin.version(),
+        include: './dist',
+        urlPrefix: '/',
+        org: 'protocol-labs-it',
+        project: process.env.SENTRY_PROJECT,
+        authToken: process.env.SENTRY_TOKEN
+      })
+  ].filter(Boolean),
   stats: 'minimal',
   resolve: {
     fallback: {
