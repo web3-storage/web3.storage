@@ -78,7 +78,9 @@ async function fetchCar (gateway, request, ctx, init = {}) {
   // gateway does not support `carversion` yet.
   // using it now means we can skip the cache if it is supported in the future
   const url = new URL(`/api/v0/dag/export?arg=${cid}&carversion=1`, gateway)
-  res = await fetch(url, { method: 'POST', ...init })
+  // TODO: remove when Pinata gateway supports POST.
+  const method = gateway === GATEWAY ? 'GET' : 'POST'
+  res = await fetch(url, { method, ...init })
   if (!res.ok) {
     // bail early. dont cache errors.
     return res
