@@ -28,7 +28,7 @@
     "ipfs-car": "^0.5.3",
     "ora": "^5.4.1",
     "sade": "^1.7.4",
-    "web3.storage": "^2.0.0"
+    "web3.storage": "^3.0.0"
   },
   "devDependencies": {
     "execa": "^5.1.1",

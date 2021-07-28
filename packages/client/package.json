@@ -39,13 +39,16 @@
     "files-from-path": "^0.2.0",
     "ipfs-car": "^0.5.3",
     "p-retry": "^4.5.0",
+    "parse-link-header": "^1.0.1",
     "streaming-iterables": "^6.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@types/mocha": "8.2.2",
+    "@types/parse-link-header": "^1.0.0",
     "bundlesize": "^0.18.1",
+    "cors": "^2.8.5",
     "del-cli": "^4.0.0",
     "hundreds": "0.0.9",
     "mocha": "8.3.2",

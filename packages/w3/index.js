@@ -1,9 +1,9 @@
-import fs from 'fs'
-import { writeFiles } from 'ipfs-car/unpack/fs'
 import { Web3Storage, filesFromPath } from 'web3.storage'
+import { writeFiles } from 'ipfs-car/unpack/fs'
 import enquirer from 'enquirer'
 import Conf from 'conf'
 import ora from 'ora'
+import fs from 'fs'
 
 const API = 'https://api.web3.storage'
 
@@ -17,17 +17,19 @@ const config = new Conf({
  * @param {object} opts
  * @param {string} [opts.api]
  * @param {string} [opts.token]
+ * @param {boolean} [opts.json]
  */
 function getClient ({
   api = config.get('api') || API,
-  token = config.get('token')
+  token = config.get('token'),
+  json = false
 }) {
   if (!token) {
     console.log('! run `w3 token` to set an API token to use')
     process.exit(-1)
   }
   const endpoint = new URL(api)
-  if (api !== API) {
+  if (api !== API && !json) {
     // note if we're using something other than prod.
     console.log(`⁂ using ${endpoint.hostname}`)
   }
@@ -90,6 +92,43 @@ export async function get (cid, opts) {
   const client = getClient(opts)
   const res = await client.get(cid)
   await writeFiles(res.unixFsIterator(), opts.output)
+}
+
+/**
+ * Print out all the uploads in your account by data created
+ *
+ * @param {object} [opts]
+ * @param {string} [opts.api]
+ * @param {string} [opts.token]
+ * @param {number} [opts.size] number of results to return per page
+ * @param {string} [opts.before] list items uploaded before this iso date string
+ */
+export async function list (opts = {}) {
+  const client = getClient(opts)
+  let count = 0
+  let bytes = 0
+  for await (const item of client.list()) {
+    if (opts.json) {
+      console.log(JSON.stringify(item))
+    } else if (opts.cid) {
+      console.log(item.cid)
+    } else {
+      if (count === 0) {
+        console.log(`  Content ID${Array.from(item.cid).slice(0, -10).fill(' ').join('')}  Name`)
+      }
+      console.log(`⁂ ${item.cid}  ${item.name}`)
+    }
+    bytes += item.dagSize
+    count++
+  }
+  if (!opts.json && !opts.cid) {
+    if (count === 0) {
+      console.log('⁂ No uploads!')
+      console.log('⁂ Try out `w3 put <path to files>` to upload some')
+    } else {
+      console.log(`  ${count} item${count === 1 ? '' : 's'} – ${filesize(bytes)} stored `)
+    }
+  }
 }
 
 /**

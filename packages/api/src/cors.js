@@ -21,7 +21,8 @@ export function corsOptions (request) {
       // Allow all future content Request headers to go back to browser
       // such as Authorization (Bearer) or X-Client-Name-Version
       'Access-Control-Allow-Headers':
-        headers.get('Access-Control-Request-Headers') || ''
+        headers.get('Access-Control-Request-Headers') || '',
+      'Access-Control-Expose-Headers': 'Link'
     }
 
     return new Response(null, {
@@ -64,5 +65,6 @@ export function addCorsHeaders (request, response) {
   } else {
     response.headers.set('Access-Control-Allow-Origin', '*')
   }
+  response.headers.set('Access-Control-Expose-Headers', 'Link')
   return response
 }
