@@ -57,6 +57,9 @@ export function withCorsHeaders (handler) {
  * @returns {Response}
  */
 export function addCorsHeaders (request, response) {
+  // Clone the response so that it's no longer immutable
+  response = new Response(response.body)
+
   const origin = request.headers.get('origin')
   if (origin) {
     response.headers.set('Access-Control-Allow-Origin', origin)
