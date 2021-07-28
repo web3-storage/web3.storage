@@ -11,10 +11,14 @@
  * see: https://github.com/sinedied/smoke#middleware-hooks
  */
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 module.exports = {
   // middlewares to be executed before the request is processed
   before: [
+    cors({
+      exposedHeaders: 'Link'
+    }),
     bodyParser.raw({
       limit: '101MB', // Cloudflare limit is 100MB so larger than that and you're gonna have a bad time anyway.
       type: ['application/car', 'application/octet-stream']

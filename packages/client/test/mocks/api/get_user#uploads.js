@@ -1,6 +1,6 @@
 module.exports = (opts) => {
   const { headers, query } = opts
-  const res = require('../../fixtures/user/uploads-101.json')
+  const res = require('../../fixtures/user/uploads-102.json')
   if (headers.authorization === 'Bearer good') {
     const { size, before } = query
     if (size > 100) {
@@ -10,13 +10,13 @@ module.exports = (opts) => {
       }
     }
     const body = JSON.parse(JSON.stringify(res)).filter(u => u.created < before).slice(0, size)
-    const headers = body.length === 100
+    const responseHeaders = body.length === 100
       ? { Link: `</user/uploads/?size=${size}&before=${body[body.length - 1].created}>; rel="next"` }
       : {}
     return {
       statusCode: 200,
       body,
-      headers
+      headers: responseHeaders
     }
   }
   if (headers.authorization === 'Bearer error') {

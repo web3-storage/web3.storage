@@ -99,5 +99,6 @@
   {"name":"web3-storage-web3.storage-101-4835fdc4","cid":"bafybeifyf2rsnsczayexpj3x32bzoet7xsvpkaird6fxq4jblpxeaqepfe","created":"2021-07-24T21:35:52.256005Z","dagSize":2252998,"pins":[{"status":"Pinned"},{"status":"Pinned"},{"status":"Pinned"}],"deals":[]},
   {"name":"web3-storage-web3.storage-100-7209c1c2","cid":"bafybeigmbpwkztnj25ibywmbp7c3cpwsgtbtlfrhucmxalvadhwundprym","created":"2021-07-24T21:06:20.979985Z","dagSize":2252998,"pins":[{"status":"Pinned"},{"status":"Pinned"},{"status":"Pinned"}],"deals":[]},
   {"name":"web3-storage-web3.storage-99-fa0680ac","cid":"bafybeibf243riiuzy2v3expjogggoioygvipwwg4akh42r2zkk3qcfpbya","created":"2021-07-24T21:01:14.604938Z","dagSize":2254184,"pins":[{"status":"Pinned"},{"status":"Pinned"},{"status":"Pinned"}],"deals":[]},
-  {"name":"testing add-to-web3","cid":"bafybeig2girrvm6wjis6xuqaqvoxhfejuk2bwv4bfzpjhlahsume26ufjy","created":"2021-07-19T23:04:41.935890Z","dagSize":119879,"pins":[],"deals":[]}
+  {"name":"testing add-to-web3","cid":"bafybeig2girrvm6wjis6xuqaqvoxhfejuk2bwv4bfzpjhlahsume26ufjy","created":"2021-07-19T23:04:41.935890Z","dagSize":119879,"pins":[],"deals":[]},
+  {"name":"not-distributed.jpg","cid":"bafybeig3zgiasqh7bsmvc5cudkkeeh3qborbscua3eqqky7m7fbzgrb4qu","created":"2021-07-14T19:16:55.233593Z","dagSize":null,"pins":[],"deals":[]}
 ]

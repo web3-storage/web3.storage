@@ -235,7 +235,10 @@ class Web3Storage {
       const url = new URL(`/user/uploads?${search}`, endpoint)
       return fetch(url.toString(), {
         method: 'GET',
-        headers: Web3Storage.headers(token)
+        headers: {
+          ...Web3Storage.headers(token),
+          'Access-Control-Request-Headers': 'Link'
+        }
       })
     }
     let count = 0
