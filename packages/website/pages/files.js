@@ -258,7 +258,7 @@ export default function Files({ user }) {
   }
 
   const FilesTable = () => (
-    <table className="w-full mt-4">
+    <table className={ clsx("mt-4", uploads.length === 0 ? 'flex justify-center' : 'w-full')}>
       <thead>
         <tr>
           { uploads.length > 0 && (
@@ -302,8 +302,8 @@ export default function Files({ user }) {
   )
 
   return (
-    <main className="px-4 md:px-8 lg:px-14">
-      <div className="mx-auto my-4 lg:my-32 text-w3storage-purple">
+    <main className="w-full">
+      <div className="layout-margins my-4 lg:my-32 text-w3storage-purple">
         <h3 className="mb-8">Files</h3>
         <When condition={isLoading || isFetching}>
           <Loading />
