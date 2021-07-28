@@ -49,8 +49,7 @@ const body = Query(
                   Var('userRef'),
                   Select('ref', Var('content')),
                   true
-                ),
-                upload: Select(['ref'], Get(Var('uploadMatch')))
+                )
               },
               If(
                 IsNonEmpty(Var('uploadMatch')),
@@ -66,7 +65,7 @@ const body = Query(
                   }),
                   // Flag upload as deleted
                   Update(
-                    Var('upload'),
+                    Select(['ref'], Get(Var('uploadMatch'))),
                     { data: { deleted: Now() } }
                   )
                 ),
