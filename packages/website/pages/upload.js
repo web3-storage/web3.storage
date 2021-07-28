@@ -75,12 +75,12 @@ export default function Upload() {
   }
 
   return (
-    <main className="p-4 sm:px-16 mt-4 sm:mt-16 text-w3storage-purple">
+    <main className="p-4 sm:px-16 mt-4 sm:mt-16 text-w3storage-purple h-full flex-grow" {...getRootProps()}>
       <div className="mw9 pv3 ph3 ph5-ns min-vh-100 flex flex-col items-center">
         <div className="p-6">
           <h2>Upload File</h2>
           <form onSubmit={handleUploadSubmit} className='flex flex-col items-start py-8'>
-            <div className="my-4 flex flex-col items-start" {...getRootProps()}>
+            <div className="my-4 flex flex-col items-start">
               <label htmlFor="name" className="mb-2">
                 File:
               </label>
@@ -98,15 +98,6 @@ export default function Upload() {
                 <p className="px-4">{ inputFile.name.length > 0 ? inputFile.name : 'No file chosen'}</p>
               </div>
             </div>
-            {isDragActive && (
-              <div className="absolute top-0 left-0 right-0 bottom-0 bg-gray-800 bg-opacity-40 flex justify-center items-center">
-                <div className="bg-white p-4 border rounded">
-                  <div className="bg-blue-100 bg-opacity-80 p-4 border-2 border-gray-300 border-dashed">
-                    Drop the file here to upload it.
-                  </div>
-                </div>
-              </div>
-            )}
             <div className="mv3">
               <Button
                 className="bg-nslime"
@@ -130,6 +121,15 @@ export default function Upload() {
               </p>
             </div>
           </form>
+          {isDragActive && (
+            <div className="absolute top-0 left-0 right-0 bottom-0 bg-gray-800 bg-opacity-40 flex justify-center items-center">
+              <div className="bg-white p-4 border rounded">
+                <div className="bg-blue-100 bg-opacity-80 p-4 md:p-16 border-2 border-gray-300 border-dashed">
+                  Drop the file here to upload it.
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </main>

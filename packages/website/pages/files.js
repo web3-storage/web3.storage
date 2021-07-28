@@ -1,9 +1,14 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import filesize from 'filesize'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
+
 import Button from '../components/button.js'
 import Checkbox from '../components/checkbox'
 import Loading from '../components/loading'
+import Tooltip from '../components/tooltip'
+
+import CopyIcon from '../icons/copy'
 import { getUploads, deleteUpload } from '../lib/api.js'
 import { When } from 'react-if'
 import clsx from 'clsx'
@@ -24,6 +29,27 @@ export function getStaticProps() {
       needsUser: true,
     },
   }
+}
+
+const QuestionMark = () => (
+  <div className="relative flex items-center justify-center ml-3 text-sm text-w3storage-red cursor-pointer">
+    <div className="absolute rounded-full border w-4 h-4 border-w3storage-red" />
+    ?
+  </div>
+)
+
+const TOOLTIPS = {
+  PIN_STATUS: (<span>Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes.</span>),
+
+  CID: (<span>
+    The <strong>c</strong>ontent <strong>id</strong>entifier for a file or a piece of data.<span> </span>
+    <a href="https://docs.web3.storage/concepts/content-addressing/" target="_blank" className="underline" rel="noreferrer">Learn more</a>
+  </span>),
+
+  STORAGE_PROVIDERS: (<span>
+    Service providers offering storage capacity to the Filecoin network.<span> </span>
+    <a href="https://docs.web3.storage/concepts/decentralized-storage/" target="_blank" className="underline" rel="noreferrer">Learn more</a> 
+  </span>),
 }
 
 /**
@@ -62,22 +88,32 @@ const TableElement = ({ children, index = 0, checked, breakAll = true, centered,
 )
 
 /**
+ * @param {import('web3.storage/src/lib/interface').Pin[]} pins
+ * @returns {import('web3.storage/src/lib/interface').Pin['status'] | 'Queuing'}
+ */
+const getBestPinStatus = pins => {
+  const pin = pins.find(byStatus('Pinned')) || pins.find(byStatus('Pinning')) || pins.find(byStatus('PinQueued'))
+  return pin ? pin.status : 'Queuing'
+}
+
+/**
+ * @param {import('web3.storage/src/lib/interface').Pin['status']} status
+ * @returns {(pin: import('web3.storage/src/lib/interface').Pin) => boolean}
+ */
+const byStatus = status => pin => pin.status === status
+
+/**
  * @param {Object} props
  * @param {Upload} props.upload
  * @param {number} props.index
  * @param {function} props.toggle
  * @param {string[]} props.selectedFiles
+ * @param {function} props.showCopiedMessage
  */
-const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
+const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage }) => {
   const checked = selectedFiles.includes(upload.cid)
   const sharedArgs = { index, checked }
-
-  let pinStatus = '-'
-  if (upload.pins.length) {
-    pinStatus = upload.pins.some(p => p.status === 'Pinned')
-      ? 'Pinned'
-      : upload.pins[0].status
-  }
+  const pinStatus = getBestPinStatus(upload.pins)
 
   const deals = upload.deals
     .filter(d => d.status !== 'Queued')
@@ -96,8 +132,16 @@ const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
   const queuedDeals = upload.deals.filter(d => d.status === 'Queued')
   if (queuedDeals.length) {
     deals.push(
-      <span key={upload.cid + '-pending'}>
+      <span key={upload.cid + '-pending'} title={`Upload is queued in ${queuedDeals.length} aggregate${queuedDeals.length > 1 ? 's' : ''} for deals.`}>
         {`${deals.length ? ', ' : ''}${queuedDeals.length} pending`}
+      </span>
+    )
+  }
+
+  if (!upload.deals.length) {
+    deals.push(
+      <span key='queuing' title='Upload is being added to an aggregate and waiting to join the deal queue.'>
+        Queuing
       </span>
     )
   }
@@ -112,14 +156,17 @@ const UploadItem = ({ upload, index, toggle, selectedFiles }) => {
       </TableElement>
       <TableElement {...sharedArgs} important>{upload.name}</TableElement>
       <TableElement {...sharedArgs} important>
-        <GatewayLink cid={upload.cid} />
+        <div className="flex items-center justify-center">
+          <GatewayLink cid={upload.cid} />
+          <CopyToClipboard text={upload.cid} onCopy={() => showCopiedMessage()}>
+            <CopyIcon className="ml-2 cursor-pointer hover:opacity-80" width="16" fill="currentColor"/>
+          </CopyToClipboard>
+        </div>
       </TableElement>
       <TableElement {...sharedArgs} centered>{pinStatus}</TableElement>
-      <TableElement {...sharedArgs} breakAll={false}>
-        {deals.length ? deals : '-'}
-      </TableElement>
+      <TableElement {...sharedArgs} centered breakAll={false}>{deals}</TableElement>
       <TableElement {...sharedArgs} centered>
-        {upload.dagSize ? filesize(upload.dagSize) : '-'}
+        {upload.dagSize ? filesize(upload.dagSize) : 'Calculating...'}
       </TableElement>
     </tr>
   )
@@ -136,14 +183,15 @@ export default function Files({ user }) {
   const initialFiles = [];
 
   const [selectedFiles, setSelectedFiles] = useState(/** @type string[] */ initialFiles)
-  const [isNextDisabled, setNextDisabled] = useState('')
-  const [size] = useState(25)
+  const [size] = useState(25 + 1)
+  const [copied, setCopied] = useState(false);
+
   const [befores, setBefores] = useState([new Date().toISOString()])
   const queryClient = useQueryClient()
   const queryParams = { before: befores[0], size }
   /** @type {[string, { before: string, size: number }]} */
   const queryKey = ['get-uploads', queryParams]
-  const { isLoading, isFetching, data } = useQuery(
+  const { isLoading, isFetching, data, refetch } = useQuery(
     queryKey,
     (ctx) => getUploads(ctx.queryKey[1]),
     {
@@ -151,14 +199,8 @@ export default function Files({ user }) {
     }
   )
 
-  const reachedEndOfPagination = data?.length === 0 && befores.length > 1
-  if (reachedEndOfPagination) {
-    setNextDisabled(befores[1])
-    setBefores(befores.slice(1))
-  }
-
   /** @type {Upload[]} */
-  const uploads = data || []
+  const uploads = data?.length === size ? data.concat().splice(0, size - 1) : (data || [])
 
   function handleDelete() {
     if (!confirm('Are you sure? Deleted files cannot be recovered!')) return
@@ -210,6 +252,11 @@ export default function Files({ user }) {
     selectedFiles.length >= 1 ? setSelectedFiles([]) : setSelectedFiles(uploads.map(u => u.cid))
   }
 
+  const showCopiedMessage = () => {
+    setCopied(true)
+    setTimeout(() => setCopied(false), 4 * 1000)
+  }
+
   const FilesTable = () => (
     <table className="w-full mt-4">
       <thead>
@@ -220,22 +267,42 @@ export default function Files({ user }) {
           </th> )}
           <TableHeader>Timestamp</TableHeader>
           <TableHeader>Name</TableHeader>
-          <TableHeader>CID</TableHeader>
-          <TableHeader>Pin Status</TableHeader>
-          <TableHeader>Storage Providers</TableHeader>
+          <TableHeader>
+            <span className="flex w-100 justify-center items-center">CID 
+              <Tooltip placement='top' overlay={TOOLTIPS.CID} overlayClassName='table-tooltip'>
+                { QuestionMark() }
+              </Tooltip>
+            </span>
+          </TableHeader>
+          <TableHeader>
+            <span className="flex w-100 justify-center">Pin Status
+              <Tooltip placement='top' overlay={TOOLTIPS.PIN_STATUS} overlayClassName='table-tooltip'>
+                {QuestionMark()}
+              </Tooltip>
+            </span>
+          </TableHeader>
+          <TableHeader>
+            <span className="flex w-100 justify-center">Storage Providers
+              <Tooltip placement='top' overlay={TOOLTIPS.STORAGE_PROVIDERS} overlayClassName='table-tooltip'>
+                {QuestionMark()}
+              </Tooltip>
+            </span>
+          </TableHeader>
           <TableHeader>Size</TableHeader>
         </tr>
       </thead>
       <tbody>
         {uploads.map((upload, index) =>
-          <UploadItem key={upload.cid} upload={upload} index={index} toggle={toggle} selectedFiles={selectedFiles} />
+          <UploadItem key={upload.cid} upload={upload} index={index} toggle={toggle}
+            selectedFiles={selectedFiles} showCopiedMessage={showCopiedMessage}
+          />
         )}
       </tbody>
     </table>
   )
 
   return (
-    <main className="layout-margins">
+    <main className="px-4 md:px-8 lg:px-14">
       <div className="mx-auto my-4 lg:my-32 text-w3storage-purple">
         <h3 className="mb-8">Files</h3>
         <When condition={isLoading || isFetching}>
@@ -250,7 +317,7 @@ export default function Files({ user }) {
                   No files
                 </p>
                 <div className="w-36 m-auto">
-                  <Button href="/upload" id="upload">Upload File</Button>
+                  <Button href="/upload" id="upload">Upload Files</Button>
                 </div>
               </When>
               <When condition={!hasZeroUploads}>
@@ -262,8 +329,12 @@ export default function Files({ user }) {
                     {/* <Button small className="ml-2">
                       Export Deals
                     </Button> */}
+                    
                     <div className="w-35 ml-auto">
-                      <Button href="/upload" small id="upload">Upload File</Button>
+                      <Button small onClick={() => refetch()}>Refresh</Button>
+                    </div>
+                    <div className="w-35 ml-4">
+                      <Button href="/upload" small id="upload">Upload More Files</Button>
                     </div>
                   </div>
                   <FilesTable />
@@ -278,13 +349,12 @@ export default function Files({ user }) {
                         ← Previous
                       </Button>
                     </When>
-                    <When condition={uploads.length >= size}>
+                    <When condition={data?.length === size }>
                       <Button
                         className="black"
                         wrapperClassName="m-h-2 ml-auto"
                         onClick={handleNextClick}
                         id="uploads-next"
-                        disabled={isNextDisabled === befores[0]}
                       >
                         Next →
                       </Button>
@@ -295,6 +365,12 @@ export default function Files({ user }) {
             </div>
           </>
         </When>
+      </div>
+      <div className={clsx(
+        'fixed bottom-0 left-0 right-0 bg-w3storage-blue-dark text-w3storage-white p-4 text-center appear-bottom-then-go-away', 
+        !copied && 'hidden')
+      }>
+        Copied CID to clipboard!
       </div>
     </main>
   )

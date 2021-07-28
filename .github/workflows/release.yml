@@ -127,6 +127,8 @@ jobs:
         uses: web3-storage/wrangler-action@node16
         env:
           SENTRY_TOKEN: ${{ secrets.PROD_SENTRY_TOKEN}}
+          SENTRY_PROJECT: ${{ secrets.PROD_SENTRY_PROJECT}}
+          SENTRY_UPLOAD: ${{ secrets.PROD_SENTRY_UPLOAD}}
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           workingDirectory: 'packages/api'
@@ -148,6 +150,8 @@ jobs:
           NEXT_PUBLIC_ENV: production
           NEXT_PUBLIC_API: https://api.web3.storage
           NEXT_PUBLIC_MAGIC: ${{ secrets.PROD_MAGIC_PUBLIC_KEY }}
+          NEXT_PUBLIC_COUNTLY_URL: ${{ secrets.COUNTLY_URL }}
+          NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
 
       # Add the site to web3.storage, output the cid as `steps.ipfs.outputs.cid`
       - name: Add to web3.storage
@@ -164,7 +168,6 @@ jobs:
 
       - name: Deploy https://web3.storage
         if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'website' }}
-        # TODO: replace `--record preview` with `--record _dnslink` when we are ready!
-        run: npx dnslink-cloudflare --record preview --domain web3.storage --link /ipfs/${{ steps.ipfs.outputs.cid }}
+        run: npx dnslink-cloudflare --record _dnslink --domain web3.storage --link /ipfs/${{ steps.ipfs.outputs.cid }}
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}

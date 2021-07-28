@@ -1,4 +1,4 @@
-/* global MAGIC_SECRET_KEY FAUNA_ENDPOINT FAUNA_KEY SALT CLUSTER_BASIC_AUTH_TOKEN CLUSTER_API_URL SENTRY_DSN */
+/* global MAGIC_SECRET_KEY FAUNA_ENDPOINT FAUNA_KEY SALT CLUSTER_BASIC_AUTH_TOKEN CLUSTER_API_URL SENTRY_DSN, VERSION */
 import Toucan from 'toucan-js'
 import { Magic } from '@magic-sdk/admin'
 import { DBClient } from '@web3-storage/db'
@@ -23,8 +23,12 @@ export function envAll (_, env, event) {
     rewriteFrames: {
       root: '/'
     },
-    // version: env.VERSION || VERSION, // TODO: version endpoint?
-    pkg
+    version: env.VERSION || VERSION,
+    pkg: {
+      ...pkg,
+      // sentry cannot deal with "/" in version
+      name: pkg.name.replace('@web3-storage/', '')
+    }
   })
   env.magic = new Magic(env.MAGIC_SECRET_KEY || MAGIC_SECRET_KEY)
 
