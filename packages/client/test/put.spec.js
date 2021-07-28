@@ -47,7 +47,7 @@ describe('put', () => {
       await client.put([new File(['test-compromised-service'], 'file.txt')], { maxRetries: 1 })
       assert.unreachable('should have thrown')
     } catch (err) {
-      assert.match(err.message, /is compromised/)
+      assert.match(err.message, /root CID mismatch/)
     }
   })
 
