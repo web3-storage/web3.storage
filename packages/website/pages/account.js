@@ -4,7 +4,9 @@ import { useQuery } from 'react-query'
 import Link from 'next/link'
 import { getTokens } from '../lib/api'
 import Button from '../components/button.js'
+import Loading from '../components/loading.js'
 import VerticalLines from '../illustrations/vertical-lines.js'
+import { When } from 'react-if'
 // import emailContent from '../content/file-a-request.json'
 
 /**
@@ -27,7 +29,7 @@ import VerticalLines from '../illustrations/vertical-lines.js'
  */
 export default function Account({ user }) {
   const [copied, setCopied] = useState('')
-  const { data } = useQuery('get-tokens', getTokens, {
+  const { data, isLoading, isFetching } = useQuery('get-tokens', getTokens, {
     enabled: !!user
   })
   /** @type {import('./tokens').Token[]} */
@@ -57,71 +59,78 @@ export default function Account({ user }) {
       <div className="layout-margins">
         <main className="max-w-screen-lg mx-auto my-4 lg:my-32 text-w3storage-purple">
           <h3 className="mb-8">Your account</h3>
-          {/* <div>
-            <div className="typography-body-title font-medium">
-              Storage Capacity: <span className="font-normal ml-2">300 GiB / 1 TiB</span>
+          <When condition={isLoading || isFetching}>
+            <div className="relative">
+              <Loading />
             </div>
-            <div className="h-9 border border-black w-96 rounded-md mt-4">
-              <div className="h-full border rounded-md bg-gray-200" style={{ width: '20%' }} />
-            </div>
-            <p className="mt-4">
-              {'Need more? '}
-              <a href={mailTo}>
-                <span className="font-bold">
-                  {'File a request >'}
-                </span>
-              </a>
-            </p>
-          </div> */}
-          <div className="mt-10">
-            <h3>Getting started</h3>
-            <div className="flex gap-x-10 mt-10">
-              {tokens.length ? null : (
-                <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
-                  <h3>Create your first API token</h3>
-                  <p>
-                    Generate an API Token to embed into your projects!
-                  </p>
-                  <Button href='/new-token'>
-                    Create an API Token
-                  </Button>
+          </When>
+          <When condition={!isLoading && !isFetching}>
+            {/* <div>
+              <div className="typography-body-title font-medium">
+                Storage Capacity: <span className="font-normal ml-2">300 GiB / 1 TiB</span>
+              </div>
+              <div className="h-9 border border-black w-96 rounded-md mt-4">
+                <div className="h-full border rounded-md bg-gray-200" style={{ width: '20%' }} />
+              </div>
+              <p className="mt-4">
+                {'Need more? '}
+                <a href={mailTo}>
+                  <span className="font-bold">
+                    {'File a request >'}
+                  </span>
+                </a>
+              </p>
+            </div> */}
+            <When condition={tokens.length === 0}>
+              <div className="mt-10">
+                <h3>Getting started</h3>
+                <div className="flex gap-x-10 mt-10">
+                  <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
+                    <h3>Create your first API token</h3>
+                    <p>
+                      Generate an API Token to embed into your projects!
+                    </p>
+                    <Button href='/new-token'>
+                      Create an API Token
+                    </Button>
+                  </div>
+                  <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
+                    <h3>Start building</h3>
+                    <p>
+                      Start storing and retrieving files using our client library! See the docs for guides and walkthroughs!
+                    </p>
+                    <Button href="https://docs.web3.storage">
+                      Explore the docs
+                    </Button>
+                  </div>
                 </div>
-              )}
-              <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
-                <h3>Start building</h3>
-                <p>
-                  Start storing and retrieving files using our client library! See the docs for guides and walkthroughs!
-                </p>
-                <Button href="https://docs.web3.storage">
-                  Explore the docs
-                </Button>
+              </div>
+            </When>
+            <div className="mt-28">
+              <h3 id="api-tokens">API tokens</h3>
+              <div className="flex flex-wrap gap-x-14 mt-10">
+                <Link href='/new-token'>
+                  <button type="button" className="flex items-center justify-center text-center bg-w3storage-pink border-w3storage-red w-64 h-60 mb-12 p-9 hover:bg-w3storage-white">
+                    <p className="typography-body-title px-8">Create an API token</p>
+                  </button>
+                </Link>
+                {tokens.slice(0, 5).map(t => (
+                  <form
+                    key={t._id}
+                    data-value={t.secret}
+                    onSubmit={handleCopyToken}
+                    className="flex flex-col justify-between items-center text-center bg-white border border-w3storage-red w-64 h-60 mb-12 p-9"
+                  >
+                    <p className="typography-body-title px-8">{t.name}</p>
+                    <Button type="submit">{copied === t.secret ? 'Copied!' : 'Copy'}</Button>
+                  </form>
+                ))}
+              </div>
+              <div className="w-64">
+                <Button href="/tokens">Manage tokens</Button>
               </div>
             </div>
-          </div>
-          <div className="mt-28">
-            <h3 id="api-tokens">API tokens</h3>
-            <div className="flex flex-wrap gap-x-14 mt-10">
-              <Link href='/new-token'>
-                <button type="button" className="flex items-center justify-center text-center bg-w3storage-pink border-w3storage-red w-64 h-60 mb-12 p-9 hover:bg-w3storage-white">
-                  <p className="typography-body-title px-8">Create an API token</p>
-                </button>
-              </Link>
-              {tokens.slice(0, 5).map(t => (
-                <form
-                  key={t._id}
-                  data-value={t.secret}
-                  onSubmit={handleCopyToken}
-                  className="flex flex-col justify-between items-center text-center bg-white border border-w3storage-red w-64 h-60 mb-12 p-9"
-                >
-                  <p className="typography-body-title px-8">{t.name}</p>
-                  <Button type="submit">{copied === t.secret ? 'Copied!' : 'Copy'}</Button>
-                </form>
-              ))}
-            </div>
-            <div className="w-64">
-              <Button href="/tokens">Manage tokens</Button>
-            </div>
-          </div>
+          </When>
         </main>
         <div className="absolute top-48 left-0 w-full pointer-events-none" style={{ minWidth: '1536px' }}>
           <div className="w-min ml-auto">

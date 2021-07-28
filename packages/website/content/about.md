@@ -39,3 +39,5 @@ For reference, the following parameters and strategies are used to ensure highly
 It is recommended that you do not rely on Filecoin deals directly for performant retrieval, and instead retrieve the data via IPFS (where Web3.Storage will be dual pinning the content). Retrieving data over the IPFS network is the recommended means of accessing Web3.Storage data.
 
 ### [Terms of service](/terms)
+
+The terms of service can be found [here](/terms).
