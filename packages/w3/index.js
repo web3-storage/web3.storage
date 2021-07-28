@@ -126,7 +126,7 @@ export async function list (opts = {}) {
       console.log('⁂ No uploads!')
       console.log('⁂ Try out `w3 put <path to files>` to upload some')
     } else {
-      console.log(`  ${count} item${count === 1 ? '' : 's'} – ${filesize(bytes)} strored `)
+      console.log(`  ${count} item${count === 1 ? '' : 's'} – ${filesize(bytes)} stored `)
     }
   }
 }
