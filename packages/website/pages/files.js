@@ -258,7 +258,7 @@ export default function Files({ user }) {
   }
 
   const FilesTable = () => (
-    <table className="w-full mt-4">
+    <table className={ clsx("mt-4", uploads.length === 0 ? 'flex justify-center' : 'w-full')}>
       <thead>
         <tr>
           { uploads.length > 0 && (
