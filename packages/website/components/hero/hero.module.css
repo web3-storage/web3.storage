@@ -1,0 +1,22 @@
+.background {
+    max-width: calc(100vw - 140px);
+}
+
+.topSection {
+    height: 24.05rem;
+}
+
+@media only screen and (min-width: 600px) {
+    .container {
+       overflow: hidden;
+       overflow-x: clip;
+       overflow-y: visible;
+    }
+
+    .background {
+        maxWidth: calc(100vw - 200px)
+    }
+    .topSection {
+        height: 42rem;
+    }
+}
