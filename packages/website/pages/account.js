@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { getTokens } from '../lib/api'
 import Button from '../components/button.js'
 import VerticalLines from '../illustrations/vertical-lines.js'
+import { When } from 'react-if'
 // import emailContent from '../content/file-a-request.json'
 
 /**
@@ -73,31 +74,33 @@ export default function Account({ user }) {
               </a>
             </p>
           </div> */}
-          <div className="mt-10">
-            <h3>Getting started</h3>
-            <div className="flex gap-x-10 mt-10">
-              {tokens.length ? null : (
+          <When condition={tokens.length === 0}>
+            <div className="mt-10">
+              <h3>Getting started</h3>
+              <div className="flex gap-x-10 mt-10">
+                {tokens.length ? null : (
+                  <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
+                    <h3>Create your first API token</h3>
+                    <p>
+                      Generate an API Token to embed into your projects!
+                    </p>
+                    <Button href='/new-token'>
+                      Create an API Token
+                    </Button>
+                  </div>
+                )}
                 <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
-                  <h3>Create your first API token</h3>
+                  <h3>Start building</h3>
                   <p>
-                    Generate an API Token to embed into your projects!
+                    Start storing and retrieving files using our client library! See the docs for guides and walkthroughs!
                   </p>
-                  <Button href='/new-token'>
-                    Create an API Token
+                  <Button href="https://docs.web3.storage">
+                    Explore the docs
                   </Button>
                 </div>
-              )}
-              <div className="flex flex-col items-center justify-between w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
-                <h3>Start building</h3>
-                <p>
-                  Start storing and retrieving files using our client library! See the docs for guides and walkthroughs!
-                </p>
-                <Button href="https://docs.web3.storage">
-                  Explore the docs
-                </Button>
               </div>
             </div>
-          </div>
+          </When>
           <div className="mt-28">
             <h3 id="api-tokens">API tokens</h3>
             <div className="flex flex-wrap gap-x-14 mt-10">
