@@ -1,17 +1,48 @@
 import { Web3Storage } from 'web3.storage'
 
-const endpoint = 'https://api.web3.storage'
-const token =
-  new URLSearchParams(window.location.search).get('key') || 'API_KEY' // your API key from https://web3.storage/manage
+const form = document.querySelector('#upload-form')
+const filepicker = document.querySelector('#filepicker')
+const tokenInput = document.querySelector('#token')
+const output = document.querySelector('#output')
 
-const storage = new Web3Storage({ endpoint, token })
+form.addEventListener('submit', async function (event) {
+  // don't reload the page!
+  event.preventDefault()
 
-document.getElementById('filepicker').addEventListener('change', async function (event) {
-  const cidP = document.getElementById('cid')
-  const files = event.target.files
+  showMessage('> 📦 creating web3.storage client')
+  const token = tokenInput.value
+  const client = new Web3Storage({ token })
 
-  const cid = await storage.put(files)
+  showMessage('> 🤖 chunking and hashing the files (in your browser!) to calculate the Content ID')
+  const files = filepicker.files
+  const cid = await client.put(files, {
+    onRootCidReady: (localCid) => {
+      showMessage(`> 🔑 locally calculated Content ID: ${localCid} `)
+      showMessage('> 📡 sending files to web3.storage ')
+    },
+    onStoredChunk: (bytes) => showMessage(`> 🛰 sent ${bytes} bytes to web3.storage`)
+  })
+  showMessage(`> ✅ web3.storage now hosting ${cid}`)
+  showLink(`https://dweb.link/ipfs/${cid}`)
 
-  const text = document.createTextNode(`Content added with CID: ${cid}`)
-  cidP.appendChild(text)
+  showMessage('> 📡 fetching the list of all unique uploads on this account')
+  let totalBytes = 0
+  for await (const upload of client.list()) {
+    showMessage(`> 📄 ${upload.cid}  ${upload.name}`)
+    totalBytes += upload.dagSize
+  }
+  showMessage(`> ⁂ ${totalBytes} stored!`)
 }, false)
+
+function showMessage (text) {
+  const node = document.createElement('div')
+  node.innerText = text
+  output.appendChild(node)
+}
+
+function showLink (url) {
+  const node = document.createElement('a')
+  node.href = url
+  node.innerText = `> 🔗 ${url}`
+  output.appendChild(node)
+}
