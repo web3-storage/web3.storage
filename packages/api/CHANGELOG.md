@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.0.0](https://www.github.com/web3-storage/web3.storage/compare/api-v1.0.1...api-v2.0.0) (2021-07-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* make unixfs importer on ipfs-car use same defaults as lotus (#170)
+
+### Features
+
+* make unixfs importer on ipfs-car use same defaults as lotus ([#170](https://www.github.com/web3-storage/web3.storage/issues/170)) ([06f6948](https://www.github.com/web3-storage/web3.storage/commit/06f6948ce36b5e2a87f31b9bfac41e9465cb901b))
+
+
+### Bug Fixes
+
+* query cluster until we get a preferable pin status ([#192](https://www.github.com/web3-storage/web3.storage/issues/192)) ([0ee131a](https://www.github.com/web3-storage/web3.storage/commit/0ee131a3217f9972ee1f9a0204677157c03773f8))
+* sentry source maps ([#204](https://www.github.com/web3-storage/web3.storage/issues/204)) ([6cf8571](https://www.github.com/web3-storage/web3.storage/commit/6cf8571c79505db4769a40bf42b36d484d315550))
+
 ### [1.0.1](https://www.github.com/web3-storage/web3.storage/compare/api-v1.0.0...api-v1.0.1) (2021-07-26)
 
 
