@@ -184,21 +184,21 @@ export async function userTokensPost (request, env) {
 }
 
 /**
- * Retrieve user storage data.
+ * Retrieve user account data.
  *
  * @param {AuthenticatedRequest} request
  * @param {import('./env').Env} env
  */
-export async function userStorageGet (request, env) {
+export async function userAccountGet (request, env) {
   const res = await env.db.query(gql`
-    query findStorageByUser($user: ID!) {
-      findStorageByUser(user: $user) {
+    query findUserByID($id: ID!) {
+      findUserByID(id: $id) {
         usedStorage
       }
     }
-  `, { user: request.auth.user._id })
+  `, { id: request.auth.user._id })
 
-  return new JSONResponse(res.findStorageByUser)
+  return new JSONResponse(res.findUserByID)
 }
 
 /**

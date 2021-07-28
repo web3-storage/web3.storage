@@ -74,7 +74,7 @@ module.exports = ({ body }) => {
     return gqlOkResponse(require('../../fixtures/find-metrics.json'))
   }
 
-  if (body.query.includes('findStorageByUser')) {
+  if (body.query.includes('findUserByID')) {
     return gqlOkResponse(require('../../fixtures/find-storage-by-user.json'))
   }
 

@@ -9,10 +9,10 @@ function getTestJWT (sub = 'test', name = 'test') {
   return JWT.sign({ sub, iss: JWT_ISSUER, iat: Date.now(), name }, SALT)
 }
 
-describe('GET /user/storage', () => {
-  it('retrieves user storage data', async () => {
+describe('GET /user/account', () => {
+  it('retrieves user account data', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('user/storage', endpoint), {
+    const res = await fetch(new URL('user/account', endpoint), {
       headers: { Authorization: `Bearer ${token}` }
     })
     assert(res.ok)
