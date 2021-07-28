@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.1.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.0.0...web3.storage-v3.1.0) (2021-07-28)
+
+
+### Features
+
+* list user uploads in client and `w3` ([#198](https://www.github.com/web3-storage/web3.storage/issues/198)) ([31caaa0](https://www.github.com/web3-storage/web3.storage/commit/31caaa0d6ef88a7467c6192a8b2d976f70087c62))
+
+
+### Bug Fixes
+
+* validate root car ([#219](https://www.github.com/web3-storage/web3.storage/issues/219)) ([6029f5a](https://www.github.com/web3-storage/web3.storage/commit/6029f5af65c843b0aca951745ef8fcde4eea268c)), closes [#191](https://www.github.com/web3-storage/web3.storage/issues/191)
+
 ## [3.0.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v2.1.1...web3.storage-v3.0.0) (2021-07-26)
 
 
