@@ -51,8 +51,21 @@ export default function Login() {
       <div className="py-4 mt-4 sm:mt-32 text-w3storage-purple">
         <form onSubmit={onSubmit} className="text-center w-100 sm:w-80 mx-auto">
           <label>
-            <h3 className="mb-6">Log in</h3>
+            <h3 className="mb-6">Log in with</h3>
           </label>
+
+          <Button
+            onClick={() => {
+              setIsRedirecting(true)
+              loginSocial('github')
+            }}
+            Icon={GithubIcon}
+          >
+            {isRedirecting ? 'Redirecting...' : 'GitHub'}
+          </Button>
+
+          <h3 className="my-8">Or</h3>
+
           <input
             type="email"
             name="email"
@@ -67,17 +80,6 @@ export default function Login() {
 
           {errorMsg && <p className="error">{errorMsg}</p>}
 
-          <h3 className="my-8">Or with</h3>
-
-          <Button
-            onClick={() => {
-              setIsRedirecting(true)
-              loginSocial('github')
-            }}
-            Icon={GithubIcon}
-          >
-            {isRedirecting ? 'Redirecting...' : 'GitHub'}
-          </Button>
           <br />
           <br />
         </form>
