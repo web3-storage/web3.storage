@@ -16,6 +16,7 @@
 import { transform } from 'streaming-iterables'
 import pRetry from 'p-retry'
 import { pack } from 'ipfs-car/pack'
+import parseLink from 'parse-link-header'
 import { unpackStream } from 'ipfs-car/unpack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
 import { filesFromPath, getFilesFromPath } from 'files-from-path'
@@ -32,6 +33,7 @@ const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 
 /** @typedef { import('./lib/interface.js').API } API */
 /** @typedef { import('./lib/interface.js').Status} Status */
+/** @typedef { import('./lib/interface.js').Upload} Upload */
 /** @typedef { import('./lib/interface.js').Service } Service */
 /** @typedef { import('./lib/interface.js').Web3File} Web3File */
 /** @typedef { import('./lib/interface.js').Filelike } Filelike */
@@ -215,6 +217,46 @@ class Web3Storage {
     return res.json()
   }
 
+  /**
+   * @param {Service} service
+   * @param {object} [opts]
+   * @param {string} [opts.before] list items uploaded before this ISO 8601 date string
+   * @param {number} [opts.maxResults] maximum number of results to return
+   * @returns {AsyncIterable<Upload>}
+   */
+  static async * list (service, { before = new Date().toISOString(), maxResults = Infinity } = {}) {
+  /**
+   * @param {Service} service
+   * @param {{before: string, size: number}} opts
+   * @returns {Promise<Response>}
+   */
+    function listPage ({ endpoint, token }, { before, size }) {
+      const search = new URLSearchParams({ before, size: size.toString() })
+      const url = new URL(`/user/uploads?${search}`, endpoint)
+      return fetch(url.toString(), {
+        method: 'GET',
+        headers: {
+          ...Web3Storage.headers(token),
+          'Access-Control-Request-Headers': 'Link'
+        }
+      })
+    }
+    let count = 0
+    const size = maxResults > 100 ? 100 : maxResults
+    for await (const res of paginator(listPage, service, { before, size })) {
+      if (!res.ok) {
+        throw new Error(`${res.status} ${res.statusText}`)
+      }
+      const page = await res.json()
+      for (const upload of page) {
+        if (++count > maxResults) {
+          return
+        }
+        yield upload
+      }
+    }
+  }
+
   // Just a sugar so you don't have to pass around endpoint and token around.
 
   /**
@@ -258,6 +300,26 @@ class Web3Storage {
    */
   status (cid) {
     return Web3Storage.status(this, cid)
+  }
+
+  /**
+   * Find all uploads for this account. Use a `for await...of` loop to fetch them all.
+   * @example
+   * Fetch all the uploads
+   * ```js
+   * const uploads = []
+   * for await (const item of client.list()) {
+   *    uploads.push(item)
+   * }
+   * ```
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of
+   * @param {object} [opts]
+   * @param {string} [opts.before] list items uploaded before this ISO 8601 date string
+   * @param {number} [opts.maxResults] maximum number of results to return
+   * @returns {AsyncIterable<Upload>}
+   */
+  list (opts) {
+    return Web3Storage.list(this, opts)
   }
 }
 
@@ -329,6 +391,26 @@ function toWeb3Response (res) {
     }
   })
   return response
+}
+
+/**
+ * Follow Link headers on a Response, to fetch all the things.
+ *
+ * @param {(service: Service, opts: any) => Promise<Response>} fn
+ * @param {Service} service
+ * @param {{}} opts
+ */
+async function * paginator (fn, service, opts) {
+  let res = await fn(service, opts)
+  yield res
+  let link = parseLink(res.headers.get('Link') || '')
+  // @ts-ignore
+  while (link && link.next) {
+    // @ts-ignore
+    res = await fn(service, link.next)
+    yield res
+    link = parseLink(res.headers.get('Link') || '')
+  }
 }
 
 export { Web3Storage, File, Blob, filesFromPath, getFilesFromPath }
