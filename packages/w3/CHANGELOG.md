@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.0.0](https://www.github.com/web3-storage/web3.storage/compare/w3-v1.1.0...w3-v2.0.0) (2021-07-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* make unixfs importer on ipfs-car use same defaults as lotus (#170)
+
+### Features
+
+* list user uploads in client and `w3` ([#198](https://www.github.com/web3-storage/web3.storage/issues/198)) ([31caaa0](https://www.github.com/web3-storage/web3.storage/commit/31caaa0d6ef88a7467c6192a8b2d976f70087c62))
+* make unixfs importer on ipfs-car use same defaults as lotus ([#170](https://www.github.com/web3-storage/web3.storage/issues/170)) ([06f6948](https://www.github.com/web3-storage/web3.storage/commit/06f6948ce36b5e2a87f31b9bfac41e9465cb901b))
+
+
+### Bug Fixes
+
+* get version of w3 cmd from package.json ([aa6a1ed](https://www.github.com/web3-storage/web3.storage/commit/aa6a1edcd7e0e586230d0146cb30877b8af62f71)), closes [#167](https://www.github.com/web3-storage/web3.storage/issues/167)
+
 ## [1.1.0](https://www.github.com/web3-storage/web3.storage/compare/w3-v1.0.1...w3-v1.1.0) (2021-07-23)
 
 
