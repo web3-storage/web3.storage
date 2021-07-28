@@ -25,6 +25,7 @@ cli.command('list')
   .describe('list all the uploads in your account')
   .option('--json', 'Format as newline delimted JSON')
   .option('--cid', 'Only print the root CID per upload')
+  .alias(['ls'])
   .action(list)
 
 cli.command('get <cid>')
