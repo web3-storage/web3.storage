@@ -53,6 +53,19 @@ export default function Login() {
           <label>
             <h3 className="mb-6">Log in</h3>
           </label>
+
+          <Button
+            onClick={() => {
+              setIsRedirecting(true)
+              loginSocial('github')
+            }}
+            Icon={GithubIcon}
+          >
+            {isRedirecting ? 'Redirecting...' : 'GitHub'}
+          </Button>
+
+          <h3 className="my-8">Or with</h3>
+
           <input
             type="email"
             name="email"
@@ -67,17 +80,6 @@ export default function Login() {
 
           {errorMsg && <p className="error">{errorMsg}</p>}
 
-          <h3 className="my-8">Or with</h3>
-
-          <Button
-            onClick={() => {
-              setIsRedirecting(true)
-              loginSocial('github')
-            }}
-            Icon={GithubIcon}
-          >
-            {isRedirecting ? 'Redirecting...' : 'GitHub'}
-          </Button>
           <br />
           <br />
         </form>
