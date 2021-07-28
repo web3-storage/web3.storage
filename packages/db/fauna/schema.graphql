@@ -28,7 +28,7 @@ type User {
   created: Time!
 
   """
-  Used storage.
+  Used storage in bytes.
   """
   usedStorage: Long
 }
