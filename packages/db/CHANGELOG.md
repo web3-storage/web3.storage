@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://www.github.com/web3-storage/web3.storage/compare/db-v1.0.0...db-v2.0.0) (2021-07-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* track user storage (#197)
+
+### Features
+
+* track user storage ([#197](https://www.github.com/web3-storage/web3.storage/issues/197)) ([ffdd27c](https://www.github.com/web3-storage/web3.storage/commit/ffdd27c68adc6c9328f83e626c2b5d96d2e06397))
+
 ## 1.0.0 (2021-07-22)
 
 
