@@ -47,9 +47,9 @@ export default function Navbar({ bgColor = '', user, isLoadingUser }) {
                   Files
                 </a>
               </Link>
-              <Link href="/profile">
+              <Link href="/account">
                 <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-6 md:mr-12">
-                  Profile
+                  Account
                 </a>
               </Link>
             </>
