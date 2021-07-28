@@ -6,6 +6,11 @@
     height: 24.05rem;
 }
 
+.illustration {
+    top: 34px;
+    min-width: 1440px;
+}
+
 @media only screen and (min-width: 600px) {
     .container {
        overflow: hidden;
@@ -14,9 +19,11 @@
     }
 
     .background {
-        maxWidth: calc(100vw - 200px)
+        max-width: calc(100vw - 200px)
     }
     .topSection {
-        height: 42rem;
+        height: 42.05rem;
+        margin-left: auto;
+        margin-right: auto;
     }
 }

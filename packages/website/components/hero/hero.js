@@ -15,7 +15,7 @@ export default function Hero() {
     <div className={ clsx("relative w-full z-0 flex", styles.container )}>
       <div className={ clsx("md:layout-margins", styles.topSection) }>
         <div className="absolute top-0 right-0 left-0 bottom-0 flex items-center z-n1 pointer-events-none">
-          <HeroIllustration className="absolute left-1/2 transform -translate-x-1/2 top-0 w-screen hidden sm:block"/>
+          <HeroIllustration className={clsx("absolute left-1/2 transform -translate-x-1/2 top-0 w-screen hidden sm:block", styles.illustration)} />
           <HeroBackgroundLeft className="absolute left-0 bottom-0 h-full"/>
           <HeroBackgroundRight className="absolute right-0 bottom-0 h-full "/>
           <div className={clsx("absolute top-0 left-1/2 transform -translate-x-1/2 bg-w3storage-red w-full h-full", styles.background) }/>
@@ -24,9 +24,9 @@ export default function Hero() {
           <CircleNoise className="absolute right-0 left-0 mx-auto animate-pulse hidden sm:block" style={{ transform: 'translate3d(35rem, 7rem, 0)' }} />
         </div>
 
-        <div className="mx-auto max-w-4xl text-center pt-6 md:pt-10">
+        <div className="mx-auto max-w-4xl text-center pt-6 md:pt-20">
           <hgroup className="text-w3storage-purple mb-16">
-            <h1 className="mb-10 text-4xl sm:text-5xl">Decentralized Storage Made Simple</h1>
+            <h1 className="mb-10 text-4xl sm:text-5xl md:text-7xl">Decentralized Storage Made Simple</h1>
             <h2 className="space-grotesk text-xl sm:text-2xl typography-hero-subtitle mb-5">Build apps backed by Filecoin, no infrastructure required.</h2>
           </hgroup>
           <Button
