@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.0.0...website-v1.1.0) (2021-07-28)
+
+
+### Features
+
+* show enqueuing uploads ([23f58a3](https://www.github.com/web3-storage/web3.storage/commit/23f58a36446aa3fd240eb38b5b63ae2a5aa6462a))
+
+
+### Bug Fixes
+
+* query cluster until we get a preferable pin status ([#192](https://www.github.com/web3-storage/web3.storage/issues/192)) ([0ee131a](https://www.github.com/web3-storage/web3.storage/commit/0ee131a3217f9972ee1f9a0204677157c03773f8))
+* show calculating when DAG size is not yet known ([#199](https://www.github.com/web3-storage/web3.storage/issues/199)) ([0aa3aaf](https://www.github.com/web3-storage/web3.storage/commit/0aa3aafc62d41a9943766d3df11c621e998c4d1f))
+* two docs links to quickstart ([#168](https://www.github.com/web3-storage/web3.storage/issues/168)) ([dff14f4](https://www.github.com/web3-storage/web3.storage/commit/dff14f4d1d3a533342e60d924c963d553ede2295))
+
 ## 1.0.0 (2021-07-26)
 
 
