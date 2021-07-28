@@ -6,16 +6,16 @@ import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 // @ts-ignore
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
-import Button from '../components/button.js'
-import Hero from '../components/hero.js'
+import Button from '../components/button'
+import Hero from '../components/hero'
 
-import OpenIcon from '../icons/open.js'
-import SimpleIcon from '../icons/simple.js'
-import ProvableStorage from '../icons/provable-storage.js'
-import FreeIcon from '../icons/free.js'
-import CopyIcon from '../icons/copy.js'
-import Squares from '../illustrations/squares.js'
-import GettingStartedIllustration from '../illustrations/getting-started-illustration.js'
+import OpenIcon from '../icons/open'
+import SimpleIcon from '../icons/simple'
+import ProvableStorage from '../icons/provable-storage'
+import FreeIcon from '../icons/free'
+import CopyIcon from '../icons/copy'
+import Squares from '../illustrations/squares'
+import GettingStartedIllustration from '../illustrations/getting-started-illustration'
 
 /**
  * @returns {{ props: import('../components/types.js').LayoutProps}}
