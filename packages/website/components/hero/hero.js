@@ -11,7 +11,6 @@ import HeroBackgroundRight from '../../illustrations/hero-background-right'
 import styles from './hero.module.css'
 
 export default function Hero() {
-  /** @type {import('react').CSSProperties} */
   return (
     <div className={ clsx("relative w-full z-0 flex", styles.container )}>
       <div className={ clsx("md:layout-margins", styles.topSection) }>
