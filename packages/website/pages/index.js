@@ -35,7 +35,7 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <main className="z-10">
+      <main className="z-10 transform-gpu">
         <WhyWeb3Storage />
         <GetStarted />
       </main>
@@ -45,26 +45,34 @@ export default function Home() {
 
 function WhyWeb3Storage() {
   const codeSnippets = {
-    store: `import { Web3Storage, getFilesFromPath } from 'web3.storage'
+    store: `// Name the file \`store.mjs\` so you can use \`import\` with nodejs 
+// Run \`npm i web3.storage\` to install this package
+import { Web3Storage, getFilesFromPath } from 'web3.storage'
 
-const token = 'your-api-token'
+const token = process.env.API_TOKEN
 const client = new Web3Storage({ token })
 
 async function storeFiles () {
-  const files = await getFilesFromPath('./')
+  const files = await getFilesFromPath('/path/to/file')
   const cid = await client.put(files)
   console.log(cid)
 }
 
-storeFiles()`,
-    retrieve: `import { Web3Storage } from 'web3.storage'
+storeFiles()
+// Now run it with 
+// API_TOKEN=YOUR_TOKEN_HERE node ./store.mjs
+`,
+    retrieve: `// Name the file \`retrieve.mjs\` so you can use \`import\` with nodejs  
+// Run \`npm i web3.storage\` to install this package
+import { Web3Storage } from 'web3.storage'
 
-const token = 'your-api-token'
+const token = process.env.API_TOKEN
 const client = new Web3Storage({ token })
 
 async function retrieveFiles () {
   const cid =
     'bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'
+  // You can fetch data using any CID, even from IPFS Nodes or Gateway URLs!
   const res = await client.get(cid)
   const files = await res.files()
 
@@ -73,7 +81,10 @@ async function retrieveFiles () {
   }
 }
 
-retrieveFiles()`
+retrieveFiles()
+// Now run it with 
+// API_TOKEN=YOUR_TOKEN_HERE node ./retrieve.mjs 
+`
   }
 
   const [code, setCode] = useState('store')
@@ -96,7 +107,7 @@ retrieveFiles()`
 
   return (
     <>
-      <div className="layout-margins pt-24">
+      <div className="layout-margins mt-24 bg-w3storage-background">
         <h2 className="text-w3storage-purple text-center bg-w3storage-background border-2 border-w3storage-red px-5 lg:px-10 py-3 lg:py-6 w-max max-w-full mx-auto">
           Why build on Web3.Storage?
         </h2>
@@ -144,7 +155,9 @@ retrieveFiles()`
             <p className="max-w-xs mb-8">
               Build applications with data persisted by Filecoin and available over IPFS. Get started in minutes with this simple interface.
             </p>
-            <a href="https://docs.web3.storage/#quickstart" className="font-bold">{'Learn more >'}</a>
+            <a href="https://docs.web3.storage/#quickstart" className="font-bold underline" target="_blank" rel="noreferrer">
+              Follow the Quickstart Guide
+            </a>
           </div>
           <div className="relative w-full md:mr-12">
             <div className="text-white pl-6 xl:pl-0">
