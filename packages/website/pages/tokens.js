@@ -6,7 +6,8 @@ import { deleteToken, getTokens } from '../lib/api'
 import Button from '../components/button.js'
 import Loading from '../components/loading.js'
 
-/** @typedef {{ _id: string, name: string, secret: string }} Token */
+/** @typedef {{ data: Object[] }} TokenUploads */
+/** @typedef {{ _id: string, name: string, secret: string, uploads?: TokenUploads }} Token */
 
 /**
  * @returns {{ props: import('../components/types.js').LayoutProps}}

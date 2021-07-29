@@ -218,6 +218,11 @@ export async function userTokensGet (request, env) {
           name
           secret
           created
+          uploads {
+            data {
+              _id
+            }
+          }
         }
       }
     }

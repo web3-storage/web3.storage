@@ -96,6 +96,7 @@ export default function Account({ user }) {
 
   const isLoaded = !isLoading && !isFetching
 
+  const hasUsedTokensToUploadBefore = tokens.some(t => Object.entries(t.uploads?.data || {}).length > 0)
   /**
    * @param {import('react').ChangeEvent<HTMLFormElement>} e
    */
@@ -124,55 +125,61 @@ export default function Account({ user }) {
             </div>
           </When>
           <When condition={isLoaded}>
-            <When condition={tokens.length === 0}>
+            <When condition={tokens.length === 0 || !hasUsedTokensToUploadBefore}>
               <div className="mt-9">
                 <h3 className="font-normal">Getting started</h3>
                 <div className="flex flex-wrap gap-x-10">
-                  <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center" style={{ maxWidth: '24rem'}}>
-                    <h3 className="font-normal">Create your first API token</h3>
-                    <p>
-                      Generate an API Token to embed into your projects!
-                    </p>
-                    <Button href='/new-token'>
-                      Create an API Token
-                    </Button>
-                  </div>
-                  <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center" style={{ maxWidth: '24rem'}}>
-                    <h3 className="font-normal">Start building</h3>
-                    <p>
-                      Start storing and retrieving files using our client library! See the docs for guides and walkthroughs!
-                    </p>
-                    <Button href="https://docs.web3.storage">
-                      Explore the docs
-                    </Button>
-                  </div>
+                  <When condition={tokens.length === 0}>
+                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center" style={{ maxWidth: '24rem'}}>
+                      <h3 className="font-normal">Create your first API token</h3>
+                      <p>
+                        Generate an API Token to embed into your projects!
+                      </p>
+                      <Button href='/new-token'>
+                        Create an API Token
+                      </Button>
+                    </div>
+                  </When>
+                  <When condition={tokens.length === 0 || !hasUsedTokensToUploadBefore}>
+                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center" style={{ maxWidth: '24rem'}}>
+                      <h3 className="font-normal">Start building</h3>
+                      <p>
+                        Start storing and retrieving files using our client library! See the docs for guides and walkthroughs!
+                      </p>
+                      <Button href="https://docs.web3.storage">
+                        Explore the docs
+                      </Button>
+                    </div>
+                  </When>
                 </div>
               </div>
             </When>
-            <div className="mt-9">
-              <h3 id="api-tokens" className="font-normal">API tokens</h3>
-              <div className="flex flex-wrap gap-x-14 mt-10">
-                <Link href='/new-token'>
-                  <button type="button" className="flex items-center justify-center text-center bg-w3storage-pink border-w3storage-red w-64 h-60 mb-12 p-9 hover:bg-w3storage-white">
-                    <p className="typography-body-title px-8">Create an API token</p>
-                  </button>
-                </Link>
-                {tokens.slice(0, 5).map(t => (
-                  <form
-                    key={t._id}
-                    data-value={t.secret}
-                    onSubmit={handleCopyToken}
-                    className="flex flex-col justify-between items-center text-center bg-white border border-w3storage-red w-64 h-60 mb-12 px-8 py-9"
-                  >
-                    <p className="text-xl break-all">{t.name}</p>
-                    <Button type="submit" wrapperClassName="w-full">{copied === t.secret ? 'Copied!' : 'Copy'}</Button>
-                  </form>
-                ))}
+            <When condition={tokens.length > 0}>
+              <div className="mt-9">
+                <h3 id="api-tokens" className="font-normal">API tokens</h3>
+                <div className="flex flex-wrap gap-x-14 mt-10">
+                  <Link href='/new-token'>
+                    <button type="button" className="flex items-center justify-center text-center bg-w3storage-pink border-w3storage-red w-64 h-60 mb-12 p-9 hover:bg-w3storage-white">
+                      <p className="typography-body-title px-8">Create an API token</p>
+                    </button>
+                  </Link>
+                  {tokens.slice(0, 5).map(t => (
+                    <form
+                      key={t._id}
+                      data-value={t.secret}
+                      onSubmit={handleCopyToken}
+                      className="flex flex-col justify-between items-center text-center bg-white border border-w3storage-red w-64 h-60 mb-12 px-8 py-9"
+                    >
+                      <p className="text-xl break-all">{t.name}</p>
+                      <Button type="submit" wrapperClassName="w-full">{copied === t.secret ? 'Copied!' : 'Copy'}</Button>
+                    </form>
+                  ))}
+                </div>
+                <div className="w-64">
+                  <Button href="/tokens">Manage tokens</Button>
+                </div>
               </div>
-              <div className="w-64">
-                <Button href="/tokens">Manage tokens</Button>
-              </div>
-            </div>
+            </When>
           </When>
         </main>
       </div>
