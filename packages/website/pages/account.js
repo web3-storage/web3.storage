@@ -162,10 +162,10 @@ export default function Account({ user }) {
                     key={t._id}
                     data-value={t.secret}
                     onSubmit={handleCopyToken}
-                    className="flex flex-col justify-between items-center text-center bg-white border border-w3storage-red w-64 h-60 mb-12 p-9"
+                    className="flex flex-col justify-between items-center text-center bg-white border border-w3storage-red w-64 h-60 mb-12 px-8 py-9"
                   >
-                    <p className="typography-body-title px-8">{t.name}</p>
-                    <Button type="submit">{copied === t.secret ? 'Copied!' : 'Copy'}</Button>
+                    <p className="text-xl break-all">{t.name}</p>
+                    <Button type="submit" wrapperClassName="w-full">{copied === t.secret ? 'Copied!' : 'Copy'}</Button>
                   </form>
                 ))}
               </div>
