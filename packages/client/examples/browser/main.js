@@ -5,6 +5,8 @@ const filepicker = document.querySelector('#filepicker')
 const tokenInput = document.querySelector('#token')
 const output = document.querySelector('#output')
 
+showMessage('> ⁂ waiting for form submission...')
+
 form.addEventListener('submit', async function (event) {
   // don't reload the page!
   event.preventDefault()
@@ -20,7 +22,7 @@ form.addEventListener('submit', async function (event) {
       showMessage(`> 🔑 locally calculated Content ID: ${localCid} `)
       showMessage('> 📡 sending files to web3.storage ')
     },
-    onStoredChunk: (bytes) => showMessage(`> 🛰 sent ${bytes} bytes to web3.storage`)
+    onStoredChunk: (bytes) => showMessage(`> 🛰 sent ${bytes.toLocaleString()} bytes to web3.storage`)
   })
   showMessage(`> ✅ web3.storage now hosting ${cid}`)
   showLink(`https://dweb.link/ipfs/${cid}`)
@@ -31,7 +33,7 @@ form.addEventListener('submit', async function (event) {
     showMessage(`> 📄 ${upload.cid}  ${upload.name}`)
     totalBytes += upload.dagSize || 0
   }
-  showMessage(`> ⁂ ${totalBytes} stored!`)
+  showMessage(`> ⁂ ${totalBytes.toLocaleString()} bytes stored!`)
 }, false)
 
 function showMessage (text) {
