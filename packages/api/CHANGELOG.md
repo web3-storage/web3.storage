@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.1.1](https://www.github.com/web3-storage/web3.storage/compare/api-v3.1.0...api-v3.1.1) (2021-07-29)
+
+
+### Bug Fixes
+
+* immutable headers on cached responses ([#205](https://www.github.com/web3-storage/web3.storage/issues/205)) ([604a43b](https://www.github.com/web3-storage/web3.storage/commit/604a43b1bbb575d3c461516f29f40737ec3800c9))
+
 ## [3.1.0](https://www.github.com/web3-storage/web3.storage/compare/api-v3.0.0...api-v3.1.0) (2021-07-28)
 
 
