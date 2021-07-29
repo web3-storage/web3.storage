@@ -2,6 +2,9 @@
 
 A demo using the [`web3.storage`](https://www.npmjs.com/package/web3.storage) client in the browser to pre-calculate the CID for an asset then store it on web3.storage.
 
+Content addressing, IPFS, Filecoin, web3.storage... it's all pretty rad! Here is gateway URL for the Content ID of this example, (stored via web3.storage of course!) so you can check it out in your browser! https://dweb.link/ipfs/bafybeigxve4jcuc5o5cq3sjifgw5ukzteb23xsqalzjltavk5bzn4bi3w4
+
+
 ## Getting started
 
 ```console
