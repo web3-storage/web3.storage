@@ -25,7 +25,7 @@ export default function Footer({ bgColor = '' }) {
               Status
             </a>
           </Link>
-          <Link href="/terms">
+          <Link href="/about/#terms-of-service">
             <a className="font-bold no-underline hover:underline mr-6 md:mr-12">
               Terms of service
             </a>
