@@ -14,7 +14,7 @@
     "build": "webpack",
     "test": "npm-run-all -p -r mock:cluster mock:db test:e2e -s test:size",
     "test:size": "bundlesize",
-    "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js --debug",
+    "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js -b webkit",
     "mock:cluster": "smoke -p 9094 test/mocks/cluster",
     "mock:db": "smoke -p 9086 test/mocks/db"
   },

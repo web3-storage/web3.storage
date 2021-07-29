@@ -55,7 +55,7 @@ export function withApiOrMagicToken (handler) {
       throw new NoTokenError()
     }
     if (isWeb3ApiToken(token, env)) {
-      const authToken = findWeb3ApiToken(token, env)
+      const authToken = await findWeb3ApiToken(token, env)
       if (!authToken) {
         throw new TokenNotFoundError()
       }
@@ -64,7 +64,7 @@ export function withApiOrMagicToken (handler) {
       return handler(request, env, ctx)
     }
     if (isMagicToken(token, env)) {
-      const user = findUserFromMagicToken(token, env)
+      const user = await findUserFromMagicToken(token, env)
       if (!user) {
         throw new UserNotFoundError()
       }
