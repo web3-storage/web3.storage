@@ -21,22 +21,22 @@ export default function Footer({ bgColor = '' }) {
         </div>
         <div className="flex flex-col order-1 xl:order-2 sm:flex-row">
           <Link href="https://web3-storage.statuspage.io/">
-            <a className="font-bold no-underline hover:underline mr-6 md:mr-12">
+            <a className="text-sm font-bold no-underline hover:underline mr-6 md:mr-12">
               Status
             </a>
           </Link>
           <Link href="/about/#terms-of-service">
-            <a className="font-bold no-underline hover:underline mr-6 md:mr-12">
+            <a className="text-sm font-bold no-underline hover:underline mr-6 md:mr-12">
               Terms of service
             </a>
           </Link>
           <Link href="https://github.com/web3-storage/web3.storage/issues/new/choose">
-            <a className="font-bold no-underline hover:underline mr-6 md:mr-12" target="_blank" rel="noreferrer">
+            <a className="text-sm font-bold no-underline hover:underline mr-6 md:mr-12" target="_blank" rel="noreferrer">
               Open an issue
             </a>
           </Link>
           <Link href="https://docs.web3.storage/community/help-and-support/">
-            <a className="font-bold no-underline hover:underline">
+            <a className="text-sm font-bold no-underline hover:underline">
               Contact us
             </a>
           </Link>

@@ -24,31 +24,31 @@ export default function Navbar({ bgColor = '', user, isLoadingUser }) {
     <nav className={`${bgColor} w-full z-50`}>
       <div className="flex items-center justify-between py-3 layout-margins">
         <Link href="/">
-          <a title="Web3 Storage" className="flex">
-            <img src="/w3storage-logo.svg" style={{ height: '2.4rem' }} />
-            <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-3xl hidden xl:inline-block">Web3.Storage</span>
+          <a title="Web3 Storage" className="flex items-center">
+            <img src="/w3storage-logo.svg" style={{ height: '1.8rem' }} />
+            <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-md hidden xl:inline-block">Web3.Storage</span>
           </a>
         </Link>
         <div className="flex items-center" style={{ minHeight: 52 }}>
           <Link href="https://docs.web3.storage/">
-            <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-6 md:mr-12">
+            <a className="text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle mr-6 md:mr-12">
               Docs
             </a>
           </Link>
           <Link href="/about">
-            <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12 hidden md:inline-block">
+            <a className="text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle mr-12 hidden md:inline-block">
               About
             </a>
           </Link>
           {user ? (
             <>
               <Link href="/files">
-                <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-6 md:mr-12">
+                <a className="text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle mr-6 md:mr-12">
                   Files
                 </a>
               </Link>
               <Link href="/account">
-                <a className="text-w3storage-purple font-bold no-underline hover:underline align-middle mr-6 md:mr-12">
+                <a className="text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle mr-6 md:mr-12">
                   Account
                 </a>
               </Link>
