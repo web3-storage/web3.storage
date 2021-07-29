@@ -9,7 +9,9 @@ npm install
 npm start
 ```
 
-Then visit `http://localhost:3000?` and add your files 🚀
+Then visit `http://localhost:3000` and add your files 🚀. 
+
+You need an API token, which you can get by signing in to web3.storage, and clicking "Create an API token"
 
 ## Screenshot
 
