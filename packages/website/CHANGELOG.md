@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.1.2](https://www.github.com/web3-storage/web3.storage/compare/website-v1.1.1...website-v1.1.2) (2021-07-29)
+
+
+### Bug Fixes
+
+* purge list ([045dbb8](https://www.github.com/web3-storage/web3.storage/commit/045dbb8d93d2c4a648b11de84d98f68afe93b055))
+
 ### [1.1.1](https://www.github.com/web3-storage/web3.storage/compare/website-v1.1.0...website-v1.1.1) (2021-07-28)
 
 
