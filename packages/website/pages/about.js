@@ -27,14 +27,12 @@ import slug from 'remark-slug'
  */
 export default function About({ data }) {
     return (
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden z-0">
+        <div className="absolute top-10 right-0 pointer-events-none bottom-0 hidden sm:block z-n1">
+          <VerticalLines className="h-full" style={{ maxWidth: 192 }} />
+        </div>
         <div className="layout-margins">
           <ReactMarkdown className="prose max-w-screen-lg mx-auto text-w3storage-purple my-4 lg:my-32" children={data} remarkPlugins={[slug]} />
-          <div className="absolute top-48 left-0 w-full pointer-events-none" style={{ minWidth: '1536px' }}>
-            <div className="w-min ml-auto">
-              <VerticalLines />
-            </div>
-          </div>
         </div>
       </div>
     )
