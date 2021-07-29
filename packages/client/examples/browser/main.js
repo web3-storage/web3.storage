@@ -29,7 +29,7 @@ form.addEventListener('submit', async function (event) {
   let totalBytes = 0
   for await (const upload of client.list()) {
     showMessage(`> 📄 ${upload.cid}  ${upload.name}`)
-    totalBytes += upload.dagSize
+    totalBytes += upload.dagSize || 0
   }
   showMessage(`> ⁂ ${totalBytes} stored!`)
 }, false)
