@@ -210,6 +210,14 @@ body {
   animation: appear-bottom-then-go-away 3s ease-in-out both;
 }
 
+@keyframes grow-width {
+  from   { width: 0  }
+}
+
+.grow-width {
+  animation: grow-width 1s ease-in-out both;
+}
+
 .prose h1 > a,
 .prose h2 > a,
 .prose h3 > a,

@@ -218,10 +218,21 @@ export async function userTokensGet (request, env) {
           name
           secret
           created
+          uploads(_size: 1) {
+            data {
+              _id
+            }
+          }
         }
       }
     }
   `, { user: request.auth.user._id })
+
+  res.findAuthTokensByUser.data = res.findAuthTokensByUser.data.map(t => {
+    t.hasUploads = Boolean(t.uploads.data.length)
+    delete t.uploads
+    return t
+  })
 
   return new JSONResponse(res.findAuthTokensByUser.data)
 }

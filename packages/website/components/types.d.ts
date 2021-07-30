@@ -15,10 +15,12 @@ export interface LayoutProps {
 }
 
 export interface LayoutChildrenProps {
-  user?: {
-    issuer: string | null
-    publicAddress: string | null
-    email: string | null
-  },
+  user?: LayoutUser
   data: any
+}
+
+export interface LayoutUser {
+  issuer: string | null
+  publicAddress: string | null
+  email: string | null
 }
