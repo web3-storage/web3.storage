@@ -8,6 +8,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import Button from '../components/button'
 import Hero from '../components/hero'
+import countly from '../lib/countly'
 
 import OpenIcon from '../icons/open'
 import SimpleIcon from '../icons/simple'
@@ -229,7 +230,12 @@ function GetStarted() {
               <h3 className="mb-12 font-medium">1. Create an account</h3>
               <div className="flex flex-col flex-grow justify-between">
                 <p>Sign up using your email address or GitHub handle and create your API Key.</p>
-                <Button href="/login" variant="light" wrapperClassName="w-max mt-12">
+                <Button
+                  href="/login"
+                  variant="light"
+                  wrapperClassName="w-max mt-12"
+                  tracking={{ ui: countly.ui.HOME_GET_STARTED, action: "Sign Up" }}
+                >
                   {'Sign Up >'}
                 </Button>
               </div>
@@ -238,7 +244,12 @@ function GetStarted() {
               <h3 className="mb-12 font-medium">2. Install the library</h3>
               <div className="flex flex-col flex-grow justify-between">
                 <p>Grab the client library using NPM.</p>
-                <Button href="https://docs.web3.storage/#quickstart" variant="light" wrapperClassName="w-max mt-12">
+                <Button
+                  href="https://docs.web3.storage/#quickstart"
+                  variant="light"
+                  wrapperClassName="w-max mt-12"
+                  tracking={{ ui: countly.ui.HOME_GET_STARTED, action: "Install" }}
+                >
                   {'Install >'}
                 </Button>
               </div>
@@ -247,7 +258,12 @@ function GetStarted() {
               <h3 className="mb-12 font-medium">3. Start building</h3>
               <div className="flex flex-col flex-grow justify-between">
                 <p>Read the docs and follow our guides to start building on Web3!</p>
-                <Button href="https://docs.web3.storage/how-tos/store/" variant="light" wrapperClassName="w-max mt-12">
+                <Button
+                  href="https://docs.web3.storage/how-tos/store/"
+                  variant="light"
+                  wrapperClassName="w-max mt-12"
+                  tracking={{ ui: countly.ui.HOME_GET_STARTED, action: "Read" }}
+                >
                   {'Read >'}
                 </Button>
               </div>

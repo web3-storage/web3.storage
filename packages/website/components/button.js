@@ -1,7 +1,16 @@
+import { useCallback } from 'react'
 import Link from 'next/link'
 import clsx from 'clsx'
 
+import countly from '../lib/countly'
+
 /**
+ * @typedef {Object} TrackingProp
+ * @prop {string} ui UI section id. One of countly.ui.
+ * @prop {string} [action] Action id. used to uniquely identify an action within a ui section.
+ * @prop {string} [event] Custom event name to be used instead of the default CTA_LINK_CLICK.
+ * @prop {Object} [data] Extra data to send to countly.
+ * 
  * @typedef {Object} ButtonProps
  * @prop {string} [wrapperClassName]
  * @prop {string} [className]
@@ -14,6 +23,7 @@ import clsx from 'clsx'
  * @prop {'dark' | 'light' | 'outlined' } [variant]
  * @prop {boolean} [small] If the button should have min-width & height or not
  * @prop {import('react').FunctionComponent} [Icon] Icon component to prefix
+ * @prop {TrackingProp} [tracking] Tracking data to send to countly on button click
  */
 
 /**
@@ -33,9 +43,21 @@ export default function Button({
   variant = 'dark',
   small,
   Icon,
+  tracking
 }) {
+  const onClickHandler = useCallback((event) => {
+    tracking && countly.trackEvent(tracking.event || countly.events.CTA_LINK_CLICK, {
+      ui: tracking.ui,
+      action: tracking.action,
+      link: href,
+      ...(tracking.data || {}),
+    })
+    onClick && onClick(event)
+  }, [tracking, onClick, href])
+
   const buttonStyle = small ? {} : { minWidth: '6rem', minHeight: '3.25rem' }
-  let variantClasses = '';
+  let variantClasses = ''
+
   switch(variant) {
     case 'dark':
       variantClasses = 'bg-w3storage-purple text-white border border-transparent'
@@ -49,6 +71,7 @@ export default function Button({
       variantClasses = 'bg-transparent border-2 border-w3storage-purple text-w3storage-purple'
       break
   }
+
   const btn = (
     <button
       type={type}
@@ -69,7 +92,7 @@ export default function Button({
         className
       )}
       style={buttonStyle}
-      onClick={onClick}
+      onClick={onClickHandler}
       disabled={disabled}
       id={id}
     >

@@ -1,9 +1,11 @@
-import { getToken, API } from "../lib/api";
 import { useRouter } from "next/router";
 import { Web3Storage } from "web3.storage";
 import { useQueryClient } from "react-query";
 import { useDropzone } from "react-dropzone";
 import { useRef, useState } from "react";
+
+import countly from "../lib/countly";
+import { getToken, API } from "../lib/api";
 import Button from "../components/button.js";
 
 export function getStaticProps() {
@@ -104,6 +106,10 @@ export default function Upload() {
                 type="submit"
                 disabled={uploading || !inputRef?.current?.files || inputRef?.current?.files?.length === 0}
                 id="upload-file"
+                tracking={{
+                  event: countly.events.FILE_UPLOAD_CLICK,
+                  ui: countly.ui.UPLOAD,
+                }}
               >
                 {uploading
                   ? `Uploading...${

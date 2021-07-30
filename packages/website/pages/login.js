@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Router from 'next/router'
 import { useQueryClient } from 'react-query'
+import countly from '../lib/countly'
 import { loginEmail, loginSocial } from '../lib/magic.js'
 import Button from '../components/button.js'
 import GithubIcon from '../icons/github.js'
@@ -60,6 +61,11 @@ export default function Login() {
               loginSocial('github')
             }}
             Icon={GithubIcon}
+            tracking={{
+              event: countly.events.LOGIN_CLICK,
+              ui: countly.ui.LOGIN,
+              action: 'Github'
+            }}
           >
             {isRedirecting ? 'Redirecting...' : 'GitHub'}
           </Button>
@@ -74,7 +80,16 @@ export default function Login() {
             className="w-full border border-black px-4 py-3 placeholder-black"
           />
 
-          <Button type="submit" disabled={disabled} wrapperClassName="mt-2">
+          <Button
+            type="submit"
+            disabled={disabled}
+            wrapperClassName="mt-2"
+            tracking={{
+              event: countly.events.LOGIN_CLICK,
+              ui: countly.ui.LOGIN,
+              action: 'Sign Up / Login'
+            }}
+          >
             Sign Up / Login
           </Button>
 

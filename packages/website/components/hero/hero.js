@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import countly from '../../lib/countly'
 import Button from '../button'
 
 import Wave from '../../illustrations/wave'
@@ -33,6 +34,7 @@ export default function Hero() {
             href="/login"
             id="getting-started"
             wrapperClassName="flex mx-auto w-48"
+            tracking={{ ui: countly.ui.HOME_HERO, action: "Get Started" }}
           >
             Get Started
           </Button>
