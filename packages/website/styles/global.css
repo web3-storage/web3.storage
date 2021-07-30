@@ -86,6 +86,12 @@
   letter-spacing: normal;
 }
 
+.typography-body-subtitle {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.25rem;
+  letter-spacing: normal;
+}
+
 .typography-cta {
   font-family: "Open Sans", sans-serif;
   font-weight: 600;
@@ -119,6 +125,11 @@ h2 {
 
 h3 {
   @apply typography-body-title;
+  @apply font-bold;
+}
+
+h4 {
+  @apply typography-body-subtitle;
   @apply font-bold;
 }
 
@@ -199,8 +210,17 @@ body {
   animation: appear-bottom-then-go-away 3s ease-in-out both;
 }
 
+@keyframes grow-width {
+  from   { width: 0  }
+}
+
+.grow-width {
+  animation: grow-width 1s ease-in-out both;
+}
+
 .prose h1 > a,
 .prose h2 > a,
-.prose h3 > a {
+.prose h3 > a,
+.prose h4 > a {
   text-decoration: none;
 }

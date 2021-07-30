@@ -368,6 +368,9 @@ enum DealStatus {
 }
 
 type Query {
+  """
+  Find all uploads created after a given date. Note: this INCLUDES deleted uploads.
+  """
   findUploadsCreatedAfter(since: Time!): [Upload!]! @resolver(paginated: true)
   findUploadsByUser(where: FindUploadsByUserInput!): [Upload!]! @resolver(paginated: true)
   findContentByCid(cid: String!): Content @resolver

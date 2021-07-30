@@ -70,10 +70,13 @@ export async function metricsGet (request, env, ctx) {
     `web3storage_pins_status_failed_total ${findMetrics.pinsFailedTotal}`
   ].join('\n')
 
-  res = new Response(metrics)
+  res = new Response(metrics, {
+    headers: {
+      // cache metrics response
+      'Cache-Control': `public, max-age=${METRICS_CACHE_MAX_AGE}`
+    }
+  })
 
-  // cache metrics response
-  res.headers.set('Cache-Control', `public, max-age=${METRICS_CACHE_MAX_AGE}`)
   ctx.waitUntil(cache.put(request, res.clone()))
 
   return res

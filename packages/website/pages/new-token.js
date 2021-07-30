@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useQueryClient } from 'react-query'
+
 import Button from '../components/button.js'
+import countly from '../lib/countly'
 import { createToken } from '../lib/api.js'
 import VerticalLines from '../illustrations/vertical-lines.js'
 
@@ -45,7 +47,10 @@ export default function NewToken() {
   }
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden z-0 flex-grow">
+      <div className="absolute top-10 right-0 pointer-events-none bottom-0 hidden sm:flex justify-end z-n1">
+        <VerticalLines className="h-full"/>
+      </div>
       <div className="layout-margins">
         <main className="max-w-screen-lg mx-auto my-4 lg:my-16 text-w3storage-purple">
           <div className="flex flex-col items-center justify-between mx-auto w-96 h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center">
@@ -68,6 +73,11 @@ export default function NewToken() {
                   type="submit"
                   disabled={creating}
                   id="create-new-token"
+                  tracking={{
+                    event: countly.events.TOKEN_CREATE,
+                    ui: countly.ui.NEW_TOKEN,
+                    action: 'Create new token'
+                  }}
                 >
                   {creating ? 'Creating...' : 'Create'}
                 </Button>
@@ -75,11 +85,6 @@ export default function NewToken() {
             </form>
           </div>
         </main>
-        <div className="absolute top-48 left-0 w-full pointer-events-none" style={{ minWidth: '1536px' }}>
-          <div className="w-min ml-auto">
-            <VerticalLines />
-          </div>
-        </div>
       </div>
     </div>
   )

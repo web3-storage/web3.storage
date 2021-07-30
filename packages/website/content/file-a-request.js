@@ -4,9 +4,9 @@
 */
 
 export default ({
-    "mail": "support@web3.storage",
-    "subject": "Account Limit Increase Request",
-    "body": [
+    mail: "support@web3.storage",
+    subject: "Account Limit Increase Request",
+    body: [
         "### Name",
         "``` Please share the user authentication method (Github, Email) associated with your account ```",
         "",

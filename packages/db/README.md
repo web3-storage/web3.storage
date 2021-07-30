@@ -17,7 +17,7 @@ Note: the `import` task imports both the GraphQL schema and the FaunaQL function
 
 ## Schema
 
-[![web3.storage schema](https://user-images.githubusercontent.com/152863/125276207-dc959980-e307-11eb-99fb-3f0c81d61b8f.jpg)](https://user-images.githubusercontent.com/152863/125276207-dc959980-e307-11eb-99fb-3f0c81d61b8f.jpg)
+[![web3.storage schema](https://bafybeieevwz3ubli22dra5dnjp5w2gvuc54y6bpf67p3xikeracokttp2m.ipfs.dweb.link/web3.storage-schema.jpg)](https://bafybeieevwz3ubli22dra5dnjp5w2gvuc54y6bpf67p3xikeracokttp2m.ipfs.dweb.link/web3.storage-schema.jpg)
 
 ### `User`
 

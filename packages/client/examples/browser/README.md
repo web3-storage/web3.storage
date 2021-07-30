@@ -1,16 +1,22 @@
-# Files demo browser - web3.storage
+# web3.storage in the browser
 
-A demo using web3.storage client in the browser to pre-calculate the CID for an asset then store it on web3.storage.
+A demo using the [`web3.storage`](https://www.npmjs.com/package/web3.storage) client in the browser to pre-calculate the CID for an asset then store it on web3.storage.
+
+Content addressing, IPFS, Filecoin, web3.storage... it's all pretty rad! Here is gateway URL for the Content ID of this example, (stored via web3.storage of course!) so you can check it out in your browser! https://dweb.link/ipfs/bafybeigxve4jcuc5o5cq3sjifgw5ukzteb23xsqalzjltavk5bzn4bi3w4
+
 
 ## Getting started
 
 ```console
 npm install
-npm run dev
-
-# or
-yarn
-yarn dev
+npm start
 ```
 
-Then visit `http://localhost:3000?key=<your web3.storage API KEY here>` and add your files.
+Then visit `http://localhost:3000` and add your files 🚀. 
+
+You need an API token, which you can get by signing in to web3.storage, and clicking "Create an API token"
+
+## Screenshot
+
+![screenshot of the browser demo](https://user-images.githubusercontent.com/58871/127395300-331a21cf-90ab-4471-93e3-5c7e289ce321.png)
+
