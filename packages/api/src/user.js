@@ -218,7 +218,7 @@ export async function userTokensGet (request, env) {
           name
           secret
           created
-          uploads {
+          uploads(_size: 1) {
             data {
               _id
             }
