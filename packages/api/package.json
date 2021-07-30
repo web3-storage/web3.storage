@@ -11,7 +11,7 @@
     "start": "wrangler dev --env $(whoami)",
     "dev": "wrangler dev --env $(whoami)",
     "publish": "wrangler publish --env $(whoami)",
-    "build": "webpack",
+    "build": "WEBPACK_CLI_FORCE_LOAD_ESM_CONFIG=true webpack",
     "test": "npm-run-all -p -r mock:cluster mock:db test:e2e -s test:size",
     "test:size": "bundlesize",
     "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js -b webkit",
