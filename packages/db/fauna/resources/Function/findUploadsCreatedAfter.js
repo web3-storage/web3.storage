@@ -26,7 +26,7 @@ const body = Query(
     Let(
       {
         range: Range(
-          Match(Index('upload_sort_by_created_asc'), true),
+          Match(Index('upload_inc_deleted_sort_by_created_asc')),
           Var('since'),
           null
         ),
