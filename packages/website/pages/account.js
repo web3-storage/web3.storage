@@ -1,8 +1,9 @@
 /* eslint-env browser */
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { useQuery } from 'react-query'
 import Link from 'next/link'
 import { getTokens, getStorage } from '../lib/api'
+import countly from '../lib/countly'
 import Button from '../components/button'
 import Loading from '../components/loading'
 import VerticalLines from '../illustrations/vertical-lines'
@@ -100,13 +101,26 @@ export default function Account({ user }) {
   /**
    * @param {import('react').ChangeEvent<HTMLFormElement>} e
    */
+
+
   async function handleCopyToken(e) {
     e.preventDefault()
     const secret = e.target.dataset.value
     if (!secret) throw new Error('missing token value')
     await navigator.clipboard.writeText(secret)
     setCopied(secret)
+
+    countly.trackEvent(countly.events.TOKEN_COPY, {
+      ui: countly.ui.PROFILE_API_TOKENS,
+    })
   }
+
+  const onNewTokenClick = useCallback(() => {
+    countly.trackEvent(countly.events.CTA_LINK_CLICK, {
+      ui: countly.ui.PROFILE_API_TOKENS,
+      action: 'Create an API Token'
+    })
+  }, [])
 
   return (
     <div className="relative overflow-hidden z-0">
@@ -135,7 +149,10 @@ export default function Account({ user }) {
                       <p>
                         Generate an API Token to embed into your projects!
                       </p>
-                      <Button href='/new-token'>
+                      <Button
+                        href='/new-token'
+                        tracking={{ ui: countly.ui.PROFILE_GETTING_STARTED, action: 'Create an API Token' }}
+                      >
                         Create an API Token
                       </Button>
                     </div>
@@ -146,7 +163,10 @@ export default function Account({ user }) {
                       <p>
                         Start storing and retrieving files using our client library! See the docs for guides and walkthroughs!
                       </p>
-                      <Button href="https://docs.web3.storage">
+                      <Button
+                        href="https://docs.web3.storage"
+                        tracking={{ ui: countly.ui.PROFILE_GETTING_STARTED, action: 'Explore the docs' }}
+                      >
                         Explore the docs
                       </Button>
                     </div>
@@ -159,7 +179,11 @@ export default function Account({ user }) {
                 <h3 id="api-tokens" className="font-normal">API tokens</h3>
                 <div className="flex flex-wrap gap-x-14 mt-10">
                   <Link href='/new-token'>
-                    <button type="button" className="flex items-center justify-center text-center bg-w3storage-pink border-w3storage-red w-64 h-60 mb-12 p-9 hover:bg-w3storage-white">
+                    <button
+                      type="button"
+                      className="flex items-center justify-center text-center bg-w3storage-pink border-w3storage-red w-64 h-60 mb-12 p-9 hover:bg-w3storage-white"
+                      onClick={onNewTokenClick}
+                    >
                       <p className="typography-body-title px-8">Create an API token</p>
                     </button>
                   </Link>
@@ -176,7 +200,10 @@ export default function Account({ user }) {
                   ))}
                 </div>
                 <div className="w-64">
-                  <Button href="/tokens">Manage tokens</Button>
+                  <Button
+                    href="/tokens"
+                    tracking={{ ui: countly.ui.PROFILE_API_TOKENS, action: 'Manage tokens' }}
+                  >Manage tokens</Button>
                 </div>
               </div>
             </When>

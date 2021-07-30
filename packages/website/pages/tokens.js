@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { If, Then, Else, When } from 'react-if'
 import clsx from 'clsx'
+
+import countly from '../lib/countly'
 import { deleteToken, getTokens } from '../lib/api'
 import Button from '../components/button.js'
 import Loading from '../components/loading.js'
@@ -123,6 +125,10 @@ export default function Tokens({ user }) {
     } finally {
       await queryClient.invalidateQueries('get-tokens')
       setDeleting('')
+
+      countly.trackEvent(countly.events.TOKEN_DELETE, {
+        ui: countly.ui.TOKENS,
+      })
     }
   }
 
@@ -132,6 +138,10 @@ export default function Tokens({ user }) {
   async function handleCopyToken(t) {
     await navigator.clipboard.writeText(t.secret)
     setCopied(t._id)
+
+    countly.trackEvent(countly.events.TOKEN_COPY, {
+      ui: countly.ui.TOKENS,
+    })
   }
 
   return (
@@ -141,7 +151,11 @@ export default function Tokens({ user }) {
         <When condition={tokens.length > 0}>
           <div className="flex ml-6">
             <div className="w-35 ml-auto">
-              <Button href="/new-token" small>New API Token</Button>
+              <Button
+                href="/new-token"
+                small
+                tracking={{ ui: countly.ui.TOKENS, action: 'New API Token' }}
+              >New API Token</Button>
             </div>
           </div>
         </When>
@@ -181,7 +195,11 @@ export default function Tokens({ user }) {
                   No API Tokens
                 </p>
                 <div className="w-35 mt-10">
-                  <Button href="/new-token" small>New API Token</Button>
+                  <Button
+                    href="/new-token"
+                    small
+                    tracking={{ ui: countly.ui.TOKENS_EMPTY, action: 'New API Token' }}
+                  >New API Token</Button>
                 </div>
               </div>
             </When>

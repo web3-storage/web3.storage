@@ -9,6 +9,7 @@ import Loading from '../components/loading'
 import Tooltip from '../components/tooltip'
 
 import CopyIcon from '../icons/copy'
+import countly from '../lib/countly'
 import { getUploads, deleteUpload } from '../lib/api.js'
 import { When } from 'react-if'
 import clsx from 'clsx'
@@ -177,6 +178,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
  *
  * @param {import('../components/types.js').LayoutChildrenProps} props
  * @returns
+
  */
 export default function Files({ user }) {
   /** @type string[] */
@@ -203,9 +205,16 @@ export default function Files({ user }) {
   const uploads = data?.length === size ? data.concat().splice(0, size - 1) : (data || [])
 
   function handleDelete() {
-    if (!confirm('Are you sure? Deleted files cannot be recovered!')) return
+    if (!confirm('Are you sure? Deleted files cannot be recovered!')) {
+      countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
+        ui: countly.ui.FILES,
+        totalDeleted: 0
+      })
+      
+      return
+    }
 
-    selectedFiles.map(async cid => {
+    const deletedFiles = selectedFiles.map(async cid => {
       if (!cid || typeof cid !== 'string') return;
 
       try {
@@ -213,6 +222,13 @@ export default function Files({ user }) {
       } finally {
         await queryClient.invalidateQueries('get-uploads')
       }
+
+      return cid
+    }).filter(cid => !!cid)
+
+    countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
+      ui: countly.ui.FILES,
+      totalDeleted: deletedFiles.length
     })
 
     setSelectedFiles([])
@@ -319,7 +335,15 @@ export default function Files({ user }) {
                   No files
                 </p>
                 <div className="w-36 m-auto">
-                  <Button href="/upload" id="upload">Upload Files</Button>
+                  <Button
+                    href="/upload"
+                    id="upload"
+                    tracking={{
+                      ui: countly.ui.FILES,
+                      action: 'Upload File',
+                      data: { isFirstFile: true }
+                    }}
+                  >Upload Files</Button>
                 </div>
               </When>
               <When condition={!hasZeroUploads}>
@@ -333,10 +357,27 @@ export default function Files({ user }) {
                     </Button> */}
                     
                     <div className="w-35 ml-auto">
-                      <Button small onClick={() => refetch()}>Refresh</Button>
+                      <Button
+                        small
+                        onClick={() => refetch()}
+                        tracking={{
+                          event: countly.events.FILES_REFRESH,
+                          ui: countly.ui.FILES,
+                          action: 'Refresh',
+                        }}
+                      >Refresh</Button>
                     </div>
                     <div className="w-35 ml-4">
-                      <Button href="/upload" small id="upload">Upload More Files</Button>
+                      <Button
+                        href="/upload"
+                        small
+                        id="upload"
+                        tracking={{
+                          ui: countly.ui.FILES,
+                          action: 'Upload File',
+                          data: { isFirstFile: false }
+                        }}
+                      >Upload More Files</Button>
                     </div>
                   </div>
                   <FilesTable />
@@ -347,6 +388,11 @@ export default function Files({ user }) {
                         wrapperClassName="m-h-2"
                         onClick={handlePrevClick}
                         id="uploads-previous"
+                        tracking={{
+                          event: countly.events.FILES_NAVIGATION_CLICK,
+                          ui: countly.ui.FILES,
+                          action: 'Previous'
+                        }}
                       >
                         ← Previous
                       </Button>
@@ -357,6 +403,11 @@ export default function Files({ user }) {
                         wrapperClassName="m-h-2 ml-auto"
                         onClick={handleNextClick}
                         id="uploads-next"
+                        tracking={{
+                          event: countly.events.FILES_NAVIGATION_CLICK,
+                          ui: countly.ui.FILES,
+                          action: 'Next'
+                        }}
                       >
                         Next →
                       </Button>

@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useQueryClient } from 'react-query'
+
 import Button from '../components/button.js'
+import countly from '../lib/countly'
 import { createToken } from '../lib/api.js'
 import VerticalLines from '../illustrations/vertical-lines.js'
 
@@ -68,6 +70,11 @@ export default function NewToken() {
                   type="submit"
                   disabled={creating}
                   id="create-new-token"
+                  tracking={{
+                    event: countly.events.TOKEN_CREATE,
+                    ui: countly.ui.NEW_TOKEN,
+                    action: 'Create new token'
+                  }}
                 >
                   {creating ? 'Creating...' : 'Create'}
                 </Button>

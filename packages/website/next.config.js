@@ -19,7 +19,12 @@ const nextConfig = {
     })
 
     return config
-  }
+  },
+  exportPathMap: async function () {
+    return {
+      '/ipfs-404.html': { page: '/404' },
+    }
+  },
 }
 
 module.exports = nextConfig
