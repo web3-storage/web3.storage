@@ -67,7 +67,7 @@ const body = Query(
                   Update(Var('userRef'), {
                     data: {
                       usedStorage: Add(
-                        Select(['usedStorage'], Get(Var('userRef')), 0),
+                        Select(['data', 'usedStorage'], Get(Var('userRef')), 0),
                         Select(['chunkSize'], Var('data'))
                       )
                     }
@@ -103,7 +103,7 @@ const body = Query(
                     Update(Var('userRef'), {
                       data: {
                         usedStorage: Add(
-                          Select(['usedStorage'], Get(Var('userRef')), 0),
+                          Select(['data', 'usedStorage'], Get(Var('userRef')), 0),
                           Select(['chunkSize'], Var('data'))
                         )
                       }
