@@ -46,8 +46,8 @@ export default function NewToken() {
 
   return (
     <div className="relative overflow-hidden z-0 flex-grow">
-      <div className="absolute top-10 right-0 pointer-events-none bottom-0 hidden sm:block z-n1">
-        <VerticalLines className="h-full" style={{ maxWidth: 192 }} />
+      <div className="absolute top-10 right-0 pointer-events-none bottom-0 hidden sm:flex justify-end z-n1">
+        <VerticalLines className="h-full"/>
       </div>
       <div className="layout-margins">
         <main className="max-w-screen-lg mx-auto my-4 lg:my-16 text-w3storage-purple">

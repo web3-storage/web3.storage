@@ -28,7 +28,7 @@ import slug from 'remark-slug'
 export default function About({ data }) {
     return (
       <div className="relative overflow-hidden z-0">
-        <div className="absolute top-10 right-0 pointer-events-none bottom-0 hidden xl:block z-n1">
+        <div className="absolute top-10 right-0 pointer-events-none bottom-0 hidden xl:flex justify-end z-n1">
           <VerticalLines className="h-full"/>
         </div>
         <div className="layout-margins">
