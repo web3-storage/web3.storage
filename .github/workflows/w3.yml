@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: 16.5
+          node-version: 16
       # Only install the deps directly listed... dont do workspace magic.
       # Running install from the root gets you all the deps for all the packages.
       # which can easily mask missing deps if another modules also depends on it.
