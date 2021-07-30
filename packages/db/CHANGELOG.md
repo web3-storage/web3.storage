@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.0.2](https://www.github.com/web3-storage/web3.storage/compare/db-v2.0.1...db-v2.0.2) (2021-07-30)
+
+
+### Bug Fixes
+
+* pins dag size default to 0 ([#252](https://www.github.com/web3-storage/web3.storage/issues/252)) ([5e578f4](https://www.github.com/web3-storage/web3.storage/commit/5e578f4ae9f0f1edb35e0c38b39007781cad7bd6))
+
 ### [2.0.1](https://www.github.com/web3-storage/web3.storage/compare/db-v2.0.0...db-v2.0.1) (2021-07-30)
 
 
