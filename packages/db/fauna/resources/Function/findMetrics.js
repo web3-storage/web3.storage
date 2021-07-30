@@ -45,7 +45,7 @@ const body = Query(
             ),
             Lambda(
               'pin',
-              Select(['data', 'dagSize'], Get(Var('pin')))
+              Select(['data', 'dagSize'], Get(Var('pin')), 0)
             )
           ))
         ),
