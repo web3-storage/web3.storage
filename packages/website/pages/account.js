@@ -112,7 +112,7 @@ export default function Account({ user }) {
     <div className="relative overflow-hidden z-0">
       <When condition={isLoaded}>
         <div className="absolute top-10 right-0 pointer-events-none bottom-0 hidden sm:block z-n1">
-          <VerticalLines className="h-full" style={{ maxWidth: 200 }} />
+          <VerticalLines className="h-full"/>
         </div>
       </When>
       <div className="layout-margins">
