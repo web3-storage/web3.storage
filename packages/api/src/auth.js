@@ -22,7 +22,6 @@ export function withMagicToken (handler) {
    * @returns {Response}
    */
   return async (request, env, ctx) => {
-    console.log('withMagicToken', request.url)
     const token = getTokenFromRequest(request, env)
 
     const magicUser = await tryMagicToken(token, env)
@@ -51,7 +50,6 @@ export function withApiOrMagicToken (handler) {
    * @returns {Response}
    */
   return async (request, env, ctx) => {
-    console.log('withApiOrMagicToken', request.url)
     const token = getTokenFromRequest(request, env)
 
     const magicUser = await tryMagicToken(token, env)
