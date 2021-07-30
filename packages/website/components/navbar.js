@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Router from 'next/router'
 import Link from 'next/link'
 import { getMagic } from '../lib/magic.js'
@@ -8,8 +8,7 @@ import Button from './button.js'
 import { useResizeObserver } from '../hooks/resize-observer'
 import clsx from 'clsx'
 import Hamburger from '../icons/hamburger'
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
-import { useEffect } from 'react'
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 
 
 /**
