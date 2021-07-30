@@ -31,12 +31,12 @@ export default function Navbar({ bgColor = '', user, isLoadingUser }) {
         </Link>
         <div className="flex items-center" style={{ minHeight: 52 }}>
           <Link href="https://docs.web3.storage/">
-            <a className="text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle pr-3 py-3 md:px-6">
+            <a className={`text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle p-3 py-3 md:px-6 ${user ? '' : 'mr-6 md:mr-0'}`}>
               Docs
             </a>
           </Link>
           <Link href="/about">
-            <a className="text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle p-3 md:px-6 hidden md:inline-block">
+            <a className={`text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle p-3 md:px-6 hidden md:inline-block ${user ? '' : 'md:mr-6'}`}>
               About
             </a>
           </Link>
@@ -48,7 +48,7 @@ export default function Navbar({ bgColor = '', user, isLoadingUser }) {
                 </a>
               </Link>
               <Link href="/account">
-                <a className="text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle p-3 md:px-6">
+                <a className="text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle p-3 md:px-6 mr-3 md:mr-6">
                   Account
                 </a>
               </Link>
