@@ -27,7 +27,8 @@ export function getStaticProps() {
       needsLoggedIn: false,
       navBgColor: 'bg-w3storage-red',
       footerBgColor: 'bg-w3storage-red',
-      highlightMessage: `Looking to store NFTs? Check out <a class="underline" href="https://nft.storage">NFT.Storage</a>!</p>`
+      highlightMessage: `Looking to store NFTs? Check out <a class="underline" href="https://nft.storage">NFT.Storage</a>!</p>`,
+      hasBanner: true
     },
   }
 }

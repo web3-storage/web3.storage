@@ -199,6 +199,15 @@ body {
   border-top-color: #fc6553;
 }
 
+@keyframes appear-from-left {
+  from { transform: translateX(-100%) }
+  to   { transform: translateX(0)     }
+}
+
+.appear-from-left {
+  animation: appear-from-left 0.4s ease-in-out both;
+}
+
 @keyframes appear-bottom-then-go-away {
   from   { opacity: 1; transform: translateY(100%)  }
   20%    { opacity: 1; transform: translateY(0)     }

@@ -11,6 +11,7 @@
   "dependencies": {
     "@magic-ext/oauth": "^0.7.0",
     "@tailwindcss/typography": "^0.4.1",
+    "body-scroll-lock": "^4.0.0-beta.0",
     "clsx": "^1.1.1",
     "countly-sdk-web": "^20.11.2",
     "filesize": "^6.1.0",
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^5.5.0",
+    "@types/body-scroll-lock": "^2.6.2",
     "@types/react": "^17.0.4",
     "@types/react-copy-to-clipboard": "^5.0.1",
     "@types/react-dom": "^17.0.9",

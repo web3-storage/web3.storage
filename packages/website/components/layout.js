@@ -23,8 +23,9 @@ export default function Layout({
   title = 'Web3 Storage - The simple file storage service for IPFS & Filecoin.',
   description = 'Web3 Storage',
   pageBgColor = 'bg-w3storage-background',
-  navBgColor,
+  navBgColor = 'bg-w3storage-background',
   footerBgColor,
+  hasBanner = false,
   data = null,
   highlightMessage,
 }) {
@@ -63,7 +64,7 @@ export default function Layout({
           { highlightMessage &&
             <div className="w-full bg-w3storage-purple text-white typography-cta text-center py-1" dangerouslySetInnerHTML={{ __html: highlightMessage }} />
           }
-          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
+          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} hasBanner={hasBanner} />
           {children({ isLoggedIn, data })}
           <Footer bgColor={footerBgColor} />
         </>
