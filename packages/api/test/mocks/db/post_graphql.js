@@ -34,7 +34,10 @@ module.exports = ({ body }) => {
           _id: 'test-auth-token',
           name: 'Test Auth Token',
           secret: 'test-auth-token-secret',
-          created: Date.now()
+          created: Date.now(),
+          uploads: {
+            data: []
+          }
         }]
       }
     })
