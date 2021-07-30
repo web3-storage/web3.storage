@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.2.0](https://www.github.com/web3-storage/web3.storage/compare/api-v3.1.1...api-v3.2.0) (2021-07-30)
+
+
+### Features
+
+* add 'hasUpload' property to the tokens ([f583565](https://www.github.com/web3-storage/web3.storage/commit/f58356593a0e9cf02fa3a4c5c96a6be2d9acfc03))
+* restrict block size ([#242](https://www.github.com/web3-storage/web3.storage/issues/242)) ([85b3199](https://www.github.com/web3-storage/web3.storage/commit/85b31996108e8c6a8d421844f82f35187efe85fa))
+
+
+### Bug Fixes
+
+* pass reader to getDagSize ([60d97fb](https://www.github.com/web3-storage/web3.storage/commit/60d97fb096043ac3a60f4f343b81aab1e89a171e))
+* show 'explore the docs' when token hasnt been used ([2a707aa](https://www.github.com/web3-storage/web3.storage/commit/2a707aa6502c4a8acd465c34018b33c4c47a7d81))
+* token upload now only fetchs 1 ([620435c](https://www.github.com/web3-storage/web3.storage/commit/620435c16cbb3a044ba56f8718055670f7369a2c))
+
 ### [3.1.1](https://www.github.com/web3-storage/web3.storage/compare/api-v3.1.0...api-v3.1.1) (2021-07-29)
 
 
