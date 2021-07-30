@@ -96,7 +96,7 @@ export default function Account({ user }) {
 
   const isLoaded = !isLoading && !isFetching
 
-  const hasUsedTokensToUploadBefore = tokens.some(t => Object.entries(t.uploads?.data || {}).length > 0)
+  const hasUsedTokensToUploadBefore = tokens.some(t => t.hasUploads)
   /**
    * @param {import('react').ChangeEvent<HTMLFormElement>} e
    */
