@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://www.github.com/web3-storage/web3.storage/compare/w3-v2.0.0...w3-v2.1.0) (2021-07-29)
+
+
+### Features
+
+* add alias for list -> ls ([#228](https://www.github.com/web3-storage/web3.storage/issues/228)) ([58bda2d](https://www.github.com/web3-storage/web3.storage/commit/58bda2ddb72fa04aded0542fd33847cf194d64f0))
+
 ## [2.0.0](https://www.github.com/web3-storage/web3.storage/compare/w3-v1.1.0...w3-v2.0.0) (2021-07-28)
 
 
