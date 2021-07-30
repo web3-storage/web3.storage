@@ -27,7 +27,6 @@ router.get('/status/:cid',          auth['🤲'](statusGet))
 router.get('/car/:cid',             auth['🤲'](carGet))
 router.head('/car/:cid',            auth['🤲'](carHead))
 
-router.put('/car/:cid',             auth['🔒'](carPut))
 router.post('/car',                 auth['🔒'](carPost))
 router.put('/car/:cid',             auth['🔒'](carPut))
 router.post('/upload',              auth['🔒'](uploadPost))
