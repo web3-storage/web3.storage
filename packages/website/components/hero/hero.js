@@ -19,9 +19,9 @@ export default function Hero() {
           <HeroBackgroundLeft className="absolute left-0 bottom-0 h-full"/>
           <HeroBackgroundRight className="absolute right-0 bottom-0 h-full "/>
           <div className={clsx("absolute top-0 left-1/2 transform -translate-x-1/2 bg-w3storage-red w-full h-full", styles.background) }/>
-          <SquiggleAndCircles className="absolute right-0 left-0 mx-auto animate-pulse hidden sm:block" style={{ transform: 'translate3d(-43rem, -5rem, 0)', animationDelay: -1.1 }} />
-          <Wave className="absolute right-0 left-0 mx-auto animate-pulse hidden sm:block" style={{ transform: 'translate3d(-26rem, 14rem, 0)', height: 72, animationDelay: -1.3 }} />
-          <CircleNoise className="absolute right-0 left-0 mx-auto animate-pulse hidden sm:block" style={{ transform: 'translate3d(35rem, 7rem, 0)' }} />
+          <SquiggleAndCircles className="absolute right-0 left-0 mx-auto hidden sm:block" style={{ transform: 'translate3d(-43rem, -5rem, 0)', animationDelay: -1.1 }} />
+          <Wave className="absolute right-0 left-0 mx-auto hidden sm:block" style={{ transform: 'translate3d(-26rem, 14rem, 0)', height: 72, animationDelay: -1.3 }} />
+          <CircleNoise className="absolute right-0 left-0 mx-auto hidden sm:block" style={{ transform: 'translate3d(35rem, 7rem, 0)' }} />
         </div>
 
         <div className="mx-auto max-w-4xl text-center pt-6 md:pt-20">

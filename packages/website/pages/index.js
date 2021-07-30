@@ -108,18 +108,18 @@ retrieveFiles()
   return (
     <>
       <div className="layout-margins mt-24 bg-w3storage-background">
-        <h2 className="text-w3storage-purple text-center bg-w3storage-background border-2 border-w3storage-red px-5 lg:px-10 py-3 lg:py-6 w-max max-w-full mx-auto">
+        <h2 className="text-w3storage-purple text-center bg-w3storage-background border-w3storage-red px-5 lg:px-10 py-3 lg:py-6 w-max max-w-full mx-auto" style={{borderWidth: 3}}>
           Why build on Web3.Storage?
         </h2>
         <div className="grid grid-flow-row md:grid-flow-col md:grid-rows-6-auto xl:grid-rows-3-auto items-end gap-x-10 xl:gap-x-12 mt-20 text-w3storage-purple">
-          <SimpleIcon />
-          <h3 className="relative mt-10">
+          <SimpleIcon className="ml-2" />
+          <h3 className="text-xl relative mt-10">
             <div className="h-5 w-1 absolute -left-4 top-0 mt-1 bg-w3storage-red" />
             Simple
           </h3>
           <p className="mt-8 self-start">Just download the library and start building! No infrastructure or DevOps required.</p>
           <OpenIcon className="mt-20 md:mt-0" />
-          <h3 className="relative mt-10">
+          <h3 className="text-xl relative mt-10">
             <div className="h-5 w-1 absolute -left-4 top-0 mt-1 bg-w3storage-red" />
             Open
           </h3>
@@ -127,7 +127,7 @@ retrieveFiles()
             Build applications that are open by design. All data stored is accessible on the public <a className="underline" href="https://ipfs.io">IPFS network</a> - interoperable with the tools and services building on the decentralized web.
           </p>
           <ProvableStorage className="mt-20 md:mt-0" />
-          <h3 className="relative mt-10">
+          <h3 className="text-xl relative mt-10">
             <div className="h-5 w-1 absolute -left-4 top-0 mt-1 bg-w3storage-red" />
             Provable Storage
           </h3>
@@ -135,7 +135,7 @@ retrieveFiles()
             Automatically replicate your data across a network of storage providers. Verify the integrity of your data, enabled by Filecoin’s cryptographic proof system.
           </p>
           <FreeIcon className="mt-20 xl:mt-0" />
-          <h3 className="relative mt-10">
+          <h3 className="text-xl relative mt-10">
             <div className="h-5 w-1 absolute -left-4 top-0 mt-1 bg-w3storage-red" />
             Free
           </h3>
@@ -225,7 +225,7 @@ function GetStarted() {
             Start building applications backed by Filecoin in 3 steps, it’s that easy.  
           </p>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-4 xl:gap-x-12 mt-20">
-            <div className="flex flex-col border-4 border-white p-10 mb-10 lg:mb-0">
+            <div className="flex flex-col border-white p-10 mb-10 lg:mb-0" style={{borderWidth: 3}}>
               <h3 className="mb-12 font-medium">1. Create an account</h3>
               <div className="flex flex-col flex-grow justify-between">
                 <p>Sign up using your email address or GitHub handle and create your API Key.</p>
@@ -234,7 +234,7 @@ function GetStarted() {
                 </Button>
               </div>
             </div>
-            <div className="flex flex-col border-4 border-white p-10 mb-10 lg:mb-0">
+            <div className="flex flex-col border-white p-10 mb-10 lg:mb-0" style={{borderWidth: 3}}>
               <h3 className="mb-12 font-medium">2. Install the library</h3>
               <div className="flex flex-col flex-grow justify-between">
                 <p>Grab the client library using NPM.</p>
@@ -243,7 +243,7 @@ function GetStarted() {
                 </Button>
               </div>
             </div>
-            <div className="flex flex-col border-4 border-white p-10 mb-10 lg:mb-0">
+            <div className="flex flex-col border-white p-10 mb-10 lg:mb-0" style={{borderWidth: 3}}>
               <h3 className="mb-12 font-medium">3. Start building</h3>
               <div className="flex flex-col flex-grow justify-between">
                 <p>Read the docs and follow our guides to start building on Web3!</p>
