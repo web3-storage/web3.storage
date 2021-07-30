@@ -2,31 +2,42 @@
 import { Router } from 'itty-router'
 import { errorHandler } from './error-handler.js'
 import { addCorsHeaders, withCorsHeaders, corsOptions } from './cors.js'
+import { withApiOrMagicToken, withMagicToken } from './auth.js'
 import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { uploadPost } from './upload.js'
-import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, withAuth } from './user.js'
+import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet } from './user.js'
 import { metricsGet } from './metrics.js'
 import { notFound } from './utils/json-response.js'
 
 const router = Router()
-
 router.options('*', corsOptions)
 router.all('*', envAll)
-router.get('/car/:cid', withCorsHeaders(carGet))
-router.head('/car/:cid', withCorsHeaders(carHead))
-router.put('/car/:cid', withCorsHeaders(withAuth(carPut)))
-router.post('/car', withCorsHeaders(withAuth(carPost)))
-router.post('/upload', withCorsHeaders(withAuth(uploadPost)))
-router.get('/status/:cid', withCorsHeaders(statusGet))
-router.post('/user/login', withCorsHeaders(userLoginPost))
-router.get('/user/tokens', withCorsHeaders(withAuth(userTokensGet)))
-router.post('/user/tokens', withCorsHeaders(withAuth(userTokensPost)))
-router.delete('/user/tokens/:id', withCorsHeaders(withAuth(userTokensDelete)))
-router.get('/user/uploads', withCorsHeaders(withAuth(userUploadsGet)))
-router.delete('/user/uploads/:cid', withCorsHeaders(withAuth(userUploadsDelete)))
-router.get('/user/account', withCorsHeaders(withAuth(userAccountGet)))
+
+const auth = {
+  '🤲': handler => withCorsHeaders(handler),
+  '🔒': handler => withCorsHeaders(withApiOrMagicToken(handler)),
+  '👮': handler => withCorsHeaders(withMagicToken(handler))
+}
+
+/* eslint-disable no-multi-spaces */
+router.post('/user/login',          auth['🤲'](userLoginPost))
+router.get('/status/:cid',          auth['🤲'](statusGet))
+router.get('/car/:cid',             auth['🤲'](carGet))
+router.head('/car/:cid',            auth['🤲'](carHead))
+
+router.post('/car',                 auth['🔒'](carPost))
+router.put('/car/:cid',             auth['🔒'](carPut))
+router.post('/upload',              auth['🔒'](uploadPost))
+router.get('/user/uploads',         auth['🔒'](userUploadsGet))
+
+router.delete('/user/uploads/:cid', auth['👮'](userUploadsDelete))
+router.get('/user/tokens',          auth['👮'](userTokensGet))
+router.post('/user/tokens',         auth['👮'](userTokensPost))
+router.delete('/user/tokens/:id',   auth['👮'](userTokensDelete))
+router.get('/user/account',         auth['👮'](userAccountGet))
+/* eslint-enable no-multi-spaces */
 
 // Monitoring
 router.get('/metrics', withCorsHeaders(metricsGet))

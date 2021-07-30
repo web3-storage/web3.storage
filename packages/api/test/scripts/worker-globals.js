@@ -11,3 +11,6 @@ export const FAUNA_KEY = 'test-fauna-key'
 export const MAGIC_SECRET_KEY = 'test-magic-secret-key'
 export const CLUSTER_API_URL = 'http://localhost:9094'
 export const CLUSTER_BASIC_AUTH_TOKEN = 'test'
+
+// Can be removed once we get a test mode for admin magic sdk.
+export const DANGEROUSLY_BYPASS_MAGIC_AUTH = true

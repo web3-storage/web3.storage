@@ -2,14 +2,12 @@ import { gql } from '@web3-storage/db'
 import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
-import { UserNotFoundError, TokenNotFoundError } from './errors.js'
 import { convertRawContent } from './status.js'
 
 /**
- * @typedef {{
- *   user: { _id: string, issuer: string }
- *   authToken?: { _id: string, name: string }
- * }} Auth
+ * @typedef { _id: string, issuer: string } User
+ * @typedef { _id: string, name: string } AuthToken
+ * @typedef {{ user: User authToken?: AuthToken }} Auth
  * @typedef {Request & { auth: Auth }} AuthenticatedRequest
  */
 
@@ -83,74 +81,6 @@ function parseMagic ({ issuer, email, publicAddress }) {
     issuer,
     email,
     publicAddress
-  }
-}
-
-/**
- * Middleware to validate authorization header in request.
- *
- * On successful login, adds a `auth` property on the Request
- *
- * @param {import('itty-router').RouteHandler} handler
- * @returns {import('itty-router').RouteHandler}
- */
-export function withAuth (handler) {
-  /**
-   * @param {Request} request
-   * @param {import('./env').Env}
-   * @returns {Response}
-   */
-  return async (request, env, ctx) => {
-    const auth = request.headers.get('Authorization') || ''
-    // TODO: Should this throw if no auth token with meaningful error?
-    const token = env.magic.utils.parseAuthorizationHeader(auth)
-
-    // validate access tokens
-    if (await JWT.verify(token, env.SALT)) {
-      const decoded = JWT.parse(token)
-      const res = await env.db.query(gql`
-        query VerifyAuthToken ($issuer: String!, $secret: String!) {
-          verifyAuthToken(issuer: $issuer, secret: $secret) {
-            _id
-            name
-            user {
-              _id
-              issuer
-            }
-          }
-        }
-      `, { issuer: decoded.sub, secret: token })
-
-      const authToken = res.verifyAuthToken
-      if (!authToken) {
-        throw new TokenNotFoundError()
-      }
-
-      env.sentry && env.sentry.setUser(authToken.user)
-      request.auth = { user: authToken.user, authToken }
-      return handler(request, env, ctx)
-    }
-
-    // validate magic id tokens
-    env.magic.token.validate(token)
-    const [, claim] = env.magic.token.decode(token)
-    const res = await env.db.query(gql`
-      query FindUserByIssuer ($issuer: String!) {
-        findUserByIssuer(issuer: $issuer) {
-          _id
-          issuer
-        }
-      }
-    `, { issuer: claim.iss })
-
-    const user = res.findUserByIssuer
-    if (!user) {
-      throw new UserNotFoundError()
-    }
-
-    env.sentry && env.sentry.setUser(user)
-    request.auth = { user }
-    return handler(request, env, ctx)
   }
 }
 
