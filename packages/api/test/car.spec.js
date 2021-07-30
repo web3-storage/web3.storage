@@ -1,10 +1,14 @@
-/* global describe it fetch */
+/* eslint-env mocha, browser */
 import assert from 'assert'
+import { CID } from 'multiformats/cid'
+import { sha256 } from 'multiformats/hashes/sha2'
+import * as pb from '@ipld/dag-pb'
+import { CarWriter } from '@ipld/car'
 import { endpoint } from './scripts/constants.js'
 import * as JWT from '../src/utils/jwt.js'
 import { SALT } from './scripts/worker-globals.js'
 import { createCar } from './scripts/car.js'
-import { JWT_ISSUER } from '../src/constants.js'
+import { JWT_ISSUER, MAX_BLOCK_SIZE } from '../src/constants.js'
 
 function getTestJWT (sub = 'test', name = 'test') {
   return JWT.sign({ sub, iss: JWT_ISSUER, iat: Date.now(), name }, SALT)
@@ -38,5 +42,35 @@ describe('POST /car', () => {
     const { cid } = await res.json()
     assert(cid, 'Server response payload has `cid` property')
     assert.strictEqual(cid, expectedCid, 'Server responded with expected CID')
+  })
+
+  it('should throw for blocks bigger than the maximum permitted size', async () => {
+    const token = await getTestJWT()
+
+    const bytes = pb.encode({ Data: new Uint8Array(MAX_BLOCK_SIZE + 1).fill(1), Links: [] })
+    const hash = await sha256.digest(bytes)
+    const cid = CID.create(1, pb.code, hash)
+
+    const { writer, out } = CarWriter.create(cid)
+    writer.put({ cid, bytes })
+    writer.close()
+
+    const carBytes = []
+    for await (const chunk of out) {
+      carBytes.push(chunk)
+    }
+
+    const res = await fetch(new URL('car', endpoint), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/car'
+      },
+      body: new Blob(carBytes)
+    })
+
+    assert.notEqual(res.ok, true)
+    const { message } = await res.json()
+    assert.ok(message.includes('block too big'))
   })
 })
