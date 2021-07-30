@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.0.1](https://www.github.com/web3-storage/web3.storage/compare/db-v2.0.0...db-v2.0.1) (2021-07-30)
+
+
+### Bug Fixes
+
+* path to usedStorage ([10e12de](https://www.github.com/web3-storage/web3.storage/commit/10e12dea780297eb06dc8a181d01b8d946652672))
+* update usedStorage for chunked uploads ([#249](https://www.github.com/web3-storage/web3.storage/issues/249)) ([069fbf8](https://www.github.com/web3-storage/web3.storage/commit/069fbf815057d75b9099c1c7a2f8c528fbba7fae))
+
 ## [2.0.0](https://www.github.com/web3-storage/web3.storage/compare/db-v1.0.0...db-v2.0.0) (2021-07-28)
 
 
