@@ -159,7 +159,7 @@ export async function carPost (request, env, ctx) {
     ctx.waitUntil((async () => {
       let dagSize
       try {
-        dagSize = await getDagSize(blob)
+        dagSize = await getDagSize(reader)
       } catch (err) {
         console.error(`could not determine DAG size: ${err.stack}`)
         return
