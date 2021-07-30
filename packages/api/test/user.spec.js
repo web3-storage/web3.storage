@@ -10,8 +10,23 @@ function getTestJWT (sub = 'test', name = 'test') {
 }
 
 describe('GET /user/account', () => {
-  it('retrieves user account data', async () => {
+  it('error if not authenticated with magic.link', async () => {
     const token = await getTestJWT()
+    const res = await fetch(new URL('user/account', endpoint), {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(!res.ok)
+    assert.strictEqual(res.status, 401)
+  })
+
+  it('error if no auth header', async () => {
+    const res = await fetch(new URL('user/account', endpoint))
+    assert(!res.ok)
+    assert.strictEqual(res.status, 401)
+  })
+
+  it('retrieves user account data', async () => {
+    const token = 'test-magic'
     const res = await fetch(new URL('user/account', endpoint), {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -22,8 +37,23 @@ describe('GET /user/account', () => {
 })
 
 describe('GET /user/tokens', () => {
-  it('retrieves user tokens', async () => {
+  it('error if not authenticated with magic.link', async () => {
     const token = await getTestJWT()
+    const res = await fetch(new URL('user/tokens', endpoint), {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(!res.ok)
+    assert.strictEqual(res.status, 401)
+  })
+
+  it('error if no auth header', async () => {
+    const res = await fetch(new URL('user/tokens', endpoint))
+    assert(!res.ok)
+    assert.strictEqual(res.status, 401)
+  })
+
+  it('retrieves user tokens', async () => {
+    const token = 'test-magic'
     const res = await fetch(new URL('user/tokens', endpoint), {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -40,8 +70,28 @@ describe('GET /user/tokens', () => {
 })
 
 describe('POST /user/tokens', () => {
-  it('creates a new token', async () => {
+  it('error if not authenticated with magic.link', async () => {
     const token = await getTestJWT()
+    const res = await fetch(new URL('user/tokens', endpoint), {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ name: 'test' })
+    })
+    assert(!res.ok)
+    assert.strictEqual(res.status, 401)
+  })
+
+  it('error if no auth header', async () => {
+    const res = await fetch(new URL('user/tokens', endpoint), {
+      method: 'POST',
+      body: JSON.stringify({ name: 'test' })
+    })
+    assert(!res.ok)
+    assert.strictEqual(res.status, 401)
+  })
+
+  it('creates a new token', async () => {
+    const token = 'test-magic'
     const res = await fetch(new URL('user/tokens', endpoint), {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
@@ -54,7 +104,7 @@ describe('POST /user/tokens', () => {
   })
 
   it('requires valid name', async () => {
-    const token = await getTestJWT()
+    const token = 'test-magic'
     const res = await fetch(new URL('user/tokens', endpoint), {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
@@ -67,8 +117,26 @@ describe('POST /user/tokens', () => {
 })
 
 describe('DELETE /user/tokens/:id', () => {
-  it('removes a token', async () => {
+  it('error if not authenticated with magic.link', async () => {
     const token = await getTestJWT()
+    const res = await fetch(new URL('user/tokens/xyz', endpoint), {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(!res.ok)
+    assert.strictEqual(res.status, 401)
+  })
+
+  it('error if no auth header', async () => {
+    const res = await fetch(new URL('user/tokens/xyz', endpoint), {
+      method: 'DELETE'
+    })
+    assert(!res.ok)
+    assert.strictEqual(res.status, 401)
+  })
+
+  it('removes a token', async () => {
+    const token = 'test-magic'
     const res = await fetch(new URL('user/tokens/xyz', endpoint), {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
@@ -82,6 +150,44 @@ describe('DELETE /user/tokens/:id', () => {
 describe('GET /user/uploads', () => {
   it('lists uploads', async () => {
     const token = await getTestJWT()
+    const res = await fetch(new URL('/user/uploads', endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(res.ok)
+    const uploads = await res.json()
+    // TODO: import from fixture
+    const expected = [
+      {
+        name: 'Upload at 2021-07-09T16:20:32.658Z',
+        cid: 'bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae',
+        dagSize: null,
+        created: '2021-07-09T16:20:33.946845Z',
+        deals: [],
+        pins: []
+      },
+      {
+        name: 'week-in-web3-2021-07-02.mov',
+        cid: 'bafybeigc4fntpegrqzgzhxyc7hzu25ykqqai7nzllov2jn55wvzjju7pwu',
+        dagSize: null,
+        created: '2021-07-09T10:40:35.408884Z',
+        deals: [],
+        pins: []
+      },
+      {
+        name: 'pinpie.jpg',
+        cid: 'bafkreiajkbmpugz75eg2tmocmp3e33sg5kuyq2amzngslahgn6ltmqxxfa',
+        dagSize: null,
+        created: '2021-07-09T10:36:05.862862Z',
+        deals: [],
+        pins: []
+      }
+    ]
+    assert.deepStrictEqual(uploads, expected)
+  })
+
+  it('lists uploads via magic auth', async () => {
+    const token = 'test-magic'
     const res = await fetch(new URL('/user/uploads', endpoint).toString(), {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
@@ -146,8 +252,26 @@ describe('GET /user/uploads', () => {
 })
 
 describe('DELETE /user/uploads/:cid', () => {
-  it('removes an upload', async () => {
+  it('error if not authenticated with magic.link', async () => {
     const token = await getTestJWT()
+    const res = await fetch(new URL('user/uploads/bafybeibq5kfbnbvjgjg6bop4anhhaqopkc7t6mp2v3er3fkcv6ezhgvavg', endpoint), {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(!res.ok)
+    assert.strictEqual(res.status, 401)
+  })
+
+  it('error if no auth header', async () => {
+    const res = await fetch(new URL('user/uploads/bafybeibq5kfbnbvjgjg6bop4anhhaqopkc7t6mp2v3er3fkcv6ezhgvavg', endpoint), {
+      method: 'DELETE'
+    })
+    assert(!res.ok)
+    assert.strictEqual(res.status, 401)
+  })
+
+  it('removes an upload', async () => {
+    const token = 'test-magic'
     const res = await fetch(new URL('user/uploads/bafybeibq5kfbnbvjgjg6bop4anhhaqopkc7t6mp2v3er3fkcv6ezhgvavg', endpoint), {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }

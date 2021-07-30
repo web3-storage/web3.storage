@@ -5,10 +5,9 @@ import { JWT_ISSUER } from './constants.js'
 import { convertRawContent } from './status.js'
 
 /**
- * @typedef {{
- *   user: { _id: string, issuer: string }
- *   authToken?: { _id: string, name: string }
- * }} Auth
+ * @typedef { _id: string, issuer: string } User
+ * @typedef { _id: string, name: string } AuthToken
+ * @typedef {{ user: User authToken?: AuthToken }} Auth
  * @typedef {Request & { auth: Auth }} AuthenticatedRequest
  */
 

@@ -40,6 +40,20 @@ module.exports = ({ body }) => {
     })
   }
 
+  if (body.query.includes('findUserByIssuer')) {
+    const { issuer } = body.variables
+    if (issuer === 'test-magic-issuer') {
+      return gqlOkResponse({
+        findUserByIssuer: {
+          data: [{
+            _id: 'test-magic',
+            issuer
+          }]
+        }
+      })
+    }
+  }
+
   if (body.query.includes('createAuthToken')) {
     return gqlOkResponse({ createAuthToken: { _id: 'test-auth-token' } })
   }

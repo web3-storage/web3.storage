@@ -22,16 +22,17 @@ export function withMagicToken (handler) {
    * @returns {Response}
    */
   return async (request, env, ctx) => {
+    console.log('withMagicToken', request.url)
     const token = getTokenFromRequest(request, env)
-    if (isMagicToken(token, env)) {
-      const user = findUserFromMagicToken(token, env)
-      if (!user) {
-        throw new UserNotFoundError()
-      }
-      request.auth = { user }
-      env.sentry && env.sentry.setUser(user)
+
+    const magicUser = await tryMagicToken(token, env)
+    if (magicUser) {
+      console.log('magicUser', magicUser)
+      request.auth = { user: magicUser }
+      env.sentry && env.sentry.setUser(magicUser)
       return handler(request, env, ctx)
     }
+
     throw new MagicTokenRequiredError()
   }
 }
@@ -50,34 +51,96 @@ export function withApiOrMagicToken (handler) {
    * @returns {Response}
    */
   return async (request, env, ctx) => {
+    console.log('withApiOrMagicToken', request.url)
     const token = getTokenFromRequest(request, env)
-    if (!token) {
-      throw new NoTokenError()
-    }
-    if (await isWeb3ApiToken(token, env)) {
-      const authToken = await findWeb3ApiToken(token, env)
-      if (!authToken) {
-        throw new TokenNotFoundError()
-      }
-      request.auth = { authToken, user: authToken.user }
-      env.sentry && env.sentry.setUser(authToken.user)
+
+    const magicUser = await tryMagicToken(token, env)
+    if (magicUser) {
+      request.auth = { user: magicUser }
+      env.sentry && env.sentry.setUser(magicUser)
       return handler(request, env, ctx)
     }
-    if (isMagicToken(token, env)) {
-      const user = await findUserFromMagicToken(token, env)
-      if (!user) {
-        throw new UserNotFoundError()
-      }
-      request.auth = { user }
-      env.sentry && env.sentry.setUser(user)
+
+    const apiToken = await tryWeb3ApiToken(token, env)
+    if (apiToken) {
+      request.auth = { authToken: apiToken, user: apiToken.user }
+      env.sentry && env.sentry.setUser(apiToken.user)
       return handler(request, env, ctx)
     }
+
     throw new UnrecognisedTokenError()
   }
 }
 
-async function findWeb3ApiToken (token, env) {
-  const decoded = JWT.parse(token)
+/**
+ * @param {string} token
+ * @param {import('./env').Env}
+ * @throws UserNotFoundError
+ * @returns {import(./user).User | null }
+ */
+async function tryMagicToken (token, env) {
+  let issuer = null
+  try {
+    env.magic.token.validate(token)
+    const [, claim] = env.magic.token.decode(token)
+    issuer = claim.iss
+  } catch (_) {
+    // test mode for magic admin sdk is "coming soon"
+    // see: https://magic.link/docs/introduction/test-mode#coming-soon
+    if (env.DANGEROUSLY_BYPASS_MAGIC_AUTH && token === 'test-magic') {
+      console.log(`!!! tryMagicToken bypassed with test token "${token}" !!!`)
+      issuer = 'test-magic-issuer'
+    } else {
+      // not a magic token, give up.
+      return null
+    }
+  }
+  // token is a magic.link token! let's go!
+  const user = await findUserByIssuer(issuer, env)
+  if (!user) {
+    // we have a magic token, but no user for them!
+    throw new UserNotFoundError()
+  }
+  return user
+}
+
+/**
+ * @param {string} token
+ * @param {import('./env').Env}
+ * @throws TokenNotFoundError
+ * @returns {import(./user).AuthToken | null }
+ */
+async function tryWeb3ApiToken (token, env) {
+  let decoded = null
+  try {
+    await JWT.verify(token, env.SALT)
+    decoded = JWT.parse(token)
+  } catch (_) {
+    // not a web3 api token, give up
+    return null
+  }
+  // it's a web3 api token! let's go!
+  const apiToken = await verifyAuthToken(token, decoded, env)
+  if (!apiToken) {
+    // we have a web3 api token, but it's no longer valid
+    throw new TokenNotFoundError()
+  }
+  return apiToken
+}
+
+async function findUserByIssuer (issuer, env) {
+  const res = await env.db.query(gql`
+    query FindUserByIssuer ($issuer: String!) {
+      findUserByIssuer(issuer: $issuer) {
+        _id
+        issuer
+      }
+    }
+  `, { issuer })
+  return res.findUserByIssuer
+}
+
+async function verifyAuthToken (token, decoded, env) {
   const res = await env.db.query(gql`
     query VerifyAuthToken ($issuer: String!, $secret: String!) {
       verifyAuthToken(issuer: $issuer, secret: $secret) {
@@ -93,29 +156,12 @@ async function findWeb3ApiToken (token, env) {
   return res.verifyAuthToken
 }
 
-async function findUserFromMagicToken (token, env) {
-  const [, claim] = env.magic.token.decode(token)
-  const res = await env.db.query(gql`
-    query FindUserByIssuer ($issuer: String!) {
-      findUserByIssuer(issuer: $issuer) {
-        _id
-        issuer
-      }
-    }
-  `, { issuer: claim.iss })
-  return res.findUserByIssuer
-}
-
-async function isWeb3ApiToken (token, { SALT }) {
-  return JWT.verify(token, SALT)
-}
-
-async function isMagicToken (token, { magic }) {
-  return magic.token.validate(token)
-}
-
 function getTokenFromRequest (request, { magic }) {
   const authHeader = request.headers.get('Authorization') || ''
   // NOTE: This is not magic specific, we're just reusing the header parsing logic.
-  return magic.utils.parseAuthorizationHeader(authHeader)
+  const token = magic.utils.parseAuthorizationHeader(authHeader)
+  if (!token) {
+    throw new NoTokenError()
+  }
+  return token
 }
