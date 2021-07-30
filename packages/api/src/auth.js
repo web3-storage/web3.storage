@@ -54,7 +54,7 @@ export function withApiOrMagicToken (handler) {
     if (!token) {
       throw new NoTokenError()
     }
-    if (isWeb3ApiToken(token, env)) {
+    if (await isWeb3ApiToken(token, env)) {
       const authToken = await findWeb3ApiToken(token, env)
       if (!authToken) {
         throw new TokenNotFoundError()
