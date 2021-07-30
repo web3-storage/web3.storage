@@ -10,7 +10,7 @@ import {
 
 /**
  * Middleware: verify the request is authenticated with a valid magic link token.
- * On successful login, adds a `auth` property on the Request
+ * On successful login, adds `auth.user` to the Request
  *
  * @param {import('itty-router').RouteHandler} handler
  * @returns {import('itty-router').RouteHandler}
@@ -38,7 +38,7 @@ export function withMagicToken (handler) {
 
 /**
  * Middleware: verify the request is authenticated with a valid an api token *or* a magic link token.
- * On successful login, adds a `auth` property on the Request
+ * On successful login, adds `auth.user` and `auth.auth.token` to the Request
  *
  * @param {import('itty-router').RouteHandler} handler
  * @returns {import('itty-router').RouteHandler}
