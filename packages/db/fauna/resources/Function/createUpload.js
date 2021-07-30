@@ -63,7 +63,17 @@ const body = Query(
               },
               If(
                 IsNonEmpty(Var('uploadMatch')),
-                Get(Var('uploadMatch')),
+                Do(
+                  Update(Var('userRef'), {
+                    data: {
+                      usedStorage: Add(
+                        Select(['usedStorage'], Get(Var('userRef')), 0),
+                        Select(['chunkSize'], Var('data'))
+                      )
+                    }
+                  }),
+                  Get(Var('uploadMatch'))
+                ),
                 Let(
                   {
                     upload: Create('Upload', {
