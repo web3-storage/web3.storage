@@ -5,7 +5,7 @@ import { Block } from 'multiformats/block'
 import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
-import { GATEWAY, LOCAL_ADD_THRESHOLD, DAG_SIZE_CALC_LIMIT } from './constants.js'
+import { GATEWAY, LOCAL_ADD_THRESHOLD, DAG_SIZE_CALC_LIMIT, MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { toPinStatusEnum } from './utils/pin.js'
 
@@ -104,6 +104,9 @@ export async function carPost (request, env, ctx) {
   }
 
   const blob = await request.blob()
+  const bytes = new Uint8Array(await blob.arrayBuffer())
+  const reader = await CarReader.fromBytes(bytes)
+  const chunkSize = await getBlocksSize(reader)
 
   // Ensure car blob.type is set; it is used by the cluster client to set the foramt=car flag on the /add call.
   const content = blob.slice(0, blob.size, 'application/car')
@@ -146,7 +149,7 @@ export async function carPost (request, env, ctx) {
       cid,
       name,
       type: 'Car',
-      chunkSize: await getBlocksSize(blob),
+      chunkSize,
       pins
     }
   })
@@ -189,28 +192,26 @@ export async function sizeOf (response) {
 
 /**
  * Returns the sum of all block sizes in the received Car.
- * @param {Blob} car
+ * @param {CarReader} reader
  */
-async function getBlocksSize (car) {
-  const bytes = new Uint8Array(await car.arrayBuffer())
-  const reader = await CarReader.fromBytes(bytes)
-
+async function getBlocksSize (reader) {
   let size = 0
   for await (const block of reader.blocks()) {
-    size += block.bytes.byteLength
+    const blockSize = block.bytes.byteLength
+    if (blockSize > MAX_BLOCK_SIZE) {
+      throw new Error(`block too big: ${blockSize} > ${MAX_BLOCK_SIZE}`)
+    }
+    size += blockSize
   }
-
   return size
 }
 
 /**
  * Returns the DAG size of the CAR but only if the graph is complete.
- * @param {Blob} car
+ * @param {CarReader} reader
  */
-async function getDagSize (car) {
+async function getDagSize (reader) {
   const decoders = [pb, raw, cbor]
-  const bytes = new Uint8Array(await car.arrayBuffer())
-  const reader = await CarReader.fromBytes(bytes)
   const [rootCid] = await reader.getRoots()
 
   const getBlock = async cid => {
