@@ -50,7 +50,7 @@ const StorageInfo = ({ user }) => {
   }, [])
 
   const isLoaded = !isLoading && !isFetching
-  const percentage = Math.ceil(storageData.usedStorage / MAX_STORAGE * 100)
+  const percentage = Math.ceil((storageData.usedStorage || 0) / MAX_STORAGE * 100)
 
   return <div>
     <When condition={ isLoaded }>
