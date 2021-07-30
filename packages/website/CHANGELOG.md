@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.2.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.1.2...website-v1.2.0) (2021-07-30)
+
+
+### Features
+
+* add 'hasUpload' property to the tokens ([f583565](https://www.github.com/web3-storage/web3.storage/commit/f58356593a0e9cf02fa3a4c5c96a6be2d9acfc03))
+
+
+### Bug Fixes
+
+* adapt vertical lines to incoming fix ([1c22bac](https://www.github.com/web3-storage/web3.storage/commit/1c22bac357e7646629ea42e843a57c8adca95688))
+* firefox compatibility ([f69e824](https://www.github.com/web3-storage/web3.storage/commit/f69e824c7b3882a6e1421b593c95c5f90b1228b2))
+* hero illustration lines ([719f0a0](https://www.github.com/web3-storage/web3.storage/commit/719f0a072719f58a349bbbb06d2946122f49c4d1))
+* homepage styles according to ui revision ([e7565d1](https://www.github.com/web3-storage/web3.storage/commit/e7565d1d7321896cf0da7de092cdd4b02317f381))
+* improve footer links click area ([655fd98](https://www.github.com/web3-storage/web3.storage/commit/655fd98540cf062714939e995a081e6c192f8656))
+* improve navbar links click area ([a1e93ee](https://www.github.com/web3-storage/web3.storage/commit/a1e93eedd7094ab2be2f721f596bc9f4a4507015))
+* margin between menu items and login button ([b810e03](https://www.github.com/web3-storage/web3.storage/commit/b810e037215c84d469bfcbe37da0d4fc55b3c4ce))
+* prepare UI for undefined usedStorage ([313125c](https://www.github.com/web3-storage/web3.storage/commit/313125cf34bfe5b19cfa8b7142c1cfddad79f4c0))
+* profile page token card ([9459193](https://www.github.com/web3-storage/web3.storage/commit/9459193318ccf797c76506f681dfaa98ea34762c))
+* profile page ui makeover ([98d7536](https://www.github.com/web3-storage/web3.storage/commit/98d7536cca33a901e5d98622045eef3d415c8801))
+* show 'explore the docs' when token hasnt been used ([2a707aa](https://www.github.com/web3-storage/web3.storage/commit/2a707aa6502c4a8acd465c34018b33c4c47a7d81))
+* show vertical-lines illustration again ([c9571f7](https://www.github.com/web3-storage/web3.storage/commit/c9571f7ad15c36028b5b1ccf40a42d44f817b8af))
+* vertical lines now has max width and height ([8b7dee2](https://www.github.com/web3-storage/web3.storage/commit/8b7dee225a184f80959fbf80929d77bdd9cad595))
+
 ### [1.1.2](https://www.github.com/web3-storage/web3.storage/compare/website-v1.1.1...website-v1.1.2) (2021-07-29)
 
 
