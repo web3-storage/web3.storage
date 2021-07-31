@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.2.2](https://www.github.com/web3-storage/web3.storage/compare/website-v1.2.1...website-v1.2.2) (2021-07-31)
+
+
+### Bug Fixes
+
+* more social image ([df3d0ca](https://www.github.com/web3-storage/web3.storage/commit/df3d0ca2811ac98f1786852bc7b23d31cabf8934))
+* social image twitter url ([e530776](https://www.github.com/web3-storage/web3.storage/commit/e530776f3fe20e2b5f33bafca6fb7c1351f84308))
+
 ### [1.2.1](https://www.github.com/web3-storage/web3.storage/compare/website-v1.2.0...website-v1.2.1) (2021-07-31)
 
 
