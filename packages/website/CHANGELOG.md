@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.2.1](https://www.github.com/web3-storage/web3.storage/compare/website-v1.2.0...website-v1.2.1) (2021-07-31)
+
+
+### Bug Fixes
+
+* rectify trivial typos ([#254](https://www.github.com/web3-storage/web3.storage/issues/254)) ([6067d20](https://www.github.com/web3-storage/web3.storage/commit/6067d204a68a10a316ef8e52420cca9a6dc9515a))
+* social card ([0f8e2db](https://www.github.com/web3-storage/web3.storage/commit/0f8e2db47b205c28f55cfd13a65d3cdd378a8b3c))
+
 ## [1.2.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.1.2...website-v1.2.0) (2021-07-30)
 
 
