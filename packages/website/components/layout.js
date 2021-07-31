@@ -44,11 +44,7 @@ export default function Layout({
         <meta property="og:description" content={description} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://web3.storage" />
-        <meta
-          property="og:image"
-          content="https://web3.storage/images/social-card.png"
-        />
-
+        <meta property="og:image" content="https://web3.storage/social-card.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@protocollabs" />
         <meta name="twitter:creator" content="@protocollabs" />
