@@ -28,7 +28,7 @@ If you do not agree to all the terms and conditions of this agreement, then you 
 
 Data stored via the Website will be stored on IPFS for as long as Protocol Labs, Inc. continues to operate the Website, and on Filecoin until the expiry of the respective deals (see “Filecoin deals” below for details).
 
-Data will be stored as above at no cost to the user for as long as Protocol Labs, Inc. continues to operate the Website.The Website operated at no cost to the user relying on open source infrastructure maintained by Protocol Labs, Inc. and [Filecoin Plus](https://docs.filecoin.io/store/filecoin-plus/) to fund storage deals.
+Data will be stored as above at no cost to the user for as long as Protocol Labs, Inc. continues to operate the Website. The Website is operated at no cost to the user relying on open source infrastructure maintained by Protocol Labs, Inc. and [Filecoin Plus](https://docs.filecoin.io/store/filecoin-plus/) to fund storage deals.
 
 Protocol Labs, Inc. reserves the right to terminate the Website at its sole discretion or to transfer operation of the Website to a third party or smart contract. Prior to termination or transfer, Protocol Labs, Inc. will provide 90 days’ notice to users via email to allow users enough time to make arrangements if any (e.g. pinning to their own IPFS node, or preparing to manage the renewal of their Filecoin deals on their own).
 
