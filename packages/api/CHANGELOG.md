@@ -1,5 +1,13 @@
 # Changelog
 
+### [3.2.1](https://www.github.com/web3-storage/web3.storage/compare/api-v3.2.0...api-v3.2.1) (2021-08-02)
+
+
+### Bug Fixes
+
+* force webpack to load ESM config ([#247](https://www.github.com/web3-storage/web3.storage/issues/247)) ([055ed61](https://www.github.com/web3-storage/web3.storage/commit/055ed6109ecedbf335ebe01f03a89a7b9362c147))
+* move pin ok status polling into waitUntil ([#267](https://www.github.com/web3-storage/web3.storage/issues/267)) ([97634ea](https://www.github.com/web3-storage/web3.storage/commit/97634eaeec13f33111f8728a1ba96a22c58d846d))
+
 ## [3.2.0](https://www.github.com/web3-storage/web3.storage/compare/api-v3.1.1...api-v3.2.0) (2021-07-30)
 
 
