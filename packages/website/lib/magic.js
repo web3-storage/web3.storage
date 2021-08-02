@@ -60,7 +60,7 @@ export async function isLoggedIn() {
 export async function loginEmail(email) {
   const didToken = await getMagic().auth.loginWithMagicLink({
     email: email,
-    redirectURI: new URL('/callback', window.location.origin).href,
+    redirectURI: new URL('/callback/', window.location.origin).href,
   })
 
   if (didToken) {
@@ -80,7 +80,7 @@ export async function loginSocial(provider) {
   // @ts-ignore - TODO fix Magic extension types
   await getMagic().oauth.loginWithRedirect({
     provider,
-    redirectURI: new URL('/callback', window.location.origin).href,
+    redirectURI: new URL('/callback/', window.location.origin).href,
   })
 }
 
