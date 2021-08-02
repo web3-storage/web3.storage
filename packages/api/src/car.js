@@ -28,10 +28,18 @@ const UPDATE_DAG_SIZE = gql`
   }
 `
 
+const CREATE_OR_UPDATE_PIN = gql`
+  mutation CreateOrUpdatePin($data: CreateOrUpdatePinInput!) {
+    createOrUpdatePin(data: $data) {
+      _id
+    }
+  }
+`
+
 // Duration between status check polls in ms.
-const PIN_STATUS_CHECK_INTERVAL = 50
+const PIN_STATUS_CHECK_INTERVAL = 1000
 // Max time in ms to spend polling for an OK status.
-const MAX_PIN_STATUS_CHECK_TIME = 5000
+const MAX_PIN_STATUS_CHECK_TIME = 10000
 // Pin statuses considered OK.
 const PIN_OK_STATUS = ['Pinned', 'Pinning', 'PinQueued']
 
@@ -119,26 +127,10 @@ export async function carPost (request, env, ctx) {
     local: blob.size > LOCAL_ADD_THRESHOLD
   })
 
-  /** @type {ReturnType<toPins>} */
-  let pins
-  // Retrieve current pin status and info about the nodes pinning the content.
-  // Keep querying Cluster until one of the nodes reports something other than
-  // Unpinned i.e. PinQueued or Pinning or Pinned.
-  const start = Date.now()
-  while (true) {
-    const { peerMap } = await env.cluster.status(cid)
-
-    pins = toPins(peerMap)
-    if (!pins.length) { // should not happen
-      throw new Error('not pinning on any node')
-    }
-
-    const isOk = pins.some(p => PIN_OK_STATUS.includes(p.status))
-    if (isOk) break
-
-    // If it has been more than 5 seconds, take whatever status is going.
-    if (Date.now() - start > MAX_PIN_STATUS_CHECK_TIME) break
-    await new Promise(resolve => setTimeout(resolve, PIN_STATUS_CHECK_INTERVAL))
+  const { peerMap } = await env.cluster.status(cid)
+  const pins = toPins(peerMap)
+  if (!pins.length) { // should not happen
+    throw new Error('not pinning on any node')
   }
 
   // Store in DB
@@ -165,6 +157,34 @@ export async function carPost (request, env, ctx) {
         return
       }
       await env.db.query(UPDATE_DAG_SIZE, { content: upload.content._id, dagSize })
+    })())
+  }
+
+  // Retrieve current pin status and info about the nodes pinning the content.
+  // Keep querying Cluster until one of the nodes reports something other than
+  // Unpinned i.e. PinQueued or Pinning or Pinned.
+  if (ctx.waitUntil && !pins.some(p => PIN_OK_STATUS.includes(p.status))) {
+    ctx.waitUntil((async () => {
+      const start = Date.now()
+      while (Date.now() - start > MAX_PIN_STATUS_CHECK_TIME) {
+        console.log('trying...')
+        await new Promise(resolve => setTimeout(resolve, PIN_STATUS_CHECK_INTERVAL))
+        const { peerMap } = await env.cluster.status(cid)
+        const pins = toPins(peerMap)
+        if (!pins.length) { // should not happen
+          throw new Error('not pinning on any node')
+        }
+
+        const okPins = pins.filter(p => PIN_OK_STATUS.includes(p.status))
+        if (!okPins.length) continue
+
+        for (const pin of okPins) {
+          await env.db.query(CREATE_OR_UPDATE_PIN, {
+            data: { content: upload.content._id, ...pin }
+          })
+        }
+        return
+      }
     })())
   }
 
