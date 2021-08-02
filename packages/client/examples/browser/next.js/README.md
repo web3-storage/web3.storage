@@ -9,7 +9,7 @@ Content addressing, IPFS, Filecoin, web3.storage... it's all pretty rad! Here is
 
 ```console
 npm install
-npm dev
+npm run dev
 ```
 
 Then visit `http://localhost:3000` and add your files 🚀. 
