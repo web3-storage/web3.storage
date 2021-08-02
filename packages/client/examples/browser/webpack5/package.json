@@ -1,0 +1,17 @@
+{
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "static-server .",
+    "build": "webpack",
+    "store": "npx @web3-storage/w3 put ./dist --no-wrap --token $WEB3_STORAGE_TOKEN --api https://api.web3.storage"
+  },
+  "dependencies": {
+    "web3.storage": "^3.1.0"
+  },
+  "devDependencies": {
+    "static-server": "^2.2.1",
+    "webpack": "^5.47.1",
+    "webpack-cli": "^4.7.2"
+  }
+}
