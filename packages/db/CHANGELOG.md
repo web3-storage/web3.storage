@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.0.3](https://www.github.com/web3-storage/web3.storage/compare/db-v2.0.2...db-v2.0.3) (2021-08-03)
+
+
+### Bug Fixes
+
+* increment user used storage in waitUntil ([#280](https://www.github.com/web3-storage/web3.storage/issues/280)) ([aa32153](https://www.github.com/web3-storage/web3.storage/commit/aa321534b0fba899488587c8df3ab5378dad30e2))
+
 ### [2.0.2](https://www.github.com/web3-storage/web3.storage/compare/db-v2.0.1...db-v2.0.2) (2021-07-30)
 
 
