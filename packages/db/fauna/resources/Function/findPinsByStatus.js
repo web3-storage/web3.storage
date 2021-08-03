@@ -28,7 +28,7 @@ const body = Query(
         match: Union(
           Map(
             Var('statuses'),
-            Lambda('status', Match(Index('pin_by_status'), Var('status')))
+            Lambda('status', Match(Index('pin_by_status_sort_by_created_desc'), Var('status')))
           )
         ),
         page: If(
