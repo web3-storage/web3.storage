@@ -114,7 +114,11 @@ export async function carPost (request, env, ctx) {
   const blob = await request.blob()
   const bytes = new Uint8Array(await blob.arrayBuffer())
   const reader = await CarReader.fromBytes(bytes)
+
   const chunkSize = await getBlocksSize(reader)
+  if (chunkSize === 0) {
+    throw new Error('empty CAR')
+  }
 
   // Ensure car blob.type is set; it is used by the cluster client to set the foramt=car flag on the /add call.
   const content = blob.slice(0, blob.size, 'application/car')
@@ -211,7 +215,8 @@ export async function sizeOf (response) {
 }
 
 /**
- * Returns the sum of all block sizes in the received Car.
+ * Returns the sum of all block sizes in the received CAR. Throws if any block
+ * is bigger than MAX_BLOCK_SIZE (1MiB).
  * @param {CarReader} reader
  */
 async function getBlocksSize (reader) {
