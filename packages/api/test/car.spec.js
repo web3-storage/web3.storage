@@ -69,8 +69,37 @@ describe('POST /car', () => {
       body: new Blob(carBytes)
     })
 
-    assert.notEqual(res.ok, true)
+    assert.strictEqual(res.ok, false)
     const { message } = await res.json()
     assert.ok(message.includes('block too big'))
+  })
+
+  it('should throw for empty CAR', async () => {
+    const token = await getTestJWT()
+
+    const bytes = pb.encode({ Data: new Uint8Array(), Links: [] })
+    const hash = await sha256.digest(bytes)
+    const cid = CID.create(1, pb.code, hash)
+
+    const { writer, out } = CarWriter.create(cid)
+    writer.close()
+
+    const carBytes = []
+    for await (const chunk of out) {
+      carBytes.push(chunk)
+    }
+
+    const res = await fetch(new URL('car', endpoint), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/car'
+      },
+      body: new Blob(carBytes)
+    })
+
+    assert.strictEqual(res.ok, false)
+    const { message } = await res.json()
+    assert.ok(message.includes('empty CAR'))
   })
 })
