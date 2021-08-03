@@ -87,8 +87,28 @@ module.exports = ({ body }) => {
     return gqlResponse(200, res)
   }
 
-  if (body.query.includes('findMetrics')) {
-    return gqlOkResponse(require('../../fixtures/find-metrics.json'))
+  if (body.query.includes('countPinsByStatus')) {
+    return gqlOkResponse(require('../../fixtures/count-pins-by-status.json'))
+  }
+
+  if (body.query.includes('countPins')) {
+    return gqlOkResponse(require('../../fixtures/count-pins.json'))
+  }
+
+  if (body.query.includes('countUploads')) {
+    return gqlOkResponse(require('../../fixtures/count-uploads.json'))
+  }
+
+  if (body.query.includes('countUsers')) {
+    return gqlOkResponse(require('../../fixtures/count-users.json'))
+  }
+
+  if (body.query.includes('sumContentDagSize')) {
+    return gqlOkResponse(require('../../fixtures/sum-content-dag-size.json'))
+  }
+
+  if (body.query.includes('sumPinDagSize')) {
+    return gqlOkResponse(require('../../fixtures/sum-pin-dag-size.json'))
   }
 
   if (body.query.includes('findUserByID')) {
@@ -105,6 +125,14 @@ module.exports = ({ body }) => {
       return gqlResponse(200, trimmed)
     }
     return gqlResponse(200, res)
+  }
+
+  if (body.query.includes('incrementUserUsedStorage')) {
+    return gqlOkResponse(require('../../fixtures/increment-user-used-storage.json'))
+  }
+
+  if (body.query.includes('updateContentDagSize')) {
+    return gqlOkResponse(require('../../fixtures/update-content-dag-size.json'))
   }
 
   return gqlResponse(400, {
