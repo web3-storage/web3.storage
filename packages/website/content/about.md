@@ -20,7 +20,7 @@ Our aim today is to provide a user-friendly experience that massively reduces th
 
 ### [Terms of service](#terms-of-service)
 
-The following terms and conditions govern all use of the Web3.Storage website (“Web3.Storage” or the “Website”) and all content, services and products available at or through the Website. The Website is offered subject to your acceptance without modification of all of the terms and conditions contained herein. As all data uploaded to Web3.Storage will be stored on IPFS, this Website incorporates the Terms of Service of IPFS.io.
+The following terms and conditions govern all use of the Web3.Storage website (“Web3.Storage” or the “Website”) and all content, services and products available at or through the Website. The Website is offered subject to your acceptance without modification of all of the terms and conditions contained herein. As all data uploaded to Web3.Storage will be stored on IPFS, this Website incorporates the [Terms of Service of IPFS.io](https://discuss.ipfs.io/tos).
 
 If you do not agree to all the terms and conditions of this agreement, then you may not access the Website or use any of its services.
 
