@@ -28,7 +28,7 @@ const body = Query(
         match: Union(
           Map(
             Var('statuses'),
-            Lambda('status', Match(Index('pin_by_status'), Var('status')))
+            Lambda('status', Match(Index('pin_by_status_sort_by_created_desc'), Var('status')))
           )
         ),
         page: If(
@@ -41,7 +41,7 @@ const body = Query(
           Paginate(Var('match'), { size: Var('size'), before: Var('before') })
         )
       },
-      Map(Var('page'), Lambda(['ref'], Get(Var('ref'))))
+      Map(Var('page'), Lambda(['created', 'ref'], Get(Var('ref'))))
     )
   )
 )
