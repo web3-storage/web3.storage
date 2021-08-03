@@ -36,15 +36,29 @@ const CREATE_OR_UPDATE_PIN = gql`
   }
 `
 
+const INCREMENT_USER_USED_STORAGE = gql`
+  mutation IncrementUserUsedStorage($user: ID!, $amount: Long!) {
+    incrementUserUsedStorage(user: $user, amount: $amount) {
+      usedStorage
+    }
+  }
+`
+
 // Duration between status check polls in ms.
-const PIN_STATUS_CHECK_INTERVAL = 1000
+const PIN_STATUS_CHECK_INTERVAL = 5000
 // Max time in ms to spend polling for an OK status.
-const MAX_PIN_STATUS_CHECK_TIME = 10000
+const MAX_PIN_STATUS_CHECK_TIME = 30000
 // Pin statuses considered OK.
 const PIN_OK_STATUS = ['Pinned', 'Pinning', 'PinQueued']
 
-// TODO: ipfs should let us ask the size of a CAR file.
-// This consumes the CAR response from ipfs to find the content-length.
+/**
+ * TODO: ipfs should let us ask the size of a CAR file.
+ * This consumes the CAR response from ipfs to find the content-length.
+ *
+ * @param {Request} request
+ * @param {import('./env').Env} env
+ * @param {import('./index').Ctx} ctx
+ */
 export async function carHead (request, env, ctx) {
   // cache the thing. can't cache a HEAD request, so make a new one.
   const get = new Request(request.url, { method: 'GET' })
@@ -58,6 +72,11 @@ export async function carHead (request, env, ctx) {
   return new Response(null, { headers })
 }
 
+/**
+ * @param {Request} request
+ * @param {import('./env').Env} env
+ * @param {import('./index').Ctx} ctx
+ */
 export async function carGet (request, env, ctx) {
   const cache = caches.default
   let res = await cache.match(request)
@@ -141,14 +160,28 @@ export async function carPost (request, env, ctx) {
       cid,
       name,
       type: 'Car',
-      chunkSize,
       pins
     }
   })
 
+  /** @type {(() => Promise<any>)[]} */
+  const tasks = []
+
+  // Update the user's used storage
+  tasks.push(async () => {
+    try {
+      await env.db.query(INCREMENT_USER_USED_STORAGE, {
+        user: user._id,
+        amount: chunkSize
+      })
+    } catch (err) {
+      console.error(`failed to update user used storage: ${err.stack}`)
+    }
+  })
+
   // Partial CARs are chunked at ~10MB so anything less than this is probably complete.
-  if (ctx.waitUntil && upload.content.dagSize == null && blob.size < DAG_SIZE_CALC_LIMIT) {
-    ctx.waitUntil((async () => {
+  if (upload.content.dagSize == null && blob.size < DAG_SIZE_CALC_LIMIT) {
+    tasks.push(async () => {
       let dagSize
       try {
         dagSize = await getDagSize(reader)
@@ -157,17 +190,16 @@ export async function carPost (request, env, ctx) {
         return
       }
       await env.db.query(UPDATE_DAG_SIZE, { content: upload.content._id, dagSize })
-    })())
+    })
   }
 
   // Retrieve current pin status and info about the nodes pinning the content.
   // Keep querying Cluster until one of the nodes reports something other than
   // Unpinned i.e. PinQueued or Pinning or Pinned.
-  if (ctx.waitUntil && !pins.some(p => PIN_OK_STATUS.includes(p.status))) {
-    ctx.waitUntil((async () => {
+  if (!pins.some(p => PIN_OK_STATUS.includes(p.status))) {
+    tasks.push(async () => {
       const start = Date.now()
       while (Date.now() - start > MAX_PIN_STATUS_CHECK_TIME) {
-        console.log('trying...')
         await new Promise(resolve => setTimeout(resolve, PIN_STATUS_CHECK_INTERVAL))
         const { peerMap } = await env.cluster.status(cid)
         const pins = toPins(peerMap)
@@ -185,7 +217,11 @@ export async function carPost (request, env, ctx) {
         }
         return
       }
-    })())
+    })
+  }
+
+  if (ctx.waitUntil) {
+    tasks.forEach(t => ctx.waitUntil(t()))
   }
 
   return new JSONResponse({ cid })

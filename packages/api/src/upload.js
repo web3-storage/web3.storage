@@ -13,13 +13,22 @@ const CREATE_UPLOAD = gql`
   }
 `
 
+const INCREMENT_USER_USED_STORAGE = gql`
+  mutation IncrementUserUsedStorage($user: ID!, $amount: Long!) {
+    incrementUserUsedStorage(user: $user, amount: $amount) {
+      usedStorage
+    }
+  }
+`
+
 /**
  * Post a File/Directory.
  *
  * @param {import('./user').AuthenticatedRequest} request
  * @param {import('./env').Env} env
+ * @param {import('./index').Ctx} ctx
  */
-export async function uploadPost (request, env) {
+export async function uploadPost (request, env, ctx) {
   const { user, authToken } = request.auth
   const { headers } = request
   const contentType = headers.get('content-type') || ''
@@ -88,10 +97,22 @@ export async function uploadPost (request, env) {
       name,
       type,
       pins,
-      dagSize,
-      chunkSize: dagSize
+      dagSize
     }
   })
+
+  if (ctx.waitUntil) {
+    ctx.waitUntil((async () => {
+      try {
+        await env.db.query(INCREMENT_USER_USED_STORAGE, {
+          user: user._id,
+          amount: dagSize
+        })
+      } catch (err) {
+        console.error(`failed to update user used storage: ${err.stack}`)
+      }
+    })())
+  }
 
   return new JSONResponse({ cid })
 }

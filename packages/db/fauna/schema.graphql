@@ -404,6 +404,7 @@ type Mutation {
   updateContentDagSize(content: ID!, dagSize: Long!): Content! @resolver
   createPinRequest(cid: String!): PinRequest! @resolver
   incrementPinRequestAttempts(pinRequest: ID!): PinRequest! @resolver
+  incrementUserUsedStorage(user: ID!, amount: Long!): User! @resolver
 }
 
 type Metrics {
@@ -470,7 +471,7 @@ input CreateUploadInput {
   type: UploadType!
   name: String
   dagSize: Long
-  chunkSize: Long!
+  chunkSize: Long # decremented, unused
   pins: [PinInput!]!
 }
 

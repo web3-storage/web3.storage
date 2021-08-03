@@ -24,8 +24,7 @@ const {
   Not,
   Do,
   Call,
-  Foreach,
-  Add
+  Foreach
 } = fauna
 
 const name = 'createUpload'
@@ -63,17 +62,7 @@ const body = Query(
               },
               If(
                 IsNonEmpty(Var('uploadMatch')),
-                Do(
-                  Update(Var('userRef'), {
-                    data: {
-                      usedStorage: Add(
-                        Select(['data', 'usedStorage'], Get(Var('userRef')), 0),
-                        Select(['chunkSize'], Var('data'))
-                      )
-                    }
-                  }),
-                  Get(Var('uploadMatch'))
-                ),
+                Get(Var('uploadMatch')),
                 Let(
                   {
                     upload: Create('Upload', {
@@ -99,15 +88,6 @@ const body = Query(
                         })
                       )
                     ),
-                    // Update user storage size
-                    Update(Var('userRef'), {
-                      data: {
-                        usedStorage: Add(
-                          Select(['data', 'usedStorage'], Get(Var('userRef')), 0),
-                          Select(['chunkSize'], Var('data'))
-                        )
-                      }
-                    }),
                     Var('upload')
                   )
                 )
@@ -154,15 +134,6 @@ const body = Query(
                     })
                   )
                 ),
-                // Update user storage size
-                Update(Var('userRef'), {
-                  data: {
-                    usedStorage: Add(
-                      Select(['data', 'usedStorage'], Get(Var('userRef')), 0),
-                      Select(['chunkSize'], Var('data'))
-                    )
-                  }
-                }),
                 Var('upload')
               )
             )
