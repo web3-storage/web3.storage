@@ -41,7 +41,7 @@ const body = Query(
           Paginate(Var('match'), { size: Var('size'), before: Var('before') })
         )
       },
-      Map(Var('page'), Lambda(['ref'], Get(Var('ref'))))
+      Map(Var('page'), Lambda(['created', 'ref'], Get(Var('ref'))))
     )
   )
 )
