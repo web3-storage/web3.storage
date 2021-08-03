@@ -12,19 +12,14 @@ const {
 /**
  * Usage:
  *
- * Match(
- *   Index('pins_content_by_status'),
- *   StatusString // Pinned, Pinning, PinQueued, ...
- * )
+ * Match(Index('content_sort_by_created_asc'))
  */
 const index = {
-  name: 'pins_content_by_status',
-  source: Collection('Pin'),
-  terms: [
-    { field: ['data', 'status'] }
-  ],
+  name: 'content_sort_by_created_asc',
+  source: Collection('Content'),
   values: [
-    { field: ['data', 'content'] }
+    { field: ['data', 'created'] },
+    { field: 'ref' }
   ]
 }
 

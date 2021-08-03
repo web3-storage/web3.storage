@@ -381,8 +381,15 @@ type Query {
   """
   verifyAuthToken(issuer: String!, secret: String!): AuthToken @resolver
   findPinsByStatus(statuses: [PinStatus!]!): [Pin!]! @resolver(paginated: true)
-  findMetrics: Metrics! @resolver
   findAllPinRequests: [PinRequest!]! @resolver(paginated: true)
+  findUsersByCreated(from: Time!, to: Time): [User!]! @resolver(paginated: true)
+  countUsers(from: Time!, to: Time): [Long]! @resolver(paginated: true)
+  countUploads(from: Time!, to: Time): [Long]! @resolver(paginated: true)
+  countContent(from: Time!, to: Time): [Long]! @resolver(paginated: true)
+  countPins(from: Time!, to: Time): [Long]! @resolver(paginated: true)
+  countPinsByStatus(status: PinStatus!, from: Time!, to: Time): [Long]! @resolver(paginated: true)
+  sumContentDagSize(from: Time!, to: Time): [Long]! @resolver(paginated: true)
+  sumPinDagSize(from: Time!, to: Time): [Long]! @resolver(paginated: true)
 }
 
 type Mutation {

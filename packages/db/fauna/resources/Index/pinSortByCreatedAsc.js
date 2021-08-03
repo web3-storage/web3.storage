@@ -12,15 +12,14 @@ const {
 /**
  * Usage:
  *
- * Match(
- *   Index('content_sizes')
- * )
+ * Match(Index('pin_sort_by_created_asc'))
  */
 const index = {
-  name: 'content_sizes',
-  source: Collection('Content'),
+  name: 'pin_sort_by_created_asc',
+  source: Collection('Pin'),
   values: [
-    { field: ['data', 'dagSize'] }
+    { field: ['data', 'created'] },
+    { field: 'ref' }
   ]
 }
 
