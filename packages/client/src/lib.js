@@ -109,8 +109,6 @@ class Web3Storage {
       }
     }
 
-    /** @type {string} */
-    let carRoot
     const blockstore = new Blockstore()
 
     const { out, root } = await pack({
@@ -123,17 +121,22 @@ class Web3Storage {
       maxChunkSize: 1048576,
       maxChildrenPerNode: 1024
     })
-    carRoot = root.toString()
+    /** @type {string} */
+    const carRoot = root.toString()
 
     onRootCidReady && onRootCidReady(carRoot)
-    return this._put({onStoredChunk, car: out, targetSize, maxRetries})
+    return this._put({ onStoredChunk, car: out, targetSize, maxRetries, url, headers, carRoot, blockstore })
   }
 
-  static async _put({ onStoredChunk, car,
-      targetSize = MAX_CHUNK_SIZE,
-      maxRetries = MAX_PUT_RETRIES
-    }) {
-
+  /**
+   * @param {PutOptions} [options]
+   * @returns {Promise<CIDString>}
+   */
+  static async _put ({
+    onStoredChunk, car, url, headers, carRoot, blockstore,
+    targetSize = MAX_CHUNK_SIZE,
+    maxRetries = MAX_PUT_RETRIES
+  }) {
     try {
       const splitter = await TreewalkCarSplitter.fromIterable(car, targetSize)
 

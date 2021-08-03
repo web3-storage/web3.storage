@@ -74,9 +74,14 @@ export interface Filelike {
 }
 
 export type PutOptions = {
+
+  /**
+   * TODO: Some sort of new definition here
+   */
+  car?: AsyncIterable<Uint8Array>
   /**
    * Callback called after the data has been assembled into a DAG, but before
-   * any upload requests begin. It is passed the CID of the root node of the 
+   * any upload requests begin. It is passed the CID of the root node of the
    * graph.
    */
   onRootCidReady?: (cid: CIDString) => void
@@ -92,13 +97,13 @@ export type PutOptions = {
   maxRetries?: number
   /**
    * Should input files be wrapped with a directory? Default: true
-   * 
+   *
    * It is enabled by default as it preserves the input filenames in DAG;
    * the filenames become directory entries in the generated wrapping dir.
-   * 
-   * The trade off is your root CID will be that of the wrapping dir, 
+   *
+   * The trade off is your root CID will be that of the wrapping dir,
    * rather than the input file itself.
-   * 
+   *
    * For a single file e.g. `cat.png` it's IPFS path would be
    * `<wrapping dir cid>/cat.png` rather than just `<cid for cat.png>`
    *
