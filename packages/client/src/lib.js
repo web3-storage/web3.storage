@@ -39,6 +39,7 @@ const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 /** @typedef { import('./lib/interface.js').Filelike } Filelike */
 /** @typedef { import('./lib/interface.js').CIDString} CIDString */
 /** @typedef { import('./lib/interface.js').PutOptions} PutOptions */
+/** @typedef { import('./lib/interface.js')._PutOptions} _PutOptions */
 /** @typedef { import('./lib/interface.js').UnixFSEntry} UnixFSEntry */
 /** @typedef { import('./lib/interface.js').Web3Response} Web3Response */
 
@@ -129,7 +130,7 @@ class Web3Storage {
   }
 
   /**
-   * @param {PutOptions} [options]
+   * @param {_PutOptions} options
    * @returns {Promise<CIDString>}
    */
   static async _put ({

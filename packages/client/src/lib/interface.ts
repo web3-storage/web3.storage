@@ -1,6 +1,7 @@
 import type { UnixFSEntry } from 'ipfs-car/unpack'
 import type { CID } from 'multiformats'
 export type { CID, UnixFSEntry }
+import type { MemoryBlockStore as Blockstore } from 'ipfs-car/blockstore/memory'
 
 /**
  * Define nominal type of U based on type of T. Similar to Opaque types in Flow
@@ -74,11 +75,6 @@ export interface Filelike {
 }
 
 export type PutOptions = {
-
-  /**
-   * TODO: Some sort of new definition here
-   */
-  car?: AsyncIterable<Uint8Array>
   /**
    * Callback called after the data has been assembled into a DAG, but before
    * any upload requests begin. It is passed the CID of the root node of the
@@ -115,6 +111,40 @@ export type PutOptions = {
    * Human readable name for this upload, for use in file listings.
    */
   name?: string
+}
+
+export type _PutOptions = PutOptions & {
+
+  /**
+   * TODO: Some sort of new definition here
+   */
+  targetSize?: number
+  /**
+  /**
+   * TODO: Some sort of new definition here
+   */
+  car: AsyncIterable<Uint8Array>
+  /**
+  /**
+   * TODO: Some sort of new definition here
+   */
+  headers: Record<string, string>
+  /**
+  /**
+   * TODO: Some sort of new definition here
+   */
+  url: URL
+  /**
+  /**
+   * TODO: Some sort of new definition here
+   */
+  carRoot: string
+  /**
+  /**
+   * TODO: Some sort of new definition here
+   */
+  blockstore: Blockstore
+
 }
 
 export interface Web3File extends File {
