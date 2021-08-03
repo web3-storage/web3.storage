@@ -17,7 +17,8 @@ const {
   Index,
   Sum,
   Select,
-  Get
+  Get,
+  Range
 } = fauna
 
 const name = 'sumPinDagSize'
@@ -26,15 +27,19 @@ const body = Query(
     ['from', 'to', 'size', 'after', 'before'],
     Let(
       {
-        match: Match(Index('pin_content_by_status_sort_by_created_asc'), 'Pinned'),
+        range: Range(
+          Match(Index('pin_content_by_status_sort_by_created_asc'), 'Pinned'),
+          Var('from'),
+          Var('to')
+        ),
         page: If(
           Equals(Var('before'), null),
           If(
             Equals(Var('after'), null),
-            Paginate(Var('match'), { size: Var('size') }),
-            Paginate(Var('match'), { size: Var('size'), after: Var('after') })
+            Paginate(Var('range'), { size: Var('size') }),
+            Paginate(Var('range'), { size: Var('size'), after: Var('after') })
           ),
-          Paginate(Var('match'), { size: Var('size'), before: Var('before') })
+          Paginate(Var('range'), { size: Var('size'), before: Var('before') })
         ),
         sizes: Map(
           Var('page'),
@@ -44,7 +49,11 @@ const body = Query(
           )
         )
       },
-      Sum(Select('data', Var('sizes')))
+      {
+        data: [Sum(Select('data', Var('sizes')))],
+        after: Select('after', Var('page'), null),
+        before: Select('before', Var('page'), null)
+      }
     )
   )
 )
