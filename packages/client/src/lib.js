@@ -113,22 +113,29 @@ class Web3Storage {
     let carRoot
     const blockstore = new Blockstore()
 
+    const { out, root } = await pack({
+      input: Array.from(files).map((f) => ({
+        path: f.name,
+        content: f.stream()
+      })),
+      blockstore,
+      wrapWithDirectory,
+      maxChunkSize: 1048576,
+      maxChildrenPerNode: 1024
+    })
+    carRoot = root.toString()
+
+    onRootCidReady && onRootCidReady(carRoot)
+    return this._put({onStoredChunk, car: out, targetSize, maxRetries})
+  }
+
+  static async _put({ onStoredChunk, car,
+      targetSize = MAX_CHUNK_SIZE,
+      maxRetries = MAX_PUT_RETRIES
+    }) {
+
     try {
-      const { out, root } = await pack({
-        input: Array.from(files).map((f) => ({
-          path: f.name,
-          content: f.stream()
-        })),
-        blockstore,
-        wrapWithDirectory,
-        maxChunkSize: 1048576,
-        maxChildrenPerNode: 1024
-      })
-      carRoot = root.toString()
-
-      onRootCidReady && onRootCidReady(carRoot)
-
-      const splitter = await TreewalkCarSplitter.fromIterable(out, targetSize)
+      const splitter = await TreewalkCarSplitter.fromIterable(car, targetSize)
 
       const upload = transform(
         MAX_CONCURRENT_UPLOADS,
