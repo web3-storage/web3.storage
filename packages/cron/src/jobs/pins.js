@@ -52,13 +52,29 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
     console.log('ℹ️ Enable logging by setting DEBUG=pins:updatePinStatuses')
   }
 
+  // Cached status responses - since we pin on multiple nodes we'll often ask
+  // multiple times about the same CID.
+  /** @type {Map<string, import('@nftstorage/ipfs-cluster').StatusResponse['peerMap']>} */
+  const statusCache = new Map()
+  // List of CIDs that we already updated the DAG size for and don't need to do
+  // get the size or update again.
+  /** @type {Set<string>} */
+  const updatedDagSizes = new Set()
+
   let queryRes, after
   let i = 0
   while (true) {
     queryRes = await db.query(FIND_PENDING_PINS, { after })
     log(`📥 Processing ${i} -> ${i + queryRes.findPinsByStatus.data.length}`)
     for (const pin of queryRes.findPinsByStatus.data) {
-      const { peerMap } = await cluster.status(pin.content.cid)
+      let peerMap = statusCache.get(pin.content.cid)
+      if (peerMap) {
+        log(`🥊 ${pin.content.cid}: Cache hit for status...`)
+      } else {
+        log(`⏳ ${pin.content.cid}: Checking status...`)
+        ;({ peerMap } = await cluster.status(pin.content.cid))
+        statusCache.set(pin.content.cid, peerMap)
+      }
 
       if (!peerMap[pin.location.peerId]) {
         continue // not tracked by our cluster
@@ -82,7 +98,8 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
         }
       })
 
-      if (status === 'Pinned' && !pin.content.dagSize) {
+      if (status === 'Pinned' && !pin.content.dagSize && !updatedDagSizes.has(pin.content.cid)) {
+        updatedDagSizes.add(pin.content.cid)
         log(`⏳ ${pin.content.cid}: Querying DAG size...`)
         let dagSize
         try {
