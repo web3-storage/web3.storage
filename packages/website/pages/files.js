@@ -166,7 +166,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
       </TableElement>
       <TableElement {...sharedArgs} centered>{pinStatus}</TableElement>
       <TableElement {...sharedArgs} centered breakAll={false}>{deals}</TableElement>
-      <TableElement {...sharedArgs} centered>
+      <TableElement {...sharedArgs} centered breakAll={false}>
         {upload.dagSize ? filesize(upload.dagSize) : 'Calculating...'}
       </TableElement>
     </tr>
