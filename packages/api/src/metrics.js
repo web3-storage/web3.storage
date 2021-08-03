@@ -70,6 +70,7 @@ async function sumPaginate (db, query, vars, dataProp) {
   let total = 0
   while (true) {
     const res = await db.query(query, { from: EPOCH, after, ...vars })
+    console.log(res)
     const data = res[dataProp]
     total += data.data[0]
     after = data.after
