@@ -1,5 +1,13 @@
 # Changelog
 
+### [3.2.2](https://www.github.com/web3-storage/web3.storage/compare/api-v3.2.1...api-v3.2.2) (2021-08-03)
+
+
+### Bug Fixes
+
+* check for empty CAR ([#281](https://www.github.com/web3-storage/web3.storage/issues/281)) ([ea2a34b](https://www.github.com/web3-storage/web3.storage/commit/ea2a34b3d9b6959fa53fbff3cb80100298028244))
+* increment user used storage in waitUntil ([#280](https://www.github.com/web3-storage/web3.storage/issues/280)) ([aa32153](https://www.github.com/web3-storage/web3.storage/commit/aa321534b0fba899488587c8df3ab5378dad30e2))
+
 ### [3.2.1](https://www.github.com/web3-storage/web3.storage/compare/api-v3.2.0...api-v3.2.1) (2021-08-02)
 
 
