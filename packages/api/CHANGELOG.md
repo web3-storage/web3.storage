@@ -1,5 +1,13 @@
 # Changelog
 
+### [3.2.3](https://www.github.com/web3-storage/web3.storage/compare/api-v3.2.2...api-v3.2.3) (2021-08-03)
+
+
+### Bug Fixes
+
+* dag size UDFs ([6841775](https://www.github.com/web3-storage/web3.storage/commit/68417757553b5afc56e09f21db2b44cf49150954))
+* metrics ([#285](https://www.github.com/web3-storage/web3.storage/issues/285)) ([b4c1bb2](https://www.github.com/web3-storage/web3.storage/commit/b4c1bb2f60788324c3a14440236047e97bcec460))
+
 ### [3.2.2](https://www.github.com/web3-storage/web3.storage/compare/api-v3.2.1...api-v3.2.2) (2021-08-03)
 
 
