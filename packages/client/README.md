@@ -38,8 +38,7 @@ for (const file of files) {
 ```
 
 ## Testing
-
-Run `npm test` to test the ESM code, CJS, and in the browser via `playwright-test`. 100% test coverage is required by the `hundreds` module.
+To test the client, you'll need two terminal windows open. In the first, start up the mock API by running `npm run mock:api`. In the second, you can then run `npm test` to test the ESM code, CJS, and in the browser via `playwright-test`. 100% test coverage is required by the `hundreds` module.
 
 Tests are written in `mocha` and use a mock API server to assert functionality. When adding a new method to the client, add a `test/<method>.spec.js` test suite to go with it.
 
