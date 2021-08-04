@@ -99,7 +99,6 @@ class Web3Storage {
     wrapWithDirectory = true,
     name
   } = {}) {
-
     const blockstore = new Blockstore()
 
     const { out, root } = await pack({
