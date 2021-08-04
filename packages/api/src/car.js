@@ -5,6 +5,7 @@ import { Block } from 'multiformats/block'
 import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
+import retry from 'p-retry'
 import { GATEWAY, LOCAL_ADD_THRESHOLD, DAG_SIZE_CALC_LIMIT, MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { toPinStatusEnum } from './utils/pin.js'
@@ -50,6 +51,10 @@ const PIN_STATUS_CHECK_INTERVAL = 5000
 const MAX_PIN_STATUS_CHECK_TIME = 30000
 // Pin statuses considered OK.
 const PIN_OK_STATUS = ['Pinned', 'Pinning', 'PinQueued']
+// Times to retry the transaction after the first failure.
+const CREATE_UPLOAD_RETRIES = 4
+// Time in ms before starting the first retry.
+const CREATE_UPLOAD_MAX_TIMEOUT = 100
 
 /**
  * TODO: ipfs should let us ask the size of a CAR file.
@@ -157,15 +162,22 @@ export async function carPost (request, env, ctx) {
   }
 
   // Store in DB
-  const { createUpload: upload } = await env.db.query(CREATE_UPLOAD, {
-    data: {
-      user: user._id,
-      authToken: authToken?._id,
-      cid,
-      name,
-      type: 'Car',
-      pins
-    }
+  // Retried because it's possible to receive the error:
+  // "Transaction was aborted due to detection of concurrent modification."
+  const { createUpload: upload } = await retry(() => (
+    env.db.query(CREATE_UPLOAD, {
+      data: {
+        user: user._id,
+        authToken: authToken?._id,
+        cid,
+        name,
+        type: 'Car',
+        pins
+      }
+    })
+  ), {
+    retries: CREATE_UPLOAD_RETRIES,
+    minTimeout: CREATE_UPLOAD_MAX_TIMEOUT
   })
 
   /** @type {(() => Promise<any>)[]} */
