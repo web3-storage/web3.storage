@@ -295,7 +295,6 @@ class Web3Storage {
     return Web3Storage.put(this, files, options)
   }
 
-
   /**
    * Uploads CAR files to web3.storage. Files are hashed in the client and uploaded as a single
    * [Content Addressed Archive(CAR)](https://github.com/ipld/specs/blob/master/block-layer/content-addressable-archives.md).
