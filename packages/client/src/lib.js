@@ -185,7 +185,7 @@ class Web3Storage {
       // Close Blockstore
       if (blockstore) {
         await blockstore.close()
-      } // FAILS HERE IN TESTING putCar (cannot read property 'close' of undefined )
+      }
     }
 
     return carRoot

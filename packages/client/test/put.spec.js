@@ -3,8 +3,7 @@ import * as assert from 'uvu/assert'
 import randomBytes from 'randombytes'
 import { Web3Storage } from 'web3.storage'
 import { File } from '../src/platform.js'
-import fs from 'fs'
-import { Readable } from 'stream'
+import { Readable, PassThrough } from 'stream'
 import { CarReader, CarWriter } from '@ipld/car'
 import * as raw from 'multiformats/codecs/raw'
 import { CID } from 'multiformats/cid'
@@ -152,16 +151,16 @@ async function prepareCarFile () {
 
   // create the writer and set the header with a single root
   const { writer, out } = await CarWriter.create([cid])
-  Readable.from(out).pipe(fs.createWriteStream('example.car'))
+  const pass = new PassThrough()
+  Readable.from(out).pipe(pass)
 
   // store a new block, creates a new file entry in the CAR archive
   await writer.put({ cid, bytes })
   await writer.close()
 
-  const inStream = fs.createReadStream('example.car')
   // read and parse the entire stream in one go, this will cache the contents of
   // the car in memory so is not suitable for large files.
-  const reader = await CarReader.fromIterable(inStream)
+  const reader = await CarReader.fromIterable(pass)
   console.log('i made a reader')
   return reader
 }
