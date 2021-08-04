@@ -1,5 +1,14 @@
 # Changelog
 
+### [2.0.4](https://www.github.com/web3-storage/web3.storage/compare/db-v2.0.3...db-v2.0.4) (2021-08-04)
+
+
+### Bug Fixes
+
+* dag size UDFs ([6841775](https://www.github.com/web3-storage/web3.storage/commit/68417757553b5afc56e09f21db2b44cf49150954))
+* find pins by status sort by created DESC ([#292](https://www.github.com/web3-storage/web3.storage/issues/292)) ([e96d6ae](https://www.github.com/web3-storage/web3.storage/commit/e96d6aec5bc3fe85772152f4a467568bfbf66579))
+* metrics ([#285](https://www.github.com/web3-storage/web3.storage/issues/285)) ([b4c1bb2](https://www.github.com/web3-storage/web3.storage/commit/b4c1bb2f60788324c3a14440236047e97bcec460))
+
 ### [2.0.3](https://www.github.com/web3-storage/web3.storage/compare/db-v2.0.2...db-v2.0.3) (2021-08-03)
 
 

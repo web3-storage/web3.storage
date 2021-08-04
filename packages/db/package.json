@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/db",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Database schema and tools.",
   "private": "true",
   "main": "index.js",
