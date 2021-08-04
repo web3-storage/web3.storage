@@ -161,6 +161,5 @@ async function prepareCarFile () {
   // read and parse the entire stream in one go, this will cache the contents of
   // the car in memory so is not suitable for large files.
   const reader = await CarReader.fromIterable(pass)
-  console.log('i made a reader')
   return reader
 }
