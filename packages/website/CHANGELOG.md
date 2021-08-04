@@ -1,5 +1,14 @@
 # Changelog
 
+### [1.2.3](https://www.github.com/web3-storage/web3.storage/compare/website-v1.2.2...website-v1.2.3) (2021-08-04)
+
+
+### Bug Fixes
+
+* do not wrap Calculating... ([52b10be](https://www.github.com/web3-storage/web3.storage/commit/52b10be5a26e2fc4a9ecac787fdcb1326ec67a5c))
+* link to IPFS ToS ([d7f78e7](https://www.github.com/web3-storage/web3.storage/commit/d7f78e7cd35406c396c14b3517adcfc835ea3cac))
+* redirect URL ([0d1c3ef](https://www.github.com/web3-storage/web3.storage/commit/0d1c3ef48e7217c332abbdc59b559b63bc003c7f))
+
 ### [1.2.2](https://www.github.com/web3-storage/web3.storage/compare/website-v1.2.1...website-v1.2.2) (2021-07-31)
 
 
