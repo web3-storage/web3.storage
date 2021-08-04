@@ -7,7 +7,7 @@ const EPOCH = '2021-07-28T00:00:00.000Z'
 
 const COUNT_USERS = gql`
   query CountUsers($from: Time!, $after: String) {
-    countUsers(from: $from, _size: 100000, _cursor: $after) {
+    countUsers(from: $from, _size: 80000, _cursor: $after) {
       data,
       after
     }
@@ -16,7 +16,7 @@ const COUNT_USERS = gql`
 
 const COUNT_UPLOADS = gql`
   query CountUploads($from: Time!, $after: String) {
-    countUploads(from: $from, _size: 100000, _cursor: $after) {
+    countUploads(from: $from, _size: 80000, _cursor: $after) {
       data,
       after
     }
@@ -25,7 +25,7 @@ const COUNT_UPLOADS = gql`
 
 const COUNT_PINS = gql`
   query CountPins($from: Time!, $after: String) {
-    countPins(from: $from, _size: 100000, _cursor: $after) {
+    countPins(from: $from, _size: 80000, _cursor: $after) {
       data,
       after
     }
@@ -34,7 +34,7 @@ const COUNT_PINS = gql`
 
 const COUNT_PINS_BY_STATUS = gql`
   query CountPinsByStatus($status: PinStatus!, $from: Time!, $after: String) {
-    countPinsByStatus(status: $status, from: $from, _size: 100000, _cursor: $after) {
+    countPinsByStatus(status: $status, from: $from, _size: 80000, _cursor: $after) {
       data,
       after
     }
