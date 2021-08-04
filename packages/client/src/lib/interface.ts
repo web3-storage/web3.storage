@@ -119,28 +119,34 @@ export type _PutOptions = PutOptions & {
    * CarReader interface from @ipld/car
    TODO: Figure out the right format to use below - ask irakli
    */
-  car: AsyncIterable<Uint8Array>
+  car: ICarReader
   /**
   /**
    * HTTP headers object
    */
   headers: Record<string, string>
   /**
-  /**
    * Web3.Storage write import
    */
   url: URL
+  /**
+   * TODO: describe this thing
+   */
+  endpoint: URL
   /**
   /**
    * CID string of the CAR file root
    */
   carRoot: string
-  /**
+
   /**
    * Blockstore
    */
-  blockstore: Blockstore
-
+  blockstore?: Blockstore
+  /**
+   * API token
+   */
+  token: string
 }
 
 export interface Web3File extends File {

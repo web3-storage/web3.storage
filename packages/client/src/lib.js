@@ -99,16 +99,6 @@ class Web3Storage {
     wrapWithDirectory = true,
     name
   } = {}) {
-    const url = new URL('/car', endpoint)
-    let headers = Web3Storage.headers(token)
-
-    if (name) {
-      headers = {
-        ...headers,
-        // @ts-ignore 'X-Name' does not exist in type inferred
-        'X-Name': name
-      }
-    }
 
     const blockstore = new Blockstore()
 
@@ -127,7 +117,7 @@ class Web3Storage {
 
     onRootCidReady && onRootCidReady(carRoot)
     const car = await CarReader.fromIterable(out)
-    return this._put({ onStoredChunk, car, maxRetries, url, headers, carRoot, blockstore })
+    return this._put({ onStoredChunk, car, maxRetries, carRoot, blockstore, endpoint, token, name })
   }
 
   /**
@@ -135,10 +125,22 @@ class Web3Storage {
    * @returns {Promise<CIDString>}
    */
   static async _put ({
-    onStoredChunk, car, url, headers, carRoot, blockstore,
+    onStoredChunk, car, token, endpoint, name, carRoot, blockstore,
     maxRetries = MAX_PUT_RETRIES
   }) {
     const targetSize = MAX_CHUNK_SIZE
+
+    const url = new URL('/car', endpoint)
+    let headers = Web3Storage.headers(token)
+
+    if (name) {
+      headers = {
+        ...headers,
+        // @ts-ignore 'X-Name' does not exist in type inferred
+        'X-Name': name
+      }
+    }
+
     try {
       const splitter = new TreewalkCarSplitter(car, targetSize)
 
@@ -336,8 +338,7 @@ class Web3Storage {
    * const car = await getCar()
    * const cid = await putCar(car)
    * ```
-   * TODO: Replace below with the file type we put in tsc for carReader
-   * @param {Iterable<Filelike>} files
+   //@param {ICarReader} car
    * @param {_PutOptions} [options]
    */
   putCar (car, options = {}) {
