@@ -47,7 +47,8 @@
     "@web3-storage/db": "^2.0.0",
     "@web3-storage/multipart-parser": "^1.0.0",
     "itty-router": "^2.3.10",
-    "multiformats": "^9.0.4"
+    "multiformats": "^9.0.4",
+    "p-retry": "^4.6.1"
   },
   "bundlesize": [
     {
