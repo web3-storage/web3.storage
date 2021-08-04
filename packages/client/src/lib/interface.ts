@@ -116,32 +116,28 @@ export type PutOptions = {
 export type _PutOptions = PutOptions & {
 
   /**
-   * TODO: Some sort of new definition here
-   */
-  targetSize?: number
-  /**
-  /**
-   * TODO: Some sort of new definition here
+   * CarReader interface from @ipld/car
+   TODO: Figure out the right format to use below - ask irakli
    */
   car: AsyncIterable<Uint8Array>
   /**
   /**
-   * TODO: Some sort of new definition here
+   * HTTP headers object
    */
   headers: Record<string, string>
   /**
   /**
-   * TODO: Some sort of new definition here
+   * Web3.Storage write import
    */
   url: URL
   /**
   /**
-   * TODO: Some sort of new definition here
+   * CID string of the CAR file root
    */
   carRoot: string
   /**
   /**
-   * TODO: Some sort of new definition here
+   * Blockstore
    */
   blockstore: Blockstore
 
