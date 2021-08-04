@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.2.5](https://www.github.com/web3-storage/web3.storage/compare/api-v3.2.4...api-v3.2.5) (2021-08-04)
+
+
+### Bug Fixes
+
+* retry createUpload DB transaction ([#297](https://www.github.com/web3-storage/web3.storage/issues/297)) ([606eefc](https://www.github.com/web3-storage/web3.storage/commit/606eefc478b9acba9e22904109aaef0a419e380f))
+
 ### [3.2.4](https://www.github.com/web3-storage/web3.storage/compare/api-v3.2.3...api-v3.2.4) (2021-08-04)
 
 
