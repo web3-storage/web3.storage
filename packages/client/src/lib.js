@@ -183,7 +183,9 @@ class Web3Storage {
       for await (const _ of upload(splitter.cars())) {} // eslint-disable-line
     } finally {
       // Close Blockstore
-      await blockstore.close()
+      if (blockstore) {
+        await blockstore.close()
+      } // FAILS HERE IN TESTING putCar (cannot read property 'close' of undefined )
     }
 
     return carRoot
