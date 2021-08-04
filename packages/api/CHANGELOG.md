@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.2.4](https://www.github.com/web3-storage/web3.storage/compare/api-v3.2.3...api-v3.2.4) (2021-08-04)
+
+
+### Bug Fixes
+
+* use page sizes that do not result in width errors ([88818b7](https://www.github.com/web3-storage/web3.storage/commit/88818b7162055eceec506942653370c3e1860fec))
+
 ### [3.2.3](https://www.github.com/web3-storage/web3.storage/compare/api-v3.2.2...api-v3.2.3) (2021-08-03)
 
 
