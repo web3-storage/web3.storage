@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.0](https://www.github.com/web3-storage/web3.storage/compare/api-v3.2.5...api-v3.3.0) (2021-08-05)
+
+
+### Features
+
+* use db metrics ([#306](https://www.github.com/web3-storage/web3.storage/issues/306)) ([0156e9e](https://www.github.com/web3-storage/web3.storage/commit/0156e9e5705914beb58f2c3ac69415b4643efe64)), closes [#93](https://www.github.com/web3-storage/web3.storage/issues/93)
+
 ### [3.2.5](https://www.github.com/web3-storage/web3.storage/compare/api-v3.2.4...api-v3.2.5) (2021-08-04)
 
 
