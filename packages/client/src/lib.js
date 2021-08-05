@@ -117,6 +117,7 @@ class Web3Storage {
     onRootCidReady && onRootCidReady(carRoot)
     const car = await CarReader.fromIterable(out)
     return this._put({ onStoredChunk, car, maxRetries, carRoot, blockstore, endpoint, token, name })
+    // ERRORS OUT HERE in build:tsc saying that that an argument of <the whole object passed above> is not assignable to paramater of type '_PutOptions'
   }
 
   /**
@@ -337,11 +338,13 @@ class Web3Storage {
    * const car = await getCar()
    * const cid = await putCar(car)
    * ```
-   //@param {ICarReader} car
+   * @param {CarReader} car
    * @param {_PutOptions} [options]
    */
   putCar (car, options = {}) {
+// ERRORS OUT HERE in build:tsc saying "Type '{}' is not assignable to type '_PutOptions'"
     return Web3Storage._put({ ...options, car })
+  // ERRORS OUT HERE in test:esm for putCar saying  "TypeError [ERR_INVALID_URL]: Invalid URL"
   }
 
   /**
