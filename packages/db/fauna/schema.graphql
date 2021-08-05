@@ -367,6 +367,21 @@ enum DealStatus {
   Terminated
 }
 
+type Metric {
+  """
+  Unique key identifying the metric.
+  """
+  key: String! @unique
+  """
+  Current value for the metric, see updated property for last calculation date.
+  """
+  value: Long!
+  """
+  Last time this metric was updated.
+  """
+  updated: Time!
+}
+
 type Query {
   """
   Find all uploads created after a given date. Note: this INCLUDES deleted uploads.
@@ -390,6 +405,7 @@ type Query {
   countPinsByStatus(status: PinStatus!, from: Time!, to: Time): [Long]! @resolver(paginated: true)
   sumContentDagSize(from: Time!, to: Time): [Long]! @resolver(paginated: true)
   sumPinDagSize(from: Time!, to: Time): [Long]! @resolver(paginated: true)
+  findMetricByKey(key: String!): Metric @resolver
 }
 
 type Mutation {
@@ -412,19 +428,7 @@ type Mutation {
   createPinRequest(cid: String!): PinRequest! @resolver
   incrementPinRequestAttempts(pinRequest: ID!): PinRequest! @resolver
   incrementUserUsedStorage(user: ID!, amount: Long!): User! @resolver
-}
-
-type Metrics {
-  usersTotal: Int!
-  uploadsTotal: Int!
-  contentTotal: Int!
-  contentTotalBytes: Long!
-  pinsTotal: Int!
-  pinsTotalBytes: Long!
-  pinsQueuedTotal: Int!
-  pinsPinningTotal: Int!
-  pinsPinnedTotal: Int!
-  pinsFailedTotal: Int!
+  createOrUpdateMetric(data: CreateOrUpdateMetricInput!): Metric! @resolver
 }
 
 input CreateAggregateInput {
@@ -497,4 +501,9 @@ input CreateOrUpdatePinInput {
   content: ID!
   status: PinStatus!
   location: PinLocationInput!
+}
+
+input CreateOrUpdateMetricInput {
+  key: String!
+  value: Long!
 }

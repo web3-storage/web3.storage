@@ -1,0 +1,32 @@
+name: Cron Metrics
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+
+jobs:
+  update:
+    name: Update metrics
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: ['staging', 'production']
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Run job
+        env:
+          DEBUG: '*'
+          ENV: ${{ matrix.env }}
+          FAUNA_KEY: ${{ secrets.PROD_FAUNA_KEY }}
+          STAGING_FAUNA_KEY: ${{ secrets.STAGING_FAUNA_KEY }}
+        run: npm run start:metrics -w packages/cron
