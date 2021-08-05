@@ -87,28 +87,8 @@ module.exports = ({ body }) => {
     return gqlResponse(200, res)
   }
 
-  if (body.query.includes('countPinsByStatus')) {
-    return gqlOkResponse(require('../../fixtures/count-pins-by-status.json'))
-  }
-
-  if (body.query.includes('countPins')) {
-    return gqlOkResponse(require('../../fixtures/count-pins.json'))
-  }
-
-  if (body.query.includes('countUploads')) {
-    return gqlOkResponse(require('../../fixtures/count-uploads.json'))
-  }
-
-  if (body.query.includes('countUsers')) {
-    return gqlOkResponse(require('../../fixtures/count-users.json'))
-  }
-
-  if (body.query.includes('sumContentDagSize')) {
-    return gqlOkResponse(require('../../fixtures/sum-content-dag-size.json'))
-  }
-
-  if (body.query.includes('sumPinDagSize')) {
-    return gqlOkResponse(require('../../fixtures/sum-pin-dag-size.json'))
+  if (body.query.includes('findMetricByKey')) {
+    return gqlOkResponse({ findMetricByKey: { value: 42 } })
   }
 
   if (body.query.includes('findUserByID')) {
