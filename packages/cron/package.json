@@ -7,6 +7,7 @@
   "type": "module",
   "scripts": {
     "start": "run-s start:*",
+    "start:metrics": "node src/bin/metrics.js",
     "start:pins": "node src/bin/pins.js",
     "start:pinata": "node src/bin/pinata.js"
   },
