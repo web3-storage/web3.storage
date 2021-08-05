@@ -115,15 +115,10 @@ export type PutOptions = {
 }
 
 export type _PutOptions = PutOptions & {
-
   /**
    * CarReader interface from @ipld/car/api
    */
   car: CarReader
-  /**
-   * HTTP headers object
-   */
-  headers: Record<string, string>
   /**
    * Blockstore
    */
