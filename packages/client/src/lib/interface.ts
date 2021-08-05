@@ -2,6 +2,7 @@ import type { UnixFSEntry } from 'ipfs-car/unpack'
 import type { CID } from 'multiformats'
 export type { CID, UnixFSEntry }
 import type { MemoryBlockStore as Blockstore } from 'ipfs-car/blockstore/memory'
+import type { CarReader } from '@ipld/car/api'
 
 /**
  * Define nominal type of U based on type of T. Similar to Opaque types in Flow
@@ -116,11 +117,9 @@ export type PutOptions = {
 export type _PutOptions = PutOptions & {
 
   /**
-   * CarReader interface from @ipld/car
-   TODO: Figure out the right format to use below - ask irakli
+   * CarReader interface from @ipld/car/api
    */
-  car: ICarReader
-  /**
+  car: CarReader
   /**
    * HTTP headers object
    */
@@ -133,7 +132,6 @@ export type _PutOptions = PutOptions & {
    * TODO: describe this thing
    */
   endpoint: URL
-  /**
   /**
    * CID string of the CAR file root
    */
