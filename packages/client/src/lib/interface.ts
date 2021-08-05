@@ -125,26 +125,9 @@ export type _PutOptions = PutOptions & {
    */
   headers: Record<string, string>
   /**
-   * Web3.Storage write import
-   */
-  url: URL
-  /**
-   * TODO: describe this thing
-   */
-  endpoint: URL
-  /**
-   * CID string of the CAR file root
-   */
-  carRoot: string
-
-  /**
    * Blockstore
    */
   blockstore?: Blockstore
-  /**
-   * API token
-   */
-  token: string
 }
 
 export interface Web3File extends File {

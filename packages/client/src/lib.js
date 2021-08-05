@@ -116,16 +116,17 @@ class Web3Storage {
 
     onRootCidReady && onRootCidReady(carRoot)
     const car = await CarReader.fromIterable(out)
-    return this._put({ onStoredChunk, car, maxRetries, carRoot, blockstore, endpoint, token, name })
+    return this._put({ endpoint, token }, { onStoredChunk, car, maxRetries, blockstore, name })
     // ERRORS OUT HERE in build:tsc saying that that an argument of <the whole object passed above> is not assignable to paramater of type '_PutOptions'
   }
 
   /**
+   * @param {Service} service
    * @param {_PutOptions} options
    * @returns {Promise<CIDString>}
    */
-  static async _put ({
-    onStoredChunk, car, token, endpoint, name, carRoot, blockstore,
+  static async _put ({ endpoint, token }, {
+    onStoredChunk, car, name, blockstore,
     maxRetries = MAX_PUT_RETRIES
   }) {
     const targetSize = MAX_CHUNK_SIZE
@@ -140,6 +141,11 @@ class Web3Storage {
         'X-Name': name
       }
     }
+    console.log(1)
+    const [ root ] = await car.getRoots()
+    const carRoot = root.toString()
+
+    console.log(2)
 
     try {
       const splitter = new TreewalkCarSplitter(car, targetSize)
@@ -147,24 +153,25 @@ class Web3Storage {
       const upload = transform(
         MAX_CONCURRENT_UPLOADS,
         async (/** @type {AsyncIterable<Uint8Array>} */ car) => {
+          console.log(2)
           const carParts = []
           for await (const part of car) {
             carParts.push(part)
           }
-
           const carFile = new Blob(carParts, {
             type: 'application/car'
           })
-
           const res = await pRetry(
             async () => {
+              console.log(3)
               const request = await fetch(url.toString(), {
                 method: 'POST',
                 headers,
                 body: carFile
               })
+              console.log('request')
               const res = await request.json()
-
+              console.log('res')
               if (!request.ok) {
                 throw new Error(res.message)
               }
@@ -172,11 +179,12 @@ class Web3Storage {
               if (res.cid !== carRoot) {
                 throw new Error(`root CID mismatch, expected: ${carRoot}, received: ${res.cid}`)
               }
-
+              console.log(4)
               return res.cid
             },
             { retries: maxRetries }
           )
+          console.log(5)
           onStoredChunk && onStoredChunk(carFile.size)
           return res
         }
@@ -343,7 +351,7 @@ class Web3Storage {
    */
   putCar (car, options = {}) {
 // ERRORS OUT HERE in build:tsc saying "Type '{}' is not assignable to type '_PutOptions'"
-    return Web3Storage._put({ ...options, car })
+    return Web3Storage._put(this, { ...options, car })
   // ERRORS OUT HERE in test:esm for putCar saying  "TypeError [ERR_INVALID_URL]: Invalid URL"
   }
 

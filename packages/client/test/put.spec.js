@@ -109,9 +109,9 @@ describe('putCar', () => {
   it('adds CAR files', async () => {
     const client = new Web3Storage({ token, endpoint })
     const car = await prepareCarFile()
-    const expectedCid = 'bafybeiep3t2chy6e3dxk3fktnshm7tpopjrns6wevo4uwpnnz5aq352se4'
+    const expectedCid = 'bafkreihwkf6mtnjobdqrkiksr7qhp6tiiqywux64aylunbvmfhzeql2coa'
     const cid = await client.putCar(car, {
-      name: 'web3-storage-dir',
+      name: 'putCar test',
       onRootCidReady: (cid) => {
         assert.equal(cid, expectedCid, 'returned cid matches the CAR')
       }
@@ -152,7 +152,8 @@ async function prepareCarFile () {
   // create the writer and set the header with a single root
   const { writer, out } = await CarWriter.create([cid])
   const pass = new PassThrough()
-  Readable.from(out).pipe(pass)
+  const _out = Readable.from(out)
+  _out.pipe(pass)
 
   // store a new block, creates a new file entry in the CAR archive
   await writer.put({ cid, bytes })
