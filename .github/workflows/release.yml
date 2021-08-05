@@ -64,7 +64,7 @@ jobs:
         package: ${{fromJson(needs.changeFinder.outputs.nodePaths)}}
     steps:
       - name: Create Release PR
-        uses: alanshaw/release-please-action@v2.30.0
+        uses: alanshaw/release-please-action@v2.30.1
         id: release-please
         with:
           path: packages/${{ matrix.package }}
