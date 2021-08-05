@@ -1,7 +1,7 @@
 {
   "name": "report",
   "version": "0.0.0",
-  "private": "true",
+  "private": true,
   "description": "Activity report for Web3.Storage",
   "main": "index.js",
   "type": "module",
