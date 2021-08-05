@@ -1,82 +1,26 @@
 /* global Response caches */
 
+import retry from 'p-retry'
 import { gql } from '@web3-storage/db'
 import { METRICS_CACHE_MAX_AGE } from './constants.js'
 
-const EPOCH = '2021-07-28T00:00:00.000Z'
-
-const COUNT_USERS = gql`
-  query CountUsers($from: Time!, $after: String) {
-    countUsers(from: $from, _size: 80000, _cursor: $after) {
-      data,
-      after
-    }
-  }
-`
-
-const COUNT_UPLOADS = gql`
-  query CountUploads($from: Time!, $after: String) {
-    countUploads(from: $from, _size: 80000, _cursor: $after) {
-      data,
-      after
-    }
-  }
-`
-
-const COUNT_PINS = gql`
-  query CountPins($from: Time!, $after: String) {
-    countPins(from: $from, _size: 80000, _cursor: $after) {
-      data,
-      after
-    }
-  }
-`
-
-const COUNT_PINS_BY_STATUS = gql`
-  query CountPinsByStatus($status: PinStatus!, $from: Time!, $after: String) {
-    countPinsByStatus(status: $status, from: $from, _size: 80000, _cursor: $after) {
-      data,
-      after
-    }
-  }
-`
-
-const SUM_PIN_DAG_SIZE = gql`
-  query SumPinDagSize($from: Time!, $after: String) {
-    sumPinDagSize(from: $from, _size: 25000, _cursor: $after) {
-      data
-      after
-    }
-  }
-`
-
-const SUM_CONTENT_DAG_SIZE = gql`
-  query SumContentDagSize($from: Time!, $after: String) {
-    sumContentDagSize(from: $from, _size: 25000, _cursor: $after) {
-      data
-      after
+const FIND_METRIC = gql`
+  query FindMetric($key: String!) {
+    findMetricByKey(key: $key) {
+      key
+      value
+      updated
     }
   }
 `
 
 /**
  * @param {import('@web3-storage/db').DBClient} db
- * @param {typeof gql} query
- * @param {any} vars
- * @param {string} dataProp
+ * @param {string} key
  */
-async function sumPaginate (db, query, vars, dataProp) {
-  let after
-  let total = 0
-  while (true) {
-    const res = await db.query(query, { from: EPOCH, after, ...vars })
-    console.log(res)
-    const data = res[dataProp]
-    total += data.data[0] || 0
-    after = data.after
-    if (!after) break
-  }
-  return total
+async function getMetricValue (db, key) {
+  const { findMetricByKey } = await retry(() => db.query(FIND_METRIC, { key }))
+  return findMetricByKey ? findMetricByKey.value : 0
 }
 
 /**
@@ -106,15 +50,15 @@ export async function metricsGet (request, env, ctx) {
     pinsPinnedTotal,
     pinsFailedTotal
   ] = await Promise.all([
-    sumPaginate(env.db, COUNT_USERS, {}, 'countUsers'),
-    sumPaginate(env.db, COUNT_UPLOADS, {}, 'countUploads'),
-    sumPaginate(env.db, SUM_CONTENT_DAG_SIZE, {}, 'sumContentDagSize'),
-    sumPaginate(env.db, COUNT_PINS, {}, 'countPins'),
-    sumPaginate(env.db, SUM_PIN_DAG_SIZE, {}, 'sumPinDagSize'),
-    sumPaginate(env.db, COUNT_PINS_BY_STATUS, { status: 'PinQueued' }, 'countPinsByStatus'),
-    sumPaginate(env.db, COUNT_PINS_BY_STATUS, { status: 'Pinning' }, 'countPinsByStatus'),
-    sumPaginate(env.db, COUNT_PINS_BY_STATUS, { status: 'Pinned' }, 'countPinsByStatus'),
-    sumPaginate(env.db, COUNT_PINS_BY_STATUS, { status: 'PinError' }, 'countPinsByStatus')
+    getMetricValue(env.db, 'users_total'),
+    getMetricValue(env.db, 'uploads_total'),
+    getMetricValue(env.db, 'content_bytes_total'),
+    getMetricValue(env.db, 'pins_total'),
+    getMetricValue(env.db, 'pins_bytes_total'),
+    getMetricValue(env.db, 'pins_status_queued_total'),
+    getMetricValue(env.db, 'pins_status_pinning_total'),
+    getMetricValue(env.db, 'pins_status_pinned_total'),
+    getMetricValue(env.db, 'pins_status_failed_total')
   ])
 
   const metrics = [
