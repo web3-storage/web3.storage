@@ -1,6 +1,7 @@
 import debug from 'debug'
 import { gql } from '@web3-storage/db'
 import { toPinStatusEnum } from '@web3-storage/api/src/utils/pin.js'
+import retry from 'p-retry'
 
 const log = debug('pins:updatePinStatuses')
 
@@ -64,7 +65,7 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
   let queryRes, after
   let i = 0
   while (true) {
-    queryRes = await db.query(FIND_PENDING_PINS, { after })
+    queryRes = await retry(() => db.query(FIND_PENDING_PINS, { after }))
     log(`📥 Processing ${i} -> ${i + queryRes.findPinsByStatus.data.length}`)
     for (const pin of queryRes.findPinsByStatus.data) {
       let peerMap = statusCache.get(pin.content.cid)
@@ -87,7 +88,7 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
       }
 
       log(`📌 ${pin.content.cid}@${pin.location.peerId}: ${pin.status} => ${status}`)
-      await db.query(CREATE_OR_UPDATE_PIN, {
+      await retry(() => db.query(CREATE_OR_UPDATE_PIN, {
         data: {
           content: pin.content._id,
           status: status,
@@ -96,7 +97,7 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
             peerName: peerMap[pin.location.peerId].peerName
           }
         }
-      })
+      }))
 
       if (status === 'Pinned' && !pin.content.dagSize && !updatedDagSizes.has(pin.content.cid)) {
         updatedDagSizes.add(pin.content.cid)
@@ -106,7 +107,7 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
           // Note: this will timeout for large DAGs
           dagSize = await ipfs.dagSize(pin.content.cid, { timeout: 10 * 60000 })
           log(`🛄 ${pin.content.cid}@${pin.location.peerId}: ${dagSize} bytes`)
-          await db.query(UPDATE_CONTENT_DAG_SIZE, { content: pin.content._id, dagSize })
+          await retry(() => db.query(UPDATE_CONTENT_DAG_SIZE, { content: pin.content._id, dagSize }))
         } catch (err) {
           log(`💥 ${pin.content.cid}@${pin.location.peerId}: Failed to update DAG size`)
           log(err)
