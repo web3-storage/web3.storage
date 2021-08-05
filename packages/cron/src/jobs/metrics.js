@@ -132,7 +132,7 @@ export async function updateMetrics ({ db }) {
  */
 async function createMetric (db, key, query, vars, dataProp) {
   const to = new Date(Date.now() - 1000)
-  console.log(`ℹ️ Creating "${key}" metric from ${EPOCH} to ${to}`)
+  console.log(`ℹ️ Creating "${key}" metric from ${EPOCH} to ${to.toISOString()}`)
 
   vars = { ...vars, from: EPOCH, to: to.toISOString() }
   const total = await sumPaginate(db, query, vars, dataProp, total => {
@@ -155,7 +155,7 @@ async function updateMetric (db, key, query, vars, dataProp) {
   console.log(`🦴 Fetching current metric "${key}"...`)
 
   const metric = await getMetric(db, key)
-  console.log(`ℹ️ Updating "${key}" metric from ${metric.updated} to ${to}`)
+  console.log(`ℹ️ Updating "${key}" metric from ${metric.updated} to ${to.toISOString()}`)
 
   vars = { ...vars, from: metric.updated, to: to.toISOString() }
   const total = await sumPaginate(db, query, vars, dataProp, total => {
