@@ -142,12 +142,11 @@ class Web3Storage {
     }
     console.log(1)
 
-    const [ root ] = await car.getRoots()
+    const [root] = await car.getRoots()
     if (root == null) {
       throw new Error('missing root CID')
     }
     const carRoot = root.toString()
-    // ERRORS OUT HERE in build.tsc regarding `root` above - "Object is possibly 'undefined'."
 
     console.log(2)
 
