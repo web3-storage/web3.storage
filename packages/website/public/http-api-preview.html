@@ -1,0 +1,35 @@
+<!--
+To preview this page locally w/Python 3, run the following command from this directory:
+
+pip install http.server
+python -m http.server
+
+Then browse to this file.
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ReDoc</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header HTML could go here -->
+    <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
+    <redoc id="ReDocMe"/><!-- This is the container for ReDoc's output -->
+    <script language="JavaScript">
+    Redoc.init('schema.yml', {
+      expandResponses: "200",
+      pathInMiddlePanel: true,
+      disableSearch: true,
+    }, document.getElementById('ReDocMe'))
+    </script>
+
+  </body>
+</html>
