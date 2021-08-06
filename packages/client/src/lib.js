@@ -116,7 +116,7 @@ class Web3Storage {
 
     onRootCidReady && onRootCidReady(carRoot)
     const car = await CarReader.fromIterable(out)
-    return this._put({ endpoint, token }, { onStoredChunk, car, maxRetries, blockstore, name })
+    return this.putCar({ endpoint, token }, car, { onStoredChunk, maxRetries, blockstore, name })
   }
 
   /**
@@ -341,7 +341,7 @@ class Web3Storage {
    * const cid = await client.putCar(car)
    * ```
    * @param {import('@ipld/car/api').CarReader} car
-   * @param {PutCarOptions} [options]
+   * @param {PutCarOptions} options
    */
   putCar (car, options) {
     return Web3Storage.putCar(this, car, options)
