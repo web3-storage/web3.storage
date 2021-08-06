@@ -1,7 +1,7 @@
 import type { UnixFSEntry } from 'ipfs-car/unpack'
 import type { CID } from 'multiformats'
 export type { CID, UnixFSEntry }
-import type { MemoryBlockStore as Blockstore } from 'ipfs-car/blockstore/memory'
+import type { Blockstore } from 'ipfs-car/blockstore'
 import type { CarReader } from '@ipld/car/api'
 
 /**
@@ -114,11 +114,7 @@ export type PutOptions = {
   name?: string
 }
 
-export type _PutOptions = PutOptions & {
-  /**
-   * CarReader interface from @ipld/car/api
-   */
-  car: CarReader
+export type PutCarOptions = PutOptions & {
   /**
    * Blockstore
    */

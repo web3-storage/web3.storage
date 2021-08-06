@@ -40,7 +40,7 @@ const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 /** @typedef { import('./lib/interface.js').Filelike } Filelike */
 /** @typedef { import('./lib/interface.js').CIDString} CIDString */
 /** @typedef { import('./lib/interface.js').PutOptions} PutOptions */
-/** @typedef { import('./lib/interface.js')._PutOptions} _PutOptions */
+/** @typedef { import('./lib/interface.js').PutCarOptions} PutCarOptions */
 /** @typedef { import('./lib/interface.js').UnixFSEntry} UnixFSEntry */
 /** @typedef { import('./lib/interface.js').Web3Response} Web3Response */
 
@@ -121,11 +121,12 @@ class Web3Storage {
 
   /**
    * @param {Service} service
-   * @param {_PutOptions} options
+   * @param {import('@ipld/car/api').CarReader} car
+   * @param {PutCarOptions} options
    * @returns {Promise<CIDString>}
    */
-  static async _put ({ endpoint, token }, {
-    onStoredChunk, car, name, blockstore,
+  static async putCar ({ endpoint, token }, car, {
+    onStoredChunk, name, blockstore,
     maxRetries = MAX_PUT_RETRIES
   }) {
     const targetSize = MAX_CHUNK_SIZE
@@ -302,8 +303,7 @@ class Web3Storage {
   }
 
   /**
-   * Uploads CAR files to web3.storage. Files are hashed in the client and uploaded as a single
-   * [Content Addressed Archive(CAR)](https://github.com/ipld/specs/blob/master/block-layer/content-addressable-archives.md).
+   * Uploads a CAR ([Content Addressed Archive](https://github.com/ipld/specs/blob/master/block-layer/content-addressable-archives.md)) file to web3.storage.
    * Takes a CarReader interface from @ipld/car
    *
    * Returns the corresponding Content Identifier (CID).
@@ -336,15 +336,15 @@ class Web3Storage {
    *    const reader = await CarReader.fromIterable(inStream)
    *    return reader
    * }
-
+   *
    * const car = await getCar()
-   * const cid = await putCar(car)
+   * const cid = await client.putCar(car)
    * ```
-   * @param {CarReader} car
-   * @param {_PutOptions} [options]
+   * @param {import('@ipld/car/api').CarReader} car
+   * @param {PutCarOptions} [options]
    */
   putCar (car, options) {
-    return Web3Storage._put(this, { ...options, car })
+    return Web3Storage.putCar(this, car, options)
   }
 
   /**
