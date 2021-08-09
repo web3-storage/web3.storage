@@ -73,7 +73,6 @@ export async function run (options) {
           spinner.text = renderText(`Fetching uploads page ${i}...`, { totalUsers, totalUploads, users, userUploads }, options)
           after = uploadsPage.after
           if (!after) break
-          if (i === 5) break
           i++
         }
       })(),
@@ -88,7 +87,6 @@ export async function run (options) {
           spinner.text = renderText(`Fetching users page ${i}...`, { totalUsers, totalUploads, users, userUploads }, options)
           after = userPage.after
           if (!after) break
-          if (i === 5) break
           i++
         }
       })()
