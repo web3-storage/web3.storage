@@ -8,7 +8,9 @@ cli.version(getPkg().version)
 
 cli.command('run')
   .describe('Run the default report.')
-  .option('--top', 'Show the top n items', 10)
+  .option('-t, --top', 'Show the top n items')
+  .option('-o, --output', 'Path to write CSV of all collected data')
+  .alias()
   .action(run)
 
 cli.parse(process.argv)

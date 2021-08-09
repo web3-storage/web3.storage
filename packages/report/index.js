@@ -5,6 +5,10 @@ import { format } from 'd3-format'
 import prettyMs from 'pretty-ms'
 import retry from 'p-retry'
 import bytes from 'bytes'
+import fs from 'fs'
+import path from 'path'
+import stringify from 'csv-stringify'
+import { pipeline } from 'stream/promises'
 
 const formatNumber = format(',')
 
@@ -52,47 +56,61 @@ export async function run (options) {
 
   spinner.start('Fetching users page 0...')
 
-  await Promise.all([
-    (async () => {
-      let after = null
-      let i = 1
-      while (true) {
-        const { findUploadsCreatedAfter: uploadsPage } = await retry(() => db.query(FIND_UPLOADS_CREATED_AFTER, { since: from, cursor: after }))
-        totalUploads += uploadsPage.data.length
+  try {
+    await Promise.all([
+      (async () => {
+        let after = null
+        let i = 1
+        while (true) {
+          const { findUploadsCreatedAfter: uploadsPage } = await retry(() => db.query(FIND_UPLOADS_CREATED_AFTER, { since: from, cursor: after }))
+          totalUploads += uploadsPage.data.length
 
-        for (const upload of uploadsPage.data) {
-          const uploads = userUploads.get(upload.user._id) || []
-          userUploads.set(upload.user._id, uploads.concat(upload))
+          for (const upload of uploadsPage.data) {
+            const uploads = userUploads.get(upload.user._id) || []
+            userUploads.set(upload.user._id, uploads.concat(upload))
+          }
+
+          spinner.text = renderText(`Fetching uploads page ${i}...`, { totalUsers, totalUploads, users, userUploads }, options)
+          after = uploadsPage.after
+          if (!after) break
+          i++
         }
+      })(),
+      (async () => {
+        let after = null
+        let i = 1
+        while (true) {
+          const { findUsersByCreated: userPage } = await retry(() => db.query(FIND_USERS_BY_CREATED, { from, to, after }))
+          totalUsers += userPage.data.length
+          users = users.concat(userPage.data)
 
-        spinner.text = render(`Fetching uploads page ${i}...`, { totalUsers, totalUploads, users, userUploads }, options)
-        after = uploadsPage.after
-        if (!after) break
-        i++
-      }
-    })(),
-    (async () => {
-      let after = null
-      let i = 1
-      while (true) {
-        const { findUsersByCreated: userPage } = await retry(() => db.query(FIND_USERS_BY_CREATED, { from, to, after }))
-        totalUsers += userPage.data.length
-        users = users.concat(userPage.data)
+          spinner.text = renderText(`Fetching users page ${i}...`, { totalUsers, totalUploads, users, userUploads }, options)
+          after = userPage.after
+          if (!after) break
+          i++
+        }
+      })()
+    ])
 
-        spinner.text = render(`Fetching users page ${i}...`, { totalUsers, totalUploads, users, userUploads }, options)
-        after = userPage.after
-        if (!after) break
-        i++
-      }
-    })()
-  ])
+    spinner.text = renderText('✅ Complete!', { totalUsers, totalUploads, users, userUploads }, options)
+    spinner.stopAndPersist()
 
-  spinner.text = render('✅ Complete!', { totalUsers, totalUploads, users, userUploads }, options)
-  spinner.stopAndPersist()
+    if (!options.output) {
+      return
+    }
+
+    const outPath = path.resolve(options.output)
+    spinner.start(`Writing CSV to ${outPath}`)
+    const out = fs.createWriteStream(outPath)
+    await renderCSV({ users, userUploads }, out, options)
+    spinner.succeed()
+  } catch (err) {
+    spinner.fail()
+    console.error(err)
+  }
 }
 
-function render (msg, { totalUsers, totalUploads, users, userUploads }, options = {}) {
-  const top = options.top || 10
+function prepareRows ({ users, userUploads }, options = {}) {
   const data = []
   for (const user of users) {
     const uploads = userUploads.get(user._id) || []
@@ -112,10 +130,16 @@ function render (msg, { totalUsers, totalUploads, users, userUploads }, options 
     }
     data.push([user._id, user.email, created, uploads.length, totalDagSize, first, last])
   }
+  data.sort((a, b) => b[3] - a[3])
+  return options.top ? data.slice(0, parseInt(options.top)) : data
+}
+
+function renderText (msg, { totalUsers, totalUploads, users, userUploads }, options = {}) {
   const table = new Table({
     head: ['ID', 'Email', 'Created', 'Uploads', 'Power', 'Time to 1st upload', 'Time since last upload']
   })
-  data.sort((a, b) => b[3] - a[3]).slice(0, top).forEach(row => {
+  const data = prepareRows({ users, userUploads }, { top: 10, ...options })
+  for (const row of data) {
     const timeToFirst = row[5] === Infinity ? '' : prettyMs(row[5] - row[2].getTime(), { compact: true })
     const timeSinceLast = row[6] === 0 ? '' : prettyMs(Date.now() - row[6], { compact: true })
     const created = row[2].toLocaleDateString(undefined, {
@@ -124,7 +148,7 @@ function render (msg, { totalUsers, totalUploads, users, userUploads }, options 
       day: 'numeric'
     })
     table.push([row[0], row[1], created, formatNumber(row[3]), bytes.format(row[4]), timeToFirst, timeSinceLast])
-  })
+  }
   return `${msg || ''}
 
 ${formatNumber(totalUsers)} users  ${formatNumber(totalUploads)} uploads
@@ -139,6 +163,23 @@ Report generated ${new Date().toLocaleString(undefined, {
   minute: 'numeric'
 })}
 `
+}
+
+function renderCSV ({ users, userUploads }, dest, options = {}) {
+  return pipeline(
+    async function * () {
+      yield ['ID', 'Email', 'Created', 'Uploads', 'Power', 'Time to 1st upload', 'Time since last upload']
+      const data = prepareRows({ users, userUploads }, options)
+      for (const row of data) {
+        const timeToFirst = row[5] === Infinity ? '' : row[5] - row[2].getTime()
+        const timeSinceLast = row[6] === 0 ? '' : Date.now() - row[6]
+        const created = row[2].toISOString()
+        yield [row[0], row[1], created, row[3], row[4], timeToFirst, timeSinceLast]
+      }
+    },
+    stringify(),
+    dest
+  )
 }
 
 /**
