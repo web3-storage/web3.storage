@@ -5,10 +5,10 @@ import { Web3Storage } from 'web3.storage'
 import { File } from '../src/platform.js'
 import { PassThrough } from 'stream'
 import { Readable } from 'readable-stream'
-import { CarReader, CarWriter } from '@ipld/car'
 import * as raw from 'multiformats/codecs/raw'
 import { CID } from 'multiformats/cid'
 import { sha256 } from 'multiformats/hashes/sha2'
+import { packToBlob } from 'ipfs-car/pack/blob'
 
 describe('put', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
@@ -109,7 +109,7 @@ describe('putCar', () => {
 
   it('adds CAR files', async () => {
     const client = new Web3Storage({ token, endpoint })
-    const car = await prepareCarFile()
+    const car = await createCar('random meaningless bytes')
     const expectedCid = 'bafkreihwkf6mtnjobdqrkiksr7qhp6tiiqywux64aylunbvmfhzeql2coa'
     const cid = await client.putCar(car, {
       name: 'putCar test',
@@ -145,23 +145,8 @@ function prepareFiles () {
   ]
 }
 
-async function prepareCarFile () {
-  const bytes = new TextEncoder().encode('random meaningless bytes')
-  const hash = await sha256.digest(raw.encode(bytes))
-  const cid = CID.create(1, raw.code, hash)
-
-  // create the writer and set the header with a single root
-  const { writer, out } = await CarWriter.create([cid])
-  const pass = new PassThrough()
-  const _out = Readable.from(out)
-  _out.pipe(pass)
-
-  // store a new block, creates a new file entry in the CAR archive
-  await writer.put({ cid, bytes })
-  await writer.close()
-
-  // read and parse the entire stream in one go, this will cache the contents of
-  // the car in memory so is not suitable for large files.
-  const reader = await CarReader.fromIterable(pass)
-  return reader
+async function createCar (str) {
+  return await packToBlob({
+    input: new TextEncoder().encode(str)
+  })
 }
