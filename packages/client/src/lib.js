@@ -141,7 +141,7 @@ class Web3Storage {
         'X-Name': name
       }
     }
-
+    /* c8 ignore next 4 */
     const [root] = await car.getRoots()
     if (root == null) {
       throw new Error('missing root CID')
