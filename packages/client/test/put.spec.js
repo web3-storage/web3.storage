@@ -112,7 +112,7 @@ describe('putCar', () => {
     const carReader = await createCar('hello world')
     console.log('created car in test')
     const expectedCid = 'bafkreihwkf6mtnjobdqrkiksr7qhp6tiiqywux64aylunbvmfhzeql2coa'
-    const car = await client.putCar(carReader, {
+    const cid = await client.putCar(carReader, {
       name: 'putCar test',
       onRootCidReady: (cid) => {
         assert.equal(cid, expectedCid, 'returned cid matches the CAR')
@@ -146,6 +146,7 @@ function prepareFiles () {
   ]
 }
 
+// creates a carReader from a text string
 async function createCar (str) {
   console.log('str is: ', str)
   const carBlob = await packToBlob({
