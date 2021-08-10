@@ -139,10 +139,20 @@ export async function list (opts = {}) {
  * @param {string} [opts.api]
  * @param {string} [opts.token]
  * @param {string} [opts.wrap] wrap with directory
+ * @param {boolean|number} [opts.retry] set maxRetries for client.put
  * @param {string[]} opts._ additonal paths to add
  */
 export async function put (path, opts) {
   const client = getClient(opts)
+
+  // pass either --no-retry or --retry <number>
+  const maxRetries = Number.isInteger(Number(opts.retry))
+    ? Number(opts.retry)
+    : opts.retry === false ? 0 : undefined
+  if (maxRetries !== undefined) {
+    console.log(`⁂ maxRetries: ${maxRetries}`)
+  }
+
   const spinner = ora('Packing files').start()
   const paths = [path, ...opts._]
   const files = []
@@ -156,7 +166,9 @@ export async function put (path, opts) {
     }
   }
   let rootCid = ''
+
   const root = await client.put(files, {
+    maxRetries,
     wrapWithDirectory: opts.wrap,
     onRootCidReady: (cid) => {
       rootCid = cid
