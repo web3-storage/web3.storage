@@ -1,5 +1,13 @@
 # Changelog
 
+### [3.3.1](https://www.github.com/web3-storage/web3.storage/compare/api-v3.3.0...api-v3.3.1) (2021-08-11)
+
+
+### Bug Fixes
+
+* set stream-channels=false for cluster add ([#342](https://www.github.com/web3-storage/web3.storage/issues/342)) ([31f30b2](https://www.github.com/web3-storage/web3.storage/commit/31f30b293071cb6915a04117d004c2a0f7e2fccf))
+* update api docs ([#332](https://www.github.com/web3-storage/web3.storage/issues/332)) ([7d2f754](https://www.github.com/web3-storage/web3.storage/commit/7d2f75432e3abad7b462da848d2848354e87f76f))
+
 ## [3.3.0](https://www.github.com/web3-storage/web3.storage/compare/api-v3.2.5...api-v3.3.0) (2021-08-05)
 
 
