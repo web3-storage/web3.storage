@@ -77,6 +77,7 @@ class Web3Storage {
   /**
    * @hidden
    * @param {string} token
+   * @returns {Record<string, string>}
    */
   static headers (token) {
     if (!token) throw new Error('missing token')
@@ -135,11 +136,7 @@ class Web3Storage {
     let headers = Web3Storage.headers(token)
 
     if (name) {
-      headers = {
-        ...headers,
-        // @ts-ignore 'X-Name' does not exist in type inferred
-        'X-Name': name
-      }
+      headers = { ...headers, 'X-Name': name }
     }
 
     const roots = await car.getRoots()
