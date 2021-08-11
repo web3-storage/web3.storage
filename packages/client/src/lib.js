@@ -128,7 +128,7 @@ class Web3Storage {
   static async putCar ({ endpoint, token }, car, {
     onStoredChunk, name, blockstore,
     maxRetries = MAX_PUT_RETRIES
-  }) {
+  } = {}) {
     const targetSize = MAX_CHUNK_SIZE
 
     const url = new URL('/car', endpoint)
@@ -141,13 +141,16 @@ class Web3Storage {
         'X-Name': name
       }
     }
-    /* c8 ignore next 4 */
-    const [root] = await car.getRoots()
-    if (root == null) {
+
+    const roots = await car.getRoots()
+    if (roots[0] == null) {
       throw new Error('missing root CID')
     }
-    const carRoot = root.toString()
+    if (roots.length > 1) {
+      throw new Error('too many roots')
+    }
 
+    const carRoot = roots[0].toString()
     try {
       const splitter = new TreewalkCarSplitter(car, targetSize)
 

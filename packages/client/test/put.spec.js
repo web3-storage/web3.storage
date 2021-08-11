@@ -4,7 +4,8 @@ import randomBytes from 'randombytes'
 import { Web3Storage } from 'web3.storage'
 import { File } from '../src/platform.js'
 import { pack } from 'ipfs-car/pack'
-import { CarReader } from '@ipld/car'
+import { CarReader, CarWriter } from '@ipld/car'
+import { CID } from 'multiformats/cid'
 
 describe('put', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
@@ -114,6 +115,35 @@ describe('putCar', () => {
       }
     })
     assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+  })
+
+  it('errors for CAR with zero roots', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const { writer, out } = CarWriter.create([])
+    writer.close()
+    const reader = await CarReader.fromIterable(out)
+    try {
+      await client.putCar(reader)
+      assert.unreachable('should have thrown')
+    } catch (err) {
+      assert.match(err.message, /missing root CID/)
+    }
+  })
+
+  it('errors for CAR with multiple roots', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const { writer, out } = CarWriter.create([
+      CID.parse('bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'),
+      CID.parse('bafybeifkc773a2s6gerq7ip7tikahlfflxe4fvagyxf74zfkr33j2yu5li')
+    ])
+    writer.close()
+    const reader = await CarReader.fromIterable(out)
+    try {
+      await client.putCar(reader)
+      assert.unreachable('should have thrown')
+    } catch (err) {
+      assert.match(err.message, /too many roots/)
+    }
   })
 })
 
