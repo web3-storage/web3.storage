@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://www.github.com/web3-storage/web3.storage/compare/w3-v2.1.0...w3-v2.2.0) (2021-08-11)
+
+
+### Features
+
+* `w3 put --no-retry` ([1cf501d](https://www.github.com/web3-storage/web3.storage/commit/1cf501dda6998d712808dc4b5571beef4629e2c2))
+
 ## [2.1.0](https://www.github.com/web3-storage/web3.storage/compare/w3-v2.0.0...w3-v2.1.0) (2021-07-29)
 
 
