@@ -1,7 +1,6 @@
 import type { UnixFSEntry } from 'ipfs-car/unpack'
 import type { CID } from 'multiformats'
 export type { CID, UnixFSEntry }
-import type { Blockstore } from 'ipfs-car/blockstore'
 import type { CarReader } from '@ipld/car/api'
 
 /**
