@@ -19,6 +19,7 @@ import { pack } from 'ipfs-car/pack'
 import parseLink from 'parse-link-header'
 import { unpackStream } from 'ipfs-car/unpack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
+import { CarReader } from '@ipld/car'
 import { filesFromPath, getFilesFromPath } from 'files-from-path'
 import {
   fetch,
@@ -39,6 +40,7 @@ const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 /** @typedef { import('./lib/interface.js').Filelike } Filelike */
 /** @typedef { import('./lib/interface.js').CIDString} CIDString */
 /** @typedef { import('./lib/interface.js').PutOptions} PutOptions */
+/** @typedef { import('./lib/interface.js').PutCarOptions} PutCarOptions */
 /** @typedef { import('./lib/interface.js').UnixFSEntry} UnixFSEntry */
 /** @typedef { import('./lib/interface.js').Web3Response} Web3Response */
 
@@ -75,6 +77,7 @@ class Web3Storage {
   /**
    * @hidden
    * @param {string} token
+   * @returns {Record<string, string>}
    */
   static headers (token) {
     if (!token) throw new Error('missing token')
@@ -97,22 +100,7 @@ class Web3Storage {
     wrapWithDirectory = true,
     name
   } = {}) {
-    const url = new URL('/car', endpoint)
-    const targetSize = MAX_CHUNK_SIZE
-    let headers = Web3Storage.headers(token)
-
-    if (name) {
-      headers = {
-        ...headers,
-        // @ts-ignore 'X-Name' does not exist in type inferred
-        'X-Name': name
-      }
-    }
-
-    /** @type {string} */
-    let carRoot
     const blockstore = new Blockstore()
-
     try {
       const { out, root } = await pack({
         input: Array.from(files).map((f) => ({
@@ -124,56 +112,81 @@ class Web3Storage {
         maxChunkSize: 1048576,
         maxChildrenPerNode: 1024
       })
-      carRoot = root.toString()
-
-      onRootCidReady && onRootCidReady(carRoot)
-
-      const splitter = await TreewalkCarSplitter.fromIterable(out, targetSize)
-
-      const upload = transform(
-        MAX_CONCURRENT_UPLOADS,
-        async (/** @type {AsyncIterable<Uint8Array>} */ car) => {
-          const carParts = []
-          for await (const part of car) {
-            carParts.push(part)
-          }
-
-          const carFile = new Blob(carParts, {
-            type: 'application/car'
-          })
-
-          const res = await pRetry(
-            async () => {
-              const request = await fetch(url.toString(), {
-                method: 'POST',
-                headers,
-                body: carFile
-              })
-              const res = await request.json()
-
-              if (!request.ok) {
-                throw new Error(res.message)
-              }
-
-              if (res.cid !== carRoot) {
-                throw new Error(`root CID mismatch, expected: ${carRoot}, received: ${res.cid}`)
-              }
-
-              return res.cid
-            },
-            { retries: maxRetries }
-          )
-          onStoredChunk && onStoredChunk(carFile.size)
-          return res
-        }
-      )
-
-      for await (const _ of upload(splitter.cars())) {} // eslint-disable-line
+      onRootCidReady && onRootCidReady(root.toString())
+      const car = await CarReader.fromIterable(out)
+      return await Web3Storage.putCar({ endpoint, token }, car, { onStoredChunk, maxRetries, name })
     } finally {
-      // Close Blockstore
       await blockstore.close()
     }
+  }
 
+  /**
+   * @param {Service} service
+   * @param {import('@ipld/car/api').CarReader} car
+   * @param {PutCarOptions} [options]
+   * @returns {Promise<CIDString>}
+   */
+  static async putCar ({ endpoint, token }, car, {
+    name,
+    onStoredChunk,
+    maxRetries = MAX_PUT_RETRIES
+  } = {}) {
+    const targetSize = MAX_CHUNK_SIZE
+    const url = new URL('/car', endpoint)
+    let headers = Web3Storage.headers(token)
+
+    if (name) {
+      headers = { ...headers, 'X-Name': name }
+    }
+
+    const roots = await car.getRoots()
+    if (roots[0] == null) {
+      throw new Error('missing root CID')
+    }
+    if (roots.length > 1) {
+      throw new Error('too many roots')
+    }
+
+    const carRoot = roots[0].toString()
+    const splitter = new TreewalkCarSplitter(car, targetSize)
+
+    /**
+     * @param {AsyncIterable<Uint8Array>} car
+     * @returns {Promise<CIDString>}
+     */
+    const onCarChunk = async car => {
+      const carParts = []
+      for await (const part of car) {
+        carParts.push(part)
+      }
+
+      const carFile = new Blob(carParts, { type: 'application/car' })
+      const res = await pRetry(
+        async () => {
+          const request = await fetch(url.toString(), {
+            method: 'POST',
+            headers,
+            body: carFile
+          })
+          const res = await request.json()
+          if (!request.ok) {
+            throw new Error(res.message)
+          }
+
+          if (res.cid !== carRoot) {
+            throw new Error(`root CID mismatch, expected: ${carRoot}, received: ${res.cid}`)
+          }
+          return res.cid
+        },
+        { retries: maxRetries }
+      )
+
+      onStoredChunk && onStoredChunk(carFile.size)
+      return res
+    }
+
+    const upload = transform(MAX_CONCURRENT_UPLOADS, onCarChunk)
+    for await (const _ of upload(splitter.cars())) {} // eslint-disable-line
     return carRoot
   }
 
@@ -198,7 +211,7 @@ class Web3Storage {
    */
   /* c8 ignore next 4 */
   static async delete ({ endpoint, token }, cid) {
-    console.log('Not deleteing', cid, endpoint, token)
+    console.log('Not deleting', cid, endpoint, token)
     throw Error('.delete not implemented yet')
   }
 
@@ -284,7 +297,52 @@ class Web3Storage {
   }
 
   /**
-   * Fetch the Content Addressed Archive by it's root CID.
+   * Uploads a CAR ([Content Addressed Archive](https://github.com/ipld/specs/blob/master/block-layer/content-addressable-archives.md)) file to web3.storage.
+   * Takes a CarReader interface from @ipld/car
+   *
+   * Returns the corresponding Content Identifier (CID).
+   *
+   * @example
+   * ```js
+   * import fs from 'fs'
+   * import { Readable } from 'stream'
+   * import { CarReader, CarWriter } from '@ipld/car'
+   * import * as raw from 'multiformats/codecs/raw'
+   * import { CID } from 'multiformats/cid'
+   * import { sha256 } from 'multiformats/hashes/sha2'
+   *
+   * async function getCar() {
+   *    const bytes = new TextEncoder().encode('random meaningless bytes')
+   *    const hash = await sha256.digest(raw.encode(bytes))
+   *    const cid = CID.create(1, raw.code, hash)
+   *
+   *    // create the writer and set the header with a single root
+   *    const { writer, out } = await CarWriter.create([cid])
+   *    Readable.from(out).pipe(fs.createWriteStream('example.car'))
+
+   *    // store a new block, creates a new file entry in the CAR archive
+   *    await writer.put({ cid, bytes })
+   *    await writer.close()
+
+   *    const inStream = fs.createReadStream('example.car')
+   *    // read and parse the entire stream in one go, this will cache the contents of
+   *    // the car in memory so is not suitable for large files.
+   *    const reader = await CarReader.fromIterable(inStream)
+   *    return reader
+   * }
+   *
+   * const car = await getCar()
+   * const cid = await client.putCar(car)
+   * ```
+   * @param {import('@ipld/car/api').CarReader} car
+   * @param {PutCarOptions} [options]
+   */
+  putCar (car, options) {
+    return Web3Storage.putCar(this, car, options)
+  }
+
+  /**
+   * Fetch the Content Addressed Archive by its root CID.
    * @param {CIDString} cid
    */
   get (cid) {

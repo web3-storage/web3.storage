@@ -1,6 +1,7 @@
 import type { UnixFSEntry } from 'ipfs-car/unpack'
 import type { CID } from 'multiformats'
 export type { CID, UnixFSEntry }
+import type { CarReader } from '@ipld/car/api'
 
 /**
  * Define nominal type of U based on type of T. Similar to Opaque types in Flow
@@ -29,6 +30,15 @@ export interface API {
     service: Service,
     files: Iterable<Filelike>,
     options?: PutOptions
+  ): Promise<CIDString>
+
+  /**
+   * Uploads a CAR ([Content Addressed Archive](https://github.com/ipld/specs/blob/master/block-layer/content-addressable-archives.md)) file to web3.storage.
+   */
+  putCar(
+    service: Service,
+    car: CarReader,
+    options?: PutCarOptions
   ): Promise<CIDString>
 
   /**
@@ -76,7 +86,7 @@ export interface Filelike {
 export type PutOptions = {
   /**
    * Callback called after the data has been assembled into a DAG, but before
-   * any upload requests begin. It is passed the CID of the root node of the 
+   * any upload requests begin. It is passed the CID of the root node of the
    * graph.
    */
   onRootCidReady?: (cid: CIDString) => void
@@ -92,13 +102,13 @@ export type PutOptions = {
   maxRetries?: number
   /**
    * Should input files be wrapped with a directory? Default: true
-   * 
+   *
    * It is enabled by default as it preserves the input filenames in DAG;
    * the filenames become directory entries in the generated wrapping dir.
-   * 
-   * The trade off is your root CID will be that of the wrapping dir, 
+   *
+   * The trade off is your root CID will be that of the wrapping dir,
    * rather than the input file itself.
-   * 
+   *
    * For a single file e.g. `cat.png` it's IPFS path would be
    * `<wrapping dir cid>/cat.png` rather than just `<cid for cat.png>`
    *
@@ -110,6 +120,23 @@ export type PutOptions = {
    * Human readable name for this upload, for use in file listings.
    */
   name?: string
+}
+
+export type PutCarOptions = {
+  /**
+   * Human readable name for this upload, for use in file listings.
+   */
+   name?: string
+  /**
+   * Callback called after each chunk of data has been uploaded. By default,
+   * data is split into chunks of around 10MB. It is passed the actual chunk
+   * size in bytes.
+   */
+   onStoredChunk?: (size: number) => void
+  /**
+   * Maximum times to retry a failed upload. Default: 5
+   */
+   maxRetries?: number
 }
 
 export interface Web3File extends File {

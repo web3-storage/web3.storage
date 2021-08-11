@@ -3,6 +3,9 @@ import * as assert from 'uvu/assert'
 import randomBytes from 'randombytes'
 import { Web3Storage } from 'web3.storage'
 import { File } from '../src/platform.js'
+import { pack } from 'ipfs-car/pack'
+import { CarReader, CarWriter } from '@ipld/car'
+import { CID } from 'multiformats/cid'
 
 describe('put', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
@@ -96,6 +99,54 @@ describe('put', () => {
   })
 })
 
+describe('putCar', () => {
+  const { AUTH_TOKEN, API_PORT } = process.env
+  const token = AUTH_TOKEN || 'good'
+  const endpoint = new URL(API_PORT ? `http://localhost:${API_PORT}` : '')
+
+  it('adds CAR files', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const carReader = await createCar('hello world')
+    const expectedCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
+    const cid = await client.putCar(carReader, {
+      name: 'putCar test',
+      onRootCidReady: cid => {
+        assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+      }
+    })
+    assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+  })
+
+  it('errors for CAR with zero roots', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const { writer, out } = CarWriter.create([])
+    writer.close()
+    const reader = await CarReader.fromIterable(out)
+    try {
+      await client.putCar(reader)
+      assert.unreachable('should have thrown')
+    } catch (err) {
+      assert.match(err.message, /missing root CID/)
+    }
+  })
+
+  it('errors for CAR with multiple roots', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const { writer, out } = CarWriter.create([
+      CID.parse('bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'),
+      CID.parse('bafybeifkc773a2s6gerq7ip7tikahlfflxe4fvagyxf74zfkr33j2yu5li')
+    ])
+    writer.close()
+    const reader = await CarReader.fromIterable(out)
+    try {
+      await client.putCar(reader)
+      assert.unreachable('should have thrown')
+    } catch (err) {
+      assert.match(err.message, /too many roots/)
+    }
+  })
+})
+
 function prepareFiles () {
   const data = 'Hello web3.storage!'
   const data2 = 'Hello web3.storage!!'
@@ -118,4 +169,11 @@ function prepareFiles () {
       '/dir/otherdir/data2.txt'
     )
   ]
+}
+
+// creates a carReader from a text string
+async function createCar (str) {
+  const { out } = await pack({ input: new TextEncoder().encode(str) })
+  const reader = await CarReader.fromIterable(out)
+  return reader
 }
