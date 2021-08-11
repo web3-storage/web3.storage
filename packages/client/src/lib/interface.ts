@@ -123,11 +123,21 @@ export type PutOptions = {
   name?: string
 }
 
-export type PutCarOptions = PutOptions & {
+export type PutCarOptions = {
   /**
-   * Blockstore
+   * Human readable name for this upload, for use in file listings.
    */
-  blockstore?: Blockstore
+   name?: string
+  /**
+   * Callback called after each chunk of data has been uploaded. By default,
+   * data is split into chunks of around 10MB. It is passed the actual chunk
+   * size in bytes.
+   */
+   onStoredChunk?: (size: number) => void
+  /**
+   * Maximum times to retry a failed upload. Default: 5
+   */
+   maxRetries?: number
 }
 
 export interface Web3File extends File {
