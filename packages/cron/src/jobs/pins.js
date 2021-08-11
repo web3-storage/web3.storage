@@ -2,6 +2,7 @@ import debug from 'debug'
 import { gql } from '@web3-storage/db'
 import { toPinStatusEnum } from '@web3-storage/api/src/utils/pin.js'
 import retry from 'p-retry'
+import { piggyback } from 'piggybacker'
 
 const log = debug('pins:updatePinStatuses')
 
@@ -25,9 +26,9 @@ const FIND_PENDING_PINS = gql`
   }
 `
 
-const CREATE_OR_UPDATE_PIN = gql`
-  mutation CreateOrUpdatePin($data: CreateOrUpdatePinInput!) {
-    createOrUpdatePin(data: $data) {
+const UPDATE_PINS = gql`
+  mutation UpdatePins($pins: [UpdatePinInput!]!) {
+    updatePins(pins: $pins) {
       _id
     }
   }
@@ -62,56 +63,66 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
   /** @type {Set<string>} */
   const updatedDagSizes = new Set()
 
+  const getPinStatus = piggyback(
+    async cid => {
+      let peerMap = statusCache.get(cid)
+      if (peerMap) {
+        log(`🥊 ${cid}: Cache hit for status...`)
+      } else {
+        log(`⏳ ${cid}: Checking status...`)
+        ;({ peerMap } = await cluster.status(cid))
+        statusCache.set(cid, peerMap)
+      }
+      return peerMap
+    },
+    cid => cid
+  )
+
   let queryRes, after
   let i = 0
   while (true) {
     queryRes = await retry(() => db.query(FIND_PENDING_PINS, { after }))
     log(`📥 Processing ${i} -> ${i + queryRes.findPinsByStatus.data.length}`)
-    for (const pin of queryRes.findPinsByStatus.data) {
-      let peerMap = statusCache.get(pin.content.cid)
-      if (peerMap) {
-        log(`🥊 ${pin.content.cid}: Cache hit for status...`)
-      } else {
-        log(`⏳ ${pin.content.cid}: Checking status...`)
-        ;({ peerMap } = await cluster.status(pin.content.cid))
-        statusCache.set(pin.content.cid, peerMap)
-      }
+    const checkDagSizePins = []
+    const pinUpdates = await Promise.all(queryRes.findPinsByStatus.data.map(async pin => {
+      const peerMap = await getPinStatus(pin.content.cid)
 
       if (!peerMap[pin.location.peerId]) {
-        continue // not tracked by our cluster
+        return null // not tracked by our cluster
       }
 
       const status = toPinStatusEnum(peerMap[pin.location.peerId].status)
       if (status === pin.status) {
-        log(`🙅‍♂️ ${pin.content.cid}@${pin.location.peerId}: No status change (${status})`)
-        continue
+        log(`🙅 ${pin.content.cid}@${pin.location.peerId}: No status change (${status})`)
+        return null
+      }
+
+      if (status === 'Pinned' && !pin.content.dagSize && !updatedDagSizes.has(pin.content.cid)) {
+        checkDagSizePins.push(pin)
+        updatedDagSizes.add(pin.content.cid)
       }
 
       log(`📌 ${pin.content.cid}@${pin.location.peerId}: ${pin.status} => ${status}`)
-      await retry(() => db.query(CREATE_OR_UPDATE_PIN, {
-        data: {
-          content: pin.content._id,
-          status: status,
-          location: {
-            peerId: pin.location.peerId,
-            peerName: peerMap[pin.location.peerId].peerName
-          }
-        }
-      }))
+      return { pin: pin._id, status: status }
+    }))
 
-      if (status === 'Pinned' && !pin.content.dagSize && !updatedDagSizes.has(pin.content.cid)) {
-        updatedDagSizes.add(pin.content.cid)
-        log(`⏳ ${pin.content.cid}: Querying DAG size...`)
-        let dagSize
-        try {
-          // Note: this will timeout for large DAGs
-          dagSize = await ipfs.dagSize(pin.content.cid, { timeout: 10 * 60000 })
-          log(`🛄 ${pin.content.cid}@${pin.location.peerId}: ${dagSize} bytes`)
-          await retry(() => db.query(UPDATE_CONTENT_DAG_SIZE, { content: pin.content._id, dagSize }))
-        } catch (err) {
-          log(`💥 ${pin.content.cid}@${pin.location.peerId}: Failed to update DAG size`)
-          log(err)
-        }
+    log(`⏳ Updating ${pinUpdates.filter(Boolean).length} pins...`)
+    await retry(() => db.query(UPDATE_PINS, {
+      pins: pinUpdates.filter(Boolean)
+    }))
+    log('✅ Done')
+
+    for (const pin of checkDagSizePins) {
+      log(`⏳ ${pin.content.cid}: Querying DAG size...`)
+      let dagSize
+      try {
+        // Note: this will timeout for large DAGs
+        dagSize = await ipfs.dagSize(pin.content.cid, { timeout: 10 * 60000 })
+        log(`🛄 ${pin.content.cid}@${pin.location.peerId}: ${dagSize} bytes`)
+        await retry(() => db.query(UPDATE_CONTENT_DAG_SIZE, { content: pin.content._id, dagSize }))
+      } catch (err) {
+        log(`💥 ${pin.content.cid}@${pin.location.peerId}: Failed to update DAG size`)
+        log(err)
       }
     }
 

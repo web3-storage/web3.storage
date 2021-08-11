@@ -429,6 +429,7 @@ type Mutation {
   incrementPinRequestAttempts(pinRequest: ID!): PinRequest! @resolver
   incrementUserUsedStorage(user: ID!, amount: Long!): User! @resolver
   createOrUpdateMetric(data: CreateOrUpdateMetricInput!): Metric! @resolver
+  updatePins(pins: [UpdatePinInput!]!): [Pin!]! @resolver
 }
 
 input CreateAggregateInput {
@@ -506,4 +507,9 @@ input CreateOrUpdatePinInput {
 input CreateOrUpdateMetricInput {
   key: String!
   value: Long!
+}
+
+input UpdatePinInput {
+  pin: ID!
+  status: PinStatus!
 }

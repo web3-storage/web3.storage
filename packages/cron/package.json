@@ -21,7 +21,8 @@
     "dotenv": "^9.0.2",
     "limiter": "2.0.1",
     "node-fetch": "^2.6.1",
-    "p-retry": "^4.6.1"
+    "p-retry": "^4.6.1",
+    "piggybacker": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^16.3.1",
