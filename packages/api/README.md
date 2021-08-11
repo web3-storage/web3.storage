@@ -55,11 +55,58 @@ You only need to `npm start` for subsequent runs. PR your env config to the wran
 
 ## API
 
-### 🔐 `PUT /car/:cid`
+The given API has a set of three different authentication levels:
 
-Upload a CAR for a root CID. _Authenticated_
+- 🤲 Public
+- 🔒 API or Magic Token
+- 👮 Magic Token (admin operations)
 
-### `GET /car/:cid`
+The 👮 API methods are only allowed with a Magic Token, and consequently only available via https://web3.storage
+
+### 🔒 `POST /car`
+
+Upload a CAR file for a root CID. _Authenticated_
+
+```console
+curl -X POST --data-binary @x.car -H 'Authorization: Bearer YOUR_API_KEY' http://127.0.0.1:8787/car -s | jq
+{
+  "cid":"bafybeid4nimtvdhnawjbpakmw3cijjolgmdfhigd6bveb4rtxp33elfm6q"
+}
+```
+
+### 🔒 `POST /upload`
+
+Upload a file for a root CID (maximum of 100 MB). _Authenticated_
+
+```console
+curl -X POST --data-binary @file.txt -H 'Authorization: Bearer YOUR_API_KEY' http://127.0.0.1:8787/upload  -s | jq
+{
+  "cid":"bafkreid65ervf7fmfnbhyr2uqiqipufowox4tgkrw4n5cxgeyls4mha3ma"
+}
+```
+
+### 🔒 `GET /user/uploads`
+
+Get a list of user uploads. _Authenticated_
+
+```console
+curl -H 'Authorization: Bearer YOUR_API_KEY' 'http://127.0.0.1:8787/status/bafybeidwfngv7n5y7ydbzotrwl3gohgr2lv2g7vn6xggwcjzrf5emknrki' -s | jq
+{
+  "cid": "bafybeidwfngv7n5y7ydbzotrwl3gohgr2lv2g7vn6xggwcjzrf5emknrki",
+  "created": "2021-07-29T09:08:28.295905Z",
+  "dagSize": 112202,
+  "pins": [
+    {
+      "status": "Pinned",
+      "updated": "2021-07-29T09:08:28.295905Z",
+      "peerId": "12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6",
+      "peerName": "web3-storage-sv15",
+      "region": "US-CA"
+    }
+  ]
+```
+
+### 🤲 `GET /car/:cid`
 
 Get the CAR file containing all blocks in the tree starting at the root `:cid`
 
@@ -72,7 +119,7 @@ cache-control: public, max-age=10
 content-disposition: attachment; filename="bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.car"
 ```
 
-### `HEAD /car/:cid`
+### 🤲 `HEAD /car/:cid`
 
 Get the size of a CAR file for all blocks in the tree starting at the root `:cid` as the
 
@@ -83,7 +130,7 @@ date: Mon, 14 Jun 2021 08:30:56 GMT
 content-length: 564692
 ```
 
-### `GET /status/:cid`
+### 🤲 `GET /status/:cid`
 
 Get pinning status and filecoin deals info for a CID.
 
@@ -97,6 +144,30 @@ $ curl 'http://127.0.0.1:8787/status/bafybeidwfngv7n5y7ydbzotrwl3gohgr2lv2g7vn6x
   "deals": []
 }
 ```
+
+### 🤲 `POST /user/login`
+
+Proceed to user login (or register).
+
+### 👮 `DELETE /user/uploads/:cid`
+
+Delete a given user upload by its root CID.
+
+### 👮 `GET /user/tokens`
+
+Get list of user tokens.
+
+### 👮 `POST /user/tokens`
+
+Create a new user token.
+
+### 👮 `DELETE /user/tokens/:id`
+
+Delete a given user token.
+
+### 👮 `GET /user/account`
+
+Get the user account information.
 
 ## Setup Sentry
 
