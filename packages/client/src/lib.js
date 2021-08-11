@@ -153,40 +153,40 @@ class Web3Storage {
     const carRoot = roots[0].toString()
     const splitter = new TreewalkCarSplitter(car, targetSize)
 
-    const upload = transform(
-      MAX_CONCURRENT_UPLOADS,
-      async (/** @type {AsyncIterable<Uint8Array>} */ car) => {
-        const carParts = []
-        for await (const part of car) {
-          carParts.push(part)
-        }
-        const carFile = new Blob(carParts, {
-          type: 'application/car'
-        })
-        const res = await pRetry(
-          async () => {
-            const request = await fetch(url.toString(), {
-              method: 'POST',
-              headers,
-              body: carFile
-            })
-            const res = await request.json()
-            if (!request.ok) {
-              throw new Error(res.message)
-            }
-
-            if (res.cid !== carRoot) {
-              throw new Error(`root CID mismatch, expected: ${carRoot}, received: ${res.cid}`)
-            }
-            return res.cid
-          },
-          { retries: maxRetries }
-        )
-        onStoredChunk && onStoredChunk(carFile.size)
-        return res
+    /**
+     * @param {AsyncIterable<Uint8Array>} car
+     * @returns {Promise<CIDString>}
+     */
+    const onCarChunk = async car => {
+      const carParts = []
+      for await (const part of car) {
+        carParts.push(part)
       }
-    )
+      const carFile = new Blob(carParts, { type: 'application/car' })
+      const res = await pRetry(
+        async () => {
+          const request = await fetch(url.toString(), {
+            method: 'POST',
+            headers,
+            body: carFile
+          })
+          const res = await request.json()
+          if (!request.ok) {
+            throw new Error(res.message)
+          }
 
+          if (res.cid !== carRoot) {
+            throw new Error(`root CID mismatch, expected: ${carRoot}, received: ${res.cid}`)
+          }
+          return res.cid
+        },
+        { retries: maxRetries }
+      )
+      onStoredChunk && onStoredChunk(carFile.size)
+      return res
+    }
+
+    const upload = transform(MAX_CONCURRENT_UPLOADS, onCarChunk)
     for await (const _ of upload(splitter.cars())) {} // eslint-disable-line
     return carRoot
   }
