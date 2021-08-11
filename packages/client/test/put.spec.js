@@ -3,11 +3,7 @@ import * as assert from 'uvu/assert'
 import randomBytes from 'randombytes'
 import { Web3Storage } from 'web3.storage'
 import { File } from '../src/platform.js'
-import { PassThrough } from 'stream'
-import * as raw from 'multiformats/codecs/raw'
-import { CID } from 'multiformats/cid'
-import { sha256 } from 'multiformats/hashes/sha2'
-import { packToBlob } from 'ipfs-car/pack/blob'
+import { pack } from 'ipfs-car/pack'
 import { CarReader } from '@ipld/car'
 
 describe('put', () => {
@@ -110,11 +106,10 @@ describe('putCar', () => {
   it('adds CAR files', async () => {
     const client = new Web3Storage({ token, endpoint })
     const carReader = await createCar('hello world')
-    console.log('created car in test')
-    const expectedCid = 'bafkreihwkf6mtnjobdqrkiksr7qhp6tiiqywux64aylunbvmfhzeql2coa'
+    const expectedCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
     const cid = await client.putCar(carReader, {
       name: 'putCar test',
-      onRootCidReady: (cid) => {
+      onRootCidReady: cid => {
         assert.equal(cid, expectedCid, 'returned cid matches the CAR')
       }
     })
@@ -148,32 +143,7 @@ function prepareFiles () {
 
 // creates a carReader from a text string
 async function createCar (str) {
-  console.log('str is: ', str)
-  const carBlob = await packToBlob({
-    input: new TextEncoder().encode(str)
-  })
-  console.log('carBlob is type: ', typeof car) // object
-  console.log('carBlob is: ', carBlob)
-  // this root CID doesn't change no matter what string is passed into createCar,
-  // which seems problematic
-  // {
-  // root: CID(bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354),
-  // car: Blob {}
-  // }
-  console.log('type of carBlob is: ', typeof carBlob.car) // object
-  console.log('carBlob.root is: ', carBlob.root) // CID(bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354)
-  const buffer = await carBlob.car.arrayBuffer()
-  console.log(typeof buffer) // object
-  console.log(buffer)
-  // ArrayBuffer {
-  //   [Uint8Contents]: <3a a2 65 72 6f 6f 74 73 81 d8 2a 58 25 00 01 70 12 20 59 94 84 39 06 5f 29 61 9e f4 12 80 cb b9 32 be 52 c5 6d 99 c5 96 6b 65 e0 11 12 39 f0 98 bb ef 67 76 65 72 73 69 6f 6e 01>,
-  //   byteLength: 59
-  // }
-  console.log(buffer.Uint8Contents) // undefined
-
-  const reader = await CarReader.fromBytes(carBlob)
-  // FAILS HERE with "fromBytes() requires a Uint8Array"
-  // regardless of whether I pass carBlob or carBlob.car or buffer
-  console.log('reader is: ', reader)
+  const { out } = await pack({ input: new TextEncoder().encode(str) })
+  const reader = await CarReader.fromIterable(out)
   return reader
 }
