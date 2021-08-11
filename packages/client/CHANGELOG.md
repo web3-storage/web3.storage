@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.1.0...web3.storage-v3.2.0) (2021-08-11)
+
+
+### Features
+
+* add method for uploading CAR files ([#293](https://www.github.com/web3-storage/web3.storage/issues/293)) ([3f6b6d3](https://www.github.com/web3-storage/web3.storage/commit/3f6b6d38de796e4758f1dffffe8cde948d2bb4ac)), closes [#288](https://www.github.com/web3-storage/web3.storage/issues/288)
+
 ## [3.1.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.0.0...web3.storage-v3.1.0) (2021-07-28)
 
 
