@@ -2,6 +2,7 @@ import type { UnixFSEntry } from 'ipfs-car/unpack'
 import type { CID } from 'multiformats'
 export type { CID, UnixFSEntry }
 import type { Blockstore } from 'ipfs-car/blockstore'
+import type { CarReader } from '@ipld/car/api'
 
 /**
  * Define nominal type of U based on type of T. Similar to Opaque types in Flow
@@ -30,6 +31,15 @@ export interface API {
     service: Service,
     files: Iterable<Filelike>,
     options?: PutOptions
+  ): Promise<CIDString>
+
+  /**
+   * Uploads a CAR ([Content Addressed Archive](https://github.com/ipld/specs/blob/master/block-layer/content-addressable-archives.md)) file to web3.storage.
+   */
+  putCar(
+    service: Service,
+    car: CarReader,
+    options?: PutCarOptions
   ): Promise<CIDString>
 
   /**

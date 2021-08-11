@@ -122,7 +122,7 @@ class Web3Storage {
   /**
    * @param {Service} service
    * @param {import('@ipld/car/api').CarReader} car
-   * @param {PutCarOptions} options
+   * @param {PutCarOptions} [options]
    * @returns {Promise<CIDString>}
    */
   static async putCar ({ endpoint, token }, car, {
@@ -344,7 +344,7 @@ class Web3Storage {
    * const cid = await client.putCar(car)
    * ```
    * @param {import('@ipld/car/api').CarReader} car
-   * @param {PutCarOptions} options
+   * @param {PutCarOptions} [options]
    */
   putCar (car, options) {
     return Web3Storage.putCar(this, car, options)
