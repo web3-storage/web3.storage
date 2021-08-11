@@ -162,6 +162,7 @@ class Web3Storage {
       for await (const part of car) {
         carParts.push(part)
       }
+
       const carFile = new Blob(carParts, { type: 'application/car' })
       const res = await pRetry(
         async () => {
@@ -182,6 +183,7 @@ class Web3Storage {
         },
         { retries: maxRetries }
       )
+
       onStoredChunk && onStoredChunk(carFile.size)
       return res
     }
