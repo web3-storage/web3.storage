@@ -1,6 +1,6 @@
 /* eslint-env serviceworker */
 import { gql } from '@web3-storage/db'
-import { CarReader } from '@ipld/car'
+import { CarReader, CarBlockIterator } from '@ipld/car'
 import { Block } from 'multiformats/block'
 import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
@@ -9,6 +9,8 @@ import retry from 'p-retry'
 import { GATEWAY, LOCAL_ADD_THRESHOLD, DAG_SIZE_CALC_LIMIT, MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { toPinStatusEnum } from './utils/pin.js'
+
+const decoders = [pb, raw, cbor]
 
 const CREATE_UPLOAD = gql`
   mutation CreateUpload($data: CreateUploadInput!) {
@@ -137,10 +139,9 @@ export async function carPost (request, env, ctx) {
 
   const blob = await request.blob()
   const bytes = new Uint8Array(await blob.arrayBuffer())
-  const reader = await CarReader.fromBytes(bytes)
+  const stat = await carStat(bytes)
 
-  const stat = await carStat(reader)
-  await validateCar(reader, stat)
+  await validateCar(bytes, stat)
 
   // Ensure car blob.type is set; it is used by the cluster client to set the foramt=car flag on the /add call.
   const content = blob.slice(0, blob.size, 'application/car')
@@ -198,7 +199,7 @@ export async function carPost (request, env, ctx) {
     tasks.push(async () => {
       let dagSize
       try {
-        dagSize = await getDagSize(reader)
+        dagSize = await getDagSize(bytes)
       } catch (err) {
         console.error(`could not determine DAG size: ${err.stack}`)
         return
@@ -261,28 +262,32 @@ export async function sizeOf (response) {
 }
 
 /**
- * @param {CarReader} reader
+ * @param {Uint8Array} carBytes
  * @param {CarStat} stat
  */
-async function validateCar (reader, stat) {
+async function validateCar (carBytes, stat) {
+  if (stat.roots.length === 0) {
+    throw new Error('missing roots')
+  }
+  if (stat.roots.length > 1) {
+    throw new Error('too many roots')
+  }
   if (stat.blocks === 0) {
     throw new Error('empty CAR')
   }
-
-  const roots = await reader.getRoots()
-  if (roots.length === 0) {
-    throw new Error('missing roots')
-  }
-  if (roots.length > 1) {
-    throw new Error('too many roots')
-  }
-
-  const rootBlock = await getBlock(reader, roots[0])
-  const numLinks = Array.from(rootBlock.links()).length
-
-  // If the root block has links, then we should have at least 2 blocks in the CAR
-  if (numLinks > 0 && stat.blocks < 2) {
-    throw new Error('CAR must contain at least one non-root block')
+  if (stat.blocks === 1) {
+    const rootCid = stat.roots[0]
+    const canDecode = decoders.some(d => d.code === rootCid.code)
+    // if we can't decode, we can't check this...
+    if (canDecode) {
+      const reader = await CarReader.fromBytes(carBytes)
+      const rootBlock = await getBlock(reader, rootCid)
+      const numLinks = Array.from(rootBlock.links()).length
+      // if the root block has links, then we should have at least 2 blocks in the CAR
+      if (numLinks > 0 && stat.blocks < 2) {
+        throw new Error('CAR must contain at least one non-root block')
+      }
+    }
   }
 }
 
@@ -290,14 +295,15 @@ async function validateCar (reader, stat) {
  * Returns the sum of all block sizes and total blocks. Throws if any block
  * is bigger than MAX_BLOCK_SIZE (1MiB).
  *
- * @typedef {{ size: number, blocks: number }} CarStat
- * @param {CarReader} reader
+ * @typedef {{ roots: import('multiformats').CID[], size: number, blocks: number }} CarStat
+ * @param {Uint8Array} carBytes
  * @returns {Promise<CarStat>}
  */
-async function carStat (reader) {
+async function carStat (carBytes) {
+  const blocksIterator = await CarBlockIterator.fromBytes(carBytes)
   let blocks = 0
   let size = 0
-  for await (const block of reader.blocks()) {
+  for await (const block of blocksIterator) {
     const blockSize = block.bytes.byteLength
     if (blockSize > MAX_BLOCK_SIZE) {
       throw new Error(`block too big: ${blockSize} > ${MAX_BLOCK_SIZE}`)
@@ -305,10 +311,9 @@ async function carStat (reader) {
     size += blockSize
     blocks++
   }
-  return { size, blocks }
+  const roots = await blocksIterator.getRoots()
+  return { roots, size, blocks }
 }
-
-const decoders = [pb, raw, cbor]
 
 /**
  * @param {CarReader} reader
@@ -325,9 +330,10 @@ async function getBlock (reader, cid) {
 
 /**
  * Returns the DAG size of the CAR but only if the graph is complete.
- * @param {CarReader} reader
+ * @param {Uint8Array} carBytes
  */
-async function getDagSize (reader) {
+async function getDagSize (carBytes) {
+  const reader = await CarReader.fromBytes(carBytes)
   const [rootCid] = await reader.getRoots()
 
   const getSize = async cid => {
