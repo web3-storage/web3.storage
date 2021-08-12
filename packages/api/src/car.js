@@ -141,8 +141,6 @@ export async function carPost (request, env, ctx) {
   const bytes = new Uint8Array(await blob.arrayBuffer())
   const stat = await carStat(bytes)
 
-  await validateCar(bytes, stat)
-
   // Ensure car blob.type is set; it is used by the cluster client to set the foramt=car flag on the /add call.
   const content = blob.slice(0, blob.size, 'application/car')
 
@@ -262,45 +260,30 @@ export async function sizeOf (response) {
 }
 
 /**
- * @param {Uint8Array} carBytes
- * @param {CarStat} stat
- */
-async function validateCar (carBytes, stat) {
-  if (stat.roots.length === 0) {
-    throw new Error('missing roots')
-  }
-  if (stat.roots.length > 1) {
-    throw new Error('too many roots')
-  }
-  if (stat.blocks === 0) {
-    throw new Error('empty CAR')
-  }
-  if (stat.blocks === 1) {
-    const rootCid = stat.roots[0]
-    const canDecode = decoders.some(d => d.code === rootCid.code)
-    // if we can't decode, we can't check this...
-    if (canDecode) {
-      const reader = await CarReader.fromBytes(carBytes)
-      const rootBlock = await getBlock(reader, rootCid)
-      const numLinks = Array.from(rootBlock.links()).length
-      // if the root block has links, then we should have at least 2 blocks in the CAR
-      if (numLinks > 0) {
-        throw new Error('CAR must contain at least one non-root block')
-      }
-    }
-  }
-}
-
-/**
- * Returns the sum of all block sizes and total blocks. Throws if any block
- * is bigger than MAX_BLOCK_SIZE (1MiB).
+ * Returns the sum of all block sizes and total blocks. Throws if the CAR does
+ * not conform to our idea of a valid CAR i.e.
+ * - Missing root CIDs
+ * - >1 root CID
+ * - Any block bigger than MAX_BLOCK_SIZE (1MiB)
+ * - 0 blocks
+ * - Missing root block
+ * - Missing non-root blocks (when root block has links)
  *
- * @typedef {{ roots: import('multiformats').CID[], size: number, blocks: number }} CarStat
+ * @typedef {{ size: number, blocks: number }} CarStat
  * @param {Uint8Array} carBytes
  * @returns {Promise<CarStat>}
  */
 async function carStat (carBytes) {
   const blocksIterator = await CarBlockIterator.fromBytes(carBytes)
+  const roots = await blocksIterator.getRoots()
+  if (roots.length === 0) {
+    throw new Error('missing roots')
+  }
+  if (roots.length > 1) {
+    throw new Error('too many roots')
+  }
+  const rootCid = roots[0]
+  let rawRootBlock
   let blocks = 0
   let size = 0
   for await (const block of blocksIterator) {
@@ -308,24 +291,31 @@ async function carStat (carBytes) {
     if (blockSize > MAX_BLOCK_SIZE) {
       throw new Error(`block too big: ${blockSize} > ${MAX_BLOCK_SIZE}`)
     }
+    if (!rawRootBlock && block.cid.equals(rootCid)) {
+      rawRootBlock = block
+    }
     size += blockSize
     blocks++
   }
-  const roots = await blocksIterator.getRoots()
-  return { roots, size, blocks }
-}
-
-/**
- * @param {CarReader} reader
- * @param {import('multiformats').CID} cid
- */
-async function getBlock (reader, cid) {
-  const rawBlock = await reader.get(cid)
-  if (!rawBlock) throw new Error(`missing block for ${cid}`)
-  const { bytes } = rawBlock
-  const decoder = decoders.find(d => d.code === cid.code)
-  if (!decoder) throw new Error(`missing decoder for ${cid.code}`)
-  return new Block({ cid, bytes, value: decoder.decode(bytes) })
+  if (blocks === 0) {
+    throw new Error('empty CAR')
+  }
+  if (!rawRootBlock) {
+    throw new Error('missing root block')
+  }
+  if (blocks === 1) {
+    const decoder = decoders.find(d => d.code === rootCid.code)
+    // if we can't decode, we can't check this...
+    if (decoder) {
+      const rootBlock = new Block({ cid: rootCid, bytes: rawRootBlock.bytes, value: decoder.decode(rawRootBlock.bytes) })
+      const numLinks = Array.from(rootBlock.links()).length
+      // if the root block has links, then we should have at least 2 blocks in the CAR
+      if (numLinks > 0) {
+        throw new Error('CAR must contain at least one non-root block')
+      }
+    }
+  }
+  return { size, blocks }
 }
 
 /**
@@ -335,6 +325,15 @@ async function getBlock (reader, cid) {
 async function getDagSize (carBytes) {
   const reader = await CarReader.fromBytes(carBytes)
   const [rootCid] = await reader.getRoots()
+
+  const getBlock = async cid => {
+    const rawBlock = await reader.get(cid)
+    if (!rawBlock) throw new Error(`missing block for ${cid}`)
+    const { bytes } = rawBlock
+    const decoder = decoders.find(d => d.code === cid.code)
+    if (!decoder) throw new Error(`missing decoder for ${cid.code}`)
+    return new Block({ cid, bytes, value: decoder.decode(bytes) })
+  }
 
   const getSize = async cid => {
     const block = await getBlock(reader, cid)
