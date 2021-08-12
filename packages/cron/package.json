@@ -14,7 +14,7 @@
   "author": "Alan Shaw",
   "license": "(Apache-2.0 AND MIT)",
   "dependencies": {
-    "@nftstorage/ipfs-cluster": "^3.0.0",
+    "@nftstorage/ipfs-cluster": "^3.3.1",
     "@web-std/fetch": "^2.0.1",
     "@web3-storage/db": "^2.0.0",
     "debug": "^4.3.1",

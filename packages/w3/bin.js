@@ -13,12 +13,13 @@ cli
 cli.command('token')
   .option('--api', 'URL for the Web3 Storage API. Default: https://api.web3.storage')
   .option('--delete', 'Delete your saved token')
-  .describe('Save an API token to use for all requests.')
+  .describe('Save an API token to use for all requests')
   .action(token)
 
 cli.command('put <path>')
   .describe('Upload a file or directory to web3.storage')
-  .option('--no-wrap', 'Dont wrap input files with a directory.')
+  .option('--no-wrap', 'Dont wrap input files with a directory')
+  .option('--no-retry', 'Dont try the upload again if it fails')
   .action(put)
 
 cli.command('list')
@@ -35,7 +36,7 @@ cli.command('get <cid>')
   .action(get)
 
 cli.command('status <cid>')
-  .describe('Get the Filecoin deals and IPFS pins that contain a given CID, as JSON.')
+  .describe('Get the Filecoin deals and IPFS pins that contain a given CID, as JSON')
   .example('status bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy')
   .action(status)
 
