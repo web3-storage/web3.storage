@@ -20,6 +20,7 @@ const FIND_PENDING_PINS = gql`
           peerId
         }
         status
+        created
       }
       after
     }
@@ -112,7 +113,7 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
     }))
     log('✅ Done')
 
-    for (const pin of checkDagSizePins) {
+    await Promise.all(checkDagSizePins.map(async pin => {
       log(`⏳ ${pin.content.cid}: Querying DAG size...`)
       let dagSize
       try {
@@ -124,7 +125,7 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
         log(`💥 ${pin.content.cid}@${pin.location.peerId}: Failed to update DAG size`)
         log(err)
       }
-    }
+    }))
 
     after = queryRes.findPinsByStatus.after
     if (!after) break
