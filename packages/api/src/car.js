@@ -336,7 +336,7 @@ async function getDagSize (carBytes) {
   }
 
   const getSize = async cid => {
-    const block = await getBlock(reader, cid)
+    const block = await getBlock(cid)
     let size = block.bytes.byteLength
     for (const [, cid] of block.links()) {
       size += await getSize(cid)
