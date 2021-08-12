@@ -139,10 +139,8 @@ export async function carPost (request, env, ctx) {
   const bytes = new Uint8Array(await blob.arrayBuffer())
   const reader = await CarReader.fromBytes(bytes)
 
-  const chunkSize = await getBlocksSize(reader)
-  if (chunkSize === 0) {
-    throw new Error('empty CAR')
-  }
+  const stat = await carStat(reader)
+  await validateCar(reader, stat)
 
   // Ensure car blob.type is set; it is used by the cluster client to set the foramt=car flag on the /add call.
   const content = blob.slice(0, blob.size, 'application/car')
@@ -188,7 +186,7 @@ export async function carPost (request, env, ctx) {
     try {
       await env.db.query(INCREMENT_USER_USED_STORAGE, {
         user: user._id,
-        amount: chunkSize
+        amount: stat.size
       })
     } catch (err) {
       console.error(`failed to update user used storage: ${err.stack}`)
@@ -263,11 +261,41 @@ export async function sizeOf (response) {
 }
 
 /**
- * Returns the sum of all block sizes in the received CAR. Throws if any block
- * is bigger than MAX_BLOCK_SIZE (1MiB).
  * @param {CarReader} reader
+ * @param {CarStat} stat
  */
-async function getBlocksSize (reader) {
+async function validateCar (reader, stat) {
+  if (stat.blocks === 0) {
+    throw new Error('empty CAR')
+  }
+
+  const roots = await reader.getRoots()
+  if (roots.length === 0) {
+    throw new Error('missing roots')
+  }
+  if (roots.length > 1) {
+    throw new Error('too many roots')
+  }
+
+  const rootBlock = await getBlock(reader, roots[0])
+  const numLinks = Array.from(rootBlock.links()).length
+
+  // If the root block has links, then we should have at least 2 blocks in the CAR
+  if (numLinks > 0 && stat.blocks < 2) {
+    throw new Error('CAR must contain at least one non-root block')
+  }
+}
+
+/**
+ * Returns the sum of all block sizes and total blocks. Throws if any block
+ * is bigger than MAX_BLOCK_SIZE (1MiB).
+ *
+ * @typedef {{ size: number, blocks: number }} CarStat
+ * @param {CarReader} reader
+ * @returns {Promise<CarStat>}
+ */
+async function carStat (reader) {
+  let blocks = 0
   let size = 0
   for await (const block of reader.blocks()) {
     const blockSize = block.bytes.byteLength
@@ -275,8 +303,24 @@ async function getBlocksSize (reader) {
       throw new Error(`block too big: ${blockSize} > ${MAX_BLOCK_SIZE}`)
     }
     size += blockSize
+    blocks++
   }
-  return size
+  return { size, blocks }
+}
+
+const decoders = [pb, raw, cbor]
+
+/**
+ * @param {CarReader} reader
+ * @param {import('multiformats').CID} cid
+ */
+async function getBlock (reader, cid) {
+  const rawBlock = await reader.get(cid)
+  if (!rawBlock) throw new Error(`missing block for ${cid}`)
+  const { bytes } = rawBlock
+  const decoder = decoders.find(d => d.code === cid.code)
+  if (!decoder) throw new Error(`missing decoder for ${cid.code}`)
+  return new Block({ cid, bytes, value: decoder.decode(bytes) })
 }
 
 /**
@@ -284,20 +328,10 @@ async function getBlocksSize (reader) {
  * @param {CarReader} reader
  */
 async function getDagSize (reader) {
-  const decoders = [pb, raw, cbor]
   const [rootCid] = await reader.getRoots()
 
-  const getBlock = async cid => {
-    const rawBlock = await reader.get(cid)
-    if (!rawBlock) throw new Error(`missing block for ${cid}`)
-    const { bytes } = rawBlock
-    const decoder = decoders.find(d => d.code === cid.code)
-    if (!decoder) throw new Error(`missing decoder for ${cid.code}`)
-    return new Block({ cid, bytes, value: decoder.decode(bytes) })
-  }
-
   const getSize = async cid => {
-    const block = await getBlock(cid)
+    const block = await getBlock(reader, cid)
     let size = block.bytes.byteLength
     for (const [, cid] of block.links()) {
       size += await getSize(cid)

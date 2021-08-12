@@ -100,6 +100,102 @@ describe('POST /car', () => {
 
     assert.strictEqual(res.ok, false)
     const { message } = await res.json()
-    assert.ok(message.includes('empty CAR'))
+    assert.strictEqual(message, 'empty CAR')
+  })
+
+  it('should throw for CAR with no roots', async () => {
+    const token = await getTestJWT()
+
+    const bytes = pb.encode({ Data: new Uint8Array(), Links: [] })
+    const hash = await sha256.digest(bytes)
+    const cid = CID.create(1, pb.code, hash)
+
+    const { writer, out } = CarWriter.create([])
+    writer.put({ cid, bytes })
+    writer.close()
+
+    const carBytes = []
+    for await (const chunk of out) {
+      carBytes.push(chunk)
+    }
+
+    const res = await fetch(new URL('car', endpoint), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/car'
+      },
+      body: new Blob(carBytes)
+    })
+
+    assert.strictEqual(res.ok, false)
+    const { message } = await res.json()
+    assert.strictEqual(message, 'missing roots')
+  })
+
+  it('should throw for CAR with multiple roots', async () => {
+    const token = await getTestJWT()
+
+    const bytes = pb.encode({ Data: new Uint8Array(), Links: [] })
+    const hash = await sha256.digest(bytes)
+    const cid = CID.create(1, pb.code, hash)
+
+    const { writer, out } = CarWriter.create([
+      cid,
+      CID.parse('bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e')
+    ])
+    writer.put({ cid, bytes })
+    writer.close()
+
+    const carBytes = []
+    for await (const chunk of out) {
+      carBytes.push(chunk)
+    }
+
+    const res = await fetch(new URL('car', endpoint), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/car'
+      },
+      body: new Blob(carBytes)
+    })
+
+    assert.strictEqual(res.ok, false)
+    const { message } = await res.json()
+    assert.strictEqual(message, 'too many roots')
+  })
+
+  it('should throw for CAR with one root block that has links', async () => {
+    const token = await getTestJWT()
+
+    const bytes = pb.encode({
+      Data: new Uint8Array(),
+      Links: [{ Hash: CID.parse('bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e') }]
+    })
+    const hash = await sha256.digest(bytes)
+    const cid = CID.create(1, pb.code, hash)
+
+    const { writer, out } = CarWriter.create(cid)
+    writer.put({ cid, bytes })
+    writer.close()
+
+    const carBytes = []
+    for await (const chunk of out) {
+      carBytes.push(chunk)
+    }
+
+    const res = await fetch(new URL('car', endpoint), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/car'
+      },
+      body: new Blob(carBytes)
+    })
+
+    assert.strictEqual(res.ok, false)
+    const { message } = await res.json()
+    assert.strictEqual(message, 'CAR must contain at least one non-root block')
   })
 })
