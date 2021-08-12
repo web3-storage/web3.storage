@@ -284,7 +284,7 @@ async function validateCar (carBytes, stat) {
       const rootBlock = await getBlock(reader, rootCid)
       const numLinks = Array.from(rootBlock.links()).length
       // if the root block has links, then we should have at least 2 blocks in the CAR
-      if (numLinks > 0 && stat.blocks < 2) {
+      if (numLinks > 0) {
         throw new Error('CAR must contain at least one non-root block')
       }
     }
