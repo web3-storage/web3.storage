@@ -25,6 +25,7 @@ const body = Query(
     ['data'],
     Let(
       {
+        updated: Select('updated', Var('data'), Now()),
         match: Match(
           Index('unique_Metric_key'),
           Select('key', Var('data'))
@@ -36,13 +37,13 @@ const body = Query(
           data: {
             key: Select('key', Var('data')),
             value: Select('value', Var('data')),
-            updated: Now()
+            updated: Var('updated')
           }
         }),
         Update(Select('ref', Get(Var('match'))), {
           data: {
             value: Select('value', Var('data')),
-            updated: Now()
+            updated: Var('updated')
           }
         })
       )
