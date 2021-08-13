@@ -140,7 +140,7 @@ async function createMetric (db, key, query, vars, dataProp) {
   })
 
   console.log(`💾 Saving value for "${key}": ${total}`)
-  await db.query(CREATE_OR_UPDATE_METRIC, { data: { key, value: total } })
+  await db.query(CREATE_OR_UPDATE_METRIC, { data: { key, value: total, updated: to.toISOString() } })
 }
 
 /**
@@ -167,5 +167,5 @@ async function updateMetric (db, key, query, vars, dataProp) {
   }
 
   console.log(`💾 Saving new value for "${key}": ${metric.value + total}`)
-  await db.query(CREATE_OR_UPDATE_METRIC, { data: { key, value: metric.value + total } })
+  await db.query(CREATE_OR_UPDATE_METRIC, { data: { key, value: metric.value + total, updated: to.toISOString() } })
 }

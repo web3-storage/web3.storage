@@ -509,6 +509,7 @@ input CreateOrUpdatePinInput {
 input CreateOrUpdateMetricInput {
   key: String!
   value: Long!
+  updated: Time
 }
 
 input UpdatePinInput {
