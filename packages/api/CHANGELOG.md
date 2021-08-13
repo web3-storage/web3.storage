@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.3.2](https://www.github.com/web3-storage/web3.storage/compare/api-v3.3.1...api-v3.3.2) (2021-08-12)
+
+
+### Bug Fixes
+
+* disallow CAR of single block with links ([#344](https://www.github.com/web3-storage/web3.storage/issues/344)) ([e7436da](https://www.github.com/web3-storage/web3.storage/commit/e7436da00d0b8b43f55fce1fb6e6fc2b58a0f04e))
+
 ### [3.3.1](https://www.github.com/web3-storage/web3.storage/compare/api-v3.3.0...api-v3.3.1) (2021-08-11)
 
 
