@@ -1,57 +1,32 @@
 openapi: '3.0.2'
 info:
   title: Web3 Storage API
+  description: "This document describes the HTTP API for [**Web3.Storage**](https://web3.storage), which allows you to build apps backed by decentralized storage powered by IPFS and Filecoin.
+
+  You can also interact with this API using client libraries. See https://docs.web3.storage for more information."
   version: '1.0'
 
 servers:
   - url: https://api.web3.storage
 
 tags:
-  - name: Web3 Storage
+  - name: Web.Storage HTTP API
 paths:
-  /car:
-    post:
-      tags:
-        - Web3 Storage
-      summary: Upload and store the IPFS DAG contained in a CAR file.
-      description: |
-        Upload a CAR (Content Addressable Archive) file and store the IPFS DAG
-        (Directed Acyclic Graph) it contains. Supports partial DAGs, so multiple
-        CAR files with the same root (but with different sub-trees) can be sent.
-      operationId: store-car
-      requestBody:
-        required: true
-        content:
-          application/car:
-            schema:
-              type: string
-              format: binary
-          application/octet-stream:
-            schema:
-              type: string
-              format: binary
-      responses:
-        '200':
-          description: OK
-          content:
-            'application/json':
-              schema:
-                $ref: '#/components/schemas/UploadResponse'
-        '400':
-          $ref: '#/components/responses/badRequest' 
-        '401':
-          $ref: '#/components/responses/unauthorized'
-        '403':
-          $ref: '#/components/responses/forbidden'
-        '5XX':
-          $ref: '#/components/responses/internalServerError'
   /upload:
     post:
       tags:
-        - Web3 Storage
+        - Web.Storage HTTP API
       summary: Upload and store one or more files.
       description: |
-        Upload data for files in a multipart request.
+        Store a file with Web3.Storage. You can upload either a single file or multiple files in a directory.
+
+        Send the POST request with one of:
+        - a single file as a single Blob/File Object as the body
+        - multiple files as FormData with `Content-Disposition` headers for each part to specify filenames and the request header `Content-Type: multipart/form-data`.
+
+        You can also upload a Content Addressed Archive (CAR) file, by setting the request body as a single CAR Blob/File object and providing the request header `Content-Type: application/car`.
+
+        Providing a CAR file allows you to pre-compute the root CID for 1 or more files, ensures that the Web3.Storage will store and provide your assets with the same CID.
       operationId: store-multipart
       requestBody:
         required: true
@@ -73,18 +48,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/UploadResponse'
         '400':
-          $ref: '#/components/responses/badRequest' 
+          $ref: '#/components/responses/badRequest'
         '401':
           $ref: '#/components/responses/unauthorized'
         '403':
           $ref: '#/components/responses/forbidden'
         '5XX':
           $ref: '#/components/responses/internalServerError'
-  /:
+  /user/uploads:
     get:
       tags:
-        - NFT Storage
-      summary: List all stored files
+        - Web.Storage HTTP API
+      summary: List previous uploads
+      description: |
+        Lists all previous uploads for the account associated with the API token being used to make the call to `/user/uploads`. These results can be paginated by specifying `before` and `limit` parameters in the querystring, and making surrepitious calls using the date associated with the oldest file returned in that batch as the value of `before` in subsequent calls.
+
+        The information returned includes the creation date and file size, as well as details about how the network is storing your data. Using this information, you can identify peers on the [IPFS (InterPlanetary File System)](https://ipfs.io) network that are pinning the data, and [Filecoin](https://filecoin.io) storage providers that have accepted deals to store the data.
       operationId: list
       parameters:
         - $ref: '#/components/parameters/before'
@@ -102,17 +81,16 @@ paths:
           $ref: '#/components/responses/forbidden'
         '5XX':
           $ref: '#/components/responses/internalServerError'
-  /{cid}:
+  /status/{cid}:
     get:
       tags:
-        - NFT Storage
-      summary: Get information for the stored file CID
-      description: Includes the IPFS pinning state and the Filecoin deal state.
+        - Web.Storage HTTP API
+      summary: Retrieve information about an upload
+      description: Retrieve metadata about your file by using `/status/{cid}`, supplying the CID of the file you are interested in. This metadata includes the creation date and file size, as well as details about how the network is storing your data. Using this information, you can identify peers on the [IPFS (InterPlanetary File System)](https://ipfs.io) network that are pinning the data, and [Filecoin](https://filecoin.io) storage providers that have accepted deals to store the data.
       operationId: status
       parameters:
         - name: cid
           in: path
-          description: CID for the NFT
           required: true
           schema:
             $ref: '#/components/schemas/CID'
@@ -129,26 +107,25 @@ paths:
           $ref: '#/components/responses/forbidden'
         '5XX':
           $ref: '#/components/responses/internalServerError'
+  /user/uploads/{cid}:
     delete:
       tags:
-        - NFT Storage
-      summary: Stop storing the content with the passed CID
+        - Web.Storage HTTP API
+      summary: Stop storing the specified content
       description: |
-        Stop storing the content with the passed CID on nft.storage.
+        Stop storing the content with the passed CID on Web3.Storage.
         - Unpin the item from the underlying IPFS pinning service.
-        - Cease renewals for expired Filecoin deals involving the CID.  
+        - Cease renewals for expired Filecoin deals involving the CID.
 
         ⚠️ This does not remove the content from the network.
-
         - Does not terminate any established Filecoin deal.
-        - Does not remove the content from other IPFS nodes in the network that already cached or pinned the CID.  
+        - Does not remove the content from other IPFS nodes in the network that already cached or pinned the CID.
 
-        Note: the content will remain available if another user has stored the CID with nft.storage.
+        **The content will remain available if another user has stored the CID with Web3.Storage**.
       operationId: delete
       parameters:
         - name: cid
           in: path
-          description: CID for the NFT
           required: true
           schema:
             $ref: '#/components/schemas/CID'
@@ -165,18 +142,52 @@ paths:
           $ref: '#/components/responses/forbidden'
         '5XX':
           $ref: '#/components/responses/internalServerError'
-  /check/{cid}:
+  /car:
+    post:
+      tags:
+        - Web.Storage HTTP API
+      summary: Upload a CAR
+      description: |
+        Upload a CAR (Content Addressable Archive) file and store the IPFS DAG
+        (Directed Acyclic Graph) it contains. Supports partial DAGs, so multiple
+        CAR files with the same root (but with different sub-trees) can be sent. Only one CAR can be uploaded at a time, and only CAR files are accepted, in contrast to [`/upload`](#operation/store-multipart) which can upload multiple files and accepts both CAR files and files from the client.
+      operationId: store-car
+      requestBody:
+        required: true
+        content:
+          application/car:
+            schema:
+              type: string
+              format: binary
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+  /car/{cid}:
     get:
       tags:
-        - NFT Storage
-      summary: Check if a CID of an NFT is being stored by nft.storage.
-      description: Includes the IPFS pinning state and the Filecoin deal state.
-      operationId: check
-      security: []
+        - Web.Storage HTTP API
+      summary: Retrieve information about about a CAR
+      description: Retrieve metadata about your file by using `/car/{cid}`, supplying the CID of the CAR you are interested in. This metadata includes the creation date and file size, as well as details about how the network is storing your data. Using this information, you can identify peers on the [IPFS (InterPlanetary File System)](https://ipfs.io) network that are pinning the data, and [Filecoin](https://filecoin.io) storage providers that have accepted deals to store the data.
+      operationId: car-cid
       parameters:
         - name: cid
           in: path
-          description: CID for the NFT
           required: true
           schema:
             $ref: '#/components/schemas/CID'
@@ -186,21 +197,53 @@ paths:
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/CheckResponse'
-        '404':
-          $ref: '#/components/responses/notFound'
+                $ref: '#/components/schemas/GetResponse'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+    head:
+      tags:
+        - Web.Storage HTTP API
+      summary: Retrieve HTTP headers regarding a CAR
+      description: |
+        This method is useful for doing a dry run of a call to `/car/{cid}`. Given that it only returns HTTP header information, it's far more lightweight and can be used to just get metadata about the given CAR file without retrieving a whole payload in the body of the HTTP response.
+      operationId: head-car
+      requestBody:
+        required: true
+        content:
+          application/car:
+            schema:
+              type: string
+              format: binary
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
         '5XX':
           $ref: '#/components/responses/internalServerError'
 
+
 components:
   schemas:
-    NFT:
+    upload:
       type: object
       properties:
         cid:
           $ref: '#/components/schemas/CID'
         size:
-          description: Size in bytes of the NFT data.
+          description: Size in bytes of the upload data.
           type: number
           default: 132614
         created:
@@ -211,7 +254,7 @@ components:
           example: image/jpeg
           description: MIME type of the upload file or 'directory' when uploading multiple files.
         scope:
-          description: Name of the JWT token used to create this NFT.
+          description: Name of the JWT token used to create the upload.
           type: string
           default: default
         pin:
@@ -243,7 +286,7 @@ components:
                 type: string
                 example: http://bafkreidivzimqfqtoqxkrpge6bjyhlvxqs3rhe73owtmdulaxr5do5in7u.ipfs.dweb.link/image.jpg
     Files:
-      description: Files in the directory (only if this NFT is a directory).
+      description: Files in the directory (only if this upload is a directory).
       type: array
       items:
         type: object
@@ -355,7 +398,7 @@ components:
         value:
           type: array
           items:
-            $ref: '#/components/schemas/NFT'
+            $ref: '#/components/schemas/upload'
     GetResponse:
       type: object
       properties:
@@ -364,7 +407,7 @@ components:
           default: true
         value:
           type: object
-          $ref: '#/components/schemas/NFT'
+          $ref: '#/components/schemas/upload'
     CheckResponse:
       type: object
       properties:
@@ -434,9 +477,9 @@ components:
   securitySchemes:
     bearerAuth:
       description: |
-        The NFT Storage API uses *Bearer Tokens* to authenticate requests. You can view and manage your tokens in the [NFT Storage Dashboard](https://nft.storage).   
+        The Web3.Storage API uses *Bearer Tokens* to authenticate requests. You can [view and manage your tokens in the Web3.Storage Dashboard](https://web3.storage/tokens/).
 
-        Your tokens carry many privileges, so be sure to keep them secure! Do not share your *secret tokens* in publicly accessible areas such as GitHub, client-side code, and so forth.   
+        Your tokens carry many privileges, so be sure to keep them secure! Do not share your *secret tokens* in publicly accessible areas such as GitHub, client-side code, and so forth.
 
         **Bearer authentication** (also called token authentication) is an HTTP authentication scheme that involves security tokens called bearer tokens. The name “Bearer authentication” can be understood as “give access to the bearer of this token.” The bearer token is a cryptic string, usually generated by the server in response to a login request. The client must send this token in the Authorization header when making requests to protected resources:
 
@@ -479,7 +522,7 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
   parameters:
     before:
-      description: Return results created before provided timestamp
+      description: Specifies a date, in ISO 8601 format. Ensures that the call to `/list` will not return any results newer than the given date.
       name: before
       in: query
       required: false
@@ -488,7 +531,7 @@ components:
         format: date-time  # RFC 3339, section 5.6
       example: "2020-07-27T17:32:28Z"
     limit:
-      description: Max records to return
+      description: Specifies the maximum number of uploads to return.
       name: limit
       in: query
       required: false
