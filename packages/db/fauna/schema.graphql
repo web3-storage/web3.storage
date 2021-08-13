@@ -389,6 +389,7 @@ type Query {
   findUploadsCreatedAfter(since: Time!): [Upload!]! @resolver(paginated: true)
   findUploadsByUser(where: FindUploadsByUserInput!): [Upload!]! @resolver(paginated: true)
   findContentByCid(cid: String!): Content @resolver
+  findContentByCreated(from: Time!, to: Time): [Content!]! @resolver(paginated: true)
   findUserByIssuer(issuer: String!): User @resolver
   findAuthTokensByUser(user: ID!): [AuthToken!]! @resolver(paginated: true)
   """
@@ -414,6 +415,7 @@ type Mutation {
   createUpload(data: CreateUploadInput!): Upload! @resolver
   deleteAuthToken(user: ID!, authToken: ID!): AuthToken! @resolver
   deleteUserUpload(user: ID!, cid: String!): Upload! @resolver
+  deleteUploadByUserAndContent(user: ID!, content: ID!): Upload! @resolver
   createAggregate(data: CreateAggregateInput!): Aggregate! @resolver
   """
   Adds new entries to the aggregate, existing entries are ignored.
