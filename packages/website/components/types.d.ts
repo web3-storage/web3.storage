@@ -2,7 +2,7 @@ import type { ReactChildren } from 'react'
 
 export interface LayoutProps {
   callback?: boolean
-  needsUser?: boolean
+  needsLoggedIn?: boolean
   redirectTo?: string
   redirectIfFound?: boolean
   title?: string
@@ -15,12 +15,6 @@ export interface LayoutProps {
 }
 
 export interface LayoutChildrenProps {
-  user?: LayoutUser
+  isLoggedIn?: boolean
   data: any
-}
-
-export interface LayoutUser {
-  issuer: string | null
-  publicAddress: string | null
-  email: string | null
 }

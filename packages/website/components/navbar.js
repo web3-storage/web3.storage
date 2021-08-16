@@ -11,10 +11,10 @@ import Button from './button.js'
  *
  * @param {Object} props
  * @param {string} [props.bgColor]
- * @param {any} [props.user]
+ * @param {boolean} [props.isLoggedIn]
  * @param {boolean} props.isLoadingUser
  */
-export default function Navbar({ bgColor = '', user, isLoadingUser }) {
+export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   const queryClient = useQueryClient()
   const onLinkClick = useCallback((event) => {
     countly.trackCustomLinkClick(
@@ -45,7 +45,7 @@ export default function Navbar({ bgColor = '', user, isLoadingUser }) {
         <div className="flex items-center" style={{ minHeight: 52 }}>
           <Link href="https://docs.web3.storage/">
             <a
-              className={`text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle p-3 py-3 md:px-6 ${user ? '' : 'mr-6 md:mr-0'}`}
+              className={`text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle p-3 py-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`}
               onClick={onLinkClick}
             >
               Docs
@@ -53,13 +53,13 @@ export default function Navbar({ bgColor = '', user, isLoadingUser }) {
           </Link>
           <Link href="/about">
             <a 
-              className={`text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle p-3 md:px-6 hidden md:inline-block ${user ? '' : 'md:mr-6'}`}
+              className={`text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle p-3 md:px-6 hidden md:inline-block ${isLoggedIn ? '' : 'md:mr-6'}`}
               onClick={onLinkClick}
             >
               About
             </a>
           </Link>
-          {user ? (
+          {isLoggedIn ? (
             <>
               <Link href="/files">
                 <a
@@ -81,7 +81,7 @@ export default function Navbar({ bgColor = '', user, isLoadingUser }) {
           ) : null}
           {isLoadingUser
             ? null
-            : user
+            : isLoggedIn
               ? (
                 <Button
                   onClick={logout}

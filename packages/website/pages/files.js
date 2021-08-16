@@ -27,7 +27,7 @@ export function getStaticProps() {
       title: 'Files - Web3 Storage',
       pageBgColor: 'bg-w3storage-neutral-red',
       redirectTo: '/',
-      needsUser: true,
+      needsLoggedIn: true,
     },
   }
 }
@@ -177,10 +177,8 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
  * Files Page
  *
  * @param {import('../components/types.js').LayoutChildrenProps} props
- * @returns
-
  */
-export default function Files({ user }) {
+export default function Files({ isLoggedIn }) {
   /** @type string[] */
   const initialFiles = [];
 
@@ -197,7 +195,7 @@ export default function Files({ user }) {
     queryKey,
     (ctx) => getUploads(ctx.queryKey[1]),
     {
-      enabled: !!user,
+      enabled: isLoggedIn,
     }
   )
 

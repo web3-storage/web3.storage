@@ -13,7 +13,7 @@ export function getStaticProps() {
     props: {
       title: "Upload - Web3 Storage",
       redirectTo: "/",
-      needsUser: true,
+      needsLoggedIn: true,
     },
   };
 }

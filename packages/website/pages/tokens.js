@@ -18,7 +18,7 @@ export function getStaticProps() {
     props: {
       title: 'Manage API Tokens - web3.storage',
       redirectTo: '/',
-      needsUser: true,
+      needsLoggedIn: true,
     },
   }
 }
@@ -95,12 +95,12 @@ const TokenRow = ({ token, index, copied, onCopy, deleting, onDelete }) => {
  * @param {import('../components/types.js').LayoutChildrenProps} props
  * @returns
  */
-export default function Tokens({ user }) {
+export default function Tokens({ isLoggedIn }) {
   const [deleting, setDeleting] = useState('')
   const [copied, setCopied] = useState('')
   const queryClient = useQueryClient()
   const { isLoading, isFetching, data } = useQuery('get-tokens', getTokens, {
-    enabled: !!user
+    enabled: isLoggedIn
   })
   /** @type Token[] */
   const tokens = data || []

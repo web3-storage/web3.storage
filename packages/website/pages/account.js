@@ -23,7 +23,7 @@ const MAX_STORAGE = 1.1e+12 /* 1 TB */
       props: {
         title: 'Account - Web3 Storage',
         redirectTo: '/',
-        needsUser: true,
+        needsLoggedIn: true,
       },
     }
 }
@@ -35,11 +35,11 @@ const MAX_STORAGE = 1.1e+12 /* 1 TB */
 
 /**
  * @param {Object} props
- * @param {import('../components/types').LayoutUser} [props.user]
+ * @param {boolean | undefined} [props.isLoggedIn]
  */
-const StorageInfo = ({ user }) => {
+const StorageInfo = ({ isLoggedIn }) => {
   const { data, isLoading, isFetching } = useQuery('get-storage', getStorage, {
-    enabled: !!user,
+    enabled: isLoggedIn,
   })
 
   /** @type {StorageData} */
@@ -82,10 +82,10 @@ const StorageInfo = ({ user }) => {
 /**
  * @param {import('../components/types').LayoutChildrenProps} props
  */
-export default function Account({ user }) {
+export default function Account({ isLoggedIn }) {
   const [copied, setCopied] = useState('')
   const { data, isLoading, isFetching } = useQuery('get-tokens', getTokens, {
-    enabled: !!user
+    enabled: isLoggedIn
   })
   /** @type {import('./tokens').Token[]} */
   const tokens = data || []
@@ -132,7 +132,7 @@ export default function Account({ user }) {
       <div className="layout-margins">
         <main className="max-w-screen-lg mx-auto my-4 lg:my-16 text-w3storage-purple">
           <h3 className="mb-8">Your account</h3>
-          <StorageInfo user={user}/>
+          <StorageInfo isLoggedIn={isLoggedIn}/>
           <When condition={!isLoaded}>
             <div className="relative w-52 pt-60">
               <Loading />
