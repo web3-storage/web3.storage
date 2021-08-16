@@ -33,7 +33,7 @@ export default function Footer({ bgColor = '' }) {
         <div className="flex flex-col order-1 xl:order-2 sm:flex-row">
           <Link href="https://web3-storage.statuspage.io/">
             <a
-              className="text-sm font-bold no-underline hover:underline p-3 md:px-6"
+              className="text-sm font-bold no-underline hover:underline py-3 sm:pr-6"
               onClick={onLinkClick}
             >
               Status
@@ -41,7 +41,7 @@ export default function Footer({ bgColor = '' }) {
           </Link>
           <Link href="/about/#terms-of-service">
             <a
-              className="text-sm font-bold no-underline hover:underline p-3 md:px-6"
+              className="text-sm font-bold no-underline hover:underline py-3 sm:pr-6"
               onClick={onLinkClick}
             >
               Terms of service
@@ -49,8 +49,8 @@ export default function Footer({ bgColor = '' }) {
           </Link>
           <Link href="https://github.com/web3-storage/web3.storage/issues/new/choose">
             <a
-              className="text-sm font-bold no-underline hover:underline p-3 md:px-6" 
-              target="_blank" 
+              className="text-sm font-bold no-underline hover:underline py-3 sm:pr-6"
+              target="_blank"
               rel="noreferrer"
               onClick={onLinkClick}
             >
@@ -58,8 +58,8 @@ export default function Footer({ bgColor = '' }) {
             </a>
           </Link>
           <Link href="https://docs.web3.storage/community/help-and-support/">
-            <a 
-              className="text-sm font-bold no-underline hover:underline p-3 md:px-6"
+            <a
+              className="text-sm font-bold no-underline hover:underline py-3"
               onClick={onLinkClick}
             >
               Contact us

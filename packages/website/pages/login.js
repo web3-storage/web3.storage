@@ -18,6 +18,7 @@ export function getStaticProps() {
       redirectTo: '/files',
       redirectIfFound: true,
       pageBgColor: 'bg-w3storage-red',
+      navBgColor: 'bg-w3storage-red'
     },
   }
 }

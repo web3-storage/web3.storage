@@ -41,21 +41,23 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser, hasBan
     }
   })
 
-  const ITEMS = useMemo(() => 
-    [{
-        link: 'https://docs.web3.storage/', 
+  const ITEMS = useMemo(() =>
+    [
+      {
+        link: 'https://docs.web3.storage/',
         name: 'Docs',
         spacing: `p-3 py-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
       }, {
-        link: '/about', 
+        link: '/about',
         name: 'About',
         spacing: `p-3 py-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
-    }, ...(isLoggedIn ? [{ 
-        link: '/files', 
+    }, ...(isLoggedIn ? [{
+        link: '/files',
         name: 'Files',
         spacing: `p-3 md:px-6`
-      }, { 
-        link: '/account', 
+      },
+      {
+        link: '/account',
         name: 'Account',
         spacing: `p-3 md:px-6 mr-3 md:mr-6`
       }
@@ -73,7 +75,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser, hasBan
       event.currentTarget
     )
   }, [])
-  
+
   async function logout() {
     await getMagic().user.logout()
     await queryClient.invalidateQueries('magic-user')
@@ -95,7 +97,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser, hasBan
       <div className={clsx("py-3 text-w3storage-purple items-center w-100", isSmallVariant ? 'grid grid-cols-3 px-4' : 'flex justify-between layout-margins')}>
         { isSmallVariant && <div onClick={toggleMenu}><Hamburger className="w-6 ml-4 cursor-pointer" aria-label="Toggle Navbar"/></div> }
         <a href="/" title="Web3 Storage" className={clsx("flex items-center", isSmallVariant ? 'justify-center' : '')} onClick={onLinkClick}>
-          <img src="/w3storage-logo.svg" style={{ height: '1.8rem' }} />
+          <img src="/w3storage-logo.svg" style={{ height: '1.8rem', minWidth: '1.8rem' }} />
           <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-md hidden xl:inline-block">Web3.Storage</span>
         </a>
         <div className={clsx("flex items-center", isSmallVariant ? 'justify-end' : '')} style={{ minHeight: 52 }}>
@@ -108,7 +110,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser, hasBan
             ? null
             : isLoggedIn
               ? (
-                <Button 
+                <Button
                   onClick={logout}
                   id="logout"
                   wrapperClassName="inline-block"
@@ -133,7 +135,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser, hasBan
 
       { isSmallVariant && isMenuOpen && (<div className="fixed top-0 left-0 right-0 bottom-0 o-0" onClick={() => closeMenu()}/>)}
       <div className={clsx(
-          "appear-from-left fixed top-16 left-0 bottom-0 shadow-2xl p-6", bgColor,
+          "appear-from-left fixed left-0 bottom-0 shadow-2xl p-6 w-4/5 bg-w3storage-red",
           isSmallVariant && isMenuOpen ? 'flex flex-col' : 'hidden',
           shouldOffsetMenu ? 'top-32': 'top-16',
       )} aria-hidden={isSmallVariant && isMenuOpen}>
