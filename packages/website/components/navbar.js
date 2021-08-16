@@ -135,7 +135,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser, hasBan
 
       { isSmallVariant && isMenuOpen && (<div className="fixed top-0 left-0 right-0 bottom-0 o-0" onClick={() => closeMenu()}/>)}
       <div className={clsx(
-          "appear-from-left fixed left-0 bottom-0 shadow-2xl p-6 w-4/5 bg-w3storage-red",
+          "appear-from-left fixed left-0 bottom-0 shadow-2xl p-6 w-4/5", bgColor,
           isSmallVariant && isMenuOpen ? 'flex flex-col' : 'hidden',
           shouldOffsetMenu ? 'top-32': 'top-16',
       )} aria-hidden={isSmallVariant && isMenuOpen}>
