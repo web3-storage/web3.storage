@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.2.4](https://www.github.com/web3-storage/web3.storage/compare/website-v1.2.3...website-v1.2.4) (2021-08-16)
+
+
+### Bug Fixes
+
+* remove unused user metadata request ([#352](https://www.github.com/web3-storage/web3.storage/issues/352)) ([cf3dc17](https://www.github.com/web3-storage/web3.storage/commit/cf3dc175d8ce97506002bbca3eb01e65f91d632d))
+
 ### [1.2.3](https://www.github.com/web3-storage/web3.storage/compare/website-v1.2.2...website-v1.2.3) (2021-08-04)
 
 
