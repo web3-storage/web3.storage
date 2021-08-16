@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import Footer from './footer.js'
 import Navbar from './navbar.js'
 import Loading from './loading'
-import { useUser } from '../lib/user'
+import { useLoggedIn } from '../lib/user'
 
 /**
  * @typedef {import('react').ReactChildren} Children
@@ -16,7 +16,7 @@ import { useUser } from '../lib/user'
  */
 export default function Layout({
   callback,
-  needsUser = false,
+  needsLoggedIn = false,
   children,
   redirectTo,
   redirectIfFound = false,
@@ -28,12 +28,12 @@ export default function Layout({
   data = null,
   highlightMessage,
 }) {
-  const { user, isLoading, isFetching } = useUser({
+  const { isLoggedIn, isLoading, isFetching } = useLoggedIn({
     redirectTo,
     redirectIfFound,
-    enabled: needsUser,
+    enabled: needsLoggedIn,
   })
-  const shouldWaitForUser = needsUser && isLoading
+  const shouldWaitForLoggedIn = needsLoggedIn && isLoading
 
   return (
     <div className={clsx(pageBgColor, 'flex flex-col min-h-screen')}>
@@ -51,20 +51,20 @@ export default function Layout({
         <meta name="twitter:site" content="@protocollabs" />
         <meta name="twitter:creator" content="@protocollabs" />
       </Head>
-      {shouldWaitForUser ? (
+      {shouldWaitForLoggedIn ? (
         <Loading />
       ) : callback ? (
         <>
           <Loading />
-          {children({ user, data })}
+          {children({ isLoggedIn, data })}
         </>
       ) : (
         <>
           { highlightMessage &&
             <div className="w-full bg-w3storage-purple text-white typography-cta text-center py-1" dangerouslySetInnerHTML={{ __html: highlightMessage }} />
           }
-          <Navbar user={user} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
-          {children({ user, data })}
+          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
+          {children({ isLoggedIn, data })}
           <Footer bgColor={footerBgColor} />
         </>
       )}

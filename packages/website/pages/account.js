@@ -23,7 +23,7 @@ const MAX_STORAGE = 1.1e+12 /* 1 TB */
       props: {
         title: 'Account - Web3 Storage',
         redirectTo: '/',
-        needsUser: true,
+        needsLoggedIn: true,
       },
     }
 }
@@ -34,12 +34,11 @@ const MAX_STORAGE = 1.1e+12 /* 1 TB */
  */
 
 /**
- * @param {Object} props
- * @param {import('../components/types').LayoutUser} [props.user]
+ * @param {import('../components/types').LayoutChildrenProps} props
  */
-const StorageInfo = ({ user }) => {
+const StorageInfo = ({ isLoggedIn }) => {
   const { data, isLoading, isFetching } = useQuery('get-storage', getStorage, {
-    enabled: !!user,
+    enabled: isLoggedIn,
   })
 
   /** @type {StorageData} */

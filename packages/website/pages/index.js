@@ -24,7 +24,7 @@ import GettingStartedIllustration from '../illustrations/getting-started-illustr
 export function getStaticProps() {
   return {
     props: {
-      needsUser: false,
+      needsLoggedIn: false,
       navBgColor: 'bg-w3storage-red',
       footerBgColor: 'bg-w3storage-red',
       highlightMessage: `Looking to store NFTs? Check out <a class="underline" href="https://nft.storage">NFT.Storage</a>!</p>`

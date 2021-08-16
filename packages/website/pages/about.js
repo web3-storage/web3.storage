@@ -12,7 +12,7 @@ import slug from 'remark-slug'
 
     return {
       props: {
-        needsUser: false,
+        needsLoggedIn: false,
         data: data.content,
       },
     }

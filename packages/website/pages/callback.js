@@ -11,7 +11,7 @@ export function getStaticProps() {
     props: {
       title: 'Login Redirect - Web3 Storage',
       callback: true,
-      needsUser: false,
+      needsLoggedIn: false,
     },
   }
 }

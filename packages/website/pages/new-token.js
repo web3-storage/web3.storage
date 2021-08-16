@@ -16,7 +16,7 @@ export function getStaticProps() {
   return {
     props: {
       title: 'New API Token - Web3 Storage',
-      needsUser: true,
+      needsLoggedIn: true,
       redirectTo: '/',
     },
   }
