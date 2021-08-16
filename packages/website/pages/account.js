@@ -28,7 +28,7 @@ const MAX_STORAGE = 1.1e+12 /* 1 TB */
     }
 }
 
-/** 
+/**
  * @typedef {Object} StorageData
  * @property {Number} usedStorage
  */
@@ -72,9 +72,6 @@ const StorageInfo = ({ isLoggedIn }) => {
           </span>
         </a>
       </p>
-    </When>
-    <When condition={ !isLoaded }>
-      <div className="relative w-52 p-10"><Loading /></div>
     </When>
   </div>
 }
