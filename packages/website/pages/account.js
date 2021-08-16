@@ -34,7 +34,8 @@ const MAX_STORAGE = 1.1e+12 /* 1 TB */
  */
 
 /**
- * @param {import('../components/types').LayoutChildrenProps} props
+ * @param {Object} props
+ * @param {boolean | undefined} [props.isLoggedIn]
  */
 const StorageInfo = ({ isLoggedIn }) => {
   const { data, isLoading, isFetching } = useQuery('get-storage', getStorage, {
