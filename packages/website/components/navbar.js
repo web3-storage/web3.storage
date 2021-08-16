@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState , useEffect } from 'react'
 import Router from 'next/router'
 import Link from 'next/link'
 import { getMagic } from '../lib/magic.js'
@@ -8,8 +8,7 @@ import Button from './button.js'
 import { useResizeObserver } from '../hooks/resize-observer'
 import clsx from 'clsx'
 import Hamburger from '../icons/hamburger'
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
-import { useEffect } from 'react'
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 
 // Change this value if you change the navbar items.
 const SMALL_VARIANT_MAX_SIZE = 400;
@@ -65,7 +64,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser, hasBan
 
   useEffect(() => {
     setOffsetMenu(hasBanner && window.scrollY < 50)
-  }, [isMenuOpen])
+  }, [hasBanner, isMenuOpen])
 
   const queryClient = useQueryClient()
   const onLinkClick = useCallback((event) => {
@@ -94,20 +93,16 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser, hasBan
   return (
     <nav className={clsx(bgColor, 'w-full z-50', isSmallVariant ? 'sticky top-0' : '')} ref={containerRef}>
       <div className={clsx("py-3 text-w3storage-purple items-center w-100", isSmallVariant ? 'grid grid-cols-3 px-4' : 'flex justify-between layout-margins')}>
-        { isSmallVariant && <div onClick={toggleMenu}><Hamburger className="w-6 ml-4" aria-label="Toggle Navbar"/></div> }
-        <Link href="/" onClick={onLinkClick}>
-          <a title="Web3 Storage" className={clsx("flex items-center", isSmallVariant ? 'justify-center' : '')}>
-            <img src="/w3storage-logo.svg" style={{ height: '1.8rem' }} />
-            <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-base hidden xl:inline-block">Web3.Storage</span>
-          </a>
-        </Link>
+        { isSmallVariant && <div onClick={toggleMenu}><Hamburger className="w-6 ml-4 cursor-pointer" aria-label="Toggle Navbar"/></div> }
+        <a href="/" title="Web3 Storage" className={clsx("flex items-center", isSmallVariant ? 'justify-center' : '')} onClick={onLinkClick}>
+          <img src="/w3storage-logo.svg" style={{ height: '1.8rem' }} />
+          <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-md hidden xl:inline-block">Web3.Storage</span>
+        </a>
         <div className={clsx("flex items-center", isSmallVariant ? 'justify-end' : '')} style={{ minHeight: 52 }}>
           { !isSmallVariant && ITEMS.map(item => (
-            <Link href={item.link} key={item.name} onClick={onLinkClick}>
-              <a className={clsx('text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle', item.spacing)}>
-                { item.name }
-              </a>
-            </Link>
+            <a href={item.link} key={item.name} onClick={onLinkClick} className={clsx('text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle', item.spacing)}>
+              { item.name }
+            </a>
           ))}
           {isLoadingUser
             ? null
