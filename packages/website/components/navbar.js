@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import Router from 'next/router'
 import Link from 'next/link'
 import { getMagic } from '../lib/magic.js'
@@ -8,8 +8,11 @@ import Button from './button.js'
 import { useResizeObserver } from '../hooks/resize-observer'
 import clsx from 'clsx'
 import Hamburger from '../icons/hamburger'
-import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import { useEffect } from 'react'
 
+// Change this value if you change the navbar items.
+const SMALL_VARIANT_MAX_SIZE = 400;
 
 /**
  * Navbar Component
@@ -60,9 +63,6 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser, hasBan
     ] : [])
   ], [isLoggedIn])
 
-  // Change this value if you change the navbar items style.
-  const SMALL_VARIANT_MAX_SIZE = ITEMS.length * 80 + 160;
-
   useEffect(() => {
     setOffsetMenu(hasBanner && window.scrollY < 50)
   }, [isMenuOpen])
@@ -109,7 +109,9 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser, hasBan
               </a>
             </Link>
           ))}
-          {isLoggedIn
+          {isLoadingUser
+            ? null
+            : isLoggedIn
               ? (
                 <Button 
                   onClick={logout}
