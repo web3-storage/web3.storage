@@ -19,6 +19,7 @@ cli.command('token')
 cli.command('put <path>')
   .describe('Upload a file or directory to web3.storage')
   .option('--no-wrap', 'Dont wrap input files with a directory')
+  .option('-n, --name', 'Name to identify the upload')
   .option('--no-retry', 'Dont try the upload again if it fails')
   .action(put)
 
