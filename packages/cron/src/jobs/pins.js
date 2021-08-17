@@ -8,7 +8,7 @@ const log = debug('pins:updatePinStatuses')
 
 const FIND_PENDING_PINS = gql`
   query FindPinsByStatus($statuses: [PinStatus!]!, $after: String) {
-    findPinsByStatus(statuses: $statuses, _size: 2000, _cursor: $after) {
+    findPinsByStatus(statuses: $statuses, _size: 1000, _cursor: $after) {
       data {
         _id
         content {
