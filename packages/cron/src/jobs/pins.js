@@ -88,9 +88,9 @@ export async function updatePinStatuses (status, { cluster, db, ipfs }) {
   let i = 0
   while (true) {
     queryRes = await retry(() => db.query(FIND_PENDING_PINS, { status, from, after }))
-    log(`📥 Processing ${i} -> ${i + queryRes.findPinsByStatus.data.length}`)
+    log(`📥 Processing ${i} -> ${i + queryRes.findPinsByStatusAndCreated.data.length}`)
     const checkDagSizePins = []
-    const pinUpdates = await Promise.all(queryRes.findPinsByStatus.data.map(async pin => {
+    const pinUpdates = await Promise.all(queryRes.findPinsByStatusAndCreated.data.map(async pin => {
       const peerMap = await getPinStatus(pin.content.cid)
 
       if (!peerMap[pin.location.peerId]) {
@@ -132,9 +132,9 @@ export async function updatePinStatuses (status, { cluster, db, ipfs }) {
       }
     }))
 
-    after = queryRes.findPinsByStatus.after
+    after = queryRes.findPinsByStatusAndCreated.after
     if (!after) break
-    i += queryRes.findPinsByStatus.data.length
+    i += queryRes.findPinsByStatusAndCreated.data.length
   }
   log('🎉 Done')
 }
