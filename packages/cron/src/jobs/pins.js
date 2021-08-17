@@ -7,8 +7,8 @@ import { piggyback } from 'piggybacker'
 const log = debug('pins:updatePinStatuses')
 
 const FIND_PENDING_PINS = gql`
-  query FindPinsByStatus($status: PinStatus!, $after: String) {
-    findPinsByStatus(status: $status, _size: 100, _cursor: $after) {
+  query FindPinsByStatusAndCreated($status: PinStatus!, $from: Time! $after: String) {
+    findPinsByStatusAndCreated(status: $status, from: $from, _size: 1000, _cursor: $after) {
       data {
         _id
         content {
@@ -82,10 +82,12 @@ export async function updatePinStatuses (status, { cluster, db, ipfs }) {
     cid => cid
   )
 
+  // Only consider pins created in the last month, anything older needs special attention.
+  const from = new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString()
   let queryRes, after
   let i = 0
   while (true) {
-    queryRes = await retry(() => db.query(FIND_PENDING_PINS, { status, after }))
+    queryRes = await retry(() => db.query(FIND_PENDING_PINS, { status, from, after }))
     log(`📥 Processing ${i} -> ${i + queryRes.findPinsByStatus.data.length}`)
     const checkDagSizePins = []
     const pinUpdates = await Promise.all(queryRes.findPinsByStatus.data.map(async pin => {

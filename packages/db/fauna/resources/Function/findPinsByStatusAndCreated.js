@@ -15,24 +15,29 @@ const {
   Map,
   Get,
   Equals,
-  Let
+  Let,
+  Range
 } = fauna
 
-const name = 'findPinsByStatus'
+const name = 'findPinsByStatusAndCreated'
 const body = Query(
   Lambda(
-    ['status', 'size', 'after', 'before'],
+    ['status', 'from', 'to', 'size', 'after', 'before'],
     Let(
       {
-        match: Match(Index('pin_by_status_sort_by_created_asc'), Var('status')),
+        range: Range(
+          Match(Index('pin_by_status_sort_by_created_asc'), Var('status')),
+          Var('from'),
+          Var('to')
+        ),
         page: If(
           Equals(Var('before'), null),
           If(
             Equals(Var('after'), null),
-            Paginate(Var('match'), { size: Var('size') }),
-            Paginate(Var('match'), { size: Var('size'), after: Var('after') })
+            Paginate(Var('range'), { size: Var('size') }),
+            Paginate(Var('range'), { size: Var('size'), after: Var('after') })
           ),
-          Paginate(Var('match'), { size: Var('size'), before: Var('before') })
+          Paginate(Var('range'), { size: Var('size'), before: Var('before') })
         )
       },
       Map(Var('page'), Lambda(['created', 'ref'], Get(Var('ref'))))

@@ -397,6 +397,7 @@ type Query {
   """
   verifyAuthToken(issuer: String!, secret: String!): AuthToken @resolver
   findPinsByStatus(status: PinStatus!): [Pin!]! @resolver(paginated: true)
+  findPinsByStatusAndCreated(status: PinStatus!, from: Time!, to: Time): [Pin!]! @resolver(paginated: true)
   findAllPinRequests: [PinRequest!]! @resolver(paginated: true)
   findUsersByCreated(from: Time!, to: Time): [User!]! @resolver(paginated: true)
   countUsers(from: Time!, to: Time): [Long]! @resolver(paginated: true)
