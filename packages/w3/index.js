@@ -140,6 +140,7 @@ export async function list (opts = {}) {
  * @param {string} [opts.token]
  * @param {string} [opts.wrap] wrap with directory
  * @param {string} [opts.name] upload name
+ * @param {boolean} [opts.hidden] include paths that start with .
  * @param {boolean|number} [opts.retry] set maxRetries for client.put
  * @param {string[]} opts._ additonal paths to add
  */
@@ -157,11 +158,12 @@ export async function put (path, opts) {
 
   const spinner = ora('Packing files').start()
   const paths = [path, ...opts._]
+  const hidden = !!opts.hidden
   const files = []
   let totalSize = 0
   let totalSent = 0
   for (const p of paths) {
-    for await (const file of filesFromPath(p)) {
+    for await (const file of filesFromPath(p, { hidden })) {
       totalSize += file.size
       files.push(file)
       spinner.text = `Packing ${files.length} file${files.length === 1 ? '' : 's'} (${filesize(totalSize)})`
