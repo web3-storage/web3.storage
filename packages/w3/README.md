@@ -24,14 +24,31 @@ $ w3 token
 
 Upload files to web3.storage. The IPFS Content ID (CID) for your files is calculated on your machine, and sent up along with your files. web3.storage makes your content available on the IPFS network
 
-- `--no-wrap` Dont wrap input files with a directory.
+- `--no-wrap` Don't wrap input files with a directory
+- `-n, --name` Name to identify the upload
+- `-H, --hidden` Include paths that start with "."
+- `--no-retry` Don't try the upload again if it fails
 
 ### `w3 get <cid>`
 
 Fetch files by CID. They are verified on your machine to ensure you got the eact bytes for the given CID.
 
-- `--output` The path to write the files to.
+- `-o, --output` The path to write the files to
+
+### `w3 list`
+
+List all the uploads in your account.
+
+- `--json` Format as newline delimted JSON
+- `--cid` Only print the root CID per upload
+
+### `w3 status <cid>`
+
+Get the Filecoin deals and IPFS pins that contain a given CID, as JSON.
 
 ### `w3 token`
 
-Paste in a token to save a new one. Pass in `--delete` to remove an previously saved token.
+Paste in a token to save a new one. Pass in `--delete` to remove a previously saved token.
+
+- `--api` URL for the Web3 Storage API. Default: https://api.web3.storage
+- `--delete` Delete a previously saved token
