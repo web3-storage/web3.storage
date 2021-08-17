@@ -44,7 +44,7 @@ const UPDATE_CONTENT_DAG_SIZE = gql`
 `
 
 /**
- * @param {import('@web3-storage/api/src/utils/pin.js').PinStatus} statuses Update pins with these statuses.
+ * @param {import('@web3-storage/api/src/utils/pin.js').PinStatus[]} statuses Update pins with these statuses.
  * @param {{
  *   cluster: import('@nftstorage/ipfs-cluster').Cluster
  *   db: import('@web3-storage/db').DBClient
