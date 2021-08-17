@@ -4,6 +4,7 @@ import enquirer from 'enquirer'
 import Conf from 'conf'
 import ora from 'ora'
 import fs from 'fs'
+import { CarIndexedReader } from '@ipld/car'
 
 const API = 'https://api.web3.storage'
 
