@@ -99,6 +99,11 @@
   letter-spacing: 0.02em;
 }
 
+.typography-logo {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1rem;
+}
+
 @screen md {
   .typography-hero-title {
     font-size: 3.6rem;
