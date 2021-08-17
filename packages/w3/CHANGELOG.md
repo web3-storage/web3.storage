@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.0](https://www.github.com/web3-storage/web3.storage/compare/w3-v2.2.0...w3-v2.3.0) (2021-08-17)
+
+
+### Features
+
+* add --name and --hidden flags to w3 put ([#356](https://www.github.com/web3-storage/web3.storage/issues/356)) ([c2e4de3](https://www.github.com/web3-storage/web3.storage/commit/c2e4de33cb17b93e8551c7230fa2f4b8d3bd8cce)), closes [#316](https://www.github.com/web3-storage/web3.storage/issues/316)
+
 ## [2.2.0](https://www.github.com/web3-storage/web3.storage/compare/w3-v2.1.0...w3-v2.2.0) (2021-08-11)
 
 
