@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import sade from 'sade'
-import { get, list, put, status, token, getPkg } from './index.js'
+import { get, list, put, putCar, status, token, getPkg } from './index.js'
 
 const cli = sade('w3')
 
@@ -23,6 +23,12 @@ cli.command('put <path>')
   .option('-H, --hidden', 'Include paths that start with "."')
   .option('--no-retry', 'Dont try the upload again if it fails')
   .action(put)
+
+cli.command("put-car <path>")
+  .describe("Upload a car file to web3.storage")
+  .option("-n, --name", "Name to identify the upload")
+  .option("--no-retry", "Dont try the upload again if it fails")
+  .action(putCar);
 
 cli.command('list')
   .describe('List all the uploads in your account')

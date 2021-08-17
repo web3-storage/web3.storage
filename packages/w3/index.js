@@ -19,7 +19,7 @@ const config = new Conf({
  * @param {string} [opts.token]
  * @param {boolean} [opts.json]
  */
-function getClient ({
+function getClient({
   api = config.get('api') || API,
   token = config.get('token'),
   json = false
@@ -42,7 +42,7 @@ function getClient ({
  * @param {string} [opts.api]
  * @param {string} [opts.token]
  */
-export async function token ({ delete: del, token, api = API }) {
+export async function token({ delete: del, token, api = API }) {
   if (del) {
     config.delete('token')
     config.delete('api')
@@ -73,7 +73,7 @@ export async function token ({ delete: del, token, api = API }) {
  * @param {string} [opts.token]
  * @param {string} [opts.output] the path to write the files to
  */
-export async function status (cid, opts) {
+export async function status(cid, opts) {
   const client = getClient(opts)
   const status = await client.status(cid)
   console.log(JSON.stringify(status, null, 2))
@@ -88,7 +88,7 @@ export async function status (cid, opts) {
  * @param {string} [opts.token]
  * @param {string} [opts.output] the path to write the files to
  */
-export async function get (cid, opts) {
+export async function get(cid, opts) {
   const client = getClient(opts)
   const res = await client.get(cid)
   await writeFiles(res.unixFsIterator(), opts.output)
@@ -103,7 +103,7 @@ export async function get (cid, opts) {
  * @param {number} [opts.size] number of results to return per page
  * @param {string} [opts.before] list items uploaded before this iso date string
  */
-export async function list (opts = {}) {
+export async function list(opts = {}) {
   const client = getClient(opts)
   let count = 0
   let bytes = 0
@@ -144,7 +144,7 @@ export async function list (opts = {}) {
  * @param {boolean|number} [opts.retry] set maxRetries for client.put
  * @param {string[]} opts._ additonal paths to add
  */
-export async function put (path, opts) {
+export async function put(path, opts) {
   const client = getClient(opts)
 
   // pass either --no-retry or --retry <number>
@@ -194,11 +194,74 @@ export async function put (path, opts) {
   console.log(`⁂ https://dweb.link/ipfs/${root}`)
 }
 
-function filesize (bytes) {
+/**
+ * Add car file to web3.storage
+ *
+ * @param {string} path the first file path to store
+ * @param {object} opts
+ * @param {string} [opts.api]
+ * @param {string} [opts.token]
+ * @param {string} [opts.name] upload name
+ * @param {boolean|number} [opts.retry] set maxRetries for client.put
+ * @param {string[]} opts._ additonal paths to add
+ */
+export async function putCar(path, opts) {
+  const client = getClient(opts)
+
+  // pass either --no-retry or --retry <number>
+  const maxRetries = Number.isInteger(Number(opts.retry))
+    ? Number(opts.retry)
+    : opts.retry === false ? 0 : undefined
+  if (maxRetries !== undefined) {
+    console.log(`⁂ maxRetries: ${maxRetries}`)
+  }
+  const name = opts.name !== undefined ? opts.name : undefined
+
+  const spinner = ora('storing').start()
+  // const paths = [path, ...opts._]
+  // const hidden = !!opts.hidden
+  // const files = []
+  // let totalSize = 0
+  // let totalSent = 0
+  // for (const p of paths) {
+  //   for await (const file of filesFromPath(p, { hidden })) {
+  //     totalSize += file.size
+  //     files.push(file)
+  //     spinner.text = `Packing ${files.length} file${files.length === 1 ? '' : 's'} (${filesize(totalSize)})`
+  //   }
+  // }
+  // let rootCid = ''
+
+  const carReader = await CarIndexedReader.fromFile(path)
+
+  const root = await client.putCar(carReader, {
+    name,
+    maxRetries,
+    // onRootCidReady: (cid) => {
+    //   rootCid = cid
+    //   spinner.stopAndPersist({ symbol: '#', text: `Packed ${files.length} file${files.length === 1 ? '' : 's'} (${filesize(totalSize)})` })
+    //   console.log(`# ${rootCid}`)
+    //   if (totalSize > 1024 * 1024 * 10) {
+    //     spinner.start('Chunking')
+    //   } else {
+    //     spinner.start('Storing')
+    //   }
+    // },
+
+    onStoredChunk: (size) => {
+      totalSent += size
+      spinner.text = `Stored ${filesize(totalSent)}`
+    }
+  })
+  spinner.stopAndPersist({ symbol: '⁂', text: `Stored ` })
+  console.log(`⁂ https://dweb.link/ipfs/${root}`)
+}
+
+function filesize(bytes) {
   const size = bytes / 1024 / 1024
   return `${size.toFixed(1)}MB`
 }
 
-export function getPkg () {
+export function getPkg() {
   return JSON.parse(fs.readFileSync(new URL('./package.json', import.meta.url)))
 }
