@@ -15,22 +15,16 @@ const {
   Map,
   Get,
   Equals,
-  Let,
-  Union
+  Let
 } = fauna
 
 const name = 'findPinsByStatus'
 const body = Query(
   Lambda(
-    ['statuses', 'size', 'after', 'before'],
+    ['status', 'size', 'after', 'before'],
     Let(
       {
-        match: Union(
-          Map(
-            Var('statuses'),
-            Lambda('status', Match(Index('pin_by_status_sort_by_created_desc'), Var('status')))
-          )
-        ),
+        match: Match(Index('pin_by_status_sort_by_created_desc'), Var('status')),
         page: If(
           Equals(Var('before'), null),
           If(

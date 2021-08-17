@@ -396,7 +396,7 @@ type Query {
   Verify the User with the passed issuer owns the AuthToken with the passed secret.
   """
   verifyAuthToken(issuer: String!, secret: String!): AuthToken @resolver
-  findPinsByStatus(statuses: [PinStatus!]!): [Pin!]! @resolver(paginated: true)
+  findPinsByStatus(status: PinStatus!): [Pin!]! @resolver(paginated: true)
   findAllPinRequests: [PinRequest!]! @resolver(paginated: true)
   findUsersByCreated(from: Time!, to: Time): [User!]! @resolver(paginated: true)
   countUsers(from: Time!, to: Time): [Long]! @resolver(paginated: true)

@@ -7,8 +7,8 @@ import { piggyback } from 'piggybacker'
 const log = debug('pins:updatePinStatuses')
 
 const FIND_PENDING_PINS = gql`
-  query FindPinsByStatus($statuses: [PinStatus!]!, $after: String) {
-    findPinsByStatus(statuses: $statuses, _size: 1000, _cursor: $after) {
+  query FindPinsByStatus($status: PinStatus!, $after: String) {
+    findPinsByStatus(status: $status, _size: 100, _cursor: $after) {
       data {
         _id
         content {
@@ -44,19 +44,19 @@ const UPDATE_CONTENT_DAG_SIZE = gql`
 `
 
 /**
- * @param {import('@web3-storage/api/src/utils/pin.js').PinStatus[]} statuses Update pins with these statuses.
+ * @param {import('@web3-storage/api/src/utils/pin.js').PinStatus} status Update pins with this status.
  * @param {{
  *   cluster: import('@nftstorage/ipfs-cluster').Cluster
  *   db: import('@web3-storage/db').DBClient
  *   ipfs: import('../lib/ipfs').IPFS
  * }} config
  */
-export async function updatePinStatuses (statuses, { cluster, db, ipfs }) {
+export async function updatePinStatuses (status, { cluster, db, ipfs }) {
   if (!log.enabled) {
     console.log('ℹ️ Enable logging by setting DEBUG=pins:updatePinStatuses')
   }
 
-  log(`ℹ️ Updating pin statuses for pins with current status: ${statuses}`)
+  log(`ℹ️ Updating pin statuses for pins with current status: ${status}`)
 
   // Cached status responses - since we pin on multiple nodes we'll often ask
   // multiple times about the same CID.
@@ -85,7 +85,7 @@ export async function updatePinStatuses (statuses, { cluster, db, ipfs }) {
   let queryRes, after
   let i = 0
   while (true) {
-    queryRes = await retry(() => db.query(FIND_PENDING_PINS, { statuses, after }))
+    queryRes = await retry(() => db.query(FIND_PENDING_PINS, { status, after }))
     log(`📥 Processing ${i} -> ${i + queryRes.findPinsByStatus.data.length}`)
     const checkDagSizePins = []
     const pinUpdates = await Promise.all(queryRes.findPinsByStatus.data.map(async pin => {
