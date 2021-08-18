@@ -367,6 +367,11 @@ enum DealStatus {
   Terminated
 }
 
+enum Sort {
+  asc
+  desc
+}
+
 type Metric {
   """
   Unique key identifying the metric.
@@ -387,7 +392,7 @@ type Query {
   Find all uploads created after a given date. Note: this INCLUDES deleted uploads.
   """
   findUploadsCreatedAfter(since: Time!): [Upload!]! @resolver(paginated: true)
-  findUploadsByUser(where: FindUploadsByUserInput!): [Upload!]! @resolver(paginated: true)
+  findUploadsByUser(where: FindUploadsByUserInput!, $sortBy: UploadsSortByInput): [Upload!]! @resolver(paginated: true)
   findContentByCid(cid: String!): Content @resolver
   findContentByCreated(from: Time!, to: Time): [Content!]! @resolver(paginated: true)
   findUserByIssuer(issuer: String!): User @resolver
@@ -462,6 +467,13 @@ input CreateOrUpdateDealInput {
 input FindUploadsByUserInput {
   user: ID!
   createdBefore: Time!
+}
+
+input UploadsSortByInput {
+  date: Sort
+  name: Sort
+  pinStatus: Sort
+  size: Sort
 }
 
 input CreateOrUpdateUserInput {
