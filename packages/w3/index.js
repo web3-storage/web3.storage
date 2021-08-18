@@ -218,43 +218,25 @@ export async function putCar(path, opts) {
   }
   const name = opts.name !== undefined ? opts.name : undefined
 
+
+  let totalSent = 0
+  let totalSize = 0
+  const stats = fs.statSync(path)
+  totalSize = stats.size
   const spinner = ora('storing').start()
-  // const paths = [path, ...opts._]
-  // const hidden = !!opts.hidden
-  // const files = []
-  // let totalSize = 0
-  // let totalSent = 0
-  // for (const p of paths) {
-  //   for await (const file of filesFromPath(p, { hidden })) {
-  //     totalSize += file.size
-  //     files.push(file)
-  //     spinner.text = `Packing ${files.length} file${files.length === 1 ? '' : 's'} (${filesize(totalSize)})`
-  //   }
-  // }
-  // let rootCid = ''
 
   const carReader = await CarIndexedReader.fromFile(path)
 
   const root = await client.putCar(carReader, {
     name,
     maxRetries,
-    // onRootCidReady: (cid) => {
-    //   rootCid = cid
-    //   spinner.stopAndPersist({ symbol: '#', text: `Packed ${files.length} file${files.length === 1 ? '' : 's'} (${filesize(totalSize)})` })
-    //   console.log(`# ${rootCid}`)
-    //   if (totalSize > 1024 * 1024 * 10) {
-    //     spinner.start('Chunking')
-    //   } else {
-    //     spinner.start('Storing')
-    //   }
-    // },
 
     onStoredChunk: (size) => {
       totalSent += size
-      spinner.text = `Stored ${filesize(totalSent)}`
+      spinner.text = `Storing ${Math.round((totalSent / totalSize) * 100)}%`
     }
   })
-  spinner.stopAndPersist({ symbol: '⁂', text: `Stored ` })
+  spinner.stopAndPersist({ symbol: '⁂', text: `Stored ${filesize(totalSize)}` })
   console.log(`⁂ https://dweb.link/ipfs/${root}`)
 }
 

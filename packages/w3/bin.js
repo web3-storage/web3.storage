@@ -28,7 +28,7 @@ cli.command("put-car <path>")
   .describe("Upload a car file to web3.storage")
   .option("-n, --name", "Name to identify the upload")
   .option("--no-retry", "Dont try the upload again if it fails")
-  .action(putCar);
+  .action(putCar)
 
 cli.command('list')
   .describe('List all the uploads in your account')
