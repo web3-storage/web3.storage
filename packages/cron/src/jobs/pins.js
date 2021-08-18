@@ -8,7 +8,7 @@ const log = debug('pins:updatePinStatuses')
 
 const FIND_PENDING_PINS = gql`
   query FindPinsByStatusAndCreated($status: PinStatus!, $from: Time! $after: String) {
-    findPinsByStatusAndCreated(status: $status, from: $from, _size: 1000, _cursor: $after) {
+    findPinsByStatusAndCreated(status: $status, from: $from, _size: 500, _cursor: $after) {
       data {
         _id
         content {
@@ -82,8 +82,8 @@ export async function updatePinStatuses (status, { cluster, db, ipfs }) {
     cid => cid
   )
 
-  // Only consider pins created in the last month, anything older needs special attention.
-  const from = new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString()
+  // Only consider pins created in the last 2 weeks, anything older needs special attention.
+  const from = new Date(new Date().setDate(new Date().getDate() - 14)).toISOString()
   let queryRes, after
   let i = 0
   while (true) {
