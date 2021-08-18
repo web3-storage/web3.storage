@@ -24,7 +24,8 @@ const {
   Not,
   Do,
   Call,
-  Foreach
+  Foreach,
+  Equals
 } = fauna
 
 const name = 'createUpload'
@@ -80,12 +81,26 @@ const body = Query(
                     Foreach(
                       Select('pins', Var('data')),
                       Lambda(
-                        ['pin'],
-                        Call('createOrUpdatePin', {
-                          content: Select(['ref', 'id'], Var('content')),
-                          status: Select('status', Var('pin')),
-                          location: Select('location', Var('pin'))
-                        })
+                        ['pinData'],
+                        Let(
+                          {
+                            pin: Call('createOrUpdatePin', {
+                              content: Select(['ref', 'id'], Var('content')),
+                              status: Select('status', Var('pinData')),
+                              location: Select('location', Var('pinData'))
+                            })
+                          },
+                          If(
+                            Not(Equals(Select('status', Var('pinData')), 'Pinned')),
+                            Create('PinSyncRequest', {
+                              data: {
+                                pin: Select('ref', Var('pin')),
+                                created: Now()
+                              }
+                            }),
+                            null
+                          )
+                        )
                       )
                     ),
                     Var('upload')
@@ -126,12 +141,26 @@ const body = Query(
                 Foreach(
                   Select('pins', Var('data')),
                   Lambda(
-                    ['pin'],
-                    Call('createOrUpdatePin', {
-                      content: Select(['ref', 'id'], Var('content')),
-                      status: Select('status', Var('pin')),
-                      location: Select('location', Var('pin'))
-                    })
+                    ['pinData'],
+                    Let(
+                      {
+                        pin: Call('createOrUpdatePin', {
+                          content: Select(['ref', 'id'], Var('content')),
+                          status: Select('status', Var('pinData')),
+                          location: Select('location', Var('pinData'))
+                        })
+                      },
+                      If(
+                        Not(Equals(Select('status', Var('pinData')), 'Pinned')),
+                        Create('PinSyncRequest', {
+                          data: {
+                            pin: Select('ref', Var('pin')),
+                            created: Now()
+                          }
+                        }),
+                        null
+                      )
+                    )
                   )
                 ),
                 Var('upload')

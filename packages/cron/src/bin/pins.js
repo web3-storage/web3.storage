@@ -13,9 +13,8 @@ async function main () {
   const cluster = getCluster(process.env)
   const ipfs = getClusterIPFSProxy(process.env)
   const db = getDBClient(process.env)
-  const status = process.argv[2] || 'Unpinned'
 
-  await updatePinStatuses(status, { env, db, cluster, ipfs })
+  await updatePinStatuses({ env, db, cluster, ipfs })
 }
 
 dotenv.config()
