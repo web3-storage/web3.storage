@@ -201,6 +201,21 @@ type PinRequest {
 }
 
 """
+A request to keep a Pin in sync with the nodes that are pinning it.
+"""
+type PinSyncRequest {
+  """
+  The pin to keep in sync.
+  """
+  pin: Pin! @relation
+
+  """
+  When the PinSyncRequest was created.
+  """
+  created: Time!
+}
+
+"""
 An upload created by a user.
 """
 type Upload {
@@ -408,6 +423,7 @@ type Query {
   sumContentDagSize(from: Time!, to: Time): [Long]! @resolver(paginated: true)
   sumPinDagSize(from: Time!, to: Time): [Long]! @resolver(paginated: true)
   findMetricByKey(key: String!): Metric @resolver
+  findPinSyncRequests: [PinSyncRequest!]! @resolver(paginated: true)
 }
 
 type Mutation {
@@ -433,6 +449,8 @@ type Mutation {
   incrementUserUsedStorage(user: ID!, amount: Long!): User! @resolver
   createOrUpdateMetric(data: CreateOrUpdateMetricInput!): Metric! @resolver
   updatePins(pins: [UpdatePinInput!]!): [Pin!]! @resolver
+  createPinSyncRequests(pins: [ID!]!): [PinSyncRequest!]! @resolver
+  deletePinSyncRequests(requests: [ID!]!): [PinSyncRequest!]! @resolver
 }
 
 input CreateAggregateInput {
