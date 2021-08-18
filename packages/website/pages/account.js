@@ -56,10 +56,10 @@ const StorageInfo = ({ isLoggedIn }) => {
   return <div>
     <When condition={ isLoaded }>
       <div className="text-2xl font-medium">
-        Storage Capacity: <span className="font-normal ml-2">{ fileSize(storageData.usedStorage) } / { fileSize(MAX_STORAGE) }</span>
+        Storage:<span className="font-normal ml-2">{ fileSize(storageData.usedStorage) } of { fileSize(MAX_STORAGE) } used</span>
       </div>
       <div className="h-9 border-2 border-w3storage-red mt-4 bg-white" style={{ maxWidth: '24rem'}}>
-        <div className="h-full bg-w3storage-red max-w-full grow-width" style={{ 
+        <div className="h-full bg-w3storage-red max-w-full grow-width" style={{
           width: `${percentage}%`,
         }}/>
       </div>
