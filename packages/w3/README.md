@@ -29,6 +29,13 @@ Upload files to web3.storage. The IPFS Content ID (CID) for your files is calcul
 - `-H, --hidden` Include paths that start with "."
 - `--no-retry` Don't try the upload again if it fails
 
+### `w3 put-car <path>`
+
+Upload a [CAR](https://ipld.io/specs/transport/car/carv1/) file to web3.storage.
+
+- `-n, --name` Name to identify the upload
+- `--no-retry` Don't try the upload again if it fails
+
 ### `w3 get <cid>`
 
 Fetch files by CID. They are verified on your machine to ensure you got the eact bytes for the given CID.
