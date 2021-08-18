@@ -2,7 +2,7 @@ name: Cron Pins
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '*/30 * * * *'
 
 jobs:
   update:
@@ -12,7 +12,7 @@ jobs:
       matrix:
         env: ['staging', 'production']
         status: ['Unpinned', 'PinQueued', 'Pinning']
-    concurrency: cron-pins # ensure only one of these runs at a time
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v2
 
