@@ -23,6 +23,7 @@
   },
   "homepage": "https://web3.storage",
   "dependencies": {
+    "@ipld/car": "^3.1.16",
     "conf": "^10.0.1",
     "enquirer": "^2.3.6",
     "ipfs-car": "^0.5.3",
