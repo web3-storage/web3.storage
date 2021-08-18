@@ -12,7 +12,7 @@ jobs:
       matrix:
         env: ['staging', 'production']
         status: ['Unpinned', 'PinQueued', 'Pinning']
-    timeout-minutes: 10
+    concurrency: cron-pins # ensure only one of these runs at a time
     steps:
       - uses: actions/checkout@v2
 
