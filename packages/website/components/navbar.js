@@ -39,7 +39,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
             onClick={onLinkClick}
           >
             <img src="/w3storage-logo.svg" style={{ height: '1.8rem' }} />
-            <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-md hidden xl:inline-block">Web3.Storage</span>
+            <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-base hidden xl:inline-block">Web3.Storage</span>
           </a>
         </Link>
         <div className="flex items-center" style={{ minHeight: 52 }}>
