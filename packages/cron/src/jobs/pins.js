@@ -7,20 +7,23 @@ import { piggyback } from 'piggybacker'
 const log = debug('pins:updatePinStatuses')
 
 const FIND_PENDING_PINS = gql`
-  query FindPinsByStatusAndCreated($status: PinStatus!, $from: Time! $after: String) {
-    findPinsByStatusAndCreated(status: $status, from: $from, _size: 500, _cursor: $after) {
+  query FindPinSyncRequest($status: PinStatus!, $from: Time! $after: String) {
+    findPinSyncRequests(_size: 500, _cursor: $after) {
       data {
         _id
-        content {
+        pin {
           _id
-          cid
-          dagSize
+          content {
+            _id
+            cid
+            dagSize
+          }
+          location {
+            peerId
+          }
+          status
+          created
         }
-        location {
-          peerId
-        }
-        status
-        created
       }
       after
     }
@@ -43,20 +46,28 @@ const UPDATE_CONTENT_DAG_SIZE = gql`
   }
 `
 
+const DELETE_PIN_SYNC_REQUESTS = gql`
+`
+
+const CREATE_PIN_SYNC_REQUESTS = gql`
+  mutation UpdatePins($pins: [UpdatePinInput!]!) {
+    updatePins(pins: $pins) {
+      _id
+    }
+  }
+`
+
 /**
- * @param {import('@web3-storage/api/src/utils/pin.js').PinStatus} status Update pins with this status.
  * @param {{
  *   cluster: import('@nftstorage/ipfs-cluster').Cluster
  *   db: import('@web3-storage/db').DBClient
  *   ipfs: import('../lib/ipfs').IPFS
  * }} config
  */
-export async function updatePinStatuses (status, { cluster, db, ipfs }) {
+export async function updatePinStatuses ({ cluster, db, ipfs }) {
   if (!log.enabled) {
     console.log('ℹ️ Enable logging by setting DEBUG=pins:updatePinStatuses')
   }
-
-  log(`ℹ️ Updating pin statuses for pins with current status: ${status}`)
 
   // Cached status responses - since we pin on multiple nodes we'll often ask
   // multiple times about the same CID.
@@ -82,15 +93,14 @@ export async function updatePinStatuses (status, { cluster, db, ipfs }) {
     cid => cid
   )
 
-  // Only consider pins created in the last 2 weeks, anything older needs special attention.
-  const from = new Date(new Date().setDate(new Date().getDate() - 14)).toISOString()
   let queryRes, after
   let i = 0
   while (true) {
-    queryRes = await retry(() => db.query(FIND_PENDING_PINS, { status, from, after }), { onFailedAttempt: log })
-    log(`📥 Processing ${i} -> ${i + queryRes.findPinsByStatusAndCreated.data.length}`)
+    queryRes = await retry(() => db.query(FIND_PENDING_PINS, { after }), { onFailedAttempt: log })
+    log(`📥 Processing ${i} -> ${i + queryRes.findPinSyncRequests.data.length}`)
     const checkDagSizePins = []
-    const pinUpdates = await Promise.all(queryRes.findPinsByStatusAndCreated.data.map(async pin => {
+    const reSyncPins = []
+    const pinUpdates = await Promise.all(queryRes.findPinSyncRequests.data.map(async pin => {
       const peerMap = await getPinStatus(pin.content.cid)
 
       if (!peerMap[pin.location.peerId]) {
@@ -100,12 +110,17 @@ export async function updatePinStatuses (status, { cluster, db, ipfs }) {
       const status = toPinStatusEnum(peerMap[pin.location.peerId].status)
       if (status === pin.status) {
         log(`🙅 ${pin.content.cid}@${pin.location.peerId}: No status change (${status})`)
+        reSyncPins.push(pin)
         return null
       }
 
       if (status === 'Pinned' && !pin.content.dagSize && !updatedDagSizes.has(pin.content.cid)) {
         checkDagSizePins.push(pin)
         updatedDagSizes.add(pin.content.cid)
+      }
+
+      if (status !== 'Pinned') {
+        reSyncPins.push(pin)
       }
 
       log(`📌 ${pin.content.cid}@${pin.location.peerId}: ${pin.status} => ${status}`)
@@ -116,7 +131,13 @@ export async function updatePinStatuses (status, { cluster, db, ipfs }) {
     await retry(() => db.query(UPDATE_PINS, {
       pins: pinUpdates.filter(Boolean)
     }), { onFailedAttempt: log })
-    log('✅ Done')
+    log(`✅ Updated ${pinUpdates.filter(Boolean).length} pins...`)
+
+    log(`⏳ Removing ${queryRes.findPinSyncRequests.data.length} pin sync requests...`)
+    await retry(() => db.query(DELETE_PIN_SYNC_REQUESTS, {
+      requests: queryRes.findPinSyncRequests.data.map(p => p._id)
+    }), { onFailedAttempt: log })
+    log(`✅ Updated ${pinUpdates.filter(Boolean).length} pins...`)
 
     await Promise.all(checkDagSizePins.map(async pin => {
       log(`⏳ ${pin.content.cid}: Querying DAG size...`)

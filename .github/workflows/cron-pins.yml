@@ -11,7 +11,6 @@ jobs:
     strategy:
       matrix:
         env: ['staging', 'production']
-        status: ['Unpinned', 'PinQueued', 'Pinning']
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v2
@@ -34,4 +33,4 @@ jobs:
           CLUSTER_BASIC_AUTH_TOKEN: ${{ secrets.CLUSTER_BASIC_AUTH_TOKEN }}
           CLUSTER_IPFS_PROXY_API_URL: ${{ secrets.CLUSTER_IPFS_PROXY_API_URL }}
           CLUSTER_IPFS_PROXY_BASIC_AUTH_TOKEN: ${{ secrets.CLUSTER_IPFS_PROXY_BASIC_AUTH_TOKEN }}
-        run: npm run start:pins -w packages/cron -- ${{ matrix.status }}
+        run: npm run start:pins -w packages/cron

@@ -21,7 +21,7 @@ const body = Query(
     ['requests'],
     Map(
       Var('requests'),
-      Lambda(['id'], Update(Ref(Collection('PinSyncRequest'), Var('id'))), { ttl: Now() })
+      Lambda(['id'], Update(Ref(Collection('PinSyncRequest'), Var('id')), { ttl: Now() }))
     )
   )
 )
