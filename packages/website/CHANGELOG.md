@@ -1,5 +1,14 @@
 # Changelog
 
+### [1.2.5](https://www.github.com/web3-storage/web3.storage/compare/website-v1.2.4...website-v1.2.5) (2021-08-18)
+
+
+### Bug Fixes
+
+* logo text style ([e3b64b1](https://www.github.com/web3-storage/web3.storage/commit/e3b64b143bfc5dff00bf9348484aefae4deb17ac))
+* logo text style ([47f190d](https://www.github.com/web3-storage/web3.storage/commit/47f190d0213a92a85916ea2a10443803b7cc5148))
+* remove double spinners for the account page ([#354](https://www.github.com/web3-storage/web3.storage/issues/354)) ([de966e2](https://www.github.com/web3-storage/web3.storage/commit/de966e265df4354e89675178a3a7fd42a7e14a1a))
+
 ### [1.2.4](https://www.github.com/web3-storage/web3.storage/compare/website-v1.2.3...website-v1.2.4) (2021-08-16)
 
 
