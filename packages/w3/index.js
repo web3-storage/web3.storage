@@ -20,7 +20,7 @@ const config = new Conf({
  * @param {string} [opts.token]
  * @param {boolean} [opts.json]
  */
-function getClient({
+function getClient ({
   api = config.get('api') || API,
   token = config.get('token'),
   json = false
@@ -43,7 +43,7 @@ function getClient({
  * @param {string} [opts.api]
  * @param {string} [opts.token]
  */
-export async function token({ delete: del, token, api = API }) {
+export async function token ({ delete: del, token, api = API }) {
   if (del) {
     config.delete('token')
     config.delete('api')
@@ -74,7 +74,7 @@ export async function token({ delete: del, token, api = API }) {
  * @param {string} [opts.token]
  * @param {string} [opts.output] the path to write the files to
  */
-export async function status(cid, opts) {
+export async function status (cid, opts) {
   const client = getClient(opts)
   const status = await client.status(cid)
   console.log(JSON.stringify(status, null, 2))
@@ -89,7 +89,7 @@ export async function status(cid, opts) {
  * @param {string} [opts.token]
  * @param {string} [opts.output] the path to write the files to
  */
-export async function get(cid, opts) {
+export async function get (cid, opts) {
   const client = getClient(opts)
   const res = await client.get(cid)
   await writeFiles(res.unixFsIterator(), opts.output)
@@ -104,7 +104,7 @@ export async function get(cid, opts) {
  * @param {number} [opts.size] number of results to return per page
  * @param {string} [opts.before] list items uploaded before this iso date string
  */
-export async function list(opts = {}) {
+export async function list (opts = {}) {
   const client = getClient(opts)
   let count = 0
   let bytes = 0
@@ -145,7 +145,7 @@ export async function list(opts = {}) {
  * @param {boolean|number} [opts.retry] set maxRetries for client.put
  * @param {string[]} opts._ additonal paths to add
  */
-export async function put(path, opts) {
+export async function put (path, opts) {
   const client = getClient(opts)
 
   // pass either --no-retry or --retry <number>
@@ -205,7 +205,7 @@ export async function put(path, opts) {
  * @param {string} [opts.name] upload name
  * @param {boolean|number} [opts.retry] set maxRetries for client.putCar
  */
-export async function putCar(path, opts) {
+export async function putCar (path, opts) {
   const client = getClient(opts)
 
   // pass either --no-retry or --retry <number>
@@ -216,7 +216,6 @@ export async function putCar(path, opts) {
     console.log(`⁂ maxRetries: ${maxRetries}`)
   }
   const name = opts.name !== undefined ? opts.name : undefined
-
 
   let totalSent = 0
   let totalSize = 0
@@ -239,11 +238,11 @@ export async function putCar(path, opts) {
   console.log(`⁂ https://dweb.link/ipfs/${root}`)
 }
 
-function filesize(bytes) {
+function filesize (bytes) {
   const size = bytes / 1024 / 1024
   return `${size.toFixed(1)}MB`
 }
 
-export function getPkg() {
+export function getPkg () {
   return JSON.parse(fs.readFileSync(new URL('./package.json', import.meta.url)))
 }
