@@ -12,7 +12,7 @@ const {
   Map,
   Collection,
   Ref,
-  Now
+  Delete
 } = fauna
 
 const name = 'deletePinSyncRequests'
@@ -21,7 +21,7 @@ const body = Query(
     ['requests'],
     Map(
       Var('requests'),
-      Lambda(['id'], Update(Ref(Collection('PinSyncRequest'), Var('id')), { ttl: Now() }))
+      Lambda(['id'], Delete(Ref(Collection('PinSyncRequest'), Var('id'))))
     )
   )
 )
