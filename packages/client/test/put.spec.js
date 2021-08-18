@@ -6,6 +6,9 @@ import { File } from '../src/platform.js'
 import { pack } from 'ipfs-car/pack'
 import { CarReader, CarWriter } from '@ipld/car'
 import { CID } from 'multiformats/cid'
+import { encode } from 'multiformats/block'
+import * as json from '@ipld/dag-json'
+import { sha256 } from 'multiformats/hashes/sha2'
 
 describe('put', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
@@ -144,6 +147,23 @@ describe('putCar', () => {
     } catch (err) {
       assert.match(err.message, /too many roots/)
     }
+  })
+
+  it('put CAR with non-default decoder', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const block = await encode({ value: { hello: 'world' }, codec: json, hasher: sha256 })
+    const { writer, out } = CarWriter.create([block.cid])
+    writer.put(block)
+    writer.close()
+    const reader = await CarReader.fromIterable(out)
+    const cid = await client.putCar(reader, {
+      name: 'putCar test',
+      onRootCidReady: cid => {
+        assert.equal(cid, block.cid.toString(), 'returned cid matches the CAR')
+      },
+      decoders: [json]
+    })
+    assert.equal(cid, block.cid.toString(), 'returned cid matches the CAR')
   })
 })
 

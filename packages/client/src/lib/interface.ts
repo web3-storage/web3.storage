@@ -2,6 +2,7 @@ import type { UnixFSEntry } from 'ipfs-car/unpack'
 import type { CID } from 'multiformats'
 export type { CID, UnixFSEntry }
 import type { CarReader } from '@ipld/car/api'
+import type { BlockDecoder } from 'multiformats/codecs/interface'
 
 /**
  * Define nominal type of U based on type of T. Similar to Opaque types in Flow
@@ -137,6 +138,13 @@ export type PutCarOptions = {
    * Maximum times to retry a failed upload. Default: 5
    */
    maxRetries?: number
+   /**
+    * Additional IPLD block decoders. Used to interpret the data in the CAR file
+    * and split it into multiple chunks. Note these are only required if the CAR
+    * file was not encoded using the default encoders: `dag-pb`, `dag-cbor` and
+    * `raw`.
+    */
+   decoders?: BlockDecoder<any, any>[]
 }
 
 export interface Web3File extends File {
