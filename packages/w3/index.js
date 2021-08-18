@@ -196,15 +196,14 @@ export async function put(path, opts) {
 }
 
 /**
- * Add car file to web3.storage
+ * Add CAR file to web3.storage
  *
  * @param {string} path the first file path to store
  * @param {object} opts
  * @param {string} [opts.api]
  * @param {string} [opts.token]
  * @param {string} [opts.name] upload name
- * @param {boolean|number} [opts.retry] set maxRetries for client.put
- * @param {string[]} opts._ additonal paths to add
+ * @param {boolean|number} [opts.retry] set maxRetries for client.putCar
  */
 export async function putCar(path, opts) {
   const client = getClient(opts)
