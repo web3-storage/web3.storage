@@ -7,8 +7,8 @@ import { piggyback } from 'piggybacker'
 const log = debug('pins:updatePinStatuses')
 
 const FIND_PIN_SYNC_REQUESTS = gql`
-  query FindPinSyncRequests($status: PinStatus!, $from: Time! $after: String) {
-    findPinSyncRequests(_size: 500, _cursor: $after) {
+  query FindPinSyncRequests($to: Time, $after: String) {
+    findPinSyncRequests(to: $to, _size: 1000, _cursor: $after) {
       data {
         _id
         pin {
@@ -98,10 +98,11 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
     cid => cid
   )
 
+  const to = new Date().toISOString()
   let queryRes, after
   let i = 0
   while (true) {
-    queryRes = await retry(() => db.query(FIND_PIN_SYNC_REQUESTS, { after }), { onFailedAttempt: log })
+    queryRes = await retry(() => db.query(FIND_PIN_SYNC_REQUESTS, { to, after }), { onFailedAttempt: log })
     const requests = queryRes.findPinSyncRequests.data
     log(`📥 Processing ${i} -> ${i + requests.length}`)
 
@@ -116,19 +117,19 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
       }
 
       const status = toPinStatusEnum(peerMap[pin.location.peerId].status)
+
+      if (status !== 'Pinned' && status !== 'Remote') {
+        reSyncPins.push(pin)
+      }
+
       if (status === pin.status) {
         log(`🙅 ${pin.content.cid}@${pin.location.peerId}: No status change (${status})`)
-        reSyncPins.push(pin)
         return null
       }
 
       if (status === 'Pinned' && !pin.content.dagSize && !updatedDagSizes.has(pin.content.cid)) {
         checkDagSizePins.push(pin)
         updatedDagSizes.add(pin.content.cid)
-      }
-
-      if (status !== 'Pinned') {
-        reSyncPins.push(pin)
       }
 
       log(`📌 ${pin.content.cid}@${pin.location.peerId}: ${pin.status} => ${status}`)
@@ -144,14 +145,6 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
     }
     log(`✅ Updated ${pinUpdates.filter(Boolean).length} pins...`)
 
-    log(`⏳ Removing ${requests.length} pin sync requests...`)
-    if (requests.length) {
-      await retry(() => db.query(DELETE_PIN_SYNC_REQUESTS, {
-        requests: requests.map(r => r._id)
-      }), { onFailedAttempt: log })
-    }
-    log(`✅ Removed ${requests.length} pin sync requests...`)
-
     log(`⏳ Re-queuing ${reSyncPins.length} pin sync requests...`)
     if (reSyncPins.length) {
       await retry(() => db.query(CREATE_PIN_SYNC_REQUESTS, {
@@ -159,6 +152,14 @@ export async function updatePinStatuses ({ cluster, db, ipfs }) {
       }), { onFailedAttempt: log })
     }
     log(`✅ Re-queued ${reSyncPins.length} pin sync requests...`)
+
+    log(`⏳ Removing ${requests.length} pin sync requests...`)
+    if (requests.length) {
+      await retry(() => db.query(DELETE_PIN_SYNC_REQUESTS, {
+        requests: requests.map(r => r._id)
+      }), { onFailedAttempt: log })
+    }
+    log(`✅ Removed ${requests.length} pin sync requests...`)
 
     await Promise.all(checkDagSizePins.map(async pin => {
       log(`⏳ ${pin.content.cid}: Querying DAG size...`)

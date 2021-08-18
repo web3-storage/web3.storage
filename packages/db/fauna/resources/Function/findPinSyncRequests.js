@@ -15,25 +15,31 @@ const {
   Equals,
   Let,
   Match,
-  Index
+  Index,
+  Range,
+  IsNull
 } = fauna
 
 // return all, oldest first, paginated
 const name = 'findPinSyncRequests'
 const body = Query(
   Lambda(
-    ['size', 'after', 'before'],
+    ['from', 'to', 'size', 'after', 'before'],
     Let(
       {
-        match: Match(Index('pinSyncRequest_sort_by_created_asc')),
+        range: Range(
+          Match(Index('pinSyncRequest_sort_by_created_asc')),
+          If(IsNull(Var('from')), [], Var('from')),
+          If(IsNull(Var('to')), [], Var('to'))
+        ),
         page: If(
           Equals(Var('before'), null),
           If(
             Equals(Var('after'), null),
-            Paginate(Var('match'), { size: Var('size') }),
-            Paginate(Var('match'), { size: Var('size'), after: Var('after') })
+            Paginate(Var('range'), { size: Var('size') }),
+            Paginate(Var('range'), { size: Var('size'), after: Var('after') })
           ),
-          Paginate(Var('match'), { size: Var('size'), before: Var('before') })
+          Paginate(Var('range'), { size: Var('size'), before: Var('before') })
         )
       },
       Map(Var('page'), Lambda(['created', 'ref'], Get(Var('ref'))))

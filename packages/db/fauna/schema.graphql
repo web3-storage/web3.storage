@@ -423,7 +423,7 @@ type Query {
   sumContentDagSize(from: Time!, to: Time): [Long]! @resolver(paginated: true)
   sumPinDagSize(from: Time!, to: Time): [Long]! @resolver(paginated: true)
   findMetricByKey(key: String!): Metric @resolver
-  findPinSyncRequests: [PinSyncRequest!]! @resolver(paginated: true)
+  findPinSyncRequests(from: Time, to: Time): [PinSyncRequest!]! @resolver(paginated: true)
 }
 
 type Mutation {
