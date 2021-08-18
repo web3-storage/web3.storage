@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.4.0](https://www.github.com/web3-storage/web3.storage/compare/w3-v2.3.0...w3-v2.4.0) (2021-08-18)
+
+
+### Features
+
+* add command to upload CAR file from CLI ([#363](https://www.github.com/web3-storage/web3.storage/issues/363)) ([214d5b0](https://www.github.com/web3-storage/web3.storage/commit/214d5b09af6e1d2b6d8f8b36e00166aa10379955)), closes [#357](https://www.github.com/web3-storage/web3.storage/issues/357)
+
+
+### Bug Fixes
+
+* add missing dependency ([494478c](https://www.github.com/web3-storage/web3.storage/commit/494478c7baed649a49c59ba9605700c29ee9794d))
+
 ## [2.3.0](https://www.github.com/web3-storage/web3.storage/compare/w3-v2.2.0...w3-v2.3.0) (2021-08-17)
 
 

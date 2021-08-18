@@ -87,7 +87,7 @@ export async function updatePinStatuses (status, { cluster, db, ipfs }) {
   let queryRes, after
   let i = 0
   while (true) {
-    queryRes = await retry(() => db.query(FIND_PENDING_PINS, { status, from, after }))
+    queryRes = await retry(() => db.query(FIND_PENDING_PINS, { status, from, after }), { onFailedAttempt: log })
     log(`📥 Processing ${i} -> ${i + queryRes.findPinsByStatusAndCreated.data.length}`)
     const checkDagSizePins = []
     const pinUpdates = await Promise.all(queryRes.findPinsByStatusAndCreated.data.map(async pin => {
@@ -115,7 +115,7 @@ export async function updatePinStatuses (status, { cluster, db, ipfs }) {
     log(`⏳ Updating ${pinUpdates.filter(Boolean).length} pins...`)
     await retry(() => db.query(UPDATE_PINS, {
       pins: pinUpdates.filter(Boolean)
-    }))
+    }), { onFailedAttempt: log })
     log('✅ Done')
 
     await Promise.all(checkDagSizePins.map(async pin => {
@@ -125,7 +125,7 @@ export async function updatePinStatuses (status, { cluster, db, ipfs }) {
         // Note: this will timeout for large DAGs
         dagSize = await ipfs.dagSize(pin.content.cid, { timeout: 10 * 60000 })
         log(`🛄 ${pin.content.cid}@${pin.location.peerId}: ${dagSize} bytes`)
-        await retry(() => db.query(UPDATE_CONTENT_DAG_SIZE, { content: pin.content._id, dagSize }))
+        await retry(() => db.query(UPDATE_CONTENT_DAG_SIZE, { content: pin.content._id, dagSize }), { onFailedAttempt: log })
       } catch (err) {
         log(`💥 ${pin.content.cid}@${pin.location.peerId}: Failed to update DAG size`)
         log(err)
