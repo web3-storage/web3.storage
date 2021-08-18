@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.2.0...web3.storage-v3.3.0) (2021-08-18)
+
+
+### Features
+
+* support any IPLD decoder ([#365](https://www.github.com/web3-storage/web3.storage/issues/365)) ([406d227](https://www.github.com/web3-storage/web3.storage/commit/406d227f2b32afcafc805ee0085b6aebe4e9b06e))
+
 ## [3.2.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.1.0...web3.storage-v3.2.0) (2021-08-11)
 
 
