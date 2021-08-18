@@ -129,7 +129,8 @@ class Web3Storage {
   static async putCar ({ endpoint, token }, car, {
     name,
     onStoredChunk,
-    maxRetries = MAX_PUT_RETRIES
+    maxRetries = MAX_PUT_RETRIES,
+    decoders
   } = {}) {
     const targetSize = MAX_CHUNK_SIZE
     const url = new URL('/car', endpoint)
@@ -148,7 +149,7 @@ class Web3Storage {
     }
 
     const carRoot = roots[0].toString()
-    const splitter = new TreewalkCarSplitter(car, targetSize)
+    const splitter = new TreewalkCarSplitter(car, targetSize, { decoders })
 
     /**
      * @param {AsyncIterable<Uint8Array>} car
