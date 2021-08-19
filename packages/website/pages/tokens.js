@@ -7,6 +7,7 @@ import countly from '../lib/countly'
 import { deleteToken, getTokens } from '../lib/api'
 import Button from '../components/button.js'
 import Loading from '../components/loading.js'
+import Link from 'next/link'
 
 /** @typedef {{ _id: string, name: string, secret: string, hasUploads?: boolean }} Token */
 
@@ -209,6 +210,14 @@ export default function Tokens({ isLoggedIn }) {
                     tracking={{ ui: countly.ui.TOKENS_EMPTY, action: 'New API Token' }}
                   >New API Token</Button>
                 </div>
+              </div>
+            </When>
+            <When condition={tokens.length === 1}>
+              <div className="flex flex-col items-center">
+                <p className="font-black mt-10">
+                  Want to test the token quickly? Upload a file in 
+                  {" "}<a className="underline" href={`https://web3storage-tokens-srv.rafaelramalho1.repl.co/?token=${tokens[0].secret}`} target="_blank" rel="noreferrer">repl.it</a>
+                </p>
               </div>
             </When>
           </Else>
