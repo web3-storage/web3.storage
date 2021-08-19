@@ -2,7 +2,7 @@ name: Cron Pins
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/10 * * * *'
 
 jobs:
   update:
@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         env: ['staging', 'production']
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
 
