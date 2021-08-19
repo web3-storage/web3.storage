@@ -11,7 +11,7 @@ export interface LayoutProps {
   navBgColor?: string
   footerBgColor?: string
   data?: any
-  highlightMessage?: string,
+  highlightMessage?: string
 }
 
 export interface LayoutChildrenProps {
