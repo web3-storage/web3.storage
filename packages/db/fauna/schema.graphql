@@ -382,14 +382,24 @@ enum DealStatus {
   Terminated
 }
 
+<<<<<<< HEAD
 enum SortDirection {
+=======
+enum Sort {
+>>>>>>> ab164b0 (feat: api supports upload list sorting)
   Asc
   Desc
 }
 
 enum UploadListSortBy {
   Date,
+<<<<<<< HEAD
   Name
+=======
+  Name,
+  PinStatus,
+  Size
+>>>>>>> ab164b0 (feat: api supports upload list sorting)
 }
 
 type Metric {
