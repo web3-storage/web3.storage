@@ -11,7 +11,7 @@
     min-width: 1440px;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 640px) {
     .container {
        overflow: hidden;
        overflow-x: clip;
@@ -21,6 +21,7 @@
     .background {
         max-width: calc(100vw - 200px)
     }
+
     .topSection {
         height: 42.05rem;
         margin-left: auto;
