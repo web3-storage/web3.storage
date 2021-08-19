@@ -42,13 +42,33 @@ const body = Query(
                 Index('upload_by_user_sort_by_name_asc'),
                 Index('upload_by_user_sort_by_name_desc')
               ),
-              // Default to Date Sort
+              // Size Sort
               If(
-                Equals(Var('sortOrder'), 'Asc'),
-                Index('upload_by_user_sort_by_created_asc'),
-                Index('upload_by_user_sort_by_created_desc')
+                Equals(Var('sortBy'), 'Size'),
+                // TODO: DO to obtain all uploads
+                If(
+                  Equals(Var('sortOrder'), 'Asc'),
+                  Index('upload_by_user_sort_by_size_asc'),
+                  Index('upload_by_user_sort_by_size_desc')
+                ),
+                // PinStatus Sort
+                If(
+                  Equals(Var('sortBy'), 'PinStatus'),
+                  If(
+                    Equals(Var('sortOrder'), 'Asc'),
+                    Index('upload_by_user_sort_by_pin_status_asc'),
+                    Index('upload_by_user_sort_by_pin_status_desc')
+                  ),
+                  // Default to Date Sort
+                  If(
+                    Equals(Var('sortOrder'), 'Asc'),
+                    Index('upload_by_user_sort_by_created_asc'),
+                    Index('upload_by_user_sort_by_created_desc')
+                  )
+                )
               )
             ),
+            // Index('upload_by_user_sort_by_created_desc'),
             Ref(Collection('User'), Select('user', Var('where'))),
             true
           ),
