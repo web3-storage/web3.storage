@@ -9,6 +9,7 @@ import Loading from '../components/loading'
 import Tooltip from '../components/tooltip'
 
 import CopyIcon from '../icons/copy'
+import ChevronIcon from '../icons/chevron'
 import countly from '../lib/countly'
 import { getUploads, deleteUpload } from '../lib/api.js'
 import { When } from 'react-if'
@@ -199,10 +200,12 @@ export default function Files({ isLoggedIn }) {
   const [selectedFiles, setSelectedFiles] = useState(/** @type string[] */ initialFiles)
   const [size] = useState(25 + 1)
   const [copied, setCopied] = useState(false);
+  const [sortingBy, setSortingBy] = useState('Date')
+  const [sortOrder, setSortOrder] = useState('Desc')
 
   const [befores, setBefores] = useState([new Date().toISOString()])
   const queryClient = useQueryClient()
-  const queryParams = { before: befores[0], size }
+  const queryParams = { before: befores[0], size, sortBy: sortingBy, sortOrder }
   /** @type {[string, { before: string, size: number }]} */
   const queryKey = ['get-uploads', queryParams]
   const { isLoading, isFetching, data, refetch } = useQuery(
@@ -261,10 +264,23 @@ export default function Files({ isLoggedIn }) {
   /**
    * @param {Object} props
    * @param {Object} [props.children]
+   * @param {boolean} [props.sortable]
+   * @param {string} [props.sortKey]
    */
-  const TableHeader = ({ children }) => (
+  const TableHeader = ({ children, sortable, sortKey }) => (
     <th className="px-2 border-2 border-w3storage-red bg-w3storage-red-background">
-      { children }
+      <div className="flex items-center justify-center">
+      { children } { sortable && sortKey ? 
+        <div className="relative ml-1 mr-2">
+          <button className="absolute bottom-0 left-0 p-1 pb-0 cursor-pointer" onClick={() => { setSortOrder('Asc'); setSortingBy(sortKey)}}>
+            <ChevronIcon width="13" height="10" className={clsx(sortKey === sortingBy && sortOrder === 'Asc'  && 'text-w3storage-red', 'transform rotate-180')}/>
+          </button>  
+          <button className="absolute top-0 left-0 p-1 pt-0 cursor-pointer" onClick={() => { setSortOrder('Desc'); setSortingBy(sortKey)} }>
+            <ChevronIcon width="13" height="10" className={clsx(sortKey === sortingBy && sortOrder === 'Desc' && 'text-w3storage-red')}/>
+          </button>
+        </div> : null 
+      }
+      </div>
     </th>
   )
 
@@ -295,8 +311,8 @@ export default function Files({ isLoggedIn }) {
           <th className="w-8">
             <Checkbox className="mr-2" checked={selectedFiles.length === uploads.filter(u => Boolean(u.dagSize)).length} disabled={uploads.every(upload => !upload.dagSize)} onChange={toggleAll} />
           </th> )}
-          <TableHeader>Timestamp</TableHeader>
-          <TableHeader>Name</TableHeader>
+          <TableHeader sortable sortKey="Date">Timestamp</TableHeader>
+          <TableHeader sortable sortKey="Name">Name</TableHeader>
           <TableHeader>
             <span className="flex w-100 justify-center items-center">CID 
               <Tooltip placement='top' overlay={TOOLTIPS.CID} overlayClassName='table-tooltip'>
