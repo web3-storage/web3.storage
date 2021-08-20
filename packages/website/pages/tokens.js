@@ -7,7 +7,6 @@ import countly from '../lib/countly'
 import { deleteToken, getTokens } from '../lib/api'
 import Button from '../components/button.js'
 import Loading from '../components/loading.js'
-import Link from 'next/link'
 
 /** @typedef {{ _id: string, name: string, secret: string, hasUploads?: boolean }} Token */
 
