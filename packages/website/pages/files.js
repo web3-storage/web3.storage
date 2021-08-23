@@ -206,7 +206,7 @@ export default function Files({ isLoggedIn }) {
   const [befores, setBefores] = useState([new Date().toISOString()])
   const queryClient = useQueryClient()
   const queryParams = { before: befores[0], size, sortBy: sortingBy, sortOrder }
-  /** @type {[string, { before: string, size: number }]} */
+  /** @type {[string, { before: string, size: number, sortBy: string, sortOrder: string }]} */
   const queryKey = ['get-uploads', queryParams]
   const { isLoading, isFetching, data, refetch } = useQuery(
     queryKey,
