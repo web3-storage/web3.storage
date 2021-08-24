@@ -208,7 +208,7 @@ class Web3Storage {
   /**
    * @param {Service} service
    * @param {CIDString} cid
-   * @returns {Promise<CIDString|undefined>}
+   * @returns {Promise<boolean>}
    */
   static async delete ({ endpoint, token }, cid) {
     const url = new URL(`/user/uploads/${cid}`, endpoint)
@@ -218,7 +218,7 @@ class Web3Storage {
         headers: Web3Storage.headers(token)
       })
       if (res.status === 404) {
-        return undefined
+        return false
       }
       if (!res.ok) {
         throw new Error(res.statusText)
@@ -226,13 +226,13 @@ class Web3Storage {
       const response = await res.json()
       if (response.response.errors) {
         console.error(response.response.errors)
-        return undefined
+        return false
       }
 
-      return response
+      return true
     } catch (e) {
       console.error(e)
-      return undefined
+      return false
     }
   }
 
@@ -373,6 +373,7 @@ class Web3Storage {
   /**
    * Remove a users record of an upload. Does not make CID unavailable.
    * @param {CIDString} cid
+   * @returns {Promise<boolean>}
    */
   delete (cid) {
     return Web3Storage.delete(this, cid)

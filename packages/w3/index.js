@@ -196,7 +196,7 @@ export async function put (path, opts) {
 }
 
 /**
- * Deletes 1 or more uploads
+ * Deletes 1 upload
  *
  * @param {string} cid the root CID to delete
  * @param {object} opts
@@ -208,9 +208,9 @@ export async function deleteUpload (cid, opts) {
   const client = getClient(opts)
   const deleteStatus = await client.delete(cid)
   if (!deleteStatus) {
-    return console.log('Failed to delete upload.')
+    return console.error('Failed to delete upload.')
   }
-  console.log('Deleted upload: ', JSON.stringify(deleteStatus, null, 2))
+  console.log('Deleted upload successfully.')
 }
 
 /**
