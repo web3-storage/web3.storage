@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import sade from 'sade'
-import { get, list, put, putCar, status, token, getPkg } from './index.js'
+import { get, list, put, deleteUpload, putCar, status, token, getPkg } from './index.js'
 
 const cli = sade('w3')
 
@@ -47,5 +47,10 @@ cli.command('status <cid>')
   .describe('Get the Filecoin deals and IPFS pins that contain a given CID, as JSON')
   .example('status bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy')
   .action(status)
+
+cli.command('delete <cid>')
+  .describe('Deletes the upload identified by a given CID')
+  .example('delete bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy')
+  .action(deleteUpload)
 
 cli.parse(process.argv)

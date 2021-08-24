@@ -196,6 +196,24 @@ export async function put (path, opts) {
 }
 
 /**
+ * Deletes 1 or more uploads
+ *
+ * @param {string} cid the root CID to fetch
+ * @param {object} opts
+ * @param {string} [opts.api]
+ * @param {string} [opts.token]
+ * @param {string} [opts.output] the path to write the files to
+ */
+export async function deleteUpload (cid, opts) {
+  const client = getClient(opts)
+  const deleteStatus = await client.delete(cid)
+  if (!deleteStatus) {
+    return console.log('Failed to delete upload.')
+  }
+  console.log('Deleted upload: ', JSON.stringify(deleteStatus, null, 2))
+}
+
+/**
  * Add CAR file to web3.storage
  *
  * @param {string} path the first file path to store

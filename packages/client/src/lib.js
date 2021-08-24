@@ -208,12 +208,33 @@ class Web3Storage {
   /**
    * @param {Service} service
    * @param {CIDString} cid
-   * @returns {Promise<CIDString>}
+   * @returns {Promise<CIDString|undefined>}
    */
   /* c8 ignore next 4 */
   static async delete ({ endpoint, token }, cid) {
-    console.log('Not deleting', cid, endpoint, token)
-    throw Error('.delete not implemented yet')
+    const url = new URL(`/user/uploads/${cid}`, endpoint)
+    try {
+      const res = await fetch(url.toString(), {
+        method: 'DELETE',
+        headers: Web3Storage.headers(token)
+      })
+      if (res.status === 404) {
+        return undefined
+      }
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+      const response = await res.json()
+      if (response.response.errors) {
+        console.error(response.response.errors)
+        return undefined
+      }
+
+      return response
+    } catch (e) {
+      console.error(e)
+      return undefined
+    }
   }
 
   /**

@@ -39,3 +39,20 @@ describe('w3 get', () => {
     }
   })
 })
+
+describe('w3 delete', () => {
+  it('requires arguments', () => {
+    try {
+      execa.sync('./bin.js', ['delete'])
+      assert.fail('Should exit with error code')
+    } catch (err) {
+      assert.match(err.stderr, /Insufficient arguments!/)
+    }
+  })
+
+  it('provides help', () => {
+    const response = execa.sync('./bin.js', ['delete', '--help'])
+    assert(response.stdout, 'Should show the help text')
+    assert(response.stdout.includes('Deletes the upload identified by a given CID'), 'Should explain the function')
+  })
+})

@@ -272,13 +272,17 @@ export async function userUploadsDelete (request, env) {
   const user = request.auth.user._id
   const cid = request.params.cid
 
-  const res = await env.db.query(gql`
-    mutation DeleteUserUpload($user: ID!, $cid: String!) {
-      deleteUserUpload(user: $user, cid: $cid) {
-        _id
+  try {
+    const res = await env.db.query(gql`
+      mutation DeleteUserUpload($user: ID!, $cid: String!) {
+        deleteUserUpload(user: $user, cid: $cid) {
+          _id
+        }
       }
-    }
-  `, { cid, user })
+    `, { cid, user })
 
-  return new JSONResponse(res.deleteUserUpload)
+    return new JSONResponse(res.deleteUserUpload)
+  } catch (err) {
+    return new JSONResponse(err)
+  }
 }
