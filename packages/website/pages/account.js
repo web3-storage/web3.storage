@@ -76,6 +76,8 @@ const StorageInfo = ({ isLoggedIn }) => {
   </div>
 }
 
+const CURRENT_DATE = new Date().toISOString()
+
 /**
  * @param {import('../components/types').LayoutChildrenProps} props
  */
@@ -88,12 +90,11 @@ export default function Account({ isLoggedIn }) {
   /** @type {import('./tokens').Token[]} */
   const tokens = tokensData || []
 
-  const [currentDate, setCurrentDate] = useState(new Date().toISOString())
-  const queryParams = { before: currentDate, size: 1 }
+  const queryParams = { before: CURRENT_DATE, size: 1 }
   const queryKey = ['get-uploads', queryParams]
   const { data: uploadsData, isLoading: isLoadingUploads, isFetching: isFetchingUploads } = useQuery(
     queryKey,
-    (ctx) => getUploads(queryParams),
+    () => getUploads(queryParams),
     {
       enabled: isLoggedIn,
     }
