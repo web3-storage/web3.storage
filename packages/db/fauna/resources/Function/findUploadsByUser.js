@@ -49,7 +49,6 @@ const body = Query(
                 Index('upload_by_user_sort_by_created_desc')
               )
             ),
-            // Index('upload_by_user_sort_by_created_desc'),
             Ref(Collection('User'), Select('user', Var('where'))),
             true
           ),
