@@ -50,7 +50,7 @@ export interface API {
   /**
    * Remove a users record of an upload. Does not make CID unavailable.
    */
-  delete(service: Service, cid: CIDString): Promise<CIDString>
+  delete(service: Service, cid: CIDString): Promise<CIDString | undefined>
 
   /**
    * Get info on Filecoin deals and IPFS pins that a CID is replicated in.

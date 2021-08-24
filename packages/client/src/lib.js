@@ -210,7 +210,6 @@ class Web3Storage {
    * @param {CIDString} cid
    * @returns {Promise<CIDString|undefined>}
    */
-  /* c8 ignore next 4 */
   static async delete ({ endpoint, token }, cid) {
     const url = new URL(`/user/uploads/${cid}`, endpoint)
     try {
@@ -372,9 +371,9 @@ class Web3Storage {
   }
 
   /**
+   * Remove a users record of an upload. Does not make CID unavailable.
    * @param {CIDString} cid
    */
-  /* c8 ignore next 3 */
   delete (cid) {
     return Web3Storage.delete(this, cid)
   }
