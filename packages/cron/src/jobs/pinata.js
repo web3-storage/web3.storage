@@ -25,9 +25,9 @@ const FIND_BATCH = gql`
   }
 `
 
-const DELETE_ONE = gql`
-  mutation DeletePinRequest($_id: ID!) {
-    deletePinRequest(id: $_id){
+const DELETE_PIN_REQUESTS = gql`
+  mutation DeletePinRequests($requests: [ID!]!) {
+    deletePinRequests(requests: $requests){
       _id
     }
   }
@@ -84,7 +84,7 @@ export async function pinToPinata ({ db, pinata }) {
       await pinata.pinByHash(cid)
       log(`📌 ${cid} ${count}/${total} pinned on Pinata! `)
       // Remove from the queue. Not awaiting, just move on.
-      db.query(DELETE_ONE, { _id })
+      db.query(DELETE_PIN_REQUESTS, { requests: [_id] })
       ok++
     } catch (err) {
       if (attempts < MAX_ATTEMPTS) {
@@ -92,7 +92,7 @@ export async function pinToPinata ({ db, pinata }) {
         db.query(INCREMENT_ATTEMPTS, { _id })
       } else {
         log(`❌ ${cid} ${count}/${total} failed to pin ${attempts} times. Deleting Pin Request`, err)
-        db.query(DELETE_ONE, { _id })
+        db.query(DELETE_PIN_REQUESTS, { requests: [_id] })
       }
     }
   }
