@@ -32,6 +32,8 @@ Data will be stored as above at no cost to the user for as long as Protocol Labs
 
 Protocol Labs, Inc. reserves the right to terminate the Website at its sole discretion or to transfer operation of the Website to a third party or smart contract. Prior to termination or transfer, Protocol Labs, Inc. will provide 90 days’ notice to users via email to allow users enough time to make arrangements if any (e.g. pinning to their own IPFS node, or preparing to manage the renewal of their Filecoin deals on their own).
 
+Deleting files from the Web3.Storage site's [Files page](https://web3.storage/files/) will remove them from the file listing for a user's account, but nodes on the IPFS network may retain copies of the data indefinitely. Users should not use Web3.Storage for data that may need to be permanently deleted in the future.
+
 #### [Data limits](#data-limits)
 
 Web3.Storage supports uploads up to 32GiB in size per request, and currently has a cap of 1TiB of storage per account. Data limits can be increased at no cost by submitting a request via your Account page when logged in.
