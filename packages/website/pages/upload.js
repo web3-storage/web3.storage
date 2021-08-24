@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 import countly from "../lib/countly";
 import { getToken, API } from "../lib/api";
 import Button from "../components/button.js";
+import Link from 'next/link'
 
 export function getStaticProps() {
   return {
@@ -63,7 +64,7 @@ export default function Upload() {
   const onDrop = (acceptedFiles) => uploadFile(acceptedFiles[0]);
   const { getRootProps, isDragActive } = useDropzone({ onDrop, multiple: false });
 
-  const openInput = () => { 
+  const openInput = () => {
     const fileInput = inputRef?.current;
     fileInput && fileInput.click()
   }
@@ -81,7 +82,7 @@ export default function Upload() {
       <div className="border border-l-8 border-w3storage-red-dark p-6">
         <p className="font-semibold">CAUTION</p>
         <p className="text-sm text-justify mt-2 leading-6">
-          All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. In addition, since Web3.Storage pins the data to multiple places across IPFS and Filecoin, there is no guarantee that the data can be removed from public access, even if you delete it from your Web3.Storage account. Do not store any private or sensitive information in an unencrypted form using Web3.Storage.
+          All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. Do not store any private or sensitive information in an unencrypted form using Web3.Storage. In addition, deleting files from the Web3.Storage site’s <Link href="/files"><a className="text-sm font-bold no-underline hover:underline">Files</a></Link> page will remove them from the file listing for your account, but that doesn’t prevent nodes on the <a className="text-sm font-bold no-underline hover:underline" href="https://docs.web3.storage/concepts/decentralized-storage/" target="_blank">decentralized storage network</a> from retaining copies of the data indefinitely. Do not use Web3.Storage for data that may need to be permanently deleted in the future.
         </p>
       </div>
       <div className="flex flex-col items-center">
