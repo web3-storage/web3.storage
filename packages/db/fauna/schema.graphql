@@ -367,16 +367,14 @@ enum DealStatus {
   Terminated
 }
 
-enum Sort {
+enum SortDirection {
   Asc
   Desc
 }
 
 enum UploadListSortBy {
   Date,
-  Name,
-  PinStatus,
-  Size
+  Name
 }
 
 type Metric {
@@ -399,7 +397,7 @@ type Query {
   Find all uploads created after a given date. Note: this INCLUDES deleted uploads.
   """
   findUploadsCreatedAfter(since: Time!): [Upload!]! @resolver(paginated: true)
-  findUploadsByUser(where: FindUploadsByUserInput!, sortBy: UploadListSortBy, sortOrder: Sort): [Upload!]! @resolver(paginated: true)
+  findUploadsByUser(where: FindUploadsByUserInput!, sortBy: UploadListSortBy, sortOrder: SortDirection): [Upload!]! @resolver(paginated: true)
   findContentByCid(cid: String!): Content @resolver
   findContentByCreated(from: Time!, to: Time): [Content!]! @resolver(paginated: true)
   findUserByIssuer(issuer: String!): User @resolver

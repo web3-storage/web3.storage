@@ -96,8 +96,15 @@ module.exports = ({ body }) => {
   }
 
   if (body.query.includes('findUploadsByUser')) {
-    const res = require('../../fixtures/get-user-uploads/find-uploads-by-user.json')
     const size = body.variables.size
+    const sortBy = body.variables.sortBy
+    let res
+
+    if (sortBy === 'Name') {
+      res = require('../../fixtures/get-user-uploads/find-uploads-by-user-sorted-by-name.json')
+    } else {
+      res = require('../../fixtures/get-user-uploads/find-uploads-by-user.json')
+    }
     if (size && size < 3) {
       const trimmed = JSON.parse(JSON.stringify(res))
       // trim it down to the expected number
