@@ -198,7 +198,7 @@ export async function put (path, opts) {
 /**
  * Deletes 1 or more uploads
  *
- * @param {string} cid the root CID to fetch
+ * @param {string} cid the root CID to delete
  * @param {object} opts
  * @param {string} [opts.api]
  * @param {string} [opts.token]
