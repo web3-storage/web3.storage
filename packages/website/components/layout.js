@@ -23,7 +23,7 @@ export default function Layout({
   title = 'Web3 Storage - The simple file storage service for IPFS & Filecoin.',
   description = 'Web3 Storage',
   pageBgColor = 'bg-w3storage-background',
-  navBgColor,
+  navBgColor = 'bg-w3storage-background',
   footerBgColor,
   data = null,
   highlightMessage,
