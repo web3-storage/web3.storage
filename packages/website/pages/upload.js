@@ -77,12 +77,18 @@ export default function Upload() {
   }
 
   return (
-    <main className="p-4 sm:px-16 mt-4 sm:mt-16 text-w3storage-purple h-full flex-grow" {...getRootProps()}>
-      <div className="mw9 pv3 ph3 ph5-ns min-vh-100 flex flex-col items-center">
-        <div className="p-6">
+    <main className="layout-margins my-4 sm:my-16 text-w3storage-purple h-full flex-grow" {...getRootProps()}>
+      <div className="border border-l-8 border-w3storage-red-dark p-6">
+        <p className="font-semibold">CAUTION</p>
+        <p className="text-sm text-justify mt-2 leading-6">
+          All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. In addition, since Web3.Storage pins the data to multiple places across IPFS and Filecoin, there is no guarantee that the data can be removed from public access, even if you delete it from your Web3.Storage account. Do not store any private or sensitive information in an unencrypted form using Web3.Storage.
+        </p>
+      </div>
+      <div className="flex flex-col items-center">
+        <div className="pt-8">
           <h2>Upload File</h2>
-          <form onSubmit={handleUploadSubmit} className='flex flex-col items-start py-8'>
-            <div className="my-4 flex flex-col items-start">
+          <form onSubmit={handleUploadSubmit} className='flex flex-col items-start pt-8'>
+            <div className="mb-4 flex flex-col items-start">
               <label htmlFor="name" className="mb-2">
                 File:
               </label>
@@ -100,9 +106,8 @@ export default function Upload() {
                 <p className="px-4">{ inputFile.name.length > 0 ? inputFile.name : 'No file chosen'}</p>
               </div>
             </div>
-            <div className="mv3">
+            <div>
               <Button
-                className="bg-nslime"
                 type="submit"
                 disabled={uploading || !inputRef?.current?.files || inputRef?.current?.files?.length === 0}
                 id="upload-file"

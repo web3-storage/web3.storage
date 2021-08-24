@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { useQuery } from 'react-query'
 import Link from 'next/link'
-import { getTokens, getStorage } from '../lib/api'
+import { getTokens, getStorage, getUploads } from '../lib/api'
 import countly from '../lib/countly'
 import Button from '../components/button'
 import Loading from '../components/loading'
@@ -81,18 +81,33 @@ const StorageInfo = ({ isLoggedIn }) => {
  */
 export default function Account({ isLoggedIn }) {
   const [copied, setCopied] = useState('')
-  const { data, isLoading, isFetching } = useQuery('get-tokens', getTokens, {
+  const { data: tokensData, isLoading: isLoadingTokens, isFetching: isFetchingTokens } = useQuery('get-tokens', getTokens, {
     enabled: isLoggedIn
   })
+
   /** @type {import('./tokens').Token[]} */
-  const tokens = data || []
+  const tokens = tokensData || []
+
+  const [currentDate, setCurrentDate] = useState(new Date().toISOString())
+  const queryParams = { before: currentDate, size: 1 }
+  const queryKey = ['get-uploads', queryParams]
+  const { data: uploadsData, isLoading: isLoadingUploads, isFetching: isFetchingUploads } = useQuery(
+    queryKey,
+    (ctx) => getUploads(queryParams),
+    {
+      enabled: isLoggedIn,
+    }
+  )
+
+  const hasUploads = uploadsData?.length > 0
+
   useEffect(() => {
     if (!copied) return
     const timer = setTimeout(() => setCopied(''), 5000)
     return () => clearTimeout(timer)
   }, [copied])
 
-  const isLoaded = !isLoading && !isFetching
+  const isLoaded = !isLoadingTokens && !isFetchingTokens && !isLoadingUploads && !isFetchingUploads
 
   const hasUsedTokensToUploadBefore = tokens.some(t => t.hasUploads)
   /**
@@ -127,7 +142,7 @@ export default function Account({ isLoggedIn }) {
         </div>
       </When>
       <div className="layout-margins">
-        <main className="max-w-screen-lg mx-auto my-4 lg:my-16 text-w3storage-purple">
+        <main className="max-w-screen-xl mx-auto my-4 lg:my-16 text-w3storage-purple">
           <h3 className="mb-8">Your account</h3>
           <StorageInfo isLoggedIn={isLoggedIn}/>
           <When condition={!isLoaded}>
@@ -140,6 +155,20 @@ export default function Account({ isLoggedIn }) {
               <div className="mt-9">
                 <h3 className="font-normal">Getting started</h3>
                 <div className="flex flex-wrap gap-x-10">
+                  <When condition={!hasUploads}>
+                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center" style={{ maxWidth: '24rem'}}>
+                      <h3 className="font-normal">Upload your first file</h3>
+                      <p>
+                        Try uploading a file to Web3.Storage!
+                      </p>
+                      <Button
+                        href='/files'
+                        tracking={{ ui: countly.ui.PROFILE_GETTING_STARTED, action: 'Upload a file' }}
+                      >
+                        Upload a file
+                      </Button>
+                    </div>
+                  </When>
                   <When condition={tokens.length === 0}>
                     <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center" style={{ maxWidth: '24rem'}}>
                       <h3 className="font-normal">Create your first API token</h3>
