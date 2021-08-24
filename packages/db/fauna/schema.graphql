@@ -445,6 +445,7 @@ type Mutation {
   createOrUpdatePin(data: CreateOrUpdatePinInput): Pin! @resolver
   updateContentDagSize(content: ID!, dagSize: Long!): Content! @resolver
   createPinRequest(cid: String!): PinRequest! @resolver
+  deletePinRequests(requests: [ID!]!): [PinRequest!]! @resolver
   incrementPinRequestAttempts(pinRequest: ID!): PinRequest! @resolver
   incrementUserUsedStorage(user: ID!, amount: Long!): User! @resolver
   createOrUpdateMetric(data: CreateOrUpdateMetricInput!): Metric! @resolver
