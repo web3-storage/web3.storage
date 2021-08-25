@@ -434,7 +434,7 @@ export default function Files({ isLoggedIn }) {
  */
 function GatewayLink({ cid }) {
   const href = cid.startsWith('Qm')
-    ? `https://ipfs.io/ipfs/${cid}`
+    ? `https://gateway.web3.storage/ipfs/${cid}`
     : `https://${cid}.ipfs.dweb.link`
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" className="black underline">
