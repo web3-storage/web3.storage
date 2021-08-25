@@ -186,6 +186,44 @@ describe('GET /user/uploads', () => {
     assert.deepStrictEqual(uploads, expected)
   })
 
+  it('lists uploads sorted by name', async () => {
+    const token = await getTestJWT()
+    const res = await fetch(new URL('/user/uploads?sortBy=Name', endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(res.ok)
+    const uploads = await res.json()
+    // TODO: import from fixture
+    const expected = [
+      {
+        name: 'pinpie.jpg',
+        cid: 'bafkreiajkbmpugz75eg2tmocmp3e33sg5kuyq2amzngslahgn6ltmqxxfa',
+        dagSize: null,
+        created: '2021-07-09T10:36:05.862862Z',
+        deals: [],
+        pins: []
+      },
+      {
+        name: 'Upload at 2021-07-09T16:20:32.658Z',
+        cid: 'bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae',
+        dagSize: null,
+        created: '2021-07-09T16:20:33.946845Z',
+        deals: [],
+        pins: []
+      },
+      {
+        name: 'week-in-web3-2021-07-02.mov',
+        cid: 'bafybeigc4fntpegrqzgzhxyc7hzu25ykqqai7nzllov2jn55wvzjju7pwu',
+        dagSize: null,
+        created: '2021-07-09T10:40:35.408884Z',
+        deals: [],
+        pins: []
+      }
+    ]
+    assert.deepStrictEqual(uploads, expected)
+  })
+
   it('lists uploads via magic auth', async () => {
     const token = 'test-magic'
     const res = await fetch(new URL('/user/uploads', endpoint).toString(), {

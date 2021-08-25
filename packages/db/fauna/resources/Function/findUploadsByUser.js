@@ -26,12 +26,29 @@ const {
 const name = 'findUploadsByUser'
 const body = Query(
   Lambda(
-    ['where', 'size', 'after', 'before'],
+    ['where', 'sortBy', 'sortOrder', 'size', 'after', 'before'],
     Let(
       {
+        sortBy: Var('sortBy'),
+        sortOrder: Var('sortOrder'),
         match: Filter(
           Match(
-            Index('upload_by_user_sort_by_created_desc'),
+            // Select Index per sortBy and sortOrder
+            If(
+              // Name Sort
+              Equals(Var('sortBy'), 'Name'),
+              If(
+                Equals(Var('sortOrder'), 'Asc'),
+                Index('upload_by_user_sort_by_name_asc'),
+                Index('upload_by_user_sort_by_name_desc')
+              ),
+              // Default to Date Sort
+              If(
+                Equals(Var('sortOrder'), 'Asc'),
+                Index('upload_by_user_sort_by_created_asc'),
+                Index('upload_by_user_sort_by_created_desc')
+              )
+            ),
             Ref(Collection('User'), Select('user', Var('where'))),
             true
           ),

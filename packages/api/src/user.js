@@ -214,9 +214,12 @@ export async function userUploadsGet (request, env) {
     before = parsedBefore
   }
 
+  const sortBy = searchParams.get('sortBy') || 'Date'
+  const sortOrder = searchParams.get('sortOrder') || 'Desc'
+
   const res = await env.db.query(gql`
-    query FindUploadsByUser($where: FindUploadsByUserInput!, $size: Int!) {
-      findUploadsByUser(where: $where, _size: $size) {
+    query FindUploadsByUser($where: FindUploadsByUserInput!, $sortBy: UploadListSortBy, $sortOrder: Sort, $size: Int!) {
+      findUploadsByUser(where: $where, sortBy: $sortBy, sortOrder: $sortOrder, _size: $size) {
         data {
           name
           content {
@@ -246,7 +249,7 @@ export async function userUploadsGet (request, env) {
         }
       }
     }
-  `, { where: { createdBefore: before.toISOString(), user: request.auth.user._id }, size })
+  `, { where: { createdBefore: before.toISOString(), user: request.auth.user._id }, size, sortBy, sortOrder })
 
   const { data: raw } = res.findUploadsByUser
   const uploads = raw.map(({ name, content, created }) => ({
