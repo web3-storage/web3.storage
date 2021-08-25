@@ -32,7 +32,7 @@ Data will be stored as above at no cost to the user for as long as Protocol Labs
 
 Protocol Labs, Inc. reserves the right to terminate the Website at its sole discretion or to transfer operation of the Website to a third party or smart contract. Prior to termination or transfer, Protocol Labs, Inc. will provide 90 days’ notice to users via email to allow users enough time to make arrangements if any (e.g. pinning to their own IPFS node, or preparing to manage the renewal of their Filecoin deals on their own).
 
-Deleting files from the Web3.Storage site's [Files page](https://web3.storage/files/) will remove them from the file listing for a user's account, but nodes on the IPFS network may retain copies of the data indefinitely. Users should not use Web3.Storage for data that may need to be permanently deleted in the future.
+All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. Users should not store any private or sensitive information in an unencrypted form using Web3.Storage. Further, deleting files from Web3.Storage via the site's Files page or API will remove them from the file listing for a user's account, but nodes on the IPFS network may retain copies of the data indefinitely. Users should not use Web3.Storage for data that may need to be permanently deleted in the future.
 
 #### [Data limits](#data-limits)
 
