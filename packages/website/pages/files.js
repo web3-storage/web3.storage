@@ -52,10 +52,6 @@ const TOOLTIPS = {
     <a href="https://docs.web3.storage/concepts/decentralized-storage/" target="_blank" className="underline" rel="noreferrer">Learn more</a> 
   </span>),
 
-  QUEUED_DEALS: numDeals => (<span>
-    {`The content from this upload has been aggregated for storage on Filecoin and is queued for deals with ${numDeals} storage provider${numDeals > 1 ? 's' : ''}. Filecoin deals will be active within 48 hours of upload.`}
-  </span>),
-
   QUEUED_UPLOAD: (<span>
     The content from this upload is being aggregated for storage on Filecoin. Filecoin deals will be active within 48 hours of upload.
   </span>)
@@ -140,10 +136,11 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
 
   const queuedDeals = upload.deals.filter(d => d.status === 'Queued')
   if (queuedDeals.length) {
+    const message = `The content from this upload has been aggregated for storage on Filecoin and is queued for deals with ${queuedDeals.length} storage provider${queuedDeals.length > 1 ? 's' : ''}. Filecoin deals will be active within 48 hours of upload.`
     deals.push(
       <span className='flex justify-center' key={upload.cid + '-pending'}>
         {`${deals.length ? ', ' : ''}${queuedDeals.length} pending`}
-        <Tooltip placement='top' overlay={TOOLTIPS.QUEUED_DEALS(queuedDeals.length)} overlayClassName='table-tooltip'>
+        <Tooltip placement='top' overlay={<span>{message}</span>} overlayClassName='table-tooltip'>
           { QuestionMark() }
         </Tooltip>              
       </span>
@@ -217,7 +214,70 @@ export default function Files({ isLoggedIn }) {
   )
 
   /** @type {Upload[]} */
-  const uploads = data?.length === size ? data.concat().splice(0, size - 1) : (data || [])
+  const uploads = [{
+    "cid": "bafybeiepdjmu7bkau2sv5hag4m76jyt747d4do6kenhedpvd24kcc2zq7u",
+    "created": "2021-08-24T21:35:31.988241Z",
+    "dagSize": 15393,
+    "pins": [
+      {
+        "status": "Pinned",
+        "updated": "2021-08-24T21:39:40.586057Z",
+        "peerId": "12D3KooWMbibcXHwkSjgV7VZ8TMfDKi6pZvmi97P83ZwHm9LEsvV",
+        "peerName": "web3-storage-dc13",
+        "region": "US-DC"
+      },
+      {
+        "status": "Pinned",
+        "updated": "2021-08-24T21:39:40.586057Z",
+        "peerId": "12D3KooWF6uxxqZf4sXpQEbNE4BfbVJWAKWrFSKamxmWm4E9vyzd",
+        "peerName": "web3-storage-am6",
+        "region": "NL"
+      },
+      {
+        "status": "Pinned",
+        "updated": "2021-08-24T21:39:40.586057Z",
+        "peerId": "12D3KooWLWFUri36dmTkki6o9PwfQNwGb2gsHuKD5FdcwzCXYnwc",
+        "peerName": "web3-storage-am6-2",
+        "region": "NL"
+      }
+    ],
+    "deals": [
+      {
+        "dealId": 2332952,
+        "storageProvider": "f022142",
+        "status": "Queued",
+        "pieceCid": "baga6ea4seaqo6jfxitxwcgcemdcqnmnqan7p7u4l76k3orjqjdo5lengpiorcia",
+        "dataCid": "bafybeie2bpl25wxuif2r6zlsq4l77h2jbldscr2yn3jz7iy4pqdd725fau",
+        "dataModelSelector": "Links/47/Hash/Links/15/Hash/Links/0/Hash",
+        "activation": "2021-08-25T13:00:30Z",
+        "created": "2021-08-25T00:17:10.392875Z",
+        "updated": "2021-08-25T07:57:26.999531Z"
+      },
+      {
+        "dealId": 2333120,
+        "storageProvider": "f022352",
+        "status": "Queued",
+        "pieceCid": "baga6ea4seaqo6jfxitxwcgcemdcqnmnqan7p7u4l76k3orjqjdo5lengpiorcia",
+        "dataCid": "bafybeie2bpl25wxuif2r6zlsq4l77h2jbldscr2yn3jz7iy4pqdd725fau",
+        "dataModelSelector": "Links/47/Hash/Links/15/Hash/Links/0/Hash",
+        "activation": "2021-08-25T14:50:30Z",
+        "created": "2021-08-25T01:00:28.410557Z",
+        "updated": "2021-08-25T07:57:26.307022Z"
+      },
+      {
+        "dealId": 2333678,
+        "storageProvider": "f01278",
+        "status": "Published",
+        "pieceCid": "baga6ea4seaqo6jfxitxwcgcemdcqnmnqan7p7u4l76k3orjqjdo5lengpiorcia",
+        "dataCid": "bafybeie2bpl25wxuif2r6zlsq4l77h2jbldscr2yn3jz7iy4pqdd725fau",
+        "dataModelSelector": "Links/47/Hash/Links/15/Hash/Links/0/Hash",
+        "activation": "2021-08-26T23:37:30Z",
+        "created": "2021-08-25T03:02:14.998793Z",
+        "updated": "2021-08-25T07:57:26.639659Z"
+      }
+    ]
+  }]
+  // const uploads = data?.length === size ? data.concat().splice(0, size - 1) : (data || [])
 
   function handleDelete() {
     if (!confirm('Are you sure? Deleted files cannot be recovered!')) {
