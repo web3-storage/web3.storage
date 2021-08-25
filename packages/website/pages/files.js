@@ -51,6 +51,14 @@ const TOOLTIPS = {
     Service providers offering storage capacity to the Filecoin network.<span> </span>
     <a href="https://docs.web3.storage/concepts/decentralized-storage/" target="_blank" className="underline" rel="noreferrer">Learn more</a> 
   </span>),
+
+  QUEUED_DEALS: numDeals => (<span>
+    {`The content from this upload has been aggregated for storage on Filecoin and is queued for deals with ${numDeals} storage provider${numDeals > 1 ? 's' : ''}. Filecoin deals will be active within 48 hours of upload.`}
+  </span>),
+
+  QUEUED_UPLOAD: (<span>
+    The content from this upload is being aggregated for storage on Filecoin. Filecoin deals will be active within 48 hours of upload.
+  </span>)
 }
 
 /**
@@ -133,16 +141,21 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
   const queuedDeals = upload.deals.filter(d => d.status === 'Queued')
   if (queuedDeals.length) {
     deals.push(
-      <span key={upload.cid + '-pending'} title={`Upload is queued in ${queuedDeals.length} aggregate${queuedDeals.length > 1 ? 's' : ''} for deals.`}>
+      <span className='flex justify-center' key={upload.cid + '-pending'}>
         {`${deals.length ? ', ' : ''}${queuedDeals.length} pending`}
+        <Tooltip placement='top' overlay={TOOLTIPS.QUEUED_DEALS(queuedDeals.length)} overlayClassName='table-tooltip'>
+          { QuestionMark() }
+        </Tooltip>              
       </span>
     )
   }
 
   if (!upload.deals.length) {
-    deals.push(
-      <span key='queuing' title='Upload is being added to an aggregate and waiting to join the deal queue.'>
+    deals.push(<span className='flex justify-center' key='queuing'>
         Queuing
+        <Tooltip placement='top' overlay={TOOLTIPS.QUEUED_UPLOAD} overlayClassName='table-tooltip'>
+        { QuestionMark() }           
+        </Tooltip>
       </span>
     )
   }
@@ -165,7 +178,11 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
         </div>
       </TableElement>
       <TableElement {...sharedArgs} centered>{pinStatus}</TableElement>
-      <TableElement {...sharedArgs} centered breakAll={false}>{deals}</TableElement>
+      <TableElement {...sharedArgs} centered breakAll={false}>
+        <div className="flex justify-center">
+          {deals}
+        </div>
+      </TableElement>
       <TableElement {...sharedArgs} centered breakAll={false}>
         {upload.dagSize ? filesize(upload.dagSize) : 'Calculating...'}
       </TableElement>
