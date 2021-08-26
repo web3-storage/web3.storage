@@ -2,7 +2,7 @@ name: Cron Pinata
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '*/5 * * * *'
 
 jobs:
   update:
@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        env: ['staging', 'production']
-    timeout-minutes: 10
+        env: ['production']
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v2
 
