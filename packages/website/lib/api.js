@@ -94,11 +94,11 @@ export async function createToken(name) {
 /**
  * Get files
  *
- * @param {{ size: number, before: string }} query
+ * @param {{ size: number, before: string, sortBy: string, sortOrder: string, }} query
  * @returns
  */
-export async function getUploads({ size, before }) {
-  const params = new URLSearchParams({ before, size: String(size) })
+export async function getUploads({ size, before, sortBy, sortOrder }) {
+  const params = new URLSearchParams({ before, size: String(size), sortBy, sortOrder })
   const res = await fetch(`${API}/user/uploads?${params}`, {
     method: 'GET',
     headers: {
