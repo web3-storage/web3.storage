@@ -7,6 +7,7 @@ export default {
   input: 'src/lib.js',
   output: [
     {
+      inlineDynamicImports: true,
       file: 'dist/bundle.esm.min.js',
       format: 'esm',
       plugins: [terser()],
