@@ -218,7 +218,7 @@ export async function userUploadsGet (request, env) {
   const sortOrder = searchParams.get('sortOrder') || 'Desc'
 
   const res = await env.db.query(gql`
-    query FindUploadsByUser($where: FindUploadsByUserInput!, $sortBy: UploadListSortBy, $sortOrder: Sort, $size: Int!) {
+    query FindUploadsByUser($where: FindUploadsByUserInput!, $sortBy: UploadListSortBy, $sortOrder: SortDirection, $size: Int!) {
       findUploadsByUser(where: $where, sortBy: $sortBy, sortOrder: $sortOrder, _size: $size) {
         data {
           name
