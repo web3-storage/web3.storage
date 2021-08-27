@@ -92,10 +92,14 @@ export async function createToken(name) {
 }
 
 /**
- * Get files
- *
- * @param {{ size: number, before: string, sortBy: string, sortOrder: string, }} query
- * @returns
+ * Gets files
+ * @param {object} args
+ * @param {number} args.size
+ * @param {string} args.before
+ * @param {string} args.sortBy Can be either "Date" or "Name"
+ * @param {string} args.sortOrder Can be either "Asc" or "Desc"
+ * @returns {Promise<import('web3.storage').Upload[]>}
+ * @throws {Error} When it fails to get uploads
  */
 export async function getUploads({ size, before, sortBy, sortOrder }) {
   const params = new URLSearchParams({ before, size: String(size), sortBy, sortOrder })

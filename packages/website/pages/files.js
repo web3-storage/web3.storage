@@ -15,7 +15,7 @@ import { getUploads, deleteUpload } from '../lib/api.js'
 import { When } from 'react-if'
 import clsx from 'clsx'
 
-/** @typedef {{ name?: string } & import('web3.storage').Status} Upload */
+/** @typedef {{ name?: string } & import('web3.storage').Upload} Upload */
 
 /**
  * Static Props
@@ -197,7 +197,7 @@ export default function Files({ isLoggedIn }) {
   /** @type string[] */
   const initialFiles = [];
 
-  const [selectedFiles, setSelectedFiles] = useState(/** @type string[] */ initialFiles)
+  const [selectedFiles, setSelectedFiles] = useState(initialFiles)
   const [size] = useState(25 + 1)
   const [copied, setCopied] = useState(false);
   const [sortingBy, setSortingBy] = useState('Date')
