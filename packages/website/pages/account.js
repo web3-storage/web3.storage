@@ -100,7 +100,7 @@ export default function Account({ isLoggedIn }) {
     }
   )
 
-  const hasUploads = uploadsData?.length > 0
+  const hasUploads = uploadsData ? uploadsData.length > 0 : 0
 
   useEffect(() => {
     if (!copied) return

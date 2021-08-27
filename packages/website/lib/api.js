@@ -96,13 +96,21 @@ export async function createToken(name) {
  * @param {object} args
  * @param {number} args.size
  * @param {string} args.before
- * @param {string} args.sortBy Can be either "Date" or "Name"
- * @param {string} args.sortOrder Can be either "Asc" or "Desc"
+ * @param {string} [args.sortBy] Can be either "Date" or "Name" - uses "Date" as default
+ * @param {string} [args.sortOrder] Can be either "Asc" or "Desc" - uses "Desc" as default
  * @returns {Promise<import('web3.storage').Upload[]>}
  * @throws {Error} When it fails to get uploads
  */
 export async function getUploads({ size, before, sortBy, sortOrder }) {
-  const params = new URLSearchParams({ before, size: String(size), sortBy, sortOrder })
+  const params = new URLSearchParams({ before, size: String(size) })
+  if (sortBy) {
+    params.set('sortBy', sortBy)
+  }
+
+  if (sortOrder) {
+    params.set('setOrder', sortOrder)
+  }
+
   const res = await fetch(`${API}/user/uploads?${params}`, {
     method: 'GET',
     headers: {
