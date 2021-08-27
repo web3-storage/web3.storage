@@ -2,6 +2,7 @@ import { Web3Storage, filesFromPath } from 'web3.storage'
 import { writeFiles } from 'ipfs-car/unpack/fs'
 import enquirer from 'enquirer'
 import Conf from 'conf'
+import path from 'path'
 import ora from 'ora'
 import fs from 'fs'
 import { CarIndexedReader } from '@ipld/car'
@@ -135,7 +136,7 @@ export async function list (opts = {}) {
 /**
  * Add 1 or more files/directories to web3.storage
  *
- * @param {string} path the first file path to store
+ * @param {string} firstPath the first file path to store
  * @param {object} opts
  * @param {string} [opts.api]
  * @param {string} [opts.token]
@@ -145,9 +146,9 @@ export async function list (opts = {}) {
  * @param {boolean|number} [opts.retry] set maxRetries for client.put
  * @param {string[]} opts._ additonal paths to add
  */
-export async function put (path, opts) {
+export async function put (firstPath, opts) {
+  const paths = checkPathsExist([firstPath, ...opts._])
   const client = getClient(opts)
-
   // pass either --no-retry or --retry <number>
   const maxRetries = Number.isInteger(Number(opts.retry))
     ? Number(opts.retry)
@@ -156,13 +157,11 @@ export async function put (path, opts) {
     console.log(`⁂ maxRetries: ${maxRetries}`)
   }
   const name = opts.name !== undefined ? opts.name : undefined
-
-  const spinner = ora('Packing files').start()
-  const paths = [path, ...opts._]
   const hidden = !!opts.hidden
   const files = []
   let totalSize = 0
   let totalSent = 0
+  const spinner = ora('Packing files').start()
   for (const p of paths) {
     for await (const file of filesFromPath(p, { hidden })) {
       totalSize += file.size
@@ -171,7 +170,6 @@ export async function put (path, opts) {
     }
   }
   let rootCid = ''
-
   const root = await client.put(files, {
     maxRetries,
     name,
@@ -198,16 +196,16 @@ export async function put (path, opts) {
 /**
  * Add CAR file to web3.storage
  *
- * @param {string} path the first file path to store
+ * @param {string} firstPath the first file path to store
  * @param {object} opts
  * @param {string} [opts.api]
  * @param {string} [opts.token]
  * @param {string} [opts.name] upload name
  * @param {boolean|number} [opts.retry] set maxRetries for client.putCar
  */
-export async function putCar (path, opts) {
+export async function putCar (firstPath, opts) {
+  checkPathsExist([firstPath])
   const client = getClient(opts)
-
   // pass either --no-retry or --retry <number>
   const maxRetries = Number.isInteger(Number(opts.retry))
     ? Number(opts.retry)
@@ -215,20 +213,29 @@ export async function putCar (path, opts) {
   if (maxRetries !== undefined) {
     console.log(`⁂ maxRetries: ${maxRetries}`)
   }
-  const name = opts.name !== undefined ? opts.name : undefined
-
+  const spinner = ora('Reading CAR').start()
+  const carReader = await CarIndexedReader.fromFile(firstPath)
+  const roots = await carReader.getRoots()
+  if (roots.length > 1) {
+    spinner.fail(`Cannot add CAR file with multiple roots. ${firstPath} contains mulitple roots.`)
+    process.exit(-1)
+  }
+  if (roots.length < 1) {
+    spinner.fail(`CAR must have a root CID. ${firstPath} has no roots.`)
+    process.exit(-1)
+  }
+  const stats = fs.statSync(firstPath)
+  spinner.stopAndPersist({ symbol: '#', text: roots[0].toString() })
+  const totalSize = stats.size
+  if (totalSize > 1024 * 1024 * 10) {
+    spinner.start('Chunking')
+  } else {
+    spinner.start('Storing')
+  }
   let totalSent = 0
-  let totalSize = 0
-  const stats = fs.statSync(path)
-  totalSize = stats.size
-  const spinner = ora('storing').start()
-
-  const carReader = await CarIndexedReader.fromFile(path)
-
   const root = await client.putCar(carReader, {
-    name,
+    name: opts.name !== undefined ? opts.name : undefined,
     maxRetries,
-
     onStoredChunk: (size) => {
       totalSent += size
       spinner.text = `Storing ${Math.round((totalSent / totalSize) * 100)}%`
@@ -245,4 +252,15 @@ function filesize (bytes) {
 
 export function getPkg () {
   return JSON.parse(fs.readFileSync(new URL('./package.json', import.meta.url)))
+}
+
+function checkPathsExist (paths) {
+  paths = Array.isArray(paths) ? paths : [paths]
+  for (const p of paths) {
+    if (!fs.existsSync(p)) {
+      console.error(`The path ${path.resolve(p)} does not exist`)
+      process.exit(-1)
+    }
+  }
+  return paths
 }

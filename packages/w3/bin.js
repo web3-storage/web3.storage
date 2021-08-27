@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import 'hard-rejection/register.js' // throw on unhandled promise rejection in node 14.
 import sade from 'sade'
 import { get, list, put, putCar, status, token, getPkg } from './index.js'
 
