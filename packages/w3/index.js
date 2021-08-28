@@ -218,11 +218,11 @@ export async function putCar (firstPath, opts) {
   const roots = await carReader.getRoots()
   if (roots.length > 1) {
     spinner.fail(`Cannot add CAR file with multiple roots. ${firstPath} contains mulitple roots.`)
-    process.exit(-1)
+    process.exit(1)
   }
   if (roots.length < 1) {
     spinner.fail(`CAR must have a root CID. ${firstPath} has no roots.`)
-    process.exit(-1)
+    process.exit(1)
   }
   const stats = fs.statSync(firstPath)
   spinner.stopAndPersist({ symbol: '#', text: roots[0].toString() })
@@ -259,7 +259,7 @@ function checkPathsExist (paths) {
   for (const p of paths) {
     if (!fs.existsSync(p)) {
       console.error(`The path ${path.resolve(p)} does not exist`)
-      process.exit(-1)
+      process.exit(1)
     }
   }
   return paths
