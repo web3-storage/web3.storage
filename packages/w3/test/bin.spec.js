@@ -27,6 +27,41 @@ describe('w3 put', () => {
       assert.match(err.stderr, /Insufficient arguments!/)
     }
   })
+  it('fails with clear error if the path does not exist', () => {
+    try {
+      execa.sync('./bin.js', ['put', 'nonesuch'])
+      assert.fail('Should exit with error code')
+    } catch (err) {
+      assert.match(err.stderr, /The path .+ does not exist/)
+    }
+  })
+  it('fails with clear error if any path does not exist', () => {
+    try {
+      execa.sync('./bin.js', ['put', './bin.js', 'nonesuch'])
+      assert.fail('Should exit with error code')
+    } catch (err) {
+      assert.match(err.stderr, /The path .+ does not exist/)
+    }
+  })
+})
+
+describe('w3 put-car', () => {
+  it('offers help', () => {
+    try {
+      execa.sync('./bin.js', ['put-car'])
+      assert.fail('Should exit with error code')
+    } catch (err) {
+      assert.match(err.stderr, /Insufficient arguments!/)
+    }
+  })
+  it('fails with clear error if the path does not exist', () => {
+    try {
+      execa.sync('./bin.js', ['put-car', 'nonesuch'])
+      assert.fail('Should exit with error code')
+    } catch (err) {
+      assert.match(err.stderr, /The path .+ does not exist/)
+    }
+  })
 })
 
 describe('w3 get', () => {

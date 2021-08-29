@@ -24,6 +24,13 @@ describe('w3 put <path>', () => {
   }).timeout(60000)
 })
 
+describe('w3 put-car <path>', () => {
+  it('puts a single CAR', () => {
+    const { stdout } = execa.sync('./bin.js', ['put-car', '../client/test/fixtures/dir.car', ...authArgs])
+    assert.match(stdout, /bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu/)
+  }).timeout(60000)
+})
+
 // FIXME: was working but now getting a 500 server error!
 describe('w3 get <cid>', () => {
   it('gets a dir by cid', () => {
