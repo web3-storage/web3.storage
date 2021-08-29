@@ -103,6 +103,20 @@ const body = Query(
                         )
                       )
                     ),
+                    Foreach(
+                      Select('backupData', Var('data')),
+                      Lambda(
+                        ['data'],
+                        Create('Backup', {
+                          data: {
+                            upload: Select('ref', Var('upload')),
+                            key: Select('key', Var('data')),
+                            name: Select('name', Var('data')),
+                            created: Now()
+                          }
+                        })
+                      )
+                    ),
                     Var('upload')
                   )
                 )
@@ -161,6 +175,20 @@ const body = Query(
                         null
                       )
                     )
+                  )
+                ),
+                Foreach(
+                  Select('backupData', Var('data')),
+                  Lambda(
+                    ['data'],
+                    Create('Backup', {
+                      data: {
+                        upload: Select('ref', Var('upload')),
+                        key: Select('key', Var('data')),
+                        name: Select('name', Var('data')),
+                        created: Now()
+                      }
+                    })
                   )
                 ),
                 Var('upload')

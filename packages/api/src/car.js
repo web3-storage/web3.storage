@@ -7,6 +7,7 @@ import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
 import retry from 'p-retry'
 import { GATEWAY, LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
+import { backup } from './utils/backup.js'
 import { JSONResponse } from './utils/json-response.js'
 import { toPinStatusEnum } from './utils/pin.js'
 
@@ -145,22 +146,10 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   // Returns either the sum of the block sizes in the CAR, or the cumulative size of the DAG for a dag-pb root.
   const { size: dagSize } = await carStat(car)
 
-  // Note: We can't make use of `bytes` or `size` properties on the response from cluster.add
-  // `bytes` is the sum of block sizes in bytes. Where the CAR is a partial, it'll only be a shard of the total dag size.
-  // `size` is UnixFS FileSize which is 0 for directories, and is not set for raw encoded files, only dag-pb ones.
-  const { cid/*, bytes, size */ } = await env.cluster.add(car, {
-    metadata: { size: car.size.toString() },
-    // When >2.5MB, use local add, because waiting for blocks to be sent to
-    // other cluster nodes can take a long time. Replication to other nodes
-    // will be done async by bitswap instead.
-    local: car.size > LOCAL_ADD_THRESHOLD
-  })
-
-  const { peerMap } = await env.cluster.status(cid)
-  const pins = toPins(peerMap)
-  if (!pins.length) { // should not happen
-    throw new Error('not pinning on any node')
-  }
+  const [{ cid, pins }, backupKey] = await Promise.all([
+    addToCluster(car, env),
+    backup(car, env)
+  ])
 
   let name = headers.get('x-name')
   if (!name || typeof name !== 'string') {
@@ -178,6 +167,12 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
         cid,
         name,
         type: uploadType,
+        backupData: backupKey
+          ? [{
+            key: backupKey,
+            name: env.s3BucketName
+          }]
+          : [],
         pins,
         dagSize
       }
@@ -254,6 +249,33 @@ export async function sizeOf (response) {
     size += value.byteLength
   }
   return size
+}
+
+/**
+ * Adds car to local cluster and returns its content identifier and pins
+ *
+ * @param {Blob} car
+ * @param {import('./env').Env} env
+ */
+async function addToCluster (car, env) {
+  // Note: We can't make use of `bytes` or `size` properties on the response from cluster.add
+  // `bytes` is the sum of block sizes in bytes. Where the CAR is a partial, it'll only be a shard of the total dag size.
+  // `size` is UnixFS FileSize which is 0 for directories, and is not set for raw encoded files, only dag-pb ones.
+  const { cid } = await env.cluster.add(car, {
+    metadata: { size: car.size.toString() },
+    // When >2.5MB, use local add, because waiting for blocks to be sent to
+    // other cluster nodes can take a long time. Replication to other nodes
+    // will be done async by bitswap instead.
+    local: car.size > LOCAL_ADD_THRESHOLD
+  })
+
+  const { peerMap } = await env.cluster.status(cid)
+  const pins = toPins(peerMap)
+  if (!pins.length) { // should not happen
+    throw new Error('not pinning on any node')
+  }
+
+  return { cid, pins }
 }
 
 /**

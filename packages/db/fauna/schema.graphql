@@ -216,6 +216,36 @@ type PinSyncRequest {
 }
 
 """
+Details of the backups created for an upload.
+"""
+type Backup {
+  """
+  Upload that originated the backup
+  """
+  upload: Upload! @relation
+
+  """
+  Backup key.
+  """
+  key: String!
+
+  """
+  Backup bucket name.
+  """
+  name: String!
+
+  """
+  Creation date.
+  """
+  created: Time!
+
+  """
+  Deletion date.
+  """
+  deleted: Time
+}
+
+"""
 An upload created by a user.
 """
 type Upload {
@@ -519,9 +549,15 @@ input CreateUploadInput {
   cid: String!
   type: UploadType!
   name: String
+  backupData: [createBackupInput]!
   dagSize: Long
   chunkSize: Long # decremented, unused
   pins: [PinInput!]!
+}
+
+input createBackupInput {
+  key: String!
+  name: String!
 }
 
 input PinInput {

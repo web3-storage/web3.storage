@@ -12,11 +12,12 @@
     "dev": "wrangler dev --env $(whoami)",
     "publish": "wrangler publish --env $(whoami)",
     "build": "WEBPACK_CLI_FORCE_LOAD_ESM_CONFIG=true webpack",
-    "test": "npm-run-all -p -r mock:cluster mock:db test:e2e -s test:size",
+    "test": "npm-run-all -p -r mock:cluster mock:db mock:backup test:e2e -s test:size",
     "test:size": "bundlesize",
     "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js -b webkit",
     "mock:cluster": "smoke -p 9094 test/mocks/cluster",
-    "mock:db": "smoke -p 9086 test/mocks/db"
+    "mock:db": "smoke -p 9086 test/mocks/db",
+    "mock:backup": "smoke -p 9096 test/mocks/backup"
   },
   "devDependencies": {
     "@sentry/webpack-plugin": "^1.16.0",
@@ -37,6 +38,7 @@
     "webpack-cli": "^4.7.2"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.28.0",
     "@ipld/car": "^3.1.4",
     "@ipld/dag-cbor": "^6.0.3",
     "@ipld/dag-pb": "^2.0.2",
@@ -48,12 +50,13 @@
     "ipfs-car": "^0.5.8",
     "itty-router": "^2.3.10",
     "multiformats": "^9.0.4",
-    "p-retry": "^4.6.1"
+    "p-retry": "^4.6.1",
+    "uint8arrays": "^3.0.0"
   },
   "bundlesize": [
     {
       "path": "./dist/main.js",
-      "maxSize": "1 MB",
+      "maxSize": "1.4 MB",
       "compression": "none"
     }
   ]
