@@ -9,7 +9,7 @@
     "pinpin": "./src/bin.js"
   },
   "scripts": {
-    "start": "DEBUG=pinpin ./src/bin.js"
+    "start": "DEBUG_HIDE_DATE=true DEBUG=pinpin ./src/bin.js"
   },
   "dependencies": {
     "debug": "^4.3.2",
