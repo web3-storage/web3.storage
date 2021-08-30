@@ -136,3 +136,26 @@ export async function deleteUpload (cid) {
     throw new Error(`failed to delete upload: ${await res.text()}`)
   }
 }
+
+/**
+ * Renames upload
+ *
+ * @param {string} cid
+ * @param {string} name
+ */
+ export async function renameUpload (cid, name) {
+  const res = await fetch(`${API}/user/uploads/${cid}/rename`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + (await getToken()),
+    },
+    body: JSON.stringify({
+      name
+    })
+  })
+
+  if (!res.ok) {
+    throw new Error(`failed to delete upload: ${await res.text()}`)
+  }
+}

@@ -442,6 +442,7 @@ type Mutation {
   createUpload(data: CreateUploadInput!): Upload! @resolver
   deleteAuthToken(user: ID!, authToken: ID!): AuthToken! @resolver
   deleteUserUpload(user: ID!, cid: String!): Upload! @resolver
+  renameUserUpload(user: ID!, cid: String!, name: String!): Upload! @resolver
   deleteUploadByUserAndContent(user: ID!, content: ID!): Upload! @resolver
   createAggregate(data: CreateAggregateInput!): Aggregate! @resolver
   """
