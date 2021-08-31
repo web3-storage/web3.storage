@@ -266,6 +266,11 @@ export default function Files({ isLoggedIn }) {
     }
   )
 
+  const refreshUploads = async () => {
+    setBefores([new Date().toISOString()])
+    return refetch();
+  }
+
   /** @type {Upload[]} */
   const uploads = data?.length === size ? data.concat().splice(0, size - 1) : (data || [])
 
@@ -437,7 +442,7 @@ export default function Files({ isLoggedIn }) {
                     <div className="w-35 ml-auto">
                       <Button
                         small
-                        onClick={() => refetch()}
+                        onClick={() => refreshUploads()}
                         tracking={{
                           event: countly.events.FILES_REFRESH,
                           ui: countly.ui.FILES,
