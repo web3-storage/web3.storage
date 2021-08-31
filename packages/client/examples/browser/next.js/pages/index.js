@@ -46,7 +46,7 @@ export default function Home () {
       </header>
       <form id='upload-form' onSubmit={handleSubmit}>
         <label htmlFor='token'>Paste your web3.storage API token here</label>
-        <input type='text' id='token' onChange={e => setToken(e.target.value)} required />
+        <input type='password' id='token' onChange={e => setToken(e.target.value)} required />
         <label htmlFor='filepicker'>Pick files to store</label>
         <input type='file' id='filepicker' name='fileList' onChange={e => setFiles(e.target.files)} multiple required />
         <input type='submit' value='Submit' id='submit' />
