@@ -34,7 +34,6 @@ const body = Query(
         Let(
           {
             content: Get(Var('contentMatch')),
-            dagSize: Select(['data', 'dagSize'], Var('content'))
           },
           Let(
             {
