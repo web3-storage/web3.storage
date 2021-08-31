@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.3.1](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.0...web3.storage-v3.3.1) (2021-08-29)
+
+
+### Bug Fixes
+
+* update dependencies ([#404](https://www.github.com/web3-storage/web3.storage/issues/404)) ([dd11034](https://www.github.com/web3-storage/web3.storage/commit/dd110344c6475e0e074bfaec6cf32d16643e1bdb))
+
 ## [3.3.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.2.0...web3.storage-v3.3.0) (2021-08-18)
 
 
