@@ -33,7 +33,7 @@ const body = Query(
         IsNonEmpty(Var('contentMatch')),
         Let(
           {
-            content: Get(Var('contentMatch')),
+            content: Get(Var('contentMatch'))
           },
           Let(
             {
