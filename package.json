@@ -8,10 +8,10 @@
     "packages/client",
     "packages/cron",
     "packages/db",
+    "packages/pinpin",
     "packages/report",
     "packages/w3",
-    "packages/website",
-    "packages/pinpin"
+    "packages/website"
   ],
   "scripts": {
     "test": "npm run lint && npm run test --workspaces",
