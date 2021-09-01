@@ -8,7 +8,7 @@ export class Pinata {
   /**
    * @param {{ apiToken: string }} config
    */
-  constructor ({ apiToken, reqsPerSec = 2 }) {
+  constructor ({ apiToken, reqsPerSec = 3 }) {
     this.apiToken = apiToken
     this.limiter = new RateLimiter({ tokensPerInterval: reqsPerSec, interval: 'second' })
   }

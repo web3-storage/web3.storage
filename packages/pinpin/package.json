@@ -1,0 +1,21 @@
+{
+  "name": "@web3-storage/pinpin",
+  "version": "1.0.0",
+  "description": "pin pins on pinata",
+  "license": "(Apache-2.0 AND MIT)",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "pinpin": "./src/bin.js"
+  },
+  "scripts": {
+    "start": "DEBUG_HIDE_DATE=true DEBUG=pinpin ./src/bin.js"
+  },
+  "dependencies": {
+    "debug": "^4.3.2",
+    "dotenv": "^10.0.0",
+    "limiter": "^2.0.1",
+    "node-fetch": "^2.6.1",
+    "p-retry": "^4.6.1"
+  }
+}
