@@ -36,7 +36,7 @@
     "@web-std/file": "^1.1.0",
     "browser-readablestream-to-it": "^1.0.2",
     "carbites": "^1.0.6",
-    "files-from-path": "^0.2.0",
+    "files-from-path": "^0.2.1",
     "ipfs-car": "^0.5.8",
     "p-retry": "^4.5.0",
     "parse-link-header": "^1.0.1",
