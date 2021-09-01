@@ -32,13 +32,13 @@ main()
  * Stores a simple "hello world" object as IPLD data, encoded using dag-cbor.
  * @param {Web3.Storage} storage a Web3.Storage client
  */
-async function simpleCborExample(storage) {
+async function simpleCborExample (storage) {
   // encode the value into an IPLD block and store with Web3.Storage
   const block = await encodeCborBlock({ hello: 'world' })
   const car = await makeCar(block.cid, [block])
 
   // upload to Web3.Storage using putCar
-  console.log(`🤖 Storing simple CBOR object...`)
+  console.log('🤖 Storing simple CBOR object...')
   const cid = await storage.putCar(car)
   console.log(`🎉 Done storing simple CBOR object. CID: ${cid}`)
   console.log(`💡 If you have ipfs installed, try: ipfs dag get ${cid}\n`)
@@ -48,7 +48,7 @@ async function simpleCborExample(storage) {
  * Stores a CBOR object that links to another CBOR object by CID.
  * @param {Web3Storage} storage a Web3.Storage client
  */
-async function cborLinkExample(storage) {
+async function cborLinkExample (storage) {
   // Encode a simple object to get its CID
   const addressBlock = await encodeCborBlock({ email: 'zaphod@beeblebrox.galaxy' })
 
@@ -56,14 +56,14 @@ async function cborLinkExample(storage) {
   const personBlock = await encodeCborBlock({
     title: 'Galactic President',
     description: 'Just this guy, you know?',
-    contact: addressBlock.cid,
+    contact: addressBlock.cid
   })
 
   // pack everything into a CAR
   const car = await makeCar(personBlock.cid, [personBlock, addressBlock])
 
   // upload to Web3.Storage using putCar
-  console.log(`🤖 Storing CBOR objects with CID links between them...`)
+  console.log('🤖 Storing CBOR objects with CID links between them...')
   const cid = await storage.putCar(car)
   console.log('🎉 Stored linked data using dag-cbor. Root CID:', cid)
   console.log(`💡 If you have ipfs installed, try: ipfs dag get ${cid}`)
@@ -75,7 +75,7 @@ async function cborLinkExample(storage) {
  * @param {any} value - any JS value that can be converted to CBOR (if it can be JSON.stringified, it will work)
  * @returns {Block} a block of encoded IPLD data.
  */
-async function encodeCborBlock(value) {
+async function encodeCborBlock (value) {
   return encode({ value, codec: cbor, hasher: sha256 })
 }
 
@@ -86,7 +86,7 @@ async function encodeCborBlock(value) {
  * @param {Iterable<Block>} ipldBlocks a collection of encoded IPLD blocks
  * @returns {CarReader} a CarReader for sending the CAR data to Web3.Storage
  */
-async function makeCar(rootCID, ipldBlocks) {
+async function makeCar (rootCID, ipldBlocks) {
   // create a new CarWriter, with the given root CID
   const { writer, out } = CarWriter.create([rootCID])
 
