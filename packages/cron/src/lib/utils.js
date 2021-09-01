@@ -1,7 +1,6 @@
 import { Cluster } from '@nftstorage/ipfs-cluster'
 import { DBClient } from '@web3-storage/db'
 import { IPFS } from './ipfs.js'
-import { Pinata } from './pinata.js'
 
 /**
  * Create a new IPFS Cluster instance from the passed environment variables.
@@ -48,14 +47,4 @@ export function getDBClient (env) {
     throw new Error(`unsupported environment ${env.ENV}`)
   }
   return new DBClient({ token })
-}
-
-/**
- * Create a new Piñata client instance from the passed environment variables.
- * @param {Record<string, string|undefined>} env
- */
-export function getPinata (env, { reqsPerSec = 2 }) {
-  const apiToken = env.PINATA_JWT
-  if (!apiToken) throw new Error('missing Pinata API token')
-  return new Pinata({ apiToken, reqsPerSec })
 }
