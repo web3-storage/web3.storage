@@ -87,18 +87,7 @@ async function encodeCborBlock (value) {
  * @returns {CarReader} a CarReader for sending the CAR data to Web3.Storage
  */
 async function makeCar (rootCID, ipldBlocks) {
-  // create a new CarWriter, with the given root CID
-  const { writer, out } = CarWriter.create([rootCID])
-
-  // add the blocks to the CAR and close it
-  for (const block of ipldBlocks) {
-    writer.put(block)
-  }
-  writer.close()
-
-  // create a new CarReader we can hand to Web3.Storage.putCar
-  const reader = await CarReader.fromIterable(out)
-  return reader
+  return new CarReader(1, [rootCID], ipldBlocks)
 }
 
 /**
