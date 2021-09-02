@@ -1,6 +1,6 @@
 import process from 'process'
 import minimist from 'minimist'
-import { CarReader, CarWriter } from '@ipld/car'
+import { CarReader } from '@ipld/car'
 import { encode } from 'multiformats/block'
 import * as cbor from '@ipld/dag-cbor'
 import { sha256 } from 'multiformats/hashes/sha2'
