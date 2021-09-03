@@ -168,8 +168,6 @@ jobs:
         with:
           path_to_add: packages/website/out
           web3_token: ${{ secrets.WEB3_TOKEN }}
-          # TODO: move to prod once we can get a token
-          web3_api: https://api-staging.web3.storage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
