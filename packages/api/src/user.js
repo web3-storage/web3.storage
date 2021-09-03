@@ -285,3 +285,25 @@ export async function userUploadsDelete (request, env) {
 
   return new JSONResponse(res.deleteUserUpload)
 }
+
+/**
+ * Renames a user's upload.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userUploadsRename (request, env) {
+  const user = request.auth.user._id
+  const { cid } = request.params
+  const { name } = await request.json()
+
+  const res = await env.db.query(gql`
+    mutation RenameUserUpload($user: ID!, $cid: String!, $name: String!) {
+      renameUserUpload(user: $user, cid: $cid, name: $name) {
+        name
+      }
+    }
+  `, { cid, user, name })
+
+  return new JSONResponse(res.renameUserUpload)
+}

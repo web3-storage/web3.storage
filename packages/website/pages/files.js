@@ -10,8 +10,10 @@ import Tooltip from '../components/tooltip'
 
 import CopyIcon from '../icons/copy'
 import ChevronIcon from '../icons/chevron'
+import PencilIcon from '../icons/pencil'
+import TickIcon from '../icons/tick'
 import countly from '../lib/countly'
-import { getUploads, deleteUpload } from '../lib/api.js'
+import { getUploads, deleteUpload, renameUpload } from '../lib/api.js'
 import { When } from 'react-if'
 import clsx from 'clsx'
 
@@ -120,6 +122,32 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
   const checked = selectedFiles.includes(upload.cid)
   const sharedArgs = { index, checked }
   const pinStatus = getBestPinStatus(upload.pins)
+  const [isRenaming, setRenaming] = useState(false)
+  const [isLoading, setLoading] = useState(false)
+  const [renameError, setError] = useState('')
+  const [renamedValue, setRenamedValue] = useState('')
+
+  /** @param {import('react').ChangeEvent<HTMLFormElement>} ev */
+  const handleRename = async (ev) => {
+    ev.preventDefault()
+    const data = new FormData(ev.target);
+    const fileName = data.get("fileName")
+    
+    if(!fileName || typeof fileName !=='string') return;
+    if (fileName === upload.name) return setRenaming(false)
+
+    try {
+      setLoading(true)
+      await renameUpload(upload.cid, fileName)
+      setError('')
+    } catch(e) {
+      console.error(e);
+      setError(e.message)
+    }
+    setLoading(false)
+    setRenaming(false)
+    setRenamedValue(fileName)
+  } 
 
   const deals = upload.deals
     .filter(d => d.status !== 'Queued')
@@ -166,7 +194,29 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
       <TableElement {...sharedArgs}>
         <span title={upload.created} className="break-normal">{formatTimestamp(upload.created)}</span>
       </TableElement>
-      <TableElement {...sharedArgs} important>{upload.name}</TableElement>
+      <TableElement {...sharedArgs} important>
+        {!isRenaming ? (
+          <div className={ clsx("flex items-center justify-start", renameError.length > 0 && "text-w3storage-red")}>
+            <span className="flex-auto">{renamedValue || upload.name}</span>
+            { renameError.length > 0 && 
+              <span className="rounded-full border-w3storage-red border flex-none w-6 h-6 flex justify-center items-center" title={renameError}>!</span>
+            }
+            <button className="p-2 pr-1 cursor-pointer" onClick={() => setRenaming(true)}>
+              <PencilIcon style={{minWidth: 18 }} height="18" className="dib" fill="currentColor" aria-label="Edit"/>
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleRename} className="flex items-center justify-start">
+            <input className="flex-auto p-0 flex-auto" defaultValue={renamedValue || upload.name} autoFocus name="fileName" required/>
+            <button className="p-2 pr-1 cursor-pointer" type="submit">
+              { isLoading ? 
+                <Loading height={18} className="dib relative" fill="currentColor"/> :
+                <TickIcon style={{minWidth: 18 }} height="18" className="dib" fill="currentColor" aria-label="Edit"/>
+              }
+            </button>
+          </form>
+        )}  
+      </TableElement>
       <TableElement {...sharedArgs} important>
         <div className="flex items-center justify-center">
           <GatewayLink cid={upload.cid} />
