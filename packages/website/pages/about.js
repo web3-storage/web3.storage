@@ -1,19 +1,14 @@
 /* eslint-disable react/no-children-prop */
-import matter from 'gray-matter'
-import ReactMarkdown from "react-markdown";
+import { loadMDX } from '../lib/markdown'
+import { MDXRemote } from 'next-mdx-remote'
 import VerticalLines from '../illustrations/vertical-lines.js'
-import slug from 'remark-slug'
 
  export async function getStaticProps() {
-   // @ts-ignore
-   const content = await import ('../content/about.md')
-   const data = matter(content.default)
-
-
+   const { mdx } = await loadMDX('content/about.md')
     return {
       props: {
         needsLoggedIn: false,
-        data: data.content,
+        data: mdx,
       },
     }
   }
@@ -32,7 +27,9 @@ export default function About({ data }) {
           <VerticalLines className="h-full"/>
         </div>
         <div className="layout-margins">
-          <ReactMarkdown className="prose max-w-screen-lg mx-auto text-w3storage-purple my-4 lg:my-32" children={data} remarkPlugins={[slug]} />
+          <div className="prose max-w-screen-lg mx-auto text-w3storage-purple my-4 lg:my-32" >
+            <MDXRemote {...data} />
+          </div>
         </div>
       </div>
     )
