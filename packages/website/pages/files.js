@@ -267,7 +267,9 @@ export default function Files({ isLoggedIn }) {
   )
 
   const refreshUploads = async () => {
-    setBefores([new Date().toISOString()])
+    if (befores.length <= 1) {
+      setBefores([new Date().toISOString()])
+    }
     return refetch();
   }
 
