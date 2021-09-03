@@ -1,0 +1,32 @@
+name: Cron Pins
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+
+jobs:
+  upload-test:
+    name: Upload test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        # cool! https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#using-environment-variables-in-a-matrix
+        include:
+          - api: https://api.web3.storage
+            token: ${{ secrets.WEB3_TOKEN }}
+          - api: https://api-staging.web3.storage
+            token: ${{ secrets.STAGING_WEB3_TOKEN }}
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Add small file via w3
+        run: |
+          echo "$(date --utc --iso-8601=seconds) web3.storage upload test" > ./date 
+          npx @web3-storage/w3 put ./date --api {{ matrix.api }} --token ${{ matrix.token }}
+      # test adding a file larger than LOCAL_ADD_THRESHOLD see: packages/api/src/constants.js
+      - name: Add 3MiB file via w3
+        run: |
+          dd if=/dev/urandom of=./foo bs=1024 count=3072
+          npx @web3-storage/w3 put ./medium --api {{ matrix.api }} --token ${{ matrix.token }}
