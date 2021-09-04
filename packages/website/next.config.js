@@ -27,4 +27,5 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+const withTM = require('next-transpile-modules')(['react-children-utilities'])
+module.exports = withTM(nextConfig)

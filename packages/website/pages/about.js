@@ -1,6 +1,6 @@
 /* eslint-disable react/no-children-prop */
 import { loadMDX } from '../lib/markdown'
-import { MDXRemote } from 'next-mdx-remote'
+import { MDX } from '../components/mdx'
 import VerticalLines from '../illustrations/vertical-lines.js'
 
  export async function getStaticProps() {
@@ -28,7 +28,7 @@ export default function About({ data }) {
         </div>
         <div className="layout-margins">
           <div className="prose max-w-screen-lg mx-auto text-w3storage-purple my-4 lg:my-32" >
-            <MDXRemote {...data} />
+            <MDX mdx={data} />
           </div>
         </div>
       </div>

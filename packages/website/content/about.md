@@ -1,3 +1,8 @@
+---
+snippets:
+  test: pages/_app.js
+---
+
 ### [What is Web3.Storage?](#what-is-web3storage)
 
 Web3.Storage is a service to make building on top of Filecoin as simple as possible - giving the developers the power of open, distributed networks via a friendly JS client library. Behind the scenes, Web3.Storage is backed by Filecoin and makes content available via IPFS leveraging the unique properties of each network.
@@ -7,6 +12,14 @@ Web3.Storage is a service to make building on top of Filecoin as simple as possi
 - IPFS offers content addressing - enabling developers to create immutable links to their content, and flexibility for developers in how they'd like to retrieve their data (whether it be running personal nodes, relying on public infrastructure, or paying for hosted options).
 
 Developers can start building in a matter of minutes - allowing them to take advantage of all the power and openness of the decentralized web with none of the infrastructure complexity.
+
+```c
+int main() {
+  printf("boo")
+}
+```
+
+<CodeSnippet {...snippets.test} />
 
 ### [Methodology](#methodology)
 
