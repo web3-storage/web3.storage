@@ -32,6 +32,7 @@
     "react-query": "^3.13.9",
     "react-syntax-highlighter": "^11.0.3",
     "react-toastify": "^8.0.2",
+    "rehype-slug": "^5.0.0",
     "remark-slug": "^6.1.0",
     "web3.storage": "^3.0.0",
     "yaml": "^1.10.2"

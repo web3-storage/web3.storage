@@ -28,7 +28,6 @@ export default function CodeBlock(props) {
   const meta = parseMetastring(metastring)
   const mergedProps = {...props, ...meta}
   const { copyEnabled, title } = mergedProps
-  console.log('merged', mergedProps)
   const copyButton = copyEnabled === false ? <div/> : CopyButton({src})
 
   return (

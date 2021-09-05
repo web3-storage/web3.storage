@@ -23,5 +23,11 @@ const nextConfig = {
   },
 }
 
-const withTM = require('next-transpile-modules')(['react-children-utilities'])
+const withTM = require('next-transpile-modules')([
+  'react-children-utilities', 
+  'rehype-slug', 
+  'hast-util-has-property', 
+  'hast-util-heading-rank', 
+  'hast-util-to-string',
+])
 module.exports = withTM(nextConfig)

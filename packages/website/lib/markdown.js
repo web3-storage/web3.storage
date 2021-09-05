@@ -2,6 +2,7 @@ import matter from 'gray-matter'
 import { serialize } from 'next-mdx-remote/serialize'
 import fs from 'fs/promises'
 import path from 'path'
+import slug from 'rehype-slug'
 
 /**
  * 
@@ -14,14 +15,8 @@ async function slurp(filepath) {
   return fs.readFile(fullPath, 'utf8')
 }
 
-/**
- * 
- * @param {string} mdxFilePath 
- * @returns 
- */
-export async function loadMDX(mdxFilePath) {
-  const fullContent = await slurp(mdxFilePath)
-  const { content: raw, data: frontmatter } = matter(fullContent)
+export async function serializeMDX(mdxSource) {
+  const { content: raw, data: frontmatter } = matter(mdxSource)
 
   if (frontmatter.snippets) {
     const snippets = {}
@@ -36,24 +31,26 @@ export async function loadMDX(mdxFilePath) {
     frontmatter.snippets = snippets
   }
 
-  const mdx = await serialize(raw, { scope: frontmatter })
-
-  // TODO: for code snippets, maybe frontmatter lists sources to load here in static props
-  // e.g.
-  // 
-  // snippets:
-  //   howto: snippets/howto.js
-  //
-  // Then in your mdx:
-  //
-  //    Here's some code that frazzles the frizzlers:
-  //    <CodeSnippet snippet={howto} region="friz-frazzlers" />
-  //
-  // 
+  const mdxOptions = {
+    rehypePlugins: [
+      slug,
+    ]
+  }
+  const mdx = await serialize(raw, { scope: frontmatter, mdxOptions })
 
   return {
     frontmatter,
     raw,
     mdx,
   }
+}
+
+/**
+ * 
+ * @param {string} mdxFilePath 
+ * @returns 
+ */
+export async function loadMDX(mdxFilePath) {
+  const fullContent = await slurp(mdxFilePath)
+  return serializeMDX(fullContent)
 }

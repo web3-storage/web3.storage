@@ -34,7 +34,6 @@ function swizzlePreElement(props) {
     return <pre {...props} />
   }
   const child = React.Children.only(children)
-  console.log(child.props)
   if (!child.props.className.startsWith('language')) {
     return <pre {...props} />
   }
