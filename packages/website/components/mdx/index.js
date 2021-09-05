@@ -2,6 +2,7 @@ import React from 'react'
 import { MDXRemote } from 'next-mdx-remote'
 import CodeBlock from './CodeBlock'
 import CodeSnippet from './CodeSnippet'
+import 'remark-admonitions/styles/classic.css'
 
 /**
  * @typedef {object} MDXRemoteProps

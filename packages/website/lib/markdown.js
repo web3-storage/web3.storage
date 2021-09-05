@@ -2,6 +2,7 @@ import matter from 'gray-matter'
 import { serialize } from 'next-mdx-remote/serialize'
 import fs from 'fs/promises'
 import path from 'path'
+import admonitions from 'remark-admonitions'
 import slug from 'rehype-slug'
 
 /**
@@ -32,6 +33,9 @@ export async function serializeMDX(mdxSource) {
   }
 
   const mdxOptions = {
+    remarkPlugins: [
+      admonitions,
+    ],
     rehypePlugins: [
       slug,
     ]
