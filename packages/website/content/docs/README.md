@@ -1,6 +1,9 @@
 ---
 title: Welcome
 description: "Learn how to use Web3.Storage to decentralize your data storage without all the complicated details."
+snippets:
+  putFiles: content/docs-snippets/quickstart/put-files.js
+  packageJson: content/docs-snippets/quickstart/package.json
 ---
 
 # Better storage. Better transfers. Better internet.
@@ -40,8 +43,8 @@ node --version && npm --version
 
 You need a Web3.Storage account to get your API token and manage your stored data. You can sign up **for free** using your email address or GitHub.
 
-::::tabs
-:::tab Email
+<Tabs>
+<TabItem value="email" label="Email">
 
 ### Sign up using email
 
@@ -50,9 +53,8 @@ You need a Web3.Storage account to get your API token and manage your stored dat
 1. Check your inbox for a verification email from Web3.Storage, and click the **Log in** button in the email.
 1. You're all set!
 
-:::
-
-:::tab GitHub
+</TabItem>
+<TabItem value="github" label="GitHub">
 
 ### Sign up using GitHub
 
@@ -61,8 +63,8 @@ You need a Web3.Storage account to get your API token and manage your stored dat
 1. **Authorize** Web3.Storage when asked by GitHub.
 1. You're all set!
 
-:::
-::::
+</TabItem>
+</Tabs>
 
 Now that you're signed up and logged in, it's time to [get your API token. ↓](#get-an-api-token)
 
@@ -98,11 +100,11 @@ All data uploaded to Web3.Storage is available to anyone who requests it using t
 
 1. Create a file called `put-files.js` and paste in the following code:
 
-    <<< @/code-snippets/quickstart/put-files.js
+    <CodeSnippet {...snippets.putFiles} title='put-files.js' />
 
 1. Create another file called `package.json` and paste in the following code:
 
-    <<< @/code-snippets/quickstart/package-example.json
+    <CodeSnippet {...snippets.packageJson} title='package.json' />
 
 1. Save both files, and then run `npm install` from your project folder:
 
@@ -112,7 +114,7 @@ All data uploaded to Web3.Storage is available to anyone who requests it using t
 
     This step may take a few moments. Once it's done, the command should output something like this:
 
-    ```shell output
+    ```shell copyEnabled: false
     added 224 packages, and audited 225 packages in 14s
 
     40 packages are looking for funding

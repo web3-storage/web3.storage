@@ -2,6 +2,8 @@ import React from 'react'
 import { MDXRemote } from 'next-mdx-remote'
 import CodeBlock from './CodeBlock'
 import CodeSnippet from './CodeSnippet'
+import Tabs from './Tabs'
+import TabItem from './TabItem'
 import 'remark-admonitions/styles/classic.css'
 
 /**
@@ -23,7 +25,10 @@ import 'remark-admonitions/styles/classic.css'
 export function MDX(props) {
   const { mdx } = props
   mdx.components = {
+    CodeBlock,
     CodeSnippet,
+    Tabs,
+    TabItem,
     pre: swizzlePreElement,
   }
   return <MDXRemote {...mdx} />
