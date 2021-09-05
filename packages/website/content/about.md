@@ -13,7 +13,7 @@ Web3.Storage is a service to make building on top of Filecoin as simple as possi
 
 Developers can start building in a matter of minutes - allowing them to take advantage of all the power and openness of the decentralized web with none of the infrastructure complexity.
 
-```c
+```c title: main.c
 int main() {
   printf("boo\n");
 }

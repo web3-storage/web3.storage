@@ -8,10 +8,6 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   webpack: function(config) {
-    config.module.rules.push({
-      test: /\.md$/,
-      type: 'asset/source'
-    })
 
     config.module.rules.push({
       test: /\.svg$/,

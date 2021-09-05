@@ -1,7 +1,9 @@
 import React from "react";
 import clsx from 'clsx';
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import Highlight, { defaultProps } from "prism-react-renderer";
+import { CopyToClipboard } from "react-copy-to-clipboard"
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import Highlight, { defaultProps } from "prism-react-renderer"
 import { onlyText } from 'react-children-utilities'
 import yaml from 'js-yaml'
 
@@ -9,7 +11,7 @@ import yaml from 'js-yaml'
  * @typedef {object} CodeBlockProps
  * @property {string} [lang] language to use for syntax highlighting
  * @property {string} [metastring] additional meta info attached to markdown code block. If present, will be parsed and merged into the code block props. {@see parseMetastring} for parsing rules.
- * @property {object} [meta] meta info as a parsed object. use as an alternative to metastring - metastring will be ignored if meta is present.
+ * @property {string} [title] if present, code block will be rendered with a title at the top.
  * @property {boolean} [copyEnabled] whether to show a copy-to-clipboard button. defaults to true if left undefined.
  * @property {React.Children} children the text content of all child nodes will be used as the source to display inside the code block
  */
@@ -23,30 +25,51 @@ export default function CodeBlock(props) {
   const { lang, metastring } = props
   const src = onlyText(props.children)
 
-
-  const meta = props.meta || parseMetastring(metastring)
+  const meta = parseMetastring(metastring)
   const mergedProps = {...props, ...meta}
-  const { copyEnabled } = mergedProps
+  const { copyEnabled, title } = mergedProps
+  console.log('merged', mergedProps)
   const copyButton = copyEnabled === false ? <div/> : CopyButton({src})
 
   return (
-    <div className='relative' >
+    <div className='codeBlockWrapper bg-gray-300 rounded-md' >
       <Highlight {...defaultProps} code={src} language={lang}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <pre className={className} style={style}>
-          {tokens.map((line, i) => (
-            <div {...getLineProps({ line, key: i })}>
-              {line.map((token, key) => (
-                <span {...getTokenProps({ token, key })} />
+        <div>
+          <div className={clsx(className, 'rounded-md')} style={style}>
+          {titleView(title)}
+            <div className='relative'>
+            <pre >
+              {tokens.map((line, i) => (
+                <div {...getLineProps({ line, key: i })}>
+                  {line.map((token, key) => (
+                    <span {...getTokenProps({ token, key })} />
+                  ))}
+                </div>
               ))}
+            </pre>
+            {copyButton}
             </div>
-          ))}
-        </pre>
+        </div>
+      </div>
       )}
     </Highlight>
-    {copyButton}
   </div>
   )
+}
+
+/**
+ * 
+ * @param {string|undefined} title 
+ * @returns {React.ReactElement}
+ */
+function titleView(title) {
+  if (!title) {
+    return <div/>
+  }
+  return <div className='border-b-1 border-gray-500 text-bold pl-2 pt-2'>
+    {title}
+  </div>
 }
 
 /**
@@ -83,9 +106,15 @@ function CopyButton({className, src }) {
     <div className={clsx('absolute', 'top-1', 'right-4', 'text-white', className)}>
       <CopyToClipboard 
         text={src}
-        options={{ message: 'Copied!' }}>
+        onCopy={() => toast.success('Copied!')} >
           <button>copy</button>
       </CopyToClipboard>
+      <ToastContainer 
+        position='bottom-center'
+        autoClose={1500}
+        hideProgressBar={true}
+        newestOnTop={true}
+        />
     </div>
   )
 }
