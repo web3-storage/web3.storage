@@ -15,8 +15,12 @@ Developers can start building in a matter of minutes - allowing them to take adv
 
 ```c
 int main() {
-  printf("boo")
+  printf("boo\n");
 }
+```
+
+```text copyEnabled: false
+boo
 ```
 
 <CodeSnippet {...snippets.test} />

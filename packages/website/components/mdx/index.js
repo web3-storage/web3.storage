@@ -21,18 +21,25 @@ import CodeSnippet from './CodeSnippet'
  */
 export function MDX(props) {
   const { mdx } = props
-  mdx.components = mdx.components || {}
-  mdx.components.CodeSnippet = CodeSnippet
-  // @ts-ignore
-  mdx.components.code = function hackCode(_props) {
-    console.log('monkey patch, yo', _props)
-    if (!_props.className || !_props.className.startsWith('language')) {
-      return <code {..._props} />
-    }
-
-    const lang = _props.className.replace('language-', '')
-    return <CodeBlock lang={lang} {..._props} />
+  mdx.components = {
+    CodeSnippet,
+    pre: swizzlePreElement,
   }
-  // @ts-ignore
   return <MDXRemote {...mdx} />
+}
+
+function swizzlePreElement(props) {
+  const { children, rest } = props
+  if (React.Children.count(children) !== 1) {
+    return <pre {...props} />
+  }
+  const child = React.Children.only(children)
+  console.log(child.props)
+  if (!child.props.className.startsWith('language')) {
+    return <pre {...props} />
+  }
+  const lang = child.props.className.replace('language-', '')
+  return <CodeBlock lang={lang} metastring={child.props.metastring} {...rest}>
+      {child}
+    </CodeBlock>
 }

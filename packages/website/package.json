@@ -15,6 +15,7 @@
     "countly-sdk-web": "^20.11.2",
     "filesize": "^6.1.0",
     "gray-matter": "^4.0.3",
+    "js-yaml": "^3.14.1",
     "magic-sdk": "^4.2.1",
     "next": "^11.0.1",
     "next-mdx-remote": "^3.0.4",
@@ -23,7 +24,7 @@
     "rc-tooltip": "^5.1.1",
     "react": "^17.0.2",
     "react-children-utilities": "^2.6.2",
-    "react-copy-to-clipboard": "^5.0.3",
+    "react-copy-to-clipboard": "^5.0.4",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.4",
     "react-if": "^4.0.1",
@@ -31,7 +32,8 @@
     "react-query": "^3.13.9",
     "react-syntax-highlighter": "^11.0.3",
     "remark-slug": "^6.1.0",
-    "web3.storage": "^3.0.0"
+    "web3.storage": "^3.0.0",
+    "yaml": "^1.10.2"
   },
   "devDependencies": {
     "@svgr/webpack": "^5.5.0",
