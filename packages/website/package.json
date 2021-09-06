@@ -15,7 +15,6 @@
     "countly-sdk-web": "^20.11.2",
     "filesize": "^6.1.0",
     "gray-matter": "^4.0.3",
-    "js-yaml": "^3.14.1",
     "magic-sdk": "^4.2.1",
     "next": "^11.0.1",
     "next-mdx-remote": "^3.0.4",

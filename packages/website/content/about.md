@@ -13,18 +13,6 @@ Web3.Storage is a service to make building on top of Filecoin as simple as possi
 
 Developers can start building in a matter of minutes - allowing them to take advantage of all the power and openness of the decentralized web with none of the infrastructure complexity.
 
-```c title: main.c
-int main() {
-  printf("boo\n");
-}
-```
-
-```text copyEnabled: false
-boo
-```
-
-<CodeSnippet {...snippets.test} />
-
 ### [Methodology](#methodology)
 
 Content uploaded to Web3.Storage is pinned redundantly in an [IPFS Cluster](https://cluster.ipfs.io) of 3 geographically distributed nodes. When 32GiB of content is made available, a request is made to pin a new batch of content into a separate IPFS cluster - where a 32GiB CAR file is generated to store the data. Once this 32GiB CAR file is ready, a queue of geographically distributed storage providers - selected for performance and availability - bid for the right to store these deals, with the Web3.Storage client making a minimum of 5 deals with the various storage providers. Please see the [documentation](https://docs.web3.storage/) for how one can use the [Status API](https://docs.web3.storage/how-tos/query/) to query for information regarding pin status and deal status for your uploaded content.

@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Highlight, { defaultProps } from "prism-react-renderer"
 import { onlyText } from 'react-children-utilities'
-import yaml from 'js-yaml'
+import yaml from 'yaml'
 
 /**
  * @typedef {object} CodeBlockProps
@@ -80,12 +80,11 @@ function titleView(title) {
  * @returns {object}
  */
 function parseMetastring(metastring) {
-  if (!metastring) {
+  if (!metastring || !metastring.match(/^\s*{.*}\s*$/)) {
     return {}
   }
-  const yamlstr = `{${metastring}}`
   try {
-    return yaml.load(yamlstr)
+    return yaml.parse(metastring)
   } catch (e) {
     console.warn(`error parsing code block metastring "${metastring}":`, e)
     return {}

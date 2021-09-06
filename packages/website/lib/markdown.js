@@ -23,11 +23,12 @@ export async function serializeMDX(mdxSource) {
   const { content: raw, data: frontmatter } = matter(mdxSource)
 
   if (frontmatter.snippets) {
-    const snippets = {}
+    const snippets = {...frontmatter.snippets}
     for (const [key, filename] of Object.entries(frontmatter.snippets)) {
       if (typeof filename !== 'string') {
         continue
       }
+      console.log(`loading snippet ${key} from ${filename}`)
       const src = await slurp(filename)
       const lang = path.extname(filename).replace('.', '')
       snippets[key] = { src, filename, lang }

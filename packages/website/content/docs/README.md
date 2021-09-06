@@ -34,9 +34,13 @@ You'll need **Node version 14** or higher and **NPM version 7** or higher to com
 
 ```shell
 node --version && npm --version
-> v16.4.2
-> 7.18.1
 ```
+
+```shell {copyEnabled: false}
+v16.4.2
+7.18.1
+```
+
 :::
 
 ## Create an account
@@ -114,7 +118,7 @@ All data uploaded to Web3.Storage is available to anyone who requests it using t
 
     This step may take a few moments. Once it's done, the command should output something like this:
 
-    ```shell copyEnabled: false
+    ```shell {copyEnabled: false}
     added 224 packages, and audited 225 packages in 14s
 
     40 packages are looking for funding
