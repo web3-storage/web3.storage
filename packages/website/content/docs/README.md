@@ -25,7 +25,7 @@ With Web3.Storage, you get all the benefits of decentralized storage technologie
 4. [Getting your uploaded file](#get-your-file) using your browser or curl.
 
 **This guide uses Node.js since it's the fastest way to get started using the Web3.Storage JavaScript client programmatically**, but don't worry if Node isn't your favorite runtime environment — or if you'd rather not do any coding at all. You can also use Web3.Storage in the following ways:
-- Work with the API methods in the [JavaScript client library](/reference/client-library.md) using the JS runtime of your choice.
+- Work with the API methods in the [JavaScript client library](./reference/client-library.md) using the JS runtime of your choice.
 - Upload and retrieve files directly from your [Files page](https://web3.storage/files/) on the Web3.Storage website.
 
 :::danger PREREQUISITES
@@ -171,7 +171,7 @@ You've already done the most difficult work in this guide — getting your files
 
 If you ever need to find your files again, and you've forgotten the CID, head over to the [Files section](https://web3.storage/files/) in Web3.Storage:
 
-![A listing of files in Web3.Storage](./images/files-listing.png)
+![A listing of files in Web3.Storage](/images/docs/files-listing.png)
 
 ## Next steps
 

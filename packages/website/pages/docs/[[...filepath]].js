@@ -13,7 +13,7 @@ const BASE_DOCS_PATH = 'content/docs'
  export async function getStaticProps() {
    const docs = await loadDocs()
    for (const doc of docs) {
-     console.log('loading doc from', doc.localPath)
+    //  console.log('loading doc from', doc.localPath)
      doc.compiled = await serializeMDX(doc.content)
    }
    return {
@@ -27,7 +27,7 @@ const BASE_DOCS_PATH = 'content/docs'
   export async function getStaticPaths() {
     const docs = await loadDocs()
     const paths = docs.map(d => d.path)
-    console.log('docs paths', paths)
+    // console.log('docs paths', paths)
     paths.push('/docs/index.html')
     return {
       paths,
@@ -80,8 +80,8 @@ export default function DocsPage({ docs }) {
   if (docPath === '/docs/index.html') {
     docPath = '/docs'
   }
-  console.log('docs template page', router.query, docPath)
-  console.log('all doc paths', docs.map(d => d.path))
+  // console.log('docs template page', router.query, docPath)
+  // console.log('all doc paths', docs.map(d => d.path))
   for (const d of docs) {
     if (d.path === docPath) {
       doc = d
@@ -92,7 +92,7 @@ export default function DocsPage({ docs }) {
     console.log('no matching doc. TODO: redirect to 404')
     return <div></div>
   }
-  console.log('doc found', doc)
+  // console.log('doc found', doc)
 
     return (
       <div className="relative overflow-hidden z-0">
