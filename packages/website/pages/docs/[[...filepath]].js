@@ -31,7 +31,7 @@ const BASE_DOCS_PATH = 'content/docs'
   export async function getStaticPaths() {
     const docs = await loadDocs()
     const paths = docs.map(d => d.path)
-    if ('dev' === process.env.NEXT_PUBLIC_ENV) {
+    if (process.env.NEXT_PUBLIC_ENV === 'dev') {
       // this seems to be needed for the dev server, but breaks the export...
       paths.push('/docs/index.html')
     }
@@ -51,7 +51,6 @@ const BASE_DOCS_PATH = 'content/docs'
       if (!entry.match(/\.mdx?$/)) {
         continue
       }
-      console.log('entry', entry)
       const content = await fs.readFile(entry, 'utf-8')
       const name = entry.replace(BASE_DOCS_PATH, '').replace(/\/README.mdx?$/, '')
       const docId = name.replace(/\.mdx?$/, '')
@@ -152,7 +151,6 @@ function submenu({title, prefix, docs, docId}) {
       // TODO: add fallback/default instead?
       throw new Error('markdown doc is missing "title" front matter')
     }
-    console.log(d.path, title, active)
     weightedItems.push({ 
       item: menuLink(d.path, title, active),
       weight,
@@ -162,8 +160,10 @@ function submenu({title, prefix, docs, docId}) {
   weightedItems.sort((a, b) => a.weight - b.weight).reverse()
   const items = weightedItems.map(i => i.item)
 
+  const defaultOpen = docId.startsWith(prefix)
+
   return (
-    <SubMenu title={title} open={true} >
+    <SubMenu title={title} defaultOpen={defaultOpen} key={title} >
       {items}
     </SubMenu>
   )
