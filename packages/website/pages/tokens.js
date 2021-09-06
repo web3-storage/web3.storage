@@ -74,14 +74,14 @@ const TokenRow = ({ token, index, copied, onCopy, deleting, onDelete }) => {
       </TableElement>
       <TableElement {...sharedArgs} breakAll={false}>
         <form onSubmit={e => { e.preventDefault(); onCopy(token) }}>
-          <Button type="submit" small className="w-28">
+          <Button type="submit" small className="w-24">
             {copied === token._id ? 'Copied!' : 'Copy'}
           </Button>
         </form>
       </TableElement>
       <TableElement {...sharedArgs} breakAll={false}>
         <form onSubmit={e => { e.preventDefault(); onDelete(token) }}>
-          <Button type="submit" disabled={Boolean(deleting)} small>
+          <Button type="submit" disabled={Boolean(deleting)} small className="w-24">
             {deleting === token._id ? 'Deleting...' : 'Delete'}
           </Button>
         </form>
