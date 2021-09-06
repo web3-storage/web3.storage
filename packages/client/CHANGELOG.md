@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.3.2](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.1...web3.storage-v3.3.2) (2021-09-06)
+
+
+### Bug Fixes
+
+* update files from path dep with types fixed ([#426](https://www.github.com/web3-storage/web3.storage/issues/426)) ([484c12e](https://www.github.com/web3-storage/web3.storage/commit/484c12e2f64dffb2aff4e43df1f6e9d0341f898a))
+
 ### [3.3.1](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.0...web3.storage-v3.3.1) (2021-08-29)
 
 
