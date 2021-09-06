@@ -22,16 +22,17 @@ import yaml from 'yaml'
  * @returns 
  */
 export default function CodeBlock(props) {
-  const { lang, metastring } = props
+  const { lang } = props
   const src = onlyText(props.children)
 
-  const meta = parseMetastring(metastring)
+  const meta = parseMetastring(props.metastring)
   const mergedProps = {...props, ...meta}
   const { copyEnabled, title } = mergedProps
   const copyButton = copyEnabled === false ? <div/> : CopyButton({src})
 
   return (
     <div className='codeBlockWrapper bg-gray-300 rounded-md' >
+      {/* @ts-ignore */}
       <Highlight {...defaultProps} code={src} language={lang}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <div>
@@ -40,8 +41,10 @@ export default function CodeBlock(props) {
             <div className='relative'>
             <pre >
               {tokens.map((line, i) => (
+                // eslint-disable-next-line react/jsx-key
                 <div {...getLineProps({ line, key: i })}>
                   {line.map((token, key) => (
+                    // eslint-disable-next-line react/jsx-key
                     <span {...getTokenProps({ token, key })} />
                   ))}
                 </div>

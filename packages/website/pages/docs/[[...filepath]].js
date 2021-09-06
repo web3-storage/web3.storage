@@ -27,8 +27,10 @@ const BASE_DOCS_PATH = 'content/docs'
   export async function getStaticPaths() {
     const docs = await loadDocs()
     const paths = docs.map(d => d.path)
-    // console.log('docs paths', paths)
-    paths.push('/docs/index.html')
+    if ('dev' === process.env.NEXT_PUBLIC_ENV) {
+      // this seems to be needed for the dev server, but breaks the export...
+      paths.push('/docs/index.html')
+    }
     return {
       paths,
       fallback: false,
@@ -76,7 +78,8 @@ export default function DocsPage({ docs }) {
 
   const router = useRouter()
   let doc = null
-  let docPath = ['/docs', ...router.query.filepath].join('/')
+  const filepath = router.query.filepath || []
+  let docPath = ['/docs', ...filepath].join('/')
   if (docPath === '/docs/index.html') {
     docPath = '/docs'
   }

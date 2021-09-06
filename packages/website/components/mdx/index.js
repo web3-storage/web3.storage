@@ -7,10 +7,12 @@ import TabItem from './TabItem'
 import 'remark-admonitions/styles/classic.css'
 
 /**
+ * @typedef {import('react').ReactNode} ReactNode
+ * 
  * @typedef {object} MDXRemoteProps
  * @property {string} compiledSource
- * @property {object} [scope]
- * @property {object} [components]
+ * @property {Record<string, any>} [scope]
+ * @property {Record<string, ReactNode>} [components]
  * 
  * @typedef {object} MDXProps
  * @property {MDXRemoteProps} mdx
@@ -34,13 +36,19 @@ export function MDX(props) {
   return <MDXRemote {...mdx} />
 }
 
+/**
+ * 
+ * @param {any} props 
+ * @returns 
+ */
+
 function swizzlePreElement(props) {
   const { children, rest } = props
   if (React.Children.count(children) !== 1) {
     return <pre {...props} />
   }
   const child = React.Children.only(children)
-  if (!child.props.className.startsWith('language')) {
+  if (!child.props.className || !child.props.className.startsWith('language')) {
     return <pre {...props} />
   }
   const lang = child.props.className.replace('language-', '')
