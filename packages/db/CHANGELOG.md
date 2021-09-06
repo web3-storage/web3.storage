@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.1.0...db-v2.2.0) (2021-09-06)
+
+
+### Features
+
+* allow uploads to be renamed ([2cd9483](https://www.github.com/web3-storage/web3.storage/commit/2cd9483734df5e558a79f58701002f2c50c94269))
+* api supports upload list sorting ([#373](https://www.github.com/web3-storage/web3.storage/issues/373)) ([7b0ec3b](https://www.github.com/web3-storage/web3.storage/commit/7b0ec3beea3aa9b596a794441267d7b8bfcbb7b6))
+
 ## [2.1.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.0.3...db-v2.1.0) (2021-08-24)
 
 
