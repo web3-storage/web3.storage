@@ -2,8 +2,9 @@ import matter from 'gray-matter'
 import { serialize } from 'next-mdx-remote/serialize'
 import fs from 'fs/promises'
 import path from 'path'
-import admonitions from 'remark-admonitions'
-import slug from 'rehype-slug'
+import remarkAdmonitions from 'remark-admonitions'
+import rehypeSlug from 'rehype-slug'
+import rehypeToc from '@jsdevtools/rehype-toc'
 
 /**
  * 
@@ -16,11 +17,19 @@ async function slurp(filepath) {
 }
 
 /**
+ * @typedef {object} SerializeMDXOptions
+ * @property {boolean} [disableToc] if true, don't generate a table-of-contents
+ */
+
+/**
  * @param {string} mdxSource
+ * 
+ * @param {SerializeMDXOptions} [options]
  * @returns {Promise<object>}
  */
-export async function serializeMDX(mdxSource) {
+export async function serializeMDX(mdxSource, options = {}) {
   const { content: raw, data: frontmatter } = matter(mdxSource)
+  const { disableToc } = options
 
   if (frontmatter.snippets) {
     const snippets = {...frontmatter.snippets}
@@ -38,16 +47,29 @@ export async function serializeMDX(mdxSource) {
 
   const mdxOptions = {
     remarkPlugins: [
-      admonitions,
+      remarkAdmonitions,
       transformInternalLinks,
     ],
     rehypePlugins: [
-      slug,
+      rehypeSlug,
+      [rehypeToc, {
+        headings: ['h2', 'h3'],
+        position: 'beforeend',
+        // @ts-ignore
+        customizeTOC: toc => disableToc ? false : toc,
+        cssClasses: {
+          // TODO: take these as a param
+          toc: 'toc hidden md:block'
+        }
+      }]
     ]
   }
 
-  const mdx = await serialize(raw, { 
-    scope: frontmatter, 
+  const src = ['<main class="mdx-main prose max-w-2xl">', raw, '</main>'].join('\n\n')
+
+  const mdx = await serialize(src, { 
+    scope: frontmatter,
+    // @ts-ignore
     mdxOptions,
   })
 
@@ -60,12 +82,13 @@ export async function serializeMDX(mdxSource) {
 
 /**
  * 
- * @param {string} mdxFilePath 
+ * @param {string} mdxFilePath
+ * @param {SerializeMDXOptions} [options]
  * @returns 
  */
-export async function loadMDX(mdxFilePath) {
+export async function loadMDX(mdxFilePath, options = {}) {
   const fullContent = await slurp(mdxFilePath)
-  return serializeMDX(fullContent)
+  return serializeMDX(fullContent, options)
 }
 
 function transformInternalLinks() {

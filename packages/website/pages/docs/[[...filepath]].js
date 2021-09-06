@@ -108,10 +108,8 @@ export default function DocsPage({ docs }) {
       <aside className='h-screen sticky top-0'>
         {sidebar}
       </aside>
-      <div className="layout-margins">
-        <div className="prose mx-auto text-w3storage-purple my-4 lg:my-32" >
+        <div className="flex mx-auto text-w3storage-purple px-5" >
           <MDX mdx={doc.compiled.mdx} />
-        </div>
       </div>
     </div>
   )
@@ -129,7 +127,7 @@ function makeSidebar({ docs, docId }) {
   ]
 
   return (
-    <ProSidebar width={300}>
+    <ProSidebar width={300} >
       <Menu popperArrow={false} >
         {items}
       </Menu>

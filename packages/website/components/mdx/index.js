@@ -25,15 +25,19 @@ import 'remark-admonitions/styles/classic.css'
  * @param {MDXProps} props 
  */
 export function MDX(props) {
-  const { mdx } = props
-  mdx.components = {
+  const { mdx: { compiledSource, scope, components: userComponents } } = props
+  const components = {
     CodeBlock,
     CodeSnippet,
     Tabs,
     TabItem,
     pre: swizzlePreElement,
+    ...userComponents,
   }
-  return <MDXRemote {...mdx} />
+  return <MDXRemote 
+    compiledSource={compiledSource} 
+    scope={scope} 
+    components={components} />
 }
 
 /**

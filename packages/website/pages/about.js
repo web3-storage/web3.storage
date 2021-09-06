@@ -4,7 +4,7 @@ import { MDX } from '../components/mdx'
 import VerticalLines from '../illustrations/vertical-lines.js'
 
  export async function getStaticProps() {
-   const { mdx } = await loadMDX('content/about.md')
+   const { mdx } = await loadMDX('content/about.md', { disableToc: true })
     return {
       props: {
         needsLoggedIn: false,

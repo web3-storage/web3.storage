@@ -9,6 +9,7 @@
     "test": "eslint './**/*.js' && tsc --build"
   },
   "dependencies": {
+    "@jsdevtools/rehype-toc": "^3.0.2",
     "@magic-ext/oauth": "^0.7.0",
     "@tailwindcss/typography": "^0.4.1",
     "clsx": "^1.1.1",

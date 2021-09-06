@@ -111,7 +111,7 @@ The `putCar` method accepts a `CarReader`, which is a type defined by the [`@ipl
 
 You can create a `CarReader` from a `Uint8Array` using the `fromBytes` static method:
 
-```js
+```javascript
 import { CarReader } from '@ipld/car'
 
 // assume loadCarData returns the contents of a CAR file as a Uint8Array

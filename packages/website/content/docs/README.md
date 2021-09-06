@@ -50,7 +50,7 @@ You need a Web3.Storage account to get your API token and manage your stored dat
 <Tabs>
 <TabItem value="email" label="Email">
 
-### Sign up using email
+#### Sign up using email
 
 1. Go to [web3.storage/login](https://web3.storage/login) to get started.
 1. Enter your email address.
@@ -60,7 +60,7 @@ You need a Web3.Storage account to get your API token and manage your stored dat
 </TabItem>
 <TabItem value="github" label="GitHub">
 
-### Sign up using GitHub
+#### Sign up using GitHub
 
 1. Go to [web3.storage/login](https://web3.storage/login) to get started.
 1. Click **GitHub** on the Login screen.
