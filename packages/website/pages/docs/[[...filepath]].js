@@ -39,7 +39,7 @@ const BASE_DOCS_PATH = 'content/docs'
 
   let _cachedDocs = null
   async function loadDocs() {
-    if (_cachedDocs) {
+    if (_cachedDocs && process.env.NEXT_PUBLIC_ENV !== 'dev') {
       return _cachedDocs
     }
     const docs = []
