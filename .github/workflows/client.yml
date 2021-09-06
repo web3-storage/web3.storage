@@ -3,9 +3,15 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'packages/client/**'
+      - '.github/workflows/client.yml'
   pull_request:
     branches:
       - main
+    paths:
+      - 'packages/client/**'
+      - '.github/workflows/client.yml'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -18,3 +24,8 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - run: npm run build --workspace packages/client
       - run: npm test --workspace packages/client
+      - name: Test upload to staging
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "$(date --utc --iso-8601=seconds) web3.storage upload test" > ./upload-test-small
+          packages/w3/bin.js ./upload-test-small --api https://api-staging.web3.storage --token ${{ secrets.STAGING_WEB3_TOKEN }}

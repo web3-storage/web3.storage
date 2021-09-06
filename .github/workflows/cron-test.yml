@@ -9,25 +9,16 @@ jobs:
     name: Upload test
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    strategy:
-      matrix: 
-        # COOL! https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#using-environment-variables-in-a-matrix
-        # NOTE: you can't use secrets here, so we set the name of a secret and then look it up in the run step. see: https://github.community/t/secrets-in-matrix/17307
-        include:
-          - api: https://api.web3.storage
-            token_name: WEB3_TOKEN
-          - api: https://api-staging.web3.storage
-            token_name: STAGING_WEB3_TOKEN
     steps:
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           node-version: 16
       - name: Add small file via w3
         run: |
           echo "$(date --utc --iso-8601=seconds) web3.storage upload test" > ./upload-test-small 
-          npx @web3-storage/w3 put ./upload-test-small --api ${{ matrix.api }} --token ${{ secrets[matrix.token_name] }}
+          npx @web3-storage/w3 put ./upload-test-small --token ${{ secrets.WEB3_TOKEN }}
       # test adding a file larger than LOCAL_ADD_THRESHOLD see: packages/api/src/constants.js
       - name: Add 3MiB file via w3
         run: |
           dd if=/dev/urandom of=./upload-test-3mib bs=1024 count=3072
-          npx @web3-storage/w3 put ./upload-test-3mib --api ${{ matrix.api }} --token ${{ secrets[matrix.token_name] }}
+          npx @web3-storage/w3 put ./upload-test-3mib --token ${{ secrets.WEB3_TOKEN }}

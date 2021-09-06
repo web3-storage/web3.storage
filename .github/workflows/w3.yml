@@ -28,3 +28,20 @@ jobs:
         working-directory: packages/w3
       - run: npm test
         working-directory: packages/w3
+
+  test-e2e:
+    runs-on: ubuntu-latest
+    name: Test
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      # Use workspace deps here to test the workspace version of the client against the staging api.
+      # We want this one to fail if we can't upload to the staging api using the workspace version of the client.
+      - uses: bahmutov/npm-install@v1
+      - name: Test upload to staging
+        run: |
+          npm run build -w packages/client
+          echo "$(date --utc --iso-8601=seconds) web3.storage upload test" > ./upload-test-small
+          packages/w3/bin.js ./upload-test-small --api https://api-staging.web3.storage --token ${{ secrets.STAGING_WEB3_TOKEN }}
