@@ -13,7 +13,7 @@ import yaml from 'yaml'
  * @property {string} [metastring] additional meta info attached to markdown code block. If present, will be parsed and merged into the code block props. {@see parseMetastring} for parsing rules.
  * @property {string} [title] if present, code block will be rendered with a title at the top.
  * @property {boolean} [copyEnabled] whether to show a copy-to-clipboard button. defaults to true if left undefined.
- * @property {React.Children} children the text content of all child nodes will be used as the source to display inside the code block
+ * @property {React.Children|React.ReactElement} children the text content of all child nodes will be used as the source to display inside the code block
  */
 
 /**

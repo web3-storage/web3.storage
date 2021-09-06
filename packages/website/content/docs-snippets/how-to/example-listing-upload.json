@@ -1,0 +1,20 @@
+{
+  "name": "cat pics",
+  "cid": "bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e",
+  "created": "2021-07-14T19:27:14.934572Z",
+  "dagSize": 101,
+  "pins": [{
+    "status": "Pinned"
+  }],
+  "deals": [{
+    "dealId": 12345,
+    "storageProvider": "f099",
+    "status": "Active",
+    "pieceCid": "bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e",
+    "dataCid": "bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e",
+    "dataModelSelector": "Links/0/Links",
+    "activation": "2021-07-14T19:27:14.934572Z",
+    "created": "2021-07-14T19:27:14.934572Z",
+    "updated": "2021-07-14T19:27:14.934572Z"
+  }]
+}

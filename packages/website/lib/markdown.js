@@ -83,7 +83,10 @@ function transformInternalLinks() {
       if (!node.url || node.url.match(/^https?:/)) {
         return
       }
-      const url = node.url.replace(/\.mdx?/, '/')
+      let url = node.url.replace(/\.mdx?/, '/')
+      if (url.startsWith('./')) {
+        url = '.' + url
+      }
       // console.log(`changing url from '${node.url}' to '${url}'`)
       node.url = url
     })
