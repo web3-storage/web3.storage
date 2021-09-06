@@ -12,6 +12,7 @@ import yaml from 'yaml'
  * @property {string} [lang] language to use for syntax highlighting
  * @property {string} [metastring] additional meta info attached to markdown code block. If present, will be parsed and merged into the code block props. {@see parseMetastring} for parsing rules.
  * @property {string} [title] if present, code block will be rendered with a title at the top.
+ * @property {boolean} [collapsed] if true, code block will be hidden in a <details> element. defaults to false.
  * @property {boolean} [copyEnabled] whether to show a copy-to-clipboard button. defaults to true if left undefined.
  * @property {React.Children|React.ReactElement} children the text content of all child nodes will be used as the source to display inside the code block
  */
@@ -27,34 +28,51 @@ export default function CodeBlock(props) {
 
   const meta = parseMetastring(props.metastring)
   const mergedProps = {...props, ...meta}
-  const { copyEnabled, title } = mergedProps
+  const { copyEnabled, title, collapsed } = mergedProps
   const copyButton = copyEnabled === false ? <div/> : CopyButton({src})
+
+  // @ts-ignore
+  const wrapWithDetails = content => collapsed 
+    ? <details><summary>{title || 'Show code'}</summary>{content}</details> 
+    : <div>{content}</div>
+
+  const codeTitle = collapsed
+  ? <div/>
+  : titleView(title)
+
+    // @ts-ignore
+  const codeContent = ({ className, style, tokens, getLineProps, getTokenProps }) => 
+    wrapWithDetails(
+      <div className={clsx(className, 'rounded-md')} style={style}>
+        {codeTitle}
+        <div className='relative'>
+          <pre >
+            {
+              // @ts-ignore
+              tokens.map((line, i) => (
+                // eslint-disable-next-line react/jsx-key
+                <div {...getLineProps({ line, key: i })}>
+                  {
+                    // @ts-ignore
+                    line.map((token, key) => (
+                      // eslint-disable-next-line react/jsx-key
+                      <span {...getTokenProps({ token, key })} />
+                    ))
+                  }
+                </div>
+              ))
+            }
+          </pre>
+          {copyButton}
+        </div>
+      </div>
+    )
 
   return (
     <div className='codeBlockWrapper bg-gray-300 rounded-md' >
       {/* @ts-ignore */}
       <Highlight {...defaultProps} code={src} language={lang}>
-      {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <div>
-          <div className={clsx(className, 'rounded-md')} style={style}>
-          {titleView(title)}
-            <div className='relative'>
-            <pre >
-              {tokens.map((line, i) => (
-                // eslint-disable-next-line react/jsx-key
-                <div {...getLineProps({ line, key: i })}>
-                  {line.map((token, key) => (
-                    // eslint-disable-next-line react/jsx-key
-                    <span {...getTokenProps({ token, key })} />
-                  ))}
-                </div>
-              ))}
-            </pre>
-            {copyButton}
-            </div>
-        </div>
-      </div>
-      )}
+      {codeContent}
     </Highlight>
   </div>
   )
