@@ -1,6 +1,8 @@
 ---
 title: JavaScript client library
 description: Integrate Web3.Storage into your code using the JavaScript client library.
+snippets:
+  dagjson: content/docs-snippets/how-to/dag-json.js
 ---
 
 # JavaScript client library reference
@@ -42,8 +44,8 @@ Store files using the `put()` method.
 
 ### Examples
 
-::::tabs
-:::tab Browser
+<Tabs>
+<TabItem value="Browser">
 
 In the browser, using a file chooser to prompt the user for files to store:
 
@@ -57,9 +59,8 @@ const rootCid = await client.put(fileInput.files, {
 })
 ```
 
-:::
-
-:::tab Node.js
+</TabItem>
+<TabItem value="Node.js">
 
 In Node.js, using the `getFilesFromPath` helper to load `File` objects from a local path:
 
@@ -70,8 +71,8 @@ const files = await getFilesFromPath('./files')
 const rootCid = await client.put(files)
 ```
 
-:::
-::::
+</TabItem>
+</Tabs>
 
 ### Return value
 
@@ -88,24 +89,29 @@ Method parameters are supplied in positional order.
 
 An `{options}` object has the following properties that can be used as parameters when calling `put()`:
 
-::: details name
+<details>
+<summary>name</summary>
+
 _String._ The `name` parameter lets you attach an arbitrary name to the uploaded content archive, which you can use to identify and organize your uploads. The name is not stored alongside the data on IPFS, but it is viewable within the file listing on the Web3.Storage site.
 
 ```js
 const cid = await client.put(files, { name: 'cat pics' })
 ```
-:::
 
-::: details maxRetries
+</details>
+
+<details>
+<summary>maxRetries</summary>
 
 _Number._ You can specify how many times `put` should attempt to retry in case of failure by passing in a `maxRetries` option:
 
 ```js
 const cid = await client.put(files, { maxRetries: 3 })
 ```
-:::
+</details>
 
-::: details wrapWithDirectory
+<details>
+<summary>wrapWithDirectory</summary>
 
 _Boolean._ The `wrapWithDirectory` parameter controls whether the files will be wrapped in an IPFS directory when added to Web3.Storage. With the default value of `true`, all files provided to the `put` method will be wrapped in an IPFS directory listing.
 
@@ -144,10 +150,10 @@ bafybeiebez7epbidb7f6fcurnd5ukpokrpq5wkrsuakynukpxxo4y4ewvi/
 └── stuff
     └── things.md
 ```
+</details>
 
-:::
-
-::: details onRootCidReady
+<details>
+<summary>onRootCidReady</summary>
 
 _Function._ Because the data is formatted for IPFS and Filecoin on the client, the root CID for the data is generated before the data is uploaded to Web3.Storage. If you want to display the CID to the user before the upload is complete, pass in an `onRootCidReady` function that accepts a CID string:
 
@@ -155,9 +161,10 @@ _Function._ Because the data is formatted for IPFS and Filecoin on the client, t
 const onRootCidReady = rootCid => console.log('root cid:', rootCid)
 const cid = await client.put(files, { onRootCidReady })
 ```
-:::
+</details>
 
-::: details onStoredChunk
+<details>
+<summary>onStoredChunk</summary>
 
 _Function._ You can also display progress updates by passing in an `onStoredChunk` callback. This is called after each chunk of data is uploaded, with the size of the chunk in bytes passed in as a parameter:
 
@@ -165,7 +172,8 @@ _Function._ You can also display progress updates by passing in an `onStoredChun
 const onStoredChunk = chunkSize => console.log(`stored chunk of ${chunkSize} bytes`)
 const cid = await client.put(files, { onStoredChunk })
 ```
-:::
+
+</details>
 
 ## Retrieve files
 
@@ -193,8 +201,8 @@ Returns `undefined` if there are no matches for the given CID.
 
 If found, the method returns a `Web3Response` object, which extends the [Fetch API response object](https://developer.mozilla.org/en-US/docs/Web/API/Response) to add two iterator methods unique to the Web3.Storage client library: `files()` and `unixFsIterator()`.
 
-::::tabs
-:::tab File
+<Tabs>
+<TabItem value="File">
 
 #### Using `File` objects
 
@@ -202,9 +210,8 @@ Calling the `files()` method returns your requested files as an `Array<Web3File>
 
 The `Web3File` type extends [the generic JavaScript `File` type](https://developer.mozilla.org/en-US/docs/Web/API/File), adding a `string` property for the CID of the given file named `cid`, as shown in the example below. This is different from the CID of the CAR that contains the file, which you specified when calling `get()`.
 
-:::
-
-:::tab UnixFS
+</TabItem>
+<TabItem value="UnixFS">
 
 #### Using `UnixFS` objects
 
@@ -227,8 +234,8 @@ Note that not all `UnixFS` entries returned by the iterator represent files. If 
 
 For more details on `UnixFS` objects, see [the README file in the `UnixFS` GitHub repository](https://github.com/ipfs/js-ipfs-unixfs/blob/master/packages/ipfs-unixfs/README.md).
 
-:::
-::::
+</TabItem>
+</Tabs>
 
 ### Parameters
 
@@ -250,8 +257,8 @@ Retrieve metadata about your file by using the `status()` method and supplying t
 
 ### Examples
 
-::::tabs
-:::tab Call
+<Tabs>
+<TabItem value="Call">
 
 Here's an example of a call to the `status()` method:
 
@@ -260,9 +267,9 @@ const info = await client.status(rootCid)
 console.log(`${info.cid} ${info.dagSize} ${info.created}`)
 ```
 
-:::
+</TabItem>
 
-:::tab Response
+<TabItem value="Response">
 
 Here's an example response from the `status()` method:
 
@@ -307,8 +314,8 @@ Here's an example response from the `status()` method:
 }
 ```
 
-:::
-::::
+</TabItem>
+</Tabs>
 
 ### Parameters
 
@@ -324,26 +331,32 @@ Returns `undefined` if there are no matches for the given CID.
 
 If found, the `status()` method returns a `{Status}` object that contains the metadata for your object's storage deal on the Web3.Storage network, with the following properties:
 
-::: details cid
+<details>
+<summary>cid</summary>
 
 _String._ The `cid` property is the content identifier of the data for which you are retrieving status information.
-:::
 
-::: details dagSize
+</details>
+
+<details>
+<summary>dagSize</summary>
 
 _Number._ The `dagSize` property is the total size, in bytes, of the [Merkle Directed Acyclic Graph (DAG)](https://docs.ipfs.io/concepts/merkle-dag/) containing the queried CID.
-:::
+</details>
 
-::: details created
+<details>
+<summary>created</summary>
 
 _String._ The `created` property gives the creation date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
 
-::: tip
+:::tip
 The `created` date returned by a call to `status()` is the date and time that the CID was first seen on the network. The date given by a call to `list()` is the date and time of a particular upload via a call to `put()`. These can differ if multiple users upload the same file(s).
 :::
 
+</details>
 
-::: details pins
+<details>
+<summary>pins</summary>
 
 _Array._ The `pins` property is an array of `Pin` objects. Each `Pin` object represents a specific [peer in the IPFS network,](https://docs.libp2p.io/concepts/peer-id/) with the following structure:
 
@@ -356,9 +369,11 @@ Pin {
   updated: string // Updated date in ISO 8601 format.
 }
 ```
-:::
 
-::: details deals
+</details>
+
+<details>
+<summary>deals</summary>
 
 _Array._ The `deals` property is an array of `Deal` objects. Each `Deal` object represents a specific [storage deal on the Filecoin network,](https://docs.filecoin.io/about-filecoin/how-filecoin-works/#deals) for a specific [Piece](https://spec.filecoin.io/systems/filecoin_files/piece/) of data, with the following structure:
 
@@ -375,7 +390,8 @@ Deal {
   updated: string // Updated date, in ISO 8601 format.
 }
 ```
-:::
+
+</details>
 
 ## List uploads
 
@@ -403,13 +419,15 @@ for await (const item of client.list({ maxResults: 10 })) {
 
 The `list()` method accepts an `{options}` object with the following properties:
 
-::: details before
+<details>
+<summary>before</summary>
 _String_. Specifies a date, in ISO 8601 format. Ensures that the call to `list()` will not return any results newer than the given date.
-:::
+</details>
 
-::: details maxResults
+<details>
+<summary>maxResults</summary>
 _Number_. Specifies the maximum number of uploads to return when calling `list()`.
-:::
+</details>
 
 ### Return value
 
@@ -441,7 +459,7 @@ The return value for `list()` is an `AsyncIterable` object, containing objects w
 }
 ```
 
-::: tip
+:::tip
 The `created` date on these objects are the date and time that the user uploaded via `put()`. The `created` date given by a call to `status()` is the date and time that the CID was first seen on the network. These can differ if multiple users uploaded the same file(s).
 :::
 
@@ -501,24 +519,27 @@ Method parameters are supplied in positional order.
 
 An `{options}` object has the following properties that can be used as parameters when calling `putCar()`:
 
-::: details name
+<details>
+<summary>name</summary>
 _String._ The `name` parameter lets you attach an arbitrary name to the uploaded content archive, which you can use to identify and organize your uploads. The name is not stored alongside the data on IPFS, but it is viewable within the file listing on the Web3.Storage site.
 
 ```js
 const cid = await client.putCar(files, { name: 'cat pics' })
 ```
-:::
+</details>
 
-::: details maxRetries
+<details>
+<summary>maxRetries</summary>
 
 _Number._ You can specify how many times `putCar` should attempt to retry in case of failure by passing in a `maxRetries` option. The default value is `5`.
 
 ```js
 const cid = await client.putCar(files, { maxRetries: 3 })
 ```
-:::
+</details>
 
-::: details onStoredChunk
+<details>
+<summary>onStoredChunk</summary>
 
 _Function._ You can also display progress updates by passing in an `onStoredChunk` callback. This is called after each chunk of data is uploaded, with the size of the chunk in bytes passed in as a parameter. By default, data is split into chunks of around 10MB.
 
@@ -526,12 +547,13 @@ _Function._ You can also display progress updates by passing in an `onStoredChun
 const onStoredChunk = chunkSize => console.log(`stored chunk of ${chunkSize} bytes`)
 const cid = await client.putCar(car, { onStoredChunk })
 ```
-:::
+</details>
 
-::: details decoders
+<details>
+<summary>decoders</summary>
 
 [_BlockDecoder_](https://github.com/multiformats/js-multiformats#ipld-codecs-multicodec). Used to specify additional IPLD block decoders which interpret the data in the CAR file  and split it into multiple chunks. Note these are only required if the CAR file was not encoded using the default encoders: `dag-pb`, `dag-cbor` and `raw`.
 
-<<<@/code-snippets/how-to/dag-json.js
+<CodeSnippet {...snippets.dagjson} />
 
-:::
+</details>

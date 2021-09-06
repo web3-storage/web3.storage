@@ -1,6 +1,8 @@
 ---
 title: Retrieve
 description: Learn how to retrieve data stored using Web3.Storage in this quick how-to guide.
+snippets:
+  howto: content/docs-snippets/how-to/index.js
 ---
 
 # How to retrieve data from Web3.Storage
@@ -25,7 +27,7 @@ You can use an IPFS gateway to view a list of all the files in that directory fr
 
 If you want to link directly to a file within that directory, just add the file path after the CID portion of the link. For example: [bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link/not-distributed.jpg](https://bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link/not-distributed.jpg) could be used as a shareable link for your new favorite wallpaper.
 
-::: tip
+:::tip
 Your [Files page](https://web3.storage/files/) on Web3.Storage includes IPFS gateway links to all the content you've uploaded, so if you're looking to link to one of your own files, you don't even have to create a gateway URL.
 :::
 
@@ -66,12 +68,11 @@ npm install web3.storage
 
 Use the following code to create a Web3.Storage client:
 
-<<<@/code-snippets/how-to/index.js#makeStorageClient
+<CodeSnippet {...snippets.howto} region="makeStorageClient" />
 
 Once you have a client, you can call `client.get`, passing in a CID string:
 
-<<<@/code-snippets/how-to/index.js#retrieve-basics
-
+<CodeSnippet {...snippets.howto} region="retrieve-basics" />
 
 ### The `Web3Response` object
 
@@ -81,7 +82,7 @@ The [`files` method][reference-js-web3response] returns an array of `Web3File` o
 
 Here's the example from above, now with the code to unpack and inspect the files in the response:
 
-<<<@/code-snippets/how-to/index.js#retrieve-unpack-files
+<CodeSnippet {...snippets.howto} region="retrieve-unpack-files" />
 
 :::tip
 Another option is to use the array of `unixFs` objects provided by the `unixFsIterator()` method to iterate through your files. While in the vast majority of cases you'll want to use the `files()` method outlined above, existing IPFS users may prefer interacting with `unixFs` objects if they have existing code or tooling that supports it. For more details, see the [JavaScript client library reference][reference-js].

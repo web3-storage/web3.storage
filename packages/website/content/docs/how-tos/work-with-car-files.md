@@ -1,6 +1,9 @@
 ---
 title: Work with Content Archives
 description: Learn how to work with Content Archives of IPLD data.
+snippets:
+  howto: content/docs-snippets/how-to/index.js
+  dagcbor: content/docs-snippets/how-to/dag-cbor.js
 ---
 
 # Working with Content Archives
@@ -168,35 +171,30 @@ Below are some examples of working with `dag-cbor` data and sending it to Web3.S
 
 First, you'll need to import some things:
 
-<<<@/code-snippets/how-to/dag-cbor.js#imports
+<CodeSnippet {...snippets.dagcbor} region="imports" />
 
 Now we'll define a convenience function to encode an IPLD block of CBOR data and hash with SHA2-256:
 
-::: details encodeCborBlock(value)
-<<<@/code-snippets/how-to/dag-cbor.js#encodeCborBlock
-:::
+<CodeSnippet {...snippets.dagcbor} region="encodeCborBlock" title="encodeCborBlock(value)" collapsed="true" />
+
 
 And a function to make a CAR from a collection of blocks and a root CID:
 
-::: details makeCar(rootCID, ipldBlocks)
-<<<@/code-snippets/how-to/dag-cbor.js#makeCar
-:::
+<CodeSnippet {...snippets.dagcbor} region="makeCar" title="makeCar(rootCid, ipldBlocks)" collapsed="true" />
 
 #### Storing simple CBOR data
 
 Using the helpers above, you can make a CAR file with a single block of simple CBOR data and send it to Web3.Storage:
 
-::: details simpleCborExample()
-<<<@/code-snippets/how-to/dag-cbor.js#simpleCborExample
-:::
+<CodeSnippet {...snippets.dagcbor} region="simpleCborExample" title="simpleCborExample()" collapsed="true" />
 
 If you have the IPFS command line app installed, you can view the object you stored with the [`ipfs dag get` command][ipfs-docs-dag-get], for example:
 
-```shell with-output
+```shell
 ipfs dag get bafyreidykglsfhoixmivffc5uwhcgshx4j465xwqntbmu43nb2dzqwfvae
 ```
 
-```json
+```json {copyEnabled: false}
 {
   "hello": "world"
 }
@@ -208,17 +206,15 @@ Note that the example output has been indented with [jq](https://stedolan.github
 
 You can link from one CBOR object to another using CIDs:
 
-::: details cborLinkExample()
-<<<@/code-snippets/how-to/dag-cbor.js#cborLinkExample
-:::
+<CodeSnippet {...snippets.dagcbor} region="cborLinkExample" title="cborLinkExample()" collapsed="true" />
 
 As with simple objects, you can use `ipfs dag get` to show the outer object:
 
-```shell with-output
+```shell
 ipfs dag get bafyreieq6bftbe3o46lrdbzj6vrvyee4njfschajxgmpxwbqex3czifhry
 ```
 
-```json
+```json {copyEnabled: false}
 {
   "contact": {
     "/": "bafyreicp2g6ez5exmw5uxsns7kkwtxr5z4vyx4xkdci6xpy2vou3zqc6me"
@@ -230,11 +226,11 @@ ipfs dag get bafyreieq6bftbe3o46lrdbzj6vrvyee4njfschajxgmpxwbqex3czifhry
 
 The `contact` field above contains an IPLD link, which can be included in the `ipfs dag get` command to resolve the linked object:
 
-```shell with-output
+```shell
 ipfs dag get bafyreieq6bftbe3o46lrdbzj6vrvyee4njfschajxgmpxwbqex3czifhry/contact
 ```
 
-```json
+```json {copyEnabled: false}
 {"email":"zaphod@beeblebrox.galaxy"}
 ```
 
@@ -246,23 +242,19 @@ First, we'll encode a file into UnixFS format. Normally, this is done by the cli
 
 Here's a helper function to make a UnixFS file and encode it to an IPLD block:
 
-::: details makeUnixFsFile(source)
-<<<@/code-snippets/how-to/dag-cbor.js#makeUnixFsFile
-:::
+<CodeSnippet {...snippets.dagcbor} region="encodeCborBlock" title="makeUnixFsFile(source)" collapsed="true" />
 
 The helper returns a `root` block, which we can link to by CID, as well as a `blocks` array containing the encoded file data. When we create the CAR to send to Web3.Storage, it's important to include all the file blocks as well as the CBOR block.
 
-::: details cborLinkToFileExample()
-<<<@/code-snippets/how-to/dag-cbor.js#cborLinkToFileExample
-:::
+<CodeSnippet {...snippets.dagcbor} region="cborLinkToFileExample" title="cborLinkToFileExample()" collapsed="true" />
 
 As before, we can view the root block with `ipfs dag get`:
 
-```shell with-output
+```shell
 ipfs dag get bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy
 ```
 
-```json
+```json {copyEnabled: false}
 {
   "description": "A CBOR object that references a UnixFS file object by CID",
   "file": {
@@ -273,11 +265,11 @@ ipfs dag get bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy
 
 Since the file data is plain text, you can use `ipfs dag get` to fetch its contents:
 
-```shell with-output
+```shell
 ipfs dag get bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy/file
 ```
 
-```json
+```json {copyEnabled: false}
 "Some plain text, encoded to UTF-8"
 ```
 
@@ -285,11 +277,11 @@ Notice that the file content is wrapped in quotes because `dag get` is interpret
 
 To avoid this, or to fetch binary files, you can use `ipfs get` to download the file:
 
-```shell with-output
+```shell
 ipfs get bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy/file
 ```
 
-```text
+```text {copyEnabled: false}
 Saving file(s) to file
  33 B / 33 B [===============================================================] 100.00% 0s
 ```
@@ -301,7 +293,7 @@ However, the gateway *can* traverse the IPLD links inside our CBOR object, so yo
 
 [https://bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy.ipfs.dweb.link/file](https://bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy.ipfs.dweb.link/file).
 
-::: warning Gateway support
+:::warning Gateway support
 Although Web3.Storage supports storing CAR files with `dag-cbor` content by default and can accept other codecs with the `decoders` option, the IPFS HTTP gateway does not currently "speak" these formats and will not return such data over HTTP. Please follow [this issue](https://github.com/ipfs/go-ipfs/issues/8234) to track the development of this feature.
 :::
 

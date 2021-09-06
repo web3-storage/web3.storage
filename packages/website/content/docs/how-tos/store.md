@@ -1,6 +1,10 @@
 ---
 title: Store
 description: Learn how to store your data on the decentralized web with Web3.Storage.
+snippets:
+  howto: content/docs-snippets/how-to/index.js
+  browser: content/docs-snippets/how-to/platform-browser.js
+  node: content/docs-snippets/how-to/platform-node.js
 ---
 
 # How to store data using Web3.Storage
@@ -16,7 +20,7 @@ If you're using another language, see the [HTTP API reference][reference-http] f
 Uploading data to Web3.Storage using the JavaScript client library requires a free API token, which in turn requires a Web3.Storage account. If you already have an account and a token, read on. If not, have a look at the [quickstart guide][quickstart-guide] to get up and running in just a few minutes.
 
 
-::: danger CAUTION
+:::danger CAUTION
 All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. Do not store any private or sensitive information in an unencrypted form using Web3.Storage.
 :::
 
@@ -32,7 +36,7 @@ npm install web3.storage
 
 First we need to create a `Web3.Storage` client object, passing in an API token to its [constructor][reference-js-constructor]:
 
-<<<@/code-snippets/how-to/index.js#makeStorageClient
+<CodeSnippet {...snippets.howto} region="makeStorageClient" />
 
 ## Preparing files for upload
 
@@ -40,38 +44,35 @@ The Web3.Storage client's [`put` method][reference-js-put] accepts an array of [
 
 There are a few different ways of creating `File` objects available, depending on your platform.
 
-:::: tabs
-
-::: tab Browser
+<Tabs>
+<TabItem value="Browser">
 
 In the browser, you can use a [file input element][mdn-file-input] to allow the user to select files for upload:
 
-<<<@/code-snippets/how-to/platform-browser.js#getFiles
+<CodeSnippet {...snippets.browser} region="getFiles" />
 
 You can also manually create `File` objects using the native `File` constructor provided by the browser runtime. This is useful when you want to store data created by your application, instead of files from the user's computer.
 
-<<<@/code-snippets/how-to/platform-browser.js#makeFileObjects
+<CodeSnippet {...snippets.browser} region="makeFileObjects" />
 
-:::
-
-::: tab Node.js
+</TabItem>
+<TabItem value="Node.js" >
 
 In Node.js, the `web3.storage` package exports some helpful utility functions from the [`files-from-path` module](https://www.npmjs.com/package/files-from-path) that allow you to easily read `File` objects from the local file system. The `getFilesFromPath` helper asynchronously returns an array of `File`s that you can use directly with the `put` client method:
 
-<<<@/code-snippets/how-to/platform-node.js#getFiles
+<CodeSnippet {...snippets.node} region="getFiles" />
 
 If you expect to be loading a lot of large files, you may be better served by the [`filesFromPath` helper](https://github.com/web3-storage/files-from-path#filesfrompath). It reduces memory pressure by `yield`ing `File` objects one by one as they're loaded from disk, instead of loading everything into memory. You can then issue multiple `put` requests to send each file to Web3.Storage.
 
 You can also manually create `File` objects by importing a Node.js implementation of `File` from the `web3.storage` package. This is useful when you want to store data created by your application, instead of files from the user's computer.
 
-<<<@/code-snippets/how-to/platform-node.js#makeFileObjects
+<CodeSnippet {...snippets.node} region="makeFileObjects" />
 
-:::
+</TabItem>
+</Tabs>
 
-::::
 
-
-::: tip 
+:::tip 
 **When uploading multiple files, try to give each file a unique name.** All the files in a `put` request will be bundled into one content archive, and linking to the files inside is much easier if each file has a unique, human-readable name.
 :::
 
@@ -79,9 +80,9 @@ You can also manually create `File` objects by importing a Node.js implementatio
 
 Once you have an array of `File`s, uploading is simple:
 
-<<<@/code-snippets/how-to/index.js#storeFiles
+<CodeSnippet {...snippets.howto} region="storeFiles" />
 
-::: warning IMPORTANT
+:::warning IMPORTANT
 Deleting files from the Web3.Storage site's [Files page][site-files] will remove them from the file listing for your account, but that doesn't prevent nodes on the [decentralized storage network][concepts-decentralized-storage] from retaining copies of the data indefinitely. Do not use Web3.Storage for data that may need to be permanently deleted in the future.
 :::
 
@@ -95,7 +96,7 @@ As each chunk of data is uploaded, the `onStoredChunk` callback gets invoked wit
 
 Here's a simple example of using the callbacks to print the progress of an upload to the console:
 
-<<<@/code-snippets/how-to/index.js#storeWithProgress
+<CodeSnippet {...snippets.howto} region="storeWithProgress" />
 
 ## Storing IPFS Content Archives
 
