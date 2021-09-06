@@ -65,7 +65,7 @@ export async function serializeMDX(mdxSource, options = {}) {
     ]
   }
 
-  const src = ['<main class="mdx-main prose max-w-2xl">', raw, '</main>'].join('\n\n')
+  const src = ['<main className="mdx-main prose max-w-2xl">', raw, '</main>'].join('\n\n')
 
   const mdx = await serialize(src, { 
     scope: frontmatter,
