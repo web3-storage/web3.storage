@@ -84,8 +84,8 @@ export default function DocsPage({ docs }) {
   const router = useRouter()
   let doc = null
   const filepath = router.query.filepath || []
-  let docId = filepath.join('/')
-  let docPath = ['/docs', docId].join('/')
+  let docId = ['', ...filepath].join('/')
+  let docPath = '/docs' + docId
   if (docPath === '/docs/index.html') {
     docPath = '/docs'
     docId = '/'
@@ -103,7 +103,7 @@ export default function DocsPage({ docs }) {
     return <div></div>
   }
 
-  const sidebar = makeSidebar(docs, docId, router)
+  const sidebar = makeSidebar({ docs, docId })
   return (
     <div className="flex">
       <aside className='h-screen sticky top-0'>
@@ -119,14 +119,14 @@ export default function DocsPage({ docs }) {
 }
 
 // TODO: this is a little too hard-coded for my liking...
-function makeSidebar(docs) {
+function makeSidebar({ docs, docId }) {
   const items = [
-    menuLink('/docs/index.html', 'Welcome'),
-    submenu('How-Tos', '/how-tos/', docs),
-    submenu('Concepts', '/concepts/', docs),
-    submenu('Examples', '/examples/', docs),
-    submenu('Reference', '/reference/', docs),
-    submenu('Community', '/community/', docs)
+    menuLink('/docs/index.html', 'Welcome', docId === '/'),
+    submenu({ title: 'How-Tos', prefix: '/how-tos/', docs, docId }),
+    submenu({ title: 'Concepts', prefix: '/concepts/', docs, docId }),
+    submenu({ title: 'Examples', prefix: '/examples/', docs, docId }),
+    submenu({ title: 'Reference', prefix: '/reference/', docs, docId }),
+    submenu({ title: 'Community', prefix: '/community/', docs, docId }),
   ]
 
   return (
@@ -138,12 +138,13 @@ function makeSidebar(docs) {
   )
 }
 
-function submenu(title, prefix, docs) {
+function submenu({title, prefix, docs, docId}) {
   const weightedItems = []
   for (const d of docs) {
     if (!d.docId.startsWith(prefix)) {
       continue
     }
+    const active = d.docId === docId
     const frontmatter = d.compiled.frontmatter || {}
     const title = frontmatter.title
     const weight = frontmatter.weight || 0
@@ -151,8 +152,9 @@ function submenu(title, prefix, docs) {
       // TODO: add fallback/default instead?
       throw new Error('markdown doc is missing "title" front matter')
     }
+    console.log(d.path, title, active)
     weightedItems.push({ 
-      item: menuLink(d.path, title),
+      item: menuLink(d.path, title, active),
       weight,
     })
   }
@@ -168,9 +170,9 @@ function submenu(title, prefix, docs) {
 }
 
 
-function menuLink(href, content) {
+function menuLink(href, content, active) {
   return (
-    <MenuItem>
+    <MenuItem active={active} key={href} >
       <Link href={href}>
         {content}
       </Link>
