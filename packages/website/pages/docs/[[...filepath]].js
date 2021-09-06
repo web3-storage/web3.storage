@@ -31,7 +31,7 @@ const BASE_DOCS_PATH = 'content/docs'
   export async function getStaticPaths() {
     const docs = await loadDocs()
     const paths = docs.map(d => d.path)
-    if (process.env.NEXT_PUBLIC_ENV === 'dev') {
+    if (process.env.NODE_ENV === 'development') {
       // this seems to be needed for the dev server, but breaks the export...
       paths.push('/docs/index.html')
     }

@@ -59,7 +59,7 @@ export async function serializeMDX(mdxSource, options = {}) {
         customizeTOC: toc => disableToc ? false : toc,
         cssClasses: {
           // TODO: take these as a param
-          toc: 'toc hidden md:block'
+          toc: 'toc hidden md:block h-screen sticky top-0 p-10'
         }
       }]
     ]
