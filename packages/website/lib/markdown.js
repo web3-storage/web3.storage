@@ -79,17 +79,27 @@ function transformInternalLinks() {
   }
 
   return function transformer(tree, file, done) {
-    visit(tree, 'link', node => {
+    const rewriteLinks = node => {
       if (!node.url || node.url.match(/^https?:/)) {
         return
       }
       let url = node.url.replace(/\.mdx?/, '/')
+
+      // hack to deal with the fact that the rendered site puts
+      // docs one level deeper in the path hierarchy than the sources
+      // e.g. /foo/bar.md becomes /foo/bar/index.html
+      // so we need to drop down an extra level to make things resolve
       if (url.startsWith('./')) {
         url = '.' + url
+      } else if (url.startsWith('../')) {
+        url = '../' + url
       }
       // console.log(`changing url from '${node.url}' to '${url}'`)
       node.url = url
-    })
+    }
+
+    visit(tree, 'link', rewriteLinks)
+    visit(tree, 'definition', rewriteLinks)
 
     done()
   }
