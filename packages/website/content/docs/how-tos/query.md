@@ -1,6 +1,7 @@
 ---
 title: Query
 description: Learn how to query Web3.Storage in this quick how-to guide.
+weight: 80
 snippets:
   howto: content/docs-snippets/how-to/index.js
 ---

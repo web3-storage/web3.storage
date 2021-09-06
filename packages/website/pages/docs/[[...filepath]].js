@@ -1,11 +1,15 @@
 /* eslint-disable react/no-children-prop */
-import { useRouter } from 'next/router'
-import { serializeMDX } from '../../lib/markdown'
-import { MDX } from '../../components/mdx'
-import VerticalLines from '../../illustrations/vertical-lines.js'
-
 import fs from 'fs/promises'
 import path from 'path'
+
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+
+import { serializeMDX } from '../../lib/markdown'
+import { MDX } from '../../components/mdx'
+
+import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
+import 'react-pro-sidebar/dist/css/styles.css';
 
 const BASE_DOCS_PATH = 'content/docs'
 
@@ -50,8 +54,9 @@ const BASE_DOCS_PATH = 'content/docs'
       console.log('entry', entry)
       const content = await fs.readFile(entry, 'utf-8')
       const name = entry.replace(BASE_DOCS_PATH, '').replace(/\/README.mdx?$/, '')
-      const pagePath = '/docs' + name.replace(/\.mdx?$/, '')
-      docs.push({ content, path: pagePath, localPath: entry })
+      const docId = name.replace(/\.mdx?$/, '')
+      const pagePath = '/docs' + docId
+      docs.push({ content, docId, path: pagePath, localPath: entry })
     }
     _cachedDocs = docs
     return _cachedDocs
@@ -79,9 +84,11 @@ export default function DocsPage({ docs }) {
   const router = useRouter()
   let doc = null
   const filepath = router.query.filepath || []
-  let docPath = ['/docs', ...filepath].join('/')
+  let docId = filepath.join('/')
+  let docPath = ['/docs', docId].join('/')
   if (docPath === '/docs/index.html') {
     docPath = '/docs'
+    docId = '/'
   }
   // console.log('docs template page', router.query, docPath)
   // console.log('all doc paths', docs.map(d => d.path))
@@ -95,18 +102,78 @@ export default function DocsPage({ docs }) {
     console.log('no matching doc. TODO: redirect to 404')
     return <div></div>
   }
-  // console.log('doc found', doc)
 
-    return (
-      <div className="relative overflow-hidden z-0">
-        <div className="absolute top-10 right-0 pointer-events-none bottom-0 hidden xl:flex justify-end z-n1">
-          <VerticalLines className="h-full"/>
-        </div>
-        <div className="layout-margins">
-          <div className="prose max-w-screen-lg mx-auto text-w3storage-purple my-4 lg:my-32" >
-            <MDX mdx={doc.compiled.mdx} />
-          </div>
+  const sidebar = makeSidebar(docs, docId, router)
+  return (
+    <div className="flex">
+      <aside className='h-screen sticky top-0'>
+        {sidebar}
+      </aside>
+      <div className="layout-margins">
+        <div className="prose mx-auto text-w3storage-purple my-4 lg:my-32" >
+          <MDX mdx={doc.compiled.mdx} />
         </div>
       </div>
-    )
+    </div>
+  )
+}
+
+// TODO: this is a little too hard-coded for my liking...
+function makeSidebar(docs) {
+  const items = [
+    menuLink('/docs/index.html', 'Welcome'),
+    submenu('How-Tos', '/how-tos/', docs),
+    submenu('Concepts', '/concepts/', docs),
+    submenu('Examples', '/examples/', docs),
+    submenu('Reference', '/reference/', docs),
+    submenu('Community', '/community/', docs)
+  ]
+
+  return (
+    <ProSidebar width={300}>
+      <Menu popperArrow={false} >
+        {items}
+      </Menu>
+    </ProSidebar>
+  )
+}
+
+function submenu(title, prefix, docs) {
+  const weightedItems = []
+  for (const d of docs) {
+    if (!d.docId.startsWith(prefix)) {
+      continue
+    }
+    const frontmatter = d.compiled.frontmatter || {}
+    const title = frontmatter.title
+    const weight = frontmatter.weight || 0
+    if (!title) {
+      // TODO: add fallback/default instead?
+      throw new Error('markdown doc is missing "title" front matter')
+    }
+    weightedItems.push({ 
+      item: menuLink(d.path, title),
+      weight,
+    })
+  }
+
+  weightedItems.sort((a, b) => a.weight - b.weight).reverse()
+  const items = weightedItems.map(i => i.item)
+
+  return (
+    <SubMenu title={title} open={true} >
+      {items}
+    </SubMenu>
+  )
+}
+
+
+function menuLink(href, content) {
+  return (
+    <MenuItem>
+      <Link href={href}>
+        {content}
+      </Link>
+    </MenuItem>
+  )
 }

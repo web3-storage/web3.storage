@@ -1,6 +1,7 @@
 ---
 title: Getting started
 description: Learn Web3.Storage by example with sample applications and starter projects.
+weight: 1000
 ---
 
 # Getting started examples

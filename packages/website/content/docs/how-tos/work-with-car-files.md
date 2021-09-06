@@ -1,6 +1,7 @@
 ---
 title: Work with Content Archives
 description: Learn how to work with Content Archives of IPLD data.
+weight: 50
 snippets:
   howto: content/docs-snippets/how-to/index.js
   dagcbor: content/docs-snippets/how-to/dag-cbor.js

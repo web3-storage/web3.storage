@@ -1,6 +1,7 @@
 ---
 title: Store
 description: Learn how to store your data on the decentralized web with Web3.Storage.
+weight: 100
 snippets:
   howto: content/docs-snippets/how-to/index.js
   browser: content/docs-snippets/how-to/platform-browser.js

@@ -1,6 +1,7 @@
 ---
 title: Retrieve
 description: Learn how to retrieve data stored using Web3.Storage in this quick how-to guide.
+weight: 90
 snippets:
   howto: content/docs-snippets/how-to/index.js
 ---

@@ -1,6 +1,7 @@
 ---
 title: Troubleshooting
 description: A collection of common issues for new developers, and solutions to those problems.
+weight: -100
 ---
 
 # Troubleshooting

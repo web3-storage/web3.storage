@@ -1,6 +1,7 @@
 ---
 title: JavaScript client library
 description: Integrate Web3.Storage into your code using the JavaScript client library.
+weight: 1000
 snippets:
   dagjson: content/docs-snippets/how-to/dag-json.js
 ---

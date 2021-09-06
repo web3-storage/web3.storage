@@ -1,6 +1,7 @@
 ---
 title: List
 description: Learn how to list the files you've uploaded to Web3.Storage in this quick how-to guide.
+weight: 70
 snippets:
   howto: content/docs-snippets/how-to/index.js
   exampleListing: content/docs-snippets/how-to/example-listing-upload.json

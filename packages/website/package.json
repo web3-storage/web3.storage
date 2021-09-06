@@ -28,6 +28,7 @@
     "react-dropzone": "^11.3.4",
     "react-if": "^4.0.1",
     "react-markdown": "^6.0.2",
+    "react-pro-sidebar": "^0.6.0",
     "react-query": "^3.13.9",
     "react-syntax-highlighter": "^11.0.3",
     "react-toastify": "^8.0.2",
