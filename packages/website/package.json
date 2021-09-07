@@ -16,6 +16,8 @@
     "countly-sdk-web": "^20.11.2",
     "filesize": "^6.1.0",
     "gray-matter": "^4.0.3",
+    "hast-util-to-html": "^8.0.2",
+    "html-react-parser": "^1.2.9",
     "magic-sdk": "^4.2.1",
     "next": "11.0.1",
     "next-mdx-remote": "^3.0.4",

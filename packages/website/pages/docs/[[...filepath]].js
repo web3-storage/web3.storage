@@ -11,6 +11,8 @@ import { MDX } from '../../components/mdx'
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import 'react-pro-sidebar/dist/css/styles.css';
 
+import parseHtml from 'html-react-parser'
+
 const BASE_DOCS_PATH = 'content/docs'
 
 
@@ -97,15 +99,17 @@ export default function DocsPage({ docs }) {
     return <div></div>
   }
 
+  const toc = doc.compiled.toc ? parseHtml(doc.compiled.toc) : <div />
   const sidebar = makeSidebar({ docs, docId })
   return (
     <div className="flex">
       <aside className='h-screen sticky top-0'>
         {sidebar}
       </aside>
-        <div className="flex mx-auto text-w3storage-purple px-5" >
-          <MDX mdx={doc.compiled.mdx} />
+      <div className="prose mx-auto text-w3storage-purple px-5" >
+        <MDX mdx={doc.compiled.mdx} />
       </div>
+      {toc}
     </div>
   )
 }

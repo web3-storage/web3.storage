@@ -5,6 +5,7 @@ import path from 'path'
 import remarkAdmonitions from 'remark-admonitions'
 import rehypeSlug from 'rehype-slug'
 import rehypeToc from '@jsdevtools/rehype-toc'
+import { toHtml } from 'hast-util-to-html'
 
 /**
  * 
@@ -45,6 +46,7 @@ export async function serializeMDX(mdxSource, options = {}) {
     frontmatter.snippets = snippets
   }
 
+  let tocAst = null
   const mdxOptions = {
     remarkPlugins: [
       remarkAdmonitions,
@@ -54,9 +56,11 @@ export async function serializeMDX(mdxSource, options = {}) {
       rehypeSlug,
       [rehypeToc, {
         headings: ['h2', 'h3'],
-        position: 'beforeend',
         // @ts-ignore
-        customizeTOC: toc => disableToc ? false : toc,
+        customizeTOC: toc => {
+          tocAst = toc
+          return false
+        },
         cssClasses: {
           // TODO: take these as a param
           toc: 'toc hidden md:block h-screen sticky top-0 p-10'
@@ -65,18 +69,22 @@ export async function serializeMDX(mdxSource, options = {}) {
     ]
   }
 
-  const src = ['<main className="mdx-main prose max-w-2xl">', raw, '</main>'].join('\n\n')
-
-  const mdx = await serialize(src, { 
+  const mdx = await serialize(raw, { 
     scope: frontmatter,
     // @ts-ignore
     mdxOptions,
   })
 
+  let toc
+  if (tocAst && !disableToc) {
+    toc = toHtml(tocAst)
+  }
+
   return {
     frontmatter,
     raw,
     mdx,
+    toc,
   }
 }
 
