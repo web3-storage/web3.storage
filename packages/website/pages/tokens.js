@@ -211,11 +211,11 @@ export default function Tokens({ isLoggedIn }) {
                 </div>
               </div>
             </When>
-            <When condition={tokens.length === 1}>
+            <When condition={tokens.length > 0}>
               <div className="flex flex-col items-center">
                 <p className="font-black mt-10">
-                  Want to test the token quickly? Upload a file in 
-                  {" "}<a className="underline" href={`https://Upload-with-Token-Node-demo.web3storage.repl.co/?token=${tokens[0].secret}`} target="_blank" rel="noreferrer">repl.it</a>
+                  Want to test the token quickly? Paste it in
+                  {" "}<a className="underline" href={`https://upload-with-token-node-demo.web3storage.repl.co`} target="_blank" rel="noreferrer">this repl.it</a>
                 </p>
               </div>
             </When>
