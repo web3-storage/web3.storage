@@ -38,8 +38,8 @@ function extractRegion(src, regionName) {
     return src
   }
 
-  const startPattern = new RegExp(`\/\/\\s*#region\\s+${regionName}`)
-  const endPattern = new RegExp(`\/\/\\s*#endregion\\s+${regionName}`)
+  const startPattern = new RegExp(`//\\s*#region\\s+${regionName}`)
+  const endPattern = new RegExp(`//\\s*#endregion\\s+${regionName}`)
   const lines = src.split(/\r?\n/)
   const regionLines = []
   let found = false
