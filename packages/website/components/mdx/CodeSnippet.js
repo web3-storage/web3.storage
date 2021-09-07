@@ -1,6 +1,4 @@
 import React from 'react'
-import { onlyText } from 'react-children-utilities'
-
 import CodeBlock from './CodeBlock'
 
 

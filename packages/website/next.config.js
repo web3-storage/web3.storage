@@ -7,9 +7,9 @@ const nextConfig = {
     // TODO: Remove me when all the ts errors are figured out.
     ignoreDuringBuilds: true,
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  // typescript: {
+  //   ignoreBuildErrors: true,
+  // },
   webpack: function(config) {
 
     config.module.rules.push({

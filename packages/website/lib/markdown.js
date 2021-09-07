@@ -7,6 +7,7 @@ import rehypeSlug from 'rehype-slug'
 import rehypeToc from '@jsdevtools/rehype-toc'
 import { toHtml } from 'hast-util-to-html'
 
+
 /**
  * 
  * @param {string} filepath 
@@ -20,13 +21,22 @@ async function slurp(filepath) {
 /**
  * @typedef {object} SerializeMDXOptions
  * @property {boolean} [disableToc] if true, don't generate a table-of-contents
+ * 
+ * 
+ * @typedef {import('next-mdx-remote').MDXRemoteSerializeResult} MDXRemoteSerializeResult
+ * 
+ * @typedef {object} SerializeMDXResult
+ * @property {Record<string, any>} frontmatter
+ * @property {string} raw
+ * @property {string|undefined} toc
+ * @property {MDXRemoteSerializeResult} mdx
  */
 
 /**
  * @param {string} mdxSource
  * 
  * @param {SerializeMDXOptions} [options]
- * @returns {Promise<object>}
+ * @returns {Promise<SerializeMDXResult>}
  */
 export async function serializeMDX(mdxSource, options = {}) {
   const { content: raw, data: frontmatter } = matter(mdxSource)
@@ -92,26 +102,48 @@ export async function serializeMDX(mdxSource, options = {}) {
  * 
  * @param {string} mdxFilePath
  * @param {SerializeMDXOptions} [options]
- * @returns 
+ * @returns {Promise<SerializeMDXResult>}
  */
 export async function loadMDX(mdxFilePath, options = {}) {
   const fullContent = await slurp(mdxFilePath)
   return serializeMDX(fullContent, options)
 }
 
+
+/**
+ * @typedef {import('unist').Node} Node
+ * @typedef {import('unist').Parent} Parent
+ * @typedef {import('mdast').Link} Link
+ * @typedef {import('mdast').Definition} Definition
+ * @typedef {import('mdast').Image} Image
+ */
+
 function transformInternalLinks() {
+  /**
+   * @param {Node|Parent} node 
+   * @param {string} type 
+   * @param {function(Node):void} handler 
+   */
   function visit(node, type, handler) {
     if (node.type === type) {
       handler(node)
     }
-    if (node.children) {
+    if ('children' in node) {
       node.children.forEach(n => visit(n, type, handler))
     }
   }
 
-  return function transformer(tree, file, done) {
-    const rewriteLinks = node => {
-      if (!node.url || node.url.match(/^https?:/)) {
+  /**
+   * @param {Parent} tree
+   * @param {string} _file
+   * @param {function} done
+  */
+  function transformer(tree, _file, done) {
+    const rewriteLinks = (/** @type {Node|Link|Definition} */ node)=> {
+      if (!('url' in node)) {
+        return
+      }
+      if (!node.url.match(/^https?:/)) {
         return
       }
       let url = node.url.replace(/\.mdx?/, '/')
@@ -132,7 +164,10 @@ function transformInternalLinks() {
     visit(tree, 'link', rewriteLinks)
     visit(tree, 'definition', rewriteLinks)
 
-    visit(tree, 'image', node => {
+    visit(tree, 'image', (/** @type {Node|Image} */ node) => {
+      if (!('url' in node)) {
+        return
+      }
       if (!node.url || node.url.match(/^https?:/)) {
         return
       }
@@ -145,4 +180,6 @@ function transformInternalLinks() {
 
     done()
   }
+
+  return transformer
 }
