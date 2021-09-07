@@ -71,10 +71,6 @@ export async function serializeMDX(mdxSource, options = {}) {
           tocAst = toc
           return false
         },
-        cssClasses: {
-          // TODO: take these as a param
-          toc: 'toc hidden md:block h-screen sticky top-0 p-10'
-        }
       }]
     ]
   }
