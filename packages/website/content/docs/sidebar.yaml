@@ -1,0 +1,37 @@
+items:
+  - path: /
+    title: Welcome
+  - title: 'How-Tos'
+    items:
+      - title: Store
+        path: how-tos/store
+      - title: Retrieve
+        path: how-tos/retrieve
+      - title: Query
+        path: how-tos/query
+      - title: List
+        path: how-tos/list
+      - title: Generate API Token
+        path: how-tos/generate-api-token
+  - title: Concepts
+    items:
+      - title: Content addressing
+        path: concepts/content-addressing
+      - title: Decentralized storage
+        path: concepts/decentralized-storage
+  - title: Examples
+    items:
+      - title: Getting started
+        path: examples/getting-started
+      - title: Image gallery
+        path: examples/image-gallery
+  - title: Reference
+    items:
+      - title: JavaScript client library
+        path: reference/client-library
+      - title: JavaScript utility libraries
+        path: reference/js-utilities
+  - title: Community
+    items:
+      - title: Help & Support
+        path: community/help-and-support

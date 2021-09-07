@@ -55,7 +55,7 @@ export async function serializeMDX(mdxSource, options = {}) {
     rehypePlugins: [
       rehypeSlug,
       [rehypeToc, {
-        headings: ['h2', 'h3'],
+        headings: ['h2'],
         // @ts-ignore
         customizeTOC: toc => {
           tocAst = toc
