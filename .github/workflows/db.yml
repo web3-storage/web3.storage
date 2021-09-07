@@ -30,3 +30,8 @@ jobs:
         run: npm run import -w packages/db
         env:
           FAUNA_KEY: ${{ secrets.STAGING_FAUNA_KEY }}
+      - name: Test upload to staging
+        run: |
+          npm run build -w packages/client
+          echo "$(date --utc --iso-8601=seconds) web3.storage upload test" > ./upload-test-small
+          ./packages/w3/bin.js put ./upload-test-small --api https://api-staging.web3.storage --token ${{ secrets.STAGING_WEB3_TOKEN }}
