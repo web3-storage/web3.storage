@@ -7,7 +7,7 @@ description: Learn about Web3.Storage by walking through the code for a simple i
 
 To demonstrate how to use the Web3.Storage JavaScript library to build an application, we've written a simple image gallery app for uploading your favorite memes and GIFs to the decentralized web.
 
-![Animated screen capture of the example app, showing a user uploading an image and viewing it in their gallery.](./images/image-gallery-example.gif)
+![Animated screen capture of the example app, showing a user uploading an image and viewing it in their gallery.](../../../public/images/docs/image-gallery-example.gif)
 
 You can [play with the app in your browser][example-demo], since it has been uploaded to Web3.Storage and is available using any IPFS HTTP gateway. All you need is an [API token][howto-token] for Web3.Storage.
 

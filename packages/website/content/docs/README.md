@@ -175,7 +175,7 @@ You've already done the most difficult work in this guide — getting your files
 
 If you ever need to find your files again, and you've forgotten the CID, head over to the [Files section](https://web3.storage/files/) in Web3.Storage:
 
-![A listing of files in Web3.Storage](/images/docs/files-listing.png)
+![A listing of files in Web3.Storage](../../public/images/docs/files-listing.png)
 
 ## Next steps
 

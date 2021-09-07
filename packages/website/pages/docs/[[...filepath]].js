@@ -41,11 +41,7 @@ const BASE_DOCS_PATH = 'content/docs'
     }
   }
 
-  let _cachedDocs = null
   async function loadDocs() {
-    if (_cachedDocs && process.env.NEXT_PUBLIC_ENV !== 'dev') {
-      return _cachedDocs
-    }
     const docs = []
     for await (const entry of walk(BASE_DOCS_PATH)) {
       if (!entry.match(/\.mdx?$/)) {
@@ -57,8 +53,7 @@ const BASE_DOCS_PATH = 'content/docs'
       const pagePath = '/docs' + docId
       docs.push({ content, docId, path: pagePath, localPath: entry })
     }
-    _cachedDocs = docs
-    return _cachedDocs
+    return docs
   }
 
   async function* walk(dir) {

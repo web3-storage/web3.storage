@@ -124,6 +124,17 @@ function transformInternalLinks() {
     visit(tree, 'link', rewriteLinks)
     visit(tree, 'definition', rewriteLinks)
 
+    visit(tree, 'image', node => {
+      if (!node.url || node.url.match(/^https?:/)) {
+        return
+      }
+      const url = node.url.replace(/^.*\/public\/images/, '/images')
+      if (url !== node.url) {
+        // console.log(`chaning image url from ${node.url} to ${url}`)
+        node.url = url
+      }
+    })
+
     done()
   }
 }

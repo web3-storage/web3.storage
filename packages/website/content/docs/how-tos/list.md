@@ -15,7 +15,7 @@ Once you've [stored some files][howto-store] using Web3.Storage, you'll want to 
 
 You can see a list of everything you've uploaded to Web3.Storage on the [Files page][site-files] on the Web3.Storage website. If you don't need to work with this list programmatically, using the website may be a simpler choice.
 
-![A screenshot of the file listing available at https://web3.storage/files when logged in to your account](/images/docs/files-listing.png)
+![A screenshot of the file listing available at https://web3.storage/files when logged in to your account](../../../public/images/docs/files-listing.png)
 
 This [Files page][site-files] provides a convenient overview of your stored data, including links to view your files in your browser via an [IPFS gateway][ipfs-docs-gateway] and information about how the data is being stored on the [decentralized storage networks][concepts-decentralized-storage] that Web3.Storage uses under the hood.
 ## Using the Web3.Storage client
