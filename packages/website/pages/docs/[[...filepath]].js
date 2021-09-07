@@ -156,6 +156,9 @@ function menuLink(href, content, active) {
 }
 
 function docIdFromPath(routerPath) {
+  if (!routerPath) {
+    return '/'
+  }
   const docId = ['', ...routerPath].join('/')
   if (docId === '/index.html') {
     return '/'
