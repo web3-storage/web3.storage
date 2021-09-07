@@ -3,9 +3,11 @@ import fs from 'fs/promises'
 import path from 'path'
 
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 import { serializeMDX } from '../../lib/markdown'
 import { MDX } from '../../components/mdx'
+import PageNotFound from '../404'
 
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import 'react-pro-sidebar/dist/css/styles.css';
@@ -101,13 +103,10 @@ async function loadSidebarDefinition() {
  * @returns
  */
 export default function DocsPage({ doc, sidebar }) {
-
-  // console.log('docs template page', router.query, docPath)
-  // console.log('all doc paths', docs.map(d => d.path))
-
+  const router = useRouter()
   if (doc === null) {
-    console.log('no matching doc. TODO: redirect to 404')
-    return <div></div>
+    console.log('no document matches requested id ', docIdFromPath(router.query.filepath))
+    return <PageNotFound />
   }
   
   const toc = doc.compiled.toc ? parseHtml(doc.compiled.toc) : <div />
@@ -125,7 +124,6 @@ export default function DocsPage({ doc, sidebar }) {
   )
 }
 
-// TODO: this is a little too hard-coded for my liking...
 function makeSidebar(sidebarSpec, doc) {
   const items = sidebarSpec.items.map(i => makeSidebarElements(i, doc))
   return (
@@ -136,7 +134,6 @@ function makeSidebar(sidebarSpec, doc) {
     </ProSidebar>
   )
 }
-
 
 function makeSidebarElements(item, doc) {
   if (!item.items) {
