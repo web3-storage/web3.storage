@@ -154,10 +154,10 @@ export default function Account({ isLoggedIn }) {
           <When condition={isLoaded}>
             <When condition={tokens.length === 0 || !hasUsedTokensToUploadBefore}>
               <div className="mt-9">
-                <h3 className="font-normal">Getting started</h3>
-                <div className="flex flex-wrap gap-x-10">
-                  <When condition={!hasUploads}>
-                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center" style={{ maxWidth: '24rem'}}>
+                <When condition={!hasUploads}>
+                  <h3 className="font-normal">Getting started</h3>
+                  <div className="flex flex-wrap gap-x-10">
+                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red p-10 text-center" style={{ maxWidth: '24rem'}}>
                       <h3 className="font-normal">Upload your first file</h3>
                       <p>
                         Try uploading a file to Web3.Storage!
@@ -169,9 +169,12 @@ export default function Account({ isLoggedIn }) {
                         Upload a file
                       </Button>
                     </div>
-                  </When>
+                  </div>
+                </When>
+                <h3 className="font-normal mt-14">Next steps</h3>
+                <div className="flex flex-wrap gap-x-10">
                   <When condition={tokens.length === 0}>
-                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center" style={{ maxWidth: '24rem'}}>
+                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red p-10 text-center" style={{ maxWidth: '24rem'}}>
                       <h3 className="font-normal">Create your first API token</h3>
                       <p>
                         Generate an API Token to embed into your projects!
@@ -185,8 +188,8 @@ export default function Account({ isLoggedIn }) {
                     </div>
                   </When>
                   <When condition={tokens.length === 0 || !hasUsedTokensToUploadBefore}>
-                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center" style={{ maxWidth: '24rem'}}>
-                      <h3 className="font-normal">Start building</h3>
+                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red p-10 text-center" style={{ maxWidth: '24rem'}}>
+                      <h3 className="font-normal">Read the docs</h3>
                       <p>
                         Start storing and retrieving files using our client library! See the docs for guides and walkthroughs!
                       </p>
