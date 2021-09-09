@@ -17,7 +17,7 @@ import countly from '../lib/countly'
  * @prop { import('react').MouseEventHandler<HTMLButtonElement> } [onClick]
  * @prop {string} [href]
  * @prop {import('react').ButtonHTMLAttributes<HTMLButtonElement>["type"]} [type]
- * @prop {import('react').ReactChildren | string} children
+ * @prop {import('react').ReactNode | string} children
  * @prop {boolean} [disabled]
  * @prop {string} [id]
  * @prop {'dark' | 'light' | 'outlined' } [variant]
