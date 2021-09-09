@@ -33,8 +33,7 @@ export default function Layout({
     redirectIfFound,
     enabled: needsLoggedIn,
   })
-  const shouldWaitForLoggedIn = needsLoggedIn && isLoading
-
+  const shouldWaitForLoggedIn = needsLoggedIn && !isLoggedIn
   return (
     <div className={clsx(pageBgColor, 'flex flex-col min-h-screen')}>
       <Head>
@@ -52,7 +51,11 @@ export default function Layout({
         <meta name="twitter:creator" content="@protocollabs" />
       </Head>
       {shouldWaitForLoggedIn ? (
-        <Loading />
+        <>
+          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
+            <Loading />
+          <Footer bgColor={footerBgColor} />
+        </>
       ) : callback ? (
         <>
           <Loading />

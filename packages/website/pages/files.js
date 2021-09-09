@@ -29,7 +29,7 @@ export function getStaticProps() {
     props: {
       title: 'Files - Web3 Storage',
       pageBgColor: 'bg-w3storage-neutral-red',
-      redirectTo: '/',
+      redirectTo: '/login/',
       needsLoggedIn: true,
     },
   }

@@ -11,6 +11,7 @@ import Hamburger from '../icons/hamburger'
 
 import Logo from '../icons/w3storage-logo'
 import Cross from '../icons/cross'
+import Loading from './loading.js'
 
 /**
  * Navbar Component
@@ -43,11 +44,13 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
         link: 'https://docs.web3.storage/',
         name: 'Docs',
         spacing: `p-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
-      }, {
+      },
+      {
         link: '/about',
         name: 'About',
         spacing: `p-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
-    }, ...(isLoggedIn ? [{
+      },
+      {
         link: '/files',
         name: 'Files',
         spacing: `p-3 md:px-6`
@@ -57,8 +60,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
         name: 'Account',
         spacing: `p-3 md:px-6 mr-3 md:mr-6`
       }
-    ] : [])
-  ], [isLoggedIn])
+    ], [isLoggedIn])
 
   const queryClient = useQueryClient()
   const onLinkClick = useCallback((event) => {
@@ -78,6 +80,34 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
     isMenuOpen ? document.body.classList.remove('overflow-hidden') : document.body.classList.add('overflow-hidden')
     setMenuOpen(!isMenuOpen)
   }
+
+  const logoutButton = (
+    <Button
+      onClick={logout}
+      id="logout"
+      wrapperClassName="inline-block"
+      variant="outlined"
+      small={isSmallVariant}
+      tracking={{
+        event: countly.events.LOGOUT_CLICK,
+        ui: countly.ui.NAVBAR,
+        action: 'Logout'
+      }}>
+      Logout
+    </Button>
+  )
+
+  const loginButton = (
+    <Button href="/login" id="login" wrapperClassName="inline-block" small={isSmallVariant} tracking={{ ui: countly.ui.NAVBAR, action: 'Login' }}>
+      Login
+    </Button>
+    )
+
+  const spinnerButton = (
+    <Button href="#" id="loading-user" wrapperClassName="inline-block" small={isSmallVariant} >
+      <Loading className='user-spinner' fill='white' height={10} />
+    </Button>
+  )
 
   return (
     <nav className={clsx(bgColor, 'w-full z-50', isSmallVariant ? 'sticky top-0' : '')} ref={containerRef}>
@@ -102,28 +132,10 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
             </a>
           ))}
           {isLoadingUser
-            ? null
+            ? spinnerButton
             : isLoggedIn
-              ? (
-                <Button
-                  onClick={logout}
-                  id="logout"
-                  wrapperClassName="inline-block"
-                  variant="outlined"
-                  small={isSmallVariant}
-                  tracking={{
-                    event: countly.events.LOGOUT_CLICK,
-                    ui: countly.ui.NAVBAR,
-                    action: 'Logout'
-                  }}>
-                  Logout
-                </Button>
-                )
-              : (
-                <Button href="/login" id="login" wrapperClassName="inline-block" small={isSmallVariant} tracking={{ ui: countly.ui.NAVBAR, action: 'Login' }}>
-                  Login
-                </Button>
-                )
+              ? logoutButton
+              : loginButton
           }
         </div>
       </div>
