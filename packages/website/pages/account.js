@@ -22,7 +22,7 @@ const MAX_STORAGE = 1.1e+12 /* 1 TB */
     return {
       props: {
         title: 'Account - Web3 Storage',
-        redirectTo: '/',
+        redirectTo: '/login/',
         needsLoggedIn: true,
       },
     }
