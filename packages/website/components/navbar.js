@@ -105,7 +105,8 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
 
   const spinnerButton = (
     <Button href="#" id="loading-user" wrapperClassName="inline-block" small={isSmallVariant} >
-      <Loading className='user-spinner' fill='white' height='10px' />
+      {/* @ts-expect-error */ }
+      <Loading className='user-spinner' fill='white' height={10} />
     </Button>
   )
 
