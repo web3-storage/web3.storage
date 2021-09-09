@@ -33,8 +33,7 @@ export default function Layout({
     redirectIfFound,
     enabled: needsLoggedIn,
   })
-  const shouldWaitForLoggedIn = needsLoggedIn && isLoading
-
+  const shouldWaitForLoggedIn = needsLoggedIn && !isLoggedIn
   return (
     <div className={clsx(pageBgColor, 'flex flex-col min-h-screen')}>
       <Head>
