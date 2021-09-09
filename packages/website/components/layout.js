@@ -51,7 +51,11 @@ export default function Layout({
         <meta name="twitter:creator" content="@protocollabs" />
       </Head>
       {shouldWaitForLoggedIn ? (
-        <Loading />
+        <>
+          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
+            <Loading />
+          <Footer bgColor={footerBgColor} />
+        </>
       ) : callback ? (
         <>
           <Loading />
