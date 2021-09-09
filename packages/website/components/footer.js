@@ -30,7 +30,7 @@ export default function Footer({ bgColor = '' }) {
             Protocol Labs
           </a>
         </div>
-        <div className="flex flex-col order-1 xl:order-2 sm:flex-row">
+        <div className="flex flex-col order-1 xl:order-2 sm:flex-row -mx-3">
           <Link href="https://status.web3.storage/">
             <a
               className="text-sm font-bold no-underline hover:underline py-3 sm:px-3"
