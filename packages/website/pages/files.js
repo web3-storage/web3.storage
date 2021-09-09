@@ -270,6 +270,13 @@ export default function Files({ isLoggedIn }) {
     }
   )
 
+  const refreshUploads = async () => {
+    if (befores.length <= 1) {
+      setBefores([new Date().toISOString()])
+    }
+    return refetch();
+  }
+
   /** @type {Upload[]} */
   const uploads = data?.length === size ? data.concat().splice(0, size - 1) : (data || [])
 
@@ -419,7 +426,7 @@ export default function Files({ isLoggedIn }) {
             <div className="flex flex-wrap -mt-4">
               <Button
                 small
-                onClick={() => refetch()}
+                onClick={() => refreshUploads()}
                 wrapperClassName="mt-4 mr-4"
                 tracking={{
                   event: countly.events.FILES_REFRESH,
