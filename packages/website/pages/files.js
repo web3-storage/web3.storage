@@ -60,6 +60,47 @@ const TOOLTIPS = {
   </span>)
 }
 
+
+
+/**
+ * @param {string} pinStatus
+ * @returns {JSX.Element}
+ */
+const getPinStatusTooltip = (pinStatus) => {
+  let message = null
+
+  switch (pinStatus) {
+    case 'Queuing':
+      message = 'The upload has been received or is in progress and has not yet been queued for pinning.'
+      break;
+
+    case 'PinQueued':
+      message = 'The upload has been received and is in the queue to be pinned.'
+      break;
+
+    case 'Pinning':
+      message = 'The upload is being replicated to multiple IPFS nodes.'
+      break;
+
+    case 'Pinned':
+      message = 'The upload is fully pinned on X IPFS nodes.'
+      break;
+
+    default:
+      break;
+  }
+
+  if (message) {
+    return (
+      <Tooltip placement='top' overlay={<span>{message}</span>} overlayClassName='table-tooltip'>
+        { QuestionMark() }
+      </Tooltip>
+    )
+  } else {
+    return <></>
+  }
+}
+
 /**
  * If it's a different day, it returns the day, otherwise it returns the hour
  * @param {*} timestamp
@@ -150,10 +191,6 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
     setRenamedValue(fileName)
   }
 
-  // upload.deals.push({ status: 'Active', dealId: 35, storageProvider: '123451', pieceCid: '12345', dataCid: '12341', created: new Date().toISOString(), updated: new Date().toISOString(), dataModelSelector: 'wtf', activation: 'hmmm' })
-  // upload.deals.push({ status: 'Active', dealId: 32, storageProvider: '123451a', pieceCid: '12345a', dataCid: '12341a', created: new Date().toISOString(), updated: new Date().toISOString(), dataModelSelector: 'wtf', activation: 'hmmm' })
-  // upload.deals.push({ status: 'Active', dealId: 31, storageProvider: '123451b', pieceCid: '12345b', dataCid: '12341b', created: new Date().toISOString(), updated: new Date().toISOString(), dataModelSelector: 'wtf', activation: 'hmmm' })
-
   const deals = upload.deals
     .filter(d => d.status !== 'Queued')
     .map((deal, i, deals) => {
@@ -230,7 +267,12 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
           </CopyToClipboard>
         </div>
       </TableElement>
-      <TableElement {...sharedArgs} centered>{pinStatus}</TableElement>
+      <TableElement {...sharedArgs} centered>
+        <span className="flex justify-center">
+          {pinStatus}
+          {getPinStatusTooltip(pinStatus)}
+        </span>
+      </TableElement>
       <TableElement {...sharedArgs} centered noWrap={false}>
         <div className="text-left">
           {deals}
