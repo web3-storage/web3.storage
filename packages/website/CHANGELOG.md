@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.3.1](https://www.github.com/web3-storage/web3.storage/compare/website-v1.3.0...website-v1.3.1) (2021-09-09)
+
+
+### Bug Fixes
+
+* improve table layout inside files page ([#454](https://www.github.com/web3-storage/web3.storage/issues/454)) ([e591487](https://www.github.com/web3-storage/web3.storage/commit/e5914878bdbb200b7cb6903555ad35363db4fdbb)), closes [#430](https://www.github.com/web3-storage/web3.storage/issues/430) [#431](https://www.github.com/web3-storage/web3.storage/issues/431)
+* make refresh fetch recent uploads ([#423](https://www.github.com/web3-storage/web3.storage/issues/423)) ([d8c9245](https://www.github.com/web3-storage/web3.storage/commit/d8c9245e8ed6cb98d5dfaf4a0d8ffd2edd87994b))
+
 ## [1.3.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.2.4...website-v1.3.0) (2021-09-06)
 
 
