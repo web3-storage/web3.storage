@@ -31,7 +31,7 @@ export default function Footer({ bgColor = '' }) {
           </a>
         </div>
         <div className="flex flex-col order-1 xl:order-2 sm:flex-row">
-          <Link href="https://web3-storage.statuspage.io/">
+          <Link href="https://status.web3.storage/">
             <a
               className="text-sm font-bold no-underline hover:underline py-3 sm:pr-6"
               onClick={onLinkClick}
