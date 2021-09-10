@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.3.1...website-v1.4.0) (2021-09-10)
+
+
+### Features
+
+* add a new step to the getting started ([#391](https://www.github.com/web3-storage/web3.storage/issues/391)) ([03844f4](https://www.github.com/web3-storage/web3.storage/commit/03844f456a3faafc755d3342ae6a2fc67822b1e2))
+
+
+### Bug Fixes
+
+* use the same font size for the whole footer ([#461](https://www.github.com/web3-storage/web3.storage/issues/461)) ([91b054a](https://www.github.com/web3-storage/web3.storage/commit/91b054a30070d0db11477a0397af40ad42f2bda9))
+
 ### [1.3.1](https://www.github.com/web3-storage/web3.storage/compare/website-v1.3.0...website-v1.3.1) (2021-09-09)
 
 
