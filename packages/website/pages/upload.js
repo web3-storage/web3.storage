@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 import countly from "../lib/countly";
 import { getToken, API } from "../lib/api";
 import Button from "../components/button.js";
+import Link from 'next/link'
 
 export function getStaticProps() {
   return {
@@ -63,7 +64,7 @@ export default function Upload() {
   const onDrop = (acceptedFiles) => uploadFile(acceptedFiles[0]);
   const { getRootProps, isDragActive } = useDropzone({ onDrop, multiple: false });
 
-  const openInput = () => { 
+  const openInput = () => {
     const fileInput = inputRef?.current;
     fileInput && fileInput.click()
   }
@@ -77,12 +78,12 @@ export default function Upload() {
   }
 
   return (
-    <main className="p-4 sm:px-16 mt-4 sm:mt-16 text-w3storage-purple h-full flex-grow" {...getRootProps()}>
-      <div className="mw9 pv3 ph3 ph5-ns min-vh-100 flex flex-col items-center">
-        <div className="p-6">
+    <main className="layout-margins my-4 sm:my-16 text-w3storage-purple h-full flex-grow" {...getRootProps()}>
+      <div className="flex flex-col items-center">
+        <div>
           <h2>Upload File</h2>
-          <form onSubmit={handleUploadSubmit} className='flex flex-col items-start py-8'>
-            <div className="my-4 flex flex-col items-start">
+          <form onSubmit={handleUploadSubmit} className='flex flex-col items-start pt-8'>
+            <div className="mb-4 flex flex-col items-start">
               <label htmlFor="name" className="mb-2">
                 File:
               </label>
@@ -100,9 +101,8 @@ export default function Upload() {
                 <p className="px-4">{ inputFile.name.length > 0 ? inputFile.name : 'No file chosen'}</p>
               </div>
             </div>
-            <div className="mv3">
+            <div>
               <Button
-                className="bg-nslime"
                 type="submit"
                 disabled={uploading || !inputRef?.current?.files || inputRef?.current?.files?.length === 0}
                 id="upload-file"
@@ -136,6 +136,20 @@ export default function Upload() {
               </div>
             </div>
           )}
+        </div>
+      </div>
+      <div className="mt-16 max-w-xl mx-auto">
+        <div className="mb-8">
+          <p className="font-semibold">🌍 Public data</p>
+          <p className="text-sm leading-6">
+            All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. Do not store any private or sensitive information in an unencrypted form using Web3.Storage.
+          </p>
+        </div>
+        <div>
+          <p className="font-semibold">♾️ Permanent data</p>
+          <p className="text-sm leading-6">
+            Deleting files from the Web3.Storage site’s <Link href="/files"><a className="text-sm font-bold no-underline hover:underline">Files</a></Link> page will remove them from the file listing for your account, but that doesn’t prevent nodes on the <a className="text-sm font-bold no-underline hover:underline" href="https://docs.web3.storage/concepts/decentralized-storage/" target="_blank" rel="noreferrer">decentralized storage network</a> from retaining copies of the data indefinitely. Do not use Web3.Storage for data that may need to be permanently deleted in the future.
+          </p>
         </div>
       </div>
     </main>
