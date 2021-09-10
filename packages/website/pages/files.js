@@ -310,6 +310,8 @@ export default function Files({ isLoggedIn }) {
     setSelectedFiles([])
   }
 
+  const handleFirstPageClick = () => setBefores([new Date().toISOString()])
+
   function handlePrevClick() {
     if (befores.length === 1) return
     setBefores(befores.slice(1))
@@ -471,11 +473,23 @@ export default function Files({ isLoggedIn }) {
               <When condition={!hasZeroUploads}>
                 <>
                   <FilesTable />
-                  <div className="mt-4 flex justify-between ml-7 md:ml-8">
+                  <div className="mt-4 flex ml-7 md:ml-8">
                     <When condition={befores.length !== 1}>
                       <Button
                         className="black"
-                        wrapperClassName="m-h-2"
+                        wrapperClassName="mr-2"
+                        onClick={handleFirstPageClick}
+                        id="uploads-first"
+                        tracking={{
+                          event: countly.events.FILES_NAVIGATION_CLICK,
+                          ui: countly.ui.FILES,
+                          action: 'First'
+                        }}
+                      >
+                        First
+                      </Button>
+                      <Button
+                        className="black"
                         onClick={handlePrevClick}
                         id="uploads-previous"
                         tracking={{
@@ -490,7 +504,7 @@ export default function Files({ isLoggedIn }) {
                     <When condition={data?.length === size }>
                       <Button
                         className="black"
-                        wrapperClassName="m-h-2 ml-auto"
+                        wrapperClassName="ml-auto"
                         onClick={handleNextClick}
                         id="uploads-next"
                         tracking={{
