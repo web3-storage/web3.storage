@@ -13,12 +13,22 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
+      - run: npm install -g @web3-storage/w3
       - name: Add small file via w3
         run: |
           echo "$(date --utc --iso-8601=seconds) web3.storage upload test" > ./upload-test-small 
-          npx @web3-storage/w3 put ./upload-test-small --token ${{ secrets.WEB3_TOKEN }}
+          w3 put ./upload-test-small --token ${{ secrets.WEB3_TOKEN }}
+
       # test adding a file larger than LOCAL_ADD_THRESHOLD see: packages/api/src/constants.js
-      - name: Add 3MiB file via w3
+      # Create a random file. upload it via w3 and time the duration in seconds
+      # `usr/bin/time -f "%e" -o ./duration_secs` writes the wall-clock runtime in seconds of the command to the file ./duration_secs
+      # the rest is wrapping it up as a metric in the prometheus format and sending it off to the push gateway
+      # see: https://github.com/prometheus/pushgateway/blob/master/README.md
+      - name: Add 3MiB file via w3 and push duration to prometheus push gateway
         run: |
           dd if=/dev/urandom of=./upload-test-3mib bs=1024 count=3072
-          npx @web3-storage/w3 put ./upload-test-3mib --token ${{ secrets.WEB3_TOKEN }}
+          /usr/bin/time -f "%e" -o ./duration_secs w3 put ./upload-test-3mib --token ${{ secrets.WEB3_TOKEN }}
+          echo "# HELP web3storage_upload_duration_seconds How long it took to upload a file via w3" > ./metric
+          echo "# TYPE web3storage_upload_duration_seconds gauge" >> ./metric
+          echo "web3storage_upload_duration_seconds{endpoint=\"/car\",size=\"3MiB\",cmd=\"w3\"} $(cat ./duration_secs)" >> ./metric
+          curl --data-binary "@./metric" --basic --user "${{ secrets.PUSHGATEWAY_BASIC_AUTH }}" https://pushgateway.k8s.locotorp.info/metrics/job/web3storage_ci/instance/github_action
