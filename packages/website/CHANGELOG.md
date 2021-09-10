@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.3.2](https://www.github.com/web3-storage/web3.storage/compare/website-v1.3.1...website-v1.3.2) (2021-09-10)
+
+
+### Bug Fixes
+
+* use the same font size for the whole footer ([#461](https://www.github.com/web3-storage/web3.storage/issues/461)) ([91b054a](https://www.github.com/web3-storage/web3.storage/commit/91b054a30070d0db11477a0397af40ad42f2bda9))
+
 ### [1.3.1](https://www.github.com/web3-storage/web3.storage/compare/website-v1.3.0...website-v1.3.1) (2021-09-09)
 
 
