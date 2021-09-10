@@ -35,4 +35,5 @@ jobs:
           echo "# HELP web3storage_upload_duration_seconds How long it took to upload a file via w3" > ./metric
           echo "# TYPE web3storage_upload_duration_seconds gauge" >> ./metric
           echo "web3storage_upload_duration_seconds{endpoint=\"/car\",size=\"3MiB\",cmd=\"w3\"} $(cat ./duration_secs)" >> ./metric
+          cat ./metric
           curl --silent --show-error --data-binary "@./metric" --basic --user "${{ secrets.PUSHGATEWAY_BASIC_AUTH }}" https://pushgateway.k8s.locotorp.info/metrics/job/web3storage_ci/instance/github_action
