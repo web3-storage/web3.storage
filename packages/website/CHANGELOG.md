@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.4.1](https://www.github.com/web3-storage/web3.storage/compare/website-v1.4.0...website-v1.4.1) (2021-09-13)
+
+
+### Bug Fixes
+
+* tables scroll with the buttons ([09862a8](https://www.github.com/web3-storage/web3.storage/commit/09862a89ad45e8ed6281f27ffc7a03fba30c5a71))
+
 ## [1.4.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.3.1...website-v1.4.0) (2021-09-10)
 
 
