@@ -471,53 +471,51 @@ export default function Files({ isLoggedIn }) {
                 </div>
               </When>
               <When condition={!hasZeroUploads}>
-                <>
-                  <FilesTable />
-                  <div className="mt-4 flex ml-7 md:ml-8">
-                    <When condition={befores.length !== 1}>
-                      <Button
-                        className="black"
-                        wrapperClassName="mr-2"
-                        onClick={handleFirstPageClick}
-                        id="uploads-first"
-                        tracking={{
-                          event: countly.events.FILES_NAVIGATION_CLICK,
-                          ui: countly.ui.FILES,
-                          action: 'First'
-                        }}
-                      >
-                        First
-                      </Button>
-                      <Button
-                        className="black"
-                        onClick={handlePrevClick}
-                        id="uploads-previous"
-                        tracking={{
-                          event: countly.events.FILES_NAVIGATION_CLICK,
-                          ui: countly.ui.FILES,
-                          action: 'Previous'
-                        }}
-                      >
-                        ← Previous
-                      </Button>
-                    </When>
-                    <When condition={data?.length === size }>
-                      <Button
-                        className="black"
-                        wrapperClassName="ml-auto"
-                        onClick={handleNextClick}
-                        id="uploads-next"
-                        tracking={{
-                          event: countly.events.FILES_NAVIGATION_CLICK,
-                          ui: countly.ui.FILES,
-                          action: 'Next'
-                        }}
-                      >
-                        Next →
-                      </Button>
-                    </When>
-                  </div>
-                </>
+                <FilesTable />
+              </When>
+            </div>
+            <div className="mt-4 flex ml-7 md:ml-8">
+              <When condition={befores.length !== 1}>
+                <Button
+                  className="black"
+                  wrapperClassName="mr-2"
+                  onClick={handleFirstPageClick}
+                  id="uploads-first"
+                  tracking={{
+                    event: countly.events.FILES_NAVIGATION_CLICK,
+                    ui: countly.ui.FILES,
+                    action: 'First'
+                  }}
+                >
+                  First
+                </Button>
+                <Button
+                  className="black"
+                  onClick={handlePrevClick}
+                  id="uploads-previous"
+                  tracking={{
+                    event: countly.events.FILES_NAVIGATION_CLICK,
+                    ui: countly.ui.FILES,
+                    action: 'Previous'
+                  }}
+                >
+                  ← Previous
+                </Button>
+              </When>
+              <When condition={data?.length === size }>
+                <Button
+                  className="black"
+                  wrapperClassName="ml-auto"
+                  onClick={handleNextClick}
+                  id="uploads-next"
+                  tracking={{
+                    event: countly.events.FILES_NAVIGATION_CLICK,
+                    ui: countly.ui.FILES,
+                    action: 'Next'
+                  }}
+                >
+                  Next →
+                </Button>
               </When>
             </div>
           </>
