@@ -64,9 +64,10 @@ const TOOLTIPS = {
 
 /**
  * @param {string} pinStatus
+ * @param {number} numberOfPins
  * @returns {JSX.Element}
  */
-const getPinStatusTooltip = (pinStatus) => {
+const getPinStatusTooltip = (pinStatus, numberOfPins) => {
   let message = null
 
   switch (pinStatus) {
@@ -83,7 +84,7 @@ const getPinStatusTooltip = (pinStatus) => {
       break;
 
     case 'Pinned':
-      message = 'The upload is fully pinned on X IPFS nodes.'
+      message = `The upload is fully pinned on ${numberOfPins} IPFS nodes.`
       break;
 
     default:
@@ -270,7 +271,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
       <TableElement {...sharedArgs} centered>
         <span className="flex justify-center">
           {pinStatus}
-          {getPinStatusTooltip(pinStatus)}
+          {getPinStatusTooltip(pinStatus, upload.pins.length)}
         </span>
       </TableElement>
       <TableElement {...sharedArgs} centered noWrap={false}>
