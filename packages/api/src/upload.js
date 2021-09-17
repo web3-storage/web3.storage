@@ -32,7 +32,7 @@ export async function uploadPost (request, env, ctx) {
     }
     files.push(blob)
   }
-  console.log('/upload', files)
+
   const { car } = await packToBlob({ input: files })
   return handleCarUpload(request, env, ctx, car)
 }

@@ -18,6 +18,10 @@ export default {
   mode: 'development',
   devtool: 'source-map',
   plugins: [
+    // no chunking plz. it's "server-side"
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1
+    }),
     new webpack.ProvidePlugin({
       process: 'process/browser.js',
       Buffer: ['buffer', 'Buffer']
