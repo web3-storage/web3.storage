@@ -60,7 +60,24 @@ const TOOLTIPS = {
   </span>)
 }
 
-
+/**
+ * @param {string} pinStatus
+ * @param {number} numberOfPins
+ * @returns {any}
+ */
+const getMessage = (pinStatus, numberOfPins) => {
+  switch (pinStatus) {
+    case "Queuing":
+      return "The upload has been received or is in progress and has not yet been queued for pinning.";
+    case "PinQueued":
+      return "The upload has been received and is in the queue to be pinned.";
+    case "Pinning":
+      return "The upload is being replicated to multiple IPFS nodes.";
+    case "Pinned":
+      return `The upload is fully pinned on ${numberOfPins} IPFS nodes.`;
+  }
+  return null;
+};
 
 /**
  * @param {string} pinStatus
@@ -68,38 +85,19 @@ const TOOLTIPS = {
  * @returns {JSX.Element}
  */
 const getPinStatusTooltip = (pinStatus, numberOfPins) => {
-  let message = null
+  const message = getMessage(pinStatus, numberOfPins);
 
-  switch (pinStatus) {
-    case 'Queuing':
-      message = 'The upload has been received or is in progress and has not yet been queued for pinning.'
-      break;
+  if (!message) return <></>
 
-    case 'PinQueued':
-      message = 'The upload has been received and is in the queue to be pinned.'
-      break;
-
-    case 'Pinning':
-      message = 'The upload is being replicated to multiple IPFS nodes.'
-      break;
-
-    case 'Pinned':
-      message = `The upload is fully pinned on ${numberOfPins} IPFS nodes.`
-      break;
-
-    default:
-      break;
-  }
-
-  if (message) {
-    return (
-      <Tooltip placement='top' overlay={<span>{message}</span>} overlayClassName='table-tooltip'>
-        { QuestionMark() }
-      </Tooltip>
-    )
-  } else {
-    return <></>
-  }
+  return (
+    <Tooltip
+      placement="top"
+      overlay={<span>{message}</span>}
+      overlayClassName="table-tooltip"
+    >
+      {QuestionMark()}
+    </Tooltip>
+  );
 }
 
 /**
