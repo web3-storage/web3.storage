@@ -3,7 +3,8 @@ import { useQuery, useQueryClient } from 'react-query'
 import filesize from 'filesize'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
-import Button from '../components/button.js'
+import Alert from '../components/alert'
+import Button from '../components/button'
 import Checkbox from '../components/checkbox'
 import Loading from '../components/loading'
 import Tooltip from '../components/tooltip'
@@ -126,6 +127,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
   const [isLoading, setLoading] = useState(false)
   const [renameError, setError] = useState('')
   const [renamedValue, setRenamedValue] = useState('')
+  const [hasTriedToClickDisabledCheckbox, setTriedToClickDisabledCheckbox] = useState(false)
 
   /** @param {import('react').ChangeEvent<HTMLFormElement>} ev */
   const handleRename = async (ev) => {
@@ -193,7 +195,26 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
   return (
     <tr>
       <td className="w-8">
-        <Checkbox className="mr-2" checked={checked} disabled={!upload.dagSize} disabledText='You may only delete after the upload is complete' onChange={() => toggle(upload.cid)}/>
+        <Checkbox className="mr-2" checked={checked} disabled={!upload.dagSize} disabledText='You may only delete after the upload is complete' onChange={() => toggle(upload.cid)} onClick={() => !upload.dagSize && setTriedToClickDisabledCheckbox(true)}/>
+        { hasTriedToClickDisabledCheckbox && (
+           <Alert
+            className="p-4 text-white"
+            position="bottom"
+            type="error"
+            timer={6}
+            onTimerEnd={() => setTriedToClickDisabledCheckbox(false)}
+          >
+            <>
+              <span>You may only delete after the upload is complete! </span>
+              <button
+                className="ml-2 border rounded-full px-3 pointer"
+                onClick={() => setTriedToClickDisabledCheckbox(false)}
+              >
+                X
+              </button>
+            </>
+          </Alert>
+        )}
       </td>
       <TableElement {...sharedArgs}>
         <span title={upload.created} className="break-normal">{formatTimestamp(upload.created)}</span>

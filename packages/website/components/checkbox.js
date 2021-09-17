@@ -10,9 +10,10 @@ import Tick from '../icons/tick'
  * @param {string} [props.disabledText]
  * @param {boolean} [props.checked]
  * @param {function} [props.onChange]
+ * @param {React.MouseEventHandler<HTMLLabelElement>} [props.onClick]
  * @returns
  */
-const Checkbox = ({ className, label, disabled, disabledText, checked, onChange, ...props }) => {
+const Checkbox = ({ className, label, disabled, disabledText, checked, onChange, onClick, ...props }) => {
   const /** @type {React.MutableRefObject<HTMLInputElement|null>} */ inputRef = useRef(null);
   /**
    * @param {Object} event
@@ -28,7 +29,7 @@ const Checkbox = ({ className, label, disabled, disabledText, checked, onChange,
     }
   }
 
-  return <label className={clsx('block relative', className)} {...props }>
+  return <label className={clsx('block relative', className)} onClick={onClick} {...props }>
         <input className='absolute top-0 left-0 hidden' type='checkbox' checked={checked} disabled={disabled} onChange={change} ref={inputRef} />
         <div className={ clsx('relative w-4 h-4 border border-w3storage-red',
           disabled ? 'bg-gray-300 cursor-not-allowed' : 'bg-w3storage-red-background cursor-pointer')
