@@ -1,12 +1,12 @@
 /* eslint-env serviceworker */
 import { gql } from '@web3-storage/db'
-import { CarReader, CarBlockIterator } from '@ipld/car'
+import { CarBlockIterator } from '@ipld/car'
 import { Block } from 'multiformats/block'
 import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
 import retry from 'p-retry'
-import { GATEWAY, LOCAL_ADD_THRESHOLD, DAG_SIZE_CALC_LIMIT, MAX_BLOCK_SIZE } from './constants.js'
+import { GATEWAY, LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { toPinStatusEnum } from './utils/pin.js'
 
@@ -19,14 +19,6 @@ const CREATE_UPLOAD = gql`
         _id
         dagSize
       }
-    }
-  }
-`
-
-const UPDATE_DAG_SIZE = gql`
-  mutation UpdateContentDagSize($content: ID!, $dagSize: Long!) {
-    updateContentDagSize(content: $content, dagSize: $dagSize) {
-      _id
     }
   }
 `
@@ -129,33 +121,57 @@ export async function carGet (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 export async function carPost (request, env, ctx) {
+  let blob = await request.blob()
+  // Ensure car blob.type is set; it is used by the cluster client to set the foramt=car flag on the /add call.
+  blob = blob.slice(0, blob.size, 'application/car')
+
+  return handleCarUpload(request, env, ctx, blob)
+}
+
+/**
+ * Post a CAR file.
+ *
+ * @param {import('./user').AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ * @param {import('./index').Ctx} ctx
+ * @param {Blob} car
+ */
+export async function handleCarUpload (request, env, ctx, car) {
   const { user, authToken } = request.auth
   const { headers } = request
 
-  let name = headers.get('x-name')
-  if (!name || typeof name !== 'string') {
-    name = `Upload at ${new Date().toISOString()}`
-  }
+  const bytes = new Uint8Array(await car.arrayBuffer())
 
-  const blob = await request.blob()
-  const bytes = new Uint8Array(await blob.arrayBuffer())
-  const stat = await carStat(bytes)
+  // throw if CAR is invalid
+  await carStat(bytes)
 
-  // Ensure car blob.type is set; it is used by the cluster client to set the foramt=car flag on the /add call.
-  const content = blob.slice(0, blob.size, 'application/car')
-
-  const { cid } = await env.cluster.add(content, {
-    metadata: { size: content.size.toString() },
+  const {
+    cid,
+    bytes: sumOfBlocksInCarSize,
+    size: unixFsCumulativeSize
+  } = await env.cluster.add(car, {
+    metadata: { size: car.size.toString() },
     // When >2.5MB, use local add, because waiting for blocks to be sent to
     // other cluster nodes can take a long time. Replication to other nodes
     // will be done async by bitswap instead.
-    local: blob.size > LOCAL_ADD_THRESHOLD
+    local: car.size > LOCAL_ADD_THRESHOLD
   })
+
+  // If the CAR had a unixFS root, then use the cumlative size property from the root.
+  // Otherwise, cluster gives us the sum of the bytes of every block in the car.
+  // see: https://github.com/ipfs/ipfs-cluster/blob/396a348a6541177a61e91bfd8c1d50ef75822559/adder/adder.go#L296-L308
+  const dagSize = unixFsCumulativeSize || sumOfBlocksInCarSize
+  console.log({ dagSize, unixFsCumulativeSize, sumOfBlocksInCarSize })
 
   const { peerMap } = await env.cluster.status(cid)
   const pins = toPins(peerMap)
   if (!pins.length) { // should not happen
     throw new Error('not pinning on any node')
+  }
+
+  let name = headers.get('x-name')
+  if (!name || typeof name !== 'string') {
+    name = `Upload at ${new Date().toISOString()}`
   }
 
   // Store in DB
@@ -169,7 +185,8 @@ export async function carPost (request, env, ctx) {
         cid,
         name,
         type: 'Car',
-        pins
+        pins,
+        dagSize
       }
     })
   ), {
@@ -180,31 +197,18 @@ export async function carPost (request, env, ctx) {
   /** @type {(() => Promise<any>)[]} */
   const tasks = []
 
+  // TODO: this should be handled in the db code as part of the CREATE_UPLOAD
   // Update the user's used storage
   tasks.push(async () => {
     try {
       await env.db.query(INCREMENT_USER_USED_STORAGE, {
         user: user._id,
-        amount: stat.size
+        amount: dagSize
       })
     } catch (err) {
       console.error(`failed to update user used storage: ${err.stack}`)
     }
   })
-
-  // Partial CARs are chunked at ~10MB so anything less than this is probably complete.
-  if (upload.content.dagSize == null && blob.size < DAG_SIZE_CALC_LIMIT) {
-    tasks.push(async () => {
-      let dagSize
-      try {
-        dagSize = await getDagSize(bytes)
-      } catch (err) {
-        console.error(`could not determine DAG size: ${err.stack}`)
-        return
-      }
-      await env.db.query(UPDATE_DAG_SIZE, { content: upload.content._id, dagSize })
-    })
-  }
 
   // Retrieve current pin status and info about the nodes pinning the content.
   // Keep querying Cluster until one of the nodes reports something other than
@@ -316,35 +320,6 @@ async function carStat (carBytes) {
     }
   }
   return { size, blocks }
-}
-
-/**
- * Returns the DAG size of the CAR but only if the graph is complete.
- * @param {Uint8Array} carBytes
- */
-async function getDagSize (carBytes) {
-  const reader = await CarReader.fromBytes(carBytes)
-  const [rootCid] = await reader.getRoots()
-
-  const getBlock = async cid => {
-    const rawBlock = await reader.get(cid)
-    if (!rawBlock) throw new Error(`missing block for ${cid}`)
-    const { bytes } = rawBlock
-    const decoder = decoders.find(d => d.code === cid.code)
-    if (!decoder) throw new Error(`missing decoder for ${cid.code}`)
-    return new Block({ cid, bytes, value: decoder.decode(bytes) })
-  }
-
-  const getSize = async cid => {
-    const block = await getBlock(cid)
-    let size = block.bytes.byteLength
-    for (const [, cid] of block.links()) {
-      size += await getSize(cid)
-    }
-    return size
-  }
-
-  return getSize(rootCid)
 }
 
 /**
