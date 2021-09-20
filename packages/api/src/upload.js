@@ -1,4 +1,4 @@
-/* eslint-env serviceworker */
+/* eslint-env serviceworker, browser */
 import { packToBlob } from 'ipfs-car/pack/blob'
 import { handleCarUpload } from './car.js'
 import { toFormData } from './utils/form-data.js'
@@ -19,10 +19,14 @@ export async function uploadPost (request, env, ctx) {
     name = `Upload at ${new Date().toISOString()}`
   }
 
-  let files = []
+  let input
   if (contentType.includes('multipart/form-data')) {
     const form = await toFormData(request)
-    files = form.getAll('file')
+    const files = form.getAll('file')
+    input = files.map((f) => ({
+      path: f.name,
+      content: f.stream()
+    }))
   } else if (contentType.includes('application/car')) {
     throw new Error('Please POST Content-addressed Archives to /car')
   } else {
@@ -30,9 +34,10 @@ export async function uploadPost (request, env, ctx) {
     if (blob.size === 0) {
       throw new Error('Empty payload')
     }
-    files.push(blob)
+    input = [blob]
   }
-
-  const { car } = await packToBlob({ input: files })
+  // TODO: do we want to wrap file uploads like we do car uploads from the client?
+  // this path used to send the files to cluster and we didn't wrap, so we dont here for consistency with the old ways.
+  const { car } = await packToBlob({ input, wrapWithDirectory: false })
   return handleCarUpload(request, env, ctx, car)
 }
