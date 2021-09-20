@@ -156,11 +156,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     local: car.size > LOCAL_ADD_THRESHOLD
   })
 
-  // If the CAR had a unixFS root, then use the cumlative size property from the root.
-  // Otherwise, cluster gives us the sum of the bytes of every block in the car.
-  // see: https://github.com/ipfs/ipfs-cluster/blob/396a348a6541177a61e91bfd8c1d50ef75822559/adder/adder.go#L296-L308
-  const dagSize = unixFsCumulativeSize || sumOfBlocksInCarSize
-  console.log({ dagSize, unixFsCumulativeSize, sumOfBlocksInCarSize })
+  console.log({ cid, dagSize })
 
   const { peerMap } = await env.cluster.status(cid)
   const pins = toPins(peerMap)
@@ -316,11 +312,20 @@ async function carStat (carBlob) {
       throw new Error('CAR must contain at least one non-root block')
     }
     // get the size of the full dag for this root, even if we only have a partial CAR.
+<<<<<<< HEAD
     if (rootBlock.cid.code === pb.code) {
       size = cumulativeSize(rootBlock.bytes, rootBlock.value)
+=======
+    if (rootCid.code === pb.code) {
+      size = cumulativeSize(rootBlock, links)
+>>>>>>> 7d266a0 (chore: derive cumlative size for dag-pb roots)
     }
   }
   return { size, blocks }
+}
+
+function cumulativeSize (block, links) {
+  return block.bytes.length + links.reduce((acc, curr) => acc + (curr.Tsize || 0), 0)
 }
 
 /**
