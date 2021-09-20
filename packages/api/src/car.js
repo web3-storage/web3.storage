@@ -140,16 +140,12 @@ export async function handleCarUpload (request, env, ctx, car) {
   const { user, authToken } = request.auth
   const { headers } = request
 
-  const bytes = new Uint8Array(await car.arrayBuffer())
+  // throws if CAR is invalid by our standards
+  const { size: dagSize } = await carStat(car)
 
-  // throw if CAR is invalid
-  await carStat(bytes)
-
-  const {
-    cid,
-    bytes: sumOfBlocksInCarSize,
-    size: unixFsCumulativeSize
-  } = await env.cluster.add(car, {
+  // We can't use the `bytes` from cluster where it's a unixfs root partial, as it'll be a shard of the total dag size.
+  // We can't use the `size` from cluster as it's the unixfs FileSize which is 0 for directories, and is not set for raw encoded files, only dag-pb ones.
+  const { cid } = await env.cluster.add(car, {
     metadata: { size: car.size.toString() },
     // When >2.5MB, use local add, because waiting for blocks to be sent to
     // other cluster nodes can take a long time. Replication to other nodes
@@ -157,11 +153,7 @@ export async function handleCarUpload (request, env, ctx, car) {
     local: car.size > LOCAL_ADD_THRESHOLD
   })
 
-  // If the CAR had a unixFS root, then use the cumlative size property from the root.
-  // Otherwise, cluster gives us the sum of the bytes of every block in the car.
-  // see: https://github.com/ipfs/ipfs-cluster/blob/396a348a6541177a61e91bfd8c1d50ef75822559/adder/adder.go#L296-L308
-  const dagSize = unixFsCumulativeSize || sumOfBlocksInCarSize
-  console.log({ dagSize, unixFsCumulativeSize, sumOfBlocksInCarSize })
+  console.log({ cid, dagSize })
 
   const { peerMap } = await env.cluster.status(cid)
   const pins = toPins(peerMap)
@@ -274,10 +266,11 @@ export async function sizeOf (response) {
  * - Missing non-root blocks (when root block has links)
  *
  * @typedef {{ size: number, blocks: number }} CarStat
- * @param {Uint8Array} carBytes
+ * @param {Blob} carBlob
  * @returns {Promise<CarStat>}
  */
-async function carStat (carBytes) {
+async function carStat (carBlob) {
+  const carBytes = new Uint8Array(await carBlob.arrayBuffer())
   const blocksIterator = await CarBlockIterator.fromBytes(carBytes)
   const roots = await blocksIterator.getRoots()
   if (roots.length === 0) {
@@ -307,19 +300,24 @@ async function carStat (carBytes) {
   if (!rawRootBlock) {
     throw new Error('missing root block')
   }
-  if (blocks === 1) {
-    const decoder = decoders.find(d => d.code === rootCid.code)
-    // if we can't decode, we can't check this...
-    if (decoder) {
-      const rootBlock = new Block({ cid: rootCid, bytes: rawRootBlock.bytes, value: decoder.decode(rawRootBlock.bytes) })
-      const numLinks = Array.from(rootBlock.links()).length
-      // if the root block has links, then we should have at least 2 blocks in the CAR
-      if (numLinks > 0) {
-        throw new Error('CAR must contain at least one non-root block')
-      }
+  const decoder = decoders.find(d => d.code === rootCid.code)
+  if (decoder) {
+    const rootBlock = new Block({ cid: rootCid, bytes: rawRootBlock.bytes, value: decoder.decode(rawRootBlock.bytes) })
+    const links = Array.from(rootBlock.links())
+    // if the root block has links, then we should have at least 2 blocks in the CAR
+    if (blocks === 1 && links.length > 0) {
+      throw new Error('CAR must contain at least one non-root block')
+    }
+    // get the size of the full dag for this root, even if we only have a partial CAR.
+    if (rootCid.code === pb.code) {
+      size = cumulativeSize(rootBlock, links)
     }
   }
   return { size, blocks }
+}
+
+function cumulativeSize (block, links) {
+  return block.bytes.length + links.reduce((acc, curr) => acc + (curr.Tsize || 0), 0)
 }
 
 /**
