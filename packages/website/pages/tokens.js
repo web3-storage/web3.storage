@@ -68,20 +68,24 @@ const TokenRow = ({ token, index, copied, onCopy, deleting, onDelete }) => {
   const sharedArgs = { index }
   return (
     <tr>
-      <TableElement {...sharedArgs} important>{token.name}</TableElement>
+      <TableElement {...sharedArgs} important breakAll={false}>
+        {token.name}
+      </TableElement>
       <TableElement {...sharedArgs} important>
-        <code style={{ wordWrap: 'break-word' }}>{token.secret}</code>
+        <code style={{ whiteSpace: 'nowrap' }}>
+          {token.secret.substr(0, 20)}...{token.secret.substr(token.secret.length - 20, token.secret.length)}
+        </code>
       </TableElement>
       <TableElement {...sharedArgs} breakAll={false}>
         <form onSubmit={e => { e.preventDefault(); onCopy(token) }}>
-          <Button type="submit" small className="w-24">
+          <Button type="submit" small className="w-24 m-2">
             {copied === token._id ? 'Copied!' : 'Copy'}
           </Button>
         </form>
       </TableElement>
       <TableElement {...sharedArgs} breakAll={false}>
         <form onSubmit={e => { e.preventDefault(); onDelete(token) }}>
-          <Button type="submit" disabled={Boolean(deleting)} small className="w-24">
+          <Button type="submit" disabled={Boolean(deleting)} small className="w-24 m-2">
             {deleting === token._id ? 'Deleting...' : 'Delete'}
           </Button>
         </form>
@@ -165,29 +169,31 @@ export default function Tokens({ isLoggedIn }) {
           </Then>
           <Else>
             <When condition={tokens.length > 0}>
-              <table className="w-full mt-4">
-                <thead>
-                  <tr className="bb b--black">
-                    <TableHeader>Name</TableHeader>
-                    <TableHeader>Token</TableHeader>
-                    <TableHeader />
-                    <TableHeader />
-                  </tr>
-                </thead>
-                <tbody>
-                  {tokens.map((t, i) =>
-                    <TokenRow 
-                      key={t._id}
-                      token={t}
-                      index={i}
-                      copied={copied}
-                      onCopy={handleCopyToken}
-                      deleting={deleting}
-                      onDelete={handleDeleteToken}
-                    />
-                  )}
-                </tbody>
-              </table>
+              <div className="table-responsive">
+                <table className="w-full mt-4">
+                  <thead>
+                    <tr className="bb b--black">
+                      <TableHeader>Name</TableHeader>
+                      <TableHeader>Token</TableHeader>
+                      <TableHeader />
+                      <TableHeader />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tokens.map((t, i) =>
+                      <TokenRow
+                        key={t._id}
+                        token={t}
+                        index={i}
+                        copied={copied}
+                        onCopy={handleCopyToken}
+                        deleting={deleting}
+                        onDelete={handleDeleteToken}
+                      />
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </When>
             <When condition={tokens.length === 0}>
               <div className="flex flex-col items-center">
