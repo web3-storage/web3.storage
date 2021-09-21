@@ -63,8 +63,9 @@ const TableElement = ({ children, index = 0, breakAll = true, centered, importan
  * @param {(t: Token) => void} props.onCopy
  * @param {string} props.deleting
  * @param {(t: Token) => void} props.onDelete
+ * @param {number} props.visibleChars
  */
-const TokenRow = ({ token, index, copied, onCopy, deleting, onDelete }) => {
+const TokenRow = ({ token, index, copied, onCopy, deleting, onDelete, visibleChars }) => {
   const sharedArgs = { index }
   return (
     <tr>
@@ -73,7 +74,7 @@ const TokenRow = ({ token, index, copied, onCopy, deleting, onDelete }) => {
       </TableElement>
       <TableElement {...sharedArgs} important>
         <code style={{ whiteSpace: 'nowrap' }}>
-          {token.secret.substr(0, 20)}...{token.secret.substr(token.secret.length - 20, token.secret.length)}
+          {token.secret.substr(0, visibleChars)}...{token.secret.substr(token.secret.length - visibleChars, token.secret.length)}
         </code>
       </TableElement>
       <TableElement {...sharedArgs} breakAll={false}>
@@ -180,15 +181,16 @@ export default function Tokens({ isLoggedIn }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {tokens.map((t, i) =>
+                    {tokens.map((token, index) =>
                       <TokenRow
-                        key={t._id}
-                        token={t}
-                        index={i}
+                        key={token._id}
+                        token={token}
+                        index={index}
                         copied={copied}
                         onCopy={handleCopyToken}
                         deleting={deleting}
                         onDelete={handleDeleteToken}
+                        visibleChars={20}
                       />
                     )}
                   </tbody>
