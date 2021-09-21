@@ -169,9 +169,9 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
         type: uploadType,
         backupData: backupKey
           ? [{
-            key: backupKey,
-            name: env.s3BucketName
-          }]
+              key: backupKey,
+              name: env.s3BucketName
+            }]
           : [],
         pins,
         dagSize
