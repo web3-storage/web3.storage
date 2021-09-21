@@ -135,6 +135,7 @@ export async function carPost (request, env, ctx) {
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
  * @param {Blob} car
+ * @param {string} [uploadType = 'Car']
  */
 export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car') {
   const { user, authToken } = request.auth
