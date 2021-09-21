@@ -141,12 +141,14 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   const { user, authToken } = request.auth
   const { headers } = request
 
-  // throws if CAR is invalid by our standards
+  // Throws if CAR is invalid by our standards.
+  // Returns either the sum of the block sizes in the CAR, or the cumulative size of the DAG for a dag-pb root.
   const { size: dagSize } = await carStat(car)
 
-  // We can't use the `bytes` from cluster where it's a unixfs root partial, as it'll be a shard of the total dag size.
-  // We can't use the `size` from cluster as it's the unixfs FileSize which is 0 for directories, and is not set for raw encoded files, only dag-pb ones.
-  const { cid } = await env.cluster.add(car, {
+  // Note: We can't make use of `bytes` or `size` properties on the response from cluster.add
+  // `bytes` is the sum of block sizes in bytes. Where the CAR is a partial, it'll only be a shard of the total dag size.
+  // `size` is UnixFS FileSize which is 0 for directories, and is not set for raw encoded files, only dag-pb ones.
+  const { cid/*, bytes, size */ } = await env.cluster.add(car, {
     metadata: { size: car.size.toString() },
     // When >2.5MB, use local add, because waiting for blocks to be sent to
     // other cluster nodes can take a long time. Replication to other nodes
