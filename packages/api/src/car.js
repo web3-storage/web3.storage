@@ -1,15 +1,21 @@
 /* eslint-env serviceworker */
 import { gql } from '@web3-storage/db'
+import { PutObjectCommand } from '@aws-sdk/client-s3'
 import { CarBlockIterator } from '@ipld/car'
+import { toString } from 'uint8arrays'
 import { Block } from 'multiformats/block'
+import { sha256 } from 'multiformats/hashes/sha2'
 import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
 import retry from 'p-retry'
 import { GATEWAY, LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
-import { backup } from './utils/backup.js'
 import { JSONResponse } from './utils/json-response.js'
 import { toPinStatusEnum } from './utils/pin.js'
+
+/**
+ * @typedef {import('multiformats/cid').CID} CID
+ */
 
 const decoders = [pb, raw, cbor]
 
@@ -148,7 +154,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
 
   const [{ cid, pins }, backupKey] = await Promise.all([
     addToCluster(car, env),
-    backup(car, env)
+    backup(car, rootCid, user._id, env)
   ])
 
   let name = headers.get('x-name')
@@ -279,6 +285,35 @@ async function addToCluster (car, env) {
 }
 
 /**
+ * Backup given Car file keyed by /${rootCid}/${userId}/${carHash}
+ * @param {Blob} blob
+ * @param {CID} rootCid
+ * @param {string} userId
+ * @param {import('../env').Env} env
+ */
+async function backup (blob, rootCid, userId, env) {
+  if (!env.s3Client) {
+    return undefined
+  }
+
+  const data = await blob.arrayBuffer()
+  const dataHash = await sha256.digest(new Uint8Array(data))
+  const keyStr = `${rootCid.toString()}.${userId}.${toString(dataHash.bytes, 'base32')}`
+  const bucketParams = {
+    Bucket: env.s3BucketName,
+    Key: keyStr,
+    Body: blob
+  }
+  try {
+    await env.s3Client.send(new PutObjectCommand(bucketParams))
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
+  return keyStr
+}
+
+/**
  * Returns the sum of all block sizes and total blocks. Throws if the CAR does
  * not conform to our idea of a valid CAR i.e.
  * - Missing root CIDs
@@ -288,7 +323,7 @@ async function addToCluster (car, env) {
  * - Missing root block
  * - Missing non-root blocks (when root block has links)
  *
- * @typedef {{ size: number, blocks: number }} CarStat
+ * @typedef {{ size: number, blocks: number, rootCid: CID }} CarStat
  * @param {Blob} carBlob
  * @returns {Promise<CarStat>}
  */
@@ -336,7 +371,7 @@ async function carStat (carBlob) {
       size = cumulativeSize(rootBlock.bytes, rootBlock.value)
     }
   }
-  return { size, blocks }
+  return { size, blocks, rootCid }
 }
 
 /**
