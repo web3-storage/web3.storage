@@ -136,7 +136,7 @@ export async function carPost (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  * @param {Blob} car
  */
-export async function handleCarUpload (request, env, ctx, car) {
+export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car') {
   const { user, authToken } = request.auth
   const { headers } = request
 
@@ -152,8 +152,6 @@ export async function handleCarUpload (request, env, ctx, car) {
     // will be done async by bitswap instead.
     local: car.size > LOCAL_ADD_THRESHOLD
   })
-
-  console.log({ cid, dagSize })
 
   const { peerMap } = await env.cluster.status(cid)
   const pins = toPins(peerMap)
@@ -176,7 +174,7 @@ export async function handleCarUpload (request, env, ctx, car) {
         authToken: authToken?._id,
         cid,
         name,
-        type: 'Car',
+        type: uploadType,
         pins,
         dagSize
       }
@@ -309,15 +307,23 @@ async function carStat (carBlob) {
       throw new Error('CAR must contain at least one non-root block')
     }
     // get the size of the full dag for this root, even if we only have a partial CAR.
-    if (rootCid.code === pb.code) {
-      size = cumulativeSize(rootBlock, links)
+    if (rootBlock.cid.code === pb.code) {
+      size = cumulativeSize(rootBlock.bytes, rootBlock.value)
     }
   }
   return { size, blocks }
 }
 
-function cumulativeSize (block, links) {
-  return block.bytes.length + links.reduce((acc, curr) => acc + (curr.Tsize || 0), 0)
+/**
+ * The sum of the node size and size of each link
+ * @param {import('@ipld/dag-pb/src/interface').PBNode} pbNode
+ * @returns {number} the size of the DAG in bytes
+ */
+function cumulativeSize (pbNodeBytes, pbNode) {
+  // NOTE: Tsize is optional, but all ipfs implementations we know of set it. 
+  // It's metadata, that could be missing or deliberately set to an incorrect value.
+  // This logic is the same as used by go/js-ipfs to display the cumulative size of a dag-pb dag.
+  return pbNodeBytes.length + pbNode.Links.reduce((acc, curr) => acc + (curr.Tsize || 0), 0)
 }
 
 /**
