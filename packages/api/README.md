@@ -188,4 +188,4 @@ Production vars should be set in Github Actions secrets.
 
 ## S3 Setup
 
-We use [S3](https://aws.amazon.com/s3/) for backup storage. For production an accounton AWS needs to be created.
+We use [S3](https://aws.amazon.com/s3/) for backup and disaster recovery. For production an account on AWS needs to be created.
