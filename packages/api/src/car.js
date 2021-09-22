@@ -296,13 +296,13 @@ async function backup (blob, rootCid, userId, env) {
   const data = await blob.arrayBuffer()
   const dataHash = await sha256.digest(new Uint8Array(data))
   const keyStr = `${rootCid.toString()}.${userId}.${toString(dataHash.bytes, 'base32')}.car`
-  const bucketParams = {
+  const cmdParams = {
     Bucket: env.s3BucketName,
     Key: keyStr,
     Body: blob
   }
 
-  await env.s3Client.send(new PutObjectCommand(bucketParams))
+  await env.s3Client.send(new PutObjectCommand(cmdParams))
   return keyStr
 }
 

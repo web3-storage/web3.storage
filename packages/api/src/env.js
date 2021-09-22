@@ -59,23 +59,23 @@ export function envAll (_, env, event) {
   const headers = clusterAuthToken ? { Authorization: `Basic ${clusterAuthToken}` } : {}
   env.cluster = new Cluster(env.CLUSTER_API_URL || CLUSTER_API_URL, { headers })
 
-  try {
-    if ((env.S3_ACCESS_KEY_ID || S3_ACCESS_KEY_ID) && (env.S3_SECRET_ACCESS_KEY_ID || S3_SECRET_ACCESS_KEY_ID)) {
-      const s3Endpoint = env.S3_BUCKET_ENDPOINT || (typeof S3_BUCKET_ENDPOINT === 'undefined' ? undefined : S3_BUCKET_ENDPOINT)
-      env.s3BucketName = env.S3_BUCKET_NAME || S3_BUCKET_NAME
-      env.s3BucketRegion = env.S3_BUCKET_REGION || S3_BUCKET_REGION
-      env.s3Client = new S3Client({
-        endpoint: s3Endpoint,
-        forcePathStyle: !!s3Endpoint, // Force path if endpoint provided
-        region: env.S3_BUCKET_REGION || S3_BUCKET_REGION,
-        credentials: {
-          accessKeyId: env.S3_ACCESS_KEY_ID || S3_ACCESS_KEY_ID,
-          secretAccessKey: env.S3_SECRET_ACCESS_KEY_ID || S3_SECRET_ACCESS_KEY_ID
-        }
-      })
-    }
-    // env.s3Client = {}
-  } catch { // not required in dev mode
-    console.log('no setup for backups')
+  // backups not required in dev mode
+  if (env.ENV === 'dev' && !(env.S3_ACCESS_KEY_ID || typeof S3_ACCESS_KEY_ID !== 'undefined')) {
+    console.log('running without backups wired up')
+  } else {
+    const s3Endpoint = env.S3_BUCKET_ENDPOINT || (typeof S3_BUCKET_ENDPOINT === 'undefined' ? undefined : S3_BUCKET_ENDPOINT)
+
+    env.s3BucketName = env.S3_BUCKET_NAME || S3_BUCKET_NAME
+    env.s3BucketRegion = env.S3_BUCKET_REGION || S3_BUCKET_REGION
+
+    env.s3Client = new S3Client({
+      endpoint: s3Endpoint,
+      forcePathStyle: !!s3Endpoint, // Force path if endpoint provided
+      region: env.S3_BUCKET_REGION || S3_BUCKET_REGION,
+      credentials: {
+        accessKeyId: env.S3_ACCESS_KEY_ID || S3_ACCESS_KEY_ID,
+        secretAccessKey: env.S3_SECRET_ACCESS_KEY_ID || S3_SECRET_ACCESS_KEY_ID
+      }
+    })
   }
 }

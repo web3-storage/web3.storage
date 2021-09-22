@@ -25,44 +25,44 @@ format = "service-worker"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api.web3.storage/*"
-vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/" }
+vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "production" }
 
 [env.staging]
 # name = "web3-storage-staging"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api-staging.web3.storage/*"
-vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/" }
+vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "staging" }
 
 [env.alan]
 workers_dev = true
 account_id = "4fe12d085474d33bdcfd8e9bed4d8f95"
-vars = { CLUSTER_API_URL = "https://alan-cluster-api-web3-storage.loca.lt" }
+vars = { CLUSTER_API_URL = "https://alan-cluster-api-web3-storage.loca.lt", ENV = "dev" }
 
 [env.oli]
 workers_dev = true
 account_id = "6e5a2aed80cd37d77e8d0c797a75ebbd"
-vars = { CLUSTER_API_URL = "https://oli-cluster-api-web3-storage.loca.lt" }
+vars = { CLUSTER_API_URL = "https://oli-cluster-api-web3-storage.loca.lt", ENV = "dev" }
 
 [env.yusef]
 workers_dev = true
 account_id = "8c3da25233263bd7a26c0e2e04569ded"
-vars = { CLUSTER_API_URL = "https://yusef-cluster-api-web3-storage.loca.lt" }
+vars = { CLUSTER_API_URL = "https://yusef-cluster-api-web3-storage.loca.lt", ENV = "dev" }
 
 [env.vsantos]
 workers_dev = true
 account_id = "7ec0b7cf2ec201b2580374e53ba5f37b"
-vars = { CLUSTER_API_URL = "https://vsantos-cluster-api-web3-storage.loca.lt" }
+vars = { CLUSTER_API_URL = "https://vsantos-cluster-api-web3-storage.loca.lt", ENV = "dev" }
 
 [env.rafaelramalho]
 workers_dev = true
 account_id = "83d74d9c17d37ac07ea4f27ffa927626"
-vars = { CLUSTER_API_URL = "https://rafaelramalho-cluster-api-web3-storage.loca.lt/" }
+vars = { CLUSTER_API_URL = "https://rafaelramalho-cluster-api-web3-storage.loca.lt/", ENV = "dev" }
 
 [env.joaopeixoto]
 workers_dev = true
 account_id = "d7a6d34e62065b452c82b7fe992b8d88"
-vars = { CLUSTER_API_URL = "https://joaopeixoto-cluster-api-web3-storage.loca.lt" }
+vars = { CLUSTER_API_URL = "https://joaopeixoto-cluster-api-web3-storage.loca.lt", ENV = "dev" }
 
 # Add your env here. Override the the values you need to change.
 
@@ -71,4 +71,4 @@ vars = { CLUSTER_API_URL = "https://joaopeixoto-cluster-api-web3-storage.loca.lt
 # [env.${whoami}]
 # workers_dev = true
 # account_id = "<get me from `wrangler whoami`"
-# vars = { CLUSTER_API_URL = "https://<your ${whoami} here>-cluster-api-web3-storage.loca.lt" }
+# vars = { CLUSTER_API_URL = "https://<your ${whoami} here>-cluster-api-web3-storage.loca.lt", ENV = "dev" }
