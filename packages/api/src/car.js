@@ -282,7 +282,7 @@ async function addToCluster (car, env) {
 }
 
 /**
- * Backup given Car file keyed by /${rootCid}/${userId}/${carHash}
+ * Backup given Car file keyed by /${rootCid}/${userId}/${carHash}.car
  * @param {Blob} blob
  * @param {CID} rootCid
  * @param {string} userId
@@ -295,7 +295,7 @@ async function backup (blob, rootCid, userId, env) {
 
   const data = await blob.arrayBuffer()
   const dataHash = await sha256.digest(new Uint8Array(data))
-  const keyStr = `${rootCid.toString()}.${userId}.${toString(dataHash.bytes, 'base32')}.car`
+  const keyStr = `${rootCid.toString()}/${userId}/${toString(dataHash.bytes, 'base32')}.car`
   const cmdParams = {
     Bucket: env.s3BucketName,
     Key: keyStr,
