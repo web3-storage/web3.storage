@@ -62,6 +62,8 @@ export function envAll (_, env, event) {
   try {
     if ((env.S3_ACCESS_KEY_ID || S3_ACCESS_KEY_ID) && (env.S3_SECRET_ACCESS_KEY_ID || S3_SECRET_ACCESS_KEY_ID)) {
       const s3Endpoint = env.S3_BUCKET_ENDPOINT || (typeof S3_BUCKET_ENDPOINT === 'undefined' ? undefined : S3_BUCKET_ENDPOINT)
+      env.s3BucketName = env.S3_BUCKET_NAME || S3_BUCKET_NAME
+      env.s3BucketRegion = env.S3_BUCKET_REGION || S3_BUCKET_REGION
       env.s3Client = new S3Client({
         endpoint: s3Endpoint,
         forcePathStyle: !!s3Endpoint, // Force path if endpoint provided
@@ -71,8 +73,8 @@ export function envAll (_, env, event) {
           secretAccessKey: env.S3_SECRET_ACCESS_KEY_ID || S3_SECRET_ACCESS_KEY_ID
         }
       })
-      env.s3BucketName = env.S3_BUCKET_NAME || S3_BUCKET_NAME
     }
+    // env.s3Client = {}
   } catch { // not required in dev mode
     console.log('no setup for backups')
   }

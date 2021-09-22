@@ -173,11 +173,8 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
         cid,
         name,
         type: uploadType,
-        backupData: backupKey
-          ? [{
-              key: backupKey,
-              name: env.s3BucketName
-            }]
+        backupUrls: backupKey
+          ? [`https://${env.s3BucketName}.s3.${env.s3BucketRegion}.amazonaws.com/${backupKey}`]
           : [],
         pins,
         dagSize
@@ -298,18 +295,14 @@ async function backup (blob, rootCid, userId, env) {
 
   const data = await blob.arrayBuffer()
   const dataHash = await sha256.digest(new Uint8Array(data))
-  const keyStr = `${rootCid.toString()}.${userId}.${toString(dataHash.bytes, 'base32')}`
+  const keyStr = `${rootCid.toString()}.${userId}.${toString(dataHash.bytes, 'base32')}.car`
   const bucketParams = {
     Bucket: env.s3BucketName,
     Key: keyStr,
     Body: blob
   }
-  try {
-    await env.s3Client.send(new PutObjectCommand(bucketParams))
-  } catch (err) {
-    console.log(err)
-    throw err
-  }
+
+  await env.s3Client.send(new PutObjectCommand(bucketParams))
   return keyStr
 }
 

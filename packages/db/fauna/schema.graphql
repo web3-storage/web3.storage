@@ -225,14 +225,9 @@ type Backup {
   upload: Upload! @relation
 
   """
-  Backup key.
+  Backup url.
   """
-  key: String!
-
-  """
-  Backup bucket name.
-  """
-  name: String!
+  url: String!
 
   """
   Creation date.
@@ -549,15 +544,10 @@ input CreateUploadInput {
   cid: String!
   type: UploadType!
   name: String
-  backupData: [createBackupInput]!
+  backupUrls: [String]!
   dagSize: Long
   chunkSize: Long # decremented, unused
   pins: [PinInput!]!
-}
-
-input createBackupInput {
-  key: String!
-  name: String!
 }
 
 input PinInput {
