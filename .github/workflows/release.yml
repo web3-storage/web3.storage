@@ -73,6 +73,7 @@ jobs:
           package-name: ${{ matrix.package }}
           monorepo-tags: true
           command: release-pr
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"refactor","section":"Changes","hidden":false},{"type":"chore","section":"Changes","hidden":false}]'
 
   release:
     runs-on: ubuntu-latest
