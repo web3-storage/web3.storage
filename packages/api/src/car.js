@@ -1,12 +1,12 @@
 /* eslint-env serviceworker */
 import { gql } from '@web3-storage/db'
-import { CarReader, CarBlockIterator } from '@ipld/car'
+import { CarBlockIterator } from '@ipld/car'
 import { Block } from 'multiformats/block'
 import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
 import retry from 'p-retry'
-import { GATEWAY, LOCAL_ADD_THRESHOLD, DAG_SIZE_CALC_LIMIT, MAX_BLOCK_SIZE } from './constants.js'
+import { GATEWAY, LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { toPinStatusEnum } from './utils/pin.js'
 
@@ -19,14 +19,6 @@ const CREATE_UPLOAD = gql`
         _id
         dagSize
       }
-    }
-  }
-`
-
-const UPDATE_DAG_SIZE = gql`
-  mutation UpdateContentDagSize($content: ID!, $dagSize: Long!) {
-    updateContentDagSize(content: $content, dagSize: $dagSize) {
-      _id
     }
   }
 `
@@ -129,33 +121,50 @@ export async function carGet (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 export async function carPost (request, env, ctx) {
+  let blob = await request.blob()
+  // Ensure car blob.type is set; it is used by the cluster client to set the format=car flag on the /add call.
+  blob = blob.slice(0, blob.size, 'application/car')
+
+  return handleCarUpload(request, env, ctx, blob)
+}
+
+/**
+ * Request handler for a CAR file upload.
+ *
+ * @param {import('./user').AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ * @param {import('./index').Ctx} ctx
+ * @param {Blob} car
+ * @param {string} [uploadType = 'Car']
+ */
+export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car') {
   const { user, authToken } = request.auth
   const { headers } = request
 
-  let name = headers.get('x-name')
-  if (!name || typeof name !== 'string') {
-    name = `Upload at ${new Date().toISOString()}`
-  }
+  // Throws if CAR is invalid by our standards.
+  // Returns either the sum of the block sizes in the CAR, or the cumulative size of the DAG for a dag-pb root.
+  const { size: dagSize } = await carStat(car)
 
-  const blob = await request.blob()
-  const bytes = new Uint8Array(await blob.arrayBuffer())
-  const stat = await carStat(bytes)
-
-  // Ensure car blob.type is set; it is used by the cluster client to set the foramt=car flag on the /add call.
-  const content = blob.slice(0, blob.size, 'application/car')
-
-  const { cid } = await env.cluster.add(content, {
-    metadata: { size: content.size.toString() },
+  // Note: We can't make use of `bytes` or `size` properties on the response from cluster.add
+  // `bytes` is the sum of block sizes in bytes. Where the CAR is a partial, it'll only be a shard of the total dag size.
+  // `size` is UnixFS FileSize which is 0 for directories, and is not set for raw encoded files, only dag-pb ones.
+  const { cid/*, bytes, size */ } = await env.cluster.add(car, {
+    metadata: { size: car.size.toString() },
     // When >2.5MB, use local add, because waiting for blocks to be sent to
     // other cluster nodes can take a long time. Replication to other nodes
     // will be done async by bitswap instead.
-    local: blob.size > LOCAL_ADD_THRESHOLD
+    local: car.size > LOCAL_ADD_THRESHOLD
   })
 
   const { peerMap } = await env.cluster.status(cid)
   const pins = toPins(peerMap)
   if (!pins.length) { // should not happen
     throw new Error('not pinning on any node')
+  }
+
+  let name = headers.get('x-name')
+  if (!name || typeof name !== 'string') {
+    name = `Upload at ${new Date().toISOString()}`
   }
 
   // Store in DB
@@ -168,8 +177,9 @@ export async function carPost (request, env, ctx) {
         authToken: authToken?._id,
         cid,
         name,
-        type: 'Car',
-        pins
+        type: uploadType,
+        pins,
+        dagSize
       }
     })
   ), {
@@ -180,31 +190,18 @@ export async function carPost (request, env, ctx) {
   /** @type {(() => Promise<any>)[]} */
   const tasks = []
 
+  // TODO: this should be handled in the db code as part of the CREATE_UPLOAD
   // Update the user's used storage
   tasks.push(async () => {
     try {
       await env.db.query(INCREMENT_USER_USED_STORAGE, {
         user: user._id,
-        amount: stat.size
+        amount: dagSize
       })
     } catch (err) {
       console.error(`failed to update user used storage: ${err.stack}`)
     }
   })
-
-  // Partial CARs are chunked at ~10MB so anything less than this is probably complete.
-  if (upload.content.dagSize == null && blob.size < DAG_SIZE_CALC_LIMIT) {
-    tasks.push(async () => {
-      let dagSize
-      try {
-        dagSize = await getDagSize(bytes)
-      } catch (err) {
-        console.error(`could not determine DAG size: ${err.stack}`)
-        return
-      }
-      await env.db.query(UPDATE_DAG_SIZE, { content: upload.content._id, dagSize })
-    })
-  }
 
   // Retrieve current pin status and info about the nodes pinning the content.
   // Keep querying Cluster until one of the nodes reports something other than
@@ -270,10 +267,11 @@ export async function sizeOf (response) {
  * - Missing non-root blocks (when root block has links)
  *
  * @typedef {{ size: number, blocks: number }} CarStat
- * @param {Uint8Array} carBytes
+ * @param {Blob} carBlob
  * @returns {Promise<CarStat>}
  */
-async function carStat (carBytes) {
+async function carStat (carBlob) {
+  const carBytes = new Uint8Array(await carBlob.arrayBuffer())
   const blocksIterator = await CarBlockIterator.fromBytes(carBytes)
   const roots = await blocksIterator.getRoots()
   if (roots.length === 0) {
@@ -303,48 +301,32 @@ async function carStat (carBytes) {
   if (!rawRootBlock) {
     throw new Error('missing root block')
   }
-  if (blocks === 1) {
-    const decoder = decoders.find(d => d.code === rootCid.code)
-    // if we can't decode, we can't check this...
-    if (decoder) {
-      const rootBlock = new Block({ cid: rootCid, bytes: rawRootBlock.bytes, value: decoder.decode(rawRootBlock.bytes) })
-      const numLinks = Array.from(rootBlock.links()).length
-      // if the root block has links, then we should have at least 2 blocks in the CAR
-      if (numLinks > 0) {
-        throw new Error('CAR must contain at least one non-root block')
-      }
+  const decoder = decoders.find(d => d.code === rootCid.code)
+  if (decoder) {
+    const rootBlock = new Block({ cid: rootCid, bytes: rawRootBlock.bytes, value: decoder.decode(rawRootBlock.bytes) })
+    const links = Array.from(rootBlock.links())
+    // if the root block has links, then we should have at least 2 blocks in the CAR
+    if (blocks === 1 && links.length > 0) {
+      throw new Error('CAR must contain at least one non-root block')
+    }
+    // get the size of the full dag for this root, even if we only have a partial CAR.
+    if (rootBlock.cid.code === pb.code) {
+      size = cumulativeSize(rootBlock.bytes, rootBlock.value)
     }
   }
   return { size, blocks }
 }
 
 /**
- * Returns the DAG size of the CAR but only if the graph is complete.
- * @param {Uint8Array} carBytes
+ * The sum of the node size and size of each link
+ * @param {import('@ipld/dag-pb/src/interface').PBNode} pbNode
+ * @returns {number} the size of the DAG in bytes
  */
-async function getDagSize (carBytes) {
-  const reader = await CarReader.fromBytes(carBytes)
-  const [rootCid] = await reader.getRoots()
-
-  const getBlock = async cid => {
-    const rawBlock = await reader.get(cid)
-    if (!rawBlock) throw new Error(`missing block for ${cid}`)
-    const { bytes } = rawBlock
-    const decoder = decoders.find(d => d.code === cid.code)
-    if (!decoder) throw new Error(`missing decoder for ${cid.code}`)
-    return new Block({ cid, bytes, value: decoder.decode(bytes) })
-  }
-
-  const getSize = async cid => {
-    const block = await getBlock(cid)
-    let size = block.bytes.byteLength
-    for (const [, cid] of block.links()) {
-      size += await getSize(cid)
-    }
-    return size
-  }
-
-  return getSize(rootCid)
+function cumulativeSize (pbNodeBytes, pbNode) {
+  // NOTE: Tsize is optional, but all ipfs implementations we know of set it.
+  // It's metadata, that could be missing or deliberately set to an incorrect value.
+  // This logic is the same as used by go/js-ipfs to display the cumulative size of a dag-pb dag.
+  return pbNodeBytes.length + pbNode.Links.reduce((acc, curr) => acc + (curr.Tsize || 0), 0)
 }
 
 /**
