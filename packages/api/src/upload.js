@@ -28,7 +28,7 @@ export async function uploadPost (request, env, ctx) {
       content: f.stream()
     }))
   } else if (contentType.includes('application/car')) {
-    throw new Error('Please POST Content-addressed Archives to /car')
+    throw new HTTPError('Please POST Content-addressed Archives to /car', 400)
   } else {
     const blob = await request.blob()
     if (blob.size === 0) {

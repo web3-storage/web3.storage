@@ -122,14 +122,14 @@ export async function carGet (request, env, ctx) {
  */
 export async function carPost (request, env, ctx) {
   let blob = await request.blob()
-  // Ensure car blob.type is set; it is used by the cluster client to set the foramt=car flag on the /add call.
+  // Ensure car blob.type is set; it is used by the cluster client to set the format=car flag on the /add call.
   blob = blob.slice(0, blob.size, 'application/car')
 
   return handleCarUpload(request, env, ctx, blob)
 }
 
 /**
- * Post a CAR file.
+ * Request handler for a CAR file upload.
  *
  * @param {import('./user').AuthenticatedRequest} request
  * @param {import('./env').Env} env
