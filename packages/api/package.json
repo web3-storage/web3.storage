@@ -56,7 +56,7 @@
   "bundlesize": [
     {
       "path": "./dist/main.js",
-      "maxSize": "1.1 MB"
+      "maxSize": "1 MB"
     }
   ]
 }
