@@ -150,7 +150,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
 
   // Throws if CAR is invalid by our standards.
   // Returns either the sum of the block sizes in the CAR, or the cumulative size of the DAG for a dag-pb root.
-  const { size: dagSize } = await carStat(car)
+  const { size: dagSize, rootCid } = await carStat(car)
 
   const [{ cid, pins }, backupKey] = await Promise.all([
     addToCluster(car, env),
