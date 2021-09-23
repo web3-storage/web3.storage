@@ -265,6 +265,10 @@ enum UploadType {
   """
   Car
   """
+  Files uploaded and converteded into a CAR file.
+  """
+  Upload
+  """
   A raw blob upload in the request body.
   """
   Blob

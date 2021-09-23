@@ -21,8 +21,6 @@ export async function uploadPost (request, env, ctx) {
   }
 
   let input
-  // NOTE: this is tracked in the db to allow us to query for content that was uploaded as raw files vs as CARs.
-  let uploadType
   if (contentType.includes('multipart/form-data')) {
     const form = await toFormData(request)
     const files = form.getAll('file')
@@ -30,7 +28,6 @@ export async function uploadPost (request, env, ctx) {
       path: f.name,
       content: f.stream()
     }))
-    uploadType = 'Multipart'
   } else if (contentType.includes('application/car')) {
     throw new HTTPError('Please POST Content-addressed Archives to /car', 400)
   } else {
@@ -39,11 +36,12 @@ export async function uploadPost (request, env, ctx) {
       throw new Error('Empty payload')
     }
     input = [blob]
-    uploadType = 'Blob'
   }
   // TODO: do we want to wrap file uploads like we do car uploads from the client?
   // this path used to send the files to cluster and we didn't wrap, so we dont here for consistency with the old ways.
   const { car } = await packToBlob({ input, wrapWithDirectory: false })
 
+  // NOTE: this is tracked in the db to allow us to query for content that was uploaded as raw files vs as CARs.
+  const uploadType = 'Upload'
   return handleCarUpload(request, env, ctx, car, uploadType)
 }
