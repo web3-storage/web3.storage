@@ -2,6 +2,7 @@
 import { packToBlob } from 'ipfs-car/pack/blob'
 import { handleCarUpload } from './car.js'
 import { toFormData } from './utils/form-data.js'
+import { HTTPError } from './errors.js'
 
 /**
  * Post a File/Directory.
