@@ -15,6 +15,7 @@ import pkg from '../package.json'
  * @property {string} SALT
  * @property {S3Client} [s3Client]
  * @property {string} [s3BucketName]
+ * @property {string} [s3BucketRegion]
  */
 
 /**
