@@ -142,6 +142,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
       setError('')
     } catch(e) {
       console.error(e);
+      // @ts-ignore Catch clause variable type annotation must be 'any' or 'unknown' if specified.ts(1196)
       setError(e.message)
     }
     setLoading(false)
