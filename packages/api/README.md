@@ -46,10 +46,10 @@ One time set up of your cloudflare worker subdomain for dev:
     wrangler secret put FAUNA_KEY --env $(whoami) # Get from fauna.com after creating a dev Classic DB
     wrangler secret put CLUSTER_BASIC_AUTH_TOKEN --env $(whoami) # Get from web3.storage vault in 1password (not required for dev)
     wrangler secret put SENTRY_DSN --env $(whoami) # Get from Sentry (not required for dev)
-    wrangler secret put S3_BUCKET_REGION --env $(whoami) # Get from Amazon S3 (not required for dev)
+    wrangler secret put S3_BUCKET_REGION --env $(whoami) # e.g us-east-2 (not required for dev)
     wrangler secret put S3_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3 (not required for dev)
     wrangler secret put S3_SECRET_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3 (not required for dev)
-    wrangler secret put S3_BUCKET_NAME --env $(whoami) # Get from Amazon S3 (not required for dev)
+    wrangler secret put S3_BUCKET_NAME --env $(whoami) # e.g web3.storage-staging-us-east-2 (not required for dev)
     ```
 
 - `npm run publish` - Publish the worker under your env. An alias for `wrangler publish --env $(whoami)`
