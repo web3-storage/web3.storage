@@ -265,7 +265,7 @@ enum UploadType {
   """
   Car
   """
-  Files uploaded and converteded into a CAR file.
+  Files uploaded and converted into a CAR file.
   """
   Upload
   """
