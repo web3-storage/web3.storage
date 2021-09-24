@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.2.1](https://www.github.com/web3-storage/web3.storage/compare/db-v2.2.0...db-v2.2.1) (2021-09-24)
+
+
+### Bug Fixes
+
+* upload type in upload enum for db ([#490](https://www.github.com/web3-storage/web3.storage/issues/490)) ([ed8f089](https://www.github.com/web3-storage/web3.storage/commit/ed8f0897082160015a0fa7a23ac0ec55bd78bceb))
+
 ## [2.2.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.1.0...db-v2.2.0) (2021-09-06)
 
 
