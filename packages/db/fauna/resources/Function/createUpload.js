@@ -63,7 +63,36 @@ const body = Query(
               },
               If(
                 IsNonEmpty(Var('uploadMatch')),
-                Get(Var('uploadMatch')),
+                Do(
+                  Foreach(
+                    Select('backupUrls', Var('data')),
+                    Lambda(
+                      ['url'],
+                      Let(
+                        {
+                          upload: Select('ref', Get(Var('uploadMatch'))),
+                          backupMatch: Match(
+                            Index('backup_by_upload_and_url'),
+                            Var('upload'),
+                            Var('url')
+                          )
+                        },
+                        If(
+                          IsNonEmpty(Var('backupMatch')),
+                          Get(Var('backupMatch')),
+                          Create('Backup', {
+                            data: {
+                              upload: Var('upload'),
+                              url: Var('url'),
+                              created: Now()
+                            }
+                          })
+                        )
+                      )
+                    )
+                  ),
+                  Get(Var('uploadMatch'))
+                ),
                 Let(
                   {
                     upload: Create('Upload', {
