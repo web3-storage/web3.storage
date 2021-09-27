@@ -6,7 +6,8 @@
   "scripts": {
     "start": "next dev",
     "build": "next build && next export",
-    "test": "eslint './**/*.js' && tsc --build"
+    "test": "eslint './**/*.js' && tsc --build",
+    "test:e2e": "npx playwright test"
   },
   "dependencies": {
     "@magic-ext/oauth": "^0.7.0",
@@ -30,12 +31,14 @@
     "web3.storage": "^3.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.15.0",
     "@svgr/webpack": "^5.5.0",
     "@types/react": "^17.0.4",
     "@types/react-copy-to-clipboard": "^5.0.1",
     "@types/react-dom": "^17.0.9",
     "@types/react-syntax-highlighter": "^13.5.2",
     "autoprefixer": "^10.2.6",
+    "dotenv": "^10.0.0",
     "eslint": "^7.24.0",
     "eslint-config-next": "^11.0.1",
     "eslint-config-prettier": "^8.2.0",

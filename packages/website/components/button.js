@@ -21,6 +21,7 @@ import countly from '../lib/countly'
  * @prop {boolean} [disabled]
  * @prop {string} [id]
  * @prop {'dark' | 'light' | 'outlined' } [variant]
+ * @prop {string} [ariaLabel]
  * @prop {boolean} [small] If the button should have min-width & height or not
  * @prop {import('react').FunctionComponent} [Icon] Icon component to prefix
  * @prop {TrackingProp} [tracking] Tracking data to send to countly on button click
@@ -41,9 +42,10 @@ export default function Button({
   children,
   disabled = false,
   variant = 'dark',
+  ariaLabel,
   small,
   Icon,
-  tracking
+  tracking,
 }) {
   const onClickHandler = useCallback((event) => {
     tracking && countly.trackEvent(tracking.event || countly.events.CTA_LINK_CLICK, {
@@ -95,6 +97,7 @@ export default function Button({
       onClick={onClickHandler}
       disabled={disabled}
       id={id}
+      aria-label={ariaLabel}
     >
       { Icon && <Icon className="w-7 mr-2 fill-current"/> }
       {children}

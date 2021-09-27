@@ -67,6 +67,7 @@ export default function Login() {
               ui: countly.ui.LOGIN,
               action: 'Github'
             }}
+            ariaLabel="Login with GitHub"
           >
             {isRedirecting ? 'Redirecting...' : 'GitHub'}
           </Button>
