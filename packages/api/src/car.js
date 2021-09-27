@@ -1,7 +1,10 @@
 /* eslint-env serviceworker */
 import { gql } from '@web3-storage/db'
+import { PutObjectCommand } from '@aws-sdk/client-s3'
 import { CarBlockIterator } from '@ipld/car'
+import { toString } from 'uint8arrays'
 import { Block } from 'multiformats/block'
+import { sha256 } from 'multiformats/hashes/sha2'
 import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
@@ -9,6 +12,10 @@ import retry from 'p-retry'
 import { GATEWAY, LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { toPinStatusEnum } from './utils/pin.js'
+
+/**
+ * @typedef {import('multiformats/cid').CID} CID
+ */
 
 const decoders = [pb, raw, cbor]
 
@@ -143,24 +150,12 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
 
   // Throws if CAR is invalid by our standards.
   // Returns either the sum of the block sizes in the CAR, or the cumulative size of the DAG for a dag-pb root.
-  const { size: dagSize } = await carStat(car)
+  const { size: dagSize, rootCid } = await carStat(car)
 
-  // Note: We can't make use of `bytes` or `size` properties on the response from cluster.add
-  // `bytes` is the sum of block sizes in bytes. Where the CAR is a partial, it'll only be a shard of the total dag size.
-  // `size` is UnixFS FileSize which is 0 for directories, and is not set for raw encoded files, only dag-pb ones.
-  const { cid/*, bytes, size */ } = await env.cluster.add(car, {
-    metadata: { size: car.size.toString() },
-    // When >2.5MB, use local add, because waiting for blocks to be sent to
-    // other cluster nodes can take a long time. Replication to other nodes
-    // will be done async by bitswap instead.
-    local: car.size > LOCAL_ADD_THRESHOLD
-  })
-
-  const { peerMap } = await env.cluster.status(cid)
-  const pins = toPins(peerMap)
-  if (!pins.length) { // should not happen
-    throw new Error('not pinning on any node')
-  }
+  const [{ cid, pins }, backupKey] = await Promise.all([
+    addToCluster(car, env),
+    backup(car, rootCid, user._id, env)
+  ])
 
   let name = headers.get('x-name')
   if (!name || typeof name !== 'string') {
@@ -178,6 +173,9 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
         cid,
         name,
         type: uploadType,
+        backupUrls: backupKey
+          ? [`https://${env.s3BucketName}.s3.${env.s3BucketRegion}.amazonaws.com/${backupKey}`]
+          : [],
         pins,
         dagSize
       }
@@ -257,6 +255,58 @@ export async function sizeOf (response) {
 }
 
 /**
+ * Adds car to local cluster and returns its content identifier and pins
+ *
+ * @param {Blob} car
+ * @param {import('./env').Env} env
+ */
+async function addToCluster (car, env) {
+  // Note: We can't make use of `bytes` or `size` properties on the response from cluster.add
+  // `bytes` is the sum of block sizes in bytes. Where the CAR is a partial, it'll only be a shard of the total dag size.
+  // `size` is UnixFS FileSize which is 0 for directories, and is not set for raw encoded files, only dag-pb ones.
+  const { cid } = await env.cluster.add(car, {
+    metadata: { size: car.size.toString() },
+    // When >2.5MB, use local add, because waiting for blocks to be sent to
+    // other cluster nodes can take a long time. Replication to other nodes
+    // will be done async by bitswap instead.
+    local: car.size > LOCAL_ADD_THRESHOLD
+  })
+
+  const { peerMap } = await env.cluster.status(cid)
+  const pins = toPins(peerMap)
+  if (!pins.length) { // should not happen
+    throw new Error('not pinning on any node')
+  }
+
+  return { cid, pins }
+}
+
+/**
+ * Backup given Car file keyed by /raw/${rootCid}/${userId}/${carHash}.car
+ * @param {Blob} blob
+ * @param {CID} rootCid
+ * @param {string} userId
+ * @param {import('../env').Env} env
+ */
+async function backup (blob, rootCid, userId, env) {
+  if (!env.s3Client) {
+    return undefined
+  }
+
+  const data = await blob.arrayBuffer()
+  const dataHash = await sha256.digest(new Uint8Array(data))
+  const keyStr = `raw/${rootCid.toString()}/${userId}/${toString(dataHash.bytes, 'base32')}.car`
+  const cmdParams = {
+    Bucket: env.s3BucketName,
+    Key: keyStr,
+    Body: blob
+  }
+
+  await env.s3Client.send(new PutObjectCommand(cmdParams))
+  return keyStr
+}
+
+/**
  * Returns the sum of all block sizes and total blocks. Throws if the CAR does
  * not conform to our idea of a valid CAR i.e.
  * - Missing root CIDs
@@ -266,7 +316,7 @@ export async function sizeOf (response) {
  * - Missing root block
  * - Missing non-root blocks (when root block has links)
  *
- * @typedef {{ size: number, blocks: number }} CarStat
+ * @typedef {{ size: number, blocks: number, rootCid: CID }} CarStat
  * @param {Blob} carBlob
  * @returns {Promise<CarStat>}
  */
@@ -314,7 +364,7 @@ async function carStat (carBlob) {
       size = cumulativeSize(rootBlock.bytes, rootBlock.value)
     }
   }
-  return { size, blocks }
+  return { size, blocks, rootCid }
 }
 
 /**

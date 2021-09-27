@@ -4,6 +4,7 @@ import { CID } from 'multiformats/cid'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
 import { CarWriter } from '@ipld/car'
+
 import { endpoint } from './scripts/constants.js'
 import * as JWT from '../src/utils/jwt.js'
 import { SALT } from './scripts/worker-globals.js'

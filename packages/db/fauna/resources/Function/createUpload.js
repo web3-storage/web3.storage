@@ -103,6 +103,19 @@ const body = Query(
                         )
                       )
                     ),
+                    Foreach(
+                      Select('backupUrls', Var('data')),
+                      Lambda(
+                        ['url'],
+                        Create('Backup', {
+                          data: {
+                            upload: Select('ref', Var('upload')),
+                            url: Var('url'),
+                            created: Now()
+                          }
+                        })
+                      )
+                    ),
                     Var('upload')
                   )
                 )
@@ -161,6 +174,19 @@ const body = Query(
                         null
                       )
                     )
+                  )
+                ),
+                Foreach(
+                  Select('backupUrls', Var('data')),
+                  Lambda(
+                    ['url'],
+                    Create('Backup', {
+                      data: {
+                        upload: Select('ref', Var('upload')),
+                        url: Var('url'),
+                        created: Now()
+                      }
+                    })
                   )
                 ),
                 Var('upload')

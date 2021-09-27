@@ -50,6 +50,7 @@ export default {
     }
   },
   optimization: {
-    minimize: true
+    minimize: true,
+    usedExports: true
   }
 }
