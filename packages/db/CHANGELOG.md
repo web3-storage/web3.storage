@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.3.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.2.0...db-v2.3.0) (2021-09-27)
+
+
+### Features
+
+* storage backup ([#417](https://www.github.com/web3-storage/web3.storage/issues/417)) ([ae5423a](https://www.github.com/web3-storage/web3.storage/commit/ae5423aebc779545126fb6ba652637317efc91e7))
+
+
+### Bug Fixes
+
+* chunked backup creation ([#496](https://www.github.com/web3-storage/web3.storage/issues/496)) ([4c8cf17](https://www.github.com/web3-storage/web3.storage/commit/4c8cf173deb21cbf0debf40901bfd2e7207c2026))
+* upload type in upload enum for db ([#490](https://www.github.com/web3-storage/web3.storage/issues/490)) ([ed8f089](https://www.github.com/web3-storage/web3.storage/commit/ed8f0897082160015a0fa7a23ac0ec55bd78bceb))
+
 ## [2.2.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.1.0...db-v2.2.0) (2021-09-06)
 
 
