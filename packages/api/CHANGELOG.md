@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.5.1](https://www.github.com/web3-storage/web3.storage/compare/api-v3.5.0...api-v3.5.1) (2021-09-28)
+
+
+### Bug Fixes
+
+* increment used storage ([#501](https://www.github.com/web3-storage/web3.storage/issues/501)) ([1becd09](https://www.github.com/web3-storage/web3.storage/commit/1becd09bbdaabc503c180cc38c37f7f03852fe62))
+
 ## [3.5.0](https://www.github.com/web3-storage/web3.storage/compare/api-v3.4.0...api-v3.5.0) (2021-09-27)
 
 
