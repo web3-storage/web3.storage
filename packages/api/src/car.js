@@ -38,14 +38,6 @@ const CREATE_OR_UPDATE_PIN = gql`
   }
 `
 
-const INCREMENT_USER_USED_STORAGE = gql`
-  mutation IncrementUserUsedStorage($user: ID!, $amount: Long!) {
-    incrementUserUsedStorage(user: $user, amount: $amount) {
-      usedStorage
-    }
-  }
-`
-
 // Duration between status check polls in ms.
 const PIN_STATUS_CHECK_INTERVAL = 5000
 // Max time in ms to spend polling for an OK status.
@@ -187,19 +179,6 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
 
   /** @type {(() => Promise<any>)[]} */
   const tasks = []
-
-  // TODO: this should be handled in the db code as part of the CREATE_UPLOAD
-  // Update the user's used storage
-  tasks.push(async () => {
-    try {
-      await env.db.query(INCREMENT_USER_USED_STORAGE, {
-        user: user._id,
-        amount: dagSize
-      })
-    } catch (err) {
-      console.error(`failed to update user used storage: ${err.stack}`)
-    }
-  })
 
   // Retrieve current pin status and info about the nodes pinning the content.
   // Keep querying Cluster until one of the nodes reports something other than
@@ -369,6 +348,7 @@ async function carStat (carBlob) {
 
 /**
  * The sum of the node size and size of each link
+ * @param {Uint8Array} pbNodeBytes
  * @param {import('@ipld/dag-pb/src/interface').PBNode} pbNode
  * @returns {number} the size of the DAG in bytes
  */
@@ -376,7 +356,7 @@ function cumulativeSize (pbNodeBytes, pbNode) {
   // NOTE: Tsize is optional, but all ipfs implementations we know of set it.
   // It's metadata, that could be missing or deliberately set to an incorrect value.
   // This logic is the same as used by go/js-ipfs to display the cumulative size of a dag-pb dag.
-  return pbNodeBytes.length + pbNode.Links.reduce((acc, curr) => acc + (curr.Tsize || 0), 0)
+  return pbNodeBytes.byteLength + pbNode.Links.reduce((acc, curr) => acc + (curr.Tsize || 0), 0)
 }
 
 /**
