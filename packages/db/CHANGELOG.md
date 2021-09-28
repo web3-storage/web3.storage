@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.3.1](https://www.github.com/web3-storage/web3.storage/compare/db-v2.3.0...db-v2.3.1) (2021-09-28)
+
+
+### Bug Fixes
+
+* increment used storage ([#501](https://www.github.com/web3-storage/web3.storage/issues/501)) ([1becd09](https://www.github.com/web3-storage/web3.storage/commit/1becd09bbdaabc503c180cc38c37f7f03852fe62))
+
 ## [2.3.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.2.0...db-v2.3.0) (2021-09-27)
 
 
