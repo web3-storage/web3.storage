@@ -25,7 +25,8 @@ const {
   Do,
   Call,
   Foreach,
-  Equals
+  Equals,
+  Add
 } = fauna
 
 const name = 'createUpload'
@@ -47,7 +48,8 @@ const body = Query(
         Let(
           {
             cid: Select('cid', Var('data')),
-            contentMatch: Match(Index('unique_Content_cid'), Var('cid'))
+            contentMatch: Match(Index('unique_Content_cid'), Var('cid')),
+            usedStorage: Select(['data', 'usedStorage'], Get(Var('userRef')), 0)
           },
           If(
             IsNonEmpty(Var('contentMatch')),
@@ -103,6 +105,11 @@ const body = Query(
                         name: Select('name', Var('data'), null),
                         type: Select('type', Var('data')),
                         created: Now()
+                      }
+                    }),
+                    user: Update(Var('userRef'), {
+                      data: {
+                        usedStorage: Add(Var('usedStorage'), Select('dagSize', Var('data'), 0))
                       }
                     })
                   },
@@ -167,6 +174,11 @@ const body = Query(
                     name: Select('name', Var('data'), null),
                     type: Select('type', Var('data')),
                     created: Now()
+                  }
+                }),
+                user: Update(Var('userRef'), {
+                  data: {
+                    usedStorage: Add(Var('usedStorage'), Select('dagSize', Var('data'), 0))
                   }
                 }),
                 pinRequest: Create('PinRequest', {
