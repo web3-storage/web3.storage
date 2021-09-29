@@ -1,4 +1,4 @@
-/* global MAGIC_SECRET_KEY FAUNA_ENDPOINT FAUNA_KEY SALT CLUSTER_BASIC_AUTH_TOKEN CLUSTER_API_URL SENTRY_DSN, VERSION DANGEROUSLY_BYPASS_MAGIC_AUTH S3_BUCKET_ENDPOINT S3_BUCKET_NAME S3_BUCKET_REGION S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY_ID */
+/* global MAGIC_SECRET_KEY FAUNA_ENDPOINT FAUNA_KEY SALT CLUSTER_BASIC_AUTH_TOKEN CLUSTER_API_URL SENTRY_DSN, VERSION DANGEROUSLY_BYPASS_MAGIC_AUTH S3_BUCKET_ENDPOINT S3_BUCKET_NAME S3_BUCKET_REGION S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY_ID ENV */
 import Toucan from 'toucan-js'
 import { S3Client } from '@aws-sdk/client-s3'
 import { Magic } from '@magic-sdk/admin'
@@ -26,14 +26,15 @@ import pkg from '../package.json'
 export function envAll (_, env, event) {
   env.sentry = (env.SENTRY_DSN || typeof SENTRY_DSN !== 'undefined') && new Toucan({
     dsn: env.SENTRY_DSN || SENTRY_DSN,
-    event,
+    context: event,
     allowedHeaders: ['user-agent'],
     allowedSearchParams: /(.*)/,
     debug: false,
     rewriteFrames: {
       root: '/'
     },
-    version: env.VERSION || VERSION,
+    env: env.ENV || ENV,
+    release: env.VERSION || VERSION,
     pkg: {
       ...pkg,
       // sentry cannot deal with "/" in version
