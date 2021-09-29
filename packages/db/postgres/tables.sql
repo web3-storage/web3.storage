@@ -37,8 +37,7 @@ CREATE TABLE IF NOT EXISTS content
 (
   -- Root CID for this content. Normalized as v1 base32.
   cid             TEXT PRIMARY KEY,
-  -- Size of the DAG in bytes. Set if known on upload or for partials is set
-  -- when content is fully pinned in at least one location.
+  -- Size of the DAG in bytes. Either the cumulativeSize for dag-pb or the sum of block sizes in the CAR.
   dag_size        BIGINT,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
