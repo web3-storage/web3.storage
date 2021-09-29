@@ -1,6 +1,6 @@
 
 -- A user of web3.storage.
-CREATE TABLE IF NOT EXISTS user
+CREATE TABLE IF NOT EXISTS public.user
 (
   id              BIGSERIAL PRIMARY KEY,
   name            TEXT                                                          NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS auth_key
   -- Secret that corresponds to this token.
   secret          TEXT                                                          NOT NULL,
   -- User this token belongs to.
-  user_id         BIGINT                                                        NOT NULL REFERENCES user (id),
+  user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   deleted_at      TIMESTAMP WITH TIME ZONE
 );
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS upload
 (
   id              BIGSERIAL PRIMARY KEY,
   -- User that uploaded this content.
-  user_id         BIGINT                                                        NOT NULL REFERENCES user (id),
+  user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
   -- User authentication token that was used to upload this content.
   -- Note: nullable, because the user may have used a Magic.link token.
   auth_key_id     BIGINT REFERENCES auth_key (id),
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS backup
   url             TEXT                                                          NOT NULL UNIQUE,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   deleted_at      TIMESTAMP WITH TIME ZONE
-)
+);
 
 -- A request to keep a Pin in sync with the nodes that are pinning it.
 CREATE TABLE IF NOT EXISTS pin_request
