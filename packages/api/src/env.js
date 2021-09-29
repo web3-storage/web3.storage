@@ -33,7 +33,7 @@ export function envAll (_, env, event) {
     rewriteFrames: {
       root: '/'
     },
-    env: env.ENV || ENV,
+    environment: env.ENV || ENV,
     release: env.VERSION || VERSION,
     pkg: {
       ...pkg,
