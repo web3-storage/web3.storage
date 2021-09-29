@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "license": "(Apache-2.0 AND MIT)",
-  "main": "dist/main.js",
+  "main": "dist/worker.js",
   "scripts": {
     "lt": "npm run lt:cluster",
     "lt:cluster": "npx localtunnel --port 9094 --subdomain \"$(whoami)-cluster-api-web3-storage\"",
@@ -55,7 +55,7 @@
   },
   "bundlesize": [
     {
-      "path": "./dist/main.js",
+      "path": "./dist/worker.js",
       "maxSize": "1 MB"
     }
   ]

@@ -52,5 +52,8 @@ export default {
   optimization: {
     minimize: true,
     usedExports: true
+  },
+  output: {
+    filename: 'worker.js'
   }
 }
