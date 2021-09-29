@@ -1,6 +1,5 @@
 
 -- A user of web3.storage.
--- TODO: Should we call account?
 CREATE TABLE IF NOT EXISTS user
 (
   id              BIGSERIAL PRIMARY KEY,
@@ -148,7 +147,14 @@ CREATE TABLE IF NOT EXISTS backup
   -- Backup url location.
   url             TEXT                                                          NOT NULL UNIQUE,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  deleted_at      TIMESTAMP WITH TIME ZONE,
+  deleted_at      TIMESTAMP WITH TIME ZONE
 )
 
--- TODO: we need https://github.com/web3-storage/web3.storage/blob/main/packages/db/fauna/schema.graphql#L174-L216 
+-- A request to keep a Pin in sync with the nodes that are pinning it.
+CREATE TABLE IF NOT EXISTS pin_request
+(
+  id              BIGSERIAL PRIMARY KEY,
+  -- Identifier for the pin to keep in sync.
+  pin_id          BIGINT                                                        NOT NULL REFERENCES pin (id),
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+)
