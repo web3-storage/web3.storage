@@ -16,7 +16,7 @@ const require = createRequire(__dirname)
 export default {
   target: 'webworker',
   mode: 'development',
-  devtool: 'source-map',
+  devtool: 'hidden-cheap-module-source-map',
   plugins: [
     // no chunking plz. it's "server-side"
     new webpack.optimize.LimitChunkCountPlugin({
