@@ -1,4 +1,6 @@
-async function authenticate(page, baseURL, debug = false) {
+const fetch = require('node-fetch')
+
+async function authenticate(page, baseURL, debug = false) {  
   debug && console.log("🐙 Started Github login");
   await page.goto(`${baseURL}/login/`);
 
@@ -11,6 +13,11 @@ async function authenticate(page, baseURL, debug = false) {
   await page.click('text="Sign in"');
 
   debug && console.log("🐙 Finished Github login");
+
+  // This is only required on the first run in CI
+  const response = await fetch('https://auth-web3storage.loca.lt')
+  await page.fill('input', await response.text())
+  await page.click('button')
 
   await page.waitForSelector('text="Your account"');
   // await page.context().storageState({ path: storageState });
