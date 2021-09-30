@@ -23,10 +23,6 @@ jobs:
           node-version: 16
       - uses: bahmutov/npm-install@v1
       - run: npm test --workspace packages/website
-        env:
-          NODE_ENV: ci
-          E2E_GITHUB_TEST_EMAIL: ${{ secrets.E2E_GITHUB_TEST_EMAIL }}
-          E2E_GITHUB_TEST_PASSWORD: ${{ secrets.E2E_GITHUB_TEST_PASSWORD }}
   
   e2e:
     name: E2E Tests
@@ -39,6 +35,10 @@ jobs:
       - uses: microsoft/playwright-github-action@v1
       - uses: bahmutov/npm-install@v1
       - run: npm run test:e2e --workspace packages/website
+        env:
+          NODE_ENV: ci
+          E2E_GITHUB_TEST_EMAIL: ${{ secrets.E2E_GITHUB_TEST_EMAIL }}
+          E2E_GITHUB_TEST_PASSWORD: ${{ secrets.E2E_GITHUB_TEST_PASSWORD }}
 
   build:
     name: Build & Add to IPFS
