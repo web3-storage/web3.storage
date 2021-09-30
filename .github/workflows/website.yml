@@ -23,6 +23,8 @@ jobs:
           node-version: 16
       - uses: bahmutov/npm-install@v1
       - run: npm test --workspace packages/website
+          env:
+            NODE_ENV: ci
   
   e2e:
     name: E2E Tests
