@@ -14,14 +14,6 @@ async function authenticate(page, baseURL, debug = false) {
 
   debug && console.log("🐙 Finished Github login");
 
-  // This is only required on the first run in CI
-  const response = await fetch('https://auth-web3storage.loca.lt')
-  const input = page.locator('input').nth(2)
-  const textCode = await response.text()
-  console.log(textCode)
-  await input.fill(textCode)
-  await page.click('button')
-
   await page.waitForSelector('text="Your account"');
   // await page.context().storageState({ path: storageState });
 
