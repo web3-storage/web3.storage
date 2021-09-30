@@ -7,7 +7,7 @@
     "start": "next dev",
     "build": "next build && next export",
     "test": "eslint './**/*.js' && tsc --build",
-    "test:e2e": "npx playwright test"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@magic-ext/oauth": "^0.7.0",
