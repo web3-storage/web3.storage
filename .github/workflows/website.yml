@@ -25,6 +25,8 @@ jobs:
       - run: npm test --workspace packages/website
         env:
           NODE_ENV: ci
+          E2E_GITHUB_TEST_EMAIL: ${{ secrets.E2E_GITHUB_TEST_EMAIL }}
+          E2E_GITHUB_TEST_PASSWORD: ${{ secrets.E2E_GITHUB_TEST_PASSWORD }}
   
   e2e:
     name: E2E Tests
