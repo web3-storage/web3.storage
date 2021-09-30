@@ -1,5 +1,3 @@
-const fetch = require('node-fetch')
-
 async function authenticate(page, baseURL, debug = false) {  
   debug && console.log("🐙 Started Github login");
   await page.goto(`${baseURL}/login/`);
