@@ -29,7 +29,7 @@ npm start
 In order to properly run the E2E tests locally, you need to set the following env variables in `.env.local`:
 
 ```ini
-E2E_BASE_URL='http://localhost:'
+E2E_BASE_URL='http://localhost:PORT'
 E2E_GITHUB_TEST_EMAIL='TEST_ACCOUNT_EMAIL_FOR_GITHUB'
 E2E_GITHUB_TEST_PASSWORD='TEST_ACCOUNT_PASSWORD_FOR_GITHUB'
 ```
