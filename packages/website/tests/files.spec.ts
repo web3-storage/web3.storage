@@ -3,6 +3,7 @@ import { authenticate } from './utils/auth'
 
 test.describe('Uploading Files', () => {
   test.beforeEach(async ({ page, baseURL }) => {
+    console.log(baseURL)
     await authenticate(page, baseURL)
     await page.goto("/upload");
   })
