@@ -24,6 +24,24 @@ npm install
 npm start
 ```
 
+## E2E Testing
+
+In order to properly run the E2E tests locally, you need to set the following env variables in `.env.local`:
+
+```ini
+E2E_BASE_URL='http://localhost:'
+E2E_GITHUB_TEST_EMAIL='TEST_ACCOUNT_EMAIL_FOR_GITHUB'
+E2E_GITHUB_TEST_PASSWORD='TEST_ACCOUNT_PASSWORD_FOR_GITHUB'
+```
+
+### Running Tests Locally
+
+```bash
+cd packages/website ; npm run test:e2e
+# or
+npm run test:e2e --workspace=packages/website
+```
+
 ## Deploy
 
 The site is deployed from Github Actions. When a PR that changes website code is merged to main, the website is built and uploaded to web3.storage. The CID for the new build is set as a dnslink for https://staging.web3.storage so you can see the site served from an IPFS gateway, or fetch it over IPFS in Brave or any browser with IPFS Companion installed.
