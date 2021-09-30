@@ -84,7 +84,12 @@ export default {
     minimize: true,
     minimizer: [
       new TerserPlugin({
-        extractComments: false // disable generation of worker.LICENSE.txt as we don't and can't use it from CF.
+        extractComments: false, // disable generation of worker.LICENSE.txt as we don't and can't use it from CF.
+        terserOptions: {
+          format: {
+            comments: false
+          }
+        }
       })
     ],
     usedExports: true
