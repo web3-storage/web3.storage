@@ -6,8 +6,8 @@ async function authenticate(page, baseURL, debug = false) {
 
   await page.waitForSelector("#login_field");
 
-  await page.fill("#login_field", process.env.TEST_EMAIL);
-  await page.fill("#password", process.env.TEST_PASSWORD);
+  await page.fill("#login_field", process.env.E2E_GITHUB_TEST_EMAIL);
+  await page.fill("#password", process.env.E2E_GITHUB_TEST_PASSWORD);
   await page.click('text="Sign in"');
 
   debug && console.log("🐙 Finished Github login");
