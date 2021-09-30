@@ -215,7 +215,7 @@ export default function Tokens({ isLoggedIn }) {
               <div className="flex flex-col items-center">
                 <p className="font-black mt-10">
                   Want to test the token quickly? Paste it in
-                  {" "}<a className="underline" href={`https://upload-with-token-node-demo.web3storage.repl.co`} target="_blank" rel="noreferrer">this repl.it</a>
+                  {" "}<a className="underline" href={`https://bafybeic5r5yxjh5xpmeczfp34ysrjcoa66pllnjgffahopzrl5yhex7d7i.ipfs.dweb.link/`} target="_blank" rel="noreferrer">this demo website</a>
                 </p>
               </div>
             </When>
