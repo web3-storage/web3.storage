@@ -155,5 +155,6 @@ CREATE TABLE IF NOT EXISTS pin_request
   id              BIGSERIAL PRIMARY KEY,
   -- Identifier for the pin to keep in sync.
   pin_id          BIGINT                                                        NOT NULL REFERENCES pin (id),
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  deleted_at      TIMESTAMP WITH TIME ZONE
 )
