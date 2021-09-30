@@ -11,6 +11,7 @@ command = "npm run build"
 watch_dir = "src"
 [build.upload]
 format = "service-worker"
+# NOTE: Make sure the main field in your package.json references the Worker script you want to publish.
 
 # ---- Environment specific overrides below ! ----
 # NOTE: wrangler automatically assigns each env the root `name` with the env name suffixed on the end
