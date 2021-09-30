@@ -1,5 +1,17 @@
 # Changelog
 
+### [3.5.2](https://www.github.com/web3-storage/web3.storage/compare/api-v3.5.1...api-v3.5.2) (2021-09-30)
+
+
+### Bug Fixes
+
+* source mapping and commit info in sentry ([#505](https://www.github.com/web3-storage/web3.storage/issues/505)) ([5f058a8](https://www.github.com/web3-storage/web3.storage/commit/5f058a81f1b9acd083a9240399f74c1a1bb60adb))
+
+
+### Changes
+
+* dont send source-map to cloudflare ([#506](https://www.github.com/web3-storage/web3.storage/issues/506)) ([f67e3d6](https://www.github.com/web3-storage/web3.storage/commit/f67e3d666d7ef1b5c5f4ff8f5eb6878866f6bdea))
+
 ### [3.5.1](https://www.github.com/web3-storage/web3.storage/compare/api-v3.5.0...api-v3.5.1) (2021-09-28)
 
 
