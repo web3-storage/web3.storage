@@ -122,10 +122,9 @@ CREATE TABLE IF NOT EXISTS upload
   -- User authentication token that was used to upload this content.
   -- Note: nullable, because the user may have used a Magic.link token.
   auth_key_id     BIGINT REFERENCES auth_key (id),
-  -- The root of the uploaded content.
+  -- The root of the uploaded content (base32 CIDv1 normalised).
   content_cid     TEXT                                                          NOT NULL REFERENCES content (cid),
-  -- CID for the content as provided by the user.
-  -- TODO: do we need this? Should we fail if they do not match?
+  -- CID in the from we found in the received file.
   source_cid      TEXT                                                          NOT NULL,
   -- Type of received upload data.
   type            upload_type                                                   NOT NULL,
