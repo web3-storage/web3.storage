@@ -16,6 +16,10 @@ export const S3_BUCKET_NAME = 'bucket'
 export const S3_BUCKET_REGION = 'eu-central-1'
 export const S3_ACCESS_KEY_ID = 'access-key-id'
 export const S3_SECRET_ACCESS_KEY_ID = 'secret-access-key'
+export const VERSION = 'short-commit-sha'
+export const COMMITHASH = 'full-commit-sha'
+export const BRANCH = 'main'
+export const RELEASE = '1.0.0'
 
 // Can be removed once we get a test mode for admin magic sdk.
 export const DANGEROUSLY_BYPASS_MAGIC_AUTH = true

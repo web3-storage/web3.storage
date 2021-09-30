@@ -26,9 +26,13 @@ const gitRevisionPlugin = new GitRevisionPlugin()
 const __dirname = path.dirname(new URL(import.meta.url).pathname)
 const require = createRequire(__dirname)
 
+const RELEASE = process.env.npm_package_version
 // relaase name cannot contain slashes, and are global per org, so we prefix here.
 // see: https://docs.sentry.io/platforms/javascript/guides/cordova/configuration/releases/
-const SENTRY_RELEASE = `web3-api@${process.env.npm_package_version}`
+const SENTRY_RELEASE = `web3-api@${RELEASE}`
+const COMMITHASH = gitRevisionPlugin.commithash()
+const VERSION = gitRevisionPlugin.version()
+const BRANCH = gitRevisionPlugin.branch()
 
 export default {
   target: 'webworker',
@@ -46,8 +50,11 @@ export default {
       Buffer: ['buffer', 'Buffer']
     }),
     new webpack.DefinePlugin({
-      VERSION: JSON.stringify(gitRevisionPlugin.version()),
-      SENTRY_RELEASE: JSON.stringify(SENTRY_RELEASE)
+      SENTRY_RELEASE: JSON.stringify(SENTRY_RELEASE),
+      RELEASE: JSON.stringify(RELEASE),
+      COMMITHASH: JSON.stringify(COMMITHASH),
+      VERSION: JSON.stringify(VERSION),
+      BRANCH: JSON.stringify(BRANCH)
     }),
     process.env.SENTRY_UPLOAD === 'true' &&
       new SentryWebpackPlugin({

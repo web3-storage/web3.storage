@@ -9,6 +9,7 @@ import { carHead, carGet, carPut, carPost } from './car.js'
 import { uploadPost } from './upload.js'
 import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, userUploadsRename } from './user.js'
 import { metricsGet } from './metrics.js'
+import { versionGet } from './version.js'
 import { notFound } from './utils/json-response.js'
 
 const router = Router()
@@ -26,6 +27,7 @@ router.post('/user/login',          auth['🤲'](userLoginPost))
 router.get('/status/:cid',          auth['🤲'](statusGet))
 router.get('/car/:cid',             auth['🤲'](carGet))
 router.head('/car/:cid',            auth['🤲'](carHead))
+// router.get('/version',              auth['🤲'](versionGet))
 
 router.post('/car',                 auth['🔒'](carPost))
 router.put('/car/:cid',             auth['🔒'](carPut))

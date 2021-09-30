@@ -1,4 +1,4 @@
-/* global MAGIC_SECRET_KEY FAUNA_ENDPOINT FAUNA_KEY SALT CLUSTER_BASIC_AUTH_TOKEN CLUSTER_API_URL SENTRY_DSN SENTRY_RELEASE DANGEROUSLY_BYPASS_MAGIC_AUTH S3_BUCKET_ENDPOINT S3_BUCKET_NAME S3_BUCKET_REGION S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY_ID ENV */
+/* global MAGIC_SECRET_KEY FAUNA_ENDPOINT FAUNA_KEY SALT CLUSTER_BASIC_AUTH_TOKEN CLUSTER_API_URL SENTRY_DSN SENTRY_RELEASE DANGEROUSLY_BYPASS_MAGIC_AUTH S3_BUCKET_ENDPOINT S3_BUCKET_NAME S3_BUCKET_REGION S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY_ID ENV COMMITHASH VERSION BRANCH RELEASE */
 import Toucan from 'toucan-js'
 import { S3Client } from '@aws-sdk/client-s3'
 import { Magic } from '@magic-sdk/admin'
@@ -24,6 +24,13 @@ import pkg from '../package.json'
  * @param {FetchEvent} event
  */
 export function envAll (_, env, event) {
+  // squirted in by webpack DefinePlugin
+  env.SENTRY_RELEASE = env.SENTRY_RELEASE || SENTRY_RELEASE
+  env.RELEASE = env.RELEASE || RELEASE
+  env.COMMITHASH = env.COMMITHASH || COMMITHASH
+  env.VERSION = env.VERSION || VERSION
+  env.BRANCH = env.BRANCH || BRANCH
+
   env.sentry = (env.SENTRY_DSN || typeof SENTRY_DSN !== 'undefined') && new Toucan({
     dsn: env.SENTRY_DSN || SENTRY_DSN,
     context: event,
@@ -34,7 +41,7 @@ export function envAll (_, env, event) {
       root: '/'
     },
     environment: env.ENV || ENV,
-    release: env.SENTRY_RELEASE || SENTRY_RELEASE,
+    release: env.SENTRY_RELEASE,
     pkg
   })
   env.magic = new Magic(env.MAGIC_SECRET_KEY || MAGIC_SECRET_KEY)
