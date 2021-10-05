@@ -22,7 +22,20 @@ export function useLoggedIn({ redirectTo, redirectIfFound, enabled } = {}) {
   })
 
   useEffect(() => {
+    console.log('🚀 useLoggedIn')
+    console.table({
+      redirectTo,
+      redirectIfFound,
+      enabled,
+      loggedIn,
+      isFetching,
+      isLoading,
+      status,
+      error
+    })
+    
     if (!redirectTo || isLoading || isFetching) {
+      console.log('➡️ skipped')
       return
     }
     if (
@@ -32,7 +45,10 @@ export function useLoggedIn({ redirectTo, redirectIfFound, enabled } = {}) {
       (redirectIfFound && loggedIn)
     ) {
       router.push(redirectTo)
+      console.log(`➡️ redirected to ${redirectTo}`)
     }
+
+    console.log(`➡️ ignored`)
   }, [redirectTo, redirectIfFound, status, isFetching, isLoading, loggedIn, router, enabled])
 
   return { status, isLoggedIn: loggedIn, error, isFetching, isLoading }

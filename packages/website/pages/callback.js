@@ -45,7 +45,7 @@ const Callback = () => {
     if (!router.query.provider && router.query.magic_credential) {
       finishEmailRedirectLogin()
     }
-    if (router.query.provider) {
+    else if (router.query.provider) {
       finishSocialLogin()
     }
   }, [router, router.query, queryClient])
