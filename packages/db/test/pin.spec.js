@@ -1,0 +1,102 @@
+/* eslint-env mocha, browser */
+import assert from 'assert'
+import { DBClient } from '../index'
+
+describe('pin', () => {
+  /** @type {DBClient} */
+  let client
+  let user
+
+  const cid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
+  const type = 'Upload'
+  const dagSize = 1000
+  const name = `Upload_${new Date().toISOString()}`
+  const initialBackupUrl = `https://backup.cid/${new Date().toISOString()}/${Math.random()}`
+  const initialPinData = {
+    status: 'Pinning',
+    location: {
+      peerId: 'peer_id',
+      peerName: 'peer_name',
+      region: 'region'
+    }
+  }
+  let authKeys
+  let upload
+
+  // Setup client
+  before(() => {
+    client = new DBClient({
+      endpoint: 'http://127.0.0.1:3000',
+      token: 'super-secret-jwt-token-with-at-least-32-characters-long',
+      postgres: true
+    })
+  })
+
+  // Setup testing user
+  before(async () => {
+    const name = 'test-name'
+    const email = 'test@email.com'
+    const issuer = `issuer${Math.random()}`
+    const publicAddress = `public_address${Math.random()}`
+
+    const upsertUser = await client.upsertUser({
+      name,
+      email,
+      issuer,
+      publicAddress
+    })
+
+    assert(upsertUser, 'user created')
+    assert.strictEqual(upsertUser.issuer, issuer, 'user has correct issuer')
+
+    // Get previously created user
+    user = await client.getUser(issuer)
+  })
+
+  // Create auth key
+  before(async () => {
+    const name = 'test-key-name'
+    const secret = 'test-secret'
+    await client.createKey({
+      name,
+      secret,
+      user: user.id
+    })
+  })
+
+  // Setup upload
+  before(async () => {
+    authKeys = await client.listKeys(user.id)
+    const createdUpload = await client.createUpload({
+      user: user.id,
+      contentCid: cid,
+      sourceCid: cid,
+      authKey: authKeys[0]._id,
+      type,
+      dagSize: dagSize,
+      name,
+      pins: [initialPinData],
+      backupUrls: [initialBackupUrl]
+    })
+
+    assert(createdUpload, 'upload created')
+    assert(createdUpload.cid, 'upload has root cid')
+
+    upload = await client.getUpload(cid, user.id)
+
+    assert(upload, 'upload created')
+  })
+
+  it('can get upload pins', async () => {
+    const pins = await client.getPins(cid)
+    assert(pins, 'pins created')
+    assert.strictEqual(pins.length, 1, 'upload has a single pin')
+    assert(pins[0].id, 'pin has id')
+    assert(pins[0].created, 'pin has inserted timestamp')
+    assert(pins[0].updated, 'pin has inserted timestamp')
+    assert.strictEqual(pins[0].status, initialPinData.status, 'pin has correct state')
+    assert.strictEqual(pins[0].peerId, initialPinData.location.peerId, 'pin has correct location peer id')
+    assert.strictEqual(pins[0].peerName, initialPinData.location.peerName, 'pin has correct location peer name')
+    assert.strictEqual(pins[0].region, initialPinData.location.region, 'pin has correct location peer region')
+  })
+})
