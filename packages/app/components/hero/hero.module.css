@@ -1,0 +1,30 @@
+.background {
+    max-width: calc(100vw - 140px);
+}
+
+.topSection {
+    height: 24.05rem;
+}
+
+.illustration {
+    top: 34px;
+    min-width: 1440px;
+}
+
+@media only screen and (min-width: 640px) {
+    .container {
+       overflow: hidden;
+       overflow-x: clip;
+       overflow-y: visible;
+    }
+
+    .background {
+        max-width: calc(100vw - 200px)
+    }
+
+    .topSection {
+        height: 42.05rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
