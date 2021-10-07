@@ -21,7 +21,7 @@ export default function Layout({
   redirectTo,
   redirectIfFound = false,
   title = 'Web3 Storage - The simple file storage service for IPFS & Filecoin.',
-  description = 'Web3 Storage',
+  description = 'With Web3.Storage you get all the benefits of decentralized storage and content addressing with the frictionless experience you expect in a modern storage solution. It’s fast, open and it’s free.',
   pageBgColor = 'bg-w3storage-background',
   navBgColor = 'bg-w3storage-background',
   footerBgColor,

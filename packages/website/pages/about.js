@@ -14,6 +14,7 @@ import slug from 'remark-slug'
       props: {
         needsLoggedIn: false,
         data: data.content,
+        title: 'Web3 Storage - About web3.storage, the easy way to store with IPFS and Filecoin',
       },
     }
   }
