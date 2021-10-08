@@ -454,6 +454,7 @@ export class DBClient {
       .match({
         issuer
       })
+      .filter('keys.deleted_at', 'is', null)
       .single()
 
     if (error) {
@@ -494,6 +495,7 @@ export class DBClient {
         uploads:upload(id)
       `)
       .match({ user_id: userId })
+      .is('deleted_at', null)
 
     if (error) {
       throw new DBError(error)
@@ -511,14 +513,25 @@ export class DBClient {
   /**
    * Delete auth key with given id.
    *
-   * @param {number} id
+   * @param {number} userId
+   * @param {number} keyId
    */
-  async deleteKey (id) {
+  async deleteKey (userId, keyId) {
+    // Fauna Fallback
+    if (!this.client) {
+      return this._client.deleteKey(id)
+    }
+
     /** @type {{ error: Error }} */
     const { error } = await this.client
       .from('auth_key')
-      .delete()
-      .match({ id })
+      .update({
+        deleted_at: new Date().toISOString(),
+      })
+      .match({
+        id: keyId,
+        user_id: userId
+      })
 
     if (error) {
       throw new DBError(error)

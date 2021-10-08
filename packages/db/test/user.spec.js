@@ -134,7 +134,7 @@ describe('user operations', () => {
     const keys = await client.listKeys(user.id)
 
     // Delete previously created key
-    await client.deleteKey(authKey._id)
+    await client.deleteKey(user.id, authKey._id)
 
     const finalKeys = await client.listKeys(user.id)
     assert(finalKeys, 'final keys fetched')

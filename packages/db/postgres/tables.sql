@@ -26,7 +26,8 @@ CREATE TABLE IF NOT EXISTS auth_key
   -- User this token belongs to.
   user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+  updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  deleted_at      TIMESTAMP WITH TIME ZONE
 );
 
 -- Details of the root of a file/directory stored on web3.storage.
