@@ -58,7 +58,7 @@ export function envAll (_, env, event) {
   env.cluster = new Cluster(env.CLUSTER_API_URL || CLUSTER_API_URL, { headers })
 
   // backups not required in dev mode
-  if (env.ENV === 'dev' && !(env.S3_ACCESS_KEY_ID || typeof S3_ACCESS_KEY_ID !== 'undefined')) {
+  if ((env.ENV === 'dev' || ENV === 'dev') && !(env.S3_ACCESS_KEY_ID || typeof S3_ACCESS_KEY_ID !== 'undefined')) {
     console.log('running without backups wired up')
   } else {
     const s3Endpoint = env.S3_BUCKET_ENDPOINT || (typeof S3_BUCKET_ENDPOINT === 'undefined' ? undefined : S3_BUCKET_ENDPOINT)
