@@ -34,7 +34,7 @@ One time set up of your cloudflare worker subdomain for dev:
     [env.bobbytables]
     workers_dev = true
     account_id = "<what does the `wrangler whoami` say>"
-    vars = { CLUSTER_API_URL = "https://USER-cluster-api-web3-storage.loca.lt" }
+    vars = { CLUSTER_API_URL = "https://USER-cluster-api-web3-storage.loca.lt", ENV = "dev" }
     ```
 
 - `npm run build` - Build the bundle
