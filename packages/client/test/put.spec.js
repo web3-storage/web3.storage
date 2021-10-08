@@ -165,6 +165,19 @@ describe('putCar', () => {
     })
     assert.equal(cid, block.cid.toString(), 'returned cid matches the CAR')
   })
+
+  it('encodes filename for header', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const carReader = await createCar('hello world')
+    const expectedCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
+    const cid = await client.putCar(carReader, {
+      name: 'filename–with–funky–chars',
+      onRootCidReady: cid => {
+        assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+      }
+    })
+    assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+  })
 })
 
 function prepareFiles () {

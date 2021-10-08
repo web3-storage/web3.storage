@@ -149,7 +149,8 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     backup(car, rootCid, user._id, env)
   ])
 
-  let name = headers.get('x-name')
+  const xName = headers.get('x-name')
+  let name = xName && decodeURIComponent(xName)
   if (!name || typeof name !== 'string') {
     name = `Upload at ${new Date().toISOString()}`
   }
