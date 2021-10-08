@@ -94,7 +94,7 @@ export class DBClient {
     }
 
     return {
-      id: data.id,
+      _id: data.id,
       issuer: data.issuer,
       name: data.name,
       email: data.email,

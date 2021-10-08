@@ -18,7 +18,7 @@ export type UpsertUserOutput = {
 export type User = definitions['user']
 
 export type UserOutput = {
-  id: definitions['user']['id'],
+  _id: definitions['user']['id'],
   name: definitions['user']['name'],
   email: definitions['user']['email'],
   issuer: definitions['user']['issuer'],

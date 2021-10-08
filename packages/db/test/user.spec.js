@@ -37,7 +37,7 @@ describe('user operations', () => {
     user = await client.getUser(issuer)
 
     assert(user, 'user fetched by issuer')
-    assert(user.id, 'user has id')
+    assert(user._id, 'user has id')
     assert(user.created, 'user has created timestamp')
     assert(user.updated, 'user has updated timestamp')
     assert.strictEqual(user.name, name, 'user has correct name')
@@ -82,7 +82,7 @@ describe('user operations', () => {
     const publicAddress = `public_address${Math.random()}`
 
     const upsertUser = await client.upsertUser({
-      id: user.id,
+      id: user._id,
       name,
       email,
       issuer: user.issuer,
@@ -93,7 +93,7 @@ describe('user operations', () => {
 
     const updatedUser = await client.getUser(user.issuer)
     assert.strictEqual(updatedUser.email, email, 'user has new email')
-    assert.strictEqual(updatedUser.id, user.id, 'user has same id')
+    assert.strictEqual(updatedUser._id, user._id, 'user has same id')
     assert.strictEqual(updatedUser.created, user.created, 'user has same created timestamp')
   })
 
@@ -103,7 +103,7 @@ describe('user operations', () => {
     const authKey = await client.createKey({
       name,
       secret,
-      user: user.id
+      user: user._id
     })
 
     assert(authKey, 'auth key created')
@@ -113,7 +113,7 @@ describe('user operations', () => {
     assert(fetchedKey, 'auth key created')
     assert.strictEqual(fetchedKey._id, authKey._id)
 
-    const keys = await client.listKeys(user.id)
+    const keys = await client.listKeys(user._id)
 
     assert(keys, 'keys received')
     assert.strictEqual(keys.length, 1, 'user has an auth key')
@@ -128,15 +128,15 @@ describe('user operations', () => {
     const authKey = await client.createKey({
       name,
       secret,
-      user: user.id
+      user: user._id
     })
 
-    const keys = await client.listKeys(user.id)
+    const keys = await client.listKeys(user._id)
 
     // Delete previously created key
-    await client.deleteKey(user.id, authKey._id)
+    await client.deleteKey(user._id, authKey._id)
 
-    const finalKeys = await client.listKeys(user.id)
+    const finalKeys = await client.listKeys(user._id)
     assert(finalKeys, 'final keys fetched')
     assert.deepEqual(finalKeys.length, keys.length - 1, 'user had auth key deleted')
   })
@@ -145,17 +145,17 @@ describe('user operations', () => {
     const authKey = await client.createKey({
       name: 'test-key-name-3',
       secret: 'test-secret-3',
-      user: user.id
+      user: user._id
     })
 
-    const emptyUsedStorage = await client.getUsedStorage(user.id)
+    const emptyUsedStorage = await client.getUsedStorage(user._id)
     assert.deepEqual(emptyUsedStorage, 0, 'received empty used storage')
 
     // Create Upload 1
     const cid1 = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47fgf111'
     const dagSize1 = 10000
     await client.createUpload({
-      user: user.id,
+      user: user._id,
       contentCid: cid1,
       sourceCid: cid1,
       authKey: authKey._id,
@@ -165,14 +165,14 @@ describe('user operations', () => {
       backupUrls: []
     })
 
-    const firstUsedStorage = await client.getUsedStorage(user.id)
+    const firstUsedStorage = await client.getUsedStorage(user._id)
     assert.deepEqual(firstUsedStorage, dagSize1, 'used storage with first upload')
 
     // Create Upload 2
     const cid2 = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47fgf112'
     const dagSize2 = 30000
     await client.createUpload({
-      user: user.id,
+      user: user._id,
       contentCid: cid2,
       sourceCid: cid2,
       authKey: authKey._id,
@@ -182,13 +182,13 @@ describe('user operations', () => {
       backupUrls: []
     })
 
-    const secondUsedStorage = await client.getUsedStorage(user.id)
+    const secondUsedStorage = await client.getUsedStorage(user._id)
     assert.deepEqual(secondUsedStorage, dagSize1 + dagSize2, 'used storage with second upload')
 
     // Delete Upload 2
-    await client.deleteUpload(cid2, user.id)
+    await client.deleteUpload(cid2, user._id)
 
-    const thirdUsedStorage = await client.getUsedStorage(user.id)
+    const thirdUsedStorage = await client.getUsedStorage(user._id)
     assert.deepEqual(thirdUsedStorage, dagSize1, 'used storage with only first upload again')
   })
 })

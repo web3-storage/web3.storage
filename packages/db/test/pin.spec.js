@@ -60,15 +60,15 @@ describe('pin', () => {
     await client.createKey({
       name,
       secret,
-      user: user.id
+      user: user._id
     })
   })
 
   // Setup upload
   before(async () => {
-    authKeys = await client.listKeys(user.id)
+    authKeys = await client.listKeys(user._id)
     const createdUpload = await client.createUpload({
-      user: user.id,
+      user: user._id,
       contentCid: cid,
       sourceCid: cid,
       authKey: authKeys[0]._id,
@@ -82,7 +82,7 @@ describe('pin', () => {
     assert(createdUpload, 'upload created')
     assert(createdUpload.cid, 'upload has root cid')
 
-    upload = await client.getUpload(cid, user.id)
+    upload = await client.getUpload(cid, user._id)
 
     assert(upload, 'upload created')
   })
