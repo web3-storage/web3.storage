@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.5.3](https://www.github.com/web3-storage/web3.storage/compare/api-v3.5.2...api-v3.5.3) (2021-10-08)
+
+
+### Bug Fixes
+
+* api dev mode without backup secrets ([#526](https://www.github.com/web3-storage/web3.storage/issues/526)) ([4d3f1b1](https://www.github.com/web3-storage/web3.storage/commit/4d3f1b17821f4f2b7bac8bbb7078f3fea85a67d7))
+
 ### [3.5.2](https://www.github.com/web3-storage/web3.storage/compare/api-v3.5.1...api-v3.5.2) (2021-09-30)
 
 
