@@ -33,6 +33,7 @@ export class DBClient {
   deleteUpload(cid: string, userId: number): Promise<{ _id: number }>
   getStatus (cid: string): Promise<ContentItemOutput>
   getBackups(uploadId: number): Promise<Array<BackupOutput>>
+  upsertPin (cid: string, pin: PinItemOutput): Promise<number>
   getPins (cid: string): Promise<Array<PinItemOutput>>
   getDeals (cid: string): Promise<Deal[]>
   getDealsForCids (cids: string[]): Promise<Record<string, Deal[]>>

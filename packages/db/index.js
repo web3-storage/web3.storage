@@ -342,6 +342,36 @@ export class DBClient {
   }
 
   /**
+   * Upsert pin.
+   *
+   * @param {string} cid
+   * @param {import('./db-client-types').PinItemOutput} pin
+   * @return {Promise<number>}
+   */
+  async upsertPin (cid, pin) {
+    /** @type {{ data: number, error: Error }} */
+    const { data: pinId, error } = await this.client.rpc('upsert_pin', {
+      data: {
+        content_cid: cid,
+        pin: {
+          status: pin.status,
+          location: {
+            peer_id: pin.location.peerId,
+            peer_name: pin.location.peerName,
+            region: pin.location.region
+          }
+        }
+      }
+    })
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return pinId
+  }
+
+  /**
    * Get Pins for a cid
    *
    * @param {string} cid
@@ -517,16 +547,11 @@ export class DBClient {
    * @param {number} keyId
    */
   async deleteKey (userId, keyId) {
-    // Fauna Fallback
-    if (!this.client) {
-      return this._client.deleteKey(id)
-    }
-
     /** @type {{ error: Error }} */
     const { error } = await this.client
       .from('auth_key')
       .update({
-        deleted_at: new Date().toISOString(),
+        deleted_at: new Date().toISOString()
       })
       .match({
         id: keyId,

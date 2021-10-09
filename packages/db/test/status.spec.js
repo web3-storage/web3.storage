@@ -7,7 +7,7 @@ describe('status', () => {
   let client
   let user
 
-  const cid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
+  const cid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci56bgf354'
   const type = 'Upload'
   const dagSize = 1000
   const name = `Upload_${new Date().toISOString()}`

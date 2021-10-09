@@ -48,7 +48,7 @@ describe('upload', () => {
     })
   })
 
-  const cid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
+  const cid = 'bafybeiczsscdsbs7ffqz55asqde1qmv6klcw3gofszvwlyarci47bgf354'
   const type = 'Upload'
   const dagSize = 1000
   const name = `Upload_${new Date().toISOString()}`
