@@ -88,11 +88,11 @@ describe('backup', () => {
   })
 
   it('can get upload backups', async () => {
-    const backups = await client.getBackups(upload.id)
+    const backups = await client.getBackups(upload._id)
 
     assert(backups, 'backups created')
     assert.strictEqual(backups.length, 1, 'upload has a single backup')
-    assert(backups[0].id, 'backup has id')
+    assert(backups[0]._id, 'backup has id')
     assert(backups[0].created, 'backup has inserted timestamp')
     assert.strictEqual(backups[0].url, initialBackupUrl, 'backup has correct url')
   })

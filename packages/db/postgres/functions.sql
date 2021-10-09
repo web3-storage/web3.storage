@@ -70,7 +70,9 @@ BEGIN
             data ->> 'name',
             (data ->> 'updated_at')::timestamptz,
             (data ->> 'inserted_at')::timestamptz)
-  ON CONFLICT ( user_id, source_cid ) DO UPDATE SET "updated_at" = (data ->> 'updated_at')::timestamptz
+  ON CONFLICT ( user_id, source_cid ) DO UPDATE
+    SET "updated_at" = (data ->> 'updated_at')::timestamptz,
+        "deleted_at" = null
   returning id into inserted_upload_id;
 
   foreach backup_url in array json_arr_to_text_arr(data -> 'backup_urls')
@@ -142,7 +144,7 @@ BEGIN
     select sum(c.dag_size)
     from upload u
     join content c on c.cid = u.content_cid
-    where u.user_id = query_user_id
+    where u.user_id = query_user_id and u.deleted_at is null
   );
 END
 $$;

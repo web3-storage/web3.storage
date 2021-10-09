@@ -91,7 +91,7 @@ describe('pin', () => {
     const pins = await client.getPins(cid)
     assert(pins, 'pins created')
     assert.strictEqual(pins.length, 1, 'upload has a single pin')
-    assert(pins[0].id, 'pin has id')
+    assert(pins[0]._id, 'pin has id')
     assert(pins[0].created, 'pin has inserted timestamp')
     assert(pins[0].updated, 'pin has inserted timestamp')
     assert.strictEqual(pins[0].status, initialPinData.status, 'pin has correct state')
@@ -119,7 +119,7 @@ describe('pin', () => {
       }
     })
     assert(updatedPin, 'pin updated')
-    assert.strictEqual(updatedPin, pinsPreUpdated[0].id, 'id of previous pin')
+    assert.strictEqual(updatedPin, pinsPreUpdated[0]._id, 'id of previous pin')
 
     const pinsAfterUpdated = await client.getPins(cid)
     assert.strictEqual(pinsAfterUpdated[0].status, newStatus, 'pin is pinned')
@@ -143,7 +143,7 @@ describe('pin', () => {
     })
 
     assert(createdPin, 'pin created')
-    assert.notStrictEqual(createdPin, pinsPreUpdated[0].id, 'id of previous pin not the same')
+    assert.notStrictEqual(createdPin, pinsPreUpdated[0]._id, 'id of previous pin not the same')
 
     const pinsAfterUpdated = await client.getPins(cid)
     assert.notStrictEqual(pinsAfterUpdated.length, previousPinsNumber, 'cid has more pins')

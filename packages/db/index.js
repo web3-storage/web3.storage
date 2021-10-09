@@ -158,7 +158,7 @@ export class DBClient {
     }
 
     return {
-      id: uploadResponse.id,
+      _id: uploadResponse.id,
       cid: uploadResponse.content_cid
     }
   }
@@ -177,6 +177,7 @@ export class DBClient {
       .select(uploadQuery)
       .eq('content_cid', cid)
       .eq('user_id', userId)
+      .is('deleted_at', null)
       .single()
 
     if (error) {
@@ -203,6 +204,7 @@ export class DBClient {
       .from('upload')
       .select(uploadQuery)
       .eq('user_id', userId)
+      .is('deleted_at', null)
       .limit(opts.size || 10)
       .order(
         opts.sortBy === 'Name' ? 'name' : 'inserted_at',
@@ -249,6 +251,7 @@ export class DBClient {
         user_id: userId,
         content_cid: cid
       })
+      .is('deleted_at', null)
       .single()
 
     if (error) {
@@ -270,11 +273,14 @@ export class DBClient {
     /** @type {{ data: import('./db-client-types').UploadItem, error: Error }} */
     const { data, error } = await this.client
       .from('upload')
-      .delete()
+      .update({
+        deleted_at: new Date().toISOString()
+      })
       .match({
         content_cid: cid,
         user_id: userId
       })
+      .single()
 
     if (error) {
       throw new DBError(error)
@@ -334,7 +340,7 @@ export class DBClient {
     }
 
     return backups.map(b => ({
-      id: b.id,
+      _id: b.id,
       created: b.inserted_at,
       uploadId: b.upload_id,
       url: b.url

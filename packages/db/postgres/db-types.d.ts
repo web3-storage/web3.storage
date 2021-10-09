@@ -95,6 +95,7 @@ export interface paths {
           user_id?: parameters["rowFilter.auth_key.user_id"];
           inserted_at?: parameters["rowFilter.auth_key.inserted_at"];
           updated_at?: parameters["rowFilter.auth_key.updated_at"];
+          deleted_at?: parameters["rowFilter.auth_key.deleted_at"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -151,6 +152,7 @@ export interface paths {
           user_id?: parameters["rowFilter.auth_key.user_id"];
           inserted_at?: parameters["rowFilter.auth_key.inserted_at"];
           updated_at?: parameters["rowFilter.auth_key.updated_at"];
+          deleted_at?: parameters["rowFilter.auth_key.deleted_at"];
         };
         header: {
           /** Preference */
@@ -171,6 +173,7 @@ export interface paths {
           user_id?: parameters["rowFilter.auth_key.user_id"];
           inserted_at?: parameters["rowFilter.auth_key.inserted_at"];
           updated_at?: parameters["rowFilter.auth_key.updated_at"];
+          deleted_at?: parameters["rowFilter.auth_key.deleted_at"];
         };
         body: {
           /** auth_key */
@@ -729,6 +732,7 @@ export interface paths {
           name?: parameters["rowFilter.upload.name"];
           inserted_at?: parameters["rowFilter.upload.inserted_at"];
           updated_at?: parameters["rowFilter.upload.updated_at"];
+          deleted_at?: parameters["rowFilter.upload.deleted_at"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -788,6 +792,7 @@ export interface paths {
           name?: parameters["rowFilter.upload.name"];
           inserted_at?: parameters["rowFilter.upload.inserted_at"];
           updated_at?: parameters["rowFilter.upload.updated_at"];
+          deleted_at?: parameters["rowFilter.upload.deleted_at"];
         };
         header: {
           /** Preference */
@@ -811,6 +816,7 @@ export interface paths {
           name?: parameters["rowFilter.upload.name"];
           inserted_at?: parameters["rowFilter.upload.inserted_at"];
           updated_at?: parameters["rowFilter.upload.updated_at"];
+          deleted_at?: parameters["rowFilter.upload.deleted_at"];
         };
         body: {
           /** upload */
@@ -1010,6 +1016,25 @@ export interface paths {
       };
     };
   };
+  "/rpc/upsert_pin": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/json_arr_to_text_arr": {
     post: {
       parameters: {
@@ -1117,6 +1142,7 @@ export interface definitions {
     user_id: number;
     inserted_at: string;
     updated_at: string;
+    deleted_at?: string;
   };
   backup: {
     /**
@@ -1239,6 +1265,7 @@ export interface definitions {
     name?: string;
     inserted_at: string;
     updated_at: string;
+    deleted_at?: string;
   };
   user: {
     /**
@@ -1299,6 +1326,7 @@ export interface parameters {
   "rowFilter.auth_key.user_id": string;
   "rowFilter.auth_key.inserted_at": string;
   "rowFilter.auth_key.updated_at": string;
+  "rowFilter.auth_key.deleted_at": string;
   /** backup */
   "body.backup": definitions["backup"];
   "rowFilter.backup.id": string;
@@ -1357,6 +1385,7 @@ export interface parameters {
   "rowFilter.upload.name": string;
   "rowFilter.upload.inserted_at": string;
   "rowFilter.upload.updated_at": string;
+  "rowFilter.upload.deleted_at": string;
   /** user */
   "body.user": definitions["user"];
   "rowFilter.user.id": string;

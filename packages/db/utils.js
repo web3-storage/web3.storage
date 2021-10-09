@@ -6,7 +6,7 @@
  */
 export function normalizeUpload (upload) {
   return {
-    id: upload.id,
+    _id: upload.id,
     type: upload.type,
     name: upload.name,
     created: upload.inserted_at,
@@ -40,7 +40,7 @@ export function normalizeContent (content) {
  */
 export function normalizePins (pins) {
   return pins.map(pin => ({
-    id: pin.id,
+    _id: pin.id,
     status: pin.status,
     created: pin.inserted_at,
     updated: pin.updated_at,

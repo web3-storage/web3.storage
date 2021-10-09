@@ -85,7 +85,7 @@ describe('upload', () => {
     upload = await client.getUpload(cid, user._id)
 
     assert(upload, 'upload created')
-    assert(upload.id, 'upload has an id')
+    assert(upload._id, 'upload has an id')
     assert(upload.created, 'upload has created timestamp')
     assert(upload.updated, 'upload has updated timestamp')
     assert.strictEqual(upload.type, type, 'upload has correct type')
@@ -118,7 +118,7 @@ describe('upload', () => {
     })
 
     assert(followUpCreate, 'follow up upload created')
-    assert.strictEqual(followUpCreate.id, upload.id, 'follow up upload has same id')
+    assert.strictEqual(followUpCreate._id, upload._id, 'follow up upload has same id')
 
     const followUpUpload = await client.getUpload(cid, user._id)
 
@@ -128,7 +128,7 @@ describe('upload', () => {
     assert.strictEqual(followUpUpload.type, upload.type, 'upload has same type')
     assert.strictEqual(followUpUpload.name, upload.name, 'upload has same name')
 
-    const backups = await client.getBackups(upload.id)
+    const backups = await client.getBackups(upload._id)
 
     assert(backups, 'backups created')
     assert.strictEqual(backups.length, 3, 'upload has three backups')
@@ -168,7 +168,7 @@ describe('upload', () => {
     const otherCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf112'
     const name = `Upload_${new Date().toISOString()}`
 
-    await client.createUpload({
+    const { _id: uploadId } = await client.createUpload({
       user: user._id,
       contentCid: otherCid,
       sourceCid: otherCid,
@@ -189,6 +189,21 @@ describe('upload', () => {
     const finalUserUploads = await client.listUploads(user._id)
     assert(finalUserUploads, 'user upload deleted')
     assert.strictEqual(finalUserUploads.length, userUploads.length - 1, 'user upload deleted')
+
+    // Create the same upload will result in getting it "restored"
+    const { _id: uploadIdRestored } = await client.createUpload({
+      user: user._id,
+      contentCid: otherCid,
+      sourceCid: otherCid,
+      authKey: authKeys[0]._id,
+      type,
+      dagSize,
+      name,
+      pins: [initialPinData],
+      backupUrls: [`https://backup.cid/${new Date().toISOString()}`]
+    })
+
+    assert.strictEqual(uploadId, uploadIdRestored)
   })
 
   it('creates a new upload for the same content when content uploaded by multiple users', async () => {
@@ -228,8 +243,8 @@ describe('upload', () => {
     })
 
     assert(uploadWithSameCid, 'upload created')
-    assert(uploadWithSameCid.id, 'upload has id')
-    assert.notStrictEqual(uploadWithSameCid.id, upload.id, 'a new upload was created for a new user')
+    assert(uploadWithSameCid._id, 'upload has id')
+    assert.notStrictEqual(uploadWithSameCid._id, upload._id, 'a new upload was created for a new user')
   })
 
   it('can list user uploads with several options', async () => {

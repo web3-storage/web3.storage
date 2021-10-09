@@ -132,6 +132,7 @@ CREATE TABLE IF NOT EXISTS upload
   name            TEXT,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  deleted_at      TIMESTAMP WITH TIME ZONE,
   -- deleted_at      TIMESTAMP WITH TIME ZONE, do we want?
   UNIQUE (user_id, source_cid)
 );
