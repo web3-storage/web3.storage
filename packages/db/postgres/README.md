@@ -1,11 +1,5 @@
 # Postgres <!-- omit in toc -->
 
-## Database Diagram
-
-![image](https://user-images.githubusercontent.com/7295071/135415822-be854ec5-d1e2-4588-a951-f287b60b65be.png)
-
-Powered by [dbdiagram.io](https://dbdiagram.io/d/61546519825b5b014618caf6).
-
 ## Getting started
 
 ### 1. Install postgres and docker
@@ -23,18 +17,18 @@ Inside the `/packages/db` folder create a file called `.env.local` with the foll
 ```ini
 # PostgREST API URL
 DATABASE_URL=http://localhost:3000
-# Create a token, for role "postgres", using secret value PGRST_JWT_SECRET from './postgres/docker/docker-compose.yml'
+# PostgREST API token, for role "postgres", using secret value PGRST_JWT_SECRET from './postgres/docker/docker-compose.yml'
 # https://postgrest.org/en/v8.0/tutorials/tut1.html#step-3-sign-a-token
-DATABASE_TOKEN=<jwt token>
+DATABASE_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU
 
 # Connection string for locally running postgres used in tests
 DATABASE_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 
-# RO dagcargo credentials for fdw in tests
-DAG_CARGO_HOST=<get from password vault - replica>
-DAG_CARGO_USER=<get from password vault - replica>
-DAG_CARGO_PASSWORD=<get from password vault - replica>
-DAG_CARGO_DATABASE=<get from password vault - replica>
+# Read-only `dagcargo` credentials for "foreign data wrapper" (fdw) in tests
+DAG_CARGO_HOST=<get from password vault - dagcargo replica>
+DAG_CARGO_USER=<get from password vault - dagcargo replica>
+DAG_CARGO_PASSWORD=<get from password vault - dagcargo replica>
+DAG_CARGO_DATABASE=<get from password vault - dagcargo replica>
 ```
 
 Production vars are set in Github Actions secrets.
@@ -70,3 +64,9 @@ Once you are done, the local setup can easily be stopped and cleaned using:
 ```bash
 node scripts/cli.js db --stop --clean --project web3-storage
 ```
+
+## Database Diagram
+
+![image](https://user-images.githubusercontent.com/7295071/135415822-be854ec5-d1e2-4588-a951-f287b60b65be.png)
+
+Powered by [dbdiagram.io](https://dbdiagram.io/d/61546519825b5b014618caf6).
