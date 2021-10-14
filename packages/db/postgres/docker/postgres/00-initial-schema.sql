@@ -1,5 +1,4 @@
 -- Set up reatime
-create publication supabase_realtime for all tables;
 
 -- Extension namespacing
 create schema extensions;

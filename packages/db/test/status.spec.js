@@ -90,9 +90,9 @@ describe('status', () => {
   it('can get content status', async () => {
     const status = await client.getStatus(cid)
     assert(status, 'status received')
-    assert(status.cid, 'status has cid')
+    assert.strictEqual(status.cid, cid, 'status has cid')
     assert(status.created, 'status has inserted timestamp')
-    assert(status.dagSize, 'status has dag size')
+    assert.strictEqual(status.dagSize, dagSize, 'status has dag size')
     assert.strictEqual(status.pins.length, 1, 'status pins has a single pin')
   })
 })

@@ -146,6 +146,6 @@ describe('pin', () => {
     assert.notStrictEqual(createdPin, pinsPreUpdated[0]._id, 'id of previous pin not the same')
 
     const pinsAfterUpdated = await client.getPins(cid)
-    assert.notStrictEqual(pinsAfterUpdated.length, previousPinsNumber, 'cid has more pins')
+    assert.ok(pinsAfterUpdated.length > previousPinsNumber, 'cid has more pins')
   })
 })
