@@ -10,7 +10,8 @@ describe('db', () => {
       postgres: true
     })
 
-    assert(dbClient.client, 'postgres client created')
+    assert(dbClient._client, 'postgres client created')
+    assert.strictEqual(dbClient._isPostgres, true, 'postgres running')
   })
 
   it('can create fauna client', () => {
@@ -19,5 +20,6 @@ describe('db', () => {
     })
 
     assert(dbClient._client, 'fauna client created')
+    assert.notStrictEqual(dbClient._isPostgres, true, 'fauna running')
   })
 })

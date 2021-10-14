@@ -51,24 +51,19 @@ describe('user operations', () => {
     throw new Error('should fail to get a non existing user')
   })
 
-  it('should fail to create user with same issuer', async () => {
-    try {
-      const name = 'test-name-different'
-      const email = 'test-different@email.com'
-      const issuer = user.issuer // same issuer as previously created
-      const publicAddress = `public_address-different${Math.random()}`
+  it('should update user with same issuer (login)', async () => {
+    const name = 'test-name-different'
+    const email = 'test-different@email.com'
+    const issuer = user.issuer // same issuer as previously created
+    const publicAddress = `public_address-different${Math.random()}`
 
-      await client.upsertUser({
-        name,
-        email,
-        issuer,
-        publicAddress
-      })
-    } catch (err) {
-      assert(err, 'errored to create user with the same issuer')
-      return
-    }
-    throw new Error('should fail to create user with the same issuer')
+    const upsertUser = await client.upsertUser({
+      name,
+      email,
+      issuer,
+      publicAddress
+    })
+    assert(upsertUser, 'user updated')
   })
 
   it('can update previously created user', async () => {

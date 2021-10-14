@@ -1,27 +1,6 @@
 /* global Response caches */
 
-import retry from 'p-retry'
-import { gql } from '@web3-storage/db'
 import { METRICS_CACHE_MAX_AGE } from './constants.js'
-
-const FIND_METRIC = gql`
-  query FindMetric($key: String!) {
-    findMetricByKey(key: $key) {
-      key
-      value
-      updated
-    }
-  }
-`
-
-/**
- * @param {import('@web3-storage/db').DBClient} db
- * @param {string} key
- */
-async function getMetricValue (db, key) {
-  const { findMetricByKey } = await retry(() => db.query(FIND_METRIC, { key }))
-  return findMetricByKey ? findMetricByKey.value : 0
-}
 
 /**
  * Retrieve metrics in prometheus exposition format.
@@ -50,15 +29,15 @@ export async function metricsGet (request, env, ctx) {
     pinsPinnedTotal,
     pinsFailedTotal
   ] = await Promise.all([
-    getMetricValue(env.db, 'users_total'),
-    getMetricValue(env.db, 'uploads_total'),
-    getMetricValue(env.db, 'content_bytes_total'),
-    getMetricValue(env.db, 'pins_total'),
-    getMetricValue(env.db, 'pins_bytes_total'),
-    getMetricValue(env.db, 'pins_status_queued_total'),
-    getMetricValue(env.db, 'pins_status_pinning_total'),
-    getMetricValue(env.db, 'pins_status_pinned_total'),
-    getMetricValue(env.db, 'pins_status_failed_total')
+    env.db.getMetricsValue('users_total'),
+    env.db.getMetricsValue('uploads_total'),
+    env.db.getMetricsValue('content_bytes_total'),
+    env.db.getMetricsValue('pins_total'),
+    env.db.getMetricsValue('pins_bytes_total'),
+    env.db.getMetricsValue('pins_status_queued_total'),
+    env.db.getMetricsValue('pins_status_pinning_total'),
+    env.db.getMetricsValue('pins_status_pinned_total'),
+    env.db.getMetricsValue('pins_status_failed_total')
   ])
 
   const metrics = [
