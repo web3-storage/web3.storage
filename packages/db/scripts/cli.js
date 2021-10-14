@@ -5,7 +5,7 @@ import sade from 'sade'
 import { fileURLToPath } from 'url'
 import { dbCmd } from './cmds/db.js'
 import { dbSqlCmd } from './cmds/db-sql.js'
-import { dbTypesCmd } from './cmds/db-types.js'
+import { dbTypesCmd } from './cmds/pg-rest-api-types.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const prog = sade('api')
@@ -29,7 +29,7 @@ prog
   .option('--project', 'Project name', 'nft-storage')
   .option('--clean', 'Clean all dockers artifacts', false)
   .action(dbCmd)
-  .command('db-types')
+  .command('pg-rest-api-types')
   .describe('Database openapi types')
   .action(dbTypesCmd)
 

@@ -26,9 +26,9 @@ jobs:
       - run: npx playwright install-deps
       - run: npm test --workspace packages/db
         env:
-          DATABASE_URL: ${{secrets.DATABASE_URL}}
-          DATABASE_TOKEN: ${{secrets.DATABASE_TOKEN}}
-          DATABASE_CONNECTION: ${{secrets.DATABASE_CONNECTION}}
+          PG_REST_URL: ${{secrets.PG_REST_URL}}
+          PG_REST_JWT: ${{secrets.PG_REST_JWT}}
+          PG_CONNECTION: ${{secrets.PG_CONNECTION}}
           DAG_CARGO_HOST: ${{secrets.DAG_CARGO_HOST}}
           DAG_CARGO_DATABASE: ${{secrets.DAG_CARGO_DATABASE}}
           DAG_CARGO_USER: ${{secrets.DAG_CARGO_USER}}

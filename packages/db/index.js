@@ -18,7 +18,7 @@ const uploadQuery = `
         content(cid, dag_size, pins:pin(status, updated_at, pin_location(id, peer_id, peer_name, region)))
       `
 /**
- * @typedef {import('./postgres/db-types').definitions} definitions
+ * @typedef {import('./postgres/pg-rest-api-types').definitions} definitions
  */
 
 export class DBClient {

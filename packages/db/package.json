@@ -9,7 +9,7 @@
     "import": "npm run import:gql && npm run import:fql",
     "import:gql": "node tools/import-graphql-schema.js",
     "import:fql": "node tools/import-fql-resources.js",
-    "db-types": "./scripts/cli.js db-types",
+    "pg-rest-api-types": "./scripts/cli.js pg-rest-api-types",
     "test": "playwright-test \"test/**/*.spec.js\" --sw index.js"
   },
   "keywords": [

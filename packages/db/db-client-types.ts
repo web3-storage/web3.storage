@@ -1,4 +1,4 @@
-import { definitions } from './postgres/db-types'
+import { definitions } from './postgres/pg-rest-api-types'
 
 // User
 export type UpsertUserInput = {

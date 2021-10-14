@@ -43,7 +43,7 @@ export async function dbSqlCmd ({ reset, cargo, testing } = {}) {
   fdwSql = fdwSql.replace(":'DAG_CARGO_PASSWORD'", `'${process.env.DAG_CARGO_PASSWORD}'`)
 
   // Setup postgres client
-  const connectionString = process.env.DATABASE_CONNECTION
+  const connectionString = process.env.PG_CONNECTION
   const client = await retry(
     async () => {
       const c = new Client({ connectionString })
