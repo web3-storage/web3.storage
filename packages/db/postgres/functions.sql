@@ -1,17 +1,19 @@
 DROP FUNCTION IF EXISTS json_arr_to_text_arr;
-DROP FUNCTION IF EXISTS json_arr_to_upload__pin_type_arr;
+DROP FUNCTION IF EXISTS json_arr_to_json_element_array;
 DROP FUNCTION IF EXISTS create_upload;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
 
+-- transform a JSON array property into an array of SQL text elements
 CREATE OR REPLACE FUNCTION json_arr_to_text_arr(_json json)
   RETURNS text[] LANGUAGE sql IMMUTABLE PARALLEL SAFE AS
 'SELECT ARRAY(SELECT json_array_elements_text(_json))';
 
-CREATE OR REPLACE FUNCTION json_arr_to_upload__pin_type_arr(_json json)
+-- transform a JSON array property into an array of SQL json elements
+CREATE OR REPLACE FUNCTION json_arr_to_json_element_array(_json json)
   RETURNS json[] LANGUAGE sql IMMUTABLE PARALLEL SAFE AS
 'SELECT ARRAY(SELECT * FROM json_array_elements(_json))';
 
-CREATE OR REPLACE FUNCTION create_upload(data json) RETURNS setof upload
+CREATE OR REPLACE FUNCTION create_upload(data json) RETURNS BIGINT
     LANGUAGE plpgsql
     volatile
     PARALLEL UNSAFE
@@ -32,7 +34,7 @@ BEGIN
     ON CONFLICT ( cid ) DO NOTHING;
 
   -- Iterate over received pins
-  foreach pin in array json_arr_to_upload__pin_type_arr(data -> 'pins')
+  foreach pin in array json_arr_to_json_element_array(data -> 'pins')
   loop
         -- Add to pin_location table if new
         insert into pin_location (peer_id, peer_name, region)
@@ -79,22 +81,15 @@ BEGIN
   loop
     -- insert into backup with update
     insert into backup (upload_id,
-                    url,
-                    inserted_at)
+                        url,
+                        inserted_at)
     values (inserted_upload_id,
             backup_url,
-            (data ->> 'inserted_at')::timestamptz);
+            (data ->> 'inserted_at')::timestamptz)
+    ON CONFLICT ( url ) DO NOTHING;
   end loop;
 
-  return query select *
-                from upload u
-                where u.user_id = (data ->> 'user_id')::BIGINT
-                  AND u.content_cid = data ->> 'content_cid';
-  IF NOT FOUND THEN
-      RAISE EXCEPTION 'No upload found %', data ->> 'content_cid';
-  END IF;
-
-  RETURN;
+  return inserted_upload_id;
 END
 $$;
 

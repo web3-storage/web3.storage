@@ -62,8 +62,17 @@ export type AuthKeyItemOutput = {
 }
 
 // Pin
-export type PinItem = definitions['pin'] & {
-  pin_location: definitions['pin_location']
+export type PinItem = {
+  _id: definitions['pin']['id']
+  status: definitions['pin']['status']
+  created: definitions['pin']['inserted_at']
+  updated: definitions['pin']['updated_at']
+  location: {
+    _id: definitions['pin_location']['id']
+    peerId: definitions['pin_location']['peer_id']
+    peerName: definitions['pin_location']['peer_name']
+    region: definitions['pin_location']['region']
+  }
 }
 
 export type PinItemOutput = {
@@ -101,15 +110,15 @@ export type Deal = {
 // Content
 export type ContentItem = {
   cid: definitions['content']['cid']
-  dag_size: definitions['content']['dag_size']
-  inserted_at?: definitions['upload']['inserted_at']
+  dagSize: definitions['content']['dag_size']
+  created?: definitions['upload']['inserted_at']
   pins: Array<{
     status: definitions['pin']['status']
-    updated_at: definitions['pin']['updated_at']
-    pin_location: {
+    updated: definitions['pin']['updated_at']
+    location: {
       _id: definitions['pin_location']['id']
-      peer_id: definitions['pin_location']['peer_id']
-      peer_name: definitions['pin_location']['peer_name']
+      peerId: definitions['pin_location']['peer_id']
+      peerName: definitions['pin_location']['peer_name']
       region: definitions['pin_location']['region']
     }
   }>
@@ -155,18 +164,18 @@ export type UploadItem = {
   id: definitions['upload']['id']
   type: definitions['upload']['type']
   name?: definitions['upload']['name']
-  inserted_at?: definitions['upload']['inserted_at']
-  updated_at?: definitions['upload']['updated_at']
+  created?: definitions['upload']['inserted_at']
+  updated?: definitions['upload']['updated_at']
   content: {
     cid: definitions['content']['cid']
-    dag_size: definitions['content']['dag_size']
+    dagSize: definitions['content']['dag_size']
     pins: Array<{
       status: definitions['pin']['status']
-      updated_at: definitions['pin']['updated_at']
-      pin_location: {
+      updated: definitions['pin']['updated_at']
+      location: {
         id: definitions['pin_location']['id']
-        peer_id: definitions['pin_location']['peer_id']
-        peer_name: definitions['pin_location']['peer_name']
+        peerId: definitions['pin_location']['peer_id']
+        peerName: definitions['pin_location']['peer_name']
         region: definitions['pin_location']['region']
       }
     }>

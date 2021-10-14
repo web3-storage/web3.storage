@@ -50,7 +50,7 @@ One time set up of your cloudflare worker subdomain for dev:
     wrangler secret put S3_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3 (not required for dev)
     wrangler secret put S3_SECRET_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3 (not required for dev)
     wrangler secret put S3_BUCKET_NAME --env $(whoami) # e.g web3.storage-staging-us-east-2 (not required for dev)
-    wrangler secret put DATABASE_TOKEN --env USER # Get from database postgrest
+    wrangler secret put PG_REST_JWT --env USER # Get from database postgrest
     ```
 
 - `npm run publish` - Publish the worker under your env. An alias for `wrangler publish --env $(whoami)`

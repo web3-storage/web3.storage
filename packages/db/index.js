@@ -10,12 +10,12 @@ const ENDPOINT = 'https://graphql.fauna.com/graphql'
 export { gql }
 
 const uploadQuery = `
-        id,
+        _id:id,
         type,
         name,
-        inserted_at,
-        updated_at,
-        content(cid, dag_size, pins:pin(status, updated_at, pin_location(id, peer_id, peer_name, region)))
+        created:inserted_at,
+        updated:updated_at,
+        content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region)))
       `
 /**
  * @typedef {import('./postgres/pg-rest-api-types').definitions} definitions
@@ -121,7 +121,7 @@ export class DBClient {
    */
   async createUpload (data) {
     const now = new Date().toISOString()
-    /** @type {{ data: import('./db-client-types').UploadOutput, error: Error }} */
+    /** @type {{ data: number, error: Error }} */
     const { data: uploadResponse, error } = await this.client.rpc('create_upload', {
       data: {
         user_id: data.user,
@@ -150,8 +150,8 @@ export class DBClient {
     }
 
     return {
-      _id: uploadResponse.id,
-      cid: uploadResponse.content_cid
+      _id: uploadResponse,
+      cid: data.contentCid
     }
   }
 
@@ -295,9 +295,9 @@ export class DBClient {
       .from('content')
       .select(`
         cid,
-        dag_size,
-        inserted_at,
-        pins:pin(status, updated_at, pin_location(peer_id, peer_name, region))
+        dagSize:dag_size,
+        created:inserted_at,
+        pins:pin(status, updated:updated_at, location:pin_location(peerId:peer_id, peerName:peer_name, region))
       `)
       .match({ cid })
       .single()
@@ -380,11 +380,11 @@ export class DBClient {
     const { data: pins, error } = await this.client
       .from('pin')
       .select(`
-        id,
+        _id:id,
         status,
-        inserted_at,
-        updated_at,
-        pin_location(id, peer_id, peer_name, region)
+        created:inserted_at,
+        updated:updated_at,
+        location:pin_location(id, peerId:peer_id, peerName:peer_name, region)
       `)
       .match({ content_cid: cid })
 
@@ -475,9 +475,9 @@ export class DBClient {
     const { data, error } = await this.client
       .from('user')
       .select(`
-        id,
+        _id:id,
         issuer,
-        keys:auth_key_user_id_fkey(id, name,secret)
+        keys:auth_key_user_id_fkey(_id:id, name,secret)
       `)
       .match({
         issuer
@@ -496,10 +496,10 @@ export class DBClient {
     }
 
     return {
-      _id: key.id,
+      _id: key._id,
       name: key.name,
       user: {
-        _id: data.id,
+        _id: data._id,
         issuer: data.issuer
       }
     }

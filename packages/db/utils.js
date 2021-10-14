@@ -6,13 +6,8 @@
  */
 export function normalizeUpload (upload) {
   return {
-    _id: upload.id,
-    type: upload.type,
-    name: upload.name,
-    created: upload.inserted_at,
-    updated: upload.updated_at,
-    cid: upload.content.cid,
-    dagSize: upload.content.dag_size,
+    ...upload,
+    ...upload.content,
     pins: normalizePins(upload.content.pins)
   }
 }
@@ -25,9 +20,7 @@ export function normalizeUpload (upload) {
  */
 export function normalizeContent (content) {
   return {
-    created: content.inserted_at,
-    cid: content.cid,
-    dagSize: content.dag_size,
+    ...content,
     pins: normalizePins(content.pins)
   }
 }
@@ -40,12 +33,12 @@ export function normalizeContent (content) {
  */
 export function normalizePins (pins) {
   return pins.map(pin => ({
-    _id: pin.id,
+    _id: pin._id,
     status: pin.status,
-    created: pin.inserted_at,
-    updated: pin.updated_at,
-    peerId: pin.pin_location.peer_id,
-    peerName: pin.pin_location.peer_name,
-    region: pin.pin_location.region
+    created: pin.created,
+    updated: pin.updated,
+    peerId: pin.location.peerId,
+    peerName: pin.location.peerName,
+    region: pin.location.region
   }))
 }
