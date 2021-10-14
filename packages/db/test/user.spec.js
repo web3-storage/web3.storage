@@ -9,17 +9,12 @@ describe('user operations', () => {
   const publicAddress = `public_address${Math.random()}`
 
   /** @type {DBClient} */
-  let client
-  let user
-
-  // Setup client
-  before(() => {
-    client = new DBClient({
-      endpoint: 'http://127.0.0.1:3000',
-      token: 'super-secret-jwt-token-with-at-least-32-characters-long',
-      postgres: true
-    })
+  const client = new DBClient({
+    endpoint: 'http://127.0.0.1:3000',
+    token: 'super-secret-jwt-token-with-at-least-32-characters-long',
+    postgres: true
   })
+  let user
 
   // Setup testing user
   before(async () => {

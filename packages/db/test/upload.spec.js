@@ -4,17 +4,12 @@ import { DBClient } from '../index'
 
 describe('upload', () => {
   /** @type {DBClient} */
-  let client
-  let user
-
-  // Setup client
-  before(() => {
-    client = new DBClient({
-      endpoint: 'http://127.0.0.1:3000',
-      token: 'super-secret-jwt-token-with-at-least-32-characters-long',
-      postgres: true
-    })
+  const client = new DBClient({
+    endpoint: 'http://127.0.0.1:3000',
+    token: 'super-secret-jwt-token-with-at-least-32-characters-long',
+    postgres: true
   })
+  let user
 
   // Setup testing user
   before(async () => {
@@ -123,7 +118,7 @@ describe('upload', () => {
     const followUpUpload = await client.getUpload(cid, user._id)
 
     assert(followUpUpload, 'follow up upload created')
-    assert(followUpUpload.updated, 'upload has updated timestamp') // TODO: diff
+    assert.notStrictEqual(followUpUpload.updated, upload.updated, 'upload has updated timestamp')
     assert.strictEqual(followUpUpload.created, upload.created, 'upload has inserted timestamp')
     assert.strictEqual(followUpUpload.type, upload.type, 'upload has same type')
     assert.strictEqual(followUpUpload.name, upload.name, 'upload has same name')

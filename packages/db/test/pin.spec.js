@@ -4,7 +4,11 @@ import { DBClient } from '../index'
 
 describe('pin', () => {
   /** @type {DBClient} */
-  let client
+  const client = new DBClient({
+    endpoint: 'http://127.0.0.1:3000',
+    token: 'super-secret-jwt-token-with-at-least-32-characters-long',
+    postgres: true
+  })
   let user
 
   const cid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
@@ -22,15 +26,6 @@ describe('pin', () => {
   }
   let authKeys
   let upload
-
-  // Setup client
-  before(() => {
-    client = new DBClient({
-      endpoint: 'http://127.0.0.1:3000',
-      token: 'super-secret-jwt-token-with-at-least-32-characters-long',
-      postgres: true
-    })
-  })
 
   // Setup testing user
   before(async () => {
