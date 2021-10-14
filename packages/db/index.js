@@ -78,13 +78,13 @@ export class DBClient {
     const { data, error } = await this.client
       .from('user')
       .select(`
-        id,
+        _id:id,
         issuer,
         name,
         email,
-        public_address,
-        inserted_at,
-        updated_at
+        publicAddress:public_address,
+        created:inserted_at,
+        updated:updated_at
       `)
       .eq('issuer', issuer)
       .single()
@@ -93,15 +93,7 @@ export class DBClient {
       throw new DBError(error)
     }
 
-    return {
-      _id: data.id,
-      issuer: data.issuer,
-      name: data.name,
-      email: data.email,
-      publicAddress: data.public_address,
-      created: data.inserted_at,
-      updated: data.updated_at
-    }
+    return data
   }
 
   /**
