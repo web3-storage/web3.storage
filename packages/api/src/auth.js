@@ -26,7 +26,6 @@ export function withMagicToken (handler) {
 
     const magicUser = await tryMagicToken(token, env)
     if (magicUser) {
-      console.log('magicUser', magicUser)
       request.auth = { user: magicUser }
       env.sentry && env.sentry.setUser(magicUser)
       return handler(request, env, ctx)

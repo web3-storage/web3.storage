@@ -1,5 +1,7 @@
 # DB
 
+web3.storage currently uses FaunaDB by default and its setup can be seen next. However, we are migrating to use Postgres and its setup can be seen [here](./postgres/README.md).
+
 ## Getting Started
 
 1. Sign up at https://fauna.com.
