@@ -4,7 +4,7 @@ Frontend build for the web3.storage website.
 
 ## Getting Started
 
-Inside the `/packages/website` folder create a file called `.env.local` with the following content.
+Inside the `/packages/app` folder create a file called `.env.local` with the following content.
 
 ```ini
 NEXT_PUBLIC_ENV=dev

@@ -8,11 +8,8 @@ import slug from 'remark-slug'
    // @ts-ignore
    const content = await import ('../content/about.md')
    const data = matter(content.default)
-
-
     return {
       props: {
-        needsLoggedIn: false,
         data: data.content,
       },
     }

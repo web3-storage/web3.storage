@@ -10,6 +10,7 @@ import VerticalLines from '../illustrations/vertical-lines'
 import { When } from 'react-if'
 import emailContent from '../content/file-a-request'
 import fileSize from 'filesize'
+import { Navigation } from '../../shared/constants'
 
 const MAX_STORAGE = 1.1e+12 /* 1 TB */
 
@@ -22,7 +23,7 @@ const MAX_STORAGE = 1.1e+12 /* 1 TB */
     return {
       props: {
         title: 'Account - Web3 Storage',
-        redirectTo: '/login/',
+        redirectTo: Navigation.login,
         needsLoggedIn: true,
       },
     }

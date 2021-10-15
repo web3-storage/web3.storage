@@ -1,9 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
-import Router from 'next/router'
 import Link from 'next/link'
-import { getMagic } from '../lib/magic.js'
 import countly from '../lib/countly'
-import { useQueryClient } from 'react-query'
+import Loading from './loading.js'
 import Button from './button.js'
 import { useResizeObserver } from '../hooks/resize-observer'
 import clsx from 'clsx'
@@ -11,7 +9,7 @@ import Hamburger from '../icons/hamburger'
 
 import Logo from '../icons/w3storage-logo'
 import Cross from '../icons/cross'
-import Loading from './loading.js'
+import { Navigation } from '../../shared/constants'
 
 /**
  * Navbar Component
@@ -41,28 +39,17 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   const ITEMS = useMemo(() =>
     [
       {
-        link: 'https://docs.web3.storage/',
+        link: Navigation.docs,
         name: 'Docs',
         spacing: `p-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
       },
       {
-        link: '/about',
+        link: Navigation.about,
         name: 'About',
         spacing: `p-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
       },
-      {
-        link: '/files',
-        name: 'Files',
-        spacing: `p-3 md:px-6`
-      },
-      {
-        link: '/account',
-        name: 'Account',
-        spacing: `p-3 md:px-6 mr-3 md:mr-6`
-      }
     ], [isLoggedIn])
 
-  const queryClient = useQueryClient()
   const onLinkClick = useCallback((event) => {
     countly.trackCustomLinkClick(
       countly.events.LINK_CLICK_NAVBAR,
@@ -70,44 +57,10 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
     )
   }, [])
 
-  async function logout() {
-    await getMagic().user.logout()
-    await queryClient.invalidateQueries('magic-user')
-    Router.push('/')
-  }
-
   const toggleMenu = () => {
     isMenuOpen ? document.body.classList.remove('overflow-hidden') : document.body.classList.add('overflow-hidden')
     setMenuOpen(!isMenuOpen)
   }
-
-  const logoutButton = (
-    <Button
-      onClick={logout}
-      id="logout"
-      wrapperClassName="inline-block"
-      variant="outlined"
-      small={isSmallVariant}
-      tracking={{
-        event: countly.events.LOGOUT_CLICK,
-        ui: countly.ui.NAVBAR,
-        action: 'Logout'
-      }}>
-      Logout
-    </Button>
-  )
-
-  const loginButton = (
-    <Button href="/login" id="login" wrapperClassName="inline-block" small={isSmallVariant} tracking={{ ui: countly.ui.NAVBAR, action: 'Login' }}>
-      Login
-    </Button>
-    )
-
-  const spinnerButton = (
-    <Button href="#" id="loading-user" wrapperClassName="inline-block" small={isSmallVariant} >
-      <Loading className='user-spinner' fill='white' height={10} />
-    </Button>
-  )
 
   return (
     <nav className={clsx(bgColor, 'w-full z-50', isSmallVariant ? 'sticky top-0' : '')} ref={containerRef}>
@@ -131,11 +84,32 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
               { item.name }
             </a>
           ))}
-          {isLoadingUser
-            ? spinnerButton
-            : isLoggedIn
-              ? logoutButton
-              : loginButton
+          {isLoadingUser 
+          ? <Button href="#" id="loading-user" wrapperClassName="inline-block" small={isSmallVariant} >
+            <Loading className='user-spinner' fill='white' height={10} />
+          </Button>
+          : isLoggedIn
+            ? <Button
+                href={Navigation.logout}
+                id="logout"
+                wrapperClassName="inline-block"
+                variant="outlined"
+                small={isSmallVariant}
+                tracking={{
+                  event: countly.events.LOGOUT_CLICK,
+                  ui: countly.ui.NAVBAR,
+                  action: 'Logout'
+                }}>
+                Logout
+              </Button>
+            : <Button 
+                href={Navigation.login}
+                id="login"
+                wrapperClassName="inline-block"
+                small={isSmallVariant}
+                tracking={{ ui: countly.ui.NAVBAR, action: 'Login' }}>
+              Login
+            </Button>
           }
         </div>
       </div>

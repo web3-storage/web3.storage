@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import filesize from 'filesize'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { Navigation } from '../../shared/constants.js'
 
 import Button from '../components/button.js'
 import Checkbox from '../components/checkbox'
@@ -29,7 +30,7 @@ export function getStaticProps() {
     props: {
       title: 'Files - Web3 Storage',
       pageBgColor: 'bg-w3storage-neutral-red',
-      redirectTo: '/login/',
+      redirectTo: Navigation.login,
       needsLoggedIn: true,
     },
   }

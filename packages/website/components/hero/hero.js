@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import countly from '../../lib/countly'
 import Button from '../button'
+import { Navigation } from '../../../shared/constants';
 
 import Wave from '../../illustrations/wave'
 import CircleNoise from '../../illustrations/circle-noise'
@@ -31,7 +32,7 @@ export default function Hero() {
             <h2 className="space-grotesk text-xl sm:text-2xl typography-hero-subtitle mb-5">Build apps backed by Filecoin, no infrastructure required.</h2>
           </hgroup>
           <Button
-            href="/login"
+            href={Navigation.login}
             id="getting-started"
             wrapperClassName="flex mx-auto w-48"
             tracking={{ ui: countly.ui.HOME_HERO, action: "Get Started" }}

@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import Link from 'next/link'
 
 import countly from '../lib/countly'
+import { Navigation } from '../../shared/constants'
 
 /**
  * Footer Component
@@ -39,7 +40,7 @@ export default function Footer({ bgColor = '' }) {
               Status
             </a>
           </Link>
-          <Link href="/about/#terms-of-service">
+          <Link href={`${Navigation.about}/#terms-of-service`}>
             <a
               className="text-sm font-bold no-underline hover:underline py-3 sm:px-3"
               onClick={onLinkClick}
