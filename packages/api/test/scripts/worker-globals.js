@@ -6,6 +6,10 @@ export const caches = {
 }
 
 export const ENV = 'dev'
+export const BRANCH = 'test'
+export const VERSION = 'test'
+export const COMMITHASH = 'test'
+export const MAINTENANCE_MODE = 'rw'
 export const SALT = 'test-salt'
 export const FAUNA_ENDPOINT = 'http://localhost:9086/graphql'
 export const FAUNA_KEY = 'test-fauna-key'
