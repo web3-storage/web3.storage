@@ -1,10 +1,12 @@
-/* global MAGIC_SECRET_KEY FAUNA_ENDPOINT FAUNA_KEY SALT CLUSTER_BASIC_AUTH_TOKEN CLUSTER_API_URL SENTRY_DSN SENTRY_RELEASE DANGEROUSLY_BYPASS_MAGIC_AUTH S3_BUCKET_ENDPOINT S3_BUCKET_NAME S3_BUCKET_REGION S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY_ID ENV */
+/* global MAGIC_SECRET_KEY FAUNA_ENDPOINT FAUNA_KEY SALT CLUSTER_BASIC_AUTH_TOKEN CLUSTER_API_URL SENTRY_DSN SENTRY_RELEASE DANGEROUSLY_BYPASS_MAGIC_AUTH */
+/* global S3_BUCKET_ENDPOINT S3_BUCKET_NAME S3_BUCKET_REGION S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY_ID ENV MAINTENANCE_MODE VERSION COMMITHASH BRANCH */
 import Toucan from 'toucan-js'
 import { S3Client } from '@aws-sdk/client-s3'
 import { Magic } from '@magic-sdk/admin'
 import { DBClient } from '@web3-storage/db'
 import { Cluster } from '@nftstorage/ipfs-cluster'
 
+import { DEFAULT_MODE } from './maintenance.js'
 import pkg from '../package.json'
 
 /**
@@ -13,6 +15,7 @@ import pkg from '../package.json'
  * @property {Magic} magic
  * @property {DBClient} db
  * @property {string} SALT
+ * @property {import('./maintenance').Mode} MODE
  * @property {S3Client} [s3Client]
  * @property {string} [s3BucketName]
  * @property {string} [s3BucketRegion]
@@ -52,6 +55,10 @@ export function envAll (_, env, event) {
   })
 
   env.SALT = env.SALT || SALT
+  env.MODE = env.MAINTENANCE_MODE || (typeof MAINTENANCE_MODE === 'undefined' ? DEFAULT_MODE : MAINTENANCE_MODE)
+  env.VERSION = env.VERSION || VERSION
+  env.COMMITHASH = env.COMMITHASH || COMMITHASH
+  env.BRANCH = env.BRANCH || BRANCH
 
   const clusterAuthToken = env.CLUSTER_BASIC_AUTH_TOKEN || (typeof CLUSTER_BASIC_AUTH_TOKEN === 'undefined' ? undefined : CLUSTER_BASIC_AUTH_TOKEN)
   const headers = clusterAuthToken ? { Authorization: `Basic ${clusterAuthToken}` } : {}

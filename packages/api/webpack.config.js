@@ -12,6 +12,7 @@
 import dotenv from 'dotenv'
 import { createRequire } from 'module'
 import SentryWebpackPlugin from '@sentry/webpack-plugin'
+import git from 'git-rev-sync'
 import { GitRevisionPlugin } from 'git-revision-webpack-plugin'
 import RemovePlugin from 'remove-files-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
@@ -47,7 +48,9 @@ export default {
     }),
     new webpack.DefinePlugin({
       VERSION: JSON.stringify(gitRevisionPlugin.version()),
-      SENTRY_RELEASE: JSON.stringify(SENTRY_RELEASE)
+      SENTRY_RELEASE: JSON.stringify(SENTRY_RELEASE),
+      COMMITHASH: JSON.stringify(git.long(__dirname)),
+      BRANCH: JSON.stringify(git.branch(__dirname))
     }),
     process.env.SENTRY_UPLOAD === 'true' &&
       new SentryWebpackPlugin({

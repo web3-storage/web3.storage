@@ -9,6 +9,12 @@ import { carHead, carGet, carPut, carPost } from './car.js'
 import { uploadPost } from './upload.js'
 import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, userUploadsRename } from './user.js'
 import { metricsGet } from './metrics.js'
+import { versionGet } from './version.js'
+import {
+  withMode,
+  READ_ONLY,
+  READ_WRITE
+} from './maintenance.js'
 import { notFound } from './utils/json-response.js'
 
 const router = Router()
@@ -21,27 +27,35 @@ const auth = {
   '👮': handler => withCorsHeaders(withMagicToken(handler))
 }
 
+const mode = {
+  '👀': handler => withMode(handler, READ_ONLY),
+  '📝': handler => withMode(handler, READ_WRITE)
+}
+
 /* eslint-disable no-multi-spaces */
-router.post('/user/login',          auth['🤲'](userLoginPost))
-router.get('/status/:cid',          auth['🤲'](statusGet))
-router.get('/car/:cid',             auth['🤲'](carGet))
-router.head('/car/:cid',            auth['🤲'](carHead))
+router.post('/user/login',          mode['👀'](auth['🤲'](userLoginPost)))
+router.get('/status/:cid',          mode['👀'](auth['🤲'](statusGet)))
+router.get('/car/:cid',             mode['👀'](auth['🤲'](carGet)))
+router.head('/car/:cid',            mode['👀'](auth['🤲'](carHead)))
 
-router.post('/car',                 auth['🔒'](carPost))
-router.put('/car/:cid',             auth['🔒'](carPut))
-router.post('/upload',              auth['🔒'](uploadPost))
-router.get('/user/uploads',         auth['🔒'](userUploadsGet))
+router.post('/car',                 mode['📝'](auth['🔒'](carPost)))
+router.put('/car/:cid',             mode['📝'](auth['🔒'](carPut)))
+router.post('/upload',              mode['📝'](auth['🔒'](uploadPost)))
+router.get('/user/uploads',         mode['👀'](auth['🔒'](userUploadsGet)))
 
-router.delete('/user/uploads/:cid',      auth['👮'](userUploadsDelete))
-router.post('/user/uploads/:cid/rename', auth['👮'](userUploadsRename))
-router.get('/user/tokens',               auth['👮'](userTokensGet))
-router.post('/user/tokens',              auth['👮'](userTokensPost))
-router.delete('/user/tokens/:id',        auth['👮'](userTokensDelete))
-router.get('/user/account',              auth['👮'](userAccountGet))
+router.delete('/user/uploads/:cid',      mode['📝'](auth['👮'](userUploadsDelete)))
+router.post('/user/uploads/:cid/rename', mode['📝'](auth['👮'](userUploadsRename)))
+router.get('/user/tokens',               mode['👀'](auth['👮'](userTokensGet)))
+router.post('/user/tokens',              mode['📝'](auth['👮'](userTokensPost)))
+router.delete('/user/tokens/:id',        mode['📝'](auth['👮'](userTokensDelete)))
+router.get('/user/account',              mode['👀'](auth['👮'](userAccountGet)))
 /* eslint-enable no-multi-spaces */
 
 // Monitoring
-router.get('/metrics', withCorsHeaders(metricsGet))
+router.get('/metrics', mode['👀'](withCorsHeaders(metricsGet)))
+
+// Version
+router.get('/version', withCorsHeaders(versionGet))
 
 router.get('/', () => {
   return new Response(

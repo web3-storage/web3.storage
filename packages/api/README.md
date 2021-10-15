@@ -57,6 +57,22 @@ One time set up of your cloudflare worker subdomain for dev:
 
 You only need to `npm start` for subsequent runs. PR your env config to the wrangler.toml, to celebrate 🎉
 
+## Maintenance Mode
+
+The API can be put into maintenance mode to prevent writes or prevent reads _and_ writes.
+
+To change the maintenance mode for the API, issue the following command:
+
+```sh
+wrangler secret put MAINTENANCE_MODE --env production
+```
+
+When prompted for a value enter one of the following permission combinations:
+
+- `--` = no reading or writing
+- `r-` = read only mode
+- `rw` = read and write (normal operation)
+
 ## API
 
 The given API has a set of three different authentication levels:
