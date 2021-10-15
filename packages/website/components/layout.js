@@ -1,9 +1,9 @@
-import { useState } from 'react'
 import Head from 'next/head'
 import clsx from 'clsx'
 import Footer from './footer.js'
 import Navbar from './navbar.js'
-import { Navigation } from '../../shared/constants.js'
+import Loading from './loading'
+import { useLoggedIn } from '../lib/user'
 
 /**
  * @typedef {import('react').ReactChildren} Children
@@ -15,7 +15,11 @@ import { Navigation } from '../../shared/constants.js'
  * @returns
  */
 export default function Layout({
+  callback,
+  needsLoggedIn = false,
   children,
+  redirectTo,
+  redirectIfFound = false,
   title = 'Web3 Storage - The simple file storage service for IPFS & Filecoin.',
   description = 'Web3 Storage',
   pageBgColor = 'bg-w3storage-background',
@@ -24,26 +28,12 @@ export default function Layout({
   data = null,
   highlightMessage,
 }) {
-  const [loginStatus, setLoginStatus] = useState(false);
-  const [isFetching, setIsFetching] = useState(true);
-
-  // TODO: Fetch from Navigation.auth
-  const res = fetch('/').then(res => 
-    //TODO: Remove
-    {
-      setTimeout(() => {
-        setLoginStatus(false)
-        setIsFetching(false)
-      }, 1000);
-    }
-    
-    // TODO: enable
-    // res.json().then(data => {
-    //   setLoginStatus(data?.authenticated || false)
-    //   setIsFetching(false)
-    // })
-  ).catch(err => console.log('Error', err))
-
+  const { isLoggedIn, isLoading, isFetching } = useLoggedIn({
+    redirectTo,
+    redirectIfFound,
+    enabled: needsLoggedIn,
+  })
+  const shouldWaitForLoggedIn = needsLoggedIn && !isLoggedIn
   return (
     <div className={clsx(pageBgColor, 'flex flex-col min-h-screen')}>
       <Head>
@@ -60,14 +50,27 @@ export default function Layout({
         <meta name="twitter:site" content="@protocollabs" />
         <meta name="twitter:creator" content="@protocollabs" />
       </Head>
+      {shouldWaitForLoggedIn ? (
+        <>
+          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
+            <Loading />
+          <Footer bgColor={footerBgColor} />
+        </>
+      ) : callback ? (
+        <>
+          <Loading />
+          {children({ isLoggedIn, data })}
+        </>
+      ) : (
         <>
           { highlightMessage &&
             <div className="w-full bg-w3storage-purple text-white typography-cta text-center py-1" dangerouslySetInnerHTML={{ __html: highlightMessage }} />
           }
-          <Navbar isLoadingUser={isFetching} isLoggedIn={loginStatus} bgColor={navBgColor} />
-          {children({ data })}
+          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
+          {children({ isLoggedIn, data })}
           <Footer bgColor={footerBgColor} />
         </>
+      )}
     </div>
   )
 }

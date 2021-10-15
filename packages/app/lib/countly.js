@@ -27,6 +27,7 @@ export const events = {
 
 /** @constant */
 export const ui = {
+  HOME_HERO: 'home/hero',
   HOME_GET_STARTED: 'home/get-started',
   NAVBAR: 'navbar',
   LOGIN: 'login',

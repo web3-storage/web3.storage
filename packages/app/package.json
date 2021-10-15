@@ -4,7 +4,7 @@
   "description": "web3.storage website",
   "private": true,
   "scripts": {
-    "start": "next dev -p 9000",
+    "start": "next dev",
     "build": "next build && next export",
     "test": "eslint './**/*.js' && tsc --build"
   },
@@ -12,9 +12,9 @@
     "@magic-ext/oauth": "^0.7.0",
     "@tailwindcss/typography": "^0.4.1",
     "clsx": "^1.1.1",
-    "cors": "^2.8.5",
     "countly-sdk-web": "^20.11.2",
     "filesize": "^6.1.0",
+    "gray-matter": "^4.0.3",
     "magic-sdk": "^4.2.1",
     "next": "^11.0.1",
     "rc-tooltip": "^5.1.1",
@@ -23,7 +23,10 @@
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.4",
     "react-if": "^4.0.1",
+    "react-markdown": "^6.0.2",
     "react-query": "^3.13.9",
+    "react-syntax-highlighter": "^11.0.3",
+    "remark-slug": "^6.1.0",
     "web3.storage": "^3.0.0"
   },
   "devDependencies": {

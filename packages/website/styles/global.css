@@ -7,39 +7,39 @@
    ================================================================================ */
 
 @font-face {
-  font-family: "Space Grotesk";
-  font-weight: 400;
-  font-style: normal;
-  src: url("/fonts/space-grotesk/space-grotesk-regular.woff2") format("woff2");
-  src: url("/fonts/space-grotesk/space-grotesk-regular.woff") format("woff");
-  font-display: swap;
+    font-family: "Space Grotesk";
+    font-weight: 400;
+    font-style: normal;
+    src: url("/fonts/space-grotesk/space-grotesk-regular.woff2") format("woff2");
+    src: url("/fonts/space-grotesk/space-grotesk-regular.woff") format("woff");
+    font-display: swap;
 }
 
 @font-face {
-  font-family: "Space Grotesk";
-  font-weight: 500;
-  font-style: normal;
-  src: url("/fonts/space-grotesk/space-grotesk-medium.woff2") format("woff2");
-  src: url("/fonts/space-grotesk/space-grotesk-medium.woff") format("woff");
-  font-display: swap;
+    font-family: "Space Grotesk";
+    font-weight: 500;
+    font-style: normal;
+    src: url("/fonts/space-grotesk/space-grotesk-medium.woff2") format("woff2");
+    src: url("/fonts/space-grotesk/space-grotesk-medium.woff") format("woff");
+    font-display: swap;
 }
 
 @font-face {
-  font-family: "Open Sans";
-  font-weight: 400;
-  font-style: normal;
-  src: url("/fonts/open-sans/open-sans.woff2") format("woff2");
-  src: url("/fonts/open-sans/open-sans.woff") format("woff");
-  font-display: swap;
+    font-family: "Open Sans";
+    font-weight: 400;
+    font-style: normal;
+    src: url("/fonts/open-sans/open-sans.woff2") format("woff2");
+    src: url("/fonts/open-sans/open-sans.woff") format("woff");
+    font-display: swap;
 }
 
 @font-face {
-  font-family: "Open Sans";
-  font-weight: 600;
-  font-style: normal;
-  src: url("/fonts/open-sans/open-sans-semi-bold.woff2") format("woff2");
-  src: url("/fonts/open-sans/open-sans-semi-bold.woff") format("woff");
-  font-display: swap;
+    font-family: "Open Sans";
+    font-weight: 600;
+    font-style: normal;
+    src: url("/fonts/open-sans/open-sans-semi-bold.woff2") format("woff2");
+    src: url("/fonts/open-sans/open-sans-semi-bold.woff") format("woff");
+    font-display: swap;
 }
 
 @font-face {
@@ -60,7 +60,7 @@
   letter-spacing: normal;
 }
 
-.typography-main-title {
+.typography-hero-title {
   font-family: "Space Grotesk", sans-serif;
   font-size: 3rem;
   letter-spacing: normal;
@@ -100,13 +100,23 @@
 }
 
 @screen md {
+  .typography-hero-title {
+    font-size: 3.6rem;
+  }
+
   .typography-section-title {
     font-size: 2.375rem;
   }
 }
 
+@screen lg {
+  .typography-hero-title {
+    font-size: 5rem;
+  }
+}
+
 h1 {
-  @apply typography-main-title;
+  @apply typography-hero-title;
 }
 
 h2 {
@@ -163,7 +173,6 @@ body {
   }
 }
 
-
 .loading {
   position: absolute;
   top: 50%;
@@ -171,8 +180,43 @@ body {
   transform: translate(-50%, -50%);
 }
 
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+}
 
-/* ============= About ============= */
+.table-tooltip.rc-tooltip {
+  opacity: 1;
+}
+
+.table-tooltip .rc-tooltip-content {
+  position: relative;
+  bottom: 4px;
+}
+
+.table-tooltip .rc-tooltip-content .rc-tooltip-arrow {
+  border-top-color: #fc6553;
+}
+
+@keyframes appear-bottom-then-go-away {
+  from   { opacity: 1; transform: translateY(100%)  }
+  20%    { opacity: 1; transform: translateY(0)     }
+  80%    { opacity: 1; transform: translateY(0)     }
+  100%   { opacity: 0; transform: translateY(100%)  }
+}
+
+.appear-bottom-then-go-away {
+  animation: appear-bottom-then-go-away 3s ease-in-out both;
+}
+
+@keyframes grow-width {
+  from   { width: 0  }
+}
+
+.grow-width {
+  animation: grow-width 1s ease-in-out both;
+}
 
 .prose h1 > a,
 .prose h2 > a,

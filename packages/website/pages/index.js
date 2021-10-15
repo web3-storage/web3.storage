@@ -5,7 +5,6 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 // @ts-ignore
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { Navigation } from '../../shared/constants';
 
 import Button from '../components/button'
 import Hero from '../components/hero'
@@ -25,6 +24,7 @@ import GettingStartedIllustration from '../illustrations/getting-started-illustr
 export function getStaticProps() {
   return {
     props: {
+      needsLoggedIn: false,
       navBgColor: 'bg-w3storage-red',
       footerBgColor: 'bg-w3storage-red',
       highlightMessage: `Looking to store NFTs? Check out <a class="underline" href="https://nft.storage">NFT.Storage</a>!</p>`
@@ -231,7 +231,7 @@ function GetStarted() {
               <div className="flex flex-col flex-grow justify-between">
                 <p>Sign up using your email address or GitHub handle and create your API Key.</p>
                 <Button
-                  href={Navigation.login}
+                  href="/login"
                   variant="light"
                   wrapperClassName="w-max mt-12"
                   tracking={{ ui: countly.ui.HOME_GET_STARTED, action: "Sign Up" }}

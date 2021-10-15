@@ -1,11 +1,13 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
+import Router from 'next/router'
 import Link from 'next/link'
+import { getMagic } from '../lib/magic.js'
 import countly from '../lib/countly'
+import { useQueryClient } from 'react-query'
 import Button from './button.js'
 import { useResizeObserver } from '../hooks/resize-observer'
 import clsx from 'clsx'
 import Hamburger from '../icons/hamburger'
-import { Navigation } from '../../shared/constants';
 
 import Logo from '../icons/w3storage-logo'
 import Cross from '../icons/cross'
@@ -39,28 +41,40 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   const ITEMS = useMemo(() =>
     [
       {
-        link: Navigation.docs,
+        link: 'https://docs.web3.storage/',
         name: 'Docs',
         spacing: `p-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
       },
       {
-        link: Navigation.files,
+        link: '/about',
+        name: 'About',
+        spacing: `p-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
+      },
+      {
+        link: '/files',
         name: 'Files',
         spacing: `p-3 md:px-6`
       },
       {
-        link: Navigation.account,
+        link: '/account',
         name: 'Account',
         spacing: `p-3 md:px-6 mr-3 md:mr-6`
       }
     ], [isLoggedIn])
 
+  const queryClient = useQueryClient()
   const onLinkClick = useCallback((event) => {
     countly.trackCustomLinkClick(
       countly.events.LINK_CLICK_NAVBAR,
       event.currentTarget
     )
   }, [])
+
+  async function logout() {
+    await getMagic().user.logout()
+    await queryClient.invalidateQueries('magic-user')
+    Router.push('/')
+  }
 
   const toggleMenu = () => {
     isMenuOpen ? document.body.classList.remove('overflow-hidden') : document.body.classList.add('overflow-hidden')
@@ -69,7 +83,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
 
   const logoutButton = (
     <Button
-      href={Navigation.logout}
+      onClick={logout}
       id="logout"
       wrapperClassName="inline-block"
       variant="outlined"
@@ -84,7 +98,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   )
 
   const loginButton = (
-    <Button href={Navigation.login} id="login" wrapperClassName="inline-block" small={isSmallVariant} tracking={{ ui: countly.ui.NAVBAR, action: 'Login' }}>
+    <Button href="/login" id="login" wrapperClassName="inline-block" small={isSmallVariant} tracking={{ ui: countly.ui.NAVBAR, action: 'Login' }}>
       Login
     </Button>
     )

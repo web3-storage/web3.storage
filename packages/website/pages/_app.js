@@ -1,8 +1,20 @@
 import { useEffect } from 'react'
+import { ReactQueryDevtools } from 'react-query/devtools'
 import Router from 'next/router'
 import '../styles/global.css'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import Layout from '../components/layout.js'
-import countly from '../lib/countly'
+import countly from '../lib/countly';
+
+
+const queryClient = new QueryClient({
+  defaultOptions: { 
+    queries: { 
+      refetchOnWindowFocus: false,
+      staleTime: 60 * 1000
+    }
+  },
+})
 
 /**
  * App Component
@@ -18,8 +30,11 @@ export default function App({ Component, pageProps }) {
   }, [])
   
   return (
-    <Layout {...pageProps}>
-      {(props) => <Component {...pageProps} {...props} />}
-    </Layout>
+    <QueryClientProvider client={queryClient}>
+      <Layout {...pageProps}>
+        {(props) => <Component {...pageProps} {...props} />}
+      </Layout>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   )
 }

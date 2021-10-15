@@ -7,39 +7,39 @@
    ================================================================================ */
 
 @font-face {
-  font-family: "Space Grotesk";
-  font-weight: 400;
-  font-style: normal;
-  src: url("/fonts/space-grotesk/space-grotesk-regular.woff2") format("woff2");
-  src: url("/fonts/space-grotesk/space-grotesk-regular.woff") format("woff");
-  font-display: swap;
+    font-family: "Space Grotesk";
+    font-weight: 400;
+    font-style: normal;
+    src: url("/fonts/space-grotesk/space-grotesk-regular.woff2") format("woff2");
+    src: url("/fonts/space-grotesk/space-grotesk-regular.woff") format("woff");
+    font-display: swap;
 }
 
 @font-face {
-  font-family: "Space Grotesk";
-  font-weight: 500;
-  font-style: normal;
-  src: url("/fonts/space-grotesk/space-grotesk-medium.woff2") format("woff2");
-  src: url("/fonts/space-grotesk/space-grotesk-medium.woff") format("woff");
-  font-display: swap;
+    font-family: "Space Grotesk";
+    font-weight: 500;
+    font-style: normal;
+    src: url("/fonts/space-grotesk/space-grotesk-medium.woff2") format("woff2");
+    src: url("/fonts/space-grotesk/space-grotesk-medium.woff") format("woff");
+    font-display: swap;
 }
 
 @font-face {
-  font-family: "Open Sans";
-  font-weight: 400;
-  font-style: normal;
-  src: url("/fonts/open-sans/open-sans.woff2") format("woff2");
-  src: url("/fonts/open-sans/open-sans.woff") format("woff");
-  font-display: swap;
+    font-family: "Open Sans";
+    font-weight: 400;
+    font-style: normal;
+    src: url("/fonts/open-sans/open-sans.woff2") format("woff2");
+    src: url("/fonts/open-sans/open-sans.woff") format("woff");
+    font-display: swap;
 }
 
 @font-face {
-  font-family: "Open Sans";
-  font-weight: 600;
-  font-style: normal;
-  src: url("/fonts/open-sans/open-sans-semi-bold.woff2") format("woff2");
-  src: url("/fonts/open-sans/open-sans-semi-bold.woff") format("woff");
-  font-display: swap;
+    font-family: "Open Sans";
+    font-weight: 600;
+    font-style: normal;
+    src: url("/fonts/open-sans/open-sans-semi-bold.woff2") format("woff2");
+    src: url("/fonts/open-sans/open-sans-semi-bold.woff") format("woff");
+    font-display: swap;
 }
 
 @font-face {
@@ -60,7 +60,7 @@
   letter-spacing: normal;
 }
 
-.typography-main-title {
+.typography-hero-title {
   font-family: "Space Grotesk", sans-serif;
   font-size: 3rem;
   letter-spacing: normal;
@@ -68,12 +68,8 @@
   line-height: 1.4em;
 }
 
-.typography-main-title {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 3rem;
-  letter-spacing: normal;
-  font-weight: 500;
-  line-height: 1.4em;
+.typography-hero-subtitle {
+  letter-spacing: 0.02em;
 }
 
 .typography-section-title {
@@ -104,13 +100,23 @@
 }
 
 @screen md {
+  .typography-hero-title {
+    font-size: 3.6rem;
+  }
+
   .typography-section-title {
     font-size: 2.375rem;
   }
 }
 
+@screen lg {
+  .typography-hero-title {
+    font-size: 5rem;
+  }
+}
+
 h1 {
-  @apply typography-main-title;
+  @apply typography-hero-title;
 }
 
 h2 {
@@ -210,4 +216,11 @@ body {
 
 .grow-width {
   animation: grow-width 1s ease-in-out both;
+}
+
+.prose h1 > a,
+.prose h2 > a,
+.prose h3 > a,
+.prose h4 > a {
+  text-decoration: none;
 }
