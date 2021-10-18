@@ -127,7 +127,7 @@ export default function Layout({
         </>
       ) : (
         <>
-          <MessageBanner highlightMessage={ highlightMessage } />
+          <MessageBanner highlightMessage={ highlightMessage }/>
           <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
           {children({ isLoggedIn, data })}
           <Footer bgColor={footerBgColor} />
