@@ -4,12 +4,12 @@ import { endpoint } from './scripts/constants.js'
 
 describe('GET /status/:cid', () => {
   it('get pin and deal status', async () => {
-    const cid = 'testcid'
+    const cid = 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm'
     const res = await fetch(new URL(`status/${cid}`, endpoint))
     assert(res.ok, `${JSON.stringify(res)}`)
     const json = await res.json()
     assert.deepStrictEqual(json, {
-      cid: 'testcid',
+      cid: 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm',
       created: '2021-07-14T19:27:14.934572Z',
       dagSize: 101,
       pins: [{
@@ -24,7 +24,7 @@ describe('GET /status/:cid', () => {
         storageProvider: 'f99',
         status: 'Active',
         pieceCid: 'baga',
-        dataCid: 'testcid',
+        dataCid: 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm',
         dataModelSelector: 'Links/0/Links',
         activation: '<iso timestamp>',
         created: '2021-07-14T19:27:14.934572Z',
@@ -34,7 +34,7 @@ describe('GET /status/:cid', () => {
   })
 
   it('get shows initial queued deal', async () => {
-    const cid = 'nodeal'
+    const cid = 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q'
     const res = await fetch(new URL(`status/${cid}`, endpoint))
     assert(res.ok)
     const json = await res.json()
@@ -52,14 +52,14 @@ describe('GET /status/:cid', () => {
       deals: [{
         status: 'Queued',
         pieceCid: 'baga',
-        dataCid: 'nodeal',
+        dataCid: 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q',
         dataModelSelector: 'Links/0/Links'
       }]
     })
   })
 
   it('get shows no deals before aggregate is ready', async () => {
-    const cid = 'noaggregate'
+    const cid = 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4'
     const res = await fetch(new URL(`status/${cid}`, endpoint))
     assert(res.ok)
     const json = await res.json()
@@ -79,7 +79,7 @@ describe('GET /status/:cid', () => {
   })
 
   it('get 404 for unknown cid', async () => {
-    const cid = 'unknown'
+    const cid = 'bafybeihgrtet4vowd4t4iqaspzclxajrwwsesur7zllkahrbhcymfh7kyi'
     const res = await fetch(new URL(`status/${cid}`, endpoint))
     assert(!res.ok)
     assert.strictEqual(res.status, 404)

@@ -48,9 +48,7 @@ export type AuthKey = {
 }
 
 export type AuthKeyItem = definitions['auth_key'] & {
-  uploads: Array<
-    Pick<definitions['upload'], 'id'>
-  >
+  uploads: number
 }
 
 export type AuthKeyItemOutput = {

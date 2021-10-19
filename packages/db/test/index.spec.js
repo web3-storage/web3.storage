@@ -1,12 +1,13 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 import { DBClient } from '../index'
+import { token } from './utils.js'
 
 describe('db', () => {
   it('can create postgres client', () => {
     const dbClient = new DBClient({
       endpoint: 'http://127.0.0.1:3000',
-      token: 'super-secret-jwt-token-with-at-least-32-characters-long',
+      token,
       postgres: true
     })
 
@@ -16,7 +17,7 @@ describe('db', () => {
 
   it('can create fauna client', () => {
     const dbClient = new DBClient({
-      token: 'super-secret-jwt-token-with-at-least-32-characters-long'
+      token
     })
 
     assert(dbClient._client, 'fauna client created')

@@ -83,22 +83,22 @@ export class DBClient {
   /**
    * Rename an upload.
    *
-   * @param {string} cid
    * @param {number} userId
+   * @param {string} cid
    * @param {string} name
    */
-  renameUpload (cid, userId, name) {
-    return this._client.renameUpload(cid, userId, name)
+  renameUpload (userId, cid, name) {
+    return this._client.renameUpload(userId, cid, name)
   }
 
   /**
    * Delete a user upload.
    *
-   * @param {string} cid
    * @param {number} userId
+   * @param {string} cid
    */
-  deleteUpload (cid, userId) {
-    return this._client.deleteUpload(cid, userId)
+  deleteUpload (userId, cid) {
+    return this._client.deleteUpload(userId, cid)
   }
 
   /**
