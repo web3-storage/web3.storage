@@ -133,6 +133,15 @@ export class DBClient {
   }
 
   /**
+   * Upsert given pin status.
+   *
+   * @param {Array<import('./db-client-types').PinsUpsertInput>} pins
+   */
+  upsertPins (pins) {
+    return this._client.upsertPins(pins)
+  }
+
+  /**
    * Get Pins for a cid
    *
    * @param {string} cid
@@ -140,6 +149,58 @@ export class DBClient {
    */
   getPins (cid) {
     return this._client.getPins(cid)
+  }
+
+  /**
+   * Get All Pin requests.
+   *
+   * @param {Object} [options]
+   * @param {number} [options.size = 600]
+   * @return {Promise<Array<import('../db-client-types').PinRequestItemOutput>>}
+   */
+  getPinRequests () {
+    return this._client.getPinRequests()
+  }
+
+  /**
+   * Delete pin requests with provided ids.
+   *
+   * @param {Array<number>} ids
+   * @return {Promise<void>}
+   */
+  deletePinRequests (ids) {
+    return this._client.deletePinRequests(ids)
+  }
+
+  /**
+   * Create pin sync requests.
+   *
+   * @param {Array<number>} pinSyncRequests
+   */
+  createPinSyncRequests (pinSyncRequests) {
+    return this._client.createPinSyncRequests(pinSyncRequests)
+  }
+
+  /**
+   * Get All Pin Sync requests.
+   *
+   * @param {Object} [options]
+   * @param {string} [options.to]
+   * @param {string} [options.afer]
+   * @return {Promise<Array<import('../db-client-types').PinSyncRequestOutput>>}
+   */
+  getPinSyncRequests (options) {
+    return this._client.getPinSyncRequests(options)
+  }
+
+  /**
+   * Delete pin sync requests with provided ids.
+   *
+   * @param {Array<number>} ids
+   * @return {Promise<void>}
+   */
+  deletePinSyncRequests (ids) {
+    return this._client.deletePinSyncRequests(ids)
   }
 
   /**

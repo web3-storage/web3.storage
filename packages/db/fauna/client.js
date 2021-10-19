@@ -265,7 +265,7 @@ export class FaunaClient {
    * Upsert pin.
    *
    * @param {string} cid
-   * @param {import('../db-client-types').PinItemOutput} pin
+   * @param {import('../db-client-types').PinsUpsertInput} pin
    * @return {Promise<number>}
    */
   async upsertPin (cid, pin) {
@@ -281,6 +281,21 @@ export class FaunaClient {
   }
 
   /**
+   * Upsert given pin status.
+   *
+   * @param {Array<import('../db-client-types').PinIdAndStatus>} pins
+   */
+  async upsertPins (pins) {
+    await this.query(gql`
+      mutation UpdatePins($pins: [UpdatePinInput!]!) {
+        updatePins(pins: $pins) {
+          _id
+        }
+      }
+    `, { pins })
+  }
+
+  /**
    * Get Pins for a cid
    *
    * @param {string} cid
@@ -288,6 +303,126 @@ export class FaunaClient {
    */
   async getPins (cid) {
     throw new Error('not implemented in fauna')
+  }
+
+  /**
+   * Get All Pin requests.
+   *
+   * @param {Object} [options]
+   * @param {number} [options.size = 600]
+   * @return {Promise<Array<import('../db-client-types').PinRequestItemOutput>>}
+   */
+  async getPinRequests ({ size = 600 } = {}) {
+    const res = await this.query(gql`
+      query FindAllPinRequests($size: Int!) {
+        findAllPinRequests(_size: $size) {
+          data {
+            _id
+            cid
+            created
+          }
+        }
+      }
+    `, { size })
+
+    return res.findAllPinRequests.data
+  }
+
+  /**
+   * Delete pin requests with provided ids.
+   *
+   * @param {Array<number>} ids
+   * @return {Promise<void>}
+   */
+  async deletePinRequests (ids) {
+    await this.query(gql`
+      mutation DeletePinRequests($requests: [ID!]!) {
+        deletePinRequests(requests: $requests){
+          _id
+        }
+      }
+    `, { requests: ids })
+  }
+
+  /**
+   * Create pin sync requests.
+   *
+   * @param {Array<number>} pinSyncRequests
+   */
+  async createPinSyncRequests (pinSyncRequests) {
+    await this.query(gql`
+      mutation CreatePinSyncRequests($pins: [ID!]!) {
+        createPinSyncRequests(pins: $pins) {
+          _id
+        }
+      }
+    `, { pins: pinSyncRequests })
+  }
+
+  /**
+   * Get All Pin Sync requests.
+   *
+   * @param {Object} [options]
+   * @param {string} [options.to]
+   * @param {string} [options.afer]
+   * @return {Promise<Array<import('../db-client-types').PinSyncRequestOutput>>}
+   */
+  async getPinSyncRequests ({ to, after } = {}) {
+    const res = await this.query(gql`
+      query FindPinSyncRequests($to: Time, $after: String) {
+        findPinSyncRequests(to: $to, _size: 1000, _cursor: $after) {
+          data {
+            _id
+            pin {
+              _id
+              content {
+                _id
+                cid
+                dagSize
+              }
+              location {
+                peerId
+              }
+              status
+              created
+            }
+          }
+          after
+        }
+      }
+    `, { to, after })
+
+    return {
+      data: res.findPinSyncRequests.data.map(req => ({
+        _id: req._id,
+        pin: {
+          _id: req.pin._id,
+          status: req.pin.status,
+          created: req.pin.created,
+          contentCid: req.pin.content.cid,
+          location: {
+            peerId: req.pin.location.peerId
+          }
+        }
+      })),
+      after: res.findPinSyncRequests.after
+    }
+  }
+
+  /**
+   * Delete pin sync requests with provided ids.
+   *
+   * @param {Array<number>} ids
+   * @return {Promise<void>}
+   */
+  async deletePinSyncRequests (ids) {
+    await this.query(gql`
+      mutation DeletePinSyncRequests($requests: [ID!]!) {
+        deletePinSyncRequests(requests: $requests) {
+          _id
+        }
+      }
+    `, { requests: ids })
   }
 
   /**

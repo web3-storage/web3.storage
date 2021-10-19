@@ -67,6 +67,6 @@ node scripts/cli.js db --stop --clean --project web3-storage
 
 ## Database Diagram
 
-![image](https://user-images.githubusercontent.com/7295071/135415822-be854ec5-d1e2-4588-a951-f287b60b65be.png)
+![image](https://user-images.githubusercontent.com/7295071/137729026-50aebb55-e89c-45ed-b636-b3e39cc53cc0.png)
 
 Powered by [dbdiagram.io](https://dbdiagram.io/d/61546519825b5b014618caf6).

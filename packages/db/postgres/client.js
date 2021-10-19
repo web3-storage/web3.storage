@@ -343,10 +343,10 @@ export class PostgresClient {
   }
 
   /**
-   * Upsert pin.
+   * Upsert pin of a given cid.
    *
    * @param {string} cid
-   * @param {import('../db-client-types').PinItemOutput} pin
+   * @param {import('../db-client-types').PinsUpsertInput} pin
    * @return {Promise<number>}
    */
   async upsertPin (cid, pin) {
@@ -373,6 +373,21 @@ export class PostgresClient {
   }
 
   /**
+   * Upsert given pin status.
+   *
+   * @param {Array<import('../db-client-types').PinsUpsertInput>} pins
+   */
+  async upsertPins (pins) {
+    const { error } = await this._client
+      .from('pin')
+      .upsert(pins, { count: 'exact', returning: 'minimal' })
+
+    if (error) {
+      throw new DBError(error)
+    }
+  }
+
+  /**
    * Get Pins for a cid
    *
    * @param {string} cid
@@ -396,6 +411,129 @@ export class PostgresClient {
     }
 
     return normalizePins(pins)
+  }
+
+  /**
+   * Get All Pin requests.
+   *
+   * @param {Object} [options]
+   * @param {number} [options.size = 600]
+   * @return {Promise<Array<import('../db-client-types').PinRequestItemOutput>>}
+   */
+  async getPinRequests ({ size = 600 } = {}) {
+    /** @type {{ data: Array<import('../db-client-types').PinRequestItemOutput>, error: Error }} */
+    const { data: pinReqs, error } = await this._client
+      .from('pin_request')
+      .select(`
+        _id:id,
+        cid:content_cid,
+        created:inserted_at
+      `)
+      .limit(size)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return pinReqs
+  }
+
+  /**
+   * Delete pin requests with provided ids.
+   *
+   * @param {Array<number>} ids
+   * @return {Promise<void>}
+   */
+  async deletePinRequests (ids) {
+    /** @type {{ error: Error }} */
+    const { error } = await this._client
+      .from('pin_request')
+      .delete()
+      .in('id', ids)
+
+    if (error) {
+      throw new DBError(error)
+    }
+  }
+
+  /**
+   * Create pin sync requests.
+   *
+   * @param {Array<number>} pinSyncRequests
+   */
+  async createPinSyncRequests (pinSyncRequests) {
+    /** @type {{ error: Error }} */
+    const { error } = await this._client
+      .from('pin_sync_request')
+      .upsert(pinSyncRequests.map(psr => ({
+        pin_id: psr,
+        inserted_at: new Date().toISOString()
+      })), {
+        onConflict: 'pin_id'
+      })
+
+    if (error) {
+      throw new DBError(error)
+    }
+  }
+
+  /**
+   * Get All Pin Sync requests.
+   *
+   * @param {Object} [options]
+   * @param {string} [options.to]
+   * @param {string} [options.afer]
+   * @param {number} [options.size]
+   * @return {Promise<import('../db-client-types').PinSyncRequestOutput>}
+   */
+  async getPinSyncRequests ({ to, after, size }) {
+    let query = this._client
+      .from('pin_sync_request')
+      .select(`
+        _id:id,
+        pin:pin(_id:id, status, contentCid:content_cid, created:inserted_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region))
+      `)
+      .order(
+        'inserted_at',
+        { ascending: true }
+      )
+      .limit(size)
+
+    if (to) {
+      query = query.lt('inserted_at', to)
+    }
+    if (after) {
+      query = query.gte('inserted_at', after)
+    }
+
+    /** @type {{ data: Array<import('../db-client-types').PinSyncRequestItem>, error: Error }} */
+    const { data: pinSyncReqs, error } = await query
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return {
+      data: pinSyncReqs,
+      after: !!size && pinSyncReqs.length === size && pinSyncReqs[0].pin.created // return after if more
+    }
+  }
+
+  /**
+   * Delete pin sync requests with provided ids.
+   *
+   * @param {Array<number>} ids
+   * @return {Promise<void>}
+   */
+  async deletePinSyncRequests (ids) {
+    /** @type {{ error: Error }} */
+    const { error } = await this._client
+      .from('pin_sync_request')
+      .delete()
+      .in('id', ids)
+
+    if (error) {
+      throw new DBError(error)
+    }
   }
 
   /**

@@ -631,8 +631,10 @@ export interface paths {
       parameters: {
         query: {
           id?: parameters["rowFilter.pin_request.id"];
-          pin_id?: parameters["rowFilter.pin_request.pin_id"];
+          content_cid?: parameters["rowFilter.pin_request.content_cid"];
+          attempts?: parameters["rowFilter.pin_request.attempts"];
           inserted_at?: parameters["rowFilter.pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.pin_request.updated_at"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -684,8 +686,10 @@ export interface paths {
       parameters: {
         query: {
           id?: parameters["rowFilter.pin_request.id"];
-          pin_id?: parameters["rowFilter.pin_request.pin_id"];
+          content_cid?: parameters["rowFilter.pin_request.content_cid"];
+          attempts?: parameters["rowFilter.pin_request.attempts"];
           inserted_at?: parameters["rowFilter.pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.pin_request.updated_at"];
         };
         header: {
           /** Preference */
@@ -701,12 +705,107 @@ export interface paths {
       parameters: {
         query: {
           id?: parameters["rowFilter.pin_request.id"];
-          pin_id?: parameters["rowFilter.pin_request.pin_id"];
+          content_cid?: parameters["rowFilter.pin_request.content_cid"];
+          attempts?: parameters["rowFilter.pin_request.attempts"];
           inserted_at?: parameters["rowFilter.pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.pin_request.updated_at"];
         };
         body: {
           /** pin_request */
           pin_request?: definitions["pin_request"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/pin_sync_request": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.pin_sync_request.id"];
+          pin_id?: parameters["rowFilter.pin_sync_request.pin_id"];
+          inserted_at?: parameters["rowFilter.pin_sync_request.inserted_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["pin_sync_request"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** pin_sync_request */
+          pin_sync_request?: definitions["pin_sync_request"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.pin_sync_request.id"];
+          pin_id?: parameters["rowFilter.pin_sync_request.pin_id"];
+          inserted_at?: parameters["rowFilter.pin_sync_request.inserted_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.pin_sync_request.id"];
+          pin_id?: parameters["rowFilter.pin_sync_request.pin_id"];
+          inserted_at?: parameters["rowFilter.pin_sync_request.inserted_at"];
+        };
+        body: {
+          /** pin_sync_request */
+          pin_sync_request?: definitions["pin_sync_request"];
         };
         header: {
           /** Preference */
@@ -944,6 +1043,23 @@ export interface paths {
       };
     };
   };
+  "/rpc/pin_dag_size_total": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/postgres_fdw_handler": {
     post: {
       parameters: {
@@ -1054,6 +1170,42 @@ export interface paths {
       };
     };
   };
+  "/rpc/content_dag_size_total": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/json_arr_to_json_element_array": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            _json: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/user_used_storage": {
     post: {
       parameters: {
@@ -1079,25 +1231,6 @@ export interface paths {
         body: {
           args: {
             data: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/json_arr_to_upload__pin_type_arr": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            _json: string;
           };
         };
         header: {
@@ -1227,6 +1360,21 @@ export interface definitions {
     region?: string;
   };
   pin_request: {
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Note:
+     * This is a Foreign Key to `content.cid`.<fk table='content' column='cid'/>
+     */
+    content_cid: string;
+    attempts?: number;
+    inserted_at: string;
+    updated_at: string;
+  };
+  pin_sync_request: {
     /**
      * Note:
      * This is a Primary Key.<pk/>
@@ -1372,8 +1520,15 @@ export interface parameters {
   /** pin_request */
   "body.pin_request": definitions["pin_request"];
   "rowFilter.pin_request.id": string;
-  "rowFilter.pin_request.pin_id": string;
+  "rowFilter.pin_request.content_cid": string;
+  "rowFilter.pin_request.attempts": string;
   "rowFilter.pin_request.inserted_at": string;
+  "rowFilter.pin_request.updated_at": string;
+  /** pin_sync_request */
+  "body.pin_sync_request": definitions["pin_sync_request"];
+  "rowFilter.pin_sync_request.id": string;
+  "rowFilter.pin_sync_request.pin_id": string;
+  "rowFilter.pin_sync_request.inserted_at": string;
   /** upload */
   "body.upload": definitions["upload"];
   "rowFilter.upload.id": string;
