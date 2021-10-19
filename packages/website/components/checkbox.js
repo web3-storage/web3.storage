@@ -5,14 +5,13 @@ import Tick from '../icons/tick'
 /**
  * @param {object} props
  * @param {string} [props.className]
- * @param {string} [props.label]
  * @param {boolean} [props.disabled]
  * @param {string} [props.disabledText]
  * @param {boolean} [props.checked]
  * @param {function} [props.onChange]
  * @returns
  */
-const Checkbox = ({ className, label, disabled, disabledText, checked, onChange, ...props }) => {
+const Checkbox = ({ className, disabled, disabledText, checked, onChange, ...props }) => {
   const /** @type {React.MutableRefObject<HTMLInputElement|null>} */ inputRef = useRef(null);
   /**
    * @param {Object} event
