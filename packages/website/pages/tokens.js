@@ -211,6 +211,14 @@ export default function Tokens({ isLoggedIn }) {
                 </div>
               </div>
             </When>
+            <When condition={tokens.length > 0}>
+              <div className="flex flex-col items-center">
+                <p className="font-black mt-10">
+                  Want to test the token quickly? Paste it in
+                  {" "}<a className="underline" href={`https://bafybeic5r5yxjh5xpmeczfp34ysrjcoa66pllnjgffahopzrl5yhex7d7i.ipfs.dweb.link/`} target="_blank" rel="noreferrer">this demo website</a>
+                </p>
+              </div>
+            </When>
           </Else>
         </If>
       </main>
