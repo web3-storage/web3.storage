@@ -1,7 +1,7 @@
 export const caches = {
   default: {
     match: () => null,
-    put: () => {}
+    put: () => { }
   }
 }
 
@@ -16,9 +16,7 @@ export const S3_BUCKET_NAME = 'bucket'
 export const S3_BUCKET_REGION = 'eu-central-1'
 export const S3_ACCESS_KEY_ID = 'access-key-id'
 export const S3_SECRET_ACCESS_KEY_ID = 'secret-access-key'
-export const DATABASE = 'postgres'
-export const PG_REST_URL = 'http://localhost:9087'
-export const PG_REST_JWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTYwMzk2ODgzNCwiZXhwIjoyNTUwNjUzNjM0LCJyb2xlIjoic2VydmljZV9yb2xlIn0.necIJaiP7X2T2QjGeV-FhpkizcNTX8HjDDBAxpgQTEI'
+export const DATABASE = 'fauna'
 
 // Can be removed once we get a test mode for admin magic sdk.
 export const DANGEROUSLY_BYPASS_MAGIC_AUTH = true

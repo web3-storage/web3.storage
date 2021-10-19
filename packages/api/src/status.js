@@ -1,58 +1,4 @@
-import { gql } from '@web3-storage/db'
 import { JSONResponse, notFound } from './utils/json-response.js'
-
-const DEAL_STATUS = new Set([
-  'Queued',
-  'Published',
-  'Active'
-])
-
-const PIN_STATUS = new Set([
-  'Pinned',
-  'Pinning',
-  'PinQueued'
-])
-
-export function convertRawContent (raw) {
-  const pins = raw.pins.data
-    .filter(({ status }) => PIN_STATUS.has(status))
-    .map(({ status, updated, location }) => ({ status, updated, ...location }))
-
-  const deals = raw.aggregateEntries.data.map(({ dataModelSelector, aggregate }) => {
-    const { pieceCid, dataCid, deals } = aggregate
-    if (deals.data.length === 0) {
-      return [{
-        status: 'Queued',
-        pieceCid,
-        dataCid,
-        dataModelSelector
-      }]
-    }
-    return deals.data
-      .filter(({ status }) => DEAL_STATUS.has(status))
-      .map(({ dealId, storageProvider, status, activation, created, updated }) => ({
-        dealId,
-        storageProvider,
-        status,
-        pieceCid,
-        dataCid,
-        dataModelSelector,
-        activation,
-        created,
-        updated
-      }))
-  }).reduce((a, b) => a.concat(b), []) // flatten array of arrays.
-
-  const { cid, dagSize, created } = raw
-
-  return {
-    cid,
-    created,
-    dagSize,
-    pins,
-    deals
-  }
-}
 
 /**
  * Returns pin and deal status info for a given CID.
@@ -64,51 +10,11 @@ export function convertRawContent (raw) {
  */
 export async function statusGet (request, env) {
   const cid = request.params.cid
-  const result = await env.db.query(
-    gql`query FindContentByCid($cid: String!) {
-      findContentByCid(cid: $cid) {
-        cid
-        created
-        dagSize
-        aggregateEntries {
-          data {
-            dataModelSelector
-            aggregate {
-              dataCid
-              pieceCid
-              deals {
-                data {
-                  storageProvider
-                  dealId
-                  status
-                  activation
-                  created
-                  updated
-                }
-              }
-            }
-          }
-        }
-        pins {
-          data {
-            status
-            updated
-            location {
-              peerId
-              peerName
-              region
-            }
-          }
-        }
-      }
-    }
-  `, { cid })
+  const res = await env.db.getStatus(cid)
 
-  const { findContentByCid: raw } = result
-
-  if (!raw) {
+  if (!res) {
     return notFound()
   }
 
-  return new JSONResponse(convertRawContent(raw))
+  return new JSONResponse(res)
 }

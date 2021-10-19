@@ -1,4 +1,4 @@
-/* global MAGIC_SECRET_KEY FAUNA_ENDPOINT FAUNA_KEY SALT CLUSTER_BASIC_AUTH_TOKEN CLUSTER_API_URL SENTRY_DSN SENTRY_RELEASE DANGEROUSLY_BYPASS_MAGIC_AUTH S3_BUCKET_ENDPOINT S3_BUCKET_NAME S3_BUCKET_REGION S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY_ID ENV */
+/* global MAGIC_SECRET_KEY FAUNA_ENDPOINT FAUNA_KEY SALT CLUSTER_BASIC_AUTH_TOKEN CLUSTER_API_URL SENTRY_DSN SENTRY_RELEASE DANGEROUSLY_BYPASS_MAGIC_AUTH S3_BUCKET_ENDPOINT S3_BUCKET_NAME S3_BUCKET_REGION S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY_ID ENV DATABASE PG_REST_URL PG_REST_JWT */
 import Toucan from 'toucan-js'
 import { S3Client } from '@aws-sdk/client-s3'
 import { Magic } from '@magic-sdk/admin'
@@ -46,10 +46,20 @@ export function envAll (_, env, event) {
     env.DANGEROUSLY_BYPASS_MAGIC_AUTH = DANGEROUSLY_BYPASS_MAGIC_AUTH
   }
 
-  env.db = new DBClient({
-    endpoint: env.FAUNA_ENDPOINT || (typeof FAUNA_ENDPOINT === 'undefined' ? undefined : FAUNA_ENDPOINT),
-    token: env.FAUNA_KEY || FAUNA_KEY
-  })
+  if (env.DATABSE === 'fauna' ||
+    (typeof DATABASE !== 'undefined' && DATABASE === 'fauna') ||
+    (!env.DATABASE && typeof DATABASE === 'undefined')) {
+    env.db = new DBClient({
+      endpoint: env.FAUNA_ENDPOINT || (typeof FAUNA_ENDPOINT === 'undefined' ? undefined : FAUNA_ENDPOINT),
+      token: env.FAUNA_KEY || FAUNA_KEY
+    })
+  } else {
+    env.db = new DBClient({
+      endpoint: env.PG_REST_URL || (typeof PG_REST_URL === 'undefined' ? undefined : PG_REST_URL),
+      token: env.PG_REST_JWT || PG_REST_JWT,
+      postgres: true
+    })
+  }
 
   env.SALT = env.SALT || SALT
 
