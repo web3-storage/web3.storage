@@ -17,7 +17,7 @@ One time set up of your cloudflare worker subdomain for dev:
 
     ```sh
     npm install -g localtunnel
-    lt --port 9094 --subdomain USER-cluster-api-web3-storage
+    npm run lt:cluster
     ```
 
     - There is an npm script you can use to quickly establish these tunnels during development:
@@ -31,7 +31,7 @@ One time set up of your cloudflare worker subdomain for dev:
     - Once a DB is running, you will need a local tunnel similar to cluster:
 
     ```sh
-    lt --port 3000 --subdomain \"$(whoami)-postgres-api-web3-storage\"
+    npm run lt:postgres
     ```
 - Update `wrangler.toml` with a new `env`. Set your env name to be the value of `whoami` on your system you can use `npm start` to run the worker in dev mode for you.
 

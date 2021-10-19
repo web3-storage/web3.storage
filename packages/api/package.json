@@ -6,7 +6,7 @@
   "license": "(Apache-2.0 AND MIT)",
   "main": "dist/worker.js",
   "scripts": {
-    "lt": "npm run lt:cluster",
+    "lt": "npm-run-all -p lt:*",
     "lt:cluster": "npx localtunnel --port 9094 --subdomain \"$(whoami)-cluster-api-web3-storage\"",
     "lt:postgres": "npx localtunnel --port 3000 --subdomain \"$(whoami)-postgres-api-web3-storage\"",
     "start": "wrangler dev --env $(whoami)",
