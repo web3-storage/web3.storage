@@ -22,7 +22,7 @@ import type {
 export { gql }
 
 export class DBClient {
-  constructor(config: { endpoint?: string; token: string })
+  constructor(config: { endpoint?: string; token: string, postgres?: boolean })
   upsertUser (user: UpsertUserInput): Promise<UpsertUserOutput>
   getUser (issuer: string): Promise<UserOutput>
   getUsedStorage (userId: number): Promise<number>

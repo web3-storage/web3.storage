@@ -13,11 +13,11 @@ One time set up of your cloudflare worker subdomain for dev:
 - Setup Cluster
     - You need to run a cluster locally and make it accessible from the internet for development.
     - Follow the quickstart guide to get an IPFS Cluster up and running: https://cluster.ipfs.io/documentation/quickstart/
-    - Install [localtunnel](https://theboroer.github.io/localtunnel-www/) and expose the IPFS Cluster HTTP API and IPFS Proxy API (replacing "USER" with your name):
+    - Install [localtunnel](https://theboroer.github.io/localtunnel-www/) and expose the IPFS Cluster HTTP API (replacing "USER" with your name):
 
     ```sh
     npm install -g localtunnel
-    lt --port 9094 --subdomain USER-cluster-api-web3-storage
+    npm run lt:cluster
     ```
 
     - There is an npm script you can use to quickly establish these tunnels during development:
@@ -26,6 +26,13 @@ One time set up of your cloudflare worker subdomain for dev:
     npm run lt
     ```
 - Copy your cloudflare account id from `wrangler whoami`
+- Setup database
+    - For setting up a local database check [Local DB setup](../db/postgres/README.md).
+    - Once a DB is running, you will need a local tunnel similar to cluster:
+
+    ```sh
+    npm run lt:postgres
+    ```
 - Update `wrangler.toml` with a new `env`. Set your env name to be the value of `whoami` on your system you can use `npm start` to run the worker in dev mode for you.
 
     [**wrangler.toml**](./wrangler.toml)
@@ -34,7 +41,7 @@ One time set up of your cloudflare worker subdomain for dev:
     [env.bobbytables]
     workers_dev = true
     account_id = "<what does the `wrangler whoami` say>"
-    vars = { CLUSTER_API_URL = "https://USER-cluster-api-web3-storage.loca.lt", ENV = "dev" }
+    vars = { CLUSTER_API_URL = "https://USER-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://USER-postgres-api-web3-storage.loca.lt", ENV = "dev" }
     ```
 
 - `npm run build` - Build the bundle

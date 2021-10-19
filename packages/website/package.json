@@ -4,7 +4,7 @@
   "description": "web3.storage website",
   "private": true,
   "scripts": {
-    "start": "next dev",
+    "start": "next dev -p 4000",
     "build": "next build && next-sitemap && next export",
     "test": "eslint './**/*.js' && tsc --build"
   },

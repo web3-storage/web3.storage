@@ -144,6 +144,31 @@ BEGIN
 END
 $$;
 
+CREATE OR REPLACE FUNCTION content_dag_size_total() RETURNS BIGINT
+  LANGUAGE plpgsql
+AS
+$$
+BEGIN
+  return(
+    select sum(c.dag_size)
+    from content c
+  );
+END
+$$;
+
+CREATE OR REPLACE FUNCTION pin_dag_size_total() RETURNS BIGINT
+  LANGUAGE plpgsql
+AS
+$$
+BEGIN
+  return(
+    select sum(c.dag_size)
+    from pin p
+    join content c on c.cid = p.content_cid
+  );
+END
+$$;
+
 CREATE OR REPLACE FUNCTION find_deals_by_content_cids(cids text[])
     RETURNS TABLE
             (
