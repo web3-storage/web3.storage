@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "next dev",
-    "build": "next build && next export",
+    "build": "next build && next-sitemap && next export",
     "test": "eslint './**/*.js' && tsc --build"
   },
   "dependencies": {
@@ -45,6 +45,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "next-sitemap": "^1.6.173",
     "postcss": "^8.3.5",
     "tailwindcss": "^2.2.4",
     "typescript": "^4.3.5"
