@@ -1,8 +1,6 @@
-import { gql } from '@web3-storage/db'
 import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
-import { convertRawContent } from './status.js'
 
 /**
  * @typedef { _id: string, issuer: string } User
@@ -42,15 +40,8 @@ async function loginOrRegister (request, env) {
     ? parseGitHub(data.data, metadata)
     : parseMagic(metadata)
 
-  const res = await env.db.query(gql`
-    mutation CreateOrUpdateUser($data: CreateOrUpdateUserInput!) {
-      createOrUpdateUser(data: $data) {
-        issuer
-      }
-    }
-  `, { data: parsed })
-
-  return res.createOrUpdateUser
+  const user = await env.db.upsertUser(parsed)
+  return user
 }
 
 /**
@@ -102,15 +93,13 @@ export async function userTokensPost (request, env) {
   const iss = JWT_ISSUER
   const secret = await JWT.sign({ sub, iss, iat: Date.now(), name }, env.SALT)
 
-  const res = await env.db.query(gql`
-    mutation CreateAuthToken($data: CreateAuthTokenInput!) {
-      createAuthToken(data: $data) {
-        _id
-      }
-    }
-  `, { data: { user: _id, name, secret } })
+  const key = await env.db.createKey({
+    user: _id,
+    name,
+    secret
+  })
 
-  return new JSONResponse(res.createAuthToken, { status: 201 })
+  return new JSONResponse(key, { status: 201 })
 }
 
 /**
@@ -120,15 +109,11 @@ export async function userTokensPost (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userAccountGet (request, env) {
-  const res = await env.db.query(gql`
-    query findUserByID($id: ID!) {
-      findUserByID(id: $id) {
-        usedStorage
-      }
-    }
-  `, { id: request.auth.user._id })
+  const usedStorage = await env.db.getUsedStorage(request.auth.user._id)
 
-  return new JSONResponse(res.findUserByID)
+  return new JSONResponse({
+    usedStorage
+  })
 }
 
 /**
@@ -138,33 +123,9 @@ export async function userAccountGet (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userTokensGet (request, env) {
-  const res = await env.db.query(gql`
-    query FindAuthTokensByUser($user: ID!) {
-      # Paginated but users are probably not going to have tons of these.
-      # Note: 100,000 is the max page size.
-      findAuthTokensByUser(user: $user, _size: 100000) {
-        data {
-          _id
-          name
-          secret
-          created
-          uploads(_size: 1) {
-            data {
-              _id
-            }
-          }
-        }
-      }
-    }
-  `, { user: request.auth.user._id })
+  const tokens = await env.db.listKeys(request.auth.user._id)
 
-  res.findAuthTokensByUser.data = res.findAuthTokensByUser.data.map(t => {
-    t.hasUploads = Boolean(t.uploads.data.length)
-    delete t.uploads
-    return t
-  })
-
-  return new JSONResponse(res.findAuthTokensByUser.data)
+  return new JSONResponse(tokens)
 }
 
 /**
@@ -175,15 +136,8 @@ export async function userTokensGet (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userTokensDelete (request, env) {
-  const res = await env.db.query(gql`
-    mutation DeleteAuthToken($user: ID!, $authToken: ID!) {
-      deleteAuthToken(user: $user, authToken: $authToken) {
-        _id
-      }
-    }
-  `, { user: request.auth.user._id, authToken: request.params.id })
-
-  return new JSONResponse(res.deleteAuthToken)
+  const res = await env.db.deleteKey(request.auth.user._id, request.params.id)
+  return new JSONResponse(res)
 }
 
 /**
@@ -217,46 +171,13 @@ export async function userUploadsGet (request, env) {
   const sortBy = searchParams.get('sortBy') || 'Date'
   const sortOrder = searchParams.get('sortOrder') || 'Desc'
 
-  const res = await env.db.query(gql`
-    query FindUploadsByUser($where: FindUploadsByUserInput!, $sortBy: UploadListSortBy, $sortOrder: SortDirection, $size: Int!) {
-      findUploadsByUser(where: $where, sortBy: $sortBy, sortOrder: $sortOrder, _size: $size) {
-        data {
-          name
-          content {
-            cid
-            dagSize
-            aggregateEntries {
-              data {
-                aggregate {
-                  deals {
-                    data {
-                      storageProvider
-                      renewal
-                      dealId
-                      status
-                    }
-                  }
-                }
-              }
-            }
-            pins {
-              data {
-                status
-              }
-            }
-          }
-          created
-        }
-      }
-    }
-  `, { where: { createdBefore: before.toISOString(), user: request.auth.user._id }, size, sortBy, sortOrder })
+  const uploads = await env.db.listUploads(request.auth.user._id, {
+    size,
+    before: before.toISOString(),
+    sortBy,
+    sortOrder
+  })
 
-  const { data: raw } = res.findUploadsByUser
-  const uploads = raw.map(({ name, content, created }) => ({
-    name,
-    ...convertRawContent(content),
-    created
-  }))
   const oldest = uploads[uploads.length - 1]
   const headers = uploads.length === size
     ? { Link: `<${requestUrl.pathname}?size=${size}&before=${oldest.created}>; rel="next"` }
@@ -272,18 +193,11 @@ export async function userUploadsGet (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userUploadsDelete (request, env) {
-  const user = request.auth.user._id
   const cid = request.params.cid
+  const user = request.auth.user._id
 
-  const res = await env.db.query(gql`
-    mutation DeleteUserUpload($user: ID!, $cid: String!) {
-      deleteUserUpload(user: $user, cid: $cid) {
-        _id
-      }
-    }
-  `, { cid, user })
-
-  return new JSONResponse(res.deleteUserUpload)
+  const res = await env.db.deleteUpload(cid, user)
+  return new JSONResponse(res)
 }
 
 /**
@@ -297,13 +211,6 @@ export async function userUploadsRename (request, env) {
   const { cid } = request.params
   const { name } = await request.json()
 
-  const res = await env.db.query(gql`
-    mutation RenameUserUpload($user: ID!, $cid: String!, $name: String!) {
-      renameUserUpload(user: $user, cid: $cid, name: $name) {
-        name
-      }
-    }
-  `, { cid, user, name })
-
-  return new JSONResponse(res.renameUserUpload)
+  const res = await env.db.renameUpload(cid, user, name)
+  return new JSONResponse(res)
 }

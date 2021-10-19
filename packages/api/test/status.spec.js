@@ -24,7 +24,7 @@ describe('GET /status/:cid', () => {
         storageProvider: 'f99',
         status: 'Active',
         pieceCid: 'baga',
-        dataCid: 'bafy',
+        dataCid: 'testcid',
         dataModelSelector: 'Links/0/Links',
         activation: '<iso timestamp>',
         created: '2021-07-14T19:27:14.934572Z',
@@ -52,7 +52,7 @@ describe('GET /status/:cid', () => {
       deals: [{
         status: 'Queued',
         pieceCid: 'baga',
-        dataCid: 'bafy',
+        dataCid: 'nodeal',
         dataModelSelector: 'Links/0/Links'
       }]
     })

@@ -21,7 +21,8 @@
   "license": "(Apache-2.0 AND MIT)",
   "dependencies": {
     "@supabase/postgrest-js": "^0.34.0",
-    "graphql-request": "^3.4.0"
+    "graphql-request": "^3.4.0",
+    "p-retry": "^4.6.1"
   },
   "devDependencies": {
     "@web-std/fetch": "^2.0.1",
@@ -31,7 +32,6 @@
     "execa": "^5.1.1",
     "faunadb": "^4.3.0",
     "openapi-typescript": "^4.0.2",
-    "p-retry": "^4.6.1",
     "pg": "^8.7.1",
     "playwright-test": "^7.0.1",
     "sade": "^1.7.4",

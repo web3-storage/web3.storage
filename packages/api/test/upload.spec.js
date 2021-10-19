@@ -6,7 +6,7 @@ import { SALT } from './scripts/worker-globals.js'
 import { JWT_ISSUER } from '../src/constants.js'
 
 function getTestJWT (sub = 'test', name = 'test') {
-  return JWT.sign({ sub, iss: JWT_ISSUER, iat: Date.now(), name }, SALT)
+  return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
 }
 
 describe('POST /upload', () => {
