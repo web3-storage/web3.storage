@@ -45,11 +45,11 @@ const MessageBanner = ({ highlightMessage }) => {
   }
 
   if (statusPageError) {
-    console.log(statusPageError)
+    console.error(statusPageError)
   }
 
   if (apiVersionError) {
-    console.log(apiVersionError)
+    console.error(apiVersionError)
   }
 
   if (maintenanceMessage) {
