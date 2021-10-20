@@ -167,3 +167,21 @@ export async function deleteUpload (cid) {
     throw new Error(`failed to delete upload: ${await res.text()}`)
   }
 }
+
+export async function getVersion() {
+  const route = '/version'
+  const res = await fetch(`${API}${route}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  const body = await res.json()
+
+  if (body.ok) {
+    return body
+  } else {
+    throw new Error(body.error.message)
+  }
+}
