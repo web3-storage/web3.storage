@@ -29,8 +29,8 @@ export class DBClient {
   createUpload (data: CreateUploadInput): Promise<CreateUploadOutput>
   getUpload (cid: string, userId: number): Promise<UploadItemOutput>
   listUploads (userId: number, opts?: ListUploadsOptions): Promise<UploadItemOutput[]>
-  renameUpload (cid: string, userId: number, name: string): Promise<{ name: string }>
-  deleteUpload(cid: string, userId: number): Promise<{ _id: number }>
+  renameUpload (userId: number, cid: string, name: string): Promise<{ name: string }>
+  deleteUpload (userId: number, cid: string): Promise<{ _id: number }>
   getStatus (cid: string): Promise<ContentItemOutput>
   getBackups(uploadId: number): Promise<Array<BackupOutput>>
   upsertPin (cid: string, pin: PinItemOutput): Promise<number>

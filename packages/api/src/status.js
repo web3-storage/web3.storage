@@ -1,4 +1,5 @@
 import { JSONResponse, notFound } from './utils/json-response.js'
+import { normalizeCid } from './utils/normalize-cid.js'
 
 /**
  * Returns pin and deal status info for a given CID.
@@ -10,11 +11,15 @@ import { JSONResponse, notFound } from './utils/json-response.js'
  */
 export async function statusGet (request, env) {
   const cid = request.params.cid
-  const res = await env.db.getStatus(cid)
+  const normalizedCid = normalizeCid(cid)
+  const res = await env.db.getStatus(normalizedCid)
 
   if (!res) {
     return notFound()
   }
+
+  // replace content cid for source cid in response
+  res.cid = cid
 
   return new JSONResponse(res)
 }

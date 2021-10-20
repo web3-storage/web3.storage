@@ -1,12 +1,13 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 import { DBClient } from '../index'
+import { token } from './utils.js'
 
 describe('backup', () => {
   /** @type {DBClient} */
   const client = new DBClient({
     endpoint: 'http://127.0.0.1:3000',
-    token: 'super-secret-jwt-token-with-at-least-32-characters-long',
+    token,
     postgres: true
   })
   let user

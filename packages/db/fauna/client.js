@@ -165,11 +165,11 @@ export class FaunaClient {
   /**
    * Rename an upload.
    *
-   * @param {string} cid
    * @param {number} user
+   * @param {string} cid
    * @param {string} name
    */
-  async renameUpload (cid, user, name) {
+  async renameUpload (user, cid, name) {
     const res = await this.query(gql`
     mutation RenameUserUpload($user: ID!, $cid: String!, $name: String!) {
       renameUserUpload(user: $user, cid: $cid, name: $name) {
@@ -184,10 +184,10 @@ export class FaunaClient {
   /**
    * Delete a user upload.
    *
-   * @param {string} cid
    * @param {number} userId
+   * @param {string} cid
    */
-  async deleteUpload (cid, userId) {
+  async deleteUpload (userId, cid) {
     const res = await this.query(gql`
       mutation DeleteUserUpload($user: ID!, $cid: String!) {
         deleteUserUpload(user: $user, cid: $cid) {

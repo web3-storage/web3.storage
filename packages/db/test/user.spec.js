@@ -1,6 +1,7 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 import { DBClient } from '../index'
+import { token } from './utils.js'
 
 describe('user operations', () => {
   const name = 'test-name'
@@ -11,7 +12,7 @@ describe('user operations', () => {
   /** @type {DBClient} */
   const client = new DBClient({
     endpoint: 'http://127.0.0.1:3000',
-    token: 'super-secret-jwt-token-with-at-least-32-characters-long',
+    token,
     postgres: true
   })
   let user
@@ -129,9 +130,18 @@ describe('user operations', () => {
     const finalKeys = await client.listKeys(user._id)
     assert(finalKeys, 'final keys fetched')
     assert.deepEqual(finalKeys.length, keys.length - 1, 'user had auth key deleted')
+
+    // Should fail to delete again
+    let error
+    try {
+      await client.deleteKey(user._id, authKey._id)
+    } catch (err) {
+      error = err
+    }
+    assert(error, 'should fail to delete auth key again')
   })
 
-  it('can track user used storage', async () => {
+  it('can track user used storage and has uploads', async () => {
     const authKey = await client.createKey({
       name: 'test-key-name-3',
       secret: 'test-secret-3',
@@ -175,8 +185,12 @@ describe('user operations', () => {
     const secondUsedStorage = await client.getUsedStorage(user._id)
     assert.deepEqual(secondUsedStorage, dagSize1 + dagSize2, 'used storage with second upload')
 
+    // Confirm auth key has uploads
+    const userKeys = await client.listKeys(user._id)
+    assert.strictEqual(userKeys.find(k => k.hasUploads)._id, authKey._id)
+
     // Delete Upload 2
-    await client.deleteUpload(cid2, user._id)
+    await client.deleteUpload(user._id, cid2)
 
     const thirdUsedStorage = await client.getUsedStorage(user._id)
     assert.deepEqual(thirdUsedStorage, dagSize1, 'used storage with only first upload again')
