@@ -6,7 +6,7 @@ import { InvalidCidError } from '../errors.js'
  *
  * @param {string} cid
  */
-export function parseCid (cid) {
+export function normalizeCid (cid) {
   try {
     const c = CID.parse(cid)
     return c.toV1().toString()

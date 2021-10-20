@@ -11,7 +11,7 @@ import retry from 'p-retry'
 import { GATEWAY, LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { toPinStatusEnum } from './utils/pin.js'
-import { parseCid } from './utils/parse-cid.js'
+import { normalizeCid } from './utils/normalize-cid.js'
 
 /**
  * @typedef {import('multiformats/cid').CID} CID
@@ -135,7 +135,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     name = `Upload at ${new Date().toISOString()}`
   }
 
-  const normalizedCid = parseCid(cid)
+  const normalizedCid = normalizeCid(cid)
   // Store in DB
   // Retried because it's possible to receive the error:
   // "Transaction was aborted due to detection of concurrent modification."
