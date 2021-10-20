@@ -144,6 +144,29 @@ BEGIN
 END
 $$;
 
+CREATE OR REPLACE FUNCTION user_keys_list(query_user_id BIGINT)
+  RETURNS TABLE
+          (
+              "id"                bigint,
+              "name"              text,
+              "secret"            text,
+              "created"           timestamptz,
+              "uploads"           bigint
+          )
+  LANGUAGE sql
+AS
+$$
+select  ak.id as id,
+        ak.name as name,
+        ak.secret as secret,
+        ak.inserted_at as created,
+        count(u.id) as uploads
+from auth_key ak
+left outer join upload u on ak.id = u.auth_key_id
+where ak.user_id = query_user_id and u.deleted_at is null and ak.deleted_at is null
+group by ak.id
+$$;
+
 CREATE OR REPLACE FUNCTION content_dag_size_total() RETURNS BIGINT
   LANGUAGE plpgsql
 AS

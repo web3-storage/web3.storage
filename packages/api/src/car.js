@@ -3,16 +3,15 @@ import { PutObjectCommand } from '@aws-sdk/client-s3'
 import { CarBlockIterator } from '@ipld/car'
 import { toString } from 'uint8arrays'
 import { Block } from 'multiformats/block'
-import { CID } from 'multiformats/cid'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
 import retry from 'p-retry'
 import { GATEWAY, LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
-import { ErrorInvalidCid } from './errors.js'
 import { JSONResponse } from './utils/json-response.js'
 import { toPinStatusEnum } from './utils/pin.js'
+import { normalizeCid } from './utils/normalize-cid.js'
 
 /**
  * @typedef {import('multiformats/cid').CID} CID
@@ -136,14 +135,15 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     name = `Upload at ${new Date().toISOString()}`
   }
 
+  const normalizedCid = normalizeCid(cid)
   // Store in DB
   // Retried because it's possible to receive the error:
   // "Transaction was aborted due to detection of concurrent modification."
-  const { createUpload: upload } = await retry(() => (
+  await retry(() => (
     env.db.createUpload({
       user: user._id,
       authKey: authToken?._id,
-      contentCid: parseCid(cid),
+      contentCid: normalizedCid,
       sourceCid: cid,
       name,
       type: uploadType,
@@ -179,7 +179,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
         if (!okPins.length) continue
 
         for (const pin of okPins) {
-          await env.db.upsertPin(upload.content._id, pin)
+          await env.db.upsertPin(normalizedCid, pin)
         }
         return
       }
@@ -346,18 +346,4 @@ function toPins (peerMap) {
     status: toPinStatusEnum(status),
     location: { peerId, peerName }
   }))
-}
-
-/**
- * Parse CID and return v1 and original
- *
- * @param {string} cid
- */
-function parseCid (cid) {
-  try {
-    const c = CID.parse(cid)
-    return c.toV1().toString()
-  } catch (err) {
-    throw new ErrorInvalidCid(cid)
-  }
 }

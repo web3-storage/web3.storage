@@ -56,7 +56,7 @@ export class MagicTokenRequiredError extends HTTPError {
 }
 MagicTokenRequiredError.CODE = 'ERROR_MAGIC_TOKEN_REQUIRED'
 
-export class ErrorInvalidCid extends Error {
+export class InvalidCidError extends Error {
   /**
    * @param {string} cid
    */
@@ -64,7 +64,7 @@ export class ErrorInvalidCid extends Error {
     super(`Invalid CID: ${cid}`)
     this.name = 'InvalidCid'
     this.status = 400
-    this.code = ErrorInvalidCid.CODE
+    this.code = InvalidCidError.CODE
   }
 }
-ErrorInvalidCid.CODE = 'ERROR_INVALID_CID'
+InvalidCidError.CODE = 'ERROR_INVALID_CID'
