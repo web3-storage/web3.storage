@@ -196,7 +196,7 @@ export async function userUploadsDelete (request, env) {
   const cid = request.params.cid
   const user = request.auth.user._id
 
-  const res = await env.db.deleteUpload(cid, user)
+  const res = await env.db.deleteUpload(user, cid)
   return new JSONResponse(res)
 }
 
@@ -211,6 +211,6 @@ export async function userUploadsRename (request, env) {
   const { cid } = request.params
   const { name } = await request.json()
 
-  const res = await env.db.renameUpload(cid, user, name)
+  const res = await env.db.renameUpload(user, cid, name)
   return new JSONResponse(res)
 }

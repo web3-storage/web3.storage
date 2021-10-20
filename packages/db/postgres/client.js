@@ -27,7 +27,7 @@ export class PostgresClient {
   constructor ({ endpoint, token }) {
     this._client = new PostgrestClient(endpoint, {
       headers: {
-        apikey: token,
+        Authorization: `Bearer ${token}`,
         accept: '*/*'
       }
     })
@@ -149,7 +149,7 @@ export class PostgresClient {
 
     return {
       _id: uploadResponse,
-      cid: data.contentCid
+      cid: data.sourceCid
     }
   }
 
@@ -165,7 +165,7 @@ export class PostgresClient {
     const { data: upload, error } = await this._client
       .from('upload')
       .select(uploadQuery)
-      .eq('content_cid', cid)
+      .eq('source_cid', cid)
       .eq('user_id', userId)
       .is('deleted_at', null)
       .single()
@@ -229,18 +229,18 @@ export class PostgresClient {
   /**
    * Rename an upload.
    *
-   * @param {string} cid
    * @param {number} userId
+   * @param {string} cid
    * @param {string} name
    */
-  async renameUpload (cid, userId, name) {
+  async renameUpload (userId, cid, name) {
     /** @type {{ data: import('../db-client-types').UploadItem, error: Error }} */
     const { data, error } = await this._client
       .from('upload')
       .update({ name })
       .match({
         user_id: userId,
-        content_cid: cid
+        source_cid: cid
       })
       .is('deleted_at', null)
       .single()
@@ -257,10 +257,10 @@ export class PostgresClient {
   /**
    * Delete a user upload.
    *
-   * @param {string} cid
    * @param {number} userId
+   * @param {string} cid
    */
-  async deleteUpload (cid, userId) {
+  async deleteUpload (userId, cid) {
     /** @type {{ data: import('../db-client-types').UploadItem, error: Error }} */
     const { data, error } = await this._client
       .from('upload')
@@ -268,9 +268,10 @@ export class PostgresClient {
         deleted_at: new Date().toISOString()
       })
       .match({
-        content_cid: cid,
+        source_cid: cid,
         user_id: userId
       })
+      .is('deleted_at', null)
       .single()
 
     if (error) {
@@ -485,20 +486,20 @@ export class PostgresClient {
         issuer
       })
       .filter('keys.deleted_at', 'is', null)
+      .eq('keys.secret', secret)
       .single()
 
     if (error) {
       throw new DBError(error)
     }
-    const key = data.keys.find(k => k.secret === secret)
 
-    if (!key) {
+    if (!data.keys.length) {
       throw new Error('user has no key with given secret')
     }
 
     return {
-      _id: key._id,
-      name: key.name,
+      _id: data.keys[0]._id,
+      name: data.keys[0].name,
       user: {
         _id: data._id,
         issuer: data.issuer
@@ -514,28 +515,18 @@ export class PostgresClient {
    */
   async listKeys (userId) {
     /** @type {{ error: Error, data: Array<import('../db-client-types').AuthKeyItem> }} */
-    const { data, error } = await this._client
-      .from('auth_key')
-      .select(`
-        id,
-        name,
-        secret,
-        inserted_at,
-        uploads:upload(id)
-      `)
-      .match({ user_id: userId })
-      .is('deleted_at', null)
+    const { data, error } = await this._client.rpc('user_keys_list', { query_user_id: userId })
 
     if (error) {
       throw new DBError(error)
     }
 
-    return data.map(k => ({
-      _id: k.id,
-      name: k.name,
-      secret: k.secret,
-      created: k.inserted_at,
-      hasUploads: Boolean(k.uploads.length)
+    return data.map(ki => ({
+      _id: ki.id,
+      name: ki.name,
+      secret: ki.secret,
+      created: ki.created,
+      hasUploads: Boolean(ki.uploads)
     }))
   }
 
@@ -556,6 +547,7 @@ export class PostgresClient {
         id: keyId,
         user_id: userId
       })
+      .is('deleted_at', null)
 
     if (error) {
       throw new DBError(error)

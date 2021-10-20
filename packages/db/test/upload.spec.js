@@ -1,12 +1,13 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 import { DBClient } from '../index'
+import { token } from './utils.js'
 
 describe('upload', () => {
   /** @type {DBClient} */
   const client = new DBClient({
     endpoint: 'http://127.0.0.1:3000',
-    token: 'super-secret-jwt-token-with-at-least-32-characters-long',
+    token,
     postgres: true
   })
   let user
@@ -153,7 +154,7 @@ describe('upload', () => {
     assert(otherUploadCreated, 'other upload created')
 
     const newName = 'renamed-name'
-    const renamedUpload = await client.renameUpload(otherCid, user._id, newName)
+    const renamedUpload = await client.renameUpload(user._id, otherCid, newName)
 
     assert(renamedUpload, 'renamed upload')
     assert.strictEqual(renamedUpload.name, newName, 'upload has a new name')
@@ -179,7 +180,16 @@ describe('upload', () => {
     const userUploads = await client.listUploads(user._id)
 
     // Delete previously created upload
-    await client.deleteUpload(otherCid, user._id)
+    await client.deleteUpload(user._id, otherCid)
+
+    // Should fail to delete again
+    let error
+    try {
+      await client.deleteUpload(user._id, otherCid)
+    } catch (err) {
+      error = err
+    }
+    assert(error, 'should fail to delete upload again')
 
     const finalUserUploads = await client.listUploads(user._id)
     assert(finalUserUploads, 'user upload deleted')
