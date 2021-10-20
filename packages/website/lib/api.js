@@ -34,7 +34,7 @@ export async function getTokens() {
   return res.json()
 }
 
-export async function getStorage() {
+export async function getAccount() {
   const res = await fetch(API + '/user/account', {
     method: 'GET',
     headers: {
@@ -44,7 +44,7 @@ export async function getStorage() {
   })
 
   if (!res.ok) {
-    throw new Error(`failed to get storage info: ${await res.text()}`)
+    throw new Error(`failed to get account info: ${await res.text()}`)
   }
 
   return res.json()

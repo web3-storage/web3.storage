@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { useQuery } from 'react-query'
 import Link from 'next/link'
-import { getTokens, getStorage, getUploads } from '../lib/api'
+import { getTokens, getAccount, getUploads } from '../lib/api'
 import countly from '../lib/countly'
 import Button from '../components/button'
 import Loading from '../components/loading'
@@ -29,34 +29,23 @@ const MAX_STORAGE = 1.1e+12 /* 1 TB */
 }
 
 /**
- * @typedef {Object} StorageData
- * @property {Number} usedStorage
- */
-
-/**
  * @param {Object} props
- * @param {boolean | undefined} [props.isLoggedIn]
+ * @param {Number} [props.usedStorage]
+ * * @param {boolean | undefined} [props.isLoaded]
  */
-const StorageInfo = ({ isLoggedIn }) => {
-  const { data, isLoading, isFetching } = useQuery('get-storage', getStorage, {
-    enabled: isLoggedIn,
-  })
-
-  /** @type {StorageData} */
-  const storageData = data || {usedStorage: 0};
+const StorageInfo = ({ usedStorage = 0, isLoaded }) => {
 
   const mailTo = useMemo(() => {
     const { mail, subject, body } = emailContent
     return `mailto:${mail}?subject=${subject}&body=${encodeURIComponent(body.join('\n'))}`
   }, [])
 
-  const isLoaded = !isLoading && !isFetching
-  const percentage = Math.ceil((storageData.usedStorage || 0) / MAX_STORAGE * 100)
+  const percentage = Math.ceil((usedStorage) / MAX_STORAGE * 100)
 
   return <div>
     <When condition={ isLoaded }>
       <div className="text-2xl font-medium">
-        Storage:<span className="font-normal ml-2">{ fileSize(storageData.usedStorage) } of { fileSize(MAX_STORAGE) } used</span>
+        Storage:<span className="font-normal ml-2">{ fileSize(usedStorage) } of { fileSize(MAX_STORAGE) } used</span>
       </div>
       <div className="h-9 border-2 border-w3storage-red mt-4 bg-white" style={{ maxWidth: '24rem'}}>
         <div className="h-full bg-w3storage-red max-w-full grow-width" style={{
@@ -83,8 +72,13 @@ const CURRENT_DATE = new Date().toISOString()
  */
 export default function Account({ isLoggedIn }) {
   const [copied, setCopied] = useState('')
+
   const { data: tokensData, isLoading: isLoadingTokens, isFetching: isFetchingTokens } = useQuery('get-tokens', getTokens, {
     enabled: isLoggedIn
+  })
+
+  const { data: userData } = useQuery('get-account', getAccount, {
+    enabled: isLoggedIn,
   })
 
   /** @type {import('./tokens').Token[]} */
@@ -142,16 +136,25 @@ export default function Account({ isLoggedIn }) {
           <VerticalLines className="h-full"/>
         </div>
       </When>
+
       <div className="layout-margins">
         <main className="max-w-screen-xl mx-auto my-4 lg:my-16 text-w3storage-purple">
-          <h3 className="mb-8">Your account</h3>
-          <StorageInfo isLoggedIn={isLoggedIn}/>
+          <h3>Your account</h3>
+          <When condition={!!userData}>
+          <div className="flex flex-col items-center mt-10 max-w-full bg-white border border-w3storage-red p-10 text-center mb-8" style={{ maxWidth: '24rem'}}>
+            <h3 className="font-normal mb-4">Your info</h3>
+            { userData?.picture && <img src={userData?.picture} className="rounded-full w-24 h-24 mb-4" /> }
+            { userData?.name && userData?.name !== userData?.email.substring(0, userData?.email.indexOf("@")) && <span>{userData.name}</span> }
+            { userData?.email && <span>email: {userData?.email}</span> }
+            <span>login method: {userData?.github ? 'github' : 'email'}</span>
+          </div>
+          </When>
+          <StorageInfo usedStorage={userData?.usedStorage} isLoaded={isLoaded} />
           <When condition={!isLoaded}>
             <div className="relative w-52 pt-60">
               <Loading />
             </div>
           </When>
-          <When condition={isLoaded}>
             <When condition={tokens.length === 0 || !hasUsedTokensToUploadBefore}>
               <div className="mt-9">
                 <When condition={!hasUploads}>
@@ -237,7 +240,6 @@ export default function Account({ isLoggedIn }) {
                 </div>
               </div>
             </When>
-          </When>
         </main>
       </div>
     </div>

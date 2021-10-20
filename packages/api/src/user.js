@@ -123,6 +123,11 @@ export async function userAccountGet (request, env) {
   const res = await env.db.query(gql`
     query findUserByID($id: ID!) {
       findUserByID(id: $id) {
+        email
+        github
+        name
+        picture
+        publicAddress
         usedStorage
       }
     }
