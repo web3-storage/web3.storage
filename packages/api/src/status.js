@@ -12,14 +12,13 @@ import { parseCid } from './utils/parse-cid.js'
 export async function statusGet (request, env) {
   const cid = request.params.cid
   const normalizedCid = parseCid(cid)
-  console.log('normalized', normalizedCid)
   const res = await env.db.getStatus(normalizedCid)
 
   if (!res) {
     return notFound()
   }
 
-  // replace content cid for normalized cid in response
+  // replace content cid for source cid in response
   res.cid = cid
 
   return new JSONResponse(res)

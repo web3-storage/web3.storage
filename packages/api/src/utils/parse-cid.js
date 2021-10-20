@@ -2,7 +2,7 @@ import { CID } from 'multiformats/cid'
 import { InvalidCidError } from '../errors.js'
 
 /**
- * Parse CID and return v1 and original
+ * Parse CID and return normalized b32 v1
  *
  * @param {string} cid
  */
