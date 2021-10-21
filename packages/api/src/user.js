@@ -125,9 +125,6 @@ export async function userAccountGet (request, env) {
       findUserByID(id: $id) {
         email
         github
-        name
-        picture
-        publicAddress
         usedStorage
       }
     }

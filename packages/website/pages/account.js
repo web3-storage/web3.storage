@@ -139,22 +139,19 @@ export default function Account({ isLoggedIn }) {
 
       <div className="layout-margins">
         <main className="max-w-screen-xl mx-auto my-4 lg:my-16 text-w3storage-purple">
-          <h3>Your account</h3>
-          <When condition={!!userData}>
-            <div className="flex flex-col items-center mt-10 max-w-full bg-white border border-w3storage-red p-10 text-center mb-8" style={{ maxWidth: '24rem'}}>
-              <h3 className="font-normal mb-4">Your info</h3>
-              { userData?.picture && <img src={userData?.picture} className="rounded-full w-24 h-24 mb-4" /> }
-              { userData?.name && userData?.name !== userData?.email.substring(0, userData?.email.indexOf("@")) && <span>{userData.name}</span> }
-              { userData?.email && <span>email: {userData?.email}</span> }
-              <span>login method: {userData?.github ? 'github' : 'email'}</span>
-            </div>
-          </When>
+          <div className="flex mb-8 flex-wrap items-center">
+            <h3 className="mr-2">Your account</h3>
+            <When condition={!!userData && isLoaded}>
+              { userData?.email && <span className="text-sm">({userData?.email}{userData?.github && ` via github` })</span> }
+            </When>
+          </div>
           <StorageInfo usedStorage={userData?.usedStorage} isLoaded={isLoaded} />
           <When condition={!isLoaded}>
             <div className="relative w-52 pt-60">
               <Loading />
             </div>
           </When>
+          <When condition={isLoaded}>
             <When condition={tokens.length === 0 || !hasUsedTokensToUploadBefore}>
               <div className="mt-9">
                 <When condition={!hasUploads}>
@@ -240,6 +237,7 @@ export default function Account({ isLoggedIn }) {
                 </div>
               </div>
             </When>
+          </When>
         </main>
       </div>
     </div>
