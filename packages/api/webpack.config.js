@@ -31,15 +31,6 @@ const require = createRequire(__dirname)
 // see: https://docs.sentry.io/platforms/javascript/guides/cordova/configuration/releases/
 const SENTRY_RELEASE = `web3-api@${process.env.npm_package_version}`
 
-const alias = {
-  // node-fetch and cross-fetch causes TypeError: Illegal invocation in Cloudflare Workers
-  'node-fetch': path.resolve(__dirname, 'src', 'utils', 'fetch.js')
-}
-
-if (process.env.DATABASE === 'postgres') {
-  alias['cross-fetch'] = path.resolve(__dirname, 'src', 'utils', 'fetch.js')
-}
-
 export default {
   target: 'webworker',
   mode: 'development',
@@ -87,7 +78,11 @@ export default {
     fallback: {
       stream: require.resolve('stream-browserify')
     },
-    alias
+    alias: {
+      // node-fetch and cross-fetch causes TypeError: Illegal invocation in Cloudflare Workers
+      'node-fetch': path.resolve(__dirname, 'src', 'utils', 'fetch.js'),
+      'cross-fetch': path.resolve(__dirname, 'src', 'utils', 'fetch.js')
+    }
   },
   optimization: {
     minimize: true,
