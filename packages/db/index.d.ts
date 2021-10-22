@@ -1,5 +1,6 @@
 import { gql } from 'graphql-request'
 import { RequestDocument } from 'graphql-request/dist/types'
+import { PostgrestClient } from '@supabase/postgrest-js'
 
 import type {
   UpsertUserInput,
@@ -16,6 +17,9 @@ import type {
   AuthKey,
   AuthKeyItemOutput,
   PinItemOutput,
+  PinRequestItemOutput,
+  PinSyncRequestOutput,
+  PinsUpsertInput,
   BackupOutput
 } from './db-client-types'
 
@@ -23,6 +27,7 @@ export { gql }
 
 export class DBClient {
   constructor(config: { endpoint?: string; token: string, postgres?: boolean })
+  client: PostgrestClient
   upsertUser (user: UpsertUserInput): Promise<UpsertUserOutput>
   getUser (issuer: string): Promise<UserOutput>
   getUsedStorage (userId: number): Promise<number>
@@ -34,7 +39,13 @@ export class DBClient {
   getStatus (cid: string): Promise<ContentItemOutput>
   getBackups(uploadId: number): Promise<Array<BackupOutput>>
   upsertPin (cid: string, pin: PinItemOutput): Promise<number>
+  upsertPins (pins: Array<PinsUpsertInput>): Promise<void>
   getPins (cid: string): Promise<Array<PinItemOutput>>
+  getPinRequests ({ size }: { size: number }): Promise<Array<PinRequestItemOutput>>
+  deletePinRequests (ids: Array<number>): Promise<void>
+  createPinSyncRequests (pinSyncRequests: Array<number>): Promise<void>
+  getPinSyncRequests ({ to, after }: { to: string, after: string }): Promise<PinSyncRequestOutput>
+  deletePinSyncRequests (ids: Array<number>): Promise<void>
   getDeals (cid: string): Promise<Deal[]>
   getDealsForCids (cids: string[]): Promise<Record<string, Deal[]>>
   createKey (key: CreateAuthKeyInput): Promise<CreateAuthKeyOutput>
