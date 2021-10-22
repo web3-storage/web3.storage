@@ -177,11 +177,9 @@ export async function getVersion() {
     },
   })
 
-  const body = await res.json()
-
-  if (body.ok) {
-    return body
+  if (res.ok) {
+    return await res.json()
   } else {
-    throw new Error(body.error.message)
+    throw new Error(await res.text())
   }
 }
