@@ -15,8 +15,22 @@ To run this locally you will need the following in your `packages/cron/.env` fil
 
 ```ini
 ENV=dev
+DATABASE=postgres
+
+# PostgREST API URL
+DEV_PG_REST_URL=http://localhost:3000
+# PostgREST API token, for role "postgres", using secret value PGRST_JWT_SECRET from './postgres/docker/docker-compose.yml'
+# https://postgrest.org/en/v8.0/tutorials/tut1.html#step-3-sign-a-token
+DEV_PG_REST_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU
+
+# Connection string for locally running postgres used in tests
+DEV_PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
+
+# Cluster
 CLUSTER_API_URL=http://127.0.0.1:9094/
 CLUSTER_IPFS_PROXY_API_URL=http://127.0.0.1:9095/api/v0/
+
+# Fauna
 DEV_FAUNA_KEY="<your key here>"
 ```
 
@@ -30,26 +44,4 @@ Run the job:
 
 ```sh
 npm run start:pins
-```
-
-### pinata
-
-Fetch the oldest 600 PinRequests from the DB and pin them on Piñata
-
-To run this locally you will need the following in your `packages/cron/.env` file:
-
-```ini
-ENV=dev
-DEV_FAUNA_KEY="<your key here>"
-PINATA_JWT="<your jwt here>"
-```
-
-You also need to have:
-
-- a dev account and db set up on FaunaDB with the latest schema imported as per [../db/README.md](../db/README.md)
-
-Run the job:
-
-```sh
-npm run start:pinata
 ```

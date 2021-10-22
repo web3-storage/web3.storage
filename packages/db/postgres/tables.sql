@@ -148,11 +148,22 @@ CREATE TABLE IF NOT EXISTS backup
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- A request to keep a Pin in sync with the nodes that are pinning it.
+-- Tracks requests to replicate content to more nodes.
 CREATE TABLE IF NOT EXISTS pin_request
 (
   id              BIGSERIAL PRIMARY KEY,
+  -- Root CID of the Pin we want to replicate.
+  content_cid     TEXT                                                          NOT NULL UNIQUE REFERENCES content (cid),
+  attempts        INT DEFAULT 0,
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- A request to keep a Pin in sync with the nodes that are pinning it.
+CREATE TABLE IF NOT EXISTS pin_sync_request
+(
+  id              BIGSERIAL PRIMARY KEY,
   -- Identifier for the pin to keep in sync.
-  pin_id          BIGINT                                                        NOT NULL REFERENCES pin (id),
+  pin_id          BIGINT                                                        NOT NULL UNIQUE REFERENCES pin (id),
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-)
+);

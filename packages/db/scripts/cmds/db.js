@@ -21,6 +21,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 export async function dbCmd ({ project, init, start, stop, clean }) {
   const composePath = path.join(__dirname, '../../postgres/docker/docker-compose.yml')
 
+  if (!project) {
+    throw new Error('A project must be provided as parameter')
+  }
+
   if (init) {
     await execa('docker-compose', [
       '--file',

@@ -15,8 +15,16 @@ Ensure you have all the dependencies, by running `npm i` in the parent project.
 To run this locally you will need the following in your `packages/cron/.env` file:
 
 ```ini
+DATABASE=postgres
+
 FAUNA_KEY="<your key here>"
 PINATA_JWT="<your jwt here>"
+
+# PostgREST API URL
+PG_REST_URL=http://localhost:3000
+# PostgREST API token, for role "postgres", using secret value PGRST_JWT_SECRET from './postgres/docker/docker-compose.yml'
+# https://postgrest.org/en/v8.0/tutorials/tut1.html#step-3-sign-a-token
+PG_REST_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU
 ```
 
 You also need to have:
@@ -31,7 +39,7 @@ npm run start
 
 ## Running on Heroku
 
-Deploy using the `herkou` command. Install the `heroku` cli and log in with `heroku login`. A Procfile is added to the root of the monorepo to define the `pinpin` process. It's a worker that should run on a single dyno. There is no `web` worker, which heroku assumes there will be, so we have to explicitly scale the dynos to make that the case. Deployment uses git, and you get `heroku` remote to push to, added to your repo automatically.
+Deploy using the `heroku` command. Install the `heroku` cli and log in with `heroku login`. A Procfile is added to the root of the monorepo to define the `pinpin` process. It's a worker that should run on a single dyno. There is no `web` worker, which heroku assumes there will be, so we have to explicitly scale the dynos to make that the case. Deployment uses git, and you get `heroku` remote to push to, added to your repo automatically.
 
 Deploying from scratch looks like this:
 

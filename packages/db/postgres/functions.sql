@@ -22,6 +22,7 @@ $$
 DECLARE
   backup_url TEXT;
   pin json;
+  pin_result_id BIGINT;
   pin_location_result_id BIGINT;
   inserted_upload_id BIGINT;
 BEGIN
@@ -32,6 +33,14 @@ BEGIN
           (data ->> 'updated_at')::timestamptz,
           (data ->> 'inserted_at')::timestamptz)
     ON CONFLICT ( cid ) DO NOTHING;
+  
+  -- Add to pin_request table if new
+  insert into pin_request (content_cid, attempts, updated_at, inserted_at)
+  values (data ->> 'content_cid',
+          0,
+          (data ->> 'updated_at')::timestamptz,
+          (data ->> 'inserted_at')::timestamptz)
+    ON CONFLICT ( content_cid ) DO NOTHING;
 
   -- Iterate over received pins
   foreach pin in array json_arr_to_json_element_array(data -> 'pins')
@@ -53,7 +62,18 @@ BEGIN
                 pin_location_result_id,
                 (data ->> 'updated_at')::timestamptz,
                 (data ->> 'inserted_at')::timestamptz)
-        ON CONFLICT ( content_cid, pin_location_id ) DO NOTHING;
+        -- Force update on conflict to get result, otherwise needs a follow up select
+        ON CONFLICT ( content_cid, pin_location_id ) DO UPDATE
+          SET "updated_at" = (data ->> 'updated_at')::timestamptz
+        returning id into pin_result_id;
+
+        -- Create a Pin Sync Request if not pinned
+        IF (pin ->> 'status')::pin_status_type != ('Pinned')::pin_status_type THEN
+          insert into pin_sync_request (pin_id, inserted_at)
+          values (pin_result_id,
+                  (data ->> 'inserted_at')::timestamptz)
+          ON CONFLICT ( pin_id ) DO NOTHING;
+        END IF;
   end loop;
 
   insert into upload (user_id,
