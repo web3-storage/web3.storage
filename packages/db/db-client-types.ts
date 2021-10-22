@@ -60,6 +60,11 @@ export type AuthKeyItemOutput = {
 }
 
 // Pin
+export type PinsUpsertInput = {
+  id: definitions['pin']['id']
+  status: definitions['pin']['status']
+}
+
 export type PinItem = {
   _id: definitions['pin']['id']
   status: definitions['pin']['status']
@@ -81,6 +86,33 @@ export type PinItemOutput = {
   peerId: definitions['pin_location']['peer_id']
   peerName: definitions['pin_location']['peer_name']
   region: definitions['pin_location']['region']
+}
+
+export type PinRequestItemOutput = {
+  _id: definitions['pin_request']['id']
+  cid: definitions['pin_request']['content_cid']
+  created: definitions['pin_request']['inserted_at']
+}
+
+export type PinSyncRequestItem = {
+  _id: definitions['pin_sync_request']['id']
+  pin: {
+    _id: definitions['pin']['id']
+    status: definitions['pin']['status']
+    contentCid: definitions['pin']['content_cid']
+    created: definitions['pin']['inserted_at']
+    location: {
+      _id?: definitions['pin_location']['id']
+      peerId: definitions['pin_location']['peer_id']
+      peerName?: definitions['pin_location']['peer_name']
+      region?: definitions['pin_location']['region']
+    }
+  }
+}
+
+export type PinSyncRequestOutput = {
+  data: Array<PinSyncRequestItem>
+  after: definitions['pin']['inserted_at']
 }
 
 // Backup
