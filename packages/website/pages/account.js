@@ -142,7 +142,7 @@ export default function Account({ isLoggedIn }) {
           <div className="flex mb-8 flex-wrap items-center">
             <h3 className="mr-2">Your account</h3>
             <When condition={!!userData && isLoaded}>
-              { userData?.email && <span className="text-sm">({userData?.email}{userData?.github && ` via github` })</span> }
+              { userData?.email && <span>({userData?.email}{userData?.github && ` via github` })</span> }
             </When>
           </div>
           <StorageInfo usedStorage={userData?.usedStorage} isLoaded={isLoaded} />
