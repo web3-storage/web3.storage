@@ -41,7 +41,7 @@ const MessageBanner = ({ highlightMessage }) => {
 
   if (apiVersionData && apiVersionData.mode !== 'rw' && !maintenanceMessage) {
     maintenanceMessage =
-      'The NFT.Storage API is currently undergoing maintenance...'
+      'The web3.Storage API is currently undergoing maintenance...'
   }
 
   if (statusPageError) {
