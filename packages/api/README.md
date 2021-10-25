@@ -102,6 +102,8 @@ curl -X POST --data-binary @x.car -H 'Authorization: Bearer YOUR_API_KEY' http:/
 }
 ```
 
+You can also provide a name for the file using the header `X-NAME`, but be sure to encode the filename first. For example `LICENSE–MIT` should be sent as `LICENSE%E2%80%93MIT`.
+
 ### 🔒 `POST /upload`
 
 Upload a file for a root CID (maximum of 100 MB). _Authenticated_
@@ -112,6 +114,8 @@ curl -X POST --data-binary @file.txt -H 'Authorization: Bearer YOUR_API_KEY' htt
   "cid":"bafkreid65ervf7fmfnbhyr2uqiqipufowox4tgkrw4n5cxgeyls4mha3ma"
 }
 ```
+
+You can also provide a name for the file using the header `X-NAME`, but be sure to encode the filename first. For example `LICENSE–MIT` should be sent as `LICENSE%E2%80%93MIT`.
 
 ### 🔒 `GET /user/uploads`
 

@@ -65,4 +65,24 @@ describe('POST /upload', () => {
     assert(cid, 'Server response payload has `cid` property')
     assert.strictEqual(cid, expectedCid, 'Server responded with expected CID')
   })
+
+  it('should decode filename from header', async () => {
+    const expectedName = 'filename–with–funky–chars'
+
+    // Create token
+    const token = await getTestJWT()
+
+    const res = await fetch(new URL('upload', endpoint), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'X-Name': encodeURIComponent(expectedName)
+      },
+      body: new Blob(['hello world!'])
+    })
+
+    assert(res, 'Server responded')
+    // db mock throws 500 if filename was not decoded
+    assert(res.ok, 'Server response not ok: filename might not have been decoded.')
+  })
 })

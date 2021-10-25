@@ -9,6 +9,15 @@ const gqlOkResponse = data => gqlResponse(200, { data })
  */
 module.exports = ({ body }) => {
   if (body.query.includes('createUpload')) {
+    // validate filename is decoded
+    const name = body.variables.data.name
+    const decoded = decodeURIComponent(body.variables.data.name)
+    if (name && name.includes('%') && !decoded.includes('%')) {
+      return gqlResponse(500, {
+        errors: [{ message: 'Filename was not decoded' }]
+      })
+    }
+
     return gqlOkResponse({
       createUpload: { content: { _id: 'test-content' } }
     })

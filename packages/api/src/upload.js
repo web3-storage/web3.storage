@@ -15,11 +15,6 @@ export async function uploadPost (request, env, ctx) {
   const { headers } = request
   const contentType = headers.get('content-type') || ''
 
-  let name = headers.get('x-name')
-  if (!name || typeof name !== 'string') {
-    name = `Upload at ${new Date().toISOString()}`
-  }
-
   let input
   if (contentType.includes('multipart/form-data')) {
     const form = await toFormData(request)

@@ -137,7 +137,7 @@ class Web3Storage {
     let headers = Web3Storage.headers(token)
 
     if (name) {
-      headers = { ...headers, 'X-Name': name }
+      headers = { ...headers, 'X-Name': encodeURIComponent(name) }
     }
 
     const roots = await car.getRoots()

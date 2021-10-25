@@ -1,6 +1,8 @@
 import { getMagic } from './magic'
 import constants from './constants'
 
+/** @typedef {{ name?: string } & import('web3.storage').Upload} Upload */
+
 export const API = constants.API
 
 const LIFESPAN = constants.MAGIC_TOKEN_LIFESPAN / 1000
