@@ -87,7 +87,7 @@ export default function Account({ isLoggedIn }) {
     enabled: isLoggedIn
   })
 
-  const { data } = useQuery('get-info', getInfo, {
+  const { data, isLoading: isLoadingUserData, isFetching: isFetchingUserData } = useQuery('get-info', getInfo, {
     enabled: isLoggedIn,
   })
 
@@ -112,7 +112,7 @@ export default function Account({ isLoggedIn }) {
     return () => clearTimeout(timer)
   }, [copied])
 
-  const isLoaded = !isLoadingTokens && !isFetchingTokens && !isLoadingUploads && !isFetchingUploads
+  const isLoaded = !isLoadingTokens && !isFetchingTokens && !isLoadingUploads && !isFetchingUploads && !isLoadingUserData && !isFetchingUserData
 
   const hasUsedTokensToUploadBefore = tokens.some(t => t.hasUploads)
   /**
@@ -150,7 +150,7 @@ export default function Account({ isLoggedIn }) {
         <main className="max-w-screen-xl mx-auto my-4 lg:my-16 text-w3storage-purple">
           <div className="flex mb-8 flex-wrap items-center">
             <h3 className="mr-2">Your account</h3>
-            <When condition={!!data && isLoaded}>
+            <When condition={isLoaded}>
               { data?.userInfo.email && <span>({data?.userInfo.email}{data?.userInfo.github && ` via GitHub` })</span> }
             </When>
           </div>
