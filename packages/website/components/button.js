@@ -64,7 +64,7 @@ export default function Button({
       break
 
     case 'light':
-      variantClasses = 'bg-white text-w3storage-purple border border-transparent'
+      variantClasses = 'bg-white text-w3storage-purple border-2 border-w3storage-purple'
       break
 
     case 'outlined':
@@ -80,13 +80,10 @@ export default function Button({
         'flex',
         'items-center',
         'justify-center',
-        'hover:opacity-90',
-        'focus:opacity-90',
-        'focus:border-white',
         'px-4',
         disabled ?
           'cursor-auto opacity-50' :
-          'hover:opacity-90 focus:opacity-90 focus:border-white',
+          'hover:opacity-90 focus:opacity-90 transition',
         'typography-cta',
         !small && 'w-full',
         className

@@ -1,15 +1,17 @@
 /* eslint-env browser */
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { useQuery } from 'react-query'
+import { When } from 'react-if'
 import Link from 'next/link'
+import fileSize from 'filesize'
+
 import { getTokens, getStorage, getUploads } from '../lib/api'
 import countly from '../lib/countly'
+import { useDragAndDrop, OnDrop } from '../components/upload';
 import Button from '../components/button'
 import Loading from '../components/loading'
 import VerticalLines from '../illustrations/vertical-lines'
-import { When } from 'react-if'
 import emailContent from '../content/file-a-request'
-import fileSize from 'filesize'
 
 const MAX_STORAGE = 1.1e+12 /* 1 TB */
 
@@ -115,7 +117,6 @@ export default function Account({ isLoggedIn }) {
    * @param {import('react').ChangeEvent<HTMLFormElement>} e
    */
 
-
   async function handleCopyToken(e) {
     e.preventDefault()
     const secret = e.target.dataset.value
@@ -135,8 +136,11 @@ export default function Account({ isLoggedIn }) {
     })
   }, [])
 
+  const { getRootProps, isDragActive } = useDragAndDrop()
+
   return (
-    <div className="relative overflow-hidden z-0">
+    <div className="relative overflow-hidden" {...getRootProps()}>
+      <OnDrop show={isDragActive} />
       <When condition={isLoaded}>
         <div className="absolute top-10 right-0 pointer-events-none bottom-0 hidden md:flex justify-end z-n1">
           <VerticalLines className="h-full"/>
@@ -157,16 +161,23 @@ export default function Account({ isLoggedIn }) {
                 <When condition={!hasUploads}>
                   <h3 className="font-normal">Getting started</h3>
                   <div className="flex flex-wrap gap-x-10">
-                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red p-10 text-center" style={{ maxWidth: '24rem'}}>
-                      <h3 className="font-normal">Upload your first file</h3>
-                      <p>
-                        Try uploading a file to Web3.Storage!
+                    <div
+                      className="relative flex flex-col items-center mt-10 justify-between h-96 max-w-full p-10 text-center"
+                      style={{ maxWidth: '24rem'}}
+                    >
+                      <div
+                        className="absolute z-0 top-0 right-0 bottom-0 left-0 border-2 border-w3storage-red bg-w3storage-white"
+                      />
+                      <h3 className="relative font-normal">Upload your first file</h3>
+                      <p className="relative">
+                        Try uploading files to Web3.Storage!
                       </p>
                       <Button
                         href='/files'
+                        className="relative"
                         tracking={{ ui: countly.ui.PROFILE_GETTING_STARTED, action: 'Upload a file' }}
                       >
-                        Upload a file
+                        Upload files
                       </Button>
                     </div>
                   </div>
