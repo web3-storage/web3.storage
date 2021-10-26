@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { useQuery } from 'react-query'
 import Link from 'next/link'
-import { getTokens, getStorage, getUploads } from '../lib/api'
+import { getTokens, getStorage, getUploads, getInfo } from '../lib/api'
 import countly from '../lib/countly'
 import Button from '../components/button'
 import Loading from '../components/loading'
@@ -87,6 +87,10 @@ export default function Account({ isLoggedIn }) {
     enabled: isLoggedIn
   })
 
+  const { data } = useQuery('get-info', getInfo, {
+    enabled: isLoggedIn,
+  })
+
   /** @type {import('./tokens').Token[]} */
   const tokens = tokensData || []
 
@@ -144,13 +148,18 @@ export default function Account({ isLoggedIn }) {
       </When>
       <div className="layout-margins">
         <main className="max-w-screen-xl mx-auto my-4 lg:my-16 text-w3storage-purple">
-          <h3 className="mb-8">Your account</h3>
-          <StorageInfo isLoggedIn={isLoggedIn}/>
+          <div className="flex mb-8 flex-wrap items-center">
+            <h3 className="mr-2">Your account</h3>
+            <When condition={!!data && isLoaded}>
+              { data?.userInfo.email && <span>({data?.userInfo.email}{data?.userInfo.github && ` via GitHub` })</span> }
+            </When>
+          </div>
+          <StorageInfo isLoggedIn={isLoggedIn} />
           <When condition={!isLoaded}>
-            <div className="relative w-52 pt-60">
-              <Loading />
-            </div>
-          </When>
+              <div className="relative w-52 pt-60">
+                <Loading />
+              </div>
+            </When>
           <When condition={isLoaded}>
             <When condition={tokens.length === 0 || !hasUsedTokensToUploadBefore}>
               <div className="mt-9">

@@ -117,6 +117,19 @@ export async function userAccountGet (request, env) {
 }
 
 /**
+ * Retrieve user info
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userInfoGet (request, env) {
+  const userInfo = await env.db.getUser(request.auth.user.issuer)
+  return new JSONResponse({
+    userInfo
+  })
+}
+
+/**
  * Retrieve user auth tokens.
  *
  * @param {AuthenticatedRequest} request
