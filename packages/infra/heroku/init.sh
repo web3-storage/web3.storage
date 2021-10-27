@@ -69,7 +69,7 @@ git init
 git add -A
 git commit -m "chore: configure postgrest"
 
-# heroku git:remote --app=web3-storage-pgrest-staging
+heroku git:remote --app=web3-storage-pgrest-staging
 git push heroku main
 heroku git:remote --app=web3-storage-pgrest-prod
 git push heroku main
