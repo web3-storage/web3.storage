@@ -57,6 +57,7 @@ One time set up of your cloudflare worker subdomain for dev:
     wrangler secret put S3_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3 (not required for dev)
     wrangler secret put S3_SECRET_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3 (not required for dev)
     wrangler secret put S3_BUCKET_NAME --env $(whoami) # e.g web3.storage-staging-us-east-2 (not required for dev)
+    wrangler secret put DATABASE --env USER # Specify Database to use, either "postgres" or "fauna"
     wrangler secret put PG_REST_JWT --env USER # Get from database postgrest
     ```
 
@@ -217,13 +218,5 @@ Production vars should be set in Github Actions secrets.
 ## S3 Setup
 
 We use [S3](https://aws.amazon.com/s3/) for backup and disaster recovery. For production an account on AWS needs to be created.
-
-## Local DB Setup
-
-Inside the `/packages/api` folder create a file called `.env.local` with the following content.
-
-```ini
-DATABASE=<name> # either "fauna" or "postgres"
-```
 
 Production vars should be set in Github Actions secrets.
