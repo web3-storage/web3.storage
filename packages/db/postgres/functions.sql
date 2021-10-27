@@ -26,6 +26,9 @@ DECLARE
   pin_location_result_id BIGINT;
   inserted_upload_id BIGINT;
 BEGIN
+  -- Set timeout as imposed by heroku
+  SET LOCAL statement_timeout = '30s';
+
   -- Add to content table if new
   insert into content (cid, dag_size, updated_at, inserted_at)
   values (data ->> 'content_cid',
