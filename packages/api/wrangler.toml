@@ -53,7 +53,7 @@ vars = { CLUSTER_API_URL = "https://yusef-cluster-api-web3-storage.loca.lt", ENV
 [env.vsantos]
 workers_dev = true
 account_id = "7ec0b7cf2ec201b2580374e53ba5f37b"
-vars = { CLUSTER_API_URL = "https://vascosantos-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://vascosantos-postgres-api-web3-storage.loca.lt", ENV = "dev", DATABASE = "postgres" }
+vars = { CLUSTER_API_URL = "https://vascosantos-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://vascosantos-postgres-api-web3-storage.loca.lt", ENV = "dev" }
 
 [env.rafaelramalho]
 workers_dev = true

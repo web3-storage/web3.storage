@@ -50,7 +50,7 @@ export function envAll (_, env, event) {
     env.DANGEROUSLY_BYPASS_MAGIC_AUTH = DANGEROUSLY_BYPASS_MAGIC_AUTH
   }
 
-  if (env.DATABSE === 'fauna' ||
+  if (env.DATABASE === 'fauna' ||
     (typeof DATABASE !== 'undefined' && DATABASE === 'fauna') ||
     (!env.DATABASE && typeof DATABASE === 'undefined')) {
     env.db = new DBClient({
