@@ -68,3 +68,13 @@ export class InvalidCidError extends Error {
   }
 }
 InvalidCidError.CODE = 'ERROR_INVALID_CID'
+
+export class UnsupportedBlockchainError extends HTTPError {
+  constructor (blockchain) {
+    super(`Wallet auth is not supported for blockchain: ${blockchain}`)
+    this.name = 'UnsupportedBlockchain'
+    this.status = 400
+    this.code = UnsupportedBlockchainError.CODE
+  }
+}
+UnsupportedBlockchainError.CODE = 'ERROR_UNSUPPORTED_BLOCKCHAIN'

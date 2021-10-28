@@ -2,7 +2,7 @@
 import { Router } from 'itty-router'
 import { errorHandler } from './error-handler.js'
 import { addCorsHeaders, withCorsHeaders, corsOptions } from './cors.js'
-import { withApiOrMagicToken, withMagicToken } from './auth.js'
+import { withApiOrMagicToken, withApiOrMagicTokenOrWalletAuth, withMagicToken } from './auth.js'
 import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
@@ -24,6 +24,7 @@ router.all('*', envAll)
 const auth = {
   '🤲': handler => withCorsHeaders(handler),
   '🔒': handler => withCorsHeaders(withApiOrMagicToken(handler)),
+  '🔗': handler => withCorsHeaders(withApiOrMagicTokenOrWalletAuth(handler)),
   '👮': handler => withCorsHeaders(withMagicToken(handler))
 }
 
@@ -38,8 +39,8 @@ router.get('/status/:cid',          mode['👀'](auth['🤲'](statusGet)))
 router.get('/car/:cid',             mode['👀'](auth['🤲'](carGet)))
 router.head('/car/:cid',            mode['👀'](auth['🤲'](carHead)))
 
-router.post('/car',                 mode['📝'](auth['🔒'](carPost)))
-router.put('/car/:cid',             mode['📝'](auth['🔒'](carPut)))
+router.post('/car',                 mode['📝'](auth['🔗'](carPost)))
+router.put('/car/:cid',             mode['📝'](auth['🔗'](carPut)))
 router.post('/upload',              mode['📝'](auth['🔒'](uploadPost)))
 router.get('/user/uploads',         mode['👀'](auth['🔒'](userUploadsGet)))
 
