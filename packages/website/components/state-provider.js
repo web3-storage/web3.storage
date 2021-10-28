@@ -1,7 +1,5 @@
 import { createContext, useEffect, useReducer } from 'react'
-import { useQuery } from 'react-query'
-import { getInfo } from '../lib/api'
-import { useLoggedIn } from '../lib/user'
+import { useUser } from '../hooks/use-user'
 
 /**
  * @typedef {{
@@ -64,7 +62,13 @@ const reducer = (state, action) => {
   }
 }
 
-export const AppContext = createContext(initialState)
+export const AppContext = createContext({ 
+  state: initialState, 
+  /**
+   * @param {any} _dispatch
+   */
+  dispatch: (_dispatch) => {} 
+})
 
 /**
  * @param {Object} props
@@ -72,15 +76,13 @@ export const AppContext = createContext(initialState)
  */
 const StateProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const { isLoggedIn } = useLoggedIn()
-  const { data } = useQuery('get-info', getInfo, {
-    enabled: isLoggedIn
-  })
-  
-  useEffect(() => dispatch({ type: 'updateUser', payload: data }), [data])
+
+  // init app state with user
+  const user = useUser()
+  useEffect(() => dispatch({ type: 'updateUser', payload: user }), [ user ])
 
   return (
-    <AppContext.Provider value={state}>
+    <AppContext.Provider value={{ state: state, dispatch: dispatch }}>
       { children }
     </AppContext.Provider>
   )

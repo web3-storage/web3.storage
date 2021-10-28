@@ -88,7 +88,7 @@ export default function Account({ isLoggedIn }) {
     enabled: isLoggedIn
   })
 
-  const appState = useContext(AppContext)
+  const { state } = useContext(AppContext)  
 
   /** @type {import('./tokens').Token[]} */
   const tokens = tokensData || []
@@ -111,7 +111,7 @@ export default function Account({ isLoggedIn }) {
     return () => clearTimeout(timer)
   }, [copied])
 
-  const isLoaded = !isLoadingTokens && !isFetchingTokens && !isLoadingUploads && !isFetchingUploads && !!appState.user
+  const isLoaded = !isLoadingTokens && !isFetchingTokens && !isLoadingUploads && !isFetchingUploads && !!state.user
 
   const hasUsedTokensToUploadBefore = tokens.some(t => t.hasUploads)
   /**
@@ -150,7 +150,7 @@ export default function Account({ isLoggedIn }) {
           <div className="flex mb-8 flex-wrap items-center">
             <h3 className="mr-2">Your account</h3>
             <When condition={isLoaded}>
-              { appState.user?.info.email && <span>({appState.user?.info.email}{appState.user?.info.github && ` via GitHub` })</span> }
+              { state.user?.info.email && <span>({state.user?.info.email}{state.user?.info.github && ` via GitHub` })</span> }
             </When>
           </div>
           <StorageInfo isLoggedIn={isLoggedIn} />
