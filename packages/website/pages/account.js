@@ -10,7 +10,7 @@ import VerticalLines from '../illustrations/vertical-lines'
 import { When } from 'react-if'
 import emailContent from '../content/file-a-request'
 import fileSize from 'filesize'
-import { UserContext } from '../components/user-provider'
+import { AppContext } from '../components/state-provider'
 
 const MAX_STORAGE = 1.1e+12 /* 1 TB */
 
@@ -88,7 +88,7 @@ export default function Account({ isLoggedIn }) {
     enabled: isLoggedIn
   })
 
-  const { user } = useContext(UserContext)
+  const appState = useContext(AppContext)
 
   /** @type {import('./tokens').Token[]} */
   const tokens = tokensData || []
@@ -111,7 +111,7 @@ export default function Account({ isLoggedIn }) {
     return () => clearTimeout(timer)
   }, [copied])
 
-  const isLoaded = !isLoadingTokens && !isFetchingTokens && !isLoadingUploads && !isFetchingUploads
+  const isLoaded = !isLoadingTokens && !isFetchingTokens && !isLoadingUploads && !isFetchingUploads && !!appState.user
 
   const hasUsedTokensToUploadBefore = tokens.some(t => t.hasUploads)
   /**
@@ -150,7 +150,7 @@ export default function Account({ isLoggedIn }) {
           <div className="flex mb-8 flex-wrap items-center">
             <h3 className="mr-2">Your account</h3>
             <When condition={isLoaded}>
-              { user.info.email && <span>({user.info.email}{user.info.github && ` via GitHub` })</span> }
+              { appState.user?.info.email && <span>({appState.user?.info.email}{appState.user?.info.github && ` via GitHub` })</span> }
             </When>
           </div>
           <StorageInfo isLoggedIn={isLoggedIn} />

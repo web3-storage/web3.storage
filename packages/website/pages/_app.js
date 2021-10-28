@@ -3,7 +3,7 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import Router from 'next/router'
 import '../styles/global.css'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import UserProvider from '../components/user-provider'
+import StateProvider from '../components/state-provider'
 import Layout from '../components/layout.js'
 import countly from '../lib/countly';
 
@@ -32,11 +32,11 @@ export default function App({ Component, pageProps }) {
   
   return (
     <QueryClientProvider client={queryClient}>
-      <UserProvider>
+      <StateProvider>
         <Layout {...pageProps}>
           {(props) => <Component {...pageProps} {...props} />}
         </Layout>
-      </UserProvider>
+      </StateProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
