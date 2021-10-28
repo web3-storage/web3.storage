@@ -12,7 +12,7 @@ const {
 /**
  * Usage:
  *
- * Match(Index('pinSync_migration_timestamp'))
+ * Match(Index('pinSyncRequest_migration_timestamp'))
  */
 const index = {
   name: 'pinSyncRequest_migration_timestamp',

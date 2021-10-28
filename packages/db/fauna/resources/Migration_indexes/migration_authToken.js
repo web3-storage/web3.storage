@@ -12,7 +12,7 @@ const {
 /**
  * Usage:
  *
- * Match(Index('authtoken_filter_by_timestamp'))
+ * Match(Index('authtoken_migration_timestamp'))
  */
 const index = {
   name: 'authtoken_migration_timestamp',
