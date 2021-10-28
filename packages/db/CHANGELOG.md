@@ -1,5 +1,28 @@
 # Changelog
 
+## [2.4.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.3.1...db-v2.4.0) (2021-10-28)
+
+
+### Features
+
+* cron and pinpin rewire ([#531](https://www.github.com/web3-storage/web3.storage/issues/531)) ([9e5b42d](https://www.github.com/web3-storage/web3.storage/commit/9e5b42dc6d33bf3cf017034474981812370b366e))
+* postgres setup ([#508](https://www.github.com/web3-storage/web3.storage/issues/508)) ([cd04716](https://www.github.com/web3-storage/web3.storage/commit/cd04716844a646d986f53aeae7c73840a008aad3))
+* updated at indexes ([#551](https://www.github.com/web3-storage/web3.storage/issues/551)) ([b6c0ce5](https://www.github.com/web3-storage/web3.storage/commit/b6c0ce51f51e5b5339a202fbd04c15674e36e79d))
+
+
+### Bug Fixes
+
+* add mocha dev dependency to api and db ([0648527](https://www.github.com/web3-storage/web3.storage/commit/064852797e0cf56faacbfdcbf9a142973e25c663))
+* **api:** add timeout statement to upload function ([#569](https://www.github.com/web3-storage/web3.storage/issues/569)) ([bf17756](https://www.github.com/web3-storage/web3.storage/commit/bf177569c690ad1f37583574a0b8c6026c189f40))
+* db client improvements ([#546](https://www.github.com/web3-storage/web3.storage/issues/546)) ([5deffae](https://www.github.com/web3-storage/web3.storage/commit/5deffae2ec3e6c81d90d7db10285fd051c5c1c7d))
+* db fauna updated ts ([#572](https://www.github.com/web3-storage/web3.storage/issues/572)) ([c0c8334](https://www.github.com/web3-storage/web3.storage/commit/c0c8334ff29810d4c7f841740fd8714acf0e9a66))
+* upload fn ts wrongly inserted ([#570](https://www.github.com/web3-storage/web3.storage/issues/570)) ([c9de809](https://www.github.com/web3-storage/web3.storage/commit/c9de809d4bda1939e6867f22fef986d493888bfe))
+
+
+### Changes
+
+* api rewire ([#524](https://www.github.com/web3-storage/web3.storage/issues/524)) ([f4f9cd3](https://www.github.com/web3-storage/web3.storage/commit/f4f9cd39f0859b843067057af9bcdbf4f29063e9))
+
 ### [2.3.1](https://www.github.com/web3-storage/web3.storage/compare/db-v2.3.0...db-v2.3.1) (2021-09-28)
 
 
