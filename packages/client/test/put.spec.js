@@ -109,7 +109,7 @@ describe('put', () => {
     const keypair = new solanaWeb3.Keypair()
     const publicKey = keypair.publicKey.toBytes()
     const signMessage = async (msg) => nacl.sign.detached(msg, keypair.secretKey)
-    const getChainContext = async () => ({ 
+    const getChainContext = async () => ({
       blockchain: 'solana',
       network: 'devnet',
       recentBlockhash: 'asdfghjkl'
@@ -121,7 +121,7 @@ describe('put', () => {
       keyType: 'ed25519',
       publicKey,
       signMessage,
-      getChainContext,
+      getChainContext
     }
 
     const client = new Web3Storage({ wallet, endpoint })
@@ -212,7 +212,7 @@ describe('putCar', () => {
     const keypair = new solanaWeb3.Keypair()
     const publicKey = keypair.publicKey.toBytes()
     const signMessage = async (msg) => nacl.sign.detached(msg, keypair.secretKey)
-    const getChainContext = async () => ({ 
+    const getChainContext = async () => ({
       blockchain: 'solana',
       network: 'devnet',
       recentBlockhash: 'asdfghjkl'
@@ -224,7 +224,7 @@ describe('putCar', () => {
       keyType: 'ed25519',
       publicKey,
       signMessage,
-      getChainContext,
+      getChainContext
     }
 
     const client = new Web3Storage({ wallet, endpoint })
@@ -243,7 +243,7 @@ describe('putCar', () => {
     const keypair = new solanaWeb3.Keypair()
     const publicKey = keypair.publicKey.toBytes()
     const signMessage = async (msg) => nacl.sign.detached(msg, keypair.secretKey)
-    const getChainContext = async () => ({ 
+    const getChainContext = async () => ({
       blockchain: 'solana',
       network: 'devnet',
       recentBlockhash: 'asdfghjkl'
@@ -255,12 +255,12 @@ describe('putCar', () => {
       keyType: 'not-a-supported-key-type',
       publicKey,
       signMessage,
-      getChainContext,
+      getChainContext
     }
 
     const client = new Web3Storage({ wallet, endpoint })
     const carReader = await createCar('hello world')
-    try {    
+    try {
       await client.putCar(carReader)
       assert.unreachable()
     } catch (err) {
@@ -272,7 +272,7 @@ describe('putCar', () => {
     const keypair = new solanaWeb3.Keypair()
     const publicKey = keypair.publicKey.toBytes()
     const signMessage = async (msg) => nacl.sign.detached(msg, keypair.secretKey)
-    const getChainContext = async () => ({ 
+    const getChainContext = async () => ({
       blockchain: 'dogecoin',
       network: 'mainnet',
       recentBlockhash: 'asdfghjkl'
@@ -284,12 +284,12 @@ describe('putCar', () => {
       keyType: 'ed25519',
       publicKey,
       signMessage,
-      getChainContext,
+      getChainContext
     }
 
     const client = new Web3Storage({ wallet, endpoint })
     const carReader = await createCar('hello world')
-    try {    
+    try {
       await client.putCar(carReader)
       assert.unreachable()
     } catch (err) {
@@ -301,7 +301,7 @@ describe('putCar', () => {
     const keypair = new solanaWeb3.Keypair()
     const publicKey = keypair.publicKey.toBytes()
     const signMessage = async (msg) => nacl.sign.detached(msg, keypair.secretKey)
-    const getChainContext = async () => ({ 
+    const getChainContext = async () => ({
       blockchain: 'ethereum',
       network: 'devnet',
       recentBlockhash: 'asdfghjkl'
@@ -313,12 +313,12 @@ describe('putCar', () => {
       keyType: 'ed25519',
       publicKey,
       signMessage,
-      getChainContext,
+      getChainContext
     }
 
     const client = new Web3Storage({ wallet, endpoint })
     const carReader = await createCar('hello world')
-    try {    
+    try {
       await client.putCar(carReader)
       assert.unreachable()
     } catch (err) {
