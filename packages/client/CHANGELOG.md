@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.3.3](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.2...web3.storage-v3.3.3) (2021-10-28)
+
+
+### Bug Fixes
+
+* encode filenames ([#539](https://www.github.com/web3-storage/web3.storage/issues/539)) ([de01972](https://www.github.com/web3-storage/web3.storage/commit/de0197278c041a5bd0c2979e38f79bad068bf993))
+
 ### [3.3.2](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.1...web3.storage-v3.3.2) (2021-09-06)
 
 
