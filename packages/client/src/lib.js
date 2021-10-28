@@ -102,17 +102,17 @@ class Web3Storage {
    * @returns {Promise<Record<string, string>>}
    */
   static async headers (token, wallet, rootCID) {
-    if (!token) {
-      if (wallet && rootCID) {
-        const { payload, signature } = await createAndSignWalletAuthPayload(wallet, rootCID)
-        const authHeaderValue = `X-Wallet-Signature-${wallet.blockchain}-${wallet.network} ${base64.encode(signature)}`
-        return {
-          Authorization: authHeaderValue,
-          'X-Wallet-Signature-Payload': base64.encode(payload),
-          'X-Client': 'web3.storage'
-        }
+    if (!token && wallet != null && rootCID != null) {
+      const { payload, signature } = await createAndSignWalletAuthPayload(wallet, rootCID)
+      const authHeaderValue = `X-Wallet-Signature-${wallet.blockchain}-${wallet.network} ${base64.encode(signature)}`
+      return {
+        Authorization: authHeaderValue,
+        'X-Wallet-Signature-Payload': base64.encode(payload),
+        'X-Client': 'web3.storage'
       }
+    }
 
+    if (!token) {
       throw new Error('missing token')
     }
     return {
@@ -127,7 +127,7 @@ class Web3Storage {
    * @param {PutOptions} [options]
    * @returns {Promise<CIDString>}
    */
-  static async put ({ endpoint, token }, files, {
+  static async put ({ endpoint, token, wallet }, files, {
     onRootCidReady,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
@@ -148,7 +148,7 @@ class Web3Storage {
       })
       onRootCidReady && onRootCidReady(root.toString())
       const car = await CarReader.fromIterable(out)
-      return await Web3Storage.putCar({ endpoint, token }, car, { onStoredChunk, maxRetries, name })
+      return await Web3Storage.putCar({ endpoint, token, wallet }, car, { onStoredChunk, maxRetries, name })
     } finally {
       await blockstore.close()
     }

@@ -9,13 +9,15 @@ import { CID } from 'multiformats/cid'
 import { encode } from 'multiformats/block'
 import * as json from '@ipld/dag-json'
 import { sha256 } from 'multiformats/hashes/sha2'
+import * as solanaWeb3 from '@solana/web3.js'
+import nacl from 'tweetnacl'
 
 describe('put', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
   const token = AUTH_TOKEN || 'good'
   const endpoint = new URL(API_PORT ? `http://localhost:${API_PORT}` : '')
 
-  it('errors without token', async () => {
+  it('errors without token or wallet', async () => {
     // @ts-ignore
     const client = new Web3Storage({ endpoint })
     const files = prepareFiles()
@@ -100,6 +102,33 @@ describe('put', () => {
     })
     assert.ok(uploadedChunks >= 100)
   })
+
+  it('adds files with Solana wallet authentication', async function () {
+    this.timeout(30e3)
+
+    const keypair = new solanaWeb3.Keypair()
+    const publicKey = keypair.publicKey.toBytes()
+    const signMessage = async (msg) => nacl.sign.detached(msg, keypair.secretKey)
+    const getChainContext = async () => ({ 
+      blockchain: 'solana',
+      network: 'devnet',
+      recentBlockhash: 'asdfghjkl'
+    })
+
+    const wallet = {
+      blockchain: 'solana',
+      network: 'devnet',
+      keyType: 'ed25519',
+      publicKey,
+      signMessage,
+      getChainContext,
+    }
+
+    const client = new Web3Storage({ wallet, endpoint })
+    const files = prepareFiles()
+    const cid = await client.put(files)
+    assert.ok(cid, 'something failed')
+  })
 })
 
 describe('putCar', () => {
@@ -177,6 +206,95 @@ describe('putCar', () => {
       }
     })
     assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+  })
+
+  it('adds CAR files using Solana wallet auth', async () => {
+    const keypair = new solanaWeb3.Keypair()
+    const publicKey = keypair.publicKey.toBytes()
+    const signMessage = async (msg) => nacl.sign.detached(msg, keypair.secretKey)
+    const getChainContext = async () => ({ 
+      blockchain: 'solana',
+      network: 'devnet',
+      recentBlockhash: 'asdfghjkl'
+    })
+
+    const wallet = {
+      blockchain: 'solana',
+      network: 'devnet',
+      keyType: 'ed25519',
+      publicKey,
+      signMessage,
+      getChainContext,
+    }
+
+    const client = new Web3Storage({ wallet, endpoint })
+    const carReader = await createCar('hello world')
+    const expectedCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
+    const cid = await client.putCar(carReader, {
+      name: 'putCar test',
+      onRootCidReady: cid => {
+        assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+      }
+    })
+    assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+  })
+
+  it('errors if wallet uses unsupported keyType', async () => {
+    const keypair = new solanaWeb3.Keypair()
+    const publicKey = keypair.publicKey.toBytes()
+    const signMessage = async (msg) => nacl.sign.detached(msg, keypair.secretKey)
+    const getChainContext = async () => ({ 
+      blockchain: 'solana',
+      network: 'devnet',
+      recentBlockhash: 'asdfghjkl'
+    })
+
+    const wallet = {
+      blockchain: 'solana',
+      network: 'devnet',
+      keyType: 'not-a-supported-key-type',
+      publicKey,
+      signMessage,
+      getChainContext,
+    }
+
+    const client = new Web3Storage({ wallet, endpoint })
+    const carReader = await createCar('hello world')
+    try {    
+      await client.putCar(carReader)
+      assert.unreachable()
+    } catch (err) {
+      assert.match(err.message, 'key type')
+    }
+  })
+
+  it('errors if chain context and wallet have unequal "blockchain" fields', async () => {
+    const keypair = new solanaWeb3.Keypair()
+    const publicKey = keypair.publicKey.toBytes()
+    const signMessage = async (msg) => nacl.sign.detached(msg, keypair.secretKey)
+    const getChainContext = async () => ({ 
+      blockchain: 'ethereum',
+      network: 'devnet',
+      recentBlockhash: 'asdfghjkl'
+    })
+
+    const wallet = {
+      blockchain: 'solana',
+      network: 'devnet',
+      keyType: 'ed25519',
+      publicKey,
+      signMessage,
+      getChainContext,
+    }
+
+    const client = new Web3Storage({ wallet, endpoint })
+    const carReader = await createCar('hello world')
+    try {    
+      await client.putCar(carReader)
+      assert.unreachable()
+    } catch (err) {
+      assert.match(err.message, 'context mismatch')
+    }
   })
 })
 
