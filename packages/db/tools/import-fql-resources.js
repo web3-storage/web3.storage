@@ -11,6 +11,7 @@ const main = async () => {
   }
   await uploadResources('function')
   await uploadResources('index')
+  await uploadResources('migration_indexes')
 }
 
 /**
