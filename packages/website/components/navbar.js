@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useContext, useMemo, useRef, useState } from 'react'
 import Router from 'next/router'
 import Link from 'next/link'
 import { getMagic } from '../lib/magic.js'
@@ -12,6 +12,7 @@ import Hamburger from '../icons/hamburger'
 import Logo from '../icons/w3storage-logo'
 import Cross from '../icons/cross'
 import Loading from './loading.js'
+import { initUser, UserContext } from './user-provider.js'
 
 /**
  * Navbar Component
@@ -25,6 +26,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   const containerRef = useRef(null)
   const [isSmallVariant, setSmallVariant] = useState(false)
   const [isMenuOpen, setMenuOpen] = useState(false)
+  const { setUser } = useContext(UserContext)
 
   useResizeObserver(containerRef, () => {
     const shouldGoToSmallVariant =  window.innerWidth < 640
@@ -73,6 +75,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   async function logout() {
     await getMagic().user.logout()
     await queryClient.invalidateQueries('magic-user')
+    setUser(initUser)
     Router.push('/')
   }
 

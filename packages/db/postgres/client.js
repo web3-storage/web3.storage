@@ -80,6 +80,7 @@ export class PostgresClient {
         issuer,
         name,
         email,
+        github,
         publicAddress:public_address,
         created:inserted_at,
         updated:updated_at

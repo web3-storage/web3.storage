@@ -123,9 +123,9 @@ export async function userAccountGet (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userInfoGet (request, env) {
-  const userInfo = await env.db.getUser(request.auth.user.issuer)
+  const info = await env.db.getUser(request.auth.user.issuer)
   return new JSONResponse({
-    userInfo
+    info
   })
 }
 

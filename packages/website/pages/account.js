@@ -1,8 +1,8 @@
 /* eslint-env browser */
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useCallback, useContext } from 'react'
 import { useQuery } from 'react-query'
 import Link from 'next/link'
-import { getTokens, getStorage, getUploads, getInfo } from '../lib/api'
+import { getTokens, getStorage, getUploads } from '../lib/api'
 import countly from '../lib/countly'
 import Button from '../components/button'
 import Loading from '../components/loading'
@@ -10,6 +10,7 @@ import VerticalLines from '../illustrations/vertical-lines'
 import { When } from 'react-if'
 import emailContent from '../content/file-a-request'
 import fileSize from 'filesize'
+import { UserContext } from '../components/user-provider'
 
 const MAX_STORAGE = 1.1e+12 /* 1 TB */
 
@@ -87,9 +88,7 @@ export default function Account({ isLoggedIn }) {
     enabled: isLoggedIn
   })
 
-  const { data, isLoading: isLoadingUserData, isFetching: isFetchingUserData } = useQuery('get-info', getInfo, {
-    enabled: isLoggedIn,
-  })
+  const { user } = useContext(UserContext)
 
   /** @type {import('./tokens').Token[]} */
   const tokens = tokensData || []
@@ -112,7 +111,7 @@ export default function Account({ isLoggedIn }) {
     return () => clearTimeout(timer)
   }, [copied])
 
-  const isLoaded = !isLoadingTokens && !isFetchingTokens && !isLoadingUploads && !isFetchingUploads && !isLoadingUserData && !isFetchingUserData
+  const isLoaded = !isLoadingTokens && !isFetchingTokens && !isLoadingUploads && !isFetchingUploads
 
   const hasUsedTokensToUploadBefore = tokens.some(t => t.hasUploads)
   /**
@@ -151,7 +150,7 @@ export default function Account({ isLoggedIn }) {
           <div className="flex mb-8 flex-wrap items-center">
             <h3 className="mr-2">Your account</h3>
             <When condition={isLoaded}>
-              { data?.userInfo.email && <span>({data?.userInfo.email}{data?.userInfo.github && ` via GitHub` })</span> }
+              { user.info.email && <span>({user.info.email}{user.info.github && ` via GitHub` })</span> }
             </When>
           </div>
           <StorageInfo isLoggedIn={isLoggedIn} />
