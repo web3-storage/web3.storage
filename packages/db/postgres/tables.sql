@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS public.user
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+CREATE INDEX IF NOT EXISTS user_updated_at_idx ON public.user (updated_at);
+
 -- User authentication keys.
 CREATE TABLE IF NOT EXISTS auth_key
 (
@@ -40,6 +42,8 @@ CREATE TABLE IF NOT EXISTS content
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+CREATE INDEX IF NOT EXISTS content_updated_at_idx ON content (updated_at);
 
 -- IPFS Cluster tracker status values.
 -- https://github.com/ipfs/ipfs-cluster/blob/54c3608899754412861e69ee81ca8f676f7e294b/api/types.go#L52-L83
@@ -100,6 +104,8 @@ CREATE TABLE IF NOT EXISTS pin
   UNIQUE (content_cid, pin_location_id)
 );
 
+CREATE INDEX IF NOT EXISTS pin_updated_at_idx ON pin (updated_at);
+
 -- Upload type is the type of received upload data.
 CREATE TYPE upload_type AS ENUM
 (
@@ -136,6 +142,8 @@ CREATE TABLE IF NOT EXISTS upload
   -- deleted_at      TIMESTAMP WITH TIME ZONE, do we want?
   UNIQUE (user_id, source_cid)
 );
+
+CREATE INDEX IF NOT EXISTS upload_updated_at_idx ON upload (updated_at);
 
 -- Details of the backups created for an upload.
 CREATE TABLE IF NOT EXISTS backup
