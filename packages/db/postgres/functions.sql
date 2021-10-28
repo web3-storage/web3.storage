@@ -93,8 +93,8 @@ BEGIN
             data ->> 'source_cid',
             (data ->> 'type')::upload_type,
             data ->> 'name',
-            (data ->> 'updated_at')::timestamptz,
-            (data ->> 'inserted_at')::timestamptz)
+            (data ->> 'inserted_at')::timestamptz,
+            (data ->> 'updated_at')::timestamptz)
   ON CONFLICT ( user_id, source_cid ) DO UPDATE
     SET "updated_at" = (data ->> 'updated_at')::timestamptz,
         "deleted_at" = null
