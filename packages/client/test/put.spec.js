@@ -268,6 +268,35 @@ describe('putCar', () => {
     }
   })
 
+  it('errors if wallet is for an unsupported blockchain', async () => {
+    const keypair = new solanaWeb3.Keypair()
+    const publicKey = keypair.publicKey.toBytes()
+    const signMessage = async (msg) => nacl.sign.detached(msg, keypair.secretKey)
+    const getChainContext = async () => ({ 
+      blockchain: 'dogecoin',
+      network: 'mainnet',
+      recentBlockhash: 'asdfghjkl'
+    })
+
+    const wallet = {
+      blockchain: 'dogecoin',
+      network: 'mainnet',
+      keyType: 'ed25519',
+      publicKey,
+      signMessage,
+      getChainContext,
+    }
+
+    const client = new Web3Storage({ wallet, endpoint })
+    const carReader = await createCar('hello world')
+    try {    
+      await client.putCar(carReader)
+      assert.unreachable()
+    } catch (err) {
+      assert.match(err.message, 'unsupported blockchain')
+    }
+  })
+
   it('errors if chain context and wallet have unequal "blockchain" fields', async () => {
     const keypair = new solanaWeb3.Keypair()
     const publicKey = keypair.publicKey.toBytes()

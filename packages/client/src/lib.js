@@ -38,6 +38,7 @@ const MAX_PUT_RETRIES = 5
 const MAX_CONCURRENT_UPLOADS = 3
 const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 const SIGNING_DOMAIN_PREFIX = new TextEncoder().encode('web3-storage-wallet-auth:')
+const WALLET_AUTH_SUPPORTED_CHAINS = ['solana']
 
 /** @typedef { import('./lib/interface.js').API } API */
 /** @typedef { import('./lib/interface.js').Status} Status */
@@ -103,6 +104,9 @@ class Web3Storage {
    */
   static async headers (token, wallet, rootCID) {
     if (!token && wallet != null && rootCID != null) {
+      if (!WALLET_AUTH_SUPPORTED_CHAINS.includes(wallet.blockchain)) {
+        throw new Error(`unsupported blockchain ${wallet.blockchain}. currently supported values are: ${WALLET_AUTH_SUPPORTED_CHAINS.join(', ')}`)
+      }
       const { payload, signature } = await createAndSignWalletAuthPayload(wallet, rootCID)
       const authHeaderValue = `X-Wallet-Signature-${wallet.blockchain}-${wallet.network} ${base64.encode(signature)}`
       return {
