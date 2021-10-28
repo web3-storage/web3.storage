@@ -540,7 +540,7 @@ async function encodePublicKey (keyType, publicKeyBytes) {
  *
  * @hidden
  * @param {WalletAuthenticationPayload} payload
- * @returns {Promise<Uint8Array>} an encoded dag-cbor representation of the payload, suitable for signing
+ * @returns {Promise<EncodedWalletAuthenticationPayload>} an encoded dag-cbor representation of the payload, suitable for signing
  */
 async function preparePayloadForSigning (payload) {
   const { cid, publicKey } = payload
