@@ -66,7 +66,12 @@ const body = Query(
                   // Flag upload as deleted
                   Update(
                     Select(['ref'], Get(Var('uploadMatch'))),
-                    { data: { deleted: Now() } }
+                    {
+                      data: {
+                        deleted: Now(),
+                        updated: Now()
+                      }
+                    }
                   )
                 ),
                 Abort('upload not found')

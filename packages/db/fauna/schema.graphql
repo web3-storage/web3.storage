@@ -63,6 +63,11 @@ type AuthToken {
   created: Time!
 
   """
+  Updated date.
+  """
+  updated: Time
+
+  """
   Deletion date.
   """
   deleted: Time
@@ -274,6 +279,11 @@ type Upload {
   Creation date.
   """
   created: Time!
+
+  """
+  Updated date.
+  """
+  updated: Time
 
   """
   Deletion date.

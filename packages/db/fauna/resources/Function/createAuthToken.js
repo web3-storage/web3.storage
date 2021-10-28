@@ -35,7 +35,8 @@ const body = Query(
             user: Var('user'),
             name: Var('name'),
             secret: Var('secret'),
-            created: Now()
+            created: Now(),
+            updated: Now()
           }
         }),
         Abort('user not found')
