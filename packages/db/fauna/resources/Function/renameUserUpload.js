@@ -17,7 +17,8 @@ const {
   Ref,
   Select,
   Update,
-  Var
+  Var,
+  Now
 } = fauna
 
 const name = 'renameUserUpload'
@@ -47,7 +48,12 @@ const body = Query(
             If(IsNonEmpty(Var('uploadMatch')),
               Update(
                 Select(['ref'], Get(Var('uploadMatch'))),
-                { data: { name: Var('name') } }
+                {
+                  data: {
+                    name: Var('name'),
+                    updated: Now()
+                  }
+                }
               ),
               Abort('upload not found')
             )

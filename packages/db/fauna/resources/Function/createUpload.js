@@ -104,7 +104,8 @@ const body = Query(
                         content: Select('ref', Var('content')),
                         name: Select('name', Var('data'), null),
                         type: Select('type', Var('data')),
-                        created: Now()
+                        created: Now(),
+                        updated: Now()
                       }
                     }),
                     user: Update(Var('userRef'), {
@@ -173,7 +174,8 @@ const body = Query(
                     content: Select('ref', Var('content')),
                     name: Select('name', Var('data'), null),
                     type: Select('type', Var('data')),
-                    created: Now()
+                    created: Now(),
+                    updated: Now()
                   }
                 }),
                 user: Update(Var('userRef'), {
