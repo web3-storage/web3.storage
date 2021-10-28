@@ -9,9 +9,11 @@ import type { BlockDecoder } from 'multiformats/codecs/interface'
  */
 export type Tagged<T, Tag> = T & { tag?: Tag }
 
+
 export interface Service {
   endpoint: URL
-  token: string
+  token?: string
+  wallet?: WalletAuthProvider
 }
 
 export interface PublicService {
@@ -246,4 +248,102 @@ export interface Status {
 
 export interface Upload extends Status {
   name: string
+}
+
+/**
+ * Blockchains currently supported for wallet-based authentication.
+ */
+export type SupportedBlockchain = 'solana'
+
+/**
+ * Types of key pair supported for wallet-based authentication.
+ */
+export type SupportedKeyType = 'ed25519'
+
+/**
+ * Chain-specific context information (e.g. recent block hash).
+ */
+export interface ChainContext {
+  blockchain: SupportedBlockchain,
+}
+
+/**
+ * Context information for the Solana blockchain.
+ */
+export interface SolanaChainContext extends ChainContext {
+  blockchain: 'solana'
+  recentBlockhash: string,
+  network: 'mainnet' | 'devnet' | 'testnet'
+}
+
+/**
+ * In-memory representation of the payload to be signed as part of wallet authentication.
+ */
+export interface WalletAuthenticationPayload {
+  /**
+   * CID of the content being uploaded.
+   */
+  cid: CID,
+
+  /**
+   * Public key encoded as a CID using the identity multihash codec.
+   */
+  publicKey: CID,
+
+  /**
+   * Chain-specific context information.
+   */
+  context: ChainContext,
+}
+
+/**
+ * Tagged Uint8Array containing a serialized {@link WalletAuthenticationPayload}.
+ */
+export type EncodedWalletAuthenticationPayload = Tagged<Uint8Array, WalletAuthenticationPayload>
+
+/**
+ * Uint8Array containing the signature of a {@link WalletAuthenticationPayload}.
+ */
+export type WalletAuthenticationPayloadSignature = Uint8Array
+
+/**
+ * Callback function that is invoked during wallet-based authentication. Must return a signature
+ * compatible with the {@link WalletAuthProvider.keyType}.
+ */
+export type MessageSigner = (payload: Uint8Array) => Promise<WalletAuthenticationPayloadSignature>
+
+/**
+ * Interface for providing wallet-based authentication for uploads.
+ * 
+ * Wallet authenticated uploads are specific to one CID, in contrast to API tokens which can be used
+ * to upload anything.
+ * 
+ */
+export interface WalletAuthProvider {
+  /** String enum identifier for the blockchain the wallet belongs to. */
+  blockchain: SupportedBlockchain
+
+  /** 
+   * String enum identifier for a specific deployment of the blockchain (e.g. "mainnet", "testnet", etc.) 
+   * Values will be specific to each blockchain. 
+   */
+  network: string 
+
+  /** String enum identifier for the type of key pair used by the wallet. */
+  keyType: SupportedKeyType
+
+  /** Raw bytes of public key. */
+  publicKey: Uint8Array
+
+  /**
+   * Callback function that is invoked during wallet-based authentication. Must return a signature
+   * compatible with {@link keyType}.
+   */
+  signMessage: MessageSigner
+
+  /**
+   * Callback function that is invoked during wallet-based authentication. Returns chain-specific context
+   * information that is included in the signed auth payload.
+   */
+  getChainContext(): Promise<ChainContext>
 }
