@@ -138,9 +138,8 @@ CREATE TABLE IF NOT EXISTS upload
   name            TEXT,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  deleted_at      TIMESTAMP WITH TIME ZONE,
-  -- deleted_at      TIMESTAMP WITH TIME ZONE, do we want?
-  UNIQUE (user_id, source_cid)
+  deleted_at      TIMESTAMP WITH TIME ZONE
+  -- UNIQUE (user_id, source_cid)
 );
 
 CREATE INDEX IF NOT EXISTS upload_updated_at_idx ON upload (updated_at);
@@ -152,7 +151,7 @@ CREATE TABLE IF NOT EXISTS backup
   -- Upload that resulted in this backup.
   upload_id       BIGINT                                                        NOT NULL REFERENCES upload (id) ON DELETE CASCADE,
   -- Backup url location.
-  url             TEXT                                                          NOT NULL UNIQUE,
+  url             TEXT                                                          NOT NULL,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -172,7 +171,7 @@ CREATE TABLE IF NOT EXISTS pin_sync_request
 (
   id              BIGSERIAL PRIMARY KEY,
   -- Identifier for the pin to keep in sync.
-  pin_id          BIGINT                                                        NOT NULL UNIQUE REFERENCES pin (id),
+  pin_id          BIGINT                                                        NOT NULL REFERENCES pin (id),
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
