@@ -468,9 +468,7 @@ export class PostgresClient {
       .upsert(pinSyncRequests.map(psr => ({
         pin_id: psr,
         inserted_at: new Date().toISOString()
-      })), {
-        onConflict: 'pin_id'
-      })
+      }))) // TODO: On conflict pin ID
 
     if (error) {
       throw new DBError(error)

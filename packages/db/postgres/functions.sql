@@ -74,31 +74,39 @@ BEGIN
         IF (pin ->> 'status')::pin_status_type != ('Pinned')::pin_status_type THEN
           insert into pin_sync_request (pin_id, inserted_at)
           values (pin_result_id,
-                  (data ->> 'inserted_at')::timestamptz)
-          ON CONFLICT ( pin_id ) DO NOTHING;
+                  (data ->> 'inserted_at')::timestamptz);
+          -- ON CONFLICT ( pin_id ) DO NOTHING;
         END IF;
   end loop;
 
-  insert into upload (user_id,
-                      auth_key_id,
-                      content_cid,
-                      source_cid,
-                      type,
-                      name,
-                      inserted_at,
-                      updated_at)
-  values ((data ->> 'user_id')::BIGINT,
-            (data ->> 'auth_key_id')::BIGINT,
-            data ->> 'content_cid',
-            data ->> 'source_cid',
-            (data ->> 'type')::upload_type,
-            data ->> 'name',
-            (data ->> 'inserted_at')::timestamptz,
-            (data ->> 'updated_at')::timestamptz)
-  ON CONFLICT ( user_id, source_cid ) DO UPDATE
-    SET "updated_at" = (data ->> 'updated_at')::timestamptz,
-        "deleted_at" = null
-  returning id into inserted_upload_id;
+  inserted_upload_id := (select id
+  from upload u
+  where u.user_id = (data ->> 'user_id')::BIGINT
+        AND u.content_cid = data ->> 'content_cid'
+  limit 1);
+
+  IF (inserted_upload_id IS NULL) THEN
+    insert into upload (user_id,
+                        auth_key_id,
+                        content_cid,
+                        source_cid,
+                        type,
+                        name,
+                        inserted_at,
+                        updated_at)
+    values ((data ->> 'user_id')::BIGINT,
+              (data ->> 'auth_key_id')::BIGINT,
+              data ->> 'content_cid',
+              data ->> 'source_cid',
+              (data ->> 'type')::upload_type,
+              data ->> 'name',
+              (data ->> 'inserted_at')::timestamptz,
+              (data ->> 'updated_at')::timestamptz)
+    -- ON CONFLICT ( user_id, source_cid ) DO UPDATE
+    --   SET "updated_at" = (data ->> 'updated_at')::timestamptz,
+    --       "deleted_at" = null
+    returning id into inserted_upload_id;
+  END IF;
 
   foreach backup_url in array json_arr_to_text_arr(data -> 'backup_urls')
   loop
@@ -108,8 +116,7 @@ BEGIN
                         inserted_at)
     values (inserted_upload_id,
             backup_url,
-            (data ->> 'inserted_at')::timestamptz)
-    ON CONFLICT ( url ) DO NOTHING;
+            (data ->> 'inserted_at')::timestamptz);
   end loop;
 
   return inserted_upload_id;
