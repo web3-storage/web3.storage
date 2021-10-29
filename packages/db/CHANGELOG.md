@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.5.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.4.0...db-v2.5.0) (2021-10-29)
+
+
+### Features
+
+* add migration indexes ([#573](https://www.github.com/web3-storage/web3.storage/issues/573)) ([c9cd864](https://www.github.com/web3-storage/web3.storage/commit/c9cd8642f9c9d21d98b3d9e9061d8549b82f35ef))
+* add migration tracker table ([#578](https://www.github.com/web3-storage/web3.storage/issues/578)) ([dc1ce24](https://www.github.com/web3-storage/web3.storage/commit/dc1ce241e129fe65108cb96f129032608acd2b8a))
+
+
+### Bug Fixes
+
+* backup should not have unique url ([#580](https://www.github.com/web3-storage/web3.storage/issues/580)) ([14b5c78](https://www.github.com/web3-storage/web3.storage/commit/14b5c781be6e886c9e5158f81795efe773d22ffe))
+
 ## [2.4.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.3.1...db-v2.4.0) (2021-10-28)
 
 
