@@ -265,6 +265,24 @@ export type SupportedKeyType = 'ed25519'
  */
 export interface ChainContext {
   blockchain: SupportedBlockchain,
+  timestamp: Date,
+}
+
+export type Permission = 'PUT' // in the future: 'DELETE' | 'TAG', etc
+export type ResourceType = 'CID' // in the future: 'NAMESPACE', etc.
+export type ResourceId = string
+
+/**
+ * Describes the permission scope of the request (e.g. what resource it is attempting to access and how).
+ * The client must include this in the {@link WalletAuthenticationPayload} and sign it with a wallet key,
+ * and it must match the endpoint and resource that are actually used. E.g. if the user puts CID 'bafy123...',
+ * in their RequestScope but tries to upload CID 'bafy321...' instead, the request will fail.
+ * 
+ */
+export interface RequestScope {
+  permission: Permission
+  resourceType: ResourceType
+  resourceId: ResourceId
 }
 
 /**
@@ -280,10 +298,7 @@ export interface SolanaChainContext extends ChainContext {
  * In-memory representation of the payload to be signed as part of wallet authentication.
  */
 export interface WalletAuthenticationPayload {
-  /**
-   * CID of the content being uploaded.
-   */
-  cid: CID,
+  scope: RequestScope,
 
   /**
    * Public key encoded as a CID using the identity multihash codec.

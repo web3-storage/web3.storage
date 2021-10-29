@@ -111,6 +111,7 @@ describe('put', () => {
     const signMessage = async (msg) => nacl.sign.detached(msg, keypair.secretKey)
     const getChainContext = async () => ({
       blockchain: 'solana',
+      timestamp: new Date(),
       network: 'devnet',
       recentBlockhash: 'asdfghjkl'
     })
@@ -215,6 +216,7 @@ describe('putCar', () => {
     const getChainContext = async () => ({
       blockchain: 'solana',
       network: 'devnet',
+      timestamp: new Date(),
       recentBlockhash: 'asdfghjkl'
     })
 
@@ -246,7 +248,8 @@ describe('putCar', () => {
     const getChainContext = async () => ({
       blockchain: 'solana',
       network: 'devnet',
-      recentBlockhash: 'asdfghjkl'
+      recentBlockhash: 'asdfghjkl',
+      timestamp: new Date()
     })
 
     const wallet = {
@@ -275,7 +278,8 @@ describe('putCar', () => {
     const getChainContext = async () => ({
       blockchain: 'dogecoin',
       network: 'mainnet',
-      recentBlockhash: 'asdfghjkl'
+      recentBlockhash: 'asdfghjkl',
+      timestamp: new Date()
     })
 
     const wallet = {
@@ -304,7 +308,8 @@ describe('putCar', () => {
     const getChainContext = async () => ({
       blockchain: 'ethereum',
       network: 'devnet',
-      recentBlockhash: 'asdfghjkl'
+      recentBlockhash: 'asdfghjkl',
+      timestamp: new Date()
     })
 
     const wallet = {
@@ -323,6 +328,36 @@ describe('putCar', () => {
       assert.unreachable()
     } catch (err) {
       assert.match(err.message, 'context mismatch')
+    }
+  })
+
+  it('errors if chain context has null timestamp', async () => {
+    const keypair = new solanaWeb3.Keypair()
+    const publicKey = keypair.publicKey.toBytes()
+    const signMessage = async (msg) => nacl.sign.detached(msg, keypair.secretKey)
+    const getChainContext = async () => ({
+      blockchain: 'solana',
+      network: 'devnet',
+      recentBlockhash: 'asdfghjkl',
+      timestamp: null
+    })
+
+    const wallet = {
+      blockchain: 'solana',
+      network: 'devnet',
+      keyType: 'ed25519',
+      publicKey,
+      signMessage,
+      getChainContext
+    }
+
+    const client = new Web3Storage({ wallet, endpoint })
+    const carReader = await createCar('hello world')
+    try {
+      await client.putCar(carReader)
+      assert.unreachable()
+    } catch (err) {
+      assert.match(err.message, 'timestamp')
     }
   })
 })

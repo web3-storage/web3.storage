@@ -102,7 +102,15 @@ export function withApiOrMagicTokenOrWalletAuth (handler) {
     }
 
     const walletAuthInfo = getWalletAuthInfoFromRequest(request)
-    tryWalletAuth(walletAuthInfo)
+    const authResult = tryWalletAuth(walletAuthInfo)
+    if (!authResult || !authResult.user || !authResult.scope) {
+      // TODO: custom error
+      throw new Error('invalid wallet auth payload')
+    }
+
+    const { scope, user } = authResult
+    request.auth = { scope, user }
+    return handler(request, env, ctx)
   }
 }
 
@@ -170,6 +178,13 @@ function verifyAuthToken (token, decoded, env) {
   return env.db.getKey(decoded.sub, token)
 }
 
+/**
+ * @param {string} blockchain 
+ * @param {string} network 
+ * @param {CID} publicKey 
+ * @param {import('./env').Env} env 
+ * @returns {unknown} TBD :)
+ */
 function findUserByWalletKey (blockchain, network, publicKey, env) {
   // TODO: lookup / create user based on public key info.
   // The user id derived from the public key should probably include the blockchain
@@ -187,6 +202,18 @@ function getTokenFromRequest (request, { magic }) {
   return token
 }
 
+
+/**
+ * 
+ * @typedef {object} WalletAuthInfoRaw
+ * @property {Uint8Array} payloadBytes - raw bytes of signed payload
+ * @property {Uint8Array} signatureBytes - raw bytes of signature
+ * @property {string} blockchain - string id of blockchain wallet belongs to (e.g. 'solana')
+ * @property {string} network - name of long-lived deployment of blockchain (e.g. 'mainnet')
+ * 
+ * @param {Request} request 
+ * @returns {WalletAuthInfoRaw|null}
+ */
 function getWalletAuthInfoFromRequest (request) {
   const authHeader = request.headers.get('Authorization')
   if (!authHeader) {
@@ -212,6 +239,12 @@ function getWalletAuthInfoFromRequest (request) {
   return { payloadBytes, signatureBytes, blockchain, network }
 }
 
+/**
+ * 
+ * @param {WalletAuthInfoRaw} authInfo
+ * @param {Env} env 
+ * @returns 
+ */
 async function tryWalletAuth ({ payloadBytes, signatureBytes, blockchain, network }, env) {
   if (!isBlockchainSupported(blockchain)) {
     throw new UnsupportedBlockchainError(blockchain)
@@ -226,21 +259,35 @@ async function tryWalletAuth ({ payloadBytes, signatureBytes, blockchain, networ
     // TODO: custom error
     throw new Error('no user for wallet key')
   }
-  return userInfo
+
+  // return the request scope so it can be attached to the env
+  const { scope } = payload
+  return { user, scope }
 }
 
+/**
+ * 
+ * @param {string} blockchain 
+ * @returns {boolean} true if the given blockchain is supported for wallet auth
+ */
 function isBlockchainSupported (blockchain) {
   const supported = ['solana']
   return supported.includes(blockchain)
 }
 
+/**
+ * @typedef {import('../../client/src/lib/interface').WalletAuthenticationPayload} WalletAuthenticationPayload
+ * 
+ * @param {Uint8Array} payloadBytes serialized bytes of signed auth payload
+ * @returns {Promise<WalletAuthenticationPayload>} the decoded payload object
+ */
 async function decodePayload (payloadBytes) {
   const payloadBlock = await Block.decode({ bytes: payloadBytes, codec: dagCbor, hasher: sha256 })
   const payloadCbor = payloadBlock.value
-  const { cid: cidBytes, publicKeyBytes, context } = payloadCbor
-  // TODO: define custom error type for missing fields / invalid cid
-  if (!cidBytes) {
-    throw new Error('wallet auth payload is missing required "cid" field')
+  const { scope, publicKey: publicKeyBytes, context } = payloadCbor
+  // TODO: define custom error type for missing fields
+  if (!scope) {
+    throw new Error('wallet auth payload is missing required "scope" field')
   }
   if (!publicKeyBytes) {
     throw new Error('wallet auth payload is missing required "publicKey" field')
@@ -249,9 +296,8 @@ async function decodePayload (payloadBytes) {
     throw new Error('wallet auth payload is missing required "context" field')
   }
   try {
-    const cid = CID.decode(cidBytes)
-    const publicKey = CID.decode(cidBytes)
-    return { cid, publicKey, context }
+    const publicKey = CID.decode(publicKeyBytes)
+    return { scope, publicKey, context }
   } catch (err) {
     throw new Error(`invalid CID in wallet auth payload: ${err.message}`)
   }

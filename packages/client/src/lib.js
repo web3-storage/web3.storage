@@ -58,6 +58,7 @@ const WALLET_AUTH_SUPPORTED_CHAINS = ['solana']
 /** @typedef {import('./lib/interface').MessageSigner} MessageSigner */
 /** @typedef {import('./lib/interface').WalletAuthenticationPayloadSignature} WalletAuthenticationPayloadSignature */
 /** @typedef {import('./lib/interface').EncodedWalletAuthenticationPayload} EncodedWalletAuthenticationPayload */
+/** @typedef {import('./lib/interface').RequestScope} RequestScope */
 
 /**
  * @implements Service
@@ -98,16 +99,16 @@ class Web3Storage {
   /**
    * @hidden
    * @param {string} [token]
-   * @param {import('./lib/interface.js').WalletAuthProvider | undefined} [wallet]
-   * @param {CIDString} [rootCID]
+   * @param {WalletAuthProvider} [wallet]
+   * @param {RequestScope} [scope]
    * @returns {Promise<Record<string, string>>}
    */
-  static async headers (token, wallet, rootCID) {
-    if (!token && wallet != null && rootCID != null) {
+  static async headers (token, wallet, scope) {
+    if (!token && wallet != null && scope != null) {
       if (!WALLET_AUTH_SUPPORTED_CHAINS.includes(wallet.blockchain)) {
         throw new Error(`unsupported blockchain ${wallet.blockchain}. currently supported values are: ${WALLET_AUTH_SUPPORTED_CHAINS.join(', ')}`)
       }
-      const { payload, signature } = await createAndSignWalletAuthPayload(wallet, rootCID)
+      const { payload, signature } = await createAndSignWalletAuthPayload(wallet, scope)
       const authHeaderValue = `X-Wallet-Signature-${wallet.blockchain}-${wallet.network} ${base64.encode(signature)}`
       return {
         Authorization: authHeaderValue,
@@ -181,8 +182,7 @@ class Web3Storage {
       throw new Error('too many roots')
     }
     const carRoot = roots[0].toString()
-
-    let headers = await Web3Storage.headers(token, wallet, carRoot)
+    let headers = await Web3Storage.headers(token, wallet, putCidScope(carRoot))
     if (name) {
       headers = { ...headers, 'X-Name': encodeURIComponent(name) }
     }
@@ -259,11 +259,11 @@ class Web3Storage {
    * @param {CIDString} cid
    * @returns {Promise<Status | undefined>}
    */
-  static async status ({ endpoint, token, wallet }, cid) {
+  static async status ({ endpoint, token }, cid) {
     const url = new URL(`/status/${cid}`, endpoint)
     const res = await fetch(url.toString(), {
       method: 'GET',
-      headers: await Web3Storage.headers(token, wallet, cid)
+      headers: await Web3Storage.headers(token)
     })
     if (res.status === 404) {
       return undefined
@@ -547,8 +547,13 @@ async function encodePublicKey (keyType, publicKeyBytes) {
  * @returns {Promise<EncodedWalletAuthenticationPayload>} an encoded dag-cbor representation of the payload, suitable for signing
  */
 async function preparePayloadForSigning (payload) {
-  const { cid, publicKey } = payload
-  const value = { ...payload, cid: cid.bytes, publicKey: publicKey.bytes }
+  const { context: ctx, publicKey } = payload
+  if (ctx.timestamp == null) {
+    throw new Error('ChainContext is missing timestamp')
+  }
+
+  const context = { ...ctx, timestamp: ctx.timestamp.toISOString() }
+  const value = { ...payload, context, publicKey: publicKey.bytes }
   const block = await Block.encode({ value, codec: dagCbor, hasher: sha256 })
   return block.bytes
 }
@@ -561,20 +566,18 @@ async function preparePayloadForSigning (payload) {
  *
  * @hidden
  * @param {WalletAuthProvider} provider
- * @param {CIDString} cidString
+ * @param {RequestScope} scope
  * @returns {Promise<{payload: EncodedWalletAuthenticationPayload, signature: WalletAuthenticationPayloadSignature}>}
  */
-async function createAndSignWalletAuthPayload (provider, cidString) {
+async function createAndSignWalletAuthPayload (provider, scope) {
   const publicKey = await encodePublicKey(provider.keyType, provider.publicKey)
   const context = await provider.getChainContext()
   if (context.blockchain !== provider.blockchain) {
     throw new Error('chain context mismatch')
   }
 
-  const cid = CID.parse(cidString)
-
   const payload = await preparePayloadForSigning({
-    cid,
+    scope,
     publicKey,
     context
   })
@@ -585,6 +588,19 @@ async function createAndSignWalletAuthPayload (provider, cidString) {
 
   // return the unprefixed payload bytes & signature
   return { payload, signature }
+}
+
+/**
+ * Returns a RequestScope for uploading a given CID.
+ * @param {string} cid
+ * @returns {RequestScope}
+ */
+function putCidScope (cid) {
+  return {
+    permission: 'PUT',
+    resourceType: 'CID',
+    resourceId: cid
+  }
 }
 
 export { Web3Storage, File, Blob, filesFromPath, getFilesFromPath }
