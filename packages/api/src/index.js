@@ -52,6 +52,12 @@ router.get('/user/account',              mode['👀'](auth['👮'](userAccountGe
 router.get('/user/info',                 mode['👀'](auth['👮'](userInfoGet)))
 /* eslint-enable no-multi-spaces */
 
+// Temporary backdoor bypassing maintenance mode middleware
+router.get('/_backdoor/user/uploads', auth['🔒'](userUploadsGet))
+router.get('/_backdoor/status/:cid', auth['🤲'](statusGet))
+router.post('/_backdoor/car', auth['🔒'](carPost))
+router.post('/_backdoor/upload', auth['🔒'](uploadPost))
+
 // Monitoring
 router.get('/metrics', mode['👀'](withCorsHeaders(metricsGet)))
 
