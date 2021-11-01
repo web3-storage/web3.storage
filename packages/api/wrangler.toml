@@ -77,4 +77,4 @@ vars = { CLUSTER_API_URL = "https://paolo-cluster-api-web3-storage.loca.lt/", PG
 # [env.${whoami}]
 # workers_dev = true
 # account_id = "<get me from `wrangler whoami`"
-# vars = { CLUSTER_API_URL = "https://<your ${whoami} here>-cluster-api-web3-storage.loca.lt", ENV = "dev" }
+# vars = { CLUSTER_API_URL = "https://<your ${whoami} here>-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://<your ${whoami} here>-postgres-api-web3-storage.loca.lt", ENV = "dev" }
