@@ -122,7 +122,7 @@ export async function updateMetrics ({ db }) {
   await Promise.all([
     updateMetric(db, 'users_total', COUNT_USERS, {}, 'countUsers'),
     updateMetric(db, 'uploads_total', COUNT_UPLOADS, {}, 'countUploads'),
-    updateMetric(db, 'content_total', COUNT_CIDS, {}, 'countCids'),
+    updateMetric(db, 'content_total', COUNT_CIDS, {}, 'countContent'),
     updateMetric(db, 'content_bytes_total', SUM_CONTENT_DAG_SIZE, {}, 'sumContentDagSize'),
     updateMetric(db, 'pins_total', COUNT_PINS, {}, 'countPins'),
     updateMetric(db, 'pins_bytes_total', SUM_PIN_DAG_SIZE, {}, 'sumPinDagSize'),
