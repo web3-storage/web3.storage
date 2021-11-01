@@ -121,9 +121,12 @@ async function getMetric (db, key) {
 export async function updateMetrics ({ db }) {
   await Promise.all([
     updateMetric(db, 'users_total', COUNT_USERS, {}, 'countUsers'),
+    updateMetric(db, 'users_total_v2', COUNT_USERS, {}, 'countUsers'),
     updateMetric(db, 'uploads_total', COUNT_UPLOADS, {}, 'countUploads'),
+    updateMetric(db, 'uploads_total_v2', COUNT_UPLOADS, {}, 'countUploads'),
     updateMetric(db, 'content_total', COUNT_CIDS, {}, 'countContent'),
     updateMetric(db, 'content_bytes_total', SUM_CONTENT_DAG_SIZE, {}, 'sumContentDagSize'),
+    updateMetric(db, 'content_bytes_total_v2', SUM_CONTENT_DAG_SIZE, {}, 'sumContentDagSize'),
     updateMetric(db, 'pins_total', COUNT_PINS, {}, 'countPins'),
     updateMetric(db, 'pins_bytes_total', SUM_PIN_DAG_SIZE, {}, 'sumPinDagSize'),
     createMetric(db, 'pins_status_queued_total', COUNT_PINS_BY_STATUS, { status: 'PinQueued' }, 'countPinsByStatus'),
