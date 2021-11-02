@@ -39,6 +39,8 @@ export class FaunaClient {
         findUserByIssuer(issuer: $issuer) {
           _id
           issuer
+          email
+          github
         }
       }
     `, { issuer })
