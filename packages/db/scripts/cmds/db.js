@@ -47,7 +47,7 @@ export async function dbCmd ({ project, init, start, stop, clean }) {
 
   if (start) {
     if ((await isPortReachable(5432)) || (await isPortReachable(3000))) {
-      throw new Error('Another docker project already running')
+      throw new Error('Another docker project already running or you have Postgres running on your machine')
     }
 
     await execa('docker-compose', [
