@@ -13,6 +13,8 @@ import { JSONResponse } from './utils/json-response.js'
 import { toPinStatusEnum } from './utils/pin.js'
 import { normalizeCid } from './utils/normalize-cid.js'
 
+// TODO Use/adapt pin utils `getOKpins`, `toPins` and `waitToGetOkPins` here.
+
 /**
  * @typedef {import('multiformats/cid').CID} CID
  */
