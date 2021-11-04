@@ -32,7 +32,7 @@ const PinStatusMap = {
 
 /**
  * Converts from cluster status string to DB pin status enum string.
- * @param {TrackerStatus} trackerStatus
+ * @param {TrackerStatus|string} trackerStatus
  */
 export function toPinStatusEnum (trackerStatus) {
   if (typeof trackerStatus !== 'string') {
