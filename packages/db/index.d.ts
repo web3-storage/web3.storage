@@ -42,6 +42,7 @@ export class DBClient {
   upsertPins (pins: Array<PinUpsertInput>): Promise<void>
   getPins (cid: string): Promise<Array<PinItemOutput>>
   getPinRequests ({ size }: { size: number }): Promise<Array<PinRequestItemOutput>>
+  createPinRequest(cid: string, userId: number): Promise<PinRequestItemOutput>
   deletePinRequests (ids: Array<number>): Promise<void>
   createPinSyncRequests (pinSyncRequests: Array<number>): Promise<void>
   getPinSyncRequests ({ to, after }: { to: string, after: string }): Promise<PinSyncRequestOutput>

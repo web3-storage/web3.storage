@@ -286,4 +286,21 @@ export class DBClient {
     }
     return this._client.query(document, variables)
   }
+
+  /**
+   * Create a pin request for the specified Cid for specified user.
+   *
+   * @param {string} cid
+   * @param {number} userId
+   * @return {Promise.<import('./db-client-types').PinRequestItemOutput>}
+   */
+  createPinRequest (cid, userId) {
+    // TODO Implement create Pin Request
+    const created = new Date().toISOString()
+    return Promise.resolve({
+      _id: 1,
+      cid: 'cid',
+      created
+    })
+  }
 }
