@@ -346,7 +346,7 @@ export class PostgresClient {
    * Upsert pin of a given cid.
    *
    * @param {string} cid
-   * @param {import('../db-client-types').PinsUpsertInput} pin
+   * @param {import('../db-client-types').PinUpsertInput} pin
    * @return {Promise<number>}
    */
   async upsertPin (cid, pin) {
@@ -375,7 +375,7 @@ export class PostgresClient {
   /**
    * Upsert given pin status.
    *
-   * @param {Array<import('../db-client-types').PinsUpsertInput>} pins
+   * @param {Array<import('../db-client-types').PinUpsertInput>} pins
    */
   async upsertPins (pins) {
     const { error } = await this._client

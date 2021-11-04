@@ -135,7 +135,7 @@ export class DBClient {
   /**
    * Upsert given pin status.
    *
-   * @param {Array<import('./db-client-types').PinsUpsertInput>} pins
+   * @param {Array<import('./db-client-types').PinUpsertInput>} pins
    */
   upsertPins (pins) {
     return this._client.upsertPins(pins)

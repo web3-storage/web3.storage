@@ -60,9 +60,10 @@ export type AuthKeyItemOutput = {
 }
 
 // Pin
-export type PinsUpsertInput = {
-  id: definitions['pin']['id']
-  status: definitions['pin']['status']
+export type PinUpsertInput = {
+  id?: definitions['pin']['id']
+  status: definitions['pin']['status'],
+  location: location,
 }
 
 export type PinItem = {
@@ -70,12 +71,7 @@ export type PinItem = {
   status: definitions['pin']['status']
   created: definitions['pin']['inserted_at']
   updated: definitions['pin']['updated_at']
-  location: {
-    _id: definitions['pin_location']['id']
-    peerId: definitions['pin_location']['peer_id']
-    peerName: definitions['pin_location']['peer_name']
-    region: definitions['pin_location']['region']
-  }
+  location: location
 }
 
 export type PinItemOutput = {
@@ -145,12 +141,7 @@ export type ContentItem = {
   pins: Array<{
     status: definitions['pin']['status']
     updated: definitions['pin']['updated_at']
-    location: {
-      _id: definitions['pin_location']['id']
-      peerId: definitions['pin_location']['peer_id']
-      peerName: definitions['pin_location']['peer_name']
-      region: definitions['pin_location']['region']
-    }
+    location: location
   }>
 }
 
@@ -176,11 +167,7 @@ export interface CreateUploadInput {
   updated?: definitions['upload']['updated_at']
   pins: Array<{
     status: definitions['pin']['status']
-    location: {
-      peerId: definitions['pin_location']['peer_id']
-      peerName: definitions['pin_location']['peer_name']
-      region: definitions['pin_location']['region']
-    }
+    location: location
   }>,
   backupUrls: Array<definitions['backup']['url']>
 }
@@ -202,12 +189,7 @@ export type UploadItem = {
     pins: Array<{
       status: definitions['pin']['status']
       updated: definitions['pin']['updated_at']
-      location: {
-        id: definitions['pin_location']['id']
-        peerId: definitions['pin_location']['peer_id']
-        peerName: definitions['pin_location']['peer_name']
-        region: definitions['pin_location']['region']
-      }
+      location: location
     }>
   }
 }
@@ -233,6 +215,14 @@ export type UploadOutput = definitions['upload'] & {
     }[]
   },
   deals: Deal[]
+}
+
+
+export type location = {
+  id?: definitions['pin_location']['id']
+  peerId: definitions['pin_location']['peer_id']
+  peerName: definitions['pin_location']['peer_name']
+  region?: definitions['pin_location']['region']
 }
 
 export type ListUploadsOptions = {
