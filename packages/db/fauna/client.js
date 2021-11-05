@@ -294,7 +294,7 @@ export class FaunaClient {
           _id
         }
       }
-    `, { pins })
+    `, { pins: pins.map(p => ({ pin: p.id, status: p.status })) })
   }
 
   /**
