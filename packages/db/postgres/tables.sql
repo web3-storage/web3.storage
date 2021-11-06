@@ -48,34 +48,54 @@ CREATE INDEX IF NOT EXISTS content_updated_at_idx ON content (updated_at);
 -- IPFS Cluster tracker status values.
 -- https://github.com/ipfs/ipfs-cluster/blob/54c3608899754412861e69ee81ca8f676f7e294b/api/types.go#L52-L83
 -- TODO: nft.storage only using a subset of these: https://github.com/ipfs-shipyard/nft.storage/blob/main/packages/api/db/tables.sql#L2-L7
-CREATE TYPE pin_status_type AS ENUM
-(
-  -- Should never see this value. When used as a filter. It means "all".
-  'Undefined',
-  -- The cluster node is offline or not responding.
-  'ClusterError',
-  -- An error occurred pinning.
-  'PinError',
-  -- An error occurred unpinning.
-  'UnpinError',
-  -- The IPFS daemon has pinned the item.
-  'Pinned',
-  -- The IPFS daemon is currently pinning the item.
-  'Pinning',
-  -- The IPFS daemon is currently unpinning the item.
-  'Unpinning',
-  -- The IPFS daemon is not pinning the item.
-  'Unpinned',
-  -- The IPFS daemon is not pinning the item but it is being tracked.
-  'Remote',
-  -- The item has been queued for pinning on the IPFS daemon.
-  'PinQueued',
-  -- The item has been queued for unpinning on the IPFS daemon.
-  'UnpinQueued',
-  -- The IPFS daemon is not pinning the item through this CID but it is tracked
-  -- in a cluster dag
-  'Sharded'
-);
+-- TODO: is this the best way to create types only if they do not exists?
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'pin_status_type') THEN
+        CREATE TYPE pin_status_type AS ENUM 
+        (
+          -- Should never see this value. When used as a filter. It means "all".
+          'Undefined',
+          -- The cluster node is offline or not responding.
+          'ClusterError',
+          -- An error occurred pinning.
+          'PinError',
+          -- An error occurred unpinning.
+          'UnpinError',
+          -- The IPFS daemon has pinned the item.
+          'Pinned',
+          -- The IPFS daemon is currently pinning the item.
+          'Pinning',
+          -- The IPFS daemon is currently unpinning the item.
+          'Unpinning',
+          -- The IPFS daemon is not pinning the item.
+          'Unpinned',
+          -- The IPFS daemon is not pinning the item but it is being tracked.
+          'Remote',
+          -- The item has been queued for pinning on the IPFS daemon.
+          'PinQueued',
+          -- The item has been queued for unpinning on the IPFS daemon.
+          'UnpinQueued',
+          -- The IPFS daemon is not pinning the item through this CID but it is tracked
+          -- in a cluster dag
+          'Sharded'
+        );
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'upload_type') THEN
+      -- Upload type is the type of received upload data.
+      CREATE TYPE upload_type AS ENUM
+      (
+        -- A CAR file upload.
+        'Car',
+        -- Files uploaded and converted into a CAR file.
+        'Upload',
+        -- A raw blob upload in the request body.
+        'Blob',
+        -- A multi file upload using a multipart request.
+        'Multipart'
+      );
+      END IF;
+END$$;
 
 -- An IPFS node that is pinning content.
 CREATE TABLE IF NOT EXISTS pin_location
@@ -106,18 +126,6 @@ CREATE TABLE IF NOT EXISTS pin
 
 CREATE INDEX IF NOT EXISTS pin_updated_at_idx ON pin (updated_at);
 
--- Upload type is the type of received upload data.
-CREATE TYPE upload_type AS ENUM
-(
-  -- A CAR file upload.
-  'Car',
-  -- Files uploaded and converted into a CAR file.
-  'Upload',
-  -- A raw blob upload in the request body.
-  'Blob',
-  -- A multi file upload using a multipart request.
-  'Multipart'
-);
 
 -- An upload created by a user.
 CREATE TABLE IF NOT EXISTS upload
@@ -162,6 +170,17 @@ CREATE TABLE IF NOT EXISTS pin_request
   -- Root CID of the Pin we want to replicate.
   content_cid     TEXT                                                          NOT NULL UNIQUE REFERENCES content (cid),
   attempts        INT DEFAULT 0,
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Tracks pinning requests
+CREATE TABLE IF NOT EXISTS pinning_api_pin_request
+(
+  id              BIGSERIAL PRIMARY KEY,
+  -- Root CID of the Pin we want to replicate.
+  content_cid     TEXT                                                          UNIQUE REFERENCES content (cid),
+  user_id         BIGINT                                                          NOT NULL UNIQUE REFERENCES public.user (id),
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
