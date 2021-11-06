@@ -37,7 +37,7 @@ export async function addPin (request, env, ctx) {
   const { user } = request.auth
 
   const pinStatus = await createPin(cid, user._id, env, ctx)
-  console.log(pinStatus)
+
   return new JSONResponse(pinStatus)
 }
 
