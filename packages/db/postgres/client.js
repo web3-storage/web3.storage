@@ -727,4 +727,23 @@ export class PostgresClient {
         throw new Error('unknown metric requested')
     }
   }
+
+  /**
+   * Create a pin request for the specified Cid for specified user.
+   *
+   * @param {string} cid
+   * @param {number} userId
+   * @return {Promise.<import('../db-client-types').PinRequestItemOutput>}
+   */
+  async createPinRequest (cid, userId) {
+    const { data, error } = await this._client
+      .from('pinning_api_pin_request')
+      .upsert({
+        cid,
+        userId
+      })
+      .single()
+
+    return data
+  }
 }
