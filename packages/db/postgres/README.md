@@ -65,6 +65,22 @@ Once you are done, the local setup can easily be stopped and cleaned using:
 node scripts/cli.js db --stop --clean --project web3-storage
 ```
 
+### 4. Alter or create new tables
+When altering the DB schema in order for your changes to be reflected in Postgres you need to run
+
+```bash
+node scripts/cli.js db-sql
+```
+
+In order to update `pg-rest-api-types` you can run
+
+You can run 
+```bash
+node scripts/cli.js pg-rest-api-types
+```
+Do not forget to update `db-client-types.ts` to reflect your changes to the schema.
+
+
 ## Database Diagram
 
 ![image](https://user-images.githubusercontent.com/7295071/137729026-50aebb55-e89c-45ed-b636-b3e39cc53cc0.png)
