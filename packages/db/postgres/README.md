@@ -80,6 +80,8 @@ node scripts/cli.js pg-rest-api-types
 ```
 Do not forget to update `db-client-types.ts` to reflect your changes to the schema.
 
+If you're creating a new table, type, view please remember to update `reset.sql` as well.
+
 
 ## Database Diagram
 
