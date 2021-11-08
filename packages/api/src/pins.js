@@ -1,6 +1,6 @@
 
 import { JSONResponse } from './utils/json-response.js'
-import { toPinStatusEnum, waitToGetOkPins } from './utils/pin'
+import { toPinStatusEnum, waitToGetOkPins } from './utils/pin.js'
 
 /**
  *
