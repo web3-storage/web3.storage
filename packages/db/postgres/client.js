@@ -744,6 +744,13 @@ export class PostgresClient {
       })
       .single()
 
+    if (error) {
+      throw new DBError(error)
+    }
+
+    // TODO Should we replicate content to Pinata
+    // TODO Should we backup content to S3
+
     return data
   }
 }
