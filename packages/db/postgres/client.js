@@ -120,7 +120,10 @@ export class PostgresClient {
   async createUpload (data) {
     const now = new Date().toISOString()
     /** @type {{ data: number, error: Error }} */
-    const { data: uploadResponse, error } = await this._client.rpc('create_upload', {
+
+    // TODO We should create a pinning_api_pin_request here.
+    // All content should have a pinning request for consistency.
+    const { data: uploadResponse, error } = await this._client.rpc('create_content', {
       data: {
         user_id: data.user,
         auth_key_id: data.authKey,
@@ -139,7 +142,8 @@ export class PostgresClient {
             region: pin.location.region
           }
         })),
-        backup_urls: data.backupUrls
+        backup_urls: data.backupUrls,
+        is_upload: true
       }
     }).single()
 
@@ -731,16 +735,26 @@ export class PostgresClient {
   /**
    * Create a pin request for the specified Cid for specified user.
    *
-   * @param {string} cid
-   * @param {number} userId
-   * @return {Promise.<import('../db-client-types').PinRequestItemOutput>}
+   * @param {import('../db-client-types').PinningApiPinningRequestInput} pinningRequestInput
+   * @return {Promise.<import('../db-client-types').PinningApiPinningRequestOutput>}
    */
-  async createPinRequest (cid, userId) {
+  async createPinRequest ({ cid, userId }) {
+    // TODO Creating content here, not sure if this is the right approach given we don't know yet if
+    // the content exists
+    await this._client
+      .from('content')
+      .upsert({
+        cid
+      }, {
+        onConflict: 'cid'
+      })
+      .single()
+
     const { data, error } = await this._client
       .from('pinning_api_pin_request')
       .upsert({
-        cid,
-        userId
+        content_cid: cid,
+        user_id: userId
       })
       .single()
 
@@ -748,9 +762,42 @@ export class PostgresClient {
       throw new DBError(error)
     }
 
-    // TODO Should we replicate content to Pinata
-    // TODO Should we backup content to S3
-
     return data
+  }
+
+  /**
+   *
+   * @param {import('../db-client-types').ContentItemInput} contentItem
+   * @return {Promise.<string>} cid
+   */
+  async createContent ({ cid, dagSize, pins, backupUrls }) {
+    const now = new Date().toISOString()
+    const { data: response, error } = await this._client.rpc('create_content', {
+      data: {
+        content_cid: cid,
+        dag_size: dagSize,
+        inserted_at: now,
+        updated_at: now,
+        pins: pins.map(pin => ({
+          status: pin.status,
+          location: {
+            peer_id: pin.location.peerId,
+            peer_name: pin.location.peerName,
+            region: pin.location.region
+          }
+        })),
+        backup_urls: backupUrls,
+        is_upload: false
+      }
+    }).single()
+
+    // TODO Should we replicate content to Pinata?
+    // TODO Should we backup content to S3?
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return cid
   }
 }

@@ -20,7 +20,10 @@ import type {
   PinRequestItemOutput,
   PinSyncRequestOutput,
   PinUpsertInput,
-  BackupOutput
+  BackupOutput,
+  ContentItemInput,
+  PinningApiPinningRequestInput,
+  PinningApiPinningRequestOutput
 } from './db-client-types'
 
 export { gql }
@@ -42,7 +45,8 @@ export class DBClient {
   upsertPins (pins: Array<PinUpsertInput>): Promise<void>
   getPins (cid: string): Promise<Array<PinItemOutput>>
   getPinRequests ({ size }: { size: number }): Promise<Array<PinRequestItemOutput>>
-  createPinRequest(cid: string, userId: number): Promise<PinRequestItemOutput>
+  createPinRequest(pinRequst: PinningApiPinningRequestInput): Promise<PinningApiPinningRequestOutput>
+  createContent(ContentItem: ContentItemInput): Promise<string>
   deletePinRequests (ids: Array<number>): Promise<void>
   createPinSyncRequests (pinSyncRequests: Array<number>): Promise<void>
   getPinSyncRequests ({ to, after }: { to: string, after: string }): Promise<PinSyncRequestOutput>

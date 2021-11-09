@@ -560,6 +560,25 @@ export class FaunaClient {
   }
 
   /**
+   * Create a pin request for the specified Cid for specified user.
+   *
+   * @param {import('../db-client-types').PinningApiPinningRequestInput} pinningRequestInput
+   * @return {Promise.<import('../db-client-types').PinningApiPinningRequestOutput>}
+   */
+  async createPinRequest ({ cid, userId }) {
+    throw (new Error('Not implemented'))
+  }
+
+  /**
+     *
+     * @param {import('../db-client-types').ContentItemInput} contentItem
+     * @return {Promise.<string>} cid
+     */
+  async createContent (contentItem) {
+    throw (new Error('Not implemented'))
+  }
+
+  /**
    * @template T
    * @template V
    * @param {import('graphql-request').RequestDocument} document

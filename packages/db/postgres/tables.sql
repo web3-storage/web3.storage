@@ -179,8 +179,8 @@ CREATE TABLE IF NOT EXISTS pinning_api_pin_request
 (
   id              BIGSERIAL PRIMARY KEY,
   -- Root CID of the Pin we want to replicate.
-  content_cid     TEXT                                                          UNIQUE REFERENCES content (cid),
-  user_id         BIGINT                                                          NOT NULL UNIQUE REFERENCES public.user (id),
+  content_cid     TEXT                                                          NOT NULL UNIQUE REFERENCES content (cid),
+  user_id         BIGINT                                                        NOT NULL UNIQUE REFERENCES public.user (id),
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );

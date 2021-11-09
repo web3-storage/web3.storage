@@ -64,6 +64,7 @@ export type PinUpsertInput = {
   id?: definitions['pin']['id']
   status: definitions['pin']['status'],
   location: location,
+  updated?: definitions['pin']['updated_at']
 }
 
 export type PinItem = {
@@ -137,12 +138,13 @@ export type Deal = {
 export type ContentItem = {
   cid: definitions['content']['cid']
   dagSize: definitions['content']['dag_size']
-  created?: definitions['upload']['inserted_at']
-  pins: Array<{
-    status: definitions['pin']['status']
-    updated: definitions['pin']['updated_at']
-    location: location
-  }>
+  created?: definitions['upload']['inserted_at'],
+  pins: Array<PinUpsertInput>
+}
+
+// Content
+export type ContentItemInput = ContentItem & {
+  backupUrls?: Array<definitions['backup']['url']>
 }
 
 export type ContentItemOutput = {
@@ -223,6 +225,17 @@ export type location = {
   peerId: definitions['pin_location']['peer_id']
   peerName: definitions['pin_location']['peer_name']
   region?: definitions['pin_location']['region']
+}
+
+//Pinning API. Pinning Request
+export type PinningApiPinningRequestInput = {
+  cid: definitions['pinning_api_pin_request']['content_cid'],
+  userId: definitions['pinning_api_pin_request']['user_id'],
+}
+
+export type PinningApiPinningRequestOutput = PinningApiPinningRequestInput & {
+  id: definitions['pinning_api_pin_request']['id'],
+  created: definitions['pinning_api_pin_request']['inserted_at'],
 }
 
 export type ListUploadsOptions = {

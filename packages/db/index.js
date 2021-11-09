@@ -290,17 +290,19 @@ export class DBClient {
   /**
    * Create a pin request for the specified Cid for specified user.
    *
-   * @param {string} cid
-   * @param {number} userId
-   * @return {Promise.<import('./db-client-types').PinRequestItemOutput>}
+   * @param {import('./db-client-types').PinningApiPinningRequestInput} pinningRequestInput
+   * @return {Promise.<import('./db-client-types').PinningApiPinningRequestOutput>}
    */
-  createPinRequest (cid, userId) {
-    // TODO Implement create Pin Request
-    const created = new Date().toISOString()
-    return Promise.resolve({
-      _id: 1,
-      cid: 'cid',
-      created
-    })
+  createPinRequest (pinningRequestInput) {
+    return this._client.createPinRequest(pinningRequestInput)
+  }
+
+  /**
+   *
+   * @param {import('./db-client-types').ContentItemInput} contentItem
+   * @return {Promise.<string>} cid
+   */
+  createContent (contentItem) {
+    return this._client.createContent(contentItem)
   }
 }

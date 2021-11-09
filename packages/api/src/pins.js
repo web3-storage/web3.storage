@@ -49,6 +49,18 @@ export async function addPin (request, env, ctx) {
  * @returns {Promise<ServiceApiPinStatus>}
  */
 const createPin = async (cid, userId, env, ctx) => {
+  // Request
+  // ========
+  // 1. Pin CID to Cluster
+  // 2. Create Pin request in Database (not adding any content at this stage.)
+  // ========
+  //
+  // Async task
+  // ========
+  // 1. Wait for ok pins
+  // 2. Create a content, pin replication requests, pin objects and backups.
+  // ========
+
   const normalizedCid = cid
 
   // TODO Is this the right initial Status to assign?
@@ -59,13 +71,13 @@ const createPin = async (cid, userId, env, ctx) => {
     cid
   }
 
-  await env.cluster.pin(normalizedCid)
+  env.cluster.pin(normalizedCid)
 
-  const pinRequest = await env.db.createPinRequest(cid, userId)
+  const pinRequest = await env.db.createPinRequest({ cid, userId })
 
   /** @type {ServiceApiPinStatus} */
   const serviceApiPinStatus = {
-    requestId: pinRequest._id.toString(),
+    requestId: pinRequest.id.toString(),
     created: pinRequest.created,
     status: pinInitialStatus,
     delegates: [],
@@ -77,6 +89,10 @@ const createPin = async (cid, userId, env, ctx) => {
   /** @type {(() => Promise<any>)[]} */
   const tasks = [async () => {
     const okPins = await waitToGetOkPins(cid, env.cluster)
+    // TODO Create backups?
+    // TODO Get content dagSize
+    // At this point we should be sure the content exists.
+    env.db.createContent({ cid, dagSize: 100, pins: okPins })
     for (const pin of okPins) {
       await env.db.upsertPin(cid, pin)
     }

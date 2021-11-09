@@ -10,7 +10,7 @@ function getTestJWT (sub = 'test', name = 'test') {
   return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
 }
 
-describe.only('POST /pin', () => {
+describe('POST /pin', () => {
   it('should pin a file by CID to the Cluster', async () => {
     const name = 'car'
     // Create token
