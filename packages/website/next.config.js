@@ -25,16 +25,6 @@ const nextConfig = {
       '/ipfs-404.html': { page: '/404' },
     }
   },
-  async rewrites() {
-    return {
-     fallback: [
-       {
-         source: '/docs/',
-         destination: '/docs/index.html',
-       },
-     ],
-   }
-  },
 }
 
 module.exports = nextConfig
