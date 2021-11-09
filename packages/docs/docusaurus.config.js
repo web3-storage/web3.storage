@@ -139,7 +139,7 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           sidebarCollapsible: false,
-          editUrl: 'https://github.com/web3-storage/docs/edit/main/',
+          editUrl: 'https://github.com/web3-storage/web3.storage/edit/main/packages/docs/',
           showLastUpdateTime: true,
           routeBasePath: '/',
           remarkPlugins: [
