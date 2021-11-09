@@ -280,7 +280,7 @@ This section will demonstrate a few ways to split CARs in a way that's acceptabl
       for await (const chunk of smallCar) {
         // Do something with the car data...
         // For example, you could upload it to the Web3.storage HTTP API
-        // https://docs.web3.storage/http-api.html#operation/post-car
+        // https://web3.storage/docs/reference/http-api/#operation/post-car
       }
       // You can also get the root CID of each small CAR with the getRoots method:
       const roots = await smallCar.getRoots()
