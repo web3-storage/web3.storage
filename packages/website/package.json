@@ -4,8 +4,11 @@
   "description": "web3.storage website",
   "private": true,
   "scripts": {
-    "start": "next dev -p 4000",
-    "build": "next build && next-sitemap && next export",
+    "start": "concurrently -n docs,app \"npm run start:docs\" \"npm run start:devserver\"",
+    "build": "npm run build:docs && next build && next-sitemap && next export",
+    "start:devserver": "node ./dev-server.js",
+    "start:docs": "pushd ../.. && npm --workspace packages/docs run start:nobrowser",
+    "build:docs": "pushd ../.. && npm --workspace packages/docs run build",
     "test": "eslint './**/*.js' && tsc --build"
   },
   "dependencies": {
@@ -36,6 +39,7 @@
     "@types/react-dom": "^17.0.9",
     "@types/react-syntax-highlighter": "^13.5.2",
     "autoprefixer": "^10.2.6",
+    "concurrently": "^6.3.0",
     "eslint": "^7.24.0",
     "eslint-config-next": "^11.0.1",
     "eslint-config-prettier": "^8.2.0",
@@ -45,6 +49,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "http-proxy-middleware": "^2.0.1",
     "next-sitemap": "^1.6.173",
     "postcss": "^8.3.5",
     "tailwindcss": "^2.2.4",

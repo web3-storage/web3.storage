@@ -1,0 +1,34 @@
+@import '../../css/vars.css';
+
+.container {
+  display: flex;
+  flex-direction: row;
+  
+}
+
+.sidebarWrapper {
+  background-color: var(--sidebar-background-color);
+}
+
+/* The default sidebar has padding equal to the navbar height,
+   but our layout for the api page is already offset by the navbar height,
+   so we remove it here.
+*/
+.sidebarWrapper div:first-child {
+  padding-top: 0;
+}
+
+.tocWrapper {
+  white-space: nowrap;
+}
+
+.mobileTocWrapper {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+@media only screen and (min-width: 997px) {
+  .mobileTocWrapper {
+    display: none;
+  }
+}

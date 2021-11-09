@@ -1,0 +1,20 @@
+@import '../../css/vars.css';
+
+.feedback {
+  background-color: var(--feedback-background-color);
+  border: 1px solid var(--w3storage-red);
+  padding: 2em;
+}
+
+.actionButton {
+  color: var(--w3storage-white);
+  background-color: var(--w3storage-purple);
+  font-weight: 700;
+  padding: 10px 15px;
+  border: none;
+  outline: none;
+  margin-right: 10px;
+  margin-bottom: 15px;
+  border-radius: 2px;
+  cursor: pointer;
+}

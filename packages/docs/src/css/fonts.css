@@ -1,0 +1,67 @@
+
+/* ================================================================================
+   Fonts
+   ================================================================================ */
+
+@font-face {
+    font-family: "Space Grotesk";
+    font-weight: 400;
+    font-style: normal;
+    src: url("/fonts/space-grotesk/space-grotesk-regular.woff2") format("woff2");
+    src: url("/fonts/space-grotesk/space-grotesk-regular.woff") format("woff");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Space Grotesk";
+    font-weight: 500;
+    font-style: normal;
+    src: url("/fonts/space-grotesk/space-grotesk-medium.woff2") format("woff2");
+    src: url("/fonts/space-grotesk/space-grotesk-medium.woff") format("woff");
+    font-display: swap;
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-weight: 700;
+  font-style: normal;
+  src: url("/fonts/space-grotesk/space-grotesk-medium.woff2") format("woff2");
+  src: url("/fonts/space-grotesk/space-grotesk-medium.woff") format("woff");
+  font-display: swap;
+}
+
+@font-face {
+    font-family: "Open Sans";
+    font-weight: 400;
+    font-style: normal;
+    src: url("/fonts/open-sans/open-sans.woff2") format("woff2");
+    src: url("/fonts/open-sans/open-sans.woff") format("woff");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Open Sans";
+    font-weight: 600;
+    font-style: normal;
+    src: url("/fonts/open-sans/open-sans-semi-bold.woff2") format("woff2");
+    src: url("/fonts/open-sans/open-sans-semi-bold.woff") format("woff");
+    font-display: swap;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  font-weight: 700;
+  font-style: normal;
+  src: url("/fonts/open-sans/open-sans-bold.woff2") format("woff2");
+  src: url("/fonts/open-sans/open-sans-bold.woff") format("woff");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Space Mono";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/fonts/space-mono/space-mono-regular.woff2") format("woff2");
+  src: url("/fonts/space-mono/space-mono-regular.woff") format("woff");
+  font-display: swap;
+}

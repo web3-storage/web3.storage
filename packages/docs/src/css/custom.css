@@ -1,0 +1,166 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+@import './vars.css';
+@import './fonts.css';
+
+.prism-code {
+  tab-size: 2;
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+html[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* background-color: var(--w3storage-background); */
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  line-height: 1.875em;
+  letter-spacing: 0.02em;
+}
+
+.docs-wrapper {
+  color: var(--ifm-color-content);
+}
+
+.docs-wrapper .container a {
+  font-weight: 700;
+}
+
+.docs-wrapper .container .table-of-contents a {
+  font-weight: 400;
+}
+
+.docs-wrapper blockquote {
+  color: var(--ifm-color-content);
+  font-size: 1.3em;
+  border-left: 0.2rem solid var(--ifm-color-primary);
+  margin: 1rem 0;
+}
+
+.menu {
+  background-color: var(--sidebar-background-color);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1em;
+  line-height: 1.7;
+  letter-spacing: normal;
+  font-weight: 400;
+}
+
+/* Menu links without an href are category headings */
+/* We also style the welcome link (href='/') as a heading */
+.menu__link:not([href]), .menu__link[href='/'] {
+  font-size: 1.45em;
+  font-weight: 500;
+  margin-top: 20px;
+}
+
+.menu__link, .menu__link:not([href]):hover  {
+  color: var(--nav-link-color);
+}
+
+.menu__link:hover {
+  color: var(--nav-link-hover-color);
+}
+
+.menu__link--active {
+  color: var(--nav-link-active-color);
+}
+
+.navbar a, .footer a {
+  letter-spacing: normal;
+  color: var(--nav-link-color);
+  font-weight: 600;
+}
+
+.navbar a:hover, .footer a:hover {
+  color: var(--nav-link-hover-color);
+  text-decoration: none;
+}
+
+/* override hover higlight color for Web3.Storage logo text */
+a.navbar__brand:hover {
+  color: var(--nav-link-color);
+}
+
+.navbar__title {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.75rem;
+  font-weight: 500;
+}
+
+/* hack to prevent the external link icon showing in the navbar and footer */
+.navbar svg[class^="iconExternalLink"] {
+  display: none;
+}
+
+.footer svg[class^="iconExternalLink"] {
+  display: none;
+}
+
+.icon.outbound {
+  display: inline-block;
+}
+
+.footer {
+  background-color: var(--ifm-background-surface-color);
+}
+
+ul.footer__items {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+h1, h2, h3, h4, h5 {
+  color: var(--heading-color);
+}
+
+h1 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 3rem;
+  letter-spacing: normal;
+  font-weight: 500;
+  line-height: 1.4em;
+}
+
+h2 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.75rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  line-height: 1.395em;
+
+  border: 0;
+  border-bottom: 1px;
+  border-color: var(--web3storage-purple);
+  border-style: solid;
+}
+
+h3 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: normal;
+  font-weight: 500;
+}
+
+h4 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.25rem;
+  letter-spacing: normal;
+  font-weight: 700;
+}
+

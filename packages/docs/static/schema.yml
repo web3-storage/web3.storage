@@ -1,0 +1,412 @@
+openapi: '3.0.2'
+info:
+  title: Web3.Storage API
+  description: |
+    This documentation describes the HTTP API for [**Web3.Storage**](https://web3.storage), which allows you to quickly and easily build applications using decentralized data storage persisted by [Filecoin](https://filecoin.io) and available over [IPFS](https://ipfs.io).
+
+    You can also interact with this API using client libraries. See [**docs.web3.storage**](https://docs.web3.storage) for more information on using a client library, as well as a variety of other guides and how-tos for Web3.Storage as a whole.
+  version: '1.0'
+
+servers:
+  - url: https://api.web3.storage
+
+tags:
+  - name: Web3.Storage HTTP API
+paths:
+  /car:
+    post:
+      tags:
+        - Web3.Storage HTTP API
+      summary: Upload a CAR
+      description: |
+        Upload a [CAR](https://ipld.io/specs/transport/car/) (Content Addressable aRchive) file and store the [IPFS DAG](https://docs.ipfs.io/concepts/merkle-dag/)
+        (Directed Acyclic Graph) it contains.
+
+        See the [Working with Content Archives guide](https://docs.web3.storage/how-tos/work-with-car-files) for details on creating CARs and splitting them into chunks for upload using the [carbites JavaScript API](https://github.com/nftstorage/carbites),
+        [command line tool](https://github.com/nftstorage/carbites-cli/), or [Go library](https://github.com/alanshaw/go-carbites).
+
+        Requests to this endpoint have a maximum payload size of 100MB but partial DAGs are supported, so multiple CAR files with the same root but with different sub-trees can be sent. This enables uploading of files that are bigger than the maximum payload size.
+
+        Note that only one CAR can be uploaded at a time, and only CAR files are accepted. This is in contrast to [`/upload`](#operation/post-upload), which can upload multiple files at once and accepts both CAR files and files from the client.
+
+        You can also provide a name for the file using the header `X-NAME`, but be sure to encode the filename first. For example `LICENSE–MIT` should be sent as `LICENSE%E2%80%93MIT`.
+      operationId: post-car
+      requestBody:
+        required: true
+        content:
+          application/car:
+            schema:
+              type: string
+              format: binary
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+  /car/{cid}:
+    get:
+      tags:
+        - Web3.Storage HTTP API
+      summary: Retrieve a CAR
+      description: Retrieve an [IPFS DAG](https://docs.ipfs.io/concepts/merkle-dag/) (Directed Acyclic Graph) packaged in a CAR file by using `/car/{cid}`, supplying the CID of the data you are interested in.
+      operationId: get-car-cid
+      security: []
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/CID'
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/car':
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+    head:
+      tags:
+        - Web3.Storage HTTP API
+      summary: Retrieve HTTP headers regarding a CAR
+      description: |
+        This method is useful for doing a dry run of a call to `/car/{cid}`. Because it only returns HTTP header information, it is far more lightweight and can be used to get only the metadata about the given CAR file without retrieving a whole payload in the body of the HTTP response.
+      operationId: head-car-cid
+      security: []
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/CID'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+  /status/{cid}:
+    get:
+      tags:
+        - Web3.Storage HTTP API
+      summary: Retrieve information about an upload
+      description: Retrieve metadata about a specific file by using `/status/{cid}`, supplying the CID of the file you are interested in. This metadata includes the creation date and file size, as well as details about how the network is storing your data. Using this information, you can identify peers on the [IPFS (InterPlanetary File System)](https://ipfs.io) network that are pinning the data, and [Filecoin](https://filecoin.io) storage providers that have accepted deals to store the data.
+      operationId: get-status-cid
+      security: []
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/CID'
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+  /upload:
+    post:
+      tags:
+        - Web3.Storage HTTP API
+      summary: Upload and store one or more files
+      description: |
+        Store files using Web3.Storage. You can upload either a single file or multiple files.
+
+        Send the POST request with one of the following:
+        - a single file, with a single blob/file object as the body
+        - multiple files, as `FormData` with `Content-Disposition` headers for each part to specify filenames and the request header `Content-Type: multipart/form-data`
+
+        Requests to this endpoint have a maximum payload size of 100MB. To upload larger files, see the documentation for the `/car` endpoint.
+
+        You can also provide a name for the file using the header `X-NAME`, but be sure to encode the filename first. For example `LICENSE–MIT` should be sent as `LICENSE%E2%80%93MIT`.
+      operationId: post-upload
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+  /user/uploads:
+    get:
+      tags:
+        - Web3.Storage HTTP API
+      summary: List previous uploads
+      description: |
+        Lists all previous uploads for the account ordered by creation date, newest first. These results can be paginated by specifying `before` and `limit` parameters in the query string, using the creation date associated with the oldest upload returned in each batch as the value of `before` in subsequent calls.
+
+        Note this endpoint returns all uploads for the account not just the API key in use.
+
+        The information returned includes the creation date and file size, as well as details about how the network is storing your data. Using this information, you can identify peers on the [IPFS (InterPlanetary File System)](https://ipfs.io) network that are pinning the data, and [Filecoin](https://filecoin.io) storage providers that have accepted deals to store the data.
+      operationId: get-user-uploads
+      parameters:
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Status'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+
+
+
+
+
+components:
+  schemas:
+    Status:
+      type: object
+      properties:
+        cid:
+          $ref: '#/components/schemas/CID'
+        dagSize:
+          description: Total size of the DAG in bytes.
+          type: number
+          default: 132614
+        created:
+          $ref: '#/components/schemas/Date'
+        pins:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pin'
+        deals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Deal'
+    Deal:
+      type: object
+      properties:
+        dealId:
+          description: On-chain ID of the deal.
+          type: number
+          example: 138
+        storageProvider:
+          description: Address of the provider storing this data.
+          type: string
+          example: f05678
+        status:
+          description: Current deal status.
+          type: string
+          enum:
+            - Queued
+            - Published
+            - Active
+        pieceCid:
+          description: 'Filecoin [Piece CID](https://spec.filecoin.io/systems/filecoin_files/piece/) of the data in the deal.'
+          type: string
+          example: bafkreidivzimqfqtoqxkrpge6bjyhlvxqs3rhe73owtmdulaxr5do5in7u
+        dataCid:
+          description: CID of the data aggregated in this deal.
+          type: string
+          example: bafkreidivzimqfqtoqxkrpge6bjyhlvxqs3rhe73owtmdulaxr5do5in7u
+        dataModelSelector:
+          description: Selector for extracting stored data from the aggregated data root.
+          type: string
+          example: 'Links/100/Hash/Links/0/Hash/Links/0/Hash'
+        activation:
+          description: 'Date when the deal will become active in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.'
+          type: string
+          example: '2021-03-18T11:46:50.000Z'
+        created:
+          description: 'Creation date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.'
+          type: string
+          example: '2021-03-18T11:46:50.000Z'
+        updated:
+          description: 'Updated date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.'
+          type: string
+          example: '2021-03-18T11:46:50.000Z'
+      required:
+        - status
+        - created
+        - updated
+    Date:
+      type: string
+      format: date-time
+      example: '2021-03-12T17:03:07.787Z'
+      description: 'This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: YYYY-MM-DDTHH:MM:SSZ.'
+    CID:
+      type: string
+      example: bafkreidivzimqfqtoqxkrpge6bjyhlvxqs3rhe73owtmdulaxr5do5in7u
+      description: Self-describing content-addressed identifiers for distributed systems. Check the [CID (Content IDentifier) Specification](https://github.com/multiformats/cid) for more info.
+    PinStatus:
+      type: string
+      enum:
+        - PinQueued
+        - Pinning
+        - Pinned
+    Pin:
+      type: object
+      properties:
+        peerId:
+          description: Libp2p peer ID of the node pinning the data.
+          type: string
+          example: 12D3KooWMbibcXHwkSjgV7VZ8TMfDKi6pZvmi97P83ZwHm9LEsvV
+        peerName:
+          description: Human readable name for the peer pinning the data.
+          type: string
+          example: web3-storage-dc13
+        region:
+          description: Approximate geographical region of the node pinning the data.
+          type: string
+          example: US-DC
+        status:
+          $ref: '#/components/schemas/PinStatus'
+        updated:
+          $ref: '#/components/schemas/Date'
+    UploadResponse:
+      type: object
+      properties:
+        cid:
+          $ref: '#/components/schemas/CID'
+    ErrorResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+    UnauthorizedErrorResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          default: HTTP Error
+        message:
+          type: string
+          default: Unauthorized
+    ForbiddenErrorResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          default: HTTP Error
+        message:
+          type: string
+          enum: [Token is not valid, Session expired]
+
+  securitySchemes:
+    bearerAuth:
+      description: |
+        The Web3.Storage API uses *bearer tokens* to authenticate requests. You can view and manage these tokens on the [API Tokens page](https://web3.storage/tokens/) in your Web3.Storage account dashboard.
+
+        Your tokens carry many privileges, so be sure to keep them secure! Do not share your *secret tokens* in publicly accessible locations such as a GitHub repository, client-side code, and so forth.
+
+        **Bearer authentication** (also called *token authentication*) is an HTTP authentication scheme that involves security tokens called bearer tokens. The term “bearer authentication” can be understood as “give access to the bearer of this token.” The bearer token is a cryptic string, usually generated by the server in response to a login request. The client must send this token in the `Authorization` header when making requests to protected resources:
+
+        ```js
+        Authorization: Bearer <token>
+        ```
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    unauthorized:
+      description: Unauthorized
+      content:
+        'application/json':
+          schema:
+            $ref: '#/components/schemas/UnauthorizedErrorResponse'
+    forbidden:
+      description: Forbidden
+      content:
+        'application/json':
+          schema:
+            $ref: '#/components/schemas/ForbiddenErrorResponse'
+    notFound:
+      description: Not Found
+      content:
+        'application/json':
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    internalServerError:
+      description: Internal Server Error
+      content:
+        'application/json':
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    badRequest:
+      description: Bad Request
+      content:
+        'application/json':
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    before:
+      description: Specifies a date, in ISO 8601 format. Ensures that the call to `/list` will not return any results newer than the given date.
+      name: before
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date-time  # RFC 3339, section 5.6
+      example: "2020-07-27T17:32:28Z"
+    limit:
+      description: Specifies the maximum number of uploads to return.
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 100
+        default: 10
+security:
+  - bearerAuth: []

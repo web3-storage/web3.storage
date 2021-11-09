@@ -8,6 +8,7 @@
     "packages/client",
     "packages/cron",
     "packages/db",
+    "packages/docs",
     "packages/pinpin",
     "packages/report",
     "packages/w3",
