@@ -7,8 +7,8 @@
     "start": "concurrently -n docs,app \"npm run start:docs\" \"npm run start:devserver\"",
     "build": "npm run build:docs && next build && next-sitemap && next export",
     "start:devserver": "node --stack-size=10000 ./dev-server.js",
-    "start:docs": "pushd ../.. && npm --workspace packages/docs run start:nobrowser",
-    "build:docs": "pushd ../.. && npm --workspace packages/docs run build:embed",
+    "start:docs": "cd ../.. && npm --workspace packages/docs run start:nobrowser",
+    "build:docs": "cd ../.. && npm --workspace packages/docs run build:embed",
     "test": "eslint './**/*.js' && tsc --build"
   },
   "dependencies": {
