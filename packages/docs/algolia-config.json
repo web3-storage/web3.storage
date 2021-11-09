@@ -1,7 +1,7 @@
 {
   "index_name": "web3-storage-docusaurus",
   "start_urls": [
-    "https://docs.web3.storage"
+    "https://web3.storage/docs"
   ],
   "stop_urls": [],
   "selectors": {
