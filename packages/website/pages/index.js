@@ -156,7 +156,7 @@ retrieveFiles()
             <p className="max-w-xs mb-8">
               Build applications with data persisted by Filecoin and available over IPFS. Get started in minutes with this simple interface.
             </p>
-            <a href="https://docs.web3.storage/#quickstart" className="font-bold underline" target="_blank" rel="noreferrer">
+            <a href="/docs/#quickstart" className="font-bold underline" target="_blank" rel="noreferrer">
               Follow the Quickstart Guide
             </a>
           </div>
@@ -245,7 +245,7 @@ function GetStarted() {
               <div className="flex flex-col flex-grow justify-between">
                 <p>Grab the client library using NPM.</p>
                 <Button
-                  href="https://docs.web3.storage/#quickstart"
+                  href="/docs/#quickstart"
                   variant="light"
                   wrapperClassName="w-max mt-12"
                   tracking={{ ui: countly.ui.HOME_GET_STARTED, action: "Install" }}
@@ -259,7 +259,7 @@ function GetStarted() {
               <div className="flex flex-col flex-grow justify-between">
                 <p>Read the docs and follow our guides to start building on Web3!</p>
                 <Button
-                  href="https://docs.web3.storage/how-tos/store/"
+                  href="/docs/how-tos/store/"
                   variant="light"
                   wrapperClassName="w-max mt-12"
                   tracking={{ ui: countly.ui.HOME_GET_STARTED, action: "Read" }}

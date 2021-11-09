@@ -57,7 +57,7 @@ export default function Footer({ bgColor = '' }) {
               Open an issue
             </a>
           </Link>
-          <Link href="https://docs.web3.storage/community/help-and-support/">
+          <Link href="https://web3.storage/docs/community/help-and-support/">
             <a
               className="text-sm font-bold no-underline hover:underline py-3 sm:px-3"
               onClick={onLinkClick}

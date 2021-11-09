@@ -202,7 +202,7 @@ export default function Account({ isLoggedIn }) {
                         Start storing and retrieving files using our client library! See the docs for guides and walkthroughs!
                       </p>
                       <Button
-                        href="https://docs.web3.storage"
+                        href="/docs"
                         tracking={{ ui: countly.ui.PROFILE_GETTING_STARTED, action: 'Explore the docs' }}
                       >
                         Explore the docs

@@ -41,7 +41,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   const ITEMS = useMemo(() =>
     [
       {
-        link: 'https://docs.web3.storage/',
+        link: '/docs',
         name: 'Docs',
         spacing: `p-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
       },
