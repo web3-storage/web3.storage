@@ -8,7 +8,7 @@
     "build": "npm run build:docs && next build && next-sitemap && next export",
     "start:devserver": "node ./dev-server.js",
     "start:docs": "pushd ../.. && npm --workspace packages/docs run start:nobrowser",
-    "build:docs": "pushd ../.. && npm --workspace packages/docs run build",
+    "build:docs": "pushd ../.. && npm --workspace packages/docs run build:embed",
     "test": "eslint './**/*.js' && tsc --build"
   },
   "dependencies": {

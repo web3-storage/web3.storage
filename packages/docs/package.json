@@ -7,7 +7,7 @@
     "start": "npm run pre-build && docusaurus start --port 3030",
     "start:nobrowser": "npm run pre-build && docusaurus start --port 3030 --no-open",
     "build": "npm run pre-build && docusaurus build",
-    "docs:build": "npm run build && ./scripts/fleek-hack.sh",
+    "build:embed": "npm run pre-build && docusaurus build --out-dir ../website/public/docs",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
