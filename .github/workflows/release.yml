@@ -73,6 +73,7 @@ jobs:
           package-name: ${{ matrix.package }}
           monorepo-tags: true
           command: release-pr
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"refactor","section":"Changes","hidden":false},{"type":"chore","section":"Changes","hidden":false}]'
 
   release:
     runs-on: ubuntu-latest
@@ -142,6 +143,13 @@ jobs:
           FAUNA_KEY: ${{ secrets.PROD_FAUNA_KEY }}
 
       # --- Website deploy steps ----------------------------------------------
+      - name: Deploy to Cloudflare pages
+        if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'website' }}
+        # Reset the `website-prod` branch to trigger a production build & deploy on Cloudflare Pages.
+        run: |
+          git push origin --delete website-prod
+          git push origin main:website-prod
+
       - run: npm run build -w packages/client
         if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'website' }}
       - run: npm run build -w packages/website
@@ -161,8 +169,6 @@ jobs:
         with:
           path_to_add: packages/website/out
           web3_token: ${{ secrets.WEB3_TOKEN }}
-          # TODO: move to prod once we can get a token
-          web3_api: https://api-staging.web3.storage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

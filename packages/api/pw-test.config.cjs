@@ -12,6 +12,10 @@ module.exports = {
         build.onResolve({ filter: /^stream$/ }, () => {
           return { path: require.resolve('stream-browserify') }
         })
+
+        build.onResolve({ filter: /^cross-fetch$/ }, () => {
+          return { path: path.resolve(__dirname, 'src', 'utils', 'fetch.js') }
+        })
       }
     }]
   }

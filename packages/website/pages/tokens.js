@@ -63,25 +63,30 @@ const TableElement = ({ children, index = 0, breakAll = true, centered, importan
  * @param {(t: Token) => void} props.onCopy
  * @param {string} props.deleting
  * @param {(t: Token) => void} props.onDelete
+ * @param {number} props.visibleChars
  */
-const TokenRow = ({ token, index, copied, onCopy, deleting, onDelete }) => {
+const TokenRow = ({ token, index, copied, onCopy, deleting, onDelete, visibleChars }) => {
   const sharedArgs = { index }
   return (
     <tr>
-      <TableElement {...sharedArgs} important>{token.name}</TableElement>
+      <TableElement {...sharedArgs} important breakAll={false}>
+        {token.name}
+      </TableElement>
       <TableElement {...sharedArgs} important>
-        <code style={{ wordWrap: 'break-word' }}>{token.secret}</code>
+        <code style={{ whiteSpace: 'nowrap' }}>
+          {token.secret.substr(0, visibleChars)}...{token.secret.substr(token.secret.length - visibleChars, token.secret.length)}
+        </code>
       </TableElement>
       <TableElement {...sharedArgs} breakAll={false}>
         <form onSubmit={e => { e.preventDefault(); onCopy(token) }}>
-          <Button type="submit" small className="w-28">
+          <Button type="submit" small className="w-24 m-2">
             {copied === token._id ? 'Copied!' : 'Copy'}
           </Button>
         </form>
       </TableElement>
       <TableElement {...sharedArgs} breakAll={false}>
         <form onSubmit={e => { e.preventDefault(); onDelete(token) }}>
-          <Button type="submit" disabled={Boolean(deleting)} small>
+          <Button type="submit" disabled={Boolean(deleting)} small className="w-24 m-2">
             {deleting === token._id ? 'Deleting...' : 'Delete'}
           </Button>
         </form>
@@ -165,29 +170,32 @@ export default function Tokens({ isLoggedIn }) {
           </Then>
           <Else>
             <When condition={tokens.length > 0}>
-              <table className="w-full mt-4">
-                <thead>
-                  <tr className="bb b--black">
-                    <TableHeader>Name</TableHeader>
-                    <TableHeader>Token</TableHeader>
-                    <TableHeader />
-                    <TableHeader />
-                  </tr>
-                </thead>
-                <tbody>
-                  {tokens.map((t, i) =>
-                    <TokenRow 
-                      key={t._id}
-                      token={t}
-                      index={i}
-                      copied={copied}
-                      onCopy={handleCopyToken}
-                      deleting={deleting}
-                      onDelete={handleDeleteToken}
-                    />
-                  )}
-                </tbody>
-              </table>
+              <div className="table-responsive">
+                <table className="w-full mt-4">
+                  <thead>
+                    <tr className="bb b--black">
+                      <TableHeader>Name</TableHeader>
+                      <TableHeader>Token</TableHeader>
+                      <TableHeader />
+                      <TableHeader />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tokens.map((token, index) =>
+                      <TokenRow
+                        key={token._id}
+                        token={token}
+                        index={index}
+                        copied={copied}
+                        onCopy={handleCopyToken}
+                        deleting={deleting}
+                        onDelete={handleDeleteToken}
+                        visibleChars={20}
+                      />
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </When>
             <When condition={tokens.length === 0}>
               <div className="flex flex-col items-center">
@@ -201,6 +209,14 @@ export default function Tokens({ isLoggedIn }) {
                     tracking={{ ui: countly.ui.TOKENS_EMPTY, action: 'New API Token' }}
                   >New API Token</Button>
                 </div>
+              </div>
+            </When>
+            <When condition={tokens.length > 0}>
+              <div className="flex flex-col items-center">
+                <p className="font-black mt-10">
+                  Want to test the token quickly? Paste it in
+                  {" "}<a className="underline" href={`https://bafybeic5r5yxjh5xpmeczfp34ysrjcoa66pllnjgffahopzrl5yhex7d7i.ipfs.dweb.link/`} target="_blank" rel="noreferrer">this demo website</a>
+                </p>
               </div>
             </When>
           </Else>

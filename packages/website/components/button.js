@@ -10,14 +10,14 @@ import countly from '../lib/countly'
  * @prop {string} [action] Action id. used to uniquely identify an action within a ui section.
  * @prop {string} [event] Custom event name to be used instead of the default CTA_LINK_CLICK.
  * @prop {Object} [data] Extra data to send to countly.
- * 
+ *
  * @typedef {Object} ButtonProps
  * @prop {string} [wrapperClassName]
  * @prop {string} [className]
  * @prop { import('react').MouseEventHandler<HTMLButtonElement> } [onClick]
  * @prop {string} [href]
  * @prop {import('react').ButtonHTMLAttributes<HTMLButtonElement>["type"]} [type]
- * @prop {import('react').ReactChildren | string} children
+ * @prop {import('react').ReactNode | string} children
  * @prop {boolean} [disabled]
  * @prop {string} [id]
  * @prop {'dark' | 'light' | 'outlined' } [variant]
@@ -102,9 +102,9 @@ export default function Button({
   )
   return href ? (
     <Link href={href}>
-      <a className={wrapperClassName}>
+      <div className={wrapperClassName}>
         {btn}
-      </a>
+      </div>
     </Link>
   ) : (
     <div className={wrapperClassName}>

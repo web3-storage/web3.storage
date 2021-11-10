@@ -10,8 +10,10 @@ import Tooltip from '../components/tooltip'
 
 import CopyIcon from '../icons/copy'
 import ChevronIcon from '../icons/chevron'
+import PencilIcon from '../icons/pencil'
+import TickIcon from '../icons/tick'
 import countly from '../lib/countly'
-import { getUploads, deleteUpload } from '../lib/api.js'
+import { getUploads, deleteUpload, renameUpload } from '../lib/api.js'
 import { When } from 'react-if'
 import clsx from 'clsx'
 
@@ -27,7 +29,7 @@ export function getStaticProps() {
     props: {
       title: 'Files - Web3 Storage',
       pageBgColor: 'bg-w3storage-neutral-red',
-      redirectTo: '/',
+      redirectTo: '/login/',
       needsLoggedIn: true,
     },
   }
@@ -50,12 +52,52 @@ const TOOLTIPS = {
 
   STORAGE_PROVIDERS: (<span>
     Service providers offering storage capacity to the Filecoin network.<span> </span>
-    <a href="https://docs.web3.storage/concepts/decentralized-storage/" target="_blank" className="underline" rel="noreferrer">Learn more</a> 
+    <a href="https://docs.web3.storage/concepts/decentralized-storage/" target="_blank" className="underline" rel="noreferrer">Learn more</a>
   </span>),
 
   QUEUED_UPLOAD: (<span>
     The content from this upload is being aggregated for storage on Filecoin. Filecoin deals will be active within 48 hours of upload.
   </span>)
+}
+
+/**
+ * @param {string} pinStatus
+ * @param {number} numberOfPins
+ * @returns {any}
+ */
+const getMessage = (pinStatus, numberOfPins) => {
+  switch (pinStatus) {
+    case "Queuing":
+      return "The upload has been received or is in progress and has not yet been queued for pinning.";
+    case "PinQueued":
+      return "The upload has been received and is in the queue to be pinned.";
+    case "Pinning":
+      return "The upload is being replicated to multiple IPFS nodes.";
+    case "Pinned":
+      return `The upload is fully pinned on ${numberOfPins} IPFS nodes.`;
+  }
+  return null;
+};
+
+/**
+ * @param {string} pinStatus
+ * @param {number} numberOfPins
+ * @returns {JSX.Element}
+ */
+const getPinStatusTooltip = (pinStatus, numberOfPins) => {
+  const message = getMessage(pinStatus, numberOfPins);
+
+  if (!message) return <></>
+
+  return (
+    <Tooltip
+      placement="top"
+      overlay={<span>{message}</span>}
+      overlayClassName="table-tooltip"
+    >
+      {QuestionMark()}
+    </Tooltip>
+  );
 }
 
 /**
@@ -70,7 +112,7 @@ const formatTimestamp = (timestamp) => {
     day: 'numeric',
     hour: 'numeric',
     minute: 'numeric',
-  }) 
+  })
 }
 
 /**
@@ -78,16 +120,16 @@ const formatTimestamp = (timestamp) => {
  * @param {Object} [props.children]
  * @param {number} [props.index]
  * @param {boolean} [props.checked]
- * @param {boolean} [props.breakAll]
+ * @param {boolean} [props.noWrap]
  * @param {boolean} [props.centered]
  * @param {boolean} [props.important]
 */
-const TableElement = ({ children, index = 0, checked, breakAll = true, centered, important }) => (
+const TableElement = ({ children, index = 0, checked, noWrap = true, centered, important }) => (
   <td className={clsx('px-2 border-2 border-w3storage-red',
      index % 2 === 0 ? 'bg-white' : 'bg-gray-100',
      checked && 'bg-w3storage-red-accent bg-opacity-20',
-     breakAll && 'break-all',
-     centered && 'text-center'
+     centered && 'text-center',
+     noWrap && 'whitespace-nowrap'
     )} style={{ minWidth: important ?  150 : 0 }}>
     { children }
   </td>
@@ -120,6 +162,33 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
   const checked = selectedFiles.includes(upload.cid)
   const sharedArgs = { index, checked }
   const pinStatus = getBestPinStatus(upload.pins)
+  const [isRenaming, setRenaming] = useState(false)
+  const [isLoading, setLoading] = useState(false)
+  const [renameError, setError] = useState('')
+  const [renamedValue, setRenamedValue] = useState('')
+
+  /** @param {import('react').ChangeEvent<HTMLFormElement>} ev */
+  const handleRename = async (ev) => {
+    ev.preventDefault()
+    const data = new FormData(ev.target);
+    const fileName = data.get("fileName")
+
+    if(!fileName || typeof fileName !=='string') return;
+    if (fileName === upload.name) return setRenaming(false)
+
+    try {
+      setLoading(true)
+      await renameUpload(upload.cid, fileName)
+      setError('')
+    } catch(e) {
+      console.error(e);
+      // @ts-ignore Catch clause variable type annotation must be 'any' or 'unknown' if specified.ts(1196)
+      setError(e.message)
+    }
+    setLoading(false)
+    setRenaming(false)
+    setRenamedValue(fileName)
+  }
 
   const deals = upload.deals
     .filter(d => d.status !== 'Queued')
@@ -143,7 +212,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
         {`${deals.length ? ', ' : ''}${queuedDeals.length} pending`}
         <Tooltip placement='top' overlay={<span>{message}</span>} overlayClassName='table-tooltip'>
           { QuestionMark() }
-        </Tooltip>              
+        </Tooltip>
       </span>
     )
   }
@@ -152,7 +221,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
     deals.push(<span className='flex justify-center' key='queuing'>
         Queuing
         <Tooltip placement='top' overlay={TOOLTIPS.QUEUED_UPLOAD} overlayClassName='table-tooltip'>
-        { QuestionMark() }           
+        { QuestionMark() }
         </Tooltip>
       </span>
     )
@@ -166,7 +235,29 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
       <TableElement {...sharedArgs}>
         <span title={upload.created} className="break-normal">{formatTimestamp(upload.created)}</span>
       </TableElement>
-      <TableElement {...sharedArgs} important>{upload.name}</TableElement>
+      <TableElement {...sharedArgs} important noWrap={false}>
+        {!isRenaming ? (
+          <div className={ clsx("flex items-center justify-start", renameError.length > 0 && "text-w3storage-red")}>
+            <span className="flex-auto">{renamedValue || upload.name}</span>
+            { renameError.length > 0 &&
+              <span className="rounded-full border-w3storage-red border flex-none w-6 h-6 flex justify-center items-center" title={renameError}>!</span>
+            }
+            <button className="p-2 pr-1 cursor-pointer" onClick={() => setRenaming(true)}>
+              <PencilIcon style={{minWidth: 18 }} height="18" className="dib" fill="currentColor" aria-label="Edit"/>
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleRename} className="flex items-center justify-start">
+            <input className="flex-auto p-0" defaultValue={renamedValue || upload.name} autoFocus name="fileName" required/>
+            <button className="p-2 pr-1 cursor-pointer" type="submit">
+              { isLoading ?
+                <Loading height={18} className="dib relative" fill="currentColor"/> :
+                <TickIcon style={{minWidth: 18 }} height="18" className="dib" fill="currentColor" aria-label="Edit"/>
+              }
+            </button>
+          </form>
+        )}
+      </TableElement>
       <TableElement {...sharedArgs} important>
         <div className="flex items-center justify-center">
           <GatewayLink cid={upload.cid} />
@@ -175,13 +266,18 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
           </CopyToClipboard>
         </div>
       </TableElement>
-      <TableElement {...sharedArgs} centered>{pinStatus}</TableElement>
-      <TableElement {...sharedArgs} centered breakAll={false}>
-        <div className="flex justify-center">
+      <TableElement {...sharedArgs} centered>
+        <span className="flex justify-center">
+          {pinStatus}
+          {getPinStatusTooltip(pinStatus, upload.pins.length)}
+        </span>
+      </TableElement>
+      <TableElement {...sharedArgs} centered noWrap={false}>
+        <div className="text-left">
           {deals}
         </div>
       </TableElement>
-      <TableElement {...sharedArgs} centered breakAll={false}>
+      <TableElement {...sharedArgs} centered>
         {upload.dagSize ? filesize(upload.dagSize) : 'Calculating...'}
       </TableElement>
     </tr>
@@ -216,6 +312,13 @@ export default function Files({ isLoggedIn }) {
     }
   )
 
+  const refreshUploads = async () => {
+    if (befores.length <= 1) {
+      setBefores([new Date().toISOString()])
+    }
+    return refetch();
+  }
+
   /** @type {Upload[]} */
   const uploads = data?.length === size ? data.concat().splice(0, size - 1) : (data || [])
 
@@ -225,7 +328,7 @@ export default function Files({ isLoggedIn }) {
         ui: countly.ui.FILES,
         totalDeleted: 0
       })
-      
+
       return
     }
 
@@ -249,6 +352,8 @@ export default function Files({ isLoggedIn }) {
     setSelectedFiles([])
   }
 
+  const handleFirstPageClick = () => setBefores([new Date().toISOString()])
+
   function handlePrevClick() {
     if (befores.length === 1) return
     setBefores(befores.slice(1))
@@ -268,17 +373,17 @@ export default function Files({ isLoggedIn }) {
    * @param {string} [props.sortKey]
    */
   const TableHeader = ({ children, sortable, sortKey }) => (
-    <th className="px-2 border-2 border-w3storage-red bg-w3storage-red-background">
+    <th className="px-4 border-2 border-w3storage-red bg-w3storage-red-background whitespace-nowrap">
       <div className="flex items-center justify-center">
-      { children } { sortable && sortKey ? 
+      { children } { sortable && sortKey ?
         <div className="relative ml-1 mr-2">
           <button className="absolute bottom-0 left-0 p-1 pb-0 cursor-pointer" onClick={() => { setSortOrder('Asc'); setSortingBy(sortKey)}}>
             <ChevronIcon width="13" height="10" className={clsx(sortKey === sortingBy && sortOrder === 'Asc'  && 'text-w3storage-red', 'transform rotate-180')}/>
-          </button>  
+          </button>
           <button className="absolute top-0 left-0 p-1 pt-0 cursor-pointer" onClick={() => { setSortOrder('Desc'); setSortingBy(sortKey)} }>
             <ChevronIcon width="13" height="10" className={clsx(sortKey === sortingBy && sortOrder === 'Desc' && 'text-w3storage-red')}/>
           </button>
-        </div> : null 
+        </div> : null
       }
       </div>
     </th>
@@ -314,7 +419,7 @@ export default function Files({ isLoggedIn }) {
           <TableHeader sortable sortKey="Date">Timestamp</TableHeader>
           <TableHeader sortable sortKey="Name">Name</TableHeader>
           <TableHeader>
-            <span className="flex w-100 justify-center items-center">CID 
+            <span className="flex w-100 justify-center items-center">CID
               <Tooltip placement='top' overlay={TOOLTIPS.CID} overlayClassName='table-tooltip'>
                 { QuestionMark() }
               </Tooltip>
@@ -354,6 +459,39 @@ export default function Files({ isLoggedIn }) {
         <When condition={isLoading || isFetching}>
           <Loading />
         </When>
+        <When condition={!hasZeroUploads}>
+          <div className="flex flex-row flex-wrap justify-between ml-7 md:ml-8">
+            <Button small disabled={selectedFiles.length === 0} onClick={handleDelete} wrapperClassName="mb-4 mr-4">
+              Delete
+            </Button>
+            {/* <Button small className="ml-2">
+              Export Deals
+            </Button> */}
+            <div className="flex flex-wrap -mt-4">
+              <Button
+                small
+                onClick={() => refreshUploads()}
+                wrapperClassName="mt-4 mr-4"
+                tracking={{
+                  event: countly.events.FILES_REFRESH,
+                  ui: countly.ui.FILES,
+                  action: 'Refresh',
+                }}
+              >Refresh</Button>
+              <Button
+                href="/upload"
+                small
+                id="upload"
+                wrapperClassName="mt-4"
+                tracking={{
+                  ui: countly.ui.FILES,
+                  action: 'Upload File',
+                  data: { isFirstFile: false }
+                }}
+              >Upload More Files</Button>
+            </div>
+          </div>
+        </When>
         <When condition={!isLoading && !isFetching}>
           <>
             <div className="table-responsive">
@@ -375,80 +513,58 @@ export default function Files({ isLoggedIn }) {
                 </div>
               </When>
               <When condition={!hasZeroUploads}>
-                <>
-                  <div className="flex ml-7 md:ml-8">
-                    <Button small disabled={selectedFiles.length === 0} onClick={handleDelete}>
-                      Delete
-                    </Button>
-                    {/* <Button small className="ml-2">
-                      Export Deals
-                    </Button> */}
-                    
-                    <div className="w-35 ml-auto">
-                      <Button
-                        small
-                        onClick={() => refetch()}
-                        tracking={{
-                          event: countly.events.FILES_REFRESH,
-                          ui: countly.ui.FILES,
-                          action: 'Refresh',
-                        }}
-                      >Refresh</Button>
-                    </div>
-                    <div className="w-35 ml-4">
-                      <Button
-                        href="/upload"
-                        small
-                        id="upload"
-                        tracking={{
-                          ui: countly.ui.FILES,
-                          action: 'Upload File',
-                          data: { isFirstFile: false }
-                        }}
-                      >Upload More Files</Button>
-                    </div>
-                  </div>
-                  <FilesTable />
-                  <div className="mt-4 flex justify-between ml-7 md:ml-8">
-                    <When condition={befores.length !== 1}>
-                      <Button
-                        className="black"
-                        wrapperClassName="m-h-2"
-                        onClick={handlePrevClick}
-                        id="uploads-previous"
-                        tracking={{
-                          event: countly.events.FILES_NAVIGATION_CLICK,
-                          ui: countly.ui.FILES,
-                          action: 'Previous'
-                        }}
-                      >
-                        ← Previous
-                      </Button>
-                    </When>
-                    <When condition={data?.length === size }>
-                      <Button
-                        className="black"
-                        wrapperClassName="m-h-2 ml-auto"
-                        onClick={handleNextClick}
-                        id="uploads-next"
-                        tracking={{
-                          event: countly.events.FILES_NAVIGATION_CLICK,
-                          ui: countly.ui.FILES,
-                          action: 'Next'
-                        }}
-                      >
-                        Next →
-                      </Button>
-                    </When>
-                  </div>
-                </>
+                <FilesTable />
+              </When>
+            </div>
+            <div className="mt-4 flex ml-7 md:ml-8">
+              <When condition={befores.length !== 1}>
+                <Button
+                  className="black"
+                  wrapperClassName="mr-2"
+                  onClick={handleFirstPageClick}
+                  id="uploads-first"
+                  tracking={{
+                    event: countly.events.FILES_NAVIGATION_CLICK,
+                    ui: countly.ui.FILES,
+                    action: 'First'
+                  }}
+                >
+                  First
+                </Button>
+                <Button
+                  className="black"
+                  onClick={handlePrevClick}
+                  id="uploads-previous"
+                  tracking={{
+                    event: countly.events.FILES_NAVIGATION_CLICK,
+                    ui: countly.ui.FILES,
+                    action: 'Previous'
+                  }}
+                >
+                  ← Previous
+                </Button>
+              </When>
+              <When condition={data?.length === size }>
+                <Button
+                  className="black"
+                  wrapperClassName="ml-auto"
+                  onClick={handleNextClick}
+                  id="uploads-next"
+                  tracking={{
+                    event: countly.events.FILES_NAVIGATION_CLICK,
+                    ui: countly.ui.FILES,
+                    action: 'Next'
+                  }}
+                >
+                  Next →
+                </Button>
               </When>
             </div>
           </>
         </When>
       </div>
       <div className={clsx(
-        'fixed bottom-0 left-0 right-0 bg-w3storage-blue-dark text-w3storage-white p-4 text-center appear-bottom-then-go-away', 
+        'fixed bottom-0 left-0 right-0 bg-w3storage-blue-dark text-w3storage-white p-4 text-center appear-bottom-then-go-away',
         !copied && 'hidden')
       }>
         Copied CID to clipboard!

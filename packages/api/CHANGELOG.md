@@ -1,5 +1,76 @@
 # Changelog
 
+## [3.6.0](https://www.github.com/web3-storage/web3.storage/compare/api-v3.5.2...api-v3.6.0) (2021-10-28)
+
+
+### Features
+
+* maintenance mode ([#538](https://www.github.com/web3-storage/web3.storage/issues/538)) ([b206a66](https://www.github.com/web3-storage/web3.storage/commit/b206a66d5404246af9d5c25f0d5b4b0ad415610e))
+* postgres setup ([#508](https://www.github.com/web3-storage/web3.storage/issues/508)) ([cd04716](https://www.github.com/web3-storage/web3.storage/commit/cd04716844a646d986f53aeae7c73840a008aad3))
+
+
+### Bug Fixes
+
+* add mocha dev dependency to api and db ([0648527](https://www.github.com/web3-storage/web3.storage/commit/064852797e0cf56faacbfdcbf9a142973e25c663))
+* api dev mode without backup secrets ([#526](https://www.github.com/web3-storage/web3.storage/issues/526)) ([4d3f1b1](https://www.github.com/web3-storage/web3.storage/commit/4d3f1b17821f4f2b7bac8bbb7078f3fea85a67d7))
+* api webpack build compatible with both dbs and swappable on runtime ([#559](https://www.github.com/web3-storage/web3.storage/issues/559)) ([9000b2d](https://www.github.com/web3-storage/web3.storage/commit/9000b2d4d54f34301f82ca1ffc7983cc299c5c7e))
+* database env var ([#568](https://www.github.com/web3-storage/web3.storage/issues/568)) ([47ac553](https://www.github.com/web3-storage/web3.storage/commit/47ac5538e2e90908b9873227cc548e7a21d9b45e))
+* db client improvements ([#546](https://www.github.com/web3-storage/web3.storage/issues/546)) ([5deffae](https://www.github.com/web3-storage/web3.storage/commit/5deffae2ec3e6c81d90d7db10285fd051c5c1c7d))
+* encode filenames ([#539](https://www.github.com/web3-storage/web3.storage/issues/539)) ([de01972](https://www.github.com/web3-storage/web3.storage/commit/de0197278c041a5bd0c2979e38f79bad068bf993))
+* fauna webpack config ([#550](https://www.github.com/web3-storage/web3.storage/issues/550)) ([d1cfc71](https://www.github.com/web3-storage/web3.storage/commit/d1cfc71cc6df91b58b59d0abd1d60a4518770221))
+
+
+### Changes
+
+* api rewire ([#524](https://www.github.com/web3-storage/web3.storage/issues/524)) ([f4f9cd3](https://www.github.com/web3-storage/web3.storage/commit/f4f9cd39f0859b843067057af9bcdbf4f29063e9))
+
+### [3.5.2](https://www.github.com/web3-storage/web3.storage/compare/api-v3.5.1...api-v3.5.2) (2021-09-30)
+
+
+### Bug Fixes
+
+* source mapping and commit info in sentry ([#505](https://www.github.com/web3-storage/web3.storage/issues/505)) ([5f058a8](https://www.github.com/web3-storage/web3.storage/commit/5f058a81f1b9acd083a9240399f74c1a1bb60adb))
+
+
+### Changes
+
+* dont send source-map to cloudflare ([#506](https://www.github.com/web3-storage/web3.storage/issues/506)) ([f67e3d6](https://www.github.com/web3-storage/web3.storage/commit/f67e3d666d7ef1b5c5f4ff8f5eb6878866f6bdea))
+
+### [3.5.1](https://www.github.com/web3-storage/web3.storage/compare/api-v3.5.0...api-v3.5.1) (2021-09-28)
+
+
+### Bug Fixes
+
+* increment used storage ([#501](https://www.github.com/web3-storage/web3.storage/issues/501)) ([1becd09](https://www.github.com/web3-storage/web3.storage/commit/1becd09bbdaabc503c180cc38c37f7f03852fe62))
+
+## [3.5.0](https://www.github.com/web3-storage/web3.storage/compare/api-v3.4.0...api-v3.5.0) (2021-09-27)
+
+
+### Features
+
+* add a new step to the getting started ([#391](https://www.github.com/web3-storage/web3.storage/issues/391)) ([03844f4](https://www.github.com/web3-storage/web3.storage/commit/03844f456a3faafc755d3342ae6a2fc67822b1e2))
+* storage backup ([#417](https://www.github.com/web3-storage/web3.storage/issues/417)) ([ae5423a](https://www.github.com/web3-storage/web3.storage/commit/ae5423aebc779545126fb6ba652637317efc91e7))
+
+
+### Changes
+
+* bring upload car settings inline with client ([81456c2](https://www.github.com/web3-storage/web3.storage/commit/81456c2cad203a505f83968c11fd44ab4e79548d))
+* unify /upload and /car uploads ([#480](https://www.github.com/web3-storage/web3.storage/issues/480)) ([b62c8b9](https://www.github.com/web3-storage/web3.storage/commit/b62c8b930686f77e455862428699a2870fdd3eb7))
+
+## [3.4.0](https://www.github.com/web3-storage/web3.storage/compare/api-v3.3.2...api-v3.4.0) (2021-09-06)
+
+
+### Features
+
+* allow uploads to be renamed ([2cd9483](https://www.github.com/web3-storage/web3.storage/commit/2cd9483734df5e558a79f58701002f2c50c94269))
+* api supports upload list sorting ([#373](https://www.github.com/web3-storage/web3.storage/issues/373)) ([7b0ec3b](https://www.github.com/web3-storage/web3.storage/commit/7b0ec3beea3aa9b596a794441267d7b8bfcbb7b6))
+
+
+### Bug Fixes
+
+* sort direction in api ([d0551ec](https://www.github.com/web3-storage/web3.storage/commit/d0551ecda381e2ff5e5ff84b013a4975a27f989b))
+* update dependencies ([#404](https://www.github.com/web3-storage/web3.storage/issues/404)) ([dd11034](https://www.github.com/web3-storage/web3.storage/commit/dd110344c6475e0e074bfaec6cf32d16643e1bdb))
+
 ### [3.3.2](https://www.github.com/web3-storage/web3.storage/compare/api-v3.3.1...api-v3.3.2) (2021-08-12)
 
 

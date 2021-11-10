@@ -1,4 +1,3 @@
-import { gql } from '@web3-storage/db'
 import * as JWT from './utils/jwt.js'
 import {
   UserNotFoundError,
@@ -26,7 +25,6 @@ export function withMagicToken (handler) {
 
     const magicUser = await tryMagicToken(token, env)
     if (magicUser) {
-      console.log('magicUser', magicUser)
       request.auth = { user: magicUser }
       env.sentry && env.sentry.setUser(magicUser)
       return handler(request, env, ctx)
@@ -126,32 +124,12 @@ async function tryWeb3ApiToken (token, env) {
   return apiToken
 }
 
-async function findUserByIssuer (issuer, env) {
-  const res = await env.db.query(gql`
-    query FindUserByIssuer ($issuer: String!) {
-      findUserByIssuer(issuer: $issuer) {
-        _id
-        issuer
-      }
-    }
-  `, { issuer })
-  return res.findUserByIssuer
+function findUserByIssuer (issuer, env) {
+  return env.db.getUser(issuer)
 }
 
-async function verifyAuthToken (token, decoded, env) {
-  const res = await env.db.query(gql`
-    query VerifyAuthToken ($issuer: String!, $secret: String!) {
-      verifyAuthToken(issuer: $issuer, secret: $secret) {
-        _id
-        name
-        user {
-          _id
-          issuer
-        }
-      }
-    }
-  `, { issuer: decoded.sub, secret: token })
-  return res.verifyAuthToken
+function verifyAuthToken (token, decoded, env) {
+  return env.db.getKey(decoded.sub, token)
 }
 
 function getTokenFromRequest (request, { magic }) {

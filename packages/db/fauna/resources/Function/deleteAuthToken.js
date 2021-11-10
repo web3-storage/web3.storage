@@ -34,7 +34,12 @@ const body = Query(
             Select(['data', 'user', 'id'], Get(Var('authTokenRef'))),
             Var('userId')
           ),
-          Update(Var('authTokenRef'), { data: { deleted: Now() } }),
+          Update(Var('authTokenRef'), {
+            data: {
+              deleted: Now(),
+              updated: Now()
+            }
+          }),
           Abort('unauthorized')
         ),
         Abort('not found')

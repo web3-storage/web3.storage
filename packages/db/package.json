@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/db",
-  "version": "2.1.0",
+  "version": "2.5.0",
   "description": "Database schema and tools.",
   "private": "true",
   "main": "index.js",
@@ -9,7 +9,8 @@
     "import": "npm run import:gql && npm run import:fql",
     "import:gql": "node tools/import-graphql-schema.js",
     "import:fql": "node tools/import-fql-resources.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pg-rest-api-types": "./scripts/cli.js pg-rest-api-types",
+    "test": "playwright-test \"test/**/*.spec.js\" --sw index.js"
   },
   "keywords": [
     "fauna",
@@ -19,12 +20,22 @@
   "author": "Alan Shaw",
   "license": "(Apache-2.0 AND MIT)",
   "dependencies": {
-    "graphql-request": "^3.4.0"
+    "@supabase/postgrest-js": "^0.34.0",
+    "graphql-request": "^3.4.0",
+    "p-retry": "^4.6.1"
   },
   "devDependencies": {
     "@web-std/fetch": "^2.0.1",
+    "assert": "^2.0.0",
+    "delay": "^5.0.0",
     "dotenv": "^10.0.0",
+    "execa": "^5.1.1",
     "faunadb": "^4.3.0",
+    "mocha": "^9.1.3",
+    "openapi-typescript": "^4.0.2",
+    "pg": "^8.7.1",
+    "playwright-test": "^7.0.1",
+    "sade": "^1.7.4",
     "standard": "^16.0.3"
   }
 }

@@ -14,7 +14,8 @@ const {
   Collection,
   Get,
   Add,
-  Select
+  Select,
+  Now
 } = fauna
 
 const name = 'incrementPinRequestAttempts'
@@ -28,7 +29,8 @@ const body = Query(
       },
       Update(Var('pinRequestRef'), {
         data: {
-          attempts: Add(Select(['data', 'attempts'], Var('pinRequest')), 1)
+          attempts: Add(Select(['data', 'attempts'], Var('pinRequest')), 1),
+          updated: Now()
         }
       })
     )

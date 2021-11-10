@@ -1,8 +1,8 @@
 /* eslint-env browser */
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useCallback, useContext } from 'react'
 import { useQuery } from 'react-query'
 import Link from 'next/link'
-import { getTokens, getStorage } from '../lib/api'
+import { getTokens, getStorage, getUploads } from '../lib/api'
 import countly from '../lib/countly'
 import Button from '../components/button'
 import Loading from '../components/loading'
@@ -10,6 +10,7 @@ import VerticalLines from '../illustrations/vertical-lines'
 import { When } from 'react-if'
 import emailContent from '../content/file-a-request'
 import fileSize from 'filesize'
+import { AppContext } from '../components/state-provider'
 
 const MAX_STORAGE = 1.1e+12 /* 1 TB */
 
@@ -22,7 +23,7 @@ const MAX_STORAGE = 1.1e+12 /* 1 TB */
     return {
       props: {
         title: 'Account - Web3 Storage',
-        redirectTo: '/',
+        redirectTo: '/login/',
         needsLoggedIn: true,
       },
     }
@@ -76,23 +77,41 @@ const StorageInfo = ({ isLoggedIn }) => {
   </div>
 }
 
+const CURRENT_DATE = new Date().toISOString()
+
 /**
  * @param {import('../components/types').LayoutChildrenProps} props
  */
 export default function Account({ isLoggedIn }) {
   const [copied, setCopied] = useState('')
-  const { data, isLoading, isFetching } = useQuery('get-tokens', getTokens, {
+  const { data: tokensData, isLoading: isLoadingTokens, isFetching: isFetchingTokens } = useQuery('get-tokens', getTokens, {
     enabled: isLoggedIn
   })
+
+  const { state } = useContext(AppContext)  
+
   /** @type {import('./tokens').Token[]} */
-  const tokens = data || []
+  const tokens = tokensData || []
+
+  const queryParams = { before: CURRENT_DATE, size: 1 }
+  const queryKey = ['get-uploads', queryParams]
+  const { data: uploadsData, isLoading: isLoadingUploads, isFetching: isFetchingUploads } = useQuery(
+    queryKey,
+    () => getUploads(queryParams),
+    {
+      enabled: isLoggedIn,
+    }
+  )
+
+  const hasUploads = uploadsData ? uploadsData.length > 0 : 0
+
   useEffect(() => {
     if (!copied) return
     const timer = setTimeout(() => setCopied(''), 5000)
     return () => clearTimeout(timer)
   }, [copied])
 
-  const isLoaded = !isLoading && !isFetching
+  const isLoaded = !isLoadingTokens && !isFetchingTokens && !isLoadingUploads && !isFetchingUploads && !!state.user
 
   const hasUsedTokensToUploadBefore = tokens.some(t => t.hasUploads)
   /**
@@ -127,21 +146,43 @@ export default function Account({ isLoggedIn }) {
         </div>
       </When>
       <div className="layout-margins">
-        <main className="max-w-screen-lg mx-auto my-4 lg:my-16 text-w3storage-purple">
-          <h3 className="mb-8">Your account</h3>
-          <StorageInfo isLoggedIn={isLoggedIn}/>
+        <main className="max-w-screen-xl mx-auto my-4 lg:my-16 text-w3storage-purple">
+          <div className="flex mb-8 flex-wrap items-center">
+            <h3 className="mr-2">Your account</h3>
+            <When condition={isLoaded}>
+              { state.user?.info.email && <span>({state.user?.info.email}{state.user?.info.github && ` via GitHub` })</span> }
+            </When>
+          </div>
+          <StorageInfo isLoggedIn={isLoggedIn} />
           <When condition={!isLoaded}>
-            <div className="relative w-52 pt-60">
-              <Loading />
-            </div>
-          </When>
+              <div className="relative w-52 pt-60">
+                <Loading />
+              </div>
+            </When>
           <When condition={isLoaded}>
             <When condition={tokens.length === 0 || !hasUsedTokensToUploadBefore}>
               <div className="mt-9">
-                <h3 className="font-normal">Getting started</h3>
+                <When condition={!hasUploads}>
+                  <h3 className="font-normal">Getting started</h3>
+                  <div className="flex flex-wrap gap-x-10">
+                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red p-10 text-center" style={{ maxWidth: '24rem'}}>
+                      <h3 className="font-normal">Upload your first file</h3>
+                      <p>
+                        Try uploading a file to Web3.Storage!
+                      </p>
+                      <Button
+                        href='/files'
+                        tracking={{ ui: countly.ui.PROFILE_GETTING_STARTED, action: 'Upload a file' }}
+                      >
+                        Upload a file
+                      </Button>
+                    </div>
+                  </div>
+                </When>
+                <h3 className="font-normal mt-14">Next steps</h3>
                 <div className="flex flex-wrap gap-x-10">
                   <When condition={tokens.length === 0}>
-                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center" style={{ maxWidth: '24rem'}}>
+                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red p-10 text-center" style={{ maxWidth: '24rem'}}>
                       <h3 className="font-normal">Create your first API token</h3>
                       <p>
                         Generate an API Token to embed into your projects!
@@ -155,8 +196,8 @@ export default function Account({ isLoggedIn }) {
                     </div>
                   </When>
                   <When condition={tokens.length === 0 || !hasUsedTokensToUploadBefore}>
-                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red py-12 px-10 text-center" style={{ maxWidth: '24rem'}}>
-                      <h3 className="font-normal">Start building</h3>
+                    <div className="flex flex-col items-center mt-10 justify-between h-96 max-w-full bg-white border border-w3storage-red p-10 text-center" style={{ maxWidth: '24rem'}}>
+                      <h3 className="font-normal">Read the docs</h3>
                       <p>
                         Start storing and retrieving files using our client library! See the docs for guides and walkthroughs!
                       </p>

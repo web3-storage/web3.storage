@@ -51,7 +51,6 @@ jobs:
         with:
           path_to_add: packages/website/out
           web3_token: ${{ secrets.WEB3_TOKEN }}
-          web3_api: https://api-staging.web3.storage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       

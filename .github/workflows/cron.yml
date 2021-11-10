@@ -1,0 +1,23 @@
+name: cron
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/cron/**'
+      - '.github/workflows/cron.yml'
+  pull_request:
+    paths:
+      - 'packages/cron/**'
+      - '.github/workflows/cron.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - uses: bahmutov/npm-install@v1
+      - run: npm test --workspace packages/cron

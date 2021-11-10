@@ -10,12 +10,30 @@ on:
   # Nothing to do on PR yet, but having the check appear on the PR serves as a reminder 
   # that we don't have proper tests for db changes yet, and that merging it will deploy.
   pull_request:
-    branches:
-      - main
     paths:
       - 'packages/db/**'
       - '.github/workflows/db.yml'
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - uses: bahmutov/npm-install@v1
+      - run: npx playwright install-deps
+      - run: npm test --workspace packages/db
+        env:
+          PG_REST_URL: ${{secrets.PG_REST_URL}}
+          PG_REST_JWT: ${{secrets.PG_REST_JWT}}
+          PG_CONNECTION: ${{secrets.PG_CONNECTION}}
+          DAG_CARGO_HOST: ${{secrets.DAG_CARGO_HOST}}
+          DAG_CARGO_DATABASE: ${{secrets.DAG_CARGO_DATABASE}}
+          DAG_CARGO_USER: ${{secrets.DAG_CARGO_USER}}
+          DAG_CARGO_PASSWORD: ${{secrets.DAG_CARGO_PASSWORD}}
+
   deploy-staging:
     name: Deploy Staging DB
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -30,3 +48,8 @@ jobs:
         run: npm run import -w packages/db
         env:
           FAUNA_KEY: ${{ secrets.STAGING_FAUNA_KEY }}
+      - name: Test upload to staging
+        run: |
+          npm run build -w packages/client
+          echo "$(date --utc --iso-8601=seconds) web3.storage upload test" > ./upload-test-small
+          ./packages/w3/bin.js put ./upload-test-small --api https://api-staging.web3.storage --token ${{ secrets.STAGING_WEB3_TOKEN }}

@@ -1,25 +1,8 @@
-/* eslint-env serviceworker */
-import { gql } from '@web3-storage/db'
-import { JSONResponse } from './utils/json-response.js'
+/* eslint-env serviceworker, browser */
+import { packToBlob } from 'ipfs-car/pack/blob'
+import { handleCarUpload } from './car.js'
 import { toFormData } from './utils/form-data.js'
-import { LOCAL_ADD_THRESHOLD } from './constants.js'
-import { toPinStatusEnum } from './utils/pin.js'
-
-const CREATE_UPLOAD = gql`
-  mutation CreateUpload($data: CreateUploadInput!) {
-    createUpload(data: $data) {
-      _id
-    }
-  }
-`
-
-const INCREMENT_USER_USED_STORAGE = gql`
-  mutation IncrementUserUsedStorage($user: ID!, $amount: Long!) {
-    incrementUserUsedStorage(user: $user, amount: $amount) {
-      usedStorage
-    }
-  }
-`
+import { HTTPError } from './errors.js'
 
 /**
  * Post a File/Directory.
@@ -29,90 +12,36 @@ const INCREMENT_USER_USED_STORAGE = gql`
  * @param {import('./index').Ctx} ctx
  */
 export async function uploadPost (request, env, ctx) {
-  const { user, authToken } = request.auth
   const { headers } = request
   const contentType = headers.get('content-type') || ''
 
-  let cid
-  let dagSize
-  let name = headers.get('x-name')
-  let type
-  if (!name || typeof name !== 'string') {
-    name = `Upload at ${new Date().toISOString()}`
-  }
-
+  let input
   if (contentType.includes('multipart/form-data')) {
     const form = await toFormData(request)
-    const files = /** @type {File[]} */ (form.getAll('file'))
-    const dirSize = files.reduce((total, f) => total + f.size, 0)
-
-    const entries = await env.cluster.addDirectory(files, {
-      metadata: { size: dirSize.toString() },
-      // When >2.5MB, use local add, because waiting for blocks to be sent to
-      // other cluster nodes can take a long time. Replication to other nodes
-      // will be done async by bitswap instead.
-      local: dirSize > LOCAL_ADD_THRESHOLD
-    })
-    const dir = entries[entries.length - 1]
-
-    cid = dir.cid
-    dagSize = dir.size
-    type = 'Multipart'
+    const files = form.getAll('file')
+    input = files.map((f) => ({
+      path: f.name,
+      content: f.stream()
+    }))
+  } else if (contentType.includes('application/car')) {
+    throw new HTTPError('Please POST Content-addressed Archives to /car', 400)
   } else {
     const blob = await request.blob()
     if (blob.size === 0) {
       throw new Error('Empty payload')
     }
-
-    const entry = await env.cluster.add(blob, {
-      metadata: { size: blob.size.toString() },
-      // When >2.5MB, use local add, because waiting for blocks to be sent to
-      // other cluster nodes can take a long time. Replication to other nodes
-      // will be done async by bitswap instead.
-      local: blob.size > LOCAL_ADD_THRESHOLD
-    })
-
-    cid = entry.cid
-    dagSize = entry.size
-    type = 'Blob'
+    input = [blob]
   }
-
-  // Retrieve current pin status and info about the nodes pinning the content.
-  const { peerMap } = await env.cluster.status(cid)
-  const pins = Object.entries(peerMap).map(([peerId, { peerName, status }]) => ({
-    status: toPinStatusEnum(status),
-    location: { peerId, peerName }
-  }))
-
-  if (!pins.length) { // should not happen
-    throw new Error('not pinning on any node')
-  }
-
-  // Store in DB
-  await env.db.query(CREATE_UPLOAD, {
-    data: {
-      user: user._id,
-      authToken: authToken?._id,
-      cid,
-      name,
-      type,
-      pins,
-      dagSize
-    }
+  // TODO: do we want to wrap file uploads like we do car uploads from the client?
+  // this path used to send the files to cluster and we didn't wrap, so we dont here for consistency with the old ways.
+  const { car } = await packToBlob({
+    input,
+    maxChunkSize: 1048576,
+    maxChildrenPerNode: 1024,
+    wrapWithDirectory: false
   })
 
-  if (ctx.waitUntil) {
-    ctx.waitUntil((async () => {
-      try {
-        await env.db.query(INCREMENT_USER_USED_STORAGE, {
-          user: user._id,
-          amount: dagSize
-        })
-      } catch (err) {
-        console.error(`failed to update user used storage: ${err.stack}`)
-      }
-    })())
-  }
-
-  return new JSONResponse({ cid })
+  // NOTE: this is tracked in the db to allow us to query for content that was uploaded as raw files vs as CARs.
+  const uploadType = 'Upload'
+  return handleCarUpload(request, env, ctx, car, uploadType)
 }

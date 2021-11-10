@@ -25,7 +25,8 @@ const {
   Do,
   Call,
   Foreach,
-  Equals
+  Equals,
+  Add
 } = fauna
 
 const name = 'createUpload'
@@ -47,7 +48,8 @@ const body = Query(
         Let(
           {
             cid: Select('cid', Var('data')),
-            contentMatch: Match(Index('unique_Content_cid'), Var('cid'))
+            contentMatch: Match(Index('unique_Content_cid'), Var('cid')),
+            usedStorage: Select(['data', 'usedStorage'], Get(Var('userRef')), 0)
           },
           If(
             IsNonEmpty(Var('contentMatch')),
@@ -63,7 +65,36 @@ const body = Query(
               },
               If(
                 IsNonEmpty(Var('uploadMatch')),
-                Get(Var('uploadMatch')),
+                Do(
+                  Foreach(
+                    Select('backupUrls', Var('data')),
+                    Lambda(
+                      ['url'],
+                      Let(
+                        {
+                          upload: Select('ref', Get(Var('uploadMatch'))),
+                          backupMatch: Match(
+                            Index('backup_by_upload_and_url'),
+                            Var('upload'),
+                            Var('url')
+                          )
+                        },
+                        If(
+                          IsNonEmpty(Var('backupMatch')),
+                          Get(Var('backupMatch')),
+                          Create('Backup', {
+                            data: {
+                              upload: Var('upload'),
+                              url: Var('url'),
+                              created: Now()
+                            }
+                          })
+                        )
+                      )
+                    )
+                  ),
+                  Get(Var('uploadMatch'))
+                ),
                 Let(
                   {
                     upload: Create('Upload', {
@@ -73,7 +104,13 @@ const body = Query(
                         content: Select('ref', Var('content')),
                         name: Select('name', Var('data'), null),
                         type: Select('type', Var('data')),
-                        created: Now()
+                        created: Now(),
+                        updated: Now()
+                      }
+                    }),
+                    user: Update(Var('userRef'), {
+                      data: {
+                        usedStorage: Add(Var('usedStorage'), Select('dagSize', Var('data'), 0))
                       }
                     })
                   },
@@ -103,6 +140,19 @@ const body = Query(
                         )
                       )
                     ),
+                    Foreach(
+                      Select('backupUrls', Var('data')),
+                      Lambda(
+                        ['url'],
+                        Create('Backup', {
+                          data: {
+                            upload: Select('ref', Var('upload')),
+                            url: Var('url'),
+                            created: Now()
+                          }
+                        })
+                      )
+                    ),
                     Var('upload')
                   )
                 )
@@ -124,7 +174,13 @@ const body = Query(
                     content: Select('ref', Var('content')),
                     name: Select('name', Var('data'), null),
                     type: Select('type', Var('data')),
-                    created: Now()
+                    created: Now(),
+                    updated: Now()
+                  }
+                }),
+                user: Update(Var('userRef'), {
+                  data: {
+                    usedStorage: Add(Var('usedStorage'), Select('dagSize', Var('data'), 0))
                   }
                 }),
                 pinRequest: Create('PinRequest', {
@@ -161,6 +217,19 @@ const body = Query(
                         null
                       )
                     )
+                  )
+                ),
+                Foreach(
+                  Select('backupUrls', Var('data')),
+                  Lambda(
+                    ['url'],
+                    Create('Backup', {
+                      data: {
+                        upload: Select('ref', Var('upload')),
+                        url: Var('url'),
+                        created: Now()
+                      }
+                    })
                   )
                 ),
                 Var('upload')

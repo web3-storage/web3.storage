@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.4.1](https://www.github.com/web3-storage/web3.storage/compare/w3-v2.4.0...w3-v2.4.1) (2021-08-31)
+
+
+### Bug Fixes
+
+* `w3 put <path>...` warn if paths do not exist ([#412](https://www.github.com/web3-storage/web3.storage/issues/412)) ([c790401](https://www.github.com/web3-storage/web3.storage/commit/c79040176a116047c0acd9a22680927c30596085)), closes [#399](https://www.github.com/web3-storage/web3.storage/issues/399)
+* update dependencies ([#404](https://www.github.com/web3-storage/web3.storage/issues/404)) ([dd11034](https://www.github.com/web3-storage/web3.storage/commit/dd110344c6475e0e074bfaec6cf32d16643e1bdb))
+
 ## [2.4.0](https://www.github.com/web3-storage/web3.storage/compare/w3-v2.3.0...w3-v2.4.0) (2021-08-18)
 
 

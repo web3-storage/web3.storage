@@ -1,6 +1,8 @@
 import { getMagic } from './magic'
 import constants from './constants'
 
+/** @typedef {{ name?: string } & import('web3.storage').Upload} Upload */
+
 export const API = constants.API
 
 const LIFESPAN = constants.MAGIC_TOKEN_LIFESPAN / 1000
@@ -45,6 +47,22 @@ export async function getStorage() {
 
   if (!res.ok) {
     throw new Error(`failed to get storage info: ${await res.text()}`)
+  }
+
+  return res.json()
+}
+
+export async function getInfo() {
+  const res = await fetch(API + '/user/info', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + (await getToken()),
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error(`failed to get user info: ${await res.text()}`)
   }
 
   return res.json()
@@ -96,13 +114,21 @@ export async function createToken(name) {
  * @param {object} args
  * @param {number} args.size
  * @param {string} args.before
- * @param {string} args.sortBy Can be either "Date" or "Name"
- * @param {string} args.sortOrder Can be either "Asc" or "Desc"
+ * @param {string} [args.sortBy] Can be either "Date" or "Name" - uses "Date" as default
+ * @param {string} [args.sortOrder] Can be either "Asc" or "Desc" - uses "Desc" as default
  * @returns {Promise<import('web3.storage').Upload[]>}
  * @throws {Error} When it fails to get uploads
  */
 export async function getUploads({ size, before, sortBy, sortOrder }) {
-  const params = new URLSearchParams({ before, size: String(size), sortBy, sortOrder })
+  const params = new URLSearchParams({ before, size: String(size) })
+  if (sortBy) {
+    params.set('sortBy', sortBy)
+  }
+
+  if (sortOrder) {
+    params.set('setOrder', sortOrder)
+  }
+
   const res = await fetch(`${API}/user/uploads?${params}`, {
     method: 'GET',
     headers: {
@@ -134,5 +160,44 @@ export async function deleteUpload (cid) {
 
   if (!res.ok) {
     throw new Error(`failed to delete upload: ${await res.text()}`)
+  }
+}
+
+/**
+ * Renames upload
+ *
+ * @param {string} cid
+ * @param {string} name
+ */
+ export async function renameUpload (cid, name) {
+  const res = await fetch(`${API}/user/uploads/${cid}/rename`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + (await getToken()),
+    },
+    body: JSON.stringify({
+      name
+    })
+  })
+
+  if (!res.ok) {
+    throw new Error(`failed to delete upload: ${await res.text()}`)
+  }
+}
+
+export async function getVersion() {
+  const route = '/version'
+  const res = await fetch(`${API}${route}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (res.ok) {
+    return await res.json()
+  } else {
+    throw new Error(await res.text())
   }
 }

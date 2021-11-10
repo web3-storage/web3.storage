@@ -63,6 +63,11 @@ type AuthToken {
   created: Time!
 
   """
+  Updated date.
+  """
+  updated: Time
+
+  """
   Deletion date.
   """
   deleted: Time
@@ -216,6 +221,31 @@ type PinSyncRequest {
 }
 
 """
+Details of the backups created for an upload.
+"""
+type Backup {
+  """
+  Upload that originated the backup
+  """
+  upload: Upload! @relation
+
+  """
+  Backup url.
+  """
+  url: String!
+
+  """
+  Creation date.
+  """
+  created: Time!
+
+  """
+  Deletion date.
+  """
+  deleted: Time
+}
+
+"""
 An upload created by a user.
 """
 type Upload {
@@ -251,6 +281,11 @@ type Upload {
   created: Time!
 
   """
+  Updated date.
+  """
+  updated: Time
+
+  """
   Deletion date.
   """
   deleted: Time
@@ -264,6 +299,10 @@ enum UploadType {
   A CAR file upload.
   """
   Car
+  """
+  Files uploaded and converted into a CAR file.
+  """
+  Upload
   """
   A raw blob upload in the request body.
   """
@@ -442,6 +481,7 @@ type Mutation {
   createUpload(data: CreateUploadInput!): Upload! @resolver
   deleteAuthToken(user: ID!, authToken: ID!): AuthToken! @resolver
   deleteUserUpload(user: ID!, cid: String!): Upload! @resolver
+  renameUserUpload(user: ID!, cid: String!, name: String!): Upload! @resolver
   deleteUploadByUserAndContent(user: ID!, content: ID!): Upload! @resolver
   createAggregate(data: CreateAggregateInput!): Aggregate! @resolver
   """
@@ -514,6 +554,7 @@ input CreateUploadInput {
   cid: String!
   type: UploadType!
   name: String
+  backupUrls: [String]!
   dagSize: Long
   chunkSize: Long # decremented, unused
   pins: [PinInput!]!
