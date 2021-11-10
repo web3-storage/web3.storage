@@ -54,9 +54,10 @@ router.get('/user/info',                 mode['👀'](auth['👮'](userInfoGet))
 
 // Temporary backdoor bypassing maintenance mode middleware
 router.get('/_backdoor/user/uploads', auth['🔒'](userUploadsGet))
-router.get('/_backdoor/status/:cid', auth['🤲'](statusGet))
-router.post('/_backdoor/car', auth['🔒'](carPost))
-router.post('/_backdoor/upload', auth['🔒'](uploadPost))
+router.get('/_backdoor/status/:cid',  auth['🤲'](statusGet))
+router.get('/_backdoor/car/:cid',     auth['🤲'](carGet))
+router.post('/_backdoor/car',         auth['🔒'](carPost))
+router.post('/_backdoor/upload',      auth['🔒'](uploadPost))
 
 // Monitoring
 router.get('/metrics', mode['👀'](withCorsHeaders(metricsGet)))
