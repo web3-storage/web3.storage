@@ -29,32 +29,32 @@ module.exports = {
       respectPrefersColorScheme: true,
       disableSwitch: true,
     },
-    navbar: {
-      title: 'Web3.Storage',
-      logo: {
-        alt: 'Web3.Storage Logo',
-        src: 'img/logo.svg',
-        srcDark: 'img/logo-dark.svg',
-        href: 'https://web3.storage',
-      },
-      items: [
-        {
-          label: 'Docs',
-          type: 'doc',
-          docId: 'intro',
-          position: 'right',
-        },
-        {
-          label: 'About',
-          position: 'right',
-          href: 'https://web3.storage/about',
-        },
-        {
-          type: 'search',
-          position: 'right',
-        }
-      ],
-    },
+    // navbar: {
+    //   // title: 'Web3.Storage',
+    //   // logo: {
+    //   //   alt: 'Web3.Storage Logo',
+    //   //   src: 'img/logo.svg',
+    //   //   srcDark: 'img/logo-dark.svg',
+    //   //   href: 'https://web3.storage',
+    //   // },
+    //   items: [
+    //     // {
+    //     //   label: 'Docs',
+    //     //   type: 'doc',
+    //     //   docId: 'intro',
+    //     //   position: 'right',
+    //     // },
+    //     // {
+    //     //   label: 'About',
+    //     //   position: 'right',
+    //     //   href: 'https://web3.storage/about',
+    //     // },
+    //     {
+    //       type: 'search',
+    //       position: 'right',
+    //     }
+    //   ],
+    // },
 
     footer: {
       copyright: `<div class="footer--made-with">Made with 💛 by <a href="https://protocol.ai" target="_blank" rel="noopener noreferrer" data-v-13c85306="" data-v-2294af70="">Protocol Labs</a></div>`,
@@ -175,7 +175,7 @@ module.exports = {
         }
       ]
     }],
-    
+    'docusaurus-tailwindcss',
     sitePlugin,
   ]
 };

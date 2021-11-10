@@ -1,3 +1,5 @@
+import React from 'react'
+
 /**
  * @param {any} props
  */

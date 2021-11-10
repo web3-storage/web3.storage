@@ -163,6 +163,7 @@ function RedocPage() {
           sidebar={sidebarDefinition.docs} 
         />
       </div>
+      <h1 style={{ fontSize: 96 }}>HELLO</h1>
       <div className={styles.redocWrapper} >
         <div className={styles.mobileTocWrapper} >
             <TOCCollapsible toc={tocDefinition} />

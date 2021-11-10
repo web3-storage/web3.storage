@@ -1,30 +1,30 @@
+import React from 'react'
 import { useCallback, useMemo, useRef, useState } from 'react'
-import Router from 'next/router'
-import Link from 'next/link'
-import { getMagic } from '../lib/magic.js'
-import countly from '../lib/countly'
-import { useQueryClient } from 'react-query'
-import Button from './button.js'
-import { useResizeObserver } from '../hooks/resize-observer'
+import { Magic } from 'magic-sdk'
+import Link from '@docusaurus/Link'
+import countly from '@web3-storage/website/lib/countly'
+import Button from '@site/src/components/button'
+import { useResizeObserver } from '@site/sric/hooks/resize-observer'
 import clsx from 'clsx'
-import Hamburger from '../icons/hamburger'
 
-import Logo from '../icons/w3storage-logo'
-import Cross from '../icons/cross'
-import Loading from './loading.js'
+import Hamburger from '@web3-storage/website/icons/hamburger'
+import Logo from '@web3-storage/website/icons/w3storage-logo'
+import Cross from '@web3-storage/website/icons/cross'
+import Loading from '@web3-storage/website/components/loading.js'
 
-/**
- * Navbar Component
- *
- * @param {Object} props
- * @param {string} [props.bgColor]
- * @param {boolean} [props.isLoggedIn]
- * @param {boolean} props.isLoadingUser
- */
-export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
+export default function Navbar() {
   const containerRef = useRef(null)
   const [isSmallVariant, setSmallVariant] = useState(false)
   const [isMenuOpen, setMenuOpen] = useState(false)
+  const [ isLoggedIn, setIsLoggedIn ] = useState(null)
+
+  const bgColor = ''
+  const isLoadingUser = isLoggedIn === null
+
+  const MAGIC_LINK_PUB_KEY = process.env.MAGIC_LINK_PUB_KEY || ''
+  const m = new Magic(MAGIC_LINK_PUB_KEY)
+  m.user.isLoggedIn()
+    .then(isLoggedIn => setIsLoggedIn(isLoggedIn))
 
   useResizeObserver(containerRef, () => {
     const shouldGoToSmallVariant =  window.innerWidth < 640
@@ -41,28 +41,27 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   const ITEMS = useMemo(() =>
     [
       {
-        link: '/docs',
+        link: 'https://web3.storage/docs',
         name: 'Docs',
         spacing: `p-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
       },
       {
-        link: '/about',
+        link: 'https://web3.storage/about',
         name: 'About',
         spacing: `p-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
       },
       {
-        link: '/files',
+        link: 'https://web3.storage/files',
         name: 'Files',
         spacing: `p-3 md:px-6`
       },
       {
-        link: '/account',
+        link: 'https://web3.storage/account',
         name: 'Account',
         spacing: `p-3 md:px-6 mr-3 md:mr-6`
       }
     ], [isLoggedIn])
 
-  const queryClient = useQueryClient()
   const onLinkClick = useCallback((event) => {
     countly.trackCustomLinkClick(
       countly.events.LINK_CLICK_NAVBAR,
@@ -70,18 +69,21 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
     )
   }, [])
 
-  async function logout() {
-    await getMagic().user.logout()
-    await queryClient.invalidateQueries('magic-user')
-    Router.push('/')
-  }
+  const logout = async () => await m.user.logout() 
 
   const toggleMenu = () => {
-    isMenuOpen ? document.body.classList.remove('overflow-hidden') : document.body.classList.add('overflow-hidden')
+    if(isMenuOpen) {
+      document.body.classList.remove('overflow-hidden')
+      document.body.style.overflow = 'visible'
+    }
+    else {
+      document.body.classList.add('overflow-hidden')
+      document.body.style.overflow = 'hidden'
+    }
     setMenuOpen(!isMenuOpen)
   }
 
-  const logoutButton = (
+  const logoutButton = 
     <Button
       onClick={logout}
       id="logout"
@@ -95,12 +97,11 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
       }}>
       Logout
     </Button>
-  )
 
   const loginButton = (
-    <Button href="/login" id="login" wrapperClassName="inline-block" small={isSmallVariant} tracking={{ ui: countly.ui.NAVBAR, action: 'Login' }}>
+    <a href="https://web3.storage/login">
       Login
-    </Button>
+    </a>
     )
 
   const spinnerButton = (
@@ -139,20 +140,22 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
           }
         </div>
       </div>
-      <div className={clsx(
+      <div 
+        style={{ backgroundColor: '#0b0a45' }}
+        className={clsx(
           "transition-all duration-300 fixed top-0 left-0 bottom-0 shadow-2xl p-6 w-full bg-w3storage-blue-dark",
-          isSmallVariant && isMenuOpen ? 'flex justify-center opacity-100' : 'opacity-0 invisible'
+          isSmallVariant && isMenuOpen ? 'flex justify-center opacity-100 w-screen h-screen sticky' : 'opacity-0 invisible'
       )} aria-hidden={isSmallVariant && isMenuOpen}>
-        <div className="flex flex-col align-middle text-center mt-4">
+        <div className="flex flex-col align-middle items-center text-center mt-4">
           <a href="/" title="Web3 Storage" className="flex justify-center mb-8">
             <Logo style={{ height: '4rem', minWidth: '4rem' }} className="fill-current text-w3storage-red" />
           </a>
           { ITEMS.map(item => (
-            <Link href={item.link} key={item.name}>
               <a className={clsx('space-grotesk text-5xl text-white font-bold no-underline hover:underline align-middle mt-4', item.spacing)} onClick={() => toggleMenu()}>
-                { item.name }
+                <Link href={item.link} key={item.name}>
+                  { item.name }
+                </Link>
               </a>
-            </Link>
           ))}
           <button className="flex justify-center mt-16" onClick={ () => toggleMenu() }>
             <Cross />

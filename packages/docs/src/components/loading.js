@@ -1,5 +1,5 @@
 import React from 'react'
-import SpinnerIcon from '../icons/spinner'
+import SpinnerIcon from '@site/src/icons/spinner'
 
 /**
  * @param {Object} [props]
