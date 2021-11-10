@@ -50,7 +50,6 @@ router.post('/user/tokens',              mode['📝'](auth['👮'](userTokensPos
 router.delete('/user/tokens/:id',        mode['📝'](auth['👮'](userTokensDelete)))
 router.get('/user/account',              mode['👀'](auth['👮'](userAccountGet)))
 router.get('/user/info',                 mode['👀'](auth['👮'](userInfoGet)))
-/* eslint-enable no-multi-spaces */
 
 // Temporary backdoor bypassing maintenance mode middleware
 router.get('/_backdoor/user/uploads', auth['🔒'](userUploadsGet))
@@ -58,6 +57,7 @@ router.get('/_backdoor/status/:cid',  auth['🤲'](statusGet))
 router.get('/_backdoor/car/:cid',     auth['🤲'](carGet))
 router.post('/_backdoor/car',         auth['🔒'](carPost))
 router.post('/_backdoor/upload',      auth['🔒'](uploadPost))
+/* eslint-enable no-multi-spaces */
 
 // Monitoring
 router.get('/metrics', mode['👀'](withCorsHeaders(metricsGet)))
