@@ -1,8 +1,9 @@
 /**
  * https://github.com/sinedied/smoke#javascript-mocks
  */
-module.exports = ({ body }) => {
+module.exports = () => {
   return {
-    id: 1
+    statusCode: 200,
+    body: '1' // key ID
   }
 }

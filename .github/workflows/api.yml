@@ -5,10 +5,12 @@ on:
       - main
     paths:
       - 'packages/api/**'
+      - 'packages/db/**'
       - '.github/workflows/api.yml'
   pull_request:
     paths:
       - 'packages/api/**'
+      - 'packages/db/**'
       - '.github/workflows/api.yml'
 jobs:
   test:
