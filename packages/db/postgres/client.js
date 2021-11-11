@@ -12,7 +12,7 @@ import {
 } from './metrics.js'
 
 const uploadQuery = `
-        _id:id,
+        _id:id::text,
         type,
         name,
         created:inserted_at,
@@ -76,7 +76,7 @@ export class PostgresClient {
     const { data, error } = await this._client
       .from('user')
       .select(`
-        _id:id,
+        _id:id::text,
         issuer,
         name,
         email,
@@ -328,19 +328,19 @@ export class PostgresClient {
     /** @type {{ data: Array<definitions['backup']>, error: Error }} */
     const { data: backups, error } = await this._client
       .from('backup')
-      .select('*')
+      .select(`
+        _id:id::text,
+        created:inserted_at,
+        uploadId:upload_id::text,
+        url
+      `)
       .match({ upload_id: uploadId })
 
     if (error) {
       throw new DBError(error)
     }
 
-    return backups.map(b => ({
-      _id: b.id,
-      created: b.inserted_at,
-      uploadId: b.upload_id,
-      url: b.url
-    }))
+    return backups
   }
 
   /**
@@ -399,11 +399,11 @@ export class PostgresClient {
     const { data: pins, error } = await this._client
       .from('pin')
       .select(`
-        _id:id,
+        _id:id::text,
         status,
         created:inserted_at,
         updated:updated_at,
-        location:pin_location(id, peerId:peer_id, peerName:peer_name, region)
+        location:pin_location(id::text, peerId:peer_id, peerName:peer_name, region)
       `)
       .match({ content_cid: cid })
 
@@ -426,7 +426,7 @@ export class PostgresClient {
     const { data: pinReqs, error } = await this._client
       .from('pin_request')
       .select(`
-        _id:id,
+        _id:id::text,
         cid:content_cid,
         created:inserted_at
       `)
@@ -491,7 +491,7 @@ export class PostgresClient {
     let query = this._client
       .from('pin_sync_request')
       .select(`
-        _id:id,
+        _id:id::text,
         pin:pin(_id:id, status, contentCid:content_cid, created:inserted_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region))
       `)
       .order(
@@ -586,22 +586,25 @@ export class PostgresClient {
    * @return {Promise<import('../db-client-types').CreateAuthKeyOutput>}
    */
   async createKey ({ name, secret, user }) {
+    const now = new Date().toISOString()
+
     /** @type {{ data: definitions['auth_key'], error: Error }} */
-    const { data, error } = await this._client
-      .from('auth_key')
-      .insert({
-        name: name,
-        secret: secret,
-        user_id: user
-      })
-      .single()
+    const { data, error } = await this._client.rpc('create_key', {
+      data: {
+        name,
+        secret,
+        user_id: user,
+        inserted_at: now,
+        updated_at: now
+      }
+    }).single()
 
     if (error) {
       throw new DBError(error)
     }
 
     return {
-      _id: data.id
+      _id: data
     }
   }
 
@@ -617,9 +620,9 @@ export class PostgresClient {
     const { data, error } = await this._client
       .from('user')
       .select(`
-        _id:id,
+        _id:id::text,
         issuer,
-        keys:auth_key_user_id_fkey(_id:id, name,secret)
+        keys:auth_key_user_id_fkey(_id:id::text, name,secret)
       `)
       .match({
         issuer

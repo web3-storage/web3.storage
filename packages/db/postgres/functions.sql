@@ -13,7 +13,28 @@ CREATE OR REPLACE FUNCTION json_arr_to_json_element_array(_json json)
   RETURNS json[] LANGUAGE sql IMMUTABLE PARALLEL SAFE AS
 'SELECT ARRAY(SELECT * FROM json_array_elements(_json))';
 
-CREATE OR REPLACE FUNCTION create_upload(data json) RETURNS BIGINT
+CREATE OR REPLACE FUNCTION create_key(data json) RETURNS TEXT
+    LANGUAGE plpgsql
+    volatile
+    PARALLEL UNSAFE
+AS
+$$
+DECLARE
+  inserted_key_id BIGINT;
+BEGIN
+  insert into auth_key (name, secret, user_id, inserted_at, updated_at)
+  VALUES (data ->> 'name',
+          data ->> 'secret',
+          (data ->> 'user_id')::BIGINT,
+          (data ->> 'inserted_at')::timestamptz,
+          (data ->> 'updated_at')::timestamptz)
+  returning id into inserted_key_id;
+
+  return (inserted_key_id)::TEXT;
+END
+$$;
+
+CREATE OR REPLACE FUNCTION create_upload(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile
     PARALLEL UNSAFE
@@ -113,11 +134,11 @@ BEGIN
     ON CONFLICT ( url ) DO NOTHING;
   end loop;
 
-  return inserted_upload_id;
+  return (inserted_upload_id)::TEXT;
 END
 $$;
 
-CREATE OR REPLACE FUNCTION upsert_pin(data json) RETURNS BIGINT
+CREATE OR REPLACE FUNCTION upsert_pin(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile
     PARALLEL UNSAFE
@@ -150,11 +171,11 @@ BEGIN
             "updated_at" = NOW()
   returning id into pin_result_id;
 
-  return pin_location_result_id;
+  return (pin_location_result_id)::TEXT;
 END
 $$;
 
-CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT) RETURNS BIGINT
+CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT) RETURNS TEXT
   LANGUAGE plpgsql
 AS
 $$
@@ -164,14 +185,14 @@ BEGIN
     from upload u
     join content c on c.cid = u.content_cid
     where u.user_id = query_user_id and u.deleted_at is null
-  );
+  )::TEXT;
 END
 $$;
 
 CREATE OR REPLACE FUNCTION user_keys_list(query_user_id BIGINT)
   RETURNS TABLE
           (
-              "id"                bigint,
+              "id"                text,
               "name"              text,
               "secret"            text,
               "created"           timestamptz,
@@ -180,7 +201,7 @@ CREATE OR REPLACE FUNCTION user_keys_list(query_user_id BIGINT)
   LANGUAGE sql
 AS
 $$
-select  ak.id as id,
+select  (ak.id)::TEXT as id,
         ak.name as name,
         ak.secret as secret,
         ak.inserted_at as created,
@@ -191,7 +212,7 @@ where ak.user_id = query_user_id and u.deleted_at is null and ak.deleted_at is n
 group by ak.id
 $$;
 
-CREATE OR REPLACE FUNCTION content_dag_size_total() RETURNS BIGINT
+CREATE OR REPLACE FUNCTION content_dag_size_total() RETURNS TEXT
   LANGUAGE plpgsql
 AS
 $$
@@ -199,11 +220,11 @@ BEGIN
   return(
     select sum(c.dag_size)
     from content c
-  );
+  )::TEXT;
 END
 $$;
 
-CREATE OR REPLACE FUNCTION pin_dag_size_total() RETURNS BIGINT
+CREATE OR REPLACE FUNCTION pin_dag_size_total() RETURNS TEXT
   LANGUAGE plpgsql
 AS
 $$
@@ -212,7 +233,7 @@ BEGIN
     select sum(c.dag_size)
     from pin p
     join content c on c.cid = p.content_cid
-  );
+  )::TEXT;
 END
 $$;
 
