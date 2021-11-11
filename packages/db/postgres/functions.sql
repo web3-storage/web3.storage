@@ -109,7 +109,8 @@ BEGIN
                         inserted_at)
     values (inserted_upload_id,
             backup_url,
-            (data ->> 'inserted_at')::timestamptz);
+            (data ->> 'inserted_at')::timestamptz)
+    ON CONFLICT ( url ) DO NOTHING;
   end loop;
 
   return inserted_upload_id;
