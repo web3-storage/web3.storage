@@ -16,6 +16,7 @@ import {
   READ_WRITE
 } from './maintenance.js'
 import { notFound } from './utils/json-response.js'
+import { nameGet, namePost } from './name.js'
 
 const router = Router()
 router.options('*', corsOptions)
@@ -42,6 +43,9 @@ router.post('/car',                 mode['📝'](auth['🔒'](carPost)))
 router.put('/car/:cid',             mode['📝'](auth['🔒'](carPut)))
 router.post('/upload',              mode['📝'](auth['🔒'](uploadPost)))
 router.get('/user/uploads',         mode['👀'](auth['🔒'](userUploadsGet)))
+
+router.get('/name/:key',            mode['👀'](auth['🤲'](nameGet)))
+router.post('/name/:key',           mode['📝'](auth['🔒'](namePost)))
 
 router.delete('/user/uploads/:cid',      mode['📝'](auth['👮'](userUploadsDelete)))
 router.post('/user/uploads/:cid/rename', mode['📝'](auth['👮'](userUploadsRename)))
