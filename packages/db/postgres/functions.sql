@@ -1,6 +1,12 @@
 DROP FUNCTION IF EXISTS json_arr_to_text_arr;
 DROP FUNCTION IF EXISTS json_arr_to_json_element_array;
+DROP FUNCTION IF EXISTS create_key;
 DROP FUNCTION IF EXISTS create_upload;
+DROP FUNCTION IF EXISTS upsert_pin;
+DROP FUNCTION IF EXISTS user_used_storage;
+DROP FUNCTION IF EXISTS user_keys_list;
+DROP FUNCTION IF EXISTS content_dag_size_total;
+DROP FUNCTION IF EXISTS pin_dag_size_total;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
 
 -- transform a JSON array property into an array of SQL text elements
