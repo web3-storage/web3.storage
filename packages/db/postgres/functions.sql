@@ -27,14 +27,8 @@ BEGIN
           data ->> 'secret',
           (data ->> 'user_id')::BIGINT,
           (data ->> 'inserted_at')::timestamptz,
-          (data ->> 'updated_at')::timestamptz);
-
-  inserted_key_id := (select id
-  from auth_key
-  where name = data ->> 'name'
-        AND user_id = (data ->> 'user_id')::BIGINT
-        AND secret = data ->> 'secret'
-  limit 1);
+          (data ->> 'updated_at')::timestamptz)
+  returning id into inserted_key_id;
 
   return (inserted_key_id)::TEXT;
 END
