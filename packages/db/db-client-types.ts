@@ -18,7 +18,7 @@ export type UpsertUserOutput = {
 export type User = definitions['user']
 
 export type UserOutput = {
-  _id: definitions['user']['id'],
+  _id: string,
   name: definitions['user']['name'],
   email: definitions['user']['email'],
   issuer: definitions['user']['issuer'],
@@ -36,7 +36,7 @@ export interface CreateAuthKeyInput {
 }
 
 export type CreateAuthKeyOutput = {
-  _id: definitions['auth_key']['id']
+  _id: string
 }
 
 export type AuthKey = {
@@ -53,7 +53,7 @@ export type AuthKeyItem = definitions['auth_key'] & {
 }
 
 export type AuthKeyItemOutput = {
-  _id: definitions['auth_key']['id']
+  _id: string
   name: definitions['auth_key']['name']
   secret: definitions['auth_key']['secret']
   created: definitions['auth_key']['inserted_at']
@@ -67,12 +67,12 @@ export type PinsUpsertInput = {
 }
 
 export type PinItem = {
-  _id: definitions['pin']['id']
+  _id: string
   status: definitions['pin']['status']
   created: definitions['pin']['inserted_at']
   updated: definitions['pin']['updated_at']
   location: {
-    _id: definitions['pin_location']['id']
+    _id: string
     peerId: definitions['pin_location']['peer_id']
     peerName: definitions['pin_location']['peer_name']
     region: definitions['pin_location']['region']
@@ -80,7 +80,7 @@ export type PinItem = {
 }
 
 export type PinItemOutput = {
-  _id?: definitions['pin']['id']
+  _id?: string
   status: definitions['pin']['status']
   created?: definitions['pin']['inserted_at']
   updated: definitions['pin']['updated_at']
@@ -90,20 +90,20 @@ export type PinItemOutput = {
 }
 
 export type PinRequestItemOutput = {
-  _id: definitions['pin_request']['id']
+  _id: string
   cid: definitions['pin_request']['content_cid']
   created: definitions['pin_request']['inserted_at']
 }
 
 export type PinSyncRequestItem = {
-  _id: definitions['pin_sync_request']['id']
+  _id: string
   pin: {
-    _id: definitions['pin']['id']
+    _id: string
     status: definitions['pin']['status']
     contentCid: definitions['pin']['content_cid']
     created: definitions['pin']['inserted_at']
     location: {
-      _id?: definitions['pin_location']['id']
+      _id?: string
       peerId: definitions['pin_location']['peer_id']
       peerName?: definitions['pin_location']['peer_name']
       region?: definitions['pin_location']['region']
@@ -118,7 +118,7 @@ export type PinSyncRequestOutput = {
 
 // Backup
 export type BackupOutput = {
-  _id: definitions['backup']['id']
+  _id: string
   created: definitions['backup']['inserted_at']
   url: definitions['backup']['url']
   uploadId: definitions['backup']['upload_id']
@@ -147,7 +147,7 @@ export type ContentItem = {
     status: definitions['pin']['status']
     updated: definitions['pin']['updated_at']
     location: {
-      _id: definitions['pin_location']['id']
+      _id: string
       peerId: definitions['pin_location']['peer_id']
       peerName: definitions['pin_location']['peer_name']
       region: definitions['pin_location']['region']
@@ -187,12 +187,12 @@ export interface CreateUploadInput {
 }
 
 export type CreateUploadOutput = {
-  _id: definitions['upload']['id'],
+  _id: string
   cid: definitions['content']['cid']
 }
 
 export type UploadItem = {
-  id: definitions['upload']['id']
+  id: string
   type: definitions['upload']['type']
   name?: definitions['upload']['name']
   created?: definitions['upload']['inserted_at']
@@ -214,7 +214,7 @@ export type UploadItem = {
 }
 
 export type UploadItemOutput = {
-  _id: definitions['upload']['id']
+  _id: string
   type: definitions['upload']['type']
   name?: definitions['upload']['name']
   created: definitions['upload']['inserted_at']
