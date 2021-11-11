@@ -133,7 +133,8 @@ class Web3Storage {
     decoders
   } = {}) {
     const targetSize = MAX_CHUNK_SIZE
-    const url = new URL('/car', endpoint)
+    const url = new URL('car', endpoint)
+    console.log(url.toString())
     let headers = Web3Storage.headers(token)
 
     if (name) {
@@ -197,7 +198,7 @@ class Web3Storage {
    * @returns {Promise<Web3Response | null>}
    */
   static async get ({ endpoint, token }, cid) {
-    const url = new URL(`/car/${cid}`, endpoint)
+    const url = new URL(`car/${cid}`, endpoint)
     const res = await fetch(url.toString(), {
       method: 'GET',
       headers: Web3Storage.headers(token)
@@ -222,7 +223,7 @@ class Web3Storage {
    * @returns {Promise<Status | undefined>}
    */
   static async status ({ endpoint, token }, cid) {
-    const url = new URL(`/status/${cid}`, endpoint)
+    const url = new URL(`status/${cid}`, endpoint)
     const res = await fetch(url.toString(), {
       method: 'GET',
       headers: Web3Storage.headers(token)
@@ -251,7 +252,7 @@ class Web3Storage {
    */
     function listPage ({ endpoint, token }, { before, size }) {
       const search = new URLSearchParams({ before, size: size.toString() })
-      const url = new URL(`/user/uploads?${search}`, endpoint)
+      const url = new URL(`user/uploads?${search}`, endpoint)
       return fetch(url.toString(), {
         method: 'GET',
         headers: {

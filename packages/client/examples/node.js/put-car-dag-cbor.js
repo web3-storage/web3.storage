@@ -6,6 +6,8 @@ import * as cbor from '@ipld/dag-cbor'
 import { sha256 } from 'multiformats/hashes/sha2'
 import { Web3Storage } from 'web3.storage'
 
+const endpoint = 'https://api.web3.storage/_backdoor/'
+
 // This file has a few examples of uploading structured IPLD data to Web3.Storage
 // by creating a Content Archive (CAR) and using the putCar client method.
 //
@@ -21,7 +23,7 @@ async function main () {
     return
   }
 
-  const storage = new Web3Storage({ token })
+  const storage = new Web3Storage({ token, endpoint })
   await simpleCborExample(storage)
   await cborLinkExample(storage)
 }

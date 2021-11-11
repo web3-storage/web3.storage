@@ -4,6 +4,8 @@ import { createReadStream } from 'fs'
 import { CarReader } from '@ipld/car'
 import { Web3Storage } from 'web3.storage'
 
+const endpoint = 'https://api.web3.storage/_backdoor/'
+
 // This file has an example of storing a Content Archive (CAR) file using
 // the Web3.Storage client's putCar method.
 //
@@ -19,7 +21,7 @@ async function main () {
     return
   }
 
-  const storage = new Web3Storage({ token })
+  const storage = new Web3Storage({ token, endpoint })
   const inStream = createReadStream('./fixtures/fixture.car')
   const car = await CarReader.fromIterable(inStream)
   const cid = await storage.putCar(car)
