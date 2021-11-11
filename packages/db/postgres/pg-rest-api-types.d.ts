@@ -428,6 +428,207 @@ export interface paths {
       };
     };
   };
+  "/migration_tracker": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.migration_tracker.id"];
+          cid?: parameters["rowFilter.migration_tracker.cid"];
+          duration?: parameters["rowFilter.migration_tracker.duration"];
+          dump_started_at?: parameters["rowFilter.migration_tracker.dump_started_at"];
+          dump_ended_at?: parameters["rowFilter.migration_tracker.dump_ended_at"];
+          inserted_at?: parameters["rowFilter.migration_tracker.inserted_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["migration_tracker"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** migration_tracker */
+          migration_tracker?: definitions["migration_tracker"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.migration_tracker.id"];
+          cid?: parameters["rowFilter.migration_tracker.cid"];
+          duration?: parameters["rowFilter.migration_tracker.duration"];
+          dump_started_at?: parameters["rowFilter.migration_tracker.dump_started_at"];
+          dump_ended_at?: parameters["rowFilter.migration_tracker.dump_ended_at"];
+          inserted_at?: parameters["rowFilter.migration_tracker.inserted_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.migration_tracker.id"];
+          cid?: parameters["rowFilter.migration_tracker.cid"];
+          duration?: parameters["rowFilter.migration_tracker.duration"];
+          dump_started_at?: parameters["rowFilter.migration_tracker.dump_started_at"];
+          dump_ended_at?: parameters["rowFilter.migration_tracker.dump_ended_at"];
+          inserted_at?: parameters["rowFilter.migration_tracker.inserted_at"];
+        };
+        body: {
+          /** migration_tracker */
+          migration_tracker?: definitions["migration_tracker"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/name": {
+    get: {
+      parameters: {
+        query: {
+          key?: parameters["rowFilter.name.key"];
+          seqno?: parameters["rowFilter.name.seqno"];
+          record?: parameters["rowFilter.name.record"];
+          inserted_at?: parameters["rowFilter.name.inserted_at"];
+          updated_at?: parameters["rowFilter.name.updated_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["name"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** name */
+          name?: definitions["name"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          key?: parameters["rowFilter.name.key"];
+          seqno?: parameters["rowFilter.name.seqno"];
+          record?: parameters["rowFilter.name.record"];
+          inserted_at?: parameters["rowFilter.name.inserted_at"];
+          updated_at?: parameters["rowFilter.name.updated_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          key?: parameters["rowFilter.name.key"];
+          seqno?: parameters["rowFilter.name.seqno"];
+          record?: parameters["rowFilter.name.record"];
+          inserted_at?: parameters["rowFilter.name.inserted_at"];
+          updated_at?: parameters["rowFilter.name.updated_at"];
+        };
+        body: {
+          /** name */
+          name?: definitions["name"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/pin": {
     get: {
       parameters: {
@@ -1094,6 +1295,25 @@ export interface paths {
       };
     };
   };
+  "/rpc/user_keys_list": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            query_user_id: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/postgres_fdw_validator": {
     post: {
       parameters: {
@@ -1175,6 +1395,25 @@ export interface paths {
       parameters: {
         body: {
           args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/create_key": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            data: string;
+          };
         };
         header: {
           /** Preference */
@@ -1316,6 +1555,29 @@ export interface definitions {
     sector_start_epoch?: number;
     sector_start_time?: string;
     end_time?: string;
+  };
+  migration_tracker: {
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    cid: string;
+    duration?: number;
+    dump_started_at?: string;
+    dump_ended_at: string;
+    inserted_at: string;
+  };
+  name: {
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    key: string;
+    seqno: number;
+    record: string;
+    inserted_at: string;
+    updated_at: string;
   };
   pin: {
     /**
@@ -1503,6 +1765,21 @@ export interface parameters {
   "rowFilter.deal.sector_start_epoch": string;
   "rowFilter.deal.sector_start_time": string;
   "rowFilter.deal.end_time": string;
+  /** migration_tracker */
+  "body.migration_tracker": definitions["migration_tracker"];
+  "rowFilter.migration_tracker.id": string;
+  "rowFilter.migration_tracker.cid": string;
+  "rowFilter.migration_tracker.duration": string;
+  "rowFilter.migration_tracker.dump_started_at": string;
+  "rowFilter.migration_tracker.dump_ended_at": string;
+  "rowFilter.migration_tracker.inserted_at": string;
+  /** name */
+  "body.name": definitions["name"];
+  "rowFilter.name.key": string;
+  "rowFilter.name.seqno": string;
+  "rowFilter.name.record": string;
+  "rowFilter.name.inserted_at": string;
+  "rowFilter.name.updated_at": string;
   /** pin */
   "body.pin": definitions["pin"];
   "rowFilter.pin.id": string;
