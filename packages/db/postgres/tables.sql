@@ -200,16 +200,16 @@ CREATE TABLE IF NOT EXISTS migration_tracker
   dump_started_at TIMESTAMP WITH TIME ZONE,
   dump_ended_at   TIMESTAMP WITH TIME ZONE NOT NULL,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-)
+);
 
 CREATE TABLE IF NOT EXISTS public.name
 (
     -- base36 "libp2p-key" encoding of the public key
     key         TEXT PRIMARY KEY,
-    -- sequence number from the record (used to ensure updates are new)
-    seqno       BIGINT NOT NULL DEFAULT 0,
-    -- the IPNS record
-    record      BYTEA NOT NULL,
+    -- sequence number from the record, used to ensure updates are new
+    seqno       BIGINT NOT NULL,
+    -- the serialized IPNS record - base64 encoded
+    record      TEXT NOT NULL,
     inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );

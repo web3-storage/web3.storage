@@ -20,16 +20,16 @@ export async function nameGet (request, env) {
     throw new HTTPError(`invalid key code: ${key.code}`, 400)
   }
 
-  const record = await env.db.getNameRecord(key)
-  if (!record) {
+  const rawRecord = await env.db.resolveNameRecord(key)
+  if (!rawRecord) {
     throw new HTTPError(`record not found for key: ${key}`, 404)
   }
 
-  const { value } = ipns.unmarshal(record)
+  const { value } = ipns.unmarshal(uint8arrays.fromString(rawRecord, 'base64pad'))
 
   return new JSONResponse({
     value: CID.decode(value).toString(),
-    record: uint8arrays.toString(record, 'base64pad')
+    record: rawRecord
   })
 }
 
@@ -45,8 +45,8 @@ export async function namePost (request, env) {
     throw new HTTPError(`invalid key code: ${key.code}`, 400)
   }
 
-  const rawRecord = uint8arrays.fromString(await request.text(), 'base64pad')
-  const record = ipns.unmarshal(rawRecord)
+  const rawRecord = await request.text()
+  const record = ipns.unmarshal(uint8arrays.fromString(rawRecord, 'base64pad'))
   const pubKey = keys.unmarshalPublicKey(Digest.decode(key.multihash.bytes).bytes)
 
   if (record.pubKey && !keys.unmarshalPublicKey(record.pubKey).equals(pubKey)) {

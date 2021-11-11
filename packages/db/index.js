@@ -733,4 +733,49 @@ export class DBClient {
         throw new Error('unknown metric requested')
     }
   }
+
+  /**
+   * Get the raw IPNS record for a given key.
+   *
+   * @param {string} key
+   */
+  async resolveNameRecord (key) {
+    /** @type {{ error: Error, data: Array<import('../db-client-types').NameItem> }} */
+    const { data, error } = await this._client
+      .from('name')
+      .select('record')
+      .match({ key })
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return data.length ? data[0].record : undefined
+  }
+
+  /**
+   * Publish a new IPNS record, ensuring the sequence number is greater than
+   * the sequence number of an existing record for the given key.
+   *
+   * @param {string} key
+   * @param {string} record Base 64 encoded serialized IPNS record.
+   * @param {bigint} seqno Sequence number from the record.
+   */
+  async publishNameRecord (key, record, seqno) {
+    const { error } = await this._client
+      .from('name')
+      .upsert({
+        key,
+        record,
+        updated_at: new Date().toISOString()
+      }, {
+        returning: 'minimal',
+        onConflict: 'key'
+      })
+      .lt('seqno', seqno.toString())
+
+    if (error) {
+      throw new DBError(error)
+    }
+  }
 }
