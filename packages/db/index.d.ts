@@ -38,7 +38,7 @@ export class DBClient {
   deleteUpload (userId: number, cid: string): Promise<{ _id: number }>
   getStatus (cid: string): Promise<ContentItemOutput>
   getBackups(uploadId: number): Promise<Array<BackupOutput>>
-  upsertPin (cid: string, pin: PinItemOutput): Promise<number>
+  upsertPin (cid: string, pin: PinUpsertInput): Promise<number>
   upsertPins (pins: Array<PinUpsertInput>): Promise<void>
   getPins (cid: string): Promise<Array<PinItemOutput>>
   getPinRequests ({ size }: { size: number }): Promise<Array<PinRequestItemOutput>>

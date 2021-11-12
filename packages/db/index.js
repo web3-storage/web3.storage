@@ -125,7 +125,7 @@ export class DBClient {
    * Upsert pin.
    *
    * @param {string} cid
-   * @param {import('./db-client-types').PinItemOutput} pin
+   * @param {import('./db-client-types').PinUpsertInput} pin
    * @return {Promise<number>}
    */
   upsertPin (cid, pin) {
