@@ -74,7 +74,7 @@ export type PinItem = PinUpsertInput & {
 }
 
 
-export type PinItemNormalized = {
+export type PinItemOutput = {
   _id?: string
   status: definitions['pin']['status']
   created?: definitions['pin']['inserted_at']
@@ -144,7 +144,7 @@ export type ContentItemOutput = {
   created: definitions['content']['inserted_at']
   cid: definitions['content']['cid']
   dagSize?: definitions['content']['dag_size']
-  pins: Array<PinItemNormalized>,
+  pins: Array<PinItemOutput>,
   deals: Array<Deal>
 }
 
@@ -197,7 +197,7 @@ export type UploadItemOutput = {
   updated: definitions['upload']['updated_at']
   cid: definitions['content']['cid']
   dagSize?: definitions['content']['dag_size']
-  pins: Array<PinItemNormalized>,
+  pins: Array<PinItemOutput>,
   deals: Array<Deal>
 }
 

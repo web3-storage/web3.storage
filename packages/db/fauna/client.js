@@ -301,7 +301,7 @@ export class FaunaClient {
    * Get Pins for a cid
    *
    * @param {string} cid
-   * @return {Promise<Array<import('../db-client-types').PinItemNormalized>>}
+   * @return {Promise<Array<import('../db-client-types').PinItemOutput>>}
    */
   async getPins (cid) {
     throw new Error('not implemented in fauna')

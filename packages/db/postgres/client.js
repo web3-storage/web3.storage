@@ -393,7 +393,7 @@ export class PostgresClient {
    * Get Pins for a cid
    *
    * @param {string} cid
-   * @return {Promise<Array<import('../db-client-types').PinItemNormalized>>}
+   * @return {Promise<Array<import('../db-client-types').PinItemOutput>>}
    */
   async getPins (cid) {
     /** @type {{ data: Array<import('../db-client-types').PinItem>, error: PostgrestError }} */
