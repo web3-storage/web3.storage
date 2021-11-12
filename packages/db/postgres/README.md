@@ -66,7 +66,8 @@ node scripts/cli.js db --stop --clean --project web3-storage
 ```
 
 ### 4. Alter DB schema
-In order for your changes to the DB schema to be reflected in Postgres you need to run:
+
+In order for your changes to the DB schema to be reflected in Postgres you need to run an `openapi-typescript` script:
 
 ```bash
 node scripts/cli.js db-sql
@@ -82,6 +83,7 @@ node scripts/cli.js pg-rest-api-types
 Do not forget to update `db-client-types.ts` to reflect your changes to the schema.
 
 If you're creating a new table, type or view please remember to update `reset.sql` as well.
+
 ## Database Diagram
 
 ![image](https://user-images.githubusercontent.com/7295071/137729026-50aebb55-e89c-45ed-b636-b3e39cc53cc0.png)
