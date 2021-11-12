@@ -7,7 +7,7 @@ import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { uploadPost } from './upload.js'
-import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, userUploadsRename } from './user.js'
+import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, userUploadsRename, userInfoGet } from './user.js'
 import { metricsGet } from './metrics.js'
 import { versionGet } from './version.js'
 import {
@@ -53,6 +53,14 @@ router.get('/user/tokens',               mode['👀'](auth['👮'](userTokensGet
 router.post('/user/tokens',              mode['📝'](auth['👮'](userTokensPost)))
 router.delete('/user/tokens/:id',        mode['📝'](auth['👮'](userTokensDelete)))
 router.get('/user/account',              mode['👀'](auth['👮'](userAccountGet)))
+router.get('/user/info',                 mode['👀'](auth['👮'](userInfoGet)))
+
+// Temporary backdoor bypassing maintenance mode middleware
+router.get('/_backdoor/user/uploads', auth['🔒'](userUploadsGet))
+router.get('/_backdoor/status/:cid',  auth['🤲'](statusGet))
+router.get('/_backdoor/car/:cid',     auth['🤲'](carGet))
+router.post('/_backdoor/car',         auth['🔒'](carPost))
+router.post('/_backdoor/upload',      auth['🔒'](uploadPost))
 /* eslint-enable no-multi-spaces */
 
 // Monitoring

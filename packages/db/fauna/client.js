@@ -39,6 +39,8 @@ export class FaunaClient {
         findUserByIssuer(issuer: $issuer) {
           _id
           issuer
+          email
+          github
         }
       }
     `, { issuer })
@@ -292,7 +294,7 @@ export class FaunaClient {
           _id
         }
       }
-    `, { pins })
+    `, { pins: pins.map(p => ({ pin: p.id, status: p.status })) })
   }
 
   /**

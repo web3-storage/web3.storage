@@ -11,7 +11,8 @@
     "packages/pinpin",
     "packages/report",
     "packages/w3",
-    "packages/website"
+    "packages/website",
+    "packages/pinpin"
   ],
   "scripts": {
     "test": "npm run lint && npm run test --workspaces",

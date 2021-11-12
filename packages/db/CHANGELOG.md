@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.6.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.5.0...db-v2.6.0) (2021-11-10)
+
+
+### Features
+
+* add user email to account page ([#566](https://www.github.com/web3-storage/web3.storage/issues/566)) ([a34d976](https://www.github.com/web3-storage/web3.storage/commit/a34d97623eaa2153c9bf068c3a099f3c463af1a3))
+
+
+### Bug Fixes
+
+* fauna pins cron ([#592](https://www.github.com/web3-storage/web3.storage/issues/592)) ([f1df5dc](https://www.github.com/web3-storage/web3.storage/commit/f1df5dc9140d96acb516cb79f5ee39469db64395))
+* re-add constraints ([#597](https://www.github.com/web3-storage/web3.storage/issues/597)) ([596e65c](https://www.github.com/web3-storage/web3.storage/commit/596e65cf9220953d82f7b5e85ab71e616b6424b3))
+
 ## [2.5.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.4.0...db-v2.5.0) (2021-10-29)
 
 

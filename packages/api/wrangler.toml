@@ -65,6 +65,11 @@ workers_dev = true
 account_id = "d7a6d34e62065b452c82b7fe992b8d88"
 vars = { CLUSTER_API_URL = "https://joaopeixoto-cluster-api-web3-storage.loca.lt", ENV = "dev" }
 
+[env.tempus]
+workers_dev = true
+account_id = "4303c6f9fed102b35399fe94af99f8bd"
+vars = { CLUSTER_API_URL = "https://tempus-cluster-api-web3-storage.loca.lt", ENV = "dev" }
+
 [env.paolo]
 workers_dev = true
 account_id = "21ba9b25d0fe2fbefc6c9f17e1b90d86"
