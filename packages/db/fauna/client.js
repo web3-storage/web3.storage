@@ -267,7 +267,7 @@ export class FaunaClient {
    * Upsert pin.
    *
    * @param {string} cid
-   * @param {import('../db-client-types').PinsUpsertInput} pin
+   * @param {import('../db-client-types').PinUpsertInput} pin
    * @return {Promise<number>}
    */
   async upsertPin (cid, pin) {

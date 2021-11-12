@@ -61,7 +61,7 @@ export type AuthKeyItemOutput = {
 }
 
 // Pin
-export type PinsUpsertInput = {
+export type PinUpsertInput = {
   id: definitions['pin']['id']
   status: definitions['pin']['status']
 }
