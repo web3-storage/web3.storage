@@ -67,18 +67,12 @@ export type PinUpsertInput = {
   location: Location,
 }
 
-export type PinItem = {
-  _id: string
-  status: definitions['pin']['status']
+export type PinItem = PinUpsertInput & {
+  id: definitions['pin']['id'],
   created: definitions['pin']['inserted_at']
   updated: definitions['pin']['updated_at']
-  location: {
-    _id: string
-    peerId: definitions['pin_location']['peer_id']
-    peerName: definitions['pin_location']['peer_name']
-    region: definitions['pin_location']['region']
   }
-}
+
 
 export type PinItemOutput = {
   _id?: string
