@@ -62,8 +62,9 @@ export type AuthKeyItemOutput = {
 
 // Pin
 export type PinUpsertInput = {
-  id: definitions['pin']['id']
-  status: definitions['pin']['status']
+  id?: definitions['pin']['id']
+  status: definitions['pin']['status'],
+  location: Location,
 }
 
 export type PinItem = {
@@ -234,6 +235,13 @@ export type UploadOutput = definitions['upload'] & {
     }[]
   },
   deals: Deal[]
+}
+
+export type Location = {
+  id?: definitions['pin_location']['id']
+  peerId: definitions['pin_location']['peer_id']
+  peerName: definitions['pin_location']['peer_name']
+  region?: definitions['pin_location']['region']
 }
 
 export type ListUploadsOptions = {
