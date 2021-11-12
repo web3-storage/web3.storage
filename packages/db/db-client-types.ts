@@ -97,12 +97,7 @@ export type PinSyncRequestItem = {
     status: definitions['pin']['status']
     contentCid: definitions['pin']['content_cid']
     created: definitions['pin']['inserted_at']
-    location: {
-      _id?: string
-      peerId: definitions['pin_location']['peer_id']
-      peerName?: definitions['pin_location']['peer_name']
-      region?: definitions['pin_location']['region']
-    }
+    location: Location
   }
 }
 
@@ -141,12 +136,7 @@ export type ContentItem = {
   pins: Array<{
     status: definitions['pin']['status']
     updated: definitions['pin']['updated_at']
-    location: {
-      _id: string
-      peerId: definitions['pin_location']['peer_id']
-      peerName: definitions['pin_location']['peer_name']
-      region: definitions['pin_location']['region']
-    }
+    location: Location
   }>
 }
 
@@ -172,11 +162,7 @@ export interface CreateUploadInput {
   updated?: definitions['upload']['updated_at']
   pins: Array<{
     status: definitions['pin']['status']
-    location: {
-      peerId: definitions['pin_location']['peer_id']
-      peerName: definitions['pin_location']['peer_name']
-      region: definitions['pin_location']['region']
-    }
+    location: Location
   }>,
   backupUrls: Array<definitions['backup']['url']>
 }
@@ -198,12 +184,7 @@ export type UploadItem = {
     pins: Array<{
       status: definitions['pin']['status']
       updated: definitions['pin']['updated_at']
-      location: {
-        id: definitions['pin_location']['id']
-        peerId: definitions['pin_location']['peer_id']
-        peerName: definitions['pin_location']['peer_name']
-        region: definitions['pin_location']['region']
-      }
+      location: Location
     }>
   }
 }
