@@ -32,7 +32,7 @@ export function normalizeContent (content) {
  * Normalize pin items.
  *
  * @param {Array<import('../db-client-types').PinItem>} pins
- * @return {Array<import('../db-client-types').PinItemOutput>}
+ * @return {Array<import('../db-client-types').PinItemNormalized>}
  */
 export function normalizePins (pins) {
   return pins.map(pin => ({

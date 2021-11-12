@@ -145,7 +145,7 @@ export class DBClient {
    * Get Pins for a cid
    *
    * @param {string} cid
-   * @return {Promise<Array<import('./db-client-types').PinItemOutput>>}
+   * @return {Promise<Array<import('./db-client-types').PinItemNormalized>>}
    */
   getPins (cid) {
     return this._client.getPins(cid)

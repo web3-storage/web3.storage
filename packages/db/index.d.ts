@@ -16,7 +16,7 @@ import type {
   CreateAuthKeyOutput,
   AuthKey,
   AuthKeyItemOutput,
-  PinItemOutput,
+  PinItemNormalized,
   PinRequestItemOutput,
   PinSyncRequestOutput,
   PinUpsertInput,
@@ -40,7 +40,7 @@ export class DBClient {
   getBackups(uploadId: number): Promise<Array<BackupOutput>>
   upsertPin (cid: string, pin: PinUpsertInput): Promise<number>
   upsertPins (pins: Array<PinUpsertInput>): Promise<void>
-  getPins (cid: string): Promise<Array<PinItemOutput>>
+  getPins (cid: string): Promise<Array<PinItemNormalized>>
   getPinRequests ({ size }: { size: number }): Promise<Array<PinRequestItemOutput>>
   deletePinRequests (ids: Array<number>): Promise<void>
   createPinSyncRequests (pinSyncRequests: Array<number>): Promise<void>
