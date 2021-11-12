@@ -68,10 +68,10 @@ export type PinUpsertInput = {
 }
 
 export type PinItem = PinUpsertInput & {
-  id: definitions['pin']['id'],
+  _id: string,
   created: definitions['pin']['inserted_at']
   updated: definitions['pin']['updated_at']
-  }
+}
 
 
 export type PinItemNormalized = {
