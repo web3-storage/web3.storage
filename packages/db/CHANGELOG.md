@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.6.2](https://www.github.com/web3-storage/web3.storage/compare/db-v2.6.1...db-v2.6.2) (2021-11-15)
+
+
+### Bug Fixes
+
+* add indexes and optimise token list function ([#618](https://www.github.com/web3-storage/web3.storage/issues/618)) ([05ff3ed](https://www.github.com/web3-storage/web3.storage/commit/05ff3ed907977816f4609c049ceb910333c2b545))
+* pin sync req id text ([#622](https://www.github.com/web3-storage/web3.storage/issues/622)) ([dee0a4e](https://www.github.com/web3-storage/web3.storage/commit/dee0a4ea2c92f435b4669825894341faf317f658))
+
 ### [2.6.1](https://www.github.com/web3-storage/web3.storage/compare/db-v2.6.0...db-v2.6.1) (2021-11-12)
 
 
