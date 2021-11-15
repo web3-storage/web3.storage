@@ -538,6 +538,7 @@ export interface paths {
           content_cid?: parameters["rowFilter.pa_pin_request.content_cid"];
           auth_key_id?: parameters["rowFilter.pa_pin_request.auth_key_id"];
           requested_cid?: parameters["rowFilter.pa_pin_request.requested_cid"];
+          name?: parameters["rowFilter.pa_pin_request.name"];
           inserted_at?: parameters["rowFilter.pa_pin_request.inserted_at"];
           updated_at?: parameters["rowFilter.pa_pin_request.updated_at"];
           /** Filtering Columns */
@@ -594,6 +595,7 @@ export interface paths {
           content_cid?: parameters["rowFilter.pa_pin_request.content_cid"];
           auth_key_id?: parameters["rowFilter.pa_pin_request.auth_key_id"];
           requested_cid?: parameters["rowFilter.pa_pin_request.requested_cid"];
+          name?: parameters["rowFilter.pa_pin_request.name"];
           inserted_at?: parameters["rowFilter.pa_pin_request.inserted_at"];
           updated_at?: parameters["rowFilter.pa_pin_request.updated_at"];
         };
@@ -614,6 +616,7 @@ export interface paths {
           content_cid?: parameters["rowFilter.pa_pin_request.content_cid"];
           auth_key_id?: parameters["rowFilter.pa_pin_request.auth_key_id"];
           requested_cid?: parameters["rowFilter.pa_pin_request.requested_cid"];
+          name?: parameters["rowFilter.pa_pin_request.name"];
           inserted_at?: parameters["rowFilter.pa_pin_request.inserted_at"];
           updated_at?: parameters["rowFilter.pa_pin_request.updated_at"];
         };
@@ -1588,6 +1591,7 @@ export interface definitions {
      */
     auth_key_id: number;
     requested_cid: string;
+    name?: string;
     inserted_at: string;
     updated_at: string;
   };
@@ -1791,6 +1795,7 @@ export interface parameters {
   "rowFilter.pa_pin_request.content_cid": string;
   "rowFilter.pa_pin_request.auth_key_id": string;
   "rowFilter.pa_pin_request.requested_cid": string;
+  "rowFilter.pa_pin_request.name": string;
   "rowFilter.pa_pin_request.inserted_at": string;
   "rowFilter.pa_pin_request.updated_at": string;
   /** pin */

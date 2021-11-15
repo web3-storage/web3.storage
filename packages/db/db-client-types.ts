@@ -2,7 +2,7 @@ import { definitions } from './postgres/pg-rest-api-types'
 
 // User
 export type UpsertUserInput = {
-  id: definitions['user']['id'],
+  id?: definitions['user']['id'],
   name: definitions['user']['name'],
   picture?: definitions['user']['picture'],
   email: definitions['user']['email'],
@@ -248,6 +248,7 @@ export type ListUploadsOptions = {
 // PinRequest
 export type PAPinRequestUpsertInput = {
   id?: string,
+  name?: definitions['pa_pin_request']['name'],
   authKey: definitions['pa_pin_request']['auth_key_id'],
   requestedCid: definitions['pa_pin_request']['requested_cid'],
 }
@@ -257,4 +258,5 @@ export type PAPinRequestUpsertOutput = PAPinRequestUpsertInput & {
   contentCid: definitions['pa_pin_request']['content_cid']
   created: definitions['pa_pin_request']['inserted_at']
   updated: definitions['pa_pin_request']['updated_at']
+  status: Array<definitions['pin']['status']>
 }

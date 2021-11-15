@@ -186,6 +186,7 @@ CREATE TABLE IF NOT EXISTS pa_pin_request
  auth_key_id         BIGINT                                                       NOT NULL REFERENCES public.user (id),
  -- The id of the content being requested, it could not exist on IPFS (typo, node offline etc)
  requested_cid   TEXT NOT NULL,
+ name            TEXT,
  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
  updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
