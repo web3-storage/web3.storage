@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.7.3](https://www.github.com/web3-storage/web3.storage/compare/api-v3.7.2...api-v3.7.3) (2021-11-15)
+
+
+### Bug Fixes
+
+* performance metrics queries ([#625](https://www.github.com/web3-storage/web3.storage/issues/625)) ([85efba5](https://www.github.com/web3-storage/web3.storage/commit/85efba5c2ba0b65def2a93e2b811268e9ab96b00))
+
 ### [3.7.2](https://www.github.com/web3-storage/web3.storage/compare/api-v3.7.1...api-v3.7.2) (2021-11-15)
 
 
