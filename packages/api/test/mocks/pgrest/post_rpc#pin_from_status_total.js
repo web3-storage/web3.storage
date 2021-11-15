@@ -4,6 +4,8 @@
 module.exports = () => {
   return {
     statusCode: 200,
-    body: '30000'
+    body: [{
+      pin_from_status_total: '30000'
+    }]
   }
 }
