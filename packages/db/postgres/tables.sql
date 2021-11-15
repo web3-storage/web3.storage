@@ -32,6 +32,8 @@ CREATE TABLE IF NOT EXISTS auth_key
   deleted_at      TIMESTAMP WITH TIME ZONE
 );
 
+CREATE INDEX IF NOT EXISTS auth_key_user_id_idx ON auth_key (user_id);
+
 -- Details of the root of a file/directory stored on web3.storage.
 CREATE TABLE IF NOT EXISTS content
 (
@@ -105,6 +107,7 @@ CREATE TABLE IF NOT EXISTS pin
 );
 
 CREATE INDEX IF NOT EXISTS pin_updated_at_idx ON pin (updated_at);
+CREATE INDEX IF NOT EXISTS pin_status_idx ON pin (status);
 
 -- Upload type is the type of received upload data.
 CREATE TYPE upload_type AS ENUM
@@ -143,6 +146,7 @@ CREATE TABLE IF NOT EXISTS upload
 );
 
 CREATE INDEX IF NOT EXISTS upload_updated_at_idx ON upload (updated_at);
+CREATE INDEX IF NOT EXISTS upload_auth_key_id_idx ON upload (auth_key_id);
 
 -- Details of the backups created for an upload.
 CREATE TABLE IF NOT EXISTS backup
