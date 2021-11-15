@@ -241,3 +241,20 @@ export type ListUploadsOptions = {
    */
   sortOrder?: 'Asc' | 'Desc'
 }
+
+
+// Pinninng
+
+// PinRequest
+export type PAPinRequestUpsertInput = {
+  id?: string,
+  authKey: definitions['pa_pin_request']['auth_key_id'],
+  requestedCid: definitions['pa_pin_request']['requested_cid'],
+}
+
+export type PAPinRequestUpsertOutput = PAPinRequestUpsertInput & {
+  id: string,
+  contentCid: definitions['pa_pin_request']['content_cid']
+  created: definitions['pa_pin_request']['inserted_at']
+  updated: definitions['pa_pin_request']['updated_at']
+}

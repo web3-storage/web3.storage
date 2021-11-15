@@ -428,6 +428,210 @@ export interface paths {
       };
     };
   };
+  "/migration_tracker": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.migration_tracker.id"];
+          cid?: parameters["rowFilter.migration_tracker.cid"];
+          duration?: parameters["rowFilter.migration_tracker.duration"];
+          dump_started_at?: parameters["rowFilter.migration_tracker.dump_started_at"];
+          dump_ended_at?: parameters["rowFilter.migration_tracker.dump_ended_at"];
+          inserted_at?: parameters["rowFilter.migration_tracker.inserted_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["migration_tracker"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** migration_tracker */
+          migration_tracker?: definitions["migration_tracker"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.migration_tracker.id"];
+          cid?: parameters["rowFilter.migration_tracker.cid"];
+          duration?: parameters["rowFilter.migration_tracker.duration"];
+          dump_started_at?: parameters["rowFilter.migration_tracker.dump_started_at"];
+          dump_ended_at?: parameters["rowFilter.migration_tracker.dump_ended_at"];
+          inserted_at?: parameters["rowFilter.migration_tracker.inserted_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.migration_tracker.id"];
+          cid?: parameters["rowFilter.migration_tracker.cid"];
+          duration?: parameters["rowFilter.migration_tracker.duration"];
+          dump_started_at?: parameters["rowFilter.migration_tracker.dump_started_at"];
+          dump_ended_at?: parameters["rowFilter.migration_tracker.dump_ended_at"];
+          inserted_at?: parameters["rowFilter.migration_tracker.inserted_at"];
+        };
+        body: {
+          /** migration_tracker */
+          migration_tracker?: definitions["migration_tracker"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/pa_pin_request": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.pa_pin_request.id"];
+          content_cid?: parameters["rowFilter.pa_pin_request.content_cid"];
+          auth_key_id?: parameters["rowFilter.pa_pin_request.auth_key_id"];
+          requested_cid?: parameters["rowFilter.pa_pin_request.requested_cid"];
+          inserted_at?: parameters["rowFilter.pa_pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.pa_pin_request.updated_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["pa_pin_request"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** pa_pin_request */
+          pa_pin_request?: definitions["pa_pin_request"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.pa_pin_request.id"];
+          content_cid?: parameters["rowFilter.pa_pin_request.content_cid"];
+          auth_key_id?: parameters["rowFilter.pa_pin_request.auth_key_id"];
+          requested_cid?: parameters["rowFilter.pa_pin_request.requested_cid"];
+          inserted_at?: parameters["rowFilter.pa_pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.pa_pin_request.updated_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.pa_pin_request.id"];
+          content_cid?: parameters["rowFilter.pa_pin_request.content_cid"];
+          auth_key_id?: parameters["rowFilter.pa_pin_request.auth_key_id"];
+          requested_cid?: parameters["rowFilter.pa_pin_request.requested_cid"];
+          inserted_at?: parameters["rowFilter.pa_pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.pa_pin_request.updated_at"];
+        };
+        body: {
+          /** pa_pin_request */
+          pa_pin_request?: definitions["pa_pin_request"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/pin": {
     get: {
       parameters: {
@@ -1094,6 +1298,25 @@ export interface paths {
       };
     };
   };
+  "/rpc/user_keys_list": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            query_user_id: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/postgres_fdw_validator": {
     post: {
       parameters: {
@@ -1175,6 +1398,25 @@ export interface paths {
       parameters: {
         body: {
           args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/create_key": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            data: string;
+          };
         };
         header: {
           /** Preference */
@@ -1316,6 +1558,38 @@ export interface definitions {
     sector_start_epoch?: number;
     sector_start_time?: string;
     end_time?: string;
+  };
+  migration_tracker: {
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    cid: string;
+    duration?: number;
+    dump_started_at?: string;
+    dump_ended_at: string;
+    inserted_at: string;
+  };
+  pa_pin_request: {
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Note:
+     * This is a Foreign Key to `content.cid`.<fk table='content' column='cid'/>
+     */
+    content_cid?: string;
+    /**
+     * Note:
+     * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
+     */
+    auth_key_id: number;
+    requested_cid: string;
+    inserted_at: string;
+    updated_at: string;
   };
   pin: {
     /**
@@ -1503,6 +1777,22 @@ export interface parameters {
   "rowFilter.deal.sector_start_epoch": string;
   "rowFilter.deal.sector_start_time": string;
   "rowFilter.deal.end_time": string;
+  /** migration_tracker */
+  "body.migration_tracker": definitions["migration_tracker"];
+  "rowFilter.migration_tracker.id": string;
+  "rowFilter.migration_tracker.cid": string;
+  "rowFilter.migration_tracker.duration": string;
+  "rowFilter.migration_tracker.dump_started_at": string;
+  "rowFilter.migration_tracker.dump_ended_at": string;
+  "rowFilter.migration_tracker.inserted_at": string;
+  /** pa_pin_request */
+  "body.pa_pin_request": definitions["pa_pin_request"];
+  "rowFilter.pa_pin_request.id": string;
+  "rowFilter.pa_pin_request.content_cid": string;
+  "rowFilter.pa_pin_request.auth_key_id": string;
+  "rowFilter.pa_pin_request.requested_cid": string;
+  "rowFilter.pa_pin_request.inserted_at": string;
+  "rowFilter.pa_pin_request.updated_at": string;
   /** pin */
   "body.pin": definitions["pin"];
   "rowFilter.pin.id": string;
