@@ -1,5 +1,19 @@
 # Changelog
 
+### [2.6.1](https://www.github.com/web3-storage/web3.storage/compare/db-v2.6.0...db-v2.6.1) (2021-11-12)
+
+
+### Bug Fixes
+
+* add missing sql drop functions ([#605](https://www.github.com/web3-storage/web3.storage/issues/605)) ([0f01eb6](https://www.github.com/web3-storage/web3.storage/commit/0f01eb6c73cf95d8860e27d42619f2b7ac0c3a45))
+* add on conflict clause to create backup ([#602](https://www.github.com/web3-storage/web3.storage/issues/602)) ([504809e](https://www.github.com/web3-storage/web3.storage/commit/504809ecdc4b87fd472874a3b4fe0eb8e336a357))
+* bigserial id cast to string ([#604](https://www.github.com/web3-storage/web3.storage/issues/604)) ([7c6b9b4](https://www.github.com/web3-storage/web3.storage/commit/7c6b9b4c66742652ace92c8e71d42a0f9c945acb))
+
+
+### Changes
+
+* improve docs for updating schemas and db error logging  ([51021f1](https://www.github.com/web3-storage/web3.storage/commit/51021f11785914b7ae9fb43979b95be101ee8bf1))
+
 ## [2.6.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.5.0...db-v2.6.0) (2021-11-10)
 
 
