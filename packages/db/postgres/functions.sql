@@ -211,7 +211,7 @@ SELECT (ak.id)::TEXT AS id,
        ak.name AS name,
        ak.secret AS secret,
        ak.inserted_at AS created,
-       CASE WHEN EXISTS(SELECT 42 FROM upload u WHERE ak.id = u.auth_key_id AND u.deleted_at IS NULL) THEN 1 ELSE 0 END
+       CASE WHEN EXISTS(SELECT 42 FROM upload u WHERE ak.id = u.auth_key_id AND u.deleted_at IS NULL) THEN 1::BIGINT ELSE 0::BIGINT END
   FROM auth_key ak
  WHERE ak.user_id = query_user_id AND ak.deleted_at IS NULL
 $$;
