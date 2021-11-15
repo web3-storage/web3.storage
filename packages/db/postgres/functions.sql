@@ -216,6 +216,19 @@ SELECT (ak.id)::TEXT AS id,
  WHERE ak.user_id = query_user_id AND ak.deleted_at IS NULL
 $$;
 
+CREATE OR REPLACE FUNCTION pin_from_status_total(query_status TEXT) RETURNS TEXT
+  LANGUAGE plpgsql
+AS
+$$
+BEGIN
+  return(
+    select count(*)
+    from pin
+    where status = (query_status)::pin_status_type
+  )::TEXT;
+END
+$$;
+
 CREATE OR REPLACE FUNCTION content_dag_size_total() RETURNS TEXT
   LANGUAGE plpgsql
 AS

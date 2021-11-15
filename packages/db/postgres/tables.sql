@@ -46,6 +46,8 @@ CREATE TABLE IF NOT EXISTS content
 );
 
 CREATE INDEX IF NOT EXISTS content_updated_at_idx ON content (updated_at);
+-- TODO: Sync with @ribasushi as we can start using this as the primary key
+CREATE UNIQUE INDEX content_cid_with_size_idx ON content (cid) INCLUDE (dag_size);
 
 -- IPFS Cluster tracker status values.
 -- https://github.com/ipfs/ipfs-cluster/blob/54c3608899754412861e69ee81ca8f676f7e294b/api/types.go#L52-L83
