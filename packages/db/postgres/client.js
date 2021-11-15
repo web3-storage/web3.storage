@@ -120,6 +120,8 @@ export class PostgresClient {
    * @returns {Promise<import('../db-client-types').CreateUploadOutput>}
    */
   async createUpload (data) {
+    // TODO: refactor this to be createContent, and optionally an upload
+
     const now = new Date().toISOString()
     /** @type {{ data: number, error: PostgrestError }} */
     const { data: uploadResponse, error } = await this._client.rpc('create_upload', {
@@ -733,5 +735,28 @@ export class PostgresClient {
       default:
         throw new Error('unknown metric requested')
     }
+  }
+
+  /**
+   * Creates a Pin Request.
+   *
+   * @param {import('../db-client-types').PAPinRequestUpsertInput} pinRequest
+   * @return {Promise.<import('../db-client-types').PAPinRequestUpsertOutput>}
+   */
+  async createPinRequest (pinRequest) {
+    // TODO: to implement
+    throw new Error('Not implemented')
+  }
+
+  /**
+   * Get pin requests for a specific auth key.
+   *
+   * @param {string} authKey
+   * @param {object} opt
+   * @return {Promise.<Array.<import('../db-client-types').PAPinRequestUpsertOutput>>}
+   */
+  async listPinRequests (authKey, opt) {
+    // TODO: to implement
+    throw new Error('Not implemented')
   }
 }
