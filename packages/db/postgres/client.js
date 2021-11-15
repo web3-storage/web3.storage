@@ -492,7 +492,7 @@ export class PostgresClient {
       .from('pin_sync_request')
       .select(`
         _id:id::text,
-        pin:pin(_id:id, status, contentCid:content_cid, created:inserted_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region))
+        pin:pin(_id:id::text, status, contentCid:content_cid, created:inserted_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, region))
       `)
       .order(
         'inserted_at',

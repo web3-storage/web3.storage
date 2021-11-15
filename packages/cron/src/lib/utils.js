@@ -73,7 +73,7 @@ function getDBPostgresClient (env) {
   } else if (env.ENV === 'dev') {
     if (!env.DEV_PG_REST_JWT) throw new Error('missing DEV_PG_REST_JWT environment var')
     if (!env.DEV_PG_REST_URL) throw new Error('missing DEV_PG_REST_URL environment var')
-    token = env.DEV_FAUNA_KEY
+    token = env.DEV_PG_REST_JWT
     endpoint = env.DEV_PG_REST_URL
   } else {
     throw new Error(`unsupported environment ${env.ENV}`)
