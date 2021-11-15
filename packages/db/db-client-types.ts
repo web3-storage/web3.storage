@@ -249,12 +249,12 @@ export type ListUploadsOptions = {
 export type PAPinRequestUpsertInput = {
   id?: string,
   name?: definitions['pa_pin_request']['name'],
-  authKey: definitions['pa_pin_request']['auth_key_id'],
+  authKey: string,
   requestedCid: definitions['pa_pin_request']['requested_cid'],
 }
 
 export type PAPinRequestUpsertOutput = PAPinRequestUpsertInput & {
-  id: string,
+  _id: string,
   contentCid: definitions['pa_pin_request']['content_cid']
   created: definitions['pa_pin_request']['inserted_at']
   updated: definitions['pa_pin_request']['updated_at']

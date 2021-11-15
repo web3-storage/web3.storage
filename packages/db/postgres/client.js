@@ -743,7 +743,18 @@ export class PostgresClient {
    * @param {import('../db-client-types').PAPinRequestUpsertInput} pinRequest
    * @return {Promise.<import('../db-client-types').PAPinRequestUpsertOutput>}
    */
-  async createPinRequest (pinRequest) {
+  async createPAPinRequest (pinRequest) {
+    // TODO: to implement
+    throw new Error('Not implemented')
+  }
+
+  /**
+   * Get a Pin Request by id
+   *
+   * @param {string} pinRequestId
+   * @return {Promise.<import('../db-client-types').PAPinRequestUpsertOutput>}
+   */
+  async getPAPinRequest (pinRequestId) {
     // TODO: to implement
     throw new Error('Not implemented')
   }
@@ -755,7 +766,7 @@ export class PostgresClient {
    * @param {object} opt
    * @return {Promise.<Array.<import('../db-client-types').PAPinRequestUpsertOutput>>}
    */
-  async listPinRequests (authKey, opt) {
+  async listPAPinRequests (authKey, opt) {
     // TODO: to implement
     throw new Error('Not implemented')
   }
