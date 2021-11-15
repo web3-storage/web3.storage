@@ -19,6 +19,9 @@ const uploadQuery = `
         updated:updated_at,
         content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region)))
       `
+
+const PAPinRequestTableName = 'pa_pin_request'
+
 /**
  * @typedef {import('./pg-rest-api-types.js').definitions} definitions
  * @typedef {import('@supabase/postgrest-js').PostgrestError} PostgrestError
@@ -744,8 +747,29 @@ export class PostgresClient {
    * @return {Promise.<import('../db-client-types').PAPinRequestUpsertOutput>}
    */
   async createPAPinRequest (pinRequest) {
-    // TODO: to implement
-    throw new Error('Not implemented')
+    /** @type {{data: import('../db-client-types').PAPinRequestUpsertOutput, error: PostgrestError }} */
+    const { data, error } = await this._client
+      .from(PAPinRequestTableName)
+      .insert({
+        requested_cid: pinRequest.requestedCid,
+        auth_key_id: pinRequest.authKey,
+        name: pinRequest.name
+      })
+      .select(`
+        _id:id::text,
+        requestedCid:requested_cid,
+        authKey:auth_key_id,
+        name,
+        created:inserted_at,
+        updated:updated_at
+      `)
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return data
   }
 
   /**
@@ -756,7 +780,29 @@ export class PostgresClient {
    */
   async getPAPinRequest (pinRequestId) {
     // TODO: to implement
-    throw new Error('Not implemented')
+    /** @type {{data: import('../db-client-types').PAPinRequestUpsertOutput, error: PostgrestError }} */
+    const { data, error } = await this._client
+      .from(PAPinRequestTableName)
+      .select(`
+        _id:id::text,
+        requestedCid:requested_cid,
+        authKey:auth_key_id,
+        name,
+        created:inserted_at,
+      updated:updated_at
+      `)
+      .eq('id', pinRequestId)
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return {
+      // TODO get actual status
+      status: 'queued',
+      ...data
+    }
   }
 
   /**
