@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.6.4](https://www.github.com/web3-storage/web3.storage/compare/db-v2.6.3...db-v2.6.4) (2021-11-15)
+
+
+### Bug Fixes
+
+* pin status metrics returns data object ([#628](https://www.github.com/web3-storage/web3.storage/issues/628)) ([20877ae](https://www.github.com/web3-storage/web3.storage/commit/20877aeed7730a81d08435be6bee1dfe6d9afebe))
+
 ### [2.6.3](https://www.github.com/web3-storage/web3.storage/compare/db-v2.6.2...db-v2.6.3) (2021-11-15)
 
 
