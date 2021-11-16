@@ -14,10 +14,10 @@ const libp2pKeyCode = 0x72
  * @param {import('./env').Env} env
  */
 export async function nameGet (request, env) {
-  const { params: { key: rawKey } } = request
-  const key = CID.parse(rawKey, base36)
-  if (key.code !== libp2pKeyCode) {
-    throw new HTTPError(`invalid key code: ${key.code}`, 400)
+  const { params: { key } } = request
+  const { code } = CID.parse(key, base36)
+  if (code !== libp2pKeyCode) {
+    throw new HTTPError(`invalid key code: ${code}`, 400)
   }
 
   const rawRecord = await env.db.resolveNameRecord(key)
@@ -28,7 +28,7 @@ export async function nameGet (request, env) {
   const { value } = ipns.unmarshal(uint8arrays.fromString(rawRecord, 'base64pad'))
 
   return new JSONResponse({
-    value: CID.decode(value).toString(),
+    value: uint8arrays.toString(value),
     record: rawRecord
   })
 }
@@ -38,23 +38,23 @@ export async function nameGet (request, env) {
  * @param {import('./env').Env} env
  */
 export async function namePost (request, env) {
-  const { params: { key: rawKey } } = request
-  const key = CID.parse(rawKey, base36)
+  const { params: { key } } = request
+  const keyCid = CID.parse(key, base36)
 
-  if (key.code !== libp2pKeyCode) {
-    throw new HTTPError(`invalid key code: ${key.code}`, 400)
+  if (keyCid.code !== libp2pKeyCode) {
+    throw new HTTPError(`invalid key code: ${keyCid.code}`, 400)
   }
 
   const rawRecord = await request.text()
   const record = ipns.unmarshal(uint8arrays.fromString(rawRecord, 'base64pad'))
-  const pubKey = keys.unmarshalPublicKey(Digest.decode(key.multihash.bytes).bytes)
+  const pubKey = keys.unmarshalPublicKey(Digest.decode(keyCid.multihash.bytes).bytes)
 
   if (record.pubKey && !keys.unmarshalPublicKey(record.pubKey).equals(pubKey)) {
     throw new HTTPError('embedded public key mismatch', 400)
   }
 
   await ipns.validate(pubKey, record)
-  await env.db.publishNameRecord(rawKey, rawRecord, record.sequence)
+  await env.db.publishNameRecord(key, rawRecord, record.sequence)
 
-  return new JSONResponse({}, 202)
+  return new JSONResponse({ id: key }, { status: 202 })
 }

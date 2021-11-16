@@ -1,13 +1,7 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 import { endpoint } from './scripts/constants.js'
-import * as JWT from '../src/utils/jwt.js'
-import { SALT } from './scripts/worker-globals.js'
-import { JWT_ISSUER } from '../src/constants.js'
-
-function getTestJWT (sub = 'test', name = 'test') {
-  return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
-}
+import { getTestJWT } from './scripts/helpers.js'
 
 describe('GET /user/account', () => {
   it('error if not authenticated with magic.link', async () => {
