@@ -112,6 +112,7 @@ CREATE INDEX IF NOT EXISTS pin_content_cid_idx ON pin (content_cid);
 CREATE INDEX IF NOT EXISTS pin_location_id_idx ON pin (pin_location_id);
 CREATE INDEX IF NOT EXISTS pin_updated_at_idx ON pin (updated_at);
 CREATE INDEX IF NOT EXISTS pin_status_idx ON pin (status);
+CREATE INDEX IF NOT EXISTS pin_composite_pinned_at_idx ON pin (content_cid, updated_at) WHERE status = 'Pinned';
 
 -- Upload type is the type of received upload data.
 CREATE TYPE upload_type AS ENUM
