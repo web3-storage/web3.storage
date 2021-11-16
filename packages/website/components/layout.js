@@ -11,7 +11,7 @@ import { useQuery } from 'react-query'
 /**
  * @param {any} highlightMessage
  */
-const MessageBanner = ({ highlightMessage }) => {
+const MessageBanner = ({ highlightMessage, apiVersionData }) => {
   let maintenanceMessage = ''
 
   const { data: statusPageData, error: statusPageError } = useQuery(
@@ -23,16 +23,6 @@ const MessageBanner = ({ highlightMessage }) => {
       (/** @type {{ status: string; }} */ maintenance) =>
         maintenance.status !== 'completed'
     ) || []
-
-  const { data: apiVersionData, error: apiVersionError } = useQuery(
-    'get-version',
-    () => getVersion(),
-    {
-      enabled:
-        (statusPageData && scheduledMaintenances.length === 0) ||
-        statusPageError !== null,
-    }
-  )
 
   if (scheduledMaintenances.length > 0) {
     maintenanceMessage =
@@ -46,10 +36,6 @@ const MessageBanner = ({ highlightMessage }) => {
 
   if (statusPageError) {
     console.error(statusPageError)
-  }
-
-  if (apiVersionError) {
-    console.error(apiVersionError)
   }
 
   if (maintenanceMessage) {
@@ -98,11 +84,22 @@ export default function Layout({
     enabled: needsLoggedIn,
   })
   const shouldWaitForLoggedIn = needsLoggedIn && !isLoggedIn
+  const { data: apiVersionData, error: apiVersionError } = useQuery(
+    'get-version',
+    () => getVersion()
+  )
+
+  if (apiVersionError) {
+    console.error(apiVersionError)
+  }
+
   return (
     <div className={clsx(pageBgColor, 'flex flex-col min-h-screen')}>
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="api-version" content={apiVersionData && apiVersionData.version} />
+        <meta name="api-commit" content={apiVersionData && apiVersionData.commit} />
         <meta property="image" content="https://web3.storage/social-card.png" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
@@ -127,7 +124,7 @@ export default function Layout({
         </>
       ) : (
         <>
-          <MessageBanner highlightMessage={ highlightMessage }/>
+          <MessageBanner highlightMessage={highlightMessage} apiVersionData={apiVersionData}/>
           <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
           {children({ isLoggedIn, data })}
           <Footer bgColor={footerBgColor} />
