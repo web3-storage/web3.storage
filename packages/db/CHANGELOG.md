@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.6.5](https://www.github.com/web3-storage/web3.storage/compare/db-v2.6.4...db-v2.6.5) (2021-11-16)
+
+
+### Changes
+
+* add missing indexes for fk ([#632](https://www.github.com/web3-storage/web3.storage/issues/632)) ([0a26912](https://www.github.com/web3-storage/web3.storage/commit/0a26912389508296f66e5efeb91952119b768748))
+
 ### [2.6.4](https://www.github.com/web3-storage/web3.storage/compare/db-v2.6.3...db-v2.6.4) (2021-11-15)
 
 
