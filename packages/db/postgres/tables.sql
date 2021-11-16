@@ -108,6 +108,8 @@ CREATE TABLE IF NOT EXISTS pin
   UNIQUE (content_cid, pin_location_id)
 );
 
+CREATE INDEX IF NOT EXISTS pin_content_cid_idx ON pin (content_cid);
+CREATE INDEX IF NOT EXISTS pin_location_id_idx ON pin (pin_location_id);
 CREATE INDEX IF NOT EXISTS pin_updated_at_idx ON pin (updated_at);
 CREATE INDEX IF NOT EXISTS pin_status_idx ON pin (status);
 
@@ -147,8 +149,9 @@ CREATE TABLE IF NOT EXISTS upload
   UNIQUE (user_id, source_cid)
 );
 
-CREATE INDEX IF NOT EXISTS upload_updated_at_idx ON upload (updated_at);
 CREATE INDEX IF NOT EXISTS upload_auth_key_id_idx ON upload (auth_key_id);
+CREATE INDEX IF NOT EXISTS upload_content_cid_idx ON upload (content_cid);
+CREATE INDEX IF NOT EXISTS upload_updated_at_idx ON upload (updated_at);
 
 -- Details of the backups created for an upload.
 CREATE TABLE IF NOT EXISTS backup
@@ -161,6 +164,8 @@ CREATE TABLE IF NOT EXISTS backup
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+CREATE INDEX IF NOT EXISTS backup_upload_id_idx ON backup (upload_id);
+
 -- Tracks requests to replicate content to more nodes.
 CREATE TABLE IF NOT EXISTS pin_request
 (
@@ -172,6 +177,8 @@ CREATE TABLE IF NOT EXISTS pin_request
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+CREATE INDEX IF NOT EXISTS pin_request_content_cid_idx ON pin_request (content_cid);
+
 -- A request to keep a Pin in sync with the nodes that are pinning it.
 CREATE TABLE IF NOT EXISTS pin_sync_request
 (
@@ -180,6 +187,8 @@ CREATE TABLE IF NOT EXISTS pin_sync_request
   pin_id          BIGINT                                                        NOT NULL UNIQUE REFERENCES pin (id),
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+CREATE INDEX IF NOT EXISTS pin_sync_request_pin_id_idx ON pin_sync_request (pin_id);
 
 -- A migration tracker.
 CREATE TABLE IF NOT EXISTS migration_tracker
