@@ -8,6 +8,7 @@ DROP FUNCTION IF EXISTS user_keys_list;
 DROP FUNCTION IF EXISTS content_dag_size_total;
 DROP FUNCTION IF EXISTS pin_dag_size_total;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
+DROP FUNCTION IF EXISTS publish_name_record;
 
 -- transform a JSON array property into an array of SQL text elements
 CREATE OR REPLACE FUNCTION json_arr_to_text_arr(_json json)
@@ -292,4 +293,31 @@ FROM public.aggregate_entry ae
          LEFT JOIN public.deal de USING (aggregate_cid)
 WHERE ae.cid_v1 = ANY (cids)
 ORDER BY de.entry_last_updated
+$$;
+
+CREATE OR REPLACE FUNCTION publish_name_record(data json)
+    LANGUAGE plpgsql
+    volatile
+    PARALLEL UNSAFE
+AS
+$$
+BEGIN
+  INSERT INTO public.name (key, record, has_v2_sig, seqno, validity)
+  VALUES (data ->> 'key',
+          data ->> 'record',
+          data ->> 'has_v2_sig',
+          (data ->> 'seqno')::BIGINT,
+          (data ->> 'validity')::BIGINT)
+  ON CONFLICT (key) DO UPDATE
+    SET record = data ->> 'record',
+        has_v2_sig = data ->> 'has_v2_sig',
+        seqno = (data ->> 'seqno')::BIGINT,
+        validity = (data ->> 'validity')::BIGINT)
+    WHERE
+        (data ->> 'has_v2_sig' = TRUE AND has_v2_sig = FALSE) OR
+        ((data ->> 'seqno')::BIGINT > seqno) OR
+        ((data ->> 'validity')::BIGINT > validity)
+        -- TODO:
+        -- (DECODE(data ->> 'record', 'base64'))
+END
 $$;
