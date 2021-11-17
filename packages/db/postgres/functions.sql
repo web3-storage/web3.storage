@@ -295,29 +295,31 @@ WHERE ae.cid_v1 = ANY (cids)
 ORDER BY de.entry_last_updated
 $$;
 
-CREATE OR REPLACE FUNCTION publish_name_record(data json)
+CREATE OR REPLACE FUNCTION publish_name_record(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile
     PARALLEL UNSAFE
 AS
 $$
 BEGIN
-  INSERT INTO public.name (key, record, has_v2_sig, seqno, validity)
+  INSERT INTO name (key, record, has_v2_sig, seqno, validity)
   VALUES (data ->> 'key',
           data ->> 'record',
-          data ->> 'has_v2_sig',
+          (data ->> 'has_v2_sig')::BOOLEAN,
           (data ->> 'seqno')::BIGINT,
           (data ->> 'validity')::BIGINT)
   ON CONFLICT (key) DO UPDATE
     SET record = data ->> 'record',
-        has_v2_sig = data ->> 'has_v2_sig',
+        has_v2_sig = (data ->> 'has_v2_sig')::BOOLEAN,
         seqno = (data ->> 'seqno')::BIGINT,
-        validity = (data ->> 'validity')::BIGINT)
+        validity = (data ->> 'validity')::BIGINT,
+        updated_at = TIMEZONE('utc'::TEXT, NOW())
     WHERE
-        (data ->> 'has_v2_sig' = TRUE AND has_v2_sig = FALSE) OR
-        ((data ->> 'seqno')::BIGINT > seqno) OR
-        ((data ->> 'validity')::BIGINT > validity)
-        -- TODO:
-        -- (DECODE(data ->> 'record', 'base64'))
+        -- https://github.com/ipfs/go-ipns/blob/a8379aa25ef287ffab7c5b89bfaad622da7e976d/ipns.go#L325
+        ((data ->> 'has_v2_sig')::BOOLEAN = TRUE AND name.has_v2_sig = FALSE) OR
+        ((data ->> 'has_v2_sig')::BOOLEAN = name.has_v2_sig AND (data ->> 'seqno')::BIGINT > name.seqno) OR
+        ((data ->> 'has_v2_sig')::BOOLEAN = name.has_v2_sig AND (data ->> 'seqno')::BIGINT = name.seqno AND (data ->> 'validity')::BIGINT > name.validity) OR
+        ((data ->> 'has_v2_sig')::BOOLEAN = name.has_v2_sig AND (data ->> 'seqno')::BIGINT = name.seqno AND (data ->> 'validity')::BIGINT = name.validity AND DECODE(data ->> 'record', 'base64') > DECODE(name.record, 'base64'));
+  RETURN data ->> 'key';
 END
 $$;
