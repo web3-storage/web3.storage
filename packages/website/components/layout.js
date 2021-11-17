@@ -1,3 +1,5 @@
+/* global VERSION, COMMITHASH */
+
 import Head from 'next/head'
 import clsx from 'clsx'
 import Footer from './footer.js'
@@ -9,9 +11,14 @@ import { getStatusPageSummary } from '../lib/statuspage-api'
 import { useQuery } from 'react-query'
 
 /**
+ * @global
+ * @typedef {string} COMMITHASH
+ */
+
+/**
  * @param {any} highlightMessage
  */
-const MessageBanner = ({ highlightMessage, apiVersionData }) => {
+const MessageBanner = ({ highlightMessage }) => {
   let maintenanceMessage = ''
 
   const { data: statusPageData, error: statusPageError } = useQuery(
@@ -23,6 +30,16 @@ const MessageBanner = ({ highlightMessage, apiVersionData }) => {
       (/** @type {{ status: string; }} */ maintenance) =>
         maintenance.status !== 'completed'
     ) || []
+
+  const { data: apiVersionData, error: apiVersionError } = useQuery(
+    'get-version',
+    () => getVersion(),
+    {
+      enabled:
+        (statusPageData && scheduledMaintenances.length === 0) ||
+        statusPageError !== null,
+    }
+  )
 
   if (scheduledMaintenances.length > 0) {
     maintenanceMessage =
@@ -36,6 +53,10 @@ const MessageBanner = ({ highlightMessage, apiVersionData }) => {
 
   if (statusPageError) {
     console.error(statusPageError)
+  }
+
+  if (apiVersionError) {
+    console.error(apiVersionError)
   }
 
   if (maintenanceMessage) {
@@ -84,22 +105,17 @@ export default function Layout({
     enabled: needsLoggedIn,
   })
   const shouldWaitForLoggedIn = needsLoggedIn && !isLoggedIn
-  const { data: apiVersionData, error: apiVersionError } = useQuery(
-    'get-version',
-    () => getVersion()
-  )
-
-  if (apiVersionError) {
-    console.error(apiVersionError)
-  }
-
+  // @ts-ignore VERSION is global var
+  const globalVersion = VERSION
+  // @ts-ignore COMMITHASH is global var
+  const globalCommitHash = COMMITHASH
   return (
     <div className={clsx(pageBgColor, 'flex flex-col min-h-screen')}>
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <meta name="api-version" content={apiVersionData && apiVersionData.version} />
-        <meta name="api-commit" content={apiVersionData && apiVersionData.commit} />
+        <meta name="website-version" content={globalVersion} />
+        <meta name="website-commit" content={globalCommitHash} />
         <meta property="image" content="https://web3.storage/social-card.png" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
@@ -124,7 +140,7 @@ export default function Layout({
         </>
       ) : (
         <>
-          <MessageBanner highlightMessage={highlightMessage} apiVersionData={apiVersionData}/>
+          <MessageBanner highlightMessage={ highlightMessage }/>
           <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
           {children({ isLoggedIn, data })}
           <Footer bgColor={footerBgColor} />
