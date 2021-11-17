@@ -757,7 +757,7 @@ export class PostgresClient {
    */
   async createPAPinRequest (pinRequest) {
     /** @type { import('../db-client-types').PAPinRequestUpsertOutput } */
-    let output
+
     // TODO is there a better way to avoid 2 queries?
     // ie. before insert trigger https://dba.stackexchange.com/questions/27178/handling-error-of-foreign-key
     /** @type {{data: {cid: string}}} */
@@ -821,7 +821,6 @@ export class PostgresClient {
    * @return {Promise.<Array.<import('../db-client-types').PAPinRequestUpsertOutput>>}
    */
   async listPAPinRequests (authKey, opt) {
-    // TODO(paolo): to implement
     throw new Error('Not implemented')
   }
 }
