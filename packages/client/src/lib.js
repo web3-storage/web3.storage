@@ -480,6 +480,7 @@ async function * paginator (fn, service, opts) {
 }
 
 export { Web3Storage, File, Blob, filesFromPath, getFilesFromPath }
+export * as Name from './name.js'
 
 /**
  * Just to verify API compatibility.
