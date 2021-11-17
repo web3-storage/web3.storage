@@ -17,6 +17,7 @@
   "scripts": {
     "test": "npm run lint && npm run test --workspaces",
     "lint": "standard --verbose | snazzy",
+    "start:cluster": "./docker/cluster/run.sh",
     "lint:fix": "standard --fix "
   },
   "devDependencies": {

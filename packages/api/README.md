@@ -11,16 +11,22 @@ One time set up of your cloudflare worker subdomain for dev:
 - `npm i @cloudflare/wrangler -g` - Install the Cloudflare wrangler CLI
 - `wrangler login` - Authenticate your wrangler cli; it'll open your browser.
 - Setup Cluster
-    - You need to run a cluster locally and make it accessible from the internet for development.
-    - Follow the quickstart guide to get an IPFS Cluster up and running: https://cluster.ipfs.io/documentation/quickstart/
-    - Install [localtunnel](https://theboroer.github.io/localtunnel-www/) and expose the IPFS Cluster HTTP API (replacing "USER" with your name):
 
+  The root project contains a docker compose compfiguration to spin up a cluster in `docker/cluster`
+    
+  - You need to run a cluster locally and make it accessible from the internet for development. 
+  - From the root folder you can run
+      ```
+      npm run start:cluster
+      ```
+      to start the IPFS cluster.
+  - 
     ```sh
     npm install -g localtunnel
     npm run lt:cluster
     ```
 
-    - There is an npm script you can use to quickly establish these tunnels during development:
+  - There is an npm script you can use to quickly establish these tunnels during development:
 
     ```sh
     npm run lt
