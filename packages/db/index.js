@@ -218,12 +218,12 @@ export class DBClient {
     }
 
     // Get deals
-    const cids = uploads?.map((u) => u.content_cid)
+    const cids = uploads?.map((u) => u.content.cid)
     const deals = await this.getDealsForCids(cids)
 
     return uploads?.map((u) => ({
       ...normalizeUpload(u),
-      deals: deals[u.content_cid] || []
+      deals: deals[u.content.cid] || []
     }))
   }
 
