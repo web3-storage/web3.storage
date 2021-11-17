@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.0.0](https://www.github.com/web3-storage/web3.storage/compare/api-v3.7.4...api-v4.0.0) (2021-11-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove faunadb (#610)
+
+### Bug Fixes
+
+* metrics for pin status response ([eb9f9ca](https://www.github.com/web3-storage/web3.storage/commit/eb9f9cac67aaa7b4d23d91a034ebddb0dcf8b92b))
+* remove faunadb ([#610](https://www.github.com/web3-storage/web3.storage/issues/610)) ([631e23f](https://www.github.com/web3-storage/web3.storage/commit/631e23f304ae3bef7d022041a39f72bc9438f469))
+
 ### [3.7.4](https://www.github.com/web3-storage/web3.storage/compare/api-v3.7.3...api-v3.7.4) (2021-11-15)
 
 
