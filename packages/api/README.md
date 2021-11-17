@@ -121,7 +121,7 @@ You can also provide a name for the file using the header `X-NAME`, but be sure 
 Get a list of user uploads. _Authenticated_
 
 ```console
-curl -H 'Authorization: Bearer YOUR_API_KEY' 'http://127.0.0.1:8787/status/bafybeidwfngv7n5y7ydbzotrwl3gohgr2lv2g7vn6xggwcjzrf5emknrki' -s | jq
+curl -H 'Authorization: Bearer YOUR_API_KEY' 'http://127.0.0.1:8787/user/uploads' -s | jq
 {
   "cid": "bafybeidwfngv7n5y7ydbzotrwl3gohgr2lv2g7vn6xggwcjzrf5emknrki",
   "created": "2021-07-29T09:08:28.295905Z",
@@ -134,7 +134,14 @@ curl -H 'Authorization: Bearer YOUR_API_KEY' 'http://127.0.0.1:8787/status/bafyb
       "peerName": "web3-storage-sv15",
       "region": "US-CA"
     }
-  ]
+  ],
+  "deals": []
+```
+
+By default, 25 uploads are requested, but more can be requested up to a maximum of 1000. A `size` parameter should be used as follows:
+
+```console
+curl -H 'Authorization: Bearer YOUR_API_KEY' 'http://127.0.0.1:8787/user/uploads?size=1000'
 ```
 
 ### 🤲 `GET /car/:cid`
