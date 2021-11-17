@@ -16,7 +16,11 @@ export async function pinPost (request, env, ctx) {
     )
   }
 
-  const normalizedCid = normalizeCid(cid)
+  try {
+    const normalizedCid = normalizeCid(cid)
+  } catch (err) {
+    return new JSONResponse(err)
+  }
 
   // Validate name
   if (name && typeof name !== 'string') {
@@ -35,12 +39,23 @@ export async function pinPost (request, env, ctx) {
   }
 
   // Validate meta
-  if (meta && (typeof meta !== 'object' || Array.isArray(meta))) {
-    return new JSONResponse(
+  if (meta) {
+    const res = new JSONResponse(
       { error: { reason: 'INVALID_PIN_DATA', details: 'Invalid metadata' } },
       { status: 400 }
     )
+    if (typeof meta !== 'object' || Array.isArray(meta)) {
+      return res
+    }
+
+    const hasStringValues = Object.entries(meta).some(([, v]) => typeof v === 'string')
+    if (!hasStringValues) {
+      return res
+    }
   }
+
+  // @todo: write logic for pinning cid
+  return new JSONResponse('OK')
 }
 
 /**
