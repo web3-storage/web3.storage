@@ -759,21 +759,20 @@ export class DBClient {
    *
    * @param {string} key
    * @param {string} record Base 64 encoded serialized IPNS record.
+   * @param {boolean} hasV2Sig If the record has a v2 signature.
    * @param {bigint} seqno Sequence number from the record.
+   * @param {bigint} validity Validity from the record in nanoseconds since 00:00, Jan 1 1970 UTC.
    */
-  async publishNameRecord (key, record, seqno) {
-    const { error } = await this._client
-      .from('name')
-      .upsert({
+  async publishNameRecord (key, record, hasV2Sig, seqno, validity) {
+    const { error } = await this._client.rpc('publish_name_record', {
+      data: {
         key,
         record,
+        has_v2_sig: hasV2Sig,
         seqno: seqno.toString(),
-        updated_at: new Date().toISOString()
-      }, {
-        returning: 'minimal',
-        onConflict: 'key'
-      })
-      .lt('seqno', seqno.toString())
+        validity: validity.toString()
+      }
+    })
 
     if (error) {
       throw new DBError(error)

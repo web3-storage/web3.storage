@@ -4,6 +4,7 @@ import * as Digest from 'multiformats/hashes/digest'
 import { base36 } from 'multiformats/bases/base36'
 import { CID } from 'multiformats/cid'
 import { keys } from 'libp2p-crypto'
+import { PreciseDate } from '@google-cloud/precise-date'
 import { HTTPError } from './errors.js'
 import { JSONResponse } from './utils/json-response.js'
 
@@ -45,16 +46,23 @@ export async function namePost (request, env) {
     throw new HTTPError(`invalid key code: ${keyCid.code}`, 400)
   }
 
-  const rawRecord = await request.text()
-  const record = ipns.unmarshal(uint8arrays.fromString(rawRecord, 'base64pad'))
+  const record = await request.text()
+  const entry = ipns.unmarshal(uint8arrays.fromString(record, 'base64pad'))
   const pubKey = keys.unmarshalPublicKey(Digest.decode(keyCid.multihash.bytes).bytes)
 
-  if (record.pubKey && !keys.unmarshalPublicKey(record.pubKey).equals(pubKey)) {
+  if (entry.pubKey && !keys.unmarshalPublicKey(entry.pubKey).equals(pubKey)) {
     throw new HTTPError('embedded public key mismatch', 400)
   }
 
-  await ipns.validate(pubKey, record)
-  await env.db.publishNameRecord(key, rawRecord, record.sequence)
+  await ipns.validate(pubKey, entry)
+
+  await env.db.publishNameRecord(
+    key,
+    record,
+    Boolean(entry.signatureV2),
+    entry.sequence,
+    new PreciseDate(uint8arrays.toString(entry.validity)).getFullTime()
+  )
 
   return new JSONResponse({ id: key }, { status: 202 })
 }
