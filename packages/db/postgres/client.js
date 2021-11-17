@@ -799,10 +799,6 @@ export class PostgresClient {
    * @return {Promise.<import('../db-client-types').PAPinRequestUpsertOutput>}
    */
   async getPAPinRequest (pinRequestId) {
-    /** @type { import('../db-client-types').PAPinRequestUpsertOutput } */
-    let output
-
-    // TODO(paolo) to implement
     /** @type {{data: import('../db-client-types').PAPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
       .from(PAPinRequestTableName)

@@ -6,6 +6,26 @@ import { createUpload, createUser, createUserAuthKey, token } from './utils.js'
 
 const pinRequestTable = 'pa_pin_request'
 
+/**
+ *
+ * @param {*} pinRequestOutput
+ * @param {object} opt
+ * @param {boolean} [opt.withContent]
+ */
+const assertCorrectPinRequestOutputTypes = (pinRequestOutput, { withContent = true } = {}) => {
+  assert.ok(typeof pinRequestOutput._id === 'string', '_id should be a string')
+  assert.ok(typeof pinRequestOutput.requestedCid === 'string', 'requestedCid should be a string')
+  assert.ok(Array.isArray(pinRequestOutput.pins), 'pin should be an array')
+  assert.ok(Date.parse(pinRequestOutput.created), 'created should be valid date string')
+  assert.ok(Date.parse(pinRequestOutput.updated), 'updated should be valid date string')
+
+  if (withContent) {
+    assert.ok(typeof pinRequestOutput.contentCid === 'string', 'requestedCid should be a string')
+  } else {
+    assert.ifError(pinRequestOutput.contentCid)
+  }
+}
+
 describe('Pin Request', () => {
   /** @type {PostgresClient} */
   const client = new PostgresClient({
@@ -96,26 +116,65 @@ describe('Pin Request', () => {
     })
 
     it('it returns the right object', async () => {
-      assert.ok(typeof aPinRequestOutput._id === 'string', '_id should be a string')
-      assert.ifError(aPinRequestOutput.contentCid)
-      assert.strictEqual(aPinRequestOutput.requestedCid, cids[0], 'requestedCid should be a string')
-      assert.ok(typeof aPinRequestOutput.requestedCid === 'string', 'requestedCid should be a string')
-      assert.ok(Array.isArray(aPinRequestOutput.pins), 'pin should be an array')
-      assert.ok(Date.parse(aPinRequestOutput.created), 'created should be valid date string')
-      assert.ok(Date.parse(aPinRequestOutput.updated), 'updated should be valid date string')
+      assertCorrectPinRequestOutputTypes(aPinRequestOutput, { withContent: false })
+      assert.strictEqual(aPinRequestOutput.requestedCid, cids[0], 'requestedCid is the one provided')
     })
 
     it('returns no pins if they do not exists', async () => {
       assert.strictEqual(aPinRequestOutput.pins.length, 0)
     })
 
+    it('it returns the right object when it has content associated', async () => {
+      assertCorrectPinRequestOutputTypes(aPinRequestOutputForExistingContent)
+      assert.strictEqual(aPinRequestOutputForExistingContent.requestedCid, cids[1], 'rrequestedCid is the one provided')
+    })
+
     it('returns a content cid if exists contentCid', async () => {
       assert.strictEqual(aPinRequestOutputForExistingContent.contentCid, cids[1])
     })
 
-    it('returns pins if content exists', async () => {
+    it('returns pins if pins if content exists', async () => {
       // Only checking statuses for simplicity
       const statuses = aPinRequestOutputForExistingContent.pins
+        .map((p) => p.status)
+      assert.deepStrictEqual(statuses, [pins[0].status, pins[1].status])
+    })
+  })
+
+  describe('Get Pin', () => {
+    let savedPinRequest
+    let savedPinRequestForExistingContent
+
+    before(async () => {
+      savedPinRequest = await client.getPAPinRequest(aPinRequestOutput._id)
+      savedPinRequestForExistingContent = await client.getPAPinRequest(aPinRequestOutputForExistingContent._id)
+    })
+
+    it('it creates a Pin Request', async () => {
+      assert.ok(savedPinRequest)
+    })
+
+    it('it returns the right object', async () => {
+      assertCorrectPinRequestOutputTypes(savedPinRequest, { withContent: false })
+      assert.strictEqual(savedPinRequest.requestedCid, cids[0], 'requestedCid is the one provided')
+    })
+
+    it('returns no pins if they do not exists', async () => {
+      assert.strictEqual(savedPinRequest.pins.length, 0)
+    })
+
+    it('it returns the right object when it has content associated', async () => {
+      assertCorrectPinRequestOutputTypes(savedPinRequestForExistingContent)
+      assert.strictEqual(savedPinRequestForExistingContent.requestedCid, cids[1], 'rrequestedCid is the one provided')
+    })
+
+    it('returns a content cid if exists contentCid', async () => {
+      assert.strictEqual(savedPinRequestForExistingContent.contentCid, cids[1])
+    })
+
+    it('returns pins if pins if content exists', async () => {
+      // Only checking statuses for simplicity
+      const statuses = savedPinRequestForExistingContent.pins
         .map((p) => p.status)
       assert.deepStrictEqual(statuses, [pins[0].status, pins[1].status])
     })
