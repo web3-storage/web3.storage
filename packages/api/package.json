@@ -15,6 +15,7 @@
     "build": "WEBPACK_CLI_FORCE_LOAD_ESM_CONFIG=true webpack",
     "test": "npm-run-all -p -r mock:cluster mock:backup test:e2e -s test:size",
     "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js -b webkit",
+    "test:e2e:debug": "playwright-test \"test/**/*.spec.js\" --debug --sw src/index.js -b webkit",
     "test:size": "bundlesize",
     "mock:cluster": "smoke -p 9094 test/mocks/cluster",
     "mock:backup": "smoke -p 9096 test/mocks/backup"
