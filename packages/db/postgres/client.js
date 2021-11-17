@@ -1,6 +1,6 @@
 import { PostgrestClient } from '@supabase/postgrest-js'
 
-import { normalizeUpload, normalizeContent, normalizePins } from './utils.js'
+import { normalizeUpload, normalizeContent, normalizePins, normalizePaPinRequest } from './utils.js'
 import { DBError } from './errors.js'
 import {
   getUserMetrics,
@@ -21,6 +21,15 @@ const uploadQuery = `
       `
 
 const PAPinRequestTableName = 'pa_pin_request'
+const pinRequestSelect = `
+  _id:id::text,
+  requestedCid:requested_cid,
+  contentCid:content_cid,
+  authKey:auth_key_id,
+  name,
+  created:inserted_at,
+  updated:updated_at,
+  content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region)))  `
 
 /**
  * @typedef {import('./pg-rest-api-types.js').definitions} definitions
@@ -747,29 +756,40 @@ export class PostgresClient {
    * @return {Promise.<import('../db-client-types').PAPinRequestUpsertOutput>}
    */
   async createPAPinRequest (pinRequest) {
-    /** @type {{data: import('../db-client-types').PAPinRequestUpsertOutput, error: PostgrestError }} */
+    /** @type { import('../db-client-types').PAPinRequestUpsertOutput } */
+    let output
+    // TODO is there a better way to avoid 2 queries?
+    // ie. before insert trigger https://dba.stackexchange.com/questions/27178/handling-error-of-foreign-key
+    /** @type {{data: {cid: string}}} */
+    const { data: content } = await this._client
+      .from('content')
+      .select('cid')
+      .eq('cid', pinRequest.requestedCid)
+      .single()
+
+    const toInsert = {
+      requested_cid: pinRequest.requestedCid,
+      auth_key_id: pinRequest.authKey,
+      name: pinRequest.name
+    }
+
+    // If content already exists updated foreigh key
+    if (content?.cid) {
+      toInsert.content_cid = content.cid
+    }
+
+    /** @type {{data: import('../db-client-types').PAPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
       .from(PAPinRequestTableName)
-      .insert({
-        requested_cid: pinRequest.requestedCid,
-        auth_key_id: pinRequest.authKey,
-        name: pinRequest.name
-      })
-      .select(`
-        _id:id::text,
-        requestedCid:requested_cid,
-        authKey:auth_key_id,
-        name,
-        created:inserted_at,
-        updated:updated_at
-      `)
+      .insert(toInsert)
+      .select(pinRequestSelect)
       .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    return data
+    return normalizePaPinRequest(data)
   }
 
   /**
@@ -779,18 +799,14 @@ export class PostgresClient {
    * @return {Promise.<import('../db-client-types').PAPinRequestUpsertOutput>}
    */
   async getPAPinRequest (pinRequestId) {
+    /** @type { import('../db-client-types').PAPinRequestUpsertOutput } */
+    let output
+
     // TODO: to implement
-    /** @type {{data: import('../db-client-types').PAPinRequestUpsertOutput, error: PostgrestError }} */
+    /** @type {{data: import('../db-client-types').PAPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
       .from(PAPinRequestTableName)
-      .select(`
-        _id:id::text,
-        requestedCid:requested_cid,
-        authKey:auth_key_id,
-        name,
-        created:inserted_at,
-      updated:updated_at
-      `)
+      .select(pinRequestSelect)
       .eq('id', pinRequestId)
       .single()
 
@@ -798,11 +814,7 @@ export class PostgresClient {
       throw new DBError(error)
     }
 
-    return {
-      // TODO get actual status
-      status: 'queued',
-      ...data
-    }
+    return normalizePaPinRequest(data)
   }
 
   /**

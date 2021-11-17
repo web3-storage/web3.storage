@@ -178,15 +178,7 @@ export type UploadItem = {
   name?: definitions['upload']['name']
   created?: definitions['upload']['inserted_at']
   updated?: definitions['upload']['updated_at']
-  content: {
-    cid: definitions['content']['cid']
-    dagSize: definitions['content']['dag_size']
-    pins: Array<{
-      status: definitions['pin']['status']
-      updated: definitions['pin']['updated_at']
-      location: Location
-    }>
-  }
+  content: ContentItem
 }
 
 export type UploadItemOutput = {
@@ -253,10 +245,18 @@ export type PAPinRequestUpsertInput = {
   requestedCid: definitions['pa_pin_request']['requested_cid'],
 }
 
+export type PAPinRequestItem = PAPinRequestUpsertInput & {
+  _id: string,
+  contentCid: definitions['pa_pin_request']['content_cid']
+  created: definitions['upload']['inserted_at']
+  updated: definitions['upload']['updated_at']
+  content: ContentItem
+}
+
 export type PAPinRequestUpsertOutput = PAPinRequestUpsertInput & {
   _id: string,
   contentCid: definitions['pa_pin_request']['content_cid']
   created: definitions['pa_pin_request']['inserted_at']
   updated: definitions['pa_pin_request']['updated_at']
-  status: Array<definitions['pin']['status']>
+  pins: Array<PinItemOutput>
 }
