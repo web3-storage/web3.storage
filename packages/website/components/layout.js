@@ -11,11 +11,6 @@ import { getStatusPageSummary } from '../lib/statuspage-api'
 import { useQuery } from 'react-query'
 
 /**
- * @global
- * @typedef {string} COMMITHASH
- */
-
-/**
  * @param {any} highlightMessage
  */
 const MessageBanner = ({ highlightMessage }) => {
