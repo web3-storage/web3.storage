@@ -768,6 +768,7 @@ export class DBClient {
       .upsert({
         key,
         record,
+        seqno: seqno.toString(),
         updated_at: new Date().toISOString()
       }, {
         returning: 'minimal',
