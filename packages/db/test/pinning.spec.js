@@ -94,30 +94,30 @@ describe('Pin Request', () => {
       const savedPinRequest = await client.getPAPinRequest(aPinRequestOutput._id)
       assert.ok(savedPinRequest)
     })
-  })
 
-  it('it returns the right object', async () => {
-    assert.ok(typeof aPinRequestOutput._id === 'string', '_id should be a string')
-    assert.ifError(aPinRequestOutput.contentCid)
-    assert.strictEqual(aPinRequestOutput.requestedCid, cids[0], 'requestedCid should be a string')
-    assert.ok(typeof aPinRequestOutput.requestedCid === 'string', 'requestedCid should be a string')
-    assert.ok(Array.isArray(aPinRequestOutput.pins), 'pin should be an array')
-    assert.ok(Date.parse(aPinRequestOutput.created), 'created should be valid date string')
-    assert.ok(Date.parse(aPinRequestOutput.updated), 'updated should be valid date string')
-  })
+    it('it returns the right object', async () => {
+      assert.ok(typeof aPinRequestOutput._id === 'string', '_id should be a string')
+      assert.ifError(aPinRequestOutput.contentCid)
+      assert.strictEqual(aPinRequestOutput.requestedCid, cids[0], 'requestedCid should be a string')
+      assert.ok(typeof aPinRequestOutput.requestedCid === 'string', 'requestedCid should be a string')
+      assert.ok(Array.isArray(aPinRequestOutput.pins), 'pin should be an array')
+      assert.ok(Date.parse(aPinRequestOutput.created), 'created should be valid date string')
+      assert.ok(Date.parse(aPinRequestOutput.updated), 'updated should be valid date string')
+    })
 
-  it('returns no pins if they do not exists', async () => {
-    assert.strictEqual(aPinRequestOutput.pins.length, 0)
-  })
+    it('returns no pins if they do not exists', async () => {
+      assert.strictEqual(aPinRequestOutput.pins.length, 0)
+    })
 
-  it('returns a content cid if exists contentCid', async () => {
-    assert.strictEqual(aPinRequestOutputForExistingContent.contentCid, cids[1])
-  })
+    it('returns a content cid if exists contentCid', async () => {
+      assert.strictEqual(aPinRequestOutputForExistingContent.contentCid, cids[1])
+    })
 
-  it('returns pins if content exists', async () => {
-    // Only checking statuses for simplicity
-    const statuses = aPinRequestOutputForExistingContent.pins
-      .map((p) => p.status)
-    assert.deepStrictEqual(statuses, [pins[0].status, pins[1].status])
+    it('returns pins if content exists', async () => {
+      // Only checking statuses for simplicity
+      const statuses = aPinRequestOutputForExistingContent.pins
+        .map((p) => p.status)
+      assert.deepStrictEqual(statuses, [pins[0].status, pins[1].status])
+    })
   })
 })

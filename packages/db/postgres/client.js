@@ -132,7 +132,7 @@ export class PostgresClient {
    * @returns {Promise<import('../db-client-types').CreateUploadOutput>}
    */
   async createUpload (data) {
-    // TODO: refactor this to be createContent, and optionally an upload
+    // TODO(paolo): refactor this to be createContent, and optionally an upload
 
     const now = new Date().toISOString()
     /** @type {{ data: number, error: PostgrestError }} */
@@ -802,7 +802,7 @@ export class PostgresClient {
     /** @type { import('../db-client-types').PAPinRequestUpsertOutput } */
     let output
 
-    // TODO: to implement
+    // TODO(paolo) to implement
     /** @type {{data: import('../db-client-types').PAPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
       .from(PAPinRequestTableName)
@@ -825,7 +825,7 @@ export class PostgresClient {
    * @return {Promise.<Array.<import('../db-client-types').PAPinRequestUpsertOutput>>}
    */
   async listPAPinRequests (authKey, opt) {
-    // TODO: to implement
+    // TODO(paolo): to implement
     throw new Error('Not implemented')
   }
 }

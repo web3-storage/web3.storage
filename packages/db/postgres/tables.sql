@@ -176,7 +176,7 @@ CREATE TABLE IF NOT EXISTS pin_sync_request
 );
 
 -- Tracks pinning requests from Pinning Service API
--- TODO this table should be considered for track all content stored on web3.storage
+-- TODO(paolo) this table should be considered for track all content stored on web3.storage
 CREATE TABLE IF NOT EXISTS pa_pin_request
 (
  id              BIGSERIAL PRIMARY KEY,
