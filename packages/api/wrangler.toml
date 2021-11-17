@@ -38,7 +38,7 @@ vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "st
 [env.alan]
 workers_dev = true
 account_id = "4fe12d085474d33bdcfd8e9bed4d8f95"
-vars = { CLUSTER_API_URL = "https://alan-cluster-api-web3-storage.loca.lt", ENV = "dev" }
+vars = { CLUSTER_API_URL = "https://alan-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://alan-postgres-api-web3-storage.loca.lt", ENV = "dev" }
 
 [env.oli]
 workers_dev = true

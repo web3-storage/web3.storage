@@ -7,6 +7,7 @@ import { identity } from 'multiformats/hashes/identity'
 import { base36 } from 'multiformats/bases/base36'
 import { CID } from 'multiformats/cid'
 import { keys } from 'libp2p-crypto'
+import { fetch } from './platform.js'
 
 const libp2pKeyCode = 0x72
 
