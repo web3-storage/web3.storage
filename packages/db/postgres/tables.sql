@@ -214,10 +214,14 @@ CREATE TABLE IF NOT EXISTS public.name
 (
     -- base36 "libp2p-key" encoding of the public key
     key         TEXT PRIMARY KEY,
-    -- sequence number from the record, used to ensure updates are new
-    seqno       BIGINT NOT NULL,
     -- the serialized IPNS record - base64 encoded
     record      TEXT NOT NULL,
+    -- the following 3 fields are derived from the record, and used for
+    -- newness comparisons, see:
+    -- https://github.com/ipfs/go-ipns/blob/a8379aa25ef287ffab7c5b89bfaad622da7e976d/ipns.go#L325
+    has_v2_sig  BOOLEAN NOT NULL,
+    seqno       BIGINT NOT NULL,
+    validity    BIGINT NOT NULL, -- (nanosecond resolution so needs to be a bigint not timestamp)
     inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
