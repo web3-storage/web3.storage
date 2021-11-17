@@ -37,6 +37,40 @@ for (const file of files) {
 }
 ```
 
+### Mutability
+
+Mutability in Web3.Storage is maintained through IPNS records.
+
+⚠️ Name records are not _yet_ published to or updated from the IPFS network. Working with name records simply updates the Web3.Storage cache of data.
+
+```js
+import { Web3Storage, Name } from 'web3.storage'
+
+const client = new Web3Storage({ token: API_TOKEN })
+
+// Create a private key, and key ID (the "name" used to resolve the current value)
+const { id, privateKey } = await Name.keypair()
+
+// The value to publish
+const value = '/ipfs/bafkreiem4twkqzsq2aj4shbycd4yvoj2cx72vezicletlhi7dijjciqpui'
+
+// Create a new name record for the given value
+const { record } = await Name.create(privateKey, null, value)
+
+// Publish the name record to Web3.Storage
+await Name.publish(client, id, record)
+
+// Later...resolve the current record (and it's value) for the key ID
+const { value: curValue, record: curRecord } = await Name.resolve(client, id)
+
+// Update an existing record with a new value
+const updatedValue = '/ipfs/bafybeiauyddeo2axgargy56kwxirquxaxso3nobtjtjvoqu552oqciudrm'
+const { record: updatedRecord } = await Name.create(privateKey, curRecord, updatedValue)
+
+// Publish the new record =)
+await Name.publish(client, id, updatedRecord)
+```
+
 ## Testing
 Run `npm test` to test the ESM code, CJS, and in the browser via `playwright-test`. 100% test coverage is required by the `hundreds` module.
 
