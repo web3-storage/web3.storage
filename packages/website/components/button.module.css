@@ -1,0 +1,17 @@
+.button.dark {
+  border: 1px solid transparent;
+  background: #171691;
+  color: #fff;
+}
+
+.button.light {
+  border: 1px solid transparent;
+  background: #fff;
+  color: #171691;
+}
+
+.button.outlined {
+  border: 2px solid #171691;
+  background: transparent;
+  color: #171691;
+}
