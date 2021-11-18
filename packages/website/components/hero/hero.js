@@ -2,12 +2,12 @@ import clsx from 'clsx';
 import countly from '../../lib/countly'
 import Button from '../button'
 
-import Wave from '../../illustrations/wave'
-import CircleNoise from '../../illustrations/circle-noise'
-import SquiggleAndCircles from '../../illustrations/squiggle-and-circles'
-import HeroIllustration from '../../illustrations/hero-illustration'
-import HeroBackgroundLeft from '../../illustrations/hero-background-left'
-import HeroBackgroundRight from '../../illustrations/hero-background-right'
+import { ReactComponent as Wave } from 'Illustrations/wave.svg'
+import { ReactComponent as CircleNoise } from 'Illustrations/circle-noise.svg'
+import { ReactComponent as SquiggleAndCircles } from 'Illustrations/squiggle-and-circles.svg'
+import { ReactComponent as HeroIllustration } from 'Illustrations/hero-illustration.svg'
+import { ReactComponent as HeroBackgroundLeft } from 'Illustrations/hero-background-left.svg'
+import { ReactComponent as HeroBackgroundRight } from 'Illustrations/hero-background-right.svg'
 // @ts-ignore
 import styles from './hero.module.css'
 

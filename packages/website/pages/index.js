@@ -10,13 +10,13 @@ import Button from '../components/button'
 import Hero from '../components/hero'
 import countly from '../lib/countly'
 
-import OpenIcon from '../icons/open'
-import SimpleIcon from '../icons/simple'
-import ProvableStorage from '../icons/provable-storage'
-import FreeIcon from '../icons/free'
-import CopyIcon from '../icons/copy'
-import Squares from '../illustrations/squares'
-import GettingStartedIllustration from '../illustrations/getting-started-illustration'
+import { ReactComponent as OpenIcon } from 'Icons/open.svg'
+import { ReactComponent as SimpleIcon } from 'Icons/simple.svg'
+import { ReactComponent as ProvableStorage } from 'Icons/provable-storage.svg'
+import { ReactComponent as FreeIcon } from 'Icons/free.svg'
+import { ReactComponent as CopyIcon } from 'Icons/copy.svg'
+import { ReactComponent as Squares } from 'Illustrations/squares.svg'
+import { ReactComponent as GettingStartedIllustration } from 'Illustrations/getting-started-illustration.svg'
 
 /**
  * @returns {{ props: import('../components/types.js').LayoutProps}}

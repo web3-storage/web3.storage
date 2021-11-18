@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import React, { useRef } from 'react'
-import Tick from '../icons/tick'
+import { ReactComponent as Tick } from 'Icons/tick.svg'
 
 /**
  * @param {object} props

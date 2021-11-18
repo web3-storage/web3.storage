@@ -3,15 +3,15 @@ import { useQuery, useQueryClient } from 'react-query'
 import filesize from 'filesize'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
-import Button from '../components/button.js'
+import Button from '../components/button'
 import Checkbox from '../components/checkbox'
-import Loading from '../components/loading'
+import Loading from '../components/loading/loading'
 import Tooltip from '../components/tooltip'
 
-import CopyIcon from '../icons/copy'
-import ChevronIcon from '../icons/chevron'
-import PencilIcon from '../icons/pencil'
-import TickIcon from '../icons/tick'
+import { ReactComponent as CopyIcon } from 'Icons/copy.svg'
+import { ReactComponent as ChevronIcon } from 'Icons/chevron.svg'
+import { ReactComponent as PencilIcon } from 'Icons/pencil.svg'
+import { ReactComponent as TickIcon } from 'Icons/tick.svg'
 import countly from '../lib/countly'
 import { getUploads, deleteUpload, renameUpload } from '../lib/api.js'
 import { When } from 'react-if'
@@ -252,7 +252,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
             <input className="flex-auto p-0" defaultValue={renamedValue || upload.name} autoFocus name="fileName" required/>
             <button className="p-2 pr-1 cursor-pointer" type="submit">
               { isLoading ?
-                <Loading height={18} className="dib relative" fill="currentColor"/> :
+                <Loading className="dib relative" /> :
                 <TickIcon style={{minWidth: 18 }} height="18" className="dib" fill="currentColor" aria-label="Edit"/>
               }
             </button>

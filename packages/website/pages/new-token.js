@@ -5,7 +5,7 @@ import { useQueryClient } from 'react-query'
 import Button from '../components/button.js'
 import countly from '../lib/countly'
 import { createToken } from '../lib/api.js'
-import VerticalLines from '../illustrations/vertical-lines.js'
+import { ReactComponent as VerticalLines } from 'Illustrations/vertical-lines.svg'
 
 /**
  * Static Props

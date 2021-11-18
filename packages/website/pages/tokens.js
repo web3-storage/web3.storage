@@ -5,8 +5,8 @@ import clsx from 'clsx'
 
 import countly from '../lib/countly'
 import { deleteToken, getTokens } from '../lib/api'
-import Button from '../components/button.js'
-import Loading from '../components/loading.js'
+import Button from '../components/button'
+import Loading from '../components/loading/loading'
 
 /** @typedef {{ _id: string, name: string, secret: string, hasUploads?: boolean }} Token */
 

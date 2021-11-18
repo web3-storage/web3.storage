@@ -7,11 +7,11 @@ import { useQueryClient } from 'react-query'
 import Button from './button.js'
 import { useResizeObserver } from '../hooks/resize-observer'
 import clsx from 'clsx'
-import Hamburger from '../icons/hamburger'
+import { ReactComponent as Hamburger } from 'Icons/hamburger.svg'
 
-import Logo from '../icons/w3storage-logo'
-import Cross from '../icons/cross'
-import Loading from './loading.js'
+import { ReactComponent as Logo } from 'Icons/w3storage-logo.svg'
+import { ReactComponent as Cross } from 'Icons/cross.svg'
+import Loading, { SpinnerSize } from './loading/loading'
 
 /**
  * Navbar Component
@@ -105,7 +105,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
 
   const spinnerButton = (
     <Button href="#" id="loading-user" wrapperClassName="inline-block ml-3 md:ml-6" small={isSmallVariant} >
-      <Loading className='user-spinner' fill='white' height={10} />
+      <Loading className='user-spinner' size={SpinnerSize.SMALL} />
     </Button>
   )
 
