@@ -38,7 +38,7 @@ export class DBClient {
    * Upsert user.
    *
    * @param {import('./db-client-types').UpsertUserInput} user
-   * @return {Promise.<import('./db-client-types').UpsertUserOutput>}
+   * @return {Promise<import('./db-client-types').UpsertUserOutput>}
    */
   async upsertUser (user) {
     /** @type {{ data: definitions['user'], error: PostgrestError }} */
@@ -103,7 +103,7 @@ export class DBClient {
    * @returns {Promise<number>}
    */
   async getUsedStorage (userId) {
-    /** @type {{ data: number, error: PostgrestError }} */
+    /** @type {{ data: string, error: PostgrestError }} */
     const { data, error } = await this._client.rpc('user_used_storage', { query_user_id: userId }).single()
 
     if (error) {
