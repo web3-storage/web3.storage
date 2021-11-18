@@ -264,6 +264,7 @@ class Web3Storage {
     const size = maxResults > 100 ? 100 : maxResults
     for await (const res of paginator(listPage, service, { before, size })) {
       if (!res.ok) {
+        /* c8 ignore next 2 */
         const errorMessage = await res.json()
         throw new Error(`${res.status} ${res.statusText} ${'- ' + errorMessage?.message || ''}`)
       }
