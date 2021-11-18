@@ -45,6 +45,7 @@ router.post('/upload',              mode['📝'](auth['🔒'](uploadPost)))
 router.get('/user/uploads',         mode['👀'](auth['🔒'](userUploadsGet)))
 
 router.get('/name/:key',            mode['👀'](auth['🤲'](nameGet)))
+router.get('/name/:key/watch',      mode['👀'](auth['🤲'](nameWatchGet)))
 router.post('/name/:key',           mode['📝'](auth['🔒'](namePost)))
 
 router.delete('/user/uploads/:cid',      mode['📝'](auth['👮'](userUploadsDelete)))

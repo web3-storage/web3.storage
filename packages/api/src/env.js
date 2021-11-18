@@ -5,9 +5,31 @@ import { S3Client } from '@aws-sdk/client-s3'
 import { Magic } from '@magic-sdk/admin'
 import { DBClient } from '@web3-storage/db'
 import { Cluster } from '@nftstorage/ipfs-cluster'
-
 import { DEFAULT_MODE } from './maintenance.js'
 import pkg from '../package.json'
+
+/**
+ * From: https://github.com/cloudflare/workers-types
+ *
+ * @typedef {{
+ *  toString(): string
+ *  equals(other: DurableObjectId): boolean
+ *  readonly name?: string
+ * }} DurableObjectId
+ * 
+ * @typedef {{
+ *   newUniqueId(options?: { jurisdiction?: string }): DurableObjectId
+ *   idFromName(name: string): DurableObjectId
+ *   idFromString(id: string): DurableObjectId
+ *   get(id: DurableObjectId): DurableObjectStub
+ * }} DurableObjectNamespace
+ * 
+ * @typedef {{
+ *   readonly id: DurableObjectId
+ *   readonly name?: string
+ *   fetch(requestOrUrl: Request | string, requestInit?: RequestInit | Request): Promise<Response>
+ * }} DurableObjectStub
+ */
 
 /**
  * @typedef {object} Env
@@ -19,6 +41,7 @@ import pkg from '../package.json'
  * @property {S3Client} [s3Client]
  * @property {string} [s3BucketName]
  * @property {string} [s3BucketRegion]
+ * @property {DurableObjectNamespace} nameRooms
  */
 
 /**
