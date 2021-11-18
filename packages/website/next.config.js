@@ -1,3 +1,5 @@
+const path = require('path');
+
 const nextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
@@ -8,6 +10,13 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   webpack: function(config) {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'Icons': path.resolve(__dirname, 'assets/icons'),
+      'Illustrations': path.resolve(__dirname, 'assets/illustrations'),
+      'ZeroComponents': path.resolve(__dirname, 'modules/zero/components'),
+    }
+
     config.module.rules.push({
       test: /\.md$/,
       type: 'asset/source'
@@ -15,7 +24,7 @@ const nextConfig = {
 
     config.module.rules.push({
       test: /\.svg$/,
-      use: ['@svgr/webpack'],
+      use: [ '@svgr/webpack', 'url-loader' ],
     })
 
     return config

@@ -24,6 +24,13 @@ npm install
 npm start
 ```
 
+### Running Storybook
+
+```bash
+After `Running Locally`
+npm run storybook
+```
+
 ## Deploy
 
 The site is deployed from Github Actions. When a PR that changes website code is merged to main, the website is built and uploaded to web3.storage. The CID for the new build is set as a dnslink for https://staging.web3.storage so you can see the site served from an IPFS gateway, or fetch it over IPFS in Brave or any browser with IPFS Companion installed.
