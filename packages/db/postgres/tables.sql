@@ -45,12 +45,13 @@ CREATE TABLE IF NOT EXISTS content
 
 CREATE INDEX IF NOT EXISTS content_updated_at_idx ON content (updated_at);
 
--- IPFS Cluster tracker status values.
--- https://github.com/ipfs/ipfs-cluster/blob/54c3608899754412861e69ee81ca8f676f7e294b/api/types.go#L52-L83
--- TODO: nft.storage only using a subset of these: https://github.com/ipfs-shipyard/nft.storage/blob/main/packages/api/db/tables.sql#L2-L7
 DO $$
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'pin_status_type') THEN
+    
+    -- IPFS Cluster tracker status values.
+    -- https://github.com/ipfs/ipfs-cluster/blob/54c3608899754412861e69ee81ca8f676f7e294b/api/types.go#L52-L83
+    -- TODO: nft.storage only using a subset of these: https://github.com/ipfs-shipyard/nft.storage/blob/main/packages/api/db/tables.sql#L2-L7
     CREATE TYPE pin_status_type AS ENUM
     (
       -- Should never see this value. When used as a filter. It means "all".
