@@ -1,7 +1,13 @@
 /* eslint-env serviceworker */
+
+// TODO: move this to pin.js
+/**
+ * @typedef {{ error: { reason: string, details?: string } }} PinDataError
+ */
+
 export class JSONResponse extends Response {
   /**
-   * @param {BodyInit} body
+   * @param {BodyInit | PinDataError} body
    * @param {ResponseInit} [init]
    */
   constructor (body, init = {}) {

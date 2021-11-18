@@ -4,23 +4,25 @@ import { endpoint } from './scripts/constants.js'
 import * as JWT from '../src/utils/jwt.js'
 import { SALT } from './scripts/worker-globals.js'
 import { JWT_ISSUER } from '../src/constants.js'
+import { ERROR_CODE, ERROR_STATUS, INVALID_CID, INVALID_META, INVALID_NAME, INVALID_ORIGINS } from '../src/pins.js'
 
 function getTestJWT (sub = 'test', name = 'test') {
   return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
 }
 
-describe.only('POST /pins', () => {
-  it('should receive pin data containing cid', async () => {
-    const name = 'car'
+describe('POST /pins', () => {
+  let token = null
+  before(async () => {
     // Create token
-    const token = await getTestJWT()
+    token = await getTestJWT()
+  })
 
+  it('should receive pin data containing cid', async () => {
     const res = await fetch(new URL('pins', endpoint).toString(), {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'X-Name': name
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
@@ -34,38 +36,28 @@ describe.only('POST /pins', () => {
   })
 
   it('requires cid', async () => {
-    const name = 'car'
-    // Create token
-    const token = await getTestJWT()
-
     const res = await fetch(new URL('pins', endpoint).toString(), {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'X-Name': name
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({})
     })
 
     assert(res, 'Server responded')
-    assert(res.status, '400')
+    assert(res.status, `${ERROR_CODE}`)
     const data = await res.json()
     const error = data.error
-    assert(error.reason, 'Invalid request id:')
+    assert(error.reason, INVALID_CID)
   })
 
   it('throws error if cid is invalid', async () => {
-    const name = 'car'
-    // Create token
-    const token = await getTestJWT()
-
     const res = await fetch(new URL('pins', endpoint).toString(), {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'X-Name': name
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         cid: 'abc'
@@ -73,22 +65,18 @@ describe.only('POST /pins', () => {
     })
 
     assert(res, 'Server responded')
-    assert(res.status, '400')
+    assert(res.status, `${ERROR_CODE}`)
     const data = await res.json()
-    assert(data.code, 'ERROR_INVALID_CID')
+    const error = data.error
+    assert(error.reason, INVALID_CID)
   })
 
   it('should receive pin data containing cid, name, origin, meta', async () => {
-    const name = 'car'
-    // Create token
-    const token = await getTestJWT()
-
     const res = await fetch(new URL('pins', endpoint).toString(), {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'X-Name': name
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e',
@@ -110,16 +98,11 @@ describe.only('POST /pins', () => {
   })
 
   it('validates name', async () => {
-    const name = 'car'
-    // Create token
-    const token = await getTestJWT()
-
     const res = await fetch(new URL('pins', endpoint).toString(), {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'X-Name': name
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e',
@@ -128,24 +111,19 @@ describe.only('POST /pins', () => {
     })
 
     assert(res, 'Server responded')
-    assert(res.status, '400')
+    assert(res.status, `${ERROR_CODE}`)
     const data = await res.json()
     const error = data.error
-    assert(error.reason, 'INVALID_PIN_DATA')
-    assert(error.details, 'Invalid name')
+    assert(error.reason, ERROR_STATUS)
+    assert(error.details, INVALID_NAME)
   })
 
   it('validates origins', async () => {
-    const name = 'car'
-    // Create token
-    const token = await getTestJWT()
-
     const res = await fetch(new URL('pins', endpoint).toString(), {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'X-Name': name
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e',
@@ -154,24 +132,19 @@ describe.only('POST /pins', () => {
     })
 
     assert(res, 'Server responded')
-    assert(res.status, '400')
+    assert(res.status, `${ERROR_CODE}`)
     const data = await res.json()
     const error = data.error
-    assert(error.reason, 'INVALID_PIN_DATA')
-    assert(error.details, 'Invalid origins')
+    assert(error.reason, ERROR_STATUS)
+    assert(error.details, INVALID_ORIGINS)
   })
 
   it('validates meta', async () => {
-    const name = 'car'
-    // Create token
-    const token = await getTestJWT()
-
-    let res = await fetch(new URL('pins', endpoint).toString(), {
+    const res = await fetch(new URL('pins', endpoint).toString(), {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'X-Name': name
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e',
@@ -180,18 +153,19 @@ describe.only('POST /pins', () => {
     })
 
     assert(res, 'Server responded')
-    assert(res.status, '400')
-    let data = await res.json()
-    let error = data.error
-    assert(error.reason, 'INVALID_PIN_DATA')
-    assert(error.details, 'Invalid meta')
+    assert(res.status, `${ERROR_CODE}`)
+    const data = await res.json()
+    const error = data.error
+    assert(error.reason, ERROR_STATUS)
+    assert(error.details, INVALID_META)
+  })
 
-    res = await fetch(new URL('pins', endpoint).toString(), {
+  it('validates meta values', async () => {
+    const res = await fetch(new URL('pins', endpoint).toString(), {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'X-Name': name
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e',
@@ -202,10 +176,10 @@ describe.only('POST /pins', () => {
     })
 
     assert(res, 'Server responded')
-    assert(res.status, '400')
-    data = await res.json()
-    error = data.error
-    assert(error.reason, 'INVALID_PIN_DATA')
-    assert(error.details, 'Invalid meta')
+    assert(res.status, `${ERROR_CODE}`)
+    const data = await res.json()
+    const error = data.error
+    assert(error.reason, ERROR_STATUS)
+    assert(error.details, INVALID_META)
   })
 })
