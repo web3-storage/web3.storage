@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.5.0...website-v1.6.0) (2021-11-15)
+
+
+### Features
+
+* add user email to account page ([#566](https://www.github.com/web3-storage/web3.storage/issues/566)) ([a34d976](https://www.github.com/web3-storage/web3.storage/commit/a34d97623eaa2153c9bf068c3a099f3c463af1a3))
+* add user survey ([#574](https://www.github.com/web3-storage/web3.storage/issues/574)) ([3d17829](https://www.github.com/web3-storage/web3.storage/commit/3d1782963c6d94378e97842b09a1dbcf95c6c129))
+
 ## [1.5.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.4.0...website-v1.5.0) (2021-10-28)
 
 
