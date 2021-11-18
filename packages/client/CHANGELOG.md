@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.3.4](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.3...web3.storage-v3.3.4) (2021-11-18)
+
+
+### Changes
+
+* improve error message when listing uploads ([#565](https://www.github.com/web3-storage/web3.storage/issues/565)) ([1f1e5b8](https://www.github.com/web3-storage/web3.storage/commit/1f1e5b880ddc64b1cfc10a0a76aa7aa1339fab2e))
+
 ### [3.3.3](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.2...web3.storage-v3.3.3) (2021-10-28)
 
 
