@@ -183,3 +183,75 @@ describe('POST /pins', () => {
     assert(error.details, INVALID_META)
   })
 })
+
+describe('GET /pins/:requestId', () => {
+  let token = null
+  before(async () => {
+    // Create token
+    token = await getTestJWT()
+  })
+
+  it('requires a string as requestId', async () => {
+    const res = await fetch(new URL('pins/UniqueIdOfPinRequest', endpoint).toString(), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+
+    assert(res, 'Server responded')
+    assert(res.ok, 'Server response ok')
+    const data = await res.json()
+    assert(data, 'OK')
+  })
+
+  it('requires requestId', async () => {
+    const res = await fetch(new URL('pins', endpoint).toString(), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+
+    assert(res, 'Server responded')
+    assert(!res.ok)
+  })
+})
+
+describe('GET /delete/:requestId', () => {
+  let token = null
+  before(async () => {
+    // Create token
+    token = await getTestJWT()
+  })
+
+  it('requires a string as requestId', async () => {
+    const res = await fetch(new URL('pins/UniqueIdOfPinRequest', endpoint).toString(), {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+
+    assert(res, 'Server responded')
+    assert(res.ok, 'Server response ok')
+    const data = await res.json()
+    assert(data, 'OK')
+  })
+
+  it('requires requestId', async () => {
+    const res = await fetch(new URL('pins', endpoint).toString(), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+
+    assert(res, 'Server responded')
+    assert(!res.ok)
+  })
+})
