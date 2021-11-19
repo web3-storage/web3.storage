@@ -110,7 +110,7 @@ export async function pinGet (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 export async function pinsGet (request, env, ctx) {
-  const { cid, name, match, status } = await request.json()
+  const { cid, name, match, status } = request.params
 
   // Normalize cid
   if (cid) {
@@ -148,7 +148,7 @@ export async function pinsGet (request, env, ctx) {
   }
 
   // Validate status
-  if (status && typeof !Array.isArray(status)) {
+  if (status && !Array.isArray(status)) {
     const isValidStatus = status.every(v => STATUS_OPTIONS.includes(v))
     if (!isValidStatus) {
       return new JSONResponse(
