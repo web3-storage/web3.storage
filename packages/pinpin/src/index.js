@@ -9,7 +9,7 @@ import debug from 'debug'
 import retry from 'p-retry'
 
 // Note: any other batch size and the request to fetch the PinRequests fails!
-const MAX_PIN_REQUESTS_PER_RUN = 600
+const MAX_PIN_REQUESTS_PER_RUN = 400
 const log = debug('pinpin')
 
 /**

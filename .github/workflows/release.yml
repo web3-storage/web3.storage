@@ -136,11 +136,8 @@ jobs:
           environment: 'production'
 
       # --- DB deploy steps -------------------------------------------------
-      - name: Update FaunaDB resources
-        if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'db' }}
-        run: npm run import -w packages/db
-        env:
-          FAUNA_KEY: ${{ secrets.PROD_FAUNA_KEY }}
+      # - name: Update Postgres resources
+      #   if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'db' }}
 
       # --- Website deploy steps ----------------------------------------------
       - name: Deploy to Cloudflare pages

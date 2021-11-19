@@ -70,6 +70,11 @@ workers_dev = true
 account_id = "4303c6f9fed102b35399fe94af99f8bd"
 vars = { CLUSTER_API_URL = "https://tempus-cluster-api-web3-storage.loca.lt", ENV = "dev" }
 
+[env.paolo]
+workers_dev = true
+account_id = "21ba9b25d0fe2fbefc6c9f17e1b90d86"
+vars = { CLUSTER_API_URL = "https://paolo-cluster-api-web3-storage.loca.lt/", PG_REST_URL = "https://paolo-postgres-api-web3-storage.loca.lt/", ENV = "dev" }
+
 # Add your env here. Override the the values you need to change.
 
 # Create your env name as the value of `whoami` on your system, so you can run `npm start` to run in dev mode.
@@ -77,4 +82,4 @@ vars = { CLUSTER_API_URL = "https://tempus-cluster-api-web3-storage.loca.lt", EN
 # [env.${whoami}]
 # workers_dev = true
 # account_id = "<get me from `wrangler whoami`"
-# vars = { CLUSTER_API_URL = "https://<your ${whoami} here>-cluster-api-web3-storage.loca.lt", ENV = "dev" }
+# vars = { CLUSTER_API_URL = "https://<your ${whoami} here>-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://<your ${whoami} here>-postgres-api-web3-storage.loca.lt", ENV = "dev" }

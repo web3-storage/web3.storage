@@ -44,10 +44,8 @@ jobs:
         with:
           node-version: 16
       - uses: bahmutov/npm-install@v1
-      - name: Update FaunaDB resources
-        run: npm run import -w packages/db
-        env:
-          FAUNA_KEY: ${{ secrets.STAGING_FAUNA_KEY }}
+      # TODO: Update schema on changes
+      # - name: Update Postgres resources
       - name: Test upload to staging
         run: |
           npm run build -w packages/client
