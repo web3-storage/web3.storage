@@ -4,7 +4,7 @@ import { Magic } from 'magic-sdk'
 import Link from '@docusaurus/Link'
 import countly from '@web3-storage/website/lib/countly'
 import Button from '@site/src/components/button'
-import { useResizeObserver } from '@site/sric/hooks/resize-observer'
+import { useResizeObserver } from '@site/src/hooks/resize-observer'
 import clsx from 'clsx'
 
 import Hamburger from '@web3-storage/website/icons/hamburger'
