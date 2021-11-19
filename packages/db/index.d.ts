@@ -22,7 +22,8 @@ import type {
   PinUpsertInput,
   BackupOutput,
   PAPinRequestUpsertOutput,
-  PAPinRequestUpsertInput
+  PAPinRequestUpsertInput,
+  ContentInput
 } from './db-client-types'
 
 export { gql }
@@ -55,6 +56,7 @@ export class DBClient {
   listKeys (userId: number): Promise<Array<AuthKeyItemOutput>>
   createPAPinRequest (pinRequest: PAPinRequestUpsertInput): Promise<PAPinRequestUpsertOutput>
   getPAPinRequest(pinRequestId: string) : Promise<PAPinRequestUpsertOutput>
+  createContent(content: ContentInput, opt?: {updatePinRequests?: boolean}) : Promise<string>
   deleteKey (id: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
 }

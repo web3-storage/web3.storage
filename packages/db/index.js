@@ -813,6 +813,64 @@ export class DBClient {
   }
 
   /**
+   * Creates some content and relative pins, pin_sync_request and pin_requests
+   *
+   * Once the content is created through this function, cron jobs will run to check the
+   * pin status and update them in our db.
+   * At the same time a pin_request is created to duplicate the content on Pinata
+   *
+   * @param {import('./db-client-types').ContentInput} content
+   * @param {object} [opt]
+   * @param {boolean} [opt.updatePinRequests] If provided
+   * @return {Promise<string>} The content cid
+   */
+  async createContent (content, {
+    updatePinRequests = false
+  } = {}) {
+    const now = new Date().toISOString()
+
+    /** @type {{data: string, error: PostgrestError }} */
+    const { data: cid, error: createError } = await this._client
+      .rpc('create_content', {
+        data: {
+          content_cid: content.cid,
+          dag_size: content.dagSize,
+          inserted_at: content.created || now,
+          updated_at: content.updated || now,
+          pins: content.pins.map(pin => ({
+            status: pin.status,
+            location: {
+              peer_id: pin.location.peerId,
+              peer_name: pin.location.peerName,
+              region: pin.location.region
+            }
+          }))
+        }
+      }).single()
+
+    if (createError) {
+      throw new DBError(createError)
+    }
+
+    // Update Pin Request FK
+    if (updatePinRequests) {
+      /** @type {{data: string, error: PostgrestError }} */
+      const { error: updateError } = await this._client
+        .from(PAPinRequestTableName)
+        .update({ content_cid: content.cid })
+        .match({
+          requested_cid: content.cid
+        })
+
+      if (updateError) {
+        throw new DBError(updateError)
+      }
+    }
+
+    return cid
+  }
+
+  /**
    * Get pin requests for a specific auth key.
    *
    * @param {string} authKey
