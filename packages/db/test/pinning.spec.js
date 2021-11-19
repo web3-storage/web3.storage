@@ -26,11 +26,11 @@ const assertCorrectPinRequestOutputTypes = (pinRequestOutput, { withContent = tr
 }
 
 describe('Pin Request', () => {
-  /** @type {DBClient} */
-  const client = new DBClient({
+  /** @type {DBClient & {_client}} */
+  const client = (new DBClient({
     endpoint: 'http://127.0.0.1:3000',
     token
-  })
+  }))
   let user
   let authKey
   /**
