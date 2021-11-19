@@ -36,7 +36,7 @@ All data uploaded to Web3.Storage is available to anyone who requests it using t
 
 #### [Data limits](#data-limits)
 
-Web3.Storage supports uploads up to 32GiB in size per request, and currently has a cap of 1TiB of storage per account. Data limits can be increased at no cost by submitting a request via your Account page when logged in.
+Web3.Storage supports uploads up to 31GiB in size per request, and currently has a cap of 1TiB of storage per account. Data limits can be increased at no cost by submitting a request via your Account page when logged in.
 
 #### [Filecoin deals](#filecoin-deals)
 

@@ -76,17 +76,13 @@ const pinStatusMapping = {
 
 export async function getPinStatusMetrics (client, key) {
   const pinStatus = pinStatusMapping[key]
-  const { count, error } = await client
-    .from('pin')
-    .select('*', { head: true, count: 'exact' })
-    .filter('status', 'eq', pinStatus)
-    .range(0, 1)
+  const { data, error } = await client.rpc('pin_from_status_total', { query_status: pinStatus })
 
   if (error) {
     throw new DBError(error)
   }
 
   return {
-    total: count
+    total: data
   }
 }

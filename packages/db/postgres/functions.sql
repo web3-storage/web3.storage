@@ -207,15 +207,26 @@ CREATE OR REPLACE FUNCTION user_keys_list(query_user_id BIGINT)
   LANGUAGE sql
 AS
 $$
-select  (ak.id)::TEXT as id,
-        ak.name as name,
-        ak.secret as secret,
-        ak.inserted_at as created,
-        count(u.id) as uploads
-from auth_key ak
-left outer join upload u on ak.id = u.auth_key_id
-where ak.user_id = query_user_id and u.deleted_at is null and ak.deleted_at is null
-group by ak.id
+SELECT (ak.id)::TEXT AS id,
+       ak.name AS name,
+       ak.secret AS secret,
+       ak.inserted_at AS created,
+       CASE WHEN EXISTS(SELECT 42 FROM upload u WHERE ak.id = u.auth_key_id AND u.deleted_at IS NULL) THEN 1::BIGINT ELSE 0::BIGINT END
+  FROM auth_key ak
+ WHERE ak.user_id = query_user_id AND ak.deleted_at IS NULL
+$$;
+
+CREATE OR REPLACE FUNCTION pin_from_status_total(query_status TEXT) RETURNS TEXT
+  LANGUAGE plpgsql
+AS
+$$
+BEGIN
+  return(
+    select count(*)
+    from pin
+    where status = (query_status)::pin_status_type
+  )::TEXT;
+END
 $$;
 
 CREATE OR REPLACE FUNCTION content_dag_size_total() RETURNS TEXT

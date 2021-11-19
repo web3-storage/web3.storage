@@ -207,7 +207,7 @@ export type UploadOutput = definitions['upload'] & {
 export type Location = {
   id?: definitions['pin_location']['id']
   peerId: definitions['pin_location']['peer_id']
-  peerName: definitions['pin_location']['peer_name']
+  peerName?: definitions['pin_location']['peer_name']
   region?: definitions['pin_location']['region']
 }
 

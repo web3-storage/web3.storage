@@ -43,12 +43,12 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
       {
         link: 'https://docs.web3.storage/',
         name: 'Docs',
-        spacing: `p-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
+        spacing: 'p-3 md:px-6'
       },
       {
         link: '/about',
         name: 'About',
-        spacing: `p-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
+        spacing: 'p-3 md:px-6'
       },
       {
         link: '/files',
@@ -58,9 +58,9 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
       {
         link: '/account',
         name: 'Account',
-        spacing: `p-3 md:px-6 mr-3 md:mr-6`
+        spacing: `p-3 md:px-6`
       }
-    ], [isLoggedIn])
+    ], [])
 
   const queryClient = useQueryClient()
   const onLinkClick = useCallback((event) => {
@@ -85,7 +85,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
     <Button
       onClick={logout}
       id="logout"
-      wrapperClassName="inline-block"
+      wrapperClassName="inline-block ml-3 md:ml-6"
       variant="outlined"
       small={isSmallVariant}
       tracking={{
@@ -98,13 +98,13 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   )
 
   const loginButton = (
-    <Button href="/login" id="login" wrapperClassName="inline-block" small={isSmallVariant} tracking={{ ui: countly.ui.NAVBAR, action: 'Login' }}>
+    <Button href="/login" id="login" wrapperClassName="inline-block ml-3 md:ml-6" small={isSmallVariant} tracking={{ ui: countly.ui.NAVBAR, action: 'Login' }}>
       Login
     </Button>
     )
 
   const spinnerButton = (
-    <Button href="#" id="loading-user" wrapperClassName="inline-block" small={isSmallVariant} >
+    <Button href="#" id="loading-user" wrapperClassName="inline-block ml-3 md:ml-6" small={isSmallVariant} >
       <Loading className='user-spinner' fill='white' height={10} />
     </Button>
   )

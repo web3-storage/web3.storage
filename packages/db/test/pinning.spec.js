@@ -1,7 +1,6 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 import { DBClient } from '../index'
-import { PostgresClient } from '../postgres/client'
 import { createUpload, createUser, createUserAuthKey, token } from './utils.js'
 
 const pinRequestTable = 'pa_pin_request'
@@ -27,8 +26,8 @@ const assertCorrectPinRequestOutputTypes = (pinRequestOutput, { withContent = tr
 }
 
 describe('Pin Request', () => {
-  /** @type {PostgresClient} */
-  const client = new PostgresClient({
+  /** @type {DBClient} */
+  const client = new DBClient({
     endpoint: 'http://127.0.0.1:3000',
     token
   })
