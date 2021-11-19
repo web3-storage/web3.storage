@@ -88,7 +88,6 @@ export async function resolve (service, key) {
   const res = await ok(fetch(url.toString()))
   const { record } = await res.json()
   const entry = ipns.unmarshal(uint8ArrayFromString(record, 'base64pad'))
-  // TODO: ensure not expired?
   await ipns.validate(pubKey, entry)
   return { value: uint8ArrayToString(entry.value), record }
 }
