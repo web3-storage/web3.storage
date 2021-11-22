@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import clsx from 'clsx'
 
-import styles from './button.module.scss';
+import styles from './button.module.css';
 
 /**
  * @typedef {Object} ButtonProps
@@ -50,10 +50,10 @@ const Button = ({
       </button>
     </div>
   )
-  return href 
+  return href
     ? <Link href={href}>
         {btn}
-      </Link> 
+      </Link>
     : btn
 }
 

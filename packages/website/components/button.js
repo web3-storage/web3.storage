@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import ZeroButton from 'ZeroComponents/button/button'
 import countly from '../lib/countly'
 
-import styles from './button.module.scss';
+import styles from './button.module.css'
 
 export const ButtonVariant = {
   DARK: 'dark',
@@ -31,7 +31,7 @@ const Button = ({ tracking, onClick, href, ...props }) => {
     })
     onClick && onClick(event)
   }, [])
-  
+
   return <ZeroButton {...props} onClick={onClickHandler} />
 }
 

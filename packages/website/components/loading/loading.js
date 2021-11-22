@@ -1,7 +1,7 @@
 import { ReactComponent as SpinnerIcon } from 'Icons/spinner.svg'
 import clsx from 'clsx'
 
-import styles from './loading.module.scss';
+import styles from './loading.module.css';
 
 export const SpinnerSize = {
   SMALL: 'small',

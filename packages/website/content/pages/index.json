@@ -1,0 +1,29 @@
+{
+  "seo": {
+    "title": "",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "page_content": [
+    [
+      {
+        "id": "hero_header",
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-10"
+            },
+            "heading": "The easiest way to store data on the decentralized web.",
+            "subheading": "Store your data using our simple API. It’s fast, open, and it’s free."
+          }
+        ]
+      }
+    ]
+  ]
+}

@@ -220,3 +220,7 @@ body {
 .prose h4 > a {
   text-decoration: none;
 }
+
+.image-full-width {
+  width: 100%;
+}
