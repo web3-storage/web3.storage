@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import ZeroButton from 'ZeroComponents/button/button'
 import countly from '../lib/countly'
 
-import styles from './button.module.css';
+import styles from './button.module.scss';
 
 export const ButtonVariant = {
   DARK: 'dark',
