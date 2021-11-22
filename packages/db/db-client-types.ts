@@ -159,24 +159,6 @@ export type ContentItemOutput = {
 }
 
 
-// Content
-export interface CreateUploadInput {
-  user: definitions['upload']['user_id']
-  authKey: definitions['upload']['auth_key_id']
-  contentCid: definitions['upload']['content_cid']
-  sourceCid: definitions['upload']['source_cid']
-  type: definitions['upload']['type']
-  name?: definitions['upload']['name']
-  dagSize?: definitions['content']['dag_size']
-  created?: definitions['upload']['inserted_at']
-  updated?: definitions['upload']['updated_at']
-  pins: Array<{
-    status: definitions['pin']['status']
-    location: Location
-  }>,
-  backupUrls: Array<definitions['backup']['url']>
-}
-
 // Upload
 export interface CreateUploadInput {
   user: definitions['upload']['user_id']
