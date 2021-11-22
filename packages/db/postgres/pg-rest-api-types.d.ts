@@ -1301,6 +1301,25 @@ export interface paths {
       };
     };
   };
+  "/rpc/create_content": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/user_keys_list": {
     post: {
       parameters: {
@@ -1326,6 +1345,25 @@ export interface paths {
         body: {
           args: {
             "": string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/pin_from_status_total": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            query_status: string;
           };
         };
         header: {
