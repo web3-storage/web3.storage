@@ -132,7 +132,6 @@ export class DBClient {
    * @returns {Promise<import('./db-client-types').CreateUploadOutput>}
    */
   async createUpload (data) {
-    // TODO(paolo): refactor this to be createContent, and optionally an upload
     const now = new Date().toISOString()
     /** @type {{ data: string, error: PostgrestError }} */
     const { data: uploadResponse, error } = await this._client.rpc('create_upload', {
@@ -835,8 +834,8 @@ export class DBClient {
         data: {
           content_cid: content.cid,
           dag_size: content.dagSize,
-          inserted_at: content.created || now,
-          updated_at: content.updated || now,
+          inserted_at: now,
+          updated_at: now,
           pins: content.pins.map(pin => ({
             status: pin.status,
             location: {
@@ -855,12 +854,12 @@ export class DBClient {
     // Update Pin Request FK
     if (updatePinRequests) {
       /** @type {{data: string, error: PostgrestError }} */
-      const { error: updateError } = await this._client
+      const { error: updateError } = (await this._client
         .from(PAPinRequestTableName)
         .update({ content_cid: content.cid })
         .match({
           requested_cid: content.cid
-        })
+        }))
 
       if (updateError) {
         throw new DBError(updateError)
