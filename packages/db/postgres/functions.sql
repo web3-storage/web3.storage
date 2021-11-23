@@ -295,7 +295,7 @@ WHERE ae.cid_v1 = ANY (cids)
 ORDER BY de.entry_last_updated
 $$;
 
-CREATE OR REPLACE FUNCTION publish_name_record(data json) RETURNS TEXT
+CREATE OR REPLACE FUNCTION publish_name_record(data json) RETURNS VOID
     LANGUAGE plpgsql
     volatile
     PARALLEL UNSAFE
@@ -320,6 +320,5 @@ BEGIN
         ((data ->> 'has_v2_sig')::BOOLEAN = name.has_v2_sig AND (data ->> 'seqno')::BIGINT > name.seqno) OR
         ((data ->> 'has_v2_sig')::BOOLEAN = name.has_v2_sig AND (data ->> 'seqno')::BIGINT = name.seqno AND (data ->> 'validity')::BIGINT > name.validity) OR
         ((data ->> 'has_v2_sig')::BOOLEAN = name.has_v2_sig AND (data ->> 'seqno')::BIGINT = name.seqno AND (data ->> 'validity')::BIGINT = name.validity AND DECODE(data ->> 'record', 'base64') > DECODE(name.record, 'base64'));
-  RETURN data ->> 'key';
 END
 $$;

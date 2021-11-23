@@ -30,7 +30,6 @@
     "git-rev-sync": "^3.0.1",
     "git-revision-webpack-plugin": "^5.0.0",
     "ipfs-unixfs-importer": "^9.0.4",
-    "libp2p-crypto": "^0.20.0",
     "mocha": "^9.1.3",
     "npm-run-all": "^4.1.5",
     "playwright-test": "^7.0.1",
@@ -54,11 +53,12 @@
     "@nftstorage/ipfs-cluster": "^3.3.1",
     "@web3-storage/db": "^3.0.0",
     "@web3-storage/multipart-parser": "^1.0.0",
+    "cborg": "^1.5.3",
     "ipfs-car": "^0.5.8",
-    "ipns": "^0.15.0",
     "itty-router": "^2.3.10",
     "multiformats": "^9.0.4",
     "p-retry": "^4.6.1",
+    "protobufjs": "^6.11.2",
     "uint8arrays": "^3.0.0"
   },
   "bundlesize": [

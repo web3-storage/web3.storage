@@ -1,9 +1,10 @@
-import * as uint8arrays from 'uint8arrays'
-import * as ipns from 'ipns'
+import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string'
+import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
+import * as ipns from './utils/ipns/index.js'
 import * as Digest from 'multiformats/hashes/digest'
 import { base36 } from 'multiformats/bases/base36'
 import { CID } from 'multiformats/cid'
-import { keys } from 'libp2p-crypto'
+import * as ed25519 from './utils/crypto/ed25519.js'
 import { PreciseDate } from '@google-cloud/precise-date'
 import { HTTPError } from './errors.js'
 import { JSONResponse } from './utils/json-response.js'
@@ -26,10 +27,10 @@ export async function nameGet (request, env) {
     throw new HTTPError(`record not found for key: ${key}`, 404)
   }
 
-  const { value } = ipns.unmarshal(uint8arrays.fromString(rawRecord, 'base64pad'))
+  const { value } = ipns.unmarshal(uint8ArrayFromString(rawRecord, 'base64pad'))
 
   return new JSONResponse({
-    value: uint8arrays.toString(value),
+    value: uint8ArrayToString(value),
     record: rawRecord
   })
 }
@@ -47,10 +48,10 @@ export async function namePost (request, env) {
   }
 
   const record = await request.text()
-  const entry = ipns.unmarshal(uint8arrays.fromString(record, 'base64pad'))
-  const pubKey = keys.unmarshalPublicKey(Digest.decode(keyCid.multihash.bytes).bytes)
+  const entry = ipns.unmarshal(uint8ArrayFromString(record, 'base64pad'))
+  const pubKey = ed25519.unmarshalPublicKey(Digest.decode(keyCid.multihash.bytes).bytes)
 
-  if (entry.pubKey && !keys.unmarshalPublicKey(entry.pubKey).equals(pubKey)) {
+  if (entry.pubKey && !ed25519.unmarshalPublicKey(entry.pubKey).equals(pubKey)) {
     throw new HTTPError('embedded public key mismatch', 400)
   }
 
@@ -61,7 +62,7 @@ export async function namePost (request, env) {
     record,
     Boolean(entry.signatureV2),
     entry.sequence,
-    new PreciseDate(uint8arrays.toString(entry.validity)).getFullTime()
+    new PreciseDate(uint8ArrayToString(entry.validity)).getFullTime()
   )
 
   return new JSONResponse({ id: key }, { status: 202 })
