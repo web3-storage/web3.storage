@@ -73,14 +73,14 @@ export function envAll (_, env, event) {
     env.s3BucketName = env.S3_BUCKET_NAME || S3_BUCKET_NAME
     env.s3BucketRegion = env.S3_BUCKET_REGION || S3_BUCKET_REGION
 
-    // env.s3Client = new S3Client({
-    //   endpoint: s3Endpoint,
-    //   forcePathStyle: !!s3Endpoint, // Force path if endpoint provided
-    //   region: env.S3_BUCKET_REGION || S3_BUCKET_REGION,
-    //   credentials: {
-    //     accessKeyId: env.S3_ACCESS_KEY_ID || S3_ACCESS_KEY_ID,
-    //     secretAccessKey: env.S3_SECRET_ACCESS_KEY_ID || S3_SECRET_ACCESS_KEY_ID
-    //   }
-    // })
+    env.s3Client = new S3Client({
+      endpoint: s3Endpoint,
+      forcePathStyle: !!s3Endpoint, // Force path if endpoint provided
+      region: env.S3_BUCKET_REGION || S3_BUCKET_REGION,
+      credentials: {
+        accessKeyId: env.S3_ACCESS_KEY_ID || S3_ACCESS_KEY_ID,
+        secretAccessKey: env.S3_SECRET_ACCESS_KEY_ID || S3_SECRET_ACCESS_KEY_ID
+      }
+    })
   }
 }
