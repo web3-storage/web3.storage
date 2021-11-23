@@ -13,7 +13,7 @@ module.exports = ({ body }) => {
         pieceCid: 'baga',
         dataCid: 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm',
         dataModelSelector: 'Links/0/Links',
-        activation: '<iso timestamp>',
+        dealActivation: '<iso timestamp>',
         created: '2021-07-14T19:27:14.934572Z',
         updated: '2021-07-14T19:27:14.934572Z'
       },
@@ -24,7 +24,7 @@ module.exports = ({ body }) => {
         pieceCid: 'baga',
         dataCid: 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm',
         dataModelSelector: 'Links/0/Links',
-        activation: '<iso timestamp>',
+        dealActivation: '<iso timestamp>',
         created: '2021-07-14T19:27:14.934572Z',
         updated: '2021-07-14T19:27:14.934572Z'
       }
