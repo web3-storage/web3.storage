@@ -9,6 +9,15 @@ const ERROR_NON_ED25519_PUBLIC_KEY = 'ERROR_NON_ED25519_PUBLIC_KEY'
 const ERROR_INVALID_KEY_LENGTH = 'ERROR_INVALID_KEY_LENGTH'
 
 /**
+ * NODE-ED25519 exists only in the CloudFlare workers runtime API
+ * see: https://developers.cloudflare.com/workers/runtime-apis/web-crypto#footnote%201
+ */
+const CLOUDFLARE_ED25519 = {
+  name: 'NODE-ED25519',
+  namedCurve: 'NODE-ED25519'
+}
+
+/**
  * @param {Uint8Array} buf
  */
 export function unmarshalPublicKey (buf) {
@@ -26,9 +35,8 @@ class Ed25519PublicKey {
   }
 
   async verify (data, sig) {
-    const alg = { name: 'NODE-ED25519', namedCurve: 'NODE-ED25519' }
-    const cryptoKey = await crypto.subtle.importKey('raw', this._key, alg, false, ['verify'])
-    return crypto.subtle.verify(alg, cryptoKey, sig, data)
+    const cryptoKey = await crypto.subtle.importKey('raw', this._key, CLOUDFLARE_ED25519, false, ['verify'])
+    return crypto.subtle.verify(CLOUDFLARE_ED25519, cryptoKey, sig, data)
   }
 
   marshal () {
