@@ -43,5 +43,11 @@ export function normalizePins (pins) {
     peerId: pin.location.peerId,
     peerName: pin.location.peerName,
     region: pin.location.region
-  }))
+  })).filter(pin => PIN_STATUS.has(pin.status))
 }
+
+const PIN_STATUS = new Set([
+  'Pinned',
+  'Pinning',
+  'PinQueued'
+])
