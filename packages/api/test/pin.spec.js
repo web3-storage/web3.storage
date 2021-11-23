@@ -4,7 +4,7 @@ import { endpoint } from './scripts/constants.js'
 import * as JWT from '../src/utils/jwt.js'
 import { SALT } from './scripts/worker-globals.js'
 import { JWT_ISSUER } from '../src/constants.js'
-import { ERROR_CODE, ERROR_STATUS, INVALID_CID, INVALID_META, INVALID_NAME, INVALID_ORIGINS } from '../src/pins.js'
+import { ERROR_CODE, ERROR_STATUS, INVALID_CID, INVALID_META, INVALID_NAME, INVALID_ORIGINS, REQUIRED_CID } from '../src/pins.js'
 
 function getTestJWT (sub = 'test', name = 'test') {
   return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
@@ -32,7 +32,7 @@ describe('POST /pins', () => {
     assert(res, 'Server responded')
     assert(res.ok, 'Server response ok')
     const data = await res.json()
-    assert(data, 'OK')
+    assert.strictEqual(data, 'OK')
   })
 
   it('requires cid', async () => {
@@ -46,10 +46,11 @@ describe('POST /pins', () => {
     })
 
     assert(res, 'Server responded')
-    assert(res.status, `${ERROR_CODE}`)
+    assert.strictEqual(res.status, ERROR_CODE)
     const data = await res.json()
     const error = data.error
-    assert(error.reason, INVALID_CID)
+    assert.strictEqual(error.reason, ERROR_STATUS)
+    assert.strictEqual(error.details, REQUIRED_CID)
   })
 
   it('throws error if cid is invalid', async () => {
@@ -65,10 +66,11 @@ describe('POST /pins', () => {
     })
 
     assert(res, 'Server responded')
-    assert(res.status, `${ERROR_CODE}`)
+    assert.strictEqual(res.status, ERROR_CODE)
     const data = await res.json()
     const error = data.error
-    assert(error.reason, INVALID_CID)
+    assert.strictEqual(error.reason, ERROR_STATUS)
+    assert.strictEqual(error.details, INVALID_CID)
   })
 
   it('should receive pin data containing cid, name, origin, meta', async () => {
@@ -94,7 +96,7 @@ describe('POST /pins', () => {
     assert(res, 'Server responded')
     assert(res.ok, 'Server response ok')
     const data = await res.json()
-    assert(data, 'OK')
+    assert.strictEqual(data, 'OK')
   })
 
   it('validates name', async () => {
@@ -111,11 +113,11 @@ describe('POST /pins', () => {
     })
 
     assert(res, 'Server responded')
-    assert(res.status, `${ERROR_CODE}`)
+    assert.strictEqual(res.status, ERROR_CODE)
     const data = await res.json()
     const error = data.error
-    assert(error.reason, ERROR_STATUS)
-    assert(error.details, INVALID_NAME)
+    assert.strictEqual(error.reason, ERROR_STATUS)
+    assert.strictEqual(error.details, INVALID_NAME)
   })
 
   it('validates origins', async () => {
@@ -132,11 +134,11 @@ describe('POST /pins', () => {
     })
 
     assert(res, 'Server responded')
-    assert(res.status, `${ERROR_CODE}`)
+    assert.strictEqual(res.status, ERROR_CODE)
     const data = await res.json()
     const error = data.error
-    assert(error.reason, ERROR_STATUS)
-    assert(error.details, INVALID_ORIGINS)
+    assert.strictEqual(error.reason, ERROR_STATUS)
+    assert.strictEqual(error.details, INVALID_ORIGINS)
   })
 
   it('validates meta', async () => {
@@ -153,11 +155,11 @@ describe('POST /pins', () => {
     })
 
     assert(res, 'Server responded')
-    assert(res.status, `${ERROR_CODE}`)
+    assert.strictEqual(res.status, ERROR_CODE)
     const data = await res.json()
     const error = data.error
-    assert(error.reason, ERROR_STATUS)
-    assert(error.details, INVALID_META)
+    assert.strictEqual(error.reason, ERROR_STATUS)
+    assert.strictEqual(error.details, INVALID_META)
   })
 
   it('validates meta values', async () => {
@@ -176,11 +178,11 @@ describe('POST /pins', () => {
     })
 
     assert(res, 'Server responded')
-    assert(res.status, `${ERROR_CODE}`)
+    assert.strictEqual(res.status, ERROR_CODE)
     const data = await res.json()
     const error = data.error
-    assert(error.reason, ERROR_STATUS)
-    assert(error.details, INVALID_META)
+    assert.strictEqual(error.reason, ERROR_STATUS)
+    assert.strictEqual(error.details, INVALID_META)
   })
 })
 
@@ -203,7 +205,7 @@ describe('GET /pins/:requestId', () => {
     assert(res, 'Server responded')
     assert(res.ok, 'Server response ok')
     const data = await res.json()
-    assert(data, 'OK')
+    assert.strictEqual(data, 'OK')
   })
 
   it('requires requestId', async () => {
@@ -239,7 +241,7 @@ describe('GET /delete/:requestId', () => {
     assert(res, 'Server responded')
     assert(res.ok, 'Server response ok')
     const data = await res.json()
-    assert(data, 'OK')
+    assert.strictEqual(data, 'OK')
   })
 
   it('requires requestId', async () => {
