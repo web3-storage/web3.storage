@@ -1,0 +1,23 @@
+.navigation {
+  position: relative;
+  z-index: 1;
+}
+
+.navBar,
+.navItemsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.siteLogo {
+  width: 2rem;
+}
+
+.mobilePanel {
+  display: none;
+}
+
+.open {
+  display: block;
+}

@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import clsx from 'clsx'
 import Footer from './footer.js'
-import Navbar from './navbar.js'
+import Navbar from './navbar'
 import Loading from './loading/loading'
 import { useLoggedIn } from '../lib/user'
 import { getVersion } from '../lib/api'
@@ -87,7 +87,6 @@ export default function Layout({
   title = 'Web3 Storage - The simple file storage service for IPFS & Filecoin.',
   description = 'With Web3.Storage you get all the benefits of decentralized storage and content addressing with the frictionless experience you expect in a modern storage solution. It’s fast, open and it’s free.',
   pageBgColor = 'bg-w3storage-background',
-  navBgColor = 'bg-w3storage-background',
   footerBgColor,
   data = null,
   highlightMessage,
@@ -116,7 +115,7 @@ export default function Layout({
       </Head>
       {shouldWaitForLoggedIn ? (
         <>
-          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
+          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} />
             <Loading />
           <Footer bgColor={footerBgColor} />
         </>
@@ -128,7 +127,7 @@ export default function Layout({
       ) : (
         <>
           <MessageBanner highlightMessage={ highlightMessage }/>
-          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
+          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} />
           {children({ isLoggedIn, data })}
           <Footer bgColor={footerBgColor} />
         </>
