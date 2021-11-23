@@ -16,10 +16,10 @@ import Triangle from '../../assets/illustrations/triangle'
 import styles from './hero.module.css'
 
 /**
- * @param {Object} props.headerContent
+ * @param {Object} props.block
 */
 
-export default function Hero({headerContent}) {
+export default function Hero({block}) {
   return (
     <div className={ clsx("relative w-full z-0 flex", styles.container) }>
       <div className={ styles.topSection }>
@@ -38,8 +38,8 @@ export default function Hero({headerContent}) {
 
         <div className="mx-auto max-w-4xl text-center pt-6 md:pt-20">
           <hgroup className="text-w3storage-purple mb-16 px-4">
-            <h1 className="mb-10 text-4xl sm:text-5xl md:text-7xl">{ headerContent.columns[0].heading }</h1>
-            <h2 className="space-grotesk text-xl sm:text-2xl typography-hero-subtitle mb-5">{ headerContent.columns[0].subheading }</h2>
+            <h1 className="mb-10 text-4xl sm:text-5xl md:text-7xl">{ block.heading }</h1>
+            <h2 className="space-grotesk text-xl sm:text-2xl typography-hero-subtitle mb-5">{ block.subheading }</h2>
           </hgroup>
           <Button
             href="/login"

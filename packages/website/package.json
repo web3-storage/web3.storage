@@ -27,6 +27,7 @@
     "react-if": "^4.0.1",
     "react-markdown": "^6.0.2",
     "react-query": "^3.13.9",
+    "react-redux": "^7.2.6",
     "react-syntax-highlighter": "^11.0.3",
     "remark-slug": "^6.1.0",
     "web3.storage": "^3.0.0"

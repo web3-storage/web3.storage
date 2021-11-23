@@ -1,6 +1,9 @@
 import React from 'react'
+import clsx from 'clsx';
 
+import Hero from './hero'
 import TextBlock from './textblock'
+import ImageBlock from './imageblock'
 
 class BlockBuilder extends React.Component {
   constructor(props) {
@@ -8,16 +11,30 @@ class BlockBuilder extends React.Component {
     this.getComponent = this.getComponent.bind(this);
   }
 
+  getCustomComponents (customizations) {
+    if (Array.isArray(customizations)){
+      return (
+        <>
+          {customizations.map(block => (
+            <>
+            { this.getComponent(block) }
+            </>
+          ))}
+        </>
+      )
+    }
+    return false
+  }
+
   getComponent (column) {
     let component = ''
     switch (column.type) {
-      case 'text_block' : return <TextBlock block={column}/>; break
-      case 'image_block' : name = 'ImageBlock'; break
-      case 'video_block' : name = 'VideoBlock'; break
-      case 'accordion_block' : name = 'AccordionBlock'; break
-      case 'card_list_block' : name = 'CardListBlock'; break
-      case 'paginated_cards' : name = 'PaginatedCards'; break
-      // case 'custom' : return (`<${column.component}/>`) ; break
+      case 'hero' : return <Hero block={column}/>;
+      case 'text_block' : return <TextBlock block={column}/>;
+      case 'image_block' : return <ImageBlock block={column}/>;
+      case 'card_list_block' : return <CardListBlock block={column}/>;
+      case 'sectional' : return <BlockBuilder subsections={column.subsections} />;
+      case 'custom' : return this.getCustomComponents(column.customizations)
     }
   }
 
@@ -33,7 +50,7 @@ class BlockBuilder extends React.Component {
               {subsection.columns.map((column, index) => (
                 <div
                   key={`${subsection.id}-column-${index}`}
-                  className="col-count"
+                  className={ clsx("col-count", `column-${index}`) }
                   data-push-left="off-count"
                   data-push-right="off-count">
                   <div class="column-content">
@@ -50,18 +67,3 @@ class BlockBuilder extends React.Component {
 }
 
 export default BlockBuilder
-
-// {/* ======================================= [Block] Custom */}
-// <template v-if="block.type === 'custom'">
-//   <component
-//     :is="component.name"
-//     v-for="(component, componentKey) in block.customizations"
-//     :key="componentKey"
-//     :class="`block__${blockId}`"
-//     v-bind="component.props" />
-// </template>
-
-//   {/* ================== Recursive Sectional/Block imports */}
-// <BlockBuilder
-//   v-else
-//   :sections="block.sections" />

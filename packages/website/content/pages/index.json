@@ -15,7 +15,7 @@
         "id": "hero_header",
         "columns": [
           {
-            "type": "text_block",
+            "type": "hero",
             "cols": {
               "num": "col-10"
             },

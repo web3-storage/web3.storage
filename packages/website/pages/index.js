@@ -38,12 +38,10 @@ export function getStaticProps() {
 }
 
 export default function Home() {
-  const headerContent = IndexPageData.page_content[0]
   const sections = IndexPageData.page_content
   return (
     <>
-      <Hero headerContent={headerContent[0]} />
-      <main className="z-10 transform-gpu">
+      <main>
         {sections.map((section, index) => (
           <BlockBuilder
             key={`section_${index}`}
