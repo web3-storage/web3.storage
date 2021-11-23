@@ -1,6 +1,6 @@
 import { PostgrestClient } from '@supabase/postgrest-js'
 
-import { normalizeUpload, normalizeContent, normalizePins } from './utils.js'
+import { normalizeUpload, normalizeContent, normalizePins, normalizePaPinRequest } from './utils.js'
 import { DBError } from './errors.js'
 import {
   getUserMetrics,
@@ -19,6 +19,18 @@ const uploadQuery = `
         updated:updated_at,
         content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region)))
       `
+
+const PAPinRequestTableName = 'pa_pin_request'
+const pinRequestSelect = `
+  _id:id::text,
+  requestedCid:requested_cid,
+  contentCid:content_cid,
+  authKey:auth_key_id,
+  name,
+  created:inserted_at,
+  updated:updated_at,
+  content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region)))  `
+
 /**
  * @typedef {import('./postgres/pg-rest-api-types').definitions} definitions
  * @typedef {import('@supabase/postgrest-js').PostgrestError} PostgrestError
@@ -556,7 +568,7 @@ export class DBClient {
    * @return {Promise<Record<string, import('./db-client-types').Deal[]>>}
    */
   async getDealsForCids (cids = []) {
-    /** @type {{ data: Array<import('../db-client-types').Deal>, error: PostgrestError }} */
+    /** @type {{ data: Array<import('./db-client-types').Deal>, error: PostgrestError }} */
     const { data, error } = await this._client
       .rpc('find_deals_by_content_cids', {
         cids
@@ -733,5 +745,138 @@ export class DBClient {
       default:
         throw new Error('unknown metric requested')
     }
+  }
+
+  /**
+   * Creates a Pin Request.
+   *
+   * @param {import('./db-client-types').PAPinRequestUpsertInput} pinRequest
+   * @return {Promise<import('./db-client-types').PAPinRequestUpsertOutput>}
+   */
+  async createPAPinRequest (pinRequest) {
+    /** @type { import('./db-client-types').PAPinRequestUpsertOutput } */
+
+    // TODO is there a better way to avoid 2 queries?
+    // ie. before insert trigger https://dba.stackexchange.com/questions/27178/handling-error-of-foreign-key
+    /** @type {{data: {cid: string}}} */
+    const { data: content } = await this._client
+      .from('content')
+      .select('cid')
+      .eq('cid', pinRequest.requestedCid)
+      .single()
+
+    const toInsert = {
+      requested_cid: pinRequest.requestedCid,
+      auth_key_id: pinRequest.authKey,
+      name: pinRequest.name
+    }
+
+    // If content already exists updated foreigh key
+    if (content?.cid) {
+      toInsert.content_cid = content.cid
+    }
+
+    /** @type {{data: import('./db-client-types').PAPinRequestItem, error: PostgrestError }} */
+    const { data, error } = await this._client
+      .from(PAPinRequestTableName)
+      .insert(toInsert)
+      .select(pinRequestSelect)
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return normalizePaPinRequest(data)
+  }
+
+  /**
+   * Get a Pin Request by id
+   *
+   * @param {string} pinRequestId
+   * @return {Promise<import('./db-client-types').PAPinRequestUpsertOutput>}
+   */
+  async getPAPinRequest (pinRequestId) {
+    /** @type {{data: import('./db-client-types').PAPinRequestItem, error: PostgrestError }} */
+    const { data, error } = await this._client
+      .from(PAPinRequestTableName)
+      .select(pinRequestSelect)
+      .eq('id', pinRequestId)
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return normalizePaPinRequest(data)
+  }
+
+  /**
+   * Creates some content and relative pins, pin_sync_request and pin_requests
+   *
+   * Once the content is created through this function, cron jobs will run to check the
+   * pin status and update them in our db.
+   * At the same time a pin_request is created to duplicate the content on Pinata
+   *
+   * @param {import('./db-client-types').ContentInput} content
+   * @param {object} [opt]
+   * @param {boolean} [opt.updatePinRequests] If provided
+   * @return {Promise<string>} The content cid
+   */
+  async createContent (content, {
+    updatePinRequests = false
+  } = {}) {
+    const now = new Date().toISOString()
+
+    /** @type {{data: string, error: PostgrestError }} */
+    const { data: cid, error: createError } = await this._client
+      .rpc('create_content', {
+        data: {
+          content_cid: content.cid,
+          dag_size: content.dagSize,
+          inserted_at: now,
+          updated_at: now,
+          pins: content.pins.map(pin => ({
+            status: pin.status,
+            location: {
+              peer_id: pin.location.peerId,
+              peer_name: pin.location.peerName,
+              region: pin.location.region
+            }
+          }))
+        }
+      }).single()
+
+    if (createError) {
+      throw new DBError(createError)
+    }
+
+    // Update Pin Request FK
+    if (updatePinRequests) {
+      /** @type {{data: string, error: PostgrestError }} */
+      const { error: updateError } = (await this._client
+        .from(PAPinRequestTableName)
+        .update({ content_cid: content.cid })
+        .match({
+          requested_cid: content.cid
+        }))
+
+      if (updateError) {
+        throw new DBError(updateError)
+      }
+    }
+
+    return cid
+  }
+
+  /**
+   * Get pin requests for a specific auth key.
+   *
+   * @param {string} authKey
+   * @param {object} opt
+   * @return {Promise<Array<import('./db-client-types').PAPinRequestUpsertOutput>>}
+   */
+  async listPAPinRequests (authKey, opt) {
+    throw new Error('Not implemented')
   }
 }

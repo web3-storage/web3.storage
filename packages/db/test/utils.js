@@ -7,6 +7,7 @@ export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZ
  * @param {string} [options.email]
  * @param {string} [options.issuer]
  * @param {string} [options.publicAddress]
+ * @return {Promise.<import('../db-client-types').UserOutput>}
  */
 export async function createUser (dbClient, options = {}) {
   const issuer = options.issuer || `issuer${Math.random()}`

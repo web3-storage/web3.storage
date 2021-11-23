@@ -15,6 +15,24 @@ export function normalizeUpload (upload) {
   }
 }
 
+// TODO: this looks really similar to normalizeUpload.
+// should be merged together
+/**
+ * Normalize pin request
+ *
+ * @param {object} paPinRequest
+ * @return {import('../db-client-types').PAPinRequestUpsertOutput}
+ */
+export function normalizePaPinRequest (paPinRequest) {
+  const nPaPinRequest = { ...paPinRequest }
+  delete nPaPinRequest.content
+
+  return {
+    ...nPaPinRequest,
+    pins: paPinRequest.content?.pins ? normalizePins(paPinRequest.content.pins) : []
+  }
+}
+
 /**
  * Normalize content item.
  *

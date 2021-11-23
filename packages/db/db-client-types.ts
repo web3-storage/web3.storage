@@ -2,7 +2,7 @@ import { definitions } from './postgres/pg-rest-api-types'
 
 // User
 export type UpsertUserInput = {
-  id: definitions['user']['id'],
+  id?: definitions['user']['id'],
   name: definitions['user']['name'],
   picture?: definitions['user']['picture'],
   email: definitions['user']['email'],
@@ -129,6 +129,16 @@ export type Deal = {
 }
 
 // Content
+export type ContentInput = {
+  cid: definitions['content']['cid']
+  dagSize: definitions['content']['dag_size']
+  pins: Array<{
+    status: definitions['pin']['status']
+    updated: definitions['pin']['updated_at']
+    location: Location
+  }>
+}
+
 export type ContentItem = {
   cid: definitions['content']['cid']
   dagSize: definitions['content']['dag_size']
@@ -178,15 +188,7 @@ export type UploadItem = {
   name?: definitions['upload']['name']
   created?: definitions['upload']['inserted_at']
   updated?: definitions['upload']['updated_at']
-  content: {
-    cid: definitions['content']['cid']
-    dagSize: definitions['content']['dag_size']
-    pins: Array<{
-      status: definitions['pin']['status']
-      updated: definitions['pin']['updated_at']
-      location: Location
-    }>
-  }
+  content: ContentItem
 }
 
 export type UploadItemOutput = {
@@ -240,4 +242,31 @@ export type ListUploadsOptions = {
    * Sort order.
    */
   sortOrder?: 'Asc' | 'Desc'
+}
+
+
+// Pinninng
+
+// PinRequest
+export type PAPinRequestUpsertInput = {
+  id?: string,
+  name?: definitions['pa_pin_request']['name'],
+  authKey: string,
+  requestedCid: definitions['pa_pin_request']['requested_cid'],
+}
+
+export type PAPinRequestItem = PAPinRequestUpsertInput & {
+  _id: string,
+  contentCid: definitions['pa_pin_request']['content_cid']
+  created: definitions['upload']['inserted_at']
+  updated: definitions['upload']['updated_at']
+  content: ContentItem
+}
+
+export type PAPinRequestUpsertOutput = PAPinRequestUpsertInput & {
+  _id: string,
+  contentCid: definitions['pa_pin_request']['content_cid']
+  created: definitions['pa_pin_request']['inserted_at']
+  updated: definitions['pa_pin_request']['updated_at']
+  pins: Array<PinItemOutput>
 }
