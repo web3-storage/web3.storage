@@ -46,8 +46,21 @@ export function normalizePins (pins) {
   })).filter(pin => PIN_STATUS.has(pin.status))
 }
 
+/**
+ * Normalize deal items.
+ */
+export function normalizeDeals (deals) {
+  return deals.filter(deal => DEAL_STATUS.has(deal.status))
+}
+
 const PIN_STATUS = new Set([
   'Pinned',
   'Pinning',
   'PinQueued'
+])
+
+const DEAL_STATUS = new Set([
+  'Queued',
+  'Published',
+  'Active'
 ])
