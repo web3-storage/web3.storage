@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.6.0...website-v1.7.0) (2021-11-23)
+
+
+### Features
+
+* add website version and commit to meta tags ([#639](https://www.github.com/web3-storage/web3.storage/issues/639)) ([23d0b53](https://www.github.com/web3-storage/web3.storage/commit/23d0b53c0dbd36b062c4b12809ac212f004cfc70))
+
 ## [1.6.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.5.0...website-v1.6.0) (2021-11-15)
 
 
