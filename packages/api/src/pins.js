@@ -192,3 +192,12 @@ export async function pinDelete (request, env, ctx) {
   // TODO: write logic for deleting pin request
   return new JSONResponse('OK')
 }
+
+/**
+ * @param {import('./user').AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ * @param {import('./index').Ctx} ctx
+ */
+export async function pinReplace (request, env, ctx) {
+  throw new Error('Not implemented')
+}
