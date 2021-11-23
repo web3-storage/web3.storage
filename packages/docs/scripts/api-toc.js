@@ -2,16 +2,16 @@
 /**
  * This script generates a table-of-contents for the HTTP API reference page
  * by pulling heading ids and titles from the OpenAPI schema yaml file.
- * 
+ *
  * The output is a JSON array of Docusaurus TOC items, saved to 'src/pages/http-api/toc.json'
- * 
+ *
  */
 
 const fs = require('fs')
 const path = require('path')
 const yaml = require('yaml')
 
-function makeApiToc(specFilename) {
+function makeApiToc (specFilename) {
   const specStr = fs.readFileSync(specFilename, 'utf-8')
   const schema = yaml.parse(specStr)
   const { paths } = schema
@@ -20,7 +20,7 @@ function makeApiToc(specFilename) {
     {
       id: 'section/Authentication',
       value: 'Authentication',
-      children: [],
+      children: []
     }
   ]
 
@@ -29,7 +29,7 @@ function makeApiToc(specFilename) {
       const item = {
         id: 'operation/' + operation.operationId,
         value: operation.summary,
-        children: [],
+        children: []
       }
       items.push(item)
     }
@@ -37,11 +37,11 @@ function makeApiToc(specFilename) {
   return items
 }
 
-function writeToc(toc, filename) {
+function writeToc (toc, filename) {
   fs.writeFileSync(filename, JSON.stringify(toc), 'utf-8')
 }
 
-function main() {
+function main () {
   const specFilename = path.resolve(__dirname, '..', 'static', 'schema.yml')
   const out = path.resolve(__dirname, '..', 'src', 'components', 'RedocPage', 'toc.json')
 

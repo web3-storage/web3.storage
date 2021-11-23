@@ -4,7 +4,7 @@ import { encode } from 'multiformats/block'
 import * as json from '@ipld/dag-json'
 import { sha256 } from 'multiformats/hashes/sha2'
 
-async function storeDagJSON(jsonObject) {
+async function storeDagJSON (jsonObject) {
   // encode the json object into an IPLD block
   const block = await encode({ value: jsonObject, codec: json, hasher: sha256 })
 

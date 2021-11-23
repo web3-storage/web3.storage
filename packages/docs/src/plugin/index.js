@@ -1,13 +1,13 @@
 const path = require('path')
 
 module.exports = function (context) {
-  const {siteConfig} = context
-  const {themeConfig} = siteConfig
-  const {countly} = themeConfig || {}
+  const { siteConfig } = context
+  const { themeConfig } = siteConfig
+  const { countly } = themeConfig || {}
 
   if (!countly) {
     throw new Error(
-      `You need to specify "countly" object in "themeConfig" with "appKey" field in it to use this plugin.`,
+      'You need to specify "countly" object in "themeConfig" with "appKey" field in it to use this plugin.'
     )
   }
 
@@ -16,7 +16,7 @@ module.exports = function (context) {
   if (!appKey) {
     throw new Error(
       'You specified the "countly" object in "themeConfig" but the "appKey" field was missing. ' +
-        'Please ensure this is not a mistake.',
+        'Please ensure this is not a mistake.'
     )
   }
 
@@ -28,11 +28,11 @@ module.exports = function (context) {
   return {
     name: 'docusaurus-plugin-web3storage-docs',
 
-    getClientModules() {
+    getClientModules () {
       return enabled ? [path.resolve(__dirname, './analytics')] : []
     },
 
-    injectHtmlTags() {
+    injectHtmlTags () {
       if (!enabled) {
         return {}
       }
@@ -46,6 +46,6 @@ module.exports = function (context) {
           }
         ]
       }
-    },
+    }
   }
 }

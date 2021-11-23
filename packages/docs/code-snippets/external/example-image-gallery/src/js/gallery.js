@@ -7,16 +7,16 @@ import Glide from '@glidejs/glide'
 import { listImageMetadata } from './storage'
 import { showElement, hideElement, setLocationHash, getLocationHash, makeClipboardButton, makeShareLink, getSavedToken } from './helpers'
 
-////////////////////////////////////
-///////// Gallery view
-////////////////////////////////////
+/// /////////////////////////////////
+/// ////// Gallery view
+/// /////////////////////////////////
 
 // #region gallery-view
 
 /**
  * DOM initialization for gallery view.
  */
-async function setupGalleryUI() {
+async function setupGalleryUI () {
   const carousel = document.getElementById('carousel')
   const spinner = document.getElementById('carousel-spinner')
   const slideContainer = document.getElementById('slide-container')
@@ -58,7 +58,7 @@ async function setupGalleryUI() {
   const glide = new Glide('.glide', {
     type: 'carousel',
     gap: 800,
-    startAt: selectedSlide,
+    startAt: selectedSlide
   })
 
   // after moving to a new slide, update the location hash with the matching CID
@@ -93,7 +93,7 @@ async function setupGalleryUI() {
  * @param {object} metadata
  * @returns {HTMLDivElement}
  */
-function makeImageCard(metadata) {
+function makeImageCard (metadata) {
   const wrapper = document.createElement('div')
   wrapper.className = 'gallery-image-card'
 
@@ -114,7 +114,7 @@ function makeImageCard(metadata) {
   return wrapper
 }
 
-function updateImageCount(current, total) {
+function updateImageCount (current, total) {
   const div = document.getElementById('gallery-image-count')
   if (!div) {
     return
@@ -124,10 +124,9 @@ function updateImageCount(current, total) {
 
 // #endregion gallery-view
 
-////////////////////////////////
-///////// Initialization
-////////////////////////////////
-
+/// /////////////////////////////
+/// ////// Initialization
+/// /////////////////////////////
 
 // redirect to settings page if there's no API token in local storage
 if (!getSavedToken()) {

@@ -31,7 +31,7 @@ import countly from '../util/countly'
  * @param {ButtonProps} param0
  * @returns
  */
-export default function Button({
+export default function Button ({
   id,
   wrapperClassName,
   className,
@@ -50,7 +50,7 @@ export default function Button({
       ui: tracking.ui,
       action: tracking.action,
       link: href,
-      ...(tracking.data || {}),
+      ...(tracking.data || {})
     })
     onClick && onClick(event)
   }, [tracking, onClick, href])
@@ -58,7 +58,7 @@ export default function Button({
   const buttonStyle = small ? {} : { minWidth: '6rem', minHeight: '3.25rem' }
   let variantClasses = ''
 
-  switch(variant) {
+  switch (variant) {
     case 'dark':
       variantClasses = 'bg-w3storage-purple text-white border border-transparent'
       break
@@ -84,9 +84,9 @@ export default function Button({
         'focus:opacity-90',
         'focus:border-white',
         'px-4',
-        disabled ?
-          'cursor-auto opacity-50' :
-          'hover:opacity-90 focus:opacity-90 focus:border-white',
+        disabled
+          ? 'cursor-auto opacity-50'
+          : 'hover:opacity-90 focus:opacity-90 focus:border-white',
         'typography-cta',
         !small && 'w-full',
         className
@@ -96,19 +96,21 @@ export default function Button({
       disabled={disabled}
       id={id}
     >
-      { Icon && <Icon className="w-7 mr-2 fill-current"/> }
+      {Icon && <Icon className='w-7 mr-2 fill-current' />}
       {children}
     </button>
   )
-  return href ? (
-    <Link href={href}>
+  return href
+    ? (
+      <Link href={href}>
+        <div className={wrapperClassName}>
+          {btn}
+        </div>
+      </Link>
+      )
+    : (
       <div className={wrapperClassName}>
         {btn}
       </div>
-    </Link>
-  ) : (
-    <div className={wrapperClassName}>
-      {btn}
-    </div>
-  )
+      )
 }

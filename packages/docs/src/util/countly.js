@@ -10,7 +10,7 @@ export const events = {
   LINK_CLICK_SIDEBAR: 'linkClickSidebar',
   LINK_CLICK_NAVBAR: 'linkClickNavbar',
   LINK_CLICK_FOOTER: 'linkClickFooter',
-  NOT_FOUND: 'notFound',
+  NOT_FOUND: 'notFound'
 }
 
 let ready = false
@@ -32,16 +32,16 @@ export function init () {
 
   countly.init({
     app_key: appKey,
-    app_version: "1.0",
+    app_version: '1.0',
     url,
-    debug,
-  });
-  
-  countly.track_sessions();
-  countly.track_pageview();
-  countly.track_clicks();
-  countly.track_links();
-  countly.track_scrolls();
+    debug
+  })
+
+  countly.track_sessions()
+  countly.track_pageview()
+  countly.track_clicks()
+  countly.track_links()
+  countly.track_scrolls()
 
   // Track other built-in docusaurus links
   document.addEventListener('click', ({ target }) => {
@@ -52,8 +52,8 @@ export function init () {
     // Sometimes the click event is delivered to the child of the <a> tag,
     // so if the target isn't an <a>, we check if it's parent is
     if (target.tagName.toLowerCase() !== 'a') {
-      if (target.parentElement && 
-          target.parentElement.tagName && 
+      if (target.parentElement &&
+          target.parentElement.tagName &&
           target.parentElement.tagName.toLowerCase() === 'a') {
         target = target.parentElement
       } else {
@@ -70,24 +70,22 @@ export function init () {
       event = events.LINK_CLICK_HOME_LOGO
     } else if (target.classList.contains('footer__link-item')) {
       event = events.LINK_CLICK_FOOTER
-    } 
+    }
 
     if (event) {
       trackEvent(event, {
         path: location.pathname,
         href: target.href,
         link: target.pathname + (target.pathname.endsWith('/') ? '' : '/') + target.hash,
-        text: target.innerText,
+        text: target.innerText
       })
     }
-    
   })
 
   ready = true
   console.log('[countly] initialized')
   return ready
 }
-
 
 /*
   Track an event to countly with the provided data
@@ -128,5 +126,5 @@ export function trackPageView (path) {
 export default {
   events,
   trackEvent,
-  trackPageView,
+  trackPageView
 }

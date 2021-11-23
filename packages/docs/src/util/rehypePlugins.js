@@ -5,30 +5,29 @@
 // uses `await import` to load the actual plugins we want to apply, then
 // calls the transformer function on them.
 
-function attachPlugins() {
-  return async function transformer(node, file) {
+function attachPlugins () {
+  return async function transformer (node, file) {
     const linkIconFile = process.cwd() + '/static/img/external-link.svg'
     const linkIcon = await loadSvg(linkIconFile)
 
     const { default: rehypeExternalLinks } = await import('rehype-external-links')
     const xform = rehypeExternalLinks({
       target: '_blank',
-      content: linkIcon,
+      content: linkIcon
     })
 
     return xform(node, file)
   }
 }
 
-
 /**
  * Loads an SVG file and returns a hast AST, suitable for injecting into
  * the rehype-external-links plugin.
- * 
+ *
  * @param {string} filename path to a .svg file
  * @returns {Promise<import('hast').Element>} a hast AST for the SVG element
  */
-async function loadSvg(filename) {
+async function loadSvg (filename) {
   if (_iconCache.has(filename)) {
     return _iconCache.get(filename)
   }

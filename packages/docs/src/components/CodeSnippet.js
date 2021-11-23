@@ -1,7 +1,7 @@
 import React from 'react'
 import CodeBlock from '@theme/CodeBlock'
 
-export default function CodeSnippet(props) {
+export default function CodeSnippet (props) {
   const { src, region, lang, ...codeBlockProps } = props
   if (lang) {
     codeBlockProps.className = `language-${lang}`
@@ -13,7 +13,7 @@ export default function CodeSnippet(props) {
   )
 }
 
-function extractRegion(src, regionName) {
+function extractRegion (src, regionName) {
   if (!regionName) {
     return src
   }

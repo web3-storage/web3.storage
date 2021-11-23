@@ -1,5 +1,5 @@
-const lightCodeTheme = require('prism-react-renderer/themes/palenight');
-const darkCodeTheme = require('prism-react-renderer/themes/vsDark');
+const lightCodeTheme = require('prism-react-renderer/themes/palenight')
+const darkCodeTheme = require('prism-react-renderer/themes/vsDark')
 
 const sitePlugin = require('./src/plugin')
 const rehypeLoader = require('./src/util/rehypePlugins')
@@ -25,10 +25,12 @@ module.exports = {
   organizationName: 'web3-storage',
   projectName: 'web3.storage',
   themeConfig: {
-    colorMode: DEBUG ? {} : {
-      respectPrefersColorScheme: true,
-      disableSwitch: true,
-    },
+    colorMode: DEBUG
+      ? {}
+      : {
+          respectPrefersColorScheme: true,
+          disableSwitch: true
+        },
     // navbar: {
     //   // title: 'Web3.Storage',
     //   // logo: {
@@ -57,21 +59,21 @@ module.exports = {
     // },
 
     footer: {
-      copyright: `<div class="footer--made-with">Made with 💛 by <a href="https://protocol.ai" target="_blank" rel="noopener noreferrer" data-v-13c85306="" data-v-2294af70="">Protocol Labs</a></div>`,
+      copyright: '<div class="footer--made-with">Made with 💛 by <a href="https://protocol.ai" target="_blank" rel="noopener noreferrer" data-v-13c85306="" data-v-2294af70="">Protocol Labs</a></div>',
       links: [
         {
           items: [
             {
               label: 'Status',
-              href: 'https://status.web3.storage/',
+              href: 'https://status.web3.storage/'
             },
             {
               label: 'Terms of Service',
-              href: 'https://web3.storage/about/#terms-of-service',
+              href: 'https://web3.storage/about/#terms-of-service'
             },
             {
               label: 'Open an issue',
-              href: 'https://docs.web3.storage/community/help-and-support/#bug-reports-or-feature-requests',
+              href: 'https://docs.web3.storage/community/help-and-support/#bug-reports-or-feature-requests'
             },
             {
               label: 'Contact us',
@@ -83,18 +85,18 @@ module.exports = {
     },
     prism: {
       theme: lightCodeTheme,
-      darkTheme: darkCodeTheme,
+      darkTheme: darkCodeTheme
     },
 
     algolia: {
       apiKey: ALGOLIA_KEY,
       indexName: ALGOLIA_INDEX,
-      appId: ALGOLIA_APP_ID,
+      appId: ALGOLIA_APP_ID
     },
 
     countly: {
       appKey: COUNTLY_KEY,
-      countlyUrl: COUNTLY_URL,
+      countlyUrl: COUNTLY_URL
     },
 
     redoc: {
@@ -103,7 +105,7 @@ module.exports = {
         fontSize: '16px',
         headings: {
           fontFamily: 'Space Grotesk, sans-serif',
-          fontWeight: '600',
+          fontWeight: '600'
         }
       },
 
@@ -114,23 +116,23 @@ module.exports = {
         secondary: '#37b667',
         text: '#171691',
         contrastText: '#fff',
-    
+
         tableRowBackground: '#ffffff',
         tableRowAltBackground: '#fafafa',
-    
+
         responsePanelBackground: '#3f3f75',
-        codeBlockBackground: '#292d3e',
+        codeBlockBackground: '#292d3e'
       },
       darkThemeColors: {
         background: '#2d2d65',
         headers: '#fde956',
         text: '#fff',
-    
+
         tableRowBackground: '#2d2d65',
         tableRowAltBackground: '#3f3f75',
-        codeBlockBackground: '#1e1e1e',
+        codeBlockBackground: '#1e1e1e'
       }
-    },
+    }
   },
   presets: [
     [
@@ -143,7 +145,7 @@ module.exports = {
           showLastUpdateTime: true,
           routeBasePath: '/',
           remarkPlugins: [
-            require('remark-docusaurus-tabs'),
+            require('remark-docusaurus-tabs')
           ],
           rehypePlugins: [
             rehypeLoader
@@ -151,19 +153,19 @@ module.exports = {
         },
         blog: false,
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
-        },
-      },
+          customCss: require.resolve('./src/css/custom.css')
+        }
+      }
     ],
-    
-    'redocusaurus',
+
+    'redocusaurus'
   ],
   plugins: [
     ['@docusaurus/plugin-client-redirects', {
       redirects: [
         {
           from: '/http-api.html',
-          to: '/reference/http-api/',
+          to: '/reference/http-api/'
         },
         {
           from: '/http-api/',
@@ -171,11 +173,11 @@ module.exports = {
         },
         {
           from: '/reference/client-library',
-          to: '/reference/js-client-library',
+          to: '/reference/js-client-library'
         }
       ]
     }],
     'docusaurus-tailwindcss',
-    sitePlugin,
+    sitePlugin
   ]
-};
+}

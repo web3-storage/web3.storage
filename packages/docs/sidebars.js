@@ -12,7 +12,7 @@ module.exports = {
         'how-tos/list-directory-contents',
         'how-tos/work-with-car-files',
         'how-tos/generate-api-token',
-        'how-tos/troubleshooting',
+        'how-tos/troubleshooting'
       ]
     },
     {
@@ -29,7 +29,7 @@ module.exports = {
       label: 'Examples',
       items: [
         'examples/getting-started',
-        'examples/image-gallery',
+        'examples/image-gallery'
       ]
     },
     {
@@ -43,7 +43,7 @@ module.exports = {
           type: 'link',
           label: 'HTTP API',
           href: '/reference/http-api/'
-        },
+        }
       ]
     },
     {
@@ -53,5 +53,5 @@ module.exports = {
         'community/help-and-support'
       ]
     }
-  ],
-};
+  ]
+}
