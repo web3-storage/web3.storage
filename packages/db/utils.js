@@ -35,15 +35,16 @@ export function normalizeContent (content) {
  * @return {Array<import('../db-client-types').PinItemOutput>}
  */
 export function normalizePins (pins) {
-  return pins.map(pin => ({
-    _id: pin._id,
-    status: pin.status,
-    created: pin.created,
-    updated: pin.updated,
-    peerId: pin.location.peerId,
-    peerName: pin.location.peerName,
-    region: pin.location.region
-  })).filter(pin => PIN_STATUS.has(pin.status))
+  return pins.filter(pin => PIN_STATUS.has(pin.status))
+    .map(pin => ({
+      _id: pin._id,
+      status: pin.status,
+      created: pin.created,
+      updated: pin.updated,
+      peerId: pin.location.peerId,
+      peerName: pin.location.peerName,
+      region: pin.location.region
+    }))
 }
 
 /**
