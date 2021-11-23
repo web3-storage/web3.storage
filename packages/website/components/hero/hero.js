@@ -9,7 +9,7 @@ import { ReactComponent as HeroIllustration } from 'Illustrations/hero-illustrat
 import { ReactComponent as HeroBackgroundLeft } from 'Illustrations/hero-background-left.svg'
 import { ReactComponent as HeroBackgroundRight } from 'Illustrations/hero-background-right.svg'
 // @ts-ignore
-import styles from './hero.module.scss'
+import styles from './hero.module.css'
 
 export default function Hero() {
   return (
