@@ -1,5 +1,16 @@
 # Changelog
 
+### [3.0.2](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.1...db-v3.0.2) (2021-11-23)
+
+
+### Bug Fixes
+
+* deal normalize should filter out unexpected deal status ([#682](https://www.github.com/web3-storage/web3.storage/issues/682)) ([0e233cc](https://www.github.com/web3-storage/web3.storage/commit/0e233cc5af499a032cf83e3454eefbfb7ef2b0a0))
+* fixes and improv to types annotations across the board ([46a3f1c](https://www.github.com/web3-storage/web3.storage/commit/46a3f1cbe3da6ac401d9b4fddc5723ba62841ec7))
+* pin dag size metric should filter by pinned status ([#646](https://www.github.com/web3-storage/web3.storage/issues/646)) ([547f466](https://www.github.com/web3-storage/web3.storage/commit/547f4663c70d3916aeb056b103fc5470ba8b52cd))
+* pin normalize should filter out unexpected pin status ([#677](https://www.github.com/web3-storage/web3.storage/issues/677)) ([f8c78b4](https://www.github.com/web3-storage/web3.storage/commit/f8c78b4ff3377c19a9bc101a7c8c97757cc511ae))
+* prevent table.sql to fail if a type already exists ([22b222a](https://www.github.com/web3-storage/web3.storage/commit/22b222ad320e9933f01d9c59fc5b59b4fb05fa53))
+
 ### [3.0.1](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.0...db-v3.0.1) (2021-11-17)
 
 
