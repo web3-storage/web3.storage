@@ -566,7 +566,6 @@ export class DBClient {
       throw new DBError(error)
     }
 
-    // TODO: normalize deal by removing deal prefix on dealActivation and dealExpiration
     const result = {}
     for (const d of normalizeDeals(data)) {
       const cid = d.dataCid

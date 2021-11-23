@@ -51,6 +51,18 @@ export function normalizePins (pins) {
  */
 export function normalizeDeals (deals) {
   return deals.filter(deal => DEAL_STATUS.has(deal.status))
+    .map(deal => ({
+      dealId: deal.dealId,
+      storageProvider: deal.storageProvider,
+      status: deal.status,
+      pieceCid: deal.pieceCid,
+      dataCid: deal.dataCid,
+      dataModelSelector: deal.dataModelSelector,
+      activation: deal.dealActivation,
+      expiration: deal.dealExpiration,
+      created: deal.created,
+      updated: deal.updated
+    }))
 }
 
 const PIN_STATUS = new Set([
