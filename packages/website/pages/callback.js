@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useQueryClient } from 'react-query'
-import { redirectMagic, redirectSocial } from '../lib/magic.js'
+import { redirectMagic, redirectSocial } from 'Lib/magic.js'
 
 /**
  * @returns {{ props: import('../components/types.js').LayoutProps}}

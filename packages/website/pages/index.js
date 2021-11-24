@@ -6,9 +6,9 @@ import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 // @ts-ignore
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
-import Button from '../components/button'
+import Button from '../components/button/button'
 import Hero from '../components/hero'
-import countly from '../lib/countly'
+import countly from 'Lib/countly'
 
 import IndexPageData from '../content/pages/index'
 

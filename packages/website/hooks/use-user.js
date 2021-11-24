@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
-import { useLoggedIn } from '../lib/user'
-import { getInfo } from '../lib/api'
+import { useLoggedIn } from 'Lib/user'
+import { getInfo } from 'Lib/api'
 
 export const useUser = () => {
   const { isLoggedIn } = useLoggedIn()

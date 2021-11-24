@@ -1,5 +1,7 @@
 import clsx from 'clsx';
-import Button from '../button'
+import countly from '../../lib/countly'
+
+import Button from '../button/button'
 import TextBlock from '../textblock'
 
 import Grid3D from '../../assets/illustrations/grid3D'
@@ -45,5 +47,3 @@ export default function Hero({block}) {
     </div>
   )
 }
-
-//

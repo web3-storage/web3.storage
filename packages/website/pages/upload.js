@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 
 import countly from "../lib/countly";
 import { getToken, API } from "../lib/api";
-import Button from "../components/button.js";
+import Button from "../components/button/button";
 import Link from 'next/link'
 
 export function getStaticProps() {
