@@ -1,4 +1,4 @@
-@use "sass:math";
+@use 'sass:math';
 
 // Make the breakpoints
 @mixin bp($breakpoint) {
@@ -31,7 +31,7 @@
   [#{$gl-attributeName}~="#{$gl-gridName}"],
   [#{$gl-attributeName}*="#{$gl-gridName}-"],
   [#{$gl-attributeName}*="#{$gl-gridName}_"] {
-    
+
     @for $i from 1 through $gl-colCount {
       > [#{$gl-attributeName}*="#{$col}-#{$i}"]{ flex-basis: map-get($gl-colPortions, $i); max-width: map-get($gl-colPortions, $i); }
     }
