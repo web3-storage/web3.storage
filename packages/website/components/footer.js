@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import Link from 'next/link'
 
-import countly from '../lib/countly'
+import countly from 'Lib/countly'
 
 /**
  * Footer Component

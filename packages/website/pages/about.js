@@ -1,7 +1,7 @@
 /* eslint-disable react/no-children-prop */
 import matter from 'gray-matter'
 import ReactMarkdown from "react-markdown";
-import VerticalLines from '../illustrations/vertical-lines.js'
+import { ReactComponent as VerticalLines } from 'Illustrations/vertical-lines.svg'
 import slug from 'remark-slug'
 
  export async function getStaticProps() {

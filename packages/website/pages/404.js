@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import countly from '../lib/countly'
+import countly from 'Lib/countly'
 
 export default function Custom404() {
     useEffect(() => {
