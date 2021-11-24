@@ -39,43 +39,95 @@ for (const file of files) {
 
 ### Mutability
 
+**❗️Experimental** this API may not work, may change, and may be removed in a future version.
+
 Mutability in Web3.Storage is maintained through IPNS records.
 
 ⚠️ Name records are not _yet_ published to or updated from the IPFS network. Working with name records simply updates the Web3.Storage cache of data.
 
+#### Create and Publish
+
 ```js
-import { Web3Storage, Name } from 'web3.storage'
+import { Web3Storage } from 'web3.storage'
+import * as Name from 'web3.storage/src/name.js'
 
 const client = new Web3Storage({ token: API_TOKEN })
-
-// Creates a new "writable" name with a new SigningKey
 const name = await Name.create()
-// ...also create from an existing signing key
-// const name = await Name.from(bytes)
 
-console.log('Name:', name.toString()) // k51qzi5uqu5di9agapykyjh3tqrf7i14a7fjq46oo0f6dxiimj62knq13059lt
-// ...you can also create a new name from this string (non-writable):
-// Name.parse('k51qzi5uqu5di9agapykyjh3tqrf7i14a7fjq46oo0f6dxiimj62knq13059lt')
-
-// Signing key bytes (for use with `Name.from(bytes)`)
-console.log('Signing key:', name.key.bytes)
+console.log('Name:', name.toString())
+// e.g. k51qzi5uqu5di9agapykyjh3tqrf7i14a7fjq46oo0f6dxiimj62knq13059lt
 
 // The value to publish
 const value = '/ipfs/bafkreiem4twkqzsq2aj4shbycd4yvoj2cx72vezicletlhi7dijjciqpui'
-const revision = await Name.v0(name, value)
+const record = await Name.v0(name, value)
 
-// Publish the new revision to Web3.Storage
-await Name.publish(client, revision, name.key)
+await Name.publish(client, record, name.key)
+```
 
-const curRevision = await Name.resolve(client, name)
+⚠️ Note: records live for 1 year after creation by default.
 
-console.log('Resolved value:', curRevision.value) // /ipfs/bafkreiem4twkqzsq2aj4shbycd4yvoj2cx72vezicletlhi7dijjciqpui
+#### Resolve
 
-// Create a new revision
+```js
+import { Web3Storage } from 'web3.storage'
+import * as Name from 'web3.storage/src/name.js'
+
+const client = new Web3Storage({ token: API_TOKEN })
+const name = Name.parse('k51qzi5uqu5di9agapykyjh3tqrf7i14a7fjq46oo0f6dxiimj62knq13059lt')
+
+const record = await Name.resolve(client, name)
+
+console.log('Resolved value:', curRecord.value)
+// e.g. /ipfs/bafkreiem4twkqzsq2aj4shbycd4yvoj2cx72vezicletlhi7dijjciqpui
+```
+
+#### Update
+
+```js
+import { Web3Storage } from 'web3.storage'
+import * as Name from 'web3.storage/src/name.js'
+
+const client = new Web3Storage({ token: API_TOKEN })
+const name = await Name.create()
+
+const value = '/ipfs/bafkreiem4twkqzsq2aj4shbycd4yvoj2cx72vezicletlhi7dijjciqpui'
+const record = await Name.v0(name, value)
+
+await Name.publish(client, record, name.key)
+
+// ...later
+
 const nextValue = '/ipfs/bafybeiauyddeo2axgargy56kwxirquxaxso3nobtjtjvoqu552oqciudrm'
-const nextRevision = await Name.increment(revision, nextValue)
+// Make a revision to the current record (increments sequence number and sets value)
+const nextRecord = await Name.increment(record, nextValue)
 
-await Name.publish(client, nextRevision, name.key)
+await Name.publish(client, nextRecord, name.key)
+```
+
+#### Signing Key Management
+
+The private key used to sign records should be saved if the record needs to be updated in the future.
+
+```js
+import { Web3Storage } from 'web3.storage'
+import * as Name from 'web3.storage/name'
+import fs from 'fs'
+
+const client = new Web3Storage({ token: API_TOKEN })
+
+// Creates a new "writable" name with a new signing key
+const name = await Name.create()
+
+// Store the signing key to a file for use later
+await fs.promises.writeFile('priv.key', name.key.bytes)
+
+// ...later
+
+const bytes = await fs.promises.readFile('priv.key')
+const name = await Name.from(bytes)
+
+console.log('Name:', name.toString())
+// e.g. k51qzi5uqu5di9agapykyjh3tqrf7i14a7fjq46oo0f6dxiimj62knq13059lt
 ```
 
 ## Testing
