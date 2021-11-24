@@ -49,7 +49,7 @@ export default function Navbar({ isLoggedIn, isLoadingUser }) {
   })
 
   const toggleMenu = () => {
-    isMenuOpen ? document.body.classList.remove('overflow-hidden') : document.body.classList.add('overflow-hidden')
+    // isMenuOpen ? document.body.classList.remove('overflow-hidden') : document.body.classList.add('overflow-hidden')
     setMenuOpen(!isMenuOpen)
   }
 
@@ -108,7 +108,8 @@ export default function Navbar({ isLoggedIn, isLoadingUser }) {
 
   // ================================================ Main Template [Navigation]
   return (
-    <nav class={styles.navigation}>
+    <nav class={styles.navigation} ref={containerRef}>
+
       <div class={styles.navBar}>
         { isSmallVariant &&
           <div class="menu-toggle">
