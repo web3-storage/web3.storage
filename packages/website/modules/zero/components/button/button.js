@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import clsx from 'clsx'
 
-import styles from './button.module.css';
+import styles from './button.module.scss';
 
 /**
  * @typedef {Object} ButtonProps

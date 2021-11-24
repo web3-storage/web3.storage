@@ -13,7 +13,7 @@ import Cross from '../../assets/illustrations/cross'
 import Triangle from '../../assets/illustrations/triangle'
 
 // @ts-ignore
-import styles from './hero.module.css'
+import styles from './hero.module.scss'
 
 /**
  * @param {Object} props.block
@@ -36,9 +36,11 @@ export default function Hero({block}) {
           <Triangle className={ clsx(styles.illustration, styles.triangle) }/>
         </div>
 
-        <div>
+        <div >
           <div>
-            <TextBlock block={block}/>
+            <TextBlock
+              block={block}
+              classList={styles} />
           </div>
         </div>
 
@@ -46,3 +48,5 @@ export default function Hero({block}) {
     </div>
   )
 }
+
+//

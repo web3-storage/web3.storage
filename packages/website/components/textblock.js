@@ -4,9 +4,10 @@ import countly from '../lib/countly'
 
 /**
  * @param {Object} props.block
+ * @param {Object} props.classList
 */
 
-export default function TextBlock({block}) {
+export default function TextBlock({block, classList}) {
 
   const format = block.format || 'medium'
   const theme = block.theme || 'light'
@@ -17,18 +18,18 @@ export default function TextBlock({block}) {
 
   const getHeadingType = (block) => {
     switch (block.format) {
-      case 'header' : return <h1 class="heading h1">{ block.heading }</h1>;
-      case 'small' : return <h3 class="heading h3">{ block.heading }</h3>;
-      default : return <h2 class="heading h2">{ block.heading }</h2>;
+      case 'header' : return <h1 class={ clsx("heading", classList.heading)}>{ block.heading }</h1>;
+      case 'small' : return <h3 class={ clsx("heading", classList.heading)}>{ block.heading }</h3>;
+      default : return <h2 class={ clsx("heading", classList.heading)}>{ block.heading }</h2>;
     }
   }
 
   return (
-    <div class={clsx('block text-block', `format__${format}`, `theme__${theme}`)}>
+    <div className={clsx('block text-block', `format__${format}`, `theme__${theme}`)}>
 
       { typeof block.label === 'string' &&
-        <div class="label">
-          <span class="label-textual">
+        <div class={ clsx("label", classList.label)}>
+          <span class={ clsx("label-textual", classList.labelTextual)}>
             { block.label }
           </span>
         </div>
@@ -37,13 +38,13 @@ export default function TextBlock({block}) {
       { typeof block.heading === 'string' && getHeadingType(block) }
 
       { typeof block.subheading === 'string' &&
-        <div class="subheading">
+        <div class={ clsx("subheading", classList.subheading)}>
           { block.subheading }
         </div>
       }
 
       { typeof block.description === 'string' &&
-        <div class="description">
+        <div class={ clsx("description", classList.description)}>
           { block.description }
         </div>
       }
