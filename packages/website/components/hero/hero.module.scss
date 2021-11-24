@@ -3,6 +3,13 @@
   width: 100vw;
   z-index: 0;
   display: flex;
+  .heading {
+    color: black;
+  }
+
+  .subheading {
+    color: black;
+  }
 }
 
 .topSection {
@@ -91,12 +98,14 @@
   transform: rotate(-90deg);
 }
 
-.heading {
-  color: black;
-}
 
-.subheading {
-  color: black;
+.header_text_block {
+  .heading {
+    color: black;
+  }
+  .subheading {
+    color: black;
+  }
 }
 
 @media only screen and (min-width: 640px) {
@@ -106,9 +115,9 @@
        overflow-y: visible;
     }
 
-    .topSection {
-        height: 42.05rem;
-        margin-left: auto;
-        margin-right: auto;
-    }
+    // .topSection {
+    //     height: 42.05rem;
+    //     margin-left: auto;
+    //     margin-right: auto;
+    // }
 }

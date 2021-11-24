@@ -36,13 +36,10 @@ export default function Hero({block}) {
           <Triangle className={ clsx(styles.illustration, styles.triangle) }/>
         </div>
 
-        <div >
-          <div>
-            <TextBlock
-              block={block}
-              classList={styles} />
-          </div>
-        </div>
+        <TextBlock
+          class="header_text_block"
+          block={block}
+          className={styles.header_text_block} />
 
       </div>
     </div>

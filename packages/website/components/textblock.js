@@ -4,10 +4,10 @@ import countly from '../lib/countly'
 
 /**
  * @param {Object} props.block
- * @param {Object} props.classList
+ * @param {Object} props.className
 */
 
-export default function TextBlock({block, classList}) {
+export default function TextBlock({block, className}) {
 
   const format = block.format || 'medium'
   const theme = block.theme || 'light'
@@ -18,18 +18,18 @@ export default function TextBlock({block, classList}) {
 
   const getHeadingType = (block) => {
     switch (block.format) {
-      case 'header' : return <h1 class={ clsx("heading", classList.heading)}>{ block.heading }</h1>;
-      case 'small' : return <h3 class={ clsx("heading", classList.heading)}>{ block.heading }</h3>;
-      default : return <h2 class={ clsx("heading", classList.heading)}>{ block.heading }</h2>;
+      case 'header' : return <h1 className={ clsx("heading")}>{ block.heading }</h1>;
+      case 'small' : return <h3 className={ clsx("heading")}>{ block.heading }</h3>;
+      default : return <h2 className={ clsx("heading")}>{ block.heading }</h2>;
     }
   }
 
   return (
-    <div className={clsx('block text-block', `format__${format}`, `theme__${theme}`)}>
+    <div className={clsx( className, 'block text-block', `format__${format}`, `theme__${theme}`)}>
 
       { typeof block.label === 'string' &&
-        <div class={ clsx("label", classList.label)}>
-          <span class={ clsx("label-textual", classList.labelTextual)}>
+        <div classNames={ clsx("label")}>
+          <span className={ clsx("label-textual")}>
             { block.label }
           </span>
         </div>
@@ -38,13 +38,13 @@ export default function TextBlock({block, classList}) {
       { typeof block.heading === 'string' && getHeadingType(block) }
 
       { typeof block.subheading === 'string' &&
-        <div class={ clsx("subheading", classList.subheading)}>
+        <div className={ clsx("subheading")}>
           { block.subheading }
         </div>
       }
 
       { typeof block.description === 'string' &&
-        <div class={ clsx("description", classList.description)}>
+        <div className={ clsx("description")}>
           { block.description }
         </div>
       }
