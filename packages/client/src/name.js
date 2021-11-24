@@ -7,6 +7,7 @@ import { identity } from 'multiformats/hashes/identity'
 import { base36 } from 'multiformats/bases/base36'
 import { CID } from 'multiformats/cid'
 import { keys } from 'libp2p-crypto'
+import * as cborg from 'cborg'
 import { fetch } from './platform.js'
 
 const libp2pKeyCode = 0x72
@@ -187,37 +188,27 @@ export class Revision {
   }
 
   /**
+   * Note: if `revision.name` is a `WritableName` then signing key data will be
+   * lost. i.e. the private key is not encoded.
+   *
    * @param {Revision} revision Revision to encode.
-   * @param {SigningKey} key Private key to sign the record with.
    */
-  static async encode (revision, key) {
-    const entry = await ipns.create(
-      // @ts-expect-error API expects a libp2p-crypto.PrivateKey but only uses SigningKey.sign().
-      key,
-      uint8ArrayFromString(revision.value),
-      revision.sequence,
-      new Date(revision.validity).getTime() - Date.now()
-    )
-    return ipns.marshal(entry)
+  static encode (revision) {
+    return cborg.encode({
+      name: revision._name.toString(),
+      value: revision._value,
+      sequence: revision._sequence,
+      validity: revision._validity
+    })
   }
 
   /**
    * @param {Uint8Array} bytes
-   * @param {Name} name
    */
-  static async decode (bytes, name) {
-    const entry = ipns.unmarshal(bytes)
-    const keyCid = CID.decode(name.bytes)
-    const pubKey = keys.unmarshalPublicKey(Digest.decode(keyCid.multihash.bytes).bytes)
-
-    await ipns.validate(pubKey, entry)
-
-    return new Revision(
-      name,
-      uint8ArrayToString(entry.value),
-      entry.sequence,
-      uint8ArrayToString(entry.validity)
-    )
+  static decode (bytes) {
+    const raw = cborg.decode(bytes)
+    const name = parse(raw.name)
+    return new Revision(name, raw.value, BigInt(raw.sequence), raw.validity)
   }
 }
 
@@ -235,10 +226,17 @@ export class Revision {
  */
 export async function publish (service, revision, key) {
   const url = new URL(`name/${revision.name}`, service.endpoint)
+  const entry = await ipns.create(
+    // @ts-expect-error API expects a libp2p-crypto.PrivateKey but only uses SigningKey.sign().
+    key,
+    uint8ArrayFromString(revision.value),
+    revision.sequence,
+    new Date(revision.validity).getTime() - Date.now()
+  )
   const res = await maybeHandleError(fetch(url.toString(), {
     method: 'POST',
     headers: headers(service.token),
-    body: uint8ArrayToString(await Revision.encode(revision, key), 'base64pad')
+    body: uint8ArrayToString(ipns.marshal(entry), 'base64pad')
   }))
   await res.json()
 }
@@ -255,7 +253,18 @@ export async function resolve (service, name) {
   const url = new URL(`name/${name}`, service.endpoint)
   const res = await maybeHandleError(fetch(url.toString()))
   const { record } = await res.json()
-  return Revision.decode(uint8ArrayFromString(record, 'base64pad'), name)
+  const entry = ipns.unmarshal(uint8ArrayFromString(record, 'base64pad'))
+  const keyCid = CID.decode(name.bytes)
+  const pubKey = keys.unmarshalPublicKey(Digest.decode(keyCid.multihash.bytes).bytes)
+
+  await ipns.validate(pubKey, entry)
+
+  return new Revision(
+    name,
+    uint8ArrayToString(entry.value),
+    entry.sequence,
+    uint8ArrayToString(entry.validity)
+  )
 }
 
 /**

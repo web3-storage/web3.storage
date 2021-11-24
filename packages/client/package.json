@@ -36,6 +36,7 @@
     "@web-std/file": "^1.1.0",
     "browser-readablestream-to-it": "^1.0.2",
     "carbites": "^1.0.6",
+    "cborg": "^1.5.3",
     "files-from-path": "^0.2.1",
     "ipfs-car": "^0.5.8",
     "ipns": "^0.15.0",
