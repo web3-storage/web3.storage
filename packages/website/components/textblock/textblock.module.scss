@@ -1,0 +1,38 @@
+// //////////////////////////////////////////////////////////// General & Themes
+.textBlock {
+  position: relative;
+}
+
+// ///////////////////////////////////////////////////////////////////// Formats
+// .format__medium {
+//   .description {
+//     padding-right: 10rem;
+//   }
+// }
+
+// ///////////////////////////////////////////////////////////////////// Content
+.label {
+  margin-bottom: 1rem;
+}
+
+.labelText {
+
+}
+
+.heading {
+  &:not(:last-child) {
+    margin-bottom: 3rem;
+  }
+}
+
+.subheading {
+
+}
+
+.description {
+  
+}
+
+.cta {
+
+}

@@ -1,8 +1,9 @@
+// ===================================================================== Imports
 import clsx from 'clsx';
 import countly from '../../lib/countly'
 
 import Button from '../button/button'
-import TextBlock from '../textblock'
+import TextBlock from '../textblock/textblock'
 
 import Grid3D from '../../assets/illustrations/grid3D'
 import GradientBackground from '../../assets/illustrations/gradient-background'
@@ -14,13 +15,13 @@ import Coil from '../../assets/illustrations/coil'
 import Cross from '../../assets/illustrations/cross'
 import Triangle from '../../assets/illustrations/triangle'
 
-// @ts-ignore
 import styles from './hero.module.scss'
 
+// ====================================================================== Params
 /**
  * @param {Object} props.block
 */
-
+// ====================================================================== Export
 export default function Hero({block}) {
   return (
     <div className={ styles.container }>
@@ -39,9 +40,8 @@ export default function Hero({block}) {
         </div>
 
         <TextBlock
-          class="header_text_block"
           block={block}
-          className={styles.header_text_block} />
+          className={styles} />
 
       </div>
     </div>

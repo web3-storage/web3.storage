@@ -51,7 +51,7 @@ $leading_Huge: 5rem;
 $leading_Massive: 6.4375rem;
 
 @function leading($lineHeight, $fontSize) {
-  @return ($lineHeight / $fontSize) * 1rem;
+  @return math.round(10 * ($lineHeight / $fontSize)) / 10;
 }
 
 // -------------------------------------------------------------- Letter Spacing
@@ -118,7 +118,7 @@ $letterSpacing_Large: 0.03em;
 }
 
 @mixin h1 {
-  @include fontSize_MediumLarge;
+  @include fontSize_ExtraLarge;
   @include leading_MediumLarge;
   @include fontWeight_Semibold;
 }

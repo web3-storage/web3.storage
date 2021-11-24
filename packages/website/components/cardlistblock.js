@@ -1,9 +1,11 @@
+// ===================================================================== Imports
 import Card from './card';
 
+// ====================================================================== Params
 /**
  * @param {Object} props.block
 */
-
+// ====================================================================== Export
 export default function CardListBlock({block}) {
   return (
     <div class="block card-list-block">

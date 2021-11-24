@@ -1,15 +1,8 @@
 .container {
-  /* position: relative; */
-  width: 100vw;
+  width: 100%;
+  padding: 0 1.75rem;
   z-index: 0;
   display: flex;
-  .heading {
-    color: black;
-  }
-
-  .subheading {
-    color: black;
-  }
 }
 
 .topSection {
@@ -25,6 +18,7 @@
   display: flex;
   align-items: center;
   pointer-events: none;
+  z-index: -1;
 }
 
 .gradientBackground {
@@ -88,7 +82,6 @@
   width: 5.25rem;
   right: 31%;
   bottom: 3.5rem;
-  /* transform: rotate(0deg); */
 }
 
 .triangle {
@@ -98,26 +91,19 @@
   transform: rotate(-90deg);
 }
 
-
 .header_text_block {
   .heading {
-    color: black;
+
   }
   .subheading {
     color: black;
   }
 }
 
-@media only screen and (min-width: 640px) {
-    .container {
-       overflow: hidden;
-       overflow-x: clip;
-       overflow-y: visible;
-    }
-
-    // .topSection {
-    //     height: 42.05rem;
-    //     margin-left: auto;
-    //     margin-right: auto;
-    // }
-}
+// @media only screen and (min-width: 640px) {
+//     .container {
+//        overflow: hidden;
+//        overflow-x: clip;
+//        overflow-y: visible;
+//     }
+// }

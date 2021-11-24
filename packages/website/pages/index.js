@@ -12,15 +12,14 @@ import countly from 'Lib/countly'
 
 import IndexPageData from '../content/pages/index'
 
-import styles from './home.module.css'
+import styles from './index.module.scss'
 
-import BlockBuilder from '../components/blockbuilder'
+import BlockBuilder from '../components/blockbuilder/blockbuilder'
 import { ReactComponent as OpenIcon } from 'Icons/open.svg'
 import { ReactComponent as SimpleIcon } from 'Icons/simple.svg'
 import { ReactComponent as ProvableStorage } from 'Icons/provable-storage.svg'
 import { ReactComponent as FreeIcon } from 'Icons/free.svg'
 import { ReactComponent as CopyIcon } from 'Icons/copy.svg'
-// import { ReactComponent as Squares } from 'Illustrations/squares.svg'
 import { ReactComponent as GettingStartedIllustration } from 'Illustrations/getting-started-illustration.svg'
 
 /**
@@ -41,18 +40,19 @@ export default function Home() {
   const sections = IndexPageData.page_content
   return (
     <>
-      <main>
+      <main class={ clsx("page", styles.pageIndex) }>
         {sections.map((section, index) => (
           <BlockBuilder
             key={`section_${index}`}
             subsections={section}/>
         ))}
-        <WhyWeb3Storage />
-        <GetStarted />
       </main>
     </>
   )
 }
+
+// <WhyWeb3Storage />
+// <GetStarted />
 
 function WhyWeb3Storage() {
   const codeSnippets = {
