@@ -27,7 +27,6 @@ class BlockBuilder extends React.Component {
   }
 
   getComponent (column) {
-    let component = ''
     switch (column.type) {
       case 'hero' : return <Hero block={column}/>;
       case 'text_block' : return <TextBlock block={column}/>;
