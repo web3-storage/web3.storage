@@ -1,183 +1,126 @@
-/* ==========================================================================
-    GRIDLEX
-    Just a Flexbox Grid System - v. 2.7.1
-========================================================================== */
+// ///////////////////////////////////////////////////////// Imports & Variables
+// -----------------------------------------------------------------------------
+@import 'normalize';
+@import 'variables';
+@import 'grid/gridlex-2.7.1';
 
-@import "gridlex/gridlex-vars";
-@import "gridlex/gridlex-preprocessing";
-@import "gridlex/gridlex-mixins";
-@import "gridlex/gridlex-classes";
+// /////////////////////////////////////////////////////////////////////// Fonts
+// -----------------------------------------------------------------------------
+$fontAssetPath: '../assets/fonts';
 
-/* ================================================================================
-   Fonts
-   ================================================================================ */
-
+//////////////////////////////////////////////////////////////////// Suisse Intl
 @font-face {
-    font-family: "Space Grotesk";
-    font-weight: 400;
-    font-style: normal;
-    src: url("/fonts/space-grotesk/space-grotesk-regular.woff2") format("woff2");
-    src: url("/fonts/space-grotesk/space-grotesk-regular.woff") format("woff");
-    font-display: swap;
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Light.otf') format('opentype');
+  font-weight: 300;
 }
 
 @font-face {
-    font-family: "Space Grotesk";
-    font-weight: 500;
-    font-style: normal;
-    src: url("/fonts/space-grotesk/space-grotesk-medium.woff2") format("woff2");
-    src: url("/fonts/space-grotesk/space-grotesk-medium.woff") format("woff");
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Open Sans";
-    font-weight: 400;
-    font-style: normal;
-    src: url("/fonts/open-sans/open-sans.woff2") format("woff2");
-    src: url("/fonts/open-sans/open-sans.woff") format("woff");
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Open Sans";
-    font-weight: 600;
-    font-style: normal;
-    src: url("/fonts/open-sans/open-sans-semi-bold.woff2") format("woff2");
-    src: url("/fonts/open-sans/open-sans-semi-bold.woff") format("woff");
-    font-display: swap;
-}
-
-@font-face {
-  font-family: "Space Mono";
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Regular.otf') format('opentype');
   font-weight: 400;
-  font-style: normal;
-  src: url("/fonts/space-mono/space-mono-regular.woff2") format("woff2");
-  src: url("/fonts/space-mono/space-mono-regular.woff") format("woff");
-  font-display: swap;
 }
 
-/* ================================================================================
-   Typography
-   ================================================================================ */
-
-.space-grotesk {
-  font-family: "Space Grotesk", sans-serif;
-  letter-spacing: normal;
-}
-
-.typography-hero-title {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 3rem;
-  letter-spacing: normal;
+@font-face {
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Medium.otf') format('opentype');
   font-weight: 500;
-  line-height: 1.4em;
 }
 
-.typography-hero-subtitle {
-  letter-spacing: 0.02em;
-}
-
-.typography-section-title {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1.75rem;
-  font-weight: 500;
-  letter-spacing: normal;
-  line-height: 1.395em;
-}
-
-.typography-body-title {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1.625rem;
-  letter-spacing: normal;
-}
-
-.typography-body-subtitle {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1.25rem;
-  letter-spacing: normal;
-}
-
-.typography-cta {
-  font-family: "Open Sans", sans-serif;
+@font-face {
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-SemiBold.otf') format('opentype');
   font-weight: 600;
-  font-size: 0.9375rem; /* 15px */
-  letter-spacing: 0.02em;
 }
 
-// @screen md {
-//   .typography-hero-title {
-//     font-size: 3.6rem;
-//   }
+@font-face {
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Bold.otf') format('opentype');
+  font-weight: 700;
+}
 
-//   .typography-section-title {
-//     font-size: 2.375rem;
-//   }
-// }
-
-// @screen lg {
-//   .typography-hero-title {
-//     font-size: 5rem;
-//   }
-// }
-
-// h1 {
-//   @apply typography-hero-title;
-// }
-
-// h2 {
-//   @apply typography-section-title;
-// }
-
-// h3 {
-//   @apply typography-body-title;
-//   @apply font-bold;
-// }
-
-// h4 {
-//   @apply typography-body-subtitle;
-//   @apply font-bold;
-// }
-
+// ///////////////////////////////////////////////////////////////////// General
+// -----------------------------------------------------------------------------
 html, body {
-  height: 100%;
+  font-family: $font_Primary;
+  font-size: 16px;
+  font-weight: $fontWeight_Regular;
+  line-height: $leading_Regular;
+  letter-spacing: $letterSpacing_Large;
+  color: white;
+  background-color: $seaShell;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  ::-moz-selection { background: white; color: black; }
+  ::selection { background: white; color: black; }
+  &.no-scroll {
+    overflow-y: hidden;
+  }
+  &.no-cursor {
+    cursor: none;
+  }
+  * {
+    box-sizing: border-box;
+    &:before,
+    &:after {
+      box-sizing: border-box;
+    }
+  }
 }
 
-body {
-  // @apply antialiased;
-
-  font-family: "Open Sans", sans-serif;
-  font-size: 1.125rem;
-  line-height: 1.875em;
-  letter-spacing: 0.02em;
+a, button, ul {
+  background-color: transparent;
+  text-decoration: none;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  border: 0;
 }
+
+a, button {
+  cursor: pointer;
+}
+
+::-webkit-file-upload-button {
+  cursor: pointer;
+}
+
+// ////////////////////////////////////////////////////////////////// Typography
+// -----------------------------------------------------------------------------
+h1, .h1 {
+  @include h1;
+}
+
+h2, .h2 {
+  @include h2;
+}
+
+h3, .h3 {
+  @include h3;
+}
+
+// ////////////////////////////////////////////////////////////////// Components
+// -----------------------------------------------------------------------------
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
 
 /* ================================================================================
    Layout
    ================================================================================ */
 
-// .layout-margins {
-//   @apply mx-8;
-// }
-
-// @screen md {
-//   .layout-margins {
-//       margin-left: 4%;
-//       margin-right: 4%;
-//   }
-
-//   .md\:layout-margins {
-//     // @apply mx-8;
-//   }
-// }
-
-/* 1440 max width + 58px left & right padding */
-// @media only screen and (min-width: 1680px) {
-//   .layout-margins,
-//   .md\:layout-margins {
-      // @apply max-w-screen-2xl mx-auto;
-//   }
-// }
 
 .loading {
   position: absolute;
