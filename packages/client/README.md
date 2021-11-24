@@ -48,9 +48,6 @@ import { Web3Storage, Name } from 'web3.storage'
 
 const client = new Web3Storage({ token: API_TOKEN })
 
-// const keypair = new Keypair()
-// const name = await Name.from(keypair)
-
 // Creates a new "writable" name with a new SigningKey
 const name = await Name.create()
 // ...also create from an existing signing key
@@ -60,12 +57,12 @@ console.log('Name:', name.toString()) // k51qzi5uqu5di9agapykyjh3tqrf7i14a7fjq46
 // ...you can also create a new name from this string (non-writable):
 // Name.parse('k51qzi5uqu5di9agapykyjh3tqrf7i14a7fjq46oo0f6dxiimj62knq13059lt')
 
-// Signing key bytes
-console.log('Private key:', name.key.bytes)
+// Signing key bytes (for use with `Name.from(bytes)`)
+console.log('Signing key:', name.key.bytes)
 
 // The value to publish
 const value = '/ipfs/bafkreiem4twkqzsq2aj4shbycd4yvoj2cx72vezicletlhi7dijjciqpui'
-const revision = Name.v0(name, value)
+const revision = await Name.v0(name, value)
 
 // Publish the new revision to Web3.Storage
 await Name.publish(client, revision, name.key)
@@ -76,9 +73,9 @@ console.log('Resolved value:', curRevision.value) // /ipfs/bafkreiem4twkqzsq2aj4
 
 // Create a new revision
 const nextValue = '/ipfs/bafybeiauyddeo2axgargy56kwxirquxaxso3nobtjtjvoqu552oqciudrm'
-const nextRevision = Name.increment(revision, nextValue)
+const nextRevision = await Name.increment(revision, nextValue)
 
-await Name.publish(client, name, nextRevision)
+await Name.publish(client, nextRevision, name.key)
 ```
 
 ## Testing

@@ -65,7 +65,8 @@ class WritableName extends Name {
 }
 
 /**
- * Create a new writable name.
+ * Create a new name with associated signing key that can be used to create and
+ * publish IPNS record revisions.
  */
 export async function create () {
   const privKey = await keys.generateKeyPair('Ed25519', 2048)
@@ -122,8 +123,18 @@ class Revision {
    */
   constructor (name, value, sequence, validity) {
     this._name = name
+    if (typeof value !== 'string') {
+      throw new Error('invalid value')
+    }
     this._value = value
+    if (typeof sequence !== 'bigint') {
+      throw new Error('invalid sequence number')
+    }
     this._sequence = sequence
+    if (typeof validity !== 'string') {
+      throw new Error('invalid validity')
+    }
+    // TODO: validate format
     this._validity = validity
   }
 
@@ -163,10 +174,10 @@ export async function publish (service, revision, key) {
     key,
     uint8ArrayFromString(revision.value),
     revision.sequence,
-    revision.validity
+    new Date(revision.validity).getTime() - Date.now()
   )
-  const url = new URL(`name/${key}`, service.endpoint)
-  const res = await ok(fetch(url.toString(), {
+  const url = new URL(`name/${revision.name}`, service.endpoint)
+  const res = await withoutError(fetch(url.toString(), {
     method: 'POST',
     headers: headers(service.token),
     body: uint8ArrayToString(ipns.marshal(entry), 'base64pad')
@@ -183,7 +194,7 @@ export async function publish (service, revision, key) {
  */
 export async function resolve (service, name) {
   const url = new URL(`name/${name}`, service.endpoint)
-  const res = await ok(fetch(url.toString()))
+  const res = await withoutError(fetch(url.toString()))
   const { record } = await res.json()
   const entry = ipns.unmarshal(uint8ArrayFromString(record, 'base64pad'))
 
@@ -216,7 +227,7 @@ function headers (token) {
  * @param {Promise<Response>} resPromise
  * @returns {Promise<Response>}
  */
-async function ok (resPromise) {
+async function withoutError (resPromise) {
   const res = await resPromise
   if (res.ok) return res
   const err = new Error(`unexpected status: ${res.status}`)

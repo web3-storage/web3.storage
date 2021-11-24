@@ -20,7 +20,7 @@ async function main () {
   const value = '/ipfs/bafkreiem4twkqzsq2aj4shbycd4yvoj2cx72vezicletlhi7dijjciqpui'
 
   // Create a new revision for the given value
-  const revision = Name.v0(name, value)
+  const revision = await Name.v0(name, value)
   console.log(`💿 Created new IPNS record revision /ipns/${name} => ${revision.value} (seqno ${revision.sequence})`)
 
   console.log('⏳ Publishing to Web3.Storage...')
@@ -33,11 +33,11 @@ async function main () {
 
   // Make a revision to our name points to a new value
   const nextValue = '/ipfs/bafybeiauyddeo2axgargy56kwxirquxaxso3nobtjtjvoqu552oqciudrm'
-  const nextRevision = Name.increment(revision, nextValue)
-  console.log(`💿 Created new IPNS record revision /ipns/${name} => ${nextRevision.value} (seqno ${revision.sequence})`)
+  const nextRevision = await Name.increment(revision, nextValue)
+  console.log(`💿 Created new IPNS record revision /ipns/${name} => ${nextRevision.value} (seqno ${nextRevision.sequence})`)
 
   console.log('⏳ Publishing to Web3.Storage...')
-  await Name.publish(client, name, nextRevision)
+  await Name.publish(client, nextRevision, name.key)
   console.log('✅ Done\n')
 
   console.log('⏳ Resolving current value...')
