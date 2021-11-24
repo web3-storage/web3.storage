@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import Router from 'next/router'
 import { useQueryClient } from 'react-query'
-import countly from '../lib/countly'
-import { loginEmail, loginSocial } from '../lib/magic.js'
-import Button from '../components/button.js'
+import countly from 'Lib/countly'
+import { loginEmail, loginSocial } from 'Lib/magic.js'
+import Button from '../components/button/button'
 import { ReactComponent as GithubIcon } from 'Icons/github.svg'
 
 /**

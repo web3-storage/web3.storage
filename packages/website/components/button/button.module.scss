@@ -1,0 +1,45 @@
+.button {
+  cursor: pointer;
+
+  &[disabled] {
+    cursor: default;
+  }
+
+  button {
+    background: transparent;
+    border: none;
+    width: 100%;
+    display: flex;
+
+    &:active, &:hover, &:focus {
+      background: transparent;
+    }
+  }
+
+  &.dark {
+    border: 1px solid transparent;
+    background: #171691;
+
+    button {
+      color: #fff;
+    }
+  }
+
+  &.light {
+    border: 1px solid transparent;
+    background: #fff;
+
+    button {
+      color: #171691;
+    }
+  }
+
+  &.outlined {
+    border: 2px solid #171691;
+    background: transparent;
+    
+    button {
+      color: #171691;
+    }
+  }
+}

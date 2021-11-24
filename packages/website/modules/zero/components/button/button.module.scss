@@ -1,9 +1,18 @@
 .button {
   cursor: pointer;
-  background: transparent;
-  border: none;
+
+  &[disabled] {
+    cursor: default;
+  }
+
+  button {
+    border: none;
+    width: 100%;
+    display: flex;
+
+    &:active, &:hover, &:focus {
+      background: transparent;
+    }
+  }
 }
 
-.button[disabled] {
-  cursor: default;
-}

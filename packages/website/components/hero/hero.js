@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import countly from '../../lib/countly'
-import Button from '../button'
+import Button from '../button/button'
 
 import { ReactComponent as Wave } from 'Illustrations/wave.svg'
 import { ReactComponent as CircleNoise } from 'Illustrations/circle-noise.svg'

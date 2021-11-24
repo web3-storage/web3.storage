@@ -3,9 +3,9 @@ import { useQuery, useQueryClient } from 'react-query'
 import { If, Then, Else, When } from 'react-if'
 import clsx from 'clsx'
 
-import countly from '../lib/countly'
-import { deleteToken, getTokens } from '../lib/api'
-import Button from '../components/button'
+import countly from 'Lib/countly'
+import { deleteToken, getTokens } from 'Lib/api'
+import Button from '../components/button/button'
 import Loading from '../components/loading/loading'
 
 /** @typedef {{ _id: string, name: string, secret: string, hasUploads?: boolean }} Token */

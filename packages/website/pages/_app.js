@@ -5,7 +5,7 @@ import '../styles/global.scss'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import StateProvider from '../components/state-provider'
 import Layout from '../components/layout.js'
-import countly from '../lib/countly';
+import countly from 'Lib/countly';
 
 
 const queryClient = new QueryClient({

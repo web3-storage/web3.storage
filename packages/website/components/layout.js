@@ -3,9 +3,9 @@ import clsx from 'clsx'
 import Footer from './footer.js'
 import Navbar from './navbar.js'
 import Loading from './loading/loading'
-import { useLoggedIn } from '../lib/user'
-import { getVersion } from '../lib/api'
-import { getStatusPageSummary } from '../lib/statuspage-api'
+import { useLoggedIn } from 'Lib/user'
+import { getVersion } from 'Lib/api'
+import { getStatusPageSummary } from 'Lib/statuspage-api'
 import { useQuery } from 'react-query'
 
 /**
