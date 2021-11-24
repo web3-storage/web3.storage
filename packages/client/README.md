@@ -48,27 +48,37 @@ import { Web3Storage, Name } from 'web3.storage'
 
 const client = new Web3Storage({ token: API_TOKEN })
 
-// Create a private key, and key ID (the "name" used to resolve the current value)
-const { id, privateKey } = await Name.keypair()
+// const keypair = new Keypair()
+// const name = await Name.from(keypair)
+
+// Creates a new "writable" name with a new SigningKey
+const name = await Name.create()
+// ...also create from an existing signing key
+// const name = await Name.from(bytes)
+
+console.log('Name:', name.toString()) // k51qzi5uqu5di9agapykyjh3tqrf7i14a7fjq46oo0f6dxiimj62knq13059lt
+// ...you can also create a new name from this string (non-writable):
+// Name.parse('k51qzi5uqu5di9agapykyjh3tqrf7i14a7fjq46oo0f6dxiimj62knq13059lt')
+
+// Signing key bytes
+console.log('Private key:', name.key.bytes)
 
 // The value to publish
 const value = '/ipfs/bafkreiem4twkqzsq2aj4shbycd4yvoj2cx72vezicletlhi7dijjciqpui'
+const revision = Name.v0(name, value)
 
-// Create a new name record for the given value
-const { record } = await Name.create(privateKey, null, value)
+// Publish the new revision to Web3.Storage
+await Name.publish(client, revision, name.key)
 
-// Publish the name record to Web3.Storage
-await Name.publish(client, id, record)
+const curRevision = await Name.resolve(client, name)
 
-// Later...resolve the current record (and it's value) for the key ID
-const { value: curValue, record: curRecord } = await Name.resolve(client, id)
+console.log('Resolved value:', curRevision.value) // /ipfs/bafkreiem4twkqzsq2aj4shbycd4yvoj2cx72vezicletlhi7dijjciqpui
 
-// Update an existing record with a new value
-const updatedValue = '/ipfs/bafybeiauyddeo2axgargy56kwxirquxaxso3nobtjtjvoqu552oqciudrm'
-const { record: updatedRecord } = await Name.create(privateKey, curRecord, updatedValue)
+// Create a new revision
+const nextValue = '/ipfs/bafybeiauyddeo2axgargy56kwxirquxaxso3nobtjtjvoqu552oqciudrm'
+const nextRevision = Name.increment(revision, nextValue)
 
-// Publish the new record =)
-await Name.publish(client, id, updatedRecord)
+await Name.publish(client, name, nextRevision)
 ```
 
 ## Testing

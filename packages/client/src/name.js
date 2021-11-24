@@ -1,6 +1,5 @@
 import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string'
 import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
-import { equals as uint8ArrayEquals } from 'uint8arrays/equals'
 import * as ipns from 'ipns'
 import * as Digest from 'multiformats/hashes/digest'
 import { identity } from 'multiformats/hashes/identity'
@@ -10,63 +9,167 @@ import { keys } from 'libp2p-crypto'
 import { fetch } from './platform.js'
 
 const libp2pKeyCode = 0x72
+const ONE_YEAR = 1000 * 60 * 60 * 24 * 365
 
 /**
- * Create a private key, and key ID (the "name" used to resolve the current
- * value).
+ * @typedef {{
+ *   bytes: Uint8Array,
+ *   verify (data: Uint8Array, signature: Uint8Array): Promise<boolean>
+ * }} PublicKey
+ * @typedef {{
+ *   sign (data: Uint8Array): Promise<Uint8Array>
+ * }} SigningKey
+ * @typedef {{
+ *   public: PublicKey,
+ *   bytes: Uint8Array
+ * } & SigningKey} PrivateKey
  */
-export async function keypair () {
-  const privKeyObj = await keys.generateKeyPair('Ed25519', 2048)
-  const digest = Digest.create(identity.code, privKeyObj.public.bytes)
-  return {
-    id: CID.createV1(libp2pKeyCode, digest).toString(base36),
-    privateKey: uint8ArrayToString(privKeyObj.bytes, 'base64pad')
+
+class Name {
+  /**
+   * @param {PublicKey} pubKey Public key.
+   */
+  constructor (pubKey) {
+    /**
+     * @private
+     */
+    this._pubKey = pubKey
+  }
+
+  get bytes () {
+    const digest = Digest.create(identity.code, this._pubKey.bytes)
+    return CID.createV1(libp2pKeyCode, digest).bytes
+  }
+
+  toString () {
+    const digest = Digest.create(identity.code, this._pubKey.bytes)
+    return CID.createV1(libp2pKeyCode, digest).toString(base36)
+  }
+}
+
+class WritableName extends Name {
+  /**
+   * @param {PrivateKey} privKey
+   */
+  constructor (privKey) {
+    super(privKey.public)
+    /**
+     * @private
+     */
+    this._privKey = privKey
+  }
+
+  get key () {
+    return this._privKey
   }
 }
 
 /**
- * Create a new IPNS record.
- *
- * @param {string} privKey Base 64 encoded private key bytes.
- * @param {string|null} record Base 64 encoded bytes of the existing IPNS
- * record. Records are created with a sequence number incremented from the
- * previous value. Expected to be `null` when creating a brand new record.
- * @param {string} value IPFS path.
+ * Create a new writable name.
  */
-export async function create (privKey, record, value) {
-  const privKeyBytes = uint8ArrayFromString(privKey, 'base64pad')
-  const privKeyObj = await keys.unmarshalPrivateKey(privKeyBytes)
-  const lifetime = 1000 * 60 * 60 // TODO: how long?
-
-  let entry = record ? ipns.unmarshal(uint8ArrayFromString(record, 'base64pad')) : null
-  const valueBytes = uint8ArrayFromString(value)
-
-  // Determine the record sequence number
-  let seqno = 0n
-  if (entry && entry.sequence != null) {
-    seqno = uint8ArrayEquals(entry.value, valueBytes) ? entry.sequence : entry.sequence + 1n
-  }
-
-  entry = await ipns.create(privKeyObj, valueBytes, seqno, lifetime)
-  return { record: uint8ArrayToString(ipns.marshal(entry), 'base64pad') }
+export async function create () {
+  const privKey = await keys.generateKeyPair('Ed25519', 2048)
+  return new WritableName(privKey)
 }
 
 /**
- * Publish an IPNS record to Web3.Storage.
+ * Parses string name to readable name.
+ * @param {string} name
+ */
+export function parse (name) {
+  const keyCid = CID.parse(name, base36)
+  if (keyCid.code !== libp2pKeyCode) {
+    throw new Error(`invalid key, expected ${libp2pKeyCode} codec code but got ${keyCid.code}`)
+  }
+  const pubKey = keys.unmarshalPublicKey(Digest.decode(keyCid.multihash.bytes).bytes)
+  return new Name(pubKey)
+}
+
+/**
+ * @param {Uint8Array} key
+ */
+export async function from (key) {
+  const privKey = await keys.unmarshalPrivateKey(key)
+  return new WritableName(privKey)
+}
+
+/**
+ * @param {Name} name
+ * @param {string} value
+ */
+export async function v0 (name, value) {
+  return new Revision(name, value, 0n, new Date(Date.now() + ONE_YEAR).toISOString())
+}
+
+/**
+ * @param {Revision} revision
+ * @param {string} value
+ */
+export async function increment (revision, value) {
+  const seqno = revision.sequence + 1n
+  return new Revision(revision.name, value, seqno, new Date(Date.now() + ONE_YEAR).toISOString())
+}
+
+/**
+ * A represetation of a IPNS record that may be initial or revised.
+ */
+class Revision {
+  /**
+   * @param {Name} name
+   * @param {string} value
+   * @param {bigint} sequence
+   * @param {string} validity
+   */
+  constructor (name, value, sequence, validity) {
+    this._name = name
+    this._value = value
+    this._sequence = sequence
+    this._validity = validity
+  }
+
+  get name () {
+    return this._name
+  }
+
+  get value () {
+    return this._value
+  }
+
+  get sequence () {
+    return this._sequence
+  }
+
+  /**
+   * RFC3339 date string.
+   */
+  get validity () {
+    return this._validity
+  }
+}
+
+/**
+ * Publish an name revision to Web3.Storage.
  *
  * ⚠️ Name records are not _yet_ published to or updated from the IPFS network.
  * Working with name records simply updates the Web3.Storage cache of data.
  *
  * @param {import('./lib/interface.js').Service} service
- * @param {string} key "libp2p-key" encoding of the public key.
- * @param {string} record Base 64 encoded buffer of IPNS record to publish.
+ * @param {Revision} revision Revision of record to publish
+ * @param {SigningKey} key Record signing key
  */
-export async function publish (service, key, record) {
+export async function publish (service, revision, key) {
+  const entry = await ipns.create(
+    // @ts-expect-error API expects a libp2p-crypto.PrivateKey but only uses SigningKey.sign().
+    key,
+    uint8ArrayFromString(revision.value),
+    revision.sequence,
+    revision.validity
+  )
   const url = new URL(`name/${key}`, service.endpoint)
   const res = await ok(fetch(url.toString(), {
     method: 'POST',
     headers: headers(service.token),
-    body: record
+    body: uint8ArrayToString(ipns.marshal(entry), 'base64pad')
   }))
   return res.json()
 }
@@ -75,21 +178,26 @@ export async function publish (service, key, record) {
  * Resolve the current IPNS record (and it's value) for the passed key ID.
  *
  * @param {import('./lib/interface.js').PublicService} service
- * @param {string} key "libp2p-key" encoding of the public key.
- * @returns {Promise<{ value: string, record: string }>}
+ * @param {Name} name The name to resolve.
+ * @returns {Promise<Revision>}
  */
-export async function resolve (service, key) {
-  const keyCid = CID.parse(key, base36)
-  if (keyCid.code !== libp2pKeyCode) {
-    throw new Error(`invalid key code: ${keyCid.code}`)
-  }
-  const pubKey = keys.unmarshalPublicKey(Digest.decode(keyCid.multihash.bytes).bytes)
-  const url = new URL(`name/${key}`, service.endpoint)
+export async function resolve (service, name) {
+  const url = new URL(`name/${name}`, service.endpoint)
   const res = await ok(fetch(url.toString()))
   const { record } = await res.json()
   const entry = ipns.unmarshal(uint8ArrayFromString(record, 'base64pad'))
+
+  const keyCid = CID.decode(name.bytes)
+  const pubKey = keys.unmarshalPublicKey(Digest.decode(keyCid.multihash.bytes).bytes)
+
   await ipns.validate(pubKey, entry)
-  return { value: uint8ArrayToString(entry.value), record }
+
+  return new Revision(
+    name,
+    uint8ArrayToString(entry.value),
+    entry.sequence,
+    uint8ArrayToString(entry.validity)
+  )
 }
 
 /**

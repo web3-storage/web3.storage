@@ -12,40 +12,37 @@ async function main () {
   }
 
   const client = new Web3Storage({ token, endpoint: args.endpoint })
+  const name = await Name.create()
 
-  // Create a private key, and key ID (the "name" used to resolve the current value)
-  const { id, privateKey } = await Name.keypair()
-
-  console.log(`\n🆔 Created key ID:\n${id}\n`)
+  console.log(`\n🆔 Created name:\n${name}\n`)
 
   // The value to publish
   const value = '/ipfs/bafkreiem4twkqzsq2aj4shbycd4yvoj2cx72vezicletlhi7dijjciqpui'
 
-  // Create a new name record for the given value
-  const { record } = await Name.create(privateKey, null, value)
-  console.log(`💿 Created new IPNS record /ipns/${id} => ${value}:\n${record}\n`)
+  // Create a new revision for the given value
+  const revision = Name.v0(name, value)
+  console.log(`💿 Created new IPNS record revision /ipns/${name} => ${revision.value} (seqno ${revision.sequence})`)
 
   console.log('⏳ Publishing to Web3.Storage...')
-  await Name.publish(client, id, record)
+  await Name.publish(client, revision, name.key)
   console.log('✅ Done\n')
 
   console.log('⏳ Resolving current value...')
-  const { value: curValue, record: curRecord } = await Name.resolve(client, id)
-  console.log(`👉 Current value: ${curValue}\n`)
+  const curRevision = await Name.resolve(client, name)
+  console.log(`👉 Current value: ${curRevision.value}\n`)
 
-  // Update an existing record with a new value
-  const updatedValue = '/ipfs/bafybeiauyddeo2axgargy56kwxirquxaxso3nobtjtjvoqu552oqciudrm'
-
-  const { record: updatedRecord } = await Name.create(privateKey, curRecord, updatedValue)
-  console.log(`💿 Created new IPNS record /ipns/${id} => ${updatedValue}:\n${updatedRecord}\n`)
+  // Make a revision to our name points to a new value
+  const nextValue = '/ipfs/bafybeiauyddeo2axgargy56kwxirquxaxso3nobtjtjvoqu552oqciudrm'
+  const nextRevision = Name.increment(revision, nextValue)
+  console.log(`💿 Created new IPNS record revision /ipns/${name} => ${nextRevision.value} (seqno ${revision.sequence})`)
 
   console.log('⏳ Publishing to Web3.Storage...')
-  await Name.publish(client, id, updatedRecord)
+  await Name.publish(client, name, nextRevision)
   console.log('✅ Done\n')
 
   console.log('⏳ Resolving current value...')
-  const { value: newCurValue } = await Name.resolve(client, id)
-  console.log(`👉 Current value: ${newCurValue}\n`)
+  const newCurRevision = await Name.resolve(client, name)
+  console.log(`👉 Current value: ${newCurRevision.value}\n`)
 }
 
 main()
