@@ -1,3 +1,13 @@
+/* ==========================================================================
+    GRIDLEX
+    Just a Flexbox Grid System - v. 2.7.1
+========================================================================== */
+
+@import "gridlex/gridlex-vars";
+@import "gridlex/gridlex-preprocessing";
+@import "gridlex/gridlex-mixins";
+@import "gridlex/gridlex-classes";
+
 /* ================================================================================
    Fonts
    ================================================================================ */
@@ -95,46 +105,46 @@
   letter-spacing: 0.02em;
 }
 
-@screen md {
-  .typography-hero-title {
-    font-size: 3.6rem;
-  }
+// @screen md {
+//   .typography-hero-title {
+//     font-size: 3.6rem;
+//   }
 
-  .typography-section-title {
-    font-size: 2.375rem;
-  }
-}
+//   .typography-section-title {
+//     font-size: 2.375rem;
+//   }
+// }
 
-@screen lg {
-  .typography-hero-title {
-    font-size: 5rem;
-  }
-}
+// @screen lg {
+//   .typography-hero-title {
+//     font-size: 5rem;
+//   }
+// }
 
-h1 {
-  @apply typography-hero-title;
-}
+// h1 {
+//   @apply typography-hero-title;
+// }
 
-h2 {
-  @apply typography-section-title;
-}
+// h2 {
+//   @apply typography-section-title;
+// }
 
-h3 {
-  @apply typography-body-title;
-  @apply font-bold;
-}
+// h3 {
+//   @apply typography-body-title;
+//   @apply font-bold;
+// }
 
-h4 {
-  @apply typography-body-subtitle;
-  @apply font-bold;
-}
+// h4 {
+//   @apply typography-body-subtitle;
+//   @apply font-bold;
+// }
 
 html, body {
   height: 100%;
 }
 
 body {
-  @apply antialiased;
+  // @apply antialiased;
 
   font-family: "Open Sans", sans-serif;
   font-size: 1.125rem;
@@ -146,28 +156,28 @@ body {
    Layout
    ================================================================================ */
 
-.layout-margins {
-  @apply mx-8;
-}
+// .layout-margins {
+//   @apply mx-8;
+// }
 
-@screen md {
-  .layout-margins {
-      margin-left: 4%;
-      margin-right: 4%;
-  }
+// @screen md {
+//   .layout-margins {
+//       margin-left: 4%;
+//       margin-right: 4%;
+//   }
 
-  .md\:layout-margins {
-    @apply mx-8;
-  }
-}
+//   .md\:layout-margins {
+//     // @apply mx-8;
+//   }
+// }
 
 /* 1440 max width + 58px left & right padding */
-@media only screen and (min-width: 1680px) {
-  .layout-margins,
-  .md\:layout-margins {
-      @apply max-w-screen-2xl mx-auto;
-  }
-}
+// @media only screen and (min-width: 1680px) {
+//   .layout-margins,
+//   .md\:layout-margins {
+      // @apply max-w-screen-2xl mx-auto;
+//   }
+// }
 
 .loading {
   position: absolute;

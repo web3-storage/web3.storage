@@ -9,6 +9,7 @@ const nextConfig = {
     // TODO: Remove me when all the ts errors are figured out.
     ignoreDuringBuilds: true,
   },
+
   webpack: function(config) {
     config.resolve.alias = {
       ...config.resolve.alias,

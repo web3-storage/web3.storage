@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "@magic-ext/oauth": "^0.7.0",
-    "@tailwindcss/typography": "^0.4.1",
     "clsx": "^1.1.1",
     "countly-sdk-web": "^20.11.2",
+    "css-loader": "^6.5.1",
     "filesize": "^6.1.0",
     "gray-matter": "^4.0.3",
     "magic-sdk": "^4.2.1",
@@ -29,6 +29,7 @@
     "react-query": "^3.13.9",
     "react-syntax-highlighter": "^11.0.3",
     "remark-slug": "^6.1.0",
+    "sass": "^1.43.4",
     "web3.storage": "^3.0.0"
   },
   "devDependencies": {
@@ -54,8 +55,6 @@
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
     "next-sitemap": "^1.6.173",
-    "postcss": "^8.3.5",
-    "tailwindcss": "^2.2.4",
     "typescript": "^4.3.5",
     "url-loader": "^4.1.1"
   },

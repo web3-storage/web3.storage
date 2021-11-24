@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import Router from 'next/router'
-import '../styles/global.css'
+import '../styles/global.scss'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import StateProvider from '../components/state-provider'
 import Layout from '../components/layout.js'

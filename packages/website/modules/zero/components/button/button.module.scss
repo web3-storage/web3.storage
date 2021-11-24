@@ -1,0 +1,9 @@
+.button {
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+
+.button[disabled] {
+  cursor: default;
+}
