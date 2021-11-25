@@ -10,11 +10,7 @@ import * as Digest from 'multiformats/hashes/digest'
 
 const libp2pKeyCode = 0x72
 
-describe.only('name', () => {
-  // const { AUTH_TOKEN, API_PORT } = process.env
-  // const token = AUTH_TOKEN || 'good'
-  // const endpoint = new URL(API_PORT ? `http://localhost:${API_PORT}` : '')
-
+describe('name', () => {
   it('creates a new name', async () => {
     const name = await Name.create()
     /** @type CID */
