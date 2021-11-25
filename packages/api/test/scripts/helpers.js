@@ -29,7 +29,7 @@ export async function createNameKeypair () {
 export async function createNameRecord (privKey, key, value, seqno = 0n) {
   const privKeyBytes = uint8arrays.fromString(privKey, 'base64pad')
   const privKeyObj = await keys.unmarshalPrivateKey(privKeyBytes)
-  const lifetime = 1000 * 60 * 60 // TODO: how long?
+  const lifetime = 1000 * 60 * 60
   const entry = await ipns.create(privKeyObj, uint8arrays.fromString(value), seqno, lifetime)
   return uint8arrays.toString(ipns.marshal(entry), 'base64pad')
 }

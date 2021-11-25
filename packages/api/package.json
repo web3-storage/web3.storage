@@ -14,7 +14,7 @@
     "publish": "wrangler publish --env $(whoami)",
     "build": "WEBPACK_CLI_FORCE_LOAD_ESM_CONFIG=true webpack",
     "test": "npm-run-all -p -r mock:cluster mock:pgrest mock:backup test:e2e -s test:size",
-    "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js -b webkit",
+    "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js -b chromium --debug",
     "test:size": "bundlesize",
     "mock:cluster": "smoke -p 9094 test/mocks/cluster",
     "mock:pgrest": "smoke -p 9087 test/mocks/pgrest",
@@ -59,6 +59,7 @@
     "multiformats": "^9.0.4",
     "p-retry": "^4.6.1",
     "protobufjs": "^6.11.2",
+    "tweetnacl": "^1.0.3",
     "uint8arrays": "^3.0.0"
   },
   "bundlesize": [

@@ -1,4 +1,4 @@
-const { db } = require('./post_name')
+const { db } = require('./post_rpc#publish_name_record')
 
 Object.assign(db, {
   k51qzi5uqu5dl2hq2hm5m29sdq1lum0kb0lmyqsowicmrmxzxywwgxhy6ymrdv:
@@ -15,6 +15,6 @@ module.exports = ({ query }) => {
   }
   return {
     statusCode: 500,
-    body: { message: 'unexpected query' }
+    body: { message: `unexpected key: ${key}` }
   }
 }

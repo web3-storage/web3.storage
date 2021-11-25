@@ -20,18 +20,18 @@ describe('POST /name/:key', () => {
     const { id: key, privateKey } = await createNameKeypair()
     const value = '/ipfs/bafybeiauyddeo2axgargy56kwxirquxaxso3nobtjtjvoqu552oqciudrm'
     const record = await createNameRecord(privateKey, key, value)
-    let res = await fetch(new URL(`name/${key}`, endpoint), {
+    const publishRes = await fetch(new URL(`name/${key}`, endpoint), {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
       body: record
     })
-    assert(res.ok)
-    const { id } = await res.json()
+    assert(publishRes.ok)
+    const { id } = await publishRes.json()
     assert.strictEqual(id, key)
 
-    res = await fetch(new URL(`name/${key}`, endpoint))
-    assert(res.ok)
-    const resolved = await res.json()
+    const resolveRes = await fetch(new URL(`name/${key}`, endpoint))
+    assert(resolveRes.ok)
+    const resolved = await resolveRes.json()
     assert.strictEqual(resolved.record, record)
     assert.strictEqual(resolved.value, value)
   })

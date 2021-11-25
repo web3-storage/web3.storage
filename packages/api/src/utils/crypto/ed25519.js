@@ -1,3 +1,4 @@
+/* eslint-env browser */
 import { sha256 } from 'multiformats/hashes/sha2'
 import { equals as uint8ArrayEquals } from 'uint8arrays/equals'
 import { PublicKey, KeyType } from './pb/keys.js'
@@ -18,6 +19,25 @@ const CLOUDFLARE_ED25519 = {
 }
 
 /**
+ * @param {Uint8Array} key Public key to verify with.
+ * @param {Uint8Array} sig Signature used to sign the data.
+ * @param {Uint8Array} data Data to verify.
+ */
+async function verify (key, sig, data) {
+  try {
+    const cryptoKey = await crypto.subtle.importKey('raw', key, CLOUDFLARE_ED25519, false, ['verify'])
+    return crypto.subtle.verify(CLOUDFLARE_ED25519, cryptoKey, sig, data)
+  } catch (err) {
+    if (err instanceof Error && err.name === 'NotSupportedError') {
+      console.warn('using tweetnacl for ed25519 - you should not see this message when running in the CloudFlare worker runtime')
+      const { default: nacl } = await import('tweetnacl')
+      return nacl.sign.detached.verify(data, sig, key)
+    }
+    throw err
+  }
+}
+
+/**
  * @param {Uint8Array} buf
  */
 export function unmarshalPublicKey (buf) {
@@ -35,8 +55,7 @@ class Ed25519PublicKey {
   }
 
   async verify (data, sig) {
-    const cryptoKey = await crypto.subtle.importKey('raw', this._key, CLOUDFLARE_ED25519, false, ['verify'])
-    return crypto.subtle.verify(CLOUDFLARE_ED25519, cryptoKey, sig, data)
+    return verify(this._key, sig, data)
   }
 
   marshal () {
@@ -67,7 +86,7 @@ function unmarshalEd25519PublicKey (bytes) {
 
 /**
  * @param {Uint8Array} key
- * @param {number} length 
+ * @param {number} length
  */
 function ensureKey (key, length) {
   key = Uint8Array.from(key || [])

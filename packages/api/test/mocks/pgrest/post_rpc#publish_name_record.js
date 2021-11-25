@@ -1,7 +1,7 @@
 const db = {}
 
 module.exports = ({ body }) => {
-  db[body.key] = body
+  db[body.data.key] = body.data
   return {
     statusCode: 200,
     body: {}
