@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.4.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.4...web3.storage-v3.4.0) (2021-11-25)
+
+
+### Features
+
+* simple mutability API using IPNS ([#648](https://www.github.com/web3-storage/web3.storage/issues/648)) ([9c287bb](https://www.github.com/web3-storage/web3.storage/commit/9c287bb7c983d3adab6ebb304decb47c5093ad78))
+
 ### [3.3.4](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.3...web3.storage-v3.3.4) (2021-11-18)
 
 
