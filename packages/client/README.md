@@ -49,7 +49,7 @@ Mutability in Web3.Storage is maintained through IPNS records.
 
 ```js
 import { Web3Storage } from 'web3.storage'
-import * as Name from 'web3.storage/src/name.js'
+import * as Name from 'web3.storage/name'
 
 const client = new Web3Storage({ token: API_TOKEN })
 const name = await Name.create()
@@ -70,7 +70,7 @@ await Name.publish(client, revision, name.key)
 
 ```js
 import { Web3Storage } from 'web3.storage'
-import * as Name from 'web3.storage/src/name.js'
+import * as Name from 'web3.storage/name'
 
 const client = new Web3Storage({ token: API_TOKEN })
 const name = Name.parse('k51qzi5uqu5di9agapykyjh3tqrf7i14a7fjq46oo0f6dxiimj62knq13059lt')
@@ -87,7 +87,7 @@ Updating records involves creating a new _revision_ from the previous one.
 
 ```js
 import { Web3Storage } from 'web3.storage'
-import * as Name from 'web3.storage/src/name.js'
+import * as Name from 'web3.storage/name'
 
 const client = new Web3Storage({ token: API_TOKEN })
 const name = await Name.create()
@@ -111,7 +111,7 @@ await Name.publish(client, nextRevision, name.key)
 The private key used to sign IPNS records should be saved if a revision needs to be created in the future.
 
 ```js
-import * as Name from 'web3.storage/src/name.js'
+import * as Name from 'web3.storage/name'
 import fs from 'fs'
 
 // Creates a new "writable" name with a new signing key
@@ -134,7 +134,7 @@ console.log('Name:', name.toString())
 The current revision for a name may need to be serialized to be stored on disk or transmitted and then deserialized later. Note that revisions are _not_ IPNS records - they carry similar data, but are not signed.
 
 ```js
-import * as Name from 'web3.storage/src/name.js'
+import * as Name from 'web3.storage/name'
 import fs from 'fs'
 
 const { Revision } = Name

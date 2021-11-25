@@ -6,7 +6,7 @@ import { identity } from 'multiformats/hashes/identity'
 import { base36 } from 'multiformats/bases/base36'
 import { CID } from 'multiformats/cid'
 import { keys } from 'libp2p-crypto'
-import * as cborg from 'cborg'
+import * as cbor from 'cborg'
 import { fetch } from './platform.js'
 
 const libp2pKeyCode = 0x72
@@ -193,7 +193,7 @@ export class Revision {
    * @param {Revision} revision Revision to encode.
    */
   static encode (revision) {
-    return cborg.encode({
+    return cbor.encode({
       name: revision._name.toString(),
       value: revision._value,
       sequence: revision._sequence,
@@ -205,7 +205,7 @@ export class Revision {
    * @param {Uint8Array} bytes
    */
   static decode (bytes) {
-    const raw = cborg.decode(bytes)
+    const raw = cbor.decode(bytes)
     const name = parse(raw.name)
     return new Revision(name, raw.value, BigInt(raw.sequence), raw.validity)
   }

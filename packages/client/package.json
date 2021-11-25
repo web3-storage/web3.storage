@@ -83,7 +83,7 @@
       "require": "./dist/src/platform.cjs",
       "node": "./src/platform.js"
     },
-    "./src/name.js": {
+    "./name": {
       "browser": "./src/name.js",
       "require": "./dist/src/name.cjs",
       "node": "./src/name.js"
@@ -91,6 +91,11 @@
   },
   "browser": {
     "./src/platform.js": "./src/platform.web.js"
+  },
+  "typesVersions": {
+    "*": {
+      "name": ["dist/src/name.d.ts"]
+    }
   },
   "bundlesize": [
     {

@@ -1,7 +1,7 @@
 import process from 'process'
 import minimist from 'minimist'
 import { Web3Storage } from 'web3.storage'
-import * as Name from 'web3.storage/src/name.js'
+import * as Name from 'web3.storage/name'
 
 async function main () {
   const args = minimist(process.argv.slice(2))
