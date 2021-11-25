@@ -1,5 +1,12 @@
 # Changelog
 
+### [4.0.4](https://www.github.com/web3-storage/web3.storage/compare/api-v4.0.3...api-v4.0.4) (2021-11-25)
+
+
+### Bug Fixes
+
+* deal status filtering ([#692](https://www.github.com/web3-storage/web3.storage/issues/692)) ([a7b4151](https://www.github.com/web3-storage/web3.storage/commit/a7b4151b05fa55646d337a090263a1eeb77b8169))
+
 ### [4.0.3](https://www.github.com/web3-storage/web3.storage/compare/api-v4.0.2...api-v4.0.3) (2021-11-23)
 
 
