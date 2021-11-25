@@ -16,22 +16,20 @@ export async function createNameKeypair () {
   const digest = Digest.create(identity.code, privKey.public.bytes)
   return {
     id: CID.createV1(libp2pKeyCode, digest).toString(base36),
-    privateKey: uint8arrays.toString(privKey.bytes, 'base64pad')
+    privateKey: privKey.bytes
   }
 }
 
 /**
- * @param {string} privKey base64 encoded private key
- * @param {string} key "libp2p-key" encoding of the public key.
+ * @param {Uint8Array} privKey base64 encoded private key
  * @param {string} value IPFS path
  * @param {bigint} seqno Sequence number
  */
-export async function createNameRecord (privKey, key, value, seqno = 0n) {
-  const privKeyBytes = uint8arrays.fromString(privKey, 'base64pad')
-  const privKeyObj = await keys.unmarshalPrivateKey(privKeyBytes)
+export async function createNameRecord (privKey, value, seqno = 0n) {
+  const privKeyObj = await keys.unmarshalPrivateKey(privKey)
   const lifetime = 1000 * 60 * 60
   const entry = await ipns.create(privKeyObj, uint8arrays.fromString(value), seqno, lifetime)
-  return uint8arrays.toString(ipns.marshal(entry), 'base64pad')
+  return ipns.marshal(entry)
 }
 
 export function getTestJWT (sub = 'test', name = 'test') {

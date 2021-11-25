@@ -1,5 +1,6 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
+import * as uint8arrays from 'uint8arrays'
 import { endpoint } from './scripts/constants.js'
 import { createNameKeypair, createNameRecord, getTestJWT } from './scripts/helpers.js'
 
@@ -19,11 +20,11 @@ describe('POST /name/:key', () => {
     const token = await getTestJWT()
     const { id: key, privateKey } = await createNameKeypair()
     const value = '/ipfs/bafybeiauyddeo2axgargy56kwxirquxaxso3nobtjtjvoqu552oqciudrm'
-    const record = await createNameRecord(privateKey, key, value)
+    const record = await createNameRecord(privateKey, value)
     const publishRes = await fetch(new URL(`name/${key}`, endpoint), {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
-      body: record
+      body: uint8arrays.toString(record, 'base64pad')
     })
     assert(publishRes.ok)
     const { id } = await publishRes.json()
