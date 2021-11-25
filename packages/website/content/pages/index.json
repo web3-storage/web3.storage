@@ -17,10 +17,20 @@
           {
             "type": "hero",
             "cols": {
-              "num": "col-10"
+              "num": "col-6",
+              "push_left": "off-3"
             },
+            "format": "header",
             "heading": "The easiest way to store data on the decentralized web.",
-            "subheading": "Store your data using our simple API. It’s fast, open, and it’s free."
+            "subheading": "Store your data using our simple API. It’s fast, open, and it’s free.",
+            "cta": {
+              "url": "/login",
+              "text": "START STORING NOW",
+              "tracking": {
+                "ui": "HOME_HERO",
+                "action": "Get Started"
+              }
+            }
           }
         ]
       }

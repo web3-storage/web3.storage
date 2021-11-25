@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useQueryClient } from 'react-query'
 
-import Button from '../components/button.js'
-import countly from '../lib/countly'
-import { createToken } from '../lib/api.js'
+import Button from '../components/button/button'
+import countly from 'Lib/countly'
+import { createToken } from 'Lib/api.js'
 import { ReactComponent as VerticalLines } from 'Illustrations/vertical-lines.svg'
 
 /**

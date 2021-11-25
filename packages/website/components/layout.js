@@ -3,11 +3,12 @@ import clsx from 'clsx'
 import Footer from './footer.js'
 import Navbar from './navbar'
 import Loading from './loading/loading'
-import { useLoggedIn } from '../lib/user'
-import { getVersion } from '../lib/api'
-import { getStatusPageSummary } from '../lib/statuspage-api'
+import { useLoggedIn } from 'Lib/user'
+import { getVersion } from 'Lib/api'
+import { getStatusPageSummary } from 'Lib/statuspage-api'
 import { useQuery } from 'react-query'
 
+// ============================================================== Message Banner
 /**
  * @param {any} highlightMessage
  */
@@ -69,6 +70,7 @@ const MessageBanner = ({ highlightMessage }) => {
   return null
 }
 
+// ====================================================================== Layout
 /**
  * @typedef {import('react').ReactChildren} Children
  * @typedef {(props: import('./types.js').LayoutChildrenProps) => Children} ChildrenFn
@@ -91,14 +93,17 @@ export default function Layout({
   data = null,
   highlightMessage,
 }) {
+
   const { isLoggedIn, isLoading, isFetching } = useLoggedIn({
     redirectTo,
     redirectIfFound,
     enabled: needsLoggedIn,
   })
+
   const shouldWaitForLoggedIn = needsLoggedIn && !isLoggedIn
+
   return (
-    <div className={clsx(pageBgColor, 'flex flex-col min-h-screen')}>
+    <div className="master-container">
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
@@ -113,6 +118,7 @@ export default function Layout({
         <meta name="twitter:site" content="@protocollabs" />
         <meta name="twitter:creator" content="@protocollabs" />
       </Head>
+
       {shouldWaitForLoggedIn ? (
         <>
           <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} />
@@ -132,6 +138,7 @@ export default function Layout({
           <Footer bgColor={footerBgColor} />
         </>
       )}
+
     </div>
   )
 }

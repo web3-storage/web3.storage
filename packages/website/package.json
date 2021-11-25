@@ -7,12 +7,11 @@
     "start": "next dev -p 4000",
     "build": "next build && next-sitemap && next export",
     "test": "eslint './**/*.js' && tsc --build",
-    "storybook": "start-storybook -p 6000",
+    "storybook": "start-storybook -p 9000",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@magic-ext/oauth": "^0.7.0",
-    "@tailwindcss/typography": "^0.4.1",
     "clsx": "^1.1.1",
     "countly-sdk-web": "^20.11.2",
     "filesize": "^6.1.0",
@@ -45,6 +44,7 @@
     "@types/react-syntax-highlighter": "^13.5.2",
     "autoprefixer": "^10.2.6",
     "babel-loader": "^8.2.3",
+    "css-loader": "5.2.7",
     "eslint": "^7.24.0",
     "eslint-config-next": "^11.0.1",
     "eslint-config-prettier": "^8.2.0",
@@ -55,8 +55,9 @@
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
     "next-sitemap": "^1.6.173",
-    "postcss": "^8.3.5",
-    "tailwindcss": "^2.2.4",
+    "sass": "^1.43.4",
+    "sass-loader": "10.1.1",
+    "style-loader": "2.0.0",
     "typescript": "^4.3.5",
     "url-loader": "^4.1.1"
   },
