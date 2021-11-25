@@ -19,7 +19,7 @@ export async function nameGet (request, env) {
   const { params: { key } } = request
   const { code } = CID.parse(key, base36)
   if (code !== libp2pKeyCode) {
-    throw new HTTPError(`invalid key code: ${code}`, 400)
+    throw new HTTPError(`invalid key, expected: ${libp2pKeyCode} codec code but got: ${code}`, 400)
   }
 
   const rawRecord = await env.db.resolveNameRecord(key)
