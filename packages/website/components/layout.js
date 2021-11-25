@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import clsx from 'clsx'
-import Footer from './footer.js'
+import Footer from './footer/footer.js'
 import Navbar from './navbar.js'
 import Loading from './loading/loading'
 import { useLoggedIn } from 'Lib/user'
