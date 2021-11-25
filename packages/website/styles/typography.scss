@@ -111,12 +111,6 @@ $letterSpacing_Large: 0.03em;
 // leading_Huge | 80pt
 // leading_Massive | 103pt
 
-@mixin title { // large heading often found in the Hero
-  @include fontSize_Huge;
-  @include fontWeight_Extrabold;
-  @include leading_Massive;
-}
-
 @mixin h1 {
   @include fontSize_ExtraLarge;
   @include leading_MediumLarge;

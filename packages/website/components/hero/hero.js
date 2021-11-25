@@ -11,7 +11,6 @@ import Squiggle from '../../assets/illustrations/squiggle'
 import Corkscrew from '../../assets/illustrations/corkscrew'
 import Helix from '../../assets/illustrations/helix'
 import Zigzag from '../../assets/illustrations/zigzag'
-import Coil from '../../assets/illustrations/coil'
 import Cross from '../../assets/illustrations/cross'
 import Triangle from '../../assets/illustrations/triangle'
 
@@ -34,7 +33,6 @@ export default function Hero({block}) {
           <Corkscrew className={ clsx(styles.illustration, styles.corkscrew) }/>
           <Zigzag className={ clsx(styles.illustration, styles.zigzag) }/>
           <Helix className={ clsx(styles.illustration, styles.helixSmall) }/>
-          <Coil className={ clsx(styles.illustration, styles.coil) }/>
           <Cross className={ clsx(styles.illustration, styles.cross) }/>
           <Triangle className={ clsx(styles.illustration, styles.triangle) }/>
         </div>

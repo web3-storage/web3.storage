@@ -40,10 +40,11 @@ export default function Home() {
   const sections = IndexPageData.page_content
   return (
     <>
-      <main class={ clsx("page", styles.pageIndex) }>
+      <main class="page page-index">
         {sections.map((section, index) => (
           <BlockBuilder
-            key={`section_${index}`}
+            id={`section_${index + 1}`}
+            key={`section_${index + 1}`}
             subsections={section}/>
         ))}
       </main>

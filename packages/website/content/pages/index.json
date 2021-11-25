@@ -38,25 +38,51 @@
         "id": "intro_1",
         "columns": [
           {
-            "type": "text_block",
+            "type": "custom",
             "cols": {
               "num": "col-5"
             },
-            "format": "medium",
-            "heading": "Store and retrieve with ease",
-            "description": "Most decentralized storage services need you to compile your data into a specific format, find a storage provider to host your data, buy some cryptocurrency to pay the storage provider, and then send your data across the internet. With Web3.Storage, you can upload any data to our API our web UI for free, and the data will end up on a decentralized set of IPFS and Filecoin storage providers.",
-            "cta": {
-              "url": "/",
-              "text": "LEARN MORE"
-            }
+            "customizations": [
+              {
+                "type": "corkscrew",
+                "id": "intro_1-corkscrew"
+              },
+              {
+                "type": "coil",
+                "id": "intro_1-coil"
+              },
+              {
+                "type": "text_block",
+                "format": "medium",
+                "heading": "Store and retrieve with ease",
+                "description": [
+                  "Most decentralized storage services need you to compile your data into a specific format, find a storage provider to host your data, buy some cryptocurrency to pay the storage provider, and then send your data across the internet.",
+                  "With Web3.Storage, you can upload any data to our API our web UI for free, and the data will end up on a decentralized set of IPFS and Filecoin storage providers."
+                ],
+                "cta": {
+                  "url": "/",
+                  "text": "LEARN MORE",
+                  "theme": "light"
+                }
+              }
+            ]
           },
           {
-            "type": "image_block",
+            "type": "custom",
             "cols": {
               "num": "col-6",
               "push_left": "off-1"
             },
-            "src": "/images/placeholder-code-image.png"
+            "customizations": [
+              {
+                "type": "helix",
+                "id": "intro_1-helix"
+              },
+              {
+                "type": "image_block",
+                "src": "/images/placeholder-code-image.png"
+              }
+            ]
           }
         ]
       }
@@ -97,6 +123,123 @@
                 "description": "Data is stored trustlessly across a growing network of storage providers via Filecoin"
               }
             ]
+          }
+        ]
+      },
+      {
+        "id": "intro_2-cta",
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-5"
+            },
+            "format": "medium",
+            "heading": "Why Web3.Storage?",
+            "description": "With Web3.Storage you get all the benefits of decentralized storage technologies with the frictionless experience you expect in a modern dev workflow.",
+            "cta": {
+              "url": "/docs",
+              "text": "Read Docs",
+              "tracking": "",
+              "action": "Docs"
+            }
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-6",
+              "push_left": "off-1"
+            },
+            "customizations": [
+              {
+                "type": "text_block",
+                "heading": "Simple",
+                "description": "With web3.storage, you get decentralized storage in minutes. All you need is a free API token and you can use the API directly or use our simple client library."
+              },
+              {
+                "type": "text_block",
+                "heading": "Open",
+                "description": "All data stored is accessible on the public IPFS network - interoperable with the tools and services building on the decentralized web."
+              },
+              {
+                "type": "text_block",
+                "heading": "Free",
+                "description": "The unique economics of Filecoin allow Web3.Storage to be completely free to use, while still ensuring that storage providers have a strong incentive to preserve user data for the long term."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "section_FAQ_info",
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-6"
+            },
+            "format": "medium",
+            "heading": "Frequently Asked Questions",
+            "subheading": "How is this free?",
+            "description": [
+              "Web3.Storage offers a simple interface that allows users and developers to take advantage of the vast array of decentralized storage provided by the Filecoin network.",
+              "The unique economics of Filecoin allow Web3.Storage to be completely free to use, while still ensuring that storage providers have a strong incentive to preserve user data for the long term."
+            ],
+            "cta": {
+              "url": "/faq",
+              "text": "More FAQs",
+              "tracking": "",
+              "action": "FAQ",
+              "theme": "light"
+            }
+          },
+          {
+            "type": "image_block",
+            "cols": {
+              "num": "col-5",
+              "push_left": "off-1"
+            },
+            "src": "/images/placeholder-code-image.png"
+          }
+        ]
+      },
+      {
+        "id": "section_FAQ_ctas",
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-6"
+            },
+            "label": "FAQ",
+            "subheading": "How is web3.storage different from pinning services for IPFS?",
+            "description": "Web3.Storage is currently not a pinning service. At the moment, files already on the IPFS network cannot be pinned to Web3.Storage via their…",
+            "cta": {
+              "url": "/faq",
+              "text": "READ MORE",
+              "tracking": "",
+              "action": "FAQ",
+              "theme": "purpleText"
+            }
+          },
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-5",
+              "push_left": "off-1"
+            },
+            "label": "FAQ",
+            "subheading": "What happens if web3.storage is discontinued?",
+            "description": "One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data…",
+            "cta": {
+              "url": "/faq",
+              "text": "READ MORE",
+              "tracking": "",
+              "action": "FAQ",
+              "theme": "purpleText"
+            }
           }
         ]
       }

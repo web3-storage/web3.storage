@@ -2,9 +2,6 @@
   cursor: pointer;
   display: inline-block;
 
-  // flex-direction: column;
-  // justify-content: center;
-
   &[disabled] {
     cursor: default;
   }
@@ -38,11 +35,15 @@
   }
 
   &.light {
-    border: 1px solid transparent;
-    background: #fff;
-
+    background-color: white;
+    border-radius: 1.5rem;
     button {
-      color: #171691;
+      color: $ebony;
+      @include fontSize_Tiny;
+      @include fontWeight_Semibold;
+      text-transform: uppercase;
+      padding: 0.25rem 1.25rem;
+      line-height: leading(22, 13);
     }
   }
 

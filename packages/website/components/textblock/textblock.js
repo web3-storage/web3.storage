@@ -11,9 +11,10 @@ import styles from './textblock.module.scss'
 */
 // ====================================================================== Export
 export default function TextBlock({block, className}) {
-  Object.assign(styles, className);
+  // Object.assign(styles, className);
   const format = block.format || 'medium'
   const theme = block.theme || 'light'
+  const hasDescription = typeof block.description === 'string' || Array.isArray(block.description)
   const ui = typeof block.cta !== 'object' ? '' : (block.cta.hasOwnProperty('tracking') ? block.cta.tracking : '')
   const action = typeof block.cta !== 'object' ? '' : (block.cta.hasOwnProperty('action') ? block.cta.action : '')
   const tracking = {
@@ -21,11 +22,22 @@ export default function TextBlock({block, className}) {
     action: action
   }
   // ================================================================= Functions
+  const formatDescription = (text) => {
+    if (Array.isArray(text)) {
+      return (
+        <>
+          {text.map(item => (<p>{ item }</p> ))}
+        </>
+      )
+    }
+    return text
+  }
+
   const getHeadingType = (block) => {
     switch (block.format) {
-      case 'header' : return <h1 className={ clsx(styles.heading, "h1")}>{ block.heading }</h1>;
-      case 'small' : return <h3 className={ clsx(styles.heading, "h3")}>{ block.heading }</h3>;
-      default : return <h2 className={ clsx(styles.heading, "h2")}>{ block.heading }</h2>;
+      case 'header' : return <h1 className={ clsx(styles.heading, "h1", "heading")}>{ block.heading }</h1>;
+      case 'small' : return <h3 className={ clsx(styles.heading, "h3", "heading")}>{ block.heading }</h3>;
+      default : return <h2 className={ clsx(styles.heading, "h2", "heading")}>{ block.heading }</h2>;
     }
   }
   // ==================================================================== Export
@@ -33,8 +45,8 @@ export default function TextBlock({block, className}) {
     <div className={clsx('block text-block', `format__${format}`)}>
 
       { typeof block.label === 'string' &&
-        <div classNames={ clsx(styles.label) }>
-          <span className={ clsx(styles.labelText) }>
+        <div classNames={ clsx(styles.label, "label") }>
+          <span className={ clsx(styles.labelText, "label-text") }>
             { block.label }
           </span>
         </div>
@@ -43,14 +55,14 @@ export default function TextBlock({block, className}) {
       { typeof block.heading === 'string' && getHeadingType(block) }
 
       { typeof block.subheading === 'string' &&
-        <div className={ clsx(styles.subheading)}>
+        <div className={ clsx(styles.subheader, "subheading") }>
           { block.subheading }
         </div>
       }
 
-      { typeof block.description === 'string' &&
-        <div className={ clsx(styles.description)}>
-          { block.description }
+      { hasDescription &&
+        <div className={ clsx(styles.description, "description")}>
+          { formatDescription(block.description) }
         </div>
       }
 
@@ -58,6 +70,7 @@ export default function TextBlock({block, className}) {
         <div className={styles.cta}>
           <Button
             href={block.cta.url}
+            variant={block.cta.theme}
             tracking={tracking}>
 
               {block.cta.text}

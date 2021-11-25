@@ -7,6 +7,11 @@ import TextBlock from '../textblock/textblock'
 import ImageBlock from '../imageblock/imageblock'
 import CardListBlock from '../cardlistblock'
 
+import Squiggle from '../../assets/illustrations/squiggle'
+import Helix from '../../assets/illustrations/helix'
+import Corkscrew from '../../assets/illustrations/corkscrew'
+import Coil from '../../assets/illustrations/coil'
+
 import styles from './blockbuilder.module.scss'
 
 // ====================================================================== Export
@@ -52,14 +57,18 @@ class BlockBuilder extends React.Component {
       case 'image_block' : return <ImageBlock block={column}/>;
       case 'card_list_block' : return <CardListBlock block={column}/>;
       case 'sectional' : return <BlockBuilder subsections={column.subsections} />;
-      case 'custom' : return this.getCustomComponents(column.customizations)
+      case 'squiggle' : return <Squiggle id={column.id}/>;
+      case 'helix' : return <Helix id={column.id}/>;
+      case 'corkscrew' : return <Corkscrew id={column.id}/>;
+      case 'coil' : return <Coil id={column.id}/>;
+      case 'custom' : return this.getCustomComponents(column.customizations);
     }
   }
 
   // ====================================================== Template [Sectional]
   render(props) {
     return(
-      <div className="sectionals">
+      <div className="sectionals" id={this.props.id}>
         {this.props.subsections.map(subsection => (
           <section
             id={subsection.id}

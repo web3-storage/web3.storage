@@ -23,7 +23,7 @@ export const ButtonVariant = {
  * @prop { import('react').MouseEventHandler<HTMLButtonElement> } [onClick]
  * @prop {string} [href]
  * @prop {TrackingProp} [tracking]
- * @prop {'dark' | 'light' | 'outlined' } [variant]
+ * @prop {'dark' | 'light' | 'purple' } [variant]
  * @prop {import('react').ReactNode | string} children
  */
 
@@ -32,7 +32,7 @@ const Button = ({
   onClick,
   href,
   tracking,
-  variant,
+  variant = 'dark',
   children,
   ...props
 }) => {

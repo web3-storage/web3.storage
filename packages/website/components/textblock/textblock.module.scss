@@ -19,18 +19,13 @@
 
 }
 
-.heading {
-  &:not(:last-child) {
-    margin-bottom: 3rem;
-  }
-}
-
-.subheading {
-
-}
-
+.heading,
+.subheader,
 .description {
-  
+  margin-bottom: 1.25rem;
+  p {
+    margin-bottom: 1.25rem;
+  }
 }
 
 .cta {

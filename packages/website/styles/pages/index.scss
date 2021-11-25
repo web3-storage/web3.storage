@@ -1,4 +1,85 @@
+.page-index {
+  position: relative;
+}
+
+#section_1 {
+  position: relative;
+  z-index: 1;
+}
+
+#section_2 {
+  position: relative;
+  z-index: 1;
+}
+
+#hero_header {
+  position: relative;
+  .heading {
+    @include h1;
+    line-height: leading(55, 45);
+  }
+  .subheading {
+    @include fontSize_Regular;
+    @include fontWeight_Regular;
+    line-height: leading(34, 20);
+    margin-bottom: 1.25rem;
+  }
+}
+
 #intro_1 {
+  position: relative;
+  margin-top: 7rem;
+  padding: 8.125rem;
+  background-color: $ebony;
+  color: white;
+
+  &:after {
+    position: absolute;
+    bottom: 1px;
+    left: 0;
+    width: 100%;
+    transform: translateY(100%);
+    z-index: -1;
+    content: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1845.701' height='242.942' viewBox='0 0 1845.701 242.942'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect y='659' width='1845.701' height='242.942' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Scroll_Group_1' data-name='Scroll Group 1' transform='translate(0 -659)' clip-path='url(%23clip-path)' style='isolation: isolate'%3e%3cpath id='Path_19292' data-name='Path 19292' d='M-21173,9737.463s429.527-45.37,890.953,1,781.068,131.782,954.748,184.479V9050H-21173Z' transform='translate(21173 -9050)' fill='%2303040a'/%3e%3c/g%3e%3c/svg%3e");
+  }
+
+  .column-content,
+  .text-block {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+#intro_1-corkscrew {
+  position: absolute;
+  width: 154vw;
+  height: 100%;
+  transform: rotate(-16deg) translate(13%, -88%);
+  z-index: 0;
+  @include centerImage;
+  opacity: 0.25;
+  filter: blur(40px);
+}
+
+#intro_1-coil {
+  position: absolute;
+  width: 7.1875rem;
+  left: -3rem;
+  top: -12rem;
+  transform: rotate(17deg);
+}
+
+#intro_1-helix {
+  position: absolute;
+  width: 15rem;
+  right: -7rem;
+  top: -4.125rem;
+  transform: rotate(-79deg);
+  // z-index: 0;
+}
+
+#section_FAQ_info,
+#section_FAQ_ctas {
   background-color: $ebony;
   color: white;
 }

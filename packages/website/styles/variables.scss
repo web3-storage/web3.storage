@@ -151,6 +151,14 @@ $breakpoint_UltraLarge: 140.625rem; // 2250px
 }
 
 // --------------------------------------------------------------------- Styling
+@mixin centerImage {
+  position: absolute;
+  top: -9999px;
+  bottom: -9999px;
+  left: -9999px;
+  right: -9999px;
+  margin: auto;
+}
 
 // ------------------------------------------------------------------- Animation
 @mixin animation ($animate...) {

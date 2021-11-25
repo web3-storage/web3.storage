@@ -12,7 +12,7 @@ export default function ImageBlock({block}) {
   return (
     <>
       { block.src && (
-        <div className={ clsx("block", styles.imageBlock) }>
+        <div className={ clsx("block", "image-block", styles.imageBlock) }>
 
           <Image src={block.src} layout="fill" />
 
