@@ -25,16 +25,16 @@ export function unmarshal (buf) {
     signature: object.signature,
     validityType: object.validityType,
     validity: object.validity,
-    sequence: Object.hasOwnProperty.call(object, 'sequence') ? BigInt(`${ object.sequence }`) : 0,
+    sequence: Object.hasOwnProperty.call(object, 'sequence') ? BigInt(`${object.sequence}`) : 0,
     pubKey: object.pubKey,
-    ttl: Object.hasOwnProperty.call(object, 'ttl') ? BigInt(`${ object.ttl }`) : undefined,
+    ttl: Object.hasOwnProperty.call(object, 'ttl') ? BigInt(`${object.ttl}`) : undefined,
     signatureV2: object.signatureV2,
     data: object.data
   }
 }
 
 export async function validate (publicKey, entry) {
-  const {value, validityType, validity} = entry
+  const { value, validityType, validity } = entry
   let dataForSignature
   let signature
   if (entry.signatureV2 && entry.data) {
@@ -86,7 +86,7 @@ function ipnsEntryDataForV1Sig (value, validityType, validity) {
 
 function getValidityType (validityType) {
   if (validityType.toString() === '0') return 'EOL'
-  throw errCode(new Error(`unrecognized validity type: ${ validityType.toString() }`), 'ERROR_UNRECOGNIZED_VALIDITY')
+  throw errCode(new Error(`unrecognized validity type: ${validityType.toString()}`), 'ERROR_UNRECOGNIZED_VALIDITY')
 }
 
 const validateCborDataMatchesPbData = entry => {
