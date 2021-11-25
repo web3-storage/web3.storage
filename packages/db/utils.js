@@ -55,7 +55,7 @@ export function normalizeDeals (deals) {
     .map(deal => ({
       dealId: deal.dealId,
       storageProvider: deal.storageProvider,
-      status: deal.status,
+      status: deal.status[0].toUpperCase() + deal.status.slice(1),
       pieceCid: deal.pieceCid,
       dataCid: deal.dataCid,
       dataModelSelector: deal.dataModelSelector,
@@ -73,7 +73,7 @@ const PIN_STATUS = new Set([
 ])
 
 const DEAL_STATUS = new Set([
-  'Queued',
-  'Published',
-  'Active'
+  'queued',
+  'published',
+  'active'
 ])

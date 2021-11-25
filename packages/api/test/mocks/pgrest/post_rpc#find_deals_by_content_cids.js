@@ -9,7 +9,7 @@ module.exports = ({ body }) => {
       {
         dealId: 12345,
         storageProvider: 'f99',
-        status: 'Active',
+        status: 'active',
         pieceCid: 'baga',
         dataCid: 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm',
         dataModelSelector: 'Links/0/Links',
@@ -20,7 +20,7 @@ module.exports = ({ body }) => {
       {
         dealId: 123456,
         storageProvider: 'f98',
-        status: 'Terminated',
+        status: 'terminated',
         pieceCid: 'baga',
         dataCid: 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm',
         dataModelSelector: 'Links/0/Links',
@@ -31,7 +31,7 @@ module.exports = ({ body }) => {
     ]
   } else if (body.cids.includes('bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q')) {
     return [{
-      status: 'Queued',
+      status: 'queued',
       pieceCid: 'baga',
       dataCid: 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q',
       dataModelSelector: 'Links/0/Links'
