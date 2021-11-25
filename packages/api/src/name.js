@@ -24,7 +24,7 @@ export async function nameGet (request, env) {
 
   const rawRecord = await env.db.resolveNameRecord(key)
   if (!rawRecord) {
-    throw new HTTPError(`record not found for key: ${key}`, 404)
+    throw new HTTPError(`record not found for key: ${key}. Only keys published using the Web3.Storage API may be resolved here.`, 404)
   }
 
   const { value } = ipns.unmarshal(uint8ArrayFromString(rawRecord, 'base64pad'))
