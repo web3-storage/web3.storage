@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.0.3](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.2...db-v3.0.3) (2021-11-25)
+
+
+### Bug Fixes
+
+* deal status filtering ([#692](https://www.github.com/web3-storage/web3.storage/issues/692)) ([a7b4151](https://www.github.com/web3-storage/web3.storage/commit/a7b4151b05fa55646d337a090263a1eeb77b8169))
+
 ### [3.0.2](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.1...db-v3.0.2) (2021-11-23)
 
 
