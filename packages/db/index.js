@@ -1,6 +1,6 @@
 import { PostgrestClient } from '@supabase/postgrest-js'
 
-import { normalizeUpload, normalizeContent, normalizePins } from './utils.js'
+import { normalizeUpload, normalizeContent, normalizePins, normalizeDeals } from './utils.js'
 import { DBError } from './errors.js'
 import {
   getUserMetrics,
@@ -566,9 +566,8 @@ export class DBClient {
       throw new DBError(error)
     }
 
-    // TODO: normalize deal by removing deal prefix on dealActivation and dealExpiration
     const result = {}
-    for (const d of data) {
+    for (const d of normalizeDeals(data)) {
       const cid = d.dataCid
       if (!Array.isArray(result[cid])) {
         result[cid] = [d]

@@ -251,6 +251,7 @@ BEGIN
     select sum(c.dag_size)
     from pin p
     join content c on c.cid = p.content_cid
+    where p.status = ('Pinned')::pin_status_type
   )::TEXT;
 END
 $$;
