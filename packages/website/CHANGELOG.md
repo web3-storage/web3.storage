@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.7.1](https://www.github.com/web3-storage/web3.storage/compare/website-v1.7.0...website-v1.7.1) (2021-11-25)
+
+
+### Bug Fixes
+
+* advertise more correct size for storage in filecoin ([#690](https://www.github.com/web3-storage/web3.storage/issues/690)) ([f51387c](https://www.github.com/web3-storage/web3.storage/commit/f51387c1117074bae20da5aeaa5c8c2dd65c8631))
+
 ## [1.7.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.6.0...website-v1.7.0) (2021-11-23)
 
 
