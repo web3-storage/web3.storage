@@ -6,20 +6,16 @@ import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 // @ts-ignore
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
-import Button from '../components/button/button'
+import Button from '../components/button'
 import Hero from '../components/hero'
-import countly from 'Lib/countly'
+import countly from '../lib/countly'
 
-import IndexPageData from '../content/pages/index'
-
-import styles from './index.module.scss'
-
-import BlockBuilder from '../components/blockbuilder/blockbuilder'
 import { ReactComponent as OpenIcon } from 'Icons/open.svg'
 import { ReactComponent as SimpleIcon } from 'Icons/simple.svg'
 import { ReactComponent as ProvableStorage } from 'Icons/provable-storage.svg'
 import { ReactComponent as FreeIcon } from 'Icons/free.svg'
 import { ReactComponent as CopyIcon } from 'Icons/copy.svg'
+import { ReactComponent as Squares } from 'Illustrations/squares.svg'
 import { ReactComponent as GettingStartedIllustration } from 'Illustrations/getting-started-illustration.svg'
 
 /**
@@ -32,31 +28,25 @@ export function getStaticProps() {
       navBgColor: 'bg-w3storage-red',
       footerBgColor: 'bg-w3storage-red',
       highlightMessage: `Looking to store NFTs? Check out <a class="underline" href="https://nft.storage">NFT.Storage</a>!</p>`
-    }
+    },
   }
 }
 
 export default function Home() {
-  const sections = IndexPageData.page_content
   return (
     <>
-      <main class={ clsx("page", styles.pageIndex) }>
-        {sections.map((section, index) => (
-          <BlockBuilder
-            key={`section_${index}`}
-            subsections={section}/>
-        ))}
+      <Hero />
+      <main className="z-10 transform-gpu">
+        <WhyWeb3Storage />
+        <GetStarted />
       </main>
     </>
   )
 }
 
-// <WhyWeb3Storage />
-// <GetStarted />
-
 function WhyWeb3Storage() {
   const codeSnippets = {
-    store: `// Name the file \`store.mjs\` so you can use \`import\` with nodejs
+    store: `// Name the file \`store.mjs\` so you can use \`import\` with nodejs 
 // Run \`npm i web3.storage\` to install this package
 import { Web3Storage, getFilesFromPath } from 'web3.storage'
 
@@ -70,10 +60,10 @@ async function storeFiles () {
 }
 
 storeFiles()
-// Now run it with
+// Now run it with 
 // API_TOKEN=YOUR_TOKEN_HERE node ./store.mjs
 `,
-    retrieve: `// Name the file \`retrieve.mjs\` so you can use \`import\` with nodejs
+    retrieve: `// Name the file \`retrieve.mjs\` so you can use \`import\` with nodejs  
 // Run \`npm i web3.storage\` to install this package
 import { Web3Storage } from 'web3.storage'
 
@@ -93,8 +83,8 @@ async function retrieveFiles () {
 }
 
 retrieveFiles()
-// Now run it with
-// API_TOKEN=YOUR_TOKEN_HERE node ./retrieve.mjs
+// Now run it with 
+// API_TOKEN=YOUR_TOKEN_HERE node ./retrieve.mjs 
 `
   }
 
@@ -157,6 +147,7 @@ retrieveFiles()
       </div>
       <div className="md:layout-margins pt-24">
         <div className="relative flex flex-col xl:flex-row justify-between py-20 md:py-12 mt-20 bg-w3storage-blue-dark" style={{ borderTopLeftRadius: '6rem' }}>
+          <Squares className="absolute top-14 left-16 hidden md:block" />
           <div className="text-white pl-12 pr-12 md:pl-32 md:pr-0 w-full max-w-none xl:max-w-lg mb-16 mr-0 xl:mr-10 xl:mb-0">
             <h2 className="relative mb-8">
               <div className="h-5 w-1 absolute -left-4 top-1 md:top-2 mt-1 bg-w3storage-red" />
@@ -232,7 +223,7 @@ function GetStarted() {
           <p className="text-lg mt-8">
             Storing data on open, public infrastructure shouldn’t be a battle.
             <br/>
-            Start building applications backed by Filecoin in 3 steps, it’s that easy.
+            Start building applications backed by Filecoin in 3 steps, it’s that easy.  
           </p>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-4 xl:gap-x-12 mt-20">
             <div className="flex flex-col border-white p-10 mb-10 lg:mb-0" style={{borderWidth: 3}}>

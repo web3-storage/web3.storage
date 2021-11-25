@@ -26,7 +26,7 @@ const Button = ({
 
   return (
     <div className={clsx(className, styles.button)}>
-      { href 
+      { href
         ? (
           openInNewWindow
           ?

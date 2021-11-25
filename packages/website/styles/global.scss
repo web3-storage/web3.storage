@@ -47,7 +47,7 @@ html, body {
   font-weight: $fontWeight_Regular;
   line-height: $leading_Regular;
   letter-spacing: $letterSpacing_Large;
-  color: white;
+  color: $ebony;
   background-color: $seaShell;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -86,10 +86,53 @@ a, button {
   cursor: pointer;
 }
 
+// ///////////////////////////////////////////////////////////////// Next & Grid
+// -----------------------------------------------------------------------------
+#__next {
+  position: relative;
+  z-index: 2;
+}
+
+.master-container {
+  position: relative;
+}
+
+[class~="grid"],
+[class*="grid-"],
+[class*="grid_"] {
+  width: $containerWidth;
+  margin: 0 auto;
+  @include customMaxMQ ($containerWidth + 4rem) {
+    padding: 0 4.1665%;
+    width: 100%;
+  }
+  &[class*="-noGutter"] {
+    margin: 0 auto;
+  }
+  &.full {
+    width: 100%;
+    padding: 0 0.5rem;
+    &.maxed {
+      max-width: 90rem;
+    }
+  }
+  &.no-padding {
+    padding: 0;
+  }
+  [class~="grid"],
+  [class*="grid-"],
+  [class*="grid_"] {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+
 // ////////////////////////////////////////////////////////////////// Typography
 // -----------------------------------------------------------------------------
 h1, .h1 {
   @include h1;
+  line-height: leading(55, 45);
 }
 
 h2, .h2 {
@@ -172,4 +215,8 @@ h3, .h3 {
 .prose h3 > a,
 .prose h4 > a {
   text-decoration: none;
+}
+
+.image-full-width {
+  width: 100%;
 }

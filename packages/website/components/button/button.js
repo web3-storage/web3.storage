@@ -17,7 +17,7 @@ export const ButtonVariant = {
  * @prop {string} ui UI section id. One of countly.ui.
  * @prop {string} [action] Action id. used to uniquely identify an action within a ui section.
  * @prop {string} [event] Custom event name to be used instead of the default CTA_LINK_CLICK.
- * 
+ *
  * @typedef {Object} ButtonProps
  * @prop {string} [className]
  * @prop { import('react').MouseEventHandler<HTMLButtonElement> } [onClick]
@@ -46,7 +46,7 @@ const Button = ({
     })
     onClick && onClick(event)
   }, [])
-  
+
   return (
     <ZeroButton
       {...props}

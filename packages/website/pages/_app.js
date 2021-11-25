@@ -9,8 +9,8 @@ import countly from 'Lib/countly';
 
 
 const queryClient = new QueryClient({
-  defaultOptions: { 
-    queries: { 
+  defaultOptions: {
+    queries: {
       refetchOnWindowFocus: false,
       staleTime: 60 * 1000
     }
@@ -29,7 +29,7 @@ export default function App({ Component, pageProps }) {
       countly.trackPageView(route)
     })
   }, [])
-  
+
   return (
     <QueryClientProvider client={queryClient}>
       <StateProvider>
