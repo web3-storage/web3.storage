@@ -1,4 +1,3 @@
-/// <reference path="../dist/src/name.d.ts" />
 import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string'
 import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
 import * as ipns from 'ipns'
