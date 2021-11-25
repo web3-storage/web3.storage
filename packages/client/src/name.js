@@ -1,3 +1,31 @@
+/**
+ * A client library for the w3name - IPNS over HTTP API. It provides a
+ * convenient interface for creating names, making revisions to name records,
+ * and publishing and resolving them via the HTTP API.
+ *
+ * @example
+ * ```js
+ * import { Web3Storage } from 'web3.storage'
+ * import * as Name from 'web3.storage/name'
+ *
+ * const client = new Web3Storage({ token: API_TOKEN })
+ * const name = await Name.create()
+ *
+ * console.log('Name:', name.toString())
+ * // e.g. k51qzi5uqu5di9agapykyjh3tqrf7i14a7fjq46oo0f6dxiimj62knq13059lt
+ *
+ * // The value to publish
+ * const value = '/ipfs/bafkreiem4twkqzsq2aj4shbycd4yvoj2cx72vezicletlhi7dijjciqpui'
+ * const revision = await Name.v0(name, value)
+ *
+ * // Publish the revision
+ * await Name.publish(client, revision, name.key)
+ *
+ * // Resolve the latest value
+ * await Name.resolve(name)
+ * ```
+ * @module
+ */
 import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string'
 import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
 import * as ipns from 'ipns'
@@ -19,9 +47,11 @@ const defaultValidity = () => new Date(Date.now() + ONE_YEAR).toISOString()
  *   bytes: Uint8Array,
  *   verify (data: Uint8Array, signature: Uint8Array): Promise<boolean>
  * }} PublicKey
+ *
  * @typedef {{
  *   sign (data: Uint8Array): Promise<Uint8Array>
  * }} SigningKey
+ *
  * @typedef {{
  *   public: PublicKey,
  *   bytes: Uint8Array
