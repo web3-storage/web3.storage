@@ -71,4 +71,8 @@
       }
     }
   }
+  & > *:last-child {
+    margin-left: 1.5rem;
+    margin-right: 0;
+  }
 }

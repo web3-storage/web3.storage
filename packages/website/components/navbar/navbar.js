@@ -80,7 +80,7 @@ export default function Navbar({ isLoggedIn, isLoadingUser }) {
         ui: countly.ui.NAVBAR,
         action: 'Logout'
       }}>
-      Logout
+      Sign Out
     </Button>
   )
 
@@ -93,7 +93,7 @@ export default function Navbar({ isLoggedIn, isLoadingUser }) {
         ui: countly.ui.NAVBAR,
         action: 'Login'
       }}>
-      Login
+      Sign In
     </Button>
     )
 

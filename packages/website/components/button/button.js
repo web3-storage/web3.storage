@@ -50,7 +50,7 @@ const Button = ({
   return (
     <ZeroButton
       {...props}
-      className={clsx(styles.button, styles[variant])}
+      className={clsx("button", variant)}
       onClick={onClickHandler}
     >
       {children}
