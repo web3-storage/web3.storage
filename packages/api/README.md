@@ -207,6 +207,33 @@ Delete a given user token.
 
 Get the user account information.
 
+### 🔒 `POST /name/:key`
+
+**❗️Experimental** this API may not work, may change, and may be removed in a future version.
+
+Publish a name record for the given key ID.
+
+Users create a keypair<sup>*</sup> and derive a **Key ID** from the public key that acts as the "name".
+
+<details>
+  <summary>What is the Key ID?</summary>
+  <p>The Key ID is the base36 "libp2p-key" encoding of the public key. The public key is protobuf encoded and contains <code>Type</code> and <code>Data</code> properties, see <a href="https://github.com/libp2p/js-libp2p-crypto/blob/c29c1490bbd25722437fdb36f2f0d1a705f35909/src/keys/ed25519-class.js#L25-L30"><code>ed25519-class.js</code> for example</a>.</p>
+</details>
+
+The updated IPNS record is signed with the private key and sent in the request body (base 64 encoded). The server validates the record and ensures the sequence number is greater than the sequence number of any cached record.
+
+<sup>*</sup> Currently a Ed25519 2048 bit (min) key.
+
+### 🤲 `GET /name/:key`
+
+**❗️Experimental** this API may not work, may change, and may be removed in a future version.
+
+Resolve the current CID for the given key ID.
+
+Users "resolve" a Key ID to the current _value_ of a _record_. Typically an IPFS path. Keypair owners "publish" IPNS _records_ to create or update the current _value_.
+
+It returns the resolved value AND the full name record (base 64 encoded, for client side verification).
+
 ## Setup Sentry
 
 Inside the `/packages/api` folder create a file called `.env.local` with the following content.

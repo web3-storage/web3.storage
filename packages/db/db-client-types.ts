@@ -241,3 +241,7 @@ export type ListUploadsOptions = {
    */
   sortOrder?: 'Asc' | 'Desc'
 }
+
+export type NameItem = {
+  record: definitions['name']['record']
+}
