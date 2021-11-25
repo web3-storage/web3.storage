@@ -1,15 +1,32 @@
+// ===================================================================== Imports
 import { useCallback } from 'react'
+import countly from 'Lib/countly'
 import Link from 'next/link'
 
-import countly from 'Lib/countly'
+import { ReactComponent as SiteLogo } from 'Icons/w3storage-logo.svg'
+import Button from '../button/button.js'
+import Squiggle from '../../assets/illustrations/squiggle'
 
+import GeneralPageData from '../../content/pages/general'
+
+// ====================================================================== Params
 /**
  * Footer Component
  *
  * @param {Object} props
  * @param {string} [props.bgColor]
  */
-export default function Footer({ bgColor = '' }) {
+ // ===================================================================== Exports
+export default function Footer() {
+  const contact = GeneralPageData.footer.contact
+  const resources = GeneralPageData.footer.resources
+  const getStarted = GeneralPageData.footer.get_started
+  const tracking = {
+    ui: countly.ui[contact.cta.tracking],
+    action: contact.cta.tracking.action
+  }
+
+  // ================================================================= Functions
   const onLinkClick = useCallback((event) => {
     countly.trackCustomLinkClick(
       countly.events.LINK_CLICK_FOOTER,
@@ -17,56 +34,69 @@ export default function Footer({ bgColor = '' }) {
     )
   }, [])
 
+  // ========================================================= Template [Footer]
   return (
-    <footer className={`${bgColor} mt-auto text-w3storage-purple`}>
-      <div className="layout-margins flex flex-col xl:flex-row items-left xl:items-center justify-between py-8">
-        <div className="text-sm mt-4 order-2 xl:order-1 xl:mt-0">
-          Made with 💛 by{' '}
-          <a
-            href="https://protocol.ai/"
-            className="font-bold no-underline hover:underline"
-            onClick={onLinkClick}
-          >
-            Protocol Labs
-          </a>
+    <footer id="site-footer">
+      <section class="site-footer-section">
+
+        <Squiggle id="footer_squiggle"/>
+
+        <div class="grid-middle">
+          <div class="col-10" data-push-left="off-1">
+            <div class="footer_columns" data-push-left="off-1">
+
+              <div class="footer_contact">
+                <div class="footer_logo-container">
+                  <SiteLogo class="site-logo-image"/>
+                  <div class="site-logo-text">
+                    { contact.logo_text }
+                  </div>
+                </div>
+                <div class="prompt">
+                  { contact.prompt }
+                </div>
+                { typeof contact.cta === 'object' &&
+                  <Button
+                    href={contact.cta.url}
+                    variant={contact.cta.variant}
+                    tracking={tracking}>
+                      {contact.cta.text}
+                  </Button>
+                }
+              </div>
+
+              <div class="footer_resources">
+                <div class="label">
+                  { resources.heading }
+                </div>
+                { resources.items.map(item => (
+                  <Link
+                    href={item.url}
+                    key={item.text}
+                    onClick={onLinkClick}>
+                    { item.text }
+                  </Link>
+                ))}
+              </div>
+
+              <div class="footer_get-started">
+                <div class="label">
+                  { getStarted.heading }
+                </div>
+                { getStarted.items.map(item => (
+                  <Link
+                    href={item.url}
+                    key={item.text}
+                    onClick={onLinkClick}>
+                    { item.text }
+                  </Link>
+                ))}
+              </div>
+
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col order-1 xl:order-2 sm:flex-row mx-0 sm:-mx-3">
-          <Link href="https://status.web3.storage/">
-            <a
-              className="text-sm font-bold no-underline hover:underline py-3 sm:px-3"
-              onClick={onLinkClick}
-            >
-              Status
-            </a>
-          </Link>
-          <Link href="/about/#terms-of-service">
-            <a
-              className="text-sm font-bold no-underline hover:underline py-3 sm:px-3"
-              onClick={onLinkClick}
-            >
-              Terms of service
-            </a>
-          </Link>
-          <Link href="https://github.com/web3-storage/web3.storage/issues/new/choose">
-            <a
-              className="text-sm font-bold no-underline hover:underline py-3 sm:px-3"
-              target="_blank"
-              rel="noreferrer"
-              onClick={onLinkClick}
-            >
-              Open an issue
-            </a>
-          </Link>
-          <Link href="https://docs.web3.storage/community/help-and-support/">
-            <a
-              className="text-sm font-bold no-underline hover:underline py-3 sm:px-3"
-              onClick={onLinkClick}
-            >
-              Contact us
-            </a>
-          </Link>
-        </div>
-      </div>
+      </section>
     </footer>
   )
 }
