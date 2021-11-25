@@ -1,14 +1,14 @@
 import clsx from 'clsx';
 
 /**
- * @param {Object} props.block
+ * @param {Object} props.card
 */
 
-export default function Card({block}) {
+export default function Card({card}) {
   return (
     <div className={ clsx('block', 'text-block')}>
-      <div class="heading">{ block.heading }</div>
-      <div class="subheading">{ block.subheading }</div>
+      <div class="title">{ card.title }</div>
+      <div class="description">{ card.description }</div>
     </div>
   )
 }

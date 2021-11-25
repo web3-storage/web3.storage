@@ -14,9 +14,11 @@ export default function TextBlock({block, className}) {
   Object.assign(styles, className);
   const format = block.format || 'medium'
   const theme = block.theme || 'light'
+  const ui = typeof block.cta !== 'object' ? '' : (block.cta.hasOwnProperty('tracking') ? block.cta.tracking : '')
+  const action = typeof block.cta !== 'object' ? '' : (block.cta.hasOwnProperty('action') ? block.cta.action : '')
   const tracking = {
-    ui: countly.ui[block.cta.tracking.ui],
-    action: block.cta.tracking.action
+    ui: countly.ui[ui],
+    action: action
   }
   // ================================================================= Functions
   const getHeadingType = (block) => {

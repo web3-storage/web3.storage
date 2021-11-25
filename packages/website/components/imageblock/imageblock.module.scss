@@ -1,11 +1,14 @@
 // ///////////////////////////////////////////////////////////////////// General
 .imageBlock {
   position: relative;
-}
-
-.image {
-  display: block;
-  width: 100%;
+  div {
+    position: relative !important;
+  }
+  img {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
 }
 
 .label {

@@ -26,11 +26,77 @@
             "cta": {
               "url": "/login",
               "text": "START STORING NOW",
-              "tracking": {
-                "ui": "HOME_HERO",
-                "action": "Get Started"
-              }
+              "tracking": "HOME_HERO",
+              "action": "Get Started"
             }
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "intro_1",
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-5"
+            },
+            "format": "medium",
+            "heading": "Store and retrieve with ease",
+            "description": "Most decentralized storage services need you to compile your data into a specific format, find a storage provider to host your data, buy some cryptocurrency to pay the storage provider, and then send your data across the internet. With Web3.Storage, you can upload any data to our API our web UI for free, and the data will end up on a decentralized set of IPFS and Filecoin storage providers.",
+            "cta": {
+              "url": "/",
+              "text": "LEARN MORE"
+            }
+          },
+          {
+            "type": "image_block",
+            "cols": {
+              "num": "col-6",
+              "push_left": "off-1"
+            },
+            "src": "/images/placeholder-code-image.png"
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "intro_2-heading",
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-4"
+            },
+            "format": "medium",
+            "heading": "Web3.Storage is built for scale"
+          }
+        ]
+      },
+      {
+        "id": "intro_2-statistics",
+        "columns": [
+          {
+            "type": "card_list_block",
+            "cols": {
+              "num": "col-12"
+            },
+            "cards": [
+              {
+                "title": "Projects Worldwide",
+                "description": "Join a global community storing data on web3"
+              },
+              {
+                "title": "Stored Objects",
+                "description": "Store data for free with our easy to use API or our JS library"
+              },
+              {
+                "title": "Filecoin Storage Providers",
+                "description": "Data is stored trustlessly across a growing network of storage providers via Filecoin"
+              }
+            ]
           }
         ]
       }
