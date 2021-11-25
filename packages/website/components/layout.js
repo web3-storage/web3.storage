@@ -55,16 +55,16 @@ const MessageBanner = ({ highlightMessage }) => {
 
   if (maintenanceMessage) {
     return (
-      <div className="w-full bg-w3storage-yellow text-center" style={{ zIndex: 50 }}>
-        <div className="layout-margins py-2">
-          <span className="text-xl">⚠</span> <span className="typography-cta">{maintenanceMessage}</span>
+      <div style={{ zIndex: 50, width: '100vw' }}>
+        <div>
+          <span>⚠</span> <span className="typography-cta">{maintenanceMessage}</span>
         </div>
       </div>
     )
   }
 
   if (highlightMessage) {
-    return <div className="w-full bg-w3storage-purple text-white typography-cta text-center py-1" dangerouslySetInnerHTML={{ __html: highlightMessage }} />
+    return <div id="site-message-banner" dangerouslySetInnerHTML={{ __html: highlightMessage }} />
   }
 
   return null

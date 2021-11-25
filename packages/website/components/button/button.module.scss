@@ -1,3 +1,5 @@
+// @import '../../styles/global';
+
 .button {
   cursor: pointer;
 
@@ -18,7 +20,7 @@
 
   &.dark {
     border: 1px solid transparent;
-    background: #171691;
+    background-color: black;
 
     button {
       color: #fff;
@@ -34,10 +36,10 @@
     }
   }
 
-  &.outlined {
+  &.purple {
     border: 2px solid #171691;
     background: transparent;
-    
+
     button {
       color: #171691;
     }

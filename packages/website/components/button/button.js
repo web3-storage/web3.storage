@@ -9,7 +9,7 @@ import styles from './button.module.scss';
 export const ButtonVariant = {
   DARK: 'dark',
   LIGHT: 'light',
-  OUTLINED: 'outlined'
+  PURPLE: 'purple'
 }
 
 /**

@@ -9,7 +9,7 @@ import clsx from 'clsx'
 import Router from 'next/router'
 import Link from 'next/link'
 
-import Button from '../button.js'
+import Button from '../button/button.js'
 import { ReactComponent as SiteLogo } from 'Icons/w3storage-logo.svg'
 import { ReactComponent as Hamburger } from 'Icons/hamburger.svg'
 import { ReactComponent as Cross } from 'Icons/cross.svg'
@@ -108,73 +108,81 @@ export default function Navbar({ isLoggedIn, isLoadingUser }) {
 
   // ================================================ Main Template [Navigation]
   return (
-    <nav class={styles.navigation} ref={containerRef}>
+    <section id="section_navigation">
+      <div class="grid-noGutter">
+        <div class="col">
+          <nav id="navigation" class={styles.navigation} ref={containerRef}>
 
-      <div class={styles.navBar}>
-        { isSmallVariant &&
-          <div class="menu-toggle">
-            <button onClick={toggleMenu}>
-              <Hamburger aria-label="Toggle Navbar"/>
-            </button>
-          </div>
-        }
+            <div class={ clsx(styles.navBar, "nav-bar") }>
+              { isSmallVariant &&
+                <div class="menu-toggle">
+                  <button onClick={toggleMenu}>
+                    <Hamburger aria-label="Toggle Navbar"/>
+                  </button>
+                </div>
+              }
 
-        <div>
-          <a
-            href="/"
-            title={logoText}
-            onClick={onLinkClick}>
-            <SiteLogo className={styles.siteLogo}/>
-            <span>{ logoText }</span>
-          </a>
+              <div class="site-logo-container">
+                <a
+                  href="/"
+                  title={logoText}
+                  class="anchor-wrapper"
+                  onClick={onLinkClick}>
+                  <SiteLogo class="site-logo-image"/>
+                  <div class="site-logo-text">
+                    { logoText }
+                  </div>
+                </a>
+              </div>
+
+              <div class={ clsx(styles.navItemsContainer, "nav-items-wrapper") }>
+                { navItems.map(item => (
+                  <Link
+                    href={item.url}
+                    key={item.text}
+                    onClick={onLinkClick}>
+                    { item.text }
+                  </Link>
+                ))}
+
+                { isLoadingUser ? spinnerButton : (isLoggedIn ? logoutButton : loginButton) }
+              </div>
+
+            </div>
+
+            <div
+              class={ clsx("mobile-panel", isMenuOpen ? 'open' : '' ) }
+              aria-hidden={isSmallVariant && isMenuOpen}>
+              <div>
+                <a
+                  href="/"
+                  title={logoText}
+                  onClick={onLinkClick}>
+                  <SiteLogo />
+                </a>
+
+                { navItems.map(item => (
+                  <Link
+                    href={item.url}
+                    key={item.text}
+                    class="nav-item">
+                    <a onClick={() => toggleMenu()}>
+                      { item.text }
+                    </a>
+                  </Link>
+                ))}
+
+                <button
+                  class="exit-button"
+                  onClick={ () => toggleMenu() }>
+                  <Cross />
+                </button>
+              </div>
+            </div>
+
+          </nav>
         </div>
-
-        <div class={styles.navItemsContainer}>
-          { navItems.map(item => (
-            <Link
-              href={item.url}
-              key={item.text}
-              class="nav-item"
-              onClick={onLinkClick}>
-              { item.text }
-            </Link>
-          ))}
-
-          { isLoadingUser ? spinnerButton : (isLoggedIn ? logoutButton : loginButton) }
-        </div>
-
       </div>
-
-      <div
-        class={ clsx(styles.mobilePanel, isMenuOpen ? styles.open : '' ) }
-        aria-hidden={isSmallVariant && isMenuOpen}>
-        <div>
-          <a
-            href="/"
-            title={logoText}
-            onClick={onLinkClick}>
-            <SiteLogo className={styles.siteLogo}/>
-          </a>
-
-          { navItems.map(item => (
-            <Link
-              href={item.url}
-              key={item.text}
-              class="nav-item">
-              <a onClick={() => toggleMenu()}>
-                { item.text }
-              </a>
-            </Link>
-          ))}
-
-          <button
-            class="exit-button"
-            onClick={ () => toggleMenu() }>
-            <Cross />
-          </button>
-        </div>
-      </div>
-
-    </nav>
+    </section>
   )
 }
