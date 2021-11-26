@@ -15,19 +15,19 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-      "@magic-ext/oauth": "0.7.0",
-      "clsx": "1.1.1",
-      "countly-sdk-web": "20.11.2",
-      "filesize": "6.1.0",
-     "magic-sdk": "4.2.1",
-     "next": "12.0.1",
+    "@magic-ext/oauth": "0.7.0",
+    "clsx": "1.1.1",
+    "countly-sdk-web": "20.11.2",
+    "filesize": "6.1.0",
+    "magic-sdk": "4.2.1",
+    "next": "12.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-      "react-dropzone": "11.3.4",
-      "react-markdown": "6.0.2",
-      "react-syntax-highlighter": "11.0.3",
-      "remark-slug": "6.1.0",
-      "web3.storage": "^3.0.0"
+    "react-dropzone": "11.3.4",
+    "react-markdown": "6.0.2",
+    "react-syntax-highlighter": "11.0.3",
+    "remark-slug": "6.1.0",
+    "web3.storage": "^3.0.0"
   },
   "devDependencies": {
     "@storybook/addon-actions": "6.3.12",
@@ -38,8 +38,10 @@
     "@types/react": "17.0.36",
     "@types/react-dom": "17.0.11",
     "@types/react-syntax-highlighter": "13.5.2",
+    "@typescript-eslint/eslint-plugin": "5.4.0",
+    "@typescript-eslint/parser": "5.4.0",
     "css-loader": "5.2.7",
-    "eslint": "7.24.0",
+    "eslint": "7.32.0",
     "eslint-config-next": "12.0.4",
     "eslint-config-prettier": "8.3.0",
     "eslint-config-react-app": "6.0.0",
@@ -51,13 +53,14 @@
     "eslint-plugin-react": "7.27.1",
     "eslint-plugin-react-hooks": "4.3.0",
     "husky": "4.3.8",
+    "lint-staged": "12.1.2",
     "next-sitemap": "1.6.173",
+    "prettier": "2.4.1",
     "sass": "1.43.4",
     "sass-loader": "10.1.1",
     "style-loader": "2.0.0",
     "typescript": "4.3.5",
-    "url-loader": "4.1.1",
-    "lint-staged": "12.1.2"
+    "url-loader": "4.1.1"
   },
   "husky": {
     "hooks": {
