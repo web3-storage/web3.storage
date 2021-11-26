@@ -63,7 +63,8 @@ export class DBClient {
         email: user.email,
         issuer: user.issuer,
         github: user.github,
-        public_address: user.publicAddress
+        public_address: user.publicAddress,
+        pinning_enabled: user.pinningEnabled
       }, {
         onConflict: 'issuer'
       })
@@ -95,6 +96,7 @@ export class DBClient {
         email,
         github,
         publicAddress:public_address,
+        pinningEnabled:pinning_enabled,
         created:inserted_at,
         updated:updated_at
       `)

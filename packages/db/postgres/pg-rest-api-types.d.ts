@@ -1150,6 +1150,7 @@ export interface paths {
           issuer?: parameters["rowFilter.user.issuer"];
           github?: parameters["rowFilter.user.github"];
           public_address?: parameters["rowFilter.user.public_address"];
+          pinning_enabled?: parameters["rowFilter.user.pinning_enabled"];
           inserted_at?: parameters["rowFilter.user.inserted_at"];
           updated_at?: parameters["rowFilter.user.updated_at"];
           /** Filtering Columns */
@@ -1209,6 +1210,7 @@ export interface paths {
           issuer?: parameters["rowFilter.user.issuer"];
           github?: parameters["rowFilter.user.github"];
           public_address?: parameters["rowFilter.user.public_address"];
+          pinning_enabled?: parameters["rowFilter.user.pinning_enabled"];
           inserted_at?: parameters["rowFilter.user.inserted_at"];
           updated_at?: parameters["rowFilter.user.updated_at"];
         };
@@ -1232,6 +1234,7 @@ export interface paths {
           issuer?: parameters["rowFilter.user.issuer"];
           github?: parameters["rowFilter.user.github"];
           public_address?: parameters["rowFilter.user.public_address"];
+          pinning_enabled?: parameters["rowFilter.user.pinning_enabled"];
           inserted_at?: parameters["rowFilter.user.inserted_at"];
           updated_at?: parameters["rowFilter.user.updated_at"];
         };
@@ -1743,6 +1746,7 @@ export interface definitions {
     issuer: string;
     github?: string;
     public_address: string;
+    pinning_enabled: boolean;
     inserted_at: string;
     updated_at: string;
   };
@@ -1883,6 +1887,7 @@ export interface parameters {
   "rowFilter.user.issuer": string;
   "rowFilter.user.github": string;
   "rowFilter.user.public_address": string;
+  "rowFilter.user.pinning_enabled": string;
   "rowFilter.user.inserted_at": string;
   "rowFilter.user.updated_at": string;
 }

@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS public.user
   github          TEXT,
   -- Cryptographic public address of the Magic User.
   public_address  TEXT                                                          NOT NULL UNIQUE,
+  pinning_enabled BOOLEAN                                                       NOT NULL DEFAULT FALSE,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );

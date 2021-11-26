@@ -9,6 +9,7 @@ export type UpsertUserInput = {
   issuer: definitions['user']['issuer'],
   github?: definitions['user']['github'],
   publicAddress: definitions['user']['public_address']
+  pinningEnabled?: definitions['user']['pinning_enabled']
 }
 
 export type UpsertUserOutput = {
@@ -24,6 +25,7 @@ export type UserOutput = {
   issuer: definitions['user']['issuer'],
   github?: definitions['user']['github']
   publicAddress: definitions['user']['public_address']
+  pinningEnabled: definitions['user']['pinning_enabled']
   created: definitions['user']['inserted_at'],
   updated: definitions['user']['updated_at']
 }
@@ -134,7 +136,7 @@ export type ContentInput = {
   dagSize: definitions['content']['dag_size']
   pins: Array<{
     status: definitions['pin']['status']
-    updated: definitions['pin']['updated_at']
+    // updated: definitions['pin']['updated_at']
     location: Location
   }>
 }
@@ -145,7 +147,7 @@ export type ContentItem = {
   created?: definitions['upload']['inserted_at']
   pins: Array<{
     status: definitions['pin']['status']
-    updated: definitions['pin']['updated_at']
+    // updated: definitions['pin']['updated_at']
     location: Location
   }>
 }
@@ -155,7 +157,7 @@ export type ContentItemOutput = {
   cid: definitions['content']['cid']
   dagSize?: definitions['content']['dag_size']
   pins: Array<PinItemOutput>,
-  deals: Array<Deal>
+  deals?: Array<Deal>
 }
 
 
@@ -192,7 +194,7 @@ export type UploadItem = {
 }
 
 export type UploadItemOutput = {
-  _id: string
+  _id?: string
   type: definitions['upload']['type']
   name?: definitions['upload']['name']
   created: definitions['upload']['inserted_at']
@@ -200,7 +202,7 @@ export type UploadItemOutput = {
   cid: definitions['content']['cid']
   dagSize?: definitions['content']['dag_size']
   pins: Array<PinItemOutput>,
-  deals: Array<Deal>
+  deals?: Array<Deal>
 }
 
 export type UploadOutput = definitions['upload'] & {

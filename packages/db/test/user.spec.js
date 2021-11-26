@@ -40,6 +40,7 @@ describe('user operations', () => {
     assert.strictEqual(user.email, email, 'user has correct email')
     assert.strictEqual(user.issuer, issuer, 'user has correct issuer')
     assert.strictEqual(user.publicAddress, publicAddress, 'user has correct public address')
+    assert.strictEqual(user.pinningEnabled, false, 'user does not have pinning enabled')
   })
 
   it('should fail to get a non existing user', async () => {
@@ -71,13 +72,15 @@ describe('user operations', () => {
     const name = 'test-name'
     const email = 'new-test@email.com'
     const publicAddress = `public_address${Math.random()}`
+    const pinningEnabled = true
 
     const upsertUser = await client.upsertUser({
       id: user._id,
       name,
       email,
       issuer: user.issuer,
-      publicAddress
+      publicAddress,
+      pinningEnabled
     })
 
     assert(upsertUser, 'user updated')
@@ -86,6 +89,7 @@ describe('user operations', () => {
     assert.strictEqual(updatedUser.email, email, 'user has new email')
     assert.strictEqual(updatedUser._id, user._id, 'user has same id')
     assert.strictEqual(updatedUser.created, user.created, 'user has same created timestamp')
+    assert.strictEqual(updatedUser.pinningEnabled, pinningEnabled, 'user now has pinning enabled')
   })
 
   it('can create auth keys for user', async () => {

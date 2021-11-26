@@ -77,7 +77,7 @@ describe('Content', () => {
       assert.strictEqual(count, 1)
     })
 
-    it('it returns the created conten cid', async () => {
+    it('it returns the created content cid', async () => {
       assert.strictEqual(cidToBeCreated, createdCid)
     })
 
@@ -123,6 +123,9 @@ describe('Content', () => {
     })
 
     it('it does not add a duplicated content if already exists', async () => {
+      /**
+       * @type {import('../db-client-types').ContentInput}
+       */
       const otherContentToBeCreated = {
         cid: anotherCid,
         dagSize: 10,
@@ -188,6 +191,9 @@ describe('Content', () => {
        */
       const aSecondPinRequestOutput = await client.createPAPinRequest(aSecondPinRequestInput)
 
+      /**
+       * @type {import('../db-client-types').ContentInput}
+       */
       const contentWithPinRequest = {
         cid: cidToBeCreatedWithPinRequest,
         dagSize: 10,
