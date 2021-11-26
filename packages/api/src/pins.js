@@ -27,9 +27,11 @@ const STATUS_OPTIONS = ['queued', 'pinning', 'pinned', 'failed']
  * @param {import('./user').AuthenticatedRequest} request
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
+ * @return {Promise<JSONResponse>}
  */
 export async function pinPost (request, env, ctx) {
-  const { cid, name, origins, meta } = await request.json()
+  const pinData = await request.json()
+  const { cid, name, origins, meta } = pinData
 
   // Require cid
   if (!cid) {
@@ -39,8 +41,9 @@ export async function pinPost (request, env, ctx) {
     )
   }
 
+  // Validate cid
   try {
-    const normalizedCid = normalizeCid(cid)
+    normalizeCid(cid)
   } catch (err) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_CID } },
@@ -74,8 +77,31 @@ export async function pinPost (request, env, ctx) {
     }
   }
 
-  // TODO: write logic for pinning cid
-  return new JSONResponse('OK')
+  const { authToken } = request.auth
+  const pinStatus = await createPin(pinData, authToken, env, ctx)
+  return new JSONResponse(pinStatus)
+}
+
+/**
+ * @param {Object} pinData
+ * @param {string} authToken
+ * @param {import('./env').Env} env
+ * @param {import('./index').Ctx} ctx
+ * @returns {Promise<import('@web3-storage/db/db-client-types').PAPinRequestUpsertOutput>}
+ */
+const createPin = async (pinData, authToken, env, ctx) => {
+  const { cid, name, origins, meta } = pinData
+  const normalizedCid = normalizeCid(cid)
+
+  env.cluster.pin(normalizedCid, { origins, name, metadata: meta })
+
+  const pinRequest = await env.db.createPAPinRequest({
+    requestedCid: normalizedCid,
+    authKey: authToken,
+    name
+  })
+
+  return pinRequest
 }
 
 /**
