@@ -103,6 +103,18 @@
           "url": "/login"
         }
       ]
+    },
+    "copyright": {
+      "left": {
+        "text": "2021 Protocol Labs"
+      },
+      "right": {
+        "text": "Want more free storage?",
+        "link": {
+          "text": "Submit a request",
+          "url": ""
+        }
+      }
     }
   }
 }

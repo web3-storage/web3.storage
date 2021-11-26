@@ -5,7 +5,7 @@ $footerLogoWidth: 2.25rem;
 #site-footer {
   background-color: $ebony;
   color: white;
-  padding: 4.875rem 0;
+  padding-top: 4.875rem;
 }
 
 #site-footer-section {
@@ -15,9 +15,9 @@ $footerLogoWidth: 2.25rem;
 #footer_squiggle {
   position: absolute;
   width: 33.125rem;
-  left: -10.5rem;
-  top: 50%;
-  transform: rotate(-206deg);
+  left: -11.5rem;
+  top: 31rem;
+  transform: scaleX(-1) rotate(25deg);
   z-index: 0;
 }
 
@@ -30,7 +30,8 @@ $footerLogoWidth: 2.25rem;
 }
 
 .footer_contact {
-  margin-right: 4.875rem;
+  margin-right: 2.875rem;
+  padding-right: 2rem;
   width: 40%;
   z-index: 1;
   .footer_logo-container {
@@ -44,11 +45,17 @@ $footerLogoWidth: 2.25rem;
     }
     .site-logo-text {
       display: inline;
-      @include fontSize_Medium;
+      @include fontSize_MediumLarge;
       @include fontWeight_Medium;
       margin: 0 0.5rem;
       line-height: $footerLogoWidth;
     }
+  }
+  .prompt {
+    @include fontSize_Small;
+    @include fontWeight_Regular;
+    line-height: leading(30, 16);
+    margin-bottom: 1.25rem;
   }
 }
 
@@ -66,14 +73,65 @@ $footerLogoWidth: 2.25rem;
     line-height: leading(15, 15);
   }
   a {
+    position: relative;
     padding: 0.625rem 0;
     @include fontSize_Mini;
     @include fontWeight_Regular;
     line-height: leading(16, 15);
     color: $seaShell;
+    transition: 200ms ease;
+    transform: translateX(0);
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2.25rem;
+      height: 100%;
+      padding: 0.75rem 0;
+      background-image: url('../../assets/images/zigzag-tiny.png');
+      background-position: 0 4px;
+      background-size: 0 1.75rem;
+      background-repeat: no-repeat;
+      transform: translate(0);
+      transition: inherit;
+      opacity: 0;
+    }
+    &:hover {
+      transform: translateX(2.25rem);
+      &:before {
+        background-size: 1.75rem 1.75rem;
+        transform: translate(-2.25rem);
+        opacity: 1;
+      }
+    }
   }
 }
 
 .footer_resources {
   margin-right: 4.875rem;
+}
+
+#section_copyright {
+  margin-top: 2rem;
+  border-top: solid $doveGray 1.5px;
+}
+
+.copyright_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1.5rem 0;
+  width: 100%;
+  .copyright_left,
+  .copyright_right {
+    @include fontSize_Mini;
+  }
+  .copyright_right {
+    display: inline;
+  }
+  .copyright_link {
+    color: $malibu;
+    margin-left: 0.5rem;
+  }
 }

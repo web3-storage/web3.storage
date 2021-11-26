@@ -21,6 +21,7 @@ export default function Footer() {
   const contact = GeneralPageData.footer.contact
   const resources = GeneralPageData.footer.resources
   const getStarted = GeneralPageData.footer.get_started
+  const copyright = GeneralPageData.footer.copyright
   const tracking = {
     ui: countly.ui[contact.cta.tracking],
     action: contact.cta.tracking.action
@@ -96,6 +97,25 @@ export default function Footer() {
             </div>
           </div>
         </div>
+
+        <div id="section_copyright" class="noGrid">
+          <div class="grid">
+            <div class="copyright_container">
+              <div class="copyright_left">
+                { copyright.left.text }
+              </div>
+              <div class="copyright_right">
+                { copyright.right.text }
+                <a
+                  href={copyright.right.link.url}
+                  class="copyright_link">
+                  { copyright.right.link.text }
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </section>
     </footer>
   )
