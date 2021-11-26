@@ -17,26 +17,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noFallthroughCasesInSwitch": true,
-    "paths": {
-      "web3.storage": ["../client"]
-    }
+    "noImplicitAny": false,
+    "baseUrl": "."
   },
-  "include": [
-    "lib",
-    "pages",
-    "components",
-    "content",
-    "hooks",
-    "modules",
-    "OLD/upload.js",
-    "OLD/tokens.js",
-    "OLD/new-token.js",
-    "OLD/login.js",
-    "OLD/files.js",
-    "OLD/callback.js",
-    "OLD/about.js"
-  ],
-  "exclude": ["node_modules/", ".next/"],
+  "include": ["lib", "pages", "components", "content", "hooks", "modules", "next-env.d.ts"],
+  "exclude": ["node_modules/", ".next/", "{pages,components,content,hooks,modules}/**/*.js"],
   "references": [
     {
       "path": "../client"
