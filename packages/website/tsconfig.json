@@ -21,7 +21,21 @@
       "web3.storage": ["../client"]
     }
   },
-  "include": ["lib", "pages", "components", "content", "hooks", "modules"],
+  "include": [
+    "lib",
+    "pages",
+    "components",
+    "content",
+    "hooks",
+    "modules",
+    "OLD/upload.js",
+    "OLD/tokens.js",
+    "OLD/new-token.js",
+    "OLD/login.js",
+    "OLD/files.js",
+    "OLD/callback.js",
+    "OLD/about.js"
+  ],
   "exclude": ["node_modules/", ".next/"],
   "references": [
     {
