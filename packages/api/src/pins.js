@@ -163,7 +163,6 @@ export async function pinGet (request, env, ctx) {
     return notFound()
   }
 
-  console.log(pinRequest)
   /** @type { ServiceApiPinStatus } */
   const response = {
     requestId: pinRequest._id,
