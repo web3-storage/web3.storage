@@ -1,4 +1,4 @@
-import styles from './login.module.scss';
+import styles from './module.scss';
 
 const Login = () => <div className={styles['login-container']}>TODO: Login</div>;
 
