@@ -16,11 +16,12 @@
     "module": "esnext",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "noFallthroughCasesInSwitch": true,
     "paths": {
       "web3.storage": ["../client"]
     }
   },
-  "include": ["lib", "pages", "components"],
+  "include": ["lib", "pages", "components", "content", "hooks", "modules"],
   "exclude": ["node_modules/", ".next/"],
   "references": [
     {
