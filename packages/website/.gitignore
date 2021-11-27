@@ -1,3 +1,5 @@
 public/sitemap.xml
 public/robots.txt
 .vscode
+.package.lock
+.yarn.lock

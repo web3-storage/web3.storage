@@ -16,12 +16,12 @@
     "module": "esnext",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "paths": {
-      "web3.storage": ["../client"]
-    }
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "baseUrl": "."
   },
-  "include": ["lib", "pages", "components"],
-  "exclude": ["node_modules/", ".next/"],
+  "include": ["lib", "pages", "components", "content", "hooks", "modules", "declaration.d.ts"],
+  "exclude": ["node_modules/", ".next/", "{pages,components,content,hooks,modules}/**/*.js"],
   "references": [
     {
       "path": "../client"

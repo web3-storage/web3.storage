@@ -1,13 +1,13 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 class MyDocument extends Document {
   /**
    * @param {import("next/document").DocumentContext} ctx
    */
 
-  static async getInitialProps(ctx) {
-    const initialProps = await Document.getInitialProps(ctx)
-    return { ...initialProps }
+  static async getInitialProps(ctx: any) {
+    const initialProps = await Document.getInitialProps(ctx);
+    return { ...initialProps };
   }
 
   render() {
@@ -30,8 +30,8 @@ class MyDocument extends Document {
           <div id="modal-root"></div>
         </body>
       </Html>
-    )
+    );
   }
 }
 
-export default MyDocument
+export default MyDocument;
