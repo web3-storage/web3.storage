@@ -1,5 +1,7 @@
-import styles from './module.scss';
+import clsx from 'clsx';
 
-const Login = () => <div className={styles['login-container']}>TODO: Login</div>;
+import styles from './index.module.scss';
+
+const Login = () => <div className={clsx(styles['login-container'])}>TODO: Login</div>;
 
 export default Login;

@@ -10,10 +10,6 @@
 - Description of the changes in bullet-point format
 - Optional screenshot or gif examples
 
-### Testing
-
-- Bullet point format steps for testing if required
-
 ### Notes
 
 - Any notes about this PR
