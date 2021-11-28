@@ -20,7 +20,7 @@
     "noImplicitAny": false,
     "baseUrl": "."
   },
-  "include": ["lib", "pages", "components", "content", "hooks", "modules", "declaration.d.ts"],
+  "include": ["lib", "pages", "components", "content", "hooks", "modules", "store", "declaration.d.ts"],
   "exclude": ["node_modules/", ".next/", "{pages,components,content,hooks,modules}/**/*.js"],
   "references": [
     {

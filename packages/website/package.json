@@ -9,8 +9,8 @@
     "build": "next build && next-sitemap && next export",
     "test": "eslint './**/*.js' && tsc --build",
     "lint": "yarn lint:ts",
-    "lint:ts": "tsc --noEmit && eslint '{pages,components,hooks,content}/**/*.{js,ts,tsx}' --max-warnings=0",
-    "lint:ts:fix": "eslint '{pages,components,hooks,content}/**/*.{js,ts,tsx}' --fix --max-warnings=0",
+    "lint:ts": "tsc --noEmit && eslint '{pages,components,hooks,content,store}/**/*.{js,ts,tsx}' --max-warnings=0",
+    "lint:ts:fix": "eslint '{pages,components,hooks,content,store}/**/*.{js,ts,tsx}' --fix --max-warnings=0",
     "storybook": "start-storybook -p 9000",
     "build-storybook": "build-storybook"
   },
@@ -25,7 +25,9 @@
     "react-dom": "17.0.2",
     "react-dropzone": "11.3.4",
     "react-markdown": "6.0.2",
+    "react-redux": "7.2.6",
     "react-syntax-highlighter": "11.0.3",
+    "redux": "4.1.2",
     "remark-slug": "6.1.0",
     "web3.storage": "^3.0.0"
   },
@@ -69,10 +71,10 @@
     }
   },
   "lint-staged": {
-    "{pages,components,hooks,content,styles}/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+    "{pages,components,hooks,content,styles,store}/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write"
     ],
-    "{pages,components,hooks,content}/**/!(types.tsx).{js,ts,tsx}": [
+    "{pages,components,hooks,content,store}/**/!(types.tsx).{js,ts,tsx}": [
       "eslint --fix --max-warnings=0"
     ]
   }
