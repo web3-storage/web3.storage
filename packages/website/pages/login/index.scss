@@ -1,5 +1,56 @@
 .login-container {
-  background: blue;
+  // TODO: Reused background
+  background: gray;
+  height: 100vh; // TODO: Base off 100vh - header/footer heights
+  color: $white;
+  @include fontSize_Medium;
+  @include fontWeight_Regular;
+
+  padding-top: 4.5rem;
+
+  h3 {
+    font-size: 1.875rem; // TODO: Adding to fonts 30pt
+  }
+}
+
+.login-content {
+  position: relative;
+  margin: auto;
+  max-width: 19.75rem;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 0.25rem;
+}
+
+.login-sub-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba($waterloo, 0.15);
+  padding: 1.25rem 1.5rem;
+  border: 0.0625rem solid rgba($white, 0.15);
+  border-radius: 0.3125rem;
+  box-shadow: 0 0.1875rem 0 rgba($black, 0.15);
+
+  svg {
+    padding-right: 0.6875rem;
+  }
+
+  &-email {
+    flex-direction: column;
+  }
+}
+
+.login-email {
+  padding: 1rem 2rem;
+  width: 100%;
+  border: 0.0625rem solid $doveGray;
+  background: none;
+
+  &::placeholder {
+    color: $white;
+  }
 }
 
 .error {

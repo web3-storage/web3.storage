@@ -14,22 +14,25 @@ $borderRadius_Large: 0.625rem;
 $borderRadius_ExtraLarge: 0.875rem;
 
 // --------------------------------------------------------------------- Colours
-$gray50: #FAFAFA;
-$gray100: #F5F5F5;
-$gray200: #EEEEEE;
-$gray300: #E0E0E0;
-$gray400: #BDBDBD;
-$gray500: #9E9E9E;
+$gray50: #fafafa;
+$gray100: #f5f5f5;
+$gray200: #eeeeee;
+$gray300: #e0e0e0;
+$gray400: #bdbdbd;
+$gray500: #9e9e9e;
 $gray600: #757575;
 $gray700: #616161;
 $gray800: #424242;
 $gray900: #212121;
 
-$seaShell: #F1F1F1; // pale matte gray
-$steelGray: #1C1E29; // almost black gray
-$ebony: #03040A; // almost black
+$black: #000000; // full black
+$waterloo: #757a9b; // A very grayish blue
+$white: #ffffff; // full white
+$seaShell: #f1f1f1; // pale matte gray
+$steelGray: #1c1e29; // almost black gray
+$ebony: #03040a; // almost black
 $doveGray: #626262; // gray
-$malibu: #7E81FF; //bluish violet
+$malibu: #7e81ff; //bluish violet
 
 // ----------------------------------------------------------------- Breakpoints
 $breakpoint_Tiny: 25.9375rem; // 415px
@@ -42,12 +45,11 @@ $breakpoint_UltraLarge: 140.625rem; // 2250px
 
 // ------------------------------------------------------------------- Gradients
 
-
 // ////////////////////////////////////////////////////////////////////// Mixins
 // =============================================================================
 // --------------------------------------------------------------------- Styling
 @mixin shadow1 {
-	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 @mixin focus_BoxShadow_Small {
@@ -64,18 +66,36 @@ $breakpoint_UltraLarge: 140.625rem; // 2250px
 }
 
 @mixin selection_Dark {
-  ::-moz-selection { background: $translucentWhite; color: black; }
-  ::selection { background: $translucentWhite; color: black; }
+  ::-moz-selection {
+    background: $translucentWhite;
+    color: black;
+  }
+  ::selection {
+    background: $translucentWhite;
+    color: black;
+  }
 }
 
 @mixin selection_Light {
-  ::-moz-selection { background: $translucentBlack; color: white; }
-  ::selection { background: $translucentBlack; color: white; }
+  ::-moz-selection {
+    background: $translucentBlack;
+    color: white;
+  }
+  ::selection {
+    background: $translucentBlack;
+    color: white;
+  }
 }
 
 @mixin selection_Invisible {
-  ::-moz-selection { background: transparent; color: transparent; }
-  ::selection { background: transparent; color: transparent; }
+  ::-moz-selection {
+    background: transparent;
+    color: transparent;
+  }
+  ::selection {
+    background: transparent;
+    color: transparent;
+  }
 }
 
 @mixin centerImage {
@@ -85,118 +105,244 @@ $breakpoint_UltraLarge: 140.625rem; // 2250px
 }
 
 // --------------------------------------------------------------------- Styling
-@mixin borderRadius_Small { border-radius: $borderRadius_Small; }
-@mixin borderRadius_Medium { border-radius: $borderRadius_Medium; }
-@mixin borderRadius_Large { border-radius: $borderRadius_Large; }
-@mixin borderRadius_ExtraLarge { border-radius: $borderRadius_ExtraLarge; }
+@mixin borderRadius_Small {
+  border-radius: $borderRadius_Small;
+}
+@mixin borderRadius_Medium {
+  border-radius: $borderRadius_Medium;
+}
+@mixin borderRadius_Large {
+  border-radius: $borderRadius_Large;
+}
+@mixin borderRadius_ExtraLarge {
+  border-radius: $borderRadius_ExtraLarge;
+}
 
-@mixin gradient_Background_PurpleGreen { background: $gradient_PurpleGreen; }
-@mixin gradient_Background_GreenPurple { background: $gradient_GreenPurple; }
-@mixin gradient_Background_RedPurple { background: $gradient_RedPurple; }
-@mixin gradient_Background_RedGreen { background: $gradient_RedGreen; }
+@mixin gradient_Background_PurpleGreen {
+  background: $gradient_PurpleGreen;
+}
+@mixin gradient_Background_GreenPurple {
+  background: $gradient_GreenPurple;
+}
+@mixin gradient_Background_RedPurple {
+  background: $gradient_RedPurple;
+}
+@mixin gradient_Background_RedGreen {
+  background: $gradient_RedGreen;
+}
 
 // --------------------------------------------------------------------- General
-@mixin optional-at-root($sel) { @at-root #{if(not &, $sel, selector-append(&, $sel))} { @content; } }
+@mixin optional-at-root($sel) {
+  @at-root #{if(not &, $sel, selector-append(&, $sel))} {
+    @content;
+  }
+}
 @mixin placeholder {
-  @include optional-at-root('::-webkit-input-placeholder') { @content; }
-  @include optional-at-root(':-moz-placeholder') { @content; }
-  @include optional-at-root('::-moz-placeholder') { @content; }
-	@include optional-at-root(':-ms-input-placeholder') { @content; }
-	@include optional-at-root('::-ms-input-placeholder') { @content; }
-  @include optional-at-root('::placeholder') { @content; }
+  @include optional-at-root('::-webkit-input-placeholder') {
+    @content;
+  }
+  @include optional-at-root(':-moz-placeholder') {
+    @content;
+  }
+  @include optional-at-root('::-moz-placeholder') {
+    @content;
+  }
+  @include optional-at-root(':-ms-input-placeholder') {
+    @content;
+  }
+  @include optional-at-root('::-ms-input-placeholder') {
+    @content;
+  }
+  @include optional-at-root('::placeholder') {
+    @content;
+  }
 }
 
 // --------------------------------------------------------------- Media Queries
-@mixin tiny { @media screen and (max-width: $breakpoint_Tiny) { @content; } }
-@mixin mini { @media screen and (max-width: $breakpoint_Mini) { @content; } }
-@mixin small { @media screen and (max-width: $breakpoint_Small) { @content; } }
-@mixin medium { @media screen and (max-width: $breakpoint_Medium) { @content; } }
-@mixin large { @media screen and (max-width: $breakpoint_Large) { @content; } }
-@mixin xlarge { @media screen and (max-width: $breakpoint_Xlarge) { @content; } }
-@mixin ultraLarge { @media screen and (max-width: $breakpoint_UltraLarge) { @content; } }
+@mixin tiny {
+  @media screen and (max-width: $breakpoint_Tiny) {
+    @content;
+  }
+}
+@mixin mini {
+  @media screen and (max-width: $breakpoint_Mini) {
+    @content;
+  }
+}
+@mixin small {
+  @media screen and (max-width: $breakpoint_Small) {
+    @content;
+  }
+}
+@mixin medium {
+  @media screen and (max-width: $breakpoint_Medium) {
+    @content;
+  }
+}
+@mixin large {
+  @media screen and (max-width: $breakpoint_Large) {
+    @content;
+  }
+}
+@mixin xlarge {
+  @media screen and (max-width: $breakpoint_Xlarge) {
+    @content;
+  }
+}
+@mixin ultraLarge {
+  @media screen and (max-width: $breakpoint_UltraLarge) {
+    @content;
+  }
+}
 
-@mixin containerMaxMQ { @media screen and (max-width: $containerWidth) { @content; } }
-@mixin containerMinMQ { @media screen and (max-width: $containerWidthPlusOnePixel) { @content; } }
-@mixin customMaxMQ($width) { @media screen and (max-width: $width) { @content; } }
-@mixin customMinMQ($width) { @media screen and (min-width: $width) { @content; } }
+@mixin containerMaxMQ {
+  @media screen and (max-width: $containerWidth) {
+    @content;
+  }
+}
+@mixin containerMinMQ {
+  @media screen and (max-width: $containerWidthPlusOnePixel) {
+    @content;
+  }
+}
+@mixin customMaxMQ($width) {
+  @media screen and (max-width: $width) {
+    @content;
+  }
+}
+@mixin customMinMQ($width) {
+  @media screen and (min-width: $width) {
+    @content;
+  }
+}
 
 @mixin FireFox {
-  @-moz-document url-prefix() { @content; }
+  @-moz-document url-prefix() {
+    @content;
+  }
 }
 
 @mixin Edge {
-  @supports (-ms-ime-align:auto) { @content; }
+  @supports (-ms-ime-align: auto) {
+    @content;
+  }
 }
 
 @mixin Safari9 {
-  @supports (overflow:-webkit-marquee) and (justify-content:inherit) { @content; }
+  @supports (overflow: -webkit-marquee) and (justify-content: inherit) {
+    @content;
+  }
 }
 
 @mixin Safari7Plus($item) {
-  _::-webkit-full-page-media, _:future, :root #{$item} { @content; }
+  _::-webkit-full-page-media,
+  _:future,
+  :root #{$item} {
+    @content;
+  }
 }
 
 @mixin Safari9Plus($item) {
-  _:default:not(:root:root), #{$item} { @content; }
+  _:default:not(:root:root),
+  #{$item} {
+    @content;
+  }
 }
 
 @mixin IE10and11 {
-  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) { @content; }
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    @content;
+  }
 }
 
 @mixin iOSonly {
-  @supports (-webkit-overflow-scrolling: touch) { @content; }
+  @supports (-webkit-overflow-scrolling: touch) {
+    @content;
+  }
 }
 
 @mixin everythingExceptIOS {
-  @supports not (-webkit-overflow-scrolling: touch) { @content; }
+  @supports not (-webkit-overflow-scrolling: touch) {
+    @content;
+  }
 }
 
 // --------------------------------------------------------------------- Styling
 
 // ------------------------------------------------------------------- Animation
-@mixin animation ($animate...) {
+@mixin animation($animate...) {
   $max: length($animate);
   $animations: '';
   @for $i from 1 through $max {
     $animations: #{$animations + nth($animate, $i)};
-    @if $i < $max { $animations: #{$animations + ", "}; }
+    @if $i < $max {
+      $animations: #{$animations + ', '};
+    }
   }
   -webkit-animation: $animations;
-  -moz-animation:    $animations;
-  -o-animation:      $animations;
-  animation:         $animations;
+  -moz-animation: $animations;
+  -o-animation: $animations;
+  animation: $animations;
 }
 
-@mixin animationName($animationName) { -webkit-animation-name: $animationName; animation-name: $animationName; } // string
-@mixin animationDuration($animationDuration) { -webkit-animation-duration: $animationDuration; animation-duration: $animationDuration; } // num in ms or s
-@mixin animationDirection($animationDirection) { -webkit-animation-direction: $animationDirection; animation-direction: $animationDirection; } // 'normal', 'reverse', 'alternate', 'alternate-reverse'
-@mixin animationDelay($animationDelay) { -webkit-animation-delay: $animationDelay; animation-delay: $animationDelay; }
-@mixin animationIterationCount($animationIterationCount) { -webkit-animation-iteration-count: $animationIterationCount; animation-iteration-count: $animationIterationCount; } // num or 'infinite'
-@mixin animationTimingFunction($animationTimingFunction) { -webkit-animation-timing-function: $animationTimingFunction; animation-timing-function: $animationTimingFunction; } // bezier curve or 'linear'
-@mixin animationFillMode($animationFillMode) { -webkit-animation-fill-mode: $animationFillMode; animation-fill-mode: $animationFillMode; } // forwards or backwards or both
+@mixin animationName($animationName) {
+  -webkit-animation-name: $animationName;
+  animation-name: $animationName;
+} // string
+@mixin animationDuration($animationDuration) {
+  -webkit-animation-duration: $animationDuration;
+  animation-duration: $animationDuration;
+} // num in ms or s
+@mixin animationDirection($animationDirection) {
+  -webkit-animation-direction: $animationDirection;
+  animation-direction: $animationDirection;
+} // 'normal', 'reverse', 'alternate', 'alternate-reverse'
+@mixin animationDelay($animationDelay) {
+  -webkit-animation-delay: $animationDelay;
+  animation-delay: $animationDelay;
+}
+@mixin animationIterationCount($animationIterationCount) {
+  -webkit-animation-iteration-count: $animationIterationCount;
+  animation-iteration-count: $animationIterationCount;
+} // num or 'infinite'
+@mixin animationTimingFunction($animationTimingFunction) {
+  -webkit-animation-timing-function: $animationTimingFunction;
+  animation-timing-function: $animationTimingFunction;
+} // bezier curve or 'linear'
+@mixin animationFillMode($animationFillMode) {
+  -webkit-animation-fill-mode: $animationFillMode;
+  animation-fill-mode: $animationFillMode;
+} // forwards or backwards or both
 
 @mixin keyframes($animationName) {
-  @-webkit-keyframes #{$animationName} { @content; }
-  @-moz-keyframes #{$animationName} { @content; }
-  @-o-keyframes #{$animationName} { @content; }
-  @keyframes #{$animationName} { @content; }
+  @-webkit-keyframes #{$animationName} {
+    @content;
+  }
+  @-moz-keyframes #{$animationName} {
+    @content;
+  }
+  @-o-keyframes #{$animationName} {
+    @content;
+  }
+  @keyframes #{$animationName} {
+    @content;
+  }
 }
 
 @mixin transform($transforms) {
-	   -moz-transform: $transforms;
-	     -o-transform: $transforms;
-	    -ms-transform: $transforms;
-	-webkit-transform: $transforms;
-          transform: $transforms;
+  -moz-transform: $transforms;
+  -o-transform: $transforms;
+  -ms-transform: $transforms;
+  -webkit-transform: $transforms;
+  transform: $transforms;
 }
 
 @mixin transformOrigin($transformOrigin) {
-	   -moz-transform-origin: $transformOrigin;
-	     -o-transform-origin: $transformOrigin;
-	    -ms-transform-origin: $transformOrigin;
-	-webkit-transform-origin: $transformOrigin;
-          transform-origin: $transformOrigin;
+  -moz-transform-origin: $transformOrigin;
+  -o-transform-origin: $transformOrigin;
+  -ms-transform-origin: $transformOrigin;
+  -webkit-transform-origin: $transformOrigin;
+  transform-origin: $transformOrigin;
 }
 
 // ////////////////////////////////////////////////////////////// [Post] Imports
