@@ -84,7 +84,7 @@ module.exports = {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'react/jsx-props-no-spreading': 0,
     'react/prop-types': 0,
-    'react/no-array-index-key': 1,
+    'react/no-array-index-key': 0,
     'react-hooks/exhaustive-deps': 1,
     'spaced-comment': [
       'warn',

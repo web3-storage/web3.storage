@@ -6,13 +6,13 @@
 
 // Layouts
 @import 'layouts/messagebanner';
-@import 'layouts/navigation';
+@import '../components/navigation/navigation.scss';
 
 // Components
 @import 'components/button';
 
 // Pages
-
+@import '../pages/index.scss';
 // /////////////////////////////////////////////////////////////////////// Fonts
 // -----------------------------------------------------------------------------
 $fontAssetPath: '../assets/fonts';
@@ -50,7 +50,8 @@ $fontAssetPath: '../assets/fonts';
 
 // ///////////////////////////////////////////////////////////////////// General
 // -----------------------------------------------------------------------------
-html, body {
+html,
+body {
   font-family: $font_Primary;
   font-size: 16px;
   font-weight: $fontWeight_Regular;
@@ -61,8 +62,14 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
-  ::-moz-selection { background: white; color: black; }
-  ::selection { background: white; color: black; }
+  ::-moz-selection {
+    background: white;
+    color: black;
+  }
+  ::selection {
+    background: white;
+    color: black;
+  }
   &.no-scroll {
     overflow-y: hidden;
   }
@@ -78,7 +85,9 @@ html, body {
   }
 }
 
-a, button, ul {
+a,
+button,
+ul {
   background-color: transparent;
   text-decoration: none;
   color: inherit;
@@ -87,7 +96,8 @@ a, button, ul {
   border: 0;
 }
 
-a, button {
+a,
+button {
   cursor: pointer;
 }
 
@@ -106,16 +116,16 @@ a, button {
   position: relative;
 }
 
-[class~="grid"],
-[class*="grid-"],
-[class*="grid_"] {
+[class~='grid'],
+[class*='grid-'],
+[class*='grid_'] {
   width: $containerWidth;
   margin: 0 auto;
-  @include customMaxMQ ($containerWidth + 4rem) {
+  @include customMaxMQ($containerWidth + 4rem) {
     padding: 0 4.1665%;
     width: 100%;
   }
-  &[class*="-noGutter"] {
+  &[class*='-noGutter'] {
     margin: 0 auto;
   }
   &.full {
@@ -128,27 +138,29 @@ a, button {
   &.no-padding {
     padding: 0;
   }
-  [class~="grid"],
-  [class*="grid-"],
-  [class*="grid_"] {
+  [class~='grid'],
+  [class*='grid-'],
+  [class*='grid_'] {
     width: 100%;
     padding: 0;
   }
 }
 
-
 // ////////////////////////////////////////////////////////////////// Typography
 // -----------------------------------------------------------------------------
-h1, .h1 {
+h1,
+.h1 {
   @include h1;
   line-height: leading(55, 45);
 }
 
-h2, .h2 {
+h2,
+.h2 {
   @include h2;
 }
 
-h3, .h3 {
+h3,
+.h3 {
   @include h3;
 }
 
@@ -168,11 +180,9 @@ h3, .h3 {
   }
 }
 
-
 /* ================================================================================
    Layout
    ================================================================================ */
-
 
 .loading {
   position: absolute;
@@ -182,9 +192,9 @@ h3, .h3 {
 }
 
 .table-responsive {
-    display: block;
-    width: 100%;
-    overflow-x: auto;
+  display: block;
+  width: 100%;
+  overflow-x: auto;
 }
 
 .table-tooltip.rc-tooltip {
@@ -201,10 +211,22 @@ h3, .h3 {
 }
 
 @keyframes appear-bottom-then-go-away {
-  from   { opacity: 1; transform: translateY(100%)  }
-  20%    { opacity: 1; transform: translateY(0)     }
-  80%    { opacity: 1; transform: translateY(0)     }
-  100%   { opacity: 0; transform: translateY(100%)  }
+  from {
+    opacity: 1;
+    transform: translateY(100%);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
 }
 
 .appear-bottom-then-go-away {
@@ -212,7 +234,9 @@ h3, .h3 {
 }
 
 @keyframes grow-width {
-  from   { width: 0  }
+  from {
+    width: 0;
+  }
 }
 
 .grow-width {
