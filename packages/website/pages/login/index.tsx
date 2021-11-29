@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 
-import styles from './index.module.scss';
 import { useAppDispatch } from 'store';
 import { getUserData, setAuthToken } from 'store/actions';
 
@@ -43,11 +42,11 @@ const Login = () => {
   );
 
   return (
-    <div className={clsx(styles['login-container'])}>
+    <div className="login-container">
       <form>
         <input
           placeholder="user"
-          className={clsx(errors.user && styles.error)}
+          className={clsx(errors.user && 'error')}
           required
           onChange={e => setFormData({ user: e.target.value, password })}
         />
@@ -56,7 +55,7 @@ const Login = () => {
           required
           type="password"
           onChange={e => setFormData({ user, password: e.target.value })}
-          className={clsx(errors.password && styles.error)}
+          className={clsx(errors.password && 'error')}
         />
         <input type="submit" value="Login" onClick={onSubmit} />
       </form>
