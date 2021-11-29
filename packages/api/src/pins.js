@@ -143,14 +143,14 @@ export async function pinPost (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 export async function pinGet (request, env, ctx) {
-  const requestId = parseInt(request.params.requestId, 10)
-
-  if (!Number.isInteger(requestId)) {
+  if (/^\d+$/.test(request.params.requestId)) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
       { status: ERROR_CODE }
     )
   }
+
+  const requestId = parseInt(request.params.requestId, 10)
 
   let pinRequest
 
