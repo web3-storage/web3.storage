@@ -7,7 +7,7 @@ export default {
   title: 'Zero/Button'
 };
 
-export const DefaultButton = () => (
+export const Default = () => (
   <Button onClick={() => console.log('Button clicked')}>Button</Button>
 );
 
