@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import Link from 'next/link';
 
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
-import Button from '../button/button.js';
+import Button from '../button/button';
 import Squiggle from '../../assets/illustrations/squiggle';
 import GeneralPageData from '../../content/pages/general.json';
 // import countly from 'Lib/countly'
