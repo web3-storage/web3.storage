@@ -4,7 +4,7 @@ import { endpoint } from './scripts/constants.js'
 import * as JWT from '../src/utils/jwt.js'
 import { SALT } from './scripts/worker-globals.js'
 import { JWT_ISSUER } from '../src/constants.js'
-import { ERROR_CODE, ERROR_STATUS, getPinningAPIStatus, INVALID_CID, INVALID_META, INVALID_NAME, INVALID_ORIGINS, REQUIRED_CID } from '../src/pins.js'
+import { ERROR_CODE, ERROR_STATUS, getPinningAPIStatus, INVALID_CID, INVALID_META, INVALID_NAME, INVALID_ORIGINS, INVALID_REQUEST_ID, REQUIRED_CID } from '../src/pins.js'
 import { DBClient } from '../../db/index.js'
 
 /**
@@ -270,6 +270,10 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert(!res.ok, 'Server returns an error')
+      const data = await res.json()
+      const error = data.error
+      assert.strictEqual(error.reason, ERROR_STATUS)
+      assert.strictEqual(error.details, INVALID_REQUEST_ID)
     })
 
     it('it returns not found if the request does not exists', async () => {

@@ -143,10 +143,9 @@ export async function pinPost (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 export async function pinGet (request, env, ctx) {
-  let requestId
-  try {
-    requestId = parseInt(request.params.requestId, 10)
-  } catch (e) {
+  const requestId = parseInt(request.params.requestId, 10)
+
+  if (!Number.isInteger(requestId)) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
       { status: ERROR_CODE }
@@ -160,6 +159,7 @@ export async function pinGet (request, env, ctx) {
   } catch (e) {
     console.error(e)
     // TODO catch different exceptions
+    // TODO notFound error paylod does not strictly comply to spec.
     return notFound()
   }
 
