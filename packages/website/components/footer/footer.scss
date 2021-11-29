@@ -16,7 +16,7 @@ $footerLogoWidth: 2.25rem;
   position: absolute;
   width: 33.125rem;
   left: -11.5rem;
-  top: 31rem;
+  top: 29rem;
   transform: scaleX(-1) rotate(25deg);
   z-index: 0;
 }
@@ -39,7 +39,7 @@ $footerLogoWidth: 2.25rem;
     display: flex;
     flex-direction: row;
     margin-bottom: 1.75rem;
-    .site-logo-image {
+    svg {
       width: $footerLogoWidth;
       fill: white;
     }
