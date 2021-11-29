@@ -3,10 +3,13 @@ import { Web3Storage } from "web3.storage";
 import { useQueryClient } from "react-query";
 import { useDropzone } from "react-dropzone";
 import { useRef, useState } from "react";
+import { When } from 'react-if';
 
 import countly from "../lib/countly";
 import { getToken, API } from "../lib/api";
+import Alert from "../components/alert.js";
 import Button from "../components/button.js";
+import Cross from "../icons/cross";
 import Link from 'next/link'
 
 export function getStaticProps() {
@@ -26,6 +29,7 @@ export default function Upload() {
   const [/** @type {string|null} */ inputFile, setInputFile] = useState({ name: '' });
   const /** @type {React.MutableRefObject<HTMLInputElement|null>} */ inputRef = useRef(null);
   const [percentComplete, setPercentComplete] = useState(0);
+  const [error, setError] = useState('')
 
   /** @param {import('react').ChangeEvent<HTMLFormElement>} e */
   async function handleUploadSubmit(e) {
@@ -53,10 +57,14 @@ export default function Upload() {
           setPercentComplete(Math.round((totalBytesSent / file.size) * 100));
         },
       });
+      setError('')
+      router.push("/files");
+    } catch(/** @type any */ error) {
+      console.error('Error uploading: ', error)
+      setError(error.message)
     } finally {
       await queryClient.invalidateQueries("get-uploads");
       setUploading(false);
-      router.push("/files");
     }
   }
 
@@ -152,6 +160,19 @@ export default function Upload() {
           </p>
         </div>
       </div>
+      <When condition={error !== ''}>
+        <Alert className="p-4 text-white z-50" position="top" type="error">
+          <>
+            {error}{' '}
+            <button
+              className="ml-2 px-2 py-1 pointer"
+              onClick={() => setError('')}
+            >
+              <Cross width="12" height="12" fill="currentColor" />
+            </button>
+          </>
+        </Alert>
+      </When>
     </main>
   );
 }
