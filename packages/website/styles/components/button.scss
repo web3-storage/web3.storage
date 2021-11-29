@@ -1,9 +1,12 @@
 .button {
   cursor: pointer;
   display: inline-block;
-
-  // flex-direction: column;
-  // justify-content: center;
+  border-radius: 1.5rem;
+  @include fontSize_Tiny;
+  @include fontWeight_Semibold;
+  text-transform: uppercase;
+  padding: 0.25rem 1.25rem;
+  line-height: leading(22, 13);
 
   &[disabled] {
     cursor: default;
@@ -26,32 +29,22 @@
 
   &.dark {
     background-color: $ebony;
-    border-radius: 1.5rem;
     button {
       color: white;
-      @include fontSize_Tiny;
-      @include fontWeight_Semibold;
-      text-transform: uppercase;
-      padding: 0.25rem 1.25rem;
-      line-height: leading(22, 13);
     }
   }
 
   &.light {
-    border: 1px solid transparent;
-    background: #fff;
-
+    background-color: white;
     button {
-      color: #171691;
+      color: $ebony;
     }
   }
 
   &.purple {
-    border: 2px solid #171691;
-    background: transparent;
-
+    background-color: $malibu;
     button {
-      color: #171691;
+      color: $ebony;
     }
   }
 }
