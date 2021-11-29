@@ -793,7 +793,7 @@ export class DBClient {
   /**
    * Get a Pin Request by id
    *
-   * @param {string} pinRequestId
+   * @param {number} pinRequestId
    * @return {Promise<import('./db-client-types').PAPinRequestUpsertOutput>}
    */
   async getPAPinRequest (pinRequestId) {

@@ -177,5 +177,9 @@ describe('Pin Request', () => {
         .map((p) => p.status)
       assert.deepStrictEqual(statuses, [pins[0].status, pins[1].status])
     })
+
+    it('throws if does not exists', async () => {
+      assert.rejects(client.getPAPinRequest(1000))
+    })
   })
 })

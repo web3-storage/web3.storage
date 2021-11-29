@@ -1,9 +1,68 @@
-import { JSONResponse } from './utils/json-response.js'
+import { JSONResponse, notFound } from './utils/json-response.js'
 import { normalizeCid } from './utils/normalize-cid.js'
+
+/**
+ * @typedef {'queued' | 'pinning' | 'failed' | 'pinned'} apiPinStatus
+ */
+
+/**
+ *
+ * Service API Pin object definition
+ * @typedef {Object} ServiceApiPin
+ * @property {string} cid
+ * @property {string} [name]
+ * @property {Array.<string>} [origins]
+ * @property {object} [meta]
+ */
+
+/**
+ *
+ * Service API Pin Status definition
+ * @typedef {Object} ServiceApiPinStatus
+ * @property {string} requestId
+ * @property {apiPinStatus} status
+ * @property {string} created
+ * @property {Array<string>} delegates
+ * @property {string} [info]
+ *
+ * @property {ServiceApiPin} pin
+ */
 
 /**
  * @typedef {{ error: { reason: string, details?: string } }} PinDataError
  */
+
+/**
+ *
+ * @param {import('../../db/db-client-types.js').PinItemOutput[]} pins
+ * @return {apiPinStatus} status
+ */
+export const getPinningAPIStatus = (pins) => {
+  const pinStatuses = pins.map((p) => p.status)
+
+  // TODO what happens with Sharded? I'd assumed is pinned?
+
+  if (pinStatuses.includes('Pinned')) {
+    return 'pinned'
+  }
+
+  if (pinStatuses.includes('Pinning')) {
+    return 'pinning'
+  }
+
+  if (pinStatuses.includes('PinQueued') ||
+      pinStatuses.includes('Remote')) {
+    return 'queued'
+  }
+
+  if (pinStatuses.length === 0) {
+    return 'queued'
+    // TODO after some time if there are no pins we should give up and return a failed
+    // status instead
+  }
+
+  return 'failed'
+}
 
 // Error messages
 export const ERROR_CODE = 400
@@ -84,24 +143,44 @@ export async function pinPost (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 export async function pinGet (request, env, ctx) {
-  const requestId = request.params.requestId
-
-  if (!requestId) {
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: REQUIRED_REQUEST_ID } },
-      { status: ERROR_CODE }
-    )
-  }
-
-  if (typeof requestId !== 'string') {
+  // Check if requestId contains other charachers than digits
+  if (!(/^\d+$/.test(request.params.requestId))) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
       { status: ERROR_CODE }
     )
   }
 
-  // TODO: write logic for getting pin
-  return new JSONResponse('OK')
+  const requestId = parseInt(request.params.requestId, 10)
+
+  let pinRequest
+
+  try {
+    pinRequest = await env.db.getPAPinRequest(requestId)
+  } catch (e) {
+    console.error(e)
+    // TODO catch different exceptions
+    // TODO notFound error paylod does not strictly comply to spec.
+    return notFound()
+  }
+
+  /** @type { ServiceApiPinStatus } */
+  const response = {
+    requestId: pinRequest._id,
+    created: pinRequest.created,
+    // TODO populate delegates
+    delegates: [],
+    status: getPinningAPIStatus(pinRequest.pins),
+    pin: {
+      cid: pinRequest.requestedCid,
+      name: pinRequest.name,
+      // TODO populate origins and meta
+      origins: [],
+      meta: {}
+    }
+  }
+
+  return new JSONResponse(response)
 }
 
 /**

@@ -1,8 +1,8 @@
 /**
  * Normalize upload item.
  *
- * @param {import('../db-client-types').UploadItem} upload
- * @return {import('../db-client-types').UploadItemOutput}
+ * @param {import('./db-client-types').UploadItem} upload
+ * @return {import('./db-client-types').UploadItemOutput}
  */
 export function normalizeUpload (upload) {
   const nUpload = { ...upload }
@@ -21,7 +21,7 @@ export function normalizeUpload (upload) {
  * Normalize pin request
  *
  * @param {object} paPinRequest
- * @return {import('../db-client-types').PAPinRequestUpsertOutput}
+ * @return {import('./db-client-types').PAPinRequestUpsertOutput}
  */
 export function normalizePaPinRequest (paPinRequest) {
   const nPaPinRequest = { ...paPinRequest }
@@ -36,8 +36,8 @@ export function normalizePaPinRequest (paPinRequest) {
 /**
  * Normalize content item.
  *
- * @param {import('../db-client-types').ContentItem} content
- * @return {import('../db-client-types').ContentItemOutput}
+ * @param {import('./db-client-types').ContentItem} content
+ * @return {import('./db-client-types').ContentItemOutput}
  */
 export function normalizeContent (content) {
   return {
@@ -49,8 +49,8 @@ export function normalizeContent (content) {
 /**
  * Normalize pin items.
  *
- * @param {Array<import('../db-client-types').PinItem>} pins
- * @return {Array<import('../db-client-types').PinItemOutput>}
+ * @param {Array<import('./db-client-types').PinItem>} pins
+ * @return {Array<import('./db-client-types').PinItemOutput>}
  */
 export function normalizePins (pins) {
   return pins.map(pin => ({
