@@ -83,7 +83,7 @@ class Web3Storage {
     if (!token) throw new Error('missing token')
     return {
       Authorization: `Bearer ${token}`,
-      'X-Client': 'web3.storage'
+      'X-Client': 'web3.storage/js'
     }
   }
 
