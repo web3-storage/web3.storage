@@ -292,7 +292,7 @@ describe('Pinning APIs endpoints', () => {
 
     it('it returns the pin request', async () => {
       const requestId = 1
-      const res = await fetch(new URL(`pins/${requestId}}`, endpoint).toString(), {
+      const res = await fetch(new URL(`pins/${requestId}`, endpoint).toString(), {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
