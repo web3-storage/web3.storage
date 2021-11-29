@@ -35,9 +35,10 @@ export default function withAuthorization(App) {
 
       // Getting any authentication cookies if available
       const authCookie = !!req ? req.cookies.authorization : document.cookie.split('authorization=')[1]?.split(';')[0];
+      const paths = pathname.split('/').filter(Boolean).slice(1);
 
-      // Early return on the login page
-      if (pathname.indexOf('/login') >= 0) {
+      // Early return on the login page or base page
+      if (!paths.length || paths.some(path => path === 'login')) {
         return pageProps;
       }
 
