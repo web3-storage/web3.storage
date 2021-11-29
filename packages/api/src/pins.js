@@ -1,5 +1,33 @@
 import { JSONResponse } from './utils/json-response.js'
 import { normalizeCid } from './utils/normalize-cid.js'
+import { toPinStatusEnum, waitToGetOkPins } from './utils/pin.js'
+
+/**
+ * @typedef {'queued' | 'pinning' | 'failed' | 'pinned'} apiPinStatus
+ */
+
+/**
+ *
+ * Service API Pin object definition
+ * @typedef {Object} ServiceApiPin
+ * @property {string} cid
+ * @property {string} [name]
+ * @property {Array.<string>} [origins]
+ * @property {object} [meta]
+ */
+
+/**
+ *
+ * Service API Pin Status definition
+ * @typedef {Object} ServiceApiPinStatus
+ * @property {string} requestId
+ * @property {apiPinStatus} status
+ * @property {string} created
+ * @property {Array<string>} delegates
+ * @property {string} [info]
+ *
+ * @property {ServiceApiPin} pin
+ */
 
 /**
  * @typedef {{ error: { reason: string, details?: string } }} PinDataError
@@ -87,9 +115,9 @@ export async function pinPost (request, env, ctx) {
  * @param {string} authToken
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
- * @returns {Promise<import('@web3-storage/db/db-client-types').PAPinRequestUpsertOutput>}
+ * @returns {Promise<ServiceApiPinStatus>}
  */
-const createPin = async (pinData, authToken, env, ctx) => {
+async function createPin (pinData, authToken, env, ctx) {
   const { cid, name, origins, meta } = pinData
   const normalizedCid = normalizeCid(cid)
 
@@ -101,7 +129,31 @@ const createPin = async (pinData, authToken, env, ctx) => {
     name
   })
 
-  return pinRequest
+  /** @type {ServiceApiPinStatus} */
+  const serviceApiPinStatus = {
+    requestId: pinRequest.id.toString(),
+    created: pinRequest.created,
+    status: toPinStatusEnum('pin_queued'),
+    delegates: [],
+    pin: { cid: normalizedCid }
+  }
+
+  // Given we're pinning content that is currently not in the cluster, it might take a while to
+  // get the cid from the network. We check pinning status asyncrounosly.
+  /** @type {(() => Promise<any>)[]} */
+  const tasks = [async () => {
+    const okPins = await waitToGetOkPins(cid, env.cluster)
+    env.db.createContent({ cid, dagSize: 100, pins: okPins })
+    for (const pin of okPins) {
+      await env.db.upsertPin(cid, pin)
+    }
+  }]
+
+  if (ctx.waitUntil) {
+    tasks.forEach(t => ctx.waitUntil(t()))
+  }
+
+  return serviceApiPinStatus
 }
 
 /**
