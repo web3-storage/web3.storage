@@ -127,9 +127,11 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
         </div>
         <div className={clsx("flex items-center", isSmallVariant ? 'justify-end' : '')} style={{ minHeight: 52 }}>
           { !isSmallVariant && ITEMS.map(item => (
-            <a href={item.link} key={item.name} onClick={onLinkClick} className={clsx('text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle', item.spacing)}>
-              { item.name }
-            </a>
+            <Link href={item.link} key={item.name} >
+              <a onClick={onLinkClick} className={clsx('text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle', item.spacing)}>
+                  { item.name }
+              </a>
+            </Link>
           ))}
           {isLoadingUser
             ? spinnerButton
