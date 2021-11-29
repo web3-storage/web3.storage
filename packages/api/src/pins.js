@@ -143,7 +143,8 @@ export async function pinPost (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 export async function pinGet (request, env, ctx) {
-  if (/^\d+$/.test(request.params.requestId)) {
+  // Check if requestId contains other charachers than digits
+  if (!(/^\d+$/.test(request.params.requestId))) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
       { status: ERROR_CODE }
