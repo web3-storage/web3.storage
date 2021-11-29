@@ -4,107 +4,79 @@
   "description": "web3.storage website",
   "private": true,
   "scripts": {
-    "start": "next dev -p 4000",
+    "dev": "rm -rf .next && next dev -p 4000",
+    "start": "next start",
     "build": "next build && next-sitemap && next export",
     "test": "eslint './**/*.js' && tsc --build",
+    "lint": "yarn lint:ts",
+    "lint:ts": "tsc --noEmit && eslint '{pages,components,hooks,content,store}/**/*.{js,ts,tsx}' --max-warnings=0",
+    "lint:ts:fix": "eslint '{pages,components,hooks,content,store}/**/*.{js,ts,tsx}' --fix --max-warnings=0",
     "storybook": "start-storybook -p 9000",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@magic-ext/oauth": "^0.7.0",
-    "clsx": "^1.1.1",
-    "countly-sdk-web": "^20.11.2",
-    "filesize": "^6.1.0",
-    "gray-matter": "^4.0.3",
-    "magic-sdk": "^4.2.1",
-    "next": "^11.0.1",
-    "rc-tooltip": "^5.1.1",
-    "react": "^17.0.2",
-    "react-copy-to-clipboard": "^5.0.3",
-    "react-dom": "^17.0.2",
-    "react-dropzone": "^11.3.4",
-    "react-if": "^4.0.1",
-    "react-markdown": "^6.0.2",
-    "react-query": "^3.13.9",
-    "react-redux": "^7.2.6",
-    "react-syntax-highlighter": "^11.0.3",
-    "remark-slug": "^6.1.0",
-    "storybook-addon-state": "^1.0.3",
+    "@magic-ext/oauth": "0.7.0",
+    "clsx": "1.1.1",
+    "countly-sdk-web": "20.11.2",
+    "filesize": "6.1.0",
+    "magic-sdk": "4.2.1",
+    "next": "12.0.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-dropzone": "11.3.4",
+    "react-markdown": "6.0.2",
+    "react-redux": "7.2.6",
+    "react-syntax-highlighter": "11.0.3",
+    "redux": "4.1.2",
+    "remark-slug": "6.1.0",
     "web3.storage": "^3.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@storybook/addon-actions": "^6.3.12",
-    "@storybook/addon-essentials": "^6.3.12",
-    "@storybook/addon-links": "^6.3.12",
-    "@storybook/react": "^6.3.12",
-    "@svgr/webpack": "^5.5.0",
-    "@types/react": "^17.0.30",
-    "@types/react-copy-to-clipboard": "^5.0.1",
-    "@types/react-dom": "^17.0.9",
-    "@types/react-syntax-highlighter": "^13.5.2",
-    "autoprefixer": "^10.2.6",
-    "babel-loader": "^8.2.3",
+    "@storybook/addon-actions": "6.3.12",
+    "@storybook/addon-essentials": "6.3.12",
+    "@storybook/addon-links": "6.3.12",
+    "@storybook/react": "6.3.12",
+    "@svgr/webpack": "5.5.0",
+    "@types/react": "17.0.36",
+    "@types/react-dom": "17.0.11",
+    "@types/react-syntax-highlighter": "13.5.2",
+    "@typescript-eslint/eslint-plugin": "5.4.0",
+    "@typescript-eslint/parser": "5.4.0",
     "css-loader": "5.2.7",
-    "eslint": "^7.24.0",
-    "eslint-config-next": "^11.0.1",
-    "eslint-config-prettier": "^8.2.0",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.23.2",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "next-sitemap": "^1.6.173",
-    "sass": "^1.43.4",
+    "eslint": "7.32.0",
+    "eslint-config-next": "12.0.4",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-config-react-app": "6.0.0",
+    "eslint-plugin-cypress": "2.12.1",
+    "eslint-plugin-flowtype": "8.0.3",
+    "eslint-plugin-import": "2.25.3",
+    "eslint-plugin-jsx-a11y": "6.5.1",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-react": "7.27.1",
+    "eslint-plugin-react-hooks": "4.3.0",
+    "husky": "4.3.8",
+    "lint-staged": "12.1.2",
+    "next-sitemap": "1.6.173",
+    "prettier": "2.4.1",
+    "react-query": "3.33.5",
+    "sass": "1.43.4",
     "sass-loader": "10.1.1",
+    "storybook-addon-state": "^1.0.3",
     "style-loader": "2.0.0",
-    "typescript": "^4.3.5",
-    "url-loader": "^4.1.1"
+    "typescript": "4.3.5",
+    "url-loader": "4.1.1"
   },
-  "eslintConfig": {
-    "extends": [
-      "standard",
-      "plugin:react/recommended",
-      "plugin:react-hooks/recommended",
-      "prettier"
-    ],
-    "env": {
-      "es2020": true,
-      "browser": true,
-      "node": true
-    },
-    "rules": {
-      "react/prop-types": "off",
-      "no-unused-vars": [
-        "error",
-        {
-          "args": "all",
-          "argsIgnorePattern": "_",
-          "varsIgnorePattern": "_"
-        }
-      ],
-      "react/react-in-jsx-scope": "off",
-      "react/jsx-filename-extension": [
-        1,
-        {
-          "extensions": [
-            ".js",
-            ".jsx"
-          ]
-        }
-      ],
-      "react/display-name": 1
-    },
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
     }
   },
-  "eslintIgnore": [
-    "node_modules",
-    ".next",
-    "out"
-  ]
+  "lint-staged": {
+    "{pages,components,hooks,content,styles,store}/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write"
+    ],
+    "{pages,components,hooks,content,store}/**/!(types.tsx).{js,ts,tsx}": [
+      "eslint --fix --max-warnings=0"
+    ]
+  }
 }

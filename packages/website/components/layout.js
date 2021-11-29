@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import clsx from 'clsx'
-import Footer from './footer.js'
-import Navbar from './navbar.js'
+import Footer from './footer/footer.js'
+import Navbar from './navbar/navbar.js'
 import Loading from './loading/loading'
 import { useLoggedIn } from 'Lib/user'
 import { getVersion } from 'Lib/api'
@@ -55,16 +55,16 @@ const MessageBanner = ({ highlightMessage }) => {
 
   if (maintenanceMessage) {
     return (
-      <div className="w-full bg-w3storage-yellow text-center" style={{ zIndex: 50 }}>
-        <div className="layout-margins py-2">
-          <span className="text-xl">⚠</span> <span className="typography-cta">{maintenanceMessage}</span>
+      <div style={{ zIndex: 50, width: '100vw' }}>
+        <div>
+          <span>⚠</span> <span className="typography-cta">{maintenanceMessage}</span>
         </div>
       </div>
     )
   }
 
   if (highlightMessage) {
-    return <div className="w-full bg-w3storage-purple text-white typography-cta text-center py-1" dangerouslySetInnerHTML={{ __html: highlightMessage }} />
+    return <div id="site-message-banner" dangerouslySetInnerHTML={{ __html: highlightMessage }} />
   }
 
   return null
@@ -89,7 +89,6 @@ export default function Layout({
   title = 'Web3 Storage - The simple file storage service for IPFS & Filecoin.',
   description = 'With Web3.Storage you get all the benefits of decentralized storage and content addressing with the frictionless experience you expect in a modern storage solution. It’s fast, open and it’s free.',
   pageBgColor = 'bg-w3storage-background',
-  navBgColor = 'bg-w3storage-background',
   footerBgColor,
   data = null,
   highlightMessage,
@@ -122,7 +121,7 @@ export default function Layout({
 
       {shouldWaitForLoggedIn ? (
         <>
-          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
+          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} />
             <Loading />
           <Footer bgColor={footerBgColor} />
         </>
@@ -134,7 +133,7 @@ export default function Layout({
       ) : (
         <>
           <MessageBanner highlightMessage={ highlightMessage }/>
-          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
+          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} />
           {children({ isLoggedIn, data })}
           <Footer bgColor={footerBgColor} />
         </>
