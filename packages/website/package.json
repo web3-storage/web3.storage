@@ -29,6 +29,7 @@
     "react-redux": "^7.2.6",
     "react-syntax-highlighter": "^11.0.3",
     "remark-slug": "^6.1.0",
+    "storybook-addon-state": "^1.0.3",
     "web3.storage": "^3.0.0"
   },
   "devDependencies": {
