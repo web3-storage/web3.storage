@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react';
 import GithubSVG from 'assets/icons/github';
 import { useAppDispatch } from 'store';
 import { getUserData, setAuthToken } from 'store/actions';
+import Button from 'components/button/button';
 
 const Login = () => {
   // App wide methods
@@ -60,18 +61,18 @@ const Login = () => {
       <div className="login-content">
         <h3>Log in with</h3>
         <button onClick={onGithubLogin}>
-          <div className="login-sub-container login-sub-container-github">
+          <div className="section section-github">
             <GithubSVG /> Github
           </div>
         </button>
         <h3 className="login-type-divider">or</h3>
-        <div className="login-sub-container login-sub-container-email">
+        <div className="section section-email">
           <input
             className={clsx('login-email', errors.email && 'error')}
             placeholder="Enter your email"
             onChange={useCallback(e => setFormData(e.currentTarget.value), [])}
           />
-          <input type="submit" value="Login" onClick={onLoginWithEmail} />
+          <Button onClick={onLoginWithEmail}>Sign up / Login</Button>
         </div>
       </div>
     </div>
