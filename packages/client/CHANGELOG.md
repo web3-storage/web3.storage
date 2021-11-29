@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.4.1](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.4.0...web3.storage-v3.4.1) (2021-11-29)
+
+
+### Bug Fixes
+
+* webpack 4 build error ([#707](https://www.github.com/web3-storage/web3.storage/issues/707)) ([2c658a1](https://www.github.com/web3-storage/web3.storage/commit/2c658a184aeeb4ee05dc5acc039a128a0274a99c))
+
 ## [3.4.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.4...web3.storage-v3.4.0) (2021-11-25)
 
 
