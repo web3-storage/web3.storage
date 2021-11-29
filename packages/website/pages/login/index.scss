@@ -1,6 +1,4 @@
 .login-container {
-  // TODO: Reused background
-  background: gray;
   height: 100vh; // TODO: Base off 100vh - header/footer heights
   color: $white;
   @include fontSize_Medium;
