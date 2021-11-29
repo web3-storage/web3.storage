@@ -30,7 +30,7 @@ export function envAll (_, env, event) {
   env.sentry = (env.SENTRY_DSN || typeof SENTRY_DSN !== 'undefined') && new Toucan({
     dsn: env.SENTRY_DSN || SENTRY_DSN,
     context: event,
-    allowedHeaders: ['user-agent'],
+    allowedHeaders: ['user-agent', 'x-client'],
     allowedSearchParams: /(.*)/,
     debug: false,
     rewriteFrames: {
