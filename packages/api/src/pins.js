@@ -30,33 +30,6 @@ import { toPinStatusEnum, waitToGetOkPins } from './utils/pin.js'
  */
 
 /**
- * @typedef {'queued' | 'pinning' | 'failed' | 'pinned'} apiPinStatus
- */
-
-/**
- *
- * Service API Pin object definition
- * @typedef {Object} ServiceApiPin
- * @property {string} cid
- * @property {string} [name]
- * @property {Array.<string>} [origins]
- * @property {object} [meta]
- */
-
-/**
- *
- * Service API Pin Status definition
- * @typedef {Object} ServiceApiPinStatus
- * @property {string} requestId
- * @property {apiPinStatus} status
- * @property {string} created
- * @property {Array<string>} delegates
- * @property {string} [info]
- *
- * @property {ServiceApiPin} pin
- */
-
-/**
  * @typedef {{ error: { reason: string, details?: string } }} PinDataError
  */
 
@@ -192,7 +165,8 @@ async function createPin (pinData, authToken, env, ctx) {
   const serviceApiPinStatus = {
     requestId: pinRequest.id.toString(),
     created: pinRequest.created,
-    status: toPinStatusEnum('pin_queued'),
+    // TODO: does this need to be pin queued?
+    status: getPinningAPIStatus(pinRequest.pins),
     delegates: [],
     pin: { cid: normalizedCid }
   }
