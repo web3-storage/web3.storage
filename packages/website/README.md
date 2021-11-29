@@ -13,6 +13,17 @@ If you don't have `nvm` installed to manage node versions, then it is highly sug
 - yarn v1.22.10
 ```
 
+### Setting up
+
+Inside the `/packages/website` folder create a file called `.env.local` with the following content.
+
+```ini
+NEXT_PUBLIC_ENV=dev
+NEXT_PUBLIC_API=http://127.0.0.1:8787
+NEXT_PUBLIC_MAGIC=<magic test mode publishable key>
+```
+
+
 ## Usage
 
 ### Running Locally
