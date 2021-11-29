@@ -22,6 +22,7 @@ module.exports = {
         moduleDirectory: ['node_modules', 'lib', 'pages', 'components', 'content', 'hooks', 'modules'],
         paths: ['.'],
       },
+      alias: [['ZeroComponents', './modules/zero/components']],
     },
     react: {
       version: 'detect',
