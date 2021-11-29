@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import Router from 'next/router';
 import { createStore } from 'redux';
 
 import reducers from './reducers';
 import { AppReduxState } from '.';
-import { getUserData } from './actions';
 
 const __NEXT_REDUX_STORE__ = '__NEXT_REDUX_STORE__';
 
-const getOrCreateStore = (initialState: AppReduxState = {}) => {
+export const getOrCreateStore = (initialState: AppReduxState = { userData: null }) => {
   // Always make a new store if server, otherwise state is shared between requests
   if (typeof window === 'undefined') {
     return createStore(reducers, initialState);
@@ -21,67 +19,38 @@ const getOrCreateStore = (initialState: AppReduxState = {}) => {
   return window[__NEXT_REDUX_STORE__];
 };
 
-const redirectToLogin = (res, storeState) => {
-  if (res) {
-    // On the server, we'll use an HTTP response to
-    // redirect with the status code of our choice.
-    // 307 is for temporary redirects.
-    res.writeHead(307, { Location: '/login' });
-    res.end();
-  } else {
-    // On the client, we'll use the Router-object
-    // from the 'next/router' module.
-    Router.replace('/login');
-  }
-  return storeState;
-};
-
-export default function withAuthorizedReduxStore(App) {
+/**
+ * Wrapper that initializes the redux store
+ */
+export default function withReduxStore(App) {
   return class AppWithRedux extends Component<{
-    initialAppState?: AppReduxState;
+    appState: AppReduxState;
   }> {
     static async getInitialProps(appContext) {
-      const {
-        ctx: { res, req, pathname },
-      } = appContext;
+      // Initializing props
       const pageProps = { ...(await App.getInitialProps?.(appContext)) };
 
-      const authCookie = !!req ? req.cookies.authorization : document.cookie.split('authorization=')[1]?.split(';')[0];
-
-      // Early return on the login page
-      if (pathname.indexOf('/login') >= 0) {
-        return pageProps;
+      // SPA Navigation proceeds as normal
+      if (typeof window !== 'undefined' && !!window[__NEXT_REDUX_STORE__]) {
+        return { pageProps, appState: window[__NEXT_REDUX_STORE__] };
       }
 
-      // Get or Create the store with `undefined` as initialState
+      // Initializing store for the first time
       const store = getOrCreateStore();
 
-      // Initial authorization check for non login routes
-      if (!authCookie) {
-        return redirectToLogin(res, pageProps);
-      }
+      // TODO: Any additional store preconfigurations/initializations
 
       // Provide the store to getInitialProps of pages
       appContext.ctx.store = store;
 
-      // get data here
-      const userData = await getUserData(authCookie);
-
-      if (!userData.payload) {
-        // Secondary unauthorized access check, redirecting to login
-        return redirectToLogin(res, pageProps);
-      }
-
-      store.dispatch(userData);
-
       return {
         ...pageProps,
-        initialAppState: store.getState(),
+        appState: store.getState(),
       };
     }
 
     render() {
-      return <App {...this.props} store={getOrCreateStore({ ...this.props.initialAppState })} />;
+      return <App {...this.props} store={getOrCreateStore({ ...this.props.appState })} />;
     }
   };
 }

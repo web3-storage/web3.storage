@@ -1,13 +1,15 @@
 import { useAppSelector } from 'store';
 
-const TestPage: React.FC = () => {
+const Account: React.FC = () => {
   const { firstName, lastName } = useAppSelector(({ userData }) => userData!);
 
   return (
     <div>
-      {firstName}:{lastName}
+      firstname: {firstName}
+      <br />
+      lastname: {lastName}
     </div>
   );
 };
 
-export default TestPage;
+export default Account;

@@ -1,7 +1,7 @@
 import { StoreAction } from 'store';
 
 export const setAuthToken = async (user?: string, password?: string) => {
-  // TODO: Async method to API to get user authentication token
+  // TODO: Async method to API to get user authentication token and properly store in cookie
   const authentication = `${user}:${password}`;
   document.cookie = `authorization=${authentication}; expires=${new Date(
     Number.MAX_SAFE_INTEGER
