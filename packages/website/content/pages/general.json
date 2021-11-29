@@ -1,0 +1,120 @@
+{
+  "seo": {
+    "title": "",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "site_logo": {
+    "text": "Web3.Storage"
+  },
+  "navigation": [
+    {
+      "url": "/about",
+      "text": "About"
+    },
+    {
+      "url": "/tiers",
+      "text": "Tiers"
+    },
+    {
+      "url": "/faq",
+      "text": "FAQ"
+    },
+    {
+      "url": "https://docs.web3.storage/",
+      "text": "Docs"
+    }
+  ],
+  "footer": {
+    "contact": {
+      "logo_text": "Web3.Storage",
+      "prompt": "Sign up for free using your email address or GitHub.",
+      "cta": {
+        "url": "/login",
+        "text": "SIGN UP",
+        "tracking": "",
+        "action": "",
+        "variant": "purple"
+      }
+    },
+    "resources": {
+      "heading": "Resources",
+      "items": [
+        {
+          "text": "Quickstart Guide",
+          "url": "/"
+        },
+        {
+          "text": "FAQ",
+          "url": "/faq"
+        },
+        {
+          "text": "Get Help",
+          "url": "/"
+        },
+        {
+          "text": "Contact Us",
+          "url": "/"
+        },
+        {
+          "text": "Terms of Use",
+          "url": "/terms"
+        },
+        {
+          "text": "Privacy Policy",
+          "url": "/policy"
+        },
+        {
+          "text": "Status",
+          "url": "/"
+        }
+      ]
+    },
+    "get_started": {
+      "heading": "Get Started",
+      "items": [
+        {
+          "text": "Create an Account",
+          "url": "/"
+        },
+        {
+          "text": "Javascript Client Library",
+          "url": "/"
+        },
+        {
+          "text": "Open an Issue",
+          "url": "/"
+        },
+        {
+          "text": "HTTP API",
+          "url": "/"
+        },
+        {
+          "text": "Web Apps",
+          "url": "/terms"
+        },
+        {
+          "text": "Login",
+          "url": "/login"
+        }
+      ]
+    },
+    "copyright": {
+      "left": {
+        "text": "2021 Protocol Labs"
+      },
+      "right": {
+        "text": "Want more free storage?",
+        "link": {
+          "text": "Submit a request",
+          "url": ""
+        }
+      }
+    }
+  }
+}

@@ -5,7 +5,8 @@
 // --------------------------------------------------------------------- General
 $containerWidth: 61.25rem; // 980px
 $underlineSpacing: 0.1875rem;
-// $navigationHeight: 6.25rem;
+$messageBannerHeight: 3.25rem;
+$navigationHeight: 8.5rem;
 
 $borderRadius_Small: 0.3125rem;
 $borderRadius_Medium: 0.25rem;
@@ -25,8 +26,10 @@ $gray800: #424242;
 $gray900: #212121;
 
 $seaShell: #F1F1F1; // pale matte gray
-$steelGray: #1C1E29; // almost black
-$ebony: #03040A; // text black
+$steelGray: #1C1E29; // almost black gray
+$ebony: #03040A; // almost black
+$doveGray: #626262; // gray
+$malibu: #7E81FF; //bluish violet
 
 // ----------------------------------------------------------------- Breakpoints
 $breakpoint_Tiny: 25.9375rem; // 415px
