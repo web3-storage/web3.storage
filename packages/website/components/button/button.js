@@ -9,7 +9,7 @@ import styles from './button.module.scss';
 export const ButtonVariant = {
   DARK: 'dark',
   LIGHT: 'light',
-  OUTLINED: 'outlined'
+  PURPLE: 'purple'
 }
 
 /**
@@ -50,7 +50,7 @@ const Button = ({
   return (
     <ZeroButton
       {...props}
-      className={clsx(styles.button, styles[variant])}
+      className={clsx("button", variant)}
       onClick={onClickHandler}
     >
       {children}

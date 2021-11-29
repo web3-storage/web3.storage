@@ -1,0 +1,42 @@
+{
+  "seo": {
+    "title": "",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "site_logo": {
+    "text": "Web3.Storage"
+  },
+  "navigation": [
+    {
+      "type": "C",
+      "theme": "light",
+      "url": "/about",
+      "text": "About"
+    },
+    {
+      "type": "C",
+      "theme": "light",
+      "url": "/tiers",
+      "text": "Tiers"
+    },
+    {
+      "type": "C",
+      "theme": "light",
+      "url": "/faq",
+      "text": "FAQ"
+    },
+    {
+      "type": "C",
+      "theme": "light",
+      "url": "https://docs.web3.storage/",
+      "text": "Docs"
+    }
+  ],
+  "footer": {}
+}
