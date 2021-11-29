@@ -2,8 +2,6 @@ import clsx from 'clsx'
 import { useCallback } from 'react';
 import Button from 'ZeroComponents/button/button'
 
-import styles from './modal.module.scss';
-
 /**
  * @typedef {Object} ModalProps
  * @prop {string} [className]
@@ -26,12 +24,12 @@ const Modal = ({
 
   return (isOpen &&
     <>
-      <div className={clsx(className, styles.modalBackground)}></div>
-      <div className={clsx(className, styles.modalContainer)}>
-        <div className={clsx(className, styles.modal)}>
+      <div className={clsx(className, 'modalBackground')}></div>
+      <div className="modalContainer">
+        <div className="modal">
           {children}
           {showCloseButton && (
-            <Button onClick={closeModal} className={styles.modalClose}>
+            <Button onClick={closeModal} className="modalClose">
               {closeIcon 
                 ? closeIcon
                 : <span>&times;</span>
