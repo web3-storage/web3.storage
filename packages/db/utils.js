@@ -56,7 +56,10 @@ export function normalizeDeals (deals) {
       dealId: deal.dealId,
       storageProvider: deal.storageProvider,
       status: deal.status[0].toUpperCase() + deal.status.slice(1),
+      // FIXME: should be returned from SQL as contentCid (aggregate.cid_v1)
+      contentCid: deal.dataCid,
       pieceCid: deal.pieceCid,
+      // FIXME: should be returned from SQL as dataCid (aggregate.aggregate_cid)
       dataCid: deal.batchRootCid,
       dataModelSelector: deal.dataModelSelector,
       activation: deal.dealActivation,

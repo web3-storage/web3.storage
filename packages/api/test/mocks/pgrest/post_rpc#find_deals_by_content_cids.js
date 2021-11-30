@@ -12,6 +12,7 @@ module.exports = ({ body }) => {
         status: 'active',
         pieceCid: 'baga',
         dataCid: 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm',
+        batchRootCid: 'bafybeidymjmzqihaz7oeiod3zyolzgcxwbum4b4nvo4aublm6quh6zb3ae',
         dataModelSelector: 'Links/0/Links',
         dealActivation: '<iso timestamp>',
         created: '2021-07-14T19:27:14.934572Z',
@@ -23,6 +24,7 @@ module.exports = ({ body }) => {
         status: 'terminated',
         pieceCid: 'baga',
         dataCid: 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm',
+        batchRootCid: 'bafybeidymjmzqihaz7oeiod3zyolzgcxwbum4b4nvo4aublm6quh6zb4ae',
         dataModelSelector: 'Links/0/Links',
         dealActivation: '<iso timestamp>',
         created: '2021-07-14T19:27:14.934572Z',
@@ -34,6 +36,7 @@ module.exports = ({ body }) => {
       status: 'queued',
       pieceCid: 'baga',
       dataCid: 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q',
+      batchRootCid: 'bafybeidymjmzqihaz7oeiod3zyolzgcxwbum4b4nvo4aublm6quh6zb5ae',
       dataModelSelector: 'Links/0/Links'
     }]
   }
