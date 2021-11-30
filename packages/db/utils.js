@@ -57,7 +57,7 @@ export function normalizeDeals (deals) {
       storageProvider: deal.storageProvider,
       status: deal.status[0].toUpperCase() + deal.status.slice(1),
       pieceCid: deal.pieceCid,
-      dataCid: deal.dataCid,
+      dataCid: deal.batchRootCid,
       dataModelSelector: deal.dataModelSelector,
       activation: deal.dealActivation,
       expiration: deal.dealExpiration,
