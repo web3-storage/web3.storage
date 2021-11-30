@@ -173,7 +173,8 @@ async function createPin (pinData, authToken, env, ctx) {
   }
 
   // Pin CID to Cluster
-  await env.cluster.pin(normalizedCid, pinOptions)
+  // TODO: await?
+  env.cluster.pin(normalizedCid, pinOptions)
 
   // Create Pin request in db (not creating any content at this stage)
   const pinRequest = await env.db.createPAPinRequest(pinRequestData)
