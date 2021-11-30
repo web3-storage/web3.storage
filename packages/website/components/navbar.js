@@ -43,6 +43,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
     [
       {
         link: 'https://docs.web3.storage/',
+        slug: 'docs',
         name: 'Docs',
         spacing: 'p-3 md:px-6'
       },
