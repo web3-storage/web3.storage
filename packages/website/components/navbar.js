@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { getMagic } from '../lib/magic.js'
 import countly from '../lib/countly'
@@ -25,6 +25,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   const containerRef = useRef(null)
   const [isSmallVariant, setSmallVariant] = useState(false)
   const [isMenuOpen, setMenuOpen] = useState(false)
+  const router = useRouter();
 
   useResizeObserver(containerRef, () => {
     const shouldGoToSmallVariant =  window.innerWidth < 640
@@ -46,17 +47,17 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
         spacing: 'p-3 md:px-6'
       },
       {
-        link: '/about',
+        link: 'about',
         name: 'About',
         spacing: 'p-3 md:px-6'
       },
       {
-        link: '/files',
+        link: 'files',
         name: 'Files',
         spacing: `p-3 md:px-6`
       },
       {
-        link: '/account',
+        link: 'account',
         name: 'Account',
         spacing: `p-3 md:px-6`
       }
@@ -73,7 +74,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   async function logout() {
     await getMagic().user.logout()
     await queryClient.invalidateQueries('magic-user')
-    Router.push('/')
+    router.push('/')
   }
 
   const toggleMenu = () => {
@@ -128,7 +129,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
         <div className={clsx("flex items-center", isSmallVariant ? 'justify-end' : '')} style={{ minHeight: 52 }}>
           {!isSmallVariant && ITEMS.map(item => (
             <Link href={item.link} key={item.name} >
-              <a onClick={onLinkClick} className={clsx('text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle', item.spacing)}>
+              <a onClick={onLinkClick} className={clsx('text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle', item.spacing, router.pathname.includes(item.link) && 'underline')}>
                   { item.name }
               </a>
             </Link>
