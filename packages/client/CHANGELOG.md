@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.5.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.4.0...web3.storage-v3.5.0) (2021-11-30)
+
+
+### Features
+
+* enable sentry to record X-Client request header ([#711](https://www.github.com/web3-storage/web3.storage/issues/711)) ([5276add](https://www.github.com/web3-storage/web3.storage/commit/5276addfc22b63a0af7a5311056b477160a1ae28))
+
+
+### Bug Fixes
+
+* encode created date in Link header ([#719](https://www.github.com/web3-storage/web3.storage/issues/719)) ([bb0285f](https://www.github.com/web3-storage/web3.storage/commit/bb0285f2a0a5269ad1126905920758b8050a95d5))
+* webpack 4 build error ([#707](https://www.github.com/web3-storage/web3.storage/issues/707)) ([2c658a1](https://www.github.com/web3-storage/web3.storage/commit/2c658a184aeeb4ee05dc5acc039a128a0274a99c))
+
 ## [3.4.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.4...web3.storage-v3.4.0) (2021-11-25)
 
 
