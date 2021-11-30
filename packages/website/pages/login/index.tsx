@@ -3,9 +3,9 @@ import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 
 import GithubSVG from 'assets/icons/github';
+import Button, { ButtonVariant } from 'components/button/button';
 import { useAppDispatch } from 'store';
 import { getUserData, setAuthToken } from 'store/actions';
-import Button, { ButtonVariant } from 'components/button/button';
 
 const Login = () => {
   // App wide methods

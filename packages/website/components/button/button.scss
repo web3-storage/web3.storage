@@ -73,7 +73,7 @@
       border: 0.0625rem solid $white;
       background: $waterloo;
       opacity: 0.6;
-      box-shadow: 0 0.1875rem 0 rgba($black, 0.15);
+      @include shadow2;
     }
 
     button {
