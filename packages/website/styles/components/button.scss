@@ -49,4 +49,13 @@
       color: $ebony;
     }
   }
+
+  &.text-purple {
+    background-color: unset;
+    padding-left: 0;
+    button {
+      color: $malibu;
+      @include fontWeight_Semibold;
+    }
+  }
 }

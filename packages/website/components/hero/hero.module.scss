@@ -21,14 +21,6 @@
   z-index: -1;
 }
 
-.gradientBackground {
-  position: absolute;
-  width: 150%;
-  left: -25%;
-  bottom: -30rem;
-  z-index: 0;
-}
-
 .grid3D {
   position: absolute;
   top: -9999px;
@@ -86,7 +78,6 @@
 
 .header_text_block {
   .heading {
-
   }
   .subheading {
     color: black;

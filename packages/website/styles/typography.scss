@@ -61,33 +61,77 @@ $letterSpacing_Large: 0.03em;
 // ////////////////////////////////////////////////////////////////////// Mixins
 // =============================================================================
 // ------------------------------------------------------ Typography | Font Size
-@mixin fontSize_Tiny { font-size: $fontSize_Tiny; }
-@mixin fontSize_Mini { font-size: $fontSize_Mini; }
-@mixin fontSize_Small { font-size: $fontSize_Small; }
-@mixin fontSize_Regular { font-size: $fontSize_Regular; }
-@mixin fontSize_Medium { font-size: $fontSize_Medium; }
+@mixin fontSize_Tiny {
+  font-size: $fontSize_Tiny;
+}
+@mixin fontSize_Mini {
+  font-size: $fontSize_Mini;
+}
+@mixin fontSize_Small {
+  font-size: $fontSize_Small;
+}
+@mixin fontSize_Regular {
+  font-size: $fontSize_Regular;
+}
+@mixin fontSize_Medium {
+  font-size: $fontSize_Medium;
+}
 
-@mixin fontSize_Large { font-size: $fontSize_Large; }
-@mixin fontSize_MediumLarge { font-size: $fontSize_MediumLarge; }
-@mixin fontSize_ExtraLarge { font-size: $fontSize_ExtraLarge; }
-@mixin fontSize_Huge { font-size: $fontSize_Huge; }
+@mixin fontSize_Large {
+  font-size: $fontSize_Large;
+}
+@mixin fontSize_MediumLarge {
+  font-size: $fontSize_MediumLarge;
+}
+@mixin fontSize_ExtraLarge {
+  font-size: $fontSize_ExtraLarge;
+}
+@mixin fontSize_Huge {
+  font-size: $fontSize_Huge;
+}
 
 // ---------------------------------------------------- Typography | Font Weight
-@mixin fontWeight_Light { font-weight: $fontWeight_Light; }
-@mixin fontWeight_Regular { font-weight: $fontWeight_Regular; }
-@mixin fontWeight_Medium { font-weight: $fontWeight_Medium; }
-@mixin fontWeight_Semibold { font-weight: $fontWeight_Semibold; }
-@mixin fontWeight_Bold { font-weight: $fontWeight_Bold; }
+@mixin fontWeight_Light {
+  font-weight: $fontWeight_Light;
+}
+@mixin fontWeight_Regular {
+  font-weight: $fontWeight_Regular;
+}
+@mixin fontWeight_Medium {
+  font-weight: $fontWeight_Medium;
+}
+@mixin fontWeight_Semibold {
+  font-weight: $fontWeight_Semibold;
+}
+@mixin fontWeight_Bold {
+  font-weight: $fontWeight_Bold;
+}
 
 // -------------------------------------------------------- Typography | Leading
-@mixin leading_Small { line-height: $leading_Small; }
-@mixin leading_Regular { line-height: $leading_Regular; }
-@mixin leading_Medium { line-height: $leading_Medium; }
-@mixin leading_Large { line-height: $leading_Large; }
-@mixin leading_MediumLarge { line-height: $leading_MediumLarge; }
-@mixin leading_ExtraLarge { line-height: $leading_ExtraLarge; }
-@mixin leading_Huge { line-height: $leading_Huge; }
-@mixin leading_Massive { line-height: $leading_Massive; }
+@mixin leading_Small {
+  line-height: $leading_Small;
+}
+@mixin leading_Regular {
+  line-height: $leading_Regular;
+}
+@mixin leading_Medium {
+  line-height: $leading_Medium;
+}
+@mixin leading_Large {
+  line-height: $leading_Large;
+}
+@mixin leading_MediumLarge {
+  line-height: $leading_MediumLarge;
+}
+@mixin leading_ExtraLarge {
+  line-height: $leading_ExtraLarge;
+}
+@mixin leading_Huge {
+  line-height: $leading_Huge;
+}
+@mixin leading_Massive {
+  line-height: $leading_Massive;
+}
 
 // --------------------------------------------------------- Typography | Groups
 // fontSize_Tiny | 14pt
@@ -158,6 +202,15 @@ $letterSpacing_Large: 0.03em;
 @mixin label_3 {
   @include fontSize_Tiny;
   @include leading_Small;
+}
+
+@mixin gradient_Text {
+  @include magentaCyan_Gradient;
+  background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  text-fill-color: transparent;
 }
 
 // @mixin subheading {

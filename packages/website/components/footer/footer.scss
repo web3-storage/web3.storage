@@ -16,8 +16,8 @@ $footerLogoWidth: 2.25rem;
   position: absolute;
   width: 33.125rem;
   left: -11.5rem;
-  top: 29rem;
-  transform: scaleX(-1) rotate(25deg);
+  top: 0rem;
+  transform: translateY(-50%) scaleX(-1) rotate(25deg);
   z-index: 0;
 }
 

@@ -30,6 +30,10 @@ $steelGray: #1c1e29; // almost black gray
 $ebony: #03040a; // almost black
 $doveGray: #626262; // gray
 $malibu: #7e81ff; //bluish violet
+$aqua: #3effe9; //artificial cyan
+$cerise: #d726d7; //magenta
+$royalBlue: #3064e0; //blue blue
+$pictonBlue: #31e7ea; //torquoise
 
 // ----------------------------------------------------------------- Breakpoints
 $breakpoint_Tiny: 25.9375rem; // 415px
@@ -41,12 +45,15 @@ $breakpoint_Xlarge: 90rem; // 1440px
 $breakpoint_UltraLarge: 140.625rem; // 2250px
 
 // ------------------------------------------------------------------- Gradients
+@mixin magentaCyan_Gradient {
+  background: linear-gradient(to right, $cerise 0%, $royalBlue 50%, $pictonBlue 100%);
+}
 
 // ////////////////////////////////////////////////////////////////////// Mixins
 // =============================================================================
 // --------------------------------------------------------------------- Styling
 @mixin shadow1 {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.16);
 }
 
 @mixin focus_BoxShadow_Small {
@@ -93,12 +100,6 @@ $breakpoint_UltraLarge: 140.625rem; // 2250px
     background: transparent;
     color: transparent;
   }
-}
-
-@mixin centerImage {
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
 }
 
 // --------------------------------------------------------------------- Styling

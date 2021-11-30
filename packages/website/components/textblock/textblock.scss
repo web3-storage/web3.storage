@@ -11,16 +11,16 @@
 // }
 
 // ///////////////////////////////////////////////////////////////////// Content
-.label {
-  margin-bottom: 1rem;
+.label-text {
+  @include fontSize_Small;
+  @include fontWeight_Semibold;
 }
 
-.labelText {
-
+.label {
+  margin-bottom: 1.25rem;
 }
 
 .heading,
-.subheader,
 .description {
   margin-bottom: 1.25rem;
   p {
@@ -28,6 +28,12 @@
   }
 }
 
-.cta {
+.subheading {
+  margin-bottom: 0.5rem;
+  @include fontSize_Medium;
+  @include fontWeight_Semibold;
+}
 
+.description {
+  @include fontSize_Regular;
 }

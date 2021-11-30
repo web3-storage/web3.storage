@@ -1,3 +1,5 @@
+// ///////////////////////////////////////////////////// General [Page Sections]
+// -----------------------------------------------------------------------------
 .page-index {
   position: relative;
 }
@@ -10,8 +12,77 @@
 #section_2 {
   position: relative;
   z-index: 1;
+  &:before {
+    content: '';
+    position: absolute;
+    width: 2960px;
+    height: 2960px;
+    bottom: calc(-2960px + 16rem);
+    left: -50%;
+    background-image: url('../assets/images/holographic-bg.png');
+    background-repeat: no-repeat;
+    background-size: 2960px;
+    transform-origin: center;
+    transform: rotateZ(-45deg);
+    z-index: -10000;
+  }
 }
 
+#section_3 {
+  position: relative;
+  margin: 8rem 0;
+  z-index: 1;
+  margin-bottom: 9rem;
+  &:before {
+    content: '';
+    position: absolute;
+    width: calc(100% - 15rem);
+    height: 100%;
+    top: 0;
+    left: 7.5rem;
+    border-radius: 0.375rem;
+    background-color: rgba(241, 241, 241, 0.6);
+    @include shadow1;
+    z-index: 0;
+  }
+}
+
+#section_4 {
+  position: relative;
+  z-index: 1;
+  &:before {
+    position: absolute;
+    left: 0;
+    top: 1rem;
+    width: 100%;
+    transform: translateY(-100%);
+    content: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1636.34' height='122.322' viewBox='0 0 1636.34 122.322'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect width='1636.34' height='122.322' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Scroll_Group_1' data-name='Scroll Group 1' clip-path='url(%23clip-path)' style='isolation: isolate'%3e%3cg id='Group_1914' data-name='Group 1914'%3e%3cpath id='Path_18835' data-name='Path 18835' d='M-16101,11198.438v1055.932s338.735-28.635,512.177,140.625,36.063,416.637,329.8,625.462,792.163,107.167,792.163,107.167l2.2-1929.186s-388.361-117.4-797.447-117.4S-16101,11198.438-16101,11198.438Z' transform='translate(16101 -11081.04)' fill='%2303040a'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e ");
+  }
+  &:after {
+    position: absolute;
+    left: 4rem;
+    width: 110vw;
+    bottom: 4px;
+    transform: translateY(100%);
+    content: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1376.34' height='903.322' viewBox='0 0 1376.34 903.322'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect y='1168' width='1376.34' height='903.322' fill='none'/%3e%3c/clipPath%3e%3cclipPath id='clip-path-2'%3e%3crect width='1376.34' height='2071.322' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Group_1947' data-name='Group 1947' transform='translate(21114.178 -15215.691)'%3e%3cg id='Scroll_Group_2' data-name='Scroll Group 2' transform='translate(-21114.178 14047.691)' clip-path='url(%23clip-path)' style='isolation: isolate'%3e%3cg id='Group_1946' data-name='Group 1946' transform='translate(3.178 -2929.691)'%3e%3cg id='Group_1944' data-name='Group 1944'%3e%3cg id='Scroll_Group_1' data-name='Scroll Group 1' transform='translate(-3.178 2929.691)' clip-path='url(%23clip-path-2)' style='isolation: isolate'%3e%3cg id='Group_430' data-name='Group 430' transform='translate(0)'%3e%3cg id='Group_216' data-name='Group 216' transform='translate(0)'%3e%3cpath id='Path_18835' data-name='Path 18835' d='M-16101,11198.438v1055.932s338.735-28.635,512.177,140.625,36.063,416.637,329.8,625.462,792.163,107.167,792.163,107.167l2.2-1929.186s-388.361-117.4-797.447-117.4S-16101,11198.438-16101,11198.438Z' transform='translate(16101 -11081.04)' fill='%2303040a'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e ");
+  }
+}
+
+#section_5 {
+  position: relative;
+  z-index: 1;
+  padding-top: 13rem;
+}
+
+#section_6 {
+  position: relative;
+  z-index: 1;
+  background-color: $ebony;
+  color: white;
+}
+
+// /////////////////////////////////////////////////////////////// [Subsections]
+// -----------------------------------------------------------------------------
 #hero_header {
   position: relative;
   .heading {
@@ -26,12 +97,21 @@
   }
 }
 
+#index_hero_background-gradient {
+  position: absolute;
+  width: 150%;
+  left: -25%;
+  bottom: -30rem;
+  z-index: 0;
+}
+
 #intro_1 {
   position: relative;
   margin-top: 7rem;
   padding: 8.125rem;
   background-color: $ebony;
   color: white;
+  z-index: 0;
 
   &:after {
     position: absolute;
@@ -82,4 +162,75 @@
 #section_FAQ_ctas {
   background-color: $ebony;
   color: white;
+}
+
+#intro_2-heading,
+#intro_2-statistics,
+#intro_2-cta {
+  position: relative;
+}
+
+#intro_2-heading {
+  padding-top: 4rem;
+  padding-bottom: 0;
+}
+
+#intro_2-statistics {
+  padding: 0;
+  .card-list-block {
+    position: relative;
+    width: calc(100% + 2rem);
+    left: -1rem;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    background-color: rgba(241, 241, 241, 0.6);
+    @include shadow1;
+  }
+}
+
+#intro_2-cta {
+  padding-top: 1.5rem;
+  padding-bottom: 4rem;
+  .column-2 {
+    .heading {
+      display: inline;
+      @include gradient_Text;
+      @include fontSize_MediumLarge;
+      margin-bottom: 0;
+      background-size: 200%;
+    }
+  }
+}
+
+#section_FAQ_info {
+  position: relative;
+  padding-bottom: 3rem;
+  .heading {
+    @include fontSize_Large;
+    line-height: leading(50, 35);
+    margin-bottom: 2.5rem;
+  }
+  .image-block {
+    margin-top: 2.5rem;
+  }
+}
+
+#section_FAQ-squiggle {
+  position: absolute;
+  width: 33.125rem;
+  left: -11.5rem;
+  top: 0rem;
+  transform: translateY(-50%) scaleX(-1) rotate(18deg);
+  z-index: 0;
+}
+
+#section_FAQ-corkscrew {
+  position: absolute;
+  width: 154vw;
+  height: 100%;
+  transform: translate(-25%, -15%) rotate(-54deg);
+  z-index: 0;
+  @include centerImage;
+  opacity: 0.25;
+  filter: blur(40px);
 }

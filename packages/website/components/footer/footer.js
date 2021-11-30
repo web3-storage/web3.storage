@@ -30,7 +30,7 @@ export default function Footer() {
   // ========================================================= Template [Footer]
   return (
     <footer id="site-footer">
-      <section className="site-footer-section">
+      <section id="site-footer-section">
         <Squiggle id="footer_squiggle" />
 
         <div className="grid-middle">

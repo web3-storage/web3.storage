@@ -1,21 +1,20 @@
 // ===================================================================== Imports
-import Card from './card';
+import Card from '../card/card';
 
 // ====================================================================== Params
 /**
  * @param {Object} props.block
-*/
+ */
 // ====================================================================== Export
-export default function CardListBlock({block}) {
+export default function CardListBlock({ block }) {
+  const direction = block.direction || 'row';
   return (
-    <div class="block card-list-block">
-      <div class="card-column">
+    <div className="block card-list-block">
+      <div className={`card-${direction}`}>
         {block.cards.map((card, index) => (
-          <Card
-            key={`card-${index}`}
-            card={card} />
+          <Card key={`card-${index}`} card={card} />
         ))}
       </div>
     </div>
-  )
+  );
 }

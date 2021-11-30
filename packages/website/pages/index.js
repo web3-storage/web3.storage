@@ -12,7 +12,7 @@ export default function Home() {
       <Navigation />
       <main className="page page-index">
         {sections.map((section, index) => (
-          <BlockBuilder key={`section_${index}`} subsections={section} />
+          <BlockBuilder id={`section_${index + 1}`} key={`section_${index + 1}`} subsections={section} />
         ))}
       </main>
       <Footer />

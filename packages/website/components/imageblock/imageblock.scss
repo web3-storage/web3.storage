@@ -1,7 +1,8 @@
 // ///////////////////////////////////////////////////////////////////// General
-.imageBlock {
+.image-block {
   position: relative;
-  div {
+  div,
+  span {
     position: relative !important;
   }
   img {
