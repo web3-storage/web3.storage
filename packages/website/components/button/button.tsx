@@ -8,6 +8,7 @@ export enum ButtonVariant {
   DARK = 'dark',
   LIGHT = 'light',
   PURPLE = 'purple',
+  PINK_BLUE = 'pink-blue',
 }
 
 type TrackingProps = {

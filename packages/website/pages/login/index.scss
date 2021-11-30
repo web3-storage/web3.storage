@@ -9,6 +9,26 @@
   h3 {
     font-size: 1.875rem; // TODO: Adding to fonts 30pt
   }
+
+  .section {
+    svg {
+      margin-right: 0.6875rem;
+    }
+
+    &-email {
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .button {
+      width: 8.5625rem;
+      height: 2.1875rem;
+
+      button {
+        min-height: 1.5rem;
+      }
+    }
+  }
 }
 
 .login-content {
@@ -19,25 +39,6 @@
   flex-direction: column;
   text-align: center;
   gap: 0.25rem;
-}
-
-.section {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba($waterloo, 0.15);
-  padding: 1.25rem 1.5rem;
-  border: 0.0625rem solid rgba($white, 0.15);
-  border-radius: 0.3125rem;
-  box-shadow: 0 0.1875rem 0 rgba($black, 0.15);
-
-  svg {
-    padding-right: 0.6875rem;
-  }
-
-  &-email {
-    flex-direction: column;
-  }
 }
 
 .login-email {

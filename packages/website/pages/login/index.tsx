@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import GithubSVG from 'assets/icons/github';
 import { useAppDispatch } from 'store';
 import { getUserData, setAuthToken } from 'store/actions';
-import Button from 'components/button/button';
+import Button, { ButtonVariant } from 'components/button/button';
 
 const Login = () => {
   // App wide methods
@@ -42,11 +42,13 @@ const Login = () => {
 
   // Callback for email login logic
   const onLoginWithEmail = useCallback(async () => {
+    console.log('done?!', email);
     // Errors for empty fields
     if (!email) {
       setErrors({ email: !email });
       return false;
     }
+    console.log('done!');
 
     await authorizeAndNavigateToAccount(email);
   }, [email, authorizeAndNavigateToAccount]);
@@ -70,9 +72,11 @@ const Login = () => {
           <input
             className={clsx('login-email', errors.email && 'error')}
             placeholder="Enter your email"
-            onChange={useCallback(e => setFormData(e.currentTarget.value), [])}
+            onChange={useCallback(e => setFormData({ email: e.currentTarget.value }), [])}
           />
-          <Button onClick={onLoginWithEmail}>Sign up / Login</Button>
+          <Button variant={ButtonVariant.PINK_BLUE} onClick={onLoginWithEmail}>
+            Sign up / Login
+          </Button>
         </div>
       </div>
     </div>

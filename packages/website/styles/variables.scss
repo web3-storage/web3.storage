@@ -33,6 +33,9 @@ $steelGray: #1c1e29; // almost black gray
 $ebony: #03040a; // almost black
 $doveGray: #626262; // gray
 $malibu: #7e81ff; //bluish violet
+$cerise: #d726d7; //purplish pink
+$royalBlue: #3064e0; //royal blue
+$pictionBlue: #31e7ea; //violetish blue
 
 // ----------------------------------------------------------------- Breakpoints
 $breakpoint_Tiny: 25.9375rem; // 415px
@@ -44,6 +47,8 @@ $breakpoint_Xlarge: 90rem; // 1440px
 $breakpoint_UltraLarge: 140.625rem; // 2250px
 
 // ------------------------------------------------------------------- Gradients
+
+$gradient_PinkBlue: linear-gradient(45deg, $cerise 0%, $royalBlue 48%, $pictionBlue 100%);
 
 // ////////////////////////////////////////////////////////////////////// Mixins
 // =============================================================================
@@ -118,17 +123,8 @@ $breakpoint_UltraLarge: 140.625rem; // 2250px
   border-radius: $borderRadius_ExtraLarge;
 }
 
-@mixin gradient_Background_PurpleGreen {
-  background: $gradient_PurpleGreen;
-}
-@mixin gradient_Background_GreenPurple {
-  background: $gradient_GreenPurple;
-}
-@mixin gradient_Background_RedPurple {
-  background: $gradient_RedPurple;
-}
-@mixin gradient_Background_RedGreen {
-  background: $gradient_RedGreen;
+@mixin gradient_Background_PinkBlue {
+  background: $gradient_PinkBlue;
 }
 
 // --------------------------------------------------------------------- General
