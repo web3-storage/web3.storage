@@ -568,7 +568,8 @@ export class DBClient {
 
     const result = {}
     for (const d of normalizeDeals(data)) {
-      const cid = d.dataCid
+      const cid = d.contentCid
+      delete d.contentCid
       if (!Array.isArray(result[cid])) {
         result[cid] = [d]
       } else {
