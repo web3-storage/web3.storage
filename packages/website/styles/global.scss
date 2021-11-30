@@ -11,6 +11,7 @@
 @import 'layouts/messagebanner';
 @import 'layouts/section';
 @import 'layouts/corkscrewBackground';
+@import 'layouts/pageContainer';
 @import '../components/navigation/navigation.scss';
 @import '../components/footer/footer.scss';
 
@@ -20,6 +21,7 @@
 // Pages
 @import '../pages/index.scss';
 @import '../pages/login';
+@import '../pages/account';
 
 // /////////////////////////////////////////////////////////////////////// Fonts
 // -----------------------------------------------------------------------------

@@ -42,13 +42,11 @@ const Login = () => {
 
   // Callback for email login logic
   const onLoginWithEmail = useCallback(async () => {
-    console.log('done?!', email);
     // Errors for empty fields
     if (!email) {
       setErrors({ email: !email });
       return false;
     }
-    console.log('done!');
 
     await authorizeAndNavigateToAccount(email);
   }, [email, authorizeAndNavigateToAccount]);
@@ -59,7 +57,7 @@ const Login = () => {
   }, [authorizeAndNavigateToAccount]);
 
   return (
-    <div className="login-container">
+    <div className="page-container login-container">
       <div className="login-content">
         <h3>Log in with</h3>
         <button onClick={onGithubLogin}>
