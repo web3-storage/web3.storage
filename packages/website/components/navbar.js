@@ -47,21 +47,24 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
         spacing: 'p-3 md:px-6'
       },
       {
-        link: 'about',
+        link: '/about',
+        slug: 'about',
         name: 'About',
         spacing: 'p-3 md:px-6'
       },
       {
-        link: 'files',
+        link: isLoggedIn ? '/files' : '/login',
+        slug: 'files',
         name: 'Files',
         spacing: `p-3 md:px-6`
       },
       {
-        link: 'account',
+        link: isLoggedIn ? '/account' : '/login',
+        slug: 'account',
         name: 'Account',
         spacing: `p-3 md:px-6`
       }
-    ], [])
+    ], [isLoggedIn])
 
   const queryClient = useQueryClient()
   const onLinkClick = useCallback((event) => {
@@ -129,7 +132,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
         <div className={clsx("flex items-center", isSmallVariant ? 'justify-end' : '')} style={{ minHeight: 52 }}>
           {!isSmallVariant && ITEMS.map(item => (
             <Link href={item.link} key={item.name} >
-              <a onClick={onLinkClick} className={clsx('text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle', item.spacing, router.pathname.includes(item.link) && 'underline')}>
+              <a onClick={onLinkClick} className={clsx('text-sm text-w3storage-purple font-bold hover:underline align-middle', item.spacing, router.pathname.includes(item.slug) && 'underline')}>
                   { item.name }
               </a>
             </Link>
