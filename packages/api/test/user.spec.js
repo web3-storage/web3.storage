@@ -277,7 +277,7 @@ describe('GET /user/uploads', () => {
     ]
     const link = res.headers.get('Link')
     assert(link, 'has a Link header for the next page')
-    assert.strictEqual(link, `</user/uploads?size=${size}&before=${expected[0].created}>; rel="next"`)
+    assert.strictEqual(link, `</user/uploads?size=${size}&before=${encodeURIComponent(expected[0].created)}>; rel="next"`)
     const uploads = await res.json()
     assert.deepStrictEqual(uploads, expected)
   })
