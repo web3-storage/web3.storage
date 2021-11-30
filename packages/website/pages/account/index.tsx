@@ -1,5 +1,3 @@
-// import { useAppSelector } from 'store';
-
 import StorageManager from '../../components/account/StorageManager';
 import FilesManager from '../../components/account/FilesManager';
 import GradientBackground from 'assets/illustrations/gradient-background';
