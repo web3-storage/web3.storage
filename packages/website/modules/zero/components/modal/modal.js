@@ -28,15 +28,15 @@ const Modal = ({
       <div className="modalContainer">
         <div className="modal">
           {children}
-          {showCloseButton && (
-            <Button onClick={closeModal} className="modalClose">
-              {closeIcon 
-                ? closeIcon
-                : <span>&times;</span>
-              }
-            </Button>
-          )}
         </div>
+        {showCloseButton && (
+          <Button onClick={closeModal} className="modalClose">
+            {closeIcon 
+              ? closeIcon
+              : <span>&times;</span>
+            }
+          </Button>
+        )}
       </div>
     </>
   )
