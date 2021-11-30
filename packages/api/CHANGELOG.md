@@ -1,5 +1,12 @@
 # Changelog
 
+### [4.2.1](https://www.github.com/web3-storage/web3.storage/compare/api-v4.2.0...api-v4.2.1) (2021-11-30)
+
+
+### Bug Fixes
+
+* data CID is root CID of aggregate, not content CID ([#720](https://www.github.com/web3-storage/web3.storage/issues/720)) ([8c67725](https://www.github.com/web3-storage/web3.storage/commit/8c677259635a3deb30c948330f8ea118053309ce))
+
 ## [4.2.0](https://www.github.com/web3-storage/web3.storage/compare/api-v4.1.0...api-v4.2.0) (2021-11-30)
 
 
