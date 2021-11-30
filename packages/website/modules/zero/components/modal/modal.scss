@@ -1,0 +1,37 @@
+.modalContainer,
+.modalBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.modalContainer {
+  z-index: 10005;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .modal {
+    background: white;
+    position: relative;
+
+    .modalClose {
+      position: absolute;
+      top: 0;
+      right: 0;
+      max-height: 10%;
+      
+      button {
+        
+      }
+    }
+  }
+}
+
+.modalBackground {
+  background: rgba(black, 0.8);
+  z-index: 10000;
+}
