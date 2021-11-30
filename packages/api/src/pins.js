@@ -154,7 +154,8 @@ async function createPin (pinData, authToken, env, ctx) {
   const normalizedCid = normalizeCid(cid)
 
   const pinRequestData = {
-    requestedCid: normalizedCid,
+    requestedCid: cid,
+    cid: normalizedCid,
     authKey: authToken
   }
   const pinOptions = {}
@@ -173,37 +174,43 @@ async function createPin (pinData, authToken, env, ctx) {
   }
 
   // Pin CID to Cluster
-  // TODO: await?
+  // TODO: Look into when the returned Promised is resolved to understand if we should be awaiting this call.
   env.cluster.pin(normalizedCid, pinOptions)
 
-  // Create Pin request in db (not creating any content at this stage)
+  // Create Pin request in db (not creating any content at this stage if it doesn't already exists)
   const pinRequest = await env.db.createPAPinRequest(pinRequestData)
 
   /** @type {ServiceApiPinStatus} */
   const serviceApiPinStatus = {
     requestId: pinRequest.id.toString(),
     created: pinRequest.created,
-    // TODO: does this need to be pin queued?
     status: getPinningAPIStatus(pinRequest.pins),
     delegates: [],
     pin: { cid: normalizedCid }
   }
 
-  // Given we're pinning content that is currently not in the cluster, it might take a while to
-  // get the cid from the network. We check pinning status asyncrounosly.
   /** @type {(() => Promise<any>)[]} */
-  const tasks = [async () => {
-    const okPins = await waitToGetOkPins(normalizedCid, env.cluster)
-    // Create the content row
-    // TODO: Get dagSize
-    env.db.createContent({ cid: normalizedCid, pins: okPins })
-    for (const pin of okPins) {
-      await env.db.upsertPin(cid, pin)
-    }
-  }]
+  const tasks = []
 
-  // TODO: Create/update pins and pin_sync_request.
-  // TODO: Deal with pin replication requests and backups.
+  // If we're pinning content that is currently not in the cluster, it might take a while to
+  // get the cid from the network. We check pinning status asyncrounosly.
+  if (pinRequest.pins.length === 0) {
+    tasks.push(async () => {
+      const okPins = await waitToGetOkPins(normalizedCid, env.cluster)
+      // Create the content row
+      // TODO: Get dagSize
+      env.db.createContent({ cid: normalizedCid, pins: okPins })
+      for (const pin of okPins) {
+        await env.db.upsertPin(cid, pin)
+      }
+    })
+  }
+
+  // TODO: Backups. At the moment backups are related to uploads so
+  // they' re currently not taken care of in respect of a pin request.
+  // We should look into this. There's an argument where backups should be related to content rather than upload, at the moment we're
+  // backing up content multiple times if uploaded multiple times.
+  // If we refactor that it will naturally work for merge requests as well.
 
   if (ctx.waitUntil) {
     tasks.forEach(t => ctx.waitUntil(t()))
