@@ -1,6 +1,6 @@
 import { JSONResponse, notFound } from './utils/json-response.js'
 import { normalizeCid } from './utils/normalize-cid.js'
-import { toPinStatusEnum, waitToGetOkPins } from './utils/pin.js'
+import { waitToGetOkPins } from './utils/pin.js'
 
 /**
  * @typedef {'queued' | 'pinning' | 'failed' | 'pinned'} apiPinStatus
@@ -153,13 +153,30 @@ async function createPin (pinData, authToken, env, ctx) {
   const { cid, name, origins, meta } = pinData
   const normalizedCid = normalizeCid(cid)
 
-  env.cluster.pin(normalizedCid, { origins, name, metadata: meta })
-
-  const pinRequest = await env.db.createPAPinRequest({
+  const pinRequestData = {
     requestedCid: normalizedCid,
-    authKey: authToken,
-    name
-  })
+    authKey: authToken
+  }
+  const pinOptions = {}
+
+  if (name) {
+    pinRequestData.name = name
+    pinOptions.name = name
+  }
+
+  if (origins) {
+    pinOptions.origins = origins
+  }
+
+  if (meta) {
+    pinOptions.meta = meta
+  }
+
+  // Pin CID to Cluster
+  await env.cluster.pin(normalizedCid, pinOptions)
+
+  // Create Pin request in db (not creating any content at this stage)
+  const pinRequest = await env.db.createPAPinRequest(pinRequestData)
 
   /** @type {ServiceApiPinStatus} */
   const serviceApiPinStatus = {
@@ -175,12 +192,17 @@ async function createPin (pinData, authToken, env, ctx) {
   // get the cid from the network. We check pinning status asyncrounosly.
   /** @type {(() => Promise<any>)[]} */
   const tasks = [async () => {
-    const okPins = await waitToGetOkPins(cid, env.cluster)
-    env.db.createContent({ cid, dagSize: 100, pins: okPins })
+    const okPins = await waitToGetOkPins(normalizedCid, env.cluster)
+    // Create the content row
+    // TODO: Get dagSize
+    env.db.createContent({ cid: normalizedCid, pins: okPins })
     for (const pin of okPins) {
       await env.db.upsertPin(cid, pin)
     }
   }]
+
+  // TODO: Create/update pins and pin_sync_request.
+  // TODO: Deal with pin replication requests and backups.
 
   if (ctx.waitUntil) {
     tasks.forEach(t => ctx.waitUntil(t()))

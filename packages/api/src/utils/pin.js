@@ -56,6 +56,7 @@ export function toPinStatusEnum (trackerStatus) {
 
 /**
  * Function that returns list of pins considered ok.
+ * TODO: refactor car upload to use this instead.
  *
  * @param {string} cid cid to be looked for
  * @param {import('@nftstorage/ipfs-cluster').Cluster} cluster
