@@ -56,6 +56,14 @@ $breakpoint_UltraLarge: 140.625rem; // 2250px
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.16);
 }
 
+@mixin shadow2 {
+  box-shadow: 1px 0px 6px rgba(0, 0, 0, 0.1);
+}
+
+@mixin shadow3 {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
 @mixin focus_BoxShadow_Small {
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
 }

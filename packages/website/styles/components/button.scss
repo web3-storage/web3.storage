@@ -58,4 +58,13 @@
       @include fontWeight_Semibold;
     }
   }
+
+  &.blue {
+    background-color: unset;
+    padding-left: 0;
+    button {
+      color: #3d04fb;
+      @include fontWeight_Semibold;
+    }
+  }
 }

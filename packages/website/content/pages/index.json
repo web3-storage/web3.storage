@@ -92,12 +92,29 @@
         "id": "intro_2-heading",
         "columns": [
           {
-            "type": "text_block",
+            "type": "custom",
             "cols": {
               "num": "col-5"
             },
-            "format": "medium",
-            "heading": "Web3.Storage is built for scale"
+            "customizations": [
+              {
+                "type": "cross",
+                "id": "intro_2-cross"
+              },
+              {
+                "type": "text_block",
+                "format": "medium",
+                "heading": "Web3.Storage is built for scale"
+              }
+            ]
+          },
+          {
+            "type": "triangle",
+            "cols": {
+              "num": "col-6",
+              "push_left": "off-1"
+            },
+            "id": "intro_2-triangle"
           }
         ]
       },
@@ -273,34 +290,49 @@
         "id": "section_get-started",
         "columns": [
           {
-            "type": "text_block",
+            "type": "custom",
             "cols": {
               "num": "col-5"
             },
-            "format": "medium",
-            "heading": "Get Started with Web3.Storage",
-            "description": "Choose your own way to store and retrieve using Web3.Storage. You can sign up for free using your email address or GitHub.",
-            "cta": {
-              "url": "/login",
-              "text": "CREATE AN ACCOUNT",
-              "theme": "dark",
-              "action": "",
-              "tracking": ""
-            }
+            "customizations": [
+              {
+                "type": "cross",
+                "id": "section_get-started-cross"
+              },
+              {
+                "type": "text_block",
+                "format": "medium",
+                "heading": "Get Started with Web3.Storage",
+                "description": "Choose your own way to store and retrieve using Web3.Storage. You can sign up for free using your email address or GitHub.",
+                "cta": {
+                  "url": "/login",
+                  "text": "CREATE AN ACCOUNT",
+                  "theme": "dark",
+                  "action": "",
+                  "tracking": ""
+                }
+              }
+            ]
           },
           {
             "type": "custom",
             "cols": {
-              "num": "col-6",
-              "push_left": "off-1"
+              "num": "col-7"
             },
             "customizations": [
               {
                 "type": "image_block",
+                "id": "get-started-image-storage",
                 "src": "/images/index/storage-tier.png"
               },
               {
                 "type": "image_block",
+                "id": "get-started-image-files",
+                "src": "/images/index/files-display.png"
+              },
+              {
+                "type": "image_block",
+                "id": "get-started-image-upload",
                 "src": "/images/index/file-upload.png"
               }
             ]
@@ -320,20 +352,35 @@
               {
                 "type": "B",
                 "label": "JS Client Library",
-                "feature": "npm install web3.storage",
-                "description": "Import the lightweight Web3.Storage library into your project, and enjoy a simple and familiar way to store and retrieve."
+                "feature": "<span class='highlight'>npm install</span> web3.storage",
+                "description": "Import the lightweight Web3.Storage library into your project, and enjoy a simple and familiar way to store and retrieve.",
+                "cta": {
+                  "link": "",
+                  "text": "JS DOCS",
+                  "theme": "blue"
+                }
               },
               {
                 "type": "B",
                 "label": "HTTP API",
-                "feature": "curl -X POST —data-binary “@foo.gif” https://api.web3.storage/upload",
-                "description": "Test or build your project on any stack, using our easy-to-use HTTP API. Web3.Storage is as flexible as you need it to be."
+                "feature": "<span class='highlight'>curl -X</span> POST <span class='highlight'>—data-binary</span> “@foo.gif” https://api.web3.storage/upload",
+                "description": "Test or build your project on any stack, using our easy-to-use HTTP API. Web3.Storage is as flexible as you need it to be.",
+                "cta": {
+                  "link": "",
+                  "text": "HTTP DOCS",
+                  "theme": "blue"
+                }
               },
               {
                 "type": "B",
                 "label": "Web App",
                 "feature": "Drop file to upload",
-                "description": "Upload your files directly through our Web UI to debug and validate Web3.Storage’s use case for your project."
+                "description": "Upload your files directly through our Web UI to debug and validate Web3.Storage’s use case for your project.",
+                "cta": {
+                  "link": "",
+                  "text": "MAKE YOUR FIRST UPLOAD",
+                  "theme": "blue"
+                }
               }
             ]
           }
@@ -370,18 +417,21 @@
             "cards": [
               {
                 "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
                 "title": "Ryan W.",
                 "subtitle": "Capetown, South Africa",
-                "description": "“I’m really impressed with web3.storage. It’s almost too easy."
+                "description": "I’m really impressed with web3.storage. It’s almost too easy."
               },
               {
                 "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
                 "title": "Frank J.",
                 "subtitle": "Toronto, Canada",
                 "description": "Web3.Storage was so simple to hook into, and it does what you want it to do. It’s like simplified S3 for IPFS. I really like the service, and I love that it’s free."
               },
               {
                 "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
                 "title": "Connor M.",
                 "subtitle": "New York, USA",
                 "description": "Web3.Storage was pretty much plug and play for my use case."
@@ -394,11 +444,13 @@
     [
       {
         "id": "section_explore-docs",
+        "grid": ["noGutter"],
         "columns": [
           {
             "type": "card_list_block",
             "cols": {
-              "num": "col-8"
+              "num": "col-8",
+              "push_left": "off-1"
             },
             "cards": [
               {
@@ -508,7 +560,7 @@
           {
             "type": "text_block",
             "cols": {
-              "num": "col-4"
+              "num": "col-3"
             },
             "format": "medium",
             "heading": "Open product. Open book.",

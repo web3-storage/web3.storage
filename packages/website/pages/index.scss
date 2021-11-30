@@ -61,17 +61,17 @@
   &:after {
     position: absolute;
     left: 4rem;
-    width: 110vw;
-    bottom: 4px;
-    transform: translateY(100%);
-    content: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1376.34' height='903.322' viewBox='0 0 1376.34 903.322'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect y='1168' width='1376.34' height='903.322' fill='none'/%3e%3c/clipPath%3e%3cclipPath id='clip-path-2'%3e%3crect width='1376.34' height='2071.322' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Group_1947' data-name='Group 1947' transform='translate(21114.178 -15215.691)'%3e%3cg id='Scroll_Group_2' data-name='Scroll Group 2' transform='translate(-21114.178 14047.691)' clip-path='url(%23clip-path)' style='isolation: isolate'%3e%3cg id='Group_1946' data-name='Group 1946' transform='translate(3.178 -2929.691)'%3e%3cg id='Group_1944' data-name='Group 1944'%3e%3cg id='Scroll_Group_1' data-name='Scroll Group 1' transform='translate(-3.178 2929.691)' clip-path='url(%23clip-path-2)' style='isolation: isolate'%3e%3cg id='Group_430' data-name='Group 430' transform='translate(0)'%3e%3cg id='Group_216' data-name='Group 216' transform='translate(0)'%3e%3cpath id='Path_18835' data-name='Path 18835' d='M-16101,11198.438v1055.932s338.735-28.635,512.177,140.625,36.063,416.637,329.8,625.462,792.163,107.167,792.163,107.167l2.2-1929.186s-388.361-117.4-797.447-117.4S-16101,11198.438-16101,11198.438Z' transform='translate(16101 -11081.04)' fill='%2303040a'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e ");
+    width: 100%;
+    bottom: 1px;
+    transform: translate(5%, 100%) scaleX(1.1);
+    // transform: translateY(100%);
+    content: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1636.34' height='905.322' viewBox='0 0 1636.34 905.322'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect y='1166' width='1636.34' height='905.322' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Scroll_Group_2' data-name='Scroll Group 2' transform='translate(0 -1166)' clip-path='url(%23clip-path)' style='isolation: isolate'%3e%3cpath id='Path_19322' data-name='Path 19322' d='M-16101,11198.438v1055.932s338.735-28.635,512.177,140.625,36.063,416.637,329.8,625.462,792.163,107.167,792.163,107.167l2.2-1929.186s-388.361-117.4-797.447-117.4S-16101,11198.438-16101,11198.438Z' transform='translate(16101 -11081.04)' fill='%2303040a'/%3e%3c/g%3e%3c/svg%3e ");
   }
 }
 
 #section_5 {
   position: relative;
   z-index: 1;
-  padding-top: 13rem;
 }
 
 #section_6 {
@@ -79,6 +79,9 @@
   z-index: 1;
   background-color: $ebony;
   color: white;
+  background-image: url('/images/index/global-network.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
 }
 
 // /////////////////////////////////////////////////////////////// [Subsections]
@@ -175,6 +178,22 @@
   padding-bottom: 0;
 }
 
+#intro_2-cross {
+  position: absolute;
+  width: 3rem;
+  left: 0;
+  top: 0;
+  transform: translate(200%, -150%);
+}
+
+#intro_2-triangle {
+  position: absolute;
+  width: 4.75rem;
+  top: 0;
+  right: 0;
+  transform: translate(-150%, -50%) rotate(-90deg);
+}
+
 #intro_2-statistics {
   padding: 0;
   .card-list-block {
@@ -233,4 +252,72 @@
   @include centerImage;
   opacity: 0.25;
   filter: blur(40px);
+}
+
+// ------------------------------------------------------- Section [Get Started]
+#section_get-started {
+  padding-bottom: 0;
+  position: relative;
+  z-index: 1;
+  .column-1 {
+    margin-top: 14rem;
+  }
+}
+
+#section_get-started-cross {
+  position: absolute;
+  z-index: 0;
+  width: 7.75rem;
+  top: 0;
+  left: 0;
+  transform: translate(50%, 100%) scaleX(-1);
+}
+
+#get-started-image-storage {
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+  width: 66%;
+}
+
+#get-started-image-files {
+  margin-left: 7rem;
+  margin-bottom: 1rem;
+  width: 110%;
+}
+
+#get-started-image-upload {
+  width: 56%;
+  margin-left: auto;
+  right: 0;
+  transform: translateX(50%);
+}
+
+#section_get-started-cards {
+  padding-top: 2rem;
+}
+
+// ------------------------------------------------------ Section [Testimonials]
+
+#section_testimonials,
+#section_testimonials-cards {
+  position: relative;
+  z-index: 1;
+}
+
+#section_testimonials {
+  padding-bottom: 3rem;
+}
+
+#section_testimonials-cards {
+  padding-top: 0rem;
+}
+
+#section_explore-docs {
+  .text-block {
+    margin: 2.125rem 0 0 3rem;
+    .heading {
+      @include fontSize_MediumLarge;
+      line-height: leading(40, 25);
+    }
+  }
 }

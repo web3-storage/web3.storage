@@ -52,6 +52,25 @@ $fontAssetPath: '../assets/fonts';
   font-weight: 700;
 }
 
+/////////////////////////////////////////////////////////////// Suisse Intl Mono
+@font-face {
+  font-family: 'Suisse Intl Mono';
+  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Thin.otf') format('opentype');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Suisse Intl Mono';
+  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Regular.otf') format('opentype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Suisse Intl Mono';
+  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Bold.otf') format('opentype');
+  font-weight: 700;
+}
+
 // ///////////////////////////////////////////////////////////////////// General
 // -----------------------------------------------------------------------------
 html,
