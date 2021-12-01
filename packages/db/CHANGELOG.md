@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.1.0](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.2...db-v3.1.0) (2021-12-01)
+
+
+### Features
+
+* simple mutability API using IPNS ([#648](https://www.github.com/web3-storage/web3.storage/issues/648)) ([9c287bb](https://www.github.com/web3-storage/web3.storage/commit/9c287bb7c983d3adab6ebb304decb47c5093ad78))
+
+
+### Bug Fixes
+
+* data CID is root CID of aggregate, not content CID ([#720](https://www.github.com/web3-storage/web3.storage/issues/720)) ([8c67725](https://www.github.com/web3-storage/web3.storage/commit/8c677259635a3deb30c948330f8ea118053309ce))
+* deal status filtering ([#692](https://www.github.com/web3-storage/web3.storage/issues/692)) ([a7b4151](https://www.github.com/web3-storage/web3.storage/commit/a7b4151b05fa55646d337a090263a1eeb77b8169))
+* postgres set max parallel workers per gather to 4 ([#725](https://www.github.com/web3-storage/web3.storage/issues/725)) ([9cdfcfa](https://www.github.com/web3-storage/web3.storage/commit/9cdfcfa51063ae2a9a87cd71a05a6e2d42cea887))
+
 ### [3.0.2](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.1...db-v3.0.2) (2021-11-23)
 
 
