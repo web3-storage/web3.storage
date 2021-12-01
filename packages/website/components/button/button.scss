@@ -81,4 +81,10 @@
       z-index: 1;
     }
   }
+
+  &.text {
+    color: $cyan;
+    text-transform: none;
+    @include fontWeight_Regular;
+  }
 }
