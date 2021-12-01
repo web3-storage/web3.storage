@@ -1,5 +1,6 @@
 // ===================================================================== Imports
 import IndexPageData from '../content/pages/index.json';
+import MessageBanner from '../components/messagebanner/messagebanner.js';
 import Navigation from '../components/navigation/navigation.js';
 import Footer from '../components/footer/footer.js';
 import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
@@ -9,6 +10,7 @@ export default function Home() {
   const sections = IndexPageData.page_content;
   return (
     <>
+      <MessageBanner />
       <Navigation />
       <main className="page page-index">
         {sections.map((section, index) => (
