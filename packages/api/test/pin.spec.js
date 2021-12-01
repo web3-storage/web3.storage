@@ -84,8 +84,6 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert(res.ok, 'Server response ok')
-      const data = await res.json()
-      assert.strictEqual(data, 'OK')
     })
 
     it('requires cid', async () => {
@@ -148,8 +146,6 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert(res.ok, 'Server response ok')
-      const data = await res.json()
-      assert.strictEqual(data, 'OK')
     })
 
     it('validates name', async () => {

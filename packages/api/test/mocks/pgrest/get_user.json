@@ -3,7 +3,7 @@
   "issuer": "issuer-str",
   "keys": [
     {
-      "id": 1,
+      "_id": 1,
       "name": "test-key",
       "secret": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0IiwiaXNzIjoid2ViMy1zdG9yYWdlIiwiaWF0IjoxNjMzOTU3Mzg5ODcyLCJuYW1lIjoidGVzdCJ9.KEH0jHUfJls44YWsj8uex_zj0dUIvdyqGalv2rhWnx8"
     }

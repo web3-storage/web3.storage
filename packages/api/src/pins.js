@@ -1,5 +1,6 @@
 import { JSONResponse, notFound } from './utils/json-response.js'
 import { normalizeCid } from './utils/normalize-cid.js'
+import { waitToGetOkPins } from './utils/pin.js'
 
 /**
  * @typedef {'queued' | 'pinning' | 'failed' | 'pinned'} apiPinStatus
@@ -86,9 +87,11 @@ const STATUS_OPTIONS = ['queued', 'pinning', 'pinned', 'failed']
  * @param {import('./user').AuthenticatedRequest} request
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
+ * @return {Promise<JSONResponse>}
  */
 export async function pinPost (request, env, ctx) {
-  const { cid, name, origins, meta } = await request.json()
+  const pinData = await request.json()
+  const { cid, name, origins, meta } = pinData
 
   // Require cid
   if (!cid) {
@@ -98,8 +101,9 @@ export async function pinPost (request, env, ctx) {
     )
   }
 
+  // Validate cid
   try {
-    const normalizedCid = normalizeCid(cid)
+    normalizeCid(cid)
   } catch (err) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_CID } },
@@ -133,8 +137,86 @@ export async function pinPost (request, env, ctx) {
     }
   }
 
-  // TODO: write logic for pinning cid
-  return new JSONResponse('OK')
+  const { authToken } = request.auth
+  const pinStatus = await createPin(pinData, authToken._id, env, ctx)
+  return new JSONResponse(pinStatus)
+}
+
+/**
+ * @param {Object} pinData
+ * @param {string} authToken
+ * @param {import('./env').Env} env
+ * @param {import('./index').Ctx} ctx
+ * @returns {Promise<ServiceApiPinStatus>}
+ */
+async function createPin (pinData, authToken, env, ctx) {
+  const { cid, name, origins, meta } = pinData
+  const normalizedCid = normalizeCid(cid)
+
+  const pinRequestData = {
+    requestedCid: cid,
+    cid: normalizedCid,
+    authKey: authToken
+  }
+  const pinOptions = {}
+
+  if (name) {
+    pinRequestData.name = name
+    pinOptions.name = name
+  }
+
+  if (origins) {
+    pinOptions.origins = origins
+  }
+
+  if (meta) {
+    pinOptions.meta = meta
+  }
+
+  // Pin CID to Cluster
+  // TODO: Look into when the returned Promised is resolved to understand if we should be awaiting this call.
+  env.cluster.pin(normalizedCid, pinOptions)
+
+  // Create Pin request in db (not creating any content at this stage if it doesn't already exists)
+  const pinRequest = await env.db.createPAPinRequest(pinRequestData)
+
+  /** @type {ServiceApiPinStatus} */
+  const serviceApiPinStatus = {
+    requestId: pinRequest._id.toString(),
+    created: pinRequest.created,
+    status: getPinningAPIStatus(pinRequest.pins),
+    delegates: [],
+    pin: { cid: normalizedCid }
+  }
+
+  /** @type {(() => Promise<any>)[]} */
+  const tasks = []
+
+  // If we're pinning content that is currently not in the cluster, it might take a while to
+  // get the cid from the network. We check pinning status asyncrounosly.
+  if (pinRequest.pins.length === 0) {
+    tasks.push(async () => {
+      const okPins = await waitToGetOkPins(cid, env.cluster)
+      // Create the content row
+      // TODO: Get dagSize
+      env.db.createContent({ cid: normalizedCid, pins: okPins })
+      for (const pin of okPins) {
+        await env.db.upsertPin(normalizedCid, pin)
+      }
+    })
+  }
+
+  // TODO: Backups. At the moment backups are related to uploads so
+  // they' re currently not taken care of in respect of a pin request.
+  // We should look into this. There's an argument where backups should be related to content rather than upload, at the moment we're
+  // backing up content multiple times if uploaded multiple times.
+  // If we refactor that it will naturally work for merge requests as well.
+
+  if (ctx.waitUntil) {
+    tasks.forEach(t => ctx.waitUntil(t()))
+  }
+
+  return serviceApiPinStatus
 }
 
 /**
