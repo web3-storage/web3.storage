@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.3.0](https://www.github.com/web3-storage/web3.storage/compare/api-v4.2.1...api-v4.3.0) (2021-12-01)
+
+
+### Features
+
+* temporary api backdoor ([#722](https://www.github.com/web3-storage/web3.storage/issues/722)) ([a9480d9](https://www.github.com/web3-storage/web3.storage/commit/a9480d94c9ca1b031937c6de196c68d659fc79b8))
+
 ### [4.2.1](https://www.github.com/web3-storage/web3.storage/compare/api-v4.2.0...api-v4.2.1) (2021-11-30)
 
 
