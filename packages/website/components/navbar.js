@@ -125,10 +125,12 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
           </div>
         }
         <div>
-          <a href="/" title="Web3 Storage" className={clsx("flex items-center", isSmallVariant ? 'justify-center' : '')} onClick={onLinkClick}>
-            <Logo style={{ width: '1.9rem' }} className="fill-current text-w3storage-purple w-full" />
-            <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-md hidden xl:inline-block">Web3.Storage</span>
-          </a>
+          <Link href="/" >
+            <a title="Web3 Storage" className={clsx("flex items-center", isSmallVariant ? 'justify-center' : '')} onClick={onLinkClick}>
+              <Logo style={{ width: '1.9rem' }} className="fill-current text-w3storage-purple w-full" />
+              <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-md hidden xl:inline-block">Web3.Storage</span>
+            </a>
+          </Link>
         </div>
         <div className={clsx("flex items-center", isSmallVariant ? 'justify-end' : '')} style={{ minHeight: 52 }}>
           {!isSmallVariant && ITEMS.map(item => (
