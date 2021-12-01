@@ -193,7 +193,7 @@ export async function userUploadsGet (request, env) {
 
   const oldest = uploads[uploads.length - 1]
   const headers = uploads.length === size
-    ? { Link: `<${requestUrl.pathname}?size=${size}&before=${oldest.created}>; rel="next"` }
+    ? { Link: `<${requestUrl.pathname}?size=${size}&before=${encodeURIComponent(oldest.created)}>; rel="next"` }
     : undefined
   return new JSONResponse(uploads, { headers })
 }

@@ -1,3 +1,10 @@
+const path = require('path')
+const git = require('git-rev-sync')
+const { GitRevisionPlugin } = require('git-revision-webpack-plugin')
+
+const gitRevisionPlugin = new GitRevisionPlugin()
+const dirName = path.resolve(__dirname)
+
 const nextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
@@ -7,7 +14,7 @@ const nextConfig = {
     // TODO: Remove me when all the ts errors are figured out.
     ignoreDuringBuilds: true,
   },
-  webpack: function(config) {
+  webpack: function(config, options) {
     config.module.rules.push({
       test: /\.md$/,
       type: 'asset/source'
@@ -17,6 +24,13 @@ const nextConfig = {
       test: /\.svg$/,
       use: ['@svgr/webpack'],
     })
+
+    config.plugins.push(
+      new options.webpack.DefinePlugin({
+        COMMITHASH: JSON.stringify(git.long(dirName)),
+        VERSION: JSON.stringify(gitRevisionPlugin.version())
+      })
+    )
 
     return config
   },

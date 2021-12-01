@@ -53,13 +53,48 @@ export function normalizeContent (content) {
  * @return {Array<import('./db-client-types').PinItemOutput>}
  */
 export function normalizePins (pins) {
-  return pins.map(pin => ({
-    _id: pin._id,
-    status: pin.status,
-    created: pin.created,
-    updated: pin.updated,
-    peerId: pin.location.peerId,
-    peerName: pin.location.peerName,
-    region: pin.location.region
-  }))
+  return pins.filter(pin => PIN_STATUS.has(pin.status))
+    .map(pin => ({
+      _id: pin._id,
+      status: pin.status,
+      created: pin.created,
+      updated: pin.updated,
+      peerId: pin.location.peerId,
+      peerName: pin.location.peerName,
+      region: pin.location.region
+    }))
 }
+
+/**
+ * Normalize deal items.
+ */
+export function normalizeDeals (deals) {
+  return deals.filter(deal => DEAL_STATUS.has(deal.status))
+    .map(deal => ({
+      dealId: deal.dealId,
+      storageProvider: deal.storageProvider,
+      status: deal.status[0].toUpperCase() + deal.status.slice(1),
+      // FIXME: should be returned from SQL as contentCid (aggregate.cid_v1)
+      contentCid: deal.dataCid,
+      pieceCid: deal.pieceCid,
+      // FIXME: should be returned from SQL as dataCid (aggregate.aggregate_cid)
+      dataCid: deal.batchRootCid,
+      dataModelSelector: deal.dataModelSelector,
+      activation: deal.dealActivation,
+      expiration: deal.dealExpiration,
+      created: deal.created,
+      updated: deal.updated
+    }))
+}
+
+const PIN_STATUS = new Set([
+  'Pinned',
+  'Pinning',
+  'PinQueued'
+])
+
+const DEAL_STATUS = new Set([
+  'queued',
+  'published',
+  'active'
+])

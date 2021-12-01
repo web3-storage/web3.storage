@@ -1,5 +1,5 @@
 /* eslint-env serviceworker */
-import { PutObjectCommand } from '@aws-sdk/client-s3'
+import { PutObjectCommand } from '@aws-sdk/client-s3/dist-es/commands/PutObjectCommand.js'
 import { CarBlockIterator } from '@ipld/car'
 import { toString } from 'uint8arrays'
 import { Block } from 'multiformats/block'
