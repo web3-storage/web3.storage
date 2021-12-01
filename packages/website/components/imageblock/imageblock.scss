@@ -1,0 +1,18 @@
+// ///////////////////////////////////////////////////////////////////// General
+.image-block {
+  position: relative;
+  div,
+  span {
+    position: relative !important;
+  }
+  img {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.label {
+  text-align: center;
+  margin-top: 2rem;
+}

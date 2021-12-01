@@ -16,8 +16,8 @@ $footerLogoWidth: 2.25rem;
   position: absolute;
   width: 33.125rem;
   left: -11.5rem;
-  top: 29rem;
-  transform: scaleX(-1) rotate(25deg);
+  top: -4rem;
+  transform: translateY(-50%) scaleX(-1) rotate(25deg);
   z-index: 0;
 }
 
@@ -27,6 +27,10 @@ $footerLogoWidth: 2.25rem;
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+  .label {
+    margin-top: 0;
+    padding-top: 0 !important;
+  }
 }
 
 .footer_contact {
@@ -67,6 +71,7 @@ $footerLogoWidth: 2.25rem;
   flex-grow: 1;
   z-index: 1;
   .label {
+    text-align: left;
     padding: 0.625rem 0;
     @include fontSize_Small;
     @include fontWeight_Bold;
