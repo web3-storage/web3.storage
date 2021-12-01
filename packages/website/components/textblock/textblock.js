@@ -26,7 +26,7 @@ export default function TextBlock({ block, className }) {
       return (
         <>
           {text.map(item => (
-            <p>{item}</p>
+            <p key={item}>{item}</p>
           ))}
         </>
       );
@@ -48,7 +48,7 @@ export default function TextBlock({ block, className }) {
   return (
     <div className={clsx('block text-block', `format__${format}`)}>
       {typeof block.label === 'string' && (
-        <div classNames={'label'}>
+        <div className={'label'}>
           <span className={clsx('label-text')}>{block.label}</span>
         </div>
       )}

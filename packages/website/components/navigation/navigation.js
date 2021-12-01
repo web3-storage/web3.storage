@@ -125,7 +125,7 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
                   </Link>
                 ))}
                 <Button href="/login" id="login" small={isSmallVariant}>
-                  Sign In
+                  SIGN IN
                 </Button>
               </div>
             </div>

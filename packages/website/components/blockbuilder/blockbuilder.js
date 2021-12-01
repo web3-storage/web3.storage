@@ -42,8 +42,8 @@ class BlockBuilder extends React.Component {
     if (Array.isArray(customizations)) {
       return (
         <>
-          {customizations.map(block => (
-            <>{this.getComponent(block)}</>
+          {customizations.map((block, index) => (
+            <React.Fragment key={`${block.type}_${index}`}>{this.getComponent(block)}</React.Fragment>
           ))}
         </>
       );

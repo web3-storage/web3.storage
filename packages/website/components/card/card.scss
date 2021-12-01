@@ -85,7 +85,11 @@
   background-color: $ebony;
   border-radius: 5px;
   position: relative;
-  margin: 0 0.625rem;
+  margin-right: 1.125rem;
+
+  &:last-child {
+    margin-right: 0;
+  }
 
   &:before {
     content: '';

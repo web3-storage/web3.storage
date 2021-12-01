@@ -15,10 +15,10 @@ export default function Card({ card }) {
     return (
       <>
         {obj.categories.map(category => (
-          <div className="category">
-            <div class="category-heading">{category.heading}</div>
+          <div key={category.heading} className="category">
+            <div className="category-heading">{category.heading}</div>
             {category.links.map(link => (
-              <div class="category-link">
+              <div key={link.text} className="category-link">
                 <a href={link.url}>{link.text}</a>
               </div>
             ))}
@@ -31,9 +31,9 @@ export default function Card({ card }) {
   const getFeaturedElement = obj => {
     switch (obj.type) {
       case 'A':
-        return <div class="feature">{obj.feature}</div>;
+        return <div className="feature">{obj.feature}</div>;
       case 'B':
-        return <code class="code-feature" dangerouslySetInnerHTML={{ __html: obj.feature }}></code>;
+        return <code className="code-feature" dangerouslySetInnerHTML={{ __html: obj.feature }}></code>;
       case 'C':
         return <Image src={obj.image} width="64" height="64" />;
       case 'D':
@@ -46,7 +46,7 @@ export default function Card({ card }) {
   // =========================================================== Template [Card]
   return (
     <div className={clsx('card', `type__${card.type}`)}>
-      {card.label && <div class="label">{card.label}</div>}
+      {card.label && <div className="label">{card.label}</div>}
 
       {<div className="feature-wrapper">{getFeaturedElement(card)}</div>}
 
