@@ -182,7 +182,7 @@ async function createPin (pinData, authToken, env, ctx) {
 
   /** @type {ServiceApiPinStatus} */
   const serviceApiPinStatus = {
-    requestId: pinRequest.id.toString(),
+    requestId: pinRequest._id.toString(),
     created: pinRequest.created,
     status: getPinningAPIStatus(pinRequest.pins),
     delegates: [],
