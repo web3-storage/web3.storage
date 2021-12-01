@@ -126,16 +126,6 @@ export default function Upload() {
     markFileFailed,
   } = useUploadProgress(files);
 
-  /** @param {import('react').ChangeEvent<HTMLFormElement>} e */
-  async function handleUploadSubmit(e) {
-    e.preventDefault();
-    const data = new FormData(e.target);
-    const file = data.get("file");
-    if (file && file instanceof File) {
-      await uploadFile(file);
-    }
-  }
-
   const uploadFiles = useCallback(async () => {
     setUploading(true);
 
@@ -236,7 +226,7 @@ export default function Upload() {
         <div>
           <h2>Upload File</h2>
           <form
-            onSubmit={handleUploadSubmit}
+            onSubmit={onSubmit}
             className="flex flex-col items-start pt-8"
           >
             <div className="mb-4 flex flex-col items-start">
