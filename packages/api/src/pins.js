@@ -138,7 +138,7 @@ export async function pinPost (request, env, ctx) {
   }
 
   const { authToken } = request.auth
-  const pinStatus = await createPin(pinData, authToken, env, ctx)
+  const pinStatus = await createPin(pinData, authToken._id, env, ctx)
   return new JSONResponse(pinStatus)
 }
 
