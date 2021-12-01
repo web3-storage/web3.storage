@@ -1,8 +1,6 @@
 import Link from 'next/link'
 import clsx from 'clsx'
 
-import styles from './button.module.scss';
-
 /**
  * @typedef {Object} ButtonProps
  * @prop {string} [className]
@@ -25,7 +23,7 @@ const Button = ({
 }) => {
 
   return (
-    <div className={clsx(className, styles.button)}>
+    <div className={clsx(className, 'Button')}>
       { href
         ? (
           openInNewWindow

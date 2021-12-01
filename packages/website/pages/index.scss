@@ -1,7 +1,15 @@
 // ///////////////////////////////////////////////////// General [Page Sections]
 // -----------------------------------------------------------------------------
+.corkscrew-background {
+  display: none;
+}
+
 .page-index {
   position: relative;
+}
+
+.sectional {
+  padding: 6rem 0;
 }
 
 #section_1 {
@@ -123,14 +131,6 @@
     line-height: leading(34, 20);
     margin-bottom: 1.25rem;
   }
-}
-
-#index_hero_background-gradient {
-  position: absolute;
-  width: 150%;
-  left: -25%;
-  bottom: -30rem;
-  z-index: 0;
 }
 
 #intro_1 {

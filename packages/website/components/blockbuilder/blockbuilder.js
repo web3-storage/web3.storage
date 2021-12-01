@@ -1,10 +1,9 @@
 // ===================================================================== Imports
 import React from 'react';
 import clsx from 'clsx';
-
 import Hero from '../hero';
-import TextBlock from '../textblock/textblock';
-import ImageBlock from '../imageblock/imageblock';
+import TextBlock from '../textblock/textblock.js';
+import ImageBlock from '../imageblock/imageblock.js';
 import Card from '../card/card';
 import CardListBlock from '../cardlistblock/cardlistblock';
 import Squiggle from '../../assets/illustrations/squiggle';
@@ -14,7 +13,6 @@ import Coil from '../../assets/illustrations/coil';
 import Cross from '../../assets/illustrations/cross';
 import Triangle from '../../assets/illustrations/triangle';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
-import styles from './blockbuilder.module.scss';
 
 // ====================================================================== Export
 class BlockBuilder extends React.Component {
@@ -25,6 +23,7 @@ class BlockBuilder extends React.Component {
     this.getCustomComponents = this.getCustomComponents.bind(this);
     this.getComponent = this.getComponent.bind(this);
   }
+
   // ================================================================= Functions
   getGridClasses(sectionGrid) {
     const classList = ['grid'];
@@ -90,8 +89,13 @@ class BlockBuilder extends React.Component {
   render(props) {
     return (
       <div className="sectionals" id={this.props.id}>
+
         {this.props.subsections.map(subsection => (
-          <section id={subsection.id} key={subsection.id} className={clsx(styles.sectional)}>
+          <section
+            id={subsection.id}
+            key={subsection.id}
+            className="sectional">
+
             <div className={clsx(this.getGridClasses(subsection.grid), subsection.classNames)}>
               {subsection.columns.map((column, index) => (
                 <div
@@ -104,8 +108,10 @@ class BlockBuilder extends React.Component {
                 </div>
               ))}
             </div>
+
           </section>
         ))}
+
       </div>
     );
   }

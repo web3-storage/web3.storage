@@ -1,0 +1,94 @@
+// ///////////////////////////////////////////////////////////////////// General
+// -----------------------------------------------------------------------------
+.hero-illustration {
+  position: absolute;
+  z-index: 2;
+}
+
+// //////////////////////////////////////////////////////////////// Page [Index]
+// -----------------------------------------------------------------------------
+#index_hero-container {
+  width: 100%;
+  padding: 0 1.75rem;
+  z-index: 0;
+  display: flex;
+  .text-block {
+    .subheading {
+      color: black;
+    }
+  }
+}
+
+.index_hero-top-section {
+  height: 24.05rem;
+}
+
+.index_hero-artwork-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: -1;
+}
+
+#index_hero_background-gradient {
+  position: absolute;
+  width: 150%;
+  left: -25%;
+  bottom: -30rem;
+  z-index: 0;
+}
+
+#index_hero-grid-3d {
+  position: absolute;
+  top: -9999px;
+  bottom: -9999px;
+  left: -9999px;
+  right: -9999px;
+  margin: auto !important;
+  z-index: 1;
+}
+
+#index_hero-squiggle {
+  width: 29rem;
+  left: -10.5rem;
+  transform: rotate(-27deg);
+}
+
+#index_hero-corkscrew {
+  width: 24.375rem;
+  right: -2rem;
+  top: -1rem;
+  transform: rotate(115deg);
+}
+
+#index_hero-zigzag {
+  width: 7.375rem;
+  left: 25%;
+  top: 0;
+  transform: rotate(-185deg);
+}
+
+#index_hero-helix {
+  width: 4.125rem;
+  left: 37%;
+  top: -5rem;
+  transform: rotate(-90deg);
+}
+
+#index_hero-cross {
+  width: 5.25rem;
+  right: 31%;
+  bottom: 3.5rem;
+}
+
+#index_hero-triangle {
+  width: 3.5rem;
+  left: 30%;
+  bottom: 5rem;
+  transform: rotate(-90deg);
+}

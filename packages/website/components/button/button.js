@@ -4,8 +4,6 @@ import countly from 'Lib/countly'
 
 import ZeroButton from 'ZeroComponents/button/button'
 
-import styles from './button.module.scss';
-
 export const ButtonVariant = {
   DARK: 'dark',
   LIGHT: 'light',

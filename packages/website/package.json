@@ -47,6 +47,7 @@
     "eslint-config-next": "12.0.4",
     "eslint-config-prettier": "8.3.0",
     "eslint-config-react-app": "6.0.0",
+    "eslint-import-resolver-alias": "1.1.2",
     "eslint-plugin-cypress": "2.12.1",
     "eslint-plugin-flowtype": "8.0.3",
     "eslint-plugin-import": "2.25.3",
@@ -61,6 +62,7 @@
     "react-query": "3.33.5",
     "sass": "1.43.4",
     "sass-loader": "10.1.1",
+    "storybook-addon-state": "^1.0.3",
     "style-loader": "2.0.0",
     "typescript": "4.3.5",
     "url-loader": "4.1.1"

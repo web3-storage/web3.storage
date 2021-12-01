@@ -1,8 +1,6 @@
 // ===================================================================== Imports
 import clsx from 'clsx';
 import Image from 'next/image';
-// import image from '../../public/images/filecoin-logo.png'
-// console.log(image.src)
 // ====================================================================== Params
 /**
  * @param {Object} props.block

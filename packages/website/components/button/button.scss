@@ -67,4 +67,36 @@
       @include fontWeight_Semibold;
     }
   }
+
+  &.pink-blue {
+    position: relative;
+
+    &:before,
+    &:after {
+      border-radius: 1.5rem;
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    &:before {
+      @include gradient_Background_PinkBlue;
+      filter: blur(0.3125rem);
+    }
+
+    &:after {
+      border: 0.0625rem solid $white;
+      background: $waterloo;
+      opacity: 0.6;
+      @include shadow4;
+    }
+
+    button {
+      position: relative;
+      z-index: 1;
+    }
+  }
 }

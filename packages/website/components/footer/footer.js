@@ -1,11 +1,9 @@
 // ===================================================================== Imports
-import { useCallback } from 'react';
-import Link from 'next/link';
-
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Button from '../button/button.js';
-import Squiggle from '../../assets/illustrations/squiggle';
+import Squiggle from '../../assets/illustrations/squiggle.js';
 import GeneralPageData from '../../content/pages/general.json';
+import Link from 'next/link';
 // import countly from 'Lib/countly'
 // ===================================================================== Exports
 export default function Footer() {
@@ -19,13 +17,16 @@ export default function Footer() {
   };
 
   // ================================================================= Functions
-  const onLinkClick = useCallback(event => {
-    console.log('clicked');
-    // countly.trackCustomLinkClick(
-    //   countly.events.LINK_CLICK_FOOTER,
-    //   event.currentTarget
-    // )
-  }, []);
+  // const onLinkClick = useCallback(event => {
+  //   console.log('clicked');
+  //   // countly.trackCustomLinkClick(
+  //   //   countly.events.LINK_CLICK_FOOTER,
+  //   //   event.currentTarget
+  //   // )
+  // }, []);
+  const onLinkClick = () => {
+    console.log('hi')
+  }
 
   // ========================================================= Template [Footer]
   return (
