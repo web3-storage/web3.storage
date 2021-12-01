@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.7.1...website-v1.8.0) (2021-11-30)
+
+
+### Features
+
+* handle upload errors ([#543](https://www.github.com/web3-storage/web3.storage/issues/543)) ([f3ccded](https://www.github.com/web3-storage/web3.storage/commit/f3ccded145d81495d093359bc8d93e69b6fcf2eb))
+
 ### [1.7.1](https://www.github.com/web3-storage/web3.storage/compare/website-v1.7.0...website-v1.7.1) (2021-11-25)
 
 
