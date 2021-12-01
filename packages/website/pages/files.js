@@ -270,7 +270,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
       </TableElement>
       <TableElement {...sharedArgs} centered>
         <span className="flex justify-center">
-          true
+          Availabile
         </span>
       </TableElement>
       <TableElement {...sharedArgs} centered>
@@ -433,7 +433,7 @@ export default function Files({ isLoggedIn }) {
             </span>
           </TableHeader>
           <TableHeader>
-            <span className="flex w-100 justify-center">Available
+            <span className="flex w-100 justify-center">Availability
               <Tooltip placement='top' overlay={TOOLTIPS.AVAILABILITY} overlayClassName='table-tooltip'>
                 {QuestionMark()}
               </Tooltip>
