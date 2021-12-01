@@ -890,7 +890,7 @@ export class DBClient {
    * @param {bigint} seqno Sequence number from the record.
    * @param {bigint} validity Validity from the record in nanoseconds since 00:00, Jan 1 1970 UTC.
    */
-    async publishNameRecord (key, record, hasV2Sig, seqno, validity) {
+  async publishNameRecord (key, record, hasV2Sig, seqno, validity) {
     const { error } = await this._client.rpc('publish_name_record', {
       data: {
         key,

@@ -276,7 +276,7 @@ export async function pinsGet (request, env, ctx) {
   // Normalize cid
   if (cid) {
     try {
-      const normalizedCid = normalizeCid(cid)
+      const normalizedCid = normalizeCid(cid) // eslint-disable-line
     } catch (err) {
       return new JSONResponse(
         { error: { reason: ERROR_STATUS, details: INVALID_CID } },

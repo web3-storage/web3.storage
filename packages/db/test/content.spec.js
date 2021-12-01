@@ -1,14 +1,12 @@
 /* eslint-env mocha, browser */
-import { PostgrestClient } from '@supabase/postgrest-js'
 import assert from 'assert'
 import { DBClient } from '../index'
-import { createUpload, createUser, createUserAuthKey, token } from './utils.js'
+import { createUser, createUserAuthKey, token } from './utils.js'
 
 const contentTable = 'content'
-const pinRequestTable = 'pa_pin_request'
 
 describe('Content', () => {
-  /** @type {DBClient & {_client: PostgrestClient}} */
+  /** @type {DBClient & {_client: import('@supabase/postgrest-js').PostgrestClient}} */
   const client = (new DBClient({
     endpoint: 'http://127.0.0.1:3000',
     token

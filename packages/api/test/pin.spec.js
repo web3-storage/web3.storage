@@ -5,7 +5,6 @@ import * as JWT from '../src/utils/jwt.js'
 import { SALT } from './scripts/worker-globals.js'
 import { JWT_ISSUER } from '../src/constants.js'
 import { ERROR_CODE, ERROR_STATUS, getPinningAPIStatus, INVALID_CID, INVALID_META, INVALID_NAME, INVALID_ORIGINS, INVALID_REQUEST_ID, REQUIRED_CID } from '../src/pins.js'
-import { DBClient } from '../../db/index.js'
 
 /**
  *
