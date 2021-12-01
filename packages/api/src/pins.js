@@ -196,12 +196,12 @@ async function createPin (pinData, authToken, env, ctx) {
   // get the cid from the network. We check pinning status asyncrounosly.
   if (pinRequest.pins.length === 0) {
     tasks.push(async () => {
-      const okPins = await waitToGetOkPins(normalizedCid, env.cluster)
+      const okPins = await waitToGetOkPins(cid, env.cluster)
       // Create the content row
       // TODO: Get dagSize
       env.db.createContent({ cid: normalizedCid, pins: okPins })
       for (const pin of okPins) {
-        await env.db.upsertPin(cid, pin)
+        await env.db.upsertPin(normalizedCid, pin)
       }
     })
   }
