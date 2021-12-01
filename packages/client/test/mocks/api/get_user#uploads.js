@@ -11,7 +11,7 @@ module.exports = (opts) => {
     }
     const body = JSON.parse(JSON.stringify(res)).filter(u => u.created < before).slice(0, size)
     const responseHeaders = body.length === 100
-      ? { Link: `</user/uploads/?size=${size}&before=${body[body.length - 1].created}>; rel="next"` }
+      ? { Link: `</user/uploads/?size=${size}&before=${encodeURIComponent(body[body.length - 1].created)}>; rel="next"` }
       : {}
     return {
       statusCode: 200,

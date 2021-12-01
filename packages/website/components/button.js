@@ -43,7 +43,8 @@ export default function Button({
   variant = 'dark',
   small,
   Icon,
-  tracking
+  tracking,
+  ...props
 }) {
   const onClickHandler = useCallback((event) => {
     tracking && countly.trackEvent(tracking.event || countly.events.CTA_LINK_CLICK, {
@@ -92,6 +93,7 @@ export default function Button({
       onClick={onClickHandler}
       disabled={disabled}
       id={id}
+      {...props}
     >
       { Icon && <Icon className="w-7 mr-2 fill-current"/> }
       {children}

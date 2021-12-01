@@ -1,5 +1,152 @@
 # Changelog
 
+## [4.3.0](https://www.github.com/web3-storage/web3.storage/compare/api-v4.2.1...api-v4.3.0) (2021-12-01)
+
+
+### Features
+
+* temporary api backdoor ([#722](https://www.github.com/web3-storage/web3.storage/issues/722)) ([a9480d9](https://www.github.com/web3-storage/web3.storage/commit/a9480d94c9ca1b031937c6de196c68d659fc79b8))
+
+### [4.2.1](https://www.github.com/web3-storage/web3.storage/compare/api-v4.2.0...api-v4.2.1) (2021-11-30)
+
+
+### Bug Fixes
+
+* data CID is root CID of aggregate, not content CID ([#720](https://www.github.com/web3-storage/web3.storage/issues/720)) ([8c67725](https://www.github.com/web3-storage/web3.storage/commit/8c677259635a3deb30c948330f8ea118053309ce))
+
+## [4.2.0](https://www.github.com/web3-storage/web3.storage/compare/api-v4.1.0...api-v4.2.0) (2021-11-30)
+
+
+### Features
+
+* enable sentry to record X-Client request header ([#711](https://www.github.com/web3-storage/web3.storage/issues/711)) ([5276add](https://www.github.com/web3-storage/web3.storage/commit/5276addfc22b63a0af7a5311056b477160a1ae28))
+
+
+### Bug Fixes
+
+* encode created date in Link header ([#719](https://www.github.com/web3-storage/web3.storage/issues/719)) ([bb0285f](https://www.github.com/web3-storage/web3.storage/commit/bb0285f2a0a5269ad1126905920758b8050a95d5))
+
+## [4.1.0](https://www.github.com/web3-storage/web3.storage/compare/api-v4.0.5...api-v4.1.0) (2021-11-25)
+
+
+### Features
+
+* simple mutability API using IPNS ([#648](https://www.github.com/web3-storage/web3.storage/issues/648)) ([9c287bb](https://www.github.com/web3-storage/web3.storage/commit/9c287bb7c983d3adab6ebb304decb47c5093ad78))
+
+### [4.0.5](https://www.github.com/web3-storage/web3.storage/compare/api-v4.0.4...api-v4.0.5) (2021-11-25)
+
+
+### Bug Fixes
+
+* use constants for import settings values ([#696](https://www.github.com/web3-storage/web3.storage/issues/696)) ([f40db9e](https://www.github.com/web3-storage/web3.storage/commit/f40db9e5cfd2b78038e7fd35c7754f592764c66f))
+
+### [4.0.4](https://www.github.com/web3-storage/web3.storage/compare/api-v4.0.3...api-v4.0.4) (2021-11-25)
+
+
+### Bug Fixes
+
+* deal status filtering ([#692](https://www.github.com/web3-storage/web3.storage/issues/692)) ([a7b4151](https://www.github.com/web3-storage/web3.storage/commit/a7b4151b05fa55646d337a090263a1eeb77b8169))
+
+### [4.0.3](https://www.github.com/web3-storage/web3.storage/compare/api-v4.0.2...api-v4.0.3) (2021-11-23)
+
+
+### Bug Fixes
+
+* deal normalize should filter out unexpected deal status ([#682](https://www.github.com/web3-storage/web3.storage/issues/682)) ([0e233cc](https://www.github.com/web3-storage/web3.storage/commit/0e233cc5af499a032cf83e3454eefbfb7ef2b0a0))
+* pin normalize should filter out unexpected pin status ([#677](https://www.github.com/web3-storage/web3.storage/issues/677)) ([f8c78b4](https://www.github.com/web3-storage/web3.storage/commit/f8c78b4ff3377c19a9bc101a7c8c97757cc511ae))
+* script startup timeout ([#679](https://www.github.com/web3-storage/web3.storage/issues/679)) ([fb76d07](https://www.github.com/web3-storage/web3.storage/commit/fb76d0740c9d0d42805801a4b445ecb9c1f3777e))
+
+### [4.0.2](https://www.github.com/web3-storage/web3.storage/compare/api-v4.0.1...api-v4.0.2) (2021-11-17)
+
+
+### Bug Fixes
+
+* support upload list page size up to 1000 ([#645](https://www.github.com/web3-storage/web3.storage/issues/645)) ([04a5de6](https://www.github.com/web3-storage/web3.storage/commit/04a5de6080835da17398e0fde84584a817781346))
+
+### [4.0.1](https://www.github.com/web3-storage/web3.storage/compare/api-v4.0.0...api-v4.0.1) (2021-11-17)
+
+
+### Changes
+
+* use new db version ([c1f8834](https://www.github.com/web3-storage/web3.storage/commit/c1f8834d1ffc47dc72694d342bad719b483b4121))
+
+## [4.0.0](https://www.github.com/web3-storage/web3.storage/compare/api-v3.7.4...api-v4.0.0) (2021-11-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove faunadb (#610)
+
+### Bug Fixes
+
+* metrics for pin status response ([eb9f9ca](https://www.github.com/web3-storage/web3.storage/commit/eb9f9cac67aaa7b4d23d91a034ebddb0dcf8b92b))
+* remove faunadb ([#610](https://www.github.com/web3-storage/web3.storage/issues/610)) ([631e23f](https://www.github.com/web3-storage/web3.storage/commit/631e23f304ae3bef7d022041a39f72bc9438f469))
+
+### [3.7.4](https://www.github.com/web3-storage/web3.storage/compare/api-v3.7.3...api-v3.7.4) (2021-11-15)
+
+
+### Bug Fixes
+
+* pin status metrics returns data object ([#628](https://www.github.com/web3-storage/web3.storage/issues/628)) ([20877ae](https://www.github.com/web3-storage/web3.storage/commit/20877aeed7730a81d08435be6bee1dfe6d9afebe))
+
+### [3.7.3](https://www.github.com/web3-storage/web3.storage/compare/api-v3.7.2...api-v3.7.3) (2021-11-15)
+
+
+### Bug Fixes
+
+* performance metrics queries ([#625](https://www.github.com/web3-storage/web3.storage/issues/625)) ([85efba5](https://www.github.com/web3-storage/web3.storage/commit/85efba5c2ba0b65def2a93e2b811268e9ab96b00))
+
+### [3.7.2](https://www.github.com/web3-storage/web3.storage/compare/api-v3.7.1...api-v3.7.2) (2021-11-15)
+
+
+### Bug Fixes
+
+* remove backdoor routes ([#617](https://www.github.com/web3-storage/web3.storage/issues/617)) ([11f394c](https://www.github.com/web3-storage/web3.storage/commit/11f394c8d664d59ab5772138d58e0c660193fb35))
+
+### [3.7.1](https://www.github.com/web3-storage/web3.storage/compare/api-v3.7.0...api-v3.7.1) (2021-11-15)
+
+
+### Bug Fixes
+
+* create key mock ([#608](https://www.github.com/web3-storage/web3.storage/issues/608)) ([81f0fd3](https://www.github.com/web3-storage/web3.storage/commit/81f0fd30afb8980ff6d579e3ada77b67840ed9e3))
+
+
+### Changes
+
+* add worker env setup for paolo ([#582](https://www.github.com/web3-storage/web3.storage/issues/582)) ([0b7e508](https://www.github.com/web3-storage/web3.storage/commit/0b7e5084e75843d3ca1dacc79e5ef1ffc69f6a7d))
+
+## [3.7.0](https://www.github.com/web3-storage/web3.storage/compare/api-v3.6.0...api-v3.7.0) (2021-11-10)
+
+
+### Features
+
+* add user email to account page ([#566](https://www.github.com/web3-storage/web3.storage/issues/566)) ([a34d976](https://www.github.com/web3-storage/web3.storage/commit/a34d97623eaa2153c9bf068c3a099f3c463af1a3))
+* temporary api backdoor ([#599](https://www.github.com/web3-storage/web3.storage/issues/599)) ([03fbc46](https://www.github.com/web3-storage/web3.storage/commit/03fbc463a2fa18073bfcc5e7131833c602b28e79))
+
+## [3.6.0](https://www.github.com/web3-storage/web3.storage/compare/api-v3.5.2...api-v3.6.0) (2021-10-28)
+
+
+### Features
+
+* maintenance mode ([#538](https://www.github.com/web3-storage/web3.storage/issues/538)) ([b206a66](https://www.github.com/web3-storage/web3.storage/commit/b206a66d5404246af9d5c25f0d5b4b0ad415610e))
+* postgres setup ([#508](https://www.github.com/web3-storage/web3.storage/issues/508)) ([cd04716](https://www.github.com/web3-storage/web3.storage/commit/cd04716844a646d986f53aeae7c73840a008aad3))
+
+
+### Bug Fixes
+
+* add mocha dev dependency to api and db ([0648527](https://www.github.com/web3-storage/web3.storage/commit/064852797e0cf56faacbfdcbf9a142973e25c663))
+* api dev mode without backup secrets ([#526](https://www.github.com/web3-storage/web3.storage/issues/526)) ([4d3f1b1](https://www.github.com/web3-storage/web3.storage/commit/4d3f1b17821f4f2b7bac8bbb7078f3fea85a67d7))
+* api webpack build compatible with both dbs and swappable on runtime ([#559](https://www.github.com/web3-storage/web3.storage/issues/559)) ([9000b2d](https://www.github.com/web3-storage/web3.storage/commit/9000b2d4d54f34301f82ca1ffc7983cc299c5c7e))
+* database env var ([#568](https://www.github.com/web3-storage/web3.storage/issues/568)) ([47ac553](https://www.github.com/web3-storage/web3.storage/commit/47ac5538e2e90908b9873227cc548e7a21d9b45e))
+* db client improvements ([#546](https://www.github.com/web3-storage/web3.storage/issues/546)) ([5deffae](https://www.github.com/web3-storage/web3.storage/commit/5deffae2ec3e6c81d90d7db10285fd051c5c1c7d))
+* encode filenames ([#539](https://www.github.com/web3-storage/web3.storage/issues/539)) ([de01972](https://www.github.com/web3-storage/web3.storage/commit/de0197278c041a5bd0c2979e38f79bad068bf993))
+* fauna webpack config ([#550](https://www.github.com/web3-storage/web3.storage/issues/550)) ([d1cfc71](https://www.github.com/web3-storage/web3.storage/commit/d1cfc71cc6df91b58b59d0abd1d60a4518770221))
+
+
+### Changes
+
+* api rewire ([#524](https://www.github.com/web3-storage/web3.storage/issues/524)) ([f4f9cd3](https://www.github.com/web3-storage/web3.storage/commit/f4f9cd39f0859b843067057af9bcdbf4f29063e9))
+
 ### [3.5.2](https://www.github.com/web3-storage/web3.storage/compare/api-v3.5.1...api-v3.5.2) (2021-09-30)
 
 

@@ -24,7 +24,7 @@ describe('GET /status/:cid', () => {
         storageProvider: 'f99',
         status: 'Active',
         pieceCid: 'baga',
-        dataCid: 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm',
+        dataCid: 'bafybeidymjmzqihaz7oeiod3zyolzgcxwbum4b4nvo4aublm6quh6zb3ae',
         dataModelSelector: 'Links/0/Links',
         activation: '<iso timestamp>',
         created: '2021-07-14T19:27:14.934572Z',
@@ -52,7 +52,7 @@ describe('GET /status/:cid', () => {
       deals: [{
         status: 'Queued',
         pieceCid: 'baga',
-        dataCid: 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q',
+        dataCid: 'bafybeidymjmzqihaz7oeiod3zyolzgcxwbum4b4nvo4aublm6quh6zb5ae',
         dataModelSelector: 'Links/0/Links'
       }]
     })

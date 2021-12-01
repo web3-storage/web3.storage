@@ -52,7 +52,7 @@ function getDBClient (env) {
  * Create a new Piñata client instance from the passed environment variables.
  * @param {Record<string, string|undefined>} env
  */
-function getPinata (env, { reqsPerSec = 3 }) {
+function getPinata (env, { reqsPerSec = 2 }) {
   const apiToken = env.PINATA_JWT
   if (!apiToken) {
     throw new Error('missing PINATA_JWT environment var')

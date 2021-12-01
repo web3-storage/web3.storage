@@ -21,6 +21,15 @@ const COUNT_UPLOADS = gql`
   }
 `
 
+const COUNT_CIDS = gql`
+  query countContent($from: Time!, $to: Time!, $after: String) {
+    countContent(from: $from, to: $to, _size: 80000, _cursor: $after) {
+      data,
+      after
+    }
+  }
+`
+
 const COUNT_PINS = gql`
   query CountPins($from: Time!, $to: Time!, $after: String) {
     countPins(from: $from, to: $to, _size: 80000, _cursor: $after) {
@@ -113,6 +122,7 @@ export async function updateMetrics ({ db }) {
   await Promise.all([
     updateMetric(db, 'users_total', COUNT_USERS, {}, 'countUsers'),
     updateMetric(db, 'uploads_total', COUNT_UPLOADS, {}, 'countUploads'),
+    updateMetric(db, 'content_total', COUNT_CIDS, {}, 'countContent'),
     updateMetric(db, 'content_bytes_total', SUM_CONTENT_DAG_SIZE, {}, 'sumContentDagSize'),
     updateMetric(db, 'pins_total', COUNT_PINS, {}, 'countPins'),
     updateMetric(db, 'pins_bytes_total', SUM_PIN_DAG_SIZE, {}, 'sumPinDagSize'),

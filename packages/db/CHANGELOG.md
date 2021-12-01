@@ -1,5 +1,144 @@
 # Changelog
 
+## [3.1.0](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.2...db-v3.1.0) (2021-12-01)
+
+
+### Features
+
+* simple mutability API using IPNS ([#648](https://www.github.com/web3-storage/web3.storage/issues/648)) ([9c287bb](https://www.github.com/web3-storage/web3.storage/commit/9c287bb7c983d3adab6ebb304decb47c5093ad78))
+
+
+### Bug Fixes
+
+* data CID is root CID of aggregate, not content CID ([#720](https://www.github.com/web3-storage/web3.storage/issues/720)) ([8c67725](https://www.github.com/web3-storage/web3.storage/commit/8c677259635a3deb30c948330f8ea118053309ce))
+* deal status filtering ([#692](https://www.github.com/web3-storage/web3.storage/issues/692)) ([a7b4151](https://www.github.com/web3-storage/web3.storage/commit/a7b4151b05fa55646d337a090263a1eeb77b8169))
+* postgres set max parallel workers per gather to 4 ([#725](https://www.github.com/web3-storage/web3.storage/issues/725)) ([9cdfcfa](https://www.github.com/web3-storage/web3.storage/commit/9cdfcfa51063ae2a9a87cd71a05a6e2d42cea887))
+
+### [3.0.2](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.1...db-v3.0.2) (2021-11-23)
+
+
+### Bug Fixes
+
+* deal normalize should filter out unexpected deal status ([#682](https://www.github.com/web3-storage/web3.storage/issues/682)) ([0e233cc](https://www.github.com/web3-storage/web3.storage/commit/0e233cc5af499a032cf83e3454eefbfb7ef2b0a0))
+* fixes and improv to types annotations across the board ([46a3f1c](https://www.github.com/web3-storage/web3.storage/commit/46a3f1cbe3da6ac401d9b4fddc5723ba62841ec7))
+* pin dag size metric should filter by pinned status ([#646](https://www.github.com/web3-storage/web3.storage/issues/646)) ([547f466](https://www.github.com/web3-storage/web3.storage/commit/547f4663c70d3916aeb056b103fc5470ba8b52cd))
+* pin normalize should filter out unexpected pin status ([#677](https://www.github.com/web3-storage/web3.storage/issues/677)) ([f8c78b4](https://www.github.com/web3-storage/web3.storage/commit/f8c78b4ff3377c19a9bc101a7c8c97757cc511ae))
+* prevent table.sql to fail if a type already exists ([22b222a](https://www.github.com/web3-storage/web3.storage/commit/22b222ad320e9933f01d9c59fc5b59b4fb05fa53))
+
+### [3.0.1](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.0...db-v3.0.1) (2021-11-17)
+
+
+### Bug Fixes
+
+* list uploads fetch deals for correct cid ([#643](https://www.github.com/web3-storage/web3.storage/issues/643)) ([df1be1f](https://www.github.com/web3-storage/web3.storage/commit/df1be1fe65d781bda985e2710b4c89b52803ca35))
+
+## [3.0.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.6.4...db-v3.0.0) (2021-11-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove faunadb (#610)
+
+### Features
+
+* add pin composite pinned at idx ([#634](https://www.github.com/web3-storage/web3.storage/issues/634)) ([6b64d7f](https://www.github.com/web3-storage/web3.storage/commit/6b64d7fd20f1fde769eaf66626b8bdb3eea5c7a2))
+
+
+### Bug Fixes
+
+* metrics for pin status response ([eb9f9ca](https://www.github.com/web3-storage/web3.storage/commit/eb9f9cac67aaa7b4d23d91a034ebddb0dcf8b92b))
+* remove faunadb ([#610](https://www.github.com/web3-storage/web3.storage/issues/610)) ([631e23f](https://www.github.com/web3-storage/web3.storage/commit/631e23f304ae3bef7d022041a39f72bc9438f469))
+
+
+### Changes
+
+* add missing indexes for fk ([#632](https://www.github.com/web3-storage/web3.storage/issues/632)) ([0a26912](https://www.github.com/web3-storage/web3.storage/commit/0a26912389508296f66e5efeb91952119b768748))
+
+### [2.6.4](https://www.github.com/web3-storage/web3.storage/compare/db-v2.6.3...db-v2.6.4) (2021-11-15)
+
+
+### Bug Fixes
+
+* pin status metrics returns data object ([#628](https://www.github.com/web3-storage/web3.storage/issues/628)) ([20877ae](https://www.github.com/web3-storage/web3.storage/commit/20877aeed7730a81d08435be6bee1dfe6d9afebe))
+
+### [2.6.3](https://www.github.com/web3-storage/web3.storage/compare/db-v2.6.2...db-v2.6.3) (2021-11-15)
+
+
+### Bug Fixes
+
+* performance metrics queries ([#625](https://www.github.com/web3-storage/web3.storage/issues/625)) ([85efba5](https://www.github.com/web3-storage/web3.storage/commit/85efba5c2ba0b65def2a93e2b811268e9ab96b00))
+
+### [2.6.2](https://www.github.com/web3-storage/web3.storage/compare/db-v2.6.1...db-v2.6.2) (2021-11-15)
+
+
+### Bug Fixes
+
+* add indexes and optimise token list function ([#618](https://www.github.com/web3-storage/web3.storage/issues/618)) ([05ff3ed](https://www.github.com/web3-storage/web3.storage/commit/05ff3ed907977816f4609c049ceb910333c2b545))
+* pin sync req id text ([#622](https://www.github.com/web3-storage/web3.storage/issues/622)) ([dee0a4e](https://www.github.com/web3-storage/web3.storage/commit/dee0a4ea2c92f435b4669825894341faf317f658))
+
+### [2.6.1](https://www.github.com/web3-storage/web3.storage/compare/db-v2.6.0...db-v2.6.1) (2021-11-12)
+
+
+### Bug Fixes
+
+* add missing sql drop functions ([#605](https://www.github.com/web3-storage/web3.storage/issues/605)) ([0f01eb6](https://www.github.com/web3-storage/web3.storage/commit/0f01eb6c73cf95d8860e27d42619f2b7ac0c3a45))
+* add on conflict clause to create backup ([#602](https://www.github.com/web3-storage/web3.storage/issues/602)) ([504809e](https://www.github.com/web3-storage/web3.storage/commit/504809ecdc4b87fd472874a3b4fe0eb8e336a357))
+* bigserial id cast to string ([#604](https://www.github.com/web3-storage/web3.storage/issues/604)) ([7c6b9b4](https://www.github.com/web3-storage/web3.storage/commit/7c6b9b4c66742652ace92c8e71d42a0f9c945acb))
+
+
+### Changes
+
+* improve docs for updating schemas and db error logging  ([51021f1](https://www.github.com/web3-storage/web3.storage/commit/51021f11785914b7ae9fb43979b95be101ee8bf1))
+
+## [2.6.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.5.0...db-v2.6.0) (2021-11-10)
+
+
+### Features
+
+* add user email to account page ([#566](https://www.github.com/web3-storage/web3.storage/issues/566)) ([a34d976](https://www.github.com/web3-storage/web3.storage/commit/a34d97623eaa2153c9bf068c3a099f3c463af1a3))
+
+
+### Bug Fixes
+
+* fauna pins cron ([#592](https://www.github.com/web3-storage/web3.storage/issues/592)) ([f1df5dc](https://www.github.com/web3-storage/web3.storage/commit/f1df5dc9140d96acb516cb79f5ee39469db64395))
+* re-add constraints ([#597](https://www.github.com/web3-storage/web3.storage/issues/597)) ([596e65c](https://www.github.com/web3-storage/web3.storage/commit/596e65cf9220953d82f7b5e85ab71e616b6424b3))
+
+## [2.5.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.4.0...db-v2.5.0) (2021-10-29)
+
+
+### Features
+
+* add migration indexes ([#573](https://www.github.com/web3-storage/web3.storage/issues/573)) ([c9cd864](https://www.github.com/web3-storage/web3.storage/commit/c9cd8642f9c9d21d98b3d9e9061d8549b82f35ef))
+* add migration tracker table ([#578](https://www.github.com/web3-storage/web3.storage/issues/578)) ([dc1ce24](https://www.github.com/web3-storage/web3.storage/commit/dc1ce241e129fe65108cb96f129032608acd2b8a))
+
+
+### Bug Fixes
+
+* backup should not have unique url ([#580](https://www.github.com/web3-storage/web3.storage/issues/580)) ([14b5c78](https://www.github.com/web3-storage/web3.storage/commit/14b5c781be6e886c9e5158f81795efe773d22ffe))
+
+## [2.4.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.3.1...db-v2.4.0) (2021-10-28)
+
+
+### Features
+
+* cron and pinpin rewire ([#531](https://www.github.com/web3-storage/web3.storage/issues/531)) ([9e5b42d](https://www.github.com/web3-storage/web3.storage/commit/9e5b42dc6d33bf3cf017034474981812370b366e))
+* postgres setup ([#508](https://www.github.com/web3-storage/web3.storage/issues/508)) ([cd04716](https://www.github.com/web3-storage/web3.storage/commit/cd04716844a646d986f53aeae7c73840a008aad3))
+* updated at indexes ([#551](https://www.github.com/web3-storage/web3.storage/issues/551)) ([b6c0ce5](https://www.github.com/web3-storage/web3.storage/commit/b6c0ce51f51e5b5339a202fbd04c15674e36e79d))
+
+
+### Bug Fixes
+
+* add mocha dev dependency to api and db ([0648527](https://www.github.com/web3-storage/web3.storage/commit/064852797e0cf56faacbfdcbf9a142973e25c663))
+* **api:** add timeout statement to upload function ([#569](https://www.github.com/web3-storage/web3.storage/issues/569)) ([bf17756](https://www.github.com/web3-storage/web3.storage/commit/bf177569c690ad1f37583574a0b8c6026c189f40))
+* db client improvements ([#546](https://www.github.com/web3-storage/web3.storage/issues/546)) ([5deffae](https://www.github.com/web3-storage/web3.storage/commit/5deffae2ec3e6c81d90d7db10285fd051c5c1c7d))
+* db fauna updated ts ([#572](https://www.github.com/web3-storage/web3.storage/issues/572)) ([c0c8334](https://www.github.com/web3-storage/web3.storage/commit/c0c8334ff29810d4c7f841740fd8714acf0e9a66))
+* upload fn ts wrongly inserted ([#570](https://www.github.com/web3-storage/web3.storage/issues/570)) ([c9de809](https://www.github.com/web3-storage/web3.storage/commit/c9de809d4bda1939e6867f22fef986d493888bfe))
+
+
+### Changes
+
+* api rewire ([#524](https://www.github.com/web3-storage/web3.storage/issues/524)) ([f4f9cd3](https://www.github.com/web3-storage/web3.storage/commit/f4f9cd39f0859b843067057af9bcdbf4f29063e9))
+
 ### [2.3.1](https://www.github.com/web3-storage/web3.storage/compare/db-v2.3.0...db-v2.3.1) (2021-09-28)
 
 

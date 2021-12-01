@@ -52,6 +52,22 @@ export async function getStorage() {
   return res.json()
 }
 
+export async function getInfo() {
+  const res = await fetch(API + '/user/info', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + (await getToken()),
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error(`failed to get user info: ${await res.text()}`)
+  }
+
+  return res.json()
+}
+
 /**
  * Delete Token
  *

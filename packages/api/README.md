@@ -27,7 +27,7 @@ One time set up of your cloudflare worker subdomain for dev:
     ```
 - Copy your cloudflare account id from `wrangler whoami`
 - Setup database
-    - For setting up a local database check [Local DB setup](../db/postgres/README.md).
+    - For setting up a local database check [Local DB setup](../db/README.md).
     - Once a DB is running, you will need a local tunnel similar to cluster:
 
     ```sh
@@ -50,14 +50,13 @@ One time set up of your cloudflare worker subdomain for dev:
     ```sh
     wrangler secret put MAGIC_SECRET_KEY --env $(whoami) # Get from magic.link account
     wrangler secret put SALT --env $(whoami) # open `https://csprng.xyz/v1/api` in the browser and use the value of `Data`
-    wrangler secret put FAUNA_KEY --env $(whoami) # Get from fauna.com after creating a dev Classic DB
     wrangler secret put CLUSTER_BASIC_AUTH_TOKEN --env $(whoami) # Get from web3.storage vault in 1password (not required for dev)
     wrangler secret put SENTRY_DSN --env $(whoami) # Get from Sentry (not required for dev)
     wrangler secret put S3_BUCKET_REGION --env $(whoami) # e.g us-east-2 (not required for dev)
     wrangler secret put S3_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3 (not required for dev)
     wrangler secret put S3_SECRET_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3 (not required for dev)
     wrangler secret put S3_BUCKET_NAME --env $(whoami) # e.g web3.storage-staging-us-east-2 (not required for dev)
-    wrangler secret put PG_REST_JWT --env USER # Get from database postgrest
+    wrangler secret put PG_REST_JWT --env $(whoami) # Get from database postgrest
     ```
 
 - `npm run publish` - Publish the worker under your env. An alias for `wrangler publish --env $(whoami)`
@@ -122,7 +121,7 @@ You can also provide a name for the file using the header `X-NAME`, but be sure 
 Get a list of user uploads. _Authenticated_
 
 ```console
-curl -H 'Authorization: Bearer YOUR_API_KEY' 'http://127.0.0.1:8787/status/bafybeidwfngv7n5y7ydbzotrwl3gohgr2lv2g7vn6xggwcjzrf5emknrki' -s | jq
+curl -H 'Authorization: Bearer YOUR_API_KEY' 'http://127.0.0.1:8787/user/uploads' -s | jq
 {
   "cid": "bafybeidwfngv7n5y7ydbzotrwl3gohgr2lv2g7vn6xggwcjzrf5emknrki",
   "created": "2021-07-29T09:08:28.295905Z",
@@ -135,7 +134,14 @@ curl -H 'Authorization: Bearer YOUR_API_KEY' 'http://127.0.0.1:8787/status/bafyb
       "peerName": "web3-storage-sv15",
       "region": "US-CA"
     }
-  ]
+  ],
+  "deals": []
+```
+
+By default, 25 uploads are requested, but more can be requested up to a maximum of 1000. A `size` parameter should be used as follows:
+
+```console
+curl -H 'Authorization: Bearer YOUR_API_KEY' 'http://127.0.0.1:8787/user/uploads?size=1000'
 ```
 
 ### 🤲 `GET /car/:cid`
@@ -201,6 +207,33 @@ Delete a given user token.
 
 Get the user account information.
 
+### 🔒 `POST /name/:key`
+
+**❗️Experimental** this API may not work, may change, and may be removed in a future version.
+
+Publish a name record for the given key ID.
+
+Users create a keypair<sup>*</sup> and derive a **Key ID** from the public key that acts as the "name".
+
+<details>
+  <summary>What is the Key ID?</summary>
+  <p>The Key ID is the base36 "libp2p-key" encoding of the public key. The public key is protobuf encoded and contains <code>Type</code> and <code>Data</code> properties, see <a href="https://github.com/libp2p/js-libp2p-crypto/blob/c29c1490bbd25722437fdb36f2f0d1a705f35909/src/keys/ed25519-class.js#L25-L30"><code>ed25519-class.js</code> for example</a>.</p>
+</details>
+
+The updated IPNS record is signed with the private key and sent in the request body (base 64 encoded). The server validates the record and ensures the sequence number is greater than the sequence number of any cached record.
+
+<sup>*</sup> Currently a Ed25519 2048 bit (min) key.
+
+### 🤲 `GET /name/:key`
+
+**❗️Experimental** this API may not work, may change, and may be removed in a future version.
+
+Resolve the current CID for the given key ID.
+
+Users "resolve" a Key ID to the current _value_ of a _record_. Typically an IPFS path. Keypair owners "publish" IPNS _records_ to create or update the current _value_.
+
+It returns the resolved value AND the full name record (base 64 encoded, for client side verification).
+
 ## Setup Sentry
 
 Inside the `/packages/api` folder create a file called `.env.local` with the following content.
@@ -217,13 +250,5 @@ Production vars should be set in Github Actions secrets.
 ## S3 Setup
 
 We use [S3](https://aws.amazon.com/s3/) for backup and disaster recovery. For production an account on AWS needs to be created.
-
-## Local DB Setup
-
-Inside the `/packages/api` folder create a file called `.env.local` with the following content.
-
-```ini
-DATABASE=<name> # either "fauna" or "postgres"
-```
 
 Production vars should be set in Github Actions secrets.

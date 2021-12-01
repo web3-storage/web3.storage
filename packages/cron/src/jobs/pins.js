@@ -3,7 +3,7 @@ import { toPinStatusEnum } from '@web3-storage/api/src/utils/pin.js'
 import retry from 'p-retry'
 import { piggyback } from 'piggybacker'
 
-const MAX_PIN_REQUESTS_PER_RUN = 600
+const MAX_PIN_REQUESTS_PER_RUN = 400
 const log = debug('pins:updatePinStatuses')
 
 /**

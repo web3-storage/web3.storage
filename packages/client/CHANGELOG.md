@@ -1,5 +1,39 @@
 # Changelog
 
+## [3.5.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.4.0...web3.storage-v3.5.0) (2021-11-30)
+
+
+### Features
+
+* enable sentry to record X-Client request header ([#711](https://www.github.com/web3-storage/web3.storage/issues/711)) ([5276add](https://www.github.com/web3-storage/web3.storage/commit/5276addfc22b63a0af7a5311056b477160a1ae28))
+
+
+### Bug Fixes
+
+* encode created date in Link header ([#719](https://www.github.com/web3-storage/web3.storage/issues/719)) ([bb0285f](https://www.github.com/web3-storage/web3.storage/commit/bb0285f2a0a5269ad1126905920758b8050a95d5))
+* webpack 4 build error ([#707](https://www.github.com/web3-storage/web3.storage/issues/707)) ([2c658a1](https://www.github.com/web3-storage/web3.storage/commit/2c658a184aeeb4ee05dc5acc039a128a0274a99c))
+
+## [3.4.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.4...web3.storage-v3.4.0) (2021-11-25)
+
+
+### Features
+
+* simple mutability API using IPNS ([#648](https://www.github.com/web3-storage/web3.storage/issues/648)) ([9c287bb](https://www.github.com/web3-storage/web3.storage/commit/9c287bb7c983d3adab6ebb304decb47c5093ad78))
+
+### [3.3.4](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.3...web3.storage-v3.3.4) (2021-11-18)
+
+
+### Changes
+
+* improve error message when listing uploads ([#565](https://www.github.com/web3-storage/web3.storage/issues/565)) ([1f1e5b8](https://www.github.com/web3-storage/web3.storage/commit/1f1e5b880ddc64b1cfc10a0a76aa7aa1339fab2e))
+
+### [3.3.3](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.2...web3.storage-v3.3.3) (2021-10-28)
+
+
+### Bug Fixes
+
+* encode filenames ([#539](https://www.github.com/web3-storage/web3.storage/issues/539)) ([de01972](https://www.github.com/web3-storage/web3.storage/commit/de0197278c041a5bd0c2979e38f79bad068bf993))
+
 ### [3.3.2](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.3.1...web3.storage-v3.3.2) (2021-09-06)
 
 

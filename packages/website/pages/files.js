@@ -17,6 +17,7 @@ import { getUploads, deleteUpload, renameUpload } from '../lib/api'
 import { useDragAndDrop, OnDrop } from '../components/upload'
 import { When } from 'react-if'
 import clsx from 'clsx'
+import Script from 'next/script'
 
 /** @typedef {{ name?: string } & import('web3.storage').Upload} Upload */
 
@@ -44,7 +45,8 @@ const QuestionMark = () => (
 )
 
 const TOOLTIPS = {
-  PIN_STATUS: (<span>Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes.</span>),
+  PIN_STATUS: (<span>Reports the status of a file or piece of data stored on Web3.Storage’s IPFS Cluster. Status might not be fully up-to-date. Data is still available even when still in Queuing state.</span>),
+  AVAILABILITY: (<span>Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes.</span>),
 
   CID: (<span>
     The <strong>c</strong>ontent <strong>id</strong>entifier for a file or a piece of data.<span> </span>
@@ -269,6 +271,11 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
       </TableElement>
       <TableElement {...sharedArgs} centered>
         <span className="flex justify-center">
+          Availabile
+        </span>
+      </TableElement>
+      <TableElement {...sharedArgs} centered>
+        <span className="flex justify-center">
           {pinStatus}
           {getPinStatusTooltip(pinStatus, upload.pins.length)}
         </span>
@@ -427,6 +434,13 @@ export default function Files({ isLoggedIn }) {
             </span>
           </TableHeader>
           <TableHeader>
+            <span className="flex w-100 justify-center">Availability
+              <Tooltip placement='top' overlay={TOOLTIPS.AVAILABILITY} overlayClassName='table-tooltip'>
+                {QuestionMark()}
+              </Tooltip>
+            </span>
+          </TableHeader>
+          <TableHeader>
             <span className="flex w-100 justify-center">Pin Status
               <Tooltip placement='top' overlay={TOOLTIPS.PIN_STATUS} overlayClassName='table-tooltip'>
                 {QuestionMark()}
@@ -452,128 +466,136 @@ export default function Files({ isLoggedIn }) {
       </tbody>
     </table>
   )
-  
+
   const { getRootProps, isDragActive } = useDragAndDrop()
-  
+
   return (
-    <main className="w-full flex-grow relative" { ...getRootProps() }>
-      <OnDrop show={isDragActive} />
-      <div className="layout-margins my-4 lg:my-32 text-w3storage-purple">
-        <h3 className="mb-8">Files</h3>
-        <When condition={isLoading || isFetching}>
-          <Loading />
-        </When>
-        <When condition={!hasZeroUploads}>
-          <div className="flex flex-row flex-wrap justify-between ml-7 md:ml-8">
-            <Button small disabled={selectedFiles.length === 0} onClick={handleDelete} wrapperClassName="mb-4 mr-4">
-              Delete
-            </Button>
-            {/* <Button small className="ml-2">
-              Export Deals
-            </Button> */}
-            <div className="flex flex-wrap -mt-4">
-              <Button
-                small
-                onClick={() => refreshUploads()}
-                wrapperClassName="mt-4 mr-4"
-                tracking={{
-                  event: countly.events.FILES_REFRESH,
-                  ui: countly.ui.FILES,
-                  action: 'Refresh',
-                }}
-              >Refresh</Button>
-              <Button
-                href="/upload"
-                small
-                id="upload"
-                wrapperClassName="mt-4"
-                tracking={{
-                  ui: countly.ui.FILES,
-                  action: 'Upload File',
-                  data: { isFirstFile: false }
-                }}
-              >Upload More Files</Button>
+    <>
+      <Script src="//embed.typeform.com/next/embed.js" />
+      <main className="w-full" { ...getRootProps() }>
+        <OnDrop show={isDragActive} />
+        <div className="layout-margins flex justify-center mt-4 lg:mt-16">
+          <Button data-tf-popup="Q3FOftXD" wrapperClassName="max-w-xl">
+            {"Tell us how we are doing"}
+          </Button>
+        </div>
+        <div className="layout-margins my-4 lg:my-16 text-w3storage-purple">
+          <h3 className="mb-8">Files</h3>
+          <When condition={isLoading || isFetching}>
+            <Loading />
+          </When>
+          <When condition={!hasZeroUploads}>
+            <div className="flex flex-row flex-wrap justify-between ml-7 md:ml-8">
+              <Button small disabled={selectedFiles.length === 0} onClick={handleDelete} wrapperClassName="mb-4 mr-4">
+                Delete
+              </Button>
+              {/* <Button small className="ml-2">
+                Export Deals
+              </Button> */}
+              <div className="flex flex-wrap -mt-4">
+                <Button
+                  small
+                  onClick={() => refreshUploads()}
+                  wrapperClassName="mt-4 mr-4"
+                  tracking={{
+                    event: countly.events.FILES_REFRESH,
+                    ui: countly.ui.FILES,
+                    action: 'Refresh',
+                  }}
+                >Refresh</Button>
+                <Button
+                  href="/upload"
+                  small
+                  id="upload"
+                  wrapperClassName="mt-4"
+                  tracking={{
+                    ui: countly.ui.FILES,
+                    action: 'Upload File',
+                    data: { isFirstFile: false }
+                  }}
+                >Upload More Files</Button>
+              </div>
             </div>
-          </div>
-        </When>
-        <When condition={!isLoading && !isFetching}>
-          <>
-            <div className="table-responsive">
-              <When condition={hasZeroUploads}>
-                <FilesTable />
-                <p className="flex justify-center font-black mt-4 mb-10">
-                  No files
-                </p>
-                <div className="w-36 m-auto">
+          </When>
+          <When condition={!isLoading && !isFetching}>
+            <>
+              <div className="table-responsive">
+                <When condition={hasZeroUploads}>
+                  <FilesTable />
+                  <p className="flex justify-center font-black mt-4 mb-10">
+                    No files
+                  </p>
+                  <div className="w-36 m-auto">
+                    <Button
+                      href="/upload"
+                      id="upload"
+                      tracking={{
+                        ui: countly.ui.FILES,
+                        action: 'Upload File',
+                        data: { isFirstFile: true }
+                      }}
+                    >Upload Files</Button>
+                  </div>
+                </When>
+                <When condition={!hasZeroUploads}>
+                  <FilesTable />
+                </When>
+              </div>
+              <div className="mt-4 flex ml-7 md:ml-8">
+                <When condition={befores.length !== 1}>
                   <Button
-                    href="/upload"
-                    id="upload"
+                    className="black"
+                    wrapperClassName="mr-2"
+                    onClick={handleFirstPageClick}
+                    id="uploads-first"
                     tracking={{
+                      event: countly.events.FILES_NAVIGATION_CLICK,
                       ui: countly.ui.FILES,
-                      action: 'Upload File',
-                      data: { isFirstFile: true }
+                      action: 'First'
                     }}
-                  >Upload Files</Button>
-                </div>
-              </When>
-              <When condition={!hasZeroUploads}>
-                <FilesTable />
-              </When>
-            </div>
-            <div className="mt-4 flex ml-7 md:ml-8">
-              <When condition={befores.length !== 1}>
-                <Button
-                  className="black"
-                  wrapperClassName="mr-2"
-                  onClick={handleFirstPageClick}
-                  id="uploads-first"
-                  tracking={{
-                    event: countly.events.FILES_NAVIGATION_CLICK,
-                    ui: countly.ui.FILES,
-                    action: 'First'
-                  }}
-                >
-                  First
-                </Button>
-                <Button
-                  className="black"
-                  onClick={handlePrevClick}
-                  id="uploads-previous"
-                  tracking={{
-                    event: countly.events.FILES_NAVIGATION_CLICK,
-                    ui: countly.ui.FILES,
-                    action: 'Previous'
-                  }}
-                >
-                  ← Previous
-                </Button>
-              </When>
-              <When condition={data?.length === size }>
-                <Button
-                  className="black"
-                  wrapperClassName="ml-auto"
-                  onClick={handleNextClick}
-                  id="uploads-next"
-                  tracking={{
-                    event: countly.events.FILES_NAVIGATION_CLICK,
-                    ui: countly.ui.FILES,
-                    action: 'Next'
-                  }}
-                >
-                  Next →
-                </Button>
-              </When>
-            </div>
-          </>
-        </When>
-      </div>
-      <div className={clsx(
-        'fixed bottom-0 left-0 right-0 bg-w3storage-blue-dark text-w3storage-white p-4 text-center appear-bottom-then-go-away',
-        !copied && 'hidden')
-      }>
-        Copied CID to clipboard!
-      </div>
-    </main>
+                  >
+                    First
+                  </Button>
+                  <Button
+                    className="black"
+                    onClick={handlePrevClick}
+                    id="uploads-previous"
+                    tracking={{
+                      event: countly.events.FILES_NAVIGATION_CLICK,
+                      ui: countly.ui.FILES,
+                      action: 'Previous'
+                    }}
+                  >
+                    ← Previous
+                  </Button>
+                </When>
+                <When condition={data?.length === size }>
+                  <Button
+                    className="black"
+                    wrapperClassName="ml-auto"
+                    onClick={handleNextClick}
+                    id="uploads-next"
+                    tracking={{
+                      event: countly.events.FILES_NAVIGATION_CLICK,
+                      ui: countly.ui.FILES,
+                      action: 'Next'
+                    }}
+                  >
+                    Next →
+                  </Button>
+                </When>
+              </div>
+            </>
+          </When>
+        </div>
+        <div className={clsx(
+          'fixed bottom-0 left-0 right-0 bg-w3storage-blue-dark text-w3storage-white p-4 text-center appear-bottom-then-go-away',
+          !copied && 'hidden')
+        }>
+          Copied CID to clipboard!
+        </div>
+      </main>
+    </>
   )
 }
 

@@ -38,7 +38,7 @@ vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "st
 [env.alan]
 workers_dev = true
 account_id = "4fe12d085474d33bdcfd8e9bed4d8f95"
-vars = { CLUSTER_API_URL = "https://alan-cluster-api-web3-storage.loca.lt", ENV = "dev" }
+vars = { CLUSTER_API_URL = "https://alan-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://alan-postgres-api-web3-storage.loca.lt", ENV = "dev" }
 
 [env.oli]
 workers_dev = true
@@ -53,7 +53,7 @@ vars = { CLUSTER_API_URL = "https://yusef-cluster-api-web3-storage.loca.lt", ENV
 [env.vsantos]
 workers_dev = true
 account_id = "7ec0b7cf2ec201b2580374e53ba5f37b"
-vars = { CLUSTER_API_URL = "https://vascosantos-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://vascosantos-postgres-api-web3-storage.loca.lt", ENV = "dev", DATABASE = "postgres" }
+vars = { CLUSTER_API_URL = "https://vascosantos-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://vascosantos-postgres-api-web3-storage.loca.lt", ENV = "dev" }
 
 [env.rafaelramalho]
 workers_dev = true
@@ -65,11 +65,15 @@ workers_dev = true
 account_id = "d7a6d34e62065b452c82b7fe992b8d88"
 vars = { CLUSTER_API_URL = "https://joaopeixoto-cluster-api-web3-storage.loca.lt", ENV = "dev" }
 
-[env.zebateira]
+[env.tempus]
 workers_dev = true
-account_id = "9357c50891f315d3c8a84e87ee47f740"
-vars = { CLUSTER_API_URL = "https://zebateira-cluster-api-web3-storage.loca.lt", ENV = "dev" }
+account_id = "4303c6f9fed102b35399fe94af99f8bd"
+vars = { CLUSTER_API_URL = "https://tempus-cluster-api-web3-storage.loca.lt", ENV = "dev" }
 
+[env.paolo]
+workers_dev = true
+account_id = "21ba9b25d0fe2fbefc6c9f17e1b90d86"
+vars = { CLUSTER_API_URL = "https://paolo-cluster-api-web3-storage.loca.lt/", PG_REST_URL = "https://paolo-postgres-api-web3-storage.loca.lt/", ENV = "dev" }
 
 # Add your env here. Override the the values you need to change.
 
@@ -78,4 +82,4 @@ vars = { CLUSTER_API_URL = "https://zebateira-cluster-api-web3-storage.loca.lt",
 # [env.${whoami}]
 # workers_dev = true
 # account_id = "<get me from `wrangler whoami`"
-# vars = { CLUSTER_API_URL = "https://<your ${whoami} here>-cluster-api-web3-storage.loca.lt", ENV = "dev" }
+# vars = { CLUSTER_API_URL = "https://<your ${whoami} here>-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://<your ${whoami} here>-postgres-api-web3-storage.loca.lt", ENV = "dev" }

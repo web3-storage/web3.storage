@@ -17,11 +17,13 @@ heroku addons:create heroku-postgresql:premium-4 --app=web3-storage-prod --name=
 
 # Add schema
 heroku pg:psql web3-storage-staging-0 --app=web3-storage-staging
+# ...run schema SQL from /packages/db/config.sql
 # ...run schema SQL from /packages/db/tables.sql
 # ...run schema SQL from /packages/db/fdw.sql with credentials replaced
 # ...run schema SQL from /packages/db/cargo.sql
 # ...run schema SQL from /packages/db/functions.sql
 heroku pg:psql web3-storage-prod-0 --app=web3-storage-prod
+# ...run schema SQL from /packages/db/config.sql
 # ...run schema SQL from /packages/db/tables.sql
 # ...run schema SQL from /packages/db/fdw.sql with credentials replaced
 # ...run schema SQL from /packages/db/cargo.sql
@@ -69,7 +71,7 @@ git init
 git add -A
 git commit -m "chore: configure postgrest"
 
-# heroku git:remote --app=web3-storage-pgrest-staging
+heroku git:remote --app=web3-storage-pgrest-staging
 git push heroku main
 heroku git:remote --app=web3-storage-pgrest-prod
 git push heroku main
@@ -94,3 +96,11 @@ heroku pg:credentials:create web3-storage-prod-0 --name=dagcargo --app=web3-stor
 # Grant privileges to dagcargo user
 heroku pg:psql web3-storage-staging-0 --app=web3-storage-staging < grant-dagcargo.sql
 heroku pg:psql web3-storage-prod-0 --app=web3-storage-prod < grant-dagcargo.sql
+
+# stats ########################################################################
+
+# Add stats user for ad-hoc reporting (only needs production access)
+heroku pg:credentials:create web3-storage-prod-0 --name=stats --app=web3-storage-prod
+
+# Grant RO privileges to stats user
+heroku pg:psql web3-storage-prod-0 --app=web3-storage-prod < grant-stats.sql

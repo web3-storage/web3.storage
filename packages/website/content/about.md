@@ -10,7 +10,7 @@ Developers can start building in a matter of minutes - allowing them to take adv
 
 ### [Methodology](#methodology)
 
-Content uploaded to Web3.Storage is pinned redundantly in an [IPFS Cluster](https://cluster.ipfs.io) of 3 geographically distributed nodes. When 32GiB of content is made available, a request is made to pin a new batch of content into a separate IPFS cluster - where a 32GiB CAR file is generated to store the data. Once this 32GiB CAR file is ready, a queue of geographically distributed storage providers - selected for performance and availability - bid for the right to store these deals, with the Web3.Storage client making a minimum of 5 deals with the various storage providers. Please see the [documentation](https://docs.web3.storage/) for how one can use the [Status API](https://docs.web3.storage/how-tos/query/) to query for information regarding pin status and deal status for your uploaded content.
+Content uploaded to Web3.Storage is pinned redundantly in an [IPFS Cluster](https://cluster.ipfs.io) of 3 geographically distributed nodes. When 31GiB of content is made available, a request is made to pin a new batch of content into a separate IPFS cluster - where a 31GiB CAR file is generated to store the data. Once this 31GiB CAR file is ready, a queue of geographically distributed storage providers - selected for performance and availability - bid for the right to store these deals, with the Web3.Storage client making a minimum of 5 deals with the various storage providers. Please see the [documentation](https://docs.web3.storage/) for how one can use the [Status API](https://docs.web3.storage/how-tos/query/) to query for information regarding pin status and deal status for your uploaded content.
 
 Once the deals are active, the Web3.Storage client polls to ensure that the relevant sectors are still available. In the event of an early termination (or a miner going offline), the Web3.Storage client will automatically add the relevant deals into the queue of upcoming deals to ensure at all times there are always a minimum of 5 copies of data being stored with Filecoin Storage Providers.
 
@@ -36,7 +36,7 @@ All data uploaded to Web3.Storage is available to anyone who requests it using t
 
 #### [Data limits](#data-limits)
 
-Web3.Storage supports uploads up to 32GiB in size per request, and currently has a cap of 1TiB of storage per account. Data limits can be increased at no cost by submitting a request via your Account page when logged in.
+Web3.Storage supports uploads up to 31GiB in size per request, and currently has a cap of 1TiB of storage per account. Data limits can be increased at no cost by submitting a request via your Account page when logged in.
 
 #### [Filecoin deals](#filecoin-deals)
 

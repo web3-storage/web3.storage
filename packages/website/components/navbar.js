@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { getMagic } from '../lib/magic.js'
 import countly from '../lib/countly'
@@ -25,6 +25,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   const containerRef = useRef(null)
   const [isSmallVariant, setSmallVariant] = useState(false)
   const [isMenuOpen, setMenuOpen] = useState(false)
+  const router = useRouter();
 
   useResizeObserver(containerRef, () => {
     const shouldGoToSmallVariant =  window.innerWidth < 640
@@ -42,23 +43,27 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
     [
       {
         link: 'https://docs.web3.storage/',
+        slug: 'docs',
         name: 'Docs',
-        spacing: `p-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
+        spacing: 'p-3 md:px-6'
       },
       {
         link: '/about',
+        slug: 'about',
         name: 'About',
-        spacing: `p-3 md:px-6 ${isLoggedIn ? '' : 'mr-6 md:mr-0'}`
+        spacing: 'p-3 md:px-6'
       },
       {
-        link: '/files',
+        link: isLoggedIn ? '/files' : '/login',
+        slug: 'files',
         name: 'Files',
         spacing: `p-3 md:px-6`
       },
       {
-        link: '/account',
+        link: isLoggedIn ? '/account' : '/login',
+        slug: 'account',
         name: 'Account',
-        spacing: `p-3 md:px-6 mr-3 md:mr-6`
+        spacing: `p-3 md:px-6`
       }
     ], [isLoggedIn])
 
@@ -73,7 +78,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   async function logout() {
     await getMagic().user.logout()
     await queryClient.invalidateQueries('magic-user')
-    Router.push('/')
+    router.push('/')
   }
 
   const toggleMenu = () => {
@@ -85,7 +90,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
     <Button
       onClick={logout}
       id="logout"
-      wrapperClassName="inline-block"
+      wrapperClassName="inline-block ml-3 md:ml-6"
       variant="outlined"
       small={isSmallVariant}
       tracking={{
@@ -98,19 +103,19 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   )
 
   const loginButton = (
-    <Button href="/login" id="login" wrapperClassName="inline-block" small={isSmallVariant} tracking={{ ui: countly.ui.NAVBAR, action: 'Login' }}>
+    <Button href="/login" id="login" wrapperClassName="inline-block ml-3 md:ml-6" small={isSmallVariant} tracking={{ ui: countly.ui.NAVBAR, action: 'Login' }}>
       Login
     </Button>
     )
 
   const spinnerButton = (
-    <Button href="#" id="loading-user" wrapperClassName="inline-block" small={isSmallVariant} >
+    <Button href="#" id="loading-user" wrapperClassName="inline-block ml-3 md:ml-6" small={isSmallVariant} >
       <Loading className='user-spinner' fill='white' height={10} />
     </Button>
   )
 
   return (
-    <nav className={clsx(bgColor, 'w-full z-50', isSmallVariant ? 'sticky top-0' : '')} ref={containerRef}>
+    <nav className={clsx(bgColor, 'w-full z-40', isSmallVariant ? 'sticky top-0' : '')} ref={containerRef}>
       <div className={clsx("py-3 text-w3storage-purple items-center w-100", isSmallVariant ? 'grid grid-cols-3 px-4' : 'flex justify-between layout-margins')}>
         { isSmallVariant &&
           <div className="flex align-middle">
@@ -120,16 +125,20 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
           </div>
         }
         <div>
-          <a href="/" title="Web3 Storage" className={clsx("flex items-center", isSmallVariant ? 'justify-center' : '')} onClick={onLinkClick}>
-            <Logo style={{ width: '1.9rem' }} className="fill-current text-w3storage-purple w-full" />
-            <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-md hidden xl:inline-block">Web3.Storage</span>
-          </a>
+          <Link href="/" >
+            <a title="Web3 Storage" className={clsx("flex items-center", isSmallVariant ? 'justify-center' : '')} onClick={onLinkClick}>
+              <Logo style={{ width: '1.9rem' }} className="fill-current text-w3storage-purple w-full" />
+              <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-md hidden xl:inline-block">Web3.Storage</span>
+            </a>
+          </Link>
         </div>
         <div className={clsx("flex items-center", isSmallVariant ? 'justify-end' : '')} style={{ minHeight: 52 }}>
-          { !isSmallVariant && ITEMS.map(item => (
-            <a href={item.link} key={item.name} onClick={onLinkClick} className={clsx('text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle', item.spacing)}>
-              { item.name }
-            </a>
+          {!isSmallVariant && ITEMS.map(item => (
+            <Link href={item.link} key={item.name} >
+              <a onClick={onLinkClick} className={clsx('text-sm text-w3storage-purple font-bold hover:underline align-middle', item.spacing, router.pathname.includes(item.slug) && 'underline')}>
+                  { item.name }
+              </a>
+            </Link>
           ))}
           {isLoadingUser
             ? spinnerButton
@@ -155,7 +164,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
             </Link>
           ))}
           <button className="flex justify-center mt-16" onClick={ () => toggleMenu() }>
-            <Cross />
+            <Cross width="48" height="48" />
           </button>
         </div>
       </div>

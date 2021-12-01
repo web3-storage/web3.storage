@@ -1,3 +1,5 @@
+/* global VERSION, COMMITHASH */
+
 import Head from 'next/head'
 import clsx from 'clsx'
 import Footer from './footer.js'
@@ -98,11 +100,17 @@ export default function Layout({
     enabled: needsLoggedIn,
   })
   const shouldWaitForLoggedIn = needsLoggedIn && !isLoggedIn
+  // @ts-ignore VERSION is global var
+  const globalVersion = VERSION
+  // @ts-ignore COMMITHASH is global var
+  const globalCommitHash = COMMITHASH
   return (
-    <div className={clsx(pageBgColor, 'flex flex-col min-h-screen')}>
+    <div className={clsx(shouldWaitForLoggedIn ? 'bg-w3storage-red' : pageBgColor, 'flex flex-col min-h-screen')}>
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="website-version" content={globalVersion} />
+        <meta name="website-commit" content={globalCommitHash} />
         <meta property="image" content="https://web3.storage/social-card.png" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
@@ -116,8 +124,9 @@ export default function Layout({
       </Head>
       {shouldWaitForLoggedIn ? (
         <>
-          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
-            <Loading />
+          <MessageBanner highlightMessage={ highlightMessage }/>
+          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={'bg-w3storage-red'} />
+          <Loading />
           <Footer bgColor={footerBgColor} />
         </>
       ) : callback ? (

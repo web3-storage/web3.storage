@@ -1,7 +1,14 @@
 DROP FUNCTION IF EXISTS json_arr_to_text_arr;
 DROP FUNCTION IF EXISTS json_arr_to_json_element_array;
+DROP FUNCTION IF EXISTS create_key;
 DROP FUNCTION IF EXISTS create_upload;
+DROP FUNCTION IF EXISTS upsert_pin;
+DROP FUNCTION IF EXISTS user_used_storage;
+DROP FUNCTION IF EXISTS user_keys_list;
+DROP FUNCTION IF EXISTS content_dag_size_total;
+DROP FUNCTION IF EXISTS pin_dag_size_total;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
+DROP FUNCTION IF EXISTS publish_name_record;
 
 -- transform a JSON array property into an array of SQL text elements
 CREATE OR REPLACE FUNCTION json_arr_to_text_arr(_json json)
@@ -13,7 +20,28 @@ CREATE OR REPLACE FUNCTION json_arr_to_json_element_array(_json json)
   RETURNS json[] LANGUAGE sql IMMUTABLE PARALLEL SAFE AS
 'SELECT ARRAY(SELECT * FROM json_array_elements(_json))';
 
-CREATE OR REPLACE FUNCTION create_upload(data json) RETURNS BIGINT
+CREATE OR REPLACE FUNCTION create_key(data json) RETURNS TEXT
+    LANGUAGE plpgsql
+    volatile
+    PARALLEL UNSAFE
+AS
+$$
+DECLARE
+  inserted_key_id BIGINT;
+BEGIN
+  insert into auth_key (name, secret, user_id, inserted_at, updated_at)
+  VALUES (data ->> 'name',
+          data ->> 'secret',
+          (data ->> 'user_id')::BIGINT,
+          (data ->> 'inserted_at')::timestamptz,
+          (data ->> 'updated_at')::timestamptz)
+  returning id into inserted_key_id;
+
+  return (inserted_key_id)::TEXT;
+END
+$$;
+
+CREATE OR REPLACE FUNCTION create_upload(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile
     PARALLEL UNSAFE
@@ -26,6 +54,9 @@ DECLARE
   pin_location_result_id BIGINT;
   inserted_upload_id BIGINT;
 BEGIN
+  -- Set timeout as imposed by heroku
+  SET LOCAL statement_timeout = '30s';
+
   -- Add to content table if new
   insert into content (cid, dag_size, updated_at, inserted_at)
   values (data ->> 'content_cid',
@@ -90,10 +121,11 @@ BEGIN
             data ->> 'source_cid',
             (data ->> 'type')::upload_type,
             data ->> 'name',
-            (data ->> 'updated_at')::timestamptz,
-            (data ->> 'inserted_at')::timestamptz)
+            (data ->> 'inserted_at')::timestamptz,
+            (data ->> 'updated_at')::timestamptz)
   ON CONFLICT ( user_id, source_cid ) DO UPDATE
     SET "updated_at" = (data ->> 'updated_at')::timestamptz,
+        "name" = data ->> 'name',
         "deleted_at" = null
   returning id into inserted_upload_id;
 
@@ -109,11 +141,11 @@ BEGIN
     ON CONFLICT ( url ) DO NOTHING;
   end loop;
 
-  return inserted_upload_id;
+  return (inserted_upload_id)::TEXT;
 END
 $$;
 
-CREATE OR REPLACE FUNCTION upsert_pin(data json) RETURNS BIGINT
+CREATE OR REPLACE FUNCTION upsert_pin(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile
     PARALLEL UNSAFE
@@ -146,11 +178,11 @@ BEGIN
             "updated_at" = NOW()
   returning id into pin_result_id;
 
-  return pin_location_result_id;
+  return (pin_location_result_id)::TEXT;
 END
 $$;
 
-CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT) RETURNS BIGINT
+CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT) RETURNS TEXT
   LANGUAGE plpgsql
 AS
 $$
@@ -160,14 +192,14 @@ BEGIN
     from upload u
     join content c on c.cid = u.content_cid
     where u.user_id = query_user_id and u.deleted_at is null
-  );
+  )::TEXT;
 END
 $$;
 
 CREATE OR REPLACE FUNCTION user_keys_list(query_user_id BIGINT)
   RETURNS TABLE
           (
-              "id"                bigint,
+              "id"                text,
               "name"              text,
               "secret"            text,
               "created"           timestamptz,
@@ -176,18 +208,29 @@ CREATE OR REPLACE FUNCTION user_keys_list(query_user_id BIGINT)
   LANGUAGE sql
 AS
 $$
-select  ak.id as id,
-        ak.name as name,
-        ak.secret as secret,
-        ak.inserted_at as created,
-        count(u.id) as uploads
-from auth_key ak
-left outer join upload u on ak.id = u.auth_key_id
-where ak.user_id = query_user_id and u.deleted_at is null and ak.deleted_at is null
-group by ak.id
+SELECT (ak.id)::TEXT AS id,
+       ak.name AS name,
+       ak.secret AS secret,
+       ak.inserted_at AS created,
+       CASE WHEN EXISTS(SELECT 42 FROM upload u WHERE ak.id = u.auth_key_id AND u.deleted_at IS NULL) THEN 1::BIGINT ELSE 0::BIGINT END
+  FROM auth_key ak
+ WHERE ak.user_id = query_user_id AND ak.deleted_at IS NULL
 $$;
 
-CREATE OR REPLACE FUNCTION content_dag_size_total() RETURNS BIGINT
+CREATE OR REPLACE FUNCTION pin_from_status_total(query_status TEXT) RETURNS TEXT
+  LANGUAGE plpgsql
+AS
+$$
+BEGIN
+  return(
+    select count(*)
+    from pin
+    where status = (query_status)::pin_status_type
+  )::TEXT;
+END
+$$;
+
+CREATE OR REPLACE FUNCTION content_dag_size_total() RETURNS TEXT
   LANGUAGE plpgsql
 AS
 $$
@@ -195,11 +238,11 @@ BEGIN
   return(
     select sum(c.dag_size)
     from content c
-  );
+  )::TEXT;
 END
 $$;
 
-CREATE OR REPLACE FUNCTION pin_dag_size_total() RETURNS BIGINT
+CREATE OR REPLACE FUNCTION pin_dag_size_total() RETURNS TEXT
   LANGUAGE plpgsql
 AS
 $$
@@ -208,7 +251,8 @@ BEGIN
     select sum(c.dag_size)
     from pin p
     join content c on c.cid = p.content_cid
-  );
+    where p.status = ('Pinned')::pin_status_type
+  )::TEXT;
 END
 $$;
 
@@ -250,4 +294,32 @@ FROM public.aggregate_entry ae
          LEFT JOIN public.deal de USING (aggregate_cid)
 WHERE ae.cid_v1 = ANY (cids)
 ORDER BY de.entry_last_updated
+$$;
+
+CREATE OR REPLACE FUNCTION publish_name_record(data json) RETURNS VOID
+    LANGUAGE plpgsql
+    volatile
+    PARALLEL UNSAFE
+AS
+$$
+BEGIN
+  INSERT INTO name (key, record, has_v2_sig, seqno, validity)
+  VALUES (data ->> 'key',
+          data ->> 'record',
+          (data ->> 'has_v2_sig')::BOOLEAN,
+          (data ->> 'seqno')::BIGINT,
+          (data ->> 'validity')::BIGINT)
+  ON CONFLICT (key) DO UPDATE
+    SET record = data ->> 'record',
+        has_v2_sig = (data ->> 'has_v2_sig')::BOOLEAN,
+        seqno = (data ->> 'seqno')::BIGINT,
+        validity = (data ->> 'validity')::BIGINT,
+        updated_at = TIMEZONE('utc'::TEXT, NOW())
+    WHERE
+        -- https://github.com/ipfs/go-ipns/blob/a8379aa25ef287ffab7c5b89bfaad622da7e976d/ipns.go#L325
+        ((data ->> 'has_v2_sig')::BOOLEAN = TRUE AND name.has_v2_sig = FALSE) OR
+        ((data ->> 'has_v2_sig')::BOOLEAN = name.has_v2_sig AND (data ->> 'seqno')::BIGINT > name.seqno) OR
+        ((data ->> 'has_v2_sig')::BOOLEAN = name.has_v2_sig AND (data ->> 'seqno')::BIGINT = name.seqno AND (data ->> 'validity')::BIGINT > name.validity) OR
+        ((data ->> 'has_v2_sig')::BOOLEAN = name.has_v2_sig AND (data ->> 'seqno')::BIGINT = name.seqno AND (data ->> 'validity')::BIGINT = name.validity AND DECODE(data ->> 'record', 'base64') > DECODE(name.record, 'base64'));
+END
 $$;
