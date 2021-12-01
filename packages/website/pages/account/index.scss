@@ -1,0 +1,52 @@
+.account-container {
+  max-width: 61.125rem;
+  margin: auto;
+
+  h3 {
+    padding: 0 1.75rem 0.75rem;
+  }
+}
+
+.account-content {
+  display: grid;
+  width: 100%;
+  grid-template-areas:
+    'storage-manager storage-manager upload-cta'
+    'tokens-cta docs-cta upload-cta'
+    'files-manager files-manager files-manager';
+
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 0.6875rem 0.9375rem;
+
+  .account {
+    &-storage-manager {
+      grid-area: storage-manager;
+      height: 9rem; // TODO: Remove temporary height
+    }
+    &-upload-cta {
+      grid-area: upload-cta;
+      overflow: hidden;
+      position: relative;
+      background: $white;
+      border: none;
+    }
+    &-tokens-cta {
+      grid-area: tokens-cta;
+      height: 14.5rem; // TODO: Remove temporary height
+    }
+    &-docs-cta {
+      grid-area: docs-cta;
+      height: 14.5rem; // TODO: Remove temporary height
+    }
+    &-files-manager {
+      grid-area: files-manager;
+      min-height: 17.125rem; // TODO: Remove temporary height
+    }
+  }
+}
+
+.account-gradient-background {
+  position: absolute;
+  min-width: 36.625rem;
+  left: -40%;
+}

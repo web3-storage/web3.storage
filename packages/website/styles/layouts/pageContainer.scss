@@ -1,0 +1,11 @@
+.page-container {
+  height: 100vh; // TODO: Base off 100vh - header/footer heights
+  color: $white;
+  padding-top: 4.5rem;
+  @include fontSize_Medium;
+  @include fontWeight_Regular;
+
+  h3 {
+    font-size: 1.875rem; // TODO: Adding to fonts 30pt
+  }
+}

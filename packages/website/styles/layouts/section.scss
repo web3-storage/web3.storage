@@ -1,0 +1,10 @@
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba($waterloo, 0.15);
+  padding: 1.25rem 1.5rem;
+  border: 0.0625rem solid rgba($white, 0.15);
+  border-radius: 0.3125rem;
+  @include shadow2;
+}

@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 
 import withAuthorization from '../store/withAuthorization';
 import withReduxStore from '../store/store';
+import CorkscrewBackground from '../assets/illustrations/corkscrewBlurred';
 
 /**
  * App root Component
@@ -11,6 +12,7 @@ import withReduxStore from '../store/store';
 const App = ({ Component, store, pageProps }: any) => {
   return (
     <Provider store={store}>
+      <CorkscrewBackground />
       <Component {...pageProps} />
     </Provider>
   );

@@ -2,7 +2,8 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 
-import styles from './index.module.scss';
+import GithubSVG from 'assets/icons/github';
+import Button, { ButtonVariant } from 'components/button/button';
 import { useAppDispatch } from 'store';
 import { getUserData, setAuthToken } from 'store/actions';
 
@@ -12,26 +13,23 @@ const Login = () => {
   const { push } = useRouter();
 
   // Error states
-  const [errors, setErrors] = useState<{ user?: boolean; password?: boolean }>({});
+  const [errors, setErrors] = useState<{ email?: boolean }>({});
 
   // User form data binding
-  const [{ user, password }, setFormData] = useState<{ user?: string; password?: string }>({});
+  const [{ email }, setFormData] = useState<{ email?: string }>({});
 
-  // Callback for submission
-  const onSubmit = useCallback(
-    async e => {
-      e.preventDefault();
-
-      // Errors for empty fields
-      if (!user || !password) {
-        setErrors({ user: !user, password: !password });
-        return false;
-      }
-
+  // Callback for email login logic
+  const authorizeAndNavigateToAccount = useCallback(
+    async oauth => {
       // Setting auth token
       const {
         payload: { authentication },
-      } = await dispatch(await setAuthToken(user, password));
+      } = await dispatch(
+        await setAuthToken(
+          // TODO: Set to the actual auth from the api based off of email
+          oauth
+        )
+      );
 
       // Getting user data
       await dispatch(await getUserData(authentication));
@@ -39,27 +37,46 @@ const Login = () => {
       // Redirecting to account page
       push('/account');
     },
-    [dispatch, password, push, user]
+    [dispatch, push]
   );
 
+  // Callback for email login logic
+  const onLoginWithEmail = useCallback(async () => {
+    // Errors for empty fields
+    if (!email) {
+      setErrors({ email: !email });
+      return false;
+    }
+
+    await authorizeAndNavigateToAccount(email);
+  }, [email, authorizeAndNavigateToAccount]);
+
+  // Callback for github login logic
+  const onGithubLogin = useCallback(async () => {
+    await authorizeAndNavigateToAccount('test:email');
+  }, [authorizeAndNavigateToAccount]);
+
   return (
-    <div className={clsx(styles['login-container'])}>
-      <form>
-        <input
-          placeholder="user"
-          className={clsx(errors.user && styles.error)}
-          required
-          onChange={e => setFormData({ user: e.target.value, password })}
-        />
-        <input
-          placeholder="password"
-          required
-          type="password"
-          onChange={e => setFormData({ user, password: e.target.value })}
-          className={clsx(errors.password && styles.error)}
-        />
-        <input type="submit" value="Login" onClick={onSubmit} />
-      </form>
+    <div className="page-container login-container">
+      <div className="login-content">
+        <h3>Log in with</h3>
+        <button onClick={onGithubLogin}>
+          <div className="section section-github">
+            <GithubSVG /> Github
+          </div>
+        </button>
+        <h3 className="login-type-divider">or</h3>
+        <div className="section section-email">
+          <input
+            className={clsx('login-email', errors.email && 'error')}
+            placeholder="Enter your email"
+            onChange={useCallback(e => setFormData({ email: e.currentTarget.value }), [])}
+          />
+          <Button variant={ButtonVariant.PINK_BLUE} onClick={onLoginWithEmail}>
+            Sign up / Login
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
