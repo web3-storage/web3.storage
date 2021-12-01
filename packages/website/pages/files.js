@@ -270,7 +270,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
       </TableElement>
       <TableElement {...sharedArgs} centered>
         <span className="flex justify-center">
-          Availabile
+          Available
         </span>
       </TableElement>
       <TableElement {...sharedArgs} centered>
