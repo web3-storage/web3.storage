@@ -1,6 +1,7 @@
 import * as JWT from './utils/jwt.js'
 import {
   UserNotFoundError,
+  PinningNotEnabledError,
   TokenNotFoundError,
   UnrecognisedTokenError,
   NoTokenError,
@@ -69,10 +70,40 @@ export function withApiOrMagicToken (handler) {
 }
 
 /**
+ * Middleware: verify the request is authenticated with a valid api token
+ * for a user that has pinning enabled.
+ * On successful login, adds `auth.user` and `auth.auth.token` to the Request
+ *
+ * @param {import('itty-router').RouteHandler} handler
+ * @returns {import('itty-router').RouteHandler}
+ */
+export function withPinningEnabledUser (handler) {
+  /**
+   * @param {Request} request
+   * @param {import('./env').Env}
+   * @returns
+   */
+  return async (request, env, ctx) => {
+    console.log('--> withPinningEnabledUser')
+    const token = getTokenFromRequest(request, env)
+    const apiToken = await tryWeb3ApiToken(token, env)
+    if (apiToken) {
+      if (apiToken.user.pinningEnabled) {
+        request.auth = { authToken: apiToken, user: apiToken.user }
+        env.sentry && env.sentry.setUser(apiToken.user)
+        return handler(request, env, ctx)
+      }
+      throw new PinningNotEnabledError()
+    }
+    throw new UnrecognisedTokenError()
+  }
+}
+
+/**
  * @param {string} token
  * @param {import('./env').Env}
  * @throws UserNotFoundError
- * @returns {import(./user).User | null }
+ * @returns {Promise<import('@web3-storage/db/db-client-types').UserOutput> | null }
  */
 async function tryMagicToken (token, env) {
   let issuer = null

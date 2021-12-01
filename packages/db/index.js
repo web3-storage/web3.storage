@@ -631,20 +631,29 @@ export class DBClient {
    * @return {Promise<import('./db-client-types').AuthKey>}
    */
   async getKey (issuer, secret) {
+    console.log('--> getKey:issuer', issuer)
+    console.log('--> getKey:secret', secret)
     /** @type {{ data, error: PostgrestError } */
     const { data, error } = await this._client
       .from('user')
       .select(`
         _id:id::text,
         issuer,
-        keys:auth_key_user_id_fkey(_id:id::text, name,secret)
+        pinningEnabled:pinning_enabled,
+        keys:auth_key_user_id_fkey(
+          _id:id::text,
+          name,
+          secret
+        )
       `)
       .match({
-        issuer
+        issuer: issuer
       })
       .filter('keys.deleted_at', 'is', null)
       .eq('keys.secret', secret)
       .single()
+
+    console.log('--> getKey:data', data)
 
     if (error) {
       throw new DBError(error)
@@ -659,7 +668,8 @@ export class DBClient {
       name: data.keys[0].name,
       user: {
         _id: data._id,
-        issuer: data.issuer
+        issuer: data.issuer,
+        pinningEnabled: data.pinningEnabled
       }
     }
   }

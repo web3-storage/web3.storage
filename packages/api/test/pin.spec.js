@@ -14,10 +14,17 @@ describe('POST /pins', () => {
   let token = null
   before(async () => {
     // Create token
-    token = await getTestJWT()
+    token = await getTestJWT('user-pinning-enabled')
   })
 
-  it('should receive pin data containing cid', async () => {
+  // TODO
+  // Mock users associated with a specified token
+  // - with access to the pinning API disabled (the default)
+  // - with access to the pinning API enabled
+
+  it('error if user not authorised to pin', async () => {
+    // User will have pinning diabled by default
+    token = await getTestJWT()
     const res = await fetch(new URL('pins', endpoint).toString(), {
       method: 'POST',
       headers: {
@@ -28,7 +35,21 @@ describe('POST /pins', () => {
         cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
       })
     })
+    assert(!res.ok)
+    assert.strictEqual(res.status, 403)
+  })
 
+  it.only('should receive pin data containing cid', async () => {
+    const res = await fetch(new URL('pins', endpoint).toString(), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
+      })
+    })
     assert(res, 'Server responded')
     assert(res.ok, 'Server response ok')
     const data = await res.json()
@@ -222,7 +243,28 @@ describe('GET /pins/:requestId', () => {
   })
 })
 
-describe('GET /delete/:requestId', () => {
+describe('GET /pins', () => {
+  let token = null
+  before(async () => {
+    // Create token
+    token = await getTestJWT()
+  })
+
+  it('requires requestId', async () => {
+    const res = await fetch(new URL('pins', endpoint).toString(), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+
+    assert(res, 'Server responded')
+    assert(!res.ok)
+  })
+})
+
+describe('DELETE /pins/:requestId', () => {
   let token = null
   before(async () => {
     // Create token
@@ -242,18 +284,5 @@ describe('GET /delete/:requestId', () => {
     assert(res.ok, 'Server response ok')
     const data = await res.json()
     assert.strictEqual(data, 'OK')
-  })
-
-  it('requires requestId', async () => {
-    const res = await fetch(new URL('pins', endpoint).toString(), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    })
-
-    assert(res, 'Server responded')
-    assert(!res.ok)
   })
 })

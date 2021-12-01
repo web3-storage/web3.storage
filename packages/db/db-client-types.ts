@@ -46,7 +46,8 @@ export type AuthKey = {
   name: definitions['auth_key']['name'],
   user: {
     _id: definitions['user']['id'],
-    issuer: definitions['user']['issuer']
+    issuer: definitions['user']['issuer'],
+    pinningEnabled: definitions['user']['pinning_enabled']
   }
 }
 
