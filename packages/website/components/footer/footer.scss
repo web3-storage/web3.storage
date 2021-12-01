@@ -27,6 +27,10 @@ $footerLogoWidth: 2.25rem;
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+  .label {
+    margin-top: 0;
+    padding-top: 0 !important;
+  }
 }
 
 .footer_contact {
