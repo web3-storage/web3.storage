@@ -105,7 +105,7 @@ export default function Layout({
   // @ts-ignore COMMITHASH is global var
   const globalCommitHash = COMMITHASH
   return (
-    <div className={clsx(pageBgColor, 'flex flex-col min-h-screen')}>
+    <div className={clsx(shouldWaitForLoggedIn ? 'bg-w3storage-red' : pageBgColor, 'flex flex-col min-h-screen')}>
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
@@ -124,8 +124,9 @@ export default function Layout({
       </Head>
       {shouldWaitForLoggedIn ? (
         <>
-          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
-            <Loading />
+          <MessageBanner highlightMessage={ highlightMessage }/>
+          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={'bg-w3storage-red'} />
+          <Loading />
           <Footer bgColor={footerBgColor} />
         </>
       ) : callback ? (
