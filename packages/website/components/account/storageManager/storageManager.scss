@@ -1,0 +1,92 @@
+$tier1Width: 6.5rem;
+$tier2Width: 7.1825rem;
+
+.storage-manager-container {
+  display: flex;
+  flex-direction: column;
+
+  > * {
+    width: 100%;
+  }
+
+  padding: 1.5rem 2.375rem 0.25rem;
+}
+
+.storage-manager-info,
+.storage-manager-space {
+  display: flex;
+  padding-left: 0.5625rem;
+  align-items: center;
+}
+
+.storage-manager-space {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.storage-manager-info {
+  @include fontSize_Tiny;
+  @include fontWeight_Regular;
+  .button {
+    padding: 0;
+    padding-left: 0.75rem;
+  }
+  margin-top: 0.25rem;
+}
+
+.storage-manager-meter {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 1.375rem;
+  border-radius: 1rem;
+  background: rgba($vulcan, 0.15);
+  border: 0.0625rem solid rgba($waterloo, 0.15);
+  overflow: hidden;
+}
+
+.storage-manager-meter-used {
+  @include gradient_Background_BluePurple;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 1rem;
+}
+
+.storage-manager-meter-tier {
+  @include fontSize_Atom;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 0.0625rem solid rgba($waterloo, 0.15);
+  gap: 0.25rem;
+  height: 100%;
+
+  &-0 {
+    width: $tier1Width;
+  }
+  &-1 {
+    width: $tier2Width;
+  }
+  &-2 {
+    flex: 1;
+  }
+
+  &.locked {
+    opacity: 50%;
+    background: rgba($comet, 0.15);
+  }
+
+  svg {
+    color: $cyan;
+  }
+
+  span {
+    z-index: 1;
+  }
+}
