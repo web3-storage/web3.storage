@@ -1,0 +1,173 @@
+// ///////////////////////////////////////////////////////////////////// General
+// -----------------------------------------------------------------------------
+.card {
+  flex: 1 1 0px;
+  padding: 1.5rem;
+  .feature-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  .title,
+  .subtitle,
+  .description {
+    text-align: center;
+  }
+}
+
+// //////////////////////////////////////////////// Card [Type A] -> Big Numbers
+// -----------------------------------------------------------------------------
+.card.type__A {
+  .feature {
+    @include gradient_Text;
+    @include fontSize_ExtraLarge;
+    @include fontWeight_Bold;
+    background-size: 200%;
+  }
+
+  .title {
+    @include fontSize_Small;
+    @include fontWeight_Semibold;
+    text-transform: uppercase;
+    line-height: leading(34, 16);
+    margin-bottom: 0.625rem;
+  }
+
+  .description {
+    @include fontSize_Mini;
+    @include fontWeight_Regular;
+    line-height: leading(25, 15);
+  }
+}
+
+// ///////////////////////////////////////////////// Card [Type B] -> Code Cards
+// -----------------------------------------------------------------------------
+.card.type__B {
+  .label {
+    margin: 0;
+    text-align: left;
+    @include fontSize_Medium;
+    @include fontWeight_Semibold;
+    line-height: leading(34, 20);
+  }
+
+  .feature-wrapper {
+    padding: 0.5rem 1rem;
+    margin: 2.25rem 0;
+    background-color: $gray50;
+    border: solid 1px white;
+    border-radius: 0.5rem;
+    @include shadow2;
+  }
+
+  .code-feature {
+    font-family: 'Suisse Intl Mono';
+    @include fontSize_Tiny;
+    @include fontWeight_Regular;
+    line-height: leading(19, 13);
+    color: #0008d9;
+    .highlight {
+      color: #925fdc;
+    }
+  }
+
+  .description {
+    @include fontSize_Mini;
+    @include fontWeight_Regular;
+    line-height: leading(26, 15);
+    text-align: left;
+  }
+}
+
+// /////////////////////////////////////////////// Card [Type C] -> Shadow Cards
+// -----------------------------------------------------------------------------
+.card.type__C {
+  background-color: $ebony;
+  border-radius: 5px;
+  position: relative;
+  margin-right: 1.125rem;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    border-radius: 0px;
+    height: calc(100% + 2px);
+    width: calc(100% + 2px);
+    top: -1px;
+    left: -1px;
+    background: linear-gradient(135deg, #d726d7 0%, #3064e0 50%, #31e7ea 100%);
+    z-index: -1;
+    filter: blur(6px);
+  }
+
+  .feature-wrapper {
+    img {
+      border-radius: 50%;
+      border: solid 4px white !important;
+    }
+  }
+
+  .title {
+    @include fontSize_Small;
+    @include fontWeight_Semibold;
+    line-height: leading(34, 16);
+    margin-bottom: 0.625rem;
+  }
+
+  .subtitle {
+    @include fontSize_Tiny;
+    @include fontWeight_Regular;
+    line-height: leading(22, 16);
+    margin-bottom: 1rem;
+  }
+
+  .description {
+    @include fontSize_Mini;
+    @include fontWeight_Regular;
+    line-height: leading(22, 15);
+  }
+}
+
+// ////////////////////////////////////////////// Card [Type D] -> Explore Cards
+// -----------------------------------------------------------------------------
+.card.type__D {
+  padding: 2rem;
+  margin-right: 1.5rem;
+  background-color: $gray50;
+  border-radius: 0.5rem;
+  @include shadow3;
+
+  .feature-wrapper,
+  .category {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .feature-wrapper {
+    margin-bottom: 0;
+
+    .category {
+      &:not(:first-child) {
+        margin-top: 1.5rem;
+      }
+    }
+    .category-heading {
+      margin-bottom: 0.5rem;
+      @include fontSize_Medium;
+      @include fontWeight_Semibold;
+      line-height: leading(34, 20);
+    }
+    .category-link {
+      padding: 0.25rem 0;
+      a {
+        @include gradient_Text;
+        @include fontSize_Regular;
+        background-size: 150%;
+      }
+    }
+  }
+}

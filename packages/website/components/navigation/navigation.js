@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 
 import { useResizeObserver } from '../../hooks/resize-observer';
-import Button from '../button/button.js';
+import Button from '../button/button';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Hamburger from '../../assets/icons/hamburger.js';
 import GeneralPageData from '../../content/pages/general.json';
@@ -125,7 +125,7 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
                   </Link>
                 ))}
                 <Button href="/login" id="login" small={isSmallVariant}>
-                  Sign In
+                  SIGN IN
                 </Button>
               </div>
             </div>

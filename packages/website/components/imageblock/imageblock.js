@@ -1,26 +1,21 @@
 // ===================================================================== Imports
 import clsx from 'clsx';
-import styles from './imageblock.module.scss'
+import Image from 'next/image';
 // ====================================================================== Params
 /**
  * @param {Object} props.block
-*/
+ */
 // ====================================================================== Export
-export default function ImageBlock({block}) {
+export default function ImageBlock({ block }) {
   return (
     <>
-      { block.src && (
-        <div className={ clsx("block", styles.imageBlock)}>
+      {block.src && (
+        <div id={block.id} className={clsx('block', 'image-block')}>
+          <Image src={block.src} layout="fill" />
 
-          <img src={block.src} className={ clsx(styles.image) } />
-
-          <div
-            className={ clsx(styles.label) }>
-            { block.label }
-          </div>
-
+          <div className={'image-label'}>{block.label}</div>
         </div>
       )}
     </>
-  )
+  );
 }

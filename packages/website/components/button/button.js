@@ -4,8 +4,6 @@ import countly from 'Lib/countly'
 
 import ZeroButton from 'ZeroComponents/button/button'
 
-import styles from './button.module.scss';
-
 export const ButtonVariant = {
   DARK: 'dark',
   LIGHT: 'light',
@@ -23,7 +21,7 @@ export const ButtonVariant = {
  * @prop { import('react').MouseEventHandler<HTMLButtonElement> } [onClick]
  * @prop {string} [href]
  * @prop {TrackingProp} [tracking]
- * @prop {'dark' | 'light' | 'outlined' } [variant]
+ * @prop {'dark' | 'light' | 'purple' } [variant]
  * @prop {import('react').ReactNode | string} children
  */
 
@@ -32,7 +30,7 @@ const Button = ({
   onClick,
   href,
   tracking,
-  variant,
+  variant = 'dark',
   children,
   ...props
 }) => {
