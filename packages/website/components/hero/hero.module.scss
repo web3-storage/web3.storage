@@ -1,0 +1,109 @@
+.container {
+  width: 100%;
+  padding: 0 1.75rem;
+  z-index: 0;
+  display: flex;
+}
+
+.topSection {
+  height: 24.05rem;
+}
+
+.artworkContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.gradientBackground {
+  position: absolute;
+  width: 150%;
+  left: -25%;
+  bottom: -20rem;
+  z-index: 0;
+}
+
+.grid3D {
+  position: absolute;
+  top: -9999px;
+  bottom: -9999px;
+  left: -9999px;
+  right: -9999px;
+  margin: auto;
+  z-index: 1;
+}
+
+.illustration {
+  position: absolute;
+  z-index: 2;
+}
+
+.squiggle {
+  width: 29rem;
+  left: -10.5rem;
+  transform: rotate(-27deg);
+}
+
+.corkscrew {
+  width: 24.375rem;
+  right: -2rem;
+  top: -1rem;
+  transform: rotate(115deg);
+}
+
+.zigzag {
+  width: 7.375rem;
+  left: 25%;
+  top: 0;
+  transform: rotate(-185deg);
+}
+
+.helixSmall {
+  width: 4.125rem;
+  left: 37%;
+  top: -5rem;
+  transform: rotate(-90deg);
+}
+
+.coil {
+  width: 7.1875rem;
+  left: 10%;
+  bottom: -8rem;
+  transform: rotate(17deg);
+}
+
+.cross {
+  width: 5.25rem;
+  right: 31%;
+  bottom: 3.5rem;
+}
+
+.triangle {
+  width: 3.5rem;
+  left: 30%;
+  bottom: 5rem;
+  transform: rotate(-90deg);
+}
+
+.header_text_block {
+  .heading {
+
+  }
+  .subheading {
+    color: black;
+  }
+}
+
+// @media only screen and (min-width: 640px) {
+//     .container {
+//        overflow: hidden;
+//        overflow-x: clip;
+//        overflow-y: visible;
+//     }
+// }

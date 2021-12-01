@@ -1,15 +1,14 @@
-/* global VERSION, COMMITHASH */
-
 import Head from 'next/head'
 import clsx from 'clsx'
-import Footer from './footer.js'
-import Navbar from './navbar.js'
-import Loading from './loading'
-import { useLoggedIn } from '../lib/user'
-import { getVersion } from '../lib/api'
-import { getStatusPageSummary } from '../lib/statuspage-api'
+import Footer from './footer/footer.js'
+import Navbar from './navbar/navbar.js'
+import Loading from './loading/loading'
+import { useLoggedIn } from 'Lib/user'
+import { getVersion } from 'Lib/api'
+import { getStatusPageSummary } from 'Lib/statuspage-api'
 import { useQuery } from 'react-query'
 
+// ============================================================== Message Banner
 /**
  * @param {any} highlightMessage
  */
@@ -56,21 +55,22 @@ const MessageBanner = ({ highlightMessage }) => {
 
   if (maintenanceMessage) {
     return (
-      <div className="w-full bg-w3storage-yellow text-center" style={{ zIndex: 50 }}>
-        <div className="layout-margins py-2">
-          <span className="text-xl">⚠</span> <span className="typography-cta">{maintenanceMessage}</span>
+      <div style={{ zIndex: 50, width: '100vw' }}>
+        <div>
+          <span>⚠</span> <span className="typography-cta">{maintenanceMessage}</span>
         </div>
       </div>
     )
   }
 
   if (highlightMessage) {
-    return <div className="w-full bg-w3storage-purple text-white typography-cta text-center py-1" dangerouslySetInnerHTML={{ __html: highlightMessage }} />
+    return <div id="site-message-banner" dangerouslySetInnerHTML={{ __html: highlightMessage }} />
   }
 
   return null
 }
 
+// ====================================================================== Layout
 /**
  * @typedef {import('react').ReactChildren} Children
  * @typedef {(props: import('./types.js').LayoutChildrenProps) => Children} ChildrenFn
@@ -89,28 +89,24 @@ export default function Layout({
   title = 'Web3 Storage - The simple file storage service for IPFS & Filecoin.',
   description = 'With Web3.Storage you get all the benefits of decentralized storage and content addressing with the frictionless experience you expect in a modern storage solution. It’s fast, open and it’s free.',
   pageBgColor = 'bg-w3storage-background',
-  navBgColor = 'bg-w3storage-background',
   footerBgColor,
   data = null,
   highlightMessage,
 }) {
+
   const { isLoggedIn, isLoading, isFetching } = useLoggedIn({
     redirectTo,
     redirectIfFound,
     enabled: needsLoggedIn,
   })
+
   const shouldWaitForLoggedIn = needsLoggedIn && !isLoggedIn
-  // @ts-ignore VERSION is global var
-  const globalVersion = VERSION
-  // @ts-ignore COMMITHASH is global var
-  const globalCommitHash = COMMITHASH
+
   return (
-    <div className={clsx(pageBgColor, 'flex flex-col min-h-screen')}>
+    <div className="master-container">
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <meta name="website-version" content={globalVersion} />
-        <meta name="website-commit" content={globalCommitHash} />
         <meta property="image" content="https://web3.storage/social-card.png" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
@@ -122,9 +118,10 @@ export default function Layout({
         <meta name="twitter:site" content="@protocollabs" />
         <meta name="twitter:creator" content="@protocollabs" />
       </Head>
+
       {shouldWaitForLoggedIn ? (
         <>
-          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
+          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} />
             <Loading />
           <Footer bgColor={footerBgColor} />
         </>
@@ -136,11 +133,12 @@ export default function Layout({
       ) : (
         <>
           <MessageBanner highlightMessage={ highlightMessage }/>
-          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} bgColor={navBgColor} />
+          <Navbar isLoggedIn={isLoggedIn} isLoadingUser={isLoading || isFetching} />
           {children({ isLoggedIn, data })}
           <Footer bgColor={footerBgColor} />
         </>
       )}
+
     </div>
   )
 }

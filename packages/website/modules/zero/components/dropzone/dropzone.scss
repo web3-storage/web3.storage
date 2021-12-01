@@ -1,0 +1,14 @@
+.Dropzone {
+
+  .droparea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .filelist {
+    display: grid;
+    grid-template-columns: auto minmax(0, max-content);
+  }
+}
