@@ -52,7 +52,7 @@ $breakpoint_UltraLarge: 140.625rem; // 2250px
 
 // ------------------------------------------------------------------- Gradients
 @mixin magentaCyan_Gradient {
-  background: linear-gradient(to right, $cerise 0%, $royalBlue 50%, $pictonBlue 100%);
+  background: linear-gradient(to right, $cerise 0%, $royalBlue 50%, $pictionBlue 100%);
 }
 
 $gradient_PinkBlue: linear-gradient(45deg, $cerise 0%, $royalBlue 48%, $pictonBlue 100%);
