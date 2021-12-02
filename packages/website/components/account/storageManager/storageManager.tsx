@@ -16,32 +16,73 @@ enum StorageTiers {
 
 const terabyte = 1099511627776;
 
+const tier1Width = '6.5rem';
+const tier2Width = '7.1825rem';
 const storageInfo: {
   [key in StorageTiers]: {
     usageLabel: string;
     meterLabel: string;
+    usageLimitInTB: number;
+    maxWidth: string;
   };
 } = {
   [StorageTiers.TIER_1]: {
     usageLabel: '1 TB',
     meterLabel: '<1 TB',
+    usageLimitInTB: terabyte,
+    maxWidth: tier1Width,
   },
   [StorageTiers.TIER_2]: {
     usageLabel: '10 TB',
     meterLabel: '1-10 TB',
+    usageLimitInTB: terabyte * 10,
+    maxWidth: tier2Width,
   },
   [StorageTiers.TIER_3]: {
     usageLabel: '10 TB+',
     meterLabel: '10TB+',
+    usageLimitInTB: terabyte * 20,
+    maxWidth: `calc(100% - (${tier1Width} + ${tier2Width}))`,
   },
 };
 
 const StorageManager = ({ className }: StorageManagerProps) => {
   // TODO: Hook up storage tier & storage used to redux state
-  const storageTier = StorageTiers.TIER_1; // No tier available?
-  const usedStorage = 1099511627776; // in bytes
+  const storageTier = StorageTiers.TIER_3; // No tier available?
+  const usedStorage = terabyte * 20; // in bytes
 
   const { usageLabel } = useMemo(() => storageInfo[storageTier], [storageTier]);
+
+  // Tiered width calculation so bar fills proportionally to tier's allocation & user access level
+  const calculatedWidth = useMemo(() => {
+    // Determine usage relative to tier
+    let storageLeft = usedStorage;
+
+    const widths: string[] = [];
+    Object.keys(storageInfo)
+      // Filter out anything above the current tier if applicable
+      .filter(key => key <= storageTier)
+      // Mapping leftover results to storageInfo object
+      .map(key => storageInfo[key])
+      // Calculating width based off of storage used relative to each tier
+      .forEach(({ usageLimitInTB, maxWidth }, index, currentArray) => {
+        if (storageLeft > 0) {
+          // Base starting point is the accumalation of all previous tier's usageLimitInTB
+          const baseTBStart =
+            index > 0
+              ? // slicing all items up to the current index and combining usage limits to determine a start
+                currentArray
+                  .slice(0, index)
+                  .reduce((acc, { usageLimitInTB: prevTierLimit }) => (acc += prevTierLimit) && acc, 0)
+              : 0;
+
+          widths.push(`calc(${Math.min((baseTBStart + storageLeft) / usageLimitInTB, 1)} * ${maxWidth})`);
+          storageLeft -= usageLimitInTB;
+        }
+      });
+
+    return `calc(${widths.join(' + ')})`;
+  }, [usedStorage, storageTier]);
 
   const onSearchFiles = useCallback(() => {
     window.alert('Search File');
@@ -51,7 +92,6 @@ const StorageManager = ({ className }: StorageManagerProps) => {
     window.alert('Request more storage');
   }, []);
 
-  // 9 rem height
   return (
     <div className={clsx('section storage-manager-container', className)}>
       <div className="storage-manager-space">
@@ -68,11 +108,12 @@ const StorageManager = ({ className }: StorageManagerProps) => {
         {Object.values(StorageTiers).map((tier, currentIndex, arr) => {
           const activeTierIndex = arr.indexOf(storageTier);
           const locked = currentIndex > activeTierIndex;
-          const { meterLabel } = storageInfo[tier];
+          const { meterLabel, maxWidth } = storageInfo[tier];
           return (
             <div
               key={tier}
-              className={clsx('storage-manager-meter-tier', `storage-manager-meter-tier-${tier}`, locked && 'locked')}
+              style={{ width: maxWidth }}
+              className={clsx('storage-manager-meter-tier', locked && 'locked')}
             >
               <span>{meterLabel}</span>
               {locked && <LockIcon />}
@@ -83,8 +124,7 @@ const StorageManager = ({ className }: StorageManagerProps) => {
         <div
           className="storage-manager-meter-used"
           style={{
-            // TODO: Better width determination
-            width: `${(usedStorage / (terabyte * 11)) * 100}%`,
+            width: calculatedWidth,
           }}
         />
       </div>
