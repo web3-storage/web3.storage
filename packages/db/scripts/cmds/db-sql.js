@@ -14,9 +14,9 @@ const { Client } = pg
 /**
  * @param {Object} [opts]
  * @param {boolean} [opts.reset]
- * @param {boolean} [opts.cargo]
+ * @param {boolean} [opts.testing]
  */
-export async function dbSqlCmd ({ reset, cargo } = {}) {
+export async function dbSqlCmd ({ reset, testing } = {}) {
   // read all the SQL files
   const configSql = fs.readFileSync(path.join(__dirname, '../../postgres/config.sql'), {
     encoding: 'utf-8'
@@ -50,7 +50,7 @@ export async function dbSqlCmd ({ reset, cargo } = {}) {
   await client.query(configSql)
   await client.query(tablesSql)
 
-  if (cargo) {
+  if (testing) {
     await client.query(cargoSchema)
   }
 
