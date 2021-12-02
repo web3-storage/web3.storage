@@ -7,7 +7,7 @@ import SpinnerIcon from '../icons/spinner'
  * @param {string} [props.fill]
  */
 const Loading = ({ className, height = 50, fill='#000' }) => (
-  <div className={ className || 'loading' }>
+  <div className={ className || 'w-full loading' }>
     <SpinnerIcon src="/spinner.svg" height={height} aria-label="Loading" fill={fill} />
   </div>
 )

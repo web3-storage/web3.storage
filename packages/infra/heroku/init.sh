@@ -17,11 +17,13 @@ heroku addons:create heroku-postgresql:premium-4 --app=web3-storage-prod --name=
 
 # Add schema
 heroku pg:psql web3-storage-staging-0 --app=web3-storage-staging
+# ...run schema SQL from /packages/db/config.sql
 # ...run schema SQL from /packages/db/tables.sql
 # ...run schema SQL from /packages/db/fdw.sql with credentials replaced
 # ...run schema SQL from /packages/db/cargo.sql
 # ...run schema SQL from /packages/db/functions.sql
 heroku pg:psql web3-storage-prod-0 --app=web3-storage-prod
+# ...run schema SQL from /packages/db/config.sql
 # ...run schema SQL from /packages/db/tables.sql
 # ...run schema SQL from /packages/db/fdw.sql with credentials replaced
 # ...run schema SQL from /packages/db/cargo.sql
