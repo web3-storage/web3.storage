@@ -91,6 +91,7 @@ const STATUS_OPTIONS = ['queued', 'pinning', 'pinned', 'failed']
  */
 export async function pinPost (request, env, ctx) {
   const pinData = await request.json()
+  const requestId = request.params.requestId
   const { cid, name, origins, meta } = pinData
 
   // Require cid
@@ -138,8 +139,13 @@ export async function pinPost (request, env, ctx) {
   }
 
   const { authToken } = request.auth
-  const pinStatus = await createPin(pinData, authToken._id, env, ctx)
-  return new JSONResponse(pinStatus)
+  if (requestId) {
+    // TODO: replace pin
+    // await pinReplace(pinData)
+  } else {
+    const pinStatus = await createPin(pinData, authToken._id, env, ctx)
+    return new JSONResponse(pinStatus)
+  }
 }
 
 /**
@@ -334,7 +340,9 @@ export async function pinsGet (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 export async function pinDelete (request, env, ctx) {
-  const requestId = request.params.requestId
+  let requestId = request.params.requestId
+  // Don't delete pin requests that don't belong to the user
+  const { authToken } = request.auth
 
   if (!requestId) {
     return new JSONResponse(
@@ -350,8 +358,34 @@ export async function pinDelete (request, env, ctx) {
     )
   }
 
-  // TODO: write logic for deleting pin request
-  return new JSONResponse('OK')
+  // TODO: refactor this validation (also used in GET)
+  // Check if requestId contains other charachers than digits
+  if (!(/^\d+$/.test(requestId))) {
+    return new JSONResponse(
+      { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
+      { status: ERROR_CODE }
+    )
+  }
+
+  requestId = parseInt(requestId, 10)
+
+  let res
+  try {
+    // Update deleted_at (and updated_at) for the pin request
+    res = await env.db.deletePAPinRequest(requestId, authToken._id)
+  } catch (e) {
+    console.error(e)
+    // TODO catch different exceptions
+    // TODO notFound error paylod does not strictly comply to spec.
+    return notFound()
+  }
+
+  /**
+   * TODO: check if there's any more pin requests left for a cid
+   *  and if not, update deleted_at for the specific upload
+   */
+
+  return new JSONResponse(res)
 }
 
 /**
@@ -359,6 +393,19 @@ export async function pinDelete (request, env, ctx) {
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
  */
-export async function pinReplace (request, env, ctx) {
+async function pinReplace (request, env, ctx) {
+  /**
+   * TODO(alexandra):
+   * 1. Get requestId
+   * 2. Check if there's a PA Pin request with requestId, get cid associated with it
+   *    -- Ensure it's not deleted (deleted_at == null)
+   *    -- Ensure the user is allowed to replace this pin request
+   *    -- If not: throw
+   * 3. Get pin data
+   * 4. Normalize cid/validation
+   * 5. If new cid == old cid, throw
+   * 6. Create new pin (handle error)
+   * 7. Delete old pin (handle error)
+   * */
   throw new Error('Not implemented')
 }

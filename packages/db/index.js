@@ -881,6 +881,34 @@ export class DBClient {
   }
 
   /**
+   * Delete a user PA pin request.
+   *
+   * @param {number} requestId
+   * @param {string} authKey
+   */
+  async deletePAPinRequest (requestId, authKey) {
+    const date = new Date().toISOString()
+    /** @type {{ data: import('./db-client-types').PAPinRequestItem, error: PostgrestError }} */
+    const { data, error } = await this._client
+      .from('pa_pin_request')
+      .update({
+        deleted_at: date,
+        updated_at: date
+      })
+      .match({ auth_key_id: authKey, id: requestId })
+      .filter('deleted_at', 'is', null)
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return {
+      _id: data.id
+    }
+  }
+
+  /**
    * Publish a new IPNS record, ensuring the sequence number is greater than
    * the sequence number of an existing record for the given key.
    *
