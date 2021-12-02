@@ -174,10 +174,10 @@ body {
 }
 
 .loading {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 }
 
 .table-responsive {
