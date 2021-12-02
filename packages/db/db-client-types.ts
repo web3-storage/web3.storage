@@ -260,6 +260,7 @@ export type PAPinRequestItem = PAPinRequestUpsertInput & {
   contentCid: definitions['pa_pin_request']['content_cid']
   created: definitions['upload']['inserted_at']
   updated: definitions['upload']['updated_at']
+  deleted?: definitions['upload']['deleted_at']
   content: ContentItem
 }
 
@@ -268,8 +269,10 @@ export type PAPinRequestUpsertOutput = PAPinRequestUpsertInput & {
   contentCid: definitions['pa_pin_request']['content_cid']
   created: definitions['pa_pin_request']['inserted_at']
   updated: definitions['pa_pin_request']['updated_at']
+  deleted?: definitions['pa_pin_request']['deleted_at']
   pins: Array<PinItemOutput>
 }
+
 export type NameItem = {
   record: definitions['name']['record']
 }
