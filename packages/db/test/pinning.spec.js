@@ -124,12 +124,12 @@ describe('Pin Request', () => {
   })
 
   describe('Create Pin', () => {
-    it('it creates a Pin Request', async () => {
+    it('creates a Pin Request', async () => {
       const savedPinRequest = await client.getPAPinRequest(aPinRequestOutput._id)
       assert.ok(savedPinRequest)
     })
 
-    it('it returns the right object', async () => {
+    it('returns the right object', async () => {
       assertCorrectPinRequestOutputTypes(aPinRequestOutput, { withContent: false })
       assert.strictEqual(aPinRequestOutput.requestedCid, cids[0], 'requestedCid is the one provided')
     })
@@ -138,7 +138,7 @@ describe('Pin Request', () => {
       assert.strictEqual(aPinRequestOutput.pins.length, 0)
     })
 
-    it('it returns the right object when it has content associated', async () => {
+    it('returns the right object when it has content associated', async () => {
       assertCorrectPinRequestOutputTypes(aPinRequestOutputForExistingContent)
       assert.strictEqual(aPinRequestOutputForExistingContent.requestedCid, cids[1], 'rrequestedCid is the one provided')
     })
@@ -164,11 +164,11 @@ describe('Pin Request', () => {
       savedPinRequestForExistingContent = await client.getPAPinRequest(aPinRequestOutputForExistingContent._id)
     })
 
-    it('it creates a Pin Request', async () => {
+    it('creates a Pin Request', async () => {
       assert.ok(savedPinRequest)
     })
 
-    it('it returns the right object', async () => {
+    it('returns the right object', async () => {
       assertCorrectPinRequestOutputTypes(savedPinRequest, { withContent: false })
       assert.strictEqual(savedPinRequest.requestedCid, cids[0], 'requestedCid is the one provided')
     })
@@ -177,7 +177,7 @@ describe('Pin Request', () => {
       assert.strictEqual(savedPinRequest.pins.length, 0)
     })
 
-    it('it returns the right object when it has content associated', async () => {
+    it('returns the right object when it has content associated', async () => {
       assertCorrectPinRequestOutputTypes(savedPinRequestForExistingContent)
       assert.strictEqual(savedPinRequestForExistingContent.requestedCid, cids[1], 'rrequestedCid is the one provided')
     })
@@ -284,12 +284,12 @@ describe('Pin Request', () => {
       }))
     })
 
-    it('it limits the results to 10', async () => {
+    it('limits the results to 10', async () => {
       const prs = await client.listPAPinRequests(authKeyPinList)
       assert.strictEqual(prs.length, 10)
     })
 
-    it('it limits the results to the provided limit', async () => {
+    it('limits the results to the provided limit', async () => {
       const limit = 8
       const prs = await client.listPAPinRequests(authKeyPinList, {
         limit
@@ -297,12 +297,12 @@ describe('Pin Request', () => {
       assert.strictEqual(prs.length, limit)
     })
 
-    it('it returns only requests for the provided token', async () => {
+    it('returns only requests for the provided token', async () => {
       const prs = await client.listPAPinRequests('10')
       assert.strictEqual(prs.length, 0)
     })
 
-    it('it sorts by date', async () => {
+    it('sorts by date', async () => {
       const prs = await client.listPAPinRequests(authKeyPinList)
 
       const sorted = prs.reduce((n, item) => n !== false && item.created <= n.created && item)
@@ -319,7 +319,7 @@ describe('Pin Request', () => {
       assert.strictEqual(createdPinningRequests._id, prs[0]._id)
     })
 
-    it('it filters items by provided cid', async () => {
+    it('filters items by provided cid', async () => {
       const cids = [createdPinningRequests[0].requestedCid, createdPinningRequests[1].requestedCid]
       const prs = await client.listPAPinRequests(authKeyPinList, {
         cid: cids
@@ -330,7 +330,7 @@ describe('Pin Request', () => {
       assert(prs.map(p => p.requestedCid).includes(cids[1]))
     })
 
-    it('it filters items by exact match by default', async () => {
+    it('filters items by exact match by default', async () => {
       const name = 'capybara'
       const prs = await client.listPAPinRequests(authKeyPinList, {
         name
@@ -342,7 +342,7 @@ describe('Pin Request', () => {
       })
     })
 
-    it('it filters items by iexact match', async () => {
+    it('filters items by iexact match', async () => {
       const name = 'camel'
       const prs = await client.listPAPinRequests(authKeyPinList, {
         name,
@@ -355,7 +355,7 @@ describe('Pin Request', () => {
       })
     })
 
-    it('it filters items by partial match', async () => {
+    it('filters items by partial match', async () => {
       const name = 'giant'
       const prs = await client.listPAPinRequests(authKeyPinList, {
         name,
@@ -368,7 +368,7 @@ describe('Pin Request', () => {
       })
     })
 
-    it('it filters items by ipartial match', async () => {
+    it('filters items by ipartial match', async () => {
       const name = 'giant'
       const prs = await client.listPAPinRequests(authKeyPinList, {
         name,
