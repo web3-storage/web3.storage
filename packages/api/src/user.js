@@ -166,7 +166,7 @@ export async function userUploadsGet (request, env) {
   let size = 25
   if (searchParams.has('size')) {
     const parsedSize = parseInt(searchParams.get('size'))
-    if (isNaN(parsedSize) || parsedSize <= 0 || parsedSize > 100) {
+    if (isNaN(parsedSize) || parsedSize <= 0 || parsedSize > 1000) {
       throw Object.assign(new Error('invalid page size'), { status: 400 })
     }
     size = parsedSize
@@ -193,7 +193,7 @@ export async function userUploadsGet (request, env) {
 
   const oldest = uploads[uploads.length - 1]
   const headers = uploads.length === size
-    ? { Link: `<${requestUrl.pathname}?size=${size}&before=${oldest.created}>; rel="next"` }
+    ? { Link: `<${requestUrl.pathname}?size=${size}&before=${encodeURIComponent(oldest.created)}>; rel="next"` }
     : undefined
   return new JSONResponse(uploads, { headers })
 }

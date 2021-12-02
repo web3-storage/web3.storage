@@ -1,5 +1,80 @@
 # Changelog
 
+### [4.2.1](https://www.github.com/web3-storage/web3.storage/compare/api-v4.2.0...api-v4.2.1) (2021-11-30)
+
+
+### Bug Fixes
+
+* data CID is root CID of aggregate, not content CID ([#720](https://www.github.com/web3-storage/web3.storage/issues/720)) ([8c67725](https://www.github.com/web3-storage/web3.storage/commit/8c677259635a3deb30c948330f8ea118053309ce))
+
+## [4.2.0](https://www.github.com/web3-storage/web3.storage/compare/api-v4.1.0...api-v4.2.0) (2021-11-30)
+
+
+### Features
+
+* enable sentry to record X-Client request header ([#711](https://www.github.com/web3-storage/web3.storage/issues/711)) ([5276add](https://www.github.com/web3-storage/web3.storage/commit/5276addfc22b63a0af7a5311056b477160a1ae28))
+
+
+### Bug Fixes
+
+* encode created date in Link header ([#719](https://www.github.com/web3-storage/web3.storage/issues/719)) ([bb0285f](https://www.github.com/web3-storage/web3.storage/commit/bb0285f2a0a5269ad1126905920758b8050a95d5))
+
+## [4.1.0](https://www.github.com/web3-storage/web3.storage/compare/api-v4.0.5...api-v4.1.0) (2021-11-25)
+
+
+### Features
+
+* simple mutability API using IPNS ([#648](https://www.github.com/web3-storage/web3.storage/issues/648)) ([9c287bb](https://www.github.com/web3-storage/web3.storage/commit/9c287bb7c983d3adab6ebb304decb47c5093ad78))
+
+### [4.0.5](https://www.github.com/web3-storage/web3.storage/compare/api-v4.0.4...api-v4.0.5) (2021-11-25)
+
+
+### Bug Fixes
+
+* use constants for import settings values ([#696](https://www.github.com/web3-storage/web3.storage/issues/696)) ([f40db9e](https://www.github.com/web3-storage/web3.storage/commit/f40db9e5cfd2b78038e7fd35c7754f592764c66f))
+
+### [4.0.4](https://www.github.com/web3-storage/web3.storage/compare/api-v4.0.3...api-v4.0.4) (2021-11-25)
+
+
+### Bug Fixes
+
+* deal status filtering ([#692](https://www.github.com/web3-storage/web3.storage/issues/692)) ([a7b4151](https://www.github.com/web3-storage/web3.storage/commit/a7b4151b05fa55646d337a090263a1eeb77b8169))
+
+### [4.0.3](https://www.github.com/web3-storage/web3.storage/compare/api-v4.0.2...api-v4.0.3) (2021-11-23)
+
+
+### Bug Fixes
+
+* deal normalize should filter out unexpected deal status ([#682](https://www.github.com/web3-storage/web3.storage/issues/682)) ([0e233cc](https://www.github.com/web3-storage/web3.storage/commit/0e233cc5af499a032cf83e3454eefbfb7ef2b0a0))
+* pin normalize should filter out unexpected pin status ([#677](https://www.github.com/web3-storage/web3.storage/issues/677)) ([f8c78b4](https://www.github.com/web3-storage/web3.storage/commit/f8c78b4ff3377c19a9bc101a7c8c97757cc511ae))
+* script startup timeout ([#679](https://www.github.com/web3-storage/web3.storage/issues/679)) ([fb76d07](https://www.github.com/web3-storage/web3.storage/commit/fb76d0740c9d0d42805801a4b445ecb9c1f3777e))
+
+### [4.0.2](https://www.github.com/web3-storage/web3.storage/compare/api-v4.0.1...api-v4.0.2) (2021-11-17)
+
+
+### Bug Fixes
+
+* support upload list page size up to 1000 ([#645](https://www.github.com/web3-storage/web3.storage/issues/645)) ([04a5de6](https://www.github.com/web3-storage/web3.storage/commit/04a5de6080835da17398e0fde84584a817781346))
+
+### [4.0.1](https://www.github.com/web3-storage/web3.storage/compare/api-v4.0.0...api-v4.0.1) (2021-11-17)
+
+
+### Changes
+
+* use new db version ([c1f8834](https://www.github.com/web3-storage/web3.storage/commit/c1f8834d1ffc47dc72694d342bad719b483b4121))
+
+## [4.0.0](https://www.github.com/web3-storage/web3.storage/compare/api-v3.7.4...api-v4.0.0) (2021-11-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove faunadb (#610)
+
+### Bug Fixes
+
+* metrics for pin status response ([eb9f9ca](https://www.github.com/web3-storage/web3.storage/commit/eb9f9cac67aaa7b4d23d91a034ebddb0dcf8b92b))
+* remove faunadb ([#610](https://www.github.com/web3-storage/web3.storage/issues/610)) ([631e23f](https://www.github.com/web3-storage/web3.storage/commit/631e23f304ae3bef7d022041a39f72bc9438f469))
+
 ### [3.7.4](https://www.github.com/web3-storage/web3.storage/compare/api-v3.7.3...api-v3.7.4) (2021-11-15)
 
 

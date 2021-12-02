@@ -1,5 +1,45 @@
 # Changelog
 
+### [3.0.2](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.1...db-v3.0.2) (2021-11-23)
+
+
+### Bug Fixes
+
+* deal normalize should filter out unexpected deal status ([#682](https://www.github.com/web3-storage/web3.storage/issues/682)) ([0e233cc](https://www.github.com/web3-storage/web3.storage/commit/0e233cc5af499a032cf83e3454eefbfb7ef2b0a0))
+* fixes and improv to types annotations across the board ([46a3f1c](https://www.github.com/web3-storage/web3.storage/commit/46a3f1cbe3da6ac401d9b4fddc5723ba62841ec7))
+* pin dag size metric should filter by pinned status ([#646](https://www.github.com/web3-storage/web3.storage/issues/646)) ([547f466](https://www.github.com/web3-storage/web3.storage/commit/547f4663c70d3916aeb056b103fc5470ba8b52cd))
+* pin normalize should filter out unexpected pin status ([#677](https://www.github.com/web3-storage/web3.storage/issues/677)) ([f8c78b4](https://www.github.com/web3-storage/web3.storage/commit/f8c78b4ff3377c19a9bc101a7c8c97757cc511ae))
+* prevent table.sql to fail if a type already exists ([22b222a](https://www.github.com/web3-storage/web3.storage/commit/22b222ad320e9933f01d9c59fc5b59b4fb05fa53))
+
+### [3.0.1](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.0...db-v3.0.1) (2021-11-17)
+
+
+### Bug Fixes
+
+* list uploads fetch deals for correct cid ([#643](https://www.github.com/web3-storage/web3.storage/issues/643)) ([df1be1f](https://www.github.com/web3-storage/web3.storage/commit/df1be1fe65d781bda985e2710b4c89b52803ca35))
+
+## [3.0.0](https://www.github.com/web3-storage/web3.storage/compare/db-v2.6.4...db-v3.0.0) (2021-11-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove faunadb (#610)
+
+### Features
+
+* add pin composite pinned at idx ([#634](https://www.github.com/web3-storage/web3.storage/issues/634)) ([6b64d7f](https://www.github.com/web3-storage/web3.storage/commit/6b64d7fd20f1fde769eaf66626b8bdb3eea5c7a2))
+
+
+### Bug Fixes
+
+* metrics for pin status response ([eb9f9ca](https://www.github.com/web3-storage/web3.storage/commit/eb9f9cac67aaa7b4d23d91a034ebddb0dcf8b92b))
+* remove faunadb ([#610](https://www.github.com/web3-storage/web3.storage/issues/610)) ([631e23f](https://www.github.com/web3-storage/web3.storage/commit/631e23f304ae3bef7d022041a39f72bc9438f469))
+
+
+### Changes
+
+* add missing indexes for fk ([#632](https://www.github.com/web3-storage/web3.storage/issues/632)) ([0a26912](https://www.github.com/web3-storage/web3.storage/commit/0a26912389508296f66e5efeb91952119b768748))
+
 ### [2.6.4](https://www.github.com/web3-storage/web3.storage/compare/db-v2.6.3...db-v2.6.4) (2021-11-15)
 
 

@@ -1,4 +1,9 @@
-const path = require('path');
+const path = require('path')
+const git = require('git-rev-sync')
+const { GitRevisionPlugin } = require('git-revision-webpack-plugin')
+
+const gitRevisionPlugin = new GitRevisionPlugin()
+const dirName = path.resolve(__dirname)
 
 const nextConfig = {
   trailingSlash: true,
@@ -22,6 +27,13 @@ const nextConfig = {
       test: /\.svg$/,
       use: [ '@svgr/webpack', 'url-loader' ],
     })
+
+    config.plugins.push(
+      new options.webpack.DefinePlugin({
+        COMMITHASH: JSON.stringify(git.long(dirName)),
+        VERSION: JSON.stringify(gitRevisionPlugin.version())
+      })
+    )
 
     return config
   },

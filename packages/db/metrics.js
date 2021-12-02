@@ -83,6 +83,6 @@ export async function getPinStatusMetrics (client, key) {
   }
 
   return {
-    total: data[0].pin_from_status_total
+    total: data
   }
 }
