@@ -26,17 +26,20 @@ $gray800: #424242;
 $gray900: #212121;
 
 $black: #000000; // full black
-$waterloo: #757a9b; // A very grayish blue
+$waterloo: #757a9b; // A grayish blue
+$comet: #586379; // A very grayish blue
+$vulcan: #0f111a; // A blackish blue
 $white: #ffffff; // full white
 $seaShell: #f1f1f1; // pale matte gray
 $steelGray: #1c1e29; // almost black gray
 $ebony: #03040a; // almost black
 $doveGray: #626262; // gray
-$malibu: #7e81ff; //bluish violet
-$aqua: #3effe9; //artificial cyan
-$cerise: #d726d7; //magenta
-$royalBlue: #3064e0; //blue blue
-$pictonBlue: #31e7ea; //torquoise
+$malibu: #7e81ff; // bluish violet
+$heliotrope: #9c48ff; // darker bluish violet
+$cerise: #d726d7; // purplish pink
+$royalBlue: #3064e0; // royal blue
+$pictionBlue: #31e7ea; // violetish blue
+$cyan: #3effe9; // full cyan
 
 // ----------------------------------------------------------------- Breakpoints
 $breakpoint_Tiny: 25.9375rem; // 415px
@@ -52,8 +55,8 @@ $breakpoint_UltraLarge: 140.625rem; // 2250px
   background: linear-gradient(to right, $cerise 0%, $royalBlue 50%, $pictonBlue 100%);
 }
 
-$gradient_PinkBlue: linear-gradient(45deg, $cerise 0%, $royalBlue 48%, $pictonBlue 100%);
-
+$gradient_PinkBlue: linear-gradient(45deg, $cerise 0%, $royalBlue 48%, $pictionBlue 100%);
+$gradient_BluePurple: linear-gradient(-45deg, $cyan 0%, $royalBlue 50%, $heliotrope 100%);
 
 // ////////////////////////////////////////////////////////////////////// Mixins
 // =============================================================================
@@ -140,6 +143,10 @@ $gradient_PinkBlue: linear-gradient(45deg, $cerise 0%, $royalBlue 48%, $pictonBl
 
 @mixin gradient_Background_PinkBlue {
   background: $gradient_PinkBlue;
+}
+
+@mixin gradient_Background_BluePurple {
+  background: $gradient_BluePurple;
 }
 
 // --------------------------------------------------------------------- General

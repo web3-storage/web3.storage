@@ -99,4 +99,11 @@
       z-index: 1;
     }
   }
+
+  &.text {
+    line-height: 0;
+    color: $cyan;
+    text-transform: none;
+    @include fontWeight_Regular;
+  }
 }

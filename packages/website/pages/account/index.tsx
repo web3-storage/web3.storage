@@ -1,5 +1,5 @@
-import StorageManager from '../../components/account/StorageManager';
-import FilesManager from '../../components/account/FilesManager';
+import StorageManager from '../../components/account/storageManager/storageManager';
+import FilesManager from '../../components/account/filesManager/filesManager';
 import GradientBackground from 'assets/illustrations/gradient-background';
 
 const Account: React.FC = () => {

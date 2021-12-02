@@ -4,6 +4,7 @@
 $font_Primary: 'SuisseIntl';
 
 // ---------------------------------------------------------------------- Sizing
+// fontSize_Atom | 11pt
 // fontSize_Tiny | 13pt
 // fontSize_Mini | 15pt
 // fontSize_Small | 16pt
@@ -14,6 +15,7 @@ $font_Primary: 'SuisseIntl';
 // fontSize_ExtraLarge | 45pt
 // fontSize_Huge | 67pt
 
+$fontSize_Atom: 0.6875rem;
 $fontSize_Tiny: 0.8125rem;
 $fontSize_Mini: 0.9375rem;
 $fontSize_Small: 1rem;
@@ -61,6 +63,10 @@ $letterSpacing_Large: 0.03em;
 // ////////////////////////////////////////////////////////////////////// Mixins
 // =============================================================================
 // ------------------------------------------------------ Typography | Font Size
+
+@mixin fontSize_Atom {
+  font-size: $fontSize_Atom;
+}
 @mixin fontSize_Tiny {
   font-size: $fontSize_Tiny;
 }
@@ -155,6 +161,13 @@ $letterSpacing_Large: 0.03em;
 // leading_Huge | 80pt
 // leading_Massive | 103pt
 
+@mixin title {
+  // large heading often found in the Hero
+  @include fontSize_Huge;
+  @include fontWeight_Extrabold;
+  @include leading_Massive;
+}
+
 @mixin h1 {
   @include fontSize_ExtraLarge;
   @include leading_MediumLarge;
@@ -186,6 +199,7 @@ $letterSpacing_Large: 0.03em;
 @mixin p3 {
   @include fontSize_Regular;
   @include leading_Regular;
+  @include fontWeight_Semibold();
 }
 
 @mixin label_1 {
