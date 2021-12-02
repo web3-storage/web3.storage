@@ -15,7 +15,7 @@ module.exports = {
 
     const project = `web3-storage-db-${Date.now()}`
     await execa(cli, ['db', '--start', '--project', project])
-    await execa(cli, ['db-sql', '--cargo', '--testing'])
+    await execa(cli, ['db-sql', '--cargo'])
 
     console.log('⚡️ local postgrest container started.')
     return { project }
