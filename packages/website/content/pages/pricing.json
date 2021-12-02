@@ -21,6 +21,10 @@
             },
             "customizations": [
               {
+                "type": "coil",
+                "id": "pricing_hero-coil"
+              },
+              {
                 "type": "corkscrew",
                 "id": "pricing_hero-corkscrew"
               },
@@ -37,7 +41,7 @@
             },
             "format": "header",
             "heading": "Looking for storage limits? Look elsewhere.",
-            "subheading": "Stop worrying about running out of data storage and focus only on the potential of your application. All storage tiers are free."
+            "subheading": "Stop worrying about running out of data storage and focus only on the potential of your application. <b>All storage tiers are free.</b>"
           }
         ]
       }
@@ -89,6 +93,7 @@
             "direction": "column",
             "cards": [
               {
+                "type": "E",
                 "label": "FREE",
                 "title": "Up to 1TB",
                 "description": "<ul><li>No strings attached</li><li>Limits around storage/retrieval performance</li></ul>",
@@ -101,25 +106,27 @@
                 }
               },
               {
+                "type": "E",
                 "label": "STILL FREE",
                 "title": "1 to 10 TB",
                 "description": "<ul><li>Just fill out a form to tell us more about what you’re building. We want to understand your needs and scale with you</li><li>Higher limits around storage/retrieval performance</li></ul>",
                 "cta": {
                   "text": "REQUEST MORE STORAGE",
                   "url": "",
-                  "theme": "dark",
+                  "theme": "light outline",
                   "tracking": "",
                   "action": ""
                 }
               },
               {
+                "type": "E",
                 "label": "YEP, ALSO STILL FREE",
                 "title": "10 TB +",
                 "description": "<ul><li>Subject to everything in 1-10TB tier</li><li>Need to meet with us quarterly to discuss their needs</li><li>Higher limits around storage/retrieval performance</li></ul>",
                 "cta": {
                   "text": "REQUEST MORE STORAGE",
                   "url": "",
-                  "theme": "dark",
+                  "theme": "light outline",
                   "tracking": "",
                   "action": ""
                 }
@@ -142,7 +149,7 @@
             "customizations": [
               {
                 "type": "corkscrew",
-                "id": "section_FAQ-corkscrew"
+                "id": "pricing_section_FAQ-corkscrew"
               },
               {
                 "type": "text_block",

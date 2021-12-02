@@ -9,13 +9,17 @@ export default function Home() {
   const sections = PricingPageData.page_content;
   return (
     <>
-      <Navigation />
       <main className="page page-pricing">
+
+        <Navigation />
+
         {sections.map((section, index) => (
           <BlockBuilder id={`pricing_section_${index + 1}`} key={`section_${index}`} subsections={section} />
         ))}
+
+        <Footer />
+        
       </main>
-      <Footer />
     </>
   );
 }

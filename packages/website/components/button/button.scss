@@ -21,6 +21,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    @include fontWeight_Semibold;
 
     &:active,
     &:hover,
@@ -105,5 +106,11 @@
     color: $cyan;
     text-transform: none;
     @include fontWeight_Regular;
+  }
+
+  &.outline {
+    box-sizing: border-box;
+    background-color: unset;
+    border: solid 2px $ebony;
   }
 }
