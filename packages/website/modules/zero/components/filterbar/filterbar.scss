@@ -1,0 +1,10 @@
+.Filterbar {
+  border: 1px solid black;
+  display: inline-flex;
+  align-items: center;
+
+  .filterbar-input {
+    border: none;
+    background: transparent;
+  }
+}

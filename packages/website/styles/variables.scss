@@ -51,6 +51,9 @@ $breakpoint_Xlarge: 90rem; // 1440px
 $breakpoint_UltraLarge: 140.625rem; // 2250px
 
 // ------------------------------------------------------------------- Gradients
+@mixin magentaCyan_Gradient {
+  background: linear-gradient(to right, $cerise 0%, $royalBlue 50%, $pictonBlue 100%);
+}
 
 $gradient_PinkBlue: linear-gradient(45deg, $cerise 0%, $royalBlue 48%, $pictionBlue 100%);
 $gradient_BluePurple: linear-gradient(-45deg, $cyan 0%, $royalBlue 50%, $heliotrope 100%);
@@ -59,11 +62,23 @@ $gradient_BluePurple: linear-gradient(-45deg, $cyan 0%, $royalBlue 50%, $heliotr
 // =============================================================================
 // --------------------------------------------------------------------- Styling
 @mixin shadow1 {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.16);
 }
 
 @mixin shadow2 {
+  box-shadow: 1px 0px 6px rgba(0, 0, 0, 0.1);
+}
+
+@mixin shadow3 {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+@mixin shadow4 {
   box-shadow: 0 0.1875rem 0 rgba($black, 0.15);
+}
+
+@mixin shadow5 {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 @mixin focus_BoxShadow_Small {
@@ -110,12 +125,6 @@ $gradient_BluePurple: linear-gradient(-45deg, $cyan 0%, $royalBlue 50%, $heliotr
     background: transparent;
     color: transparent;
   }
-}
-
-@mixin centerImage {
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
 }
 
 // --------------------------------------------------------------------- Styling
@@ -277,6 +286,14 @@ $gradient_BluePurple: linear-gradient(-45deg, $cyan 0%, $royalBlue 50%, $heliotr
 }
 
 // --------------------------------------------------------------------- Styling
+@mixin centerImage {
+  position: absolute;
+  top: -9999px;
+  bottom: -9999px;
+  left: -9999px;
+  right: -9999px;
+  margin: auto;
+}
 
 // ------------------------------------------------------------------- Animation
 @mixin animation($animate...) {

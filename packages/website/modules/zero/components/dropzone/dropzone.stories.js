@@ -44,6 +44,7 @@ export const FileReader = () => createElement(() => {
         onChange={onFileChangeSuccess}
         onError={onFileChangeError}
       />
+      <small>NOTE: Due to storybook limitations the file list only shows in `Default`</small>
       <Button type="button" onClick={onUpload}>Upload</Button>
     </form> 
   )
@@ -77,6 +78,7 @@ export const FormData = () => createElement(() => {
         onChange={onFileChangeSuccess}
         onError={onFileChangeError}
       />
+      <small>NOTE: Due to storybook limitations the file list only shows in `Default`</small>
       <Button type="submit">Upload</Button>
     </form> 
   )

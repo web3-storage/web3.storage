@@ -63,6 +63,7 @@ $letterSpacing_Large: 0.03em;
 // ////////////////////////////////////////////////////////////////////// Mixins
 // =============================================================================
 // ------------------------------------------------------ Typography | Font Size
+
 @mixin fontSize_Atom {
   font-size: $fontSize_Atom;
 }
@@ -215,6 +216,15 @@ $letterSpacing_Large: 0.03em;
 @mixin label_3 {
   @include fontSize_Tiny;
   @include leading_Small;
+}
+
+@mixin gradient_Text {
+  @include magentaCyan_Gradient;
+  background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  text-fill-color: transparent;
 }
 
 // @mixin subheading {

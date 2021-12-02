@@ -12,6 +12,13 @@
   "site_logo": {
     "text": "Web3.Storage"
   },
+  "message_banner": {
+    "text": "Looking to store NFTs? Check out",
+    "link": {
+      "text": "NFT.Storage",
+      "url": "https://nft.storage/"
+    }
+  },
   "navigation": [
     {
       "url": "/about",

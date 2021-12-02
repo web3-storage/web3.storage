@@ -1,0 +1,25 @@
+$messageBannerHeight: 3.25rem;
+
+#section_message-banner {
+  background-color: $ebony;
+  position: relative;
+  z-index: 100;
+}
+
+.message-banner-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: $messageBannerHeight;
+  color: white;
+}
+.message-banner-content {
+  margin: auto 0;
+  display: inline;
+  @include fontSize_Small;
+  @include fontWeight_Medium;
+  a {
+    @include gradient_Text;
+    margin: 0 0.5rem;
+  }
+}
