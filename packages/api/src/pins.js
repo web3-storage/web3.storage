@@ -66,6 +66,7 @@ export const getPinningAPIStatus = (pins) => {
 }
 
 // Error messages
+// TODO: Refactor errors
 export const ERROR_CODE = 400
 export const ERROR_STATUS = 'INVALID_PIN_DATA'
 export const INVALID_CID = 'Invalid cid'
@@ -139,13 +140,14 @@ export async function pinPost (request, env, ctx) {
   }
 
   const { authToken } = request.auth
+  let response
   if (requestId) {
-    // TODO: replace pin
-    // await pinReplace(pinData)
+    response = await pinReplace(request, env, ctx)
   } else {
-    const pinStatus = await createPin(pinData, authToken._id, env, ctx)
-    return new JSONResponse(pinStatus)
+    response = await createPin(pinData, authToken._id, env, ctx)
   }
+
+  return new JSONResponse(response)
 }
 
 /**
@@ -407,5 +409,54 @@ async function pinReplace (request, env, ctx) {
    * 6. Create new pin (handle error)
    * 7. Delete old pin (handle error)
    * */
-  throw new Error('Not implemented')
+  const requestId = request.params.requestId
+  const { authToken } = request.auth
+
+  const existingPinRequest = await env.db.getPAPinRequest(requestId)
+  if (!existingPinRequest) {
+    return notFound()
+  }
+
+  // TODO: improve errors
+  if (existingPinRequest.deleted) {
+    return new JSONResponse(
+      { error: { reason: 'Nothing to replace' } },
+      { status: 501 }
+    )
+  }
+
+  const existingCid = existingPinRequest.requestedCid
+  const newPinData = await request.json()
+
+  // Validate cid
+  const cid = normalizeCid(newPinData.cid)
+
+  // TODO: improve errors
+  if (!cid || cid === existingCid) {
+    return new JSONResponse(
+      { error: { reason: 'Invalid cid/Nothing to replace' } },
+      { status: 501 }
+    )
+  }
+
+  let pinStatus
+  try {
+    pinStatus = await createPin(newPinData, authToken._id, env, ctx)
+  } catch (e) {
+    return new JSONResponse(
+      { error: { reason: `DB Error: ${e}` } },
+      { status: 501 }
+    )
+  }
+
+  try {
+    await pinDelete(request, env, ctx)
+  } catch (e) {
+    return new JSONResponse(
+      { error: { reason: `DB Error: ${e}` } },
+      { status: 501 }
+    )
+  }
+
+  return new JSONResponse(pinStatus)
 }
