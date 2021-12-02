@@ -270,6 +270,36 @@ export type PAPinRequestUpsertOutput = PAPinRequestUpsertInput & {
   updated: definitions['pa_pin_request']['updated_at']
   pins: Array<PinItemOutput>
 }
+
+export type ListPAPinRequestOptions = {
+  /**
+   * Uploads created before a given timestamp.
+   */
+  before?: string
+  /**
+   * Uploads created after a given timestamp.
+   */
+  after?: string
+  /**
+   * Max records (default: 10).
+   */
+  limit?: number
+  /**
+   * Match (default: exact)
+   */
+  match?: "exact" | "iexact" | "partial" | "ipartial"
+  /**
+   * Name  to match
+   */
+  name?: string
+
+  /**
+   * TODO.
+   */
+  meta?: object
+}
+
+
 export type NameItem = {
   record: definitions['name']['record']
 }

@@ -873,11 +873,35 @@ export class DBClient {
    * Get pin requests for a specific auth key.
    *
    * @param {string} authKey
-   * @param {object} opt
+   * @param {import('./db-client-types').ListPAPinRequestOptions} opts
    * @return {Promise<Array<import('./db-client-types').PAPinRequestUpsertOutput>>}
    */
-  async listPAPinRequests (authKey, opt) {
-    throw new Error('Not implemented')
+  async listPAPinRequests (authKey, opts = {
+    match: 'exact',
+    limit: 10
+  }) {
+    let query = this._client
+      .from(PAPinRequestTableName)
+      .select(pinRequestSelect)
+      .eq('auth_key_id', authKey)
+      .limit(opts.limit || 10)
+      .order('createdAt', { ascending: true })
+
+    if (opts.before) {
+      query = query.lt('inserted_at', opts.before)
+    }
+
+    if (opts.after) {
+      query = query.gte('inserted_at', opts.after)
+    }
+
+    /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error }} */
+    const { data: pinRequests, error } = (await query)
+
+    if (error) {
+      throw new DBError(error)
+    }
+    return pinRequests.map(pR => normalizePaPinRequest(pR))
   }
 
   /**
