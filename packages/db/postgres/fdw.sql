@@ -22,7 +22,7 @@ USER MAPPING FOR current_user
     );
 
 CREATE
-USER MAPPING FOR web3_user
+USER MAPPING FOR web3_storage
   SERVER dag_cargo_server
   OPTIONS (
       user :'DAG_CARGO_USER', 
