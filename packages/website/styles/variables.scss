@@ -38,7 +38,7 @@ $malibu: #7e81ff; // bluish violet
 $heliotrope: #9c48ff; // darker bluish violet
 $cerise: #d726d7; // purplish pink
 $royalBlue: #3064e0; // royal blue
-$pictionBlue: #31e7ea; // violetish blue
+$pictonBlue: #31e7ea; // violetish blue
 $cyan: #3effe9; // full cyan
 
 // ----------------------------------------------------------------- Breakpoints
@@ -55,7 +55,7 @@ $breakpoint_UltraLarge: 140.625rem; // 2250px
   background: linear-gradient(to right, $cerise 0%, $royalBlue 50%, $pictonBlue 100%);
 }
 
-$gradient_PinkBlue: linear-gradient(45deg, $cerise 0%, $royalBlue 48%, $pictionBlue 100%);
+$gradient_PinkBlue: linear-gradient(45deg, $cerise 0%, $royalBlue 48%, $pictonBlue 100%);
 $gradient_BluePurple: linear-gradient(-45deg, $cyan 0%, $royalBlue 50%, $heliotrope 100%);
 
 // ////////////////////////////////////////////////////////////////////// Mixins

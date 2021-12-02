@@ -9,7 +9,7 @@ const nextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
 
-  webpack: function(config) {
+  webpack: function(config, options) {
     config.resolve.alias = {
       ...config.resolve.alias,
       'Icons': path.resolve(__dirname, 'assets/icons'),
