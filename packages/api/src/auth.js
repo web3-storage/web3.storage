@@ -84,7 +84,6 @@ export function withPinningEnabledUser (handler) {
    * @returns
    */
   return async (request, env, ctx) => {
-    console.log('--> withPinningEnabledUser')
     const token = getTokenFromRequest(request, env)
     const apiToken = await tryWeb3ApiToken(token, env)
     if (apiToken) {

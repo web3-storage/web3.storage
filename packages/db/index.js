@@ -631,8 +631,6 @@ export class DBClient {
    * @return {Promise<import('./db-client-types').AuthKey>}
    */
   async getKey (issuer, secret) {
-    console.log('--> getKey:issuer', issuer)
-    console.log('--> getKey:secret', secret)
     /** @type {{ data, error: PostgrestError } */
     const { data, error } = await this._client
       .from('user')
@@ -652,8 +650,6 @@ export class DBClient {
       .filter('keys.deleted_at', 'is', null)
       .eq('keys.secret', secret)
       .single()
-
-    console.log('--> getKey:data', data)
 
     if (error) {
       throw new DBError(error)
