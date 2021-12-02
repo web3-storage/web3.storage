@@ -5,6 +5,7 @@ import * as JWT from '../src/utils/jwt.js'
 import { SALT } from './scripts/worker-globals.js'
 import { JWT_ISSUER } from '../src/constants.js'
 import { ERROR_CODE, ERROR_STATUS, INVALID_CID, INVALID_META, INVALID_NAME, INVALID_ORIGINS, REQUIRED_CID } from '../src/pins.js'
+import { PinningNotEnabledError } from '../src/errors'
 
 function getTestJWT (sub = 'test', name = 'test') {
   return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
@@ -17,29 +18,7 @@ describe('POST /pins', () => {
     token = await getTestJWT('user-pinning-enabled')
   })
 
-  // TODO
-  // Mock users associated with a specified token
-  // - with access to the pinning API disabled (the default)
-  // - with access to the pinning API enabled
-
-  it('error if user not authorised to pin', async () => {
-    // User will have pinning diabled by default
-    token = await getTestJWT()
-    const res = await fetch(new URL('pins', endpoint).toString(), {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
-      })
-    })
-    assert(!res.ok)
-    assert.strictEqual(res.status, 403)
-  })
-
-  it.only('should receive pin data containing cid', async () => {
+  it('should receive pin data containing cid', async () => {
     const res = await fetch(new URL('pins', endpoint).toString(), {
       method: 'POST',
       headers: {
@@ -205,13 +184,53 @@ describe('POST /pins', () => {
     assert.strictEqual(error.reason, ERROR_STATUS)
     assert.strictEqual(error.details, INVALID_META)
   })
+
+  it('error if user not authorised to pin', async () => {
+    // User will have pinning disabled by default
+    token = await getTestJWT()
+    const res = await fetch(new URL('pins', endpoint).toString(), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
+      })
+    })
+
+    assert(!res.ok)
+    assert.strictEqual(res.status, (new PinningNotEnabledError()).status)
+  })
+})
+
+describe('POST /pins/:requestId', () => {
+  let token = null
+  before(async () => {
+    // Create token
+    token = await getTestJWT('user-pinning-enabled')
+  })
+
+  it('error if user not authorised to pin', async () => {
+    token = await getTestJWT()
+    const res = await fetch(new URL('pins/UniqueIdOfPinRequest', endpoint).toString(), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+
+    assert(!res.ok)
+    assert.strictEqual(res.status, (new PinningNotEnabledError()).status)
+  })
 })
 
 describe('GET /pins/:requestId', () => {
   let token = null
   before(async () => {
     // Create token
-    token = await getTestJWT()
+    token = await getTestJWT('user-pinning-enabled')
   })
 
   it('requires a string as requestId', async () => {
@@ -240,6 +259,21 @@ describe('GET /pins/:requestId', () => {
 
     assert(res, 'Server responded')
     assert(!res.ok)
+  })
+
+  it('error if user not authorised to pin', async () => {
+    // User will have pinning disabled by default
+    token = await getTestJWT()
+    const res = await fetch(new URL('pins', endpoint).toString(), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+
+    assert(!res.ok)
+    assert.strictEqual(res.status, (new PinningNotEnabledError()).status)
   })
 })
 
@@ -268,7 +302,7 @@ describe('DELETE /pins/:requestId', () => {
   let token = null
   before(async () => {
     // Create token
-    token = await getTestJWT()
+    token = await getTestJWT('user-pinning-enabled')
   })
 
   it('requires a string as requestId', async () => {
@@ -284,5 +318,20 @@ describe('DELETE /pins/:requestId', () => {
     assert(res.ok, 'Server response ok')
     const data = await res.json()
     assert.strictEqual(data, 'OK')
+  })
+
+  it('error if user not authorised to pin', async () => {
+    // User will have pinning disabled by default
+    token = await getTestJWT()
+    const res = await fetch(new URL('pins/UniqueIdOfPinRequest', endpoint).toString(), {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+
+    assert(!res.ok)
+    assert.strictEqual(res.status, (new PinningNotEnabledError()).status)
   })
 })
