@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from 'react-query'
 import filesize from 'filesize'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
-import Button from '../components/button'
+import Button from '../components/button.js'
 import Checkbox from '../components/checkbox'
 import Loading from '../components/loading'
 import Tooltip from '../components/tooltip'
@@ -13,8 +13,7 @@ import ChevronIcon from '../icons/chevron'
 import PencilIcon from '../icons/pencil'
 import TickIcon from '../icons/tick'
 import countly from '../lib/countly'
-import { getUploads, deleteUpload, renameUpload } from '../lib/api'
-import { useDragAndDrop, OnDrop } from '../components/upload'
+import { getUploads, deleteUpload, renameUpload } from '../lib/api.js'
 import { When } from 'react-if'
 import clsx from 'clsx'
 import Script from 'next/script'
@@ -214,7 +213,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
       <span className='flex justify-center' key={upload.cid + '-pending'}>
         {`${deals.length ? ', ' : ''}${queuedDeals.length} pending`}
         <Tooltip placement='top' overlay={<span>{message}</span>} overlayClassName='table-tooltip'>
-          <QuestionMark />
+          { QuestionMark() }
         </Tooltip>
       </span>
     )
@@ -224,7 +223,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
     deals.push(<span className='flex justify-center' key='queuing'>
         Queuing
         <Tooltip placement='top' overlay={TOOLTIPS.QUEUED_UPLOAD} overlayClassName='table-tooltip'>
-          <QuestionMark />
+        { QuestionMark() }
         </Tooltip>
       </span>
     )
@@ -262,7 +261,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
         )}
       </TableElement>
       <TableElement {...sharedArgs} important>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-center">
           <GatewayLink cid={upload.cid} />
           <CopyToClipboard text={upload.cid} onCopy={() => showCopiedMessage()}>
             <CopyIcon className="ml-2 cursor-pointer hover:opacity-80" width="16" fill="currentColor"/>
@@ -271,7 +270,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
       </TableElement>
       <TableElement {...sharedArgs} centered>
         <span className="flex justify-center">
-          Availabile
+          Available
         </span>
       </TableElement>
       <TableElement {...sharedArgs} centered>
@@ -417,7 +416,7 @@ export default function Files({ isLoggedIn }) {
   }
 
   const FilesTable = () => (
-    <table className={ clsx("mt-4", 'w-full')}>
+    <table className={ clsx("mt-4", uploads.length === 0 ? 'flex justify-center' : 'w-full')}>
       <thead>
         <tr>
           { uploads.length > 0 && (
@@ -467,13 +466,10 @@ export default function Files({ isLoggedIn }) {
     </table>
   )
 
-  const { getRootProps, isDragActive } = useDragAndDrop()
-
   return (
     <>
       <Script src="//embed.typeform.com/next/embed.js" />
-      <main className="w-full" { ...getRootProps() }>
-        <OnDrop show={isDragActive} />
+      <main className="w-full">
         <div className="layout-margins flex justify-center mt-4 lg:mt-16">
           <Button data-tf-popup="Q3FOftXD" wrapperClassName="max-w-xl">
             {"Tell us how we are doing"}

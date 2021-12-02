@@ -1,9 +1,7 @@
-import { useRouter } from "next/router";
 import { Web3Storage } from "web3.storage";
 import { useQueryClient } from "react-query";
 import { useDropzone } from "react-dropzone";
 import { useRef, useState, useContext, useCallback } from "react";
-import { When } from "react-if";
 import clsx from "clsx";
 import Link from "next/link";
 import prettyBytes from "pretty-bytes";
@@ -16,10 +14,9 @@ import {
   STATUS,
   FilesContext,
 } from "../components/upload";
-import Alert from "../components/alert.js";
 import Button from "../components/button.js";
 import Loading from "../components/loading";
-import Cross from "../icons/cross";
+import { CrossWithNoFill } from "../icons/cross";
 import Tooltip from "../components/tooltip";
 
 const MAX_CONCURRENT_UPLOADS = 5;
@@ -39,9 +36,14 @@ export function getStaticProps() {
  * @param {Object} props
  * @param {import('../components/upload').FileProgress} props.file
  * @param {String} [props.className]
+ * @param {Function} props.onRemoveFile
  * @returns
  */
-function File({ file, className }) {
+function File({ file, className, onRemoveFile }) {
+  function handleRemoveFile() {
+    onRemoveFile(file)
+  }
+
   return (
     <div
       className={clsx(
@@ -61,8 +63,29 @@ function File({ file, className }) {
           transform: `translateX(${file.progress.percentage}%)`,
         }}
       />
-      <div className="text-sm truncate">{file.name}</div>
-      <div className="text-xs opacity-80">{prettyBytes(file.size)}</div>
+      <div className="flex">
+        <div>
+          <p className="text-sm truncate">{file.name}</p>
+          <p className="text-xs opacity-80">{prettyBytes(file.size)}</p>
+        </div>
+        {
+          // @ts-ignore
+          file.status !== STATUS.FAILED ?  (
+            <Tooltip
+            placement="topRight"
+            overlay={
+              (
+              <span>
+                Remove {file.name} from upload list.
+              </span>
+              )
+            }
+          >
+            <CrossWithNoFill className="pl-4 h-3 text-w3storage-red cursor-pointer text-opacity-80 hover:text-opacity-100 fill-current flex self-center" onClick={handleRemoveFile}/>
+          </Tooltip>
+          ) :  file.status !== STATUS.COMPLETED && <CrossWithNoFill className="pl-4 h-3 text-w3storage-red cursor-pointer text-opacity-80 hover:text-opacity-100 fill-current flex self-center" onClick={handleRemoveFile}/>
+        }
+      </div>
     </div>
   );
 }
@@ -71,9 +94,10 @@ function File({ file, className }) {
  *
  * @param {Object} props
  * @param {import('../components/upload').UploadProgress} props.progress
+ * @param {Function} props.onRemoveFile
  * @returns
  */
-function Files({ progress }) {
+function Files({ progress, onRemoveFile }) {
   const fileWrapperClassName = "overflow-hidden";
   const files = Object.values(progress.files);
 
@@ -94,7 +118,10 @@ function Files({ progress }) {
             }
           >
             <div className={fileWrapperClassName}>
-              <File file={progress.files[file.name]} />
+              <File
+                file={progress.files[file.name]}
+                onRemoveFile={onRemoveFile}
+              />
             </div>
           </Tooltip>
         ) : (
@@ -102,6 +129,7 @@ function Files({ progress }) {
             key={file.name}
             className={fileWrapperClassName}
             file={progress.files[file.name]}
+            onRemoveFile={onRemoveFile}
           />
         )
       )}
@@ -180,6 +208,18 @@ export default function Upload() {
     [progress.ready, uploadFiles]
   );
 
+  // @ts-ignore
+  const handleRemoveFile = useCallback((removedFile)=> {
+    // @ts-ignore
+    const updatedFileList = files.filter(x => x.name !== removedFile.name)
+    // @ts-ignore
+    initialize(updatedFileList);
+    // @ts-ignore
+    setFiles(updatedFileList);
+    setFinished(false);
+  }, [files])
+
+
   /** @param {File[]} acceptedFiles */
   const onDrop = useCallback(
     (acceptedFiles) => {
@@ -188,12 +228,14 @@ export default function Upload() {
       }
 
       initialize(acceptedFiles);
+
       // @ts-ignore
       setFiles(acceptedFiles);
       setFinished(false);
     },
     [initialize, uploading, setFiles]
   );
+  
   const { getRootProps, isDragActive } = useDropzone({
     onDrop,
     multiple: false,
@@ -209,7 +251,6 @@ export default function Upload() {
     }
 
     const files = Array.from(fileInput.files);
-
     // @ts-ignore
     initialize(files);
     // @ts-ignore
@@ -254,7 +295,7 @@ export default function Upload() {
                 </Button>
 
                 <div className="flex relative z-1 flex-wrap items-center px-4 overflow-y-auto max-h-48">
-                  <Files progress={progress} />
+                  <Files progress={progress} onRemoveFile={handleRemoveFile}/>
                 </div>
               </div>
             </div>
@@ -276,7 +317,7 @@ export default function Upload() {
                 )}
               </Button>
               <div
-                className={clsx("ml-8 w-full pt-1", {
+                className={clsx("w-full pt-1", {
                   hidden: !uploading && !finished,
                 })}
               >

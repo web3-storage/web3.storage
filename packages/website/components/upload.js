@@ -248,10 +248,9 @@ export function useProgress (/** @type{File[]} */ files = []) {
 export const FilesContext = React.createContext({
   files: [],
   /**
-   * @param {File[]} _files 
-   * @param {Function} _cb 
+   * @param {any[]} _files
    */
-  set: (_files, _cb) => {}
+  set: (_files) => {}
 });
 
 // @ts-ignore
