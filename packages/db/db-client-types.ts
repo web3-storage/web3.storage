@@ -253,6 +253,7 @@ export type PAPinRequestUpsertInput = {
   name?: definitions['pa_pin_request']['name'],
   authKey: string,
   requestedCid: definitions['pa_pin_request']['requested_cid'],
+  cid: definitions['pa_pin_request']['requested_cid'],
 }
 
 export type PAPinRequestItem = PAPinRequestUpsertInput & {
@@ -273,6 +274,10 @@ export type PAPinRequestUpsertOutput = PAPinRequestUpsertInput & {
 
 export type ListPAPinRequestOptions = {
   /**
+   * List of cids to match
+   */
+  cid?: string[]
+  /**
    * Uploads created before a given timestamp.
    */
   before?: string
@@ -292,11 +297,14 @@ export type ListPAPinRequestOptions = {
    * Name  to match
    */
   name?: string
-
+  /**
+   * status  to match
+   */
+   status?: Array<definitions['pin']['status']>
   /**
    * TODO.
    */
-  meta?: object
+  meta?: unknown,
 }
 
 

@@ -762,7 +762,7 @@ export class DBClient {
     const { data: content } = await this._client
       .from('content')
       .select('cid')
-      .eq('cid', pinRequest.requestedCid)
+      .eq('cid', pinRequest.cid)
       .single()
 
     const toInsert = {
@@ -876,25 +876,49 @@ export class DBClient {
    * @param {import('./db-client-types').ListPAPinRequestOptions} opts
    * @return {Promise<Array<import('./db-client-types').PAPinRequestUpsertOutput>>}
    */
-  async listPAPinRequests (authKey, opts = {
-    match: 'exact',
-    limit: 10
-  }) {
+  async listPAPinRequests (authKey, opts = {}) {
+    const match = opts?.match || 'exact'
+    const limit = opts?.limit || 10
+
     let query = this._client
       .from(PAPinRequestTableName)
       .select(pinRequestSelect)
       .eq('auth_key_id', authKey)
-      .limit(opts.limit || 10)
-      .order('createdAt', { ascending: true })
+      .limit(limit)
+      .order('inserted_at', { ascending: false })
+
+    if (opts.status) {
+      query = query.in('content.pins.status', opts.status)
+    }
+
+    if (opts.cid) {
+      query = query.in('requested_cid', opts.cid)
+    }
+
+    if (opts.name && match === 'exact') {
+      console.log('exact', opts.name)
+      query = query.like('name', `${opts.name}`)
+    }
+
+    if (opts.name && match === 'iexact') {
+      query = query.ilike('name', `${opts.name}`)
+    }
+
+    if (opts.name && match === 'partial') {
+      query = query.like('name', `%${opts.name}%`)
+    }
+
+    if (opts.name && match === 'ipartial') {
+      query = query.ilike('name', `%${opts.name}%`)
+    }
 
     if (opts.before) {
-      query = query.lt('inserted_at', opts.before)
+      query = query.lte('inserted_at', opts.before)
     }
 
     if (opts.after) {
       query = query.gte('inserted_at', opts.after)
     }
-
     /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error }} */
     const { data: pinRequests, error } = (await query)
 
