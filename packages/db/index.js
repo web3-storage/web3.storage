@@ -1,6 +1,6 @@
 import { PostgrestClient } from '@supabase/postgrest-js'
 
-import { normalizeUpload, normalizeContent, normalizePins, normalizePaPinRequest } from './utils.js'
+import { normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePaPinRequest } from './utils.js'
 import { DBError } from './errors.js'
 import {
   getUserMetrics,
@@ -580,10 +580,10 @@ export class DBClient {
       throw new DBError(error)
     }
 
-    // TODO: normalize deal by removing deal prefix on dealActivation and dealExpiration
     const result = {}
-    for (const d of data) {
-      const cid = d.dataCid
+    for (const d of normalizeDeals(data)) {
+      const cid = d.contentCid
+      delete d.contentCid
       if (!Array.isArray(result[cid])) {
         result[cid] = [d]
       } else {
@@ -805,7 +805,7 @@ export class DBClient {
   /**
    * Get a Pin Request by id
    *
-   * @param {string} pinRequestId
+   * @param {number} pinRequestId
    * @return {Promise<import('./db-client-types').PAPinRequestUpsertOutput>}
    */
   async getPAPinRequest (pinRequestId) {
@@ -890,5 +890,31 @@ export class DBClient {
    */
   async listPAPinRequests (authKey, opt) {
     throw new Error('Not implemented')
+  }
+
+  /**
+   * Publish a new IPNS record, ensuring the sequence number is greater than
+   * the sequence number of an existing record for the given key.
+   *
+   * @param {string} key
+   * @param {string} record Base 64 encoded serialized IPNS record.
+   * @param {boolean} hasV2Sig If the record has a v2 signature.
+   * @param {bigint} seqno Sequence number from the record.
+   * @param {bigint} validity Validity from the record in nanoseconds since 00:00, Jan 1 1970 UTC.
+   */
+  async publishNameRecord (key, record, hasV2Sig, seqno, validity) {
+    const { error } = await this._client.rpc('publish_name_record', {
+      data: {
+        key,
+        record,
+        has_v2_sig: hasV2Sig,
+        seqno: seqno.toString(),
+        validity: validity.toString()
+      }
+    })
+
+    if (error) {
+      throw new DBError(error)
+    }
   }
 }

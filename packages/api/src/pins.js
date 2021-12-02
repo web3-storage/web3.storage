@@ -1,9 +1,69 @@
-import { JSONResponse } from './utils/json-response.js'
+import { JSONResponse, notFound } from './utils/json-response.js'
 import { normalizeCid } from './utils/normalize-cid.js'
+import { waitToGetOkPins } from './utils/pin.js'
+
+/**
+ * @typedef {'queued' | 'pinning' | 'failed' | 'pinned'} apiPinStatus
+ */
+
+/**
+ *
+ * Service API Pin object definition
+ * @typedef {Object} ServiceApiPin
+ * @property {string} cid
+ * @property {string} [name]
+ * @property {Array.<string>} [origins]
+ * @property {object} [meta]
+ */
+
+/**
+ *
+ * Service API Pin Status definition
+ * @typedef {Object} ServiceApiPinStatus
+ * @property {string} requestId
+ * @property {apiPinStatus} status
+ * @property {string} created
+ * @property {Array<string>} delegates
+ * @property {string} [info]
+ *
+ * @property {ServiceApiPin} pin
+ */
 
 /**
  * @typedef {{ error: { reason: string, details?: string } }} PinDataError
  */
+
+/**
+ *
+ * @param {import('../../db/db-client-types.js').PinItemOutput[]} pins
+ * @return {apiPinStatus} status
+ */
+export const getPinningAPIStatus = (pins) => {
+  const pinStatuses = pins.map((p) => p.status)
+
+  // TODO what happens with Sharded? I'd assumed is pinned?
+
+  if (pinStatuses.includes('Pinned')) {
+    return 'pinned'
+  }
+
+  if (pinStatuses.includes('Pinning')) {
+    return 'pinning'
+  }
+
+  if (pinStatuses.includes('PinQueued') ||
+      pinStatuses.includes('Remote')) {
+    return 'queued'
+  }
+
+  if (pinStatuses.length === 0) {
+    return 'queued'
+    // TODO after some time if there are no pins we should give up and return a failed
+    // status instead
+  }
+
+  return 'failed'
+}
 
 // Error messages
 export const ERROR_CODE = 400
@@ -27,9 +87,11 @@ const STATUS_OPTIONS = ['queued', 'pinning', 'pinned', 'failed']
  * @param {import('./user').AuthenticatedRequest} request
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
+ * @return {Promise<JSONResponse>}
  */
 export async function pinPost (request, env, ctx) {
-  const { cid, name, origins, meta } = await request.json()
+  const pinData = await request.json()
+  const { cid, name, origins, meta } = pinData
 
   // Require cid
   if (!cid) {
@@ -39,8 +101,9 @@ export async function pinPost (request, env, ctx) {
     )
   }
 
+  // Validate cid
   try {
-    const normalizedCid = normalizeCid(cid)
+    normalizeCid(cid)
   } catch (err) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_CID } },
@@ -74,8 +137,86 @@ export async function pinPost (request, env, ctx) {
     }
   }
 
-  // TODO: write logic for pinning cid
-  return new JSONResponse('OK')
+  const { authToken } = request.auth
+  const pinStatus = await createPin(pinData, authToken._id, env, ctx)
+  return new JSONResponse(pinStatus)
+}
+
+/**
+ * @param {Object} pinData
+ * @param {string} authToken
+ * @param {import('./env').Env} env
+ * @param {import('./index').Ctx} ctx
+ * @returns {Promise<ServiceApiPinStatus>}
+ */
+async function createPin (pinData, authToken, env, ctx) {
+  const { cid, name, origins, meta } = pinData
+  const normalizedCid = normalizeCid(cid)
+
+  const pinRequestData = {
+    requestedCid: cid,
+    cid: normalizedCid,
+    authKey: authToken
+  }
+  const pinOptions = {}
+
+  if (name) {
+    pinRequestData.name = name
+    pinOptions.name = name
+  }
+
+  if (origins) {
+    pinOptions.origins = origins
+  }
+
+  if (meta) {
+    pinOptions.meta = meta
+  }
+
+  // Pin CID to Cluster
+  // TODO: Look into when the returned Promised is resolved to understand if we should be awaiting this call.
+  env.cluster.pin(normalizedCid, pinOptions)
+
+  // Create Pin request in db (not creating any content at this stage if it doesn't already exists)
+  const pinRequest = await env.db.createPAPinRequest(pinRequestData)
+
+  /** @type {ServiceApiPinStatus} */
+  const serviceApiPinStatus = {
+    requestId: pinRequest._id.toString(),
+    created: pinRequest.created,
+    status: getPinningAPIStatus(pinRequest.pins),
+    delegates: [],
+    pin: { cid: normalizedCid }
+  }
+
+  /** @type {(() => Promise<any>)[]} */
+  const tasks = []
+
+  // If we're pinning content that is currently not in the cluster, it might take a while to
+  // get the cid from the network. We check pinning status asyncrounosly.
+  if (pinRequest.pins.length === 0) {
+    tasks.push(async () => {
+      const okPins = await waitToGetOkPins(cid, env.cluster)
+      // Create the content row
+      // TODO: Get dagSize
+      env.db.createContent({ cid: normalizedCid, pins: okPins })
+      for (const pin of okPins) {
+        await env.db.upsertPin(normalizedCid, pin)
+      }
+    })
+  }
+
+  // TODO: Backups. At the moment backups are related to uploads so
+  // they' re currently not taken care of in respect of a pin request.
+  // We should look into this. There's an argument where backups should be related to content rather than upload, at the moment we're
+  // backing up content multiple times if uploaded multiple times.
+  // If we refactor that it will naturally work for merge requests as well.
+
+  if (ctx.waitUntil) {
+    tasks.forEach(t => ctx.waitUntil(t()))
+  }
+
+  return serviceApiPinStatus
 }
 
 /**
@@ -84,24 +225,44 @@ export async function pinPost (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 export async function pinGet (request, env, ctx) {
-  const requestId = request.params.requestId
-
-  if (!requestId) {
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: REQUIRED_REQUEST_ID } },
-      { status: ERROR_CODE }
-    )
-  }
-
-  if (typeof requestId !== 'string') {
+  // Check if requestId contains other charachers than digits
+  if (!(/^\d+$/.test(request.params.requestId))) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
       { status: ERROR_CODE }
     )
   }
 
-  // TODO: write logic for getting pin
-  return new JSONResponse('OK')
+  const requestId = parseInt(request.params.requestId, 10)
+
+  let pinRequest
+
+  try {
+    pinRequest = await env.db.getPAPinRequest(requestId)
+  } catch (e) {
+    console.error(e)
+    // TODO catch different exceptions
+    // TODO notFound error paylod does not strictly comply to spec.
+    return notFound()
+  }
+
+  /** @type { ServiceApiPinStatus } */
+  const response = {
+    requestId: pinRequest._id,
+    created: pinRequest.created,
+    // TODO populate delegates
+    delegates: [],
+    status: getPinningAPIStatus(pinRequest.pins),
+    pin: {
+      cid: pinRequest.requestedCid,
+      name: pinRequest.name,
+      // TODO populate origins and meta
+      origins: [],
+      meta: {}
+    }
+  }
+
+  return new JSONResponse(response)
 }
 
 /**
@@ -115,7 +276,7 @@ export async function pinsGet (request, env, ctx) {
   // Normalize cid
   if (cid) {
     try {
-      const normalizedCid = normalizeCid(cid)
+      const normalizedCid = normalizeCid(cid) // eslint-disable-line
     } catch (err) {
       return new JSONResponse(
         { error: { reason: ERROR_STATUS, details: INVALID_CID } },

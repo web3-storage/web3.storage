@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/api",
-  "version": "4.0.2",
+  "version": "4.2.1",
   "private": true,
   "type": "module",
   "license": "(Apache-2.0 AND MIT)",
@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.28.0",
+    "@google-cloud/precise-date": "^2.0.4",
     "@ipld/car": "^3.1.4",
     "@ipld/dag-cbor": "^6.0.3",
     "@ipld/dag-pb": "^2.0.2",
@@ -52,10 +53,13 @@
     "@nftstorage/ipfs-cluster": "^3.3.1",
     "@web3-storage/db": "^3.0.0",
     "@web3-storage/multipart-parser": "^1.0.0",
+    "cborg": "^1.5.3",
     "ipfs-car": "^0.5.8",
     "itty-router": "^2.3.10",
     "multiformats": "^9.0.4",
     "p-retry": "^4.6.1",
+    "protobufjs": "^6.11.2",
+    "tweetnacl": "^1.0.3",
     "uint8arrays": "^3.0.0"
   },
   "bundlesize": [

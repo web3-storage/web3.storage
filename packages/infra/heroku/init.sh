@@ -94,3 +94,11 @@ heroku pg:credentials:create web3-storage-prod-0 --name=dagcargo --app=web3-stor
 # Grant privileges to dagcargo user
 heroku pg:psql web3-storage-staging-0 --app=web3-storage-staging < grant-dagcargo.sql
 heroku pg:psql web3-storage-prod-0 --app=web3-storage-prod < grant-dagcargo.sql
+
+# stats ########################################################################
+
+# Add stats user for ad-hoc reporting (only needs production access)
+heroku pg:credentials:create web3-storage-prod-0 --name=stats --app=web3-storage-prod
+
+# Grant RO privileges to stats user
+heroku pg:psql web3-storage-prod-0 --app=web3-storage-prod < grant-stats.sql

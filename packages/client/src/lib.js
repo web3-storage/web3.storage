@@ -83,7 +83,7 @@ class Web3Storage {
     if (!token) throw new Error('missing token')
     return {
       Authorization: `Bearer ${token}`,
-      'X-Client': 'web3.storage'
+      'X-Client': 'web3.storage/js'
     }
   }
 
@@ -266,7 +266,7 @@ class Web3Storage {
       if (!res.ok) {
         /* c8 ignore next 2 */
         const errorMessage = await res.json()
-        throw new Error(`${res.status} ${res.statusText} ${'- ' + errorMessage?.message || ''}`)
+        throw new Error(`${res.status} ${res.statusText} ${errorMessage ? '- ' + errorMessage.message : ''}`)
       }
       const page = await res.json()
       for (const upload of page) {

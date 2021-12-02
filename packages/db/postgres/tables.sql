@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS pa_pin_request
  -- Points to the pinned content, it is updated once the content is actually being found.
  content_cid     TEXT                                                         REFERENCES content (cid),
   -- Points to auth key used to pin the content.
- auth_key_id         BIGINT                                                       NOT NULL REFERENCES public.user (id),
+ auth_key_id         BIGINT                                                       NOT NULL REFERENCES public.auth_key (id),
  -- The id of the content being requested, it could not exist on IPFS (typo, node offline etc)
  requested_cid   TEXT NOT NULL,
  name            TEXT,
@@ -225,4 +225,19 @@ CREATE TABLE IF NOT EXISTS migration_tracker
   dump_started_at TIMESTAMP WITH TIME ZONE,
   dump_ended_at   TIMESTAMP WITH TIME ZONE NOT NULL,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-)
+);
+
+CREATE TABLE IF NOT EXISTS name
+(
+    -- base36 "libp2p-key" encoding of the public key
+    key         TEXT PRIMARY KEY,
+    -- the serialized IPNS record - base64 encoded
+    record      TEXT NOT NULL,
+    -- next 3 fields are derived from the record & used for newness comparisons
+    -- see: https://github.com/ipfs/go-ipns/blob/a8379aa25ef287ffab7c5b89bfaad622da7e976d/ipns.go#L325
+    has_v2_sig  BOOLEAN NOT NULL,
+    seqno       BIGINT NOT NULL,
+    validity    BIGINT NOT NULL, -- nanoseconds since 00:00, Jan 1 1970 UTC
+    inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);

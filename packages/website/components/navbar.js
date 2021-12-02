@@ -110,7 +110,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   )
 
   return (
-    <nav className={clsx(bgColor, 'w-full z-50', isSmallVariant ? 'sticky top-0' : '')} ref={containerRef}>
+    <nav className={clsx(bgColor, 'w-full z-40', isSmallVariant ? 'sticky top-0' : '')} ref={containerRef}>
       <div className={clsx("py-3 text-w3storage-purple items-center w-100", isSmallVariant ? 'grid grid-cols-3 px-4' : 'flex justify-between layout-margins')}>
         { isSmallVariant &&
           <div className="flex align-middle">
@@ -155,7 +155,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
             </Link>
           ))}
           <button className="flex justify-center mt-16" onClick={ () => toggleMenu() }>
-            <Cross />
+            <Cross width="48" height="48" />
           </button>
         </div>
       </div>

@@ -530,6 +530,111 @@ export interface paths {
       };
     };
   };
+  "/name": {
+    get: {
+      parameters: {
+        query: {
+          key?: parameters["rowFilter.name.key"];
+          record?: parameters["rowFilter.name.record"];
+          has_v2_sig?: parameters["rowFilter.name.has_v2_sig"];
+          seqno?: parameters["rowFilter.name.seqno"];
+          validity?: parameters["rowFilter.name.validity"];
+          inserted_at?: parameters["rowFilter.name.inserted_at"];
+          updated_at?: parameters["rowFilter.name.updated_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["name"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** name */
+          name?: definitions["name"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          key?: parameters["rowFilter.name.key"];
+          record?: parameters["rowFilter.name.record"];
+          has_v2_sig?: parameters["rowFilter.name.has_v2_sig"];
+          seqno?: parameters["rowFilter.name.seqno"];
+          validity?: parameters["rowFilter.name.validity"];
+          inserted_at?: parameters["rowFilter.name.inserted_at"];
+          updated_at?: parameters["rowFilter.name.updated_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          key?: parameters["rowFilter.name.key"];
+          record?: parameters["rowFilter.name.record"];
+          has_v2_sig?: parameters["rowFilter.name.has_v2_sig"];
+          seqno?: parameters["rowFilter.name.seqno"];
+          validity?: parameters["rowFilter.name.validity"];
+          inserted_at?: parameters["rowFilter.name.inserted_at"];
+          updated_at?: parameters["rowFilter.name.updated_at"];
+        };
+        body: {
+          /** name */
+          name?: definitions["name"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/pa_pin_request": {
     get: {
       parameters: {
@@ -1437,6 +1542,25 @@ export interface paths {
       };
     };
   };
+  "/rpc/publish_name_record": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/content_dag_size_total": {
     post: {
       parameters: {
@@ -1614,6 +1738,19 @@ export interface definitions {
     dump_started_at?: string;
     dump_ended_at: string;
     inserted_at: string;
+  };
+  name: {
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    key: string;
+    record: string;
+    has_v2_sig: boolean;
+    seqno: number;
+    validity: number;
+    inserted_at: string;
+    updated_at: string;
   };
   pa_pin_request: {
     /**
@@ -1831,6 +1968,15 @@ export interface parameters {
   "rowFilter.migration_tracker.dump_started_at": string;
   "rowFilter.migration_tracker.dump_ended_at": string;
   "rowFilter.migration_tracker.inserted_at": string;
+  /** name */
+  "body.name": definitions["name"];
+  "rowFilter.name.key": string;
+  "rowFilter.name.record": string;
+  "rowFilter.name.has_v2_sig": string;
+  "rowFilter.name.seqno": string;
+  "rowFilter.name.validity": string;
+  "rowFilter.name.inserted_at": string;
+  "rowFilter.name.updated_at": string;
   /** pa_pin_request */
   "body.pa_pin_request": definitions["pa_pin_request"];
   "rowFilter.pa_pin_request.id": string;

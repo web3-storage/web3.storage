@@ -17,6 +17,7 @@ import {
   READ_WRITE
 } from './maintenance.js'
 import { notFound } from './utils/json-response.js'
+import { nameGet, namePost } from './name.js'
 
 const router = Router()
 router.options('*', corsOptions)
@@ -50,6 +51,9 @@ router.post('/pins/:requestId',     mode['📝'](auth['📌'](pinReplace)))
 router.get('/pins',                 mode['👀'](auth['📌'](pinsGet)))
 router.get('/pins/:requestId',      mode['👀'](auth['📌'](pinGet)))
 router.delete('/pins/:requestId',   mode['📝'](auth['📌'](pinDelete)))
+
+router.get('/name/:key',            mode['👀'](auth['🤲'](nameGet)))
+router.post('/name/:key',           mode['📝'](auth['🔒'](namePost)))
 
 router.delete('/user/uploads/:cid',      mode['📝'](auth['👮'](userUploadsDelete)))
 router.post('/user/uploads/:cid/rename', mode['📝'](auth['👮'](userUploadsRename)))

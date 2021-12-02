@@ -273,3 +273,6 @@ export type PAPinRequestUpsertOutput = PAPinRequestUpsertInput & {
   updated: definitions['pa_pin_request']['updated_at']
   pins: Array<PinItemOutput>
 }
+export type NameItem = {
+  record: definitions['name']['record']
+}

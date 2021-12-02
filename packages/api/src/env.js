@@ -1,7 +1,7 @@
 /* global MAGIC_SECRET_KEY SALT CLUSTER_BASIC_AUTH_TOKEN CLUSTER_API_URL SENTRY_DSN SENTRY_RELEASE DANGEROUSLY_BYPASS_MAGIC_AUTH PG_REST_URL PG_REST_JWT */
 /* global S3_BUCKET_ENDPOINT S3_BUCKET_NAME S3_BUCKET_REGION S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY_ID ENV MAINTENANCE_MODE VERSION COMMITHASH BRANCH */
 import Toucan from 'toucan-js'
-import { S3Client } from '@aws-sdk/client-s3'
+import { S3Client } from '@aws-sdk/client-s3/dist-es/S3Client.js'
 import { Magic } from '@magic-sdk/admin'
 import { DBClient } from '@web3-storage/db'
 import { Cluster } from '@nftstorage/ipfs-cluster'
@@ -30,7 +30,7 @@ export function envAll (_, env, event) {
   env.sentry = (env.SENTRY_DSN || typeof SENTRY_DSN !== 'undefined') && new Toucan({
     dsn: env.SENTRY_DSN || SENTRY_DSN,
     context: event,
-    allowedHeaders: ['user-agent'],
+    allowedHeaders: ['user-agent', 'x-client'],
     allowedSearchParams: /(.*)/,
     debug: false,
     rewriteFrames: {

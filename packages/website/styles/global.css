@@ -224,3 +224,55 @@ body {
 .prose h4 > a {
   text-decoration: none;
 }
+
+.appear-from-top {
+  animation: appear-from-top 0.3s ease-in-out both;
+}
+
+.disappear-to-top {
+  animation: disappear-to-top 0.3s ease-in-out both;
+}
+
+.appear-from-bottom {
+  animation: appear-from-bottom 0.3s ease-in-out both;
+}
+
+.disappear-to-bottom {
+  animation: disappear-to-bottom 0.3s ease-in-out both;
+}
+
+@keyframes appear-from-bottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes disappear-to-bottom {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes appear-from-top {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes disappear-to-top {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
