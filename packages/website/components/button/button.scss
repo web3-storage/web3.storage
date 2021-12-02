@@ -50,6 +50,24 @@
     }
   }
 
+  &.text-purple {
+    background-color: unset;
+    padding-left: 0;
+    button {
+      color: $malibu;
+      @include fontWeight_Semibold;
+    }
+  }
+
+  &.blue {
+    background-color: unset;
+    padding-left: 0;
+    button {
+      color: #3d04fb;
+      @include fontWeight_Semibold;
+    }
+  }
+
   &.pink-blue {
     position: relative;
 
@@ -73,12 +91,19 @@
       border: 0.0625rem solid $white;
       background: $waterloo;
       opacity: 0.6;
-      @include shadow2;
+      @include shadow4;
     }
 
     button {
       position: relative;
       z-index: 1;
     }
+  }
+
+  &.text {
+    line-height: 0;
+    color: $cyan;
+    text-transform: none;
+    @include fontWeight_Regular;
   }
 }

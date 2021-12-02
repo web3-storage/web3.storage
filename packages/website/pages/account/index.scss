@@ -21,7 +21,6 @@
   .account {
     &-storage-manager {
       grid-area: storage-manager;
-      height: 9rem; // TODO: Remove temporary height
     }
     &-upload-cta {
       grid-area: upload-cta;

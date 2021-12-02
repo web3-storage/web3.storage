@@ -1,0 +1,13 @@
+.card-column,
+.card-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-column {
+  flex-direction: column;
+}
+
+.card-row {
+  flex-direction: row;
+}

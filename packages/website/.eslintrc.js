@@ -22,7 +22,9 @@ module.exports = {
         moduleDirectory: ['node_modules', 'lib', 'pages', 'components', 'content', 'hooks', 'modules'],
         paths: ['.'],
       },
-      alias: [['ZeroComponents', './modules/zero/components']],
+      alias: [
+        ['ZeroComponents', './modules/zero/components']
+      ]
     },
     react: {
       version: 'detect',
@@ -48,6 +50,7 @@ module.exports = {
     'jsx-a11y/mouse-events-have-key-events': 0,
     'import/no-anonymous-default-export': 0,
     'import/no-named-as-default': 2,
+    'import/no-named-as-default-member': 0,
     'import/no-duplicates': 2,
     'import/prefer-default-export': 0,
     'import/default': 2,
@@ -63,6 +66,8 @@ module.exports = {
       },
     ],
     'no-unneeded-ternary': ['error', { defaultAssignment: false }],
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
     '@typescript-eslint/no-unused-vars': ['warn', { vars: 'local', args: 'none' }],
     'max-len': [
       'warn',
