@@ -1,6 +1,3 @@
-$tier1Width: 6.5rem;
-$tier2Width: 7.1825rem;
-
 .storage-manager-container {
   display: flex;
   flex-direction: column;
@@ -66,16 +63,6 @@ $tier2Width: 7.1825rem;
   border: 0.0625rem solid rgba($waterloo, 0.15);
   gap: 0.25rem;
   height: 100%;
-
-  &-0 {
-    width: $tier1Width;
-  }
-  &-1 {
-    width: $tier2Width;
-  }
-  &-2 {
-    flex: 1;
-  }
 
   &.locked {
     opacity: 50%;
