@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { getMagic } from '../lib/magic.js'
 import countly from '../lib/countly'
@@ -25,6 +25,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   const containerRef = useRef(null)
   const [isSmallVariant, setSmallVariant] = useState(false)
   const [isMenuOpen, setMenuOpen] = useState(false)
+  const router = useRouter();
 
   useResizeObserver(containerRef, () => {
     const shouldGoToSmallVariant =  window.innerWidth < 640
@@ -42,25 +43,29 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
     [
       {
         link: 'https://docs.web3.storage/',
+        slug: 'docs',
         name: 'Docs',
         spacing: 'p-3 md:px-6'
       },
       {
         link: '/about',
+        slug: 'about',
         name: 'About',
         spacing: 'p-3 md:px-6'
       },
       {
-        link: '/files',
+        link: isLoggedIn ? '/files' : '/login',
+        slug: 'files',
         name: 'Files',
         spacing: `p-3 md:px-6`
       },
       {
-        link: '/account',
+        link: isLoggedIn ? '/account' : '/login',
+        slug: 'account',
         name: 'Account',
         spacing: `p-3 md:px-6`
       }
-    ], [])
+    ], [isLoggedIn])
 
   const queryClient = useQueryClient()
   const onLinkClick = useCallback((event) => {
@@ -73,7 +78,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
   async function logout() {
     await getMagic().user.logout()
     await queryClient.invalidateQueries('magic-user')
-    Router.push('/')
+    router.push('/')
   }
 
   const toggleMenu = () => {
@@ -120,16 +125,20 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
           </div>
         }
         <div>
-          <a href="/" title="Web3 Storage" className={clsx("flex items-center", isSmallVariant ? 'justify-center' : '')} onClick={onLinkClick}>
-            <Logo style={{ width: '1.9rem' }} className="fill-current text-w3storage-purple w-full" />
-            <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-md hidden xl:inline-block">Web3.Storage</span>
-          </a>
+          <Link href="/" >
+            <a title="Web3 Storage" className={clsx("flex items-center", isSmallVariant ? 'justify-center' : '')} onClick={onLinkClick}>
+              <Logo style={{ width: '1.9rem' }} className="fill-current text-w3storage-purple w-full" />
+              <span className="space-grotesk ml-2 text-w3storage-purple font-medium text-md hidden xl:inline-block">Web3.Storage</span>
+            </a>
+          </Link>
         </div>
         <div className={clsx("flex items-center", isSmallVariant ? 'justify-end' : '')} style={{ minHeight: 52 }}>
-          { !isSmallVariant && ITEMS.map(item => (
-            <a href={item.link} key={item.name} onClick={onLinkClick} className={clsx('text-sm text-w3storage-purple font-bold no-underline hover:underline align-middle', item.spacing)}>
-              { item.name }
-            </a>
+          {!isSmallVariant && ITEMS.map(item => (
+            <Link href={item.link} key={item.name} >
+              <a onClick={onLinkClick} className={clsx('text-sm text-w3storage-purple font-bold hover:underline align-middle', item.spacing, router.pathname.includes(item.slug) && 'underline')}>
+                  { item.name }
+              </a>
+            </Link>
           ))}
           {isLoadingUser
             ? spinnerButton
