@@ -33,7 +33,7 @@
         "id": "section_architecture-1",
         "columns": [
           {
-            "type":"custom",
+            "type": "custom",
             "cols": {
               "num": "col-11"
             },
@@ -159,9 +159,7 @@
       },
       {
         "id": "how-it-works-accordion",
-        "columns": [
-
-        ]
+        "columns": []
       },
       {
         "id": "section_explore-docs",
