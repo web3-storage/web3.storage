@@ -77,10 +77,10 @@ describe('Pin Request', () => {
     }
   ]
 
-  // Create user and auth key`
+  // Create user and auth key
   before(async () => {
     user = await createUser(client)
-    authKey = await createUserAuthKey(client, user._id)
+    authKey = await createUserAuthKey(client, +user._id)
   })
 
   // Guarantee no Pin requests exist and create the ones needed for our tests
@@ -110,7 +110,7 @@ describe('Pin Request', () => {
 
   describe('Create Pin', () => {
     it('it creates a Pin Request', async () => {
-      const savedPinRequest = await client.getPAPinRequest(aPinRequestOutput._id)
+      const savedPinRequest = await client.getPAPinRequest(+aPinRequestOutput._id)
       assert.ok(savedPinRequest)
     })
 
@@ -125,7 +125,7 @@ describe('Pin Request', () => {
 
     it('it returns the right object when it has content associated', async () => {
       assertCorrectPinRequestOutputTypes(aPinRequestOutputForExistingContent)
-      assert.strictEqual(aPinRequestOutputForExistingContent.requestedCid, cids[1], 'rrequestedCid is the one provided')
+      assert.strictEqual(aPinRequestOutputForExistingContent.requestedCid, cids[1], 'requestedCid is the one provided')
     })
 
     it('returns a content cid if exists contentCid', async () => {
@@ -145,8 +145,8 @@ describe('Pin Request', () => {
     let savedPinRequestForExistingContent
 
     before(async () => {
-      savedPinRequest = await client.getPAPinRequest(aPinRequestOutput._id)
-      savedPinRequestForExistingContent = await client.getPAPinRequest(aPinRequestOutputForExistingContent._id)
+      savedPinRequest = await client.getPAPinRequest(+aPinRequestOutput._id)
+      savedPinRequestForExistingContent = await client.getPAPinRequest(+aPinRequestOutputForExistingContent._id)
     })
 
     it('it creates a Pin Request', async () => {
@@ -180,6 +180,32 @@ describe('Pin Request', () => {
 
     it('throws if does not exists', async () => {
       assert.rejects(client.getPAPinRequest(1000))
+    })
+  })
+
+  describe('Delete Pin', () => {
+    it('throws if the request id does not exist', async () => {
+      assert.rejects(client.deletePAPinRequest(1000, authKey))
+    })
+
+    it('throws if the auth key does not belong to the pin request', async () => {
+      assert.rejects(client.deletePAPinRequest(+aPinRequestOutput._id, 'fakeAuth'))
+    })
+
+    it('returns the id of the deleted pin request', async () => {
+      const pinRequest = await client.getPAPinRequest(+aPinRequestOutput._id)
+      assert.ok(!pinRequest.deleted, 'is null')
+      const deletedPinRequest = await client.deletePAPinRequest(+aPinRequestOutput._id, authKey)
+      assert.ok(deletedPinRequest)
+      assert.strictEqual(deletedPinRequest._id, 1)
+    })
+
+    it('does not select pin request after deletion', async () => {
+      assert.rejects(client.getPAPinRequest(+aPinRequestOutput._id))
+    })
+
+    it('cannot delete a pin request which is already deleted', async () => {
+      assert.rejects(client.deletePAPinRequest(+aPinRequestOutput._id, authKey))
     })
   })
 })
