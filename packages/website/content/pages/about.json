@@ -1,0 +1,300 @@
+{
+  "seo": {
+    "title": "",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "page_content": [
+    [
+      {
+        "id": "about_hero-header",
+        "columns": [
+          {
+            "type": "hero",
+            "page": "about",
+            "cols": {
+              "num": "col-6",
+              "push_left": "off-6"
+            },
+            "format": "header",
+            "heading": "What is Web3.Storage?",
+            "subheading": "Web3.Storage is a service to make building on top of Filecoin as simple as possible - giving developers the power of distributed storage and content addressing via a simple HTTP API and handy client libraries."
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "section_architecture-1",
+        "columns": [
+          {
+            "type":"custom",
+            "cols": {
+              "num": "col-11"
+            },
+            "customizations": [
+              {
+                "type": "text_block",
+                "format": "small",
+                "description": [
+                  "Content uploaded to Web3.Storage is pinned redundantly in an IPFS Cluster of 3 geographically distributed nodes. When 32GiB of content is made available, a request is made to pin a new batch of content into a separate IPFS cluster - where a 32GiB CAR file is generated to store the data.",
+                  "Once this 31GiB CAR file is ready, a queue of geographically distributed storage providers - selected for performance and availability - bid for the right to store these deals, with the Web3.Storage client making a minimum of 5 deals with the various storage providers.",
+                  "<b>Please see the documentation</b> for how one can use the Status API to query for information regarding pin status and deal status for your uploaded content."
+                ]
+              },
+              {
+                "type": "image_block",
+                "src": "/images/about/placeholder_image.png"
+              }
+            ]
+          },
+          {
+            "type": "corkscrew",
+            "id": "about_section_architecture-corkscrew",
+            "cols": {
+              "num": "col-1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "section_architecture-2",
+        "columns": [
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-5"
+            },
+            "customizations": [
+              {
+                "type": "helix",
+                "id": "section_architecture-2-helix"
+              },
+              {
+                "type": "image_block",
+                "id": "section_architecture-image-storage",
+                "src": "/images/index/storage-tier.png"
+              },
+              {
+                "type": "image_block",
+                "id": "section_architecture-image-files",
+                "src": "/images/index/files-display.png"
+              },
+              {
+                "type": "image_block",
+                "id": "section_architecture-image-upload",
+                "src": "/images/index/file-upload.png"
+              }
+            ]
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-6",
+              "push_left": "off-1"
+            },
+            "customizations": [
+              {
+                "type": "cross",
+                "id": "section_architecture-2-cross"
+              },
+              {
+                "type": "text_block",
+                "format": "small",
+                "heading": "Once the deals are active, the Web3.Storage client polls to ensure that the relevant sectors are still available.",
+                "description": [
+                  "In the event of an early termination (or a miner going offline), the Web3.Storage client will automatically add the relevant deals into the queue of upcoming deals to ensure at all times there are always a minimum of 5 copies of data being stored with Filecoin Storage Providers.",
+                  "In the future, we hope to expand this service to offer a variety of options for storing data - including purely protocol-based approaches (e.g. via smart contracts) as well as other hosted options (e.g. HTTP endpoints). We also aim to provide more native tooling for automated deal management via tools like smart contracts - which may augment the offerings of this service in the future.",
+                  "Our aim today is to provide a user-friendly experience that massively reduces the burden for onboarding new use cases into the web3 ecosystem today - while providing an upgrade path for the future."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "section_how-it-works",
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-5"
+            },
+            "format": "medium",
+            "heading": "How Does Web3.Storage work?",
+            "description": [
+              "<span class='how-it-works-highlight'>Developers can start building in a matter of minutes</span> - allowing them to take advantage of all the power and openness of the decentralized web with none of the infrastructure complexity.",
+              "Behind the scenes, Web3.Storage is backed by Filecoin and makes content available via IPFS leveraging the unique properties of each network."
+            ]
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-6",
+              "push_left": "off-1"
+            },
+            "customizations": [
+              {
+                "type": "text_block",
+                "format": "small",
+                "heading": "About Filecoin",
+                "description": "Filecoin offers persistent, decentralized storage - guaranteeing the integrity of the underlying data through a robust economic model while also providing cryptographic proofs for verifiability."
+              },
+              {
+                "type": "text_block",
+                "format": "small",
+                "heading": "About IPFS",
+                "description": "IPFS offers content addressing - enabling developers to create immutable links to their content, and flexibility for developers in how they’d like to retrieve their data (whether it be running personal nodes, relying on public infrastructure, or paying for hosted options)."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "how-it-works-accordion",
+        "columns": [
+
+        ]
+      },
+      {
+        "id": "section_explore-docs",
+        "grid": ["noGutter"],
+        "columns": [
+          {
+            "type": "card_list_block",
+            "cols": {
+              "num": "col-8",
+              "push_left": "off-1"
+            },
+            "cards": [
+              {
+                "type": "D",
+                "categories": [
+                  {
+                    "heading": "Welcome",
+                    "links": [
+                      {
+                        "url": "",
+                        "text": "Quickstart"
+                      },
+                      {
+                        "url": "",
+                        "text": "Create an Account"
+                      },
+                      {
+                        "url": "",
+                        "text": "Get an API token"
+                      },
+                      {
+                        "url": "",
+                        "text": "Create the Upload Script"
+                      },
+                      {
+                        "url": "",
+                        "text": "Run the Script"
+                      },
+                      {
+                        "url": "",
+                        "text": "Get your file"
+                      },
+                      {
+                        "url": "",
+                        "text": "Next Steps"
+                      }
+                    ]
+                  },
+                  {
+                    "heading": "Concepts",
+                    "links": [
+                      {
+                        "url": "",
+                        "text": "Content Addressing"
+                      },
+                      {
+                        "url": "",
+                        "text": "Decentralized Storage"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "D",
+                "categories": [
+                  {
+                    "heading": "How-tos",
+                    "links": [
+                      {
+                        "url": "",
+                        "text": "Store"
+                      },
+                      {
+                        "url": "",
+                        "text": "Retrieve"
+                      },
+                      {
+                        "url": "",
+                        "text": "Query"
+                      },
+                      {
+                        "url": "",
+                        "text": "List"
+                      },
+                      {
+                        "url": "",
+                        "text": "Work with Content"
+                      },
+                      {
+                        "url": "",
+                        "text": "Generate an API Token"
+                      },
+                      {
+                        "url": "",
+                        "text": "Troubleshooting"
+                      }
+                    ]
+                  },
+                  {
+                    "heading": "Reference",
+                    "links": [
+                      {
+                        "url": "",
+                        "text": "HTTP API Reference"
+                      },
+                      {
+                        "url": "",
+                        "text": "Javascript Client Library"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-3"
+            },
+            "format": "medium",
+            "heading": "Open product. Open book.",
+            "cta": {
+              "url": "/docs",
+              "text": "EXPLORE DOCS",
+              "theme": "dark",
+              "action": "",
+              "tracking": ""
+            }
+          }
+        ]
+      }
+    ]
+  ]
+}

@@ -1,0 +1,96 @@
+@use 'sass:math';
+
+#about_section_1 {
+  position: relative;
+  z-index: 1;
+  padding-bottom: 3rem;
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: calc(100% + $navigationHeight);
+    top: calc(-1 * $navigationHeight);
+    left: 0;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: 0 -10rem;
+    background-image: url('/images/about/about-holographic-bg.png');
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3.5rem;
+    width: 100%;
+    height: 15rem;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='1383' height='420.945' viewBox='0 0 1383 420.945'%3e%3cpath id='Intersection_1' data-name='Intersection 1' d='M.5,434.5V181.941c16.49-6.406,437.4-168.386,838.391-168.386,201.1,0,397.2,40.741,544.609,82.164V434.5Z' transform='translate(-0.5 -13.555)' fill='%2303040a'/%3e%3c/svg%3e ");
+  }
+}
+
+#about_section_2 {
+  position: relative;
+  z-index: 1;
+  background-color: $ebony;
+  color: white;
+  padding-top: 7.625rem;
+}
+
+#about_hero-header {
+  position: relative;
+  padding-top: 7rem;
+  padding-bottom: 11rem;
+  z-index: 1;
+  .heading {
+    @include h1;
+    line-height: leading(55, 45);
+  }
+  .subheading {
+    @include fontSize_Regular;
+    @include fontWeight_Regular;
+    line-height: leading(34, 20);
+    margin-bottom: 1.25rem;
+  }
+}
+
+#about_hero-cluster {
+  position: absolute;
+  left: 0;
+  top: 2rem;
+  width: 27.125rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 2.5rem);
+  @include containerMaxMQ {
+    left: 0;
+  }
+}
+
+#section_architecture-1 {
+  position: relative;
+  .image-block {
+    margin: 2.5rem 0;
+  }
+}
+
+#about_section_architecture-corkscrew {
+  position: absolute;
+  width: 32rem;
+  top: -12rem;
+  right: -2rem;
+  transform: rotate(29deg);
+}
+
+#section_architecture-2 {
+  position: relative;
+  z-index: 1;
+}
+
+#section_architecture-2-helix {
+  position: absolute;
+  width: 13.25rem;
+}
+
+#section_architecture-2-cross {
+  position: absolute;
+  width: 3rem;
+}
