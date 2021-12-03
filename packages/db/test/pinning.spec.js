@@ -197,7 +197,7 @@ describe('Pin Request', () => {
       assert.ok(!pinRequest.deleted, 'is null')
       const deletedPinRequest = await client.deletePAPinRequest(+aPinRequestOutput._id, authKey)
       assert.ok(deletedPinRequest)
-      assert.strictEqual(deletedPinRequest._id, 1)
+      assert.equal(deletedPinRequest._id, 3)
     })
 
     it('does not select pin request after deletion', async () => {

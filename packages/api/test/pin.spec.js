@@ -60,7 +60,7 @@ function getTestJWT (sub = 'test', name = 'test') {
   return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
 }
 
-describe('Pinning APIs endpoints', () => {
+describe.only('Pinning APIs endpoints', () => {
   let token = null
 
   before(async () => {
@@ -241,7 +241,7 @@ describe('Pinning APIs endpoints', () => {
       token = await getTestJWT()
     })
 
-    it('returns anauthorized if no token', async () => {
+    it('returns unauthorized if no token', async () => {
       const res = await fetch(new URL('pins/1', endpoint).toString(), {
         method: 'GET',
         headers: {
@@ -369,7 +369,7 @@ describe('Pinning APIs endpoints', () => {
     })
   })
 
-  describe('GET /delete/:requestId', () => {
+  describe.skip('DELETE /pins/:requestId', () => {
     let token = null
     before(async () => {
     // Create token

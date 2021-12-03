@@ -92,7 +92,6 @@ const STATUS_OPTIONS = ['queued', 'pinning', 'pinned', 'failed']
  */
 export async function pinPost (request, env, ctx) {
   const pinData = await request.json()
-  const requestId = request.params.requestId
   const { cid, name, origins, meta } = pinData
 
   // Require cid
@@ -140,7 +139,9 @@ export async function pinPost (request, env, ctx) {
   }
 
   const { authToken } = request.auth
+  const requestId = request.params ? request.params.requestId : null
   let response
+
   if (requestId) {
     response = await pinReplace(request, env, ctx)
   } else {
