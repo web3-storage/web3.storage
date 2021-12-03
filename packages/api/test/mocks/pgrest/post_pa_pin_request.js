@@ -14,6 +14,7 @@ module.exports = ({ query }) => {
     requestedCid: 'something',
     authKey: 'something',
     name: 'something',
+    deleted: null,
     created: date.toISOString(),
     updated: date.toISOString()
   }
