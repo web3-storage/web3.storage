@@ -1,9 +1,10 @@
 // ===================================================================== Imports
+import Link from 'next/link';
+
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
-import Button from '../button/button.js';
+import Button from '../button/button';
 import Squiggle from '../../assets/illustrations/squiggle.js';
 import GeneralPageData from '../../content/pages/general.json';
-import Link from 'next/link';
 // import countly from 'Lib/countly'
 // ===================================================================== Exports
 export default function Footer() {
@@ -25,8 +26,8 @@ export default function Footer() {
   //   // )
   // }, []);
   const onLinkClick = () => {
-    console.log('hi')
-  }
+    console.log('hi');
+  };
 
   // ========================================================= Template [Footer]
   return (
