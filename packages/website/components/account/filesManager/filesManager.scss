@@ -1,0 +1,44 @@
+.files-manager-container {
+  display: flex;
+  flex-direction: column;
+  > * {
+    width: 100%;
+  }
+}
+
+.files-manager-header {
+  display: flex;
+  justify-content: space-between;
+  justify-items: center;
+}
+
+.files-manager-search {
+  position: relative;
+  display: inline-flex;
+  svg {
+    color: $white;
+    position: absolute;
+    top: 0.575rem;
+    left: 0.75rem;
+  }
+
+  &:before {
+    width: 100%;
+    height: 100%;
+    background: blue;
+  }
+  input {
+    &::placeholder {
+      @include fontSize_Tiny;
+      @include fontWeight_Regular;
+      color: rgba($white, 0.8);
+    }
+    padding-bottom: 0.1875rem;
+    height: 1.75rem;
+    background: $vulcan;
+    border-radius: 0.625rem;
+    border: 0.0625rem solid $waterloo;
+    width: 26rem;
+    padding-left: 2.1875rem;
+  }
+}
