@@ -159,7 +159,28 @@
       },
       {
         "id": "how-it-works-accordion",
-        "columns": []
+        "columns": [
+          {
+            "type": "accordion_block",
+            "cols": {
+              "num": "col-12"
+            },
+            "sections": [
+              {
+                "heading": "Storage Term",
+                "content": "All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. Users should not store any private or sensitive information in an unencrypted form using Web3.Storage. Further, deleting files from Web3.Storage via the site’s Files page or API will remove them from the file listing for a user’s account, but nodes on the IPFS network may retain copies of the data indefinitely. Users should not use Web3.Storage for data that may need to be permanently deleted in the future."
+              },
+              {
+                "heading": "Data Limits",
+                "content": "hihi"
+              },
+              {
+                "heading": "Filecoin Deals",
+                "content": "hola"
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "section_explore-docs",
