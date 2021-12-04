@@ -295,6 +295,11 @@ $gradient_BluePurple: linear-gradient(-45deg, $cyan 0%, $royalBlue 50%, $heliotr
   margin: auto;
 }
 
+// --------------------------------------------------------------------- Functions
+@function calculateWidthPercentage($width-section, $width-actual) {
+  @return math.percentage(math.div($width-section, $width-actual));
+}
+
 // ------------------------------------------------------------------- Animation
 @mixin animation($animate...) {
   $max: length($animate);
