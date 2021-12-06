@@ -30,9 +30,9 @@ const CTACard = ({ className = '', heading, description, ctas, theme = CTAThemeT
       <span>{description}</span>
       {!!ctas?.length && (
         <div className="cta-buttons-container">
-          {ctas.map(({ onClick = () => null, children, ...buttonProps }) => (
-            <Button onClick={onClick} {...buttonProps}>
-              {children}
+          {ctas.map(({ onClick = () => null, children: text, ...buttonProps }) => (
+            <Button key={text} onClick={onClick} {...buttonProps}>
+              {text}
             </Button>
           ))}
         </div>

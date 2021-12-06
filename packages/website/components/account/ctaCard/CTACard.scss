@@ -25,7 +25,10 @@ $cta-card-padding-top: 4rem;
     padding: 0 0.75rem;
     &:not(:only-child) {
       flex: 1;
-      align-items: center;
     }
+  }
+
+  button {
+    align-items: center;
   }
 }
