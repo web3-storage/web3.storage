@@ -1,7 +1,7 @@
-import { useCallback, Fragment, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import clsx from 'clsx'
 
-import Dropdown from 'ZeroComponents/dropdown/dropdown';
+import Dropdown from 'ZeroComponents/dropdown/dropdown'
 
 /**
  * @typedef {Object} SortOptionProp
@@ -46,6 +46,7 @@ const Sortable = ({
   onChange
 }) => {
   const handleSort = useCallback((sortIndex) => {
+    sortIndex = parseInt(sortIndex)
     const option = options[sortIndex]
     if(!option || !onChange) return
 
@@ -57,13 +58,13 @@ const Sortable = ({
   }, [])
 
   useEffect(() => handleSort(defaultIndex), [])
-  
+
   return (
     <div className={clsx(className, 'Sortable')}>
       <Dropdown
-        value={null}
+        value={`${defaultIndex}`}
         options={options.map((option, i) => (
-          { label: option.label, value: i }
+          { label: option.label, value: `${i}` }
         ))}
         onChange={optionIndex => handleSort(optionIndex)}
       />

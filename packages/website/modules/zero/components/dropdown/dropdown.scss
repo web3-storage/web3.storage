@@ -1,14 +1,48 @@
 .Dropdown {
 
-  .droparea {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  .dropdownButton {
+    cursor: pointer;
+    border: none;
+    background: transparent;
+  }
+  
+  .dropdownContent {
+    position: absolute;
+    overflow: hidden;
+    background: red;
+    max-height: 0;
+    transition: max-height 350ms ease-in-out;
+
+    .dropdownItemList {
+      border: 1px solid black;
+      background: white;
+      z-index: 5000;
+      display: inline-flex;
+      flex-direction: column;
+
+      .dropdownItem {
+        cursor: pointer;
+
+        &.current {
+          background: cyan;
+        }
+      }
+    }
   }
 
-  .filelist {
-    display: grid;
-    grid-template-columns: auto minmax(0, max-content);
+  .dropdownSelect {
+    display: none;
+  }
+
+  &.open {
+    .dropdownContent {
+      max-height: 100vh;
+    }
+  }
+
+  &.scrollable {
+    .dropdownContent {
+      overflow-y: scroll;
+    }
   }
 }
