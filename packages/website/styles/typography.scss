@@ -187,8 +187,8 @@ $letterSpacing_Large: 0.03em;
 }
 
 @mixin h4 {
-  @include fontSize_Small;
-  @include leading_Small;
+  @include fontSize_Regular;
+  @include leading_Regular;
   @include fontWeight_Semibold;
 }
 
