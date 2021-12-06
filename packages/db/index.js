@@ -70,10 +70,10 @@ export class DBClient {
    * Get user by its issuer.
    *
    * @param {string} issuer
-   * @return {Promise<import('./db-client-types').UserOutput>}
+   * @return {Promise<import('./db-client-types').UserOutput | undefined>}
    */
   async getUser (issuer) {
-    /** @type {{ data: import('./db-client-types').UserOutput, error: PostgrestError }} */
+    /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
       .select(`
@@ -87,13 +87,12 @@ export class DBClient {
         updated:updated_at
       `)
       .eq('issuer', issuer)
-      .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    return data
+    return data.length ? data[0] : undefined
   }
 
   /**
@@ -614,7 +613,7 @@ export class DBClient {
    *
    * @param {string} issuer
    * @param {string} secret
-   * @return {Promise<import('./db-client-types').AuthKey>}
+   * @return {Promise<import('./db-client-types').AuthKey | undefined>}
    */
   async getKey (issuer, secret) {
     /** @type {{ data, error: PostgrestError } */
@@ -630,22 +629,26 @@ export class DBClient {
       })
       .filter('keys.deleted_at', 'is', null)
       .eq('keys.secret', secret)
-      .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    if (!data.keys.length) {
-      throw new Error('user has no key with given secret')
+    if (!data.length) {
+      return undefined
+    }
+
+    const keyData = data[0]
+    if (!keyData.keys.length) {
+      return undefined
     }
 
     return {
-      _id: data.keys[0]._id,
-      name: data.keys[0].name,
+      _id: keyData.keys[0]._id,
+      name: keyData.keys[0].name,
       user: {
-        _id: data._id,
-        issuer: data.issuer
+        _id: keyData._id,
+        issuer: keyData.issuer
       }
     }
   }
