@@ -4,9 +4,6 @@ import React from 'react';
 // ====================================================================== Params
 /**
  * @param Boolean props.multiple
- * @param Boolean props.toggleOnLoad
- * @param Boolean props.toggleWhenAdded
- * @param Boolean props.scrollToWhenAdded
  * @param {Array} props.sections
  */
 
@@ -16,13 +13,12 @@ class Accordion extends React.Component {
     super(props);
     this.setActiveSections = this.setActiveSections.bind(this);
     this.state = {
-      active: this.multiple ? [] : false,
+      active: this.props.multiple ? [] : false,
       childCount: 0
     }
   }
 
   setActiveSections (id) {
-    console.log(id)
     if (this.props.multiple) {
       if (this.state.active.includes(id)) {
         this.setState(({ active }) => ({ active: active.filter((_id) => _id !== id) }))
@@ -61,9 +57,6 @@ class Accordion extends React.Component {
 
 Accordion.defaultProps = {
   multiple: false,
-  toggleOnLoad: false,
-  toggleWhenAdded: false,
-  scrollToWhenAdded: false,
   sections: []
 }
 

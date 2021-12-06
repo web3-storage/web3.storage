@@ -13,7 +13,7 @@ export default function AccordionHeader({ toggle, uid, children }) {
   // ==================================================================== Export
   return (
     <div
-    class="accordion-header"
+    className="accordion-header"
     onClick={ () => { toggle(uid) } }>
 
       {children ? children : ''}

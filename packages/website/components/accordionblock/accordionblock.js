@@ -10,7 +10,9 @@ import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
 export default function AccordionBlock({ block }) {
   return (
     <div className="block accordion-block">
-      <ZeroAccordion sections={block.sections}>
+      <ZeroAccordion
+        multiple={true} 
+        sections={block.sections}>
         {block.sections.map((section, index) => (
           <ZeroAccordionSection
             key={`accordion_section-${index}`}>

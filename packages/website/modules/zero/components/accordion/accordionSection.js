@@ -1,23 +1,25 @@
 // ===================================================================== Imports
-import React from 'react';
+import React, { useState } from "react";
 import ZeroAccordionHeader from 'ZeroComponents/accordion/accordionHeader';
 import ZeroAccordionContent from 'ZeroComponents/accordion/accordionContent';
+import clsx from 'clsx';
 
 // ====================================================================== Params
 /**
  * @param {Array} props.active
+ * @param function props.toggle
  * @param Boolean props.selected
  */
 // ================================================================== Functions
-function Header() {
+function Header () {
   return null
 }
 
-function Content() {
+function Content () {
   return null
 }
 
-function generateUID() {
+const generateUID = () => {
   var first = (Math.random() * 46656) | 0
   var second = (Math.random() * 46656) | 0
   first = ("000" + first.toString(36)).slice(-3)
@@ -25,43 +27,36 @@ function generateUID() {
   return first + second
 }
 
-// ===================================================================== Export
-class AccordionSection extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      uid: generateUID()
-    }
-  }
+function AccordionSection({ active, toggle, children }) {
+  const [uid, setUID] = useState(generateUID)
+  const header = children.find(child => child.type === Header)
+  const content = children.find(child => child.type === Content)
+  const open = Array.isArray(active) ? active.includes(uid) : active === uid
 
-  static Header = Header
-  static Content = Content
+  return (
+    <div className={ clsx("accordion-section", open ? 'open': '') }>
 
-  render(props) {
-    const {children} = this.props
-    const header = children.find(child => child.type === Header)
-    const content = children.find(child => child.type === Content)
+      <ZeroAccordionHeader
+        uid={uid}
+        toggle={toggle}>
 
-    return (
-      <div class="accordion-section">
+        {header ? header.props.children : null}
 
-        <ZeroAccordionHeader
-          uid={this.state.uid}
-          toggle={this.props.toggle}>
+      </ZeroAccordionHeader>
 
-          {header ? header.props.children : null}
+      <ZeroAccordionContent open={open}>
 
-        </ZeroAccordionHeader>
+        {content ? content.props.children : null}
 
-        <ZeroAccordionContent>
+      </ZeroAccordionContent>
 
-          {content ? content.props.children : null}
-          
-        </ZeroAccordionContent>
-
-      </div>
-    )
-  }
+    </div>
+  )
 }
 
+AccordionSection.Header = Header
+
+AccordionSection.Content = Content
+
+// ===================================================================== Export
 export default AccordionSection
