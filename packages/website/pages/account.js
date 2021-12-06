@@ -9,7 +9,7 @@ import Loading from '../components/loading'
 import VerticalLines from '../illustrations/vertical-lines'
 import { When } from 'react-if'
 import emailContent from '../content/file-a-request'
-import fileSize from 'filesize'
+import { fileSize } from '../lib/formatter'
 import { AppContext } from '../components/state-provider'
 
 const MAX_STORAGE = 1.1e+12 /* 1 TB */
