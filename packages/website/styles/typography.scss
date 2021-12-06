@@ -186,6 +186,12 @@ $letterSpacing_Large: 0.03em;
   @include fontWeight_Semibold;
 }
 
+@mixin h4 {
+  @include fontSize_Small;
+  @include leading_Small;
+  @include fontWeight_Semibold;
+}
+
 @mixin p1 {
   @include fontSize_Medium;
   @include leading_Medium;
@@ -216,6 +222,12 @@ $letterSpacing_Large: 0.03em;
 @mixin label_3 {
   @include fontSize_Tiny;
   @include leading_Small;
+}
+
+@mixin label_4 {
+  @include fontSize_Small;
+  @include leading_Small;
+  @include fontWeight_Regular;
 }
 
 @mixin gradient_Text {

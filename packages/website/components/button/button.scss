@@ -106,4 +106,20 @@
     text-transform: none;
     @include fontWeight_Regular;
   }
+
+  &.outline {
+    &-dark,
+    &-light {
+      border-radius: 1.5rem;
+    }
+
+    &-dark {
+      color: $black;
+      border: 0.0625rem solid $black;
+    }
+    &-light {
+      color: $white;
+      border: 0.0625rem solid $white;
+    }
+  }
 }

@@ -10,6 +10,8 @@ export enum ButtonVariant {
   PURPLE = 'purple',
   PINK_BLUE = 'pink-blue',
   TEXT = 'text',
+  OUTLINE_DARK = 'outline-dark',
+  OUTLINE_LIGHT = 'outline-light',
 }
 
 type TrackingProps = {
