@@ -1,5 +1,12 @@
 # Changelog
 
+### [4.3.1](https://www.github.com/web3-storage/web3.storage/compare/api-v4.3.0...api-v4.3.1) (2021-12-06)
+
+
+### Bug Fixes
+
+* remove backdoor routes ([#737](https://www.github.com/web3-storage/web3.storage/issues/737)) ([132c1f5](https://www.github.com/web3-storage/web3.storage/commit/132c1f5cd6dcb1a001eec8c97ce575feacc78dec))
+
 ## [4.3.0](https://www.github.com/web3-storage/web3.storage/compare/api-v4.2.1...api-v4.3.0) (2021-12-01)
 
 
