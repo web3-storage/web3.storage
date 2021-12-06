@@ -1,16 +1,22 @@
-import React, { createElement, useCallback } from 'react'
-import useState from 'storybook-addon-state';
-import Dropdown from 'ZeroComponents/dropdown/dropdown';
+import React from 'react'
+import useState from 'storybook-addon-state'
+import Dropdown from 'ZeroComponents/dropdown/dropdown'
 
 export default {
   title: 'Zero/Dropdown'
-};
+}
 
 export const Default = () => {
-  const [selectValue, setSelectValue] = useState('test')
+  const [selectValue, setSelectValue] = useState(null)
 
   return (
     <>
+      <div>
+        <input type="text" defaultValue="Select me and tab to dropdown" readOnly style={{ width: '100%' }} />
+      </div>
+      <br/>
+      <div>Selected: {selectValue}</div>
+      <br/>
       <Dropdown
         value="fourth"
         options={[
@@ -23,9 +29,7 @@ export const Default = () => {
         ]}
         onChange={value => setSelectValue(value)}
       />
-      <br/>
-      <div>Selected: {selectValue}</div>
     </>
   )
-};
+}
 

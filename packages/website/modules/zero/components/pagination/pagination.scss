@@ -1,14 +1,34 @@
 .Pagination {
 
-  .droparea {
+  .pageList {
+    list-style: none;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+    gap: 1rem;
 
-  .filelist {
-    display: grid;
-    grid-template-columns: auto minmax(0, max-content);
+    .page {
+      cursor: pointer;
+
+      &.current {
+        cursor: default;
+        font-weight: 600;
+        color: #ff0000;
+      }
+
+      &:hover {
+        opacity: 0.75;
+     }
+    }
+
+    .firstPage,
+    .prevPage,
+    .nextPage,
+    .lastPage {
+      cursor: pointer;
+    }
+
+    .prevEllipses,
+    .nextEllipses {
+      cursor: default;
+    }
   }
 }
