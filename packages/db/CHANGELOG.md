@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.0](https://www.github.com/web3-storage/web3.storage/compare/db-v3.1.0...db-v4.0.0) (2021-12-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* client should not throw on 404 (#751)
+
+### Bug Fixes
+
+* client should not throw on 404 ([#751](https://www.github.com/web3-storage/web3.storage/issues/751)) ([a4cce7e](https://www.github.com/web3-storage/web3.storage/commit/a4cce7eb67a6dab6a75c5c86bcebe4dc66ecd6e4))
+
 ## [3.1.0](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.2...db-v3.1.0) (2021-12-01)
 
 
