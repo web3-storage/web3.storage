@@ -74,7 +74,8 @@ export const INVALID_MATCH = 'Match should be a string (i.e. "exact", "iexact", 
 export const INVALID_META = 'Meta should be an object with string values'
 export const INVALID_NAME = 'Name should be a string'
 export const INVALID_ORIGINS = 'Origins should be an array of strings'
-export const INVALID_REQUEST_ID = 'Request id should be a string'
+export const INVALID_REQUEST_ID = 'Request id should be a string containing digits only'
+export const INVALID_REPLACE = 'Existing and replacement CID are the same'
 export const INVALID_STATUS = 'Status should be an array of strings'
 export const REQUIRED_CID = 'CID is required'
 export const REQUIRED_REQUEST_ID = 'Request id is required'
@@ -354,16 +355,7 @@ export async function pinDelete (request, env, ctx) {
     )
   }
 
-  if (typeof requestId !== 'string') {
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
-      { status: ERROR_CODE }
-    )
-  }
-
-  // TODO: refactor this validation (also used in GET)
-  // Check if requestId contains other charachers than digits
-  if (!(/^\d+$/.test(requestId))) {
+  if (typeof requestId !== 'string' || !(/^\d+$/.test(requestId))) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
       { status: ERROR_CODE }
@@ -397,19 +389,6 @@ export async function pinDelete (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 async function pinReplace (request, env, ctx) {
-  /**
-   * TODO(alexandra):
-   * 1. Get requestId
-   * 2. Check if there's a PA Pin request with requestId, get cid associated with it
-   *    -- Ensure it's not deleted (deleted_at == null)
-   *    -- Ensure the user is allowed to replace this pin request
-   *    -- If not: throw
-   * 3. Get pin data
-   * 4. Normalize cid/validation
-   * 5. If new cid == old cid, throw
-   * 6. Create new pin (handle error)
-   * 7. Delete old pin (handle error)
-   * */
   const requestId = request.params.requestId
   const { authToken } = request.auth
 
@@ -418,25 +397,23 @@ async function pinReplace (request, env, ctx) {
     return notFound()
   }
 
-  // TODO: improve errors
-  if (existingPinRequest.deleted) {
-    return new JSONResponse(
-      { error: { reason: 'Nothing to replace' } },
-      { status: 501 }
-    )
-  }
-
   const existingCid = existingPinRequest.requestedCid
   const newPinData = await request.json()
 
   // Validate cid
   const cid = normalizeCid(newPinData.cid)
 
-  // TODO: improve errors
-  if (!cid || cid === existingCid) {
+  if (!cid) {
     return new JSONResponse(
-      { error: { reason: 'Invalid cid/Nothing to replace' } },
-      { status: 501 }
+      { error: { reason: ERROR_STATUS, details: INVALID_CID } },
+      { status: ERROR_CODE }
+    )
+  }
+
+  if (cid === existingCid) {
+    return new JSONResponse(
+      { error: { reason: ERROR_STATUS, details: INVALID_REPLACE } },
+      { status: ERROR_CODE }
     )
   }
 
