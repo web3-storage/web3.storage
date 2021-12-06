@@ -56,8 +56,7 @@ class Accordion extends React.Component {
 }
 
 Accordion.defaultProps = {
-  multiple: false,
-  sections: []
+  multiple: false
 }
 
 export default Accordion

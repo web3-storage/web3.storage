@@ -11,8 +11,7 @@ export default function AccordionBlock({ block }) {
   return (
     <div className="block accordion-block">
       <ZeroAccordion
-        multiple={true} 
-        sections={block.sections}>
+        multiple={true}>
         {block.sections.map((section, index) => (
           <ZeroAccordionSection
             key={`accordion_section-${index}`}>
