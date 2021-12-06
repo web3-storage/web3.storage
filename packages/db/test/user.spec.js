@@ -42,14 +42,9 @@ describe('user operations', () => {
     assert.strictEqual(user.publicAddress, publicAddress, 'user has correct public address')
   })
 
-  it('should fail to get a non existing user', async () => {
-    try {
-      await client.getUser('fake-issuer')
-    } catch (err) {
-      assert(err, 'errored to get a non existing user')
-      return
-    }
-    throw new Error('should fail to get a non existing user')
+  it('should return undefined to get a non existing user', async () => {
+    const user = await client.getUser('fake-issuer')
+    assert.strictEqual(user, undefined)
   })
 
   it('should update user with same issuer (login)', async () => {
@@ -86,6 +81,13 @@ describe('user operations', () => {
     assert.strictEqual(updatedUser.email, email, 'user has new email')
     assert.strictEqual(updatedUser._id, user._id, 'user has same id')
     assert.strictEqual(updatedUser.created, user.created, 'user has same created timestamp')
+  })
+
+  it('should return undefined to get non existing key for user', async () => {
+    const secret = 'test-secret-fail'
+    const fetchedKey = await client.getKey(user.issuer, secret)
+
+    assert.strictEqual(fetchedKey, undefined)
   })
 
   it('can create auth keys for user', async () => {
