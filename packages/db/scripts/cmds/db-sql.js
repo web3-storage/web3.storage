@@ -45,19 +45,16 @@ export async function dbSqlCmd ({ reset, cargo, testing } = {}) {
   await client.query(configSql)
   await client.query(tablesSql)
 
-  if (testing) {
+  // if testing or cargo fdw flag not set, you just get the schema, no fdw connection to dagcargo
+  if (testing || !cargo) {
     await client.query(cargoSchema)
-  } else if (cargo) {
+  } else {
     // Replace secrets in the FDW sql file
     fdwSql = fdwSql.replace(":'DAG_CARGO_HOST'", `'${process.env.DAG_CARGO_HOST}'`)
     fdwSql = fdwSql.replace(":'DAG_CARGO_DATABASE'", `'${process.env.DAG_CARGO_DATABASE}'`)
     fdwSql = fdwSql.replaceAll(":'DAG_CARGO_USER'", `'${process.env.DAG_CARGO_USER}'`)
     fdwSql = fdwSql.replaceAll(":'DAG_CARGO_PASSWORD'", `'${process.env.DAG_CARGO_PASSWORD}'`)
-
-    // Create web3_storage role
-    await client.query(`
-CREATE ROLE web3_storage LOGIN;
-    `)
+    fdwSql = fdwSql.replaceAll(":WEB3_STORAGE_USER", `${process.env.WEB3_STORAGE_USER || 'CURRENT_USER'}`)
     await client.query(fdwSql)
     await client.query(cargoSql)
   }
