@@ -9,9 +9,11 @@ import { ReactComponent as Chevron } from '../../assets/icons/chevron.svg';
  */
 // ====================================================================== Export
 export default function AccordionBlock({ block }) {
+  const multiple = block.multiple ? block.multiple : false;
+  const toggleOnLoad = block.toggleOnLoad ? block.toggleOnLoad : false;
   return (
     <div className="block accordion-block">
-      <ZeroAccordion multiple={true} toggleOnLoad={true}>
+      <ZeroAccordion multiple={multiple} toggleOnLoad={toggleOnLoad}>
         {block.sections.map((section, index) => (
           <ZeroAccordionSection key={`accordion_section-${index}`}>
             <ZeroAccordionSection.Header>
@@ -22,7 +24,7 @@ export default function AccordionBlock({ block }) {
             </ZeroAccordionSection.Header>
 
             <ZeroAccordionSection.Content>
-              <div>{section.content}</div>
+              <div className="accordion-content-text" dangerouslySetInnerHTML={{ __html: section.content }}></div>
             </ZeroAccordionSection.Content>
           </ZeroAccordionSection>
         ))}

@@ -1,14 +1,19 @@
 .accordion-chevron {
-  transition: 250ms ease;
   width: 1.125rem;
-  transform-origin: center;
+  margin-top: 0.25rem;
+  svg {
+    transition: 250ms ease;
+    transform-origin: center;
+  }
 }
 
 .accordion-section {
   margin-bottom: 2rem;
   &.open {
     .accordion-chevron {
-      transform: rotate(180deg);
+      svg {
+        transform: rotate(180deg);
+      }
     }
   }
 }
