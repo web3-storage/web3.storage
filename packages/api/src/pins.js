@@ -366,7 +366,7 @@ export async function pinDelete (request, env, ctx) {
 
   let res
   try {
-    // Update deleted_at (and updated_at) for the pin request
+    // Update deleted_at (and updated_at) timestamp for the pin request.
     res = await env.db.deletePAPinRequest(requestId, authToken._id)
   } catch (e) {
     console.error(e)
@@ -374,11 +374,6 @@ export async function pinDelete (request, env, ctx) {
     // TODO notFound error paylod does not strictly comply to spec.
     return notFound()
   }
-
-  /**
-   * TODO: check if there's any more pin requests left for a cid
-   *  and if not, update deleted_at for the specific upload
-   */
 
   return new JSONResponse(res)
 }
