@@ -14,14 +14,6 @@ SERVER dag_cargo_server
       );
 
 CREATE
-USER MAPPING FOR current_user
-  SERVER dag_cargo_server
-  OPTIONS (
-      user :'DAG_CARGO_USER', 
-      password :'DAG_CARGO_PASSWORD'
-    );
-
-CREATE
 USER MAPPING FOR :WEB3_STORAGE_USER
   SERVER dag_cargo_server
   OPTIONS (

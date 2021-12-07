@@ -54,7 +54,7 @@ export async function dbSqlCmd ({ reset, cargo, testing } = {}) {
     fdwSql = fdwSql.replace(":'DAG_CARGO_DATABASE'", `'${process.env.DAG_CARGO_DATABASE}'`)
     fdwSql = fdwSql.replaceAll(":'DAG_CARGO_USER'", `'${process.env.DAG_CARGO_USER}'`)
     fdwSql = fdwSql.replaceAll(":'DAG_CARGO_PASSWORD'", `'${process.env.DAG_CARGO_PASSWORD}'`)
-    fdwSql = fdwSql.replaceAll(":WEB3_STORAGE_USER", `${process.env.WEB3_STORAGE_USER || 'CURRENT_USER'}`)
+    fdwSql = fdwSql.replaceAll(":'WEB3_STORAGE_USER'", `${process.env.WEB3_STORAGE_USER || 'CURRENT_USER'}`)
     await client.query(fdwSql)
     await client.query(cargoSql)
   }
