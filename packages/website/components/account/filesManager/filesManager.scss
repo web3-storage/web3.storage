@@ -2,12 +2,13 @@ $input-gradient-overage-width: '1%';
 $input-gradient-overage-height: '5%';
 
 $base-row-width: 55.5625rem;
-$date-width: calculateWidthPercentage(6.25rem, $base-row-width);
-$date-name: calculateWidthPercentage(14rem, $base-row-width);
-$date-cid: calculateWidthPercentage(11.375rem, $base-row-width);
-$date-pin-status: calculateWidthPercentage(7.5625rem, $base-row-width);
-$date-storage-providers: calculateWidthPercentage(11.6875rem, $base-row-width);
-$date-size: auto;
+$file-width: calculateWidthPercentage(6.25rem, $base-row-width);
+$file-name: calculateWidthPercentage(14rem, $base-row-width);
+$file-cid: calculateWidthPercentage(11.375rem, $base-row-width);
+$file-availability: calculateWidthPercentage(7.5rem, $base-row-width);
+$file-pin-status: calculateWidthPercentage(6.5rem, $base-row-width);
+$file-storage-providers: calculateWidthPercentage(6.5rem, $base-row-width);
+$file-size: auto;
 
 .files-manager-container {
   display: flex;
@@ -81,10 +82,12 @@ $date-size: auto;
 .files-manager-row {
   @include fontSize_Tiny;
   @include fontWeight_Semibold;
+  @include leading_Tiny;
 
   display: grid;
   position: relative;
-  grid-template-columns: $date-width $date-name $date-cid $date-pin-status $date-storage-providers $date-size;
+  grid-template-columns: $file-width $file-name $file-cid $file-availability $file-pin-status $file-storage-providers $file-size;
+  align-items: end;
 }
 
 .files-manager-table-header-divider {

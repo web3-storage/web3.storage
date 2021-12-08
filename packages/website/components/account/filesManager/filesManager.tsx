@@ -28,7 +28,8 @@ const FilesManager = ({ className }: FilesManagerProps) => {
         <span className="file-date">Date</span>
         <span className="file-name">Name</span>
         <span className="file-cid">CID</span>
-        <span className="file-pin-status">Pin Status</span>
+        <span className="file-availability">Availability</span>
+        <span className="file-pin-status">Status</span>
         <span className="file-storage-providers">Storage Providers</span>
         <span className="file-size">Size</span>
       </div>
