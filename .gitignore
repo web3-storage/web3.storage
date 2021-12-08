@@ -35,6 +35,3 @@ yarn.lock
 site/public
 .cluster
 *.http
-
-
-.docker-volumes
