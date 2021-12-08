@@ -1,0 +1,31 @@
+.accordion-chevron {
+  transition: 250ms ease;
+  width: 1.125rem;
+  transform-origin: center;
+}
+
+.accordion-section {
+  margin-bottom: 2rem;
+  &.open {
+    .accordion-chevron {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.accordion-header {
+  margin-bottom: 0.5rem;
+}
+
+.accordion-header-text {
+  margin-left: 3.625rem;
+  @include fontSize_MediumLarge;
+  @include fontWeight_Semibold;
+  line-height: leading(40, 25);
+}
+
+.accordion-content {
+  margin-left: 4.75rem;
+  @include fontSize_Regular;
+  line-height: leading(34, 18);
+}

@@ -16,6 +16,7 @@
         "columns": [
           {
             "type": "hero",
+            "page": "index",
             "cols": {
               "num": "col-6",
               "push_left": "off-3"

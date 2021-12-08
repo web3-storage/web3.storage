@@ -24,11 +24,13 @@
 @import '../components/card/card.scss';
 @import '../components/textblock/textblock.scss';
 @import '../components/imageblock/imageblock.scss';
+@import '../components/accordionblock/accordionblock.scss';
 @import '../components/hero/hero.scss';
 @import '../components/messagebanner/messagebanner.scss';
 
 // Pages
 @import '../pages/index.scss';
+@import '../pages/about.scss';
 @import '../pages/login';
 @import '../pages/account';
 
