@@ -1,4 +1,6 @@
 import clsx from 'clsx';
+import Link from 'next/link';
+import { useState } from 'react';
 
 import Modal from 'modules/zero/components/modal/modal';
 import Dropzone from 'modules/zero/components/dropzone/dropzone';
@@ -49,6 +51,8 @@ const UploadContentBlock = ({ className, heading, icon, description }) => (
  * @returns
  */
 const FileUploader = ({ className = '', uploadModalState, background }) => {
+  const [filesToUpload, setFilesToUpload] = useState([]);
+
   return (
     <div className={'file-upload-modal'}>
       <Modal
@@ -60,12 +64,16 @@ const FileUploader = ({ className = '', uploadModalState, background }) => {
         <div className={clsx(className, 'file-uploader-container')}>
           {background}
           <GradientBackgroundB className="account-gradient-background" />
-          <h5>Upload a file</h5>
-          <div className="file-upload-subheading">You can also upload files using the JS Client Library.</div>
+          <h5>Upload {!!filesToUpload.length ? 'more files' : 'a file'}</h5>
+          <div className={'file-upload-subheading'}>
+            You can also upload files using the{'\u00A0'}
+            <Link href="https://www.npmjs.com/package/web3.storage">JS Client Library.</Link>
+          </div>
           <Dropzone
             className="file-uploader-dropzone"
-            onChange={() => {
+            onChange={files => {
               console.log('file change');
+              setFilesToUpload(filesToUpload.concat(files));
             }}
             onError={() => {
               console.log('error');
