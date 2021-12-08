@@ -137,7 +137,6 @@ export type ContentInput = {
   dagSize: definitions['content']['dag_size']
   pins: Array<{
     status: definitions['pin']['status']
-    // updated: definitions['pin']['updated_at']
     location: Location
   }>
 }
@@ -148,7 +147,7 @@ export type ContentItem = {
   created?: definitions['upload']['inserted_at']
   pins: Array<{
     status: definitions['pin']['status']
-    // updated: definitions['pin']['updated_at']
+    updated: definitions['pin']['updated_at']
     location: Location
   }>
 }
@@ -158,7 +157,7 @@ export type ContentItemOutput = {
   cid: definitions['content']['cid']
   dagSize?: definitions['content']['dag_size']
   pins: Array<PinItemOutput>,
-  deals?: Array<Deal>
+  deals: Array<Deal>
 }
 
 
@@ -203,7 +202,7 @@ export type UploadItemOutput = {
   cid: definitions['content']['cid']
   dagSize?: definitions['content']['dag_size']
   pins: Array<PinItemOutput>,
-  deals?: Array<Deal>
+  deals: Array<Deal>
 }
 
 export type UploadOutput = definitions['upload'] & {

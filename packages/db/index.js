@@ -645,7 +645,7 @@ export class DBClient {
         )
       `)
       .match({
-        issuer: issuer
+        issuer
       })
       .filter('keys.deleted_at', 'is', null)
       .eq('keys.secret', secret)

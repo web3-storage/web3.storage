@@ -350,13 +350,6 @@ export async function pinDelete (request, env, ctx) {
     )
   }
 
-  if (!(/^\d+$/.test(request.params.requestId))) {
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
-      { status: ERROR_CODE }
-    )
-  }
-
   // TODO: write logic for deleting pin request
   return new JSONResponse('OK')
 }
