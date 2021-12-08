@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 // ///////////////////////////////////////////////////////////////////// General
 // -----------------------------------------------------------------------------
 .hero-illustration {
@@ -43,7 +45,8 @@
   z-index: 0;
 }
 
-#index_hero-grid-3d {
+#index_hero-grid-3d,
+#faq_hero-grid-3d {
   position: absolute;
   top: -9999px;
   bottom: -9999px;
@@ -91,4 +94,132 @@
   left: 30%;
   bottom: 5rem;
   transform: rotate(-90deg);
+}
+
+// ////////////////////////////////////////////////////////////////// Page [FAQ]
+// -----------------------------------------------------------------------------
+
+#faq_hero-header {
+  position: relative;
+  padding-top: 10rem;
+  z-index: 1;
+  .text-block {
+    position: relative;
+    z-index: 2;
+    .heading {
+      display: none;
+    }
+    .subheading {
+      position: relative;
+      width: calc(100% + 2rem);
+      left: -1rem;
+      display: inline-block;
+      @include fontSize_Huge;
+      @include fontWeight_Semibold;
+      line-height: leading(96, 67);
+      text-align: center;
+      div {
+        display: inherit;
+      }
+      span {
+        &:last-child {
+          margin-right: 4.875rem;
+        }
+      }
+    }
+  }
+}
+
+#faq_hero-grid-3d {
+  top: calc(-2rem - $navigationHeight);
+  bottom: unset;
+  transform: scale(1.62, 1.1);
+  svg,
+  path {
+    opacity: 0.75;
+  }
+}
+
+.faq_hero-artwork-container {
+  &:after {
+    content: '';
+    position: absolute;
+    top: calc(-2rem - $navigationHeight);
+    left: 0;
+    width: 100%;
+    height: 80rem;
+    background: linear-gradient(rgba($seaShell, 0), $seaShell);
+    z-index: 1;
+  }
+}
+
+#faq_hero_title-triangle {
+  position: relative;
+  width: 4.875rem;
+  height: 4.875rem;
+  top: 1rem;
+  margin: 0 0.5rem;
+  &:after {
+    display: inherit;
+    content: '';
+    top: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: scaleX(-1) rotate(-90deg);
+    background-image: url('../../assets/images/triangle.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+  }
+}
+
+#faq_hero_title-coil {
+  position: relative;
+  width: 4.875rem;
+  height: 4.875rem;
+  top: 1rem;
+  margin: 0 0.5rem;
+  &:after {
+    display: inherit;
+    content: '';
+    top: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: rotate(31deg);
+    background-image: url('../../assets/images/coil.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+  }
+}
+
+#faq_hero-ring,
+#faq_hero-helix,
+#faq_hero-corkscrew {
+  position: absolute;
+}
+
+#faq_hero-ring {
+  width: 36.5rem;
+  right: 0;
+  bottom: 0;
+  transform: translate(55%, 54%) rotate(-23deg);
+}
+
+#faq_hero-corkscrew {
+  width: 13.375rem;
+  top: 13.5rem;
+  right: calc(50% - #{math.div($containerWidth, 2)} + 3rem);
+  transform: scaleX(-1) rotate(-1deg);
+  @include containerMaxMQ {
+    right: 0;
+  }
+}
+
+#faq_hero-helix {
+  width: 18rem;
+  left: 0;
+  top: 1rem;
+  left: -4rem;
+  transform: rotate(-79deg);
 }
