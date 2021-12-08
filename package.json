@@ -12,12 +12,12 @@
     "packages/report",
     "packages/w3",
     "packages/website",
-    "packages/pinpin"
+    "packages/pinpin",
+    "packages/tools"
   ],
   "scripts": {
     "test": "npm run lint && npm run test --workspaces",
     "lint": "standard --verbose | snazzy",
-    "start:cluster": "./docker/cluster/run.sh",
     "lint:fix": "standard --fix "
   },
   "devDependencies": {

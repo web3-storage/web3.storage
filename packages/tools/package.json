@@ -1,0 +1,19 @@
+{
+  "name": "tools",
+  "version": "1.0.0",
+  "description": "Web3.Storage tools",
+  "private": "true",
+  "main": "index.js",
+  "type": "module",
+  "devDependencies": {},
+  "scripts": {
+    "start:cluster": "./docker/cluster/run.sh",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "web3.storage",
+    "tools\\"
+  ],
+  "author": "Paolo Chillari",
+  "license": "(Apache-2.0 AND MIT)"
+}
