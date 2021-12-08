@@ -28,6 +28,18 @@
     border-radius: 0.625rem;
   }
 
+  .filelist {
+    @include fontSize_Tiny;
+    @include fontWeight_Regular;
+
+    > * {
+      border-top: 0.0625rem solid rgba($white, 0.25);
+      padding: 0.25rem 0;
+    }
+    border-bottom: 0.0625rem solid rgba($white, 0.25);
+    grid-row-gap: 0;
+    margin-bottom: 0.85rem;
+  }
   margin-bottom: 0.5rem;
 }
 
@@ -76,6 +88,8 @@
   display: flex;
   align-items: center;
   margin-bottom: 0.25rem;
+  @include fontSize_Small;
+  @include fontWeight_Semibold;
 
   svg {
     margin-right: 1.4375rem;
