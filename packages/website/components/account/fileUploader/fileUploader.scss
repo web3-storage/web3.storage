@@ -45,6 +45,7 @@
 .file-upload-modal {
   .modalContainer {
     max-width: 45.6275rem;
+    border-radius: 0.625rem;
   }
   .modalClose {
     top: 1.5rem;
@@ -54,7 +55,6 @@
   .modal {
     background: none;
     overflow: hidden;
-    border-radius: 0.625rem;
   }
 
   svg {
