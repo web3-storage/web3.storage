@@ -15,11 +15,15 @@ One time set up of your cloudflare worker subdomain for dev:
   The root project contains a docker compose compfiguration to spin up a cluster in `docker/cluster`
     
   - You need to run a cluster locally and make it accessible from the internet for development. 
-  - From the root folder you can run
-      ```
-      npm run start:cluster
-      ```
-      to start the IPFS cluster.
+    ```
+    npm run cluster:start
+    ```
+    to start the IPFS cluster.
+
+    You can stop the cluster by
+    ```
+    npm run cluster:stop
+    ```
   - 
     ```sh
     npm install -g localtunnel

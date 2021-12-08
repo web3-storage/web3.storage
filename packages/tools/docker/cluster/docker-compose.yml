@@ -25,41 +25,44 @@ version: '3.4'
 # |-- ...
 # 
 # During the first start, default configurations are created for all peers.
+volumes:
+  cluster0:
+  ipfs0:
 
 services:
 
-##################################################################################
-## Cluster PEER 0 ################################################################
-##################################################################################
+  ##################################################################################
+  ## Cluster PEER 0 ################################################################
+  ##################################################################################
 
-  ipfs0:
-    container_name: ipfs0
-    image: ipfs/go-ipfs:latest
-#   ports:
-#     - "4001:4001" # ipfs swarm - expose if needed/wanted
-#     - "5001:5001" # ipfs api - expose if needed/wanted
-#     - "8080:8080" # ipfs gateway - expose if needed/wanted
-    volumes:
-      - ./.docker-volumes/ipfs0:/data/ipfs
-      
-  cluster0:
-    container_name: cluster0
-    image: ipfs/ipfs-cluster:latest
-    depends_on:
-      - ipfs0
-    environment:
-      CLUSTER_PEERNAME: cluster0
-      CLUSTER_SECRET: ${CLUSTER_SECRET} # From shell variable if set
-      CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs0/tcp/5001
-      CLUSTER_CRDT_TRUSTEDPEERS: '*' # Trust all peers in Cluster
-      CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # Expose API
-      CLUSTER_MONITORPINGINTERVAL: 2s # Speed up peer discovery
-    ports:
-          # Open API port (allows ipfs-cluster-ctl usage on host)
-          - "127.0.0.1:9094:9094"
-          # The cluster swarm port would need  to be exposed if this container
-          # was to connect to cluster peers on other hosts.
-          # But this is just a testing cluster.
-          # - "9096:9096" # Cluster IPFS Proxy endpoint
-    volumes:
-      - ./.docker-volumes/compose/cluster0:/data/ipfs-cluster
+    ipfs0:
+      container_name: ipfs0
+      image: ipfs/go-ipfs:latest
+      volumes:
+        - ipfs0:/data/ipfs
+      #ports:
+      #- "4001:4001" # ipfs swarm - expose if needed/wanted
+      #- "5001:5001" # ipfs api - expose if needed/wanted
+      #- "8080:8080" # ipfs gateway - expose if needed/wanted
+        
+    cluster0:
+      container_name: cluster0
+      image: ipfs/ipfs-cluster:latest
+      depends_on:
+        - ipfs0
+      environment:
+        CLUSTER_PEERNAME: cluster0
+        CLUSTER_SECRET: ${CLUSTER_SECRET} # From shell variable if set
+        CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs0/tcp/5001
+        CLUSTER_CRDT_TRUSTEDPEERS: '*' # Trust all peers in Cluster
+        CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # Expose API
+        CLUSTER_MONITORPINGINTERVAL: 2s # Speed up peer discovery
+      volumes:
+        - cluster0:/data/ipfs-cluster
+      ports:
+            # Open API port (allows ipfs-cluster-ctl usage on host)
+            - "127.0.0.1:9094:9094"
+            # The cluster swarm port would need  to be exposed if this container
+            # was to connect to cluster peers on other hosts.
+            # But this is just a testing cluster.
+            # - "9096:9096" # Cluster IPFS Proxy endpoint
