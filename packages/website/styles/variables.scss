@@ -27,9 +27,8 @@ $gray900: #212121;
 
 $black: #000000; // full black
 $waterloo: #757a9b; // A grayish blue
-$comet: #586379; // A very grayish blue
+$comet: #262940; // A very grayish blue
 $shark: #1d2027; // A blackish blue
-$vulcan: #0f111a; // A very blackish blue
 $white: #ffffff; // full white
 $seaShell: #f1f1f1; // pale matte gray
 $steelGray: #1c1e29; // almost black gray
@@ -57,7 +56,7 @@ $breakpoint_UltraLarge: 140.625rem; // 2250px
 }
 
 $gradient_PinkBlue: linear-gradient(45deg, $cerise 0%, $royalBlue 48%, $pictionBlue 100%);
-$gradient_BluePurple: linear-gradient(-45deg, $cyan 0%, $royalBlue 50%, $heliotrope 100%);
+$gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotrope 100%);
 
 // ////////////////////////////////////////////////////////////////////// Mixins
 // =============================================================================
