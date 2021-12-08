@@ -1,0 +1,89 @@
+.file-uploader-container {
+  // min-width: 45.625rem;
+  color: $ebony;
+  padding: 3.125rem 8.5rem 3.125rem 8.125rem;
+
+  > * {
+    position: relative;
+  }
+  h5 {
+    text-align: center;
+    margin-bottom: 0.85rem;
+  }
+}
+
+.file-upload-subheading {
+  @include fontSize_Small;
+  @include fontWeight_Regular;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.file-uploader-dropzone {
+  .droparea {
+    padding: 1.875rem 0;
+    background: rgba($white, 0.1);
+    border: solid;
+    border-image: url('../../../assets/images/dashed-border.png') 2 round;
+    border-radius: 0.625rem;
+  }
+
+  margin-bottom: 0.5rem;
+}
+
+.file-upload-modal {
+  .modalContainer {
+    max-width: 45.6275rem;
+  }
+  .modalClose {
+    top: 1.5rem;
+    right: 1.5rem;
+  }
+
+  .modal {
+    background: none;
+    overflow: hidden;
+    border-radius: 0.625rem;
+  }
+
+  svg {
+    color: $ebony;
+  }
+
+  .dragAreaText {
+    @include fontSize_Small;
+    @include fontWeight_Regular;
+    letter-spacing: $letterSpacing_None;
+  }
+}
+
+.upload-content-block {
+  @include leading_Small;
+}
+
+.upload-content-block {
+  padding-left: 1.25rem;
+  padding-right: 0.25rem;
+  &:not(:last-child) {
+    margin-bottom: 1.5rem;
+  }
+  &:last-child {
+    padding-bottom: 0.75rem;
+  }
+}
+
+.upload-content-block-heading {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+
+  svg {
+    margin-right: 1.4375rem;
+  }
+}
+
+.upload-content-block-description {
+  @include fontSize_Tiny;
+  @include fontWeight_Regular;
+  letter-spacing: $letterSpacing_None;
+}

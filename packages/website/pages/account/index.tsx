@@ -70,7 +70,10 @@ const Account: React.FC = () => {
           />
           <FilesManager className="account-files-manager" />
         </div>
-        <FileUploader uploadModalState={uploadModalState} />
+        <FileUploader
+          uploadModalState={uploadModalState}
+          background={<GradientBackgroundB className="account-gradient-background" />}
+        />
       </div>
     </>
   );
