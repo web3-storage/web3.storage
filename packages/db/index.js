@@ -896,7 +896,6 @@ export class DBClient {
     }
 
     if (opts.name && match === 'exact') {
-      console.log('exact', opts.name)
       query = query.like('name', `${opts.name}`)
     }
 
@@ -919,12 +918,14 @@ export class DBClient {
     if (opts.after) {
       query = query.gte('inserted_at', opts.after)
     }
-    /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error }} */
+
+    /** @type {{ data: Array<import('./db-client-types').PAPinRequestItem>, error: Error }} */
     const { data: pinRequests, error } = (await query)
 
     if (error) {
       throw new DBError(error)
     }
+
     return pinRequests.map(pR => normalizePaPinRequest(pR))
   }
 

@@ -24,7 +24,7 @@ import type {
   PAPinRequestUpsertOutput,
   PAPinRequestUpsertInput,
   ContentInput,
-  ListPAPinRequestOptions
+  ListPAPinRequestOptions,
 } from './db-client-types'
 
 export { gql }

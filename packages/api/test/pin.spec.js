@@ -234,6 +234,68 @@ describe('Pinning APIs endpoints', () => {
     })
   })
 
+  describe('GET /pins', () => {
+    let token = null
+    let baseUrl
+    before(async () => {
+      token = await getTestJWT()
+      baseUrl = new URL('pins', endpoint).toString()
+    })
+
+    it('validates filter values', async () => {
+      const opts = new URLSearchParams({
+        limit: '3.14'
+      })
+      const url = `${baseUrl}?${opts}`
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(!res.ok, 'Serve returns an error')
+    })
+
+    it('filters the list of pins', async () => {
+      const opts = new URLSearchParams({
+        name: 'PinnedDoc.pdf',
+        match: 'exact',
+        limit: '3'
+      })
+      const url = `${baseUrl}?${opts}`
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Serve response is ok')
+    })
+
+    it('returns the pins with default filter values', async () => {
+      const url = `${baseUrl}`
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Serve response is ok')
+    })
+  })
+
   describe('GET /pins/:requestId', () => {
     let token = null
     before(async () => {
@@ -369,7 +431,7 @@ describe('Pinning APIs endpoints', () => {
     })
   })
 
-  describe('GET /delete/:requestId', () => {
+  describe('DELETE /pins/:requestId', () => {
     let token = null
     before(async () => {
     // Create token
@@ -391,9 +453,9 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(data, 'OK')
     })
 
-    it('requires requestId', async () => {
+    it('requires a requestId', async () => {
       const res = await fetch(new URL('pins', endpoint).toString(), {
-        method: 'GET',
+        method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'

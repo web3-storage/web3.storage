@@ -278,6 +278,18 @@ export type ListPAPinRequestOptions = {
    */
   cid?: string[]
   /**
+   * Name  to match
+   */
+  name?: string
+   /**
+   * Match (default: exact)
+   */
+  match?: "exact" | "iexact" | "partial" | "ipartial"
+  /**
+   * status  to match
+   */
+  status?: Array<definitions['pin']['status']>
+  /**
    * Uploads created before a given timestamp.
    */
   before?: string
@@ -290,23 +302,10 @@ export type ListPAPinRequestOptions = {
    */
   limit?: number
   /**
-   * Match (default: exact)
-   */
-  match?: "exact" | "iexact" | "partial" | "ipartial"
-  /**
-   * Name  to match
-   */
-  name?: string
-  /**
-   * status  to match
-   */
-   status?: Array<definitions['pin']['status']>
-  /**
    * TODO.
    */
   meta?: unknown,
 }
-
 
 export type NameItem = {
   record: definitions['name']['record']

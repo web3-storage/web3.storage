@@ -75,6 +75,8 @@ export const INVALID_NAME = 'Name should be a string'
 export const INVALID_ORIGINS = 'Origins should be an array of strings'
 export const INVALID_REQUEST_ID = 'Request id should be a string'
 export const INVALID_STATUS = 'Status should be an array of strings'
+export const INVALID_TIMESTAMP = 'Should be a valid timestamp'
+export const INVALID_LIMIT = 'Limit should be a number'
 export const REQUIRED_CID = 'CID is required'
 export const REQUIRED_REQUEST_ID = 'Request id is required'
 export const UNPERMITTED_MATCH = 'Match should be "exact", "iexact", "partial", or "ipartial"'
@@ -234,7 +236,6 @@ export async function pinGet (request, env, ctx) {
   }
 
   const requestId = parseInt(request.params.requestId, 10)
-
   let pinRequest
 
   try {
@@ -247,31 +248,32 @@ export async function pinGet (request, env, ctx) {
   }
 
   /** @type { ServiceApiPinStatus } */
-  const response = {
-    requestId: pinRequest._id,
-    created: pinRequest.created,
-    // TODO populate delegates
-    delegates: [],
-    status: getPinningAPIStatus(pinRequest.pins),
-    pin: {
-      cid: pinRequest.requestedCid,
-      name: pinRequest.name,
-      // TODO populate origins and meta
-      origins: [],
-      meta: {}
-    }
-  }
-
-  return new JSONResponse(response)
+  const pin = getPinStatus(pinRequest)
+  return new JSONResponse(pin)
 }
 
 /**
+ * List all the pins matching optional filters.
+ * When no filter is specified, only successful pins are returned.
+ *
  * @param {import('./user').AuthenticatedRequest} request
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
  */
 export async function pinsGet (request, env, ctx) {
-  const { cid, name, match, status } = request.params
+  const url = new URL(request.url)
+  const urlParams = new URLSearchParams(url.search)
+  const opts = Object.fromEntries(urlParams)
+
+  const {
+    cid,
+    name,
+    match,
+    status,
+    before,
+    after,
+    limit
+  } = opts
 
   // Normalize cid
   if (cid) {
@@ -309,23 +311,82 @@ export async function pinsGet (request, env, ctx) {
   }
 
   // Validate status
-  if (status && !Array.isArray(status)) {
-    const isValidStatus = status.every(v => STATUS_OPTIONS.includes(v))
-    if (!isValidStatus) {
+  if (status) {
+    if (Array.isArray(status)) {
+      const isValidStatus = status.every(v => STATUS_OPTIONS.includes(v))
+      if (!isValidStatus) {
+        return new JSONResponse(
+          { error: { reason: ERROR_STATUS, details: UNPERMITTED_STATUS } },
+          { status: ERROR_CODE }
+        )
+      }
+    } else {
       return new JSONResponse(
-        { error: { reason: ERROR_STATUS, details: UNPERMITTED_STATUS } },
+        { error: { reason: ERROR_STATUS, details: INVALID_STATUS } },
         { status: ERROR_CODE }
       )
     }
+  }
 
+  // Validate before timestamp.
+  if (before && (typeof before !== 'string' || (new Date(before)).getTime() <= 0)) {
     return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_STATUS } },
+      { error: { reason: ERROR_STATUS, details: INVALID_TIMESTAMP } },
       { status: ERROR_CODE }
     )
   }
 
-  // TODO: write logic for listing pins
-  return new JSONResponse('OK')
+  // Validate after timestamp.
+  if (after && (typeof after !== 'string' || (new Date(after)).getTime() <= 0)) {
+    return new JSONResponse(
+      { error: { reason: ERROR_STATUS, details: INVALID_TIMESTAMP } },
+      { status: ERROR_CODE }
+    )
+  }
+
+  // Validate query limit.
+  if (limit && !(/^\d+$/.test(limit))) {
+    return new JSONResponse(
+      { error: { reason: ERROR_STATUS, details: INVALID_LIMIT } },
+      { status: ERROR_CODE }
+    )
+  }
+
+  let pinRequests
+
+  try {
+    pinRequests = await env.db.listPAPinRequests(request.auth.authToken, opts)
+  } catch (e) {
+    console.error(e)
+    return notFound()
+  }
+
+  const pins = pinRequests.map((pinRequest) => getPinStatus(pinRequest))
+  return new JSONResponse({
+    count: pins.length,
+    results: pins
+  })
+}
+
+/**
+ * Transform a PinRequest into a PinStatus
+ *
+ * @param { Object } pinRequest
+ * @returns { ServiceApiPinStatus }
+ */
+function getPinStatus (pinRequest) {
+  return {
+    requestId: pinRequest._id,
+    status: getPinningAPIStatus(pinRequest.pins),
+    created: pinRequest.created,
+    pin: {
+      cid: pinRequest.requestedCid,
+      name: pinRequest.name,
+      origins: [],
+      meta: {}
+    },
+    delegates: []
+  }
 }
 
 /**
