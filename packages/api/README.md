@@ -11,9 +11,6 @@ One time set up of your cloudflare worker subdomain for dev:
 - `npm i @cloudflare/wrangler -g` - Install the Cloudflare wrangler CLI
 - `wrangler login` - Authenticate your wrangler cli; it'll open your browser.
 - Setup Cluster
-
-  The root project contains a docker compose compfiguration to spin up a cluster in `docker/cluster`
-    
   - You need to run a cluster locally and make it accessible from the internet for development. 
     ```
     npm run cluster:start
@@ -24,13 +21,18 @@ One time set up of your cloudflare worker subdomain for dev:
     ```
     npm run cluster:stop
     ```
+
+    The data is persisted among different runs, if you'd like to reset your cluster you can run
+        ```
+    npm run cluster:reset
+    ```
   - 
     ```sh
     npm install -g localtunnel
     npm run lt:cluster
     ```
 
-  - There is an npm script you can use to quickly establish these tunnels during development:
+    - There is an npm script you can use to quickly establish these tunnels during development:
 
     ```sh
     npm run lt
