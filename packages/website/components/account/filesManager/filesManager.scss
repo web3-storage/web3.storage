@@ -1,21 +1,24 @@
 $input-gradient-overage-width: '1%';
 $input-gradient-overage-height: '5%';
 
-$base-row-width: 55.5625rem;
-$file-width: calculateWidthPercentage(6.25rem, $base-row-width);
-$file-name: calculateWidthPercentage(14rem, $base-row-width);
-$file-cid: calculateWidthPercentage(11.375rem, $base-row-width);
-$file-availability: calculateWidthPercentage(7.5rem, $base-row-width);
-$file-pin-status: calculateWidthPercentage(6.5rem, $base-row-width);
-$file-storage-providers: calculateWidthPercentage(6.5rem, $base-row-width);
+$base-row-width: 60.125rem;
+$file-select: calculateWidthPercentage(2.375rem, $base-row-width);
+$file-date: calculateWidthPercentage(5.8125rem, $base-row-width);
+$file-name: calculateWidthPercentage(13rem, $base-row-width);
+$file-cid: calculateWidthPercentage(12.6875rem, $base-row-width);
+$file-availability: calculateWidthPercentage(7.375rem, $base-row-width);
+$file-pin-status: calculateWidthPercentage(6.5625rem, $base-row-width);
+$file-storage-providers: calculateWidthPercentage(7.5rem, $base-row-width);
 $file-size: auto;
+
+$info-icon-size: 0.5625rem;
 
 .files-manager-container {
   display: flex;
   flex-direction: column;
   position: relative;
   justify-content: flex-start;
-  padding: 1.5rem 2.125rem;
+  padding: 1.5rem 0;
 
   > * {
     width: 100%;
@@ -26,7 +29,7 @@ $file-size: auto;
   display: flex;
   justify-content: space-between;
   justify-items: center;
-  padding-bottom: 1.5rem;
+  padding: 0 2.125rem 1.5rem;
 }
 
 .files-manager-search {
@@ -86,12 +89,65 @@ $file-size: auto;
 
   display: grid;
   position: relative;
-  grid-template-columns: $file-width $file-name $file-cid $file-availability $file-pin-status $file-storage-providers $file-size;
+  grid-template-columns: $file-select $file-date $file-name $file-cid $file-availability $file-pin-status $file-storage-providers $file-size;
   align-items: end;
+  padding-left: 1.125rem;
+  min-height: 6.1875rem;
+  border-bottom: 0.0625rem solid rgba(white, 0.05);
+
+  &-header {
+    padding-bottom: 1.25rem;
+    min-height: initial;
+    border-bottom: 0.125rem solid rgba(white, 0.15);
+  }
+
+  .file {
+    &-select {
+      width: 0.75rem;
+      height: 0.75rem;
+      @include border_Background_Waterloo_White;
+      border-radius: 0.125rem;
+      cursor: pointer;
+      position: relative;
+
+      input {
+        cursor: pointer;
+        opacity: 0;
+      }
+      input:checked ~ .check {
+        display: initial;
+      }
+      svg {
+        display: none;
+        color: $cyan;
+        top: -0.2rem;
+        position: absolute;
+        pointer-events: none;
+      }
+    }
+    &-date {
+      padding-right: 2.1875rem;
+    }
+    &-name {
+      padding-right: 2.1875rem;
+    }
+    &-cid {
+      padding-right: 3rem;
+    }
+    &-availability {
+      padding-right: 2.6875rem;
+    }
+    &-pin-status {
+      padding-right: 3rem;
+    }
+    &-storage-providers {
+      padding-right: 2.5rem;
+    }
+  }
 }
 
 .files-manager-table-header-divider {
-  border-bottom: 1px solid rgba(white, 0.05);
+  border-bottom: 0.0625rem solid rgba($white, 0.05);
   position: absolute;
   width: 100%;
   left: 0;
@@ -99,15 +155,56 @@ $file-size: auto;
 }
 
 .files-manager-table-content {
-  padding-top: 2.5rem;
+  display: flex;
 }
 
 .files-manager-upload-cta {
   @include fontWeight_Regular;
   @include fontSize_Medium;
-
+  padding-left: 2.5rem;
+  padding-top: 0.85rem;
   .button {
     @include fontSize_Medium;
     padding-left: 0;
+  }
+}
+
+.info-container {
+  position: relative;
+  display: inline-block;
+}
+
+.info-icon {
+  color: $steelGray;
+  background: rgba($white, 0.75);
+  font-size: 0.3125rem;
+  width: $info-icon-size;
+  height: $info-icon-size;
+  display: block;
+  text-align: center;
+  border-radius: 1rem;
+  line-height: 0.5rem;
+  cursor: pointer;
+  @include fontWeight_Semibold;
+}
+
+.info-tooltip {
+  position: absolute;
+  left: calc(100% + 0.75rem);
+  bottom: calc(50% - #{$info-icon-size / 2});
+  transform: translateY(calc(50% - #{$info-icon-size / 2}));
+  padding: 1rem 1.25rem;
+  background: rgba($martinique, 0.95);
+  border-radius: 0.75rem;
+  max-height: 3.8125rem;
+  color: $white;
+
+  &:before {
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+
+    border-right: 10px solid blue;
   }
 }
