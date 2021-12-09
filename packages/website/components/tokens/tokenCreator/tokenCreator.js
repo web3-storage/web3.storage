@@ -17,7 +17,7 @@ const Tokens = () => {
 
   return (
     <div className="token-creator-container">
-      <div className={clsx(!query.create && 'hidden')}>
+      <div className={clsx(!query.create && 'hidden', 'token-creator-input-container')}>
         <input ref={inputRef} className="token-creator-input" placeholder="Name your token" />
         <button className="token-creator-submit" onClick={useCallback(() => push('/tokens'), [push])}>
           +

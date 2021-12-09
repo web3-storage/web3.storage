@@ -6,7 +6,7 @@ import TokensManager from 'components/tokens/tokensManager/tokensManager';
 import Button, { ButtonVariant } from 'components/button/button';
 
 const Tokens = () => {
-  const tokens = [1]; // TODO: hook up to actual tokens
+  const tokens = []; // TODO: hook up to actual tokens
   return (
     <div className="page-container tokens-container">
       <div className="tokens-header">
