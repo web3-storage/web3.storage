@@ -16,8 +16,9 @@ const { Client } = pg
  * @param {boolean} [opts.reset]
  * @param {boolean} [opts.cargo]
  * @param {boolean} [opts.testing]
+ * @param {string} [opts.customSqlPath]
  */
-export async function dbSqlCmd ({ reset, cargo, testing } = {}) {
+export async function dbSqlCmd ({ reset, cargo, testing, customSqlPath } = {}) {
   // read all the SQL files
   const configSql = fs.readFileSync(path.join(__dirname, '../../postgres/config.sql'), 'utf-8')
 
@@ -27,6 +28,8 @@ export async function dbSqlCmd ({ reset, cargo, testing } = {}) {
   const cargoSql = fs.readFileSync(path.join(__dirname, '../../postgres/cargo.sql'), 'utf-8')
   const cargoTesting = fs.readFileSync(path.join(__dirname, '../../postgres/cargo.testing.sql'), 'utf-8')
   let fdwSql = fs.readFileSync(path.join(__dirname, '../../postgres/fdw.sql'), 'utf-8')
+  // Ready custom
+  const customSql = customSqlPath ? fs.readFileSync(customSqlPath, 'utf-8') : undefined
 
   // Setup postgres client
   const connectionString = process.env.PG_CONNECTION
@@ -61,5 +64,6 @@ export async function dbSqlCmd ({ reset, cargo, testing } = {}) {
   }
 
   await client.query(functionsSql)
+  customSql && await client.query(customSql)
   await client.end()
 }
