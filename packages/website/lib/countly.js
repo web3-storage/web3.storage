@@ -1,4 +1,7 @@
+import { useEffect } from 'react'
 import countly from 'countly-sdk-web'
+import Router from 'next/router'
+
 
 const config = {
   key: process.env.NEXT_PUBLIC_COUNTLY_KEY,
@@ -130,6 +133,15 @@ export function trackCustomLinkClick (event, target) {
       target.href,
     text: target.innerText
   })
+}
+
+export function useCountly () {
+  useEffect(() => {
+    init()
+    Router.events.on('routeChangeComplete', (route) => {
+      trackPageView(route)
+    })
+  }, [])
 }
 
 export let ready = false

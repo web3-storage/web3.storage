@@ -1,16 +1,25 @@
-import { useRouter } from "next/router";
 import { Web3Storage } from "web3.storage";
 import { useQueryClient } from "react-query";
 import { useDropzone } from "react-dropzone";
-import { useRef, useState } from "react";
-import { When } from 'react-if';
+import { useRef, useState, useContext, useCallback } from "react";
+import clsx from "clsx";
+import Link from "next/link";
+import prettyBytes from "pretty-bytes";
+import pMap from "p-map";
 
 import countly from "../lib/countly";
 import { getToken, API } from "../lib/api";
-import Alert from "../components/alert.js";
+import {
+  useProgress as useUploadProgress,
+  STATUS,
+  FilesContext,
+} from "../components/upload";
 import Button from "../components/button.js";
-import Cross from "../icons/cross";
-import Link from 'next/link'
+import Loading from "../components/loading";
+import { CrossWithNoFill } from "../icons/cross";
+import Tooltip from "../components/tooltip";
+
+const MAX_CONCURRENT_UPLOADS = 5;
 
 export function getStaticProps() {
   return {
@@ -22,116 +31,359 @@ export function getStaticProps() {
   };
 }
 
-export default function Upload() {
-  const router = useRouter();
-  const queryClient = useQueryClient();
-  const [uploading, setUploading] = useState(false);
-  const [/** @type {string|null} */ inputFile, setInputFile] = useState({ name: '' });
-  const /** @type {React.MutableRefObject<HTMLInputElement|null>} */ inputRef = useRef(null);
-  const [percentComplete, setPercentComplete] = useState(0);
-  const [error, setError] = useState('')
-
-  /** @param {import('react').ChangeEvent<HTMLFormElement>} e */
-  async function handleUploadSubmit(e) {
-    e.preventDefault();
-    const data = new FormData(e.target);
-    const file = data.get("file");
-    if (file && file instanceof File) {
-      await uploadFile(file)
-    }
+/**
+ *
+ * @param {Object} props
+ * @param {import('../components/upload').FileProgress} props.file
+ * @param {String} [props.className]
+ * @param {Function} props.onRemoveFile
+ * @returns
+ */
+function File({ file, className, onRemoveFile }) {
+  function handleRemoveFile() {
+    onRemoveFile(file)
   }
 
-  /** @param {File} file */
-  async function uploadFile(file) {
+  return (
+    <div
+      className={clsx(
+        className,
+        "relative mr-2 mb-2 px-2 py-1 border border-w3storage-black text-black leading-normal transition-colors overflow-hidden",
+        // @ts-ignore
+        file.status !== STATUS.FAILED
+          ? "bg-w3storage-red-light"
+          : "bg-w3storage-red bg-opacity-50"
+      )}
+    >
+      <div
+        className={clsx(
+          "absolute z-0 top-0 right-full bottom-0 -left-full transition bg-w3storage-green bg-opacity-25"
+        )}
+        style={{
+          transform: `translateX(${file.progress.percentage}%)`,
+        }}
+      />
+      <div className="flex">
+        <div>
+          <p className="text-sm truncate">{file.name}</p>
+          <p className="text-xs opacity-80">{prettyBytes(file.size)}</p>
+        </div>
+        {
+          // @ts-ignore
+          file.status !== STATUS.FAILED ?  (
+            <Tooltip
+            placement="topRight"
+            overlay={
+              (
+              <span>
+                Remove {file.name} from upload list.
+              </span>
+              )
+            }
+          >
+            <CrossWithNoFill className="pl-4 h-3 text-w3storage-red cursor-pointer text-opacity-80 hover:text-opacity-100 fill-current flex self-center" onClick={handleRemoveFile}/>
+          </Tooltip>
+          ) :  file.status !== STATUS.COMPLETED && <CrossWithNoFill className="pl-4 h-3 text-w3storage-red cursor-pointer text-opacity-80 hover:text-opacity-100 fill-current flex self-center" onClick={handleRemoveFile}/>
+        }
+      </div>
+    </div>
+  );
+}
+
+/**
+ *
+ * @param {Object} props
+ * @param {import('../components/upload').UploadProgress} props.progress
+ * @param {Function} props.onRemoveFile
+ * @returns
+ */
+function Files({ progress, onRemoveFile }) {
+  const fileWrapperClassName = "overflow-hidden";
+  const files = Object.values(progress.files);
+
+  return (
+    <>
+      {files.map((file) =>
+        // @ts-ignore
+        file.status === STATUS.FAILED ? (
+          <Tooltip
+            key={file.name}
+            placement="top"
+            overlay={
+              <span>
+                Error:{" "}
+                {progress.files[file.name].error?.message ||
+                  "Upload failed with unknown error. Please try again."}
+              </span>
+            }
+          >
+            <div className={fileWrapperClassName}>
+              <File
+                file={progress.files[file.name]}
+                onRemoveFile={onRemoveFile}
+              />
+            </div>
+          </Tooltip>
+        ) : (
+          <File
+            key={file.name}
+            className={fileWrapperClassName}
+            file={progress.files[file.name]}
+            onRemoveFile={onRemoveFile}
+          />
+        )
+      )}
+      {!progress.ready && "No file(s) chosen"}
+    </>
+  );
+}
+
+export default function Upload() {
+  const queryClient = useQueryClient();
+  const [finished, setFinished] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const /** @type {React.MutableRefObject<HTMLInputElement|null>} */ inputRef =
+      useRef(null);
+  const { files, set: setFiles } = useContext(FilesContext);
+  const {
+    progress,
+    initialize,
+    updateFileProgress,
+    markFileCompleted,
+    markFileFailed,
+  } = useUploadProgress(files);
+
+  const uploadFiles = useCallback(async () => {
+    setUploading(true);
+
     const client = new Web3Storage({
       token: await getToken(),
       endpoint: new URL(API),
     });
-    setUploading(true);
+
     try {
-      let totalBytesSent = 0;
-      await client.put([file], {
-        name: file.name,
-        onStoredChunk: (size) => {
-          totalBytesSent += size;
-          setPercentComplete(Math.round((totalBytesSent / file.size) * 100));
-        },
+      const uploadFile = async (
+        /** @type import('../components/upload').FileProgress} */ file
+      ) => {
+        try {
+          await client.put([file.inputFile], {
+            name: file.name,
+            onStoredChunk: (size) => updateFileProgress(file, size),
+          });
+        } catch (error) {
+          markFileFailed(file, error);
+          console.error(error);
+          return;
+        }
+
+        markFileCompleted(file);
+      };
+
+      await pMap(Object.values(progress.files), uploadFile, {
+        concurrency: MAX_CONCURRENT_UPLOADS,
       });
-      setError('')
-      router.push("/files");
-    } catch(/** @type any */ error) {
-      console.error('Error uploading: ', error)
-      setError(error.message)
     } finally {
       await queryClient.invalidateQueries("get-uploads");
       setUploading(false);
+      setFinished(true);
+      // @ts-ignore
+      setFiles([]);
     }
-  }
+  }, [
+    updateFileProgress,
+    markFileCompleted,
+    markFileFailed,
+    progress.files,
+    setFiles,
+    queryClient,
+  ]);
+
+  const onSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+
+      progress.ready && uploadFiles();
+    },
+    [progress.ready, uploadFiles]
+  );
+
+  // @ts-ignore
+  const handleRemoveFile = useCallback((removedFile)=> {
+    // @ts-ignore
+    const updatedFileList = files.filter(x => x.name !== removedFile.name)
+    // @ts-ignore
+    initialize(updatedFileList);
+    // @ts-ignore
+    setFiles(updatedFileList);
+    setFinished(false);
+  }, [files])
+
 
   /** @param {File[]} acceptedFiles */
-  const onDrop = (acceptedFiles) => uploadFile(acceptedFiles[0]);
-  const { getRootProps, isDragActive } = useDropzone({ onDrop, multiple: false });
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      if (uploading) {
+        return;
+      }
 
-  const openInput = () => {
+      initialize(acceptedFiles);
+
+      // @ts-ignore
+      setFiles(acceptedFiles);
+      setFinished(false);
+    },
+    [initialize, uploading, setFiles]
+  );
+  
+  const { getRootProps, isDragActive } = useDropzone({
+    onDrop,
+    multiple: false,
+  });
+
+  const openInput = useCallback(() => inputRef?.current?.click(), []);
+
+  const onInputChange = useCallback(() => {
     const fileInput = inputRef?.current;
-    fileInput && fileInput.click()
-  }
 
-  const onInputChange = () => {
-    const fileInput = inputRef?.current;
-    if(!fileInput || !fileInput.files || !fileInput.files[0]) return;
+    if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+      return;
+    }
 
-    const file = fileInput.files[0]
-    setInputFile({ name: file.name })
-  }
+    const files = Array.from(fileInput.files);
+    // @ts-ignore
+    initialize(files);
+    // @ts-ignore
+    setFiles(files);
+    setFinished(false);
+  }, [initialize, setFiles]);
 
   return (
-    <main className="layout-margins my-4 sm:my-16 text-w3storage-purple h-full flex-grow" {...getRootProps()}>
+    <main
+      className="layout-margins my-4 sm:my-16 text-w3storage-purple h-full flex-grow"
+      {...getRootProps()}
+    >
       <div className="flex flex-col items-center">
         <div>
           <h2>Upload File</h2>
-          <form onSubmit={handleUploadSubmit} className='flex flex-col items-start pt-8'>
+          <form
+            onSubmit={onSubmit}
+            className="flex flex-col items-start pt-8"
+          >
             <div className="mb-4 flex flex-col items-start">
               <label htmlFor="name" className="mb-2">
                 File:
               </label>
               <input
                 ref={inputRef}
-                id="file"
-                name="file"
+                id="files"
+                name="files"
                 type="file"
                 className="hidden"
                 required
+                multiple
                 onChange={onInputChange}
               />
               <div className="flex items-center border-w3storage-red border-dashed border-2 p-3">
-                <Button variant='light' className='border border-w3storage-purple focus:border-w3storage-purple' onClick={openInput}>Choose File</Button>
-                <p className="px-4">{ inputFile.name.length > 0 ? inputFile.name : 'No file chosen'}</p>
+                <Button
+                  variant="light"
+                  className="border border-w3storage-purple focus:border-w3storage-purple"
+                  onClick={openInput}
+                  disabled={uploading}
+                >
+                  Choose File(s)
+                </Button>
+
+                <div className="flex relative z-1 flex-wrap items-center px-4 overflow-y-auto max-h-48">
+                  <Files progress={progress} onRemoveFile={handleRemoveFile}/>
+                </div>
               </div>
             </div>
             <div>
               <Button
-                type="submit"
-                disabled={uploading || !inputRef?.current?.files || inputRef?.current?.files?.length === 0}
+                type="button"
+                disabled={uploading || !progress.ready || finished}
                 id="upload-file"
                 tracking={{
                   event: countly.events.FILE_UPLOAD_CLICK,
                   ui: countly.ui.UPLOAD,
                 }}
+                onClick={onSubmit}
               >
-                {uploading
-                  ? `Uploading...${
-                      percentComplete ? `(${percentComplete}%)` : ""
-                    }`
-                  : "Upload"}
+                {uploading ? (
+                  <Loading className="user-spinner" fill="white" height={10} />
+                ) : (
+                  "Upload"
+                )}
               </Button>
+              <div
+                className={clsx("w-full pt-1", {
+                  hidden: !uploading && !finished,
+                })}
+              >
+                <div
+                  className={clsx(
+                    "relative overflow-hidden text-sm border-2 h-6 bg-w3storage-purple bg-opacity-25",
+                    finished
+                      ? "border-w3storage-purple"
+                      : "border-w3storage-blue-desaturated"
+                  )}
+                >
+                  <div className="z-10 relative text-center font-bold h-full text-w3storage-white drop-shadow-lg">
+                    {progress.percentage}%
+                  </div>
+                  <div
+                    className={clsx(
+                      "absolute z-0 top-0 right-full bottom-0 -left-full transition",
+                      finished
+                        ? "bg-w3storage-purple"
+                        : "bg-w3storage-blue-desaturated"
+                    )}
+                    style={{ transform: `translateX(${progress.percentage}%)` }}
+                  />
+                  <div
+                    className={clsx(
+                      "absolute z-0 top-0 -right-full bottom-0 left-full transition",
+                      {
+                        "bg-transparent": progress.failed.number === 0,
+                        "bg-w3storage-red bg-opacity-75":
+                          progress.failed.number > 0 && finished,
+                      }
+                    )}
+                    style={{
+                      transform: `translateX(${progress.percentage - 100}%)`,
+                    }}
+                  />
+                </div>
+                <div className="flex justify-between leading-7 text-sm flex-wrap sm:flex-nowrap">
+                  <div>
+                    {`Files: ${progress.completed.number}/${progress.total.number}`}
+                    <span className="text-w3storage-red-dark">
+                      {progress.failed.number
+                        ? ` (${progress.failed.number} failed)`
+                        : ""}
+                    </span>
+                  </div>
+                  <div>{`${prettyBytes(progress.completed.size).replace(
+                    " ",
+                    ""
+                  )}/${prettyBytes(progress.total.size).replace(
+                    " ",
+                    ""
+                  )}`}</div>
+                </div>
+              </div>
             </div>
             <div>
               <p className="pt-4 text-sm">
                 You can also upload files using the{" "}
-                <a href="https://www.npmjs.com/package/web3.storage" className="black underline">
+                <a
+                  href="https://www.npmjs.com/package/web3.storage"
+                  className="black underline"
+                >
                   JS Client Library
-                </a>.
+                </a>
+                .
               </p>
             </div>
           </form>
@@ -150,29 +402,36 @@ export default function Upload() {
         <div className="mb-8">
           <p className="font-semibold">🌍 Public data</p>
           <p className="text-sm leading-6">
-            All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. Do not store any private or sensitive information in an unencrypted form using Web3.Storage.
+            All data uploaded to Web3.Storage is available to anyone who
+            requests it using the correct CID. Do not store any private or
+            sensitive information in an unencrypted form using Web3.Storage.
           </p>
         </div>
         <div>
           <p className="font-semibold">♾️ Permanent data</p>
           <p className="text-sm leading-6">
-            Deleting files from the Web3.Storage site’s <Link href="/files"><a className="text-sm font-bold no-underline hover:underline">Files</a></Link> page will remove them from the file listing for your account, but that doesn’t prevent nodes on the <a className="text-sm font-bold no-underline hover:underline" href="https://docs.web3.storage/concepts/decentralized-storage/" target="_blank" rel="noreferrer">decentralized storage network</a> from retaining copies of the data indefinitely. Do not use Web3.Storage for data that may need to be permanently deleted in the future.
+            Deleting files from the Web3.Storage site’s{" "}
+            <Link href="/files">
+              <a className="text-sm font-bold no-underline hover:underline">
+                Files
+              </a>
+            </Link>{" "}
+            page will remove them from the file listing for your account, but
+            that doesn’t prevent nodes on the{" "}
+            <a
+              className="text-sm font-bold no-underline hover:underline"
+              href="https://docs.web3.storage/concepts/decentralized-storage/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              decentralized storage network
+            </a>{" "}
+            from retaining copies of the data indefinitely. Do not use
+            Web3.Storage for data that may need to be permanently deleted in the
+            future.
           </p>
         </div>
       </div>
-      <When condition={error !== ''}>
-        <Alert className="p-4 text-white z-50" position="top" type="error">
-          <>
-            {error}{' '}
-            <button
-              className="ml-2 px-2 py-1 pointer"
-              onClick={() => setError('')}
-            >
-              <Cross width="12" height="12" fill="currentColor" />
-            </button>
-          </>
-        </Alert>
-      </When>
     </main>
   );
 }
