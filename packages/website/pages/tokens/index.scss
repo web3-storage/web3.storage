@@ -6,3 +6,45 @@
     padding: 0 1.75rem 0.75rem;
   }
 }
+
+.tokens-header,
+.tokens-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.tokens-footer {
+  @include fontSize_Tiny;
+  @include fontWeight_Regular;
+  margin-top: 0.75rem;
+}
+
+.dashboard-link {
+  @include fontSize_Medium;
+  @include fontWeight_Semibold;
+  div {
+    display: none;
+  }
+  padding-left: 1.375rem;
+
+  &.hasTokens {
+    @include fontSize_Mini;
+    padding-left: 0.75rem;
+
+    div {
+      transform: scaleX(-1);
+      display: initial;
+    }
+
+    a {
+      margin-left: 1.4375rem;
+    }
+  }
+}
+
+.testing-cta {
+  .button {
+    padding-left: 0;
+  }
+}

@@ -1,37 +1,32 @@
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { useCallback, useState, useLayoutEffect, useRef } from 'react';
+import { useCallback, useLayoutEffect, useRef } from 'react';
 
 import Button, { ButtonVariant } from 'components/button/button';
 
 const Tokens = () => {
   const inputRef = useRef();
 
-  const { query } = useRouter();
-  const [isCreating, setIsCreating] = useState(!!query.create);
-
-  const onCreate = useCallback(() => {
-    console.log('create that token!');
-    setIsCreating(false);
-  }, [setIsCreating]);
+  const { query, push } = useRouter();
 
   useLayoutEffect(() => {
-    console.log('oh!', inputRef.current);
-    return !!isCreating && inputRef.current.focus();
-  }, [isCreating]);
+    if (!!query.create) {
+      inputRef.current.focus();
+    }
+  }, [query.create]);
 
   return (
     <div className="token-creator-container">
-      <div className={clsx(!isCreating && 'hidden')}>
+      <div className={clsx(!query.create && 'hidden')}>
         <input ref={inputRef} className="token-creator-input" placeholder="Name your token" />
-        <button className="token-creator-submit" onClick={onCreate}>
+        <button className="token-creator-submit" onClick={useCallback(() => push('/tokens'), [push])}>
           +
         </button>
       </div>
       <Button
-        className={clsx('token-creator-create', isCreating && 'hidden')}
+        className={clsx('token-creator-create', query.create && 'hidden')}
         href="/account"
-        onClick={() => setIsCreating(true)}
+        onClick={useCallback(() => push('/tokens?create=true'), [push])}
         variant={ButtonVariant.TEXT}
       >
         + Create a new API Token
