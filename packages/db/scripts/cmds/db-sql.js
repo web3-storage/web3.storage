@@ -19,32 +19,14 @@ const { Client } = pg
  */
 export async function dbSqlCmd ({ reset, cargo, testing } = {}) {
   // read all the SQL files
-  const configSql = fs.readFileSync(path.join(__dirname, '../../postgres/config.sql'), {
-    encoding: 'utf-8'
-  })
+  const configSql = fs.readFileSync(path.join(__dirname, '../../postgres/config.sql'), 'utf-8')
 
-  const tablesSql = fs.readFileSync(path.join(__dirname, '../../postgres/tables.sql'), {
-    encoding: 'utf-8'
-  })
-  const functionsSql = fs.readFileSync(path.join(__dirname, '../../postgres/functions.sql'), {
-    encoding: 'utf-8'
-  })
-  const resetSql = fs.readFileSync(path.join(__dirname, '../../postgres/reset.sql'), {
-    encoding: 'utf-8'
-  })
-  let cargoSql = fs.readFileSync(path.join(__dirname, '../../postgres/cargo.sql'), {
-    encoding: 'utf-8'
-  })
-
-  let fdwSql = fs.readFileSync(path.join(__dirname, '../../postgres/fdw.sql'), {
-    encoding: 'utf-8'
-  })
-
-  // Replace secrets in the FDW sql file
-  fdwSql = fdwSql.replace(":'DAG_CARGO_HOST'", `'${process.env.DAG_CARGO_HOST}'`)
-  fdwSql = fdwSql.replace(":'DAG_CARGO_DATABASE'", `'${process.env.DAG_CARGO_DATABASE}'`)
-  fdwSql = fdwSql.replace(":'DAG_CARGO_USER'", `'${process.env.DAG_CARGO_USER}'`)
-  fdwSql = fdwSql.replace(":'DAG_CARGO_PASSWORD'", `'${process.env.DAG_CARGO_PASSWORD}'`)
+  const tablesSql = fs.readFileSync(path.join(__dirname, '../../postgres/tables.sql'), 'utf-8')
+  const functionsSql = fs.readFileSync(path.join(__dirname, '../../postgres/functions.sql'), 'utf-8')
+  const resetSql = fs.readFileSync(path.join(__dirname, '../../postgres/reset.sql'), 'utf-8')
+  const cargoSql = fs.readFileSync(path.join(__dirname, '../../postgres/cargo.sql'), 'utf-8')
+  const cargoTesting = fs.readFileSync(path.join(__dirname, '../../postgres/cargo.testing.sql'), 'utf-8')
+  let fdwSql = fs.readFileSync(path.join(__dirname, '../../postgres/fdw.sql'), 'utf-8')
 
   // Setup postgres client
   const connectionString = process.env.PG_CONNECTION
@@ -64,25 +46,16 @@ export async function dbSqlCmd ({ reset, cargo, testing } = {}) {
   await client.query(configSql)
   await client.query(tablesSql)
 
-  if (cargo) {
-    if (testing) {
-      cargoSql = cargoSql.replace(
-        `
--- Create materialized view from cargo "aggregate_entries" table
-CREATE MATERIALIZED VIEW public.aggregate_entry
-AS
-SELECT *
-FROM cargo.aggregate_entries;`,
-        `
-CREATE MATERIALIZED VIEW public.aggregate_entry
-AS
-SELECT *
-FROM cargo.aggregate_entries 
-WHERE cid_v1 in ('bafybeiaj5yqocsg5cxsuhtvclnh4ulmrgsmnfbhbrfxrc3u2kkh35mts4e');
-`
-      )
-    }
-
+  // if testing or cargo fdw flag not set, you just get the schema, no fdw connection to dagcargo
+  if (testing && cargo) {
+    await client.query(cargoTesting)
+  } else if (!testing && cargo) {
+    // Replace secrets in the FDW sql file
+    fdwSql = fdwSql.replace(":'DAG_CARGO_HOST'", `'${process.env.DAG_CARGO_HOST}'`)
+    fdwSql = fdwSql.replace(":'DAG_CARGO_DATABASE'", `'${process.env.DAG_CARGO_DATABASE}'`)
+    fdwSql = fdwSql.replaceAll(":'DAG_CARGO_USER'", `'${process.env.DAG_CARGO_USER}'`)
+    fdwSql = fdwSql.replaceAll(":'DAG_CARGO_PASSWORD'", `'${process.env.DAG_CARGO_PASSWORD}'`)
+    fdwSql = fdwSql.replaceAll(':WEB3_STORAGE_USER', `${process.env.WEB3_STORAGE_USER || 'CURRENT_USER'}`)
     await client.query(fdwSql)
     await client.query(cargoSql)
   }
