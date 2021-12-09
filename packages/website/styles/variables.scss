@@ -13,6 +13,7 @@ $borderRadius_Medium: 0.25rem;
 $borderRadius_Large: 0.625rem;
 $borderRadius_ExtraLarge: 0.875rem;
 $borderRadius_UltraLarge: 1rem;
+$borderRadius_Huge: 1.5rem;
 
 // --------------------------------------------------------------------- Colours
 $gray50: #fafafa;
@@ -141,6 +142,12 @@ $gradient_BluePurple: linear-gradient(-45deg, $cyan 0%, $royalBlue 50%, $heliotr
 }
 @mixin borderRadius_ExtraLarge {
   border-radius: $borderRadius_ExtraLarge;
+}
+@mixin borderRadius_UltraLarge {
+  border-radius: $borderRadius_UltraLarge;
+}
+@mixin borderRadius_Huge {
+  border-radius: $borderRadius_Huge;
 }
 
 @mixin border_Background_Waterloo_White {
