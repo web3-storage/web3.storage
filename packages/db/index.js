@@ -291,7 +291,7 @@ export class DBClient {
    * @returns {Promise<import('./db-client-types').ContentItemOutput>}
    */
   async getStatus (cid) {
-    /** @type {{ data: import('./db-client-types').ContentItem, error: PostgrestError }} */
+    /** @type {{ data: Array<import('./db-client-types').ContentItem>, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('content')
       .select(`
@@ -301,19 +301,18 @@ export class DBClient {
         pins:pin(status, updated:updated_at, location:pin_location(peerId:peer_id, peerName:peer_name, region))
       `)
       .match({ cid })
-      .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    if (!data) {
-      return
+    if (!data || !data.length) {
+      return undefined
     }
 
     const deals = await this.getDeals(cid)
     return {
-      ...normalizeContent(data),
+      ...normalizeContent(data[0]),
       deals
     }
   }
