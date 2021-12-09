@@ -36,9 +36,9 @@ const FilesManager = ({ className }: FilesManagerProps) => {
       <div className="files-manager-table-content">
         {!files.length ? (
           <span className="files-manager-upload-cta">
-            You don’t have any API Tokens created yet.{'\u00A0'}
+            You don’t have any files uploaded yet.{'\u00A0'}
             <Button onClick={onFileUploead} variant={ButtonVariant.TEXT}>
-              Create your first API Token.
+              Upload your first file
             </Button>
           </span>
         ) : (

@@ -58,7 +58,7 @@ $date-size: auto;
   input {
     @include fontSize_Tiny;
     @include fontWeight_Regular;
-    @include borderRadius_UltraLarge;
+    @include borderRadius_Large;
 
     position: relative;
 
