@@ -699,8 +699,12 @@ export class DBClient {
       throw new DBError(error)
     }
 
+    if (!data.length) {
+      return undefined
+    }
+
     return {
-      _id: data.id
+      _id: data[0].id
     }
   }
 
