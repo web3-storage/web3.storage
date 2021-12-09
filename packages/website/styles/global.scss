@@ -22,6 +22,7 @@
 @import '../components/account/filesManager/filesManager';
 @import '../components/tokens/tokenCreator/tokenCreator';
 @import '../components/tokens/tokensManager/tokensManager';
+@import '../components/account/fileUploader/fileUploader';
 @import '../components/cardlistblock/cardlistblock.scss';
 @import '../components/card/card.scss';
 @import '../components/textblock/textblock.scss';
@@ -209,6 +210,11 @@ h3,
 h4,
 .h4 {
   @include h4;
+}
+
+h5,
+.h5 {
+  @include h5;
 }
 
 // ////////////////////////////////////////////////////////////////// Components

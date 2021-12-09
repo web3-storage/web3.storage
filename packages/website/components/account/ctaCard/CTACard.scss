@@ -9,6 +9,10 @@ $cta-card-padding-top: 4rem;
   padding-bottom: 1.5rem;
   align-items: baseline;
 
+  > * {
+    position: relative;
+  }
+
   span {
     padding-top: 0.5rem;
     padding-bottom: 1.25rem;

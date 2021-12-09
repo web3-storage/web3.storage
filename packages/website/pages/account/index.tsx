@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import StorageManager from '../../components/account/storageManager/storageManager';
 import FilesManager from '../../components/account/filesManager/filesManager';
 import CTACard from '../../components/account/ctaCard/CTACard';
+import FileUploader from '../../components/account/fileUploader/fileUploader';
 import GradientBackgroundB from 'assets/illustrations/gradient-background-b';
 import { ButtonVariant } from 'components/button/button';
 
@@ -14,9 +15,11 @@ enum CTACardTypes {
 }
 
 const Account: React.FC = () => {
+  const uploadModalState = useState(false);
+
   const onFileUploead = useCallback(() => {
-    window.alert('Upload a file');
-  }, []);
+    uploadModalState[1](true);
+  }, [uploadModalState]);
   const onReadDocs = useCallback(() => {
     window.alert('Read docs');
   }, []);
@@ -56,20 +59,26 @@ const Account: React.FC = () => {
   );
 
   return (
-    <div className="page-container account-container">
-      <h3>Account</h3>
-      <div className="account-content">
-        <StorageManager className="account-storage-manager" />
-        <CTACard className="account-tokens-cta" {...CTAConfigs[CTACardTypes.API_TOKENS]} />
-        <CTACard className="account-docs-cta" {...CTAConfigs[CTACardTypes.READ_DOCS]} />
-        <CTACard
-          className="account-upload-cta"
-          {...CTAConfigs[CTACardTypes.UPLOAD_FILES]}
+    <>
+      <div className="page-container account-container">
+        <h3>Account</h3>
+        <div className="account-content">
+          <StorageManager className="account-storage-manager" />
+          <CTACard className="account-tokens-cta" {...CTAConfigs[CTACardTypes.API_TOKENS]} />
+          <CTACard className="account-docs-cta" {...CTAConfigs[CTACardTypes.READ_DOCS]} />
+          <CTACard
+            className="account-upload-cta"
+            {...CTAConfigs[CTACardTypes.UPLOAD_FILES]}
+            background={<GradientBackgroundB className="account-gradient-background" />}
+          />
+          <FilesManager className="account-files-manager" />
+        </div>
+        <FileUploader
+          uploadModalState={uploadModalState}
           background={<GradientBackgroundB className="account-gradient-background" />}
         />
-        <FilesManager className="account-files-manager" />
       </div>
-    </div>
+    </>
   );
 };
 
