@@ -1,8 +1,9 @@
+import Link from 'next/link';
 import { useCallback, useMemo } from 'react';
 
 import StorageManager from '../../components/account/storageManager/storageManager';
 import FilesManager from '../../components/account/filesManager/filesManager';
-import CTACard from '../../components/account/CTACard/CTACard';
+import CTACard from '../../components/account/ctaCard/CTACard';
 import GradientBackgroundB from 'assets/illustrations/gradient-background-b';
 import { ButtonVariant } from 'components/button/button';
 
@@ -16,12 +17,6 @@ const Account: React.FC = () => {
   const onFileUploead = useCallback(() => {
     window.alert('Upload a file');
   }, []);
-  const onCreateToken = useCallback(() => {
-    window.alert('Create a token');
-  }, []);
-  const onManageToken = useCallback(() => {
-    window.alert('Manage a token');
-  }, []);
   const onReadDocs = useCallback(() => {
     window.alert('Read docs');
   }, []);
@@ -33,8 +28,16 @@ const Account: React.FC = () => {
         heading: 'API Tokens',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
         ctas: [
-          { onClick: onCreateToken, variant: ButtonVariant.PINK_BLUE, children: 'Create a Token' },
-          { onClick: onManageToken, variant: ButtonVariant.OUTLINE_LIGHT, children: 'Manage Tokens' },
+          {
+            href: '/tokens?create=true',
+            variant: ButtonVariant.PINK_BLUE,
+            children: <Link href="/tokens?create=true">Create a Token</Link>,
+          },
+          {
+            href: '/tokens',
+            variant: ButtonVariant.OUTLINE_LIGHT,
+            children: <Link href="/tokens">Manage Tokens</Link>,
+          },
         ],
       },
       [CTACardTypes.READ_DOCS]: {
@@ -49,7 +52,7 @@ const Account: React.FC = () => {
         ctas: [{ onClick: onFileUploead, variant: ButtonVariant.OUTLINE_DARK, children: 'Upload Files' }],
       },
     }),
-    [hasFiles, onCreateToken, onFileUploead, onManageToken, onReadDocs]
+    [hasFiles, onFileUploead, onReadDocs]
   );
 
   return (

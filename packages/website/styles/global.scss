@@ -20,6 +20,7 @@
 @import '../components/account/CTACard/CTACard';
 @import '../components/account/storageManager/storageManager';
 @import '../components/account/filesManager/filesManager';
+@import '../components/tokens/tokenCreator/tokenCreator';
 @import '../components/cardlistblock/cardlistblock.scss';
 @import '../components/card/card.scss';
 @import '../components/textblock/textblock.scss';
@@ -31,6 +32,7 @@
 @import '../pages/index.scss';
 @import '../pages/login';
 @import '../pages/account';
+@import '../pages/tokens';
 
 // /////////////////////////////////////////////////////////////////////// Fonts
 // -----------------------------------------------------------------------------
@@ -296,4 +298,8 @@ h4,
 
 .image-full-width {
   width: 100%;
+}
+
+.hidden {
+  display: none;
 }

@@ -39,7 +39,7 @@
   position: relative;
   width: 100%;
   height: 1.375rem;
-  border-radius: 1rem;
+  border-radius: $borderRadius_UltraLarge;
   background: rgba($vulcan, 0.15);
   border: 0.0625rem solid rgba($waterloo, 0.15);
   overflow: hidden;
@@ -51,7 +51,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  border-radius: 1rem;
+  border-radius: $borderRadius_UltraLarge;
 }
 
 .storage-manager-meter-tier {
