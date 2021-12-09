@@ -28,7 +28,7 @@
     background: rgba($white, 0.1);
     border: solid;
     border-image: url('../../../assets/images/dashed-border.png') 2 round;
-    border-radius: 0.625rem;
+    @include borderRadius_Large;
   }
 
   .filelist {
@@ -49,7 +49,7 @@
 .file-upload-modal {
   .modalContainer {
     max-width: 45.6275rem;
-    border-radius: 0.625rem;
+    @include borderRadius_Large;
   }
   .modalClose {
     top: 1.5rem;
