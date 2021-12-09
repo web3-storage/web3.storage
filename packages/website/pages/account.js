@@ -6,6 +6,7 @@ import Link from 'next/link'
 
 import { getTokens, getStorage, getUploads } from '../lib/api'
 import countly from '../lib/countly'
+import { fileSize } from '../lib/formatter'
 import { useDragAndDrop, OnDrop } from '../components/upload';
 import Button from '../components/button'
 import Loading from '../components/loading'
