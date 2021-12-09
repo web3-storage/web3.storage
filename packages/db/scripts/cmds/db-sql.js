@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS cargo.aggregates (
   aggregate_cid TEXT NOT NULL UNIQUE,
   piece_cid TEXT UNIQUE NOT NULL,
   sha256hex TEXT NOT NULL,
-  payload_size BIGINT NOT NULL,
+  export_size BIGINT NOT NULL,
   metadata JSONB,
   entry_created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
