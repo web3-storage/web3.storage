@@ -34,6 +34,7 @@
 }
 
 .storage-manager-meter {
+  @include borderRadius_UltraLarge;
   display: flex;
   align-items: center;
   position: relative;
@@ -47,11 +48,11 @@
 
 .storage-manager-meter-used {
   @include gradient_Background_BluePurple;
+  @include borderRadius_UltraLarge;
   height: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  border-radius: 1rem;
 }
 
 .storage-manager-meter-tier {

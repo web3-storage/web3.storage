@@ -26,7 +26,7 @@ type TrackingProps = {
 };
 
 type ButtonProps = {
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   className?: string;
   href?: string;
   tracking?: TrackingProps;
@@ -59,7 +59,7 @@ const Button = ({
 
   return (
     // @ts-ignore Ignoring ZeroButton as it is not properly typed
-    <ZeroButton {...props} className={clsx('button', variant)} onClick={onClickHandler}>
+    <ZeroButton {...props} className={clsx('button', variant, className)} onClick={onClickHandler}>
       {children}
     </ZeroButton>
   );
