@@ -1,5 +1,26 @@
 # Changelog
 
+### [4.0.1](https://www.github.com/web3-storage/web3.storage/compare/db-v4.0.0...db-v4.0.1) (2021-12-09)
+
+
+### Bug Fixes
+
+* api using db instead of mocks for tests ([#765](https://www.github.com/web3-storage/web3.storage/issues/765)) ([c9f6c06](https://www.github.com/web3-storage/web3.storage/commit/c9f6c066a5d46367d57a6f0de482166621c3fe38))
+* db delete key return value ([#766](https://www.github.com/web3-storage/web3.storage/issues/766)) ([34f5f82](https://www.github.com/web3-storage/web3.storage/commit/34f5f826f68ff8407fad0a6e9d0a20f6e4d99d47))
+* remove dagcargo materialized views ([#735](https://www.github.com/web3-storage/web3.storage/issues/735)) ([62db538](https://www.github.com/web3-storage/web3.storage/commit/62db5383f39e7d3e3484ccb51bd4eb3de816bcfd))
+* tolerant of failure for deals ([#769](https://www.github.com/web3-storage/web3.storage/issues/769)) ([2bae4d4](https://www.github.com/web3-storage/web3.storage/commit/2bae4d438b570de0905d1b7d577654657ddc1282))
+
+## [4.0.0](https://www.github.com/web3-storage/web3.storage/compare/db-v3.1.0...db-v4.0.0) (2021-12-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* client should not throw on 404 (#751)
+
+### Bug Fixes
+
+* client should not throw on 404 ([#751](https://www.github.com/web3-storage/web3.storage/issues/751)) ([a4cce7e](https://www.github.com/web3-storage/web3.storage/commit/a4cce7eb67a6dab6a75c5c86bcebe4dc66ecd6e4))
+
 ## [3.1.0](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.2...db-v3.1.0) (2021-12-01)
 
 

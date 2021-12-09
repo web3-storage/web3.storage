@@ -3,7 +3,6 @@ import React, { useState, useEffect, useMemo, useCallback, useContext } from 're
 import { useQuery } from 'react-query'
 import { When } from 'react-if'
 import Link from 'next/link'
-import fileSize from 'filesize'
 
 import { getTokens, getStorage, getUploads } from '../lib/api'
 import countly from '../lib/countly'

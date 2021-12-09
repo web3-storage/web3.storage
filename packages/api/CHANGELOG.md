@@ -1,5 +1,30 @@
 # Changelog
 
+### [5.0.1](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.0...api-v5.0.1) (2021-12-09)
+
+
+### Bug Fixes
+
+* api using db instead of mocks for tests ([#765](https://www.github.com/web3-storage/web3.storage/issues/765)) ([c9f6c06](https://www.github.com/web3-storage/web3.storage/commit/c9f6c066a5d46367d57a6f0de482166621c3fe38))
+* db delete key return value ([#766](https://www.github.com/web3-storage/web3.storage/issues/766)) ([34f5f82](https://www.github.com/web3-storage/web3.storage/commit/34f5f826f68ff8407fad0a6e9d0a20f6e4d99d47))
+
+## [5.0.0](https://www.github.com/web3-storage/web3.storage/compare/api-v4.3.0...api-v5.0.0) (2021-12-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* client should not throw on 404 (#751)
+
+### Bug Fixes
+
+* client should not throw on 404 ([#751](https://www.github.com/web3-storage/web3.storage/issues/751)) ([a4cce7e](https://www.github.com/web3-storage/web3.storage/commit/a4cce7eb67a6dab6a75c5c86bcebe4dc66ecd6e4))
+* remove backdoor routes ([#737](https://www.github.com/web3-storage/web3.storage/issues/737)) ([132c1f5](https://www.github.com/web3-storage/web3.storage/commit/132c1f5cd6dcb1a001eec8c97ce575feacc78dec))
+
+
+### Changes
+
+* update db breaking change ([d011d00](https://www.github.com/web3-storage/web3.storage/commit/d011d003f0e76c37e9a1646ae1cd53bb65ad673d))
+
 ## [4.3.0](https://www.github.com/web3-storage/web3.storage/compare/api-v4.2.1...api-v4.3.0) (2021-12-01)
 
 

@@ -25,6 +25,10 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - run: npm run build --workspace packages/api
       - run: npm test --workspace packages/api
+        env:
+            PG_REST_URL: ${{secrets.PG_REST_URL}}
+            PG_REST_JWT: ${{secrets.PG_REST_JWT}}
+            PG_CONNECTION: ${{secrets.PG_CONNECTION}}
 
   deploy-staging:
     name: Deploy Staging API
