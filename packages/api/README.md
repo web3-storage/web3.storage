@@ -11,10 +11,22 @@ One time set up of your cloudflare worker subdomain for dev:
 - `npm i @cloudflare/wrangler -g` - Install the Cloudflare wrangler CLI
 - `wrangler login` - Authenticate your wrangler cli; it'll open your browser.
 - Setup Cluster
-    - You need to run a cluster locally and make it accessible from the internet for development.
-    - Follow the quickstart guide to get an IPFS Cluster up and running: https://cluster.ipfs.io/documentation/quickstart/
-    - Install [localtunnel](https://theboroer.github.io/localtunnel-www/) and expose the IPFS Cluster HTTP API (replacing "USER" with your name):
+  - You need to run a cluster locally and make it accessible from the internet for development. 
+    ```
+    npm run cluster:start
+    ```
+    to start the IPFS cluster.
 
+    You can stop the cluster by
+    ```
+    npm run cluster:stop
+    ```
+
+    The data is persisted among different runs, if you'd like to reset your cluster you can run
+        ```
+    npm run cluster:reset
+    ```
+  - 
     ```sh
     npm install -g localtunnel
     npm run lt:cluster

@@ -1,0 +1,26 @@
+{
+  "name": "@web3-storage/tools",
+  "version": "1.0.0",
+  "description": "Web3.Storage tools",
+  "private": "true",
+  "main": "index.js",
+  "type": "module",
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "execa": "^5.1.1",
+    "sade": "^1.7.4"
+  },
+  "scripts": {
+    "cluster:start": "./scripts/cli.js cluster --start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "web3.storage",
+    "tools"
+  ],
+  "author": "Paolo Chillari",
+  "license": "(Apache-2.0 AND MIT)",
+  "bin": {
+    "web3-storage-tools": "scripts/cli.js"
+  }
+}
