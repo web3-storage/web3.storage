@@ -4,7 +4,7 @@ import { endpoint } from './scripts/constants.js'
 import * as JWT from '../src/utils/jwt.js'
 import { SALT } from './scripts/worker-globals.js'
 import { JWT_ISSUER } from '../src/constants.js'
-import { ERROR_CODE, ERROR_STATUS, getPinningAPIStatus, INVALID_CID, INVALID_META, INVALID_NAME, INVALID_ORIGINS, INVALID_REQUEST_ID, REQUIRED_CID } from '../src/pins.js'
+import { ERROR_CODE, ERROR_STATUS, getPinningAPIStatus, INVALID_CID, INVALID_META, INVALID_NAME, INVALID_ORIGINS, INVALID_REPLACE, INVALID_REQUEST_ID, REQUIRED_CID } from '../src/pins.js'
 
 /**
  *
@@ -415,9 +415,9 @@ describe('Pinning APIs endpoints', () => {
       assert.deepEqual(res.status, 404)
     })
 
-    // TODO (alexandra): needs mock
-    it.skip('it returns the pin request id that has been deleted', async () => {
-      const res = await fetch(new URL('pins/1', endpoint).toString(), {
+    it('it returns the pin request id that has been deleted', async () => {
+      const requestId = 1
+      const res = await fetch(new URL(`pins/${requestId}`, endpoint).toString(), {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`
@@ -425,8 +425,52 @@ describe('Pinning APIs endpoints', () => {
       })
 
       assert(res.ok, 'Server responded')
+      assert.equal(res.status, 200)
       const { _id } = await res.json()
-      assert(_id)
+      assert.strictEqual(_id, requestId)
+    })
+  })
+
+  describe('POST /pins/:requestId', () => {
+    let token = null
+    before(async () => {
+      // Create token
+      token = await getTestJWT()
+    })
+
+    it('should not replace an inexistent or deleted pin request', async () => {
+      const res = await fetch(new URL('pins/100', endpoint).toString(), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
+        })
+      })
+
+      assert(res, 'Server responded')
+      assert.equal(res.status, 404)
+      const { message } = await res.json()
+      assert.equal(message, 'Not Found')
+    })
+
+    it('should not replace the same pin request', async () => {
+      const res = await fetch(new URL('pins/3', endpoint).toString(), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          cid: 'bafybeihgrtet4vowd4t4iqaspzclxajrwwsesur7zllkahrbhcymfh7kyi'
+        })
+      })
+
+      assert(res, 'Server responded')
+      assert(!res.ok)
+      assert.equal(res.status, 400)
+      const { error } = await res.json()
+      assert.equal(error.details, INVALID_REPLACE)
     })
   })
 })

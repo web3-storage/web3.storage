@@ -3,10 +3,13 @@
  * @param {Request} request
  */
 module.exports = ({ query }) => {
-  const date = new Date()
+  const id = query.id && query.id.split('eq.')[1]
+  // TODO : change this for actual tests
+
+  const date = new Date(1, 1, 1)
 
   const pinRequest = {
-    _id: '1',
+    _id: `${id}`,
     contentCid: null,
     requestedCid: 'something',
     authKey: 'something',

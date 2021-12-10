@@ -49,6 +49,32 @@ module.exports = ({ query }) => {
     }
   }
 
+  if (id === '3') {
+    const pinRequest = {
+      _id: id,
+      contentCid: 'bafybeihgrtet4vowd4t4iqaspzclxajrwwsesur7zllkahrbhcymfh7kyi',
+      requestedCid: 'bafybeihgrtet4vowd4t4iqaspzclxajrwwsesur7zllkahrbhcymfh7kyi',
+      authKey: 'something',
+      name: 'something',
+      deleted: null,
+      created: date.toISOString(),
+      updated: date.toISOString(),
+      content: {
+        cid: 'bafybeihgrtet4vowd4t4iqaspzclxajrwwsesur7zllkahrbhcymfh7kyi',
+        dagSize: null,
+        pins: [{
+          status: 'Pinned',
+          updated: date.toISOString(),
+          location: {}
+        }]
+      }
+    }
+    return {
+      statusCode: 200,
+      body: JSON.stringify(pinRequest)
+    }
+  }
+
   return {
     statusCode: 404,
     body: JSON.stringify({

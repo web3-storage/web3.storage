@@ -27,7 +27,7 @@ const pinRequestSelect = `
   contentCid:content_cid,
   authKey:auth_key_id,
   name,
-  deleted: deleted_at,
+  deleted:deleted_at,
   created:inserted_at,
   updated:updated_at,
   content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region)))  `
