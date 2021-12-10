@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 // ///////////////////////////////////////////////////////////////////// General
 // -----------------------------------------------------------------------------
 .hero-illustration {
@@ -37,10 +39,15 @@
 
 #index_hero_background-gradient {
   position: absolute;
-  width: 150%;
-  left: -25%;
-  bottom: -30rem;
+  width: 100%;
+  height: calc(100% + $navigationHeight + 9rem);
+  left: 0;
+  top: calc(0rem - $navigationHeight);
   z-index: 0;
+  background-image: url('/images/index/holographic-bg-cropped-1.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: right 0 bottom 0rem;
 }
 
 #index_hero-grid-3d {
@@ -57,6 +64,9 @@
   width: 29rem;
   left: -10.5rem;
   transform: rotate(-27deg);
+  @include medium {
+    left: calc(50% - #{math.div($containerWidth, 2)} - 12rem);
+  }
 }
 
 #index_hero-corkscrew {
@@ -64,6 +74,12 @@
   right: -2rem;
   top: -1rem;
   transform: rotate(115deg);
+  @include large {
+    right: calc(50% - #{math.div($containerWidth, 2)} - 9rem);
+  }
+  @include small {
+    display: none;
+  }
 }
 
 #index_hero-zigzag {
@@ -71,24 +87,42 @@
   left: 25%;
   top: 0;
   transform: rotate(-185deg);
+  @include medium {
+    width: 3rem;
+  }
+  @include mini {
+    left: 1%;
+  }
 }
 
 #index_hero-helix {
   width: 4.125rem;
   left: 37%;
-  top: -5rem;
+  top: -1 * $navigationHeight;
   transform: rotate(-90deg);
+  @include mini {
+    display: none;
+  }
 }
 
 #index_hero-cross {
   width: 5.25rem;
   right: 31%;
   bottom: 3.5rem;
+  @include small {
+    display: none;
+  }
 }
 
 #index_hero-triangle {
   width: 3.5rem;
   left: 30%;
-  bottom: 5rem;
+  bottom: 2rem;
   transform: rotate(-90deg);
+  @include medium {
+    bottom: -2rem;
+  }
+  @include small {
+    left: 2rem;
+  }
 }

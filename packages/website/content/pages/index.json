@@ -17,8 +17,8 @@
           {
             "type": "hero",
             "cols": {
-              "num": "col-6",
-              "push_left": "off-3"
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-3_sm-2_mi-1_ti-0"
             },
             "format": "header",
             "heading": "The easiest way to store data on the decentralized web.",
@@ -40,16 +40,21 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-5"
+              "num": "col-5_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "customizations": [
               {
                 "type": "corkscrew",
-                "id": "intro_1-corkscrew"
+                "id": "intro_1-hero-corkscrew"
               },
               {
                 "type": "coil",
                 "id": "intro_1-coil"
+              },
+              {
+                "type": "cross",
+                "id": "intro_1-cross"
               },
               {
                 "type": "text_block",
@@ -70,8 +75,8 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-6",
-              "push_left": "off-1"
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-1_sm-2_mi-1_ti-0"
             },
             "customizations": [
               {
@@ -94,7 +99,8 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-5"
+              "num": "col-5_sm-5_mi-8_ti-12",
+              "push_left": "off-0_sm-1_mi-1_ti-0"
             },
             "customizations": [
               {
@@ -124,7 +130,8 @@
           {
             "type": "card_list_block",
             "cols": {
-              "num": "col-12"
+              "num": "col-12_mi-10_ti-12",
+              "push_left": "off-0_mi-1_ti-0"
             },
             "direction": "row",
             "cards": [
@@ -156,7 +163,8 @@
           {
             "type": "text_block",
             "cols": {
-              "num": "col-5"
+              "num": "col-5_sm-10_ti-12",
+              "push_left": "off-0_sm-1_ti-0"
             },
             "format": "medium",
             "heading": "Why Web3.Storage?",
@@ -171,8 +179,8 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-6",
-              "push_left": "off-1"
+              "num": "col-6_sm-10_ti-12",
+              "push_left": "off-1_sm-1_ti-0"
             },
             "customizations": [
               {
