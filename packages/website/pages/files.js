@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
-import filesize from 'filesize'
+import { fileSize } from '../lib/formatter'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import Button from '../components/button.js'
@@ -285,7 +285,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
         </div>
       </TableElement>
       <TableElement {...sharedArgs} centered>
-        {upload.dagSize ? filesize(upload.dagSize) : 'Calculating...'}
+        {upload.dagSize ? fileSize(upload.dagSize) : 'Calculating...'}
       </TableElement>
     </tr>
   )
