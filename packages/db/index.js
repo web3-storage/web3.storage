@@ -82,10 +82,10 @@ export class DBClient {
    * Get user by its issuer.
    *
    * @param {string} issuer
-   * @return {Promise<import('./db-client-types').UserOutput>}
+   * @return {Promise<import('./db-client-types').UserOutput | undefined>}
    */
   async getUser (issuer) {
-    /** @type {{ data: import('./db-client-types').UserOutput, error: PostgrestError }} */
+    /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
       .select(`
@@ -99,13 +99,12 @@ export class DBClient {
         updated:updated_at
       `)
       .eq('issuer', issuer)
-      .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    return data
+    return data.length ? data[0] : undefined
   }
 
   /**
@@ -304,7 +303,7 @@ export class DBClient {
    * @returns {Promise<import('./db-client-types').ContentItemOutput>}
    */
   async getStatus (cid) {
-    /** @type {{ data: import('./db-client-types').ContentItem, error: PostgrestError }} */
+    /** @type {{ data: Array<import('./db-client-types').ContentItem>, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('content')
       .select(`
@@ -314,19 +313,18 @@ export class DBClient {
         pins:pin(status, updated:updated_at, location:pin_location(peerId:peer_id, peerName:peer_name, region))
       `)
       .match({ cid })
-      .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    if (!data) {
-      return
+    if (!data || !data.length) {
+      return undefined
     }
 
     const deals = await this.getDeals(cid)
     return {
-      ...normalizeContent(data),
+      ...normalizeContent(data[0]),
       deals
     }
   }
@@ -562,7 +560,9 @@ export class DBClient {
   }
 
   /**
-   * Get deals for multiple cids
+   * Get deals for multiple cids. This function is error tolerant as it uses
+   * the dagcargo FDW. It will return an empty object if any error is
+   * encountered fetching the data.
    *
    * @param {string[]} cids
    * @return {Promise<Record<string, import('./db-client-types').Deal[]>>}
@@ -575,7 +575,7 @@ export class DBClient {
       })
 
     if (error) {
-      throw new DBError(error)
+      return {}
     }
 
     const result = {}
@@ -626,7 +626,7 @@ export class DBClient {
    *
    * @param {string} issuer
    * @param {string} secret
-   * @return {Promise<import('./db-client-types').AuthKey>}
+   * @return {Promise<import('./db-client-types').AuthKey | undefined>}
    */
   async getKey (issuer, secret) {
     /** @type {{ data, error: PostgrestError } */
@@ -642,22 +642,26 @@ export class DBClient {
       })
       .filter('keys.deleted_at', 'is', null)
       .eq('keys.secret', secret)
-      .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    if (!data.keys.length) {
-      throw new Error('user has no key with given secret')
+    if (!data.length) {
+      return undefined
+    }
+
+    const keyData = data[0]
+    if (!keyData.keys.length) {
+      return undefined
     }
 
     return {
-      _id: data.keys[0]._id,
-      name: data.keys[0].name,
+      _id: keyData.keys[0]._id,
+      name: keyData.keys[0].name,
       user: {
-        _id: data._id,
-        issuer: data.issuer
+        _id: keyData._id,
+        issuer: keyData.issuer
       }
     }
   }
@@ -708,8 +712,12 @@ export class DBClient {
       throw new DBError(error)
     }
 
+    if (!data.length) {
+      return undefined
+    }
+
     return {
-      _id: data.id
+      _id: data[0].id
     }
   }
 

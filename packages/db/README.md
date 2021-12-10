@@ -25,12 +25,6 @@ PG_REST_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0S
 
 # Connection string for locally running postgres used in tests
 PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
-
-# Read-only `dagcargo` credentials for "foreign data wrapper" (fdw) in tests
-DAG_CARGO_HOST=<get from password vault - dagcargo replica>
-DAG_CARGO_USER=<get from password vault - dagcargo replica>
-DAG_CARGO_PASSWORD=<get from password vault - dagcargo replica>
-DAG_CARGO_DATABASE=<get from password vault - dagcargo replica>
 ```
 
 Production vars are set in Github Actions secrets.

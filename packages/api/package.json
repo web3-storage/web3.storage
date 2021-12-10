@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/api",
-  "version": "4.3.0",
+  "version": "5.0.1",
   "private": true,
   "type": "module",
   "license": "(Apache-2.0 AND MIT)",
@@ -13,11 +13,10 @@
     "dev": "wrangler dev --env $(whoami)",
     "publish": "wrangler publish --env $(whoami)",
     "build": "WEBPACK_CLI_FORCE_LOAD_ESM_CONFIG=true webpack",
-    "test": "npm-run-all -p -r mock:cluster mock:pgrest mock:backup test:e2e -s test:size",
+    "test": "npm-run-all -p -r mock:cluster mock:backup test:e2e -s test:size",
     "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js -b webkit",
     "test:size": "bundlesize",
     "mock:cluster": "smoke -p 9094 test/mocks/cluster",
-    "mock:pgrest": "smoke -p 9087 test/mocks/pgrest",
     "mock:backup": "smoke -p 9096 test/mocks/backup"
   },
   "devDependencies": {
@@ -51,7 +50,7 @@
     "@magic-ext/oauth": "^0.8.0",
     "@magic-sdk/admin": "^1.3.0",
     "@nftstorage/ipfs-cluster": "^3.3.1",
-    "@web3-storage/db": "^3.0.0",
+    "@web3-storage/db": "^4.0.0",
     "@web3-storage/multipart-parser": "^1.0.0",
     "cborg": "^1.5.3",
     "ipfs-car": "^0.5.8",
