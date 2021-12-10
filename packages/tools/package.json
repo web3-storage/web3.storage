@@ -11,7 +11,7 @@
     "sade": "^1.7.4"
   },
   "scripts": {
-    "start:cluster": "./docker/cluster/run.sh",
+    "cluster:start": "./scripts/cli.js cluster --start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
