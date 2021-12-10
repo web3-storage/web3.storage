@@ -85,11 +85,12 @@
     &:before {
       @include gradient_Background_PinkBlue;
       filter: blur(0.3125rem);
+      box-shadow: 0 0.1875rem 0 rgba($heliotrope, 0.33);
     }
 
     &:after {
-      border: 0.0625rem solid $white;
-      background: $waterloo;
+      border: 0.0625rem solid $steelGray;
+      background: $charade;
       opacity: 0.6;
       @include shadow4;
     }
