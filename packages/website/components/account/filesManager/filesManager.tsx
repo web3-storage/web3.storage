@@ -3,7 +3,8 @@ import React, { useCallback } from 'react';
 
 import SearchIcon from 'assets/icons/search';
 import CheckIcon from 'assets/icons/check';
-import InfoIcon from 'assets/icons/info';
+import InfoAIcon from 'assets/icons/infoA';
+import InfoBIcon from 'assets/icons/infoB';
 import Button, { ButtonVariant } from 'components/button/button';
 
 type FilesManagerProps = {
@@ -12,7 +13,7 @@ type FilesManagerProps = {
 
 const Info = ({ content, icon = null }: { content: string; icon?: React.ReactNode }) => (
   <div className="info-container">
-    {icon || <span className="info-icon">?</span>}
+    {icon || <InfoAIcon />}
     <span className="info-tooltip" dangerouslySetInnerHTML={{ __html: content }} />
   </div>
 );
@@ -40,13 +41,13 @@ const FileRowItem = ({
       <span className="file-cid">
         {cid}
         {isHeader && (
-          <Info content="The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/'>Learn more</a>" />
+          <Info content="The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>" />
         )}
       </span>
       <span className="file-availability">
         {available}
         {isHeader && (
-          <Info content="The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/'>Learn more</a>" />
+          <Info content="Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes." />
         )}
       </span>
       <span className="file-pin-status">
@@ -54,13 +55,13 @@ const FileRowItem = ({
         {isHeader ? (
           <Info content="Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes." />
         ) : (
-          status === 'pinned' && <Info icon={<InfoIcon />} content="The upload is fully pinned on 3 IPFS nodes." />
+          status === 'pinned' && <Info icon={<InfoBIcon />} content="The upload is fully pinned on 3 IPFS nodes." />
         )}
       </span>
       <span className="file-storage-providers">
         {storageProviders}
         {isHeader && (
-          <Info content="Service providers offering storage capacity to the Filecoin network. <a href='https://docs.web3.storage/concepts/decentralized-storage/'>Learn more</a>" />
+          <Info content="Service providers offering storage capacity to the Filecoin network. <a href='https://docs.web3.storage/concepts/decentralized-storage/' target='_blank' rel='noreferrer'>Learn more</a>" />
         )}
       </span>
       <span className="file-size">{size}</span>

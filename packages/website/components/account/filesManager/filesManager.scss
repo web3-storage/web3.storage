@@ -12,6 +12,8 @@ $file-storage-providers: calculateWidthPercentage(7.5rem, $base-row-width);
 $file-size: auto;
 
 $info-icon-size: 0.5625rem;
+$info-tooltip-arrow-size: 0.625rem;
+$info-tooltip-center: calc(50% - #{$info-icon-size / 2});
 
 .files-manager-container {
   display: flex;
@@ -66,7 +68,7 @@ $info-icon-size: 0.5625rem;
 
     position: relative;
 
-    &::placeholder {
+    &:placeholder {
       color: $white;
     }
     &:focus {
@@ -103,12 +105,13 @@ $info-icon-size: 0.5625rem;
 
   .file {
     &-select {
+      @include border_Background_Waterloo_White;
       width: 0.75rem;
       height: 0.75rem;
-      @include border_Background_Waterloo_White;
       border-radius: 0.125rem;
       cursor: pointer;
       position: relative;
+      margin-bottom: 0.125rem;
 
       input {
         cursor: pointer;
@@ -144,6 +147,13 @@ $info-icon-size: 0.5625rem;
       padding-right: 2.5rem;
     }
   }
+
+  // Targeting all columns
+  > span {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+  }
 }
 
 .files-manager-table-header-divider {
@@ -172,39 +182,52 @@ $info-icon-size: 0.5625rem;
 .info-container {
   position: relative;
   display: inline-block;
-}
 
-.info-icon {
-  color: $steelGray;
-  background: rgba($white, 0.75);
-  font-size: 0.3125rem;
-  width: $info-icon-size;
-  height: $info-icon-size;
-  display: block;
-  text-align: center;
-  border-radius: 1rem;
-  line-height: 0.5rem;
-  cursor: pointer;
-  @include fontWeight_Semibold;
+  &:hover {
+    .info-tooltip {
+      display: block;
+    }
+
+    // Bridging the gap to the tooltip to keep it hovered
+    &:after {
+      content: ' ';
+      width: #{$info-tooltip-arrow-size + 0.75rem};
+      position: absolute;
+      left: 100%;
+      height: 100%;
+    }
+  }
 }
 
 .info-tooltip {
+  display: none;
   position: absolute;
-  left: calc(100% + 0.75rem);
-  bottom: calc(50% - #{$info-icon-size / 2});
-  transform: translateY(calc(50% - #{$info-icon-size / 2}));
-  padding: 1rem 1.25rem;
+  left: calc(100% + #{$info-tooltip-arrow-size + 0.75rem});
+  bottom: $info-tooltip-center;
+  transform: translateY($info-tooltip-center);
+  padding: 1rem 1.25rem 1rem;
   background: rgba($martinique, 0.95);
   border-radius: 0.75rem;
-  max-height: 3.8125rem;
+  width: max-content;
+  max-width: 16rem;
   color: $white;
+  z-index: 1;
 
   &:before {
     width: 0;
     height: 0;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
+    border-top: $info-tooltip-arrow-size solid transparent;
+    border-bottom: $info-tooltip-arrow-size solid transparent;
+    content: ' ';
+    border-right: $info-tooltip-arrow-size solid rgba($martinique, 0.95);
+    position: absolute;
+    left: -$info-tooltip-arrow-size;
+    bottom: $info-tooltip-center;
+    transform: translateY($info-tooltip-center);
+  }
 
-    border-right: 10px solid blue;
+  a {
+    color: $cyan;
+    cursor: pointer;
   }
 }
