@@ -262,11 +262,13 @@ export class DBClient {
    * @param {string} cid
    */
   async deleteUpload (userId, cid) {
+    const now = new Date().toISOString()
     /** @type {{ data: import('./db-client-types').UploadItem, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('upload')
       .update({
-        deleted_at: new Date().toISOString()
+        deleted_at: now,
+        updated_at: now
       })
       .match({
         source_cid: cid,
@@ -684,11 +686,13 @@ export class DBClient {
    * @param {number} keyId
    */
   async deleteKey (userId, keyId) {
+    const now = new Date().toISOString()
     /** @type {{ data, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('auth_key')
       .update({
-        deleted_at: new Date().toISOString()
+        deleted_at: now,
+        updated_at: now
       })
       .match({
         id: keyId,
