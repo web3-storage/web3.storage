@@ -42,7 +42,7 @@ If you want to run your own local DB for development using this package DB clien
 Start a docker compose with a Postgres Database and Postgrest.
 
 ```bash
-node scripts/cli.js db --start --project web3-storage
+npm start
 ```
 
 ### 2. Populate Database
@@ -55,10 +55,16 @@ node scripts/cli.js db-sql --cargo --testing
 
 You can now interact with your local database. Its URL and Token are defined in the previous section.
 
-Once you are done, the local setup can easily be stopped and cleaned using:
+Once you are done, the local setup can easily be stopped:
 
 ```bash
-node scripts/cli.js db --stop --clean --project web3-storage
+npm stop
+```
+
+If you'd like to also clear the database and all docker artifacts you can run
+
+```
+npm run stop:clean
 ```
 
 ### 4. Alter DB schema
@@ -79,6 +85,15 @@ node scripts/cli.js pg-rest-api-types
 Do not forget to update `db-client-types.ts` to reflect your changes to the schema.
 
 If you're creating a new table, type or view please remember to update `reset.sql` as well.
+
+## DB package CLI
+The `scripts/cli.js` to run some common operations on the database.
+
+Please run
+```
+./scripts/cli.js --help
+```
+to find out more.
 
 ## Database Diagram
 

@@ -182,6 +182,13 @@ describe('upload', () => {
     // Delete previously created upload
     await client.deleteUpload(user._id, otherCid)
 
+    const { data: deletedUpload } = await client._client
+      .from('upload')
+      .select('*')
+      .eq('id', uploadId)
+      .single()
+    assert.strictEqual(deletedUpload.updated_at, deletedUpload.deleted_at)
+
     // Should fail to delete again
     let error
     try {
