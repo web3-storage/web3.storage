@@ -61,7 +61,6 @@ prog
       ])
     }
     if (clean) {
-      console.log(`cleaaning ${composePath}, ${project},`)
       await execa('docker-compose', [
         '--file',
         composePath,
