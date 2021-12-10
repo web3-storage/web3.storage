@@ -6,7 +6,6 @@ import { fileURLToPath } from 'url'
 import execa from 'execa'
 import net from 'net'
 
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const prog = sade('api')
 
@@ -30,50 +29,49 @@ prog
  * @param {boolean} [opts.stop]
  * @param {boolean} [opts.clean]
  */
- export async function clusterCmd ({ project, start, stop, clean }) {
-    const composePath = path.join(__dirname, '../docker/cluster/docker-compose.yml')
+export async function clusterCmd ({ project, start, stop, clean }) {
+  const composePath = path.join(__dirname, '../docker/cluster/docker-compose.yml')
 
-    if (!project) {
-        throw new Error('A project must be provided as parameter')
-    }
+  if (!project) {
+    throw new Error('A project must be provided as parameter')
+  }
 
-    if (start) {
-      if (await isPortReachable(9094)) {
-        throw new Error('Cluster is already running. Please check if you have any docker project or cluster deamon already running.')
-      }
-      await execa('docker-compose', [
-        '--file',
-        composePath,
-        '--project-name',
-        project,
-        'up',
-        '--detach'
-      ])
+  if (start) {
+    if (await isPortReachable(9094)) {
+      throw new Error('Cluster is already running. Please check if you have any docker project or cluster deamon already running.')
     }
+    await execa('docker-compose', [
+      '--file',
+      composePath,
+      '--project-name',
+      project,
+      'up',
+      '--detach'
+    ])
+  }
 
-    if (stop) {
-      await execa('docker-compose', [
-        '--file',
-        composePath,
-        '--project-name',
-        project,
-        'stop'
-      ])
-    }
-    if (clean) {
-      await execa('docker-compose', [
-        '--file',
-        composePath,
-        '--project-name',
-        project,
-        'down',
-        '--volumes',
-        '--rmi',
-        'local',
-        '--remove-orphans'
-      ])
-    }
-
+  if (stop) {
+    await execa('docker-compose', [
+      '--file',
+      composePath,
+      '--project-name',
+      project,
+      'stop'
+    ])
+  }
+  if (clean) {
+    await execa('docker-compose', [
+      '--file',
+      composePath,
+      '--project-name',
+      project,
+      'down',
+      '--volumes',
+      '--rmi',
+      'local',
+      '--remove-orphans'
+    ])
+  }
 }
 
 prog.parse(process.argv)
@@ -81,7 +79,7 @@ prog.parse(process.argv)
 /**
  * @param {number} port
  */
- export default async function isPortReachable (
+export default async function isPortReachable (
   port,
   { host = 'localhost', timeout = 1000 } = {}
 ) {
@@ -114,4 +112,3 @@ prog.parse(process.argv)
     return false
   }
 }
-
