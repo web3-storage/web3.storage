@@ -1,5 +1,17 @@
 # Changelog
 
+### [4.0.2](https://www.github.com/web3-storage/web3.storage/compare/db-v4.0.1...db-v4.0.2) (2021-12-10)
+
+
+### Bug Fixes
+
+* delete ops should update updated ts ([#774](https://www.github.com/web3-storage/web3.storage/issues/774)) ([88b6c09](https://www.github.com/web3-storage/web3.storage/commit/88b6c0910b4e33b56d912b6fa53eb62301e0aec2))
+
+
+### Changes
+
+* create tool package with ipfs-cluster docker-compose setup. ([d6ee483](https://www.github.com/web3-storage/web3.storage/commit/d6ee4831237efcfc24e9fb8ee4c835533b16fbe7))
+
 ### [4.0.1](https://www.github.com/web3-storage/web3.storage/compare/db-v4.0.0...db-v4.0.1) (2021-12-09)
 
 
