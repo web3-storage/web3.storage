@@ -97,7 +97,7 @@ export default function Navbar({ bgColor = "", isLoggedIn, isLoadingUser }) {
       href="/login"
       id="login"
       variant="dark"
-      wrapperClassName="inline-block ml-3 md:ml-6"
+      wrapperClassName="inline-block ml-3 md:ml-6 md:min-height[3.25rem]"
       tracking={{ ui: countly.ui.NAVBAR, action: "Login" }}
     >
       Login

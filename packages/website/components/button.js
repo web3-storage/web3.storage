@@ -56,7 +56,6 @@ export default function Button({
     onClick && onClick(event)
   }, [tracking, onClick, href])
 
-  const buttonStyle = small ? {} : { minWidth: '6rem', minHeight: '3.25rem' }
   let variantClasses = ''
 
   switch(variant) {
@@ -82,6 +81,8 @@ export default function Button({
         'items-center',
         'justify-center',
         'px-4',
+        'md:min-h-3.25',
+        'md:min-w-6',
         disabled ?
           'cursor-auto opacity-50' :
           'hover:opacity-90 focus:opacity-90 transition',
@@ -89,7 +90,6 @@ export default function Button({
         !small && 'w-full',
         className
       )}
-      style={buttonStyle}
       onClick={onClickHandler}
       disabled={disabled}
       id={id}
