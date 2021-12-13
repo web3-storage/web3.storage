@@ -35,13 +35,13 @@ $date-size: auto;
 
   &:before {
     @include gradient_Background_BluePurple;
+    @include borderRadius_UltraLarge;
     width: calc(100% + #{$input-gradient-overage-width});
     height: calc(100% + #{$input-gradient-overage-height});
     top: calc(-#{$input-gradient-overage-height}/ 2);
     left: calc(-#{$input-gradient-overage-width}/ 2);
     content: ' ';
     position: absolute;
-    border-radius: 1rem;
     filter: blur(0.1875rem);
     margin: auto;
     box-shadow: 0 0.125rem $heliotrope;
@@ -58,6 +58,7 @@ $date-size: auto;
   input {
     @include fontSize_Tiny;
     @include fontWeight_Regular;
+    @include borderRadius_Large;
 
     position: relative;
 
@@ -70,7 +71,6 @@ $date-size: auto;
     padding-top: 0.1875rem;
     height: 100%;
     background: $shark;
-    border-radius: 0.625rem;
     border: 0.0625rem solid $waterloo;
     opacity: 0.85;
     width: 26rem;
