@@ -274,9 +274,9 @@ export type PAPinRequestUpsertOutput = PAPinRequestUpsertInput & {
 
 export type ListPAPinRequestOptions = {
   /**
-   * List of cids to match
+   * Comma-separated list of CIDs to match
    */
-  cid?: string[]
+  cid?: string
   /**
    * Name  to match
    */

@@ -5,7 +5,18 @@ import { endpoint } from './scripts/constants.js'
 // import { SALT } from './scripts/worker-globals.js'
 // import { JWT_ISSUER } from '../src/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
-import { ERROR_CODE, ERROR_STATUS, getPinningAPIStatus, INVALID_CID, INVALID_META, INVALID_NAME, INVALID_ORIGINS, INVALID_REQUEST_ID, REQUIRED_CID } from '../src/pins.js'
+import {
+  ERROR_CODE,
+  ERROR_STATUS,
+  getPinningAPIStatus,
+  INVALID_CID,
+  INVALID_META,
+  INVALID_NAME,
+  INVALID_ORIGINS,
+  INVALID_REQUEST_ID,
+  REQUIRED_CID,
+  INVALID_LIMIT
+} from '../src/pins.js'
 
 /**
  *
@@ -57,16 +68,10 @@ const assertCorrectPinResponse = (data) => {
   }
 }
 
-// function getTestJWT (sub = 'test', name = 'test') {
-//   return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
-// }
-
 describe('Pinning APIs endpoints', () => {
   let token = null
 
   before(async () => {
-  // Create token
-    // token = await getTestJWT()
     token = await getTestJWT('test-upload', 'test-upload')
   })
 
@@ -125,7 +130,7 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(error.details, INVALID_CID)
     })
 
-    it.only('should receive pin data containing cid, name, origin, meta', async () => {
+    it('should receive pin data containing cid, name, origin, meta', async () => {
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
         headers: {
@@ -144,21 +149,9 @@ describe('Pinning APIs endpoints', () => {
           }
         })
       })
-      console.log(res)
+
       assert(res, 'Server responded')
       assert(res.ok, 'Server response ok')
-
-      const res2 = await fetch(
-        new URL('pins', endpoint).toString(), {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        })
-      console.log(res2)
-      assert(res2, 'list Server responded')
-      assert(res2.ok, 'list Serve response is ok')
     })
 
     it('validates name', async () => {
@@ -248,32 +241,13 @@ describe('Pinning APIs endpoints', () => {
     })
   })
 
-  describe('GET /pins', () => {
+  describe.only('GET /pins', () => {
     let baseUrl
+    let token
+
     before(async () => {
       baseUrl = new URL('pins', endpoint).toString()
-
-      const res = await fetch(new URL('pins', endpoint).toString(), {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e',
-          name: 'PreciousData.pdf',
-          origins: [
-            '/ip4/203.0.113.142/tcp/4001/p2p/QmSourcePeerId',
-            '/ip4/203.0.113.114/udp/4001/quic/p2p/QmSourcePeerId'
-          ],
-          meta: {
-            app_id: '99986338-1113-4706-8302-4420da6158aa'
-          }
-        })
-      })
-      console.log(res)
-      assert(res, 'Server responded')
-      assert(res.ok, 'Server response ok')
+      token = await getTestJWT('test-upload', 'test-upload')
     })
 
     it('validates filter values', async () => {
@@ -291,13 +265,160 @@ describe('Pinning APIs endpoints', () => {
         })
 
       assert(res, 'Server responded')
-      assert(!res.ok, 'Serve returns an error')
+      assert.strictEqual(res.status, ERROR_CODE)
+      const data = await res.json()
+      const error = data.error
+      assert.strictEqual(error.reason, ERROR_STATUS)
+      assert.strictEqual(error.details, INVALID_LIMIT)
     })
 
-    it('filters the list of pins', async () => {
+    it('validates CID values passed as filter', async () => {
+      const cids = `
+bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4,
+bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q,
+bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo,
+`
+
+      const url = `${baseUrl}?cid=${cids}`
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert.strictEqual(res.status, ERROR_CODE)
+      const data = await res.json()
+      const error = data.error
+      assert.strictEqual(error.reason, ERROR_STATUS)
+      assert.strictEqual(error.details, INVALID_CID)
+    })
+
+    it('returns the pins for this user with default filter values', async () => {
+      const url = `${baseUrl}`
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Serve response is ok')
+      const data = await res.json()
+      assert.strictEqual(data.count, 6)
+    })
+
+    it('filters pins on CID, for this user', async () => {
+      const cids = `
+bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm,
+bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q,
+bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
+`
+
+      const url = `${baseUrl}?cid=${cids}`
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Serve response is ok')
+      const data = await res.json()
+      assert.strictEqual(data.count, 2)
+    })
+
+    it('filters case sensitive exact match on name', async () => {
       const opts = new URLSearchParams({
-        name: 'PinnedDoc.pdf',
-        match: 'exact',
+        name: 'ReportDoc.pdf'
+      })
+      const url = `${baseUrl}?${opts}`
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Serve response is ok')
+      const data = await res.json()
+      assert.strictEqual(data.count, 1)
+    })
+
+    it('filters case insensitive partial match on name', async () => {
+      const opts = new URLSearchParams({
+        name: 'image',
+        match: 'ipartial'
+      })
+      const url = `${baseUrl}?${opts}`
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Serve response is ok')
+      const data = await res.json()
+      assert.strictEqual(data.count, 3)
+    })
+
+    it('filters pins created before a date', async () => {
+      const opts = new URLSearchParams({
+        before: '2021-07-01T00:00:00.000000Z'
+      })
+      const url = `${baseUrl}?${opts}`
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Serve response is ok')
+      const data = await res.json()
+      assert.strictEqual(data.count, 1)
+    })
+
+    it('filters pins created after a date', async () => {
+      const opts = new URLSearchParams({
+        after: '2021-07-15T00:00:00.000000Z'
+      })
+      const url = `${baseUrl}?${opts}`
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Serve response is ok')
+      const data = await res.json()
+      assert.strictEqual(data.count, 1)
+    })
+
+    it('limits the number of pins returned for this user', async () => {
+      const opts = new URLSearchParams({
         limit: '3'
       })
       const url = `${baseUrl}?${opts}`
@@ -312,21 +433,8 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert(res.ok, 'Serve response is ok')
-    })
-
-    it('returns the pins with default filter values', async () => {
-      const url = `${baseUrl}`
-      const res = await fetch(
-        url, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        })
-      console.log(res)
-      assert(res, 'Server responded')
-      assert(res.ok, 'Serve response is ok')
+      const data = await res.json()
+      assert.strictEqual(data.count, 3)
     })
   })
 

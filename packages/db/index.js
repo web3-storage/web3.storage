@@ -900,7 +900,7 @@ export class DBClient {
     }
 
     if (opts.cid) {
-      query = query.in('requested_cid', opts.cid)
+      query = query.in('requested_cid', opts.cid.split(','))
     }
 
     if (opts.name && match === 'exact') {

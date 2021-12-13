@@ -1,3 +1,4 @@
+import { createIncorrectSignerAddressError } from '@magic-sdk/admin/dist/core/sdk-exceptions'
 import { JSONResponse, notFound } from './utils/json-response.js'
 import { normalizeCid } from './utils/normalize-cid.js'
 import { waitToGetOkPins } from './utils/pin.js'
@@ -275,10 +276,13 @@ export async function pinsGet (request, env, ctx) {
     limit
   } = opts
 
-  // Normalize cid
+  // Validate cid queryparameter, a comma-separated list of actual CIDs.
   if (cid) {
     try {
-      const normalizedCid = normalizeCid(cid) // eslint-disable-line
+      cid.split(',').forEach((c) => {
+        console.log(c)
+        normalizeCid(c)
+      })
     } catch (err) {
       return new JSONResponse(
         { error: { reason: ERROR_STATUS, details: INVALID_CID } },
@@ -287,7 +291,7 @@ export async function pinsGet (request, env, ctx) {
     }
   }
 
-  // Validate name
+  // Validate name.
   if (name && typeof name !== 'string') {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_NAME } },
@@ -295,7 +299,7 @@ export async function pinsGet (request, env, ctx) {
     )
   }
 
-  // Validate match
+  // Validate match.
   if (match && typeof match !== 'string') {
     if (!MATCH_OPTIONS.includes(match)) {
       return new JSONResponse(
@@ -310,7 +314,7 @@ export async function pinsGet (request, env, ctx) {
     )
   }
 
-  // Validate status
+  // Validate status.
   if (status) {
     if (Array.isArray(status)) {
       const isValidStatus = status.every(v => STATUS_OPTIONS.includes(v))
@@ -355,7 +359,7 @@ export async function pinsGet (request, env, ctx) {
   let pinRequests
 
   try {
-    pinRequests = await env.db.listPAPinRequests(request.auth.authToken, opts)
+    pinRequests = await env.db.listPAPinRequests(request.auth.authToken._id, opts)
   } catch (e) {
     console.error(e)
     return notFound()
