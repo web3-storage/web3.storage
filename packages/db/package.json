@@ -1,11 +1,14 @@
 {
   "name": "@web3-storage/db",
-  "version": "3.1.0",
+  "version": "4.0.2",
   "description": "Database schema and tools.",
   "private": "true",
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "start": "node scripts/cli.js db --start --project web3-storage",
+    "stop": "node scripts/cli.js db --stop --project web3-storage",
+    "stop:clean": "node scripts/cli.js db --stop --clean --project web3-storage",
     "pg-rest-api-types": "./scripts/cli.js pg-rest-api-types",
     "test": "playwright-test \"test/**/*.spec.js\" --sw index.js"
   },

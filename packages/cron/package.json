@@ -9,7 +9,6 @@
     "start": "run-s start:*",
     "start:metrics": "node src/bin/metrics.js",
     "start:pins": "node src/bin/pins.js",
-    "start:dagcargo:views": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/dagcargo-views.js",
     "test": "npm-run-all -p -r mock:cluster mock:pgrest test:e2e",
     "test:e2e": "mocha test/*.spec.js --exit",
     "mock:cluster": "smoke -p 9094 test/mocks/cluster",
@@ -20,7 +19,7 @@
   "dependencies": {
     "@nftstorage/ipfs-cluster": "^3.3.1",
     "@web-std/fetch": "^2.0.1",
-    "@web3-storage/db": "^3.0.0",
+    "@web3-storage/db": "^4.0.0",
     "debug": "^4.3.1",
     "dotenv": "^9.0.2",
     "limiter": "2.0.1",
