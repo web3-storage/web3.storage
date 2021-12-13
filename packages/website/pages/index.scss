@@ -246,6 +246,10 @@
 #section_FAQ_info {
   position: relative;
   padding-bottom: 3rem;
+  .text-block {
+    position: relative;
+    z-index: 1;
+  }
   .heading {
     @include fontSize_Large;
     line-height: leading(50, 35);
