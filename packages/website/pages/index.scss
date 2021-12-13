@@ -428,6 +428,18 @@
   padding-bottom: 0;
   position: relative;
   z-index: 1;
+
+  @include small {
+    padding-bottom: 5rem;
+  }
+  @include mini {
+    padding-bottom: 2rem;
+  }
+
+  @include tiny {
+    padding-bottom: 0;
+  }
+
   .column-1 {
     margin-top: 14rem;
   }
@@ -459,8 +471,10 @@
     }
     @include tiny {
       padding-top: 10rem;
+      padding-bottom: 5rem;
       &:before {
         top: -10rem;
+        height: calc(100% + 12rem);
       }
     }
   }
@@ -506,7 +520,41 @@
 }
 
 #section_get-started-cards {
+  position: relative;
+  z-index: 1;
   padding-top: 2rem;
+  &:before {
+    display: none;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 6rem;
+    left: 0;
+    top: 0;
+    transform: translateY(-100%);
+    background-repeat: no-repeat;
+    background-size: 101%;
+    background-position: left 0 bottom 0;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='374' height='65.045' viewBox='0 0 374 65.045'%3e%3cpath id='Subtraction_2' data-name='Subtraction 2' d='M479.5,65.044h-374V0c12.712,3.341,26.358,6.235,40.56,8.6,13.244,2.207,27.4,4.028,42.084,5.412,25.851,2.435,53.943,3.618,85.882,3.618,33.491,0,65.842-1.271,98.794-2.687l6.208-.267.782-.034c28.406-1.227,55.236-2.385,78.606-2.385,7.741,0,14.638.123,21.083.375v52.41Z' transform='translate(-105.5)' fill='%23f1f1f1'/%3e%3c/svg%3e ");
+  }
+  @include small {
+    &:before {
+      display: block;
+      height: 12rem;
+    }
+  }
+  @include tiny {
+    padding-top: 0;
+    margin-top: 3rem;
+  }
+
+  .card-list-block {
+    @include small {
+      .card-row {
+        flex-direction: column;
+      }
+    }
+  }
 }
 
 // ------------------------------------------------------ Section [Testimonials]
@@ -537,6 +585,13 @@
     position: relative;
     left: -2.5rem;
     width: calc(100% + 5rem);
+
+    @include small {
+      .card-row {
+        flex-direction: column;
+      }
+    }
+
     .card {
       .feature-wrapper {
         margin-bottom: 0.5rem;
@@ -547,6 +602,30 @@
 
 // ------------------------------------------------------ Section [Explore Docs]
 #section_explore-docs {
+  .column-1 {
+    display: none;
+  }
+
+  @include medium {
+    .column-1 {
+      display: block;
+    }
+    .column-3 {
+      display: none;
+    }
+  }
+
+  .card-list-block {
+    @include mini {
+      .card-row {
+        flex-direction: column;
+      }
+      .card {
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+
   .text-block {
     margin: 2.125rem 0 0 3rem;
     .heading {

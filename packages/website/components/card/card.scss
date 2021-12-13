@@ -52,6 +52,7 @@
   }
 
   .feature-wrapper {
+    justify-content: flex-start;
     padding: 0.5rem 1rem;
     margin: 2.25rem 0;
     background-color: $gray50;
@@ -61,11 +62,18 @@
   }
 
   .code-feature {
+    text-align: left;
     font-family: 'Suisse Intl Mono';
     @include fontSize_Tiny;
     @include fontWeight_Regular;
     line-height: leading(19, 13);
     color: #0008d9;
+    word-break: break-all;
+
+    @include mini {
+      font-size: 12px;
+    }
+
     .highlight {
       color: #925fdc;
     }
