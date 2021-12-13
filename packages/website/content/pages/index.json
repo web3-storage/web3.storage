@@ -16,6 +16,7 @@
         "columns": [
           {
             "type": "hero",
+            "page": "index",
             "cols": {
               "num": "col-6_sm-8_mi-10_ti-12",
               "push_left": "off-3_sm-2_mi-1_ti-0"
@@ -84,8 +85,53 @@
                 "id": "intro_1-helix"
               },
               {
-                "type": "image_block",
-                "src": "/images/placeholder-code-image.png"
+                "type": "code_preview",
+                "tabs": [
+                  {
+                    "thumb": "STORE",
+                    "lines": [
+                      "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
+                      "",
+                      "const token = process.env.API_TOKEN",
+                      "const client = new Web3Storage({ token })",
+                      "",
+                      "async function storeFiles () {",
+                      "  const files = await getFilesFromPath('/path/to/file')",
+                      "  const cid = await client.put(files)",
+                      "  console.log(cid)",
+                      "}",
+                      "",
+                      "storeFiles()"
+                    ],
+                    "output": {
+                      "label": "Result",
+                      "value": "bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu"
+                    }
+                  },
+                  {
+                    "thumb": "RETRIEVE",
+                    "lines": [
+                      "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
+                      "",
+                      "const token = process.env.API_TOKEN",
+                      "const client = new Web3Storage({ token })",
+                      "",
+                      "async function retrieveFiles () {",
+                      "  const id =",
+                      "     'bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'",
+                      "",
+                      "  const res = await client.get(cid)",
+                      "  const files = await res.files()",
+                      "",
+                      "  for (const file of files) {",
+                      "    console.log(`${file.cid}: ${file.name} (${file.size} bytes)`)",
+                      "  }",
+                      "}",
+                      "",
+                      "retrieveFiles()"
+                    ]
+                  }
+                ]
               }
             ]
           }

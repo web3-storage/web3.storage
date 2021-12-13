@@ -1,5 +1,6 @@
 // ===================================================================== Imports
 import clsx from 'clsx';
+
 import Button from '../button/button';
 import countly from '../../lib/countly';
 
@@ -25,7 +26,7 @@ export default function TextBlock({ block, className }) {
       return (
         <>
           {text.map(item => (
-            <p key={item}>{item}</p>
+            <p key={item} dangerouslySetInnerHTML={{ __html: item }}></p>
           ))}
         </>
       );

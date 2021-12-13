@@ -29,9 +29,11 @@
 @import '../components/imageblock/imageblock.scss';
 @import '../components/hero/hero.scss';
 @import '../components/messagebanner/messagebanner.scss';
+@import '../components/codepreview/codepreview.scss';
 
 // Pages
 @import '../pages/index.scss';
+@import '../pages/about.scss';
 @import '../pages/login';
 @import '../pages/account';
 @import '../pages/tokens';
