@@ -27,7 +27,7 @@
       overflow: hidden;
       position: relative;
       border: none;
-      color: $black;
+      color: $ebony;
       justify-content: start;
 
       h4 {
@@ -49,9 +49,13 @@
 
 .account-gradient-background {
   background: $white;
+  height: 100%;
+  width: 100%;
   position: absolute;
-  min-width: 36.625rem;
-  left: -25%;
-  top: -25%;
-  z-index: -1;
+  left: 0;
+  top: 0;
+
+  img {
+    height: 100%;
+  }
 }

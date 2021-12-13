@@ -35,13 +35,12 @@ export default function withAuthorization(App) {
 
       // Getting any authentication cookies if available
       const authCookie = !!req ? req.cookies.authorization : document.cookie.split('authorization=')[1]?.split(';')[0];
-      const paths = pathname.split('/').filter(Boolean).slice(1);
+      const paths = pathname.split('/').filter(Boolean).slice(0);
 
       // Early return on the login page or base page
       if (!paths.length || paths.some(path => path === 'login')) {
         return pageProps;
       }
-
       // Initial authorization check for non login routes
       if (!authCookie) {
         return redirectToLogin(res, pageProps);

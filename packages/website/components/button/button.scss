@@ -1,7 +1,7 @@
 .button {
   cursor: pointer;
   display: inline-block;
-  border-radius: 1.5rem;
+  @include borderRadius_Huge;
   @include fontSize_Tiny;
   @include fontWeight_Semibold;
   text-transform: uppercase;
@@ -73,7 +73,7 @@
 
     &:before,
     &:after {
-      border-radius: 1.5rem;
+      @include borderRadius_Huge;
       content: '';
       position: absolute;
       width: 100%;
@@ -110,7 +110,7 @@
   &.outline {
     &-dark,
     &-light {
-      border-radius: 1.5rem;
+      @include borderRadius_Huge;
     }
 
     &-dark {
