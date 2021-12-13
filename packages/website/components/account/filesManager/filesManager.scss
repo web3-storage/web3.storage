@@ -1,0 +1,110 @@
+$input-gradient-overage-width: '1%';
+$input-gradient-overage-height: '5%';
+
+$base-row-width: 55.5625rem;
+$date-width: calculateWidthPercentage(6.25rem, $base-row-width);
+$date-name: calculateWidthPercentage(14rem, $base-row-width);
+$date-cid: calculateWidthPercentage(11.375rem, $base-row-width);
+$date-pin-status: calculateWidthPercentage(7.5625rem, $base-row-width);
+$date-storage-providers: calculateWidthPercentage(11.6875rem, $base-row-width);
+$date-size: auto;
+
+.files-manager-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  justify-content: flex-start;
+  padding: 1.5rem 2.125rem;
+
+  > * {
+    width: 100%;
+  }
+}
+
+.files-manager-header {
+  display: flex;
+  justify-content: space-between;
+  justify-items: center;
+  padding-bottom: 1.5rem;
+}
+
+.files-manager-search {
+  position: relative;
+  display: inline-flex;
+  height: 1.5625rem;
+
+  &:before {
+    @include gradient_Background_BluePurple;
+    @include borderRadius_UltraLarge;
+    width: calc(100% + #{$input-gradient-overage-width});
+    height: calc(100% + #{$input-gradient-overage-height});
+    top: calc(-#{$input-gradient-overage-height}/ 2);
+    left: calc(-#{$input-gradient-overage-width}/ 2);
+    content: ' ';
+    position: absolute;
+    filter: blur(0.1875rem);
+    margin: auto;
+    box-shadow: 0 0.125rem $heliotrope;
+    opacity: 0.25;
+  }
+
+  svg {
+    color: $white;
+    position: absolute;
+    top: 0.5rem;
+    left: 1rem;
+  }
+
+  input {
+    @include fontSize_Tiny;
+    @include fontWeight_Regular;
+    @include borderRadius_Large;
+
+    position: relative;
+
+    &::placeholder {
+      color: $white;
+    }
+    &:focus {
+      outline: none;
+    }
+    padding-top: 0.1875rem;
+    height: 100%;
+    background: $shark;
+    border: 0.0625rem solid $waterloo;
+    opacity: 0.85;
+    width: 26rem;
+    padding-left: 2.1875rem;
+  }
+}
+
+.files-manager-row {
+  @include fontSize_Tiny;
+  @include fontWeight_Semibold;
+
+  display: grid;
+  position: relative;
+  grid-template-columns: $date-width $date-name $date-cid $date-pin-status $date-storage-providers $date-size;
+}
+
+.files-manager-table-header-divider {
+  border-bottom: 1px solid rgba(white, 0.05);
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 8.125rem;
+}
+
+.files-manager-table-content {
+  padding-top: 2.5rem;
+}
+
+.files-manager-upload-cta {
+  @include fontWeight_Regular;
+  @include fontSize_Medium;
+
+  .button {
+    @include fontSize_Medium;
+    padding-left: 0;
+  }
+}

@@ -26,26 +26,36 @@
       grid-area: upload-cta;
       overflow: hidden;
       position: relative;
-      background: $white;
       border: none;
+      color: $ebony;
+      justify-content: start;
+
+      h4 {
+        padding-bottom: 0.5rem;
+      }
     }
     &-tokens-cta {
       grid-area: tokens-cta;
-      height: 14.5rem; // TODO: Remove temporary height
     }
     &-docs-cta {
       grid-area: docs-cta;
-      height: 14.5rem; // TODO: Remove temporary height
     }
     &-files-manager {
       grid-area: files-manager;
-      min-height: 17.125rem; // TODO: Remove temporary height
+      min-height: 17.125rem;
     }
   }
 }
 
 .account-gradient-background {
+  background: $white;
+  height: 100%;
+  width: 100%;
   position: absolute;
-  min-width: 36.625rem;
-  left: -40%;
+  left: 0;
+  top: 0;
+
+  img {
+    height: 100%;
+  }
 }

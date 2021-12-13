@@ -11,6 +11,7 @@ $font_Primary: 'SuisseIntl';
 // fontSize_Regular | 18pt
 // fontSize_Medium | 20pt
 // fontSize_MediumLarge | 25pt
+// fontSize_MediumExtraLarge |30pt
 // fontSize_Large | 35pt
 // fontSize_ExtraLarge | 45pt
 // fontSize_Huge | 67pt
@@ -22,6 +23,7 @@ $fontSize_Small: 1rem;
 $fontSize_Regular: 1.125rem;
 $fontSize_Medium: 1.25rem;
 $fontSize_MediumLarge: 1.5625rem;
+$fontSize_MediumExtraLarge: 1.875rem;
 $fontSize_Large: 2.1875rem;
 $fontSize_ExtraLarge: 2.8125rem;
 $fontSize_Huge: 4.1875rem;
@@ -57,6 +59,7 @@ $leading_Massive: 6.4375rem;
 }
 
 // -------------------------------------------------------------- Letter Spacing
+$letterSpacing_None: 0;
 $letterSpacing_Regular: 0.02em;
 $letterSpacing_Large: 0.03em;
 
@@ -88,6 +91,9 @@ $letterSpacing_Large: 0.03em;
 }
 @mixin fontSize_MediumLarge {
   font-size: $fontSize_MediumLarge;
+}
+@mixin fontSize_MediumExtraLarge {
+  font-size: $fontSize_MediumExtraLarge;
 }
 @mixin fontSize_ExtraLarge {
   font-size: $fontSize_ExtraLarge;
@@ -186,6 +192,18 @@ $letterSpacing_Large: 0.03em;
   @include fontWeight_Semibold;
 }
 
+@mixin h4 {
+  @include fontSize_Regular;
+  @include leading_Regular;
+  @include fontWeight_Semibold;
+}
+
+@mixin h5 {
+  @include fontSize_MediumExtraLarge;
+  @include leading_Regular;
+  @include fontWeight_Semibold;
+}
+
 @mixin p1 {
   @include fontSize_Medium;
   @include leading_Medium;
@@ -216,6 +234,12 @@ $letterSpacing_Large: 0.03em;
 @mixin label_3 {
   @include fontSize_Tiny;
   @include leading_Small;
+}
+
+@mixin label_4 {
+  @include fontSize_Small;
+  @include leading_Small;
+  @include fontWeight_Regular;
 }
 
 @mixin gradient_Text {
