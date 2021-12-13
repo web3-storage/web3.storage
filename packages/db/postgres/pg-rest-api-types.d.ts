@@ -12,79 +12,6 @@ export interface paths {
       };
     };
   };
-  "/aggregate": {
-    get: {
-      parameters: {
-        query: {
-          aggregate_cid?: parameters["rowFilter.aggregate.aggregate_cid"];
-          piece_cid?: parameters["rowFilter.aggregate.piece_cid"];
-          sha256hex?: parameters["rowFilter.aggregate.sha256hex"];
-          export_size?: parameters["rowFilter.aggregate.export_size"];
-          metadata?: parameters["rowFilter.aggregate.metadata"];
-          entry_created?: parameters["rowFilter.aggregate.entry_created"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["aggregate"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-  };
-  "/aggregate_entry": {
-    get: {
-      parameters: {
-        query: {
-          aggregate_cid?: parameters["rowFilter.aggregate_entry.aggregate_cid"];
-          cid_v1?: parameters["rowFilter.aggregate_entry.cid_v1"];
-          datamodel_selector?: parameters["rowFilter.aggregate_entry.datamodel_selector"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["aggregate_entry"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-  };
   "/auth_key": {
     get: {
       parameters: {
@@ -382,52 +309,6 @@ export interface paths {
       };
     };
   };
-  "/deal": {
-    get: {
-      parameters: {
-        query: {
-          deal_id?: parameters["rowFilter.deal.deal_id"];
-          aggregate_cid?: parameters["rowFilter.deal.aggregate_cid"];
-          client?: parameters["rowFilter.deal.client"];
-          provider?: parameters["rowFilter.deal.provider"];
-          status?: parameters["rowFilter.deal.status"];
-          start_epoch?: parameters["rowFilter.deal.start_epoch"];
-          end_epoch?: parameters["rowFilter.deal.end_epoch"];
-          entry_created?: parameters["rowFilter.deal.entry_created"];
-          entry_last_updated?: parameters["rowFilter.deal.entry_last_updated"];
-          status_meta?: parameters["rowFilter.deal.status_meta"];
-          start_time?: parameters["rowFilter.deal.start_time"];
-          sector_start_epoch?: parameters["rowFilter.deal.sector_start_epoch"];
-          sector_start_time?: parameters["rowFilter.deal.sector_start_time"];
-          end_time?: parameters["rowFilter.deal.end_time"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["deal"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-  };
   "/migration_tracker": {
     get: {
       parameters: {
@@ -535,8 +416,10 @@ export interface paths {
       parameters: {
         query: {
           key?: parameters["rowFilter.name.key"];
-          seqno?: parameters["rowFilter.name.seqno"];
           record?: parameters["rowFilter.name.record"];
+          has_v2_sig?: parameters["rowFilter.name.has_v2_sig"];
+          seqno?: parameters["rowFilter.name.seqno"];
+          validity?: parameters["rowFilter.name.validity"];
           inserted_at?: parameters["rowFilter.name.inserted_at"];
           updated_at?: parameters["rowFilter.name.updated_at"];
           /** Filtering Columns */
@@ -590,8 +473,10 @@ export interface paths {
       parameters: {
         query: {
           key?: parameters["rowFilter.name.key"];
-          seqno?: parameters["rowFilter.name.seqno"];
           record?: parameters["rowFilter.name.record"];
+          has_v2_sig?: parameters["rowFilter.name.has_v2_sig"];
+          seqno?: parameters["rowFilter.name.seqno"];
+          validity?: parameters["rowFilter.name.validity"];
           inserted_at?: parameters["rowFilter.name.inserted_at"];
           updated_at?: parameters["rowFilter.name.updated_at"];
         };
@@ -609,8 +494,10 @@ export interface paths {
       parameters: {
         query: {
           key?: parameters["rowFilter.name.key"];
-          seqno?: parameters["rowFilter.name.seqno"];
           record?: parameters["rowFilter.name.record"];
+          has_v2_sig?: parameters["rowFilter.name.has_v2_sig"];
+          seqno?: parameters["rowFilter.name.seqno"];
+          validity?: parameters["rowFilter.name.validity"];
           inserted_at?: parameters["rowFilter.name.inserted_at"];
           updated_at?: parameters["rowFilter.name.updated_at"];
         };
@@ -1261,23 +1148,6 @@ export interface paths {
       };
     };
   };
-  "/rpc/postgres_fdw_handler": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
   "/rpc/pgrst_watch": {
     post: {
       parameters: {
@@ -1295,7 +1165,7 @@ export interface paths {
       };
     };
   };
-  "/rpc/user_keys_list": {
+  "/rpc/user_auth_keys_list": {
     post: {
       parameters: {
         body: {
@@ -1314,12 +1184,12 @@ export interface paths {
       };
     };
   };
-  "/rpc/postgres_fdw_validator": {
+  "/rpc/pin_from_status_total": {
     post: {
       parameters: {
         body: {
           args: {
-            "": string;
+            query_status: string;
           };
         };
         header: {
@@ -1377,6 +1247,25 @@ export interface paths {
         body: {
           args: {
             _json: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/publish_name_record": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            data: string;
           };
         };
         header: {
@@ -1486,19 +1375,6 @@ export interface paths {
 }
 
 export interface definitions {
-  aggregate: {
-    aggregate_cid?: string;
-    piece_cid?: string;
-    sha256hex?: string;
-    export_size?: number;
-    metadata?: string;
-    entry_created?: string;
-  };
-  aggregate_entry: {
-    aggregate_cid?: string;
-    cid_v1?: string;
-    datamodel_selector?: string;
-  };
   auth_key: {
     /**
      * Note:
@@ -1540,22 +1416,6 @@ export interface definitions {
     inserted_at: string;
     updated_at: string;
   };
-  deal: {
-    deal_id?: number;
-    aggregate_cid?: string;
-    client?: string;
-    provider?: string;
-    status?: string;
-    start_epoch?: number;
-    end_epoch?: number;
-    entry_created?: string;
-    entry_last_updated?: string;
-    status_meta?: string;
-    start_time?: string;
-    sector_start_epoch?: number;
-    sector_start_time?: string;
-    end_time?: string;
-  };
   migration_tracker: {
     /**
      * Note:
@@ -1574,8 +1434,10 @@ export interface definitions {
      * This is a Primary Key.<pk/>
      */
     key: string;
-    seqno: number;
     record: string;
+    has_v2_sig: boolean;
+    seqno: number;
+    validity: number;
     inserted_at: string;
     updated_at: string;
   };
@@ -1715,19 +1577,6 @@ export interface parameters {
   offset: string;
   /** Limiting and Pagination */
   limit: string;
-  /** aggregate */
-  "body.aggregate": definitions["aggregate"];
-  "rowFilter.aggregate.aggregate_cid": string;
-  "rowFilter.aggregate.piece_cid": string;
-  "rowFilter.aggregate.sha256hex": string;
-  "rowFilter.aggregate.export_size": string;
-  "rowFilter.aggregate.metadata": string;
-  "rowFilter.aggregate.entry_created": string;
-  /** aggregate_entry */
-  "body.aggregate_entry": definitions["aggregate_entry"];
-  "rowFilter.aggregate_entry.aggregate_cid": string;
-  "rowFilter.aggregate_entry.cid_v1": string;
-  "rowFilter.aggregate_entry.datamodel_selector": string;
   /** auth_key */
   "body.auth_key": definitions["auth_key"];
   "rowFilter.auth_key.id": string;
@@ -1749,22 +1598,6 @@ export interface parameters {
   "rowFilter.content.dag_size": string;
   "rowFilter.content.inserted_at": string;
   "rowFilter.content.updated_at": string;
-  /** deal */
-  "body.deal": definitions["deal"];
-  "rowFilter.deal.deal_id": string;
-  "rowFilter.deal.aggregate_cid": string;
-  "rowFilter.deal.client": string;
-  "rowFilter.deal.provider": string;
-  "rowFilter.deal.status": string;
-  "rowFilter.deal.start_epoch": string;
-  "rowFilter.deal.end_epoch": string;
-  "rowFilter.deal.entry_created": string;
-  "rowFilter.deal.entry_last_updated": string;
-  "rowFilter.deal.status_meta": string;
-  "rowFilter.deal.start_time": string;
-  "rowFilter.deal.sector_start_epoch": string;
-  "rowFilter.deal.sector_start_time": string;
-  "rowFilter.deal.end_time": string;
   /** migration_tracker */
   "body.migration_tracker": definitions["migration_tracker"];
   "rowFilter.migration_tracker.id": string;
@@ -1776,8 +1609,10 @@ export interface parameters {
   /** name */
   "body.name": definitions["name"];
   "rowFilter.name.key": string;
-  "rowFilter.name.seqno": string;
   "rowFilter.name.record": string;
+  "rowFilter.name.has_v2_sig": string;
+  "rowFilter.name.seqno": string;
+  "rowFilter.name.validity": string;
   "rowFilter.name.inserted_at": string;
   "rowFilter.name.updated_at": string;
   /** pin */
