@@ -34,12 +34,12 @@
 }
 
 .storage-manager-meter {
+  @include borderRadius_UltraLarge;
   display: flex;
   align-items: center;
   position: relative;
   width: 100%;
   height: 1.375rem;
-  border-radius: 1rem;
   background: rgba($vulcan, 0.15);
   border: 0.0625rem solid rgba($waterloo, 0.15);
   overflow: hidden;
@@ -47,11 +47,11 @@
 
 .storage-manager-meter-used {
   @include gradient_Background_BluePurple;
+  @include borderRadius_UltraLarge;
   height: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  border-radius: 1rem;
 }
 
 .storage-manager-meter-tier {

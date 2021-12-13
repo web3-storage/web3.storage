@@ -17,8 +17,12 @@
 
 // Components
 @import '../components/button/button';
+@import '../components/account/CTACard/CTACard';
 @import '../components/account/storageManager/storageManager';
 @import '../components/account/filesManager/filesManager';
+@import '../components/tokens/tokenCreator/tokenCreator';
+@import '../components/tokens/tokensManager/tokensManager';
+@import '../components/account/fileUploader/fileUploader';
 @import '../components/cardlistblock/cardlistblock.scss';
 @import '../components/card/card.scss';
 @import '../components/textblock/textblock.scss';
@@ -26,6 +30,7 @@
 @import '../components/accordionblock/accordionblock.scss';
 @import '../components/hero/hero.scss';
 @import '../components/messagebanner/messagebanner.scss';
+@import '../components/codepreview/codepreview.scss';
 
 // Pages
 @import '../pages/index.scss';
@@ -33,6 +38,7 @@
 @import '../pages/faq.scss';
 @import '../pages/login';
 @import '../pages/account';
+@import '../pages/tokens';
 
 // /////////////////////////////////////////////////////////////////////// Fonts
 // -----------------------------------------------------------------------------
@@ -205,6 +211,16 @@ h3,
   @include h3;
 }
 
+h4,
+.h4 {
+  @include h4;
+}
+
+h5,
+.h5 {
+  @include h5;
+}
+
 // ////////////////////////////////////////////////////////////////// Components
 // -----------------------------------------------------------------------------
 .video-wrapper {
@@ -293,4 +309,8 @@ h3,
 
 .image-full-width {
   width: 100%;
+}
+
+.hidden {
+  display: none;
 }
