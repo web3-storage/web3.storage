@@ -1,9 +1,10 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 import { endpoint } from './scripts/constants.js'
-import * as JWT from '../src/utils/jwt.js'
-import { SALT } from './scripts/worker-globals.js'
-import { JWT_ISSUER } from '../src/constants.js'
+// import * as JWT from '../src/utils/jwt.js'
+// import { SALT } from './scripts/worker-globals.js'
+// import { JWT_ISSUER } from '../src/constants.js'
+import { getTestJWT } from './scripts/helpers.js'
 import { ERROR_CODE, ERROR_STATUS, getPinningAPIStatus, INVALID_CID, INVALID_META, INVALID_NAME, INVALID_ORIGINS, INVALID_REQUEST_ID, REQUIRED_CID } from '../src/pins.js'
 
 /**
@@ -56,16 +57,17 @@ const assertCorrectPinResponse = (data) => {
   }
 }
 
-function getTestJWT (sub = 'test', name = 'test') {
-  return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
-}
+// function getTestJWT (sub = 'test', name = 'test') {
+//   return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
+// }
 
 describe('Pinning APIs endpoints', () => {
   let token = null
 
   before(async () => {
   // Create token
-    token = await getTestJWT()
+    // token = await getTestJWT()
+    token = await getTestJWT('test-upload', 'test-upload')
   })
 
   describe('POST /pins', () => {
@@ -123,7 +125,7 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(error.details, INVALID_CID)
     })
 
-    it('should receive pin data containing cid, name, origin, meta', async () => {
+    it.only('should receive pin data containing cid, name, origin, meta', async () => {
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
         headers: {
@@ -142,9 +144,21 @@ describe('Pinning APIs endpoints', () => {
           }
         })
       })
-
+      console.log(res)
       assert(res, 'Server responded')
       assert(res.ok, 'Server response ok')
+
+      const res2 = await fetch(
+        new URL('pins', endpoint).toString(), {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+      console.log(res2)
+      assert(res2, 'list Server responded')
+      assert(res2.ok, 'list Serve response is ok')
     })
 
     it('validates name', async () => {
@@ -235,11 +249,31 @@ describe('Pinning APIs endpoints', () => {
   })
 
   describe('GET /pins', () => {
-    let token = null
     let baseUrl
     before(async () => {
-      token = await getTestJWT()
       baseUrl = new URL('pins', endpoint).toString()
+
+      const res = await fetch(new URL('pins', endpoint).toString(), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e',
+          name: 'PreciousData.pdf',
+          origins: [
+            '/ip4/203.0.113.142/tcp/4001/p2p/QmSourcePeerId',
+            '/ip4/203.0.113.114/udp/4001/quic/p2p/QmSourcePeerId'
+          ],
+          meta: {
+            app_id: '99986338-1113-4706-8302-4420da6158aa'
+          }
+        })
+      })
+      console.log(res)
+      assert(res, 'Server responded')
+      assert(res.ok, 'Server response ok')
     })
 
     it('validates filter values', async () => {
@@ -290,7 +324,7 @@ describe('Pinning APIs endpoints', () => {
             'Content-Type': 'application/json'
           }
         })
-
+      console.log(res)
       assert(res, 'Server responded')
       assert(res.ok, 'Serve response is ok')
     })
