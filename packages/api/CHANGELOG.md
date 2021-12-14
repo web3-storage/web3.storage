@@ -1,5 +1,12 @@
 # Changelog
 
+### [5.0.3](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.2...api-v5.0.3) (2021-12-14)
+
+
+### Bug Fixes
+
+* add metadata to backup ([#783](https://www.github.com/web3-storage/web3.storage/issues/783)) ([70db5c9](https://www.github.com/web3-storage/web3.storage/commit/70db5c9e417c6df1858db2caf9fae62d45cc6410))
+
 ### [5.0.2](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.1...api-v5.0.2) (2021-12-10)
 
 
