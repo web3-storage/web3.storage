@@ -6,6 +6,7 @@ import CorkscrewBackground from '../assets/illustrations/corkscrewBlurred';
 import Metadata from 'components/general/metadata';
 import RestrictedRoute from 'components/general/restrictedRoute';
 import { AuthorizationProvider } from 'components/contexts/authorizationContext';
+import { UserProvider } from 'components/contexts/userContext';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,11 +26,13 @@ const App = ({ Component, pageProps }: any) => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthorizationProvider {...pageProps}>
-        <Metadata {...pageProps} />
-        {pathname !== '/' && <CorkscrewBackground />}
-        <RestrictedRoute {...pageProps}>
-          <Component {...pageProps} />
-        </RestrictedRoute>
+        <UserProvider>
+          <Metadata {...pageProps} />
+          {pathname !== '/' && <CorkscrewBackground />}
+          <RestrictedRoute {...pageProps}>
+            <Component {...pageProps} />
+          </RestrictedRoute>
+        </UserProvider>
       </AuthorizationProvider>
     </QueryClientProvider>
   );

@@ -52,7 +52,7 @@ export const AuthorizationProvider = ({ children, authOnLoad = true }) => {
     <AuthorizationContext.Provider
       value={
         /** @type {AuthorizationContextProps} */
-        { status, isLoggedIn: loggedIn, error, isFetching, isLoading }
+        { status, isLoggedIn: !!loggedIn, error, isFetching, isLoading }
       }
     >
       {children}
