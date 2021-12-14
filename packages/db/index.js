@@ -27,6 +27,7 @@ const pinRequestSelect = `
   contentCid:content_cid,
   authKey:auth_key_id,
   name,
+  deleted:deleted_at,
   created:inserted_at,
   updated:updated_at,
   content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region)))  `
@@ -814,6 +815,7 @@ export class DBClient {
       .from(PAPinRequestTableName)
       .select(pinRequestSelect)
       .eq('id', pinRequestId)
+      .is('deleted_at', null)
       .single()
 
     if (error) {
@@ -890,6 +892,34 @@ export class DBClient {
    */
   async listPAPinRequests (authKey, opt) {
     throw new Error('Not implemented')
+  }
+
+  /**
+   * Delete a user PA pin request.
+   *
+   * @param {number} requestId
+   * @param {string} authKey
+   */
+  async deletePAPinRequest (requestId, authKey) {
+    const date = new Date().toISOString()
+    /** @type {{ data: import('./db-client-types').PAPinRequestItem, error: PostgrestError }} */
+    const { data, error } = await this._client
+      .from(PAPinRequestTableName)
+      .update({
+        deleted_at: date,
+        updated_at: date
+      })
+      .match({ auth_key_id: authKey, id: requestId })
+      .filter('deleted_at', 'is', null)
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return {
+      _id: data.id
+    }
   }
 
   /**
