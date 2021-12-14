@@ -212,7 +212,7 @@ SELECT (ak.id)::TEXT AS id,
        ak.name AS name,
        ak.secret AS secret,
        ak.inserted_at AS created,
-       EXISTS(SELECT 42 FROM upload u WHERE ak.id = u.auth_key_id)
+       EXISTS(SELECT 42 FROM upload u WHERE u.auth_key_id = ak.id) AS has_uploads
   FROM auth_key ak
  WHERE ak.user_id = query_user_id AND ak.deleted_at IS NULL
 $$;
