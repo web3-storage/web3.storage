@@ -8,7 +8,7 @@ import clsx from 'clsx';
 /**
  * @param {Array} props.active
  * @param function props.toggle
- * @param Boolean props.selected
+ * @param Boolean props.toggleOnLoad
  */
 // ================================================================== Functions
 function Header () {
@@ -27,7 +27,7 @@ const generateUID = () => {
   return first + second
 }
 
-function AccordionSection({ active, toggle, children }) {
+function AccordionSection({ active, toggle, toggleOnLoad, children }) {
   const [uid, setUID] = useState(generateUID)
   const header = children.find(child => child.type === Header)
   const content = children.find(child => child.type === Content)
@@ -44,7 +44,11 @@ function AccordionSection({ active, toggle, children }) {
 
       </ZeroAccordionHeader>
 
-      <ZeroAccordionContent open={open}>
+      <ZeroAccordionContent
+        uid={uid}
+        toggle={toggle}
+        open={open}
+        toggleOnLoad={toggleOnLoad}>
 
         {content ? content.props.children : null}
 

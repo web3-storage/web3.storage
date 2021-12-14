@@ -39,6 +39,10 @@
             },
             "customizations": [
               {
+                "type": "corkscrew",
+                "id": "architecture-blurred-background"
+              },
+              {
                 "type": "text_block",
                 "format": "small",
                 "description": [
@@ -172,11 +176,11 @@
               },
               {
                 "heading": "Data Limits",
-                "content": "hihi"
+                "content": ""
               },
               {
                 "heading": "Filecoin Deals",
-                "content": "hola"
+                "content": ""
               }
             ]
           }

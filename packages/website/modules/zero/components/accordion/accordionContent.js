@@ -6,9 +6,11 @@ import { useRef, useState, useEffect, useLayoutEffect } from 'react';
 /**
  * @param Boolean props.open
  * @param function props.toggle
+ * @param String props.uid
+ * @param Boolean props.toggleOnLoad
  */
 // ====================================================================== Export
-export default function AccordionContent({ open, toggle, children }) {
+export default function AccordionContent({ open, toggle, uid, toggleOnLoad, children }) {
   const content = useRef(null)
   const firstUpdate = useRef(true)
   const [contentHeight, setContentHeight] = useState('0px')
@@ -17,8 +19,11 @@ export default function AccordionContent({ open, toggle, children }) {
   const measuring = isMeasuring ? "measuring-content" : ''
 
   // ================================================================= Functions
-  useEffect(() => {
-    setTimeout(() => { updateContentHeight(open) }, 500)
+  useLayoutEffect(() => {
+    setTimeout(() => {
+      updateContentHeight(open)
+      if (toggleOnLoad ) { toggle(uid) }
+    }, 500)
   }, [])
 
   useEffect(() => {
