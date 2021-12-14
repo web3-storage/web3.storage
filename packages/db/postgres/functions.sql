@@ -170,6 +170,43 @@ BEGIN
 END
 $$;
 
+-- Creates a pin request with relative content, pins, pin_requests and backups.
+CREATE OR REPLACE FUNCTION create_pin_request(data json) RETURNS TEXT
+    LANGUAGE plpgsql
+    volatile
+    PARALLEL UNSAFE
+AS
+$$
+DECLARE
+  inserted_pin_request_id BIGINT;
+BEGIN
+  -- Set timeout as imposed by heroku
+  SET LOCAL statement_timeout = '30s';
+
+  PERFORM create_content(data);
+
+  insert into pa_pin_request ,
+                      auth_key_id,
+                      content_cid,
+                      requested_cid,
+                      name,
+                      inserted_at,
+                      updated_at)
+  values (
+            (data ->> 'auth_key_id')::BIGINT,
+            data ->> 'content_cid',
+            data ->> 'requested_cid',
+            data ->> 'name',
+            (data ->> 'inserted_at')::timestamptz,
+            (data ->> 'updated_at')::timestamptz
+          )
+
+  returning id into inserted_pin_request_id;
+
+  return (inserted_pin_request_id)::TEXT;
+END
+$$;
+
 CREATE OR REPLACE FUNCTION upsert_pin(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile

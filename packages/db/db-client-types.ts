@@ -253,6 +253,14 @@ export type PAPinRequestUpsertInput = {
   name?: definitions['pa_pin_request']['name'],
   authKey: string,
   requestedCid: definitions['pa_pin_request']['requested_cid'],
+  contentCid: definitions['upload']['content_cid'],
+  dagSize?: definitions['content']['dag_size'],
+  pins: Array<{
+    status: definitions['pin']['status']
+    location: Location
+  }>,
+  created?: definitions['upload']['inserted_at'],
+  updated?: definitions['upload']['updated_at'],
 }
 
 export type PAPinRequestItem = PAPinRequestUpsertInput & {

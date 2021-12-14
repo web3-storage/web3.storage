@@ -763,44 +763,40 @@ export class DBClient {
   /**
    * Creates a Pin Request.
    *
-   * @param {import('./db-client-types').PAPinRequestUpsertInput} pinRequest
+   * @param {import('./db-client-types').PAPinRequestUpsertInput} pinRequestData
    * @return {Promise<import('./db-client-types').PAPinRequestUpsertOutput>}
    */
-  async createPAPinRequest (pinRequest) {
-    /** @type { import('./db-client-types').PAPinRequestUpsertOutput } */
+  async createPAPinRequest (pinRequestData) {
+    const now = new Date().toISOString()
 
-    // TODO is there a better way to avoid 2 queries?
-    // ie. before insert trigger https://dba.stackexchange.com/questions/27178/handling-error-of-foreign-key
-    /** @type {{data: {cid: string}}} */
-    const { data: content } = await this._client
-      .from('content')
-      .select('cid')
-      .eq('cid', pinRequest.requestedCid)
-      .single()
-
-    const toInsert = {
-      requested_cid: pinRequest.requestedCid,
-      auth_key_id: pinRequest.authKey,
-      name: pinRequest.name
-    }
-
-    // If content already exists updated foreigh key
-    if (content?.cid) {
-      toInsert.content_cid = content.cid
-    }
-
-    /** @type {{data: import('./db-client-types').PAPinRequestItem, error: PostgrestError }} */
-    const { data, error } = await this._client
-      .from(PAPinRequestTableName)
-      .insert(toInsert)
-      .select(pinRequestSelect)
-      .single()
+    /** @type {{ data: string, error: PostgrestError }} */
+    const { data: pinRequestId, error } = await this._client.rpc('create_pin_request', {
+      data: {
+        auth_key_id: pinRequestData.authKey,
+        content_cid: pinRequestData.contentCid,
+        requested_cid: pinRequestData.requestedCid,
+        name: pinRequestData.name,
+        dag_size: pinRequestData.dagSize,
+        inserted_at: pinRequestData.created || now,
+        updated_at: pinRequestData.updated || now,
+        pins: pinRequestData.pins.map(pin => ({
+          status: pin.status,
+          location: {
+            peer_id: pin.location.peerId,
+            peer_name: pin.location.peerName,
+            region: pin.location.region
+          }
+        }))
+      }
+    }).single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    return normalizePaPinRequest(data)
+    // TODO: this second request could be avoided by returning the right data from create_pin_request procedure.
+    const pinRequest = this.getPAPinRequest(parseInt(pinRequestId, 10))
+    return normalizePaPinRequest(pinRequest)
   }
 
   /**
