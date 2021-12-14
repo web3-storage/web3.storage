@@ -305,7 +305,7 @@ describe('Pin Request', () => {
     it('sorts by date', async () => {
       const prs = await client.listPAPinRequests(authKeyPinList)
 
-      const sorted = prs.reduce((n, item) => n !== false && item.created <= n.created && item)
+      const sorted = prs.reduce((n, item) => n !== null && item.created <= n.created && item)
       assert(sorted)
     })
 
@@ -379,6 +379,23 @@ describe('Pin Request', () => {
       prs.forEach(pr => {
         assert(pr.name.toLowerCase().includes(name.toLowerCase()))
       })
+    })
+
+    it('filters items created before a date', async () => {
+      const pins = await client.listPAPinRequests(authKeyPinList, {
+        before: '2021-01-01T00:00:00.000000Z'
+      })
+
+      assert.strictEqual(pins.length, 0)
+    })
+
+    it('filters items created after a date', async () => {
+      const pins = await client.listPAPinRequests(authKeyPinList, {
+        after: '2021-01-01T00:00:00.000000Z',
+        limit: 20
+      })
+
+      assert.strictEqual(pins.length, 11)
     })
   })
 })

@@ -276,7 +276,7 @@ export type ListPAPinRequestOptions = {
   /**
    * Comma-separated list of CIDs to match
    */
-  cid?: string
+  cid?: string[]
   /**
    * Name  to match
    */

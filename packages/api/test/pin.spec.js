@@ -241,7 +241,7 @@ describe('Pinning APIs endpoints', () => {
     })
   })
 
-  describe.only('GET /pins', () => {
+  describe('GET /pins', () => {
     let baseUrl
     let token
 
@@ -266,8 +266,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, ERROR_CODE)
-      const data = await res.json()
-      const error = data.error
+      const error = await res.json()
       assert.strictEqual(error.reason, ERROR_STATUS)
       assert.strictEqual(error.details, INVALID_LIMIT)
     })
@@ -290,8 +289,7 @@ bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo,
         })
 
       assert.strictEqual(res.status, ERROR_CODE)
-      const data = await res.json()
-      const error = data.error
+      const error = await res.json()
       assert.strictEqual(error.reason, ERROR_STATUS)
       assert.strictEqual(error.details, INVALID_CID)
     })
@@ -310,7 +308,7 @@ bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo,
       assert(res, 'Server responded')
       assert(res.ok, 'Serve response is ok')
       const data = await res.json()
-      assert.strictEqual(data.count, 6)
+      assert.strictEqual(data.count, 8)
     })
 
     it('filters pins on CID, for this user', async () => {
@@ -414,7 +412,8 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       assert(res, 'Server responded')
       assert(res.ok, 'Serve response is ok')
       const data = await res.json()
-      assert.strictEqual(data.count, 1)
+      // 1 pin from init-data.sql, 2 pins created in /post pins test
+      assert.strictEqual(data.count, 3)
     })
 
     it('limits the number of pins returned for this user', async () => {
@@ -475,7 +474,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       assert.strictEqual(error.details, INVALID_REQUEST_ID)
     })
 
-    it('it returns not found if the request does not exists', async () => {
+    it('returns not found if the request does not exists', async () => {
       const pinThatDoesNotExists = '100'
       const res = await fetch(new URL(`pins/${pinThatDoesNotExists}`, endpoint).toString(), {
         method: 'GET',
@@ -489,7 +488,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       assert.deepEqual(res.status, 404)
     })
 
-    it('it returns the pin request', async () => {
+    it('returns the pin request', async () => {
       const requestId = 1
       const res = await fetch(new URL(`pins/${requestId}`, endpoint).toString(), {
         method: 'GET',
@@ -507,7 +506,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       assert.deepEqual(data.status, 'queued')
     })
 
-    it('it returns the pin request with pinned status', async () => {
+    it('returns the pin request with specified name', async () => {
       const requestId = 2
 
       const res = await fetch(new URL(`pins/${requestId}`, endpoint).toString(), {
@@ -524,7 +523,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
 
       assertCorrectPinResponse(data)
       assert.strictEqual(data.requestId, requestId.toString())
-      assert.strictEqual(data.status, 'pinned')
+      assert.strictEqual(data.pin.name, 'reportdoc.pdf')
     })
   })
 

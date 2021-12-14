@@ -264,99 +264,15 @@ export async function pinGet (request, env, ctx) {
 export async function pinsGet (request, env, ctx) {
   const url = new URL(request.url)
   const urlParams = new URLSearchParams(url.search)
-  const opts = Object.fromEntries(urlParams)
+  const params = Object.fromEntries(urlParams)
 
-  const {
-    cid,
-    name,
-    match,
-    status,
-    before,
-    after,
-    limit
-  } = opts
-
-  // Validate cid queryparameter, a comma-separated list of actual CIDs.
-  if (cid) {
-    try {
-      cid.split(',').forEach((c) => {
-        console.log(c)
-        normalizeCid(c)
-      })
-    } catch (err) {
-      return new JSONResponse(
-        { error: { reason: ERROR_STATUS, details: INVALID_CID } },
-        { status: ERROR_CODE }
-      )
-    }
-  }
-
-  // Validate name.
-  if (name && typeof name !== 'string') {
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_NAME } },
-      { status: ERROR_CODE }
-    )
-  }
-
-  // Validate match.
-  if (match && typeof match !== 'string') {
-    if (!MATCH_OPTIONS.includes(match)) {
-      return new JSONResponse(
-        { error: { reason: ERROR_STATUS, details: UNPERMITTED_MATCH } },
-        { status: ERROR_CODE }
-      )
-    }
-
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_MATCH } },
-      { status: ERROR_CODE }
-    )
-  }
-
-  // Validate status.
-  if (status) {
-    if (Array.isArray(status)) {
-      const isValidStatus = status.every(v => STATUS_OPTIONS.includes(v))
-      if (!isValidStatus) {
-        return new JSONResponse(
-          { error: { reason: ERROR_STATUS, details: UNPERMITTED_STATUS } },
-          { status: ERROR_CODE }
-        )
-      }
-    } else {
-      return new JSONResponse(
-        { error: { reason: ERROR_STATUS, details: INVALID_STATUS } },
-        { status: ERROR_CODE }
-      )
-    }
-  }
-
-  // Validate before timestamp.
-  if (before && (typeof before !== 'string' || (new Date(before)).getTime() <= 0)) {
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_TIMESTAMP } },
-      { status: ERROR_CODE }
-    )
-  }
-
-  // Validate after timestamp.
-  if (after && (typeof after !== 'string' || (new Date(after)).getTime() <= 0)) {
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_TIMESTAMP } },
-      { status: ERROR_CODE }
-    )
-  }
-
-  // Validate query limit.
-  if (limit && !(/^\d+$/.test(limit))) {
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_LIMIT } },
-      { status: ERROR_CODE }
-    )
+  const result = parseSearchParams(params)
+  if (result.error) {
+    return new JSONResponse(result.error, { status: 400 })
   }
 
   let pinRequests
+  const opts = result.data
 
   try {
     pinRequests = await env.db.listPAPinRequests(request.auth.authToken._id, opts)
@@ -370,6 +286,118 @@ export async function pinsGet (request, env, ctx) {
     count: pins.length,
     results: pins
   })
+}
+
+/**
+ * Parse the list options
+ *
+ * @param {*} params
+ * @returns
+ */
+function parseSearchParams (params) {
+  const opts = {}
+  const {
+    cid,
+    name,
+    match,
+    status,
+    before,
+    after,
+    limit
+  } = params
+
+  if (cid) {
+    const cids = []
+    try {
+      cid.split(',').forEach((c) => {
+        const parsedCid = normalizeCid(c)
+        cids.push(parsedCid)
+      })
+    } catch (err) {
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_CID },
+        data: undefined
+      }
+    }
+    opts.cid = cids
+  }
+
+  if (name) {
+    if (typeof name !== 'string') {
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_NAME },
+        data: undefined
+      }
+    }
+    opts.name = name
+  }
+
+  if (match) {
+    if (typeof match !== 'string') {
+      if (!MATCH_OPTIONS.includes(match)) {
+        return {
+          error: { reason: ERROR_STATUS, details: UNPERMITTED_MATCH },
+          data: undefined
+        }
+      }
+
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_MATCH },
+        data: undefined
+      }
+    }
+    opts.match = match
+  }
+
+  if (status) {
+    if (Array.isArray(status)) {
+      const isValidStatus = status.every(v => STATUS_OPTIONS.includes(v))
+      if (!isValidStatus) {
+        return {
+          error: { reason: ERROR_STATUS, details: UNPERMITTED_STATUS },
+          data: undefined
+        }
+      }
+    } else {
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_STATUS },
+        data: undefined
+      }
+    }
+    opts.status = status
+  }
+
+  if (before) {
+    if ((typeof before !== 'string' || (new Date(before)).getTime() <= 0)) {
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_TIMESTAMP },
+        data: undefined
+      }
+    }
+    opts.before = before
+  }
+
+  if (after) {
+    if ((typeof after !== 'string' || (new Date(after)).getTime() <= 0)) {
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_TIMESTAMP },
+        data: undefined
+      }
+    }
+    opts.after = after
+  }
+
+  if (limit) {
+    if (!(/^\d+$/.test(limit))) {
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_LIMIT },
+        data: undefined
+      }
+    }
+    opts.limit = limit
+  }
+
+  return { error: undefined, data: opts }
 }
 
 /**
