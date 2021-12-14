@@ -51,7 +51,6 @@ const Login = () => {
 
   // Callback for github login logic
   const onGithubLogin = useCallback(async () => {
-    // await authorizeAndNavigateToAccount('test:email');
     // Tracking event
     trackEvent(countly.events.LOGIN_CLICK, {
       ui: countly.ui.LOGIN,
