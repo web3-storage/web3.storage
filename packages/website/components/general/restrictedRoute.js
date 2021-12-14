@@ -17,8 +17,8 @@ import { useAuthorization } from 'components/contexts/authorizationContext';
  *
  * @param {RestrictedRouteProps} props
  */
-export default function RestrictedRoute({ isRestricted = false, children, redirectTo, redirectIfFound = false }) {
-  const router = useRouter();
+const RestrictedRoute = ({ isRestricted = false, children, redirectTo, redirectIfFound = false }) => {
+  const { push } = useRouter();
   const { isLoading, isFetching, isLoggedIn } = useAuthorization();
 
   useEffect(() => {
@@ -31,9 +31,9 @@ export default function RestrictedRoute({ isRestricted = false, children, redire
       // If redirectIfFound is also set, redirect if the user was found
       (redirectIfFound && isLoggedIn)
     ) {
-      router.push(redirectTo);
+      push(redirectTo);
     }
-  }, [redirectTo, redirectIfFound, isFetching, isLoading, isLoggedIn, router]);
+  }, [redirectTo, redirectIfFound, isFetching, isLoading, isLoggedIn, push]);
 
   const shouldWaitForLoggedIn = isRestricted && !isLoggedIn;
 
@@ -43,4 +43,6 @@ export default function RestrictedRoute({ isRestricted = false, children, redire
       {!shouldWaitForLoggedIn && children}
     </>
   );
-}
+};
+
+export default RestrictedRoute;

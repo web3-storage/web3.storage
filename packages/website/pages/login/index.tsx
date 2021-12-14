@@ -7,6 +7,7 @@ import GithubSVG from 'assets/icons/github';
 import Button, { ButtonVariant } from 'components/button/button';
 import countly, { trackEvent } from 'lib/countly';
 import { loginEmail, loginSocial } from 'lib/magic';
+import { PageProps } from 'components/types';
 
 enum LoginType {
   GITHUB = 'github',
@@ -96,5 +97,16 @@ const Login = () => {
     </div>
   );
 };
+
+export function getStaticProps(): { props: PageProps } {
+  return {
+    props: {
+      title: 'Login - Web3 Storage',
+      redirectTo: '/account',
+      redirectIfFound: true,
+      authOnLoad: false,
+    },
+  };
+}
 
 export default Login;

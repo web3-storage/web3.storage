@@ -10,6 +10,7 @@ import { isLoggedIn } from 'lib/magic';
  * @property {boolean} [isRestricted] whether or not this route is restricted to auhtenticated users
  * @property {string} [redirectTo] If redirectTo is set, redirect if the user was not found
  * @property {boolean} [redirectIfFound] If redirectIfFound is also set, redirect if the user was found.
+ * @property {boolean} [authOnLoad] Whether or not to check for magic authorization, defaults to true
  */
 
 /**
@@ -23,8 +24,6 @@ import { isLoggedIn } from 'lib/magic';
 
 /**
  * Authorization Context
- *
- * @param {AuthorizationProviderProps} props
  */
 export const AuthorizationContext = React.createContext(/** @type {any} */ (undefined));
 
@@ -35,7 +34,7 @@ export const AuthorizationContext = React.createContext(/** @type {any} */ (unde
  *
  * @return
  */
-export const AuthorizationProvider = ({ children }) => {
+export const AuthorizationProvider = ({ children, authOnLoad = true }) => {
   const {
     status,
     data: loggedIn,
@@ -46,7 +45,9 @@ export const AuthorizationProvider = ({ children }) => {
     staleTime: constants.MAGIC_TOKEN_LIFESPAN,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    enabled: authOnLoad,
   });
+
   return (
     <AuthorizationContext.Provider
       value={

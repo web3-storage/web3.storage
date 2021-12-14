@@ -7,6 +7,7 @@ import CTACard from '../../components/account/ctaCard/CTACard';
 import FileUploader from '../../components/account/fileUploader/fileUploader';
 import GradientBackgroundB from 'assets/illustrations/gradient-background-b';
 import { ButtonVariant } from 'components/button/button';
+import { PageProps } from 'components/types';
 
 enum CTACardTypes {
   API_TOKENS,
@@ -82,12 +83,7 @@ const Account: React.FC = () => {
   );
 };
 
-/**
- * Static Props
- *
- * @returns {{ props: import('../components/types').LayoutProps}}
- */
-export function getStaticProps() {
+export function getStaticProps(): { props: PageProps } {
   return {
     props: {
       title: 'Account - Web3 Storage',

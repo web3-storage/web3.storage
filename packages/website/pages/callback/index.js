@@ -4,9 +4,6 @@ import { useQueryClient } from 'react-query';
 
 import { redirectMagic, redirectSocial } from 'Lib/magic.js';
 
-/**
- * @returns {{ props: import('../components/types.js').LayoutProps}}
- */
 export function getStaticProps() {
   return {
     props: {
