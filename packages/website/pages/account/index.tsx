@@ -82,4 +82,19 @@ const Account: React.FC = () => {
   );
 };
 
+/**
+ * Static Props
+ *
+ * @returns {{ props: import('../components/types').LayoutProps}}
+ */
+export function getStaticProps() {
+  return {
+    props: {
+      title: 'Account - Web3 Storage',
+      redirectTo: '/login/',
+      isRestricted: true,
+    },
+  };
+}
+
 export default Account;
