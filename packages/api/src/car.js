@@ -120,14 +120,19 @@ export async function carPost (request, env, ctx) {
 export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car') {
   const { user, authToken } = request.auth
   const { headers } = request
+  let structure = uploadType === 'Upload' ? 'Complete' : 'Unknown'
 
   // Throws if CAR is invalid by our standards.
   // Returns either the sum of the block sizes in the CAR, or the cumulative size of the DAG for a dag-pb root.
   const { size: dagSize, rootCid } = await carStat(car)
 
+  if (structure === 'Unknown' && rootCid.code === raw.code) {
+    structure = 'Complete'
+  }
+
   const [{ cid, pins }, backupKey] = await Promise.all([
     addToCluster(car, env),
-    backup(car, rootCid, user._id, env)
+    backup(car, rootCid, user._id, env, structure)
   ])
 
   const xName = headers.get('x-name')
@@ -241,13 +246,20 @@ async function addToCluster (car, env) {
 }
 
 /**
+ * DAG structure metadata
+ * "Unknown" structure means it could be a partial or it could be a complete DAG
+ * i.e. we haven't walked the graph to verify if we have all the blocks or not.
+ */
+
+/**
  * Backup given Car file keyed by /raw/${rootCid}/${userId}/${carHash}.car
  * @param {Blob} blob
  * @param {CID} rootCid
  * @param {string} userId
- * @param {import('../env').Env} env
+ * @param {import('./env').Env} env
+ * @param {('Unknown' | 'Partial' | 'Complete')} structure The known structural completeness of a given DAG.
  */
-async function backup (blob, rootCid, userId, env) {
+async function backup (blob, rootCid, userId, env, structure = 'Unknown') {
   if (!env.s3Client) {
     return undefined
   }
@@ -258,7 +270,8 @@ async function backup (blob, rootCid, userId, env) {
   const cmdParams = {
     Bucket: env.s3BucketName,
     Key: keyStr,
-    Body: blob
+    Body: blob,
+    Metadata: { structure }
   }
 
   await env.s3Client.send(new PutObjectCommand(cmdParams))
