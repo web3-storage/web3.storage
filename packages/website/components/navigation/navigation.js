@@ -26,7 +26,8 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
   // component State
   const [isMenuOpen, setMenuOpen] = useState(false);
   // Navigation Content
-  const navItems = GeneralPageData.navigation;
+  const navItems = GeneralPageData.navigation.links;
+  const navCTA = GeneralPageData.navigation.cta;
   const logoText = GeneralPageData.site_logo.text;
 
   // ================================================================= Functions
@@ -42,6 +43,17 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
     console.log('clicked');
     // countly.trackCustomLinkClick(countly.events.LINK_CLICK_NAVBAR, event.currentTarget);
   }, []);
+
+  const getNavLinkOrHeader = item => {
+    if (Array.isArray(item.links)) {
+      return <div className="nav-item-heading">{item.text}</div>;
+    }
+    return (
+      <Link href={item.url} key={item.text} className="nav-item" onClick={onLinkClick}>
+        {item.text}
+      </Link>
+    );
+  };
 
   // async function logout() {
   //   await getMagic().user.logout();
@@ -104,8 +116,8 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
                     {item.text}
                   </Link>
                 ))}
-                <Button href="/login" id="login">
-                  SIGN IN
+                <Button href={navCTA.url} id="login" variant={'dark'}>
+                  {navCTA.text}
                 </Button>
               </div>
 
@@ -120,20 +132,26 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
               <div className="mobile-items-wrapper">
                 <ZeroAccordion multiple={true}>
                   {navItems.map((item, index) => (
-                    <ZeroAccordionSection key={`mobile-${item.text}`}>
-                      <ZeroAccordionSection.Header>
-                        <div>{item.text}</div>
-                      </ZeroAccordionSection.Header>
+                    <ZeroAccordionSection key={`mobile-${item.text}`} disabled={!Array.isArray(item.links)}>
+                      <ZeroAccordionSection.Header>{getNavLinkOrHeader(item)}</ZeroAccordionSection.Header>
 
                       <ZeroAccordionSection.Content>
-                        <div>hi</div>
+                        {Array.isArray(item.links) && (
+                          <div className="nav-sublinks-wrapper">
+                            {item.links.map(link => (
+                              <Link href={link.url} key={link.text} className="nav-sublink" onClick={onLinkClick}>
+                                {link.text}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
                       </ZeroAccordionSection.Content>
                     </ZeroAccordionSection>
                   ))}
                 </ZeroAccordion>
 
-                <Button href="/login" id="login">
-                  SIGN IN
+                <Button href={navCTA.url} id="login" variant={'light'}>
+                  {navCTA.text}
                 </Button>
               </div>
             </div>
@@ -143,18 +161,3 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
     </section>
   );
 }
-
-//
-// <a href="/" title={logoText} onClick={onLinkClick}>
-//   <SiteLogo />
-// </a>
-//
-// {navItems.map(item => (
-//   <Link href={item.url} key={item.text} className="nav-item" onClick={() => toggleMenu()}>
-//     {item.text}
-//   </Link>
-// ))}
-//
-// <button className="exit-button" onClick={() => toggleMenu()}>
-//   exit
-// </button>

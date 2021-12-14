@@ -19,24 +19,66 @@
       "url": "https://nft.storage/"
     }
   },
-  "navigation": [
-    {
-      "url": "/about",
-      "text": "About"
-    },
-    {
-      "url": "/tiers",
-      "text": "Tiers"
-    },
-    {
-      "url": "/faq",
-      "text": "FAQ"
-    },
-    {
-      "url": "https://docs.web3.storage/",
-      "text": "Docs"
+  "navigation": {
+    "links": [
+      {
+        "url": "/about",
+        "text": "ABOUT"
+      },
+      {
+        "url": "/tiers",
+        "text": "TIERS"
+      },
+      {
+        "url": "/faq",
+        "text": "FAQ"
+      },
+      {
+        "url": "https://docs.web3.storage/",
+        "text": "DOCS"
+      },
+      {
+        "url": "/login",
+        "text": "ACCOUNT",
+        "links": [
+          {
+            "text": "Dashboard",
+            "url": "/"
+          },
+          {
+            "text": "Files",
+            "url": "/"
+          },
+          {
+            "text": "API Tokens",
+            "url": "/"
+          },
+          {
+            "text": "Create an API Token",
+            "url": "/"
+          },
+          {
+            "text": "Request more storage",
+            "url": "/"
+          },
+          {
+            "text": "Status",
+            "url": "/"
+          },
+          {
+            "text": "Open an issue",
+            "url": "/"
+          }
+        ]
+      }
+    ],
+    "cta": {
+      "url": "/login",
+      "text": "SIGN IN",
+      "tracking": "",
+      "action": ""
     }
-  ],
+  },
   "footer": {
     "contact": {
       "logo_text": "Web3.Storage",
