@@ -43,4 +43,19 @@ const Tokens = () => {
   );
 };
 
+/**
+ * Static Props
+ *
+ * @returns {{ props: import('components/types').PageProps}}
+ */
+export function getStaticProps() {
+  return {
+    props: {
+      title: 'Manage API Tokens - web3.storage',
+      redirectTo: '/login',
+      isRestricted: true,
+    },
+  };
+}
+
 export default Tokens;
