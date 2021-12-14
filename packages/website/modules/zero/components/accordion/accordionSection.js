@@ -32,7 +32,7 @@ function AccordionSection({ active, toggle, children }) {
   const header = children.find(child => child.type === Header)
   const content = children.find(child => child.type === Content)
   const open = Array.isArray(active) ? active.includes(uid) : active === uid
-
+  console.log(children)
   return (
     <div className={ clsx("accordion-section", open ? 'open': '') }>
 

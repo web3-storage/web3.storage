@@ -449,7 +449,7 @@
           {
             "type": "text_block",
             "cols": {
-              "num": "col-5_sm-8_mi-10_ti-12",
+              "num": "col-5_md-7_sm-8_mi-10_ti-12",
               "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "format": "medium",
@@ -493,6 +493,40 @@
                 "description": "Web3.Storage was pretty much plug and play for my use case."
               }
             ]
+          },
+          {
+            "type": "slider_block",
+            "cols": {
+              "num": "col-12"
+            },
+            "breakpoints": {
+              "medium": 3,
+              "small": 2,
+              "mini": 1
+            },
+            "slides": [
+              {
+                "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
+                "title": "Ryan W.",
+                "subtitle": "Capetown, South Africa",
+                "description": "I’m really impressed with web3.storage. It’s almost too easy."
+              },
+              {
+                "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
+                "title": "Frank J.",
+                "subtitle": "Toronto, Canada",
+                "description": "Web3.Storage was so simple to hook into, and it does what you want it to do. It’s like simplified S3 for IPFS. I really like the service, and I love that it’s free."
+              },
+              {
+                "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
+                "title": "Connor M.",
+                "subtitle": "New York, USA",
+                "description": "Web3.Storage was pretty much plug and play for my use case."
+              }
+            ]
           }
         ]
       }
@@ -505,7 +539,8 @@
           {
             "type": "text_block",
             "cols": {
-              "num": "col-3"
+              "num": "col-3_md-7_ti-8",
+              "push_left": "off-0_md-1_sm-0"
             },
             "format": "medium",
             "heading": "Open product. Open book.",
