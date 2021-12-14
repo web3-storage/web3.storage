@@ -67,6 +67,7 @@ export const getPinningAPIStatus = (pins) => {
 }
 
 // Error messages
+// TODO: Refactor errors
 export const ERROR_CODE = 400
 export const ERROR_STATUS = 'INVALID_PIN_DATA'
 export const INVALID_CID = 'Invalid cid'
@@ -74,7 +75,8 @@ export const INVALID_MATCH = 'Match should be a string (i.e. "exact", "iexact", 
 export const INVALID_META = 'Meta should be an object with string values'
 export const INVALID_NAME = 'Name should be a string'
 export const INVALID_ORIGINS = 'Origins should be an array of strings'
-export const INVALID_REQUEST_ID = 'Request id should be a string'
+export const INVALID_REQUEST_ID = 'Request id should be a string containing digits only'
+export const INVALID_REPLACE = 'Existing and replacement CID are the same'
 export const INVALID_STATUS = 'Status should be an array of strings'
 export const INVALID_TIMESTAMP = 'Should be a valid timestamp'
 export const INVALID_LIMIT = 'Limit should be a number'
@@ -141,8 +143,20 @@ export async function pinPost (request, env, ctx) {
   }
 
   const { authToken } = request.auth
-  const pinStatus = await createPin(pinData, authToken._id, env, ctx)
-  return new JSONResponse(pinStatus)
+  const requestId = request.params ? request.params.requestId : null
+
+  if (requestId) {
+    if (typeof requestId !== 'string' || !(/^\d+$/.test(requestId))) {
+      return new JSONResponse(
+        { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
+        { status: ERROR_CODE }
+      )
+    }
+
+    return replacePin(pinData, parseInt(requestId, 10), authToken._id, env, ctx)
+  }
+
+  return createPin(pinData, authToken._id, env, ctx)
 }
 
 /**
@@ -150,7 +164,7 @@ export async function pinPost (request, env, ctx) {
  * @param {string} authToken
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
- * @returns {Promise<ServiceApiPinStatus>}
+ * @return {Promise<JSONResponse>}
  */
 async function createPin (pinData, authToken, env, ctx) {
   const { cid, name, origins, meta } = pinData
@@ -219,7 +233,7 @@ async function createPin (pinData, authToken, env, ctx) {
     tasks.forEach(t => ctx.waitUntil(t()))
   }
 
-  return serviceApiPinStatus
+  return new JSONResponse(serviceApiPinStatus)
 }
 
 /**
@@ -427,7 +441,9 @@ function getPinStatus (pinRequest) {
  * @param {import('./index').Ctx} ctx
  */
 export async function pinDelete (request, env, ctx) {
-  const requestId = request.params.requestId
+  let requestId = request.params.requestId
+  // Don't delete pin requests that don't belong to the user
+  const { authToken } = request.auth
 
   if (!requestId) {
     return new JSONResponse(
@@ -436,22 +452,70 @@ export async function pinDelete (request, env, ctx) {
     )
   }
 
-  if (typeof requestId !== 'string') {
+  if (typeof requestId !== 'string' || !(/^\d+$/.test(requestId))) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
       { status: ERROR_CODE }
     )
   }
 
-  // TODO: write logic for deleting pin request
-  return new JSONResponse('OK')
+  requestId = parseInt(requestId, 10)
+
+  let res
+  try {
+    // Update deleted_at (and updated_at) timestamp for the pin request.
+    res = await env.db.deletePAPinRequest(requestId, authToken._id)
+  } catch (e) {
+    console.error(e)
+    // TODO catch different exceptions
+    // TODO notFound error paylod does not strictly comply to spec.
+    return notFound()
+  }
+
+  return new JSONResponse(res)
 }
 
 /**
- * @param {import('./user').AuthenticatedRequest} request
+ * @param {Object} newPinData
+ * @param {number} requestId
+ * @param {string} authToken
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
  */
-export async function pinReplace (request, env, ctx) {
-  throw new Error('Not implemented')
+async function replacePin (newPinData, requestId, authToken, env, ctx) {
+  let existingPinRequest
+  try {
+    existingPinRequest = await env.db.getPAPinRequest(requestId)
+  } catch (e) {
+    return notFound()
+  }
+
+  const existingCid = existingPinRequest.requestedCid
+  if (newPinData.cid === existingCid) {
+    return new JSONResponse(
+      { error: { reason: ERROR_STATUS, details: INVALID_REPLACE } },
+      { status: ERROR_CODE }
+    )
+  }
+
+  let pinStatus
+  try {
+    pinStatus = await createPin(newPinData, authToken, env, ctx)
+  } catch (e) {
+    return new JSONResponse(
+      { error: { reason: `DB Error: ${e}` } },
+      { status: 501 }
+    )
+  }
+
+  try {
+    await env.db.deletePAPinRequest(requestId, authToken)
+  } catch (e) {
+    return new JSONResponse(
+      { error: { reason: `DB Error: ${e}` } },
+      { status: 501 }
+    )
+  }
+
+  return pinStatus
 }

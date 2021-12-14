@@ -27,6 +27,7 @@ const pinRequestSelect = `
   contentCid:content_cid,
   authKey:auth_key_id,
   name,
+  deleted:deleted_at,
   created:inserted_at,
   updated:updated_at,
   content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region)))  `
@@ -274,11 +275,13 @@ export class DBClient {
    * @param {string} cid
    */
   async deleteUpload (userId, cid) {
+    const now = new Date().toISOString()
     /** @type {{ data: import('./db-client-types').UploadItem, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('upload')
       .update({
-        deleted_at: new Date().toISOString()
+        deleted_at: now,
+        updated_at: now
       })
       .match({
         source_cid: cid,
@@ -696,11 +699,13 @@ export class DBClient {
    * @param {number} keyId
    */
   async deleteKey (userId, keyId) {
+    const now = new Date().toISOString()
     /** @type {{ data, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('auth_key')
       .update({
-        deleted_at: new Date().toISOString()
+        deleted_at: now,
+        updated_at: now
       })
       .match({
         id: keyId,
@@ -810,6 +815,7 @@ export class DBClient {
       .from(PAPinRequestTableName)
       .select(pinRequestSelect)
       .eq('id', pinRequestId)
+      .is('deleted_at', null)
       .single()
 
     if (error) {
@@ -935,6 +941,34 @@ export class DBClient {
     }
 
     return pinRequests.map(pR => normalizePaPinRequest(pR))
+  }
+
+  /**
+   * Delete a user PA pin request.
+   *
+   * @param {number} requestId
+   * @param {string} authKey
+   */
+  async deletePAPinRequest (requestId, authKey) {
+    const date = new Date().toISOString()
+    /** @type {{ data: import('./db-client-types').PAPinRequestItem, error: PostgrestError }} */
+    const { data, error } = await this._client
+      .from(PAPinRequestTableName)
+      .update({
+        deleted_at: date,
+        updated_at: date
+      })
+      .match({ auth_key_id: authKey, id: requestId })
+      .filter('deleted_at', 'is', null)
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return {
+      _id: data.id
+    }
   }
 
   /**

@@ -130,6 +130,13 @@ describe('user operations', () => {
     const { _id } = await client.deleteKey(user._id, authKey._id)
     assert(_id, 'key deleted')
 
+    const { data: deletedKey } = await client._client
+      .from('auth_key')
+      .select('*')
+      .eq('id', _id)
+      .single()
+    assert.strictEqual(deletedKey.updated_at, deletedKey.deleted_at)
+
     const finalKeys = await client.listKeys(user._id)
     assert(finalKeys, 'final keys fetched')
     assert.deepEqual(finalKeys.length, keys.length - 1, 'user had auth key deleted')

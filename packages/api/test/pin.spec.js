@@ -1,9 +1,6 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 import { endpoint } from './scripts/constants.js'
-// import * as JWT from '../src/utils/jwt.js'
-// import { SALT } from './scripts/worker-globals.js'
-// import { JWT_ISSUER } from '../src/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
 import {
   ERROR_CODE,
@@ -77,27 +74,26 @@ describe('Pinning APIs endpoints', () => {
 
   describe('POST /pins', () => {
     it('should receive pin data containing cid', async () => {
+      const cid = 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({
-          cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
-        })
+        body: JSON.stringify({ cid })
       })
 
       assert(res, 'Server responded')
       assert(res.ok, 'Server response ok')
+      const data = await res.json()
+      assert.strictEqual(data.pin.cid, cid)
     })
 
     it('requires cid', async () => {
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({})
       })
@@ -114,8 +110,7 @@ describe('Pinning APIs endpoints', () => {
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
           cid: 'abc'
@@ -131,14 +126,14 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('should receive pin data containing cid, name, origin, meta', async () => {
+      const cid = 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e',
+          cid,
           name: 'PreciousData.pdf',
           origins: [
             '/ip4/203.0.113.142/tcp/4001/p2p/QmSourcePeerId',
@@ -152,6 +147,8 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert(res.ok, 'Server response ok')
+      const data = await res.json()
+      assert.strictEqual(data.pin.cid, cid)
     })
 
     it('validates name', async () => {
@@ -444,7 +441,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       token = await getTestJWT()
     })
 
-    it('returns anauthorized if no token', async () => {
+    it('returns unauthorized if no token', async () => {
       const res = await fetch(new URL('pins/1', endpoint).toString(), {
         method: 'GET',
         headers: {
@@ -575,36 +572,105 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
   describe('DELETE /pins/:requestId', () => {
     let token = null
     before(async () => {
-    // Create token
+      // Create token
       token = await getTestJWT()
     })
 
-    it('requires a string as requestId', async () => {
-      const res = await fetch(new URL('pins/UniqueIdOfPinRequest', endpoint).toString(), {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-
-      assert(res, 'Server responded')
-      assert(res.ok, 'Server response ok')
-      const data = await res.json()
-      assert.strictEqual(data, 'OK')
-    })
-
-    it('requires a requestId', async () => {
-      const res = await fetch(new URL('pins', endpoint).toString(), {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+    it('fails to delete if there is no user token', async () => {
+      const res = await fetch(new URL('pins/1', endpoint).toString(), {
+        method: 'DELETE'
       })
 
       assert(res, 'Server responded')
       assert(!res.ok)
+      assert.deepEqual(res.status, 401)
+    })
+
+    it('requires a number as string as requestId', async () => {
+      const res = await fetch(new URL('pins/NotAValidId', endpoint).toString(), {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      assert(res, 'Server responded')
+      assert(!res.ok, 'Server returns an error')
+      const data = await res.json()
+      const error = data.error
+      assert.strictEqual(error.reason, ERROR_STATUS)
+      assert.strictEqual(error.details, INVALID_REQUEST_ID)
+    })
+
+    it('returns not found if the request does not exists', async () => {
+      const pinThatDoesNotExists = 100
+      const res = await fetch(new URL(`pins/${pinThatDoesNotExists}`, endpoint).toString(), {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      assert(res, 'Server responded')
+      assert.deepEqual(res.status, 404)
+    })
+
+    it('returns the pin request id that has been deleted', async () => {
+      const requestId = 1
+      const res = await fetch(new URL(`pins/${requestId}`, endpoint).toString(), {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      assert(res.ok, 'Server responded')
+      assert.equal(res.status, 200)
+      const { _id } = await res.json()
+      assert.strictEqual(_id, requestId)
+    })
+  })
+
+  describe('POST /pins/:requestId', () => {
+    let token = null
+    before(async () => {
+      // Create token
+      token = await getTestJWT()
+    })
+
+    it('should not replace an inexistent or deleted pin request', async () => {
+      const res = await fetch(new URL('pins/100', endpoint).toString(), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
+        })
+      })
+
+      assert(res, 'Server responded')
+      assert.equal(res.status, 404)
+      const { message } = await res.json()
+      assert.equal(message, 'Not Found')
+    })
+
+    it('should not replace the same pin request', async () => {
+      const res = await fetch(new URL('pins/3', endpoint).toString(), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          cid: 'bafybeihgrtet4vowd4t4iqaspzclxajrwwsesur7zllkahrbhcymfh7kyi'
+        })
+      })
+
+      assert(res, 'Server responded')
+      assert(!res.ok)
+      assert.equal(res.status, 400)
+      const { error } = await res.json()
+      assert.equal(error.details, INVALID_REPLACE)
     })
   })
 })

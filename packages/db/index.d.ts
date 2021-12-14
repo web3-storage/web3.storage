@@ -21,6 +21,7 @@ import type {
   PinSyncRequestOutput,
   PinUpsertInput,
   BackupOutput,
+  PAPinRequestItem,
   PAPinRequestUpsertOutput,
   PAPinRequestUpsertInput,
   ContentInput,
@@ -56,9 +57,10 @@ export class DBClient {
   getKey (issuer: string, secret: string): Promise<AuthKey>
   listKeys (userId: number): Promise<Array<AuthKeyItemOutput>>
   createPAPinRequest (pinRequest: PAPinRequestUpsertInput): Promise<PAPinRequestUpsertOutput>
-  getPAPinRequest(pinRequestId: number) : Promise<PAPinRequestUpsertOutput>
+  getPAPinRequest (pinRequestId: number) : Promise<PAPinRequestUpsertOutput>
   listPAPinRequests(authKey: string, opts?: ListPAPinRequestOptions ) : Promise<PAPinRequestUpsertOutput[]>
-  createContent(content: ContentInput, opt?: {updatePinRequests?: boolean}) : Promise<string>
+  deletePAPinRequest (pinRequestId: number, authKey: string) : Promise<PAPinRequestItem>
+  createContent (content: ContentInput, opt?: {updatePinRequests?: boolean}) : Promise<string>
   deleteKey (id: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
 }

@@ -8,7 +8,7 @@ import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { uploadPost } from './upload.js'
 import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, userUploadsRename, userInfoGet } from './user.js'
-import { pinDelete, pinGet, pinPost, pinReplace, pinsGet } from './pins.js'
+import { pinDelete, pinGet, pinPost, pinsGet } from './pins.js'
 import { metricsGet } from './metrics.js'
 import { versionGet } from './version.js'
 import {
@@ -46,7 +46,7 @@ router.post('/upload',              mode['📝'](auth['🔒'](uploadPost)))
 router.get('/user/uploads',         mode['👀'](auth['🔒'](userUploadsGet)))
 
 router.post('/pins',                mode['📝'](auth['🔒'](pinPost)))
-router.post('/pins/:requestId',     mode['📝'](auth['🔒'](pinReplace)))
+router.post('/pins/:requestId',     mode['📝'](auth['🔒'](pinPost)))
 router.get('/pins/:requestId',      mode['👀'](auth['🔒'](pinGet)))
 router.get('/pins',                 mode['👀'](auth['🔒'](pinsGet)))
 router.delete('/pins/:requestId',   mode['📝'](auth['🔒'](pinDelete)))

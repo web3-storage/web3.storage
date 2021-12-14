@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/api",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "private": true,
   "type": "module",
   "license": "(Apache-2.0 AND MIT)",
@@ -15,14 +15,19 @@
     "build": "WEBPACK_CLI_FORCE_LOAD_ESM_CONFIG=true webpack",
     "test": "npm-run-all -p -r mock:cluster mock:backup test:e2e -s test:size",
     "test:e2e": "playwright-test \"test/**/*.spec.js\" --sw src/index.js -b webkit",
+    "test:e2e:debug": "npm run test:e2e -- --debug",
     "test:size": "bundlesize",
     "mock:cluster": "smoke -p 9094 test/mocks/cluster",
-    "mock:backup": "smoke -p 9096 test/mocks/backup"
+    "mock:backup": "smoke -p 9096 test/mocks/backup",
+    "cluster:start": "web3-storage-tools cluster --start",
+    "cluster:stop": "web3-storage-tools cluster --stop",
+    "cluster:reset": "web3-storage-tools cluster --clean"
   },
   "devDependencies": {
     "@sentry/webpack-plugin": "^1.16.0",
     "@types/mocha": "^8.2.2",
     "@web-std/form-data": "^2.1.0",
+    "@web3-storage/tools": "^1.0.0",
     "assert": "^2.0.0",
     "buffer": "^6.0.3",
     "dotenv": "^10.0.0",
