@@ -78,7 +78,7 @@ function Slider ({
   const columns = Math.ceil(collection.length / rows)
   const indices = columns - display
   const visibleColumns = mapColumnNumbertoBreakpoints(displayOptions, columns)
-  // console.log(visibleColumns)
+
   // ================================================================= Functions
   useEffect(() => {
     if (columns < display) {
@@ -97,7 +97,6 @@ function Slider ({
   }, [display])
 
   const updateElementWidths = () => {
-    console.log(display)
     const width = rowContainer.current.clientWidth / display
     animate.current = false
     slidingRowWidth.current = (width * columns + 'px')
@@ -148,11 +147,9 @@ function Slider ({
   }
 
   useEffect(() => {
-    console.log(thumbPosition)
     animate.current = true
     const value = thumbPosition / sliderInput.current.clientWidth
     const i = Math.trunc((value - (value % indices)) / indices)
-    console.log(i)
     const newIndex = Math.max(0, Math.min(i, indices))
     if (newIndex !== index.current) {
       index.current = newIndex

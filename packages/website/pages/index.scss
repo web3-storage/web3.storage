@@ -354,16 +354,30 @@
   position: absolute;
   width: 3rem;
   left: 0;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 15rem);
   top: 0;
   transform: translate(200%, -150%);
+  @include large {
+    left: 0;
+  }
+  @include mini {
+    left: -3rem;
+    top: 3rem;
+  }
 }
 
 #intro_2-triangle {
   position: absolute;
   width: 4.75rem;
   top: 0;
-  right: 0;
+  right: calc(50% - #{math.div($containerWidth, 2)} - 7rem);
   transform: translate(-150%, -50%) rotate(-90deg);
+  @include small {
+    right: -5rem;
+  }
+  @include mini {
+    display: none;
+  }
 }
 
 #intro_2-statistics {

@@ -35,39 +35,41 @@ export default function Footer() {
       <section id="site-footer-section">
         <Squiggle id="footer_squiggle" />
 
-        <div className="grid-middle">
-          <div className="col-10" data-push-left="off-1">
-            <div className="footer_columns" data-push-left="off-1">
-              <div className="footer_contact">
-                <div className="footer_logo-container">
-                  <SiteLogo />
-                  <div className="site-logo-text">{contact.logo_text}</div>
-                </div>
-                <div className="prompt">{contact.prompt}</div>
-                {typeof contact.cta === 'object' && (
-                  <Button href={contact.cta.url} variant={contact.cta.variant} tracking={tracking}>
-                    {contact.cta.text}
-                  </Button>
-                )}
+        <div className="grid">
+          <div className="col-4_sm-8_mi-12" data-push-left="off-1_sm-1_mi-0">
+            <div className="footer_contact">
+              <div className="footer_logo-container">
+                <SiteLogo />
+                <div className="site-logo-text">{contact.logo_text}</div>
               </div>
+              <div className="prompt">{contact.prompt}</div>
+              {typeof contact.cta === 'object' && (
+                <Button href={contact.cta.url} variant={contact.cta.variant} tracking={tracking}>
+                  {contact.cta.text}
+                </Button>
+              )}
+            </div>
+          </div>
 
-              <div className="footer_resources">
-                <div className="label">{resources.heading}</div>
-                {resources.items.map(item => (
-                  <Link href={item.url} key={item.text} onClick={onLinkClick}>
-                    {item.text}
-                  </Link>
-                ))}
-              </div>
+          <div className="col-3_sm-5_mi-8" data-push-left="off-0_sm-2_mi-3">
+            <div className="footer_resources">
+              <div className="label">{resources.heading}</div>
+              {resources.items.map(item => (
+                <Link href={item.url} key={item.text} onClick={onLinkClick}>
+                  {item.text}
+                </Link>
+              ))}
+            </div>
+          </div>
 
-              <div className="footer_get-started">
-                <div className="label">{getStarted.heading}</div>
-                {getStarted.items.map(item => (
-                  <Link href={item.url} key={item.text} onClick={onLinkClick}>
-                    {item.text}
-                  </Link>
-                ))}
-              </div>
+          <div className="col-4_sm-5_mi-8" data-push-left="off-0_mi-3">
+            <div className="footer_get-started">
+              <div className="label">{getStarted.heading}</div>
+              {getStarted.items.map(item => (
+                <Link href={item.url} key={item.text} onClick={onLinkClick}>
+                  {item.text}
+                </Link>
+              ))}
             </div>
           </div>
         </div>

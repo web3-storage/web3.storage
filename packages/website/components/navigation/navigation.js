@@ -1,9 +1,10 @@
 // ===================================================================== Imports
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
 
-import { useResizeObserver } from '../../hooks/resize-observer';
+import ZeroAccordion from 'ZeroComponents/accordion/accordion';
+import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
 import Button from '../button/button';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Hamburger from '../../assets/icons/hamburger.js';
@@ -22,24 +23,13 @@ import GeneralPageData from '../../content/pages/general.json';
 
 // ===================================================================== Exports
 export default function Navigation({ isLoggedIn, isLoadingUser }) {
-  const containerRef = useRef(null);
   // component State
-  const [isSmallVariant, setSmallVariant] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
   // Navigation Content
   const navItems = GeneralPageData.navigation;
   const logoText = GeneralPageData.site_logo.text;
 
   // ================================================================= Functions
-  useResizeObserver(containerRef, () => {
-    const shouldGoToSmallVariant = window.innerWidth < 640;
-    if (shouldGoToSmallVariant && !isSmallVariant) {
-      setSmallVariant(true);
-    }
-    if (!shouldGoToSmallVariant && isSmallVariant) {
-      setSmallVariant(false);
-    }
-  });
 
   const toggleMenu = () => {
     // isMenuOpen ? document.body.classList.remove('overflow-hidden') : document.body.classList.add('overflow-hidden')
@@ -65,7 +55,6 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
   //     onClick={logout}
   //     id="logout"
   //     variant="outlined"
-  //     small={isSmallVariant}
   //     tracking={{
   //       event: countly.events.LOGOUT_CLICK,
   //       ui: countly.ui.NAVBAR,
@@ -80,7 +69,6 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
   //   <Button
   //     href="/login"
   //     id="login"
-  //     small={isSmallVariant}
   //     tracking={{
   //       ui: countly.ui.NAVBAR,
   //       action: 'Login',
@@ -91,7 +79,7 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
   // );
   //
   // const spinnerButton = (
-  //   <Button href="#" id="loading-user" small={isSmallVariant}>
+  //   <Button href="#" id="loading-user">
   //     <Loading size={SpinnerSize.SMALL} />
   //   </Button>
   // );
@@ -101,16 +89,8 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
     <section id="section_navigation">
       <div className="grid-noGutter">
         <div className="col">
-          <nav id="navigation" ref={containerRef}>
-            <div className="nav-bar">
-              {isSmallVariant && (
-                <div className="menu-toggle">
-                  <button onClick={toggleMenu}>
-                    <Hamburger aria-label="Toggle Navbar" />
-                  </button>
-                </div>
-              )}
-
+          <nav id="navigation">
+            <div className={clsx('nav-bar', isMenuOpen ? 'mobile-panel' : '')}>
               <div className="site-logo-container">
                 <a href="/" title={logoText} className="anchor-wrapper" onClick={onLinkClick}>
                   <SiteLogo className="site-logo-image" />
@@ -124,27 +104,37 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
                     {item.text}
                   </Link>
                 ))}
-                <Button href="/login" id="login" small={isSmallVariant}>
+                <Button href="/login" id="login">
                   SIGN IN
                 </Button>
               </div>
+
+              <div className="nav-menu-toggle">
+                <button onClick={toggleMenu}>
+                  <Hamburger aria-label="Toggle Navbar" />
+                </button>
+              </div>
             </div>
 
-            <div className={clsx('mobile-panel', isMenuOpen ? 'open' : '')} aria-hidden={isSmallVariant && isMenuOpen}>
-              <div>
-                <a href="/" title={logoText} onClick={onLinkClick}>
-                  <SiteLogo />
-                </a>
+            <div className={clsx('nav-mobile-panel', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
+              <div className="mobile-items-wrapper">
+                <ZeroAccordion multiple={true}>
+                  {navItems.map((item, index) => (
+                    <ZeroAccordionSection key={`mobile-${item.text}`}>
+                      <ZeroAccordionSection.Header>
+                        <div>{item.text}</div>
+                      </ZeroAccordionSection.Header>
 
-                {navItems.map(item => (
-                  <Link href={item.url} key={item.text} className="nav-item" onClick={() => toggleMenu()}>
-                    {item.text}
-                  </Link>
-                ))}
+                      <ZeroAccordionSection.Content>
+                        <div>hi</div>
+                      </ZeroAccordionSection.Content>
+                    </ZeroAccordionSection>
+                  ))}
+                </ZeroAccordion>
 
-                <button className="exit-button" onClick={() => toggleMenu()}>
-                  exit
-                </button>
+                <Button href="/login" id="login">
+                  SIGN IN
+                </Button>
               </div>
             </div>
           </nav>
@@ -153,3 +143,18 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
     </section>
   );
 }
+
+//
+// <a href="/" title={logoText} onClick={onLinkClick}>
+//   <SiteLogo />
+// </a>
+//
+// {navItems.map(item => (
+//   <Link href={item.url} key={item.text} className="nav-item" onClick={() => toggleMenu()}>
+//     {item.text}
+//   </Link>
+// ))}
+//
+// <button className="exit-button" onClick={() => toggleMenu()}>
+//   exit
+// </button>

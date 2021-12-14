@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 #navigation {
   position: relative;
   display: flex;
@@ -35,13 +37,6 @@
   }
 }
 
-.mobile-panel {
-  display: none;
-  &.open {
-    display: block;
-  }
-}
-
 .nav-items-wrapper {
   a {
     position: relative;
@@ -75,4 +70,65 @@
     margin-left: 1.5rem;
     margin-right: 0;
   }
+}
+
+// ////////////////////////////////////////////////////////////////////// mobile
+
+.nav-bar {
+  position: relative;
+  z-index: 1;
+  &.mobile-panel {
+    z-index: 50;
+  }
+}
+
+.nav-items-wrapper {
+  @include small {
+    display: none;
+  }
+}
+
+.nav-menu-toggle {
+  display: none;
+  @include small {
+    display: block;
+  }
+}
+
+.nav-mobile-panel {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: -99999px;
+  right: -99999px;
+  margin: 0 auto;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 255, 0, 0.2);
+
+  &.open {
+    @include small {
+      display: block;
+    }
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/index/holographic-bg-nav-mobile.png');
+    background-size: 100% 100%;
+  }
+}
+
+.mobile-items-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  z-index: 51;
+  margin-top: $navigationHeight;
 }

@@ -1,4 +1,5 @@
 // ------------------------------------------------------------------- Variables
+@use 'sass:math';
 $footerLogoWidth: 2.25rem;
 
 // --------------------------------------------------------------------- Styling
@@ -15,28 +16,31 @@ $footerLogoWidth: 2.25rem;
 #footer_squiggle {
   position: absolute;
   width: 33.125rem;
-  left: -11.5rem;
+  left: -12.5rem;
   top: -4rem;
   transform: translateY(-50%) scaleX(-1) rotate(25deg);
   z-index: 1;
+  @include large {
+    left: calc(50% - #{math.div($containerWidth, 2)} - 19rem);
+  }
+  @include small {
+    transform: translateY(-50%) scaleX(-1);
+    top: calc(50% + 2rem);
+    left: -20rem;
+  }
 }
 
-.footer_columns {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  .label {
-    margin-top: 0;
-    padding-top: 0 !important;
+.footer_contact,
+.footer_resources,
+.footer_get-started {
+  margin-left: 1.5rem;
+  @include small {
+    margin-bottom: 3rem;
   }
 }
 
 .footer_contact {
-  margin-right: 2.875rem;
   padding-right: 2rem;
-  width: 40%;
   z-index: 1;
   .footer_logo-container {
     position: relative;
@@ -45,6 +49,7 @@ $footerLogoWidth: 2.25rem;
     margin-bottom: 1.75rem;
     svg {
       width: $footerLogoWidth;
+      min-width: $footerLogoWidth;
       fill: white;
     }
     .site-logo-text {
@@ -76,6 +81,8 @@ $footerLogoWidth: 2.25rem;
     @include fontSize_Small;
     @include fontWeight_Bold;
     line-height: leading(15, 15);
+    margin-top: 0;
+    padding-top: 0 !important;
   }
   a {
     position: relative;
@@ -113,13 +120,12 @@ $footerLogoWidth: 2.25rem;
   }
 }
 
-.footer_resources {
-  margin-right: 4.875rem;
-}
-
 #section_copyright {
   margin-top: 2rem;
   border-top: solid $doveGray 1.5px;
+  @include small {
+    margin-top: 0;
+  }
 }
 
 .copyright_container {
@@ -131,6 +137,9 @@ $footerLogoWidth: 2.25rem;
   .copyright_left,
   .copyright_right {
     @include fontSize_Mini;
+    @include mini {
+      padding: 0.375rem 0;
+    }
   }
   .copyright_right {
     display: inline;
@@ -138,5 +147,10 @@ $footerLogoWidth: 2.25rem;
   .copyright_link {
     color: $malibu;
     margin-left: 0.5rem;
+  }
+
+  @include mini {
+    flex-direction: column;
+    padding-top: 1rem;
   }
 }
