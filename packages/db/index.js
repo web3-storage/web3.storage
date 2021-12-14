@@ -664,7 +664,7 @@ export class DBClient {
    */
   async listKeys (userId) {
     /** @type {{ error: PostgrestError, data: Array<import('./db-client-types').AuthKeyItem> }} */
-    const { data, error } = await this._client.rpc('user_keys_list', { query_user_id: userId })
+    const { data, error } = await this._client.rpc('user_auth_keys_list', { query_user_id: userId })
 
     if (error) {
       throw new DBError(error)
@@ -675,7 +675,7 @@ export class DBClient {
       name: ki.name,
       secret: ki.secret,
       created: ki.created,
-      hasUploads: Boolean(ki.uploads)
+      hasUploads: ki.has_uploads
     }))
   }
 
