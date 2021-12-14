@@ -47,7 +47,6 @@ export const AuthorizationProvider = ({ children }) => {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
-
   return (
     <AuthorizationContext.Provider
       value={
