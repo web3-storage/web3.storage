@@ -15,8 +15,6 @@ export function normalizeUpload (upload) {
   }
 }
 
-// TODO: this looks really similar to normalizeUpload.
-// should be merged together
 /**
  * Normalize pin request
  *

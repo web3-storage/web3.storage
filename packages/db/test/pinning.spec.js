@@ -21,7 +21,7 @@ const assertCorrectPinRequestOutputTypes = (pinRequestOutput) => {
   assert.ok(typeof pinRequestOutput.contentCid === 'string', 'requestedCid should be a string')
 }
 
-describe.only('Pin Request', () => {
+describe('Pin Request', () => {
   /** @type {DBClient & {_client: import('@supabase/postgrest-js').PostgrestClient }} */
   const client = (new DBClient({
     endpoint: 'http://127.0.0.1:3000',
@@ -99,7 +99,7 @@ describe.only('Pin Request', () => {
 
     it('returns the right object', async () => {
       assertCorrectPinRequestOutputTypes(aPinRequestOutput)
-      assert.strictEqual(aPinRequestOutput.requestedCid, cids[0], 'rrequestedCid is not the one provided')
+      assert.strictEqual(aPinRequestOutput.requestedCid, cids[0], 'requestedCid is not the one provided')
       assert.strictEqual(aPinRequestOutput.authKey, authKey, 'auth key is not the one provided')
       assert.strictEqual(aPinRequestOutput.contentCid, normalizedCids[0], 'contentCid is not the one provided')
     })
@@ -147,7 +147,7 @@ describe.only('Pin Request', () => {
 
     it('returns the right object', async () => {
       assertCorrectPinRequestOutputTypes(savedPinRequest)
-      assert.strictEqual(savedPinRequest.requestedCid, cids[0], 'rrequestedCid is not the one provided')
+      assert.strictEqual(savedPinRequest.requestedCid, cids[0], 'requestedCid is not the one provided')
       assert.strictEqual(savedPinRequest.authKey, authKey, 'auth key is not the one provided')
       assert.strictEqual(savedPinRequest.contentCid, normalizedCids[0], 'contentCid is not the one provided')
     })

@@ -109,7 +109,7 @@ BEGIN
         END IF;
   end loop;
 
-  return (inserted_cid)::TEXT;
+  return (inserted_cid);
 END
 $$;
 
