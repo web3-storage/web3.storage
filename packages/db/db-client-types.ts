@@ -309,6 +309,11 @@ export type ListPAPinRequestOptions = {
   meta?: unknown,
 }
 
+export type ListPAPinRequestResults = {
+  count: number,
+  results: Array<PAPinRequestUpsertOutput>
+}
+
 export type NameItem = {
   record: definitions['name']['record']
 }

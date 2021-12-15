@@ -58,7 +58,7 @@ export class DBClient {
   listKeys (userId: number): Promise<Array<AuthKeyItemOutput>>
   createPAPinRequest (pinRequest: PAPinRequestUpsertInput): Promise<PAPinRequestUpsertOutput>
   getPAPinRequest (pinRequestId: number) : Promise<PAPinRequestUpsertOutput>
-  listPAPinRequests(authKey: string, opts?: ListPAPinRequestOptions ) : Promise<PAPinRequestUpsertOutput[]>
+  listPAPinRequests(authKey: string, opts?: ListPAPinRequestOptions ) : Promise<{count: number, results: PAPinRequestUpsertOutput[]}>
   deletePAPinRequest (pinRequestId: number, authKey: string) : Promise<PAPinRequestItem>
   createContent (content: ContentInput, opt?: {updatePinRequests?: boolean}) : Promise<string>
   deleteKey (id: number): Promise<void>

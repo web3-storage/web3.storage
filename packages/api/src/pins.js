@@ -295,9 +295,10 @@ export async function pinsGet (request, env, ctx) {
     return notFound()
   }
 
-  const pins = pinRequests.map((pinRequest) => getPinStatus(pinRequest))
+  const pins = pinRequests.results.map((pinRequest) => getPinStatus(pinRequest))
+
   return new JSONResponse({
-    count: pins.length,
+    count: pinRequests.count,
     results: pins
   })
 }

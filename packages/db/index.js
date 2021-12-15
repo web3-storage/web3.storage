@@ -884,11 +884,11 @@ export class DBClient {
   }
 
   /**
-   * Get pin requests for a specific auth key.
+   * Get a filtered list of pin requests for a user
    *
    * @param {string} authKey
    * @param {import('./db-client-types').ListPAPinRequestOptions} opts
-   * @return {Promise<Array<import('./db-client-types').PAPinRequestUpsertOutput>>}
+   * @return {Promise<{count: number, results: import('./db-client-types').PAPinRequestUpsertOutput[]}}
    */
   async listPAPinRequests (authKey, opts = {}) {
     const match = opts?.match || 'exact'
@@ -898,7 +898,6 @@ export class DBClient {
       .from(PAPinRequestTableName)
       .select(pinRequestSelect)
       .eq('auth_key_id', authKey)
-      .limit(limit)
       .order('inserted_at', { ascending: false })
 
     if (opts.status) {
@@ -933,14 +932,33 @@ export class DBClient {
       query = query.gte('inserted_at', opts.after)
     }
 
-    /** @type {{ data: Array<import('./db-client-types').PAPinRequestItem>, error: Error }} */
-    const { data: pinRequests, error } = (await query)
+    const count = await this.countPAPinRequests(query)
 
+    const { data, error } = await query.limit(limit)
     if (error) {
       throw new DBError(error)
     }
 
-    return pinRequests.map(pR => normalizePaPinRequest(pR))
+    const pins = data.map(pinRequest => normalizePaPinRequest(pinRequest))
+
+    return {
+      count: count,
+      results: pins
+    }
+  }
+
+  /**
+   * Count all the pin requests for a user and filter
+   *
+   * @param {PostgrestFilterBuilder} query
+   * @returns number
+   */
+  async countPAPinRequests (query) {
+    const { data, error } = await query
+    if (error) {
+      throw new DBError(error)
+    }
+    return data.length
   }
 
   /**
