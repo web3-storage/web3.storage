@@ -4,6 +4,7 @@ import React from 'react';
 // ====================================================================== Params
 /**
  * @param Boolean props.multiple
+ * @param Boolean props.toggleOnLoad
  * @param {Array} props.sections
  */
 
@@ -39,7 +40,8 @@ class Accordion extends React.Component {
       if (React.isValidElement(child)) {
         return React.cloneElement(child, {
           active: this.state.active,
-          toggle: this.setActiveSections
+          toggle: this.setActiveSections,
+          toggleOnLoad: this.props.toggleOnLoad
         })
       }
       return child

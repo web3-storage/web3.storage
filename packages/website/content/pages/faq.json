@@ -1,0 +1,80 @@
+{
+  "seo": {
+    "title": "",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "page_content": [
+    [
+      {
+        "id": "faq_hero-header",
+        "grid": ["middle", "noGutter"],
+        "columns": [
+          {
+            "type": "hero",
+            "page": "faq",
+            "cols": {
+              "num": "col-8",
+              "push_left": "off-2"
+            },
+            "format": "header",
+            "heading": "Frequently Asked Questions",
+            "subheading": "Frequenctly<div id='faq_hero_title-triangle'></div>Asked<div id='faq_hero_title-coil'></div><span>Questions</span>"
+          }
+        ]
+      },
+      {
+        "id": "faq_section-main",
+        "columns": [
+          {
+            "type": "accordion_block",
+            "cols": {
+              "num": "col-12"
+            },
+            "multiple": false,
+            "toggleOnLoad": false,
+            "sections": [
+              {
+                "heading": "How is Web3.Storage different from pinning services for IPFS?",
+                "content": "Web3.Storage is currently not a pinning service. At the moment, files already on the IPFS network cannot be pinned to Web3.Storage via their CIDs. Files are uploaded to Web3.Storage directly, and those files are then stored on IPFS and Filecoin, and are available via IPFS (so they can be pinned to other pinning services once uploaded)."
+              },
+              {
+                "heading": "How is Web3.Storage different from NFT.Storage?",
+                "content": "Both services are offered by the same group and share much of the same architecture, but as the name suggests, NFT.Storage is a service that is focused on NFTs specifically. It automatically generates the right metadata for uploaded files and offers unlimited free storage for NFTs, currently sponsored by Protocol Labs to keep all NFTs on IPFS safe forever. On the other hand, Web3.Storage can be used for any kind of data storage."
+              },
+              {
+                "heading": "How can you offer this service for free?",
+                "content": "Due to the cryptoeconomics of Filecoin, data storage is provided for free. Protocol Labs only covers the overhead of running Web3.Storage, with the goal to reduce the overhead as Filecoin continues to improve (e.g., faster storage and retrieval). Please see here for a full explanation."
+              },
+              {
+                "heading": "What happens if Web3.Storage is discontinued?",
+                "content": "One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data is accessible via IPFS, and you can simply export all of your CIDs and ask a pinning service to pin them without need to download or upload any data. You have this option even if you use Web3.Storage today and just want another redundant copy of your data persisted. And you don’t need to change the URLs that your application is pointing to, since IPFS URLs are content addressable.<br><br>We don’t expect to ever discontinue Web3.Storage, but if we need to, we’ll give you 90 days’ notice for you to make the easy switch."
+              },
+              {
+                "heading": "How can I delete items from Web3.Storage?",
+                "content": "You can delete files listed in your account. Simply log-in to your account and use the file manager on the files page. It’s currently not possible to delete files via the API or the client libraries, but we are working on enabling that feature in the near future.<br><br>However, once a file is uploaded to Web3.Storage, there cannot be a guarantee that all copies of the file are gone from the IPFS network. As soon as a file is uploaded, other IPFS nodes can access and store a copy of the data. The data only becomes unavailable when the last IPFS node has stopped pinning the file, and all copies are garbage collected. As a consequence you should only upload to Web3.Storage files that you know can be shared with anyone forever, or are securely encrypted."
+              },
+              {
+                "heading": "Can I use Web3.Storage, even if I don’t want to use the Javascript or go client libraries?",
+                "content": "Yes, you can use the Web3.Storage APIs directly, but in that case you need to ensure that you provide the API with the right format. The API won’t accept raw files above 100MB, so you’ll need to package them as .CAR files and chunk them to the right size using CLI tools like <a href='https://github.com/web3-storage/ipfs-car' target='_blank'>ipfs-car</a> and <a href='https://github.com/nftstorage/carbites-cli' target='_blank'>carbites.</a>"
+              },
+              {
+                "heading": "How can I edit a file or add files to a folder?",
+                "content": "Since CIDs are immutable, it’s currently not possible to edit files or add files to a folder. We are working on making mutable references available that you can use instead."
+              },
+              {
+                "heading": "How can I upload files to Web3.Storage from the browser?",
+                "content": "Currently the best way to upload to Web3.Storage from the browser is to relay data through an endpoint that you control that has access to the API token. Providing the API token in your front-end will allow anyone to upload files to your account and list already uploaded files. However, we are actively working on ways end-users can upload data directly to Web3.Storage without needing an intermediary!"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  ]
+}

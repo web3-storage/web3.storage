@@ -39,6 +39,10 @@
             },
             "customizations": [
               {
+                "type": "corkscrew",
+                "id": "architecture-blurred-background"
+              },
+              {
                 "type": "text_block",
                 "format": "small",
                 "description": [
@@ -165,6 +169,8 @@
             "cols": {
               "num": "col-12"
             },
+            "multiple": true,
+            "toggleOnLoad": true,
             "sections": [
               {
                 "heading": "Storage Term",
@@ -172,11 +178,11 @@
               },
               {
                 "heading": "Data Limits",
-                "content": "hihi"
+                "content": ""
               },
               {
                 "heading": "Filecoin Deals",
-                "content": "hola"
+                "content": ""
               }
             ]
           }
