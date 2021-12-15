@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import countly from 'lib/countly';
 import Button, { ButtonVariant } from 'components/button/button';
 
 const TokensManager = () => {
@@ -15,9 +16,13 @@ const TokensManager = () => {
       <div className="tokens-manager-table-content">
         {!tokens.length ? (
           <span className="tokens-manager-upload-cta">
-            You don’t have any files uploaded yet.{'\u00A0'}
-            <Button href="/tokens?create=true" variant={ButtonVariant.TEXT}>
-              <Link href="/tokens?create=true">Upload your first file</Link>
+            You don’t have any API Tokens created yet.{'\u00A0'}
+            <Button
+              href="/tokens?create=true"
+              variant={ButtonVariant.TEXT}
+              tracking={{ ui: countly.ui.TOKENS_EMPTY, action: 'New API Token' }}
+            >
+              <Link href="/tokens?create=true">Create your first API token.</Link>
             </Button>
           </span>
         ) : (
