@@ -169,8 +169,9 @@ CREATE TABLE IF NOT EXISTS backup
   -- Upload that resulted in this backup.
   upload_id       BIGINT                                                        NOT NULL REFERENCES upload (id) ON DELETE CASCADE,
   -- Backup url location.
-  url             TEXT                                                          NOT NULL UNIQUE,
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+  url             TEXT                                                          NOT NULL,
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  UNIQUE (upload_id, url)
 );
 
 CREATE INDEX IF NOT EXISTS backup_upload_id_idx ON backup (upload_id);
