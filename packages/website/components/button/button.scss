@@ -105,7 +105,10 @@
     line-height: 0;
     color: $cyan;
     text-transform: none;
-    @include fontWeight_Regular;
+
+    button {
+      @include fontWeight_Regular;
+    }
   }
 
   &.outline {

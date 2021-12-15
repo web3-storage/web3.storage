@@ -63,7 +63,7 @@ $breakpoint_UltraLarge: 140.625rem; // 2250px
 }
 
 $gradient_PinkBlue: linear-gradient(45deg, $cerise 0%, $royalBlue 48%, $pictonBlue 100%);
-$gradient_BluePurple: linear-gradient(-45deg, $cyan 0%, $royalBlue 50%, $heliotrope 100%);
+$gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotrope 100%);
 
 // ////////////////////////////////////////////////////////////////////// Mixins
 // =============================================================================
