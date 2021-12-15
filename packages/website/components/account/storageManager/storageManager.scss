@@ -40,8 +40,7 @@
   position: relative;
   width: 100%;
   height: 1.375rem;
-  border-radius: 1rem;
-  background: rgba($shark, 0.15);
+  background: rgba($vulcan, 0.15);
   border: 0.0625rem solid rgba($waterloo, 0.15);
   overflow: hidden;
 }
@@ -61,18 +60,17 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  background: rgba($comet, 0.15);
   border: 0.0625rem solid rgba($waterloo, 0.15);
   gap: 0.25rem;
   height: 100%;
-  color: $black;
 
   &.locked {
-    color: $white;
+    opacity: 50%;
+    background: rgba($comet, 0.15);
   }
 
   svg {
-    color: rgba($cyan, 0.5);
+    color: $cyan;
   }
 
   span {
