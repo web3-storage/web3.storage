@@ -138,7 +138,7 @@ BEGIN
     values (inserted_upload_id,
             backup_url,
             (data ->> 'inserted_at')::timestamptz)
-    ON CONFLICT ( url ) DO NOTHING;
+    ON CONFLICT ( upload_id, url ) DO NOTHING;
   end loop;
 
   return (inserted_upload_id)::TEXT;
