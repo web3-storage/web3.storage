@@ -73,6 +73,10 @@
   background: rgba($vulcan, 0.15);
   border: 0.0625rem solid rgba($waterloo, 0.15);
   width: 32.6875rem;
+  &:only-child {
+    flex: 1;
+    max-width: 35.5rem;
+  }
 
   span {
     @include fontSize_Atom;

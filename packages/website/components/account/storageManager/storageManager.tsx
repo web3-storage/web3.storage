@@ -22,7 +22,7 @@ const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body
 const StorageManager = ({ className = '' }) => {
   // TODO: Hook up storage tier & storage used to api
   const storageTier = StorageTiers.TIER_2; // No tier available?
-  const usedStorage = terabyte * 5; // in bytes
+  const usedStorage = terabyte * 8; // in bytes
 
   const { maxSpaceLabel, unlockLabel, usedSpacePercentage } = useMemo<{
     maxSpaceLabel: string;
