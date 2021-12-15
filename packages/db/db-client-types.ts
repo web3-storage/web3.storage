@@ -62,7 +62,7 @@ export type AuthKeyItemOutput = {
 
 // Pin
 export type PinUpsertInput = {
-  id?: definitions['pin']['id']
+  id?: definitions['pin']['id'],
   status: definitions['pin']['status'],
   location: Location,
 }
@@ -255,10 +255,7 @@ export type PAPinRequestUpsertInput = {
   requestedCid: definitions['pa_pin_request']['requested_cid'],
   contentCid: definitions['upload']['content_cid'],
   dagSize?: definitions['content']['dag_size'],
-  pins: Array<{
-    status: definitions['pin']['status']
-    location: Location
-  }>,
+  pins: Array<PinUpsertInput>,
   created?: definitions['upload']['inserted_at'],
   updated?: definitions['upload']['updated_at'],
 }

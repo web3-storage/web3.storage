@@ -185,13 +185,14 @@ BEGIN
 
   PERFORM create_content(data);
 
-  insert into pa_pin_request ,
+  insert into pa_pin_request (
                       auth_key_id,
                       content_cid,
                       requested_cid,
                       name,
                       inserted_at,
-                      updated_at)
+                      updated_at
+                    )
   values (
             (data ->> 'auth_key_id')::BIGINT,
             data ->> 'content_cid',

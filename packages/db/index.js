@@ -25,12 +25,12 @@ const pinRequestSelect = `
   _id:id::text,
   requestedCid:requested_cid,
   contentCid:content_cid,
-  authKey:auth_key_id,
+  authKey:auth_key_id::text,
   name,
   deleted:deleted_at,
   created:inserted_at,
   updated:updated_at,
-  content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region)))  `
+  content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, region)))  `
 
 /**
  * @typedef {import('./postgres/pg-rest-api-types').definitions} definitions
@@ -794,9 +794,10 @@ export class DBClient {
       throw new DBError(error)
     }
 
-    // TODO: this second request could be avoided by returning the right data from create_pin_request procedure.
-    const pinRequest = this.getPAPinRequest(parseInt(pinRequestId, 10))
-    return normalizePaPinRequest(pinRequest)
+    // TODO: this second request could be avoided by returning the right data
+    // from create_pin_request remote procedure. (But to keep this DRY we need to refactor
+    // this a bit)
+    return await this.getPAPinRequest(parseInt(pinRequestId, 10))
   }
 
   /**
@@ -821,63 +822,6 @@ export class DBClient {
     return normalizePaPinRequest(data)
   }
 
-  /**
-   * Creates some content and relative pins, pin_sync_request and pin_requests
-   *
-   * Once the content is created through this function, cron jobs will run to check the
-   * pin status and update them in our db.
-   * At the same time a pin_request is created to duplicate the content on Pinata
-   *
-   * @param {import('./db-client-types').ContentInput} content
-   * @param {object} [opt]
-   * @param {boolean} [opt.updatePinRequests] If provided
-   * @return {Promise<string>} The content cid
-   */
-  async createContent (content, {
-    updatePinRequests = false
-  } = {}) {
-    const now = new Date().toISOString()
-
-    /** @type {{data: string, error: PostgrestError }} */
-    const { data: cid, error: createError } = await this._client
-      .rpc('create_content', {
-        data: {
-          content_cid: content.cid,
-          dag_size: content.dagSize,
-          inserted_at: now,
-          updated_at: now,
-          pins: content.pins.map(pin => ({
-            status: pin.status,
-            location: {
-              peer_id: pin.location.peerId,
-              peer_name: pin.location.peerName,
-              region: pin.location.region
-            }
-          }))
-        }
-      }).single()
-
-    if (createError) {
-      throw new DBError(createError)
-    }
-
-    // Update Pin Request FK
-    if (updatePinRequests) {
-      /** @type {{data: string, error: PostgrestError }} */
-      const { error: updateError } = (await this._client
-        .from(PAPinRequestTableName)
-        .update({ content_cid: content.cid })
-        .match({
-          requested_cid: content.cid
-        }))
-
-      if (updateError) {
-        throw new DBError(updateError)
-      }
-    }
-
-    return cid
-  }
 
   /**
    * Get pin requests for a specific auth key.
