@@ -19,6 +19,7 @@
     "clsx": "1.1.1",
     "countly-sdk-web": "20.11.2",
     "filesize": "6.1.0",
+    "git-rev-sync": "^3.0.1",
     "git-revision-webpack-plugin": "^5.0.0",
     "magic-sdk": "4.2.1",
     "next": "12.0.1",
