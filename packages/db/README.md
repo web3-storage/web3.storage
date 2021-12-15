@@ -25,12 +25,6 @@ PG_REST_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0S
 
 # Connection string for locally running postgres used in tests
 PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
-
-# Read-only `dagcargo` credentials for "foreign data wrapper" (fdw) in tests
-DAG_CARGO_HOST=<get from password vault - dagcargo replica>
-DAG_CARGO_USER=<get from password vault - dagcargo replica>
-DAG_CARGO_PASSWORD=<get from password vault - dagcargo replica>
-DAG_CARGO_DATABASE=<get from password vault - dagcargo replica>
 ```
 
 Production vars are set in Github Actions secrets.
@@ -48,7 +42,7 @@ If you want to run your own local DB for development using this package DB clien
 Start a docker compose with a Postgres Database and Postgrest.
 
 ```bash
-node scripts/cli.js db --start --project web3-storage
+npm start
 ```
 
 ### 2. Populate Database
@@ -61,10 +55,16 @@ node scripts/cli.js db-sql --cargo --testing
 
 You can now interact with your local database. Its URL and Token are defined in the previous section.
 
-Once you are done, the local setup can easily be stopped and cleaned using:
+Once you are done, the local setup can easily be stopped:
 
 ```bash
-node scripts/cli.js db --stop --clean --project web3-storage
+npm stop
+```
+
+If you'd like to also clear the database and all docker artifacts you can run
+
+```
+npm run stop:clean
 ```
 
 ### 4. Alter DB schema
@@ -86,6 +86,15 @@ node scripts/cli.js db --stop --clean --project web3-storage
 4. Add the schema changes to `db-client-types.ts` as well.
 
 5. If the schema changes include creating a new table, type or view update `reset.sql` as well.
+
+## DB package CLI
+The `scripts/cli.js` to run some common operations on the database.
+
+Please run
+```
+./scripts/cli.js --help
+```
+to find out more.
 
 ## Database Diagram
 

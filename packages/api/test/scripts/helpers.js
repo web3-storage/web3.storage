@@ -32,6 +32,6 @@ export async function createNameRecord (privKey, value, seqno = 0n) {
   return ipns.marshal(entry)
 }
 
-export function getTestJWT (sub = 'test', name = 'test') {
+export function getTestJWT (sub = 'test-magic-issuer', name = 'test-magic-issuer') {
   return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
 }

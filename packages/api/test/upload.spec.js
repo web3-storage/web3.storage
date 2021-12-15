@@ -8,7 +8,7 @@ describe('POST /upload', () => {
     const name = 'single-file-upload'
 
     // Create token
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     const file = new Blob(['hello world!'])
     // expected CID for the above data
@@ -33,7 +33,7 @@ describe('POST /upload', () => {
   it('should add posted Files (dir) to Cluster', async () => {
     const name = 'directory-upload'
     // Create token
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     const body = new FormData()
     const file1 = new Blob(['hello world! 1'])
@@ -64,7 +64,7 @@ describe('POST /upload', () => {
     const expectedName = 'filename–with–funky–chars'
 
     // Create token
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     const res = await fetch(new URL('upload', endpoint).toString(), {
       method: 'POST',

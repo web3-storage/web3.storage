@@ -13,7 +13,7 @@ describe('POST /car', () => {
   it('should add posted CARs to Cluster', async () => {
     const name = 'car'
     // Create token
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     // Create Car
     const { root, car: carBody } = await createCar('hello world!')
@@ -40,7 +40,7 @@ describe('POST /car', () => {
   })
 
   it('should throw for blocks bigger than the maximum permitted size', async () => {
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     const bytes = pb.encode({ Data: new Uint8Array(MAX_BLOCK_SIZE + 1).fill(1), Links: [] })
     const hash = await sha256.digest(bytes)
@@ -70,7 +70,7 @@ describe('POST /car', () => {
   })
 
   it('should throw for empty CAR', async () => {
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     const bytes = pb.encode({ Data: new Uint8Array(), Links: [] })
     const hash = await sha256.digest(bytes)
@@ -99,7 +99,7 @@ describe('POST /car', () => {
   })
 
   it('should throw for CAR with no roots', async () => {
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     const bytes = pb.encode({ Data: new Uint8Array(), Links: [] })
     const hash = await sha256.digest(bytes)
@@ -129,7 +129,7 @@ describe('POST /car', () => {
   })
 
   it('should throw for CAR with multiple roots', async () => {
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     const bytes = pb.encode({ Data: new Uint8Array(), Links: [] })
     const hash = await sha256.digest(bytes)
@@ -162,7 +162,7 @@ describe('POST /car', () => {
   })
 
   it('should throw for CAR with one root block that has links', async () => {
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     const bytes = pb.encode({
       Data: new Uint8Array(),
