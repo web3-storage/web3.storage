@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { useCallback, useMemo } from 'react';
 
 import LockIcon from 'assets/icons/lock';
+import emailContent from '../../../content/file-a-request';
 import Button, { ButtonVariant } from 'components/button/button';
 
 // Tiers available
@@ -13,6 +14,10 @@ enum StorageTiers {
 
 // Raw TB number to be used in calculations
 const terabyte = 1099511627776;
+
+const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body=${encodeURIComponent(
+  emailContent.body.join('\n')
+)}`;
 
 const StorageManager = ({ className = '' }) => {
   // TODO: Hook up storage tier & storage used to api
@@ -50,10 +55,6 @@ const StorageManager = ({ className = '' }) => {
     window.alert('Search File');
   }, []);
 
-  const onMoreStorage = useCallback(() => {
-    window.alert('Request more storage');
-  }, []);
-
   return (
     <div className={clsx('section storage-manager-container', className)}>
       <div className="storage-manager-space">
@@ -77,16 +78,20 @@ const StorageManager = ({ className = '' }) => {
           <span className="storage-manager-meter-label">{maxSpaceLabel}</span>
         </div>
         {!!unlockLabel && (
-          <Button onClick={onMoreStorage} variant={ButtonVariant.TEXT}>
-            <LockIcon />
-            {unlockLabel}
+          <Button variant={ButtonVariant.TEXT} href={mailTo}>
+            <a href={mailTo} target="_blank" rel="noreferrer">
+              <LockIcon />
+              {unlockLabel}
+            </a>
           </Button>
         )}
       </div>
       <div className="storage-manager-info">
         Need more free storage?
-        <Button onClick={onMoreStorage} variant={ButtonVariant.TEXT}>
-          Submit a request
+        <Button variant={ButtonVariant.TEXT} href={mailTo}>
+          <a href={mailTo} target="_blank" rel="noreferrer">
+            Submit a request
+          </a>
         </Button>
       </div>
     </div>

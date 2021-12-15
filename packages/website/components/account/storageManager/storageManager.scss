@@ -52,10 +52,14 @@
       @include fontSize_Atom;
       @include fontWeight_Regular;
       padding: 0;
-      flex-direction: row;
-      align-items: center;
       min-height: auto;
       width: auto;
+
+      a {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
     }
   }
 }
