@@ -27,7 +27,7 @@ const auth = {
   '🤲': handler => withCorsHeaders(handler),
   '🔒': handler => withCorsHeaders(withApiOrMagicToken(handler)),
   '👮': handler => withCorsHeaders(withMagicToken(handler)),
-  '📌': handler => withCorsHeaders(withPinningEnabledUser(handler))
+  '📌': handler => auth['🔒'](withPinningEnabledUser(handler))
 }
 
 const mode = {

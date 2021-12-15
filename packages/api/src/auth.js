@@ -70,9 +70,7 @@ export function withApiOrMagicToken (handler) {
 }
 
 /**
- * Middleware: verify the request is authenticated with a valid api token
- * for a user that has pinning enabled.
- * On successful login, adds `auth.user` and `auth.auth.token` to the Request
+ * Middleware: verify the autheticated request is for a user that has pinning enabled.
  *
  * @param {import('itty-router').RouteHandler} handler
  * @returns {import('itty-router').RouteHandler}
@@ -84,17 +82,12 @@ export function withPinningEnabledUser (handler) {
    * @returns
    */
   return async (request, env, ctx) => {
-    const token = getTokenFromRequest(request, env)
-    const apiToken = await tryWeb3ApiToken(token, env)
-    if (apiToken) {
-      if (apiToken.user.pinningEnabled) {
-        request.auth = { authToken: apiToken, user: apiToken.user }
-        env.sentry && env.sentry.setUser(apiToken.user)
-        return handler(request, env, ctx)
-      }
+    const { user } = request.auth
+    // TODO call a function passing the user ID to check for pinning enabled from separate table
+    if (!user.pinningEnabled) {
       throw new PinningNotEnabledError()
     }
-    throw new UnrecognisedTokenError()
+    return handler(request, env, ctx)
   }
 }
 
