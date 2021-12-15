@@ -1,11 +1,13 @@
 // ===================================================================== Imports
 import React from 'react';
 import clsx from 'clsx';
+
 import Hero from '../hero';
 import TextBlock from '../textblock/textblock.js';
 import ImageBlock from '../imageblock/imageblock.js';
 import Card from '../card/card';
 import CardListBlock from '../cardlistblock/cardlistblock';
+import CodePreview from '../codepreview/codepreview';
 import Squiggle from '../../assets/illustrations/squiggle';
 import Helix from '../../assets/illustrations/helix';
 import Corkscrew from '../../assets/illustrations/corkscrew';
@@ -62,6 +64,8 @@ class BlockBuilder extends React.Component {
         return <Card block={column} />;
       case 'card_list_block':
         return <CardListBlock block={column} />;
+      case 'code_preview':
+        return <CodePreview block={column} />;
       case 'sectional':
         return <BlockBuilder subsections={column.subsections} />;
       case 'squiggle':
@@ -89,13 +93,8 @@ class BlockBuilder extends React.Component {
   render(props) {
     return (
       <div className="sectionals" id={this.props.id}>
-
         {this.props.subsections.map(subsection => (
-          <section
-            id={subsection.id}
-            key={subsection.id}
-            className="sectional">
-
+          <section id={subsection.id} key={subsection.id} className="sectional">
             <div className={clsx(this.getGridClasses(subsection.grid), subsection.classNames)}>
               {subsection.columns.map((column, index) => (
                 <div
@@ -108,10 +107,8 @@ class BlockBuilder extends React.Component {
                 </div>
               ))}
             </div>
-
           </section>
         ))}
-
       </div>
     );
   }
