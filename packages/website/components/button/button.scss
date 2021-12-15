@@ -21,6 +21,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    @include fontWeight_Semibold;
 
     &:active,
     &:hover,
@@ -95,6 +96,7 @@
     }
 
     button {
+      @include fontWeight_Regular;
       position: relative;
       z-index: 1;
     }
@@ -104,13 +106,23 @@
     line-height: 0;
     color: $cyan;
     text-transform: none;
-    @include fontWeight_Regular;
+    button {
+      @include fontWeight_Regular;
+    }
   }
 
   &.outline {
+    box-sizing: border-box;
+    background-color: unset;
+    border: solid 2px $ebony;
+
     &-dark,
     &-light {
       @include borderRadius_Huge;
+
+      button {
+        @include fontWeight_Regular;
+      }
     }
 
     &-dark {

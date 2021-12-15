@@ -1,5 +1,26 @@
 @use 'sass:math';
 
+.page-pricing {
+  .section-navigation {
+    background-color: $ebony;
+    color: white;
+  }
+
+  .site-logo-container {
+    svg {
+      fill: white;
+    }
+  }
+
+  .nav-items-wrapper {
+    a {
+      &:after {
+        border: solid 2px white;
+      }
+    }
+  }
+}
+
 #navigation {
   position: relative;
   display: flex;

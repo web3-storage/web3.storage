@@ -1,26 +1,21 @@
 // ===================================================================== Imports
-import IndexPageData from '../content/pages/index.json';
-import MessageBanner from '../components/messagebanner/messagebanner.js';
+import FAQPageData from '../content/pages/faq.json';
 import Navigation from '../components/navigation/navigation.js';
 import Footer from '../components/footer/footer.js';
 import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
 // import countly from 'Lib/countly'
 // ===================================================================== Exports
 export default function Home() {
-  const sections = IndexPageData.page_content;
+  const sections = FAQPageData.page_content;
   return (
     <>
-      <main className="page page-index">
-        <MessageBanner />
-
-        <Navigation />
-
+      <Navigation />
+      <main className="page page-faq">
         {sections.map((section, index) => (
-          <BlockBuilder id={`section_${index + 1}`} key={`section_${index + 1}`} subsections={section} />
+          <BlockBuilder id={`faq_section_${index + 1}`} key={`faq_section_${index + 1}`} subsections={section} />
         ))}
-
-        <Footer />
       </main>
+      <Footer />
     </>
   );
 }

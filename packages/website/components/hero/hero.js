@@ -8,6 +8,7 @@ import Zigzag from '../../assets/illustrations/zigzag';
 import Cross from '../../assets/illustrations/cross';
 import Triangle from '../../assets/illustrations/triangle';
 import Cluster from '../../assets/illustrations/cluster';
+import Ring from '../../assets/illustrations/ring';
 
 // ====================================================================== Params
 /**
@@ -17,6 +18,17 @@ import Cluster from '../../assets/illustrations/cluster';
 export default function Hero({ block }) {
   const page = block.page || '';
   // ================================================================= Functions
+  const faqHero = () => {
+    return (
+      <>
+        <Grid3D id="faq_hero-grid-3d" />
+        <Corkscrew id="faq_hero-corkscrew" className={'hero-illustration'} />
+        <Helix id="faq_hero-helix" className={'hero-illustration'} />
+        <Ring id="faq_hero-ring" className={'hero-illustration'} />
+      </>
+    );
+  };
+
   const indexHero = () => {
     return (
       <>
@@ -40,6 +52,8 @@ export default function Hero({ block }) {
         return <></>;
       case 'about':
         return <Cluster id="about_hero-cluster" />;
+      case 'faq':
+        return faqHero();
       default:
         return null;
     }

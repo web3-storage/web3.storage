@@ -55,7 +55,9 @@ export default function TextBlock({ block, className }) {
 
       {typeof block.heading === 'string' && getHeadingType(block)}
 
-      {typeof block.subheading === 'string' && <div className={'subheading'}>{block.subheading}</div>}
+      {typeof block.subheading === 'string' && (
+        <div className={'subheading'} dangerouslySetInnerHTML={{ __html: block.subheading }}></div>
+      )}
 
       {hasDescription && <div className={'description'}>{formatDescription(block.description)}</div>}
 

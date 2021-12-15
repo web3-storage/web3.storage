@@ -98,7 +98,7 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
 
   // ================================================ Main Template [Navigation]
   return (
-    <section id="section_navigation">
+    <section id="section_navigation" className="section-navigation">
       <div className="grid-noGutter">
         <div className="col">
           <nav id="navigation">

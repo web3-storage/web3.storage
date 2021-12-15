@@ -169,6 +169,8 @@
             "cols": {
               "num": "col-12"
             },
+            "multiple": true,
+            "toggleOnLoad": true,
             "sections": [
               {
                 "heading": "Storage Term",

@@ -22,7 +22,7 @@ export default function AccordionBlock({ block }) {
             </ZeroAccordionSection.Header>
 
             <ZeroAccordionSection.Content>
-              <div>{section.content}</div>
+              <div className="accordion-content-text" dangerouslySetInnerHTML={{ __html: section.content }}></div>
             </ZeroAccordionSection.Content>
           </ZeroAccordionSection>
         ))}

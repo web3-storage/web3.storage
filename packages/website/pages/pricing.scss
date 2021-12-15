@@ -1,0 +1,187 @@
+// ///////////////////////////////////////////////////// General [Page Sections]
+// -----------------------------------------------------------------------------
+.page-pricing {
+  position: relative;
+}
+
+#pricing_section_1,
+#pricing_section_3 {
+  position: relative;
+  background-color: $ebony;
+}
+
+#pricing_section_1 {
+  z-index: 5;
+}
+
+#pricing_section_2 {
+  position: relative;
+  z-index: 2;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0rem;
+    left: -30%;
+    width: 220%;
+    height: 220%;
+    transform: translateY(-42rem) rotate(-50deg);
+    transform-origin: center;
+    background-size: 100%;
+    background-image: url('/images/index/holographic-bg.png');
+    z-index: -1;
+  }
+}
+
+#pricing_section_3 {
+  z-index: 2;
+  padding-bottom: 8rem;
+  &:before {
+    position: absolute;
+    left: 0;
+    top: 1rem;
+    width: 100%;
+    transform: translateY(-100%);
+    content: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1636.34' height='122.322' viewBox='0 0 1636.34 122.322'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect width='1636.34' height='122.322' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Scroll_Group_1' data-name='Scroll Group 1' clip-path='url(%23clip-path)' style='isolation: isolate'%3e%3cg id='Group_1914' data-name='Group 1914'%3e%3cpath id='Path_18835' data-name='Path 18835' d='M-16101,11198.438v1055.932s338.735-28.635,512.177,140.625,36.063,416.637,329.8,625.462,792.163,107.167,792.163,107.167l2.2-1929.186s-388.361-117.4-797.447-117.4S-16101,11198.438-16101,11198.438Z' transform='translate(16101 -11081.04)' fill='%2303040a'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e ");
+  }
+}
+
+#pricing_section_4 {
+  position: relative;
+  z-index: 6;
+  background-color: $seaShell;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10rem;
+    transform: translateY(-100%);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='1365' height='172.072' viewBox='0 0 1365 172.072'%3e%3cpath id='Subtraction_1' data-name='Subtraction 1' d='M1365.5,1490.379H.5V1318.307c2.18,1.03,14.117,6.583,35.282,14.638,11.943,4.545,24.781,9.111,38.157,13.571,16.412,5.472,33.757,10.822,51.551,15.9,44.637,12.743,92.561,23.944,142.44,33.292,29.392,5.508,59.829,10.432,90.465,14.635,33.579,4.607,68.238,8.462,103.013,11.458,23.225,2,46.631,3.5,69.567,4.453,21.313.886,43.042,1.336,64.586,1.336,34.14,0,69.483-1.111,108.051-3.4,35.709-2.115,71.444-5.084,100.157-7.47l4.085-.339.018,0c31.282-2.6,63.629-5.288,95.834-7.255,17.318-1.057,33.294-1.833,48.84-2.372,17.419-.6,33.881-.9,50.327-.9,32.485,0,63.635,1.157,95.23,3.537,16.949,1.277,34.216,2.934,51.319,4.926,17.863,2.08,36.168,4.6,54.408,7.478,29.029,4.588,57.861,10.31,85.7,17.008,25.788,6.206,51.349,13.4,75.973,21.383v30.184h0Z' transform='translate(-0.5 -1318.307)' fill='%23f1f1f1'/%3e%3c/svg%3e ");
+  }
+}
+
+// /////////////////////////////////////////////////////////////// [Subsections]
+// -----------------------------------------------------------------------------
+
+// -------------------------------------------------------------- Section [Hero]
+#pricing_hero_header {
+  padding-top: 7rem;
+  padding-bottom: 9rem;
+
+  .text-block {
+    color: white;
+    .subheading {
+      @include fontSize_Medium;
+      @include fontWeight_Regular;
+      line-height: leading(34, 20);
+    }
+  }
+
+  &:after {
+    position: absolute;
+    bottom: 1px;
+    left: 0;
+    width: 100%;
+    transform: translateY(100%);
+    z-index: -1;
+    content: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1845.701' height='242.942' viewBox='0 0 1845.701 242.942'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect y='659' width='1845.701' height='242.942' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Scroll_Group_1' data-name='Scroll Group 1' transform='translate(0 -659)' clip-path='url(%23clip-path)' style='isolation: isolate'%3e%3cpath id='Path_19292' data-name='Path 19292' d='M-21173,9737.463s429.527-45.37,890.953,1,781.068,131.782,954.748,184.479V9050H-21173Z' transform='translate(21173 -9050)' fill='%2303040a'/%3e%3c/g%3e%3c/svg%3e");
+  }
+}
+
+#pricing_hero-coil {
+  position: absolute;
+  width: 7.25rem;
+  left: 35%;
+  top: calc(-3rem - $navigationHeight);
+  transform: rotate(17deg);
+}
+
+#pricing_hero-corkscrew {
+  position: absolute;
+  width: 39rem;
+  left: -3rem;
+  top: -5rem;
+}
+
+#pricing_hero-cross {
+  position: absolute;
+  z-index: 1;
+  width: 3rem;
+  left: 8rem;
+  bottom: -3rem;
+}
+
+// ------------------------------------------------------------- Section [Tiers]
+#section_tiers,
+#section_tiers-cards {
+  position: relative;
+  z-index: 1;
+  &:before {
+    content: '';
+    position: absolute;
+    width: calc(84% - 4rem);
+    height: 100%;
+    top: 0;
+    left: calc(8% + 2rem);
+    opacity: 0.15;
+    background-color: $waterloo;
+  }
+}
+
+#section_tiers {
+  margin-top: 10.25rem;
+  padding-top: 4.25rem;
+  padding-bottom: 3rem;
+  &:before {
+    border-radius: 0.5rem 0.5rem 0 0;
+    box-shadow: 1px -3px 6px -2px rgba(0, 0, 0, 0.16);
+  }
+  .text-block {
+    .heading {
+      @include fontSize_Large;
+      padding-right: 5rem;
+      line-height: leading(50, 35);
+      margin-bottom: 2rem;
+    }
+  }
+}
+
+#section_tiers-cards {
+  margin-bottom: 10.25rem;
+  padding-top: 0rem;
+  &:before {
+    border-radius: 0 0 0.5rem 0.5rem;
+    box-shadow: 1px 3px 6px -2px rgba(0, 0, 0, 0.16);
+  }
+  .column-content {
+    position: relative;
+  }
+}
+
+#section_tiers-triangle {
+  position: absolute;
+  width: 4.875rem;
+  top: -2rem;
+  right: 11rem;
+  transform: scaleX(-1) rotate(-90deg);
+}
+
+// --------------------------------------------------------------- Section [FAQ]
+#pricing_section_FAQ-corkscrew {
+  z-index: 0;
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  left: -5rem;
+  width: 132rem;
+  transform: rotate(-160deg);
+  opacity: 0.25;
+  filter: blur(40px);
+  img {
+    position: relative;
+    top: 22rem;
+  }
+}
