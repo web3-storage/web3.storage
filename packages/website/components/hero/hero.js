@@ -6,6 +6,7 @@ import Corkscrew from '../../assets/illustrations/corkscrew';
 import Helix from '../../assets/illustrations/helix';
 import Zigzag from '../../assets/illustrations/zigzag';
 import Cross from '../../assets/illustrations/cross';
+import Coil from '../../assets/illustrations/coil';
 import Triangle from '../../assets/illustrations/triangle';
 import Cluster from '../../assets/illustrations/cluster';
 import Ring from '../../assets/illustrations/ring';
@@ -25,6 +26,16 @@ export default function Hero({ block }) {
         <Corkscrew id="faq_hero-corkscrew" className={'hero-illustration'} />
         <Helix id="faq_hero-helix" className={'hero-illustration'} />
         <Ring id="faq_hero-ring" className={'hero-illustration'} />
+      </>
+    );
+  };
+
+  const tiersHero = () => {
+    return (
+      <>
+        <Coil id="pricing_hero-coil" className={'hero-illustration'} />
+        <Corkscrew id="pricing_hero-corkscrew" className={'hero-illustration'} />
+        <Cross id="pricing_hero-cross" className={'hero-illustration'} />
       </>
     );
   };
@@ -49,7 +60,7 @@ export default function Hero({ block }) {
       case 'index':
         return indexHero();
       case 'pricing':
-        return <></>;
+        return tiersHero();
       case 'about':
         return <Cluster id="about_hero-cluster" />;
       case 'faq':

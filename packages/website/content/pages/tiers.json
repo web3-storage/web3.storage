@@ -15,29 +15,11 @@
         "id": "pricing_hero_header",
         "columns": [
           {
-            "type": "custom",
+            "type": "hero",
+            "page": "pricing",
             "cols": {
-              "num": "col-6"
-            },
-            "customizations": [
-              {
-                "type": "coil",
-                "id": "pricing_hero-coil"
-              },
-              {
-                "type": "corkscrew",
-                "id": "pricing_hero-corkscrew"
-              },
-              {
-                "type": "cross",
-                "id": "pricing_hero-cross"
-              }
-            ]
-          },
-          {
-            "type": "text_block",
-            "cols": {
-              "num": "col-6"
+              "num": "col-6_md-5_sm-10_ti-12",
+              "push_left": "off-6_md-6_sm-2_ti-0"
             },
             "format": "header",
             "heading": "Looking for storage limits? Look elsewhere.",
@@ -49,11 +31,13 @@
     [
       {
         "id": "section_tiers",
+        "grid": ["middle"],
         "columns": [
           {
             "type": "text_block",
             "cols": {
-              "num": "col-6"
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "format": "medium",
             "heading": "Storage that grows with you",
@@ -66,8 +50,8 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-5",
-              "push_left": "off-1"
+              "num": "col-5_sm-8_mi-10_ti-12",
+              "push_left": "off-1_sm-2_mi-1_ti-0"
             },
             "customizations": [
               {
@@ -76,7 +60,7 @@
               },
               {
                 "type": "image_block",
-                "src": ""
+                "src": "/images/tiers/holographic-graph.png"
               }
             ]
           }

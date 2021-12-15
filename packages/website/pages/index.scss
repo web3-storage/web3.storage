@@ -353,7 +353,6 @@
 #intro_2-cross {
   position: absolute;
   width: 3rem;
-  left: 0;
   left: calc(50% - #{math.div($containerWidth, 2)} - 15rem);
   top: 0;
   transform: translate(200%, -150%);

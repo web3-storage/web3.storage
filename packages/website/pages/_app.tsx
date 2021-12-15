@@ -12,7 +12,7 @@ import CorkscrewBackground from '../assets/illustrations/corkscrewBlurred';
 
 const App = ({ Component, store, pageProps, isBase }: any) => {
   const { pathname } = useRouter();
-  const marketingRoutes = ['/', '/pricing', '/about', '/faq', '/terms'];
+  const marketingRoutes = ['/', '/tiers', '/about', '/faq', '/terms'];
   const notMarketingSite = !marketingRoutes.includes(pathname);
 
   return (
