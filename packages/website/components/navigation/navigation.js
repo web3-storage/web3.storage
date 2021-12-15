@@ -1,8 +1,8 @@
 // ===================================================================== Imports
 import { useCallback, useRef, useState } from 'react';
+import { useRouter } from 'next/router'
 import clsx from 'clsx';
 import Link from 'next/link';
-
 import { useResizeObserver } from '../../hooks/resize-observer';
 import Button from '../button/button';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
@@ -22,13 +22,15 @@ import GeneralPageData from '../../content/pages/general.json';
 
 // ===================================================================== Exports
 export default function Navigation({ isLoggedIn, isLoadingUser }) {
-  const containerRef = useRef(null);
+  const router = useRouter()
+  const containerRef = useRef(null)
   // component State
-  const [isSmallVariant, setSmallVariant] = useState(false);
-  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [isSmallVariant, setSmallVariant] = useState(false)
+  const [isMenuOpen, setMenuOpen] = useState(false)
   // Navigation Content
-  const navItems = GeneralPageData.navigation;
-  const logoText = GeneralPageData.site_logo.text;
+  const navItems = GeneralPageData.navigation
+  const logoText = GeneralPageData.site_logo.text
+  const theme = (router.route === '/pricing') ? 'light' : 'dark'
 
   // ================================================================= Functions
   useResizeObserver(containerRef, () => {
@@ -98,7 +100,7 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
 
   // ================================================ Main Template [Navigation]
   return (
-    <section id="section_navigation">
+    <section id="section_navigation" className="section-navigation">
       <div className="grid-noGutter">
         <div className="col">
           <nav id="navigation" ref={containerRef}>
@@ -124,7 +126,11 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
                     {item.text}
                   </Link>
                 ))}
-                <Button href="/login" id="login" small={isSmallVariant}>
+                <Button
+                  href="/login"
+                  id="login"
+                  variant={theme}
+                  small={isSmallVariant}>
                   SIGN IN
                 </Button>
               </div>
