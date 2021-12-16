@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React, { useCallback } from 'react';
 
 import SearchIcon from 'assets/icons/search';
+import countly from 'lib/countly';
 import CheckIcon from 'assets/icons/check';
 import InfoAIcon from 'assets/icons/infoA';
 import InfoBIcon from 'assets/icons/infoB';
@@ -104,7 +105,15 @@ const FilesManager = ({ className }: FilesManagerProps) => {
         {!files.length ? (
           <span className="files-manager-upload-cta">
             You don’t have any files uploaded yet.{'\u00A0'}
-            <Button onClick={onFileUploead} variant={ButtonVariant.TEXT}>
+            <Button
+              onClick={onFileUploead}
+              variant={ButtonVariant.TEXT}
+              tracking={{
+                ui: countly.ui.FILES,
+                action: 'Upload File',
+                data: { isFirstFile: true },
+              }}
+            >
               Upload your first file
             </Button>
           </span>
