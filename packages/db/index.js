@@ -822,16 +822,75 @@ export class DBClient {
     return normalizePaPinRequest(data)
   }
 
-
   /**
-   * Get pin requests for a specific auth key.
+   * Get a filtered list of pin requests for a user
    *
    * @param {string} authKey
-   * @param {object} opt
-   * @return {Promise<Array<import('./db-client-types').PAPinRequestUpsertOutput>>}
+   * @param {import('./db-client-types').ListPAPinRequestOptions} opts
+   * @return {Promise<import('./db-client-types').ListPAPinRequestResults> }> }
    */
-  async listPAPinRequests (authKey, opt) {
-    throw new Error('Not implemented')
+  async listPAPinRequests (authKey, opts = {}) {
+    const match = opts?.match || 'exact'
+    const limit = opts?.limit || 10
+
+    let query = this._client
+      .from(PAPinRequestTableName)
+      .select(pinRequestSelect)
+      .eq('auth_key_id', authKey)
+      .order('inserted_at', { ascending: false })
+
+    if (opts.status) {
+      query = query.in('content.pins.status', opts.status)
+    }
+
+    if (opts.cid) {
+      query = query.in('requested_cid', opts.cid)
+    }
+
+    if (opts.name && match === 'exact') {
+      query = query.like('name', `${opts.name}`)
+    }
+
+    if (opts.name && match === 'iexact') {
+      query = query.ilike('name', `${opts.name}`)
+    }
+
+    if (opts.name && match === 'partial') {
+      query = query.like('name', `%${opts.name}%`)
+    }
+
+    if (opts.name && match === 'ipartial') {
+      query = query.ilike('name', `%${opts.name}%`)
+    }
+
+    if (opts.before) {
+      query = query.lte('inserted_at', opts.before)
+    }
+
+    if (opts.after) {
+      query = query.gte('inserted_at', opts.after)
+    }
+
+    // TODO(https://github.com/web3-storage/web3.storage/issues/798): filter by meta is missing
+
+    /** @type {{ data: Array<import('./db-client-types').PAPinRequestItem>, error: Error }} */
+    const { data, error } = (await query)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    const count = data.length
+
+    // TODO(https://github.com/web3-storage/web3.storage/issues/804): Not limiting the query might cause
+    // performance issues if a user created lots of requests with a token. We should improve this.
+    const pinRequests = data.slice(0, limit)
+    const pins = pinRequests.map(pinRequest => normalizePaPinRequest(pinRequest))
+
+    return {
+      count,
+      results: pins
+    }
   }
 
   /**

@@ -73,11 +73,12 @@ export const INVALID_NAME = 'Name should be a string'
 export const INVALID_ORIGINS = 'Origins should be an array of strings'
 export const INVALID_REQUEST_ID = 'Request id should be a string containing digits only'
 export const INVALID_REPLACE = 'Existing and replacement CID are the same'
-export const INVALID_STATUS = 'Status should be an array of strings'
+export const INVALID_STATUS = 'Status should be a list of "queued", "pinning", "pinned", or "failed"'
+export const INVALID_TIMESTAMP = 'Should be a valid timestamp'
+export const INVALID_LIMIT = 'Limit should be a number'
 export const REQUIRED_CID = 'CID is required'
 export const REQUIRED_REQUEST_ID = 'Request id is required'
 export const UNPERMITTED_MATCH = 'Match should be "exact", "iexact", "partial", or "ipartial"'
-export const UNPERMITTED_STATUS = 'Status should be "queued", "pinning", "pinned", or "failed"'
 
 const MATCH_OPTIONS = ['exact', 'iexact', 'partial', 'ipartial']
 const STATUS_OPTIONS = ['queued', 'pinning', 'pinned', 'failed']
@@ -183,16 +184,8 @@ async function createPin (pinData, authToken, env, ctx) {
 
   const pinRequest = await env.db.createPAPinRequest(pinRequestData)
 
-  // TODO: create resuable function to create pinResponseData
   /** @type {ServiceApiPinStatus} */
-  const serviceApiPinStatus = {
-    requestId: pinRequest._id.toString(),
-    created: pinRequest.created,
-    status: getPinningAPIStatus(pinRequest.pins),
-    // TODO(https://github.com/web3-storage/web3.storage/issues/792)
-    delegates: [],
-    pin: { cid }
-  }
+  const pinStatus = getPinStatus(pinRequest)
 
   /** @type {(() => Promise<any>)[]} */
   const tasks = []
@@ -215,7 +208,7 @@ async function createPin (pinData, authToken, env, ctx) {
     tasks.forEach(t => ctx.waitUntil(t()))
   }
 
-  return new JSONResponse(serviceApiPinStatus)
+  return new JSONResponse(pinStatus)
 }
 
 /**
@@ -247,85 +240,174 @@ export async function pinGet (request, env, ctx) {
   }
 
   /** @type { ServiceApiPinStatus } */
-  const response = {
-    requestId: pinRequest._id,
-    created: pinRequest.created,
-    // TODO(https://github.com/web3-storage/web3.storage/issues/792) populate delegates
-    delegates: [],
-    status: getPinningAPIStatus(pinRequest.pins),
-    pin: {
-      cid: pinRequest.requestedCid,
-      name: pinRequest.name,
-      // TODO(https://github.com/web3-storage/web3.storage/issues/792) populate origins and meta
-      origins: [],
-      meta: {}
-    }
-  }
-
-  return new JSONResponse(response)
+  const pin = getPinStatus(pinRequest)
+  return new JSONResponse(pin)
 }
 
 /**
+ * List all the pins matching optional filters.
+ * When no filter is specified, only successful pins are returned.
+ *
  * @param {import('./user').AuthenticatedRequest} request
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
  */
 export async function pinsGet (request, env, ctx) {
-  const { cid, name, match, status } = request.params
+  const url = new URL(request.url)
+  const urlParams = new URLSearchParams(url.search)
+  const params = Object.fromEntries(urlParams)
 
-  // Normalize cid
+  const result = parseSearchParams(params)
+  if (result.error) {
+    return new JSONResponse(result.error, { status: 400 })
+  }
+
+  let pinRequests
+  const opts = result.data
+
+  try {
+    pinRequests = await env.db.listPAPinRequests(request.auth.authToken._id, opts)
+  } catch (e) {
+    console.error(e)
+    return notFound()
+  }
+
+  const pins = pinRequests.results.map((pinRequest) => getPinStatus(pinRequest))
+
+  return new JSONResponse({
+    count: pinRequests.count,
+    results: pins
+  })
+}
+
+/**
+ * Parse the list options
+ *
+ * @param {*} params
+ * @returns
+ */
+function parseSearchParams (params) {
+  const opts = {}
+  const {
+    cid,
+    name,
+    match,
+    status,
+    before,
+    after,
+    limit
+  } = params
+
   if (cid) {
+    const cids = []
     try {
-      const normalizedCid = normalizeCid(cid) // eslint-disable-line
+      cid.split(',').forEach((c) => {
+        normalizeCid(c)
+        cids.push(c)
+      })
     } catch (err) {
-      return new JSONResponse(
-        { error: { reason: ERROR_STATUS, details: INVALID_CID } },
-        { status: ERROR_CODE }
-      )
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_CID },
+        data: undefined
+      }
     }
+    opts.cid = cids
   }
 
-  // Validate name
-  if (name && typeof name !== 'string') {
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_NAME } },
-      { status: ERROR_CODE }
-    )
-  }
-
-  // Validate match
-  if (match && typeof match !== 'string') {
-    if (!MATCH_OPTIONS.includes(match)) {
-      return new JSONResponse(
-        { error: { reason: ERROR_STATUS, details: UNPERMITTED_MATCH } },
-        { status: ERROR_CODE }
-      )
+  if (name) {
+    if (typeof name !== 'string') {
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_NAME },
+        data: undefined
+      }
     }
-
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_MATCH } },
-      { status: ERROR_CODE }
-    )
+    opts.name = name
   }
 
-  // Validate status
-  if (status && !Array.isArray(status)) {
+  if (match) {
+    if (typeof match !== 'string') {
+      if (!MATCH_OPTIONS.includes(match)) {
+        return {
+          error: { reason: ERROR_STATUS, details: UNPERMITTED_MATCH },
+          data: undefined
+        }
+      }
+
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_MATCH },
+        data: undefined
+      }
+    }
+    opts.match = match
+  }
+
+  if (status) {
+    const statuses = status.split(',')
     const isValidStatus = status.every(v => STATUS_OPTIONS.includes(v))
-    if (!isValidStatus) {
-      return new JSONResponse(
-        { error: { reason: ERROR_STATUS, details: UNPERMITTED_STATUS } },
-        { status: ERROR_CODE }
-      )
-    }
 
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_STATUS } },
-      { status: ERROR_CODE }
-    )
+    if (!isValidStatus) {
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_STATUS },
+        data: undefined
+      }
+    }
+    // TODO(https://github.com/web3-storage/web3.storage/issues/797): statuses need to be mapped to db statuses
+    opts.status = statuses
   }
 
-  // TODO: write logic for listing pins
-  return new JSONResponse('OK')
+  if (before) {
+    if (typeof before !== 'string' || !Date.parse(before)) {
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_TIMESTAMP },
+        data: undefined
+      }
+    }
+    opts.before = before
+  }
+
+  if (after) {
+    if (typeof after !== 'string' || !Date.parse(after)) {
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_TIMESTAMP },
+        data: undefined
+      }
+    }
+    opts.after = after
+  }
+
+  if (limit) {
+    if (!(/^\d+$/.test(limit))) {
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_LIMIT },
+        data: undefined
+      }
+    }
+    opts.limit = limit
+  }
+
+  return { error: undefined, data: opts }
+}
+
+/**
+ * Transform a PinRequest into a PinStatus
+ *
+ * @param { Object } pinRequest
+ * @returns { ServiceApiPinStatus }
+ */
+function getPinStatus (pinRequest) {
+  return {
+    requestId: pinRequest._id.toString(),
+    status: getPinningAPIStatus(pinRequest.pins),
+    created: pinRequest.created,
+    pin: {
+      cid: pinRequest.requestedCid,
+      name: pinRequest.name,
+      origins: [],
+      meta: {}
+    },
+    // TODO(https://github.com/web3-storage/web3.storage/issues/792)
+    delegates: []
+  }
 }
 
 /**

@@ -278,6 +278,46 @@ export type PAPinRequestUpsertOutput = PAPinRequestUpsertInput & {
   pins: Array<PinItemOutput>
 }
 
+export type ListPAPinRequestOptions = {
+  /**
+   * Comma-separated list of CIDs to match
+   */
+  cid?: string[]
+  /**
+   * Name  to match
+   */
+  name?: string
+   /**
+   * Match (default: exact)
+   */
+  match?: "exact" | "iexact" | "partial" | "ipartial"
+  /**
+   * status  to match
+   */
+  status?: Array<definitions['pin']['status']>
+  /**
+   * Uploads created before a given timestamp.
+   */
+  before?: string
+  /**
+   * Uploads created after a given timestamp.
+   */
+  after?: string
+  /**
+   * Max records (default: 10).
+   */
+  limit?: number
+  /**
+   * TODO.
+   */
+  meta?: unknown,
+}
+
+export type ListPAPinRequestResults = {
+  count: number,
+  results: Array<PAPinRequestUpsertOutput>
+}
+
 export type NameItem = {
   record: definitions['name']['record']
 }
