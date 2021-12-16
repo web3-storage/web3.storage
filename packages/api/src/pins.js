@@ -1,4 +1,3 @@
-import { createIncorrectSignerAddressError } from '@magic-sdk/admin/dist/core/sdk-exceptions'
 import { JSONResponse, notFound } from './utils/json-response.js'
 import { normalizeCid } from './utils/normalize-cid.js'
 import { waitToGetOkPins } from './utils/pin.js'
@@ -77,13 +76,12 @@ export const INVALID_NAME = 'Name should be a string'
 export const INVALID_ORIGINS = 'Origins should be an array of strings'
 export const INVALID_REQUEST_ID = 'Request id should be a string containing digits only'
 export const INVALID_REPLACE = 'Existing and replacement CID are the same'
-export const INVALID_STATUS = 'Status should be an array of strings'
+export const INVALID_STATUS = 'Status should be a list of "queued", "pinning", "pinned", or "failed"'
 export const INVALID_TIMESTAMP = 'Should be a valid timestamp'
 export const INVALID_LIMIT = 'Limit should be a number'
 export const REQUIRED_CID = 'CID is required'
 export const REQUIRED_REQUEST_ID = 'Request id is required'
 export const UNPERMITTED_MATCH = 'Match should be "exact", "iexact", "partial", or "ipartial"'
-export const UNPERMITTED_STATUS = 'Status should be "queued", "pinning", "pinned", or "failed"'
 
 const MATCH_OPTIONS = ['exact', 'iexact', 'partial', 'ipartial']
 const STATUS_OPTIONS = ['queued', 'pinning', 'pinned', 'failed']
@@ -324,8 +322,8 @@ function parseSearchParams (params) {
     const cids = []
     try {
       cid.split(',').forEach((c) => {
-        const parsedCid = normalizeCid(c)
-        cids.push(parsedCid)
+        normalizeCid(c)
+        cids.push(c)
       })
     } catch (err) {
       return {
@@ -364,21 +362,17 @@ function parseSearchParams (params) {
   }
 
   if (status) {
-    if (Array.isArray(status)) {
-      const isValidStatus = status.every(v => STATUS_OPTIONS.includes(v))
-      if (!isValidStatus) {
-        return {
-          error: { reason: ERROR_STATUS, details: UNPERMITTED_STATUS },
-          data: undefined
-        }
-      }
-    } else {
+    const statuses = status.split(',')
+    const isValidStatus = status.every(v => STATUS_OPTIONS.includes(v))
+
+    if (!isValidStatus) {
       return {
         error: { reason: ERROR_STATUS, details: INVALID_STATUS },
         data: undefined
       }
     }
-    opts.status = status
+    // TODO(https://github.com/web3-storage/web3.storage/issues/797): statuses need to be mapped to db statuses
+    opts.status = statuses
   }
 
   if (before) {

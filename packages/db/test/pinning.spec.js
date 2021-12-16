@@ -198,7 +198,7 @@ describe('Pin Request', () => {
     })
   })
 
-  describe.only('Get Pins', () => {
+  describe('Get Pins', () => {
     const pins = [
       {
         status: 'Pinning',
@@ -310,7 +310,7 @@ describe('Pin Request', () => {
     })
 
     it.skip('it filters items by provided status', async () => {
-      // TODO: status filtering is currently not working
+      // TODO(https://github.com/web3-storage/web3.storage/issues/797): status filtering is currently not working
       const prs = await client.listPAPinRequests(authKeyPinList, {
         status: ['Pinning']
       })

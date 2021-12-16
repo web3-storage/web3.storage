@@ -933,6 +933,8 @@ export class DBClient {
       query = query.gte('inserted_at', opts.after)
     }
 
+    // TODO(https://github.com/web3-storage/web3.storage/issues/798): filter by meta is missing
+
     /** @type {{ data: Array<import('./db-client-types').PAPinRequestItem>, error: Error }} */
     const { data: pinRequests, error } = (await query)
 
