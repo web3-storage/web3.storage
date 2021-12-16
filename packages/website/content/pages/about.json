@@ -18,8 +18,8 @@
             "type": "hero",
             "page": "about",
             "cols": {
-              "num": "col-6",
-              "push_left": "off-6"
+              "num": "col-6_sm-7_mi-10_ti-12",
+              "push_left": "off-6_sm-5_mi-1_ti-0"
             },
             "format": "header",
             "heading": "What is Web3.Storage?",

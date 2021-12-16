@@ -85,6 +85,38 @@
     line-height: leading(26, 15);
     text-align: left;
   }
+
+  .icon-before {
+    display: inline-block;
+    margin-right: 1rem;
+    font-family: 'Courier', monospace;
+    @include fontWeight_Bold;
+    @include fontSize_MediumLarge;
+    line-height: leading(29, 24);
+    color: #3d04fb;
+    svg {
+      transform: translateY(0.40625rem);
+    }
+  }
+
+  .button {
+    position: relative;
+    &:after {
+      content: '➔';
+      position: absolute;
+      right: -0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      @include fontWeight_Semibold;
+      @include fontSize_Small;
+      color: #3d04fb;
+    }
+  }
+
+  button {
+    @include fontSize_Small;
+    line-height: leading(34, 16);
+  }
 }
 
 // /////////////////////////////////////////////// Card [Type C] -> Shadow Cards

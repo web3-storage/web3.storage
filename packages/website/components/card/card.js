@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import Image from 'next/image';
 
 import Button from '../button/button';
+import NpmIcon from '../../assets/icons/npmicon';
+import Windows from '../../assets/icons/windows';
 // ====================================================================== Params
 /**
  * @param {Object} props.card
@@ -11,6 +13,7 @@ import Button from '../button/button';
  */
 // ====================================================================== Export
 export default function Card({ card, parent, index }) {
+  const hasIcon = card.hasOwnProperty('icon_before') && typeof card.icon_before === 'object';
   // ================================================================= Functions
   const renderExploreCards = obj => {
     return (
@@ -42,6 +45,35 @@ export default function Card({ card, parent, index }) {
       default:
         return false;
     }
+  };
+
+  const getIcon = obj => {
+    let svg;
+    if (obj.hasOwnProperty('svg')) {
+      switch (obj.svg) {
+        case 'npm_icon':
+          svg = <NpmIcon />;
+          break;
+        case 'windows_icon':
+          svg = <Windows />;
+          break;
+        default:
+          svg = false;
+          break;
+      }
+    }
+    if (svg) {
+      return (
+        <a href={obj.url} target="_blank" rel="noreferrer">
+          {svg}
+        </a>
+      );
+    }
+    return (
+      <a href={obj.url} target="_blank" rel="noreferrer">
+        {obj.text ? obj.text : ''}
+      </a>
+    );
   };
 
   // ========================================================= Templates [Cards]
@@ -114,6 +146,8 @@ export default function Card({ card, parent, index }) {
       {card.subtitle && <div className="subtitle">{card.subtitle}</div>}
 
       {card.description && <div className="description">{card.description}</div>}
+
+      {hasIcon && <div className="icon-before">{getIcon(card.icon_before)}</div>}
 
       {card.cta && (
         <Button href={card.cta.link} variant={card.cta.theme} tracking={{}}>

@@ -409,6 +409,10 @@
                 "label": "JS Client Library",
                 "feature": "<span class='highlight'>npm install</span> web3.storage",
                 "description": "Import the lightweight Web3.Storage library into your project, and enjoy a simple and familiar way to store and retrieve.",
+                "icon_before": {
+                  "url": "https://www.npmjs.com/package/web3.storage",
+                  "svg": "npm_icon"
+                },
                 "cta": {
                   "link": "",
                   "text": "JS DOCS",
@@ -420,6 +424,10 @@
                 "label": "HTTP API",
                 "feature": "<span class='highlight'>curl -X</span> POST <span class='highlight'>—data-binary</span> “@foo.gif” https://api.web3.storage/upload",
                 "description": "Test or build your project on any stack, using our easy-to-use HTTP API. Web3.Storage is as flexible as you need it to be.",
+                "icon_before": {
+                  "url": "https://docs.web3.storage/reference/http-api/",
+                  "text": "{…}"
+                },
                 "cta": {
                   "link": "",
                   "text": "HTTP DOCS",
@@ -431,6 +439,10 @@
                 "label": "Web App",
                 "feature": "Drop file to upload",
                 "description": "Upload your files directly through our Web UI to debug and validate Web3.Storage’s use case for your project.",
+                "icon_before": {
+                  "url": "",
+                  "svg": "windows_icon"
+                },
                 "cta": {
                   "link": "",
                   "text": "MAKE YOUR FIRST UPLOAD",
