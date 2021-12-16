@@ -942,6 +942,9 @@ export class DBClient {
     }
 
     const count = data.length
+
+    // TODO(https://github.com/web3-storage/web3.storage/issues/804): Not limiting the query might cause
+    // performance issues if a user created lots of requests with a token. We should improve this.
     const pinRequests = data.slice(limit)
     const pins = pinRequests.map(pinRequest => normalizePaPinRequest(pinRequest))
 
