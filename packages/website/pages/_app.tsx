@@ -22,14 +22,15 @@ const queryClient = new QueryClient({
  */
 const App = ({ Component, pageProps }: any) => {
   const { pathname } = useRouter();
-  const isNotMarketingRoute = !['/', '/pricing', '/about', '/faq', '/terms'].includes(pathname);
+  const marketingRoutes = ['/', '/pricing', '/about', '/faq', '/terms'];
+  const notMarketingSite = !marketingRoutes.includes(pathname);
 
   return (
     <QueryClientProvider client={queryClient}>
       <AuthorizationProvider {...pageProps}>
         <UserProvider>
           <Metadata {...pageProps} />
-          {isNotMarketingRoute && <CorkscrewBackground />}
+          {notMarketingSite && <CorkscrewBackground />}
           <RestrictedRoute {...pageProps}>
             <Component {...pageProps} />
           </RestrictedRoute>
