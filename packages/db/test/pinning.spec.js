@@ -34,7 +34,7 @@ const assertCorrectPinRequestOutputTypes = (pinRequestOutput, { withContent = tr
   assert.ok(Date.parse(pinRequestOutput.updated), 'updated should be valid date string')
 
   if (withContent) {
-    assert.ok(typeof pinRequestOutput.contentCid === 'string', 'requestedCid should be a string')
+    assert.ok(typeof pinRequestOutput.contentCid === 'string', 'contentCid should be a string')
   } else {
     assert.ifError(pinRequestOutput.contentCid)
   }
@@ -116,6 +116,7 @@ describe('Pin Request', () => {
 
     aPinRequestInputForExistingContent = {
       requestedCid: cids[1],
+      cid: cids[1],
       authKey
     }
 
@@ -285,25 +286,25 @@ describe('Pin Request', () => {
     })
 
     it('limits the results to 10', async () => {
-      const prs = await client.listPAPinRequests(authKeyPinList)
+      const { results: prs } = await client.listPAPinRequests(authKeyPinList)
       assert.strictEqual(prs.length, 10)
     })
 
     it('limits the results to the provided limit', async () => {
       const limit = 8
-      const prs = await client.listPAPinRequests(authKeyPinList, {
+      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
         limit
       })
       assert.strictEqual(prs.length, limit)
     })
 
     it('returns only requests for the provided token', async () => {
-      const prs = await client.listPAPinRequests('10')
+      const { results: prs } = await client.listPAPinRequests('10')
       assert.strictEqual(prs.length, 0)
     })
 
     it('sorts by date', async () => {
-      const prs = await client.listPAPinRequests(authKeyPinList)
+      const { results: prs } = await client.listPAPinRequests(authKeyPinList)
 
       const sorted = prs.reduce((n, item) => n !== null && item.created <= n.created && item)
       assert(sorted)
@@ -311,7 +312,7 @@ describe('Pin Request', () => {
 
     it.skip('it filters items by provided status', async () => {
       // TODO(https://github.com/web3-storage/web3.storage/issues/797): status filtering is currently not working
-      const prs = await client.listPAPinRequests(authKeyPinList, {
+      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
         status: ['Pinning']
       })
 
@@ -321,7 +322,7 @@ describe('Pin Request', () => {
 
     it('filters items by provided cid', async () => {
       const cids = [createdPinningRequests[0].requestedCid, createdPinningRequests[1].requestedCid]
-      const prs = await client.listPAPinRequests(authKeyPinList, {
+      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
         cid: cids
       })
 
@@ -332,7 +333,7 @@ describe('Pin Request', () => {
 
     it('filters items by exact match by default', async () => {
       const name = 'capybara'
-      const prs = await client.listPAPinRequests(authKeyPinList, {
+      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
         name
       })
 
@@ -344,7 +345,7 @@ describe('Pin Request', () => {
 
     it('filters items by iexact match', async () => {
       const name = 'camel'
-      const prs = await client.listPAPinRequests(authKeyPinList, {
+      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
         name,
         match: 'iexact'
       })
@@ -357,7 +358,7 @@ describe('Pin Request', () => {
 
     it('filters items by partial match', async () => {
       const name = 'giant'
-      const prs = await client.listPAPinRequests(authKeyPinList, {
+      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
         name,
         match: 'partial'
       })
@@ -370,7 +371,7 @@ describe('Pin Request', () => {
 
     it('filters items by ipartial match', async () => {
       const name = 'giant'
-      const prs = await client.listPAPinRequests(authKeyPinList, {
+      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
         name,
         match: 'ipartial'
       })
@@ -382,7 +383,7 @@ describe('Pin Request', () => {
     })
 
     it('filters items created before a date', async () => {
-      const pins = await client.listPAPinRequests(authKeyPinList, {
+      const { results: pins } = await client.listPAPinRequests(authKeyPinList, {
         before: '2021-01-01T00:00:00.000000Z'
       })
 
@@ -390,7 +391,7 @@ describe('Pin Request', () => {
     })
 
     it('filters items created after a date', async () => {
-      const pins = await client.listPAPinRequests(authKeyPinList, {
+      const { results: pins } = await client.listPAPinRequests(authKeyPinList, {
         after: '2021-01-01T00:00:00.000000Z',
         limit: 20
       })

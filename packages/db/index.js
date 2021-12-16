@@ -888,7 +888,7 @@ export class DBClient {
    *
    * @param {string} authKey
    * @param {import('./db-client-types').ListPAPinRequestOptions} opts
-   * @return {Promise<{count: number, results: import('./db-client-types').PAPinRequestUpsertOutput[]}}
+   * @return {Promise<import('./db-client-types').ListPAPinRequestResults> }> }
    */
   async listPAPinRequests (authKey, opts = {}) {
     const match = opts?.match || 'exact'
@@ -943,13 +943,11 @@ export class DBClient {
 
     const count = data.length
 
-    // TODO(https://github.com/web3-storage/web3.storage/issues/804): Not limiting the query might cause
-    // performance issues if a user created lots of requests with a token. We should improve this.
-    const pinRequests = data.slice(limit)
+    const pinRequests = data.slice(0, limit)
     const pins = pinRequests.map(pinRequest => normalizePaPinRequest(pinRequest))
 
     return {
-      count: count,
+      count,
       results: pins
     }
   }
