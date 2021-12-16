@@ -32,6 +32,7 @@ type ButtonProps = {
   tracking?: TrackingProps;
   variant?: ButtonVariant;
   children?: React.ReactNode;
+  disabled?: boolean;
 };
 
 const Button = ({
