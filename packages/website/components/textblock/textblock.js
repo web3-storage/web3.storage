@@ -26,7 +26,7 @@ export default function TextBlock({ block, className }) {
       return (
         <>
           {text.map(item => (
-            <p key={item}>{item}</p>
+            <p key={item} dangerouslySetInnerHTML={{ __html: item }}></p>
           ))}
         </>
       );
