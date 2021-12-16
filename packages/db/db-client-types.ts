@@ -255,6 +255,7 @@ export type PAPinRequestUpsertInput = {
   name?: definitions['pa_pin_request']['name'],
   authKey: string,
   requestedCid: definitions['pa_pin_request']['requested_cid'],
+  cid: definitions['pa_pin_request']['requested_cid'],
 }
 
 export type PAPinRequestItem = PAPinRequestUpsertInput & {
@@ -273,6 +274,46 @@ export type PAPinRequestUpsertOutput = PAPinRequestUpsertInput & {
   updated: definitions['pa_pin_request']['updated_at']
   deleted?: definitions['pa_pin_request']['deleted_at']
   pins: Array<PinItemOutput>
+}
+
+export type ListPAPinRequestOptions = {
+  /**
+   * Comma-separated list of CIDs to match
+   */
+  cid?: string[]
+  /**
+   * Name  to match
+   */
+  name?: string
+   /**
+   * Match (default: exact)
+   */
+  match?: "exact" | "iexact" | "partial" | "ipartial"
+  /**
+   * status  to match
+   */
+  status?: Array<definitions['pin']['status']>
+  /**
+   * Uploads created before a given timestamp.
+   */
+  before?: string
+  /**
+   * Uploads created after a given timestamp.
+   */
+  after?: string
+  /**
+   * Max records (default: 10).
+   */
+  limit?: number
+  /**
+   * TODO.
+   */
+  meta?: unknown,
+}
+
+export type ListPAPinRequestResults = {
+  count: number,
+  results: Array<PAPinRequestUpsertOutput>
 }
 
 export type NameItem = {
