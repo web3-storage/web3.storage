@@ -12,5 +12,5 @@ export default function handler(req, res) {
     });
   }
 
-  return res.status(403).json({ message: 'Forbidden fruit.' });
+  return res.status(403).json({ message: 'Forbidden.' });
 }

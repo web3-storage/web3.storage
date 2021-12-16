@@ -33,7 +33,6 @@ export const UserContext = React.createContext(/** @type {any} */ (undefined));
  */
 export const UserProvider = ({ children }) => {
   const { isLoggedIn } = useAuthorization();
-  console.log('oh', isLoggedIn);
   const { data } = useQuery('get-info', getInfo, {
     enabled: isLoggedIn,
   });

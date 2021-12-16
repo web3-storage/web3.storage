@@ -50,7 +50,7 @@ const Callback = () => {
   }, [router, router.query, queryClient]);
 
   // TODO handle errors
-  return null;
+  return <div className="page-container" />;
 };
 
 export default Callback;
