@@ -6,6 +6,7 @@ import FilesManager from '../../components/account/filesManager/filesManager';
 import CTACard from '../../components/account/ctaCard/CTACard';
 import FileUploader from '../../components/account/fileUploader/fileUploader';
 import GradientBackgroundB from 'assets/illustrations/gradient-background-b';
+import countly from 'lib/countly';
 import { ButtonVariant } from 'components/button/button';
 import { PageProps } from 'components/types';
 
@@ -21,9 +22,6 @@ const Account: React.FC = () => {
   const onFileUploead = useCallback(() => {
     uploadModalState[1](true);
   }, [uploadModalState]);
-  const onReadDocs = useCallback(() => {
-    window.alert('Read docs');
-  }, []);
 
   const hasFiles = false; // TODO: Has files check
   const CTAConfigs = useMemo(
@@ -35,11 +33,13 @@ const Account: React.FC = () => {
           {
             href: '/tokens?create=true',
             variant: ButtonVariant.PINK_BLUE,
+            tracking: { ui: countly.ui.PROFILE_GETTING_STARTED, action: 'Create an API Token' },
             children: <Link href="/tokens?create=true">Create a Token</Link>,
           },
           {
             href: '/tokens',
             variant: ButtonVariant.OUTLINE_LIGHT,
+            tracking: { ui: countly.ui.PROFILE_API_TOKENS, action: 'Manage tokens' },
             children: <Link href="/tokens">Manage Tokens</Link>,
           },
         ],
@@ -47,16 +47,37 @@ const Account: React.FC = () => {
       [CTACardTypes.READ_DOCS]: {
         heading: 'Read the docs',
         description: 'See the docs for guides and and walkthroughs',
-        ctas: [{ onClick: onReadDocs, variant: ButtonVariant.PINK_BLUE, children: 'Explore the docs' }],
+        ctas: [
+          {
+            variant: ButtonVariant.PINK_BLUE,
+            children: (
+              <a href="https://docs.web3.storage" target="_blank" rel="noreferrer">
+                Explore the docs
+              </a>
+            ),
+            tracking: { ui: countly.ui.PROFILE_GETTING_STARTED, action: 'Explore the docs' },
+          },
+        ],
       },
       [CTACardTypes.UPLOAD_FILES]: {
         heading: `Upload ${hasFiles ? 'more' : 'your first'} file${hasFiles ? 's' : ''}`,
         description:
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        ctas: [{ onClick: onFileUploead, variant: ButtonVariant.OUTLINE_DARK, children: 'Upload Files' }],
+        ctas: [
+          {
+            onClick: onFileUploead,
+            variant: ButtonVariant.OUTLINE_DARK,
+            children: 'Upload Files',
+            tracking: {
+              ui: countly.ui.FILES,
+              action: 'Upload File',
+              data: { isFirstFile: !hasFiles },
+            },
+          },
+        ],
       },
     }),
-    [hasFiles, onFileUploead, onReadDocs]
+    [hasFiles, onFileUploead]
   );
 
   return (

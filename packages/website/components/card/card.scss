@@ -175,7 +175,6 @@
 // //////////////////////////////////////////////// Card [Type E] -> Tiers Cards
 // -----------------------------------------------------------------------------
 .card.type__E {
-
   margin-bottom: 1.5rem;
   border-radius: 0.5rem;
   background-color: rgba($waterloo, 0.15);
@@ -201,8 +200,8 @@
       width: 3rem;
       height: calc(100% + 2px);
       border-radius: 1.125rem;
-      background: linear-gradient(80deg, #1FFBFF 0%, #4880FF 50%, #9C48FF 100%);
-      box-shadow: 0 2px 8px rgba(#210F55, 0.33);
+      background: linear-gradient(80deg, #1ffbff 0%, #4880ff 50%, #9c48ff 100%);
+      box-shadow: 0 2px 8px rgba(#210f55, 0.33);
       z-index: 1;
     }
 

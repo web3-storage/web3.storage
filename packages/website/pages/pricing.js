@@ -10,7 +10,6 @@ export default function Home() {
   return (
     <>
       <main className="page page-pricing">
-
         <Navigation />
 
         {sections.map((section, index) => (
@@ -18,7 +17,6 @@ export default function Home() {
         ))}
 
         <Footer />
-        
       </main>
     </>
   );

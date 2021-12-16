@@ -7,6 +7,7 @@ import TextBlock from '../textblock/textblock.js';
 import ImageBlock from '../imageblock/imageblock.js';
 import Card from '../card/card';
 import CardListBlock from '../cardlistblock/cardlistblock';
+import AccordionBlock from '../accordionblock/accordionblock';
 import CodePreview from '../codepreview/codepreview';
 import Squiggle from '../../assets/illustrations/squiggle';
 import Helix from '../../assets/illustrations/helix';
@@ -64,6 +65,8 @@ class BlockBuilder extends React.Component {
         return <Card block={column} />;
       case 'card_list_block':
         return <CardListBlock block={column} />;
+      case 'accordion_block':
+        return <AccordionBlock block={column} />;
       case 'code_preview':
         return <CodePreview block={column} />;
       case 'sectional':
