@@ -190,6 +190,9 @@
   &:last-child {
     margin-bottom: 0;
   }
+  @include mini {
+    padding: 3rem 1.5rem;
+  }
 
   .feature_storage-bar {
     position: relative;
@@ -256,9 +259,12 @@
     padding: 0 2.625rem;
     @include mini {
       padding: 0 1rem;
+      margin-bottom: 1rem;
     }
     .description {
       display: none;
+      padding-top: 0.5rem;
+      padding-bottom: 1.5rem;
       @include mini {
         display: block;
       }
@@ -266,6 +272,7 @@
   }
   .card_panel-right {
     .description {
+      padding: 0.5rem 0;
       @include mini {
         display: none;
       }
@@ -306,7 +313,9 @@
     @include fontWeight_Regular;
     line-height: leading(26, 15);
     li {
-      margin-bottom: 0.375rem;
+      &:not(:last-child) {
+        margin-bottom: 0.375rem;
+      }
     }
   }
 }

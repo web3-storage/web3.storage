@@ -1,5 +1,6 @@
 // ===================================================================== Imports
 import { useCallback, useState } from 'react';
+import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Link from 'next/link';
 
@@ -23,12 +24,14 @@ import GeneralPageData from '../../content/pages/general.json';
 
 // ===================================================================== Exports
 export default function Navigation({ isLoggedIn, isLoadingUser }) {
+  const router = useRouter();
   // component State
   const [isMenuOpen, setMenuOpen] = useState(false);
   // Navigation Content
   const navItems = GeneralPageData.navigation.links;
   const navCTA = GeneralPageData.navigation.cta;
   const logoText = GeneralPageData.site_logo.text;
+  const theme = router.route === '/tiers' ? 'light' : 'dark';
 
   // ================================================================= Functions
 
@@ -98,30 +101,30 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
 
   // ================================================ Main Template [Navigation]
   return (
-    <section id="section_navigation" className="section-navigation">
+    <section id="section_navigation" className={clsx('section-navigation', theme)}>
       <div className="grid-noGutter">
         <div className="col">
           <nav id="navigation">
             <div className={clsx('nav-bar', isMenuOpen ? 'mobile-panel' : '')}>
-              <div className="site-logo-container">
+              <div className={clsx('site-logo-container', theme, isMenuOpen ? 'menu-open' : '')}>
                 <a href="/" title={logoText} className="anchor-wrapper" onClick={onLinkClick}>
                   <SiteLogo className="site-logo-image" />
                   <div className="site-logo-text">{logoText}</div>
                 </a>
               </div>
 
-              <div className="nav-items-wrapper">
+              <div className={clsx('nav-items-wrapper', theme)}>
                 {navItems.map(item => (
                   <Link href={item.url} key={item.text} className="nav-item" onClick={onLinkClick}>
                     {item.text}
                   </Link>
                 ))}
-                <Button href={navCTA.url} id="login" variant={'dark'}>
+                <Button href={navCTA.url} id="login" variant={theme}>
                   {navCTA.text}
                 </Button>
               </div>
 
-              <div className="nav-menu-toggle">
+              <div className={clsx('nav-menu-toggle', theme, isMenuOpen ? 'menu-open' : '')}>
                 <button onClick={toggleMenu}>
                   <Hamburger aria-label="Toggle Navbar" />
                 </button>

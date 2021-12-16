@@ -1,18 +1,31 @@
 @use 'sass:math';
 
-.page-pricing {
-  .section-navigation {
+.section-navigation {
+  &.light {
     background-color: $ebony;
     color: white;
   }
+}
 
-  .site-logo-container {
+.site-logo-container {
+  &.light {
+    color: white;
+    transition: 250ms ease;
     svg {
       fill: white;
+      transition: 250ms ease;
+    }
+    &.menu-open {
+      color: $ebony;
+      svg {
+        fill: $ebony;
+      }
     }
   }
+}
 
-  .nav-items-wrapper {
+.nav-items-wrapper {
+  &.light {
     a {
       &:after {
         border: solid 2px white;
@@ -73,6 +86,9 @@
     padding: 0 0.5rem;
     transform: translateY(0rem);
     transition: 200ms ease;
+    @include medium {
+      margin: 0 0.875rem;
+    }
     &:after {
       content: '';
       position: absolute;
@@ -106,8 +122,10 @@
   padding: 0 0;
   transition: 350 ease;
   &.mobile-panel {
-    padding: 0 1.5rem;
     z-index: 50;
+  }
+  @include small {
+    padding: 0 1.5rem;
   }
 }
 
@@ -122,6 +140,21 @@
   @include small {
     display: block;
   }
+  &.light {
+    svg,
+    path {
+      fill: white;
+      stroke: white;
+      transition: 250ms ease;
+    }
+    &.menu-open {
+      svg,
+      path {
+        fill: $ebony;
+        stroke: $ebony;
+      }
+    }
+  }
 }
 
 .nav-mobile-panel {
@@ -135,6 +168,7 @@
   width: 100vw;
   transform: translateY(calc(-100% - 9rem));
   transition: 350ms ease;
+  color: $ebony;
 
   &:before {
     content: '';
