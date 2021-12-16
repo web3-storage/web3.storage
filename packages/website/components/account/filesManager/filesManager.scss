@@ -151,7 +151,7 @@ $info-tooltip-center: calc(50% - #{$info-icon-size / 2});
   // Targeting all columns
   > span {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     justify-content: space-between;
   }
 }

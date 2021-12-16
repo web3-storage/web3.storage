@@ -9,8 +9,6 @@ export function getStaticProps() {
   return {
     props: {
       title: 'Login Redirect - Web3 Storage',
-      callback: true,
-      needsLoggedIn: false,
     },
   };
 }

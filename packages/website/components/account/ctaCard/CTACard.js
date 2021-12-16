@@ -31,7 +31,7 @@ const CTACard = ({ className = '', heading, description, ctas, theme = CTAThemeT
       {!!ctas?.length && (
         <div className="cta-buttons-container">
           {ctas.map(({ onClick = () => null, children: text, ...buttonProps }) => (
-            <Button key={text} onClick={onClick} {...buttonProps}>
+            <Button key={buttonProps.href || text} onClick={onClick} {...buttonProps}>
               {text}
             </Button>
           ))}
