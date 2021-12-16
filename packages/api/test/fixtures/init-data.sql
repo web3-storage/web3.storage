@@ -68,3 +68,14 @@ VALUES (
   1,
   1669394359626000000
 );
+
+-- /pins route testing
+INSERT INTO pa_pin_request (auth_key_id, content_cid, requested_cid, name, inserted_at, updated_at)
+VALUES (3, NULL , 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo', 'ReportDoc.pdf', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, NULL , 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 'reportdoc.pdf', '2021-01-01T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, NULL, 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 'Data', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfoga4', 'Image.jpeg', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy5', 'Image.png', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy6', 'Image.jpg', '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (2, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy9', 'Image.jpg', '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (2, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 'Image.jpg', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z');
