@@ -17,7 +17,7 @@ const App = ({ Component, store, pageProps, isBase }: any) => {
 
   return (
     <Provider store={store}>
-      { notMarketingSite && <CorkscrewBackground />}
+      {notMarketingSite && <CorkscrewBackground />}
       <Component {...pageProps} />
     </Provider>
   );

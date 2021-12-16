@@ -90,7 +90,7 @@
     }
 
     &:after {
-      border: 0.0625rem solid $steelGray;
+      border: 0.0625rem solid $alto;
       background: $charade;
       opacity: 0.6;
       @include shadow4;
@@ -107,6 +107,7 @@
     line-height: 0;
     color: $cyan;
     text-transform: none;
+
     button {
       @include fontWeight_Regular;
     }
