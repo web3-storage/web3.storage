@@ -48,8 +48,8 @@ const storageInfo: {
 
 const StorageManager = ({ className }: StorageManagerProps) => {
   // TODO: Hook up storage tier & storage used to redux state
-  const storageTier = StorageTiers.TIER_3; // No tier available?
-  const usedStorage = terabyte * 20; // in bytes
+  const storageTier = StorageTiers.TIER_2; // No tier available?
+  const usedStorage = terabyte * 4; // in bytes
 
   const { usageLabel } = useMemo(() => storageInfo[storageTier], [storageTier]);
 
