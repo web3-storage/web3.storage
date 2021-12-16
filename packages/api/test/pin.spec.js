@@ -247,7 +247,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       assert.strictEqual(data.count, 1)
     })
 
-    it('limits the number of pins returned for this user', async () => {
+    it('limits the number of pins returned for this user and includes the total', async () => {
       const opts = new URLSearchParams({
         limit: '3'
       })
@@ -264,7 +264,8 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       assert(res, 'Server responded')
       assert(res.ok, 'Serve response is ok')
       const data = await res.json()
-      assert.strictEqual(data.count, 3)
+      assert.strictEqual(data.count, 6)
+      assert.strictEqual(data.results.length, 3)
     })
   })
 
