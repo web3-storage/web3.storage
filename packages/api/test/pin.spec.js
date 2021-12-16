@@ -86,7 +86,7 @@ describe('Pinning APIs endpoints', () => {
       const opts = new URLSearchParams({
         limit: '3.14'
       })
-      const url = `${baseUrl}?${opts}`
+      const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
         url, {
           method: 'GET',
@@ -110,7 +110,7 @@ bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q,
 bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo,
 `
 
-      const url = `${baseUrl}?cid=${cids}`
+      const url = new URL(`${baseUrl}?cid=${cids}`).toString()
       const res = await fetch(
         url, {
           method: 'GET',
@@ -127,9 +127,8 @@ bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo,
     })
 
     it('returns the pins for this user with default filter values', async () => {
-      const url = `${baseUrl}`
       const res = await fetch(
-        url, {
+        baseUrl, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -138,7 +137,7 @@ bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo,
         })
 
       assert(res, 'Server responded')
-      assert(res.ok, 'Serve response is ok')
+      assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 6)
     })
@@ -150,7 +149,7 @@ bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q,
 bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
 `
 
-      const url = `${baseUrl}?cid=${cids}`
+      const url = new URL(`${baseUrl}?cid=${cids}`).toString()
       const res = await fetch(
         url, {
           method: 'GET',
@@ -161,7 +160,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
         })
 
       assert(res, 'Server responded')
-      assert(res.ok, 'Serve response is ok')
+      assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 2)
     })
@@ -170,7 +169,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       const opts = new URLSearchParams({
         name: 'ReportDoc.pdf'
       })
-      const url = `${baseUrl}?${opts}`
+      const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
         url, {
           method: 'GET',
@@ -181,7 +180,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
         })
 
       assert(res, 'Server responded')
-      assert(res.ok, 'Serve response is ok')
+      assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 1)
     })
@@ -191,7 +190,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
         name: 'image',
         match: 'ipartial'
       })
-      const url = `${baseUrl}?${opts}`
+      const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
         url, {
           method: 'GET',
@@ -202,7 +201,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
         })
 
       assert(res, 'Server responded')
-      assert(res.ok, 'Serve response is ok')
+      assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 3)
     })
@@ -211,7 +210,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       const opts = new URLSearchParams({
         before: '2021-07-01T00:00:00.000000Z'
       })
-      const url = `${baseUrl}?${opts}`
+      const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
         url, {
           method: 'GET',
@@ -222,7 +221,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
         })
 
       assert(res, 'Server responded')
-      assert(res.ok, 'Serve response is ok')
+      assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 1)
     })
@@ -231,7 +230,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       const opts = new URLSearchParams({
         after: '2021-07-15T00:00:00.000000Z'
       })
-      const url = `${baseUrl}?${opts}`
+      const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
         url, {
           method: 'GET',
@@ -242,7 +241,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
         })
 
       assert(res, 'Server responded')
-      assert(res.ok, 'Serve response is ok')
+      assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 1)
     })
@@ -251,7 +250,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       const opts = new URLSearchParams({
         limit: '3'
       })
-      const url = `${baseUrl}?${opts}`
+      const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
         url, {
           method: 'GET',
@@ -262,7 +261,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
         })
 
       assert(res, 'Server responded')
-      assert(res.ok, 'Serve response is ok')
+      assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 6)
       assert.strictEqual(data.results.length, 3)
@@ -498,7 +497,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       const data = await res.json()
 
       assert(res, 'Server responded')
-      assert(res.ok, 'Serve response is ok')
+      assert(res.ok, 'Server response is ok')
       assertCorrectPinResponse(data)
       assert.deepEqual(data.requestId, requestId)
       assert.deepEqual(data.status, 'queued')
@@ -517,8 +516,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       const data = await res.json()
 
       assert(res, 'Server responded')
-      assert(res.ok, 'Serve response is ok')
-
+      assert(res.ok, 'Server response is ok')
       assertCorrectPinResponse(data)
       assert.strictEqual(data.requestId, requestId.toString())
       assert.strictEqual(data.pin.name, 'reportdoc.pdf')

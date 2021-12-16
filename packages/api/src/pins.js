@@ -196,13 +196,7 @@ async function createPin (pinData, authToken, env, ctx) {
   const pinRequest = await env.db.createPAPinRequest(pinRequestData)
 
   /** @type {ServiceApiPinStatus} */
-  const serviceApiPinStatus = {
-    requestId: pinRequest._id.toString(),
-    created: pinRequest.created,
-    status: getPinningAPIStatus(pinRequest.pins),
-    delegates: [],
-    pin: { cid: normalizedCid }
-  }
+  const pinStatus = getPinStatus(pinRequest)
 
   /** @type {(() => Promise<any>)[]} */
   const tasks = []
@@ -231,7 +225,7 @@ async function createPin (pinData, authToken, env, ctx) {
     tasks.forEach(t => ctx.waitUntil(t()))
   }
 
-  return new JSONResponse(serviceApiPinStatus)
+  return new JSONResponse(pinStatus)
 }
 
 /**
@@ -377,7 +371,7 @@ function parseSearchParams (params) {
   }
 
   if (before) {
-    if ((typeof before !== 'string' || (new Date(before)).getTime() <= 0)) {
+    if (typeof before !== 'string' || !Date.parse(before)) {
       return {
         error: { reason: ERROR_STATUS, details: INVALID_TIMESTAMP },
         data: undefined
@@ -387,7 +381,7 @@ function parseSearchParams (params) {
   }
 
   if (after) {
-    if ((typeof after !== 'string' || (new Date(after)).getTime() <= 0)) {
+    if (typeof after !== 'string' || !Date.parse(after)) {
       return {
         error: { reason: ERROR_STATUS, details: INVALID_TIMESTAMP },
         data: undefined
