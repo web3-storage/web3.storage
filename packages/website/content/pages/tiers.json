@@ -122,43 +122,35 @@
     ],
     [
       {
-        "id": "section_FAQ_info",
+        "id": "pricing_section_FAQ_info",
         "grid": ["middle"],
         "columns": [
           {
-            "type": "custom",
+            "type": "text_block",
             "cols": {
-              "num": "col-6"
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
             },
-            "customizations": [
-              {
-                "type": "corkscrew",
-                "id": "pricing_section_FAQ-corkscrew"
-              },
-              {
-                "type": "text_block",
-                "format": "medium",
-                "heading": "Frequently Asked Questions",
-                "subheading": "How is this free?",
-                "description": [
-                  "Web3.Storage offers a simple interface that allows users and developers to take advantage of the vast array of decentralized storage provided by the Filecoin network.",
-                  "The unique economics of Filecoin allow Web3.Storage to be completely free to use, while still ensuring that storage providers have a strong incentive to preserve user data for the long term."
-                ],
-                "cta": {
-                  "url": "/faq",
-                  "text": "MORE FAQs",
-                  "tracking": "",
-                  "action": "FAQ",
-                  "theme": "light"
-                }
-              }
-            ]
+            "format": "medium",
+            "heading": "Frequently Asked Questions",
+            "subheading": "How is this free?",
+            "description": [
+              "Web3.Storage offers a simple interface that allows users and developers to take advantage of the vast array of decentralized storage provided by the Filecoin network.",
+              "The unique economics of Filecoin allow Web3.Storage to be completely free to use, while still ensuring that storage providers have a strong incentive to preserve user data for the long term."
+            ],
+            "cta": {
+              "url": "/faq",
+              "text": "MORE FAQs",
+              "tracking": "",
+              "action": "FAQ",
+              "theme": "light"
+            }
           },
           {
             "type": "image_block",
             "cols": {
-              "num": "col-5",
-              "push_left": "off-1"
+              "num": "col-5_sm-8_mi-10_ti-12",
+              "push_left": "off-1_sm-2_mi-1_ti-0"
             },
             "src": "/images/index/cluster-1.png"
           }
@@ -170,7 +162,8 @@
           {
             "type": "text_block",
             "cols": {
-              "num": "col-6"
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "label": "FAQ",
             "subheading": "How is web3.storage different from pinning services for IPFS?",
@@ -186,8 +179,8 @@
           {
             "type": "text_block",
             "cols": {
-              "num": "col-5",
-              "push_left": "off-1"
+              "num": "col-5_sm-8_mi-10_ti-12",
+              "push_left": "off-1_sm-2_mi-1_ti-0"
             },
             "label": "FAQ",
             "subheading": "What happens if web3.storage is discontinued?",
@@ -209,10 +202,26 @@
         "grid": ["noGutter"],
         "columns": [
           {
+            "type": "text_block",
+            "cols": {
+              "num": "col-3_md-7_ti-8",
+              "push_left": "off-0_md-1_sm-0"
+            },
+            "format": "medium",
+            "heading": "Open product. Open book.",
+            "cta": {
+              "url": "/docs",
+              "text": "EXPLORE DOCS",
+              "theme": "dark",
+              "action": "",
+              "tracking": ""
+            }
+          },
+          {
             "type": "card_list_block",
             "cols": {
-              "num": "col-8",
-              "push_left": "off-1"
+              "num": "col-8_md-10_sm-12_mi-10",
+              "push_left": "off-1_md-1_sm-0_mi-1"
             },
             "cards": [
               {

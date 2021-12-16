@@ -200,6 +200,10 @@
     width: calc(100% - 2rem);
     border-radius: 1.125rem;
     border: solid 1px rgba($waterloo, 0.15);
+    @include mini {
+      margin: 0;
+      width: 100%;
+    }
 
     .feature_storage-bar-highlight {
       position: absolute;
@@ -250,6 +254,22 @@
 
   .card_panel-left {
     padding: 0 2.625rem;
+    @include mini {
+      padding: 0 1rem;
+    }
+    .description {
+      display: none;
+      @include mini {
+        display: block;
+      }
+    }
+  }
+  .card_panel-right {
+    .description {
+      @include mini {
+        display: none;
+      }
+    }
   }
 
   .label,
@@ -270,6 +290,12 @@
     @include fontSize_ExtraLarge;
     @include fontWeight_Semibold;
     margin-bottom: 1.5rem;
+    @include small {
+      @include fontSize_Large;
+    }
+    @include mini {
+      @include fontSize_ExtraLarge;
+    }
   }
 
   .description {

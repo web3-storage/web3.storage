@@ -73,11 +73,15 @@ export default function Card({ card, parent, index }) {
             </div>
           </div>
 
-          <div className="col-4">
+          <div className="col-4_md-5_sm-6_mi-12">
             <div className={'card_panel-left'}>
               {card.label && <div className="label">{card.label}</div>}
 
               {card.title && <div className="title">{card.title}</div>}
+
+              {card.description && (
+                <div className="description" dangerouslySetInnerHTML={{ __html: card.description }}></div>
+              )}
 
               {card.cta && (
                 <Button href={card.cta.link} variant={card.cta.theme} tracking={{}}>
@@ -87,7 +91,7 @@ export default function Card({ card, parent, index }) {
             </div>
           </div>
 
-          <div className="col-7">
+          <div className="col-7_sm-6_mi-0">
             <div className={'card_panel-right'}>
               {card.description && (
                 <div className="description" dangerouslySetInnerHTML={{ __html: card.description }}></div>
