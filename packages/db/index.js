@@ -932,33 +932,19 @@ export class DBClient {
       query = query.gte('inserted_at', opts.after)
     }
 
-    const count = await this.countPAPinRequests(query)
-
-    const { data, error } = await query.limit(limit)
+    const { data, error } = await query
     if (error) {
       throw new DBError(error)
     }
 
-    const pins = data.map(pinRequest => normalizePaPinRequest(pinRequest))
+    const count = data.length
+    const pinRequests = data.slice(limit)
+    const pins = pinRequests.map(pinRequest => normalizePaPinRequest(pinRequest))
 
     return {
       count: count,
       results: pins
     }
-  }
-
-  /**
-   * Count all the pin requests for a user and filter
-   *
-   * @param {PostgrestFilterBuilder} query
-   * @returns number
-   */
-  async countPAPinRequests (query) {
-    const { data, error } = await query
-    if (error) {
-      throw new DBError(error)
-    }
-    return data.length
   }
 
   /**
