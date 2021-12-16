@@ -30,7 +30,7 @@ describe('POST /upload', () => {
     assert.strictEqual(cid, expectedCid, 'Server responded with expected CID')
   })
 
-  it.skip('should add posted Files (dir) to Cluster', async () => {
+  it('should add posted Files (dir) to Cluster', async () => {
     const name = 'directory-upload'
     // Create token
     const token = await getTestJWT('test-upload', 'test-upload')
