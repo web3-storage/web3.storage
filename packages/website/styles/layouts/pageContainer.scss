@@ -1,4 +1,5 @@
 .page-container {
+  position: relative;
   height: 100vh; // TODO: Base off 100vh - header/footer heights
   color: $white;
   padding-top: 4.5rem;

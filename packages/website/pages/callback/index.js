@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 
+import Loading from 'components/loading/loading';
 import { redirectMagic, redirectSocial } from 'Lib/magic.js';
 
 export function getStaticProps() {
@@ -50,7 +51,11 @@ const Callback = () => {
   }, [router, router.query, queryClient]);
 
   // TODO handle errors
-  return <div className="page-container" />;
+  return (
+    <div className="page-container">
+      <Loading />
+    </div>
+  );
 };
 
 export default Callback;
