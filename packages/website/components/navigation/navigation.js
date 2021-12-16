@@ -1,52 +1,52 @@
 // ===================================================================== Imports
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Link from 'next/link';
 
+import { useAuthorization } from 'components/contexts/authorizationContext';
 import ZeroAccordion from 'ZeroComponents/accordion/accordion';
 import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
 import Button from '../button/button';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Hamburger from '../../assets/icons/hamburger.js';
 import GeneralPageData from '../../content/pages/general.json';
-// import { getMagic } from '../../lib/magic.js';
-// import { countly, trackCustomLinkClick, events, ui } from '../../lib/countly';
+import { trackCustomLinkClick, events } from 'lib/countly';
 // import Loading, { SpinnerSize } from '../loading/loading';
 // ====================================================================== Params
 /**
  * Navbar Component
  *
  * @param {Object} props
- * @param {boolean} [props.isLoggedIn]
- * @param {boolean} props.isLoadingUser
  */
 
 // ===================================================================== Exports
-export default function Navigation({ isLoggedIn, isLoadingUser }) {
+export default function Navigation() {
   const router = useRouter();
+  const { isLoggedIn, isLoading, isFetching, logout } = useAuthorization();
+  const isLoadingUser = useMemo(() => isLoading || isFetching, [isLoading, isFetching]);
   // component State
   const [isMenuOpen, setMenuOpen] = useState(false);
   // Navigation Content
   const navItems = GeneralPageData.navigation.links;
-  const navCTA = GeneralPageData.navigation.cta;
+  const auth = GeneralPageData.navigation.auth;
   const logoText = GeneralPageData.site_logo.text;
   const theme = router.route === '/tiers' ? 'light' : 'dark';
-
   // ================================================================= Functions
 
   const toggleMenu = () => {
-    // isMenuOpen ? document.body.classList.remove('overflow-hidden') : document.body.classList.add('overflow-hidden')
     setMenuOpen(!isMenuOpen);
   };
 
-  // const queryClient = useQueryClient()
-
   const onLinkClick = useCallback(event => {
-    console.log('clicked');
-    // countly.trackCustomLinkClick(countly.events.LINK_CLICK_NAVBAR, event.currentTarget);
+    trackCustomLinkClick(events.LINK_CLICK_NAVBAR, event.currentTarget);
   }, []);
 
+  const login = useCallback(() => {
+    router.push('/login');
+  }, [router]);
+
+  // ======================================================= Templates [Buttons]
   const getNavLinkOrHeader = item => {
     if (Array.isArray(item.links)) {
       return <div className="nav-item-heading">{item.text}</div>;
@@ -58,46 +58,27 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
     );
   };
 
-  // async function logout() {
-  //   await getMagic().user.logout();
-  //   await queryClient.invalidateQueries('magic-user');
-  //   Router.push('/');
-  // }
+  const logoutButton = button => {
+    return (
+      <Button onClick={logout} id="logout" variant={theme}>
+        {button.logout.text}
+      </Button>
+    );
+  };
 
-  // ======================================================= Templates [Buttons]
-  // const logoutButton = (
-  //   <Button
-  //     onClick={logout}
-  //     id="logout"
-  //     variant="outlined"
-  //     tracking={{
-  //       event: countly.events.LOGOUT_CLICK,
-  //       ui: countly.ui.NAVBAR,
-  //       action: 'Logout',
-  //     }}
-  //   >
-  //     Sign Out
-  //   </Button>
-  // );
-  //
-  // const loginButton = (
-  //   <Button
-  //     href="/login"
-  //     id="login"
-  //     tracking={{
-  //       ui: countly.ui.NAVBAR,
-  //       action: 'Login',
-  //     }}
-  //   >
-  //     Sign In
-  //   </Button>
-  // );
-  //
-  // const spinnerButton = (
-  //   <Button href="#" id="loading-user">
-  //     <Loading size={SpinnerSize.SMALL} />
-  //   </Button>
-  // );
+  const loginButton = button => {
+    return (
+      <Button onClick={login} id="login" variant={theme}>
+        {button.login.text}
+      </Button>
+    );
+  };
+
+  const loadingButton = (
+    <Button href="#" id="loading-user">
+      loading
+    </Button>
+  );
 
   // ================================================ Main Template [Navigation]
   return (
@@ -119,9 +100,8 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
                     {item.text}
                   </Link>
                 ))}
-                <Button href={navCTA.url} id="login" variant={theme}>
-                  {navCTA.text}
-                </Button>
+
+                {isLoadingUser ? loadingButton : isLoggedIn ? logoutButton(auth) : loginButton(auth)}
               </div>
 
               <div className={clsx('nav-menu-toggle', theme, isMenuOpen ? 'menu-open' : '')}>
@@ -153,9 +133,7 @@ export default function Navigation({ isLoggedIn, isLoadingUser }) {
                   ))}
                 </ZeroAccordion>
 
-                <Button href={navCTA.url} id="login" variant={'light'}>
-                  {navCTA.text}
-                </Button>
+                {isLoadingUser ? loadingButton : isLoggedIn ? logoutButton(auth) : loginButton(auth)}
               </div>
             </div>
           </nav>

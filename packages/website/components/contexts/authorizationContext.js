@@ -1,8 +1,9 @@
-import React from 'react';
-import { useQuery } from 'react-query';
+import React, { useCallback } from 'react';
+import { useRouter } from 'next/router';
+import { useQuery, useQueryClient } from 'react-query';
 
 import constants from 'lib/constants';
-import { isLoggedIn } from 'lib/magic';
+import { isLoggedIn, getMagic } from 'lib/magic';
 
 /**
  * @typedef {Object} AuthorizationProviderProps
@@ -20,6 +21,7 @@ import { isLoggedIn } from 'lib/magic';
  * @property {unknown} error react-query error
  * @property {boolean} isFetching react-query isFetching
  * @property {boolean} isLoading react-query isLoading
+ * @property {() => Promise} logout Method to log user out of current session
  */
 
 /**
@@ -48,11 +50,20 @@ export const AuthorizationProvider = ({ children, authOnLoad = true }) => {
     enabled: authOnLoad,
   });
 
+  const { push } = useRouter();
+  const queryClient = useQueryClient();
+
+  const logout = useCallback(async () => {
+    await getMagic().user.logout();
+    await queryClient.invalidateQueries('magic-user');
+    push('/');
+  }, [push, queryClient]);
+
   return (
     <AuthorizationContext.Provider
       value={
         /** @type {AuthorizationContextProps} */
-        { status, isLoggedIn: !!loggedIn, error, isFetching, isLoading }
+        { status, isLoggedIn: !!loggedIn, error, isFetching, isLoading, logout }
       }
     >
       {children}

@@ -72,11 +72,14 @@
         ]
       }
     ],
-    "cta": {
-      "url": "/login",
-      "text": "SIGN IN",
-      "tracking": "",
-      "action": ""
+    "auth": {
+      "login": {
+        "url": "/login",
+        "text": "SIGN IN"
+      },
+      "logout": {
+        "text": "LOG OUT"
+      }
     }
   },
   "footer": {
