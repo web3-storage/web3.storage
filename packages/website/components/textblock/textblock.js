@@ -1,5 +1,6 @@
 // ===================================================================== Imports
 import clsx from 'clsx';
+
 import Button from '../button/button';
 import countly from '../../lib/countly';
 
@@ -25,7 +26,7 @@ export default function TextBlock({ block, className }) {
       return (
         <>
           {text.map(item => (
-            <p key={item}>{item}</p>
+            <p key={item} dangerouslySetInnerHTML={{ __html: item }}></p>
           ))}
         </>
       );
@@ -54,12 +55,9 @@ export default function TextBlock({ block, className }) {
 
       {typeof block.heading === 'string' && getHeadingType(block)}
 
-      {typeof block.subheading === 'string' &&
-        <div
-          className={'subheading'}
-          dangerouslySetInnerHTML={{ __html: block.subheading }}>
-        </div>
-      }
+      {typeof block.subheading === 'string' && (
+        <div className={'subheading'} dangerouslySetInnerHTML={{ __html: block.subheading }}></div>
+      )}
 
       {hasDescription && <div className={'description'}>{formatDescription(block.description)}</div>}
 
