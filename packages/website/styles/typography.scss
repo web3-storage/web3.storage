@@ -45,6 +45,7 @@ $fontWeight_Bold: 700;
 // leading_Huge | 80pt
 // leading_Massive | 103pt
 
+$leading_Tiny: 1rem;
 $leading_Small: 1.4375rem;
 $leading_Regular: 35px;
 $leading_Medium: 2.5rem;
@@ -120,6 +121,9 @@ $letterSpacing_Large: 0.03em;
 }
 
 // -------------------------------------------------------- Typography | Leading
+@mixin leading_Tiny {
+  line-height: $leading_Tiny;
+}
 @mixin leading_Small {
   line-height: $leading_Small;
 }

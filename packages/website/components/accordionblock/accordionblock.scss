@@ -1,0 +1,36 @@
+.accordion-chevron {
+  width: 1.125rem;
+  margin-top: 0.25rem;
+  svg {
+    transition: 250ms ease;
+    transform-origin: center;
+  }
+}
+
+.accordion-section {
+  margin-bottom: 2rem;
+  &.open {
+    .accordion-chevron {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
+.accordion-header {
+  margin-bottom: 0.5rem;
+}
+
+.accordion-header-text {
+  margin-left: 3.625rem;
+  @include fontSize_MediumLarge;
+  @include fontWeight_Semibold;
+  line-height: leading(40, 25);
+}
+
+.accordion-content {
+  margin-left: 4.75rem;
+  @include fontSize_Regular;
+  line-height: leading(34, 18);
+}

@@ -17,7 +17,7 @@ $borderRadius_Huge: 1.5rem;
 
 // --------------------------------------------------------------------- Colours
 $gray50: #fafafa;
-$gray100: #f5f5f5;
+$gray100: hsl(0, 0%, 96%);
 $gray200: #eeeeee;
 $gray300: #e0e0e0;
 $gray400: #bdbdbd;
@@ -29,19 +29,22 @@ $gray900: #212121;
 
 $black: #000000; // full black
 $waterloo: #757a9b; // A grayish blue
+$charade: #2b2d39; // A light black blue
 $shark: #1d2027; // A blackish blue
-$vulcan: #0f111a; // A very blackish blue
+$vulcan: #0f111a;
 $white: #ffffff; // full white
 $seaShell: #f1f1f1; // pale matte gray
+$alto: #d1d1d1; // dark matte gray
 $steelGray: #1c1e29; // almost black gray
 $ebony: #03040a; // almost black
 $doveGray: #626262; // gray
 $malibu: #7e81ff; // bluish violet
-$heliotrope: #9c48ff; // darker bluish violet
+$heliotrope: #714cdd; // darker bluish violet
 $cerise: #d726d7; // purplish pink
 $royalBlue: #3064e0; // royal blue
 $pictonBlue: #31e7ea; // violetish blue
 $cyan: #3effe9; // full cyan
+$martinique: #392d52; // bluish purple
 
 // ----------------------------------------------------------------- Breakpoints
 $breakpoint_Tiny: 25.9375rem; // 415px

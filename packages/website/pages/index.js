@@ -11,7 +11,6 @@ export default function Home() {
   return (
     <>
       <main className="page page-index">
-
         <MessageBanner />
 
         <Navigation />
@@ -21,7 +20,6 @@ export default function Home() {
         ))}
 
         <Footer />
-
       </main>
     </>
   );
