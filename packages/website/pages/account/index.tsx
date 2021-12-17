@@ -49,6 +49,7 @@ const Account: React.FC = () => {
         description: 'See the docs for guides and and walkthroughs',
         ctas: [
           {
+            href: 'https://docs.web3.storage',
             variant: ButtonVariant.PINK_BLUE,
             children: (
               <a href="https://docs.web3.storage" target="_blank" rel="noreferrer">
