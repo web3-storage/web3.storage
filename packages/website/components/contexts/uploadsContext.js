@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react';
 
-import { deleteUpload, renameUpload } from 'lib/api';
+import { deleteUpload, getUploads, renameUpload } from 'lib/api';
 
 /**
- * @typedef {import('../../lib/api').getUploads} getUploads
+ * @typedef {import('../../lib/api').UploadArgs} UploadArgs
+ * @typedef {import('web3.storage').Upload} Upload
  */
 
 /**
@@ -30,24 +31,11 @@ import { deleteUpload, renameUpload } from 'lib/api';
  */
 
 /**
- * @typedef {Object} Upload
- * @property {string} cid
- * @property {string} created
- * @property {number} dagSize
- * @property {Deal[]} deals
- * @property {string} name
- * @property {Pin[]} pins
- * @property {string} type
- * @property {string} updated
- * @property {string} _id
- */
-
-/**
  * @typedef {Object} UploadsContextProps
  * @property {Upload[]} uploads Uploads available in this account
  * @property {(cid: string) => Promise<void>} deleteUpload Method to delete an existing upload
  * @property {(cid: string, name: string)=>Promise<void>} renameUpload Method to rename an existing upload
- * @property {getUploads} getUploads Method that refetches list of uploads based on certain params
+ * @property {(args?: UploadArgs) => Promise<Upload[]>} getUploads Method that refetches list of uploads based on certain params
  * @property {(file:File) => Promise<void>} uploadFile Method to upload a new file
  * @property {boolean} isFetchingUploads Whether or not new uploads are being fetched
  * @property {number|undefined} fetchDate The date in which the last uploads list fetch happened
@@ -69,7 +57,7 @@ export const UploadsContext = React.createContext(/** @type {any} */ (undefined)
  * @param {UploadsProviderProps} props
  */
 export const UploadsProvider = ({ children }) => {
-  const [uploads, setUploads] = useState([]);
+  const [uploads, setUploads] = useState(/** @type {Upload[]} */ ([]));
   const [isFetchingUploads, setIsFetchingUploads] = useState(false);
   const [fetchDate, setFetchDate] = useState(/** @type {number|undefined} */ (undefined));
 
@@ -100,14 +88,16 @@ export const UploadsProvider = ({ children }) => {
     []
   );
 
-  const getUploads = useCallback(
-    /** @type {getUploads} */
-    async (...args) => {
+  const getUploadsCallback = useCallback(
+    /** @type {(args?: UploadArgs) => Promise<Upload[]>}} */
+    async (args = { size: 1, before: new Date().toISOString() }) => {
       setIsFetchingUploads(true);
-      const updatedUploads = await getUploads(...args);
+      const updatedUploads = await getUploads(args);
       setUploads(updatedUploads);
       setIsFetchingUploads(false);
       setFetchDate(Date.now());
+
+      return updatedUploads;
     },
     [setUploads, setIsFetchingUploads]
   );
@@ -116,7 +106,15 @@ export const UploadsProvider = ({ children }) => {
     <UploadsContext.Provider
       value={
         /** @type {UploadsContextProps} */
-        ({ uploadFile, deleteUpload, renameUpload, getUploads, uploads, isFetchingUploads, fetchDate })
+        ({
+          uploadFile,
+          deleteUpload,
+          renameUpload,
+          getUploads: getUploadsCallback,
+          uploads,
+          isFetchingUploads,
+          fetchDate,
+        })
       }
     >
       {children}

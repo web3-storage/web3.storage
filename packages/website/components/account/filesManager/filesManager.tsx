@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import SearchIcon from 'assets/icons/search';
 import countly from 'lib/countly';
@@ -7,6 +7,8 @@ import CheckIcon from 'assets/icons/check';
 import InfoAIcon from 'assets/icons/infoA';
 import InfoBIcon from 'assets/icons/infoB';
 import Button, { ButtonVariant } from 'components/button/button';
+import { useUploads } from 'components/contexts/uploadsContext';
+import Loading from 'components/loading/loading';
 
 type FilesManagerProps = {
   className?: string;
@@ -30,49 +32,54 @@ const FileRowItem = ({
   size,
   onSelect,
   isHeader = false,
-}) => {
-  return (
-    <div className={clsx('files-manager-row', className, isHeader && 'files-manager-row-header')}>
-      <span className="file-select">
-        <input type="checkbox" id={`${name}-select`} onChange={onSelect} />
-        <CheckIcon className="check" />
-      </span>
-      <span className="file-date">{date}</span>
-      <span className="file-name">{name}</span>
-      <span className="file-cid">
-        {cid}
-        {isHeader && (
-          <Info content="The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>" />
-        )}
-      </span>
-      <span className="file-availability">
-        {available}
-        {isHeader && (
-          <Info content="Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes." />
-        )}
-      </span>
-      <span className="file-pin-status">
-        {status}
-        {isHeader ? (
-          <Info content="Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes." />
-        ) : (
-          status === 'pinned' && <Info icon={<InfoBIcon />} content="The upload is fully pinned on 3 IPFS nodes." />
-        )}
-      </span>
-      <span className="file-storage-providers">
-        {storageProviders}
-        {isHeader && (
-          <Info content="Service providers offering storage capacity to the Filecoin network. <a href='https://docs.web3.storage/concepts/decentralized-storage/' target='_blank' rel='noreferrer'>Learn more</a>" />
-        )}
-      </span>
-      <span className="file-size">{size}</span>
-    </div>
-  );
-};
+}) => (
+  <div className={clsx('files-manager-row', className, isHeader && 'files-manager-row-header')}>
+    <span className="file-select">
+      <input type="checkbox" id={`${name}-select`} onChange={onSelect} />
+      <CheckIcon className="check" />
+    </span>
+    <span className="file-date">{date}</span>
+    <span className="file-name">{name}</span>
+    <span className="file-cid">
+      {cid}
+      {isHeader && (
+        <Info content="The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>" />
+      )}
+    </span>
+    <span className="file-availability">
+      {available}
+      {isHeader && (
+        <Info content="Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes." />
+      )}
+    </span>
+    <span className="file-pin-status">
+      {status}
+      {isHeader ? (
+        <Info content="Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes." />
+      ) : (
+        status === 'pinned' && <Info icon={<InfoBIcon />} content="The upload is fully pinned on 3 IPFS nodes." />
+      )}
+    </span>
+    <span className="file-storage-providers">
+      {storageProviders}
+      {isHeader && (
+        <Info content="Service providers offering storage capacity to the Filecoin network. <a href='https://docs.web3.storage/concepts/decentralized-storage/' target='_blank' rel='noreferrer'>Learn more</a>" />
+      )}
+    </span>
+    <span className="file-size">{size}</span>
+  </div>
+);
 
 const FilesManager = ({ className }: FilesManagerProps) => {
-  // TODO: Pull files from redux to populate
-  const files = [];
+  const { uploads: files, fetchDate, getUploads, isFetchingUploads } = useUploads();
+
+  // Initial fetch on component load
+  useEffect(() => {
+    if (!fetchDate && !isFetchingUploads) {
+      getUploads();
+    }
+  }, [fetchDate, getUploads, isFetchingUploads]);
+
   const onFileUploead = useCallback(() => {
     window.alert('Upload a file');
   }, []);
@@ -102,7 +109,9 @@ const FilesManager = ({ className }: FilesManagerProps) => {
         isHeader
       />
       <div className="files-manager-table-content">
-        {!files.length ? (
+        {isFetchingUploads || !fetchDate ? (
+          <Loading className={'files-loading-spinner'} />
+        ) : !files.length ? (
           <span className="files-manager-upload-cta">
             You don’t have any files uploaded yet.{'\u00A0'}
             <Button

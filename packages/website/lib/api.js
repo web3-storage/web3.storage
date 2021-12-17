@@ -109,16 +109,20 @@ export async function createToken(name) {
   return res.json()
 }
 
+
 /**
- * 
- * @callback Promise<import('web3.storage').Upload[]> getUploads
- * 
+ * @typedef {Object} UploadArgs
+ * @property {number} args.size
+ * @property {string} args.before
+ * @property {string} [args.sortBy] Can be either "Date" or "Name" - uses "Date" as default
+ * @property {string} [args.sortOrder] Can be either "Asc" or "Desc" - uses "Desc" as default
+ */
+
+/**
  * Gets files
- * @param {object} args
- * @param {number} args.size
- * @param {string} args.before
- * @param {string} [args.sortBy] Can be either "Date" or "Name" - uses "Date" as default
- * @param {string} [args.sortOrder] Can be either "Asc" or "Desc" - uses "Desc" as default
+ * 
+ * @param {UploadArgs} args
+ * 
  * @returns {Promise<import('web3.storage').Upload[]>}
  * @throws {Error} When it fails to get uploads
  */
