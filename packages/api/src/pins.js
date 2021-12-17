@@ -9,7 +9,7 @@ import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 /**
  *
  * Service API Pin object definition
- * @typedef {Object} ServiceApiPin
+ * @typedef {Object} PsaPin
  * @property {string} cid
  * @property {string} [name]
  * @property {Array.<string>} [origins]
@@ -19,14 +19,14 @@ import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 /**
  *
  * Service API Pin Status definition
- * @typedef {Object} ServiceApiPinStatus
+ * @typedef {Object} PsaPinStatusResponse
  * @property {string} requestId
  * @property {apiPinStatus} status
  * @property {string} created
  * @property {Array<string>} delegates
  * @property {string} [info]
  *
- * @property {ServiceApiPin} pin
+ * @property {PsaPin} pin
  */
 
 /**
@@ -38,7 +38,7 @@ import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
  * @param {import('../../db/db-client-types.js').PinItemOutput[]} pins
  * @return {apiPinStatus} status
  */
-export const getPinningAPIStatus = (pins) => {
+export const getEffectivePinStatus = (pins) => {
   const pinStatuses = pins.map((p) => p.status)
 
   // TODO what happens with Sharded? I'd assumed is pinned?
@@ -183,7 +183,7 @@ async function createPin (pinData, authToken, env, ctx) {
 
   const pinRequest = await env.db.createPsaPinRequest(pinRequestData)
 
-  /** @type {ServiceApiPinStatus} */
+  /** @type {PsaPinStatusResponse} */
   const pinStatus = getPinStatus(pinRequest)
 
   /** @type {(() => Promise<any>)[]} */
@@ -238,7 +238,7 @@ export async function pinGet (request, env, ctx) {
     return notFound()
   }
 
-  /** @type { ServiceApiPinStatus } */
+  /** @type { PsaPinStatusResponse } */
   const pin = getPinStatus(pinRequest)
   return new JSONResponse(pin)
 }
@@ -391,12 +391,12 @@ function parseSearchParams (params) {
  * Transform a PinRequest into a PinStatus
  *
  * @param { Object } pinRequest
- * @returns { ServiceApiPinStatus }
+ * @returns { PsaPinStatusResponse }
  */
 function getPinStatus (pinRequest) {
   return {
     requestId: pinRequest._id.toString(),
-    status: getPinningAPIStatus(pinRequest.pins),
+    status: getEffectivePinStatus(pinRequest.pins),
     created: pinRequest.created,
     pin: {
       cid: pinRequest.requestedCid,

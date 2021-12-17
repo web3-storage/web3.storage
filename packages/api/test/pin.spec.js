@@ -5,7 +5,7 @@ import { getTestJWT } from './scripts/helpers.js'
 import {
   ERROR_CODE,
   ERROR_STATUS,
-  getPinningAPIStatus,
+  getEffectivePinStatus,
   INVALID_CID,
   INVALID_META,
   INVALID_NAME,
@@ -70,7 +70,7 @@ const assertCorrectPinResponse = (data) => {
  *
  * @param {string} cid
  * @param {string} token
- * @return {Promise<import('../src/pins.js').ServiceApiPinStatus>}
+ * @return {Promise<import('../src/pins.js').PsaPinStatusResponse>}
  */
 const createPinRequest = async (cid, token) => {
   return await (await fetch(new URL('pins', endpoint).toString(), {
@@ -543,7 +543,7 @@ describe('Pinning APIs endpoints', () => {
     })
   })
 
-  describe('getPinningAPIStatus', () => {
+  describe('getEffectivePinStatus', () => {
     it('should return pinned if at it is pinned in at least a node', () => {
       /** @type {import('../../db/db-client-types.js').PinItemOutput[]} */
       const pins = [
@@ -551,12 +551,12 @@ describe('Pinning APIs endpoints', () => {
         createPinWithStatus('PinQueued'),
         createPinWithStatus('PinError')
       ]
-      assert.strictEqual(getPinningAPIStatus(pins), 'pinned')
+      assert.strictEqual(getEffectivePinStatus(pins), 'pinned')
     })
 
     it('should return queued if there are no pins yet', () => {
       const pins = []
-      assert.strictEqual(getPinningAPIStatus(pins), 'failed')
+      assert.strictEqual(getEffectivePinStatus(pins), 'failed')
     })
 
     it('should return "queued" at least 1 pin has it queued', () => {
@@ -565,7 +565,7 @@ describe('Pinning APIs endpoints', () => {
         createPinWithStatus('PinError'),
         createPinWithStatus('PinQueued')
       ]
-      assert.strictEqual(getPinningAPIStatus(pins), 'queued')
+      assert.strictEqual(getEffectivePinStatus(pins), 'queued')
     })
 
     it('should return "queued" at least 1 pin has remote status', () => {
@@ -575,7 +575,7 @@ describe('Pinning APIs endpoints', () => {
         createPinWithStatus('PinQueued')
       ]
 
-      assert.strictEqual(getPinningAPIStatus(pins), 'queued')
+      assert.strictEqual(getEffectivePinStatus(pins), 'queued')
     })
 
     it('should return failed pins have statuses other than Pinned, Pinning, PinQueued or Remote', () => {
@@ -584,7 +584,7 @@ describe('Pinning APIs endpoints', () => {
         createPinWithStatus('PinError')
       ]
 
-      assert.strictEqual(getPinningAPIStatus(pins), 'failed')
+      assert.strictEqual(getEffectivePinStatus(pins), 'failed')
     })
   })
 
