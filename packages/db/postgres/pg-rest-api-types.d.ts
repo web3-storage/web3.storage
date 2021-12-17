@@ -635,18 +635,18 @@ export interface paths {
       };
     };
   };
-  "/pa_pin_request": {
+  "/psa_pin_request": {
     get: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.pa_pin_request.id"];
-          content_cid?: parameters["rowFilter.pa_pin_request.content_cid"];
-          auth_key_id?: parameters["rowFilter.pa_pin_request.auth_key_id"];
-          requested_cid?: parameters["rowFilter.pa_pin_request.requested_cid"];
-          name?: parameters["rowFilter.pa_pin_request.name"];
-          deleted_at?: parameters["rowFilter.pa_pin_request.deleted_at"];
-          inserted_at?: parameters["rowFilter.pa_pin_request.inserted_at"];
-          updated_at?: parameters["rowFilter.pa_pin_request.updated_at"];
+          id?: parameters["rowFilter.psa_pin_request.id"];
+          content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
+          auth_key_id?: parameters["rowFilter.psa_pin_request.auth_key_id"];
+          requested_cid?: parameters["rowFilter.psa_pin_request.requested_cid"];
+          name?: parameters["rowFilter.psa_pin_request.name"];
+          deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
+          inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.psa_pin_request.updated_at"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -668,7 +668,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["pa_pin_request"][];
+          schema: definitions["psa_pin_request"][];
         };
         /** Partial Content */
         206: unknown;
@@ -677,8 +677,8 @@ export interface paths {
     post: {
       parameters: {
         body: {
-          /** pa_pin_request */
-          pa_pin_request?: definitions["pa_pin_request"];
+          /** psa_pin_request */
+          psa_pin_request?: definitions["psa_pin_request"];
         };
         query: {
           /** Filtering Columns */
@@ -697,14 +697,14 @@ export interface paths {
     delete: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.pa_pin_request.id"];
-          content_cid?: parameters["rowFilter.pa_pin_request.content_cid"];
-          auth_key_id?: parameters["rowFilter.pa_pin_request.auth_key_id"];
-          requested_cid?: parameters["rowFilter.pa_pin_request.requested_cid"];
-          name?: parameters["rowFilter.pa_pin_request.name"];
-          deleted_at?: parameters["rowFilter.pa_pin_request.deleted_at"];
-          inserted_at?: parameters["rowFilter.pa_pin_request.inserted_at"];
-          updated_at?: parameters["rowFilter.pa_pin_request.updated_at"];
+          id?: parameters["rowFilter.psa_pin_request.id"];
+          content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
+          auth_key_id?: parameters["rowFilter.psa_pin_request.auth_key_id"];
+          requested_cid?: parameters["rowFilter.psa_pin_request.requested_cid"];
+          name?: parameters["rowFilter.psa_pin_request.name"];
+          deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
+          inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.psa_pin_request.updated_at"];
         };
         header: {
           /** Preference */
@@ -719,18 +719,18 @@ export interface paths {
     patch: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.pa_pin_request.id"];
-          content_cid?: parameters["rowFilter.pa_pin_request.content_cid"];
-          auth_key_id?: parameters["rowFilter.pa_pin_request.auth_key_id"];
-          requested_cid?: parameters["rowFilter.pa_pin_request.requested_cid"];
-          name?: parameters["rowFilter.pa_pin_request.name"];
-          deleted_at?: parameters["rowFilter.pa_pin_request.deleted_at"];
-          inserted_at?: parameters["rowFilter.pa_pin_request.inserted_at"];
-          updated_at?: parameters["rowFilter.pa_pin_request.updated_at"];
+          id?: parameters["rowFilter.psa_pin_request.id"];
+          content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
+          auth_key_id?: parameters["rowFilter.psa_pin_request.auth_key_id"];
+          requested_cid?: parameters["rowFilter.psa_pin_request.requested_cid"];
+          name?: parameters["rowFilter.psa_pin_request.name"];
+          deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
+          inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.psa_pin_request.updated_at"];
         };
         body: {
-          /** pa_pin_request */
-          pa_pin_request?: definitions["pa_pin_request"];
+          /** psa_pin_request */
+          psa_pin_request?: definitions["psa_pin_request"];
         };
         header: {
           /** Preference */
@@ -1752,7 +1752,7 @@ export interface definitions {
     inserted_at: string;
     updated_at: string;
   };
-  pa_pin_request: {
+  psa_pin_request: {
     /**
      * Note:
      * This is a Primary Key.<pk/>
@@ -1977,16 +1977,16 @@ export interface parameters {
   "rowFilter.name.validity": string;
   "rowFilter.name.inserted_at": string;
   "rowFilter.name.updated_at": string;
-  /** pa_pin_request */
-  "body.pa_pin_request": definitions["pa_pin_request"];
-  "rowFilter.pa_pin_request.id": string;
-  "rowFilter.pa_pin_request.content_cid": string;
-  "rowFilter.pa_pin_request.auth_key_id": string;
-  "rowFilter.pa_pin_request.requested_cid": string;
-  "rowFilter.pa_pin_request.name": string;
-  "rowFilter.pa_pin_request.deleted_at": string;
-  "rowFilter.pa_pin_request.inserted_at": string;
-  "rowFilter.pa_pin_request.updated_at": string;
+  /** psa_pin_request */
+  "body.psa_pin_request": definitions["psa_pin_request"];
+  "rowFilter.psa_pin_request.id": string;
+  "rowFilter.psa_pin_request.content_cid": string;
+  "rowFilter.psa_pin_request.auth_key_id": string;
+  "rowFilter.psa_pin_request.requested_cid": string;
+  "rowFilter.psa_pin_request.name": string;
+  "rowFilter.psa_pin_request.deleted_at": string;
+  "rowFilter.psa_pin_request.inserted_at": string;
+  "rowFilter.psa_pin_request.updated_at": string;
   /** pin */
   "body.pin": definitions["pin"];
   "rowFilter.pin.id": string;

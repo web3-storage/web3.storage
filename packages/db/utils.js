@@ -18,16 +18,16 @@ export function normalizeUpload (upload) {
 /**
  * Normalize pin request
  *
- * @param {object} paPinRequest
- * @return {import('./db-client-types').PAPinRequestUpsertOutput}
+ * @param {object} psaPinRequest
+ * @return {import('./db-client-types').PsaPinRequestUpsertOutput}
  */
-export function normalizePaPinRequest (paPinRequest) {
-  const nPaPinRequest = { ...paPinRequest }
-  delete nPaPinRequest.content
+export function normalizePsaPinRequest (psaPinRequest) {
+  const nPsaPinRequest = { ...psaPinRequest }
+  delete nPsaPinRequest.content
 
   return {
-    ...nPaPinRequest,
-    pins: paPinRequest.content?.pins ? normalizePins(paPinRequest.content.pins) : []
+    ...nPsaPinRequest,
+    pins: psaPinRequest.content?.pins ? normalizePins(psaPinRequest.content.pins) : []
   }
 }
 

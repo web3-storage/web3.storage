@@ -182,7 +182,7 @@ async function createPin (pinData, authToken, env, ctx) {
     pins
   }
 
-  const pinRequest = await env.db.createPAPinRequest(pinRequestData)
+  const pinRequest = await env.db.createPsaPinRequest(pinRequestData)
 
   /** @type {ServiceApiPinStatus} */
   const pinStatus = getPinStatus(pinRequest)
@@ -227,11 +227,11 @@ export async function pinGet (request, env, ctx) {
 
   const requestId = parseInt(request.params.requestId, 10)
 
-  /** @type { import('../../db/db-client-types.js').PAPinRequestUpsertOutput } */
+  /** @type { import('../../db/db-client-types.js').PsaPinRequestUpsertOutput } */
   let pinRequest
 
   try {
-    pinRequest = await env.db.getPAPinRequest(requestId)
+    pinRequest = await env.db.getPsaPinRequest(requestId)
   } catch (e) {
     console.error(e)
     // TODO catch different exceptions
@@ -266,7 +266,7 @@ export async function pinsGet (request, env, ctx) {
   const opts = result.data
 
   try {
-    pinRequests = await env.db.listPAPinRequests(request.auth.authToken._id, opts)
+    pinRequests = await env.db.listPsaPinRequests(request.auth.authToken._id, opts)
   } catch (e) {
     console.error(e)
     return notFound()
@@ -439,7 +439,7 @@ export async function pinDelete (request, env, ctx) {
   let res
   try {
     // Update deleted_at (and updated_at) timestamp for the pin request.
-    res = await env.db.deletePAPinRequest(requestId, authToken._id)
+    res = await env.db.deletePsaPinRequest(requestId, authToken._id)
   } catch (e) {
     console.error(e)
     // TODO catch different exceptions
@@ -460,7 +460,7 @@ export async function pinDelete (request, env, ctx) {
 async function replacePin (newPinData, requestId, authToken, env, ctx) {
   let existingPinRequest
   try {
-    existingPinRequest = await env.db.getPAPinRequest(requestId)
+    existingPinRequest = await env.db.getPsaPinRequest(requestId)
   } catch (e) {
     return notFound()
   }
@@ -484,7 +484,7 @@ async function replacePin (newPinData, requestId, authToken, env, ctx) {
   }
 
   try {
-    await env.db.deletePAPinRequest(requestId, authToken)
+    await env.db.deletePsaPinRequest(requestId, authToken)
   } catch (e) {
     return new JSONResponse(
       { error: { reason: `DB Error: ${e}` } },

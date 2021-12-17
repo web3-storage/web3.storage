@@ -1,6 +1,6 @@
 import { PostgrestClient } from '@supabase/postgrest-js'
 
-import { normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePaPinRequest } from './utils.js'
+import { normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest } from './utils.js'
 import { DBError } from './errors.js'
 import {
   getUserMetrics,
@@ -20,7 +20,7 @@ const uploadQuery = `
         content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region)))
       `
 
-const PAPinRequestTableName = 'pa_pin_request'
+const psaPinRequestTableName = 'psa_pin_request'
 const pinRequestSelect = `
   _id:id::text,
   requestedCid:requested_cid,
@@ -763,14 +763,14 @@ export class DBClient {
   /**
    * Creates a Pin Request.
    *
-   * @param {import('./db-client-types').PAPinRequestUpsertInput} pinRequestData
-   * @return {Promise<import('./db-client-types').PAPinRequestUpsertOutput>}
+   * @param {import('./db-client-types').PsaPinRequestUpsertInput} pinRequestData
+   * @return {Promise<import('./db-client-types').PsaPinRequestUpsertOutput>}
    */
-  async createPAPinRequest (pinRequestData) {
+  async createPsaPinRequest (pinRequestData) {
     const now = new Date().toISOString()
 
     /** @type {{ data: string, error: PostgrestError }} */
-    const { data: pinRequestId, error } = await this._client.rpc('create_pin_request', {
+    const { data: pinRequestId, error } = await this._client.rpc('create_psa_pin_request', {
       data: {
         auth_key_id: pinRequestData.authKey,
         content_cid: pinRequestData.contentCid,
@@ -795,21 +795,21 @@ export class DBClient {
     }
 
     // TODO: this second request could be avoided by returning the right data
-    // from create_pin_request remote procedure. (But to keep this DRY we need to refactor
+    // from create_psa_pin_request remote procedure. (But to keep this DRY we need to refactor
     // this a bit)
-    return await this.getPAPinRequest(parseInt(pinRequestId, 10))
+    return await this.getPsaPinRequest(parseInt(pinRequestId, 10))
   }
 
   /**
    * Get a Pin Request by id
    *
    * @param {number} pinRequestId
-   * @return {Promise<import('./db-client-types').PAPinRequestUpsertOutput>}
+   * @return {Promise<import('./db-client-types').PsaPinRequestUpsertOutput>}
    */
-  async getPAPinRequest (pinRequestId) {
-    /** @type {{data: import('./db-client-types').PAPinRequestItem, error: PostgrestError }} */
+  async getPsaPinRequest (pinRequestId) {
+    /** @type {{data: import('./db-client-types').PsaPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
-      .from(PAPinRequestTableName)
+      .from(psaPinRequestTableName)
       .select(pinRequestSelect)
       .eq('id', pinRequestId)
       .is('deleted_at', null)
@@ -819,22 +819,22 @@ export class DBClient {
       throw new DBError(error)
     }
 
-    return normalizePaPinRequest(data)
+    return normalizePsaPinRequest(data)
   }
 
   /**
    * Get a filtered list of pin requests for a user
    *
    * @param {string} authKey
-   * @param {import('./db-client-types').ListPAPinRequestOptions} opts
-   * @return {Promise<import('./db-client-types').ListPAPinRequestResults> }> }
+   * @param {import('./db-client-types').ListPsaPinRequestOptions} opts
+   * @return {Promise<import('./db-client-types').ListPsaPinRequestResults> }> }
    */
-  async listPAPinRequests (authKey, opts = {}) {
+  async listPsaPinRequests (authKey, opts = {}) {
     const match = opts?.match || 'exact'
     const limit = opts?.limit || 10
 
     let query = this._client
-      .from(PAPinRequestTableName)
+      .from(psaPinRequestTableName)
       .select(pinRequestSelect)
       .eq('auth_key_id', authKey)
       .order('inserted_at', { ascending: false })
@@ -873,7 +873,7 @@ export class DBClient {
 
     // TODO(https://github.com/web3-storage/web3.storage/issues/798): filter by meta is missing
 
-    /** @type {{ data: Array<import('./db-client-types').PAPinRequestItem>, error: Error }} */
+    /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, error: Error }} */
     const { data, error } = (await query)
 
     if (error) {
@@ -885,7 +885,7 @@ export class DBClient {
     // TODO(https://github.com/web3-storage/web3.storage/issues/804): Not limiting the query might cause
     // performance issues if a user created lots of requests with a token. We should improve this.
     const pinRequests = data.slice(0, limit)
-    const pins = pinRequests.map(pinRequest => normalizePaPinRequest(pinRequest))
+    const pins = pinRequests.map(pinRequest => normalizePsaPinRequest(pinRequest))
 
     return {
       count,
@@ -899,11 +899,11 @@ export class DBClient {
    * @param {number} requestId
    * @param {string} authKey
    */
-  async deletePAPinRequest (requestId, authKey) {
+  async deletePsaPinRequest (requestId, authKey) {
     const date = new Date().toISOString()
-    /** @type {{ data: import('./db-client-types').PAPinRequestItem, error: PostgrestError }} */
+    /** @type {{ data: import('./db-client-types').PsaPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
-      .from(PAPinRequestTableName)
+      .from(psaPinRequestTableName)
       .update({
         deleted_at: date,
         updated_at: date

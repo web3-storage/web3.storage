@@ -8,7 +8,7 @@ import { sha256 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
 /* global crypto */
 
-const pinRequestTable = 'pa_pin_request'
+const pinRequestTable = 'psa_pin_request'
 
 /**
  * @param {number} code
@@ -44,12 +44,12 @@ describe('Pin Request', () => {
   let user
   let authKey
   /**
-   * @type {import('../db-client-types').PAPinRequestUpsertInput}
+   * @type {import('../db-client-types').PsaPinRequestUpsertInput}
    */
   let aPinRequestInput
 
   /**
-   * @type {import('../db-client-types').PAPinRequestUpsertOutput}
+   * @type {import('../db-client-types').PsaPinRequestUpsertOutput}
    */
   let aPinRequestOutput
 
@@ -101,12 +101,12 @@ describe('Pin Request', () => {
       authKey
     }
 
-    aPinRequestOutput = await client.createPAPinRequest(aPinRequestInput)
+    aPinRequestOutput = await client.createPsaPinRequest(aPinRequestInput)
   })
 
   describe('Create Pin', () => {
     it('creates a Pin Request', async () => {
-      const savedPinRequest = await client.getPAPinRequest(parseInt(aPinRequestOutput._id, 10))
+      const savedPinRequest = await client.getPsaPinRequest(parseInt(aPinRequestOutput._id, 10))
       assert.ok(savedPinRequest)
       assert.strictEqual(savedPinRequest._id, aPinRequestOutput._id)
     })
@@ -152,7 +152,7 @@ describe('Pin Request', () => {
     let savedPinRequest
 
     before(async () => {
-      savedPinRequest = await client.getPAPinRequest(parseInt(aPinRequestOutput._id, 10))
+      savedPinRequest = await client.getPsaPinRequest(parseInt(aPinRequestOutput._id, 10))
     })
 
     it('gets a Pin Request, if it exists', async () => {
@@ -174,7 +174,7 @@ describe('Pin Request', () => {
     })
 
     it('throws if does not exists', async () => {
-      assert.rejects(client.getPAPinRequest(1000))
+      assert.rejects(client.getPsaPinRequest(1000))
     })
   })
 
@@ -255,7 +255,7 @@ describe('Pin Request', () => {
         const requestedCid = item.requestedCid || await randomCid()
         const normalizedCid = item.cid || normalizeCid(requestedCid)
 
-        return client.createPAPinRequest({
+        return client.createPsaPinRequest({
           ...(item.name) && { name: item.name },
           authKey: authKeyPinList,
           requestedCid: requestedCid,
@@ -266,25 +266,25 @@ describe('Pin Request', () => {
     })
 
     it('limits the results to 10', async () => {
-      const { results: prs } = await client.listPAPinRequests(authKeyPinList)
+      const { results: prs } = await client.listPsaPinRequests(authKeyPinList)
       assert.strictEqual(prs.length, 10)
     })
 
     it('limits the results to the provided limit', async () => {
       const limit = 8
-      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
+      const { results: prs } = await client.listPsaPinRequests(authKeyPinList, {
         limit
       })
       assert.strictEqual(prs.length, limit)
     })
 
     it('returns only requests for the provided token', async () => {
-      const { results: prs } = await client.listPAPinRequests('10')
+      const { results: prs } = await client.listPsaPinRequests('10')
       assert.strictEqual(prs.length, 0)
     })
 
     it('sorts by date', async () => {
-      const { results: prs } = await client.listPAPinRequests(authKeyPinList)
+      const { results: prs } = await client.listPsaPinRequests(authKeyPinList)
 
       const sorted = prs.reduce((n, item) => n !== null && item.created <= n.created && item)
       assert(sorted)
@@ -292,7 +292,7 @@ describe('Pin Request', () => {
 
     it.skip('it filters items by provided status', async () => {
       // TODO(https://github.com/web3-storage/web3.storage/issues/797): status filtering is currently not working
-      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
+      const { results: prs } = await client.listPsaPinRequests(authKeyPinList, {
         status: ['Pinning']
       })
 
@@ -302,7 +302,7 @@ describe('Pin Request', () => {
 
     it('filters items by provided cid', async () => {
       const cids = [createdPinningRequests[0].requestedCid, createdPinningRequests[1].requestedCid]
-      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
+      const { results: prs } = await client.listPsaPinRequests(authKeyPinList, {
         cid: cids
       })
 
@@ -313,7 +313,7 @@ describe('Pin Request', () => {
 
     it('filters items by exact match by default', async () => {
       const name = 'capybara'
-      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
+      const { results: prs } = await client.listPsaPinRequests(authKeyPinList, {
         name
       })
 
@@ -325,7 +325,7 @@ describe('Pin Request', () => {
 
     it('filters items by iexact match', async () => {
       const name = 'camel'
-      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
+      const { results: prs } = await client.listPsaPinRequests(authKeyPinList, {
         name,
         match: 'iexact'
       })
@@ -338,7 +338,7 @@ describe('Pin Request', () => {
 
     it('filters items by partial match', async () => {
       const name = 'giant'
-      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
+      const { results: prs } = await client.listPsaPinRequests(authKeyPinList, {
         name,
         match: 'partial'
       })
@@ -351,7 +351,7 @@ describe('Pin Request', () => {
 
     it('filters items by ipartial match', async () => {
       const name = 'giant'
-      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
+      const { results: prs } = await client.listPsaPinRequests(authKeyPinList, {
         name,
         match: 'ipartial'
       })
@@ -363,7 +363,7 @@ describe('Pin Request', () => {
     })
 
     it('filters items created before a date', async () => {
-      const { results: pins } = await client.listPAPinRequests(authKeyPinList, {
+      const { results: pins } = await client.listPsaPinRequests(authKeyPinList, {
         before: '2021-01-01T00:00:00.000000Z'
       })
 
@@ -371,7 +371,7 @@ describe('Pin Request', () => {
     })
 
     it('filters items created after a date', async () => {
-      const { results: pins } = await client.listPAPinRequests(authKeyPinList, {
+      const { results: pins } = await client.listPsaPinRequests(authKeyPinList, {
         after: '2021-01-01T00:00:00.000000Z',
         limit: 20
       })
@@ -382,28 +382,28 @@ describe('Pin Request', () => {
 
   describe('Delete Pin', () => {
     it('throws if the request id does not exist', async () => {
-      assert.rejects(client.deletePAPinRequest(1000, authKey))
+      assert.rejects(client.deletePsaPinRequest(1000, authKey))
     })
 
     it('throws if the auth key does not belong to the pin request', async () => {
-      assert.rejects(client.deletePAPinRequest(parseInt(aPinRequestOutput._id, 10), 'fakeAuth'))
+      assert.rejects(client.deletePsaPinRequest(parseInt(aPinRequestOutput._id, 10), 'fakeAuth'))
     })
 
     it('returns the id of the deleted pin request', async () => {
       const aPinRequestOutputId = parseInt(aPinRequestOutput._id, 10)
-      const pinRequest = await client.getPAPinRequest(aPinRequestOutputId)
+      const pinRequest = await client.getPsaPinRequest(aPinRequestOutputId)
       assert.ok(!pinRequest.deleted, 'is null')
-      const deletedPinRequest = await client.deletePAPinRequest(aPinRequestOutputId, authKey)
+      const deletedPinRequest = await client.deletePsaPinRequest(aPinRequestOutputId, authKey)
       assert.ok(deletedPinRequest)
       assert.equal(deletedPinRequest._id, pinRequest._id)
     })
 
     it('does not select pin request after deletion', async () => {
-      assert.rejects(client.getPAPinRequest(parseInt(aPinRequestOutput._id, 10)))
+      assert.rejects(client.getPsaPinRequest(parseInt(aPinRequestOutput._id, 10)))
     })
 
     it('cannot delete a pin request which is already deleted', async () => {
-      assert.rejects(client.deletePAPinRequest(parseInt(aPinRequestOutput._id, 10), authKey))
+      assert.rejects(client.deletePsaPinRequest(parseInt(aPinRequestOutput._id, 10), authKey))
     })
   })
 })

@@ -81,7 +81,7 @@ VALUES  ('bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4'),
         ('bafybeidqts3rbwkprggjojbvcxy4jzpgzgcvs4a73y3gx2jjxphjeerbcy');
       
 
-INSERT INTO pa_pin_request (auth_key_id, content_cid, requested_cid, name, inserted_at, updated_at)
+INSERT INTO psa_pin_request (auth_key_id, content_cid, requested_cid, name, inserted_at, updated_at)
 VALUES (3, 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4', 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4', 'ReportDoc.pdf', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        (3, 'bafybeig7yvw6a4uhio4pmg5gahyd2xumowkfljdukad7pmdsv5uk5zcseu', 'bafybeig7yvw6a4uhio4pmg5gahyd2xumowkfljdukad7pmdsv5uk5zcseu', 'reportdoc.pdf', '2021-01-01T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        (3, 'bafybeia45bscvzxngto555xsel4gwoclb5fxd7zpxige7rl3maoleznswu', 'bafybeia45bscvzxngto555xsel4gwoclb5fxd7zpxige7rl3maoleznswu', 'Data', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),

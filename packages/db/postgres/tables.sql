@@ -200,7 +200,7 @@ CREATE TABLE IF NOT EXISTS pin_sync_request
 CREATE INDEX IF NOT EXISTS pin_sync_request_pin_id_idx ON pin_sync_request (pin_id);
 
 -- Tracks pinning requests from Pinning Service API
-CREATE TABLE IF NOT EXISTS pa_pin_request
+CREATE TABLE IF NOT EXISTS psa_pin_request
 (
   id              BIGSERIAL PRIMARY KEY,
   -- Points to auth key used to pin the content.

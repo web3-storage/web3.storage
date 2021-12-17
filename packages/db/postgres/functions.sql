@@ -171,7 +171,7 @@ END
 $$;
 
 -- Creates a pin request with relative content, pins, pin_requests and backups.
-CREATE OR REPLACE FUNCTION create_pin_request(data json) RETURNS TEXT
+CREATE OR REPLACE FUNCTION create_psa_pin_request(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile
     PARALLEL UNSAFE
@@ -185,7 +185,7 @@ BEGIN
 
   PERFORM create_content(data);
 
-  insert into pa_pin_request (
+  insert into psa_pin_request (
                       auth_key_id,
                       content_cid,
                       requested_cid,
