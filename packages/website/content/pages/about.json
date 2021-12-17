@@ -72,7 +72,7 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-5"
+              "num": "col-5_md-4"
             },
             "customizations": [
               {
@@ -99,8 +99,8 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-6",
-              "push_left": "off-1"
+              "num": "col-6_md-7_sm-12",
+              "push_left": "off-1_sm-0"
             },
             "customizations": [
               {
@@ -118,6 +118,34 @@
                 ]
               }
             ]
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-5_md-4_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
+            },
+            "customizations": [
+              {
+                "type": "helix",
+                "id": "section_architecture-2-helix"
+              },
+              {
+                "type": "image_block",
+                "id": "section_architecture-image-storage",
+                "src": "/images/index/storage-tier.png"
+              },
+              {
+                "type": "image_block",
+                "id": "section_architecture-image-files",
+                "src": "/images/index/files-display.png"
+              },
+              {
+                "type": "image_block",
+                "id": "section_architecture-image-upload",
+                "src": "/images/index/file-upload.png"
+              }
+            ]
           }
         ]
       }
@@ -129,7 +157,8 @@
           {
             "type": "text_block",
             "cols": {
-              "num": "col-5"
+              "num": "col-5_sm-10_ti-12",
+              "push_left": "off-0_sm-1_ti-0"
             },
             "format": "medium",
             "heading": "How Does Web3.Storage work?",
@@ -141,8 +170,8 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-6",
-              "push_left": "off-1"
+              "num": "col-6_sm-10_ti-12",
+              "push_left": "off-1_sm-1_ti-0"
             },
             "customizations": [
               {
@@ -167,7 +196,8 @@
           {
             "type": "accordion_block",
             "cols": {
-              "num": "col-12"
+              "num": "col-12_sm-10_ti-12",
+              "push_left": "off-0_sm-1_ti-0"
             },
             "multiple": true,
             "toggleOnLoad": true,
@@ -187,16 +217,34 @@
             ]
           }
         ]
-      },
+      }
+    ],
+    [
       {
         "id": "section_explore-docs",
         "grid": ["noGutter"],
         "columns": [
           {
+            "type": "text_block",
+            "cols": {
+              "num": "col-3_md-7_ti-8",
+              "push_left": "off-0_md-1_sm-0"
+            },
+            "format": "medium",
+            "heading": "Open product. Open book.",
+            "cta": {
+              "url": "/docs",
+              "text": "EXPLORE DOCS",
+              "theme": "dark",
+              "action": "",
+              "tracking": ""
+            }
+          },
+          {
             "type": "card_list_block",
             "cols": {
-              "num": "col-8",
-              "push_left": "off-1"
+              "num": "col-8_md-10_sm-12_mi-10",
+              "push_left": "off-1_md-1_sm-0_mi-1"
             },
             "cards": [
               {

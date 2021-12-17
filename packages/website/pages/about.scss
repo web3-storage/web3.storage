@@ -2,6 +2,15 @@
 
 // ///////////////////////////////////////////////////// General [Page Sections]
 // -----------------------------------------------------------------------------
+.page-about {
+  position: relative;
+  .heading {
+    @include mini {
+      @include fontSize_Large;
+      line-height: leading(45, 35);
+    }
+  }
+}
 
 #about_section_1 {
   position: relative;
@@ -36,6 +45,12 @@
   background-color: $ebony;
   color: white;
   padding-top: 0;
+  @include ultraLarge {
+    padding-bottom: 10rem;
+  }
+  @include xlarge {
+    padding-bottom: 5rem;
+  }
 }
 
 #about_section_3 {
@@ -43,15 +58,27 @@
   z-index: 1;
   &:before {
     content: '';
+    display: none;
     position: absolute;
     top: 0.5rem;
     left: 0;
     width: 100%;
-    height: 10rem;
+    height: 12rem;
     transform: translateY(-100%);
     background-size: 100%;
     background-repeat: no-repeat;
+    background-position: left 0 bottom 0;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='1365' height='172.072' viewBox='0 0 1365 172.072'%3e%3cpath id='Subtraction_1' data-name='Subtraction 1' d='M1365.5,1490.379H.5V1318.307c2.18,1.03,14.117,6.583,35.282,14.638,11.943,4.545,24.781,9.111,38.157,13.571,16.412,5.472,33.757,10.822,51.551,15.9,44.637,12.743,92.561,23.944,142.44,33.292,29.392,5.508,59.829,10.432,90.465,14.635,33.579,4.607,68.238,8.462,103.013,11.458,23.225,2,46.631,3.5,69.567,4.453,21.313.886,43.042,1.336,64.586,1.336,34.14,0,69.483-1.111,108.051-3.4,35.709-2.115,71.444-5.084,100.157-7.47l4.085-.339.018,0c31.282-2.6,63.629-5.288,95.834-7.255,17.318-1.057,33.294-1.833,48.84-2.372,17.419-.6,33.881-.9,50.327-.9,32.485,0,63.635,1.157,95.23,3.537,16.949,1.277,34.216,2.934,51.319,4.926,17.863,2.08,36.168,4.6,54.408,7.478,29.029,4.588,57.861,10.31,85.7,17.008,25.788,6.206,51.349,13.4,75.973,21.383v30.184h0Z' transform='translate(-0.5 -1318.307)' fill='%23f1f1f1'/%3e%3c/svg%3e ");
+    @include ultraLarge {
+      display: block;
+      height: 20rem;
+    }
+    @include xlarge {
+      height: 12rem;
+    }
+    @include small {
+      transform: scaleX(2) translateX(-25%) translateY(-100%);
+    }
   }
 }
 
@@ -67,6 +94,10 @@
   .heading {
     @include h1;
     line-height: leading(55, 45);
+    @include mini {
+      @include fontSize_Large;
+      line-height: leading(45, 35);
+    }
   }
   .subheading {
     @include fontSize_Regular;
@@ -146,6 +177,13 @@
   top: -12rem;
   right: -2rem;
   transform: rotate(29deg);
+  @include xlarge {
+    right: calc(50% - #{math.div($containerWidth, 2)} - 16rem);
+  }
+  @include small {
+    width: 16rem;
+    right: -2rem;
+  }
 }
 
 #architecture-blurred-background {
@@ -164,6 +202,17 @@
   position: relative;
   z-index: 1;
   padding-bottom: 8rem;
+  .column-1 {
+    @include small {
+      display: none;
+    }
+  }
+  .column-3 {
+    display: none;
+    @include small {
+      display: block;
+    }
+  }
   .text-block {
     .heading {
       @include fontSize_MediumLarge;
@@ -179,8 +228,15 @@
   position: absolute;
   width: 13.25rem;
   top: -5rem;
-  left: 3rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 8rem);
   transform: rotate(-79deg);
+  @include small {
+    width: 8rem;
+    left: 0;
+  }
+  @include mini {
+    display: none;
+  }
 }
 
 #section_architecture-2-cross {
@@ -204,6 +260,15 @@
   margin-left: auto;
   width: 80%;
   right: 0;
+}
+#section_architecture-image-files,
+#section_architecture-image-upload,
+#section_architecture-image-storage {
+  @include small {
+    width: 100%;
+    transform: unset;
+    right: unset;
+  }
 }
 
 // ------------------------------------------------------ Section [How it Works]
