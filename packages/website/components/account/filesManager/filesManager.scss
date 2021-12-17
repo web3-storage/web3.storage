@@ -94,15 +94,26 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
   display: grid;
   position: relative;
   grid-template-columns: $file-select $file-date $file-name $file-cid $file-availability $file-pin-status $file-storage-providers $file-size;
-  align-items: end;
+  align-items: flex-start;
   padding-left: 1.125rem;
-  min-height: 6.1875rem;
+  min-height: 6.25rem;
   border-bottom: 0.0625rem solid rgba(white, 0.05);
+  margin-top: 1.3rem;
+  padding-bottom: 1rem;
 
   &-header {
     padding-bottom: 1.25rem;
     min-height: initial;
     border-bottom: 0.125rem solid rgba(white, 0.15);
+  }
+
+  // Targeting all columns
+  > span {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    @include fontWeight_Regular;
   }
 
   .file {
@@ -135,26 +146,64 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
     }
     &-name {
       padding-right: 2.1875rem;
+      height: 100%;
+
+      &.isEditingName {
+        svg {
+          color: $cyan;
+        }
+      }
+
+      svg {
+        flex-shrink: 0;
+        cursor: pointer;
+        margin-left: 0.5rem;
+      }
+
+      textarea {
+        resize: none;
+        background: $shark;
+        border: 0.0625rem solid $waterloo;
+        border-radius: 0.625rem;
+        padding: 0.625rem;
+        height: 100%;
+      }
     }
     &-cid {
       padding-right: 3rem;
+      justify-content: space-between;
+
+      .copy-icon {
+        cursor: pointer;
+      }
     }
     &-availability {
       padding-right: 2.6875rem;
     }
     &-pin-status {
-      padding-right: 3rem;
+      // padding-right: 3rem;
+      justify-content: flex-start;
+      gap: 0.5rem;
     }
     &-storage-providers {
       padding-right: 2.5rem;
+      flex-wrap: wrap;
+      > span {
+        flex-shrink: none;
+      }
     }
   }
 
-  // Targeting all columns
-  > span {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+  // Header overrides
+  &.files-manager-row-header {
+    align-items: end;
+
+    .file {
+      &-storage-providers {
+        padding-right: 2.5rem;
+        flex-direction: row;
+      }
+    }
   }
 }
 
@@ -168,6 +217,7 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
 
 .files-manager-table-content {
   display: flex;
+  flex-direction: column;
 }
 
 .files-manager-upload-cta {
