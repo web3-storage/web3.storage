@@ -191,7 +191,7 @@ export type UploadItem = {
 }
 
 export type UploadItemOutput = {
-  _id?: string
+  _id: string
   type: definitions['upload']['type']
   name?: definitions['upload']['name']
   created: definitions['upload']['inserted_at']
