@@ -28,7 +28,8 @@ export default function Navigation() {
   // component State
   const [isMenuOpen, setMenuOpen] = useState(false);
   // Navigation Content
-  const navItems = GeneralPageData.navigation.links;
+  const links = GeneralPageData.navigation.links;
+  const navItems = isLoggedIn ? links : links.filter(item => item.text.toLowerCase() !== 'account');
   const auth = GeneralPageData.navigation.auth;
   const logoText = GeneralPageData.site_logo.text;
   const theme = router.route === '/tiers' ? 'light' : 'dark';
