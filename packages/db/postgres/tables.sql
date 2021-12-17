@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
   -- Points to the pinned content, it is updated once the content is actually being found.
   content_cid     TEXT                                                         NOT NULL REFERENCES content (cid),
   -- The id of the content being requested, it could not exist on IPFS (typo, node offline etc)
-  requested_cid   TEXT NOT NULL,
+  source_cid   TEXT NOT NULL,
   name            TEXT,
   deleted_at      TIMESTAMP WITH TIME ZONE,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,

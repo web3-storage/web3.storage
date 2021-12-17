@@ -174,7 +174,7 @@ async function createPin (pinData, authToken, env, ctx) {
   const pins = await getPins(cid, env.cluster)
 
   const pinRequestData = {
-    requestedCid: cid,
+    sourceCid: cid,
     contentCid: normalizedCid,
     authKey: authToken,
     name: pinName,
@@ -399,7 +399,7 @@ function getPinStatus (pinRequest) {
     status: getEffectivePinStatus(pinRequest.pins),
     created: pinRequest.created,
     pin: {
-      cid: pinRequest.requestedCid,
+      cid: pinRequest.sourceCid,
       name: pinRequest.name,
       origins: [],
       meta: {}
@@ -464,7 +464,7 @@ async function replacePin (newPinData, requestId, authToken, env, ctx) {
     return notFound()
   }
 
-  const existingCid = existingPinRequest.requestedCid
+  const existingCid = existingPinRequest.sourceCid
   if (newPinData.cid === existingCid) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_REPLACE } },

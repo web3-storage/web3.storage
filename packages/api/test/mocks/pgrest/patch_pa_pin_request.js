@@ -12,7 +12,7 @@ module.exports = ({ query }) => {
       {
         _id: 1,
         contentCid: null,
-        requestedCid: 'something',
+        sourceCid: 'something',
         authKey: 'something',
         name: 'something',
         created: date.toISOString(),
@@ -30,7 +30,7 @@ module.exports = ({ query }) => {
       {
         _id: 2,
         contentCid: null,
-        requestedCid: 'something',
+        sourceCid: 'something',
         authKey: 'something',
         name: 'something',
         created: date.toISOString(),
@@ -48,7 +48,7 @@ module.exports = ({ query }) => {
       {
         _id: 3,
         contentCid: null,
-        requestedCid: 'something',
+        sourceCid: 'something',
         authKey: 'something',
         name: 'something',
         created: date.toISOString(),
@@ -74,7 +74,7 @@ module.exports = ({ query }) => {
     const pinRequest = {
       _id: id,
       contentCid: null,
-      requestedCid: 'something',
+      sourceCid: 'something',
       authKey: 'something',
       name: 'something',
       created: date.toISOString(),
@@ -90,7 +90,7 @@ module.exports = ({ query }) => {
     const pinRequest = {
       _id: id,
       contentCid: null,
-      requestedCid: 'something',
+      sourceCid: 'something',
       authKey: 'something',
       name: 'something',
       created: date.toISOString(),

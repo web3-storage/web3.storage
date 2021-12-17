@@ -28,7 +28,7 @@ async function randomCid (code = pb.code) {
  */
 const assertCorrectPinRequestOutputTypes = (pinRequestOutput) => {
   assert.ok(typeof pinRequestOutput._id === 'string', '_id should be a string')
-  assert.ok(typeof pinRequestOutput.requestedCid === 'string', 'requestedCid should be a string')
+  assert.ok(typeof pinRequestOutput.sourceCid === 'string', 'sourceCid should be a string')
   assert.ok(Array.isArray(pinRequestOutput.pins), 'pin should be an array')
   assert.ok(Date.parse(pinRequestOutput.created), 'created should be valid date string')
   assert.ok(Date.parse(pinRequestOutput.updated), 'updated should be valid date string')
@@ -95,7 +95,7 @@ describe('Pin Request', () => {
     assert.strictEqual(countR, 0, 'There are still requests in the db')
 
     aPinRequestInput = {
-      requestedCid: cids[0],
+      sourceCid: cids[0],
       contentCid: normalizedCids[0],
       pins,
       authKey
@@ -113,7 +113,7 @@ describe('Pin Request', () => {
 
     it('returns the right object', async () => {
       assertCorrectPinRequestOutputTypes(aPinRequestOutput)
-      assert.strictEqual(aPinRequestOutput.requestedCid, cids[0], 'requestedCid is not the one provided')
+      assert.strictEqual(aPinRequestOutput.sourceCid, cids[0], 'sourceCid is not the one provided')
       assert.strictEqual(aPinRequestOutput.authKey, authKey, 'auth key is not the one provided')
       assert.strictEqual(aPinRequestOutput.contentCid, normalizedCids[0], 'contentCid is not the one provided')
     })
@@ -161,7 +161,7 @@ describe('Pin Request', () => {
 
     it('returns the right object', async () => {
       assertCorrectPinRequestOutputTypes(savedPinRequest)
-      assert.strictEqual(savedPinRequest.requestedCid, cids[0], 'requestedCid is not the one provided')
+      assert.strictEqual(savedPinRequest.sourceCid, cids[0], 'sourceCid is not the one provided')
       assert.strictEqual(savedPinRequest.authKey, authKey, 'auth key is not the one provided')
       assert.strictEqual(savedPinRequest.contentCid, normalizedCids[0], 'contentCid is not the one provided')
     })
@@ -218,7 +218,7 @@ describe('Pin Request', () => {
         {
           name: 'horse',
           date: [2020, 0, 1],
-          requestedCid: cidWithContent,
+          sourceCid: cidWithContent,
           cid: normalizeCidWithContent
         }, {
           name: 'capybara',
@@ -252,13 +252,13 @@ describe('Pin Request', () => {
         }
       ]
       createdPinningRequests = await Promise.all(pinRequestsInputs.map(async (item) => {
-        const requestedCid = item.requestedCid || await randomCid()
-        const normalizedCid = item.cid || normalizeCid(requestedCid)
+        const sourceCid = item.sourceCid || await randomCid()
+        const normalizedCid = item.cid || normalizeCid(sourceCid)
 
         return client.createPsaPinRequest({
           ...(item.name) && { name: item.name },
           authKey: authKeyPinList,
-          requestedCid: requestedCid,
+          sourceCid: sourceCid,
           contentCid: normalizedCid,
           pins
         })
@@ -301,14 +301,14 @@ describe('Pin Request', () => {
     })
 
     it('filters items by provided cid', async () => {
-      const cids = [createdPinningRequests[0].requestedCid, createdPinningRequests[1].requestedCid]
+      const cids = [createdPinningRequests[0].sourceCid, createdPinningRequests[1].sourceCid]
       const { results: prs } = await client.listPsaPinRequests(authKeyPinList, {
         cid: cids
       })
 
       assert.strictEqual(prs.length, 2)
-      assert(prs.map(p => p.requestedCid).includes(cids[0]))
-      assert(prs.map(p => p.requestedCid).includes(cids[1]))
+      assert(prs.map(p => p.sourceCid).includes(cids[0]))
+      assert(prs.map(p => p.sourceCid).includes(cids[1]))
     })
 
     it('filters items by exact match by default', async () => {

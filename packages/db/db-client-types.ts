@@ -252,7 +252,7 @@ export type PsaPinRequestUpsertInput = {
   id?: string,
   name?: definitions['psa_pin_request']['name'],
   authKey: string,
-  requestedCid: definitions['psa_pin_request']['requested_cid'],
+  sourceCid: definitions['psa_pin_request']['source_cid'],
   contentCid: definitions['upload']['content_cid'],
   dagSize?: definitions['content']['dag_size'],
   pins: Array<PinUpsertInput>,

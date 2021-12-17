@@ -23,7 +23,7 @@ const uploadQuery = `
 const psaPinRequestTableName = 'psa_pin_request'
 const pinRequestSelect = `
   _id:id::text,
-  requestedCid:requested_cid,
+  sourceCid:source_cid,
   contentCid:content_cid,
   authKey:auth_key_id::text,
   name,
@@ -774,7 +774,7 @@ export class DBClient {
       data: {
         auth_key_id: pinRequestData.authKey,
         content_cid: pinRequestData.contentCid,
-        requested_cid: pinRequestData.requestedCid,
+        source_cid: pinRequestData.sourceCid,
         name: pinRequestData.name,
         dag_size: pinRequestData.dagSize,
         inserted_at: pinRequestData.created || now,
@@ -844,7 +844,7 @@ export class DBClient {
     }
 
     if (opts.cid) {
-      query = query.in('requested_cid', opts.cid)
+      query = query.in('source_cid', opts.cid)
     }
 
     if (opts.name && match === 'exact') {

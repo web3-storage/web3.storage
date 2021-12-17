@@ -188,7 +188,7 @@ BEGIN
   insert into psa_pin_request (
                       auth_key_id,
                       content_cid,
-                      requested_cid,
+                      source_cid,
                       name,
                       inserted_at,
                       updated_at
@@ -196,7 +196,7 @@ BEGIN
   values (
             (data ->> 'auth_key_id')::BIGINT,
             data ->> 'content_cid',
-            data ->> 'requested_cid',
+            data ->> 'source_cid',
             data ->> 'name',
             (data ->> 'inserted_at')::timestamptz,
             (data ->> 'updated_at')::timestamptz
