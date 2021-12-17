@@ -12,6 +12,7 @@ import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Hamburger from '../../assets/icons/hamburger.js';
 import GeneralPageData from '../../content/pages/general.json';
 import { trackCustomLinkClick, events } from 'lib/countly';
+import Loading from 'components/loading/loading';
 // import Loading, { SpinnerSize } from '../loading/loading';
 // ====================================================================== Params
 /**
@@ -61,7 +62,7 @@ export default function Navigation() {
 
   const logoutButton = button => {
     return (
-      <Button onClick={logout} id="logout" variant={theme}>
+      <Button onClick={logout} id="nav-auth-button" variant={theme}>
         {button.logout.text}
       </Button>
     );
@@ -69,17 +70,20 @@ export default function Navigation() {
 
   const loginButton = button => {
     return (
-      <Button onClick={login} id="login" variant={theme}>
+      <Button onClick={login} id="nav-auth-button" variant={theme}>
         {button.login.text}
       </Button>
     );
   };
 
-  const loadingButton = (
-    <Button href="#" id="loading-user">
-      loading
-    </Button>
-  );
+  const loadingButton = button => {
+    return (
+      <Button id="nav-auth-button" variant={theme}>
+        <span className="navigation-loader-text">{button.login.text}</span>
+        <Loading className="navigation-loader" size="medium" color={theme === 'dark' ? 'white' : 'black'} />
+      </Button>
+    );
+  };
 
   // ================================================ Main Template [Navigation]
   return (
@@ -102,7 +106,7 @@ export default function Navigation() {
                   </Link>
                 ))}
 
-                {isLoadingUser ? loadingButton : isLoggedIn ? logoutButton(auth) : loginButton(auth)}
+                {isLoadingUser ? loadingButton(auth) : isLoggedIn ? logoutButton(auth) : loginButton(auth)}
               </div>
 
               <div className={clsx('nav-menu-toggle', theme, isMenuOpen ? 'menu-open' : '')}>
@@ -134,7 +138,7 @@ export default function Navigation() {
                   ))}
                 </ZeroAccordion>
 
-                {isLoadingUser ? loadingButton : isLoggedIn ? logoutButton(auth) : loginButton(auth)}
+                {isLoadingUser ? loadingButton(auth) : isLoggedIn ? logoutButton(auth) : loginButton(auth)}
               </div>
             </div>
           </nav>
