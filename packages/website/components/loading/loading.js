@@ -1,18 +1,19 @@
-import { ReactComponent as SpinnerIcon } from 'Icons/spinner.svg'
-import clsx from 'clsx'
+import clsx from 'clsx';
 
+import SpinnerIcon from 'assets/icons/spinner';
 import styles from './loading.module.scss';
 
 export const SpinnerSize = {
   SMALL: 'small',
   MEDIUM: 'medium',
-  LARGE: 'large'
-}
+  LARGE: 'large',
+};
 
 export const SpinnerColor = {
   WHITE: 'white',
   BLACK: 'black',
-}
+  GRADIENT: 'gradient',
+};
 
 /**
  * @param {Object} [props]
@@ -21,14 +22,14 @@ export const SpinnerColor = {
  * @param {SpinnerColor} [props.color]
  */
 const Loading = ({ className, size, color }) => (
-  <div className={ clsx(className, styles.loading) }>
+  <div className={clsx(className, styles.loading)}>
     <SpinnerIcon aria-label="Loading" className={clsx(styles[`spinner-${size}`], styles[`spinner-${color}`])} />
   </div>
-)
+);
 
 Loading.defaultProps = {
-  size: SpinnerSize.SMALL,
-  color: SpinnerColor.WHITE
-}
+  size: SpinnerSize.LARGE,
+  color: SpinnerColor.GRADIENT,
+};
 
-export default Loading
+export default Loading;

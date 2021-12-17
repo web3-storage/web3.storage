@@ -1,13 +1,18 @@
+.loading {
+  position: relative;
+  text-align: center;
+}
+
 .spinner-small {
-  height: 10px;
+  height: 0.625rem;
 }
 
 .spinner-medium {
-  height: 20px;
+  height: 1.25rem;
 }
 
 .spinner-large {
-  height: 50px;
+  height: 3.125rem;
 }
 
 .spinner-white {
@@ -16,4 +21,8 @@
 
 .spinner-black {
   fill: black;
+}
+
+.spinner-gradient {
+  fill: url('#spinner-gradient');
 }
