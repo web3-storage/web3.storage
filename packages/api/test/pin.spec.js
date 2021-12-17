@@ -648,7 +648,7 @@ describe('Pinning APIs endpoints', () => {
         }
       })
 
-      assert.equal(resD.status, 200, 'Delete request was not successful')
+      assert.equal(resD.status, 202, 'Delete request was not successful')
 
       const res = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
         method: 'GET',
@@ -670,9 +670,7 @@ describe('Pinning APIs endpoints', () => {
       })
 
       assert(res.ok, 'Server responded')
-      assert.equal(res.status, 200)
-      const { _id } = await res.json()
-      assert.strictEqual(_id, requestId)
+      assert.equal(res.status, 202)
     })
   })
 

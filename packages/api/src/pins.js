@@ -446,7 +446,7 @@ export async function pinDelete (request, env, ctx) {
     return notFound()
   }
 
-  return new JSONResponse(res)
+  return new JSONResponse({}, { status: 202 })
 }
 
 /**
