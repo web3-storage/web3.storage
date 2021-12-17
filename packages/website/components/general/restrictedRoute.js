@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
+import Loading from 'components/loading/loading';
 import { useAuthorization } from 'components/contexts/authorizationContext';
 
 // ====================================================================== Restricted Route
@@ -37,11 +38,12 @@ const RestrictedRoute = ({ isRestricted = false, children, redirectTo, redirectI
 
   const shouldWaitForLoggedIn = isRestricted && !isLoggedIn;
 
-  return (
-    <>
-      {/* TODO: Loading state */}
-      {!shouldWaitForLoggedIn && children}
-    </>
+  return !shouldWaitForLoggedIn ? (
+    children
+  ) : (
+    <div className="page-container">
+      <Loading />
+    </div>
   );
 };
 
