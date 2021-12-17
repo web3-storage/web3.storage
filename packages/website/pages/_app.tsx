@@ -7,6 +7,7 @@ import Metadata from 'components/general/metadata';
 import RestrictedRoute from 'components/general/restrictedRoute';
 import { AuthorizationProvider } from 'components/contexts/authorizationContext';
 import { UserProvider } from 'components/contexts/userContext';
+import { UploadsProvider } from 'components/contexts/uploadsContext';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,11 +30,13 @@ const App = ({ Component, pageProps }: any) => {
     <QueryClientProvider client={queryClient}>
       <AuthorizationProvider {...pageProps}>
         <UserProvider>
-          <Metadata {...pageProps} />
-          {notMarketingSite && <CorkscrewBackground />}
-          <RestrictedRoute {...pageProps}>
-            <Component {...pageProps} />
-          </RestrictedRoute>
+          <UploadsProvider>
+            <Metadata {...pageProps} />
+            {notMarketingSite && <CorkscrewBackground />}
+            <RestrictedRoute {...pageProps}>
+              <Component {...pageProps} />
+            </RestrictedRoute>
+          </UploadsProvider>
         </UserProvider>
       </AuthorizationProvider>
     </QueryClientProvider>

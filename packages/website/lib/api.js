@@ -110,6 +110,9 @@ export async function createToken(name) {
 }
 
 /**
+ * 
+ * @callback Promise<import('web3.storage').Upload[]> getUploads
+ * 
  * Gets files
  * @param {object} args
  * @param {number} args.size
