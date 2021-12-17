@@ -103,7 +103,7 @@ export async function pinPost (request, env, ctx) {
 
   // Validate cid
   try {
-    normalizeCid(cid)
+    pinData.normalizedCid = normalizeCid(cid)
   } catch (err) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_CID } },
@@ -162,8 +162,7 @@ export async function pinPost (request, env, ctx) {
  * @return {Promise<JSONResponse>}
  */
 async function createPin (pinData, authToken, env, ctx) {
-  const { cid, origins, meta } = pinData
-  const normalizedCid = normalizeCid(cid)
+  const { cid, origins, meta, normalizedCid } = pinData
 
   const pinName = pinData.name || undefined // deal with empty strings
 
@@ -217,7 +216,7 @@ async function createPin (pinData, authToken, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 export async function pinGet (request, env, ctx) {
-  // Check if requestId contains other charachers than digits
+  // Ensure requestId only contains digits
   if (!(/^\d+$/.test(request.params.requestId))) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
