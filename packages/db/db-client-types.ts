@@ -9,7 +9,6 @@ export type UpsertUserInput = {
   issuer: definitions['user']['issuer'],
   github?: definitions['user']['github'],
   publicAddress: definitions['user']['public_address']
-  pinningEnabled?: definitions['user']['pinning_enabled']
 }
 
 export type UpsertUserOutput = {
@@ -25,7 +24,6 @@ export type UserOutput = {
   issuer: definitions['user']['issuer'],
   github?: definitions['user']['github']
   publicAddress: definitions['user']['public_address']
-  pinningEnabled: definitions['user']['pinning_enabled']
   created: definitions['user']['inserted_at'],
   updated: definitions['user']['updated_at']
 }
@@ -46,8 +44,7 @@ export type AuthKey = {
   name: definitions['auth_key']['name'],
   user: {
     _id: definitions['user']['id'],
-    issuer: definitions['user']['issuer'],
-    pinningEnabled: definitions['user']['pinning_enabled']
+    issuer: definitions['user']['issuer']
   }
 }
 

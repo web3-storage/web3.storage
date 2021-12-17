@@ -64,8 +64,7 @@ export class DBClient {
         email: user.email,
         issuer: user.issuer,
         github: user.github,
-        public_address: user.publicAddress,
-        pinning_enabled: user.pinningEnabled
+        public_address: user.publicAddress
       }, {
         onConflict: 'issuer'
       })
@@ -97,7 +96,6 @@ export class DBClient {
         email,
         github,
         publicAddress:public_address,
-        pinningEnabled:pinning_enabled,
         created:inserted_at,
         updated:updated_at
       `)
@@ -108,6 +106,26 @@ export class DBClient {
     }
 
     return data.length ? data[0] : undefined
+  }
+
+  /**
+   * Check that a user is authorised to pin
+   *
+   * @param {*} authKeyId
+   * @returns boolean
+   */
+  async isPinningAuthorised (authKeyId) {
+    const { error, count } = await this._client
+      .from('pinning_authorisation')
+      .select('id', { count: 'exact' })
+      .eq('auth_key_id', authKeyId)
+      .filter('deleted_at', 'is', null)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return count > 0
   }
 
   /**
@@ -634,13 +652,12 @@ export class DBClient {
    * @return {Promise<import('./db-client-types').AuthKey | undefined>}
    */
   async getKey (issuer, secret) {
-    /** @type {{ data, error: PostgrestError } */
+    /** @type {{ data, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
       .select(`
         _id:id::text,
         issuer,
-        pinningEnabled:pinning_enabled,
         keys:auth_key_user_id_fkey(
           _id:id::text,
           name,
@@ -671,8 +688,7 @@ export class DBClient {
       name: keyData.keys[0].name,
       user: {
         _id: keyData._id,
-        issuer: keyData.issuer,
-        pinningEnabled: keyData.pinningEnabled
+        issuer: keyData.issuer
       }
     }
   }

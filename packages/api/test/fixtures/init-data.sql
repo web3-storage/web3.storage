@@ -8,6 +8,9 @@ VALUES (2, 'test-upload-user', 'test-upload@user.com', 'test-upload', 'test-uplo
 INSERT INTO public.user (id, name, email, issuer, public_address)
 VALUES (3, 'test-status-user', 'test-status@user.com', 'test-status', 'test-status');
 
+INSERT INTO public.user (id, name, email, issuer, public_address)
+VALUES (4, 'test-pinning-user', 'test-pinning@user.com', 'test-pinning', 'test-pinning');
+
 INSERT INTO auth_key (name, secret, user_id)
 VALUES ('test-key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LW1hZ2ljLWlzc3VlciIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtbWFnaWMtaXNzdWVyIn0.p2nD1Q4X4Z6DtJ0vxk35hhZOqSPVymhN5uyXrXth1zs', 1);
 
@@ -17,6 +20,10 @@ VALUES ('test-magic-key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0
 
 INSERT INTO auth_key (name, secret, user_id)
 VALUES ('test-upload-key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXVwbG9hZCIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtdXBsb2FkIn0.K30NZxNOTUdJ0u-2dRGbZYXu2A2-TqcNdRV-G1HkKnI', 2);
+
+-- Used to test pinning
+INSERT INTO auth_key (name, secret, user_id)
+VALUES ('test-pinning', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmciLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2MzM5NTczODk4NzIsIm5hbWUiOiJ0ZXN0LXBpbm5pbmcifQ.li8kWohG90P8TdsKL_dUStJb2f6-43G98uZsLrVEaho', 4);
 
 -- /user route data testing
 INSERT INTO content (cid)
@@ -71,11 +78,15 @@ VALUES (
 
 -- /pins route testing
 INSERT INTO pa_pin_request (auth_key_id, content_cid, requested_cid, name, inserted_at, updated_at)
-VALUES (3, NULL , 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo', 'ReportDoc.pdf', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, NULL , 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 'reportdoc.pdf', '2021-01-01T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, NULL, 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 'Data', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfoga4', 'Image.jpeg', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy5', 'Image.png', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy6', 'Image.jpg', '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+VALUES (4, NULL , 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo', 'ReportDoc.pdf', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (4, NULL , 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 'reportdoc.pdf', '2021-01-01T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (4, NULL, 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 'Data', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (4, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfoga4', 'Image.jpeg', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (4, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy5', 'Image.png', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (4, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy6', 'Image.jpg', '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        (2, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy9', 'Image.jpg', '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        (2, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 'Image.jpg', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z');
+
+-- user 'test-pinning' is authorised
+INSERT INTO pinning_authorisation (auth_key_id)
+VALUES (4)

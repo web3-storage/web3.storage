@@ -2,7 +2,7 @@
 import { Router } from 'itty-router'
 import { errorHandler } from './error-handler.js'
 import { addCorsHeaders, withCorsHeaders, corsOptions } from './cors.js'
-import { withApiOrMagicToken, withMagicToken, withPinningEnabledUser } from './auth.js'
+import { withApiOrMagicToken, withMagicToken, withPinningAuthorised } from './auth.js'
 import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
@@ -27,7 +27,7 @@ const auth = {
   '🤲': handler => withCorsHeaders(handler),
   '🔒': handler => withCorsHeaders(withApiOrMagicToken(handler)),
   '👮': handler => withCorsHeaders(withMagicToken(handler)),
-  '📌': handler => auth['🔒'](withPinningEnabledUser(handler))
+  '📌': handler => auth['🔒'](withPinningAuthorised(handler))
 }
 
 const mode = {
@@ -46,11 +46,11 @@ router.put('/car/:cid',             mode['📝'](auth['🔒'](carPut)))
 router.post('/upload',              mode['📝'](auth['🔒'](uploadPost)))
 router.get('/user/uploads',         mode['👀'](auth['🔒'](userUploadsGet)))
 
-router.post('/pins',                mode['📝'](auth['🔒'](pinPost)))
-router.post('/pins/:requestId',     mode['📝'](auth['🔒'](pinPost)))
-router.get('/pins/:requestId',      mode['👀'](auth['🔒'](pinGet)))
-router.get('/pins',                 mode['👀'](auth['🔒'](pinsGet)))
-router.delete('/pins/:requestId',   mode['📝'](auth['🔒'](pinDelete)))
+router.post('/pins',                mode['📝'](auth['📌'](pinPost)))
+router.post('/pins/:requestId',     mode['📝'](auth['📌'](pinPost)))
+router.get('/pins/:requestId',      mode['👀'](auth['📌'](pinGet)))
+router.get('/pins',                 mode['👀'](auth['📌'](pinsGet)))
+router.delete('/pins/:requestId',   mode['📝'](auth['📌'](pinDelete)))
 
 router.get('/name/:key',            mode['👀'](auth['🤲'](nameGet)))
 router.post('/name/:key',           mode['📝'](auth['🔒'](namePost)))
