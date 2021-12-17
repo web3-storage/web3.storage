@@ -23,6 +23,11 @@
   @include containerMaxMQ {
     left: 0;
   }
+  @include mini {
+    left: 5rem;
+    width: 10rem;
+    top: -3rem;
+  }
 }
 
 #terms_page_triangle {
@@ -31,8 +36,15 @@
   top: 17rem;
   transform: scaleX(-1) rotate(-90deg);
   right: calc(50% - #{math.div($containerWidth, 2)} - 4rem);
-  @include containerMaxMQ {
-    right: 0;
+  @include medium {
+    right: -8rem;
+  }
+  @include small {
+    right: -7rem;
+    top: 5rem;
+  }
+  @include mini {
+    right: -2rem;
   }
 }
 
@@ -41,8 +53,11 @@
   transform: scaleX(-1);
   top: 50%;
   left: calc(50% - #{math.div($containerWidth, 2)} - 2.5rem);
-  @include containerMaxMQ {
-    left: 0;
+  @include medium {
+    left: -5rem;
+  }
+  @include mini {
+    display: none;
   }
 }
 
@@ -52,8 +67,12 @@
   top: calc(50% + 4rem);
   transform: translateY(-20%) rotate(-23deg);
   right: calc(50% - #{math.div($containerWidth, 1)} - 4rem);
-  @include containerMaxMQ {
-    right: 0;
+  @include medium {
+    width: 16rem;
+    right: -18rem;
+  }
+  @include mini {
+    display: none;
   }
 }
 
@@ -77,6 +96,10 @@
     @include fontWeight_Semibold;
     line-height: leading(96, 67);
     margin-bottom: 3rem;
+    @include mini {
+      @include fontSize_Large;
+      line-height: leading(45, 35);
+    }
   }
   h4 {
     @include fontSize_MediumLarge;
