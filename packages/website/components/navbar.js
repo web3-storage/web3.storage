@@ -31,35 +31,35 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
         link: 'https://docs.web3.storage/',
         slug: 'docs',
         name: 'Docs',
-        spacing: 'p-3 md:px-6',
+        spacing: 'p-3 md:px-6'
       },
       {
         link: '/about',
         slug: 'about',
         name: 'About',
-        spacing: 'p-3 md:px-6',
+        spacing: 'p-3 md:px-6'
       },
       {
         link: isLoggedIn ? '/files' : '/login',
         slug: 'files',
         name: 'Files',
-        spacing: `p-3 md:px-6`,
+        spacing: `p-3 md:px-6`
       },
       {
         link: isLoggedIn ? '/account' : '/login',
         slug: 'account',
         name: 'Account',
-        spacing: `p-3 md:px-6`,
-      },
+        spacing: `p-3 md:px-6`
+      }
     ],
-    [isLoggedIn],
+    [isLoggedIn]
   )
 
   const queryClient = useQueryClient()
   const onLinkClick = useCallback((event) => {
     countly.trackCustomLinkClick(
       countly.events.LINK_CLICK_NAVBAR,
-      event.currentTarget,
+      event.currentTarget
     )
   }, [])
 
@@ -85,7 +85,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
       tracking={{
         event: countly.events.LOGOUT_CLICK,
         ui: countly.ui.NAVBAR,
-        action: 'Logout',
+        action: 'Logout'
       }}
     >
       Logout
@@ -118,7 +118,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
     <nav className={clsx(bgColor, 'w-full z-40')} ref={containerRef}>
       <div
         className={clsx(
-          'py-3 text-w3storage-purple items-center w-100 grid grid-cols-3 md:flex md:justify-between layout-margins',
+          'py-3 text-w3storage-purple items-center w-100 grid grid-cols-3 md:flex md:justify-between layout-margins'
         )}
       >
         <div className="flex flex-1 align-middle md:hidden">
@@ -154,7 +154,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
                 className={clsx(
                   'text-sm text-w3storage-purple font-bold hover:underline align-middle hidden md:flex',
                   item.spacing,
-                  router.pathname.includes(item.slug) && 'underline',
+                  router.pathname.includes(item.slug) && 'underline'
                 )}
               >
                 {item.name}
@@ -171,7 +171,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
       {isMenuOpen && (
         <div
           className={clsx(
-            'md:hidden transition-all duration-300 fixed top-0 left-0 bottom-0 shadow-2xl p-6 w-full bg-w3storage-blue-dark',
+            'md:hidden transition-all duration-300 fixed top-0 left-0 bottom-0 shadow-2xl p-6 w-full bg-w3storage-blue-dark'
           )}
         >
           <div className="flex flex-col align-middle text-center mt-4">
@@ -191,7 +191,7 @@ export default function Navbar({ bgColor = '', isLoggedIn, isLoadingUser }) {
                 <a
                   className={clsx(
                     'space-grotesk text-5xl text-white font-bold no-underline hover:underline align-middle mt-4',
-                    item.spacing,
+                    item.spacing
                   )}
                   onClick={() => toggleMenu()}
                 >
