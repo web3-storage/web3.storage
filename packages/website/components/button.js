@@ -81,6 +81,8 @@ export default function Button({
         'items-center',
         'justify-center',
         'px-4',
+        'min-h-2',
+        'min-w-2.5',
         'md:min-h-3.25',
         'md:min-w-6',
         disabled ?
