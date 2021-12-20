@@ -139,6 +139,10 @@ $file-size: auto;
         padding-right: 2.5rem;
         flex-direction: row;
       }
+
+      &-name {
+        align-items: end;
+      }
     }
   }
 
