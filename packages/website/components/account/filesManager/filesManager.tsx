@@ -100,6 +100,8 @@ const FilesManager = ({ className }: FilesManagerProps) => {
                 </span>
               ))}
               size={filesize(item.dagSize)}
+              // TODO: Remove hardcoded highlight when hooked up
+              highlight={{ target: 'name', text: 'coil' }}
               numberOfPins={item.pins.length}
             />
           ))

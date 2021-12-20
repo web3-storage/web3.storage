@@ -45,6 +45,7 @@ const Info = ({ content, icon = null }) => (
  * @property {(e: any)=>void} onSelect
  * @property {number} [numberOfPins]
  * @property {boolean} [isHeader]
+ * @property {{text: string, target: "name" | "cid"}} [highlight]
  */
 
 /**
@@ -52,18 +53,29 @@ const Info = ({ content, icon = null }) => (
  * @param {FileRowItemProps} props
  * @returns
  */
-const FileRowItem = ({
-  className = '',
-  date,
-  name,
-  cid,
-  status,
-  storageProviders,
-  size,
-  onSelect,
-  numberOfPins,
-  isHeader = false,
-}) => {
+const FileRowItem = props => {
+  const {
+    className = '',
+    date,
+    name,
+    cid,
+    status,
+    storageProviders,
+    size,
+    onSelect,
+    numberOfPins,
+    isHeader = false,
+  } = useMemo(() => {
+    const propsReturn = { ...props };
+    const { target, text = '' } = props.highlight || {};
+
+    // Splitting into highlighted content
+    if (!!target && propsReturn[target].indexOf(text) !== -1) {
+      propsReturn[target] = propsReturn[target].replace(text, `<span class="highlight">${text}</span>`);
+    }
+
+    return propsReturn;
+  }, [props]);
   const statusTooltip = useMemo(
     () =>
       ({
@@ -86,7 +98,7 @@ const FileRowItem = ({
       <span className="file-date">{date}</span>
       <span className={clsx(isEditingName && 'isEditingName', 'file-name')}>
         {!isEditingName ? (
-          name
+          <span dangerouslySetInnerHTML={{ __html: name }} />
         ) : (
           <span>
             <textarea defaultValue={name} />
