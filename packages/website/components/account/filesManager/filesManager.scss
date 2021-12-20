@@ -152,6 +152,17 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
         svg {
           color: $cyan;
         }
+
+        // Text area container for blurry background
+        > span {
+          display: flex;
+          position: relative;
+          &:before {
+            @include gradient_BlurryBox_PinkBlue;
+            border-radius: 1rem;
+            opacity: 0.5;
+          }
+        }
       }
 
       svg {
@@ -161,6 +172,7 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
       }
 
       textarea {
+        position: relative;
         resize: none;
         background: $shark;
         border: 0.0625rem solid $waterloo;

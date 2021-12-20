@@ -77,7 +77,13 @@ const FileRowItem = ({
       </span>
       <span className="file-date">{date}</span>
       <span className={clsx(isEditingName && 'isEditingName', 'file-name')}>
-        {!isEditingName ? name : <textarea defaultValue={name} />}
+        {!isEditingName ? (
+          name
+        ) : (
+          <span>
+            <textarea defaultValue={name} />
+          </span>
+        )}
 
         {!isHeader && <PencilIcon onClick={() => setIsEditingName(!isEditingName)} />}
       </span>
