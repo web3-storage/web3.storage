@@ -1,4 +1,4 @@
-$base-row-width: 54.25rem;
+$base-row-width: 52.8125rem;
 $date-name: calculateWidthPercentage(17rem, $base-row-width);
 $date-id: calculateWidthPercentage(32rem, $base-row-width);
 $date-copy: calculateWidthPercentage(3rem, $base-row-width);
@@ -8,12 +8,15 @@ $date-delete: auto;
   display: flex;
   flex-direction: column;
   position: relative;
+  align-items: baseline;
   justify-content: flex-start;
   padding: 1.5rem;
+  min-width: 60.25rem;
 
   > * {
     width: 100%;
-    padding: 0 1.125rem;
+    padding-left: 1.125rem;
+    max-width: 52.8125rem;
   }
 
   > h4 {

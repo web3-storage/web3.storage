@@ -9,5 +9,24 @@
 
   display: grid;
   position: relative;
+  padding-right: 1.4rem;
   grid-template-columns: $date-name $date-id $date-copy $date-delete;
+
+  &.isDeleting {
+    .token-actions {
+      pointer-events: none;
+      opacity: 0.1;
+    }
+  }
+}
+
+.token-actions {
+  width: 3.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  svg {
+    cursor: pointer;
+  }
 }
