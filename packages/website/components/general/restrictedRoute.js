@@ -7,7 +7,7 @@ import { useAuthorization } from 'components/contexts/authorizationContext';
 // ====================================================================== Restricted Route
 /**
  * @typedef {Object} RestrictedRouteProps
- * @property {import('react').ReactChildren} children
+ * @property {JSX.Element} children
  * @property {boolean} [isRestricted] whether or not this route is restricted to auhtenticated users
  * @property {string} [redirectTo] If redirectTo is set, redirect if the user was not found
  * @property {boolean} [redirectIfFound] If redirectIfFound is also set, redirect if the user was found.
@@ -17,6 +17,8 @@ import { useAuthorization } from 'components/contexts/authorizationContext';
  * A route wrapper that handles logic for restricted route access and redirecting
  *
  * @param {RestrictedRouteProps} props
+ *
+ * @returns {JSX.Element}
  */
 const RestrictedRoute = ({ isRestricted = false, children, redirectTo, redirectIfFound = false }) => {
   const { push } = useRouter();

@@ -1,12 +1,22 @@
 import clsx from 'clsx';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 import TokenCreator from 'components/tokens/tokenCreator/tokenCreator';
 import TokensManager from 'components/tokens/tokensManager/tokensManager';
 import Button, { ButtonVariant } from 'components/button/button';
+import { useTokens } from 'components/contexts/tokensContext';
 
 const Tokens = () => {
-  const tokens = [1]; // TODO: hook up to actual tokens
+  const { tokens, fetchDate, isFetchingTokens, getTokens } = useTokens();
+
+  // Initial fetch on component load
+  useEffect(() => {
+    if (!fetchDate && !isFetchingTokens) {
+      getTokens();
+    }
+  }, [fetchDate, getTokens, isFetchingTokens]);
+
   return (
     <div className="page-container tokens-container">
       <div className="tokens-header">

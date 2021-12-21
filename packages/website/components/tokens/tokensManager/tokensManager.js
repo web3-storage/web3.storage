@@ -1,11 +1,13 @@
 import Link from 'next/link';
 
 import countly from 'lib/countly';
+import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
+import { useTokens } from 'components/contexts/tokensContext';
 
 const TokensManager = () => {
-  const tokens = []; // TODO: Hook up to actual tokens API
-
+  const { tokens, fetchDate, isFetchingTokens } = useTokens();
+  console.log('done?!', tokens, fetchDate, isFetchingTokens);
   return (
     <div className="section tokens-manager-container">
       <h4>API Tokens</h4>
@@ -14,7 +16,9 @@ const TokensManager = () => {
         <span className="token-id">Token</span>
       </div>
       <div className="tokens-manager-table-content">
-        {!tokens.length ? (
+        {isFetchingTokens || !fetchDate ? (
+          <Loading className={'tokens-manager-loading-spinner'} />
+        ) : !tokens.length ? (
           <span className="tokens-manager-upload-cta">
             You don’t have any API Tokens created yet.{'\u00A0'}
             <Button

@@ -68,7 +68,7 @@ export const AuthorizationProvider = ({ children, authOnLoad = true }) => {
 export const useAuthorization = () => {
   const context = React.useContext(AuthorizationContext);
   if (context === undefined) {
-    throw new Error('useApp must be used within a AppProvider');
+    throw new Error('useAuthorization must be used within a AuthorizationProvider');
   }
   return context;
 };
