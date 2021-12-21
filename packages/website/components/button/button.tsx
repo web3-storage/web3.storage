@@ -5,6 +5,7 @@ import ZeroButton from 'ZeroComponents/button/button';
 import { trackEvent, events } from 'lib/countly';
 
 export enum ButtonVariant {
+  NONE = 'none',
   DARK = 'dark',
   LIGHT = 'light',
   PURPLE = 'purple',
@@ -43,7 +44,7 @@ const Button = ({
   variant = ButtonVariant.DARK,
   children,
   ...props
-}: ButtonProps) => {
+}: ButtonProps & Partial<Omit<HTMLButtonElement, 'children'>>) => {
   const onClickHandler = useCallback(
     event => {
       tracking &&

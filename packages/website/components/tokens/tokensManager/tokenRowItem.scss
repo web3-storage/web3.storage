@@ -11,13 +11,6 @@
   position: relative;
   padding-right: 1.4rem;
   grid-template-columns: $date-name $date-id $date-copy $date-delete;
-
-  &.isDeleting {
-    .token-actions {
-      pointer-events: none;
-      opacity: 0.1;
-    }
-  }
 }
 
 .token-actions {

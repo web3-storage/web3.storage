@@ -26,7 +26,7 @@ const TokenRowItem = ({ className = '', name, secret, id, isHeader, onTokenDelet
       'tokens-manager-row',
       className,
       isHeader && 'tokens-manager-header',
-      !!deletingTokenId && 'isDeleting'
+      !!deletingTokenId && 'isDisabled'
     )}
   >
     <span className="token-name" title={name}>

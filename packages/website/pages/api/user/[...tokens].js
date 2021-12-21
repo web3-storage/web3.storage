@@ -35,7 +35,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ _id: tokensRoute[1] });
       }
       if (req.method === 'POST') {
-        const { name } = JSON.parse(req.body);
+        const { name } = req.body;
         const newToken = {
           _id: new Date().getTime().toString(),
           name,

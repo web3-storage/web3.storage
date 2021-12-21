@@ -11,6 +11,7 @@ import { deleteToken, getTokens, createToken } from 'lib/api';
  * @property {() => Promise<Token[]>} getTokens Method that refetches list of Tokens based on certain params
  * @property {(name: string) => Promise<Token>} createToken Method that creates a new token
  * @property {boolean} isFetchingTokens Whether or not new Tokens are being fetched
+ * @property {boolean} isCreating Whether or not a new token is being created
  * @property {number|undefined} fetchDate The date in which the last Tokens list fetch happened
  */
 
@@ -32,6 +33,7 @@ export const TokensContext = React.createContext(/** @type {any} */ (undefined))
 export const TokensProvider = ({ children }) => {
   const [tokens, setTokens] = useState(/** @type {Token[]} */ ([]));
   const [isFetchingTokens, setIsFetchingTokens] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const [fetchDate, setFetchDate] = useState(/** @type {number|undefined} */ (undefined));
 
   const getTokensCallback = useCallback(
@@ -48,16 +50,28 @@ export const TokensProvider = ({ children }) => {
     [setTokens, setFetchDate, setIsFetchingTokens]
   );
 
+  const createTokensCallback = useCallback(
+    /** @type {(name: string) => Promise<Token>}} */
+    async name => {
+      setIsCreating(true);
+      const newToken = await createToken(name);
+      setIsCreating(false);
+      return newToken;
+    },
+    [setIsCreating]
+  );
+
   return (
     <TokensContext.Provider
       value={
         /** @type {TokensContextProps} */
         ({
           deleteToken,
-          createToken,
+          createToken: createTokensCallback,
           getTokens: getTokensCallback,
           tokens,
           isFetchingTokens,
+          isCreating,
           fetchDate,
         })
       }

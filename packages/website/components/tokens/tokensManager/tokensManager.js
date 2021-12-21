@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import clsx from 'clsx';
 import { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 
@@ -9,7 +10,7 @@ import Button, { ButtonVariant } from 'components/button/button';
 import { useTokens } from 'components/contexts/tokensContext';
 
 const TokensManager = () => {
-  const { tokens, fetchDate, isFetchingTokens, deleteToken, getTokens } = useTokens();
+  const { tokens, fetchDate, isFetchingTokens, deleteToken, getTokens, isCreating } = useTokens();
   const [deletingTokenId, setDeletingTokenId] = useState('');
   const queryClient = useQueryClient();
 
@@ -48,6 +49,7 @@ const TokensManager = () => {
           <span className="tokens-manager-upload-cta">
             You don’t have any API Tokens created yet.{'\u00A0'}
             <Button
+              className={clsx(isCreating && 'isDisabled')}
               href="/tokens?create=true"
               variant={ButtonVariant.TEXT}
               tracking={{ ui: countly.ui.TOKENS_EMPTY, action: 'New API Token' }}
