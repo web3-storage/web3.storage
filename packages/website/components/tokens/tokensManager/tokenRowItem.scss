@@ -1,0 +1,26 @@
+.tokens-manager-header {
+  padding-bottom: 0.1rem;
+  border-bottom: 0.0625rem solid rgba($white, 0.05);
+}
+
+.tokens-manager-row {
+  @include fontSize_Tiny;
+  @include fontWeight_Semibold;
+
+  display: grid;
+  position: relative;
+  padding-right: 1.4rem;
+  grid-template-columns: $date-name $date-id $date-copy $date-delete;
+}
+
+.token-actions {
+  width: 3.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  svg {
+    cursor: pointer;
+    color: $seaShell;
+  }
+}

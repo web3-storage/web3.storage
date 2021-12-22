@@ -43,7 +43,7 @@ const Button = ({
   variant = ButtonVariant.DARK,
   children,
   ...props
-}: ButtonProps) => {
+}: ButtonProps & Partial<Omit<HTMLButtonElement, 'children'>>) => {
   const onClickHandler = useCallback(
     event => {
       tracking &&

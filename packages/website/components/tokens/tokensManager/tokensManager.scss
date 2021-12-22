@@ -1,4 +1,4 @@
-$base-row-width: 54.25rem;
+$base-row-width: 52.8125rem;
 $date-name: calculateWidthPercentage(17rem, $base-row-width);
 $date-id: calculateWidthPercentage(32rem, $base-row-width);
 $date-copy: calculateWidthPercentage(3rem, $base-row-width);
@@ -8,34 +8,34 @@ $date-delete: auto;
   display: flex;
   flex-direction: column;
   position: relative;
+  align-items: baseline;
   justify-content: flex-start;
-  padding: 1.5rem 2.125rem;
+  padding: 1.5rem;
+  min-width: 60.25rem;
 
   > * {
     width: 100%;
+    padding-left: 1.125rem;
+    max-width: 52.8125rem;
+  }
+
+  > h4 {
+    margin-bottom: 1rem;
   }
 }
 
-.tokens-manager-header {
-  padding-bottom: 0.1rem;
-  border-bottom: 0.0625rem solid rgba($white, 0.05);
-}
-
-.tokens-manager-row {
-  @include fontSize_Tiny;
-  @include fontWeight_Semibold;
-
-  display: grid;
-  position: relative;
-  grid-template-columns: $date-name $date-id $date-copy $date-delete;
-}
-
 .tokens-manager-table-content {
-  padding: 1.25rem 1.375rem;
+  padding-top: 1.25rem;
   min-height: 21.25rem;
 
   .button {
     @include fontSize_Medium;
     padding-left: 0;
   }
+}
+
+.tokens-manager-loading-spinner {
+  width: 100%;
+  padding: 0;
+  padding-top: 2em;
 }

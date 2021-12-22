@@ -130,7 +130,7 @@ export const UploadsProvider = ({ children }) => {
 export const useUploads = () => {
   const context = React.useContext(UploadsContext);
   if (context === undefined) {
-    throw new Error('useApp must be used within a AppProvider');
+    throw new Error('useUploads must be used within a UploadsProvider');
   }
   return context;
 };
