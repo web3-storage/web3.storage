@@ -5,7 +5,6 @@ import ZeroButton from 'ZeroComponents/button/button';
 import { trackEvent, events } from 'lib/countly';
 
 export enum ButtonVariant {
-  NONE = 'none',
   DARK = 'dark',
   LIGHT = 'light',
   PURPLE = 'purple',

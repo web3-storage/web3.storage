@@ -18,7 +18,7 @@ import { useAuthorization } from 'components/contexts/authorizationContext';
  *
  * @param {RestrictedRouteProps} props
  *
- * @returns {JSX.Element}
+ * @returns
  */
 const RestrictedRoute = ({ isRestricted = false, children, redirectTo, redirectIfFound = false }) => {
   const { push } = useRouter();
