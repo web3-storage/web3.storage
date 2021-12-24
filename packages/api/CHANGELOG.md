@@ -1,5 +1,12 @@
 # Changelog
 
+### [5.0.4](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.3...api-v5.0.4) (2021-12-24)
+
+
+### Bug Fixes
+
+* remove temporary dag size sum for pins ([#824](https://www.github.com/web3-storage/web3.storage/issues/824)) ([f7faccc](https://www.github.com/web3-storage/web3.storage/commit/f7facccb6ee7ee23d080dcf7ec8376adc98638fe))
+
 ### [5.0.3](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.2...api-v5.0.3) (2021-12-14)
 
 
