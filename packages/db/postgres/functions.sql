@@ -222,6 +222,8 @@ CREATE OR REPLACE FUNCTION pin_from_status_total(query_status TEXT) RETURNS TEXT
 AS
 $$
 BEGIN
+  -- Set timeout as imposed by heroku
+  SET LOCAL statement_timeout = '30s';
   return(
     select count(*)
     from pin
@@ -235,6 +237,8 @@ CREATE OR REPLACE FUNCTION content_dag_size_total() RETURNS TEXT
 AS
 $$
 BEGIN
+  -- Set timeout as imposed by heroku
+  SET LOCAL statement_timeout = '30s';
   return(
     select sum(c.dag_size)
     from content c
@@ -247,6 +251,8 @@ CREATE OR REPLACE FUNCTION pin_dag_size_total() RETURNS TEXT
 AS
 $$
 BEGIN
+  -- Set timeout as imposed by heroku
+  SET LOCAL statement_timeout = '30s';
   return(
     select sum(c.dag_size)
     from pin p
