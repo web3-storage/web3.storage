@@ -42,7 +42,7 @@
     "ipns": "^0.15.0",
     "libp2p-crypto": "^0.20.0",
     "p-retry": "^4.5.0",
-    "parse-link-header": "^1.0.1",
+    "parse-link-header": "^2.0.0",
     "streaming-iterables": "^6.0.0",
     "uint8arrays": "^3.0.0"
   },
@@ -52,7 +52,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@types/mocha": "8.2.2",
-    "@types/parse-link-header": "^1.0.0",
+    "@types/parse-link-header": "^1.0.1",
     "bundlesize": "^0.18.1",
     "cors": "^2.8.5",
     "del-cli": "^4.0.0",
