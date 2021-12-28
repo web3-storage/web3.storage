@@ -13,7 +13,6 @@
 
 @media only screen and (min-width: 640px) {
     .container {
-       overflow: hidden;
        overflow-x: clip;
        overflow-y: visible;
     }
