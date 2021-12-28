@@ -26,14 +26,14 @@ format = "service-worker"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api.web3.storage/*"
-vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "production", PG_REST_URL = "https://db.web3.storage" }
+vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "production", PG_REST_URL = "https://web3-storage-pgrest-prod.herokuapp.com" }
 
 [env.staging]
 # name = "web3-storage-staging"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api-staging.web3.storage/*"
-vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "staging", PG_REST_URL = "https://db-staging.web3.storage" }
+vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "staging", PG_REST_URL = "https://web3-storage-pgrest-staging.herokuapp.com" }
 
 [env.alan]
 workers_dev = true
