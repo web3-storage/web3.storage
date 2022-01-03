@@ -98,7 +98,7 @@ export default function Card({ card, parent, index }) {
               <div className={'feature_storage-bar-highlight'} style={{ width: width }}></div>
 
               {parent.cards.map((card, j) => (
-                <div key={card.title} className="storage-bar-tier" style={{ flexGrow: j + 1 }}>
+                <div key={card.title} className="storage-bar-tier">
                   <span className={clsx('storage-bar-tier-label', index < j ? 'display' : '')}>{card.title}</span>
                 </div>
               ))}
