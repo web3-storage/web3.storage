@@ -25,9 +25,7 @@ export default function Footer() {
   //   //   event.currentTarget
   //   // )
   // }, []);
-  const onLinkClick = () => {
-    console.log('hi');
-  };
+  const onLinkClick = () => {};
 
   // ========================================================= Template [Footer]
   return (

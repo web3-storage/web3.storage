@@ -115,7 +115,6 @@ const FileRowItem = props => {
           <CopyIcon
             className="copy-icon"
             onClick={() => {
-              console.log('shiet');
               addTextToClipboard(cid);
             }}
           />

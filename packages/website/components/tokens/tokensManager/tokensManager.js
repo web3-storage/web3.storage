@@ -19,7 +19,6 @@ const TokensManager = () => {
       if (!window.confirm('Are you sure? Deleted tokens cannot be recovered!')) {
         return;
       }
-      console.log('herr we gurr');
       setDeletingTokenId(id);
 
       try {
