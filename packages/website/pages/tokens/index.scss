@@ -5,6 +5,11 @@
   h3 {
     padding: 0 1.75rem 0.75rem;
   }
+
+  .isDisabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
 }
 
 .tokens-header,
