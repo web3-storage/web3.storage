@@ -8,6 +8,7 @@ module.exports = {
   "addons": [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
+    'storybook-addon-next-router'
     // "@storybook/addon-knobs"
   ],
   webpackFinal: async (config) => {
@@ -15,8 +16,10 @@ module.exports = {
       ...config.resolve.alias,
       'Icons': path.resolve(__dirname, '../assets/icons'),
       'Illustrations': path.resolve(__dirname, '../assets/illustrations'),
+      'lib': path.resolve(__dirname, '../lib'),
       'Lib': path.resolve(__dirname, '../lib'),
       'ZeroComponents': path.resolve(__dirname, '../modules/zero/components'),
+      'ZeroHooks': path.resolve(__dirname, '../modules/zero/hooks'),
     }
 
     config.module.rules.push({

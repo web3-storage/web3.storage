@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useMemo, useCallback, useEffect, useRef, useState } from 'react'
+import useQueryParams from 'ZeroHooks/useQueryParams'
 import clsx from 'clsx'
 
 /**
@@ -11,7 +12,9 @@ import clsx from 'clsx'
  * @prop {DropdownOption[]} [options]
  * @prop {string} [value]
  * @prop {boolean} [scrollable]
- * @prop { import('react').MouseEventHandler<HTMLSelectElement> } [onChange]
+ * @prop {string} [queryParam]
+ * @prop {function} [onChange]
+ * @prop { import('react').MouseEventHandler<HTMLSelectElement> } [onSelectChange]
  */
 
 const Dropdown = ({
@@ -19,80 +22,61 @@ const Dropdown = ({
   options,
   value,
   scrollable,
-  onChange
+  queryParam,
+  onChange,
+  onSelectChange
 }) => {
   const selectElRef = useRef(null)
-  const dropdownElRef = useRef(null)
 
-  const [selectedIndex, setSelectedIndex] = useState(null)
   const [isOpen, setIsOpen] = useState(false)
+  const [dropdownValue, setDropdownValue] = useState(null)
 
-  const getSelectIndex = useCallback((index) => {
+  const [queryValue, setQueryValue] = useQueryParams(queryParam, value)
+
+  const currentItem = useMemo(() => options.find(option => String(option.value) === String(queryParam ? queryValue : dropdownValue)) || options[0], [options, queryParam, queryValue, dropdownValue])
+
+  const setCurrentItem = useCallback((newValue, close = true) => {
+    queryParam ? setQueryValue(newValue) : setDropdownValue(newValue)
+    close && setIsOpen(false)
+  }, [queryParam, setQueryValue, setDropdownValue, isOpen, setIsOpen])
+
+  useEffect(() => {
     const selectEl = selectElRef.current
-    return options.findIndex(option => option.value === selectEl.value)
-  }, [])
-
-  const handleSelectChange = useCallback(() => setSelectedIndex(getSelectIndex()), [])
-
-  const handleDropdownItemSelected = useCallback((index) => {
-    setSelectedIndex(index)
-    setIsOpen(false)
-  }, [])
-
-  function setDropdownItem(index) {
-    const dropdownEl = dropdownElRef.current
-    setSelectedIndex(index)
-    dropdownEl.getElementsByClassName('dropdownItem')[index].focus()
-  }
+    selectEl.value = currentItem.value
+    onChange && onChange(currentItem.value)
+  }, [queryValue, dropdownValue])
 
   const handleDropdownKeyUp = useCallback((event) => {
-    const dropdownEl = dropdownElRef.current
-    const currentIndex = getSelectIndex()
+    const selectEl = selectElRef.current
+    const currentIndex = options.findIndex(option => option.value === selectEl.value)
 
     if(event.key === 'Escape') {
       setIsOpen(false)
     }
     if(event.key === 'Enter') {
-      if(document.activeElement !== dropdownEl.getElementsByClassName('dropdownItem')[currentIndex])
-        setDropdownItem(currentIndex)
+      setCurrentItem(options[currentIndex].value)
     }
     else if(event.key === 'ArrowUp') {
-      if(document.activeElement !== dropdownEl.getElementsByClassName('dropdownItem')[currentIndex]) {
-        setDropdownItem(currentIndex)
-      } else {
-        if(currentIndex > 0)
-          setDropdownItem(currentIndex - 1)
-      }
+      if(!isOpen)
+        setIsOpen(true)
+      else if(currentIndex > 0)
+        setCurrentItem(options[currentIndex - 1].value, false)
     }
     else if(event.key === 'ArrowDown') {
-      if(document.activeElement !== dropdownEl.getElementsByClassName('dropdownItem')[currentIndex]) {
-        setDropdownItem(currentIndex)
-      } else {
-        if(currentIndex < options.length - 1)
-          setDropdownItem(currentIndex + 1)
-      }
+      if(!isOpen)
+        setIsOpen(true)
+      else if(currentIndex < options.length - 1)
+        setCurrentItem(options[currentIndex + 1].value, false)
     }
     else if(event.key === 'ArrowLeft') {
       if(currentIndex > 0)
-        setDropdownItem(currentIndex - 1)
+        setCurrentItem(options[currentIndex - 1].value)
     }
     else if(event.key === 'ArrowRight') {
       if(currentIndex < options.length - 1)
-        setDropdownItem(currentIndex + 1)
+        setCurrentItem(options[currentIndex + 1].value)
     }
-  }, [])
-
-  useEffect(() => {
-    if(selectedIndex || selectedIndex === 0) {
-      const selectEl = selectElRef.current
-      const option = options[selectedIndex]
-      if(!option) return
-      selectEl.value = option.value
-      onChange && onChange(selectEl.value)
-    }
-  }, [selectedIndex])
-
-  useEffect(handleSelectChange, [])
+  }, [options, setIsOpen, setCurrentItem])
 
   return (
     <div
@@ -108,19 +92,19 @@ const Dropdown = ({
         aria-haspopup="listbox"
         aria-expanded={isOpen ? 'true' : 'false'}
       >
-        {options[selectedIndex] && options[selectedIndex].label}
+        {currentItem && currentItem.label}
       </button>
 
       <div className="dropdownContent">
-        <div ref={dropdownElRef} className={clsx('dropdownItemList')} role="listbox" tabIndex="-1">
-          {options.map((option, i) => (
+        <div className={clsx('dropdownItemList')} role="listbox" tabIndex="-1">
+          {options.map((option) => (
             <div
-              key={`item-${i}`}
-              className={clsx('dropdownItem', { current: selectedIndex === i })}
+              key={`item-${option.value}`}
+              className={clsx('dropdownItem', { current: currentItem.value === option.value })}
               tabIndex="-1"
               role="option"
-              aria-selected={selectedIndex === i ? 'true' : 'false'}
-              onClick={() => handleDropdownItemSelected(i)}
+              aria-selected={currentItem.value === option.value ? 'true' : 'false'}
+              onClick={() => setCurrentItem(option.value)}
               onFocus={() => setIsOpen(true)}
               onBlur={() => setIsOpen(false)}
               onKeyUp={(event) => (event.key === 'Enter' && isOpen) && setIsOpen(false)}
@@ -129,16 +113,15 @@ const Dropdown = ({
             </div>
           ))}
         </div>
-        
+
         <select
           ref={selectElRef}
           className="dropdownSelect"
-          defaultValue={value}
-          onChange={handleSelectChange}
           aria-hidden="true"
+          onChange={onSelectChange}
         >
-          {options.map((option, i) => (
-            <option key={`option-${i}`} value={option.value}>
+          {options.map((option) => (
+            <option key={`option-${option.value}`} value={option.value}>
               {option.label}
             </option>
           ))}
@@ -150,7 +133,8 @@ const Dropdown = ({
 
 Dropdown.defaultProps = {
   options: [],
-  scrollable: false
+  scrollable: false,
+  value: null
 }
 
 export default Dropdown

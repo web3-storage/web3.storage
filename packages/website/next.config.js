@@ -16,6 +16,7 @@ const nextConfig = {
       'Illustrations': path.resolve(__dirname, 'assets/illustrations'),
       'Lib': path.resolve(__dirname, 'lib'),
       'ZeroComponents': path.resolve(__dirname, 'modules/zero/components'),
+      'ZeroHooks': path.resolve(__dirname, 'modules/zero/hooks'),
     }
 
     config.module.rules.push({
