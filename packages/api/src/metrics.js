@@ -23,7 +23,6 @@ export async function metricsGet (request, env, ctx) {
     uploadsTotal,
     contentTotalBytes,
     pinsTotal,
-    // pinsTotalBytes,
     pinsQueuedTotal,
     pinsPinningTotal,
     pinsPinnedTotal,
@@ -33,7 +32,6 @@ export async function metricsGet (request, env, ctx) {
     env.db.getMetricsValue('uploads_total'),
     env.db.getMetricsValue('content_bytes_total'),
     env.db.getMetricsValue('pins_total'),
-    // env.db.getMetricsValue('pins_bytes_total'),
     env.db.getMetricsValue('pins_status_queued_total'),
     env.db.getMetricsValue('pins_status_pinning_total'),
     env.db.getMetricsValue('pins_status_pinned_total'),
@@ -56,10 +54,6 @@ export async function metricsGet (request, env, ctx) {
     '# HELP web3storage_pins_total Total number of pins on the IPFS Cluster',
     '# TYPE web3storage_pins_total counter',
     `web3storage_pins_total ${pinsTotal}`,
-
-    // '# HELP web3storage_pins_bytes_total Total size in bytes of pins on the IPFS Cluster',
-    // '# TYPE web3storage_pins_bytes_total counter',
-    // `web3storage_pins_bytes_total ${pinsTotalBytes}`,
 
     '# HELP web3storage_pins_status_queued_total Total number of pins that are queued.',
     '# TYPE web3storage_pins_status_queued_total counter',
