@@ -13,7 +13,7 @@ import Hamburger from '../../assets/icons/hamburger.js';
 import GeneralPageData from '../../content/pages/general.json';
 import { trackCustomLinkClick, events } from 'lib/countly';
 import Loading from 'components/loading/loading';
-// import Loading, { SpinnerSize } from '../loading/loading';
+import Breadcrumbs from 'components/breadcrumbs/breadcrumbs';
 // ====================================================================== Params
 /**
  * Navbar Component
@@ -91,7 +91,13 @@ export default function Navigation() {
       <div className="grid-noGutter">
         <div className="col">
           <nav id="navigation">
-            <div className={clsx('nav-bar', isMenuOpen ? 'mobile-panel' : '')}>
+            <div
+              className={clsx(
+                'nav-bar',
+                isMenuOpen ? 'mobile-panel' : '',
+                router.route === '/' ? 'breadcrumbs-hidden' : ''
+              )}
+            >
               <div className={clsx('site-logo-container', theme, isMenuOpen ? 'menu-open' : '')}>
                 <a href="/" title={logoText} className="anchor-wrapper" onClick={onLinkClick}>
                   <SiteLogo className="site-logo-image" />
@@ -115,6 +121,8 @@ export default function Navigation() {
                 </button>
               </div>
             </div>
+
+            {router.route === '/' ? null : <Breadcrumbs variant={theme} />}
 
             <div className={clsx('nav-mobile-panel', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
               <div className="mobile-items-wrapper">

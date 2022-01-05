@@ -37,13 +37,18 @@
 #navigation {
   position: relative;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   height: $navigationHeight;
   z-index: 50;
 }
 
 .nav-bar {
   width: 100%;
-  margin: auto;
+  margin-top: 1.5rem;
+  &.breadcrumbs-hidden {
+    margin-top: 0;
+  }
 }
 
 .nav-bar,

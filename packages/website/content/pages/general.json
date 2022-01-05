@@ -19,6 +19,13 @@
       "url": "https://nft.storage/"
     }
   },
+  "breadcrumbs": {
+    "index": "Home",
+    "about": "About",
+    "tiers": "Tiers",
+    "faq": "FAQ",
+    "terms": "TOS"
+  },
   "navigation": {
     "links": [
       {
