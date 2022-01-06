@@ -85,12 +85,13 @@ $footerLogoWidth: 2.25rem;
     margin-top: 0;
     padding-top: 0 !important;
   }
-  a {
+  .footer-link {
     position: relative;
     padding: 0.625rem 0;
     @include fontSize_Mini;
     @include fontWeight_Regular;
     line-height: leading(16, 15);
+    text-align: left;
     color: $seaShell;
     transition: 200ms ease;
     transform: translateX(0);

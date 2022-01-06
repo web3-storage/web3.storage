@@ -1,33 +1,42 @@
 // ===================================================================== Imports
+import { useCallback } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Button from '../button/button';
 import Squiggle from '../../assets/illustrations/squiggle.js';
 import GeneralPageData from '../../content/pages/general.json';
-// import countly from 'Lib/countly'
+import { trackCustomLinkClick, events } from 'lib/countly';
 // ===================================================================== Exports
 export default function Footer() {
+  const router = useRouter();
   const contact = GeneralPageData.footer.contact;
   const resources = GeneralPageData.footer.resources;
   const getStarted = GeneralPageData.footer.get_started;
   const copyright = GeneralPageData.footer.copyright;
-  const tracking = {
-    // ui: countly.ui[contact.cta.tracking],
-    // action: contact.cta.tracking.action
-  };
 
   // ================================================================= Functions
-  // const onLinkClick = useCallback(event => {
-  //   console.log('clicked');
-  //   // countly.trackCustomLinkClick(
-  //   //   countly.events.LINK_CLICK_FOOTER,
-  //   //   event.currentTarget
-  //   // )
-  // }, []);
-  const onLinkClick = () => {
-    console.log('hi');
-  };
+  const onLinkClick = useCallback(e => {
+    trackCustomLinkClick(events.LINK_CLICK_FOOTER, e.currentTarget);
+  }, []);
+
+  const handleButtonClick = useCallback(
+    cta => {
+      if (cta.url) {
+        router.push(cta.url);
+      }
+    },
+    [router]
+  );
+
+  const handleKeySelect = useCallback(
+    (e, url) => {
+      onLinkClick(e);
+      router.push(url);
+    },
+    [router, onLinkClick]
+  );
 
   // ========================================================= Template [Footer]
   return (
@@ -44,7 +53,16 @@ export default function Footer() {
               </div>
               <div className="prompt">{contact.prompt}</div>
               {typeof contact.cta === 'object' && (
-                <Button href={contact.cta.url} variant={contact.cta.variant} tracking={tracking}>
+                <Button
+                  className={'cta'}
+                  variant={contact.cta.theme}
+                  onClick={() => handleButtonClick(contact.cta)}
+                  onKeyPress={() => handleButtonClick(contact.cta)}
+                  tracking={{
+                    event: 'LINK_CLICK_FOOTER',
+                    action: 'Sign up',
+                  }}
+                >
                   {contact.cta.text}
                 </Button>
               )}
@@ -55,8 +73,10 @@ export default function Footer() {
             <div className="footer_resources">
               <div className="label">{resources.heading}</div>
               {resources.items.map(item => (
-                <Link href={item.url} key={item.text} onClick={onLinkClick}>
-                  {item.text}
+                <Link href={item.url} key={item.text}>
+                  <button className="footer-link" onClick={onLinkClick} onKeyPress={e => handleKeySelect(e, item.url)}>
+                    {item.text}
+                  </button>
                 </Link>
               ))}
             </div>
@@ -66,8 +86,10 @@ export default function Footer() {
             <div className="footer_get-started">
               <div className="label">{getStarted.heading}</div>
               {getStarted.items.map(item => (
-                <Link href={item.url} key={item.text} onClick={onLinkClick}>
-                  {item.text}
+                <Link href={item.url} key={item.text}>
+                  <button className="footer-link" onClick={onLinkClick} onKeyPress={e => handleKeySelect(e, item.url)}>
+                    {item.text}
+                  </button>
                 </Link>
               ))}
             </div>

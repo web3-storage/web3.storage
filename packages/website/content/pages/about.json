@@ -233,11 +233,12 @@
             "format": "medium",
             "heading": "Open product. Open book.",
             "cta": {
-              "url": "/docs",
+              "url": "https://docs.web3.storage/",
               "text": "EXPLORE DOCS",
               "theme": "dark",
-              "action": "",
-              "tracking": ""
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           },
           {
@@ -254,31 +255,31 @@
                     "heading": "Welcome",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#quickstart",
                         "text": "Quickstart"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#create-an-account",
                         "text": "Create an Account"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#get-an-api-token",
                         "text": "Get an API token"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#create-the-upload-script",
                         "text": "Create the Upload Script"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#run-the-script",
                         "text": "Run the Script"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#get-your-file",
                         "text": "Get your file"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#next-steps",
                         "text": "Next Steps"
                       }
                     ]
@@ -287,11 +288,11 @@
                     "heading": "Concepts",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/concepts/content-addressing",
                         "text": "Content Addressing"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/concepts/decentralized-storage",
                         "text": "Decentralized Storage"
                       }
                     ]
@@ -305,31 +306,31 @@
                     "heading": "How-tos",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/store/",
                         "text": "Store"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/retrieve",
                         "text": "Retrieve"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/query",
                         "text": "Query"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/list",
                         "text": "List"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/work-with-car-files",
                         "text": "Work with Content"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/generate-api-token",
                         "text": "Generate an API Token"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/troubleshooting",
                         "text": "Troubleshooting"
                       }
                     ]
@@ -338,11 +339,11 @@
                     "heading": "Reference",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/reference/http-api/",
                         "text": "HTTP API Reference"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/reference/js-client-library",
                         "text": "Javascript Client Library"
                       }
                     ]
@@ -359,11 +360,12 @@
             "format": "medium",
             "heading": "Open product. Open book.",
             "cta": {
-              "url": "/docs",
+              "url": "https://docs.web3.storage/",
               "text": "EXPLORE DOCS",
               "theme": "dark",
-              "action": "",
-              "tracking": ""
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           }
         ]

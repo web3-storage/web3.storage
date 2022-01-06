@@ -50,31 +50,31 @@
         "links": [
           {
             "text": "Dashboard",
-            "url": "/"
+            "url": "/account"
           },
           {
             "text": "Files",
-            "url": "/"
+            "url": "/account"
           },
           {
             "text": "API Tokens",
-            "url": "/"
+            "url": "/account"
           },
           {
             "text": "Create an API Token",
-            "url": "/"
+            "url": "/account"
           },
           {
             "text": "Request more storage",
-            "url": "/"
+            "url": "/account"
           },
           {
             "text": "Status",
-            "url": "/"
+            "url": "/account"
           },
           {
             "text": "Open an issue",
-            "url": "/"
+            "url": "/account"
           }
         ]
       }
@@ -96,9 +96,7 @@
       "cta": {
         "url": "/login",
         "text": "SIGN UP",
-        "tracking": "",
-        "action": "",
-        "variant": "pink-blue"
+        "theme": "pink-blue"
       }
     },
     "resources": {
@@ -106,7 +104,7 @@
       "items": [
         {
           "text": "Quickstart Guide",
-          "url": "/"
+          "url": "https://docs.web3.storage/#quickstart"
         },
         {
           "text": "FAQ",
@@ -114,11 +112,11 @@
         },
         {
           "text": "Get Help",
-          "url": "/"
+          "url": "https://docs.web3.storage/community/help-and-support"
         },
         {
           "text": "Contact Us",
-          "url": "/"
+          "url": "https://docs.web3.storage/community/help-and-support/"
         },
         {
           "text": "Terms of Use",
@@ -130,7 +128,7 @@
         },
         {
           "text": "Status",
-          "url": "/"
+          "url": "https://status.web3.storage/"
         }
       ]
     },
@@ -139,19 +137,19 @@
       "items": [
         {
           "text": "Create an Account",
-          "url": "/"
+          "url": "/login"
         },
         {
           "text": "Javascript Client Library",
-          "url": "/"
+          "url": "https://docs.web3.storage/reference/js-client-library"
         },
         {
           "text": "Open an Issue",
-          "url": "/"
+          "url": "/account"
         },
         {
           "text": "HTTP API",
-          "url": "/"
+          "url": "https://docs.web3.storage/reference/http-api/"
         },
         {
           "text": "Web Apps",
@@ -171,7 +169,7 @@
         "text": "Want more free storage?",
         "link": {
           "text": "Submit a request",
-          "url": ""
+          "url": "/account"
         }
       }
     }

@@ -112,7 +112,7 @@ export default function Navigation() {
       </Button>
     );
   };
-  // e => { handleLinkSelect(e) }
+
   // ================================================ Main Template [Navigation]
   return (
     <section id="section_navigation" className={clsx('section-navigation', theme)}>

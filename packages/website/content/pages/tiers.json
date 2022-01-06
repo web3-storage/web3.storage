@@ -83,9 +83,10 @@
                 "description": "<ul><li>No strings attached</li><li>Limits around storage/retrieval performance</li></ul>",
                 "cta": {
                   "text": "START HERE",
-                  "url": "",
+                  "url": "/account",
                   "theme": "dark",
-                  "tracking": "",
+                  "event": "",
+                  "ui": "",
                   "action": ""
                 }
               },
@@ -96,9 +97,10 @@
                 "description": "<ul><li>Just fill out a form to tell us more about what you’re building. We want to understand your needs and scale with you</li><li>Higher limits around storage/retrieval performance</li></ul>",
                 "cta": {
                   "text": "REQUEST MORE STORAGE",
-                  "url": "",
+                  "url": "/account",
                   "theme": "light outline",
-                  "tracking": "",
+                  "event": "",
+                  "ui": "",
                   "action": ""
                 }
               },
@@ -109,9 +111,10 @@
                 "description": "<ul><li>Subject to everything in 1-10TB tier</li><li>Need to meet with us quarterly to discuss their needs</li><li>Higher limits around storage/retrieval performance</li></ul>",
                 "cta": {
                   "text": "REQUEST MORE STORAGE",
-                  "url": "",
+                  "url": "/account",
                   "theme": "light outline",
-                  "tracking": "",
+                  "event": "",
+                  "ui": "",
                   "action": ""
                 }
               }
@@ -141,9 +144,10 @@
             "cta": {
               "url": "/faq",
               "text": "MORE FAQs",
-              "tracking": "",
-              "action": "FAQ",
-              "theme": "light"
+              "theme": "light",
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           },
           {
@@ -171,9 +175,10 @@
             "cta": {
               "url": "/faq",
               "text": "READ MORE     ➔",
-              "tracking": "",
-              "action": "FAQ",
-              "theme": "text-purple"
+              "theme": "text-purple",
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           },
           {
@@ -188,9 +193,10 @@
             "cta": {
               "url": "/faq",
               "text": "READ MORE     ➔",
-              "tracking": "",
-              "action": "FAQ",
-              "theme": "text-purple"
+              "theme": "text-purple",
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           }
         ]
@@ -210,11 +216,12 @@
             "format": "medium",
             "heading": "Open product. Open book.",
             "cta": {
-              "url": "/docs",
+              "url": "https://docs.web3.storage/",
               "text": "EXPLORE DOCS",
               "theme": "dark",
-              "action": "",
-              "tracking": ""
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           },
           {
@@ -231,31 +238,31 @@
                     "heading": "Welcome",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#quickstart",
                         "text": "Quickstart"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#create-an-account",
                         "text": "Create an Account"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#get-an-api-token",
                         "text": "Get an API token"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#create-the-upload-script",
                         "text": "Create the Upload Script"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#run-the-script",
                         "text": "Run the Script"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#get-your-file",
                         "text": "Get your file"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#next-steps",
                         "text": "Next Steps"
                       }
                     ]
@@ -264,11 +271,11 @@
                     "heading": "Concepts",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/concepts/content-addressing",
                         "text": "Content Addressing"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/concepts/decentralized-storage",
                         "text": "Decentralized Storage"
                       }
                     ]
@@ -282,31 +289,31 @@
                     "heading": "How-tos",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/store/",
                         "text": "Store"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/retrieve",
                         "text": "Retrieve"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/query",
                         "text": "Query"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/list",
                         "text": "List"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/work-with-car-files",
                         "text": "Work with Content"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/generate-api-token",
                         "text": "Generate an API Token"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/troubleshooting",
                         "text": "Troubleshooting"
                       }
                     ]
@@ -315,11 +322,11 @@
                     "heading": "Reference",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/reference/http-api/",
                         "text": "HTTP API Reference"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/reference/js-client-library",
                         "text": "Javascript Client Library"
                       }
                     ]
@@ -336,11 +343,12 @@
             "format": "medium",
             "heading": "Open product. Open book.",
             "cta": {
-              "url": "/docs",
+              "url": "https://docs.web3.storage/",
               "text": "EXPLORE DOCS",
               "theme": "dark",
-              "action": "",
-              "tracking": ""
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           }
         ]

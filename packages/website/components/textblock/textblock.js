@@ -1,4 +1,6 @@
 // ===================================================================== Imports
+import { useCallback } from 'react';
+import { useRouter } from 'next/router';
 import clsx from 'clsx';
 
 import Button from '../button/button';
@@ -11,6 +13,7 @@ import countly from '../../lib/countly';
  */
 // ====================================================================== Export
 export default function TextBlock({ block, className }) {
+  const router = useRouter();
   const format = block.format || 'medium';
   const hasDescription = typeof block.description === 'string' || Array.isArray(block.description);
   const tracking = {};
@@ -51,9 +54,14 @@ export default function TextBlock({ block, className }) {
     }
   };
 
-  // const login = useCallback(() => {
-  //   router.push('/login');
-  // }, [router]);
+  const handleButtonClick = useCallback(
+    cta => {
+      if (cta.url) {
+        router.push(cta.url);
+      }
+    },
+    [router]
+  );
 
   // ==================================================================== Export
   return (
@@ -73,11 +81,15 @@ export default function TextBlock({ block, className }) {
       {hasDescription && <div className={'description'}>{formatDescription(block.description)}</div>}
 
       {typeof block.cta === 'object' && (
-        <div className={'cta'}>
-          <Button href={block.cta.url} variant={block.cta.theme} tracking={tracking}>
-            {block.cta.text}
-          </Button>
-        </div>
+        <Button
+          className={'cta'}
+          variant={block.cta.theme}
+          tracking={tracking}
+          onClick={() => handleButtonClick(block.cta)}
+          onKeyPress={() => handleButtonClick(block.cta)}
+        >
+          {block.cta.text}
+        </Button>
       )}
     </div>
   );

@@ -1,10 +1,13 @@
 // ===================================================================== Imports
+import { useCallback } from 'react';
+import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Image from 'next/image';
 
 import Button from '../button/button';
 import NpmIcon from '../../assets/icons/npmicon';
 import Windows from '../../assets/icons/windows';
+import countly from '../../lib/countly';
 // ====================================================================== Params
 /**
  * @param {Object} props.card
@@ -13,7 +16,20 @@ import Windows from '../../assets/icons/windows';
  */
 // ====================================================================== Export
 export default function Card({ card, parent, index }) {
+  const router = useRouter();
   const hasIcon = card.hasOwnProperty('icon_before') && typeof card.icon_before === 'object';
+  const tracking = {};
+  if (typeof card.cta === 'object') {
+    if (card.cta.event) {
+      tracking.event = countly.events[card.cta.event];
+    }
+    if (card.cta.ui) {
+      tracking.ui = countly.ui[card.cta.ui];
+    }
+    if (card.cta.action) {
+      tracking.action = card.cta.action;
+    }
+  }
   // ================================================================= Functions
   const renderExploreCards = obj => {
     return (
@@ -76,6 +92,15 @@ export default function Card({ card, parent, index }) {
     );
   };
 
+  const handleButtonClick = useCallback(
+    cta => {
+      if (cta.url) {
+        router.push(cta.url);
+      }
+    },
+    [router]
+  );
+
   // ========================================================= Templates [Cards]
   if (card.type === 'E') {
     const len = parent.cards.length;
@@ -116,7 +141,13 @@ export default function Card({ card, parent, index }) {
               )}
 
               {card.cta && (
-                <Button href={card.cta.link} variant={card.cta.theme} tracking={{}}>
+                <Button
+                  className={'cta'}
+                  variant={card.cta.theme}
+                  tracking={tracking}
+                  onClick={() => handleButtonClick(card.cta)}
+                  onKeyPress={() => handleButtonClick(card.cta)}
+                >
                   {card.cta.text}
                 </Button>
               )}
@@ -150,7 +181,13 @@ export default function Card({ card, parent, index }) {
       {hasIcon && <div className="icon-before">{getIcon(card.icon_before)}</div>}
 
       {card.cta && (
-        <Button href={card.cta.link} variant={card.cta.theme} tracking={{}}>
+        <Button
+          className={'cta'}
+          variant={card.cta.theme}
+          tracking={tracking}
+          onClick={() => handleButtonClick(card.cta)}
+          onKeyPress={() => handleButtonClick(card.cta)}
+        >
           {card.cta.text}
         </Button>
       )}

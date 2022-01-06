@@ -27,6 +27,7 @@
             "cta": {
               "url": "/login",
               "text": "START STORING NOW",
+              "event": "",
               "ui": "HOME_HERO",
               "action": "Get Started"
             }
@@ -66,9 +67,12 @@
                   "With Web3.Storage, you can upload any data to our API our web UI for free, and the data will end up on a decentralized set of IPFS and Filecoin storage providers."
                 ],
                 "cta": {
-                  "url": "/",
+                  "url": "/about",
                   "text": "LEARN MORE",
-                  "theme": "light"
+                  "theme": "light",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
                 }
               }
             ]
@@ -216,10 +220,12 @@
             "heading": "Why Web3.Storage?",
             "description": "With Web3.Storage you get all the benefits of decentralized storage technologies with the frictionless experience you expect in a modern dev workflow.",
             "cta": {
-              "url": "/docs",
+              "url": "https://docs.web3.storage/",
               "text": "READ DOCS",
               "tracking": "",
-              "action": "Docs"
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           },
           {
@@ -280,9 +286,10 @@
                 "cta": {
                   "url": "/faq",
                   "text": "MORE FAQs",
-                  "tracking": "",
-                  "action": "FAQ",
-                  "theme": "light"
+                  "theme": "light",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
                 }
               }
             ]
@@ -312,9 +319,10 @@
             "cta": {
               "url": "/faq",
               "text": "READ MORE     ➔",
-              "tracking": "",
-              "action": "FAQ",
-              "theme": "text-purple"
+              "theme": "text-purple",
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           },
           {
@@ -329,9 +337,10 @@
             "cta": {
               "url": "/faq",
               "text": "READ MORE     ➔",
-              "tracking": "",
-              "action": "FAQ",
-              "theme": "text-purple"
+              "theme": "text-purple",
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           }
         ]
@@ -361,8 +370,9 @@
                   "url": "/login",
                   "text": "CREATE AN ACCOUNT",
                   "theme": "dark",
-                  "action": "",
-                  "tracking": ""
+                  "event": "",
+                  "ui": "",
+                  "action": ""
                 }
               }
             ]
@@ -414,9 +424,12 @@
                   "svg": "npm_icon"
                 },
                 "cta": {
-                  "link": "",
+                  "url": "https://docs.web3.storage/reference/js-client-library",
                   "text": "JS DOCS",
-                  "theme": "blue"
+                  "theme": "blue",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
                 }
               },
               {
@@ -429,9 +442,12 @@
                   "text": "{…}"
                 },
                 "cta": {
-                  "link": "",
+                  "url": "https://docs.web3.storage/reference/http-api/",
                   "text": "HTTP DOCS",
-                  "theme": "blue"
+                  "theme": "blue",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
                 }
               },
               {
@@ -440,13 +456,16 @@
                 "feature": "Drop file to upload",
                 "description": "Upload your files directly through our Web UI to debug and validate Web3.Storage’s use case for your project.",
                 "icon_before": {
-                  "url": "",
+                  "url": "/login",
                   "svg": "windows_icon"
                 },
                 "cta": {
-                  "link": "",
+                  "url": "/login",
                   "text": "MAKE YOUR FIRST UPLOAD",
-                  "theme": "blue"
+                  "theme": "blue",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
                 }
               }
             ]
@@ -557,11 +576,12 @@
             "format": "medium",
             "heading": "Open product. Open book.",
             "cta": {
-              "url": "/docs",
+              "url": "https://docs.web3.storage/",
               "text": "EXPLORE DOCS",
               "theme": "dark",
-              "action": "",
-              "tracking": ""
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           },
           {
@@ -578,31 +598,31 @@
                     "heading": "Welcome",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#quickstart",
                         "text": "Quickstart"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#create-an-account",
                         "text": "Create an Account"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#get-an-api-token",
                         "text": "Get an API token"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#create-the-upload-script",
                         "text": "Create the Upload Script"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#run-the-script",
                         "text": "Run the Script"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#get-your-file",
                         "text": "Get your file"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#next-steps",
                         "text": "Next Steps"
                       }
                     ]
@@ -611,11 +631,11 @@
                     "heading": "Concepts",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/concepts/content-addressing",
                         "text": "Content Addressing"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/concepts/decentralized-storage",
                         "text": "Decentralized Storage"
                       }
                     ]
@@ -629,31 +649,31 @@
                     "heading": "How-tos",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/store/",
                         "text": "Store"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/retrieve",
                         "text": "Retrieve"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/query",
                         "text": "Query"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/list",
                         "text": "List"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/work-with-car-files",
                         "text": "Work with Content"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/generate-api-token",
                         "text": "Generate an API Token"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/troubleshooting",
                         "text": "Troubleshooting"
                       }
                     ]
@@ -662,11 +682,11 @@
                     "heading": "Reference",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/reference/http-api/",
                         "text": "HTTP API Reference"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/reference/js-client-library",
                         "text": "Javascript Client Library"
                       }
                     ]
@@ -683,11 +703,12 @@
             "format": "medium",
             "heading": "Open product. Open book.",
             "cta": {
-              "url": "/docs",
+              "url": "https://docs.web3.storage/",
               "text": "EXPLORE DOCS",
               "theme": "dark",
-              "action": "",
-              "tracking": ""
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           }
         ]
