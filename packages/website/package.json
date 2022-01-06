@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/website",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "web3.storage website",
   "private": true,
   "scripts": {
