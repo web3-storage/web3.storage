@@ -26,7 +26,7 @@
 
 .nav-items-wrapper {
   &.light {
-    a {
+    .nav-item {
       &:after {
         border: solid 2px white;
       }
@@ -88,7 +88,7 @@
       display: flex;
     }
   }
-  a {
+  .nav-item {
     position: relative;
     @include fontSize_Small;
     @include fontWeight_Semibold;
@@ -97,6 +97,7 @@
     padding: 0 0.5rem;
     transform: translateY(0rem);
     transition: 200ms ease;
+    cursor: pointer;
     @include medium {
       margin: 0 0.875rem;
     }
@@ -229,7 +230,8 @@
   z-index: 51;
   margin-top: $navigationHeight;
   .nav-item-heading,
-  a {
+  .nav-sublink,
+  .nav-item {
     @include fontSize_Small;
     @include fontWeight_Semibold;
   }
@@ -257,8 +259,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  .nav-sublink,
-  a {
+  .nav-sublink {
+    cursor: pointer;
     margin: 0.25rem 0;
     @include fontSize_Mini;
   }

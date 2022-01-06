@@ -19,6 +19,10 @@
   @include fontSize_Mini;
   line-height: leading(34, 15);
   &.breadcrumb-link {
+    font-size: inherit;
+    line-height: inherit;
+    font-weight: inherit;
+    cursor: pointer;
     &:hover {
       text-decoration: underline;
     }

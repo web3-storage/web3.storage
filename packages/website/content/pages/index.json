@@ -27,7 +27,7 @@
             "cta": {
               "url": "/login",
               "text": "START STORING NOW",
-              "tracking": "HOME_HERO",
+              "ui": "HOME_HERO",
               "action": "Get Started"
             }
           }

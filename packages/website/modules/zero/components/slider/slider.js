@@ -76,7 +76,7 @@ function Slider ({
   const thumb = children.find(child => child.type === Thumb)
 
   const columns = Math.ceil(collection.length / rows)
-  const indices = columns - display
+  const indices = columns - display + 1
   const visibleColumns = mapColumnNumbertoBreakpoints(displayOptions, columns)
 
   // ================================================================= Functions
@@ -119,13 +119,11 @@ function Slider ({
   }
 
   const handleSliderResize = () => {
+    index.current = 0
+    range.current = 0
+    sliderInput.current.value = 0
+    setThumbPosition(0)
     matchBreakpointDisplayAmount()
-    if (index.current > indices) {
-      index.current = Math.max(indices, 0)
-    }
-    // if (rangeInput) {
-    //   instance.inputWidth = instance.$refs.sliderInput.getBoundingClientRect().width
-    // }
   }
 
   const matchBreakpointDisplayAmount = () => {
@@ -143,13 +141,13 @@ function Slider ({
 
   const handleSliderChange = () => {
     const pos = (sliderInput.current.value - (indices / 2)) / ((indices * indices + 1) - (indices / 2))
+    range.current = pos
     setThumbPosition(Math.max(pos * (sliderInput.current.clientWidth - 36), 0))
   }
 
   useEffect(() => {
     animate.current = true
-    const value = thumbPosition / sliderInput.current.clientWidth
-    const i = Math.trunc((value - (value % indices)) / indices)
+    const i = Math.round(range.current * (indices - 1))
     const newIndex = Math.max(0, Math.min(i, indices))
     if (newIndex !== index.current) {
       index.current = newIndex

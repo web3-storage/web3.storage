@@ -9,10 +9,12 @@ import GeneralPageData from '../../content/pages/general.json';
 /**
  * Breadcrumbs
  *
- * @param String variant
+ * @param String props.variant
+ * @param function props.click
+ * @param function props.keyboard
  */
 // ====================================================================== Export
-export default function Breadcrumbs({ variant }) {
+export default function Breadcrumbs({ variant, click, keyboard }) {
   const router = useRouter();
   const breadcrumbs = GeneralPageData.breadcrumbs;
   const routeName = router.route.replace('/', '');
@@ -32,8 +34,14 @@ export default function Breadcrumbs({ variant }) {
       {links.map(item => (
         <div key={item.text} className="breadcrumb-wrapper">
           {item.url ? (
-            <Link href={item.url} className={clsx('breadcrumb', 'breadcrumb-link', variant)}>
-              {item.text}
+            <Link href={item.url}>
+              <button
+                className={clsx('breadcrumb', 'breadcrumb-link', variant)}
+                onClick={e => click(e)}
+                onKeyPress={e => keyboard(e, item.url)}
+              >
+                {item.text}
+              </button>
             </Link>
           ) : (
             <div className={clsx('breadcrumb', 'breadcrumb-text', variant)}>{item.text}</div>

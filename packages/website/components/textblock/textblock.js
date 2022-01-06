@@ -11,15 +11,21 @@ import countly from '../../lib/countly';
  */
 // ====================================================================== Export
 export default function TextBlock({ block, className }) {
-  // Object.assign(styles, className);
   const format = block.format || 'medium';
   const hasDescription = typeof block.description === 'string' || Array.isArray(block.description);
-  const ui = typeof block.cta !== 'object' ? '' : block.cta.hasOwnProperty('tracking') ? block.cta.tracking : '';
-  const action = typeof block.cta !== 'object' ? '' : block.cta.hasOwnProperty('action') ? block.cta.action : '';
-  const tracking = {
-    ui: countly.ui[ui],
-    action: action,
-  };
+  const tracking = {};
+  if (typeof block.cta === 'object') {
+    if (block.cta.event) {
+      tracking.event = countly.events[block.cta.event];
+    }
+    if (block.cta.ui) {
+      tracking.ui = countly.ui[block.cta.ui];
+    }
+    if (block.cta.action) {
+      tracking.action = block.cta.action;
+    }
+  }
+
   // ================================================================= Functions
   const formatDescription = text => {
     if (Array.isArray(text)) {
@@ -44,6 +50,11 @@ export default function TextBlock({ block, className }) {
         return <h2 className={clsx('h2', 'heading')}>{block.heading}</h2>;
     }
   };
+
+  // const login = useCallback(() => {
+  //   router.push('/login');
+  // }, [router]);
+
   // ==================================================================== Export
   return (
     <div className={clsx('block text-block', `format__${format}`)}>
