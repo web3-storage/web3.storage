@@ -1,5 +1,12 @@
 # Changelog
 
+### [5.0.5](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.4...api-v5.0.5) (2022-01-06)
+
+
+### Bug Fixes
+
+* db endpoint to use heroku ([#817](https://www.github.com/web3-storage/web3.storage/issues/817)) ([5f846a7](https://www.github.com/web3-storage/web3.storage/commit/5f846a705063ccdc966c4837492dd87926eebd06))
+
 ### [5.0.4](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.3...api-v5.0.4) (2021-12-24)
 
 
