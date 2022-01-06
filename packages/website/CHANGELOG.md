@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.9.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.8.0...website-v1.9.0) (2022-01-06)
+
+
+### Features
+
+* issue 689 added new column and metadata for review ([#729](https://www.github.com/web3-storage/web3.storage/issues/729)) ([b360024](https://www.github.com/web3-storage/web3.storage/commit/b360024315411651fb452314a6c68fc8fcadb149))
+* Multiple File upload and uniform drag and drop ([#567](https://www.github.com/web3-storage/web3.storage/issues/567)) ([dbe8239](https://www.github.com/web3-storage/web3.storage/commit/dbe823921e639d49aebd1e7d650536185d9521af))
+
+
+### Bug Fixes
+
+* mispelled available ([#731](https://www.github.com/web3-storage/web3.storage/issues/731)) ([24e1949](https://www.github.com/web3-storage/web3.storage/commit/24e1949bcf455d8aff52e8beaa88b30591af440d))
+
+
+### Changes
+
+* created a formatter abstraction for filesize to standardize iec binary units for all file size display props ([#757](https://www.github.com/web3-storage/web3.storage/issues/757)) ([72a5ac7](https://www.github.com/web3-storage/web3.storage/commit/72a5ac7c1e273ce7220c0e0fdd88f8cd8e90503e))
+
 ## [1.8.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.7.1...website-v1.8.0) (2021-11-30)
 
 
