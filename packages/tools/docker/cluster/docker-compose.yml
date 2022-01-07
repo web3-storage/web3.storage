@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.6'
 
 # This is an example docker-compose file to quickly test an IPFS Cluster
 # with multiple peers on a contained environment.
@@ -56,6 +56,9 @@ services:
         CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs0/tcp/5001
         CLUSTER_CRDT_TRUSTEDPEERS: '*' # Trust all peers in Cluster
         CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # Expose API
+        CLUSTER_RESTAPI_BASICAUTHCREDENTIALS: test:test
+        CLUSTER_RESTAPI_CORSALLOWEDMETHODS: GET,POST,OPTIONS
+        CLUSTER_RESTAPI_CORSALLOWEDHEADERS: authorization
         CLUSTER_MONITORPINGINTERVAL: 2s # Speed up peer discovery
       volumes:
         - cluster0:/data/ipfs-cluster
