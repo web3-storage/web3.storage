@@ -53,7 +53,7 @@ export function normalizeContent (content) {
  * @return {Array<import('./db-client-types').PinItemOutput>}
  */
 export function normalizePins (pins) {
-  return pins.filter(pin => PIN_STATUS.has(pin.status))
+  return pins.filter(pin => Object.keys(PIN_STATUS).includes(pin.status))
     .map(pin => ({
       _id: pin._id,
       status: pin.status,
@@ -87,14 +87,22 @@ export function normalizeDeals (deals) {
     }))
 }
 
-const PIN_STATUS = new Set([
-  'Pinned',
-  'Pinning',
-  'PinQueued'
-])
-
 const DEAL_STATUS = new Set([
   'queued',
   'published',
   'active'
 ])
+
+export const PIN_STATUS = Object.freeze({
+  PinQueued: 'PinQueued',
+  Pinning: 'Pinning',
+  Pinned: 'Pinned',
+  PinError: 'PinError'
+})
+
+export const PIN_STATUS_FILTER = Object.freeze({
+  queued: 'queued',
+  pinning: 'pinning',
+  pinned: 'pinned',
+  failed: 'failed'
+})

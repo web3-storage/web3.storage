@@ -358,7 +358,7 @@ function parseSearchParams (params) {
 
   if (status) {
     const statuses = status.split(',')
-    const isValidStatus = status.every(v => STATUS_OPTIONS.includes(v))
+    const isValidStatus = statuses.every(v => STATUS_OPTIONS.includes(v))
 
     if (!isValidStatus) {
       return {

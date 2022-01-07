@@ -31,7 +31,7 @@ VALUES (1, 'bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae', 'bafkr
 -- /status route data testing
 INSERT INTO content (cid, dag_size, inserted_at)
 VALUES ('bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 101, '2021-07-14T19:27:14.934572Z'),
-       ('bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 101, '2021-07-14T19:27:14.934572Z'),
+       ('bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 102, '2021-07-14T19:27:14.934572Z'),
        ('bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 101, '2021-07-14T19:27:14.934572Z');
 
 INSERT INTO upload (user_id, content_cid, source_cid, type, inserted_at, updated_at)
@@ -40,12 +40,20 @@ VALUES (3, 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 'bafyb
        (3, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 'Car', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z');
 
 INSERT INTO pin_location (id, peer_id, peer_name, region)
-VALUES (1, '12D3KooWR1Js', 'who?', 'where?');
+VALUES (1, '12D3KooWR1Js', 'who?', 'where?'),
+       (2, '22D3KooWR1Js', 'who?', 'where?'),
+       (3, '32D3KooWR1Js', 'who?', 'where?');
 
 INSERT INTO pin (status, content_cid, pin_location_id, inserted_at, updated_at)
-VALUES ('Pinned', 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
-       ('Pinned', 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
-       ('Pinned', 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00');
+VALUES ('PinQueued', 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
+       ('Pinning', 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 2, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
+       ('Pinned', 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 3, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
+       ('Pinning', 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
+       ('PinError', 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
+       ('Pinning', 'bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
+       ('Pinning', 'bafybeigc4fntpegrqzgzhxyc7hzu25ykqqai7nzllov2jn55wvzjju7pwu', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
+       ('Pinning', 'bafkreiajkbmpugz75eg2tmocmp3e33sg5kuyq2amzngslahgn6ltmqxxfa', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00')
+       ;
 
 INSERT INTO cargo.aggregate_entries (aggregate_cid, cid_v1, datamodel_selector) VALUES
 ('bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bme', 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 'Links/0/Links'),
@@ -71,11 +79,11 @@ VALUES (
 
 -- /pins route testing
 INSERT INTO pa_pin_request (auth_key_id, content_cid, requested_cid, name, inserted_at, updated_at)
-VALUES (3, NULL , 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo', 'ReportDoc.pdf', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, NULL , 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 'reportdoc.pdf', '2021-01-01T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, NULL, 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 'Data', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfoga4', 'Image.jpeg', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy5', 'Image.png', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy6', 'Image.jpg', '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (2, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy9', 'Image.jpg', '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (2, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 'Image.jpg', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z');
+VALUES (3, 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo', 'ReportDoc.pdf', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 'reportdoc.pdf', '2021-01-01T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 'FailedPinning.doc', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, 'bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae', 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfoga4', 'Image.jpeg', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, 'bafybeigc4fntpegrqzgzhxyc7hzu25ykqqai7nzllov2jn55wvzjju7pwu', 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy5', 'Image.png', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, 'bafkreiajkbmpugz75eg2tmocmp3e33sg5kuyq2amzngslahgn6ltmqxxfa', 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy6', 'Image.jpg', '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (2, 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy9', 'Document.md', '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (2, 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 'README.md', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z');

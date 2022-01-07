@@ -126,7 +126,7 @@ bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo,
       assert.strictEqual(error.details, INVALID_CID)
     })
 
-    it('returns the pins for this user with default filter values', async () => {
+    it('returns only successful pins when no filter values are specified', async () => {
       const res = await fetch(
         baseUrl, {
           method: 'GET',
@@ -139,7 +139,7 @@ bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo,
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
-      assert.strictEqual(data.count, 6)
+      assert.strictEqual(data.count, 1)
     })
 
     it('filters pins on CID, for this user', async () => {
@@ -204,6 +204,48 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 3)
+    })
+
+    it('filters pins by status', async () => {
+      const opts = new URLSearchParams({
+        status: 'failed'
+      })
+      const url = new URL(`${baseUrl}?${opts}`).toString()
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Server response is ok')
+      const data = await res.json()
+      assert.strictEqual(data.count, 1)
+      assert.strictEqual(data.results.length, 1)
+      assert.strictEqual(data.results[0].pin.name, 'FailedPinning.doc')
+    })
+
+    it('filters pins by multiple status', async () => {
+      const opts = new URLSearchParams({
+        status: 'queued,pinning'
+      })
+      const url = new URL(`${baseUrl}?${opts}`).toString()
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Server response is ok')
+      const data = await res.json()
+      assert.strictEqual(data.count, 5)
     })
 
     it('filters pins created before a date', async () => {
@@ -500,7 +542,8 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       assert(res.ok, 'Server response is ok')
       assertCorrectPinResponse(data)
       assert.deepEqual(data.requestId, requestId)
-      assert.deepEqual(data.status, 'queued')
+      assert.strictEqual(data.status, 'pinned')
+      assert.strictEqual(data.pin.name, 'ReportDoc.pdf')
     })
 
     it('returns the pin request with specified name', async () => {

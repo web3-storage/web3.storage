@@ -290,7 +290,7 @@ export type ListPAPinRequestOptions = {
   /**
    * status  to match
    */
-  status?: Array<definitions['pin']['status']>
+  status?: Array<"queued" | "pinning" | "pinned" | "failed">
   /**
    * Uploads created before a given timestamp.
    */

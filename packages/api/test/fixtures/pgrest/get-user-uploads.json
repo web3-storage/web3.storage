@@ -8,7 +8,15 @@
     "created": "2021-07-09T16:20:33.946845+00:00",
     "updated": "2021-07-09T16:20:33.946845+00:00",
     "deals": [],
-    "pins": []
+    "pins": [
+      {
+        "peerId": "12D3KooWR1Js",
+        "peerName": "who?",
+        "region": "where?",
+        "status": "Pinning",
+        "updated": "2021-07-14T19:27:14.934572+00:00"
+      }
+    ]
   },
   {
     "_id": "2",
@@ -19,7 +27,15 @@
     "created": "2021-07-09T10:40:35.408884+00:00",
     "updated": "2021-07-09T10:40:35.408884+00:00",
     "deals": [],
-    "pins": []
+    "pins": [
+      {
+        "peerId": "12D3KooWR1Js",
+        "peerName": "who?",
+        "region": "where?",
+        "status": "Pinning",
+        "updated": "2021-07-14T19:27:14.934572+00:00"
+      }
+    ]
   },
   {
     "_id": "3",
@@ -30,6 +46,14 @@
     "created": "2021-07-09T10:36:05.862862+00:00",
     "updated": "2021-07-09T10:36:05.862862+00:00",
     "deals": [],
-    "pins": []
+    "pins": [
+      {
+        "peerId": "12D3KooWR1Js",
+        "peerName": "who?",
+        "region": "where?",
+        "status": "Pinning",
+        "updated": "2021-07-14T19:27:14.934572+00:00"
+      }
+    ]
   }
 ]

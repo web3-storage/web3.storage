@@ -200,78 +200,122 @@ describe('Pin Request', () => {
   })
 
   describe('Get Pins', () => {
-    const pins = [
-      {
-        status: 'Pinning',
-        location: {
-          peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
-          peerName: 'web3-storage-sv15',
-          region: 'region'
-        }
-      },
-      {
-        status: 'Pinning',
-        location: {
-          peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
-          peerName: 'web3-storage-sv16',
-          region: 'region'
-        }
-      }
-    ]
     let pinRequestsInputs
-
     let userPinList
     let authKeyPinList
     let createdPinningRequests
-    let cidWithContent
-    let normalizeCidWithContent
 
     before(async () => {
-      userPinList = await createUser(client)
-      authKeyPinList = await createUserAuthKey(client, userPinList._id)
     })
 
     before(async () => {
-      cidWithContent = await randomCid()
-      normalizeCidWithContent = normalizeCid(cidWithContent)
-      await createUpload(client, userPinList._id, authKeyPinList, normalizeCidWithContent, { pins: pins })
+      userPinList = await createUser(client)
+      authKeyPinList = await createUserAuthKey(client, parseInt(userPinList._id, 10))
+
+      let pins = [
+        {
+          status: 'Pinned',
+          location: {
+            peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
+            peerName: 'web3-storage-sv15',
+            region: 'region'
+          }
+        },
+        {
+          status: 'Pinned',
+          location: {
+            peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
+            peerName: 'web3-storage-sv16',
+            region: 'region'
+          }
+        }
+      ]
+      const cidWithContent1 = await randomCid()
+      const normalizeCidWithContent1 = normalizeCid(cidWithContent1)
+      await createUpload(client, parseInt(userPinList._id, 10), parseInt(authKeyPinList, 10), normalizeCidWithContent1, { pins: pins })
+
+      pins = [
+        {
+          status: 'PinError',
+          location: {
+            peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
+            peerName: 'web3-storage-sv15',
+            region: 'region'
+          }
+        }
+      ]
+      const cidWithContent2 = await randomCid()
+      const normalizeCidWithContent2 = normalizeCid(cidWithContent2)
+      await createUpload(client, parseInt(userPinList._id, 10), parseInt(authKeyPinList, 10), normalizeCidWithContent2, { pins: pins })
+
       pinRequestsInputs = [
         {
           name: 'horse',
           date: [2020, 0, 1],
-          requestedCid: cidWithContent,
-          cid: normalizeCidWithContent
-        }, {
+          requestedCid: cidWithContent1,
+          cid: normalizeCidWithContent1
+        },
+        {
           name: 'capybara',
-          date: [2020, 1, 1]
-        }, {
+          date: [2020, 1, 1],
+          requestedCid: cidWithContent2,
+          cid: normalizeCidWithContent2
+        },
+        {
           name: 'Camel',
-          date: [2020, 2, 1]
-        }, {
+          date: [2020, 2, 1],
+          requestedCid: cidWithContent1,
+          cid: normalizeCidWithContent1
+        },
+        {
           name: 'Giant Panda Bear',
-          date: [2020, 3, 1]
-        }, {
+          date: [2020, 3, 1],
+          requestedCid: cidWithContent1,
+          cid: normalizeCidWithContent1
+        },
+        {
           name: 'giant Schnoodle',
-          date: [2020, 4, 1]
-        }, {
+          date: [2020, 4, 1],
+          requestedCid: cidWithContent1,
+          cid: normalizeCidWithContent1
+        },
+        {
           name: 'giant worm',
-          date: [2020, 5, 1]
-        }, {
+          date: [2020, 5, 1],
+          requestedCid: cidWithContent1,
+          cid: normalizeCidWithContent1
+        },
+        {
           name: 'Zonkey Schnoodle',
-          date: [2020, 6, 1]
-        }, {
+          date: [2020, 6, 1],
+          requestedCid: cidWithContent1,
+          cid: normalizeCidWithContent1
+        },
+        {
           name: 'Zorse',
-          date: [2020, 7, 1]
-        }, {
-          date: [2020, 8, 1]
-        }, {
+          date: [2020, 7, 1],
+          requestedCid: cidWithContent1,
+          cid: normalizeCidWithContent1
+        },
+        {
+          date: [2020, 8, 1],
+          requestedCid: cidWithContent1,
+          cid: normalizeCidWithContent1
+        },
+        {
           name: '',
-          date: [2020, 9, 1]
-        }, {
+          date: [2020, 9, 1],
+          requestedCid: cidWithContent1,
+          cid: normalizeCidWithContent1
+        },
+        {
           name: 'Bear',
-          date: [2020, 10, 1]
+          date: [2020, 10, 1],
+          requestedCid: cidWithContent1,
+          cid: normalizeCidWithContent1
         }
       ]
+
       createdPinningRequests = await Promise.all(pinRequestsInputs.map(async (item) => {
         const requestedCid = item.requestedCid || await randomCid()
         const normalizedCid = item.cid || normalizeCid(requestedCid)
@@ -310,25 +354,23 @@ describe('Pin Request', () => {
       assert(sorted)
     })
 
-    it.skip('it filters items by provided status', async () => {
-      // TODO(https://github.com/web3-storage/web3.storage/issues/797): status filtering is currently not working
-      const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
-        status: ['Pinning']
+    it('filters items by provided status', async () => {
+      const { results: pins } = await client.listPAPinRequests(authKeyPinList, {
+        status: ['pinning', 'failed']
       })
 
-      assert.strictEqual(prs.length, 1)
-      assert.strictEqual(createdPinningRequests._id, prs[0]._id)
+      assert.strictEqual(pins.length, 1)
+      assert.strictEqual(pins[0].name, 'capybara')
     })
 
     it('filters items by provided cid', async () => {
-      const cids = [createdPinningRequests[0].requestedCid, createdPinningRequests[1].requestedCid]
+      const cids = [createdPinningRequests[1].requestedCid]
       const { results: prs } = await client.listPAPinRequests(authKeyPinList, {
         cid: cids
       })
 
-      assert.strictEqual(prs.length, 2)
+      assert.strictEqual(prs.length, 1)
       assert(prs.map(p => p.requestedCid).includes(cids[0]))
-      assert(prs.map(p => p.requestedCid).includes(cids[1]))
     })
 
     it('filters items by exact match by default', async () => {
