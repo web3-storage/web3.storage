@@ -13,11 +13,8 @@
     "text": "Web3.Storage"
   },
   "message_banner": {
-    "text": "Looking to store NFTs? Check out",
-    "link": {
-      "text": "NFT.Storage",
-      "url": "https://nft.storage/"
-    }
+    "content": "Looking to store NFTs? Check out <a href='https://nft.storage/' target='blank' className='message-banner-link'>NFT.Storage</a>",
+    "maintenceAlert": "The web3.Storage API is currently undergoing maintenance..."
   },
   "breadcrumbs": {
     "index": "Home",

@@ -27,4 +27,17 @@ $messageBannerHeight: 3.25rem;
   @include tiny {
     line-height: leading(24, 16);
   }
+
+  &.banner-alert {
+    &:before {
+      content: '⚠';
+      display: inline;
+      margin-right: 0.25rem;
+      @include fontSize_Small;
+      @include fontWeight_Medium;
+      @include tiny {
+        line-height: leading(24, 16);
+      }
+    }
+  }
 }
