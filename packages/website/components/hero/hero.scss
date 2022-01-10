@@ -17,6 +17,10 @@
   .text-block {
     .subheading {
       color: black;
+      padding-right: 5rem;
+      @include mini {
+        padding-right: 0;
+      }
     }
   }
 }
@@ -85,8 +89,8 @@
 
 #index_hero-zigzag {
   width: 7.375rem;
-  left: 25%;
-  top: 0;
+  left: calc(25% - 2rem);
+  top: -3.5rem;
   transform: rotate(-185deg);
   @include medium {
     width: 3rem;
@@ -109,7 +113,7 @@
 #index_hero-cross {
   width: 5.25rem;
   right: 31%;
-  bottom: 3.5rem;
+  bottom: 1rem;
   @include small {
     display: none;
   }

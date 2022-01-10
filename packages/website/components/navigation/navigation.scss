@@ -202,14 +202,14 @@
     height: calc(100% + 9rem);
     background-image: url('/images/index/holographic-bg-nav-mobile.png');
     background-size: cover;
-    background-position: right 0px top 0;
+    background-position: right 0px bottom 0;
     background-repeat: no-repeat;
   }
   @include tiny {
     transform: translateY(-100%);
     &:before {
       height: 100%;
-      background-position: right -175px top 0;
+      background-position: right -100px bottom 0;
     }
   }
 

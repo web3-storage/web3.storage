@@ -70,12 +70,12 @@ export default function Navigation() {
     );
   };
 
-  const logoutButton = button => {
+  const logoutButton = (button, forceTheme) => {
     return (
       <Button
         id="nav-auth-button"
         onClick={logout}
-        variant={theme}
+        variant={forceTheme || theme}
         tracking={{
           event: events.LOGOUT_CLICK,
           ui: ui.NAVBAR,
@@ -87,13 +87,13 @@ export default function Navigation() {
     );
   };
 
-  const loginButton = button => {
+  const loginButton = (button, forceTheme) => {
     return (
       <Button
         id="nav-auth-button"
         href={button.url}
         onClick={login}
-        variant={theme}
+        variant={forceTheme || theme}
         tracking={{
           ui: ui.NAVBAR,
           action: 'Login',
@@ -104,11 +104,12 @@ export default function Navigation() {
     );
   };
 
-  const loadingButton = button => {
+  const loadingButton = (button, forceTheme) => {
+    const variant = forceTheme || theme;
     return (
-      <Button href="#" id="nav-auth-button" variant={theme}>
+      <Button href="#" id="nav-auth-button" variant={variant}>
         <span className="navigation-loader-text">{button.text}</span>
-        <Loading className="navigation-loader" size="medium" color={theme === 'dark' ? 'white' : 'black'} />
+        <Loading className="navigation-loader" size="medium" color={variant === 'dark' ? 'white' : 'black'} />
       </Button>
     );
   };
@@ -199,7 +200,11 @@ export default function Navigation() {
                   ))}
                 </ZeroAccordion>
 
-                {isLoadingUser ? loadingButton(auth) : isLoggedIn ? logoutButton(auth) : loginButton(auth)}
+                {isLoadingUser
+                  ? loadingButton(auth.login, 'light')
+                  : isLoggedIn
+                  ? logoutButton(auth.logout, 'light')
+                  : loginButton(auth.login, 'light')}
               </div>
             </div>
           </nav>

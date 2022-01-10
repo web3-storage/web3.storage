@@ -163,6 +163,7 @@
 // ------------------------------------------------------ Section [Architecture]
 #section_architecture-1 {
   position: relative;
+  padding-bottom: 0;
   .text-block {
     position: relative;
   }
@@ -203,6 +204,7 @@
   z-index: 1;
   padding-bottom: 8rem;
   .column-1 {
+    padding-top: 5rem;
     @include small {
       display: none;
     }
@@ -227,7 +229,7 @@
 #section_architecture-2-helix {
   position: absolute;
   width: 13.25rem;
-  top: -5rem;
+  top: 0rem;
   left: calc(50% - #{math.div($containerWidth, 2)} - 8rem);
   transform: rotate(-79deg);
   @include small {
@@ -275,13 +277,20 @@
 #section_how-it-works {
   padding-top: 3rem;
   padding-bottom: 4rem;
+  .heading {
+    @include fontSize_Large;
+    line-height: leading(50, 35);
+    margin-bottom: 2.25rem;
+  }
   .how-it-works-highlight {
     color: #3c3cd6;
     @include fontWeight_Semibold;
   }
   .column-2 {
     .heading {
+      @include fontSize_MediumLarge;
       @include gradient_Text;
+      margin-bottom: 1rem;
     }
   }
 }

@@ -44,14 +44,14 @@
             "description": [
               "Web3.storage is designed to scale to meet your storage needs. The economics of Filecoin allow us to offer all storage tiers for free.",
               "The 1TB storage tier is open to everyone with no strings attached. If you need more than 1TB, that’s still free, but we need to know about your needs, so we can scale the service to meet your needs.",
-              "Here’s a breakdown of our free storage tiers."
+              "Here’s a breakdown of our free storage tiers:"
             ]
           },
           {
             "type": "custom",
             "cols": {
-              "num": "col-5_sm-8_mi-10_ti-12",
-              "push_left": "off-1_sm-2_mi-1_ti-0"
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "customizations": [
               {

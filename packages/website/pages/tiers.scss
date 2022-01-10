@@ -104,7 +104,7 @@
     content: '';
     display: none;
     position: absolute;
-    top: 1px;
+    top: 2px;
     left: 0;
     width: 100%;
     height: 10rem;
@@ -143,6 +143,9 @@
 
   .text-block {
     color: white;
+    .heading {
+      margin-bottom: 1rem;
+    }
     .subheading {
       @include fontSize_Medium;
       @include fontWeight_Regular;
@@ -244,15 +247,11 @@
       margin-bottom: 2rem;
     }
   }
-  // .image_block {
-  //   @include small {
-  //     transform: translateY(2rem);
-  //   }
-  // }
 }
 
 #section_tiers-cards {
-  padding-top: 0rem;
+  padding-top: 0;
+  padding-bottom: 1rem;
   .column-content {
     position: relative;
   }
@@ -262,7 +261,7 @@
   position: absolute;
   width: 4.875rem;
   top: 8rem;
-  transform: scaleX(-1) rotate(-90deg);
+  transform: scaleX(-1) rotate(-100deg);
   right: calc(50% - #{math.div($containerWidth, 2)});
   @include small {
     right: -5rem;

@@ -6,6 +6,9 @@
 .page-index {
   position: relative;
   .heading {
+    @include fontSize_Large;
+    line-height: leading(50, 35);
+    margin-bottom: 2.25rem;
     @include mini {
       @include fontSize_Large;
       line-height: leading(45, 35);
@@ -268,6 +271,13 @@
   .text-block {
     position: relative;
     z-index: 1;
+    .heading {
+      padding-right: 2rem;
+      margin-bottom: 2.25rem;
+    }
+    .description {
+      margin-bottom: 2rem;
+    }
   }
   @include small {
     .text-block {
@@ -319,6 +329,7 @@
   width: 15rem;
   right: -7rem;
   top: -4.125rem;
+  opacity: 0.8;
   transform: rotate(-79deg);
   @include mini {
     width: 7.5rem;
@@ -401,6 +412,9 @@
   padding-top: 1.5rem;
   padding-bottom: 4rem;
   .column-1 {
+    .heading {
+      margin-bottom: 2.75rem;
+    }
     @include small {
       margin-top: 2rem;
       margin-bottom: 5rem;
@@ -411,8 +425,18 @@
       display: inline;
       @include gradient_Text;
       @include fontSize_MediumLarge;
-      margin-bottom: 0;
+      margin-bottom: 0.25rem;
       background-size: 200%;
+    }
+    .text-block {
+      .description {
+        margin-bottom: 1.75rem;
+      }
+      &:last-child {
+        .description {
+          margin-bottom: 0;
+        }
+      }
     }
   }
 }
@@ -502,6 +526,8 @@
     z-index: 1;
     .label {
       text-align: left;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
     }
   }
 }
@@ -525,6 +551,10 @@
 
   .column-1 {
     margin-top: 14rem;
+    .heading {
+      margin-bottom: 2.25rem;
+      line-height: leading(50, 35);
+    }
   }
   .column-2 {
     @include small {
@@ -649,11 +679,12 @@
 }
 
 #section_testimonials {
-  padding-top: 9rem;
+  padding-top: 8rem;
   padding-bottom: 3rem;
   .text-block {
     .heading {
       @include fontSize_Large;
+      line-height: leading(50, 35);
     }
     .description {
       @include fontSize_Regular;
@@ -666,7 +697,7 @@
   padding-bottom: 12rem;
 
   @include ultraLarge {
-    padding-bottom: 16rem;
+    padding-bottom: 15rem;
   }
   @include large {
     padding-bottom: 12rem;
@@ -754,6 +785,7 @@
     .heading {
       @include fontSize_MediumLarge;
       line-height: leading(40, 25);
+      margin-bottom: 1rem;
     }
   }
 }

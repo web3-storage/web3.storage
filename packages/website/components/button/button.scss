@@ -5,7 +5,7 @@
   @include fontSize_Tiny;
   @include fontWeight_Semibold;
   text-transform: uppercase;
-  line-height: leading(22, 13);
+  line-height: 1;
 
   &[disabled] {
     cursor: default;
@@ -22,6 +22,7 @@
     flex-direction: column;
     justify-content: center;
     @include fontWeight_Semibold;
+    line-height: inherit;
 
     &:active,
     &:hover,
@@ -54,10 +55,22 @@
   &.text-purple {
     background-color: unset;
     padding-left: 0;
+    position: relative;
     button {
       color: $malibu;
+      @include fontSize_Small;
       @include fontWeight_Semibold;
       padding-left: 0;
+    }
+    &:after {
+      content: '➔';
+      position: absolute;
+      right: -0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $malibu;
+      @include fontSize_Small;
+      @include fontWeight_Semibold;
     }
   }
 

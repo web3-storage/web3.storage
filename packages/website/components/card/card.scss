@@ -18,11 +18,15 @@
 // //////////////////////////////////////////////// Card [Type A] -> Big Numbers
 // -----------------------------------------------------------------------------
 .card.type__A {
+  .feature-wrapper {
+    margin-top: 1rem;
+  }
   .feature {
     @include gradient_Text;
     @include fontSize_ExtraLarge;
     @include fontWeight_Bold;
     background-size: 200%;
+    transform: scaleY(1.2);
   }
 
   .title {
@@ -30,7 +34,7 @@
     @include fontWeight_Semibold;
     text-transform: uppercase;
     line-height: leading(34, 16);
-    margin-bottom: 0.625rem;
+    margin-bottom: 0.25rem;
   }
 
   .description {

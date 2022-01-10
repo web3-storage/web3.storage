@@ -78,12 +78,10 @@ $footerLogoWidth: 2.25rem;
   z-index: 1;
   .label {
     text-align: left;
-    padding: 0.625rem 0;
     @include fontSize_Small;
     @include fontWeight_Bold;
     line-height: leading(15, 15);
     margin-top: 0;
-    padding-top: 0 !important;
   }
   .footer-link {
     position: relative;
