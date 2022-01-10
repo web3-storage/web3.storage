@@ -99,9 +99,7 @@
     }
 
     &:before {
-      @include gradient_Background_PinkBlue;
-      filter: blur(0.3125rem);
-      box-shadow: 0 0.1875rem 0 rgba($heliotrope, 0.33);
+      @include gradient_BlurryBox_PinkBlue;
     }
 
     &:after {

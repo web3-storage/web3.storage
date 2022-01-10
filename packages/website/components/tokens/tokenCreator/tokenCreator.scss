@@ -1,3 +1,8 @@
+.token-creator-container {
+  color: $cyan;
+  @include fontSize_Mini;
+}
+
 .token-creator-input {
   text-decoration: none;
   outline: none;
@@ -5,7 +10,6 @@
   height: 2.375rem;
   padding: 0 1.875rem;
   color: $cyan;
-  @include fontSize_Mini;
   @include border_Background_Waterloo_White;
 
   &::placeholder {
@@ -30,7 +34,6 @@
 
 .token-creator-submit {
   position: absolute;
-  color: $cyan;
   right: 1rem;
   @include fontSize_MediumLarge;
 }
