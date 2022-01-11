@@ -1,5 +1,12 @@
 # Changelog
 
+### [5.0.7](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.6...api-v5.0.7) (2022-01-11)
+
+
+### Bug Fixes
+
+* api cluster add car explicitly ([#858](https://www.github.com/web3-storage/web3.storage/issues/858)) ([66b8fe3](https://www.github.com/web3-storage/web3.storage/commit/66b8fe3c9da72074865b86539e6e26b26d482a3b))
+
 ### [5.0.6](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.5...api-v5.0.6) (2022-01-11)
 
 
