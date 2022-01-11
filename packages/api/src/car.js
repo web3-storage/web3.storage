@@ -228,7 +228,7 @@ async function addToCluster (car, env) {
   // Note: We can't make use of `bytes` or `size` properties on the response from cluster.add
   // `bytes` is the sum of block sizes in bytes. Where the CAR is a partial, it'll only be a shard of the total dag size.
   // `size` is UnixFS FileSize which is 0 for directories, and is not set for raw encoded files, only dag-pb ones.
-  const { cid } = await env.cluster.add(car, {
+  const { cid } = await env.cluster.addCAR(car, {
     metadata: { size: car.size.toString() },
     // When >2.5MB, use local add, because waiting for blocks to be sent to
     // other cluster nodes can take a long time. Replication to other nodes
