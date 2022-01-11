@@ -305,7 +305,6 @@ async function carStat (carBlob) {
   const rootCid = roots[0]
   let rawRootBlock
   let blocks = 0
-  let size = 0
   for await (const block of blocksIterator) {
     const blockSize = block.bytes.byteLength
     if (blockSize > MAX_BLOCK_SIZE) {
@@ -314,7 +313,6 @@ async function carStat (carBlob) {
     if (!rawRootBlock && block.cid.equals(rootCid)) {
       rawRootBlock = block
     }
-    size += blockSize
     blocks++
   }
   if (blocks === 0) {
@@ -323,12 +321,13 @@ async function carStat (carBlob) {
   if (!rawRootBlock) {
     throw new Error('missing root block')
   }
+  let size
   const decoder = decoders.find(d => d.code === rootCid.code)
   if (decoder) {
     const rootBlock = new Block({ cid: rootCid, bytes: rawRootBlock.bytes, value: decoder.decode(rawRootBlock.bytes) })
-    const links = Array.from(rootBlock.links())
+    const hasLinks = !rootBlock.links()[Symbol.iterator]().next().done
     // if the root block has links, then we should have at least 2 blocks in the CAR
-    if (blocks === 1 && links.length > 0) {
+    if (hasLinks && blocks < 2) {
       throw new Error('CAR must contain at least one non-root block')
     }
     // get the size of the full dag for this root, even if we only have a partial CAR.
