@@ -1,5 +1,18 @@
 # Changelog
 
+### [5.0.6](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.5...api-v5.0.6) (2022-01-11)
+
+
+### Bug Fixes
+
+* dag size for big dags with non pb root ([#850](https://www.github.com/web3-storage/web3.storage/issues/850)) ([b60fa1c](https://www.github.com/web3-storage/web3.storage/commit/b60fa1c3dbd839e3669578aa539cc5815b470d05))
+* update deps in api and client ([#855](https://www.github.com/web3-storage/web3.storage/issues/855)) ([22155db](https://www.github.com/web3-storage/web3.storage/commit/22155db13b646e9846cf10c26d10faeb0d3b936e))
+
+
+### Changes
+
+* added leslieoa to api wrangler config ([#849](https://www.github.com/web3-storage/web3.storage/issues/849)) ([ec502e3](https://www.github.com/web3-storage/web3.storage/commit/ec502e341283c6e4f767090ee269a45d36abc563))
+
 ### [5.0.5](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.4...api-v5.0.5) (2022-01-06)
 
 
