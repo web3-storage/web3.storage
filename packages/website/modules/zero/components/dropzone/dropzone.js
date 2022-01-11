@@ -1,4 +1,4 @@
-import { useCallback, Fragment } from 'react'
+import { useCallback, Fragment, useMemo, useEffect } from 'react'
 import { useDropzone } from "react-dropzone";
 import clsx from 'clsx'
 
@@ -24,6 +24,21 @@ const Dropzone = ({
 
   const {acceptedFiles, fileRejections, getRootProps, getInputProps} = useDropzone({onDropAccepted, onDropRejected, ...props});
 
+  const filesInfo = useMemo(() => acceptedFiles.reduce((acc, value) => (acc[value.path] = acc[value.path] || { progress: 0 }) && acc, filesInfo || {}), [acceptedFiles])
+
+  useEffect(() => {
+    // TODO: Hook up to real file upload
+    const interval = setInterval(() => {
+      Object.keys(filesInfo).forEach((key) => {
+        filesInfo[key].progress = Math.floor(Math.min(filesInfo[key].progress + Math.random() * 10, 100))
+
+        if(filesInfo[key].progress === 100)
+          clearInterval(interval)
+      })
+    }, 1000);
+    return () => clearInterval(interval)
+  }, [filesInfo])
+
   return (
     <div className={clsx(className, 'Dropzone')}>
       <div {...getRootProps({className: 'droparea'})}>
@@ -44,7 +59,7 @@ const Dropzone = ({
               {file.path}
             </div>
             <div className="status">
-              {file.size}
+              {filesInfo[file.path].progress !== 100 ? `Loading... ${filesInfo[file.path].progress}%` : `Complete`}
             </div>
           </Fragment>
         ))}

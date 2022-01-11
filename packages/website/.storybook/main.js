@@ -15,6 +15,7 @@ module.exports = {
       ...config.resolve.alias,
       'Icons': path.resolve(__dirname, '../assets/icons'),
       'Illustrations': path.resolve(__dirname, '../assets/illustrations'),
+      'lib': path.resolve(__dirname, '../lib'),
       'Lib': path.resolve(__dirname, '../lib'),
       'ZeroComponents': path.resolve(__dirname, '../modules/zero/components'),
     }
