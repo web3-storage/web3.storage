@@ -1,153 +1,210 @@
 // ===================================================================== Imports
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Link from 'next/link';
 
-import { useResizeObserver } from '../../hooks/resize-observer';
+import { useAuthorization } from 'components/contexts/authorizationContext';
+import ZeroAccordion from 'ZeroComponents/accordion/accordion';
+import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
 import Button from '../button/button';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Hamburger from '../../assets/icons/hamburger.js';
 import GeneralPageData from '../../content/pages/general.json';
-// import { getMagic } from '../../lib/magic.js';
-// import { countly, trackCustomLinkClick, events, ui } from '../../lib/countly';
-// import Loading, { SpinnerSize } from '../loading/loading';
+import { trackCustomLinkClick, events, ui } from 'lib/countly';
+import Loading from 'components/loading/loading';
+import Breadcrumbs from 'components/breadcrumbs/breadcrumbs';
 // ====================================================================== Params
 /**
  * Navbar Component
  *
  * @param {Object} props
- * @param {boolean} [props.isLoggedIn]
- * @param {boolean} props.isLoadingUser
  */
 
 // ===================================================================== Exports
-export default function Navigation({ isLoggedIn, isLoadingUser }) {
+export default function Navigation() {
   const router = useRouter();
-  const containerRef = useRef(null);
+  const { isLoggedIn, isLoading, isFetching, logout } = useAuthorization();
+  const isLoadingUser = useMemo(() => isLoading || isFetching, [isLoading, isFetching]);
   // component State
-  const [isSmallVariant, setSmallVariant] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
   // Navigation Content
-  const navItems = GeneralPageData.navigation;
+  const links = GeneralPageData.navigation.links;
+  const navItems = isLoggedIn ? links : links.filter(item => item.text.toLowerCase() !== 'account');
+  const auth = GeneralPageData.navigation.auth;
   const logoText = GeneralPageData.site_logo.text;
-  const theme = router.route === '/pricing' ? 'light' : 'dark';
-
+  const theme = router.route === '/tiers' ? 'light' : 'dark';
   // ================================================================= Functions
-  useResizeObserver(containerRef, () => {
-    const shouldGoToSmallVariant = window.innerWidth < 640;
-    if (shouldGoToSmallVariant && !isSmallVariant) {
-      setSmallVariant(true);
-    }
-    if (!shouldGoToSmallVariant && isSmallVariant) {
-      setSmallVariant(false);
-    }
-  });
 
   const toggleMenu = () => {
-    // isMenuOpen ? document.body.classList.remove('overflow-hidden') : document.body.classList.add('overflow-hidden')
     setMenuOpen(!isMenuOpen);
   };
 
-  // const queryClient = useQueryClient()
-
-  const onLinkClick = useCallback(event => {
-    console.log('clicked');
-    // countly.trackCustomLinkClick(countly.events.LINK_CLICK_NAVBAR, event.currentTarget);
+  const onLinkClick = useCallback(e => {
+    trackCustomLinkClick(events.LINK_CLICK_NAVBAR, e.currentTarget);
   }, []);
 
-  // async function logout() {
-  //   await getMagic().user.logout();
-  //   await queryClient.invalidateQueries('magic-user');
-  //   Router.push('/');
-  // }
+  const login = useCallback(() => {
+    router.push('/login');
+  }, [router]);
+
+  const handleKeySelect = useCallback(
+    (e, url) => {
+      onLinkClick(e);
+      router.push(url);
+    },
+    [router, onLinkClick]
+  );
 
   // ======================================================= Templates [Buttons]
-  // const logoutButton = (
-  //   <Button
-  //     onClick={logout}
-  //     id="logout"
-  //     variant="outlined"
-  //     small={isSmallVariant}
-  //     tracking={{
-  //       event: countly.events.LOGOUT_CLICK,
-  //       ui: countly.ui.NAVBAR,
-  //       action: 'Logout',
-  //     }}
-  //   >
-  //     Sign Out
-  //   </Button>
-  // );
-  //
-  // const loginButton = (
-  //   <Button
-  //     href="/login"
-  //     id="login"
-  //     small={isSmallVariant}
-  //     tracking={{
-  //       ui: countly.ui.NAVBAR,
-  //       action: 'Login',
-  //     }}
-  //   >
-  //     Sign In
-  //   </Button>
-  // );
-  //
-  // const spinnerButton = (
-  //   <Button href="#" id="loading-user" small={isSmallVariant}>
-  //     <Loading size={SpinnerSize.SMALL} />
-  //   </Button>
-  // );
+  const getNavLinkOrHeader = item => {
+    if (Array.isArray(item.links)) {
+      return <div className="nav-item-heading">{item.text}</div>;
+    }
+    return (
+      <Link href={item.url} key={item.text}>
+        <button className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
+          {item.text}
+        </button>
+      </Link>
+    );
+  };
+
+  const logoutButton = (button, forceTheme) => {
+    return (
+      <Button
+        id="nav-auth-button"
+        onClick={logout}
+        variant={forceTheme || theme}
+        tracking={{
+          event: events.LOGOUT_CLICK,
+          ui: ui.NAVBAR,
+          action: 'Logout',
+        }}
+      >
+        {button.text}
+      </Button>
+    );
+  };
+
+  const loginButton = (button, forceTheme) => {
+    return (
+      <Button
+        id="nav-auth-button"
+        href={button.url}
+        onClick={login}
+        variant={forceTheme || theme}
+        tracking={{
+          ui: ui.NAVBAR,
+          action: 'Login',
+        }}
+      >
+        {button.text}
+      </Button>
+    );
+  };
+
+  const loadingButton = (button, forceTheme) => {
+    const variant = forceTheme || theme;
+    return (
+      <Button href="#" id="nav-auth-button" variant={variant}>
+        <span className="navigation-loader-text">{button.text}</span>
+        <Loading className="navigation-loader" size="medium" color={variant === 'dark' ? 'white' : 'black'} />
+      </Button>
+    );
+  };
 
   // ================================================ Main Template [Navigation]
   return (
-    <section id="section_navigation" className="section-navigation">
+    <section id="section_navigation" className={clsx('section-navigation', theme)}>
       <div className="grid-noGutter">
         <div className="col">
-          <nav id="navigation" ref={containerRef}>
-            <div className="nav-bar">
-              {isSmallVariant && (
-                <div className="menu-toggle">
-                  <button onClick={toggleMenu}>
-                    <Hamburger aria-label="Toggle Navbar" />
-                  </button>
-                </div>
+          <nav id="navigation">
+            <div
+              className={clsx(
+                'nav-bar',
+                isMenuOpen ? 'mobile-panel' : '',
+                router.route === '/' ? 'breadcrumbs-hidden' : ''
               )}
-
-              <div className="site-logo-container">
-                <a href="/" title={logoText} className="anchor-wrapper" onClick={onLinkClick}>
-                  <SiteLogo className="site-logo-image" />
-                  <div className="site-logo-text">{logoText}</div>
-                </a>
+            >
+              <div className={clsx('site-logo-container', theme, isMenuOpen ? 'menu-open' : '')}>
+                <Link href="/">
+                  <div
+                    title={logoText}
+                    className="anchor-wrapper"
+                    onClick={onLinkClick}
+                    onKeyPress={e => handleKeySelect(e, '/')}
+                    role="button"
+                    tabIndex="0"
+                  >
+                    <SiteLogo className="site-logo-image" />
+                    <button className="site-logo-text" onClick={onLinkClick} onKeyPress={e => handleKeySelect(e, '/')}>
+                      {logoText}
+                    </button>
+                  </div>
+                </Link>
               </div>
 
-              <div className="nav-items-wrapper">
+              <div className={clsx('nav-items-wrapper', theme)}>
                 {navItems.map(item => (
-                  <Link href={item.url} key={item.text} className="nav-item" onClick={onLinkClick}>
-                    {item.text}
+                  <Link key={item.text} href={item.url}>
+                    <button className="nav-item" onClick={onLinkClick} onKeyPress={e => handleKeySelect(e, item.url)}>
+                      {item.text}
+                    </button>
                   </Link>
                 ))}
-                <Button href="/login" id="login" variant={theme} small={isSmallVariant}>
-                  SIGN IN
-                </Button>
+
+                {isLoadingUser
+                  ? loadingButton(auth.login)
+                  : isLoggedIn
+                  ? logoutButton(auth.logout)
+                  : loginButton(auth.login)}
+              </div>
+
+              <div className={clsx('nav-menu-toggle', theme, isMenuOpen ? 'menu-open' : '')}>
+                <button onClick={toggleMenu}>
+                  <Hamburger aria-label="Toggle Navbar" />
+                </button>
               </div>
             </div>
 
-            <div className={clsx('mobile-panel', isMenuOpen ? 'open' : '')} aria-hidden={isSmallVariant && isMenuOpen}>
-              <div>
-                <a href="/" title={logoText} onClick={onLinkClick}>
-                  <SiteLogo />
-                </a>
+            {router.route === '/' ? null : (
+              <Breadcrumbs variant={theme} click={onLinkClick} keyboard={handleKeySelect} />
+            )}
 
-                {navItems.map(item => (
-                  <Link href={item.url} key={item.text} className="nav-item" onClick={() => toggleMenu()}>
-                    {item.text}
-                  </Link>
-                ))}
+            <div className={clsx('nav-mobile-panel', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
+              <div className="mobile-items-wrapper">
+                <ZeroAccordion multiple={true}>
+                  {navItems.map((item, index) => (
+                    <ZeroAccordionSection key={`mobile-${item.text}`} disabled={!Array.isArray(item.links)}>
+                      <ZeroAccordionSection.Header>{getNavLinkOrHeader(item)}</ZeroAccordionSection.Header>
 
-                <button className="exit-button" onClick={() => toggleMenu()}>
-                  exit
-                </button>
+                      <ZeroAccordionSection.Content>
+                        {Array.isArray(item.links) && (
+                          <div className="nav-sublinks-wrapper">
+                            {item.links.map(link => (
+                              <Link href={link.url} key={link.text}>
+                                <button
+                                  className="nav-sublink"
+                                  onClick={onLinkClick}
+                                  onKeyPress={e => handleKeySelect(e, link.url)}
+                                >
+                                  {link.text}
+                                </button>
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </ZeroAccordionSection.Content>
+                    </ZeroAccordionSection>
+                  ))}
+                </ZeroAccordion>
+
+                {isLoadingUser
+                  ? loadingButton(auth.login, 'light')
+                  : isLoggedIn
+                  ? logoutButton(auth.logout, 'light')
+                  : loginButton(auth.login, 'light')}
               </div>
             </div>
           </nav>

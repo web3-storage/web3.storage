@@ -26,13 +26,13 @@ export default function AccordionContent({ open, toggle, uid, toggleOnLoad, chil
     }, 500)
   }, [])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const resize = () => { updateContentHeight(open) }
     window.addEventListener('resize', resize)
     return () => window.removeEventListener('resize', resize)
   }, [open])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!firstUpdate.current) {
       const newHeight = open ? contentHeight : '0px'
       setHeight(newHeight)

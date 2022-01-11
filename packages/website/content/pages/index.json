@@ -18,8 +18,8 @@
             "type": "hero",
             "page": "index",
             "cols": {
-              "num": "col-6",
-              "push_left": "off-3"
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-3_sm-2_mi-1_ti-0"
             },
             "format": "header",
             "heading": "The easiest way to store data on the decentralized web.",
@@ -27,7 +27,8 @@
             "cta": {
               "url": "/login",
               "text": "START STORING NOW",
-              "tracking": "HOME_HERO",
+              "event": "",
+              "ui": "HOME_HERO",
               "action": "Get Started"
             }
           }
@@ -41,16 +42,21 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-5"
+              "num": "col-5_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "customizations": [
               {
                 "type": "corkscrew",
-                "id": "intro_1-corkscrew"
+                "id": "intro_1-hero-corkscrew"
               },
               {
                 "type": "coil",
                 "id": "intro_1-coil"
+              },
+              {
+                "type": "cross",
+                "id": "intro_1-cross"
               },
               {
                 "type": "text_block",
@@ -61,9 +67,12 @@
                   "With Web3.Storage, you can upload any data to our API our web UI for free, and the data will end up on a decentralized set of IPFS and Filecoin storage providers."
                 ],
                 "cta": {
-                  "url": "/",
+                  "url": "/about",
                   "text": "LEARN MORE",
-                  "theme": "light"
+                  "theme": "light",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
                 }
               }
             ]
@@ -71,8 +80,8 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-6",
-              "push_left": "off-1"
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-1_sm-2_mi-1_ti-0"
             },
             "customizations": [
               {
@@ -140,7 +149,8 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-5"
+              "num": "col-5_sm-5_mi-8_ti-12",
+              "push_left": "off-0_sm-1_mi-1_ti-0"
             },
             "customizations": [
               {
@@ -170,7 +180,8 @@
           {
             "type": "card_list_block",
             "cols": {
-              "num": "col-12"
+              "num": "col-12_mi-10_ti-12",
+              "push_left": "off-0_mi-1_ti-0"
             },
             "direction": "row",
             "cards": [
@@ -202,23 +213,26 @@
           {
             "type": "text_block",
             "cols": {
-              "num": "col-5"
+              "num": "col-5_sm-10_ti-12",
+              "push_left": "off-0_sm-1_ti-0"
             },
             "format": "medium",
             "heading": "Why Web3.Storage?",
             "description": "With Web3.Storage you get all the benefits of decentralized storage technologies with the frictionless experience you expect in a modern dev workflow.",
             "cta": {
-              "url": "/docs",
+              "url": "https://docs.web3.storage/",
               "text": "READ DOCS",
               "tracking": "",
-              "action": "Docs"
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           },
           {
             "type": "custom",
             "cols": {
-              "num": "col-6",
-              "push_left": "off-1"
+              "num": "col-6_sm-10_ti-12",
+              "push_left": "off-1_sm-1_ti-0"
             },
             "customizations": [
               {
@@ -252,16 +266,13 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-6"
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "customizations": [
               {
                 "type": "squiggle",
                 "id": "section_FAQ-squiggle"
-              },
-              {
-                "type": "corkscrew",
-                "id": "section_FAQ-corkscrew"
               },
               {
                 "type": "text_block",
@@ -275,9 +286,10 @@
                 "cta": {
                   "url": "/faq",
                   "text": "MORE FAQs",
-                  "tracking": "",
-                  "action": "FAQ",
-                  "theme": "light"
+                  "theme": "light",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
                 }
               }
             ]
@@ -285,8 +297,8 @@
           {
             "type": "image_block",
             "cols": {
-              "num": "col-5",
-              "push_left": "off-1"
+              "num": "col-5_sm-8_mi-10_ti-12",
+              "push_left": "off-1_sm-2_mi-1_ti-0"
             },
             "src": "/images/index/cluster-1.png"
           }
@@ -298,34 +310,37 @@
           {
             "type": "text_block",
             "cols": {
-              "num": "col-6"
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "label": "FAQ",
             "subheading": "How is web3.storage different from pinning services for IPFS?",
             "description": "Web3.Storage is currently not a pinning service. At the moment, files already on the IPFS network cannot be pinned to Web3.Storage via their…",
             "cta": {
               "url": "/faq",
-              "text": "READ MORE     ➔",
-              "tracking": "",
-              "action": "FAQ",
-              "theme": "text-purple"
+              "text": "READ MORE",
+              "theme": "text-purple",
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           },
           {
             "type": "text_block",
             "cols": {
-              "num": "col-5",
-              "push_left": "off-1"
+              "num": "col-5_sm-8_mi-10_ti-12",
+              "push_left": "off-1_sm-2_mi-1_ti-0"
             },
             "label": "FAQ",
             "subheading": "What happens if web3.storage is discontinued?",
             "description": "One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data…",
             "cta": {
               "url": "/faq",
-              "text": "READ MORE     ➔",
-              "tracking": "",
-              "action": "FAQ",
-              "theme": "text-purple"
+              "text": "READ MORE",
+              "theme": "text-purple",
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           }
         ]
@@ -338,7 +353,8 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-5"
+              "num": "col-5_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "customizations": [
               {
@@ -354,8 +370,9 @@
                   "url": "/login",
                   "text": "CREATE AN ACCOUNT",
                   "theme": "dark",
-                  "action": "",
-                  "tracking": ""
+                  "event": "",
+                  "ui": "",
+                  "action": ""
                 }
               }
             ]
@@ -363,7 +380,8 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-7"
+              "num": "col-7_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "customizations": [
               {
@@ -391,7 +409,8 @@
           {
             "type": "card_list_block",
             "cols": {
-              "num": "col-12"
+              "num": "col-12_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "direction": "row",
             "cards": [
@@ -400,10 +419,17 @@
                 "label": "JS Client Library",
                 "feature": "<span class='highlight'>npm install</span> web3.storage",
                 "description": "Import the lightweight Web3.Storage library into your project, and enjoy a simple and familiar way to store and retrieve.",
+                "icon_before": {
+                  "url": "https://www.npmjs.com/package/web3.storage",
+                  "svg": "npm_icon"
+                },
                 "cta": {
-                  "link": "",
+                  "url": "https://docs.web3.storage/reference/js-client-library",
                   "text": "JS DOCS",
-                  "theme": "blue"
+                  "theme": "blue",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
                 }
               },
               {
@@ -411,10 +437,17 @@
                 "label": "HTTP API",
                 "feature": "<span class='highlight'>curl -X</span> POST <span class='highlight'>—data-binary</span> “@foo.gif” https://api.web3.storage/upload",
                 "description": "Test or build your project on any stack, using our easy-to-use HTTP API. Web3.Storage is as flexible as you need it to be.",
+                "icon_before": {
+                  "url": "https://docs.web3.storage/reference/http-api/",
+                  "text": "{…}"
+                },
                 "cta": {
-                  "link": "",
+                  "url": "https://docs.web3.storage/reference/http-api/",
                   "text": "HTTP DOCS",
-                  "theme": "blue"
+                  "theme": "blue",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
                 }
               },
               {
@@ -422,10 +455,17 @@
                 "label": "Web App",
                 "feature": "Drop file to upload",
                 "description": "Upload your files directly through our Web UI to debug and validate Web3.Storage’s use case for your project.",
+                "icon_before": {
+                  "url": "/login",
+                  "svg": "windows_icon"
+                },
                 "cta": {
-                  "link": "",
+                  "url": "/login",
                   "text": "MAKE YOUR FIRST UPLOAD",
-                  "theme": "blue"
+                  "theme": "blue",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
                 }
               }
             ]
@@ -440,7 +480,8 @@
           {
             "type": "text_block",
             "cols": {
-              "num": "col-5"
+              "num": "col-5_md-7_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "format": "medium",
             "heading": "Trusted by the future",
@@ -483,6 +524,40 @@
                 "description": "Web3.Storage was pretty much plug and play for my use case."
               }
             ]
+          },
+          {
+            "type": "slider_block",
+            "cols": {
+              "num": "col-12"
+            },
+            "breakpoints": {
+              "medium": 3,
+              "small": 2,
+              "mini": 1
+            },
+            "slides": [
+              {
+                "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
+                "title": "Ryan W.",
+                "subtitle": "Capetown, South Africa",
+                "description": "I’m really impressed with web3.storage. It’s almost too easy."
+              },
+              {
+                "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
+                "title": "Frank J.",
+                "subtitle": "Toronto, Canada",
+                "description": "Web3.Storage was so simple to hook into, and it does what you want it to do. It’s like simplified S3 for IPFS. I really like the service, and I love that it’s free."
+              },
+              {
+                "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
+                "title": "Connor M.",
+                "subtitle": "New York, USA",
+                "description": "Web3.Storage was pretty much plug and play for my use case."
+              }
+            ]
           }
         ]
       }
@@ -493,10 +568,27 @@
         "grid": ["noGutter"],
         "columns": [
           {
+            "type": "text_block",
+            "cols": {
+              "num": "col-3_md-7_ti-8",
+              "push_left": "off-0_md-1_sm-0"
+            },
+            "format": "medium",
+            "heading": "Open product. Open book.",
+            "cta": {
+              "url": "https://docs.web3.storage/",
+              "text": "EXPLORE DOCS",
+              "theme": "dark",
+              "event": "",
+              "ui": "",
+              "action": ""
+            }
+          },
+          {
             "type": "card_list_block",
             "cols": {
-              "num": "col-8",
-              "push_left": "off-1"
+              "num": "col-8_md-10_sm-12_mi-10",
+              "push_left": "off-1_md-1_sm-0_mi-1"
             },
             "cards": [
               {
@@ -506,31 +598,31 @@
                     "heading": "Welcome",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#quickstart",
                         "text": "Quickstart"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#create-an-account",
                         "text": "Create an Account"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#get-an-api-token",
                         "text": "Get an API token"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#create-the-upload-script",
                         "text": "Create the Upload Script"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#run-the-script",
                         "text": "Run the Script"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#get-your-file",
                         "text": "Get your file"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/#next-steps",
                         "text": "Next Steps"
                       }
                     ]
@@ -539,11 +631,11 @@
                     "heading": "Concepts",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/concepts/content-addressing",
                         "text": "Content Addressing"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/concepts/decentralized-storage",
                         "text": "Decentralized Storage"
                       }
                     ]
@@ -557,31 +649,31 @@
                     "heading": "How-tos",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/store/",
                         "text": "Store"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/retrieve",
                         "text": "Retrieve"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/query",
                         "text": "Query"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/list",
                         "text": "List"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/work-with-car-files",
                         "text": "Work with Content"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/generate-api-token",
                         "text": "Generate an API Token"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/how-tos/troubleshooting",
                         "text": "Troubleshooting"
                       }
                     ]
@@ -590,11 +682,11 @@
                     "heading": "Reference",
                     "links": [
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/reference/http-api/",
                         "text": "HTTP API Reference"
                       },
                       {
-                        "url": "",
+                        "url": "https://docs.web3.storage/reference/js-client-library",
                         "text": "Javascript Client Library"
                       }
                     ]
@@ -611,11 +703,12 @@
             "format": "medium",
             "heading": "Open product. Open book.",
             "cta": {
-              "url": "/docs",
+              "url": "https://docs.web3.storage/",
               "text": "EXPLORE DOCS",
               "theme": "dark",
-              "action": "",
-              "tracking": ""
+              "event": "",
+              "ui": "",
+              "action": ""
             }
           }
         ]

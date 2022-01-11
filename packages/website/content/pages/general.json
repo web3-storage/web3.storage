@@ -13,30 +13,79 @@
     "text": "Web3.Storage"
   },
   "message_banner": {
-    "text": "Looking to store NFTs? Check out",
-    "link": {
-      "text": "NFT.Storage",
-      "url": "https://nft.storage/"
+    "content": "Looking to store NFTs? Check out <a href='https://nft.storage/' target='blank' className='message-banner-link'>NFT.Storage</a>",
+    "maintenceAlert": "The web3.Storage API is currently undergoing maintenance..."
+  },
+  "breadcrumbs": {
+    "index": "Home",
+    "about": "About",
+    "tiers": "Tiers",
+    "faq": "FAQ",
+    "terms": "TOS"
+  },
+  "navigation": {
+    "links": [
+      {
+        "url": "/about",
+        "text": "ABOUT"
+      },
+      {
+        "url": "/tiers",
+        "text": "TIERS"
+      },
+      {
+        "url": "/faq",
+        "text": "FAQ"
+      },
+      {
+        "url": "https://docs.web3.storage/",
+        "text": "DOCS"
+      },
+      {
+        "url": "/login",
+        "text": "ACCOUNT",
+        "links": [
+          {
+            "text": "Dashboard",
+            "url": "/account"
+          },
+          {
+            "text": "Files",
+            "url": "/account"
+          },
+          {
+            "text": "API Tokens",
+            "url": "/account"
+          },
+          {
+            "text": "Create an API Token",
+            "url": "/account"
+          },
+          {
+            "text": "Request more storage",
+            "url": "/account"
+          },
+          {
+            "text": "Status",
+            "url": "/account"
+          },
+          {
+            "text": "Open an issue",
+            "url": "/account"
+          }
+        ]
+      }
+    ],
+    "auth": {
+      "login": {
+        "url": "/login",
+        "text": "SIGN IN"
+      },
+      "logout": {
+        "text": "LOG OUT"
+      }
     }
   },
-  "navigation": [
-    {
-      "url": "/about",
-      "text": "About"
-    },
-    {
-      "url": "/tiers",
-      "text": "Tiers"
-    },
-    {
-      "url": "/faq",
-      "text": "FAQ"
-    },
-    {
-      "url": "https://docs.web3.storage/",
-      "text": "Docs"
-    }
-  ],
   "footer": {
     "contact": {
       "logo_text": "Web3.Storage",
@@ -44,9 +93,7 @@
       "cta": {
         "url": "/login",
         "text": "SIGN UP",
-        "tracking": "",
-        "action": "",
-        "variant": "purple"
+        "theme": "pink-blue"
       }
     },
     "resources": {
@@ -54,7 +101,7 @@
       "items": [
         {
           "text": "Quickstart Guide",
-          "url": "/"
+          "url": "https://docs.web3.storage/#quickstart"
         },
         {
           "text": "FAQ",
@@ -62,11 +109,11 @@
         },
         {
           "text": "Get Help",
-          "url": "/"
+          "url": "https://docs.web3.storage/community/help-and-support"
         },
         {
           "text": "Contact Us",
-          "url": "/"
+          "url": "https://docs.web3.storage/community/help-and-support/"
         },
         {
           "text": "Terms of Use",
@@ -78,7 +125,7 @@
         },
         {
           "text": "Status",
-          "url": "/"
+          "url": "https://status.web3.storage/"
         }
       ]
     },
@@ -87,19 +134,19 @@
       "items": [
         {
           "text": "Create an Account",
-          "url": "/"
+          "url": "/login"
         },
         {
           "text": "Javascript Client Library",
-          "url": "/"
+          "url": "https://docs.web3.storage/reference/js-client-library"
         },
         {
           "text": "Open an Issue",
-          "url": "/"
+          "url": "/account"
         },
         {
           "text": "HTTP API",
-          "url": "/"
+          "url": "https://docs.web3.storage/reference/http-api/"
         },
         {
           "text": "Web Apps",
@@ -119,7 +166,7 @@
         "text": "Want more free storage?",
         "link": {
           "text": "Submit a request",
-          "url": ""
+          "url": "/account"
         }
       }
     }
