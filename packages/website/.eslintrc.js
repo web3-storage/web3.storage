@@ -24,6 +24,7 @@ module.exports = {
       },
       alias: [
         ['ZeroComponents', './modules/zero/components']
+        ['ZeroHooks', './modules/zero/hooks']
       ]
     },
     react: {

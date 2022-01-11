@@ -7,7 +7,8 @@ import clsx from 'clsx'
  * @prop {string} [className]
  * @prop {ReactComponent} [icon]
  * @prop {string} [dragAreaText]
- * @prop { import('react').MouseEventHandler<HTMLInputElement> } [onChange]
+ * @prop {function} [onChange]
+ * @prop {function} [onError]
  */
 
 const Dropzone = ({

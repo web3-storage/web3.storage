@@ -51,6 +51,27 @@ export const Default = () => {
   )
 }
 
+export const WithQueryParams = () => {
+  const [paginatedNames, setPaginatedNames] = useState(data)
+
+  return(
+    <div style={{ display: 'flex', gap: '10rem' }}>
+      <div>
+        {paginatedNames && paginatedNames.map((name, i) => <Button key={`btn-${i}`}>{name.firstname} {name.lastname}</Button>)}
+      </div>
+      
+      <Pagination
+        items={data}
+        itemsPerPage={2}
+        visiblePages={2}
+        defaultPage={5}
+        queryParam="page"
+        onChange={(items) => setPaginatedNames(items)}
+      />
+    </div>
+  )
+}
+
 export const ResultsPerPage = () => {
   const [paginatedNames, setPaginatedNames] = useState('paginatedNames', data)
   const [itemsPerPage, setItemsPerPage] = useState('itemsPerPage', 2)

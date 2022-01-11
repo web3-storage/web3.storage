@@ -1,14 +1,14 @@
 import React, { createElement, useCallback } from 'react'
 import useState from 'storybook-addon-state';
-import FilterBar from './filterbar';
+import Filterable from './filterable';
 import { ReactComponent as SearchIcon } from '../../assets/search.svg'
 
 export default {
-  title: 'Zero/Filterbar'
+  title: 'Zero/Filterable'
 };
 
 export const Default = () => (
-  <FilterBar
+  <Filterable
     className="customBar"
     value="initial search"
     placeholder="Enter filter text"

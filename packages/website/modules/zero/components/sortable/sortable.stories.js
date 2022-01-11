@@ -37,14 +37,15 @@ export const Default = () => {
       <Sortable
         items={names}
         options={ [
-          { label: 'First Name', key: 'firstname' },
-          { label: 'Last Name Descending', key: 'lastname', direction: SortDirection.DESC },
-          { label: 'Numeric (Newer)', direction: SortDirection.DESC, compareFn: SortType.ALPHANUMERIC },
-          { label: 'Numeric (Older)', direction: SortDirection.ASC, compareFn: SortType.ALPHANUMERIC },
-          { label: 'Custom Ascending', direction: SortDirection.ASC, compareFn: customSort },
-          { label: 'Custom Descending', direction: SortDirection.DESC, compareFn: customSort },
+          { label: 'First Name', value: 'firstname', key: 'firstname' },
+          { label: 'Last Name Descending', value: 'lastname', key: 'lastname', direction: SortDirection.DESC },
+          { label: 'Numeric (Newer)', value: 'numericASC', direction: SortDirection.DESC, compareFn: SortType.ALPHANUMERIC },
+          { label: 'Numeric (Older)', value: 'numericDESC', direction: SortDirection.ASC, compareFn: SortType.ALPHANUMERIC },
+          { label: 'Custom Ascending', value: 'customASC', direction: SortDirection.ASC, compareFn: customSort },
+          { label: 'Custom Descending', value: 'customDESC', direction: SortDirection.DESC, compareFn: customSort },
         ]}
-        defaultIndex="3"
+        value="numericASC"
+        queryParam="order"
         onChange={(sortedItems) => {
           setNames(sortedItems)
         }}

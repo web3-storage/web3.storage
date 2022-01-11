@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import clsx from 'clsx'
 
 import Dropdown from 'ZeroComponents/dropdown/dropdown'
@@ -6,6 +6,7 @@ import Dropdown from 'ZeroComponents/dropdown/dropdown'
 /**
  * @typedef {Object} SortOptionProp
  * @prop {string} [label]
+ * @prop {string} [value]
  * @prop {string} [key]
  * @prop {string} [direction] 
  * @prop {function} [compareFn]
@@ -14,8 +15,9 @@ import Dropdown from 'ZeroComponents/dropdown/dropdown'
  * @prop {string} [className]
  * @prop {any[]} [items]
  * @prop {SortOption[]} [options]
- * @prop {number} [defaultIndex]
- * @prop { import('react').MouseEventHandler<HTMLSelectElement> } [onChange]
+ * @prop {string} [value]
+ * @prop {string} [queryParam]
+ * @prop {function} [onChange]
  */
 
 export const SortDirection = { ASC: 'ASC', DESC: 'DESC' }
@@ -42,40 +44,47 @@ const Sortable = ({
   className,
   items,
   options,
-  defaultIndex,
+  value,
+  queryParam,
   onChange
 }) => {
-  const handleSort = useCallback((sortIndex) => {
-    sortIndex = parseInt(sortIndex)
-    const option = options[sortIndex]
-    if(!option || !onChange) return
+  const [currentOption, setCurrentOption] = useState(null)
 
-    const compareFn = option.compareFn || SortType.ALPHANUMERIC
-    const direction = option.direction || SortDirection.ASC
-    const key = option.key || null
+  const handleDropdownChange = useCallback((newValue) => {
+    const option = options.find(option => option.value === newValue)
+    if(!option) return
+    setCurrentOption(option)
+  }, [items, options, currentOption, setCurrentOption])
+
+  useEffect(() => {
+    if(!currentOption) return
+    const compareFn = currentOption.compareFn || SortType.ALPHANUMERIC
+    const direction = currentOption.direction || SortDirection.ASC
+    const key = currentOption.key || null
     const sortedItems = compareFn(items.slice(0), direction, key)
-    onChange(sortedItems)
-  }, [])
 
-  useEffect(() => handleSort(defaultIndex), [])
+    onChange && onChange(sortedItems)
+  }, [items, currentOption, onChange])
 
   return (
     <div className={clsx(className, 'Sortable')}>
       <Dropdown
-        value={`${defaultIndex}`}
-        options={options.map((option, i) => (
-          { label: option.label, value: `${i}` }
+        value={value}
+        options={options.map((option) => (
+          { label: option.label, value: `${option.value}` }
         ))}
-        onChange={optionIndex => handleSort(optionIndex)}
+        queryParam={queryParam}
+        onChange={handleDropdownChange}
       />
     </div>
   )
 }
 
 Sortable.defaultProps = {
-  defaultIndex: 0,
   items: [],
-  options: []
+  options: [],
+  value: null,
+  queryParam: null
 }
 
 export default Sortable
