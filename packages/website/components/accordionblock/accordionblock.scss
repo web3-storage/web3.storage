@@ -27,10 +27,16 @@
   @include fontSize_MediumLarge;
   @include fontWeight_Semibold;
   line-height: leading(40, 25);
+  @include mini {
+    margin-left: 1.625rem;
+  }
 }
 
 .accordion-content {
   margin-left: 4.75rem;
   @include fontSize_Regular;
   line-height: leading(34, 18);
+  @include mini {
+    margin-left: 2.75rem;
+  }
 }

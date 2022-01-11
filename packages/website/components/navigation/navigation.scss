@@ -1,17 +1,32 @@
-.page-pricing {
-  .section-navigation {
+@use 'sass:math';
+
+.section-navigation {
+  &.light {
     background-color: $ebony;
     color: white;
   }
+}
 
-  .site-logo-container {
+.site-logo-container {
+  &.light {
+    color: white;
+    transition: 250ms ease;
     svg {
       fill: white;
+      transition: 250ms ease;
+    }
+    &.menu-open {
+      color: $ebony;
+      svg {
+        fill: $ebony;
+      }
     }
   }
+}
 
-  .nav-items-wrapper {
-    a {
+.nav-items-wrapper {
+  &.light {
+    .nav-item {
       &:after {
         border: solid 2px white;
       }
@@ -22,13 +37,18 @@
 #navigation {
   position: relative;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   height: $navigationHeight;
   z-index: 50;
 }
 
 .nav-bar {
   width: 100%;
-  margin: auto;
+  margin-top: 1.5rem;
+  &.breadcrumbs-hidden {
+    margin-top: 0;
+  }
 }
 
 .nav-bar,
@@ -36,6 +56,11 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.nav-item {
+  @include fontWeight_Semibold;
+  letter-spacing: 0.03em;
 }
 
 .site-logo-container {
@@ -56,15 +81,14 @@
   }
 }
 
-.mobile-panel {
-  display: none;
-  &.open {
-    display: block;
-  }
-}
-
 .nav-items-wrapper {
-  a {
+  .button {
+    position: relative;
+    div {
+      display: flex;
+    }
+  }
+  .nav-item {
     position: relative;
     @include fontSize_Small;
     @include fontWeight_Semibold;
@@ -73,6 +97,10 @@
     padding: 0 0.5rem;
     transform: translateY(0rem);
     transition: 200ms ease;
+    cursor: pointer;
+    @include medium {
+      margin: 0 0.875rem;
+    }
     &:after {
       content: '';
       position: absolute;
@@ -95,5 +123,145 @@
   & > *:last-child {
     margin-left: 1.5rem;
     margin-right: 0;
+  }
+}
+
+.navigation-loader {
+  position: absolute !important;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.navigation-loader-text {
+  visibility: hidden;
+}
+
+// ////////////////////////////////////////////////////////////////////// mobile
+
+.nav-bar {
+  position: relative;
+  z-index: 1;
+  padding: 0 0;
+  transition: 350 ease;
+  &.mobile-panel {
+    z-index: 50;
+  }
+  @include small {
+    padding: 0 1.5rem;
+  }
+}
+
+.nav-items-wrapper {
+  @include small {
+    display: none;
+  }
+}
+
+.nav-menu-toggle {
+  display: none;
+  @include small {
+    display: block;
+  }
+  &.light {
+    svg,
+    path {
+      fill: white;
+      stroke: white;
+      transition: 250ms ease;
+    }
+    &.menu-open {
+      svg,
+      path {
+        fill: $ebony;
+        stroke: $ebony;
+      }
+    }
+  }
+}
+
+.nav-mobile-panel {
+  visibility: hidden;
+  position: absolute;
+  padding: 0 3.5rem;
+  top: 0;
+  left: -99999px;
+  right: -99999px;
+  margin: 0 auto;
+  width: 100vw;
+  transform: translateY(calc(-100% - 9rem));
+  transition: 350ms ease;
+  color: $ebony;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    height: calc(100% + 9rem);
+    background-image: url('/images/index/holographic-bg-nav-mobile.png');
+    background-size: cover;
+    background-position: right 0px bottom 0;
+    background-repeat: no-repeat;
+  }
+  @include tiny {
+    transform: translateY(-100%);
+    &:before {
+      height: 100%;
+      background-position: right -100px bottom 0;
+    }
+  }
+
+  &.open {
+    @include small {
+      visibility: visible;
+    }
+    transform: translateY(0%);
+  }
+}
+
+.mobile-items-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-bottom: 6rem;
+  position: relative;
+  z-index: 51;
+  margin-top: $navigationHeight;
+  .nav-item-heading,
+  .nav-sublink,
+  .nav-item {
+    @include fontSize_Small;
+    @include fontWeight_Semibold;
+  }
+  .accordion-content {
+    margin-left: 2rem;
+    transition: height 300ms ease-in-out;
+  }
+  .accordion-section,
+  .button {
+    margin: 0.375rem 0;
+  }
+  .button {
+    position: relative;
+    width: fit-content;
+    div {
+      display: flex;
+    }
+  }
+  button {
+    @include fontWeight_Semibold;
+  }
+}
+
+.nav-sublinks-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .nav-sublink {
+    cursor: pointer;
+    margin: 0.25rem 0;
+    @include fontSize_Mini;
   }
 }

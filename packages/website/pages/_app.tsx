@@ -11,7 +11,7 @@ import AppProviders from 'components/general/appProviders';
  */
 const App = ({ Component, pageProps }: any) => {
   const { pathname } = useRouter();
-  const marketingRoutes = ['/', '/pricing', '/about', '/faq', '/terms'];
+  const marketingRoutes = ['/', '/tiers', '/about', '/faq', '/terms'];
   const notMarketingSite = !marketingRoutes.includes(pathname);
 
   return (

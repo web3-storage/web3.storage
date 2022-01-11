@@ -19,12 +19,12 @@
             "type": "hero",
             "page": "faq",
             "cols": {
-              "num": "col-8",
-              "push_left": "off-2"
+              "num": "col-8_md-10_sm-8",
+              "push_left": "off-2_md-1_sm-2"
             },
             "format": "header",
             "heading": "Frequently Asked Questions",
-            "subheading": "Frequenctly<div id='faq_hero_title-triangle'></div>Asked<div id='faq_hero_title-coil'></div><span>Questions</span>"
+            "subheading": "<span>Frequently</span><div id='faq_hero_title-triangle'></div><span>Asked</span><div id='faq_hero_title-coil'></div><span>Questions</span>"
           }
         ]
       },

@@ -33,10 +33,12 @@
 @import '../components/hero/hero.scss';
 @import '../components/messagebanner/messagebanner.scss';
 @import '../components/codepreview/codepreview.scss';
+@import '../components/breadcrumbs/breadcrumbs.scss';
+@import '../components/scroll2top/scroll2top.scss';
 
 // Pages
 @import '../pages/index.scss';
-@import '../pages/pricing.scss';
+@import '../pages/tiers.scss';
 @import '../pages/about.scss';
 @import '../pages/faq.scss';
 @import '../pages/terms.scss';
