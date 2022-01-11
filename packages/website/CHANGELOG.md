@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.9.1](https://www.github.com/web3-storage/web3.storage/compare/website-v1.9.0...website-v1.9.1) (2022-01-11)
+
+
+### Bug Fixes
+
+* only disallow delete if dag size is unknown ([#839](https://www.github.com/web3-storage/web3.storage/issues/839)) ([c5729b6](https://www.github.com/web3-storage/web3.storage/commit/c5729b6a340b665e09602d2a71de04453e81f63d))
+* update deps in api and client ([#855](https://www.github.com/web3-storage/web3.storage/issues/855)) ([22155db](https://www.github.com/web3-storage/web3.storage/commit/22155db13b646e9846cf10c26d10faeb0d3b936e))
+
 ## [1.9.0](https://www.github.com/web3-storage/web3.storage/compare/website-v1.8.0...website-v1.9.0) (2022-01-06)
 
 
