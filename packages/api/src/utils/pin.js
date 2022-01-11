@@ -103,6 +103,11 @@ export function toPins (peerMap) {
 
 /**
  *
+ * waitOkPins checks the status of the given CID on the cluster
+ * every given `checkInterval` until at least one pin has a PIN_OK_STATUS.
+ *
+ * After a given maximum `waitTime`, if no OK pins are found the promise is resolved with an empty array.
+ *
  * @param {string} cid
  * @param {import('@nftstorage/ipfs-cluster').Cluster} cluster
  * @param {number} waitTime
