@@ -1,5 +1,19 @@
 # Changelog
 
+### [3.5.3](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.2...web3.storage-v3.5.3) (2022-01-11)
+
+
+### Bug Fixes
+
+* update deps in api and client ([#855](https://www.github.com/web3-storage/web3.storage/issues/855)) ([22155db](https://www.github.com/web3-storage/web3.storage/commit/22155db13b646e9846cf10c26d10faeb0d3b936e))
+
+### [3.5.2](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.1...web3.storage-v3.5.2) (2021-12-27)
+
+
+### Bug Fixes
+
+* react-scripts-v5 compatible issue. ([#826](https://www.github.com/web3-storage/web3.storage/issues/826)) ([abf13d4](https://www.github.com/web3-storage/web3.storage/commit/abf13d4a085d2d91c3f395e6f61f1304cd127e7e))
+
 ### [3.5.1](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.0...web3.storage-v3.5.1) (2021-12-06)
 
 
