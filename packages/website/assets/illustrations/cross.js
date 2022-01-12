@@ -1,3 +1,4 @@
+// @ts-ignore
 import cross from '../images/cross.png'
 /**
  * @param {any} props

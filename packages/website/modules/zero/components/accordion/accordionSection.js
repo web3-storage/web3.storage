@@ -1,13 +1,16 @@
 // ===================================================================== Imports
 import React, { useState } from "react";
+// @ts-ignore
 import ZeroAccordionHeader from 'ZeroComponents/accordion/accordionHeader';
+// @ts-ignore
 import ZeroAccordionContent from 'ZeroComponents/accordion/accordionContent';
 import clsx from 'clsx';
 
 // ====================================================================== Params
 /**
+ * @param {Object} props
  * @param {Array} props.active
- * @param function props.toggle
+ * @callback props.toggle
  * @param Boolean props.toggleOnLoad
  */
 // ================================================================== Functions
@@ -20,10 +23,10 @@ function Content () {
 }
 
 const generateUID = () => {
-  var first = (Math.random() * 46656) | 0
-  var second = (Math.random() * 46656) | 0
-  first = ("000" + first.toString(36)).slice(-3)
-  second = ("000" + second.toString(36)).slice(-3)
+  const firstNum = (Math.random() * 46656) | 0
+  const secondNum = (Math.random() * 46656) | 0
+  const first = ("000" + firstNum.toString(36)).slice(-3)
+  const second = ("000" + secondNum.toString(36)).slice(-3)
   return first + second
 }
 
@@ -31,7 +34,7 @@ function AccordionSection({ active, toggle, toggleOnLoad, disabled, children }) 
   const [uid, setUID] = useState(generateUID)
   const header = children.find(child => child.type === Header)
   const content = children.find(child => child.type === Content)
-  const open = Array.isArray(active) ? active.includes(uid) : active === uid
+  const open = active.includes(uid)
 
   return (
     <div className={ clsx("accordion-section", open ? 'open': '') }>

@@ -8,7 +8,7 @@ import Dropdown from 'ZeroComponents/dropdown/dropdown'
  * @prop {string} [label]
  * @prop {string} [value]
  * @prop {string} [key]
- * @prop {string} [direction] 
+ * @prop {string} [direction]
  * @prop {function} [compareFn]
  *
  * @typedef {Object} SortableProps
@@ -30,7 +30,7 @@ export const SortType = {
       } else if(direction === SortDirection.DESC) {
         return items.sort((a, b) => a[key] && b[key] ? b[key].localeCompare(a[key]) : console.warn(`Missing key ${key}`))
       }
-    } 
+    }
     else if(direction === SortDirection.ASC) {
       return items.sort((a, b) => typeof a !== 'object' && typeof b !== 'object' ? a.localeCompare(b) : console.warn(`Missing key definition`))
     } else if(direction === SortDirection.DESC) {

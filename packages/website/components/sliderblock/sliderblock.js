@@ -1,5 +1,6 @@
 // ===================================================================== Imports
 import Card from '../card/card';
+// @ts-ignore
 import ZeroSlider from 'ZeroComponents/slider/slider';
 
 // ====================================================================== Params
@@ -13,7 +14,11 @@ export default function SliderBlock({ block }) {
       <ZeroSlider collection={block.slides} arrowSelectors={false} rangeInput={true} displayOptions={block.breakpoints}>
         <ZeroSlider.Content>
           {block.slides.map((card, index) => (
-            <Card key={`slider-item-${index}`} card={card} />
+            <Card
+              key={`slider-item-${index}`}
+              card={card}
+              cardsGroup={null}
+              index={index} />
           ))}
         </ZeroSlider.Content>
 

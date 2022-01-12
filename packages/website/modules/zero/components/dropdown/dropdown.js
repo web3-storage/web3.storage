@@ -81,11 +81,11 @@ const Dropdown = ({
   return (
     <div
       className={clsx(className, 'Dropdown', { open: isOpen, scrollable })}
-      tabIndex="-1"
+      tabIndex={-1}
       onBlur={(event) => !event.relatedTarget && setIsOpen(false)}
       onKeyUp={handleDropdownKeyUp}
     >
-      <button 
+      <button
         className="dropdownButton"
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -96,12 +96,12 @@ const Dropdown = ({
       </button>
 
       <div className="dropdownContent">
-        <div className={clsx('dropdownItemList')} role="listbox" tabIndex="-1">
+        <div className={clsx('dropdownItemList')} role="listbox" tabIndex={-1}>
           {options.map((option) => (
             <div
               key={`item-${option.value}`}
               className={clsx('dropdownItem', { current: currentItem.value === option.value })}
-              tabIndex="-1"
+              tabIndex={-1}
               role="option"
               aria-selected={currentItem.value === option.value ? 'true' : 'false'}
               onClick={() => setCurrentItem(option.value)}

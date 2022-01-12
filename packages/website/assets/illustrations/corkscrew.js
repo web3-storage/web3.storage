@@ -1,3 +1,4 @@
+// @ts-ignore
 import corkscrew from '../images/corkscrew.png'
 /**
  * @param {any} props

@@ -10,8 +10,8 @@ import GeneralPageData from '../../content/pages/general.json';
  * Breadcrumbs
  *
  * @param String props.variant
- * @param function props.click
- * @param function props.keyboard
+ * @callback props.click
+ * @callback props.keyboard
  */
 // ====================================================================== Export
 export default function Breadcrumbs({ variant, click, keyboard }) {
@@ -26,7 +26,7 @@ export default function Breadcrumbs({ variant, click, keyboard }) {
   ];
 
   if (breadcrumbs.hasOwnProperty(routeName)) {
-    links.push({ text: breadcrumbs[routeName] });
+    links.push({ url: '', text: breadcrumbs[routeName] });
   }
 
   return (

@@ -5,12 +5,6 @@ import clsx from 'clsx';
 import { getVersion } from 'lib/api';
 import { getStatusPageSummary } from 'lib/statuspage-api';
 import GeneralPageData from '../../content/pages/general.json';
-// ====================================================================== Params
-/**
- * messageBanner Component
- *
- * @param {Object} props
- */
 
 // ===================================================================== Exports
 export default function MessageBanner() {
@@ -83,7 +77,7 @@ export default function MessageBanner() {
                 onClick={() => messageBannerClick(bannerPrompt)}
                 onKeyPress={() => messageBannerClick(bannerPrompt)}
                 role="button"
-                tabIndex="0"
+                tabIndex={0}
               ></div>
             </div>
           </div>

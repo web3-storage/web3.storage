@@ -5,7 +5,9 @@ import clsx from 'clsx';
 import Link from 'next/link';
 
 import { useAuthorization } from 'components/contexts/authorizationContext';
+// @ts-ignore
 import ZeroAccordion from 'ZeroComponents/accordion/accordion';
+// @ts-ignore
 import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
 import Button from '../button/button';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
@@ -14,12 +16,6 @@ import GeneralPageData from '../../content/pages/general.json';
 import { trackCustomLinkClick, events, ui } from 'lib/countly';
 import Loading from 'components/loading/loading';
 import Breadcrumbs from 'components/breadcrumbs/breadcrumbs';
-// ====================================================================== Params
-/**
- * Navbar Component
- *
- * @param {Object} props
- */
 
 // ===================================================================== Exports
 export default function Navigation() {
@@ -135,7 +131,7 @@ export default function Navigation() {
                     onClick={onLinkClick}
                     onKeyPress={e => handleKeySelect(e, '/')}
                     role="button"
-                    tabIndex="0"
+                    tabIndex={0}
                   >
                     <SiteLogo className="site-logo-image" />
                     <button className="site-logo-text" onClick={onLinkClick} onKeyPress={e => handleKeySelect(e, '/')}>

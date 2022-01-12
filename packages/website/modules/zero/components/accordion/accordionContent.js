@@ -5,13 +5,13 @@ import { useRef, useState, useEffect, useLayoutEffect } from 'react';
 // ====================================================================== Params
 /**
  * @param Boolean props.open
- * @param function props.toggle
+ * @callback props.toggle
  * @param String props.uid
  * @param Boolean props.toggleOnLoad
  */
 // ====================================================================== Export
 export default function AccordionContent({ open, toggle, uid, toggleOnLoad, children }) {
-  const content = useRef(null)
+  const content = useRef(/** @type {any} */ (null))
   const firstUpdate = useRef(true)
   const [contentHeight, setContentHeight] = useState('0px')
   const [height, setHeight] = useState('unset')
