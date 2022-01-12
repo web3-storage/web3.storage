@@ -24,6 +24,10 @@ $date-delete: auto;
   }
 }
 
+.tokens-manager-header {
+  display: flex;
+}
+
 .tokens-manager-table-content {
   padding-top: 1.25rem;
   min-height: 21.25rem;
@@ -38,4 +42,18 @@ $date-delete: auto;
   width: 100%;
   padding: 0;
   padding-top: 2em;
+}
+
+
+.tokens-manager-footer {
+  &:before {
+    content: '';
+  }
+}
+
+.tokens-manager-header,
+.tokens-manager-footer {
+  .Dropdown .dropdownContent .dropdownItemList {
+    background-color: black;
+  }
 }

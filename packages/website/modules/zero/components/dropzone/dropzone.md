@@ -42,3 +42,7 @@ Returns an array of valid files
 Returns an array of invalid files
 **type:** `function`  
 **returns:** `File[]`   
+
+### Additional params
+Built-in react-dropzone params can be found on the official website  
+`https://react-dropzone.js.org/#src`
