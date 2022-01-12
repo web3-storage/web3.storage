@@ -1,8 +1,13 @@
 // ===================================================================== Imports
+import { useCallback } from 'react';
+import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Image from 'next/image';
 
 import Button from '../button/button';
+import NpmIcon from '../../assets/icons/npmicon';
+import Windows from '../../assets/icons/windows';
+import countly from '../../lib/countly';
 // ====================================================================== Params
 /**
  * @param {Object} props.card
@@ -11,6 +16,20 @@ import Button from '../button/button';
  */
 // ====================================================================== Export
 export default function Card({ card, parent, index }) {
+  const router = useRouter();
+  const hasIcon = card.hasOwnProperty('icon_before') && typeof card.icon_before === 'object';
+  const tracking = {};
+  if (typeof card.cta === 'object') {
+    if (card.cta.event) {
+      tracking.event = countly.events[card.cta.event];
+    }
+    if (card.cta.ui) {
+      tracking.ui = countly.ui[card.cta.ui];
+    }
+    if (card.cta.action) {
+      tracking.action = card.cta.action;
+    }
+  }
   // ================================================================= Functions
   const renderExploreCards = obj => {
     return (
@@ -44,6 +63,44 @@ export default function Card({ card, parent, index }) {
     }
   };
 
+  const getIcon = obj => {
+    let svg;
+    if (obj.hasOwnProperty('svg')) {
+      switch (obj.svg) {
+        case 'npm_icon':
+          svg = <NpmIcon />;
+          break;
+        case 'windows_icon':
+          svg = <Windows />;
+          break;
+        default:
+          svg = false;
+          break;
+      }
+    }
+    if (svg) {
+      return (
+        <a href={obj.url} target="_blank" rel="noreferrer">
+          {svg}
+        </a>
+      );
+    }
+    return (
+      <a href={obj.url} target="_blank" rel="noreferrer">
+        {obj.text ? obj.text : ''}
+      </a>
+    );
+  };
+
+  const handleButtonClick = useCallback(
+    cta => {
+      if (cta.url) {
+        router.push(cta.url);
+      }
+    },
+    [router]
+  );
+
   // ========================================================= Templates [Cards]
   if (card.type === 'E') {
     const len = parent.cards.length;
@@ -66,28 +123,38 @@ export default function Card({ card, parent, index }) {
               <div className={'feature_storage-bar-highlight'} style={{ width: width }}></div>
 
               {parent.cards.map((card, j) => (
-                <div key={card.title} className="storage-bar-tier" style={{ flexGrow: j + 1 }}>
+                <div key={card.title} className="storage-bar-tier">
                   <span className={clsx('storage-bar-tier-label', index < j ? 'display' : '')}>{card.title}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="col-4">
+          <div className="col-4_md-5_sm-6_mi-12">
             <div className={'card_panel-left'}>
               {card.label && <div className="label">{card.label}</div>}
 
               {card.title && <div className="title">{card.title}</div>}
 
+              {card.description && (
+                <div className="description" dangerouslySetInnerHTML={{ __html: card.description }}></div>
+              )}
+
               {card.cta && (
-                <Button href={card.cta.link} variant={card.cta.theme} tracking={{}}>
+                <Button
+                  className={'cta'}
+                  variant={card.cta.theme}
+                  tracking={tracking}
+                  onClick={() => handleButtonClick(card.cta)}
+                  onKeyPress={() => handleButtonClick(card.cta)}
+                >
                   {card.cta.text}
                 </Button>
               )}
             </div>
           </div>
 
-          <div className="col-7">
+          <div className="col-7_sm-6_mi-0">
             <div className={'card_panel-right'}>
               {card.description && (
                 <div className="description" dangerouslySetInnerHTML={{ __html: card.description }}></div>
@@ -111,8 +178,16 @@ export default function Card({ card, parent, index }) {
 
       {card.description && <div className="description">{card.description}</div>}
 
+      {hasIcon && <div className="icon-before">{getIcon(card.icon_before)}</div>}
+
       {card.cta && (
-        <Button href={card.cta.link} variant={card.cta.theme} tracking={{}}>
+        <Button
+          className={'cta'}
+          variant={card.cta.theme}
+          tracking={tracking}
+          onClick={() => handleButtonClick(card.cta)}
+          onKeyPress={() => handleButtonClick(card.cta)}
+        >
           {card.cta.text}
         </Button>
       )}

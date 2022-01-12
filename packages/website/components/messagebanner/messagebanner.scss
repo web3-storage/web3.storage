@@ -10,16 +10,34 @@ $messageBannerHeight: 3.25rem;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  height: $messageBannerHeight;
+  // height: 0;
+  padding: 0.53125rem 0;
   color: white;
 }
 .message-banner-content {
   margin: auto 0;
   display: inline;
+  text-align: center;
   @include fontSize_Small;
   @include fontWeight_Medium;
   a {
     @include gradient_Text;
     margin: 0 0.5rem;
+  }
+  @include tiny {
+    line-height: leading(24, 16);
+  }
+
+  &.banner-alert {
+    &:before {
+      content: '⚠';
+      display: inline;
+      margin-right: 0.25rem;
+      @include fontSize_Small;
+      @include fontWeight_Medium;
+      @include tiny {
+        line-height: leading(24, 16);
+      }
+    }
   }
 }

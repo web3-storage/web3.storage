@@ -27,7 +27,7 @@ const generateUID = () => {
   return first + second
 }
 
-function AccordionSection({ active, toggle, toggleOnLoad, children }) {
+function AccordionSection({ active, toggle, toggleOnLoad, disabled, children }) {
   const [uid, setUID] = useState(generateUID)
   const header = children.find(child => child.type === Header)
   const content = children.find(child => child.type === Content)
@@ -38,7 +38,7 @@ function AccordionSection({ active, toggle, toggleOnLoad, children }) {
 
       <ZeroAccordionHeader
         uid={uid}
-        toggle={toggle}>
+        toggle={disabled ? () => { return null } : toggle}>
 
         {header ? header.props.children : null}
 
@@ -61,6 +61,10 @@ function AccordionSection({ active, toggle, toggleOnLoad, children }) {
 AccordionSection.Header = Header
 
 AccordionSection.Content = Content
+
+AccordionSection.defaultProps = {
+  disabled: false
+}
 
 // ===================================================================== Export
 export default AccordionSection

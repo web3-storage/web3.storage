@@ -1,4 +1,6 @@
 // ===================================================================== Imports
+import { useCallback } from 'react';
+import { useRouter } from 'next/router';
 import clsx from 'clsx';
 
 import Button from '../button/button';
@@ -11,15 +13,22 @@ import countly from '../../lib/countly';
  */
 // ====================================================================== Export
 export default function TextBlock({ block, className }) {
-  // Object.assign(styles, className);
+  const router = useRouter();
   const format = block.format || 'medium';
   const hasDescription = typeof block.description === 'string' || Array.isArray(block.description);
-  const ui = typeof block.cta !== 'object' ? '' : block.cta.hasOwnProperty('tracking') ? block.cta.tracking : '';
-  const action = typeof block.cta !== 'object' ? '' : block.cta.hasOwnProperty('action') ? block.cta.action : '';
-  const tracking = {
-    ui: countly.ui[ui],
-    action: action,
-  };
+  const tracking = {};
+  if (typeof block.cta === 'object') {
+    if (block.cta.event) {
+      tracking.event = countly.events[block.cta.event];
+    }
+    if (block.cta.ui) {
+      tracking.ui = countly.ui[block.cta.ui];
+    }
+    if (block.cta.action) {
+      tracking.action = block.cta.action;
+    }
+  }
+
   // ================================================================= Functions
   const formatDescription = text => {
     if (Array.isArray(text)) {
@@ -44,6 +53,16 @@ export default function TextBlock({ block, className }) {
         return <h2 className={clsx('h2', 'heading')}>{block.heading}</h2>;
     }
   };
+
+  const handleButtonClick = useCallback(
+    cta => {
+      if (cta.url) {
+        router.push(cta.url);
+      }
+    },
+    [router]
+  );
+
   // ==================================================================== Export
   return (
     <div className={clsx('block text-block', `format__${format}`)}>
@@ -62,11 +81,15 @@ export default function TextBlock({ block, className }) {
       {hasDescription && <div className={'description'}>{formatDescription(block.description)}</div>}
 
       {typeof block.cta === 'object' && (
-        <div className={'cta'}>
-          <Button href={block.cta.url} variant={block.cta.theme} tracking={tracking}>
-            {block.cta.text}
-          </Button>
-        </div>
+        <Button
+          className={'cta'}
+          variant={block.cta.theme}
+          tracking={tracking}
+          onClick={() => handleButtonClick(block.cta)}
+          onKeyPress={() => handleButtonClick(block.cta)}
+        >
+          {block.cta.text}
+        </Button>
       )}
     </div>
   );

@@ -84,10 +84,15 @@ $cpTabColor: #2a272e;
   color: $lavenderPink;
 }
 
-.hljs-title {
-  &.function_ {
-    color: $sunglow;
+.hljs-function {
+  color: $anikiwa;
+  .hljs-keyword {
+    color: $anikiwa;
   }
+}
+
+.hljs-title {
+  color: $sunglow;
   &.class_ {
     color: $anikiwa;
   }

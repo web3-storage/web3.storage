@@ -17,6 +17,10 @@
   .text-block {
     .subheading {
       color: black;
+      padding-right: 5rem;
+      @include mini {
+        padding-right: 0;
+      }
     }
   }
 }
@@ -39,10 +43,15 @@
 
 #index_hero_background-gradient {
   position: absolute;
-  width: 150%;
-  left: -25%;
-  bottom: -30rem;
+  width: 100%;
+  height: calc(100% + $navigationHeight + 9rem);
+  left: 0;
+  top: calc(0rem - $navigationHeight);
   z-index: 0;
+  background-image: url('/images/index/holographic-bg-cropped-1.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: right 0 bottom 0rem;
 }
 
 #index_hero-grid-3d,
@@ -60,6 +69,9 @@
   width: 29rem;
   left: -10.5rem;
   transform: rotate(-27deg);
+  @include medium {
+    left: calc(50% - #{math.div($containerWidth, 2)} - 12rem);
+  }
 }
 
 #index_hero-corkscrew {
@@ -67,33 +79,57 @@
   right: -2rem;
   top: -1rem;
   transform: rotate(115deg);
+  @include large {
+    right: calc(50% - #{math.div($containerWidth, 2)} - 9rem);
+  }
+  @include small {
+    display: none;
+  }
 }
 
 #index_hero-zigzag {
   width: 7.375rem;
-  left: 25%;
-  top: 0;
+  left: calc(25% - 2rem);
+  top: -3.5rem;
   transform: rotate(-185deg);
+  @include medium {
+    width: 3rem;
+  }
+  @include mini {
+    left: 1%;
+  }
 }
 
 #index_hero-helix {
   width: 4.125rem;
   left: 37%;
-  top: -5rem;
+  top: -1 * $navigationHeight;
   transform: rotate(-90deg);
+  @include mini {
+    display: none;
+  }
 }
 
 #index_hero-cross {
   width: 5.25rem;
   right: 31%;
-  bottom: 3.5rem;
+  bottom: 1rem;
+  @include small {
+    display: none;
+  }
 }
 
 #index_hero-triangle {
   width: 3.5rem;
   left: 30%;
-  bottom: 5rem;
+  bottom: 2rem;
   transform: rotate(-90deg);
+  @include medium {
+    bottom: -2rem;
+  }
+  @include small {
+    left: 2rem;
+  }
 }
 
 // ////////////////////////////////////////////////////////////////// Page [FAQ]
@@ -124,6 +160,24 @@
       span {
         &:last-child {
           margin-right: 4.875rem;
+          @include small {
+            margin-right: 0;
+            margin-left: 1rem;
+          }
+          @include mini {
+            margin-left: 0;
+          }
+        }
+      }
+      @include small {
+        @include fontSize_ExtraLarge;
+      }
+      @include mini {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        div {
+          margin-bottom: 1.5rem;
         }
       }
     }
@@ -153,26 +207,7 @@
   }
 }
 
-#faq_hero_title-triangle {
-  position: relative;
-  width: 4.875rem;
-  height: 4.875rem;
-  top: 1rem;
-  margin: 0 0.5rem;
-  &:after {
-    display: inherit;
-    content: '';
-    top: 0;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform: scaleX(-1) rotate(-90deg);
-    background-image: url('../../assets/images/triangle.png');
-    background-size: 100%;
-    background-repeat: no-repeat;
-  }
-}
-
+#faq_hero_title-triangle,
 #faq_hero_title-coil {
   position: relative;
   width: 4.875rem;
@@ -186,10 +221,39 @@
     width: 100%;
     height: 100%;
     position: relative;
-    transform: rotate(31deg);
-    background-image: url('../../assets/images/coil.png');
+
     background-size: 100%;
     background-repeat: no-repeat;
+  }
+  @include small {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+#faq_hero_title-triangle {
+  &:after {
+    transform: scaleX(-1) rotate(-90deg);
+    background-image: url('../../assets/images/triangle.png');
+  }
+}
+
+#faq_hero_title-coil {
+  &:after {
+    transform: rotate(31deg);
+    background-image: url('../../assets/images/coil.png');
+    @include small {
+      display: none;
+    }
+    @include mini {
+      display: block;
+    }
+  }
+  @include small {
+    position: absolute;
+  }
+  @include mini {
+    position: relative;
   }
 }
 
@@ -204,6 +268,7 @@
   right: 0;
   bottom: 0;
   transform: translate(55%, 54%) rotate(-23deg);
+  right: calc(50% - #{math.div($containerWidth, 2)} - 13rem);
 }
 
 #faq_hero-corkscrew {
@@ -214,12 +279,23 @@
   @include containerMaxMQ {
     right: 0;
   }
+  @include small {
+    right: calc(50% - #{math.div($containerWidth, 2)} + 3rem);
+  }
 }
 
 #faq_hero-helix {
   width: 18rem;
-  left: 0;
   top: 1rem;
   left: -4rem;
   transform: rotate(-79deg);
+  left: calc(50% - #{math.div($containerWidth, 2)} - 18rem);
+  @include medium {
+    width: 14rem;
+    left: -4rem;
+  }
+  @include small {
+    width: 10rem;
+    top: -1rem;
+  }
 }

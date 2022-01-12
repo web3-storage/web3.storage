@@ -9,11 +9,9 @@ import { ReactComponent as Chevron } from '../../assets/icons/chevron.svg';
  */
 // ====================================================================== Export
 export default function AccordionBlock({ block }) {
-  const multiple = block.multiple ? block.multiple : false;
-  const toggleOnLoad = block.toggleOnLoad ? block.toggleOnLoad : false;
   return (
     <div className="block accordion-block">
-      <ZeroAccordion multiple={multiple} toggleOnLoad={toggleOnLoad}>
+      <ZeroAccordion multiple={true} toggleOnLoad={true}>
         {block.sections.map((section, index) => (
           <ZeroAccordionSection key={`accordion_section-${index}`}>
             <ZeroAccordionSection.Header>
