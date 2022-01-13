@@ -126,7 +126,7 @@ describe('Pin Request', () => {
 
   describe('Create Pin', () => {
     it('creates a Pin Request', async () => {
-      const savedPinRequest = await client.getPAPinRequest(parseInt(aPinRequestOutput._id, 10))
+      const savedPinRequest = await client.getPAPinRequest(authKey, parseInt(aPinRequestOutput._id, 10))
       assert.ok(savedPinRequest)
     })
 
@@ -161,8 +161,8 @@ describe('Pin Request', () => {
     let savedPinRequestForExistingContent
 
     before(async () => {
-      savedPinRequest = await client.getPAPinRequest(parseInt(aPinRequestOutput._id, 10))
-      savedPinRequestForExistingContent = await client.getPAPinRequest(parseInt(aPinRequestOutputForExistingContent._id, 10))
+      savedPinRequest = await client.getPAPinRequest(authKey, parseInt(aPinRequestOutput._id, 10))
+      savedPinRequestForExistingContent = await client.getPAPinRequest(authKey, parseInt(aPinRequestOutputForExistingContent._id, 10))
     })
 
     it('creates a Pin Request', async () => {
@@ -195,7 +195,7 @@ describe('Pin Request', () => {
     })
 
     it('throws if does not exists', async () => {
-      assert.rejects(client.getPAPinRequest(1000))
+      assert.rejects(client.getPAPinRequest(authKey, 1000))
     })
   })
 
@@ -411,7 +411,7 @@ describe('Pin Request', () => {
 
     it('returns the id of the deleted pin request', async () => {
       const aPinRequestOutputId = parseInt(aPinRequestOutput._id, 10)
-      const pinRequest = await client.getPAPinRequest(aPinRequestOutputId)
+      const pinRequest = await client.getPAPinRequest(authKey, aPinRequestOutputId)
       assert.ok(!pinRequest.deleted, 'is null')
       const deletedPinRequest = await client.deletePAPinRequest(aPinRequestOutputId, authKey)
       assert.ok(deletedPinRequest)
@@ -419,7 +419,7 @@ describe('Pin Request', () => {
     })
 
     it('does not select pin request after deletion', async () => {
-      assert.rejects(client.getPAPinRequest(parseInt(aPinRequestOutput._id, 10)))
+      assert.rejects(client.getPAPinRequest(authKey, parseInt(aPinRequestOutput._id, 10)))
     })
 
     it('cannot delete a pin request which is already deleted', async () => {

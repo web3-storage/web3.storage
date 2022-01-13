@@ -437,8 +437,8 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
   describe('GET /pins/:requestId', () => {
     let token = null
     before(async () => {
-    // Create token
-      token = await getTestJWT()
+      // Create token
+      token = await getTestJWT('test-upload', 'test-upload')
     })
 
     it('returns unauthorized if no token', async () => {
@@ -472,7 +472,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
     })
 
     it('returns not found if the request does not exists', async () => {
-      const pinThatDoesNotExists = '100'
+      const pinThatDoesNotExists = 100
       const res = await fetch(new URL(`pins/${pinThatDoesNotExists}`, endpoint).toString(), {
         method: 'GET',
         headers: {

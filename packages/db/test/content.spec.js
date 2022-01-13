@@ -201,8 +201,8 @@ describe('Content', () => {
 
       await client.createContent(contentWithPinRequest, { updatePinRequests: true })
 
-      const request1 = await client.getPAPinRequest(aPinRequestOutput._id)
-      const request2 = await client.getPAPinRequest(aSecondPinRequestOutput._id)
+      const request1 = await client.getPAPinRequest(authKey, aPinRequestOutput._id)
+      const request2 = await client.getPAPinRequest(authKey, aSecondPinRequestOutput._id)
 
       assert.strictEqual(request1.contentCid, cidToBeCreatedWithPinRequest)
       assert.ifError(request2.contentCid)
