@@ -1,6 +1,5 @@
 // ===================================================================== Imports
 import Card from '../card/card';
-// @ts-ignore
 import ZeroSlider from 'ZeroComponents/slider/slider';
 
 // ====================================================================== Params

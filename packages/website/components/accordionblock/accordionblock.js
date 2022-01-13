@@ -1,7 +1,5 @@
 // ===================================================================== Imports
-// @ts-ignore
 import ZeroAccordion from 'ZeroComponents/accordion/accordion';
-// @ts-ignore
 import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
 import { ReactComponent as Chevron } from '../../assets/icons/chevron.svg';
 
