@@ -509,6 +509,17 @@ describe('Pinning APIs endpoints', () => {
       assert.deepEqual(res.status, 404)
     })
 
+    it('returns not found if the request does not belong to the user token', async () => {
+      token = await getTestJWT()
+      const res = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` }
+      })
+
+      assert(res, 'Server responded')
+      assert.deepEqual(res.status, 404)
+    })
+
     it('returns the pin request', async () => {
       const res = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
         method: 'GET',
