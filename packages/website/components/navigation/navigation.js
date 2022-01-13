@@ -4,11 +4,9 @@ import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Link from 'next/link';
 
-import { useAuthorization } from 'components/contexts/authorizationContext';
-// @ts-ignore
 import ZeroAccordion from 'ZeroComponents/accordion/accordion';
-// @ts-ignore
 import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
+import { useAuthorization } from 'components/contexts/authorizationContext';
 import Button from '../button/button';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Hamburger from '../../assets/icons/hamburger.js';

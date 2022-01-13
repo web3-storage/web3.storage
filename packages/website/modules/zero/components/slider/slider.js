@@ -11,19 +11,32 @@ import clsx from 'clsx'
  * @param {Object} props.displayOptions
  */
 // =================================================================== Functions
-function Content () {
+
+/**
+ * @param {any} props TODO: Define props
+ */
+function Content ({}) {
   return null
 }
 
-function Previous () {
+/**
+ * @param {any} props TODO: Define props
+ */
+function Previous ({}) {
   return null
 }
 
-function Next () {
+/**
+ * @param {any} props TODO: Define props
+ */
+function Next ({}) {
   return null
 }
 
-function Thumb () {
+/**
+ * @param {any} props TODO: Define props
+ */
+function Thumb ({}) {
   return null
 }
 

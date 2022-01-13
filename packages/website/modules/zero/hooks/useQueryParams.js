@@ -1,13 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 
 /**
- * @typedef {function} useQueryParams
- * @prop {string} [param]
- * @prop {string} [defaultValue]
+ * @param {string} [param]
+ * @param {string|number|null} [defaultValue]
+ * @returns {[queryValue: any, setQueryValue: any] | []}
  */
-
-export default function useQueryParams(param, defaultValue = null) {
-  if(!param) return []
+export default function useQueryParams(param = '', defaultValue = null) {
 
   const [queryValue, setQueryValue] = useState(defaultValue);
 
@@ -22,7 +20,11 @@ export default function useQueryParams(param, defaultValue = null) {
     const queryParams = new URLSearchParams(window.location.search);
     const value = queryParams.get(param)
     setValue(value || defaultValue)
-  }, [])
+  }, 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [])
+  
+  if(!param) return []
 
   return [queryValue, setValue]
 }

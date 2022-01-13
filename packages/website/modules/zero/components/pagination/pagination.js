@@ -1,18 +1,22 @@
-import { useMemo, useCallback, useState, useEffect } from 'react'
-import useQueryParams from 'ZeroHooks/useQueryParams'
 import clsx from 'clsx'
+import { useMemo, useCallback, useState, useEffect } from 'react'
+
+import useQueryParams from 'ZeroHooks/useQueryParams'
 
 /**
  * @typedef {Object} PaginationProps
  * @prop {string} [className]
- * @prop {any[]} [items]
- * @prop {number} [itemsPerPage]
- * @prop {number} [visiblePages]
+ * @prop {any[]} items
+ * @prop {string|number} itemsPerPage
+ * @prop {number} visiblePages
  * @prop {number} [defaultPage]
- * @prop {number} [queryParam]
+ * @prop {string} [queryParam]
  * @prop {function} [onChange]
  */
 
+/**
+ * @param {PaginationProps} props
+ */
 const Pagination = ({
   className,
   items,
@@ -24,10 +28,10 @@ const Pagination = ({
 }) => {
   const [queryValue, setQueryValue] = useQueryParams(queryParam, defaultPage);
 
-  const [pageList, setPageList] = useState([])
+  const [pageList, setPageList] = useState(/** @type {number[]} */([]))
   const [activePage, setActivePage] = useState(defaultPage)
 
-  const pageCount = useMemo(() => itemsPerPage ? Math.ceil(items.length/parseInt(itemsPerPage)) : null, [items, itemsPerPage])
+  const pageCount = useMemo(() => itemsPerPage ? Math.ceil(items.length/parseInt(/** @type {string} */(itemsPerPage))) : null, [items, itemsPerPage])
 
   const currentPage = useMemo(() => parseInt(queryParam ? queryValue : activePage), [queryParam, queryValue, activePage])
 
@@ -42,8 +46,8 @@ const Pagination = ({
     pageCount && currentPage < 1 && setCurrentPage(defaultPage)
     pageCount && currentPage > pageCount && setCurrentPage(pageCount)
 
-    const firstItem = (currentPage - 1) * parseInt(itemsPerPage)
-    onChange && onChange(items.slice(firstItem, firstItem + parseInt(itemsPerPage)))
+    const firstItem = (currentPage - 1) * parseInt(/** @type {string} */(itemsPerPage))
+    onChange && onChange(items.slice(firstItem, firstItem + parseInt(/** @type {string} */(itemsPerPage))))
   }, [items, itemsPerPage, visiblePages, pageCount, setPageList, currentPage, setCurrentPage, onChange])
 
   return (
@@ -67,13 +71,13 @@ const Pagination = ({
             {page}
           </button>
         ))}
-        {currentPage < pageCount - visiblePages
+        {pageCount != null && currentPage < pageCount - visiblePages
           && <div className="nextEllipses">...</div>
         }
-        {currentPage < pageCount
+        {pageCount != null && currentPage < pageCount
           && <button type="button" className="nextPage" onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
         }
-        {currentPage < pageCount - visiblePages
+        {pageCount != null && currentPage < pageCount - visiblePages
           && <button type="button" className="lastPage" onClick={() => setCurrentPage(pageCount)}>Last</button>
         }
       </ul>

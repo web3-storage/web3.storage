@@ -12,6 +12,11 @@ import clsx from 'clsx'
  * @prop {import('react').ReactNode | string} children
  */
 
+/**
+ * 
+ * @param {ButtonProps} props 
+ * @returns 
+ */
 const Button = ({
   className,
   onClick,

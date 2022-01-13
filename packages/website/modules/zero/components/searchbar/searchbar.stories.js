@@ -1,5 +1,6 @@
 import React from 'react'
 import useState from 'storybook-addon-state';
+
 import SearchBar from './searchbar';
 import { ReactComponent as SearchIcon } from '../../assets/search.svg'
 

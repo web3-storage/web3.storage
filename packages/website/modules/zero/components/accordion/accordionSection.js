@@ -1,24 +1,28 @@
 // ===================================================================== Imports
 import React, { useState } from "react";
-// @ts-ignore
-import ZeroAccordionHeader from 'ZeroComponents/accordion/accordionHeader';
-// @ts-ignore
-import ZeroAccordionContent from 'ZeroComponents/accordion/accordionContent';
 import clsx from 'clsx';
+
+import ZeroAccordionHeader from 'ZeroComponents/accordion/accordionHeader';
+import ZeroAccordionContent from 'ZeroComponents/accordion/accordionContent';
 
 // ====================================================================== Params
 /**
- * @param {Object} props
- * @param {Array} props.active
+ * @param {any} props TODO: Define props
  * @callback props.toggle
  * @param Boolean props.toggleOnLoad
  */
 // ================================================================== Functions
-function Header () {
+function Header ({}) {
   return null
 }
 
-function Content () {
+// ====================================================================== Params
+/**
+ * @param {any} props TODO: Define props
+ */
+// ================================================================== Functions
+
+function Content ({}) {
   return null
 }
 
@@ -30,6 +34,11 @@ const generateUID = () => {
   return first + second
 }
 
+/**
+ * User Info Hook
+ *
+ * @param { any } props TODO: Define props
+ */
 function AccordionSection({ active, toggle, toggleOnLoad, disabled, children }) {
   const [uid, setUID] = useState(generateUID)
   const header = children.find(child => child.type === Header)

@@ -147,7 +147,7 @@ export default function Card({ card, cardsGroup = [], index = 0 }) {
                   variant={card.cta.theme}
                   tracking={tracking}
                   onClick={() => handleButtonClick(card.cta)}
-                  onkeypress={() => handleButtonClick(card.cta)}
+                  onKeyPress={() => handleButtonClick(card.cta)}
                 >
                   {card.cta.text}
                 </Button>
@@ -187,7 +187,7 @@ export default function Card({ card, cardsGroup = [], index = 0 }) {
           variant={card.cta.theme}
           tracking={tracking}
           onClick={() => handleButtonClick(card.cta)}
-          onkeypress={() => handleButtonClick(card.cta)}
+          onKeyPress={() => handleButtonClick(card.cta)}
         >
           {card.cta.text}
         </Button>

@@ -85,7 +85,7 @@ export default function TextBlock({ block }) {
           variant={block.cta.theme}
           tracking={tracking}
           onClick={() => handleButtonClick(block.cta)}
-          onkeypress={() => handleButtonClick(block.cta)}
+          onKeyPress={() => handleButtonClick(block.cta)}
         >
           {block.cta.text}
         </Button>
