@@ -3,7 +3,7 @@
  * Do not make direct changes to the file.
  */
 
-export interface paths {
+ export interface paths {
   "/": {
     get: {
       responses: {
@@ -1292,7 +1292,7 @@ export interface paths {
       };
     };
   };
-  "/rpc/user_auth_keys_list": {
+  "/rpc/user_keys_list": {
     post: {
       parameters: {
         body: {
@@ -1587,31 +1587,6 @@ export interface definitions {
     inserted_at: string;
     updated_at: string;
   };
-<<<<<<< HEAD
-  pa_pin_request: {
-    /**
-     * Note:
-     * This is a Primary Key.<pk/>
-     */
-    id: number;
-    /**
-     * Note:
-     * This is a Foreign Key to `content.cid`.<fk table='content' column='cid'/>
-     */
-    content_cid?: string;
-    /**
-     * Note:
-     * This is a Foreign Key to `auth_key.id`.<fk table='auth_key' column='id'/>
-     */
-    auth_key_id: number;
-    requested_cid: string;
-    name?: string;
-    deleted_at?: string;
-    inserted_at: string;
-    updated_at: string;
-  };
-=======
->>>>>>> ae65ae33dca0363f3b2ae9bc97eaee0f1e71179b
   pin: {
     /**
      * Note:
