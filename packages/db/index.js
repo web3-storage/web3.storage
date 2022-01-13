@@ -111,14 +111,14 @@ export class DBClient {
   /**
    * Check that a user is authorised to pin
    *
-   * @param {*} authKeyId
+   * @param {*} userId
    * @returns boolean
    */
-  async isPinningAuthorised (authKeyId) {
+  async isPinningAuthorised (userId) {
     const { error, count } = await this._client
       .from('pinning_authorisation')
       .select('id', { count: 'exact' })
-      .eq('auth_key_id', authKeyId)
+      .eq('user_id', userId)
       .filter('deleted_at', 'is', null)
 
     if (error) {

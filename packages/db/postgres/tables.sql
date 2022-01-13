@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS pinning_authorisation
 (
   id              BIGSERIAL PRIMARY KEY,
   -- Points to auth key used to pin the content.
-  auth_key_id     BIGINT                                                       NOT NULL REFERENCES public.auth_key (id),
+  user_id     BIGINT                                                       NOT NULL REFERENCES public.user (id),
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   deleted_at      TIMESTAMP WITH TIME ZONE
 )

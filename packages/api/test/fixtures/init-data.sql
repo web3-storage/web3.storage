@@ -88,5 +88,5 @@ VALUES (4, NULL , 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo',
        (2, NULL, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 'Image.jpg', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z');
 
 -- user 'test-pinning' is authorised
-INSERT INTO pinning_authorisation (auth_key_id)
+INSERT INTO pinning_authorisation (user_id)
 VALUES (4)

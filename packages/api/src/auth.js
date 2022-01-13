@@ -78,7 +78,7 @@ export function withApiOrMagicToken (handler) {
  */
 export function withPinningAuthorised (handler) {
   return async (request, env, ctx) => {
-    const authorised = await env.db.isPinningAuthorised(request.auth.authToken._id)
+    const authorised = await env.db.isPinningAuthorised(request.auth.user._id)
     if (!authorised) {
       throw new PinningNotAuthorisedError()
     }
