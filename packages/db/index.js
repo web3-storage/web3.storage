@@ -806,15 +806,16 @@ export class DBClient {
   /**
    * Get a Pin Request by id
    *
+   * @param {string} authKey
    * @param {number} pinRequestId
    * @return {Promise<import('./db-client-types').PAPinRequestUpsertOutput>}
    */
-  async getPAPinRequest (pinRequestId) {
+  async getPAPinRequest (authKey, pinRequestId) {
     /** @type {{data: import('./db-client-types').PAPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
       .from(PAPinRequestTableName)
       .select(pinRequestSelect)
-      .eq('id', pinRequestId)
+      .match({ auth_key_id: authKey, id: pinRequestId })
       .is('deleted_at', null)
       .single()
 

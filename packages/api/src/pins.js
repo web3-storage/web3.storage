@@ -242,11 +242,12 @@ export async function pinGet (request, env, ctx) {
     )
   }
 
+  const { authToken } = request.auth
   const requestId = parseInt(request.params.requestId, 10)
   let pinRequest
 
   try {
-    pinRequest = await env.db.getPAPinRequest(requestId)
+    pinRequest = await env.db.getPAPinRequest(authToken._id, requestId)
   } catch (e) {
     console.error(e)
     // TODO catch different exceptions
@@ -474,7 +475,7 @@ export async function pinDelete (request, env, ctx) {
 async function replacePin (newPinData, requestId, authToken, env, ctx) {
   let existingPinRequest
   try {
-    existingPinRequest = await env.db.getPAPinRequest(requestId)
+    existingPinRequest = await env.db.getPAPinRequest(authToken, requestId)
   } catch (e) {
     return notFound()
   }
