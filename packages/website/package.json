@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "rm -rf .next && next dev -p 4000",
     "start": "next start",
-    "build": "next build && next-sitemap && next export",
+    "build": "next build && next-sitemap",
+    "export": "next export",
     "test": "eslint './**/*.js' && tsc --build",
     "lint": "yarn lint:ts",
     "lint:ts": "tsc --noEmit && eslint '{pages,components,hooks,content,store}/**/*.{js,ts,tsx}' --max-warnings=0",
