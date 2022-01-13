@@ -295,8 +295,7 @@ describe('Pinning APIs endpoints', () => {
   describe('POST /pins', () => {
     let token = null
     before(async () => {
-      // token = await getTestJWT('test-pinning', 'test-pinning')
-      token = await getTestJWT('test-upload', 'test-upload')
+      token = await getTestJWT('test-pinning', 'test-pinning')
     })
 
     it('should receive pin data containing cid', async () => {
@@ -351,7 +350,7 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(error.details, INVALID_CID)
     })
 
-    it.only('should receive pin data containing cid, name, origin, meta', async () => {
+    it('should receive pin data containing cid, name, origin, meta', async () => {
       const cid = 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
