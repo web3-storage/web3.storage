@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import clsx from 'clsx'
+import React, { useEffect, useState } from 'react';
+import clsx from 'clsx';
 
 /**
  * @typedef {Object} AlertProps
@@ -11,31 +11,24 @@ import clsx from 'clsx'
  * @prop {JSX.Element} [children]
  */
 
-const ANIMATION_DURATION = 400
+const ANIMATION_DURATION = 400;
 
 /**
  *
  * @param {AlertProps} props
  * @returns
  */
-export default function Alert({
-  className,
-  position = 'bottom',
-  type = 'info',
-  timer,
-  onTimerEnd,
-  children,
-}) {
-  const [hasTimerEnded, setTimerHasEnded] = useState(false)
+export default function Alert({ className, position = 'bottom', type = 'info', timer, onTimerEnd, children }) {
+  const [hasTimerEnded, setTimerHasEnded] = useState(false);
 
   useEffect(() => {
     if (timer && onTimerEnd) {
       setTimeout(() => {
-        setTimerHasEnded(true)
-        setTimeout(onTimerEnd, ANIMATION_DURATION)
-      }, timer * 1000)
+        setTimerHasEnded(true);
+        setTimeout(onTimerEnd, ANIMATION_DURATION);
+      }, timer * 1000);
     }
-  }, [timer, onTimerEnd])
+  }, [timer, onTimerEnd]);
 
   return (
     <div
@@ -47,18 +40,14 @@ export default function Alert({
         type === 'error' && 'bg-w3storage-red',
         type === 'success' && 'bg-w3storage-green',
 
-        position === 'bottom' && hasTimerEnded &&
-          'bottom-0 disappear-to-bottom',
-        position === 'bottom' && !hasTimerEnded &&
-          'bottom-0 appear-from-bottom',
+        position === 'bottom' && hasTimerEnded && 'bottom-0 disappear-to-bottom',
+        position === 'bottom' && !hasTimerEnded && 'bottom-0 appear-from-bottom',
 
-        position === 'top' && hasTimerEnded &&
-          'top-0 disappear-to-top',
-        position === 'top' && !hasTimerEnded &&
-          'top-0 appear-from-top',
+        position === 'top' && hasTimerEnded && 'top-0 disappear-to-top',
+        position === 'top' && !hasTimerEnded && 'top-0 appear-from-top'
       )}
     >
       {children}
     </div>
-  )
+  );
 }
