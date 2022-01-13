@@ -510,10 +510,10 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('returns not found if the request does not belong to the user token', async () => {
-      token = await getTestJWT()
+      const wrongToken = await getTestJWT()
       const res = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
         method: 'GET',
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${wrongToken}` }
       })
 
       assert(res, 'Server responded')
