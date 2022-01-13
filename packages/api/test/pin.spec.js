@@ -5,7 +5,7 @@ import { getTestJWT } from './scripts/helpers.js'
 import {
   ERROR_CODE,
   ERROR_STATUS,
-  getPinningAPIStatus,
+  getEffectivePinStatus,
   INVALID_CID,
   INVALID_META,
   INVALID_NAME,
@@ -66,6 +66,22 @@ const assertCorrectPinResponse = (data) => {
   }
 }
 
+/**
+ *
+ * @param {string} cid
+ * @param {string} token
+ * @return {Promise<import('../src/pins.js').PsaPinStatusResponse>}
+ */
+const createPinRequest = async (cid, token) => {
+  return await (await fetch(new URL('pins', endpoint).toString(), {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ cid })
+  })).json()
+}
+
 describe('Pinning APIs endpoints', () => {
   let token = null
 
@@ -75,11 +91,9 @@ describe('Pinning APIs endpoints', () => {
 
   describe('GET /pins', () => {
     let baseUrl
-    let token
 
     before(async () => {
       baseUrl = new URL('pins', endpoint).toString()
-      token = await getTestJWT('test-upload', 'test-upload')
     })
 
     it('validates filter values', async () => {
@@ -104,13 +118,13 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('validates CID values passed as filter', async () => {
-      const cids = `
-bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4,
-bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q,
-bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo,
-`
+      const cids = [
+        'notAValidCID',
+        'bafybeia45bscvzxngto555xsel4gwoclb5fxd7zpxige7rl3maoleznswu',
+        'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4'
+      ]
 
-      const url = new URL(`${baseUrl}?cid=${cids}`).toString()
+      const url = new URL(`${baseUrl}?cid=${cids.join(',')}`).toString()
       const res = await fetch(
         url, {
           method: 'GET',
@@ -143,13 +157,13 @@ bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfo,
     })
 
     it('filters pins on CID, for this user', async () => {
-      const cids = `
-bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm,
-bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q,
-bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
-`
+      const cids = [
+        'bafybeig7yvw6a4uhio4pmg5gahyd2xumowkfljdukad7pmdsv5uk5zcseu',
+        'bafybeia45bscvzxngto555xsel4gwoclb5fxd7zpxige7rl3maoleznswu',
+        'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4' // Not exists
+      ]
 
-      const url = new URL(`${baseUrl}?cid=${cids}`).toString()
+      const url = new URL(`${baseUrl}?cid=${cids.join(',')}`).toString()
       const res = await fetch(
         url, {
           method: 'GET',
@@ -435,10 +449,17 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
   })
 
   describe('GET /pins/:requestId', () => {
-    let token = null
+    let pinRequest
+
     before(async () => {
-    // Create token
-      token = await getTestJWT()
+      const cid = 'bafybeihy6bymmfcdjdrkhaha2srphnhrewimtkdxdmcama2dpgvpyx4efu'
+      pinRequest = await (await fetch(new URL('pins', endpoint).toString(), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ cid })
+      })).json()
     })
 
     it('returns unauthorized if no token', async () => {
@@ -486,8 +507,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
     })
 
     it('returns the pin request', async () => {
-      const requestId = 1
-      const res = await fetch(new URL(`pins/${requestId}`, endpoint).toString(), {
+      const res = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -499,8 +519,8 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       assertCorrectPinResponse(data)
-      assert.deepEqual(data.requestId, requestId)
-      assert.deepEqual(data.status, 'queued')
+      assert.deepEqual(data.requestId, pinRequest.requestId)
+      assert.deepEqual(data.status, 'pinned')
     })
 
     it('returns the pin request with specified name', async () => {
@@ -523,7 +543,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
     })
   })
 
-  describe('getPinningAPIStatus', () => {
+  describe('getEffectivePinStatus', () => {
     it('should return pinned if at it is pinned in at least a node', () => {
       /** @type {import('../../db/db-client-types.js').PinItemOutput[]} */
       const pins = [
@@ -531,12 +551,12 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
         createPinWithStatus('PinQueued'),
         createPinWithStatus('PinError')
       ]
-      assert.strictEqual(getPinningAPIStatus(pins), 'pinned')
+      assert.strictEqual(getEffectivePinStatus(pins), 'pinned')
     })
 
     it('should return queued if there are no pins yet', () => {
       const pins = []
-      assert.strictEqual(getPinningAPIStatus(pins), 'queued')
+      assert.strictEqual(getEffectivePinStatus(pins), 'failed')
     })
 
     it('should return "queued" at least 1 pin has it queued', () => {
@@ -545,7 +565,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
         createPinWithStatus('PinError'),
         createPinWithStatus('PinQueued')
       ]
-      assert.strictEqual(getPinningAPIStatus(pins), 'queued')
+      assert.strictEqual(getEffectivePinStatus(pins), 'queued')
     })
 
     it('should return "queued" at least 1 pin has remote status', () => {
@@ -555,7 +575,7 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
         createPinWithStatus('PinQueued')
       ]
 
-      assert.strictEqual(getPinningAPIStatus(pins), 'queued')
+      assert.strictEqual(getEffectivePinStatus(pins), 'queued')
     })
 
     it('should return failed pins have statuses other than Pinned, Pinning, PinQueued or Remote', () => {
@@ -564,16 +584,11 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
         createPinWithStatus('PinError')
       ]
 
-      assert.strictEqual(getPinningAPIStatus(pins), 'failed')
+      assert.strictEqual(getEffectivePinStatus(pins), 'failed')
     })
   })
 
   describe('DELETE /pins/:requestId', () => {
-    let token = null
-    before(async () => {
-      token = await getTestJWT('test-upload', 'test-upload')
-    })
-
     it('fails to delete if there is no user token', async () => {
       const res = await fetch(new URL('pins/1', endpoint).toString(), {
         method: 'DELETE'
@@ -613,6 +628,38 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       assert.deepEqual(res.status, 404)
     })
 
+    it('deletes the pin request', async () => {
+      const cid = 'bafybeifzequu4ial7i4jdw4gxabi5xyx2qeci2o4scc65s2st5o7fsynqu'
+      const pinRequest = await createPinRequest(cid, token)
+
+      const r = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      assert(r.ok, 'It did not create the request in the first place')
+
+      const resD = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      assert.equal(resD.status, 202, 'Delete request was not successful')
+
+      const res = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      assert.equal(res.status, 404)
+    })
+
     it('returns the pin request id that has been deleted', async () => {
       const requestId = 1
       const res = await fetch(new URL(`pins/${requestId}`, endpoint).toString(), {
@@ -623,18 +670,11 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       })
 
       assert(res.ok, 'Server responded')
-      assert.equal(res.status, 200)
-      const { _id } = await res.json()
-      assert.strictEqual(_id, requestId)
+      assert.equal(res.status, 202)
     })
   })
 
   describe('POST /pins/:requestId', () => {
-    let token = null
-    before(async () => {
-      token = await getTestJWT('test-upload', 'test-upload')
-    })
-
     it('should not replace a pin request that doesn\'t exist', async () => {
       const res = await fetch(new URL('pins/100', endpoint).toString(), {
         method: 'POST',
@@ -652,14 +692,48 @@ bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4
       assert.equal(message, 'Not Found')
     })
 
-    it.skip('should not replace the same pin request', async () => {
-      const res = await fetch(new URL('pins/3', endpoint).toString(), {
+    it('should delete the pin request and replace it', async () => {
+      const cid = 'bafybeid3ka3b3f443kv2je3mfm4byk6qps3wipr7wzu5uli6tdo57crcke'
+      const newCid = 'bafybeid4f2r3zpnkjqrglkng265ttqg6zbdr75dpbiwellvlpcxq7pggjy'
+
+      // Creates pin Requests
+      const pinRequest = await createPinRequest(cid, token)
+
+      // It replaces it
+      const resR = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          cid: 'bafybeihgrtet4vowd4t4iqaspzclxajrwwsesur7zllkahrbhcymfh7kyi'
+          cid: newCid
+        })
+      })
+
+      assert(resR, 'Replace request did not respond')
+      assert(resR.ok, 'Replace request was not successful')
+
+      const resG = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      assert(resG, 'Get request did not respond')
+      assert.strictEqual(resG.status, 404, 'Pin request was not deleted')
+    })
+
+    it('should not replace the same pin request', async () => {
+      const cid = 'bafybeieppxukl4i4acnjcdj2fueoa5oppuaciseggv2cvplj2iu6d7kx2e'
+      const pinRequest = await createPinRequest(cid, token)
+      const res = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          cid
         })
       })
 
