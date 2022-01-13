@@ -1,6 +1,6 @@
 import { JSONResponse, notFound } from './utils/json-response.js'
 import { normalizeCid } from './utils/normalize-cid.js'
-import { waitToGetOkPins } from './utils/pin.js'
+import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 
 /**
  * @typedef {'queued' | 'pinning' | 'failed' | 'pinned'} apiPinStatus
@@ -9,7 +9,7 @@ import { waitToGetOkPins } from './utils/pin.js'
 /**
  *
  * Service API Pin object definition
- * @typedef {Object} ServiceApiPin
+ * @typedef {Object} PsaPin
  * @property {string} cid
  * @property {string} [name]
  * @property {Array.<string>} [origins]
@@ -19,14 +19,14 @@ import { waitToGetOkPins } from './utils/pin.js'
 /**
  *
  * Service API Pin Status definition
- * @typedef {Object} ServiceApiPinStatus
+ * @typedef {Object} PsaPinStatusResponse
  * @property {string} requestId
  * @property {apiPinStatus} status
  * @property {string} created
  * @property {Array<string>} delegates
  * @property {string} [info]
  *
- * @property {ServiceApiPin} pin
+ * @property {PsaPin} pin
  */
 
 /**
@@ -38,7 +38,7 @@ import { waitToGetOkPins } from './utils/pin.js'
  * @param {import('../../db/db-client-types.js').PinItemOutput[]} pins
  * @return {apiPinStatus} status
  */
-export const getPinningAPIStatus = (pins) => {
+export const getEffectivePinStatus = (pins) => {
   const pinStatuses = pins.map((p) => p.status)
 
   // TODO what happens with Sharded? I'd assumed is pinned?
@@ -56,11 +56,8 @@ export const getPinningAPIStatus = (pins) => {
     return 'queued'
   }
 
-  if (pinStatuses.length === 0) {
-    return 'queued'
-    // TODO after some time if there are no pins we should give up and return a failed
-    // status instead
-  }
+  // TODO after some time if there are no pins we should give up and return a failed
+  // status instead
 
   return 'failed'
 }
@@ -106,7 +103,7 @@ export async function pinPost (request, env, ctx) {
 
   // Validate cid
   try {
-    normalizeCid(cid)
+    pinData.normalizedCid = normalizeCid(cid)
   } catch (err) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_CID } },
@@ -165,61 +162,46 @@ export async function pinPost (request, env, ctx) {
  * @return {Promise<JSONResponse>}
  */
 async function createPin (pinData, authToken, env, ctx) {
-  const { cid, name, origins, meta } = pinData
-  const normalizedCid = normalizeCid(cid)
+  const { cid, origins, meta, normalizedCid } = pinData
+
+  const pinName = pinData.name || undefined // deal with empty strings
+
+  await env.cluster.pin(cid, {
+    name: pinName,
+    origins,
+    metadata: meta
+  })
+  const pins = await getPins(cid, env.cluster)
 
   const pinRequestData = {
-    requestedCid: cid,
-    cid: normalizedCid,
-    authKey: authToken
-  }
-  const pinOptions = {}
-
-  if (name) {
-    pinRequestData.name = name
-    pinOptions.name = name
+    sourceCid: cid,
+    contentCid: normalizedCid,
+    authKey: authToken,
+    name: pinName,
+    pins
   }
 
-  if (origins) {
-    pinOptions.origins = origins
-  }
+  const pinRequest = await env.db.createPsaPinRequest(pinRequestData)
 
-  if (meta) {
-    pinOptions.meta = meta
-  }
-
-  // Pin CID to Cluster
-  // TODO: Look into when the returned Promised is resolved to understand if we should be awaiting this call.
-  env.cluster.pin(normalizedCid, pinOptions)
-
-  // Create Pin request in db (not creating any content at this stage if it doesn't already exists)
-  const pinRequest = await env.db.createPAPinRequest(pinRequestData)
-
-  /** @type {ServiceApiPinStatus} */
+  /** @type {PsaPinStatusResponse} */
   const pinStatus = getPinStatus(pinRequest)
 
   /** @type {(() => Promise<any>)[]} */
   const tasks = []
 
-  // If we're pinning content that is currently not in the cluster, it might take a while to
-  // get the cid from the network. We check pinning status asyncrounosly.
-  if (pinRequest.pins.length === 0) {
-    tasks.push(async () => {
-      const okPins = await waitToGetOkPins(cid, env.cluster)
-      // Create the content row
-      // TODO: Get dagSize
-      env.db.createContent({ cid: normalizedCid, pins: okPins })
-      for (const pin of okPins) {
-        await env.db.upsertPin(normalizedCid, pin)
-      }
-    })
+  if (!pins.some(p => PIN_OK_STATUS.includes(p.status))) {
+    tasks.push(
+      waitAndUpdateOkPins.bind(
+        null,
+        normalizeCid,
+        env.cluster,
+        env.db)
+    )
   }
 
-  // TODO: Backups. At the moment backups are related to uploads so
+  // TODO(https://github.com/web3-storage/web3.storage/issues/794)
+  // Backups. At the moment backups are related to uploads so
   // they' re currently not taken care of in respect of a pin request.
-  // We should look into this. There's an argument where backups should be related to content rather than upload, at the moment we're
-  // backing up content multiple times if uploaded multiple times.
-  // If we refactor that it will naturally work for merge requests as well.
 
   if (ctx.waitUntil) {
     tasks.forEach(t => ctx.waitUntil(t()))
@@ -234,7 +216,7 @@ async function createPin (pinData, authToken, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 export async function pinGet (request, env, ctx) {
-  // Check if requestId contains other charachers than digits
+  // Ensure requestId only contains digits
   if (!(/^\d+$/.test(request.params.requestId))) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
@@ -244,10 +226,12 @@ export async function pinGet (request, env, ctx) {
 
   const { authToken } = request.auth
   const requestId = parseInt(request.params.requestId, 10)
+
+  /** @type { import('../../db/db-client-types.js').PsaPinRequestUpsertOutput } */
   let pinRequest
 
   try {
-    pinRequest = await env.db.getPAPinRequest(authToken._id, requestId)
+    pinRequest = await env.db.getPsaPinRequest(authToken._id, requestId)
   } catch (e) {
     console.error(e)
     // TODO catch different exceptions
@@ -255,7 +239,7 @@ export async function pinGet (request, env, ctx) {
     return notFound()
   }
 
-  /** @type { ServiceApiPinStatus } */
+  /** @type { PsaPinStatusResponse } */
   const pin = getPinStatus(pinRequest)
   return new JSONResponse(pin)
 }
@@ -282,7 +266,7 @@ export async function pinsGet (request, env, ctx) {
   const opts = result.data
 
   try {
-    pinRequests = await env.db.listPAPinRequests(request.auth.authToken._id, opts)
+    pinRequests = await env.db.listPsaPinRequests(request.auth.authToken._id, opts)
   } catch (e) {
     console.error(e)
     return notFound()
@@ -408,19 +392,20 @@ function parseSearchParams (params) {
  * Transform a PinRequest into a PinStatus
  *
  * @param { Object } pinRequest
- * @returns { ServiceApiPinStatus }
+ * @returns { PsaPinStatusResponse }
  */
 function getPinStatus (pinRequest) {
   return {
-    requestId: pinRequest._id,
-    status: getPinningAPIStatus(pinRequest.pins),
+    requestId: pinRequest._id.toString(),
+    status: getEffectivePinStatus(pinRequest.pins),
     created: pinRequest.created,
     pin: {
-      cid: pinRequest.requestedCid,
+      cid: pinRequest.sourceCid,
       name: pinRequest.name,
       origins: [],
       meta: {}
     },
+    // TODO(https://github.com/web3-storage/web3.storage/issues/792)
     delegates: []
   }
 }
@@ -454,7 +439,7 @@ export async function pinDelete (request, env, ctx) {
   let res
   try {
     // Update deleted_at (and updated_at) timestamp for the pin request.
-    res = await env.db.deletePAPinRequest(requestId, authToken._id)
+    res = await env.db.deletePsaPinRequest(requestId, authToken._id)
   } catch (e) {
     console.error(e)
     // TODO catch different exceptions
@@ -462,7 +447,7 @@ export async function pinDelete (request, env, ctx) {
     return notFound()
   }
 
-  return new JSONResponse(res)
+  return new JSONResponse({}, { status: 202 })
 }
 
 /**
@@ -475,12 +460,12 @@ export async function pinDelete (request, env, ctx) {
 async function replacePin (newPinData, requestId, authToken, env, ctx) {
   let existingPinRequest
   try {
-    existingPinRequest = await env.db.getPAPinRequest(authToken, requestId)
+    existingPinRequest = await env.db.getPsaPinRequest(authToken, requestId)
   } catch (e) {
     return notFound()
   }
 
-  const existingCid = existingPinRequest.requestedCid
+  const existingCid = existingPinRequest.sourceCid
   if (newPinData.cid === existingCid) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_REPLACE } },
@@ -499,7 +484,7 @@ async function replacePin (newPinData, requestId, authToken, env, ctx) {
   }
 
   try {
-    await env.db.deletePAPinRequest(requestId, authToken)
+    await env.db.deletePsaPinRequest(requestId, authToken)
   } catch (e) {
     return new JSONResponse(
       { error: { reason: `DB Error: ${e}` } },

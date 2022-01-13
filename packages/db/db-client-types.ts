@@ -62,7 +62,7 @@ export type AuthKeyItemOutput = {
 
 // Pin
 export type PinUpsertInput = {
-  id?: definitions['pin']['id']
+  id?: definitions['pin']['id'],
   status: definitions['pin']['status'],
   location: Location,
 }
@@ -248,33 +248,37 @@ export type ListUploadsOptions = {
 // Pinninng
 
 // PinRequest
-export type PAPinRequestUpsertInput = {
+export type PsaPinRequestUpsertInput = {
   id?: string,
-  name?: definitions['pa_pin_request']['name'],
+  name?: definitions['psa_pin_request']['name'],
   authKey: string,
-  requestedCid: definitions['pa_pin_request']['requested_cid'],
-  cid: definitions['pa_pin_request']['requested_cid'],
+  sourceCid: definitions['psa_pin_request']['source_cid'],
+  contentCid: definitions['upload']['content_cid'],
+  dagSize?: definitions['content']['dag_size'],
+  pins: Array<PinUpsertInput>,
+  created?: definitions['upload']['inserted_at'],
+  updated?: definitions['upload']['updated_at'],
 }
 
-export type PAPinRequestItem = PAPinRequestUpsertInput & {
+export type PsaPinRequestItem = PsaPinRequestUpsertInput & {
   _id: string,
-  contentCid: definitions['pa_pin_request']['content_cid']
+  contentCid: definitions['psa_pin_request']['content_cid']
   created: definitions['upload']['inserted_at']
   updated: definitions['upload']['updated_at']
   deleted?: definitions['upload']['deleted_at']
   content: ContentItem
 }
 
-export type PAPinRequestUpsertOutput = PAPinRequestUpsertInput & {
+export type PsaPinRequestUpsertOutput = PsaPinRequestUpsertInput & {
   _id: string,
-  contentCid: definitions['pa_pin_request']['content_cid']
-  created: definitions['pa_pin_request']['inserted_at']
-  updated: definitions['pa_pin_request']['updated_at']
-  deleted?: definitions['pa_pin_request']['deleted_at']
+  contentCid: definitions['psa_pin_request']['content_cid']
+  created: definitions['psa_pin_request']['inserted_at']
+  updated: definitions['psa_pin_request']['updated_at']
+  deleted?: definitions['psa_pin_request']['deleted_at']
   pins: Array<PinItemOutput>
 }
 
-export type ListPAPinRequestOptions = {
+export type ListPsaPinRequestOptions = {
   /**
    * Comma-separated list of CIDs to match
    */
@@ -309,9 +313,9 @@ export type ListPAPinRequestOptions = {
   meta?: unknown,
 }
 
-export type ListPAPinRequestResults = {
+export type ListPsaPinRequestResults = {
   count: number,
-  results: Array<PAPinRequestUpsertOutput>
+  results: Array<PsaPinRequestUpsertOutput>
 }
 
 export type NameItem = {

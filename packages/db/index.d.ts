@@ -21,12 +21,12 @@ import type {
   PinSyncRequestOutput,
   PinUpsertInput,
   BackupOutput,
-  PAPinRequestItem,
-  PAPinRequestUpsertOutput,
-  PAPinRequestUpsertInput,
+  PsaPinRequestItem,
+  PsaPinRequestUpsertOutput,
+  PsaPinRequestUpsertInput,
   ContentInput,
-  ListPAPinRequestOptions,
-  ListPAPinRequestResults,
+  ListPsaPinRequestOptions,
+  ListPsaPinRequestResults,
 } from './db-client-types'
 
 export { gql }
@@ -57,10 +57,10 @@ export class DBClient {
   createKey (key: CreateAuthKeyInput): Promise<CreateAuthKeyOutput>
   getKey (issuer: string, secret: string): Promise<AuthKey>
   listKeys (userId: number): Promise<Array<AuthKeyItemOutput>>
-  createPAPinRequest (pinRequest: PAPinRequestUpsertInput): Promise<PAPinRequestUpsertOutput>
-  getPAPinRequest (authKey: string, pinRequestId: number) : Promise<PAPinRequestUpsertOutput>
-  listPAPinRequests(authKey: string, opts?: ListPAPinRequestOptions ) : Promise<ListPAPinRequestResults>
-  deletePAPinRequest (pinRequestId: number, authKey: string) : Promise<PAPinRequestItem>
+  createPsaPinRequest (pinRequest: PsaPinRequestUpsertInput): Promise<PsaPinRequestUpsertOutput>
+  getPsaPinRequest (authKey: string, pinRequestId: number) : Promise<PAPinRequestUpsertOutput>
+  listPsaPinRequests(authKey: string, opts?: ListPsaPinRequestOptions ) : Promise<ListPsaPinRequestResults>
+  deletePsaPinRequest (pinRequestId: number, authKey: string) : Promise<PsaPinRequestItem>
   createContent (content: ContentInput, opt?: {updatePinRequests?: boolean}) : Promise<string>
   deleteKey (id: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
