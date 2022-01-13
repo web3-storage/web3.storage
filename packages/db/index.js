@@ -797,7 +797,7 @@ export class DBClient {
     // TODO: this second request could be avoided by returning the right data
     // from create_psa_pin_request remote procedure. (But to keep this DRY we need to refactor
     // this a bit)
-    return await this.getPsaPinRequest(parseInt(pinRequestId, 10))
+    return await this.getPsaPinRequest(pinRequestData.authKey, parseInt(pinRequestId, 10))
   }
 
   /**
