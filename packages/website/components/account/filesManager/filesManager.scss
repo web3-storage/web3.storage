@@ -99,3 +99,21 @@ $input-gradient-overage-height: '5%';
   padding: 0;
   padding-top: 2em;
 }
+
+.files-manager-footer {
+  display: flex;
+  justify-content: space-between;
+  justify-items: center;
+  padding: 0 2.125rem 1.5rem;
+  
+  &:before {
+    content: '';
+  }
+}
+
+.files-manager-header,
+.files-manager-footer {
+  .Dropdown .dropdownContent .dropdownItemList {
+    background-color: black;
+  }
+}

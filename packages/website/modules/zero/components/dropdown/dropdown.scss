@@ -10,12 +10,12 @@
     position: absolute;
     overflow: hidden;
     max-height: 0;
+    z-index: 5000;
     transition: max-height 350ms ease-in-out;
 
     .dropdownItemList {
       border: 1px solid black;
       background: white;
-      z-index: 5000;
       display: inline-flex;
       flex-direction: column;
 

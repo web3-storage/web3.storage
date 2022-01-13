@@ -20,7 +20,7 @@ const Modal = ({
 }) => {
   const [isOpen, setModalOpen] = modalState;
 
-  const closeModal = useCallback(() => setModalOpen(false), [])
+  const closeModal = useCallback(() => setModalOpen(false), [setModalOpen])
 
   return (isOpen &&
     <>
