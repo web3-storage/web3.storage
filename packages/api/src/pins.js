@@ -168,8 +168,7 @@ async function createPin (pinData, authToken, env, ctx) {
 
   await env.cluster.pin(cid, {
     name: pinName,
-    origins,
-    metadata: meta
+    origins
   })
   const pins = await getPins(cid, env.cluster)
 
