@@ -432,10 +432,9 @@ export async function pinDelete (request, env, ctx) {
 
   requestId = parseInt(requestId, 10)
 
-  let res
   try {
     // Update deleted_at (and updated_at) timestamp for the pin request.
-    res = await env.db.deletePsaPinRequest(requestId, authToken._id)
+    await env.db.deletePsaPinRequest(requestId, authToken._id)
   } catch (e) {
     console.error(e)
     // TODO catch different exceptions
