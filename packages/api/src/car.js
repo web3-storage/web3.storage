@@ -233,10 +233,7 @@ async function addToCluster (car, env) {
  * @param {CID} rootCid
  * @param {string} userId
  * @param {import('./env').Env} env
-<<<<<<< HEAD
  * @param {('Unknown' | 'Partial' | 'Complete')} structure The known structural completeness of a given DAG.
-=======
->>>>>>> ae65ae33dca0363f3b2ae9bc97eaee0f1e71179b
  */
 async function backup (blob, rootCid, userId, env, structure = 'Unknown') {
   if (!env.s3Client) {
