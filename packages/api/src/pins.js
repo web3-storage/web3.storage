@@ -198,10 +198,6 @@ async function createPin (pinData, authToken, env, ctx) {
     )
   }
 
-  // TODO(https://github.com/web3-storage/web3.storage/issues/794)
-  // Backups. At the moment backups are related to uploads so
-  // they' re currently not taken care of in respect of a pin request.
-
   if (ctx.waitUntil) {
     tasks.forEach(t => ctx.waitUntil(t()))
   }
