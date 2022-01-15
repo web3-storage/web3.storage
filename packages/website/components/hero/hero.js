@@ -19,6 +19,14 @@ import Ring from '../../assets/illustrations/ring';
 export default function Hero({ block }) {
   const page = block.page || '';
   // ================================================================= Functions
+  const hero404 = () => {
+    return (
+      <>
+        <Grid3D id="error_hero-grid-3d" />
+      </>
+    );
+  };
+
   const faqHero = () => {
     return (
       <>
@@ -65,6 +73,8 @@ export default function Hero({ block }) {
         return <Cluster id="about_hero-cluster" />;
       case 'faq':
         return faqHero();
+      case 'error':
+        return hero404();
       default:
         return null;
     }

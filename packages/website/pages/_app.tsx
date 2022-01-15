@@ -11,13 +11,13 @@ import AppProviders from 'components/general/appProviders';
  */
 const App = ({ Component, pageProps }: any) => {
   const { pathname } = useRouter();
-  const marketingRoutes = ['/', '/tiers', '/about', '/faq', '/terms'];
-  const notMarketingSite = !marketingRoutes.includes(pathname);
+  const productRoutes = ['/login', '/account', '/tokens'];
+  const productApp = productRoutes.includes(pathname);
 
   return (
     <AppProviders authorizationProps={{ ...pageProps }}>
       <Metadata {...pageProps} />
-      {notMarketingSite && <CorkscrewBackground />}
+      {productApp && <CorkscrewBackground />}
       <RestrictedRoute {...pageProps}>
         <Component {...pageProps} />
       </RestrictedRoute>

@@ -55,7 +55,8 @@
 }
 
 #index_hero-grid-3d,
-#faq_hero-grid-3d {
+#faq_hero-grid-3d,
+#error_hero-grid-3d {
   position: absolute;
   top: -9999px;
   bottom: -9999px;
@@ -299,3 +300,132 @@
     top: -1rem;
   }
 }
+
+// ////////////////////////////////////////////////////////////////// Page [404]
+// -----------------------------------------------------------------------------
+
+#error_hero-header {
+  position: relative;
+  padding-top: 10rem;
+  z-index: 1;
+  .text-block {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+#error_hero-grid-3d {
+  top: calc(-2rem - $navigationHeight);
+  bottom: unset;
+  transform: scale(1.62, 1.1);
+  svg,
+  path {
+    opacity: 0.75;
+  }
+}
+
+.error_hero-artwork-container {
+  &:after {
+    content: '';
+    position: absolute;
+    top: calc(-2rem - $navigationHeight);
+    left: 0;
+    width: 100%;
+    height: 80rem;
+    background: linear-gradient(rgba($seaShell, 0), $seaShell);
+    z-index: 1;
+  }
+}
+
+// #error_hero_title-triangle,
+// #error_hero_title-coil {
+//   position: relative;
+//   width: 4.875rem;
+//   height: 4.875rem;
+//   top: 1rem;
+//   margin: 0 0.5rem;
+//   &:after {
+//     display: inherit;
+//     content: '';
+//     top: 0;
+//     width: 100%;
+//     height: 100%;
+//     position: relative;
+//
+//     background-size: 100%;
+//     background-repeat: no-repeat;
+//   }
+//   @include small {
+//     width: 4rem;
+//     height: 4rem;
+//   }
+// }
+//
+// #error_hero_title-triangle {
+//   &:after {
+//     transform: scaleX(-1) rotate(-90deg);
+//     background-image: url('../../assets/images/triangle.png');
+//   }
+// }
+//
+// #error_hero_title-coil {
+//   &:after {
+//     transform: rotate(31deg);
+//     background-image: url('../../assets/images/coil.png');
+//     @include small {
+//       display: none;
+//     }
+//     @include mini {
+//       display: block;
+//     }
+//   }
+//   @include small {
+//     position: absolute;
+//   }
+//   @include mini {
+//     position: relative;
+//   }
+// }
+//
+// #error_hero-ring,
+// #error_hero-helix,
+// #error_hero-corkscrew {
+//   position: absolute;
+// }
+//
+// #error_hero-ring {
+//   width: 36.5rem;
+//   right: 0;
+//   bottom: 0;
+//   transform: translate(55%, 54%) rotate(-23deg);
+//   right: calc(50% - #{math.div($containerWidth, 2)} - 13rem);
+// }
+//
+// #error_hero-corkscrew {
+//   width: 13.375rem;
+//   top: 13.5rem;
+//   right: calc(50% - #{math.div($containerWidth, 2)} + 3rem);
+//   transform: scaleX(-1) rotate(-1deg);
+//   @include containerMaxMQ {
+//     right: 0;
+//   }
+//   @include small {
+//     right: calc(50% - #{math.div($containerWidth, 2)} + 3rem);
+//   }
+// }
+//
+// #error_hero-helix {
+//   width: 18rem;
+//   top: 1rem;
+//   left: -4rem;
+//   transform: rotate(-79deg);
+//   left: calc(50% - #{math.div($containerWidth, 2)} - 18rem);
+//   @include medium {
+//     width: 14rem;
+//     left: -4rem;
+//   }
+//   @include small {
+//     width: 10rem;
+//     top: -1rem;
+//   }
+// }

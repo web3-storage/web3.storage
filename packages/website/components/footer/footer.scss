@@ -7,6 +7,8 @@ $footerLogoWidth: 2.25rem;
   background-color: $ebony;
   color: white;
   padding-top: 4.875rem;
+  position: relative;
+  z-index: 10;
 }
 
 #site-footer-section {
