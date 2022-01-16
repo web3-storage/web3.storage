@@ -181,7 +181,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
         <Pagination
           items={sortedFiles}
           itemsPerPage={itemsPerPage}
-          visiblePages={2}
+          visiblePages={1}
           queryParam="page"
           onChange={setPaginatedFiles}
         />

@@ -1,0 +1,15 @@
+.Pagination {
+  @include fontSize_Tiny;
+  @include fontWeight_Semibold;
+  .pageList {
+    .page {
+      &.current {
+        color: $cyan;
+      }
+    }
+
+    .nextPage:hover {
+      color: $cyan;
+    }
+  }
+}
