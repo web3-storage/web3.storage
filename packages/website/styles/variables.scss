@@ -183,6 +183,19 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
   background: $gradient_BluePurple;
 }
 
+@mixin gradient_Blrry_Background_PinkBlue {
+  &:before {
+    @include gradient_BlurryBox_PinkBlue;
+    @include borderRadius_UltraLarge;
+    content: ' ';
+    position: absolute;
+    filter: blur(0.25rem);
+    margin: auto;
+    box-shadow: 0 0.125rem $heliotrope;
+    opacity: 0.5;
+  }
+}
+
 // --------------------------------------------------------------------- General
 @mixin optional-at-root($sel) {
   @at-root #{if(not &, $sel, selector-append(&, $sel))} {

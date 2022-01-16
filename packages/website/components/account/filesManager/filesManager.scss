@@ -1,6 +1,3 @@
-$input-gradient-overage-width: '1%';
-$input-gradient-overage-height: '5%';
-
 .files-manager-container {
   display: flex;
   flex-direction: column;
@@ -15,6 +12,7 @@ $input-gradient-overage-height: '5%';
 
 .files-manager-header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   justify-items: center;
   padding: 0 2.125rem 1.5rem;
@@ -24,49 +22,36 @@ $input-gradient-overage-height: '5%';
   position: relative;
   display: inline-flex;
   height: 1.5625rem;
+  @include gradient_Blrry_Background_PinkBlue;
 
-  &:before {
-    @include gradient_Background_BluePurple;
-    @include borderRadius_UltraLarge;
-    width: calc(100% + #{$input-gradient-overage-width});
-    height: calc(100% + #{$input-gradient-overage-height});
-    top: calc(-#{$input-gradient-overage-height}/ 2);
-    left: calc(-#{$input-gradient-overage-width}/ 2);
-    content: ' ';
-    position: absolute;
-    filter: blur(0.1875rem);
-    margin: auto;
-    box-shadow: 0 0.125rem $heliotrope;
-    opacity: 0.25;
-  }
-
-  svg {
-    color: $white;
-    position: absolute;
-    top: 0.5rem;
-    left: 1rem;
-  }
-
-  input {
+  .SearchBar {
+    @include borderRadius_Large;
     @include fontSize_Tiny;
     @include fontWeight_Regular;
-    @include borderRadius_Large;
 
     position: relative;
-
-    &:placeholder {
-      color: $white;
-    }
-    &:focus {
-      outline: none;
-    }
-    padding-top: 0.1875rem;
-    height: 100%;
-    background: $shark;
+    background: rgba($shark, 0.85);
     border: 0.0625rem solid $waterloo;
-    opacity: 0.85;
-    width: 26rem;
-    padding-left: 2.1875rem;
+    color: $white;
+    .search-icon {
+      svg {
+        position: absolute;
+        top: 0.4rem;
+        left: 0.75rem;
+      }
+    }
+    input {
+      &::placeholder {
+        color: rgba($white, 0.8);
+      }
+      &:focus {
+        outline: none;
+      }
+      padding-top: 0.05rem;
+      height: 100%;
+      width: 26rem;
+      padding-left: 2.1rem;
+    }
   }
 }
 
@@ -105,7 +90,7 @@ $input-gradient-overage-height: '5%';
   justify-content: space-between;
   justify-items: center;
   padding: 0 2.125rem 1.5rem;
-  
+
   &:before {
     content: '';
   }
@@ -113,7 +98,84 @@ $input-gradient-overage-height: '5%';
 
 .files-manager-header,
 .files-manager-footer {
-  .Dropdown .dropdownContent .dropdownItemList {
-    background-color: black;
+  .Dropdown .dropdownItemList {
+    background: none;
+  }
+
+  .files-manager-result-dropdown .dropdownContent {
+    position: absolute;
+    top: 0;
+  }
+
+  .Dropdown {
+    position: relative;
+
+    .dropdownButton {
+      @include fontSize_Tiny;
+      @include fontWeight_Semibold;
+      position: relative;
+
+      &:after {
+        display: inline-block;
+        margin-left: 1rem;
+        @include fontSize_Tiny;
+        content: '❯';
+        transform: rotate(90deg);
+        color: $cyan;
+      }
+    }
+
+    &.open .dropdownContent {
+      overflow: visible;
+      animation: none;
+      display: block;
+    }
+
+    .dropdownContent {
+      @include fontSize_Tiny;
+      @include fontWeight_Regular;
+      @include gradient_Blrry_Background_PinkBlue;
+      display: none;
+      left: 50%;
+      transform: translateX(-50%);
+
+      .dropdownItemList {
+        @include borderRadius_UltraLarge;
+        border: 0.0625rem solid rgba($waterloo, 0.85);
+        background: rgba($shark, 0.85);
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .dropdownItem {
+        @include leading_Small;
+        position: relative;
+        padding: 0 1.25rem;
+        white-space: nowrap;
+        &:first-child {
+          margin-top: 0.625rem;
+        }
+        &:last-child {
+          margin-bottom: 0.625rem;
+        }
+
+        &.current {
+          background: none;
+          &::before {
+            content: ' ';
+            width: 100%;
+            height: 1.375rem;
+            position: absolute;
+            @include gradient_Background_PinkBlue;
+            opacity: 0.7;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: -1;
+          }
+        }
+      }
+    }
   }
 }

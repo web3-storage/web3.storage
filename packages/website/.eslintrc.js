@@ -23,7 +23,7 @@ module.exports = {
         paths: ['.'],
       },
       alias: [
-        ['ZeroComponents', './modules/zero/components']
+        ['ZeroComponents', './modules/zero/components'],
         ['ZeroHooks', './modules/zero/hooks']
       ]
     },

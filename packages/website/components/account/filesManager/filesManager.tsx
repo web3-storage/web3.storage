@@ -10,11 +10,10 @@ import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
 import { formatTimestamp } from 'lib/utils';
 import { useUploads } from 'components/contexts/uploadsContext';
-
-import Dropdown from 'ZeroComponents/dropdown/dropdown'
-import Filterable from 'ZeroComponents/filterable/filterable'
-import Sortable, { SortType, SortDirection } from 'ZeroComponents/sortable/sortable'
-import Pagination from 'ZeroComponents/pagination/pagination'
+import Dropdown from 'ZeroComponents/dropdown/dropdown';
+import Filterable from 'ZeroComponents/filterable/filterable';
+import Sortable, { SortType, SortDirection } from 'ZeroComponents/sortable/sortable';
+import Pagination from 'ZeroComponents/pagination/pagination';
 
 type FilesManagerProps = {
   className?: string;
@@ -23,10 +22,10 @@ type FilesManagerProps = {
 const FilesManager = ({ className }: FilesManagerProps) => {
   const { uploads: files, fetchDate, getUploads, isFetchingUploads } = useUploads();
 
-  const [filteredFiles, setFilteredFiles] = useState([])
-  const [sortedFiles, setSortedFiles] = useState([])
-  const [paginatedFiles, setPaginatedFiles] = useState([])
-  const [itemsPerPage, setItemsPerPage] = useState(null)
+  const [filteredFiles, setFilteredFiles] = useState([]);
+  const [sortedFiles, setSortedFiles] = useState([]);
+  const [paginatedFiles, setPaginatedFiles] = useState([]);
+  const [itemsPerPage, setItemsPerPage] = useState(null);
 
   // Initial fetch on component load
   useEffect(() => {
@@ -46,7 +45,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
   const onFileSelect = useCallback((file: Upload) => {
     window.alert(`Select file:${file.name}`);
   }, []);
-
+  console.log('done', sortedFiles);
   return (
     <div className={clsx('section files-manager-container', className)}>
       <div className="files-manager-header">
@@ -56,16 +55,61 @@ const FilesManager = ({ className }: FilesManagerProps) => {
           items={files}
           icon={<SearchIcon />}
           filterKeys={['name', 'cid']}
-          placeholder="Search for a token"
+          placeholder="Search for a file"
           queryParam="filter"
           onChange={setFilteredFiles}
         />
         <Sortable
           items={filteredFiles}
-          options={ [
-            { label: 'Alphabetical A-Z', key: 'name', value: 'a-z', direction: SortDirection.ASC, compareFn: SortType.ALPHANUMERIC },
-            { label: 'Most Recently Added', value: 'newest', compareFn: (items) => items.sort((a, b) => a['created'].localeCompare(b['created'])) },
-            { label: 'Least Recently Added', value: 'oldest', compareFn: (items) => items.sort((a, b) => b['created'].localeCompare(a['created'])) },
+          options={[
+            {
+              label: 'Alphabetical A-Z',
+              key: 'name',
+              value: 'a-z',
+              direction: SortDirection.ASC,
+              compareFn: SortType.ALPHANUMERIC,
+            },
+            {
+              label: 'Alphabetical Z-A',
+              key: 'name',
+              value: 'z-A',
+              direction: SortDirection.DESC,
+              compareFn: SortType.ALPHANUMERIC,
+            },
+            {
+              label: 'Most Recently Added',
+              value: 'newest',
+              compareFn: items => items.sort((a, b) => a['created'].localeCompare(b['created'])),
+            },
+            {
+              label: 'Least Recently Added',
+              value: 'oldest',
+              compareFn: items => items.sort((a, b) => b['created'].localeCompare(a['created'])),
+            },
+            {
+              label: 'Largest size',
+              value: 'largest',
+              compareFn: items => items.sort((a, b) => b.dagSize - a.dagSize),
+            },
+            {
+              label: 'Smallest size',
+              value: 'smallest',
+              compareFn: items => items.sort((a, b) => a.dagSize - b.dagSize),
+            },
+            /** TODO: Add file type sorting if available
+             * {
+             * label: 'File type',
+             * value: 'fileType',
+             * compareFn: items => items.sort((a, b) => b.dagSize < a.dagSize),
+             * },
+             */
+            /** TODO: Confirm what miner sorting is
+             * {
+             * label: 'Miner',
+             * value: 'miner',
+             * compareFn: items => items.sort((a, b) => b.dagSize < a.dagSize),
+             * },
+             */
           ]}
           value="a-z"
           queryParam="order"

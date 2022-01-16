@@ -138,6 +138,7 @@ $file-size: auto;
       &-storage-providers {
         padding-right: 2.5rem;
         flex-direction: row;
+        flex-wrap: nowrap;
       }
 
       &-name {
