@@ -5,14 +5,12 @@
 .Dropdown {
   position: relative;
   .dropdownButton {
-    @include fontSize_Tiny;
-    @include fontWeight_Semibold;
+    @include label_5;
     position: relative;
 
     &:after {
       display: inline-block;
       margin-left: 1rem;
-      @include fontSize_Tiny;
       content: '❯';
       transform: rotate(90deg);
       color: $cyan;

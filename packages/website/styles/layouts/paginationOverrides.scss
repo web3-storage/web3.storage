@@ -1,6 +1,5 @@
 .Pagination {
-  @include fontSize_Tiny;
-  @include fontWeight_Semibold;
+  @include label_5;
   .pageList {
     .page {
       &.current {

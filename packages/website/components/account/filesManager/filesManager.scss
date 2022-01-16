@@ -8,6 +8,12 @@
   > * {
     width: 100%;
   }
+
+  &.disabled,
+  .disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
 
 .files-manager-header {
@@ -23,8 +29,7 @@
   }
 
   .refresh {
-    @include fontSize_Tiny;
-    @include fontWeight_Semibold;
+    @include label_5;
     position: relative;
     top: 0.1rem;
     cursor: pointer;
@@ -33,11 +38,6 @@
     svg {
       color: $cyan;
       margin-right: 0.625rem;
-    }
-
-    &.disabled {
-      opacity: 0.5;
-      pointer-events: none;
     }
   }
 }
@@ -114,14 +114,16 @@
   display: flex;
   justify-content: space-between;
   justify-items: center;
-  padding: 0 2.125rem 1.5rem;
-
-  &:before {
-    content: '';
-  }
+  padding: 1.5rem 2rem 0;
 
   .files-manager-result-dropdown .dropdownContent {
     position: absolute;
     top: 0;
+  }
+
+  .delete {
+    @include label_5;
+    cursor: pointer;
+    color: $cyan;
   }
 }

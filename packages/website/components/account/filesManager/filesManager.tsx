@@ -22,15 +22,18 @@ type FilesManagerProps = {
 };
 
 const FilesManager = ({ className }: FilesManagerProps) => {
-  const { uploads: files, fetchDate, getUploads, isFetchingUploads } = useUploads();
+  const { uploads: files, fetchDate, getUploads, isFetchingUploads, deleteUpload } = useUploads();
   const {
     query: { filter },
   } = useRouter();
-  const [filteredFiles, setFilteredFiles] = useState([]);
-  const [sortedFiles, setSortedFiles] = useState([]);
-  const [paginatedFiles, setPaginatedFiles] = useState([]);
+  const [filteredFiles, setFilteredFiles] = useState(files);
+  const [sortedFiles, setSortedFiles] = useState(filteredFiles);
+  const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
   const [itemsPerPage, setItemsPerPage] = useState(null);
   const [keyword, setKeyword] = useState(filter);
+
+  const [selectedFiles, setSelectedFiles] = useState<Upload[]>([]);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Initial fetch on component load
   useEffect(() => {
@@ -43,16 +46,58 @@ const FilesManager = ({ className }: FilesManagerProps) => {
     window.alert('Upload a file');
   }, []);
 
-  const onSelectAllToggle = useCallback(e => {
-    window.alert(`Select all toggle ${e.currentTarget.value}`);
-  }, []);
+  const onSelectAllToggle = useCallback(
+    e => {
+      const filesToSelect = paginatedFiles.filter(file => !selectedFiles.some(fileSelected => fileSelected === file));
 
-  const onFileSelect = useCallback((file: Upload) => {
-    window.alert(`Select file:${file.name}`);
-  }, []);
+      if (!filesToSelect.length) {
+        return setSelectedFiles([]);
+      }
+
+      return setSelectedFiles(selectedFiles.concat(filesToSelect));
+    },
+    [selectedFiles, setSelectedFiles, paginatedFiles]
+  );
+
+  const onFileSelect = useCallback(
+    (file: Upload) => {
+      const selectedIndex = selectedFiles.findIndex(fileSelected => fileSelected === file);
+      if (selectedIndex !== -1) {
+        selectedFiles.splice(selectedIndex, 1);
+
+        return setSelectedFiles([...selectedFiles]);
+      }
+
+      setSelectedFiles([...selectedFiles, file]);
+    },
+    [selectedFiles, setSelectedFiles]
+  );
+
+  const onDeleteSelected = useCallback(async () => {
+    if (!window.confirm('Are you sure? Deleted files cannot be recovered!')) {
+      countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
+        ui: countly.ui.FILES,
+        totalDeleted: 0,
+      });
+      return;
+    }
+
+    setIsDeleting(true);
+    await Promise.all(selectedFiles.map(({ cid }) => deleteUpload(cid)));
+
+    countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
+      ui: countly.ui.FILES,
+      totalDeleted: selectedFiles.length,
+    });
+
+    setIsDeleting(false);
+    setSelectedFiles([]);
+
+    getUploads();
+  }, [selectedFiles, deleteUpload, setIsDeleting, getUploads]);
 
   return (
-    <div className={clsx('section files-manager-container', className)}>
+    <div className={clsx('section files-manager-container', className, isDeleting && 'disabled')}>
       <div className="files-manager-header">
         <span>Files</span>
         <Filterable
@@ -139,6 +184,9 @@ const FilesManager = ({ className }: FilesManagerProps) => {
         storageProviders="Storage Providers"
         size="Size"
         isHeader
+        isSelected={
+          paginatedFiles.every(file => selectedFiles.find(fileSelected => file === fileSelected)) && !!fetchDate
+        }
       />
       <div className="files-manager-table-content">
         {isFetchingUploads || !fetchDate ? (
@@ -187,31 +235,37 @@ const FilesManager = ({ className }: FilesManagerProps) => {
               // TODO: Remove hardcoded highlight when hooked up
               highlight={{ target: 'name', text: keyword }}
               numberOfPins={item.pins.length}
+              isSelected={!!selectedFiles.find(fileSelected => fileSelected === item)}
             />
           ))
         )}
       </div>
-      <div className="files-manager-footer">
-        <Pagination
-          items={sortedFiles}
-          itemsPerPage={itemsPerPage}
-          visiblePages={1}
-          queryParam="page"
-          onChange={setPaginatedFiles}
-        />
-        <Dropdown
-          className="files-manager-result-dropdown"
-          value="10"
-          options={[
-            { label: 'View 10 Results', value: '10' },
-            { label: 'View 20 Results', value: '20' },
-            { label: 'View 50 Results', value: '50' },
-            { label: 'View 100 Results', value: '100' },
-          ]}
-          queryParam="items"
-          onChange={value => setItemsPerPage(value)}
-        />
-      </div>
+      {!!files.length && (
+        <div className="files-manager-footer">
+          <button className={clsx('delete', !selectedFiles.length && 'disabled')} onClick={onDeleteSelected}>
+            Delete Selected
+          </button>
+          <Pagination
+            items={sortedFiles}
+            itemsPerPage={itemsPerPage}
+            visiblePages={1}
+            queryParam="page"
+            onChange={setPaginatedFiles}
+          />
+          <Dropdown
+            className="files-manager-result-dropdown"
+            value="10"
+            options={[
+              { label: 'View 10 Results', value: '10' },
+              { label: 'View 20 Results', value: '20' },
+              { label: 'View 50 Results', value: '50' },
+              { label: 'View 100 Results', value: '100' },
+            ]}
+            queryParam="items"
+            onChange={value => setItemsPerPage(value)}
+          />
+        </div>
+      )}
     </div>
   );
 };
