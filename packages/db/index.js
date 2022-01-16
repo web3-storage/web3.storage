@@ -38,7 +38,7 @@ const pinRequestSelect = `
 
 const listPinsQuery = `
   _id:id::text,
-  requestedCid:requested_cid,
+  requestedCid:source_cid,
   contentCid:content_cid,
   authKey:auth_key_id,
   name,
@@ -888,7 +888,7 @@ export class DBClient {
       }
 
       if (opts.cid) {
-        query = query.in('requested_cid', opts.cid)
+        query = query.in('source_cid', opts.cid)
       }
 
       if (opts.name) {

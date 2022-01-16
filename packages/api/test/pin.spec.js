@@ -158,8 +158,8 @@ describe('Pinning APIs endpoints', () => {
 
     it('filters pins on CID, for this user', async () => {
       const cids = [
-        'bafybeig7yvw6a4uhio4pmg5gahyd2xumowkfljdukad7pmdsv5uk5zcseu',
-        'bafybeia45bscvzxngto555xsel4gwoclb5fxd7zpxige7rl3maoleznswu',
+        'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4', // Pinned
+        'bafybeia45bscvzxngto555xsel4gwoclb5fxd7zpxige7rl3maoleznswu', // PinError
         'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4' // Not exists
       ]
 
@@ -259,7 +259,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
-      assert.strictEqual(data.count, 5)
+      assert.strictEqual(data.count, 4)
     })
 
     it('filters pins created before a date', async () => {
@@ -549,7 +549,8 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('returns the pin request', async () => {
-      const res = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+      const requestId = 1
+      const res = await fetch(new URL(`pins/${requestId}`, endpoint).toString(), {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -561,9 +562,8 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       assertCorrectPinResponse(data)
-
-      assert.deepEqual(data.requestId, pinRequest.requestId)
-      assert.deepEqual(data.status, 'pinned')
+      assert.deepEqual(data.requestId, requestId)
+      assert.strictEqual(data.status, 'pinned')
       assert.strictEqual(data.pin.name, 'ReportDoc.pdf')
     })
 
