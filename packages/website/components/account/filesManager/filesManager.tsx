@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import filesize from 'filesize';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Upload } from 'web3.storage';
 
 import FileRowItem, { PinStatus } from './fileRowItem';
@@ -8,12 +9,12 @@ import SearchIcon from 'assets/icons/search';
 import countly from 'lib/countly';
 import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
-import { formatTimestamp } from 'lib/utils';
-import { useUploads } from 'components/contexts/uploadsContext';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
 import Filterable from 'ZeroComponents/filterable/filterable';
 import Sortable, { SortType, SortDirection } from 'ZeroComponents/sortable/sortable';
 import Pagination from 'ZeroComponents/pagination/pagination';
+import { formatTimestamp } from 'lib/utils';
+import { useUploads } from 'components/contexts/uploadsContext';
 
 type FilesManagerProps = {
   className?: string;
@@ -21,11 +22,14 @@ type FilesManagerProps = {
 
 const FilesManager = ({ className }: FilesManagerProps) => {
   const { uploads: files, fetchDate, getUploads, isFetchingUploads } = useUploads();
-
+  const {
+    query: { filter },
+  } = useRouter();
   const [filteredFiles, setFilteredFiles] = useState([]);
   const [sortedFiles, setSortedFiles] = useState([]);
   const [paginatedFiles, setPaginatedFiles] = useState([]);
   const [itemsPerPage, setItemsPerPage] = useState(null);
+  const [keyword, setKeyword] = useState(filter);
 
   // Initial fetch on component load
   useEffect(() => {
@@ -45,7 +49,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
   const onFileSelect = useCallback((file: Upload) => {
     window.alert(`Select file:${file.name}`);
   }, []);
-  console.log('done', sortedFiles);
+
   return (
     <div className={clsx('section files-manager-container', className)}>
       <div className="files-manager-header">
@@ -58,6 +62,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
           placeholder="Search for a file"
           queryParam="filter"
           onChange={setFilteredFiles}
+          onValueChange={setKeyword}
         />
         <Sortable
           items={filteredFiles}
@@ -171,7 +176,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
               ))}
               size={filesize(item.dagSize)}
               // TODO: Remove hardcoded highlight when hooked up
-              highlight={{ target: 'name', text: 'coil' }}
+              highlight={{ target: 'name', text: keyword }}
               numberOfPins={item.pins.length}
             />
           ))
