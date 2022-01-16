@@ -17,6 +17,7 @@ import Dropdown from 'ZeroComponents/dropdown/dropdown'
  * @prop {SortOption[]} [options]
  * @prop {string} [value]
  * @prop {string} [queryParam]
+ * @prop {string} [staticLabel]
  * @prop {function} [onChange]
  */
 
@@ -46,7 +47,8 @@ const Sortable = ({
   options,
   value,
   queryParam,
-  onChange
+  onChange,
+  staticLabel
 }) => {
   const [currentOption, setCurrentOption] = useState(null)
 
@@ -75,6 +77,7 @@ const Sortable = ({
         ))}
         queryParam={queryParam}
         onChange={handleDropdownChange}
+        staticLabel={staticLabel}
       />
     </div>
   )

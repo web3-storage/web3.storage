@@ -6,6 +6,7 @@ import { Upload } from 'web3.storage';
 
 import FileRowItem, { PinStatus } from './fileRowItem';
 import SearchIcon from 'assets/icons/search';
+import RefreshIcon from 'assets/icons/refresh';
 import countly from 'lib/countly';
 import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
@@ -53,7 +54,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
   return (
     <div className={clsx('section files-manager-container', className)}>
       <div className="files-manager-header">
-        Files
+        <span>Files</span>
         <Filterable
           className="files-manager-search"
           items={files}
@@ -64,8 +65,16 @@ const FilesManager = ({ className }: FilesManagerProps) => {
           onChange={setFilteredFiles}
           onValueChange={setKeyword}
         />
+        <button
+          className={clsx('refresh', isFetchingUploads && 'disabled')}
+          onClick={useCallback(_ => getUploads(), [getUploads])}
+        >
+          <RefreshIcon />
+          Refresh
+        </button>
         <Sortable
           items={filteredFiles}
+          staticLabel={'Sort by'}
           options={[
             {
               label: 'Alphabetical A-Z',

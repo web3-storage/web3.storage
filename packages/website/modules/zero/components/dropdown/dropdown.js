@@ -13,6 +13,7 @@ import clsx from 'clsx'
  * @prop {string} [value]
  * @prop {boolean} [scrollable]
  * @prop {string} [queryParam]
+ * @prop {string} [staticLabel]
  * @prop {function} [onChange]
  * @prop { import('react').MouseEventHandler<HTMLSelectElement> } [onSelectChange]
  */
@@ -24,6 +25,7 @@ const Dropdown = ({
   scrollable,
   queryParam,
   onChange,
+  staticLabel,
   onSelectChange
 }) => {
   const selectElRef = useRef(null)
@@ -93,7 +95,7 @@ const Dropdown = ({
         aria-haspopup="listbox"
         aria-expanded={isOpen ? 'true' : 'false'}
       >
-        {currentItem && currentItem.label}
+        {staticLabel || (currentItem && currentItem.label)}
       </button>
 
       <div className="dropdownContent">

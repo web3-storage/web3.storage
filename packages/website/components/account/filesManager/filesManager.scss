@@ -13,16 +13,41 @@
 .files-manager-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   justify-items: center;
   padding: 0 2.125rem 1.5rem;
+
+  // Title
+  > :first-child {
+    margin-right: 11.625rem;
+  }
+
+  .refresh {
+    @include fontSize_Tiny;
+    @include fontWeight_Semibold;
+    position: relative;
+    top: 0.1rem;
+    cursor: pointer;
+    margin-right: 2.5rem;
+
+    svg {
+      color: $cyan;
+      margin-right: 0.625rem;
+    }
+
+    &.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
 }
 
 .files-manager-search {
+  @include gradient_Blrry_Background_PinkBlue;
   position: relative;
   display: inline-flex;
   height: 1.5625rem;
-  @include gradient_Blrry_Background_PinkBlue;
+  margin-right: 3rem;
 
   .SearchBar {
     @include borderRadius_Large;
@@ -94,10 +119,7 @@
   &:before {
     content: '';
   }
-}
 
-.files-manager-header,
-.files-manager-footer {
   .files-manager-result-dropdown .dropdownContent {
     position: absolute;
     top: 0;
