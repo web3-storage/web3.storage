@@ -200,16 +200,15 @@ CREATE TABLE IF NOT EXISTS pin_sync_request
 CREATE INDEX IF NOT EXISTS pin_sync_request_pin_id_idx ON pin_sync_request (pin_id);
 
 -- Tracks pinning requests from Pinning Service API
--- TODO(paolo) this table should be considered for track all content stored on web3.storage
-CREATE TABLE IF NOT EXISTS pa_pin_request
+CREATE TABLE IF NOT EXISTS psa_pin_request
 (
   id              BIGSERIAL PRIMARY KEY,
-  -- Points to the pinned content, it is updated once the content is actually being found.
-  content_cid     TEXT                                                         REFERENCES content (cid),
   -- Points to auth key used to pin the content.
   auth_key_id     BIGINT                                                       NOT NULL REFERENCES public.auth_key (id),
+  -- Points to the pinned content, it is updated once the content is actually being found.
+  content_cid     TEXT                                                         NOT NULL REFERENCES content (cid),
   -- The id of the content being requested, it could not exist on IPFS (typo, node offline etc)
-  requested_cid   TEXT NOT NULL,
+  source_cid   TEXT NOT NULL,
   name            TEXT,
   deleted_at      TIMESTAMP WITH TIME ZONE,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,

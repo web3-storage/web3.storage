@@ -10,7 +10,7 @@ module.exports = async ({ params }) => {
       cid: { '/': params.cid },
       name: 'test-pin-name',
       peer_map: {
-        'test-peer-id': {
+        [`test-peer-id-${Math.floor(Math.random() * 10000)}`]: {
           peername: 'test-peer-name',
           status: 'pinned',
           timestamp: new Date().toISOString()

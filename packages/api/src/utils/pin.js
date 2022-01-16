@@ -37,7 +37,7 @@ const PIN_STATUS_CHECK_INTERVAL = 5000
 const MAX_PIN_STATUS_CHECK_TIME = 30000
 
 // Pin statuses considered OK.
-const PIN_OK_STATUS = ['Pinned', 'Pinning', 'PinQueued']
+export const PIN_OK_STATUS = ['Pinned', 'Pinning', 'PinQueued']
 
 /**
  * Converts from cluster status string to DB pin status enum string.
@@ -55,8 +55,29 @@ export function toPinStatusEnum (trackerStatus) {
 }
 
 /**
- * Function that returns list of pins considered ok.
- * TODO: refactor car upload to use this instead.
+ * Function that returns list of pins for given CID.
+ *
+ * @param {string} cid cid to be looked for
+ * @param {import('@nftstorage/ipfs-cluster').Cluster} cluster
+ * @param {import('@nftstorage/ipfs-cluster').StatusResponse['peerMap']} [peerMap] Optional list of peers, if not provided the fuctions queries the cluster.
+ * @return {Promise.<import('@web3-storage/db/db-client-types').PinUpsertInput[]>}
+ */
+export async function getPins (cid, cluster, peerMap) {
+  if (!peerMap) {
+    peerMap = (await cluster.status(cid)).peerMap
+  }
+
+  const pins = toPins(peerMap)
+
+  if (!pins.length) {
+    throw new Error('not pinning on any node')
+  }
+
+  return pins
+}
+
+/**
+ * Function that returns list of pins with a PIN_OK_STATUS.
  *
  * @param {string} cid cid to be looked for
  * @param {import('@nftstorage/ipfs-cluster').Cluster} cluster
@@ -64,16 +85,7 @@ export function toPinStatusEnum (trackerStatus) {
  * @return {Promise.<import('@web3-storage/db/db-client-types').PinUpsertInput[]>}
  */
 export async function getOKpins (cid, cluster, peerMap) {
-  if (!peerMap) {
-    const status = await cluster.status(cid)
-    peerMap = status.peerMap
-  }
-  const pins = toPins(peerMap)
-
-  // TODO To validate: I expect in case of a pinning request it's acceptable to have no pins here?
-  // if (!pins.length) { // should not happen
-  //   throw new Error('not pinning on any node')
-  // }
+  const pins = await getPins(cid, cluster, peerMap)
 
   return pins.filter(p => PIN_OK_STATUS.includes(p.status))
 }
@@ -91,15 +103,20 @@ export function toPins (peerMap) {
 
 /**
  *
+ * waitOkPins checks the status of the given CID on the cluster
+ * every given `checkInterval` until at least one pin has a PIN_OK_STATUS.
+ *
+ * After a given maximum `waitTime`, if no OK pins are found the promise is resolved with an empty array.
+ *
  * @param {string} cid
  * @param {import('@nftstorage/ipfs-cluster').Cluster} cluster
  * @param {number} waitTime
  * @param {number} checkInterval
  * @return {Promise.<import('@web3-storage/db/db-client-types').PinUpsertInput[]>}
  */
-export async function waitToGetOkPins (cid, cluster, waitTime = MAX_PIN_STATUS_CHECK_TIME, checkInterval = PIN_STATUS_CHECK_INTERVAL) {
+export async function waitOkPins (cid, cluster, waitTime = MAX_PIN_STATUS_CHECK_TIME, checkInterval = PIN_STATUS_CHECK_INTERVAL) {
   const start = Date.now()
-  while (Date.now() - start > waitTime) {
+  while (Date.now() - start < waitTime) {
     await new Promise(resolve => setTimeout(resolve, checkInterval))
     const okPins = await getOKpins(cid, cluster)
     if (!okPins.length) continue
@@ -107,4 +124,23 @@ export async function waitToGetOkPins (cid, cluster, waitTime = MAX_PIN_STATUS_C
     return okPins
   }
   return []
+}
+
+/**
+ * Used to async wait for pins for the provided cid to have an
+ * OK_STATUS and update them in the db.
+ *
+ * @param {string} cid
+ * @param {import('@nftstorage/ipfs-cluster').Cluster} cluster
+ * @param {import('@web3-storage/db').DBClient} db
+ * @param {number} waitTime
+ * @param {number} checkInterval
+ * @return {Promise.<import('@web3-storage/db/db-client-types').PinUpsertInput[]>}
+ */
+export async function waitAndUpdateOkPins (cid, cluster, db, waitTime = MAX_PIN_STATUS_CHECK_TIME, checkInterval = PIN_STATUS_CHECK_INTERVAL) {
+  const okPins = await waitOkPins(cid, cluster, waitTime, checkInterval)
+  for (const pin of okPins) {
+    await db.upsertPin(cid, pin)
+  }
+  return okPins
 }
