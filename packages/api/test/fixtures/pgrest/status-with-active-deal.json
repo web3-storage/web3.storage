@@ -4,25 +4,11 @@
   "dagSize": 101,
   "pins": [
     {
-      "status": "PinQueued",
-      "updated": "2021-07-14T19:27:14.934572+00:00",
       "peerId": "12D3KooWR1Js",
       "peerName": "who?",
-      "region": "where?"
-    },
-    {
-      "status": "Pinning",
-      "updated": "2021-07-14T19:27:14.934572+00:00",
-      "peerId": "22D3KooWR1Js",
-      "peerName": "who?",
-      "region": "where?"
-    },
-    {
+      "region": "where?",
       "status": "Pinned",
-      "updated": "2021-07-14T19:27:14.934572+00:00",
-      "peerId": "32D3KooWR1Js",
-      "peerName": "who?",
-      "region": "where?"
+      "updated": "2021-07-14T19:27:14.934572+00:00"
     }
   ],
   "deals": [
