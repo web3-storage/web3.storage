@@ -42,44 +42,6 @@
   }
 }
 
-.files-manager-search {
-  @include gradient_Blrry_Background_PinkBlue;
-  position: relative;
-  display: inline-flex;
-  height: 1.5625rem;
-  margin-right: 3rem;
-
-  .SearchBar {
-    @include borderRadius_Large;
-    @include fontSize_Tiny;
-    @include fontWeight_Regular;
-
-    position: relative;
-    background: rgba($shark, 0.85);
-    border: 0.0625rem solid $waterloo;
-    color: $white;
-    .search-icon {
-      svg {
-        position: absolute;
-        top: 0.4rem;
-        left: 0.75rem;
-      }
-    }
-    input {
-      &::placeholder {
-        color: rgba($white, 0.8);
-      }
-      &:focus {
-        outline: none;
-      }
-      padding-top: 0.05rem;
-      height: 100%;
-      width: 26rem;
-      padding-left: 2.1rem;
-    }
-  }
-}
-
 .files-manager-table-header-divider {
   border-bottom: 0.0625rem solid rgba($white, 0.05);
   position: absolute;
@@ -99,8 +61,10 @@
   padding-left: 2.5rem;
   padding-top: 0.85rem;
   .button {
-    @include fontSize_Medium;
-    padding-left: 0;
+    button {
+      @include fontSize_Medium;
+      padding-left: 0;
+    }
   }
 }
 

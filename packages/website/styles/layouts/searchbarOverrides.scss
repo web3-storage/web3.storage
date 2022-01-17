@@ -1,0 +1,14 @@
+.Pagination {
+  @include label_5;
+  .pageList {
+    .page {
+      &.current {
+        color: $cyan;
+      }
+    }
+
+    .nextPage:hover {
+      color: $cyan;
+    }
+  }
+}

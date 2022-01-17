@@ -42,7 +42,7 @@
   .dropdownContent {
     @include fontSize_Tiny;
     @include fontWeight_Regular;
-    @include gradient_Blrry_Background_PinkBlue;
+    @include gradient_Blurry_Background_PinkBlue;
     display: none;
     left: 50%;
     transform: translateX(-50%);

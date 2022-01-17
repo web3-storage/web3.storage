@@ -183,7 +183,7 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
   background: $gradient_BluePurple;
 }
 
-@mixin gradient_Blrry_Background_PinkBlue {
+@mixin gradient_Blurry_Background_PinkBlue {
   &:before {
     @include gradient_BlurryBox_PinkBlue;
     @include borderRadius_UltraLarge;
