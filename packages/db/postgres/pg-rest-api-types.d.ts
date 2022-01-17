@@ -3,7 +3,7 @@
  * Do not make direct changes to the file.
  */
 
- export interface paths {
+export interface paths {
   "/": {
     get: {
       responses: {
