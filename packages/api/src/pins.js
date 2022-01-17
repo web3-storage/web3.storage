@@ -62,6 +62,31 @@ export const getEffectivePinStatus = (pins) => {
   return 'failed'
 }
 
+const psaStatusesToDBStatusesMap = {
+  pinned: ['Pinned'],
+  queued: ['PinQueued'],
+  pinning: ['Pinning'],
+  failed: [
+    'ClusterError',
+    'PinError',
+    'Unpinned'
+  ]
+}
+
+/**
+ * Maps a pinning api status array to db status accepted by the DB
+ * @param {string[]} statuses
+ * @return {import('@web3-storage/db/postgres/pg-rest-api-types').definitions['pin']['status'][]}
+ */
+
+const psaStatusesToDBStatuses = (statuses) => {
+  const dbStatuses = (statuses.reduce((mappedStatuses, psaStatus) => {
+    return mappedStatuses.concat(psaStatusesToDBStatusesMap[psaStatus])
+  }, []))
+  console.log(dbStatuses)
+  return dbStatuses
+}
+
 // Error messages
 // TODO: Refactor errors
 export const ERROR_CODE = 400
@@ -347,8 +372,7 @@ function parseSearchParams (params) {
         data: undefined
       }
     }
-    // TODO(https://github.com/web3-storage/web3.storage/issues/797): statuses need to be mapped to db statuses
-    opts.status = statuses
+    opts.statuses = psaStatusesToDBStatuses(statuses)
   }
 
   if (before) {
