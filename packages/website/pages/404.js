@@ -18,6 +18,14 @@ const block = {
       },
       format: 'header',
       heading: '404',
+      cta: {
+        url: '/',
+        text: 'GO BACK HOME',
+        theme: 'text-purple',
+        event: '',
+        ui: '',
+        action: '',
+      },
     },
   ],
 };

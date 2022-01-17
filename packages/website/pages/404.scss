@@ -1,4 +1,24 @@
 .page-404 {
   position: relative;
   width: 100vw;
+  .text-block {
+    text-align: center;
+    .heading {
+      padding-top: 3rem;
+      margin-bottom: 0;
+      font-size: 9.375rem;
+      line-height: leading(215, 150);
+      @include fontWeight_Semibold;
+      @include mini {
+        font-size: 6rem;
+      }
+    }
+    .button {
+      transform: translateX(0.5rem);
+    }
+  }
+}
+
+#error_section-1 {
+  padding-bottom: 10rem;
 }

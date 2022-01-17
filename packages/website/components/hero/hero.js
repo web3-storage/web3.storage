@@ -10,6 +10,7 @@ import Coil from '../../assets/illustrations/coil';
 import Triangle from '../../assets/illustrations/triangle';
 import Cluster from '../../assets/illustrations/cluster';
 import Ring from '../../assets/illustrations/ring';
+import Spring from '../../assets/illustrations/spring';
 
 // ====================================================================== Params
 /**
@@ -23,6 +24,15 @@ export default function Hero({ block }) {
     return (
       <>
         <Grid3D id="error_hero-grid-3d" />
+        <Helix id="error_hero-helix" className={'hero-illustration'} />
+        <Triangle id="error_hero-triangle-1" className={'hero-illustration'} />
+        <Triangle id="error_hero-triangle-2" className={'hero-illustration'} />
+        <Triangle id="error_hero-triangle-3" className={'hero-illustration'} />
+        <Cross id="error_hero-cross-1" className={'hero-illustration'} />
+        <Cross id="error_hero-cross-2" className={'hero-illustration'} />
+        <Corkscrew id="error_hero-corkscrew" className={'hero-illustration'} />
+        <Ring id="error_hero-ring" className={'hero-illustration'} />
+        <Spring id="error_hero-spring" className={'hero-illustration'} />
       </>
     );
   };
