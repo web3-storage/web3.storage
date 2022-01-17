@@ -19,7 +19,7 @@
     "tools"
   ],
   "author": "Paolo Chillari",
-  "license": "(Apache-2.0 AND MIT)",
+  "license": "(Apache-2.0 OR MIT)",
   "bin": {
     "web3-storage-tools": "scripts/cli.js"
   }

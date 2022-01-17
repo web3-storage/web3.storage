@@ -3,7 +3,7 @@
   "version": "3.5.2",
   "description": "API client for web3.storage",
   "type": "module",
-  "license": "(Apache-2.0 AND MIT)",
+  "license": "(Apache-2.0 OR MIT)",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/web3-storage/web3.storage.git"

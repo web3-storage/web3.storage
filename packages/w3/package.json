@@ -17,7 +17,7 @@
     "directory": "packages/w3"
   },
   "author": "",
-  "license": "(Apache-2.0 AND MIT)",
+  "license": "(Apache-2.0 OR MIT)",
   "bugs": {
     "url": "https://github.com/web3-storage/web3.storage/issues"
   },
