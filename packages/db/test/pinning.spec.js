@@ -335,7 +335,7 @@ describe('Pin Request', () => {
 
     it('filters items by provided status', async () => {
       const { results: pins } = await client.listPsaPinRequests(authKeyPinList, {
-        status: ['pinning', 'failed']
+        statuses: ['Pinning', 'PinError']
       })
 
       assert.strictEqual(pins.length, 1)

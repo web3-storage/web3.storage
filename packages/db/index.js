@@ -1,9 +1,7 @@
 import { PostgrestClient } from '@supabase/postgrest-js'
 
 import {
-  normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest,
-  PIN_STATUS,
-  PIN_STATUS_FILTER
+  normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest
 } from './utils.js'
 import { DBError } from './errors.js'
 import {
@@ -868,23 +866,10 @@ export class DBClient {
       .order('inserted_at', { ascending: false })
 
     if (!Object.keys(opts).length) {
-      query = query.eq('content.pins.status', PIN_STATUS[PIN_STATUS.Pinned])
+      query = query.eq('content.pins.status', 'Pinned')
     } else {
-      if (opts.status) {
-        const status = []
-        if (opts.status.includes(PIN_STATUS_FILTER[PIN_STATUS_FILTER.queued])) {
-          status.push(PIN_STATUS[PIN_STATUS.PinQueued])
-        }
-        if (opts.status.includes(PIN_STATUS_FILTER[PIN_STATUS_FILTER.pinning])) {
-          status.push(PIN_STATUS[PIN_STATUS.Pinning])
-        }
-        if (opts.status.includes(PIN_STATUS_FILTER[PIN_STATUS_FILTER.pinned])) {
-          status.push(PIN_STATUS[PIN_STATUS.Pinned])
-        }
-        if (opts.status.includes(PIN_STATUS_FILTER[PIN_STATUS_FILTER.failed])) {
-          status.push(PIN_STATUS[PIN_STATUS.PinError])
-        }
-        query = query.in('content.pins.status', status)
+      if (opts.statuses) {
+        query = query.in('content.pins.status', opts.statuses)
       }
 
       if (opts.cid) {
