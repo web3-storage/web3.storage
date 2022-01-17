@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/website",
-  "version": "1.8.0",
+  "version": "1.9.1",
   "description": "web3.storage website",
   "private": true,
   "scripts": {
@@ -29,7 +29,7 @@
     "react-query": "^3.13.9",
     "react-syntax-highlighter": "^11.0.3",
     "remark-slug": "^6.1.0",
-    "web3.storage": "^3.0.0"
+    "web3.storage": "^3.5.2"
   },
   "devDependencies": {
     "@svgr/webpack": "^5.5.0",

@@ -15,7 +15,6 @@ To run this locally you will need the following in your `packages/cron/.env` fil
 
 ```ini
 ENV=dev
-DATABASE=postgres
 
 # PostgREST API URL
 DEV_PG_REST_URL=http://localhost:3000
@@ -29,9 +28,6 @@ DEV_PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 # Cluster
 CLUSTER_API_URL=http://127.0.0.1:9094/
 CLUSTER_IPFS_PROXY_API_URL=http://127.0.0.1:9095/api/v0/
-
-# Fauna
-DEV_FAUNA_KEY="<your key here>"
 ```
 
 You also need to have:

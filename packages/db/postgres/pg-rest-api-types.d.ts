@@ -1273,6 +1273,9 @@ export interface paths {
       };
     };
   };
+
+
+  // feat/pinning-api
   "/rpc/create_content": {
     post: {
       parameters: {
@@ -1292,7 +1295,8 @@ export interface paths {
       };
     };
   };
-  "/rpc/user_keys_list": {
+
+  "/rpc/user_auth_keys_list": {
     post: {
       parameters: {
         body: {
@@ -1311,6 +1315,7 @@ export interface paths {
       };
     };
   };
+
   "/rpc/pin_from_status_total": {
     post: {
       parameters: {
@@ -1594,18 +1599,18 @@ export interface definitions {
      */
     id: number;
     status:
-      | "Undefined"
-      | "ClusterError"
-      | "PinError"
-      | "UnpinError"
-      | "Pinned"
-      | "Pinning"
-      | "Unpinning"
-      | "Unpinned"
-      | "Remote"
-      | "PinQueued"
-      | "UnpinQueued"
-      | "Sharded";
+    | "Undefined"
+    | "ClusterError"
+    | "PinError"
+    | "UnpinError"
+    | "Pinned"
+    | "Pinning"
+    | "Unpinning"
+    | "Unpinned"
+    | "Remote"
+    | "PinQueued"
+    | "UnpinQueued"
+    | "Sharded";
     /**
      * Note:
      * This is a Foreign Key to `content.cid`.<fk table='content' column='cid'/>
@@ -1844,6 +1849,6 @@ export interface parameters {
   "rowFilter.user.updated_at": string;
 }
 
-export interface operations {}
+export interface operations { }
 
-export interface external {}
+export interface external { }
