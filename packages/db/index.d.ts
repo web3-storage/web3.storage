@@ -58,7 +58,7 @@ export class DBClient {
   getKey (issuer: string, secret: string): Promise<AuthKey>
   listKeys (userId: number): Promise<Array<AuthKeyItemOutput>>
   createPsaPinRequest (pinRequest: PsaPinRequestUpsertInput): Promise<PsaPinRequestUpsertOutput>
-  getPsaPinRequest (pinRequestId: number) : Promise<PsaPinRequestUpsertOutput>
+  getPsaPinRequest (authKey: string, pinRequestId: number) : Promise<PsaPinRequestUpsertOutput>
   listPsaPinRequests(authKey: string, opts?: ListPsaPinRequestOptions ) : Promise<ListPsaPinRequestResults>
   deletePsaPinRequest (pinRequestId: number, authKey: string) : Promise<PsaPinRequestItem>
   createContent (content: ContentInput, opt?: {updatePinRequests?: boolean}) : Promise<string>
