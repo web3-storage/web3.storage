@@ -92,6 +92,7 @@ const STATUS_OPTIONS = ['queued', 'pinning', 'pinned', 'failed']
 export async function pinPost (request, env, ctx) {
   const pinData = await request.json()
   const { cid, name, origins, meta } = pinData
+  let normalizedCid
 
   // Require cid
   if (!cid) {
@@ -103,7 +104,7 @@ export async function pinPost (request, env, ctx) {
 
   // Validate cid
   try {
-    pinData.normalizedCid = normalizeCid(cid)
+    normalizedCid = normalizeCid(cid)
   } catch (err) {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_CID } },
@@ -151,25 +152,25 @@ export async function pinPost (request, env, ctx) {
     return replacePin(pinData, parseInt(requestId, 10), authToken._id, env, ctx)
   }
 
-  return createPin(pinData, authToken._id, env, ctx)
+  return createPin(normalizedCid, pinData, authToken._id, env, ctx)
 }
 
 /**
+ * @param {string} normalizedCid
  * @param {Object} pinData
  * @param {string} authToken
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
  * @return {Promise<JSONResponse>}
  */
-async function createPin (pinData, authToken, env, ctx) {
-  const { cid, origins, meta, normalizedCid } = pinData
+async function createPin (normalizedCid, pinData, authToken, env, ctx) {
+  const { cid, origins } = pinData
 
   const pinName = pinData.name || undefined // deal with empty strings
 
   await env.cluster.pin(cid, {
     name: pinName,
-    origins,
-    metadata: meta
+    origins
   })
   const pins = await getPins(cid, env.cluster)
 
@@ -198,10 +199,6 @@ async function createPin (pinData, authToken, env, ctx) {
         env.db)
     )
   }
-
-  // TODO(https://github.com/web3-storage/web3.storage/issues/794)
-  // Backups. At the moment backups are related to uploads so
-  // they' re currently not taken care of in respect of a pin request.
 
   if (ctx.waitUntil) {
     tasks.forEach(t => ctx.waitUntil(t()))
@@ -435,10 +432,9 @@ export async function pinDelete (request, env, ctx) {
 
   requestId = parseInt(requestId, 10)
 
-  let res
   try {
     // Update deleted_at (and updated_at) timestamp for the pin request.
-    res = await env.db.deletePsaPinRequest(requestId, authToken._id)
+    await env.db.deletePsaPinRequest(requestId, authToken._id)
   } catch (e) {
     console.error(e)
     // TODO catch different exceptions
@@ -474,7 +470,7 @@ async function replacePin (newPinData, requestId, authToken, env, ctx) {
 
   let pinStatus
   try {
-    pinStatus = await createPin(newPinData, authToken, env, ctx)
+    pinStatus = await createPin(existingPinRequest.contentCid, newPinData, authToken, env, ctx)
   } catch (e) {
     return new JSONResponse(
       { error: { reason: `DB Error: ${e}` } },
