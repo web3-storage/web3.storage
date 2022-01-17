@@ -171,5 +171,32 @@
       }
     }
   },
-  "error_404": {}
+  "error_404": {
+    "sections": [
+      {
+        "id": "error_hero-header",
+        "grid": ["middle", "noGutter"],
+        "columns": [
+          {
+            "type": "hero",
+            "page": "error",
+            "cols": {
+              "num": "col-8_md-10_sm-8",
+              "push_left": "off-2_md-1_sm-2"
+            },
+            "format": "header",
+            "heading": "404",
+            "cta": {
+              "url": "/",
+              "text": "GO BACK HOME",
+              "theme": "text-purple",
+              "event": "",
+              "ui": "",
+              "action": ""
+            }
+          }
+        ]
+      }
+    ]
+  }
 }
