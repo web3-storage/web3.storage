@@ -89,7 +89,7 @@ describe('Pinning APIs endpoints', () => {
     token = await getTestJWT('test-upload', 'test-upload')
   })
 
-  describe('GET /pins', () => {
+  describe.only('GET /pins', () => {
     let baseUrl
 
     before(async () => {
@@ -110,11 +110,11 @@ describe('Pinning APIs endpoints', () => {
           }
         })
 
-      assert(res, 'Server responded')
       assert.strictEqual(res.status, ERROR_CODE)
-      const error = await res.json()
-      assert.strictEqual(error.reason, ERROR_STATUS)
-      assert.strictEqual(error.details, INVALID_LIMIT)
+
+      const { ok, error } = await res.json()
+      assert.strictEqual(ok, false)
+      assert.strictEqual(error.message, 'invalid params')
     })
 
     it('validates CID values passed as filter', async () => {

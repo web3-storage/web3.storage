@@ -20,6 +20,7 @@ import { notFound } from './utils/json-response.js'
 import { nameGet, namePost } from './name.js'
 
 const router = Router()
+
 router.options('*', corsOptions)
 router.all('*', envAll)
 

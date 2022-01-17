@@ -1,6 +1,8 @@
 import { JSONResponse, notFound } from './utils/json-response.js'
 import { normalizeCid } from './utils/normalize-cid.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
+import { Validator } from '@cfworker/json-schema'
+import { HTTPError } from './errors.js'
 
 /**
  * @typedef {'queued' | 'pinning' | 'failed' | 'pinned'} apiPinStatus
@@ -32,6 +34,33 @@ import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 /**
  * @typedef {{ error: { reason: string, details?: string } }} PinDataError
  */
+
+const DEFAULT_LIMIT = 10
+const MAX_LIMIT = 1000
+
+// Validation Schema
+const validator = new Validator({
+  type: 'object',
+  properties: {
+    cid: { type: 'array', items: { type: 'string' } },
+    name: { type: 'string' },
+    match: {
+      type: 'string',
+      enum: ['exact', 'iexact', 'ipartial', 'partial']
+    },
+    status: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: ['queued', 'pinning', 'pinned', 'failed']
+      }
+    },
+    before: { type: 'string', format: 'date-time' },
+    after: { type: 'string', format: 'date-time' },
+    limit: { type: 'integer', minimum: 1, maximum: MAX_LIMIT },
+    meta: { type: 'object' }
+  }
+})
 
 /**
  *
@@ -251,15 +280,18 @@ export async function pinGet (request, env, ctx) {
 export async function pinsGet (request, env, ctx) {
   const url = new URL(request.url)
   const urlParams = new URLSearchParams(url.search)
-  const params = Object.fromEntries(urlParams)
+  const opts = Object.fromEntries(urlParams)
 
-  const result = parseSearchParams(params)
-  if (result.error) {
-    return new JSONResponse(result.error, { status: 400 })
+  // const result = parseSearchParams(params)
+  // if (result.error) {
+  //   return new JSONResponse(result.error, { status: 400 })
+  // }
+  const result = validator.validate(opts)
+  if (!result.valid) {
+    throw new HTTPError('invalid params', 400)
   }
 
   let pinRequests
-  const opts = result.data
 
   try {
     pinRequests = await env.db.listPsaPinRequests(request.auth.authToken._id, opts)

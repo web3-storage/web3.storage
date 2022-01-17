@@ -1,3 +1,5 @@
+import { JSONResponse } from "./utils/json-response"
+
 export class HTTPError extends Error {
   /**
    *
@@ -8,6 +10,31 @@ export class HTTPError extends Error {
     super(message)
     this.name = 'HTTPError'
     this.status = status
+  }
+
+  /**
+   * @param {string} message
+   * @param {number} [status]
+   * @returns {never}
+   */
+  static throw (message, status) {
+    throw new this(message, status)
+  }
+
+  /**
+   *
+   * @param {Error & {status?: number;code?: string;}} err
+   */
+  static respond (err) {
+    return new JSONResponse(
+      {
+        ok: false,
+        error: err
+      },
+      {
+        status: err.status
+      }
+    )
   }
 }
 
