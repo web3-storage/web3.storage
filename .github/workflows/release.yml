@@ -127,9 +127,8 @@ jobs:
         # workaround for https://github.com/cloudflare/wrangler-action/issues/59 to use node 16
         uses: web3-storage/wrangler-action@node16
         env:
-          SENTRY_TOKEN: ${{ secrets.PROD_SENTRY_TOKEN}}
-          SENTRY_PROJECT: ${{ secrets.PROD_SENTRY_PROJECT}}
-          SENTRY_UPLOAD: ${{ secrets.PROD_SENTRY_UPLOAD}}
+          SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
+          SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           workingDirectory: 'packages/api'
