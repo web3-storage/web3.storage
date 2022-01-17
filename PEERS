@@ -1,0 +1,21 @@
+# A list of known IPFS peers that are hosting content uploaded to Web3.Storage.
+#
+# YOU DO NOT NEED THIS LIST. All peers that provide content on IPFS are
+# discoverable via the DHT. IPFS transfers content P2P from multiple sources
+# including other peers that recently acquired the content.
+#
+# Note: this list may be incorrect, may change, or become out of date at any
+# time without notice.
+
+# web3-storage-sv15
+/ip4/139.178.69.155/tcp/4001/p2p/12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE1
+# web3-storage-sv15-2
+/ip4/139.178.68.91/tcp/4001/p2p/12D3KooWEDMw7oRqQkdCJbyeqS5mUmWGwTp8JJ2tjCzTkHboF6wK
+# web3-storage-am6
+/ip4/147.75.33.191/tcp/4001/p2p/12D3KooWPySxxWQjBgX9Jp6uAHQfVmdq8HG1gVvS1fRawHNSrmqW
+# web3-storage-am6-2
+/ip4/147.75.32.73/tcp/4001/p2p/12D3KooWNuoVEfVLJvU3jWY2zLYjGUaathsecwT19jhByjnbQvkj
+# web3-storage-dc13
+/ip4/145.40.89.195/tcp/4001/p2p/12D3KooWSnniGsyAF663gvHdqhyfJMCjWJv54cGSzcPiEMAfanvU
+# web3-storage-dc13-2
+/ip4/136.144.56.153/tcp/4001/p2p/12D3KooWKytRAd2ujxhGzaLHKJuje8sVrHXvjGNvHXovpar5KaKQ

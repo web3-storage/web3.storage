@@ -49,7 +49,7 @@ export type AuthKey = {
 }
 
 export type AuthKeyItem = definitions['auth_key'] & {
-  uploads: number
+  has_uploads: boolean
 }
 
 export type AuthKeyItemOutput = {

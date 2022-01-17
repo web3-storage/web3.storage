@@ -30,35 +30,10 @@ export function getClusterIPFSProxy (env) {
 }
 
 /**
- * Create a new Fauna DB client instance from the passed environment variables.
+ * Create a new DB client instance from the passed environment variables.
  * @param {Record<string, string|undefined>} env
  */
 export function getDBClient (env) {
-  if (env.DATABASE === 'postgres') {
-    return getDBPostgresClient(env)
-  }
-
-  return getDBFaunaClient(env)
-}
-
-function getDBFaunaClient (env) {
-  let token
-  if (env.ENV === 'production') {
-    if (!env.FAUNA_KEY) throw new Error('missing FAUNA_KEY environment var')
-    token = env.FAUNA_KEY
-  } else if (env.ENV === 'staging') {
-    if (!env.STAGING_FAUNA_KEY) throw new Error('missing STAGING_FAUNA_KEY environment var')
-    token = env.STAGING_FAUNA_KEY
-  } else if (env.ENV === 'dev') {
-    if (!env.DEV_FAUNA_KEY) throw new Error('missing DEV_FAUNA_KEY environment var')
-    token = env.DEV_FAUNA_KEY
-  } else {
-    throw new Error(`unsupported environment ${env.ENV}`)
-  }
-  return new DBClient({ token })
-}
-
-function getDBPostgresClient (env) {
   let token, endpoint
   if (env.ENV === 'production') {
     if (!env.PG_REST_JWT) throw new Error('missing PG_REST_JWT environment var')

@@ -26,14 +26,14 @@ format = "service-worker"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api.web3.storage/*"
-vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "production", PG_REST_URL = "https://db.web3.storage" }
+vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "production", PG_REST_URL = "https://web3-storage-pgrest-prod.herokuapp.com" }
 
 [env.staging]
 # name = "web3-storage-staging"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api-staging.web3.storage/*"
-vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "staging", PG_REST_URL = "https://db-staging.web3.storage" }
+vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "staging", PG_REST_URL = "https://web3-storage-pgrest-staging.herokuapp.com" }
 
 [env.alan]
 workers_dev = true
@@ -79,6 +79,11 @@ vars = { CLUSTER_API_URL = "https://paolo-cluster-api-web3-storage.loca.lt/", PG
 workers_dev = true
 account_id = "e7a8a523464d26ce98e3747575b366b6"
 vars = { CLUSTER_API_URL = "https://garyhomewood-cluster-api-web3-storage.loca.lt/", PG_REST_URL = "https://garyhomewood-postgres-api-web3-storage.loca.lt/", ENV = "dev" }
+
+[env.leslieoa]
+workers_dev = true
+account_id = "ede80955a038a6911c9b03ae4343fee4"
+vars = { CLUSTER_API_URL = "https://leslieoa-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://leslieoa-postgres-api-web3-storage.loca.lt", ENV = "dev" }
 
 # Add your env here. Override the the values you need to change.
 

@@ -4,7 +4,7 @@ DROP FUNCTION IF EXISTS create_key;
 DROP FUNCTION IF EXISTS create_upload;
 DROP FUNCTION IF EXISTS upsert_pin;
 DROP FUNCTION IF EXISTS user_used_storage;
-DROP FUNCTION IF EXISTS user_keys_list;
+DROP FUNCTION IF EXISTS user_auth_keys_list;
 DROP FUNCTION IF EXISTS content_dag_size_total;
 DROP FUNCTION IF EXISTS pin_dag_size_total;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
@@ -163,7 +163,7 @@ BEGIN
     values (inserted_upload_id,
             backup_url,
             (data ->> 'inserted_at')::timestamptz)
-    ON CONFLICT ( url ) DO NOTHING;
+    ON CONFLICT ( upload_id, url ) DO NOTHING;
   end loop;
 
   return (inserted_upload_id)::TEXT;
@@ -259,14 +259,14 @@ BEGIN
 END
 $$;
 
-CREATE OR REPLACE FUNCTION user_keys_list(query_user_id BIGINT)
+CREATE OR REPLACE FUNCTION user_auth_keys_list(query_user_id BIGINT)
   RETURNS TABLE
           (
               "id"                text,
               "name"              text,
               "secret"            text,
               "created"           timestamptz,
-              "uploads"           bigint
+              "has_uploads"           boolean
           )
   LANGUAGE sql
 AS
@@ -275,7 +275,7 @@ SELECT (ak.id)::TEXT AS id,
        ak.name AS name,
        ak.secret AS secret,
        ak.inserted_at AS created,
-       CASE WHEN EXISTS(SELECT 42 FROM upload u WHERE ak.id = u.auth_key_id AND u.deleted_at IS NULL) THEN 1::BIGINT ELSE 0::BIGINT END
+       EXISTS(SELECT 42 FROM upload u WHERE u.auth_key_id = ak.id) AS has_uploads
   FROM auth_key ak
  WHERE ak.user_id = query_user_id AND ak.deleted_at IS NULL
 $$;
