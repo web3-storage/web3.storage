@@ -185,7 +185,9 @@ const FilesManager = ({ className }: FilesManagerProps) => {
         size="Size"
         isHeader
         isSelected={
-          paginatedFiles.every(file => selectedFiles.find(fileSelected => file === fileSelected)) && !!fetchDate
+          !!selectedFiles.length &&
+          paginatedFiles.every(file => selectedFiles.find(fileSelected => file === fileSelected)) &&
+          !!fetchDate
         }
       />
       <div className="files-manager-table-content">
