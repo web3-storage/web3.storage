@@ -236,60 +236,60 @@ describe('Pin Request', () => {
         }, {
           name: 'capybara',
           date: [2020, 1, 1],
-          requestedCid: cidWithContent2,
+          sourceCid: cidWithContent2,
           cid: normalizeCidWithContent2
         },
         {
           name: 'Camel',
           date: [2020, 2, 1],
-          requestedCid: cidWithContent1,
+          sourceCid: cidWithContent1,
           cid: normalizeCidWithContent1
         },
         {
           name: 'Giant Panda Bear',
           date: [2020, 3, 1],
-          requestedCid: cidWithContent1,
+          sourceCid: cidWithContent1,
           cid: normalizeCidWithContent1
         },
         {
           name: 'giant Schnoodle',
           date: [2020, 4, 1],
-          requestedCid: cidWithContent1,
+          sourceCid: cidWithContent1,
           cid: normalizeCidWithContent1
         },
         {
           name: 'giant worm',
           date: [2020, 5, 1],
-          requestedCid: cidWithContent1,
+          sourceCid: cidWithContent1,
           cid: normalizeCidWithContent1
         },
         {
           name: 'Zonkey Schnoodle',
           date: [2020, 6, 1],
-          requestedCid: cidWithContent1,
+          sourceCid: cidWithContent1,
           cid: normalizeCidWithContent1
         },
         {
           name: 'Zorse',
           date: [2020, 7, 1],
-          requestedCid: cidWithContent1,
+          sourceCid: cidWithContent1,
           cid: normalizeCidWithContent1
         },
         {
           date: [2020, 8, 1],
-          requestedCid: cidWithContent1,
+          sourceCid: cidWithContent1,
           cid: normalizeCidWithContent1
         },
         {
           name: '',
           date: [2020, 9, 1],
-          requestedCid: cidWithContent1,
+          sourceCid: cidWithContent1,
           cid: normalizeCidWithContent1
         },
         {
           name: 'Bear',
           date: [2020, 10, 1],
-          requestedCid: cidWithContent1,
+          sourceCid: cidWithContent1,
           cid: normalizeCidWithContent1
         }
       ]
@@ -343,7 +343,7 @@ describe('Pin Request', () => {
     })
 
     it('filters items by provided cid', async () => {
-      const cids = [createdPinningRequests[1].requestedCid]
+      const cids = [createdPinningRequests[1].sourceCid]
       const { results: prs } = await client.listPsaPinRequests(authKeyPinList, {
         cid: cids
       })

@@ -38,7 +38,7 @@ const pinRequestSelect = `
 
 const listPinsQuery = `
   _id:id::text,
-  requestedCid:source_cid,
+  sourceCid:source_cid,
   contentCid:content_cid,
   authKey:auth_key_id,
   name,
