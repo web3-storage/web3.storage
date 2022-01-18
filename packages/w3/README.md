@@ -59,3 +59,36 @@ Paste in a token to save a new one. Pass in `--delete` to remove a previously sa
 
 - `--api` URL for the Web3 Storage API. Default: https://api.web3.storage
 - `--delete` Delete a previously saved token
+
+### `w3 name create`
+
+**❗️Experimental** this API may not work, may change, and may be removed.
+
+Create a new name and associated signing key that can be used to create and publish IPNS record revisions. Prints the IPNS name and stores the signing key in config.
+
+### `w3 name list`
+
+**❗️Experimental** this API may not work, may change, and may be removed.
+
+List IPNS names managed by this utility.
+
+### `w3 name publish <keyId> <value>`
+
+Publish a name revision to Web3.Storage.
+
+**❗️Experimental** this API may not work, may change, and may be removed.
+
+⚠️ Name records are not _yet_ published to or updated from the IPFS network.
+Working with name records simply updates the Web3.Storage cache of data.
+
+### `w3 name resolve <keyId>`
+
+**❗️Experimental** this API may not work, may change, and may be removed.
+
+Resolve the current IPNS record revision for the passed name.
+
+### `w3 name rm <keyId>`
+
+**❗️Experimental** this API may not work, may change, and may be removed.
+
+Remove an IPNS name managed by this utility. Note: this does NOT unpublish the IPNS name, it simply removes the IPNS name and signing key from local config.
