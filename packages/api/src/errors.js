@@ -25,14 +25,14 @@ export class HTTPError extends Error {
    *
    * @param {Error & {status?: number;code?: string;}} err
    */
-  static respond (err) {
+  static respond (code, message, status) {
     return new JSONResponse(
       {
         ok: false,
-        error: err
+        error: { code, message }
       },
       {
-        status: err.status
+        status: status
       }
     )
   }
