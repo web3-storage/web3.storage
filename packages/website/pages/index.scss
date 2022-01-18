@@ -116,16 +116,21 @@
   &:after {
     content: '';
     position: absolute;
-    width: 100%;
+    width: 1440px;
     height: 80rem;
-    bottom: 1rem;
+    left: calc(50% - #{math.div($containerWidth, 2)} - 10rem);
+    bottom: calc(1.125rem + 1px);
     background-size: 100%;
+    background-position: left -50px top 0;
     transform: translateY(calc(100% - 3rem)) scaleY(0.92);
     background-repeat: no-repeat;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1366' height='932' viewBox='0 0 1366 932'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect id='Rectangle_2597' data-name='Rectangle 2597' width='1366' height='932' transform='translate(-20933 15244)' fill='%23fff' stroke='%23707070' stroke-width='1'/%3e%3c/clipPath%3e%3cclipPath id='clip-path-2'%3e%3crect x='-82' y='104' width='1708.34' height='1983.322' fill='none'/%3e%3c/clipPath%3e%3cclipPath id='clip-path-3'%3e%3crect width='1376.34' height='2071.322' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Mask_Group_126' data-name='Mask Group 126' transform='translate(20933 -15244)' clip-path='url(%23clip-path)'%3e%3cg id='Scroll_Group_2' data-name='Scroll Group 2' transform='translate(-20933 14088.508)' clip-path='url(%23clip-path-2)' style='isolation: isolate'%3e%3cg id='Group_3560' data-name='Group 3560' transform='translate(3.178 -2929.691)'%3e%3cg id='Group_1944' data-name='Group 1944'%3e%3cg id='Scroll_Group_1' data-name='Scroll Group 1' transform='translate(-3.178 2929.691)' clip-path='url(%23clip-path-3)' style='isolation: isolate'%3e%3cg id='Group_430' data-name='Group 430' transform='translate(0)'%3e%3cg id='Group_216' data-name='Group 216' transform='translate(0)'%3e%3cpath id='Path_18835' data-name='Path 18835' d='M-16101,11198.438v1055.932s338.735-28.635,512.177,140.625,36.063,416.637,329.8,625.462,792.163,107.167,792.163,107.167l2.2-1929.186s-388.361-117.4-797.447-117.4S-16101,11198.438-16101,11198.438Z' transform='translate(16101 -11081.04)' fill='%2303040a'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e ");
     @include xlarge {
+      width: 100%;
+      left: unset;
       height: 62rem;
       bottom: 1px;
+      background-position: left 0 top 0;
     }
     @include small {
       height: 40rem;
@@ -139,6 +144,19 @@
 #section_5 {
   position: relative;
   z-index: 1;
+
+  &:before {
+    content: '';
+    position: absolute;
+    right: calc(50% - #{math.div($containerWidth, 2)} - 15rem - 50vw);
+    top: -1px;
+    width: 50vw;
+    height: calc(54.5rem + 1px);
+    background-color: $ebony;
+    @include xlarge {
+      display: none;
+    }
+  }
 }
 
 #section_6 {

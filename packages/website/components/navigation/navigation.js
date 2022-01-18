@@ -5,7 +5,9 @@ import clsx from 'clsx';
 import Link from 'next/link';
 
 import { useAuthorization } from 'components/contexts/authorizationContext';
+// @ts-ignore
 import ZeroAccordion from 'ZeroComponents/accordion/accordion';
+// @ts-ignore
 import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
 import Button from '../button/button';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
@@ -148,7 +150,10 @@ export default function Navigation() {
               <div className={clsx('nav-items-wrapper', theme)}>
                 {navItems.map(item => (
                   <Link key={item.text} href={item.url}>
-                    <button className="nav-item" onClick={onLinkClick} onKeyPress={e => handleKeySelect(e, item.url)}>
+                    <button
+                      className={ clsx('nav-item', item.url === router.route ? 'current-page' : '')}
+                      onClick={onLinkClick}
+                      onKeyPress={e => handleKeySelect(e, item.url)}>
                       {item.text}
                     </button>
                   </Link>

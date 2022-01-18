@@ -71,6 +71,7 @@
   }
   .site-logo-image {
     width: 2rem;
+    cursor: pointer;
   }
   .site-logo-text {
     display: inline;
@@ -111,9 +112,16 @@
       border-radius: 2px;
       border: solid 2px $ebony;
       opacity: 0;
-      transition: inherit;
+      transition: 200ms ease;
     }
     &:hover {
+      color: $blue;
+      transform: translateY(-0.75rem);
+      &:after {
+        border: solid 2px $blue;
+      }
+    }
+    &.current-page {
       transform: translateY(-0.75rem);
       &:after {
         opacity: 1;
@@ -123,6 +131,16 @@
   & > *:last-child {
     margin-left: 1.5rem;
     margin-right: 0;
+  }
+  &.light {
+    .nav-item {
+      &:hover {
+        color: $malibu;
+        &:after {
+          border: solid 2px $malibu;
+        }
+      }
+    }
   }
 }
 
@@ -258,10 +276,12 @@
 .nav-sublinks-wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: flex-start;
   .nav-sublink {
     cursor: pointer;
     margin: 0.25rem 0;
+    text-align: left;
     @include fontSize_Mini;
   }
 }
