@@ -66,7 +66,6 @@ describe('user operations', () => {
     const name = 'test-name'
     const email = 'new-test@email.com'
     const publicAddress = `public_address${Math.random()}`
-    const pinningEnabled = true
 
     const upsertUser = await client.upsertUser({
       id: user._id,
