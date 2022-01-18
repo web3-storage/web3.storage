@@ -93,6 +93,19 @@ describe('Pinning APIs endpoints', () => {
       token = await getTestJWT('test-pinning', 'test-pinning')
     })
 
+    it('returns unauthorized if no token', async () => {
+      const res = await fetch(new URL('pins/1', endpoint).toString(), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      assert(res, 'Server responded')
+      assert(!res.ok)
+      assert.deepEqual(res.status, 401)
+    })
+
     it('validates filter values', async () => {
       const opts = new URLSearchParams({
         limit: '3.14'
@@ -480,39 +493,6 @@ describe('Pinning APIs endpoints', () => {
     })
   })
 
-  describe('GET /pins', () => {
-    let token = null
-    before(async () => {
-      token = await getTestJWT('user-pinning-enabled', 'user-pinning-enabled')
-    })
-
-    it('returns unauthorized if no token', async () => {
-      const res = await fetch(new URL('pins/1', endpoint).toString(), {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-
-      assert(res, 'Server responded')
-      assert(!res.ok)
-      assert.deepEqual(res.status, 401)
-    })
-
-    it('error if user not authorised to pin', async () => {
-      token = await getTestJWT()
-      const res = await fetch(new URL('pins', endpoint).toString(), {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      assert(!res.ok)
-      assert.strictEqual(res.status, (new PinningNotAuthorisedError()).status)
-    })
-  })
-
   describe('GET /pins/:requestId', () => {
     let pinRequest
     let token = null
@@ -560,13 +540,24 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('returns not found if the request does not exists', async () => {
-      const pinThatDoesNotExists = '100'
+      const pinThatDoesNotExists = 100
       const res = await fetch(new URL(`pins/${pinThatDoesNotExists}`, endpoint).toString(), {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
+      })
+
+      assert(res, 'Server responded')
+      assert.deepEqual(res.status, 404)
+    })
+
+    it('returns not found if the request does not belong to the user token', async () => {
+      const wrongToken = await getTestJWT('test-pinning-2', 'test-pinning-2')
+      const res = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${wrongToken}` }
       })
 
       assert(res, 'Server responded')
@@ -627,77 +618,6 @@ describe('Pinning APIs endpoints', () => {
     })
   })
 
-  describe('POST /pins/:requestId', () => {
-    let token = null
-    before(async () => {
-      token = await getTestJWT('test-pinning', 'test-pinning')
-    })
-
-    it('error if user not authorised to pin', async () => {
-      token = await getTestJWT()
-      const res = await fetch(new URL('pins/UniqueIdOfPinRequest', endpoint).toString(), {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-
-      assert(!res.ok)
-      assert.strictEqual(res.status, (new PinningNotAuthorisedError()).status)
-    })
-  })
-
-  describe('DELETE /pins/:requestId', () => {
-    let token = null
-    before(async () => {
-      token = await getTestJWT('test-pinning', 'test-pinning')
-    })
-
-    it('requires a valid string as requestId', async () => {
-      const res = await fetch(new URL('pins/NotAValidId', endpoint).toString(), {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      assert(res, 'Server responded')
-      assert(!res.ok, 'Server returns an error')
-      const data = await res.json()
-      const error = data.error
-      assert.strictEqual(error.reason, ERROR_STATUS)
-      assert.strictEqual(error.details, INVALID_REQUEST_ID)
-    })
-
-    it.skip('requires a requestId', async () => {
-      const res = await fetch(new URL('pins/1', endpoint).toString(), {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      assert(res, 'Server responded')
-      assert(res.ok, 'Server response ok')
-      const data = await res.json()
-      assert.strictEqual(data, 'OK')
-    })
-
-    it('error if user not authorised to pin', async () => {
-      token = await getTestJWT()
-      const res = await fetch(new URL('pins/1', endpoint).toString(), {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      assert(!res.ok)
-      assert.strictEqual(res.status, (new PinningNotAuthorisedError()).status)
-    })
-  })
-
   describe('getPinningAPIStatus', () => {
     it('returns "pinned" if it is pinned on at least one node', () => {
       /** @type {import('../../db/db-client-types.js').PinItemOutput[]} */
@@ -741,10 +661,10 @@ describe('Pinning APIs endpoints', () => {
     })
   })
 
-  describe.skip('DELETE /pins/:requestId', () => {
+  describe('DELETE /pins/:requestId', () => {
     let token = null
     before(async () => {
-      token = await getTestJWT('test-upload', 'test-upload')
+      token = await getTestJWT('test-pinning', 'test-pinning')
     })
 
     it('fails to delete if there is no user token', async () => {
@@ -757,14 +677,14 @@ describe('Pinning APIs endpoints', () => {
       assert.deepEqual(res.status, 401)
     })
 
-    it('requires a number as string as requestId', async () => {
+    it('requires a valid string as requestId', async () => {
       const res = await fetch(new URL('pins/NotAValidId', endpoint).toString(), {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       })
-
       assert(res, 'Server responded')
       assert(!res.ok, 'Server returns an error')
       const data = await res.json()
@@ -829,6 +749,19 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res.ok, 'Server responded')
       assert.equal(res.status, 202)
+    })
+
+    it('error if user not authorised to pin', async () => {
+      token = await getTestJWT()
+      const res = await fetch(new URL('pins/1', endpoint).toString(), {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      assert(!res.ok)
+      assert.strictEqual(res.status, (new PinningNotAuthorisedError()).status)
     })
   })
 
@@ -905,6 +838,20 @@ describe('Pinning APIs endpoints', () => {
       assert.equal(res.status, 400)
       const { error } = await res.json()
       assert.equal(error.details, INVALID_REPLACE)
+    })
+
+    it('error if user not authorised to pin', async () => {
+      token = await getTestJWT()
+      const res = await fetch(new URL('pins/UniqueIdOfPinRequest', endpoint).toString(), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+
+      assert(!res.ok)
+      assert.strictEqual(res.status, (new PinningNotAuthorisedError()).status)
     })
   })
 })

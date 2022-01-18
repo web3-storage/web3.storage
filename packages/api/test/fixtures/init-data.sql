@@ -11,6 +11,9 @@ VALUES (3, 'test-status-user', 'test-status@user.com', 'test-status', 'test-stat
 INSERT INTO public.user (id, name, email, issuer, public_address)
 VALUES (4, 'test-pinning-user', 'test-pinning@user.com', 'test-pinning', 'test-pinning');
 
+INSERT INTO public.user (id, name, email, issuer, public_address)
+VALUES (5, 'test-pinning-2-user', 'test-pinning2@user.com', 'test-pinning-2', 'test-pinning-2');
+
 INSERT INTO auth_key (name, secret, user_id)
 VALUES ('test-key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LW1hZ2ljLWlzc3VlciIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtbWFnaWMtaXNzdWVyIn0.p2nD1Q4X4Z6DtJ0vxk35hhZOqSPVymhN5uyXrXth1zs', 1);
 
@@ -24,6 +27,8 @@ VALUES ('test-upload-key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN
 -- Used to test pinning
 INSERT INTO auth_key (name, secret, user_id)
 VALUES ('test-pinning', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmciLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2MzM5NTczODk4NzIsIm5hbWUiOiJ0ZXN0LXBpbm5pbmcifQ.li8kWohG90P8TdsKL_dUStJb2f6-43G98uZsLrVEaho', 4);
+INSERT INTO auth_key (name, secret, user_id)
+VALUES ('test-pinning-2', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmctMiIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtcGlubmluZy0yIn0.B0lwP5T2KLP0D1XGvz_f7AJcJ_j65NPN3BsxZ4Io2-g', 5);
 
 -- /user route data testing
 INSERT INTO content (cid)
@@ -79,6 +84,8 @@ VALUES (
 -- user 'test-pinning' is authorised
 INSERT INTO pinning_authorisation (user_id)
 VALUES (4);
+INSERT INTO pinning_authorisation (user_id)
+VALUES (5);
 
 INSERT INTO content (cid)
 VALUES  ('bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4'),
