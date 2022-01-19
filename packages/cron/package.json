@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/cron",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Web3 Storage Cron Jobs",
   "private": true,
   "main": "src/index.js",
