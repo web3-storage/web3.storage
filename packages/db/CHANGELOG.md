@@ -1,5 +1,12 @@
 # Changelog
 
+### [4.0.5](https://www.github.com/web3-storage/web3.storage/compare/db-v4.0.4...db-v4.0.5) (2022-01-19)
+
+
+### Changes
+
+* update licenses ([#831](https://www.github.com/web3-storage/web3.storage/issues/831)) ([8e081aa](https://www.github.com/web3-storage/web3.storage/commit/8e081aac2dd03dd5eb642bff9c2da867d61edd87))
+
 ### [4.0.4](https://www.github.com/web3-storage/web3.storage/compare/db-v4.0.3...db-v4.0.4) (2022-01-04)
 
 
