@@ -127,9 +127,8 @@ jobs:
         # workaround for https://github.com/cloudflare/wrangler-action/issues/59 to use node 16
         uses: web3-storage/wrangler-action@node16
         env:
-          SENTRY_TOKEN: ${{ secrets.PROD_SENTRY_TOKEN}}
-          SENTRY_PROJECT: ${{ secrets.PROD_SENTRY_PROJECT}}
-          SENTRY_UPLOAD: ${{ secrets.PROD_SENTRY_UPLOAD}}
+          SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
+          SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           workingDirectory: 'packages/api'
@@ -161,7 +160,7 @@ jobs:
       # Add the site to web3.storage, output the cid as `steps.ipfs.outputs.cid`
       - name: Add to web3.storage
         if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'website' }}
-        uses: web3-storage/add-to-web3@v1
+        uses: web3-storage/add-to-web3@v2
         id: ipfs
         with:
           path_to_add: packages/website/out

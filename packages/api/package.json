@@ -1,9 +1,9 @@
 {
   "name": "@web3-storage/api",
-  "version": "5.0.7",
+  "version": "5.0.8",
   "private": true,
   "type": "module",
-  "license": "(Apache-2.0 AND MIT)",
+  "license": "(Apache-2.0 OR MIT)",
   "main": "dist/worker.js",
   "scripts": {
     "lt": "npm-run-all -p lt:*",
