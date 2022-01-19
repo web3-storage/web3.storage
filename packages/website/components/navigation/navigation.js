@@ -16,6 +16,8 @@ import GeneralPageData from '../../content/pages/general.json';
 import { trackCustomLinkClick, events, ui } from 'lib/countly';
 import Loading from 'components/loading/loading';
 import Breadcrumbs from 'components/breadcrumbs/breadcrumbs';
+import emailContent from '../../content/file-a-request';
+
 // ====================================================================== Params
 /**
  * Navbar Component
@@ -33,10 +35,15 @@ export default function Navigation({ isProductApp }) {
   const [isMenuOpen, setMenuOpen] = useState(false);
   // Navigation Content
   const links = GeneralPageData.navigation.links;
-  const navItems = isLoggedIn ? links : links.filter(item => item.text.toLowerCase() !== 'account');
+  const account = links.find(item => item.text.toLowerCase() === 'account');
+  const navItems = links.filter(item => item.text.toLowerCase() !== 'account');
   const auth = GeneralPageData.navigation.auth;
   const logoText = GeneralPageData.site_logo.text;
   const theme = router.route === '/tiers' || isProductApp ? 'light' : 'dark';
+  const buttonTheme = isProductApp ? 'pink-blue' : '';
+  const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body=${encodeURIComponent(
+    emailContent.body.join('\n')
+  )}`;
 
   // ================================================================= Functions
 
@@ -46,11 +53,17 @@ export default function Navigation({ isProductApp }) {
 
   const onLinkClick = useCallback(e => {
     trackCustomLinkClick(events.LINK_CLICK_NAVBAR, e.currentTarget);
-  }, []);
+    if (isMenuOpen) {
+      setMenuOpen(false)
+    }
+  }, [isMenuOpen]);
 
   const login = useCallback(() => {
     router.push('/login');
-  }, [router]);
+    if (isMenuOpen) {
+      setMenuOpen(false)
+    }
+  }, [router, isMenuOpen]);
 
   const handleKeySelect = useCallback(
     (e, url) => {
@@ -61,25 +74,49 @@ export default function Navigation({ isProductApp }) {
   );
 
   // ======================================================= Templates [Buttons]
-  const getNavLinkOrHeader = item => {
-    if (Array.isArray(item.links)) {
-      return <div className="nav-item-heading">{item.text}</div>;
+  const getAccountMenu = () => {
+    if (isProductApp) {
+      const labelText = account.text.toLowerCase()
+      return (
+        <div className="nav-account-button">
+          <button
+            className={ clsx('nav-item', account.url === router.route ? 'current-page' : '')}
+            onClick={onLinkClick}
+            onKeyPress={e => handleKeySelect(e, account.url)}>
+            {account.text}
+          </button>
+          <div className="nav-account-dropdown">
+            <div className="label">{labelText[0].toUpperCase() + labelText.substring(1)}</div>
+            {account.links.map(link => (
+              <Link href={link.url === 'request-more-storage' ? mailTo : link.url} key={link.text}>
+                <button className="nav-dropdown-link" onClick={onLinkClick} onKeyPress={e => handleKeySelect(e, link.url)}>
+                  {link.text}
+                </button>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )
     }
     return (
-      <Link href={item.url} key={item.text}>
-        <button className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
-          {item.text}
+      <Link key={account.text} href={account.url}>
+        <button
+          className={ clsx('nav-item', account.url === router.route ? 'current-page' : '')}
+          onClick={onLinkClick}
+          onKeyPress={e => handleKeySelect(e, account.url)}>
+          {account.text}
         </button>
       </Link>
-    );
-  };
+    )
+  }
 
   const logoutButton = (button, forceTheme) => {
+    const variant = forceTheme || theme;
     return (
       <Button
         id="nav-auth-button"
         onClick={logout}
-        variant={forceTheme || theme}
+        variant={variant}
         tracking={{
           event: events.LOGOUT_CLICK,
           ui: ui.NAVBAR,
@@ -92,12 +129,13 @@ export default function Navigation({ isProductApp }) {
   };
 
   const loginButton = (button, forceTheme) => {
+    const variant = forceTheme || theme;
     return (
       <Button
         id="nav-auth-button"
         href={button.url}
         onClick={login}
-        variant={forceTheme || theme}
+        variant={variant}
         tracking={{
           ui: ui.NAVBAR,
           action: 'Login',
@@ -163,11 +201,13 @@ export default function Navigation({ isProductApp }) {
                   </Link>
                 ))}
 
+                { isLoggedIn && getAccountMenu() }
+
                 {isLoadingUser
-                  ? loadingButton(auth.login)
+                  ? loadingButton(auth.login, buttonTheme)
                   : isLoggedIn
-                  ? logoutButton(auth.logout)
-                  : loginButton(auth.login)}
+                  ? logoutButton(auth.logout, buttonTheme)
+                  : loginButton(auth.login, buttonTheme)}
               </div>
 
               <div className={clsx('nav-menu-toggle', theme, isMenuOpen ? 'menu-open' : '')}>
@@ -183,16 +223,31 @@ export default function Navigation({ isProductApp }) {
 
             <div className={clsx('nav-mobile-panel', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
               <div className="mobile-items-wrapper">
-                <ZeroAccordion multiple={true}>
-                  {navItems.map((item, index) => (
-                    <ZeroAccordionSection key={`mobile-${item.text}`} disabled={!Array.isArray(item.links)}>
-                      <ZeroAccordionSection.Header>{getNavLinkOrHeader(item)}</ZeroAccordionSection.Header>
+
+                {navItems.map((item, index) => (
+                  <Link href={item.url} key={`mobile-${item.text}`}>
+                    <button className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
+                      {item.text}
+                    </button>
+                  </Link>
+                ))}
+
+                { isLoggedIn &&
+                  <ZeroAccordion multiple={false}>
+                    <ZeroAccordionSection disabled={!Array.isArray(account.links)}>
+                      <ZeroAccordionSection.Header>
+                        <div className="nav-item-heading">
+                          {account.text}
+                        </div>
+                      </ZeroAccordionSection.Header>
 
                       <ZeroAccordionSection.Content>
-                        {Array.isArray(item.links) && (
+                        {Array.isArray(account.links) && (
                           <div className="nav-sublinks-wrapper">
-                            {item.links.map(link => (
-                              <Link href={link.url} key={link.text}>
+                            {account.links.map(link => (
+                              <Link
+                                href={link.url === 'request-more-storage' ? mailTo : link.url}
+                                key={link.text}>
                                 <button
                                   className="nav-sublink"
                                   onClick={onLinkClick}
@@ -206,8 +261,8 @@ export default function Navigation({ isProductApp }) {
                         )}
                       </ZeroAccordionSection.Content>
                     </ZeroAccordionSection>
-                  ))}
-                </ZeroAccordion>
+                  </ZeroAccordion>
+                }
 
                 {isLoadingUser
                   ? loadingButton(auth.login, 'light')
