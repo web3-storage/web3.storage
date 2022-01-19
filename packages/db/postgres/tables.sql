@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS content
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+CREATE INDEX IF NOT EXISTS content_inserted_at_idx ON content (inserted_at);
 CREATE INDEX IF NOT EXISTS content_updated_at_idx ON content (updated_at);
 -- TODO: Sync with @ribasushi as we can start using this as the primary key
 CREATE UNIQUE INDEX content_cid_with_size_idx ON content (cid) INCLUDE (dag_size);
@@ -128,7 +129,6 @@ CREATE TABLE IF NOT EXISTS pin
   UNIQUE (content_cid, pin_location_id)
 );
 
-CREATE INDEX IF NOT EXISTS pin_content_cid_idx ON pin (content_cid);
 CREATE INDEX IF NOT EXISTS pin_location_id_idx ON pin (pin_location_id);
 CREATE INDEX IF NOT EXISTS pin_updated_at_idx ON pin (updated_at);
 CREATE INDEX IF NOT EXISTS pin_status_idx ON pin (status);
