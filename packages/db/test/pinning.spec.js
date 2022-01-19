@@ -290,8 +290,8 @@ describe('Pin Request', () => {
       assert(sorted)
     })
 
-    it.skip('it filters items by provided status', async () => {
-      // TODO(https://github.com/web3-storage/web3.storage/issues/797): status filtering is currently not working
+    it.skip('filters items by provided status', async () => {
+      // TODO(https://github.com/web3-storage/web3.storage/issues/797): status filtering not yet implemented
       const { results: prs } = await client.listPsaPinRequests(authKeyPinList, {
         status: ['Pinning']
       })
