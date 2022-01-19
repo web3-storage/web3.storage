@@ -8,7 +8,7 @@ export async function create () {
   console.log(name.toString())
 }
 
-export async function list () {
+export function list () {
   Object.keys(config.store.name || {}).forEach(keyId => console.log(keyId))
 }
 
@@ -54,6 +54,6 @@ export async function resolve (keyId, opts) {
 /**
  * @param {string} keyId
  */
-export async function rm (keyId) {
+export function rm (keyId) {
   config.delete(`name.${keyId}`)
 }
