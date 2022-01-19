@@ -24,12 +24,13 @@
   "homepage": "https://web3.storage",
   "dependencies": {
     "@ipld/car": "^3.1.16",
-    "conf": "^10.0.1",
+    "conf": "^10.1.1",
     "enquirer": "^2.3.6",
     "hard-rejection": "^2.1.0",
     "ipfs-car": "^0.6.1",
     "ora": "^5.4.1",
     "sade": "^1.7.4",
+    "uint8arrays": "^3.0.0",
     "web3.storage": "^3.5.2"
   },
   "devDependencies": {
