@@ -915,6 +915,7 @@
           content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
           source_cid?: parameters["rowFilter.psa_pin_request.source_cid"];
           name?: parameters["rowFilter.psa_pin_request.name"];
+          metadata?: parameters["rowFilter.psa_pin_request.metadata"];
           deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
           inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
           updated_at?: parameters["rowFilter.psa_pin_request.updated_at"];
@@ -973,6 +974,7 @@
           content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
           source_cid?: parameters["rowFilter.psa_pin_request.source_cid"];
           name?: parameters["rowFilter.psa_pin_request.name"];
+          metadata?: parameters["rowFilter.psa_pin_request.metadata"];
           deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
           inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
           updated_at?: parameters["rowFilter.psa_pin_request.updated_at"];
@@ -995,6 +997,7 @@
           content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
           source_cid?: parameters["rowFilter.psa_pin_request.source_cid"];
           name?: parameters["rowFilter.psa_pin_request.name"];
+          metadata?: parameters["rowFilter.psa_pin_request.metadata"];
           deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
           inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
           updated_at?: parameters["rowFilter.psa_pin_request.updated_at"];
@@ -1680,6 +1683,7 @@ export interface definitions {
     content_cid: string;
     source_cid: string;
     name?: string;
+    metadata?: Record<string, string>
     deleted_at?: string;
     inserted_at: string;
     updated_at: string;
@@ -1821,6 +1825,7 @@ export interface parameters {
   "rowFilter.psa_pin_request.content_cid": string;
   "rowFilter.psa_pin_request.source_cid": string;
   "rowFilter.psa_pin_request.name": string;
+  "rowFilter.psa_pin_request.metadata": Record<string, string>;
   "rowFilter.psa_pin_request.deleted_at": string;
   "rowFilter.psa_pin_request.inserted_at": string;
   "rowFilter.psa_pin_request.updated_at": string;

@@ -190,6 +190,7 @@ BEGIN
                       content_cid,
                       source_cid,
                       name,
+                      metadata,
                       inserted_at,
                       updated_at
                     )
@@ -198,6 +199,7 @@ BEGIN
             data ->> 'content_cid',
             data ->> 'source_cid',
             data ->> 'name',
+            (data ->> 'metadata')::jsonb,
             (data ->> 'inserted_at')::timestamptz,
             (data ->> 'updated_at')::timestamptz
           )
