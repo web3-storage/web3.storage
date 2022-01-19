@@ -61,7 +61,7 @@ export default {
         include: './dist',
         urlPrefix: '/',
         org: 'protocol-labs-it',
-        project: process.env.SENTRY_PROJECT,
+        project: 'web3-api',
         authToken: process.env.SENTRY_TOKEN
       }),
     process.env.SENTRY_UPLOAD === 'true' &&

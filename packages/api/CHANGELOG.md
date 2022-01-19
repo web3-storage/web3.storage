@@ -1,5 +1,12 @@
 # Changelog
 
+### [5.0.8](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.7...api-v5.0.8) (2022-01-17)
+
+
+### Bug Fixes
+
+* use single sentry project ([#869](https://www.github.com/web3-storage/web3.storage/issues/869)) ([ca530cd](https://www.github.com/web3-storage/web3.storage/commit/ca530cde3a601ddcabb8e25e39b9006641d6c3cf))
+
 ### [5.0.7](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.6...api-v5.0.7) (2022-01-11)
 
 
