@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.5.4](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.3...web3.storage-v3.5.4) (2022-01-19)
+
+
+### Changes
+
+* update licenses ([#831](https://www.github.com/web3-storage/web3.storage/issues/831)) ([8e081aa](https://www.github.com/web3-storage/web3.storage/commit/8e081aac2dd03dd5eb642bff9c2da867d61edd87))
+
 ### [3.5.3](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.2...web3.storage-v3.5.3) (2022-01-11)
 
 
