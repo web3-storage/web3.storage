@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/report",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Activity report for Web3.Storage",
   "main": "index.js",
