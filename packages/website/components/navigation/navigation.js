@@ -21,10 +21,11 @@ import Breadcrumbs from 'components/breadcrumbs/breadcrumbs';
  * Navbar Component
  *
  * @param {Object} props
+ * @param {Boolean} props.isProductApp
  */
 
 // ===================================================================== Exports
-export default function Navigation() {
+export default function Navigation({ isProductApp }) {
   const router = useRouter();
   const { isLoggedIn, isLoading, isFetching, logout } = useAuthorization();
   const isLoadingUser = useMemo(() => isLoading || isFetching, [isLoading, isFetching]);
@@ -35,7 +36,8 @@ export default function Navigation() {
   const navItems = isLoggedIn ? links : links.filter(item => item.text.toLowerCase() !== 'account');
   const auth = GeneralPageData.navigation.auth;
   const logoText = GeneralPageData.site_logo.text;
-  const theme = router.route === '/tiers' ? 'light' : 'dark';
+  const theme = router.route === '/tiers' || isProductApp ? 'light' : 'dark';
+
   // ================================================================= Functions
 
   const toggleMenu = () => {
@@ -118,7 +120,9 @@ export default function Navigation() {
 
   // ================================================ Main Template [Navigation]
   return (
-    <section id="section_navigation" className={clsx('section-navigation', theme)}>
+    <section
+      id="section_navigation"
+      className={clsx('section-navigation', theme, isProductApp ? 'clear-bg' : '')}>
       <div className="grid-noGutter">
         <div className="col">
           <nav id="navigation">
@@ -126,7 +130,7 @@ export default function Navigation() {
               className={clsx(
                 'nav-bar',
                 isMenuOpen ? 'mobile-panel' : '',
-                router.route === '/' ? 'breadcrumbs-hidden' : ''
+                router.route === '/' || isProductApp ? 'breadcrumbs-hidden' : ''
               )}
             >
               <div className={clsx('site-logo-container', theme, isMenuOpen ? 'menu-open' : '')}>
@@ -173,7 +177,7 @@ export default function Navigation() {
               </div>
             </div>
 
-            {router.route === '/' ? null : (
+            {router.route === '/' || isProductApp ? null : (
               <Breadcrumbs variant={theme} click={onLinkClick} keyboard={handleKeySelect} />
             )}
 
