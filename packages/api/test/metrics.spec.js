@@ -12,7 +12,6 @@ describe('GET /metrics', () => {
     assert(text.includes('web3storage_uploads_total'))
     assert(text.includes('web3storage_content_bytes_total'))
     assert(text.includes('web3storage_pins_total'))
-    assert(text.includes('web3storage_pins_bytes_total'))
     assert(text.includes('web3storage_pins_status_queued_total'))
     assert(text.includes('web3storage_pins_status_pinning_total'))
     assert(text.includes('web3storage_pins_status_pinned_total'))

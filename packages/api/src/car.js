@@ -114,14 +114,19 @@ export async function carPost (request, env, ctx) {
 export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car') {
   const { user, authToken } = request.auth
   const { headers } = request
+  let structure = uploadType === 'Upload' ? 'Complete' : 'Unknown'
 
   // Throws if CAR is invalid by our standards.
   // Returns either the sum of the block sizes in the CAR, or the cumulative size of the DAG for a dag-pb root.
   const { size: dagSize, rootCid } = await carStat(car)
 
+  if (structure === 'Unknown' && rootCid.code === raw.code) {
+    structure = 'Complete'
+  }
+
   const [{ cid, pins }, backupKey] = await Promise.all([
     addToCluster(car, env),
-    backup(car, rootCid, user._id, env)
+    backup(car, rootCid, user._id, env, structure)
   ])
 
   const xName = headers.get('x-name')
@@ -204,7 +209,7 @@ async function addToCluster (car, env) {
   // Note: We can't make use of `bytes` or `size` properties on the response from cluster.add
   // `bytes` is the sum of block sizes in bytes. Where the CAR is a partial, it'll only be a shard of the total dag size.
   // `size` is UnixFS FileSize which is 0 for directories, and is not set for raw encoded files, only dag-pb ones.
-  const { cid } = await env.cluster.add(car, {
+  const { cid } = await env.cluster.addCAR(car, {
     metadata: { size: car.size.toString() },
     // When >2.5MB, use local add, because waiting for blocks to be sent to
     // other cluster nodes can take a long time. Replication to other nodes
@@ -217,13 +222,20 @@ async function addToCluster (car, env) {
 }
 
 /**
+ * DAG structure metadata
+ * "Unknown" structure means it could be a partial or it could be a complete DAG
+ * i.e. we haven't walked the graph to verify if we have all the blocks or not.
+ */
+
+/**
  * Backup given Car file keyed by /raw/${rootCid}/${userId}/${carHash}.car
  * @param {Blob} blob
  * @param {CID} rootCid
  * @param {string} userId
  * @param {import('./env').Env} env
+ * @param {('Unknown' | 'Partial' | 'Complete')} structure The known structural completeness of a given DAG.
  */
-async function backup (blob, rootCid, userId, env) {
+async function backup (blob, rootCid, userId, env, structure = 'Unknown') {
   if (!env.s3Client) {
     return undefined
   }
@@ -234,7 +246,8 @@ async function backup (blob, rootCid, userId, env) {
   const cmdParams = {
     Bucket: env.s3BucketName,
     Key: keyStr,
-    Body: blob
+    Body: blob,
+    Metadata: { structure }
   }
 
   await env.s3Client.send(new PutObjectCommand(cmdParams))
@@ -268,7 +281,6 @@ async function carStat (carBlob) {
   const rootCid = roots[0]
   let rawRootBlock
   let blocks = 0
-  let size = 0
   for await (const block of blocksIterator) {
     const blockSize = block.bytes.byteLength
     if (blockSize > MAX_BLOCK_SIZE) {
@@ -277,7 +289,6 @@ async function carStat (carBlob) {
     if (!rawRootBlock && block.cid.equals(rootCid)) {
       rawRootBlock = block
     }
-    size += blockSize
     blocks++
   }
   if (blocks === 0) {
@@ -286,12 +297,13 @@ async function carStat (carBlob) {
   if (!rawRootBlock) {
     throw new Error('missing root block')
   }
+  let size
   const decoder = decoders.find(d => d.code === rootCid.code)
   if (decoder) {
     const rootBlock = new Block({ cid: rootCid, bytes: rawRootBlock.bytes, value: decoder.decode(rawRootBlock.bytes) })
-    const links = Array.from(rootBlock.links())
+    const hasLinks = !rootBlock.links()[Symbol.iterator]().next().done
     // if the root block has links, then we should have at least 2 blocks in the CAR
-    if (blocks === 1 && links.length > 0) {
+    if (hasLinks && blocks < 2) {
       throw new Error('CAR must contain at least one non-root block')
     }
     // get the size of the full dag for this root, even if we only have a partial CAR.

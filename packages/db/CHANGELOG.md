@@ -1,5 +1,24 @@
 # Changelog
 
+### [4.0.4](https://www.github.com/web3-storage/web3.storage/compare/db-v4.0.3...db-v4.0.4) (2022-01-04)
+
+
+### Bug Fixes
+
+* backup unique constraint ([#795](https://www.github.com/web3-storage/web3.storage/issues/795)) ([b19790f](https://www.github.com/web3-storage/web3.storage/commit/b19790f621fd6544f3abdf944edde95697227f76))
+
+
+### Changes
+
+* update pgrest ([#816](https://www.github.com/web3-storage/web3.storage/issues/816)) ([574baad](https://www.github.com/web3-storage/web3.storage/commit/574baad961c3a4524212ad7a27c30d150ca150c0))
+
+### [4.0.3](https://www.github.com/web3-storage/web3.storage/compare/db-v4.0.2...db-v4.0.3) (2021-12-14)
+
+
+### Bug Fixes
+
+* improve list tokens ([#782](https://www.github.com/web3-storage/web3.storage/issues/782)) ([b58a101](https://www.github.com/web3-storage/web3.storage/commit/b58a1018c2cb2cd7f838dbc0e1fefef446b06eae))
+
 ### [4.0.2](https://www.github.com/web3-storage/web3.storage/compare/db-v4.0.1...db-v4.0.2) (2021-12-10)
 
 

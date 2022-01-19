@@ -1,5 +1,53 @@
 # Changelog
 
+### [5.0.8](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.7...api-v5.0.8) (2022-01-17)
+
+
+### Bug Fixes
+
+* use single sentry project ([#869](https://www.github.com/web3-storage/web3.storage/issues/869)) ([ca530cd](https://www.github.com/web3-storage/web3.storage/commit/ca530cde3a601ddcabb8e25e39b9006641d6c3cf))
+
+### [5.0.7](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.6...api-v5.0.7) (2022-01-11)
+
+
+### Bug Fixes
+
+* api cluster add car explicitly ([#858](https://www.github.com/web3-storage/web3.storage/issues/858)) ([66b8fe3](https://www.github.com/web3-storage/web3.storage/commit/66b8fe3c9da72074865b86539e6e26b26d482a3b))
+
+### [5.0.6](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.5...api-v5.0.6) (2022-01-11)
+
+
+### Bug Fixes
+
+* dag size for big dags with non pb root ([#850](https://www.github.com/web3-storage/web3.storage/issues/850)) ([b60fa1c](https://www.github.com/web3-storage/web3.storage/commit/b60fa1c3dbd839e3669578aa539cc5815b470d05))
+* update deps in api and client ([#855](https://www.github.com/web3-storage/web3.storage/issues/855)) ([22155db](https://www.github.com/web3-storage/web3.storage/commit/22155db13b646e9846cf10c26d10faeb0d3b936e))
+
+
+### Changes
+
+* added leslieoa to api wrangler config ([#849](https://www.github.com/web3-storage/web3.storage/issues/849)) ([ec502e3](https://www.github.com/web3-storage/web3.storage/commit/ec502e341283c6e4f767090ee269a45d36abc563))
+
+### [5.0.5](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.4...api-v5.0.5) (2022-01-06)
+
+
+### Bug Fixes
+
+* db endpoint to use heroku ([#817](https://www.github.com/web3-storage/web3.storage/issues/817)) ([5f846a7](https://www.github.com/web3-storage/web3.storage/commit/5f846a705063ccdc966c4837492dd87926eebd06))
+
+### [5.0.4](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.3...api-v5.0.4) (2021-12-24)
+
+
+### Bug Fixes
+
+* remove temporary dag size sum for pins ([#824](https://www.github.com/web3-storage/web3.storage/issues/824)) ([f7faccc](https://www.github.com/web3-storage/web3.storage/commit/f7facccb6ee7ee23d080dcf7ec8376adc98638fe))
+
+### [5.0.3](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.2...api-v5.0.3) (2021-12-14)
+
+
+### Bug Fixes
+
+* add metadata to backup ([#783](https://www.github.com/web3-storage/web3.storage/issues/783)) ([70db5c9](https://www.github.com/web3-storage/web3.storage/commit/70db5c9e417c6df1858db2caf9fae62d45cc6410))
+
 ### [5.0.2](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.1...api-v5.0.2) (2021-12-10)
 
 

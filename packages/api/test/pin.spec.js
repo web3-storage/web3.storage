@@ -494,6 +494,9 @@ describe('Pinning APIs endpoints', () => {
     let pinRequest
 
     before(async () => {
+      // Create token
+      token = await getTestJWT('test-upload', 'test-upload')
+
       const cid = 'bafybeihy6bymmfcdjdrkhaha2srphnhrewimtkdxdmcama2dpgvpyx4efu'
       pinRequest = await (await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
@@ -535,13 +538,24 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('returns not found if the request does not exists', async () => {
-      const pinThatDoesNotExists = '100'
+      const pinThatDoesNotExists = 100
       const res = await fetch(new URL(`pins/${pinThatDoesNotExists}`, endpoint).toString(), {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
+      })
+
+      assert(res, 'Server responded')
+      assert.deepEqual(res.status, 404)
+    })
+
+    it('returns not found if the request does not belong to the user token', async () => {
+      const wrongToken = await getTestJWT()
+      const res = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${wrongToken}` }
       })
 
       assert(res, 'Server responded')

@@ -703,7 +703,7 @@ export class DBClient {
    */
   async listKeys (userId) {
     /** @type {{ error: PostgrestError, data: Array<import('./db-client-types').AuthKeyItem> }} */
-    const { data, error } = await this._client.rpc('user_keys_list', { query_user_id: userId })
+    const { data, error } = await this._client.rpc('user_auth_keys_list', { query_user_id: userId })
 
     if (error) {
       throw new DBError(error)
@@ -714,7 +714,7 @@ export class DBClient {
       name: ki.name,
       secret: ki.secret,
       created: ki.created,
-      hasUploads: Boolean(ki.uploads)
+      hasUploads: ki.has_uploads
     }))
   }
 
@@ -823,21 +823,22 @@ export class DBClient {
     // TODO: this second request could be avoided by returning the right data
     // from create_psa_pin_request remote procedure. (But to keep this DRY we need to refactor
     // this a bit)
-    return await this.getPsaPinRequest(parseInt(pinRequestId, 10))
+    return await this.getPsaPinRequest(pinRequestData.authKey, parseInt(pinRequestId, 10))
   }
 
   /**
    * Get a Pin Request by id
    *
+   * @param {string} authKey
    * @param {number} pinRequestId
    * @return {Promise<import('./db-client-types').PsaPinRequestUpsertOutput>}
    */
-  async getPsaPinRequest (pinRequestId) {
+  async getPsaPinRequest (authKey, pinRequestId) {
     /** @type {{data: import('./db-client-types').PsaPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
       .from(psaPinRequestTableName)
       .select(pinRequestSelect)
-      .eq('id', pinRequestId)
+      .match({ auth_key_id: authKey, id: pinRequestId })
       .is('deleted_at', null)
       .single()
 

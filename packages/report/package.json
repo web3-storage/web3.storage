@@ -13,7 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Alan Shaw",
-  "license": "(Apache-2.0 AND MIT)",
+  "license": "(Apache-2.0 OR MIT)",
   "dependencies": {
     "@web3-storage/db": "^4.0.0",
     "bytes": "^3.1.0",

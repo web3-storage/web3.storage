@@ -9,13 +9,14 @@
     "start": "run-s start:*",
     "start:metrics": "node src/bin/metrics.js",
     "start:pins": "node src/bin/pins.js",
+    "start:dagcargo:sizes": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/dagcargo-sizes.js",
     "test": "npm-run-all -p -r mock:cluster mock:pgrest test:e2e",
     "test:e2e": "mocha test/*.spec.js --exit",
     "mock:cluster": "smoke -p 9094 test/mocks/cluster",
     "mock:pgrest": "smoke -p 9087 test/mocks/pgrest"
   },
   "author": "Alan Shaw",
-  "license": "(Apache-2.0 AND MIT)",
+  "license": "(Apache-2.0 OR MIT)",
   "dependencies": {
     "@nftstorage/ipfs-cluster": "^3.3.1",
     "@web-std/fetch": "^2.0.1",
