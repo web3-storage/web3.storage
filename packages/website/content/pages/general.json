@@ -42,7 +42,7 @@
         "text": "DOCS"
       },
       {
-        "url": "/login",
+        "url": "/account",
         "text": "ACCOUNT",
         "links": [
           {
@@ -55,19 +55,19 @@
           },
           {
             "text": "API Tokens",
-            "url": "/account"
+            "url": "/tokens"
           },
           {
             "text": "Create an API Token",
-            "url": "/account"
+            "url": "/tokens/?create=true"
           },
           {
             "text": "Request more storage",
-            "url": "/account"
+            "url": "request-more-storage"
           },
           {
             "text": "Status",
-            "url": "/account"
+            "url": "https://status.web3.storage/"
           },
           {
             "text": "Open an issue",
