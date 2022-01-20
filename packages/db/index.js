@@ -27,6 +27,7 @@ const pinRequestSelect = `
   contentCid:content_cid,
   authKey:auth_key_id::text,
   name,
+  meta,
   deleted:deleted_at,
   created:inserted_at,
   updated:updated_at,
@@ -776,6 +777,7 @@ export class DBClient {
         content_cid: pinRequestData.contentCid,
         source_cid: pinRequestData.sourceCid,
         name: pinRequestData.name,
+        meta: pinRequestData.meta,
         dag_size: pinRequestData.dagSize,
         inserted_at: pinRequestData.created || now,
         updated_at: pinRequestData.updated || now,
@@ -797,21 +799,22 @@ export class DBClient {
     // TODO: this second request could be avoided by returning the right data
     // from create_psa_pin_request remote procedure. (But to keep this DRY we need to refactor
     // this a bit)
-    return await this.getPsaPinRequest(pinRequestId)
+    return await this.getPsaPinRequest(pinRequestData.authKey,pinRequestId)
   }
 
   /**
    * Get a Pin Request by id
    *
+   * @param {string} authKey
    * @param {number} pinRequestId
    * @return {Promise<import('./db-client-types').PsaPinRequestUpsertOutput>}
    */
-  async getPsaPinRequest(pinRequestId) {
+  async getPsaPinRequest (authKey, pinRequestId) {
     /** @type {{data: import('./db-client-types').PsaPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
       .from(psaPinRequestTableName)
       .select(pinRequestSelect)
-      .eq('id', pinRequestId)
+      .match({ auth_key_id: authKey, id: pinRequestId })
       .is('deleted_at', null)
       .single()
 

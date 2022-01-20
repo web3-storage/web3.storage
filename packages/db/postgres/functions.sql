@@ -191,6 +191,7 @@ BEGIN
                       content_cid,
                       source_cid,
                       name,
+                      meta,
                       inserted_at,
                       updated_at
                     )
@@ -199,6 +200,7 @@ BEGIN
             data ->> 'content_cid',
             data ->> 'source_cid',
             data ->> 'name',
+            (data ->> 'meta')::jsonb,
             (data ->> 'inserted_at')::timestamptz,
             (data ->> 'updated_at')::timestamptz
           )

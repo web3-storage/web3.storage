@@ -158,15 +158,17 @@ export async function pinPost (request, env, ctx) {
 /**
  * @param {string} normalizedCid
  * @param {Object} pinData
- * @param {string} authToken
+ * @param {string} authTokenId
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
  * @return {Promise<JSONResponse>}
  */
-async function createPin (normalizedCid, pinData, authToken, env, ctx) {
+async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
   const { cid, origins } = pinData
 
-  const pinName = pinData.name || undefined // deal with empty strings
+  // deal with empty strings
+  const pinName = pinData.name || undefined
+  const pinMeta = pinData.meta || undefined
 
   await env.cluster.pin(cid, {
     name: pinName,
@@ -177,7 +179,8 @@ async function createPin (normalizedCid, pinData, authToken, env, ctx) {
   const pinRequestData = {
     sourceCid: cid,
     contentCid: normalizedCid,
-    authKey: authToken,
+    authKey: authTokenId,
+    meta: pinMeta,
     name: pinName,
     pins
   }
@@ -221,13 +224,14 @@ export async function pinGet (request, env, ctx) {
     )
   }
 
+  const { authToken } = request.auth
   const requestId = parseInt(request.params.requestId, 10)
 
   /** @type { import('../../db/db-client-types.js').PsaPinRequestUpsertOutput } */
   let pinRequest
 
   try {
-    pinRequest = await env.db.getPsaPinRequest(requestId)
+    pinRequest = await env.db.getPsaPinRequest(authToken._id, requestId)
   } catch (e) {
     console.error(e)
     // TODO catch different exceptions
@@ -399,7 +403,7 @@ function getPinStatus (pinRequest) {
       cid: pinRequest.sourceCid,
       name: pinRequest.name,
       origins: [],
-      meta: {}
+      meta: pinRequest.meta
     },
     // TODO(https://github.com/web3-storage/web3.storage/issues/792)
     delegates: []
@@ -448,14 +452,14 @@ export async function pinDelete (request, env, ctx) {
 /**
  * @param {Object} newPinData
  * @param {number} requestId
- * @param {string} authToken
+ * @param {string} authTokenId
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
  */
-async function replacePin (newPinData, requestId, authToken, env, ctx) {
+async function replacePin (newPinData, requestId, authTokenId, env, ctx) {
   let existingPinRequest
   try {
-    existingPinRequest = await env.db.getPsaPinRequest(requestId)
+    existingPinRequest = await env.db.getPsaPinRequest(authTokenId, requestId)
   } catch (e) {
     return notFound()
   }
@@ -470,7 +474,7 @@ async function replacePin (newPinData, requestId, authToken, env, ctx) {
 
   let pinStatus
   try {
-    pinStatus = await createPin(existingPinRequest.contentCid, newPinData, authToken, env, ctx)
+    pinStatus = await createPin(existingPinRequest.contentCid, newPinData, authTokenId, env, ctx)
   } catch (e) {
     return new JSONResponse(
       { error: { reason: `DB Error: ${e}` } },
@@ -479,7 +483,7 @@ async function replacePin (newPinData, requestId, authToken, env, ctx) {
   }
 
   try {
-    await env.db.deletePsaPinRequest(requestId, authToken)
+    await env.db.deletePsaPinRequest(requestId, authTokenId)
   } catch (e) {
     return new JSONResponse(
       { error: { reason: `DB Error: ${e}` } },

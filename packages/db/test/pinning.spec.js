@@ -58,6 +58,8 @@ describe('Pin Request', () => {
     'QmNvTjdqEPjZVWCvRWsFJA1vK7TTw1g9JP6we1WBJTRADM'
   ]
 
+  const meta = { key: 'value' }
+
   const normalizedCids = cids.map(cid => normalizeCid(cid))
 
   const pins = [
@@ -97,6 +99,7 @@ describe('Pin Request', () => {
     aPinRequestInput = {
       sourceCid: cids[0],
       contentCid: normalizedCids[0],
+      meta,
       pins,
       authKey
     }
@@ -106,13 +109,18 @@ describe('Pin Request', () => {
 
   describe('Create Pin', () => {
     it('creates a Pin Request', async () => {
+<<<<<<< HEAD
       const savedPinRequest = await client.getPsaPinRequest(aPinRequestOutput._id)
+=======
+      const savedPinRequest = await client.getPsaPinRequest(authKey, parseInt(aPinRequestOutput._id, 10))
+>>>>>>> feat/pinning-apis
       assert.ok(savedPinRequest)
       assert.strictEqual(savedPinRequest._id, aPinRequestOutput._id)
     })
 
     it('returns the right object', async () => {
       assertCorrectPinRequestOutputTypes(aPinRequestOutput)
+      assert.deepStrictEqual(aPinRequestOutput.meta, meta, 'metadata is not the one provided')
       assert.strictEqual(aPinRequestOutput.sourceCid, cids[0], 'sourceCid is not the one provided')
       assert.strictEqual(aPinRequestOutput.authKey, authKey, 'auth key is not the one provided')
       assert.strictEqual(aPinRequestOutput.contentCid, normalizedCids[0], 'contentCid is not the one provided')
@@ -152,7 +160,11 @@ describe('Pin Request', () => {
     let savedPinRequest
 
     before(async () => {
+<<<<<<< HEAD
       savedPinRequest = await client.getPsaPinRequest(aPinRequestOutput._id)
+=======
+      savedPinRequest = await client.getPsaPinRequest(authKey, parseInt(aPinRequestOutput._id, 10))
+>>>>>>> feat/pinning-apis
     })
 
     it('gets a Pin Request, if it exists', async () => {
@@ -174,7 +186,7 @@ describe('Pin Request', () => {
     })
 
     it('throws if does not exists', async () => {
-      assert.rejects(client.getPsaPinRequest(1000))
+      assert.rejects(client.getPsaPinRequest(authKey, 1000))
     })
   })
 
@@ -390,8 +402,13 @@ describe('Pin Request', () => {
     })
 
     it('returns the id of the deleted pin request', async () => {
+<<<<<<< HEAD
       const aPinRequestOutputId = aPinRequestOutput._id
       const pinRequest = await client.getPsaPinRequest(aPinRequestOutputId)
+=======
+      const aPinRequestOutputId = parseInt(aPinRequestOutput._id, 10)
+      const pinRequest = await client.getPsaPinRequest(authKey, aPinRequestOutputId)
+>>>>>>> feat/pinning-apis
       assert.ok(!pinRequest.deleted, 'is null')
       const deletedPinRequest = await client.deletePsaPinRequest(aPinRequestOutputId, authKey)
       assert.ok(deletedPinRequest)
@@ -399,7 +416,11 @@ describe('Pin Request', () => {
     })
 
     it('does not select pin request after deletion', async () => {
+<<<<<<< HEAD
       assert.rejects(client.getPsaPinRequest(aPinRequestOutput._id))
+=======
+      assert.rejects(client.getPsaPinRequest(authKey, parseInt(aPinRequestOutput._id, 10)))
+>>>>>>> feat/pinning-apis
     })
 
     it('cannot delete a pin request which is already deleted', async () => {

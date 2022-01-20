@@ -2,7 +2,7 @@
   "name": "@web3-storage/pinpin",
   "version": "1.0.0",
   "description": "pin pins on pinata",
-  "license": "(Apache-2.0 AND MIT)",
+  "license": "(Apache-2.0 OR MIT)",
   "type": "module",
   "main": "index.js",
   "bin": {
