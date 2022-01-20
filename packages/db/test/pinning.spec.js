@@ -109,11 +109,7 @@ describe('Pin Request', () => {
 
   describe('Create Pin', () => {
     it('creates a Pin Request', async () => {
-<<<<<<< HEAD
-      const savedPinRequest = await client.getPsaPinRequest(aPinRequestOutput._id)
-=======
-      const savedPinRequest = await client.getPsaPinRequest(authKey, parseInt(aPinRequestOutput._id, 10))
->>>>>>> feat/pinning-apis
+      const savedPinRequest = await client.getPsaPinRequest(authKey, aPinRequestOutput._id)
       assert.ok(savedPinRequest)
       assert.strictEqual(savedPinRequest._id, aPinRequestOutput._id)
     })
@@ -160,11 +156,7 @@ describe('Pin Request', () => {
     let savedPinRequest
 
     before(async () => {
-<<<<<<< HEAD
-      savedPinRequest = await client.getPsaPinRequest(aPinRequestOutput._id)
-=======
-      savedPinRequest = await client.getPsaPinRequest(authKey, parseInt(aPinRequestOutput._id, 10))
->>>>>>> feat/pinning-apis
+      savedPinRequest = await client.getPsaPinRequest(authKey, aPinRequestOutput._id)
     })
 
     it('gets a Pin Request, if it exists', async () => {
@@ -402,13 +394,8 @@ describe('Pin Request', () => {
     })
 
     it('returns the id of the deleted pin request', async () => {
-<<<<<<< HEAD
       const aPinRequestOutputId = aPinRequestOutput._id
-      const pinRequest = await client.getPsaPinRequest(aPinRequestOutputId)
-=======
-      const aPinRequestOutputId = parseInt(aPinRequestOutput._id, 10)
       const pinRequest = await client.getPsaPinRequest(authKey, aPinRequestOutputId)
->>>>>>> feat/pinning-apis
       assert.ok(!pinRequest.deleted, 'is null')
       const deletedPinRequest = await client.deletePsaPinRequest(aPinRequestOutputId, authKey)
       assert.ok(deletedPinRequest)
@@ -416,11 +403,7 @@ describe('Pin Request', () => {
     })
 
     it('does not select pin request after deletion', async () => {
-<<<<<<< HEAD
-      assert.rejects(client.getPsaPinRequest(aPinRequestOutput._id))
-=======
-      assert.rejects(client.getPsaPinRequest(authKey, parseInt(aPinRequestOutput._id, 10)))
->>>>>>> feat/pinning-apis
+      assert.rejects(client.getPsaPinRequest(authKey, aPinRequestOutput._id))
     })
 
     it('cannot delete a pin request which is already deleted', async () => {
