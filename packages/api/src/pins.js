@@ -180,7 +180,7 @@ async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
     sourceCid: cid,
     contentCid: normalizedCid,
     authKey: authTokenId,
-    metadata: pinMeta,
+    meta: pinMeta,
     name: pinName,
     pins
   }
@@ -403,7 +403,7 @@ function getPinStatus (pinRequest) {
       cid: pinRequest.sourceCid,
       name: pinRequest.name,
       origins: [],
-      meta: pinRequest.metadata
+      meta: pinRequest.meta
     },
     // TODO(https://github.com/web3-storage/web3.storage/issues/792)
     delegates: []

@@ -211,7 +211,7 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
   -- The id of the content being requested, it could not exist on IPFS (typo, node offline etc)
   source_cid      TEXT NOT NULL,
   name            TEXT,
-  metadata        jsonb,
+  meta            jsonb,
   deleted_at      TIMESTAMP WITH TIME ZONE,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL

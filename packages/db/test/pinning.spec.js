@@ -58,7 +58,7 @@ describe('Pin Request', () => {
     'QmNvTjdqEPjZVWCvRWsFJA1vK7TTw1g9JP6we1WBJTRADM'
   ]
 
-  const metadata = { key: 'value' }
+  const meta = { key: 'value' }
 
   const normalizedCids = cids.map(cid => normalizeCid(cid))
 
@@ -99,7 +99,7 @@ describe('Pin Request', () => {
     aPinRequestInput = {
       sourceCid: cids[0],
       contentCid: normalizedCids[0],
-      metadata,
+      meta,
       pins,
       authKey
     }
@@ -116,7 +116,7 @@ describe('Pin Request', () => {
 
     it('returns the right object', async () => {
       assertCorrectPinRequestOutputTypes(aPinRequestOutput)
-      assert.deepStrictEqual(aPinRequestOutput.metadata, metadata, 'metadata is not the one provided')
+      assert.deepStrictEqual(aPinRequestOutput.meta, meta, 'metadata is not the one provided')
       assert.strictEqual(aPinRequestOutput.sourceCid, cids[0], 'sourceCid is not the one provided')
       assert.strictEqual(aPinRequestOutput.authKey, authKey, 'auth key is not the one provided')
       assert.strictEqual(aPinRequestOutput.contentCid, normalizedCids[0], 'contentCid is not the one provided')
