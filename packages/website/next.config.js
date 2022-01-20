@@ -9,7 +9,7 @@ const nextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
   images: {
-    loader: 'akamai',
+    loader: 'imgix',
     path: '',
   },
 
