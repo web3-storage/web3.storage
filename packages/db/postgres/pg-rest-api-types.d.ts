@@ -1639,7 +1639,7 @@ export interface definitions {
      * Note:
      * This is a Primary Key.<pk/>
      */
-    id: string; // Create custom UUID v4 type
+    id: number;
     /**
      * Note:
      * This is a Foreign Key to `content.cid`.<fk table='content' column='cid'/>
@@ -1667,7 +1667,7 @@ export interface definitions {
      * Note:
      * This is a Primary Key.<pk/>
      */
-    id: number;
+    id: string; // Create custom UUID v4 type
     /**
      * Note:
      * This is a Foreign Key to `auth_key.id`.<fk table='auth_key' column='id'/>

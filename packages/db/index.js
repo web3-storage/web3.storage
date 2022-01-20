@@ -38,7 +38,7 @@ const pinRequestSelect = `
  */
 
 export class DBClient {
-  constructor ({ endpoint, token }) {
+  constructor({ endpoint, token }) {
     this._client = new PostgrestClient(endpoint, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -53,7 +53,7 @@ export class DBClient {
    * @param {import('./db-client-types').UpsertUserInput} user
    * @return {Promise<import('./db-client-types').UpsertUserOutput>}
    */
-  async upsertUser (user) {
+  async upsertUser(user) {
     /** @type {{ data: definitions['user'], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
@@ -85,7 +85,7 @@ export class DBClient {
    * @param {string} issuer
    * @return {Promise<import('./db-client-types').UserOutput | undefined>}
    */
-  async getUser (issuer) {
+  async getUser(issuer) {
     /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
@@ -114,7 +114,7 @@ export class DBClient {
    * @param {number} userId
    * @returns {Promise<number>}
    */
-  async getUsedStorage (userId) {
+  async getUsedStorage(userId) {
     /** @type {{ data: string, error: PostgrestError }} */
     const { data, error } = await this._client.rpc('user_used_storage', { query_user_id: userId }).single()
 
@@ -131,7 +131,7 @@ export class DBClient {
    * @param {import('./db-client-types').CreateUploadInput} data
    * @returns {Promise<import('./db-client-types').CreateUploadOutput>}
    */
-  async createUpload (data) {
+  async createUpload(data) {
     const now = new Date().toISOString()
     /** @type {{ data: string, error: PostgrestError }} */
     const { data: uploadResponse, error } = await this._client.rpc('create_upload', {
@@ -174,7 +174,7 @@ export class DBClient {
    * @param {number} userId
    * @returns {Promise<import('./db-client-types').UploadItemOutput>}
    */
-  async getUpload (cid, userId) {
+  async getUpload(cid, userId) {
     /** @type {{ data: import('./db-client-types').UploadItem, error: PostgrestError }} */
     const { data: upload, error } = await this._client
       .from('upload')
@@ -203,7 +203,7 @@ export class DBClient {
    * @param {import('./db-client-types').ListUploadsOptions} [opts]
    * @returns {Promise<Array<import('./db-client-types').UploadItemOutput>>}
    */
-  async listUploads (userId, opts = {}) {
+  async listUploads(userId, opts = {}) {
     let query = this._client
       .from('upload')
       .select(uploadQuery)
@@ -247,7 +247,7 @@ export class DBClient {
    * @param {string} cid
    * @param {string} name
    */
-  async renameUpload (userId, cid, name) {
+  async renameUpload(userId, cid, name) {
     /** @type {{ data: import('./db-client-types').UploadItem, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('upload')
@@ -274,7 +274,7 @@ export class DBClient {
    * @param {number} userId
    * @param {string} cid
    */
-  async deleteUpload (userId, cid) {
+  async deleteUpload(userId, cid) {
     const now = new Date().toISOString()
     /** @type {{ data: import('./db-client-types').UploadItem, error: PostgrestError }} */
     const { data, error } = await this._client
@@ -305,7 +305,7 @@ export class DBClient {
    * @param {string} cid
    * @returns {Promise<import('./db-client-types').ContentItemOutput>}
    */
-  async getStatus (cid) {
+  async getStatus(cid) {
     /** @type {{ data: Array<import('./db-client-types').ContentItem>, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('content')
@@ -338,7 +338,7 @@ export class DBClient {
    * @param {number} uploadId
    * @return {Promise<Array<import('./db-client-types').BackupOutput>>}
    */
-  async getBackups (uploadId) {
+  async getBackups(uploadId) {
     /** @type {{ data: Array<definitions['backup']>, error: PostgrestError }} */
     const { data: backups, error } = await this._client
       .from('backup')
@@ -364,7 +364,7 @@ export class DBClient {
    * @param {import('./db-client-types').PinUpsertInput} pin
    * @return {Promise<number>}
    */
-  async upsertPin (cid, pin) {
+  async upsertPin(cid, pin) {
     /** @type {{ data: number, error: PostgrestError }} */
     const { data: pinId, error } = await this._client.rpc('upsert_pin', {
       data: {
@@ -392,7 +392,7 @@ export class DBClient {
    *
    * @param {Array<import('./db-client-types').PinUpsertInput>} pins
    */
-  async upsertPins (pins) {
+  async upsertPins(pins) {
     const { error } = await this._client
       .from('pin')
       .upsert(pins, { count: 'exact', returning: 'minimal' })
@@ -408,7 +408,7 @@ export class DBClient {
    * @param {string} cid
    * @return {Promise<Array<import('./db-client-types').PinItemOutput>>}
    */
-  async getPins (cid) {
+  async getPins(cid) {
     /** @type {{ data: Array<import('./db-client-types').PinItem>, error: PostgrestError }} */
     const { data: pins, error } = await this._client
       .from('pin')
@@ -435,7 +435,7 @@ export class DBClient {
    * @param {number} [options.size = 600]
    * @return {Promise<Array<import('./db-client-types').PinRequestItemOutput>>}
    */
-  async getPinRequests ({ size = 600 } = {}) {
+  async getPinRequests({ size = 600 } = {}) {
     /** @type {{ data: Array<import('./db-client-types').PinRequestItemOutput>, error: PostgrestError }} */
     const { data: pinReqs, error } = await this._client
       .from('pin_request')
@@ -459,7 +459,7 @@ export class DBClient {
    * @param {Array<number>} ids
    * @return {Promise<void>}
    */
-  async deletePinRequests (ids) {
+  async deletePinRequests(ids) {
     /** @type {{ error: PostgrestError }} */
     const { error } = await this._client
       .from('pin_request')
@@ -476,7 +476,7 @@ export class DBClient {
    *
    * @param {Array<number>} pinSyncRequests
    */
-  async createPinSyncRequests (pinSyncRequests) {
+  async createPinSyncRequests(pinSyncRequests) {
     /** @type {{ error: PostgrestError }} */
     const { error } = await this._client
       .from('pin_sync_request')
@@ -501,7 +501,7 @@ export class DBClient {
    * @param {number} [options.size]
    * @return {Promise<import('./db-client-types').PinSyncRequestOutput>}
    */
-  async getPinSyncRequests ({ to, after, size }) {
+  async getPinSyncRequests({ to, after, size }) {
     let query = this._client
       .from('pin_sync_request')
       .select(`
@@ -539,7 +539,7 @@ export class DBClient {
    * @param {Array<number>} ids
    * @return {Promise<void>}
    */
-  async deletePinSyncRequests (ids) {
+  async deletePinSyncRequests(ids) {
     /** @type {{ error: PostgrestError }} */
     const { error } = await this._client
       .from('pin_sync_request')
@@ -557,7 +557,7 @@ export class DBClient {
    * @param {string} cid
    * @return {Promise<import('./db-client-types').Deal[]>}
    */
-  async getDeals (cid) {
+  async getDeals(cid) {
     const deals = await this.getDealsForCids([cid])
     return deals[cid] ? deals[cid] : []
   }
@@ -570,7 +570,7 @@ export class DBClient {
    * @param {string[]} cids
    * @return {Promise<Record<string, import('./db-client-types').Deal[]>>}
    */
-  async getDealsForCids (cids = []) {
+  async getDealsForCids(cids = []) {
     /** @type {{ data: Array<import('./db-client-types').Deal>, error: PostgrestError }} */
     const { data, error } = await this._client
       .rpc('find_deals_by_content_cids', {
@@ -601,7 +601,7 @@ export class DBClient {
    * @param {import('./db-client-types').CreateAuthKeyInput} key
    * @return {Promise<import('./db-client-types').CreateAuthKeyOutput>}
    */
-  async createKey ({ name, secret, user }) {
+  async createKey({ name, secret, user }) {
     const now = new Date().toISOString()
 
     /** @type {{ data: string, error: PostgrestError }} */
@@ -631,7 +631,7 @@ export class DBClient {
    * @param {string} secret
    * @return {Promise<import('./db-client-types').AuthKey | undefined>}
    */
-  async getKey (issuer, secret) {
+  async getKey(issuer, secret) {
     /** @type {{ data, error: PostgrestError } */
     const { data, error } = await this._client
       .from('user')
@@ -675,7 +675,7 @@ export class DBClient {
    * @param {number} userId
    * @return {Promise<Array<import('./db-client-types').AuthKeyItemOutput>>}
    */
-  async listKeys (userId) {
+  async listKeys(userId) {
     /** @type {{ error: PostgrestError, data: Array<import('./db-client-types').AuthKeyItem> }} */
     const { data, error } = await this._client.rpc('user_auth_keys_list', { query_user_id: userId })
 
@@ -698,7 +698,7 @@ export class DBClient {
    * @param {number} userId
    * @param {number} keyId
    */
-  async deleteKey (userId, keyId) {
+  async deleteKey(userId, keyId) {
     const now = new Date().toISOString()
     /** @type {{ data, error: PostgrestError }} */
     const { data, error } = await this._client
@@ -731,7 +731,7 @@ export class DBClient {
    *
    * @param {string} key
    */
-  async getMetricsValue (key) {
+  async getMetricsValue(key) {
     let res
     switch (key) {
       case 'users_total':
@@ -766,7 +766,7 @@ export class DBClient {
    * @param {import('./db-client-types').PsaPinRequestUpsertInput} pinRequestData
    * @return {Promise<import('./db-client-types').PsaPinRequestUpsertOutput>}
    */
-  async createPsaPinRequest (pinRequestData) {
+  async createPsaPinRequest(pinRequestData) {
     const now = new Date().toISOString()
 
     /** @type {{ data: string, error: PostgrestError }} */
@@ -797,7 +797,7 @@ export class DBClient {
     // TODO: this second request could be avoided by returning the right data
     // from create_psa_pin_request remote procedure. (But to keep this DRY we need to refactor
     // this a bit)
-    return await this.getPsaPinRequest(parseInt(pinRequestId, 10))
+    return await this.getPsaPinRequest(pinRequestId)
   }
 
   /**
@@ -806,7 +806,7 @@ export class DBClient {
    * @param {number} pinRequestId
    * @return {Promise<import('./db-client-types').PsaPinRequestUpsertOutput>}
    */
-  async getPsaPinRequest (pinRequestId) {
+  async getPsaPinRequest(pinRequestId) {
     /** @type {{data: import('./db-client-types').PsaPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
       .from(psaPinRequestTableName)
@@ -829,7 +829,7 @@ export class DBClient {
    * @param {import('./db-client-types').ListPsaPinRequestOptions} opts
    * @return {Promise<import('./db-client-types').ListPsaPinRequestResults> }> }
    */
-  async listPsaPinRequests (authKey, opts = {}) {
+  async listPsaPinRequests(authKey, opts = {}) {
     const match = opts?.match || 'exact'
     const limit = opts?.limit || 10
 
@@ -899,7 +899,7 @@ export class DBClient {
    * @param {number} requestId
    * @param {string} authKey
    */
-  async deletePsaPinRequest (requestId, authKey) {
+  async deletePsaPinRequest(requestId, authKey) {
     const date = new Date().toISOString()
     /** @type {{ data: import('./db-client-types').PsaPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
@@ -926,7 +926,7 @@ export class DBClient {
    *
    * @param {string} key
    */
-  async resolveNameRecord (key) {
+  async resolveNameRecord(key) {
     /** @type {{ error: Error, data: Array<import('../db-client-types').NameItem> }} */
     const { data, error } = await this._client
       .from('name')
@@ -950,7 +950,7 @@ export class DBClient {
    * @param {bigint} seqno Sequence number from the record.
    * @param {bigint} validity Validity from the record in nanoseconds since 00:00, Jan 1 1970 UTC.
    */
-  async publishNameRecord (key, record, hasV2Sig, seqno, validity) {
+  async publishNameRecord(key, record, hasV2Sig, seqno, validity) {
     const { error } = await this._client.rpc('publish_name_record', {
       data: {
         key,

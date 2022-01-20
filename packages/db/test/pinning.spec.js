@@ -14,7 +14,7 @@ const pinRequestTable = 'psa_pin_request'
  * @param {number} code
  * @returns {Promise<string>}
  */
-async function randomCid (code = pb.code) {
+async function randomCid(code = pb.code) {
   const bytes = crypto.getRandomValues(new Uint8Array(10))
   const hash = await sha256.digest(bytes)
   return CID.create(1, code, hash).toString()
@@ -106,7 +106,7 @@ describe('Pin Request', () => {
 
   describe('Create Pin', () => {
     it('creates a Pin Request', async () => {
-      const savedPinRequest = await client.getPsaPinRequest(parseInt(aPinRequestOutput._id, 10))
+      const savedPinRequest = await client.getPsaPinRequest(aPinRequestOutput._id)
       assert.ok(savedPinRequest)
       assert.strictEqual(savedPinRequest._id, aPinRequestOutput._id)
     })
@@ -152,7 +152,7 @@ describe('Pin Request', () => {
     let savedPinRequest
 
     before(async () => {
-      savedPinRequest = await client.getPsaPinRequest(parseInt(aPinRequestOutput._id, 10))
+      savedPinRequest = await client.getPsaPinRequest(aPinRequestOutput._id)
     })
 
     it('gets a Pin Request, if it exists', async () => {
@@ -386,11 +386,11 @@ describe('Pin Request', () => {
     })
 
     it('throws if the auth key does not belong to the pin request', async () => {
-      assert.rejects(client.deletePsaPinRequest(parseInt(aPinRequestOutput._id, 10), 'fakeAuth'))
+      assert.rejects(client.deletePsaPinRequest(aPinRequestOutput._id, 'fakeAuth'))
     })
 
     it('returns the id of the deleted pin request', async () => {
-      const aPinRequestOutputId = parseInt(aPinRequestOutput._id, 10)
+      const aPinRequestOutputId = aPinRequestOutput._id
       const pinRequest = await client.getPsaPinRequest(aPinRequestOutputId)
       assert.ok(!pinRequest.deleted, 'is null')
       const deletedPinRequest = await client.deletePsaPinRequest(aPinRequestOutputId, authKey)
@@ -399,11 +399,11 @@ describe('Pin Request', () => {
     })
 
     it('does not select pin request after deletion', async () => {
-      assert.rejects(client.getPsaPinRequest(parseInt(aPinRequestOutput._id, 10)))
+      assert.rejects(client.getPsaPinRequest(aPinRequestOutput._id))
     })
 
     it('cannot delete a pin request which is already deleted', async () => {
-      assert.rejects(client.deletePsaPinRequest(parseInt(aPinRequestOutput._id, 10), authKey))
+      assert.rejects(client.deletePsaPinRequest(aPinRequestOutput._id, authKey))
     })
   })
 })

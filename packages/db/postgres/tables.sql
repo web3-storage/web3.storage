@@ -176,16 +176,10 @@ CREATE TABLE IF NOT EXISTS backup
 
 CREATE INDEX IF NOT EXISTS backup_upload_id_idx ON backup (upload_id);
 
-
--- Setting search_path to public scope for uuid function(s)
-SET search_path TO public;
-DROP extension IF EXISTS "uuid-ossp";
-CREATE extension "uuid-ossp" SCHEMA public;
-
 -- Tracks requests to replicate content to more nodes.
 CREATE TABLE IF NOT EXISTS pin_request
 (
-  id              UUID DEFAULT public.uuid_generate_v4() PRIMARY KEY,
+  id              BIGSERIAL PRIMARY KEY,
   -- Root CID of the Pin we want to replicate.
   content_cid     TEXT                                                          NOT NULL UNIQUE REFERENCES content (cid),
   attempts        INT DEFAULT 0,
@@ -206,10 +200,17 @@ CREATE TABLE IF NOT EXISTS pin_sync_request
 
 CREATE INDEX IF NOT EXISTS pin_sync_request_pin_id_idx ON pin_sync_request (pin_id);
 
+
+-- Setting search_path to public scope for uuid function(s)
+SET search_path TO public;
+DROP extension IF EXISTS "uuid-ossp";
+CREATE extension "uuid-ossp" SCHEMA public;
+
 -- Tracks pinning requests from Pinning Service API
 CREATE TABLE IF NOT EXISTS psa_pin_request
 (
-  id              BIGSERIAL PRIMARY KEY,
+  -- TODO - Vlaidate UUID type is available
+  id              TEXT DEFAULT public.uuid_generate_v4() PRIMARY KEY,
   -- Points to auth key used to pin the content.
   auth_key_id     BIGINT                                                       NOT NULL REFERENCES public.auth_key (id),
   -- Points to the pinned content, it is updated once the content is actually being found.
