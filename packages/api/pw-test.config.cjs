@@ -1,6 +1,7 @@
 const path = require('path')
 const dotenv = require('dotenv')
 const execa = require('execa')
+const delay = require('delay')
 
 dotenv.config({
   path: path.join(__dirname, '.env.local')
@@ -24,6 +25,7 @@ module.exports = {
     await execa(toolsCli, ['cluster', '--start', '--project', projectCluster])
     console.log('⚡️ local ipfs-cluster container started.')
 
+    await delay(2000)
     return { projectDb, projectCluster }
   },
   // Tear down docker containers
