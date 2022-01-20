@@ -1,5 +1,14 @@
 # Changelog
 
+### [5.0.9](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.8...api-v5.0.9) (2022-01-20)
+
+
+### Changes
+
+* remove commented metrics for dag size sum in pins ([#838](https://www.github.com/web3-storage/web3.storage/issues/838)) ([0bb853c](https://www.github.com/web3-storage/web3.storage/commit/0bb853c229fd18bba727c63206c085a620f85679))
+* update licenses ([#831](https://www.github.com/web3-storage/web3.storage/issues/831)) ([8e081aa](https://www.github.com/web3-storage/web3.storage/commit/8e081aac2dd03dd5eb642bff9c2da867d61edd87))
+* use docker cluster for api tests ([#847](https://www.github.com/web3-storage/web3.storage/issues/847)) ([24c400d](https://www.github.com/web3-storage/web3.storage/commit/24c400d31e92df7a42055e73b14244036c8cf7ad))
+
 ### [5.0.8](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.7...api-v5.0.8) (2022-01-17)
 
 
