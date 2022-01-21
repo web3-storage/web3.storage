@@ -16,19 +16,20 @@ import Footer from '../components/footer/footer.js';
 const App = ({ Component, pageProps }: any) => {
   const { pathname } = useRouter();
   const productRoutes = ['/login', '/account', '/tokens'];
+  const marketingRoutes = ['/', '/tiers', '/about', '/faq', '/terms'];
   const productApp = productRoutes.includes(pathname);
 
+  
   return (
     <AppProviders authorizationProps={{ ...pageProps }}>
       <Metadata {...pageProps} />
-      {productApp && <CorkscrewBackground />}
       <RestrictedRoute {...pageProps}>
         <div
           id="master-container"
-          className={clsx(notMarketingSite ? 'product-app' : 'marketing-site')}>
-          {notMarketingSite && <Corkscrew className="corkscrew-background"/>}
+          className={clsx(productApp ? 'product-app' : 'marketing-site')}>
+          {productApp && <Corkscrew className="corkscrew-background"/>}
           <MessageBanner />
-          <Navigation isProductApp={notMarketingSite} />
+          <Navigation isProductApp={productApp} />
           <Component {...pageProps} />
           <Footer />
         </div>

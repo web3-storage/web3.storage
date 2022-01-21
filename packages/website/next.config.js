@@ -10,9 +10,8 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     loader: 'imgix',
-    path: '',
+    path: '/',
   },
-
   webpack: function(config, options) {
     config.resolve.alias = {
       ...config.resolve.alias,

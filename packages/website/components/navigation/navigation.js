@@ -34,7 +34,8 @@ export default function Navigation({ isProductApp }) {
   const [isMenuOpen, setMenuOpen] = useState(false);
   // Navigation Content
   const links = GeneralPageData.navigation.links;
-  const account = links.find(item => item.text.toLowerCase() === 'account');
+  const account = links?.find(item => item.text.toLowerCase() === 'account');
+
   const navItems = links.filter(item => item.text.toLowerCase() !== 'account');
   const auth = GeneralPageData.navigation.auth;
   const logoText = GeneralPageData.site_logo.text;
@@ -74,40 +75,43 @@ export default function Navigation({ isProductApp }) {
 
   // ======================================================= Templates [Buttons]
   const getAccountMenu = () => {
-    if (isProductApp) {
-      const labelText = account.text.toLowerCase()
+    if (account && account.links) {
+      if (isProductApp) {
+        const labelText = account.text.toLowerCase()
+        return (
+          <div className="nav-account-button">
+            <button
+              className={ clsx('nav-item', account.url === router.route ? 'current-page' : '')}
+              onClick={onLinkClick}
+              onKeyPress={e => handleKeySelect(e, account.url)}>
+              {account.text}
+            </button>
+            <div className="nav-account-dropdown">
+              <div className="label">{labelText[0].toUpperCase() + labelText.substring(1)}</div>
+              {account.links.map(link => (
+                <Link href={link.url === 'request-more-storage' ? mailTo : link.url} key={link.text}>
+                  <button className="nav-dropdown-link" onClick={onLinkClick} onKeyPress={e => handleKeySelect(e, link.url)}>
+                    {link.text}
+                  </button>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )
+      }
       return (
-        <div className="nav-account-button">
+        <Link key={account.text} href={account.url}>
           <button
             className={ clsx('nav-item', account.url === router.route ? 'current-page' : '')}
             onClick={onLinkClick}
             onKeyPress={e => handleKeySelect(e, account.url)}>
             {account.text}
           </button>
-          <div className="nav-account-dropdown">
-            <div className="label">{labelText[0].toUpperCase() + labelText.substring(1)}</div>
-            {account.links.map(link => (
-              <Link href={link.url === 'request-more-storage' ? mailTo : link.url} key={link.text}>
-                <button className="nav-dropdown-link" onClick={onLinkClick} onKeyPress={e => handleKeySelect(e, link.url)}>
-                  {link.text}
-                </button>
-              </Link>
-            ))}
-          </div>
-        </div>
+        </Link>
       )
     }
-    return (
-      <Link key={account.text} href={account.url}>
-        <button
-          className={ clsx('nav-item', account.url === router.route ? 'current-page' : '')}
-          onClick={onLinkClick}
-          onKeyPress={e => handleKeySelect(e, account.url)}>
-          {account.text}
-        </button>
-      </Link>
-    )
-  }
+    return null;
+  };
 
   const logoutButton = (button, forceTheme) => {
     const variant = forceTheme || theme;

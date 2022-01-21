@@ -1,3 +1,4 @@
+// @ts-ignore
 import spring from '../images/spring.png'
 /**
  * @param {any} props

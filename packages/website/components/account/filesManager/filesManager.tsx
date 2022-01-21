@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import filesize from 'filesize';
 import React, { useCallback, useEffect, useState } from 'react';
+// @ts-ignore
 import { useRouter } from 'next/router';
 import { Upload } from 'web3.storage';
 
