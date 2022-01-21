@@ -3,7 +3,8 @@ import clsx from 'clsx';
 
 // ====================================================================== Params
 /**
- * @param function props.toggle
+ *
+ * @callback props.toggle
  * @param String props.uid
  */
 // ====================================================================== Export

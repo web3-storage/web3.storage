@@ -8,12 +8,10 @@ import countly from 'lib/countly';
 import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
 import { useTokens } from 'components/contexts/tokensContext';
-
-import Dropdown from 'ZeroComponents/dropdown/dropdown'
-import Filterable from 'ZeroComponents/filterable/filterable'
-import Sortable, { SortType, SortDirection } from 'ZeroComponents/sortable/sortable'
-import Pagination from 'ZeroComponents/pagination/pagination'
-
+import Dropdown from 'ZeroComponents/dropdown/dropdown';
+import Filterable from 'ZeroComponents/filterable/filterable';
+import Sortable, { SortType, SortDirection } from 'ZeroComponents/sortable/sortable';
+import Pagination from 'ZeroComponents/pagination/pagination';
 import SearchIcon from 'assets/icons/search';
 
 const TokensManager = () => {
@@ -21,14 +19,14 @@ const TokensManager = () => {
   const [deletingTokenId, setDeletingTokenId] = useState('');
   const queryClient = useQueryClient();
 
-  const [filteredTokens, setFilteredTokens] = useState([])
-  const [sortedTokens, setSortedTokens] = useState([])
-  const [paginatedTokens, setPaginatedTokens] = useState([])
-  const [itemsPerPage, setItemsPerPage] = useState(null)
+  const [filteredTokens, setFilteredTokens] = useState([]);
+  const [sortedTokens, setSortedTokens] = useState([]);
+  const [paginatedTokens, setPaginatedTokens] = useState([]);
+  const [itemsPerPage, setItemsPerPage] = useState(null);
 
   const deleteTokenCallback = useCallback(
     async id => {
-      if (!window.confirm('Are you sure? Deleted tokens cannot be recovered!')) { 
+      if (!window.confirm('Are you sure? Deleted tokens cannot be recovered!')) {
         return;
       }
       setDeletingTokenId(id);
@@ -51,7 +49,7 @@ const TokensManager = () => {
 
   return (
     <div className="section tokens-manager-container">
-      <div className="tokens-manager-header tokens-manager-row">
+      <div className="tokens-manager-header">
         <h4>API Tokens</h4>
         <Filterable
           items={tokens}
@@ -63,10 +61,25 @@ const TokensManager = () => {
         />
         <Sortable
           items={filteredTokens}
-          options={ [
-            { label: 'Alphabetical A-Z', key: 'name', value: 'a-z', direction: SortDirection.ASC, compareFn: SortType.ALPHANUMERIC },
-            { label: 'Most Recently Added', value: 'newest', compareFn: (items) => items.sort((a, b) => a['created'].localeCompare(b['created'])) },
-            { label: 'Least Recently Added', value: 'oldest', compareFn: (items) => items.sort((a, b) => b['created'].localeCompare(a['created'])) },
+          staticLabel={'Sort By'}
+          options={[
+            {
+              label: 'Alphabetical A-Z',
+              key: 'name',
+              value: 'a-z',
+              direction: SortDirection.ASC,
+              compareFn: SortType.ALPHANUMERIC,
+            },
+            {
+              label: 'Most Recently Added',
+              value: 'newest',
+              compareFn: items => items.sort((a, b) => a['created'].localeCompare(b['created'])),
+            },
+            {
+              label: 'Least Recently Added',
+              value: 'oldest',
+              compareFn: items => items.sort((a, b) => b['created'].localeCompare(a['created'])),
+            },
           ]}
           value="a-z"
           queryParam="order"
@@ -79,7 +92,7 @@ const TokensManager = () => {
           <Loading className={'tokens-manager-loading-spinner'} />
         ) : !tokens.length ? (
           <span className="tokens-manager-upload-cta">
-            You don’t have any API Tokens created yet.{'\u00A0'}
+            You don't have any API Tokens created yet.{'\u00A0'}
             <Button
               className={clsx(isCreating && 'isDisabled')}
               href="/tokens?create=true"
@@ -102,7 +115,7 @@ const TokensManager = () => {
           ))
         )}
       </div>
-      <div className="tokens-manager-footer tokens-manager-row">
+      <div className="tokens-manager-footer">
         <Pagination
           items={sortedTokens}
           itemsPerPage={itemsPerPage}

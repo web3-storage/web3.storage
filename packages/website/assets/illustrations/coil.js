@@ -1,3 +1,4 @@
+// @ts-ignore
 import coil from '../images/coil.png'
 /**
  * @param {any} props

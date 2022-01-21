@@ -46,6 +46,7 @@ $pictonBlue: #31e7ea; // violetish blue
 $cyan: #3effe9; // full cyan
 $martinique: #392d52; // bluish purple
 $blue: #3D04FB; // bluest blue
+$woodsmoke: #161b24; // blue almost black
 // ----------------------------------------------------------------- Breakpoints
 $breakpoint_Tiny: 25.9375rem; // 415px
 $breakpoint_Mini: 40rem; // 640px
@@ -181,6 +182,19 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
 
 @mixin gradient_Background_BluePurple {
   background: $gradient_BluePurple;
+}
+
+@mixin gradient_Blurry_Background_PinkBlue {
+  &:before {
+    @include gradient_BlurryBox_PinkBlue;
+    @include borderRadius_UltraLarge;
+    content: ' ';
+    position: absolute;
+    filter: blur(0.25rem);
+    margin: auto;
+    box-shadow: 0 0.125rem $heliotrope;
+    opacity: 0.5;
+  }
 }
 
 // --------------------------------------------------------------------- General

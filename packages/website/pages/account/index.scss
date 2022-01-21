@@ -1,6 +1,9 @@
 .account-container {
   max-width: 61.125rem;
   margin: auto;
+  display: table;
+  padding-bottom: 10rem;
+  position: relative;
 
   h3 {
     padding: 0 1.75rem 0.75rem;

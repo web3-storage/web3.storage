@@ -1,3 +1,4 @@
+// @ts-ignore
 import zigzag from '../images/zigzag.png'
 /**
  * @param {any} props

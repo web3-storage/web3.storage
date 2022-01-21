@@ -1,6 +1,3 @@
-$input-gradient-overage-width: '1%';
-$input-gradient-overage-height: '5%';
-
 .files-manager-container {
   display: flex;
   flex-direction: column;
@@ -11,62 +8,37 @@ $input-gradient-overage-height: '5%';
   > * {
     width: 100%;
   }
+
+  &.disabled,
+  .disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
 
 .files-manager-header {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: flex-start;
   justify-items: center;
   padding: 0 2.125rem 1.5rem;
-}
 
-.files-manager-search {
-  position: relative;
-  display: inline-flex;
-  height: 1.5625rem;
-
-  &:before {
-    @include gradient_Background_BluePurple;
-    @include borderRadius_UltraLarge;
-    width: calc(100% + #{$input-gradient-overage-width});
-    height: calc(100% + #{$input-gradient-overage-height});
-    top: calc(-#{$input-gradient-overage-height}/ 2);
-    left: calc(-#{$input-gradient-overage-width}/ 2);
-    content: ' ';
-    position: absolute;
-    filter: blur(0.1875rem);
-    margin: auto;
-    box-shadow: 0 0.125rem $heliotrope;
-    opacity: 0.25;
+  // Title
+  > :first-child {
+    margin-right: 11.625rem;
   }
 
-  svg {
-    color: $white;
-    position: absolute;
-    top: 0.5rem;
-    left: 1rem;
-  }
-
-  input {
-    @include fontSize_Tiny;
-    @include fontWeight_Regular;
-    @include borderRadius_Large;
-
+  .refresh {
+    @include label_5;
     position: relative;
+    top: 0.1rem;
+    cursor: pointer;
+    margin-right: 2.5rem;
 
-    &:placeholder {
-      color: $white;
+    svg {
+      color: $cyan;
+      margin-right: 0.625rem;
     }
-    &:focus {
-      outline: none;
-    }
-    padding-top: 0.1875rem;
-    height: 100%;
-    background: $shark;
-    border: 0.0625rem solid $waterloo;
-    opacity: 0.85;
-    width: 26rem;
-    padding-left: 2.1875rem;
   }
 }
 
@@ -89,8 +61,10 @@ $input-gradient-overage-height: '5%';
   padding-left: 2.5rem;
   padding-top: 0.85rem;
   .button {
-    @include fontSize_Medium;
-    padding-left: 0;
+    button {
+      @include fontSize_Medium;
+      padding-left: 0;
+    }
   }
 }
 
@@ -104,16 +78,16 @@ $input-gradient-overage-height: '5%';
   display: flex;
   justify-content: space-between;
   justify-items: center;
-  padding: 0 2.125rem 1.5rem;
-  
-  &:before {
-    content: '';
-  }
-}
+  padding: 1.5rem 2rem 0;
 
-.files-manager-header,
-.files-manager-footer {
-  .Dropdown .dropdownContent .dropdownItemList {
-    background-color: black;
+  .files-manager-result-dropdown .dropdownContent {
+    position: absolute;
+    top: 0;
+  }
+
+  .delete {
+    @include label_5;
+    cursor: pointer;
+    color: $cyan;
   }
 }

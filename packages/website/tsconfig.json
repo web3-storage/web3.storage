@@ -18,10 +18,14 @@
     "isolatedModules": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
-    "baseUrl": "."
+    "baseUrl": "./",
+    "paths": {
+      "ZeroComponents/*": ["modules/zero/components/*"],
+      "ZeroHooks/*": ["modules/zero/hooks/*"]
+    }
   },
   "include": ["lib", "pages", "components", "content", "hooks", "modules", "store", "declaration.d.ts"],
-  "exclude": ["node_modules/", ".next/", "{pages,components,content,hooks,modules}/**/*.js"],
+  "exclude": ["node_modules", ".next/", "{pages,components,content,hooks,modules}/**/*.js"],
   "references": [
     {
       "path": "../client"

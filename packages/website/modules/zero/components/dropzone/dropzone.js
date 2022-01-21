@@ -5,12 +5,19 @@ import clsx from 'clsx'
 /**
  * @typedef {Object} DropzoneProps
  * @prop {string} [className]
- * @prop {ReactComponent} [icon]
+ * @prop {React.ReactNode} [icon]
  * @prop {string} [dragAreaText]
  * @prop {function} [onChange]
  * @prop {function} [onError]
+ * @prop {number} [maxFiles]
+ * @prop {string} [accept]
+ * @prop {boolean} [multiple]
  */
 
+/**
+ * 
+ * @param {DropzoneProps} props 
+ */
 const Dropzone = ({
   className,
   icon,
@@ -25,7 +32,7 @@ const Dropzone = ({
 
   const {acceptedFiles, fileRejections, getRootProps, getInputProps} = useDropzone({onDropAccepted, onDropRejected, ...props});
 
-  const filesInfo = useMemo(() => acceptedFiles.reduce((acc, value) => (acc[value.path] = acc[value.path] || { progress: 0 }) && acc, filesInfo || {}), [acceptedFiles])
+  const filesInfo = useMemo(() => acceptedFiles.reduce((acc, value) => (acc[/** @type {any} */(value).path] = acc[/** @type {any} */(value).path] || { progress: 0 }) && acc, filesInfo || {}), [acceptedFiles])
 
   useEffect(() => {
     // TODO: Hook up to real file upload
@@ -57,10 +64,10 @@ const Dropzone = ({
         {acceptedFiles.map((file, i) => (
           <Fragment key={`file-${i}`}>
             <div className="filename">
-              {file.path}
+              {/** @type {any} */ (file).path}
             </div>
             <div className="status">
-              {filesInfo[file.path].progress !== 100 ? `Loading... ${filesInfo[file.path].progress}%` : `Complete`}
+              {filesInfo[/** @type {any} */ (file).path].progress !== 100 ? `Loading... ${filesInfo[/** @type {any} */(file).path].progress}%` : `Complete`}
             </div>
           </Fragment>
         ))}

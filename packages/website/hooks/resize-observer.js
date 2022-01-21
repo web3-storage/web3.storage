@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 /**
  * @param {React.MutableRefObject<HTMLElement | null>} ref React ref on which resizes are to be observed

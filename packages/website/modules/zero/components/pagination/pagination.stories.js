@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react'
-import useState from 'storybook-addon-state'
+import React, { useCallback, useState } from 'react'
+
 import Button from 'ZeroComponents/button/button'
 import Dropdown from 'ZeroComponents/dropdown/dropdown'
 import Pagination from 'ZeroComponents/pagination/pagination'
@@ -73,8 +73,8 @@ export const WithQueryParams = () => {
 }
 
 export const ResultsPerPage = () => {
-  const [paginatedNames, setPaginatedNames] = useState('paginatedNames', data)
-  const [itemsPerPage, setItemsPerPage] = useState('itemsPerPage', 2)
+  const [paginatedNames, setPaginatedNames] = useState(data)
+  const [itemsPerPage, setItemsPerPage] = useState(2)
 
   return (
     <div style={{ display: 'flex', gap: '10rem' }}>
@@ -110,9 +110,9 @@ export const ResultsPerPage = () => {
 }
 
 export const Sorted = () => {
-  const [names, setNames] = useState('names', data)
-  const [paginatedNames, setPaginatedNames] = useState('paginatedNames', names)
-  const [itemsPerPage, setItemsPerPage] = useState('itemsPerPage', 2)
+  const [names, setNames] = useState( data)
+  const [paginatedNames, setPaginatedNames] = useState(names)
+  const [itemsPerPage, setItemsPerPage] = useState(2)
 
   const handleSort = useCallback((sortedItems) => setNames(sortedItems), [])
  

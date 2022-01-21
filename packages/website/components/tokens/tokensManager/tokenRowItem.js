@@ -20,12 +20,12 @@ import { addTextToClipboard, truncateString } from 'lib/utils';
  * @param {TokenRowItemProps} props
  * @returns
  */
-const TokenRowItem = ({ className = '', name, secret, id, isHeader, onTokenDelete, deletingTokenId }) => (
+const TokenRowItem = ({ className = '', name, secret, id = '', isHeader, onTokenDelete, deletingTokenId }) => (
   <div
     className={clsx(
       'tokens-manager-row',
       className,
-      isHeader && 'tokens-manager-header',
+      isHeader && 'tokens-manager-row-header',
       !!deletingTokenId && 'isDisabled'
     )}
   >
@@ -33,15 +33,23 @@ const TokenRowItem = ({ className = '', name, secret, id, isHeader, onTokenDelet
       {name}
     </span>
     <span className="token-id" title={secret}>
-      {truncateString(secret, 22, '...', 'double')}
+      {truncateString(secret, 36, '...', 'double')}
     </span>
     {!isHeader && (
       <>
         {deletingTokenId !== id ? (
-          <div className="token-actions">
-            <CopyIcon onClick={() => addTextToClipboard(secret)} />
-            <TrashIcon onClick={onTokenDelete} />
-          </div>
+          <>
+            <div className="token-copy">
+              <button onClick={() => addTextToClipboard(secret)}>
+                <CopyIcon />
+              </button>
+            </div>
+            <div className="token-delete">
+              <button onClick={() => onTokenDelete?.(id)}>
+                <TrashIcon />
+              </button>
+            </div>
+          </>
         ) : (
           'Deleting...'
         )}

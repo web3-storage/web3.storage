@@ -1,15 +1,19 @@
-import { useEffect, useCallback, useState, useMemo } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 import clsx from 'clsx'
 
 /**
  * @typedef {Object} SearchBarProps
  * @prop {string} [className]
- * @prop {ReactComponent} [icon]
+ * @prop {React.ReactNode} [icon]
  * @prop {string} [value]
  * @prop {string} [placeholder]
  * @prop {function} [onChange]
  */
 
+/**
+ * 
+ * @param {SearchBarProps} props
+ */
 const SearchBar = ({
   className,
   icon,
