@@ -14,6 +14,7 @@ import useQueryParams from 'ZeroHooks/useQueryParams'
  * @prop {string|number} [value]
  * @prop {boolean} [scrollable]
  * @prop {string} [queryParam]
+ * @prop {string} [staticLabel]
  * @prop {function} [onChange]
  * @prop { import('react').ChangeEventHandler<HTMLSelectElement> } [onSelectChange]
  */
@@ -30,6 +31,7 @@ const Dropdown = ({
   scrollable,
   queryParam,
   onChange,
+  staticLabel,
   onSelectChange
 }) => {
   const selectElRef = useRef(/** @type {any} */(null))
@@ -100,7 +102,7 @@ const Dropdown = ({
         aria-haspopup="listbox"
         aria-expanded={isOpen ? 'true' : 'false'}
       >
-        {currentItem && currentItem.label}
+        {staticLabel || (currentItem && currentItem.label)}
       </button>
 
       <div className="dropdownContent">

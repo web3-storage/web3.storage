@@ -27,6 +27,7 @@ const Filterable = ({
   value,
   queryParam,
   onChange,
+  onValueChange,
   ...props
 }) => {
   const [queryValue, setQueryValue] = useQueryParams(queryParam, value)
@@ -35,7 +36,7 @@ const Filterable = ({
 
   const currentValue = useMemo(() => queryValue || filterValue, [queryValue, filterValue])
 
-  const setCurrentValue = useCallback((newValue) => queryParam ? setQueryValue(newValue) : setFilterValue(newValue), [queryParam, setQueryValue, setFilterValue])
+  const setCurrentValue = useCallback((newValue) => onValueChange?.(newValue) ?? (queryParam ? setQueryValue(newValue) : setFilterValue(newValue)), [queryParam, setQueryValue, setFilterValue])
 
   useEffect(() => {
     if(!currentValue) return onChange && onChange(items?.slice(0))

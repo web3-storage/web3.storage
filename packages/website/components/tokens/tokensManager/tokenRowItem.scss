@@ -1,7 +1,8 @@
-.tokens-manager-header {
-  padding-bottom: 0.1rem;
-  border-bottom: 0.0625rem solid rgba($white, 0.05);
-}
+$base-row-width: 52.8125rem;
+$date-name: calculateWidthPercentage(15.5rem, $base-row-width);
+$date-id: calculateWidthPercentage(34rem, $base-row-width);
+$date-copy: calculateWidthPercentage(3rem, $base-row-width);
+$date-delete: auto;
 
 .tokens-manager-row {
   @include fontSize_Tiny;
@@ -9,18 +10,20 @@
 
   display: grid;
   position: relative;
-  padding-right: 1.4rem;
+  padding: 0 1.4rem 0.65rem 0;
   grid-template-columns: $date-name $date-id $date-copy $date-delete;
+  border-bottom: 0.0625rem solid rgba($white, 0.05);
+
+  &.tokens-manager-row-header {
+    padding-bottom: 0;
+    padding-left: 1.125rem;
+  }
 }
 
-.token-actions {
-  width: 3.75rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  svg {
+.token-copy,
+.token-delete {
+  > * {
+    position: relative;
     cursor: pointer;
-    color: $seaShell;
   }
 }
