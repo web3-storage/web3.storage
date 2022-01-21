@@ -31,19 +31,17 @@ const Filterable = ({
 }) => {
   const [queryValue, setQueryValue] = useQueryParams(queryParam, value)
 
-  const [filterValue, setFilterValue] = useState(null)
+  const [filterValue, setFilterValue] = useState('')
 
-  const currentValue = useMemo(() => queryParam ? queryValue : filterValue, [queryParam, queryValue, filterValue])
+  const currentValue = useMemo(() => queryValue || filterValue, [queryValue, filterValue])
 
   const setCurrentValue = useCallback((newValue) => queryParam ? setQueryValue(newValue) : setFilterValue(newValue), [queryParam, setQueryValue, setFilterValue])
 
   useEffect(() => {
     if(!currentValue) return onChange && onChange(items?.slice(0))
-
-    const filteredItems = items?.slice(0).filter(item => filterKeys.filter(filterKey => String(item[filterKey] ? item[filterKey] : item).toLowerCase().includes(currentValue.toLowerCase())).length > 0)
-
+    const filteredItems = items.slice(0).filter(item => filterKeys.filter(filterKey => String(item[filterKey] || item).toLowerCase().includes(currentValue.toLowerCase())).length > 0)
     onChange && onChange(filteredItems)
-  }, [currentValue, onChange])
+  }, [items, currentValue, onChange])
 
   return (
     <div className={clsx(className, 'Filterable')}>

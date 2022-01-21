@@ -3,11 +3,13 @@ import { useCallback } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import Button from '../button/button';
 import NpmIcon from '../../assets/icons/npmicon';
 import Windows from '../../assets/icons/windows';
 import countly from '../../lib/countly';
+
 // ====================================================================== Params
 /**
  * @param {Object} props
@@ -32,6 +34,27 @@ export default function Card({ card, cardsGroup = [], index = 0 }) {
     }
   }
   // ================================================================= Functions
+  const onLinkClick = useCallback(e => {
+    countly.trackCustomLinkClick(countly.events.LINK_CLICK_EXPLORE_DOCS, e.currentTarget);
+  }, []);
+
+  const handleKeySelect = useCallback(
+    (e, url) => {
+      onLinkClick(e);
+      router.push(url);
+    },
+    [router, onLinkClick]
+  );
+
+  const handleButtonClick = useCallback(
+    cta => {
+      if (cta.url) {
+        router.push(cta.url);
+      }
+    },
+    [router]
+  );
+
   const renderExploreCards = obj => {
     return (
       <>
@@ -39,9 +62,17 @@ export default function Card({ card, cardsGroup = [], index = 0 }) {
           <div key={category.heading} className="category">
             <div className="category-heading">{category.heading}</div>
             {category.links.map(link => (
-              <div key={link.text} className="category-link">
-                <a href={link.url}>{link.text}</a>
-              </div>
+              <Link href={link.url} key={link.text}>
+                <div
+                  className="category-link"
+                  onClick={onLinkClick}
+                  onKeyPress={e => handleKeySelect(e, link.url)}
+                  tabIndex={0}
+                  role="button"
+                >
+                  {link.text}
+                </div>
+              </Link>
             ))}
           </div>
         ))}
@@ -92,15 +123,6 @@ export default function Card({ card, cardsGroup = [], index = 0 }) {
       </a>
     );
   };
-
-  const handleButtonClick = useCallback(
-    cta => {
-      if (cta.url) {
-        router.push(cta.url);
-      }
-    },
-    [router]
-  );
 
   // ========================================================= Templates [Cards]
   if (card.type === 'E') {

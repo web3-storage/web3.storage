@@ -165,8 +165,11 @@ button {
   overflow-x: hidden;
 }
 
-.master-container {
+#master-container {
   position: relative;
+  &.product-app {
+    background-color: $ebony;
+  }
 }
 
 [class~='grid'],

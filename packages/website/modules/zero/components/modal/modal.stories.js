@@ -10,7 +10,7 @@ export const Default = () => {
   const modalState = useState(false);
   const [, setModalState] = modalState;
 
-  const openModal  = useCallback(() => setModalState(true), [])
+  const openModal  = useCallback(() => setModalState(true), [setModalState])
 
   return (
     <>

@@ -47,6 +47,7 @@ const Dropdown = ({
   }, [queryParam, setQueryValue, setDropdownValue, isOpen, setIsOpen])
 
   useEffect(() => {
+    if(!currentItem || !currentItem.value) return
     const selectEl = selectElRef.current
     selectEl.value = currentItem.value
     onChange && onChange(currentItem.value)

@@ -47,10 +47,10 @@ export default function MessageBanner() {
   }
 
   if (statusPageError) {
-    console.error(statusPageError);
+    // console.error(statusPageError);
   }
   if (apiVersionError) {
-    console.error(apiVersionError);
+    // console.error(apiVersionError);
   }
 
   if (maintenanceMessage) {
