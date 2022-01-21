@@ -347,8 +347,8 @@ describe('Pinning APIs endpoints', () => {
           cid,
           name: 'PreciousData.pdf',
           origins: [
-            '/ip4/203.0.113.142/tcp/4001/p2p/QmSourcePeerId',
-            '/ip4/203.0.113.114/udp/4001/quic/p2p/QmSourcePeerId'
+            '/ip6/2606:4700:60::6/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N',
+            '/ip4/172.65.0.13/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx4N'
           ],
           meta
         })
@@ -534,7 +534,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res.ok, 'Server response is ok')
       assertCorrectPinResponse(data)
       assert.deepEqual(data.requestId, pinRequest.requestId)
-      assert.deepEqual(data.status, 'pinned')
+      assert.deepEqual(data.status, 'pinning')
     })
 
     it('returns the pin request with specified name', async () => {
