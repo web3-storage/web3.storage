@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import filesize from 'filesize';
 import React, { useCallback, useEffect, useState } from 'react';
+// @ts-ignore
 import { Upload } from 'web3.storage';
 
 import FileRowItem, { PinStatus } from './fileRowItem';

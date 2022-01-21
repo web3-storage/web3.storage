@@ -6,6 +6,7 @@ import Triangle from '../assets/illustrations/triangle';
 import Cross from '../assets/illustrations/cross';
 import Coil from '../assets/illustrations/coil';
 import Ring from '../assets/illustrations/ring';
+// @ts-ignore
 import termsOfService from '../content/terms-of-service.md';
 // ===================================================================== Exports
 export default function Home() {

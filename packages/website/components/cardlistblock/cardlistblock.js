@@ -12,7 +12,7 @@ export default function CardListBlock({ block }) {
     <div className="block card-list-block">
       <div className={`card-${direction}`}>
         {block.cards.map((card, index) => (
-          <Card key={`card-${index}`} card={card} parent={block} index={index} />
+          <Card key={`card-${index}`} card={card} cardsGroup={block.cards} index={index} />
         ))}
       </div>
     </div>

@@ -1,3 +1,4 @@
+// @ts-ignore
 import ring from '../images/ring.png'
 /**
  * @param {any} props

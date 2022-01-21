@@ -8,11 +8,10 @@ import countly from '../../lib/countly';
 
 // ====================================================================== Params
 /**
- * @param {Object} props.block
- * @param {Object} props.className
+ * @param {Object} block
  */
 // ====================================================================== Export
-export default function TextBlock({ block, className }) {
+export default function TextBlock({ block }) {
   const router = useRouter();
   const format = block.format || 'medium';
   const hasDescription = typeof block.description === 'string' || Array.isArray(block.description);

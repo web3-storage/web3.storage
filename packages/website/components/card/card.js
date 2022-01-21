@@ -12,12 +12,13 @@ import countly from '../../lib/countly';
 
 // ====================================================================== Params
 /**
+ * @param {Object} props
  * @param {Object} props.card
- * @param {Object} props.parent
- * @param Number props.index
+ * @param {Object} props.cardsGroup
+ * @param {number} props.index
  */
 // ====================================================================== Export
-export default function Card({ card, parent, index }) {
+export default function Card({ card, cardsGroup = [], index = 0 }) {
   const router = useRouter();
   const hasIcon = card.hasOwnProperty('icon_before') && typeof card.icon_before === 'object';
   const tracking = {};
@@ -125,7 +126,7 @@ export default function Card({ card, parent, index }) {
 
   // ========================================================= Templates [Cards]
   if (card.type === 'E') {
-    const len = parent.cards.length;
+    const len = cardsGroup.length;
     let sum = 0;
     let weight = 0;
 
@@ -144,7 +145,7 @@ export default function Card({ card, parent, index }) {
             <div className={'feature_storage-bar'}>
               <div className={'feature_storage-bar-highlight'} style={{ width: width }}></div>
 
-              {parent.cards.map((card, j) => (
+              {cardsGroup.map((card, j) => (
                 <div key={card.title} className="storage-bar-tier">
                   <span className={clsx('storage-bar-tier-label', index < j ? 'display' : '')}>{card.title}</span>
                 </div>

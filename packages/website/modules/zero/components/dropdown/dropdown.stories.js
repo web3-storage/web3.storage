@@ -1,5 +1,5 @@
-import React from 'react'
-import useState from 'storybook-addon-state'
+import React, { useState } from 'react'
+
 import Dropdown from 'ZeroComponents/dropdown/dropdown'
 
 export default {

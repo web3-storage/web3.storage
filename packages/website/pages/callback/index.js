@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 
 import Loading from 'components/loading/loading';
-import { redirectMagic, redirectSocial } from 'Lib/magic.js';
+import { redirectMagic, redirectSocial } from 'lib/magic.js';
 
 export function getStaticProps() {
   return {

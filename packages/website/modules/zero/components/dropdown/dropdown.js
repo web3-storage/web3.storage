@@ -1,6 +1,7 @@
-import { useMemo, useCallback, useEffect, useRef, useState } from 'react'
-import useQueryParams from 'ZeroHooks/useQueryParams'
 import clsx from 'clsx'
+import { useMemo, useCallback, useEffect, useRef, useState } from 'react'
+
+import useQueryParams from 'ZeroHooks/useQueryParams'
 
 /**
  * @typedef {Object} DropdownOptionProp
@@ -9,14 +10,19 @@ import clsx from 'clsx'
  *
  * @typedef {Object} DropdownProps
  * @prop {string} [className]
- * @prop {DropdownOption[]} [options]
- * @prop {string} [value]
+ * @prop {DropdownOptionProp[]} options
+ * @prop {string|number} [value]
  * @prop {boolean} [scrollable]
  * @prop {string} [queryParam]
  * @prop {function} [onChange]
- * @prop { import('react').MouseEventHandler<HTMLSelectElement> } [onSelectChange]
+ * @prop { import('react').ChangeEventHandler<HTMLSelectElement> } [onSelectChange]
  */
 
+/**
+ * 
+ * @param {DropdownProps} props
+ * @returns 
+ */
 const Dropdown = ({
   className,
   options,
@@ -26,7 +32,7 @@ const Dropdown = ({
   onChange,
   onSelectChange
 }) => {
-  const selectElRef = useRef(null)
+  const selectElRef = useRef(/** @type {any} */(null))
 
   const [isOpen, setIsOpen] = useState(false)
   const [dropdownValue, setDropdownValue] = useState(null)
@@ -81,12 +87,13 @@ const Dropdown = ({
 
   return (
     <div
+      role="button"
       className={clsx(className, 'Dropdown', { open: isOpen, scrollable })}
-      tabIndex="-1"
+      tabIndex={-1}
       onBlur={(event) => !event.relatedTarget && setIsOpen(false)}
       onKeyUp={handleDropdownKeyUp}
     >
-      <button 
+      <button
         className="dropdownButton"
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -97,12 +104,12 @@ const Dropdown = ({
       </button>
 
       <div className="dropdownContent">
-        <div className={clsx('dropdownItemList')} role="listbox" tabIndex="-1">
+        <div className={clsx('dropdownItemList')} role="listbox" tabIndex={-1}>
           {options.map((option) => (
             <div
               key={`item-${option.value}`}
               className={clsx('dropdownItem', { current: currentItem.value === option.value })}
-              tabIndex="-1"
+              tabIndex={-1}
               role="option"
               aria-selected={currentItem.value === option.value ? 'true' : 'false'}
               onClick={() => setCurrentItem(option.value)}

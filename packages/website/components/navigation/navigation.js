@@ -5,10 +5,10 @@ import clsx from 'clsx';
 import Link from 'next/link';
 
 import { useAuthorization } from 'components/contexts/authorizationContext';
-// @ts-ignore
 import ZeroAccordion from 'ZeroComponents/accordion/accordion';
 // @ts-ignore
 import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
+import { useAuthorization } from 'components/contexts/authorizationContext';
 import Button from '../button/button';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Hamburger from '../../assets/icons/hamburger.js';
@@ -179,7 +179,7 @@ export default function Navigation({ isProductApp }) {
                     onClick={onLinkClick}
                     onKeyPress={e => handleKeySelect(e, '/')}
                     role="button"
-                    tabIndex="0"
+                    tabIndex={0}
                   >
                     <SiteLogo className="site-logo-image" />
                     <button className="site-logo-text" onClick={onLinkClick} onKeyPress={e => handleKeySelect(e, '/')}>

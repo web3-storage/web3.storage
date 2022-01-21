@@ -1,3 +1,4 @@
+// @ts-ignore
 import cluster from '../images/cluster.png'
 /**
  * @param {any} props

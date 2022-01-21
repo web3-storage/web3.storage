@@ -5,7 +5,6 @@ import clsx from 'clsx';
 import Hero from '../hero';
 import TextBlock from '../textblock/textblock.js';
 import ImageBlock from '../imageblock/imageblock.js';
-import Card from '../card/card';
 import CardListBlock from '../cardlistblock/cardlistblock';
 import SliderBlock from '../sliderblock/sliderblock';
 import AccordionBlock from '../accordionblock/accordionblock';
@@ -62,8 +61,6 @@ class BlockBuilder extends React.Component {
         return <TextBlock block={column} />;
       case 'image_block':
         return <ImageBlock block={column} />;
-      case 'card':
-        return <Card block={column} />;
       case 'card_list_block':
         return <CardListBlock block={column} />;
       case 'slider_block':

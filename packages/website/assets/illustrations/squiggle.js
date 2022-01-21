@@ -1,3 +1,4 @@
+// @ts-ignore
 import squiggle from '../images/squiggle.png'
 /**
  * @param {any} props
