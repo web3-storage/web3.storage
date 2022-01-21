@@ -98,7 +98,7 @@
                 "cta": {
                   "text": "REQUEST MORE STORAGE",
                   "url": "/account",
-                  "theme": "light outline",
+                  "theme": "outline-dark",
                   "event": "",
                   "ui": "",
                   "action": ""
@@ -112,7 +112,7 @@
                 "cta": {
                   "text": "REQUEST MORE STORAGE",
                   "url": "/account",
-                  "theme": "light outline",
+                  "theme": "outline-dark",
                   "event": "",
                   "ui": "",
                   "action": ""
@@ -174,7 +174,7 @@
             "description": "Web3.Storage is currently not a pinning service. At the moment, files already on the IPFS network cannot be pinned to Web3.Storage via their…",
             "cta": {
               "url": "/faq",
-              "text": "READ MORE     ➔",
+              "text": "READ MORE",
               "theme": "text-purple",
               "event": "",
               "ui": "",
@@ -192,7 +192,7 @@
             "description": "One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data…",
             "cta": {
               "url": "/faq",
-              "text": "READ MORE     ➔",
+              "text": "READ MORE",
               "theme": "text-purple",
               "event": "",
               "ui": "",

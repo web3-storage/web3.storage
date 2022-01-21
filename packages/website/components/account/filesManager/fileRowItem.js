@@ -45,6 +45,7 @@ const Info = ({ content, icon = null }) => (
  * @property {(e: any)=>void} onSelect
  * @property {number} [numberOfPins]
  * @property {boolean} [isHeader]
+ * @property {boolean} [isSelected]
  * @property {{text: string, target: "name" | "cid"}} [highlight]
  */
 
@@ -65,6 +66,7 @@ const FileRowItem = props => {
     onSelect,
     numberOfPins,
     isHeader = false,
+    isSelected,
   } = useMemo(() => {
     const propsReturn = { ...props };
     const { target, text = '' } = props.highlight || {};
@@ -92,7 +94,7 @@ const FileRowItem = props => {
   return (
     <div className={clsx('files-manager-row', className, isHeader && 'files-manager-row-header')}>
       <span className="file-select">
-        <input type="checkbox" id={`${name}-select`} onChange={onSelect} />
+        <input checked={isSelected} type="checkbox" id={`${name}-select`} onChange={onSelect} />
         <CheckIcon className="check" />
       </span>
       <span className="file-date">{date}</span>

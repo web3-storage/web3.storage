@@ -1,16 +1,21 @@
 import clsx from 'clsx'
 import { useCallback } from 'react';
+
 import Button from 'ZeroComponents/button/button'
 
 /**
  * @typedef {Object} ModalProps
  * @prop {string} [className]
- * @prop { [boolean, Dispatch<SetStateAction<boolean>>] } [modalState]
+ * @prop { [boolean, React.Dispatch<React.SetStateAction<boolean>>] } modalState
  * @prop {boolean} [showCloseButton]
- * @prop {ReactComponent} [closeIcon]
+ * @prop {React.ReactNode} [closeIcon]
  * @prop {import('react').ReactNode | string} children
  */
 
+/**
+ * 
+ * @param {ModalProps} props
+ */
 const Modal = ({
   className,
   modalState,
@@ -22,7 +27,7 @@ const Modal = ({
 
   const closeModal = useCallback(() => setModalOpen(false), [setModalOpen])
 
-  return (isOpen &&
+  return (isOpen ?
     <>
       <div className={clsx(className, 'modalBackground')}></div>
       <div className="modalContainer">
@@ -31,14 +36,11 @@ const Modal = ({
         </div>
         {showCloseButton && (
           <Button onClick={closeModal} className="modalClose">
-            {closeIcon 
-              ? closeIcon
-              : <span>&times;</span>
-            }
+            {closeIcon && <span>&times;</span>}
           </Button>
         )}
       </div>
-    </>
+    </> : null
   )
 }
 

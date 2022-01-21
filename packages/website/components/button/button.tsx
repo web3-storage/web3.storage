@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 import ZeroButton from 'ZeroComponents/button/button';
 import { trackEvent, events } from 'lib/countly';
@@ -43,7 +43,7 @@ const Button = ({
   variant = ButtonVariant.DARK,
   children,
   ...props
-}: ButtonProps & Partial<Omit<HTMLButtonElement, 'children'>>) => {
+}: ButtonProps & Partial<Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children'>>) => {
   const onClickHandler = useCallback(
     event => {
       tracking &&

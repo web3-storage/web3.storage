@@ -7,11 +7,11 @@ hljs.registerLanguage('javascript', javascript);
 
 // ====================================================================== Params
 /**
+ * @param {Object} props
  * @param {Object} props.block
- * @param {Object} props.className
  */
 // ====================================================================== Export
-export default function CodePreview({ block, className }) {
+export default function CodePreview({ block }) {
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleTabSelection = (e, ind) => {

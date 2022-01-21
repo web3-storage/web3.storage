@@ -55,7 +55,7 @@ export default function Footer() {
               {typeof contact.cta === 'object' && (
                 <Button
                   className={'cta'}
-                  variant={contact.cta.theme}
+                  variant={/** @type {any} */ (contact.cta.theme)}
                   onClick={() => handleButtonClick(contact.cta)}
                   onKeyPress={() => handleButtonClick(contact.cta)}
                   tracking={{

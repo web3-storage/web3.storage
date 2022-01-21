@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react'
 import useState from 'storybook-addon-state';
+
 import Button from 'ZeroComponents/button/button';
 import Dropzone from './dropzone';
-import { ReactComponent as OpenIcon } from 'Icons/open.svg'
+import { ReactComponent as OpenIcon } from 'assets/icons/open.svg'
 
 export default {
   title: 'Zero/Dropzone'
@@ -24,14 +25,16 @@ export const FileReader = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if(files)
-      files.forEach((file) => {
+    if(files) {
+      /** @type {any} */ (files).forEach((file) => {
+        //@ts-ignore TODO: Fix implementation for typescript instantiation
         const reader = new FileReader()
         reader.onabort = () => console.log('file reading was aborted')
         reader.onerror = () => console.log('file reading has failed')
         reader.onload = () => console.log(reader.result)
         reader.readAsArrayBuffer(file)
       })
+    }
   };
 
   return (
@@ -58,10 +61,11 @@ export const FormData = () => {
 
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
+     //@ts-ignore TODO: Fix implementation for typescript instantiation
     let formData = new FormData(e.target);
 
     if(files)
-      files.forEach((file) => {
+      /** @type {any} */ (files).forEach((file) => {
         formData.append('files', file, file.name)
       })
   }, []);

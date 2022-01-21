@@ -1,6 +1,8 @@
 module.exports = {
   extends: [
     'react-app',
+    'next',
+    'next/core-web-vitals',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:jsx-a11y/recommended',
@@ -23,7 +25,7 @@ module.exports = {
         paths: ['.'],
       },
       alias: [
-        ['ZeroComponents', './modules/zero/components']
+        ['ZeroComponents', './modules/zero/components'],
         ['ZeroHooks', './modules/zero/hooks']
       ]
     },
@@ -67,8 +69,8 @@ module.exports = {
       },
     ],
     'no-unneeded-ternary': ['error', { defaultAssignment: false }],
-    "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["error"],
+    'no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': ['error'],
     '@typescript-eslint/no-unused-vars': ['warn', { vars: 'local', args: 'none' }],
     'max-len': [
       'warn',

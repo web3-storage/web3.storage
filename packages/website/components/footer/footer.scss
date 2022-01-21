@@ -22,7 +22,7 @@ $footerLogoWidth: 2.25rem;
   left: -12.5rem;
   top: -4rem;
   transform: translateY(-50%) scaleX(-1) rotate(25deg);
-  z-index: 1;
+  z-index: -1;
   @include large {
     left: calc(50% - #{math.div($containerWidth, 2)} - 19rem);
   }
@@ -52,7 +52,7 @@ $footerLogoWidth: 2.25rem;
     margin-bottom: 1.75rem;
     svg {
       width: $footerLogoWidth;
-      min-width: $footerLogoWidth;
+      height: $footerLogoWidth;
       fill: white;
     }
     .site-logo-text {

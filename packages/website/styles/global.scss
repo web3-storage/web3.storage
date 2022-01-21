@@ -12,12 +12,15 @@
 @import 'layouts/section';
 @import 'layouts/corkscrewBackground';
 @import 'layouts/pageContainer';
+@import 'layouts/dropdownOverrides';
+@import 'layouts/paginationOverrides';
+@import 'layouts/filterableOverrides';
 @import '../components/navigation/navigation.scss';
 @import '../components/footer/footer.scss';
 
 // Components
 @import '../components/button/button';
-@import '../components/account/CTACard/CTACard';
+@import '../components/account/ctaCard/CTACard';
 @import '../components/account/storageManager/storageManager';
 @import '../components/account/filesManager/filesManager';
 @import '../components/account/filesManager/fileRowItem';
@@ -166,8 +169,11 @@ button {
   overflow-x: hidden;
 }
 
-.master-container {
+#master-container {
   position: relative;
+  &.product-app {
+    background-color: $ebony;
+  }
 }
 
 [class~='grid'],

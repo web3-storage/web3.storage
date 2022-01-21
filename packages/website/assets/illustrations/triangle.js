@@ -1,3 +1,4 @@
+// @ts-ignore
 import triangle from '../images/triangle.png'
 /**
  * @param {any} props

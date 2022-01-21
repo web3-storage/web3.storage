@@ -8,13 +8,19 @@ export default {
 };
 
 export const Dark = () => (
-  <Button variant={ButtonVariant.DARK} onClick={() => console.log('Button clicked')}>Button</Button>
+  <Button variant={ButtonVariant.DARK} onClick={() => console.log('Button clicked')}>
+    Button
+  </Button>
 );
 
 export const Light = () => (
-  <Button variant={ButtonVariant.LIGHT} onClick={() => console.log('Button clicked')}>Button</Button>
+  <Button variant={ButtonVariant.LIGHT} onClick={() => console.log('Button clicked')}>
+    Button
+  </Button>
 );
 
 export const Outlined = () => (
-  <Button variant={ButtonVariant.OUTLINED} onClick={() => console.log('Button clicked')}>Button</Button>
+  <Button variant={ButtonVariant.OUTLINE_DARK} onClick={() => console.log('Button clicked')}>
+    Button
+  </Button>
 );
