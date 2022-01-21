@@ -206,7 +206,6 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
   id              BIGSERIAL PRIMARY KEY,
   -- Points to auth key used to pin the content.
   auth_key_id     BIGINT                                                       NOT NULL REFERENCES public.auth_key (id),
-  -- Points to the pinned content, it is updated once the content is actually being found.
   content_cid     TEXT                                                         NOT NULL REFERENCES content (cid),
   -- The id of the content being requested, it could not exist on IPFS (typo, node offline etc)
   source_cid      TEXT NOT NULL,
