@@ -112,8 +112,8 @@ export class DBClient {
   /**
    * Check that a user is authorised to pin
    *
-   * @param {*} userId
-   * @returns boolean
+   * @param {number} userId
+   * @returns {Promise<boolean>}
    */
   async isPinningAuthorised (userId) {
     const { error, count } = await this._client

@@ -70,7 +70,7 @@ export function withApiOrMagicToken (handler) {
 }
 
 /**
- * Middleware: verify that the autheticated request is for a user who is
+ * Middleware: verify that the authenticated request is for a user who is
  * authorised to pin.
  *
  * @param {import('itty-router').RouteHandler} handler
@@ -79,11 +79,10 @@ export function withApiOrMagicToken (handler) {
 export function withPinningAuthorised (handler) {
   return async (request, env, ctx) => {
     const authorised = await env.db.isPinningAuthorised(request.auth.user._id)
-    if (!authorised) {
-      throw new PinningNotAuthorisedError()
+    if (authorised) {
+      return handler(request, env, ctx)
     }
-
-    return handler(request, env, ctx)
+    throw new PinningNotAuthorisedError()
   }
 }
 

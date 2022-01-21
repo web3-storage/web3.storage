@@ -23,7 +23,7 @@ UserNotFoundError.CODE = 'ERROR_USER_NOT_FOUND'
 export class PinningNotAuthorisedError extends HTTPError {
   constructor (msg = 'Pinning not authorised for this user') {
     super(msg, 403)
-    this.name = 'PinningNotEnabled'
+    this.name = 'PinningNotAuthorisedError'
     this.code = PinningNotAuthorisedError.CODE
   }
 }

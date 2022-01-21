@@ -292,11 +292,11 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('error if user not authorised to pin', async () => {
-      token = await getTestJWT('test-upload', 'test-upload')
+      const notAuthorisedToken = await getTestJWT('test-upload', 'test-upload')
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${notAuthorisedToken}`,
           'Content-Type': 'application/json'
         }
       })
@@ -476,11 +476,11 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('error if user not authorised to pin', async () => {
-      token = await getTestJWT()
+      const notAuthorisedToken = await getTestJWT()
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${notAuthorisedToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -621,11 +621,11 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('error if user not authorised to pin', async () => {
-      token = await getTestJWT()
+      const notAuthorisedToken = await getTestJWT()
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${notAuthorisedToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -772,11 +772,11 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('error if user not authorised to pin', async () => {
-      token = await getTestJWT()
+      const notAuthorisedToken = await getTestJWT()
       const res = await fetch(new URL('pins/1', endpoint).toString(), {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${notAuthorisedToken}`,
           'Content-Type': 'application/json'
         }
       })
@@ -861,11 +861,11 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('error if user not authorised to pin', async () => {
-      token = await getTestJWT()
+      const notAuthorisedToken = await getTestJWT()
       const res = await fetch(new URL('pins/UniqueIdOfPinRequest', endpoint).toString(), {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${notAuthorisedToken}`,
           'Content-Type': 'application/json'
         }
       })
