@@ -166,7 +166,9 @@ export async function pinPost (request, env, ctx) {
 async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
   const { cid, origins } = pinData
 
-  const pinName = pinData.name || undefined // deal with empty strings
+  // deal with empty strings
+  const pinName = pinData.name || undefined
+  const pinMeta = pinData.meta || undefined
 
   await env.cluster.pin(cid, {
     name: pinName,
@@ -178,6 +180,7 @@ async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
     sourceCid: cid,
     contentCid: normalizedCid,
     authKey: authTokenId,
+    meta: pinMeta,
     name: pinName,
     pins
   }
@@ -400,7 +403,7 @@ function getPinStatus (pinRequest) {
       cid: pinRequest.sourceCid,
       name: pinRequest.name,
       origins: [],
-      meta: {}
+      meta: pinRequest.meta
     },
     // TODO(https://github.com/web3-storage/web3.storage/issues/792)
     delegates: []
