@@ -28,6 +28,14 @@ $cpTabColor: #2a272e;
   background-color: $cpTabColor;
   z-index: 1;
   cursor: pointer;
+
+  @include mini {
+    padding: 0.75rem 2.5rem 0.25rem 2.5rem;
+  }
+  @include tiny {
+    padding: 0.75rem 2rem 0.25rem 2rem;
+  }
+
   &:after {
     content: '';
     position: absolute;

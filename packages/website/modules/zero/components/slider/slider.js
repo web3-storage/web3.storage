@@ -3,26 +3,40 @@ import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import clsx from 'clsx'
 // ====================================================================== Params
 /**
+ * @param {Object} props
  * @param {Array} props.collection
- * @param Boolean props.arrowSelectors
- * @param Boolean props.rangeInput
- * @param Number props.rows
+ * @param {boolean} props.arrowSelectors
+ * @param {boolean} props.rangeInput
+ * @param {number} props.rows
  * @param {Object} props.displayOptions
  */
 // =================================================================== Functions
-function Content () {
+
+/**
+ * @param {any} props TODO: Define props
+ */
+function Content ({}) {
   return null
 }
 
-function Previous () {
+/**
+ * @param {any} props TODO: Define props
+ */
+function Previous ({}) {
   return null
 }
 
-function Next () {
+/**
+ * @param {any} props TODO: Define props
+ */
+function Next ({}) {
   return null
 }
 
-function Thumb () {
+/**
+ * @param {any} props TODO: Define props
+ */
+function Thumb ({}) {
   return null
 }
 
@@ -67,8 +81,8 @@ function Slider ({
   const slidingRowWidth = useRef('100%')
 
   const animate = useRef(true)
-  const rowContainer = useRef(null)
-  const sliderInput = useRef(null)
+  const rowContainer = useRef(/** @type {any} */ (null))
+  const sliderInput = useRef(/** @type {any} */ (null))
 
   const content = children.find(child => child.type === Content)
   const previous = children.find(child => child.type === Previous)
@@ -135,7 +149,7 @@ function Slider ({
       }
     }
     if (reset) {
-      display = visibleColumns.default
+      setDisplay(visibleColumns.default)
     }
   }
 

@@ -8,16 +8,17 @@ import Dropdown from 'ZeroComponents/dropdown/dropdown'
  * @prop {string} [label]
  * @prop {string} [value]
  * @prop {string} [key]
- * @prop {string} [direction] 
+ * @prop {string} [direction]
  * @prop {function} [compareFn]
  *
  * @typedef {Object} SortableProps
  * @prop {string} [className]
  * @prop {any[]} [items]
- * @prop {SortOption[]} [options]
+ * @prop {SortOptionProp[]} [options]
  * @prop {string} [value]
  * @prop {string} [queryParam]
  * @prop {string} [staticLabel]
+ * @prop {number} [defaultIndex]
  * @prop {function} [onChange]
  */
 
@@ -31,7 +32,7 @@ export const SortType = {
       } else if(direction === SortDirection.DESC) {
         return items.sort((a, b) => a[key] && b[key] ? b[key].localeCompare(a[key]) : console.warn(`Missing key ${key}`))
       }
-    } 
+    }
     else if(direction === SortDirection.ASC) {
       return items.sort((a, b) => typeof a !== 'object' && typeof b !== 'object' ? a.localeCompare(b) : console.warn(`Missing key definition`))
     } else if(direction === SortDirection.DESC) {
@@ -41,6 +42,10 @@ export const SortType = {
   }
 }
 
+/**
+ * 
+ * @param {SortableProps} props
+ */
 const Sortable = ({
   className,
   items,
@@ -50,10 +55,10 @@ const Sortable = ({
   onChange,
   staticLabel
 }) => {
-  const [currentOption, setCurrentOption] = useState(null)
+  const [currentOption, setCurrentOption] = useState(/** @type {any} */(null))
 
   const handleDropdownChange = useCallback((newValue) => {
-    const option = options.find(option => option.value === newValue)
+    const option = options?.find(option => option.value === newValue)
     if(!option) return
     setCurrentOption(option)
   }, [items, options, currentOption, setCurrentOption])
@@ -63,7 +68,7 @@ const Sortable = ({
     const compareFn = currentOption.compareFn || SortType.ALPHANUMERIC
     const direction = currentOption.direction || SortDirection.ASC
     const key = currentOption.key || null
-    const sortedItems = compareFn(items.slice(0), direction, key)
+    const sortedItems = compareFn(items?.slice(0), direction, key)
 
     onChange && onChange(sortedItems)
   }, [items, currentOption, onChange])
@@ -72,7 +77,7 @@ const Sortable = ({
     <div className={clsx(className, 'Sortable')}>
       <Dropdown
         value={value}
-        options={options.map((option) => (
+        options={options?.map((option) => (
           { label: option.label, value: `${option.value}` }
         ))}
         queryParam={queryParam}

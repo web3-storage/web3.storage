@@ -26,7 +26,7 @@
     @include fontSize_ExtraLarge;
     @include fontWeight_Bold;
     background-size: 200%;
-    transform: scaleY(1.2);
+    transform: scaleY(1.2) translateY(0.375px);
   }
 
   .title {
@@ -97,29 +97,10 @@
     @include fontWeight_Bold;
     @include fontSize_MediumLarge;
     line-height: leading(29, 24);
-    color: #3d04fb;
+    color: $blue;
     svg {
       transform: translateY(0.40625rem);
     }
-  }
-
-  .button {
-    position: relative;
-    &:after {
-      content: '➔';
-      position: absolute;
-      right: -0.5rem;
-      top: 50%;
-      transform: translateY(-50%);
-      @include fontWeight_Semibold;
-      @include fontSize_Small;
-      color: #3d04fb;
-    }
-  }
-
-  button {
-    @include fontSize_Small;
-    line-height: leading(34, 16);
   }
 }
 
@@ -146,6 +127,14 @@
     background: linear-gradient(135deg, #d726d7 0%, #3064e0 50%, #31e7ea 100%);
     z-index: -1;
     filter: blur(6px);
+    opacity: 0;
+    transition: 250ms ease;
+  }
+
+  &:hover {
+    &:before {
+      opacity: 1;
+    }
   }
 
   .feature-wrapper {
@@ -180,6 +169,7 @@
 // -----------------------------------------------------------------------------
 .card.type__D {
   padding: 2rem;
+  padding-right: 2.5rem;
   margin-right: 1.5rem;
   background-color: $gray50;
   border-radius: 0.5rem;
@@ -206,11 +196,37 @@
       line-height: leading(34, 20);
     }
     .category-link {
+      display: block;
       padding: 0.25rem 0;
-      a {
-        @include gradient_Text;
-        @include fontSize_Regular;
-        background-size: 150%;
+      @include gradient_Text;
+      @include fontSize_Regular;
+      background-size: 150%;
+      transition: 200ms ease;
+      text-align: left;
+      cursor: pointer;
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0.25rem;
+        left: 0;
+        width: 2.25rem;
+        height: 100%;
+        padding: 0.75rem 0;
+        background-image: url('../../assets/images/zigzag-tiny.png');
+        background-position: 0 4px;
+        background-size: 0 1.75rem;
+        background-repeat: no-repeat;
+        transform: translate(0);
+        transition: inherit;
+        opacity: 0;
+      }
+      &:hover {
+        transform: translateX(2.25rem);
+        &:before {
+          background-size: 1.75rem 1.75rem;
+          transform: translate(-2.25rem);
+          opacity: 1;
+        }
       }
     }
   }

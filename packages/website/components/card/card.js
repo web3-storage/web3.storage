@@ -3,19 +3,22 @@ import { useCallback } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import Button from '../button/button';
 import NpmIcon from '../../assets/icons/npmicon';
 import Windows from '../../assets/icons/windows';
 import countly from '../../lib/countly';
+
 // ====================================================================== Params
 /**
+ * @param {Object} props
  * @param {Object} props.card
- * @param {Object} props.parent
- * @param Number props.index
+ * @param {Object} props.cardsGroup
+ * @param {number} props.index
  */
 // ====================================================================== Export
-export default function Card({ card, parent, index }) {
+export default function Card({ card, cardsGroup = [], index = 0 }) {
   const router = useRouter();
   const hasIcon = card.hasOwnProperty('icon_before') && typeof card.icon_before === 'object';
   const tracking = {};
@@ -31,6 +34,27 @@ export default function Card({ card, parent, index }) {
     }
   }
   // ================================================================= Functions
+  const onLinkClick = useCallback(e => {
+    countly.trackCustomLinkClick(countly.events.LINK_CLICK_EXPLORE_DOCS, e.currentTarget);
+  }, []);
+
+  const handleKeySelect = useCallback(
+    (e, url) => {
+      onLinkClick(e);
+      router.push(url);
+    },
+    [router, onLinkClick]
+  );
+
+  const handleButtonClick = useCallback(
+    cta => {
+      if (cta.url) {
+        router.push(cta.url);
+      }
+    },
+    [router]
+  );
+
   const renderExploreCards = obj => {
     return (
       <>
@@ -38,9 +62,17 @@ export default function Card({ card, parent, index }) {
           <div key={category.heading} className="category">
             <div className="category-heading">{category.heading}</div>
             {category.links.map(link => (
-              <div key={link.text} className="category-link">
-                <a href={link.url}>{link.text}</a>
-              </div>
+              <Link href={link.url} key={link.text}>
+                <div
+                  className="category-link"
+                  onClick={onLinkClick}
+                  onKeyPress={e => handleKeySelect(e, link.url)}
+                  tabIndex={0}
+                  role="button"
+                >
+                  {link.text}
+                </div>
+              </Link>
             ))}
           </div>
         ))}
@@ -92,18 +124,9 @@ export default function Card({ card, parent, index }) {
     );
   };
 
-  const handleButtonClick = useCallback(
-    cta => {
-      if (cta.url) {
-        router.push(cta.url);
-      }
-    },
-    [router]
-  );
-
   // ========================================================= Templates [Cards]
   if (card.type === 'E') {
-    const len = parent.cards.length;
+    const len = cardsGroup.length;
     let sum = 0;
     let weight = 0;
 
@@ -122,7 +145,7 @@ export default function Card({ card, parent, index }) {
             <div className={'feature_storage-bar'}>
               <div className={'feature_storage-bar-highlight'} style={{ width: width }}></div>
 
-              {parent.cards.map((card, j) => (
+              {cardsGroup.map((card, j) => (
                 <div key={card.title} className="storage-bar-tier">
                   <span className={clsx('storage-bar-tier-label', index < j ? 'display' : '')}>{card.title}</span>
                 </div>

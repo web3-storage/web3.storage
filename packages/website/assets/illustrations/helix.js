@@ -1,3 +1,4 @@
+// @ts-ignore
 import helix from '../images/helix.png'
 /**
  * @param {any} props

@@ -1,15 +1,12 @@
 .corkscrew-background {
-  background: $black;
   position: absolute;
-  width: 100%;
-  background-size: cover;
-  z-index: -1;
-
-  img {
-    position: relative;
-    width: calc(100% + 15rem);
-    height: auto;
-    left: -15rem;
-    top: -20rem;
-  }
+  width: 2112px;
+  top: 0;
+  left: -9999px;
+  right: -9999px;
+  margin: auto;
+  transform: translate(-14rem, -22rem);
+  z-index: 0;
+  opacity: 0.25;
+  filter: blur(40px);
 }

@@ -1,7 +1,7 @@
-import { useMemo, useCallback, useEffect, useState } from 'react'
-import useQueryParams from 'ZeroHooks/useQueryParams'
 import clsx from 'clsx'
+import { useMemo, useCallback, useEffect, useState } from 'react'
 
+import useQueryParams from 'ZeroHooks/useQueryParams'
 import SearchBar from 'ZeroComponents/searchbar/searchbar'
 
 /**
@@ -11,13 +11,19 @@ import SearchBar from 'ZeroComponents/searchbar/searchbar'
  * @prop {string[]} [filterKeys]
  * @prop {string} [value]
  * @prop {string} [queryParam]
+ * @prop {string} [placeholder]
+ * @prop {React.ReactNode} [icon]
  * @prop {function} [onChange]
  */
 
+/**
+ * 
+ * @param {FilterableProps} props
+ */
 const Filterable = ({
   className,
   items,
-  filterKeys,
+  filterKeys = [],
   value,
   queryParam,
   onChange,
@@ -33,10 +39,8 @@ const Filterable = ({
   const setCurrentValue = useCallback((newValue) => onValueChange?.(newValue) ?? (queryParam ? setQueryValue(newValue) : setFilterValue(newValue)), [queryParam, setQueryValue, setFilterValue])
 
   useEffect(() => {
-    if(!currentValue) return onChange && onChange(items.slice(0))
-
+    if(!currentValue) return onChange && onChange(items?.slice(0))
     const filteredItems = items.slice(0).filter(item => filterKeys.filter(filterKey => String(item[filterKey] || item).toLowerCase().includes(currentValue.toLowerCase())).length > 0)
-
     onChange && onChange(filteredItems)
   }, [items, currentValue, onChange])
 

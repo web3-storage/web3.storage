@@ -1,5 +1,5 @@
-import React, { createElement, useCallback } from 'react'
-import useState from 'storybook-addon-state';
+import React from 'react'
+
 import Filterable from './filterable';
 import { ReactComponent as SearchIcon } from '../../assets/search.svg'
 

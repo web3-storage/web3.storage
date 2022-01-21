@@ -11,7 +11,7 @@ import { ReactComponent as Chevron } from '../../assets/icons/chevron.svg';
 export default function AccordionBlock({ block }) {
   return (
     <div className="block accordion-block">
-      <ZeroAccordion multiple={true} toggleOnLoad={true}>
+      <ZeroAccordion multiple={block.multiple} toggleOnLoad={block.toggleOnLoad}>
         {block.sections.map((section, index) => (
           <ZeroAccordionSection key={`accordion_section-${index}`}>
             <ZeroAccordionSection.Header>

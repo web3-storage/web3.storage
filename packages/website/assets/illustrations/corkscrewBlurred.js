@@ -1,3 +1,4 @@
+// @ts-ignore
 import corkscrewBlurred from '../images/corkscrewBlurred.png';
 /**
  * @param {any} props

@@ -14,7 +14,10 @@ class Accordion extends React.Component {
     super(props);
     this.setActiveSections = this.setActiveSections.bind(this);
     this.state = {
-      active: this.props.multiple ? [] : false,
+      /**
+       * @type {boolean[]}
+       */
+      active: [],
       childCount: 0
     }
   }
@@ -28,9 +31,9 @@ class Accordion extends React.Component {
       }
     } else {
       if (this.state.active === id) {
-        this.setState({ active: false })
+        this.setState({ active: [] })
       } else {
-        this.setState({ active: id })
+        this.setState({ active: [id] })
       }
     }
   }
