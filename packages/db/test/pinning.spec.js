@@ -14,7 +14,7 @@ const pinRequestTable = 'psa_pin_request'
  * @param {number} code
  * @returns {Promise<string>}
  */
-async function randomCid(code = pb.code) {
+async function randomCid (code = pb.code) {
   const bytes = crypto.getRandomValues(new Uint8Array(10))
   const hash = await sha256.digest(bytes)
   return CID.create(1, code, hash).toString()

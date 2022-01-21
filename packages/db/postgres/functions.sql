@@ -178,7 +178,7 @@ CREATE OR REPLACE FUNCTION create_psa_pin_request(data json) RETURNS TEXT
 AS
 $$
 DECLARE
--- TODO - Vlaidate UUID type is available
+-- TODO - Validate UUID type is available
   inserted_pin_request_id TEXT;
 BEGIN
   -- Set timeout as imposed by heroku
