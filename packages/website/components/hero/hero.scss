@@ -55,7 +55,8 @@
 }
 
 #index_hero-grid-3d,
-#faq_hero-grid-3d {
+#faq_hero-grid-3d,
+#error_hero-grid-3d {
   position: absolute;
   top: -9999px;
   bottom: -9999px;
@@ -298,4 +299,128 @@
     width: 10rem;
     top: -1rem;
   }
+}
+
+// ////////////////////////////////////////////////////////////////// Page [404]
+// -----------------------------------------------------------------------------
+
+#error_hero-header {
+  position: relative;
+  padding-top: 10rem;
+  z-index: 1;
+  .text-block {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+#error_hero-grid-3d {
+  top: calc(-2rem - $navigationHeight);
+  bottom: unset;
+  transform: scale(1.2, 0.9) translateY(-5rem);
+  svg,
+  path {
+    opacity: 0.75;
+  }
+}
+
+.error_hero-artwork-container {
+  &:after {
+    content: '';
+    position: absolute;
+    top: calc(-2rem - $navigationHeight);
+    left: 0;
+    width: 100%;
+    height: 80rem;
+    background: linear-gradient(rgba($seaShell, 0), $seaShell);
+    z-index: 1;
+  }
+}
+
+#error_hero-helix {
+  width: 18rem;
+  left: 0;
+  top: -6rem;
+  transform: translateX(-100%) rotate(-79deg);
+  left: calc(50% - #{math.div($containerWidth, 2)});
+  @include containerMaxMQ {
+    left: 0;
+  }
+  @include mini {
+    left: 5rem;
+    width: 10rem;
+    top: -3rem;
+  }
+}
+
+#error_hero-triangle-1 {
+  width: 2.8125rem;
+  left: calc(50% + 2rem);
+  transform: scaleX(-1) rotate(-103deg);
+  @include mini {
+    top: 8rem;
+  }
+}
+
+#error_hero-triangle-2 {
+  width: 2.625rem;
+  bottom: 4rem;
+  left: calc(50% - 10rem);
+  transform: scaleX(-1) rotate(-90deg);
+  @include mini {
+    bottom: 2rem;
+    left: calc(50% - 8rem);
+  }
+}
+
+#error_hero-triangle-3 {
+  width: 2rem;
+  bottom: 6rem;
+  left: calc(50% + 11rem);
+  transform: rotate(47deg) scaleY(-1);
+  @include mini {
+    bottom: 4rem;
+    left: calc(50% + 9rem);
+  }
+}
+
+#error_hero-cross-1 {
+  width: 2rem;
+  top: 10rem;
+  right: calc(50% - 11.5rem);
+  transform: scaleX(-1);
+}
+
+#error_hero-cross-2 {
+  width: 2rem;
+  left: calc(50% - 15rem);
+  bottom: 9rem;
+}
+
+#error_hero-corkscrew {
+  width: 6.5rem;
+  top: 17rem;
+  right: calc(50% - 16.5rem);
+  transform: rotate(13deg);
+  @include mini {
+    top: 15rem;
+  }
+}
+
+#error_hero-ring {
+  width: 7.5rem;
+  top: 12rem;
+  left: calc(50% - 17rem);
+  transform: rotate(-38deg);
+  @include mini {
+    top: 11rem;
+    left: calc(50% - 13rem);
+  }
+}
+
+#error_hero-spring {
+  width: 26.875rem;
+  transform: rotate(-37deg);
+  right: calc(50% - #{math.div($containerWidth, 2)} - 19rem);
+  top: 3rem;
 }

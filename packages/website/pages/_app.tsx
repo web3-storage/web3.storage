@@ -15,12 +15,13 @@ import Footer from '../components/footer/footer.js';
  */
 const App = ({ Component, pageProps }: any) => {
   const { pathname } = useRouter();
-  const marketingRoutes = ['/', '/tiers', '/about', '/faq', '/terms'];
-  const notMarketingSite = !marketingRoutes.includes(pathname);
+  const productRoutes = ['/login', '/account', '/tokens'];
+  const productApp = productRoutes.includes(pathname);
 
   return (
     <AppProviders authorizationProps={{ ...pageProps }}>
       <Metadata {...pageProps} />
+      {productApp && <CorkscrewBackground />}
       <RestrictedRoute {...pageProps}>
         <div
           id="master-container"
