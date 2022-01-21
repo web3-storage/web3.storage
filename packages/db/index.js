@@ -363,10 +363,10 @@ export class DBClient {
    *
    * @param {string} cid
    * @param {import('./db-client-types').PinUpsertInput} pin
-   * @return {Promise<number>}
+   * @return {Promise<string>}
    */
   async upsertPin (cid, pin) {
-    /** @type {{ data: number, error: PostgrestError }} */
+    /** @type {{ data: string, error: PostgrestError }} */
     const { data: pinId, error } = await this._client.rpc('upsert_pin', {
       data: {
         content_cid: cid,
