@@ -8,6 +8,9 @@ const dirName = path.resolve(__dirname)
 const nextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
+  images: {
+    loader: "default",
+  },
   webpack: function(config, options) {
     config.resolve.alias = {
       ...config.resolve.alias,
