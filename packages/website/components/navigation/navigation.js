@@ -235,7 +235,7 @@ export default function Navigation({ isProductApp }) {
                   </Link>
                 ))}
 
-                { isLoggedIn &&
+                { isLoggedIn && account &&
                   <ZeroAccordion multiple={false}>
                     <ZeroAccordionSection disabled={!Array.isArray(account.links)}>
                       <ZeroAccordionSection.Header>

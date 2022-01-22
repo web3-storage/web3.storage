@@ -118,7 +118,7 @@ const TokensManager = () => {
       <div className="tokens-manager-footer">
         <Pagination
           items={sortedTokens}
-          itemsPerPage={itemsPerPage}
+          itemsPerPage={itemsPerPage || 10}
           visiblePages={2}
           queryParam="page"
           onChange={setPaginatedTokens}
