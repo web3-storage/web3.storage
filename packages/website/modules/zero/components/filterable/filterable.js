@@ -14,6 +14,7 @@ import SearchBar from 'ZeroComponents/searchbar/searchbar'
  * @prop {string} [placeholder]
  * @prop {React.ReactNode} [icon]
  * @prop {function} [onChange]
+ * @prop {function} [onValueChange]
  */
 
 /**
@@ -40,7 +41,7 @@ const Filterable = ({
 
   useEffect(() => {
     if(!currentValue) return onChange && onChange(items?.slice(0))
-    const filteredItems = items.slice(0).filter(item => filterKeys.filter(filterKey => String(item[filterKey] || item).toLowerCase().includes(currentValue.toLowerCase())).length > 0)
+    const filteredItems = items?.slice(0).filter(item => filterKeys.filter(filterKey => String(item[filterKey] || item).toLowerCase().includes(currentValue.toLowerCase())).length > 0)
     onChange && onChange(filteredItems)
   }, [items, currentValue, onChange])
 

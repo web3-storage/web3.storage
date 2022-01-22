@@ -9,10 +9,8 @@ const nextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
   images: {
-    loader: 'imgix',
-    path: '',
+    loader: 'custom',
   },
-
   webpack: function(config, options) {
     config.resolve.alias = {
       ...config.resolve.alias,
