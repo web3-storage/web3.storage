@@ -16,7 +16,7 @@ import Footer from '../components/footer/footer.js';
 const App = ({ Component, pageProps }: any) => {
   const { pathname } = useRouter();
   const productRoutes = ['/login', '/account', '/tokens'];
-  const marketingRoutes = ['/', '/tiers', '/about', '/faq', '/terms'];
+  // const marketingRoutes = ['/', '/tiers', '/about', '/faq', '/terms'];
   const productApp = productRoutes.includes(pathname);
 
   return (

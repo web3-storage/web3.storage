@@ -11,7 +11,7 @@ export default function ImageBlock({ block }) {
     <>
       {block.src && (
         <div id={block.id} className={clsx('block', 'image-block')}>
-          <Image src={block.src} layout="fill" />
+          <Image src={block.src} layout="fill" alt={block.src} />
 
           <div className={'image-label'}>{block.label}</div>
         </div>

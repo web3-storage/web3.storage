@@ -62,7 +62,7 @@ export default function Card({ card, cardsGroup = [], index = 0 }) {
           <div key={category.heading} className="category">
             <div className="category-heading">{category.heading}</div>
             {category.links.map(link => (
-              <Link href={link.url} key={link.text}>
+              <Link href={link.url} key={link.text} passHref>
                 <div
                   className="category-link"
                   onClick={onLinkClick}
@@ -87,7 +87,7 @@ export default function Card({ card, cardsGroup = [], index = 0 }) {
       case 'B':
         return <code className="code-feature" dangerouslySetInnerHTML={{ __html: obj.feature }}></code>;
       case 'C':
-        return <Image src={obj.image} width="64" height="64" />;
+        return <Image src={obj.image} width="64" height="64" alt={obj.image} />;
       case 'D':
         return renderExploreCards(obj);
       default:

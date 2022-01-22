@@ -34,7 +34,7 @@ export default function Breadcrumbs({ variant, click, keyboard }) {
       {links.map(item => (
         <div key={item.text} className="breadcrumb-wrapper">
           {item.url ? (
-            <Link href={item.url}>
+            <Link href={item.url} passHref>
               <button
                 className={clsx('breadcrumb', 'breadcrumb-link', variant)}
                 onClick={e => click(e)}

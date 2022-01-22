@@ -93,7 +93,7 @@ export default function Navigation({ isProductApp }) {
             <div className="nav-account-dropdown">
               <div className="label">{labelText[0].toUpperCase() + labelText.substring(1)}</div>
               {account.links.map(link => (
-                <Link href={link.url === 'request-more-storage' ? mailTo : link.url} key={link.text}>
+                <Link passHref href={link.url === 'request-more-storage' ? mailTo : link.url} key={link.text}>
                   <button
                     className="nav-dropdown-link"
                     onClick={onLinkClick}
@@ -108,7 +108,7 @@ export default function Navigation({ isProductApp }) {
         );
       }
       return (
-        <Link key={account.text} href={account.url}>
+        <Link passHref key={account.text} href={account.url}>
           <button
             className={clsx('nav-item', account.url === router.route ? 'current-page' : '')}
             onClick={onLinkClick}
@@ -182,7 +182,7 @@ export default function Navigation({ isProductApp }) {
               )}
             >
               <div className={clsx('site-logo-container', theme, isMenuOpen ? 'menu-open' : '')}>
-                <Link href="/">
+                <Link passHref href="/">
                   <div
                     title={logoText}
                     className="anchor-wrapper"
@@ -201,7 +201,7 @@ export default function Navigation({ isProductApp }) {
 
               <div className={clsx('nav-items-wrapper', theme)}>
                 {navItems.map(item => (
-                  <Link key={item.text} href={item.url}>
+                  <Link passHref key={item.text} href={item.url}>
                     <button
                       className={clsx('nav-item', item.url === router.route ? 'current-page' : '')}
                       onClick={onLinkClick}
@@ -235,7 +235,7 @@ export default function Navigation({ isProductApp }) {
             <div className={clsx('nav-mobile-panel', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
               <div className="mobile-items-wrapper">
                 {navItems.map((item, index) => (
-                  <Link href={item.url} key={`mobile-${item.text}`}>
+                  <Link passHref href={item.url} key={`mobile-${item.text}`}>
                     <button className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
                       {item.text}
                     </button>
@@ -253,7 +253,11 @@ export default function Navigation({ isProductApp }) {
                         {Array.isArray(account.links) && (
                           <div className="nav-sublinks-wrapper">
                             {account.links.map(link => (
-                              <Link href={link.url === 'request-more-storage' ? mailTo : link.url} key={link.text}>
+                              <Link
+                                passHref
+                                href={link.url === 'request-more-storage' ? mailTo : link.url}
+                                key={link.text}
+                              >
                                 <button
                                   className="nav-sublink"
                                   onClick={onLinkClick}

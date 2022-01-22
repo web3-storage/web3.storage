@@ -222,7 +222,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
                 PinStatus.QUEUING
               }
               storageProviders={item.deals.map((deal, indx, deals) => (
-                <span>
+                <span key={deal.dealId}>
                   <a
                     className="underline"
                     href={`https://filfox.info/en/deal/${deal.dealId}`}
