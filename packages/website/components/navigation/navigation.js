@@ -51,17 +51,20 @@ export default function Navigation({ isProductApp }) {
     setMenuOpen(!isMenuOpen);
   };
 
-  const onLinkClick = useCallback(e => {
-    trackCustomLinkClick(events.LINK_CLICK_NAVBAR, e.currentTarget);
-    if (isMenuOpen) {
-      setMenuOpen(false)
-    }
-  }, [isMenuOpen]);
+  const onLinkClick = useCallback(
+    e => {
+      trackCustomLinkClick(events.LINK_CLICK_NAVBAR, e.currentTarget);
+      if (isMenuOpen) {
+        setMenuOpen(false);
+      }
+    },
+    [isMenuOpen]
+  );
 
   const login = useCallback(() => {
     router.push('/login');
     if (isMenuOpen) {
-      setMenuOpen(false)
+      setMenuOpen(false);
     }
   }, [router, isMenuOpen]);
 
@@ -77,38 +80,44 @@ export default function Navigation({ isProductApp }) {
   const getAccountMenu = () => {
     if (account && account.links) {
       if (isProductApp) {
-        const labelText = account.text.toLowerCase()
+        const labelText = account.text.toLowerCase();
         return (
           <div className="nav-account-button">
             <button
-              className={ clsx('nav-item', account.url === router.route ? 'current-page' : '')}
+              className={clsx('nav-item', account.url === router.route ? 'current-page' : '')}
               onClick={onLinkClick}
-              onKeyPress={e => handleKeySelect(e, account.url)}>
+              onKeyPress={e => handleKeySelect(e, account.url)}
+            >
               {account.text}
             </button>
             <div className="nav-account-dropdown">
               <div className="label">{labelText[0].toUpperCase() + labelText.substring(1)}</div>
               {account.links.map(link => (
                 <Link href={link.url === 'request-more-storage' ? mailTo : link.url} key={link.text}>
-                  <button className="nav-dropdown-link" onClick={onLinkClick} onKeyPress={e => handleKeySelect(e, link.url)}>
+                  <button
+                    className="nav-dropdown-link"
+                    onClick={onLinkClick}
+                    onKeyPress={e => handleKeySelect(e, link.url)}
+                  >
                     {link.text}
                   </button>
                 </Link>
               ))}
             </div>
           </div>
-        )
+        );
       }
       return (
         <Link key={account.text} href={account.url}>
           <button
-            className={ clsx('nav-item', account.url === router.route ? 'current-page' : '')}
+            className={clsx('nav-item', account.url === router.route ? 'current-page' : '')}
             onClick={onLinkClick}
-            onKeyPress={e => handleKeySelect(e, account.url)}>
+            onKeyPress={e => handleKeySelect(e, account.url)}
+          >
             {account.text}
           </button>
         </Link>
-      )
+      );
     }
     return null;
   };
@@ -161,9 +170,7 @@ export default function Navigation({ isProductApp }) {
 
   // ================================================ Main Template [Navigation]
   return (
-    <section
-      id="section_navigation"
-      className={clsx('section-navigation', theme, isProductApp ? 'clear-bg' : '')}>
+    <section id="section_navigation" className={clsx('section-navigation', theme, isProductApp ? 'clear-bg' : '')}>
       <div className="grid-noGutter">
         <div className="col">
           <nav id="navigation">
@@ -196,15 +203,16 @@ export default function Navigation({ isProductApp }) {
                 {navItems.map(item => (
                   <Link key={item.text} href={item.url}>
                     <button
-                      className={ clsx('nav-item', item.url === router.route ? 'current-page' : '')}
+                      className={clsx('nav-item', item.url === router.route ? 'current-page' : '')}
                       onClick={onLinkClick}
-                      onKeyPress={e => handleKeySelect(e, item.url)}>
+                      onKeyPress={e => handleKeySelect(e, item.url)}
+                    >
                       {item.text}
                     </button>
                   </Link>
                 ))}
 
-                { isLoggedIn && getAccountMenu() }
+                {isLoggedIn && getAccountMenu()}
 
                 {isLoadingUser
                   ? loadingButton(auth.login, buttonTheme)
@@ -226,7 +234,6 @@ export default function Navigation({ isProductApp }) {
 
             <div className={clsx('nav-mobile-panel', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
               <div className="mobile-items-wrapper">
-
                 {navItems.map((item, index) => (
                   <Link href={item.url} key={`mobile-${item.text}`}>
                     <button className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
@@ -235,22 +242,18 @@ export default function Navigation({ isProductApp }) {
                   </Link>
                 ))}
 
-                { isLoggedIn && account &&
+                {isLoggedIn && account && (
                   <ZeroAccordion multiple={false}>
                     <ZeroAccordionSection disabled={!Array.isArray(account.links)}>
                       <ZeroAccordionSection.Header>
-                        <div className="nav-item-heading">
-                          {account.text}
-                        </div>
+                        <div className="nav-item-heading">{account.text}</div>
                       </ZeroAccordionSection.Header>
 
                       <ZeroAccordionSection.Content>
                         {Array.isArray(account.links) && (
                           <div className="nav-sublinks-wrapper">
                             {account.links.map(link => (
-                              <Link
-                                href={link.url === 'request-more-storage' ? mailTo : link.url}
-                                key={link.text}>
+                              <Link href={link.url === 'request-more-storage' ? mailTo : link.url} key={link.text}>
                                 <button
                                   className="nav-sublink"
                                   onClick={onLinkClick}
@@ -265,7 +268,7 @@ export default function Navigation({ isProductApp }) {
                       </ZeroAccordionSection.Content>
                     </ZeroAccordionSection>
                   </ZeroAccordion>
-                }
+                )}
 
                 {isLoadingUser
                   ? loadingButton(auth.login, 'light')

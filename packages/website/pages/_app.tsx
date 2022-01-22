@@ -19,15 +19,12 @@ const App = ({ Component, pageProps }: any) => {
   const marketingRoutes = ['/', '/tiers', '/about', '/faq', '/terms'];
   const productApp = productRoutes.includes(pathname);
 
-  
   return (
     <AppProviders authorizationProps={{ ...pageProps }}>
       <Metadata {...pageProps} />
       <RestrictedRoute {...pageProps}>
-        <div
-          id="master-container"
-          className={clsx(productApp ? 'product-app' : 'marketing-site')}>
-          {productApp && <Corkscrew className="corkscrew-background"/>}
+        <div id="master-container" className={clsx(productApp ? 'product-app' : 'marketing-site')}>
+          {productApp && <Corkscrew className="corkscrew-background" />}
           <MessageBanner />
           <Navigation isProductApp={productApp} />
           <Component {...pageProps} />

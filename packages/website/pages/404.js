@@ -10,7 +10,7 @@ const blocks = GeneralPageData.error_404.sections;
 
 const Custom404 = () => (
   <main className="page-404">
-    <Navigation isProductApp={false}/>
+    <Navigation isProductApp={false} />
 
     <BlockBuilder id="error_section-1" subsections={blocks} />
 
