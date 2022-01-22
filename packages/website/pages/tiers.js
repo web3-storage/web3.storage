@@ -21,6 +21,10 @@ export default function Home() {
 
 export function getStaticProps() {
   return {
-    props: {},
+    props: {
+      title: 'Tiers - Web3 Storage - Simple file storage with IPFS & Filecoin',
+      description:
+        'Web3.Storage is a service that grows with your needs, and offers a significant free tier with no strings attached.',
+    },
   };
 }
