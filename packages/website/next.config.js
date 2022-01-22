@@ -9,7 +9,8 @@ const nextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
   images: {
-    loader: "default",
+    loader: 'imgix',
+    path: 'https://web3-storage.imgix.net/',
   },
   webpack: function(config, options) {
     config.resolve.alias = {
