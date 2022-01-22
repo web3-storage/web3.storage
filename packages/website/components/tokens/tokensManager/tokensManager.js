@@ -92,7 +92,7 @@ const TokensManager = () => {
           <Loading className={'tokens-manager-loading-spinner'} />
         ) : !tokens.length ? (
           <span className="tokens-manager-upload-cta">
-            You don&apos;t have any API Tokens created yet.{'\u00A0'}
+            You don&#39;t have any API Tokens created yet.{'\u00A0'}
             <Button
               className={clsx(isCreating && 'isDisabled')}
               href="/tokens?create=true"

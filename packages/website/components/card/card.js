@@ -87,7 +87,7 @@ export default function Card({ card, cardsGroup = [], index = 0 }) {
       case 'B':
         return <code className="code-feature" dangerouslySetInnerHTML={{ __html: obj.feature }}></code>;
       case 'C':
-        return <Image src={obj.image} width="64" height="64" alt={obj.image} />;
+        return <Image alt="" src={obj.image} width="64" height="64" />;
       case 'D':
         return renderExploreCards(obj);
       default:
