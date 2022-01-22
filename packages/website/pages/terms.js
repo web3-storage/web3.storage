@@ -30,3 +30,9 @@ export default function Home() {
     </>
   );
 }
+
+export function getStaticProps() {
+  return {
+    props: {},
+  };
+}
