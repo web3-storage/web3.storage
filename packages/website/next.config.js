@@ -9,7 +9,7 @@ const nextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
   images: {
-    loader: "default",
+    loader: 'custom',
   },
   webpack: function(config, options) {
     config.resolve.alias = {
