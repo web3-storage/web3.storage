@@ -19,14 +19,14 @@ const Metadata = ({
   <Head>
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta property="image" content="https://web3.storage/social-card.png" />
+    <meta property="image" content="/social-card-web3storage.jpg" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://web3.storage" />
-    <meta property="og:image" content="https://web3.storage/social-card.png" />
+    <meta property="og:image" content="/social-card-web3storage.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://web3.storage/social-card.png" />
+    <meta name="twitter:image" content="/social-card-web3storage.jpg" />
     <meta name="twitter:site" content="@protocollabs" />
     <meta name="twitter:creator" content="@protocollabs" />
   </Head>
