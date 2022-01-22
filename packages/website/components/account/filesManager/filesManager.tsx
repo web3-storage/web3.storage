@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import filesize from 'filesize';
 import React, { useCallback, useEffect, useState } from 'react';
+// @ts-ignore
 import { useRouter } from 'next/router';
 import { Upload } from 'web3.storage';
 
@@ -221,7 +222,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
                 PinStatus.QUEUING
               }
               storageProviders={item.deals.map((deal, indx, deals) => (
-                <span>
+                <span key={deal.dealId}>
                   <a
                     className="underline"
                     href={`https://filfox.info/en/deal/${deal.dealId}`}
@@ -234,8 +235,8 @@ const FilesManager = ({ className }: FilesManagerProps) => {
                 </span>
               ))}
               size={filesize(item.dagSize)}
-              // TODO: Remove hardcoded highlight when hooked up
-              highlight={{ target: 'name', text: keyword }}
+              // TODO: Remove hardcoded highlight when hooked up, resolve temporary type fix for array of strings
+              highlight={{ target: 'name', text: keyword?.toString() || '' }}
               numberOfPins={item.pins.length}
               isSelected={!!selectedFiles.find(fileSelected => fileSelected === item)}
             />
@@ -249,7 +250,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
           </button>
           <Pagination
             items={sortedFiles}
-            itemsPerPage={itemsPerPage}
+            itemsPerPage={itemsPerPage || 10}
             visiblePages={1}
             queryParam="page"
             onChange={setPaginatedFiles}
