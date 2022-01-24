@@ -12,7 +12,7 @@ import { trackCustomLinkClick, events } from 'lib/countly';
 
 // ====================================================================== Params
 /**
- * Navbar Component
+ * Footer Component
  *
  * @param {Object} props
  * @param {Boolean} props.isProductApp
