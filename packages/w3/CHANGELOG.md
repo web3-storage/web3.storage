@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.5.0](https://www.github.com/web3-storage/web3.storage/compare/w3-v2.4.2...w3-v2.5.0) (2022-01-19)
+
+
+### Features
+
+* w3 name CLI ([#878](https://www.github.com/web3-storage/web3.storage/issues/878)) ([3fc09db](https://www.github.com/web3-storage/web3.storage/commit/3fc09dba972af3577b2cbf4890621addda6fe863))
+
+
+### Changes
+
+* update licenses ([#831](https://www.github.com/web3-storage/web3.storage/issues/831)) ([8e081aa](https://www.github.com/web3-storage/web3.storage/commit/8e081aac2dd03dd5eb642bff9c2da867d61edd87))
+
 ### [2.4.2](https://www.github.com/web3-storage/web3.storage/compare/w3-v2.4.1...w3-v2.4.2) (2022-01-11)
 
 

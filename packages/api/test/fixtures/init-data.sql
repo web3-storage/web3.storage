@@ -92,14 +92,12 @@ VALUES
        ('Pinning', 'bafybeidrzt6t4k25qjeasydgi3fyh6ejos5x4d6tk2pdzxkb66bkomezy4', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
        ('Pinning', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00');
 
-      
-
-INSERT INTO psa_pin_request (auth_key_id, content_cid, source_cid, name, inserted_at, updated_at)
-VALUES (3, 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4', 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4', 'ReportDoc.pdf', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, 'bafybeig7yvw6a4uhio4pmg5gahyd2xumowkfljdukad7pmdsv5uk5zcseu', 'bafybeig7yvw6a4uhio4pmg5gahyd2xumowkfljdukad7pmdsv5uk5zcseu', 'reportdoc.pdf', '2021-01-01T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, 'bafybeia45bscvzxngto555xsel4gwoclb5fxd7zpxige7rl3maoleznswu', 'bafybeia45bscvzxngto555xsel4gwoclb5fxd7zpxige7rl3maoleznswu', 'FailedPinning.doc', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, 'bafybeidw7pc6nvm7u4rfhpctac4qgtpmwxapw4duugvsl3ppivvzibdlgy', 'bafybeidw7pc6nvm7u4rfhpctac4qgtpmwxapw4duugvsl3ppivvzibdlgy', 'Image.jpeg', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, 'bafybeidrzt6t4k25qjeasydgi3fyh6ejos5x4d6tk2pdzxkb66bkomezy4', 'bafybeidrzt6t4k25qjeasydgi3fyh6ejos5x4d6tk2pdzxkb66bkomezy4', 'Image.png', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (3, 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 'Image.jpg', '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (2, 'bafybeiaqu6ijhfhwzjipwesbqf4myz6uczyigahib5joqbo5jw2xmjczfa', 'bafybeiaqu6ijhfhwzjipwesbqf4myz6uczyigahib5joqbo5jw2xmjczfa', 'Document.md', '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
-       (2, 'bafybeidqts3rbwkprggjojbvcxy4jzpgzgcvs4a73y3gx2jjxphjeerbcy', 'bafybeidqts3rbwkprggjojbvcxy4jzpgzgcvs4a73y3gx2jjxphjeerbcy', 'README.md', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z');
+INSERT INTO psa_pin_request (auth_key_id, content_cid, source_cid, meta, name, inserted_at, updated_at)
+VALUES (3, 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4', 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4', null, 'ReportDoc.pdf', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, 'bafybeig7yvw6a4uhio4pmg5gahyd2xumowkfljdukad7pmdsv5uk5zcseu', 'bafybeig7yvw6a4uhio4pmg5gahyd2xumowkfljdukad7pmdsv5uk5zcseu', '{"app_id": "99986338-1113-4706-8302-4420da6158aa"}', 'reportdoc.pdf', '2021-01-01T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, 'bafybeia45bscvzxngto555xsel4gwoclb5fxd7zpxige7rl3maoleznswu', 'bafybeia45bscvzxngto555xsel4gwoclb5fxd7zpxige7rl3maoleznswu', null, 'FailedPinning.doc', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, 'bafybeidw7pc6nvm7u4rfhpctac4qgtpmwxapw4duugvsl3ppivvzibdlgy', 'bafybeidw7pc6nvm7u4rfhpctac4qgtpmwxapw4duugvsl3ppivvzibdlgy', null, 'Image.jpeg', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, 'bafybeidrzt6t4k25qjeasydgi3fyh6ejos5x4d6tk2pdzxkb66bkomezy4', 'bafybeidrzt6t4k25qjeasydgi3fyh6ejos5x4d6tk2pdzxkb66bkomezy4', null, 'Image.png', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (3, 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', null, 'Image.jpg', '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (2, 'bafybeiaqu6ijhfhwzjipwesbqf4myz6uczyigahib5joqbo5jw2xmjczfa', 'bafybeiaqu6ijhfhwzjipwesbqf4myz6uczyigahib5joqbo5jw2xmjczfa', null, 'Image.jpg', '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       (2, 'bafybeidqts3rbwkprggjojbvcxy4jzpgzgcvs4a73y3gx2jjxphjeerbcy', 'bafybeidqts3rbwkprggjojbvcxy4jzpgzgcvs4a73y3gx2jjxphjeerbcy', null, 'Image.jpg', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z');

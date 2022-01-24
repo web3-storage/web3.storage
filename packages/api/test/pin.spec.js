@@ -379,6 +379,7 @@ describe('Pinning APIs endpoints', () => {
 
     it('should receive pin data containing cid, name, origin, meta', async () => {
       const cid = 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
+      const meta = { app_id: '99986338-1113-4706-8302-4420da6158aa' }
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
         headers: {
@@ -388,12 +389,10 @@ describe('Pinning APIs endpoints', () => {
           cid,
           name: 'PreciousData.pdf',
           origins: [
-            '/ip4/203.0.113.142/tcp/4001/p2p/QmSourcePeerId',
-            '/ip4/203.0.113.114/udp/4001/quic/p2p/QmSourcePeerId'
+            '/ip6/2606:4700:60::6/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N',
+            '/ip4/172.65.0.13/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx4N'
           ],
-          meta: {
-            app_id: '99986338-1113-4706-8302-4420da6158aa'
-          }
+          meta
         })
       })
 
@@ -401,6 +400,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res.ok, 'Server response ok')
       const data = await res.json()
       assert.strictEqual(data.pin.cid, cid)
+      assert.deepStrictEqual(data.pin.meta, meta)
     })
 
     it('validates name', async () => {
@@ -505,6 +505,8 @@ describe('Pinning APIs endpoints', () => {
         },
         body: JSON.stringify({ cid })
       })).json()
+
+      console.log('--> PIN REQ: ', pinRequest)
     })
 
     it('returns unauthorized if no token', async () => {
@@ -553,7 +555,7 @@ describe('Pinning APIs endpoints', () => {
 
     it('returns not found if the request does not belong to the user token', async () => {
       const wrongToken = await getTestJWT()
-      const res = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+      const res = await fetch(new URL('pins/1', endpoint).toString(), {
         method: 'GET',
         headers: { Authorization: `Bearer ${wrongToken}` }
       })
@@ -563,7 +565,7 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('returns the pin request', async () => {
-      const requestId = 1
+      const requestId = '1'
       const res = await fetch(new URL(`pins/${requestId}`, endpoint).toString(), {
         method: 'GET',
         headers: {
@@ -572,13 +574,14 @@ describe('Pinning APIs endpoints', () => {
         }
       })
       const data = await res.json()
+      console.log(data)
 
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       assertCorrectPinResponse(data)
-      assert.deepEqual(data.requestId, requestId)
+      assert.strictEqual(data.requestId, '1')
       assert.strictEqual(data.status, 'pinned')
-      assert.strictEqual(data.pin.name, 'ReportDoc.pdf')
+      assert.strictEqual(data.pin.cid, 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4')
     })
 
     it('returns the pin request with specified name', async () => {
@@ -598,6 +601,26 @@ describe('Pinning APIs endpoints', () => {
       assertCorrectPinResponse(data)
       assert.strictEqual(data.requestId, requestId.toString())
       assert.strictEqual(data.pin.name, 'reportdoc.pdf')
+    })
+
+    it('returns the pin request with specified metadata', async () => {
+      const requestId = 2
+      const meta = { app_id: '99986338-1113-4706-8302-4420da6158aa' }
+
+      const res = await fetch(new URL(`pins/${requestId}`, endpoint).toString(), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      const data = await res.json()
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Server response is ok')
+      assertCorrectPinResponse(data)
+      assert.strictEqual(data.requestId, requestId.toString())
+      assert.deepStrictEqual(data.pin.meta, meta)
     })
   })
 
