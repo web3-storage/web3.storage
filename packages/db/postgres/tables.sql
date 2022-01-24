@@ -200,10 +200,17 @@ CREATE TABLE IF NOT EXISTS pin_sync_request
 
 CREATE INDEX IF NOT EXISTS pin_sync_request_pin_id_idx ON pin_sync_request (pin_id);
 
+
+-- Setting search_path to public scope for uuid function(s)
+SET search_path TO public;
+DROP extension IF EXISTS "uuid-ossp";
+CREATE extension "uuid-ossp" SCHEMA public;
+
 -- Tracks pinning requests from Pinning Service API
 CREATE TABLE IF NOT EXISTS psa_pin_request
 (
-  id              BIGSERIAL PRIMARY KEY,
+  -- TODO - Vlaidate UUID type is available
+  id              TEXT DEFAULT public.uuid_generate_v4() PRIMARY KEY,
   -- Points to auth key used to pin the content.
   auth_key_id     BIGINT                                                       NOT NULL REFERENCES public.auth_key (id),
   content_cid     TEXT                                                         NOT NULL REFERENCES content (cid),

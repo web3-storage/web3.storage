@@ -178,7 +178,8 @@ CREATE OR REPLACE FUNCTION create_psa_pin_request(data json) RETURNS TEXT
 AS
 $$
 DECLARE
-  inserted_pin_request_id BIGINT;
+-- TODO - Validate UUID type is available
+  inserted_pin_request_id TEXT;
 BEGIN
   -- Set timeout as imposed by heroku
   SET LOCAL statement_timeout = '30s';
@@ -206,6 +207,7 @@ BEGIN
 
   returning id into inserted_pin_request_id;
 
+-- TODO - Validate and use UUID type
   return (inserted_pin_request_id)::TEXT;
 END
 $$;
