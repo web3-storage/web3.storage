@@ -2,7 +2,7 @@ import { definitions } from './postgres/pg-rest-api-types'
 
 // User
 export type UpsertUserInput = {
-  id: definitions['user']['id'],
+  id?: definitions['user']['id'],
   name: definitions['user']['name'],
   picture?: definitions['user']['picture'],
   email: definitions['user']['email'],
@@ -62,7 +62,7 @@ export type AuthKeyItemOutput = {
 
 // Pin
 export type PinUpsertInput = {
-  id?: definitions['pin']['id']
+  id?: definitions['pin']['id'],
   status: definitions['pin']['status'],
   location: Location,
 }
@@ -129,6 +129,16 @@ export type Deal = {
 }
 
 // Content
+export type ContentInput = {
+  cid: definitions['content']['cid']
+  dagSize: definitions['content']['dag_size']
+  pins: Array<{
+    status: definitions['pin']['status']
+    updated: definitions['pin']['updated_at']
+    location: Location
+  }>
+}
+
 export type ContentItem = {
   cid: definitions['content']['cid']
   dagSize: definitions['content']['dag_size']
@@ -178,15 +188,7 @@ export type UploadItem = {
   name?: definitions['upload']['name']
   created?: definitions['upload']['inserted_at']
   updated?: definitions['upload']['updated_at']
-  content: {
-    cid: definitions['content']['cid']
-    dagSize: definitions['content']['dag_size']
-    pins: Array<{
-      status: definitions['pin']['status']
-      updated: definitions['pin']['updated_at']
-      location: Location
-    }>
-  }
+  content: ContentItem
 }
 
 export type UploadItemOutput = {
@@ -240,6 +242,81 @@ export type ListUploadsOptions = {
    * Sort order.
    */
   sortOrder?: 'Asc' | 'Desc'
+}
+
+
+// Pinninng
+
+// PinRequest
+export type PsaPinRequestUpsertInput = {
+  id?: string,
+  name?: definitions['psa_pin_request']['name'],
+  meta?: definitions['psa_pin_request']['meta'],
+  authKey: string,
+  sourceCid: definitions['psa_pin_request']['source_cid'],
+  contentCid: definitions['upload']['content_cid'],
+  dagSize?: definitions['content']['dag_size'],
+  pins: Array<PinUpsertInput>,
+  created?: definitions['upload']['inserted_at'],
+  updated?: definitions['upload']['updated_at'],
+}
+
+export type PsaPinRequestItem = PsaPinRequestUpsertInput & {
+  _id: string,
+  contentCid: definitions['psa_pin_request']['content_cid']
+  created: definitions['upload']['inserted_at']
+  updated: definitions['upload']['updated_at']
+  deleted?: definitions['upload']['deleted_at']
+  content: ContentItem
+}
+
+export type PsaPinRequestUpsertOutput = PsaPinRequestUpsertInput & {
+  _id: string,
+  contentCid: definitions['psa_pin_request']['content_cid']
+  created: definitions['psa_pin_request']['inserted_at']
+  updated: definitions['psa_pin_request']['updated_at']
+  deleted?: definitions['psa_pin_request']['deleted_at']
+  pins: Array<PinItemOutput>
+}
+
+export type ListPsaPinRequestOptions = {
+  /**
+   * Comma-separated list of CIDs to match
+   */
+  cid?: string[]
+  /**
+   * Name  to match
+   */
+  name?: string
+   /**
+   * Match (default: exact)
+   */
+  match?: "exact" | "iexact" | "partial" | "ipartial"
+  /**
+   * status  to match
+   */
+  status?: Array<definitions['pin']['status']>
+  /**
+   * Uploads created before a given timestamp.
+   */
+  before?: string
+  /**
+   * Uploads created after a given timestamp.
+   */
+  after?: string
+  /**
+   * Max records (default: 10).
+   */
+  limit?: number
+  /**
+   * TODO.
+   */
+  meta?: unknown,
+}
+
+export type ListPsaPinRequestResults = {
+  count: number,
+  results: Array<PsaPinRequestUpsertOutput>
 }
 
 export type NameItem = {

@@ -41,18 +41,19 @@ BEGIN
 END
 $$;
 
-CREATE OR REPLACE FUNCTION create_upload(data json) RETURNS TEXT
+
+-- Creates a content table, with relative pins and pin_requests
+CREATE OR REPLACE FUNCTION create_content(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile
     PARALLEL UNSAFE
 AS
 $$
 DECLARE
-  backup_url TEXT;
   pin json;
   pin_result_id BIGINT;
   pin_location_result_id BIGINT;
-  inserted_upload_id BIGINT;
+  inserted_cid TEXT;
 BEGIN
   -- Set timeout as imposed by heroku
   SET LOCAL statement_timeout = '30s';
@@ -63,7 +64,8 @@ BEGIN
           (data ->> 'dag_size')::BIGINT,
           (data ->> 'updated_at')::timestamptz,
           (data ->> 'inserted_at')::timestamptz)
-    ON CONFLICT ( cid ) DO NOTHING;
+    ON CONFLICT ( cid ) DO NOTHING
+  returning cid into inserted_cid;
   
   -- Add to pin_request table if new
   insert into pin_request (content_cid, attempts, updated_at, inserted_at)
@@ -107,6 +109,29 @@ BEGIN
         END IF;
   end loop;
 
+  return (inserted_cid);
+END
+$$;
+
+-- Creates an upload with relative content, pins, pin_requests and backups.
+CREATE OR REPLACE FUNCTION create_upload(data json) RETURNS TEXT
+    LANGUAGE plpgsql
+    volatile
+    PARALLEL UNSAFE
+AS
+$$
+DECLARE
+  backup_url TEXT;
+  pin json;
+  pin_result_id BIGINT;
+  pin_location_result_id BIGINT;
+  inserted_upload_id BIGINT;
+BEGIN
+  -- Set timeout as imposed by heroku
+  SET LOCAL statement_timeout = '30s';
+
+  PERFORM create_content(data);
+
   insert into upload (user_id,
                       auth_key_id,
                       content_cid,
@@ -142,6 +167,48 @@ BEGIN
   end loop;
 
   return (inserted_upload_id)::TEXT;
+END
+$$;
+
+-- Creates a pin request with relative content, pins, pin_requests and backups.
+CREATE OR REPLACE FUNCTION create_psa_pin_request(data json) RETURNS TEXT
+    LANGUAGE plpgsql
+    volatile
+    PARALLEL UNSAFE
+AS
+$$
+DECLARE
+-- TODO - Validate UUID type is available
+  inserted_pin_request_id TEXT;
+BEGIN
+  -- Set timeout as imposed by heroku
+  SET LOCAL statement_timeout = '30s';
+
+  PERFORM create_content(data);
+
+  insert into psa_pin_request (
+                      auth_key_id,
+                      content_cid,
+                      source_cid,
+                      name,
+                      meta,
+                      inserted_at,
+                      updated_at
+                    )
+  values (
+            (data ->> 'auth_key_id')::BIGINT,
+            data ->> 'content_cid',
+            data ->> 'source_cid',
+            data ->> 'name',
+            (data ->> 'meta')::jsonb,
+            (data ->> 'inserted_at')::timestamptz,
+            (data ->> 'updated_at')::timestamptz
+          )
+
+  returning id into inserted_pin_request_id;
+
+-- TODO - Validate and use UUID type
+  return (inserted_pin_request_id)::TEXT;
 END
 $$;
 

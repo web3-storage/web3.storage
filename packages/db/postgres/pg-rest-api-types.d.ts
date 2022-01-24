@@ -3,7 +3,7 @@
  * Do not make direct changes to the file.
  */
 
-export interface paths {
+ export interface paths {
   "/": {
     get: {
       responses: {
@@ -906,6 +906,117 @@ export interface paths {
       };
     };
   };
+  "/psa_pin_request": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.psa_pin_request.id"];
+          auth_key_id?: parameters["rowFilter.psa_pin_request.auth_key_id"];
+          content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
+          source_cid?: parameters["rowFilter.psa_pin_request.source_cid"];
+          name?: parameters["rowFilter.psa_pin_request.name"];
+          meta?: parameters["rowFilter.psa_pin_request.meta"];
+          deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
+          inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.psa_pin_request.updated_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["psa_pin_request"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** psa_pin_request */
+          psa_pin_request?: definitions["psa_pin_request"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.psa_pin_request.id"];
+          auth_key_id?: parameters["rowFilter.psa_pin_request.auth_key_id"];
+          content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
+          source_cid?: parameters["rowFilter.psa_pin_request.source_cid"];
+          name?: parameters["rowFilter.psa_pin_request.name"];
+          meta?: parameters["rowFilter.psa_pin_request.meta"];
+          deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
+          inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.psa_pin_request.updated_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.psa_pin_request.id"];
+          auth_key_id?: parameters["rowFilter.psa_pin_request.auth_key_id"];
+          content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
+          source_cid?: parameters["rowFilter.psa_pin_request.source_cid"];
+          name?: parameters["rowFilter.psa_pin_request.name"];
+          meta?: parameters["rowFilter.psa_pin_request.meta"];
+          deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
+          inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.psa_pin_request.updated_at"];
+        };
+        body: {
+          /** psa_pin_request */
+          psa_pin_request?: definitions["psa_pin_request"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/upload": {
     get: {
       parameters: {
@@ -1165,6 +1276,29 @@ export interface paths {
       };
     };
   };
+
+
+  // feat/pinning-api
+  "/rpc/create_content": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+
   "/rpc/user_auth_keys_list": {
     post: {
       parameters: {
@@ -1184,6 +1318,7 @@ export interface paths {
       };
     };
   };
+
   "/rpc/pin_from_status_total": {
     post: {
       parameters: {
@@ -1334,6 +1469,25 @@ export interface paths {
       };
     };
   };
+  "/rpc/create_psa_pin_request": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/user_used_storage": {
     post: {
       parameters: {
@@ -1448,18 +1602,18 @@ export interface definitions {
      */
     id: number;
     status:
-      | "Undefined"
-      | "ClusterError"
-      | "PinError"
-      | "UnpinError"
-      | "Pinned"
-      | "Pinning"
-      | "Unpinning"
-      | "Unpinned"
-      | "Remote"
-      | "PinQueued"
-      | "UnpinQueued"
-      | "Sharded";
+    | "Undefined"
+    | "ClusterError"
+    | "PinError"
+    | "UnpinError"
+    | "Pinned"
+    | "Pinning"
+    | "Unpinning"
+    | "Unpinned"
+    | "Remote"
+    | "PinQueued"
+    | "UnpinQueued"
+    | "Sharded";
     /**
      * Note:
      * This is a Foreign Key to `content.cid`.<fk table='content' column='cid'/>
@@ -1510,6 +1664,29 @@ export interface definitions {
      */
     pin_id: number;
     inserted_at: string;
+  };
+  psa_pin_request: {
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: string; // Create custom UUID v4 type
+    /**
+     * Note:
+     * This is a Foreign Key to `auth_key.id`.<fk table='auth_key' column='id'/>
+     */
+    auth_key_id: number;
+    /**
+     * Note:
+     * This is a Foreign Key to `content.cid`.<fk table='content' column='cid'/>
+     */
+    content_cid: string;
+    source_cid: string;
+    name?: string;
+    meta?: Record<string, string>
+    deleted_at?: string;
+    inserted_at: string;
+    updated_at: string;
   };
   upload: {
     /**
@@ -1641,6 +1818,17 @@ export interface parameters {
   "rowFilter.pin_sync_request.id": string;
   "rowFilter.pin_sync_request.pin_id": string;
   "rowFilter.pin_sync_request.inserted_at": string;
+  /** psa_pin_request */
+  "body.psa_pin_request": definitions["psa_pin_request"];
+  "rowFilter.psa_pin_request.id": string;
+  "rowFilter.psa_pin_request.auth_key_id": string;
+  "rowFilter.psa_pin_request.content_cid": string;
+  "rowFilter.psa_pin_request.source_cid": string;
+  "rowFilter.psa_pin_request.name": string;
+  "rowFilter.psa_pin_request.meta": Record<string, string>;
+  "rowFilter.psa_pin_request.deleted_at": string;
+  "rowFilter.psa_pin_request.inserted_at": string;
+  "rowFilter.psa_pin_request.updated_at": string;
   /** upload */
   "body.upload": definitions["upload"];
   "rowFilter.upload.id": string;
@@ -1666,6 +1854,6 @@ export interface parameters {
   "rowFilter.user.updated_at": string;
 }
 
-export interface operations {}
+export interface operations { }
 
-export interface external {}
+export interface external { }

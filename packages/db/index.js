@@ -1,6 +1,6 @@
 import { PostgrestClient } from '@supabase/postgrest-js'
 
-import { normalizeUpload, normalizeContent, normalizePins, normalizeDeals } from './utils.js'
+import { normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest } from './utils.js'
 import { DBError } from './errors.js'
 import {
   getUserMetrics,
@@ -19,6 +19,20 @@ const uploadQuery = `
         updated:updated_at,
         content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region)))
       `
+
+const psaPinRequestTableName = 'psa_pin_request'
+const pinRequestSelect = `
+  _id:id::text,
+  sourceCid:source_cid,
+  contentCid:content_cid,
+  authKey:auth_key_id::text,
+  name,
+  meta,
+  deleted:deleted_at,
+  created:inserted_at,
+  updated:updated_at,
+  content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, region)))  `
+
 /**
  * @typedef {import('./postgres/pg-rest-api-types').definitions} definitions
  * @typedef {import('@supabase/postgrest-js').PostgrestError} PostgrestError
@@ -349,10 +363,10 @@ export class DBClient {
    *
    * @param {string} cid
    * @param {import('./db-client-types').PinUpsertInput} pin
-   * @return {Promise<number>}
+   * @return {Promise<string>}
    */
   async upsertPin (cid, pin) {
-    /** @type {{ data: number, error: PostgrestError }} */
+    /** @type {{ data: string, error: PostgrestError }} */
     const { data: pinId, error } = await this._client.rpc('upsert_pin', {
       data: {
         content_cid: cid,
@@ -558,7 +572,7 @@ export class DBClient {
    * @return {Promise<Record<string, import('./db-client-types').Deal[]>>}
    */
   async getDealsForCids (cids = []) {
-    /** @type {{ data: Array<import('../db-client-types').Deal>, error: PostgrestError }} */
+    /** @type {{ data: Array<import('./db-client-types').Deal>, error: PostgrestError }} */
     const { data, error } = await this._client
       .rpc('find_deals_by_content_cids', {
         cids
@@ -744,6 +758,169 @@ export class DBClient {
         return res.total
       default:
         throw new Error('unknown metric requested')
+    }
+  }
+
+  /**
+   * Creates a Pin Request.
+   *
+   * @param {import('./db-client-types').PsaPinRequestUpsertInput} pinRequestData
+   * @return {Promise<import('./db-client-types').PsaPinRequestUpsertOutput>}
+   */
+  async createPsaPinRequest (pinRequestData) {
+    const now = new Date().toISOString()
+
+    /** @type {{ data: string, error: PostgrestError }} */
+    const { data: pinRequestId, error } = await this._client.rpc('create_psa_pin_request', {
+      data: {
+        auth_key_id: pinRequestData.authKey,
+        content_cid: pinRequestData.contentCid,
+        source_cid: pinRequestData.sourceCid,
+        name: pinRequestData.name,
+        meta: pinRequestData.meta,
+        dag_size: pinRequestData.dagSize,
+        inserted_at: pinRequestData.created || now,
+        updated_at: pinRequestData.updated || now,
+        pins: pinRequestData.pins.map(pin => ({
+          status: pin.status,
+          location: {
+            peer_id: pin.location.peerId,
+            peer_name: pin.location.peerName,
+            region: pin.location.region
+          }
+        }))
+      }
+    }).single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    // TODO: this second request could be avoided by returning the right data
+    // from create_psa_pin_request remote procedure. (But to keep this DRY we need to refactor
+    // this a bit)
+    return await this.getPsaPinRequest(pinRequestData.authKey, pinRequestId)
+  }
+
+  /**
+   * Get a Pin Request by id
+   *
+   * @param {string} authKey
+   * @param {number} pinRequestId
+   * @return {Promise<import('./db-client-types').PsaPinRequestUpsertOutput>}
+   */
+  async getPsaPinRequest (authKey, pinRequestId) {
+    /** @type {{data: import('./db-client-types').PsaPinRequestItem, error: PostgrestError }} */
+    const { data, error } = await this._client
+      .from(psaPinRequestTableName)
+      .select(pinRequestSelect)
+      .match({ auth_key_id: authKey, id: pinRequestId })
+      .is('deleted_at', null)
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return normalizePsaPinRequest(data)
+  }
+
+  /**
+   * Get a filtered list of pin requests for a user
+   *
+   * @param {string} authKey
+   * @param {import('./db-client-types').ListPsaPinRequestOptions} opts
+   * @return {Promise<import('./db-client-types').ListPsaPinRequestResults> }> }
+   */
+  async listPsaPinRequests (authKey, opts = {}) {
+    const match = opts?.match || 'exact'
+    const limit = opts?.limit || 10
+
+    let query = this._client
+      .from(psaPinRequestTableName)
+      .select(pinRequestSelect)
+      .eq('auth_key_id', authKey)
+      .order('inserted_at', { ascending: false })
+
+    if (opts.status) {
+      query = query.in('content.pins.status', opts.status)
+    }
+
+    if (opts.cid) {
+      query = query.in('source_cid', opts.cid)
+    }
+
+    if (opts.name && match === 'exact') {
+      query = query.like('name', `${opts.name}`)
+    }
+
+    if (opts.name && match === 'iexact') {
+      query = query.ilike('name', `${opts.name}`)
+    }
+
+    if (opts.name && match === 'partial') {
+      query = query.like('name', `%${opts.name}%`)
+    }
+
+    if (opts.name && match === 'ipartial') {
+      query = query.ilike('name', `%${opts.name}%`)
+    }
+
+    if (opts.before) {
+      query = query.lte('inserted_at', opts.before)
+    }
+
+    if (opts.after) {
+      query = query.gte('inserted_at', opts.after)
+    }
+
+    // TODO(https://github.com/web3-storage/web3.storage/issues/798): filter by meta is missing
+
+    /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, error: Error }} */
+    const { data, error } = (await query)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    const count = data.length
+
+    // TODO(https://github.com/web3-storage/web3.storage/issues/804): Not limiting the query might cause
+    // performance issues if a user created lots of requests with a token. We should improve this.
+    const pinRequests = data.slice(0, limit)
+    const pins = pinRequests.map(pinRequest => normalizePsaPinRequest(pinRequest))
+
+    return {
+      count,
+      results: pins
+    }
+  }
+
+  /**
+   * Delete a user PA pin request.
+   *
+   * @param {number} requestId
+   * @param {string} authKey
+   */
+  async deletePsaPinRequest (requestId, authKey) {
+    const date = new Date().toISOString()
+    /** @type {{ data: import('./db-client-types').PsaPinRequestItem, error: PostgrestError }} */
+    const { data, error } = await this._client
+      .from(psaPinRequestTableName)
+      .update({
+        deleted_at: date,
+        updated_at: date
+      })
+      .match({ auth_key_id: authKey, id: requestId })
+      .filter('deleted_at', 'is', null)
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return {
+      _id: data.id
     }
   }
 

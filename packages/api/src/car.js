@@ -10,7 +10,7 @@ import * as pb from '@ipld/dag-pb'
 import retry from 'p-retry'
 import { GATEWAY, LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
-import { toPinStatusEnum } from './utils/pin.js'
+import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/normalize-cid.js'
 
 /**
@@ -19,12 +19,6 @@ import { normalizeCid } from './utils/normalize-cid.js'
 
 const decoders = [pb, raw, cbor]
 
-// Duration between status check polls in ms.
-const PIN_STATUS_CHECK_INTERVAL = 5000
-// Max time in ms to spend polling for an OK status.
-const MAX_PIN_STATUS_CHECK_TIME = 30000
-// Pin statuses considered OK.
-const PIN_OK_STATUS = ['Pinned', 'Pinning', 'PinQueued']
 // Times to retry the transaction after the first failure.
 const CREATE_UPLOAD_RETRIES = 4
 // Time in ms before starting the first retry.
@@ -171,25 +165,12 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   // Keep querying Cluster until one of the nodes reports something other than
   // Unpinned i.e. PinQueued or Pinning or Pinned.
   if (!pins.some(p => PIN_OK_STATUS.includes(p.status))) {
-    tasks.push(async () => {
-      const start = Date.now()
-      while (Date.now() - start > MAX_PIN_STATUS_CHECK_TIME) {
-        await new Promise(resolve => setTimeout(resolve, PIN_STATUS_CHECK_INTERVAL))
-        const { peerMap } = await env.cluster.status(cid)
-        const pins = toPins(peerMap)
-        if (!pins.length) { // should not happen
-          throw new Error('not pinning on any node')
-        }
-
-        const okPins = pins.filter(p => PIN_OK_STATUS.includes(p.status))
-        if (!okPins.length) continue
-
-        for (const pin of okPins) {
-          await env.db.upsertPin(normalizedCid, pin)
-        }
-        return
-      }
-    })
+    tasks.push(waitAndUpdateOkPins.bind(
+      null,
+      normalizeCid,
+      env.cluster,
+      env.db)
+    )
   }
 
   if (ctx.waitUntil) {
@@ -235,12 +216,7 @@ async function addToCluster (car, env) {
     // will be done async by bitswap instead.
     local: car.size > LOCAL_ADD_THRESHOLD
   })
-
-  const { peerMap } = await env.cluster.status(cid)
-  const pins = toPins(peerMap)
-  if (!pins.length) { // should not happen
-    throw new Error('not pinning on any node')
-  }
+  const pins = await getPins(cid, env.cluster)
 
   return { cid, pins }
 }
@@ -349,14 +325,4 @@ function cumulativeSize (pbNodeBytes, pbNode) {
   // It's metadata, that could be missing or deliberately set to an incorrect value.
   // This logic is the same as used by go/js-ipfs to display the cumulative size of a dag-pb dag.
   return pbNodeBytes.byteLength + pbNode.Links.reduce((acc, curr) => acc + (curr.Tsize || 0), 0)
-}
-
-/**
- * @param {import('@nftstorage/ipfs-cluster').StatusResponse['peerMap']} peerMap
- */
-function toPins (peerMap) {
-  return Object.entries(peerMap).map(([peerId, { peerName, status }]) => ({
-    status: toPinStatusEnum(status),
-    location: { peerId, peerName }
-  }))
 }
