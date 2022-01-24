@@ -9,6 +9,9 @@ $footerLogoWidth: 2.25rem;
   padding-top: 4.875rem;
   position: relative;
   z-index: 10;
+  &.clear-bg {
+    background-color: unset;
+  }
 }
 
 #site-footer-section {

@@ -2,14 +2,23 @@
 import { useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import clsx from 'clsx';
 
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Button from '../button/button';
 import Squiggle from '../../assets/illustrations/squiggle.js';
 import GeneralPageData from '../../content/pages/general.json';
 import { trackCustomLinkClick, events } from 'lib/countly';
+
+// ====================================================================== Params
+/**
+ * Navbar Component
+ *
+ * @param {Object} props
+ * @param {Boolean} props.isProductApp
+ */
 // ===================================================================== Exports
-export default function Footer() {
+export default function Footer({ isProductApp }) {
   const router = useRouter();
   const contact = GeneralPageData.footer.contact;
   const resources = GeneralPageData.footer.resources;
@@ -40,7 +49,7 @@ export default function Footer() {
 
   // ========================================================= Template [Footer]
   return (
-    <footer id="site-footer">
+    <footer id="site-footer" className={clsx(isProductApp ? 'clear-bg' : '')}>
       <section id="site-footer-section">
         <Squiggle id="footer_squiggle" />
 
