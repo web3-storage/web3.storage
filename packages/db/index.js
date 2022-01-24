@@ -263,8 +263,8 @@ export class DBClient {
    */
   async deleteUpload (userId, cid) {
     const now = new Date().toISOString()
-    /** @type {{ data: import('./db-client-types').UploadItem, error: PostgrestError }} */
-    const { data, error } = await this._client
+    /** @type {{ data: import('./db-client-types').UploadItem, error: PostgrestError, status: number }} */
+    const { data, error, status } = await this._client
       .from('upload')
       .update({
         deleted_at: now,
@@ -277,8 +277,12 @@ export class DBClient {
       .is('deleted_at', null)
       .single()
 
+    if (status === 406 || !data) {
+      return
+    }
+
     if (error) {
-      return undefined
+      throw new DBError(error)
     }
 
     return {
