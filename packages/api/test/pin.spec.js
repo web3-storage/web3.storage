@@ -478,23 +478,6 @@ describe('Pinning APIs endpoints', () => {
       assert.deepEqual(res.status, 401)
     })
 
-    it('requires a string as requestId', async () => {
-      const res = await fetch(new URL('pins/NotAValidId', endpoint).toString(), {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-
-      assert(res, 'Server responded')
-      assert(!res.ok, 'Server returns an error')
-      const data = await res.json()
-      const error = data.error
-      assert.strictEqual(error.reason, ERROR_STATUS)
-      assert.strictEqual(error.details, INVALID_REQUEST_ID)
-    })
-
     it('returns not found if the request does not exists', async () => {
       const pinThatDoesNotExists = 100
       const res = await fetch(new URL(`pins/${pinThatDoesNotExists}`, endpoint).toString(), {
@@ -538,7 +521,7 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('returns the pin request with specified name', async () => {
-      const requestId = 2
+      const requestId = 'bebd5f62-1381-4124-93a1-1e4eeed52635'
 
       const res = await fetch(new URL(`pins/${requestId}`, endpoint).toString(), {
         method: 'GET',
@@ -557,7 +540,7 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('returns the pin request with specified metadata', async () => {
-      const requestId = 2
+      const requestId = 'bebd5f62-1381-4124-93a1-1e4eeed52635'
       const meta = { app_id: '99986338-1113-4706-8302-4420da6158aa' }
 
       const res = await fetch(new URL(`pins/${requestId}`, endpoint).toString(), {
@@ -624,7 +607,7 @@ describe('Pinning APIs endpoints', () => {
 
   describe('DELETE /pins/:requestId', () => {
     it('fails to delete if there is no user token', async () => {
-      const res = await fetch(new URL('pins/1', endpoint).toString(), {
+      const res = await fetch(new URL('pins/ab62cf3c-c98d-494b-a756-b3a3fb6ddcab', endpoint).toString(), {
         method: 'DELETE'
       })
 
@@ -633,24 +616,8 @@ describe('Pinning APIs endpoints', () => {
       assert.deepEqual(res.status, 401)
     })
 
-    it('requires a number as string as requestId', async () => {
-      const res = await fetch(new URL('pins/NotAValidId', endpoint).toString(), {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-
-      assert(res, 'Server responded')
-      assert(!res.ok, 'Server returns an error')
-      const data = await res.json()
-      const error = data.error
-      assert.strictEqual(error.reason, ERROR_STATUS)
-      assert.strictEqual(error.details, INVALID_REQUEST_ID)
-    })
-
     it('returns not found if the request does not exists', async () => {
-      const pinThatDoesNotExists = 100
+      const pinThatDoesNotExists = 'idThatDoesNotExists'
       const res = await fetch(new URL(`pins/${pinThatDoesNotExists}`, endpoint).toString(), {
         method: 'DELETE',
         headers: {
@@ -695,7 +662,7 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('returns the pin request id that has been deleted', async () => {
-      const requestId = 1
+      const requestId = '5c7e7885-7f68-462d-bdfb-3f0abfb367b5'
       const res = await fetch(new URL(`pins/${requestId}`, endpoint).toString(), {
         method: 'DELETE',
         headers: {
