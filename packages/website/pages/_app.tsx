@@ -2,7 +2,6 @@ import '../styles/global.scss';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 
-import Corkscrew from '../assets/illustrations/corkscrew';
 import Metadata from 'components/general/metadata';
 import RestrictedRoute from 'components/general/restrictedRoute';
 import AppProviders from 'components/general/appProviders';
@@ -24,11 +23,11 @@ const App = ({ Component, pageProps }: any) => {
       <Metadata {...pageProps} />
       <RestrictedRoute {...pageProps}>
         <div id="master-container" className={clsx(productApp ? 'product-app' : 'marketing-site')}>
-          {productApp && <Corkscrew className="corkscrew-background" />}
+          {productApp && <div className="corkscrew-background"></div>}
           <MessageBanner />
           <Navigation isProductApp={productApp} />
           <Component {...pageProps} />
-          <Footer />
+          <Footer isProductApp={productApp} />
         </div>
       </RestrictedRoute>
     </AppProviders>

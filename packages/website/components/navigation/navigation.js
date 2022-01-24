@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 // @ts-ignore
 import { useAuthorization } from 'components/contexts/authorizationContext';
+// @ts-ignore
 import ZeroAccordion from 'ZeroComponents/accordion/accordion';
 import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
 import { trackCustomLinkClick, events, ui } from 'lib/countly';
