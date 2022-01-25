@@ -300,7 +300,8 @@ describe('Pinning APIs endpoints', () => {
         }
       })
       assert(!res.ok)
-      assert.strictEqual(res.status, (new PinningUnauthorizedError()).status)
+      const data = await res.json()
+      assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
   })
 
@@ -488,7 +489,8 @@ describe('Pinning APIs endpoints', () => {
       })
 
       assert(!res.ok)
-      assert.strictEqual(res.status, (new PinningUnauthorizedError()).status)
+      const data = await res.json()
+      assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
   })
 
@@ -614,7 +616,8 @@ describe('Pinning APIs endpoints', () => {
       })
 
       assert(!res.ok)
-      assert.strictEqual(res.status, (new PinningUnauthorizedError()).status)
+      const data = await res.json()
+      assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
   })
 
@@ -746,7 +749,8 @@ describe('Pinning APIs endpoints', () => {
         }
       })
       assert(!res.ok)
-      assert.strictEqual(res.status, (new PinningUnauthorizedError()).status)
+      const data = await res.json()
+      assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
   })
 
@@ -836,7 +840,8 @@ describe('Pinning APIs endpoints', () => {
       })
 
       assert(!res.ok)
-      assert.strictEqual(res.status, (new PinningUnauthorizedError()).status)
+      const data = await res.json()
+      assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
   })
 })

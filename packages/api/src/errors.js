@@ -27,7 +27,7 @@ export class PinningUnauthorizedError extends HTTPError {
     this.code = PinningUnauthorizedError.CODE
   }
 }
-PinningUnauthorizedError.CODE = 'ERROR_PINNING_NOT_AUTHORIZED'
+PinningUnauthorizedError.CODE = 'ERROR_PINNING_UNAUTHORIZED'
 
 export class TokenNotFoundError extends HTTPError {
   constructor (msg = 'API token no longer valid') {
