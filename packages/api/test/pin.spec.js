@@ -490,14 +490,12 @@ describe('Pinning APIs endpoints', () => {
   })
 
   describe('GET /pins/:requestId', () => {
-    let pinRequest
-
     before(async () => {
       // Create token
       token = await getTestJWT('test-upload', 'test-upload')
 
       const cid = 'bafybeihy6bymmfcdjdrkhaha2srphnhrewimtkdxdmcama2dpgvpyx4efu'
-      pinRequest = await (await fetch(new URL('pins', endpoint).toString(), {
+      await (await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`
