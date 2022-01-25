@@ -251,7 +251,7 @@ describe('Pin Request', () => {
           name: '',
           date: [2020, 9, 1]
         }, {
-          name: 'Bear',
+          name: 'toBeDeleted',
           date: [2020, 10, 1]
         }
       ]
@@ -381,6 +381,14 @@ describe('Pin Request', () => {
       })
 
       assert.strictEqual(pins.length, 11)
+    })
+
+    it('unlists deleted pins', async () => {
+      const { results: prs } = await client.listPsaPinRequests(authKeyPinList, { limit: 20 })
+      assert.strictEqual(prs.length, 11)
+      await client.deletePsaPinRequest(createdPinningRequests[10]._id, authKeyPinList)
+      const { results: res } = await client.listPsaPinRequests(authKeyPinList)
+      assert.strictEqual(res.length, 10)
     })
   })
 

@@ -840,6 +840,7 @@ export class DBClient {
       .from(psaPinRequestTableName)
       .select(pinRequestSelect)
       .eq('auth_key_id', authKey)
+      .is('deleted_at', null)
       .order('inserted_at', { ascending: false })
 
     if (opts.status) {
