@@ -2,7 +2,7 @@
 import { Router } from 'itty-router'
 import { errorHandler } from './error-handler.js'
 import { addCorsHeaders, withCorsHeaders, corsOptions } from './cors.js'
-import { withApiOrMagicToken, withMagicToken, withPinningAuthorised } from './auth.js'
+import { withApiOrMagicToken, withMagicToken, withPinningAuthorized } from './auth.js'
 import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
@@ -27,7 +27,7 @@ const auth = {
   '🤲': handler => withCorsHeaders(handler),
   '🔒': handler => withCorsHeaders(withApiOrMagicToken(handler)),
   '👮': handler => withCorsHeaders(withMagicToken(handler)),
-  '📌': handler => auth['🔒'](withPinningAuthorised(handler))
+  '📌': handler => auth['🔒'](withPinningAuthorized(handler))
 }
 
 const mode = {

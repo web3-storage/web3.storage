@@ -247,7 +247,7 @@ CREATE TABLE IF NOT EXISTS name
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS pinning_authorisation
+CREATE TABLE IF NOT EXISTS pinning_authorization
 (
   id              BIGSERIAL PRIMARY KEY,
   -- Points to user allowed to pin content.

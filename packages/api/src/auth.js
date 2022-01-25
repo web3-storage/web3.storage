@@ -1,7 +1,7 @@
 import * as JWT from './utils/jwt.js'
 import {
   UserNotFoundError,
-  PinningNotAuthorisedError,
+  PinningUnauthorizedError,
   TokenNotFoundError,
   UnrecognisedTokenError,
   NoTokenError,
@@ -71,18 +71,18 @@ export function withApiOrMagicToken (handler) {
 
 /**
  * Middleware: verify that the authenticated request is for a user who is
- * authorised to pin.
+ * authorized to pin.
  *
  * @param {import('itty-router').RouteHandler} handler
  * @returns {import('itty-router').RouteHandler}
  */
-export function withPinningAuthorised (handler) {
+export function withPinningAuthorized (handler) {
   return async (request, env, ctx) => {
-    const authorised = await env.db.isPinningAuthorised(request.auth.user._id)
-    if (authorised) {
+    const authorized = await env.db.isPinningAuthorized(request.auth.user._id)
+    if (authorized) {
       return handler(request, env, ctx)
     }
-    throw new PinningNotAuthorisedError()
+    throw new PinningUnauthorizedError()
   }
 }
 

@@ -81,10 +81,10 @@ VALUES (
   1669394359626000000
 );
 
--- user 'test-pinning' is authorised
-INSERT INTO pinning_authorisation (user_id)
+-- user 'test-pinning' is authorized
+INSERT INTO pinning_authorization (user_id)
 VALUES (4);
-INSERT INTO pinning_authorisation (user_id)
+INSERT INTO pinning_authorization (user_id)
 VALUES (5);
 
 INSERT INTO content (cid)
