@@ -190,10 +190,10 @@
 #pricing_hero-coil {
   position: absolute;
   width: 7.25rem;
-  left: 35%;
-  top: calc(-3rem - $navigationHeight);
+  left: calc(50% - #{math.div($containerWidth, 2)} + 12rem);
+  top: calc(-3.25rem - $navigationHeight);
   transform: rotate(17deg);
-  @include mini {
+  @include small {
     display: none;
   }
 }

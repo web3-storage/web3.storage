@@ -42,6 +42,13 @@
     @include fontWeight_Regular;
     line-height: leading(25, 15);
   }
+
+  .title,
+  .description {
+    max-width: 16.25rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 // ///////////////////////////////////////////////// Card [Type B] -> Code Cards

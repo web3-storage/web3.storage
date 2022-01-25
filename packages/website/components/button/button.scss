@@ -8,6 +8,7 @@
   letter-spacing: 0.03em;
   text-transform: uppercase;
   line-height: 1;
+  height: 2.1875rem;
   white-space: nowrap;
   box-sizing: border-box;
   transition: 250ms ease;
@@ -18,6 +19,7 @@
 
   button {
     background: transparent;
+    box-sizing: border-box;
     border: none;
     width: 100%;
     height: 1.9375rem;
@@ -29,7 +31,6 @@
     line-height: inherit;
     letter-spacing: inherit;
     transition: inherit;
-    box-sizing: border-box;
 
     &:active,
     &:hover,

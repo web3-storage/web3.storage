@@ -1,29 +1,30 @@
 // ===================================================================== Imports
+import { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import clsx from 'clsx';
 
 import { getVersion } from 'lib/api';
 import { getStatusPageSummary } from 'lib/statuspage-api';
+import CloseIcon from '../../assets/icons/close.js';
 import GeneralPageData from '../../content/pages/general.json';
 
 // ===================================================================== Exports
 export default function MessageBanner() {
+  const [messageBannerWasClicked, setMessageBannerWasClicked] = useState(false);
   const bannerPrompt = GeneralPageData.message_banner.content;
   const maintenceAlert = GeneralPageData.message_banner.maintenceAlert;
-  let messageBannerWasClicked = false;
+  let link = GeneralPageData.message_banner.url;
   let maintenanceMessage = '';
   let bannerContent = bannerPrompt;
 
-  if (typeof window !== 'undefined') {
-    const oldMessage = localStorage.getItem('web3StorageBannerMessage');
-    const newMessage = bannerPrompt !== oldMessage;
-    if (oldMessage) {
-      messageBannerWasClicked = true;
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const oldMessage = localStorage.getItem('web3StorageBannerMessage');
+      if (bannerPrompt === oldMessage) {
+        setMessageBannerWasClicked(true);
+      }
     }
-    if (newMessage) {
-      messageBannerWasClicked = false;
-    }
-  }
+  }, [bannerPrompt]);
 
   const { data: statusPageData, error: statusPageError } = useQuery('get-statuspage-summary', () =>
     getStatusPageSummary()
@@ -61,28 +62,45 @@ export default function MessageBanner() {
     if (typeof window !== 'undefined') {
       localStorage.setItem('web3StorageBannerMessage', message);
     }
+    setMessageBannerWasClicked(true);
   };
 
-  const showMessageBanner = !messageBannerWasClicked || maintenanceMessage;
-
   return (
-    <section id="section_message-banner">
-      {showMessageBanner && (
-        <div className="grid-noGutter">
-          <div className="col">
-            <div className="message-banner-container">
-              <div
-                className={clsx('message-banner-content', maintenanceMessage ? 'banner-alert' : '')}
-                dangerouslySetInnerHTML={{ __html: bannerContent }}
-                onClick={() => messageBannerClick(bannerPrompt)}
-                onKeyPress={() => messageBannerClick(bannerPrompt)}
-                role="button"
-                tabIndex={0}
-              ></div>
-            </div>
+    <section
+      id="section_message-banner"
+      className={clsx(!messageBannerWasClicked || maintenanceMessage ? 'show-message-banner' : '')}
+    >
+      <div className="grid-noGutter">
+        <div className="col">
+          <div className="message-banner-container">
+            <a
+              href={link}
+              target="_blank"
+              className={clsx(
+                'message-banner-content',
+                maintenanceMessage ? 'banner-alert' : '',
+                'message-banner-transition'
+              )}
+              dangerouslySetInnerHTML={{ __html: bannerContent }}
+              onClick={() => messageBannerClick(bannerPrompt)}
+              onKeyPress={() => messageBannerClick(bannerPrompt)}
+              rel="noreferrer"
+            ></a>
           </div>
         </div>
-      )}
+      </div>
+
+      <button
+        className={clsx(
+          'message-banner-close-button',
+          'message-banner-transition',
+          maintenanceMessage ? 'hide-banner-close' : ''
+        )}
+        onClick={() => messageBannerClick(bannerPrompt)}
+        onKeyPress={() => messageBannerClick(bannerPrompt)}
+      >
+        <CloseIcon />
+      </button>
     </section>
   );
 }

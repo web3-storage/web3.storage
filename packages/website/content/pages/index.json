@@ -149,7 +149,7 @@
           {
             "type": "custom",
             "cols": {
-              "num": "col-5_sm-5_mi-8_ti-12",
+              "num": "col-4_md-5_sm-5_mi-8_ti-12",
               "push_left": "off-0_sm-1_mi-1_ti-0"
             },
             "customizations": [

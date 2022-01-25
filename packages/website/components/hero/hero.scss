@@ -103,9 +103,13 @@
 
 #index_hero-helix {
   width: 4.125rem;
-  left: 37%;
+  left: calc(50% - #{math.div($containerWidth, 2)} + 14rem);
   top: -1 * $navigationHeight;
-  transform: rotate(-90deg);
+  transform: translateY(-1rem) rotate(-90deg);
+  @include medium {
+    left: calc(50% - 10rem);
+    transform: translateY(-2rem) rotate(-90deg);
+  }
   @include mini {
     display: none;
   }
