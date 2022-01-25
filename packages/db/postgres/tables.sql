@@ -98,6 +98,8 @@ BEGIN
       'Blob',
       -- A multi file upload using a multipart request.
       'Multipart'
+      -- Note: "Remote" is reserved by dagcargo to identify PSA pin request
+      -- "uploads" and cannot be used here!
     );
   END IF;
 END$$;
