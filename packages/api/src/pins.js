@@ -401,9 +401,6 @@ function getPinStatus (pinRequest) {
     pin: {
       cid: pinRequest.sourceCid,
       ...pinRequest
-      // name: pinRequest.name,
-      // origins: pinRequest.origins,
-      // meta: pinRequest.meta
     },
     // TODO(https://github.com/web3-storage/web3.storage/issues/792)
     delegates: []
