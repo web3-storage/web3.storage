@@ -164,14 +164,14 @@ export async function pinPost (request, env, ctx) {
   const requestId = request.params ? request.params.requestId : null
 
   if (requestId) {
-    if (typeof requestId !== 'string' || !(/^\d+$/.test(requestId))) {
+    if (typeof requestId !== 'string') {
       return new JSONResponse(
         { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
         { status: ERROR_CODE }
       )
     }
 
-    return replacePin(pinData, parseInt(requestId, 10), authToken._id, env, ctx)
+    return replacePin(pinData, requestId, authToken._id, env, ctx)
   }
 
   return createPin(normalizedCid, pinData, authToken._id, env, ctx)
@@ -238,8 +238,7 @@ async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 export async function pinGet (request, env, ctx) {
-  // Ensure requestId only contains digits
-  if (!(/^\d+$/.test(request.params.requestId))) {
+  if (typeof request.params.requestId !== 'string') {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
       { status: ERROR_CODE }
@@ -247,13 +246,12 @@ export async function pinGet (request, env, ctx) {
   }
 
   const { authToken } = request.auth
-  const requestId = parseInt(request.params.requestId, 10)
 
   /** @type { import('../../db/db-client-types.js').PsaPinRequestUpsertOutput } */
   let pinRequest
 
   try {
-    pinRequest = await env.db.getPsaPinRequest(authToken._id, requestId)
+    pinRequest = await env.db.getPsaPinRequest(authToken._id, request.params.requestId)
   } catch (e) {
     console.error(e)
     // TODO catch different exceptions
@@ -437,7 +435,7 @@ function getPinStatus (pinRequest) {
  * @param {import('./index').Ctx} ctx
  */
 export async function pinDelete (request, env, ctx) {
-  let requestId = request.params.requestId
+  const requestId = request.params.requestId
   // Don't delete pin requests that don't belong to the user
   const { authToken } = request.auth
 
@@ -448,14 +446,12 @@ export async function pinDelete (request, env, ctx) {
     )
   }
 
-  if (typeof requestId !== 'string' || !(/^\d+$/.test(requestId))) {
+  if (typeof requestId !== 'string') {
     return new JSONResponse(
       { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
       { status: ERROR_CODE }
     )
   }
-
-  requestId = parseInt(requestId, 10)
 
   try {
     // Update deleted_at (and updated_at) timestamp for the pin request.
@@ -472,7 +468,7 @@ export async function pinDelete (request, env, ctx) {
 
 /**
  * @param {Object} newPinData
- * @param {number} requestId
+ * @param {string} requestId
  * @param {string} authTokenId
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
