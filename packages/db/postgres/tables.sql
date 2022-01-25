@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS content
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+CREATE INDEX IF NOT EXISTS content_inserted_at_idx ON content (inserted_at);
 CREATE INDEX IF NOT EXISTS content_updated_at_idx ON content (updated_at);
 -- TODO: Sync with @ribasushi as we can start using this as the primary key
 CREATE UNIQUE INDEX content_cid_with_size_idx ON content (cid) INCLUDE (dag_size);
@@ -128,12 +129,10 @@ CREATE TABLE IF NOT EXISTS pin
   UNIQUE (content_cid, pin_location_id)
 );
 
-CREATE INDEX IF NOT EXISTS pin_content_cid_idx ON pin (content_cid);
 CREATE INDEX IF NOT EXISTS pin_location_id_idx ON pin (pin_location_id);
 CREATE INDEX IF NOT EXISTS pin_updated_at_idx ON pin (updated_at);
 CREATE INDEX IF NOT EXISTS pin_status_idx ON pin (status);
-CREATE INDEX IF NOT EXISTS pin_composite_pinned_at_idx ON pin (content_cid, updated_at) WHERE status = 'Pinned';
-
+CREATE INDEX IF NOT EXISTS pin_composite_updated_at_and_content_cid_idx ON pin (updated_at, content_cid);
 
 -- An upload created by a user.
 CREATE TABLE IF NOT EXISTS upload
@@ -200,10 +199,16 @@ CREATE TABLE IF NOT EXISTS pin_sync_request
 
 CREATE INDEX IF NOT EXISTS pin_sync_request_pin_id_idx ON pin_sync_request (pin_id);
 
+-- Setting search_path to public scope for uuid function(s)
+SET search_path TO public;
+DROP extension IF EXISTS "uuid-ossp";
+CREATE extension "uuid-ossp" SCHEMA public;
+
 -- Tracks pinning requests from Pinning Service API
 CREATE TABLE IF NOT EXISTS psa_pin_request
 (
-  id              BIGSERIAL PRIMARY KEY,
+  -- TODO - Vlaidate UUID type is available
+  id              TEXT DEFAULT public.uuid_generate_v4() PRIMARY KEY,
   -- Points to auth key used to pin the content.
   auth_key_id     BIGINT                                                       NOT NULL REFERENCES public.auth_key (id),
   content_cid     TEXT                                                         NOT NULL REFERENCES content (cid),

@@ -43,7 +43,7 @@ export class DBClient {
   renameUpload (userId: number, cid: string, name: string): Promise<{ name: string }>
   deleteUpload (userId: number, cid: string): Promise<{ _id: number }>
   getStatus (cid: string): Promise<ContentItemOutput>
-  getBackups(uploadId: number): Promise<Array<BackupOutput>>
+  getBackups (uploadId: number): Promise<Array<BackupOutput>>
   upsertPin (cid: string, pin: PinUpsertInput): Promise<number>
   upsertPins (pins: Array<PinUpsertInput>): Promise<void>
   getPins (cid: string): Promise<Array<PinItemOutput>>
@@ -58,9 +58,9 @@ export class DBClient {
   getKey (issuer: string, secret: string): Promise<AuthKey>
   listKeys (userId: number): Promise<Array<AuthKeyItemOutput>>
   createPsaPinRequest (pinRequest: PsaPinRequestUpsertInput): Promise<PsaPinRequestUpsertOutput>
-  getPsaPinRequest (authKey: string, pinRequestId: number) : Promise<PsaPinRequestUpsertOutput>
-  listPsaPinRequests(authKey: string, opts?: ListPsaPinRequestOptions ) : Promise<ListPsaPinRequestResults>
-  deletePsaPinRequest (pinRequestId: number, authKey: string) : Promise<PsaPinRequestItem>
+  getPsaPinRequest (authKey: string, pinRequestId: string) : Promise<PsaPinRequestUpsertOutput>
+  listPsaPinRequests (authKey: string, opts?: ListPsaPinRequestOptions ) : Promise<ListPsaPinRequestResults>
+  deletePsaPinRequest (pinRequestId: string, authKey: string) : Promise<PsaPinRequestItem>
   createContent (content: ContentInput, opt?: {updatePinRequests?: boolean}) : Promise<string>
   deleteKey (id: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>

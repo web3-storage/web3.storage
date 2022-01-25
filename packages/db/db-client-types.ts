@@ -134,6 +134,7 @@ export type ContentInput = {
   dagSize: definitions['content']['dag_size']
   pins: Array<{
     status: definitions['pin']['status']
+    updated: definitions['pin']['updated_at']
     location: Location
   }>
 }

@@ -383,10 +383,10 @@ export class DBClient {
    *
    * @param {string} cid
    * @param {import('./db-client-types').PinUpsertInput} pin
-   * @return {Promise<number>}
+   * @return {Promise<string>}
    */
   async upsertPin (cid, pin) {
-    /** @type {{ data: number, error: PostgrestError }} */
+    /** @type {{ data: string, error: PostgrestError }} */
     const { data: pinId, error } = await this._client.rpc('upsert_pin', {
       data: {
         content_cid: cid,
@@ -823,7 +823,7 @@ export class DBClient {
     // TODO: this second request could be avoided by returning the right data
     // from create_psa_pin_request remote procedure. (But to keep this DRY we need to refactor
     // this a bit)
-    return await this.getPsaPinRequest(pinRequestData.authKey, parseInt(pinRequestId, 10))
+    return await this.getPsaPinRequest(pinRequestData.authKey, pinRequestId)
   }
 
   /**
