@@ -116,7 +116,7 @@ describe('Pin Request', () => {
       assert.strictEqual(savedPinRequest._id, aPinRequestOutput._id)
     })
 
-    it.only('returns the right object', async () => {
+    it('returns the right object', async () => {
       assertCorrectPinRequestOutputTypes(aPinRequestOutput)
       assert.deepStrictEqual(aPinRequestOutput.meta, meta, 'metadata is not the one provided')
       assert.deepStrictEqual(aPinRequestOutput.origins, origins, 'origins is not the one provided')
