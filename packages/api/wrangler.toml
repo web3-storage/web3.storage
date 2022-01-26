@@ -75,6 +75,11 @@ workers_dev = true
 account_id = "21ba9b25d0fe2fbefc6c9f17e1b90d86"
 vars = { CLUSTER_API_URL = "https://paolo-cluster-api-web3-storage.loca.lt/", PG_REST_URL = "https://paolo-postgres-api-web3-storage.loca.lt/", ENV = "dev" }
 
+[env.garyhomewood]
+workers_dev = true
+account_id = "e7a8a523464d26ce98e3747575b366b6"
+vars = { CLUSTER_API_URL = "https://garyhomewood-cluster-api-web3-storage.loca.lt/", PG_REST_URL = "https://garyhomewood-postgres-api-web3-storage.loca.lt/", ENV = "dev" }
+
 [env.leslieoa]
 workers_dev = true
 account_id = "ede80955a038a6911c9b03ae4343fee4"

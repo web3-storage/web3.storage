@@ -69,22 +69,23 @@ npm run stop:clean
 
 ### 4. Alter DB schema
 
-In order for your changes to the DB schema to be reflected in Postgres you need to run an `openapi-typescript` script:
+1. Add the schema changes to `db/postgres` sql files as needed.
 
-```bash
-node scripts/cli.js db-sql
-```
+2. Apply the changes to the Postgres DB using:
 
-`pg-rest-api-types.ts` stores the types of the various DB tables and their columns.
-In order to get them updated after a change to your db structure you can run:
+    ```bash
+    node scripts/cli.js --reset db-sql
+    ```
 
-```bash
-node scripts/cli.js pg-rest-api-types
-```
+3. Run the following which uses `openapi-typescript` to update `pg-rest-api-types.ts`, the TypeScript interface version of the OpenAPI schema for the updated DB:
 
-Do not forget to update `db-client-types.ts` to reflect your changes to the schema.
+    ```bash
+    node scripts/cli.js pg-rest-api-types
+    ```
 
-If you're creating a new table, type or view please remember to update `reset.sql` as well.
+4. Add the schema changes to `db-client-types.ts` as well.
+
+5. If the schema changes include creating a new table, type or view update `reset.sql` as well.
 
 ## DB package CLI
 The `scripts/cli.js` to run some common operations on the database.

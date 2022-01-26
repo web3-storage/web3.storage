@@ -137,6 +137,26 @@ export class DBClient {
   }
 
   /**
+   * Check that a user is authorized to pin
+   *
+   * @param {number} userId
+   * @returns {Promise<boolean>}
+   */
+  async isPinningAuthorized (userId) {
+    const { error, count } = await this._client
+      .from('pinning_authorization')
+      .select('id', { count: 'exact' })
+      .eq('user_id', userId)
+      .filter('deleted_at', 'is', null)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return count > 0
+  }
+
+  /**
    * Get used storage in bytes.
    *
    * @param {number} userId
@@ -660,13 +680,17 @@ export class DBClient {
    * @return {Promise<import('./db-client-types').AuthKey | undefined>}
    */
   async getKey (issuer, secret) {
-    /** @type {{ data, error: PostgrestError } */
+    /** @type {{ data, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
       .select(`
         _id:id::text,
         issuer,
-        keys:auth_key_user_id_fkey(_id:id::text, name,secret)
+        keys:auth_key_user_id_fkey(
+          _id:id::text,
+          name,
+          secret
+        )
       `)
       .match({
         issuer

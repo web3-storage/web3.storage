@@ -14,7 +14,7 @@ describe('POST /upload', () => {
     // expected CID for the above data
     const expectedCid = 'bafkreidvbhs33ighmljlvr7zbv2ywwzcmp5adtf4kqvlly67cy56bdtmve'
 
-    const res = await fetch(new URL('upload', endpoint), {
+    const res = await fetch(new URL('upload', endpoint).toString(), {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -44,7 +44,7 @@ describe('POST /upload', () => {
     // expected CID for the above data
     const expectedCid = 'bafkreidekh6xmx5iqumo63i2fipsdtjmpzj4liok7wzptv4tvmnj2ptu6u'
 
-    const res = await fetch(new URL('upload', endpoint), {
+    const res = await fetch(new URL('upload', endpoint).toString(), {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -66,7 +66,7 @@ describe('POST /upload', () => {
     // Create token
     const token = await getTestJWT('test-upload', 'test-upload')
 
-    const res = await fetch(new URL('upload', endpoint), {
+    const res = await fetch(new URL('upload', endpoint).toString(), {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,

@@ -20,6 +20,15 @@ export class UserNotFoundError extends HTTPError {
 }
 UserNotFoundError.CODE = 'ERROR_USER_NOT_FOUND'
 
+export class PinningUnauthorizedError extends HTTPError {
+  constructor (msg = 'Pinning not authorized for this user') {
+    super(msg, 403)
+    this.name = 'PinningUnauthorizedError'
+    this.code = PinningUnauthorizedError.CODE
+  }
+}
+PinningUnauthorizedError.CODE = 'ERROR_PINNING_UNAUTHORIZED'
+
 export class TokenNotFoundError extends HTTPError {
   constructor (msg = 'API token no longer valid') {
     super(msg, 401)

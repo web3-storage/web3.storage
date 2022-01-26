@@ -201,7 +201,6 @@ CREATE TABLE IF NOT EXISTS pin_sync_request
 
 CREATE INDEX IF NOT EXISTS pin_sync_request_pin_id_idx ON pin_sync_request (pin_id);
 
-
 -- Setting search_path to public scope for uuid function(s)
 SET search_path TO public;
 DROP extension IF EXISTS "uuid-ossp";
@@ -252,3 +251,12 @@ CREATE TABLE IF NOT EXISTS name
     inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS pinning_authorization
+(
+  id              BIGSERIAL PRIMARY KEY,
+  -- Points to user allowed to pin content.
+  user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  deleted_at      TIMESTAMP WITH TIME ZONE
+)

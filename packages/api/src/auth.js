@@ -1,6 +1,7 @@
 import * as JWT from './utils/jwt.js'
 import {
   UserNotFoundError,
+  PinningUnauthorizedError,
   TokenNotFoundError,
   UnrecognisedTokenError,
   NoTokenError,
@@ -69,10 +70,27 @@ export function withApiOrMagicToken (handler) {
 }
 
 /**
+ * Middleware: verify that the authenticated request is for a user who is
+ * authorized to pin.
+ *
+ * @param {import('itty-router').RouteHandler} handler
+ * @returns {import('itty-router').RouteHandler}
+ */
+export function withPinningAuthorized (handler) {
+  return async (request, env, ctx) => {
+    const authorized = await env.db.isPinningAuthorized(request.auth.user._id)
+    if (authorized) {
+      return handler(request, env, ctx)
+    }
+    throw new PinningUnauthorizedError()
+  }
+}
+
+/**
  * @param {string} token
- * @param {import('./env').Env}
+ * @param {import('./env').Env} env
  * @throws UserNotFoundError
- * @returns {import(./user).User | null }
+ * @returns {Promise<import('@web3-storage/db/db-client-types').UserOutput> | null }
  */
 async function tryMagicToken (token, env) {
   let issuer = null
