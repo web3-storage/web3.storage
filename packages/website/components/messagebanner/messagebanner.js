@@ -16,17 +16,14 @@ export default function MessageBanner() {
   let link = GeneralPageData.message_banner.url;
   let maintenanceMessage = '';
   let bannerContent = bannerPrompt;
-  let digest = false;
 
-  if (crypto.subtle) {
-    digest = async ({ algorithm = 'SHA-256', message }) => {
-      Array.prototype.map
-        .call(new Uint8Array(await crypto.subtle.digest(algorithm, new TextEncoder().encode(message))), x =>
-          ('0' + x.toString(16)).slice(-2)
-        )
-        .join('');
-    };
-  }
+  const digest = async ({ algorithm = 'SHA-256', message }) => {
+    Array.prototype.map
+      .call(new Uint8Array(await crypto.subtle.digest(algorithm, new TextEncoder().encode(message))), x =>
+        ('0' + x.toString(16)).slice(-2)
+      )
+      .join('');
+  };
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -76,7 +73,7 @@ export default function MessageBanner() {
   }
 
   const messageBannerClick = message => {
-    if (typeof window !== 'undefined' && digest) {
+    if (typeof window !== 'undefined' && crypto.subtle) {
       digest({ message: message }).then(result => {
         console.log(result);
       });
