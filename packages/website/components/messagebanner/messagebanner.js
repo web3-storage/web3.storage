@@ -20,8 +20,12 @@ export default function MessageBanner() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const oldMessage = localStorage.getItem('web3StorageBannerMessage');
-      if (bannerPrompt === oldMessage) {
-        setMessageBannerWasClicked(true);
+      const oldDate = localStorage.getItem('web3StorageBannerClickDate');
+      const elapsedTime = Date.now() - parseInt(oldDate);
+
+      if (bannerPrompt === oldMessage && elapsedTime < 604800000) {
+        console.log('banner clicked');
+        setMessageBannerWasClicked(false); // CHANGE BACK TO true
       }
     }
   }, [bannerPrompt]);
@@ -59,10 +63,23 @@ export default function MessageBanner() {
   }
 
   const messageBannerClick = message => {
+    if (crypto.subtle) {
+      const digest = async ({ algorithm = 'SHA-256', message }) =>
+        Array.prototype.map
+          .call(new Uint8Array(await crypto.subtle.digest(algorithm, new TextEncoder().encode(message))), x =>
+            ('0' + x.toString(16)).slice(-2)
+          )
+          .join('');
+
+      const hash = digest({ message: message });
+      console.log(hash);
+    }
+
     if (typeof window !== 'undefined') {
       localStorage.setItem('web3StorageBannerMessage', message);
+      localStorage.setItem('web3StorageBannerClickDate', Date.now());
     }
-    setMessageBannerWasClicked(true);
+    setMessageBannerWasClicked(false); // CHANGE BACK TO true
   };
 
   return (
