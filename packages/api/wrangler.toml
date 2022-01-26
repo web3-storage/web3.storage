@@ -10,7 +10,9 @@ type = "javascript"
 command = "npm run build"
 watch_dir = "src"
 [build.upload]
-format = "service-worker"
+format = "modules"
+dir = "dist"
+main = "index.mjs"
 # NOTE: Make sure the main field in your package.json references the Worker script you want to publish.
 
 # ---- Environment specific overrides below ! ----
