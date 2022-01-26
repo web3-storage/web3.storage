@@ -12,17 +12,20 @@ export default function CardListBlock({ block }) {
   const childrenLoaded = useRef([]);
   const direction = block.direction || 'row';
   const blockB = block.cards.every(card => card.type === 'B');
-  const targetClass = blockB ? 'height-standard-target' : '';
+  const blockF = block.cards.every(card => card.type === 'F');
+  const standardHeights = blockB || blockF;
+  const targetClass = standardHeights ? 'height-standard-target' : '';
 
   const setCardContentHeights = useCallback(() => {
+    const classname = blockB ? 'feature-wrapper' : 'title';
     standardizeSiblingHeights(`description ${targetClass}`, true);
-    standardizeSiblingHeights(`feature-wrapper ${targetClass}`, true);
-  }, [targetClass]);
+    standardizeSiblingHeights(`${classname} ${targetClass}`, true);
+  }, [targetClass, blockB]);
 
   const childCardLoaded = msg => {
     childrenLoaded.current.push(msg);
 
-    if (blockB && childrenLoaded.current.length === block.cards.length) {
+    if (standardHeights && childrenLoaded.current.length === block.cards.length) {
       setTimeout(() => {
         setCardContentHeights();
       }, 1000);
@@ -30,14 +33,14 @@ export default function CardListBlock({ block }) {
   };
 
   useEffect(() => {
-    if (blockB && childrenLoaded.current.length === block.cards.length) {
+    if (standardHeights && childrenLoaded.current.length === block.cards.length) {
       const resize = () => {
         setCardContentHeights();
       };
       window.addEventListener('resize', resize);
       return () => window.removeEventListener('resize', resize);
     }
-  }, [blockB, block.cards.length, setCardContentHeights]);
+  }, [standardHeights, block.cards.length, setCardContentHeights]);
 
   // ================================================================== Template
   return (

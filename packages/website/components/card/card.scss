@@ -405,3 +405,35 @@
     }
   }
 }
+
+// ////////////////////////////////////////////////// Card [Type F] -> FAQ Cards
+// -----------------------------------------------------------------------------
+.card.type__F {
+  position: relative;
+  z-index: 1;
+  padding: 0 0.5rem 1rem;
+  margin: 0 1.75rem;
+  .feature-wrapper {
+    display: none;
+  }
+  .label,
+  .title,
+  .description {
+    text-align: left;
+  }
+  .label {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    @include fontSize_Small;
+    @include fontWeight_Semibold;
+  }
+  .title {
+    margin-bottom: 0.5rem;
+    @include fontSize_Medium;
+    @include fontWeight_Semibold;
+  }
+  .description {
+    @include fontSize_Regular;
+    margin-bottom: 1.25rem;
+  }
+}
