@@ -77,8 +77,8 @@ export default function MessageBanner() {
 
       digest({ message: message }).then(result => {
         hash = result;
+        console.log(hash);
       });
-      console.log(hash);
     }
 
     if (typeof window !== 'undefined') {
