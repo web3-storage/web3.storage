@@ -62,6 +62,28 @@ export const getEffectivePinStatus = (pins) => {
   return 'failed'
 }
 
+const psaStatusesToDBStatusesMap = {
+  pinned: ['Pinned'],
+  queued: ['PinQueued'],
+  pinning: ['Pinning'],
+  failed: [
+    'ClusterError',
+    'PinError',
+    'Unpinned'
+  ]
+}
+
+/**
+ * Maps a pinning api status array to db status accepted by the DB
+ * @param {string[]} statuses
+ * @return {import('@web3-storage/db/postgres/pg-rest-api-types').definitions['pin']['status'][]}
+ */
+const psaStatusesToDBStatuses = (statuses) => {
+  return statuses.reduce((mappedStatuses, psaStatus) => {
+    return mappedStatuses.concat(psaStatusesToDBStatusesMap[psaStatus])
+  }, [])
+}
+
 // Error messages
 // TODO: Refactor errors
 export const ERROR_CODE = 400
@@ -182,6 +204,7 @@ async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
     authKey: authTokenId,
     meta: pinMeta,
     name: pinName,
+    origins,
     pins
   }
 
@@ -341,7 +364,7 @@ function parseSearchParams (params) {
 
   if (status) {
     const statuses = status.split(',')
-    const isValidStatus = status.every(v => STATUS_OPTIONS.includes(v))
+    const isValidStatus = statuses.every(v => STATUS_OPTIONS.includes(v))
 
     if (!isValidStatus) {
       return {
@@ -349,8 +372,7 @@ function parseSearchParams (params) {
         data: undefined
       }
     }
-    // TODO(https://github.com/web3-storage/web3.storage/issues/797): statuses need to be mapped to db statuses
-    opts.status = statuses
+    opts.statuses = psaStatusesToDBStatuses(statuses)
   }
 
   if (before) {
@@ -399,9 +421,7 @@ function getPinStatus (pinRequest) {
     created: pinRequest.created,
     pin: {
       cid: pinRequest.sourceCid,
-      name: pinRequest.name,
-      origins: [],
-      meta: pinRequest.meta
+      ...pinRequest
     },
     // TODO(https://github.com/web3-storage/web3.storage/issues/792)
     delegates: []

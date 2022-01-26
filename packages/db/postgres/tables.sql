@@ -98,6 +98,8 @@ BEGIN
       'Blob',
       -- A multi file upload using a multipart request.
       'Multipart'
+      -- Note: "Remote" is reserved by dagcargo to identify PSA pin request
+      -- "uploads" and cannot be used here!
     );
   END IF;
 END$$;
@@ -212,9 +214,12 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
   -- Points to auth key used to pin the content.
   auth_key_id     BIGINT                                                       NOT NULL REFERENCES public.auth_key (id),
   content_cid     TEXT                                                         NOT NULL REFERENCES content (cid),
-  -- The id of the content being requested, it could not exist on IPFS (typo, node offline etc)
+  -- The id of the content being requested, it could not exist on IPFS (typo, node offline etc).
   source_cid      TEXT NOT NULL,
   name            TEXT,
+  -- User provided multiaddrs of origins of this upload.
+  origins         jsonb,
+  -- Custom metadata provided by the user.
   meta            jsonb,
   deleted_at      TIMESTAMP WITH TIME ZONE,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,

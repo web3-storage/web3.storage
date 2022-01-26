@@ -59,6 +59,7 @@ describe('Pin Request', () => {
   ]
 
   const meta = { key: 'value' }
+  const origins = ['origin1', 'origin2']
 
   const normalizedCids = cids.map(cid => normalizeCid(cid))
 
@@ -100,6 +101,7 @@ describe('Pin Request', () => {
       sourceCid: cids[0],
       contentCid: normalizedCids[0],
       meta,
+      origins,
       pins,
       authKey
     }
@@ -114,9 +116,10 @@ describe('Pin Request', () => {
       assert.strictEqual(savedPinRequest._id, aPinRequestOutput._id)
     })
 
-    it('returns the right object', async () => {
+    it('returns the pin request with the expected meta, origins, cids, and auth key', async () => {
       assertCorrectPinRequestOutputTypes(aPinRequestOutput)
       assert.deepStrictEqual(aPinRequestOutput.meta, meta, 'metadata is not the one provided')
+      assert.deepStrictEqual(aPinRequestOutput.origins, origins, 'origins is not the one provided')
       assert.strictEqual(aPinRequestOutput.sourceCid, cids[0], 'sourceCid is not the one provided')
       assert.strictEqual(aPinRequestOutput.authKey, authKey, 'auth key is not the one provided')
       assert.strictEqual(aPinRequestOutput.contentCid, normalizedCids[0], 'contentCid is not the one provided')
@@ -183,78 +186,165 @@ describe('Pin Request', () => {
   })
 
   describe('Get Pins', () => {
-    const pins = [
-      {
-        status: 'Pinning',
-        location: {
-          peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
-          peerName: 'web3-storage-sv15',
-          region: 'region'
-        }
-      },
-      {
-        status: 'Pinning',
-        location: {
-          peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
-          peerName: 'web3-storage-sv16',
-          region: 'region'
-        }
-      }
-    ]
-    let pinRequestsInputs
-
     let userPinList
     let authKeyPinList
     let createdPinningRequests
-    let cidWithContent
-    let normalizeCidWithContent
 
     before(async () => {
       userPinList = await createUser(client)
-      authKeyPinList = await createUserAuthKey(client, userPinList._id)
-    })
+      authKeyPinList = await createUserAuthKey(client, parseInt(userPinList._id, 10))
+      let pins = [
+        {
+          status: 'Pinning',
+          location: {
+            peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
+            peerName: 'web3-storage-sv15',
+            region: 'region'
+          }
+        },
+        {
+          status: 'Pinning',
+          location: {
+            peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
+            peerName: 'web3-storage-sv16',
+            region: 'region'
+          }
+        }
+      ]
 
-    before(async () => {
-      cidWithContent = await randomCid()
-      normalizeCidWithContent = normalizeCid(cidWithContent)
-      await createUpload(client, userPinList._id, authKeyPinList, normalizeCidWithContent, { pins: pins })
-      pinRequestsInputs = [
+      const cidWithContent1 = await randomCid()
+      const normalizeCidWithContent1 = normalizeCid(cidWithContent1)
+      await createUpload(
+        client,
+        parseInt(userPinList._id, 10),
+        parseInt(authKeyPinList, 10),
+        normalizeCidWithContent1,
+        { pins }
+      )
+
+      pins = [
+        {
+          status: 'PinError',
+          location: {
+            peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
+            peerName: 'web3-storage-sv15',
+            region: 'region'
+          }
+        }
+      ]
+      const cidWithContent2 = await randomCid()
+      const normalizeCidWithContent2 = normalizeCid(cidWithContent1)
+      await createUpload(
+        client,
+        parseInt(userPinList._id, 10),
+        parseInt(authKeyPinList, 10),
+        normalizeCidWithContent2,
+        { pins }
+      )
+
+      pins = [
+        {
+          status: 'Pinned',
+          location: {
+            peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
+            peerName: 'web3-storage-sv15',
+            region: 'region'
+          }
+        }
+      ]
+      const cidWithContent3 = await randomCid()
+      const normalizeCidWithContent3 = normalizeCid(cidWithContent2)
+      await createUpload(
+        client,
+        parseInt(userPinList._id, 10),
+        parseInt(authKeyPinList, 10),
+        normalizeCidWithContent3,
+        { pins }
+      )
+
+      const pinRequestsInputs = [
         {
           name: 'horse',
           date: [2020, 0, 1],
-          sourceCid: cidWithContent,
-          cid: normalizeCidWithContent
+          sourceCid: cidWithContent1,
+          cid: normalizeCidWithContent1
         }, {
           name: 'capybara',
-          date: [2020, 1, 1]
-        }, {
+          date: [2020, 1, 1],
+          sourceCid: cidWithContent2,
+          cid: normalizeCidWithContent2
+        },
+        {
           name: 'Camel',
-          date: [2020, 2, 1]
-        }, {
+          date: [2020, 2, 1],
+          sourceCid: cidWithContent3,
+          cid: normalizeCidWithContent3
+        },
+        {
           name: 'Giant Panda Bear',
-          date: [2020, 3, 1]
-        }, {
+          date: [2020, 3, 1],
+          sourceCid: cidWithContent3,
+          cid: normalizeCidWithContent3
+        },
+        {
           name: 'giant Schnoodle',
-          date: [2020, 4, 1]
-        }, {
+          date: [2020, 4, 1],
+          sourceCid: cidWithContent3,
+          cid: normalizeCidWithContent3
+        },
+        {
           name: 'giant worm',
-          date: [2020, 5, 1]
-        }, {
+          date: [2020, 5, 1],
+          sourceCid: cidWithContent3,
+          cid: normalizeCidWithContent3
+        },
+        {
           name: 'Zonkey Schnoodle',
-          date: [2020, 6, 1]
-        }, {
+          date: [2020, 6, 1],
+          sourceCid: cidWithContent3,
+          cid: normalizeCidWithContent3
+        },
+        {
           name: 'Zorse',
-          date: [2020, 7, 1]
-        }, {
-          date: [2020, 8, 1]
-        }, {
+          date: [2020, 7, 1],
+          sourceCid: cidWithContent3,
+          cid: normalizeCidWithContent3
+        },
+        {
+          date: [2020, 8, 1],
+          sourceCid: cidWithContent3,
+          cid: normalizeCidWithContent3
+        },
+        {
           name: '',
-          date: [2020, 9, 1]
-        }, {
+          date: [2020, 9, 1],
+          sourceCid: cidWithContent3,
+          cid: normalizeCidWithContent3
+        },
+        {
           name: 'Bear',
+          date: [2020, 10, 1],
+          sourceCid: cidWithContent3,
+          cid: normalizeCidWithContent3
+        },
+        {
+          name: 'pin 1',
+          date: [2020, 10, 1],
+          sourceCid: cidWithContent3,
+          cid: normalizeCidWithContent3
+        },
+        {
+          name: 'pin 2',
+          date: [2020, 10, 1],
+          sourceCid: cidWithContent3,
+          cid: normalizeCidWithContent3
+        },
+        {
+          name: 'toBeDeleted',
           date: [2020, 10, 1]
         }
       ]
+
       createdPinningRequests = await Promise.all(pinRequestsInputs.map(async (item) => {
         const sourceCid = item.sourceCid || await randomCid()
         const normalizedCid = item.cid || normalizeCid(sourceCid)
@@ -294,14 +384,14 @@ describe('Pin Request', () => {
       assert(sorted)
     })
 
-    it.skip('filters items by provided status', async () => {
-      // TODO(https://github.com/web3-storage/web3.storage/issues/797): status filtering not yet implemented
-      const { results: prs } = await client.listPsaPinRequests(authKeyPinList, {
-        status: ['Pinning']
+    it('filters items by provided status', async () => {
+      const { results: pins } = await client.listPsaPinRequests(authKeyPinList, {
+        statuses: ['Pinning', 'PinError']
       })
 
-      assert.strictEqual(prs.length, 1)
-      assert.strictEqual(createdPinningRequests._id, prs[0]._id)
+      assert.strictEqual(pins.length, 2)
+      assert(pins.map(p => p.name).includes('horse'))
+      assert(pins.map(p => p.name).includes('capybara'))
     })
 
     it('filters items by provided cid', async () => {
@@ -380,7 +470,15 @@ describe('Pin Request', () => {
         limit: 20
       })
 
-      assert.strictEqual(pins.length, 11)
+      assert.strictEqual(pins.length, 14)
+    })
+
+    it('unlists deleted pins', async () => {
+      const { results: prs } = await client.listPsaPinRequests(authKeyPinList, { limit: 20 })
+      assert.strictEqual(prs.length, 14)
+      await client.deletePsaPinRequest(createdPinningRequests[10]._id, authKeyPinList)
+      const { results: res } = await client.listPsaPinRequests(authKeyPinList, { limit: 20 })
+      assert.strictEqual(res.length, 13)
     })
   })
 
