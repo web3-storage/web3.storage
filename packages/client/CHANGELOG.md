@@ -1,5 +1,36 @@
 # Changelog
 
+## 1.0.0 (2022-01-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* make unixfs importer on ipfs-car use same defaults as lotus (#170)
+
+### Features
+
+* add method for uploading CAR files ([#293](https://github.com/web3-storage/web3.storage/issues/293)) ([3f6b6d3](https://github.com/web3-storage/web3.storage/commit/3f6b6d38de796e4758f1dffffe8cde948d2bb4ac)), closes [#288](https://github.com/web3-storage/web3.storage/issues/288)
+* enable sentry to record X-Client request header ([#711](https://github.com/web3-storage/web3.storage/issues/711)) ([5276add](https://github.com/web3-storage/web3.storage/commit/5276addfc22b63a0af7a5311056b477160a1ae28))
+* list user uploads in client and `w3` ([#198](https://github.com/web3-storage/web3.storage/issues/198)) ([31caaa0](https://github.com/web3-storage/web3.storage/commit/31caaa0d6ef88a7467c6192a8b2d976f70087c62))
+* make unixfs importer on ipfs-car use same defaults as lotus ([#170](https://github.com/web3-storage/web3.storage/issues/170)) ([06f6948](https://github.com/web3-storage/web3.storage/commit/06f6948ce36b5e2a87f31b9bfac41e9465cb901b))
+* simple mutability API using IPNS ([#648](https://github.com/web3-storage/web3.storage/issues/648)) ([9c287bb](https://github.com/web3-storage/web3.storage/commit/9c287bb7c983d3adab6ebb304decb47c5093ad78))
+* support any IPLD decoder ([#365](https://github.com/web3-storage/web3.storage/issues/365)) ([406d227](https://github.com/web3-storage/web3.storage/commit/406d227f2b32afcafc805ee0085b6aebe4e9b06e))
+
+
+### Bug Fixes
+
+* do not prefer node.js builtins ([#748](https://github.com/web3-storage/web3.storage/issues/748)) ([84f55e1](https://github.com/web3-storage/web3.storage/commit/84f55e14b117c12d5ce4c21d30ecc56c0ec409ec))
+* encode created date in Link header ([#719](https://github.com/web3-storage/web3.storage/issues/719)) ([bb0285f](https://github.com/web3-storage/web3.storage/commit/bb0285f2a0a5269ad1126905920758b8050a95d5))
+* encode filenames ([#539](https://github.com/web3-storage/web3.storage/issues/539)) ([de01972](https://github.com/web3-storage/web3.storage/commit/de0197278c041a5bd0c2979e38f79bad068bf993))
+* endpoint URL construction ([#734](https://github.com/web3-storage/web3.storage/issues/734)) ([50aa080](https://github.com/web3-storage/web3.storage/commit/50aa0802ffb86823876b3058438dd76d43655ed8))
+* react-scripts-v5 compatible issue. ([#826](https://github.com/web3-storage/web3.storage/issues/826)) ([abf13d4](https://github.com/web3-storage/web3.storage/commit/abf13d4a085d2d91c3f395e6f61f1304cd127e7e))
+* throw on 404 from /get ([#159](https://github.com/web3-storage/web3.storage/issues/159)) ([2fce1ac](https://github.com/web3-storage/web3.storage/commit/2fce1ac1db52dbb41910367ffc6394483908528d))
+* update dependencies ([#404](https://github.com/web3-storage/web3.storage/issues/404)) ([dd11034](https://github.com/web3-storage/web3.storage/commit/dd110344c6475e0e074bfaec6cf32d16643e1bdb))
+* update deps in api and client ([#855](https://github.com/web3-storage/web3.storage/issues/855)) ([22155db](https://github.com/web3-storage/web3.storage/commit/22155db13b646e9846cf10c26d10faeb0d3b936e))
+* update files from path dep with types fixed ([#426](https://github.com/web3-storage/web3.storage/issues/426)) ([484c12e](https://github.com/web3-storage/web3.storage/commit/484c12e2f64dffb2aff4e43df1f6e9d0341f898a))
+* validate root car ([#219](https://github.com/web3-storage/web3.storage/issues/219)) ([6029f5a](https://github.com/web3-storage/web3.storage/commit/6029f5af65c843b0aca951745ef8fcde4eea268c)), closes [#191](https://github.com/web3-storage/web3.storage/issues/191)
+* webpack 4 build error ([#707](https://github.com/web3-storage/web3.storage/issues/707)) ([2c658a1](https://github.com/web3-storage/web3.storage/commit/2c658a184aeeb4ee05dc5acc039a128a0274a99c))
+
 ### [3.5.3](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.2...web3.storage-v3.5.3) (2022-01-11)
 
 
