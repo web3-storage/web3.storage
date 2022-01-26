@@ -13,7 +13,14 @@ export default function SliderBlock({ block }) {
       <ZeroSlider collection={block.slides} arrowSelectors={false} rangeInput={true} displayOptions={block.breakpoints}>
         <ZeroSlider.Content>
           {block.slides.map((card, index) => (
-            <Card key={`slider-item-${index}`} card={card} cardsGroup={null} index={index} />
+            <Card
+              key={`slider-item-${index}`}
+              card={card}
+              cardsGroup={null}
+              index={index}
+              targetClass={null}
+              onCardLoad={null}
+            />
           ))}
         </ZeroSlider.Content>
 

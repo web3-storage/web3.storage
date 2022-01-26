@@ -20,7 +20,9 @@ export default function MessageBanner() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const oldMessage = localStorage.getItem('web3StorageBannerMessage');
-      const oldDate = localStorage.getItem('web3StorageBannerClickDate');
+      const oldDate = /** @type {string} */ (
+        localStorage.getItem('web3StorageBannerClickDate') ? localStorage.getItem('web3StorageBannerClickDate') : '0'
+      );
       const elapsedTime = Date.now() - parseInt(oldDate);
 
       if (bannerPrompt === oldMessage && elapsedTime < 604800000) {
@@ -77,7 +79,7 @@ export default function MessageBanner() {
 
     if (typeof window !== 'undefined') {
       localStorage.setItem('web3StorageBannerMessage', message);
-      localStorage.setItem('web3StorageBannerClickDate', Date.now());
+      localStorage.setItem('web3StorageBannerClickDate', Date.now().toString());
     }
     setMessageBannerWasClicked(false); // CHANGE BACK TO true
   };

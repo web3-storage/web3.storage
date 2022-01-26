@@ -57,21 +57,26 @@ export const addTextToClipboard = (text) => {
  */
 export const standardizeSiblingHeights = (target, reset) => {
   if (typeof document !== 'undefined') {
-    const elements = document.getElementsByClassName(target);
+    const elements = (
+      /** @type {HTMLCollectionOf<HTMLElement>} */
+      (document.getElementsByClassName(target))
+    );
     const heights = []
 
     for (let i = 0; i < elements.length; i++) {
+      const el = /** @type {HTMLElement} */ (elements[i])
       if (reset) {
-        elements[i].style.minHeight = 'unset'
+        el.style.minHeight = 'unset'
       }
-      const rect = elements[i].getBoundingClientRect()
+      const rect = el.getBoundingClientRect()
       heights.push(rect.height)
     }
 
     const max = Math.max(...heights);
 
     for (let i = 0; i < elements.length; i++) {
-      elements[i].style.minHeight = max + 'px'
+      const el = /** @type {HTMLElement} */ (elements[i])
+      el.style.minHeight = max + 'px'
     }
   }
 }

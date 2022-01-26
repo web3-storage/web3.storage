@@ -244,7 +244,7 @@ export default function Navigation({ isProductApp }) {
                 ))}
 
                 {isLoggedIn && account && (
-                  <ZeroAccordion multiple={false}>
+                  <ZeroAccordion multiple={false} toggleOnLoad={false}>
                     <ZeroAccordionSection disabled={!Array.isArray(account.links)}>
                       <ZeroAccordionSection.Header>
                         <div className="nav-item-heading">{account.text}</div>

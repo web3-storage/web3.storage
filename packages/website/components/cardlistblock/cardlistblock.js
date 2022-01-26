@@ -9,7 +9,7 @@ import Card from '../card/card';
  */
 // ====================================================================== Export
 export default function CardListBlock({ block }) {
-  const childrenLoaded = useRef([]);
+  const childrenLoaded = useRef(/** @type {string[]} */ ([]));
   const direction = block.direction || 'row';
   const blockB = block.cards.every(card => card.type === 'B');
   const blockF = block.cards.every(card => card.type === 'F');
@@ -53,7 +53,7 @@ export default function CardListBlock({ block }) {
             cardsGroup={block.cards}
             index={index}
             targetClass={targetClass}
-            onload={childCardLoaded}
+            onCardLoad={childCardLoaded}
           />
         ))}
       </div>

@@ -16,11 +16,11 @@ import countly from '../../lib/countly';
  * @param {Object} props.card
  * @param {Object} props.cardsGroup
  * @param {number} props.index
- * @param {string} props.targetClass
- * @callback props.onload
+ * @param {string|null} props.targetClass
+ * @param {any} props.onCardLoad
  */
 // ====================================================================== Export
-export default function Card({ card, cardsGroup = [], index = 0, targetClass, onload }) {
+export default function Card({ card, cardsGroup = [], index = 0, targetClass, onCardLoad }) {
   const router = useRouter();
   const hasIcon = card.hasOwnProperty('icon_before') && typeof card.icon_before === 'object';
   const tracking = {};
@@ -37,10 +37,10 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
   }
   // ================================================================= Functions
   useEffect(() => {
-    if (onload) {
-      onload();
+    if (onCardLoad) {
+      onCardLoad('loaded');
     }
-  }, [onload]);
+  }, [onCardLoad]);
 
   const onLinkClick = useCallback(e => {
     countly.trackCustomLinkClick(countly.events.LINK_CLICK_EXPLORE_DOCS, e.currentTarget);

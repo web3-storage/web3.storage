@@ -3,9 +3,10 @@ import React, { useState, useEffect, useRef } from "react";
 
 // ====================================================================== Params
 /**
- * @param Boolean props.multiple
- * @param Boolean props.toggleOnLoad
- * @param {Array} props.sections
+ * @param {object} props
+ * @param {boolean} props.multiple
+ * @param {boolean} props.toggleOnLoad
+ * @param {any} props.children
  */
 
 // =============================================================================
@@ -14,9 +15,9 @@ function Accordion ({
   toggleOnLoad,
   children
 }) {
-  const [active, setActive] = useState([]);
+  const [active, setActive] = useState(/** @type {string[]} */([]));
   const [expanded, setExpanded] = useState(false);
-  const sections = useRef([]);
+  const sections = useRef(/** @type {string[]} */([]));
   const buttonMessage = expanded ? 'collapse all' : 'expand all';
 
   // ================================================================= Functions
