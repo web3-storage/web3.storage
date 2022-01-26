@@ -40,3 +40,11 @@
     margin-left: 2.75rem;
   }
 }
+
+.accordion-expand-all-toggle {
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+  @include fontSize_Mini;
+  @include fontWeight_Medium;
+  opacity: 0.8;
+}

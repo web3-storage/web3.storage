@@ -306,11 +306,12 @@
       },
       {
         "id": "section_FAQ_ctas",
+        "grid": ["center"],
         "columns": [
           {
             "type": "text_block",
             "cols": {
-              "num": "col-6_sm-8_mi-10_ti-12",
+              "num": "col-5_sm-8_mi-10_ti-12",
               "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "label": "FAQ",
@@ -405,6 +406,7 @@
       },
       {
         "id": "section_get-started-cards",
+        "grid": ["noGutter"],
         "columns": [
           {
             "type": "card_list_block",

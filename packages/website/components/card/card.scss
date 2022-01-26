@@ -63,9 +63,17 @@
   }
 
   .feature-wrapper {
-    justify-content: flex-start;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 1.75rem 0;
+    height: fit-content;
+  }
+
+  .code-wrapper {
+    display: flex;
+    justify-content: center;
+    height: fit-content;
     padding: 0.5rem 1rem;
-    margin: 2.25rem 0;
     background-color: $gray50;
     border: solid 1px white;
     border-radius: 0.5rem;

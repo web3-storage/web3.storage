@@ -9,6 +9,7 @@ import { ReactComponent as Chevron } from '../../assets/icons/chevron.svg';
  */
 // ====================================================================== Export
 export default function AccordionBlock({ block }) {
+  // ================================================================== Template
   return (
     <div className="block accordion-block">
       <ZeroAccordion multiple={block.multiple} toggleOnLoad={block.toggleOnLoad}>

@@ -99,18 +99,18 @@
 
   &.blue {
     background-color: unset;
-    padding-left: 0;
+    padding: 0;
     button {
       color: $blue;
       @include fontWeight_Semibold;
       @include fontSize_Small;
       line-height: leading(34, 16);
-      padding-left: 0;
+      padding: 0;
     }
     &:after {
       content: '➔';
       position: absolute;
-      right: -0.5rem;
+      right: -1.75rem;
       top: calc(50% - 1px);
       transform: translate(0, -50%);
       @include fontWeight_Semibold;

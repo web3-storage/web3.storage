@@ -1,5 +1,5 @@
 // ===================================================================== Imports
-import React from 'react';
+import React, { useState, useEffect, useRef } from "react";
 
 // ====================================================================== Params
 /**
@@ -8,60 +8,83 @@ import React from 'react';
  * @param {Array} props.sections
  */
 
-// ====================================================================== Export
-class Accordion extends React.Component {
-  constructor(props){
-    super(props);
-    this.setActiveSections = this.setActiveSections.bind(this);
-    this.state = {
-      /**
-       * @type {boolean[]}
-       */
-      active: [],
-      childCount: 0
-    }
-  }
+// =============================================================================
+function Accordion ({
+  multiple,
+  toggleOnLoad,
+  children
+}) {
+  const [active, setActive] = useState([]);
+  const [expanded, setExpanded] = useState(false);
+  const sections = useRef([]);
+  const buttonMessage = expanded ? 'collapse all' : 'expand all';
 
-  setActiveSections (id) {
-    if (this.props.multiple) {
-      if (this.state.active.includes(id)) {
-        this.setState(({ active }) => ({ active: active.filter((_id) => _id !== id) }))
+  // ================================================================= Functions
+  const setActiveSections = (id) => {
+    if (multiple) {
+      if (active.includes(id)) {
+        setActive(active.filter((_id) => _id !== id));
       } else {
-        this.setState(({ active }) => ({ active: [...active, id] }))
+        setActive([...active, id]);
       }
     } else {
-      if (this.state.active === id) {
-        this.setState({ active: [] })
+      if (active[0] === id) {
+        setActive([]);
       } else {
-        this.setState({ active: [id] })
+        setActive([id]);
       }
     }
   }
 
-  render(props) {
-    const childrenWithProps = React.Children.map(this.props.children, child => {
-      if (React.isValidElement(child)) {
-        return React.cloneElement(child, {
-          active: this.state.active,
-          toggle: this.setActiveSections,
-          toggleOnLoad: this.props.toggleOnLoad
-        })
-      }
-      return child
-    })
+  const reportUID = (id) => {
+    sections.current.push(id)
+  }
 
-    return (
+  const childrenWithProps = React.Children.map(children, child => {
+    if (React.isValidElement(child)) {
+      return React.cloneElement(child, {
+        active: active,
+        toggle: setActiveSections,
+        toggleOnLoad: toggleOnLoad,
+        reportUID: reportUID
+      })
+    }
+    return child
+  })
+
+  const toggleExpanded = () => {
+    if (expanded) {
+      setActive([])
+    } else {
+      setActive(sections.current)
+    }
+
+    setExpanded(!expanded);
+  }
+
+  // ================================================================== Template
+  return (
+    <>
+      <div className="accordion-control-bar">
+        <button
+          className="accordion-expand-all-toggle"
+          onClick={toggleExpanded}>
+          { buttonMessage }
+        </button>
+      </div>
+
       <div className="accordion">
 
         { childrenWithProps }
 
       </div>
-    )
-  }
+    </>
+  )
 }
 
 Accordion.defaultProps = {
   multiple: false
 }
 
+// ===================================================================== Export
 export default Accordion
