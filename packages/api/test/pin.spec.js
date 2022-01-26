@@ -667,6 +667,16 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(getEffectivePinStatus(pins), 'queued')
     })
 
+    it('should return "queued" at least 1 pin has Unpinned status', () => {
+      const pins = [
+        createPinWithStatus('PinError'),
+        createPinWithStatus('PinError'),
+        createPinWithStatus('Unpinned')
+      ]
+
+      assert.strictEqual(getEffectivePinStatus(pins), 'queued')
+    })
+
     it('should return failed pins have statuses other than Pinned, Pinning, PinQueued or Remote', () => {
       const pins = [
         createPinWithStatus('UnpinQueued'),
