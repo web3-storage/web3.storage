@@ -37,7 +37,7 @@ services:
 
     ipfs0:
       container_name: ipfs0
-      image: ipfs/go-ipfs:latest
+      image: ipfs/go-ipfs:master-2022-01-17-bc7ddef
       volumes:
         - ipfs0:/data/ipfs
       #ports:
@@ -47,7 +47,7 @@ services:
         
     cluster0:
       container_name: cluster0
-      image: ipfs/ipfs-cluster:latest
+      image: ipfs/ipfs-cluster:v0.14.4
       depends_on:
         - ipfs0
       environment:
