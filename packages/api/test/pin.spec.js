@@ -338,6 +338,9 @@ describe('Pinning APIs endpoints', () => {
       assert(res.ok, 'Server response ok')
       const data = await res.json()
       assert.strictEqual(data.pin.cid, cid)
+      assert.strictEqual(data.pin.name, null)
+      assert.strictEqual(data.pin.origins, null)
+      assert.strictEqual(data.pin.meta, null)
     })
 
     it('requires cid', async () => {
@@ -378,7 +381,13 @@ describe('Pinning APIs endpoints', () => {
 
     it('should receive pin data containing cid, name, origin, meta', async () => {
       const cid = 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
+      const name = 'PreciousData.pdf'
+      const origins = [
+        '/ip6/2606:4700:60::6/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N',
+        '/ip4/172.65.0.13/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx4N'
+      ]
       const meta = { app_id: '99986338-1113-4706-8302-4420da6158aa' }
+
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
         headers: {
@@ -386,11 +395,8 @@ describe('Pinning APIs endpoints', () => {
         },
         body: JSON.stringify({
           cid,
-          name: 'PreciousData.pdf',
-          origins: [
-            '/ip6/2606:4700:60::6/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N',
-            '/ip4/172.65.0.13/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx4N'
-          ],
+          name,
+          origins,
           meta
         })
       })
@@ -399,6 +405,8 @@ describe('Pinning APIs endpoints', () => {
       assert(res.ok, 'Server response ok')
       const data = await res.json()
       assert.strictEqual(data.pin.cid, cid)
+      assert.deepStrictEqual(data.pin.name, name)
+      assert.deepStrictEqual(data.pin.origins, origins)
       assert.deepStrictEqual(data.pin.meta, meta)
     })
 
@@ -598,6 +606,29 @@ describe('Pinning APIs endpoints', () => {
       assertCorrectPinResponse(data)
       assert.strictEqual(data.requestId, requestId.toString())
       assert.deepStrictEqual(data.pin.meta, meta)
+    })
+
+    it('returns the pin request with specified origins', async () => {
+      const requestId = 'ab62cf3c-c98d-494b-a756-b3a3fb6ddcab'
+      const origins = [
+        '/ip6/2606:4700:60::6/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N',
+        '/ip4/172.65.0.13/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx4N'
+      ]
+
+      const res = await fetch(new URL(`pins/${requestId}`, endpoint).toString(), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      const data = await res.json()
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Server response is ok')
+      assertCorrectPinResponse(data)
+      assert.strictEqual(data.requestId, requestId.toString())
+      assert.deepStrictEqual(data.pin.origins, origins)
     })
   })
 

@@ -3,7 +3,7 @@
  * Do not make direct changes to the file.
  */
 
- export interface paths {
+export interface paths {
   "/": {
     get: {
       responses: {
@@ -915,6 +915,7 @@
           content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
           source_cid?: parameters["rowFilter.psa_pin_request.source_cid"];
           name?: parameters["rowFilter.psa_pin_request.name"];
+          origins?: parameters["rowFilter.psa_pin_request.origins"];
           meta?: parameters["rowFilter.psa_pin_request.meta"];
           deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
           inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
@@ -974,6 +975,7 @@
           content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
           source_cid?: parameters["rowFilter.psa_pin_request.source_cid"];
           name?: parameters["rowFilter.psa_pin_request.name"];
+          origins?: parameters["rowFilter.psa_pin_request.origins"];
           meta?: parameters["rowFilter.psa_pin_request.meta"];
           deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
           inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
@@ -997,6 +999,7 @@
           content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
           source_cid?: parameters["rowFilter.psa_pin_request.source_cid"];
           name?: parameters["rowFilter.psa_pin_request.name"];
+          origins?: parameters["rowFilter.psa_pin_request.origins"];
           meta?: parameters["rowFilter.psa_pin_request.meta"];
           deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
           inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
@@ -1259,6 +1262,23 @@
       };
     };
   };
+  "/rpc/uuid_ns_url": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/pgrst_watch": {
     post: {
       parameters: {
@@ -1276,9 +1296,40 @@
       };
     };
   };
-
-
-  // feat/pinning-api
+  "/rpc/uuid_nil": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v1": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/create_content": {
     post: {
       parameters: {
@@ -1298,7 +1349,23 @@
       };
     };
   };
-
+  "/rpc/uuid_ns_oid": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/user_auth_keys_list": {
     post: {
       parameters: {
@@ -1318,7 +1385,6 @@
       };
     };
   };
-
   "/rpc/pin_from_status_total": {
     post: {
       parameters: {
@@ -1357,6 +1423,26 @@
       };
     };
   };
+  "/rpc/uuid_generate_v5": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            namespace: string;
+            name: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/upsert_pin": {
     post: {
       parameters: {
@@ -1364,6 +1450,23 @@
           args: {
             data: string;
           };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_ns_x500": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
         };
         header: {
           /** Preference */
@@ -1414,6 +1517,26 @@
       };
     };
   };
+  "/rpc/uuid_generate_v3": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            namespace: string;
+            name: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/content_dag_size_total": {
     post: {
       parameters: {
@@ -1438,6 +1561,40 @@
           args: {
             data: string;
           };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v4": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_ns_dns": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
         };
         header: {
           /** Preference */
@@ -1495,6 +1652,23 @@
           args: {
             query_user_id: number;
           };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v1mc": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
         };
         header: {
           /** Preference */
@@ -1602,18 +1776,18 @@ export interface definitions {
      */
     id: number;
     status:
-    | "Undefined"
-    | "ClusterError"
-    | "PinError"
-    | "UnpinError"
-    | "Pinned"
-    | "Pinning"
-    | "Unpinning"
-    | "Unpinned"
-    | "Remote"
-    | "PinQueued"
-    | "UnpinQueued"
-    | "Sharded";
+      | "Undefined"
+      | "ClusterError"
+      | "PinError"
+      | "UnpinError"
+      | "Pinned"
+      | "Pinning"
+      | "Unpinning"
+      | "Unpinned"
+      | "Remote"
+      | "PinQueued"
+      | "UnpinQueued"
+      | "Sharded";
     /**
      * Note:
      * This is a Foreign Key to `content.cid`.<fk table='content' column='cid'/>
@@ -1683,7 +1857,8 @@ export interface definitions {
     content_cid: string;
     source_cid: string;
     name?: string;
-    meta?: Record<string, string>
+    origins?: string;
+    meta?: string;
     deleted_at?: string;
     inserted_at: string;
     updated_at: string;
@@ -1825,7 +2000,8 @@ export interface parameters {
   "rowFilter.psa_pin_request.content_cid": string;
   "rowFilter.psa_pin_request.source_cid": string;
   "rowFilter.psa_pin_request.name": string;
-  "rowFilter.psa_pin_request.meta": Record<string, string>;
+  "rowFilter.psa_pin_request.origins": string;
+  "rowFilter.psa_pin_request.meta": string;
   "rowFilter.psa_pin_request.deleted_at": string;
   "rowFilter.psa_pin_request.inserted_at": string;
   "rowFilter.psa_pin_request.updated_at": string;
@@ -1854,6 +2030,6 @@ export interface parameters {
   "rowFilter.user.updated_at": string;
 }
 
-export interface operations { }
+export interface operations {}
 
-export interface external { }
+export interface external {}

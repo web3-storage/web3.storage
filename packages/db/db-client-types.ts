@@ -251,6 +251,7 @@ export type ListUploadsOptions = {
 export type PsaPinRequestUpsertInput = {
   id?: string,
   name?: definitions['psa_pin_request']['name'],
+  origins?: definitions['psa_pin_request']['origins'],
   meta?: definitions['psa_pin_request']['meta'],
   authKey: string,
   sourceCid: definitions['psa_pin_request']['source_cid'],
