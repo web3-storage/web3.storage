@@ -1,5 +1,27 @@
 # Changelog
 
+## [5.1.0](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.8...api-v5.1.0) (2022-01-26)
+
+
+### Features
+
+* add origins to psa pin request ([#897](https://www.github.com/web3-storage/web3.storage/issues/897)) ([0056679](https://www.github.com/web3-storage/web3.storage/commit/00566792980b42431fa9edc55add3c7ec0618732))
+* filter pins by status ([#848](https://www.github.com/web3-storage/web3.storage/issues/848)) ([df1582b](https://www.github.com/web3-storage/web3.storage/commit/df1582b6b7d9fef45f832212d8df13aa29f246f3))
+* pinning api allowlist ([#705](https://www.github.com/web3-storage/web3.storage/issues/705)) ([ed3a08d](https://www.github.com/web3-storage/web3.storage/commit/ed3a08d9ec4a7c7a746ffd5de06319a1ba5b1dad))
+* pinning API implementation ([8187bb5](https://www.github.com/web3-storage/web3.storage/commit/8187bb5891ccf73c35289fd9f265ea110cbd5b9a))
+
+
+### Bug Fixes
+
+* update name in pinning status filtering test ([57eaf6c](https://www.github.com/web3-storage/web3.storage/commit/57eaf6c9e892be637b0cc182804ea10be2f3c4a0))
+
+
+### Changes
+
+* remove commented metrics for dag size sum in pins ([#838](https://www.github.com/web3-storage/web3.storage/issues/838)) ([0bb853c](https://www.github.com/web3-storage/web3.storage/commit/0bb853c229fd18bba727c63206c085a620f85679))
+* update licenses ([#831](https://www.github.com/web3-storage/web3.storage/issues/831)) ([8e081aa](https://www.github.com/web3-storage/web3.storage/commit/8e081aac2dd03dd5eb642bff9c2da867d61edd87))
+* use docker cluster for api tests ([#847](https://www.github.com/web3-storage/web3.storage/issues/847)) ([24c400d](https://www.github.com/web3-storage/web3.storage/commit/24c400d31e92df7a42055e73b14244036c8cf7ad))
+
 ### [5.0.8](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.7...api-v5.0.8) (2022-01-17)
 
 
