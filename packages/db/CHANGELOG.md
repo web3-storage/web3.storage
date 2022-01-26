@@ -1,5 +1,25 @@
 # Changelog
 
+## [4.1.0](https://www.github.com/web3-storage/web3.storage/compare/db-v4.0.4...db-v4.1.0) (2022-01-26)
+
+
+### Features
+
+* add origins to psa pin request ([#897](https://www.github.com/web3-storage/web3.storage/issues/897)) ([0056679](https://www.github.com/web3-storage/web3.storage/commit/00566792980b42431fa9edc55add3c7ec0618732))
+* filter pins by status ([#848](https://www.github.com/web3-storage/web3.storage/issues/848)) ([df1582b](https://www.github.com/web3-storage/web3.storage/commit/df1582b6b7d9fef45f832212d8df13aa29f246f3))
+* pinning api allowlist ([#705](https://www.github.com/web3-storage/web3.storage/issues/705)) ([ed3a08d](https://www.github.com/web3-storage/web3.storage/commit/ed3a08d9ec4a7c7a746ffd5de06319a1ba5b1dad))
+* pinning API implementation ([8187bb5](https://www.github.com/web3-storage/web3.storage/commit/8187bb5891ccf73c35289fd9f265ea110cbd5b9a))
+
+
+### Bug Fixes
+
+* unlist deleted pin requests ([#899](https://www.github.com/web3-storage/web3.storage/issues/899)) ([a378c0d](https://www.github.com/web3-storage/web3.storage/commit/a378c0d6aaea45f4e0b3b074426fa6776bdc6ca7))
+
+
+### Changes
+
+* update licenses ([#831](https://www.github.com/web3-storage/web3.storage/issues/831)) ([8e081aa](https://www.github.com/web3-storage/web3.storage/commit/8e081aac2dd03dd5eb642bff9c2da867d61edd87))
+
 ### [4.0.4](https://www.github.com/web3-storage/web3.storage/compare/db-v4.0.3...db-v4.0.4) (2022-01-04)
 
 
