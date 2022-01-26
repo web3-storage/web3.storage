@@ -65,6 +65,8 @@ export default function MessageBanner() {
   }
 
   const messageBannerClick = message => {
+    let hash = '';
+
     if (crypto.subtle) {
       const digest = async ({ algorithm = 'SHA-256', message }) =>
         Array.prototype.map
@@ -73,12 +75,14 @@ export default function MessageBanner() {
           )
           .join('');
 
-      const hash = digest({ message: message });
+      digest({ message: message }).then(result => {
+        hash = result;
+      });
       console.log(hash);
     }
 
     if (typeof window !== 'undefined') {
-      localStorage.setItem('web3StorageBannerMessage', message);
+      localStorage.setItem('web3StorageBannerMessage', hash || message);
       localStorage.setItem('web3StorageBannerClickDate', Date.now().toString());
     }
     setMessageBannerWasClicked(false); // CHANGE BACK TO true
