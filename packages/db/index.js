@@ -1,6 +1,8 @@
 import { PostgrestClient } from '@supabase/postgrest-js'
 
-import { normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest } from './utils.js'
+import {
+  normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest
+} from './utils.js'
 import { DBError } from './errors.js'
 import {
   getUserMetrics,
@@ -32,7 +34,31 @@ const pinRequestSelect = `
   deleted:deleted_at,
   created:inserted_at,
   updated:updated_at,
-  content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, region)))  `
+  content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, region)))`
+
+const listPinsQuery = `
+  _id:id::text,
+  sourceCid:source_cid,
+  contentCid:content_cid,
+  authKey:auth_key_id,
+  name,
+  deleted:deleted_at,
+  created:inserted_at,
+  updated:updated_at,
+  content!inner(
+    cid,
+    dagSize:dag_size,
+    pins:pin!inner(
+      status,
+      updated:updated_at,
+      location:pin_location(
+        _id:id,
+        peerId:peer_id,
+        peerName:peer_name,
+        region
+      )
+    )
+  )`
 
 /**
  * @typedef {import('./postgres/pg-rest-api-types').definitions} definitions
@@ -840,41 +866,46 @@ export class DBClient {
 
     let query = this._client
       .from(psaPinRequestTableName)
-      .select(pinRequestSelect)
+      .select(listPinsQuery)
       .eq('auth_key_id', authKey)
       .is('deleted_at', null)
       .order('inserted_at', { ascending: false })
 
-    if (opts.status) {
-      query = query.in('content.pins.status', opts.status)
-    }
+    if (!Object.keys(opts).length) {
+      query = query.eq('content.pins.status', 'Pinned')
+    } else {
+      if (opts.statuses) {
+        query = query.in('content.pins.status', opts.statuses)
+      }
 
-    if (opts.cid) {
-      query = query.in('source_cid', opts.cid)
-    }
+      if (opts.cid) {
+        query = query.in('source_cid', opts.cid)
+      }
 
-    if (opts.name && match === 'exact') {
-      query = query.like('name', `${opts.name}`)
-    }
+      if (opts.name) {
+        switch (match) {
+          case 'exact':
+            query = query.like('name', `${opts.name}`)
+            break
+          case 'iexact':
+            query = query.ilike('name', `${opts.name}`)
+            break
+          case 'partial':
+            query = query.like('name', `%${opts.name}%`)
+            break
+          case 'ipartial':
+            query = query.ilike('name', `%${opts.name}%`)
+            break
+        }
+      }
 
-    if (opts.name && match === 'iexact') {
-      query = query.ilike('name', `${opts.name}`)
-    }
+      if (opts.before) {
+        query = query.lte('inserted_at', opts.before)
+      }
 
-    if (opts.name && match === 'partial') {
-      query = query.like('name', `%${opts.name}%`)
-    }
-
-    if (opts.name && match === 'ipartial') {
-      query = query.ilike('name', `%${opts.name}%`)
-    }
-
-    if (opts.before) {
-      query = query.lte('inserted_at', opts.before)
-    }
-
-    if (opts.after) {
-      query = query.gte('inserted_at', opts.after)
+      if (opts.after) {
+        query = query.gte('inserted_at', opts.after)
+      }
     }
 
     // TODO(https://github.com/web3-storage/web3.storage/issues/798): filter by meta is missing

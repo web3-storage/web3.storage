@@ -296,7 +296,7 @@ export type ListPsaPinRequestOptions = {
   /**
    * status  to match
    */
-  status?: Array<definitions['pin']['status']>
+  statuses?: Array<definitions['pin']['status']>
   /**
    * Uploads created before a given timestamp.
    */
