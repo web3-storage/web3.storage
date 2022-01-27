@@ -13,8 +13,8 @@ import {
   REQUIRED_CID,
   INVALID_LIMIT,
   INVALID_REPLACE
-} from '../src/pins.js'
-import { PinningUnauthorizedError } from '../src/errors'
+} from '../src/utils/psa.js'
+import { PinningUnauthorizedError } from '../src/errors.js'
 
 /**
  *

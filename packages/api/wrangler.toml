@@ -22,6 +22,11 @@ main = "index.mjs"
 # NOTE: set worker_dev to true to deploy to a ${name}.${zone}.workers.dev
 # NOTE: `vars` are not inherited by envs. You need to declare all of them in each env.
 
+# Test!
+[env.test]
+workers_dev = true
+vars = { DEBUG = "true", ENV= "test" }
+
 # PROD!
 [env.production]
 # name = "web3-storage-production"

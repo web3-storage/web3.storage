@@ -2,7 +2,7 @@
 import assert from 'assert'
 import { endpoint } from './scripts/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
-import userUploads from './fixtures/pgrest/get-user-uploads.json'
+import userUploads from './fixtures/pgrest/get-user-uploads.js'
 
 describe('GET /user/account', () => {
   it('error if not authenticated with magic.link', async () => {

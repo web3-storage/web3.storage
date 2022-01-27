@@ -23,7 +23,7 @@ One time set up of your cloudflare worker subdomain for dev:
     ```
 
     The data is persisted among different runs, if you'd like to reset your cluster you can run
-        ```
+    ```
     npm run cluster:reset
     ```
   - 

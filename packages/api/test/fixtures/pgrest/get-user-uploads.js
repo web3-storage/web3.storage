@@ -1,4 +1,4 @@
-[
+export default [
   {
     "_id": "1",
     "name": "Upload at 2021-07-09T16:20:32.658Z",

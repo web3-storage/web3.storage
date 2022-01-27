@@ -5,12 +5,14 @@ import { fileURLToPath } from 'url'
 import sade from 'sade'
 import { build } from 'esbuild'
 import git from 'git-rev-sync'
+import { createRequire } from 'module'
 import Sentry from '@sentry/cli'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'))
+const require = createRequire(__dirname)
 
-const prog = sade('gateway')
+const prog = sade('api')
 
 prog
   .command('build')
@@ -22,11 +24,26 @@ prog
     )}`
 
     await build({
-      entryPoints: [path.join(__dirname, '../src/index.js')],
+      entryPoints: [path.join(__dirname, '..', 'src', 'index.js')],
       bundle: true,
       format: 'esm',
-      outfile: 'dist/index.mjs',
+      outfile: path.join(__dirname, '..', 'dist', 'index.mjs'),
       legalComments: 'external',
+      inject: [path.join(__dirname, 'node-globals.js')],
+      plugins: [{
+        name: 'alias',
+        setup (build) {
+          build.onResolve({ filter: /^stream$/ }, () => {
+            return { path: require.resolve('stream-browserify') }
+          })
+          build.onResolve({ filter: /^node-fetch$/ }, () => {
+            return { path: path.resolve(__dirname, 'fetch.js') }
+          })
+          build.onResolve({ filter: /^cross-fetch$/ }, () => {
+            return { path: path.resolve(__dirname, 'fetch.js') }
+          })
+        }
+      }],
       define: {
         VERSION: JSON.stringify(version),
         COMMITHASH: JSON.stringify(git.long(__dirname)),
@@ -54,7 +71,7 @@ prog
         ignoreMissing: true
       })
       await cli.releases.uploadSourceMaps(version, {
-        include: ['./dist'],
+        include: [path.join(__dirname, '..', 'dist')],
         urlPrefix: '/'
       })
       await cli.releases.finalize(version)

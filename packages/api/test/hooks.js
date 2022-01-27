@@ -1,0 +1,71 @@
+import path from 'path'
+import { fileURLToPath } from 'url'
+import dotenv from 'dotenv'
+import { Miniflare } from 'miniflare'
+import fetch from '@web-std/fetch'
+import { webcrypto } from 'crypto'
+import execa from 'execa'
+import delay from 'delay'
+import * as workerGlobals from './scripts/worker-globals.js'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+dotenv.config({ path: path.join(__dirname, '..', '.env.local') })
+
+global.fetch = fetch
+global.crypto = webcrypto
+
+const toolsCli = path.join(__dirname, '..', '..', 'tools', 'scripts', 'cli.js')
+const dbCli = path.join(__dirname, '..', '..', 'db', 'scripts', 'cli.js')
+const initScript = path.join(__dirname, 'fixtures', 'init-data.sql')
+
+export const mochaHooks = () => {
+  /** @type {string} */
+  let projectDb
+  /** @type {string} */
+  let projectCluster
+  /** @type {import('http').Server} */
+  let srv
+
+  return {
+    async beforeAll () {
+      this.timeout(30_000)
+
+      console.log('⚡️ Starting PostgREST')
+      projectDb = `web3-storage-db-${Date.now()}`
+      await execa(dbCli, ['db', '--start', '--project', projectDb])
+      await execa(dbCli, ['db-sql', '--cargo', '--testing', `--customSqlPath=${initScript}`])
+
+      console.log('⚡️ Starting IPFS Cluster')
+      projectCluster = `web3-storage-cluster-${Date.now()}`
+      await execa(toolsCli, ['cluster', '--start', '--project', projectCluster])
+
+      await delay(2000)
+
+      console.log('⚡️ Starting Miniflare')
+      srv = await new Miniflare({
+        // Autoload configuration from `.env`, `package.json` and `wrangler.toml`
+        envPath: true,
+        packagePath: true,
+        wranglerConfigPath: true,
+        wranglerConfigEnv: 'test',
+        modules: true,
+        bindings: workerGlobals
+      }).startServer()
+    },
+    async afterAll () {
+      this.timeout(30_000)
+      if (srv) {
+        console.log('🛑 Stopping Miniflare')
+        srv.close()
+      }
+      if (projectDb) {
+        console.log('🛑 Stopping PostgREST')
+        await execa(dbCli, ['db', '--stop', '--clean', '--project', projectDb])
+      }
+      if (projectCluster) {
+        console.log('🛑 Stopping IPFS Cluster')
+        await execa(toolsCli, ['cluster', '--stop', '--clean', '--project', projectCluster])
+      }
+    }
+  }
+}

@@ -206,19 +206,26 @@ export async function sizeOf (response) {
  * @param {import('./env').Env} env
  */
 async function addToCluster (car, env) {
-  // Note: We can't make use of `bytes` or `size` properties on the response from cluster.add
-  // `bytes` is the sum of block sizes in bytes. Where the CAR is a partial, it'll only be a shard of the total dag size.
-  // `size` is UnixFS FileSize which is 0 for directories, and is not set for raw encoded files, only dag-pb ones.
-  const { cid } = await env.cluster.addCAR(car, {
-    metadata: { size: car.size.toString() },
-    // When >2.5MB, use local add, because waiting for blocks to be sent to
-    // other cluster nodes can take a long time. Replication to other nodes
-    // will be done async by bitswap instead.
-    local: car.size > LOCAL_ADD_THRESHOLD
-  })
-  const pins = await getPins(cid, env.cluster)
+  try {
+    // Note: We can't make use of `bytes` or `size` properties on the response from cluster.add
+    // `bytes` is the sum of block sizes in bytes. Where the CAR is a partial, it'll only be a shard of the total dag size.
+    // `size` is UnixFS FileSize which is 0 for directories, and is not set for raw encoded files, only dag-pb ones.
+    const { cid } = await env.cluster.addCAR(car, {
+      metadata: { size: car.size.toString() },
+      // When >2.5MB, use local add, because waiting for blocks to be sent to
+      // other cluster nodes can take a long time. Replication to other nodes
+      // will be done async by bitswap instead.
+      local: car.size > LOCAL_ADD_THRESHOLD
+    })
+    const pins = await getPins(cid, env.cluster)
 
-  return { cid, pins }
+    return { cid, pins }
+  } catch (err) {
+    if (err.response) {
+      console.log(await err.response.text())
+    }
+    throw err
+  }
 }
 
 /**
