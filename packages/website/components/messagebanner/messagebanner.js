@@ -17,14 +17,6 @@ export default function MessageBanner() {
   let maintenanceMessage = '';
   let bannerContent = bannerPrompt;
 
-  const digest = async ({ algorithm = 'SHA-256', message }) => {
-    Array.prototype.map
-      .call(new Uint8Array(await crypto.subtle.digest(algorithm, new TextEncoder().encode(message))), x =>
-        ('0' + x.toString(16)).slice(-2)
-      )
-      .join('');
-  };
-
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const oldMessage = localStorage.getItem('web3StorageBannerMessage');
@@ -34,8 +26,7 @@ export default function MessageBanner() {
       const elapsedTime = Date.now() - parseInt(oldDate);
 
       if (bannerPrompt === oldMessage && elapsedTime < 604800000) {
-        console.log('banner clicked');
-        setMessageBannerWasClicked(false); // CHANGE BACK TO true
+        setMessageBannerWasClicked(true);
       }
     }
   }, [bannerPrompt]);
@@ -62,10 +53,10 @@ export default function MessageBanner() {
   }
 
   if (statusPageError) {
-    // console.error(statusPageError);
+    console.error(statusPageError);
   }
   if (apiVersionError) {
-    // console.error(apiVersionError);
+    console.error(apiVersionError);
   }
 
   if (maintenanceMessage) {
@@ -73,14 +64,11 @@ export default function MessageBanner() {
   }
 
   const messageBannerClick = message => {
-    if (typeof window !== 'undefined' && crypto.subtle) {
-      digest({ message: message }).then(result => {
-        console.log(result);
-      });
+    if (typeof window !== 'undefined') {
       localStorage.setItem('web3StorageBannerMessage', message);
       localStorage.setItem('web3StorageBannerClickDate', Date.now().toString());
     }
-    setMessageBannerWasClicked(false); // CHANGE BACK TO true
+    setMessageBannerWasClicked(true);
   };
 
   return (
