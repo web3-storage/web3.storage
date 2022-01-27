@@ -1,5 +1,5 @@
 // ===================================================================== Imports
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Image from 'next/image';
@@ -16,9 +16,11 @@ import countly from '../../lib/countly';
  * @param {Object} props.card
  * @param {Object} props.cardsGroup
  * @param {number} props.index
+ * @param {string|null} props.targetClass
+ * @param {any} props.onCardLoad
  */
 // ====================================================================== Export
-export default function Card({ card, cardsGroup = [], index = 0 }) {
+export default function Card({ card, cardsGroup = [], index = 0, targetClass, onCardLoad }) {
   const router = useRouter();
   const hasIcon = card.hasOwnProperty('icon_before') && typeof card.icon_before === 'object';
   const tracking = {};
@@ -34,6 +36,12 @@ export default function Card({ card, cardsGroup = [], index = 0 }) {
     }
   }
   // ================================================================= Functions
+  useEffect(() => {
+    if (onCardLoad) {
+      onCardLoad('loaded');
+    }
+  }, [onCardLoad]);
+
   const onLinkClick = useCallback(e => {
     countly.trackCustomLinkClick(countly.events.LINK_CLICK_EXPLORE_DOCS, e.currentTarget);
   }, []);
@@ -85,7 +93,11 @@ export default function Card({ card, cardsGroup = [], index = 0 }) {
       case 'A':
         return <div className="feature">{obj.feature}</div>;
       case 'B':
-        return <code className="code-feature" dangerouslySetInnerHTML={{ __html: obj.feature }}></code>;
+        return (
+          <div className="code-wrapper">
+            <code className="code-feature" dangerouslySetInnerHTML={{ __html: obj.feature }}></code>
+          </div>
+        );
       case 'C':
         return <Image loader={({ src }) => src} alt="" src={obj.image} width="64" height="64" />;
       case 'D':
@@ -136,7 +148,7 @@ export default function Card({ card, cardsGroup = [], index = 0 }) {
     for (let i = 0; i < len; i++) {
       sum = sum + (i + 1);
     }
-    const width = Math.round((weight / sum) * 100) + '%';
+    const width = Math.round((weight / sum) * 75) + '%';
 
     return (
       <div className={clsx('card', `type__${card.type}`)}>
@@ -193,13 +205,13 @@ export default function Card({ card, cardsGroup = [], index = 0 }) {
     <div className={clsx('card', `type__${card.type}`)}>
       {card.label && <div className="label">{card.label}</div>}
 
-      {<div className="feature-wrapper">{getFeaturedElement(card)}</div>}
+      {<div className={clsx('feature-wrapper', targetClass)}>{getFeaturedElement(card)}</div>}
 
       {card.title && <div className="title">{card.title}</div>}
 
       {card.subtitle && <div className="subtitle">{card.subtitle}</div>}
 
-      {card.description && <div className="description">{card.description}</div>}
+      {card.description && <div className={clsx('description', targetClass)}>{card.description}</div>}
 
       {hasIcon && <div className="icon-before">{getIcon(card.icon_before)}</div>}
 

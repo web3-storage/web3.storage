@@ -32,7 +32,7 @@ export const truncateString = (string, len = 30, end = '...', type = 'single') =
 
 /**
  * Utility that copies text to the clipboard
- * 
+ *
  * @param {string} text Text to be copied to clipboard
  */
 export const addTextToClipboard = (text) => {
@@ -47,4 +47,36 @@ export const addTextToClipboard = (text) => {
   container.select()
   document.execCommand('copy')
   document.body.removeChild(container)
+}
+
+/**
+ * Utility function to standardize element heights based on largest sibling
+ *
+ * @param {string} target class list to target
+ * @param {boolean} reset whether or not to unset heights before calculation
+ */
+export const standardizeSiblingHeights = (target, reset) => {
+  if (typeof document !== 'undefined') {
+    const elements = (
+      /** @type {HTMLCollectionOf<HTMLElement>} */
+      (document.getElementsByClassName(target))
+    );
+    const heights = []
+
+    for (let i = 0; i < elements.length; i++) {
+      const el = /** @type {HTMLElement} */ (elements[i])
+      if (reset) {
+        el.style.minHeight = 'unset'
+      }
+      const rect = el.getBoundingClientRect()
+      heights.push(rect.height)
+    }
+
+    const max = Math.max(...heights);
+
+    for (let i = 0; i < elements.length; i++) {
+      const el = /** @type {HTMLElement} */ (elements[i])
+      el.style.minHeight = max + 'px'
+    }
+  }
 }

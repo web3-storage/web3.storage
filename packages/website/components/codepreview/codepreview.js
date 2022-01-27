@@ -22,9 +22,9 @@ export default function CodePreview({ block }) {
   block.tabs.forEach((tab, i) => {
     highlightedCode.push('');
     tab.lines.forEach((line, j) => {
-      const lineNumber = `<span class="code-line-number">${j + 1}</span>`;
       const spacing = `${j + 1 < 10 ? ' ' : ''}`;
-      const nextLine = `${lineNumber} ${spacing} ${hljs.highlight(line, { language: 'javascript' }).value}<br>`;
+      const lineNumber = `<span class="code-line-number">${j + 1 + spacing}</span>`;
+      const nextLine = `${lineNumber} ${hljs.highlight(line, { language: 'javascript' }).value}<br>`;
       highlightedCode[i] = highlightedCode[i] + nextLine;
     });
   });

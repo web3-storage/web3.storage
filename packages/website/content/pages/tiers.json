@@ -162,42 +162,45 @@
       },
       {
         "id": "section_FAQ_ctas",
+        "grid": ["noGutter"],
         "columns": [
           {
-            "type": "text_block",
+            "type": "card_list_block",
             "cols": {
-              "num": "col-6_sm-8_mi-10_ti-12",
+              "num": "col-12_sm-8_mi-10_ti-12",
               "push_left": "off-0_sm-2_mi-1_ti-0"
             },
-            "label": "FAQ",
-            "subheading": "How is web3.storage different from pinning services for IPFS?",
-            "description": "Web3.Storage is currently not a pinning service. At the moment, files already on the IPFS network cannot be pinned to Web3.Storage via their…",
-            "cta": {
-              "url": "/faq",
-              "text": "READ MORE",
-              "theme": "text-purple",
-              "event": "",
-              "ui": "",
-              "action": ""
-            }
-          },
-          {
-            "type": "text_block",
-            "cols": {
-              "num": "col-5_sm-8_mi-10_ti-12",
-              "push_left": "off-1_sm-2_mi-1_ti-0"
-            },
-            "label": "FAQ",
-            "subheading": "What happens if web3.storage is discontinued?",
-            "description": "One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data…",
-            "cta": {
-              "url": "/faq",
-              "text": "READ MORE",
-              "theme": "text-purple",
-              "event": "",
-              "ui": "",
-              "action": ""
-            }
+            "direction": "row",
+            "cards": [
+              {
+                "type": "F",
+                "label": "FAQ",
+                "title": "How is web3.storage different from pinning services for IPFS?",
+                "description": "Web3.Storage is currently not a pinning service. At the moment, files already on the IPFS network cannot be pinned to Web3.Storage via their…",
+                "cta": {
+                  "url": "/faq",
+                  "text": "READ MORE",
+                  "theme": "text-purple",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              },
+              {
+                "type": "F",
+                "label": "FAQ",
+                "title": "What happens if web3.storage is discontinued?",
+                "description": "One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data…",
+                "cta": {
+                  "url": "/faq",
+                  "text": "READ MORE",
+                  "theme": "text-purple",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              }
+            ]
           }
         ]
       }
