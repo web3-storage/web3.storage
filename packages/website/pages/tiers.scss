@@ -40,6 +40,7 @@
     border-radius: 0.5rem;
     opacity: 0.15;
     background-color: $waterloo;
+    pointer-events: none;
     @include shadow1;
     z-index: 0;
     left: calc(50% - #{math.div($containerWidth, 2)} - 4.5rem);
