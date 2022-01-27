@@ -51,7 +51,7 @@ prog
         ENV: opts.env || 'dev',
         global: 'globalThis'
       },
-      minify: opts.env === 'dev' ? false : true,
+      minify: opts.env !== 'dev',
       sourcemap: true
     })
 
