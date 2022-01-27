@@ -1,5 +1,5 @@
 // ===================================================================== Imports
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import clsx from 'clsx';
 
 import ZeroAccordionHeader from 'ZeroComponents/accordion/accordionHeader';
@@ -39,11 +39,23 @@ const generateUID = () => {
  *
  * @param { any } props TODO: Define props
  */
-function AccordionSection({ active, toggle, toggleOnLoad, disabled, children }) {
+function AccordionSection({
+  active,
+  toggle,
+  toggleOnLoad,
+  reportUID,
+  disabled,
+  children
+}) {
   const [uid, setUID] = useState(generateUID)
+  const firstUpdate = useRef(true);
   const header = children.find(child => child.type === Header)
   const content = children.find(child => child.type === Content)
   const open = active.includes(uid)
+
+  useEffect(() => {
+    reportUID(uid)
+  }, [uid])
 
   return (
     <div className={ clsx("accordion-section", open ? 'open': '') }>

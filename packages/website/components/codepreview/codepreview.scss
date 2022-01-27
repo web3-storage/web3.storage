@@ -17,7 +17,7 @@ $cpTabColor: #2a272e;
 
 .cp-thumb {
   position: relative;
-  padding: 0.75rem 3rem 0.25rem 3rem;
+  padding: 0.75rem 3rem 0.5rem 3rem;
   margin-right: 0.5rem;
   top: 1px;
   font-size: 10px;
@@ -79,13 +79,18 @@ $cpTabColor: #2a272e;
   }
   code {
     font-family: 'Suisse Intl Mono';
-    font-size: 14px;
+    font-size: 0.75rem;
     line-height: leading(28, 14);
   }
 }
 
 .code-line-number {
   color: $doveGrayLight;
+  pointer-events: none;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
 }
 
 .hljs-keyword {

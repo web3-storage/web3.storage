@@ -538,14 +538,16 @@
   @include small {
     padding-top: 0;
   }
-
-  .text-block {
-    position: relative;
-    z-index: 1;
-    .label {
-      text-align: left;
-      margin-top: 0;
-      margin-bottom: 0.5rem;
+  .card-list-block {
+    @include small {
+      .card-row {
+        flex-direction: column;
+      }
+      .card {
+        &:not(:last-child) {
+          margin-bottom: 3.75rem;
+        }
+      }
     }
   }
 }

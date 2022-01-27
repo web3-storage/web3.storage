@@ -33,6 +33,9 @@ export default function Home() {
 
 export function getStaticProps() {
   return {
-    props: {},
+    props: {
+      title: 'Terms - Web3 Storage - Simple file storage with IPFS & Filecoin',
+      description: 'Terms of service for using Web3.storage.',
+    },
   };
 }

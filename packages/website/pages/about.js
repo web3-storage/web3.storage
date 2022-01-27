@@ -21,6 +21,10 @@ export default function Home() {
 
 export function getStaticProps() {
   return {
-    props: {},
+    props: {
+      title: 'About - Web3 Storage - Simple file storage with IPFS & Filecoin',
+      description:
+        'About Web3.Storage: the easiest way to store data on the decentralized web. Giving developers the power of Filecoin distributed storage and content addressing via a simple HTTP API and handy client libraries.',
+    },
   };
 }
