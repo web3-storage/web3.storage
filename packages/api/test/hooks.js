@@ -26,7 +26,7 @@ export const mochaHooks = () => {
 
   return {
     async beforeAll () {
-      this.timeout(30_000)
+      this.timeout(60_000)
 
       console.log('⚡️ Starting Miniflare')
       srv = await new Miniflare({
@@ -51,7 +51,7 @@ export const mochaHooks = () => {
       await delay(5000)
     },
     async afterAll () {
-      this.timeout(30_000)
+      this.timeout(60_000)
       if (srv) {
         console.log('🛑 Stopping Miniflare')
         srv.close()
