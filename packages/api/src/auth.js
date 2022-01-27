@@ -152,6 +152,9 @@ function verifyAuthToken (token, decoded, env) {
 
 function getTokenFromRequest (request, { magic }) {
   const authHeader = request.headers.get('Authorization') || ''
+  if (!authHeader) {
+    throw new NoTokenError()
+  }
   // NOTE: This is not magic specific, we're just reusing the header parsing logic.
   const token = magic.utils.parseAuthorizationHeader(authHeader)
   if (!token) {

@@ -1,5 +1,6 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
+import fetch from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
 import {

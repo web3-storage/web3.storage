@@ -24,6 +24,7 @@
   "devDependencies": {
     "@sentry/cli": "^1.72.1",
     "@types/mocha": "^9.0.0",
+    "@web-std/fetch": "^3.0.2",
     "@web-std/form-data": "^3.0.0",
     "@web3-storage/tools": "^1.0.0",
     "assert": "^2.0.0",
@@ -64,7 +65,7 @@
   },
   "bundlesize": [
     {
-      "path": "./dist/worker.js",
+      "path": "./dist/index.mjs",
       "maxSize": "1 MB"
     }
   ]

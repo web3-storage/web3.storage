@@ -46,7 +46,7 @@ const psaStatusesToDBStatusesMap = {
  * @param {string[]} statuses
  * @return {import('@web3-storage/db/postgres/pg-rest-api-types').definitions['pin']['status'][]}
  */
-const psaStatusesToDBStatuses = (statuses) => {
+export const psaStatusesToDBStatuses = (statuses) => {
   return statuses.reduce((mappedStatuses, psaStatus) => {
     return mappedStatuses.concat(psaStatusesToDBStatusesMap[psaStatus])
   }, [])

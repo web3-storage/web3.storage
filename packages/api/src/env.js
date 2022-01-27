@@ -34,7 +34,7 @@ export function envAll (req, env, ctx) {
       root: '/'
     },
     environment: env.ENV,
-    release: env.SENTRY_RELEASE || SENTRY_RELEASE,
+    release: env.SENTRY_RELEASE,
     pkg
   })
   env.magic = new Magic(env.MAGIC_SECRET_KEY)

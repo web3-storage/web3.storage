@@ -2,17 +2,15 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
 import { Miniflare } from 'miniflare'
-import fetch from '@web-std/fetch'
-import { webcrypto } from 'crypto'
 import execa from 'execa'
 import delay from 'delay'
+import { webcrypto } from 'crypto'
 import * as workerGlobals from './scripts/worker-globals.js'
+
+global.crypto = webcrypto
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 dotenv.config({ path: path.join(__dirname, '..', '.env.local') })
-
-global.fetch = fetch
-global.crypto = webcrypto
 
 const toolsCli = path.join(__dirname, '..', '..', 'tools', 'scripts', 'cli.js')
 const dbCli = path.join(__dirname, '..', '..', 'db', 'scripts', 'cli.js')
@@ -30,17 +28,6 @@ export const mochaHooks = () => {
     async beforeAll () {
       this.timeout(30_000)
 
-      console.log('⚡️ Starting PostgREST')
-      projectDb = `web3-storage-db-${Date.now()}`
-      await execa(dbCli, ['db', '--start', '--project', projectDb])
-      await execa(dbCli, ['db-sql', '--cargo', '--testing', `--customSqlPath=${initScript}`])
-
-      console.log('⚡️ Starting IPFS Cluster')
-      projectCluster = `web3-storage-cluster-${Date.now()}`
-      await execa(toolsCli, ['cluster', '--start', '--project', projectCluster])
-
-      await delay(2000)
-
       console.log('⚡️ Starting Miniflare')
       srv = await new Miniflare({
         // Autoload configuration from `.env`, `package.json` and `wrangler.toml`
@@ -51,6 +38,17 @@ export const mochaHooks = () => {
         modules: true,
         bindings: workerGlobals
       }).startServer()
+
+      console.log('⚡️ Starting PostgREST')
+      projectDb = `web3-storage-db-${Date.now()}`
+      await execa(dbCli, ['db', '--start', '--project', projectDb])
+      await execa(dbCli, ['db-sql', '--cargo', '--testing', `--customSqlPath=${initScript}`])
+
+      console.log('⚡️ Starting IPFS Cluster')
+      projectCluster = `web3-storage-cluster-${Date.now()}`
+      await execa(toolsCli, ['cluster', '--start', '--project', projectCluster])
+
+      await delay(5000)
     },
     async afterAll () {
       this.timeout(30_000)

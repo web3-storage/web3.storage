@@ -28,7 +28,7 @@ async function verify (key, sig, data) {
     const cryptoKey = await crypto.subtle.importKey('raw', key, CLOUDFLARE_ED25519, false, ['verify'])
     return crypto.subtle.verify(CLOUDFLARE_ED25519, cryptoKey, sig, data)
   } catch (err) {
-    if (err instanceof Error && err.name === 'NotSupportedError') {
+    if (err instanceof Error && (err.name === 'NotSupportedError' || err.message === 'Unsupported key usage for a NODE-ED25519 key')) {
       console.warn('using tweetnacl for ed25519 - you should not see this message when running in the CloudFlare worker runtime')
       const { default: nacl } = await import('tweetnacl')
       return nacl.sign.detached.verify(data, sig, key)
