@@ -39,16 +39,18 @@ export const mochaHooks = () => {
         bindings: workerGlobals
       }).startServer()
 
-      console.log('⚡️ Starting PostgREST')
-      projectDb = `web3-storage-db-${Date.now()}`
-      await execa(dbCli, ['db', '--start', '--project', projectDb])
-      await execa(dbCli, ['db-sql', '--cargo', '--testing', `--customSqlPath=${initScript}`])
-
       console.log('⚡️ Starting IPFS Cluster')
       projectCluster = `web3-storage-cluster-${Date.now()}`
       await execa(toolsCli, ['cluster', '--start', '--project', projectCluster])
 
-      await delay(5000)
+      console.log('⚡️ Starting PostgreSQL and PostgREST')
+      projectDb = `web3-storage-db-${Date.now()}`
+      await execa(dbCli, ['db', '--start', '--project', projectDb])
+
+      console.log('⚡️ Loading DB schema')
+      await execa(dbCli, ['db-sql', '--cargo', '--testing', `--customSqlPath=${initScript}`])
+
+      await delay(2000)
     },
     async afterAll () {
       this.timeout(60_000)
@@ -56,13 +58,13 @@ export const mochaHooks = () => {
         console.log('🛑 Stopping Miniflare')
         srv.close()
       }
-      if (projectDb) {
-        console.log('🛑 Stopping PostgREST')
-        await execa(dbCli, ['db', '--stop', '--clean', '--project', projectDb])
-      }
       if (projectCluster) {
         console.log('🛑 Stopping IPFS Cluster')
         await execa(toolsCli, ['cluster', '--stop', '--clean', '--project', projectCluster])
+      }
+      if (projectDb) {
+        console.log('🛑 Stopping PostgreSQL and PostgREST')
+        await execa(dbCli, ['db', '--stop', '--clean', '--project', projectDb])
       }
     }
   }
