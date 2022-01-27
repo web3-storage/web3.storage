@@ -2,6 +2,7 @@ import debug from 'debug'
 import { toPinStatusEnum } from '@web3-storage/api/src/utils/pin.js'
 import retry from 'p-retry'
 import { piggyback } from 'piggybacker'
+import { denormalizeCid } from './utils/normalize-cid.js'
 
 const MAX_PIN_REQUESTS_PER_RUN = 400
 const log = debug('pins:updatePinStatuses')
@@ -51,6 +52,7 @@ export async function updatePinStatuses ({ cluster, db }) {
     let pinUpdates = await Promise.all(requests.map(async req => {
       const { pin } = req
       let peerMap
+      let pinId
 
       try {
         peerMap = await getPinStatus(pin.contentCid)
@@ -66,7 +68,12 @@ export async function updatePinStatuses ({ cluster, db }) {
       const status = toPinStatusEnum(peerMap[pin.location.peerId].status)
 
       if (status !== 'Pinned' && status !== 'Remote') {
-        reSyncPins.push(pin)
+        if (status === 'Unpinned') {
+          pinId = denormalizeCid(pin._id)
+        } else {
+          pinId = pin._id
+          reSyncPins.push(pin)
+        }
       }
 
       if (status === pin.status) {
@@ -77,7 +84,7 @@ export async function updatePinStatuses ({ cluster, db }) {
       log(`📌 ${pin.contentCid}@${pin.location.peerId}: ${pin.status} => ${status}`)
 
       return {
-        id: pin._id,
+        id: pinId,
         status: status,
         content_cid: pin.contentCid,
         pin_location_id: pin.location._id,
