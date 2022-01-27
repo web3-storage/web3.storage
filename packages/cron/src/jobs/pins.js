@@ -2,7 +2,7 @@ import debug from 'debug'
 import { toPinStatusEnum } from '@web3-storage/api/src/utils/pin.js'
 import retry from 'p-retry'
 import { piggyback } from 'piggybacker'
-import { denormalizeCid } from './utils/cid.js'
+import { denormalizeCid } from '../libs/cid.js'
 
 const MAX_PIN_REQUESTS_PER_RUN = 400
 const log = debug('pins:updatePinStatuses')
