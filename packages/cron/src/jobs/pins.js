@@ -52,7 +52,7 @@ export async function updatePinStatuses ({ cluster, db }) {
     let pinUpdates = await Promise.all(requests.map(async req => {
       const { pin } = req
       let peerMap
-      let pinId
+      let contentCid
 
       try {
         peerMap = await getPinStatus(pin.contentCid)
@@ -69,9 +69,9 @@ export async function updatePinStatuses ({ cluster, db }) {
 
       if (status !== 'Pinned' && status !== 'Remote') {
         if (status === 'Unpinned') {
-          pinId = denormalizeCid(pin._id)
+          contentCid = denormalizeCid(pin.contentCid)
         } else {
-          pinId = pin._id
+          contentCid = pin.contentCid
           reSyncPins.push(pin)
         }
       }
@@ -84,9 +84,9 @@ export async function updatePinStatuses ({ cluster, db }) {
       log(`📌 ${pin.contentCid}@${pin.location.peerId}: ${pin.status} => ${status}`)
 
       return {
-        id: pinId,
+        id: pin._id,
         status: status,
-        content_cid: pin.contentCid,
+        content_cid: contentCid,
         pin_location_id: pin.location._id,
         updated_at: new Date().toISOString()
       }
