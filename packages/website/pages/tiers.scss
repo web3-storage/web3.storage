@@ -171,6 +171,7 @@
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: right 0 top 0;
+    pointer-events: none;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1845.701' height='242.942' viewBox='0 0 1845.701 242.942'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect y='659' width='1845.701' height='242.942' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Scroll_Group_1' data-name='Scroll Group 1' transform='translate(0 -659)' clip-path='url(%23clip-path)' style='isolation: isolate'%3e%3cpath id='Path_19292' data-name='Path 19292' d='M-21173,9737.463s429.527-45.37,890.953,1,781.068,131.782,954.748,184.479V9050H-21173Z' transform='translate(21173 -9050)' fill='%2303040a'/%3e%3c/g%3e%3c/svg%3e");
   }
   @include ultraLarge {
