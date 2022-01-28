@@ -19,9 +19,10 @@ prog
   .describe('Build the worker.')
   .option('--env', 'Environment', 'dev')
   .action(async (opts) => {
-    const version = `${pkg.name}@${pkg.version}-${opts.env}+${git.short(
-      __dirname
-    )}`
+    // Release name cannot contain slashes, and are global per org, so we use
+    // custom prefix here not pkg.name.
+    // See https://docs.sentry.io/platforms/javascript/guides/cordova/configuration/releases/
+    const version = `web3-api@${pkg.version}-${opts.env}+${git.short(__dirname)}`
 
     await build({
       entryPoints: [path.join(__dirname, '..', 'src', 'index.js')],
