@@ -8,10 +8,30 @@ import pkg from '../package.json'
 
 /**
  * @typedef {object} Env
+ * // Environment vars
+ * @property {string} ENV
+ * @property {string} BRANCH
+ * @property {string} VERSION
+ * @property {string} COMMITHASH
+ * @property {string} SALT
+ * @property {string} MAGIC_SECRET_KEY
+ * @property {string} CLUSTER_API_URL
+ * @property {string} [CLUSTER_BASIC_AUTH_TOKEN]
+ * @property {string} PG_REST_URL
+ * @property {string} PG_REST_JWT
+ * @property {string} [S3_BUCKET_ENDPOINT]
+ * @property {string} [S3_BUCKET_NAME]
+ * @property {string} [S3_BUCKET_REGION]
+ * @property {string} [S3_ACCESS_KEY_ID]
+ * @property {string} [S3_SECRET_ACCESS_KEY_ID]
+ * @property {string} [SENTRY_DSN]
+ * @property {string} [SENTRY_RELEASE]
+ * @property {string} MAINTENANCE_MODE
+ * @property {string} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
+ * // Derived values and class dependencies
  * @property {Cluster} cluster
  * @property {Magic} magic
  * @property {DBClient} db
- * @property {string} SALT
  * @property {import('./maintenance').Mode} MODE
  * @property {S3Client} [s3Client]
  * @property {string} [s3BucketName]
