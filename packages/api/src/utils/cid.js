@@ -14,12 +14,3 @@ export function normalizeCid (cid) {
     throw new InvalidCidError(cid)
   }
 }
-
-export function downgradeCid (cid) {
-  try {
-    cid = CID.parse(cid)
-  } catch (err) {
-    throw new InvalidCidError(cid)
-  }
-  return cid.toV0().toString()
-}
