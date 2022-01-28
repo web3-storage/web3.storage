@@ -67,7 +67,8 @@ export async function updatePinStatuses ({ cluster, db }) {
       let status = toPinStatusEnum(peerMap[pin.location.peerId].status)
 
       if (status !== 'Pinned' && status !== 'Remote') {
-        const cidV0 = downgradeCid(pin.contentCid)
+        // Attempt to downgrade CID
+        const cidV0 = downgradeCid(pin.contentCid) ? downgradeCid(pin.contentCid) : pin.contentCid
 
         try {
           peerMap = await getPinStatus(cidV0)
