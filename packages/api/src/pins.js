@@ -51,8 +51,12 @@ export const getEffectivePinStatus = (pins) => {
     return 'pinning'
   }
 
+  // The cluster may return “Unpinned” as the initial status.
+  // The cluster will return “Remote” if it has been queued for pinning by another node.
+  // A cluster status of “Unpinned”, “Remote” or “PinQueued” is equivalent to a “queued” PSA status.
   if (pinStatuses.includes('PinQueued') ||
-      pinStatuses.includes('Remote')) {
+      pinStatuses.includes('Remote') ||
+      pinStatuses.includes('Unpinned')) {
     return 'queued'
   }
 
@@ -68,8 +72,7 @@ const psaStatusesToDBStatusesMap = {
   pinning: ['Pinning'],
   failed: [
     'ClusterError',
-    'PinError',
-    'Unpinned'
+    'PinError'
   ]
 }
 
