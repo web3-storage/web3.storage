@@ -53,6 +53,7 @@ export async function updatePinStatuses ({ cluster, db }) {
       const { pin } = req
       let peerMap
 
+      // Get status of pin or check later
       try {
         peerMap = await getPinStatus(pin.contentCid)
       } catch (err) {
@@ -60,27 +61,21 @@ export async function updatePinStatuses ({ cluster, db }) {
         return null // Cluster could not find the content, please check later
       }
 
+      // Is this pin tracked by our cluster?
       if (!peerMap[pin.location.peerId]) {
         return null // not tracked by our cluster
       }
 
-      let status = toPinStatusEnum(peerMap[pin.location.peerId].status)
+      const status = toPinStatusEnum(peerMap[pin.location.peerId].status)
 
       if (status !== 'Pinned' && status !== 'Remote') {
-        const cidV0 = downgradeCid(pin.contentCid)
-
+        const cid = status === 'Unpinned' ? downgradeCid(pin.contentCid) : pin.contentCid
         try {
-          peerMap = await getPinStatus(cidV0)
+          peerMap = await getPinStatus(cid)
         } catch (err) {
           reSyncPins.push(pin)
           return null
         }
-
-        if (!peerMap[pin.location.peerId]) return null
-
-        status = toPinStatusEnum(peerMap[pin.location.peerId].status)
-
-        reSyncPins.push(pin)
       }
 
       if (status === pin.status) {
