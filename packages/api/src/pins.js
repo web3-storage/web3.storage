@@ -53,7 +53,7 @@ export const getEffectivePinStatus = (pins) => {
 
   // The cluster returns either Unpinned as "initial status",
   // Remote when it has tracked the cid or PinQueued when  it has queued it for pinning.
-  // All this statuses are translate to "queued" in respect to PSA statuses.
+  // All this statuses are translated to "queued" in respect to PSA statuses.
   if (pinStatuses.includes('PinQueued') ||
       pinStatuses.includes('Remote') ||
       pinStatuses.includes('Unpinned')) {
