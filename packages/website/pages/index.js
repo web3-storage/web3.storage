@@ -1,11 +1,19 @@
 // ===================================================================== Imports
+import { useEffect } from 'react';
+
 import IndexPageData from '../content/pages/index.json';
 import Scroll2Top from '../components/scroll2top/scroll2top.js';
 import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
+import { addFloaterAnimations } from '../lib/floater-animations.js';
 
 // ===================================================================== Exports
 export default function Home() {
   const sections = IndexPageData.page_content;
+
+  useEffect(() => {
+    addFloaterAnimations();
+  }, []);
+
   return (
     <>
       <main className="page page-index">
