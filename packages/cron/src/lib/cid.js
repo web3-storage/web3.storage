@@ -17,8 +17,9 @@ export function normalizeCid (cid) {
 
 export function downgradeCid (cid) {
   try {
-    return CID.parse(cid).toV0().toString()
+    cid = CID.parse(cid)
   } catch (err) {
     throw new InvalidCidError(cid)
   }
+  return cid.toV0().toString()
 }
