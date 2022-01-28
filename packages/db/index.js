@@ -933,7 +933,7 @@ export class DBClient {
       }
 
       if (opts.meta) {
-        query = query.eq('meta', `${opts.meta}`)
+        query = query.eq('meta', opts.meta)
       }
     }
 
