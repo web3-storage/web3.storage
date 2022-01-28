@@ -52,7 +52,6 @@ export async function updatePinStatuses ({ cluster, db }) {
     let pinUpdates = await Promise.all(requests.map(async req => {
       const { pin } = req
       let peerMap
-      let contentCid
 
       try {
         peerMap = await getPinStatus(pin.contentCid)
@@ -65,15 +64,23 @@ export async function updatePinStatuses ({ cluster, db }) {
         return null // not tracked by our cluster
       }
 
-      const status = toPinStatusEnum(peerMap[pin.location.peerId].status)
+      let status = toPinStatusEnum(peerMap[pin.location.peerId].status)
 
       if (status !== 'Pinned' && status !== 'Remote') {
-        if (status === 'Unpinned') {
-          contentCid = denormalizeCid(pin.contentCid)
-        } else {
-          contentCid = pin.contentCid
+        const cidV0 = denormalizeCid(pin.contentCid)
+
+        try {
+          peerMap = await getPinStatus(cidV0)
+        } catch (err) {
           reSyncPins.push(pin)
+          return null
         }
+
+        if (!peerMap[pin.location.peerId]) return null
+
+        status = toPinStatusEnum(peerMap[pin.location.peerId].status)
+
+        reSyncPins.push(pin)
       }
 
       if (status === pin.status) {
@@ -86,7 +93,7 @@ export async function updatePinStatuses ({ cluster, db }) {
       return {
         id: pin._id,
         status: status,
-        content_cid: contentCid,
+        content_cid: pin.contentCid,
         pin_location_id: pin.location._id,
         updated_at: new Date().toISOString()
       }
