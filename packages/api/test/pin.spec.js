@@ -1,5 +1,6 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
+import fetch from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
 import {
@@ -13,8 +14,8 @@ import {
   REQUIRED_CID,
   INVALID_LIMIT,
   INVALID_REPLACE
-} from '../src/pins.js'
-import { PinningUnauthorizedError } from '../src/errors'
+} from '../src/utils/psa.js'
+import { PinningUnauthorizedError } from '../src/errors.js'
 
 /**
  *

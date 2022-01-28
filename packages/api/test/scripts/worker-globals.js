@@ -1,10 +1,3 @@
-export const caches = {
-  default: {
-    match: () => null,
-    put: () => {}
-  }
-}
-
 export const ENV = 'dev'
 export const BRANCH = 'test'
 export const VERSION = 'test'

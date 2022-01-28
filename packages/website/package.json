@@ -47,6 +47,8 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "git-rev-sync": "^3.0.2",
+    "git-revision-webpack-plugin": "^5.0.0",
     "next-sitemap": "^1.6.173",
     "postcss": "^8.3.5",
     "tailwindcss": "^2.2.4",

@@ -1,6 +1,7 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 import * as uint8arrays from 'uint8arrays'
+import fetch from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { createNameKeypair, createNameRecord, getTestJWT } from './scripts/helpers.js'
 

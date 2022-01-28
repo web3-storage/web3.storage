@@ -1,5 +1,6 @@
-/* global describe it fetch Blob FormData */
+/* eslint-env mocha */
 import assert from 'assert'
+import fetch, { FormData, Blob } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
 

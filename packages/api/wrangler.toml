@@ -10,7 +10,9 @@ type = "javascript"
 command = "npm run build"
 watch_dir = "src"
 [build.upload]
-format = "service-worker"
+format = "modules"
+dir = "dist"
+main = "index.mjs"
 # NOTE: Make sure the main field in your package.json references the Worker script you want to publish.
 
 # ---- Environment specific overrides below ! ----
@@ -19,6 +21,11 @@ format = "service-worker"
 # NOTE: set BOTH a `route` template and `zone_id` to deploy to a custom domain.
 # NOTE: set worker_dev to true to deploy to a ${name}.${zone}.workers.dev
 # NOTE: `vars` are not inherited by envs. You need to declare all of them in each env.
+
+# Test!
+[env.test]
+workers_dev = true
+vars = { DEBUG = "true", ENV= "test" }
 
 # PROD!
 [env.production]
