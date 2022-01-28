@@ -266,7 +266,8 @@ function parseSearchParams (params) {
     status,
     before,
     after,
-    limit
+    limit,
+    meta
   } = params
 
   if (cid) {
@@ -353,6 +354,16 @@ function parseSearchParams (params) {
       }
     }
     opts.limit = limit
+  }
+
+  if (meta) {
+    if (!JSON.parse(meta) || Array.isArray(meta) || Object.entries(meta).some(([, v]) => typeof v !== 'string')) {
+      return new JSONResponse(
+        { error: { reason: ERROR_STATUS, details: INVALID_META } },
+        { status: ERROR_CODE }
+      )
+    }
+    opts.meta = meta
   }
 
   return { error: undefined, data: opts }

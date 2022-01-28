@@ -42,6 +42,7 @@ const listPinsQuery = `
   contentCid:content_cid,
   authKey:auth_key_id,
   name,
+  meta,
   deleted:deleted_at,
   created:inserted_at,
   updated:updated_at,
@@ -930,9 +931,11 @@ export class DBClient {
       if (opts.after) {
         query = query.gte('inserted_at', opts.after)
       }
-    }
 
-    // TODO(https://github.com/web3-storage/web3.storage/issues/798): filter by meta is missing
+      if (opts.meta) {
+        query = query.eq('meta', `${opts.meta}`)
+      }
+    }
 
     /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, error: Error }} */
     const { data, error } = (await query)

@@ -333,6 +333,27 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(data.results.length, 3)
     })
 
+    it('filters pins by meta', async () => {
+      const opts = new URLSearchParams({
+        status: 'pinning',
+        meta: '{"app_id": "99986338-1113-4706-8302-4420da6158bb"}'
+      })
+      const url = new URL(`${baseUrl}?${opts}`).toString()
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Server response is ok')
+      const data = await res.json()
+      assert.strictEqual(data.count, 2)
+    })
+
     it('error if user not authorized to pin', async () => {
       const notAuthorizedToken = await getTestJWT('test-upload', 'test-upload')
       const res = await fetch(new URL('pins', endpoint).toString(), {
