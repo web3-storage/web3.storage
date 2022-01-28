@@ -15,7 +15,7 @@ export function normalizeCid (cid) {
   }
 }
 
-export function denormalizeCid (cid) {
+export function downgradeCid (cid) {
   try {
     return CID.parse(cid).toV0().toString()
   } catch (err) {
