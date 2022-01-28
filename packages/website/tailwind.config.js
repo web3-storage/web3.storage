@@ -33,6 +33,12 @@ module.exports = {
         '3-auto': 'repeat(3, auto)',
         '6-auto': 'repeat(6, auto)'
       },
+      minHeight: {
+        '3.25': '3.25rem'
+      },
+      minWidth: {
+        '6': '6rem'
+      },
       zIndex: {
         'n1': '-1',
         '0': 0,
