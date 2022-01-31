@@ -888,16 +888,35 @@ export class DBClient {
     const match = opts?.match || 'exact'
     const limit = opts?.limit || 10
 
-    let query = this._client
-      .from(psaPinRequestTableName)
-      .select(listPinsQuery)
-      .eq('auth_key_id', authKey)
-      .is('deleted_at', null)
-      .order('inserted_at', { ascending: false })
+    /**
+     * PSA Pinning APIs spec does not have concept of page as an offset,
+     * but rather it relies on `before` and `after` options to offset the results "pages".
+     * Unfortunately this means that if we add our before/after filters to the query and then we count,
+     * instead of getting the total size of the table or view we get the size of a "page".
+     * To workaround this issue for now we run 2 queries, one for selecting where we pass the dates and
+     * another one for counting where we exclude them.
+     *
+     * @param {object} opt
+     * @param {boolean} [opt.count] Whether or not to return the count
+     * @returns
+     */
+    const createQueryNoDates = ({ count = false } = {}) => {
+      let query = this._client
+        .from(psaPinRequestTableName)
+        .select(listPinsQuery, count
+          ? {
+              count: 'exact'
+            }
+          : {})
+        .eq('auth_key_id', authKey)
+        .is('deleted_at', null)
+        .limit(limit)
+        .order('inserted_at', { ascending: false })
 
-    if (!Object.keys(opts).length) {
-      query = query.eq('content.pins.status', 'Pinned')
-    } else {
+      if (!opts.cid && !opts.name && !opts.statuses) {
+        query = query.eq('content.pins.status', 'Pinned')
+      }
+
       if (opts.statuses) {
         query = query.in('content.pins.status', opts.statuses)
       }
@@ -923,30 +942,35 @@ export class DBClient {
         }
       }
 
-      if (opts.before) {
-        query = query.lte('inserted_at', opts.before)
-      }
+      return query
+    }
 
-      if (opts.after) {
-        query = query.gte('inserted_at', opts.after)
-      }
+    let listQuery = createQueryNoDates()
+    const countQuery = createQueryNoDates({ count: true })
+
+    if (opts.before) {
+      listQuery = listQuery.lte('inserted_at', opts.before)
+    }
+
+    if (opts.after) {
+      listQuery = listQuery.gte('inserted_at', opts.after)
     }
 
     // TODO(https://github.com/web3-storage/web3.storage/issues/798): filter by meta is missing
 
-    /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, error: Error }} */
-    const { data, error } = (await query)
+    /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, error: PostgrestError }} */
+    const { data, error } = (await listQuery)
+
+    /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, count: number}} */
+    const { count } = (await countQuery)
 
     if (error) {
       throw new DBError(error)
     }
 
-    const count = data.length
-
     // TODO(https://github.com/web3-storage/web3.storage/issues/804): Not limiting the query might cause
     // performance issues if a user created lots of requests with a token. We should improve this.
-    const pinRequests = data.slice(0, limit)
-    const pins = pinRequests.map(pinRequest => normalizePsaPinRequest(pinRequest))
+    const pins = data.map(pinRequest => normalizePsaPinRequest(pinRequest))
 
     return {
       count,

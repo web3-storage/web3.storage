@@ -314,7 +314,8 @@ describe('Pinning APIs endpoints', () => {
 
     it('limits the number of pins returned for this user and includes the total', async () => {
       const opts = new URLSearchParams({
-        limit: '3'
+        limit: '3',
+        status: 'failed,queued,pinning,pinned'
       })
       const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
