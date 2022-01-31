@@ -68,7 +68,7 @@
 
 #index_hero-squiggle {
   width: 29rem;
-  left: -10.5rem;
+  left: -8.5rem;
   transform: rotate(-27deg);
   @include medium {
     left: calc(50% - #{math.div($containerWidth, 2)} - 12rem);

@@ -718,5 +718,74 @@
         ]
       }
     ]
+  ],
+  "floater_animations": [
+    {
+      "trigger": "hero_header",
+      "duration": 1000,
+      "offset": 500,
+      "floaters": [
+        {
+          "id": "index_hero-squiggle",
+          "start": {
+            "rotate": -27,
+            "scale": 1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": 1,
+            "scale": 1.2,
+            "x": -100,
+            "y": -5
+          }
+        }
+      ]
+    },
+    {
+      "trigger": "intro_2-heading",
+      "duration": 800,
+      "floaters": [
+        {
+          "id": "intro_2-cross",
+          "default": "translate(200%, -150%)",
+          "start": {
+            "scale": 1
+          },
+          "end": {
+            "scale": 0.5
+          }
+        },
+        {
+          "id": "intro_2-triangle",
+          "start": {
+            "rotate": -90,
+            "x": 1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -135,
+            "x": 80,
+            "y": 60
+          }
+        }
+      ]
+    },
+    {
+      "trigger": "section_get-started",
+      "duration": 800,
+      "floaters": [
+        {
+          "id": "section_get-started-cross",
+          "default": "translate(50%, 100%)",
+          "start": {
+            "scale": -1
+          },
+          "end": {
+            "scale": -2
+          }
+        }
+      ]
+    }
   ]
 }

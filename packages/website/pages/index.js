@@ -9,10 +9,11 @@ import { addFloaterAnimations } from '../lib/floater-animations.js';
 // ===================================================================== Exports
 export default function Home() {
   const sections = IndexPageData.page_content;
+  const animations = IndexPageData.floater_animations;
 
   useEffect(() => {
-    addFloaterAnimations();
-  }, []);
+    addFloaterAnimations(animations);
+  }, [animations]);
 
   return (
     <>

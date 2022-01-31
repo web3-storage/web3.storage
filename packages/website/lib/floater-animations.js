@@ -1,52 +1,53 @@
-export const addFloaterAnimations = () => {
+export const addFloaterAnimations = (scenes) => {
 
   const initScrollMagic = async () => {
     if (typeof window !== undefined) {
       const ScrollMagic = (await import('scrollmagic')).default;
       const controller = new ScrollMagic.Controller();
+      const scrollMagicScenes = [];
 
-      const floaters = {
-        'intro_2-heading': [
-          {
-            id: "intro_2-cross",
-            default: "translate(200%, -150%)",
-            start: {
-              scale: 1
-            },
-            end: {
-              scale: 0.5
-            }
-          },
-          {
-            id: "intro_2-triangle",
-            default: "translate(-150%, -50%)",
-            start: {
-              rotate: -90
-            },
-            end: {
-              rotate: -135
-            }
-          }
-        ]
+      for (let i = 0; i < scenes.length; i++) {
+        let scene = scenes[i];
+        scrollMagicScenes[i] = new ScrollMagic.Scene({
+          triggerElement: "#" + scene.trigger,
+          triggerHook: "onEnter",
+          offset: scene.offset ? scene.offset : 0,
+          duration: scene.duration
+        })
+      }
+      controller.addScene(scrollMagicScenes);
+
+      const addSceneAnimation = (i) => {
+        const len = scenes[i].floaters.length;
+        for (let j = 0; j < len; j++) {
+          const xi = scenes[i].floaters[j].start.x
+          const xf = scenes[i].floaters[j].end.x
+          const yi = scenes[i].floaters[j].start.y
+          const yf = scenes[i].floaters[j].end.y
+          const si = scenes[i].floaters[j].start.scale
+          const sf = scenes[i].floaters[j].end.scale
+          const ri = scenes[i].floaters[j].start.rotate
+          const rf = scenes[i].floaters[j].end.rotate
+          const transform = scenes[i].floaters[j].default ? scenes[i].floaters[j].default : ''
+          const id = scenes[i].floaters[j].id
+
+          scrollMagicScenes[i].on('progress', (e) => {
+              const t = e.progress;
+              const x = xi && xf ? (xf - xi) * t + xi : 0
+              const y = yi && yf ? (yf - yi) * t + yi : 0
+              const translate = x && y ? `translate(${x}px, ${y}px)` : ''
+              const scale = si && sf ? `scale(${(sf - si) * t + si})` : ''
+              const rotate = ri && rf ? `rotate(${(rf - ri) * t + ri}deg)` : ''
+
+              const el = document.getElementById(id);
+              el.style.transform = `${transform} ${translate} ${scale} ${rotate}`;
+          });
+        }
       }
 
-      const id = 'intro_2-heading'
-
-      const scene = new ScrollMagic.Scene({triggerElement: "#" + id, duration: 800})
-        .addTo(controller)
-        .on('progress', function (e) {
-          for (let i = 0; i < floaters[id].length; i++) {
-            const floater = floaters[id][i];
-
-            const scale = floater.start.scale && floater.end.scale
-              ? `scale(${(floater.end.scale - floater.start.scale) * e.progress + floater.start.scale})` : ''
-            const rotate = floater.start.rotate && floater.end.rotate
-              ? `rotate(${(floater.end.rotate - floater.start.rotate) * e.progress + floater.start.rotate}deg)` : ''
-
-            const el = document.getElementById(floater.id);
-            el.style.transform = `${floater.default} ${scale} ${rotate}`;
-          }
-        });
+      for (let i = 0; i < scenes.length; i++) {
+        addSceneAnimation(i);
+      }
     }
   };
 
