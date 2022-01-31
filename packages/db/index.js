@@ -888,90 +888,60 @@ export class DBClient {
     const match = opts?.match || 'exact'
     const limit = opts?.limit || 10
 
-    /**
-     * PSA Pinning APIs spec does not have concept of page as an offset,
-     * but rather it relies on `before` and `after` options to offset the results "pages".
-     * Unfortunately this means that if we add our before/after filters to the query and then we count,
-     * instead of getting the total size of the table or view we get the size of a "page".
-     * To workaround this issue for now we run 2 queries, one for selecting where we pass the dates and
-     * another one for counting where we exclude them.
-     *
-     * @param {object} opt
-     * @param {boolean} [opt.count] Whether or not to return the count
-     * @returns
-     */
-    const createQueryNoDates = ({ count = false } = {}) => {
-      let query = this._client
-        .from(psaPinRequestTableName)
-        .select(listPinsQuery, count
-          ? {
-              count: 'exact'
-            }
-          : {})
-        .eq('auth_key_id', authKey)
-        .is('deleted_at', null)
-        .limit(limit)
-        .order('inserted_at', { ascending: false })
+    let query = this._client
+      .from(psaPinRequestTableName)
+      .select(listPinsQuery, {
+        count: 'exact'
+      })
+      .eq('auth_key_id', authKey)
+      .is('deleted_at', null)
+      .limit(limit)
+      .order('inserted_at', { ascending: false })
 
-      if (!opts.cid && !opts.name && !opts.statuses) {
-        query = query.eq('content.pins.status', 'Pinned')
-      }
-
-      if (opts.statuses) {
-        query = query.in('content.pins.status', opts.statuses)
-      }
-
-      if (opts.cid) {
-        query = query.in('source_cid', opts.cid)
-      }
-
-      if (opts.name) {
-        switch (match) {
-          case 'exact':
-            query = query.like('name', `${opts.name}`)
-            break
-          case 'iexact':
-            query = query.ilike('name', `${opts.name}`)
-            break
-          case 'partial':
-            query = query.like('name', `%${opts.name}%`)
-            break
-          case 'ipartial':
-            query = query.ilike('name', `%${opts.name}%`)
-            break
-        }
-      }
-
-      return query
+    if (!opts.cid && !opts.name && !opts.statuses) {
+      query = query.eq('content.pins.status', 'Pinned')
     }
 
-    // TODO(https://github.com/web3-storage/web3.storage/issues/804): We're currently running 2 queries which
-    // is not ideal. We should improve this.
-    let listQuery = createQueryNoDates()
-    const countQuery = createQueryNoDates({ count: true })
+    if (opts.statuses) {
+      query = query.in('content.pins.status', opts.statuses)
+    }
+
+    if (opts.cid) {
+      query = query.in('source_cid', opts.cid)
+    }
+
+    if (opts.name) {
+      switch (match) {
+        case 'exact':
+          query = query.like('name', `${opts.name}`)
+          break
+        case 'iexact':
+          query = query.ilike('name', `${opts.name}`)
+          break
+        case 'partial':
+          query = query.like('name', `%${opts.name}%`)
+          break
+        case 'ipartial':
+          query = query.ilike('name', `%${opts.name}%`)
+          break
+      }
+    }
 
     if (opts.before) {
-      listQuery = listQuery.lte('inserted_at', opts.before)
+      query = query.lte('inserted_at', opts.before)
     }
 
     if (opts.after) {
-      listQuery = listQuery.gte('inserted_at', opts.after)
+      query = query.gte('inserted_at', opts.after)
     }
 
     // TODO(https://github.com/web3-storage/web3.storage/issues/798): filter by meta is missing
 
-    /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, error: PostgrestError }} */
-    const { data, error } = (await listQuery)
+    /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, count: number, error: PostgrestError }} */
+    const { data, count, error } = (await query)
 
     if (error) {
       throw new DBError(error)
-    }
-
-    /** @type {{ count: number, error: PostgrestError}} */
-    const { count, error: errorCount } = (await countQuery)
-
-    if (errorCount) {
-      throw new DBError(errorCount)
     }
 
     const pins = data.map(pinRequest => normalizePsaPinRequest(pinRequest))

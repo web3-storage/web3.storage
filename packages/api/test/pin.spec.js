@@ -289,7 +289,8 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
-      assert.strictEqual(data.count, 1)
+      assert.strictEqual(data.results.length, 0)
+      assert.strictEqual(data.count, 0)
     })
 
     it('filters pins created after a date', async () => {
@@ -309,7 +310,8 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
-      assert.strictEqual(data.count, 1)
+      assert.strictEqual(data.results.length, 0)
+      assert.strictEqual(data.count, 0)
     })
 
     it('limits the number of pins returned for this user and includes the total', async () => {

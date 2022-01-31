@@ -434,7 +434,7 @@ describe('Pin Request', () => {
       })
 
       assert.strictEqual(pins.length, 0)
-      assert.strictEqual(count, totalPinned)
+      assert.strictEqual(count, 0)
     })
 
     it('filters items created after a date', async () => {
