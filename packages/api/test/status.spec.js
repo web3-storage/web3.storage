@@ -1,9 +1,10 @@
-/* eslint-env mocha, browser */
+/* eslint-env mocha */
 import assert from 'assert'
+import fetch from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
-import statusWithActiveDeal from './fixtures/pgrest/status-with-active-deal.json'
-import statusWithQueuedDeal from './fixtures/pgrest/status-with-queued-deal.json'
-import statusWithNoDeal from './fixtures/pgrest/status-with-no-deal.json'
+import statusWithActiveDeal from './fixtures/pgrest/status-with-active-deal.js'
+import statusWithQueuedDeal from './fixtures/pgrest/status-with-queued-deal.js'
+import statusWithNoDeal from './fixtures/pgrest/status-with-no-deal.js'
 
 describe('GET /status/:cid', () => {
   it('get pin and deal status', async () => {

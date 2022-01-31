@@ -105,10 +105,12 @@ function serverError (error, request, env) {
 // https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent
 /** @typedef {{ waitUntil(p: Promise): void }} Ctx */
 
-addEventListener('fetch', (event) => {
-  const env = {}
-  event.respondWith(router
-    .handle(event.request, env, event)
-    .catch((e) => serverError(e, event.request, env))
-  )
-})
+export default {
+  async fetch (request, env, ctx) {
+    try {
+      return await router.handle(request, env, ctx)
+    } catch (error) {
+      return serverError(error, request, env)
+    }
+  }
+}

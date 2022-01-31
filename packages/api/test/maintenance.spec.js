@@ -1,5 +1,6 @@
-/* eslint-env mocha, browser */
+/* eslint-env mocha */
 import assert from 'assert'
+import { Response } from '@web-std/fetch'
 import {
   withMode,
   READ_WRITE,

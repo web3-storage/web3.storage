@@ -1,9 +1,10 @@
-/* eslint-env mocha, browser */
+/* eslint-env mocha */
 import assert from 'assert'
 import { CID } from 'multiformats/cid'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
 import { CarWriter } from '@ipld/car'
+import fetch, { Blob } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { createCar } from './scripts/car.js'
 import { MAX_BLOCK_SIZE } from '../src/constants.js'
