@@ -1,6 +1,48 @@
 import { JSONResponse, notFound } from './utils/json-response.js'
 import { normalizeCid } from './utils/normalize-cid.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
+import { Validator } from '@cfworker/json-schema'
+import { PinningServiceApiError } from './errors.js'
+
+const DEFAULT_LIMIT = 10
+const MAX_LIMIT = 1000
+
+// Validation Schemas
+const listPinsValidator = new Validator({
+  type: 'object',
+  required: [],
+  properties: {
+    name: { type: 'string' },
+    after: { type: 'string', format: 'date-time' },
+    before: { type: 'string', format: 'date-time' },
+    cid: { type: 'array', items: { type: 'string' } },
+    limit: { type: 'integer', minimum: 1, maximum: MAX_LIMIT },
+    meta: { type: 'object' },
+    match: {
+      type: 'string',
+      enum: ['exact', 'iexact', 'ipartial', 'partial']
+    },
+    status: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: ['PinError', 'PinQueued', 'Pinned', 'Pinning']
+      }
+    }
+  }
+})
+
+const postPinValidator = new Validator({
+  type: 'object',
+  required: ['cid'],
+  properties: {
+    cid: { type: 'string' },
+    name: { type: 'string' },
+    meta: { type: 'object', keys: { type: 'string' } },
+    origins: { type: 'array', items: { type: 'string' } },
+    requestId: { type: 'string' }
+  }
+})
 
 /**
  * @typedef {'queued' | 'pinning' | 'failed' | 'pinned'} apiPinStatus
@@ -102,9 +144,6 @@ export const REQUIRED_CID = 'CID is required'
 export const REQUIRED_REQUEST_ID = 'Request id is required'
 export const UNPERMITTED_MATCH = 'Match should be "exact", "iexact", "partial", or "ipartial"'
 
-const MATCH_OPTIONS = ['exact', 'iexact', 'partial', 'ipartial']
-const STATUS_OPTIONS = ['queued', 'pinning', 'pinned', 'failed']
-
 /**
  * @param {import('./user').AuthenticatedRequest} request
  * @param {import('./env').Env} env
@@ -113,68 +152,22 @@ const STATUS_OPTIONS = ['queued', 'pinning', 'pinned', 'failed']
  */
 export async function pinPost (request, env, ctx) {
   const pinData = await request.json()
-  const { cid, name, origins, meta } = pinData
-  let normalizedCid
-
-  // Require cid
-  if (!cid) {
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: REQUIRED_CID } },
-      { status: ERROR_CODE }
-    )
-  }
-
-  // Validate cid
-  try {
-    normalizedCid = normalizeCid(cid)
-  } catch (err) {
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_CID } },
-      { status: ERROR_CODE }
-    )
-  }
-
-  // Validate name
-  if (name && typeof name !== 'string') {
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_NAME } },
-      { status: ERROR_CODE }
-    )
-  }
-
-  // Validate origins
-  if (origins && !Array.isArray(origins)) {
-    return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_ORIGINS } },
-      { status: ERROR_CODE }
-    )
-  }
-
-  // Validate meta
-  if (meta) {
-    if (typeof meta !== 'object' || Array.isArray(meta) || Object.entries(meta).some(([, v]) => typeof v !== 'string')) {
-      return new JSONResponse(
-        { error: { reason: ERROR_STATUS, details: INVALID_META } },
-        { status: ERROR_CODE }
-      )
-    }
-  }
-
   const { authToken } = request.auth
-  const requestId = request.params ? request.params.requestId : null
+  pinData.requestId = request.params ? request.params.requestId : null
 
-  if (requestId) {
-    if (typeof requestId !== 'string') {
-      return new JSONResponse(
-        { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
-        { status: ERROR_CODE }
-      )
-    }
+  const result = parsePinObject(pinData)
 
-    return replacePin(pinData, requestId, authToken._id, env, ctx)
+  if (result.error) {
+    return new JSONResponse(result.error, { status: 400 })
   }
 
-  return createPin(normalizedCid, pinData, authToken._id, env, ctx)
+  const pinObject = result.data
+
+  if (pinObject.requestId) {
+    return replacePin(pinObject, pinObject.requestId, authToken._id, env, ctx)
+  }
+
+  return createPin(pinObject.cid, pinObject, authToken._id, env, ctx)
 }
 
 /**
@@ -241,7 +234,7 @@ async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
 export async function pinGet (request, env, ctx) {
   if (typeof request.params.requestId !== 'string') {
     return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
+      new PinningServiceApiError(INVALID_REQUEST_ID, ERROR_STATUS),
       { status: ERROR_CODE }
     )
   }
@@ -255,14 +248,14 @@ export async function pinGet (request, env, ctx) {
     pinRequest = await env.db.getPsaPinRequest(authToken._id, request.params.requestId)
   } catch (e) {
     console.error(e)
-    // TODO catch different exceptions
-    // TODO notFound error paylod does not strictly comply to spec.
-    return notFound()
+    return new JSONResponse(
+      new PinningServiceApiError(e, 'DB_ERROR'),
+      { status: 501 }
+    )
   }
 
   /** @type { PsaPinStatusResponse } */
-  const pin = getPinStatus(pinRequest)
-  return new JSONResponse(pin)
+  return new JSONResponse(getPinStatus(pinRequest))
 }
 
 /**
@@ -307,6 +300,50 @@ export async function pinsGet (request, env, ctx) {
  * @param {*} params
  * @returns
  */
+function parsePinObject (params) {
+  const opts = {}
+  const {
+    cid,
+    name,
+    meta,
+    origins,
+    requestId
+  } = params
+
+  try {
+    opts.cid = normalizeCid(cid)
+  } catch (err) {
+    return new JSONResponse(
+      { error: { reason: ERROR_STATUS, details: INVALID_CID } },
+      { status: ERROR_CODE }
+    )
+  }
+
+  if (name) opts.name = name
+  if (meta) opts.meta = meta
+  if (origins) opts.origins = origins
+  if (requestId) opts.requestId = requestId
+
+  const result = postPinValidator.validate(opts)
+
+  let data
+  let error
+
+  if (result.valid) {
+    data = opts
+  } else {
+    error = new PinningServiceApiError(JSON.stringify(result.errors))
+  }
+
+  return { data, error }
+}
+
+/**
+ * Parse the list options
+ *
+ * @param {*} params
+ * @returns
+ */
 function parseSearchParams (params) {
   const opts = {}
   const {
@@ -336,76 +373,39 @@ function parseSearchParams (params) {
   }
 
   if (name) {
-    if (typeof name !== 'string') {
-      return {
-        error: { reason: ERROR_STATUS, details: INVALID_NAME },
-        data: undefined
-      }
-    }
     opts.name = name
   }
 
   if (match) {
-    if (typeof match !== 'string') {
-      if (!MATCH_OPTIONS.includes(match)) {
-        return {
-          error: { reason: ERROR_STATUS, details: UNPERMITTED_MATCH },
-          data: undefined
-        }
-      }
-
-      return {
-        error: { reason: ERROR_STATUS, details: INVALID_MATCH },
-        data: undefined
-      }
-    }
     opts.match = match
   }
 
   if (status) {
-    const statuses = status.split(',')
-    const isValidStatus = statuses.every(v => STATUS_OPTIONS.includes(v))
-
-    if (!isValidStatus) {
-      return {
-        error: { reason: ERROR_STATUS, details: INVALID_STATUS },
-        data: undefined
-      }
-    }
-    opts.statuses = psaStatusesToDBStatuses(statuses)
+    opts.status = status.split(',').map(psaStatusesToDBStatuses)
   }
 
   if (before) {
-    if (typeof before !== 'string' || !Date.parse(before)) {
-      return {
-        error: { reason: ERROR_STATUS, details: INVALID_TIMESTAMP },
-        data: undefined
-      }
-    }
     opts.before = before
   }
 
   if (after) {
-    if (typeof after !== 'string' || !Date.parse(after)) {
-      return {
-        error: { reason: ERROR_STATUS, details: INVALID_TIMESTAMP },
-        data: undefined
-      }
-    }
     opts.after = after
   }
 
-  if (limit) {
-    if (!(/^\d+$/.test(limit))) {
-      return {
-        error: { reason: ERROR_STATUS, details: INVALID_LIMIT },
-        data: undefined
-      }
-    }
-    opts.limit = limit
+  opts.limit = limit ? Number(limit) : DEFAULT_LIMIT
+
+  const result = listPinsValidator.validate(opts)
+
+  let data
+  let error
+
+  if (result.valid) {
+    data = opts
+  } else {
+    error = new PinningServiceApiError(JSON.stringify(result.errors))
   }
 
-  return { error: undefined, data: opts }
+  return { data, error }
 }
 
 /**
@@ -440,14 +440,14 @@ export async function pinDelete (request, env, ctx) {
 
   if (!requestId) {
     return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: REQUIRED_REQUEST_ID } },
+      new PinningServiceApiError(REQUIRED_REQUEST_ID),
       { status: ERROR_CODE }
     )
   }
 
   if (typeof requestId !== 'string') {
     return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_REQUEST_ID } },
+      new PinningServiceApiError(INVALID_REQUEST_ID),
       { status: ERROR_CODE }
     )
   }
@@ -457,9 +457,10 @@ export async function pinDelete (request, env, ctx) {
     await env.db.deletePsaPinRequest(requestId, authToken._id)
   } catch (e) {
     console.error(e)
-    // TODO catch different exceptions
-    // TODO notFound error paylod does not strictly comply to spec.
-    return notFound()
+    return new JSONResponse(
+      new PinningServiceApiError(e, 'DB_ERROR'),
+      { status: 501 }
+    )
   }
 
   return new JSONResponse({}, { status: 202 })
@@ -483,7 +484,7 @@ async function replacePin (newPinData, requestId, authTokenId, env, ctx) {
   const existingCid = existingPinRequest.sourceCid
   if (newPinData.cid === existingCid) {
     return new JSONResponse(
-      { error: { reason: ERROR_STATUS, details: INVALID_REPLACE } },
+      new PinningServiceApiError(INVALID_REPLACE, ERROR_STATUS),
       { status: ERROR_CODE }
     )
   }
@@ -493,7 +494,7 @@ async function replacePin (newPinData, requestId, authTokenId, env, ctx) {
     pinStatus = await createPin(existingPinRequest.contentCid, newPinData, authTokenId, env, ctx)
   } catch (e) {
     return new JSONResponse(
-      { error: { reason: `DB Error: ${e}` } },
+      new PinningServiceApiError(e, 'DB_ERROR'),
       { status: 501 }
     )
   }
@@ -502,7 +503,7 @@ async function replacePin (newPinData, requestId, authTokenId, env, ctx) {
     await env.db.deletePsaPinRequest(requestId, authTokenId)
   } catch (e) {
     return new JSONResponse(
-      { error: { reason: `DB Error: ${e}` } },
+      new PinningServiceApiError(e, 'DB_ERROR'),
       { status: 501 }
     )
   }

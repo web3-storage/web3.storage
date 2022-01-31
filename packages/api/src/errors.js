@@ -1,3 +1,16 @@
+export class PinningServiceApiError extends Error {
+  /**
+   *
+   * @param {string} [details]
+   * @param {string} reason
+   */
+  constructor (details, reason = 'VALIDATION_ERROR') {
+    super()
+    this.reason = reason
+    this.details = details
+  }
+}
+
 export class HTTPError extends Error {
   /**
    *
