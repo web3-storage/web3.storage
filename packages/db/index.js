@@ -945,6 +945,8 @@ export class DBClient {
       return query
     }
 
+    // TODO(https://github.com/web3-storage/web3.storage/issues/804): We're currently running 2 queries which
+    // is not ideal. We should improve this.
     let listQuery = createQueryNoDates()
     const countQuery = createQueryNoDates({ count: true })
 
@@ -961,15 +963,17 @@ export class DBClient {
     /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, error: PostgrestError }} */
     const { data, error } = (await listQuery)
 
-    /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, count: number}} */
-    const { count } = (await countQuery)
-
     if (error) {
       throw new DBError(error)
     }
 
-    // TODO(https://github.com/web3-storage/web3.storage/issues/804): Not limiting the query might cause
-    // performance issues if a user created lots of requests with a token. We should improve this.
+    /** @type {{ count: number, error: PostgrestError}} */
+    const { count, error: errorCount } = (await countQuery)
+
+    if (errorCount) {
+      throw new DBError(errorCount)
+    }
+
     const pins = data.map(pinRequest => normalizePsaPinRequest(pinRequest))
 
     return {
