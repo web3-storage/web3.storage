@@ -2,7 +2,7 @@
 import assert from 'assert'
 import { normalizeCid } from '../../api/src/utils/normalize-cid'
 import { DBClient } from '../index'
-import { createUpload, createUser, createUserAuthKey, token } from './utils.js'
+import { createUser, createUserAuthKey, token } from './utils.js'
 import { CID } from 'multiformats/cid'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
