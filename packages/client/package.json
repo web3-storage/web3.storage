@@ -72,22 +72,26 @@
   "types": "./dist/src/lib.d.ts",
   "module": "./src/lib.js",
   "main": "./dist/src/lib.cjs",
-  "exports": {
-    ".": {
-      "browser": "./src/lib.js",
-      "require": "./dist/src/lib.cjs",
-      "node": "./src/lib.js"
-    },
-    "./src/platform.js": {
-      "browser": "./src/platform.web.js",
-      "require": "./dist/src/platform.cjs",
-      "node": "./src/platform.js"
-    },
-    "./name": {
-      "browser": "./src/name.js",
-      "require": "./dist/src/name.cjs",
-      "node": "./src/name.js"
-    }
+  "exports": { 
+    ".": { 
+      "browser": "./src/lib.js", 
+      "require": "./dist/src/lib.cjs", 
+      "node": "./src/lib.js" 
+    }, 
+    "./src/platform.js": { 
+      "browser": "./src/platform.web.js", 
+      "require": "./dist/src/platform.cjs", 
+      "node": "./src/platform.js" 
+    }, 
+    "./name": { 
+      "browser": "./src/name.js", 
+      "require": "./dist/src/name.cjs", 
+      "node": "./src/name.js" }, 
+    "./dist/bundle.esm.min.js": { 
+      "browser": "./dist/bundle.esm.min.js", 
+      "require": "./dist/bundle.esm.min.js", 
+      "node": "./dist/bundle.esm.min.js" 
+      }
   },
   "browser": {
     "./src/platform.js": "./src/platform.web.js"
