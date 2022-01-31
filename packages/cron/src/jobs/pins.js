@@ -62,21 +62,34 @@ export async function updatePinStatuses ({ cluster, db }) {
       }
 
       // Is this pin tracked by our cluster?
-      if (!peerMap[pin.location.peerId]) {
-        return null // not tracked by our cluster
-      }
+      if (!peerMap[pin.location.peerId]) return null
 
-      const status = toPinStatusEnum(peerMap[pin.location.peerId].status)
+      let status = toPinStatusEnum(peerMap[pin.location.peerId].status)
 
-      if (status !== 'Pinned' && status !== 'Remote') {
-        const cid = status === 'Unpinned' ? downgradeCid(pin.contentCid) : pin.contentCid
+      // If "Unpinned" downgrade to v0 CID
+      if (status === 'Unpinned') {
+        let cidV0
         try {
-          peerMap = await getPinStatus(cid)
+          cidV0 = downgradeCid(pin.contentCid)
+        } catch (err) {
+          log(`⚠️ Unable to downgrade CID: ${pin.contentCid}`)
+          reSyncPins.push(pin)
+          return null
+        }
+
+        try {
+          peerMap = await getPinStatus(cidV0)
         } catch (err) {
           reSyncPins.push(pin)
           return null
         }
+
+        if (!peerMap[pin.location.peerId]) return null
+
+        status = toPinStatusEnum(peerMap[pin.location.peerId].status)
       }
+
+      if (status !== 'Pinned' && status !== 'Remote') reSyncPins.push(pin)
 
       if (status === pin.status) {
         log(`🙅 ${pin.contentCid}@${pin.location.peerId}: No status change (${status})`)
