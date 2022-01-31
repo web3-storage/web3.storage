@@ -1,6 +1,6 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
-import { normalizeCid } from '../../api/src/utils/normalize-cid'
+import { normalizeCid } from '../../api/src/utils/cid'
 import { DBClient } from '../index'
 import { createUpload, createUser, createUserAuthKey, token } from './utils.js'
 import { CID } from 'multiformats/cid'
