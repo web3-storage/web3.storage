@@ -144,7 +144,8 @@ async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
 
   await env.cluster.pin(cid, {
     name: pinName,
-    origins
+    origins,
+    metadata: pinMeta
   })
   const pins = await getPins(cid, env.cluster)
 
@@ -426,6 +427,7 @@ async function replacePin (newPinData, requestId, authTokenId, env, ctx) {
   let existingPinRequest
   try {
     existingPinRequest = await env.db.getPsaPinRequest(authTokenId, requestId)
+    console.log('-->EXISTING', existingPinRequest)
   } catch (e) {
     return notFound()
   }

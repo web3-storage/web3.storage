@@ -866,32 +866,41 @@ describe('Pinning APIs endpoints', () => {
       const cid = 'bafybeid3ka3b3f443kv2je3mfm4byk6qps3wipr7wzu5uli6tdo57crcke'
       const newCid = 'bafybeid4f2r3zpnkjqrglkng265ttqg6zbdr75dpbiwellvlpcxq7pggjy'
 
-      // Creates pin Requests
+      // Create a pin request.
       const pinRequest = await createPinRequest(cid, token)
 
-      // It replaces it
-      const resR = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+      // Replace this pin request, and include extra data.
+      // Note: if passing origins, they must be valid.
+      const meta = { app_id: '99986338-1113-4706-8302-4420da6158aa' }
+      const replaceResponse = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          cid: newCid
+          cid: newCid,
+          name: 'Replaced.pdf',
+          meta: {
+            app_id: '99986338-1113-4706-8302-4420da6158aa'
+          }
         })
       })
 
-      assert(resR, 'Replace request did not respond')
-      assert(resR.ok, 'Replace request was not successful')
+      assert(replaceResponse, 'Replace request did not respond')
+      assert(replaceResponse.ok, 'Replace request was not successful')
+      const data = await replaceResponse.json()
+      assert.equal(data.pin.name, 'Replaced.pdf')
+      assert.deepStrictEqual(data.pin.meta, meta)
 
-      const resG = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+      // Ensure the original pin request has been deleted.
+      const getResponse = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
-
-      assert(resG, 'Get request did not respond')
-      assert.strictEqual(resG.status, 404, 'Pin request was not deleted')
+      assert(getResponse, 'Get request did not respond')
+      assert.strictEqual(getResponse.status, 404, 'Pin request was not deleted')
     })
 
     it('should not replace the same pin request', async () => {
