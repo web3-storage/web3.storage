@@ -274,7 +274,8 @@ describe('Pinning APIs endpoints', () => {
 
     it('filters pins created before a date', async () => {
       const opts = new URLSearchParams({
-        before: '2021-07-01T00:00:00.000000Z'
+        before: '2021-07-01T00:00:00.000000Z',
+        status: 'failed,queued,pinning,pinned'
       })
       const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
@@ -289,12 +290,14 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
+      assert.strictEqual(data.results.length, 1)
       assert.strictEqual(data.count, 1)
     })
 
     it('filters pins created after a date', async () => {
       const opts = new URLSearchParams({
-        after: '2021-07-15T00:00:00.000000Z'
+        after: '2021-07-15T00:00:00.000000Z',
+        status: 'failed,queued,pinning,pinned'
       })
       const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
@@ -309,12 +312,14 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
+      assert.strictEqual(data.results.length, 1)
       assert.strictEqual(data.count, 1)
     })
 
     it('limits the number of pins returned for this user and includes the total', async () => {
       const opts = new URLSearchParams({
-        limit: '3'
+        limit: '3',
+        status: 'failed,queued,pinning,pinned'
       })
       const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
