@@ -881,7 +881,7 @@ export class DBClient {
    * Get a filtered list of pin requests for a user
    *
    * @param {string} authKey
-   * @param {import('./db-client-types').ListPsaPinRequestOptions} opts
+   * @param {import('./db-client-types').ListPsaPinRequestOptions} [opts]
    * @return {Promise<import('./db-client-types').ListPsaPinRequestResults> }> }
    */
   async listPsaPinRequests (authKey, opts = {}) {
