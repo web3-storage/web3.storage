@@ -7,7 +7,7 @@ import { normalizeCid } from './normalize-cid.js'
  */
 
 /**
- * @param {import('../../../db/db-client-types.js').PinItemOutput[]} pins
+ * @param {import('@web3-storage/db/db-client-types').PinItemOutput[]} pins
  * @return {apiPinStatus} status
  */
 export const getEffectivePinStatus = (pins) => {

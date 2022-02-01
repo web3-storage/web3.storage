@@ -2,6 +2,7 @@ import debug from 'debug'
 import { toPinStatusEnum } from '@web3-storage/api/src/utils/pin.js'
 import retry from 'p-retry'
 import { piggyback } from 'piggybacker'
+import { downgradeCid } from '../lib/cid.js'
 
 const MAX_PIN_REQUESTS_PER_RUN = 400
 const log = debug('pins:updatePinStatuses')
@@ -52,6 +53,7 @@ export async function updatePinStatuses ({ cluster, db }) {
       const { pin } = req
       let peerMap
 
+      // Get status of pin or check later
       try {
         peerMap = await getPinStatus(pin.contentCid)
       } catch (err) {
@@ -59,15 +61,35 @@ export async function updatePinStatuses ({ cluster, db }) {
         return null // Cluster could not find the content, please check later
       }
 
-      if (!peerMap[pin.location.peerId]) {
-        return null // not tracked by our cluster
+      // Is this pin tracked by our cluster?
+      if (!peerMap[pin.location.peerId]) return null
+
+      let status = toPinStatusEnum(peerMap[pin.location.peerId].status)
+
+      // If "Unpinned" downgrade to v0 CID
+      if (status === 'Unpinned') {
+        let cidV0
+        try {
+          cidV0 = downgradeCid(pin.contentCid)
+        } catch (err) {
+          log(`⚠️ Unable to downgrade CID: ${pin.contentCid}`)
+          reSyncPins.push(pin)
+          return null
+        }
+
+        try {
+          peerMap = await getPinStatus(cidV0)
+        } catch (err) {
+          reSyncPins.push(pin)
+          return null
+        }
+
+        if (!peerMap[pin.location.peerId]) return null
+
+        status = toPinStatusEnum(peerMap[pin.location.peerId].status)
       }
 
-      const status = toPinStatusEnum(peerMap[pin.location.peerId].status)
-
-      if (status !== 'Pinned' && status !== 'Remote') {
-        reSyncPins.push(pin)
-      }
+      if (status !== 'Pinned' && status !== 'Remote') reSyncPins.push(pin)
 
       if (status === pin.status) {
         log(`🙅 ${pin.contentCid}@${pin.location.peerId}: No status change (${status})`)
