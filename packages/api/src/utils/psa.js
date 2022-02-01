@@ -162,6 +162,11 @@ export function validatePayload (payload, validator) {
     opts.status = opts.status.split(',').map(psaStatusesToDBStatuses)
   }
 
+  // Limit should be a number
+  if (opts.limit) {
+    opts.limit = Number(opts.limit)
+  }
+
   const result = validator.validate(opts)
 
   let data

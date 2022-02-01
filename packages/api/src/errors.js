@@ -1,15 +1,26 @@
 export class PinningServiceApiError extends Error {
   /**
    *
-   * @param {string} [details]
    * @param {string} reason
+   * @param {string} [details]
+   * @param {number} [status]
    */
-  constructor (details, reason = 'VALIDATION_ERROR') {
+  constructor (reason = 'PSA_INVALID_PIN_DATA', details, status = 400) {
     super()
     this.reason = reason
     this.details = details
+    this.status = status
   }
 }
+
+export class PSAErrorInvalidCid extends PinningServiceApiError {
+  constructor () {
+    super(PSAErrorInvalidCid.REASON)
+    this.details = 'The cid provided is invalid'
+    this.status = 400
+  }
+}
+PSAErrorInvalidCid.REASON = 'PSA_INVALID_CID'
 
 export class HTTPError extends Error {
   /**
