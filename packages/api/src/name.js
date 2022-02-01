@@ -69,7 +69,6 @@ export async function namePost (request, env, ctx) {
   )
 
   ctx.waitUntil((async () => {
-  // await ((async () => {
     const record = await env.db.resolveNameRecord(key)
     if (!record) return // shouldn't happen
     const { value } = ipns.unmarshal(uint8ArrayFromString(record, 'base64pad'))
