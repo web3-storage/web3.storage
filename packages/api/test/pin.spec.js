@@ -863,15 +863,19 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('should delete the pin request and replace it', async () => {
-      const cid = 'bafybeid3ka3b3f443kv2je3mfm4byk6qps3wipr7wzu5uli6tdo57crcke'
-      const newCid = 'bafybeid4f2r3zpnkjqrglkng265ttqg6zbdr75dpbiwellvlpcxq7pggjy'
-
       // Create a pin request.
+      const cid = 'bafybeid3ka3b3f443kv2je3mfm4byk6qps3wipr7wzu5uli6tdo57crcke'
       const pinRequest = await createPinRequest(cid, token)
 
       // Replace this pin request, and include extra data.
-      // Note: if passing origins, they must be valid.
+      const newCid = 'bafybeid4f2r3zpnkjqrglkng265ttqg6zbdr75dpbiwellvlpcxq7pggjy'
+      const name = 'Replaced.pdf'
+      const origins = [
+        '/ip4/77.100.8.43/tcp/28253/p2p/12D3KooWGYUY2TCpPZsiaJfqs7V74mbSTgx4xNtBkRzkSGQjdaLp',
+        '/ip4/77.100.8.43/udp/28253/quic/p2p/12D3KooWGYUY2TCpPZsiaJfqs7V74mbSTgx4xNtBkRzkSGQjdaLp'
+      ]
       const meta = { app_id: '99986338-1113-4706-8302-4420da6158aa' }
+
       const replaceResponse = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
         method: 'POST',
         headers: {
@@ -879,17 +883,18 @@ describe('Pinning APIs endpoints', () => {
         },
         body: JSON.stringify({
           cid: newCid,
-          name: 'Replaced.pdf',
-          meta: {
-            app_id: '99986338-1113-4706-8302-4420da6158aa'
-          }
+          name,
+          origins,
+          meta
         })
       })
 
       assert(replaceResponse, 'Replace request did not respond')
       assert(replaceResponse.ok, 'Replace request was not successful')
       const data = await replaceResponse.json()
-      assert.equal(data.pin.name, 'Replaced.pdf')
+      assert.strictEqual(data.pin.cid, newCid)
+      assert.deepStrictEqual(data.pin.name, name)
+      assert.deepStrictEqual(data.pin.origins, origins)
       assert.deepStrictEqual(data.pin.meta, meta)
 
       // Ensure the original pin request has been deleted.

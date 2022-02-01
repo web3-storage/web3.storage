@@ -427,7 +427,6 @@ async function replacePin (newPinData, requestId, authTokenId, env, ctx) {
   let existingPinRequest
   try {
     existingPinRequest = await env.db.getPsaPinRequest(authTokenId, requestId)
-    console.log('-->EXISTING', existingPinRequest)
   } catch (e) {
     return notFound()
   }
