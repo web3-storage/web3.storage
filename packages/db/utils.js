@@ -12,7 +12,7 @@ export function normalizeUpload (upload) {
     ...nUpload,
     ...upload.content,
     pins: normalizePins(upload.content.pins, {
-      filterOkStatuses: true
+      isOkStatuses: true
     })
   }
 }
@@ -50,14 +50,14 @@ export function normalizeContent (content) {
  * Normalize pin items.
  *
  * @param {Array<import('./db-client-types').PinItem>} pins
- * @param {object} opt
- * @param {boolean} [opt.filterOkStatuses]
+ * @param {object} [opt]
+ * @param {boolean} [opt.isOkStatuses]
  * @return {Array<import('./db-client-types').PinItemOutput>}
  */
 export function normalizePins (pins, {
-  filterOkStatuses = false
+  isOkStatuses = false
 } = {}) {
-  if (filterOkStatuses) {
+  if (isOkStatuses) {
     pins = pins.filter(pin => PIN_OK_STATUS.has(pin.status))
   }
 
