@@ -11,7 +11,9 @@ export function normalizeUpload (upload) {
   return {
     ...nUpload,
     ...upload.content,
-    pins: normalizePins(upload.content.pins)
+    pins: normalizePins(upload.content.pins, {
+      isOkStatuses: true
+    })
   }
 }
 
@@ -48,10 +50,18 @@ export function normalizeContent (content) {
  * Normalize pin items.
  *
  * @param {Array<import('./db-client-types').PinItem>} pins
+ * @param {object} [opt]
+ * @param {boolean} [opt.isOkStatuses]
  * @return {Array<import('./db-client-types').PinItemOutput>}
  */
-export function normalizePins (pins) {
-  return pins.filter(pin => PIN_STATUS.has(pin.status))
+export function normalizePins (pins, {
+  isOkStatuses = false
+} = {}) {
+  if (isOkStatuses) {
+    pins = pins.filter(pin => PIN_OK_STATUS.has(pin.status))
+  }
+
+  return pins
     .map(pin => ({
       _id: pin._id,
       status: pin.status,
@@ -85,7 +95,7 @@ export function normalizeDeals (deals) {
     }))
 }
 
-const PIN_STATUS = new Set([
+const PIN_OK_STATUS = new Set([
   'Pinned',
   'Pinning',
   'PinQueued'
