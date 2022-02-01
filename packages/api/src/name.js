@@ -69,10 +69,11 @@ export async function namePost (request, env, ctx) {
   )
 
   ctx.waitUntil((async () => {
+  // await ((async () => {
     const record = await env.db.resolveNameRecord(key)
     if (!record) return // shouldn't happen
     const { value } = ipns.unmarshal(uint8ArrayFromString(record, 'base64pad'))
-    const data = { value: uint8ArrayToString(value), record }
+    const data = { key, value: uint8ArrayToString(value), record }
     await NameRoom.broadcast(request, env.NAME_ROOM, key, data)
     await NameRoom.broadcast(request, env.NAME_ROOM, '*', data)
   })())
@@ -93,11 +94,6 @@ export async function nameWatchGet (request, env) {
   const keyCid = CID.parse(key, base36)
   if (keyCid.code !== libp2pKeyCode) {
     throw new HTTPError(`invalid key code: ${keyCid.code}`, 400)
-  }
-
-  const record = await env.db.resolveNameRecord(key)
-  if (!record) {
-    throw new HTTPError(`record not found for key: ${key}`, 404)
   }
 
   return NameRoom.join(request, env.NAME_ROOM, key)
@@ -178,6 +174,6 @@ export class NameRoom {
     const room = ns.get(roomId)
     const url = new URL(req.url)
     url.pathname = '/broadcast'
-    return room.fetch(new Request({ url, body: JSON.stringify(data) }))
+    return room.fetch(url, { method: 'POST', body: JSON.stringify(data) })
   }
 }
