@@ -1,9 +1,13 @@
+import { Validator } from '@cfworker/json-schema'
+import { PinningServiceApiError, PSAErrorInvalidCid } from '../errors.js'
+import { normalizeCid } from './normalize-cid.js'
+
 /**
  * @typedef {'queued' | 'pinning' | 'failed' | 'pinned'} apiPinStatus
  */
 
 /**
- * @param {import('../../db/db-client-types.js').PinItemOutput[]} pins
+ * @param {import('../../../db/db-client-types.js').PinItemOutput[]} pins
  * @return {apiPinStatus} status
  */
 export const getEffectivePinStatus = (pins) => {
@@ -57,8 +61,8 @@ export const psaStatusesToDBStatuses = (statuses) => {
 
 // Error messages
 // TODO: Refactor errors
-export const ERROR_CODE = 400
-export const ERROR_STATUS = 'INVALID_PIN_DATA'
+export const ERROR_STATUS = 400
+export const ERROR_REASON = 'INVALID_PIN_DATA'
 export const INVALID_CID = 'Invalid cid'
 export const INVALID_MATCH = 'Match should be a string (i.e. "exact", "iexact", "partial", "ipartial")'
 export const INVALID_META = 'Meta should be an object with string values'
@@ -72,3 +76,102 @@ export const INVALID_LIMIT = 'Limit should be a number'
 export const REQUIRED_CID = 'CID is required'
 export const REQUIRED_REQUEST_ID = 'Request id is required'
 export const UNPERMITTED_MATCH = 'Match should be "exact", "iexact", "partial", or "ipartial"'
+export const DEFAULT_PIN_LISTING_LIMIT = 10
+export const MAX_PIN_LISTING_LIMIT = 1000
+
+// Validation Schemas
+export const listPinsValidator = new Validator({
+  type: 'object',
+  required: [],
+  properties: {
+    name: { type: 'string' },
+    after: { type: 'string', format: 'date-time' },
+    before: { type: 'string', format: 'date-time' },
+    cid: { type: 'array', items: { type: 'string' } },
+    limit: { type: 'integer', minimum: 1, maximum: MAX_PIN_LISTING_LIMIT },
+    meta: { type: 'object' },
+    match: {
+      type: 'string',
+      enum: ['exact', 'iexact', 'ipartial', 'partial']
+    },
+    status: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: ['PinError', 'PinQueued', 'Pinned', 'Pinning']
+      }
+    }
+  }
+})
+
+export const postPinValidator = new Validator({
+  type: 'object',
+  required: ['cid'],
+  properties: {
+    cid: { type: 'string' },
+    name: { type: 'string' },
+    meta: { type: 'object', keys: { type: 'string' } },
+    origins: { type: 'array', items: { type: 'string' } },
+    requestId: { type: 'string' }
+  }
+})
+
+/**
+ * Helper function to parse and validate payload
+ *
+ * @param {*} payload
+ * @param {*} validator
+ * @returns
+ */
+export function validatePayload (payload, validator) {
+  /** @type {*} */
+  const opts = {}
+  Object.keys(payload).forEach((param) => {
+    if (payload[param]) opts[param] = payload[param]
+  })
+
+  // Validate CID or list of CIDs if present
+  if (opts.cid) {
+    if (Array.isArray(opts.cid)) {
+      const cids = []
+      try {
+        opts.cid.split(',').forEach(cid => {
+          cids.push(normalizeCid(cid))
+        })
+      } catch (err) {
+        return {
+          error: new PSAErrorInvalidCid(),
+          data: undefined
+        }
+      }
+      opts.cids = cids
+    } else {
+      try {
+        opts.cid = normalizeCid(opts.cid)
+      } catch (err) {
+        return {
+          error: new PSAErrorInvalidCid(),
+          data: undefined
+        }
+      }
+    }
+  }
+
+  // Process pin statuses
+  if (opts.status) {
+    opts.status = opts.status.split(',').map(psaStatusesToDBStatuses)
+  }
+
+  const result = validator.validate(opts)
+
+  let data
+  let error
+
+  if (result.valid) {
+    data = opts
+  } else {
+    error = new PinningServiceApiError()
+  }
+
+  return { data, error }
+}
