@@ -102,7 +102,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
       <div className="files-manager-header">
         <span>Files</span>
         <Filterable
-          className="files-manager-search"
+          className="files-manager-search medium-up-only"
           items={files}
           icon={<SearchIcon />}
           filterKeys={['name', 'cid']}
@@ -176,6 +176,16 @@ const FilesManager = ({ className }: FilesManagerProps) => {
           onChange={setSortedFiles}
         />
       </div>
+      <Filterable
+        className="files-manager-search medium-down-only"
+        items={files}
+        icon={<SearchIcon />}
+        filterKeys={['name', 'cid']}
+        placeholder="Search for a file"
+        queryParam="filter"
+        onChange={setFilteredFiles}
+        onValueChange={setKeyword}
+      />
       <FileRowItem
         onSelect={onSelectAllToggle}
         date="Date"

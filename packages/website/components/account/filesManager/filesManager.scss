@@ -5,6 +5,11 @@
   justify-content: flex-start;
   padding: 1.5rem 0;
 
+  @include medium {
+    background: none;
+    border: none;
+  }
+
   > * {
     width: 100%;
   }

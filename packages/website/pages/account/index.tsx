@@ -83,7 +83,7 @@ const Account: React.FC = () => {
 
   return (
     <>
-      <div className="page-container account-container">
+      <div className="page-container account-container grid">
         <h3>Account</h3>
         <div className="account-content">
           <StorageManager className="account-storage-manager" />

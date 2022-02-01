@@ -25,6 +25,13 @@ $file-size: auto;
   margin-top: 1.3rem;
   padding-bottom: 1rem;
 
+  @include medium {
+    grid-template-columns: auto;
+    border-bottom: 0;
+    padding: 0;
+    @include border_Background_Waterloo_White;
+  }
+
   &-header {
     padding-bottom: 1.25rem;
     min-height: initial;
@@ -36,8 +43,16 @@ $file-size: auto;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-
     @include fontWeight_Regular;
+    @include medium {
+      padding: 0.85rem 1.975rem;
+      justify-content: flex-start;
+      border-bottom: 0.0625rem solid rgba(white, 0.05);
+      &:before {
+        width: 10rem;
+        @include fontWeight_Semibold;
+      }
+    }
   }
 
   .file {
@@ -49,6 +64,9 @@ $file-size: auto;
       cursor: pointer;
       position: relative;
       margin-bottom: 0.125rem;
+      @include medium {
+        display: none;
+      }
 
       input {
         cursor: pointer;
@@ -67,10 +85,20 @@ $file-size: auto;
     }
     &-date {
       padding-right: 2.1875rem;
+      @include medium {
+        &:before {
+          content: 'Date';
+        }
+      }
     }
     &-name {
       padding-right: 2.1875rem;
       height: 100%;
+      @include medium {
+        &:before {
+          content: 'Name';
+        }
+      }
 
       &.isEditingName {
         svg {
@@ -108,6 +136,16 @@ $file-size: auto;
     &-cid {
       padding-right: 3rem;
       justify-content: space-between;
+      font-family: 'Suisse Intl Mono';
+      .info-container {
+        font-family: $font_Primary;
+      }
+      @include medium {
+        justify-content: flex-start;
+        &:before {
+          content: 'CID';
+        }
+      }
 
       .copy-icon {
         cursor: pointer;
@@ -115,17 +153,40 @@ $file-size: auto;
     }
     &-availability {
       padding-right: 2.6875rem;
+      @include medium {
+        &:before {
+          content: 'Available';
+        }
+      }
     }
     &-pin-status {
       // padding-right: 3rem;
       justify-content: flex-start;
       gap: 0.5rem;
+      @include medium {
+        gap: 0;
+        &:before {
+          content: 'Status';
+        }
+      }
     }
     &-storage-providers {
       padding-right: 2.5rem;
       flex-wrap: wrap;
+      @include medium {
+        &:before {
+          content: 'Storage Providers';
+        }
+      }
       > span {
         flex-shrink: none;
+      }
+    }
+    &-size {
+      @include medium {
+        &:before {
+          content: 'Size';
+        }
       }
     }
   }
@@ -144,6 +205,10 @@ $file-size: auto;
       &-name {
         align-items: end;
       }
+    }
+
+    @include medium {
+      display: none;
     }
   }
 
@@ -208,5 +273,17 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
   a {
     color: $cyan;
     cursor: pointer;
+  }
+}
+
+.medium-down-only {
+  display: none;
+  @include medium {
+    display: inherit;
+  }
+}
+.medium-up-only {
+  @include medium {
+    display: none;
   }
 }

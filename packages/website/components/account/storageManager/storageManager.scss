@@ -40,9 +40,11 @@
   color: $white;
   width: 100%;
   gap: 0.95rem;
+  padding-right: 2.25rem;
 
   .button {
     padding: 0;
+    height: auto;
 
     svg {
       margin-right: 0.35rem;
@@ -72,7 +74,8 @@
   height: 1.375rem;
   background: rgba($vulcan, 0.15);
   border: 0.0625rem solid rgba($waterloo, 0.15);
-  width: 32.6875rem;
+  // width: 32.6875rem;
+  flex: 1;
   &:only-child {
     flex: 1;
     max-width: 35.5rem;

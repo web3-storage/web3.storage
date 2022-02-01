@@ -5,11 +5,18 @@
   height: 1.5625rem;
   margin-right: 3rem;
 
+  @include medium {
+    margin-right: 0;
+  }
+
   .SearchBar {
     @include borderRadius_Large;
     @include fontSize_Tiny;
     @include fontWeight_Regular;
 
+    @include medium {
+      width: 100%;
+    }
     position: relative;
     background: rgba($shark, 0.85);
     border: 0.0625rem solid $waterloo;
