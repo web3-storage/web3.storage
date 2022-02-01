@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import IndexPageData from '../content/pages/index.json';
 import Scroll2Top from '../components/scroll2top/scroll2top.js';
 import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
-import { addFloaterAnimations } from '../lib/floater-animations.js';
+import { initFloaterAnimations } from '../lib/floater-animations.js';
 
 // ===================================================================== Exports
 export default function Home() {
@@ -12,7 +12,15 @@ export default function Home() {
   const animations = IndexPageData.floater_animations;
 
   useEffect(() => {
-    addFloaterAnimations(animations);
+    let pageFloaters = false;
+    initFloaterAnimations(animations).then(result => {
+      pageFloaters = result;
+    });
+    return () => {
+      if (pageFloaters) {
+        pageFloaters.destroy();
+      }
+    };
   }, [animations]);
 
   return (
