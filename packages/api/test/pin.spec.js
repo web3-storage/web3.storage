@@ -543,6 +543,26 @@ describe('Pinning APIs endpoints', () => {
       const data = await res.json()
       assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
+
+    it('returns the pin request', async () => {
+      const sourceCid = 'QmVGv1UK8EvhD9KMHdKBB1LWadiYai6sY5GHL6h7MHRWzf'
+      const res = await fetch(new URL('pins', endpoint).toString(), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          cid: sourceCid
+        })
+      })
+
+      assert(res.ok)
+      const data = await res.json()
+      assertCorrectPinResponse(data)
+      assert.strictEqual(data.pin.cid, sourceCid)
+      assert.notDeepEqual(data.status, 'failed')
+    })
   })
 
   describe('GET /pins/:requestId', () => {
