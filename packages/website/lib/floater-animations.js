@@ -30,15 +30,18 @@ export const initFloaterAnimations = async (scenes) => {
         const id = scenes[i].floaters[j].id
 
         scrollMagicScenes[i].on('progress', (e) => {
-            const t = e.progress;
-            const x = xi && xf ? (xf - xi) * t + xi : 0
-            const y = yi && yf ? (yf - yi) * t + yi : 0
-            const translate = x && y ? `translate(${x}px, ${y}px)` : ''
-            const scale = si && sf ? `scale(${(sf - si) * t + si})` : ''
-            const rotate = ri && rf ? `rotate(${(rf - ri) * t + ri}deg)` : ''
+            const element = document.getElementById(id);
 
-            const el = document.getElementById(id);
-            el.style.transform = `${transform} ${translate} ${scale} ${rotate}`;
+            if (element) {
+              const t = e.progress;
+              const x = xi && xf ? (xf - xi) * t + xi : 0
+              const y = yi && yf ? (yf - yi) * t + yi : 0
+              const translate = x && y ? `translate(${x}px, ${y}px)` : ''
+              const scale = si && sf ? `scale(${(sf - si) * t + si})` : ''
+              const rotate = ri && rf ? `rotate(${(rf - ri) * t + ri}deg)` : ''
+
+              element.style.transform = `${transform} ${translate} ${scale} ${rotate}`;
+            }
         });
       }
     }

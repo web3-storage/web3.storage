@@ -756,6 +756,21 @@
           }
         },
         {
+          "id": "intro_1-hero-corkscrew",
+          "start": {
+            "rotate": 189,
+            "scale": 1,
+            "x": 1,
+            "y": 1
+          },
+          "end": {
+            "rotate": 200,
+            "scale": 1.2,
+            "x": 30,
+            "y": 80
+          }
+        },
+        {
           "id": "index_hero-cross",
           "start": {
             "rotate": 1,
@@ -807,6 +822,21 @@
             "rotate": 2,
             "x": -40,
             "y": 32
+          }
+        },
+        {
+          "id": "intro_1-cross",
+          "start": {
+            "rotate": -1,
+            "scale": 1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -30,
+            "scale": 1.15,
+            "x": -40,
+            "y": 45
           }
         }
       ]

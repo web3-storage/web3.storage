@@ -1,11 +1,28 @@
 // ===================================================================== Imports
+import { useEffect } from 'react';
+
 import AboutPageData from '../content/pages/about.json';
 import Scroll2Top from '../components/scroll2top/scroll2top.js';
 import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
+import { initFloaterAnimations } from '../lib/floater-animations.js';
 
 // ===================================================================== Exports
 export default function Home() {
   const sections = AboutPageData.page_content;
+  const animations = AboutPageData.floater_animations;
+
+  useEffect(() => {
+    let pageFloaters = false;
+    initFloaterAnimations(animations).then(result => {
+      pageFloaters = result;
+    });
+    return () => {
+      if (pageFloaters) {
+        pageFloaters.destroy();
+      }
+    };
+  }, [animations]);
+
   return (
     <>
       <main className="page page-about">
