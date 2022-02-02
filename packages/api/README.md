@@ -246,6 +246,14 @@ Users "resolve" a Key ID to the current _value_ of a _record_. Typically an IPFS
 
 It returns the resolved value AND the full name record (base 64 encoded, for client side verification).
 
+### 🤲 `GET /name/:key/watch`
+
+**❗️Experimental** this API may not work, may change, and may be removed in a future version.
+
+Watch for changes to the given key ID over a websocket connection.
+
+When changes to the `:key` are published, a JSON encoded message is sent over the websocket containing the new value and the full name record (base 64 encoded, for client side verification).
+
 ## Setup Sentry
 
 Inside the `/packages/api` folder create a file called `.env.local` with the following content.

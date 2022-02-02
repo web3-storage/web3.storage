@@ -17,7 +17,7 @@ import {
   READ_WRITE
 } from './maintenance.js'
 import { notFound } from './utils/json-response.js'
-import { nameGet, namePost } from './name.js'
+import { nameGet, nameWatchGet, namePost } from './name.js'
 
 const router = Router()
 router.options('*', corsOptions)
@@ -53,6 +53,7 @@ router.get('/pins',                 mode['👀'](auth['📌'](pinsGet)))
 router.delete('/pins/:requestId',   mode['📝'](auth['📌'](pinDelete)))
 
 router.get('/name/:key',            mode['👀'](auth['🤲'](nameGet)))
+router.get('/name/:key/watch',      mode['👀'](auth['🤲'](nameWatchGet)))
 router.post('/name/:key',           mode['📝'](auth['🔒'](namePost)))
 
 router.delete('/user/uploads/:cid',      mode['📝'](auth['👮'](userUploadsDelete)))
@@ -114,3 +115,5 @@ export default {
     }
   }
 }
+
+export { NameRoom as NameRoom0 } from './name.js'
