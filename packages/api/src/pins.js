@@ -3,14 +3,12 @@ import { normalizeCid } from './utils/cid.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { PSAErrorDB, PSAErrorDBNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from './errors.js'
 import {
-  DEFAULT_PIN_LISTING_LIMIT,
   INVALID_REPLACE,
   INVALID_REQUEST_ID,
   REQUIRED_REQUEST_ID,
   getEffectivePinStatus,
-  listPinsValidator,
-  postPinValidator,
-  validatePayload
+  validateSearchParams,
+  validatePinObject
 } from './utils/psa.js'
 
 /**
@@ -51,7 +49,7 @@ export async function pinPost (request, env, ctx) {
   const { authToken } = request.auth
   pinData.requestId = request.params ? request.params.requestId : null
 
-  const result = validatePayload(pinData, postPinValidator)
+  const result = validatePinObject(pinData)
 
   if (result.error) {
     throw result.error
@@ -161,16 +159,13 @@ export async function pinsGet (request, env, ctx) {
   const urlParams = new URLSearchParams(url.search)
   const params = Object.fromEntries(urlParams)
 
-  const result = validatePayload(params, listPinsValidator)
+  const result = validateSearchParams(params)
   if (result.error) {
     throw result.error
   }
 
   let pinRequests
   const opts = result.data
-
-  // Set a default limit if one is not provided
-  if (!opts.limit) opts.limit = DEFAULT_PIN_LISTING_LIMIT
 
   try {
     pinRequests = await env.db.listPsaPinRequests(request.auth.authToken._id, opts)
@@ -211,6 +206,7 @@ function getPinStatus (pinRequest) {
  * @param {import('./user').AuthenticatedRequest} request
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
+ * @return {Promise<JSONResponse>}
  */
 export async function pinDelete (request, env, ctx) {
   const requestId = request.params.requestId
@@ -242,6 +238,7 @@ export async function pinDelete (request, env, ctx) {
  * @param {string} authTokenId
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
+ * @return {Promise<JSONResponse>}
  */
 async function replacePin (newPinData, requestId, authTokenId, env, ctx) {
   let existingPinRequest

@@ -78,7 +78,7 @@ export class InvalidCidError extends Error {
 }
 InvalidCidError.CODE = 'ERROR_INVALID_CID'
 
-export class PinningServiceApiError extends Error {
+export class PinningServiceApiError {
   /**
    *
    * @param {string} reason
@@ -86,7 +86,6 @@ export class PinningServiceApiError extends Error {
    * @param {number} [status]
    */
   constructor (reason = 'PSA_ERROR', details, status = 400) {
-    super()
     this.reason = reason
     this.details = details
     this.status = status

@@ -1,5 +1,5 @@
 import { Validator } from '@cfworker/json-schema'
-import { PSAErrorInvalidData } from '../errors.js'
+import { PSAErrorInvalidData, PSAErrorRequiredData } from '../errors.js'
 import { normalizeCid } from '../utils/cid.js'
 
 /**
@@ -78,7 +78,7 @@ export const DEFAULT_PIN_LISTING_LIMIT = 10
 export const MAX_PIN_LISTING_LIMIT = 1000
 
 // Validation Schemas
-export const listPinsValidator = new Validator({
+const listPinsValidator = new Validator({
   type: 'object',
   required: [],
   properties: {
@@ -96,13 +96,13 @@ export const listPinsValidator = new Validator({
       type: 'array',
       items: {
         type: 'string',
-        enum: ['PinError', 'PinQueued', 'Pinned', 'Pinning']
+        enum: ['queued', 'pinning', 'pinned', 'failed']
       }
     }
   }
 })
 
-export const postPinValidator = new Validator({
+const postPinValidator = new Validator({
   type: 'object',
   required: ['cid'],
   properties: {
@@ -115,13 +115,66 @@ export const postPinValidator = new Validator({
 })
 
 /**
- * Helper function to parse and validate payload
+ * Helper function to parse and validate payload for POST endpoint
  *
  * @param {*} payload
- * @param {*} validator
  * @returns
  */
-export function validatePayload (payload, validator) {
+export function validatePinObject (payload) {
+  /** @type {*} */
+  const opts = {}
+  const {
+    cid,
+    name,
+    meta,
+    origins,
+    requestId
+  } = payload
+
+  if (!cid) {
+    return {
+      error: new PSAErrorRequiredData(REQUIRED_CID),
+      data: undefined
+    }
+  }
+
+  // Validate CID
+  try {
+    opts.cid = normalizeCid(cid)
+  } catch (e) {
+    return {
+      error: new PSAErrorInvalidData(INVALID_CID),
+      data: undefined
+    }
+  }
+
+  if (name) opts.name = name
+  if (meta) opts.meta = meta
+  if (origins) opts.origins = origins
+  if (requestId) opts.requestId = requestId
+
+  const result = postPinValidator.validate(opts)
+
+  let data
+  let error
+
+  if (result.valid) {
+    data = opts
+  } else {
+    // TODO: customize user errors
+    error = new PSAErrorInvalidData(JSON.stringify(result.errors))
+  }
+
+  return { data, error }
+}
+
+/**
+ * Helper function to parse and validate payload for GET endpoint
+ *
+ * @param {*} payload
+ * @returns
+ */
+export function validateSearchParams (payload) {
   /** @type {*} */
   const opts = {}
   const {
@@ -132,24 +185,16 @@ export function validatePayload (payload, validator) {
     match,
     meta,
     name,
-    origins,
-    requestId,
     status
   } = payload
 
   // Validate CID or array of CIDs if present
   if (cid) {
-    let cidParam
-    if (Array.isArray(cid)) {
-      cidParam = cid
-    } else {
-      cidParam = cid.split(',')
-    }
-
-    const cids = []
-    for (const cid of cidParam) {
+    const cids = cid.split(',')
+    const normalizedCids = []
+    for (const cid of cids) {
       try {
-        cids.push(normalizeCid(cid))
+        normalizedCids.push(normalizeCid(cid))
       } catch (e) {
         return {
           error: new PSAErrorInvalidData(INVALID_CID),
@@ -157,20 +202,24 @@ export function validatePayload (payload, validator) {
         }
       }
     }
-    opts.cid = cids
+    opts.cid = normalizedCids
   }
 
-  if (status) opts.status = status.split(',').map(psaStatusesToDBStatuses)
-  if (limit) opts.limit = Number(limit)
+  if (status) opts.statuses = psaStatusesToDBStatuses(status.split(','))
+
+  if (limit) {
+    opts.limit = Number(limit)
+  } else {
+    opts.limit = DEFAULT_PIN_LISTING_LIMIT
+  }
+
   if (name) opts.name = name
   if (meta) opts.meta = meta
   if (match) opts.match = match
   if (before) opts.before = before
   if (after) opts.after = after
-  if (origins) opts.origins = origins
-  if (requestId) opts.requestId = requestId
 
-  const result = validator.validate(opts)
+  const result = listPinsValidator.validate(opts)
 
   let data
   let error
@@ -178,7 +227,8 @@ export function validatePayload (payload, validator) {
   if (result.valid) {
     data = opts
   } else {
-    error = new PSAErrorInvalidData(result.error)
+    // TODO: customize user errors
+    error = new PSAErrorInvalidData(JSON.stringify(result.errors))
   }
 
   return { data, error }
