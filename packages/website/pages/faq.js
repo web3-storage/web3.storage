@@ -11,12 +11,12 @@ export default function Home() {
   const animations = FAQPageData.floater_animations;
 
   useEffect(() => {
-    let pageFloaters = false;
+    let pageFloaters = {};
     initFloaterAnimations(animations).then(result => {
       pageFloaters = result;
     });
     return () => {
-      if (pageFloaters) {
+      if (pageFloaters.hasOwnProperty('destroy')) {
         pageFloaters.destroy();
       }
     };
