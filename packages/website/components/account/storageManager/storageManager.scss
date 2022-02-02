@@ -6,10 +6,10 @@
     width: 100%;
   }
 
-  padding: 1.25rem 0 0.1rem 2.25rem;
+  padding: 1.875rem 0 0.9375rem 2.375rem;
 
   @include medium {
-    padding: 2.5rem 1.375rem 2.5rem 1rem;
+    padding: 2.25rem 1.375rem 2.25rem 1rem;
   }
 }
 
@@ -25,6 +25,9 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.325rem;
+  @include medium {
+    margin-bottom: 0.4rem;
+  }
 }
 
 .storage-manager-info {
@@ -41,7 +44,8 @@
 
     button a {
       &::after {
-        content: '  ❯';
+        margin-left: 0.5rem;
+        content: '❯';
       }
     }
   }
@@ -68,6 +72,10 @@
   width: 100%;
   gap: 0.95rem;
   padding-right: 2.25rem;
+
+  @include medium {
+    gap: 0.625rem;
+  }
 
   .button {
     padding: 0;
@@ -123,7 +131,15 @@
     text-shadow: 0 0 0.125rem rgba(0, 0, 0, 0.94);
   }
 }
-
+.storage-manager-used {
+  margin-bottom: 0.5rem;
+  .storage-label {
+    @include fontWeight_Semibold;
+  }
+  .storage-number {
+    font-style: italic;
+  }
+}
 .storage-manager-meter-used {
   @include gradient_Background_BluePurple;
   @include borderRadius_UltraLarge;

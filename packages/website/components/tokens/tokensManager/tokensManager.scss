@@ -5,11 +5,21 @@
   align-items: baseline;
   justify-content: flex-start;
   padding: 1.5rem 0 1.5rem 1.5rem;
-  min-width: 60.25rem;
+  width: 100%;
+
+  @include medium {
+    background: transparent;
+    border: 0;
+    padding: 0;
+  }
 
   > * {
     width: 100%;
     padding-left: 1.125rem;
+
+    @include medium {
+      padding-left: 0;
+    }
 
     &:not(.tokens-manager-footer) {
       max-width: 52.8125rem;
@@ -47,6 +57,10 @@
     position: relative;
     top: 1.25rem;
     left: 0.25rem;
+  }
+
+  .token-id {
+    font-family: 'Suisse Intl Mono';
   }
 
   .button {

@@ -2,6 +2,11 @@
   color: $ebony;
   padding: 3.125rem 8.5rem 3.125rem 8.125rem;
 
+  @include medium {
+    padding: 2.375rem 1.3125rem;
+    width: 100%;
+  }
+
   > * {
     position: relative;
   }
@@ -48,12 +53,16 @@
 
 .file-upload-modal {
   .modalContainer {
-    max-width: 45.6275rem;
     @include borderRadius_Large;
+    @include medium {
+      width: 100%;
+    }
   }
   .modalClose {
-    top: 1.5rem;
-    right: 1.5rem;
+    top: 0.5rem;
+    right: 1rem;
+    color: $ebony;
+    font-size: 2rem;
   }
 
   .modal {
@@ -74,9 +83,6 @@
 
 .upload-content-block {
   @include leading_Small;
-}
-
-.upload-content-block {
   padding-left: 1.25rem;
   padding-right: 0.25rem;
   &:not(:last-child) {
@@ -84,6 +90,9 @@
   }
   &:last-child {
     padding-bottom: 0.75rem;
+  }
+  @include medium {
+    padding: 0;
   }
 }
 

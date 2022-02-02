@@ -18,7 +18,7 @@ const Tokens = () => {
   }, [fetchDate, getTokens, isFetchingTokens]);
 
   return (
-    <div className="page-container tokens-container">
+    <div className="page-container tokens-container grid">
       <div className="tokens-header">
         <h3>API Tokens</h3>
         <TokenCreator />

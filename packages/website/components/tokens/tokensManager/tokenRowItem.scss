@@ -6,7 +6,6 @@ $date-delete: auto;
 
 .tokens-manager-row {
   @include fontSize_Tiny;
-  @include fontWeight_Semibold;
 
   display: grid;
   position: relative;
@@ -14,9 +13,29 @@ $date-delete: auto;
   grid-template-columns: $date-name $date-id $date-copy $date-delete;
   border-bottom: 0.0625rem solid rgba($white, 0.05);
 
+  @include medium {
+    @include border_Background_Waterloo_White;
+    grid-template-columns: auto;
+    border-bottom: 0;
+    padding: 0;
+    margin-bottom: 1rem;
+  }
+
+  span {
+    @include medium {
+      padding: 0.85rem 1.975rem;
+      justify-content: flex-start;
+      border-bottom: 0.0625rem solid rgba(white, 0.05);
+    }
+  }
+
   &.tokens-manager-row-header {
     padding-bottom: 0;
     padding-left: 1.125rem;
+
+    @include medium {
+      display: none;
+    }
   }
 }
 

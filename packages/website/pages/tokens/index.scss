@@ -17,6 +17,7 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  width: 100%;
 }
 
 .tokens-footer {
@@ -31,11 +32,9 @@
   div {
     display: none;
   }
-  padding-left: 1.375rem;
 
   &.hasTokens {
     @include fontSize_Mini;
-    padding-left: 0.75rem;
 
     div {
       transform: scaleX(-1);

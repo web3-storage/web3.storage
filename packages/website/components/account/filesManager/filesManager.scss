@@ -28,6 +28,10 @@
   justify-items: center;
   padding: 0 2.125rem 1.5rem;
 
+  @include medium {
+    padding: 0 2.125rem 0.5rem 0.875rem;
+  }
+
   // Title
   > :first-child {
     margin-right: 11.625rem;

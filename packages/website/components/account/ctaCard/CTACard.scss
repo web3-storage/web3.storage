@@ -9,6 +9,10 @@ $cta-card-padding-top: 4rem;
   padding-bottom: 1.5rem;
   align-items: baseline;
 
+  @include medium {
+    padding: 2.95rem 2rem;
+  }
+
   > * {
     position: relative;
   }
@@ -32,7 +36,7 @@ $cta-card-padding-top: 4rem;
   }
 
   button {
-    padding: 0 0.75rem;
+    padding: 0 1rem;
     align-items: center;
   }
 }
