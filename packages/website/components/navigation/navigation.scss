@@ -199,6 +199,7 @@
     text-align: left;
     @include fontSize_Small;
     @include fontWeight_Regular;
+    color: $white;
     line-height: leading(20, 16);
     letter-spacing: 0.025em;
     margin-top: 0;

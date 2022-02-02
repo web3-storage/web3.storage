@@ -6,6 +6,7 @@ import React, { useState, useEffect, useRef } from "react";
  * @param {object} props
  * @param {boolean} props.multiple
  * @param {boolean} props.toggleOnLoad
+ * @param {boolean} props.toggleAllOption
  * @param {any} props.children
  */
 
@@ -13,6 +14,7 @@ import React, { useState, useEffect, useRef } from "react";
 function Accordion ({
   multiple,
   toggleOnLoad,
+  toggleAllOption,
   children
 }) {
   const [active, setActive] = useState(/** @type {string[]} */([]));
@@ -66,13 +68,13 @@ function Accordion ({
   // ================================================================== Template
   return (
     <>
-      <div className="accordion-control-bar">
+      { toggleAllOption && <div className="accordion-control-bar">
         <button
           className="accordion-expand-all-toggle"
           onClick={toggleExpanded}>
           { buttonMessage }
         </button>
-      </div>
+      </div>}
 
       <div className="accordion">
 
