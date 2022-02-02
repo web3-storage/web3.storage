@@ -72,6 +72,7 @@
   background-image: url('/images/index/holographic-bg-cropped-2.png');
   background-size: cover;
   background-repeat: no-repeat;
+  @include gradient_Text_Selection;
 
   &:before {
     content: '';

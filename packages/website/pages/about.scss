@@ -278,6 +278,8 @@
 #section_how-it-works {
   padding-top: 3rem;
   padding-bottom: 4rem;
+  @include gradient_Text_Selection;
+
   .heading {
     @include fontSize_Large;
     line-height: leading(50, 35);

@@ -143,6 +143,19 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
   }
 }
 
+@mixin gradient_Text_Selection {
+  ::-moz-selection {
+    -webkit-text-fill-color: $white;
+    -moz-text-fill-color: $white;
+    text-fill-color: $white;
+  }
+  ::selection {
+    -webkit-text-fill-color: $white;
+    -moz-text-fill-color: $white;
+    text-fill-color: $white;
+  }
+}
+
 // --------------------------------------------------------------------- Styling
 @mixin borderRadius_Small {
   border-radius: $borderRadius_Small;
