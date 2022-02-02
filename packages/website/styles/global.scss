@@ -328,3 +328,16 @@ h5,
 .hidden {
   display: none;
 }
+
+// responsive hiding
+.medium-down-only {
+  display: none;
+  @include medium {
+    display: inherit;
+  }
+}
+.medium-up-only {
+  @include medium {
+    display: none;
+  }
+}

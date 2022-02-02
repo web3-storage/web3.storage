@@ -7,6 +7,7 @@ import InfoBIcon from 'assets/icons/infoB';
 import CopyIcon from 'assets/icons/copy';
 import PencilIcon from 'assets/icons/pencil';
 import { addTextToClipboard, truncateString } from 'lib/utils';
+import { fileRowLabels } from 'components/account/filesManager/fileRowLabels.const';
 
 export const PinStatus = {
   PINNED: 'Pinned',
@@ -97,8 +98,12 @@ const FileRowItem = props => {
         <input checked={isSelected} type="checkbox" id={`${name}-select`} onChange={onSelect} />
         <CheckIcon className="check" />
       </span>
-      <span className="file-date">{date}</span>
+      <span className="file-date">
+        <span className="file-row-label medium-down-only">{fileRowLabels.DATE}</span>
+        {date}
+      </span>
       <span className={clsx(isEditingName && 'isEditingName', 'file-name')}>
+        <span className="file-row-label medium-down-only">{fileRowLabels.NAME}</span>
         {!isEditingName ? (
           <span dangerouslySetInnerHTML={{ __html: name }} />
         ) : (
@@ -110,8 +115,14 @@ const FileRowItem = props => {
         {!isHeader && <PencilIcon className="pencil-icon" onClick={() => setIsEditingName(!isEditingName)} />}
       </span>
       <span className="file-cid" title={cid}>
-        <span className="cid-truncate">{useMemo(() => truncateString(cid, 5, '...', 'double'), [cid])}</span>
-        <span className="cid-full">{cid}</span>
+        <span className="file-row-label medium-down-only">
+          <Info content="The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>" />
+          {fileRowLabels.CID}
+        </span>
+        <span className="cid-truncate medium-up-only">
+          {useMemo(() => truncateString(cid, 5, '...', 'double'), [cid])}
+        </span>
+        <span className="cid-full medium-down-only">{cid}</span>
         {isHeader ? (
           <Info content="The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>" />
         ) : (
@@ -123,8 +134,15 @@ const FileRowItem = props => {
           />
         )}
       </span>
-      <span className="file-availability">Available</span>
+      <span className="file-availability">
+        <span className="file-row-label medium-down-only">{fileRowLabels.AVAILABLE}</span>
+        Available
+      </span>
       <span className="file-pin-status">
+        <span className="file-row-label medium-down-only">
+          <Info content="Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes." />
+          {fileRowLabels.STATUS}
+        </span>
         {status}
         {isHeader ? (
           <Info content="Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes." />
@@ -133,6 +151,10 @@ const FileRowItem = props => {
         )}
       </span>
       <span className="file-storage-providers">
+        <span className="file-row-label medium-down-only">
+          <Info content="Service providers offering storage capacity to the Filecoin network. <a href='https://docs.web3.storage/concepts/decentralized-storage/' target='_blank' rel='noreferrer'>Learn more</a>" />
+          {fileRowLabels.STORAGE_PROVIDERS}
+        </span>
         {storageProviders}
         {isHeader ? (
           <Info content="Service providers offering storage capacity to the Filecoin network. <a href='https://docs.web3.storage/concepts/decentralized-storage/' target='_blank' rel='noreferrer'>Learn more</a>" />
@@ -145,7 +167,10 @@ const FileRowItem = props => {
           )
         )}
       </span>
-      <span className="file-size">{size}</span>
+      <span className="file-size">
+        <span className="file-row-label medium-down-only">{fileRowLabels.SIZE}</span>
+        {size}
+      </span>
     </div>
   );
 };

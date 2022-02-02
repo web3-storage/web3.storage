@@ -27,14 +27,28 @@
   justify-content: flex-start;
   justify-items: center;
   padding: 0 2.125rem 1.5rem;
+  flex-wrap: wrap;
 
   @include medium {
-    padding: 0 2.125rem 0.5rem 0.875rem;
+    padding: 0;
+    justify-content: space-between;
   }
 
   // Title
   > :first-child {
     margin-right: 11.625rem;
+    @include medium {
+      padding-left: 1rem;
+      margin-right: initial;
+    }
+  }
+
+  .files-manager-search {
+    @include medium {
+      flex-basis: 100%;
+      order: 4;
+      margin-top: 0.5rem;
+    }
   }
 
   .refresh {
@@ -44,22 +58,19 @@
     cursor: pointer;
     margin-right: 2.5rem;
 
+    @include medium {
+      margin-right: 0;
+    }
+
     svg {
       color: $cyan;
       margin-right: 0.625rem;
     }
   }
 
-  @include medium {
-    justify-content: space-between;
-
-    .refresh {
-      margin-right: 0;
-    }
-
-    // Title
-    > :first-child {
-      margin-right: initial;
+  .Sortable {
+    @include medium {
+      padding-right: 1rem;
     }
   }
 }
@@ -101,6 +112,14 @@
   justify-content: space-between;
   justify-items: center;
   padding: 1.5rem 2rem 0;
+  flex-wrap: wrap;
+
+  @include medium {
+    padding: 1rem;
+    .Pagination .pageList {
+      justify-content: center;
+    }
+  }
 
   .files-manager-result-dropdown .dropdownContent {
     position: absolute;
@@ -111,5 +130,10 @@
     @include label_5;
     cursor: pointer;
     color: $cyan;
+  }
+
+  .files-manager-pagination {
+    flex-basis: 100%;
+    order: 3;
   }
 }

@@ -17,6 +17,7 @@ import Sortable, { SortType, SortDirection } from 'ZeroComponents/sortable/sorta
 import Pagination from 'ZeroComponents/pagination/pagination';
 import { formatTimestamp } from 'lib/utils';
 import { useUploads } from 'components/contexts/uploadsContext';
+import { fileRowLabels } from 'components/account/filesManager/fileRowLabels.const';
 
 type FilesManagerProps = {
   className?: string;
@@ -102,7 +103,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
       <div className="files-manager-header">
         <span>Files</span>
         <Filterable
-          className="files-manager-search medium-up-only"
+          className="files-manager-search"
           items={files}
           icon={<SearchIcon />}
           filterKeys={['name', 'cid']}
@@ -176,24 +177,14 @@ const FilesManager = ({ className }: FilesManagerProps) => {
           onChange={setSortedFiles}
         />
       </div>
-      <Filterable
-        className="files-manager-search medium-down-only"
-        items={files}
-        icon={<SearchIcon />}
-        filterKeys={['name', 'cid']}
-        placeholder="Search for a file"
-        queryParam="filter"
-        onChange={setFilteredFiles}
-        onValueChange={setKeyword}
-      />
       <FileRowItem
         onSelect={onSelectAllToggle}
-        date="Date"
-        name="Name"
-        cid="CID"
-        status="Status"
-        storageProviders="Storage Providers"
-        size="Size"
+        date={fileRowLabels.DATE}
+        name={fileRowLabels.NAME}
+        cid={fileRowLabels.CID}
+        status={fileRowLabels.STATUS}
+        storageProviders={fileRowLabels.STORAGE_PROVIDERS}
+        size={fileRowLabels.SIZE}
         isHeader
         isSelected={
           !!selectedFiles.length &&
@@ -259,6 +250,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
             Delete Selected
           </button>
           <Pagination
+            className="files-manager-pagination"
             items={sortedFiles}
             itemsPerPage={itemsPerPage || 10}
             visiblePages={1}

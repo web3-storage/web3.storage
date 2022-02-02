@@ -54,14 +54,10 @@ $file-size: auto;
       }
       justify-content: flex-start;
       border-bottom: 0.0625rem solid rgba(white, 0.05);
-      &:before {
-        width: 10rem;
+      .file-row-label {
         @include fontWeight_Semibold;
-
-        @include medium {
-          width: 5rem;
-          flex-shrink: 0;
-        }
+        width: 6rem;
+        flex-shrink: 0;
       }
     }
   }
@@ -96,20 +92,12 @@ $file-size: auto;
     }
     &-date {
       padding-right: 2.1875rem;
-      @include medium {
-        &:before {
-          content: 'Date';
-        }
-      }
     }
     &-name {
       padding-right: 2.1875rem;
       height: 100%;
 
       @include medium {
-        &:before {
-          content: 'Name';
-        }
         .pencil-icon {
           display: none;
         }
@@ -150,45 +138,22 @@ $file-size: auto;
     }
     &-cid {
       padding-right: 3rem;
-      font-family: 'Suisse Intl Mono';
       justify-content: flex-start;
-      grid-gap: 0.5rem;
+      .cid-truncate,
       .cid-full {
-        display: none;
+        font-family: 'Suisse Intl Mono';
+        word-break: break-all;
       }
-
       @include medium {
-        grid-gap: 0;
-        .info-container {
-          font-family: $font_Primary;
-        }
         justify-content: flex-start;
-        &:before {
-          content: 'CID';
-        }
-        .copy-icon {
-          display: none;
-        }
-        .cid-full {
-          display: block;
-          word-break: break-all;
-        }
-        .cid-truncate {
-          display: none;
-        }
       }
-
       .copy-icon {
+        padding-left: 0.5rem;
         cursor: pointer;
       }
     }
     &-availability {
       padding-right: 2.6875rem;
-      @include medium {
-        &:before {
-          content: 'Available';
-        }
-      }
     }
     &-pin-status {
       // padding-right: 3rem;
@@ -196,9 +161,6 @@ $file-size: auto;
       gap: 0.5rem;
       @include medium {
         gap: 0;
-        &:before {
-          content: 'Status';
-        }
       }
     }
     &-storage-providers {
@@ -206,10 +168,6 @@ $file-size: auto;
       flex-wrap: wrap;
       @include medium {
         flex-wrap: nowrap;
-        &:before {
-          content: 'Storage Providers';
-        }
-
         > span {
           &:not(:last-child) {
             margin-right: 0.3125rem;
@@ -218,13 +176,6 @@ $file-size: auto;
       }
       > span {
         flex-shrink: none;
-      }
-    }
-    &-size {
-      @include medium {
-        &:before {
-          content: 'Size';
-        }
       }
     }
   }
@@ -267,6 +218,11 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
 
   @include medium {
     padding-left: 0.5rem;
+    .file-row-label & {
+      position: absolute;
+      left: 0.5rem;
+      padding-left: 0;
+    }
     svg {
       width: 1rem;
       height: 1rem;
@@ -319,17 +275,5 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
   a {
     color: $cyan;
     cursor: pointer;
-  }
-}
-
-.medium-down-only {
-  display: none;
-  @include medium {
-    display: inherit;
-  }
-}
-.medium-up-only {
-  @include medium {
-    display: none;
   }
 }
