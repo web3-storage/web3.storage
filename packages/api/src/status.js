@@ -1,5 +1,5 @@
 import { JSONResponse, notFound } from './utils/json-response.js'
-import { normalizeCid } from './utils/normalize-cid.js'
+import { normalizeCid } from './utils/cid.js'
 
 /**
  * Returns pin and deal status info for a given CID.

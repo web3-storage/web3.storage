@@ -11,7 +11,7 @@ import retry from 'p-retry'
 import { GATEWAY, LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
-import { normalizeCid } from './utils/normalize-cid.js'
+import { normalizeCid } from './utils/cid.js'
 
 /**
  * @typedef {import('multiformats/cid').CID} CID

@@ -1,5 +1,5 @@
 import { JSONResponse, notFound } from './utils/json-response.js'
-import { normalizeCid } from './utils/normalize-cid.js'
+import { normalizeCid } from './utils/cid.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import {
   getEffectivePinStatus,
@@ -170,7 +170,7 @@ async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
     tasks.push(
       waitAndUpdateOkPins.bind(
         null,
-        normalizeCid,
+        normalizedCid,
         env.cluster,
         env.db)
     )
