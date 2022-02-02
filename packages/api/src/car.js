@@ -167,7 +167,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   if (!pins.some(p => PIN_OK_STATUS.includes(p.status))) {
     tasks.push(waitAndUpdateOkPins.bind(
       null,
-      normalizeCid,
+      normalizedCid,
       env.cluster,
       env.db)
     )
