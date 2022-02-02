@@ -157,8 +157,7 @@ export class NameRoom {
   static async join (req, ns, key) {
     const roomId = ns.idFromName(key)
     const room = ns.get(roomId)
-    const url = new URL(req.url)
-    url.pathname = '/websocket'
+    const url = new URL('/websocket', req.url)
     return room.fetch(url, req)
   }
 
@@ -171,8 +170,7 @@ export class NameRoom {
   static async broadcast (req, ns, key, data) {
     const roomId = ns.idFromName(key)
     const room = ns.get(roomId)
-    const url = new URL(req.url)
-    url.pathname = '/broadcast'
+    const url = new URL('/broadcast', req.url)
     return room.fetch(url, { method: 'POST', body: JSON.stringify(data) })
   }
 }

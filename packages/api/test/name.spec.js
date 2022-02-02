@@ -57,15 +57,6 @@ describe('GET /name/:key/watch', () => {
     const name1Record0 = await createNameRecord(name1.privateKey, name1Value0)
     const name1Record1 = await updateNameRecord(name1.privateKey, name1Record0, name1Value1)
 
-    const publishRecord = async (key, record) => {
-      const publishRes = await fetch(new URL(`name/${key}`, endpoint), {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: uint8arrays.toString(record, 'base64pad')
-      })
-      assert(publishRes.ok)
-    }
-
     // listen for updates to name0
     /** @type {import('websocket').connection} */
     const conn = await new Promise((resolve, reject) => {
@@ -88,12 +79,12 @@ describe('GET /name/:key/watch', () => {
     })
 
     try {
-      await publishRecord(name0.id, name0Record0)
+      await publishRecord(token, name0.id, name0Record0)
       // we should NOT receive an update for this key
-      await publishRecord(name1.id, name1Record0)
+      await publishRecord(token, name1.id, name1Record0)
       // we should NOT receive an update for this key
-      await publishRecord(name1.id, name1Record1)
-      await publishRecord(name0.id, name0Record1)
+      await publishRecord(token, name1.id, name1Record1)
+      await publishRecord(token, name0.id, name0Record1)
 
       // wait for update message to be received
       await deferred.promise
@@ -119,15 +110,6 @@ describe('GET /name/:key/watch', () => {
     const name1Record0 = await createNameRecord(name1.privateKey, name1Value0)
     const name1Record1 = await updateNameRecord(name1.privateKey, name1Record0, name1Value1)
 
-    const publishRecord = async (key, record) => {
-      const publishRes = await fetch(new URL(`name/${key}`, endpoint), {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: uint8arrays.toString(record, 'base64pad')
-      })
-      assert(publishRes.ok)
-    }
-
     // listen for ALL updates
     /** @type {import('websocket').connection} */
     const conn = await new Promise((resolve, reject) => {
@@ -149,10 +131,10 @@ describe('GET /name/:key/watch', () => {
     })
 
     try {
-      await publishRecord(name1.id, name1Record0)
-      await publishRecord(name0.id, name0Record0)
-      await publishRecord(name1.id, name1Record1)
-      await publishRecord(name0.id, name0Record1)
+      await publishRecord(token, name1.id, name1Record0)
+      await publishRecord(token, name0.id, name0Record0)
+      await publishRecord(token, name1.id, name1Record1)
+      await publishRecord(token, name0.id, name0Record1)
 
       // wait for update messages to be received
       await deferred.promise
@@ -166,4 +148,13 @@ describe('GET /name/:key/watch', () => {
       conn.close()
     }
   })
+
+  async function publishRecord (token, key, record) {
+    const publishRes = await fetch(new URL(`name/${key}`, endpoint), {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: uint8arrays.toString(record, 'base64pad')
+    })
+    assert(publishRes.ok)
+  }
 })
