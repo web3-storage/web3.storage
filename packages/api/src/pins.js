@@ -1,5 +1,4 @@
 import { JSONResponse } from './utils/json-response.js'
-import { normalizeCid } from './utils/cid.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { PSAErrorDB, PSAErrorDBNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from './errors.js'
 import {
@@ -107,7 +106,7 @@ async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
     tasks.push(
       waitAndUpdateOkPins.bind(
         null,
-        normalizeCid,
+        normalizedCid,
         env.cluster,
         env.db)
     )
@@ -238,7 +237,6 @@ export async function pinDelete (request, env, ctx) {
  * @param {string} authTokenId
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
- * @return {Promise<JSONResponse>}
  */
 async function replacePin (newPinData, requestId, authTokenId, env, ctx) {
   let existingPinRequest
@@ -268,5 +266,5 @@ async function replacePin (newPinData, requestId, authTokenId, env, ctx) {
     throw new PSAErrorDB()
   }
 
-  return new JSONResponse(pinStatus, { status: 202 })
+  return pinStatus
 }
