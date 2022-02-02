@@ -1,6 +1,6 @@
 import { Validator } from '@cfworker/json-schema'
-import { PinningServiceApiError, PSAErrorInvalidCid } from '../errors.js'
-import { normalizeCid } from './normalize-cid.js'
+import { PSAErrorInvalidData } from '../errors.js'
+import { normalizeCid } from '../utils/cid.js'
 
 /**
  * @typedef {'queued' | 'pinning' | 'failed' | 'pinned'} apiPinStatus
@@ -60,10 +60,8 @@ export const psaStatusesToDBStatuses = (statuses) => {
 }
 
 // Error messages
-// TODO: Refactor errors
-export const ERROR_STATUS = 400
-export const ERROR_REASON = 'INVALID_PIN_DATA'
-export const INVALID_CID = 'Invalid cid'
+export const DATA_NOT_FOUND = 'Requested data was not found'
+export const INVALID_CID = 'The CID provided is invalid'
 export const INVALID_MATCH = 'Match should be a string (i.e. "exact", "iexact", "partial", "ipartial")'
 export const INVALID_META = 'Meta should be an object with string values'
 export const INVALID_NAME = 'Name should be a string'
@@ -126,46 +124,51 @@ export const postPinValidator = new Validator({
 export function validatePayload (payload, validator) {
   /** @type {*} */
   const opts = {}
-  Object.keys(payload).forEach((param) => {
-    if (payload[param]) opts[param] = payload[param]
-  })
+  const {
+    after,
+    before,
+    cid,
+    limit,
+    match,
+    meta,
+    name,
+    origins,
+    requestId,
+    status
+  } = payload
 
-  // Validate CID or list of CIDs if present
-  if (opts.cid) {
-    if (Array.isArray(opts.cid)) {
-      const cids = []
-      try {
-        opts.cid.split(',').forEach(cid => {
-          cids.push(normalizeCid(cid))
-        })
-      } catch (err) {
-        return {
-          error: new PSAErrorInvalidCid(),
-          data: undefined
-        }
-      }
-      opts.cids = cids
+  // Validate CID or array of CIDs if present
+  if (cid) {
+    let cidParam
+    if (Array.isArray(cid)) {
+      cidParam = cid
     } else {
+      cidParam = cid.split(',')
+    }
+
+    const cids = []
+    for (const cid of cidParam) {
       try {
-        opts.cid = normalizeCid(opts.cid)
-      } catch (err) {
+        cids.push(normalizeCid(cid))
+      } catch (e) {
         return {
-          error: new PSAErrorInvalidCid(),
+          error: new PSAErrorInvalidData(INVALID_CID),
           data: undefined
         }
       }
     }
+    opts.cid = cids
   }
 
-  // Process pin statuses
-  if (opts.status) {
-    opts.status = opts.status.split(',').map(psaStatusesToDBStatuses)
-  }
-
-  // Limit should be a number
-  if (opts.limit) {
-    opts.limit = Number(opts.limit)
-  }
+  if (status) opts.status = status.split(',').map(psaStatusesToDBStatuses)
+  if (limit) opts.limit = Number(limit)
+  if (name) opts.name = name
+  if (meta) opts.meta = meta
+  if (match) opts.match = match
+  if (before) opts.before = before
+  if (after) opts.after = after
+  if (origins) opts.origins = origins
+  if (requestId) opts.requestId = requestId
 
   const result = validator.validate(opts)
 
@@ -175,7 +178,7 @@ export function validatePayload (payload, validator) {
   if (result.valid) {
     data = opts
   } else {
-    error = new PinningServiceApiError()
+    error = new PSAErrorInvalidData(result.error)
   }
 
   return { data, error }

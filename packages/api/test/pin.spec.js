@@ -4,8 +4,9 @@ import fetch from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
 import {
-  ERROR_STATUS,
+  DATA_NOT_FOUND,
   getEffectivePinStatus,
+  INVALID_CID,
   INVALID_REPLACE
 } from '../src/utils/psa.js'
 import { PinningUnauthorizedError } from '../src/errors.js'
@@ -114,9 +115,9 @@ describe('Pinning APIs endpoints', () => {
         })
 
       assert(res, 'Server responded')
-      assert.strictEqual(res.status, ERROR_STATUS)
+      assert.strictEqual(res.status, 400)
       const error = await res.json()
-      assert.strictEqual(error.reason, 'PSA_INVALID_PIN_DATA')
+      assert.strictEqual(error.reason, 'PSA_INVALID_DATA')
       // assert.strictEqual(error.details, INVALID_LIMIT)
     })
 
@@ -137,10 +138,10 @@ describe('Pinning APIs endpoints', () => {
           }
         })
 
-      assert.strictEqual(res.status, ERROR_STATUS)
+      assert.strictEqual(res.status, 400)
       const error = await res.json()
-      assert.strictEqual(error.reason, 'PSA_INVALID_CID')
-      // assert.strictEqual(error.details, INVALID_CID)
+      assert.strictEqual(error.reason, 'PSA_INVALID_DATA')
+      assert.strictEqual(error.details, INVALID_CID)
     })
 
     it.skip('returns only successful pins when no filter values are specified', async () => {
@@ -245,7 +246,7 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(data.results[0].pin.name, 'FailedPinning.doc')
     })
 
-    it.skip('filters pins by multiple statuses', async () => {
+    it('filters pins by multiple statuses', async () => {
       const opts = new URLSearchParams({
         status: 'queued,pinning'
       })
@@ -381,12 +382,12 @@ describe('Pinning APIs endpoints', () => {
       })
 
       assert(res, 'Server responded')
-      assert.strictEqual(res.status, ERROR_STATUS)
+      assert.strictEqual(res.status, 400)
       const data = await res.json()
-      assert.strictEqual(data.reason, 'PSA_INVALID_PIN_DATA')
+      assert.strictEqual(data.reason, 'PSA_INVALID_DATA')
     })
 
-    it('throws error if cid is invalid', async () => {
+    it.only('throws error if cid is invalid', async () => {
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
         headers: {
@@ -398,10 +399,10 @@ describe('Pinning APIs endpoints', () => {
       })
 
       assert(res, 'Server responded')
-      assert.strictEqual(res.status, ERROR_STATUS)
+      assert.strictEqual(res.status, 400)
       const error = await res.json()
-      assert.strictEqual(error.reason, 'PSA_INVALID_CID')
-      assert.strictEqual(error.details, 'The cid provided is invalid')
+      assert.strictEqual(error.reason, 'PSA_INVALID_DATA')
+      assert.strictEqual(error.details, INVALID_CID)
     })
 
     it('should receive pin data containing cid, name, origin, meta', async () => {
@@ -449,9 +450,9 @@ describe('Pinning APIs endpoints', () => {
       })
 
       assert(res, 'Server responded')
-      assert.strictEqual(res.status, ERROR_STATUS)
+      assert.strictEqual(res.status, 400)
       const data = await res.json()
-      assert.strictEqual(data.reason, 'PSA_INVALID_PIN_DATA')
+      assert.strictEqual(data.reason, 'PSA_INVALID_DATA')
     })
 
     it('validates origins', async () => {
@@ -468,9 +469,9 @@ describe('Pinning APIs endpoints', () => {
       })
 
       assert(res, 'Server responded')
-      assert.strictEqual(res.status, ERROR_STATUS)
+      assert.strictEqual(res.status, 400)
       const data = await res.json()
-      assert.strictEqual(data.reason, 'PSA_INVALID_PIN_DATA')
+      assert.strictEqual(data.reason, 'PSA_INVALID_DATA')
     })
 
     it('validates meta', async () => {
@@ -487,9 +488,9 @@ describe('Pinning APIs endpoints', () => {
       })
 
       assert(res, 'Server responded')
-      assert.strictEqual(res.status, ERROR_STATUS)
+      assert.strictEqual(res.status, 400)
       const data = await res.json()
-      assert.strictEqual(data.reason, 'PSA_INVALID_PIN_DATA')
+      assert.strictEqual(data.reason, 'PSA_INVALID_DATA')
     })
 
     it.skip('error if user not authorized to pin', async () => {
@@ -510,7 +511,7 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
 
-    it('returns the pin request', async () => {
+    it.skip('returns the pin request', async () => {
       const sourceCid = 'QmVGv1UK8EvhD9KMHdKBB1LWadiYai6sY5GHL6h7MHRWzf'
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
@@ -526,6 +527,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res.ok)
       const data = await res.json()
       assertCorrectPinResponse(data)
+      console.log(data)
       assert.strictEqual(data.pin.cid, sourceCid)
       assert.notDeepEqual(data.status, 'failed')
     })
@@ -752,7 +754,7 @@ describe('Pinning APIs endpoints', () => {
       assert.deepEqual(res.status, 401)
     })
 
-    it('returns not found if the request does not exists', async () => {
+    it('returns not found if the request does not exist', async () => {
       const pinThatDoesNotExists = 'idThatDoesNotExists'
       const res = await fetch(new URL(`pins/${pinThatDoesNotExists}`, endpoint).toString(), {
         method: 'DELETE',
@@ -763,6 +765,9 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.deepEqual(res.status, 404)
+      const error = await res.json()
+      assert.deepEqual(error.reason, 'PSA_DB_NOT_FOUND')
+      assert.deepEqual(error.details, DATA_NOT_FOUND)
     })
 
     it('deletes the pin request', async () => {
@@ -845,7 +850,8 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert.equal(res.status, 404)
       const error = await res.json()
-      assert.equal(error.reason, 'DB_ERROR')
+      assert.equal(error.reason, 'PSA_DB_NOT_FOUND')
+      assert.equal(error.details, DATA_NOT_FOUND)
     })
 
     it('should delete the pin request and replace it', async () => {
@@ -868,6 +874,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(resR, 'Replace request did not respond')
       assert(resR.ok, 'Replace request was not successful')
+      assert.strictEqual(resR.status, 202)
 
       const resG = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
         method: 'GET',

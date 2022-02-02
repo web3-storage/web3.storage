@@ -1,18 +1,16 @@
 import { JSONResponse } from './utils/json-response.js'
 import { normalizeCid } from './utils/cid.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
-import { PinningServiceApiError } from './errors.js'
+import { PSAErrorDB, PSAErrorDBNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from './errors.js'
 import {
-  getEffectivePinStatus,
-  ERROR_STATUS,
-  INVALID_REQUEST_ID,
-  INVALID_REPLACE,
-  REQUIRED_REQUEST_ID,
-  listPinsValidator,
-  validatePayload,
-  postPinValidator,
   DEFAULT_PIN_LISTING_LIMIT,
-  ERROR_REASON
+  INVALID_REPLACE,
+  INVALID_REQUEST_ID,
+  REQUIRED_REQUEST_ID,
+  getEffectivePinStatus,
+  listPinsValidator,
+  postPinValidator,
+  validatePayload
 } from './utils/psa.js'
 
 /**
@@ -121,7 +119,7 @@ async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
     tasks.forEach(t => ctx.waitUntil(t()))
   }
 
-  return new JSONResponse(pinStatus)
+  return new JSONResponse(pinStatus, { status: 202 })
 }
 
 /**
@@ -131,7 +129,7 @@ async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
  */
 export async function pinGet (request, env, ctx) {
   if (typeof request.params.requestId !== 'string') {
-    throw new PinningServiceApiError(ERROR_REASON, INVALID_REQUEST_ID, ERROR_STATUS)
+    throw new PSAErrorInvalidData(INVALID_REQUEST_ID)
   }
 
   const { authToken } = request.auth
@@ -142,7 +140,8 @@ export async function pinGet (request, env, ctx) {
   try {
     pinRequest = await env.db.getPsaPinRequest(authToken._id, request.params.requestId)
   } catch (e) {
-    throw new PinningServiceApiError('DB_ERROR', e, 404)
+    console.error(e)
+    throw new PSAErrorDBNotFound()
   }
 
   /** @type { PsaPinStatusResponse } */
@@ -177,7 +176,7 @@ export async function pinsGet (request, env, ctx) {
     pinRequests = await env.db.listPsaPinRequests(request.auth.authToken._id, opts)
   } catch (e) {
     console.error(e)
-    throw new PinningServiceApiError('DB_ERROR', e, 404)
+    throw new PSAErrorDBNotFound()
   }
 
   const pins = pinRequests.results.map((pinRequest) => getPinStatus(pinRequest))
@@ -219,11 +218,11 @@ export async function pinDelete (request, env, ctx) {
   const { authToken } = request.auth
 
   if (!requestId) {
-    throw new PinningServiceApiError(ERROR_REASON, REQUIRED_REQUEST_ID, ERROR_STATUS)
+    throw new PSAErrorRequiredData(REQUIRED_REQUEST_ID)
   }
 
   if (typeof requestId !== 'string') {
-    throw new PinningServiceApiError(ERROR_REASON, INVALID_REQUEST_ID, ERROR_STATUS)
+    throw new PSAErrorInvalidData(INVALID_REQUEST_ID)
   }
 
   try {
@@ -231,7 +230,7 @@ export async function pinDelete (request, env, ctx) {
     await env.db.deletePsaPinRequest(requestId, authToken._id)
   } catch (e) {
     console.error(e)
-    throw new PinningServiceApiError('DB_ERROR', e, 404)
+    throw new PSAErrorDBNotFound()
   }
 
   return new JSONResponse({}, { status: 202 })
@@ -249,26 +248,28 @@ async function replacePin (newPinData, requestId, authTokenId, env, ctx) {
   try {
     existingPinRequest = await env.db.getPsaPinRequest(authTokenId, requestId)
   } catch (e) {
-    throw new PinningServiceApiError('DB_ERROR', e, 404)
+    throw new PSAErrorDBNotFound()
   }
 
   const existingCid = existingPinRequest.sourceCid
   if (newPinData.cid === existingCid) {
-    throw new PinningServiceApiError(ERROR_REASON, INVALID_REPLACE, ERROR_STATUS)
+    throw new PSAErrorInvalidData(INVALID_REPLACE)
   }
 
   let pinStatus
   try {
     pinStatus = await createPin(existingPinRequest.contentCid, newPinData, authTokenId, env, ctx)
   } catch (e) {
-    throw new PinningServiceApiError('DB_ERROR', e, 404)
+    console.error(e)
+    throw new PSAErrorDB()
   }
 
   try {
     await env.db.deletePsaPinRequest(requestId, authTokenId)
   } catch (e) {
-    throw new PinningServiceApiError('DB_ERROR', e, 404)
+    console.error(e)
+    throw new PSAErrorDB()
   }
 
-  return pinStatus
+  return new JSONResponse(pinStatus, { status: 202 })
 }

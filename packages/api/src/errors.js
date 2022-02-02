@@ -1,27 +1,3 @@
-export class PinningServiceApiError extends Error {
-  /**
-   *
-   * @param {string} reason
-   * @param {string} [details]
-   * @param {number} [status]
-   */
-  constructor (reason = 'PSA_INVALID_PIN_DATA', details, status = 400) {
-    super()
-    this.reason = reason
-    this.details = details
-    this.status = status
-  }
-}
-
-export class PSAErrorInvalidCid extends PinningServiceApiError {
-  constructor () {
-    super(PSAErrorInvalidCid.REASON)
-    this.details = 'The cid provided is invalid'
-    this.status = 400
-  }
-}
-PSAErrorInvalidCid.REASON = 'PSA_INVALID_CID'
-
 export class HTTPError extends Error {
   /**
    *
@@ -101,3 +77,64 @@ export class InvalidCidError extends Error {
   }
 }
 InvalidCidError.CODE = 'ERROR_INVALID_CID'
+
+export class PinningServiceApiError extends Error {
+  /**
+   *
+   * @param {string} reason
+   * @param {string} [details]
+   * @param {number} [status]
+   */
+  constructor (reason = 'PSA_ERROR', details, status = 400) {
+    super()
+    this.reason = reason
+    this.details = details
+    this.status = status
+  }
+}
+
+export class PSAErrorInvalidData extends PinningServiceApiError {
+  /**
+   * @param {string} details
+   */
+  constructor (details) {
+    super(PSAErrorInvalidData.REASON)
+    this.details = details
+  }
+}
+PSAErrorInvalidData.REASON = 'PSA_INVALID_DATA'
+
+export class PSAErrorRequiredData extends PinningServiceApiError {
+  /**
+   * @param {string} details
+   */
+  constructor (details) {
+    super(PSAErrorRequiredData.REASON)
+    this.details = details
+  }
+}
+PSAErrorRequiredData.REASON = 'PSA_REQUIRED_DATA'
+
+export class PSAErrorDBNotFound extends PinningServiceApiError {
+  /**
+   * @param {string} details
+   */
+  constructor (details = 'Requested data was not found') {
+    super(PSAErrorDBNotFound.REASON)
+    this.details = details
+    this.status = 404
+  }
+}
+PSAErrorDBNotFound.REASON = 'PSA_DB_NOT_FOUND'
+
+export class PSAErrorDB extends PinningServiceApiError {
+  /**
+   * @param {string} details
+   */
+  constructor (details = 'DB transaction failed') {
+    super(PSAErrorDB.REASON)
+    this.details = details
+    this.status = 501
+  }
+}
+PSAErrorDB.REASON = 'PSA_DB_ERROR'
