@@ -45,6 +45,19 @@
       margin-right: 0.625rem;
     }
   }
+
+  @include medium {
+    justify-content: space-between;
+
+    .refresh {
+      margin-right: 0;
+    }
+
+    // Title
+    > :first-child {
+      margin-right: initial;
+    }
+  }
 }
 
 .files-manager-table-header-divider {

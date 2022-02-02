@@ -7,6 +7,10 @@
   }
 
   padding: 1.25rem 0 0.1rem 2.25rem;
+
+  @include medium {
+    padding: 2.5rem 1.375rem 2.5rem 1rem;
+  }
 }
 
 .storage-manager-info,
@@ -19,7 +23,6 @@
 
 .storage-manager-space {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   margin-bottom: 0.325rem;
 }
@@ -27,11 +30,35 @@
 .storage-manager-info {
   @include fontSize_Tiny;
   @include fontWeight_Regular;
-  .button {
+  button {
     padding: 0;
     padding-left: 0.65rem;
   }
   margin-top: 1.25rem;
+
+  @include medium {
+    @include leading_Small;
+
+    button a {
+      &::after {
+        content: '  ❯';
+      }
+    }
+  }
+}
+
+// Mobile override after
+.storage-manager-info,
+.storage-manager-space {
+  @include medium {
+    padding-left: 0;
+    flex-direction: column;
+    align-items: flex-start;
+
+    button {
+      padding-left: 0;
+    }
+  }
 }
 
 .storage-manager-meter-container {
@@ -62,6 +89,14 @@
         flex-direction: row;
         align-items: center;
       }
+    }
+  }
+
+  @include medium {
+    flex-direction: column;
+    padding-right: 0;
+    .button {
+      align-self: flex-end;
     }
   }
 }

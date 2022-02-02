@@ -39,6 +39,10 @@
       height: 100%;
       width: 26rem;
       padding-left: 2.1rem;
+
+      @include medium {
+        width: 100%;
+      }
     }
   }
 }

@@ -25,9 +25,9 @@
     grid-template-columns: 1fr;
     grid-template-areas:
       'storage-manager'
+      'upload-cta'
       'tokens-cta'
       'docs-cta'
-      'upload-cta'
       'files-manager';
     grid-gap: 0.6875rem 0;
   }

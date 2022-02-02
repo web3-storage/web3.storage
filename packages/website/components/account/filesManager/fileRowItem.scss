@@ -51,6 +51,11 @@ $file-size: auto;
       &:before {
         width: 10rem;
         @include fontWeight_Semibold;
+
+        @include medium {
+          width: 5rem;
+          flex-shrink: 0;
+        }
       }
     }
   }
@@ -94,9 +99,13 @@ $file-size: auto;
     &-name {
       padding-right: 2.1875rem;
       height: 100%;
+
       @include medium {
         &:before {
           content: 'Name';
+        }
+        .pencil-icon {
+          display: none;
         }
       }
 
@@ -136,14 +145,28 @@ $file-size: auto;
     &-cid {
       padding-right: 3rem;
       justify-content: space-between;
-      font-family: 'Suisse Intl Mono';
-      .info-container {
-        font-family: $font_Primary;
+      .cid-full {
+        display: none;
       }
+
       @include medium {
+        font-family: 'Suisse Intl Mono';
+        .info-container {
+          font-family: $font_Primary;
+        }
         justify-content: flex-start;
         &:before {
           content: 'CID';
+        }
+        .copy-icon {
+          display: none;
+        }
+        .cid-full {
+          display: block;
+          word-break: break-all;
+        }
+        .cid-truncate {
+          display: none;
         }
       }
 
@@ -174,8 +197,15 @@ $file-size: auto;
       padding-right: 2.5rem;
       flex-wrap: wrap;
       @include medium {
+        flex-wrap: nowrap;
         &:before {
           content: 'Storage Providers';
+        }
+
+        > span {
+          &:not(:last-child) {
+            margin-right: 0.3125rem;
+          }
         }
       }
       > span {

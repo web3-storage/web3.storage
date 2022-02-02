@@ -107,10 +107,11 @@ const FileRowItem = props => {
           </span>
         )}
 
-        {!isHeader && <PencilIcon onClick={() => setIsEditingName(!isEditingName)} />}
+        {!isHeader && <PencilIcon className="pencil-icon" onClick={() => setIsEditingName(!isEditingName)} />}
       </span>
       <span className="file-cid" title={cid}>
-        {useMemo(() => truncateString(cid, 6, '...', 'double'), [cid])}
+        <span className="cid-truncate">{useMemo(() => truncateString(cid, 6, '...', 'double'), [cid])}</span>
+        <span className="cid-full">{cid}</span>
         {isHeader ? (
           <Info content="The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>" />
         ) : (
