@@ -170,7 +170,7 @@ async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
     tasks.push(
       waitAndUpdateOkPins.bind(
         null,
-        normalizeCid,
+        normalizedCid,
         env.cluster,
         env.db)
     )
