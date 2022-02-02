@@ -527,7 +527,7 @@ describe('Pinning APIs endpoints', () => {
       const data = await res.json()
       assertCorrectPinResponse(data)
       assert.strictEqual(data.pin.cid, sourceCid)
-      assert.equal(data.status, 'failed')
+      assert.notDeepEqual(data.status, 'failed')
     })
   })
 
