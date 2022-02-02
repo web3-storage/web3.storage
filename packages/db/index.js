@@ -937,7 +937,12 @@ export class DBClient {
     }
 
     if (opts.meta) {
-      query = query.eq('meta', opts.meta)
+      // Match meta on all the key/values specified.
+      const meta = JSON.parse(opts.meta)
+      for (const key in meta) {
+        const value = meta[key]
+        query = query.eq(`meta->>${key}`, value)
+      }
     }
 
     /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, count: number, error: PostgrestError }} */

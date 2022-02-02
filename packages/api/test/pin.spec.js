@@ -341,7 +341,7 @@ describe('Pinning APIs endpoints', () => {
     it('filters pins by meta', async () => {
       const opts = new URLSearchParams({
         status: 'pinning',
-        meta: '{"app_id": "99986338-1113-4706-8302-4420da6158bb"}'
+        meta: '{"app_id": "99986338-1113-4706-8302-4420da6158bb", "region": "europe"}'
       })
       const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
@@ -356,7 +356,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
-      assert.strictEqual(data.count, 2)
+      assert.strictEqual(data.count, 1)
     })
 
     it('error if user not authorized to pin', async () => {

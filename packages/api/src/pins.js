@@ -357,6 +357,7 @@ function parseSearchParams (params) {
   }
 
   if (meta) {
+    // Must be a string representation of a JSON object.
     if (!JSON.parse(meta) || Array.isArray(meta) || Object.entries(meta).some(([, v]) => typeof v !== 'string')) {
       return new JSONResponse(
         { error: { reason: ERROR_STATUS, details: INVALID_META } },
