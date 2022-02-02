@@ -23,12 +23,13 @@
 #section_1 {
   position: relative;
   z-index: 1;
+  @include selection_Light;
 }
 
 #section_2 {
   position: relative;
   z-index: 1;
-  background-color: $ebony;
+  @include background_Dark;
   &:before {
     content: '';
     position: absolute;
@@ -93,7 +94,7 @@
 #section_4 {
   position: relative;
   z-index: 1;
-  background-color: $ebony;
+  @include background_Dark;
   &:before {
     content: '';
     position: absolute;
@@ -162,7 +163,7 @@
 #section_6 {
   position: relative;
   z-index: 1;
-  background-color: $ebony;
+  @include background_Dark;
   color: white;
   &:before {
     content: '';

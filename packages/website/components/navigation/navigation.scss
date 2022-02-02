@@ -1,12 +1,14 @@
 @use 'sass:math';
 
 .section-navigation {
+  @include selection_Light;
   &.light {
-    background-color: $ebony;
+    @include background_Dark;
     color: white;
   }
   &.clear-bg {
     background-color: unset;
+    @include selection_Light;
   }
 }
 

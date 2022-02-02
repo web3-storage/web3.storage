@@ -16,6 +16,7 @@
   position: relative;
   z-index: 1;
   padding-bottom: 5rem;
+  @include selection_Light;
   &:before {
     content: '';
     position: absolute;
@@ -42,7 +43,7 @@
 #about_section_2 {
   position: relative;
   z-index: 1;
-  background-color: $ebony;
+  @include background_Dark;
   color: white;
   padding-top: 0;
   @include ultraLarge {

@@ -4,7 +4,7 @@ $footerLogoWidth: 2.25rem;
 
 // --------------------------------------------------------------------- Styling
 #site-footer {
-  background-color: $ebony;
+  @include background_Dark;
   color: white;
   padding-top: 4.875rem;
   position: relative;

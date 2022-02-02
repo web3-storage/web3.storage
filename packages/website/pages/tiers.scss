@@ -15,7 +15,7 @@
 #pricing_section_1,
 #pricing_section_3 {
   position: relative;
-  background-color: $ebony;
+  @include background_Dark;
 }
 
 #pricing_section_1 {
@@ -30,6 +30,7 @@
   background-image: url('/images/index/holographic-bg-cropped-2.png');
   background-size: cover;
   background-repeat: no-repeat;
+  @include selection_Light;
 
   &:before {
     content: '';
