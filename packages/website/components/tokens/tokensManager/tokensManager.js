@@ -13,6 +13,7 @@ import Filterable from 'ZeroComponents/filterable/filterable';
 import Sortable, { SortType, SortDirection } from 'ZeroComponents/sortable/sortable';
 import Pagination from 'ZeroComponents/pagination/pagination';
 import SearchIcon from 'assets/icons/search';
+import { tokenRowLabels } from 'components/tokens/tokensManager/tokenRowLabels.const.js';
 
 const TokensManager = () => {
   const { tokens, fetchDate, isFetchingTokens, deleteToken, getTokens, isCreating } = useTokens();
@@ -86,7 +87,7 @@ const TokensManager = () => {
           onChange={setSortedTokens}
         />
       </div>
-      <TokenRowItem name="Name" secret="Token" isHeader />
+      <TokenRowItem name={tokenRowLabels.NAME} secret={tokenRowLabels.SECRET} isHeader />
       <div className="tokens-manager-table-content">
         {isFetchingTokens || !fetchDate ? (
           <Loading className={'tokens-manager-loading-spinner'} />

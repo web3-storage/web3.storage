@@ -29,6 +29,7 @@ $file-size: auto;
     grid-template-columns: auto;
     border-bottom: 0;
     padding: 0;
+    margin-top: 1.25rem;
     @include border_Background_Waterloo_White;
   }
 
@@ -45,7 +46,7 @@ $file-size: auto;
     justify-content: space-between;
     @include fontWeight_Regular;
     @include medium {
-      padding: 0.85rem 1.975rem;
+      padding: 0.85rem 1rem 0.85rem 1.975rem;
       &.file-date {
         padding-top: 1.375rem;
       }
@@ -92,12 +93,16 @@ $file-size: auto;
     }
     &-date {
       padding-right: 2.1875rem;
+      @include medium {
+        padding-right: 1rem;
+      }
     }
     &-name {
       padding-right: 2.1875rem;
       height: 100%;
 
       @include medium {
+        padding-right: 1rem;
         .pencil-icon {
           display: none;
         }
@@ -143,20 +148,26 @@ $file-size: auto;
       .cid-full {
         font-family: 'Suisse Intl Mono';
         word-break: break-all;
+        margin-right: 0.5rem;
       }
       @include medium {
         justify-content: flex-start;
+        padding-right: 1rem;
       }
-      .copy-icon {
-        padding-left: 0.5rem;
+      svg {
         cursor: pointer;
+        @include medium {
+          display: none;
+        }
       }
     }
     &-availability {
       padding-right: 2.6875rem;
+      @include medium {
+        padding-right: 1rem;
+      }
     }
     &-pin-status {
-      // padding-right: 3rem;
       justify-content: flex-start;
       gap: 0.5rem;
       @include medium {
@@ -167,6 +178,7 @@ $file-size: auto;
       padding-right: 2.5rem;
       flex-wrap: wrap;
       @include medium {
+        padding-right: 1rem;
         flex-wrap: nowrap;
         > span {
           &:not(:last-child) {

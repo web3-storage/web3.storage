@@ -45,7 +45,7 @@ $royalBlue: #3064e0; // royal blue
 $pictonBlue: #31e7ea; // violetish blue
 $cyan: #3effe9; // full cyan
 $martinique: #392d52; // bluish purple
-$blue: #3D04FB; // bluest blue
+$blue: #3d04fb; // bluest blue
 $woodsmoke: #161b24; // blue almost black
 // ----------------------------------------------------------------- Breakpoints
 $breakpoint_Tiny: 25.9375rem; // 415px
@@ -346,6 +346,11 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
 // --------------------------------------------------------------------- Functions
 @function calculateWidthPercentage($width-section, $width-actual) {
   @return math.percentage(math.div($width-section, $width-actual));
+}
+
+@function toRem($value) {
+  $remValue: ($value / 16) + rem;
+  @return $remValue;
 }
 
 // ------------------------------------------------------------------- Animation

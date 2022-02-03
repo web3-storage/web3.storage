@@ -29,29 +29,53 @@
   > h4 {
     margin-bottom: 1rem;
   }
-
-  .tokens-manager-header {
-    padding-right: 1.5rem;
-  }
 }
 
 .tokens-manager-header {
   display: flex;
   padding-bottom: 0.75rem;
   align-items: center;
+  padding-right: 1.5rem;
+  flex-wrap: wrap;
+
+  @include medium {
+    padding-bottom: 1.625rem;
+    padding-right: 0;
+    justify-content: space-between;
+  }
 
   // Title
   > :first-child {
     margin-right: 7.85rem;
+    @include medium {
+      margin-left: 1rem;
+      margin-right: 0;
+    }
   }
 
   .Filterable {
     margin-right: 3.75rem;
+    @include medium {
+      flex-basis: 100%;
+      margin-top: 0.5rem;
+      order: 3;
+      margin-right: 0;
+    }
+  }
+
+  .Sortable {
+    @include medium {
+      margin-right: 1rem;
+    }
   }
 }
 
 .tokens-manager-table-content {
   min-height: 21.25rem;
+
+  @include medium {
+    min-height: auto;
+  }
 
   .tokens-manager-upload-cta {
     position: relative;
@@ -61,6 +85,20 @@
 
   .token-id {
     font-family: 'Suisse Intl Mono';
+  }
+
+  @include medium {
+    .token-name {
+      padding-top: 1.375rem;
+    }
+    .token-id-container {
+      display: flex;
+      padding-bottom: 1.375rem;
+      .token-id {
+        word-break: break-all;
+        @include leading_Tiny;
+      }
+    }
   }
 
   .button {
@@ -81,7 +119,18 @@
   display: flex;
   justify-content: space-between;
   padding-right: 4.125rem;
+  flex-wrap: wrap;
   &:before {
     content: '';
+  }
+  @include medium {
+    padding-right: 1rem;
+    .Pagination {
+      flex-basis: 100%;
+      order: 2;
+      .pageList {
+        justify-content: center;
+      }
+    }
   }
 }
