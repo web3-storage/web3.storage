@@ -66,10 +66,11 @@ export const INVALID_REQUEST_ID = 'Request id should be a string containing digi
 export const INVALID_REPLACE = 'Existing and replacement CID are the same.'
 export const REQUIRED_CID = 'CID is required'
 export const REQUIRED_REQUEST_ID = 'Request id is required'
+
 export const DEFAULT_PIN_LISTING_LIMIT = 10
 export const MAX_PIN_LISTING_LIMIT = 1000
 
-// Validation Schemas
+// Validation schemas
 const listPinsValidator = new Validator({
   type: 'object',
   required: [],
@@ -89,7 +90,6 @@ const listPinsValidator = new Validator({
       items: {
         type: 'string',
         enum: ['queued', 'pinning', 'pinned', 'failed']
-        // enum: ['PinError', 'PinQueued', 'Pinned', 'Pinning', 'ClusterError']
       }
     }
   }
