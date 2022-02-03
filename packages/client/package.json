@@ -86,12 +86,13 @@
     "./name": { 
       "browser": "./src/name.js", 
       "require": "./dist/src/name.cjs", 
-      "node": "./src/name.js" }, 
+      "node": "./src/name.js"
+    }, 
     "./dist/bundle.esm.min.js": { 
       "browser": "./dist/bundle.esm.min.js", 
       "require": "./dist/bundle.esm.min.js", 
       "node": "./dist/bundle.esm.min.js" 
-      }
+    }
   },
   "browser": {
     "./src/platform.js": "./src/platform.web.js"
