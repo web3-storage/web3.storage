@@ -107,7 +107,7 @@ const FileRowItem = props => {
         {!isEditingName ? (
           <span dangerouslySetInnerHTML={{ __html: name }} />
         ) : (
-          <span>
+          <span className="textarea-container">
             <textarea defaultValue={name} />
           </span>
         )}

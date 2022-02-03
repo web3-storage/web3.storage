@@ -134,7 +134,9 @@
   }
 
   .files-manager-pagination {
-    flex-basis: 100%;
-    order: 3;
+    @include medium {
+      flex-basis: 100%;
+      order: 3;
+    }
   }
 }

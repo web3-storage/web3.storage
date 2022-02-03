@@ -114,7 +114,7 @@ $file-size: auto;
         }
 
         // Text area container for blurry background
-        > span {
+        .textarea-container {
           display: flex;
           position: relative;
           &:before {
@@ -183,6 +183,9 @@ $file-size: auto;
         > span {
           &:not(:last-child) {
             margin-right: 0.3125rem;
+            @include medium {
+              margin-right: 0;
+            }
           }
         }
       }
