@@ -161,8 +161,7 @@ export function validatePinObject (payload) {
   if (result.valid) {
     data = opts
   } else {
-    // TODO: customize user errors
-    error = new PSAErrorInvalidData(JSON.stringify(result.errors))
+    error = new PSAErrorInvalidData(result.errors)
   }
 
   return { data, error }
@@ -227,8 +226,7 @@ export function validateSearchParams (payload) {
   if (result.valid) {
     data = opts
   } else {
-    // TODO: customize user errors
-    error = new PSAErrorInvalidData(JSON.stringify(result.errors))
+    error = new PSAErrorInvalidData(result.errors)
   }
 
   return { data, error }
