@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.5.4](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.3...web3.storage-v3.5.4) (2022-02-03)
+
+
+### Bug Fixes
+
+* add pre-bundled ESM build to package exports ([#930](https://github.com/web3-storage/web3.storage/issues/930)) ([b649d0f](https://github.com/web3-storage/web3.storage/commit/b649d0fd1fe33968a64d3281342bcd2430581c9e))
+
 ### [3.5.3](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.2...web3.storage-v3.5.3) (2022-01-11)
 
 

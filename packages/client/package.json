@@ -1,6 +1,6 @@
 {
   "name": "web3.storage",
-  "version": "3.5.3",
+  "version": "3.5.4",
   "description": "API client for web3.storage",
   "type": "module",
   "license": "(Apache-2.0 OR MIT)",
@@ -87,11 +87,11 @@
       "browser": "./src/name.js",
       "require": "./dist/src/name.cjs",
       "node": "./src/name.js"
-    }, 
-    "./dist/bundle.esm.min.js": { 
-      "browser": "./dist/bundle.esm.min.js", 
-      "require": "./dist/bundle.esm.min.js", 
-      "node": "./dist/bundle.esm.min.js" 
+    },
+    "./dist/bundle.esm.min.js": {
+      "browser": "./dist/bundle.esm.min.js",
+      "require": "./dist/bundle.esm.min.js",
+      "node": "./dist/bundle.esm.min.js"
     }
   },
   "browser": {
