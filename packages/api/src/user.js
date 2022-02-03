@@ -3,8 +3,8 @@ import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
 
 /**
- * @typedef { _id: string, issuer: string } User
- * @typedef { _id: string, name: string } AuthToken
+ * @typedef {{ _id: string, issuer: string }} User
+ * @typedef {{ _id: string, name: string }} AuthToken
  * @typedef {{ user: User authToken?: AuthToken }} Auth
  * @typedef {Request & { auth: Auth }} AuthenticatedRequest
  */
