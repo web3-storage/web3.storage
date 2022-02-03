@@ -145,6 +145,46 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(error.details, INVALID_CID)
     })
 
+    it('validates status values passed as filter', async () => {
+      const opts = new URLSearchParams({
+        status: 'pinning,badStatus'
+      })
+      const url = new URL(`${baseUrl}?${opts}`).toString()
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert.strictEqual(res.status, 400)
+      const error = await res.json()
+      assert.strictEqual(error.reason, PSAErrorInvalidData.REASON)
+      assert.strictEqual(error.details, '#/statuses/1: Instance does not match any of ["queued","pinning","pinned","failed"].')
+    })
+
+    it('validates match values passed as filter', async () => {
+      const opts = new URLSearchParams({
+        match: 'badMatch'
+      })
+      const url = new URL(`${baseUrl}?${opts}`).toString()
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert.strictEqual(res.status, 400)
+      const error = await res.json()
+      assert.strictEqual(error.reason, PSAErrorInvalidData.REASON)
+      assert.strictEqual(error.details, '#/match: Instance does not match any of ["exact","iexact","ipartial","partial"].')
+    })
+
     it('returns only successful pins when no filter values are specified', async () => {
       const res = await fetch(
         baseUrl, {

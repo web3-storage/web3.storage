@@ -84,11 +84,12 @@ const listPinsValidator = new Validator({
       type: 'string',
       enum: ['exact', 'iexact', 'ipartial', 'partial']
     },
-    status: {
+    statuses: {
       type: 'array',
       items: {
         type: 'string',
         enum: ['queued', 'pinning', 'pinned', 'failed']
+        // enum: ['PinError', 'PinQueued', 'Pinned', 'Pinning', 'ClusterError']
       }
     }
   }
@@ -196,8 +197,6 @@ export function validateSearchParams (payload) {
     opts.cid = normalizedCids
   }
 
-  if (status) opts.statuses = psaStatusesToDBStatuses(status.split(','))
-
   if (limit) {
     opts.limit = Number(limit)
   } else {
@@ -209,8 +208,12 @@ export function validateSearchParams (payload) {
   if (match) opts.match = match
   if (before) opts.before = before
   if (after) opts.after = after
+  if (status) opts.statuses = status.split(',')
 
   const result = listPinsValidator.validate(opts)
+
+  // If valid and present, map statuses for DB compatibility.
+  if (status) opts.statuses = psaStatusesToDBStatuses(opts.statuses)
 
   let data
   let error
