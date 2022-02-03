@@ -7,7 +7,8 @@ import {
   DATA_NOT_FOUND,
   getEffectivePinStatus,
   INVALID_CID,
-  INVALID_REPLACE
+  INVALID_REPLACE,
+  REQUIRED_CID
 } from '../src/utils/psa.js'
 import { PinningUnauthorizedError, PSAErrorDBNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from '../src/errors.js'
 
@@ -100,7 +101,7 @@ describe('Pinning APIs endpoints', () => {
       assert.deepEqual(res.status, 401)
     })
 
-    it('validates filter values', async () => {
+    it('validates limit value passed as filter', async () => {
       const opts = new URLSearchParams({
         limit: '3.14'
       })
@@ -118,6 +119,7 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(res.status, 400)
       const error = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.REASON)
+      assert.strictEqual(error.details, '#/limit: Instance type "number" is invalid. Expected "integer".')
     })
 
     it('validates CID values passed as filter', async () => {
@@ -382,8 +384,9 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, 400)
-      const data = await res.json()
-      assert.strictEqual(data.reason, PSAErrorRequiredData.REASON)
+      const error = await res.json()
+      assert.strictEqual(error.reason, PSAErrorRequiredData.REASON)
+      assert.strictEqual(error.details, REQUIRED_CID)
     })
 
     it('throws error if cid is invalid', async () => {
@@ -450,8 +453,9 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, 400)
-      const data = await res.json()
-      assert.strictEqual(data.reason, PSAErrorInvalidData.REASON)
+      const error = await res.json()
+      assert.strictEqual(error.reason, PSAErrorInvalidData.REASON)
+      assert.strictEqual(error.details, '#/name: Instance type "number" is invalid. Expected "string".')
     })
 
     it('validates origins', async () => {
@@ -469,8 +473,9 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, 400)
-      const data = await res.json()
-      assert.strictEqual(data.reason, PSAErrorInvalidData.REASON)
+      const error = await res.json()
+      assert.strictEqual(error.reason, PSAErrorInvalidData.REASON)
+      assert.strictEqual(error.details, '#/origins: Instance type "number" is invalid. Expected "array".')
     })
 
     it('validates meta', async () => {
@@ -488,8 +493,9 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, 400)
-      const data = await res.json()
-      assert.strictEqual(data.reason, PSAErrorInvalidData.REASON)
+      const error = await res.json()
+      assert.strictEqual(error.reason, PSAErrorInvalidData.REASON)
+      assert.strictEqual(error.details, '#/meta: Instance type "number" is invalid. Expected "object".')
     })
 
     it('error if user not authorized to pin', async () => {

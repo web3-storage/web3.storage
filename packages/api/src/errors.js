@@ -82,7 +82,7 @@ export class PinningServiceApiError {
   /**
    *
    * @param {string} reason
-   * @param {string|Object} [details]
+   * @param {string} [details]
    * @param {number} [status]
    */
   constructor (reason = 'PSA_ERROR', details, status = 400) {
@@ -94,9 +94,9 @@ export class PinningServiceApiError {
 
 export class PSAErrorInvalidData extends PinningServiceApiError {
   /**
-   * @param {string|Object} details
+   * @param {string} details
    */
-  constructor (details) {
+  constructor (details = 'Some data is invalid. Please consult the spec.') {
     super(PSAErrorInvalidData.REASON)
     this.details = details
   }
@@ -105,9 +105,9 @@ PSAErrorInvalidData.REASON = 'PSA_INVALID_DATA'
 
 export class PSAErrorRequiredData extends PinningServiceApiError {
   /**
-   * @param {string|Object} details
+   * @param {string} details
    */
-  constructor (details) {
+  constructor (details = 'Missing required data. Please consult the spec.') {
     super(PSAErrorRequiredData.REASON)
     this.details = details
   }
@@ -116,9 +116,9 @@ PSAErrorRequiredData.REASON = 'PSA_REQUIRED_DATA'
 
 export class PSAErrorDBNotFound extends PinningServiceApiError {
   /**
-   * @param {string|Object} details
+   * @param {string} details
    */
-  constructor (details = 'Requested data was not found') {
+  constructor (details = 'Requested data was not found.') {
     super(PSAErrorDBNotFound.REASON)
     this.details = details
     this.status = 404
@@ -128,9 +128,9 @@ PSAErrorDBNotFound.REASON = 'PSA_DB_NOT_FOUND'
 
 export class PSAErrorDB extends PinningServiceApiError {
   /**
-   * @param {string|Object} details
+   * @param {string} details
    */
-  constructor (details = 'DB transaction failed') {
+  constructor (details = 'DB transaction failed.') {
     super(PSAErrorDB.REASON)
     this.details = details
     this.status = 501

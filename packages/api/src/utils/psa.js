@@ -49,7 +49,7 @@ const psaStatusesToDBStatusesMap = {
 }
 
 /**
- * Maps a pinning api status array to db status accepted by the DB
+ * Maps a pinning api status array to db status accepted by the DB.
  * @param {string[]} statuses
  * @return {import('@web3-storage/db/postgres/pg-rest-api-types').definitions['pin']['status'][]}
  */
@@ -60,20 +60,12 @@ export const psaStatusesToDBStatuses = (statuses) => {
 }
 
 // Error messages
-export const DATA_NOT_FOUND = 'Requested data was not found'
-export const INVALID_CID = 'The CID provided is invalid'
-export const INVALID_MATCH = 'Match should be a string (i.e. "exact", "iexact", "partial", "ipartial")'
-export const INVALID_META = 'Meta should be an object with string values'
-export const INVALID_NAME = 'Name should be a string'
-export const INVALID_ORIGINS = 'Origins should be an array of strings'
-export const INVALID_REQUEST_ID = 'Request id should be a string containing digits only'
-export const INVALID_REPLACE = 'Existing and replacement CID are the same'
-export const INVALID_STATUS = 'Status should be a list of "queued", "pinning", "pinned", or "failed"'
-export const INVALID_TIMESTAMP = 'Should be a valid timestamp'
-export const INVALID_LIMIT = 'Limit should be a number'
+export const DATA_NOT_FOUND = 'Requested data was not found.'
+export const INVALID_CID = 'The CID provided is invalid.'
+export const INVALID_REQUEST_ID = 'Request id should be a string containing digits only.'
+export const INVALID_REPLACE = 'Existing and replacement CID are the same.'
 export const REQUIRED_CID = 'CID is required'
 export const REQUIRED_REQUEST_ID = 'Request id is required'
-export const UNPERMITTED_MATCH = 'Match should be "exact", "iexact", "partial", or "ipartial"'
 export const DEFAULT_PIN_LISTING_LIMIT = 10
 export const MAX_PIN_LISTING_LIMIT = 1000
 
@@ -115,7 +107,7 @@ const postPinValidator = new Validator({
 })
 
 /**
- * Helper function to parse and validate payload for POST endpoint
+ * Helper function to parse and validate payload for POST endpoint.
  *
  * @param {*} payload
  * @returns
@@ -138,7 +130,7 @@ export function validatePinObject (payload) {
     }
   }
 
-  // Validate CID
+  // Validate CID.
   try {
     opts.cid = normalizeCid(cid)
   } catch (e) {
@@ -161,14 +153,14 @@ export function validatePinObject (payload) {
   if (result.valid) {
     data = opts
   } else {
-    error = new PSAErrorInvalidData(result.errors)
+    error = parseValidatorErrors(result.errors)
   }
 
   return { data, error }
 }
 
 /**
- * Helper function to parse and validate payload for GET endpoint
+ * Helper function to parse and validate payload for GET endpoint.
  *
  * @param {*} payload
  * @returns
@@ -187,7 +179,7 @@ export function validateSearchParams (payload) {
     status
   } = payload
 
-  // Validate CID or array of CIDs if present
+  // Validate CID or array of CIDs if present.
   if (cid) {
     const cids = cid.split(',')
     const normalizedCids = []
@@ -226,8 +218,24 @@ export function validateSearchParams (payload) {
   if (result.valid) {
     data = opts
   } else {
-    error = new PSAErrorInvalidData(result.errors)
+    error = parseValidatorErrors(result.errors)
   }
 
   return { data, error }
+}
+
+/**
+ * Helper function to parse error messages coming from the validator.
+ *
+ * @param {import('@cfworker/json-schema').OutputUnit[]} errors
+ * @returns
+ */
+export function parseValidatorErrors (errors) {
+  // Pass through the error message of the last validation errors array.
+  // Last error message contains the most useful information.
+  const errorDetail = errors.pop()
+  if (!errorDetail) return new PSAErrorInvalidData()
+  const location = errorDetail.instanceLocation
+  const message = errorDetail.error
+  return new PSAErrorInvalidData(`${location}: ${message}`)
 }
