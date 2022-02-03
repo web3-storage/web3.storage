@@ -18,6 +18,10 @@ main = "index.mjs"
 [durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 
+[[migrations]]
+tag = "v0"
+new_classes = ["NameRoom0"]
+
 # ---- Environment specific overrides below ! ----
 # NOTE: wrangler automatically assigns each env the root `name` with the env name suffixed on the end
 # NOTE: wrangler tries to find an account_id defined at the root if workers_dev = true is not provided on your env.
