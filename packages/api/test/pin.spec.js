@@ -357,6 +357,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 1)
+      assert.strictEqual(data.results[0].pin.name, 'Image.jpeg')
     })
 
     it('error if user not authorized to pin', async () => {
