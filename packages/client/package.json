@@ -77,7 +77,7 @@
       "browser": "./src/lib.js",
       "require": "./dist/src/lib.cjs",
       "node": "./src/lib.js"
-    }, 
+    },
     "./src/platform.js": {
       "browser": "./src/platform.web.js",
       "require": "./dist/src/platform.cjs",
