@@ -59,11 +59,22 @@ $file-size: auto;
         @include fontWeight_Semibold;
         width: 6rem;
         flex-shrink: 0;
+        &.delete {
+          width: auto;
+          padding-right: 1rem;
+          color: $pictonBlue;
+        }
       }
     }
   }
 
   .file {
+    &-select-container {
+      @include medium {
+        justify-content: space-between;
+        order: 6;
+      }
+    }
     &-select {
       @include border_Background_Waterloo_White;
       width: 0.75rem;
@@ -72,10 +83,6 @@ $file-size: auto;
       cursor: pointer;
       position: relative;
       margin-bottom: 0.125rem;
-      @include medium {
-        display: none;
-      }
-
       input {
         cursor: pointer;
         opacity: 0;

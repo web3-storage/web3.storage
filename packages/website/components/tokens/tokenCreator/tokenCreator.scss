@@ -1,6 +1,10 @@
 .token-creator-container {
   color: $cyan;
   @include fontSize_Mini;
+  @include medium {
+    position: absolute;
+    top: 8rem;
+  }
 }
 
 .token-creator-input {

@@ -94,9 +94,12 @@ const FileRowItem = props => {
 
   return (
     <div className={clsx('files-manager-row', className, isHeader && 'files-manager-row-header')}>
-      <span className="file-select">
-        <input checked={isSelected} type="checkbox" id={`${name}-select`} onChange={onSelect} />
-        <CheckIcon className="check" />
+      <span className="file-select-container">
+        <span className="file-select">
+          <input checked={isSelected} type="checkbox" id={`${name}-select`} onChange={onSelect} />
+          <CheckIcon className="check" />
+        </span>
+        <span className="file-row-label delete medium-down-only">{fileRowLabels.DELETE}</span>
       </span>
       <span className="file-date">
         <span className="file-row-label medium-down-only">{fileRowLabels.DATE}</span>

@@ -6,4 +6,5 @@ export const fileRowLabels = {
   STORAGE_PROVIDERS: 'Storage Providers',
   SIZE: 'Size',
   AVAILABLE: 'Available',
+  DELETE: 'Delete',
 };

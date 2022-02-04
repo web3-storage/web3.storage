@@ -12,6 +12,11 @@
   }
 }
 
+.tokens-header {
+  position: relative;
+  z-index: 1;
+}
+
 .tokens-header,
 .tokens-footer {
   display: flex;
