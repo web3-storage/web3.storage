@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { useRouter} from 'next/router'
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/router';
+import { get } from 'lodash';
 
 /**
  * @param {string} [param]
@@ -7,24 +8,24 @@ import { useRouter} from 'next/router'
  * @returns {[queryValue: any, setQueryValue: any] | []}
  */
 export default function useQueryParams(param = '', defaultValue = null) {
-
-  const { isReady } = useRouter()
+  const { isReady, query } = useRouter();
 
   const [queryValue, setQueryValue] = useState(defaultValue);
 
-  const setValue = useCallback(newValue => {
-    const queryParams = new URLSearchParams(window.location.search);
-    queryParams.set(param, newValue)
-    window.history.replaceState({}, '', decodeURIComponent(`${window.location.pathname}?${queryParams}`))
-    newValue && setQueryValue(newValue)
-  }, [param, setQueryValue])
+  const setValue = useCallback(
+    newValue => {
+      const queryParams = new URLSearchParams(window.location.search);
+      queryParams.set(param, newValue);
+      window.history.replaceState({}, '', decodeURIComponent(`${window.location.pathname}?${queryParams}`));
+      newValue !== undefined && setQueryValue(newValue);
+    },
+    [param, setQueryValue]
+  );
 
   useEffect(() => {
-    if(!isReady) return
-    const queryParams = new URLSearchParams(window.location.search);
-    const value = queryParams.get(param) || defaultValue
-    setValue(value)
-  },[isReady, setValue, param, defaultValue])
+    if (!isReady) return;
+    setQueryValue(get(query, param, defaultValue));
+  }, [isReady, param, defaultValue, query]);
 
-  return [queryValue, setValue]
+  return [queryValue, setValue];
 }
