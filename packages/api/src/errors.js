@@ -114,17 +114,17 @@ export class PSAErrorRequiredData extends PinningServiceApiError {
 }
 PSAErrorRequiredData.REASON = 'PSA_REQUIRED_DATA'
 
-export class PSAErrorDBNotFound extends PinningServiceApiError {
+export class PSAErrorResourceNotFound extends PinningServiceApiError {
   /**
    * @param {string} details
    */
   constructor (details = 'Requested data was not found.') {
-    super(PSAErrorDBNotFound.REASON)
+    super(PSAErrorResourceNotFound.REASON)
     this.details = details
     this.status = 404
   }
 }
-PSAErrorDBNotFound.REASON = 'PSA_DB_NOT_FOUND'
+PSAErrorResourceNotFound.REASON = 'PSA_RESOURCE_NOT_FOUND'
 
 export class PSAErrorDB extends PinningServiceApiError {
   /**

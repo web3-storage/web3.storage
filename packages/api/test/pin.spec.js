@@ -10,7 +10,7 @@ import {
   INVALID_REPLACE,
   REQUIRED_CID
 } from '../src/utils/psa.js'
-import { PinningUnauthorizedError, PSAErrorDBNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from '../src/errors.js'
+import { PinningUnauthorizedError, PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from '../src/errors.js'
 
 /**
  *
@@ -810,7 +810,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert.deepEqual(res.status, 404)
       const error = await res.json()
-      assert.deepEqual(error.reason, PSAErrorDBNotFound.REASON)
+      assert.deepEqual(error.reason, PSAErrorResourceNotFound.REASON)
       assert.deepEqual(error.details, DATA_NOT_FOUND)
     })
 
@@ -894,7 +894,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert.equal(res.status, 404)
       const error = await res.json()
-      assert.equal(error.reason, PSAErrorDBNotFound.REASON)
+      assert.equal(error.reason, PSAErrorResourceNotFound.REASON)
       assert.equal(error.details, DATA_NOT_FOUND)
     })
 

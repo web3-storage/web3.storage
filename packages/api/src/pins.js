@@ -1,6 +1,6 @@
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
-import { PSAErrorDB, PSAErrorDBNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from './errors.js'
+import { PSAErrorDB, PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from './errors.js'
 import {
   INVALID_REPLACE,
   INVALID_REQUEST_ID,
@@ -138,7 +138,7 @@ export async function pinGet (request, env, ctx) {
     pinRequest = await env.db.getPsaPinRequest(authToken._id, request.params.requestId)
   } catch (e) {
     console.error(e)
-    throw new PSAErrorDBNotFound()
+    throw new PSAErrorResourceNotFound()
   }
 
   /** @type { PsaPinStatusResponse } */
@@ -170,7 +170,7 @@ export async function pinsGet (request, env, ctx) {
     pinRequests = await env.db.listPsaPinRequests(request.auth.authToken._id, opts)
   } catch (e) {
     console.error(e)
-    throw new PSAErrorDBNotFound()
+    throw new PSAErrorResourceNotFound()
   }
 
   const pins = pinRequests.results.map((pinRequest) => getPinStatus(pinRequest))
@@ -225,7 +225,7 @@ export async function pinDelete (request, env, ctx) {
     await env.db.deletePsaPinRequest(requestId, authToken._id)
   } catch (e) {
     console.error(e)
-    throw new PSAErrorDBNotFound()
+    throw new PSAErrorResourceNotFound()
   }
 
   return new JSONResponse({}, { status: 202 })
@@ -243,7 +243,7 @@ async function replacePin (newPinData, requestId, authTokenId, env, ctx) {
   try {
     existingPinRequest = await env.db.getPsaPinRequest(authTokenId, requestId)
   } catch (e) {
-    throw new PSAErrorDBNotFound()
+    throw new PSAErrorResourceNotFound()
   }
 
   const existingCid = existingPinRequest.sourceCid
