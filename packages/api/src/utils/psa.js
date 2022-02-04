@@ -75,7 +75,7 @@ const listPinsValidator = new Validator({
   type: 'object',
   required: [],
   properties: {
-    name: { type: 'string' },
+    name: { type: 'string', maxLength: 255 },
     after: { type: 'string', format: 'date-time' },
     before: { type: 'string', format: 'date-time' },
     cid: { type: 'array', items: { type: 'string' } },
@@ -100,9 +100,9 @@ const postPinValidator = new Validator({
   required: ['cid'],
   properties: {
     cid: { type: 'string' },
-    name: { type: 'string' },
+    name: { type: 'string', maxLength: 255 },
     meta: { type: 'object', keys: { type: 'string' } },
-    origins: { type: 'array', items: { type: 'string' } },
+    origins: { type: 'array', items: { type: 'string' }, maxItems: 20 },
     requestId: { type: 'string' }
   }
 })
