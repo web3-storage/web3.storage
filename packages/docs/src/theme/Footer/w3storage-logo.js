@@ -1,6 +1,5 @@
-/**
- * @param {any} props
- */
+import React from 'react';
+
 const SiteLogo = (props) => (
   <svg {...props} viewBox="0 0 27.2 27.18" xmlns="http://www.w3.org/2000/svg">
       <path d="M13.6 27.18A13.59 13.59 0 1127.2 13.6a13.61 13.61 0 01-13.6 13.58zM13.6 2a11.59 11.59 0 1011.6 11.6A11.62 11.62 0 0013.6 2z" fill="current"/>

@@ -2,6 +2,7 @@
 // =============================================================================
 // -------------------------------------------------------------------- Families
 $font_Primary: 'SuisseIntl';
+$fontAssetPath: '../../static/fonts';
 
 // ---------------------------------------------------------------------- Sizing
 // fontSize_Atom | 11pt
@@ -252,8 +253,7 @@ $letterSpacing_Large: 0.03em;
 }
 
 @mixin gradient_Text {
-  // @include magentaCyan_Gradient;
-  background: linear-gradient(143.26deg, #E41FEB -7.13%, #3D47DD 93.14%);
+  @include magentaCyan_Gradient;
   background-clip: text;
   -moz-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -261,84 +261,9 @@ $letterSpacing_Large: 0.03em;
   text-fill-color: transparent;
 }
 
-// /////////////////////////////////////////////////////////////////////// Fonts
-// -----------------------------------------------------------------------------
+// @mixin subheading {
+//   @include fontSize_Huge;
+//   @include fontSize_Huge;
+//   @include fontWeight_Extrabold;
+// }
 
-
-//////////////////////////////////////////////////////////////////// Suisse Intl
-@font-face {
-  font-family: 'SuisseIntl';
-  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Light.otf') format('opentype');
-  font-weight: 300;
-}
-
-@font-face {
-  font-family: 'SuisseIntl';
-  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Regular.otf') format('opentype');
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: 'SuisseIntl';
-  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Medium.otf') format('opentype');
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: 'SuisseIntl';
-  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-SemiBold.otf') format('opentype');
-  font-weight: 600;
-}
-
-@font-face {
-  font-family: 'SuisseIntl';
-  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Bold.otf') format('opentype');
-  font-weight: 700;
-}
-
-/////////////////////////////////////////////////////////////// Suisse Intl Mono
-@font-face {
-  font-family: 'Suisse Intl Mono';
-  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Thin.otf') format('opentype');
-  font-weight: 300;
-}
-
-@font-face {
-  font-family: 'Suisse Intl Mono';
-  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Regular.otf') format('opentype');
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: 'Suisse Intl Mono';
-  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Bold.otf') format('opentype');
-  font-weight: 700;
-}
-
-// ////////////////////////////////////////////////////////////////// Typography
-// -----------------------------------------------------------------------------
-h1,
-.h1 {
-  @include h1;
-  line-height: leading(55, 45);
-}
-
-h2,
-.h2 {
-  @include h2;
-}
-
-h3,
-.h3 {
-  @include h3;
-}
-
-h4,
-.h4 {
-  @include h4;
-}
-
-h5,
-.h5 {
-  @include h5;
-}

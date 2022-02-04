@@ -1,0 +1,9 @@
+$primary: #3C3CD0;
+$breakpoint: 997px;
+$imagePath: '../../static/img';
+
+@mixin desktop {
+  @media screen and (min-width: $breakpoint) {
+    @content;
+  }
+}

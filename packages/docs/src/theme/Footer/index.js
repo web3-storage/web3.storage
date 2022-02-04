@@ -1,127 +1,79 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
 import React from 'react';
 import clsx from 'clsx';
-import Link from '@docusaurus/Link';
 import {useThemeConfig} from '@docusaurus/theme-common';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import isInternalUrl from '@docusaurus/isInternalUrl';
 import styles from './styles.module.scss';
-import ThemedImage from '@theme/ThemedImage';
-import IconExternalLink from '@theme/IconExternalLink';
-
-function FooterLink({to, href, label, prependBaseUrlToHref, ...props}) {
-  const toUrl = useBaseUrl(to);
-  const normalizedHref = useBaseUrl(href, {
-    forcePrependBaseUrl: true,
-  });
-  return (
-    <Link
-      className="footer__link-item"
-      {...(href
-        ? {
-            href: prependBaseUrlToHref ? normalizedHref : href,
-          }
-        : {
-            to: toUrl,
-          })}
-      {...props}>
-      {href && !isInternalUrl(href) ? (
-        <span>
-          {label}
-          <IconExternalLink />
-        </span>
-      ) : (
-        label
-      )}
-    </Link>
-  );
-}
-
-const FooterLogo = ({sources, alt}) => (
-  <ThemedImage className="footer__logo" alt={alt} sources={sources} />
-);
+import Squiggle from './squiggle.js';
+import SiteLogo from './w3storage-logo.js';
+import GeneralPageData from './general.json';
 
 function Footer() {
-  const {footer} = useThemeConfig();
-  const {copyright, links = [], logo = {}} = footer || {};
-  const sources = {
-    light: useBaseUrl(logo.src),
-    dark: useBaseUrl(logo.srcDark || logo.src),
-  };
-
-  if (!footer) {
-    return null;
-  }
+  const contact = GeneralPageData.footer.contact;
+  const resources = GeneralPageData.footer.resources;
+  const getStarted = GeneralPageData.footer.get_started;
+  const copyright = GeneralPageData.footer.copyright;
 
   return (
-    <footer
-      className={clsx('footer', {
-        'footer--dark': footer.style === 'dark',
-      })}>
-      <div className="container">
-        {links && links.length > 0 && (
-          <div className="row footer__links">
-            {links.map((linkItem, i) => (
-              <div key={i} className="col footer__col">
-                {linkItem.title != null ? (
-                  <div className="footer__title">{linkItem.title}</div>
-                ) : null}
-                {linkItem.items != null &&
-                Array.isArray(linkItem.items) &&
-                linkItem.items.length > 0 ? (
-                  <ul className="footer__items">
-                    {linkItem.items.map((item, key) =>
-                      item.html ? (
-                        <li
-                          key={key}
-                          className="footer__item" // Developer provided the HTML, so assume it's safe.
-                          // eslint-disable-next-line react/no-danger
-                          dangerouslySetInnerHTML={{
-                            __html: item.html,
-                          }}
-                        />
-                      ) : (
-                        <li key={item.href || item.to} className="footer__item">
-                          <FooterLink {...item} />
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                ) : null}
+    <footer id="site-footer">
+      <section id="site-footer-section">
+        <Squiggle id="footer_squiggle" />
+
+        <div className="grid">
+          <div className="col-4_sm-8_mi-12" data-push-left="off-1_sm-1_mi-0">
+            <div className="footer_contact">
+              <div className="footer_logo-container">
+                <SiteLogo />
+                <div className="site-logo-text">{contact.logo_text}</div>
               </div>
-            ))}
+              <div className="prompt">{contact.prompt}</div>
+              {typeof contact.cta === 'object' && (
+                <button
+                  className={'cta'}
+                  variant={/** @type {any} */ (contact.cta.theme)}
+                >
+                  {contact.cta.text}
+                </button>
+              )}
+            </div>
           </div>
-        )}
-        {(logo || copyright) && (
-          <div className="footer__bottom text--center">
-            {logo && (logo.src || logo.srcDark) && (
-              <div className="margin-bottom--sm">
-                {logo.href ? (
-                  <Link href={logo.href} className={styles.footerLogoLink}>
-                    <FooterLogo alt={logo.alt} sources={sources} />
-                  </Link>
-                ) : (
-                  <FooterLogo alt={logo.alt} sources={sources} />
-                )}
+
+          <div className="col-3_sm-5_mi-8" data-push-left="off-0_sm-2_mi-3">
+            <div className="footer_resources">
+              <div className="label">{resources.heading}</div>
+              {resources.items.map(item => (
+                <a href={item.url} key={item.text}>
+                    {item.text}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div className="col-4_sm-5_mi-8" data-push-left="off-0_mi-3">
+            <div className="footer_get-started">
+              <div className="label">{getStarted.heading}</div>
+              {getStarted.items.map(item => (
+                <a href={item.url} key={item.text}>
+                    {item.text}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div id="section_copyright" className="noGrid">
+          <div className="grid">
+            <div className="copyright_container">
+              <div className="copyright_left">{copyright.left.text}</div>
+              <div className="copyright_right">
+                {copyright.right.text}
+                <a href={copyright.right.link.url} className="copyright_link">
+                  {copyright.right.link.text}
+                </a>
               </div>
-            )}
-            {copyright ? (
-              <div
-                className="footer__copyright" // Developer provided the HTML, so assume it's safe.
-                // eslint-disable-next-line react/no-danger
-                dangerouslySetInnerHTML={{
-                  __html: copyright,
-                }}
-              />
-            ) : null}
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      </section>
     </footer>
   );
 }

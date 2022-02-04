@@ -5,11 +5,111 @@
  */
 
 @use 'sass:math';
-@import 'variables';
+
+@import 'grid/gridlex-2.7.1';
+@import 'vars-website';
+@import 'vars';
 @import 'typography';
 @import 'nav';
 @import 'sidebar';
+@import '../theme/footer/styles.module.scss';
 
+:root {
+  --ifm-menu-color-active: #{$primary};
+  --ifm-link-color: #{$primary};
+  --ifm-navbar-link-hover-color: #{$primary};
+  --ifm-menu-color: #{$ebony};
+
+  --ifm-footer-background-color: #{$ebony};
+  --ifm-footer-color: #{$white};
+  --ifm-toc-border-color: transparent;
+  --ifm-navbar-height: 19rem;
+  --ifm-toc-link-color: #{$ebony};
+  --ifm-font-weight-bold: #{$fontWeight_Semibold};
+}
+
+
+
+//////////////////////////////////////////////////////////////////// Suisse Intl
+@font-face {
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Light.otf') format('opentype');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Regular.otf') format('opentype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Medium.otf') format('opentype');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-SemiBold.otf') format('opentype');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Bold.otf') format('opentype');
+  font-weight: 700;
+}
+
+/////////////////////////////////////////////////////////////// Suisse Intl Mono
+@font-face {
+  font-family: 'Suisse Intl Mono';
+  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Thin.otf') format('opentype');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Suisse Intl Mono';
+  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Regular.otf') format('opentype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Suisse Intl Mono';
+  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Bold.otf') format('opentype');
+  font-weight: 700;
+}
+
+// ////////////////////////////////////////////////////////////////// Typography
+// -----------------------------------------------------------------------------
+h1,
+.h1 {
+  @include h1;
+  line-height: leading(55, 45);
+}
+
+h2,
+.h2 {
+  @include h2;
+}
+
+h3,
+.h3 {
+  @include h3;
+}
+
+h4,
+.h4 {
+  @include h4;
+}
+
+h5,
+.h5 {
+  @include h5;
+}
+
+
+// custom
 html,
 body {
   font-family: $font_Primary;
