@@ -39,15 +39,30 @@ module.exports = {
       },
       items: [
         {
+          label: 'About',
+          position: 'right',
+          href: 'https://web3.storage/about',
+        },
+        {
+          label: 'Tiers',
+          position: 'right',
+          href: 'https://web3.storage/tiers',
+        },
+        {
+          label: 'FAQ',
+          position: 'right',
+          href: 'https://web3.storage/faq',
+        },
+        {
           label: 'Docs',
           type: 'doc',
           docId: 'intro',
           position: 'right',
         },
         {
-          label: 'About',
+          label: 'Sign In',
           position: 'right',
-          href: 'https://web3.storage/about',
+          href: 'https://web3.storage/login',
         },
         {
           type: 'search',
@@ -57,7 +72,7 @@ module.exports = {
     },
 
     footer: {
-      copyright: `<div class="footer--made-with">Made with 💛 by <a href="https://protocol.ai" target="_blank" rel="noopener noreferrer" data-v-13c85306="" data-v-2294af70="">Protocol Labs</a></div>`,
+      copyright: `<div class="footer--made-with">2021 <a href="https://protocol.ai" target="_blank" rel="noopener noreferrer" data-v-13c85306="" data-v-2294af70="">Protocol Labs</a></div>`,
       links: [
         {
           items: [
@@ -151,7 +166,7 @@ module.exports = {
         },
         blog: false,
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: require.resolve('./src/css/custom.scss'),
         },
       },
     ],
@@ -159,6 +174,7 @@ module.exports = {
     'redocusaurus',
   ],
   plugins: [
+    'docusaurus-plugin-sass',
     ['@docusaurus/plugin-client-redirects', {
       redirects: [
         {

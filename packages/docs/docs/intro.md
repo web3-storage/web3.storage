@@ -5,7 +5,7 @@ id: intro
 slug: /
 ---
 
-# Better storage. Better transfers. Better internet.
+# Better storage.<br/>Better transfers.<br/>Better internet.
 
 > When you need file storage for your project, website, or application, Web3.Storage is here for you. All it takes to [get started](#quickstart) storing on the decentralized web is a free API token — no need to wrestle with complicated details.
 

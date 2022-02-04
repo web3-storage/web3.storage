@@ -1,0 +1,43 @@
+// left side
+.menu__link--active:not(.menu__link--sublist) {
+    background: transparent;
+    font-weight: $fontWeight_Medium;
+}
+.menu__list .menu__list {
+    margin-left: 0;
+}
+.menu__link:not([href]) {
+    font-weight: 500;
+    font-size: toRem(22);
+    line-height: toRem(34);
+    margin-top: toRem(28);
+}
+.menu__link {
+    font-weight: normal;
+}
+
+// right side
+.tableOfContents_node_modules-\@docusaurus-theme-classic-lib-next-theme-TOC-styles-module {
+    background-color: $white;
+    box-shadow: 0px 3px 9px rgba(89, 85, 113, 0.160784);
+    border-radius: toRem(10);
+}
+.table-of-contents {
+    padding: toRem(20) toRem(25) toRem(20) toRem(30); 
+    li {
+        padding: 0;
+        margin: 0;
+        @include fontSize_Mini;
+        line-height: toRem(28);
+        padding: toRem(5) 0;
+        font-weight: $fontWeight_Medium;
+    }
+}
+.table-of-contents__link--active {
+    @include gradient_Text;
+    &::before {
+        content: '>';
+        padding-right: toRem(10);
+        line-height: 1;
+    }
+}

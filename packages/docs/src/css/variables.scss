@@ -1,0 +1,227 @@
+@use 'sass:math';
+
+// --------------------------------------------------------------------- General
+$containerWidth: 61.25rem; // 980px
+$navigationHeight: 8.5rem;
+
+$borderRadius_Small: 0.3125rem;
+$borderRadius_Medium: 0.25rem;
+$borderRadius_Large: 0.625rem;
+$borderRadius_ExtraLarge: 0.875rem;
+$borderRadius_UltraLarge: 1rem;
+$borderRadius_Huge: 1.5rem;
+
+$fontAssetPath: '../../static/fonts';
+$imagePath: '../../static/img';
+
+// --------------------------------------------------------------------- Colours
+$gray50: #fafafa;
+$gray100: hsl(0, 0%, 96%);
+$gray200: #eeeeee;
+$gray300: #e0e0e0;
+$gray400: #bdbdbd;
+$gray500: #9e9e9e;
+$gray600: #757575;
+$gray700: #616161;
+$gray800: #424242;
+$gray900: #212121;
+
+$black: #000000; // full black
+$waterloo: #757a9b; // A grayish blue
+$charade: #2b2d39; // A light black blue
+$shark: #1d2027; // A blackish blue
+$vulcan: #0f111a;
+$white: #ffffff; // full white
+$seaShell: #f1f1f1; // pale matte gray
+$alto: #d1d1d1; // dark matte gray
+$steelGray: #1c1e29; // almost black gray
+$ebony: #03040a; // almost black
+$doveGray: #626262; // gray
+$malibu: #7e81ff; // bluish violet
+$heliotrope: #714cdd; // darker bluish violet
+$cerise: #d726d7; // purplish pink
+$royalBlue: #3064e0; // royal blue
+$pictonBlue: #31e7ea; // violetish blue
+$cyan: #3effe9; // full cyan
+$martinique: #392d52; // bluish purple
+$blue: #3D04FB; // bluest blue
+$woodsmoke: #161b24; // blue almost black
+
+$primary: #3C3CD0;
+
+
+:root {
+  --ifm-menu-color-active: #{$primary};
+  --ifm-link-color: #{$primary};
+  --ifm-navbar-link-hover-color: #{$primary};
+  --ifm-menu-color: #{$ebony};
+
+  --ifm-footer-background-color: #{$ebony};
+  --ifm-footer-color: #{$white};
+  --ifm-toc-border-color: transparent;
+  --ifm-navbar-height: 19rem;
+  --ifm-toc-link-color: #{$ebony};
+  --ifm-font-weight-bold: $fontWeight_Semibold;
+}
+
+
+// ----------------------------------------------------------------- Breakpoints
+$breakpoint: 997px;
+
+// ------------------------------------------------------------------- Gradients
+@mixin magentaCyan_Gradient {
+  background: linear-gradient(to right, $cerise 0%, $royalBlue 50%, $pictonBlue 100%);
+}
+
+@mixin magentaCyan_Gradient_Reverse {
+  background: linear-gradient(to left, $cerise 0%, $royalBlue 50%, $pictonBlue 100%);
+}
+
+$gradient_PinkBlue: linear-gradient(45deg, $cerise 0%, $royalBlue 48%, $pictonBlue 100%);
+$gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotrope 100%);
+
+// ////////////////////////////////////////////////////////////////////// Mixins
+// =============================================================================
+// --------------------------------------------------------------------- Styling
+@mixin shadow1 {
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.16);
+}
+
+@mixin shadow2 {
+  box-shadow: 1px 0px 6px rgba(0, 0, 0, 0.1);
+}
+
+@mixin shadow3 {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+@mixin shadow4 {
+  box-shadow: 0 0.1875rem 0 rgba($black, 0.15);
+}
+
+@mixin shadow5 {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+@mixin shadow6 {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+
+@mixin focus_BoxShadow_Small {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+@mixin focus_BoxShadow_Regular {
+  box-shadow: 0 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+@mixin focus_BoxShadow_Link {
+  box-shadow: 0 0 0 5px rgba(0, 123, 255, 0.5);
+  border-radius: 0.125rem;
+}
+
+@mixin selection_Dark {
+  ::-moz-selection {
+    background: $translucentWhite;
+    color: black;
+  }
+  ::selection {
+    background: $translucentWhite;
+    color: black;
+  }
+}
+
+@mixin selection_Light {
+  ::-moz-selection {
+    background: $translucentBlack;
+    color: white;
+  }
+  ::selection {
+    background: $translucentBlack;
+    color: white;
+  }
+}
+
+@mixin selection_Invisible {
+  ::-moz-selection {
+    background: transparent;
+    color: transparent;
+  }
+  ::selection {
+    background: transparent;
+    color: transparent;
+  }
+}
+
+// --------------------------------------------------------------------- Styling
+@mixin border_Background_Waterloo_White {
+  @include borderRadius_Large;
+  background: rgba($waterloo, 0.15);
+  border: 0.0625rem solid rgba($white, 0.15);
+}
+
+@mixin gradient_BlurryBox_PinkBlue {
+  content: ' ';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  filter: blur(0.1875rem);
+  @include gradient_Background_PinkBlue;
+}
+
+@mixin gradient_Blurry_Background_PinkBlue {
+  &:before {
+    @include gradient_BlurryBox_PinkBlue;
+    @include borderRadius_UltraLarge;
+    content: ' ';
+    position: absolute;
+    filter: blur(0.25rem);
+    margin: auto;
+    box-shadow: 0 0.125rem $heliotrope;
+    opacity: 0.5;
+  }
+}
+
+// --------------------------------------------------------------- Media Queries
+@mixin desktop {
+  @media screen and (min-width: $breakpoint) {
+    @content;
+  }
+}
+
+// ------------------------------------------------------------------- Animation
+@mixin keyframes($animationName) {
+  @-webkit-keyframes #{$animationName} {
+    @content;
+  }
+  @-moz-keyframes #{$animationName} {
+    @content;
+  }
+  @-o-keyframes #{$animationName} {
+    @content;
+  }
+  @keyframes #{$animationName} {
+    @content;
+  }
+}
+
+@mixin transform($transforms) {
+  -moz-transform: $transforms;
+  -o-transform: $transforms;
+  -ms-transform: $transforms;
+  -webkit-transform: $transforms;
+  transform: $transforms;
+}
+
+@mixin transformOrigin($transformOrigin) {
+  -moz-transform-origin: $transformOrigin;
+  -o-transform-origin: $transformOrigin;
+  -ms-transform-origin: $transformOrigin;
+  -webkit-transform-origin: $transformOrigin;
+  transform-origin: $transformOrigin;
+}
+
+@function toRem($value) {
+  $remValue: math.div($value, 16) + rem; 
+  @return $remValue;
+}

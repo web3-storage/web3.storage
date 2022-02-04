@@ -1,0 +1,72 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+@use 'sass:math';
+@import 'variables';
+@import 'typography';
+@import 'nav';
+@import 'sidebar';
+
+html,
+body {
+  font-family: $font_Primary;
+  line-height: $leading_Regular;
+  color: $ebony;
+  background-color: $seaShell;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  background-image: url(#{$imagePath}/shapes/corkscrewBlurred.png);
+  background-repeat: repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  ::-moz-selection {
+    background: white;
+    color: black;
+  }
+  ::selection {
+    background: white;
+    color: black;
+  }
+  * {
+    box-sizing: border-box;
+    &:before,
+    &:after {
+      box-sizing: border-box;
+    }
+  }
+}
+
+// top left helix
+#__docusaurus {
+  &:before {
+      content: '';
+      width: 18rem;
+      height: 18rem;
+      top: -2.5rem;
+      left: -3.5rem;
+      position: fixed;
+      transform: rotate(-95deg);
+      background-image: url(#{$imagePath}/shapes/helix.png);
+      background-size: cover;
+  }
+}
+
+// prevent the external link icon showing in the navbar and footer
+svg[class^="iconExternalLink"] {
+  display: none;
+}
+
+// main
+@include desktop {
+  .docMainContainer_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocPage-styles-module {
+      background-color: rgba(241, 241, 241, 0.6);
+      box-shadow: 0 3px 15px rgb(0 0 0 / 16%);
+      padding: 6.125rem 6.75rem;
+      border-radius: 0.375rem;
+  }
+}
+
