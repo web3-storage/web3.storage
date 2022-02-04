@@ -98,6 +98,32 @@ const FilesManager = ({ className }: FilesManagerProps) => {
     getUploads();
   }, [selectedFiles, deleteUpload, setIsDeleting, getUploads]);
 
+  const onDeleteSingle = useCallback(
+    async cid => {
+      if (!window.confirm('Are you sure? Deleted files cannot be recovered!')) {
+        countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
+          ui: countly.ui.FILES,
+          totalDeleted: 0,
+        });
+        return;
+      }
+
+      setIsDeleting(true);
+      deleteUpload(cid);
+
+      countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
+        ui: countly.ui.FILES,
+        totalDeleted: 1,
+      });
+
+      setIsDeleting(false);
+      setSelectedFiles([]);
+
+      getUploads();
+    },
+    [deleteUpload, setIsDeleting, getUploads]
+  );
+
   return (
     <div className={clsx('section files-manager-container', className, isDeleting && 'disabled')}>
       <div className="files-manager-header">
@@ -240,6 +266,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
               highlight={{ target: 'name', text: keyword?.toString() || '' }}
               numberOfPins={item.pins.length}
               isSelected={!!selectedFiles.find(fileSelected => fileSelected === item)}
+              onDelete={() => onDeleteSingle(item.cid)}
             />
           ))
         )}

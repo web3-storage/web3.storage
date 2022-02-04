@@ -48,6 +48,7 @@ const Info = ({ content, icon = null }) => (
  * @property {boolean} [isHeader]
  * @property {boolean} [isSelected]
  * @property {{text: string, target: "name" | "cid"}} [highlight]
+ * @property {()=>void} [onDelete]
  */
 
 /**
@@ -68,6 +69,7 @@ const FileRowItem = props => {
     numberOfPins,
     isHeader = false,
     isSelected,
+    onDelete,
   } = useMemo(() => {
     const propsReturn = { ...props };
     const { target, text = '' } = props.highlight || {};
@@ -99,7 +101,9 @@ const FileRowItem = props => {
           <input checked={isSelected} type="checkbox" id={`${name}-select`} onChange={onSelect} />
           <CheckIcon className="check" />
         </span>
-        <span className="file-row-label delete medium-down-only">{fileRowLabels.DELETE}</span>
+        <button onClick={onDelete} className="file-row-label delete medium-down-only">
+          {fileRowLabels.DELETE}
+        </button>
       </span>
       <span className="file-date">
         <span className="file-row-label medium-down-only">{fileRowLabels.DATE}</span>
