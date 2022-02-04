@@ -4,6 +4,13 @@
   @include medium {
     position: absolute;
     top: 8rem;
+    width: 100%;
+    .button {
+      width: 100%;
+      button {
+        align-items: end;
+      }
+    }
   }
 }
 
@@ -15,6 +22,10 @@
   padding: 0 1.875rem;
   color: $cyan;
   @include border_Background_Waterloo_White;
+  @include medium {
+    width: 100%;
+    min-width: 0;
+  }
 
   &::placeholder {
     color: $cyan;

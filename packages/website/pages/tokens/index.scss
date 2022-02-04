@@ -32,6 +32,8 @@
   margin-top: 0.75rem;
   @include medium {
     margin-top: 2.36rem;
+    justify-content: center;
+    text-align: center;
   }
 }
 
@@ -40,6 +42,7 @@
   @include fontWeight_Semibold;
   @include medium {
     order: 2;
+    flex-basis: 100%;
   }
   div {
     display: none;
@@ -47,7 +50,8 @@
   button {
     padding-left: 1rem;
     @include medium {
-      padding-left: 0.15rem;
+      padding-left: 0;
+      align-items: center;
     }
   }
 
@@ -65,11 +69,18 @@
   }
 }
 
-.testing-cta {
+.testing-cta-container {
   @include leading_Tiny;
-  margin-bottom: 1.59375rem;
-  .button button {
-    padding-right: 1rem;
-    padding-left: 0.15rem;
+  .testing-cta {
+    @include medium {
+      display: block;
+    }
+  }
+  a {
+    color: $pictonBlue;
+    position: relative;
+  }
+  @include medium {
+    margin-bottom: 1.59375rem;
   }
 }

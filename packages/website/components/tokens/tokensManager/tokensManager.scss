@@ -23,6 +23,9 @@
 
     &:not(.tokens-manager-footer) {
       max-width: 52.8125rem;
+      @include medium {
+        max-width: none;
+      }
     }
   }
 
