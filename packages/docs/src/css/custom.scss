@@ -2,17 +2,24 @@
  * Any CSS included here will be global. The classic template
  * bundles Infima by default. Infima is a CSS framework designed to
  * work well for content-centric websites.
+ *
+ * 'from-website' import is a direct copy of scss files from website monorepo
+ * need to eventually create a mechanism to share styles
  */
 
 @use 'sass:math';
 
-@import 'grid/gridlex-2.7.1';
-@import 'vars-website';
+@import 'from-website/grid/gridlex-2.7.1';
+@import 'from-website/variables';
+@import 'from-website/button';
+
 @import 'vars';
-@import 'typography';
-@import 'nav';
-@import 'sidebar';
-@import '../theme/footer/styles.module.scss';
+
+@import 'custom/nav';
+@import 'custom/sidebar';
+@import 'from-website/footer.scss';
+@import 'custom/main.scss';
+
 
 :root {
   --ifm-menu-color-active: #{$primary};
@@ -26,11 +33,18 @@
   --ifm-navbar-height: 19rem;
   --ifm-toc-link-color: #{$ebony};
   --ifm-font-weight-bold: #{$fontWeight_Semibold};
+  --ifm-color-primary: #{$primary}; 
+  --ifm-blockquote-border-left-width: 5px;
+  --ifm-blockquote-border-color: transparent;
+  --ifm-blockquote-color: #{$ebony};
+  --ifm-spacing-vertical: #{toRem(23)};
 }
 
 
 
 //////////////////////////////////////////////////////////////////// Suisse Intl
+$fontAssetPath: '../../static/fonts';
+
 @font-face {
   font-family: 'SuisseIntl';
   src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Light.otf') format('opentype');
@@ -113,7 +127,7 @@ h5,
 html,
 body {
   font-family: $font_Primary;
-  line-height: $leading_Regular;
+  line-height: toRem(34);
   color: $ebony;
   background-color: $seaShell;
   -moz-osx-font-smoothing: grayscale;
@@ -140,19 +154,17 @@ body {
   }
 }
 
-// top left helix
-#__docusaurus {
-  &:before {
-      content: '';
-      width: 18rem;
-      height: 18rem;
-      top: -2.5rem;
-      left: -3.5rem;
-      position: fixed;
-      transform: rotate(-95deg);
-      background-image: url(#{$imagePath}/shapes/helix.png);
-      background-size: cover;
-  }
+button {
+  background-color: transparent;
+  text-decoration: none;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.label {
+  margin-bottom: 1.25rem;
 }
 
 // prevent the external link icon showing in the navbar and footer
@@ -160,13 +172,67 @@ svg[class^="iconExternalLink"] {
   display: none;
 }
 
-// main
-@include desktop {
-  .docMainContainer_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocPage-styles-module {
-      background-color: rgba(241, 241, 241, 0.6);
-      box-shadow: 0 3px 15px rgb(0 0 0 / 16%);
-      padding: 6.125rem 6.75rem;
-      border-radius: 0.375rem;
+[class~='grid'],
+[class*='grid-'],
+[class*='grid_'] {
+  width: $containerWidth;
+  margin: 0 auto;
+  @include customMaxMQ($containerWidth + 4rem) {
+    padding: 0 4.1665%;
+    width: 100%;
+  }
+  &[class*='-noGutter'] {
+    margin: 0 auto;
+  }
+  &.full {
+    width: 100%;
+    padding: 0 0.5rem;
+    &.maxed {
+      max-width: 90rem;
+    }
+  }
+  &.no-padding {
+    padding: 0;
+  }
+  [class~='grid'],
+  [class*='grid-'],
+  [class*='grid_'] {
+    width: 100%;
+    padding: 0;
   }
 }
 
+// footer custom
+footer {
+  letter-spacing: $letterSpacing_Large;
+  .footer-link {
+    letter-spacing: 0;
+  }
+  .button {
+    border: none;
+    padding: 0;
+  }
+}
+
+.markdown h1:first-child {
+  margin-bottom: toRem(36);
+}
+
+// blockquote
+blockquote {
+  padding-left: toRem(43);
+  position: relative;
+  &:before {
+    content: '';
+    border-radius: 10px;
+    width: var(--ifm-blockquote-border-left-width);
+    @include gradient_Background_BluePurple;
+    height: 100%;
+    position: absolute;
+    left: toRem(-2);
+  }
+  @include fontSize_Medium;
+  a {
+    @include fontWeight_Semibold;
+  }
+}

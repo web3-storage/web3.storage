@@ -2,7 +2,6 @@ import React from 'react';
 import clsx from 'clsx';
 import {useThemeConfig} from '@docusaurus/theme-common';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import styles from './styles.module.scss';
 import Squiggle from './squiggle.js';
 import SiteLogo from './w3storage-logo.js';
 import GeneralPageData from './general.json';
@@ -27,12 +26,11 @@ function Footer() {
               </div>
               <div className="prompt">{contact.prompt}</div>
               {typeof contact.cta === 'object' && (
-                <button
-                  className={'cta'}
-                  variant={/** @type {any} */ (contact.cta.theme)}
-                >
-                  {contact.cta.text}
-                </button>
+                <div className='button pink-blue cta Button'>
+                  <button>
+                    {contact.cta.text}
+                  </button>
+                </div>
               )}
             </div>
           </div>
@@ -41,7 +39,7 @@ function Footer() {
             <div className="footer_resources">
               <div className="label">{resources.heading}</div>
               {resources.items.map(item => (
-                <a href={item.url} key={item.text}>
+                <a className="footer-link" href={item.url} key={item.text}>
                     {item.text}
                 </a>
               ))}
@@ -52,7 +50,7 @@ function Footer() {
             <div className="footer_get-started">
               <div className="label">{getStarted.heading}</div>
               {getStarted.items.map(item => (
-                <a href={item.url} key={item.text}>
+                <a className="footer-link" href={item.url} key={item.text}>
                     {item.text}
                 </a>
               ))}

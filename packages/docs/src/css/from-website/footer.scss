@@ -1,9 +1,5 @@
 // ------------------------------------------------------------------- Variables
 @use 'sass:math';
-@import '../../css/vars-website';
-@import '../../css/vars';
-@import '../../css/typography';
-
 $footerLogoWidth: 2.25rem;
 
 // --------------------------------------------------------------------- Styling
@@ -111,7 +107,7 @@ $footerLogoWidth: 2.25rem;
       width: 2.25rem;
       height: 100%;
       padding: 0.75rem 0;
-      // background-image: url(#{$imagePath}/shapes/zigzag-tiny.png);
+      background-image: url(#{$imagePath}/shapes/zigzag-tiny.png);
       background-position: 0 4px;
       background-size: 0 1.75rem;
       background-repeat: no-repeat;

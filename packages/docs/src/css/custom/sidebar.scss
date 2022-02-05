@@ -15,6 +15,21 @@
 .menu__link {
     font-weight: normal;
 }
+.menu {
+    margin-bottom: var(--docusaurus-announcement-bar-height);
+    // top left helix
+    &:before {
+        content: '';
+        width: 18rem;
+        height: 18rem;
+        top: -2.5rem;
+        left: -3.5rem;
+        position: absolute;
+        transform: rotate(-95deg);
+        background-image: url(#{$imagePath}/shapes/helix.png);
+        background-size: cover;
+    }
+}
 
 // right side
 .tableOfContents_node_modules-\@docusaurus-theme-classic-lib-next-theme-TOC-styles-module {
