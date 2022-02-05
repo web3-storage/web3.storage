@@ -80,36 +80,9 @@ export default function Navigation({ isProductApp }) {
   // ======================================================= Templates [Buttons]
   const getAccountMenu = () => {
     if (account && account.links) {
-      if (isProductApp) {
-        const labelText = account.text.toLowerCase();
-        return (
-          <div className="nav-account-button">
-            <button
-              className={clsx('nav-item', account.url === router.route ? 'current-page' : '')}
-              onClick={onLinkClick}
-              onKeyPress={e => handleKeySelect(e, account.url)}
-            >
-              {account.text}
-            </button>
-            <div className="nav-account-dropdown">
-              <div className="label">{labelText[0].toUpperCase() + labelText.substring(1)}</div>
-              {account.links.map(link => (
-                <Link passHref href={link.url === 'request-more-storage' ? mailTo : link.url} key={link.text}>
-                  <button
-                    className="nav-dropdown-link"
-                    onClick={onLinkClick}
-                    onKeyPress={e => handleKeySelect(e, link.url)}
-                  >
-                    {link.text}
-                  </button>
-                </Link>
-              ))}
-            </div>
-          </div>
-        );
-      }
+      const labelText = account.text.toLowerCase();
       return (
-        <Link passHref key={account.text} href={account.url}>
+        <div className="nav-account-button">
           <button
             className={clsx('nav-item', account.url === router.route ? 'current-page' : '')}
             onClick={onLinkClick}
@@ -117,7 +90,21 @@ export default function Navigation({ isProductApp }) {
           >
             {account.text}
           </button>
-        </Link>
+          <div className="nav-account-dropdown">
+            <div className="label">{labelText[0].toUpperCase() + labelText.substring(1)}</div>
+            {account.links.map(link => (
+              <Link passHref href={link.url === 'request-more-storage' ? mailTo : link.url} key={link.text}>
+                <button
+                  className="nav-dropdown-link"
+                  onClick={onLinkClick}
+                  onKeyPress={e => handleKeySelect(e, link.url)}
+                >
+                  {link.text}
+                </button>
+              </Link>
+            ))}
+          </div>
+        </div>
       );
     }
     return null;
@@ -244,7 +231,7 @@ export default function Navigation({ isProductApp }) {
                 ))}
 
                 {isLoggedIn && account && (
-                  <ZeroAccordion multiple={false} toggleOnLoad={false}>
+                  <ZeroAccordion multiple={false} toggleOnLoad={false} toggleAllOption={false}>
                     <ZeroAccordionSection disabled={!Array.isArray(account.links)}>
                       <ZeroAccordionSection.Header>
                         <div className="nav-item-heading">{account.text}</div>

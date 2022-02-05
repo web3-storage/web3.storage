@@ -12,7 +12,7 @@ export default function AccordionBlock({ block }) {
   // ================================================================== Template
   return (
     <div className="block accordion-block">
-      <ZeroAccordion multiple={block.multiple} toggleOnLoad={block.toggleOnLoad}>
+      <ZeroAccordion multiple={block.multiple} toggleOnLoad={block.toggleOnLoad} toggleAllOption={true}>
         {block.sections.map((section, index) => (
           <ZeroAccordionSection key={`accordion_section-${index}`}>
             <ZeroAccordionSection.Header>
