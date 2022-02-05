@@ -1,0 +1,273 @@
+////////////////////////////////////////////////////////////////////// Normalize
+//------------------------------------------------------------------------------
+// Colors
+$yellow: #ff0;
+$black: #000;
+$silver: #c0c0c0;
+
+// Fonts
+$font_0: sans-serif;
+$font_1: monospace;
+
+// @extend-elements / original selectors / sub, sup
+%extend_1 {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+// Original selectors / button, input, optgroup, select, textarea
+%extend_2 {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+html {
+  font-family: $font_0;
+  input[type='button'] {
+    cursor: pointer;
+  }
+  input[disabled] {
+    cursor: default;
+  }
+}
+body {
+  margin: 0;
+}
+article {
+  display: block;
+}
+aside {
+  display: block;
+}
+details {
+  display: block;
+}
+figcaption {
+  display: block;
+}
+figure {
+  display: block;
+  margin: 1em 40px;
+}
+footer {
+  display: block;
+}
+header {
+  display: block;
+}
+hgroup {
+  display: block;
+}
+main {
+  display: block;
+}
+menu {
+  display: block;
+}
+nav {
+  display: block;
+}
+section {
+  display: block;
+}
+summary {
+  display: block;
+}
+audio {
+  display: inline-block;
+  vertical-align: baseline;
+  &:not([controls]) {
+    display: none;
+    height: 0;
+  }
+}
+canvas {
+  display: inline-block;
+  vertical-align: baseline;
+}
+progress {
+  display: inline-block;
+  vertical-align: baseline;
+}
+video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+[hidden] {
+  display: none;
+}
+template {
+  display: none;
+}
+a {
+  background-color: transparent;
+  &:active {
+    outline: 0;
+  }
+  &:hover {
+    outline: 0;
+  }
+}
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+b {
+  font-weight: bold;
+}
+strong {
+  font-weight: bold;
+}
+dfn {
+  font-style: italic;
+}
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+mark {
+  background: yellow;
+  color: $black;
+}
+small {
+  font-size: 80%;
+}
+sub {
+  @extend %extend_1;
+  bottom: -0.25em;
+}
+sup {
+  @extend %extend_1;
+  top: -0.5em;
+}
+img {
+  border: 0;
+}
+hr {
+  // Instead of the line below you could use @include box-sizing($bs)
+  box-sizing: content-box;
+  height: 0;
+}
+pre {
+  overflow: auto;
+  font-family: $font_1, $font_1;
+  font-size: 1em;
+}
+code {
+  font-family: $font_1, $font_1;
+  font-size: 1em;
+}
+kbd {
+  font-family: $font_1, $font_1;
+  font-size: 1em;
+}
+samp {
+  font-family: $font_1, $font_1;
+  font-size: 1em;
+}
+button {
+  @extend %extend_2;
+  overflow: visible;
+  text-transform: none;
+  cursor: pointer;
+}
+input {
+  @extend %extend_2;
+  line-height: normal;
+}
+optgroup {
+  @extend %extend_2;
+  font-weight: bold;
+}
+select {
+  @extend %extend_2;
+  text-transform: none;
+}
+textarea {
+  @extend %extend_2;
+  overflow: auto;
+}
+input[type='reset'] {
+  cursor: pointer;
+}
+input[type='submit'] {
+  cursor: pointer;
+}
+button[disabled] {
+  cursor: default;
+}
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+input[type='checkbox'] {
+  // Instead of the line below you could use @include box-sizing($bs)
+  box-sizing: border-box;
+  padding: 0;
+}
+input[type='radio'] {
+  // Instead of the line below you could use @include box-sizing($bs)
+  box-sizing: border-box;
+  padding: 0;
+}
+input[type='number']::-webkit-inner-spin-button {
+  height: auto;
+}
+input[type='number']::-webkit-outer-spin-button {
+  height: auto;
+}
+input[type='search'] {
+  // Instead of the line below you could use @include box-sizing($bs)
+  box-sizing: content-box;
+}
+input[type='search']::-webkit-search-cancel-button {
+}
+input[type='search']::-webkit-search-decoration {
+}
+fieldset {
+  border: 1px solid $silver;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+legend {
+  border: 0;
+  padding: 0;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+td {
+  padding: 0;
+}
+th {
+  padding: 0;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6,
+p,
+div,
+button {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: normal;
+}

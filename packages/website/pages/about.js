@@ -1,40 +1,47 @@
-/* eslint-disable react/no-children-prop */
-import matter from 'gray-matter'
-import ReactMarkdown from "react-markdown";
-import VerticalLines from '../illustrations/vertical-lines.js'
-import slug from 'remark-slug'
+// ===================================================================== Imports
+import { useEffect } from 'react';
 
- export async function getStaticProps() {
-   // @ts-ignore
-   const content = await import ('../content/about.md')
-   const data = matter(content.default)
+import AboutPageData from '../content/pages/about.json';
+import Scroll2Top from '../components/scroll2top/scroll2top.js';
+import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
+import { initFloaterAnimations } from '../lib/floater-animations.js';
 
+// ===================================================================== Exports
+export default function Home() {
+  const sections = AboutPageData.page_content;
+  const animations = AboutPageData.floater_animations;
 
-    return {
-      props: {
-        needsLoggedIn: false,
-        data: data.content,
-        title: 'Web3 Storage - About web3.storage, the easy way to store with IPFS and Filecoin',
-      },
-    }
-  }
+  useEffect(() => {
+    let pageFloaters = {};
+    initFloaterAnimations(animations).then(result => {
+      pageFloaters = result;
+    });
+    return () => {
+      if (pageFloaters.hasOwnProperty('destroy')) {
+        pageFloaters.destroy();
+      }
+    };
+  }, [animations]);
 
+  return (
+    <>
+      <main className="page page-about">
+        {sections.map((section, index) => (
+          <BlockBuilder id={`about_section_${index + 1}`} key={`about_section_${index + 1}`} subsections={section} />
+        ))}
+      </main>
 
-/**
- * About Page
- *
- * @param {import('../components/types.js').LayoutChildrenProps} props
- * @returns
- */
-export default function About({ data }) {
-    return (
-      <div className="relative overflow-hidden z-0">
-        <div className="absolute top-10 right-0 pointer-events-none bottom-0 hidden xl:flex justify-end z-n1">
-          <VerticalLines className="h-full"/>
-        </div>
-        <div className="layout-margins">
-          <ReactMarkdown className="prose max-w-screen-lg mx-auto text-w3storage-purple my-4 lg:my-32" children={data} remarkPlugins={[slug]} />
-        </div>
-      </div>
-    )
+      <Scroll2Top />
+    </>
+  );
+}
+
+export function getStaticProps() {
+  return {
+    props: {
+      title: 'About - Web3 Storage - Simple file storage with IPFS & Filecoin',
+      description:
+        'About Web3.Storage: the easiest way to store data on the decentralized web. Giving developers the power of Filecoin distributed storage and content addressing via a simple HTTP API and handy client libraries.',
+    },
+  };
 }

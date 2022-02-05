@@ -1,45 +1,122 @@
-import clsx from 'clsx';
-import countly from '../../lib/countly'
-import Button from '../button'
+// ===================================================================== Imports
+import TextBlock from '../textblock/textblock';
+import Grid3D from '../../assets/illustrations/grid3D';
+import Squiggle from '../../assets/illustrations/squiggle';
+import Corkscrew from '../../assets/illustrations/corkscrew';
+import Helix from '../../assets/illustrations/helix';
+import Zigzag from '../../assets/illustrations/zigzag';
+import Cross from '../../assets/illustrations/cross';
+import Coil from '../../assets/illustrations/coil';
+import Triangle from '../../assets/illustrations/triangle';
+import Cluster from '../../assets/illustrations/cluster';
+import ClusterMobile from '../../assets/illustrations/cluster2';
+import Ring from '../../assets/illustrations/ring';
+import Spring from '../../assets/illustrations/spring';
+import Cone from '../../assets/illustrations/cone';
+import Fidget from '../../assets/illustrations/fidget';
+import Blobs from '../../assets/illustrations/blobs';
 
-import Wave from '../../illustrations/wave'
-import CircleNoise from '../../illustrations/circle-noise'
-import SquiggleAndCircles from '../../illustrations/squiggle-and-circles'
-import HeroIllustration from '../../illustrations/hero-illustration'
-import HeroBackgroundLeft from '../../illustrations/hero-background-left'
-import HeroBackgroundRight from '../../illustrations/hero-background-right'
-// @ts-ignore
-import styles from './hero.module.css'
+// ====================================================================== Params
+/**
+ * @param {Object} props.block
+ */
+// ====================================================================== Export
+export default function Hero({ block }) {
+  const page = block.page || '';
+  // ================================================================= Functions
+  const hero404 = () => {
+    return (
+      <>
+        <Grid3D id="error_hero-grid-3d" />
+        <Helix id="error_hero-helix" className={'hero-illustration'} />
+        <Triangle id="error_hero-triangle-1" className={'hero-illustration'} />
+        <Triangle id="error_hero-triangle-2" className={'hero-illustration'} />
+        <Triangle id="error_hero-triangle-3" className={'hero-illustration'} />
+        <Cross id="error_hero-cross-1" className={'hero-illustration'} />
+        <Cross id="error_hero-cross-2" className={'hero-illustration'} />
+        <Corkscrew id="error_hero-corkscrew" className={'hero-illustration'} />
+        <Ring id="error_hero-ring" className={'hero-illustration'} />
+        <Spring id="error_hero-spring" className={'hero-illustration'} />
+      </>
+    );
+  };
 
-export default function Hero() {
+  const faqHero = () => {
+    return (
+      <>
+        <Grid3D id="faq_hero-grid-3d" />
+        <Corkscrew id="faq_hero-corkscrew" className={'hero-illustration'} />
+        <Helix id="faq_hero-helix" className={'hero-illustration'} />
+        <Ring id="faq_hero-ring" className={'hero-illustration'} />
+      </>
+    );
+  };
+
+  const aboutHero = () => {
+    return (
+      <>
+        <Cluster id="about_hero-cluster" className={'hero-illustration'} />
+        <ClusterMobile id="about_hero-cluster-mobile" />
+        <Blobs id="about_hero-blobs" className={'hero-illustration'} />
+        <Ring id="about_hero-ring" className={'hero-illustration'} />
+        <Helix id="about_hero-helix" className={'hero-illustration'} />
+        <Spring id="about_hero-spring" className={'hero-illustration'} />
+        <Cone id="about_hero-cone" className={'hero-illustration'} />
+        <Fidget id="about_hero-fidget" className={'hero-illustration'} />
+      </>
+    );
+  };
+
+  const tiersHero = () => {
+    return (
+      <>
+        <Coil id="pricing_hero-coil" className={'hero-illustration'} />
+        <Corkscrew id="pricing_hero-corkscrew" className={'hero-illustration'} />
+        <Cross id="pricing_hero-cross" className={'hero-illustration'} />
+      </>
+    );
+  };
+
+  const indexHero = () => {
+    return (
+      <>
+        <div id="index_hero_background-gradient"></div>
+        <Grid3D id="index_hero-grid-3d" />
+        <Squiggle id="index_hero-squiggle" className={'hero-illustration'} />
+        <Corkscrew id="index_hero-corkscrew" className={'hero-illustration'} />
+        <Zigzag id="index_hero-zigzag" className={'hero-illustration'} />
+        <Helix id="index_hero-helix" className={'hero-illustration'} />
+        <Cross id="index_hero-cross" className={'hero-illustration'} />
+        <Triangle id="index_hero-triangle" className={'hero-illustration'} />
+      </>
+    );
+  };
+
+  const getPageHeroHeader = string => {
+    switch (string) {
+      case 'index':
+        return indexHero();
+      case 'pricing':
+        return tiersHero();
+      case 'about':
+        return aboutHero();
+      case 'faq':
+        return faqHero();
+      case 'error':
+        return hero404();
+      default:
+        return null;
+    }
+  };
+
+  // ==================================================== Template [Hero Header]
   return (
-    <div className={ clsx("relative w-full z-0 flex", styles.container )}>
-      <div className={ clsx("md:layout-margins", styles.topSection) }>
-        <div className="absolute top-0 right-0 left-0 bottom-0 flex items-center z-n1 pointer-events-none">
-          <HeroIllustration className={clsx("absolute left-1/2 transform -translate-x-1/2 top-0 w-screen hidden sm:block", styles.illustration)} />
-          <HeroBackgroundLeft className="absolute left-0 bottom-0 h-full"/>
-          <HeroBackgroundRight className="absolute right-0 bottom-0 h-full "/>
-          <div className={clsx("absolute top-0 left-1/2 transform -translate-x-1/2 bg-w3storage-red w-full h-full", styles.background) }/>
-          <SquiggleAndCircles className="absolute right-0 left-0 mx-auto hidden sm:block" style={{ transform: 'translate3d(-43rem, -5rem, 0)', animationDelay: -1.1 }} />
-          <Wave className="absolute right-0 left-0 mx-auto hidden sm:block" style={{ transform: 'translate3d(-26rem, 14rem, 0)', height: 72, animationDelay: -1.3 }} />
-          <CircleNoise className="absolute right-0 left-0 mx-auto hidden sm:block" style={{ transform: 'translate3d(35rem, 7rem, 0)' }} />
-        </div>
+    <div id={`${page}_hero-container`}>
+      <div className={`${page}_hero-top-section`}>
+        <div className={`${page}_hero-artwork-container`}>{getPageHeroHeader(page)}</div>
 
-        <div className="mx-auto max-w-4xl text-center pt-6 md:pt-20">
-          <hgroup className="text-w3storage-purple mb-16 px-4">
-            <h1 className="mb-10 text-4xl sm:text-5xl md:text-7xl">Decentralized Storage Made Simple</h1>
-            <h2 className="space-grotesk text-xl sm:text-2xl typography-hero-subtitle mb-5">Build apps backed by Filecoin, no infrastructure required.</h2>
-          </hgroup>
-          <Button
-            href="/login"
-            id="getting-started"
-            wrapperClassName="flex mx-auto w-48"
-            tracking={{ ui: countly.ui.HOME_HERO, action: "Get Started" }}
-          >
-            Get Started
-          </Button>
-        </div>
+        <TextBlock block={block} />
       </div>
     </div>
-  )
+  );
 }

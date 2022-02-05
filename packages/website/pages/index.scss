@@ -1,0 +1,812 @@
+@use 'sass:math';
+
+// ///////////////////////////////////////////////////// General [Page Sections]
+// -----------------------------------------------------------------------------
+
+.page-index {
+  position: relative;
+  .heading {
+    @include fontSize_Large;
+    line-height: leading(50, 35);
+    margin-bottom: 2.25rem;
+    @include mini {
+      @include fontSize_Large;
+      line-height: leading(45, 35);
+    }
+  }
+}
+
+.sectional {
+  padding: 6rem 0;
+}
+
+#section_1 {
+  position: relative;
+  z-index: 1;
+  @include selection_Light;
+}
+
+#section_2 {
+  position: relative;
+  z-index: 1;
+  @include background_Dark;
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-image: url('/images/index/corkscrew-bg.png');
+    background-repeat: no-repeat;
+    background-size: 2112px;
+    background-position: center 5rem;
+    z-index: 1;
+    opacity: 0.25;
+    filter: blur(40px);
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 1px;
+    left: 0;
+    width: 100%;
+    height: 20rem;
+    transform: translateY(100%);
+    z-index: -1;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1845.701' height='242.942' viewBox='0 0 1845.701 242.942'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect y='659' width='1845.701' height='242.942' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Scroll_Group_1' data-name='Scroll Group 1' transform='translate(0 -659)' clip-path='url(%23clip-path)' style='isolation: isolate'%3e%3cpath id='Path_19292' data-name='Path 19292' d='M-21173,9737.463s429.527-45.37,890.953,1,781.068,131.782,954.748,184.479V9050H-21173Z' transform='translate(21173 -9050)' fill='%2303040a'/%3e%3c/g%3e%3c/svg%3e");
+    background-size: 100%;
+    background-repeat: no-repeat;
+  }
+  @include medium {
+    &:after {
+      height: 10rem;
+    }
+  }
+}
+
+#section_3 {
+  position: relative;
+  padding: 9rem 0;
+  z-index: 0;
+  background-image: url('/images/index/holographic-bg-cropped-2.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  @include gradient_Text_Selection;
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: calc($containerWidth + 9rem);
+    height: calc(100% - 18rem);
+    top: 9rem;
+    border-radius: 0.375rem;
+    background-color: rgba(241, 241, 241, 0.6);
+    @include shadow1;
+    z-index: 0;
+    left: calc(50% - #{math.div($containerWidth, 2)} - 4.5rem);
+    @include medium {
+      left: calc(50% - #{math.div($containerWidth, 2)});
+      width: calc($containerWidth - 1rem);
+    }
+  }
+}
+
+#section_4 {
+  position: relative;
+  z-index: 1;
+  @include background_Dark;
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 100%;
+    height: 20rem;
+    transform: translateY(-100%);
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1636.34' height='122.322' viewBox='0 0 1636.34 122.322'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect width='1636.34' height='122.322' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Scroll_Group_1' data-name='Scroll Group 1' clip-path='url(%23clip-path)' style='isolation: isolate'%3e%3cg id='Group_1914' data-name='Group 1914'%3e%3cpath id='Path_18835' data-name='Path 18835' d='M-16101,11198.438v1055.932s338.735-28.635,512.177,140.625,36.063,416.637,329.8,625.462,792.163,107.167,792.163,107.167l2.2-1929.186s-388.361-117.4-797.447-117.4S-16101,11198.438-16101,11198.438Z' transform='translate(16101 -11081.04)' fill='%2303040a'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e ");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: left 0 bottom 0;
+    @include xlarge {
+      content: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1636.34' height='122.322' viewBox='0 0 1636.34 122.322'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect width='1636.34' height='122.322' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Scroll_Group_1' data-name='Scroll Group 1' clip-path='url(%23clip-path)' style='isolation: isolate'%3e%3cg id='Group_1914' data-name='Group 1914'%3e%3cpath id='Path_18835' data-name='Path 18835' d='M-16101,11198.438v1055.932s338.735-28.635,512.177,140.625,36.063,416.637,329.8,625.462,792.163,107.167,792.163,107.167l2.2-1929.186s-388.361-117.4-797.447-117.4S-16101,11198.438-16101,11198.438Z' transform='translate(16101 -11081.04)' fill='%2303040a'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e ");
+      background-image: unset;
+      height: unset;
+      top: 1rem;
+    }
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    width: 1440px;
+    height: 80rem;
+    left: calc(50% - #{math.div($containerWidth, 2)} - 10rem);
+    bottom: calc(1.125rem + 1px);
+    background-size: 100%;
+    background-position: left -50px top 0;
+    transform: translateY(calc(100% - 3rem)) scaleY(0.92);
+    background-repeat: no-repeat;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1366' height='932' viewBox='0 0 1366 932'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect id='Rectangle_2597' data-name='Rectangle 2597' width='1366' height='932' transform='translate(-20933 15244)' fill='%23fff' stroke='%23707070' stroke-width='1'/%3e%3c/clipPath%3e%3cclipPath id='clip-path-2'%3e%3crect x='-82' y='104' width='1708.34' height='1983.322' fill='none'/%3e%3c/clipPath%3e%3cclipPath id='clip-path-3'%3e%3crect width='1376.34' height='2071.322' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Mask_Group_126' data-name='Mask Group 126' transform='translate(20933 -15244)' clip-path='url(%23clip-path)'%3e%3cg id='Scroll_Group_2' data-name='Scroll Group 2' transform='translate(-20933 14088.508)' clip-path='url(%23clip-path-2)' style='isolation: isolate'%3e%3cg id='Group_3560' data-name='Group 3560' transform='translate(3.178 -2929.691)'%3e%3cg id='Group_1944' data-name='Group 1944'%3e%3cg id='Scroll_Group_1' data-name='Scroll Group 1' transform='translate(-3.178 2929.691)' clip-path='url(%23clip-path-3)' style='isolation: isolate'%3e%3cg id='Group_430' data-name='Group 430' transform='translate(0)'%3e%3cg id='Group_216' data-name='Group 216' transform='translate(0)'%3e%3cpath id='Path_18835' data-name='Path 18835' d='M-16101,11198.438v1055.932s338.735-28.635,512.177,140.625,36.063,416.637,329.8,625.462,792.163,107.167,792.163,107.167l2.2-1929.186s-388.361-117.4-797.447-117.4S-16101,11198.438-16101,11198.438Z' transform='translate(16101 -11081.04)' fill='%2303040a'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e ");
+    @include xlarge {
+      width: 100%;
+      left: unset;
+      height: 62rem;
+      bottom: 1px;
+      background-position: left 0 top 0;
+    }
+    @include small {
+      height: 40rem;
+      transform: translateY(100%) scale(1.4, 1);
+      background-image: unset;
+      content: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1366' height='932' viewBox='0 0 1366 932'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect id='Rectangle_2597' data-name='Rectangle 2597' width='1366' height='932' transform='translate(-20933 15244)' fill='%23fff' stroke='%23707070' stroke-width='1'/%3e%3c/clipPath%3e%3cclipPath id='clip-path-2'%3e%3crect x='-82' y='104' width='1708.34' height='1983.322' fill='none'/%3e%3c/clipPath%3e%3cclipPath id='clip-path-3'%3e%3crect width='1376.34' height='2071.322' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Mask_Group_126' data-name='Mask Group 126' transform='translate(20933 -15244)' clip-path='url(%23clip-path)'%3e%3cg id='Scroll_Group_2' data-name='Scroll Group 2' transform='translate(-20933 14088.508)' clip-path='url(%23clip-path-2)' style='isolation: isolate'%3e%3cg id='Group_3560' data-name='Group 3560' transform='translate(3.178 -2929.691)'%3e%3cg id='Group_1944' data-name='Group 1944'%3e%3cg id='Scroll_Group_1' data-name='Scroll Group 1' transform='translate(-3.178 2929.691)' clip-path='url(%23clip-path-3)' style='isolation: isolate'%3e%3cg id='Group_430' data-name='Group 430' transform='translate(0)'%3e%3cg id='Group_216' data-name='Group 216' transform='translate(0)'%3e%3cpath id='Path_18835' data-name='Path 18835' d='M-16101,11198.438v1055.932s338.735-28.635,512.177,140.625,36.063,416.637,329.8,625.462,792.163,107.167,792.163,107.167l2.2-1929.186s-388.361-117.4-797.447-117.4S-16101,11198.438-16101,11198.438Z' transform='translate(16101 -11081.04)' fill='%2303040a'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e ");
+    }
+  }
+}
+
+#section_5 {
+  position: relative;
+  z-index: 1;
+
+  &:before {
+    content: '';
+    position: absolute;
+    right: calc(50% - #{math.div($containerWidth, 2)} - 15rem - 50vw);
+    top: -1px;
+    width: 50vw;
+    height: calc(54.5rem + 1px);
+    background-color: $ebony;
+    @include xlarge {
+      display: none;
+    }
+  }
+}
+
+#section_6 {
+  position: relative;
+  z-index: 1;
+  @include background_Dark;
+  color: white;
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0rem;
+    left: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right 0 top 0;
+    background-image: url('/images/index/global-network.png');
+  }
+
+  &:after {
+    display: none;
+    content: '';
+    position: absolute;
+    width: calc(100% + 1px);
+    height: 15rem;
+    top: -0.5rem;
+    left: 0;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1232' height='156' viewBox='0 0 1232 156'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect x='68' y='340' width='1232' height='156' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Scroll_Group_2' data-name='Scroll Group 2' transform='translate(-68 -340)' clip-path='url(%23clip-path)' style='isolation: isolate'%3e%3cpath id='Subtraction_1' data-name='Subtraction 1' d='M1368.172,522H1368V462.235c-.271-.061-30.4-6.779-81.889-16.49-30.462-5.745-62.484-11.431-95.175-16.9-40.867-6.839-82.9-13.357-124.942-19.375-107.01-15.319-214.681-27.524-320.021-36.277-62.549-5.2-124.959-9.22-185.5-11.955-66.594-3.009-132.572-4.535-196.1-4.535-61.866,0-122.928,1.447-181.493,4.3-30.816,1.5-61.574,3.425-91.419,5.715-30.819,2.365-61.534,5.188-91.292,8.392V0h1368Z' transform='translate(-0.172)' fill='%23f1f1f1'/%3e%3c/g%3e%3c/svg%3e ");
+  }
+
+  @include ultraLarge {
+    &:after {
+      display: block;
+    }
+  }
+
+  @include xlarge {
+    &:after {
+      height: 10rem;
+    }
+  }
+
+  @include large {
+    &:before {
+      background-position: right -10rem top 0;
+    }
+  }
+
+  @include medium {
+    &:before {
+      background-position: right -25rem top 0;
+    }
+  }
+
+  @include small {
+    &:before {
+      transform: scaleY(-1);
+    }
+    &:after {
+      top: -1px;
+    }
+  }
+}
+
+#section_7 {
+  position: relative;
+  z-index: 1;
+  &:before {
+    display: none;
+    content: '';
+    position: absolute;
+    width: 101%;
+    height: 20rem;
+    top: 3px;
+    left: 0;
+    transform: translateY(-100%);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: left 0 bottom 0;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='1368' height='201.069' viewBox='0 0 1368 201.069'%3e%3cpath id='Subtraction_3' data-name='Subtraction 3' d='M1368,299H0V97.932c60.328,23.174,132.024,44.548,213.1,63.528,77.584,18.163,162.983,33.965,253.823,46.969C555.456,221.1,647.586,230.9,740.75,237.553c92.872,6.632,184.766,9.995,273.127,9.995h.078c65.128,0,127.916-1.852,186.62-5.5,60.269-3.745,116.541-9.4,167.252-16.82V225H1368v74h0Z' transform='translate(0 -97.932)' fill='%23f1f1f1'/%3e%3c/svg%3e ");
+  }
+  @include ultraLarge {
+    &:before {
+      display: block;
+    }
+  }
+  @include small {
+    &:before {
+      background-image: unset;
+      content: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='1368' height='201.069' viewBox='0 0 1368 201.069'%3e%3cpath id='Subtraction_3' data-name='Subtraction 3' d='M1368,299H0V97.932c60.328,23.174,132.024,44.548,213.1,63.528,77.584,18.163,162.983,33.965,253.823,46.969C555.456,221.1,647.586,230.9,740.75,237.553c92.872,6.632,184.766,9.995,273.127,9.995h.078c65.128,0,127.916-1.852,186.62-5.5,60.269-3.745,116.541-9.4,167.252-16.82V225H1368v74h0Z' transform='translate(0 -97.932)' fill='%23f1f1f1'/%3e%3c/svg%3e ");
+      height: unset;
+      top: 1rem;
+      transform: scale(-2, 0.75) translateY(-100%);
+    }
+  }
+}
+
+// /////////////////////////////////////////////////////////////// [Subsections]
+// -----------------------------------------------------------------------------
+
+// ------------------------------------------------------------ Section [Header]
+#hero_header {
+  position: relative;
+  .heading {
+    @include h1;
+    line-height: leading(55, 45);
+    @include mini {
+      @include fontSize_Large;
+      line-height: leading(45, 35);
+    }
+  }
+  .subheading {
+    @include fontSize_Regular;
+    @include fontWeight_Regular;
+    line-height: leading(34, 20);
+    margin-bottom: 1.25rem;
+  }
+}
+// ----------------------------------------------------------- Section [Intro 1]
+#intro_1 {
+  position: relative;
+  margin-top: 7rem;
+  padding: 8.125rem 0;
+  color: white;
+  z-index: 1;
+  .column-content,
+  .text-block {
+    position: relative;
+    z-index: 1;
+    .heading {
+      padding-right: 2rem;
+      margin-bottom: 2.25rem;
+    }
+    .description {
+      margin-bottom: 2rem;
+    }
+  }
+  @include small {
+    .text-block {
+      margin-bottom: 5.25rem;
+    }
+  }
+}
+
+#intro_1-corkscrew {
+  position: absolute;
+  position: absolute;
+  left: -9999px;
+  right: -9999px;
+  margin: 0 auto;
+  width: 2112px;
+  height: 2112px;
+  top: 0;
+  transform: translateX(20rem) rotate(-16deg);
+  z-index: 0;
+  opacity: 0.25;
+  filter: blur(40px);
+}
+
+#intro_1-hero-corkscrew {
+  position: absolute;
+  display: none;
+  width: 21.25rem;
+  right: calc(50% - #{math.div($containerWidth, 2)} + 6rem);
+  top: -20rem;
+  transform: rotate(189deg);
+  @include small {
+    display: block;
+  }
+}
+
+#intro_1-coil {
+  position: absolute;
+  width: 7.1875rem;
+  left: -3rem;
+  top: -12rem;
+  transform: rotate(17deg);
+  @include small {
+    display: none;
+  }
+}
+
+#intro_1-helix {
+  position: absolute;
+  width: 15rem;
+  right: -7rem;
+  top: -4.125rem;
+  opacity: 0.8;
+  transform: rotate(-79deg);
+  @include mini {
+    width: 7.5rem;
+    right: -3rem;
+    top: -3rem;
+  }
+}
+
+#intro_1-cross {
+  position: absolute;
+  display: none;
+  top: -10rem;
+  left: 2rem;
+  width: 5.25rem;
+  @include small {
+    display: block;
+  }
+}
+
+// ----------------------------------------------------------- Section [Intro 2]
+#intro_2-heading,
+#intro_2-statistics,
+#intro_2-cta {
+  position: relative;
+}
+
+#intro_2-heading {
+  padding-top: 4rem;
+  padding-bottom: 0;
+}
+
+#intro_2-cross {
+  position: absolute;
+  width: 3rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 7rem);
+  top: -4.5rem;
+  @include large {
+    left: 0;
+  }
+  @include mini {
+    left: -3rem;
+    top: 3rem;
+  }
+}
+
+#intro_2-triangle {
+  position: absolute;
+  width: 4.75rem;
+  top: -2.5rem;
+  right: calc(50% - #{math.div($containerWidth, 2)} - 2rem);
+  transform: rotate(-90deg);
+  @include small {
+    right: -5rem;
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#intro_2-statistics {
+  padding: 0;
+  .card-list-block {
+    position: relative;
+    width: calc(100% + 2rem);
+    left: -1rem;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    background-color: rgba(241, 241, 241, 0.6);
+    @include shadow1;
+  }
+  @include mini {
+    .card-row {
+      flex-direction: column;
+    }
+  }
+}
+
+#intro_2-cta {
+  padding-top: 1.5rem;
+  padding-bottom: 4rem;
+  .column-1 {
+    .heading {
+      margin-bottom: 2.75rem;
+    }
+    @include small {
+      margin-top: 2rem;
+      margin-bottom: 5rem;
+    }
+  }
+  .column-2 {
+    .heading {
+      display: inline;
+      @include gradient_Text;
+      @include fontSize_MediumLarge;
+      margin-bottom: 0.25rem;
+      background-size: 200%;
+    }
+    .text-block {
+      .description {
+        margin-bottom: 1.75rem;
+      }
+      &:last-child {
+        .description {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+// --------------------------------------------------------------- Section [FAQ]
+#section_FAQ_info,
+#section_FAQ_ctas {
+  color: white;
+}
+
+#section_FAQ_info {
+  position: relative;
+  padding-bottom: 3rem;
+  .text-block {
+    position: relative;
+    z-index: 1;
+  }
+  .heading {
+    @include fontSize_Large;
+    line-height: leading(50, 35);
+    margin-bottom: 2.5rem;
+  }
+  .image-block {
+    margin-top: 2.5rem;
+  }
+  .text-block {
+    position: relative;
+    z-index: 1;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: calc(100% + 40rem);
+    height: 200%;
+    top: 0;
+    left: -20rem;
+    background-image: url('/images/index/corkscrew-bg.png');
+    background-repeat: no-repeat;
+    background-size: 2112px;
+    background-position: center;
+    z-index: 1;
+    opacity: 0.25;
+    filter: blur(40px);
+    transform: translateY(0rem) rotate(-38deg);
+  }
+}
+
+#section_FAQ-squiggle {
+  position: absolute;
+  width: 33.125rem;
+  left: -11.5rem;
+  top: -19.5rem;
+  transform: scaleX(-1) rotate(18deg);
+  z-index: 0;
+  @include xlarge {
+    left: -15rem;
+  }
+  @include large {
+    left: calc(50% - #{math.div($containerWidth, 2)} - 22rem);
+  }
+  @include medium {
+    left: -21rem;
+  }
+}
+
+#section_FAQ-corkscrew {
+  position: absolute;
+  width: 154vw;
+  height: 100%;
+  transform: translate(-25%, -15%) rotate(-54deg);
+  z-index: 0;
+  @include centerImage;
+  opacity: 0.25;
+  filter: blur(40px);
+}
+
+#section_FAQ_ctas {
+  position: relative;
+  z-index: 1;
+  @include small {
+    padding-top: 0;
+  }
+  .card-list-block {
+    @include small {
+      .card-row {
+        flex-direction: column;
+      }
+      .card {
+        &:not(:last-child) {
+          margin-bottom: 3.75rem;
+        }
+      }
+    }
+  }
+}
+
+// ------------------------------------------------------- Section [Get Started]
+#section_get-started {
+  padding-bottom: 0;
+  position: relative;
+  z-index: 1;
+
+  @include small {
+    padding-bottom: 5rem;
+  }
+  @include mini {
+    padding-bottom: 2rem;
+  }
+
+  @include tiny {
+    padding-bottom: 0;
+  }
+
+  .column-1 {
+    margin-top: 14rem;
+    .heading {
+      margin-bottom: 2.25rem;
+      line-height: leading(50, 35);
+    }
+  }
+  .column-2 {
+    @include small {
+      position: relative;
+      padding-top: 20rem;
+      padding-bottom: 10rem;
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: calc(50% - #{math.div($containerWidth, 2)} - 5rem);
+        width: $containerWidth;
+        height: 100%;
+        transform: scaleX(1.5);
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='377' height='778.082' viewBox='0 0 377 778.082'%3e%3cg id='Group_3793' data-name='Group 3793' transform='translate(-11005.5 -16506.504)'%3e%3cpath id='Intersection_1' data-name='Intersection 1' d='M196.15,855.813V238.438a363.2,363.2,0,0,1,87.249-22.7C407.24,199.014,505.23,147.323,573.151,98.73V871.551c-27.887-.553-61.3,1.01-97.681,2.574-31.276,1.344-64.74,2.687-98.8,2.687C315.237,876.811,251.909,872.443,196.15,855.813Z' transform='translate(10809.35 16407.773)' fill='%2303040a'/%3e%3c/g%3e%3c/svg%3e ");
+      }
+    }
+    @include mini {
+      &:before {
+        top: -5rem;
+        height: calc(100% + 5rem);
+        transform: scaleX(1);
+        left: calc(50% - #{math.div($containerWidth, 2)});
+      }
+    }
+    @include tiny {
+      padding-top: 10rem;
+      padding-bottom: 5rem;
+      &:before {
+        top: -10rem;
+        height: calc(100% + 12rem);
+      }
+    }
+  }
+}
+
+#section_get-started-cross {
+  position: absolute;
+  z-index: 0;
+  width: 7.75rem;
+  top: 0;
+  left: 0;
+  transform: translate(50%, 100%) scaleX(-1);
+}
+
+#get-started-image-storage {
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+  width: 66%;
+}
+
+#get-started-image-files {
+  margin-left: 7rem;
+  margin-bottom: 1rem;
+  width: 110%;
+}
+
+#get-started-image-upload {
+  width: 56%;
+  margin-left: auto;
+  right: 0;
+  transform: translateX(50%);
+}
+
+#get-started-image-storage,
+#get-started-image-files,
+#get-started-image-upload {
+  @include small {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    transform: unset;
+  }
+}
+
+#section_get-started-cards {
+  position: relative;
+  z-index: 1;
+  padding-top: 2rem;
+  &:before {
+    display: none;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 6rem;
+    left: 0;
+    top: 0;
+    transform: translateY(-100%);
+    background-repeat: no-repeat;
+    background-size: 101%;
+    background-position: left 0 bottom 0;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='374' height='65.045' viewBox='0 0 374 65.045'%3e%3cpath id='Subtraction_2' data-name='Subtraction 2' d='M479.5,65.044h-374V0c12.712,3.341,26.358,6.235,40.56,8.6,13.244,2.207,27.4,4.028,42.084,5.412,25.851,2.435,53.943,3.618,85.882,3.618,33.491,0,65.842-1.271,98.794-2.687l6.208-.267.782-.034c28.406-1.227,55.236-2.385,78.606-2.385,7.741,0,14.638.123,21.083.375v52.41Z' transform='translate(-105.5)' fill='%23f1f1f1'/%3e%3c/svg%3e ");
+  }
+  @include small {
+    &:before {
+      display: block;
+      height: 12rem;
+    }
+  }
+  @include tiny {
+    padding-top: 0;
+    margin-top: 3rem;
+  }
+
+  .card-list-block {
+    @include small {
+      .card-row {
+        flex-direction: column;
+      }
+    }
+  }
+}
+
+// ------------------------------------------------------ Section [Testimonials]
+
+#section_testimonials,
+#section_testimonials-cards {
+  position: relative;
+  z-index: 1;
+}
+
+#section_testimonials {
+  padding-top: 8rem;
+  padding-bottom: 3rem;
+  .text-block {
+    .heading {
+      @include fontSize_Large;
+      line-height: leading(50, 35);
+    }
+    .description {
+      @include fontSize_Regular;
+    }
+  }
+}
+
+#section_testimonials-cards {
+  padding-top: 0rem;
+  padding-bottom: 12rem;
+
+  @include ultraLarge {
+    padding-bottom: 15rem;
+  }
+  @include large {
+    padding-bottom: 12rem;
+  }
+
+  .card-list-block {
+    position: relative;
+    left: -2.5rem;
+    width: calc(100% + 5rem);
+
+    .card {
+      .feature-wrapper {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+  .column-2 {
+    display: none;
+  }
+
+  @include small {
+    .column-1 {
+      display: none;
+    }
+    .column-2 {
+      display: block;
+    }
+  }
+
+  .slider-block {
+    .testimonials-slider-thumb {
+      border-radius: 0.25rem;
+      border: solid 0.5px white;
+      height: 0.5rem;
+      width: 2.375rem;
+      background-color: #4f24ff;
+    }
+    .zero_slider-range-input {
+      width: 50%;
+      left: 25%;
+      &:after {
+        height: 0.5rem;
+        background-color: white;
+        border: none;
+        @include shadow1;
+        top: calc(50% - 4px);
+      }
+    }
+  }
+}
+
+// ------------------------------------------------------ Section [Explore Docs]
+#section_explore-docs {
+  @include small {
+    padding-top: 0;
+  }
+
+  .column-1 {
+    display: none;
+  }
+
+  @include medium {
+    .column-1 {
+      display: block;
+      margin-bottom: 3rem;
+    }
+    .column-3 {
+      display: none;
+    }
+  }
+
+  .card-list-block {
+    @include mini {
+      .card-row {
+        flex-direction: column;
+      }
+      .card {
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+
+  .text-block {
+    margin: 2.125rem 0 0 3rem;
+    .heading {
+      @include fontSize_MediumLarge;
+      line-height: leading(40, 25);
+      margin-bottom: 1rem;
+    }
+  }
+}

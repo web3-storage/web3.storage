@@ -1,0 +1,321 @@
+// ///////////////////////////////////////////////////////// Imports & Variables
+// -----------------------------------------------------------------------------
+@import 'normalize';
+@import 'variables';
+@import 'grid/gridlex-2.7.1';
+
+// Modules
+@import '../modules/zero/components/components.scss';
+
+// Layouts
+@import 'layouts/messagebanner';
+@import 'layouts/section';
+@import 'layouts/corkscrewBackground';
+@import 'layouts/pageContainer';
+@import 'layouts/dropdownOverrides';
+@import 'layouts/paginationOverrides';
+@import 'layouts/filterableOverrides';
+@import '../components/navigation/navigation.scss';
+@import '../components/footer/footer.scss';
+
+// Components
+@import '../components/button/button';
+@import '../components/account/ctaCard/CTACard';
+@import '../components/account/storageManager/storageManager';
+@import '../components/account/filesManager/filesManager';
+@import '../components/account/filesManager/fileRowItem';
+@import '../components/tokens/tokenCreator/tokenCreator';
+@import '../components/tokens/tokensManager/tokensManager';
+@import '../components/tokens/tokensManager/tokenRowItem';
+@import '../components/account/fileUploader/fileUploader';
+@import '../components/cardlistblock/cardlistblock.scss';
+@import '../components/card/card.scss';
+@import '../components/textblock/textblock.scss';
+@import '../components/imageblock/imageblock.scss';
+@import '../components/accordionblock/accordionblock.scss';
+@import '../components/hero/hero.scss';
+@import '../components/messagebanner/messagebanner.scss';
+@import '../components/codepreview/codepreview.scss';
+@import '../components/breadcrumbs/breadcrumbs.scss';
+@import '../components/scroll2top/scroll2top.scss';
+
+// Pages
+@import '../pages/index.scss';
+@import '../pages/tiers.scss';
+@import '../pages/about.scss';
+@import '../pages/faq.scss';
+@import '../pages/terms.scss';
+@import '../pages/404.scss';
+@import '../pages/login';
+@import '../pages/account';
+@import '../pages/tokens';
+
+// /////////////////////////////////////////////////////////////////////// Fonts
+// -----------------------------------------------------------------------------
+$fontAssetPath: '../assets/fonts';
+
+//////////////////////////////////////////////////////////////////// Suisse Intl
+@font-face {
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Light.otf') format('opentype');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Regular.otf') format('opentype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Medium.otf') format('opentype');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-SemiBold.otf') format('opentype');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'SuisseIntl';
+  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Bold.otf') format('opentype');
+  font-weight: 700;
+}
+
+/////////////////////////////////////////////////////////////// Suisse Intl Mono
+@font-face {
+  font-family: 'Suisse Intl Mono';
+  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Thin.otf') format('opentype');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Suisse Intl Mono';
+  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Regular.otf') format('opentype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Suisse Intl Mono';
+  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Bold.otf') format('opentype');
+  font-weight: 700;
+}
+
+// ///////////////////////////////////////////////////////////////////// General
+// -----------------------------------------------------------------------------
+html,
+body {
+  font-family: $font_Primary;
+  font-size: 16px;
+  font-weight: $fontWeight_Regular;
+  line-height: $leading_Regular;
+  letter-spacing: $letterSpacing_Large;
+  color: $ebony;
+  @include background_Light;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  &.no-scroll {
+    overflow-y: hidden;
+  }
+  &.no-cursor {
+    cursor: none;
+  }
+  * {
+    box-sizing: border-box;
+    &:before,
+    &:after {
+      box-sizing: border-box;
+    }
+  }
+}
+
+a,
+button,
+ul {
+  background-color: transparent;
+  text-decoration: none;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+a,
+button {
+  cursor: pointer;
+}
+
+::-webkit-file-upload-button {
+  cursor: pointer;
+}
+
+// ///////////////////////////////////////////////////////////////// Next & Grid
+// -----------------------------------------------------------------------------
+#__next {
+  position: relative;
+  z-index: 2;
+  overflow-x: hidden;
+}
+
+#master-container {
+  position: relative;
+  &.product-app {
+    @include background_Dark;
+  }
+}
+
+[class~='grid'],
+[class*='grid-'],
+[class*='grid_'] {
+  width: $containerWidth;
+  margin: 0 auto;
+  @include customMaxMQ($containerWidth + 4rem) {
+    padding: 0 4.1665%;
+    width: 100%;
+  }
+  &[class*='-noGutter'] {
+    margin: 0 auto;
+  }
+  &.full {
+    width: 100%;
+    padding: 0 0.5rem;
+    &.maxed {
+      max-width: 90rem;
+    }
+  }
+  &.no-padding {
+    padding: 0;
+  }
+  [class~='grid'],
+  [class*='grid-'],
+  [class*='grid_'] {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+// ////////////////////////////////////////////////////////////////// Typography
+// -----------------------------------------------------------------------------
+h1,
+.h1 {
+  @include h1;
+  line-height: leading(55, 45);
+}
+
+h2,
+.h2 {
+  @include h2;
+}
+
+h3,
+.h3 {
+  @include h3;
+}
+
+h4,
+.h4 {
+  @include h4;
+}
+
+h5,
+.h5 {
+  @include h5;
+}
+
+// ////////////////////////////////////////////////////////////////// Components
+// -----------------------------------------------------------------------------
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+/* ================================================================================
+   Layout
+   ================================================================================ */
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table-tooltip.rc-tooltip {
+  opacity: 1;
+}
+
+.table-tooltip .rc-tooltip-content {
+  position: relative;
+  bottom: 4px;
+}
+
+.table-tooltip .rc-tooltip-content .rc-tooltip-arrow {
+  border-top-color: #fc6553;
+}
+
+@keyframes appear-bottom-then-go-away {
+  from {
+    opacity: 1;
+    transform: translateY(100%);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+.appear-bottom-then-go-away {
+  animation: appear-bottom-then-go-away 3s ease-in-out both;
+}
+
+@keyframes grow-width {
+  from {
+    width: 0;
+  }
+}
+
+.grow-width {
+  animation: grow-width 1s ease-in-out both;
+}
+
+.prose h1 > a,
+.prose h2 > a,
+.prose h3 > a,
+.prose h4 > a {
+  text-decoration: none;
+}
+
+.image-full-width {
+  width: 100%;
+}
+
+.hidden {
+  display: none;
+}

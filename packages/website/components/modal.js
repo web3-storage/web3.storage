@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import ReactDOM from "react-dom";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
 
 /**
  * @typedef {Object} ModalProps
@@ -12,22 +12,20 @@ import ReactDOM from "react-dom";
  * Modal Component
  *
  * @param {ModalProps} param0
- * @returns
  */
-export default function Modal({
-    show,
-    onClose = () => {},
-    children
-}) {
+export default function Modal({ show, onClose = () => {}, children }) {
   const [isBrowser, setIsBrowser] = useState(false);
   const modalWrapperRef = useRef(null);
 
-  const backDropHandler = useCallback((e) => {
-    // @ts-ignore
-    if (show && !modalWrapperRef?.current?.contains(e.target)) {
+  const backDropHandler = useCallback(
+    e => {
+      // @ts-ignore
+      if (show && !modalWrapperRef?.current?.contains(e.target)) {
         onClose();
-    }
-  }, [onClose, show]);
+      }
+    },
+    [onClose, show]
+  );
 
   useEffect(() => {
     setIsBrowser(true);
@@ -40,9 +38,9 @@ export default function Modal({
     const bodyElement = document.querySelector('body');
 
     if (show) {
-      bodyElement?.classList.add('overflow-hidden')
+      bodyElement?.classList.add('overflow-hidden');
     } else {
-      bodyElement?.classList.remove('overflow-hidden')
+      bodyElement?.classList.remove('overflow-hidden');
     }
   }, [show]);
 
@@ -56,21 +54,26 @@ export default function Modal({
         ref={modalWrapperRef}
         role="dialog"
         aria-modal="true"
-        className="flex flex-col relative bg-white w-96 h-80 p-8 border border-black rounded-md">
+        className="flex flex-col relative bg-white w-96 h-80 p-8 border border-black rounded-md"
+      >
         <div className="absolute top-0 right-2">
-          <button type="button" className="bg-black text-white w-6 h-6 border rounded-xl text-sm leading-5" onClick={handleCloseClick}>
+          <button
+            type="button"
+            className="bg-black text-white w-6 h-6 border rounded-xl text-sm leading-5"
+            onClick={handleCloseClick}
+          >
             X
           </button>
         </div>
         {children}
       </div>
     </div>
-  ) : null
+  ) : null;
 
   if (isBrowser) {
-    const modalDiv = document.getElementById("modal-root");
+    const modalDiv = document.getElementById('modal-root');
     return modalDiv ? ReactDOM.createPortal(modalContent, modalDiv) : null;
   } else {
     return null;
   }
-};
+}

@@ -1,0 +1,571 @@
+@use 'sass:math';
+
+// ///////////////////////////////////////////////////////////////////// General
+// -----------------------------------------------------------------------------
+.hero-illustration {
+  position: absolute;
+  z-index: 2;
+}
+
+// //////////////////////////////////////////////////////////////// Page [Index]
+// -----------------------------------------------------------------------------
+#index_hero-container {
+  width: 100%;
+  padding: 0 1.75rem;
+  z-index: 0;
+  display: flex;
+  .text-block {
+    .subheading {
+      color: black;
+      padding-right: 5rem;
+      @include mini {
+        padding-right: 0;
+      }
+    }
+  }
+}
+
+.index_hero-top-section {
+  height: 24.05rem;
+}
+
+.index_hero-artwork-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: -1;
+}
+
+#index_hero_background-gradient {
+  position: absolute;
+  width: 100%;
+  height: calc(100% + $navigationHeight + 9rem);
+  left: 0;
+  top: calc(0rem - $navigationHeight);
+  z-index: 0;
+  background-image: url('/images/index/holographic-bg-cropped-1.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: right 0 bottom 0rem;
+}
+
+#index_hero-grid-3d,
+#faq_hero-grid-3d,
+#error_hero-grid-3d {
+  position: absolute;
+  top: -9999px;
+  bottom: -9999px;
+  left: -9999px;
+  right: -9999px;
+  margin: auto !important;
+  z-index: 1;
+}
+
+#index_hero-squiggle {
+  width: 29rem;
+  left: -8.5rem;
+  transform: rotate(-27deg);
+  @include medium {
+    left: calc(50% - #{math.div($containerWidth, 2)} - 12rem);
+  }
+}
+
+#index_hero-corkscrew {
+  width: 24.375rem;
+  right: -2rem;
+  top: -1rem;
+  transform: rotate(115deg);
+  @include large {
+    right: calc(50% - #{math.div($containerWidth, 2)} - 9rem);
+  }
+  @include small {
+    display: none;
+  }
+}
+
+#index_hero-zigzag {
+  width: 7.375rem;
+  left: calc(25% - 2rem);
+  top: -3.5rem;
+  transform: rotate(-185deg);
+  @include medium {
+    width: 3rem;
+  }
+  @include mini {
+    left: 1%;
+  }
+}
+
+#index_hero-helix {
+  width: 4.125rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} + 14rem);
+  top: -1 * $navigationHeight;
+  transform: translateY(-1rem) rotate(-90deg);
+  @include medium {
+    left: calc(50% - 10rem);
+    transform: translateY(-2rem) rotate(-90deg);
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#index_hero-cross {
+  width: 5.25rem;
+  right: 31%;
+  bottom: 1rem;
+  @include small {
+    display: none;
+  }
+}
+
+#index_hero-triangle {
+  width: 3.5rem;
+  left: 30%;
+  bottom: 2rem;
+  transform: rotate(-90deg);
+  @include medium {
+    bottom: -2rem;
+  }
+  @include small {
+    left: 2rem;
+  }
+}
+// //////////////////////////////////////////////////////////////// Page [About]
+// -----------------------------------------------------------------------------
+
+#about_hero-ring {
+  left: calc(50% - #{math.div($containerWidth, 2)} - 6.75rem);
+  top: 4.5rem;
+  width: 33.5rem;
+  transform: rotate(35deg) scale(0.8);
+  @include medium {
+    width: calc(0.885 * 33.5rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} - 0.25rem);
+  }
+  @include small {
+    width: calc(0.73 * 33.5rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 4rem);
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#about_hero-helix {
+  width: 8rem;
+  top: 2rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} + 16rem);
+  right: 0;
+  transform: rotate(20deg);
+  @include medium {
+    width: calc(0.885 * 8rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 20.5rem);
+  }
+  @include small {
+    width: calc(0.73 * 8rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 18rem);
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#about_hero-spring {
+  width: 10rem;
+  top: 23rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} + 14.25rem);
+  transform: rotate(45deg);
+  @include medium {
+    width: calc(0.885 * 10rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 18.75rem);
+  }
+  @include small {
+    width: calc(0.73 * 10rem);
+    top: 18rem;
+  }
+  @include mini {
+    width: 25%;
+    left: unset;
+    right: 15%;
+    top: 30%;
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#about_hero-cone {
+  width: 12rem;
+  top: 10.25rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} + 7rem);
+  @include medium {
+    width: calc(0.885 * 12rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 14rem);
+  }
+  @include small {
+    width: calc(0.73 * 12rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 14rem);
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#about_hero-fidget {
+  width: 15rem;
+  top: 2.5rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 3rem);
+  @include medium {
+    width: calc(0.885 * 15rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 3.5rem);
+  }
+  @include small {
+    width: calc(0.73 * 15rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 3.5rem);
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#about_hero-blobs {
+  width: 15rem;
+  top: 22rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 0.25rem);
+  @include medium {
+    width: calc(0.885 * 15rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 6.25rem);
+  }
+  @include small {
+    width: calc(0.73 * 15rem);
+    top: 19rem;
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#about_hero-cluster {
+  width: 26.5rem;
+  top: 2rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 1rem);
+  @include medium {
+    width: calc(0.885 * 26.5rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 5.5rem);
+  }
+  @include small {
+    width: calc(0.73 * 26.5rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 7rem);
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#about_hero-cluster-mobile {
+  position: relative;
+  width: 100%;
+  top: 0;
+  left: 0;
+  display: none;
+  @include mini {
+    display: block;
+  }
+}
+// ////////////////////////////////////////////////////////////////// Page [FAQ]
+// -----------------------------------------------------------------------------
+
+#faq_hero-header {
+  position: relative;
+  padding-top: 10rem;
+  z-index: 1;
+  .text-block {
+    position: relative;
+    z-index: 2;
+    .heading {
+      display: none;
+    }
+    .subheading {
+      position: relative;
+      width: calc(100% + 2rem);
+      left: -1rem;
+      display: inline-block;
+      @include fontSize_Huge;
+      @include fontWeight_Semibold;
+      line-height: leading(96, 67);
+      text-align: center;
+      div {
+        display: inherit;
+      }
+      span {
+        &:last-child {
+          margin-right: 4.875rem;
+          @include small {
+            margin-right: 0;
+            margin-left: 1rem;
+          }
+          @include mini {
+            margin-left: 0;
+          }
+        }
+      }
+      @include small {
+        @include fontSize_ExtraLarge;
+      }
+      @include mini {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        div {
+          margin-bottom: 1.5rem;
+        }
+      }
+    }
+  }
+}
+
+#faq_hero-grid-3d {
+  top: calc(-2rem - $navigationHeight);
+  bottom: unset;
+  transform: scale(1.62, 1.1);
+  svg,
+  path {
+    opacity: 0.75;
+  }
+}
+
+.faq_hero-artwork-container {
+  &:after {
+    content: '';
+    position: absolute;
+    top: calc(-2rem - $navigationHeight);
+    left: 0;
+    width: 100%;
+    height: 80rem;
+    background: linear-gradient(rgba($seaShell, 0), $seaShell);
+    z-index: 1;
+  }
+}
+
+#faq_hero_title-triangle,
+#faq_hero_title-coil {
+  position: relative;
+  width: 4.875rem;
+  height: 4.875rem;
+  top: 1rem;
+  margin: 0 0.5rem;
+  &:after {
+    display: inherit;
+    content: '';
+    top: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    background-size: 100%;
+    background-repeat: no-repeat;
+  }
+  @include small {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+#faq_hero_title-triangle {
+  &:after {
+    transform: scaleX(-1) rotate(-90deg);
+    background-image: url('../../assets/images/triangle.png');
+  }
+}
+
+#faq_hero_title-coil {
+  &:after {
+    transform: rotate(31deg);
+    background-image: url('../../assets/images/coil.png');
+    @include small {
+      display: none;
+    }
+    @include mini {
+      display: block;
+    }
+  }
+  @include small {
+    position: absolute;
+  }
+  @include mini {
+    position: relative;
+  }
+}
+
+#faq_hero-ring,
+#faq_hero-helix,
+#faq_hero-corkscrew {
+  position: absolute;
+}
+
+#faq_hero-ring {
+  width: 36.5rem;
+  right: 0;
+  bottom: 0;
+  transform: translate(321px, 321px) rotate(-23deg);
+  right: calc(50% - #{math.div($containerWidth, 2)} - 13rem);
+}
+
+#faq_hero-corkscrew {
+  width: 13.375rem;
+  top: 13.5rem;
+  right: calc(50% - #{math.div($containerWidth, 2)} + 3rem);
+  transform: scaleX(-1) rotate(-1deg);
+  @include containerMaxMQ {
+    right: 0;
+  }
+  @include small {
+    right: calc(50% - #{math.div($containerWidth, 2)} + 3rem);
+  }
+}
+
+#faq_hero-helix {
+  width: 18rem;
+  top: 1rem;
+  left: -4rem;
+  transform: rotate(-79deg);
+  left: calc(50% - #{math.div($containerWidth, 2)} - 18rem);
+  @include medium {
+    width: 14rem;
+    left: -4rem;
+  }
+  @include small {
+    width: 10rem;
+    top: -1rem;
+  }
+}
+
+// ////////////////////////////////////////////////////////////////// Page [404]
+// -----------------------------------------------------------------------------
+
+#error_hero-header {
+  position: relative;
+  padding-top: 10rem;
+  z-index: 1;
+  .text-block {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+#error_hero-grid-3d {
+  top: calc(-2rem - $navigationHeight);
+  bottom: unset;
+  transform: scale(1.2, 0.9) translateY(-5rem);
+  svg,
+  path {
+    opacity: 0.75;
+  }
+}
+
+.error_hero-artwork-container {
+  &:after {
+    content: '';
+    position: absolute;
+    top: calc(-2rem - $navigationHeight);
+    left: 0;
+    width: 100%;
+    height: 80rem;
+    background: linear-gradient(rgba($seaShell, 0), $seaShell);
+    z-index: 1;
+  }
+}
+
+#error_hero-helix {
+  width: 18rem;
+  left: 0;
+  top: -6rem;
+  transform: translateX(-100%) rotate(-79deg);
+  left: calc(50% - #{math.div($containerWidth, 2)});
+  @include containerMaxMQ {
+    left: 0;
+  }
+  @include mini {
+    left: 5rem;
+    width: 10rem;
+    top: -3rem;
+  }
+}
+
+#error_hero-triangle-1 {
+  width: 2.8125rem;
+  left: calc(50% + 2rem);
+  transform: scaleX(-1) rotate(-103deg);
+  @include mini {
+    top: 8rem;
+  }
+}
+
+#error_hero-triangle-2 {
+  width: 2.625rem;
+  bottom: 4rem;
+  left: calc(50% - 10rem);
+  transform: scaleX(-1) rotate(-90deg);
+  @include mini {
+    bottom: 2rem;
+    left: calc(50% - 8rem);
+  }
+}
+
+#error_hero-triangle-3 {
+  width: 2rem;
+  bottom: 6rem;
+  left: calc(50% + 11rem);
+  transform: rotate(47deg) scaleY(-1);
+  @include mini {
+    bottom: 4rem;
+    left: calc(50% + 9rem);
+  }
+}
+
+#error_hero-cross-1 {
+  width: 2rem;
+  top: 10rem;
+  right: calc(50% - 11.5rem);
+  transform: scaleX(-1);
+}
+
+#error_hero-cross-2 {
+  width: 2rem;
+  left: calc(50% - 15rem);
+  bottom: 9rem;
+}
+
+#error_hero-corkscrew {
+  width: 6.5rem;
+  top: 17rem;
+  right: calc(50% - 16.5rem);
+  transform: rotate(13deg);
+  @include mini {
+    top: 15rem;
+  }
+}
+
+#error_hero-ring {
+  width: 7.5rem;
+  top: 12rem;
+  left: calc(50% - 17rem);
+  transform: rotate(-38deg);
+  @include mini {
+    top: 11rem;
+    left: calc(50% - 13rem);
+  }
+}
+
+#error_hero-spring {
+  width: 26.875rem;
+  transform: rotate(-37deg);
+  right: calc(50% - #{math.div($containerWidth, 2)} - 19rem);
+  top: 3rem;
+}

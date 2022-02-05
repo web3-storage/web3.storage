@@ -8,13 +8,20 @@ const dirName = path.resolve(__dirname)
 const nextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
-  eslint: {
-    // Warning: Dangerously allow production builds to successfully complete even if
-    // your project has ESLint errors.
-    // TODO: Remove me when all the ts errors are figured out.
-    ignoreDuringBuilds: true,
+  images: {
+    loader: 'custom',
   },
   webpack: function(config, options) {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'Icons': path.resolve(__dirname, 'assets/icons'),
+      'Illustrations': path.resolve(__dirname, 'assets/illustrations'),
+      'Lib': path.resolve(__dirname, 'lib'),
+      'ScrollMagic': path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/ScrollMagic.js'),
+      'ZeroComponents': path.resolve(__dirname, 'modules/zero/components'),
+      'ZeroHooks': path.resolve(__dirname, 'modules/zero/hooks'),
+    }
+
     config.module.rules.push({
       test: /\.md$/,
       type: 'asset/source'
@@ -22,7 +29,7 @@ const nextConfig = {
 
     config.module.rules.push({
       test: /\.svg$/,
-      use: ['@svgr/webpack'],
+      use: [ '@svgr/webpack', 'url-loader' ],
     })
 
     config.plugins.push(

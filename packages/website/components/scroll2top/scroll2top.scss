@@ -1,0 +1,43 @@
+.scroll-2-top-footer {
+  display: none;
+  position: fixed;
+  display: none;
+  justify-content: flex-end;
+  width: 100vw;
+  height: 3rem;
+  bottom: 0;
+  z-index: 1000;
+  background: linear-gradient(rgba($ebony, 0) 0%, rgba($ebony, 0.66) 100%);
+  transform: translateY(100%);
+  transition: 200ms ease;
+  &.show {
+    transform: translateY(0%);
+  }
+  @include small {
+    display: flex;
+  }
+  svg {
+    position: relative;
+    width: 1rem;
+    top: 50%;
+    transform: translateY(-50%) scale(0.75) rotate(180deg);
+  }
+  svg,
+  path {
+    stroke: $white;
+  }
+}
+
+.scroll-2-top-button {
+  display: flex;
+  position: relative;
+  padding: 0.75rem 1.5rem;
+}
+
+.scroll-2-top-text {
+  @include fontSize_Tiny;
+  @include fontWeight_Semibold;
+  line-height: leading(22, 13);
+  margin: 0 0.375rem;
+  color: $white;
+}
