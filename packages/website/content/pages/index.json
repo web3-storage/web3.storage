@@ -735,7 +735,7 @@
           },
           "end": {
             "rotate": -5,
-            "scale": 1.2,
+            "scale": 1.5,
             "x": -100,
             "y": -5
           }
@@ -750,7 +750,7 @@
           },
           "end": {
             "rotate": 130,
-            "scale": 1.2,
+            "scale": 1.5,
             "x": 100,
             "y": 20
           }
@@ -794,7 +794,7 @@
             "y": -1
           },
           "end": {
-            "rotate": -270,
+            "rotate": -130,
             "scale": 1.15,
             "x": -40,
             "y": 10
@@ -883,13 +883,15 @@
           "id": "section_FAQ-squiggle",
           "default": "scaleX(-1)",
           "start": {
+            "scale": 0.8,
             "rotate": 18,
             "x": 1,
             "y": 1
           },
           "end": {
-            "rotate": 30,
-            "x": 25,
+            "scale": 1.2,
+            "rotate": 25,
+            "x": -50,
             "y": 20
           }
         }
