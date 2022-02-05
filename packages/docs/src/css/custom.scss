@@ -37,7 +37,17 @@
   --ifm-blockquote-border-left-width: 5px;
   --ifm-blockquote-border-color: transparent;
   --ifm-blockquote-color: #{$ebony};
-  --ifm-spacing-vertical: #{toRem(23)};
+  --ifm-spacing-vertical: #{toRem(40)};
+  --ifm-leading: #{toRem(40)};
+  --ifm-list-left-padding: 0;
+  --ifm-list-margin: #{toRem(40)};
+  --ifm-alert-padding-horizontal: #{toRem(42)};
+  --ifm-alert-padding-vertical: #{toRem(28)};
+  --ifm-tabs-color-active: #{$ebony};
+  --ifm-color-danger-contrast-background: #{$white};
+  --ifm-color-danger-contrast-foreground: #{$ebony};
+  --ifm-color-success-contrast-background: #{$white};
+  --ifm-color-info-contrast-background: #{$white};
 }
 
 
@@ -102,19 +112,23 @@ h1,
   line-height: leading(55, 45);
 }
 
+.markdown > h2,
 h2,
 .h2 {
   @include h2;
+  margin-bottom: toRem(24);
 }
 
 h3,
 .h3 {
   @include h3;
+  margin-bottom: toRem(20);
 }
 
 h4,
 .h4 {
   @include h4;
+  @include fontSize_Medium;
 }
 
 h5,
@@ -133,7 +147,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
-  background-image: url(#{$imagePath}/shapes/corkscrewBlurred.png);
+  background-image: url(#{$imagePath}/shapes/corkscrewBlurred.jpg);
   background-repeat: repeat;
   background-size: cover;
   background-attachment: fixed;
@@ -154,13 +168,16 @@ body {
   }
 }
 
-button {
-  background-color: transparent;
-  text-decoration: none;
-  color: inherit;
-  padding: 0;
-  margin: 0;
-  border: 0;
+article {
+  a {
+    @include fontWeight_Semibold;
+  }
+  ol, ul {
+    padding-left: 1rem;
+    li {
+      padding-left: 3rem;
+    }
+  }
 }
 
 .label {
@@ -203,19 +220,25 @@ svg[class^="iconExternalLink"] {
 }
 
 // footer custom
-footer {
+#site-footer {
   letter-spacing: $letterSpacing_Large;
   .footer-link {
     letter-spacing: 0;
+    &:hover {
+      text-decoration: none;
+    }
   }
   .button {
     border: none;
     padding: 0;
+    button {
+      color: $white;
+    }
   }
 }
 
 .markdown h1:first-child {
-  margin-bottom: toRem(36);
+  margin-bottom: toRem(42);
 }
 
 // blockquote
@@ -229,10 +252,46 @@ blockquote {
     @include gradient_Background_BluePurple;
     height: 100%;
     position: absolute;
-    left: toRem(-2);
+    left: toRem(-3);
   }
   @include fontSize_Medium;
-  a {
-    @include fontWeight_Semibold;
+}
+
+.docs-wrapper {
+  z-index: 100;
+}
+
+.admonition {
+  margin-bottom: toRem(60);
+  h5 {
+    text-transform: none;
+    @include fontSize_Regular;
+  }
+}
+
+footer.docusaurus-mt-lg {
+  background-color: $white;
+  @include shadow1;
+  padding: toRem(32) toRem(29);
+  @include borderRadius_Large;
+  h4 {
+    margin-bottom: 0;
+  }
+  button {
+    color: $white;
+    margin-bottom: toRem(20);
+    margin-right: 1rem;
+    @extend .button;
+    @extend .dark;
+    @include borderRadius_Small;
+    @include fontSize_Small;
+    padding: toRem(10) toRem(12);
+    height: auto;
+    &:hover {
+      color: $ebony;
+    }
+  }
+  .col {
+    padding: 0;
   }
 }

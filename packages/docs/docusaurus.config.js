@@ -114,20 +114,20 @@ module.exports = {
 
     redoc: {
       typography: {
-        fontFamily: 'Open Sans, sans-serif',
+        fontFamily: 'SuisseIntl',
         fontSize: '16px',
         headings: {
-          fontFamily: 'Space Grotesk, sans-serif',
+          fontFamily: 'SuisseIntl',
           fontWeight: '600',
         }
       },
 
       lightThemeColors: {
-        background: '#fff2ec',
+        background: '#f1f1f1',
         headers: '#171691',
-        primary: '#fc6553',
+        primary: '#3C3CD0',
         secondary: '#37b667',
-        text: '#171691',
+        text: '#03040a',
         contrastText: '#fff',
     
         tableRowBackground: '#ffffff',

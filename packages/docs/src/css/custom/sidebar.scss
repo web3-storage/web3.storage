@@ -34,7 +34,8 @@
 // right side
 .tableOfContents_node_modules-\@docusaurus-theme-classic-lib-next-theme-TOC-styles-module {
     background-color: $white;
-    box-shadow: 0px 3px 9px rgba(89, 85, 113, 0.160784);
+    // box-shadow: 0px 3px 9px rgba(89, 85, 113, 0.160784);
+    @include shadow1;
     border-radius: toRem(10);
 }
 .table-of-contents {
