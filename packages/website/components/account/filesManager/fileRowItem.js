@@ -103,7 +103,7 @@ const FileRowItem = props => {
           <span dangerouslySetInnerHTML={{ __html: name }} />
         ) : (
           <span>
-            <textarea defaultValue={name} />
+            <textarea defaultValue={props.name} />
           </span>
         )}
 
