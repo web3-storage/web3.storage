@@ -6,11 +6,25 @@ $messageBannerHeight: 3.25rem;
   z-index: 100;
   height: 0rem;
   transition: 200ms ease;
+
   &.show-message-banner {
     height: $messageBannerHeight;
     .message-banner-transition {
       transform: translateY(0);
     }
+  }
+
+  ::-moz-selection {
+    background-color: $white;
+    -webkit-text-fill-color: $ebony;
+    -moz-text-fill-color: $ebony;
+    text-fill-color: $ebony;
+  }
+  ::selection {
+    background-color: $white;
+    -webkit-text-fill-color: $ebony;
+    -moz-text-fill-color: $ebony;
+    text-fill-color: $ebony;
   }
 }
 

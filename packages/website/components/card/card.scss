@@ -18,6 +18,8 @@
 // //////////////////////////////////////////////// Card [Type A] -> Big Numbers
 // -----------------------------------------------------------------------------
 .card.type__A {
+  @include gradient_Text_Selection;
+
   .feature-wrapper {
     margin-top: 1rem;
   }
@@ -189,6 +191,7 @@
   background-color: $gray50;
   border-radius: 0.5rem;
   @include shadow3;
+  @include gradient_Text_Selection;
 
   .feature-wrapper,
   .category {
