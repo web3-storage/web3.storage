@@ -363,6 +363,11 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
   @return math.percentage(math.div($width-section, $width-actual));
 }
 
+@function toRem($value) {
+  $remValue: ($value / 16) + rem;
+  @return $remValue;
+}
+
 // ------------------------------------------------------------------- Animation
 @mixin animation($animate...) {
   $max: length($animate);

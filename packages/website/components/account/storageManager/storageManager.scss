@@ -6,7 +6,11 @@
     width: 100%;
   }
 
-  padding: 1.25rem 0 0.1rem 2.25rem;
+  padding: 1.875rem 0 0.9375rem 2.375rem;
+
+  @include medium {
+    padding: 2.25rem 1.375rem 2.25rem 1rem;
+  }
 }
 
 .storage-manager-info,
@@ -19,19 +23,46 @@
 
 .storage-manager-space {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   margin-bottom: 0.325rem;
+  @include medium {
+    margin-bottom: 0.4rem;
+  }
 }
 
 .storage-manager-info {
   @include fontSize_Tiny;
   @include fontWeight_Regular;
-  .button {
+  button {
     padding: 0;
     padding-left: 0.65rem;
   }
   margin-top: 1.25rem;
+
+  @include medium {
+    @include leading_Small;
+
+    button a {
+      &::after {
+        margin-left: 0.5rem;
+        content: '❯';
+      }
+    }
+  }
+}
+
+// Mobile override after
+.storage-manager-info,
+.storage-manager-space {
+  @include medium {
+    padding-left: 0;
+    flex-direction: column;
+    align-items: flex-start;
+
+    button {
+      padding-left: 0;
+    }
+  }
 }
 
 .storage-manager-meter-container {
@@ -40,9 +71,15 @@
   color: $white;
   width: 100%;
   gap: 0.95rem;
+  padding-right: 2.25rem;
+
+  @include medium {
+    gap: 0.625rem;
+  }
 
   .button {
     padding: 0;
+    height: auto;
 
     svg {
       margin-right: 0.35rem;
@@ -62,6 +99,14 @@
       }
     }
   }
+
+  @include medium {
+    flex-direction: column;
+    padding-right: 0;
+    .button {
+      align-self: flex-end;
+    }
+  }
 }
 
 .storage-manager-meter {
@@ -72,7 +117,8 @@
   height: 1.375rem;
   background: rgba($vulcan, 0.15);
   border: 0.0625rem solid rgba($waterloo, 0.15);
-  width: 32.6875rem;
+  // width: 32.6875rem;
+  flex: 1;
   &:only-child {
     flex: 1;
     max-width: 35.5rem;
@@ -85,7 +131,15 @@
     text-shadow: 0 0 0.125rem rgba(0, 0, 0, 0.94);
   }
 }
-
+.storage-manager-used {
+  margin-bottom: 0.5rem;
+  .storage-label {
+    @include fontWeight_Semibold;
+  }
+  .storage-number {
+    font-style: italic;
+  }
+}
 .storage-manager-meter-used {
   @include gradient_Background_BluePurple;
   @include borderRadius_UltraLarge;

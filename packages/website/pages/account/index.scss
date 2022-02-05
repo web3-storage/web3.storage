@@ -7,6 +7,9 @@
 
   h3 {
     padding: 0 1.75rem 0.75rem;
+    @include medium {
+      padding: 2rem 0;
+    }
   }
 }
 
@@ -14,12 +17,23 @@
   display: grid;
   width: 100%;
   grid-template-areas:
-    'storage-manager storage-manager upload-cta'
-    'tokens-cta docs-cta upload-cta'
-    'files-manager files-manager files-manager';
+    'storage-manager  storage-manager upload-cta'
+    'tokens-cta       docs-cta        upload-cta'
+    'files-manager    files-manager   files-manager';
 
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 0.6875rem 0.9375rem;
+
+  @include medium {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'storage-manager'
+      'upload-cta'
+      'tokens-cta'
+      'docs-cta'
+      'files-manager';
+    grid-gap: 1rem 0;
+  }
 
   .account {
     &-storage-manager {
@@ -31,7 +45,7 @@
       position: relative;
       border: none;
       color: $ebony;
-      justify-content: flex-start;
+      justify-content: center;
 
       h4 {
         padding-bottom: 0.5rem;

@@ -62,7 +62,9 @@ const StorageManager = ({ className = '' }) => {
       <div className="storage-manager-space">
         <div className="storage-manager-used">
           {/* Used storage in GB */}
-          Storage: {usedStorage / terabyte}TB of {maxSpaceLabel} used
+          <span className="storage-label">Storage</span>:{' '}
+          <span className="storage-number">{usedStorage / terabyte}TB</span> of{' '}
+          <span className="storage-number">{maxSpaceLabel}</span> used
         </div>
         <Button onClick={onSearchFiles} variant={ButtonVariant.TEXT}>
           Search my files{'\u00A0\u00A0'}❯

@@ -26,6 +26,7 @@ $footerLogoWidth: 2.25rem;
   top: -4rem;
   transform: translateY(-50%) scaleX(-1) rotate(25deg);
   z-index: -1;
+  pointer-events: none;
   @include large {
     left: calc(50% - #{math.div($containerWidth, 2)} - 19rem);
   }

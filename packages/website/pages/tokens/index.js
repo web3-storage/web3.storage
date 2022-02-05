@@ -18,7 +18,7 @@ const Tokens = () => {
   }, [fetchDate, getTokens, isFetchingTokens]);
 
   return (
-    <div className="page-container tokens-container">
+    <div className="page-container tokens-container grid">
       <div className="tokens-header">
         <h3>API Tokens</h3>
         <TokenCreator />
@@ -30,15 +30,12 @@ const Tokens = () => {
           href="/account"
           variant={ButtonVariant.TEXT}
         >
-          <div>❯</div>
-          <Link href="/account">Return to dashboard</Link>
+          <Link href="/account">❮&nbsp;&nbsp;Return to dashboard</Link>
         </Button>
-        <span className="testing-cta">
-          Want to test the token quickly? Paste it in{'\u00A0'}
-          <Button
-            href="https://bafybeic5r5yxjh5xpmeczfp34ysrjcoa66pllnjgffahopzrl5yhex7d7i.ipfs.dweb.link/"
-            variant={ButtonVariant.TEXT}
-          >
+        <span className="testing-cta-container">
+          Want to test the token quickly?
+          <span className="testing-cta">
+            &nbsp;Paste it in&nbsp;
             <a
               href="https://bafybeic5r5yxjh5xpmeczfp34ysrjcoa66pllnjgffahopzrl5yhex7d7i.ipfs.dweb.link/"
               target="_blank"
@@ -46,7 +43,7 @@ const Tokens = () => {
             >
               this demo website&nbsp;&nbsp;❯
             </a>
-          </Button>
+          </span>
         </span>
       </div>
     </div>

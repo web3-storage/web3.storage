@@ -85,7 +85,9 @@
     "about": "About",
     "tiers": "Tiers",
     "faq": "FAQ",
-    "terms": "TOS"
+    "terms": "TOS",
+    "account": "Accounts",
+    "tokens": "Accounts"
   },
   "footer": {
     "contact": {

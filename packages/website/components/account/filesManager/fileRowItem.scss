@@ -25,6 +25,14 @@ $file-size: auto;
   margin-top: 1.3rem;
   padding-bottom: 1rem;
 
+  @include medium {
+    grid-template-columns: auto;
+    border-bottom: 0;
+    padding: 0;
+    margin-top: 1.25rem;
+    @include border_Background_Waterloo_White;
+  }
+
   &-header {
     padding-bottom: 1.25rem;
     min-height: initial;
@@ -36,11 +44,37 @@ $file-size: auto;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-
     @include fontWeight_Regular;
+    @include medium {
+      padding: 0.85rem 1rem 0.85rem 1.975rem;
+      &.file-date {
+        padding-top: 1.375rem;
+      }
+      &:last-child {
+        padding-bottom: 1.375rem;
+      }
+      justify-content: flex-start;
+      border-bottom: 0.0625rem solid rgba(white, 0.05);
+      .file-row-label {
+        @include fontWeight_Semibold;
+        width: 6rem;
+        flex-shrink: 0;
+        &.delete {
+          width: auto;
+          padding-right: 1rem;
+          color: $pictonBlue;
+        }
+      }
+    }
   }
 
   .file {
+    &-select-container {
+      @include medium {
+        justify-content: space-between;
+        order: 6;
+      }
+    }
     &-select {
       @include border_Background_Waterloo_White;
       width: 0.75rem;
@@ -49,7 +83,6 @@ $file-size: auto;
       cursor: pointer;
       position: relative;
       margin-bottom: 0.125rem;
-
       input {
         cursor: pointer;
         opacity: 0;
@@ -67,10 +100,20 @@ $file-size: auto;
     }
     &-date {
       padding-right: 2.1875rem;
+      @include medium {
+        padding-right: 1rem;
+      }
     }
     &-name {
       padding-right: 2.1875rem;
       height: 100%;
+
+      @include medium {
+        padding-right: 1rem;
+        .pencil-icon {
+          display: none;
+        }
+      }
 
       &.isEditingName {
         svg {
@@ -78,7 +121,7 @@ $file-size: auto;
         }
 
         // Text area container for blurry background
-        > span {
+        .textarea-container {
           display: flex;
           position: relative;
           &:before {
@@ -107,23 +150,52 @@ $file-size: auto;
     }
     &-cid {
       padding-right: 3rem;
-      justify-content: space-between;
-
-      .copy-icon {
+      justify-content: flex-start;
+      .cid-truncate,
+      .cid-full {
+        font-family: 'Suisse Intl Mono';
+        word-break: break-all;
+        margin-right: 0.5rem;
+      }
+      @include medium {
+        justify-content: flex-start;
+        padding-right: 1rem;
+      }
+      svg {
         cursor: pointer;
+        @include medium {
+          display: none;
+        }
       }
     }
     &-availability {
       padding-right: 2.6875rem;
+      @include medium {
+        padding-right: 1rem;
+      }
     }
     &-pin-status {
-      // padding-right: 3rem;
       justify-content: flex-start;
       gap: 0.5rem;
+      @include medium {
+        gap: 0;
+      }
     }
     &-storage-providers {
       padding-right: 2.5rem;
       flex-wrap: wrap;
+      @include medium {
+        padding-right: 1rem;
+        flex-wrap: nowrap;
+        > span {
+          &:not(:last-child) {
+            margin-right: 0.3125rem;
+            @include medium {
+              margin-right: 0;
+            }
+          }
+        }
+      }
       > span {
         flex-shrink: none;
       }
@@ -145,6 +217,10 @@ $file-size: auto;
         align-items: end;
       }
     }
+
+    @include medium {
+      display: none;
+    }
   }
 
   .highlight {
@@ -161,6 +237,19 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
 .info-container {
   position: relative;
   display: inline-block;
+
+  @include medium {
+    padding-left: 0.5rem;
+    .file-row-label & {
+      position: absolute;
+      left: 0.5rem;
+      padding-left: 0;
+    }
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
 
   &:hover {
     .info-tooltip {

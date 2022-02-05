@@ -165,7 +165,7 @@ export default function Navigation({ isProductApp }) {
               className={clsx(
                 'nav-bar',
                 isMenuOpen ? 'mobile-panel' : '',
-                router.route === '/' || isProductApp ? 'breadcrumbs-hidden' : ''
+                router.route === '/' ? 'breadcrumbs-hidden' : ''
               )}
             >
               <div className={clsx('site-logo-container', theme, isMenuOpen ? 'menu-open' : '')}>
@@ -215,7 +215,7 @@ export default function Navigation({ isProductApp }) {
               </div>
             </div>
 
-            {router.route === '/' || isProductApp ? null : (
+            {router.route === '/' ? null : (
               <Breadcrumbs variant={theme} click={onLinkClick} keyboard={handleKeySelect} />
             )}
 

@@ -13,6 +13,12 @@ If you don't have `nvm` installed to manage node versions, then it is highly sug
 - yarn v1.22.10
 ```
 
+### Install dependencies
+
+```
+yarn install
+```
+
 ### Setting up
 
 Inside the `/packages/website` folder create a file called `.env.local` with the following content.
