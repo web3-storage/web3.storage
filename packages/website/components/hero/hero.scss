@@ -68,7 +68,7 @@
 
 #index_hero-squiggle {
   width: 29rem;
-  left: -10.5rem;
+  left: -8.5rem;
   transform: rotate(-27deg);
   @include medium {
     left: calc(50% - #{math.div($containerWidth, 2)} - 12rem);
@@ -136,7 +136,148 @@
     left: 2rem;
   }
 }
+// //////////////////////////////////////////////////////////////// Page [About]
+// -----------------------------------------------------------------------------
 
+#about_hero-ring {
+  left: calc(50% - #{math.div($containerWidth, 2)} - 6.75rem);
+  top: 4.5rem;
+  width: 33.5rem;
+  transform: rotate(35deg) scale(0.8);
+  @include medium {
+    width: calc(0.885 * 33.5rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} - 0.25rem);
+  }
+  @include small {
+    width: calc(0.73 * 33.5rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 4rem);
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#about_hero-helix {
+  width: 8rem;
+  top: 2rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} + 16rem);
+  right: 0;
+  transform: rotate(20deg);
+  @include medium {
+    width: calc(0.885 * 8rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 20.5rem);
+  }
+  @include small {
+    width: calc(0.73 * 8rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 18rem);
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#about_hero-spring {
+  width: 10rem;
+  top: 23rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} + 14.25rem);
+  transform: rotate(45deg);
+  @include medium {
+    width: calc(0.885 * 10rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 18.75rem);
+  }
+  @include small {
+    width: calc(0.73 * 10rem);
+    top: 18rem;
+  }
+  @include mini {
+    width: 25%;
+    left: unset;
+    right: 15%;
+    top: 30%;
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#about_hero-cone {
+  width: 12rem;
+  top: 10.25rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} + 7rem);
+  @include medium {
+    width: calc(0.885 * 12rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 14rem);
+  }
+  @include small {
+    width: calc(0.73 * 12rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 14rem);
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#about_hero-fidget {
+  width: 15rem;
+  top: 2.5rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 3rem);
+  @include medium {
+    width: calc(0.885 * 15rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 3.5rem);
+  }
+  @include small {
+    width: calc(0.73 * 15rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 3.5rem);
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#about_hero-blobs {
+  width: 15rem;
+  top: 22rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 0.25rem);
+  @include medium {
+    width: calc(0.885 * 15rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 6.25rem);
+  }
+  @include small {
+    width: calc(0.73 * 15rem);
+    top: 19rem;
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#about_hero-cluster {
+  width: 26.5rem;
+  top: 2rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 1rem);
+  @include medium {
+    width: calc(0.885 * 26.5rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 5.5rem);
+  }
+  @include small {
+    width: calc(0.73 * 26.5rem);
+    left: calc(50% - #{math.div($containerWidth, 2)} + 7rem);
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#about_hero-cluster-mobile {
+  position: relative;
+  width: 100%;
+  top: 0;
+  left: 0;
+  display: none;
+  @include mini {
+    display: block;
+  }
+}
 // ////////////////////////////////////////////////////////////////// Page [FAQ]
 // -----------------------------------------------------------------------------
 
@@ -272,7 +413,7 @@
   width: 36.5rem;
   right: 0;
   bottom: 0;
-  transform: translate(55%, 54%) rotate(-23deg);
+  transform: translate(321px, 321px) rotate(-23deg);
   right: calc(50% - #{math.div($containerWidth, 2)} - 13rem);
 }
 

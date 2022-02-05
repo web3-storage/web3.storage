@@ -382,9 +382,8 @@
 #intro_2-cross {
   position: absolute;
   width: 3rem;
-  left: calc(50% - #{math.div($containerWidth, 2)} - 15rem);
-  top: 0;
-  transform: translate(200%, -150%);
+  left: calc(50% - #{math.div($containerWidth, 2)} - 7rem);
+  top: -4.5rem;
   @include large {
     left: 0;
   }
@@ -397,9 +396,9 @@
 #intro_2-triangle {
   position: absolute;
   width: 4.75rem;
-  top: 0;
-  right: calc(50% - #{math.div($containerWidth, 2)} - 7rem);
-  transform: translate(-150%, -50%) rotate(-90deg);
+  top: -2.5rem;
+  right: calc(50% - #{math.div($containerWidth, 2)} - 2rem);
+  transform: rotate(-90deg);
   @include small {
     right: -5rem;
   }
@@ -507,8 +506,8 @@
   position: absolute;
   width: 33.125rem;
   left: -11.5rem;
-  top: -3rem;
-  transform: translateY(-50%) scaleX(-1) rotate(18deg);
+  top: -19.5rem;
+  transform: scaleX(-1) rotate(18deg);
   z-index: 0;
   @include xlarge {
     left: -15rem;

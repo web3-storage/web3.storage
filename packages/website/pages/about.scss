@@ -139,7 +139,8 @@
   }
 }
 
-#about_hero-cluster {
+#about_hero-xcluster {
+  display: none;
   position: absolute;
   top: 2rem;
   width: 27.125rem;
@@ -226,15 +227,26 @@
   }
 }
 
-#section_architecture-2-helix {
+#section_architecture-2-helix,
+#section_architecture-2-helix-small {
   position: absolute;
   width: 13.25rem;
   top: 0rem;
   left: calc(50% - #{math.div($containerWidth, 2)} - 8rem);
   transform: rotate(-79deg);
+}
+
+#section_architecture-2-helix {
+  @include small {
+    display: none;
+  }
+}
+
+#section_architecture-2-helix-small {
   @include small {
     width: 8rem;
     left: 0;
+    top: -3rem;
   }
   @include mini {
     display: none;
