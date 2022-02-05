@@ -108,36 +108,51 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
   border-radius: 0.125rem;
 }
 
-@mixin selection_Dark {
+@mixin background_Dark {
+  background-color: $ebony;
   ::-moz-selection {
-    background: $translucentWhite;
-    color: black;
+    background: $white;
+    color: $ebony;
   }
   ::selection {
-    background: $translucentWhite;
-    color: black;
+    background: $white;
+    color: $ebony;
+  }
+}
+
+@mixin background_Light {
+  background-color: $seaShell;
+  ::-moz-selection {
+    background-color: $malibu;
+    color: $white;
+  }
+  ::selection {
+    background: $malibu;
+    color: $white;
   }
 }
 
 @mixin selection_Light {
   ::-moz-selection {
-    background: $translucentBlack;
-    color: white;
+    background: $white;
+    color: $ebony;
   }
   ::selection {
-    background: $translucentBlack;
-    color: white;
+    background: $white;
+    color: $ebony;
   }
 }
 
-@mixin selection_Invisible {
+@mixin gradient_Text_Selection {
   ::-moz-selection {
-    background: transparent;
-    color: transparent;
+    -webkit-text-fill-color: $white;
+    -moz-text-fill-color: $white;
+    text-fill-color: $white;
   }
   ::selection {
-    background: transparent;
-    color: transparent;
+    -webkit-text-fill-color: $white;
+    -moz-text-fill-color: $white;
+    text-fill-color: $white;
   }
 }
 

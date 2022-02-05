@@ -1,10 +1,27 @@
 // ===================================================================== Imports
+import { useEffect } from 'react';
+
 import FAQPageData from '../content/pages/faq.json';
 import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
+import { initFloaterAnimations } from '../lib/floater-animations.js';
 
 // ===================================================================== Exports
 export default function Home() {
   const sections = FAQPageData.page_content;
+  const animations = FAQPageData.floater_animations;
+
+  useEffect(() => {
+    let pageFloaters = {};
+    initFloaterAnimations(animations).then(result => {
+      pageFloaters = result;
+    });
+    return () => {
+      if (pageFloaters.hasOwnProperty('destroy')) {
+        pageFloaters.destroy();
+      }
+    };
+  }, [animations]);
+
   return (
     <>
       <main className="page page-faq">

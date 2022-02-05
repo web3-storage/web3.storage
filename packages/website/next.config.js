@@ -17,6 +17,7 @@ const nextConfig = {
       'Icons': path.resolve(__dirname, 'assets/icons'),
       'Illustrations': path.resolve(__dirname, 'assets/illustrations'),
       'Lib': path.resolve(__dirname, 'lib'),
+      'ScrollMagic': path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/ScrollMagic.js'),
       'ZeroComponents': path.resolve(__dirname, 'modules/zero/components'),
       'ZeroHooks': path.resolve(__dirname, 'modules/zero/hooks'),
     }

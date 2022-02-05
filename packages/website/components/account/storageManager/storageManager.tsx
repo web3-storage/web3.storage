@@ -52,7 +52,9 @@ const StorageManager = ({ className = '' }) => {
   );
 
   const onSearchFiles = useCallback(() => {
-    window.alert('Search File');
+    const input: HTMLInputElement = document.querySelector('.search-input')!;
+    input.focus();
+    input.scrollIntoView(true);
   }, []);
 
   return (

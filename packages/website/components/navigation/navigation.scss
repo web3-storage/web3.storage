@@ -1,12 +1,14 @@
 @use 'sass:math';
 
 .section-navigation {
+  @include selection_Light;
   &.light {
-    background-color: $ebony;
+    @include background_Dark;
     color: white;
   }
   &.clear-bg {
     background-color: unset;
+    @include selection_Light;
   }
 }
 
@@ -199,6 +201,7 @@
     text-align: left;
     @include fontSize_Small;
     @include fontWeight_Regular;
+    color: $white;
     line-height: leading(20, 16);
     letter-spacing: 0.025em;
     margin-top: 0;

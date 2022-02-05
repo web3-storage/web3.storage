@@ -9,8 +9,12 @@ import Cross from '../../assets/illustrations/cross';
 import Coil from '../../assets/illustrations/coil';
 import Triangle from '../../assets/illustrations/triangle';
 import Cluster from '../../assets/illustrations/cluster';
+import ClusterMobile from '../../assets/illustrations/cluster2';
 import Ring from '../../assets/illustrations/ring';
 import Spring from '../../assets/illustrations/spring';
+import Cone from '../../assets/illustrations/cone';
+import Fidget from '../../assets/illustrations/fidget';
+import Blobs from '../../assets/illustrations/blobs';
 
 // ====================================================================== Params
 /**
@@ -48,6 +52,21 @@ export default function Hero({ block }) {
     );
   };
 
+  const aboutHero = () => {
+    return (
+      <>
+        <Cluster id="about_hero-cluster" className={'hero-illustration'} />
+        <ClusterMobile id="about_hero-cluster-mobile" />
+        <Blobs id="about_hero-blobs" className={'hero-illustration'} />
+        <Ring id="about_hero-ring" className={'hero-illustration'} />
+        <Helix id="about_hero-helix" className={'hero-illustration'} />
+        <Spring id="about_hero-spring" className={'hero-illustration'} />
+        <Cone id="about_hero-cone" className={'hero-illustration'} />
+        <Fidget id="about_hero-fidget" className={'hero-illustration'} />
+      </>
+    );
+  };
+
   const tiersHero = () => {
     return (
       <>
@@ -80,7 +99,7 @@ export default function Hero({ block }) {
       case 'pricing':
         return tiersHero();
       case 'about':
-        return <Cluster id="about_hero-cluster" />;
+        return aboutHero();
       case 'faq':
         return faqHero();
       case 'error':

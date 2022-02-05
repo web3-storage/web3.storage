@@ -114,18 +114,10 @@ body {
   line-height: $leading_Regular;
   letter-spacing: $letterSpacing_Large;
   color: $ebony;
-  background-color: $seaShell;
+  @include background_Light;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
-  ::-moz-selection {
-    background: white;
-    color: black;
-  }
-  ::selection {
-    background: white;
-    color: black;
-  }
   &.no-scroll {
     overflow-y: hidden;
   }
@@ -173,6 +165,7 @@ button {
   position: relative;
   &.product-app {
     background-color: $ebony;
+    @include background_Dark;
     letter-spacing: 0;
   }
 }

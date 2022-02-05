@@ -128,7 +128,7 @@
             "customizations": [
               {
                 "type": "helix",
-                "id": "section_architecture-2-helix"
+                "id": "section_architecture-2-helix-small"
               },
               {
                 "type": "image_block",
@@ -371,5 +371,126 @@
         ]
       }
     ]
+  ],
+  "floater_animations": [
+    {
+      "trigger": "about_hero-header",
+      "duration": 1000,
+      "offset": 700,
+      "floaters": [
+        {
+          "id": "about_hero-ring",
+          "start": {
+            "scale": 0.8,
+            "rotate": 35
+          },
+          "end": {
+            "scale": 1,
+            "rotate": 55
+          }
+        },
+        {
+          "id": "about_hero-helix",
+          "start": {
+            "scale": 1,
+            "rotate": 20,
+            "x": 1,
+            "y": -1
+          },
+          "end": {
+            "scale": 1.2,
+            "rotate": -20,
+            "x": 80,
+            "y": -40
+          }
+        },
+        {
+          "id": "about_hero-spring",
+          "start": {
+            "rotate": 45
+          },
+          "end": {
+            "rotate": 70
+          }
+        },
+        {
+          "id": "about_hero-cone",
+          "start": {
+            "scale": 1,
+            "rotate": 1
+          },
+          "end": {
+            "scale": 1.1,
+            "rotate": 15
+          }
+        },
+        {
+          "id": "about_section_architecture-corkscrew",
+          "start": {
+            "rotate": 29,
+            "scale": 1,
+            "x": 1,
+            "y": 1
+          },
+          "end": {
+            "rotate": 40,
+            "scale": 1.15,
+            "x": 60,
+            "y": 80
+          }
+        }
+      ]
+    },
+    {
+      "trigger": "section_architecture-2",
+      "duration": 1200,
+      "floaters": [
+        {
+          "id": "section_architecture-2-helix",
+          "start": {
+            "rotate": -79,
+            "scale": 1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -129,
+            "scale": 1.2,
+            "x": -140,
+            "y": 20
+          }
+        },
+        {
+          "id": "section_architecture-2-helix-small",
+          "start": {
+            "rotate": -79,
+            "scale": 1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -129,
+            "scale": 1.2,
+            "x": -140,
+            "y": 20
+          }
+        },
+        {
+          "id": "section_architecture-2-cross",
+          "start": {
+            "rotate": 1,
+            "scale": 1,
+            "x": 1,
+            "y": 1
+          },
+          "end": {
+            "rotate": 40,
+            "scale": 1.3,
+            "x": 70,
+            "y": 70
+          }
+        }
+      ]
+    }
   ]
 }

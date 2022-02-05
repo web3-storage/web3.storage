@@ -16,6 +16,7 @@
   position: relative;
   z-index: 1;
   padding-bottom: 5rem;
+  @include selection_Light;
   &:before {
     content: '';
     position: absolute;
@@ -42,7 +43,7 @@
 #about_section_2 {
   position: relative;
   z-index: 1;
-  background-color: $ebony;
+  @include background_Dark;
   color: white;
   padding-top: 0;
   @include ultraLarge {
@@ -139,7 +140,8 @@
   }
 }
 
-#about_hero-cluster {
+#about_hero-xcluster {
+  display: none;
   position: absolute;
   top: 2rem;
   width: 27.125rem;
@@ -226,15 +228,26 @@
   }
 }
 
-#section_architecture-2-helix {
+#section_architecture-2-helix,
+#section_architecture-2-helix-small {
   position: absolute;
   width: 13.25rem;
   top: 0rem;
   left: calc(50% - #{math.div($containerWidth, 2)} - 8rem);
   transform: rotate(-79deg);
+}
+
+#section_architecture-2-helix {
+  @include small {
+    display: none;
+  }
+}
+
+#section_architecture-2-helix-small {
   @include small {
     width: 8rem;
     left: 0;
+    top: -3rem;
   }
   @include mini {
     display: none;
@@ -277,6 +290,8 @@
 #section_how-it-works {
   padding-top: 3rem;
   padding-bottom: 4rem;
+  @include gradient_Text_Selection;
+
   .heading {
     @include fontSize_Large;
     line-height: leading(50, 35);
