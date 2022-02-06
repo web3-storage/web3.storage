@@ -1,100 +1,10 @@
 {
-  "seo": {
-    "title": "",
-    "description": ""
-  },
-  "og": {
-    "site_name": "",
-    "url": "",
-    "type": "website",
-    "image": ""
-  },
-  "site_logo": {
-    "text": "Web3.Storage"
-  },
-  "message_banner": {
-    "content": "Looking to store NFTs? Check out <span class='banner-gradient-text'>NFT.Storage</span>",
-    "url": "https://nft.storage/",
-    "maintenceAlert": "The web3.Storage API is currently undergoing maintenance..."
-  },
-  "navigation": {
-    "links": [
-      {
-        "url": "/about",
-        "text": "ABOUT"
-      },
-      {
-        "url": "/tiers",
-        "text": "TIERS"
-      },
-      {
-        "url": "/faq",
-        "text": "FAQ"
-      },
-      {
-        "url": "https://docs.web3.storage/",
-        "text": "DOCS"
-      },
-      {
-        "url": "/account",
-        "text": "ACCOUNT",
-        "links": [
-          {
-            "text": "Dashboard",
-            "url": "/account"
-          },
-          {
-            "text": "Files",
-            "url": "/account"
-          },
-          {
-            "text": "API Tokens",
-            "url": "/tokens"
-          },
-          {
-            "text": "Create an API Token",
-            "url": "/tokens/?create=true"
-          },
-          {
-            "text": "Request more storage",
-            "url": "request-more-storage"
-          },
-          {
-            "text": "Status",
-            "url": "https://status.web3.storage/"
-          },
-          {
-            "text": "Open an issue",
-            "url": "/account"
-          }
-        ]
-      }
-    ],
-    "auth": {
-      "login": {
-        "url": "/login",
-        "text": "SIGN IN"
-      },
-      "logout": {
-        "text": "LOG OUT"
-      }
-    }
-  },
-  "breadcrumbs": {
-    "index": "Home",
-    "about": "About",
-    "tiers": "Tiers",
-    "faq": "FAQ",
-    "terms": "TOS",
-    "account": "Accounts",
-    "tokens": "Accounts"
-  },
   "footer": {
     "contact": {
       "logo_text": "Web3.Storage",
       "prompt": "Sign up for free using your email address or GitHub.",
       "cta": {
-        "url": "/login",
+        "url": "https://docs.web3.storage/login",
         "text": "SIGN UP",
         "theme": "pink-blue"
       }
@@ -108,7 +18,7 @@
         },
         {
           "text": "FAQ",
-          "url": "/faq"
+          "url": "https://docs.web3.storage/faq"
         },
         {
           "text": "Get Help",
@@ -120,11 +30,11 @@
         },
         {
           "text": "Terms of Use",
-          "url": "/terms"
+          "url": "https://docs.web3.storage/terms"
         },
         {
           "text": "Privacy Policy",
-          "url": "/policy"
+          "url": "https://docs.web3.storage/policy"
         },
         {
           "text": "Status",
@@ -169,37 +79,9 @@
         "text": "Want more free storage?",
         "link": {
           "text": "Submit a request",
-          "url": "/account"
+          "url": "https://docs.web3.storage/account"
         }
       }
     }
-  },
-  "error_404": {
-    "sections": [
-      {
-        "id": "error_hero-header",
-        "grid": ["middle", "noGutter"],
-        "columns": [
-          {
-            "type": "hero",
-            "page": "error",
-            "cols": {
-              "num": "col-8_md-10_sm-8",
-              "push_left": "off-2_md-1_sm-2"
-            },
-            "format": "header",
-            "heading": "404",
-            "cta": {
-              "url": "/",
-              "text": "GO BACK HOME",
-              "theme": "text-purple",
-              "event": "",
-              "ui": "",
-              "action": ""
-            }
-          }
-        ]
-      }
-    ]
   }
 }

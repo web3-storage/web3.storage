@@ -48,6 +48,18 @@
   --ifm-color-danger-contrast-foreground: #{$ebony};
   --ifm-color-success-contrast-background: #{$white};
   --ifm-color-info-contrast-background: #{$white};
+  --docsearch-searchbox-focus-background: transparent !important;
+  --docsearch-text-color: #{$ebony} !important;
+  --docsearch-searchbox-shadow: none !important;
+  --docsearch-searchbox-background: transparent !important;
+  --ifm-background-color: #{$seaShell};
+  --ifm-font-color-base: #{$ebony};
+  --ifm-font-family-base: #{$font_Primary};
+  --ifm-font-size-base: #{toRem(16)};
+  --ifm-line-height-base: #{toRem(34)};
+  --ifm-color-danger-dark: #{$ebony};
+  --ifm-tabs-color-active-border: transparent;
+  --ifm-tabs-color: #{$ebony};
 }
 
 
@@ -140,17 +152,10 @@ h5,
 // custom
 html,
 body {
-  font-family: $font_Primary;
-  line-height: toRem(34);
-  color: $ebony;
-  background-color: $seaShell;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
-  background-image: url(#{$imagePath}/shapes/corkscrewBlurred.jpg);
-  background-repeat: repeat;
-  background-size: cover;
-  background-attachment: fixed;
+  height: auto !important;
   ::-moz-selection {
     background: white;
     color: black;
@@ -166,6 +171,12 @@ body {
       box-sizing: border-box;
     }
   }
+}
+
+html {
+  background-image: url(#{$imagePath}/shapes/corkscrewBlurred.jpg);
+  background-repeat: repeat;
+  background-size: cover;
 }
 
 article {
@@ -244,6 +255,7 @@ svg[class^="iconExternalLink"] {
 // blockquote
 blockquote {
   padding-left: toRem(43);
+  @include fontSize_Medium;
   position: relative;
   &:before {
     content: '';
@@ -254,7 +266,6 @@ blockquote {
     position: absolute;
     left: toRem(-3);
   }
-  @include fontSize_Medium;
 }
 
 .docs-wrapper {
@@ -267,20 +278,45 @@ blockquote {
     text-transform: none;
     @include fontSize_Regular;
   }
+  code {
+    background-color: $white;
+  }
+  a {
+    color: $ebony;
+    &:hover {
+      color: $ebony;
+    }
+  }
+  position: relative;
+  border: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  &:before {
+    content: '';
+    border-radius: 10px;
+    width: var(--ifm-blockquote-border-left-width);
+    @include gradient_Background_BluePurple;
+    height: 100%;
+    position: absolute;
+    left: calc(var(--ifm-blockquote-border-left-width) * -1);
+    top: 0;
+  }
 }
 
+// feedback box
 footer.docusaurus-mt-lg {
   background-color: $white;
   @include shadow1;
   padding: toRem(32) toRem(29);
   @include borderRadius_Large;
   h4 {
-    margin-bottom: 0;
+    margin-bottom: toRem(5);
   }
   button {
     color: $white;
     margin-bottom: toRem(20);
-    margin-right: 1rem;
+    margin-right: toRem(16);
+    margin-left: toRem(10);
     @extend .button;
     @extend .dark;
     @include borderRadius_Small;
@@ -293,5 +329,29 @@ footer.docusaurus-mt-lg {
   }
   .col {
     padding: 0;
+    div {
+      margin-top: toRem(5);
+      margin-bottom: toRem(5);
+    }
+  }
+}
+
+// tabs
+.tabs__item {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-right: toRem(50);
+  &--active {
+    position: relative;
+    &:after {
+      height: 5px;
+      width: 100%;
+      @include gradient_Background_BluePurple;
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      border-radius: 9px;
+    }
   }
 }

@@ -1,5 +1,26 @@
 // left side
+.menu {
+    margin-bottom: var(--docusaurus-announcement-bar-height);
+    // top left helix
+    @include desktop {
+        &:before {
+            content: '';
+            width: 18rem;
+            height: 18rem;
+            top: -2.5rem;
+            left: -3.5rem;
+            position: absolute;
+            transform: rotate(-95deg);
+            background-image: url(#{$imagePath}/shapes/helix.png);
+            background-size: cover;
+        }
+    }
+}
 .menu__link--active:not(.menu__link--sublist) {
+    &::before {
+        content: '>';
+        padding-right: toRem(10);
+    }
     background: transparent;
     font-weight: $fontWeight_Medium;
 }
@@ -14,21 +35,7 @@
 }
 .menu__link {
     font-weight: normal;
-}
-.menu {
-    margin-bottom: var(--docusaurus-announcement-bar-height);
-    // top left helix
-    &:before {
-        content: '';
-        width: 18rem;
-        height: 18rem;
-        top: -2.5rem;
-        left: -3.5rem;
-        position: absolute;
-        transform: rotate(-95deg);
-        background-image: url(#{$imagePath}/shapes/helix.png);
-        background-size: cover;
-    }
+    justify-content: flex-start;
 }
 
 // right side

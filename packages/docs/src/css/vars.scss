@@ -7,3 +7,9 @@ $imagePath: '../../static/img';
     @content;
   }
 }
+
+@mixin mobile {
+  @media screen and (max-width: ($breakpoint - 1px)) {
+    @content;
+  }
+}
