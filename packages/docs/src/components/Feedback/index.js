@@ -17,12 +17,12 @@ function Feedback({ strings: {title, yes, no, thanks, helpUsImprove}, children }
   }
 
   const actions = (
-    <div className={styles.feedbackActions}>
-      <button className={styles.actionButton} 
+    <div>
+      <button 
         onClick={() => sendFeedback('yes', yes)} >
           {yes}
       </button>
-      <button className={styles.actionButton} 
+      <button
         onClick={() => sendFeedback('no', no)}>
           {no}
       </button>
@@ -35,7 +35,7 @@ function Feedback({ strings: {title, yes, no, thanks, helpUsImprove}, children }
     </div>
   )
   return (
-    <div className={styles.feedback}>
+    <div>
       <h3>{title}</h3>
       {voteSubmitted ? thanksView : actions}
       <h4>{helpUsImprove}</h4>
