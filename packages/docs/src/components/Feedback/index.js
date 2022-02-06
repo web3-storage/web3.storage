@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useLocation } from '@docusaurus/router'
-import styles from './styles.module.css'
 import { trackEvent, events } from '../../util/countly'
 
 function Feedback({ strings: {title, yes, no, thanks, helpUsImprove}, children }) {
