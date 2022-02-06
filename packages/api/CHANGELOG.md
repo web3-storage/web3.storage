@@ -1,5 +1,12 @@
 # Changelog
 
+### [5.1.2](https://github.com/web3-storage/web3.storage/compare/api-v5.1.1...api-v5.1.2) (2022-02-06)
+
+
+### Bug Fixes
+
+* size for single block raw node ([#958](https://github.com/web3-storage/web3.storage/issues/958)) ([708aea7](https://github.com/web3-storage/web3.storage/commit/708aea775461ede27f67ac133eba9f1a22163f5d))
+
 ### [5.1.1](https://github.com/web3-storage/web3.storage/compare/api-v5.1.0...api-v5.1.1) (2022-02-03)
 
 
