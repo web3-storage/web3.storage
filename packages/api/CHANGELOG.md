@@ -1,5 +1,12 @@
 # Changelog
 
+### [5.1.3](https://github.com/web3-storage/web3.storage/compare/api-v5.1.2...api-v5.1.3) (2022-02-07)
+
+
+### Bug Fixes
+
+* db client do not throw error when no upload found ([#885](https://github.com/web3-storage/web3.storage/issues/885)) ([834d3cc](https://github.com/web3-storage/web3.storage/commit/834d3ccb22d8ee00b4f47e5eae850aaf5b7ebba1))
+
 ### [5.1.2](https://github.com/web3-storage/web3.storage/compare/api-v5.1.1...api-v5.1.2) (2022-02-06)
 
 
