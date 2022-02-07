@@ -4,6 +4,7 @@ import { normalizeCid } from '../utils/cid.js'
 
 /**
  * @typedef {'queued' | 'pinning' | 'failed' | 'pinned'} apiPinStatus
+ * @typedef {{ error?: PSAErrorInvalidData|PSAErrorRequiredData, data?: {} }} parsedData
  */
 
 /**
@@ -62,10 +63,10 @@ export const psaStatusesToDBStatuses = (statuses) => {
 // Error messages
 export const DATA_NOT_FOUND = 'Requested data was not found.'
 export const INVALID_CID = 'The CID provided is invalid.'
-export const INVALID_REQUEST_ID = 'Request id should be a string containing digits only.'
+export const INVALID_REQUEST_ID = 'Request id should be a string.'
 export const INVALID_REPLACE = 'Existing and replacement CID are the same.'
-export const REQUIRED_CID = 'CID is required'
-export const REQUIRED_REQUEST_ID = 'Request id is required'
+export const REQUIRED_CID = 'CID is required.'
+export const REQUIRED_REQUEST_ID = 'Request id is required.'
 
 export const DEFAULT_PIN_LISTING_LIMIT = 10
 export const MAX_PIN_LISTING_LIMIT = 1000
@@ -111,7 +112,7 @@ const postPinValidator = new Validator({
  * Helper function to parse and validate payload for POST endpoint.
  *
  * @param {*} payload
- * @returns
+ * @returns parsedData
  */
 export function validatePinObject (payload) {
   /** @type {*} */
@@ -133,7 +134,8 @@ export function validatePinObject (payload) {
 
   // Validate CID.
   try {
-    opts.cid = normalizeCid(cid)
+    normalizeCid(cid)
+    opts.cid = cid
   } catch (e) {
     return {
       error: new PSAErrorInvalidData(INVALID_CID),
@@ -161,12 +163,12 @@ export function validatePinObject (payload) {
 }
 
 /**
- * Helper function to parse and validate payload for GET endpoint.
+ * Helper function to parse and validate queryString for GET endpoint.
  *
- * @param {*} payload
- * @returns
+ * @param {*} queryString
+ * @returns parsedData
  */
-export function validateSearchParams (payload) {
+export function validateSearchParams (queryString) {
   /** @type {*} */
   const opts = {}
   const {
@@ -178,15 +180,16 @@ export function validateSearchParams (payload) {
     meta,
     name,
     status
-  } = payload
+  } = queryString
 
-  // Validate CID or array of CIDs if present.
+  // Validate CID(s).
   if (cid) {
     const cids = cid.split(',')
-    const normalizedCids = []
+    const sourceCids = []
     for (const cid of cids) {
       try {
-        normalizedCids.push(normalizeCid(cid))
+        normalizeCid(cid)
+        sourceCids.push(cid)
       } catch (e) {
         return {
           error: new PSAErrorInvalidData(INVALID_CID),
@@ -194,7 +197,7 @@ export function validateSearchParams (payload) {
         }
       }
     }
-    opts.cid = normalizedCids
+    opts.cid = sourceCids
   }
 
   if (limit) {
@@ -231,7 +234,7 @@ export function validateSearchParams (payload) {
  * Helper function to parse error messages coming from the validator.
  *
  * @param {import('@cfworker/json-schema').OutputUnit[]} errors
- * @returns
+ * @returns {PSAErrorInvalidData}
  */
 export function parseValidatorErrors (errors) {
   // Pass through the error message of the last validation errors array.
