@@ -11,11 +11,11 @@ export function errorHandler (err, { sentry }) {
 
   let status = err.status || 500
 
-  if (err instanceof PinningServiceApiError) {
-    if (sentry && status >= 500) {
-      sentry.captureException(err)
-    }
+  if (sentry && status >= 500) {
+    sentry.captureException(err)
+  }
 
+  if (err instanceof PinningServiceApiError) {
     const error = {
       reason: err.reason,
       details: err.details
@@ -29,9 +29,6 @@ export function errorHandler (err, { sentry }) {
   }
 
   if (err instanceof HTTPError) {
-    if (sentry && status >= 500) {
-      sentry.captureException(err)
-    }
     return new JSONResponse(error, { status })
   }
 
@@ -69,10 +66,6 @@ export function errorHandler (err, { sentry }) {
         message: err.message || 'Server Error'
       }
       break
-  }
-
-  if (sentry && status >= 500) {
-    sentry.captureException(err)
   }
 
   return new JSONResponse(error, { status })

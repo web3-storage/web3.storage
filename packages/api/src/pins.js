@@ -1,9 +1,10 @@
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
-import { PSAErrorDB, PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from './errors.js'
+import { PSAErrorDB, PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData, PinningServiceApiError } from './errors.js'
 import {
   INVALID_REPLACE,
   INVALID_REQUEST_ID,
+  PINNING_FAILED,
   REQUIRED_REQUEST_ID,
   getEffectivePinStatus,
   validateSearchParams,
@@ -256,7 +257,7 @@ async function replacePin (newPinData, requestId, authTokenId, env, ctx) {
     pinStatus = await createPin(existingPinRequest.contentCid, newPinData, authTokenId, env, ctx)
   } catch (e) {
     console.error(e)
-    throw new PSAErrorDB()
+    throw new PinningServiceApiError(PINNING_FAILED, e)
   }
 
   try {

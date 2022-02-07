@@ -63,8 +63,9 @@ export const psaStatusesToDBStatuses = (statuses) => {
 // Error messages
 export const DATA_NOT_FOUND = 'Requested data was not found.'
 export const INVALID_CID = 'The CID provided is invalid.'
-export const INVALID_REQUEST_ID = 'Request id should be a string.'
 export const INVALID_REPLACE = 'Existing and replacement CID are the same.'
+export const INVALID_REQUEST_ID = 'Request id should be a string.'
+export const PINNING_FAILED = 'PSA_PINNING_FAILED'
 export const REQUIRED_CID = 'CID is required.'
 export const REQUIRED_REQUEST_ID = 'Request id is required.'
 
