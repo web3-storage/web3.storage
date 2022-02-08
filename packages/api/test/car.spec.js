@@ -5,7 +5,7 @@ import { sha256 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
 import { CarWriter } from '@ipld/car'
 import fetch, { Blob } from '@web-std/fetch'
-import { endpoint } from './scripts/constants.js'
+import { endpoint, clusterApi, clusterApiAuthHeader } from './scripts/constants.js'
 import { createCar } from './scripts/car.js'
 import { MAX_BLOCK_SIZE } from '../src/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
@@ -38,6 +38,20 @@ describe('POST /car', () => {
     const { cid } = await res.json()
     assert(cid, 'Server response payload has `cid` property')
     assert.strictEqual(cid, expectedCid, 'Server responded with expected CID')
+
+    const statusRes = await fetch(new URL(`status/${cid}`, endpoint))
+    const status = await statusRes.json()
+    const pinned = status.pins.find(pin => pin.status === 'Pinned')
+    assert(pinned, 'CID is Pinned')
+
+    const clusterPeersRes = await fetch(new URL('peers', clusterApi), {
+      headers: {
+        Authorization: clusterApiAuthHeader
+      }
+    })
+    const clusterPeers = await clusterPeersRes.json()
+    // assert that peerId from the status belongs to one of the cluster ipfs nodes.
+    assert(clusterPeers.some(peer => peer.ipfs.id === pinned.peerId))
   })
 
   it('should throw for blocks bigger than the maximum permitted size', async () => {
