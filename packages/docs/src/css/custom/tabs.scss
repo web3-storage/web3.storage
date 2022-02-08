@@ -9,7 +9,7 @@
         &:after {
             height: 5px;
             width: 100%;
-            @include gradient_Background_BluePurple;
+            @include gradient_Background_PinkBlue;
             content: '';
             position: absolute;
             bottom: 0;

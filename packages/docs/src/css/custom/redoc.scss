@@ -12,10 +12,6 @@
     div {
         padding: 0;
     }
-    p code  {
-        color: $primary !important;
-        font-family: 'Suisse Intl Mono';
-    }
     pre {
         border-radius: var(--ifm-code-border-radius) !important;
         padding: var(--ifm-pre-padding) !important;
@@ -28,6 +24,7 @@
         font-family: 'SuisseIntl';
         border: 1px solid currentColor;
         background: transparent;
+        margin-bottom: toRem(20);
         @include fontSize_Small;
         @include fontWeight_Semibold;
         p {
@@ -37,12 +34,16 @@
         &:focus {
             box-shadow: none;
         }
+        & + div[aria-hidden] {
+            margin-top: toRem(-20);
+        }
     }
     .http-verb {
         background-color: $ebony;
         border-radius: 5px;
         font-family: 'Suisse Intl Mono';
         font-size: toRem(16);
+        @include fontWeight_Regular;
     }
     div[role=button] {
         padding: 10px;
@@ -94,15 +95,20 @@
     h5 span {
         @include fontWeight_Regular;
     }
+    // code response
     div[role="tabpanel"] {
         background-color: $steelGray;
-        border-radius: 5px;
+        border-radius: var(--ifm-code-border-radius);
         button {
             @include fontWeight_Regular;
         }
-        .redoc-json {
-            font-family: 'Suisse Intl Mono';
-            font-size: toRem(16);
+        .redoc-json * {
+            font-family: var(--ifm-font-family-monospace) !important;
+            line-height: var(--ifm-pre-line-height);
+            font-size: toRem(14.4);
+        }
+        ul, li {
+            padding: 0;
         }
     }
     .react-tabs__tab-list {
@@ -127,7 +133,7 @@
             content: '';
             border-radius: 10px;
             width: var(--ifm-blockquote-border-left-width);
-            @include gradient_Background_BluePurple;
+            @include gradient_Background_PinkBlue_Reverse;
             height: 100%;
             position: absolute;
             left: 0;

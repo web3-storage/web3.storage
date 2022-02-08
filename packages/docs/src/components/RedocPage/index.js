@@ -149,7 +149,7 @@ function RedocPage() {
               <div className='docItemContainer_node_modules-@docusaurus-theme-classic-lib-next-theme-DocItem-styles-module'>
                 <article>
                   <div className='tocCollapsible_node_modules-@docusaurus-theme-classic-lib-next-theme-TOCCollapsible-styles-module theme-doc-toc-mobile tocMobile_node_modules-@docusaurus-theme-classic-lib-next-theme-DocItem-styles-module'>
-                    <TOCCollapsible toc={tocDefinition} />
+                  { tocReady && <TOCCollapsible toc={tocDefinition} />}
                   </div>
                   <div className='theme-doc-markdown markdown'>
                     <RedocStandalone className="override-styles" specUrl={useBaseUrl(STATIC_SPEC)} options={redocOptions} />

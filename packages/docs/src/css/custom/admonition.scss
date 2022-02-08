@@ -18,15 +18,10 @@
         content: '';
         border-radius: 10px;
         width: var(--ifm-blockquote-border-left-width);
-        @include gradient_Background_BluePurple;
+        @include gradient_Background_PinkBlue_Reverse;
         height: 100%;
         position: absolute;
         left: calc(var(--ifm-blockquote-border-left-width) * -1);
         top: 0;
-    }
-    p {
-        code {
-            background-color: $white;
-        }
     }
 }
