@@ -4,6 +4,9 @@
         text-transform: none;
         @include fontSize_Regular;
     }
+    p {
+        color: $ebony;
+    }
     a {
         color: $ebony;
         &:hover {

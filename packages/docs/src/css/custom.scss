@@ -18,6 +18,7 @@
 @import 'vars';
 
 // components
+@import 'custom/accordion';
 @import 'custom/admonition';
 @import 'custom/blockquote';
 @import 'custom/feedback';
@@ -71,6 +72,9 @@
     --ifm-hover-overlay: transparent;
     --ifm-color-success-dark: #{$ebony};
     --ifm-font-family-monospace: 'Suisse Intl Mono';
+    --ifm-color-info-dark: #{$borderColor};
+    --ifm-alert-foreground-color: #{$ebony};
+    --ifm-alert-background-color: transparent;
 }
 
 // Suisse Intl
@@ -216,4 +220,13 @@ svg[class^="iconExternalLink"] {
 // pagination 
 .pagination-nav__link {
   border: 0;
+}
+
+table {
+  td {
+    min-width: toRem(150);
+    &:last-child {
+      width: 100%;
+    }
+  }
 }

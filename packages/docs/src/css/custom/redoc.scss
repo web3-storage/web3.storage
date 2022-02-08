@@ -34,8 +34,13 @@
         &:focus {
             box-shadow: none;
         }
+        // dropdown
         & + div[aria-hidden] {
             margin-top: toRem(-20);
+        }
+        // accordion
+        &[aria-expanded] + div {
+            padding: 0 toRem(20);
         }
     }
     .http-verb {
@@ -52,13 +57,22 @@
             border: none;
         }
     }
+    table.security-details {
+        th {
+            width: 50%;
+        }
+    }
     table tr {
         background-color: transparent !important;
         span {
+            @include fontSize_Small;
             color: $ebony;
         }
         td {
             min-width: 150px;
+            &:last-child {
+                width: 100%;
+            }
         }
         // borders on table
         td, th {
@@ -114,7 +128,7 @@
     .react-tabs__tab-list {
         li {
             font-family: 'Suisse Intl Mono';
-            font-size: 16px;
+            font-size: toRem(16);
             color: $white !important;
             background-color: $steelGray;
             border: none;
