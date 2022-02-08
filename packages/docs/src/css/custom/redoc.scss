@@ -1,0 +1,148 @@
+// /reference/http-api/ uses redoc plugin which overwrites some of our global styles
+// need to re-style separately
+
+.redoc-wrap {
+    @include headings;
+    .api-info {
+        padding: 0;
+        & > h1 {
+            margin-top: 0;
+        }
+    }
+    div {
+        padding: 0;
+    }
+    p code  {
+        color: $primary !important;
+        font-family: 'Suisse Intl Mono';
+    }
+    pre {
+        border-radius: var(--ifm-code-border-radius) !important;
+        padding: var(--ifm-pre-padding) !important;
+        code {
+          font-family: var(--ifm-font-family-monospace) !important;
+          font-size: var(--ifm-code-font-size) / var(--ifm-pre-line-height);
+        }
+    }
+    button {
+        font-family: 'SuisseIntl';
+        border: 1px solid currentColor;
+        background: transparent;
+        @include fontSize_Small;
+        @include fontWeight_Semibold;
+        p {
+            @include fontWeight_Semibold;
+        }
+        border-radius: 5px;
+        &:focus {
+            box-shadow: none;
+        }
+    }
+    .http-verb {
+        background-color: $ebony;
+        border-radius: 5px;
+        font-family: 'Suisse Intl Mono';
+        font-size: toRem(16);
+    }
+    div[role=button] {
+        padding: 10px;
+        background-color: $white;
+        > div {
+            border: none;
+        }
+    }
+    table tr {
+        background-color: transparent !important;
+        span {
+            color: $ebony;
+        }
+        td {
+            min-width: 150px;
+        }
+        // borders on table
+        td, th {
+            border-collapse: collapse;
+            border: 1px solid $borderColor !important;
+            &:first-child {
+                border-right: 0 !important;
+            }
+        }
+        &:last-child:not(:first-child) {
+            td {
+                border-top: 0 !important;
+            }
+        }
+        // line on left side of table
+        &.last td,
+        &:first-of-type td {
+            background-position: 5px 0;
+        }
+        td span:first-child {
+            &:before,
+            &:after {
+                position: relative;
+                left: 5px;
+            }
+        }
+    }
+    .dropdown-selector-content {
+        border-radius: 10px;
+        .dropdown-option {
+            padding: 5px 20px !important;
+        }
+    }
+    h5 span {
+        @include fontWeight_Regular;
+    }
+    div[role="tabpanel"] {
+        background-color: $steelGray;
+        border-radius: 5px;
+        button {
+            @include fontWeight_Regular;
+        }
+        .redoc-json {
+            font-family: 'Suisse Intl Mono';
+            font-size: toRem(16);
+        }
+    }
+    .react-tabs__tab-list {
+        li {
+            font-family: 'Suisse Intl Mono';
+            font-size: 16px;
+            color: $white !important;
+            background-color: $steelGray;
+            border: none;
+            @include fontWeight_Regular;
+            &.react-tabs__tab--selected {
+                color: $ebony !important;
+                background-color:  #EAE9E9 !important;
+            }
+        }
+    }
+    [data-rttabs="true"] {
+        background-color: $white;
+        padding: toRem(21) toRem(26);
+        position: relative;
+        &:before {
+            content: '';
+            border-radius: 10px;
+            width: var(--ifm-blockquote-border-left-width);
+            @include gradient_Background_BluePurple;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        span + div {
+            border: 1px solid $borderColor;
+            padding: toRem(5) toRem(10);
+            border-radius: 5px;
+        }
+        span, button {
+            font-size: toRem(13);
+            color: $white;
+            font-weight: normal;
+            line-height: toRem(32);
+        }
+    }
+}

@@ -1,0 +1,32 @@
+.admonition {
+    margin-bottom: toRem(60);
+    h5 {
+        text-transform: none;
+        @include fontSize_Regular;
+    }
+    a {
+        color: $ebony;
+        &:hover {
+            color: $ebony;
+        }
+    }
+    position: relative;
+    border: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    &:before {
+        content: '';
+        border-radius: 10px;
+        width: var(--ifm-blockquote-border-left-width);
+        @include gradient_Background_BluePurple;
+        height: 100%;
+        position: absolute;
+        left: calc(var(--ifm-blockquote-border-left-width) * -1);
+        top: 0;
+    }
+    p {
+        code {
+            background-color: $white;
+        }
+    }
+}

@@ -5,7 +5,6 @@ import { RedocStandalone, DropdownLabel  } from 'redoc';
 import DocSidebar from '@theme/DocSidebar'
 import TOC from '@theme/TOC'
 import TOCCollapsible from '@theme/TOCCollapsible'
-import useWindowSize from '@theme/hooks/useWindowSize'
 import useThemeContext from '@theme/hooks/useThemeContext'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import useBaseUrl from '@docusaurus/useBaseUrl'
@@ -18,7 +17,6 @@ import sidebarDefinition from './sidebars.json'
 import tocDefinition from './toc.json'
 
 const STATIC_SPEC = '/schema.yml'
-
 
 /**
  * The RedocPage component renders a page for the HTTP API reference using Redoc.
@@ -44,7 +42,6 @@ function RedocPage() {
   const { lightThemeColors, darkThemeColors, typography } = redocThemeConfig
   const colors = isDarkTheme ? {...lightThemeColors, ...darkThemeColors} : lightThemeColors
 
-  const windowSize = useWindowSize()
   const [tocReady, setTocReady] = useState(false)
 
   const enableTocHighlights = () => {
@@ -59,8 +56,6 @@ function RedocPage() {
     monkeyPatchStyledComponent(DropdownLabel, 'position: static;')
   })
 
-  const showDesktopToc = (windowSize === 'desktop' || windowSize === 'ssr')
-
   const prismOverrides = `
     code {
       background-color: transparent;
@@ -68,34 +63,19 @@ function RedocPage() {
   ` + prismThemeToCSS(isDarkTheme ? prismThemeDark : prismThemeLight)
 
   const extensionHooks = {
-    H1: `color: ${colors.headers};`,
-    H2: `color: ${colors.headers};`,
-    H3: `color: ${colors.headers};`,
     UnderlinedHeader: `
-      color: ${colors.headers};
-      border-bottom: 1px solid ${colors.headers};
-
-      /* override the text color of dropdown label for e.g. request type */
-      .dropdown .dropdown-selector .dropdown-selector-value {
-        color: ${colors.text};
-      }
-
-      /* override the text color of content type text, e.g. "application/json" */
-      && span {
-        color: ${colors.text};
+      div[role=button] {
+        width: 200px;
+        font-size: 16px;
+        background: transparent;
+        font-weight: normal;
+        padding: 4px;
       }
     `,
-    PropertyNameCell: `background-color: ${colors.background};`,
-    PropertyDetailsCell: `background-color: ${colors.background};`,
-    Markdown: `
-      table tr {
-        background-color: ${colors.tableRowBackground};
-        &:nth-child(2n) {
-          background-color: ${colors.tableRowAltBackground};
-        }
-      }
-    `,
+    PropertyNameCell: `border: 2px solid #DBDADA !important;`,
+    PropertyDetailsCell: `padding-left: 1.5rem; padding-right: 1.5rem;`,
     Prism: prismOverrides,
+    RightPanelHeader: `color: ${colors.text};`
   }
 
   const theme = {
@@ -136,7 +116,7 @@ function RedocPage() {
     },
     
     extensionsHook: function (styledName, _props) {
-      // console.log('redoc extensions hook', styledName, _props)
+      console.log('redoc extensions hook', styledName, _props)
       return extensionHooks[styledName]
     }
   }
@@ -172,13 +152,13 @@ function RedocPage() {
                     <TOCCollapsible toc={tocDefinition} />
                   </div>
                   <div className='theme-doc-markdown markdown'>
-                    <RedocStandalone specUrl={useBaseUrl(STATIC_SPEC)} options={redocOptions} />
+                    <RedocStandalone className="override-styles" specUrl={useBaseUrl(STATIC_SPEC)} options={redocOptions} />
                   </div>
                 </article>
               </div>
             </div>
             <div className='col col--3'>
-              <TOC toc={tocDefinition} />
+              { tocReady && <TOC toc={tocDefinition} /> }
             </div>
           </div>
         </div>

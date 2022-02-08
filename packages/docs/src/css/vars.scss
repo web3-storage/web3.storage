@@ -1,4 +1,5 @@
 $primary: #3C3CD0;
+$borderColor: #dbdada80;
 $breakpoint: 997px;
 $imagePath: '../../static/img';
 
@@ -13,3 +14,49 @@ $imagePath: '../../static/img';
     @content;
   }
 }
+
+// Typography
+@mixin headings {
+  h1 {
+    @include h1;
+    color: $ebony;
+    line-height: leading(55, 45);
+    margin-top: calc(var(--ifm-h1-vertical-rhythm-top) * var(--ifm-leading));
+    margin-bottom: toRem(42);
+  }
+  .markdown > h2,
+  h2 {
+    color: $ebony;
+    font-size: toRem(30);
+    margin-bottom: toRem(24);
+    line-height: toRem(34);
+    margin-top: calc(var(--ifm-h2-vertical-rhythm-top) * var(--ifm-leading));
+  }
+  h3 {
+    color: $ebony;
+    margin-bottom: toRem(20);
+    font-size: toRem(18);
+    line-height: toRem(34);
+    @include fontWeight_Semibold;
+    margin-top: calc(var(--ifm-h3-vertical-rhythm-top) * var(--ifm-leading));
+  }
+  h4 {
+    @include h4;
+    color: $ebony;
+    @include fontSize_Medium;
+  }
+  h5 {
+    @include h5;
+    text-transform: none;
+    color: $ebony;
+    font-size: toRem(16);
+    line-height: toRem(34);
+  }
+  header > h1 {
+    margin-top: 0;
+  }
+  pre {
+    background-color: $steelGray !important;
+  }
+}
+

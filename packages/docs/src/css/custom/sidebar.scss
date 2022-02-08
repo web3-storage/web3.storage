@@ -36,6 +36,9 @@
 .menu__link {
     font-weight: normal;
     justify-content: flex-start;
+    &:hover {
+        color: $primary;
+    }
 }
 
 // right side

@@ -121,26 +121,22 @@ module.exports = {
           fontWeight: '600',
         }
       },
-
       lightThemeColors: {
         background: '#f1f1f1',
-        headers: '#171691',
+        headers: '#03040a',
         primary: '#3C3CD0',
-        secondary: '#37b667',
+        secondary: '#3C3CD0',
         text: '#03040a',
         contrastText: '#fff',
-    
-        tableRowBackground: '#ffffff',
-        tableRowAltBackground: '#fafafa',
-    
-        responsePanelBackground: '#3f3f75',
-        codeBlockBackground: '#292d3e',
+        tableRowBackground: 'transparent',
+        tableRowAltBackground: 'transparent',
+        responsePanelBackground: 'transparent',
+        codeBlockBackground: '#1c1e29'
       },
       darkThemeColors: {
         background: '#2d2d65',
         headers: '#fde956',
         text: '#fff',
-    
         tableRowBackground: '#2d2d65',
         tableRowAltBackground: '#3f3f75',
         codeBlockBackground: '#1e1e1e',

@@ -9,62 +9,71 @@
 
 @use 'sass:math';
 
+// globals grabbed directly from website
+// in the future, need to find some way to share styles more DRY
 @import 'from-website/grid/gridlex-2.7.1';
 @import 'from-website/variables';
 @import 'from-website/button';
 
 @import 'vars';
 
+// components
+@import 'custom/admonition';
+@import 'custom/blockquote';
+@import 'custom/feedback';
+@import 'from-website/footer';
+@import 'custom/footer';
+@import 'custom/main';
 @import 'custom/nav';
+@import 'custom/redoc';
 @import 'custom/sidebar';
-@import 'from-website/footer.scss';
-@import 'custom/main.scss';
+@import 'custom/tabs';
 
-
+// overwrite vars
 :root {
-  --ifm-menu-color-active: #{$primary};
-  --ifm-link-color: #{$primary};
-  --ifm-navbar-link-hover-color: #{$primary};
-  --ifm-menu-color: #{$ebony};
-
-  --ifm-footer-background-color: #{$ebony};
-  --ifm-footer-color: #{$white};
-  --ifm-toc-border-color: transparent;
-  --ifm-navbar-height: 19rem;
-  --ifm-toc-link-color: #{$ebony};
-  --ifm-font-weight-bold: #{$fontWeight_Semibold};
-  --ifm-color-primary: #{$primary}; 
-  --ifm-blockquote-border-left-width: 5px;
-  --ifm-blockquote-border-color: transparent;
-  --ifm-blockquote-color: #{$ebony};
-  --ifm-spacing-vertical: #{toRem(40)};
-  --ifm-leading: #{toRem(40)};
-  --ifm-list-left-padding: 0;
-  --ifm-list-margin: #{toRem(40)};
-  --ifm-alert-padding-horizontal: #{toRem(42)};
-  --ifm-alert-padding-vertical: #{toRem(28)};
-  --ifm-tabs-color-active: #{$ebony};
-  --ifm-color-danger-contrast-background: #{$white};
-  --ifm-color-danger-contrast-foreground: #{$ebony};
-  --ifm-color-success-contrast-background: #{$white};
-  --ifm-color-info-contrast-background: #{$white};
-  --docsearch-searchbox-focus-background: transparent !important;
-  --docsearch-text-color: #{$ebony} !important;
-  --docsearch-searchbox-shadow: none !important;
-  --docsearch-searchbox-background: transparent !important;
-  --ifm-background-color: #{$seaShell};
-  --ifm-font-color-base: #{$ebony};
-  --ifm-font-family-base: #{$font_Primary};
-  --ifm-font-size-base: #{toRem(16)};
-  --ifm-line-height-base: #{toRem(34)};
-  --ifm-color-danger-dark: #{$ebony};
-  --ifm-tabs-color-active-border: transparent;
-  --ifm-tabs-color: #{$ebony};
+    --ifm-menu-color-active: #{$primary};
+    --ifm-link-color: #{$primary};
+    --ifm-navbar-link-hover-color: #{$primary};
+    --ifm-menu-color: #{$ebony};
+    --ifm-footer-background-color: #{$ebony};
+    --ifm-footer-color: #{$white};
+    --ifm-toc-border-color: transparent;
+    --ifm-navbar-height: 19rem;
+    --ifm-toc-link-color: #{$ebony};
+    --ifm-font-weight-bold: #{$fontWeight_Semibold};
+    --ifm-color-primary: #{$primary}; 
+    --ifm-blockquote-border-left-width: 5px;
+    --ifm-blockquote-border-color: transparent;
+    --ifm-blockquote-color: #{$ebony};
+    --ifm-spacing-vertical: #{toRem(40)};
+    --ifm-leading: #{toRem(40)};
+    --ifm-list-left-padding: 0;
+    --ifm-list-margin: #{toRem(40)};
+    --ifm-alert-padding-horizontal: #{toRem(42)};
+    --ifm-alert-padding-vertical: #{toRem(28)};
+    --ifm-tabs-color-active: #{$ebony};
+    --ifm-color-danger-contrast-background: #{$white};
+    --ifm-color-danger-contrast-foreground: #{$ebony};
+    --ifm-color-success-contrast-background: #{$white};
+    --ifm-color-info-contrast-background: #{$white};
+    --docsearch-searchbox-focus-background: transparent !important;
+    --docsearch-text-color: #{$ebony} !important;
+    --docsearch-searchbox-shadow: none !important;
+    --docsearch-searchbox-background: transparent !important;
+    --ifm-background-color: #{$seaShell};
+    --ifm-font-color-base: #{$ebony};
+    --ifm-font-family-base: #{$font_Primary};
+    --ifm-font-size-base: #{toRem(16)};
+    --ifm-line-height-base: #{toRem(34)};
+    --ifm-color-danger-dark: #{$ebony};
+    --ifm-tabs-color-active-border: transparent;
+    --ifm-tabs-color: #{$ebony};
+    --ifm-hover-overlay: transparent;
+    --ifm-color-success-dark: #{$ebony};
+    --ifm-font-family-monospace: 'Suisse Intl Mono';
 }
 
-
-
-//////////////////////////////////////////////////////////////////// Suisse Intl
+// Suisse Intl
 $fontAssetPath: '../../static/fonts';
 
 @font-face {
@@ -97,7 +106,7 @@ $fontAssetPath: '../../static/fonts';
   font-weight: 700;
 }
 
-/////////////////////////////////////////////////////////////// Suisse Intl Mono
+// Suisse Intl Mono
 @font-face {
   font-family: 'Suisse Intl Mono';
   src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Thin.otf') format('opentype');
@@ -116,42 +125,10 @@ $fontAssetPath: '../../static/fonts';
   font-weight: 700;
 }
 
-// ////////////////////////////////////////////////////////////////// Typography
-// -----------------------------------------------------------------------------
-h1,
-.h1 {
-  @include h1;
-  line-height: leading(55, 45);
-}
-
-.markdown > h2,
-h2,
-.h2 {
-  @include h2;
-  margin-bottom: toRem(24);
-}
-
-h3,
-.h3 {
-  @include h3;
-  margin-bottom: toRem(20);
-}
-
-h4,
-.h4 {
-  @include h4;
-  @include fontSize_Medium;
-}
-
-h5,
-.h5 {
-  @include h5;
-}
-
-
-// custom
+// base
 html,
 body {
+  @include headings;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
@@ -200,6 +177,7 @@ svg[class^="iconExternalLink"] {
   display: none;
 }
 
+// grid from website
 [class~='grid'],
 [class*='grid-'],
 [class*='grid_'] {
@@ -230,128 +208,11 @@ svg[class^="iconExternalLink"] {
   }
 }
 
-// footer custom
-#site-footer {
-  letter-spacing: $letterSpacing_Large;
-  .footer-link {
-    letter-spacing: 0;
-    &:hover {
-      text-decoration: none;
-    }
-  }
-  .button {
-    border: none;
-    padding: 0;
-    button {
-      color: $white;
-    }
-  }
-}
-
-.markdown h1:first-child {
-  margin-bottom: toRem(42);
-}
-
-// blockquote
-blockquote {
-  padding-left: toRem(43);
-  @include fontSize_Medium;
-  position: relative;
-  &:before {
-    content: '';
-    border-radius: 10px;
-    width: var(--ifm-blockquote-border-left-width);
-    @include gradient_Background_BluePurple;
-    height: 100%;
-    position: absolute;
-    left: toRem(-3);
-  }
-}
-
 .docs-wrapper {
   z-index: 100;
 }
 
-.admonition {
-  margin-bottom: toRem(60);
-  h5 {
-    text-transform: none;
-    @include fontSize_Regular;
-  }
-  code {
-    background-color: $white;
-  }
-  a {
-    color: $ebony;
-    &:hover {
-      color: $ebony;
-    }
-  }
-  position: relative;
+// pagination 
+.pagination-nav__link {
   border: 0;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  &:before {
-    content: '';
-    border-radius: 10px;
-    width: var(--ifm-blockquote-border-left-width);
-    @include gradient_Background_BluePurple;
-    height: 100%;
-    position: absolute;
-    left: calc(var(--ifm-blockquote-border-left-width) * -1);
-    top: 0;
-  }
-}
-
-// feedback box
-footer.docusaurus-mt-lg {
-  background-color: $white;
-  @include shadow1;
-  padding: toRem(32) toRem(29);
-  @include borderRadius_Large;
-  h4 {
-    margin-bottom: toRem(5);
-  }
-  button {
-    color: $white;
-    margin-bottom: toRem(20);
-    margin-right: toRem(16);
-    margin-left: toRem(10);
-    @extend .button;
-    @extend .dark;
-    @include borderRadius_Small;
-    @include fontSize_Small;
-    padding: toRem(10) toRem(12);
-    height: auto;
-    &:hover {
-      color: $ebony;
-    }
-  }
-  .col {
-    padding: 0;
-    div {
-      margin-top: toRem(5);
-      margin-bottom: toRem(5);
-    }
-  }
-}
-
-// tabs
-.tabs__item {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  margin-right: toRem(50);
-  &--active {
-    position: relative;
-    &:after {
-      height: 5px;
-      width: 100%;
-      @include gradient_Background_BluePurple;
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      border-radius: 9px;
-    }
-  }
 }
