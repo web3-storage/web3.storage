@@ -310,9 +310,9 @@ export type ListPsaPinRequestOptions = {
    */
   limit?: number
   /**
-   * Metadata as string representation of a JSON object.
+   * Metadata key/value JSON object.
    */
-  meta?: string,
+  meta?: object,
 }
 
 export type ListPsaPinRequestResults = {

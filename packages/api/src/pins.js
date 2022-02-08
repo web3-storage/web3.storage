@@ -358,13 +358,23 @@ function parseSearchParams (params) {
 
   if (meta) {
     // Must be a string representation of a JSON object.
-    if (!JSON.parse(meta) || Array.isArray(meta) || Object.entries(meta).some(([, v]) => typeof v !== 'string')) {
-      return new JSONResponse(
-        { error: { reason: ERROR_STATUS, details: INVALID_META } },
-        { status: ERROR_CODE }
-      )
+    let metaJson
+    try {
+      metaJson = JSON.parse(meta)
+    } catch (e) {
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_META },
+        data: undefined
+      }
     }
-    opts.meta = meta
+
+    if (Array.isArray(metaJson) || Object.entries(metaJson).some(([, v]) => typeof v !== 'string')) {
+      return {
+        error: { reason: ERROR_STATUS, details: INVALID_META },
+        data: undefined
+      }
+    }
+    opts.meta = metaJson
   }
 
   return { error: undefined, data: opts }

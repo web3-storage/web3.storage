@@ -938,9 +938,8 @@ export class DBClient {
 
     if (opts.meta) {
       // Match meta on all the key/values specified.
-      const meta = JSON.parse(opts.meta)
-      for (const key in meta) {
-        const value = meta[key]
+      for (const key in opts.meta) {
+        const value = opts.meta[key]
         query = query.eq(`meta->>${key}`, value)
       }
     }

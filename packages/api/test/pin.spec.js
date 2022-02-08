@@ -127,6 +127,30 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(error.details, INVALID_LIMIT)
     })
 
+    it('validates meta filter value', async () => {
+      const opts = new URLSearchParams({
+        meta: `[
+          "invalid",
+          "json"
+        ]`
+      })
+      const url = new URL(`${baseUrl}?${opts}`).toString()
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert.strictEqual(res.status, ERROR_CODE)
+      const error = await res.json()
+      assert.strictEqual(error.reason, ERROR_STATUS)
+      assert.strictEqual(error.details, INVALID_META)
+    })
+
     it('validates CID values passed as filter', async () => {
       const cids = [
         'notAValidCID',
