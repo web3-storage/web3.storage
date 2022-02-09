@@ -3,7 +3,7 @@ import { JSONResponse } from './utils/json-response.js'
 import { HTTPError, PinningServiceApiError } from './errors.js'
 
 /**
- * @param {Error & {status?: number;code?: string;reason?: string; details?: string}} err
+ * @param {Error & {status?: number;code?: string;reason?: string; details?: string; IS_PSA_ERROR?: boolean;}} err
  * @param {import('./env').Env} env
  */
 export function errorHandler (err, { sentry }) {
@@ -15,7 +15,7 @@ export function errorHandler (err, { sentry }) {
     sentry.captureException(err)
   }
 
-  if (err instanceof PinningServiceApiError) {
+  if (err.IS_PSA_ERROR) {
     const error = {
       reason: err.reason,
       details: err.details
