@@ -60,7 +60,7 @@ export async function pinPost (request, env, ctx) {
   }
 
   if (pinObject.requestId) {
-    return replacePin(pinObject, pinObject.requestId, authToken._id, env, ctx)
+    return replacePin(normalizedCid, pinObject, pinObject.requestId, authToken._id, env, ctx)
   }
 
   return createPin(normalizedCid, pinObject, authToken._id, env, ctx)
@@ -236,12 +236,13 @@ export async function pinDelete (request, env, ctx) {
 
 /**
  * @param {Object} newPinData
+ * @param {string} normalizedCid
  * @param {string} requestId
  * @param {string} authTokenId
  * @param {import('./env').Env} env
  * @param {import('./index').Ctx} ctx
  */
-async function replacePin (newPinData, requestId, authTokenId, env, ctx) {
+async function replacePin (normalizedCid, newPinData, requestId, authTokenId, env, ctx) {
   let existingPinRequest
   try {
     existingPinRequest = await env.db.getPsaPinRequest(authTokenId, requestId)
@@ -256,7 +257,7 @@ async function replacePin (newPinData, requestId, authTokenId, env, ctx) {
 
   let pinStatus
   try {
-    pinStatus = await createPin(existingPinRequest.contentCid, newPinData, authTokenId, env, ctx)
+    pinStatus = await createPin(normalizedCid, newPinData, authTokenId, env, ctx)
   } catch (e) {
     console.error(e)
     throw new PinningServiceApiError(PINNING_FAILED, e)
