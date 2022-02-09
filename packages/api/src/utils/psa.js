@@ -125,22 +125,25 @@ export function validatePinObject (payload) {
     origins,
     requestId
   } = payload
+  let normalizedCid
 
   if (!cid) {
     return {
       error: new PSAErrorRequiredData(REQUIRED_CID),
-      data: undefined
+      data: undefined,
+      normalizeCid: undefined
     }
   }
 
   // Validate CID.
   try {
-    normalizeCid(cid)
+    normalizedCid = normalizeCid(cid)
     opts.cid = cid
   } catch (e) {
     return {
       error: new PSAErrorInvalidData(INVALID_CID),
-      data: undefined
+      data: undefined,
+      normalizeCid: undefined
     }
   }
 
@@ -160,7 +163,7 @@ export function validatePinObject (payload) {
     error = parseValidatorErrors(result.errors)
   }
 
-  return { data, error }
+  return { data, normalizedCid, error }
 }
 
 /**

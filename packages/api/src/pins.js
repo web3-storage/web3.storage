@@ -49,19 +49,21 @@ export async function pinPost (request, env, ctx) {
   const { authToken } = request.auth
   pinData.requestId = request.params ? request.params.requestId : null
 
-  const result = validatePinObject(pinData)
+  const {
+    data: pinObject,
+    normalizedCid,
+    error
+  } = validatePinObject(pinData)
 
-  if (result.error) {
-    throw result.error
+  if (error) {
+    throw error
   }
-
-  const pinObject = result.data
 
   if (pinObject.requestId) {
     return replacePin(pinObject, pinObject.requestId, authToken._id, env, ctx)
   }
 
-  return createPin(pinObject.cid, pinObject, authToken._id, env, ctx)
+  return createPin(normalizedCid, pinObject, authToken._id, env, ctx)
 }
 
 /**
