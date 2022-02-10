@@ -14,4 +14,18 @@
             color: $white;
         }
     }
+    #footer_squiggle {
+        top: 9rem;
+        z-index: 1;
+        transform: translateY(-50%) scaleX(-1);
+        width: 22rem;
+        left: -8rem;
+        @include large {
+            left: calc(50% - #{math.div($containerWidth, 2)} - 19rem);
+        }
+        @include small {
+            top: calc(50% + 2rem);
+            left: -15rem;
+        }
+    }
 }

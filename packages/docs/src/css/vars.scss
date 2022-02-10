@@ -1,7 +1,9 @@
 $primary: #3C3CD0;
+$mobileActiveText: #7E81FF;
 $borderColor: #dbdada;
 $breakpoint: 997px;
 $imagePath: '../../static/img';
+$sidenavBg: #1C1E29;
 $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48%, $cerise 100%);
 
 @mixin gradient_Background_PinkBlue_Reverse {

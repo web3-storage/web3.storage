@@ -46,6 +46,12 @@
     }
 }
 
+@media (max-width: 1215px) {
+    .sidebar_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocSidebar-styles-module {
+        padding-top: 8.5rem !important;
+    }
+}
+
 // right side
 .tableOfContents_node_modules-\@docusaurus-theme-classic-lib-next-theme-TOC-styles-module {
     background-color: $white;
@@ -58,7 +64,7 @@
         padding: 0;
         margin: 0;
         @include fontSize_Mini;
-        line-height: toRem(28);
+        line-height: toRem(26);
         padding: toRem(5) 0;
         font-weight: $fontWeight_Medium;
     }
@@ -79,6 +85,81 @@
 }
 
 // right side mobile
-.tocCollapsible_node_modules-\@docusaurus-theme-classic-lib-next-theme-TOCCollapsible-styles-module {
-    background-color: $gray200 !important;
+@include mobile {
+    .tocCollapsibleButton_node_modules-\@docusaurus-theme-classic-lib-next-theme-TOCCollapsible-styles-module {
+        padding: 0.8rem 1rem 1rem 1rem !important;
+        &:after {
+            filter: invert(1) !important;
+        }
+    }
+    .tocCollapsible_node_modules-\@docusaurus-theme-classic-lib-next-theme-TOCCollapsible-styles-module {
+        background-color: $sidenavBg !important;
+        color: $white;
+        a {
+            color: $white;
+            @include fontWeight_Regular;
+        }
+    }
+    .tocCollapsibleContent_node_modules-\@docusaurus-theme-classic-lib-next-theme-TOCCollapsible-styles-module ul li {
+        margin: 0 1rem !important;
+        a:hover {
+            color: $white;
+        }
+        &:last-child {
+            margin-bottom: 0.5rem !important;
+        }
+        &:first-child {
+            margin-top: 0.5rem !important;
+        }
+    }
+}
+
+// mobile sidebar
+.navbar-sidebar {
+    color: $white;
+    .navbar-sidebar__brand {
+        padding: toRem(40) toRem(35) toRem(15) toRem(35);
+        height: auto;
+        .navbar__title {
+            color: $white;
+        }
+        .navbar__brand img {
+            filter: invert(1);
+        }
+    }
+    .menu {
+        padding: toRem(20);
+    }
+    .menu__link {
+        color: $white;
+    }
+    .menu__link:not([href]) {
+        margin-top: 1rem;
+        &:hover {
+            color: $white;
+        }
+    }
+    .menu__link--active {
+        color: $mobileActiveText;
+    }
+    .navbar-sidebar__back {
+        margin-bottom: toRem(10);
+        margin-top: 0;
+        padding-top: 0;
+    }
+    .navbar-sidebar__item:last-child {
+        padding-bottom: toRem(90);
+        position: relative;
+        &:after {
+            content: '';
+            position: absolute;
+            bottom: toRem(17);
+            left: toRem(64);
+            background-image: url(#{$imagePath}/shapes/cross.png);
+            width: 47px;
+            height: 47px;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+    }
 }

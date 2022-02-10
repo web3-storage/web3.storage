@@ -1,26 +1,32 @@
 
 // top navbar
 .navbar {
-    max-width: $containerWidth;
-    margin: 0 auto;
+    background: linear-gradient(180deg, $white 12.12%, rgba(254, 254, 254, 0) 100%);
     width: 100%;
     background-color: transparent;
     box-shadow: none;
-    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     height: $navigationHeight;
     padding: 0;
+    &__inner {
+        margin: 0 auto;
+        max-width: $containerWidth;
+    }
     @include mobile {
         height: 4rem;
         padding-left: 1rem;
     }
 }
 
-.navbar-sidebar__brand {
-    @include mobile {
-        height: 4rem;
+// hamburger menu
+.navbar__brand img {
+    width: 26px;
+}
+@media (max-width: 996px) {
+    .navbar__toggle {
+        margin-right: 1.5rem;
     }
 }
 
