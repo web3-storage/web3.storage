@@ -4,12 +4,13 @@ import { useEffect } from 'react';
 
 import TokenCreator from 'components/tokens/tokenCreator/tokenCreator';
 import TokensManager from 'components/tokens/tokensManager/tokensManager';
-import Button, { ButtonVariant } from 'components/button/button';
+import Button from 'components/button/button';
 import { useTokens } from 'components/contexts/tokensContext';
+import TokensData from '../../content/pages/app/tokens.json';
 
 const Tokens = () => {
   const { tokens, fetchDate, isFetchingTokens, getTokens } = useTokens();
-
+  const content = TokensData.page_content;
   // Initial fetch on component load
   useEffect(() => {
     if (!fetchDate && !isFetchingTokens) {
@@ -20,31 +21,19 @@ const Tokens = () => {
   return (
     <div className="page-container tokens-container grid">
       <div className="tokens-header">
-        <h3>API Tokens</h3>
-        <TokenCreator />
+        <h3>{content.heading}</h3>
+        <TokenCreator content={TokensData.page_content.token_creator} />
       </div>
-      <TokensManager />
+      <TokensManager content={TokensData.page_content.tokens_manager} />
       <div className="tokens-footer">
         <Button
           className={clsx('dashboard-link', !!tokens.length && 'hasTokens')}
-          href="/account"
-          variant={ButtonVariant.TEXT}
+          href={content.ui.return.url}
+          variant={content.ui.return.theme}
         >
-          <Link href="/account">❮&nbsp;&nbsp;Return to dashboard</Link>
+          <Link href={content.ui.return.url}>{content.ui.return.text}</Link>
         </Button>
-        <span className="testing-cta-container">
-          Want to test the token quickly?
-          <span className="testing-cta">
-            &nbsp;Paste it in&nbsp;
-            <a
-              href="https://bafybeic5r5yxjh5xpmeczfp34ysrjcoa66pllnjgffahopzrl5yhex7d7i.ipfs.dweb.link/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              this demo website&nbsp;&nbsp;❯
-            </a>
-          </span>
-        </span>
+        <div dangerouslySetInnerHTML={{ __html: content.ui.test_token }} className="testing-cta-container"></div>
       </div>
     </div>
   );
@@ -58,7 +47,7 @@ const Tokens = () => {
 export function getStaticProps() {
   return {
     props: {
-      title: 'Manage API Tokens - web3.storage',
+      title: TokensData.seo.title,
       redirectTo: '/login',
       isRestricted: true,
     },

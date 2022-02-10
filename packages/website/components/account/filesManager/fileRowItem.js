@@ -7,7 +7,7 @@ import InfoBIcon from 'assets/icons/infoB';
 import CopyIcon from 'assets/icons/copy';
 import PencilIcon from 'assets/icons/pencil';
 import { addTextToClipboard, truncateString } from 'lib/utils';
-import { fileRowLabels } from 'components/account/filesManager/fileRowLabels.const';
+import AppData from '../../../content/pages/app/account.json';
 
 export const PinStatus = {
   PINNED: 'Pinned',
@@ -93,6 +93,7 @@ const FileRowItem = props => {
   );
 
   const [isEditingName, setIsEditingName] = useState(false);
+  const fileRowLabels = AppData.page_content.file_manager.table.file_row_labels;
 
   return (
     <div className={clsx('files-manager-row', className, isHeader && 'files-manager-row-header')}>
@@ -102,15 +103,15 @@ const FileRowItem = props => {
           <CheckIcon className="check" />
         </span>
         <button onClick={onDelete} className="file-row-label delete medium-down-only">
-          {fileRowLabels.DELETE}
+          {fileRowLabels.delete}
         </button>
       </span>
       <span className="file-date">
-        <span className="file-row-label medium-down-only">{fileRowLabels.DATE}</span>
+        <span className="file-row-label medium-down-only">{fileRowLabels.date}</span>
         {date}
       </span>
       <span className={clsx(isEditingName && 'isEditingName', 'file-name')}>
-        <span className="file-row-label medium-down-only">{fileRowLabels.NAME}</span>
+        <span className="file-row-label medium-down-only">{fileRowLabels.name}</span>
         {!isEditingName ? (
           <span dangerouslySetInnerHTML={{ __html: name }} />
         ) : (
@@ -124,7 +125,7 @@ const FileRowItem = props => {
       <span className="file-cid" title={cid}>
         <span className="file-row-label medium-down-only">
           <Info content="The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>" />
-          {fileRowLabels.CID}
+          {fileRowLabels.cid}
         </span>
         <span className="cid-truncate medium-up-only">
           {useMemo(() => truncateString(cid, 5, '...', 'double'), [cid])}
@@ -142,13 +143,13 @@ const FileRowItem = props => {
         )}
       </span>
       <span className="file-availability">
-        <span className="file-row-label medium-down-only">{fileRowLabels.AVAILABLE}</span>
+        <span className="file-row-label medium-down-only">{fileRowLabels.available}</span>
         Available
       </span>
       <span className="file-pin-status">
         <span className="file-row-label medium-down-only">
           <Info content="Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes." />
-          {fileRowLabels.STATUS}
+          {fileRowLabels.status}
         </span>
         {status}
         {isHeader ? (
@@ -160,7 +161,7 @@ const FileRowItem = props => {
       <span className="file-storage-providers">
         <span className="file-row-label medium-down-only">
           <Info content="Service providers offering storage capacity to the Filecoin network. <a href='https://docs.web3.storage/concepts/decentralized-storage/' target='_blank' rel='noreferrer'>Learn more</a>" />
-          {fileRowLabels.STORAGE_PROVIDERS}
+          {fileRowLabels.storage_providers}
         </span>
         {storageProviders}
         {isHeader ? (
@@ -175,7 +176,7 @@ const FileRowItem = props => {
         )}
       </span>
       <span className="file-size">
-        <span className="file-row-label medium-down-only">{fileRowLabels.SIZE}</span>
+        <span className="file-row-label medium-down-only">{fileRowLabels.size}</span>
         {size}
       </span>
     </div>

@@ -10,20 +10,20 @@ import SearchIcon from 'assets/icons/search';
 import RefreshIcon from 'assets/icons/refresh';
 import countly from 'lib/countly';
 import Loading from 'components/loading/loading';
-import Button, { ButtonVariant } from 'components/button/button';
+import Button from 'components/button/button';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
 import Filterable from 'ZeroComponents/filterable/filterable';
-import Sortable, { SortType, SortDirection } from 'ZeroComponents/sortable/sortable';
+import Sortable from 'ZeroComponents/sortable/sortable';
 import Pagination from 'ZeroComponents/pagination/pagination';
 import { formatTimestamp } from 'lib/utils';
 import { useUploads } from 'components/contexts/uploadsContext';
-import { fileRowLabels } from 'components/account/filesManager/fileRowLabels.const';
 
 type FilesManagerProps = {
   className?: string;
+  content?: object;
 };
 
-const FilesManager = ({ className }: FilesManagerProps) => {
+const FilesManager = ({ className, content }: FilesManagerProps) => {
   const { uploads: files, fetchDate, getUploads, isFetchingUploads, deleteUpload } = useUploads();
   const {
     query: { filter },
@@ -36,6 +36,8 @@ const FilesManager = ({ className }: FilesManagerProps) => {
 
   const [selectedFiles, setSelectedFiles] = useState<Upload[]>([]);
   const [isDeleting, setIsDeleting] = useState(false);
+  const fileRowLabels = content.table.file_row_labels;
+  const fileDeleteWarning = content.ui.delete.alert;
 
   // Initial fetch on component load
   useEffect(() => {
@@ -76,7 +78,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
   );
 
   const onDeleteSelected = useCallback(async () => {
-    if (!window.confirm('Are you sure? Deleted files cannot be recovered!')) {
+    if (!window.confirm(fileDeleteWarning)) {
       countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
         ui: countly.ui.FILES,
         totalDeleted: 0,
@@ -96,11 +98,11 @@ const FilesManager = ({ className }: FilesManagerProps) => {
     setSelectedFiles([]);
 
     getUploads();
-  }, [selectedFiles, deleteUpload, setIsDeleting, getUploads]);
+  }, [selectedFiles, deleteUpload, setIsDeleting, getUploads, fileDeleteWarning]);
 
   const onDeleteSingle = useCallback(
     async cid => {
-      if (!window.confirm('Are you sure? Deleted files cannot be recovered!')) {
+      if (!window.confirm(fileDeleteWarning)) {
         countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
           ui: countly.ui.FILES,
           totalDeleted: 0,
@@ -121,19 +123,19 @@ const FilesManager = ({ className }: FilesManagerProps) => {
 
       getUploads();
     },
-    [deleteUpload, setIsDeleting, getUploads]
+    [deleteUpload, setIsDeleting, getUploads, fileDeleteWarning]
   );
 
   return (
     <div className={clsx('section files-manager-container', className, isDeleting && 'disabled')}>
       <div className="files-manager-header">
-        <span>Files</span>
+        <span>{content.heading}</span>
         <Filterable
           className="files-manager-search"
           items={files}
           icon={<SearchIcon />}
           filterKeys={['name', 'cid']}
-          placeholder="Search for a file"
+          placeholder={content.ui.filter.placeholder}
           queryParam="filter"
           onChange={setFilteredFiles}
           onValueChange={setKeyword}
@@ -143,61 +145,12 @@ const FilesManager = ({ className }: FilesManagerProps) => {
           onClick={useCallback(_ => getUploads(), [getUploads])}
         >
           <RefreshIcon />
-          Refresh
+          {content.ui.refresh}
         </button>
         <Sortable
           items={filteredFiles}
-          staticLabel={'Sort by'}
-          options={[
-            {
-              label: 'Alphabetical A-Z',
-              key: 'name',
-              value: 'a-z',
-              direction: SortDirection.ASC,
-              compareFn: SortType.ALPHANUMERIC,
-            },
-            {
-              label: 'Alphabetical Z-A',
-              key: 'name',
-              value: 'z-A',
-              direction: SortDirection.DESC,
-              compareFn: SortType.ALPHANUMERIC,
-            },
-            {
-              label: 'Most Recently Added',
-              value: 'newest',
-              compareFn: items => items.sort((a, b) => a['created'].localeCompare(b['created'])),
-            },
-            {
-              label: 'Least Recently Added',
-              value: 'oldest',
-              compareFn: items => items.sort((a, b) => b['created'].localeCompare(a['created'])),
-            },
-            {
-              label: 'Largest size',
-              value: 'largest',
-              compareFn: items => items.sort((a, b) => b.dagSize - a.dagSize),
-            },
-            {
-              label: 'Smallest size',
-              value: 'smallest',
-              compareFn: items => items.sort((a, b) => a.dagSize - b.dagSize),
-            },
-            /** TODO: Add file type sorting if available
-             * {
-             * label: 'File type',
-             * value: 'fileType',
-             * compareFn: items => items.sort((a, b) => b.dagSize < a.dagSize),
-             * },
-             */
-            /** TODO: Confirm what miner sorting is
-             * {
-             * label: 'Miner',
-             * value: 'miner',
-             * compareFn: items => items.sort((a, b) => b.dagSize < a.dagSize),
-             * },
-             */
-          ]}
+          staticLabel={content.ui.sortby.label}
+          options={content.ui.sortby.options}
           value="a-z"
           queryParam="order"
           onChange={setSortedFiles}
@@ -205,12 +158,12 @@ const FilesManager = ({ className }: FilesManagerProps) => {
       </div>
       <FileRowItem
         onSelect={onSelectAllToggle}
-        date={fileRowLabels.DATE}
-        name={fileRowLabels.NAME}
-        cid={fileRowLabels.CID}
-        status={fileRowLabels.STATUS}
-        storageProviders={fileRowLabels.STORAGE_PROVIDERS}
-        size={fileRowLabels.SIZE}
+        date={fileRowLabels.date}
+        name={fileRowLabels.name}
+        cid={fileRowLabels.cid}
+        status={fileRowLabels.status}
+        storageProviders={fileRowLabels.storage_providers}
+        size={fileRowLabels.size}
         isHeader
         isSelected={
           !!selectedFiles.length &&
@@ -223,17 +176,18 @@ const FilesManager = ({ className }: FilesManagerProps) => {
           <Loading className={'files-loading-spinner'} />
         ) : !files.length ? (
           <span className="files-manager-upload-cta">
-            You don’t have any files uploaded yet.{'\u00A0'}
+            {content.table.message}
+            {'\u00A0'}
             <Button
               onClick={onFileUploead}
-              variant={ButtonVariant.TEXT}
+              variant={content.table.cta.theme}
               tracking={{
-                ui: countly.ui.FILES,
-                action: 'Upload File',
+                ui: countly.ui[content.table.cta.ui],
+                action: content.table.cta.action,
                 data: { isFirstFile: true },
               }}
             >
-              Upload your first file
+              {content.table.cta.text}
             </Button>
           </span>
         ) : (
@@ -274,7 +228,7 @@ const FilesManager = ({ className }: FilesManagerProps) => {
       {!!files.length && (
         <div className="files-manager-footer">
           <button className={clsx('delete', !selectedFiles.length && 'disabled')} onClick={onDeleteSelected}>
-            Delete Selected
+            {content.ui.delete.text}
           </button>
           <Pagination
             className="files-manager-pagination"
@@ -286,13 +240,8 @@ const FilesManager = ({ className }: FilesManagerProps) => {
           />
           <Dropdown
             className="files-manager-result-dropdown"
-            value="10"
-            options={[
-              { label: 'View 10 Results', value: '10' },
-              { label: 'View 20 Results', value: '20' },
-              { label: 'View 50 Results', value: '50' },
-              { label: 'View 100 Results', value: '100' },
-            ]}
+            value={content.ui.results.options[0].value}
+            options={content.ui.results.options}
             queryParam="items"
             onChange={value => setItemsPerPage(value)}
           />
