@@ -325,6 +325,19 @@ BEGIN
 END
 $$;
 
+CREATE OR REPLACE FUNCTION uploads_by_type(query_type TEXT) RETURNS TEXT
+  LANGUAGE plpgsql
+AS
+$$
+BEGIN
+  return(
+    select count(*)
+    from upload
+    where type = (query_type)::upload_type
+  )::TEXT;
+END
+$$;
+
 CREATE OR REPLACE FUNCTION find_deals_by_content_cids(cids text[])
     RETURNS TABLE
             (

@@ -1,6 +1,6 @@
 /* global Response caches */
 
-import { METRICS_CACHE_MAX_AGE } from './constants.js'
+import { METRICS_CACHE_MAX_AGE, PIN_STATUSES, UPLOAD_TYPES } from './constants.js'
 
 /**
  * Retrieve metrics in prometheus exposition format.
@@ -21,21 +21,29 @@ export async function metricsGet (request, env, ctx) {
   const [
     usersTotal,
     uploadsTotal,
+    uploadMetrics,
     contentTotalBytes,
     pinsTotal,
-    pinsQueuedTotal,
-    pinsPinningTotal,
-    pinsPinnedTotal,
-    pinsFailedTotal
+    pinsMetrics,
+    pinsRequestsTotal
   ] = await Promise.all([
     env.db.getMetricsValue('users_total'),
     env.db.getMetricsValue('uploads_total'),
+    Promise.all(
+      UPLOAD_TYPES.map(async (t) => ({
+        type: t,
+        total: await env.db.getMetricsValue(`uploads_${t.toLowerCase()}_total`)
+      }))
+    ),
     env.db.getMetricsValue('content_bytes_total'),
     env.db.getMetricsValue('pins_total'),
-    env.db.getMetricsValue('pins_status_queued_total'),
-    env.db.getMetricsValue('pins_status_pinning_total'),
-    env.db.getMetricsValue('pins_status_pinned_total'),
-    env.db.getMetricsValue('pins_status_failed_total')
+    Promise.all(
+      PIN_STATUSES.map(async (s) => ({
+        status: s,
+        total: await env.db.getMetricsValue(`pins_status_${s.toLowerCase()}_total`)
+      }))
+    ),
+    env.db.getMetricsValue('pin_requests_total')
   ])
 
   const metrics = [
@@ -46,6 +54,10 @@ export async function metricsGet (request, env, ctx) {
     '# HELP web3storage_uploads_total Total number of user uploads.',
     '# TYPE web3storage_uploads_total counter',
     `web3storage_uploads_total ${uploadsTotal}`,
+    ...uploadMetrics.map(
+      ({ type, total }) =>
+        `web3storage_uploads_total{type="${type}"} ${total || 0}`
+    ),
 
     '# HELP web3storage_content_bytes_total Total bytes of all unique DAGs stored.',
     '# TYPE web3storage_content_bytes_total counter',
@@ -54,22 +66,14 @@ export async function metricsGet (request, env, ctx) {
     '# HELP web3storage_pins_total Total number of pins on the IPFS Cluster',
     '# TYPE web3storage_pins_total counter',
     `web3storage_pins_total ${pinsTotal}`,
+    ...pinsMetrics.map(
+      ({ status, total }) =>
+        `web3storage_pins_total{status="${status}"} ${total || 0}`
+    ),
 
-    '# HELP web3storage_pins_status_queued_total Total number of pins that are queued.',
-    '# TYPE web3storage_pins_status_queued_total counter',
-    `web3storage_pins_status_queued_total ${pinsQueuedTotal}`,
-
-    '# HELP web3storage_pins_status_pinning_total Total number of pins that are pinning.',
-    '# TYPE web3storage_pins_status_pinning_total counter',
-    `web3storage_pins_status_pinning_total ${pinsPinningTotal}`,
-
-    '# HELP web3storage_pins_status_pinned_total Total number of pins that are pinned.',
-    '# TYPE web3storage_pins_status_pinned_total counter',
-    `web3storage_pins_status_pinned_total ${pinsPinnedTotal}`,
-
-    '# HELP web3storage_pins_status_failed_total Total number of pins that are failed.',
-    '# TYPE web3storage_pins_status_failed_total counter',
-    `web3storage_pins_status_failed_total ${pinsFailedTotal}`
+    '# HELP web3storage_pins_total Total number of pins by service and status.',
+    '# TYPE web3storage_pins_total counter',
+    `web3storage_pin_requests_total ${pinsRequestsTotal}`
   ].join('\n')
 
   res = new Response(metrics, {
