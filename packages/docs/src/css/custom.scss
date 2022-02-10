@@ -137,7 +137,6 @@ body {
   @include headings;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  scroll-behavior: smooth;
   height: auto !important;
   ::-moz-selection {
     background: white;
@@ -227,8 +226,51 @@ svg[class^="iconExternalLink"] {
 table {
   td {
     min-width: toRem(150);
+    line-height: 1.4;
     &:last-child {
       width: 100%;
     }
   }
+}
+
+.container {
+  .row {
+    flex-wrap: nowrap;
+  }
+  .docItemCol_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocItem-styles-module {
+    width: 50vw;
+    @media (max-width: 1300px) {
+      width: 48vw;
+    }
+    @media (max-width: 1200px) {
+      width: 44vw;
+    }
+    @media (max-width: 1100px) {
+      width: 40vw;
+    }
+  }
+  .col--3 {
+    flex-shrink: 0 !important;
+    width: toRem(300) !important;
+  }
+}
+.row .col.col--3 {
+  --ifm-col-width: toRem(300);
+  @media (max-width: 1300px) {
+    --ifm-col-width: #{toRem(260)};
+  }
+  @media (max-width: 1200px) {
+    --ifm-col-width: #{toRem(240)};
+  }
+}
+
+// position anchor lower so it stops on top of page
+a.anchor {
+  display: block;
+  position: relative;
+  top: 180px;
+  @include mobile {
+    top: 230px;
+  }
+  visibility: hidden;
 }

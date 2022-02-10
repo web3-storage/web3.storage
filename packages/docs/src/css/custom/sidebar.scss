@@ -59,7 +59,13 @@
     border-radius: toRem(10);
 }
 .table-of-contents {
-    padding: toRem(20) toRem(25) toRem(20) toRem(30); 
+    padding: toRem(20) toRem(25) toRem(20) toRem(30);
+    @media (max-width: 1300px) {
+        padding: toRem(15) toRem(20) toRem(10) toRem(25);
+    }
+    @media (max-width: 1200px) {
+        padding: toRem(10) toRem(15) toRem(5) toRem(20);
+    }
     li {
         padding: 0;
         margin: 0;
