@@ -1,0 +1,248 @@
+$lavenderPink: #f9abd5;
+$sunglow: #ffce38;
+$anikiwa: #a7feff;
+$malibuBlue: #72bcff;
+$heliotropeLight: #e050ed;
+$doveGrayLight: #707070;
+$cpWindowColor: #1f1d29;
+$cpTabColor: #2a272e;
+
+// ////////////////////////////////////////////////////////////////// tab thumbs
+.cp-thumb-container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  height: 2.25rem;
+}
+
+.cp-thumb {
+  position: relative;
+  padding: 0.75rem 3rem 0.5rem 3rem;
+  margin-right: 0.5rem;
+  top: 1px;
+  font-size: 10px;
+  @include fontWeight_Semibold;
+  letter-spacing: 0.07em;
+  line-height: leading(17, 10);
+  z-index: 1;
+  transform: translateY(0);
+  transition: 200ms ease;
+  cursor: pointer;
+
+  @include mini {
+    padding: 0.75rem 2.5rem 0.25rem 2.5rem;
+  }
+  @include tiny {
+    padding: 0.75rem 2rem 0.25rem 2rem;
+  }
+
+  &:hover {
+    &:not(.cp-selected) {
+      transform: translateY(-0.5rem);
+    }
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 0.5rem);
+    border-radius: 0.25rem 0.25rem 0 0;
+    background-color: $cpTabColor;
+    z-index: -1;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    width: 2.5rem;
+    height: calc(100% + 0.5rem);
+    transform: translateX(50%);
+    border-right: 1.25rem solid transparent;
+    border-left: 1.25rem solid transparent;
+    border-bottom: 2.6875rem solid $cpTabColor;
+  }
+  &.cp-selected {
+    &:before {
+      background-color: $cpWindowColor;
+    }
+    z-index: 2;
+    &:after {
+      border-bottom: 2.6875rem solid $cpWindowColor;
+    }
+  }
+}
+
+// //////////////////////////////////////////////////////////////////////// code
+.code-preview-wrapper {
+  position: relative;
+  padding: 0.75rem;
+  border-radius: 0 0.25rem 0.25rem 0.25rem;
+  background-color: #1f1d29;
+  z-index: 3;
+  transition: 200ms ease;
+  overflow: hidden;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    width: calc(100% - 1.5rem);
+    height: calc(100% - 1.5rem);
+    background-color: $ebony;
+  }
+}
+
+.code-preview-content {
+  position: relative;
+  pre {
+    background-color: $ebony;
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem;
+    margin: 0;
+    &:first-child {
+      border-radius: 0.25rem 0.25rem 0 0;
+    }
+    &:last-child {
+      border-radius: 0 0 0.25rem 0.25rem;
+    }
+  }
+  code {
+    font-family: 'Suisse Intl Mono';
+    font-size: 0.75rem;
+    line-height: leading(28, 14);
+  }
+
+  &:hover {
+    .cp-copy-icon {
+      opacity: 1;
+    }
+  }
+}
+
+.code-line-number {
+  color: $doveGrayLight;
+  pointer-events: none;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.hljs-keyword {
+  color: $lavenderPink;
+}
+
+.hljs-function {
+  color: $anikiwa;
+  .hljs-keyword {
+    color: $anikiwa;
+  }
+}
+
+.hljs-title {
+  color: $sunglow;
+  &.class_ {
+    color: $anikiwa;
+  }
+}
+
+.hljs-string {
+  color: $heliotropeLight;
+}
+
+.code-preview-output-label {
+  color: $doveGrayLight;
+}
+
+.code-preview-output-value {
+  color: $malibuBlue;
+  margin-left: 1.25rem;
+}
+
+.cp-copy-icon {
+  position: absolute;
+  display: flex;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  opacity: 0;
+  transition: 200ms ease;
+
+  &.before-output {
+    transform: translateY(-4.5rem);
+  }
+  button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  svg {
+    transform: scale(1.25);
+    opacity: 0.7;
+    transition: 200ms ease;
+  }
+  &:hover {
+    svg {
+      opacity: 1;
+    }
+  }
+}
+
+.cp-copy-message {
+  @include fontSize_Tiny;
+  font-family: 'SuisseIntl';
+  margin: 0 0.5rem;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+// ////////////////////////////////////////////////////////////////// scroll bar
+pre::-webkit-scrollbar {
+  height: 0.5rem;
+}
+
+pre::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+pre::-webkit-scrollbar-thumb {
+  height: 0.5rem;
+  background-color: $cpWindowColor;
+  border-radius: 0.5rem;
+  outline: 1px solid #333038;
+}
+
+// /////////////////////////////////////////////////////////////////// animation
+
+.cp-typed {
+  display: inline-flex;
+  white-space: nowrap;
+  line-height: leading(28, 14);
+  overflow: hidden;
+  width: 100%;
+  animation: type 5s steps(60, end);
+}
+
+.cp-cursor {
+  animation: blink 1s infinite;
+  @include fontSize_Regular;
+  line-height: 1.3;
+}
+
+@keyframes type {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes blink {
+  to {
+    opacity: 0;
+  }
+}

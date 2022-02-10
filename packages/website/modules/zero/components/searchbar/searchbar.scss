@@ -1,0 +1,14 @@
+.SearchBar {
+  border: 1px solid black;
+  display: inline-flex;
+  align-items: center;
+
+  .search-icon {
+    
+  }
+
+  .search-input {
+    border: none;
+    background: transparent;
+  }
+}

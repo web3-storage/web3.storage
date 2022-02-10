@@ -1,0 +1,50 @@
+.accordion-chevron {
+  width: 1.125rem;
+  margin-top: 0.25rem;
+  svg {
+    transition: 250ms ease;
+    transform-origin: center;
+  }
+}
+
+.accordion-section {
+  margin-bottom: 2rem;
+  &.open {
+    .accordion-chevron {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
+.accordion-header {
+  margin-bottom: 0.5rem;
+}
+
+.accordion-header-text {
+  margin-left: 3.625rem;
+  @include fontSize_MediumLarge;
+  @include fontWeight_Semibold;
+  line-height: leading(40, 25);
+  @include mini {
+    margin-left: 1.625rem;
+  }
+}
+
+.accordion-content {
+  margin-left: 4.75rem;
+  @include fontSize_Regular;
+  line-height: leading(34, 18);
+  @include mini {
+    margin-left: 2.75rem;
+  }
+}
+
+.accordion-expand-all-toggle {
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+  @include fontSize_Mini;
+  @include fontWeight_Medium;
+  opacity: 0.8;
+}

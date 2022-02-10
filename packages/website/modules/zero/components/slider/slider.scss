@@ -1,0 +1,129 @@
+.zero_slider {
+  overflow: hidden;
+}
+
+.zero_slider-row {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  box-sizing: border-box;
+  position: relative;
+  left: 0px;
+}
+
+.zero_slider-row-container {
+  width: 100%;
+}
+
+.zero_sliding {
+  transition: left 300ms ease-in-out;
+}
+
+// ////////////////////////////////////////////////////////////// Slider Content
+.zero_click-wrapper {
+  padding: 1rem;
+}
+
+// ///////////////////////////////////////////////////////////// Slider Controls
+.zero_slider-range-input {
+  position: relative;
+  display: block;
+  width: 100%;
+  &:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 0px;
+    border: 1px solid gray;
+    transform: translateY(-50);
+    border-radius: 10px;
+    z-index: -10;
+  }
+}
+
+// ////////////////////////////////////////////////////////////////////// Inputs
+.zero_slide-selector {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.zero_slider-dummy-thumb {
+  position: absolute;
+  // height: 20px;
+  // width: 50px;
+  // background-color: #ffffff;
+  // border: 2px solid gray;
+  z-index: -1;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@mixin thumb() {
+  height: 20px;
+  width: 50px;
+  cursor: pointer;
+  border-radius: 0px;
+  background-color: transparent;
+  border: 2px solid transparent;
+}
+
+.zero_slider-range-input {
+  input {
+    width: 100%;
+    &[type=range] {
+      height: 28px;
+      -webkit-appearance: none;
+      margin: 10px 0;
+      width: 100%;
+      z-index: 10000;
+      background-color: transparent;
+      &::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 0px;
+        cursor: pointer;
+        animate: 0.2s;
+        border-radius: 20px;
+        background-color: transparent;
+        border-color: transparent;
+        color: transparent;
+      }
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        margin-top: -9px;
+        @include thumb
+      }
+      &::-moz-range-track {
+        width: 100%;
+        height: 0px;
+        cursor: pointer;
+        animate: 0.2s;
+        border-radius: 20px;
+        background-color: transparent;
+        border-color: transparent;
+        color: transparent;
+      }
+      &::-moz-range-thumb {
+        @include thumb
+      }
+      &::-ms-track {
+        width: 100%;
+        height: 0px;
+        cursor: pointer;
+        background-color: transparent;
+        border-color: transparent;
+        color: transparent;
+      }
+      &::-ms-fill-upper {
+        border-radius: 20px;
+      }
+      &::-ms-thumb {
+        margin-top: 1px;
+        @include thumb
+      }
+    }
+  }
+}

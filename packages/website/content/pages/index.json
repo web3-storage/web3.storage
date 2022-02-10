@@ -1,0 +1,915 @@
+{
+  "seo": {
+    "title": "",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "page_content": [
+    [
+      {
+        "id": "hero_header",
+        "columns": [
+          {
+            "type": "hero",
+            "page": "index",
+            "cols": {
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-3_sm-2_mi-1_ti-0"
+            },
+            "format": "header",
+            "heading": "The easiest way to store data on the decentralized web.",
+            "subheading": "Store your data using our simple API. It’s fast, open, and it’s free.",
+            "cta": {
+              "url": "/login",
+              "text": "START STORING NOW",
+              "event": "",
+              "ui": "HOME_HERO",
+              "action": "Get Started"
+            }
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "intro_1",
+        "columns": [
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-5_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
+            },
+            "customizations": [
+              {
+                "type": "corkscrew",
+                "id": "intro_1-hero-corkscrew"
+              },
+              {
+                "type": "coil",
+                "id": "intro_1-coil"
+              },
+              {
+                "type": "cross",
+                "id": "intro_1-cross"
+              },
+              {
+                "type": "text_block",
+                "format": "medium",
+                "heading": "Store and retrieve with ease",
+                "description": [
+                  "Most decentralized storage services need you to compile your data into a specific format, find a storage provider to host your data, buy some cryptocurrency to pay the storage provider, and then send your data across the internet.",
+                  "With Web3.Storage, you can upload any data to our API our web UI for free, and the data will end up on a decentralized set of IPFS and Filecoin storage providers."
+                ],
+                "cta": {
+                  "url": "/about",
+                  "text": "LEARN MORE",
+                  "theme": "light",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              }
+            ]
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-1_sm-2_mi-1_ti-0"
+            },
+            "customizations": [
+              {
+                "type": "helix",
+                "id": "intro_1-helix"
+              },
+              {
+                "type": "code_preview",
+                "tabs": [
+                  {
+                    "thumb": "STORE",
+                    "lines": [
+                      "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
+                      "",
+                      "const token = process.env.API_TOKEN",
+                      "const client = new Web3Storage({ token })",
+                      "",
+                      "async function storeFiles () {",
+                      "  const files = await getFilesFromPath('/path/to/file')",
+                      "  const cid = await client.put(files)",
+                      "  console.log(cid)",
+                      "}",
+                      "",
+                      "storeFiles()"
+                    ],
+                    "output": {
+                      "label": "Result",
+                      "value": "bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu"
+                    }
+                  },
+                  {
+                    "thumb": "RETRIEVE",
+                    "lines": [
+                      "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
+                      "",
+                      "const token = process.env.API_TOKEN",
+                      "const client = new Web3Storage({ token })",
+                      "",
+                      "async function retrieveFiles () {",
+                      "  const id =",
+                      "     'bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'",
+                      "",
+                      "  const res = await client.get(cid)",
+                      "  const files = await res.files()",
+                      "",
+                      "  for (const file of files) {",
+                      "    console.log(`${file.cid}: ${file.name} (${file.size} bytes)`)",
+                      "  }",
+                      "}",
+                      "",
+                      "retrieveFiles()"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "intro_2-heading",
+        "columns": [
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-4_md-5_sm-5_mi-8_ti-12",
+              "push_left": "off-0_sm-1_mi-1_ti-0"
+            },
+            "customizations": [
+              {
+                "type": "cross",
+                "id": "intro_2-cross"
+              },
+              {
+                "type": "text_block",
+                "format": "medium",
+                "heading": "Web3.Storage is built for scale"
+              }
+            ]
+          },
+          {
+            "type": "triangle",
+            "cols": {
+              "num": "col-6",
+              "push_left": "off-1"
+            },
+            "id": "intro_2-triangle"
+          }
+        ]
+      },
+      {
+        "id": "intro_2-statistics",
+        "columns": [
+          {
+            "type": "card_list_block",
+            "cols": {
+              "num": "col-12_mi-10_ti-12",
+              "push_left": "off-0_mi-1_ti-0"
+            },
+            "direction": "row",
+            "cards": [
+              {
+                "type": "A",
+                "feature": "1400+",
+                "title": "Projects Worldwide",
+                "description": "Join a global community storing data on web3"
+              },
+              {
+                "type": "A",
+                "feature": "9M+",
+                "title": "Stored Objects",
+                "description": "Store data for free with our easy to use API or our JS library"
+              },
+              {
+                "type": "A",
+                "feature": "60+",
+                "title": "Filecoin Storage Providers",
+                "description": "Data is stored trustlessly across a growing network of storage providers via Filecoin"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "intro_2-cta",
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-5_sm-10_ti-12",
+              "push_left": "off-0_sm-1_ti-0"
+            },
+            "format": "medium",
+            "heading": "Why Web3.Storage?",
+            "description": "With Web3.Storage you get all the benefits of decentralized storage technologies with the frictionless experience you expect in a modern dev workflow.",
+            "cta": {
+              "url": "https://docs.web3.storage/",
+              "text": "READ DOCS",
+              "tracking": "",
+              "event": "",
+              "ui": "",
+              "action": ""
+            }
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-6_sm-10_ti-12",
+              "push_left": "off-1_sm-1_ti-0"
+            },
+            "customizations": [
+              {
+                "type": "text_block",
+                "format": "small",
+                "heading": "Simple",
+                "description": "With web3.storage, you get decentralized storage in minutes. All you need is a free API token and you can use the API directly or use our simple client library."
+              },
+              {
+                "type": "text_block",
+                "format": "small",
+                "heading": "Open",
+                "description": "All data stored is accessible on the public IPFS network - interoperable with the tools and services building on the decentralized web."
+              },
+              {
+                "type": "text_block",
+                "format": "small",
+                "heading": "Free",
+                "description": "The unique economics of Filecoin allow Web3.Storage to be completely free to use, while still ensuring that storage providers have a strong incentive to preserve user data for the long term."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "section_FAQ_info",
+        "grid": ["middle"],
+        "columns": [
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
+            },
+            "customizations": [
+              {
+                "type": "squiggle",
+                "id": "section_FAQ-squiggle"
+              },
+              {
+                "type": "text_block",
+                "format": "medium",
+                "heading": "Frequently Asked Questions",
+                "subheading": "How is this free?",
+                "description": [
+                  "Web3.Storage offers a simple interface that allows users and developers to take advantage of the vast array of decentralized storage provided by the Filecoin network.",
+                  "The unique economics of Filecoin allow Web3.Storage to be completely free to use, while still ensuring that storage providers have a strong incentive to preserve user data for the long term."
+                ],
+                "cta": {
+                  "url": "/faq",
+                  "text": "MORE FAQs",
+                  "theme": "light",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              }
+            ]
+          },
+          {
+            "type": "image_block",
+            "cols": {
+              "num": "col-5_sm-8_mi-10_ti-12",
+              "push_left": "off-1_sm-2_mi-1_ti-0"
+            },
+            "src": "/images/index/cluster-1.png"
+          }
+        ]
+      },
+      {
+        "id": "section_FAQ_ctas",
+        "grid": ["noGutter"],
+        "columns": [
+          {
+            "type": "card_list_block",
+            "cols": {
+              "num": "col-12_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
+            },
+            "direction": "row",
+            "cards": [
+              {
+                "type": "F",
+                "label": "FAQ",
+                "title": "How is web3.storage different from pinning services for IPFS?",
+                "description": "Web3.Storage is currently not a pinning service. At the moment, files already on the IPFS network cannot be pinned to Web3.Storage via their…",
+                "cta": {
+                  "url": "/faq",
+                  "text": "READ MORE",
+                  "theme": "text-purple",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              },
+              {
+                "type": "F",
+                "label": "FAQ",
+                "title": "What happens if web3.storage is discontinued?",
+                "description": "One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data…",
+                "cta": {
+                  "url": "/faq",
+                  "text": "READ MORE",
+                  "theme": "text-purple",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "section_get-started",
+        "columns": [
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-5_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
+            },
+            "customizations": [
+              {
+                "type": "cross",
+                "id": "section_get-started-cross"
+              },
+              {
+                "type": "text_block",
+                "format": "medium",
+                "heading": "Get Started with Web3.Storage",
+                "description": "Choose your own way to store and retrieve using Web3.Storage. You can sign up for free using your email address or GitHub.",
+                "cta": {
+                  "url": "/login",
+                  "text": "CREATE AN ACCOUNT",
+                  "theme": "dark",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              }
+            ]
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-7_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
+            },
+            "customizations": [
+              {
+                "type": "image_block",
+                "id": "get-started-image-storage",
+                "src": "/images/index/storage-tier.png"
+              },
+              {
+                "type": "image_block",
+                "id": "get-started-image-files",
+                "src": "/images/index/files-display.png"
+              },
+              {
+                "type": "image_block",
+                "id": "get-started-image-upload",
+                "src": "/images/index/file-upload.png"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "section_get-started-cards",
+        "grid": ["noGutter"],
+        "columns": [
+          {
+            "type": "card_list_block",
+            "cols": {
+              "num": "col-12_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
+            },
+            "direction": "row",
+            "cards": [
+              {
+                "type": "B",
+                "label": "JS Client Library",
+                "feature": "<span class='highlight'>npm install</span> web3.storage",
+                "description": "Import the lightweight Web3.Storage library into your project, and enjoy a simple and familiar way to store and retrieve.",
+                "icon_before": {
+                  "url": "https://www.npmjs.com/package/web3.storage",
+                  "svg": "npm_icon"
+                },
+                "cta": {
+                  "url": "https://docs.web3.storage/reference/js-client-library",
+                  "text": "JS DOCS",
+                  "theme": "blue",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              },
+              {
+                "type": "B",
+                "label": "HTTP API",
+                "feature": "<span class='highlight'>curl -X</span> POST <span class='highlight'>—data-binary</span> “@foo.gif” https://api.web3.storage/upload",
+                "description": "Test or build your project on any stack, using our easy-to-use HTTP API. Web3.Storage is as flexible as you need it to be.",
+                "icon_before": {
+                  "url": "https://docs.web3.storage/reference/http-api/",
+                  "text": "{…}"
+                },
+                "cta": {
+                  "url": "https://docs.web3.storage/reference/http-api/",
+                  "text": "HTTP DOCS",
+                  "theme": "blue",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              },
+              {
+                "type": "B",
+                "label": "Web App",
+                "feature": "Drop file to upload",
+                "description": "Upload your files directly through our Web UI to debug and validate Web3.Storage’s use case for your project.",
+                "icon_before": {
+                  "url": "/login",
+                  "svg": "windows_icon"
+                },
+                "cta": {
+                  "url": "/login",
+                  "text": "MAKE YOUR FIRST UPLOAD",
+                  "theme": "blue",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "section_testimonials",
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-5_md-7_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
+            },
+            "format": "medium",
+            "heading": "Trusted by the future",
+            "description": [
+              "Web3.Storage is the easiest way to build on the decentralized web from hackathon projects to production code at scale.",
+              "See what people building the future of the web today have to say, and get started."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "section_testimonials-cards",
+        "columns": [
+          {
+            "type": "card_list_block",
+            "cols": {
+              "num": "col-12"
+            },
+            "direction": "row",
+            "cards": [
+              {
+                "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
+                "title": "Ryan W.",
+                "subtitle": "Capetown, South Africa",
+                "description": "I’m really impressed with web3.storage. It’s almost too easy."
+              },
+              {
+                "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
+                "title": "Frank J.",
+                "subtitle": "Toronto, Canada",
+                "description": "Web3.Storage was so simple to hook into, and it does what you want it to do. It’s like simplified S3 for IPFS. I really like the service, and I love that it’s free."
+              },
+              {
+                "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
+                "title": "Connor M.",
+                "subtitle": "New York, USA",
+                "description": "Web3.Storage was pretty much plug and play for my use case."
+              }
+            ]
+          },
+          {
+            "type": "slider_block",
+            "cols": {
+              "num": "col-12"
+            },
+            "breakpoints": {
+              "medium": 3,
+              "small": 2,
+              "mini": 1
+            },
+            "slides": [
+              {
+                "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
+                "title": "Ryan W.",
+                "subtitle": "Capetown, South Africa",
+                "description": "I’m really impressed with web3.storage. It’s almost too easy."
+              },
+              {
+                "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
+                "title": "Frank J.",
+                "subtitle": "Toronto, Canada",
+                "description": "Web3.Storage was so simple to hook into, and it does what you want it to do. It’s like simplified S3 for IPFS. I really like the service, and I love that it’s free."
+              },
+              {
+                "type": "C",
+                "image": "/images/index/placeholder-portrait.png",
+                "title": "Connor M.",
+                "subtitle": "New York, USA",
+                "description": "Web3.Storage was pretty much plug and play for my use case."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "section_explore-docs",
+        "grid": ["noGutter"],
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-3_md-7_ti-8",
+              "push_left": "off-0_md-1_sm-0"
+            },
+            "format": "medium",
+            "heading": "Open product. Open book.",
+            "cta": {
+              "url": "https://docs.web3.storage/",
+              "text": "EXPLORE DOCS",
+              "theme": "dark",
+              "event": "",
+              "ui": "",
+              "action": ""
+            }
+          },
+          {
+            "type": "card_list_block",
+            "cols": {
+              "num": "col-8_md-10_sm-12_mi-10",
+              "push_left": "off-1_md-1_sm-0_mi-1"
+            },
+            "cards": [
+              {
+                "type": "D",
+                "categories": [
+                  {
+                    "heading": "Welcome",
+                    "links": [
+                      {
+                        "url": "https://docs.web3.storage/#quickstart",
+                        "text": "Quickstart"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/#create-an-account",
+                        "text": "Create an Account"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/#get-an-api-token",
+                        "text": "Get an API token"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/#create-the-upload-script",
+                        "text": "Create the Upload Script"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/#run-the-script",
+                        "text": "Run the Script"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/#get-your-file",
+                        "text": "Get your file"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/#next-steps",
+                        "text": "Next Steps"
+                      }
+                    ]
+                  },
+                  {
+                    "heading": "Concepts",
+                    "links": [
+                      {
+                        "url": "https://docs.web3.storage/concepts/content-addressing",
+                        "text": "Content Addressing"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/concepts/decentralized-storage",
+                        "text": "Decentralized Storage"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "D",
+                "categories": [
+                  {
+                    "heading": "How-tos",
+                    "links": [
+                      {
+                        "url": "https://docs.web3.storage/how-tos/store/",
+                        "text": "Store"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/how-tos/retrieve",
+                        "text": "Retrieve"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/how-tos/query",
+                        "text": "Query"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/how-tos/list",
+                        "text": "List"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/how-tos/work-with-car-files",
+                        "text": "Work with Content"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/how-tos/generate-api-token",
+                        "text": "Generate an API Token"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/how-tos/troubleshooting",
+                        "text": "Troubleshooting"
+                      }
+                    ]
+                  },
+                  {
+                    "heading": "Reference",
+                    "links": [
+                      {
+                        "url": "https://docs.web3.storage/reference/http-api/",
+                        "text": "HTTP API Reference"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/reference/js-client-library",
+                        "text": "Javascript Client Library"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-3"
+            },
+            "format": "medium",
+            "heading": "Open product. Open book.",
+            "cta": {
+              "url": "https://docs.web3.storage/",
+              "text": "EXPLORE DOCS",
+              "theme": "dark",
+              "event": "",
+              "ui": "",
+              "action": ""
+            }
+          }
+        ]
+      }
+    ]
+  ],
+  "floater_animations": [
+    {
+      "trigger": "hero_header",
+      "duration": 1000,
+      "offset": 700,
+      "floaters": [
+        {
+          "id": "index_hero-squiggle",
+          "start": {
+            "rotate": -27,
+            "scale": 1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -5,
+            "scale": 1.2,
+            "x": -100,
+            "y": -5
+          }
+        },
+        {
+          "id": "index_hero-corkscrew",
+          "start": {
+            "rotate": 115,
+            "scale": 1,
+            "x": 1,
+            "y": 1
+          },
+          "end": {
+            "rotate": 130,
+            "scale": 1.2,
+            "x": 100,
+            "y": 20
+          }
+        },
+        {
+          "id": "intro_1-hero-corkscrew",
+          "start": {
+            "rotate": 189,
+            "scale": 1,
+            "x": 1,
+            "y": 1
+          },
+          "end": {
+            "rotate": 200,
+            "scale": 1.2,
+            "x": 30,
+            "y": 80
+          }
+        },
+        {
+          "id": "index_hero-cross",
+          "start": {
+            "rotate": 1,
+            "scale": 1,
+            "x": 1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -20,
+            "scale": 1.15,
+            "x": 50,
+            "y": 40
+          }
+        },
+        {
+          "id": "index_hero-zigzag",
+          "start": {
+            "rotate": -185,
+            "scale": 1,
+            "x": -1,
+            "y": -1
+          },
+          "end": {
+            "rotate": -270,
+            "scale": 1.15,
+            "x": -40,
+            "y": 10
+          }
+        },
+        {
+          "id": "index_hero-triangle",
+          "start": {
+            "scale": 1,
+            "rotate": -90
+          },
+          "end": {
+            "scale": 1.4,
+            "rotate": -120
+          }
+        },
+        {
+          "id": "intro_1-coil",
+          "start": {
+            "rotate": 17,
+            "x": 1,
+            "y": 1
+          },
+          "end": {
+            "rotate": 2,
+            "x": -40,
+            "y": 32
+          }
+        },
+        {
+          "id": "intro_1-cross",
+          "start": {
+            "rotate": -1,
+            "scale": 1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -30,
+            "scale": 1.15,
+            "x": -40,
+            "y": 45
+          }
+        }
+      ]
+    },
+    {
+      "trigger": "intro_2-heading",
+      "duration": 1000,
+      "floaters": [
+        {
+          "id": "intro_2-cross",
+          "start": {
+            "scale": 1,
+            "rotate": -1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "scale": 1.3,
+            "rotate": -30,
+            "x": -30,
+            "y": 20
+          }
+        },
+        {
+          "id": "intro_2-triangle",
+          "start": {
+            "rotate": -90,
+            "x": 1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -45,
+            "x": 80,
+            "y": 60
+          }
+        }
+      ]
+    },
+    {
+      "trigger": "section_FAQ_info",
+      "duration": 1000,
+      "floaters": [
+        {
+          "id": "section_FAQ-squiggle",
+          "default": "scaleX(-1)",
+          "start": {
+            "rotate": 18,
+            "x": 1,
+            "y": 1
+          },
+          "end": {
+            "rotate": 30,
+            "x": 25,
+            "y": 20
+          }
+        }
+      ]
+    },
+    {
+      "trigger": "section_get-started",
+      "duration": 1200,
+      "floaters": [
+        {
+          "id": "section_get-started-cross",
+          "default": "translate(50%, 100%) scaleX(-1)",
+          "start": {
+            "rotate": 1
+          },
+          "end": {
+            "rotate": 50
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+.Button {
+  cursor: pointer;
+
+  &[disabled] {
+    cursor: default;
+  }
+
+  button {
+    border: none;
+    width: 100%;
+    display: flex;
+
+    &:active, &:hover, &:focus {
+      background: transparent;
+    }
+  }
+}
+
