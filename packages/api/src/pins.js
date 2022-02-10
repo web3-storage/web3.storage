@@ -8,7 +8,7 @@ import {
   REQUIRED_REQUEST_ID,
   getEffectivePinStatus,
   validateSearchParams,
-  validatePinObject
+  transformAndValidate
 } from './utils/psa.js'
 
 /**
@@ -53,7 +53,7 @@ export async function pinPost (request, env, ctx) {
     data: pinObject,
     normalizedCid,
     error
-  } = validatePinObject(pinData)
+  } = transformAndValidate(pinData)
 
   if (error) {
     throw error

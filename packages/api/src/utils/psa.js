@@ -1,10 +1,10 @@
 import { Validator } from '@cfworker/json-schema'
-import { PSAErrorInvalidData, PSAErrorRequiredData } from '../errors.js'
+import { PSAErrorInvalidData } from '../errors.js'
 import { normalizeCid } from '../utils/cid.js'
 
 /**
  * @typedef {'queued' | 'pinning' | 'failed' | 'pinned'} apiPinStatus
- * @typedef {{ error?: PSAErrorInvalidData|PSAErrorRequiredData, data?: {} }} parsedData
+ * @typedef {{ error?: PSAErrorInvalidData, data?: {} }} parsedData
  */
 
 /**
@@ -61,6 +61,7 @@ export const psaStatusesToDBStatuses = (statuses) => {
 }
 
 // Error messages
+export const ERROR_CODE = 400
 export const DATA_NOT_FOUND = 'Requested data was not found.'
 export const INVALID_CID = 'The CID provided is invalid.'
 export const INVALID_REPLACE = 'Existing and replacement CID are the same.'
@@ -115,7 +116,7 @@ const postPinValidator = new Validator({
  * @param {*} payload
  * @returns parsedData
  */
-export function validatePinObject (payload) {
+export function transformAndValidate (payload) {
   /** @type {*} */
   const opts = {}
   const {
@@ -127,23 +128,17 @@ export function validatePinObject (payload) {
   } = payload
   let normalizedCid
 
-  if (!cid) {
-    return {
-      error: new PSAErrorRequiredData(REQUIRED_CID),
-      data: undefined,
-      normalizeCid: undefined
-    }
-  }
-
   // Validate CID.
-  try {
-    normalizedCid = normalizeCid(cid)
-    opts.cid = cid
-  } catch (e) {
-    return {
-      error: new PSAErrorInvalidData(INVALID_CID),
-      data: undefined,
-      normalizeCid: undefined
+  if (cid) {
+    try {
+      normalizedCid = normalizeCid(cid)
+      opts.cid = cid
+    } catch (e) {
+      return {
+        error: new PSAErrorInvalidData(INVALID_CID),
+        data: undefined,
+        normalizeCid: undefined
+      }
     }
   }
 

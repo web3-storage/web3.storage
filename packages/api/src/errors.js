@@ -81,61 +81,65 @@ InvalidCidError.CODE = 'ERROR_INVALID_CID'
 export class PinningServiceApiError extends Error {
   /**
    *
-   * @param {string} reason
-   * @param {string} [details]
+   * @param {string} [message]
    * @param {number} [status]
+   * @param {string} code
    */
-  constructor (reason = 'PSA_ERROR', details, status = 400) {
-    super(details)
-    this.reason = reason
-    this.details = details
+  constructor (message, status = 400, code = 'PSA_ERROR') {
+    super(message)
+    this.details = message
     this.status = status
+    this.reason = code
     this.IS_PSA_ERROR = true
   }
 }
 
 export class PSAErrorInvalidData extends PinningServiceApiError {
   /**
-   * @param {string} details
+   * @param {string} message
    */
-  constructor (details = 'Some data is invalid. Please consult the spec.') {
-    super(PSAErrorInvalidData.REASON)
-    this.details = details
+  constructor (message = 'Some data is invalid. Please consult the spec.') {
+    super(message)
+    this.details = message
+    this.reason = PSAErrorInvalidData.CODE
   }
 }
-PSAErrorInvalidData.REASON = 'PSA_INVALID_DATA'
+PSAErrorInvalidData.CODE = 'PSA_INVALID_DATA'
 
 export class PSAErrorRequiredData extends PinningServiceApiError {
   /**
-   * @param {string} details
+   * @param {string} message
    */
-  constructor (details = 'Missing required data. Please consult the spec.') {
-    super(PSAErrorRequiredData.REASON)
-    this.details = details
+  constructor (message = 'Missing required data. Please consult the spec.') {
+    super(message)
+    this.details = message
+    this.reason = PSAErrorRequiredData.CODE
   }
 }
-PSAErrorRequiredData.REASON = 'PSA_REQUIRED_DATA'
+PSAErrorRequiredData.CODE = 'PSA_REQUIRED_DATA'
 
 export class PSAErrorResourceNotFound extends PinningServiceApiError {
   /**
-   * @param {string} details
+   * @param {string} message
    */
-  constructor (details = 'Requested data was not found.') {
-    super(PSAErrorResourceNotFound.REASON)
-    this.details = details
+  constructor (message = 'Requested data was not found.') {
+    super(message)
+    this.details = message
     this.status = 404
+    this.reason = PSAErrorResourceNotFound.CODE
   }
 }
-PSAErrorResourceNotFound.REASON = 'PSA_RESOURCE_NOT_FOUND'
+PSAErrorResourceNotFound.CODE = 'PSA_RESOURCE_NOT_FOUND'
 
 export class PSAErrorDB extends PinningServiceApiError {
   /**
-   * @param {string} details
+   * @param {string} message
    */
-  constructor (details = 'DB transaction failed.') {
-    super(PSAErrorDB.REASON)
-    this.details = details
+  constructor (message = 'DB transaction failed.') {
+    super(message)
+    this.details = message
     this.status = 501
+    this.reason = PSAErrorDB.CODE
   }
 }
-PSAErrorDB.REASON = 'PSA_DB_ERROR'
+PSAErrorDB.CODE = 'PSA_DB_ERROR'
