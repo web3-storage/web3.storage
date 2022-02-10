@@ -16,16 +16,9 @@ export const CTAThemeType = {
 
 /**
  * @typedef {Object} UploadContentProps
- * @property {string} [className]
- * @property {import('react').ReactNode} [icon]
  * @property {string} [heading]
+ * @property {string} [iconType]
  * @property {string} [description]
- */
-
-/**
- *
- * @param {UploadContentProps} props
- * @returns
  */
 const uploadContentBlock = (heading, iconType, description) => {
   let icon;

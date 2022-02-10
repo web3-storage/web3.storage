@@ -17,10 +17,11 @@ import Sortable from 'ZeroComponents/sortable/sortable';
 import Pagination from 'ZeroComponents/pagination/pagination';
 import { formatTimestamp } from 'lib/utils';
 import { useUploads } from 'components/contexts/uploadsContext';
+import { ContentProps } from './filesManagerInterfaces';
 
 type FilesManagerProps = {
   className?: string;
-  content?: object;
+  content?: ContentProps;
 };
 
 const FilesManager = ({ className, content }: FilesManagerProps) => {
@@ -36,8 +37,8 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
 
   const [selectedFiles, setSelectedFiles] = useState<Upload[]>([]);
   const [isDeleting, setIsDeleting] = useState(false);
-  const fileRowLabels = content.table.file_row_labels;
-  const fileDeleteWarning = content.ui.delete.alert;
+  const fileRowLabels = content?.table.file_row_labels;
+  const fileDeleteWarning = content?.ui.delete.alert;
 
   // Initial fetch on component load
   useEffect(() => {
@@ -129,13 +130,13 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
   return (
     <div className={clsx('section files-manager-container', className, isDeleting && 'disabled')}>
       <div className="files-manager-header">
-        <span>{content.heading}</span>
+        <span>{content?.heading}</span>
         <Filterable
           className="files-manager-search"
           items={files}
           icon={<SearchIcon />}
           filterKeys={['name', 'cid']}
-          placeholder={content.ui.filter.placeholder}
+          placeholder={content?.ui.filter_placeholder}
           queryParam="filter"
           onChange={setFilteredFiles}
           onValueChange={setKeyword}
@@ -145,12 +146,12 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
           onClick={useCallback(_ => getUploads(), [getUploads])}
         >
           <RefreshIcon />
-          {content.ui.refresh}
+          {content?.ui.refresh}
         </button>
         <Sortable
           items={filteredFiles}
-          staticLabel={content.ui.sortby.label}
-          options={content.ui.sortby.options}
+          staticLabel={content?.ui.sortby.label}
+          options={content?.ui.sortby.options}
           value="a-z"
           queryParam="order"
           onChange={setSortedFiles}
@@ -176,18 +177,18 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
           <Loading className={'files-loading-spinner'} />
         ) : !files.length ? (
           <span className="files-manager-upload-cta">
-            {content.table.message}
+            {content?.table.message}
             {'\u00A0'}
             <Button
               onClick={onFileUploead}
-              variant={content.table.cta.theme}
+              variant={content?.table.cta.theme}
               tracking={{
-                ui: countly.ui[content.table.cta.ui],
-                action: content.table.cta.action,
+                ui: countly.ui[content?.table.cta.ui],
+                action: content?.table.cta.action,
                 data: { isFirstFile: true },
               }}
             >
-              {content.table.cta.text}
+              {content?.table.cta.text}
             </Button>
           </span>
         ) : (
@@ -228,7 +229,7 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
       {!!files.length && (
         <div className="files-manager-footer">
           <button className={clsx('delete', !selectedFiles.length && 'disabled')} onClick={onDeleteSelected}>
-            {content.ui.delete.text}
+            {content?.ui.delete.text}
           </button>
           <Pagination
             className="files-manager-pagination"
@@ -240,8 +241,8 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
           />
           <Dropdown
             className="files-manager-result-dropdown"
-            value={content.ui.results.options[0].value}
-            options={content.ui.results.options}
+            value={content?.ui.results.options[0].value}
+            options={content?.ui.results.options}
             queryParam="items"
             onChange={value => setItemsPerPage(value)}
           />

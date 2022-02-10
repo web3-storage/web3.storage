@@ -64,7 +64,7 @@ const Account: React.FC = () => {
     }),
     [hasFiles, onFileUploead, dashboard]
   );
-  console.log(CTAConfigs);
+
   return (
     <>
       <div className="page-container account-container grid">
