@@ -438,7 +438,7 @@ export class DBClient {
   /**
    * Upsert given pin status.
    *
-   * @param {Array<import('./db-client-types').PinUpsertInput>} pins
+   * @param {Array<import('./db-client-types').PinsUpsertInput>} pins
    */
   async upsertPins (pins) {
     const { error } = await this._client

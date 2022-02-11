@@ -20,6 +20,7 @@ import type {
   PinRequestItemOutput,
   PinSyncRequestOutput,
   PinUpsertInput,
+  PinsUpsertInput,
   BackupOutput,
   PsaPinRequestItem,
   PsaPinRequestUpsertOutput,
@@ -45,7 +46,7 @@ export class DBClient {
   getStatus (cid: string): Promise<ContentItemOutput>
   getBackups (uploadId: number): Promise<Array<BackupOutput>>
   upsertPin (cid: string, pin: PinUpsertInput): Promise<number>
-  upsertPins (pins: Array<PinUpsertInput>): Promise<void>
+  upsertPins (pins: Array<PinsUpsertInput>): Promise<void>
   getPins (cid: string): Promise<Array<PinItemOutput>>
   getPinRequests ({ size }: { size: number }): Promise<Array<PinRequestItemOutput>>
   deletePinRequests (ids: Array<number>): Promise<void>
