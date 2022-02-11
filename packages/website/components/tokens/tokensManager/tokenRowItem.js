@@ -33,11 +33,11 @@ const TokenRowItem = ({ className = '', name, secret, id = '', isHeader, onToken
     )}
   >
     <span className="token-name" title={name}>
-      <span className="file-row-label medium-down-only">{tokenRowLabels.name}</span>
+      <span className="file-row-label medium-down-only">{tokenRowLabels.name.label}</span>
       {name}
     </span>
     <span className="token-id-container" title={secret}>
-      <span className="file-row-label medium-down-only">{tokenRowLabels.secret}</span>
+      <span className="file-row-label medium-down-only">{tokenRowLabels.secret.label}</span>
       <span className="token-id">{truncateString(secret, 36, '...', 'double')}</span>
     </span>
     {!isHeader && (

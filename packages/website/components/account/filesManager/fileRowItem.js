@@ -81,19 +81,22 @@ const FileRowItem = props => {
 
     return propsReturn;
   }, [props]);
+
+  const fileRowLabels = AppData.page_content.file_manager.table.file_row_labels;
+  const statusMessages = fileRowLabels.status.tooltip;
+
   const statusTooltip = useMemo(
     () =>
       ({
-        [PinStatus.QUEUING]: 'The upload has been received or is in progress and has not yet been queued for pinning.',
-        [PinStatus.PIN_QUEUED]: 'The upload has been received and is in the queue to be pinned.',
-        [PinStatus.PINNING]: 'The upload is being replicated to multiple IPFS nodes.',
-        [PinStatus.PINNED]: `The upload is fully pinned on ${numberOfPins} IPFS nodes.`,
+        [PinStatus.QUEUING]: statusMessages.queuing,
+        [PinStatus.PIN_QUEUED]: statusMessages.pin_queued,
+        [PinStatus.PINNING]: statusMessages.pinning,
+        [PinStatus.PINNED]: statusMessages.pinned.replace('*numberOfPins*', `${numberOfPins}`),
       }[status]),
-    [numberOfPins, status]
+    [numberOfPins, status, statusMessages]
   );
 
   const [isEditingName, setIsEditingName] = useState(false);
-  const fileRowLabels = AppData.page_content.file_manager.table.file_row_labels;
 
   return (
     <div className={clsx('files-manager-row', className, isHeader && 'files-manager-row-header')}>
@@ -103,15 +106,15 @@ const FileRowItem = props => {
           <CheckIcon className="check" />
         </span>
         <button onClick={onDelete} className="file-row-label delete medium-down-only">
-          {fileRowLabels.delete}
+          {fileRowLabels.delete.label}
         </button>
       </span>
       <span className="file-date">
-        <span className="file-row-label medium-down-only">{fileRowLabels.date}</span>
+        <span className="file-row-label medium-down-only">{fileRowLabels.date.label}</span>
         {date}
       </span>
       <span className={clsx(isEditingName && 'isEditingName', 'file-name')}>
-        <span className="file-row-label medium-down-only">{fileRowLabels.name}</span>
+        <span className="file-row-label medium-down-only">{fileRowLabels.name.label}</span>
         {!isEditingName ? (
           <span dangerouslySetInnerHTML={{ __html: name }} />
         ) : (
@@ -124,15 +127,15 @@ const FileRowItem = props => {
       </span>
       <span className="file-cid" title={cid}>
         <span className="file-row-label medium-down-only">
-          <Info content="The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>" />
-          {fileRowLabels.cid}
+          <Info content={fileRowLabels.cid.tooltip} />
+          {fileRowLabels.cid.label}
         </span>
         <span className="cid-truncate medium-up-only">
           {useMemo(() => truncateString(cid, 5, '...', 'double'), [cid])}
         </span>
         <span className="cid-full medium-down-only">{cid}</span>
         {isHeader ? (
-          <Info content="The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>" />
+          <Info content={fileRowLabels.cid.tooltip} />
         ) : (
           <CopyIcon
             className="copy-icon"
@@ -143,40 +146,40 @@ const FileRowItem = props => {
         )}
       </span>
       <span className="file-availability">
-        <span className="file-row-label medium-down-only">{fileRowLabels.available}</span>
+        <span className="file-row-label medium-down-only">{fileRowLabels.available.label}</span>
         Available
       </span>
       <span className="file-pin-status">
         <span className="file-row-label medium-down-only">
-          <Info content="Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes." />
-          {fileRowLabels.status}
+          <Info content={statusMessages.header} />
+          {fileRowLabels.status.label}
         </span>
         {status}
         {isHeader ? (
-          <Info content="Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes." />
+          <Info content={statusMessages.header} />
         ) : (
-          statusTooltip && <Info icon={<InfoBIcon />} content="The upload is fully pinned on 3 IPFS nodes." />
+          statusTooltip && <Info icon={<InfoBIcon />} content={statusMessages.pinned} />
         )}
       </span>
       <span className="file-storage-providers">
         <span className="file-row-label medium-down-only">
-          <Info content="Service providers offering storage capacity to the Filecoin network. <a href='https://docs.web3.storage/concepts/decentralized-storage/' target='_blank' rel='noreferrer'>Learn more</a>" />
-          {fileRowLabels.storage_providers}
+          <Info content={fileRowLabels.storage_providers.tooltip.header} />
+          {fileRowLabels.storage_providers.label}
         </span>
         {storageProviders}
         {isHeader ? (
-          <Info content="Service providers offering storage capacity to the Filecoin network. <a href='https://docs.web3.storage/concepts/decentralized-storage/' target='_blank' rel='noreferrer'>Learn more</a>" />
+          <Info content={fileRowLabels.storage_providers.tooltip.header} />
         ) : (
           !storageProviders.length && (
             <>
               Queuing...
-              <Info content="The content from this upload is being aggregated for storage on Filecoin. Filecoin deals will be active within 48 hours of upload." />
+              <Info content={fileRowLabels.storage_providers.tooltip.queuing} />
             </>
           )
         )}
       </span>
       <span className="file-size">
-        <span className="file-row-label medium-down-only">{fileRowLabels.size}</span>
+        <span className="file-row-label medium-down-only">{fileRowLabels.size.label}</span>
         {size}
       </span>
     </div>

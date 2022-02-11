@@ -158,12 +158,12 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
       </div>
       <FileRowItem
         onSelect={onSelectAllToggle}
-        date={fileRowLabels.date}
-        name={fileRowLabels.name}
-        cid={fileRowLabels.cid}
-        status={fileRowLabels.status}
-        storageProviders={fileRowLabels.storage_providers}
-        size={fileRowLabels.size}
+        date={fileRowLabels.date.label}
+        name={fileRowLabels.name.label}
+        cid={fileRowLabels.cid.label}
+        status={fileRowLabels.status.label}
+        storageProviders={fileRowLabels.storage_providers.label}
+        size={fileRowLabels.size.label}
         isHeader
         isSelected={
           !!selectedFiles.length &&

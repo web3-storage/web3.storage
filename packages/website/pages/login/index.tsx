@@ -4,10 +4,11 @@ import { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 
 import GithubSVG from 'assets/icons/github';
-import Button, { ButtonVariant } from 'components/button/button';
+import Button from 'components/button/button';
 import countly, { trackEvent } from 'lib/countly';
 import { loginEmail, loginSocial } from 'lib/magic';
 import { PageProps } from 'components/types';
+import LoginData from '../../content/pages/app/login.json';
 
 enum LoginType {
   GITHUB = 'github',
@@ -29,6 +30,8 @@ const Login = () => {
 
   // Redirecting state
   const [isLoggingIn, setIsLoggingIn] = useState('');
+
+  const pageContent = LoginData.page_content;
 
   // Callback for email login logic
   const onLoginWithEmail = useCallback(async () => {
@@ -66,7 +69,7 @@ const Login = () => {
   return (
     <div className="page-container login-container">
       <div className="login-content">
-        <h3>Log in with</h3>
+        <h3>{pageContent.heading}</h3>
         <button onClick={onGithubLogin}>
           <div className="section section-github">
             <GithubSVG /> {isLoggingIn === LoginType.GITHUB ? 'Redirecting...' : 'Github'}
@@ -76,20 +79,20 @@ const Login = () => {
         <div className="section section-email">
           <input
             className={clsx('login-email', errors.email && 'error')}
-            placeholder="Enter your email"
+            placeholder={pageContent.form_placeholder}
             onChange={useCallback(e => setFormData({ email: e.currentTarget.value }), [])}
           />
           <Button
-            variant={ButtonVariant.PINK_BLUE}
+            variant={pageContent.cta.theme}
             onClick={onLoginWithEmail}
             tracking={{
-              event: countly.events.LOGIN_CLICK,
-              ui: countly.ui.LOGIN,
-              action: 'Sign Up / Login',
+              event: countly.events[pageContent.cta.event],
+              ui: countly.ui[pageContent.cta.ui],
+              action: pageContent.cta.action,
             }}
             disabled={isLoggingIn === LoginType.EMAIL}
           >
-            Sign up / Login
+            {pageContent.cta.text}
           </Button>
         </div>
       </div>
@@ -100,7 +103,7 @@ const Login = () => {
 export function getStaticProps(): { props: PageProps } {
   return {
     props: {
-      title: 'Login - Web3 Storage',
+      title: LoginData.seo.title,
       redirectTo: '/account',
       redirectIfFound: true,
       authOnLoad: false,

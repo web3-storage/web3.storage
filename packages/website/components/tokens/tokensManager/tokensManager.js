@@ -79,7 +79,7 @@ const TokensManager = ({ content }) => {
           onChange={setSortedTokens}
         />
       </div>
-      <TokenRowItem name={tokenRowLabels.name} secret={tokenRowLabels.secret} isHeader />
+      <TokenRowItem name={tokenRowLabels.name.label} secret={tokenRowLabels.secret.label} isHeader />
       <div className="tokens-manager-table-content">
         {isFetchingTokens || !fetchDate ? (
           <Loading className={'tokens-manager-loading-spinner'} />
