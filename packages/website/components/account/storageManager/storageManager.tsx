@@ -17,7 +17,7 @@ const terabyte = 1099511627776;
 
 type StorageManagerProps = {
   className?: string;
-  content?: object;
+  content?: any;
 };
 
 const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body=${encodeURIComponent(

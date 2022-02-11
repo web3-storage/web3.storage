@@ -17,11 +17,10 @@ import Sortable from 'ZeroComponents/sortable/sortable';
 import Pagination from 'ZeroComponents/pagination/pagination';
 import { formatTimestamp } from 'lib/utils';
 import { useUploads } from 'components/contexts/uploadsContext';
-import { ContentProps } from './filesManagerInterfaces';
 
 type FilesManagerProps = {
   className?: string;
-  content?: ContentProps;
+  content?: any;
 };
 
 const FilesManager = ({ className, content }: FilesManagerProps) => {
