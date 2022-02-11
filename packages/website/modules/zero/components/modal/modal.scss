@@ -1,0 +1,39 @@
+
+.modalContainer {
+  position: fixed;
+  z-index: 10005;
+  max-width: 90vw;
+  max-height: 90vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  .modal {
+    background: white;
+    position: relative;
+  }
+
+  .modalClose {
+    position: fixed;
+    top: 0;
+    right: 0;
+    max-height: 10%;
+    
+    button {
+      
+    }
+  }
+}
+
+.modalBackground {
+  background: rgba(black, 0.8);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 10000;
+}

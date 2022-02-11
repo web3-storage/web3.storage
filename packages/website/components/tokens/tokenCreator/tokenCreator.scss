@@ -1,0 +1,54 @@
+.token-creator-container {
+  color: $cyan;
+  @include fontSize_Mini;
+  @include medium {
+    position: absolute;
+    top: 8rem;
+    width: 100%;
+    .button {
+      width: 100%;
+      button {
+        align-items: end;
+      }
+    }
+  }
+}
+
+.token-creator-input {
+  text-decoration: none;
+  outline: none;
+  min-width: 22.625rem;
+  height: 2.375rem;
+  padding: 0 1.875rem;
+  color: $cyan;
+  @include border_Background_Waterloo_White;
+  @include medium {
+    width: 100%;
+    min-width: 0;
+  }
+
+  &::placeholder {
+    color: $cyan;
+    @include fontSize_Mini;
+  }
+}
+
+.token-creator-input-container {
+  position: relative;
+
+  &:before {
+    content: ' ';
+    position: absolute;
+    left: 1.25rem;
+    height: 1.4375rem;
+    top: 0.5rem;
+    border-right: 0.0625rem solid $doveGray;
+    transform: rotate(10deg);
+  }
+}
+
+.token-creator-submit {
+  position: absolute;
+  right: 1rem;
+  @include fontSize_MediumLarge;
+}

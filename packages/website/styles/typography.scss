@@ -1,0 +1,267 @@
+// ////////////////////////////////////////////////////////////////// Typography
+// =============================================================================
+// -------------------------------------------------------------------- Families
+$font_Primary: 'SuisseIntl';
+
+// ---------------------------------------------------------------------- Sizing
+// fontSize_Atom | 11pt
+// fontSize_Tiny | 13pt
+// fontSize_Mini | 15pt
+// fontSize_Small | 16pt
+// fontSize_Regular | 18pt
+// fontSize_Medium | 20pt
+// fontSize_MediumLarge | 25pt
+// fontSize_MediumExtraLarge |30pt
+// fontSize_Large | 35pt
+// fontSize_ExtraLarge | 45pt
+// fontSize_Huge | 67pt
+
+$fontSize_Atom: 0.6875rem;
+$fontSize_Tiny: 0.8125rem;
+$fontSize_Mini: 0.9375rem;
+$fontSize_Small: 1rem;
+$fontSize_Regular: 1.125rem;
+$fontSize_Medium: 1.25rem;
+$fontSize_MediumLarge: 1.5625rem;
+$fontSize_MediumExtraLarge: 1.875rem;
+$fontSize_Large: 2.1875rem;
+$fontSize_ExtraLarge: 2.8125rem;
+$fontSize_Huge: 4.1875rem;
+
+// ---------------------------------------------------------------------- Weight
+$fontWeight_Light: 300;
+$fontWeight_Regular: 400;
+$fontWeight_Medium: 500;
+$fontWeight_Semibold: 600;
+$fontWeight_Bold: 700;
+
+// --------------------------------------------------------------------- Leading
+// leading_Small | 23pt
+// leading_Regular | 35pt
+// leading_Medium | 40pt
+// leading_Large | 50pt
+// leading_MediumLarge | 60pt
+// leading_ExtraLarge | 70pt
+// leading_Huge | 80pt
+// leading_Massive | 103pt
+
+$leading_Tiny: 1rem;
+$leading_Small: 1.4375rem;
+$leading_Regular: 35px;
+$leading_Medium: 2.5rem;
+$leading_MediumLarge: 3.125rem;
+$leading_Large: 3.75rem;
+$leading_ExtraLarge: 4.375rem;
+$leading_Huge: 5rem;
+$leading_Massive: 6.4375rem;
+
+@function leading($lineHeight, $fontSize) {
+  @return math.div(math.round(10 * math.div($lineHeight, $fontSize)), 10);
+}
+
+// -------------------------------------------------------------- Letter Spacing
+$letterSpacing_None: 0;
+$letterSpacing_Regular: 0.02em;
+$letterSpacing_Large: 0.03em;
+
+// ////////////////////////////////////////////////////////////////////// Mixins
+// =============================================================================
+// ------------------------------------------------------ Typography | Font Size
+
+@mixin fontSize_Atom {
+  font-size: $fontSize_Atom;
+}
+@mixin fontSize_Tiny {
+  font-size: $fontSize_Tiny;
+}
+@mixin fontSize_Mini {
+  font-size: $fontSize_Mini;
+}
+@mixin fontSize_Small {
+  font-size: $fontSize_Small;
+}
+@mixin fontSize_Regular {
+  font-size: $fontSize_Regular;
+}
+@mixin fontSize_Medium {
+  font-size: $fontSize_Medium;
+}
+
+@mixin fontSize_Large {
+  font-size: $fontSize_Large;
+}
+@mixin fontSize_MediumLarge {
+  font-size: $fontSize_MediumLarge;
+}
+@mixin fontSize_MediumExtraLarge {
+  font-size: $fontSize_MediumExtraLarge;
+}
+@mixin fontSize_ExtraLarge {
+  font-size: $fontSize_ExtraLarge;
+}
+@mixin fontSize_Huge {
+  font-size: $fontSize_Huge;
+}
+
+// ---------------------------------------------------- Typography | Font Weight
+@mixin fontWeight_Light {
+  font-weight: $fontWeight_Light;
+}
+@mixin fontWeight_Regular {
+  font-weight: $fontWeight_Regular;
+}
+@mixin fontWeight_Medium {
+  font-weight: $fontWeight_Medium;
+}
+@mixin fontWeight_Semibold {
+  font-weight: $fontWeight_Semibold;
+}
+@mixin fontWeight_Bold {
+  font-weight: $fontWeight_Bold;
+}
+
+// -------------------------------------------------------- Typography | Leading
+@mixin leading_Tiny {
+  line-height: $leading_Tiny;
+}
+@mixin leading_Small {
+  line-height: $leading_Small;
+}
+@mixin leading_Regular {
+  line-height: $leading_Regular;
+}
+@mixin leading_Medium {
+  line-height: $leading_Medium;
+}
+@mixin leading_Large {
+  line-height: $leading_Large;
+}
+@mixin leading_MediumLarge {
+  line-height: $leading_MediumLarge;
+}
+@mixin leading_ExtraLarge {
+  line-height: $leading_ExtraLarge;
+}
+@mixin leading_Huge {
+  line-height: $leading_Huge;
+}
+@mixin leading_Massive {
+  line-height: $leading_Massive;
+}
+
+// --------------------------------------------------------- Typography | Groups
+// fontSize_Tiny | 14pt
+// fontSize_Mini | 16pt
+// fontSize_Small | 18pt
+// fontSize_Regular | 20pt
+// fontSize_Medium | 24pt
+// fontSize_Large | 35pt
+// fontSize_ExtraLarge | 50pt
+// fontSize_Huge | 60pt
+
+// fontWeight_Regular: 400;
+// fontWeight_Semibold: 600;
+// fontWeight_Extrabold: 800;
+
+// leading_Small | 23pt
+// leading_Regular | 35pt
+// leading_Medium | 40pt
+// leading_Large | 50pt
+// leading_ExtraLarge | 70pt
+// leading_Huge | 80pt
+// leading_Massive | 103pt
+
+@mixin title {
+  // large heading often found in the Hero
+  @include fontSize_Huge;
+  @include fontWeight_Extrabold;
+  @include leading_Massive;
+}
+
+@mixin h1 {
+  @include fontSize_ExtraLarge;
+  @include leading_MediumLarge;
+  @include fontWeight_Semibold;
+}
+
+@mixin h2 {
+  @include fontSize_ExtraLarge;
+  @include leading_ExtraLarge;
+  @include fontWeight_Semibold;
+}
+
+@mixin h3 {
+  @include fontSize_Large;
+  @include leading_Large;
+  @include fontWeight_Semibold;
+}
+
+@mixin h4 {
+  @include fontSize_Regular;
+  @include leading_Regular;
+  @include fontWeight_Semibold;
+}
+
+@mixin h5 {
+  @include fontSize_MediumExtraLarge;
+  @include leading_Regular;
+  @include fontWeight_Semibold;
+}
+
+@mixin p1 {
+  @include fontSize_Medium;
+  @include leading_Medium;
+  @include fontWeight_Semibold;
+}
+
+@mixin p2 {
+  // p2 should just take the base styles from the body/html tag in main.scss
+}
+
+@mixin p3 {
+  @include fontSize_Regular;
+  @include leading_Regular;
+  @include fontWeight_Semibold();
+}
+
+@mixin label_1 {
+  @include leading_Small;
+  @include fontWeight_Semibold;
+}
+
+@mixin label_2 {
+  @include fontSize_Small;
+  @include leading_Regular;
+  @include fontWeight_Semibold;
+}
+
+@mixin label_3 {
+  @include fontSize_Tiny;
+  @include leading_Small;
+}
+
+@mixin label_4 {
+  @include fontSize_Small;
+  @include leading_Small;
+  @include fontWeight_Regular;
+}
+
+@mixin label_5 {
+  @include fontSize_Tiny;
+  @include fontWeight_Semibold;
+}
+
+@mixin gradient_Text {
+  @include magentaCyan_Gradient;
+  background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  text-fill-color: transparent;
+}
+
+// @mixin subheading {
+//   @include fontSize_Huge;
+//   @include fontSize_Huge;
+//   @include fontWeight_Extrabold;
+// }

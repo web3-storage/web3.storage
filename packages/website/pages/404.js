@@ -1,19 +1,14 @@
-import { useEffect } from 'react'
+// ===================================================================== Imports
+import GeneralPageData from '../content/pages/general.json';
+import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
 
-import countly from '../lib/countly'
+// ===================================================================== Exports
+const blocks = GeneralPageData.error_404.sections;
 
-export default function Custom404() {
-    useEffect(() => {
-        countly.trackEvent(countly.events.NOT_FOUND, {
-            path: location.pathname
-        })
-    }, [])
-    
-    return  (
-        <main className="flex items-center justify-between my-4 lg:my-32 layout-margins">
-            <h1 className="">
-                404 - Page Not Found
-            </h1>
-        </main>
-    )
-}
+const Custom404 = () => (
+  <main className="page-404">
+    <BlockBuilder id="error_section-1" subsections={blocks} />
+  </main>
+);
+
+export default Custom404;

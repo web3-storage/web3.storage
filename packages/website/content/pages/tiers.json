@@ -1,0 +1,426 @@
+{
+  "seo": {
+    "title": "",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "page_content": [
+    [
+      {
+        "id": "pricing_hero_header",
+        "columns": [
+          {
+            "type": "hero",
+            "page": "pricing",
+            "cols": {
+              "num": "col-6_md-5_sm-10_ti-12",
+              "push_left": "off-6_md-6_sm-2_ti-0"
+            },
+            "format": "header",
+            "heading": "Looking for storage limits? Look elsewhere.",
+            "subheading": "Stop worrying about running out of data storage and focus only on the potential of your application. <b>All storage tiers are free.</b>"
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "section_tiers",
+        "grid": ["middle"],
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
+            },
+            "format": "medium",
+            "heading": "Storage that grows with you",
+            "description": [
+              "Web3.storage is designed to scale to meet your storage needs. The economics of Filecoin allow us to offer all storage tiers for free.",
+              "The 1TB storage tier is open to everyone with no strings attached. If you need more than 1TB, that’s still free, but we need to know about your needs, so we can scale the service to meet your needs.",
+              "Here’s a breakdown of our free storage tiers:"
+            ]
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
+            },
+            "customizations": [
+              {
+                "type": "triangle",
+                "id": "section_tiers-triangle"
+              },
+              {
+                "type": "image_block",
+                "src": "/images/tiers/holo-graph.png"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "section_tiers-cards",
+        "columns": [
+          {
+            "type": "card_list_block",
+            "cols": {
+              "num": "col-12"
+            },
+            "direction": "column",
+            "cards": [
+              {
+                "type": "E",
+                "label": "FREE",
+                "title": "Up to 1TB",
+                "description": "<ul><li>No strings attached</li><li>Limits around storage/retrieval performance</li></ul>",
+                "cta": {
+                  "text": "START HERE",
+                  "url": "/account",
+                  "theme": "dark",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              },
+              {
+                "type": "E",
+                "label": "STILL FREE",
+                "title": "1 to 10 TB",
+                "description": "<ul><li>Just fill out a form to tell us more about what you’re building. We want to understand your needs and scale with you</li><li>Higher limits around storage/retrieval performance</li></ul>",
+                "cta": {
+                  "text": "REQUEST MORE STORAGE",
+                  "url": "/account",
+                  "theme": "outline-dark",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              },
+              {
+                "type": "E",
+                "label": "YEP, ALSO STILL FREE",
+                "title": "10 TB +",
+                "description": "<ul><li>Subject to everything in 1-10TB tier</li><li>Need to meet with us quarterly to discuss their needs</li><li>Higher limits around storage/retrieval performance</li></ul>",
+                "cta": {
+                  "text": "REQUEST MORE STORAGE",
+                  "url": "/account",
+                  "theme": "outline-dark",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "pricing_section_FAQ_info",
+        "grid": ["middle"],
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-6_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
+            },
+            "format": "medium",
+            "heading": "Frequently Asked Questions",
+            "subheading": "How is this free?",
+            "description": [
+              "Web3.Storage offers a simple interface that allows users and developers to take advantage of the vast array of decentralized storage provided by the Filecoin network.",
+              "The unique economics of Filecoin allow Web3.Storage to be completely free to use, while still ensuring that storage providers have a strong incentive to preserve user data for the long term."
+            ],
+            "cta": {
+              "url": "/faq",
+              "text": "MORE FAQs",
+              "theme": "light",
+              "event": "",
+              "ui": "",
+              "action": ""
+            }
+          },
+          {
+            "type": "image_block",
+            "cols": {
+              "num": "col-5_sm-8_mi-10_ti-12",
+              "push_left": "off-1_sm-2_mi-1_ti-0"
+            },
+            "src": "/images/index/cluster-1.png"
+          }
+        ]
+      },
+      {
+        "id": "section_FAQ_ctas",
+        "grid": ["noGutter"],
+        "columns": [
+          {
+            "type": "card_list_block",
+            "cols": {
+              "num": "col-12_sm-8_mi-10_ti-12",
+              "push_left": "off-0_sm-2_mi-1_ti-0"
+            },
+            "direction": "row",
+            "cards": [
+              {
+                "type": "F",
+                "label": "FAQ",
+                "title": "How is web3.storage different from pinning services for IPFS?",
+                "description": "Web3.Storage is currently not a pinning service. At the moment, files already on the IPFS network cannot be pinned to Web3.Storage via their…",
+                "cta": {
+                  "url": "/faq",
+                  "text": "READ MORE",
+                  "theme": "text-purple",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              },
+              {
+                "type": "F",
+                "label": "FAQ",
+                "title": "What happens if web3.storage is discontinued?",
+                "description": "One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data…",
+                "cta": {
+                  "url": "/faq",
+                  "text": "READ MORE",
+                  "theme": "text-purple",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "section_explore-docs",
+        "grid": ["noGutter"],
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-3_md-7_ti-8",
+              "push_left": "off-0_md-1_sm-0"
+            },
+            "format": "medium",
+            "heading": "Open product. Open book.",
+            "cta": {
+              "url": "https://docs.web3.storage/",
+              "text": "EXPLORE DOCS",
+              "theme": "dark",
+              "event": "",
+              "ui": "",
+              "action": ""
+            }
+          },
+          {
+            "type": "card_list_block",
+            "cols": {
+              "num": "col-8_md-10_sm-12_mi-10",
+              "push_left": "off-1_md-1_sm-0_mi-1"
+            },
+            "cards": [
+              {
+                "type": "D",
+                "categories": [
+                  {
+                    "heading": "Welcome",
+                    "links": [
+                      {
+                        "url": "https://docs.web3.storage/#quickstart",
+                        "text": "Quickstart"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/#create-an-account",
+                        "text": "Create an Account"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/#get-an-api-token",
+                        "text": "Get an API token"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/#create-the-upload-script",
+                        "text": "Create the Upload Script"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/#run-the-script",
+                        "text": "Run the Script"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/#get-your-file",
+                        "text": "Get your file"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/#next-steps",
+                        "text": "Next Steps"
+                      }
+                    ]
+                  },
+                  {
+                    "heading": "Concepts",
+                    "links": [
+                      {
+                        "url": "https://docs.web3.storage/concepts/content-addressing",
+                        "text": "Content Addressing"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/concepts/decentralized-storage",
+                        "text": "Decentralized Storage"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "D",
+                "categories": [
+                  {
+                    "heading": "How-tos",
+                    "links": [
+                      {
+                        "url": "https://docs.web3.storage/how-tos/store/",
+                        "text": "Store"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/how-tos/retrieve",
+                        "text": "Retrieve"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/how-tos/query",
+                        "text": "Query"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/how-tos/list",
+                        "text": "List"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/how-tos/work-with-car-files",
+                        "text": "Work with Content"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/how-tos/generate-api-token",
+                        "text": "Generate an API Token"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/how-tos/troubleshooting",
+                        "text": "Troubleshooting"
+                      }
+                    ]
+                  },
+                  {
+                    "heading": "Reference",
+                    "links": [
+                      {
+                        "url": "https://docs.web3.storage/reference/http-api/",
+                        "text": "HTTP API Reference"
+                      },
+                      {
+                        "url": "https://docs.web3.storage/reference/js-client-library",
+                        "text": "Javascript Client Library"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-3"
+            },
+            "format": "medium",
+            "heading": "Open product. Open book.",
+            "cta": {
+              "url": "https://docs.web3.storage/",
+              "text": "EXPLORE DOCS",
+              "theme": "dark",
+              "event": "",
+              "ui": "",
+              "action": ""
+            }
+          }
+        ]
+      }
+    ]
+  ],
+  "floater_animations": [
+    {
+      "trigger": "pricing_hero_header",
+      "duration": 1000,
+      "offset": 700,
+      "floaters": [
+        {
+          "id": "pricing_hero-coil",
+          "default": "rotate(17deg)",
+          "start": {
+            "x": 1,
+            "y": 20
+          },
+          "end": {
+            "x": 10,
+            "y": -200
+          }
+        },
+        {
+          "id": "pricing_hero-corkscrew",
+          "start": {
+            "rotate": -1,
+            "scale": 1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -25,
+            "scale": 1.3,
+            "x": -60,
+            "y": 30
+          }
+        },
+        {
+          "id": "pricing_hero-cross",
+          "start": {
+            "scale": 1,
+            "rotate": -1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "scale": 1.3,
+            "rotate": -30,
+            "x": -30,
+            "y": 20
+          }
+        },
+        {
+          "id": "section_tiers-triangle",
+          "default": "scaleX(-1)",
+          "start": {
+            "rotate": -100,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -145,
+            "x": -80,
+            "y": 60
+          }
+        }
+      ]
+    }
+  ]
+}
