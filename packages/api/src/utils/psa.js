@@ -1,5 +1,5 @@
 import { Validator } from '@cfworker/json-schema'
-import { PSAErrorInvalidData } from '../errors.js'
+import { PSAErrorInvalidData, PSAErrorRequiredData } from '../errors.js'
 import { normalizeCid } from '../utils/cid.js'
 
 /**
@@ -67,7 +67,6 @@ export const INVALID_CID = 'The CID provided is invalid.'
 export const INVALID_REPLACE = 'Existing and replacement CID are the same.'
 export const INVALID_REQUEST_ID = 'Request id should be a string.'
 export const PINNING_FAILED = 'PSA_PINNING_FAILED'
-export const REQUIRED_CID = 'CID is required.'
 export const REQUIRED_REQUEST_ID = 'Request id is required.'
 
 export const DEFAULT_PIN_LISTING_LIMIT = 10
@@ -240,7 +239,15 @@ export function parseValidatorErrors (errors) {
   // Last error message contains the most useful information.
   const errorDetail = errors.pop()
   if (!errorDetail) return new PSAErrorInvalidData()
+
   const location = errorDetail.instanceLocation
   const message = errorDetail.error
-  return new PSAErrorInvalidData(`${location}: ${message}`)
+  const errorType = errorDetail.keyword
+
+  switch (errorType) {
+    case 'required':
+      return new PSAErrorRequiredData(message)
+    default:
+      return new PSAErrorInvalidData(`${location}: ${message}`)
+  }
 }

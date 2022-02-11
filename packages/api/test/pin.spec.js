@@ -8,7 +8,6 @@ import {
   ERROR_CODE,
   INVALID_CID,
   INVALID_REPLACE,
-  REQUIRED_CID,
   getEffectivePinStatus
 } from '../src/utils/psa.js'
 import { PinningUnauthorizedError, PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from '../src/errors.js'
@@ -79,7 +78,7 @@ const createPinRequest = async (cid, token) => {
   })).json()
 }
 
-describe.only('Pinning APIs endpoints', () => {
+describe('Pinning APIs endpoints', () => {
   describe('GET /pins', () => {
     let baseUrl
     let token
@@ -427,7 +426,7 @@ describe.only('Pinning APIs endpoints', () => {
       assert.strictEqual(res.status, ERROR_CODE)
       const error = await res.json()
       assert.strictEqual(error.reason, PSAErrorRequiredData.CODE)
-      assert.strictEqual(error.details, REQUIRED_CID)
+      assert.strictEqual(error.details, 'Instance does not have required property "cid".')
     })
 
     it('throws error if cid is invalid', async () => {
