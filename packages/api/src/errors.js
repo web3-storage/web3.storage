@@ -138,7 +138,7 @@ export class PSAErrorDB extends PinningServiceApiError {
   constructor (message = 'DB transaction failed.') {
     super(message)
     this.details = message
-    this.status = 501
+    this.status = 500
     this.reason = PSAErrorDB.CODE
   }
 }
