@@ -195,6 +195,29 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
   background: $gradient_PinkBlue;
 }
 
+@mixin gradient_BlurryDoubleBG_PinkBlue {
+  content: ' ';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  filter: blur(0.1875rem);
+  background: linear-gradient(
+    65deg,
+    $cerise 0%,
+    $cerise 5%,
+    $royalBlue 16%,
+    $pictonBlue 33%,
+    $cerise 50%,
+    $royalBlue 67%,
+    $pictonBlue 83%,
+    $cerise 95%,
+    $cerise 100%
+  );
+  background-size: 300%;
+  animation: blurry-gradient-position 40s linear infinite;
+  animation-play-state: paused;
+}
+
 @mixin gradient_Background_BluePurple {
   background: $gradient_BluePurple;
 }
@@ -209,6 +232,18 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
     margin: auto;
     box-shadow: 0 0.125rem $heliotrope;
     opacity: 0.5;
+  }
+}
+
+@keyframes blurry-gradient-position {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 500% 0;
+  }
+  100% {
+    background-position: 0 0;
   }
 }
 

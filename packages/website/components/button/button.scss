@@ -189,7 +189,7 @@
     }
 
     &:before {
-      @include gradient_BlurryBox_PinkBlue;
+      @include gradient_BlurryDoubleBG_PinkBlue;
     }
 
     &:after {
@@ -203,6 +203,12 @@
       @include fontWeight_Regular;
       position: relative;
       z-index: 1;
+    }
+
+    &:hover {
+      &:before {
+        animation-play-state: running;
+      }
     }
   }
 
