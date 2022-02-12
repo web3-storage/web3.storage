@@ -33,8 +33,9 @@
     &.admonition-tip .admonition-icon {
         background-image: url(#{$imagePath}/icon-bulb.svg);
         background-repeat: no-repeat;
-        width: 20px;
+        width: 24px;
         height: 30px;
+        background-size: cover;
         svg {
             display: none;
         }
