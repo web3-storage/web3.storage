@@ -122,6 +122,24 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(error.details, '#/limit: Instance type "number" is invalid. Expected "integer".')
     })
 
+    it('requires status', async () => {
+      const url = new URL(`${baseUrl}`).toString()
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert.strictEqual(res.status, ERROR_CODE)
+      const error = await res.json()
+      assert.strictEqual(error.reason, PSAErrorRequiredData.CODE)
+      assert.strictEqual(error.details, 'Instance does not have required property "status".')
+    })
+
     it('validates CID values passed as filter', async () => {
       const cids = [
         'notAValidCID',
