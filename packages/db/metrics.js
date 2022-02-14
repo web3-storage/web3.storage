@@ -38,15 +38,19 @@ const uploadTypeMapping = {
 }
 
 export async function getUploadTypeMetrics (client, key) {
-  const uploadType = uploadTypeMapping[key]
-  const { data, error } = await client.rpc('uploads_by_type', { query_type: uploadType })
+  const type = uploadTypeMapping[key]
+  const { count, error } = await client
+    .from('upload')
+    .select('*', { head: true, count: 'exact' })
+    .match({ type })
+    .range(0, 1)
 
   if (error) {
     throw new DBError(error)
   }
 
   return {
-    total: data
+    total: count
   }
 }
 
