@@ -1,0 +1,215 @@
+{
+  "seo": {
+    "title": "Account - Web3 Storage",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "page_content": {
+    "dashboard": {
+      "heading": "Account",
+      "card_left": {
+        "heading": "API Tokens",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+        "ctas": [
+          {
+            "link": "/tokens?create=true",
+            "text": "Create a Token",
+            "theme": "pink-blue",
+            "ui": "PROFILE_GETTING_STARTED",
+            "action": "Create an API Token"
+          },
+          {
+            "link": "/tokens",
+            "text": "Manage Tokens",
+            "theme": "outline-light",
+            "ui": "PROFILE_API_TOKENS",
+            "action": "Manage tokens"
+          }
+        ]
+      },
+      "card_center": {
+        "heading": "Read the docs",
+        "description": "See the docs for guides and walkthroughs",
+        "ctas": [
+          {
+            "link": "https://docs.web3.storage",
+            "text": "Explore the docs",
+            "theme": "pink-blue",
+            "ui": "PROFILE_GETTING_STARTED",
+            "action": "Explore the docs"
+          }
+        ]
+      },
+      "card_right": {
+        "heading": {
+          "option_1": "Upload more files",
+          "option_2": "Upload your first file"
+        },
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "ctas": [
+          {
+            "text": "Upload Files",
+            "theme": "outline-dark",
+            "ui": "FILES",
+            "action": "Upload File"
+          }
+        ]
+      }
+    },
+    "storage_manager": {
+      "heading": "Storage",
+      "prompt": "Need more free storage?",
+      "buttons": {
+        "search": "Search my files",
+        "request": "Submit a request"
+      },
+      "tiers": [
+        {
+          "max_space_label": "1 TB",
+          "unlock_label": "1-10 TB"
+        },
+        {
+          "max_space_label": "10 TB",
+          "unlock_label": "10+ TB"
+        },
+        {
+          "max_space_label": "0+ TB"
+        }
+      ]
+    },
+    "file_manager": {
+      "heading": "Files",
+      "table": {
+        "message": "You don’t have any files uploaded yet.",
+        "cta": {
+          "text": "Upload your first file",
+          "theme": "text",
+          "ui": "FILES",
+          "action": "Upload File"
+        },
+        "file_row_labels": {
+          "date": {
+            "label": "Date"
+          },
+          "name": {
+            "label": "Name"
+          },
+          "cid": {
+            "label": "CID",
+            "tooltip": "The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>"
+          },
+          "status": {
+            "label": "Status",
+            "tooltip": {
+              "header": "Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes.",
+              "queuing": "The upload has been received or is in progress and has not yet been queued for pinning.",
+              "pin_queued": "The upload has been received and is in the queue to be pinned.",
+              "pinning": "The upload is being replicated to multiple IPFS nodes.",
+              "pinned": "The upload is fully pinned on *numberOfPins* IPFS nodes."
+            }
+          },
+          "storage_providers": {
+            "label": "Storage Providers",
+            "tooltip": {
+              "header": "Service providers offering storage capacity to the Filecoin network. <a href='https://docs.web3.storage/concepts/decentralized-storage/' target='_blank' rel='noreferrer'>Learn more</a>",
+              "queuing": "The content from this upload is being aggregated for storage on Filecoin. Filecoin deals will be active within 48 hours of upload."
+            }
+          },
+          "size": {
+            "label": "Size"
+          },
+          "available": {
+            "label": "Available"
+          },
+          "delete": {
+            "label": "Delete"
+          }
+        }
+      },
+      "ui": {
+        "filter_placeholder": "Search for a file",
+        "refresh": "Refresh",
+        "sortby": {
+          "label": "Sort By",
+          "options": [
+            {
+              "label": "Alphabetical A-Z",
+              "key": "name",
+              "value": "a-z",
+              "direction": "ASC",
+              "compareFn": "ALPHANUMERIC"
+            },
+            {
+              "label": "Alphabetical Z-A",
+              "key": "name",
+              "value": "z-a",
+              "direction": "DESC",
+              "compareFn": "ALPHANUMERIC"
+            },
+            {
+              "label": "Most Recently Added",
+              "value": "newest",
+              "direction": "NEWEST",
+              "compareFn": "TIMEBASED"
+            },
+            {
+              "label": "Least Recently Added",
+              "value": "oldest",
+              "direction": "OLDEST",
+              "compareFn": "TIMEBASED"
+            },
+            {
+              "label": "Largest size",
+              "value": "largest",
+              "direction": "LARGEST",
+              "compareFn": "SIZEBASED"
+            },
+            {
+              "label": "Smallest size",
+              "value": "smallest",
+              "direction": "SMALLEST",
+              "compareFn": "SIZEBASED"
+            }
+          ]
+        },
+        "delete": {
+          "text": "Delete Selected",
+          "alert": "Are you sure? Deleted files cannot be recovered!"
+        },
+        "results": {
+          "options": [
+            { "label": "View 10 Results", "value": "10" },
+            { "label": "View 20 Results", "value": "20" },
+            { "label": "View 50 Results", "value": "50" },
+            { "label": "View 100 Results", "value": "100" }
+          ]
+        }
+      }
+    },
+    "file_uploader": {
+      "heading": {
+        "option_1": "Upload more files",
+        "option_2": "Upload a file"
+      },
+      "subheading": "You can also upload files using the <a href='https://www.npmjs.com/package/web3.storage' target='_blank'>JS Client Library.</a>",
+      "drop_prompt": "Drag and drop your files here",
+      "blocks": [
+        {
+          "icon": "globe_icon",
+          "heading": "Public Data",
+          "description": "All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. Do not store any private or sensitive information in an unencrypted form using Web3.Storage."
+        },
+        {
+          "icon": "infinity_icon",
+          "heading": "Permanent Data",
+          "description": "Deleting files from the Web3.Storage site’s Files page will remove them from the file listing for your account, but that doesn’t prevent nodes on the decentralized storage network from retaining copies of the data indefinitely. Do not use Web3.Storage for data that may need to be permanently deleted in the future."
+        }
+      ]
+    }
+  }
+}

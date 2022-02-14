@@ -3,7 +3,9 @@ import clsx from 'clsx';
 import CopyIcon from 'assets/icons/copy';
 import TrashIcon from 'assets/icons/trash';
 import { addTextToClipboard, truncateString } from 'lib/utils';
-import { tokenRowLabels } from 'components/tokens/tokensManager/tokenRowLabels.const.js';
+import TokensData from '../../../content/pages/app/tokens.json';
+
+const tokenRowLabels = TokensData.page_content.tokens_manager.table.token_row_labels;
 
 /**
  * @typedef {Object} TokenRowItemProps
@@ -31,11 +33,11 @@ const TokenRowItem = ({ className = '', name, secret, id = '', isHeader, onToken
     )}
   >
     <span className="token-name" title={name}>
-      <span className="file-row-label medium-down-only">{tokenRowLabels.NAME}</span>
+      <span className="file-row-label medium-down-only">{tokenRowLabels.name.label}</span>
       {name}
     </span>
     <span className="token-id-container" title={secret}>
-      <span className="file-row-label medium-down-only">{tokenRowLabels.SECRET}</span>
+      <span className="file-row-label medium-down-only">{tokenRowLabels.secret.label}</span>
       <span className="token-id">{truncateString(secret, 36, '...', 'double')}</span>
     </span>
     {!isHeader && (

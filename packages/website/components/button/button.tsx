@@ -30,7 +30,7 @@ type ButtonProps = {
   className?: string;
   href?: string;
   tracking?: TrackingProps;
-  variant?: ButtonVariant;
+  variant?: ButtonVariant | string;
   children?: React.ReactNode;
   disabled?: boolean;
 };

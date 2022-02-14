@@ -6,7 +6,17 @@ import countly from 'lib/countly';
 import Button, { ButtonVariant } from 'components/button/button';
 import { useTokens } from 'components/contexts/tokensContext';
 
-const TokenCreator = () => {
+/**
+ * @typedef {Object} TokenCreatorProps
+ * @property {object} [content]
+ */
+
+/**
+ *
+ * @param {TokenCreatorProps} props
+ * @returns
+ */
+const TokenCreator = ({ content }) => {
   const inputRef = useRef(/** @type {HTMLInputElement|null} */ (null));
 
   const { query, push } = useRouter();
@@ -48,11 +58,11 @@ const TokenCreator = () => {
   return (
     <div className={clsx('token-creator-container', isCreating && 'isDisabled')}>
       {isCreating ? (
-        'Creating...'
+        content.loading_message
       ) : (
         <>
           <form className={clsx(!query.create && 'hidden', 'token-creator-input-container')} onSubmit={onTokenCreate}>
-            <input ref={inputRef} required className="token-creator-input" placeholder="Name your token" />
+            <input ref={inputRef} required className="token-creator-input" placeholder={content.placeholder} />
             <button className="token-creator-submit">+</button>
           </form>
           <Button
@@ -61,7 +71,7 @@ const TokenCreator = () => {
             onClick={() => push('/tokens?create=true')}
             variant={ButtonVariant.TEXT}
           >
-            + Create a new API Token
+            {content.prompt}
           </Button>
         </>
       )}

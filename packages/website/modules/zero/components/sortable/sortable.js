@@ -22,7 +22,14 @@ import Dropdown from 'ZeroComponents/dropdown/dropdown'
  * @prop {function} [onChange]
  */
 
-export const SortDirection = { ASC: 'ASC', DESC: 'DESC' }
+export const SortDirection = {
+  ASC: 'ASC',
+  DESC: 'DESC',
+  NEWEST: 'NEWEST',
+  OLDEST: 'OLDEST',
+  LARGEST: 'LARGEST',
+  SMALLEST: 'SMALLEST'
+}
 
 export const SortType = {
   ALPHANUMERIC: (items, direction, key) => {
@@ -39,11 +46,41 @@ export const SortType = {
       return items.sort((a, b) => typeof a !== 'object' && typeof b !== 'object' ? b.localeCompare(a) : console.warn(`Missing key definition`))
     }
     return items
+  },
+  TIMEBASED: (items, direction) => {
+    if (direction === SortDirection.NEWEST) {
+      return items.sort((a, b) => b['created'].localeCompare(a['created']))
+    } else if (direction === SortDirection.OLDEST) {
+      return items.sort((a, b) => a['created'].localeCompare(b['created']))
+    }
+    return items
+  },
+  SIZEBASED: (items, direction) => {
+    if (direction === SortDirection.LARGEST) {
+      return items.sort((a, b) => b.dagSize - a.dagSize)
+    } else if (direction === SortDirection.SMALLEST) {
+      return items.sort((a, b) => a.dagSize - b.dagSize)
+    }
+    return items
   }
+  /** TODO: Add file type sorting if available
+   * {
+   * label: 'File type',
+   * value: 'fileType',
+   * compareFn: items => items.sort((a, b) => b.dagSize < a.dagSize),
+   * },
+   */
+  /** TODO: Confirm what miner sorting is
+   * {
+   * label: 'Miner',
+   * value: 'miner',
+   * compareFn: items => items.sort((a, b) => b.dagSize < a.dagSize),
+   * },
+   */
 }
 
 /**
- * 
+ *
  * @param {SortableProps} props
  */
 const Sortable = ({
@@ -65,8 +102,8 @@ const Sortable = ({
 
   useEffect(() => {
     if(!currentOption) return
-    const compareFn = currentOption.compareFn || SortType.ALPHANUMERIC
-    const direction = currentOption.direction || SortDirection.ASC
+    const compareFn = SortType[currentOption.compareFn] || SortType.ALPHANUMERIC
+    const direction = SortDirection[currentOption.direction] || SortDirection.ASC
     const key = currentOption.key || null
     const sortedItems = compareFn(items?.slice(0), direction, key)
 
