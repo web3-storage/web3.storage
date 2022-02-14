@@ -218,7 +218,7 @@ export function validateSearchParams (queryString) {
 
   if (result.valid) {
     // Map statuses for DB compatibility.
-    if (status) opts.statuses = psaStatusesToDBStatuses(opts.status)
+    opts.statuses = psaStatusesToDBStatuses(opts.status)
     data = opts
   } else {
     error = parseValidatorErrors(result.errors)
