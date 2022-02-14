@@ -15,6 +15,8 @@ export function errorHandler (err, { sentry }) {
     sentry.captureException(err)
   }
 
+  // TODO: improve error handler
+  // https://github.com/web3-storage/web3.storage/issues/976
   if (err.IS_PSA_ERROR) {
     const error = {
       reason: err.reason,
