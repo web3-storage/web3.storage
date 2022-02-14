@@ -180,7 +180,7 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(res.status, ERROR_CODE)
       const error = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
-      assert.strictEqual(error.details, '#/statuses/1: Instance does not match any of ["queued","pinning","pinned","failed"].')
+      assert.strictEqual(error.details, '#/status/1: Instance does not match any of ["queued","pinning","pinned","failed"].')
     })
 
     it('validates match values passed as filter', async () => {
@@ -204,8 +204,12 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('returns only successful pins when no filter values are specified', async () => {
+      const opts = new URLSearchParams({
+        status: 'pinned'
+      })
+      const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
-        baseUrl, {
+        url, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -225,8 +229,11 @@ describe('Pinning APIs endpoints', () => {
         'bafybeia45bscvzxngto555xsel4gwoclb5fxd7zpxige7rl3maoleznswu', // PinError
         'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4' // Not exists
       ]
-
-      const url = new URL(`${baseUrl}?cid=${cids.join(',')}`).toString()
+      const opts = new URLSearchParams({
+        cid: cids.join(','),
+        status: 'failed,queued,pinning,pinned'
+      })
+      const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
         url, {
           method: 'GET',
@@ -244,7 +251,8 @@ describe('Pinning APIs endpoints', () => {
 
     it('filters case sensitive exact match on name', async () => {
       const opts = new URLSearchParams({
-        name: 'ReportDoc.pdf'
+        name: 'ReportDoc.pdf',
+        status: 'pinned'
       })
       const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
@@ -265,7 +273,8 @@ describe('Pinning APIs endpoints', () => {
     it('filters case insensitive partial match on name', async () => {
       const opts = new URLSearchParams({
         name: 'image',
-        match: 'ipartial'
+        match: 'ipartial',
+        status: 'failed,queued,pinning,pinned'
       })
       const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
