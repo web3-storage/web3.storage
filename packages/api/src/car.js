@@ -8,6 +8,7 @@ import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
 import retry from 'p-retry'
+import { InvalidCarError } from './errors.js'
 import { GATEWAY, LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
@@ -273,10 +274,10 @@ async function carStat (carBlob) {
   const blocksIterator = await CarBlockIterator.fromBytes(carBytes)
   const roots = await blocksIterator.getRoots()
   if (roots.length === 0) {
-    throw new Error('missing roots')
+    throw new InvalidCarError('missing roots')
   }
   if (roots.length > 1) {
-    throw new Error('too many roots')
+    throw new InvalidCarError('too many roots')
   }
   const rootCid = roots[0]
   let rawRootBlock
@@ -284,7 +285,7 @@ async function carStat (carBlob) {
   for await (const block of blocksIterator) {
     const blockSize = block.bytes.byteLength
     if (blockSize > MAX_BLOCK_SIZE) {
-      throw new Error(`block too big: ${blockSize} > ${MAX_BLOCK_SIZE}`)
+      throw new InvalidCarError(`block too big: ${blockSize} > ${MAX_BLOCK_SIZE}`)
     }
     if (!rawRootBlock && block.cid.equals(rootCid)) {
       rawRootBlock = block
@@ -292,10 +293,10 @@ async function carStat (carBlob) {
     blocks++
   }
   if (blocks === 0) {
-    throw new Error('empty CAR')
+    throw new InvalidCarError('empty CAR')
   }
   if (!rawRootBlock) {
-    throw new Error('missing root block')
+    throw new InvalidCarError('missing root block')
   }
   let size
   const decoder = decoders.find(d => d.code === rootCid.code)
@@ -308,7 +309,7 @@ async function carStat (carBlob) {
       const hasLinks = !rootBlock.links()[Symbol.iterator]().next().done
       // if the root block has links, then we should have at least 2 blocks in the CAR
       if (hasLinks && blocks < 2) {
-        throw new Error('CAR must contain at least one non-root block')
+        throw new InvalidCarError('CAR must contain at least one non-root block')
       }
       // get the size of the full dag for this root, even if we only have a partial CAR.
       if (rootBlock.cid.code === pb.code) {
