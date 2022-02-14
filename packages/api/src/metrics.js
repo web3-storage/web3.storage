@@ -71,8 +71,8 @@ export async function metricsGet (request, env, ctx) {
         `web3storage_pins_total{status="${status}"} ${total || 0}`
     ),
 
-    '# HELP web3storage_pins_total Total number of pins by service and status.',
-    '# TYPE web3storage_pins_total counter',
+    '# HELP web3storage_pin_requests_total Total number of pin requests via Pinning Service API.',
+    '# TYPE web3storage_pin_requests_total counter',
     `web3storage_pin_requests_total ${pinsRequestsTotal}`
   ].join('\n')
 
