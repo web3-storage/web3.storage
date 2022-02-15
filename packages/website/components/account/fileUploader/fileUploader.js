@@ -57,7 +57,7 @@ const uploadContentBlock = (heading, iconType, description) => {
  * @param {FileUploaderProps} props
  * @returns
  */
-const FileUploader = ({ className = '', uploadModalState, background }) => {
+const FileUploader = ({ className = '', content, uploadModalState, background }) => {
   const [filesToUpload, setFilesToUpload] = useState(/** @type {File[]} */ ([]));
   const { getUploads, uploadFiles, uploadsProgress, clearUploadedFiles } = useUploads();
 
