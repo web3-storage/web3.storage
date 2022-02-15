@@ -15,11 +15,16 @@ enum StorageTiers {
 // Raw TB number to be used in calculations
 const terabyte = 1099511627776;
 
+type StorageManagerProps = {
+  className?: string;
+  content?: any;
+};
+
 const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body=${encodeURIComponent(
   emailContent.body.join('\n')
 )}`;
 
-const StorageManager = ({ className = '' }) => {
+const StorageManager = ({ className = '', content }: StorageManagerProps) => {
   // TODO: Hook up storage tier & storage used to api
   const storageTier = StorageTiers.TIER_2; // No tier available?
   const usedStorage = terabyte * 8; // in bytes
@@ -33,22 +38,22 @@ const StorageManager = ({ className = '' }) => {
       // Storage information by tier
       ({
         [StorageTiers.TIER_1]: {
-          maxSpaceLabel: '1 TB',
-          unlockLabel: '1-10+ TB',
+          maxSpaceLabel: content.tiers[0].max_space_label,
+          unlockLabel: content.tiers[0].unlock_label,
           usedSpacePercentage: (usedStorage / terabyte) * 100,
         },
         [StorageTiers.TIER_2]: {
-          maxSpaceLabel: '10 TB',
-          unlockLabel: '10+ TB',
+          maxSpaceLabel: content.tiers[1].max_space_label,
+          unlockLabel: content.tiers[1].unlock_label,
           usedSpacePercentage: (usedStorage / (terabyte * 10)) * 100,
         },
         [StorageTiers.TIER_3]: {
-          maxSpaceLabel: `${Math.floor(usedStorage / (terabyte * 10) + 1)}0+ TB`,
+          maxSpaceLabel: `${Math.floor(usedStorage / (terabyte * 10) + 1) + content.tiers[2].max_space_label}`,
           // every increment of 10 changes the amount of space used
           usedSpacePercentage: ((usedStorage % (terabyte * 10)) / (terabyte * 10)) * 100,
         },
       }[storageTier]),
-    [storageTier, usedStorage]
+    [storageTier, usedStorage, content.tiers]
   );
 
   const onSearchFiles = useCallback(() => {
@@ -62,12 +67,13 @@ const StorageManager = ({ className = '' }) => {
       <div className="storage-manager-space">
         <div className="storage-manager-used">
           {/* Used storage in GB */}
-          <span className="storage-label">Storage</span>:{' '}
+          <span className="storage-label">{content.heading}</span>:{' '}
           <span className="storage-number">{usedStorage / terabyte}TB</span> of{' '}
           <span className="storage-number">{maxSpaceLabel}</span> used
         </div>
         <Button onClick={onSearchFiles} variant={ButtonVariant.TEXT}>
-          Search my files{'\u00A0\u00A0'}❯
+          {content.buttons.search}
+          {'\u00A0\u00A0'}❯
         </Button>
       </div>
       <div className="storage-manager-meter-container">
@@ -91,10 +97,10 @@ const StorageManager = ({ className = '' }) => {
         )}
       </div>
       <div className="storage-manager-info">
-        Need more free storage?
+        {content.prompt}
         <Button variant={ButtonVariant.TEXT} href={mailTo}>
           <a href={mailTo} target="_blank" rel="noreferrer">
-            Submit a request
+            {content.buttons.request}
           </a>
         </Button>
       </div>

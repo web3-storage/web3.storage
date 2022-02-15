@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import Link from 'next/link';
 import { useState, useCallback, useMemo } from 'react';
 
 import Modal from 'modules/zero/components/modal/modal';
@@ -10,7 +9,6 @@ import InfinityIcon from 'assets/icons/infinity';
 import GlobeIcon from 'assets/icons/globe';
 import { ReactComponent as FolderIcon } from '../../../assets/icons/folder.svg';
 import { useUploads } from 'components/contexts/uploadsContext';
-import { STATUS } from 'components/contexts/uploadProgressContext';
 
 export const CTAThemeType = {
   LIGHT: 'light',
@@ -19,30 +17,37 @@ export const CTAThemeType = {
 
 /**
  * @typedef {Object} UploadContentProps
- * @property {string} [className]
- * @property {import('react').ReactNode} [icon]
  * @property {string} [heading]
+ * @property {string} [iconType]
  * @property {string} [description]
  */
-
-/**
- *
- * @param {UploadContentProps} props
- * @returns
- */
-const UploadContentBlock = ({ className, heading, icon, description }) => (
-  <div className={clsx(className, 'upload-content-block')}>
-    <div className="upload-content-block-heading">
-      {icon}
-      {heading}
+const uploadContentBlock = (heading, iconType, description) => {
+  let icon;
+  switch (iconType) {
+    case 'globe_icon':
+      icon = <GlobeIcon />;
+      break;
+    case 'infinity_icon':
+      icon = <InfinityIcon />;
+      break;
+    default:
+      icon = <FolderIcon />;
+  }
+  return (
+    <div key={heading} className="upload-content-block">
+      <div className="upload-content-block-heading">
+        {icon}
+        {heading}
+      </div>
+      <div className="upload-content-block-description">{description}</div>
     </div>
-    <div className="upload-content-block-description">{description}</div>
-  </div>
-);
+  );
+};
 
 /**
  * @typedef {Object} FileUploaderProps
  * @property {string} [className] - optional
+ * @property {object} [content]
  * @property {any} [uploadModalState]
  * @property {import('react').ReactNode} [background]
  */
@@ -84,11 +89,8 @@ const FileUploader = ({ className = '', uploadModalState, background }) => {
         <div className={clsx(className, 'file-uploader-container')}>
           {background}
           <GradientBackgroundB className="account-gradient-background" />
-          <h5>Upload {!!filesToUpload.length ? 'more files' : 'a file'}</h5>
-          <div className={'file-upload-subheading'}>
-            You can also upload files using the{'\u00A0'}
-            <Link href="https://www.npmjs.com/package/web3.storage">JS Client Library.</Link>
-          </div>
+          <h5>{!!filesToUpload.length ? content.heading.option_1 : content.heading.option_2}</h5>
+          <div className={'file-upload-subheading'} dangerouslySetInnerHTML={{ __html: content.subheading }}></div>
           <Dropzone
             className="file-uploader-dropzone"
             onChange={useCallback(
@@ -102,23 +104,13 @@ const FileUploader = ({ className = '', uploadModalState, background }) => {
               console.error('error', e);
             }}
             icon={<FolderIcon />}
-            dragAreaText="Drag and drop your files here"
+            dragAreaText={content.drop_prompt}
             maxFiles={3}
             multiple={true}
             filesInfo={filesInfo}
           />
-          <UploadContentBlock
-            className="upload-content-block-public"
-            icon={<GlobeIcon />}
-            heading="Public Data"
-            description="All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. Do not store any private or sensitive information in an unencrypted form using Web3.Storage."
-          />
-          <UploadContentBlock
-            className="upload-content-block-permanent"
-            icon={<InfinityIcon />}
-            heading="Permanent Data"
-            description="Deleting files from the Web3.Storage site’s Files page will remove them from the file listing for your account, but that doesn’t prevent nodes on the decentralized storage network from retaining copies of the data indefinitely. Do not use Web3.Storage for data that may need to be permanently deleted in the future."
-          />
+
+          {content.blocks.map(block => uploadContentBlock(block.heading, block.icon, block.description))}
         </div>
       </Modal>
     </div>
