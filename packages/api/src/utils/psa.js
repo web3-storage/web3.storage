@@ -64,6 +64,7 @@ export const psaStatusesToDBStatuses = (statuses) => {
 export const ERROR_CODE = 400
 export const DATA_NOT_FOUND = 'Requested data was not found.'
 export const INVALID_CID = 'The CID provided is invalid.'
+export const INVALID_META = 'Meta should be an object with string values'
 export const INVALID_REPLACE = 'Existing and replacement CID are the same.'
 export const INVALID_REQUEST_ID = 'Request id should be a string.'
 export const PINNING_FAILED = 'PSA_PINNING_FAILED'
@@ -204,8 +205,29 @@ export function validateSearchParams (queryString) {
     opts.limit = DEFAULT_PIN_LISTING_LIMIT
   }
 
+  if (meta) {
+    // Must be a string representation of a JSON object.
+    let metaJson
+    try {
+      metaJson = JSON.parse(meta)
+    } catch (e) {
+      return {
+        error: new PSAErrorInvalidData(INVALID_META),
+        data: undefined
+      }
+    }
+
+    if (Object.entries(metaJson).some(([, v]) => typeof v !== 'string')) {
+      return {
+        error: new PSAErrorInvalidData(INVALID_META),
+        data: undefined
+      }
+    }
+
+    opts.meta = metaJson
+  }
+
   if (name) opts.name = name
-  if (meta) opts.meta = meta
   if (match) opts.match = match
   if (before) opts.before = before
   if (after) opts.after = after

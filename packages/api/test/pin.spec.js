@@ -140,7 +140,7 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(error.details, 'Instance does not have required property "status".')
     })
 
-    it('validates meta filter value', async () => {
+    it('validates meta filter is json object', async () => {
       const opts = new URLSearchParams({
         meta: `[
           "invalid",
@@ -160,8 +160,32 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert.strictEqual(res.status, ERROR_CODE)
       const error = await res.json()
-      assert.strictEqual(error.reason, ERROR_STATUS)
-      assert.strictEqual(error.details, INVALID_META)
+      assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
+      assert.strictEqual(error.details, '#/meta: Instance type "array" is invalid. Expected "object".')
+    })
+
+    it('validates meta filter values must be strings', async () => {
+      const opts = new URLSearchParams({
+        meta: `{
+          "app-id": "app-001",
+          "not-a-string-value": 99
+        }`
+      })
+      const url = new URL(`${baseUrl}?${opts}`).toString()
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert.strictEqual(res.status, ERROR_CODE)
+      const error = await res.json()
+      assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
+      assert.strictEqual(error.details, 'Meta should be an object with string values')
     })
 
     it('validates CID values passed as filter', async () => {
