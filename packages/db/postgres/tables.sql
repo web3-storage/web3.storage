@@ -1,3 +1,21 @@
+-- Auth key blocked status type is the type of blocking that has occurred on the api
+-- key.  These are primarily used by the admin app.
+CREATE TYPE auth_key_blocked_status_type AS ENUM
+(
+  -- The api key is blocked.
+  'Blocked',
+  -- The api key is unblocked.
+  'Unblocked'
+);
+
+-- User tags are associated to a user for the purpose of granting/restricting them
+-- in the application.
+CREATE TYPE user_tag_type AS ENUM
+(
+  'PINNING',
+  'STORAGE_LIMIT'
+);
+
 -- A user of web3.storage.
 CREATE TABLE IF NOT EXISTS public.user
 (
@@ -13,6 +31,17 @@ CREATE TABLE IF NOT EXISTS public.user
   public_address  TEXT                                                          NOT NULL UNIQUE,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.user_tag
+(
+  id              BIGSERIAL PRIMARY KEY,
+  user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
+  tag             user_tag_type                                                 NOT NULL,
+  -- tag_value is useful for certain tags like STORAGE_LIMIT e.g. tag="STORAGE_LIMIT", tag_value="1TB"
+  tag_value       TEXT                                                                  ,
+  inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())     NOT NULL,
+  deleted_at  TIMESTAMP WITH TIME ZONE
 );
 
 CREATE INDEX IF NOT EXISTS user_updated_at_idx ON public.user (updated_at);
@@ -34,6 +63,16 @@ CREATE TABLE IF NOT EXISTS auth_key
 
 CREATE INDEX IF NOT EXISTS auth_key_user_id_idx ON auth_key (user_id);
 
+CREATE TABLE IF NOT EXISTS auth_key_history
+(
+  id          BIGSERIAL PRIMARY KEY,
+  status      auth_key_blocked_status_type                                  NOT NULL,
+  reason      TEXT                                                          NOT NULL,
+  auth_key_id BIGSERIAL                                                     NOT NULL REFERENCES auth_key (id),
+  inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  deleted_at  TIMESTAMP WITH TIME ZONE
+);
+
 -- Details of the root of a file/directory stored on web3.storage.
 CREATE TABLE IF NOT EXISTS content
 (
@@ -53,7 +92,7 @@ CREATE UNIQUE INDEX content_cid_with_size_idx ON content (cid) INCLUDE (dag_size
 DO $$
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'pin_status_type') THEN
-    
+
     -- IPFS Cluster tracker status values.
     -- https://github.com/ipfs/ipfs-cluster/blob/54c3608899754412861e69ee81ca8f676f7e294b/api/types.go#L52-L83
     -- TODO: nft.storage only using a subset of these: https://github.com/ipfs-shipyard/nft.storage/blob/main/packages/api/db/tables.sql#L2-L7
@@ -226,17 +265,6 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- A migration tracker.
-CREATE TABLE IF NOT EXISTS migration_tracker
-(
-  id              BIGSERIAL PRIMARY KEY,
-  cid             TEXT                                                          NOT NULL,
-  duration        BIGINT,
-  dump_started_at TIMESTAMP WITH TIME ZONE,
-  dump_ended_at   TIMESTAMP WITH TIME ZONE NOT NULL,
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS name
 (
     -- base36 "libp2p-key" encoding of the public key
@@ -259,4 +287,19 @@ CREATE TABLE IF NOT EXISTS pinning_authorization
   user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   deleted_at      TIMESTAMP WITH TIME ZONE
-)
+);
+
+CREATE VIEW admin_search as
+select
+  u.id::text as user_id,
+  u.email as email,
+  ak.secret as token,
+  ak.id::text as token_id,
+  ak.deleted_at as deleted_at,
+  akh.inserted_at as reason_inserted_at,
+  akh.reason as reason,
+  akh.status as status
+from public.user u
+right join auth_key ak on ak.user_id = u.id
+full outer join (select * from auth_key_history where deleted_at is null) as akh on akh.auth_key_id = ak.id
+where ak.deleted_at is NULL or ak.deleted_at is not NULL and akh.status is not NULL;

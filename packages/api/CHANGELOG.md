@@ -1,5 +1,35 @@
 # Changelog
 
+### [5.1.4](https://github.com/web3-storage/web3.storage/compare/api-v5.1.3...api-v5.1.4) (2022-02-14)
+
+
+### Bug Fixes
+
+* invalid CAR errors ([#977](https://github.com/web3-storage/web3.storage/issues/977)) ([2ee4a08](https://github.com/web3-storage/web3.storage/commit/2ee4a08457dbf1dc0385e65b7ea034a232c5b44c))
+
+### [5.1.3](https://github.com/web3-storage/web3.storage/compare/api-v5.1.2...api-v5.1.3) (2022-02-07)
+
+
+### Bug Fixes
+
+* db client do not throw error when no upload found ([#885](https://github.com/web3-storage/web3.storage/issues/885)) ([834d3cc](https://github.com/web3-storage/web3.storage/commit/834d3ccb22d8ee00b4f47e5eae850aaf5b7ebba1))
+
+### [5.1.2](https://github.com/web3-storage/web3.storage/compare/api-v5.1.1...api-v5.1.2) (2022-02-06)
+
+
+### Bug Fixes
+
+* size for single block raw node ([#958](https://github.com/web3-storage/web3.storage/issues/958)) ([708aea7](https://github.com/web3-storage/web3.storage/commit/708aea775461ede27f67ac133eba9f1a22163f5d))
+
+### [5.1.1](https://github.com/web3-storage/web3.storage/compare/api-v5.1.0...api-v5.1.1) (2022-02-03)
+
+
+### Bug Fixes
+
+* add initial migration ([#951](https://github.com/web3-storage/web3.storage/issues/951)) ([89c16b8](https://github.com/web3-storage/web3.storage/commit/89c16b89443dea63884820dd978c03981c7ab917))
+* durable objects config ([#949](https://github.com/web3-storage/web3.storage/issues/949)) ([0ccb3f3](https://github.com/web3-storage/web3.storage/commit/0ccb3f35b02423930fc6dbad00c3a5d867c159c7))
+* user and auth token type declarations ([#948](https://github.com/web3-storage/web3.storage/issues/948)) ([287f01c](https://github.com/web3-storage/web3.storage/commit/287f01ce574f093f732b9f33eb28d4b4258a6512))
+
 ## [5.1.0](https://github.com/web3-storage/web3.storage/compare/api-v5.0.8...api-v5.1.0) (2022-02-02)
 
 
