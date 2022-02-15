@@ -8,7 +8,7 @@ heroku login --interactive
 heroku apps:create web3-storage-staging --team=web3-storage
 heroku apps:create web3-storage-prod --team=web3-storage
 
-# # Add PostgreSQL databases
+# Add PostgreSQL databases
 heroku addons:create heroku-postgresql:premium-4 --app=web3-storage-staging --name=web3-storage-staging-0
 heroku addons:create heroku-postgresql:premium-4 --app=web3-storage-prod --name=web3-storage-prod-0
 
@@ -17,11 +17,13 @@ heroku addons:create heroku-postgresql:premium-4 --app=web3-storage-prod --name=
 
 # Add schema
 heroku pg:psql web3-storage-staging-0 --app=web3-storage-staging
+# ...run schema SQL from /packages/db/config.sql
 # ...run schema SQL from /packages/db/tables.sql
 # ...run schema SQL from /packages/db/fdw.sql with credentials replaced
 # ...run schema SQL from /packages/db/cargo.sql
 # ...run schema SQL from /packages/db/functions.sql
 heroku pg:psql web3-storage-prod-0 --app=web3-storage-prod
+# ...run schema SQL from /packages/db/config.sql
 # ...run schema SQL from /packages/db/tables.sql
 # ...run schema SQL from /packages/db/fdw.sql with credentials replaced
 # ...run schema SQL from /packages/db/cargo.sql
@@ -32,8 +34,8 @@ heroku pg:psql web3-storage-prod-0 --app=web3-storage-prod
 # Create PostgREST staging and production apps and connect them to staging/production DBs
 # https://elements.heroku.com/buildpacks/postgrest/postgrest-heroku
 # (App name has 30 char limit)
-heroku apps:create web3-storage-pgrest-staging --buildpack https://github.com/PostgREST/postgrest-heroku --team=web3-storage
-heroku apps:create web3-storage-pgrest-prod --buildpack https://github.com/PostgREST/postgrest-heroku --team=web3-storage
+heroku apps:create web3-storage-pgrest-staging --buildpack https://github.com/hugomrdias/postgrest-heroku --team=web3-storage
+heroku apps:create web3-storage-pgrest-prod --buildpack https://github.com/hugomrdias/postgrest-heroku --team=web3-storage
 
 # Bump dyno sizes
 heroku dyno:resize web=standard-1x --app web3-storage-pgrest-staging
@@ -56,12 +58,23 @@ heroku pg:credentials:create web3-storage-prod-0 --name=web3_storage --app=web3-
 heroku pg:psql web3-storage-staging-0 --app=web3-storage-staging < grant-postgrest.sql
 heroku pg:psql web3-storage-prod-0 --app=web3-storage-prod < grant-postgrest.sql
 
-# Configure the DB_URI and JWT_SECRET for PostgREST
-heroku config:set DB_URI=$(heroku config:get DATABASE_URL --app=web3-storage-staging) --app=web3-storage-pgrest-staging
-heroku config:set DB_URI=$(heroku config:get DATABASE_URL --app=web3-storage-prod) --app=web3-storage-pgrest-prod
-# Obtain secret from 1password vault!
-heroku config:set JWT_SECRET="supersecret" --app=web3-storage-pgrest-staging
-heroku config:set JWT_SECRET="supersecret" --app=web3-storage-pgrest-prod
+# Attach databases to apps
+heroku addons:attach web3-storage-prod-0 --app=web3-storage-pgrest-prod
+heroku addons:attach web3-storage-replica-0 --app=web3-storage-pgrest-prod
+heroku addons:attach web3-storage-staging-0 --app=web3-storage-pgrest-staging
+
+# PGREST config vars
+heroku config:set DB_ANON_ROLE=web_anon --app=web3-storage-pgrest-prod
+heroku config:set DB_POOL=450 --app=web3-storage-pgrest-prod
+heroku config:set DB_SCHEMA=public --app=web3-storage-pgrest-prod
+heroku config:set JWT_SECRET=secret --app=web3-storage-pgrest-prod # Obtain secret from 1password vault!
+heroku config:set POSTGREST_VER=9.0.0 --app=web3-storage-pgrest-prod
+
+heroku config:set DB_ANON_ROLE=web_anon --app=web3-storage-pgrest-staging
+heroku config:set DB_POOL=450 --app=web3-storage-pgrest-staging
+heroku config:set DB_SCHEMA=public --app=web3-storage-pgrest-staging
+heroku config:set JWT_SECRET=secret --app=web3-storage-pgrest-staging # Obtain secret from 1password vault!
+heroku config:set POSTGREST_VER=9.0.0 --app=web3-storage-pgrest-staging
 
 # Deploy
 cd postgrest/
@@ -69,8 +82,8 @@ git init
 git add -A
 git commit -m "chore: configure postgrest"
 
-heroku git:remote --app=web3-storage-pgrest-staging
-git push heroku main
+heroku git:remote --app=web3-storage-pgrest-staging --remote staging
+git push staging main
 heroku git:remote --app=web3-storage-pgrest-prod
 git push heroku main
 # go back to heroku directory

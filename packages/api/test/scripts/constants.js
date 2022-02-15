@@ -1,1 +1,1 @@
-export const endpoint = 'http://testing.web3.storage'
+export const endpoint = 'http://localhost:8787'

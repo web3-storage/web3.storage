@@ -1,9 +1,10 @@
-/* eslint-env mocha, browser */
+/* eslint-env mocha */
 import assert from 'assert'
 import { CID } from 'multiformats/cid'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
 import { CarWriter } from '@ipld/car'
+import fetch, { Blob } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { createCar } from './scripts/car.js'
 import { MAX_BLOCK_SIZE } from '../src/constants.js'
@@ -13,13 +14,13 @@ describe('POST /car', () => {
   it('should add posted CARs to Cluster', async () => {
     const name = 'car'
     // Create token
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     // Create Car
     const { root, car: carBody } = await createCar('hello world!')
 
     // expected CID for the above data
-    const expectedCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
+    const expectedCid = 'bafkreidvbhs33ighmljlvr7zbv2ywwzcmp5adtf4kqvlly67cy56bdtmve'
     assert.strictEqual(root.toString(), expectedCid, 'car file has correct root')
 
     const res = await fetch(new URL('car', endpoint), {
@@ -40,7 +41,7 @@ describe('POST /car', () => {
   })
 
   it('should throw for blocks bigger than the maximum permitted size', async () => {
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     const bytes = pb.encode({ Data: new Uint8Array(MAX_BLOCK_SIZE + 1).fill(1), Links: [] })
     const hash = await sha256.digest(bytes)
@@ -70,7 +71,7 @@ describe('POST /car', () => {
   })
 
   it('should throw for empty CAR', async () => {
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     const bytes = pb.encode({ Data: new Uint8Array(), Links: [] })
     const hash = await sha256.digest(bytes)
@@ -95,11 +96,11 @@ describe('POST /car', () => {
 
     assert.strictEqual(res.ok, false)
     const { message } = await res.json()
-    assert.strictEqual(message, 'empty CAR')
+    assert.strictEqual(message, 'Invalid CAR file received: empty CAR')
   })
 
   it('should throw for CAR with no roots', async () => {
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     const bytes = pb.encode({ Data: new Uint8Array(), Links: [] })
     const hash = await sha256.digest(bytes)
@@ -125,11 +126,11 @@ describe('POST /car', () => {
 
     assert.strictEqual(res.ok, false)
     const { message } = await res.json()
-    assert.strictEqual(message, 'missing roots')
+    assert.strictEqual(message, 'Invalid CAR file received: missing roots')
   })
 
   it('should throw for CAR with multiple roots', async () => {
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     const bytes = pb.encode({ Data: new Uint8Array(), Links: [] })
     const hash = await sha256.digest(bytes)
@@ -158,11 +159,11 @@ describe('POST /car', () => {
 
     assert.strictEqual(res.ok, false)
     const { message } = await res.json()
-    assert.strictEqual(message, 'too many roots')
+    assert.strictEqual(message, 'Invalid CAR file received: too many roots')
   })
 
   it('should throw for CAR with one root block that has links', async () => {
-    const token = await getTestJWT()
+    const token = await getTestJWT('test-upload', 'test-upload')
 
     const bytes = pb.encode({
       Data: new Uint8Array(),
@@ -191,6 +192,6 @@ describe('POST /car', () => {
 
     assert.strictEqual(res.ok, false)
     const { message } = await res.json()
-    assert.strictEqual(message, 'CAR must contain at least one non-root block')
+    assert.strictEqual(message, 'Invalid CAR file received: CAR must contain at least one non-root block')
   })
 })

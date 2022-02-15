@@ -1,5 +1,71 @@
 # Changelog
 
+### [4.0.4](https://www.github.com/web3-storage/web3.storage/compare/db-v4.0.3...db-v4.0.4) (2022-01-04)
+
+
+### Bug Fixes
+
+* backup unique constraint ([#795](https://www.github.com/web3-storage/web3.storage/issues/795)) ([b19790f](https://www.github.com/web3-storage/web3.storage/commit/b19790f621fd6544f3abdf944edde95697227f76))
+
+
+### Changes
+
+* update pgrest ([#816](https://www.github.com/web3-storage/web3.storage/issues/816)) ([574baad](https://www.github.com/web3-storage/web3.storage/commit/574baad961c3a4524212ad7a27c30d150ca150c0))
+
+### [4.0.3](https://www.github.com/web3-storage/web3.storage/compare/db-v4.0.2...db-v4.0.3) (2021-12-14)
+
+
+### Bug Fixes
+
+* improve list tokens ([#782](https://www.github.com/web3-storage/web3.storage/issues/782)) ([b58a101](https://www.github.com/web3-storage/web3.storage/commit/b58a1018c2cb2cd7f838dbc0e1fefef446b06eae))
+
+### [4.0.2](https://www.github.com/web3-storage/web3.storage/compare/db-v4.0.1...db-v4.0.2) (2021-12-10)
+
+
+### Bug Fixes
+
+* delete ops should update updated ts ([#774](https://www.github.com/web3-storage/web3.storage/issues/774)) ([88b6c09](https://www.github.com/web3-storage/web3.storage/commit/88b6c0910b4e33b56d912b6fa53eb62301e0aec2))
+
+
+### Changes
+
+* create tool package with ipfs-cluster docker-compose setup. ([d6ee483](https://www.github.com/web3-storage/web3.storage/commit/d6ee4831237efcfc24e9fb8ee4c835533b16fbe7))
+
+### [4.0.1](https://www.github.com/web3-storage/web3.storage/compare/db-v4.0.0...db-v4.0.1) (2021-12-09)
+
+
+### Bug Fixes
+
+* api using db instead of mocks for tests ([#765](https://www.github.com/web3-storage/web3.storage/issues/765)) ([c9f6c06](https://www.github.com/web3-storage/web3.storage/commit/c9f6c066a5d46367d57a6f0de482166621c3fe38))
+* db delete key return value ([#766](https://www.github.com/web3-storage/web3.storage/issues/766)) ([34f5f82](https://www.github.com/web3-storage/web3.storage/commit/34f5f826f68ff8407fad0a6e9d0a20f6e4d99d47))
+* remove dagcargo materialized views ([#735](https://www.github.com/web3-storage/web3.storage/issues/735)) ([62db538](https://www.github.com/web3-storage/web3.storage/commit/62db5383f39e7d3e3484ccb51bd4eb3de816bcfd))
+* tolerant of failure for deals ([#769](https://www.github.com/web3-storage/web3.storage/issues/769)) ([2bae4d4](https://www.github.com/web3-storage/web3.storage/commit/2bae4d438b570de0905d1b7d577654657ddc1282))
+
+## [4.0.0](https://www.github.com/web3-storage/web3.storage/compare/db-v3.1.0...db-v4.0.0) (2021-12-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* client should not throw on 404 (#751)
+
+### Bug Fixes
+
+* client should not throw on 404 ([#751](https://www.github.com/web3-storage/web3.storage/issues/751)) ([a4cce7e](https://www.github.com/web3-storage/web3.storage/commit/a4cce7eb67a6dab6a75c5c86bcebe4dc66ecd6e4))
+
+## [3.1.0](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.2...db-v3.1.0) (2021-12-01)
+
+
+### Features
+
+* simple mutability API using IPNS ([#648](https://www.github.com/web3-storage/web3.storage/issues/648)) ([9c287bb](https://www.github.com/web3-storage/web3.storage/commit/9c287bb7c983d3adab6ebb304decb47c5093ad78))
+
+
+### Bug Fixes
+
+* data CID is root CID of aggregate, not content CID ([#720](https://www.github.com/web3-storage/web3.storage/issues/720)) ([8c67725](https://www.github.com/web3-storage/web3.storage/commit/8c677259635a3deb30c948330f8ea118053309ce))
+* deal status filtering ([#692](https://www.github.com/web3-storage/web3.storage/issues/692)) ([a7b4151](https://www.github.com/web3-storage/web3.storage/commit/a7b4151b05fa55646d337a090263a1eeb77b8169))
+* postgres set max parallel workers per gather to 4 ([#725](https://www.github.com/web3-storage/web3.storage/issues/725)) ([9cdfcfa](https://www.github.com/web3-storage/web3.storage/commit/9cdfcfa51063ae2a9a87cd71a05a6e2d42cea887))
+
 ### [3.0.2](https://www.github.com/web3-storage/web3.storage/compare/db-v3.0.1...db-v3.0.2) (2021-11-23)
 
 

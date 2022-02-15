@@ -1,3 +1,21 @@
+-- Auth key blocked status type is the type of blocking that has occurred on the api
+-- key.  These are primarily used by the admin app.
+CREATE TYPE auth_key_blocked_status_type AS ENUM
+(
+  -- The api key is blocked.
+  'Blocked',
+  -- The api key is unblocked.
+  'Unblocked'
+);
+
+-- User tags are associated to a user for the purpose of granting/restricting them
+-- in the application.
+CREATE TYPE user_tag_type AS ENUM
+(
+  'PINNING',
+  'STORAGE_LIMIT'
+);
+
 -- A user of web3.storage.
 CREATE TABLE IF NOT EXISTS public.user
 (
@@ -13,6 +31,17 @@ CREATE TABLE IF NOT EXISTS public.user
   public_address  TEXT                                                          NOT NULL UNIQUE,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.user_tag
+(
+  id              BIGSERIAL PRIMARY KEY,
+  user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
+  tag             user_tag_type                                                 NOT NULL,
+  -- tag_value is useful for certain tags like STORAGE_LIMIT e.g. tag="STORAGE_LIMIT", tag_value="1TB"
+  tag_value       TEXT                                                                  ,
+  inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())     NOT NULL,
+  deleted_at  TIMESTAMP WITH TIME ZONE
 );
 
 CREATE INDEX IF NOT EXISTS user_updated_at_idx ON public.user (updated_at);
@@ -34,6 +63,16 @@ CREATE TABLE IF NOT EXISTS auth_key
 
 CREATE INDEX IF NOT EXISTS auth_key_user_id_idx ON auth_key (user_id);
 
+CREATE TABLE IF NOT EXISTS auth_key_history
+(
+  id          BIGSERIAL PRIMARY KEY,
+  status      auth_key_blocked_status_type                                  NOT NULL,
+  reason      TEXT                                                          NOT NULL,
+  auth_key_id BIGSERIAL                                                     NOT NULL REFERENCES auth_key (id),
+  inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  deleted_at  TIMESTAMP WITH TIME ZONE
+);
+
 -- Details of the root of a file/directory stored on web3.storage.
 CREATE TABLE IF NOT EXISTS content
 (
@@ -45,6 +84,7 @@ CREATE TABLE IF NOT EXISTS content
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+CREATE INDEX IF NOT EXISTS content_inserted_at_idx ON content (inserted_at);
 CREATE INDEX IF NOT EXISTS content_updated_at_idx ON content (updated_at);
 -- TODO: Sync with @ribasushi as we can start using this as the primary key
 CREATE UNIQUE INDEX content_cid_with_size_idx ON content (cid) INCLUDE (dag_size);
@@ -52,7 +92,7 @@ CREATE UNIQUE INDEX content_cid_with_size_idx ON content (cid) INCLUDE (dag_size
 DO $$
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'pin_status_type') THEN
-    
+
     -- IPFS Cluster tracker status values.
     -- https://github.com/ipfs/ipfs-cluster/blob/54c3608899754412861e69ee81ca8f676f7e294b/api/types.go#L52-L83
     -- TODO: nft.storage only using a subset of these: https://github.com/ipfs-shipyard/nft.storage/blob/main/packages/api/db/tables.sql#L2-L7
@@ -97,6 +137,8 @@ BEGIN
       'Blob',
       -- A multi file upload using a multipart request.
       'Multipart'
+      -- Note: "Remote" is reserved by dagcargo to identify PSA pin request
+      -- "uploads" and cannot be used here!
     );
   END IF;
 END$$;
@@ -128,12 +170,10 @@ CREATE TABLE IF NOT EXISTS pin
   UNIQUE (content_cid, pin_location_id)
 );
 
-CREATE INDEX IF NOT EXISTS pin_content_cid_idx ON pin (content_cid);
 CREATE INDEX IF NOT EXISTS pin_location_id_idx ON pin (pin_location_id);
 CREATE INDEX IF NOT EXISTS pin_updated_at_idx ON pin (updated_at);
 CREATE INDEX IF NOT EXISTS pin_status_idx ON pin (status);
-CREATE INDEX IF NOT EXISTS pin_composite_pinned_at_idx ON pin (content_cid, updated_at) WHERE status = 'Pinned';
-
+CREATE INDEX IF NOT EXISTS pin_composite_updated_at_and_content_cid_idx ON pin (updated_at, content_cid);
 
 -- An upload created by a user.
 CREATE TABLE IF NOT EXISTS upload
@@ -169,8 +209,9 @@ CREATE TABLE IF NOT EXISTS backup
   -- Upload that resulted in this backup.
   upload_id       BIGINT                                                        NOT NULL REFERENCES upload (id) ON DELETE CASCADE,
   -- Backup url location.
-  url             TEXT                                                          NOT NULL UNIQUE,
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+  url             TEXT                                                          NOT NULL,
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  UNIQUE (upload_id, url)
 );
 
 CREATE INDEX IF NOT EXISTS backup_upload_id_idx ON backup (upload_id);
@@ -199,15 +240,29 @@ CREATE TABLE IF NOT EXISTS pin_sync_request
 
 CREATE INDEX IF NOT EXISTS pin_sync_request_pin_id_idx ON pin_sync_request (pin_id);
 
--- A migration tracker.
-CREATE TABLE IF NOT EXISTS migration_tracker
+-- Setting search_path to public scope for uuid function(s)
+SET search_path TO public;
+DROP extension IF EXISTS "uuid-ossp";
+CREATE extension "uuid-ossp" SCHEMA public;
+
+-- Tracks pinning requests from Pinning Service API
+CREATE TABLE IF NOT EXISTS psa_pin_request
 (
-  id              BIGSERIAL PRIMARY KEY,
-  cid             TEXT                                                          NOT NULL,
-  duration        BIGINT,
-  dump_started_at TIMESTAMP WITH TIME ZONE,
-  dump_ended_at   TIMESTAMP WITH TIME ZONE NOT NULL,
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+  -- TODO - Vlaidate UUID type is available
+  id              TEXT DEFAULT public.uuid_generate_v4() PRIMARY KEY,
+  -- Points to auth key used to pin the content.
+  auth_key_id     BIGINT                                                       NOT NULL REFERENCES public.auth_key (id),
+  content_cid     TEXT                                                         NOT NULL REFERENCES content (cid),
+  -- The id of the content being requested, it could not exist on IPFS (typo, node offline etc).
+  source_cid      TEXT NOT NULL,
+  name            TEXT,
+  -- User provided multiaddrs of origins of this upload.
+  origins         jsonb,
+  -- Custom metadata provided by the user.
+  meta            jsonb,
+  deleted_at      TIMESTAMP WITH TIME ZONE,
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS name
@@ -224,3 +279,27 @@ CREATE TABLE IF NOT EXISTS name
     inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS pinning_authorization
+(
+  id              BIGSERIAL PRIMARY KEY,
+  -- Points to user allowed to pin content.
+  user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  deleted_at      TIMESTAMP WITH TIME ZONE
+);
+
+CREATE VIEW admin_search as
+select
+  u.id::text as user_id,
+  u.email as email,
+  ak.secret as token,
+  ak.id::text as token_id,
+  ak.deleted_at as deleted_at,
+  akh.inserted_at as reason_inserted_at,
+  akh.reason as reason,
+  akh.status as status
+from public.user u
+right join auth_key ak on ak.user_id = u.id
+full outer join (select * from auth_key_history where deleted_at is null) as akh on akh.auth_key_id = ak.id
+where ak.deleted_at is NULL or ak.deleted_at is not NULL and akh.status is not NULL;

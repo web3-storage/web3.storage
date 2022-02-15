@@ -1,5 +1,34 @@
 # Changelog
 
+### [3.5.4](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.3...web3.storage-v3.5.4) (2022-02-03)
+
+
+### Bug Fixes
+
+* add pre-bundled ESM build to package exports ([#930](https://github.com/web3-storage/web3.storage/issues/930)) ([b649d0f](https://github.com/web3-storage/web3.storage/commit/b649d0fd1fe33968a64d3281342bcd2430581c9e))
+
+### [3.5.3](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.2...web3.storage-v3.5.3) (2022-01-11)
+
+
+### Bug Fixes
+
+* update deps in api and client ([#855](https://www.github.com/web3-storage/web3.storage/issues/855)) ([22155db](https://www.github.com/web3-storage/web3.storage/commit/22155db13b646e9846cf10c26d10faeb0d3b936e))
+
+### [3.5.2](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.1...web3.storage-v3.5.2) (2021-12-27)
+
+
+### Bug Fixes
+
+* react-scripts-v5 compatible issue. ([#826](https://www.github.com/web3-storage/web3.storage/issues/826)) ([abf13d4](https://www.github.com/web3-storage/web3.storage/commit/abf13d4a085d2d91c3f395e6f61f1304cd127e7e))
+
+### [3.5.1](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.0...web3.storage-v3.5.1) (2021-12-06)
+
+
+### Bug Fixes
+
+* do not prefer node.js builtins ([#748](https://www.github.com/web3-storage/web3.storage/issues/748)) ([84f55e1](https://www.github.com/web3-storage/web3.storage/commit/84f55e14b117c12d5ce4c21d30ecc56c0ec409ec))
+* endpoint URL construction ([#734](https://www.github.com/web3-storage/web3.storage/issues/734)) ([50aa080](https://www.github.com/web3-storage/web3.storage/commit/50aa0802ffb86823876b3058438dd76d43655ed8))
+
 ## [3.5.0](https://www.github.com/web3-storage/web3.storage/compare/web3.storage-v3.4.0...web3.storage-v3.5.0) (2021-11-30)
 
 
