@@ -185,7 +185,7 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(res.status, ERROR_CODE)
       const error = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
-      assert.strictEqual(error.details, 'Meta should be an object with string values')
+      assert.strictEqual(error.details, '#/meta/not-a-string-value: Instance type "number" is invalid. Expected "string".')
     })
 
     it('validates CID values passed as filter', async () => {

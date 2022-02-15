@@ -83,7 +83,10 @@ const listPinsValidator = new Validator({
     before: { type: 'string', format: 'date-time' },
     cid: { type: 'array', items: { type: 'string' } },
     limit: { type: 'integer', minimum: 1, maximum: MAX_PIN_LISTING_LIMIT },
-    meta: { type: 'object' },
+    meta: {
+      type: 'object',
+      additionalProperties: { type: 'string' }
+    },
     match: {
       type: 'string',
       enum: ['exact', 'iexact', 'ipartial', 'partial']
@@ -211,13 +214,6 @@ export function validateSearchParams (queryString) {
     try {
       metaJson = JSON.parse(meta)
     } catch (e) {
-      return {
-        error: new PSAErrorInvalidData(INVALID_META),
-        data: undefined
-      }
-    }
-
-    if (Object.entries(metaJson).some(([, v]) => typeof v !== 'string')) {
       return {
         error: new PSAErrorInvalidData(INVALID_META),
         data: undefined
