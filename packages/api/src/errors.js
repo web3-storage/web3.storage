@@ -90,3 +90,71 @@ export class InvalidCarError extends Error {
   }
 }
 InvalidCarError.CODE = 'ERROR_INVALID_CAR'
+
+export class PinningServiceApiError extends Error {
+  /**
+   *
+   * @param {string} [message]
+   * @param {number} [status]
+   * @param {string} code
+   */
+  constructor (message, status = 400, code = 'PSA_ERROR') {
+    super(message)
+    this.details = message
+    this.status = status
+    this.reason = code
+    // TODO: improve error handler
+    // https://github.com/web3-storage/web3.storage/issues/976
+    this.IS_PSA_ERROR = true
+  }
+}
+
+export class PSAErrorInvalidData extends PinningServiceApiError {
+  /**
+   * @param {string} message
+   */
+  constructor (message = 'Some data is invalid. Please consult the spec.') {
+    super(message)
+    this.details = message
+    this.reason = PSAErrorInvalidData.CODE
+  }
+}
+PSAErrorInvalidData.CODE = 'PSA_INVALID_DATA'
+
+export class PSAErrorRequiredData extends PinningServiceApiError {
+  /**
+   * @param {string} message
+   */
+  constructor (message = 'Missing required data. Please consult the spec.') {
+    super(message)
+    this.details = message
+    this.reason = PSAErrorRequiredData.CODE
+  }
+}
+PSAErrorRequiredData.CODE = 'PSA_REQUIRED_DATA'
+
+export class PSAErrorResourceNotFound extends PinningServiceApiError {
+  /**
+   * @param {string} message
+   */
+  constructor (message = 'Requested data was not found.') {
+    super(message)
+    this.details = message
+    this.status = 404
+    this.reason = PSAErrorResourceNotFound.CODE
+  }
+}
+PSAErrorResourceNotFound.CODE = 'PSA_RESOURCE_NOT_FOUND'
+
+export class PSAErrorDB extends PinningServiceApiError {
+  /**
+   * @param {string} message
+   */
+  constructor (message = 'DB transaction failed.') {
+    super(message)
+    this.details = message
+    this.status = 500
+    this.reason = PSAErrorDB.CODE
+  }
+}
+PSAErrorDB.CODE = 'PSA_DB_ERROR'
