@@ -78,6 +78,19 @@ export class InvalidCidError extends Error {
 }
 InvalidCidError.CODE = 'ERROR_INVALID_CID'
 
+export class InvalidCarError extends Error {
+  /**
+   * @param {string} reason
+   */
+  constructor (reason) {
+    super(`Invalid CAR file received: ${reason}`)
+    this.name = 'InvalidCar'
+    this.status = 400
+    this.code = InvalidCidError.CODE
+  }
+}
+InvalidCarError.CODE = 'ERROR_INVALID_CAR'
+
 export class PinningServiceApiError extends Error {
   /**
    *
