@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 
 import Modal from 'modules/zero/components/modal/modal';
 import Dropzone from 'modules/zero/components/dropzone/dropzone';
@@ -9,6 +9,8 @@ import CloseIcon from 'assets/icons/close';
 import InfinityIcon from 'assets/icons/infinity';
 import GlobeIcon from 'assets/icons/globe';
 import { ReactComponent as FolderIcon } from '../../../assets/icons/folder.svg';
+import { useUploads } from 'components/contexts/uploadsContext';
+import { STATUS } from 'components/contexts/uploadProgressContext';
 
 export const CTAThemeType = {
   LIGHT: 'light',
@@ -51,7 +53,19 @@ const UploadContentBlock = ({ className, heading, icon, description }) => (
  * @returns
  */
 const FileUploader = ({ className = '', uploadModalState, background }) => {
-  const [filesToUpload, setFilesToUpload] = useState([]);
+  const [filesToUpload, setFilesToUpload] = useState(/** @type {File[]} */ ([]));
+  const { getUploads, uploadFiles, uploadsProgress, clearUploadedFiles } = useUploads();
+
+  // Mapped out file progress info
+  const filesInfo = useMemo(
+    () =>
+      Object.values(uploadsProgress.files).map(({ inputFile, progress, uploadId }) => ({
+        uploadId,
+        name: inputFile.name,
+        progress: progress.percentage,
+      })),
+    [uploadsProgress]
+  );
 
   return (
     <div className={'file-upload-modal'}>
@@ -60,6 +74,12 @@ const FileUploader = ({ className = '', uploadModalState, background }) => {
         closeIcon={<CloseIcon className="file-uploader-close" />}
         modalState={uploadModalState}
         showCloseButton
+        onClose={useCallback(() => {
+          // Clearing uploads and updating list if there are new files
+          if (clearUploadedFiles()) {
+            getUploads();
+          }
+        }, [getUploads, clearUploadedFiles])}
       >
         <div className={clsx(className, 'file-uploader-container')}>
           {background}
@@ -71,17 +91,21 @@ const FileUploader = ({ className = '', uploadModalState, background }) => {
           </div>
           <Dropzone
             className="file-uploader-dropzone"
-            onChange={files => {
-              console.log('file change');
-              setFilesToUpload(filesToUpload.concat(files));
-            }}
-            onError={() => {
-              console.log('error');
+            onChange={useCallback(
+              files => {
+                uploadFiles(files);
+                setFilesToUpload(filesToUpload.concat(files));
+              },
+              [filesToUpload, uploadFiles]
+            )}
+            onError={e => {
+              console.error('error', e);
             }}
             icon={<FolderIcon />}
             dragAreaText="Drag and drop your files here"
             maxFiles={3}
             multiple={true}
+            filesInfo={filesInfo}
           />
           <UploadContentBlock
             className="upload-content-block-public"
