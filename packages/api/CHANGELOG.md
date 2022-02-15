@@ -1,5 +1,60 @@
 # Changelog
 
+### [5.1.4](https://github.com/web3-storage/web3.storage/compare/api-v5.1.3...api-v5.1.4) (2022-02-14)
+
+
+### Bug Fixes
+
+* invalid CAR errors ([#977](https://github.com/web3-storage/web3.storage/issues/977)) ([2ee4a08](https://github.com/web3-storage/web3.storage/commit/2ee4a08457dbf1dc0385e65b7ea034a232c5b44c))
+
+### [5.1.3](https://github.com/web3-storage/web3.storage/compare/api-v5.1.2...api-v5.1.3) (2022-02-07)
+
+
+### Bug Fixes
+
+* db client do not throw error when no upload found ([#885](https://github.com/web3-storage/web3.storage/issues/885)) ([834d3cc](https://github.com/web3-storage/web3.storage/commit/834d3ccb22d8ee00b4f47e5eae850aaf5b7ebba1))
+
+### [5.1.2](https://github.com/web3-storage/web3.storage/compare/api-v5.1.1...api-v5.1.2) (2022-02-06)
+
+
+### Bug Fixes
+
+* size for single block raw node ([#958](https://github.com/web3-storage/web3.storage/issues/958)) ([708aea7](https://github.com/web3-storage/web3.storage/commit/708aea775461ede27f67ac133eba9f1a22163f5d))
+
+### [5.1.1](https://github.com/web3-storage/web3.storage/compare/api-v5.1.0...api-v5.1.1) (2022-02-03)
+
+
+### Bug Fixes
+
+* add initial migration ([#951](https://github.com/web3-storage/web3.storage/issues/951)) ([89c16b8](https://github.com/web3-storage/web3.storage/commit/89c16b89443dea63884820dd978c03981c7ab917))
+* durable objects config ([#949](https://github.com/web3-storage/web3.storage/issues/949)) ([0ccb3f3](https://github.com/web3-storage/web3.storage/commit/0ccb3f35b02423930fc6dbad00c3a5d867c159c7))
+* user and auth token type declarations ([#948](https://github.com/web3-storage/web3.storage/issues/948)) ([287f01c](https://github.com/web3-storage/web3.storage/commit/287f01ce574f093f732b9f33eb28d4b4258a6512))
+
+## [5.1.0](https://github.com/web3-storage/web3.storage/compare/api-v5.0.8...api-v5.1.0) (2022-02-02)
+
+
+### Features
+
+* add origins to psa pin request ([#897](https://github.com/web3-storage/web3.storage/issues/897)) ([0056679](https://github.com/web3-storage/web3.storage/commit/00566792980b42431fa9edc55add3c7ec0618732))
+* filter pins by status ([#848](https://github.com/web3-storage/web3.storage/issues/848)) ([df1582b](https://github.com/web3-storage/web3.storage/commit/df1582b6b7d9fef45f832212d8df13aa29f246f3))
+* pinning api allowlist ([#705](https://github.com/web3-storage/web3.storage/issues/705)) ([ed3a08d](https://github.com/web3-storage/web3.storage/commit/ed3a08d9ec4a7c7a746ffd5de06319a1ba5b1dad))
+* pinning API implementation ([8187bb5](https://github.com/web3-storage/web3.storage/commit/8187bb5891ccf73c35289fd9f265ea110cbd5b9a))
+* websockets support for w3name ([#932](https://github.com/web3-storage/web3.storage/issues/932)) ([20998fa](https://github.com/web3-storage/web3.storage/commit/20998fabf87944aa8c877702ba4175e0db8cedad))
+
+
+### Bug Fixes
+
+* bind normalizedCid instead of function ([#941](https://github.com/web3-storage/web3.storage/issues/941)) ([49cc35f](https://github.com/web3-storage/web3.storage/commit/49cc35f2cc4f3ce4790a416b907341dbb19ba716))
+* bind normalizedCid instead of function ([#942](https://github.com/web3-storage/web3.storage/issues/942)) ([6cfa3dd](https://github.com/web3-storage/web3.storage/commit/6cfa3dd148096a9aecf2f48ed712c829cf210d38))
+* check if unpinned then downgrade to v0 ([#919](https://github.com/web3-storage/web3.storage/issues/919)) ([f1e9da5](https://github.com/web3-storage/web3.storage/commit/f1e9da5da5883671415091e6168a7ac95778dfef))
+* include meta for replace pin ([#935](https://github.com/web3-storage/web3.storage/issues/935)) ([83f0b0b](https://github.com/web3-storage/web3.storage/commit/83f0b0bc4840171490a9e09c6a7ce1174ca38cd8))
+* limit the psa request listing and return right count ([67d71e8](https://github.com/web3-storage/web3.storage/commit/67d71e8f22ec87667801f7eb790eb3498f924aaf))
+* psa pin request status ([f8967a8](https://github.com/web3-storage/web3.storage/commit/f8967a870ba99d06f9e6505b08dc83930da220e9))
+* return right psa status in APIs ([445fd12](https://github.com/web3-storage/web3.storage/commit/445fd1289d1eeaa1063b5d12d9de5fb0fee773cf))
+* sentry version cannot contain slash ([#924](https://github.com/web3-storage/web3.storage/issues/924)) ([3449af4](https://github.com/web3-storage/web3.storage/commit/3449af46517989e0ba9a42785d996dba64861912))
+* update name in pinning status filtering test ([57eaf6c](https://github.com/web3-storage/web3.storage/commit/57eaf6c9e892be637b0cc182804ea10be2f3c4a0))
+* update package.json main entry ([4b46a8c](https://github.com/web3-storage/web3.storage/commit/4b46a8cff28dbdcd3bea5fad2e09db6707b6d318))
+
 ### [5.0.8](https://www.github.com/web3-storage/web3.storage/compare/api-v5.0.7...api-v5.0.8) (2022-01-17)
 
 

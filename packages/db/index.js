@@ -324,8 +324,8 @@ export class DBClient {
    */
   async deleteUpload (userId, cid) {
     const now = new Date().toISOString()
-    /** @type {{ data: import('./db-client-types').UploadItem, error: PostgrestError }} */
-    const { data, error } = await this._client
+    /** @type {{ data: import('./db-client-types').UploadItem, error: PostgrestError, status: number }} */
+    const { data, error, status } = await this._client
       .from('upload')
       .update({
         deleted_at: now,
@@ -337,6 +337,10 @@ export class DBClient {
       })
       .is('deleted_at', null)
       .single()
+
+    if (status === 406 || !data) {
+      return
+    }
 
     if (error) {
       throw new DBError(error)
@@ -881,7 +885,7 @@ export class DBClient {
    * Get a filtered list of pin requests for a user
    *
    * @param {string} authKey
-   * @param {import('./db-client-types').ListPsaPinRequestOptions} opts
+   * @param {import('./db-client-types').ListPsaPinRequestOptions} [opts]
    * @return {Promise<import('./db-client-types').ListPsaPinRequestResults> }> }
    */
   async listPsaPinRequests (authKey, opts = {}) {
@@ -890,63 +894,61 @@ export class DBClient {
 
     let query = this._client
       .from(psaPinRequestTableName)
-      .select(listPinsQuery)
+      .select(listPinsQuery, {
+        count: 'exact'
+      })
       .eq('auth_key_id', authKey)
       .is('deleted_at', null)
+      .limit(limit)
       .order('inserted_at', { ascending: false })
 
-    if (!Object.keys(opts).length) {
+    if (!opts.cid && !opts.name && !opts.statuses) {
       query = query.eq('content.pins.status', 'Pinned')
-    } else {
-      if (opts.statuses) {
-        query = query.in('content.pins.status', opts.statuses)
-      }
+    }
 
-      if (opts.cid) {
-        query = query.in('source_cid', opts.cid)
-      }
+    if (opts.statuses) {
+      query = query.in('content.pins.status', opts.statuses)
+    }
 
-      if (opts.name) {
-        switch (match) {
-          case 'exact':
-            query = query.like('name', `${opts.name}`)
-            break
-          case 'iexact':
-            query = query.ilike('name', `${opts.name}`)
-            break
-          case 'partial':
-            query = query.like('name', `%${opts.name}%`)
-            break
-          case 'ipartial':
-            query = query.ilike('name', `%${opts.name}%`)
-            break
-        }
-      }
+    if (opts.cid) {
+      query = query.in('source_cid', opts.cid)
+    }
 
-      if (opts.before) {
-        query = query.lte('inserted_at', opts.before)
+    if (opts.name) {
+      switch (match) {
+        case 'exact':
+          query = query.like('name', `${opts.name}`)
+          break
+        case 'iexact':
+          query = query.ilike('name', `${opts.name}`)
+          break
+        case 'partial':
+          query = query.like('name', `%${opts.name}%`)
+          break
+        case 'ipartial':
+          query = query.ilike('name', `%${opts.name}%`)
+          break
       }
+    }
 
-      if (opts.after) {
-        query = query.gte('inserted_at', opts.after)
-      }
+    if (opts.before) {
+      query = query.lte('inserted_at', opts.before)
+    }
+
+    if (opts.after) {
+      query = query.gte('inserted_at', opts.after)
     }
 
     // TODO(https://github.com/web3-storage/web3.storage/issues/798): filter by meta is missing
 
-    /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, error: Error }} */
-    const { data, error } = (await query)
+    /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, count: number, error: PostgrestError }} */
+    const { data, count, error } = (await query)
 
     if (error) {
       throw new DBError(error)
     }
 
-    const count = data.length
-
-    // TODO(https://github.com/web3-storage/web3.storage/issues/804): Not limiting the query might cause
-    // performance issues if a user created lots of requests with a token. We should improve this.
-    const pinRequests = data.slice(0, limit)
-    const pins = pinRequests.map(pinRequest => normalizePsaPinRequest(pinRequest))
+    const pins = data.map(pinRequest => normalizePsaPinRequest(pinRequest))
 
     return {
       count,

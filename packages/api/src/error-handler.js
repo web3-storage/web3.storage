@@ -3,22 +3,34 @@ import { JSONResponse } from './utils/json-response.js'
 import { HTTPError } from './errors.js'
 
 /**
- * @param {Error & {status?: number;code?: string;}} err
+ * @param {Error & {status?: number;code?: string;reason?: string; details?: string; IS_PSA_ERROR?: boolean;}} err
  * @param {import('./env').Env} env
  */
 export function errorHandler (err, { sentry }) {
   console.error(err.stack)
 
+  let status = err.status || 500
+
+  if (sentry && status >= 500) {
+    sentry.captureException(err)
+  }
+
+  // TODO: improve error handler
+  // https://github.com/web3-storage/web3.storage/issues/976
+  if (err.IS_PSA_ERROR) {
+    const error = {
+      reason: err.reason,
+      details: err.details
+    }
+    return new JSONResponse(error, { status })
+  }
+
   let error = {
     code: err.code,
     message: err.message
   }
-  let status = err.status || 500
 
   if (err instanceof HTTPError) {
-    if (sentry && status >= 500) {
-      sentry.captureException(err)
-    }
     return new JSONResponse(error, { status })
   }
 
@@ -56,10 +68,6 @@ export function errorHandler (err, { sentry }) {
         message: err.message || 'Server Error'
       }
       break
-  }
-
-  if (sentry && status >= 500) {
-    sentry.captureException(err)
   }
 
   return new JSONResponse(error, { status })

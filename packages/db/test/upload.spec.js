@@ -190,13 +190,8 @@ describe('upload', () => {
     assert.strictEqual(deletedUpload.updated_at, deletedUpload.deleted_at)
 
     // Should fail to delete again
-    let error
-    try {
-      await client.deleteUpload(user._id, otherCid)
-    } catch (err) {
-      error = err
-    }
-    assert(error, 'should fail to delete upload again')
+    const wasDeletedAgain = await client.deleteUpload(user._id, otherCid)
+    assert.strictEqual(wasDeletedAgain, undefined, 'should fail to delete upload again')
 
     const finalUserUploads = await client.listUploads(user._id)
     assert(finalUserUploads, 'user upload deleted')
