@@ -62,7 +62,7 @@ export type AuthKeyItemOutput = {
 
 // Pin
 export type PinUpsertInput = {
-  id?: definitions['pin']['id'],
+  _id?: string,
   status: definitions['pin']['status'],
   location: Location,
 }
@@ -74,11 +74,10 @@ export type PinItem = PinUpsertInput & {
 }
 
 export type PinsUpsertInput = {
-  id?: definitions['pin']['id'],
-  status: definitions['pin']['status'],
+  _id: string
+  status: definitions['pin']['status']
   cid: definitions['pin_request']['content_cid']
-  locationId: definitions['pin_location']['id']
-  updated: definitions['pin']['updated_at'],
+  locationId: string
 }
 
 export type PinItemOutput = {
@@ -222,7 +221,7 @@ export type UploadOutput = definitions['upload'] & {
 }
 
 export type Location = {
-  id?: definitions['pin_location']['id']
+  _id?: string
   peerId: definitions['pin_location']['peer_id']
   peerName?: definitions['pin_location']['peer_name']
   region?: definitions['pin_location']['region']

@@ -141,11 +141,10 @@ export async function waitAndUpdateOkPins (cid, cluster, db, waitTime = MAX_PIN_
   const okPins = await waitOkPins(cid, cluster, waitTime, checkInterval)
   const pins = okPins.map((pin) => {
     return {
-      id: pin.id,
+      _id: pin._id,
       status: pin.status,
       cid,
-      locationId: pin.location.id,
-      updated: new Date().toISOString()
+      locationId: pin.location._id
     }
   })
   await db.upsertPins(pins)

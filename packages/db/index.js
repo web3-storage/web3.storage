@@ -440,14 +440,23 @@ export class DBClient {
   }
 
   /**
-   * Upsert given pin status.
+   * Upsert pins.
+   *
+   * NOTE: currently only used to batch update the pin status.
    *
    * @param {Array<import('./db-client-types').PinsUpsertInput>} pins
    */
   async upsertPins (pins) {
+    const now = new Date().toISOString()
     const { error } = await this._client
       .from('pin')
-      .upsert(pins, { count: 'exact', returning: 'minimal' })
+      .upsert(pins.map(pin => ({
+        id: pin._id,
+        status: pin.status,
+        content_cid: pin.cid,
+        pin_location_id: pin.locationId,
+        updated_at: now
+      })), { count: 'exact', returning: 'minimal' })
 
     if (error) {
       throw new DBError(error)

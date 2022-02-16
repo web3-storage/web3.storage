@@ -60,6 +60,7 @@ describe('pin-sync-request', () => {
       {
         status: 'Pinning',
         location: {
+          id: 1,
           peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
           peerName: 'web3-storage-sv15',
           region: 'region'
@@ -68,6 +69,7 @@ describe('pin-sync-request', () => {
       {
         status: 'Pinning',
         location: {
+          id: 2,
           peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
           peerName: 'web3-storage-sv16',
           region: 'region'
@@ -76,6 +78,7 @@ describe('pin-sync-request', () => {
       {
         status: 'Pinned',
         location: {
+          id: 3,
           peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK8',
           peerName: 'web3-storage-sv17',
           region: 'region'
@@ -107,11 +110,10 @@ describe('pin-sync-request', () => {
 
     // Update all Pins to Pinned
     await client.upsertPins(pinSyncReqs.map(psr => ({
-      id: psr.pin._id,
+      _id: psr.pin._id,
       status: 'Pinned',
-      content_cid: psr.pin.contentCid,
-      pin_location_id: psr.pin.location._id,
-      updated_at: new Date().toISOString()
+      cid: psr.pin.contentCid,
+      locationId: psr.pin.location._id
     })))
 
     const { data: pinSyncReqsAfterUpdate } = await client.getPinSyncRequests({ to })
