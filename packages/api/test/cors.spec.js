@@ -6,8 +6,6 @@ import { endpoint } from './scripts/constants.js'
 const cid = 'bafkqaaa'
 
 describe('CORS', () => {
-  // FIXME: TypeError: terminated for request to ipfs.io gateway...
-  // I think this is a bug in Miniflare...
   it('sets CORS headers', async () => {
     const res = await fetch(new URL(`car/${cid}`, endpoint))
     assert(res.ok)
