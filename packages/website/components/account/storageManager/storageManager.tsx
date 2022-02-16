@@ -97,12 +97,10 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
         )}
       </div>
       <div className="storage-manager-info">
-        {content.prompt}
-        <Button variant={ButtonVariant.TEXT} href={mailTo}>
-          <a href={mailTo} target="_blank" rel="noreferrer">
-            {content.buttons.request}
-          </a>
-        </Button>
+        {content.prompt}&nbsp;
+        <a href={mailTo} target="_blank" rel="noreferrer">
+          {content.buttons.request}
+        </a>
       </div>
     </div>
   );

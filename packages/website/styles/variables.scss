@@ -479,6 +479,15 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
   transform-origin: $transformOrigin;
 }
 
+@mixin textLinkColorHover {
+  color: $pictonBlue;
+  transition: color 250ms;
+  &:hover {
+    color: $cerise;
+    transition: color 250ms;
+  }
+}
+
 // ////////////////////////////////////////////////////////////// [Post] Imports
 // =============================================================================
 @import 'typography';

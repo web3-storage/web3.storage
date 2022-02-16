@@ -77,8 +77,8 @@
     }
   }
   a {
-    color: $pictonBlue;
     position: relative;
+    @include textLinkColorHover;
   }
   @include medium {
     margin-bottom: 1.59375rem;

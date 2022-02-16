@@ -33,9 +33,8 @@
 .storage-manager-info {
   @include fontSize_Tiny;
   @include fontWeight_Regular;
-  button {
-    padding: 0;
-    padding-left: 0.65rem;
+  a {
+    @include textLinkColorHover;
   }
   margin-top: 1.25rem;
 
