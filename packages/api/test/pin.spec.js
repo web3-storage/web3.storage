@@ -140,6 +140,54 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(error.details, 'Instance does not have required property "status".')
     })
 
+    it('validates meta filter is json object', async () => {
+      const opts = new URLSearchParams({
+        meta: `[
+          "invalid",
+          "json"
+        ]`
+      })
+      const url = new URL(`${baseUrl}?${opts}`).toString()
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert.strictEqual(res.status, ERROR_CODE)
+      const error = await res.json()
+      assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
+      assert.strictEqual(error.details, '#/meta: Instance type "array" is invalid. Expected "object".')
+    })
+
+    it('validates meta filter values must be strings', async () => {
+      const opts = new URLSearchParams({
+        meta: `{
+          "app-id": "app-001",
+          "not-a-string-value": 99
+        }`
+      })
+      const url = new URL(`${baseUrl}?${opts}`).toString()
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert.strictEqual(res.status, ERROR_CODE)
+      const error = await res.json()
+      assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
+      assert.strictEqual(error.details, '#/meta/not-a-string-value: Instance type "number" is invalid. Expected "string".')
+    })
+
     it('validates CID values passed as filter', async () => {
       const cids = [
         'notAValidCID',
@@ -398,6 +446,28 @@ describe('Pinning APIs endpoints', () => {
       const data = await res.json()
       assert.strictEqual(data.count, 6)
       assert.strictEqual(data.results.length, 3)
+    })
+
+    it('filters pins by meta', async () => {
+      const opts = new URLSearchParams({
+        status: 'pinning',
+        meta: '{"app_id": "99986338-1113-4706-8302-4420da6158bb", "region": "europe"}'
+      })
+      const url = new URL(`${baseUrl}?${opts}`).toString()
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Server response is ok')
+      const data = await res.json()
+      assert.strictEqual(data.count, 1)
+      assert.strictEqual(data.results[0].pin.name, 'Image.jpeg')
     })
 
     it('error if user not authorized to pin', async () => {
