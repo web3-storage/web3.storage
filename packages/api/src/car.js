@@ -9,7 +9,7 @@ import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
 import retry from 'p-retry'
 import { InvalidCarError } from './errors.js'
-import { GATEWAY, LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
+import { LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/cid.js'
@@ -64,8 +64,8 @@ export async function carGet (request, env, ctx) {
   } = request
   // gateway does not support `carversion` yet.
   // using it now means we can skip the cache if it is supported in the future
-  const url = new URL(`/api/v0/dag/export?arg=${cid}&carversion=1`, GATEWAY)
-  res = await fetch(url, { method: 'POST' })
+  const url = new URL(`/api/v0/dag/export?arg=${cid}&carversion=1`, env.GATEWAY)
+  res = await fetch(url.toString(), { method: 'POST' })
   if (!res.ok) {
     // bail early. dont cache errors.
     return res
