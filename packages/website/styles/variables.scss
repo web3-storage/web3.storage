@@ -179,7 +179,7 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
 @mixin border_Background_Waterloo_White {
   @include borderRadius_Large;
   background: rgba($waterloo, 0.15);
-  border: 0.0625rem solid rgba($white, 0.15);
+  border: 0.0625rem solid rgba($white, 0.1);
 }
 
 @mixin gradient_BlurryBox_PinkBlue {

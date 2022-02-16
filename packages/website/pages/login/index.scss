@@ -44,8 +44,8 @@
 .login-email {
   padding: 1rem 2rem;
   width: 100%;
-  border: 0.0625rem solid $doveGray;
-  background: none;
+  @include border_Background_Waterloo_White;
+  border-radius: 0;
   @include buttonHover;
   &:focus {
     outline: none;
