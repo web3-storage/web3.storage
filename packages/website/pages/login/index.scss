@@ -1,18 +1,29 @@
+@mixin buttonHover {
+  transition: border-color 250ms;
+  &:hover,
+  &:active,
+  &:focus {
+    border-color: rgba($white, 0.25);
+    transition: border-color 250ms;
+  }
+}
+
 .login-container {
   .section {
     svg {
       margin-right: 0.6875rem;
     }
-
     &-email {
       flex-direction: column;
       gap: 1.25rem;
+    }
+    &-github {
+      @include buttonHover;
     }
 
     .button {
       width: 8.5625rem;
       height: 2.1875rem;
-
       button {
         min-height: 1.5rem;
       }
@@ -35,12 +46,15 @@
   width: 100%;
   border: 0.0625rem solid $doveGray;
   background: none;
-
+  @include buttonHover;
+  &:focus {
+    outline: none;
+  }
   &::placeholder {
     color: $white;
   }
-}
-
-.error {
-  border: 1px solid red;
+  &.error {
+    border-color: $cerise;
+    transition: border-color 250ms;
+  }
 }
