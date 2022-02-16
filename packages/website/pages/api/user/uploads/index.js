@@ -86,7 +86,7 @@ export const files = [
     name: '2021-human-genome-sequence-follow-up-trials-lorem-ipsum-dolor-sit-amet-consectetur.json',
     created: '2021-12-01T01:41:03.681+00:00',
     updated: '2021-12-01T01:41:03.681+00:00',
-    cid: 'amblkadflkbmalf;dkmbladkbmlakgmbla;gkmbl;3',
+    cid: 'bafybeia4yb54v7w5lpolt8dqa3a2ewftulimmxlkuaf357nmvhee5k3pzu',
     dagSize: 41538,
     pins: [
       {
