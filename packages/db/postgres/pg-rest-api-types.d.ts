@@ -12,79 +12,6 @@ export interface paths {
       };
     };
   };
-  "/aggregate": {
-    get: {
-      parameters: {
-        query: {
-          aggregate_cid?: parameters["rowFilter.aggregate.aggregate_cid"];
-          piece_cid?: parameters["rowFilter.aggregate.piece_cid"];
-          sha256hex?: parameters["rowFilter.aggregate.sha256hex"];
-          export_size?: parameters["rowFilter.aggregate.export_size"];
-          metadata?: parameters["rowFilter.aggregate.metadata"];
-          entry_created?: parameters["rowFilter.aggregate.entry_created"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["aggregate"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-  };
-  "/aggregate_entry": {
-    get: {
-      parameters: {
-        query: {
-          aggregate_cid?: parameters["rowFilter.aggregate_entry.aggregate_cid"];
-          cid_v1?: parameters["rowFilter.aggregate_entry.cid_v1"];
-          datamodel_selector?: parameters["rowFilter.aggregate_entry.datamodel_selector"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["aggregate_entry"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-  };
   "/auth_key": {
     get: {
       parameters: {
@@ -382,52 +309,6 @@ export interface paths {
       };
     };
   };
-  "/deal": {
-    get: {
-      parameters: {
-        query: {
-          deal_id?: parameters["rowFilter.deal.deal_id"];
-          aggregate_cid?: parameters["rowFilter.deal.aggregate_cid"];
-          client?: parameters["rowFilter.deal.client"];
-          provider?: parameters["rowFilter.deal.provider"];
-          status?: parameters["rowFilter.deal.status"];
-          start_epoch?: parameters["rowFilter.deal.start_epoch"];
-          end_epoch?: parameters["rowFilter.deal.end_epoch"];
-          entry_created?: parameters["rowFilter.deal.entry_created"];
-          entry_last_updated?: parameters["rowFilter.deal.entry_last_updated"];
-          status_meta?: parameters["rowFilter.deal.status_meta"];
-          start_time?: parameters["rowFilter.deal.start_time"];
-          sector_start_epoch?: parameters["rowFilter.deal.sector_start_epoch"];
-          sector_start_time?: parameters["rowFilter.deal.sector_start_time"];
-          end_time?: parameters["rowFilter.deal.end_time"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["deal"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-  };
   "/migration_tracker": {
     get: {
       parameters: {
@@ -535,8 +416,10 @@ export interface paths {
       parameters: {
         query: {
           key?: parameters["rowFilter.name.key"];
-          seqno?: parameters["rowFilter.name.seqno"];
           record?: parameters["rowFilter.name.record"];
+          has_v2_sig?: parameters["rowFilter.name.has_v2_sig"];
+          seqno?: parameters["rowFilter.name.seqno"];
+          validity?: parameters["rowFilter.name.validity"];
           inserted_at?: parameters["rowFilter.name.inserted_at"];
           updated_at?: parameters["rowFilter.name.updated_at"];
           /** Filtering Columns */
@@ -590,8 +473,10 @@ export interface paths {
       parameters: {
         query: {
           key?: parameters["rowFilter.name.key"];
-          seqno?: parameters["rowFilter.name.seqno"];
           record?: parameters["rowFilter.name.record"];
+          has_v2_sig?: parameters["rowFilter.name.has_v2_sig"];
+          seqno?: parameters["rowFilter.name.seqno"];
+          validity?: parameters["rowFilter.name.validity"];
           inserted_at?: parameters["rowFilter.name.inserted_at"];
           updated_at?: parameters["rowFilter.name.updated_at"];
         };
@@ -609,8 +494,10 @@ export interface paths {
       parameters: {
         query: {
           key?: parameters["rowFilter.name.key"];
-          seqno?: parameters["rowFilter.name.seqno"];
           record?: parameters["rowFilter.name.record"];
+          has_v2_sig?: parameters["rowFilter.name.has_v2_sig"];
+          seqno?: parameters["rowFilter.name.seqno"];
+          validity?: parameters["rowFilter.name.validity"];
           inserted_at?: parameters["rowFilter.name.inserted_at"];
           updated_at?: parameters["rowFilter.name.updated_at"];
         };
@@ -1019,6 +906,120 @@ export interface paths {
       };
     };
   };
+  "/psa_pin_request": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.psa_pin_request.id"];
+          auth_key_id?: parameters["rowFilter.psa_pin_request.auth_key_id"];
+          content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
+          source_cid?: parameters["rowFilter.psa_pin_request.source_cid"];
+          name?: parameters["rowFilter.psa_pin_request.name"];
+          origins?: parameters["rowFilter.psa_pin_request.origins"];
+          meta?: parameters["rowFilter.psa_pin_request.meta"];
+          deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
+          inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.psa_pin_request.updated_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["psa_pin_request"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** psa_pin_request */
+          psa_pin_request?: definitions["psa_pin_request"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.psa_pin_request.id"];
+          auth_key_id?: parameters["rowFilter.psa_pin_request.auth_key_id"];
+          content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
+          source_cid?: parameters["rowFilter.psa_pin_request.source_cid"];
+          name?: parameters["rowFilter.psa_pin_request.name"];
+          origins?: parameters["rowFilter.psa_pin_request.origins"];
+          meta?: parameters["rowFilter.psa_pin_request.meta"];
+          deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
+          inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.psa_pin_request.updated_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.psa_pin_request.id"];
+          auth_key_id?: parameters["rowFilter.psa_pin_request.auth_key_id"];
+          content_cid?: parameters["rowFilter.psa_pin_request.content_cid"];
+          source_cid?: parameters["rowFilter.psa_pin_request.source_cid"];
+          name?: parameters["rowFilter.psa_pin_request.name"];
+          origins?: parameters["rowFilter.psa_pin_request.origins"];
+          meta?: parameters["rowFilter.psa_pin_request.meta"];
+          deleted_at?: parameters["rowFilter.psa_pin_request.deleted_at"];
+          inserted_at?: parameters["rowFilter.psa_pin_request.inserted_at"];
+          updated_at?: parameters["rowFilter.psa_pin_request.updated_at"];
+        };
+        body: {
+          /** psa_pin_request */
+          psa_pin_request?: definitions["psa_pin_request"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/upload": {
     get: {
       parameters: {
@@ -1261,7 +1262,7 @@ export interface paths {
       };
     };
   };
-  "/rpc/postgres_fdw_handler": {
+  "/rpc/uuid_ns_url": {
     post: {
       parameters: {
         body: {
@@ -1295,7 +1296,77 @@ export interface paths {
       };
     };
   };
-  "/rpc/user_keys_list": {
+  "/rpc/uuid_nil": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v1": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/create_content": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_ns_oid": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/user_auth_keys_list": {
     post: {
       parameters: {
         body: {
@@ -1314,12 +1385,12 @@ export interface paths {
       };
     };
   };
-  "/rpc/postgres_fdw_validator": {
+  "/rpc/pin_from_status_total": {
     post: {
       parameters: {
         body: {
           args: {
-            "": string;
+            query_status: string;
           };
         };
         header: {
@@ -1352,6 +1423,26 @@ export interface paths {
       };
     };
   };
+  "/rpc/uuid_generate_v5": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            namespace: string;
+            name: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/upsert_pin": {
     post: {
       parameters: {
@@ -1371,12 +1462,68 @@ export interface paths {
       };
     };
   };
+  "/rpc/uuid_ns_x500": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/json_arr_to_text_arr": {
     post: {
       parameters: {
         body: {
           args: {
             _json: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/publish_name_record": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v3": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            namespace: string;
+            name: string;
           };
         };
         header: {
@@ -1426,12 +1573,65 @@ export interface paths {
       };
     };
   };
+  "/rpc/uuid_generate_v4": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_ns_dns": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/json_arr_to_json_element_array": {
     post: {
       parameters: {
         body: {
           args: {
             _json: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/create_psa_pin_request": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            data: string;
           };
         };
         header: {
@@ -1452,6 +1652,23 @@ export interface paths {
           args: {
             query_user_id: number;
           };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v1mc": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
         };
         header: {
           /** Preference */
@@ -1486,19 +1703,6 @@ export interface paths {
 }
 
 export interface definitions {
-  aggregate: {
-    aggregate_cid?: string;
-    piece_cid?: string;
-    sha256hex?: string;
-    export_size?: number;
-    metadata?: string;
-    entry_created?: string;
-  };
-  aggregate_entry: {
-    aggregate_cid?: string;
-    cid_v1?: string;
-    datamodel_selector?: string;
-  };
   auth_key: {
     /**
      * Note:
@@ -1540,22 +1744,6 @@ export interface definitions {
     inserted_at: string;
     updated_at: string;
   };
-  deal: {
-    deal_id?: number;
-    aggregate_cid?: string;
-    client?: string;
-    provider?: string;
-    status?: string;
-    start_epoch?: number;
-    end_epoch?: number;
-    entry_created?: string;
-    entry_last_updated?: string;
-    status_meta?: string;
-    start_time?: string;
-    sector_start_epoch?: number;
-    sector_start_time?: string;
-    end_time?: string;
-  };
   migration_tracker: {
     /**
      * Note:
@@ -1574,8 +1762,10 @@ export interface definitions {
      * This is a Primary Key.<pk/>
      */
     key: string;
-    seqno: number;
     record: string;
+    has_v2_sig: boolean;
+    seqno: number;
+    validity: number;
     inserted_at: string;
     updated_at: string;
   };
@@ -1649,6 +1839,30 @@ export interface definitions {
     pin_id: number;
     inserted_at: string;
   };
+  psa_pin_request: {
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: string; // Create custom UUID v4 type
+    /**
+     * Note:
+     * This is a Foreign Key to `auth_key.id`.<fk table='auth_key' column='id'/>
+     */
+    auth_key_id: number;
+    /**
+     * Note:
+     * This is a Foreign Key to `content.cid`.<fk table='content' column='cid'/>
+     */
+    content_cid: string;
+    source_cid: string;
+    name?: string;
+    origins?: string;
+    meta?: string;
+    deleted_at?: string;
+    inserted_at: string;
+    updated_at: string;
+  };
   upload: {
     /**
      * Note:
@@ -1715,19 +1929,6 @@ export interface parameters {
   offset: string;
   /** Limiting and Pagination */
   limit: string;
-  /** aggregate */
-  "body.aggregate": definitions["aggregate"];
-  "rowFilter.aggregate.aggregate_cid": string;
-  "rowFilter.aggregate.piece_cid": string;
-  "rowFilter.aggregate.sha256hex": string;
-  "rowFilter.aggregate.export_size": string;
-  "rowFilter.aggregate.metadata": string;
-  "rowFilter.aggregate.entry_created": string;
-  /** aggregate_entry */
-  "body.aggregate_entry": definitions["aggregate_entry"];
-  "rowFilter.aggregate_entry.aggregate_cid": string;
-  "rowFilter.aggregate_entry.cid_v1": string;
-  "rowFilter.aggregate_entry.datamodel_selector": string;
   /** auth_key */
   "body.auth_key": definitions["auth_key"];
   "rowFilter.auth_key.id": string;
@@ -1749,22 +1950,6 @@ export interface parameters {
   "rowFilter.content.dag_size": string;
   "rowFilter.content.inserted_at": string;
   "rowFilter.content.updated_at": string;
-  /** deal */
-  "body.deal": definitions["deal"];
-  "rowFilter.deal.deal_id": string;
-  "rowFilter.deal.aggregate_cid": string;
-  "rowFilter.deal.client": string;
-  "rowFilter.deal.provider": string;
-  "rowFilter.deal.status": string;
-  "rowFilter.deal.start_epoch": string;
-  "rowFilter.deal.end_epoch": string;
-  "rowFilter.deal.entry_created": string;
-  "rowFilter.deal.entry_last_updated": string;
-  "rowFilter.deal.status_meta": string;
-  "rowFilter.deal.start_time": string;
-  "rowFilter.deal.sector_start_epoch": string;
-  "rowFilter.deal.sector_start_time": string;
-  "rowFilter.deal.end_time": string;
   /** migration_tracker */
   "body.migration_tracker": definitions["migration_tracker"];
   "rowFilter.migration_tracker.id": string;
@@ -1776,8 +1961,10 @@ export interface parameters {
   /** name */
   "body.name": definitions["name"];
   "rowFilter.name.key": string;
-  "rowFilter.name.seqno": string;
   "rowFilter.name.record": string;
+  "rowFilter.name.has_v2_sig": string;
+  "rowFilter.name.seqno": string;
+  "rowFilter.name.validity": string;
   "rowFilter.name.inserted_at": string;
   "rowFilter.name.updated_at": string;
   /** pin */
@@ -1806,6 +1993,18 @@ export interface parameters {
   "rowFilter.pin_sync_request.id": string;
   "rowFilter.pin_sync_request.pin_id": string;
   "rowFilter.pin_sync_request.inserted_at": string;
+  /** psa_pin_request */
+  "body.psa_pin_request": definitions["psa_pin_request"];
+  "rowFilter.psa_pin_request.id": string;
+  "rowFilter.psa_pin_request.auth_key_id": string;
+  "rowFilter.psa_pin_request.content_cid": string;
+  "rowFilter.psa_pin_request.source_cid": string;
+  "rowFilter.psa_pin_request.name": string;
+  "rowFilter.psa_pin_request.origins": string;
+  "rowFilter.psa_pin_request.meta": string;
+  "rowFilter.psa_pin_request.deleted_at": string;
+  "rowFilter.psa_pin_request.inserted_at": string;
+  "rowFilter.psa_pin_request.updated_at": string;
   /** upload */
   "body.upload": definitions["upload"];
   "rowFilter.upload.id": string;

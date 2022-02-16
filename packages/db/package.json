@@ -1,11 +1,14 @@
 {
   "name": "@web3-storage/db",
-  "version": "3.0.2",
+  "version": "4.0.4",
   "description": "Database schema and tools.",
   "private": "true",
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "start": "node scripts/cli.js db --start --project web3-storage",
+    "stop": "node scripts/cli.js db --stop --project web3-storage",
+    "stop:clean": "node scripts/cli.js db --stop --clean --project web3-storage",
     "pg-rest-api-types": "./scripts/cli.js pg-rest-api-types",
     "test": "playwright-test \"test/**/*.spec.js\" --sw index.js"
   },
@@ -15,7 +18,7 @@
     "database"
   ],
   "author": "Alan Shaw",
-  "license": "(Apache-2.0 AND MIT)",
+  "license": "(Apache-2.0 OR MIT)",
   "dependencies": {
     "@supabase/postgrest-js": "^0.34.0",
     "p-retry": "^4.6.1"

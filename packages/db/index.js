@@ -1,6 +1,8 @@
 import { PostgrestClient } from '@supabase/postgrest-js'
 
-import { normalizeUpload, normalizeContent, normalizePins, normalizeDeals } from './utils.js'
+import {
+  normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest
+} from './utils.js'
 import { DBError } from './errors.js'
 import {
   getUserMetrics,
@@ -19,6 +21,45 @@ const uploadQuery = `
         updated:updated_at,
         content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region)))
       `
+
+const psaPinRequestTableName = 'psa_pin_request'
+const pinRequestSelect = `
+  _id:id::text,
+  sourceCid:source_cid,
+  contentCid:content_cid,
+  authKey:auth_key_id::text,
+  name,
+  origins,
+  meta,
+  deleted:deleted_at,
+  created:inserted_at,
+  updated:updated_at,
+  content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, region)))`
+
+const listPinsQuery = `
+  _id:id::text,
+  sourceCid:source_cid,
+  contentCid:content_cid,
+  authKey:auth_key_id,
+  name,
+  deleted:deleted_at,
+  created:inserted_at,
+  updated:updated_at,
+  content!inner(
+    cid,
+    dagSize:dag_size,
+    pins:pin!inner(
+      status,
+      updated:updated_at,
+      location:pin_location(
+        _id:id,
+        peerId:peer_id,
+        peerName:peer_name,
+        region
+      )
+    )
+  )`
+
 /**
  * @typedef {import('./postgres/pg-rest-api-types').definitions} definitions
  * @typedef {import('@supabase/postgrest-js').PostgrestError} PostgrestError
@@ -70,10 +111,10 @@ export class DBClient {
    * Get user by its issuer.
    *
    * @param {string} issuer
-   * @return {Promise<import('./db-client-types').UserOutput>}
+   * @return {Promise<import('./db-client-types').UserOutput | undefined>}
    */
   async getUser (issuer) {
-    /** @type {{ data: import('./db-client-types').UserOutput, error: PostgrestError }} */
+    /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
       .select(`
@@ -87,13 +128,32 @@ export class DBClient {
         updated:updated_at
       `)
       .eq('issuer', issuer)
-      .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    return data
+    return data.length ? data[0] : undefined
+  }
+
+  /**
+   * Check that a user is authorized to pin
+   *
+   * @param {number} userId
+   * @returns {Promise<boolean>}
+   */
+  async isPinningAuthorized (userId) {
+    const { error, count } = await this._client
+      .from('pinning_authorization')
+      .select('id', { count: 'exact' })
+      .eq('user_id', userId)
+      .filter('deleted_at', 'is', null)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return count > 0
   }
 
   /**
@@ -263,11 +323,13 @@ export class DBClient {
    * @param {string} cid
    */
   async deleteUpload (userId, cid) {
-    /** @type {{ data: import('./db-client-types').UploadItem, error: PostgrestError }} */
-    const { data, error } = await this._client
+    const now = new Date().toISOString()
+    /** @type {{ data: import('./db-client-types').UploadItem, error: PostgrestError, status: number }} */
+    const { data, error, status } = await this._client
       .from('upload')
       .update({
-        deleted_at: new Date().toISOString()
+        deleted_at: now,
+        updated_at: now
       })
       .match({
         source_cid: cid,
@@ -275,6 +337,10 @@ export class DBClient {
       })
       .is('deleted_at', null)
       .single()
+
+    if (status === 406 || !data) {
+      return
+    }
 
     if (error) {
       throw new DBError(error)
@@ -292,7 +358,7 @@ export class DBClient {
    * @returns {Promise<import('./db-client-types').ContentItemOutput>}
    */
   async getStatus (cid) {
-    /** @type {{ data: import('./db-client-types').ContentItem, error: PostgrestError }} */
+    /** @type {{ data: Array<import('./db-client-types').ContentItem>, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('content')
       .select(`
@@ -302,19 +368,18 @@ export class DBClient {
         pins:pin(status, updated:updated_at, location:pin_location(peerId:peer_id, peerName:peer_name, region))
       `)
       .match({ cid })
-      .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    if (!data) {
-      return
+    if (!data || !data.length) {
+      return undefined
     }
 
     const deals = await this.getDeals(cid)
     return {
-      ...normalizeContent(data),
+      ...normalizeContent(data[0]),
       deals
     }
   }
@@ -349,10 +414,10 @@ export class DBClient {
    *
    * @param {string} cid
    * @param {import('./db-client-types').PinUpsertInput} pin
-   * @return {Promise<number>}
+   * @return {Promise<string>}
    */
   async upsertPin (cid, pin) {
-    /** @type {{ data: number, error: PostgrestError }} */
+    /** @type {{ data: string, error: PostgrestError }} */
     const { data: pinId, error } = await this._client.rpc('upsert_pin', {
       data: {
         content_cid: cid,
@@ -550,20 +615,22 @@ export class DBClient {
   }
 
   /**
-   * Get deals for multiple cids
+   * Get deals for multiple cids. This function is error tolerant as it uses
+   * the dagcargo FDW. It will return an empty object if any error is
+   * encountered fetching the data.
    *
    * @param {string[]} cids
    * @return {Promise<Record<string, import('./db-client-types').Deal[]>>}
    */
   async getDealsForCids (cids = []) {
-    /** @type {{ data: Array<import('../db-client-types').Deal>, error: PostgrestError }} */
+    /** @type {{ data: Array<import('./db-client-types').Deal>, error: PostgrestError }} */
     const { data, error } = await this._client
       .rpc('find_deals_by_content_cids', {
         cids
       })
 
     if (error) {
-      throw new DBError(error)
+      return {}
     }
 
     const result = {}
@@ -614,38 +681,46 @@ export class DBClient {
    *
    * @param {string} issuer
    * @param {string} secret
-   * @return {Promise<import('./db-client-types').AuthKey>}
+   * @return {Promise<import('./db-client-types').AuthKey | undefined>}
    */
   async getKey (issuer, secret) {
-    /** @type {{ data, error: PostgrestError } */
+    /** @type {{ data, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
       .select(`
         _id:id::text,
         issuer,
-        keys:auth_key_user_id_fkey(_id:id::text, name,secret)
+        keys:auth_key_user_id_fkey(
+          _id:id::text,
+          name,
+          secret
+        )
       `)
       .match({
         issuer
       })
       .filter('keys.deleted_at', 'is', null)
       .eq('keys.secret', secret)
-      .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    if (!data.keys.length) {
-      throw new Error('user has no key with given secret')
+    if (!data.length) {
+      return undefined
+    }
+
+    const keyData = data[0]
+    if (!keyData.keys.length) {
+      return undefined
     }
 
     return {
-      _id: data.keys[0]._id,
-      name: data.keys[0].name,
+      _id: keyData.keys[0]._id,
+      name: keyData.keys[0].name,
       user: {
-        _id: data._id,
-        issuer: data.issuer
+        _id: keyData._id,
+        issuer: keyData.issuer
       }
     }
   }
@@ -658,7 +733,7 @@ export class DBClient {
    */
   async listKeys (userId) {
     /** @type {{ error: PostgrestError, data: Array<import('./db-client-types').AuthKeyItem> }} */
-    const { data, error } = await this._client.rpc('user_keys_list', { query_user_id: userId })
+    const { data, error } = await this._client.rpc('user_auth_keys_list', { query_user_id: userId })
 
     if (error) {
       throw new DBError(error)
@@ -669,7 +744,7 @@ export class DBClient {
       name: ki.name,
       secret: ki.secret,
       created: ki.created,
-      hasUploads: Boolean(ki.uploads)
+      hasUploads: ki.has_uploads
     }))
   }
 
@@ -680,11 +755,13 @@ export class DBClient {
    * @param {number} keyId
    */
   async deleteKey (userId, keyId) {
+    const now = new Date().toISOString()
     /** @type {{ data, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('auth_key')
       .update({
-        deleted_at: new Date().toISOString()
+        deleted_at: now,
+        updated_at: now
       })
       .match({
         id: keyId,
@@ -696,8 +773,12 @@ export class DBClient {
       throw new DBError(error)
     }
 
+    if (!data.length) {
+      return undefined
+    }
+
     return {
-      _id: data.id
+      _id: data[0].id
     }
   }
 
@@ -732,6 +813,174 @@ export class DBClient {
         return res.total
       default:
         throw new Error('unknown metric requested')
+    }
+  }
+
+  /**
+   * Creates a Pin Request.
+   *
+   * @param {import('./db-client-types').PsaPinRequestUpsertInput} pinRequestData
+   * @return {Promise<import('./db-client-types').PsaPinRequestUpsertOutput>}
+   */
+  async createPsaPinRequest (pinRequestData) {
+    const now = new Date().toISOString()
+
+    /** @type {{ data: string, error: PostgrestError }} */
+    const { data: pinRequestId, error } = await this._client.rpc('create_psa_pin_request', {
+      data: {
+        auth_key_id: pinRequestData.authKey,
+        content_cid: pinRequestData.contentCid,
+        source_cid: pinRequestData.sourceCid,
+        name: pinRequestData.name,
+        origins: pinRequestData.origins,
+        meta: pinRequestData.meta,
+        dag_size: pinRequestData.dagSize,
+        inserted_at: pinRequestData.created || now,
+        updated_at: pinRequestData.updated || now,
+        pins: pinRequestData.pins.map(pin => ({
+          status: pin.status,
+          location: {
+            peer_id: pin.location.peerId,
+            peer_name: pin.location.peerName,
+            region: pin.location.region
+          }
+        }))
+      }
+    }).single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    // TODO: this second request could be avoided by returning the right data
+    // from create_psa_pin_request remote procedure. (But to keep this DRY we need to refactor
+    // this a bit)
+    return await this.getPsaPinRequest(pinRequestData.authKey, pinRequestId)
+  }
+
+  /**
+   * Get a Pin Request by id
+   *
+   * @param {string} authKey
+   * @param {number} pinRequestId
+   * @return {Promise<import('./db-client-types').PsaPinRequestUpsertOutput>}
+   */
+  async getPsaPinRequest (authKey, pinRequestId) {
+    /** @type {{data: import('./db-client-types').PsaPinRequestItem, error: PostgrestError }} */
+    const { data, error } = await this._client
+      .from(psaPinRequestTableName)
+      .select(pinRequestSelect)
+      .match({ auth_key_id: authKey, id: pinRequestId })
+      .is('deleted_at', null)
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return normalizePsaPinRequest(data)
+  }
+
+  /**
+   * Get a filtered list of pin requests for a user
+   *
+   * @param {string} authKey
+   * @param {import('./db-client-types').ListPsaPinRequestOptions} [opts]
+   * @return {Promise<import('./db-client-types').ListPsaPinRequestResults> }> }
+   */
+  async listPsaPinRequests (authKey, opts = {}) {
+    const match = opts?.match || 'exact'
+    const limit = opts?.limit || 10
+
+    let query = this._client
+      .from(psaPinRequestTableName)
+      .select(listPinsQuery, {
+        count: 'exact'
+      })
+      .eq('auth_key_id', authKey)
+      .is('deleted_at', null)
+      .limit(limit)
+      .order('inserted_at', { ascending: false })
+
+    if (!opts.cid && !opts.name && !opts.statuses) {
+      query = query.eq('content.pins.status', 'Pinned')
+    }
+
+    if (opts.statuses) {
+      query = query.in('content.pins.status', opts.statuses)
+    }
+
+    if (opts.cid) {
+      query = query.in('source_cid', opts.cid)
+    }
+
+    if (opts.name) {
+      switch (match) {
+        case 'exact':
+          query = query.like('name', `${opts.name}`)
+          break
+        case 'iexact':
+          query = query.ilike('name', `${opts.name}`)
+          break
+        case 'partial':
+          query = query.like('name', `%${opts.name}%`)
+          break
+        case 'ipartial':
+          query = query.ilike('name', `%${opts.name}%`)
+          break
+      }
+    }
+
+    if (opts.before) {
+      query = query.lte('inserted_at', opts.before)
+    }
+
+    if (opts.after) {
+      query = query.gte('inserted_at', opts.after)
+    }
+
+    // TODO(https://github.com/web3-storage/web3.storage/issues/798): filter by meta is missing
+
+    /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, count: number, error: PostgrestError }} */
+    const { data, count, error } = (await query)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    const pins = data.map(pinRequest => normalizePsaPinRequest(pinRequest))
+
+    return {
+      count,
+      results: pins
+    }
+  }
+
+  /**
+   * Delete a user PA pin request.
+   *
+   * @param {number} requestId
+   * @param {string} authKey
+   */
+  async deletePsaPinRequest (requestId, authKey) {
+    const date = new Date().toISOString()
+    /** @type {{ data: import('./db-client-types').PsaPinRequestItem, error: PostgrestError }} */
+    const { data, error } = await this._client
+      .from(psaPinRequestTableName)
+      .update({
+        deleted_at: date,
+        updated_at: date
+      })
+      .match({ auth_key_id: authKey, id: requestId })
+      .filter('deleted_at', 'is', null)
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return {
+      _id: data.id
     }
   }
 

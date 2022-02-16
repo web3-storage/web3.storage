@@ -4,7 +4,7 @@ DROP FUNCTION IF EXISTS create_key;
 DROP FUNCTION IF EXISTS create_upload;
 DROP FUNCTION IF EXISTS upsert_pin;
 DROP FUNCTION IF EXISTS user_used_storage;
-DROP FUNCTION IF EXISTS user_keys_list;
+DROP FUNCTION IF EXISTS user_auth_keys_list;
 DROP FUNCTION IF EXISTS content_dag_size_total;
 DROP FUNCTION IF EXISTS pin_dag_size_total;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
@@ -41,18 +41,19 @@ BEGIN
 END
 $$;
 
-CREATE OR REPLACE FUNCTION create_upload(data json) RETURNS TEXT
+
+-- Creates a content table, with relative pins and pin_requests
+CREATE OR REPLACE FUNCTION create_content(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile
     PARALLEL UNSAFE
 AS
 $$
 DECLARE
-  backup_url TEXT;
   pin json;
   pin_result_id BIGINT;
   pin_location_result_id BIGINT;
-  inserted_upload_id BIGINT;
+  inserted_cid TEXT;
 BEGIN
   -- Set timeout as imposed by heroku
   SET LOCAL statement_timeout = '30s';
@@ -63,7 +64,8 @@ BEGIN
           (data ->> 'dag_size')::BIGINT,
           (data ->> 'updated_at')::timestamptz,
           (data ->> 'inserted_at')::timestamptz)
-    ON CONFLICT ( cid ) DO NOTHING;
+    ON CONFLICT ( cid ) DO NOTHING
+  returning cid into inserted_cid;
   
   -- Add to pin_request table if new
   insert into pin_request (content_cid, attempts, updated_at, inserted_at)
@@ -107,6 +109,29 @@ BEGIN
         END IF;
   end loop;
 
+  return (inserted_cid);
+END
+$$;
+
+-- Creates an upload with relative content, pins, pin_requests and backups.
+CREATE OR REPLACE FUNCTION create_upload(data json) RETURNS TEXT
+    LANGUAGE plpgsql
+    volatile
+    PARALLEL UNSAFE
+AS
+$$
+DECLARE
+  backup_url TEXT;
+  pin json;
+  pin_result_id BIGINT;
+  pin_location_result_id BIGINT;
+  inserted_upload_id BIGINT;
+BEGIN
+  -- Set timeout as imposed by heroku
+  SET LOCAL statement_timeout = '30s';
+
+  PERFORM create_content(data);
+
   insert into upload (user_id,
                       auth_key_id,
                       content_cid,
@@ -138,10 +163,54 @@ BEGIN
     values (inserted_upload_id,
             backup_url,
             (data ->> 'inserted_at')::timestamptz)
-    ON CONFLICT ( url ) DO NOTHING;
+    ON CONFLICT ( upload_id, url ) DO NOTHING;
   end loop;
 
   return (inserted_upload_id)::TEXT;
+END
+$$;
+
+-- Creates a pin request with relative content, pins, pin_requests and backups.
+CREATE OR REPLACE FUNCTION create_psa_pin_request(data json) RETURNS TEXT
+    LANGUAGE plpgsql
+    volatile
+    PARALLEL UNSAFE
+AS
+$$
+DECLARE
+-- TODO - Validate UUID type is available
+  inserted_pin_request_id TEXT;
+BEGIN
+  -- Set timeout as imposed by heroku
+  SET LOCAL statement_timeout = '30s';
+
+  PERFORM create_content(data);
+
+  insert into psa_pin_request (
+                      auth_key_id,
+                      content_cid,
+                      source_cid,
+                      name,
+                      origins,
+                      meta,
+                      inserted_at,
+                      updated_at
+                    )
+  values (
+            (data ->> 'auth_key_id')::BIGINT,
+            data ->> 'content_cid',
+            data ->> 'source_cid',
+            data ->> 'name',
+            (data ->> 'origins')::jsonb,
+            (data ->> 'meta')::jsonb,
+            (data ->> 'inserted_at')::timestamptz,
+            (data ->> 'updated_at')::timestamptz
+          )
+
+  returning id into inserted_pin_request_id;
+
+-- TODO - Validate and use UUID type
+  return (inserted_pin_request_id)::TEXT;
 END
 $$;
 
@@ -196,14 +265,14 @@ BEGIN
 END
 $$;
 
-CREATE OR REPLACE FUNCTION user_keys_list(query_user_id BIGINT)
+CREATE OR REPLACE FUNCTION user_auth_keys_list(query_user_id BIGINT)
   RETURNS TABLE
           (
               "id"                text,
               "name"              text,
               "secret"            text,
               "created"           timestamptz,
-              "uploads"           bigint
+              "has_uploads"           boolean
           )
   LANGUAGE sql
 AS
@@ -212,7 +281,7 @@ SELECT (ak.id)::TEXT AS id,
        ak.name AS name,
        ak.secret AS secret,
        ak.inserted_at AS created,
-       CASE WHEN EXISTS(SELECT 42 FROM upload u WHERE ak.id = u.auth_key_id AND u.deleted_at IS NULL) THEN 1::BIGINT ELSE 0::BIGINT END
+       EXISTS(SELECT 42 FROM upload u WHERE u.auth_key_id = ak.id) AS has_uploads
   FROM auth_key ak
  WHERE ak.user_id = query_user_id AND ak.deleted_at IS NULL
 $$;
@@ -289,9 +358,9 @@ SELECT COALESCE(de.status, 'queued') as status,
        a.piece_cid                   as pieceCid,
        ae.aggregate_cid              as batchRootCid,
        ae.cid_v1                     as dataCid
-FROM public.aggregate_entry ae
-         join public.aggregate a using (aggregate_cid)
-         LEFT JOIN public.deal de USING (aggregate_cid)
+FROM cargo.aggregate_entries ae
+         join cargo.aggregates a using (aggregate_cid)
+         LEFT JOIN cargo.deals de USING (aggregate_cid)
 WHERE ae.cid_v1 = ANY (cids)
 ORDER BY de.entry_last_updated
 $$;

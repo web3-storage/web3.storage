@@ -5,6 +5,7 @@ import { packToBlob } from 'ipfs-car/pack/blob'
  */
 export async function createCar (str) {
   return await packToBlob({
-    input: new TextEncoder().encode(str)
+    input: [new TextEncoder().encode(str)],
+    wrapWithDirectory: false
   })
 }

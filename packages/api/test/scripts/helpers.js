@@ -10,6 +10,7 @@ import { JWT_ISSUER } from '../../src/constants.js'
 import { SALT } from './worker-globals.js'
 
 const libp2pKeyCode = 0x72
+const lifetime = 1000 * 60 * 60
 
 export async function createNameKeypair () {
   const privKey = await keys.generateKeyPair('Ed25519', 2048)
@@ -21,17 +22,33 @@ export async function createNameKeypair () {
 }
 
 /**
- * @param {Uint8Array} privKey base64 encoded private key
+ * @param {Uint8Array} privKey Private key
  * @param {string} value IPFS path
  * @param {bigint} seqno Sequence number
  */
 export async function createNameRecord (privKey, value, seqno = 0n) {
   const privKeyObj = await keys.unmarshalPrivateKey(privKey)
-  const lifetime = 1000 * 60 * 60
   const entry = await ipns.create(privKeyObj, uint8arrays.fromString(value), seqno, lifetime)
   return ipns.marshal(entry)
 }
 
-export function getTestJWT (sub = 'test', name = 'test') {
+/**
+ * @param {Uint8Array} privKey Private key
+ * @param {Uint8Array} existingRecord Current IPNS record
+ * @param {string} newValue IPFS path
+ */
+export async function updateNameRecord (privKey, existingRecord, newValue) {
+  const privKeyObj = await keys.unmarshalPrivateKey(privKey)
+  const existingEntry = ipns.unmarshal(existingRecord)
+  const newEntry = await ipns.create(
+    privKeyObj,
+    uint8arrays.fromString(newValue),
+    existingEntry.sequence + 1n,
+    lifetime
+  )
+  return ipns.marshal(newEntry)
+}
+
+export function getTestJWT (sub = 'test-magic-issuer', name = 'test-magic-issuer') {
   return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
 }

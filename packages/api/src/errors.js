@@ -20,6 +20,15 @@ export class UserNotFoundError extends HTTPError {
 }
 UserNotFoundError.CODE = 'ERROR_USER_NOT_FOUND'
 
+export class PinningUnauthorizedError extends HTTPError {
+  constructor (msg = 'Pinning not authorized for this user') {
+    super(msg, 403)
+    this.name = 'PinningUnauthorizedError'
+    this.code = PinningUnauthorizedError.CODE
+  }
+}
+PinningUnauthorizedError.CODE = 'ERROR_PINNING_UNAUTHORIZED'
+
 export class TokenNotFoundError extends HTTPError {
   constructor (msg = 'API token no longer valid') {
     super(msg, 401)
@@ -68,3 +77,16 @@ export class InvalidCidError extends Error {
   }
 }
 InvalidCidError.CODE = 'ERROR_INVALID_CID'
+
+export class InvalidCarError extends Error {
+  /**
+   * @param {string} reason
+   */
+  constructor (reason) {
+    super(`Invalid CAR file received: ${reason}`)
+    this.name = 'InvalidCar'
+    this.status = 400
+    this.code = InvalidCidError.CODE
+  }
+}
+InvalidCarError.CODE = 'ERROR_INVALID_CAR'

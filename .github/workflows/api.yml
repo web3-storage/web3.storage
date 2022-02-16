@@ -25,6 +25,10 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - run: npm run build --workspace packages/api
       - run: npm test --workspace packages/api
+        env:
+          PG_REST_URL: ${{secrets.PG_REST_URL}}
+          PG_REST_JWT: ${{secrets.PG_REST_JWT}}
+          PG_CONNECTION: ${{secrets.PG_CONNECTION}}
 
   deploy-staging:
     name: Deploy Staging API
@@ -41,9 +45,8 @@ jobs:
         # workaround for https://github.com/cloudflare/wrangler-action/issues/59 to use node 16
         uses: web3-storage/wrangler-action@node16
         env:
-          SENTRY_TOKEN: ${{ secrets.STAGING_SENTRY_TOKEN}}
-          SENTRY_PROJECT: ${{ secrets.STAGING_SENTRY_PROJECT}}
-          SENTRY_UPLOAD: ${{ secrets.STAGING_SENTRY_UPLOAD}}
+          SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
+          SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           workingDirectory: 'packages/api'
@@ -53,3 +56,37 @@ jobs:
           npm run build -w packages/client
           echo "$(date --utc --iso-8601=seconds) web3.storage upload test" > ./upload-test-small
           ./packages/w3/bin.js put ./upload-test-small --api https://api-staging.web3.storage --token ${{ secrets.STAGING_WEB3_TOKEN }}
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v3
+        id: tag-release
+        with:
+          path: packages/api
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          monorepo-tags: true
+          package-name: api
+      - uses: actions/checkout@v2
+        if: ${{ steps.tag-release.outputs.releases_created }}
+      - uses: actions/setup-node@v2
+        if: ${{ steps.tag-release.outputs.releases_created }}
+        with:
+          node-version: '16'
+          registry-url: https://registry.npmjs.org/
+      - uses: bahmutov/npm-install@v1
+        if: ${{ steps.tag-release.outputs.releases_created }}
+      # --- API deploy steps -------------------------------------------------
+      - name: API - Deploy to Cloudflare
+        if: ${{ steps.tag-release.outputs.releases_created }}
+        # workaround for https://github.com/cloudflare/wrangler-action/issues/59 to use node 16
+        uses: web3-storage/wrangler-action@node16
+        env:
+          SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
+          SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          workingDirectory: 'packages/api'
+          environment: 'production'

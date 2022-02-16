@@ -11,10 +11,22 @@ One time set up of your cloudflare worker subdomain for dev:
 - `npm i @cloudflare/wrangler -g` - Install the Cloudflare wrangler CLI
 - `wrangler login` - Authenticate your wrangler cli; it'll open your browser.
 - Setup Cluster
-    - You need to run a cluster locally and make it accessible from the internet for development.
-    - Follow the quickstart guide to get an IPFS Cluster up and running: https://cluster.ipfs.io/documentation/quickstart/
-    - Install [localtunnel](https://theboroer.github.io/localtunnel-www/) and expose the IPFS Cluster HTTP API (replacing "USER" with your name):
+  - You need to run a cluster locally and make it accessible from the internet for development. 
+    ```
+    npm run cluster:start
+    ```
+    to start the IPFS cluster.
 
+    You can stop the cluster by
+    ```
+    npm run cluster:stop
+    ```
+
+    The data is persisted among different runs, if you'd like to reset your cluster you can run
+    ```
+    npm run cluster:reset
+    ```
+  - 
     ```sh
     npm install -g localtunnel
     npm run lt:cluster
@@ -233,6 +245,14 @@ Resolve the current CID for the given key ID.
 Users "resolve" a Key ID to the current _value_ of a _record_. Typically an IPFS path. Keypair owners "publish" IPNS _records_ to create or update the current _value_.
 
 It returns the resolved value AND the full name record (base 64 encoded, for client side verification).
+
+### 🤲 `GET /name/:key/watch`
+
+**❗️Experimental** this API may not work, may change, and may be removed in a future version.
+
+Watch for changes to the given key ID over a websocket connection.
+
+When changes to the `:key` are published, a JSON encoded message is sent over the websocket containing the new value and the full name record (base 64 encoded, for client side verification).
 
 ## Setup Sentry
 
