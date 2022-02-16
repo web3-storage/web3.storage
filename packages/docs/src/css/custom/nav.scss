@@ -1,7 +1,6 @@
 
 // top navbar
 .navbar {
-    background: linear-gradient(180deg, $white 12.12%, rgba(254, 254, 254, 0) 100%);
     width: 100%;
     background-color: transparent;
     box-shadow: none;
@@ -13,6 +12,28 @@
     &__inner {
         margin: 0 auto;
         max-width: $containerWidth;
+    }
+    transition: all 0.3s;
+    &.hide {
+      top: -$navigationHeight;
+    }
+    &:before {
+        z-index: -1;
+        transition: opacity 0.3s;
+        opacity: 0;
+        content: '';
+        width: 100%;
+        height: $navigationHeight;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: linear-gradient(180deg, $white 12.12%, rgba(254, 254, 254, 0) 100%);
+        pointer-events: none;
+    }
+    &.show-gradient {
+        &:before {
+            opacity: 1;
+        }
     }
     @include mobile {
         height: 4rem;

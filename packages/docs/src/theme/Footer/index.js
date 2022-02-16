@@ -1,16 +1,13 @@
 import React from 'react';
-import clsx from 'clsx';
-import {useThemeConfig} from '@docusaurus/theme-common';
-import useBaseUrl from '@docusaurus/useBaseUrl';
 import Squiggle from './squiggle.js';
 import SiteLogo from './w3storage-logo.js';
-import GeneralPageData from './general.json';
+import FooterData from './footer.json';
 
 function Footer() {
-  const contact = GeneralPageData.footer.contact;
-  const resources = GeneralPageData.footer.resources;
-  const getStarted = GeneralPageData.footer.get_started;
-  const copyright = GeneralPageData.footer.copyright;
+  const contact = FooterData.footer.contact;
+  const resources = FooterData.footer.resources;
+  const getStarted = FooterData.footer.get_started;
+  const copyright = FooterData.footer.copyright;
 
   return (
     <footer id="site-footer">
