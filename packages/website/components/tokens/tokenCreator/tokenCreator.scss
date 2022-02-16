@@ -1,5 +1,6 @@
 .token-creator-container {
   color: $cyan;
+  @include hoverScale;
   @include fontSize_Mini;
   @include medium {
     position: absolute;

@@ -488,6 +488,47 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
   }
 }
 
+@mixin hoverScale {
+  transition: transform 250ms;
+  &:hover {
+    transform: scale(1.1);
+    transition: transform 250ms;
+  }
+}
+
+@mixin hoverArrowLeft {
+  a {
+    &:before {
+      content: '❮';
+      padding-right: 0.5rem;
+      display: inline-block;
+      transition: transform 250ms ease-out;
+    }
+    &:hover {
+      &:before {
+        transform: translateX(-0.25rem);
+      }
+    }
+  }
+}
+
+@mixin hoverArrowRight {
+  a {
+    color: $pictonBlue;
+    &:after {
+      content: '❯';
+      padding-left: 0.25rem;
+      display: inline-block;
+      transition: transform 250ms ease-out;
+    }
+    &:hover {
+      &:after {
+        transform: translateX(0.25rem);
+      }
+    }
+  }
+}
+
 // ////////////////////////////////////////////////////////////// [Post] Imports
 // =============================================================================
 @import 'typography';

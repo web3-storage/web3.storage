@@ -38,7 +38,7 @@
 }
 
 .dashboard-link {
-  @include fontSize_Medium;
+  @include fontSize_Mini;
   @include fontWeight_Semibold;
   @include medium {
     order: 2;
@@ -54,19 +54,7 @@
       align-items: center;
     }
   }
-
-  &.hasTokens {
-    @include fontSize_Mini;
-
-    div {
-      transform: scaleX(-1);
-      display: initial;
-    }
-
-    a {
-      margin-left: 1.4375rem;
-    }
-  }
+  @include hoverArrowLeft;
 }
 
 .testing-cta-container {
@@ -78,8 +66,8 @@
   }
   a {
     position: relative;
-    @include textLinkColorHover;
   }
+  @include hoverArrowRight;
   @include medium {
     margin-bottom: 1.59375rem;
   }
