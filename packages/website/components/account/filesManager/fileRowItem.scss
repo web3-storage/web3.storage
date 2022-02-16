@@ -94,6 +94,7 @@ $file-size: auto;
         display: none;
         color: $cyan;
         top: -0.2rem;
+        left: 0;
         position: absolute;
         pointer-events: none;
       }
@@ -124,6 +125,8 @@ $file-size: auto;
         .textarea-container {
           display: flex;
           position: relative;
+          width: 100%;
+          height: 100%;
           &:before {
             @include gradient_BlurryBox_PinkBlue;
             border-radius: 1rem;
@@ -162,6 +165,7 @@ $file-size: auto;
         padding-right: 1rem;
       }
       svg {
+        height: 1rem;
         cursor: pointer;
         @include medium {
           display: none;
