@@ -7,6 +7,7 @@ $containerWidth: 61.25rem; // 980px
 $underlineSpacing: 0.1875rem;
 $messageBannerHeight: 3.25rem;
 $navigationHeight: 8.5rem;
+$transitionDuration: 250ms;
 
 $borderRadius_Small: 0.3125rem;
 $borderRadius_Medium: 0.25rem;
@@ -481,18 +482,18 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
 
 @mixin textLinkColorHover {
   color: $pictonBlue;
-  transition: color 250ms;
+  transition: color $transitionDuration;
   &:hover {
     color: $cerise;
-    transition: color 250ms;
+    transition: color $transitionDuration;
   }
 }
 
 @mixin hoverScale {
-  transition: transform 250ms;
+  transition: transform $transitionDuration ease-in-out;
   &:hover {
     transform: scale(1.1);
-    transition: transform 250ms;
+    transition: transform $transitionDuration ease-in-out;
   }
 }
 
@@ -502,7 +503,7 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
       content: '❮';
       padding-right: 0.5rem;
       display: inline-block;
-      transition: transform 250ms ease-out;
+      transition: transform $transitionDuration ease-out;
     }
     &:hover {
       &:before {
@@ -519,13 +520,24 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
       content: '❯';
       padding-left: 0.25rem;
       display: inline-block;
-      transition: transform 250ms ease-out;
+      transition: transform $transitionDuration ease-out;
     }
     &:hover {
       &:after {
         transform: translateX(0.25rem);
       }
     }
+  }
+}
+
+@mixin inputHover {
+  transition: border-color $transitionDuration;
+  &:hover,
+  &:active,
+  &:focus {
+    outline: 0;
+    border-color: rgba($white, 0.25);
+    transition: border-color $transitionDuration;
   }
 }
 

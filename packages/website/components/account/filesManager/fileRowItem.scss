@@ -108,30 +108,29 @@ $file-size: auto;
     &-name {
       padding-right: 2.1875rem;
       height: 100%;
-
       @include medium {
         padding-right: 1rem;
-        .pencil-icon {
-          display: none;
+      }
+
+      .pencil-icon {
+        transition: transform $transitionDuration ease-in-out;
+        &:hover {
+          color: $cyan;
+          transform: scale(1.1);
+          transition: transform $transitionDuration ease-in-out;
+          @include medium {
+            display: none;
+          }
         }
       }
 
       &.isEditingName {
-        svg {
-          color: $cyan;
-        }
-
         // Text area container for blurry background
         .textarea-container {
           display: flex;
           position: relative;
           width: 100%;
           height: 100%;
-          &:before {
-            @include gradient_BlurryBox_PinkBlue;
-            border-radius: 1rem;
-            opacity: 0.5;
-          }
         }
       }
 
@@ -144,11 +143,11 @@ $file-size: auto;
       textarea {
         position: relative;
         resize: none;
-        background: $shark;
-        border: 0.0625rem solid $waterloo;
-        border-radius: 0.625rem;
+        @include border_Background_Waterloo_White;
+        @include inputHover;
         padding: 0.625rem;
         height: 100%;
+        width: 100%;
       }
     }
     &-cid {
