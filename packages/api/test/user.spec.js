@@ -1,7 +1,9 @@
-/* eslint-env mocha, browser */
+/* eslint-env mocha */
 import assert from 'assert'
+import fetch from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
+import userUploads from './fixtures/pgrest/get-user-uploads.js'
 
 describe('GET /user/account', () => {
   it('error if not authenticated with magic.link', async () => {
@@ -26,7 +28,7 @@ describe('GET /user/account', () => {
     })
     assert(res.ok)
     const data = await res.json()
-    assert(data.usedStorage)
+    assert.strictEqual(data.usedStorage, 0)
   })
 })
 
@@ -113,7 +115,7 @@ describe('POST /user/tokens', () => {
 describe('DELETE /user/tokens/:id', () => {
   it('error if not authenticated with magic.link', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('user/tokens/xyz', endpoint), {
+    const res = await fetch(new URL('user/tokens/2', endpoint), {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -122,7 +124,7 @@ describe('DELETE /user/tokens/:id', () => {
   })
 
   it('error if no auth header', async () => {
-    const res = await fetch(new URL('user/tokens/xyz', endpoint), {
+    const res = await fetch(new URL('user/tokens/2', endpoint), {
       method: 'DELETE'
     })
     assert(!res.ok)
@@ -131,13 +133,13 @@ describe('DELETE /user/tokens/:id', () => {
 
   it('removes a token', async () => {
     const token = 'test-magic'
-    const res = await fetch(new URL('user/tokens/xyz', endpoint), {
+    const res = await fetch(new URL('user/tokens/2', endpoint), {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
     })
     assert(res.ok)
-    const { _id } = await res.json()
-    assert(_id)
+    const data = await res.json()
+    assert(data._id)
   })
 })
 
@@ -150,34 +152,7 @@ describe('GET /user/uploads', () => {
     })
     assert(res.ok)
     const uploads = await res.json()
-    // TODO: import from fixture
-    const expected = [
-      {
-        name: 'Upload at 2021-07-09T16:20:32.658Z',
-        cid: 'bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae',
-        dagSize: null,
-        created: '2021-07-09T16:20:33.946845Z',
-        deals: [],
-        pins: []
-      },
-      {
-        name: 'week-in-web3-2021-07-02.mov',
-        cid: 'bafybeigc4fntpegrqzgzhxyc7hzu25ykqqai7nzllov2jn55wvzjju7pwu',
-        dagSize: null,
-        created: '2021-07-09T10:40:35.408884Z',
-        deals: [],
-        pins: []
-      },
-      {
-        name: 'pinpie.jpg',
-        cid: 'bafkreiajkbmpugz75eg2tmocmp3e33sg5kuyq2amzngslahgn6ltmqxxfa',
-        dagSize: null,
-        created: '2021-07-09T10:36:05.862862Z',
-        deals: [],
-        pins: []
-      }
-    ]
-    assert.deepStrictEqual(uploads, expected)
+    assert.deepStrictEqual(uploads, userUploads)
   })
 
   it('lists uploads sorted by name', async () => {
@@ -188,34 +163,7 @@ describe('GET /user/uploads', () => {
     })
     assert(res.ok)
     const uploads = await res.json()
-    // TODO: import from fixture
-    const expected = [
-      {
-        name: 'pinpie.jpg',
-        cid: 'bafkreiajkbmpugz75eg2tmocmp3e33sg5kuyq2amzngslahgn6ltmqxxfa',
-        dagSize: null,
-        created: '2021-07-09T10:36:05.862862Z',
-        deals: [],
-        pins: []
-      },
-      {
-        name: 'Upload at 2021-07-09T16:20:32.658Z',
-        cid: 'bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae',
-        dagSize: null,
-        created: '2021-07-09T16:20:33.946845Z',
-        deals: [],
-        pins: []
-      },
-      {
-        name: 'week-in-web3-2021-07-02.mov',
-        cid: 'bafybeigc4fntpegrqzgzhxyc7hzu25ykqqai7nzllov2jn55wvzjju7pwu',
-        dagSize: null,
-        created: '2021-07-09T10:40:35.408884Z',
-        deals: [],
-        pins: []
-      }
-    ]
-    assert.deepStrictEqual(uploads, expected)
+    assert.deepStrictEqual(uploads, [...userUploads].sort((a, b) => b.name.localeCompare(a.name)))
   })
 
   it('lists uploads via magic auth', async () => {
@@ -226,34 +174,7 @@ describe('GET /user/uploads', () => {
     })
     assert(res.ok)
     const uploads = await res.json()
-    // TODO: import from fixture
-    const expected = [
-      {
-        name: 'Upload at 2021-07-09T16:20:32.658Z',
-        cid: 'bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae',
-        dagSize: null,
-        created: '2021-07-09T16:20:33.946845Z',
-        deals: [],
-        pins: []
-      },
-      {
-        name: 'week-in-web3-2021-07-02.mov',
-        cid: 'bafybeigc4fntpegrqzgzhxyc7hzu25ykqqai7nzllov2jn55wvzjju7pwu',
-        dagSize: null,
-        created: '2021-07-09T10:40:35.408884Z',
-        deals: [],
-        pins: []
-      },
-      {
-        name: 'pinpie.jpg',
-        cid: 'bafkreiajkbmpugz75eg2tmocmp3e33sg5kuyq2amzngslahgn6ltmqxxfa',
-        dagSize: null,
-        created: '2021-07-09T10:36:05.862862Z',
-        deals: [],
-        pins: []
-      }
-    ]
-    assert.deepStrictEqual(uploads, expected)
+    assert.deepStrictEqual(uploads, userUploads)
   })
 
   it('paginates', async () => {
@@ -264,17 +185,8 @@ describe('GET /user/uploads', () => {
       headers: { Authorization: `Bearer ${token}` }
     })
     assert(res.ok)
-    // TODO: import from fixture
-    const expected = [
-      {
-        name: 'Upload at 2021-07-09T16:20:32.658Z',
-        cid: 'bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae',
-        dagSize: null,
-        created: '2021-07-09T16:20:33.946845Z',
-        deals: [],
-        pins: []
-      }
-    ]
+
+    const expected = [userUploads[0]]
     const link = res.headers.get('Link')
     assert(link, 'has a Link header for the next page')
     assert.strictEqual(link, `</user/uploads?size=${size}&before=${encodeURIComponent(expected[0].created)}>; rel="next"`)
@@ -304,7 +216,7 @@ describe('DELETE /user/uploads/:cid', () => {
 
   it('removes an upload', async () => {
     const token = 'test-magic'
-    const res = await fetch(new URL('user/uploads/bafybeibq5kfbnbvjgjg6bop4anhhaqopkc7t6mp2v3er3fkcv6ezhgvavg', endpoint), {
+    const res = await fetch(new URL('user/uploads/bafkreiajkbmpugz75eg2tmocmp3e33sg5kuyq2amzngslahgn6ltmqxxfa', endpoint), {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
     })
