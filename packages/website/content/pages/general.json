@@ -85,9 +85,11 @@
     "about": "About",
     "tiers": "Tiers",
     "faq": "FAQ",
-    "terms": "TOS",
-    "account": "Accounts",
-    "tokens": "Accounts"
+    "terms": "ToS",
+    "login": "Login",
+    "callback": "Authenticating",
+    "account": "Account",
+    "tokens": "API Tokens"
   },
   "footer": {
     "contact": {

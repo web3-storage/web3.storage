@@ -87,7 +87,7 @@
   }
 
   .token-id {
-    font-family: 'Suisse Intl Mono';
+    @include monospace_Text;
   }
 
   @include medium {

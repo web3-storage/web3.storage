@@ -1,5 +1,4 @@
 .Filterable {
-  @include gradient_Blurry_Background_PinkBlue;
   position: relative;
   display: inline-flex;
   height: 1.5625rem;
@@ -7,6 +6,20 @@
 
   @include medium {
     margin-right: 0;
+  }
+  transition: all $transitionDuration ease-in-out;
+  @include gradient_Blurry_Background_PinkBlue;
+  &:hover,
+  &:focus-within {
+    &:before {
+      filter: blur(0.5rem);
+      opacity: 0.5;
+    }
+    &:focus-within {
+      .search-icon svg {
+        transform: scale(1.2);
+      }
+    }
   }
 
   .SearchBar {
@@ -23,8 +36,9 @@
     color: $white;
     .search-icon {
       svg {
+        transition: all $transitionDuration linear;
         position: absolute;
-        top: 0.4rem;
+        top: 0.375rem;
         left: 0.75rem;
       }
     }
