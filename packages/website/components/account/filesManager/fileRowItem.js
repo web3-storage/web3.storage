@@ -165,7 +165,7 @@ const FileRowItem = props => {
         {isHeader ? (
           <Info content={statusMessages.header} />
         ) : (
-          statusTooltip && <Info icon={<InfoBIcon />} content={statusMessages.pinned} />
+          statusTooltip && <Info icon={<InfoBIcon />} content={statusTooltip} />
         )}
       </span>
       <span className="file-storage-providers">
