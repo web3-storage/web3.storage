@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
-import filesize from 'filesize'
+import { fileSize } from '../lib/formatter'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import Button from '../components/button/button'
@@ -44,7 +44,8 @@ const QuestionMark = () => (
 )
 
 const TOOLTIPS = {
-  PIN_STATUS: (<span>Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes.</span>),
+  PIN_STATUS: (<span>Reports the status of a file or piece of data stored on Web3.Storage’s IPFS Cluster. Status might not be fully up-to-date. Data is still available even when still in Queuing state.</span>),
+  AVAILABILITY: (<span>Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes.</span>),
 
   CID: (<span>
     The <strong>c</strong>ontent <strong>id</strong>entifier for a file or a piece of data.<span> </span>
@@ -231,7 +232,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
   return (
     <tr>
       <td className="w-8">
-        <Checkbox className="mr-2" checked={checked} disabled={!upload.dagSize} disabledText='You may only delete after the upload is complete' onChange={() => toggle(upload.cid)}/>
+        <Checkbox className="mr-2" checked={checked} disabled={upload.dagSize == null} disabledText='You may only delete after the upload is complete' onChange={() => toggle(upload.cid)}/>
       </td>
       <TableElement {...sharedArgs}>
         <span title={upload.created} className="break-normal">{formatTimestamp(upload.created)}</span>
@@ -269,6 +270,11 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
       </TableElement>
       <TableElement {...sharedArgs} centered>
         <span className="flex justify-center">
+          Available
+        </span>
+      </TableElement>
+      <TableElement {...sharedArgs} centered>
+        <span className="flex justify-center">
           {pinStatus}
           {getPinStatusTooltip(pinStatus, upload.pins.length)}
         </span>
@@ -279,7 +285,7 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
         </div>
       </TableElement>
       <TableElement {...sharedArgs} centered>
-        {upload.dagSize ? filesize(upload.dagSize) : 'Calculating...'}
+        {upload.dagSize ? fileSize(upload.dagSize) : 'Calculating...'}
       </TableElement>
     </tr>
   )
@@ -423,6 +429,13 @@ export default function Files({ isLoggedIn }) {
             <span className="flex w-100 justify-center items-center">CID
               <Tooltip placement='top' overlay={TOOLTIPS.CID} overlayClassName='table-tooltip'>
                 { QuestionMark() }
+              </Tooltip>
+            </span>
+          </TableHeader>
+          <TableHeader>
+            <span className="flex w-100 justify-center">Availability
+              <Tooltip placement='top' overlay={TOOLTIPS.AVAILABILITY} overlayClassName='table-tooltip'>
+                {QuestionMark()}
               </Tooltip>
             </span>
           </TableHeader>
