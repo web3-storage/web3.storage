@@ -78,7 +78,11 @@ const Account: React.FC = () => {
             {...CTAConfigs[CTACardTypes.UPLOAD_FILES]}
             background={<GradientBackgroundB className="account-gradient-background" />}
           />
-          <FilesManager content={AppData.page_content.file_manager} className="account-files-manager" />
+          <FilesManager
+            content={AppData.page_content.file_manager}
+            className="account-files-manager"
+            onFileUpload={onFileUploead}
+          />
         </div>
         <FileUploader
           content={AppData.page_content.file_uploader}
