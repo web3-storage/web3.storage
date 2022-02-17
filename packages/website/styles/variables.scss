@@ -226,14 +226,15 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
 
 @mixin gradient_Blurry_Background_PinkBlue {
   &:before {
+    transition: all $transitionDuration ease-in-out;
     @include gradient_BlurryBox_PinkBlue;
     @include borderRadius_UltraLarge;
     content: ' ';
     position: absolute;
-    filter: blur(0.25rem);
+    filter: blur(0.125rem);
     margin: auto;
     box-shadow: 0 0.125rem $heliotrope;
-    opacity: 0.5;
+    opacity: 0.3;
   }
 }
 
