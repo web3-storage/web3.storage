@@ -155,7 +155,7 @@ $file-size: auto;
       justify-content: flex-start;
       .cid-truncate,
       .cid-full {
-        font-family: 'Suisse Intl Mono';
+        @include monospace_Text;
         word-break: break-all;
         margin-right: 0.5rem;
       }
@@ -187,6 +187,9 @@ $file-size: auto;
     &-storage-providers {
       padding-right: 2.5rem;
       flex-wrap: wrap;
+      :not(.info-container) {
+        @include monospace_Text;
+      }
       @include medium {
         padding-right: 1rem;
         flex-wrap: nowrap;
@@ -218,6 +221,12 @@ $file-size: auto;
 
       &-name {
         align-items: end;
+      }
+
+      &-cid {
+        span {
+          font-family: $font_Primary;
+        }
       }
     }
 
