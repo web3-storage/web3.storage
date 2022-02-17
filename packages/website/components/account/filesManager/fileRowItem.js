@@ -49,7 +49,7 @@ const Info = ({ content, icon = null }) => (
  * @property {boolean} [isSelected]
  * @property {{text: string, target: "name" | "cid"}} [highlight]
  * @property {()=>void} [onDelete]
- * @property {(newFileName: string) => void} [onEdit]
+ * @property {(newFileName: string) => void} [onEditToggle]
  * @property {boolean} [isEditingName]
  */
 
