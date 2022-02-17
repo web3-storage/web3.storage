@@ -4,6 +4,7 @@
 
 .Dropdown {
   position: relative;
+
   .dropdownButton {
     @include label_5;
     position: relative;
@@ -31,53 +32,18 @@
     }
   }
 
-  &.open .dropdownButton {
-    &:after {
-      transform: rotate(270deg);
-    }
-    &:hover {
-      &:after {
-        transform: rotate(270deg) translateX(0.125rem);
-      }
-    }
-  }
-
-  &.open .dropdownContent {
-    overflow: visible;
-    animation: growDown $transitionDuration ease-out forwards;
-    display: block;
-
-    .dropdownItem.current {
-      background: none;
-      &::before {
-        content: ' ';
-        width: 100%;
-        height: 1.375rem;
-        position: absolute;
-        @include gradient_Background_PinkBlue;
-        opacity: 0.7;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: -1;
-      }
-    }
-  }
-
   .dropdownContent {
     @include fontSize_Tiny;
     @include fontWeight_Regular;
     @include gradient_Blurry_Background_PinkBlue;
-    display: none;
+    animation: growUp $transitionDuration ease-out forwards;
     top: 100%;
     transform-origin: top center;
     perspective: 1000px;
     right: -3.5rem;
-
     @include medium {
       right: -1rem;
     }
-
     .dropdownItemList {
       @include borderRadius_UltraLarge;
       border: 0.0625rem solid rgba($waterloo, 0.85);
@@ -86,7 +52,6 @@
       z-index: 1;
       overflow: hidden;
     }
-
     .dropdownItem {
       @include leading_Small;
       position: relative;
@@ -106,6 +71,39 @@
       }
     }
   }
+
+  &.open {
+    .dropdownButton {
+      &:after {
+        transform: rotate(270deg);
+      }
+      &:hover {
+        &:after {
+          transform: rotate(270deg) translateX(0.125rem);
+        }
+      }
+    }
+    .dropdownContent {
+      overflow: visible;
+      animation: growDown $transitionDuration ease-out forwards;
+      display: block;
+      .dropdownItem.current {
+        background: none;
+        &::before {
+          content: ' ';
+          width: 100%;
+          height: 1.375rem;
+          position: absolute;
+          @include gradient_Background_PinkBlue;
+          opacity: 0.7;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: -1;
+        }
+      }
+    }
+  }
 }
 
 @keyframes growDown {
@@ -116,5 +114,17 @@
   100% {
     transform: scaleY(1);
     opacity: 1;
+  }
+}
+
+@keyframes growUp {
+  0% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0);
+    opacity: 0;
+    display: none;
   }
 }

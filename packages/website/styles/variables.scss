@@ -482,7 +482,9 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
   transform-origin: $transformOrigin;
 }
 
-@mixin textLinkColorHover {
+// HOVERS
+
+@mixin hoverTextLinkColor {
   color: $pictonBlue;
   transition: color $transitionDuration;
   &:hover {
@@ -500,39 +502,35 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
 }
 
 @mixin hoverArrowLeft {
-  a {
+  &:before {
+    content: '❮';
+    padding-right: 0.5rem;
+    display: inline-block;
+    transition: transform $transitionDuration ease-out;
+  }
+  &:hover {
     &:before {
-      content: '❮';
-      padding-right: 0.5rem;
-      display: inline-block;
-      transition: transform $transitionDuration ease-out;
-    }
-    &:hover {
-      &:before {
-        transform: translateX(-0.25rem);
-      }
+      transform: translateX(-0.25rem);
     }
   }
 }
 
 @mixin hoverArrowRight {
-  a {
-    color: $pictonBlue;
+  color: $pictonBlue;
+  &:after {
+    content: '❯';
+    padding-left: 0.25rem;
+    display: inline-block;
+    transition: transform $transitionDuration ease-out;
+  }
+  &:hover {
     &:after {
-      content: '❯';
-      padding-left: 0.25rem;
-      display: inline-block;
-      transition: transform $transitionDuration ease-out;
-    }
-    &:hover {
-      &:after {
-        transform: translateX(0.25rem);
-      }
+      transform: translateX(0.25rem);
     }
   }
 }
 
-@mixin inputHover {
+@mixin hoverInput {
   transition: border-color $transitionDuration;
   &:hover,
   &:active,

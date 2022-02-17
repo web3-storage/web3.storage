@@ -85,13 +85,12 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
                   standard: 'iec',
                 })}
               </span>
-              of <span className="storage-number">{maxSpaceLabel}</span> used
+              &nbsp;of <span className="storage-number">{maxSpaceLabel}</span> used
             </>
           )}
         </div>
         <Button onClick={onSearchFiles} variant={ButtonVariant.TEXT}>
           {content.buttons.search}
-          {'\u00A0\u00A0'}❯
         </Button>
       </div>
       <div className="storage-manager-meter-container">

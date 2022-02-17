@@ -1,13 +1,10 @@
 .storage-manager-container {
   display: flex;
   flex-direction: column;
-
   > * {
     width: 100%;
   }
-
   padding: 1.875rem 0 0.9375rem 2.375rem;
-
   @include medium {
     padding: 2.25rem 1.375rem 2.25rem 1rem;
   }
@@ -28,19 +25,24 @@
   @include medium {
     margin-bottom: 0.4rem;
   }
+  .button {
+    height: auto;
+    button {
+      @include hoverArrowRight;
+      display: inline-block;
+    }
+  }
 }
 
 .storage-manager-info {
   @include fontSize_Tiny;
   @include fontWeight_Regular;
   a {
-    @include textLinkColorHover;
+    @include hoverTextLinkColor;
   }
   margin-top: 1.25rem;
-
   @include medium {
     @include leading_Small;
-
     button a {
       &::after {
         margin-left: 0.5rem;
@@ -79,18 +81,15 @@
   .button {
     padding: 0;
     height: auto;
-
     svg {
       margin-right: 0.35rem;
     }
-
     button {
       @include fontSize_Atom;
       @include fontWeight_Regular;
       padding: 0;
       min-height: auto;
       width: auto;
-
       a {
         display: flex;
         flex-direction: row;
@@ -98,7 +97,6 @@
       }
     }
   }
-
   @include medium {
     flex-direction: column;
     padding-right: 0;
@@ -116,13 +114,11 @@
   height: 1.375rem;
   background: rgba($vulcan, 0.15);
   border: 0.0625rem solid rgba($waterloo, 0.15);
-  // width: 32.6875rem;
   flex: 1;
   &:only-child {
     flex: 1;
     max-width: 35.5rem;
   }
-
   span {
     @include fontSize_Atom;
     position: absolute;
@@ -130,6 +126,7 @@
     text-shadow: 0 0 0.125rem rgba(0, 0, 0, 0.94);
   }
 }
+
 .storage-manager-used {
   margin-bottom: 0.5rem;
   .storage-label {
@@ -139,6 +136,7 @@
     font-style: italic;
   }
 }
+
 .storage-manager-meter-used {
   @include gradient_Background_BluePurple;
   @include borderRadius_UltraLarge;

@@ -14,6 +14,7 @@ $file-size: auto;
   @include fontSize_Tiny;
   @include fontWeight_Semibold;
   @include leading_Tiny;
+  letter-spacing: 0;
 
   display: grid;
   position: relative;
@@ -111,42 +112,34 @@ $file-size: auto;
       @include medium {
         padding-right: 1rem;
       }
-
-      .pencil-icon {
-        transition: transform $transitionDuration ease-in-out;
-        &:hover {
-          color: $cyan;
-          transform: scale(1.1);
-          transition: transform $transitionDuration ease-in-out;
-          @include medium {
-            display: none;
-          }
+      svg.pencil-icon {
+        flex-shrink: 0;
+        cursor: pointer;
+        margin-left: 0.5rem;
+        @include medium {
+          display: none;
         }
       }
-
       &.isEditingName {
-        // Text area container for blurry background
         .textarea-container {
           display: flex;
           position: relative;
           width: 100%;
-          height: 100%;
+          height: calc(100% + 0.5rem);
+          margin-top: -0.65rem;
+          margin-left: -0.68rem;
+        }
+        svg.pencil-icon {
+          color: $pictonBlue;
         }
       }
-
-      svg {
-        flex-shrink: 0;
-        cursor: pointer;
-        margin-left: 0.5rem;
-      }
-
       textarea {
         position: relative;
         resize: none;
         @include border_Background_Waterloo_White;
-        @include inputHover;
-        padding: 0.625rem;
-        height: 100%;
+        @include hoverInput;
+        padding: 0.625rem 0 0.625rem 0.625rem;
+        height: calc(100% + 0.5rem);
         width: 100%;
       }
     }
@@ -187,7 +180,7 @@ $file-size: auto;
     &-storage-providers {
       padding-right: 2.5rem;
       flex-wrap: wrap;
-      :not(.info-container) {
+      > span:not(.file-row-label) {
         @include monospace_Text;
       }
       @include medium {
@@ -211,25 +204,24 @@ $file-size: auto;
   // Header overrides
   &.files-manager-row-header {
     align-items: end;
-
+    > span {
+      @include fontWeight_Semibold;
+    }
     .file {
       &-storage-providers {
         padding-right: 2.5rem;
         flex-direction: row;
         flex-wrap: nowrap;
       }
-
       &-name {
         align-items: end;
       }
-
       &-cid {
         span {
           font-family: $font_Primary;
         }
       }
     }
-
     @include medium {
       display: none;
     }

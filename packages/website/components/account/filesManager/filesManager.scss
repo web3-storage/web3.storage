@@ -143,6 +143,7 @@
     @include label_5;
     cursor: pointer;
     color: $cyan;
+    transition: opacity $transitionDuration;
   }
 
   .files-manager-pagination {

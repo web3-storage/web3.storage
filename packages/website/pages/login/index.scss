@@ -8,9 +8,8 @@
       gap: 1.25rem;
     }
     &-github {
-      @include inputHover;
+      @include hoverInput;
     }
-
     .button {
       width: 8.5625rem;
       height: 2.1875rem;
@@ -32,11 +31,11 @@
 }
 
 .login-email {
+  @include border_Background_Waterloo_White;
   padding: 1rem 2rem;
   width: 100%;
-  @include border_Background_Waterloo_White;
   border-radius: 0;
-  @include inputHover;
+  @include hoverInput;
   &::placeholder {
     color: $white;
   }

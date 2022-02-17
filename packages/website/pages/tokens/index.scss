@@ -1,11 +1,9 @@
 .tokens-container {
   max-width: 60rem;
   margin: auto;
-
   h3 {
     padding: 0 1.75rem 0.75rem;
   }
-
   .isDisabled {
     pointer-events: none;
     opacity: 0.5;
@@ -54,7 +52,9 @@
       align-items: center;
     }
   }
-  @include hoverArrowLeft;
+  a {
+    @include hoverArrowLeft;
+  }
 }
 
 .testing-cta-container {
@@ -66,8 +66,8 @@
   }
   a {
     position: relative;
+    @include hoverArrowRight;
   }
-  @include hoverArrowRight;
   @include medium {
     margin-bottom: 1.59375rem;
   }
