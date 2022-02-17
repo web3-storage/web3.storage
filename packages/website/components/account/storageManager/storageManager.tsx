@@ -1,9 +1,13 @@
 import clsx from 'clsx';
+import filesz from 'filesize';
 import { useCallback, useMemo } from 'react';
+import { useQuery } from 'react-query';
 
 import LockIcon from 'assets/icons/lock';
 import emailContent from '../../../content/file-a-request';
 import Button, { ButtonVariant } from 'components/button/button';
+import { getStorage } from 'lib/api';
+import { useAuthorization } from 'components/contexts/authorizationContext';
 
 // Tiers available
 enum StorageTiers {
@@ -25,9 +29,12 @@ const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body
 )}`;
 
 const StorageManager = ({ className = '', content }: StorageManagerProps) => {
-  // TODO: Hook up storage tier & storage used to api
-  const storageTier = StorageTiers.TIER_2; // No tier available?
-  const usedStorage = terabyte * 8; // in bytes
+  const storageTier = StorageTiers.TIER_1; // No tier available?
+  const { isLoggedIn } = useAuthorization();
+  const { data, isLoading } = useQuery('get-storage', getStorage, {
+    enabled: isLoggedIn,
+  });
+  const usedStorage = useMemo(() => data?.usedStorage || 0, [data]);
 
   const { maxSpaceLabel, unlockLabel, usedSpacePercentage } = useMemo<{
     maxSpaceLabel: string;
@@ -66,10 +73,21 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
     <div className={clsx('section storage-manager-container', className)}>
       <div className="storage-manager-space">
         <div className="storage-manager-used">
-          {/* Used storage in GB */}
-          <span className="storage-label">{content.heading}</span>:{' '}
-          <span className="storage-number">{usedStorage / terabyte} TB</span> of{' '}
-          <span className="storage-number">{maxSpaceLabel}</span> used
+          {isLoading ? (
+            content.loading
+          ) : (
+            <>
+              {/* Used storage in GB */}
+              <span className="storage-label">{content.heading}</span>:{' '}
+              <span className="storage-number">
+                {filesz(usedStorage, {
+                  base: 2,
+                  standard: 'iec',
+                })}
+              </span>
+              of <span className="storage-number">{maxSpaceLabel}</span> used
+            </>
+          )}
         </div>
         <Button onClick={onSearchFiles} variant={ButtonVariant.TEXT}>
           {content.buttons.search}

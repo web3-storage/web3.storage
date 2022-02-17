@@ -21,10 +21,11 @@ import { useUploads } from 'components/contexts/uploadsContext';
 type FilesManagerProps = {
   className?: string;
   content?: any;
+  onFileUpload: () => void;
 };
 
-const FilesManager = ({ className, content }: FilesManagerProps) => {
-  const { uploads: files, fetchDate, getUploads, isFetchingUploads, deleteUpload } = useUploads();
+const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) => {
+  const { uploads: files, fetchDate, getUploads, isFetchingUploads, deleteUpload, renameUpload } = useUploads();
   const {
     query: { filter },
   } = useRouter();
@@ -35,7 +36,8 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
   const [keyword, setKeyword] = useState(filter);
 
   const [selectedFiles, setSelectedFiles] = useState<Upload[]>([]);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [nameEditingId, setNameEditingId] = useState();
   const fileRowLabels = content?.table.file_row_labels;
   const fileDeleteWarning = content?.ui.delete.alert;
 
@@ -45,10 +47,6 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
       getUploads();
     }
   }, [fetchDate, getUploads, isFetchingUploads]);
-
-  const onFileUploead = useCallback(() => {
-    window.alert('Upload a file');
-  }, []);
 
   const onSelectAllToggle = useCallback(
     e => {
@@ -86,7 +84,7 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
       return;
     }
 
-    setIsDeleting(true);
+    setIsUpdating(true);
     await Promise.all(selectedFiles.map(({ cid }) => deleteUpload(cid)));
 
     countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
@@ -94,11 +92,11 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
       totalDeleted: selectedFiles.length,
     });
 
-    setIsDeleting(false);
+    setIsUpdating(false);
     setSelectedFiles([]);
 
     getUploads();
-  }, [selectedFiles, deleteUpload, setIsDeleting, getUploads, fileDeleteWarning]);
+  }, [selectedFiles, deleteUpload, setIsUpdating, getUploads, fileDeleteWarning]);
 
   const onDeleteSingle = useCallback(
     async cid => {
@@ -110,7 +108,7 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
         return;
       }
 
-      setIsDeleting(true);
+      setIsUpdating(true);
       deleteUpload(cid);
 
       countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
@@ -118,16 +116,32 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
         totalDeleted: 1,
       });
 
-      setIsDeleting(false);
+      setIsUpdating(false);
       setSelectedFiles([]);
 
       getUploads();
     },
-    [deleteUpload, setIsDeleting, getUploads, fileDeleteWarning]
+    [deleteUpload, setIsUpdating, getUploads, fileDeleteWarning]
+  );
+
+  //
+  const onEditToggle = useCallback(
+    targetCID => async (newFileName?: string) => {
+      setNameEditingId(targetCID !== nameEditingId ? targetCID : undefined);
+
+      const fileTarget = files.find(({ cid }) => cid === targetCID);
+      if (!!fileTarget && !!newFileName && newFileName !== fileTarget.name) {
+        setIsUpdating(true);
+        await renameUpload(targetCID, newFileName);
+        fileTarget.name = newFileName;
+        setIsUpdating(false);
+      }
+    },
+    [renameUpload, files, nameEditingId]
   );
 
   return (
-    <div className={clsx('section files-manager-container', className, isDeleting && 'disabled')}>
+    <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
       <div className="files-manager-header">
         <span>{content?.heading}</span>
         <Filterable
@@ -179,7 +193,7 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
             {content?.table.message}
             {'\u00A0'}
             <Button
-              onClick={onFileUploead}
+              onClick={onFileUpload}
               variant={content?.table.cta.theme}
               tracking={{
                 ui: countly.ui[content?.table.cta.ui],
@@ -221,6 +235,8 @@ const FilesManager = ({ className, content }: FilesManagerProps) => {
               numberOfPins={item.pins.length}
               isSelected={!!selectedFiles.find(fileSelected => fileSelected === item)}
               onDelete={() => onDeleteSingle(item.cid)}
+              isEditingName={item.cid === nameEditingId}
+              onEditToggle={onEditToggle(item.cid)}
             />
           ))
         )}

@@ -62,6 +62,7 @@ $date-delete: auto;
 }
 
 .token-copy {
+  display: flex;
   @include medium {
     bottom: 1rem;
   }

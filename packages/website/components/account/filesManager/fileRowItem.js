@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef } from 'react';
 
 import CheckIcon from 'assets/icons/check';
 import InfoAIcon from 'assets/icons/infoA';
@@ -49,6 +49,8 @@ const Info = ({ content, icon = null }) => (
  * @property {boolean} [isSelected]
  * @property {{text: string, target: "name" | "cid"}} [highlight]
  * @property {()=>void} [onDelete]
+ * @property {(newFileName?: string) => void} [onEditToggle]
+ * @property {boolean} [isEditingName]
  */
 
 /**
@@ -70,6 +72,8 @@ const FileRowItem = props => {
     isHeader = false,
     isSelected,
     onDelete,
+    onEditToggle,
+    isEditingName,
   } = useMemo(() => {
     const propsReturn = { ...props };
     const { target, text = '' } = props.highlight || {};
@@ -84,7 +88,8 @@ const FileRowItem = props => {
 
   const fileRowLabels = AppData.page_content.file_manager.table.file_row_labels;
   const statusMessages = fileRowLabels.status.tooltip;
-
+  /** @type {import('react').RefObject<HTMLTextAreaElement>} */
+  const editingNameRef = useRef(null);
   const statusTooltip = useMemo(
     () =>
       ({
@@ -95,8 +100,6 @@ const FileRowItem = props => {
       }[status]),
     [numberOfPins, status, statusMessages]
   );
-
-  const [isEditingName, setIsEditingName] = useState(false);
 
   return (
     <div className={clsx('files-manager-row', className, isHeader && 'files-manager-row-header')}>
@@ -119,11 +122,16 @@ const FileRowItem = props => {
           <span dangerouslySetInnerHTML={{ __html: name }} />
         ) : (
           <span className="textarea-container">
-            <textarea defaultValue={props.name} />
+            <textarea ref={editingNameRef} defaultValue={props.name} />
           </span>
         )}
 
-        {!isHeader && <PencilIcon className="pencil-icon" onClick={() => setIsEditingName(!isEditingName)} />}
+        {!isHeader && (
+          <PencilIcon
+            className="pencil-icon"
+            onClick={() => (isEditingName ? onEditToggle?.(editingNameRef.current?.value) : onEditToggle?.())}
+          />
+        )}
       </span>
       <span className="file-cid" title={cid}>
         <span className="file-row-label medium-down-only">
@@ -158,7 +166,7 @@ const FileRowItem = props => {
         {isHeader ? (
           <Info content={statusMessages.header} />
         ) : (
-          statusTooltip && <Info icon={<InfoBIcon />} content={statusMessages.pinned} />
+          statusTooltip && <Info icon={<InfoBIcon />} content={statusTooltip} />
         )}
       </span>
       <span className="file-storage-providers">
