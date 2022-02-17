@@ -85,7 +85,7 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
                   standard: 'iec',
                 })}
               </span>
-              of <span className="storage-number">{maxSpaceLabel}</span> used
+              &nbsp;of <span className="storage-number">{maxSpaceLabel}</span> used
             </>
           )}
         </div>

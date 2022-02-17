@@ -14,7 +14,7 @@
       "heading": "Account",
       "card_left": {
         "heading": "API Tokens",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+        "description": "Create or manage tokens so that you can access the API",
         "ctas": [
           {
             "link": "/tokens?create=true",
@@ -50,7 +50,7 @@
           "option_1": "Upload more files",
           "option_2": "Upload your first file"
         },
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "description": "Files can also be uploaded directly using this web interface, as an alternative to using the API",
         "ctas": [
           {
             "text": "Upload Files",
