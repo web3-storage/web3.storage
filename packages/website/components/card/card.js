@@ -99,7 +99,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
           </div>
         );
       case 'C':
-        return <Image loader={({ src }) => src} alt="" src={obj.image} width="64" height="64" />;
+        return <Image unoptimized alt="" src={obj.image} width="64" height="64" />;
       case 'D':
         return renderExploreCards(obj);
       default:
