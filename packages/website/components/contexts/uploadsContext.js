@@ -4,33 +4,6 @@ import { Web3Storage } from 'web3.storage';
 import { API, deleteUpload, getToken, getUploads, renameUpload } from 'lib/api';
 import { useUploadProgress } from './uploadProgressContext';
 
-/**
- * @typedef {{
- *   percentage: number,
- *   total: UploadState,
- *   completed: UploadState,
- *   failed: { number: number },
- *   files: FilesProgress,
- *   ready: boolean
- * }} UploadProgress
- *
- * @typedef {{ number: number, size: number }} UploadState
- * @typedef {{ [filename: string]: FileProgress }} FilesProgress
- * @typedef {{
- *   name: string,
- *   size: number,
- *   status: STATUS,
- *   progress: FileProgressDetails,
- *   inputFile: File,
- *   error: Error
- * }} FileProgress
- * @typedef {{
- *   total: number,
- *   uploaded: number,
- *   percentage: number
- * }} FileProgressDetails
- */
-
 export const STATUS = {
   PENDING: 'pending',
   UPLOADING: 'uploading',
@@ -41,6 +14,8 @@ export const STATUS = {
 /**
  * @typedef {import('../../lib/api').UploadArgs} UploadArgs
  * @typedef {import('web3.storage').Upload} Upload
+ * @typedef {import('./uploadProgressContext').FileProgress} FileProgress
+ * @typedef {import('./uploadProgressContext').UploadProgress} UploadProgress
  */
 
 /**
@@ -100,7 +75,7 @@ export const UploadsProvider = ({ children }) => {
   const [uploads, setUploads] = useState(/** @type {Upload[]} */ ([]));
   const [isFetchingUploads, setIsFetchingUploads] = useState(false);
   const [fetchDate, setFetchDate] = useState(/** @type {number|undefined} */ (undefined));
-  const [filesToUpload, setFilesToUpload] = useState([]);
+  const [filesToUpload, setFilesToUpload] = useState(/** @type {FileProgress[]} */ ([]));
   const { initialize, updateFileProgress, progress, markFileCompleted, markFileFailed } = useUploadProgress([]);
 
   // Initialize files and prep for upload, to be called in useEffect
@@ -140,7 +115,7 @@ export const UploadsProvider = ({ children }) => {
       setFilesToUpload(filesToUpload.concat(newFilesToUpload));
 
       newFilesToUpload.forEach(
-        /** @param {FileProgress} file */
+        /** @param {(FileProgress)} file */
         async file => {
           try {
             await client.put([file.inputFile], {
@@ -164,7 +139,10 @@ export const UploadsProvider = ({ children }) => {
   const getUploadsCallback = useCallback(
     /** @type {(args?: UploadArgs) => Promise<Upload[]>}} */
     async (
-      args = { size: new URLSearchParams(window.location.search).get('size') || '10', before: new Date().toISOString() }
+      args = {
+        size: Number(new URLSearchParams(window.location.search).get('size') || 10),
+        before: new Date().toISOString(),
+      }
     ) => {
       setIsFetchingUploads(true);
       const updatedUploads = await getUploads(args);
