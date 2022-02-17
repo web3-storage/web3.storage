@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 16
       - uses: bahmutov/npm-install@v1
-      - run: npm test --workspace packages/website
+      - run: npm run lint:ts:fix --workspace packages/website
 
   build:
     name: Build & Add to IPFS
