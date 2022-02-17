@@ -126,13 +126,13 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
 
   //
   const onEditToggle = useCallback(
-    targetCID => async (newFileName: string) => {
+    targetCID => async (newFileName?: string) => {
       setNameEditingId(targetCID !== nameEditingId ? targetCID : undefined);
 
       const fileTarget = files.find(({ cid }) => cid === targetCID);
-      if (!!newFileName && newFileName !== fileTarget.name) {
+      if (!!fileTarget && !!newFileName && newFileName !== fileTarget.name) {
         setIsUpdating(true);
-        await renameUpload(nameEditingId, newFileName);
+        await renameUpload(targetCID, newFileName);
         fileTarget.name = newFileName;
         setIsUpdating(false);
       }

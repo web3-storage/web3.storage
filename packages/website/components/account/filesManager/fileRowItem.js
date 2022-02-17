@@ -49,7 +49,7 @@ const Info = ({ content, icon = null }) => (
  * @property {boolean} [isSelected]
  * @property {{text: string, target: "name" | "cid"}} [highlight]
  * @property {()=>void} [onDelete]
- * @property {(newFileName: string) => void} [onEdit]
+ * @property {(newFileName?: string) => void} [onEditToggle]
  * @property {boolean} [isEditingName]
  */
 
@@ -88,7 +88,8 @@ const FileRowItem = props => {
 
   const fileRowLabels = AppData.page_content.file_manager.table.file_row_labels;
   const statusMessages = fileRowLabels.status.tooltip;
-  const editingNameRef = useRef();
+  /** @type {import('react').RefObject<HTMLTextAreaElement>} */
+  const editingNameRef = useRef(null);
   const statusTooltip = useMemo(
     () =>
       ({
@@ -128,7 +129,7 @@ const FileRowItem = props => {
         {!isHeader && (
           <PencilIcon
             className="pencil-icon"
-            onClick={() => (isEditingName ? onEditToggle(editingNameRef.current?.value) : onEditToggle())}
+            onClick={() => (isEditingName ? onEditToggle?.(editingNameRef.current?.value) : onEditToggle?.())}
           />
         )}
       </span>
@@ -165,7 +166,7 @@ const FileRowItem = props => {
         {isHeader ? (
           <Info content={statusMessages.header} />
         ) : (
-          statusTooltip && <Info icon={<InfoBIcon />} content={statusMessages.pinned} />
+          statusTooltip && <Info icon={<InfoBIcon />} content={statusTooltip} />
         )}
       </span>
       <span className="file-storage-providers">
