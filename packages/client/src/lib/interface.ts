@@ -102,6 +102,10 @@ export type PutOptions = {
    */
   maxRetries?: number
   /**
+   * Maximum chunk size to upload. Default: 1024 * 1024 * 10 (in bytes)
+   */
+  maxChunkSize?: number
+  /**
    * Should input files be wrapped with a directory? Default: true
    *
    * It is enabled by default as it preserves the input filenames in DAG;
@@ -138,6 +142,10 @@ export type PutCarOptions = {
    * Maximum times to retry a failed upload. Default: 5
    */
    maxRetries?: number
+  /**
+   * Maximum chunk size to upload. AS the targetSize as passed to carbites TreewalkSplitter. Default: 1024 * 1024 * 10 (in bytes).
+   */
+   maxChunkSize?: number
    /**
     * Additional IPLD block decoders. Used to interpret the data in the CAR file
     * and split it into multiple chunks. Note these are only required if the CAR

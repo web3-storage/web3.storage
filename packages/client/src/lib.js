@@ -97,6 +97,7 @@ class Web3Storage {
     onRootCidReady,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
+    maxChunkSize = MAX_CHUNK_SIZE,
     wrapWithDirectory = true,
     name
   } = {}) {
@@ -109,12 +110,12 @@ class Web3Storage {
         })),
         blockstore,
         wrapWithDirectory,
-        maxChunkSize: 1048576,
+        maxChunkSize: maxChunkSize,
         maxChildrenPerNode: 1024
       })
       onRootCidReady && onRootCidReady(root.toString())
       const car = await CarReader.fromIterable(out)
-      return await Web3Storage.putCar({ endpoint, token }, car, { onStoredChunk, maxRetries, name })
+      return await Web3Storage.putCar({ endpoint, token }, car, { onStoredChunk, maxRetries, maxChunkSize, name })
     } finally {
       await blockstore.close()
     }
@@ -130,9 +131,10 @@ class Web3Storage {
     name,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
+    maxChunkSize = MAX_CHUNK_SIZE,
     decoders
   } = {}) {
-    const targetSize = MAX_CHUNK_SIZE
+    const targetSize = maxChunkSize
     const url = new URL('car', endpoint)
     let headers = Web3Storage.headers(token)
 
