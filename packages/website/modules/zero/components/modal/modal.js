@@ -41,19 +41,21 @@ const Modal = ({ className, modalState, showCloseButton, closeIcon, children, on
     };
   }, [keydownHandler]);
 
-  return isOpen ? (
-    <>
-      <div className={clsx(className, 'modalBackground')} onClick={closeModal} role="presentation"></div>
+  return (
+    <div className={clsx(isOpen ? 'modal--open' : 'modal--close', 'modal')}>
+      <div className="modalBackground" onClick={closeModal} role="presentation"></div>
       <div className="modalContainer" onClick={e => e.stopPropagation()} role="presentation">
-        <div className="modal">{children}</div>
-        {showCloseButton && (
-          <Button onClick={closeModal} className="modalClose">
-            {closeIcon && <span>&times;</span>}
-          </Button>
-        )}
+        <div className="modalInner">
+          {children}
+          {showCloseButton && (
+            <Button onClick={closeModal} className="modalClose">
+              {closeIcon && <span>&times;</span>}
+            </Button>
+          )}
+        </div>
       </div>
-    </>
-  ) : null;
+    </div>
+  );
 };
 
 Modal.defaultProps = {
