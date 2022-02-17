@@ -155,7 +155,7 @@ const FileRowItem = props => {
       </span>
       <span className="file-availability">
         <span className="file-row-label medium-down-only">{fileRowLabels.available.label}</span>
-        Availability
+        {isHeader ? 'Availability' : 'Available'}
       </span>
       <span className="file-pin-status">
         <span className="file-row-label medium-down-only">
