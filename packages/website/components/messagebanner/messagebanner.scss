@@ -59,6 +59,10 @@
   &.mb-previously-closed {
     transform: translateY(-150%) !important;
   }
+
+  &.mb-reduced-fontsize {
+    @include fontSize_Tiny;
+  }
 }
 
 .message-banner-close-button {

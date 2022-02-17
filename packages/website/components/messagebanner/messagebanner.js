@@ -111,7 +111,8 @@ export default function MessageBanner() {
               className={clsx(
                 'message-banner-content',
                 maintenanceMessage ? 'banner-alert' : '',
-                wasPreviouslyClosed && !maintenanceMessage ? 'mb-previously-closed' : ''
+                wasPreviouslyClosed && !maintenanceMessage ? 'mb-previously-closed' : '',
+                bannerContent.length > 120 ? 'mb-reduced-fontsize' : ''
               )}
               style={{
                 transform: `translateY(${messageBannerWasClicked && !maintenanceMessage ? '-' + bannerHeight : 0})`,
