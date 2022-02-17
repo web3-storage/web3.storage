@@ -7,19 +7,44 @@
   .dropdownButton {
     @include label_5;
     position: relative;
-
     &:after {
       display: inline-block;
       margin-left: 1rem;
       content: '❯';
       transform: rotate(90deg);
       color: $cyan;
+      transition: transform $transitionDuration;
+    }
+    span {
+      display: inline-block;
+      transition: transform $transitionDuration ease-in-out;
+    }
+    &:hover {
+      span {
+        transform: scale(1.1);
+        transition: transform $transitionDuration ease-in-out;
+      }
+      &:after {
+        transition: transform $transitionDuration;
+        transform: rotate(90deg) translateX(0.125rem);
+      }
+    }
+  }
+
+  &.open .dropdownButton {
+    &:after {
+      transform: rotate(270deg);
+    }
+    &:hover {
+      &:after {
+        transform: rotate(270deg) translateX(0.125rem);
+      }
     }
   }
 
   &.open .dropdownContent {
     overflow: visible;
-    animation: none;
+    animation: growDown $transitionDuration ease-out forwards;
     display: block;
 
     .dropdownItem.current {
@@ -44,8 +69,14 @@
     @include fontWeight_Regular;
     @include gradient_Blurry_Background_PinkBlue;
     display: none;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 100%;
+    transform-origin: top center;
+    perspective: 1000px;
+    right: -3.5rem;
+
+    @include medium {
+      right: -1rem;
+    }
 
     .dropdownItemList {
       @include borderRadius_UltraLarge;
@@ -61,12 +92,29 @@
       position: relative;
       padding: 0 1.25rem;
       white-space: nowrap;
+      display: inline-block;
+      transition: background-color $transitionDuration;
       &:first-child {
         margin-top: 0.625rem;
       }
       &:last-child {
         margin-bottom: 0.625rem;
       }
+      &:hover {
+        background-color: $martinique;
+        transition: background-color $transitionDuration;
+      }
     }
+  }
+}
+
+@keyframes growDown {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
   }
 }

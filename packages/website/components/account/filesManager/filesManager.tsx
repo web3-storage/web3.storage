@@ -159,7 +159,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
           onClick={useCallback(_ => getUploads(), [getUploads])}
         >
           <RefreshIcon />
-          {content?.ui.refresh}
+          <span>{content?.ui.refresh}</span>
         </button>
         <Sortable
           items={filteredFiles}

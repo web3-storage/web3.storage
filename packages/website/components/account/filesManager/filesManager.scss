@@ -58,14 +58,27 @@
     top: 0.1rem;
     cursor: pointer;
     margin-right: 2.5rem;
-
     @include medium {
       margin-right: 0;
     }
-
     svg {
+      transition: transform $transitionDuration;
       color: $cyan;
       margin-right: 0.625rem;
+    }
+    span {
+      display: inline-block;
+      transition: transform $transitionDuration ease-in-out;
+    }
+    &:hover {
+      svg {
+        transform: rotate(90deg);
+        transition: transform $transitionDuration;
+      }
+      span {
+        transform: scale(1.1);
+        transition: transform $transitionDuration ease-in-out;
+      }
     }
   }
 
@@ -123,8 +136,7 @@
   }
 
   .files-manager-result-dropdown .dropdownContent {
-    position: absolute;
-    top: 0;
+    right: -0.75rem;
   }
 
   .delete {
