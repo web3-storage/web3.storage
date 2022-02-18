@@ -12,6 +12,46 @@ export interface paths {
       };
     };
   };
+  "/admin_search": {
+    get: {
+      parameters: {
+        query: {
+          user_id?: parameters["rowFilter.admin_search.user_id"];
+          email?: parameters["rowFilter.admin_search.email"];
+          token?: parameters["rowFilter.admin_search.token"];
+          token_id?: parameters["rowFilter.admin_search.token_id"];
+          deleted_at?: parameters["rowFilter.admin_search.deleted_at"];
+          reason_inserted_at?: parameters["rowFilter.admin_search.reason_inserted_at"];
+          reason?: parameters["rowFilter.admin_search.reason"];
+          status?: parameters["rowFilter.admin_search.status"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["admin_search"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+  };
   "/auth_key": {
     get: {
       parameters: {
@@ -105,6 +145,108 @@ export interface paths {
         body: {
           /** auth_key */
           auth_key?: definitions["auth_key"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/auth_key_history": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.auth_key_history.id"];
+          status?: parameters["rowFilter.auth_key_history.status"];
+          reason?: parameters["rowFilter.auth_key_history.reason"];
+          auth_key_id?: parameters["rowFilter.auth_key_history.auth_key_id"];
+          inserted_at?: parameters["rowFilter.auth_key_history.inserted_at"];
+          deleted_at?: parameters["rowFilter.auth_key_history.deleted_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["auth_key_history"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** auth_key_history */
+          auth_key_history?: definitions["auth_key_history"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.auth_key_history.id"];
+          status?: parameters["rowFilter.auth_key_history.status"];
+          reason?: parameters["rowFilter.auth_key_history.reason"];
+          auth_key_id?: parameters["rowFilter.auth_key_history.auth_key_id"];
+          inserted_at?: parameters["rowFilter.auth_key_history.inserted_at"];
+          deleted_at?: parameters["rowFilter.auth_key_history.deleted_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.auth_key_history.id"];
+          status?: parameters["rowFilter.auth_key_history.status"];
+          reason?: parameters["rowFilter.auth_key_history.reason"];
+          auth_key_id?: parameters["rowFilter.auth_key_history.auth_key_id"];
+          inserted_at?: parameters["rowFilter.auth_key_history.inserted_at"];
+          deleted_at?: parameters["rowFilter.auth_key_history.deleted_at"];
+        };
+        body: {
+          /** auth_key_history */
+          auth_key_history?: definitions["auth_key_history"];
         };
         header: {
           /** Preference */
@@ -297,108 +439,6 @@ export interface paths {
         body: {
           /** content */
           content?: definitions["content"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-  };
-  "/migration_tracker": {
-    get: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.migration_tracker.id"];
-          cid?: parameters["rowFilter.migration_tracker.cid"];
-          duration?: parameters["rowFilter.migration_tracker.duration"];
-          dump_started_at?: parameters["rowFilter.migration_tracker.dump_started_at"];
-          dump_ended_at?: parameters["rowFilter.migration_tracker.dump_ended_at"];
-          inserted_at?: parameters["rowFilter.migration_tracker.inserted_at"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["migration_tracker"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-    post: {
-      parameters: {
-        body: {
-          /** migration_tracker */
-          migration_tracker?: definitions["migration_tracker"];
-        };
-        query: {
-          /** Filtering Columns */
-          select?: parameters["select"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** Created */
-        201: unknown;
-      };
-    };
-    delete: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.migration_tracker.id"];
-          cid?: parameters["rowFilter.migration_tracker.cid"];
-          duration?: parameters["rowFilter.migration_tracker.duration"];
-          dump_started_at?: parameters["rowFilter.migration_tracker.dump_started_at"];
-          dump_ended_at?: parameters["rowFilter.migration_tracker.dump_ended_at"];
-          inserted_at?: parameters["rowFilter.migration_tracker.inserted_at"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-    patch: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.migration_tracker.id"];
-          cid?: parameters["rowFilter.migration_tracker.cid"];
-          duration?: parameters["rowFilter.migration_tracker.duration"];
-          dump_started_at?: parameters["rowFilter.migration_tracker.dump_started_at"];
-          dump_ended_at?: parameters["rowFilter.migration_tracker.dump_ended_at"];
-          inserted_at?: parameters["rowFilter.migration_tracker.inserted_at"];
-        };
-        body: {
-          /** migration_tracker */
-          migration_tracker?: definitions["migration_tracker"];
         };
         header: {
           /** Preference */
@@ -1245,6 +1285,114 @@ export interface paths {
       };
     };
   };
+  "/user_tag": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.user_tag.id"];
+          user_id?: parameters["rowFilter.user_tag.user_id"];
+          tag?: parameters["rowFilter.user_tag.tag"];
+          value?: parameters["rowFilter.user_tag.value"];
+          value_type?: parameters["rowFilter.user_tag.value_type"];
+          reason?: parameters["rowFilter.user_tag.reason"];
+          inserted_at?: parameters["rowFilter.user_tag.inserted_at"];
+          deleted_at?: parameters["rowFilter.user_tag.deleted_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["user_tag"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** user_tag */
+          user_tag?: definitions["user_tag"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.user_tag.id"];
+          user_id?: parameters["rowFilter.user_tag.user_id"];
+          tag?: parameters["rowFilter.user_tag.tag"];
+          value?: parameters["rowFilter.user_tag.value"];
+          value_type?: parameters["rowFilter.user_tag.value_type"];
+          reason?: parameters["rowFilter.user_tag.reason"];
+          inserted_at?: parameters["rowFilter.user_tag.inserted_at"];
+          deleted_at?: parameters["rowFilter.user_tag.deleted_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.user_tag.id"];
+          user_id?: parameters["rowFilter.user_tag.user_id"];
+          tag?: parameters["rowFilter.user_tag.tag"];
+          value?: parameters["rowFilter.user_tag.value"];
+          value_type?: parameters["rowFilter.user_tag.value_type"];
+          reason?: parameters["rowFilter.user_tag.reason"];
+          inserted_at?: parameters["rowFilter.user_tag.inserted_at"];
+          deleted_at?: parameters["rowFilter.user_tag.deleted_at"];
+        };
+        body: {
+          /** user_tag */
+          user_tag?: definitions["user_tag"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/rpc/pin_dag_size_total": {
     post: {
       parameters: {
@@ -1703,6 +1851,16 @@ export interface paths {
 }
 
 export interface definitions {
+  admin_search: {
+    user_id?: string;
+    email?: string;
+    token?: string;
+    token_id?: string;
+    deleted_at?: string;
+    reason_inserted_at?: string;
+    reason?: string;
+    status?: "Blocked" | "Unblocked";
+  };
   auth_key: {
     /**
      * Note:
@@ -1718,6 +1876,22 @@ export interface definitions {
     user_id: number;
     inserted_at: string;
     updated_at: string;
+    deleted_at?: string;
+  };
+  auth_key_history: {
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    status: "Blocked" | "Unblocked";
+    reason: string;
+    /**
+     * Note:
+     * This is a Foreign Key to `auth_key.id`.<fk table='auth_key' column='id'/>
+     */
+    auth_key_id: number;
+    inserted_at: string;
     deleted_at?: string;
   };
   backup: {
@@ -1743,18 +1917,6 @@ export interface definitions {
     dag_size?: number;
     inserted_at: string;
     updated_at: string;
-  };
-  migration_tracker: {
-    /**
-     * Note:
-     * This is a Primary Key.<pk/>
-     */
-    id: number;
-    cid: string;
-    duration?: number;
-    dump_started_at?: string;
-    dump_ended_at: string;
-    inserted_at: string;
   };
   name: {
     /**
@@ -1844,7 +2006,7 @@ export interface definitions {
      * Note:
      * This is a Primary Key.<pk/>
      */
-    id: string; // Create custom UUID v4 type
+    id: string;
     /**
      * Note:
      * This is a Foreign Key to `auth_key.id`.<fk table='auth_key' column='id'/>
@@ -1906,6 +2068,24 @@ export interface definitions {
     inserted_at: string;
     updated_at: string;
   };
+  user_tag: {
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Note:
+     * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
+     */
+    user_id: number;
+    tag: "ACCOUNT_ENABLED" | "PSA_ENABLED" | "STORAGE_LIMIT_BYTES";
+    value: string;
+    value_type: "bigint" | "boolean" | "integer" | "real" | "text";
+    reason: string;
+    inserted_at: string;
+    deleted_at?: string;
+  };
 }
 
 export interface parameters {
@@ -1929,6 +2109,16 @@ export interface parameters {
   offset: string;
   /** Limiting and Pagination */
   limit: string;
+  /** admin_search */
+  "body.admin_search": definitions["admin_search"];
+  "rowFilter.admin_search.user_id": string;
+  "rowFilter.admin_search.email": string;
+  "rowFilter.admin_search.token": string;
+  "rowFilter.admin_search.token_id": string;
+  "rowFilter.admin_search.deleted_at": string;
+  "rowFilter.admin_search.reason_inserted_at": string;
+  "rowFilter.admin_search.reason": string;
+  "rowFilter.admin_search.status": string;
   /** auth_key */
   "body.auth_key": definitions["auth_key"];
   "rowFilter.auth_key.id": string;
@@ -1938,6 +2128,14 @@ export interface parameters {
   "rowFilter.auth_key.inserted_at": string;
   "rowFilter.auth_key.updated_at": string;
   "rowFilter.auth_key.deleted_at": string;
+  /** auth_key_history */
+  "body.auth_key_history": definitions["auth_key_history"];
+  "rowFilter.auth_key_history.id": string;
+  "rowFilter.auth_key_history.status": string;
+  "rowFilter.auth_key_history.reason": string;
+  "rowFilter.auth_key_history.auth_key_id": string;
+  "rowFilter.auth_key_history.inserted_at": string;
+  "rowFilter.auth_key_history.deleted_at": string;
   /** backup */
   "body.backup": definitions["backup"];
   "rowFilter.backup.id": string;
@@ -1950,14 +2148,6 @@ export interface parameters {
   "rowFilter.content.dag_size": string;
   "rowFilter.content.inserted_at": string;
   "rowFilter.content.updated_at": string;
-  /** migration_tracker */
-  "body.migration_tracker": definitions["migration_tracker"];
-  "rowFilter.migration_tracker.id": string;
-  "rowFilter.migration_tracker.cid": string;
-  "rowFilter.migration_tracker.duration": string;
-  "rowFilter.migration_tracker.dump_started_at": string;
-  "rowFilter.migration_tracker.dump_ended_at": string;
-  "rowFilter.migration_tracker.inserted_at": string;
   /** name */
   "body.name": definitions["name"];
   "rowFilter.name.key": string;
@@ -2028,6 +2218,16 @@ export interface parameters {
   "rowFilter.user.public_address": string;
   "rowFilter.user.inserted_at": string;
   "rowFilter.user.updated_at": string;
+  /** user_tag */
+  "body.user_tag": definitions["user_tag"];
+  "rowFilter.user_tag.id": string;
+  "rowFilter.user_tag.user_id": string;
+  "rowFilter.user_tag.tag": string;
+  "rowFilter.user_tag.value": string;
+  "rowFilter.user_tag.value_type": string;
+  "rowFilter.user_tag.reason": string;
+  "rowFilter.user_tag.inserted_at": string;
+  "rowFilter.user_tag.deleted_at": string;
 }
 
 export interface operations {}

@@ -295,15 +295,6 @@ CREATE TABLE IF NOT EXISTS name
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS pinning_authorization
-(
-  id              BIGSERIAL PRIMARY KEY,
-  -- Points to user allowed to pin content.
-  user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  deleted_at      TIMESTAMP WITH TIME ZONE
-);
-
 CREATE VIEW admin_search as
 select
   u.id::text as user_id,
