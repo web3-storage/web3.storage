@@ -80,3 +80,15 @@ export const standardizeSiblingHeights = (target, reset) => {
     }
   }
 }
+
+/**
+ * Utility to check if element is in viewport
+ *
+ * @param {HTMLElement} element element to test
+ */
+export const elementIsInViewport = (element) => {
+  if (element && typeof window !== 'undefined' && typeof document !== 'undefined') {
+    const rect = element.getBoundingClientRect();
+    return (rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight))
+  }
+}
