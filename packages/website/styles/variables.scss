@@ -541,6 +541,20 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
   }
 }
 
+@mixin hoverSvg {
+  overflow: visible;
+  cursor: pointer;
+  transition: transform $transitionDuration ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+    transition: transform $transitionDuration ease-in-out;
+  }
+  &:active {
+    color: $cyan;
+    transition: transform $transitionDuration ease-in-out;
+  }
+}
+
 // ////////////////////////////////////////////////////////////// [Post] Imports
 // =============================================================================
 @import 'typography';

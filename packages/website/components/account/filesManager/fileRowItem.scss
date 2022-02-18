@@ -15,7 +15,6 @@ $file-size: auto;
   @include fontWeight_Semibold;
   @include leading_Tiny;
   letter-spacing: 0;
-
   display: grid;
   position: relative;
   grid-template-columns: $file-select $file-date $file-name $file-cid $file-availability $file-pin-status $file-storage-providers $file-size;
@@ -48,14 +47,14 @@ $file-size: auto;
     @include fontWeight_Regular;
     @include medium {
       padding: 0.85rem 1rem 0.85rem 1.975rem;
+      justify-content: flex-start;
+      border-bottom: 0.0625rem solid rgba(white, 0.05);
       &.file-date {
         padding-top: 1.375rem;
       }
       &:last-child {
         padding-bottom: 1.375rem;
       }
-      justify-content: flex-start;
-      border-bottom: 0.0625rem solid rgba(white, 0.05);
       .file-row-label {
         @include fontWeight_Semibold;
         width: 6rem;
@@ -64,6 +63,18 @@ $file-size: auto;
           width: auto;
           padding-right: 1rem;
           color: $pictonBlue;
+        }
+        .Tooltip {
+          position: absolute;
+          left: 0.5rem;
+          padding-left: 0;
+        }
+      }
+      .Tooltip {
+        padding-left: 0.5rem;
+        svg {
+          width: 1rem;
+          height: 1rem;
         }
       }
     }
@@ -113,8 +124,8 @@ $file-size: auto;
       }
       svg.pencil-icon {
         flex-shrink: 0;
-        cursor: pointer;
         margin-left: 0.5rem;
+        @include hoverSvg;
         @include medium {
           display: none;
         }
@@ -157,7 +168,7 @@ $file-size: auto;
         padding-right: 1rem;
       }
       svg {
-        cursor: pointer;
+        @include hoverSvg;
         @include medium {
           display: none;
         }
@@ -229,20 +240,5 @@ $file-size: auto;
 
   .highlight {
     @include gradient_Background_PinkBlue;
-  }
-
-  @include medium {
-    .Tooltip {
-      padding-left: 0.5rem;
-      svg {
-        width: 1rem;
-        height: 1rem;
-      }
-    }
-    .file-row-label .Tooltip {
-      position: absolute;
-      left: 0.5rem;
-      padding-left: 0;
-    }
   }
 }

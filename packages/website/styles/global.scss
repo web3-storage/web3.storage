@@ -166,18 +166,6 @@ button {
   &.product-app {
     background-color: $ebony;
     @include background_Dark;
-    svg {
-      overflow: visible;
-      transition: transform $transitionDuration ease-in-out;
-      &:hover {
-        transform: scale(1.1);
-        transition: transform $transitionDuration ease-in-out;
-      }
-      &:active {
-        color: $cyan;
-        transition: transform $transitionDuration ease-in-out;
-      }
-    }
   }
 }
 

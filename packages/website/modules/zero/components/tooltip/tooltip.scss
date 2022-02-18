@@ -9,6 +9,7 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
   display: inline-block;
 
   &:hover {
+    cursor: pointer;
     .info-tooltip {
       display: block;
     }
