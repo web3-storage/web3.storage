@@ -53,7 +53,7 @@
     "@typescript-eslint/parser": "*",
     "babel-eslint": "10.1.0",
     "css-loader": "5.2.7",
-    "eslint": "8.7.0",
+    "eslint": "^7.32.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-next": "*",
     "eslint-config-prettier": "8.3.0",
