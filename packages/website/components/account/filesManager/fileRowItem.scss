@@ -108,7 +108,6 @@ $file-size: auto;
     }
     &-name {
       padding-right: 2.1875rem;
-      height: 100%;
       @include medium {
         padding-right: 1rem;
       }
@@ -121,6 +120,7 @@ $file-size: auto;
         }
       }
       &.isEditingName {
+        height: 100%;
         .textarea-container {
           display: flex;
           position: relative;
@@ -157,7 +157,6 @@ $file-size: auto;
         padding-right: 1rem;
       }
       svg {
-        height: 1rem;
         cursor: pointer;
         @include medium {
           display: none;
@@ -204,6 +203,7 @@ $file-size: auto;
   // Header overrides
   &.files-manager-row-header {
     align-items: end;
+    height: auto;
     > span {
       @include fontWeight_Semibold;
     }

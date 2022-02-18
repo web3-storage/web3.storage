@@ -27,6 +27,7 @@
   }
   .button {
     height: auto;
+    line-height: 1;
     button {
       @include hoverArrowRight;
       display: inline-block;
