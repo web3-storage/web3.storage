@@ -250,6 +250,18 @@
         opacity: 1;
       }
     }
+    &.current-route {
+      color: $malibu;
+      &:hover {
+        transform: translateX(0) !important;
+        cursor: default;
+        &:before {
+          background-size: 0 1.75rem;
+          transform: 0;
+          opacity: 0;
+        }
+      }
+    }
   }
 }
 
