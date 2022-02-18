@@ -5,9 +5,9 @@ $file-select: calculateWidthPercentage(2.375rem, $base-row-width);
 $file-date: calculateWidthPercentage(5.8125rem, $base-row-width);
 $file-name: calculateWidthPercentage(13rem, $base-row-width);
 $file-cid: calculateWidthPercentage(12.6875rem, $base-row-width);
-$file-availability: calculateWidthPercentage(7.375rem, $base-row-width);
+$file-availability: calculateWidthPercentage(7rem, $base-row-width);
 $file-pin-status: calculateWidthPercentage(6.5625rem, $base-row-width);
-$file-storage-providers: calculateWidthPercentage(7.5rem, $base-row-width);
+$file-storage-providers: calculateWidthPercentage(7.875rem, $base-row-width);
 $file-size: auto;
 
 .files-manager-row {
@@ -175,7 +175,7 @@ $file-size: auto;
       }
     }
     &-availability {
-      padding-right: 2.6875rem;
+      padding-right: 2.3rem;
       @include medium {
         padding-right: 1rem;
       }
@@ -188,7 +188,7 @@ $file-size: auto;
       }
     }
     &-storage-providers {
-      padding-right: 2.5rem;
+      padding-right: 2.3rem;
       flex-wrap: wrap;
       > span:not(.file-row-label) {
         @include monospace_Text;

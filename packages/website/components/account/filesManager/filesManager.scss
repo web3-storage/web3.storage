@@ -24,7 +24,7 @@
 .files-manager-header {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   justify-items: center;
   padding: 0 2.125rem 1.5rem;
   flex-wrap: wrap;
@@ -36,7 +36,7 @@
 
   // Title
   > :first-child {
-    margin-right: 11.625rem;
+    margin-right: 8rem;
     @include medium {
       padding-left: 1rem;
       margin-right: initial;

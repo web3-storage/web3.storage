@@ -26,3 +26,7 @@ Displays an close icon; controlled by the **TooltipState**
 ### content
 Displays the internal content of the Tooltip tag  
 **type:** `any`
+
+### position
+'right' or 'left'
+**type:** `string`
