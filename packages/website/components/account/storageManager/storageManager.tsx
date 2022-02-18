@@ -37,7 +37,7 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
   });
   const usedStorage = useMemo(() => data?.usedStorage || 0, [data]);
   const [componentInViewport, setComponentInViewport] = useState(false);
-  const storageManagerRef = useRef<HTMLElement>(null);
+  const storageManagerRef = useRef<HTMLDivElement>(null);
 
   const { maxSpaceLabel, unlockLabel, usedSpacePercentage } = useMemo<{
     maxSpaceLabel: string;
@@ -68,11 +68,15 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
 
   useEffect(() => {
     setTimeout(() => {
-      setComponentInViewport(elementIsInViewport(storageManagerRef.current));
+      const result = elementIsInViewport(storageManagerRef.current);
+      setComponentInViewport(result);
     }, 1000);
     const scroll = () => {
       if (!componentInViewport) {
-        setComponentInViewport(elementIsInViewport(storageManagerRef.current));
+        const result = elementIsInViewport(storageManagerRef.current);
+        if (componentInViewport !== result) {
+          setComponentInViewport(result);
+        }
       }
     };
     window.addEventListener('scroll', scroll);

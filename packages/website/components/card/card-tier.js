@@ -66,7 +66,10 @@ export default function Card({ card, cardsGroup = [], index = 0, onCardLoad }) {
     setCardIsInViewport(elementIsInViewport(cardRef.current));
     const scroll = () => {
       if (!cardIsInViewport) {
-        setCardIsInViewport(elementIsInViewport(cardRef.current));
+        const result = elementIsInViewport(cardRef.current);
+        if (cardIsInViewport !== result) {
+          setCardIsInViewport(result);
+        }
       }
     };
     window.addEventListener('scroll', scroll);
