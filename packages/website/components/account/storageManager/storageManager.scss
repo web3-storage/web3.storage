@@ -141,9 +141,23 @@
   }
 }
 .storage-manager-meter-used {
-  @include gradient_Background_BluePurple;
+  background: linear-gradient(
+    45deg,
+    $cyan 0%,
+    $royalBlue 12.5%,
+    $heliotrope 25%,
+    $cyan 37.5%,
+    $royalBlue 50%,
+    $heliotrope 62.5%,
+    $cyan 75%,
+    $royalBlue 87.5%,
+    $heliotrope 100%
+  );
+  background-size: 410%;
+  background-position: 50% 0;
   @include borderRadius_UltraLarge;
   height: 1.5rem;
   top: 0;
   left: 0;
+  transition: 250ms ease-out;
 }

@@ -295,12 +295,24 @@
       position: absolute;
       top: -1px;
       left: 0;
-      width: 3rem;
+      width: 2.5rem;
       height: calc(100% + 2px);
       border-radius: 1.125rem;
-      background: linear-gradient(80deg, #1ffbff 0%, #4880ff 50%, #9c48ff 100%);
+      background: linear-gradient(
+        80deg,
+        #1ffbff 0%,
+        #4880ff 17%,
+        #9c48ff 34%,
+        #1ffbff 50%,
+        #4880ff 67%,
+        #9c48ff 83%,
+        #1ffbff 100%
+      );
+      background-size: 300%;
+      background-position: 0 0;
       box-shadow: 0 2px 8px rgba(#210f55, 0.33);
       z-index: 1;
+      transition: 250ms ease-out;
     }
 
     .storage-bar-tier {
