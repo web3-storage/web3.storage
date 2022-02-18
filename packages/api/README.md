@@ -4,7 +4,33 @@ The HTTP interface implemented as a Cloudflare Worker
 
 ## Getting started
 
-One time set up of your cloudflare worker subdomain for dev:
+We use miniflare to run the api locally, and docker to run ipfs-cluster and postgres with postREST.
+
+```sh
+# Copy <.env.local.tpl> to `.env.local` and fill out the missing worker vars.
+cp .env.local.tpl .env.local
+
+# Install the deps
+npm install
+```
+
+With docker running locally, start all the things:
+
+```
+npm start
+```
+
+🎉 miniflare is running in watch mode; you can save changes to the api code and the worker will update.
+
+Kill the process to stop miniflare, then run `npm run stop` to shutdown the cluster and postgres
+
+```sh
+npm run stop
+```
+
+## Setting up a cloudflare worker
+
+One time set up of your cloudflare worker subdomain. You only need to do this if you want to test in a real cloudflare worker.
 
 - `npm install` - Install the project dependencies
 - Sign up to Cloudflare and log in with your default browser.

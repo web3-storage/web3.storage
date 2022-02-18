@@ -9,7 +9,8 @@
     "lt": "npm-run-all -p lt:*",
     "lt:cluster": "npx localtunnel --port 9094 --subdomain \"$(whoami)-cluster-api-web3-storage\"",
     "lt:postgres": "npx localtunnel --port 3000 --subdomain \"$(whoami)-postgres-api-web3-storage\"",
-    "start": "wrangler dev --env $(whoami)",
+    "start": "npm-run-all -p cluster:start pg:start -s miniflare",
+    "stop": "npm-run-all -p cluster:stop pg:stop",
     "dev": "wrangler dev --env $(whoami)",
     "publish": "wrangler publish --env $(whoami)",
     "build": "node scripts/cli.js build",
@@ -19,7 +20,10 @@
     "mock:backup": "smoke -p 9096 test/mocks/backup",
     "cluster:start": "web3-storage-tools cluster --start",
     "cluster:stop": "web3-storage-tools cluster --stop",
-    "cluster:reset": "web3-storage-tools cluster --clean"
+    "cluster:reset": "web3-storage-tools cluster --clean",
+    "pg:start": "cd ../db && npm start",
+    "pg:stop": "cd ../db && npm run stop",
+    "miniflare": "miniflare --env .env.local --watch"
   },
   "devDependencies": {
     "@sentry/cli": "^1.72.1",
