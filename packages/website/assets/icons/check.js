@@ -1,10 +1,15 @@
 import * as React from 'react';
 
 const CheckIcon = props => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={14.832} height={11.101} viewBox="0 0 14.832 11.101" {...props}>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" {...props}>
     <path
-      d="M5.145 11.101.293 6.248a1 1 0 0 1 0-1.414 1 1 0 0 1 1.414 0l3.438 3.438L13.124.293a1 1 0 0 1 1.414 0 1 1 0 0 1 0 1.414l-3.461 3.461Z"
-      fill="currentColor"
+      className="path check"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={6}
+      strokeLinecap="round"
+      strokeMiterlimit={10}
+      d="M100.2 40.2 51.5 88.8 29.8 67.5"
     />
   </svg>
 );

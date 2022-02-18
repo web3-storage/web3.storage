@@ -105,10 +105,19 @@ $file-size: auto;
       svg {
         display: none;
         color: $cyan;
-        top: -0.2rem;
-        left: 0;
+        top: -0.5rem;
+        left: -0.25rem;
         position: absolute;
         pointer-events: none;
+        width: 1.5rem;
+        .path {
+          stroke-dasharray: 1000;
+          stroke-dashoffset: 0;
+        }
+        .path.check {
+          stroke-dashoffset: -100;
+          animation: dash-check 0.9s 0s ease-in-out forwards;
+        }
       }
     }
     &-date {
@@ -240,5 +249,23 @@ $file-size: auto;
 
   .highlight {
     @include gradient_Background_PinkBlue;
+  }
+}
+
+// check animation
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes dash-check {
+  0% {
+    stroke-dashoffset: -100;
+  }
+  100% {
+    stroke-dashoffset: 900;
   }
 }
