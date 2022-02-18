@@ -244,6 +244,14 @@
         opacity: 1;
       }
     }
+    &:active {
+      &:after {
+        opacity: 0;
+      }
+      &:before {
+        filter: unset;
+      }
+    }
     &:before {
       content: '';
       position: absolute;
