@@ -31,6 +31,6 @@ CLUSTER_API_URL=http://127.0.0.1:9094
 PG_REST_URL=http://127.0.0.1:3000
 
 # IPFS Gateaway URL pointing to dockerised ipfs instance
-GATEWAY=http://localhost:8080
+GATEWAY_URL=http://localhost:8080
 
 ENV=dev
