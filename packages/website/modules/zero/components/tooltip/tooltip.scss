@@ -40,6 +40,9 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
     border-radius: 0.75rem;
     width: max-content;
     max-width: 15rem;
+    @include medium {
+      max-width: 30vw;
+    }
     color: $white;
     z-index: 1;
     &:before {

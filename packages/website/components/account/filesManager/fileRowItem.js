@@ -156,14 +156,23 @@ const FileRowItem = props => {
           <Tooltip content={fileRowLabels.storage_providers.tooltip.header} />
           {fileRowLabels.storage_providers.label}
         </span>
-        <span>{storageProviders}</span>
+        {storageProviders}
         {isHeader ? (
           <Tooltip position="right" content={fileRowLabels.storage_providers.tooltip.header} />
         ) : (
           !storageProviders.length && (
             <>
               Queuing...
-              <Tooltip position="right" content={fileRowLabels.storage_providers.tooltip.queuing} />
+              <Tooltip
+                className="medium-down-only"
+                position="left"
+                content={fileRowLabels.storage_providers.tooltip.queuing}
+              />
+              <Tooltip
+                className="medium-up-only"
+                position="right"
+                content={fileRowLabels.storage_providers.tooltip.queuing}
+              />
             </>
           )
         )}
