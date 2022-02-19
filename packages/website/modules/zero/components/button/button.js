@@ -35,7 +35,7 @@ const Button = ({
           ?
             <a href={href} target="_blank">{children}</a>
           :
-            <Link href={href} shallow>{children}</Link>
+            <Link href={href}>{children}</Link>
         )
         :
           <button type={type} onClick={onClick} disabled={disabled}>{children}</button>
