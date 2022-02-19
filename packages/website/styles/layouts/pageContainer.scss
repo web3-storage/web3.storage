@@ -7,6 +7,6 @@
   @include fontWeight_Regular;
 
   h3 {
-    font-size: 1.875rem; // TODO: Adding to fonts 30pt
+    font-size: $fontSize_MediumExtraLarge;
   }
 }

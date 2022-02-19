@@ -9,6 +9,7 @@ import GradientBackgroundB from 'assets/illustrations/gradient-background-b';
 import countly from 'lib/countly';
 import { PageProps } from 'components/types';
 import AppData from '../../content/pages/app/account.json';
+import { useUploads } from 'components/contexts/uploadsContext';
 
 enum CTACardTypes {
   API_TOKENS,
@@ -19,12 +20,12 @@ enum CTACardTypes {
 const Account: React.FC = () => {
   const uploadModalState = useState(false);
   const dashboard = AppData.page_content.dashboard;
+  const { uploads } = useUploads();
 
   const onFileUploead = useCallback(() => {
     uploadModalState[1](true);
   }, [uploadModalState]);
 
-  const hasFiles = false; // TODO: Has files check
   const CTAConfigs = useMemo(
     () => ({
       [CTACardTypes.API_TOKENS]: {
@@ -52,17 +53,17 @@ const Account: React.FC = () => {
         })),
       },
       [CTACardTypes.UPLOAD_FILES]: {
-        heading: hasFiles ? dashboard.card_right.heading.option_1 : dashboard.card_right.heading.option_2,
+        heading: !!uploads.length ? dashboard.card_right.heading.option_1 : dashboard.card_right.heading.option_2,
         description: dashboard.card_right.description,
         ctas: dashboard.card_right.ctas.map(cta => ({
           onClick: onFileUploead,
           variant: cta.theme,
-          tracking: { ui: countly.ui[cta.ui], action: cta.action, isFirstFile: !hasFiles },
+          tracking: { ui: countly.ui[cta.ui], action: cta.action, isFirstFile: !uploads.length },
           children: cta.text,
         })),
       },
     }),
-    [hasFiles, onFileUploead, dashboard]
+    [uploads.length, onFileUploead, dashboard]
   );
 
   return (
