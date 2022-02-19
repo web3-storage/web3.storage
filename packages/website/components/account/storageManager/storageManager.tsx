@@ -67,10 +67,11 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
   );
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       const result = elementIsInViewport(storageManagerRef.current);
       setComponentInViewport(result);
     }, 1000);
+
     const scroll = () => {
       if (!componentInViewport) {
         const result = elementIsInViewport(storageManagerRef.current);
@@ -82,6 +83,7 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
     window.addEventListener('scroll', scroll);
     return () => {
       window.removeEventListener('scroll', scroll);
+      clearTimeout(timeout);
     };
   }, [componentInViewport]);
 

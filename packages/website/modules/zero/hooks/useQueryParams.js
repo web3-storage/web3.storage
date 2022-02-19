@@ -8,18 +8,18 @@ import { get } from 'lodash';
  * @returns {[queryValue: any, setQueryValue: any] | []}
  */
 export default function useQueryParams(param = '', defaultValue = null) {
-  const { isReady, query } = useRouter();
+  const { isReady, query, replace } = useRouter();
 
   const [queryValue, setQueryValue] = useState(defaultValue);
 
   const setValue = useCallback(
     newValue => {
-      const queryParams = new URLSearchParams(window.location.search);
-      queryParams.set(param, newValue);
-      window.history.replaceState({}, '', decodeURIComponent(`${window.location.pathname}?${queryParams}`));
+      replace({
+        query: { ...query, [param]: newValue },
+      });
       newValue !== undefined && setQueryValue(newValue);
     },
-    [param, setQueryValue]
+    [param, setQueryValue, query, replace]
   );
 
   useEffect(() => {
