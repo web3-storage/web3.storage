@@ -94,8 +94,11 @@
                   {
                     "thumb": "STORE",
                     "lines": [
+<<<<<<< HEAD
                       "// store.mjs",
                       "",
+=======
+>>>>>>> parent of 9c85a4dd (fix: incorrect code block result content)
                       "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
                       "",
                       "const token = process.env.API_TOKEN",
@@ -110,15 +113,23 @@
                       "storeFiles()"
                     ],
                     "output": {
+<<<<<<< HEAD
                       "label": "Run it with",
                       "value": "npm i web3.storage\nAPI_TOKEN=YOUR_TOKEN node ./store.mjs"
+=======
+                      "label": "Result",
+                      "value": "bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu"
+>>>>>>> parent of 9c85a4dd (fix: incorrect code block result content)
                     }
                   },
                   {
                     "thumb": "RETRIEVE",
                     "lines": [
+<<<<<<< HEAD
                       "// retrive.mjs",
 
+=======
+>>>>>>> parent of 9c85a4dd (fix: incorrect code block result content)
                       "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
                       "",
                       "const token = process.env.API_TOKEN",
@@ -137,11 +148,15 @@
                       "}",
                       "",
                       "retrieveFiles()"
+<<<<<<< HEAD
                     ],
                   "output": {
                     "label": "Run it with",
                     "value": "npm i web3.storage\nAPI_TOKEN=YOUR_TOKEN node ./retrieve.mjs"
                   }
+=======
+                    ]
+>>>>>>> parent of 9c85a4dd (fix: incorrect code block result content)
                   }
                 ]
               }
