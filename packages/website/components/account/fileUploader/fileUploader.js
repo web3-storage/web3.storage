@@ -8,7 +8,7 @@ import CloseIcon from 'assets/icons/close';
 import InfinityIcon from 'assets/icons/infinity';
 import GlobeIcon from 'assets/icons/globe';
 import { ReactComponent as FolderIcon } from '../../../assets/icons/folder.svg';
-import { useUploads } from 'components/contexts/uploadsContext';
+import { STATUS, useUploads } from 'components/contexts/uploadsContext';
 
 export const CTAThemeType = {
   LIGHT: 'light',
@@ -64,10 +64,11 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
   // Mapped out file progress info
   const filesInfo = useMemo(
     () =>
-      Object.values(uploadsProgress.files).map(({ inputFile, progress, uploadId }) => ({
+      Object.values(uploadsProgress.files).map(({ inputFile, progress, uploadId, status }) => ({
         uploadId,
         name: inputFile.name,
         progress: progress.percentage,
+        failed: status === STATUS.FAILED,
       })),
     [uploadsProgress]
   );
