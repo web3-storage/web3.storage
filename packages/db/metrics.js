@@ -30,15 +30,7 @@ export async function getUploadMetrics (client) {
   }
 }
 
-const uploadTypeMapping = {
-  uploads_car_total: 'Car',
-  uploads_blob_total: 'Blob',
-  uploads_multipart_total: 'Multipart',
-  uploads_upload_total: 'Upload'
-}
-
-export async function getUploadTypeMetrics (client, key) {
-  const type = uploadTypeMapping[key]
+export async function getUploadTypeMetrics (client, type) {
   const { count, error } = await client
     .from('upload')
     .select('*', { head: true, count: 'exact' })

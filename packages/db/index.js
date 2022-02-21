@@ -799,10 +799,16 @@ export class DBClient {
         res = await getUploadMetrics(this._client)
         return res.total
       case 'uploads_car_total':
+        res = await getUploadTypeMetrics(this._client, 'Car')
+        return res.total
       case 'uploads_blob_total':
+        res = await getUploadTypeMetrics(this._client, 'Blob')
+        return res.total
       case 'uploads_multipart_total':
+        res = await getUploadTypeMetrics(this._client, 'Multicar')
+        return res.total
       case 'uploads_upload_total':
-        res = await getUploadTypeMetrics(this._client, key)
+        res = await getUploadTypeMetrics(this._client, 'Upload')
         return res.total
       case 'content_bytes_total':
         res = await getContentMetrics(this._client)
