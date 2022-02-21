@@ -1,4 +1,4 @@
-import { HTTPError } from './errors.js'
+import { HTTPError, MaintenanceError } from './errors.js'
 
 /**
  * @typedef {'rw' | 'r-' | '--'} Mode
@@ -88,5 +88,5 @@ function modeBits (m) {
  */
 function maintenanceHandler () {
   const url = 'https://status.web3.storage'
-  throw new Error(`API undergoing maintenance, check ${url} for more info`)
+  throw new MaintenanceError(`API undergoing maintenance, check ${url} for more info`)
 }
