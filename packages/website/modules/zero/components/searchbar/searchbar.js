@@ -26,7 +26,7 @@ const SearchBar = ({
   const onInputFocus = useCallback(() => setFocused(true), [setFocused])
   const onInputBlur = useCallback(() => setFocused(false), [setFocused])
 
-  useEffect(() => onChange && onChange(value), [onChange, value])
+  useEffect(() => value !== "" && onChange?.(value), [onChange, value])
 
   return (
     <div className={clsx(className, 'SearchBar', {focused})}>
