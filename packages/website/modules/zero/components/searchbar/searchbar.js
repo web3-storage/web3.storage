@@ -1,5 +1,5 @@
-import { useEffect, useCallback, useState } from 'react'
-import clsx from 'clsx'
+import clsx from 'clsx';
+import { useCallback, useState } from 'react';
 
 /**
  * @typedef {Object} SearchBarProps
@@ -11,26 +11,19 @@ import clsx from 'clsx'
  */
 
 /**
- * 
+ *
  * @param {SearchBarProps} props
  */
-const SearchBar = ({
-  className,
-  icon,
-  value,
-  placeholder,
-  onChange
-}) => {
+const SearchBar = ({ className, icon, value, placeholder, onChange }) => {
   const [focused, setFocused] = useState(false);
 
-  const onInputFocus = useCallback(() => setFocused(true), [setFocused])
-  const onInputBlur = useCallback(() => setFocused(false), [setFocused])
+  const onInputFocus = useCallback(() => setFocused(true), [setFocused]);
+  const onInputBlur = useCallback(() => setFocused(false), [setFocused]);
 
-  useEffect(() => value !== "" && onChange?.(value), [onChange, value])
+  // useEffect(() => value !== "" && onChange?.(value), [onChange, value])
 
   return (
-    <div className={clsx(className, 'SearchBar', {focused})}>
-
+    <div className={clsx(className, 'SearchBar', { focused })}>
       {icon && <div className="search-icon">{icon}</div>}
 
       <input
@@ -38,17 +31,17 @@ const SearchBar = ({
         defaultValue={value}
         placeholder={placeholder}
         type="text"
-        onChange={event => onChange && onChange(event.target.value)}
+        onChange={event => onChange?.(event.target.value)}
         onFocus={onInputFocus}
         onBlur={onInputBlur}
       />
     </div>
   );
-}
+};
 
 SearchBar.defaultProps = {
   placeholder: '',
-  value: ''
-}
+  value: '',
+};
 
-export default SearchBar
+export default SearchBar;
