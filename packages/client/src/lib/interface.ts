@@ -143,7 +143,7 @@ export type PutCarOptions = {
    */
    maxRetries?: number
   /**
-   * Maximum chunk size to upload. AS the targetSize as passed to carbites TreewalkSplitter. Default: 1024 * 1024 * 10 (in bytes).
+   * Maximum chunk size to upload in bytes. Default: 10,485,760
    */
    maxChunkSize?: number
    /**
