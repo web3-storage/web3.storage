@@ -102,7 +102,7 @@ export type PutOptions = {
    */
   maxRetries?: number
   /**
-   * Maximum chunk size to upload. Default: 1024 * 1024 * 10 (in bytes)
+   * Maximum chunk size to upload in bytes. Default: 10,485,760
    */
   maxChunkSize?: number
   /**
