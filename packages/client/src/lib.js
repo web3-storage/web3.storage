@@ -110,7 +110,7 @@ class Web3Storage {
         })),
         blockstore,
         wrapWithDirectory,
-        maxChunkSize: maxChunkSize,
+        maxChunkSize,
         maxChildrenPerNode: 1024
       })
       onRootCidReady && onRootCidReady(root.toString())
