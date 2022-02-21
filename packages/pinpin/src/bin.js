@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import dotenv from 'dotenv'
 import debug from 'debug'
 import { DBClient } from '@web3-storage/db'
 import { Pinata } from './pinata.js'
 import { pinToPinata } from './index.js'
+import { envConfig } from './env.js'
 
 const log = debug('pinpin')
 
@@ -29,23 +29,15 @@ async function main () {
  * @param {Record<string, string|undefined>} env
  */
 function getDBClient (env) {
-  if (env.DATABASE === 'postgres') {
-    const token = env.PG_REST_JWT
-    const endpoint = env.PG_REST_URL
-    if (!token) {
-      throw new Error('missing PG_REST_JWT environment var')
-    }
-    if (!endpoint) {
-      throw new Error('missing PG_REST_URL environment var')
-    }
-    return new DBClient({ token, endpoint, postgres: true })
-  }
-
-  const token = env.FAUNA_KEY
+  const token = env.PG_REST_JWT
+  const endpoint = env.PG_REST_URL
   if (!token) {
-    throw new Error('missing FAUNA_KEY environment var')
+    throw new Error('missing PG_REST_JWT environment var')
   }
-  return new DBClient({ token: env.FAUNA_KEY })
+  if (!endpoint) {
+    throw new Error('missing PG_REST_URL environment var')
+  }
+  return new DBClient({ token, endpoint, postgres: true })
 }
 
 /**
@@ -60,5 +52,5 @@ function getPinata (env, { reqsPerSec = 2 }) {
   return new Pinata({ apiToken, reqsPerSec })
 }
 
-dotenv.config()
+envConfig()
 main()

@@ -67,6 +67,11 @@ import pkg from '../package.json'
  * @param {import('./index.js').Ctx} ctx
  */
 export function envAll (req, env, ctx) {
+  // In dev, set these vars in a .env file in the parent monorepo project root.
+  if (!env.PG_REST_URL) {
+    throw new Error('MISSING ENV. Please set PG_REST_URL')
+  }
+
   env.sentry = env.SENTRY_DSN && new Toucan({
     dsn: env.SENTRY_DSN,
     context: ctx,

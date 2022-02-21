@@ -10,7 +10,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const prog = sade('api')
 
 dotenv.config({
-  path: path.join(__dirname, '../.env.local')
+  path: path.join(__dirname, '..', '..', '..', '.env')
 })
 
 prog

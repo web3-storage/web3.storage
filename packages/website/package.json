@@ -4,7 +4,7 @@
   "description": "web3.storage website",
   "private": true,
   "scripts": {
-    "start": "next dev -p 4000",
+    "start": "env-cmd -f ../../.env next dev -p 4000",
     "build": "next build && next-sitemap && next export",
     "test": "eslint './**/*.js' && tsc --build"
   },
@@ -38,6 +38,7 @@
     "@types/react-dom": "^17.0.9",
     "@types/react-syntax-highlighter": "^13.5.2",
     "autoprefixer": "^10.2.6",
+    "env-cmd": "^10.1.0",
     "eslint": "^7.24.0",
     "eslint-config-next": "^11.0.1",
     "eslint-config-prettier": "^8.2.0",

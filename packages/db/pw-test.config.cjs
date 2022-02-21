@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 const execa = require('execa')
 
 dotenv.config({
-  path: path.join(__dirname, '.env.local')
+  path: path.join(__dirname, '..', '..', '.env')
 })
 
 const cli = path.join(__dirname, 'scripts/cli.js')
