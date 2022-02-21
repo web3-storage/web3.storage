@@ -7,8 +7,8 @@ import CTACard from '../../components/account/ctaCard/CTACard';
 import FileUploader from '../../components/account/fileUploader/fileUploader';
 import GradientBackgroundB from 'assets/illustrations/gradient-background-b';
 import countly from 'lib/countly';
-import { PageProps } from 'components/types';
 import AppData from '../../content/pages/app/account.json';
+import { PageProps } from 'components/types';
 import { useUploads } from 'components/contexts/uploadsContext';
 
 enum CTACardTypes {
