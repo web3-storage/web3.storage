@@ -94,7 +94,7 @@
                   {
                     "thumb": "STORE",
                     "lines": [
-                      "//store.mjs",
+                      "// store.mjs",
                       "",
                       "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
                       "",
@@ -111,13 +111,13 @@
                     ],
                     "output": {
                       "label": "Run it with",
-                      "value": "API_TOKEN=YOUR_TOKEN node ./store.mjs"
+                      "value": "npm i web3.storage\nAPI_TOKEN=YOUR_TOKEN node ./store.mjs"
                     }
                   },
                   {
                     "thumb": "RETRIEVE",
                     "lines": [
-                      "//retrive.mjs",
+                      "// retrive.mjs",
 
                       "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
                       "",
@@ -140,7 +140,7 @@
                     ],
                   "output": {
                     "label": "Run it with",
-                    "value": "API_TOKEN=YOUR_TOKEN node ./retrieve.mjs"
+                    "value": "npm i web3.storage\nAPI_TOKEN=YOUR_TOKEN node ./retrieve.mjs"
                   }
                   }
                 ]
