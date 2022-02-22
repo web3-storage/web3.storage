@@ -38,16 +38,17 @@ export async function clusterCmd ({ project, start, stop, clean }) {
 
   if (start) {
     if (await isPortReachable(9094)) {
-      throw new Error('Cluster is already running. Please check if you have any docker project or cluster deamon already running.')
+      console.log('Skipped starting IPFS Cluster. Port 9094 is already in use, so assuming cluster is already running.')
+    } else {
+      await execa('docker-compose', [
+        '--file',
+        composePath,
+        '--project-name',
+        project,
+        'up',
+        '--detach'
+      ])
     }
-    await execa('docker-compose', [
-      '--file',
-      composePath,
-      '--project-name',
-      project,
-      'up',
-      '--detach'
-    ])
   }
 
   if (stop) {
