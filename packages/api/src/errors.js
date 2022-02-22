@@ -21,7 +21,7 @@ export class UserNotFoundError extends HTTPError {
 UserNotFoundError.CODE = 'ERROR_USER_NOT_FOUND'
 
 export class PinningUnauthorizedError extends HTTPError {
-  constructor (msg = 'Pinning not authorized for this user') {
+  constructor (msg = 'Pinning not authorized for this user, email support@web3.storage to request authorization.') {
     super(msg, 403)
     this.name = 'PinningUnauthorizedError'
     this.code = PinningUnauthorizedError.CODE
@@ -86,10 +86,23 @@ export class InvalidCarError extends Error {
     super(`Invalid CAR file received: ${reason}`)
     this.name = 'InvalidCar'
     this.status = 400
-    this.code = InvalidCidError.CODE
+    this.code = InvalidCarError.CODE
   }
 }
 InvalidCarError.CODE = 'ERROR_INVALID_CAR'
+
+export class MaintenanceError extends Error {
+  /**
+   * @param {string} reason
+   */
+  constructor (reason) {
+    super(reason)
+    this.name = 'Maintenance'
+    this.status = 503
+    this.code = MaintenanceError.CODE
+  }
+}
+MaintenanceError.CODE = 'ERROR_MAINTENANCE'
 
 export class PinningServiceApiError extends Error {
   /**
