@@ -79,6 +79,8 @@ const createPinRequest = async (cid, token) => {
 }
 
 describe('Pinning APIs endpoints', () => {
+  const supportEmailCheck = /support@web3.storage/
+
   describe('GET /pins', () => {
     let baseUrl
     let token
@@ -481,6 +483,7 @@ describe('Pinning APIs endpoints', () => {
       })
       assert(!res.ok)
       const data = await res.json()
+      assert.match(data.message, supportEmailCheck, 'Error message does not contain support email address')
       assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
   })
@@ -650,6 +653,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(!res.ok)
       const data = await res.json()
+      assert.match(data.message, supportEmailCheck, 'Error message does not contain support email address')
       assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
 
@@ -798,6 +802,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(!res.ok)
       const data = await res.json()
+      assert.match(data.message, supportEmailCheck, 'Error message does not contain support email address')
       assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
 
@@ -967,6 +972,7 @@ describe('Pinning APIs endpoints', () => {
       })
       assert(!res.ok)
       const data = await res.json()
+      assert.match(data.message, supportEmailCheck, 'Error message does not contain support email address')
       assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
   })
@@ -1074,6 +1080,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(!res.ok)
       const data = await res.json()
+      assert.match(data.message, supportEmailCheck, 'Error message does not contain support email address')
       assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
   })
