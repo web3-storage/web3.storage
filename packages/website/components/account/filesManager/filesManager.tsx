@@ -259,6 +259,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
       )}
       <Modal
         className="delete-modal"
+        animation="ken"
         modalState={deleteModalState}
         closeIcon={<CloseIcon className="file-uploader-close" />}
         showCloseButton

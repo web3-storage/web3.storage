@@ -42,36 +42,84 @@
   }
 }
 
-.Modal.modal--open {
+.modal--open {
   opacity: 1;
   transition: opacity 0.3s;
   * {
     pointer-events: auto;
   }
-  .modalInner {
-    animation-name: anim-open;
-  }
 }
 
-.Modal.modal--close {
+.modal--close {
   opacity: 0;
   transition: opacity 0.3s;
-  .modalInner {
-    animation-name: anim-close;
-    animation-duration: 0.3s;
-    animation-timing-function: ease-out;
+}
+
+// DON animation (wiggly)
+.don {
+  &.modal--open {
+    .modalInner {
+      animation-name: anim-open-don;
+    }
+  }
+  &.modal--close {
+    .modalInner {
+      animation-name: anim-close-don;
+      animation-duration: 0.3s;
+      animation-timing-function: ease-out;
+    }
+  }
+  &.modal--open .modalInner,
+  &.modal--close .modalInner {
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
   }
 }
 
-.Modal.modal--open .modalInner,
-.Modal.modal--close .modalInner {
-  animation-duration: 1s;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards;
+// KEN
+.ken {
+  align-items: flex-start;
+  &.modal--open .modalInner,
+  &.modal--close .modalInner {
+    opacity: 1;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+  }
+  &.modal--open .modalInner {
+    animation-name: anim-open-ken;
+  }
+  &.modal--close .modalInner {
+    animation-name: anim-close-ken;
+  }
+  &.modal--open .modalInner > div {
+    animation: anim-elem-ken 0.3s both;
+  }
+  &.modal--open .modalInner > div:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  &.modal--open .modalInner > div:nth-child(3) {
+    animation-delay: 0.05s;
+  }
 }
 
-/* Generated with Bounce.js. Edit at http://goo.gl/6iLZu5 */
-@keyframes anim-open {
+@keyframes anim-open-ken {
+	0% { -webkit-transform: translate3d(0, -100%, 0); transform: translate3d(0, -100%, 0); }
+	100% { -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }
+}
+
+@keyframes anim-close-ken {
+	0% { -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }
+	100% { -webkit-transform: translate3d(0, -100%, 0); transform: translate3d(0, -100%, 0); }
+}
+
+@keyframes anim-elem-ken {
+	0% { opacity: 0; -webkit-transform: translate3d(0, -100px, 0); transform: translate3d(0, -100px, 0); }
+	100% { opacity: 1; -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }
+}
+
+// DON effect
+@keyframes anim-open-don {
   0% {
     opacity: 0;
     -webkit-transform: matrix3d(0.7, 0, 0, 0, 0, 0.7, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
@@ -273,7 +321,7 @@
   }
 }
 
-@keyframes anim-close {
+@keyframes anim-close-don {
   0% {
     opacity: 1;
   }

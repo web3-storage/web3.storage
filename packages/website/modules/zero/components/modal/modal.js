@@ -6,6 +6,7 @@ import Button from 'ZeroComponents/button/button';
 /**
  * @typedef {Object} ModalProps
  * @prop {string} [className]
+ * @prop {string} [animation]
  * @prop { [boolean, React.Dispatch<React.SetStateAction<boolean>>] } modalState
  * @prop {boolean} [showCloseButton]
  * @prop {React.ReactNode} [closeIcon]
@@ -17,7 +18,7 @@ import Button from 'ZeroComponents/button/button';
  *
  * @param {ModalProps} props
  */
-const Modal = ({ className, modalState, showCloseButton, closeIcon, children, onClose }) => {
+const Modal = ({ className, modalState, showCloseButton, closeIcon, children, onClose, animation }) => {
   const [isOpen, setModalOpen] = modalState;
 
   const closeModal = useCallback(() => {
@@ -42,7 +43,7 @@ const Modal = ({ className, modalState, showCloseButton, closeIcon, children, on
   }, [keydownHandler]);
 
   return (
-    <div className={clsx(className, isOpen ? 'modal--open' : 'modal--close', 'Modal')}>
+    <div className={clsx(className, animation, isOpen ? 'modal--open' : 'modal--close', 'Modal')}>
       <div className="modalBackground" onClick={closeModal} role="presentation"></div>
       <div className="modalContainer" onClick={e => e.stopPropagation()} role="presentation">
         <div className="modalInner">
@@ -61,6 +62,7 @@ const Modal = ({ className, modalState, showCloseButton, closeIcon, children, on
 Modal.defaultProps = {
   modalState: null,
   showCloseButton: true,
+  animation: 'don',
 };
 
 export default Modal;
