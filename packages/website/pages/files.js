@@ -44,8 +44,7 @@ const QuestionMark = () => (
 )
 
 const TOOLTIPS = {
-  PIN_STATUS: (<span>Reports the status of a file or piece of data stored on Web3.Storage’s IPFS Cluster. Status might not be fully up-to-date. Data is still available even when still in Queuing state.</span>),
-  AVAILABILITY: (<span>Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes.</span>),
+  PIN_STATUS: (<span>Reports the status of a file or piece of data stored on Web3.Storage’s IPFS Cluster. Status might not be fully up-to-date. Data will be available on IPFS even when still in Queuing state provided the uploaded completed successfully.</span>),
 
   CID: (<span>
     The <strong>c</strong>ontent <strong>id</strong>entifier for a file or a piece of data.<span> </span>
@@ -270,11 +269,6 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
       </TableElement>
       <TableElement {...sharedArgs} centered>
         <span className="flex justify-center">
-          Available
-        </span>
-      </TableElement>
-      <TableElement {...sharedArgs} centered>
-        <span className="flex justify-center">
           {pinStatus}
           {getPinStatusTooltip(pinStatus, upload.pins.length)}
         </span>
@@ -429,13 +423,6 @@ export default function Files({ isLoggedIn }) {
             <span className="flex w-100 justify-center items-center">CID
               <Tooltip placement='top' overlay={TOOLTIPS.CID} overlayClassName='table-tooltip'>
                 { QuestionMark() }
-              </Tooltip>
-            </span>
-          </TableHeader>
-          <TableHeader>
-            <span className="flex w-100 justify-center">Availability
-              <Tooltip placement='top' overlay={TOOLTIPS.AVAILABILITY} overlayClassName='table-tooltip'>
-                {QuestionMark()}
               </Tooltip>
             </span>
           </TableHeader>
