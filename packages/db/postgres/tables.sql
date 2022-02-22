@@ -176,7 +176,6 @@ CREATE TABLE IF NOT EXISTS backup
 );
 
 CREATE INDEX IF NOT EXISTS backup_upload_id_idx ON backup (upload_id);
-CREATE INDEX IF NOT EXISTS backup_url_idx ON backup (url);
 
 -- Tracks requests to replicate content to more nodes.
 CREATE TABLE IF NOT EXISTS pin_request
