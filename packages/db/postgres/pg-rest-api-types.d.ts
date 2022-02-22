@@ -1293,7 +1293,6 @@ export interface paths {
           user_id?: parameters["rowFilter.user_tag.user_id"];
           tag?: parameters["rowFilter.user_tag.tag"];
           value?: parameters["rowFilter.user_tag.value"];
-          value_type?: parameters["rowFilter.user_tag.value_type"];
           reason?: parameters["rowFilter.user_tag.reason"];
           inserted_at?: parameters["rowFilter.user_tag.inserted_at"];
           deleted_at?: parameters["rowFilter.user_tag.deleted_at"];
@@ -1351,7 +1350,6 @@ export interface paths {
           user_id?: parameters["rowFilter.user_tag.user_id"];
           tag?: parameters["rowFilter.user_tag.tag"];
           value?: parameters["rowFilter.user_tag.value"];
-          value_type?: parameters["rowFilter.user_tag.value_type"];
           reason?: parameters["rowFilter.user_tag.reason"];
           inserted_at?: parameters["rowFilter.user_tag.inserted_at"];
           deleted_at?: parameters["rowFilter.user_tag.deleted_at"];
@@ -1373,7 +1371,6 @@ export interface paths {
           user_id?: parameters["rowFilter.user_tag.user_id"];
           tag?: parameters["rowFilter.user_tag.tag"];
           value?: parameters["rowFilter.user_tag.value"];
-          value_type?: parameters["rowFilter.user_tag.value_type"];
           reason?: parameters["rowFilter.user_tag.reason"];
           inserted_at?: parameters["rowFilter.user_tag.inserted_at"];
           deleted_at?: parameters["rowFilter.user_tag.deleted_at"];
@@ -2079,9 +2076,8 @@ export interface definitions {
      * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
      */
     user_id: number;
-    tag: "ACCOUNT_ENABLED" | "PSA_ENABLED" | "STORAGE_LIMIT_BYTES";
+    tag: "HasAccountRestriction" | "HasPsaAccess" | "StorageLimitBytes";
     value: string;
-    value_type: "bigint" | "boolean" | "integer" | "real" | "text";
     reason: string;
     inserted_at: string;
     deleted_at?: string;
@@ -2224,7 +2220,6 @@ export interface parameters {
   "rowFilter.user_tag.user_id": string;
   "rowFilter.user_tag.tag": string;
   "rowFilter.user_tag.value": string;
-  "rowFilter.user_tag.value_type": string;
   "rowFilter.user_tag.reason": string;
   "rowFilter.user_tag.inserted_at": string;
   "rowFilter.user_tag.deleted_at": string;
