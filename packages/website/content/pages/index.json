@@ -523,9 +523,9 @@
               {
                 "type": "C",
                 "image": "/images/index/placeholder-portrait.png",
-                "title": "Connor M.",
+                "title": "Jacob P.",
                 "subtitle": "New York, USA",
-                "description": "Web3.Storage was pretty much plug and play for my use case."
+                "description": "Web3.storage enables <a href='http://example.com/' target='_blank'>Strangemood</a> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
               }
             ]
           },

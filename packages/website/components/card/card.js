@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
+import Markdown from 'markdown-to-jsx';
 
 import CardTier from './card-tier';
 import Button from '../button/button';
@@ -152,7 +153,11 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
 
       {card.subtitle && <div className="subtitle">{card.subtitle}</div>}
 
-      {card.description && <div className={clsx('description', targetClass)}>{card.description}</div>}
+      {card.description && (
+        <div className={clsx('description', targetClass)}>
+          <Markdown>{card.description}</Markdown>
+        </div>
+      )}
 
       {hasIcon && <div className="icon-before">{getIcon(card.icon_before)}</div>}
 
