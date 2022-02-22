@@ -402,7 +402,7 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
 }
 
 @function toRem($value) {
-  $remValue: ($value / 16) + rem;
+  $remValue: math.div($value, 16) + rem;
   @return $remValue;
 }
 

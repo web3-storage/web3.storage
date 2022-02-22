@@ -153,3 +153,42 @@
     }
   }
 }
+
+.delete-modal {
+  color: $ebony;
+  > * {
+    position: relative;
+  }
+  .modalContainer {
+    min-width: toRem(550);
+    @include medium {
+      min-width: auto;
+    }
+    @include borderRadius_Large;
+    .modalInner {
+      padding: toRem(49) 2rem toRem(29) 4rem;
+    }
+  }
+  .modalClose {
+    color: $ebony;
+    font-size: 2rem;
+  }
+  &-content {
+    position: relative;
+    h5 {
+      font-size: toRem(24);
+    }
+    p {
+      font-size: toRem(16);
+      @include leading_Small;
+    }
+  }
+  &-buttons {
+    margin-top: toRem(27);
+    display: flex;
+    justify-content: flex-end;
+    .button {
+      margin-left: 0.5rem;
+    }
+  }
+}

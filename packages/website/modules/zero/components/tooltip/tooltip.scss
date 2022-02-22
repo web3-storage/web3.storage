@@ -11,7 +11,6 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
   &:hover {
     cursor: pointer;
     .tooltip-content {
-      // display: block;
       transition: opacity 250ms;
       opacity: 1;
       pointer-events: auto;
@@ -27,7 +26,6 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
   }
 
   .tooltip-content {
-    // display: none;
     transition: opacity 250ms;
     opacity: 0;
     pointer-events: none;
