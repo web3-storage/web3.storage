@@ -1,3 +1,4 @@
+/* global BRANCH, VERSION, COMMITHASH */
 import Toucan from 'toucan-js'
 import { S3Client } from '@aws-sdk/client-s3/dist-es/S3Client.js'
 import { Magic } from '@magic-sdk/admin'
@@ -67,6 +68,11 @@ import pkg from '../package.json'
  * @param {import('./index.js').Ctx} ctx
  */
 export function envAll (req, env, ctx) {
+  // These values are replaced at build time by esbuild `define`
+  env.BRANCH = BRANCH
+  env.VERSION = VERSION
+  env.COMMITHASH = COMMITHASH
+
   env.sentry = env.SENTRY_DSN && new Toucan({
     dsn: env.SENTRY_DSN,
     context: ctx,

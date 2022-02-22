@@ -49,7 +49,6 @@ prog
         VERSION: JSON.stringify(version),
         COMMITHASH: JSON.stringify(git.long(__dirname)),
         BRANCH: JSON.stringify(git.branch(__dirname)),
-        ENV: opts.env || 'dev',
         global: 'globalThis'
       },
       minify: opts.env !== 'dev',
