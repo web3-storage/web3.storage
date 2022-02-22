@@ -81,7 +81,7 @@ VALUES (
   1669394359626000000
 );
 
--- -- user 'test-pinning' is authorized
+-- user 'test-pinning' is authorized
 INSERT INTO public.user_tag (user_id, tag, value, value_type, reason)
 VALUES  (4, 'PSA_ENABLED', true, 'boolean', 'test'),
         (5, 'PSA_ENABLED', true, 'boolean', 'test');
