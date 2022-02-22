@@ -8,11 +8,14 @@ Copy the `.env.tpl` to `.env` in root of the project monorepo.
 
 Create an account on https://magic.link and fill in the `MAGIC_SECRET_KEY` variable in the .env file.
 
-We use miniflare to run the api locally, and docker to run ipfs-cluster and postgres with postREST.
+We use miniflare to run the api locally, and docker to run ipfs-cluster and postgres with PostgREST.
 
 The API backend uses the [Database package](../db/) to communicate and spin up the DB layer. 
 In order to have the API backend package working you need to make sure the db underlying DB is set up.
 Please follow the setup instructions in the DB package [Readme](../db/README.md) first.
+
+
+API package setup:
 
 ```sh
 # Install the deps
@@ -34,8 +37,10 @@ npm run stop
 ```
 
 ## Setting up a cloudflare worker
-If you want to test and preview you worker on Cloudfare infrastrucure please look at [Cloudfare Get Started guide](https://developers.cloudflare.com/workers/get-started/guide#1-sign-up-for-a-workers-account).
-One time set up of your cloudflare worker subdomain. You only need to do this if you want to test in a real cloudflare worker.
+While in most cases the [Getting Started](## Getting started) is enough to develop locally, if you want to test and preview you worker on Cloudfare infrastructure here's the instructions to setup your worker and environment.  
+
+If you want more in depth information please look at [Cloudfare Get Started guide](https://developers.cloudflare.com/workers/get-started/guide#1-sign-up-for-a-workers-account).  
+
 The following instructions assume that you already you went through the Getting started section.
 
 ### 1. Sign up for a Workers account
