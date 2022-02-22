@@ -451,7 +451,7 @@ export class DBClient {
     const { error } = await this._client
       .from('pin')
       .upsert(pins.map(pin => ({
-        id: pin._id,
+        id: pin.id,
         status: pin.status,
         content_cid: pin.cid,
         pin_location_id: pin.locationId,

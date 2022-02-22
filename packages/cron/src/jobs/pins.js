@@ -99,7 +99,7 @@ export async function updatePinStatuses ({ cluster, db }) {
       log(`📌 ${pin.contentCid}@${pin.location.peerId}: ${pin.status} => ${status}`)
 
       return {
-        _id: pin._id,
+        id: pin._id,
         status: status,
         cid: pin.contentCid,
         locationId: pin.location._id

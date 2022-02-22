@@ -110,7 +110,7 @@ describe('pin-sync-request', () => {
 
     // Update all Pins to Pinned
     await client.upsertPins(pinSyncReqs.map(psr => ({
-      _id: psr.pin._id,
+      id: psr.pin._id,
       status: 'Pinned',
       cid: psr.pin.contentCid,
       locationId: psr.pin.location._id

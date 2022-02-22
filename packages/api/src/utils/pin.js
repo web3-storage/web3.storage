@@ -135,18 +135,18 @@ export async function waitOkPins (cid, cluster, waitTime = MAX_PIN_STATUS_CHECK_
  * @param {import('@web3-storage/db').DBClient} db
  * @param {number} waitTime
  * @param {number} checkInterval
- * @return {Promise.<import('@web3-storage/db/db-client-types').PinsUpsertInput[]>}
+ * @return {Promise.<import('@web3-storage/db/db-client-types').PinUpsertInput[]>}
  */
 export async function waitAndUpdateOkPins (cid, cluster, db, waitTime = MAX_PIN_STATUS_CHECK_TIME, checkInterval = PIN_STATUS_CHECK_INTERVAL) {
   const okPins = await waitOkPins(cid, cluster, waitTime, checkInterval)
   const pins = okPins.map((pin) => {
     return {
-      _id: pin._id,
+      id: pin._id,
       status: pin.status,
       cid,
       locationId: pin.location._id
     }
   })
   await db.upsertPins(pins)
-  return pins
+  return okPins
 }
