@@ -798,17 +798,11 @@ export class DBClient {
       case 'uploads_total':
         res = await getUploadMetrics(this._client)
         return res.total
-      case 'uploads_car_total':
-        res = await getUploadTypeMetrics(this._client, 'Car')
-        return res.total
-      case 'uploads_blob_total':
-        res = await getUploadTypeMetrics(this._client, 'Blob')
-        return res.total
-      case 'uploads_multipart_total':
-        res = await getUploadTypeMetrics(this._client, 'Multipart')
-        return res.total
-      case 'uploads_upload_total':
-        res = await getUploadTypeMetrics(this._client, 'Upload')
+      case 'Car':
+      case 'Blob':
+      case 'Multipart':
+      case 'Upload':
+        res = await getUploadTypeMetrics(this._client, key)
         return res.total
       case 'content_bytes_total':
         res = await getContentMetrics(this._client)
@@ -819,10 +813,10 @@ export class DBClient {
       case 'pins_bytes_total':
         res = await getPinBytesMetrics(this._client)
         return res.totalBytes
-      case 'pins_status_pinqueued_total':
-      case 'pins_status_pinning_total':
-      case 'pins_status_pinned_total':
-      case 'pins_status_pinerror_total':
+      case 'PinQueued':
+      case 'Pinning':
+      case 'Pinned':
+      case 'PinError':
         res = await getPinStatusMetrics(this._client, key)
         return res.total
       case 'pin_requests_total':

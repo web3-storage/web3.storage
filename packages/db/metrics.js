@@ -83,16 +83,8 @@ export async function getPinMetrics (client) {
   }
 }
 
-const pinStatusMapping = {
-  pins_status_pinqueued_total: 'PinQueued',
-  pins_status_pinning_total: 'Pinning',
-  pins_status_pinned_total: 'Pinned',
-  pins_status_pinerror_total: 'PinError'
-}
-
-export async function getPinStatusMetrics (client, key) {
-  const pinStatus = pinStatusMapping[key]
-  const { data, error } = await client.rpc('pin_from_status_total', { query_status: pinStatus })
+export async function getPinStatusMetrics (client, status) {
+  const { data, error } = await client.rpc('pin_from_status_total', { query_status: status })
 
   if (error) {
     throw new DBError(error)
