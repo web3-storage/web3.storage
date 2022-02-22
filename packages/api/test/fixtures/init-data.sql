@@ -82,9 +82,9 @@ VALUES (
 );
 
 -- user 'test-pinning' is authorized
-INSERT INTO public.user_tag (user_id, tag, value, value_type, reason)
-VALUES  (4, 'PSA_ENABLED', true, 'boolean', 'test'),
-        (5, 'PSA_ENABLED', true, 'boolean', 'test');
+INSERT INTO public.user_tag (user_id, tag, value, reason)
+VALUES  (4, 'HasPsaAccess', true, 'test'),
+        (5, 'HasPsaAccess', true, 'test');
 
 INSERT INTO content (cid)
 VALUES  ('bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4'),

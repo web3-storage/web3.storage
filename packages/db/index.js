@@ -148,7 +148,7 @@ export class DBClient {
       .from('user_tag')
       .select('value', { count: 'exact' })
       .eq('user_id', userId)
-      .eq('tag', 'PSA_ENABLED')
+      .eq('tag', 'HasPsaAccess')
       .eq('value', true)
       .filter('deleted_at', 'is', null)
 
