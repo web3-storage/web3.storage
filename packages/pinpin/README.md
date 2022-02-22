@@ -4,8 +4,8 @@
 Backup all content pinned on our IPFS Cluster to Piñata's infra.
 
 It's a task queue! Fetch the oldest 600 PinRequests from the DB and pin them on Piñata, then delete the PinRequests from the db when successfully submitted.
-- At the time of writing the Fauna query to fetch PinRequests hits errors if a batch size other than 600 is used.
-- We can only upload to Piñata at 3req/s max, as they have rate-limiting in place.
+
+NOTE: We can only upload to Piñata at 3req/s max, as they have rate-limiting in place.
 
 ## Getting started
 
