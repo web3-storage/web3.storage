@@ -78,6 +78,7 @@ export function envAll (req, env, ctx) {
   env.sentry = env.SENTRY_DSN && new Toucan({
     dsn: env.SENTRY_DSN,
     context: ctx,
+    request: req,
     allowedHeaders: ['user-agent', 'x-client'],
     allowedSearchParams: /(.*)/,
     debug: false,

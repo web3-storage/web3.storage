@@ -29,7 +29,7 @@ prog
       entryPoints: [path.join(__dirname, '..', 'src', 'index.js')],
       bundle: true,
       format: 'esm',
-      outfile: path.join(__dirname, '..', 'dist', 'index.mjs'),
+      outfile: path.join(__dirname, '..', 'dist', 'worker.mjs'),
       legalComments: 'external',
       inject: [path.join(__dirname, 'node-globals.js')],
       plugins: [{
