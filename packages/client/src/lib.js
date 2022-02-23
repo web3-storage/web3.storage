@@ -104,6 +104,7 @@ class Web3Storage {
   } = {}) {
     const blockstore = new Blockstore()
     try {
+      console.log('packing!')
       const { out, root } = await pack({
         input: Array.from(files).map((f) => ({
           path: f.name,
@@ -114,6 +115,7 @@ class Web3Storage {
         maxChunkSize: 1048576,
         maxChildrenPerNode: 1024
       })
+      console.log('packed!')
       onRootCidReady && onRootCidReady(root.toString())
       const car = await CarReader.fromIterable(out)
       return await Web3Storage.putCar({ endpoint, token }, car, { onStoredChunk, maxRetries, name })
