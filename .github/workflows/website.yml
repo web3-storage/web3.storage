@@ -21,6 +21,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
+      - # See https://github.com/npm/cli/issues/3637
+      - run: npm i -g npm@7.20.2
       - run: npm i && npm i -w packages/website
       - uses: bahmutov/npm-install@v1
       - run: npm run lint:ts -w packages/website
@@ -35,6 +37,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
+      - # See https://github.com/npm/cli/issues/3637
+      - run: npm i -g npm@7.20.2
       - run: npm i && npm i -w packages/website
       - uses: bahmutov/npm-install@v1
       - run: npm run build -w packages/client
