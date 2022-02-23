@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>web3.storage</title>
+    <style>
+      body {
+        font-size: 16px;
+        font-family: -apple-system, system-ui;
+        padding: 0;
+        margin: 0;
+      }
+      form {
+        width: 500px;
+        padding: 16px;
+        max-width: 100%;
+        display: block;
+        margin: 0 auto;
+        color:#333;
+      }
+      label {
+        display: block;
+        padding: 32px 0 8px;
+        font-weight: 700;
+      }
+      #token {
+        width: 100%;
+        padding: 4px;
+        font-size: 1.2rem;
+      }
+      #output {
+        display: block;
+        padding: 16px;
+        margin: 0;
+        color: lime;
+        background:#222;
+        font-family: Courier New, ui-monospace, monospace;
+        font-weight: 500;
+        line-height: 1.6;
+        position: fixed;
+        bottom: 0;
+        height: 33.3%;
+        width: 100%;
+        overflow-y: scroll;
+      }
+      #output a {
+        color: aqua
+      }
+      input[type=submit] {
+        display: block;
+        padding: 4px 16px;
+        font-weight: 700;
+        font-size: 16px;
+        margin-top: 32px;
+      }
+      h1 {
+        text-align: center;
+        font-size: 24px;
+      }
+      h1 span {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>⁂
+        <span>web3.storage</span>
+      </h1>
+    </header>
+    <form id="upload-form">
+      <label for="token">Paste your web3.storage API token here</label>
+      <input type="password" id="token" required />
+      <label>Pick files to store</label>
+      <input type="file" id="filepicker" name="fileList" multiple required />
+      <input type="submit" value="Submit" id="submit" />
+    </form>
+    <div id="output"></div>
+    <script type="module">
+      import { Web3Storage } from 'https://cdn.jsdelivr.net/npm/web3.storage/dist/bundle.esm.min.js'
+
+      const form = document.querySelector('#upload-form')
+      const filepicker = document.querySelector('#filepicker')
+      const tokenInput = document.querySelector('#token')
+      const output = document.querySelector('#output')
+
+      showMessage('> ⁂ waiting for form submission...')
+
+      form.addEventListener('submit', async function (event) {
+        // don't reload the page!
+        event.preventDefault()
+
+        showMessage('> 📦 creating web3.storage client')
+        const token = tokenInput.value
+        const client = new Web3Storage({ token })
+
+        showMessage('> 🤖 chunking and hashing the files (in your browser!) to calculate the Content ID')
+        const files = filepicker.files
+        const cid = await client.put(files, {
+          onRootCidReady: (localCid) => {
+            showMessage(`> 🔑 locally calculated Content ID: ${localCid} `)
+            showMessage('> 📡 sending files to web3.storage ')
+          },
+          onStoredChunk: (bytes) => showMessage(`> 🛰 sent ${bytes.toLocaleString()} bytes to web3.storage`)
+        })
+        showMessage(`> ✅ web3.storage now hosting ${cid}`)
+        showLink(`https://dweb.link/ipfs/${cid}`)
+      }, false)
+
+      function showMessage (text) {
+        const node = document.createElement('div')
+        node.innerText = text
+        output.appendChild(node)
+      }
+
+      function showLink (url) {
+        const node = document.createElement('a')
+        node.href = url
+        node.innerText = `> 🔗 ${url}`
+        output.appendChild(node)
+      }
+    </script>
+  </body>
+</html>

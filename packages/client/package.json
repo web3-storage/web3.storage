@@ -34,6 +34,7 @@
     "@web-std/blob": "^3.0.1",
     "@web-std/fetch": "^3.0.0",
     "@web-std/file": "^3.0.0",
+    "@web3-storage/parse-link-header": "^3.0.0",
     "browser-readablestream-to-it": "^1.0.3",
     "carbites": "^1.0.6",
     "cborg": "^1.6.0",
@@ -42,7 +43,6 @@
     "ipns": "^0.16.0",
     "libp2p-crypto": "^0.21.0",
     "p-retry": "^4.5.0",
-    "parse-link-header": "^2.0.0",
     "streaming-iterables": "^6.0.0",
     "uint8arrays": "^3.0.0"
   },
@@ -52,7 +52,6 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.1.3",
     "@types/mocha": "9.0.0",
-    "@types/parse-link-header": "^1.0.1",
     "bundlesize": "^0.18.1",
     "cors": "^2.8.5",
     "del-cli": "^4.0.0",
