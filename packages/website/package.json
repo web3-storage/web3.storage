@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "rm -rf .next && next dev -p 4000",
     "start": "next start",
-    "build": "next build && next-sitemap && next export",
+    "build": "npm ci && next build && next-sitemap && next export",
     "export": "next export",
     "test": "eslint './**/*.js' && tsc --build",
     "lint": "yarn lint:ts",
