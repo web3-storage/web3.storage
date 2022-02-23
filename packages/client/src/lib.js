@@ -166,6 +166,7 @@ class Web3Storage {
       const carFile = new Blob(carParts, { type: 'application/car' })
       const res = await pRetry(
         async () => {
+          console.log('fetch!', url.toString())
           const request = await fetch(url.toString(), {
             method: 'POST',
             headers,
