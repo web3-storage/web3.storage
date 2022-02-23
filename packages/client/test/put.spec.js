@@ -84,20 +84,24 @@ describe('put', () => {
     assert.equal(cid, expectedCid, 'returned cid matches the CAR')
   })
 
-  it('adds big files', async function () {
+  it.only('adds big files', async function () {
     this.timeout(30e3)
     const client = new Web3Storage({ token, endpoint })
     let uploadedChunks = 0
 
+    console.log('generating data')
     const files = [
       new File([randomBytes(1024e6)], '102mb.txt')
     ]
+    console.log('generated data!')
 
+    console.log('putting files')
     await client.put(files, {
       onStoredChunk: () => {
         uploadedChunks++
       }
     })
+    console.log('done putting files!')
     assert.ok(uploadedChunks >= 100)
   })
 })
