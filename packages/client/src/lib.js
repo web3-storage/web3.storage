@@ -171,7 +171,9 @@ class Web3Storage {
             headers,
             body: carFile
           })
+          console.log('status', request.status)
           const res = await request.json()
+          console.log({ responseData: res })
           if (!request.ok) {
             throw new Error(res.message)
           }

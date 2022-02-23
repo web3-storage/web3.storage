@@ -98,6 +98,7 @@ describe('put', () => {
     console.log('putting files')
     await client.put(files, {
       onStoredChunk: () => {
+        console.log('stored chunk!')
         uploadedChunks++
       }
     })
