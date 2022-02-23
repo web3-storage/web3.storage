@@ -128,6 +128,9 @@
   border-radius: 5px;
   position: relative;
   margin-right: 1.125rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 
   &:last-child {
     margin-right: 0;
@@ -155,27 +158,39 @@
   }
 
   .feature-wrapper {
-    img {
-      border-radius: 50%;
-      border: solid 4px white !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    .image-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+      img {
+        border-radius: 50%;
+        border: solid 4px white !important;
+      }
+    }
+    .title {
+      @include fontSize_Small;
+      @include fontWeight_Semibold;
+      line-height: leading(34, 16);
+      margin-bottom: 0.625rem;
+    }
+
+    .subtitle {
+      @include fontSize_Tiny;
+      @include fontWeight_Regular;
+      line-height: leading(22, 16);
+      margin-bottom: 1rem;
     }
   }
 
-  .title {
-    @include fontSize_Small;
-    @include fontWeight_Semibold;
-    line-height: leading(34, 16);
-    margin-bottom: 0.625rem;
-  }
-
-  .subtitle {
-    @include fontSize_Tiny;
-    @include fontWeight_Regular;
-    line-height: leading(22, 16);
-    margin-bottom: 1rem;
-  }
-
   .description {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     @include fontSize_Mini;
     @include fontWeight_Regular;
     line-height: leading(22, 15);

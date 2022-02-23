@@ -101,7 +101,15 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
           </div>
         );
       case 'C':
-        return <Image unoptimized alt="" src={obj.image} width="64" height="64" />;
+        return (
+          <>
+            <div className="image-wrapper">
+              <Image unoptimized alt="" src={obj.image} width="64" height="64" />
+            </div>
+            {card.title && <div className="title">{card.title}</div>}
+            {card.subtitle && <div className="subtitle">{card.subtitle}</div>}
+          </>
+        );
       case 'D':
         return renderExploreCards(obj);
       default:
@@ -149,9 +157,9 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
 
       {<div className={clsx('feature-wrapper', targetClass)}>{getFeaturedElement(card)}</div>}
 
-      {card.title && <div className="title">{card.title}</div>}
+      {card.title && card.type !== 'C' && <div className="title">{card.title}</div>}
 
-      {card.subtitle && <div className="subtitle">{card.subtitle}</div>}
+      {card.subtitle && card.type !== 'C' && <div className="subtitle">{card.subtitle}</div>}
 
       {card.description && (
         <div className={clsx('description', targetClass)}>
