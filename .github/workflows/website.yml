@@ -21,8 +21,9 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
+      - run: npm i
       - uses: bahmutov/npm-install@v1
-      - run: npm run lint:ts:fix --workspace packages/website
+      - run: npm run lint:ts --workspace packages/website
 
   build:
     name: Build & Add to IPFS
@@ -34,6 +35,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
+      - run: npm i
       - uses: bahmutov/npm-install@v1
       - run: npm run build -w packages/client
       - run: npm run build -w packages/website
