@@ -17,7 +17,7 @@ const prog = sade('api')
 prog
   .command('build')
   .describe('Build the worker.')
-  .option('--env', 'Environment', 'dev')
+  .option('--env', 'Environment', process.env.ENV)
   .action(async (opts) => {
     // Release name cannot contain slashes, and are global per org, so we use
     // custom prefix here not pkg.name.
