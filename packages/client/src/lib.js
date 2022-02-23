@@ -158,8 +158,10 @@ class Web3Storage {
      * @returns {Promise<CIDString>}
      */
     const onCarChunk = async car => {
+      console.log('onCarChunk')
       const carParts = []
       for await (const part of car) {
+        console.log('part', part)
         carParts.push(part)
       }
 
