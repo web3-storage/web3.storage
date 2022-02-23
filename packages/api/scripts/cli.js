@@ -23,6 +23,7 @@ prog
     // custom prefix here not pkg.name.
     // See https://docs.sentry.io/platforms/javascript/guides/cordova/configuration/releases/
     const sentryRelease = `web3-api@${pkg.version}-${opts.env}+${git.short(__dirname)}`
+    console.log(`Building ${sentryRelease}`)
 
     await build({
       entryPoints: [path.join(__dirname, '..', 'src', 'index.js')],
@@ -58,6 +59,7 @@ prog
 
     // Sentry release and sourcemap upload
     if (process.env.SENTRY_UPLOAD === 'true') {
+      console.log(`Uploading to Sentry ${sentryRelease}`)
       const cli = new Sentry(undefined, {
         authToken: process.env.SENTRY_TOKEN,
         org: 'protocol-labs-it',
