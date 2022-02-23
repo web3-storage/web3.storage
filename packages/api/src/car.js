@@ -7,7 +7,6 @@ import { sha256 } from 'multiformats/hashes/sha2'
 import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
-import retry from 'p-retry'
 import { InvalidCarError } from './errors.js'
 import { GATEWAY, LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
@@ -19,11 +18,6 @@ import { normalizeCid } from './utils/cid.js'
  */
 
 const decoders = [pb, raw, cbor]
-
-// Times to retry the transaction after the first failure.
-const CREATE_UPLOAD_RETRIES = 4
-// Time in ms before starting the first retry.
-const CREATE_UPLOAD_MAX_TIMEOUT = 100
 
 /**
  * TODO: ipfs should let us ask the size of a CAR file.
@@ -137,26 +131,18 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   }
 
   const normalizedCid = normalizeCid(cid)
-  // Store in DB
-  // Retried because it's possible to receive the error:
-  // "Transaction was aborted due to detection of concurrent modification."
-  await retry(() => (
-    env.db.createUpload({
-      user: user._id,
-      authKey: authToken?._id,
-      contentCid: normalizedCid,
-      sourceCid: cid,
-      name,
-      type: uploadType,
-      backupUrls: backupKey
-        ? [`https://${env.s3BucketName}.s3.${env.s3BucketRegion}.amazonaws.com/${backupKey}`]
-        : [],
-      pins,
-      dagSize
-    })
-  ), {
-    retries: CREATE_UPLOAD_RETRIES,
-    minTimeout: CREATE_UPLOAD_MAX_TIMEOUT
+  await env.db.createUpload({
+    user: user._id,
+    authKey: authToken?._id,
+    contentCid: normalizedCid,
+    sourceCid: cid,
+    name,
+    type: uploadType,
+    backupUrls: backupKey
+      ? [`https://${env.s3BucketName}.s3.${env.s3BucketRegion}.amazonaws.com/${backupKey}`]
+      : [],
+    pins,
+    dagSize
   })
 
   /** @type {(() => Promise<any>)[]} */
