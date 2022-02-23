@@ -45,6 +45,7 @@ jobs:
         # workaround for https://github.com/cloudflare/wrangler-action/issues/59 to use node 16
         uses: web3-storage/wrangler-action@node16
         env:
+          ENV: 'staging' # inform the build process what the env is
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
           SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
         with:
@@ -84,6 +85,7 @@ jobs:
         # workaround for https://github.com/cloudflare/wrangler-action/issues/59 to use node 16
         uses: web3-storage/wrangler-action@node16
         env:
+          ENV: 'production' # inform the build process what the env is
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
           SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
         with:
