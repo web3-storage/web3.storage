@@ -87,7 +87,7 @@ npm run stop:clean
 
 5. If the schema changes include creating a new table, type or view update `reset.sql` as well.
 
-6. Add the required migration script(s) to [postgres/migration](./postgres/migrations/) folder. Please follow the naming convention and add an incremental number suffix to the name of the migration file.
+6. Add the required migration script(s) to [postgres/migrations](./postgres/migrations/) folder. Please follow the naming convention and add an incremental number prefix to the name of the migration file.
 
 7. Once the PR is merged to main please add a comment to the [release-please](https://github.com/googleapis/release-please) PR pointing to the migrations script.  
     ie
