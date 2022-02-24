@@ -1,3 +1,4 @@
+/* global BRANCH, VERSION, COMMITHASH, SENTRY_RELEASE */
 import Toucan from 'toucan-js'
 import { S3Client } from '@aws-sdk/client-s3/dist-es/S3Client.js'
 import { Magic } from '@magic-sdk/admin'
@@ -71,6 +72,11 @@ export function envAll (req, env, ctx) {
   if (!env.PG_REST_URL) {
     throw new Error('MISSING ENV. Please set PG_REST_URL')
   }
+  // These values are replaced at build time by esbuild `define`
+  env.BRANCH = BRANCH
+  env.VERSION = VERSION
+  env.COMMITHASH = COMMITHASH
+  env.SENTRY_RELEASE = SENTRY_RELEASE
 
   env.sentry = env.SENTRY_DSN && new Toucan({
     dsn: env.SENTRY_DSN,

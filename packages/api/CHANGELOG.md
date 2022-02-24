@@ -1,5 +1,19 @@
 # Changelog
 
+## [5.2.0](https://github.com/web3-storage/web3.storage/compare/api-v5.1.4...api-v5.2.0) (2022-02-22)
+
+
+### Features
+
+* custom message for pin unauthorised ([#995](https://github.com/web3-storage/web3.storage/issues/995)) ([38c2e22](https://github.com/web3-storage/web3.storage/commit/38c2e22f0e71a2e6e20c176fe8cb42a4e2979fc5))
+* pins list filter by meta ([#927](https://github.com/web3-storage/web3.storage/issues/927)) ([486a0cd](https://github.com/web3-storage/web3.storage/commit/486a0cdcb82d73f2f07b76ffdc4f8d08b41a9d6a))
+
+
+### Bug Fixes
+
+* handle maintenance error ([#1019](https://github.com/web3-storage/web3.storage/issues/1019)) ([9068490](https://github.com/web3-storage/web3.storage/commit/9068490aaa4dbe037e8e6aa9eaad706a46f11aed))
+* remove api db create upload retry ([#1018](https://github.com/web3-storage/web3.storage/issues/1018)) ([e6a2f83](https://github.com/web3-storage/web3.storage/commit/e6a2f8310d812fe6f1b222ddd603b543a2f4d5e7))
+
 ### [5.1.4](https://github.com/web3-storage/web3.storage/compare/api-v5.1.3...api-v5.1.4) (2022-02-14)
 
 
