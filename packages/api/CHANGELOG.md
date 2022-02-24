@@ -1,5 +1,19 @@
 # Changelog
 
+## [5.3.0](https://github.com/web3-storage/web3.storage/compare/api-v5.2.0...api-v5.3.0) (2022-02-24)
+
+
+### Features
+
+* update metrics and add psa pin requests to metrics ([d647ecb](https://github.com/web3-storage/web3.storage/commit/d647ecb90bbf7e068b9394f42b1c535671346d71))
+
+
+### Bug Fixes
+
+* use ipfs peerId as pin location ([#966](https://github.com/web3-storage/web3.storage/issues/966)) ([5ae212d](https://github.com/web3-storage/web3.storage/commit/5ae212da21692da2fe9d08a53463b15875ec0cd7))
+* use upsertpins ([#938](https://github.com/web3-storage/web3.storage/issues/938)) ([d593a19](https://github.com/web3-storage/web3.storage/commit/d593a19a1c595b201ab27d62db23d2b6c4dc1bf2))
+* version endpoint info ([#1024](https://github.com/web3-storage/web3.storage/issues/1024)) ([049f9b8](https://github.com/web3-storage/web3.storage/commit/049f9b823a0b6406a6cc8105ca65c459a7646d15))
+
 ## [5.2.0](https://github.com/web3-storage/web3.storage/compare/api-v5.1.4...api-v5.2.0) (2022-02-22)
 
 
