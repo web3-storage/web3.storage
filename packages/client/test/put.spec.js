@@ -9,6 +9,7 @@ import { CID } from 'multiformats/cid'
 import { encode } from 'multiformats/block'
 import * as json from '@ipld/dag-json'
 import { sha256 } from 'multiformats/hashes/sha2'
+import { ReadableStream } from '@web-std/blob'
 
 describe('put', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
@@ -84,25 +85,30 @@ describe('put', () => {
     assert.equal(cid, expectedCid, 'returned cid matches the CAR')
   })
 
-  it.only('adds big files', async function () {
+  it('adds big files', async function () {
     this.timeout(30e3)
     const client = new Web3Storage({ token, endpoint })
     let uploadedChunks = 0
 
-    console.log('generating data')
     const files = [
-      new File([randomBytes(1024e6)], '102mb.txt')
+      {
+        name: '102mb.txt',
+        stream () {
+          return new ReadableStream({
+            pull (controller) {
+              controller.enqueue(randomBytes(1024e6))
+              controller.close()
+            }
+          })
+        }
+      }
     ]
-    console.log('generated data!')
 
-    console.log('putting files')
     await client.put(files, {
       onStoredChunk: () => {
-        console.log('stored chunk!')
         uploadedChunks++
       }
     })
-    console.log('done putting files!')
     assert.ok(uploadedChunks >= 100)
   })
 })

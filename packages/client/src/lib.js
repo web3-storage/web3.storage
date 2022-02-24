@@ -104,7 +104,6 @@ class Web3Storage {
   } = {}) {
     const blockstore = new Blockstore()
     try {
-      console.log('packing!')
       const { out, root } = await pack({
         input: Array.from(files).map((f) => ({
           path: f.name,
@@ -115,7 +114,6 @@ class Web3Storage {
         maxChunkSize: 1048576,
         maxChildrenPerNode: 1024
       })
-      console.log('packed!')
       onRootCidReady && onRootCidReady(root.toString())
       const car = await CarReader.fromIterable(out)
       return await Web3Storage.putCar({ endpoint, token }, car, { onStoredChunk, maxRetries, name })
@@ -160,25 +158,20 @@ class Web3Storage {
      * @returns {Promise<CIDString>}
      */
     const onCarChunk = async car => {
-      console.log('onCarChunk')
       const carParts = []
       for await (const part of car) {
-        console.log('part', part)
         carParts.push(part)
       }
 
       const carFile = new Blob(carParts, { type: 'application/car' })
       const res = await pRetry(
         async () => {
-          console.log('fetch!', url.toString())
           const request = await fetch(url.toString(), {
             method: 'POST',
             headers,
             body: carFile
           })
-          console.log('status', request.status)
           const res = await request.json()
-          console.log({ responseData: res })
           if (!request.ok) {
             throw new Error(res.message)
           }

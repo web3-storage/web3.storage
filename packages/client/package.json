@@ -14,7 +14,7 @@
   "homepage": "https://github.com/web3-storage/web3.storage#readme",
   "scripts": {
     "test": "npm-run-all -p -r mock:api test:all",
-    "test:all": "run-s test:esm",
+    "test:all": "run-s test:web test:cjs test:esm test:size",
     "test:size": "bundlesize",
     "test:web": "API_PORT=1337 playwright-test test/*.spec.js",
     "test:cjs": "API_PORT=1337 mocha dist/test/*.spec.cjs --exit",

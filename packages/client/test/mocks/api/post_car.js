@@ -8,7 +8,6 @@ const { CarReader } = require('@ipld/car')
  * @param {{ params: Record<string, string>, files: MultrFile[] }} request
  */
 module.exports = async ({ body, headers }) => {
-  console.log('IN POST CAR HANDLER')
   if (!headers.authorization || headers.authorization === 'Bearer bad') {
     return {
       statusCode: !headers.authorization ? 401 : 403
@@ -16,9 +15,7 @@ module.exports = async ({ body, headers }) => {
   }
   let car
   try {
-    console.log('CAR FROM BYTES')
     car = await CarReader.fromBytes(body)
-    console.log('GOT CAR FROM BYTES!')
   } catch (err) {
     return {
       statusCode: 400,
@@ -28,9 +25,7 @@ module.exports = async ({ body, headers }) => {
       }
     }
   }
-  console.log('CAR ROOTS')
   const [root] = await car.getRoots()
-  console.log('GOT CAR ROOTS', root)
   const carRootCid = root.toString()
 
   // Testing Failure
