@@ -67,7 +67,7 @@ If you'd like to also clear the database and all docker artifacts you can run
 npm run stop:clean
 ```
 
-### 4. Alter DB schema
+### 4. Alter DB schema and migrations
 
 1. Add the schema changes to `db/postgres` sql files as needed.
 
@@ -86,6 +86,13 @@ npm run stop:clean
 4. Add the schema changes to `db-client-types.ts` as well.
 
 5. If the schema changes include creating a new table, type or view update `reset.sql` as well.
+
+6. Add the required migration script(s) to [postgres/migration](./postgres/migrations/) folder. Please follow the naming convention and add an incremental number suffix to the name of the migration file.
+
+7. Once the PR is merged to main please add a comment to the [release-please](https://github.com/googleapis/release-please) PR pointing to the migrations script.  
+    ie
+    > Required migration [000-fix-peer_location.peer_id.sql](./postgres/migrations/000-fix-peer_location.peer_id.sql)
+    
 
 ## DB package CLI
 The `scripts/cli.js` to run some common operations on the database.
