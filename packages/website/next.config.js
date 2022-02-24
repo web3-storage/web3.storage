@@ -39,6 +39,7 @@ const nextConfig = {
       '/ipfs-404.html': { page: '/404' },
     }
   },
+  swcMinify: false
 }
 
 module.exports = nextConfig
