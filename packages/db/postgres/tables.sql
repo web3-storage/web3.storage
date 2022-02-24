@@ -8,6 +8,15 @@ CREATE TYPE auth_key_blocked_status_type AS ENUM
   'Unblocked'
 );
 
+-- User tags are associated to a user for the purpose of granting/restricting them
+-- in the application.
+CREATE TYPE user_tag_type AS ENUM
+(
+  'HasAccountRestriction',
+  'HasPsaAccess',
+  'StorageLimitBytes'
+);
+
 -- A user of web3.storage.
 CREATE TABLE IF NOT EXISTS public.user
 (
@@ -24,8 +33,23 @@ CREATE TABLE IF NOT EXISTS public.user
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
-
 CREATE INDEX IF NOT EXISTS user_updated_at_idx ON public.user (updated_at);
+
+
+CREATE TABLE IF NOT EXISTS public.user_tag
+(
+  id              BIGSERIAL PRIMARY KEY,
+  user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
+  tag             user_tag_type                                                 NOT NULL,
+  value           TEXT                                                          NOT NULL,
+  reason          TEXT                                                          NOT NULL,
+  inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())     NOT NULL,
+  deleted_at  TIMESTAMP WITH TIME ZONE
+);
+CREATE UNIQUE INDEX IF NOT EXISTS user_tag_is_deleted_idx ON user_tag (user_id, tag, deleted_at)
+WHERE deleted_at IS NOT NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS user_tag_is_not_deleted_idx ON user_tag (user_id, tag)
+WHERE deleted_at IS NULL;
 
 -- User authentication keys.
 CREATE TABLE IF NOT EXISTS auth_key

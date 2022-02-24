@@ -110,7 +110,7 @@ describe('POST /car', () => {
 
     assert.strictEqual(res.ok, false)
     const { message } = await res.json()
-    assert.strictEqual(message, 'empty CAR')
+    assert.strictEqual(message, 'Invalid CAR file received: empty CAR')
   })
 
   it('should throw for CAR with no roots', async () => {
@@ -140,7 +140,7 @@ describe('POST /car', () => {
 
     assert.strictEqual(res.ok, false)
     const { message } = await res.json()
-    assert.strictEqual(message, 'missing roots')
+    assert.strictEqual(message, 'Invalid CAR file received: missing roots')
   })
 
   it('should throw for CAR with multiple roots', async () => {
@@ -173,7 +173,7 @@ describe('POST /car', () => {
 
     assert.strictEqual(res.ok, false)
     const { message } = await res.json()
-    assert.strictEqual(message, 'too many roots')
+    assert.strictEqual(message, 'Invalid CAR file received: too many roots')
   })
 
   it('should throw for CAR with one root block that has links', async () => {
@@ -206,6 +206,6 @@ describe('POST /car', () => {
 
     assert.strictEqual(res.ok, false)
     const { message } = await res.json()
-    assert.strictEqual(message, 'CAR must contain at least one non-root block')
+    assert.strictEqual(message, 'Invalid CAR file received: CAR must contain at least one non-root block')
   })
 })
