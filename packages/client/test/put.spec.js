@@ -91,6 +91,15 @@ describe('put', () => {
     let uploadedChunks = 0
 
     const files = [
+      // Previously: new File([randomBytes(1024e6)], '102mb.txt')
+      //
+      // Node.js currently copies the buffer on every iteration when obtaining a
+      // stream from File.stream(). It also has a fixed and small chunk size of
+      // 65536 bytes. This makes reading the stream VERY slow and this test
+      // fails because it times out.
+      //
+      // TODO: revert to using File if this issue gets resolved:
+      // https://github.com/nodejs/node/issues/42108
       {
         name: '102mb.txt',
         stream () {

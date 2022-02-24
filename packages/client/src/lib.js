@@ -4,8 +4,6 @@
  * from a web browser or [Node.js](https://nodejs.org/) and comes bundled with
  * TS for out-of-the box type inference and better IntelliSense.
  *
- * Test
- *
  * @example
  * ```js
  * import { Web3Storage, File } from 'web3.storage'
