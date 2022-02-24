@@ -86,7 +86,7 @@ describe('put', () => {
   })
 
   it('adds big files', async function () {
-    this.timeout(30e3)
+    this.timeout(60e3)
     const client = new Web3Storage({ token, endpoint })
     let uploadedChunks = 0
 
