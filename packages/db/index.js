@@ -160,20 +160,20 @@ export class DBClient {
   }
 
   /**
-   * Get used storage in bytes.
+   * Get used storage in bytes, both uploaded and pinned.
    *
    * @param {number} userId
-   * @returns {Promise<number>}
+   * @returns {Promise<import('./db-client-types').UsedStorage>}
    */
   async getUsedStorage (userId) {
-    /** @type {{ data: string, error: PostgrestError }} */
+    /** @type {{ data: import('./db-client-types').UsedStorage, error: PostgrestError }} */
     const { data, error } = await this._client.rpc('user_used_storage', { query_user_id: userId }).single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    return data || 0 // No uploads for the user
+    return data
   }
 
   /**

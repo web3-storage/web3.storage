@@ -28,7 +28,8 @@ describe('GET /user/account', () => {
     })
     assert(res.ok)
     const data = await res.json()
-    assert.strictEqual(data.usedStorage, 0)
+    assert.strictEqual(parseInt(data.usedStorage.uploaded), 32000)
+    assert.strictEqual(parseInt(data.usedStorage.pinned), 10000)
   })
 })
 

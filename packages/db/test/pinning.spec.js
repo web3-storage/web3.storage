@@ -60,6 +60,7 @@ describe('Pin Request', () => {
 
   const meta = { key: 'value' }
   const origins = ['origin1', 'origin2']
+  const dagSize1 = 200
 
   const normalizedCids = cids.map(cid => normalizeCid(cid))
 
@@ -73,7 +74,7 @@ describe('Pin Request', () => {
       }
     },
     {
-      status: 'Pinning',
+      status: 'Pinned',
       location: {
         peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
         peerName: 'web3-storage-sv16',
@@ -100,6 +101,7 @@ describe('Pin Request', () => {
     aPinRequestInput = {
       sourceCid: cids[0],
       contentCid: normalizedCids[0],
+      dagSize: dagSize1,
       meta,
       origins,
       pins,
@@ -152,6 +154,13 @@ describe('Pin Request', () => {
       const statuses = aPinRequestOutput.pins
         .map((p) => p.status)
       assert.deepStrictEqual(statuses, [pins[0].status, pins[1].status])
+    })
+
+    it('includes pinned size in used storage', async () => {
+      const usedStorage = await client.getUsedStorage(user._id)
+      console.table(usedStorage)
+      assert.strictEqual(parseInt(usedStorage.uploaded), 0, 'used storage for uploaded')
+      assert.strictEqual(parseInt(usedStorage.pinned), dagSize1, 'used storage for pinned')
     })
   })
 
@@ -308,6 +317,7 @@ describe('Pin Request', () => {
           authKey: authKeyPinList,
           sourceCid: sourceCid,
           contentCid: normalizedCid,
+          dagSize: 10,
           pins: item.pins || pinnedPins,
           meta: item.meta
         })

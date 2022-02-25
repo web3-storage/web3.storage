@@ -33,7 +33,7 @@ const MAX_STORAGE = 1.1e+12 /* 1 TB */
 
 /**
  * @typedef {Object} StorageData
- * @property {Number} usedStorage
+ * @property {{ uploaded: number, pinned: number }} usedStorage
  */
 
 /**
@@ -46,7 +46,7 @@ const StorageInfo = ({ isLoggedIn }) => {
   })
 
   /** @type {StorageData} */
-  const storageData = data || {usedStorage: 0};
+  const storageData = data || { usedStorage: { uploaded: 0, pinned: 0 }};
 
   const mailTo = useMemo(() => {
     const { mail, subject, body } = emailContent
@@ -54,12 +54,12 @@ const StorageInfo = ({ isLoggedIn }) => {
   }, [])
 
   const isLoaded = !isLoading && !isFetching
-  const percentage = Math.ceil((storageData.usedStorage || 0) / MAX_STORAGE * 100)
+  const percentage = Math.ceil(((storageData.usedStorage.uploaded)) / MAX_STORAGE * 100)
 
   return <div>
     <When condition={ isLoaded }>
       <div className="text-2xl font-medium">
-        Storage:<span className="font-normal ml-2">{ fileSize(storageData.usedStorage) } of { fileSize(MAX_STORAGE) } used</span>
+        Storage:<span className="font-normal ml-2">{ fileSize((storageData.usedStorage.uploaded)) } of { fileSize(MAX_STORAGE) } used</span>
       </div>
       <div className="h-9 border-2 border-w3storage-red mt-4 bg-white" style={{ maxWidth: '24rem'}}>
         <div className="h-full bg-w3storage-red max-w-full grow-width" style={{
