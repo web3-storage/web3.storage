@@ -1,5 +1,33 @@
 # Changelog
 
+## [5.3.0](https://github.com/web3-storage/web3.storage/compare/api-v5.2.0...api-v5.3.0) (2022-02-24)
+
+
+### Features
+
+* update metrics and add psa pin requests to metrics ([d647ecb](https://github.com/web3-storage/web3.storage/commit/d647ecb90bbf7e068b9394f42b1c535671346d71))
+
+
+### Bug Fixes
+
+* use ipfs peerId as pin location ([#966](https://github.com/web3-storage/web3.storage/issues/966)) ([5ae212d](https://github.com/web3-storage/web3.storage/commit/5ae212da21692da2fe9d08a53463b15875ec0cd7))
+* use upsertpins ([#938](https://github.com/web3-storage/web3.storage/issues/938)) ([d593a19](https://github.com/web3-storage/web3.storage/commit/d593a19a1c595b201ab27d62db23d2b6c4dc1bf2))
+* version endpoint info ([#1024](https://github.com/web3-storage/web3.storage/issues/1024)) ([049f9b8](https://github.com/web3-storage/web3.storage/commit/049f9b823a0b6406a6cc8105ca65c459a7646d15))
+
+## [5.2.0](https://github.com/web3-storage/web3.storage/compare/api-v5.1.4...api-v5.2.0) (2022-02-22)
+
+
+### Features
+
+* custom message for pin unauthorised ([#995](https://github.com/web3-storage/web3.storage/issues/995)) ([38c2e22](https://github.com/web3-storage/web3.storage/commit/38c2e22f0e71a2e6e20c176fe8cb42a4e2979fc5))
+* pins list filter by meta ([#927](https://github.com/web3-storage/web3.storage/issues/927)) ([486a0cd](https://github.com/web3-storage/web3.storage/commit/486a0cdcb82d73f2f07b76ffdc4f8d08b41a9d6a))
+
+
+### Bug Fixes
+
+* handle maintenance error ([#1019](https://github.com/web3-storage/web3.storage/issues/1019)) ([9068490](https://github.com/web3-storage/web3.storage/commit/9068490aaa4dbe037e8e6aa9eaad706a46f11aed))
+* remove api db create upload retry ([#1018](https://github.com/web3-storage/web3.storage/issues/1018)) ([e6a2f83](https://github.com/web3-storage/web3.storage/commit/e6a2f8310d812fe6f1b222ddd603b543a2f4d5e7))
+
 ### [5.1.4](https://github.com/web3-storage/web3.storage/compare/api-v5.1.3...api-v5.1.4) (2022-02-14)
 
 

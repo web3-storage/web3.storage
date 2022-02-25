@@ -16,7 +16,7 @@
 import { transform } from 'streaming-iterables'
 import pRetry from 'p-retry'
 import { pack } from 'ipfs-car/pack'
-import parseLink from 'parse-link-header'
+import { parseLinkHeader } from '@web3-storage/parse-link-header'
 import { unpackStream } from 'ipfs-car/unpack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
 import { CarReader } from '@ipld/car'
@@ -469,13 +469,13 @@ function toWeb3Response (res) {
 async function * paginator (fn, service, opts) {
   let res = await fn(service, opts)
   yield res
-  let link = parseLink(res.headers.get('Link') || '')
+  let link = parseLinkHeader(res.headers.get('Link') || '')
   // @ts-ignore
   while (link && link.next) {
     // @ts-ignore
     res = await fn(service, link.next)
     yield res
-    link = parseLink(res.headers.get('Link') || '')
+    link = parseLinkHeader(res.headers.get('Link') || '')
   }
 }
 

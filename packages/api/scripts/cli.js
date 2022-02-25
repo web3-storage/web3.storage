@@ -17,12 +17,13 @@ const prog = sade('api')
 prog
   .command('build')
   .describe('Build the worker.')
-  .option('--env', 'Environment', 'dev')
+  .option('--env', 'Environment', process.env.ENV)
   .action(async (opts) => {
     // Release name cannot contain slashes, and are global per org, so we use
     // custom prefix here not pkg.name.
     // See https://docs.sentry.io/platforms/javascript/guides/cordova/configuration/releases/
-    const version = `web3-api@${pkg.version}-${opts.env}+${git.short(__dirname)}`
+    const sentryRelease = `web3-api@${pkg.version}-${opts.env}+${git.short(__dirname)}`
+    console.log(`Building ${sentryRelease}`)
 
     await build({
       entryPoints: [path.join(__dirname, '..', 'src', 'index.js')],
@@ -46,10 +47,10 @@ prog
         }
       }],
       define: {
-        VERSION: JSON.stringify(version),
+        SENTRY_RELEASE: JSON.stringify(sentryRelease),
+        VERSION: JSON.stringify(pkg.version),
         COMMITHASH: JSON.stringify(git.long(__dirname)),
         BRANCH: JSON.stringify(git.branch(__dirname)),
-        ENV: opts.env || 'dev',
         global: 'globalThis'
       },
       minify: opts.env !== 'dev',
@@ -58,6 +59,7 @@ prog
 
     // Sentry release and sourcemap upload
     if (process.env.SENTRY_UPLOAD === 'true') {
+      console.log(`Uploading to Sentry ${sentryRelease}`)
       const cli = new Sentry(undefined, {
         authToken: process.env.SENTRY_TOKEN,
         org: 'protocol-labs-it',
@@ -65,18 +67,18 @@ prog
         dist: git.short(__dirname)
       })
 
-      await cli.releases.new(version)
-      await cli.releases.setCommits(version, {
+      await cli.releases.new(sentryRelease)
+      await cli.releases.setCommits(sentryRelease, {
         auto: true,
         ignoreEmpty: true,
         ignoreMissing: true
       })
-      await cli.releases.uploadSourceMaps(version, {
+      await cli.releases.uploadSourceMaps(sentryRelease, {
         include: [path.join(__dirname, '..', 'dist')],
         urlPrefix: '/'
       })
-      await cli.releases.finalize(version)
-      await cli.releases.newDeploy(version, { env: opts.env })
+      await cli.releases.finalize(sentryRelease)
+      await cli.releases.newDeploy(sentryRelease, { env: opts.env })
     }
   })
 

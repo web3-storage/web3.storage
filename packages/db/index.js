@@ -10,7 +10,9 @@ import {
   getPinMetrics,
   getPinStatusMetrics,
   getContentMetrics,
-  getPinBytesMetrics
+  getPinBytesMetrics,
+  getPinRequestsMetrics,
+  getUploadTypeMetrics
 } from './metrics.js'
 
 const uploadQuery = `
@@ -443,14 +445,23 @@ export class DBClient {
   }
 
   /**
-   * Upsert given pin status.
+   * Upsert pins.
    *
-   * @param {Array<import('./db-client-types').PinUpsertInput>} pins
+   * NOTE: currently only used to batch update the pin status.
+   *
+   * @param {Array<import('./db-client-types').PinsUpsertInput>} pins
    */
   async upsertPins (pins) {
+    const now = new Date().toISOString()
     const { error } = await this._client
       .from('pin')
-      .upsert(pins, { count: 'exact', returning: 'minimal' })
+      .upsert(pins.map(pin => ({
+        id: pin.id,
+        status: pin.status,
+        content_cid: pin.cid,
+        pin_location_id: pin.locationId,
+        updated_at: now
+      })), { count: 'exact', returning: 'minimal' })
 
     if (error) {
       throw new DBError(error)
@@ -799,6 +810,12 @@ export class DBClient {
       case 'uploads_total':
         res = await getUploadMetrics(this._client)
         return res.total
+      case 'Car':
+      case 'Blob':
+      case 'Multipart':
+      case 'Upload':
+        res = await getUploadTypeMetrics(this._client, key)
+        return res.total
       case 'content_bytes_total':
         res = await getContentMetrics(this._client)
         return res.totalBytes
@@ -808,14 +825,17 @@ export class DBClient {
       case 'pins_bytes_total':
         res = await getPinBytesMetrics(this._client)
         return res.totalBytes
-      case 'pins_status_queued_total':
-      case 'pins_status_pinning_total':
-      case 'pins_status_pinned_total':
-      case 'pins_status_failed_total':
+      case 'PinQueued':
+      case 'Pinning':
+      case 'Pinned':
+      case 'PinError':
         res = await getPinStatusMetrics(this._client, key)
         return res.total
+      case 'pin_requests_total':
+        res = await getPinRequestsMetrics(this._client)
+        return res.total
       default:
-        throw new Error('unknown metric requested')
+        throw new Error(`unknown metric requested: ${key}`)
     }
   }
 
