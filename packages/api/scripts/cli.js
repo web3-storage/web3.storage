@@ -54,7 +54,7 @@ prog
         global: 'globalThis'
       },
       minify: opts.env !== 'dev',
-      sourcemap: true
+      sourcemap: 'external'
     })
 
     // Sentry release and sourcemap upload
@@ -74,8 +74,9 @@ prog
         ignoreMissing: true
       })
       await cli.releases.uploadSourceMaps(sentryRelease, {
+        // validate: true,
         include: [path.join(__dirname, '..', 'dist')],
-        urlPrefix: '/'
+        ext: ['map', 'mjs']
       })
       await cli.releases.finalize(sentryRelease)
       await cli.releases.newDeploy(sentryRelease, { env: opts.env })

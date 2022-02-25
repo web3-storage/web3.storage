@@ -83,7 +83,8 @@ export function envAll (req, env, ctx) {
     allowedSearchParams: /(.*)/,
     debug: false,
     rewriteFrames: {
-      root: '/'
+      // strip . from start of the filename ./worker.mjs as set by cloudflare, to make absolute path `/worker.mjs`
+      iteratee: (frame) => ({ ...frame, filename: frame.filename.substring(1) })
     },
     environment: env.ENV,
     release: env.SENTRY_RELEASE,
