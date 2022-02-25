@@ -71,7 +71,7 @@
   },
   "bundlesize": [
     {
-      "path": "./dist/index.mjs",
+      "path": "./dist/worker.mjs",
       "maxSize": "1 MB"
     }
   ]
