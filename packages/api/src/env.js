@@ -20,6 +20,7 @@ import pkg from '../package.json'
  * @property {string} [CLUSTER_BASIC_AUTH_TOKEN]
  * @property {string} PG_REST_URL
  * @property {string} PG_REST_JWT
+ * @property {string} GATEWAY_URL
  * @property {string} [S3_BUCKET_ENDPOINT]
  * @property {string} [S3_BUCKET_NAME]
  * @property {string} [S3_BUCKET_REGION]

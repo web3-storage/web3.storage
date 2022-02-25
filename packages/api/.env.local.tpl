@@ -30,4 +30,7 @@ CLUSTER_API_URL=http://127.0.0.1:9094
 # no need for localtunnel, miniflare runs on localhost
 PG_REST_URL=http://127.0.0.1:3000
 
+# IPFS Gateaway URL pointing to dockerised ipfs instance
+GATEWAY_URL=http://localhost:8080
+
 ENV=dev
