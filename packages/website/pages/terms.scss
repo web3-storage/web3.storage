@@ -130,4 +130,14 @@
       }
     }
   }
+  p > a {
+    cursor: pointer;
+    border-bottom: 4px solid #ccc;
+    transition: all 150ms linear;
+    border-image: linear-gradient(45deg, #d726d7 30%, #7e81ff 60%, #31e7ea) 1;
+  }
+
+  p > a:hover {
+    border-width: 2px;
+  }
 }

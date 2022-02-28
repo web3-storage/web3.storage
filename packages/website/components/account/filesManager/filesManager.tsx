@@ -221,7 +221,6 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
                 </span>
               ))}
               size={filesize(item.dagSize)}
-              // TODO: Remove hardcoded highlight when hooked up, resolve temporary type fix for array of strings
               highlight={{ target: 'name', text: keyword?.toString() || '' }}
               numberOfPins={item.pins.length}
               isSelected={!!selectedFiles.find(fileSelected => fileSelected === item)}

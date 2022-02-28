@@ -62,7 +62,7 @@ export type AuthKeyItemOutput = {
 
 // Pin
 export type PinUpsertInput = {
-  id?: definitions['pin']['id'],
+  _id?: string,
   status: definitions['pin']['status'],
   location: Location,
 }
@@ -73,6 +73,12 @@ export type PinItem = PinUpsertInput & {
   updated: definitions['pin']['updated_at']
 }
 
+export type PinsUpsertInput = {
+  id: string
+  status: definitions['pin']['status']
+  cid: definitions['pin_request']['content_cid']
+  locationId: string
+}
 
 export type PinItemOutput = {
   _id?: string
@@ -215,7 +221,7 @@ export type UploadOutput = definitions['upload'] & {
 }
 
 export type Location = {
-  id?: definitions['pin_location']['id']
+  _id?: string
   peerId: definitions['pin_location']['peer_id']
   peerName?: definitions['pin_location']['peer_name']
   region?: definitions['pin_location']['region']
@@ -310,9 +316,9 @@ export type ListPsaPinRequestOptions = {
    */
   limit?: number
   /**
-   * TODO.
+   * Metadata key/value JSON object.
    */
-  meta?: unknown,
+  meta?: object,
 }
 
 export type ListPsaPinRequestResults = {
