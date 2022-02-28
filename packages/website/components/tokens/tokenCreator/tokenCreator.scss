@@ -1,5 +1,10 @@
 .token-creator-container {
   color: $cyan;
+  transition: all $transitionDuration ease-in-out;
+  &:focus-within {
+    transform: scale(1.05);
+  }
+
   @include fontSize_Mini;
   @include medium {
     position: absolute;
@@ -15,16 +20,21 @@
 }
 
 .token-creator-input {
+  transition: all $transitionDurationLong ease-in-out;
   text-decoration: none;
   outline: none;
   min-width: 22.625rem;
   height: 2.375rem;
-  padding: 0 1.875rem;
+  padding: 0 2.5rem 0 1rem;
   color: $cyan;
+
   @include border_Background_Waterloo_White;
   @include medium {
     width: 100%;
     min-width: 0;
+  }
+  &:hover {
+    border-color: $waterloo;
   }
 
   &::placeholder {
@@ -35,20 +45,11 @@
 
 .token-creator-input-container {
   position: relative;
-
-  &:before {
-    content: ' ';
-    position: absolute;
-    left: 1.25rem;
-    height: 1.4375rem;
-    top: 0.5rem;
-    border-right: 0.0625rem solid $doveGray;
-    transform: rotate(10deg);
-  }
 }
 
 .token-creator-submit {
   position: absolute;
   right: 1rem;
   @include fontSize_MediumLarge;
+  @include hoverScale;
 }

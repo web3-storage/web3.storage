@@ -4,37 +4,30 @@
 
 .Dropdown {
   position: relative;
+
   .dropdownButton {
     @include label_5;
     position: relative;
-
     &:after {
       display: inline-block;
       margin-left: 1rem;
       content: '❯';
       transform: rotate(90deg);
       color: $cyan;
+      transition: transform $transitionDuration;
     }
-  }
-
-  &.open .dropdownContent {
-    overflow: visible;
-    animation: none;
-    display: block;
-
-    .dropdownItem.current {
-      background: none;
-      &::before {
-        content: ' ';
-        width: 100%;
-        height: 1.375rem;
-        position: absolute;
-        @include gradient_Background_PinkBlue;
-        opacity: 0.7;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: -1;
+    span {
+      display: inline-block;
+      transition: transform $transitionDuration ease-in-out;
+    }
+    &:hover {
+      span {
+        transform: scale(1.1);
+        transition: transform $transitionDuration ease-in-out;
+      }
+      &:after {
+        transition: transform $transitionDuration;
+        transform: rotate(90deg) translateX(0.125rem);
       }
     }
   }
@@ -43,10 +36,14 @@
     @include fontSize_Tiny;
     @include fontWeight_Regular;
     @include gradient_Blurry_Background_PinkBlue;
-    display: none;
-    left: 50%;
-    transform: translateX(-50%);
-
+    animation: growUp $transitionDuration ease-out forwards;
+    top: 100%;
+    transform-origin: top center;
+    perspective: 1000px;
+    right: -3.5rem;
+    @include medium {
+      right: -1rem;
+    }
     .dropdownItemList {
       @include borderRadius_UltraLarge;
       border: 0.0625rem solid rgba($waterloo, 0.85);
@@ -55,18 +52,79 @@
       z-index: 1;
       overflow: hidden;
     }
-
     .dropdownItem {
       @include leading_Small;
       position: relative;
       padding: 0 1.25rem;
       white-space: nowrap;
+      display: inline-block;
+      transition: background-color $transitionDuration;
       &:first-child {
         margin-top: 0.625rem;
       }
       &:last-child {
         margin-bottom: 0.625rem;
       }
+      &:hover {
+        background-color: $martinique;
+        transition: background-color $transitionDuration;
+      }
     }
+  }
+
+  &.open {
+    .dropdownButton {
+      &:after {
+        transform: rotate(270deg);
+      }
+      &:hover {
+        &:after {
+          transform: rotate(270deg) translateX(0.125rem);
+        }
+      }
+    }
+    .dropdownContent {
+      overflow: visible;
+      animation: growDown $transitionDuration ease-out forwards;
+      display: block;
+      .dropdownItem.current {
+        background: none;
+        &::before {
+          content: ' ';
+          width: 100%;
+          height: 1.375rem;
+          position: absolute;
+          @include gradient_Background_PinkBlue;
+          opacity: 0.7;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: -1;
+        }
+      }
+    }
+  }
+}
+
+@keyframes growDown {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes growUp {
+  0% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0);
+    opacity: 0;
+    display: none;
   }
 }

@@ -84,7 +84,7 @@
 
   .code-feature {
     text-align: left;
-    font-family: 'Suisse Intl Mono';
+    @include monospace_Text;
     @include fontSize_Tiny;
     @include fontWeight_Regular;
     line-height: leading(19, 13);

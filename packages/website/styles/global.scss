@@ -108,7 +108,7 @@ $fontAssetPath: '../assets/fonts';
 // -----------------------------------------------------------------------------
 html,
 body {
-  font-family: $font_Primary;
+  font-family: $font_Primary, helvetica, sans-serif;
   font-size: 16px;
   font-weight: $fontWeight_Regular;
   line-height: $leading_Regular;
@@ -166,7 +166,6 @@ button {
   &.product-app {
     background-color: $ebony;
     @include background_Dark;
-    letter-spacing: 0;
   }
 }
 

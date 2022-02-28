@@ -121,7 +121,6 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
         </div>
         <Button onClick={onSearchFiles} variant={ButtonVariant.TEXT}>
           {content.buttons.search}
-          {'\u00A0\u00A0'}❯
         </Button>
       </div>
       <div className="storage-manager-meter-container">
@@ -140,12 +139,10 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
         )}
       </div>
       <div className="storage-manager-info">
-        {content.prompt}
-        <Button variant={ButtonVariant.TEXT} href={mailTo}>
-          <a href={mailTo} target="_blank" rel="noreferrer">
-            {content.buttons.request}
-          </a>
-        </Button>
+        {content.prompt}&nbsp;
+        <a href={mailTo} target="_blank" rel="noreferrer">
+          {content.buttons.request}
+        </a>
       </div>
     </div>
   );

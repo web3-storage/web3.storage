@@ -10,13 +10,16 @@ import SearchIcon from 'assets/icons/search';
 import RefreshIcon from 'assets/icons/refresh';
 import countly from 'lib/countly';
 import Loading from 'components/loading/loading';
-import Button from 'components/button/button';
+import Button, { ButtonVariant } from 'components/button/button';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
 import Filterable from 'ZeroComponents/filterable/filterable';
 import Sortable from 'ZeroComponents/sortable/sortable';
 import Pagination from 'ZeroComponents/pagination/pagination';
+import Modal from 'modules/zero/components/modal/modal';
 import { formatTimestamp } from 'lib/utils';
 import { useUploads } from 'components/contexts/uploadsContext';
+import GradientBackgroundB from 'assets/illustrations/gradient-background-b';
+import CloseIcon from 'assets/icons/close';
 
 type FilesManagerProps = {
   className?: string;
@@ -34,12 +37,13 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
   const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
   const [itemsPerPage, setItemsPerPage] = useState(null);
   const [keyword, setKeyword] = useState(filter);
+  const [deleteSingleCid, setDeleteSingleCid] = useState('');
+  const deleteModalState = useState(false);
 
   const [selectedFiles, setSelectedFiles] = useState<Upload[]>([]);
   const [isUpdating, setIsUpdating] = useState(false);
   const [nameEditingId, setNameEditingId] = useState();
   const fileRowLabels = content?.table.file_row_labels;
-  const fileDeleteWarning = content?.ui.delete.alert;
 
   // Initial fetch on component load
   useEffect(() => {
@@ -66,7 +70,6 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
       const selectedIndex = selectedFiles.findIndex(fileSelected => fileSelected === file);
       if (selectedIndex !== -1) {
         selectedFiles.splice(selectedIndex, 1);
-
         return setSelectedFiles([...selectedFiles]);
       }
 
@@ -75,17 +78,22 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
     [selectedFiles, setSelectedFiles]
   );
 
-  const onDeleteSelected = useCallback(async () => {
-    if (!window.confirm(fileDeleteWarning)) {
-      countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
-        ui: countly.ui.FILES,
-        totalDeleted: 0,
-      });
-      return;
-    }
+  const closeDeleteModal = useCallback(() => {
+    deleteModalState[1](false);
+    countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
+      ui: countly.ui.FILES,
+      totalDeleted: 0,
+    });
+  }, [deleteModalState]);
 
+  const onDeleteSelected = useCallback(async () => {
     setIsUpdating(true);
-    await Promise.all(selectedFiles.map(({ cid }) => deleteUpload(cid)));
+
+    if (deleteSingleCid !== '') {
+      deleteUpload(deleteSingleCid);
+    } else {
+      await Promise.all(selectedFiles.map(({ cid }) => deleteUpload(cid)));
+    }
 
     countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
       ui: countly.ui.FILES,
@@ -96,35 +104,18 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
     setSelectedFiles([]);
 
     getUploads();
-  }, [selectedFiles, deleteUpload, setIsUpdating, getUploads, fileDeleteWarning]);
+    setDeleteSingleCid('');
+    deleteModalState[1](false);
+  }, [deleteSingleCid, selectedFiles, getUploads, deleteModalState, deleteUpload]);
 
   const onDeleteSingle = useCallback(
     async cid => {
-      if (!window.confirm(fileDeleteWarning)) {
-        countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
-          ui: countly.ui.FILES,
-          totalDeleted: 0,
-        });
-        return;
-      }
-
-      setIsUpdating(true);
-      deleteUpload(cid);
-
-      countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
-        ui: countly.ui.FILES,
-        totalDeleted: 1,
-      });
-
-      setIsUpdating(false);
-      setSelectedFiles([]);
-
-      getUploads();
+      deleteModalState[1](true);
+      setDeleteSingleCid(cid);
     },
-    [deleteUpload, setIsUpdating, getUploads, fileDeleteWarning]
+    [deleteModalState]
   );
 
-  //
   const onEditToggle = useCallback(
     targetCID => async (newFileName?: string) => {
       setNameEditingId(targetCID !== nameEditingId ? targetCID : undefined);
@@ -159,7 +150,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
           onClick={useCallback(_ => getUploads(), [getUploads])}
         >
           <RefreshIcon />
-          {content?.ui.refresh}
+          <span>{content?.ui.refresh}</span>
         </button>
         <Sortable
           items={filteredFiles}
@@ -242,7 +233,10 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
       </div>
       {!!files.length && (
         <div className="files-manager-footer">
-          <button className={clsx('delete', !selectedFiles.length && 'disabled')} onClick={onDeleteSelected}>
+          <button
+            className={clsx('delete', !selectedFiles.length && 'disabled')}
+            onClick={() => deleteModalState[1](true)}
+          >
             {content?.ui.delete.text}
           </button>
           <Pagination
@@ -262,6 +256,27 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
           />
         </div>
       )}
+      <Modal
+        className="delete-modal"
+        animation="ken"
+        modalState={deleteModalState}
+        closeIcon={<CloseIcon className="file-uploader-close" />}
+        showCloseButton
+      >
+        <GradientBackgroundB className="account-gradient-background" />
+        <div className="delete-modal-content">
+          <h5>{content?.ui.delete.heading}</h5>
+          <p>{content?.ui.delete.alert}</p>
+        </div>
+        <div className="delete-modal-buttons">
+          <Button variant={ButtonVariant.OUTLINE_DARK} onClick={onDeleteSelected}>
+            {content?.ui.delete.ok}
+          </Button>
+          <Button variant={ButtonVariant.OUTLINE_DARK} onClick={closeDeleteModal}>
+            {content?.ui.delete.cancel}
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -6,7 +6,6 @@ $date-delete: auto;
 
 .tokens-manager-row {
   @include fontSize_Tiny;
-
   display: grid;
   position: relative;
   padding: 0 1.4rem 0.65rem 0;
@@ -27,8 +26,6 @@ $date-delete: auto;
       padding: 0.85rem 3.975rem 0.85rem 1.375rem;
       justify-content: flex-start;
       border-bottom: 0.0625rem solid rgba(white, 0.05);
-    }
-    @include medium {
       .file-row-label {
         @include fontWeight_Semibold;
         width: 4.5rem;
@@ -42,7 +39,6 @@ $date-delete: auto;
     padding-bottom: 0;
     padding-left: 1.125rem;
     @include fontWeight_Semibold;
-
     @include medium {
       display: none;
     }
@@ -58,6 +54,9 @@ $date-delete: auto;
   @include medium {
     position: absolute;
     right: 1rem;
+  }
+  svg {
+    @include hoverSvg;
   }
 }
 

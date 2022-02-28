@@ -6,6 +6,7 @@ import Button from 'ZeroComponents/button/button';
 /**
  * @typedef {Object} ModalProps
  * @prop {string} [className]
+ * @prop {string} [animation]
  * @prop { [boolean, React.Dispatch<React.SetStateAction<boolean>>] } modalState
  * @prop {boolean} [showCloseButton]
  * @prop {React.ReactNode} [closeIcon]
@@ -17,7 +18,7 @@ import Button from 'ZeroComponents/button/button';
  *
  * @param {ModalProps} props
  */
-const Modal = ({ className, modalState, showCloseButton, closeIcon, children, onClose }) => {
+const Modal = ({ className, modalState, showCloseButton, closeIcon, children, onClose, animation }) => {
   const [isOpen, setModalOpen] = modalState;
 
   const closeModal = useCallback(() => {
@@ -25,38 +26,43 @@ const Modal = ({ className, modalState, showCloseButton, closeIcon, children, on
     onClose?.();
   }, [setModalOpen, onClose]);
 
+  const keydownHandler = useCallback(
+    e => {
+      if (e.key === 'Escape' && isOpen) {
+        closeModal();
+      }
+    },
+    [closeModal, isOpen]
+  );
+
   useEffect(() => {
-    const onKeyPress = ({ key }) => key.toLowerCase() === 'escape' && closeModal();
-
-    if (isOpen) {
-      document.addEventListener('keyup', onKeyPress);
-    } else {
-      document.removeEventListener('keyup', onKeyPress);
-    }
-
+    document.addEventListener('keydown', keydownHandler, false);
     return () => {
-      document.removeEventListener('keyup', onKeyPress);
+      document.removeEventListener('keydown', keydownHandler, false);
     };
-  }, [isOpen, closeModal]);
+  }, [keydownHandler]);
 
-  return isOpen ? (
-    <>
-      <button className={clsx(className, 'modalBackground')} onClick={closeModal} />
-      <div className="modalContainer">
-        <div className="modal">{children}</div>
-        {showCloseButton && (
-          <Button onClick={closeModal} className="modalClose">
-            {closeIcon && <span>&times;</span>}
-          </Button>
-        )}
+  return (
+    <div className={clsx(className, animation, isOpen ? 'modal--open' : 'modal--close', 'Modal')}>
+      <div className="modalBackground" onClick={closeModal} role="presentation"></div>
+      <div className="modalContainer" onClick={e => e.stopPropagation()} role="presentation">
+        <div className="modalInner">
+          {children}
+          {showCloseButton && (
+            <Button onClick={closeModal} className="modalClose">
+              {closeIcon && <span>&times;</span>}
+            </Button>
+          )}
+        </div>
       </div>
-    </>
-  ) : null;
+    </div>
+  );
 };
 
 Modal.defaultProps = {
   modalState: null,
   showCloseButton: true,
+  animation: 'don',
 };
 
 export default Modal;
