@@ -267,6 +267,8 @@ BEGIN
   WHERE u.user_id = query_user_id::BIGINT
   AND u.deleted_at is null;
 
+  -- NOTE: auth_key.deleted_at is NOT included in the where clause, since the 
+  -- auth_key is only used to authorize a request.
   SELECT COALESCE((
     SELECT COALESCE(SUM(c.dag_size), 0)
     FROM psa_pin_request psa_pr

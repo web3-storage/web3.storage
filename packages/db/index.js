@@ -1,7 +1,7 @@
 import { PostgrestClient } from '@supabase/postgrest-js'
 
 import {
-  normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest
+  normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest, parseTextToNumber
 } from './utils.js'
 import { DBError } from './errors.js'
 import {
@@ -173,14 +173,9 @@ export class DBClient {
       throw new DBError(error)
     }
 
-    if (!Number.isSafeInteger(Number(data.uploaded)) ||
-      !Number.isSafeInteger(Number(data.pinned))) {
-      throw new Error('Invalid number.')
-    }
-
     return {
-      uploaded: Number(data.uploaded),
-      pinned: Number(data.pinned)
+      uploaded: parseTextToNumber(data.uploaded),
+      pinned: parseTextToNumber(data.pinned)
     }
   }
 
