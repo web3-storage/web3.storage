@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import Button from 'ZeroComponents/button/button';
 
@@ -25,9 +25,23 @@ const Modal = ({ className, modalState, showCloseButton, closeIcon, children, on
     onClose?.();
   }, [setModalOpen, onClose]);
 
+  useEffect(() => {
+    const onKeyPress = ({ key }) => key.toLowerCase() === 'escape' && closeModal();
+
+    if (isOpen) {
+      document.addEventListener('keyup', onKeyPress);
+    } else {
+      document.removeEventListener('keyup', onKeyPress);
+    }
+
+    return () => {
+      document.removeEventListener('keyup', onKeyPress);
+    };
+  }, [isOpen, closeModal]);
+
   return isOpen ? (
     <>
-      <div className={clsx(className, 'modalBackground')}></div>
+      <button className={clsx(className, 'modalBackground')} onClick={closeModal} />
       <div className="modalContainer">
         <div className="modal">{children}</div>
         {showCloseButton && (
