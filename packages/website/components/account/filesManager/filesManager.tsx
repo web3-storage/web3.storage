@@ -37,7 +37,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
   const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
   const [itemsPerPage, setItemsPerPage] = useState(null);
   const [keyword, setKeyword] = useState(filter);
-  const [deleteSingleCid, setDeleteSingleCid] = useState(null);
+  const [deleteSingleCid, setDeleteSingleCid] = useState('');
   const deleteModalState = useState(false);
 
   const [selectedFiles, setSelectedFiles] = useState<Upload[]>([]);
@@ -89,7 +89,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
   const onDeleteSelected = useCallback(async () => {
     setIsUpdating(true);
 
-    if (deleteSingleCid) {
+    if (deleteSingleCid !== '') {
       deleteUpload(deleteSingleCid);
     } else {
       await Promise.all(selectedFiles.map(({ cid }) => deleteUpload(cid)));
@@ -104,7 +104,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
     setSelectedFiles([]);
 
     getUploads();
-    setDeleteSingleCid(null);
+    setDeleteSingleCid('');
     deleteModalState[1](false);
   }, [deleteSingleCid, selectedFiles, getUploads, deleteModalState, deleteUpload]);
 
