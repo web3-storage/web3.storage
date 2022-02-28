@@ -166,14 +166,22 @@ export class DBClient {
    * @returns {Promise<import('./db-client-types').UsedStorage>}
    */
   async getUsedStorage (userId) {
-    /** @type {{ data: import('./db-client-types').UsedStorage, error: PostgrestError }} */
+    /** @type {{ data: { uploaded: string, pinned: string }, error: PostgrestError }} */
     const { data, error } = await this._client.rpc('user_used_storage', { query_user_id: userId }).single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    return data
+    if (!Number.isSafeInteger(Number(data.uploaded)) ||
+      !Number.isSafeInteger(Number(data.pinned))) {
+      throw new Error('Invalid number.')
+    }
+
+    return {
+      uploaded: Number(data.uploaded),
+      pinned: Number(data.pinned)
+    }
   }
 
   /**

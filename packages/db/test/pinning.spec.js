@@ -101,7 +101,7 @@ describe('Pin Request', () => {
     aPinRequestInput = {
       sourceCid: cids[0],
       contentCid: normalizedCids[0],
-      dagSize: dagSize1,
+      dagSize: null,
       meta,
       origins,
       pins,
@@ -157,10 +157,21 @@ describe('Pin Request', () => {
     })
 
     it('includes pinned size in used storage', async () => {
-      const usedStorage = await client.getUsedStorage(user._id)
-      console.table(usedStorage)
-      assert.strictEqual(parseInt(usedStorage.uploaded), 0, 'used storage for uploaded')
-      assert.strictEqual(parseInt(usedStorage.pinned), dagSize1, 'used storage for pinned')
+      let usedStorage = await client.getUsedStorage(user._id)
+      assert.strictEqual(usedStorage.pinned, 0, 'used storage for pinned')
+
+      await client.createPsaPinRequest({
+        sourceCid: cids[1],
+        contentCid: normalizedCids[1],
+        dagSize: dagSize1,
+        meta,
+        origins,
+        pins,
+        authKey
+      })
+
+      usedStorage = await client.getUsedStorage(user._id)
+      assert.strictEqual(usedStorage.pinned, dagSize1, 'used storage for pinned')
     })
   })
 
