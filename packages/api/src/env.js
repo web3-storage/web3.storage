@@ -69,6 +69,10 @@ import pkg from '../package.json'
  * @param {import('./index.js').Ctx} ctx
  */
 export function envAll (req, env, ctx) {
+  // In dev, set these vars in a .env file in the parent monorepo project root.
+  if (!env.PG_REST_URL) {
+    throw new Error('MISSING ENV. Please set PG_REST_URL')
+  }
   // These values are replaced at build time by esbuild `define`
   env.BRANCH = BRANCH
   env.VERSION = VERSION

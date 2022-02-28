@@ -46,18 +46,24 @@ export async function dbCmd ({ project, init, start, stop, clean }) {
   }
 
   if (start) {
-    if ((await isPortReachable(5432)) || (await isPortReachable(3000))) {
-      throw new Error('Postgres is already running. Please check if you have any docker project or postgres deamon already running.')
+    const pgPort = await isPortReachable(5432)
+    const pgRestPort = await isPortReachable(3000)
+    if (pgPort && pgRestPort) {
+      console.log('Skipped starting Postgres. Ports 5432 & 3000 already in use, so assuming already running.')
+    } else if (pgRestPort && !pgPort) {
+      throw new Error('Failed to start postgres & postgREST. There is a process on port 3000')
+    } else if (!pgRestPort && pgPort) {
+      throw new Error('Failed to start postgres & postgREST. There is a process on port 5432.')
+    } else {
+      await execa('docker-compose', [
+        '--file',
+        composePath,
+        '--project-name',
+        project,
+        'up',
+        '--detach'
+      ])
     }
-
-    await execa('docker-compose', [
-      '--file',
-      composePath,
-      '--project-name',
-      project,
-      'up',
-      '--detach'
-    ])
   }
 
   if (stop) {

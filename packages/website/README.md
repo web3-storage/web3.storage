@@ -4,7 +4,7 @@ Frontend build for the web3.storage website.
 
 ## Getting Started
 
-Inside the `/packages/website` folder create a file called `.env.local` with the following content.
+Verify that the following are set in the `.env` file in root of the project monorepo.
 
 ```ini
 NEXT_PUBLIC_ENV=dev

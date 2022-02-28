@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import dotenv from 'dotenv'
 import { updateDagSizes } from '../jobs/dagcargo.js'
+import { envConfig } from '../lib/env.js'
 import { getPg } from '../lib/utils.js'
 
 const oneMonthAgo = () => new Date().setMonth(new Date().getMonth() - 1)
@@ -18,5 +18,5 @@ async function main () {
   }
 }
 
-dotenv.config()
+envConfig()
 main()
