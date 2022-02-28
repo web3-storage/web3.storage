@@ -10,15 +10,15 @@ import GeneralPageData from '../../content/pages/general.json';
 
 // ===================================================================== Exports
 export default function MessageBanner() {
-  const [messageBannerWasClicked, setMessageBannerWasClicked] = useState(false);
-  const [wasPreviouslyClosed, setWasPreviouslyClosed] = useState(false);
-  const [bannerHeight, setBannerHeight] = useState('unset');
-  const messageBannerRef = useRef(/** @type {any} */ (null));
   const bannerPrompt = GeneralPageData.message_banner.content;
   const maintenceAlert = GeneralPageData.message_banner.maintenceAlert;
   let link = GeneralPageData.message_banner.url;
-  let maintenanceMessage = '';
-  let bannerContent = bannerPrompt;
+
+  const [messageBannerWasClicked, setMessageBannerWasClicked] = useState(false);
+  const [wasPreviouslyClosed, setWasPreviouslyClosed] = useState(false);
+  const [bannerHeight, setBannerHeight] = useState('unset');
+  const [bannerContent, setBannerContent] = useState(bannerPrompt);
+  const messageBannerRef = useRef(/** @type {any} */ (null));
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -58,6 +58,8 @@ export default function MessageBanner() {
     getStatusPageSummary()
   );
 
+  let maintenanceMessage = '';
+
   const scheduledMaintenances =
     statusPageData?.scheduled_maintenances.filter(
       (/** @type {{ status: string; }} */ maintenance) => maintenance.status !== 'completed'
@@ -82,8 +84,8 @@ export default function MessageBanner() {
     console.error(apiVersionError);
   }
 
-  if (maintenanceMessage) {
-    bannerContent = maintenanceMessage;
+  if (maintenanceMessage && bannerContent !== maintenanceMessage) {
+    setBannerContent(maintenanceMessage);
   }
 
   const messageBannerClick = message => {
