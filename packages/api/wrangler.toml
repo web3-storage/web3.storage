@@ -12,7 +12,7 @@ watch_dir = "src"
 [build.upload]
 format = "modules"
 dir = "dist"
-main = "index.mjs"
+main = "worker.mjs"
 # NOTE: Make sure the main field in your package.json references the Worker script you want to publish.
 
 [durable_objects]
