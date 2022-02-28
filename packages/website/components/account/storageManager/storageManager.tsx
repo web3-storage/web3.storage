@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import filesz from 'filesize';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect, useState, useRef } from 'react';
 import { useQuery } from 'react-query';
 
 import LockIcon from 'assets/icons/lock';
@@ -8,6 +8,7 @@ import emailContent from '../../../content/file-a-request';
 import Button, { ButtonVariant } from 'components/button/button';
 import { getStorage } from 'lib/api';
 import { useAuthorization } from 'components/contexts/authorizationContext';
+import { elementIsInViewport } from 'lib/utils';
 
 // Tiers available
 enum StorageTiers {
@@ -35,6 +36,8 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
     enabled: isLoggedIn,
   });
   const usedStorage = useMemo(() => data?.usedStorage || 0, [data]);
+  const [componentInViewport, setComponentInViewport] = useState(false);
+  const storageManagerRef = useRef<HTMLDivElement>(null);
 
   const { maxSpaceLabel, unlockLabel, usedSpacePercentage } = useMemo<{
     maxSpaceLabel: string;
@@ -63,14 +66,41 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
     [storageTier, usedStorage, content.tiers]
   );
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const result = elementIsInViewport(storageManagerRef.current);
+      setComponentInViewport(result);
+    }, 1000);
+
+    const scroll = () => {
+      if (!componentInViewport) {
+        const result = elementIsInViewport(storageManagerRef.current);
+        if (componentInViewport !== result) {
+          setComponentInViewport(result);
+        }
+      }
+    };
+    window.addEventListener('scroll', scroll);
+    return () => {
+      window.removeEventListener('scroll', scroll);
+      clearTimeout(timeout);
+    };
+  }, [componentInViewport]);
+
   const onSearchFiles = useCallback(() => {
     const input: HTMLInputElement = document.querySelector('.search-input')!;
     input.focus();
     input.scrollIntoView(true);
   }, []);
 
+  const progressBarStyles = {
+    width: !componentInViewport ? '0' : `${Math.min(usedSpacePercentage, 100)}%`,
+    transition: `${usedSpacePercentage * 25}ms ease-out`,
+    backgroundPosition: !componentInViewport ? '50% 0' : `0% 0`,
+  };
+
   return (
-    <div className={clsx('section storage-manager-container', className)}>
+    <div ref={storageManagerRef} className={clsx('section storage-manager-container', className)}>
       <div className="storage-manager-space">
         <div className="storage-manager-used">
           {isLoading ? (
@@ -91,18 +121,12 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
         </div>
         <Button onClick={onSearchFiles} variant={ButtonVariant.TEXT}>
           {content.buttons.search}
-          {'\u00A0\u00A0'}❯
         </Button>
       </div>
       <div className="storage-manager-meter-container">
         <div className="storage-manager-meter">
           {/* Mapping out tiers into labeled sections */}
-          <div
-            className="storage-manager-meter-used"
-            style={{
-              width: `${Math.min(usedSpacePercentage, 100)}%`,
-            }}
-          />
+          <div className="storage-manager-meter-used" style={progressBarStyles} />
           <span className="storage-manager-meter-label">{maxSpaceLabel}</span>
         </div>
         {!!unlockLabel && (
@@ -115,12 +139,10 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
         )}
       </div>
       <div className="storage-manager-info">
-        {content.prompt}
-        <Button variant={ButtonVariant.TEXT} href={mailTo}>
-          <a href={mailTo} target="_blank" rel="noreferrer">
-            {content.buttons.request}
-          </a>
-        </Button>
+        {content.prompt}&nbsp;
+        <a href={mailTo} target="_blank" rel="noreferrer">
+          {content.buttons.request}
+        </a>
       </div>
     </div>
   );

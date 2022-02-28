@@ -5,3 +5,5 @@ export const LOCAL_ADD_THRESHOLD = 1024 * 1024 * 2.5
 export const DAG_SIZE_CALC_LIMIT = 1024 * 1024 * 9
 // Maximum permitted block size in bytes.
 export const MAX_BLOCK_SIZE = 1 << 20 // 1MiB
+export const UPLOAD_TYPES = ['Car', 'Blob', 'Multipart', 'Upload']
+export const PIN_STATUSES = ['PinQueued', 'Pinning', 'Pinned', 'PinError']

@@ -140,7 +140,7 @@ export const UploadsProvider = ({ children }) => {
     /** @type {(args?: UploadArgs) => Promise<Upload[]>}} */
     async (
       args = {
-        size: Number(new URLSearchParams(window.location.search).get('size') || 10),
+        size: 1000,
         before: new Date().toISOString(),
       }
     ) => {

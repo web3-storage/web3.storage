@@ -53,21 +53,15 @@
 
 .file-upload-modal {
   .modalContainer {
+    max-width: calc($containerWidth - 10%);
     @include borderRadius_Large;
     @include medium {
-      width: 100%;
+      width: 90%;
     }
   }
   .modalClose {
-    top: 0.5rem;
-    right: 1rem;
     color: $ebony;
     font-size: 2rem;
-  }
-
-  .modal {
-    background: none;
-    overflow: hidden;
   }
 
   svg {

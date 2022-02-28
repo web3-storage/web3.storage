@@ -253,15 +253,18 @@ describe('Pin Request', () => {
         },
         {
           name: 'Giant Panda Bear',
-          date: [2020, 3, 1]
+          date: [2020, 3, 1],
+          meta: '{"app_id":"99986338-1113-4706-8302-4420da6158aa", "region": "Europe", "vendor_policy": "1"}'
         },
         {
           name: 'giant Schnoodle',
-          date: [2020, 4, 1]
+          date: [2020, 4, 1],
+          meta: '{"app_id":"99986338-1113-4706-8302-4420da6158aa", "region": "Europe", "vendor_policy": "1"}'
         },
         {
           name: 'giant worm',
-          date: [2020, 5, 1]
+          date: [2020, 5, 1],
+          meta: '{"app_id":"99986338-1113-4706-8302-4420da6158aa", "region": "US", "vendor_policy": "1"}'
         },
         {
           name: 'Zonkey Schnoodle',
@@ -305,7 +308,8 @@ describe('Pin Request', () => {
           authKey: authKeyPinList,
           sourceCid: sourceCid,
           contentCid: normalizedCid,
-          pins: item.pins || pinnedPins
+          pins: item.pins || pinnedPins,
+          meta: item.meta
         })
       }))
     })
@@ -445,6 +449,19 @@ describe('Pin Request', () => {
 
       assert.strictEqual(pins.length, totalPinned)
       assert.strictEqual(count, totalPinned)
+    })
+
+    it('filters items by meta matching all key/values', async () => {
+      const { results: pins, count } = await client.listPsaPinRequests(authKeyPinList, {
+        meta: {
+          app_id: '99986338-1113-4706-8302-4420da6158aa',
+          region: 'US'
+        }
+      })
+
+      assert.strictEqual(count, 1)
+      assert.strictEqual(pins.length, 1)
+      assert.strictEqual(pins[0].name, 'giant worm')
     })
 
     it('unlists deleted pins', async () => {

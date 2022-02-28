@@ -79,22 +79,25 @@ export default function Navigation({ isProductApp }) {
   // ======================================================= Templates [Buttons]
   const getAccountMenu = () => {
     if (account && account.links) {
-      const labelText = account.text.toLowerCase();
       return (
         <div className="nav-account-button">
-          <button
-            className={clsx('nav-item', account.url === router.route ? 'current-page' : '')}
-            onClick={onLinkClick}
-            onKeyPress={e => handleKeySelect(e, account.url)}
-          >
-            {account.text}
-          </button>
+          <Link passHref href={account.url}>
+            <button
+              className={clsx('nav-item', account.url === router.route ? 'current-page' : '')}
+              onClick={onLinkClick}
+              onKeyPress={e => handleKeySelect(e, account.url)}
+            >
+              {account.text}
+            </button>
+          </Link>
           <div className="nav-account-dropdown">
-            <div className="label">{labelText[0].toUpperCase() + labelText.substring(1)}</div>
             {account.links.map(link => (
               <Link passHref href={link.url === 'request-more-storage' ? mailTo : link.url} key={link.text}>
                 <button
-                  className="nav-dropdown-link"
+                  className={clsx(
+                    'nav-dropdown-link',
+                    link.url === router.asPath || link.url === router.route ? 'current-route' : ''
+                  )}
                   onClick={onLinkClick}
                   onKeyPress={e => handleKeySelect(e, link.url)}
                 >

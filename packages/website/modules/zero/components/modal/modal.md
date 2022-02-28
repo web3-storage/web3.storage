@@ -37,3 +37,10 @@ Displays an close icon; controlled by the **modalState**
 ### children
 Displays the internal content of the Modal tag  
 **type:** `any`
+
+
+### animation
+https://tympanus.net/Development/DialogEffects/ken.html
+options: 'ken'
+default: 'don'
+**type:** `string`

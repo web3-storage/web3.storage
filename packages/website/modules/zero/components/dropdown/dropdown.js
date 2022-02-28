@@ -102,7 +102,7 @@ const Dropdown = ({
         aria-haspopup="listbox"
         aria-expanded={isOpen ? 'true' : 'false'}
       >
-        {staticLabel || (currentItem && currentItem.label)}
+        <span>{staticLabel || (currentItem && currentItem.label)}</span>
       </button>
 
       <div className="dropdownContent">

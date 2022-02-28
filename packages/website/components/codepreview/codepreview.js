@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import hljs from 'highlight.js/lib/core';
 import javascript from 'highlight.js/lib/languages/javascript';
 
+import { elementIsInViewport } from '../../lib/utils.js';
 import CopyIcon from '../../assets/icons/copy.js';
 
 hljs.registerLanguage('javascript', javascript);
@@ -27,13 +28,8 @@ export default function CodePreview({ block }) {
 
   useEffect(() => {
     const contentInViewportCheck = () => {
-      if (contentRef.current) {
-        const rect = contentRef.current.getBoundingClientRect();
-        if (rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)) {
-          if (!contentInViewport) {
-            setContentInViewport(true);
-          }
-        }
+      if (!contentInViewport) {
+        setContentInViewport(elementIsInViewport(contentRef.current));
       }
     };
 

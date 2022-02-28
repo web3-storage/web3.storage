@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import { useMemo, useRef } from 'react';
 
+import Tooltip from 'modules/zero/components/tooltip/tooltip';
 import CheckIcon from 'assets/icons/check';
-import InfoAIcon from 'assets/icons/infoA';
 import InfoBIcon from 'assets/icons/infoB';
 import CopyIcon from 'assets/icons/copy';
 import PencilIcon from 'assets/icons/pencil';
@@ -15,24 +15,6 @@ export const PinStatus = {
   PIN_QUEUED: 'PinQueued',
   QUEUING: 'Queuing...',
 };
-
-/**
- * @typedef {Object} InfoProps
- * @property {string} content
- * @property {React.ReactNode} [icon]
- */
-
-/**
- *
- * @param {InfoProps} props
- * @returns
- */
-const Info = ({ content, icon = null }) => (
-  <div className="info-container">
-    {icon || <InfoAIcon />}
-    <span className="info-tooltip" dangerouslySetInnerHTML={{ __html: content }} />
-  </div>
-);
 
 /**
  * @typedef {Object} FileRowItemProps
@@ -135,7 +117,7 @@ const FileRowItem = props => {
       </span>
       <span className="file-cid" title={cid}>
         <span className="file-row-label medium-down-only">
-          <Info content={fileRowLabels.cid.tooltip} />
+          <Tooltip content={fileRowLabels.cid.tooltip} />
           {fileRowLabels.cid.label}
         </span>
         <span className="cid-truncate medium-up-only">
@@ -143,7 +125,7 @@ const FileRowItem = props => {
         </span>
         <span className="cid-full medium-down-only">{cid}</span>
         {isHeader ? (
-          <Info content={fileRowLabels.cid.tooltip} />
+          <Tooltip content={fileRowLabels.cid.tooltip} />
         ) : (
           <CopyIcon
             className="copy-icon"
@@ -159,29 +141,38 @@ const FileRowItem = props => {
       </span>
       <span className="file-pin-status">
         <span className="file-row-label medium-down-only">
-          <Info content={statusMessages.header} />
+          <Tooltip content={statusMessages.header} />
           {fileRowLabels.status.label}
         </span>
         {status}
         {isHeader ? (
-          <Info content={statusMessages.header} />
+          <Tooltip content={statusMessages.header} />
         ) : (
-          statusTooltip && <Info icon={<InfoBIcon />} content={statusTooltip} />
+          statusTooltip && <Tooltip icon={<InfoBIcon />} content={statusTooltip} />
         )}
       </span>
       <span className="file-storage-providers">
         <span className="file-row-label medium-down-only">
-          <Info content={fileRowLabels.storage_providers.tooltip.header} />
+          <Tooltip content={fileRowLabels.storage_providers.tooltip.header} />
           {fileRowLabels.storage_providers.label}
         </span>
         {storageProviders}
         {isHeader ? (
-          <Info content={fileRowLabels.storage_providers.tooltip.header} />
+          <Tooltip position="right" content={fileRowLabels.storage_providers.tooltip.header} />
         ) : (
           !storageProviders.length && (
             <>
               Queuing...
-              <Info content={fileRowLabels.storage_providers.tooltip.queuing} />
+              <Tooltip
+                className="medium-down-only"
+                position="left"
+                content={fileRowLabels.storage_providers.tooltip.queuing}
+              />
+              <Tooltip
+                className="medium-up-only"
+                position="right"
+                content={fileRowLabels.storage_providers.tooltip.queuing}
+              />
             </>
           )
         )}

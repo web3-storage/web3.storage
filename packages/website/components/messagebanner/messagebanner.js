@@ -1,5 +1,5 @@
 // ===================================================================== Imports
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery } from 'react-query';
 import clsx from 'clsx';
 
@@ -10,12 +10,15 @@ import GeneralPageData from '../../content/pages/general.json';
 
 // ===================================================================== Exports
 export default function MessageBanner() {
-  const [messageBannerWasClicked, setMessageBannerWasClicked] = useState(false);
   const bannerPrompt = GeneralPageData.message_banner.content;
   const maintenceAlert = GeneralPageData.message_banner.maintenceAlert;
   let link = GeneralPageData.message_banner.url;
-  let maintenanceMessage = '';
-  let bannerContent = bannerPrompt;
+
+  const [messageBannerWasClicked, setMessageBannerWasClicked] = useState(false);
+  const [wasPreviouslyClosed, setWasPreviouslyClosed] = useState(false);
+  const [bannerHeight, setBannerHeight] = useState('unset');
+  const [bannerContent, setBannerContent] = useState(bannerPrompt);
+  const messageBannerRef = useRef(/** @type {any} */ (null));
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -27,13 +30,35 @@ export default function MessageBanner() {
 
       if (bannerPrompt === oldMessage && elapsedTime < 604800000) {
         setMessageBannerWasClicked(true);
+        setWasPreviouslyClosed(true);
       }
     }
   }, [bannerPrompt]);
 
+  const calculateBannerHeight = time => {
+    if (messageBannerRef.current) {
+      setBannerHeight('unset');
+      setTimeout(() => {
+        const height = messageBannerRef.current.clientHeight;
+        setBannerHeight(height + 'px');
+      }, time);
+    }
+  };
+
+  useEffect(() => {
+    calculateBannerHeight(1000);
+    const resize = () => {
+      calculateBannerHeight(100);
+    };
+    window.addEventListener('resize', resize);
+    return () => window.removeEventListener('resize', resize);
+  }, [messageBannerRef]);
+
   const { data: statusPageData, error: statusPageError } = useQuery('get-statuspage-summary', () =>
     getStatusPageSummary()
   );
+
+  let maintenanceMessage = '';
 
   const scheduledMaintenances =
     statusPageData?.scheduled_maintenances.filter(
@@ -59,8 +84,8 @@ export default function MessageBanner() {
     console.error(apiVersionError);
   }
 
-  if (maintenanceMessage) {
-    bannerContent = maintenanceMessage;
+  if (maintenanceMessage && bannerContent !== maintenanceMessage) {
+    setBannerContent(maintenanceMessage);
   }
 
   const messageBannerClick = message => {
@@ -71,27 +96,34 @@ export default function MessageBanner() {
     setMessageBannerWasClicked(true);
   };
 
+  const CustomElement = maintenanceMessage ? 'div' : 'a';
+
   return (
     <section
       id="section_message-banner"
-      className={clsx(!messageBannerWasClicked || maintenanceMessage ? 'show-message-banner' : '')}
+      ref={messageBannerRef}
+      style={{ height: !messageBannerWasClicked || maintenanceMessage ? bannerHeight : 0 }}
     >
       <div className="grid-noGutter">
         <div className="col">
           <div className="message-banner-container">
-            <a
+            <CustomElement
               href={link}
               target="_blank"
               className={clsx(
                 'message-banner-content',
                 maintenanceMessage ? 'banner-alert' : '',
-                'message-banner-transition'
+                wasPreviouslyClosed && !maintenanceMessage ? 'mb-previously-closed' : '',
+                bannerContent.length > 120 ? 'mb-reduced-fontsize' : ''
               )}
+              style={{
+                transform: `translateY(${messageBannerWasClicked && !maintenanceMessage ? '-' + bannerHeight : 0})`,
+              }}
               dangerouslySetInnerHTML={{ __html: bannerContent }}
               onClick={() => messageBannerClick(bannerPrompt)}
               onKeyPress={() => messageBannerClick(bannerPrompt)}
               rel="noreferrer"
-            ></a>
+            ></CustomElement>
           </div>
         </div>
       </div>
@@ -99,8 +131,7 @@ export default function MessageBanner() {
       <button
         className={clsx(
           'message-banner-close-button',
-          'message-banner-transition',
-          maintenanceMessage ? 'hide-banner-close' : ''
+          maintenanceMessage || messageBannerWasClicked ? 'hide-banner-close' : ''
         )}
         onClick={() => messageBannerClick(bannerPrompt)}
         onKeyPress={() => messageBannerClick(bannerPrompt)}
