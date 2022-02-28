@@ -1,6 +1,6 @@
-import { useCallback, Fragment, useMemo, useEffect, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
 import clsx from 'clsx';
+import { useCallback, Fragment, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
 
 /**
  * @typedef {Object} DropzoneProps
@@ -12,14 +12,33 @@ import clsx from 'clsx';
  * @prop {number} [maxFiles]
  * @prop {string} [accept]
  * @prop {boolean} [multiple]
- * @prop {{ progress: number, name: string, uploadId: string }[]} [filesInfo] external upload information of files
+ * @prop {{
+ *          progress: number,
+ *          name: string, uploadId:
+ *          string,
+ *          failed: boolean
+ *        }[]} [filesInfo] external upload information of files
+ * @prop {{loading: string, complete: string, failed: string}} [content]
  */
 
 /**
  *
  * @param {DropzoneProps} props
  */
-const Dropzone = ({ className, icon, dragAreaText, onChange, onError, filesInfo = [], ...props }) => {
+const Dropzone = ({
+  className,
+  icon,
+  dragAreaText,
+  onChange,
+  onError,
+  filesInfo = [],
+  content = {
+    loading: 'Loading...',
+    complete: 'Complete',
+    failed: 'Failed',
+  },
+  ...props
+}) => {
   const [acceptedFiles, setAcceptedFiles] = useState([]);
   const onDropAccepted = useCallback(
     files => {
@@ -49,7 +68,11 @@ const Dropzone = ({ className, icon, dragAreaText, onChange, onError, filesInfo 
           <Fragment key={`file-${fileInfo.uploadId}`}>
             <div className="filename">{fileInfo.name}</div>
             <div className="status">
-              {fileInfo.progress !== 100 ? `Loading... ${fileInfo.progress || 0}%` : `Complete`}
+              {!!fileInfo.failed
+                ? content.failed
+                : fileInfo.progress !== 100
+                ? `${content.loading} ${fileInfo.progress || 0}%`
+                : content.complete}
             </div>
           </Fragment>
         ))}
