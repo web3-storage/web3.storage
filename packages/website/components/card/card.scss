@@ -195,7 +195,11 @@
     @include fontWeight_Regular;
     line-height: leading(22, 15);
     a {
-      color: #48a3e8;
+      border-bottom: 1px solid;
+      transition: all $transitionDuration;
+      &:hover {
+        color: $malibu;
+      }
     }
   }
 }
