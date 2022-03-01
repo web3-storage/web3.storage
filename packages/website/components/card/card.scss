@@ -308,9 +308,9 @@
       width: 1px;
       left: 50%;
       top: -1px;
-      opacity: 0.37;
+      opacity: 0.3;
       background-color: white;
-      z-index: 0;
+      z-index: 1;
     }
 
     .feature_storage-bar-highlight {
@@ -345,9 +345,12 @@
         }
       }
       &:last-child {
-        margin-right: 2rem;
+        // margin-right: 2rem;
+        margin-right: calc(
+          50% - 1.25rem
+        ); // added to satisfy a case where there are two pricing tiers, as opposed the three from the original design
         @include tiny {
-          margin-right: 1rem;
+          margin-right: calc(50% - 0.75rem);
         }
       }
 
@@ -417,7 +420,7 @@
   }
 
   .title {
-    @include fontSize_ExtraLarge;
+    @include fontSize_Large;
     @include fontWeight_Semibold;
     margin-bottom: 1.5rem;
     @include small {
