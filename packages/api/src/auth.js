@@ -1,11 +1,12 @@
 import * as JWT from './utils/jwt.js'
 import {
-  UserNotFoundError,
+  AccountRestrictedError,
+  MagicTokenRequiredError,
+  NoTokenError,
   PinningUnauthorizedError,
   TokenNotFoundError,
   UnrecognisedTokenError,
-  NoTokenError,
-  MagicTokenRequiredError
+  UserNotFoundError
 } from './errors.js'
 
 /**
@@ -19,7 +20,7 @@ export function withMagicToken (handler) {
   /**
    * @param {Request} request
    * @param {import('./env').Env}
-   * @returns {Response}
+   * @returns {Promise<Response>}
    */
   return async (request, env, ctx) => {
     const token = getTokenFromRequest(request, env)
@@ -46,7 +47,7 @@ export function withApiOrMagicToken (handler) {
   /**
    * @param {Request} request
    * @param {import('./env').Env}
-   * @returns {Response}
+   * @returns {Promise<Response>}
    */
   return async (request, env, ctx) => {
     const token = getTokenFromRequest(request, env)
@@ -66,6 +67,23 @@ export function withApiOrMagicToken (handler) {
     }
 
     throw new UnrecognisedTokenError()
+  }
+}
+
+/**
+ * Middleware: verify that the authenticated request is for a user whose
+ * account is not restricted.
+ *
+ * @param {import('itty-router').RouteHandler} handler
+ * @returns {import('itty-router').RouteHandler}
+ */
+export function withAccountNotRestricted (handler) {
+  return async (request, env, ctx) => {
+    const isAccountRestricted = await env.db.isAccountRestricted(request.auth.user._id)
+    if (!isAccountRestricted) {
+      return handler(request, env, ctx)
+    }
+    throw new AccountRestrictedError()
   }
 }
 

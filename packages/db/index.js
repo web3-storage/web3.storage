@@ -140,7 +140,29 @@ export class DBClient {
   }
 
   /**
-   * Check that a user is authorized to pin
+   * Check that a user account is restricted.
+   *
+   * @param {number} userId
+   * @returns {Promise<boolean>}
+   */
+  async isAccountRestricted (userId) {
+    const { error, count } = await this._client
+      .from('user_tag')
+      .select('id', { count: 'exact' })
+      .eq('user_id', userId)
+      .eq('tag', 'HasAccountRestriction')
+      .eq('value', true)
+      .filter('deleted_at', 'is', null)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return count > 0
+  }
+
+  /**
+   * Check that a user is authorized to pin.
    *
    * @param {number} userId
    * @returns {Promise<boolean>}
@@ -199,7 +221,7 @@ export class DBClient {
         pins: data.pins.map(pin => ({
           status: pin.status,
           location: {
-            peer_id: pin.location.peerId,
+            peer_id: pin.location.peerId || 'x',
             peer_name: pin.location.peerName,
             region: pin.location.region
           }
@@ -427,7 +449,7 @@ export class DBClient {
         pin: {
           status: pin.status,
           location: {
-            peer_id: pin.location.peerId,
+            peer_id: pin.location.peerId || 'x',
             peer_name: pin.location.peerName,
             region: pin.location.region
           }
@@ -861,7 +883,7 @@ export class DBClient {
         pins: pinRequestData.pins.map(pin => ({
           status: pin.status,
           location: {
-            peer_id: pin.location.peerId,
+            peer_id: pin.location.peerId || 'x',
             peer_name: pin.location.peerName,
             region: pin.location.region
           }

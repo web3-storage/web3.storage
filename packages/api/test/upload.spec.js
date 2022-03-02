@@ -3,6 +3,7 @@ import assert from 'assert'
 import fetch, { FormData, Blob } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
+import { AccountRestrictedError } from '../src/errors.js'
 
 describe('POST /upload', () => {
   it('should add posted File to Cluster', async () => {
@@ -79,5 +80,25 @@ describe('POST /upload', () => {
     assert(res, 'Server responded')
     // db mock throws 500 if filename was not decoded
     assert(res.ok, 'Server response not ok: filename might not have been decoded.')
+  })
+
+  it('should throw if account is restricted', async () => {
+    const name = 'single-file-upload'
+    const token = await getTestJWT('test-restriction', 'test-restriction')
+    const file = new Blob(['hello world!'])
+
+    const res = await fetch(new URL('upload', endpoint).toString(), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'X-Name': name
+      },
+      body: file
+    })
+
+    assert.strictEqual(res.ok, false)
+    const { code, message } = await res.json()
+    assert.strictEqual(code, AccountRestrictedError.CODE)
+    assert.strictEqual(message, 'This account is restricted.')
   })
 })

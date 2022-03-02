@@ -29,6 +29,15 @@ export class PinningUnauthorizedError extends HTTPError {
 }
 PinningUnauthorizedError.CODE = 'ERROR_PINNING_UNAUTHORIZED'
 
+export class AccountRestrictedError extends HTTPError {
+  constructor (msg = 'This account is restricted.') {
+    super(msg, 403)
+    this.name = 'AccountRestrictedError'
+    this.code = AccountRestrictedError.CODE
+  }
+}
+AccountRestrictedError.CODE = 'ERROR_ACCOUNT_RESTRICTED'
+
 export class TokenNotFoundError extends HTTPError {
   constructor (msg = 'API token no longer valid') {
     super(msg, 401)

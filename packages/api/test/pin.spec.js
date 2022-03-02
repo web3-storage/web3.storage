@@ -10,7 +10,7 @@ import {
   INVALID_REPLACE,
   getEffectivePinStatus
 } from '../src/utils/psa.js'
-import { PinningUnauthorizedError, PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from '../src/errors.js'
+import { PinningUnauthorizedError, PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData, AccountRestrictedError } from '../src/errors.js'
 
 /**
  *
@@ -676,6 +676,44 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(data.pin.cid, sourceCid)
       assert.notDeepEqual(data.status, 'failed')
     })
+
+    it('should throw if account is PSA enabled, but restricted', async () => {
+      const restrictedToken = await getTestJWT('test-pinning-and-restriction', 'test-pinning-and-restriction')
+      const res = await fetch(new URL('pins', endpoint).toString(), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${restrictedToken}`
+        },
+        body: JSON.stringify({
+          cid: 'abc'
+        })
+      })
+
+      assert(res, 'Server responded')
+      assert.strictEqual(res.status, 403)
+      const { code, message } = await res.json()
+      assert.strictEqual(code, AccountRestrictedError.CODE)
+      assert.strictEqual(message, 'This account is restricted.')
+    })
+
+    it('should throw if account is restricted', async () => {
+      const restrictedToken = await getTestJWT('test-restriction', 'test-restriction')
+      const res = await fetch(new URL('pins', endpoint).toString(), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${restrictedToken}`
+        },
+        body: JSON.stringify({
+          cid: 'abc'
+        })
+      })
+
+      assert(res, 'Server responded')
+      assert.strictEqual(res.status, 403)
+      const { code, message } = await res.json()
+      assert.strictEqual(code, AccountRestrictedError.CODE)
+      assert.strictEqual(message, 'This account is restricted.')
+    })
   })
 
   describe('GET /pins/:requestId', () => {
@@ -975,6 +1013,40 @@ describe('Pinning APIs endpoints', () => {
       assert.match(data.message, supportEmailCheck, 'Error message does not contain support email address')
       assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
+
+    it('should throw if account is PSA enabled, but restricted', async () => {
+      const restrictedToken = await getTestJWT('test-pinning-and-restriction', 'test-pinning-and-restriction')
+      const res = await fetch(new URL('pins/1', endpoint).toString(), {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${restrictedToken}`,
+          'Content-Type': 'application/json'
+        }
+      })
+
+      assert(res, 'Server responded')
+      assert.strictEqual(res.status, 403)
+      const { code, message } = await res.json()
+      assert.strictEqual(code, AccountRestrictedError.CODE)
+      assert.strictEqual(message, 'This account is restricted.')
+    })
+
+    it('should throw if account is restricted', async () => {
+      const restrictedToken = await getTestJWT('test-restriction', 'test-restriction')
+      const res = await fetch(new URL('pins/1', endpoint).toString(), {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${restrictedToken}`,
+          'Content-Type': 'application/json'
+        }
+      })
+
+      assert(res, 'Server responded')
+      assert.strictEqual(res.status, 403)
+      const { code, message } = await res.json()
+      assert.strictEqual(code, AccountRestrictedError.CODE)
+      assert.strictEqual(message, 'This account is restricted.')
+    })
   })
 
   describe('POST /pins/:requestId', () => {
@@ -1082,6 +1154,44 @@ describe('Pinning APIs endpoints', () => {
       const data = await res.json()
       assert.match(data.message, supportEmailCheck, 'Error message does not contain support email address')
       assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
+    })
+
+    it('should throw if account is PSA enabled, but restricted', async () => {
+      const restrictedToken = await getTestJWT('test-pinning-and-restriction', 'test-pinning-and-restriction')
+      const res = await fetch(new URL('pins/UniqueIdOfPinRequest', endpoint).toString(), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${restrictedToken}`
+        },
+        body: JSON.stringify({
+          cid: 'abc'
+        })
+      })
+
+      assert(res, 'Server responded')
+      assert.strictEqual(res.status, 403)
+      const { code, message } = await res.json()
+      assert.strictEqual(code, AccountRestrictedError.CODE)
+      assert.strictEqual(message, 'This account is restricted.')
+    })
+
+    it('should throw if account is restricted', async () => {
+      const restrictedToken = await getTestJWT('test-restriction', 'test-restriction')
+      const res = await fetch(new URL('pins/UniqueIdOfPinRequest', endpoint).toString(), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${restrictedToken}`
+        },
+        body: JSON.stringify({
+          cid: 'abc'
+        })
+      })
+
+      assert(res, 'Server responded')
+      assert.strictEqual(res.status, 403)
+      const { code, message } = await res.json()
+      assert.strictEqual(code, AccountRestrictedError.CODE)
+      assert.strictEqual(message, 'This account is restricted.')
     })
   })
 })

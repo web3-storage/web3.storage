@@ -9,6 +9,7 @@ import { endpoint, clusterApi, clusterApiAuthHeader } from './scripts/constants.
 import { createCar } from './scripts/car.js'
 import { MAX_BLOCK_SIZE } from '../src/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
+import { AccountRestrictedError } from '../src/errors.js'
 
 describe('POST /car', () => {
   it('should add posted CARs to Cluster', async () => {
@@ -207,5 +208,26 @@ describe('POST /car', () => {
     assert.strictEqual(res.ok, false)
     const { message } = await res.json()
     assert.strictEqual(message, 'Invalid CAR file received: CAR must contain at least one non-root block')
+  })
+
+  it('should throw if account is restricted', async () => {
+    const token = await getTestJWT('test-restriction', 'test-restriction')
+
+    const { car: carBody } = await createCar('hello world!')
+
+    const res = await fetch(new URL('car', endpoint), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/car',
+        'X-Name': 'car'
+      },
+      body: carBody
+    })
+
+    assert.strictEqual(res.ok, false)
+    const { code, message } = await res.json()
+    assert.strictEqual(code, AccountRestrictedError.CODE)
+    assert.strictEqual(message, 'This account is restricted.')
   })
 })
