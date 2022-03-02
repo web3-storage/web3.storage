@@ -71,22 +71,22 @@
       "loading": "Loading...",
       "tiers": [
         {
-          "max_space_label": "1 TB",
-          "unlock_label": "1-10 TB"
+          "max_space_label": "1 TiB",
+          "unlock_label": "1 TiB+"
         },
         {
-          "max_space_label": "10 TB",
-          "unlock_label": "10+ TB"
+          "max_space_label": "10 TiB",
+          "unlock_label": "10 TiB+"
         },
         {
-          "max_space_label": "0+ TB"
+          "max_space_label": "0 TiB+"
         }
       ]
     },
     "file_manager": {
       "heading": "Files",
       "table": {
-        "message": "You don’t have any files uploaded yet.",
+        "message": "You don't have any files uploaded yet.",
         "cta": {
           "text": "Upload your first file",
           "theme": "text",

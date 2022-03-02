@@ -59,7 +59,8 @@ export default function Card({ card, cardsGroup = [], index = 0, onCardLoad }) {
     for (let i = 0; i < len; i++) {
       sum = sum + (i + 1);
     }
-    return Math.round((weight / sum) * 75);
+    const progressDisplay = 75;
+    return Math.round((weight / sum) * progressDisplay);
   }, [cardsGroup, index]);
 
   useEffect(() => {

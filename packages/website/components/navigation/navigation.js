@@ -39,7 +39,7 @@ export default function Navigation({ isProductApp }) {
   const navItems = links.filter(item => item.text.toLowerCase() !== 'account');
   const auth = GeneralPageData.navigation.auth;
   const logoText = GeneralPageData.site_logo.text;
-  const theme = router.route === '/tiers' || isProductApp ? 'light' : 'dark';
+  const theme = router.route === '/pricing' || isProductApp ? 'light' : 'dark';
   const buttonTheme = isProductApp ? 'pink-blue' : '';
   const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body=${encodeURIComponent(
     emailContent.body.join('\n')

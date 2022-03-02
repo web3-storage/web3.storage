@@ -21,11 +21,11 @@
     "links": [
       {
         "url": "/about",
-        "text": "ABOUT"
+        "text": "About"
       },
       {
-        "url": "/tiers",
-        "text": "TIERS"
+        "url": "/pricing",
+        "text": "Pricing"
       },
       {
         "url": "/faq",
@@ -33,11 +33,11 @@
       },
       {
         "url": "https://docs.web3.storage/",
-        "text": "DOCS"
+        "text": "Docs"
       },
       {
         "url": "/account",
-        "text": "ACCOUNT",
+        "text": "Account",
         "links": [
           {
             "text": "Dashboard",
@@ -73,17 +73,17 @@
     "auth": {
       "login": {
         "url": "/login",
-        "text": "SIGN IN"
+        "text": "Sign in"
       },
       "logout": {
-        "text": "LOG OUT"
+        "text": "Log out"
       }
     }
   },
   "breadcrumbs": {
     "index": "Home",
     "about": "About",
-    "tiers": "Tiers",
+    "pricing": "Pricing",
     "faq": "FAQ",
     "terms": "ToS",
     "login": "Login",

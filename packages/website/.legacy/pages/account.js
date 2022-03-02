@@ -12,7 +12,7 @@ import emailContent from '../content/file-a-request'
 import fileSize from 'filesize'
 import { AppContext } from '../components/state-provider'
 
-const MAX_STORAGE = 1.1e+12 /* 1 TB */
+const MAX_STORAGE = 1.1e+12 /* 1 TiB */
 
 /**
  * Static Props

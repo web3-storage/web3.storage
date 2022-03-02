@@ -17,8 +17,8 @@ enum StorageTiers {
   TIER_3 = '2',
 }
 
-// Raw TB number to be used in calculations
-const terabyte = 1099511627776;
+// Raw TiB number of bytes, to be used in calculations
+const tebibyte = 1099511627776;
 
 type StorageManagerProps = {
   className?: string;
@@ -50,17 +50,17 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
         [StorageTiers.TIER_1]: {
           maxSpaceLabel: content.tiers[0].max_space_label,
           unlockLabel: content.tiers[0].unlock_label,
-          usedSpacePercentage: (usedStorage / terabyte) * 100,
+          usedSpacePercentage: (usedStorage / tebibyte) * 100,
         },
         [StorageTiers.TIER_2]: {
           maxSpaceLabel: content.tiers[1].max_space_label,
           unlockLabel: content.tiers[1].unlock_label,
-          usedSpacePercentage: (usedStorage / (terabyte * 10)) * 100,
+          usedSpacePercentage: (usedStorage / (tebibyte * 10)) * 100,
         },
         [StorageTiers.TIER_3]: {
-          maxSpaceLabel: `${Math.floor(usedStorage / (terabyte * 10) + 1) + content.tiers[2].max_space_label}`,
+          maxSpaceLabel: `${Math.floor(usedStorage / (tebibyte * 10) + 1) + content.tiers[2].max_space_label}`,
           // every increment of 10 changes the amount of space used
-          usedSpacePercentage: ((usedStorage % (terabyte * 10)) / (terabyte * 10)) * 100,
+          usedSpacePercentage: ((usedStorage % (tebibyte * 10)) / (tebibyte * 10)) * 100,
         },
       }[storageTier]),
     [storageTier, usedStorage, content.tiers]

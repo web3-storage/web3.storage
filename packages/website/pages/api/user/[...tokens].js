@@ -4,17 +4,31 @@ const secret = `${Number.MAX_SAFE_INTEGER}.${Number.MAX_SAFE_INTEGER * 2}.${Numb
 export const tokens = [
   {
     _id: '315318824629961583',
-    name: 'test',
+    name: 'my first token',
     secret: `${secret}1`,
     created: '2021-11-29T16:08:33.077+00:00',
     hasUploads: false,
   },
   {
     _id: '315318824629961584',
-    name: 'tesst',
+    name: 'my second token',
     secret: `${secret}2`,
-    created: '2021-11-29T16:09:16.617+00:00',
+    created: '2021-11-29T17:09:16.617+00:00',
     hasUploads: false,
+  },
+  {
+    _id: '315318824629961585',
+    name: 'my third token',
+    secret: `${secret}3`,
+    created: '2021-12-02T12:01:16.617+00:00',
+    hasUploads: false,
+  },
+  {
+    _id: '315318824629961586',
+    name: 'my fourth token',
+    secret: `${secret}4`,
+    created: '2021-12-05T14:44:16.617+00:00',
+    hasUploads: true,
   },
 ];
 

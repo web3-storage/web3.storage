@@ -1,13 +1,13 @@
 @use 'sass:math';
 
 $base-row-width: 60.125rem;
-$file-select: calculateWidthPercentage(2.375rem, $base-row-width);
-$file-date: calculateWidthPercentage(5.8125rem, $base-row-width);
-$file-name: calculateWidthPercentage(13rem, $base-row-width);
-$file-cid: calculateWidthPercentage(12.6875rem, $base-row-width);
-$file-availability: calculateWidthPercentage(7rem, $base-row-width);
-$file-pin-status: calculateWidthPercentage(6.5625rem, $base-row-width);
-$file-storage-providers: calculateWidthPercentage(7.875rem, $base-row-width);
+$file-select: calculateWidthPercentage(3.375rem, $base-row-width);
+$file-date: calculateWidthPercentage(6.8125rem, $base-row-width);
+$file-name: calculateWidthPercentage(14rem, $base-row-width);
+$file-cid: calculateWidthPercentage(13.6875rem, $base-row-width);
+$file-availability: calculateWidthPercentage(0rem, $base-row-width);
+$file-pin-status: calculateWidthPercentage(7.5625rem, $base-row-width);
+$file-storage-providers: calculateWidthPercentage(8.875rem, $base-row-width);
 $file-size: auto;
 
 .files-manager-row {
@@ -17,7 +17,7 @@ $file-size: auto;
   letter-spacing: 0;
   display: grid;
   position: relative;
-  grid-template-columns: $file-select $file-date $file-name $file-cid $file-availability $file-pin-status $file-storage-providers $file-size;
+  grid-template-columns: $file-select $file-date $file-name $file-cid $file-pin-status $file-storage-providers $file-size;
   align-items: flex-start;
   padding-left: 1.125rem;
   min-height: 6.25rem;
