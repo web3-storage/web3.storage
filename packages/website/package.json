@@ -5,9 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "rm -rf .next && next dev -p 4000",
-    "start": "next start",
-    "start:env": "env-cmd -f ../../.env next dev -p 4000",
-    "build": "next build && next-sitemap && next export && ./scripts/docs.sh",
+    "start": "env-cmd -f ../../.env next dev -p 4000",
+    "build": "next build && next-sitemap && next export",
     "export": "next export",
     "test": "eslint './**/*.js' && tsc --build",
     "lint": "npm run lint:ts && npm run lint:es:fix",
