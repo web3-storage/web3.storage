@@ -3,17 +3,12 @@
 The HTTP interface implemented as a Cloudflare Worker
 
 ## Getting started
-
-Copy the `.env.tpl` to `.env` in root of the project monorepo. 
-
-Create an account on https://magic.link and fill in the `MAGIC_SECRET_KEY` variable in the .env file.
+Please follow the instructions in the main monorepo [Readme](../../README.md#getting-started) to setup the project.
 
 We use miniflare to run the api locally, and docker to run ipfs-cluster and postgres with PostgREST.
 
-The API backend uses the [Database package](../db/) to communicate and spin up the DB layer. 
-In order to have the API backend package working you need to make sure the db underlying DB is set up.
-Please follow the setup instructions in the DB package [Readme](../db/README.md) first.
-
+If you want to run this package in isolation, you can easily do it as follows.
+Please be aware that you will need to have the environment variable setup as described in the root [README](../../README.md#getting-started).
 
 API package setup:
 
@@ -41,7 +36,7 @@ While in most cases the [Getting Started](## Getting started) is enough to devel
 
 If you want more in depth information please look at [Cloudfare Get Started guide](https://developers.cloudflare.com/workers/get-started/guide#1-sign-up-for-a-workers-account).  
 
-The following instructions assume that you already you went through the Getting started section.
+The following instructions assume that did go through the Getting started section.
 
 ### 1. Sign up for a Workers account
 Before you can start publishing your Workers on your own domain or a free *.workers.dev subdomain, you must sign up for a Cloudflare Workers account
