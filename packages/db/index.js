@@ -221,7 +221,7 @@ export class DBClient {
         pins: data.pins.map(pin => ({
           status: pin.status,
           location: {
-            peer_id: pin.location.peerId || 'x',
+            peer_id: pin.location.peerId,
             peer_name: pin.location.peerName,
             region: pin.location.region
           }
@@ -449,7 +449,7 @@ export class DBClient {
         pin: {
           status: pin.status,
           location: {
-            peer_id: pin.location.peerId || 'x',
+            peer_id: pin.location.peerId,
             peer_name: pin.location.peerName,
             region: pin.location.region
           }
@@ -883,7 +883,7 @@ export class DBClient {
         pins: pinRequestData.pins.map(pin => ({
           status: pin.status,
           location: {
-            peer_id: pin.location.peerId || 'x',
+            peer_id: pin.location.peerId,
             peer_name: pin.location.peerName,
             region: pin.location.region
           }
