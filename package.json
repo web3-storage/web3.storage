@@ -31,7 +31,8 @@
   },
   "standard": {
     "ignore": [
-      "packages/website"
+      "packages/website",
+      "packages/docs"
     ]
   },
   "engines": {

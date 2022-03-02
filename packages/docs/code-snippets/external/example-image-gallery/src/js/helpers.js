@@ -1,10 +1,9 @@
 
-
 /**
  * Display a message to the user in the output area.
- * @param {string} text 
+ * @param {string} text
  */
-export function showMessage(text) {
+export function showMessage (text) {
   const output = document.getElementById('output')
   if (!output) {
     return
@@ -16,9 +15,9 @@ export function showMessage(text) {
 
 /**
  * Display a URL in the output area as a clickable link.
- * @param {string} url 
+ * @param {string} url
  */
-export function showLink(url) {
+export function showLink (url) {
   const output = document.getElementById('output')
   if (!output) {
     return
@@ -38,7 +37,7 @@ export function showLink(url) {
  * @param {string} labelText
  * @returns {HTMLDivElement}
  */
-export function iconLabel(iconClass, labelText) {
+export function iconLabel (iconClass, labelText) {
   const label = document.createElement('span')
   label.textContent = labelText
   const icon = document.createElement('span')
@@ -51,9 +50,9 @@ export function iconLabel(iconClass, labelText) {
 
 /**
  * Sets window location to the given path, if we're not already there.
- * @param {string} path 
+ * @param {string} path
  */
-export function navToPath(path) {
+export function navToPath (path) {
   if (window.location.pathname !== path) {
     window.location.pathname = path
   }
@@ -62,17 +61,17 @@ export function navToPath(path) {
 /**
  * Set window location to the settings page.
  */
-export function navToSettings() {
+export function navToSettings () {
   navToPath('/settings.html')
 }
 
 /**
  * Return an IPFS gateway URL for the given CID and path
- * @param {string} cid 
- * @param {string} path 
+ * @param {string} cid
+ * @param {string} path
  * @returns {string}
  */
-export function makeGatewayURL(cid, path) {
+export function makeGatewayURL (cid, path) {
   return `https://${cid}.ipfs.dweb.link/${encodeURIComponent(path)}`
 }
 
@@ -82,74 +81,74 @@ export function makeGatewayURL(cid, path) {
  * @param {object} obj a JSON-serializable object
  * @returns {File}
  */
-export function jsonFile(filename, obj) {
+export function jsonFile (filename, obj) {
   return new File([JSON.stringify(obj)], filename)
 }
 
 /**
  * @returns {string|null} the saved API token
  */
-export function getSavedToken() {
+export function getSavedToken () {
   return localStorage.getItem('w3storage-token')
 }
 
 /**
  * Saves the given token to local storage
- * @param {string} token 
+ * @param {string} token
  */
-export function saveToken(token) {
+export function saveToken (token) {
   localStorage.setItem('w3storage-token', token)
 }
 
 /**
  * Removes any saved token from local storage
  */
-export function deleteSavedToken() {
+export function deleteSavedToken () {
   localStorage.removeItem('w3storage-token')
 }
 
 /**
  * Hides the given DOM element by applying a "hidden" class,
  * which sets 'display: none'
- * @param {HTMLElement} el 
+ * @param {HTMLElement} el
  */
-export function hideElement(el) {
+export function hideElement (el) {
   el.classList.add('hidden')
 }
 
 /**
  * Removes the 'hidden' class from the given DOM element.
- * @param {HTMLElement} el 
+ * @param {HTMLElement} el
  */
-export function showElement(el) {
+export function showElement (el) {
   el.classList.remove('hidden')
 }
 
 /**
  * @returns {string} location.hash, with the leading '#' removed
  */
-export function getLocationHash() {
+export function getLocationHash () {
   return location.hash.substring(1)
 }
 
 /**
  * @param {string} value value you want to set location.hash to (without the leading '#')
  */
-export function setLocationHash(value) {
+export function setLocationHash (value) {
   location.hash = '#' + value
 }
 
 /**
  * Makes a link to view the image via the IPFS gateway.
- * @param {string} url 
+ * @param {string} url
  * @returns {HTMLAnchorElement}
  */
-export function makeShareLink(url) {
+export function makeShareLink (url) {
   const a = document.createElement('a')
   a.target = '_external'
   a.className = 'share-link'
   a.href = url
-  
+
   const label = iconLabel('fontawesome-share', 'View on IPFS')
   a.appendChild(label)
   return a
@@ -158,10 +157,10 @@ export function makeShareLink(url) {
 /**
  * Makes a button that can be clicked to copy the given URL to the clipboard.
  * Also shows a popup message to the user when clicked.
- * @param {string} url 
+ * @param {string} url
  * @returns {HTMLButtonElement}
  */
-export function makeClipboardButton(url) {
+export function makeClipboardButton (url) {
   const button = document.createElement('button')
   button.onclick = e => {
     e.preventDefault()
@@ -176,30 +175,30 @@ export function makeClipboardButton(url) {
 
 /**
  * Copies the given string to the user's clipboard.
- * @param {string} str 
+ * @param {string} str
  */
 export function copyStringToClipboard (str) {
   // Create new element
-  var el = document.createElement('textarea');
+  const el = document.createElement('textarea')
   // Set value (string to be copied)
-  el.value = str;
+  el.value = str
   // Set non-editable to avoid focus and move outside of view
-  el.setAttribute('readonly', '');
-  el.style = {position: 'absolute', left: '-9999px'};
-  document.body.appendChild(el);
+  el.setAttribute('readonly', '')
+  el.style = { position: 'absolute', left: '-9999px' }
+  document.body.appendChild(el)
   // Select text inside element
-  el.select();
+  el.select()
   // Copy text to clipboard
-  document.execCommand('copy');
+  document.execCommand('copy')
   // Remove temporary element
-  document.body.removeChild(el);
+  document.body.removeChild(el)
 }
 
 /**
  * Shows a message to the user in a small popup box that fades away after a few seconds.
  * @param {string} message message to display
  */
-export function showPopupMessage(message) {
+export function showPopupMessage (message) {
   const snackbar = document.getElementById('snackbar')
   if (!snackbar) {
     return

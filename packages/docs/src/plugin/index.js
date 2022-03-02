@@ -1,13 +1,13 @@
 const path = require('path')
 
 module.exports = function (context) {
-  const {siteConfig} = context
-  const {themeConfig} = siteConfig
-  const {countly: countlyConfig} = themeConfig || {}
+  const { siteConfig } = context
+  const { themeConfig } = siteConfig
+  const { countly: countlyConfig } = themeConfig || {}
 
   if (!countlyConfig) {
     throw new Error(
-      `You need to specify "countly" object in "themeConfig" with "appKey" field in it to use this plugin.`,
+      'You need to specify "countly" object in "themeConfig" with "appKey" field in it to use this plugin.'
     )
   }
 
@@ -31,11 +31,11 @@ module.exports = function (context) {
   return {
     name: 'docusaurus-plugin-web3storage-docs',
 
-    getClientModules() {
+    getClientModules () {
       return enabled ? [path.resolve(__dirname, './analytics')] : []
     },
 
-    injectHtmlTags() {
+    injectHtmlTags () {
       if (!enabled) {
         return {}
       }
@@ -44,7 +44,7 @@ module.exports = function (context) {
           {
             tagName: 'script',
             attributes: {
-              src: 'https://cdn.jsdelivr.net/npm/countly-sdk-web@latest/lib/countly.min.js',
+              src: 'https://cdn.jsdelivr.net/npm/countly-sdk-web@latest/lib/countly.min.js'
             }
           }
         ],
@@ -75,6 +75,6 @@ module.exports = function (context) {
           }
         ]
       }
-    },
+    }
   }
 }

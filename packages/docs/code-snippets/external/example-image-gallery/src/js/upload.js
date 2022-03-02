@@ -1,8 +1,7 @@
 import '../css/style.css'
 
 import { storeImage } from './storage'
-import { makeClipboardButton, showElement, hideElement, getSavedToken, navToSettings} from './helpers'
-
+import { makeClipboardButton, showElement, hideElement, getSavedToken, navToSettings } from './helpers'
 
 // keep track of currently selected file
 let selectedFile = null
@@ -10,7 +9,7 @@ let selectedFile = null
 /**
  * DOM initialization for upload UI.
  */
-function setupUploadUI() {
+function setupUploadUI () {
   if (!document.getElementById('upload-ui')) {
     return
   }
@@ -51,7 +50,7 @@ function setupUploadUI() {
 /**
  * Callback for file input onchange event, fired when the user makes a file selection.
  */
-function fileSelected(e) {
+function fileSelected (e) {
   if (e.target.files.length < 1) {
     console.log('nothing selected')
     return
@@ -62,9 +61,9 @@ function fileSelected(e) {
 /**
  * Callback for 'drop' event that fires when user drops a file onto the drop-area div.
  */
-function fileDropped(evt) {
+function fileDropped (evt) {
   evt.preventDefault()
-  
+
   // filter out any non-image files
   const files = [...evt.dataTransfer.files].filter(f => f.type.includes('image'))
   if (files.length < 1) {
@@ -78,7 +77,7 @@ function fileDropped(evt) {
  * Respond to file selection, whether through drag-and-drop or manual selection.
  * Side effects: sets preview image to file content and sets upload button state to enabled.
  */
-function handleFileSelected(file) {
+function handleFileSelected (file) {
   const uploadButton = document.getElementById('upload-button')
   selectedFile = file
   if (file == null) {
@@ -91,9 +90,9 @@ function handleFileSelected(file) {
 
 /**
  * Sets the src for any preview image elements to the content of the given image file.
- * @param {File} imageFile 
+ * @param {File} imageFile
  */
-function updatePreviewImages(imageFile) {
+function updatePreviewImages (imageFile) {
   const elements = document.querySelectorAll('img.preview-image')
   const url = URL.createObjectURL(imageFile)
   for (const img of elements) {
@@ -103,10 +102,10 @@ function updatePreviewImages(imageFile) {
 
 /**
  * Callback for upload button's onclick event. Calls storeImage with user selected file and caption text.
- * @param {Event} evt 
- * @returns 
+ * @param {Event} evt
+ * @returns
  */
-function uploadClicked(evt) {
+function uploadClicked (evt) {
   evt.preventDefault()
   if (selectedFile == null) {
     console.log('no file selected')
@@ -125,7 +124,7 @@ function uploadClicked(evt) {
 /**
  * Shows the image upload form and hides the in-progress and success views.
  */
-function showUploadInputs() {
+function showUploadInputs () {
   const inputArea = document.getElementById('upload-input-area')
   showElement(inputArea)
   hideInProgressView()
@@ -135,7 +134,7 @@ function showUploadInputs() {
 /**
  * Shows an "upload in progress" view and hides the image upload form and success view.
  */
-function showInProgressUI() {
+function showInProgressUI () {
   const inProgress = document.getElementById('upload-in-progress')
   showElement(inProgress)
   hideUploadInputs()
@@ -146,7 +145,7 @@ function showInProgressUI() {
  * Shows a "yay! success" view for the given upload result.
  * @param {StoreImageResult} uploadResult an object containing metdata about the uploaded file.
  */
-function showSuccessView(uploadResult) {
+function showSuccessView (uploadResult) {
   hideInProgressView()
 
   const galleryLink = document.getElementById('success-gallery-link')
@@ -165,7 +164,7 @@ function showSuccessView(uploadResult) {
 /**
  * Hides the image upload form.
  */
-function hideUploadInputs() {
+function hideUploadInputs () {
   const inputArea = document.getElementById('upload-input-area')
   hideElement(inputArea)
 }
@@ -173,7 +172,7 @@ function hideUploadInputs() {
 /**
  * Hides the upload-in-progress view.
  */
-function hideInProgressView() {
+function hideInProgressView () {
   const inProgress = document.getElementById('upload-in-progress')
   hideElement(inProgress)
 }
@@ -181,11 +180,10 @@ function hideInProgressView() {
 /**
  * Hides the upload success view.
  */
-function hideSuccessView() {
+function hideSuccessView () {
   const successView = document.getElementById('upload-success')
   hideElement(successView)
 }
-
 
 /// init
 

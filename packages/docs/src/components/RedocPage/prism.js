@@ -1,17 +1,17 @@
 
-const camelToSnakeCase = str => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+const camelToSnakeCase = str => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`)
 
-function stylesToText(styles) {
+function stylesToText (styles) {
   return Object.entries(styles).map(([k, v]) => `${camelToSnakeCase(k)}: ${v};`).join('\n')
 }
 
-function resetPrismStyles(plainStyles) {
+function resetPrismStyles (plainStyles) {
   const tokens = [
-    'comment', 'prolog', 'doctype', 'cdata', 'punctuation', 'namespace', 
+    'comment', 'prolog', 'doctype', 'cdata', 'punctuation', 'namespace',
     'property', 'tag', 'number', 'constant', 'symbol', 'boolean', 'selector', 'attr-name',
     'string', 'char', 'builtin', 'inserted', 'property.string', 'operator', 'entity', 'url',
     'variable', 'atrule', 'attr-value', 'keyword', 'regex', 'important', 'bold', 'italic',
-    'entity', 'deleted',
+    'entity', 'deleted'
   ]
   const classes = tokens.map(t => `.token.${t}`)
   const selector = classes.join(', ')
@@ -23,11 +23,11 @@ function resetPrismStyles(plainStyles) {
   `
 }
 
-export function prismThemeToCSS(theme) {
+export function prismThemeToCSS (theme) {
   const { plain, styles } = theme
   const defaultPlainOptions = {
     color: 'initial',
-    backgroundColor: 'initial',
+    backgroundColor: 'initial'
   }
   const plainCSS = stylesToText(plain ?? defaultPlainOptions)
   const containerStyle = `code[class*="language-"], pre[class*="language-"] {
@@ -43,4 +43,3 @@ export function prismThemeToCSS(theme) {
   rules.unshift(resetPrismStyles(plainCSS))
   return rules.join('\n\n')
 }
-

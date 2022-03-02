@@ -37,6 +37,7 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - run: npm run build -w packages/client
       - run: npm run build -w packages/website
+      - run: npm run build -w packages/docs
         env:
           NEXT_PUBLIC_ENV: staging
           NEXT_PUBLIC_API: https://api-staging.web3.storage

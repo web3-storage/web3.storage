@@ -2,9 +2,9 @@ import { Web3Storage } from 'web3.storage'
 
 import { showMessage, showLink, jsonFile, getSavedToken, makeGatewayURL } from './helpers'
 
-////////////////////////////////
-////// Image upload & listing
-////////////////////////////////
+/// /////////////////////////////
+/// /// Image upload & listing
+/// /////////////////////////////
 
 // #region storeImage
 
@@ -15,22 +15,22 @@ const namePrefix = 'ImageGallery'
  * Stores an image file on Web3.Storage, along with a small metadata.json that includes a caption & filename.
  * @param {File} imageFile a File object containing image data
  * @param {string} caption a string that describes the image
- * 
+ *
  * @typedef StoreImageResult
  * @property {string} cid the Content ID for an directory containing the image and metadata
  * @property {string} imageURI an ipfs:// URI for the image file
  * @property {string} metadataURI an ipfs:// URI for the metadata file
  * @property {string} imageGatewayURL an HTTP gateway URL for the image
  * @property {string} metadataGatewayURL an HTTP gateway URL for the metadata file
- * 
+ *
  * @returns {Promise<StoreImageResult>} an object containing links to the uploaded content
  */
-export async function storeImage(imageFile, caption) {
+export async function storeImage (imageFile, caption) {
   // The name for our upload includes a prefix we can use to identify our files later
   const uploadName = [namePrefix, caption].join('|')
 
   // We store some metadata about the image alongside the image file.
-  // The metadata includes the file path, which we can use to generate 
+  // The metadata includes the file path, which we can use to generate
   // a URL to the full image.
   const metadataFile = jsonFile('metadata.json', {
     path: imageFile.name,
@@ -66,15 +66,15 @@ export async function storeImage(imageFile, caption) {
   return { cid, metadataGatewayURL, imageGatewayURL, imageURI, metadataURI }
 }
 
-//#endregion storeImage
+// #endregion storeImage
 
-//#region listImageMetadata
+// #region listImageMetadata
 /**
  * Get metadata objects for each image stored in the gallery.
- * 
+ *
  * @returns {AsyncIterator<ImageMetadata>} an async iterator that will yield an ImageMetadata object for each stored image.
  */
-export async function* listImageMetadata() {
+export async function * listImageMetadata () {
   const token = getSavedToken()
   if (!token) {
     console.error('No API token for Web3.Storage found.')
@@ -96,23 +96,23 @@ export async function* listImageMetadata() {
     }
   }
 }
-//#endregion listImageMetadata
+// #endregion listImageMetadata
 
-//#region getImageMetadata
+// #region getImageMetadata
 /**
  * Fetches the metadata JSON from an image upload.
  * @param {string} cid the CID for the IPFS directory containing the metadata & image
- * 
+ *
  * @typedef {object} ImageMetadata
  * @property {string} cid the root cid of the IPFS directory containing the image & metadata
  * @property {string} path the path within the IPFS directory to the image file
  * @property {string} caption a user-provided caption for the image
  * @property {string} gatewayURL an IPFS gateway url for the image
  * @property {string} uri an IPFS uri for the image
- * 
+ *
  * @returns {Promise<ImageMetadata>} a promise that resolves to a metadata object for the image
  */
-export async function getImageMetadata(cid) {
+export async function getImageMetadata (cid) {
   const url = makeGatewayURL(cid, 'metadata.json')
   const res = await fetch(url)
   if (!res.ok) {
@@ -123,20 +123,20 @@ export async function getImageMetadata(cid) {
   const uri = `ipfs://${cid}/${metadata.path}`
   return { ...metadata, cid, gatewayURL, uri }
 }
-//#endregion getImageMetadata
+// #endregion getImageMetadata
 
-//#region validateToken
+// #region validateToken
 /**
  * Checks if the given API token is valid by issuing a request.
- * @param {string} token 
+ * @param {string} token
  * @returns {Promise<boolean>} resolves to true if the token is valid, false if invalid.
  */
-export async function validateToken(token) {
-  console.log('validating token',token)
+export async function validateToken (token) {
+  console.log('validating token', token)
   const web3storage = new Web3Storage({ token })
 
   try {
-    for await (const _ of web3storage.list({ maxResults: 1})) {
+    for await (const _ of web3storage.list({ maxResults: 1 })) {
       // any non-error response means the token is legit
       break
     }

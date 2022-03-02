@@ -3,16 +3,16 @@ import '../css/style.css'
 import { validateToken } from './storage'
 import { hideElement, showElement, saveToken, getSavedToken, deleteSavedToken, showPopupMessage } from './helpers'
 
-////////////////////////////////////
-///////// Token input view
-////////////////////////////////////
+/// /////////////////////////////////
+/// ////// Token input view
+/// /////////////////////////////////
 
 // #region token-view
 
 /**
  * DOM initialization for token management UI.
  */
-function setupTokenUI() {  
+function setupTokenUI () {
   if (!document.getElementById('token-ui')) {
     return
   }
@@ -62,7 +62,7 @@ function setupTokenUI() {
   const tokenSaveButton = document.getElementById('token-save-button')
   tokenSaveButton.onclick = evt => {
     evt.preventDefault()
-    // the save button doesn't actually do anything, 
+    // the save button doesn't actually do anything,
     // since we already handle the token input in the text field's
     // onchange handler, which will fire when you try to click the button :)
   }
@@ -71,10 +71,10 @@ function setupTokenUI() {
 }
 
 /**
- * Update the token UI to show the input box if we don't have a saved token, 
+ * Update the token UI to show the input box if we don't have a saved token,
  * or the delete button if we do.
  */
-function updateTokenUI() {
+function updateTokenUI () {
   const tokenEntrySection = document.getElementById('token-input-wrapper')
   const savedTokenSection = document.getElementById('saved-token-wrapper')
   const token = getSavedToken()
@@ -91,9 +91,9 @@ function updateTokenUI() {
 
 // #endregion token-view
 
-////////////////////////////////
-///////// Initialization
-////////////////////////////////
+/// /////////////////////////////
+/// ////// Initialization
+/// /////////////////////////////
 
 // #region init
 
