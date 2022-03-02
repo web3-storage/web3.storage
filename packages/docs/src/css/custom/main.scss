@@ -1,0 +1,38 @@
+// main
+main {
+    position: relative;
+}
+@include desktop {
+    .docMainContainer_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocPage-styles-module {
+        background-color: rgba(241, 241, 241, 0.6);
+        @include shadow3;
+        padding: 6.125vw 0 6.125vw 6.75vw;
+        border-radius: 0.375rem;
+        @media (max-width: 1450px) {
+            padding: toRem(75) 0 toRem(75) toRem(75);
+        }
+        @media (max-width: 1350px) {
+            padding: toRem(50) 0 toRem(50) toRem(50);
+        }
+        @media (max-width: 1250px) {
+            padding: toRem(25) 0 toRem(25) toRem(25);
+        }
+        @media (max-width: 1150px) {
+            padding: toRem(15) 0 toRem(15) toRem(15);
+        }
+    }
+    .docMainContainer_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocPage-styles-module {
+        &:before {
+            content: '';
+            background-image: url(#{$imagePath}/shapes/triangle.png);
+            position: absolute;
+            width: 72px;
+            height: 72px;
+            top: -40px;
+            right: 2rem;
+            z-index: -1;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+    }
+}

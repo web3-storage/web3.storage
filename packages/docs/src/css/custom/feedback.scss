@@ -1,0 +1,32 @@
+// feedback box
+footer.docusaurus-mt-lg {
+    background-color: $white;
+    @include shadow1;
+    padding: toRem(32) toRem(29);
+    @include borderRadius_Large;
+    h4 {
+      margin-bottom: toRem(5);
+    }
+    button {
+        color: $white;
+        margin-bottom: toRem(20);
+        margin-right: toRem(16);
+        margin-left: toRem(10);
+        @extend .button;
+        @extend .dark;
+        @include borderRadius_Small;
+        @include fontSize_Small;
+        padding: toRem(10) toRem(12);
+        height: auto;
+        &:hover {
+            color: $ebony;
+        }
+    }
+    .col {
+        padding: 0;
+        div {
+            margin-top: toRem(5);
+            margin-bottom: toRem(5);
+        }
+    }
+}
