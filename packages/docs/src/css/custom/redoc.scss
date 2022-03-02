@@ -170,4 +170,7 @@
             line-height: toRem(32);
         }
     }
+    div:not(:first-child) + div.anchor__h2 > div > div > div > h2 {
+        margin-top: 0;
+    }
 }
