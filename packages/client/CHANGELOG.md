@@ -1,5 +1,19 @@
 # Changelog
 
+### [3.5.6](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.5...web3.storage-v3.5.6) (2022-02-28)
+
+
+### Bug Fixes
+
+* client update deps ([#1045](https://github.com/web3-storage/web3.storage/issues/1045)) ([6050b73](https://github.com/web3-storage/web3.storage/commit/6050b73c85924d70a7d33a3674aba65aca86e5a1))
+
+### [3.5.5](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.4...web3.storage-v3.5.5) (2022-02-24)
+
+
+### Bug Fixes
+
+* tests in CI ([#1034](https://github.com/web3-storage/web3.storage/issues/1034)) ([ad26c27](https://github.com/web3-storage/web3.storage/commit/ad26c27cdbe2b18ad5af32943403b7852e49e465))
+
 ### [3.5.4](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.3...web3.storage-v3.5.4) (2022-02-03)
 
 

@@ -28,6 +28,9 @@
       ],
       "ZeroHooks/*": [
         "modules/zero/hooks/*"
+      ],
+      "web3.storage": [
+        "../client"
       ]
     },
     "incremental": true

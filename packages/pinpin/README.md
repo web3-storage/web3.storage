@@ -4,19 +4,16 @@
 Backup all content pinned on our IPFS Cluster to Piñata's infra.
 
 It's a task queue! Fetch the oldest 600 PinRequests from the DB and pin them on Piñata, then delete the PinRequests from the db when successfully submitted.
-- At the time of writing the Fauna query to fetch PinRequests hits errors if a batch size other than 600 is used.
-- We can only upload to Piñata at 3req/s max, as they have rate-limiting in place.
+
+NOTE: We can only upload to Piñata at 3req/s max, as they have rate-limiting in place.
 
 ## Getting started
 
 Ensure you have all the dependencies, by running `npm i` in the parent project.
 
-To run this locally you will need the following in your `packages/cron/.env` file:
+Verify that the following are set in the `.env` file in root of the project monorepo.
 
 ```ini
-DATABASE=postgres
-
-FAUNA_KEY="<your key here>"
 PINATA_JWT="<your jwt here>"
 
 # PostgREST API URL
@@ -47,7 +44,7 @@ Deploying from scratch looks like this:
 $ heroku create --team=web3-storage web3-storage
 
 # set the env (or better, use the webui for secrets)
-$ heroku config.set FAUNA_KEY=*** PINATA_JWT=***
+$ heroku config.set PG_REST_URL=*** PG_REST_JWT=*** PINATA_JWT=***
 
 # deploy the local pinpin branch to heroku via git (you might push from a local main branch instead.)
 $ git push heroku pinpin:main
