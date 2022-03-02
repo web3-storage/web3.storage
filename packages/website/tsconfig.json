@@ -48,7 +48,8 @@
   "exclude": [
     "node_modules",
     ".next/",
-    "{pages,components,content,hooks,modules}/**/*.js"
+    "{pages,components,content,hooks,modules}/**/*.js",
+    "lib/countly.js"
   ],
   "references": [
     {
