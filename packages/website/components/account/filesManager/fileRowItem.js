@@ -135,10 +135,10 @@ const FileRowItem = props => {
           />
         )}
       </span>
-      <span className="file-availability">
+      {/* <span className="file-availability">
         <span className="file-row-label medium-down-only">{fileRowLabels.available.label}</span>
         {isHeader ? 'Availability' : 'Available'}
-      </span>
+      </span> */}
       <span className="file-pin-status">
         <span className="file-row-label medium-down-only">
           <Tooltip content={statusMessages.header} />
