@@ -30,8 +30,9 @@ import {
 
 const MAX_PUT_RETRIES = 5
 const MAX_CONCURRENT_UPLOADS = 3
-const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
+const DEFAULT_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 const MAX_BLOCK_SIZE = 1048576
+const MAX_CHUNK_SIZE = 104857600
 
 /** @typedef { import('./lib/interface.js').API } API */
 /** @typedef { import('./lib/interface.js').Status} Status */
@@ -98,11 +99,11 @@ class Web3Storage {
     onRootCidReady,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
-    maxChunkSize = MAX_CHUNK_SIZE,
+    maxChunkSize = DEFAULT_CHUNK_SIZE,
     wrapWithDirectory = true,
     name
   } = {}) {
-    if (maxChunkSize >= 104857600 || maxChunkSize < 1048576) {
+    if (maxChunkSize >= MAX_CHUNK_SIZE || maxChunkSize < MAX_BLOCK_SIZE) {
       throw new Error('maximum chunk size must be less than 100MiB and greater than or equal to 1MB')
     }
     const blockstore = new Blockstore()
@@ -135,10 +136,10 @@ class Web3Storage {
     name,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
-    maxChunkSize = MAX_CHUNK_SIZE,
+    maxChunkSize = DEFAULT_CHUNK_SIZE,
     decoders
   } = {}) {
-    if (maxChunkSize >= 104857600 || maxChunkSize < 1048576) {
+    if (maxChunkSize >= MAX_CHUNK_SIZE || maxChunkSize < MAX_BLOCK_SIZE) {
       throw new Error('maximum chunk size must be less than 100MiB and greater than or equal to 1MB')
     }
     const targetSize = maxChunkSize
