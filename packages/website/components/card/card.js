@@ -73,7 +73,8 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
             <div className="category-heading">{category.heading}</div>
             {category.links.map(link => (
               <Link href={link.url} key={link.text} passHref>
-                <div
+                <a
+                  href="replace"
                   className="category-link"
                   onClick={onLinkClick}
                   onKeyPress={e => handleKeySelect(e, link.url)}
@@ -81,7 +82,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
                   role="button"
                 >
                   {link.text}
-                </div>
+                </a>
               </Link>
             ))}
           </div>

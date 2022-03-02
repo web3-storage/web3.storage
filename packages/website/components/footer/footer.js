@@ -83,9 +83,14 @@ export default function Footer({ isProductApp }) {
               <div className="label">{resources.heading}</div>
               {resources.items.map(item => (
                 <Link href={item.url} key={item.text} passHref>
-                  <button className="footer-link" onClick={onLinkClick} onKeyPress={e => handleKeySelect(e, item.url)}>
+                  <a
+                    href="replace"
+                    className="footer-link"
+                    onClick={onLinkClick}
+                    onKeyPress={e => handleKeySelect(e, item.url)}
+                  >
                     {item.text}
-                  </button>
+                  </a>
                 </Link>
               ))}
             </div>
@@ -96,9 +101,14 @@ export default function Footer({ isProductApp }) {
               <div className="label">{getStarted.heading}</div>
               {getStarted.items.map(item => (
                 <Link href={item.url} key={item.text} passHref>
-                  <button className="footer-link" onClick={onLinkClick} onKeyPress={e => handleKeySelect(e, item.url)}>
+                  <a
+                    href="replace"
+                    className="footer-link"
+                    onClick={onLinkClick}
+                    onKeyPress={e => handleKeySelect(e, item.url)}
+                  >
                     {item.text}
-                  </button>
+                  </a>
                 </Link>
               ))}
             </div>

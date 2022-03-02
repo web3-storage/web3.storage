@@ -82,18 +82,20 @@ export default function Navigation({ isProductApp }) {
       return (
         <div className="nav-account-button">
           <Link passHref href={account.url}>
-            <button
+            <a
+              href="replace"
               className={clsx('nav-item', account.url === router.route ? 'current-page' : '')}
               onClick={onLinkClick}
               onKeyPress={e => handleKeySelect(e, account.url)}
             >
               {account.text}
-            </button>
+            </a>
           </Link>
           <div className="nav-account-dropdown">
             {account.links.map(link => (
               <Link passHref href={link.url === 'request-more-storage' ? mailTo : link.url} key={link.text}>
-                <button
+                <a
+                  href="replace"
                   className={clsx(
                     'nav-dropdown-link',
                     link.url === router.asPath || link.url === router.route ? 'current-route' : ''
@@ -102,7 +104,7 @@ export default function Navigation({ isProductApp }) {
                   onKeyPress={e => handleKeySelect(e, link.url)}
                 >
                   {link.text}
-                </button>
+                </a>
               </Link>
             ))}
           </div>
@@ -173,7 +175,8 @@ export default function Navigation({ isProductApp }) {
             >
               <div className={clsx('site-logo-container', theme, isMenuOpen ? 'menu-open' : '')}>
                 <Link passHref href="/">
-                  <div
+                  <a
+                    href="replace"
                     title={logoText}
                     className="anchor-wrapper"
                     onClick={onLinkClick}
@@ -182,23 +185,22 @@ export default function Navigation({ isProductApp }) {
                     tabIndex={0}
                   >
                     <SiteLogo className="site-logo-image" />
-                    <button className="site-logo-text" onClick={onLinkClick} onKeyPress={e => handleKeySelect(e, '/')}>
-                      {logoText}
-                    </button>
-                  </div>
+                    <div className="site-logo-text">{logoText}</div>
+                  </a>
                 </Link>
               </div>
 
               <div className={clsx('nav-items-wrapper', theme)}>
                 {navItems.map(item => (
                   <Link passHref key={item.text} href={item.url}>
-                    <button
+                    <a
+                      href="replace"
                       className={clsx('nav-item', item.url === router.route ? 'current-page' : '')}
                       onClick={onLinkClick}
                       onKeyPress={e => handleKeySelect(e, item.url)}
                     >
                       {item.text}
-                    </button>
+                    </a>
                   </Link>
                 ))}
 
@@ -226,9 +228,9 @@ export default function Navigation({ isProductApp }) {
               <div className="mobile-items-wrapper">
                 {navItems.map((item, index) => (
                   <Link passHref href={item.url} key={`mobile-${item.text}`}>
-                    <button className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
+                    <a href="replace" className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
                       {item.text}
-                    </button>
+                    </a>
                   </Link>
                 ))}
 
@@ -248,13 +250,14 @@ export default function Navigation({ isProductApp }) {
                                 href={link.url === 'request-more-storage' ? mailTo : link.url}
                                 key={link.text}
                               >
-                                <button
+                                <a
+                                  href="replace"
                                   className="nav-sublink"
                                   onClick={onLinkClick}
                                   onKeyPress={e => handleKeySelect(e, link.url)}
                                 >
                                   {link.text}
-                                </button>
+                                </a>
                               </Link>
                             ))}
                           </div>
