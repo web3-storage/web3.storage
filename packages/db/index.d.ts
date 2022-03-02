@@ -20,6 +20,7 @@ import type {
   PinRequestItemOutput,
   PinSyncRequestOutput,
   PinUpsertInput,
+  PinsUpsertInput,
   BackupOutput,
   PsaPinRequestItem,
   PsaPinRequestUpsertOutput,
@@ -34,6 +35,7 @@ export { gql }
 export class DBClient {
   constructor(config: { endpoint?: string; token: string, postgres?: boolean })
   client: PostgrestClient
+  getMetricsValue (key: string): Promise<{ total: number }>
   upsertUser (user: UpsertUserInput): Promise<UpsertUserOutput>
   getUser (issuer: string): Promise<UserOutput>
   getUsedStorage (userId: number): Promise<number>
@@ -45,13 +47,13 @@ export class DBClient {
   getStatus (cid: string): Promise<ContentItemOutput>
   getBackups (uploadId: number): Promise<Array<BackupOutput>>
   upsertPin (cid: string, pin: PinUpsertInput): Promise<number>
-  upsertPins (pins: Array<PinUpsertInput>): Promise<void>
+  upsertPins (pins: Array<PinsUpsertInput>): Promise<void>
   getPins (cid: string): Promise<Array<PinItemOutput>>
   getPinRequests ({ size }: { size: number }): Promise<Array<PinRequestItemOutput>>
   deletePinRequests (ids: Array<number>): Promise<void>
-  createPinSyncRequests (pinSyncRequests: Array<number>): Promise<void>
-  getPinSyncRequests ({ to, after }: { to: string, after: string }): Promise<PinSyncRequestOutput>
-  deletePinSyncRequests (ids: Array<number>): Promise<void>
+  createPinSyncRequests (pinSyncRequests: Array<string>): Promise<void>
+  getPinSyncRequests ({ to, after, size }: { to: string, after?: string, size?: number }): Promise<PinSyncRequestOutput>
+  deletePinSyncRequests (ids: Array<string>): Promise<void>
   getDeals (cid: string): Promise<Deal[]>
   getDealsForCids (cids: string[]): Promise<Record<string, Deal[]>>
   createKey (key: CreateAuthKeyInput): Promise<CreateAuthKeyOutput>

@@ -4,7 +4,10 @@
     "allowJs": true,
     "checkJs": true,
     "target": "esnext",
-    "lib": ["ESNext", "DOM"],
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
     "strict": true,
     "moduleResolution": "node",
     "sourceMap": true,
@@ -17,11 +20,21 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "paths": {
-      "web3.storage": ["../client"]
-    }
+      "web3.storage": [
+        "../client"
+      ]
+    },
+    "incremental": true
   },
-  "include": ["lib", "pages", "components"],
-  "exclude": ["node_modules/", ".next/"],
+  "include": [
+    "lib",
+    "pages",
+    "components"
+  ],
+  "exclude": [
+    "node_modules/",
+    ".next/"
+  ],
   "references": [
     {
       "path": "../client"

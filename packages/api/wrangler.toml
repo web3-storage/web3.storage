@@ -12,7 +12,7 @@ watch_dir = "src"
 [build.upload]
 format = "modules"
 dir = "dist"
-main = "index.mjs"
+main = "worker.mjs"
 # NOTE: Make sure the main field in your package.json references the Worker script you want to publish.
 
 [durable_objects]
@@ -43,7 +43,7 @@ bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api.web3.storage/*"
-vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "production", PG_REST_URL = "https://web3-storage-pgrest-prod.herokuapp.com" }
+vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "production", PG_REST_URL = "https://web3-storage-pgrest-prod.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
 
 [env.production.durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
@@ -53,7 +53,7 @@ bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api-staging.web3.storage/*"
-vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "staging", PG_REST_URL = "https://web3-storage-pgrest-staging.herokuapp.com" }
+vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "staging", PG_REST_URL = "https://web3-storage-pgrest-staging.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
 
 [env.staging.durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
@@ -61,7 +61,7 @@ bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 [env.alan]
 workers_dev = true
 account_id = "4fe12d085474d33bdcfd8e9bed4d8f95"
-vars = { CLUSTER_API_URL = "https://alan-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://alan-postgres-api-web3-storage.loca.lt", ENV = "dev" }
+vars = { CLUSTER_API_URL = "https://alan-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://alan-postgres-api-web3-storage.loca.lt", ENV = "dev", GATEWAY_URL = "https://ipfs.io" }
 
 [env.alan.durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
@@ -69,7 +69,7 @@ bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 [env.oli]
 workers_dev = true
 account_id = "6e5a2aed80cd37d77e8d0c797a75ebbd"
-vars = { CLUSTER_API_URL = "https://oli-cluster-api-web3-storage.loca.lt", ENV = "dev" }
+vars = { CLUSTER_API_URL = "https://oli-cluster-api-web3-storage.loca.lt", ENV = "dev", GATEWAY_URL = "https://ipfs.io" }
 
 [env.oli.durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
@@ -77,7 +77,7 @@ bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 [env.yusef]
 workers_dev = true
 account_id = "8c3da25233263bd7a26c0e2e04569ded"
-vars = { CLUSTER_API_URL = "https://yusef-cluster-api-web3-storage.loca.lt", ENV = "dev" }
+vars = { CLUSTER_API_URL = "https://yusef-cluster-api-web3-storage.loca.lt", ENV = "dev", GATEWAY_URL = "https://ipfs.io" }
 
 [env.yusef.durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
@@ -85,7 +85,7 @@ bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 [env.vsantos]
 workers_dev = true
 account_id = "7ec0b7cf2ec201b2580374e53ba5f37b"
-vars = { CLUSTER_API_URL = "https://vascosantos-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://vascosantos-postgres-api-web3-storage.loca.lt", ENV = "dev" }
+vars = { CLUSTER_API_URL = "https://vascosantos-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://vascosantos-postgres-api-web3-storage.loca.lt", ENV = "dev", GATEWAY_URL = "https://ipfs.io" }
 
 [env.vsantos.durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
@@ -93,7 +93,7 @@ bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 [env.tempus]
 workers_dev = true
 account_id = "4303c6f9fed102b35399fe94af99f8bd"
-vars = { CLUSTER_API_URL = "https://tempus-cluster-api-web3-storage.loca.lt", ENV = "dev" }
+vars = { CLUSTER_API_URL = "https://tempus-cluster-api-web3-storage.loca.lt", ENV = "dev", GATEWAY_URL = "https://ipfs.io" }
 
 [env.tempus.durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
@@ -101,7 +101,7 @@ bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 [env.paolo]
 workers_dev = true
 account_id = "21ba9b25d0fe2fbefc6c9f17e1b90d86"
-vars = { CLUSTER_API_URL = "https://paolo-cluster-api-web3-storage.loca.lt/", PG_REST_URL = "https://paolo-postgres-api-web3-storage.loca.lt/", ENV = "dev" }
+vars = { CLUSTER_API_URL = "https://paolo-cluster-api-web3-storage.loca.lt/", PG_REST_URL = "https://paolo-postgres-api-web3-storage.loca.lt/", ENV = "dev", GATEWAY_URL = "https://ipfs.io" }
 
 [env.paolo.durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
@@ -109,7 +109,7 @@ bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 [env.garyhomewood]
 workers_dev = true
 account_id = "e7a8a523464d26ce98e3747575b366b6"
-vars = { CLUSTER_API_URL = "https://garyhomewood-cluster-api-web3-storage.loca.lt/", PG_REST_URL = "https://garyhomewood-postgres-api-web3-storage.loca.lt/", ENV = "dev" }
+vars = { CLUSTER_API_URL = "https://garyhomewood-cluster-api-web3-storage.loca.lt/", PG_REST_URL = "https://garyhomewood-postgres-api-web3-storage.loca.lt/", ENV = "dev", GATEWAY_URL = "https://ipfs.io" }
 
 [env.garyhomewood.durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
@@ -117,9 +117,17 @@ bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 [env.leslieoa]
 workers_dev = true
 account_id = "ede80955a038a6911c9b03ae4343fee4"
-vars = { CLUSTER_API_URL = "https://leslieoa-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://leslieoa-postgres-api-web3-storage.loca.lt", ENV = "dev" }
+vars = { CLUSTER_API_URL = "https://leslieoa-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://leslieoa-postgres-api-web3-storage.loca.lt", ENV = "dev", GATEWAY_URL = "https://ipfs.io" }
 
 [env.leslieoa.durable_objects]
+bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
+
+[env.alexandra]
+workers_dev = true
+account_id = "a454b0d1615f83ee5d00a63ae152f36f"
+vars = { CLUSTER_API_URL = "https://alexandra-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://alexandra-postgres-api-web3-storage.loca.lt", ENV = "dev" }
+
+[env.alexandra.durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 
 # Add your env here. Override the the values you need to change.

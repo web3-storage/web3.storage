@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import dotenv from 'dotenv'
 import { updateMetrics } from '../jobs/metrics.js'
+import { envConfig } from '../lib/env.js'
 import { getDBClient } from '../lib/utils.js'
 
 async function main () {
@@ -11,5 +11,5 @@ async function main () {
   await updateMetrics({ env, db })
 }
 
-dotenv.config()
+envConfig()
 main()

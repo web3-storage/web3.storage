@@ -4,12 +4,13 @@ The HTTP interface implemented as a Cloudflare Worker
 
 ## Getting started
 
+Copy the `.env.tpl` to `.env` in root of the project monorepo. 
+
+Create an account on https://magic.link and fill in the `MAGIC_SECRET_KEY` variable in the .env file.
+
 We use miniflare to run the api locally, and docker to run ipfs-cluster and postgres with postREST.
 
 ```sh
-# Copy <.env.local.tpl> to `.env.local` and fill out the missing worker vars.
-cp .env.local.tpl .env.local
-
 # Install the deps
 npm install
 ```

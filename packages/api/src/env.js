@@ -1,3 +1,4 @@
+/* global BRANCH, VERSION, COMMITHASH, SENTRY_RELEASE */
 import Toucan from 'toucan-js'
 import { S3Client } from '@aws-sdk/client-s3/dist-es/S3Client.js'
 import { Magic } from '@magic-sdk/admin'
@@ -19,6 +20,7 @@ import pkg from '../package.json'
  * @property {string} [CLUSTER_BASIC_AUTH_TOKEN]
  * @property {string} PG_REST_URL
  * @property {string} PG_REST_JWT
+ * @property {string} GATEWAY_URL
  * @property {string} [S3_BUCKET_ENDPOINT]
  * @property {string} [S3_BUCKET_NAME]
  * @property {string} [S3_BUCKET_REGION]
@@ -67,14 +69,26 @@ import pkg from '../package.json'
  * @param {import('./index.js').Ctx} ctx
  */
 export function envAll (req, env, ctx) {
+  // In dev, set these vars in a .env file in the parent monorepo project root.
+  if (!env.PG_REST_URL) {
+    throw new Error('MISSING ENV. Please set PG_REST_URL')
+  }
+  // These values are replaced at build time by esbuild `define`
+  env.BRANCH = BRANCH
+  env.VERSION = VERSION
+  env.COMMITHASH = COMMITHASH
+  env.SENTRY_RELEASE = SENTRY_RELEASE
+
   env.sentry = env.SENTRY_DSN && new Toucan({
     dsn: env.SENTRY_DSN,
     context: ctx,
+    request: req,
     allowedHeaders: ['user-agent', 'x-client'],
     allowedSearchParams: /(.*)/,
     debug: false,
     rewriteFrames: {
-      root: '/'
+      // strip . from start of the filename ./worker.mjs as set by cloudflare, to make absolute path `/worker.mjs`
+      iteratee: (frame) => ({ ...frame, filename: frame.filename.substring(1) })
     },
     environment: env.ENV,
     release: env.SENTRY_RELEASE,
