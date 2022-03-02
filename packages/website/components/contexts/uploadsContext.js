@@ -80,8 +80,7 @@ export const UploadsProvider = ({ children }) => {
 
   // Initialize files and prep for upload, to be called in useEffect
   const uploadFiles = useCallback(
-    /** @param {Files} file */
-    async files => {
+    async (/** @typedef { Files } */ files) => {
       // Initializing client if necessary
       client =
         client ||
