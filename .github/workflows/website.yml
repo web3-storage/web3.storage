@@ -35,15 +35,15 @@ jobs:
         with:
           node-version: 16
       - uses: bahmutov/npm-install@v1
+      - run: npm run build -w packages/client
+      - run: npm run build -w packages/docs
+      - run: npm run build -w packages/website
         env:
           NEXT_PUBLIC_ENV: staging
           NEXT_PUBLIC_API: https://api-staging.web3.storage
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           NEXT_PUBLIC_COUNTLY_URL: ${{ secrets.COUNTLY_URL }}
           NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
-      - run: npm run build -w packages/client
-      - run: npm run build -w packages/docs
-      - run: npm run build -w packages/website
 
       # Add the site to web3.storage, output the cid as `steps.ipfs.outputs.cid`
       - name: Add to web3.storage
