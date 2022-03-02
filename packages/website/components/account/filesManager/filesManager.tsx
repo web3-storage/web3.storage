@@ -13,18 +13,22 @@ import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
 import Filterable from 'ZeroComponents/filterable/filterable';
-import Sortable, { SortType, SortDirection } from 'ZeroComponents/sortable/sortable';
+import Sortable from 'ZeroComponents/sortable/sortable';
 import Pagination from 'ZeroComponents/pagination/pagination';
+import Modal from 'modules/zero/components/modal/modal';
 import { formatTimestamp } from 'lib/utils';
 import { useUploads } from 'components/contexts/uploadsContext';
-import { fileRowLabels } from 'components/account/filesManager/fileRowLabels.const';
+import GradientBackgroundB from 'assets/illustrations/gradient-background-b';
+import CloseIcon from 'assets/icons/close';
 
 type FilesManagerProps = {
   className?: string;
+  content?: any;
+  onFileUpload: () => void;
 };
 
-const FilesManager = ({ className }: FilesManagerProps) => {
-  const { uploads: files, fetchDate, getUploads, isFetchingUploads, deleteUpload } = useUploads();
+const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) => {
+  const { uploads: files, fetchDate, getUploads, isFetchingUploads, deleteUpload, renameUpload } = useUploads();
   const {
     query: { filter },
   } = useRouter();
@@ -33,9 +37,13 @@ const FilesManager = ({ className }: FilesManagerProps) => {
   const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
   const [itemsPerPage, setItemsPerPage] = useState(null);
   const [keyword, setKeyword] = useState(filter);
+  const [deleteSingleCid, setDeleteSingleCid] = useState('');
+  const deleteModalState = useState(false);
 
   const [selectedFiles, setSelectedFiles] = useState<Upload[]>([]);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [nameEditingId, setNameEditingId] = useState();
+  const fileRowLabels = content?.table.file_row_labels;
 
   // Initial fetch on component load
   useEffect(() => {
@@ -43,10 +51,6 @@ const FilesManager = ({ className }: FilesManagerProps) => {
       getUploads();
     }
   }, [fetchDate, getUploads, isFetchingUploads]);
-
-  const onFileUploead = useCallback(() => {
-    window.alert('Upload a file');
-  }, []);
 
   const onSelectAllToggle = useCallback(
     e => {
@@ -66,7 +70,6 @@ const FilesManager = ({ className }: FilesManagerProps) => {
       const selectedIndex = selectedFiles.findIndex(fileSelected => fileSelected === file);
       if (selectedIndex !== -1) {
         selectedFiles.splice(selectedIndex, 1);
-
         return setSelectedFiles([...selectedFiles]);
       }
 
@@ -75,65 +78,69 @@ const FilesManager = ({ className }: FilesManagerProps) => {
     [selectedFiles, setSelectedFiles]
   );
 
-  const onDeleteSelected = useCallback(async () => {
-    if (!window.confirm('Are you sure? Deleted files cannot be recovered!')) {
-      countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
-        ui: countly.ui.FILES,
-        totalDeleted: 0,
-      });
-      return;
-    }
+  const closeDeleteModal = useCallback(() => {
+    deleteModalState[1](false);
+    countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
+      ui: countly.ui.FILES,
+      totalDeleted: 0,
+    });
+  }, [deleteModalState]);
 
-    setIsDeleting(true);
-    await Promise.all(selectedFiles.map(({ cid }) => deleteUpload(cid)));
+  const onDeleteSelected = useCallback(async () => {
+    setIsUpdating(true);
+
+    if (deleteSingleCid !== '') {
+      deleteUpload(deleteSingleCid);
+    } else {
+      await Promise.all(selectedFiles.map(({ cid }) => deleteUpload(cid)));
+    }
 
     countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
       ui: countly.ui.FILES,
       totalDeleted: selectedFiles.length,
     });
 
-    setIsDeleting(false);
+    setIsUpdating(false);
     setSelectedFiles([]);
 
     getUploads();
-  }, [selectedFiles, deleteUpload, setIsDeleting, getUploads]);
+    setDeleteSingleCid('');
+    deleteModalState[1](false);
+  }, [deleteSingleCid, selectedFiles, getUploads, deleteModalState, deleteUpload]);
 
   const onDeleteSingle = useCallback(
     async cid => {
-      if (!window.confirm('Are you sure? Deleted files cannot be recovered!')) {
-        countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
-          ui: countly.ui.FILES,
-          totalDeleted: 0,
-        });
-        return;
-      }
-
-      setIsDeleting(true);
-      deleteUpload(cid);
-
-      countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
-        ui: countly.ui.FILES,
-        totalDeleted: 1,
-      });
-
-      setIsDeleting(false);
-      setSelectedFiles([]);
-
-      getUploads();
+      deleteModalState[1](true);
+      setDeleteSingleCid(cid);
     },
-    [deleteUpload, setIsDeleting, getUploads]
+    [deleteModalState]
+  );
+
+  const onEditToggle = useCallback(
+    targetCID => async (newFileName?: string) => {
+      setNameEditingId(targetCID !== nameEditingId ? targetCID : undefined);
+
+      const fileTarget = files.find(({ cid }) => cid === targetCID);
+      if (!!fileTarget && !!newFileName && newFileName !== fileTarget.name) {
+        setIsUpdating(true);
+        await renameUpload(targetCID, newFileName);
+        fileTarget.name = newFileName;
+        setIsUpdating(false);
+      }
+    },
+    [renameUpload, files, nameEditingId]
   );
 
   return (
-    <div className={clsx('section files-manager-container', className, isDeleting && 'disabled')}>
+    <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
       <div className="files-manager-header">
-        <span>Files</span>
+        <span>{content?.heading}</span>
         <Filterable
           className="files-manager-search"
           items={files}
           icon={<SearchIcon />}
           filterKeys={['name', 'cid']}
-          placeholder="Search for a file"
+          placeholder={content?.ui.filter_placeholder}
           queryParam="filter"
           onChange={setFilteredFiles}
           onValueChange={setKeyword}
@@ -143,61 +150,12 @@ const FilesManager = ({ className }: FilesManagerProps) => {
           onClick={useCallback(_ => getUploads(), [getUploads])}
         >
           <RefreshIcon />
-          Refresh
+          <span>{content?.ui.refresh}</span>
         </button>
         <Sortable
           items={filteredFiles}
-          staticLabel={'Sort by'}
-          options={[
-            {
-              label: 'Alphabetical A-Z',
-              key: 'name',
-              value: 'a-z',
-              direction: SortDirection.ASC,
-              compareFn: SortType.ALPHANUMERIC,
-            },
-            {
-              label: 'Alphabetical Z-A',
-              key: 'name',
-              value: 'z-A',
-              direction: SortDirection.DESC,
-              compareFn: SortType.ALPHANUMERIC,
-            },
-            {
-              label: 'Most Recently Added',
-              value: 'newest',
-              compareFn: items => items.sort((a, b) => a['created'].localeCompare(b['created'])),
-            },
-            {
-              label: 'Least Recently Added',
-              value: 'oldest',
-              compareFn: items => items.sort((a, b) => b['created'].localeCompare(a['created'])),
-            },
-            {
-              label: 'Largest size',
-              value: 'largest',
-              compareFn: items => items.sort((a, b) => b.dagSize - a.dagSize),
-            },
-            {
-              label: 'Smallest size',
-              value: 'smallest',
-              compareFn: items => items.sort((a, b) => a.dagSize - b.dagSize),
-            },
-            /** TODO: Add file type sorting if available
-             * {
-             * label: 'File type',
-             * value: 'fileType',
-             * compareFn: items => items.sort((a, b) => b.dagSize < a.dagSize),
-             * },
-             */
-            /** TODO: Confirm what miner sorting is
-             * {
-             * label: 'Miner',
-             * value: 'miner',
-             * compareFn: items => items.sort((a, b) => b.dagSize < a.dagSize),
-             * },
-             */
-          ]}
+          staticLabel={content?.ui.sortby.label}
+          options={content?.ui.sortby.options}
           value="a-z"
           queryParam="order"
           onChange={setSortedFiles}
@@ -205,12 +163,12 @@ const FilesManager = ({ className }: FilesManagerProps) => {
       </div>
       <FileRowItem
         onSelect={onSelectAllToggle}
-        date={fileRowLabels.DATE}
-        name={fileRowLabels.NAME}
-        cid={fileRowLabels.CID}
-        status={fileRowLabels.STATUS}
-        storageProviders={fileRowLabels.STORAGE_PROVIDERS}
-        size={fileRowLabels.SIZE}
+        date={fileRowLabels.date.label}
+        name={fileRowLabels.name.label}
+        cid={fileRowLabels.cid.label}
+        status={fileRowLabels.status.label}
+        storageProviders={fileRowLabels.storage_providers.label}
+        size={fileRowLabels.size.label}
         isHeader
         isSelected={
           !!selectedFiles.length &&
@@ -223,17 +181,18 @@ const FilesManager = ({ className }: FilesManagerProps) => {
           <Loading className={'files-loading-spinner'} />
         ) : !files.length ? (
           <span className="files-manager-upload-cta">
-            You don’t have any files uploaded yet.{'\u00A0'}
+            {content?.table.message}
+            {'\u00A0'}
             <Button
-              onClick={onFileUploead}
-              variant={ButtonVariant.TEXT}
+              onClick={onFileUpload}
+              variant={content?.table.cta.theme}
               tracking={{
-                ui: countly.ui.FILES,
-                action: 'Upload File',
+                ui: countly.ui[content?.table.cta.ui],
+                action: content?.table.cta.action,
                 data: { isFirstFile: true },
               }}
             >
-              Upload your first file
+              {content?.table.cta.text}
             </Button>
           </span>
         ) : (
@@ -262,19 +221,23 @@ const FilesManager = ({ className }: FilesManagerProps) => {
                 </span>
               ))}
               size={filesize(item.dagSize)}
-              // TODO: Remove hardcoded highlight when hooked up, resolve temporary type fix for array of strings
               highlight={{ target: 'name', text: keyword?.toString() || '' }}
               numberOfPins={item.pins.length}
               isSelected={!!selectedFiles.find(fileSelected => fileSelected === item)}
               onDelete={() => onDeleteSingle(item.cid)}
+              isEditingName={item.cid === nameEditingId}
+              onEditToggle={onEditToggle(item.cid)}
             />
           ))
         )}
       </div>
       {!!files.length && (
         <div className="files-manager-footer">
-          <button className={clsx('delete', !selectedFiles.length && 'disabled')} onClick={onDeleteSelected}>
-            Delete Selected
+          <button
+            className={clsx('delete', !selectedFiles.length && 'disabled')}
+            onClick={() => deleteModalState[1](true)}
+          >
+            {content?.ui.delete.text}
           </button>
           <Pagination
             className="files-manager-pagination"
@@ -286,18 +249,34 @@ const FilesManager = ({ className }: FilesManagerProps) => {
           />
           <Dropdown
             className="files-manager-result-dropdown"
-            value="10"
-            options={[
-              { label: 'View 10 Results', value: '10' },
-              { label: 'View 20 Results', value: '20' },
-              { label: 'View 50 Results', value: '50' },
-              { label: 'View 100 Results', value: '100' },
-            ]}
+            value={content?.ui.results.options[0].value}
+            options={content?.ui.results.options}
             queryParam="items"
             onChange={value => setItemsPerPage(value)}
           />
         </div>
       )}
+      <Modal
+        className="delete-modal"
+        animation="ken"
+        modalState={deleteModalState}
+        closeIcon={<CloseIcon className="file-uploader-close" />}
+        showCloseButton
+      >
+        <GradientBackgroundB className="account-gradient-background" />
+        <div className="delete-modal-content">
+          <h5>{content?.ui.delete.heading}</h5>
+          <p>{content?.ui.delete.alert}</p>
+        </div>
+        <div className="delete-modal-buttons">
+          <Button variant={ButtonVariant.OUTLINE_DARK} onClick={onDeleteSelected}>
+            {content?.ui.delete.ok}
+          </Button>
+          <Button variant={ButtonVariant.OUTLINE_DARK} onClick={closeDeleteModal}>
+            {content?.ui.delete.cancel}
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };

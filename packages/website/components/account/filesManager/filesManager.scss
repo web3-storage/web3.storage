@@ -24,7 +24,7 @@
 .files-manager-header {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   justify-items: center;
   padding: 0 2.125rem 1.5rem;
   flex-wrap: wrap;
@@ -36,7 +36,7 @@
 
   // Title
   > :first-child {
-    margin-right: 11.625rem;
+    margin-right: 8rem;
     @include medium {
       padding-left: 1rem;
       margin-right: initial;
@@ -58,14 +58,27 @@
     top: 0.1rem;
     cursor: pointer;
     margin-right: 2.5rem;
-
     @include medium {
       margin-right: 0;
     }
-
     svg {
+      transition: transform $transitionDuration;
       color: $cyan;
       margin-right: 0.625rem;
+    }
+    span {
+      display: inline-block;
+      transition: transform $transitionDuration ease-in-out;
+    }
+    &:hover {
+      svg {
+        transform: rotate(90deg);
+        transition: transform $transitionDuration;
+      }
+      span {
+        transform: scale(1.1);
+        transition: transform $transitionDuration ease-in-out;
+      }
     }
   }
 
@@ -123,20 +136,59 @@
   }
 
   .files-manager-result-dropdown .dropdownContent {
-    position: absolute;
-    top: 0;
+    right: -0.75rem;
   }
 
   .delete {
     @include label_5;
     cursor: pointer;
     color: $cyan;
+    transition: opacity $transitionDuration;
   }
 
   .files-manager-pagination {
     @include medium {
       flex-basis: 100%;
       order: 3;
+    }
+  }
+}
+
+.delete-modal {
+  color: $ebony;
+  > * {
+    position: relative;
+  }
+  .modalContainer {
+    min-width: toRem(550);
+    @include medium {
+      min-width: auto;
+    }
+    @include borderRadius_Large;
+    .modalInner {
+      padding: toRem(49) 2rem toRem(29) 4rem;
+    }
+  }
+  .modalClose {
+    color: $ebony;
+    font-size: 2rem;
+  }
+  &-content {
+    position: relative;
+    h5 {
+      font-size: toRem(24);
+    }
+    p {
+      font-size: toRem(16);
+      @include leading_Small;
+    }
+  }
+  &-buttons {
+    margin-top: toRem(27);
+    display: flex;
+    justify-content: flex-end;
+    .button {
+      margin-left: 0.5rem;
     }
   }
 }

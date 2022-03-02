@@ -7,8 +7,9 @@ import CTACard from '../../components/account/ctaCard/CTACard';
 import FileUploader from '../../components/account/fileUploader/fileUploader';
 import GradientBackgroundB from 'assets/illustrations/gradient-background-b';
 import countly from 'lib/countly';
-import { ButtonVariant } from 'components/button/button';
+import AppData from '../../content/pages/app/account.json';
 import { PageProps } from 'components/types';
+import { useUploads } from 'components/contexts/uploadsContext';
 
 enum CTACardTypes {
   API_TOKENS,
@@ -18,75 +19,59 @@ enum CTACardTypes {
 
 const Account: React.FC = () => {
   const uploadModalState = useState(false);
+  const dashboard = AppData.page_content.dashboard;
+  const { uploads } = useUploads();
 
   const onFileUploead = useCallback(() => {
     uploadModalState[1](true);
   }, [uploadModalState]);
 
-  const hasFiles = false; // TODO: Has files check
   const CTAConfigs = useMemo(
     () => ({
       [CTACardTypes.API_TOKENS]: {
-        heading: 'API Tokens',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-        ctas: [
-          {
-            href: '/tokens?create=true',
-            variant: ButtonVariant.PINK_BLUE,
-            tracking: { ui: countly.ui.PROFILE_GETTING_STARTED, action: 'Create an API Token' },
-            children: <Link href="/tokens?create=true">Create a Token</Link>,
-          },
-          {
-            href: '/tokens',
-            variant: ButtonVariant.OUTLINE_LIGHT,
-            tracking: { ui: countly.ui.PROFILE_API_TOKENS, action: 'Manage tokens' },
-            children: <Link href="/tokens">Manage Tokens</Link>,
-          },
-        ],
+        heading: dashboard.card_left.heading,
+        description: dashboard.card_left.description,
+        ctas: dashboard.card_left.ctas.map(cta => ({
+          href: cta.link,
+          variant: cta.theme,
+          tracking: { ui: countly.ui[cta.ui], action: cta.action },
+          children: <Link href={cta.link}>{cta.text}</Link>,
+        })),
       },
       [CTACardTypes.READ_DOCS]: {
-        heading: 'Read the docs',
-        description: 'See the docs for guides and and walkthroughs',
-        ctas: [
-          {
-            href: 'https://docs.web3.storage',
-            variant: ButtonVariant.PINK_BLUE,
-            children: (
-              <a href="https://docs.web3.storage" target="_blank" rel="noreferrer">
-                Explore the docs
-              </a>
-            ),
-            tracking: { ui: countly.ui.PROFILE_GETTING_STARTED, action: 'Explore the docs' },
-          },
-        ],
+        heading: dashboard.card_center.heading,
+        description: dashboard.card_center.description,
+        ctas: dashboard.card_center.ctas.map(cta => ({
+          href: cta.link,
+          variant: cta.theme,
+          tracking: { ui: countly.ui[cta.ui], action: cta.action },
+          children: (
+            <a href={cta.link} target="_blank" rel="noreferrer">
+              {cta.text}
+            </a>
+          ),
+        })),
       },
       [CTACardTypes.UPLOAD_FILES]: {
-        heading: `Upload ${hasFiles ? 'more' : 'your first'} file${hasFiles ? 's' : ''}`,
-        description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        ctas: [
-          {
-            onClick: onFileUploead,
-            variant: ButtonVariant.OUTLINE_DARK,
-            children: 'Upload Files',
-            tracking: {
-              ui: countly.ui.FILES,
-              action: 'Upload File',
-              data: { isFirstFile: !hasFiles },
-            },
-          },
-        ],
+        heading: !!uploads.length ? dashboard.card_right.heading.option_1 : dashboard.card_right.heading.option_2,
+        description: dashboard.card_right.description,
+        ctas: dashboard.card_right.ctas.map(cta => ({
+          onClick: onFileUploead,
+          variant: cta.theme,
+          tracking: { ui: countly.ui[cta.ui], action: cta.action, isFirstFile: !uploads.length },
+          children: cta.text,
+        })),
       },
     }),
-    [hasFiles, onFileUploead]
+    [uploads.length, onFileUploead, dashboard]
   );
 
   return (
     <>
       <div className="page-container account-container grid">
-        <h3>Account</h3>
+        <h3>{dashboard.heading}</h3>
         <div className="account-content">
-          <StorageManager className="account-storage-manager" />
+          <StorageManager content={AppData.page_content.storage_manager} className="account-storage-manager" />
           <CTACard className="account-tokens-cta" {...CTAConfigs[CTACardTypes.API_TOKENS]} />
           <CTACard className="account-docs-cta" {...CTAConfigs[CTACardTypes.READ_DOCS]} />
           <CTACard
@@ -94,9 +79,14 @@ const Account: React.FC = () => {
             {...CTAConfigs[CTACardTypes.UPLOAD_FILES]}
             background={<GradientBackgroundB className="account-gradient-background" />}
           />
-          <FilesManager className="account-files-manager" />
+          <FilesManager
+            content={AppData.page_content.file_manager}
+            className="account-files-manager"
+            onFileUpload={onFileUploead}
+          />
         </div>
         <FileUploader
+          content={AppData.page_content.file_uploader}
           uploadModalState={uploadModalState}
           background={<GradientBackgroundB className="account-gradient-background" />}
         />
@@ -108,7 +98,7 @@ const Account: React.FC = () => {
 export function getStaticProps(): { props: PageProps } {
   return {
     props: {
-      title: 'Account - Web3 Storage',
+      title: AppData.seo.title,
       redirectTo: '/login/',
       isRestricted: true,
     },

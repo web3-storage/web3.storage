@@ -1,10 +1,21 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
+import { Web3Storage } from 'web3.storage';
 
-import { deleteUpload, getUploads, renameUpload } from 'lib/api';
+import { API, deleteUpload, getToken, getUploads, renameUpload } from 'lib/api';
+import { useUploadProgress } from './uploadProgressContext';
+
+export const STATUS = {
+  PENDING: 'pending',
+  UPLOADING: 'uploading',
+  COMPLETED: 'completed',
+  FAILED: 'failed',
+};
 
 /**
  * @typedef {import('../../lib/api').UploadArgs} UploadArgs
  * @typedef {import('web3.storage').Upload} Upload
+ * @typedef {import('./uploadProgressContext').FileProgress} FileProgress
+ * @typedef {import('./uploadProgressContext').UploadProgress} UploadProgress
  */
 
 /**
@@ -36,9 +47,11 @@ import { deleteUpload, getUploads, renameUpload } from 'lib/api';
  * @property {(cid: string) => Promise<void>} deleteUpload Method to delete an existing upload
  * @property {(cid: string, name: string)=>Promise<void>} renameUpload Method to rename an existing upload
  * @property {(args?: UploadArgs) => Promise<Upload[]>} getUploads Method that refetches list of uploads based on certain params
- * @property {(file:File) => Promise<void>} uploadFile Method to upload a new file
+ * @property {(file:FileProgress) => Promise<void>} uploadFiles Method to upload a new file
  * @property {boolean} isFetchingUploads Whether or not new uploads are being fetched
  * @property {number|undefined} fetchDate The date in which the last uploads list fetch happened
+ * @property {UploadProgress} uploadsProgress The progress of any current uploads
+ * @property {() => boolean } clearUploadedFiles clears completed files from uploads list
  */
 
 /**
@@ -51,6 +64,8 @@ import { deleteUpload, getUploads, renameUpload } from 'lib/api';
  */
 export const UploadsContext = React.createContext(/** @type {any} */ (undefined));
 
+let client;
+
 /**
  * Uploads Info Hook
  *
@@ -60,37 +75,74 @@ export const UploadsProvider = ({ children }) => {
   const [uploads, setUploads] = useState(/** @type {Upload[]} */ ([]));
   const [isFetchingUploads, setIsFetchingUploads] = useState(false);
   const [fetchDate, setFetchDate] = useState(/** @type {number|undefined} */ (undefined));
+  const [filesToUpload, setFilesToUpload] = useState(/** @type {FileProgress[]} */ ([]));
+  const { initialize, updateFileProgress, progress, markFileCompleted, markFileFailed } = useUploadProgress([]);
 
-  const uploadFile = useCallback(
-    /** @param {File} file */
-    async file => {
-      // TODO: Enabled to hook up
-      // const client = new Web3Storage({
-      //   token: await getToken(),
-      //   endpoint: new URL(API),
-      // });
-      // setUploading(true);
-      // try {
-      //   let totalBytesSent = 0;
-      //   await client.put([file], {
-      //     name: file.name,
-      //     onStoredChunk: size => {
-      //       totalBytesSent += size;
-      //       setPercentComplete(Math.round((totalBytesSent / file.size) * 100));
-      //     },
-      //   });
-      // } finally {
-      //   await queryClient.invalidateQueries('get-uploads');
-      //   setUploading(false);
-      //   router.push('/files');
-      // }
+  // Initialize files and prep for upload, to be called in useEffect
+  const uploadFiles = useCallback(
+    async (/** @typedef { Files } */ files) => {
+      // Initializing client if necessary
+      client =
+        client ||
+        new Web3Storage({
+          token: await /** @type {Promise<string>} */ (getToken()),
+          endpoint: new URL(API),
+        });
+      initialize(Object.values(progress.files).concat(files));
     },
-    []
+    [initialize, progress.files]
   );
+
+  // Clear completed files
+  const clearUploadedFiles = useCallback(() => {
+    initialize(Object.values(progress.files).filter(({ status }) => status !== STATUS.COMPLETED));
+    return !!Object.values(progress.files).length;
+  }, [initialize, progress.files]);
+
+  /**
+   * Callback to automatically upload when the progress.files
+   * list changes and we are not currently tracking it
+   */
+  // TODO: Handle concurrency & multi-file upload
+  useEffect(() => {
+    const newFilesToUpload = Object.values(progress.files).filter(
+      ({ inputFile }) => !filesToUpload.find(({ inputFile: trackedInputFile }) => trackedInputFile === inputFile)
+    );
+
+    // Iterate through each new file to upload and make the upload call
+    if (!!newFilesToUpload.length) {
+      setFilesToUpload(filesToUpload.concat(newFilesToUpload));
+
+      newFilesToUpload.forEach(
+        /** @param {(FileProgress)} file */
+        async file => {
+          try {
+            await client.put([file.inputFile], {
+              name: file.name,
+              onStoredChunk: size => {
+                updateFileProgress(file, size);
+              },
+            });
+          } catch (error) {
+            markFileFailed(file, error);
+            console.error(error);
+            return;
+          }
+
+          markFileCompleted(file);
+        }
+      );
+    }
+  }, [progress.files, markFileCompleted, markFileFailed, filesToUpload, updateFileProgress]);
 
   const getUploadsCallback = useCallback(
     /** @type {(args?: UploadArgs) => Promise<Upload[]>}} */
-    async (args = { size: 1, before: new Date().toISOString() }) => {
+    async (
+      args = {
+        size: 1000,
+        before: new Date().toISOString(),
+      }
+    ) => {
       setIsFetchingUploads(true);
       const updatedUploads = await getUploads(args);
       setUploads(updatedUploads);
@@ -107,13 +159,15 @@ export const UploadsProvider = ({ children }) => {
       value={
         /** @type {UploadsContextProps} */
         ({
-          uploadFile,
+          uploadFiles,
           deleteUpload,
           renameUpload,
           getUploads: getUploadsCallback,
           uploads,
           isFetchingUploads,
           fetchDate,
+          uploadsProgress: progress,
+          clearUploadedFiles,
         })
       }
     >

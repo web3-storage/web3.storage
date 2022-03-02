@@ -1,6 +1,6 @@
-import { useCallback, Fragment, useMemo, useEffect } from 'react'
-import { useDropzone } from "react-dropzone";
-import clsx from 'clsx'
+import clsx from 'clsx';
+import { useCallback, Fragment, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
 
 /**
  * @typedef {Object} DropzoneProps
@@ -12,11 +12,18 @@ import clsx from 'clsx'
  * @prop {number} [maxFiles]
  * @prop {string} [accept]
  * @prop {boolean} [multiple]
+ * @prop {{
+ *          progress: number,
+ *          name: string, uploadId:
+ *          string,
+ *          failed: boolean
+ *        }[]} [filesInfo] external upload information of files
+ * @prop {{loading: string, complete: string, failed: string}} [content]
  */
 
 /**
- * 
- * @param {DropzoneProps} props 
+ *
+ * @param {DropzoneProps} props
  */
 const Dropzone = ({
   className,
@@ -24,58 +31,56 @@ const Dropzone = ({
   dragAreaText,
   onChange,
   onError,
+  filesInfo = [],
+  content = {
+    loading: 'Loading...',
+    complete: 'Complete',
+    failed: 'Failed',
+  },
   ...props
 }) => {
-  const onDropAccepted = useCallback((files) => onChange && onChange(files), [])
-  
-  const onDropRejected = useCallback((files) => onError && onError(files), [])
+  const [acceptedFiles, setAcceptedFiles] = useState([]);
+  const onDropAccepted = useCallback(
+    files => {
+      setAcceptedFiles(acceptedFiles.concat(files));
+      onChange?.(files);
+    },
+    [onChange, acceptedFiles]
+  );
 
-  const {acceptedFiles, fileRejections, getRootProps, getInputProps} = useDropzone({onDropAccepted, onDropRejected, ...props});
+  const onDropRejected = useCallback(files => onError && onError(files), [onError]);
 
-  const filesInfo = useMemo(() => acceptedFiles.reduce((acc, value) => (acc[/** @type {any} */(value).path] = acc[/** @type {any} */(value).path] || { progress: 0 }) && acc, filesInfo || {}), [acceptedFiles])
-
-  useEffect(() => {
-    // TODO: Hook up to real file upload
-    const interval = setInterval(() => {
-      Object.keys(filesInfo).forEach((key) => {
-        filesInfo[key].progress = Math.floor(Math.min(filesInfo[key].progress + Math.random() * 10, 100))
-
-        if(filesInfo[key].progress === 100)
-          clearInterval(interval)
-      })
-    }, 1000);
-    return () => clearInterval(interval)
-  }, [filesInfo])
+  const { getRootProps, getInputProps } = useDropzone({
+    onDropAccepted,
+    onDropRejected,
+    ...props,
+  });
 
   return (
     <div className={clsx(className, 'Dropzone')}>
-      <div {...getRootProps({className: 'droparea'})}>
+      <div {...getRootProps({ className: 'droparea' })}>
         <input className="inputField" name="file" {...getInputProps()} />
-        {icon && (
-          <div className="icon">
-            {icon}
-          </div>
-        )}
-        {dragAreaText
-          && <p className="dragAreaText">{dragAreaText}</p>
-        }
+        {icon && <div className="icon">{icon}</div>}
+        {dragAreaText && <p className="dragAreaText">{dragAreaText}</p>}
       </div>
       <div className="filelist">
-        {acceptedFiles.map((file, i) => (
-          <Fragment key={`file-${i}`}>
-            <div className="filename">
-              {/** @type {any} */ (file).path}
-            </div>
+        {filesInfo.map(fileInfo => (
+          <Fragment key={`file-${fileInfo.uploadId}`}>
+            <div className="filename">{fileInfo.name}</div>
             <div className="status">
-              {filesInfo[/** @type {any} */ (file).path].progress !== 100 ? `Loading... ${filesInfo[/** @type {any} */(file).path].progress}%` : `Complete`}
+              {!!fileInfo.failed
+                ? content.failed
+                : fileInfo.progress !== 100
+                ? `${content.loading} ${fileInfo.progress || 0}%`
+                : content.complete}
             </div>
           </Fragment>
         ))}
       </div>
     </div>
   );
-}
+};
 
-Dropzone.defaultProps = {}
+Dropzone.defaultProps = {};
 
-export default Dropzone
+export default Dropzone;

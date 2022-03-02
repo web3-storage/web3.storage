@@ -44,8 +44,7 @@ const QuestionMark = () => (
 )
 
 const TOOLTIPS = {
-  PIN_STATUS: (<span>Reports the status of a file or piece of data stored on Web3.Storage’s IPFS Cluster. Status might not be fully up-to-date. Data is still available even when still in Queuing state.</span>),
-  AVAILABILITY: (<span>Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes.</span>),
+  UPLOAD_STATUS: (<span>Reports the status of a file or piece of data stored on Web3.Storage. Status might not be fully up-to-date.</span>),
 
   CID: (<span>
     The <strong>c</strong>ontent <strong>id</strong>entifier for a file or a piece of data.<span> </span>
@@ -63,20 +62,44 @@ const TOOLTIPS = {
 }
 
 /**
+ * This is the status showed to the user in the upload table status column.
+ * 
+ * The rationale for using different types from import('web3.storage/src/lib/interface').Pin['status']
+ * is that users care about the status of their uploads rather than cluster ones.
+ * @typedef {'Pinned'|'Queuing'} UploadStatus
+ */
+
+/**
+ * 
+ * 
+ * @readonly
+ * @type {Object<string,UploadStatus>} UPLOAD_USER_STATUS
+ */
+ const UPLOAD_USER_STATUS = {
+  Pinned: 'Pinned',
+  Queuing: 'Queuing',
+};
+
+/**
+ * @type { Object.<import('web3.storage/src/lib/interface').Pin['status'], UploadStatus>}
+ */
+const clusterToUserStatusMap = {
+  'Pinning': UPLOAD_USER_STATUS.Queuing,
+  'PinQueued': UPLOAD_USER_STATUS.Queuing,
+  'Pinned': UPLOAD_USER_STATUS.Pinned
+}
+
+/**
  * @param {string} pinStatus
  * @param {number} numberOfPins
  * @returns {any}
  */
 const getMessage = (pinStatus, numberOfPins) => {
   switch (pinStatus) {
-    case "Queuing":
-      return "The upload has been received or is in progress and has not yet been queued for pinning.";
-    case "PinQueued":
-      return "The upload has been received and is in the queue to be pinned.";
-    case "Pinning":
-      return "The upload is being replicated to multiple IPFS nodes.";
-    case "Pinned":
-      return `The upload is fully pinned on ${numberOfPins} IPFS nodes.`;
+    case UPLOAD_USER_STATUS.Queuing:
+      return "The upload is in progress. Incomplete uploads of large files will show in this state indefinitely."
+    case UPLOAD_USER_STATUS.Pinned:
+      return `The upload is complete and the file fully pinned on ${numberOfPins} IPFS nodes on Web3.Storage’s cluster.`;
   }
   return null;
 };
@@ -139,11 +162,11 @@ const TableElement = ({ children, index = 0, checked, noWrap = true, centered, i
 
 /**
  * @param {import('web3.storage/src/lib/interface').Pin[]} pins
- * @returns {import('web3.storage/src/lib/interface').Pin['status'] | 'Queuing'}
+ * @returns {UploadStatus}
  */
-const getBestPinStatus = pins => {
+const getUploadStatus = pins => {
   const pin = pins.find(byStatus('Pinned')) || pins.find(byStatus('Pinning')) || pins.find(byStatus('PinQueued'))
-  return pin ? pin.status : 'Queuing'
+  return pin ? clusterToUserStatusMap[pin.status] : UPLOAD_USER_STATUS.Queuing;
 }
 
 /**
@@ -163,7 +186,7 @@ const byStatus = status => pin => pin.status === status
 const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage }) => {
   const checked = selectedFiles.includes(upload.cid)
   const sharedArgs = { index, checked }
-  const pinStatus = getBestPinStatus(upload.pins)
+  const uploadStatus = getUploadStatus(upload.pins)
   const [isRenaming, setRenaming] = useState(false)
   const [isLoading, setLoading] = useState(false)
   const [renameError, setError] = useState('')
@@ -267,16 +290,11 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
             <CopyIcon className="ml-2 cursor-pointer hover:opacity-80" width="16" fill="currentColor"/>
           </CopyToClipboard>
         </div>
-      </TableElement>
+      </TableElement>      
       <TableElement {...sharedArgs} centered>
         <span className="flex justify-center">
-          Available
-        </span>
-      </TableElement>
-      <TableElement {...sharedArgs} centered>
-        <span className="flex justify-center">
-          {pinStatus}
-          {getPinStatusTooltip(pinStatus, upload.pins.length)}
+          {uploadStatus}
+          {getPinStatusTooltip(uploadStatus, upload.pins.length)}
         </span>
       </TableElement>
       <TableElement {...sharedArgs} centered noWrap={false}>
@@ -285,7 +303,8 @@ const UploadItem = ({ upload, index, toggle, selectedFiles, showCopiedMessage })
         </div>
       </TableElement>
       <TableElement {...sharedArgs} centered>
-        {upload.dagSize ? fileSize(upload.dagSize) : 'Calculating...'}
+        {/* When an upload isn't pinned, we show 'Calculating...' despite having the dag size to highlight "incompleteness  " */}
+        {(upload.dagSize && uploadStatus === UPLOAD_USER_STATUS.Pinned) ? fileSize(upload.dagSize) : 'Calculating...'}
       </TableElement>
     </tr>
   )
@@ -433,15 +452,8 @@ export default function Files({ isLoggedIn }) {
             </span>
           </TableHeader>
           <TableHeader>
-            <span className="flex w-100 justify-center">Availability
-              <Tooltip placement='top' overlay={TOOLTIPS.AVAILABILITY} overlayClassName='table-tooltip'>
-                {QuestionMark()}
-              </Tooltip>
-            </span>
-          </TableHeader>
-          <TableHeader>
-            <span className="flex w-100 justify-center">Pin Status
-              <Tooltip placement='top' overlay={TOOLTIPS.PIN_STATUS} overlayClassName='table-tooltip'>
+            <span className="flex w-100 justify-center">Status
+              <Tooltip placement='top' overlay={TOOLTIPS.UPLOAD_STATUS} overlayClassName='table-tooltip'>
                 {QuestionMark()}
               </Tooltip>
             </span>

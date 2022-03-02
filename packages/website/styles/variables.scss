@@ -7,6 +7,8 @@ $containerWidth: 61.25rem; // 980px
 $underlineSpacing: 0.1875rem;
 $messageBannerHeight: 3.25rem;
 $navigationHeight: 8.5rem;
+$transitionDuration: 300ms;
+$transitionDurationLong: 600ms;
 
 $borderRadius_Small: 0.3125rem;
 $borderRadius_Medium: 0.25rem;
@@ -179,7 +181,7 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
 @mixin border_Background_Waterloo_White {
   @include borderRadius_Large;
   background: rgba($waterloo, 0.15);
-  border: 0.0625rem solid rgba($white, 0.15);
+  border: 0.0625rem solid rgba($white, 0.1);
 }
 
 @mixin gradient_BlurryBox_PinkBlue {
@@ -195,20 +197,56 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
   background: $gradient_PinkBlue;
 }
 
+@mixin gradient_BlurryDoubleBG_PinkBlue {
+  content: ' ';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  filter: blur(0.1875rem);
+  background: linear-gradient(
+    65deg,
+    $cerise 0%,
+    $cerise 5%,
+    $royalBlue 16%,
+    $pictonBlue 33%,
+    $cerise 50%,
+    $royalBlue 67%,
+    $pictonBlue 83%,
+    $cerise 95%,
+    $cerise 100%
+  );
+  background-size: 300%;
+  animation: blurry-gradient-position 40s linear infinite;
+  animation-play-state: paused;
+}
+
 @mixin gradient_Background_BluePurple {
   background: $gradient_BluePurple;
 }
 
 @mixin gradient_Blurry_Background_PinkBlue {
   &:before {
+    transition: all $transitionDuration ease-in-out;
     @include gradient_BlurryBox_PinkBlue;
     @include borderRadius_UltraLarge;
     content: ' ';
     position: absolute;
-    filter: blur(0.25rem);
+    filter: blur(0.125rem);
     margin: auto;
     box-shadow: 0 0.125rem $heliotrope;
-    opacity: 0.5;
+    opacity: 0.3;
+  }
+}
+
+@keyframes blurry-gradient-position {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 500% 0;
+  }
+  100% {
+    background-position: 0 0;
   }
 }
 
@@ -364,7 +402,7 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
 }
 
 @function toRem($value) {
-  $remValue: ($value / 16) + rem;
+  $remValue: math.div($value, 16) + rem;
   @return $remValue;
 }
 
@@ -442,6 +480,79 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
   -ms-transform-origin: $transformOrigin;
   -webkit-transform-origin: $transformOrigin;
   transform-origin: $transformOrigin;
+}
+
+// HOVERS
+
+@mixin hoverTextLinkColor {
+  color: $pictonBlue;
+  transition: color $transitionDuration;
+  &:hover {
+    color: $cerise;
+    transition: color $transitionDuration;
+  }
+}
+
+@mixin hoverScale {
+  transition: transform $transitionDuration ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+    transition: transform $transitionDuration ease-in-out;
+  }
+}
+
+@mixin hoverArrowLeft {
+  &:before {
+    content: '❮';
+    padding-right: 0.5rem;
+    display: inline-block;
+    transition: transform $transitionDuration ease-out;
+  }
+  &:hover {
+    &:before {
+      transform: translateX(-0.25rem);
+    }
+  }
+}
+
+@mixin hoverArrowRight {
+  color: $pictonBlue;
+  &:after {
+    content: '❯';
+    padding-left: 0.25rem;
+    display: inline-block;
+    transition: transform $transitionDuration ease-out;
+  }
+  &:hover {
+    &:after {
+      transform: translateX(0.25rem);
+    }
+  }
+}
+
+@mixin hoverInput {
+  transition: border-color $transitionDuration;
+  &:hover,
+  &:active,
+  &:focus {
+    outline: 0;
+    border-color: rgba($white, 0.25);
+    transition: border-color $transitionDuration;
+  }
+}
+
+@mixin hoverSvg {
+  overflow: visible;
+  cursor: pointer;
+  transition: transform $transitionDuration ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+    transition: transform $transitionDuration ease-in-out;
+  }
+  &:active {
+    color: $cyan;
+    transition: transform $transitionDuration ease-in-out;
+  }
 }
 
 // ////////////////////////////////////////////////////////////// [Post] Imports

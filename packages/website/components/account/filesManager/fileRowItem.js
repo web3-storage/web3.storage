@@ -1,13 +1,13 @@
 import clsx from 'clsx';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef } from 'react';
 
+import Tooltip from 'modules/zero/components/tooltip/tooltip';
 import CheckIcon from 'assets/icons/check';
-import InfoAIcon from 'assets/icons/infoA';
 import InfoBIcon from 'assets/icons/infoB';
 import CopyIcon from 'assets/icons/copy';
 import PencilIcon from 'assets/icons/pencil';
 import { addTextToClipboard, truncateString } from 'lib/utils';
-import { fileRowLabels } from 'components/account/filesManager/fileRowLabels.const';
+import AppData from '../../../content/pages/app/account.json';
 
 export const PinStatus = {
   PINNED: 'Pinned',
@@ -15,24 +15,6 @@ export const PinStatus = {
   PIN_QUEUED: 'PinQueued',
   QUEUING: 'Queuing...',
 };
-
-/**
- * @typedef {Object} InfoProps
- * @property {string} content
- * @property {React.ReactNode} [icon]
- */
-
-/**
- *
- * @param {InfoProps} props
- * @returns
- */
-const Info = ({ content, icon = null }) => (
-  <div className="info-container">
-    {icon || <InfoAIcon />}
-    <span className="info-tooltip" dangerouslySetInnerHTML={{ __html: content }} />
-  </div>
-);
 
 /**
  * @typedef {Object} FileRowItemProps
@@ -49,6 +31,8 @@ const Info = ({ content, icon = null }) => (
  * @property {boolean} [isSelected]
  * @property {{text: string, target: "name" | "cid"}} [highlight]
  * @property {()=>void} [onDelete]
+ * @property {(newFileName?: string) => void} [onEditToggle]
+ * @property {boolean} [isEditingName]
  */
 
 /**
@@ -70,6 +54,8 @@ const FileRowItem = props => {
     isHeader = false,
     isSelected,
     onDelete,
+    onEditToggle,
+    isEditingName,
   } = useMemo(() => {
     const propsReturn = { ...props };
     const { target, text = '' } = props.highlight || {};
@@ -81,18 +67,21 @@ const FileRowItem = props => {
 
     return propsReturn;
   }, [props]);
+
+  const fileRowLabels = AppData.page_content.file_manager.table.file_row_labels;
+  const statusMessages = fileRowLabels.status.tooltip;
+  /** @type {import('react').RefObject<HTMLTextAreaElement>} */
+  const editingNameRef = useRef(null);
   const statusTooltip = useMemo(
     () =>
       ({
-        [PinStatus.QUEUING]: 'The upload has been received or is in progress and has not yet been queued for pinning.',
-        [PinStatus.PIN_QUEUED]: 'The upload has been received and is in the queue to be pinned.',
-        [PinStatus.PINNING]: 'The upload is being replicated to multiple IPFS nodes.',
-        [PinStatus.PINNED]: `The upload is fully pinned on ${numberOfPins} IPFS nodes.`,
+        [PinStatus.QUEUING]: statusMessages.queuing,
+        [PinStatus.PIN_QUEUED]: statusMessages.pin_queued,
+        [PinStatus.PINNING]: statusMessages.pinning,
+        [PinStatus.PINNED]: statusMessages.pinned.replace('*numberOfPins*', `${numberOfPins}`),
       }[status]),
-    [numberOfPins, status]
+    [numberOfPins, status, statusMessages]
   );
-
-  const [isEditingName, setIsEditingName] = useState(false);
 
   return (
     <div className={clsx('files-manager-row', className, isHeader && 'files-manager-row-header')}>
@@ -102,36 +91,41 @@ const FileRowItem = props => {
           <CheckIcon className="check" />
         </span>
         <button onClick={onDelete} className="file-row-label delete medium-down-only">
-          {fileRowLabels.DELETE}
+          {fileRowLabels.delete.label}
         </button>
       </span>
       <span className="file-date">
-        <span className="file-row-label medium-down-only">{fileRowLabels.DATE}</span>
+        <span className="file-row-label medium-down-only">{fileRowLabels.date.label}</span>
         {date}
       </span>
       <span className={clsx(isEditingName && 'isEditingName', 'file-name')}>
-        <span className="file-row-label medium-down-only">{fileRowLabels.NAME}</span>
+        <span className="file-row-label medium-down-only">{fileRowLabels.name.label}</span>
         {!isEditingName ? (
           <span dangerouslySetInnerHTML={{ __html: name }} />
         ) : (
           <span className="textarea-container">
-            <textarea defaultValue={props.name} />
+            <textarea ref={editingNameRef} defaultValue={props.name} />
           </span>
         )}
 
-        {!isHeader && <PencilIcon className="pencil-icon" onClick={() => setIsEditingName(!isEditingName)} />}
+        {!isHeader && (
+          <PencilIcon
+            className="pencil-icon"
+            onClick={() => (isEditingName ? onEditToggle?.(editingNameRef.current?.value) : onEditToggle?.())}
+          />
+        )}
       </span>
       <span className="file-cid" title={cid}>
         <span className="file-row-label medium-down-only">
-          <Info content="The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>" />
-          {fileRowLabels.CID}
+          <Tooltip content={fileRowLabels.cid.tooltip} />
+          {fileRowLabels.cid.label}
         </span>
         <span className="cid-truncate medium-up-only">
           {useMemo(() => truncateString(cid, 5, '...', 'double'), [cid])}
         </span>
         <span className="cid-full medium-down-only">{cid}</span>
         {isHeader ? (
-          <Info content="The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>" />
+          <Tooltip content={fileRowLabels.cid.tooltip} />
         ) : (
           <CopyIcon
             className="copy-icon"
@@ -141,41 +135,50 @@ const FileRowItem = props => {
           />
         )}
       </span>
-      <span className="file-availability">
-        <span className="file-row-label medium-down-only">{fileRowLabels.AVAILABLE}</span>
-        Available
-      </span>
+      {/* <span className="file-availability">
+        <span className="file-row-label medium-down-only">{fileRowLabels.available.label}</span>
+        {isHeader ? 'Availability' : 'Available'}
+      </span> */}
       <span className="file-pin-status">
         <span className="file-row-label medium-down-only">
-          <Info content="Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes." />
-          {fileRowLabels.STATUS}
+          <Tooltip content={statusMessages.header} />
+          {fileRowLabels.status.label}
         </span>
         {status}
         {isHeader ? (
-          <Info content="Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes." />
+          <Tooltip content={statusMessages.header} />
         ) : (
-          statusTooltip && <Info icon={<InfoBIcon />} content="The upload is fully pinned on 3 IPFS nodes." />
+          statusTooltip && <Tooltip icon={<InfoBIcon />} content={statusTooltip} />
         )}
       </span>
       <span className="file-storage-providers">
         <span className="file-row-label medium-down-only">
-          <Info content="Service providers offering storage capacity to the Filecoin network. <a href='https://docs.web3.storage/concepts/decentralized-storage/' target='_blank' rel='noreferrer'>Learn more</a>" />
-          {fileRowLabels.STORAGE_PROVIDERS}
+          <Tooltip content={fileRowLabels.storage_providers.tooltip.header} />
+          {fileRowLabels.storage_providers.label}
         </span>
         {storageProviders}
         {isHeader ? (
-          <Info content="Service providers offering storage capacity to the Filecoin network. <a href='https://docs.web3.storage/concepts/decentralized-storage/' target='_blank' rel='noreferrer'>Learn more</a>" />
+          <Tooltip position="right" content={fileRowLabels.storage_providers.tooltip.header} />
         ) : (
           !storageProviders.length && (
             <>
               Queuing...
-              <Info content="The content from this upload is being aggregated for storage on Filecoin. Filecoin deals will be active within 48 hours of upload." />
+              <Tooltip
+                className="medium-down-only"
+                position="left"
+                content={fileRowLabels.storage_providers.tooltip.queuing}
+              />
+              <Tooltip
+                className="medium-up-only"
+                position="right"
+                content={fileRowLabels.storage_providers.tooltip.queuing}
+              />
             </>
           )
         )}
       </span>
       <span className="file-size">
-        <span className="file-row-label medium-down-only">{fileRowLabels.SIZE}</span>
+        <span className="file-row-label medium-down-only">{fileRowLabels.size.label}</span>
         {size}
       </span>
     </div>

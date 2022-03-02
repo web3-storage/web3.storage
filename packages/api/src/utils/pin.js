@@ -95,10 +95,15 @@ export async function getOKpins (cid, cluster, peerMap) {
  * @return {Array.<import('@web3-storage/db/db-client-types').PinUpsertInput>}
  */
 export function toPins (peerMap) {
-  return Object.entries(peerMap).map(([peerId, { peerName, status }]) => ({
-    status: toPinStatusEnum(status),
-    location: { peerId, peerName }
-  }))
+  // Note: `clusterPeerId` is an internal id, and is only used for cluster admin.
+  // The `ipfsPeerId` which we rename to `peerId` can be  used to connect to the underlying ipfs node
+  // that stores a given pin, by passing it to `ipfs swarm connect <peerid>`.
+  return Object.entries(peerMap).map(([clusterPeerId, { peerName, status, ipfsPeerId: peerId }]) => {
+    return {
+      status: toPinStatusEnum(status),
+      location: { peerId, peerName }
+    }
+  })
 }
 
 /**
@@ -139,8 +144,14 @@ export async function waitOkPins (cid, cluster, waitTime = MAX_PIN_STATUS_CHECK_
  */
 export async function waitAndUpdateOkPins (cid, cluster, db, waitTime = MAX_PIN_STATUS_CHECK_TIME, checkInterval = PIN_STATUS_CHECK_INTERVAL) {
   const okPins = await waitOkPins(cid, cluster, waitTime, checkInterval)
-  for (const pin of okPins) {
-    await db.upsertPin(cid, pin)
-  }
+  const pins = okPins.map((pin) => {
+    return {
+      id: pin._id,
+      status: pin.status,
+      cid,
+      locationId: pin.location._id
+    }
+  })
+  await db.upsertPins(pins)
   return okPins
 }

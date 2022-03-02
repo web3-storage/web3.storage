@@ -87,7 +87,7 @@
   }
 
   .token-id {
-    font-family: 'Suisse Intl Mono';
+    @include monospace_Text;
   }
 
   @include medium {
@@ -110,6 +110,10 @@
       padding-left: 0;
     }
   }
+}
+
+.tokens-manager-result-dropdown .dropdownContent {
+  right: -0.75rem;
 }
 
 .tokens-manager-loading-spinner {

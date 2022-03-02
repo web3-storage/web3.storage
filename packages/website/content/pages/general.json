@@ -21,11 +21,11 @@
     "links": [
       {
         "url": "/about",
-        "text": "ABOUT"
+        "text": "About"
       },
       {
-        "url": "/tiers",
-        "text": "TIERS"
+        "url": "/pricing",
+        "text": "Pricing"
       },
       {
         "url": "/faq",
@@ -33,11 +33,11 @@
       },
       {
         "url": "https://docs.web3.storage/",
-        "text": "DOCS"
+        "text": "Docs"
       },
       {
         "url": "/account",
-        "text": "ACCOUNT",
+        "text": "Account",
         "links": [
           {
             "text": "Dashboard",
@@ -65,7 +65,7 @@
           },
           {
             "text": "Open an issue",
-            "url": "/account"
+            "url": "https://github.com/web3-storage/web3.storage/issues/new/choose"
           }
         ]
       }
@@ -83,11 +83,13 @@
   "breadcrumbs": {
     "index": "Home",
     "about": "About",
-    "tiers": "Tiers",
+    "pricing": "Pricing",
     "faq": "FAQ",
-    "terms": "TOS",
-    "account": "Accounts",
-    "tokens": "Accounts"
+    "terms": "ToS",
+    "login": "Login",
+    "callback": "Authenticating",
+    "account": "Account",
+    "tokens": "API Tokens"
   },
   "footer": {
     "contact": {

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import dotenv from 'dotenv'
 import fetch from '@web-std/fetch'
 import { updatePinStatuses } from '../jobs/pins.js'
+import { envConfig } from '../lib/env.js'
 import { getCluster, getClusterIPFSProxy, getDBClient } from '../lib/utils.js'
 
 /** @ts-ignore */
@@ -17,5 +17,6 @@ async function main () {
   await updatePinStatuses({ env, db, cluster, ipfs })
 }
 
-dotenv.config()
+envConfig()
+
 main()

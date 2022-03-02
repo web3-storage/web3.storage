@@ -109,7 +109,6 @@ export async function createToken(name) {
   return res.json()
 }
 
-
 /**
  * @typedef {Object} UploadArgs
  * @property {number} args.size
@@ -122,7 +121,6 @@ export async function createToken(name) {
  * Gets files
  * 
  * @param {UploadArgs} args
- * 
  * @returns {Promise<import('web3.storage').Upload[]>}
  * @throws {Error} When it fails to get uploads
  */

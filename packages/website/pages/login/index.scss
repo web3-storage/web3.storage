@@ -3,16 +3,16 @@
     svg {
       margin-right: 0.6875rem;
     }
-
     &-email {
       flex-direction: column;
       gap: 1.25rem;
     }
-
+    &-github {
+      @include hoverInput;
+    }
     .button {
       width: 8.5625rem;
       height: 2.1875rem;
-
       button {
         min-height: 1.5rem;
       }
@@ -31,16 +31,16 @@
 }
 
 .login-email {
+  @include border_Background_Waterloo_White;
   padding: 1rem 2rem;
   width: 100%;
-  border: 0.0625rem solid $doveGray;
-  background: none;
-
+  border-radius: 0;
+  @include hoverInput;
   &::placeholder {
     color: $white;
   }
-}
-
-.error {
-  border: 1px solid red;
+  &.error {
+    border-color: $cerise;
+    transition: border-color 250ms;
+  }
 }

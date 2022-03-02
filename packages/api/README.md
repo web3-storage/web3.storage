@@ -4,7 +4,34 @@ The HTTP interface implemented as a Cloudflare Worker
 
 ## Getting started
 
-One time set up of your cloudflare worker subdomain for dev:
+Copy the `.env.tpl` to `.env` in root of the project monorepo. 
+
+Create an account on https://magic.link and fill in the `MAGIC_SECRET_KEY` variable in the .env file.
+
+We use miniflare to run the api locally, and docker to run ipfs-cluster and postgres with postREST.
+
+```sh
+# Install the deps
+npm install
+```
+
+With docker running locally, start all the things:
+
+```
+npm start
+```
+
+🎉 miniflare is running in watch mode; you can save changes to the api code and the worker will update.
+
+Kill the process to stop miniflare, then run `npm run stop` to shutdown the cluster and postgres
+
+```sh
+npm run stop
+```
+
+## Setting up a cloudflare worker
+
+One time set up of your cloudflare worker subdomain. You only need to do this if you want to test in a real cloudflare worker.
 
 - `npm install` - Install the project dependencies
 - Sign up to Cloudflare and log in with your default browser.
@@ -245,6 +272,14 @@ Resolve the current CID for the given key ID.
 Users "resolve" a Key ID to the current _value_ of a _record_. Typically an IPFS path. Keypair owners "publish" IPNS _records_ to create or update the current _value_.
 
 It returns the resolved value AND the full name record (base 64 encoded, for client side verification).
+
+### 🤲 `GET /name/:key/watch`
+
+**❗️Experimental** this API may not work, may change, and may be removed in a future version.
+
+Watch for changes to the given key ID over a websocket connection.
+
+When changes to the `:key` are published, a JSON encoded message is sent over the websocket containing the new value and the full name record (base 64 encoded, for client side verification).
 
 ## Setup Sentry
 

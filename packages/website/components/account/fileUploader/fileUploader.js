@@ -1,6 +1,5 @@
 import clsx from 'clsx';
-import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 
 import Modal from 'modules/zero/components/modal/modal';
 import Dropzone from 'modules/zero/components/dropzone/dropzone';
@@ -9,6 +8,7 @@ import CloseIcon from 'assets/icons/close';
 import InfinityIcon from 'assets/icons/infinity';
 import GlobeIcon from 'assets/icons/globe';
 import { ReactComponent as FolderIcon } from '../../../assets/icons/folder.svg';
+import { STATUS, useUploads } from 'components/contexts/uploadsContext';
 
 export const CTAThemeType = {
   LIGHT: 'light',
@@ -17,30 +17,37 @@ export const CTAThemeType = {
 
 /**
  * @typedef {Object} UploadContentProps
- * @property {string} [className]
- * @property {import('react').ReactNode} [icon]
  * @property {string} [heading]
+ * @property {string} [iconType]
  * @property {string} [description]
  */
-
-/**
- *
- * @param {UploadContentProps} props
- * @returns
- */
-const UploadContentBlock = ({ className, heading, icon, description }) => (
-  <div className={clsx(className, 'upload-content-block')}>
-    <div className="upload-content-block-heading">
-      {icon}
-      {heading}
+const uploadContentBlock = (heading, iconType, description) => {
+  let icon;
+  switch (iconType) {
+    case 'globe_icon':
+      icon = <GlobeIcon />;
+      break;
+    case 'infinity_icon':
+      icon = <InfinityIcon />;
+      break;
+    default:
+      icon = <FolderIcon />;
+  }
+  return (
+    <div key={heading} className="upload-content-block">
+      <div className="upload-content-block-heading">
+        {icon}
+        {heading}
+      </div>
+      <div className="upload-content-block-description">{description}</div>
     </div>
-    <div className="upload-content-block-description">{description}</div>
-  </div>
-);
+  );
+};
 
 /**
  * @typedef {Object} FileUploaderProps
  * @property {string} [className] - optional
+ * @property {object} [content]
  * @property {any} [uploadModalState]
  * @property {import('react').ReactNode} [background]
  */
@@ -50,8 +57,21 @@ const UploadContentBlock = ({ className, heading, icon, description }) => (
  * @param {FileUploaderProps} props
  * @returns
  */
-const FileUploader = ({ className = '', uploadModalState, background }) => {
-  const [filesToUpload, setFilesToUpload] = useState([]);
+const FileUploader = ({ className = '', content, uploadModalState, background }) => {
+  const [filesToUpload, setFilesToUpload] = useState(/** @type {File[]} */ ([]));
+  const { getUploads, uploadFiles, uploadsProgress, clearUploadedFiles } = useUploads();
+
+  // Mapped out file progress info
+  const filesInfo = useMemo(
+    () =>
+      Object.values(uploadsProgress.files).map(({ inputFile, progress, uploadId, status }) => ({
+        uploadId,
+        name: inputFile.name,
+        progress: progress.percentage,
+        failed: status === STATUS.FAILED,
+      })),
+    [uploadsProgress]
+  );
 
   return (
     <div className={'file-upload-modal'}>
@@ -60,41 +80,38 @@ const FileUploader = ({ className = '', uploadModalState, background }) => {
         closeIcon={<CloseIcon className="file-uploader-close" />}
         modalState={uploadModalState}
         showCloseButton
+        onClose={useCallback(() => {
+          // Clearing uploads and updating list if there are new files
+          if (clearUploadedFiles()) {
+            getUploads();
+          }
+        }, [getUploads, clearUploadedFiles])}
       >
         <div className={clsx(className, 'file-uploader-container')}>
           {background}
           <GradientBackgroundB className="account-gradient-background" />
-          <h5>Upload {!!filesToUpload.length ? 'more files' : 'a file'}</h5>
-          <div className={'file-upload-subheading'}>
-            You can also upload files using the{'\u00A0'}
-            <Link href="https://www.npmjs.com/package/web3.storage">JS Client Library.</Link>
-          </div>
+          <h5>{!!filesToUpload.length ? content.heading.option_1 : content.heading.option_2}</h5>
+          <div className={'file-upload-subheading'} dangerouslySetInnerHTML={{ __html: content.subheading }}></div>
           <Dropzone
             className="file-uploader-dropzone"
-            onChange={files => {
-              console.log('file change');
-              setFilesToUpload(filesToUpload.concat(files));
-            }}
-            onError={() => {
-              console.log('error');
+            onChange={useCallback(
+              files => {
+                uploadFiles(files);
+                setFilesToUpload(filesToUpload.concat(files));
+              },
+              [filesToUpload, uploadFiles]
+            )}
+            onError={e => {
+              console.error('error', e);
             }}
             icon={<FolderIcon />}
-            dragAreaText="Drag and drop your files here"
+            dragAreaText={content.drop_prompt}
             maxFiles={3}
             multiple={true}
+            filesInfo={filesInfo}
           />
-          <UploadContentBlock
-            className="upload-content-block-public"
-            icon={<GlobeIcon />}
-            heading="Public Data"
-            description="All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. Do not store any private or sensitive information in an unencrypted form using Web3.Storage."
-          />
-          <UploadContentBlock
-            className="upload-content-block-permanent"
-            icon={<InfinityIcon />}
-            heading="Permanent Data"
-            description="Deleting files from the Web3.Storage site’s Files page will remove them from the file listing for your account, but that doesn’t prevent nodes on the decentralized storage network from retaining copies of the data indefinitely. Do not use Web3.Storage for data that may need to be permanently deleted in the future."
-          />
+
+          {content.blocks.map(block => uploadContentBlock(block.heading, block.icon, block.description))}
         </div>
       </Modal>
     </div>

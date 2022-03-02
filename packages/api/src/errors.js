@@ -21,7 +21,7 @@ export class UserNotFoundError extends HTTPError {
 UserNotFoundError.CODE = 'ERROR_USER_NOT_FOUND'
 
 export class PinningUnauthorizedError extends HTTPError {
-  constructor (msg = 'Pinning not authorized for this user') {
+  constructor (msg = 'Pinning not authorized for this user, email support@web3.storage to request authorization.') {
     super(msg, 403)
     this.name = 'PinningUnauthorizedError'
     this.code = PinningUnauthorizedError.CODE
@@ -77,3 +77,97 @@ export class InvalidCidError extends Error {
   }
 }
 InvalidCidError.CODE = 'ERROR_INVALID_CID'
+
+export class InvalidCarError extends Error {
+  /**
+   * @param {string} reason
+   */
+  constructor (reason) {
+    super(`Invalid CAR file received: ${reason}`)
+    this.name = 'InvalidCar'
+    this.status = 400
+    this.code = InvalidCarError.CODE
+  }
+}
+InvalidCarError.CODE = 'ERROR_INVALID_CAR'
+
+export class MaintenanceError extends Error {
+  /**
+   * @param {string} reason
+   */
+  constructor (reason) {
+    super(reason)
+    this.name = 'Maintenance'
+    this.status = 503
+    this.code = MaintenanceError.CODE
+  }
+}
+MaintenanceError.CODE = 'ERROR_MAINTENANCE'
+
+export class PinningServiceApiError extends Error {
+  /**
+   *
+   * @param {string} [message]
+   * @param {number} [status]
+   * @param {string} code
+   */
+  constructor (message, status = 400, code = 'PSA_ERROR') {
+    super(message)
+    this.details = message
+    this.status = status
+    this.reason = code
+    // TODO: improve error handler
+    // https://github.com/web3-storage/web3.storage/issues/976
+    this.IS_PSA_ERROR = true
+  }
+}
+
+export class PSAErrorInvalidData extends PinningServiceApiError {
+  /**
+   * @param {string} message
+   */
+  constructor (message = 'Some data is invalid. Please consult the spec.') {
+    super(message)
+    this.details = message
+    this.reason = PSAErrorInvalidData.CODE
+  }
+}
+PSAErrorInvalidData.CODE = 'PSA_INVALID_DATA'
+
+export class PSAErrorRequiredData extends PinningServiceApiError {
+  /**
+   * @param {string} message
+   */
+  constructor (message = 'Missing required data. Please consult the spec.') {
+    super(message)
+    this.details = message
+    this.reason = PSAErrorRequiredData.CODE
+  }
+}
+PSAErrorRequiredData.CODE = 'PSA_REQUIRED_DATA'
+
+export class PSAErrorResourceNotFound extends PinningServiceApiError {
+  /**
+   * @param {string} message
+   */
+  constructor (message = 'Requested data was not found.') {
+    super(message)
+    this.details = message
+    this.status = 404
+    this.reason = PSAErrorResourceNotFound.CODE
+  }
+}
+PSAErrorResourceNotFound.CODE = 'PSA_RESOURCE_NOT_FOUND'
+
+export class PSAErrorDB extends PinningServiceApiError {
+  /**
+   * @param {string} message
+   */
+  constructor (message = 'DB transaction failed.') {
+    super(message)
+    this.details = message
+    this.status = 500
+    this.reason = PSAErrorDB.CODE
+  }
+}
+PSAErrorDB.CODE = 'PSA_DB_ERROR'

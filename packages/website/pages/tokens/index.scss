@@ -1,11 +1,9 @@
 .tokens-container {
   max-width: 60rem;
   margin: auto;
-
   h3 {
     padding: 0 1.75rem 0.75rem;
   }
-
   .isDisabled {
     pointer-events: none;
     opacity: 0.5;
@@ -38,7 +36,7 @@
 }
 
 .dashboard-link {
-  @include fontSize_Medium;
+  @include fontSize_Mini;
   @include fontWeight_Semibold;
   @include medium {
     order: 2;
@@ -54,18 +52,8 @@
       align-items: center;
     }
   }
-
-  &.hasTokens {
-    @include fontSize_Mini;
-
-    div {
-      transform: scaleX(-1);
-      display: initial;
-    }
-
-    a {
-      margin-left: 1.4375rem;
-    }
+  a {
+    @include hoverArrowLeft;
   }
 }
 
@@ -77,8 +65,8 @@
     }
   }
   a {
-    color: $pictonBlue;
     position: relative;
+    @include hoverArrowRight;
   }
   @include medium {
     margin-bottom: 1.59375rem;

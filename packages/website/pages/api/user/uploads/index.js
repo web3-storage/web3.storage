@@ -2,7 +2,7 @@ export const files = [
   {
     _id: '315318962238628132',
     type: 'Car',
-    name: 'cross.png',
+    name: '5126a4-view-all-xrays.dat',
     created: '2021-12-17T20:04:45.427+00:00',
     updated: '2021-12-17T20:04:45.427+00:00',
     cid: 'bafybeiewemrhochdwcr5orsjm2cmqnbl7oqeppgn356lirtjqfucxsxyq41',
@@ -13,7 +13,7 @@ export const files = [
   {
     _id: '315318962236660921',
     type: 'Car',
-    name: 'coil.png',
+    name: '2021-human-genome-sequence-trials-kyoto-jp.toml',
     created: '2021-12-01T01:41:03.681+00:00',
     updated: '2021-12-01T01:41:03.681+00:00',
     cid: 'bafybeih7oh42dqynvdjio7icegtbdbn4mvhr5wu7a4umm2sfgws362kkma2',
@@ -83,10 +83,10 @@ export const files = [
   {
     _id: Date.now().toString(),
     type: 'Car',
-    name: '2021-human-genome-sequence-follow-up-trials-lorem-ipsum-dolor-sit-amet-consectetur.json',
+    name: '2021-human-genome-sequence-follow-up-trials-global-kyoto-london-bogota-capetown.json',
     created: '2021-12-01T01:41:03.681+00:00',
     updated: '2021-12-01T01:41:03.681+00:00',
-    cid: 'amblkadflkbmalf;dkmbladkbmlakgmbla;gkmbl;3',
+    cid: 'bafybeia4yb54v7w5lpolt8dqa3a2ewftulimmxlkuaf357nmvhee5k3pzu',
     dagSize: 41538,
     pins: [
       {

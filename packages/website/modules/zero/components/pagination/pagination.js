@@ -62,7 +62,7 @@ const Pagination = ({
         {currentPage > visiblePages + 1
           && <div className="prevEllipses">...</div>
         }
-        {pageList && pageList.map((page) => (
+        {pageCount !== 1 && pageList && pageList.map((page) => (
           <button type="button"
             key={`page-${page}`}
             className={clsx('page', {current: currentPage === page })}

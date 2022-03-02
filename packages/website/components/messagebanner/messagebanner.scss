@@ -1,18 +1,8 @@
-$messageBannerHeight: 3.25rem;
-
 #section_message-banner {
   background-color: $ebony;
   position: relative;
   z-index: 100;
-  height: 0rem;
   transition: 200ms ease;
-
-  &.show-message-banner {
-    height: $messageBannerHeight;
-    .message-banner-transition {
-      transform: translateY(0);
-    }
-  }
 
   ::-moz-selection {
     background-color: $white;
@@ -34,11 +24,16 @@ $messageBannerHeight: 3.25rem;
   justify-content: center;
   padding: 0.53125rem 0;
   color: white;
+  @include small {
+    padding: 0.53125rem 2rem;
+  }
 }
+
 .message-banner-content {
   margin: auto 0;
   display: inline;
   text-align: center;
+  transition: 200ms ease;
   @include fontSize_Small;
   @include fontWeight_Medium;
   .banner-gradient-text {
@@ -60,6 +55,14 @@ $messageBannerHeight: 3.25rem;
       }
     }
   }
+
+  &.mb-previously-closed {
+    transform: translateY(-150%) !important;
+  }
+
+  &.mb-reduced-fontsize {
+    @include fontSize_Tiny;
+  }
 }
 
 .message-banner-close-button {
@@ -74,9 +77,4 @@ $messageBannerHeight: 3.25rem;
   &.hide-banner-close {
     display: none;
   }
-}
-
-.message-banner-transition {
-  transform: translateY(-1 * $messageBannerHeight);
-  transition: 200ms ease;
 }

@@ -1,0 +1,23 @@
+{
+  "seo": {
+    "title": "Login - Web3 Storage",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "page_content": {
+    "heading": "Log in with",
+    "form_placeholder": "Enter your email",
+    "cta": {
+      "text": "Sign Up / Login",
+      "theme": "pink-blue",
+      "event": "LOGIN_CLICK",
+      "ui": "LOGIN",
+      "action": "Sign Up / Login"
+    }
+  }
+}

@@ -94,6 +94,8 @@
                   {
                     "thumb": "STORE",
                     "lines": [
+                      "// store.mjs",
+                      "",
                       "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
                       "",
                       "const token = process.env.API_TOKEN",
@@ -108,13 +110,15 @@
                       "storeFiles()"
                     ],
                     "output": {
-                      "label": "Result",
-                      "value": "bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu"
+                      "label": "Run it with",
+                      "value": "npm i web3.storage\nAPI_TOKEN=YOUR_TOKEN node ./store.mjs"
                     }
                   },
                   {
                     "thumb": "RETRIEVE",
                     "lines": [
+                      "// retrive.mjs",
+
                       "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
                       "",
                       "const token = process.env.API_TOKEN",
@@ -133,7 +137,11 @@
                       "}",
                       "",
                       "retrieveFiles()"
-                    ]
+                    ],
+                    "output": {
+                      "label": "Run it with",
+                      "value": "npm i web3.storage\nAPI_TOKEN=YOUR_TOKEN node ./retrieve.mjs"
+                    }
                   }
                 ]
               }
@@ -508,24 +516,24 @@
             "cards": [
               {
                 "type": "C",
-                "image": "/images/index/placeholder-portrait.png",
+                "image": "/images/index/testimonial-ryan-w.jpg",
                 "title": "Ryan W.",
                 "subtitle": "Capetown, South Africa",
-                "description": "I’m really impressed with web3.storage. It’s almost too easy."
+                "description": "I work pretty much exclusively on Web3 applications, and I'm really impressed with Web3.Storage. It's almost too easy - I didn't run into any stumbling blocks and had a basic implementation of my project in 30 minutes."
               },
               {
                 "type": "C",
-                "image": "/images/index/placeholder-portrait.png",
+                "image": "/images/index/testimonial-frank-j.jpg",
                 "title": "Frank J.",
                 "subtitle": "Toronto, Canada",
-                "description": "Web3.Storage was so simple to hook into, and it does what you want it to do. It’s like simplified S3 for IPFS. I really like the service, and I love that it’s free."
+                "description": "Web3.Storage was so simple to hook into, and does what you need it to do. We run the <a href='//galacticpunks.io' target='blank'>Galactic Punks</a> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS."
               },
               {
                 "type": "C",
-                "image": "/images/index/placeholder-portrait.png",
-                "title": "Connor M.",
+                "image": "/images/index/testimonial-jacob-p.jpg",
+                "title": "Jacob P.",
                 "subtitle": "New York, USA",
-                "description": "Web3.Storage was pretty much plug and play for my use case."
+                "description": "Web3.storage enables <a href='//www.strangemood.org' target='blank'>Strangemood</a> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
               }
             ]
           },
@@ -542,24 +550,24 @@
             "slides": [
               {
                 "type": "C",
-                "image": "/images/index/placeholder-portrait.png",
+                "image": "/images/index/testimonial-ryan-w.jpg",
                 "title": "Ryan W.",
                 "subtitle": "Capetown, South Africa",
-                "description": "I’m really impressed with web3.storage. It’s almost too easy."
+                "description": "I work pretty much exclusively on Web3 applications, and I'm really impressed with Web3.Storage. It's almost too easy - I didn't run into any stumbling blocks and had a basic implementation of my project in 30 minutes."
               },
               {
                 "type": "C",
-                "image": "/images/index/placeholder-portrait.png",
+                "image": "/images/index/testimonial-frank-j.jpg",
                 "title": "Frank J.",
                 "subtitle": "Toronto, Canada",
-                "description": "Web3.Storage was so simple to hook into, and it does what you want it to do. It’s like simplified S3 for IPFS. I really like the service, and I love that it’s free."
+                "description": "Web3.Storage was so simple to hook into, and does what you need it to do. We run the <a href='//galacticpunks.io' target='blank'>Galactic Punks</a> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS."
               },
               {
                 "type": "C",
-                "image": "/images/index/placeholder-portrait.png",
-                "title": "Connor M.",
+                "image": "/images/index/testimonial-jacob-p.jpg",
+                "title": "Jacob P.",
                 "subtitle": "New York, USA",
-                "description": "Web3.Storage was pretty much plug and play for my use case."
+                "description": "Web3.storage enables <a href='//www.strangemood.org' target='blank'>Strangemood</a> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
               }
             ]
           }

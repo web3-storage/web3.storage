@@ -23,6 +23,8 @@ yarn install
 
 Inside the `/packages/website` folder create a file called `.env.local` with the following content.
 
+Verify that the following are set in the `.env` file in root of the project monorepo.
+
 ```ini
 NEXT_PUBLIC_ENV=dev
 NEXT_PUBLIC_API=http://127.0.0.1:8787

@@ -10,7 +10,7 @@ import * as workerGlobals from './scripts/worker-globals.js'
 global.crypto = webcrypto
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-dotenv.config({ path: path.join(__dirname, '..', '.env.local') })
+dotenv.config({ path: path.join(__dirname, '..', '..', '..', '.env') })
 
 const toolsCli = path.join(__dirname, '..', '..', 'tools', 'scripts', 'cli.js')
 const dbCli = path.join(__dirname, '..', '..', 'db', 'scripts', 'cli.js')
@@ -53,6 +53,7 @@ export const mochaHooks = () => {
       await delay(2000)
     },
     async afterAll () {
+      // Note: not awaiting promises here so we see the test results overview sooner.
       this.timeout(60_000)
       if (srv) {
         console.log('🛑 Stopping Miniflare')
@@ -60,11 +61,11 @@ export const mochaHooks = () => {
       }
       if (projectCluster) {
         console.log('🛑 Stopping IPFS Cluster')
-        await execa(toolsCli, ['cluster', '--stop', '--clean', '--project', projectCluster])
+        execa(toolsCli, ['cluster', '--stop', '--clean', '--project', projectCluster])
       }
       if (projectDb) {
         console.log('🛑 Stopping PostgreSQL and PostgREST')
-        await execa(dbCli, ['db', '--stop', '--clean', '--project', projectDb])
+        execa(dbCli, ['db', '--stop', '--clean', '--project', projectDb])
       }
     }
   }

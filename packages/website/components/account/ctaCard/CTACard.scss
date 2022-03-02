@@ -29,12 +29,14 @@ $cta-card-padding-top: 4rem;
   justify-content: space-between;
   width: 100%;
   gap: 0.75rem;
+  @include medium {
+    flex-wrap: wrap;
+  }
   .button {
     &:not(:only-child) {
       flex: 1;
     }
   }
-
   button {
     padding: 0 1rem;
     align-items: center;

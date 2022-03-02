@@ -5,10 +5,14 @@
       &.current {
         color: $cyan;
       }
+      &:hover {
+        color: $cerise;
+        transition: color $transitionDuration;
+      }
     }
-
-    .nextPage:hover {
-      color: $cyan;
+    button:hover {
+      color: $cerise;
+      transition: color $transitionDuration;
     }
   }
 }
