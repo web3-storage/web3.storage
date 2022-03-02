@@ -73,10 +73,10 @@
     "auth": {
       "login": {
         "url": "/login",
-        "text": "Sign in"
+        "text": "SIGN IN"
       },
       "logout": {
-        "text": "Log out"
+        "text": "LOG OUT"
       }
     }
   },
