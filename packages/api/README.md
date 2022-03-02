@@ -7,10 +7,8 @@ Please follow the instructions in the main monorepo [Readme](../../README.md#get
 
 We use miniflare to run the api locally, and docker to run ipfs-cluster and postgres with PostgREST.
 
-If you want to run this package in isolation, you can easily do it as follows.
+If you want to run this package in isolation, you can easily do it as follows:
 Please be aware that you will need to have the environment variable setup as described in the root [README](../../README.md#getting-started).
-
-API package setup:
 
 ```sh
 # Install the deps
@@ -36,7 +34,7 @@ While in most cases the [Getting Started](## Getting started) is enough to devel
 
 If you want more in depth information please look at [Cloudfare Get Started guide](https://developers.cloudflare.com/workers/get-started/guide#1-sign-up-for-a-workers-account).  
 
-The following instructions assume that did go through the Getting started section.
+The following instructions assume that you did go through the Getting started section.
 
 ### 1. Sign up for a Workers account
 Before you can start publishing your Workers on your own domain or a free *.workers.dev subdomain, you must sign up for a Cloudflare Workers account
@@ -77,6 +75,7 @@ Add the required secrets:
     wrangler secret put S3_BUCKET_NAME --env $(whoami) # e.g web3.storage-staging-us-east-2 (not required for dev)
     wrangler secret put PG_REST_JWT --env $(whoami) # Get from database postgrest
 ```
+Note this might be up to date, please look to the [.env.tpl](../../.env.tpl) in the root directory for the up to date secrets required.
 
 ## Run the code
 Run `npm run build` to build the bundle

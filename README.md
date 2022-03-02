@@ -15,7 +15,6 @@ Then install the deps with `npm` and then run all the things with `npm start`
 # install deps
 npm install
 
-
 # start the api and website
 npm start
 ```
