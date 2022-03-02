@@ -1,6 +1,6 @@
 {
-  "name": "web-3-storage-docusaurus",
-  "version": "0.0.0",
+  "name": "@web3-storage/docs",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -54,5 +54,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }
