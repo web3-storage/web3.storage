@@ -5,7 +5,7 @@ import { RedocStandalone, DropdownLabel } from 'redoc'
 import DocSidebar from '@theme/DocSidebar'
 import TOC from '@theme/TOC'
 import TOCCollapsible from '@theme/TOCCollapsible'
-import useThemeContext from '@theme/hooks/useThemeContext'
+import { useColorMode } from '@docusaurus/theme-common'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import useBaseUrl from '@docusaurus/useBaseUrl'
 
@@ -30,7 +30,7 @@ const STATIC_SPEC = '/schema.yml'
  *
  */
 function RedocPage () {
-  const { isDarkTheme } = useThemeContext()
+  const { isDarkTheme } = useColorMode()
   const { siteConfig: { themeConfig } } = useDocusaurusContext()
   const prismThemeLight = themeConfig.prism.theme
   const prismThemeDark = themeConfig.prism.darkTheme
