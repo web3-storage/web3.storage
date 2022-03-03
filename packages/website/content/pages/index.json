@@ -398,17 +398,17 @@
               {
                 "type": "image_block",
                 "id": "get-started-image-storage",
-                "src": "/images/index/storage-tier.png"
+                "src": "/images/index/app-ui-screenshot-storage-manager.png"
               },
               {
                 "type": "image_block",
                 "id": "get-started-image-files",
-                "src": "/images/index/files-display.png"
+                "src": "/images/index/app-ui-screenshot-file-manager.png"
               },
               {
                 "type": "image_block",
                 "id": "get-started-image-upload",
-                "src": "/images/index/file-upload.png"
+                "src": "/images/index/app-ui-screenshot-file-upload.png"
               }
             ]
           }
