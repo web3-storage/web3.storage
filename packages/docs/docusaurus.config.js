@@ -18,7 +18,7 @@ module.exports = {
   title: 'Web3.Storage Documentation',
   tagline: 'Better storage. Better transfers. Better internet.',
   url: 'https://docs.web3.storage/',
-  baseUrl: '/',
+  baseUrl: '/docs/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico', // TODO: replace with web3.storage favicon
