@@ -19,9 +19,9 @@
     "api-toc": "node scripts/api-toc.js"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-beta.6",
+    "@docusaurus/core": "^2.0.0-beta.6",
     "@docusaurus/plugin-client-redirects": "^2.0.0-beta.6",
-    "@docusaurus/preset-classic": "2.0.0-beta.6",
+    "@docusaurus/preset-classic": "^2.0.0-beta.6",
     "@docusaurus/theme-search-algolia": "^2.0.0-beta.6",
     "@mdx-js/react": "^1.6.21",
     "@svgr/webpack": "^5.5.0",
