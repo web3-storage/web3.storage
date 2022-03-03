@@ -17,7 +17,7 @@ const ALGOLIA_APP_ID = process.env.ALGOLIA_APP_ID || '9ARXAK1OFV'
 module.exports = {
   title: 'Web3.Storage Documentation',
   tagline: 'Better storage. Better transfers. Better internet.',
-  url: 'https://docs.web3.storage',
+  url: 'https://docs.web3.storage/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -46,9 +46,9 @@ module.exports = {
           href: 'https://web3.storage/about'
         },
         {
-          label: 'Tiers',
+          label: 'Pricing',
           position: 'right',
-          href: 'https://web3.storage/tiers'
+          href: 'https://web3.storage/pricing'
         },
         {
           label: 'FAQ',
