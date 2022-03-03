@@ -66,6 +66,7 @@
 .nav-item {
   @include fontWeight_Semibold;
   letter-spacing: 0.03em;
+  cursor: pointer;
 }
 
 .site-logo-container {
