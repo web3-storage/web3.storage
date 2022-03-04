@@ -43,17 +43,17 @@ module.exports = {
         {
           label: 'About',
           position: 'right',
-          href: 'https://web3.storage/docs/about'
+          href: 'https://web3.storage/about'
         },
         {
           label: 'Pricing',
           position: 'right',
-          href: 'https://web3.storage/docs/pricing'
+          href: 'https://web3.storage/pricing'
         },
         {
           label: 'FAQ',
           position: 'right',
-          href: 'https://web3.storage/docs/faq'
+          href: 'https://web3.storage/faq'
         },
         {
           label: 'Docs',
@@ -64,7 +64,7 @@ module.exports = {
         {
           label: 'Sign In',
           position: 'right',
-          href: 'https://web3.storage/docs/login'
+          href: 'https://web3.storage/login'
         },
         {
           type: 'search',
@@ -84,7 +84,7 @@ module.exports = {
             },
             {
               label: 'Terms of Service',
-              href: 'https://web3.storage/docs/terms'
+              href: 'https://web3.storage/terms'
             },
             {
               label: 'Open an issue',
@@ -92,7 +92,7 @@ module.exports = {
             },
             {
               label: 'Contact us',
-              href: 'https://web3.storage/docs/community/help-and-support'
+              href: '/community/help-and-support'
             }
           ]
         }
