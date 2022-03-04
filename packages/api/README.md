@@ -75,7 +75,7 @@ Add the required secrets:
     wrangler secret put S3_BUCKET_NAME --env $(whoami) # e.g web3.storage-staging-us-east-2 (not required for dev)
     wrangler secret put PG_REST_JWT --env $(whoami) # Get from database postgrest
 ```
-Note this might be up to date, please look to the [.env.tpl](../../.env.tpl) in the root directory for the up to date secrets required.
+Note this might not be up to date, please look to the [.env.tpl](../../.env.tpl) in the root directory for the up to date secrets required.
 
 ## Run the code
 Run `npm run build` to build the bundle
