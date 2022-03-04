@@ -8,7 +8,7 @@ import React from 'react'
 import Translate from '@docusaurus/Translate'
 import Interpolate from '@docusaurus/Interpolate'
 
-const ISSUE_URL = 'https://github.com/web3-storage/docs/issues/new?assignees=&labels=need%2Ftriage&template=open-an-issue.md&title=%5BPAGE+ISSUE%5D+Welcome'
+const ISSUE_URL = 'https://github.com/web3-storage/web3.storage/issues/new/choose'
 const SUGGEST_CONTENT_URL = 'https://github.com/web3-storage/docs/issues/new?assignees=&labels=need%2Ftriage&template=content-or-feature-suggestion.md&title=%5BCONTENT+REQUEST%5D+%28add+your+title+here%21%29'
 
 export default function EditThisPage ({ editUrl }) {
