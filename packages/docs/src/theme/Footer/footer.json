@@ -14,19 +14,19 @@
       "items": [
         {
           "text": "Quickstart Guide",
-          "url": "/docs/#quickstart"
+          "url": "https://web3.storage/docs/#quickstart"
         },
         {
           "text": "FAQ",
-          "url": "/docs/faq"
+          "url": "https://web3.storage/docs/faq"
         },
         {
           "text": "Get Help",
-          "url": "/docs/community/help-and-support"
+          "url": "https://web3.storage/docs/community/help-and-support"
         },
         {
           "text": "Contact Us",
-          "url": "/docs/community/help-and-support/"
+          "url": "https://web3.storage/docs/community/help-and-support/"
         },
         {
           "text": "Terms of Use",
@@ -47,7 +47,7 @@
         },
         {
           "text": "Javascript Client Library",
-          "url": "/docs/reference/js-client-library"
+          "url": "https://web3.storage/docs/reference/js-client-library"
         },
         {
           "text": "Open an Issue",
@@ -55,7 +55,7 @@
         },
         {
           "text": "HTTP API",
-          "url": "/docs/reference/http-api/"
+          "url": "https://web3.storage/docs/reference/http-api/"
         },
         {
           "text": "Login",
