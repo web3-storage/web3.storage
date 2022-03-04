@@ -77,6 +77,19 @@
     --ifm-alert-background-color: transparent;
     --ifm-navbar-background-color: #{$sidenavBg};
     --ifm-navbar-shadow : transparent;
+    --ifm-scrollbar-track-background-color: #f1f1f1;
+    --ifm-scrollbar-thumb-background-color: #c0c0c0;
+    --ifm-scrollbar-thumb-hover-background-color: #a7a7a7;
+}
+
+.thin-scrollbar::-webkit-scrollbar-track{
+  background: #f1f1f1;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb{
+  background: #c0c0c0;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb:hover{
+  background: #a7a7a7;
 }
 
 // Suisse Intl
@@ -135,6 +148,7 @@ $fontAssetPath: '../../static/fonts';
 html,
 body {
   @include headings;
+  background-color: $seaShell;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   height: auto !important;
@@ -179,6 +193,10 @@ article {
 
 // prevent the external link icon showing in the navbar and footer
 svg[class^="iconExternalLink"] {
+  display: none;
+}
+
+.theme-doc-breadcrumbs {
   display: none;
 }
 
@@ -236,22 +254,22 @@ table {
 .container {
   .row {
     flex-wrap: nowrap;
-  }
-  .docItemCol_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocItem-styles-module {
-    width: 50vw;
-    @media (max-width: 1300px) {
-      width: 48vw;
+    .col {
+      width: 50vw;
+      @media (max-width: 1300px) {
+        width: 48vw;
+      }
+      @media (max-width: 1200px) {
+        width: 44vw;
+      }
+      @media (max-width: 1100px) {
+        width: 40vw;
+      }
+      &.col--3 {
+        flex-shrink: 0 !important;
+        width: toRem(300) !important;
+      }
     }
-    @media (max-width: 1200px) {
-      width: 44vw;
-    }
-    @media (max-width: 1100px) {
-      width: 40vw;
-    }
-  }
-  .col--3 {
-    flex-shrink: 0 !important;
-    width: toRem(300) !important;
   }
 }
 .row .col.col--3 {
@@ -273,4 +291,8 @@ a.anchor {
     top: 230px;
   }
   visibility: hidden;
+}
+
+.theme-back-to-top-button {
+  background-color: $primary;
 }

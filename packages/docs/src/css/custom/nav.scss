@@ -59,12 +59,6 @@
     line-height: 2rem;
 }
 
-// dark theme toggle
-.toggle_node_modules-\@docusaurus-theme-classic-lib-next-theme-Navbar-styles-module,
-.navbarSidebarToggle_node_modules-\@docusaurus-theme-classic-lib-next-theme-Navbar-styles-module {
-    display: none;
-}
-
 // nav animation on hover
 .navbar__link:not([href$='login']) {
     transform: translateY(0rem);

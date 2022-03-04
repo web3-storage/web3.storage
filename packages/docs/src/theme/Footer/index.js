@@ -1,5 +1,4 @@
 import React from 'react'
-import Squiggle from './squiggle.js'
 import SiteLogo from './w3storage-logo.js'
 import FooterData from './footer.json'
 
@@ -12,8 +11,7 @@ function Footer () {
   return (
     <footer id='site-footer'>
       <section id='site-footer-section'>
-        <Squiggle id='footer_squiggle' />
-
+        <div id='footer_squiggle'><div id="footer_squiggle-img"></div></div>
         <div className='grid'>
           <div className='col-4_sm-8_mi-12' data-push-left='off-1_sm-1_mi-0'>
             <div className='footer_contact'>
