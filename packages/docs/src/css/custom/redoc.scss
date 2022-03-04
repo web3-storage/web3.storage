@@ -1,8 +1,27 @@
 // /reference/http-api/ uses redoc plugin which overwrites some of our global styles
 // need to re-style separately
+.docPage {
+    display: flex;
+    width: 100%;
+}
+
+.theme-doc-toc-mobile {
+    display: none;
+    @include mobile {
+        display: block;
+    }
+}
+
+main {
+    @include desktop {
+        flex-grow: 1;
+        max-width: calc(100% - var(--doc-sidebar-width));
+    }
+}
 
 .redoc-wrap {
     @include headings;
+    color: $ebony !important;
     .api-info {
         padding: 0;
         & > h1 {

@@ -135,20 +135,20 @@ function RedocPage () {
   }
   // console.log('redoc options', redocOptions)
   return (
-    <div className='docPage_node_modules-@docusaurus-theme-classic-lib-next-theme-DocPage-styles-module'>
-      <aside className='docSidebarContainer_node_modules-@docusaurus-theme-classic-lib-next-theme-DocPage-styles-module'>
+    <div className='docPage'>
+      <aside className='theme-doc-sidebar-container'>
         <DocSidebar
           path='/reference/http-api/'
           sidebar={sidebarDefinition.docs}
         />
       </aside>
-      <main className='docMainContainer_node_modules-@docusaurus-theme-classic-lib-next-theme-DocPage-styles-module'>
+      <main className=''>
         <div className='container padding-top--md padding-bottom--lg'>
           <div className='row'>
-            <div className='col docItemCol_node_modules-@docusaurus-theme-classic-lib-next-theme-DocItem-styles-module'>
-              <div className='docItemContainer_node_modules-@docusaurus-theme-classic-lib-next-theme-DocItem-styles-module'>
+            <div className='col'>
+              <div className=''>
                 <article>
-                  <div className='tocCollapsible_node_modules-@docusaurus-theme-classic-lib-next-theme-TOCCollapsible-styles-module theme-doc-toc-mobile tocMobile_node_modules-@docusaurus-theme-classic-lib-next-theme-DocItem-styles-module'>
+                  <div className='theme-doc-toc-mobile'>
                     {tocReady && <TOCCollapsible toc={tocDefinition} />}
                   </div>
                   <div className='theme-doc-markdown markdown'>
