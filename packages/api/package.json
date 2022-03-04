@@ -1,10 +1,10 @@
 {
   "name": "@web3-storage/api",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "private": true,
   "type": "module",
   "license": "(Apache-2.0 OR MIT)",
-  "main": "./dist/index.mjs",
+  "main": "./dist/worker.mjs",
   "scripts": {
     "lt": "npm-run-all -p lt:*",
     "lt:cluster": "npx localtunnel --port 9094 --subdomain \"$(whoami)-cluster-api-web3-storage\"",
@@ -23,7 +23,7 @@
     "cluster:reset": "web3-storage-tools cluster --clean",
     "pg:start": "cd ../db && npm start",
     "pg:stop": "cd ../db && npm run stop",
-    "miniflare": "miniflare --env .env.local --watch"
+    "miniflare": "miniflare --env ../../.env --watch"
   },
   "devDependencies": {
     "@sentry/cli": "^1.72.1",
@@ -71,7 +71,7 @@
   },
   "bundlesize": [
     {
-      "path": "./dist/index.mjs",
+      "path": "./dist/worker.mjs",
       "maxSize": "1 MB"
     }
   ]

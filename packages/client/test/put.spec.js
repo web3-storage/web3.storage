@@ -9,6 +9,7 @@ import { CID } from 'multiformats/cid'
 import { encode } from 'multiformats/block'
 import * as json from '@ipld/dag-json'
 import { sha256 } from 'multiformats/hashes/sha2'
+import { ReadableStream } from '@web-std/blob'
 
 describe('put', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
@@ -85,12 +86,31 @@ describe('put', () => {
   })
 
   it('adds big files', async function () {
-    this.timeout(30e3)
+    this.timeout(60e3)
     const client = new Web3Storage({ token, endpoint })
     let uploadedChunks = 0
 
     const files = [
-      new File([randomBytes(1024e6)], '102mb.txt')
+      // Previously: new File([randomBytes(1024e6)], '102mb.txt')
+      //
+      // Node.js currently copies the buffer on every iteration when obtaining a
+      // stream from File.stream(). It also has a fixed and small chunk size of
+      // 65536 bytes. This makes reading the stream VERY slow and this test
+      // fails because it times out.
+      //
+      // TODO: revert to using File if this issue gets resolved:
+      // https://github.com/nodejs/node/issues/42108
+      {
+        name: '102mb.txt',
+        stream () {
+          return new ReadableStream({
+            pull (controller) {
+              controller.enqueue(randomBytes(1024e6))
+              controller.close()
+            }
+          })
+        }
+      }
     ]
 
     await client.put(files, {

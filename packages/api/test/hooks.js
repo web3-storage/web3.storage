@@ -10,7 +10,7 @@ import * as workerGlobals from './scripts/worker-globals.js'
 global.crypto = webcrypto
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-dotenv.config({ path: path.join(__dirname, '..', '.env.local') })
+dotenv.config({ path: path.join(__dirname, '..', '..', '..', '.env') })
 
 const toolsCli = path.join(__dirname, '..', '..', 'tools', 'scripts', 'cli.js')
 const dbCli = path.join(__dirname, '..', '..', 'db', 'scripts', 'cli.js')

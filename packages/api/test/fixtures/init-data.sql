@@ -92,12 +92,11 @@ VALUES (
   1669394359626000000
 );
 
--- user 'test-pinning' is authorized
-INSERT INTO pinning_authorization (user_id)
-VALUES (4), (5), (6);
-
 INSERT INTO user_tag (user_id, tag, value, reason, deleted_at)
-VALUES  (5, 'HasAccountRestriction', true, 'Revoked access', '2021-07-14T19:27:14.934572+00:00'),
+        (4, 'HasPsaAccess', true, 'test', null),
+        (5, 'HasPsaAccess', true, 'test', null),
+        (6, 'HasPsaAccess', true, 'test', null),
+        (5, 'HasAccountRestriction', true, 'Revoked access', '2021-07-14T19:27:14.934572+00:00'),
         (5, 'HasAccountRestriction', false, 'Re-enabled access', null),
         (6, 'HasAccountRestriction', true, 'Revoked access', null),
         (7, 'HasAccountRestriction', true, 'Revoked access', null);
