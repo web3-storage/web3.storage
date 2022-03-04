@@ -25,12 +25,11 @@ module.exports = {
   organizationName: 'web3-storage',
   projectName: 'web3.storage',
   themeConfig: {
-    colorMode: DEBUG
-      ? {}
-      : {
-          respectPrefersColorScheme: true,
-          disableSwitch: true
-        },
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: false,
+      respectPrefersColorScheme: false,
+    },
     navbar: {
       title: 'Web3.Storage',
       logo: {
