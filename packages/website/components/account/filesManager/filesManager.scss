@@ -126,10 +126,12 @@
   justify-content: space-between;
   justify-items: center;
   padding: 1.5rem 2rem 0;
+  padding-bottom: 0rem;
   flex-wrap: wrap;
 
   @include medium {
     padding: 1rem;
+    padding-bottom: 0rem;
     .Pagination .pageList {
       justify-content: center;
     }

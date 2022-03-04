@@ -35,7 +35,9 @@ const Pagination = ({
 
   const currentPage = useMemo(() => parseInt(queryParam ? queryValue : activePage), [queryParam, queryValue, activePage])
 
-  const setCurrentPage = useCallback((page) => queryParam ? setQueryValue(page) : setActivePage(page), [queryParam, setQueryValue, setActivePage])
+  const setCurrentPage = useCallback((page) => {
+    queryParam ? setQueryValue(page) : setActivePage(page)
+  }, [queryParam, setQueryValue, setActivePage])
 
   useEffect(() => {
     pageCount && setPageList(
@@ -48,6 +50,10 @@ const Pagination = ({
 
     const firstItem = (currentPage - 1) * parseInt(/** @type {string} */(itemsPerPage))
     onChange && onChange(items.slice(firstItem, firstItem + parseInt(/** @type {string} */(itemsPerPage))))
+
+    const scrollToElement= document.querySelector('.Pagination');
+    scrollToElement.scrollIntoView({block: "end", inline: "nearest"});
+    
   }, [items, itemsPerPage, visiblePages, pageCount, setPageList, currentPage, setCurrentPage, onChange])
 
   return (
