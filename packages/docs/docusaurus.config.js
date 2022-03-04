@@ -17,11 +17,11 @@ const ALGOLIA_APP_ID = process.env.ALGOLIA_APP_ID || '9ARXAK1OFV'
 module.exports = {
   title: 'Web3.Storage Documentation',
   tagline: 'Better storage. Better transfers. Better internet.',
-  url: 'https://docs.web3.storage/',
+  url: 'https://web3.storage/',
   baseUrl: '/docs/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico', // TODO: replace with web3.storage favicon
+  favicon: 'img/favicon.ico',
   organizationName: 'web3-storage',
   projectName: 'web3.storage',
   themeConfig: {
