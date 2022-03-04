@@ -10,12 +10,12 @@ import GeneralPageData from '../../content/pages/general.json';
 
 // ===================================================================== Exports
 export default function MessageBanner() {
-  const bannerPrompt = GeneralPageData.message_banner.content;
+  const marketingPrompt = GeneralPageData.message_banner.content;
   const maintenceAlert = GeneralPageData.message_banner.maintenceAlert;
   let link = GeneralPageData.message_banner.url;
 
   const [bannerHeight, setBannerHeight] = useState('unset');
-  const [bannerContent, setBannerContent] = useState(bannerPrompt);
+  const [bannerContent, setBannerContent] = useState(marketingPrompt);
   const messageBannerRef = useRef(/** @type {any} */ (null));
 
   const { data: statusPageData, error: statusPageError } = useQuery('get-statuspage-summary', () =>
@@ -53,7 +53,7 @@ export default function MessageBanner() {
   }
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && bannerContent === bannerPrompt) {
+    if (typeof window !== 'undefined' && bannerContent === marketingPrompt) {
       const oldMessage = localStorage.getItem('web3StorageBannerMessage');
       const oldDate = /** @type {string} */ (
         localStorage.getItem('web3StorageBannerClickDate') ? localStorage.getItem('web3StorageBannerClickDate') : '0'
@@ -74,7 +74,7 @@ export default function MessageBanner() {
         return () => window.removeEventListener('resize', resize);
       }
     }
-  }, [bannerContent, bannerPrompt]);
+  }, [bannerContent, marketingPrompt]);
 
   const messageBannerClick = useCallback(
     message => {
@@ -82,14 +82,14 @@ export default function MessageBanner() {
         localStorage.setItem('web3StorageBannerMessage', message);
         localStorage.setItem('web3StorageBannerClickDate', Date.now().toString());
       }
-      if (bannerPrompt === bannerContent) {
+      if (marketingPrompt === bannerContent) {
         setBannerHeight('0px');
       }
     },
-    [bannerPrompt, bannerContent]
+    [marketingPrompt, bannerContent]
   );
 
-  const CustomElement = bannerPrompt === bannerContent ? 'a' : 'div';
+  const CustomElement = marketingPrompt === bannerContent ? 'a' : 'div';
 
   return (
     <section id="section_message-banner" style={{ height: bannerHeight }}>
@@ -102,12 +102,12 @@ export default function MessageBanner() {
                 target="_blank"
                 className={clsx(
                   'message-banner-content',
-                  bannerPrompt !== bannerContent ? 'banner-alert' : '',
+                  marketingPrompt !== bannerContent ? 'banner-alert' : '',
                   bannerContent.length > 120 ? 'mb-reduced-fontsize' : ''
                 )}
                 dangerouslySetInnerHTML={{ __html: bannerContent }}
-                onClick={() => messageBannerClick(bannerPrompt)}
-                onKeyPress={() => messageBannerClick(bannerPrompt)}
+                onClick={() => messageBannerClick(marketingPrompt)}
+                onKeyPress={() => messageBannerClick(marketingPrompt)}
                 rel="noreferrer"
               ></CustomElement>
             </div>
@@ -117,10 +117,10 @@ export default function MessageBanner() {
         <button
           className={clsx(
             'message-banner-close-button',
-            bannerPrompt !== bannerContent || bannerHeight === '0px' ? 'hide-banner-close' : ''
+            marketingPrompt !== bannerContent || bannerHeight === '0px' ? 'hide-banner-close' : ''
           )}
-          onClick={() => messageBannerClick(bannerPrompt)}
-          onKeyPress={() => messageBannerClick(bannerPrompt)}
+          onClick={() => messageBannerClick(marketingPrompt)}
+          onKeyPress={() => messageBannerClick(marketingPrompt)}
         >
           <CloseIcon />
         </button>
