@@ -50,7 +50,7 @@ wrangler login
 ```
 Open the browser, log into your account, and select Allow.
 
-### 4. Configure the Workers CLI
+### 4. Configure your worker
 Update `wrangler.toml` with a new `env`. Set your env name to be the value of `whoami` on your system you can use `npm start` to run the worker in dev mode for you.
 
     [**wrangler.toml**](./wrangler.toml)
