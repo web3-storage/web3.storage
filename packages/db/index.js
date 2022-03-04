@@ -140,16 +140,18 @@ export class DBClient {
   }
 
   /**
-   * Check that a user is authorized to pin
+   * Check that a user is authorized to pin.
    *
    * @param {number} userId
    * @returns {Promise<boolean>}
    */
   async isPinningAuthorized (userId) {
-    const { error, count } = await this._client
-      .from('pinning_authorization')
-      .select('id', { count: 'exact' })
+    const { count, error } = await this._client
+      .from('user_tag')
+      .select('value', { count: 'exact' })
       .eq('user_id', userId)
+      .eq('tag', 'HasPsaAccess')
+      .eq('value', true)
       .filter('deleted_at', 'is', null)
 
     if (error) {
