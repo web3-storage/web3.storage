@@ -31,7 +31,7 @@
 
 .nav-items-wrapper {
   &.light {
-    .nav-item {
+    .nav-item:not(.current-page) {
       &:after {
         border: solid 2px white;
       }
@@ -111,7 +111,7 @@
     &:after {
       content: '';
       position: absolute;
-      bottom: -0.25rem;
+      bottom: -0.5rem;
       left: 0.25rem;
       width: calc(100% - 0.5rem);
       height: 0.25rem;
@@ -122,13 +122,13 @@
     }
     &:hover {
       color: $blue;
-      transform: translateY(-0.75rem);
+      transform: translateY(-0.5rem);
       &:after {
         border: solid 2px $blue;
       }
     }
     &.current-page {
-      transform: translateY(-0.75rem);
+      transform: translateY(-0.5rem);
       &:after {
         opacity: 1;
       }
