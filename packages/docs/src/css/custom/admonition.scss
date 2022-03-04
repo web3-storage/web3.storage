@@ -1,5 +1,6 @@
 .admonition {
     margin-bottom: toRem(60);
+    background-color: $white;
     h5 {
         text-transform: none;
         @include fontSize_Regular;

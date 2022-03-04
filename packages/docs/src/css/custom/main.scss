@@ -1,9 +1,7 @@
 // main
 main {
     position: relative;
-}
-@include desktop {
-    .docMainContainer_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocPage-styles-module {
+    @include desktop {
         background-color: rgba(241, 241, 241, 0.6);
         @include shadow3;
         padding: 6.125vw 0 6.125vw 6.75vw;
@@ -20,8 +18,6 @@ main {
         @media (max-width: 1150px) {
             padding: toRem(15) 0 toRem(15) toRem(15);
         }
-    }
-    .docMainContainer_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocPage-styles-module {
         &:before {
             content: '';
             background-image: url(#{$imagePath}/shapes/triangle.png);

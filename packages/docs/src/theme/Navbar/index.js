@@ -10,7 +10,7 @@ function Navbar (props) {
     let curScroll
     let direction = 0
     let prevDirection = 0
-    const offset = 100
+    const offset = 52
     const header = document.querySelector('.navbar')
     const checkScroll = function () {
       /*
