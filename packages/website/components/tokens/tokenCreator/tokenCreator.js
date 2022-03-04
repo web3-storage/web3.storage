@@ -1,9 +1,10 @@
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { useCallback, useLayoutEffect, useRef } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
 import countly from 'lib/countly';
 import Button, { ButtonVariant } from 'components/button/button';
+import CheckIcon from 'assets/icons/check';
 import { useTokens } from 'components/contexts/tokensContext';
 
 /**
@@ -18,6 +19,7 @@ import { useTokens } from 'components/contexts/tokensContext';
  */
 const TokenCreator = ({ content }) => {
   const inputRef = useRef(/** @type {HTMLInputElement|null} */ (null));
+  const [inputHasValue, setInputHasValue] = useState(/** @type {boolean} */ (false));
 
   const { query, push } = useRouter();
   const { tokens, createToken, isCreating, getTokens } = useTokens();
@@ -55,6 +57,18 @@ const TokenCreator = ({ content }) => {
     }
   }, [query.create, isCreating]);
 
+  const handleInputValueChange = () => {
+    if (inputRef.current.value !== '') {
+      if (!inputHasValue) {
+        setInputHasValue(true);
+      }
+    } else {
+      if (inputHasValue) {
+        setInputHasValue(false);
+      }
+    }
+  };
+
   return (
     <div className={clsx('token-creator-container', isCreating && 'isDisabled')}>
       {isCreating ? (
@@ -62,8 +76,16 @@ const TokenCreator = ({ content }) => {
       ) : (
         <>
           <form className={clsx(!query.create && 'hidden', 'token-creator-input-container')} onSubmit={onTokenCreate}>
-            <input ref={inputRef} required className="token-creator-input" placeholder={content.placeholder} />
-            <button className="token-creator-submit">+</button>
+            <input
+              ref={inputRef}
+              required
+              className="token-creator-input"
+              placeholder={content.placeholder}
+              onChange={handleInputValueChange}
+            />
+            <button className="token-creator-submit">
+              {inputHasValue ? <CheckIcon className="token-creator-check" /> : '+'}
+            </button>
           </form>
           <Button
             className={clsx('token-creator-create', query.create && 'hidden')}
