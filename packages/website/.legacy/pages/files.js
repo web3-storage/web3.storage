@@ -48,12 +48,12 @@ const TOOLTIPS = {
 
   CID: (<span>
     The <strong>c</strong>ontent <strong>id</strong>entifier for a file or a piece of data.<span> </span>
-    <a href="https://docs.web3.storage/concepts/content-addressing/" target="_blank" className="underline" rel="noreferrer">Learn more</a>
+    <a href="/docs/concepts/content-addressing/" target="_blank" className="underline" rel="noreferrer">Learn more</a>
   </span>),
 
   STORAGE_PROVIDERS: (<span>
     Service providers offering storage capacity to the Filecoin network.<span> </span>
-    <a href="https://docs.web3.storage/concepts/decentralized-storage/" target="_blank" className="underline" rel="noreferrer">Learn more</a>
+    <a href="/docs/concepts/decentralized-storage/" target="_blank" className="underline" rel="noreferrer">Learn more</a>
   </span>),
 
   QUEUED_UPLOAD: (<span>

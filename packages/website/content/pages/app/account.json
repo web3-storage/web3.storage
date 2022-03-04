@@ -37,7 +37,7 @@
         "description": "See the docs for guides and walkthroughs",
         "ctas": [
           {
-            "link": "https://docs.web3.storage",
+            "link": "/docs",
             "text": "Explore the docs",
             "theme": "pink-blue",
             "ui": "PROFILE_GETTING_STARTED",
@@ -102,7 +102,7 @@
           },
           "cid": {
             "label": "CID",
-            "tooltip": "The content identifier for a file or a piece of data. <a href='https://docs.web3.storage/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>"
+            "tooltip": "The content identifier for a file or a piece of data. <a href='/docs/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>"
           },
           "status": {
             "label": "Status",
@@ -117,7 +117,7 @@
           "storage_providers": {
             "label": "Storage Providers",
             "tooltip": {
-              "header": "Service providers offering storage capacity to the Filecoin network. <a href='https://docs.web3.storage/concepts/decentralized-storage/' target='_blank' rel='noreferrer'>Learn more</a>",
+              "header": "Service providers offering storage capacity to the Filecoin network. <a href='/docs/concepts/decentralized-storage/' target='_blank' rel='noreferrer'>Learn more</a>",
               "queuing": "The content from this upload is being aggregated for storage on Filecoin. Filecoin deals will be active within 48 hours of upload."
             }
           },

@@ -16,10 +16,11 @@ import Filterable from 'ZeroComponents/filterable/filterable';
 import Sortable from 'ZeroComponents/sortable/sortable';
 import Pagination from 'ZeroComponents/pagination/pagination';
 import Modal from 'modules/zero/components/modal/modal';
-import { formatTimestamp } from 'lib/utils';
-import { useUploads } from 'components/contexts/uploadsContext';
 import GradientBackgroundB from 'assets/illustrations/gradient-background-b';
 import CloseIcon from 'assets/icons/close';
+import { formatTimestamp } from 'lib/utils';
+import { useUploads } from 'components/contexts/uploadsContext';
+import { useUser } from 'components/contexts/userContext';
 
 type FilesManagerProps = {
   className?: string;
@@ -32,6 +33,9 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
   const {
     query: { filter },
   } = useRouter();
+  const {
+    storageData: { refetch },
+  } = useUser();
   const [filteredFiles, setFilteredFiles] = useState(files);
   const [sortedFiles, setSortedFiles] = useState(filteredFiles);
   const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
@@ -90,7 +94,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
     setIsUpdating(true);
 
     if (deleteSingleCid !== '') {
-      deleteUpload(deleteSingleCid);
+      await deleteUpload(deleteSingleCid);
     } else {
       await Promise.all(selectedFiles.map(({ cid }) => deleteUpload(cid)));
     }
@@ -106,7 +110,8 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
     getUploads();
     setDeleteSingleCid('');
     deleteModalState[1](false);
-  }, [deleteSingleCid, selectedFiles, getUploads, deleteModalState, deleteUpload]);
+    refetch();
+  }, [deleteSingleCid, selectedFiles, getUploads, deleteModalState, deleteUpload, refetch]);
 
   const onDeleteSingle = useCallback(
     async cid => {

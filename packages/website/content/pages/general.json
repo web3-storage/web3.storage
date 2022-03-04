@@ -32,7 +32,7 @@
         "text": "FAQ"
       },
       {
-        "url": "https://docs.web3.storage/",
+        "url": "/docs",
         "text": "Docs"
       },
       {
@@ -106,7 +106,7 @@
       "items": [
         {
           "text": "Quickstart Guide",
-          "url": "https://docs.web3.storage/#quickstart"
+          "url": "/docs/#quickstart"
         },
         {
           "text": "FAQ",
@@ -114,19 +114,15 @@
         },
         {
           "text": "Get Help",
-          "url": "https://docs.web3.storage/community/help-and-support"
+          "url": "/docs/community/help-and-support"
         },
         {
           "text": "Contact Us",
-          "url": "https://docs.web3.storage/community/help-and-support/"
+          "url": "/docs/community/help-and-support/#questions-and-community-discussion"
         },
         {
           "text": "Terms of Use",
           "url": "/terms"
-        },
-        {
-          "text": "Privacy Policy",
-          "url": "/policy"
         },
         {
           "text": "Status",
@@ -143,15 +139,15 @@
         },
         {
           "text": "Javascript Client Library",
-          "url": "https://docs.web3.storage/reference/js-client-library"
+          "url": "/docs/reference/js-client-library"
         },
         {
           "text": "Open an Issue",
-          "url": "/account"
+          "url": "https://github.com/web3-storage/web3.storage/issues/new/choose"
         },
         {
           "text": "HTTP API",
-          "url": "https://docs.web3.storage/reference/http-api/"
+          "url": "/docs/reference/http-api/"
         },
         {
           "text": "Web Apps",

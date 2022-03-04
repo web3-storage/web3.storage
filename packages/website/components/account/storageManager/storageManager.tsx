@@ -1,13 +1,11 @@
 import clsx from 'clsx';
 import filesz from 'filesize';
 import { useCallback, useMemo, useEffect, useState, useRef } from 'react';
-import { useQuery } from 'react-query';
 
 import LockIcon from 'assets/icons/lock';
 import emailContent from '../../../content/file-a-request';
 import Button, { ButtonVariant } from 'components/button/button';
-import { getStorage } from 'lib/api';
-import { useAuthorization } from 'components/contexts/authorizationContext';
+import { useUser } from 'components/contexts/userContext';
 import { elementIsInViewport } from 'lib/utils';
 
 // Tiers available
@@ -31,10 +29,9 @@ const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body
 
 const StorageManager = ({ className = '', content }: StorageManagerProps) => {
   const storageTier = StorageTiers.TIER_1; // No tier available?
-  const { isLoggedIn } = useAuthorization();
-  const { data, isLoading } = useQuery('get-storage', getStorage, {
-    enabled: isLoggedIn,
-  });
+  const {
+    storageData: { data, isLoading },
+  } = useUser();
   const usedStorage = useMemo(() => data?.usedStorage || 0, [data]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef<HTMLDivElement>(null);
