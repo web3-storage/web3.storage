@@ -1,7 +1,7 @@
 /* eslint-env serviceworker */
 import { PutObjectCommand } from '@aws-sdk/client-s3/dist-es/commands/PutObjectCommand.js'
 import { CarBlockIterator } from '@ipld/car'
-import { toString } from 'uint8arrays'
+import { toString, equals } from 'uint8arrays'
 import { Block } from 'multiformats/block'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as raw from 'multiformats/codecs/raw'
@@ -273,6 +273,12 @@ async function carStat (carBlob) {
     if (blockSize > MAX_BLOCK_SIZE) {
       throw new InvalidCarError(`block too big: ${blockSize} > ${MAX_BLOCK_SIZE}`)
     }
+    if (block.cid.multihash.code !== 0x12) {
+      throw new InvalidCarError(`block with unsupported hash function: ${block.cid.multihash.code} for ${block.cid.toString()}`)
+    }
+    if (!isValidBlock(block)) {
+      throw new InvalidCarError(`block data does not match cid for ${block.cid.toString()}`)
+    }
     if (!rawRootBlock && block.cid.equals(rootCid)) {
       rawRootBlock = block
     }
@@ -304,6 +310,16 @@ async function carStat (carBlob) {
     }
   }
   return { size, blocks, rootCid }
+}
+
+/**
+ * Verify the hash of the bytes matches the cid multihash
+ * @param {import('@ipld/car/api'.Block)} block
+ * @returns {boolean} if the cid multihash matches the hash of the bytes
+ */
+async function isValidBlock (block) {
+  const hash = await sha256.digest(block.bytes)
+  return equals(hash.digest, block.cid.multihash.digest)
 }
 
 /**
