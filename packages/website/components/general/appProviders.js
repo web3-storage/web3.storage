@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { useRouter } from 'next/router';
 
 import { AuthorizationProvider } from 'components/contexts/authorizationContext';
 import { UserProvider } from 'components/contexts/userContext';
@@ -19,10 +20,12 @@ const queryClient = new QueryClient({
  * @returns
  */
 const AppProviders = ({ authorizationProps, children }) => {
+  const { pathname } = useRouter();
+  
   return (
     <QueryClientProvider client={queryClient}>
       <AuthorizationProvider {...authorizationProps}>
-        <UserProvider>
+        <UserProvider loadStorage={pathname.indexOf("/account") !== -1}>
           <UploadsProvider>
             <TokensProvider>{children}</TokensProvider>
           </UploadsProvider>
@@ -33,3 +36,4 @@ const AppProviders = ({ authorizationProps, children }) => {
 };
 
 export default AppProviders;
+
