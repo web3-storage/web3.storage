@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 
-import { getInfo } from 'lib/api.js';
+import { getInfo, getStorage } from 'lib/api.js';
 import { useAuthorization } from './authorizationContext.js';
 
 /**
@@ -14,11 +14,14 @@ import { useAuthorization } from './authorizationContext.js';
  * @property {string} publicAddress
  * @property {string} created
  * @property {string} updated
+ * @property {import('react-query').UseQueryResult<{usedStorage: number}>} storageData
+ * @property {string} isLoadingStorage
  */
 
 /**
  * @typedef {Object} UserProviderProps
  * @property {import('react').ReactNode} children
+ * @property {boolean} loadStorage
  */
 
 /**
@@ -31,13 +34,16 @@ export const UserContext = React.createContext(/** @type {any} */ (undefined));
  *
  * @param {UserProviderProps} props
  */
-export const UserProvider = ({ children }) => {
+export const UserProvider = ({ children, loadStorage }) => {
   const { isLoggedIn } = useAuthorization();
   const { data } = useQuery('get-info', getInfo, {
     enabled: isLoggedIn,
   });
+  const storageData = useQuery('get-storage', getStorage, {
+    enabled: isLoggedIn && loadStorage,
+  });
 
-  return <UserContext.Provider value={{ ...data }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ ...data, storageData }}>{children}</UserContext.Provider>;
 };
 
 /**
