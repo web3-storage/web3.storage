@@ -1,5 +1,5 @@
 // @ts-ignore
-import holographic from '../images/holographic-bg-2.jpeg';
+import holographic from '../images/holographic-bg-2.jpg';
 /**
  * @param {any} props
  */

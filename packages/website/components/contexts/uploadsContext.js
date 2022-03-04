@@ -3,6 +3,7 @@ import { Web3Storage } from 'web3.storage';
 
 import { API, deleteUpload, getToken, getUploads, renameUpload } from 'lib/api';
 import { useUploadProgress } from './uploadProgressContext';
+import { useUser } from './userContext';
 
 export const STATUS = {
   PENDING: 'pending',
@@ -72,6 +73,10 @@ let client;
  * @param {UploadsProviderProps} props
  */
 export const UploadsProvider = ({ children }) => {
+  const {
+    storageData: { refetch },
+  } = useUser();
+
   const [uploads, setUploads] = useState(/** @type {Upload[]} */ ([]));
   const [isFetchingUploads, setIsFetchingUploads] = useState(false);
   const [fetchDate, setFetchDate] = useState(/** @type {number|undefined} */ (undefined));
@@ -130,10 +135,11 @@ export const UploadsProvider = ({ children }) => {
           }
 
           markFileCompleted(file);
+          refetch();
         }
       );
     }
-  }, [progress.files, markFileCompleted, markFileFailed, filesToUpload, updateFileProgress]);
+  }, [progress.files, markFileCompleted, markFileFailed, filesToUpload, updateFileProgress, refetch]);
 
   const getUploadsCallback = useCallback(
     /** @type {(args?: UploadArgs) => Promise<Upload[]>}} */

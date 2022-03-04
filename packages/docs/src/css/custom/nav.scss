@@ -66,7 +66,7 @@
     &:hover,
     &[href='/'],
     &.navbar__link--active {
-        transform: translateY(-0.75rem);
+        transform: translateY(-0.5rem);
         transition: 200ms ease;
     }
 }
@@ -86,7 +86,7 @@
         &:after {
             content: "";
             position: absolute;
-            bottom: -0.25rem;
+            bottom: -0.5rem;
             left: 0.25rem;
             width: calc(100% - 0.5rem);
             height: 0.25rem;
@@ -139,7 +139,7 @@ span.DocSearch-Button-Keys {
       transform: translateY(0rem);
       transition: 200ms ease;
       &:hover {
-          transform: translateY(-0.75rem);
+          transform: translateY(-0.5rem);
           transition: 200ms ease;
       }
   }

@@ -12,7 +12,7 @@ A button that supports page redirects using the React router, external links, an
 
 ### External Link
 ```
-<Button href="https://docs.web3.storage" openInNewWindow={true}>External Link</Button>
+<Button href="/docs" openInNewWindow={true}>External Link</Button>
 ```
 
 ### Internal Callback

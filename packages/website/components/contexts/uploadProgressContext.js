@@ -84,6 +84,7 @@ const reducers = {
             !!fileTarget.uploadId
               ? fileTarget
               : {
+                  name: file.name,
                   size: file.size,
                   status: STATUS.PENDING,
                   progress: { total: file.size, uploaded: 0, percentage: 0 },

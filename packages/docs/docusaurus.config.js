@@ -17,11 +17,11 @@ const ALGOLIA_APP_ID = process.env.ALGOLIA_APP_ID || '9ARXAK1OFV'
 module.exports = {
   title: 'Web3.Storage Documentation',
   tagline: 'Better storage. Better transfers. Better internet.',
-  url: 'https://docs.web3.storage/',
+  url: 'https://web3.storage/',
   baseUrl: '/docs/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico', // TODO: replace with web3.storage favicon
+  favicon: 'img/favicon.ico',
   organizationName: 'web3-storage',
   projectName: 'web3.storage',
   themeConfig: {
@@ -83,11 +83,11 @@ module.exports = {
             },
             {
               label: 'Terms of Service',
-              href: 'https://web3.storage/about/#terms-of-service'
+              href: 'https://web3.storage/terms'
             },
             {
               label: 'Open an issue',
-              href: 'https://docs.web3.storage/community/help-and-support/#bug-reports-or-feature-requests'
+              href: 'https://github.com/web3-storage/web3.storage/issues/new/choose'
             },
             {
               label: 'Contact us',
