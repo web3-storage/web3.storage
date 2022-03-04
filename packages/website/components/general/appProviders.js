@@ -21,11 +21,11 @@ const queryClient = new QueryClient({
  */
 const AppProviders = ({ authorizationProps, children }) => {
   const { pathname } = useRouter();
-  
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthorizationProvider {...authorizationProps}>
-        <UserProvider loadStorage={pathname.indexOf("/account") !== -1}>
+        <UserProvider loadStorage={pathname.indexOf('/account') !== -1}>
           <UploadsProvider>
             <TokensProvider>{children}</TokensProvider>
           </UploadsProvider>
@@ -36,4 +36,3 @@ const AppProviders = ({ authorizationProps, children }) => {
 };
 
 export default AppProviders;
-
