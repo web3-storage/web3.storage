@@ -51,7 +51,7 @@ router.post('/pins',                mode['📝'](auth['🔒'](auth['🚫'](auth[
 router.post('/pins/:requestId',     mode['📝'](auth['🔒'](auth['🚫'](auth['📌'](pinPost)))))
 router.get('/pins/:requestId',      mode['👀'](auth['🔒'](auth['📌'](pinGet))))
 router.get('/pins',                 mode['👀'](auth['🔒'](auth['📌'](pinsGet))))
-router.delete('/pins/:requestId',   mode['📝'](auth['🔒'](auth['🚫'](auth['📌'](pinDelete)))))
+router.delete('/pins/:requestId',   mode['📝'](auth['🔒'](auth['📌'](pinDelete))))
 
 router.get('/name/:key',            mode['👀'](auth['🤲'](nameGet)))
 router.get('/name/:key/watch',      mode['👀'](auth['🤲'](nameWatchGet)))
