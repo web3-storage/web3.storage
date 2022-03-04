@@ -53,7 +53,7 @@
 }
 
 // right side
-.theme-doc-toc-desktop {
+main > .container > .row > .col--3 > div {
     background-color: $white;
     @include shadow1;
     border-radius: toRem(10);

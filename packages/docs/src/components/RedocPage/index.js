@@ -5,7 +5,6 @@ import { RedocStandalone, DropdownLabel } from 'redoc'
 import DocSidebar from '@theme/DocSidebar'
 import TOC from '@theme/TOC'
 import TOCCollapsible from '@theme/TOCCollapsible'
-import { useColorMode } from '@docusaurus/theme-common'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import useBaseUrl from '@docusaurus/useBaseUrl'
 
@@ -30,18 +29,14 @@ const STATIC_SPEC = '/schema.yml'
  *
  */
 function RedocPage () {
-  const { isDarkTheme } = useColorMode()
   const { siteConfig: { themeConfig } } = useDocusaurusContext()
   const prismThemeLight = themeConfig.prism.theme
-  const prismThemeDark = themeConfig.prism.darkTheme
-
   const redocThemeConfig = themeConfig.redoc
   if (!redocThemeConfig) {
     throw new Error('This component expects a "redoc" config object in the site theme config')
   }
-  const { lightThemeColors, darkThemeColors, typography } = redocThemeConfig
-  const colors = isDarkTheme ? { ...lightThemeColors, ...darkThemeColors } : lightThemeColors
-
+  const { lightThemeColors, typography } = redocThemeConfig
+  const colors = lightThemeColors
   const [tocReady, setTocReady] = useState(false)
 
   const enableTocHighlights = () => {
@@ -60,7 +55,7 @@ function RedocPage () {
     code {
       background-color: transparent;
     }
-  ` + prismThemeToCSS(isDarkTheme ? prismThemeDark : prismThemeLight)
+  ` + prismThemeToCSS(prismThemeLight)
 
   const extensionHooks = {
     UnderlinedHeader: `
