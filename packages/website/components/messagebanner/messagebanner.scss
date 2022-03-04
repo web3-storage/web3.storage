@@ -1,5 +1,4 @@
 #section_message-banner {
-  background-color: $ebony;
   position: relative;
   z-index: 100;
   transition: 200ms ease;
@@ -15,6 +14,15 @@
     -webkit-text-fill-color: $ebony;
     -moz-text-fill-color: $ebony;
     text-fill-color: $ebony;
+  }
+}
+
+.message-banner-wrapper {
+  background-color: $ebony;
+  width: 100%;
+  bottom: 0;
+  &.mb-hidden {
+    position: absolute;
   }
 }
 
@@ -56,10 +64,6 @@
     }
   }
 
-  &.mb-previously-closed {
-    transform: translateY(-150%) !important;
-  }
-
   &.mb-reduced-fontsize {
     @include fontSize_Tiny;
   }
@@ -67,8 +71,10 @@
 
 .message-banner-close-button {
   position: absolute;
+  display: flex;
   right: 1rem;
-  top: calc(0.75rem - 1px);
+  top: 50%;
+  transform: translateY(-50%);
   svg,
   path {
     stroke: $white;

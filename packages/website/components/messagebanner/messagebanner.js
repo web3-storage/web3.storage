@@ -1,5 +1,5 @@
 // ===================================================================== Imports
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useQuery } from 'react-query';
 import clsx from 'clsx';
 
@@ -14,45 +14,9 @@ export default function MessageBanner() {
   const maintenceAlert = GeneralPageData.message_banner.maintenceAlert;
   let link = GeneralPageData.message_banner.url;
 
-  const [messageBannerWasClicked, setMessageBannerWasClicked] = useState(false);
-  const [wasPreviouslyClosed, setWasPreviouslyClosed] = useState(false);
   const [bannerHeight, setBannerHeight] = useState('unset');
   const [bannerContent, setBannerContent] = useState(bannerPrompt);
   const messageBannerRef = useRef(/** @type {any} */ (null));
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const oldMessage = localStorage.getItem('web3StorageBannerMessage');
-      const oldDate = /** @type {string} */ (
-        localStorage.getItem('web3StorageBannerClickDate') ? localStorage.getItem('web3StorageBannerClickDate') : '0'
-      );
-      const elapsedTime = Date.now() - parseInt(oldDate);
-
-      if (bannerPrompt === oldMessage && elapsedTime < 604800000) {
-        setMessageBannerWasClicked(true);
-        setWasPreviouslyClosed(true);
-      }
-    }
-  }, [bannerPrompt]);
-
-  const calculateBannerHeight = time => {
-    if (messageBannerRef.current) {
-      setBannerHeight('unset');
-      setTimeout(() => {
-        const height = messageBannerRef.current.clientHeight;
-        setBannerHeight(height + 'px');
-      }, time);
-    }
-  };
-
-  useEffect(() => {
-    calculateBannerHeight(1000);
-    const resize = () => {
-      calculateBannerHeight(100);
-    };
-    window.addEventListener('resize', resize);
-    return () => window.removeEventListener('resize', resize);
-  }, [messageBannerRef]);
 
   const { data: statusPageData, error: statusPageError } = useQuery('get-statuspage-summary', () =>
     getStatusPageSummary()
@@ -88,56 +52,79 @@ export default function MessageBanner() {
     setBannerContent(maintenanceMessage);
   }
 
-  const messageBannerClick = message => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('web3StorageBannerMessage', message);
-      localStorage.setItem('web3StorageBannerClickDate', Date.now().toString());
-    }
-    setMessageBannerWasClicked(true);
-  };
+  useEffect(() => {
+    if (typeof window !== 'undefined' && bannerContent === bannerPrompt) {
+      const oldMessage = localStorage.getItem('web3StorageBannerMessage');
+      const oldDate = /** @type {string} */ (
+        localStorage.getItem('web3StorageBannerClickDate') ? localStorage.getItem('web3StorageBannerClickDate') : '0'
+      );
+      const elapsedTime = Date.now() - parseInt(oldDate);
 
-  const CustomElement = maintenanceMessage ? 'div' : 'a';
+      if (bannerContent === oldMessage && elapsedTime < 604800000) {
+        setBannerHeight('0px');
+      } else {
+        const resize = () => {
+          if (messageBannerRef.current) {
+            const height = messageBannerRef.current.clientHeight;
+            setBannerHeight(height + 'px');
+          }
+        };
+        resize();
+        window.addEventListener('resize', resize);
+        return () => window.removeEventListener('resize', resize);
+      }
+    }
+  }, [bannerContent, bannerPrompt]);
+
+  const messageBannerClick = useCallback(
+    message => {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('web3StorageBannerMessage', message);
+        localStorage.setItem('web3StorageBannerClickDate', Date.now().toString());
+      }
+      if (bannerPrompt === bannerContent) {
+        setBannerHeight('0px');
+      }
+    },
+    [bannerPrompt, bannerContent]
+  );
+
+  const CustomElement = bannerPrompt === bannerContent ? 'a' : 'div';
 
   return (
-    <section
-      id="section_message-banner"
-      ref={messageBannerRef}
-      style={{ height: !messageBannerWasClicked || maintenanceMessage ? bannerHeight : 0 }}
-    >
-      <div className="grid-noGutter">
-        <div className="col">
-          <div className="message-banner-container">
-            <CustomElement
-              href={link}
-              target="_blank"
-              className={clsx(
-                'message-banner-content',
-                maintenanceMessage ? 'banner-alert' : '',
-                wasPreviouslyClosed && !maintenanceMessage ? 'mb-previously-closed' : '',
-                bannerContent.length > 120 ? 'mb-reduced-fontsize' : ''
-              )}
-              style={{
-                transform: `translateY(${messageBannerWasClicked && !maintenanceMessage ? '-' + bannerHeight : 0})`,
-              }}
-              dangerouslySetInnerHTML={{ __html: bannerContent }}
-              onClick={() => messageBannerClick(bannerPrompt)}
-              onKeyPress={() => messageBannerClick(bannerPrompt)}
-              rel="noreferrer"
-            ></CustomElement>
+    <section id="section_message-banner" style={{ height: bannerHeight }}>
+      <div ref={messageBannerRef} className={clsx('message-banner-wrapper', bannerHeight === '0px' ? 'mb-hidden' : '')}>
+        <div className="grid-noGutter">
+          <div className="col">
+            <div className="message-banner-container">
+              <CustomElement
+                href={link}
+                target="_blank"
+                className={clsx(
+                  'message-banner-content',
+                  bannerPrompt !== bannerContent ? 'banner-alert' : '',
+                  bannerContent.length > 120 ? 'mb-reduced-fontsize' : ''
+                )}
+                dangerouslySetInnerHTML={{ __html: bannerContent }}
+                onClick={() => messageBannerClick(bannerPrompt)}
+                onKeyPress={() => messageBannerClick(bannerPrompt)}
+                rel="noreferrer"
+              ></CustomElement>
+            </div>
           </div>
         </div>
-      </div>
 
-      <button
-        className={clsx(
-          'message-banner-close-button',
-          maintenanceMessage || messageBannerWasClicked ? 'hide-banner-close' : ''
-        )}
-        onClick={() => messageBannerClick(bannerPrompt)}
-        onKeyPress={() => messageBannerClick(bannerPrompt)}
-      >
-        <CloseIcon />
-      </button>
+        <button
+          className={clsx(
+            'message-banner-close-button',
+            bannerPrompt !== bannerContent || bannerHeight === '0px' ? 'hide-banner-close' : ''
+          )}
+          onClick={() => messageBannerClick(bannerPrompt)}
+          onKeyPress={() => messageBannerClick(bannerPrompt)}
+        >
+          <CloseIcon />
+        </button>
+      </div>
     </section>
   );
 }
