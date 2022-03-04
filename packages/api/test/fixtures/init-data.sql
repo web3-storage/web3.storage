@@ -93,7 +93,7 @@ VALUES (
 );
 
 INSERT INTO user_tag (user_id, tag, value, reason, deleted_at)
-        (4, 'HasPsaAccess', true, 'test', null),
+VALUES  (4, 'HasPsaAccess', true, 'test', null),
         (5, 'HasPsaAccess', true, 'test', null),
         (6, 'HasPsaAccess', true, 'test', null),
         (5, 'HasAccountRestriction', true, 'Revoked access', '2021-07-14T19:27:14.934572+00:00'),
