@@ -85,6 +85,12 @@
     @include fontWeight_Medium;
     margin: 0 0.375rem;
     line-height: 2rem;
+    &.light {
+      color: $white;
+    }
+    &.dark {
+      color: $ebony;
+    }
   }
 }
 
