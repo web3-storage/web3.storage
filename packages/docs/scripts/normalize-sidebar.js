@@ -31,7 +31,7 @@ const convertDocLink = (item) => {
   const { data: frontMatter } = matter(mdString)
 
   const docPath = frontMatter.slug || docId
-  const href = [docusaurusConfig.baseUrl.replace(/\/$/, ''), docPath].join('/').replace(/\/+/, '/')
+  const href = [docusaurusConfig.baseUrl, docPath].join('').replace(/\/$/, '');
   return {
     type: 'link',
     label: frontMatter.sidebar_label || frontMatter.title,

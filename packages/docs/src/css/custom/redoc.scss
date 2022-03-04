@@ -8,11 +8,15 @@
 .theme-doc-toc-mobile {
     display: none;
     @include mobile {
+        border-radius: 5px;
         display: block;
     }
 }
 
 main {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
     @include desktop {
         flex-grow: 1;
         max-width: calc(100% - var(--doc-sidebar-width));

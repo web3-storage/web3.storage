@@ -142,11 +142,11 @@ function RedocPage () {
           sidebar={sidebarDefinition.docs}
         />
       </aside>
-      <main className=''>
+      <main>
         <div className='container padding-top--md padding-bottom--lg'>
           <div className='row'>
             <div className='col'>
-              <div className=''>
+              <div>
                 <article>
                   <div className='theme-doc-toc-mobile'>
                     {tocReady && <TOCCollapsible toc={tocDefinition} />}
