@@ -1,7 +1,7 @@
 {
   "index_name": "web3storage-docs",
   "start_urls": [
-    "https://web3.storage/docs/"
+    "https://web3.storage/docs"
   ],
   "stop_urls": [],
   "selectors": {
