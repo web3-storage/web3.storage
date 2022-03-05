@@ -82,17 +82,17 @@
               {
                 "type": "image_block",
                 "id": "section_architecture-image-storage",
-                "src": "/images/index/storage-tier.png"
+                "src": "/images/index/app-ui-screenshot-storage-manager.png"
               },
               {
                 "type": "image_block",
                 "id": "section_architecture-image-files",
-                "src": "/images/index/files-display.png"
+                "src": "/images/index/app-ui-screenshot-file-manager.png"
               },
               {
                 "type": "image_block",
                 "id": "section_architecture-image-upload",
-                "src": "/images/index/file-upload.png"
+                "src": "/images/index/app-ui-screenshot-file-upload.png"
               }
             ]
           },
@@ -133,17 +133,17 @@
               {
                 "type": "image_block",
                 "id": "section_architecture-image-storage",
-                "src": "/images/index/storage-tier.png"
+                "src": "/images/index/app-ui-screenshot-storage-manager.png"
               },
               {
                 "type": "image_block",
                 "id": "section_architecture-image-files",
-                "src": "/images/index/files-display.png"
+                "src": "/images/index/app-ui-screenshot-file-manager.png"
               },
               {
                 "type": "image_block",
                 "id": "section_architecture-image-upload",
-                "src": "/images/index/file-upload.png"
+                "src": "/images/index/app-ui-screenshot-file-upload.png"
               }
             ]
           }
