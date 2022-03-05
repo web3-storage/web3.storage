@@ -33,7 +33,9 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
   const {
     query: { filter },
   } = useRouter();
-  const { storageData: { refetch } } = useUser();
+  const {
+    storageData: { refetch },
+  } = useUser();
   const [filteredFiles, setFilteredFiles] = useState(files);
   const [sortedFiles, setSortedFiles] = useState(filteredFiles);
   const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
@@ -116,7 +118,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
       deleteModalState[1](true);
       setDeleteSingleCid(cid);
     },
-    [deleteModalState,]
+    [deleteModalState]
   );
 
   const onEditToggle = useCallback(

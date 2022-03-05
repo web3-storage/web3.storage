@@ -29,7 +29,9 @@ const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body
 
 const StorageManager = ({ className = '', content }: StorageManagerProps) => {
   const storageTier = StorageTiers.TIER_1; // No tier available?
-  const { storageData: { data, isLoading } } = useUser();
+  const {
+    storageData: { data, isLoading },
+  } = useUser();
   const usedStorage = useMemo(() => data?.usedStorage || 0, [data]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef<HTMLDivElement>(null);
