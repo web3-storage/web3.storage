@@ -130,8 +130,8 @@ module.exports = {
           nav:[
             { text: 'Status', link: `https://status.web3.storage/` },
             { text: 'Terms of service', link: `${MAIN_DOMAIN}/terms` },
-            { text: 'Open an issue', link: `/docs/community/help-and-support/#bug-reports-or-feature-requests` },
-            { text: 'Contact us', link: `/docs/community/help-and-support` },
+            { text: 'Open an issue', link: `https://web3.storage/docs/community/help-and-support/#bug-reports-or-feature-requests` },
+            { text: 'Contact us', link: `https://web3.storage/docs/community/help-and-support` },
           ]
         }
       }

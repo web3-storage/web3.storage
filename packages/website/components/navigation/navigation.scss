@@ -85,6 +85,12 @@
     @include fontWeight_Medium;
     margin: 0 0.375rem;
     line-height: 2rem;
+    &.light {
+      color: $white;
+    }
+    &.dark {
+      color: $ebony;
+    }
   }
 }
 
@@ -362,7 +368,7 @@
   .nav-item-heading,
   .nav-sublink,
   .nav-item {
-    margin: 0.375rem 0;
+    padding: 0.375rem 0;
     text-align: left;
     @include fontSize_Small;
     @include fontWeight_Semibold;
@@ -371,7 +377,9 @@
     margin-left: 2rem;
     transition: height 300ms ease-in-out;
   }
-  .accordion-section,
+  .accordion-section {
+    margin-bottom: 0.375rem;
+  }
   .button {
     margin: 0.375rem 0;
   }
@@ -393,8 +401,8 @@
   justify-content: flex-start;
   align-items: flex-start;
   .nav-sublink {
+    padding: 0.375rem 1rem 0.375rem 0;
     cursor: pointer;
-    margin: 0.25rem 0;
     text-align: left;
     @include fontSize_Mini;
   }

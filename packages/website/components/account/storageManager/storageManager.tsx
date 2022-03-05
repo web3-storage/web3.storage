@@ -86,8 +86,9 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
 
   const onSearchFiles = useCallback(() => {
     const input: HTMLInputElement = document.querySelector('.search-input')!;
+    const container: HTMLInputElement = document.querySelector('.files-manager-container')!;
     input.focus();
-    input.scrollIntoView(true);
+    container.scrollIntoView(true);
   }, []);
 
   const progressBarStyles = {

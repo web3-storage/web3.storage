@@ -52,4 +52,12 @@
   right: 1rem;
   @include fontSize_MediumLarge;
   @include hoverScale;
+  .token-creator-check {
+    padding: 0.375rem 0;
+    width: 1.5rem;
+    transform: translate(3px, 1px);
+    path {
+      stroke-width: 0.75rem;
+    }
+  }
 }

@@ -153,13 +153,13 @@
               "compareFn": "ALPHANUMERIC"
             },
             {
-              "label": "Most Recently Added",
+              "label": "Newest Upload",
               "value": "newest",
               "direction": "NEWEST",
               "compareFn": "TIMEBASED"
             },
             {
-              "label": "Least Recently Added",
+              "label": "Oldest Upload",
               "value": "oldest",
               "direction": "OLDEST",
               "compareFn": "TIMEBASED"
