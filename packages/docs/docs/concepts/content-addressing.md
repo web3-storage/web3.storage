@@ -9,9 +9,9 @@ Web3.Storage's free, decentralized file storage relies on _content addressing_ t
 
 ## The basic problem
 
-Consider what happens when you resolve a link like `docs.web3.storage/concepts/content-addressing`. First, your operating system queries a global shared key-value store, split into many domains — you may know this as the Domain Name System (DNS). The DNS returns an IP address that your network card can use to send HTTP requests over the network, where this site's naming conventions turn the key `/concepts/content-addressing` into a response payload.
+Consider what happens when you resolve a link like `web3.storage/docs/concepts/content-addressing`. First, your operating system queries a global shared key-value store, split into many domains — you may know this as the Domain Name System (DNS). The DNS returns an IP address that your network card can use to send HTTP requests over the network, where this site's naming conventions turn the key `/concepts/content-addressing` into a response payload.
 
-The problem is, components of an address like `docs.web3.storage/concepts/content-addressing` are _mutable_, meaning they can change over time. In the context of the web, where _everything_ is mutable and dynamic, this is just the way it's always been. As a result, [link rot](https://en.wikipedia-on-ipfs.org/wiki/Link_rot) is just something we've all learned to live with.
+The problem is, components of an address like `web3.storage/docs/concepts/content-addressing` are _mutable_, meaning they can change over time. In the context of the web, where _everything_ is mutable and dynamic, this is just the way it's always been. As a result, [link rot](https://en.wikipedia-on-ipfs.org/wiki/Link_rot) is just something we've all learned to live with.
 
 ## CIDs: Location-independent, globally unique keys
 

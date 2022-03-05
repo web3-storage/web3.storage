@@ -7,7 +7,7 @@ import { Web3Storage } from 'web3.storage'
 // This file has an example of storing a Content Archive (CAR) file using
 // the Web3.Storage client's putCar method.
 //
-// See https://docs.web3.storage/how-tos/work-with-car-files
+// See https://web3.storage/docs/how-tos/work-with-car-files
 // for more information about CARs.
 
 async function main () {

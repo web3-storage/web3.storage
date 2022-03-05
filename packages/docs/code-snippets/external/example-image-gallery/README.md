@@ -25,7 +25,7 @@ npm run dev
 
 Open http://localhost:3000 in your browser.
 
-On the first run, you'll be redirected to http://localhost:3000/settings.html to paste in an API token. If you don't have a token yet, see the [Quickstart guide](https://docs.web3.storage/) to learn how to get one.
+On the first run, you'll be redirected to http://localhost:3000/settings.html to paste in an API token. If you don't have a token yet, see the [Quickstart guide](https://web3.storage/docs/) to learn how to get one.
 The token is saved to your browser's local storage, so you should only need to do this once.
 
 ### Building for production
@@ -132,5 +132,5 @@ The `storeImage` function actually stores two files - we also create a small `me
 
 The `listImageMetadata` function returns an [async iterator](https://2ality.com/2016/10/asynchronous-iteration.html) that will `yield` metadata about our stored images. This includes the caption we stored, as well as the IPFS Content ID and an IPFS gateway URL to the image.
 
-`listImageMetadata` uses the [`list` Web3.Storage client method](https://docs.web3.storage/reference/client-library/#list-uploads) to get metadata about all files stored using Web3.Storage and selects the ones we're interested in by checking their `name` field for a special string prefix (added in the `storeImage` method when uploading). Once it has the root CID for each upload, `listImageMetadata` will fetch the stored `metadata.json` and `yield` a metadata object to the calling function.
+`listImageMetadata` uses the [`list` Web3.Storage client method](https://web3.storage/docs/reference/client-library/#list-uploads) to get metadata about all files stored using Web3.Storage and selects the ones we're interested in by checking their `name` field for a special string prefix (added in the `storeImage` method when uploading). Once it has the root CID for each upload, `listImageMetadata` will fetch the stored `metadata.json` and `yield` a metadata object to the calling function.
 

@@ -9,7 +9,7 @@ import { Web3Storage } from 'web3.storage'
 // This file has a few examples of uploading structured IPLD data to Web3.Storage
 // by creating a Content Archive (CAR) and using the putCar client method.
 //
-// See https://docs.web3.storage/how-tos/work-with-car-files/#advanced-ipld-formats
+// See https://web3.storage/docs/how-tos/work-with-car-files/#advanced-ipld-formats
 // for more information.
 
 async function main () {
