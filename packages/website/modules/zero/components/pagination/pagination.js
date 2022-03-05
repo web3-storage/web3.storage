@@ -52,7 +52,7 @@ const Pagination = ({
     onChange && onChange(items.slice(firstItem, firstItem + parseInt(/** @type {string} */(itemsPerPage))))
 
     const scrollToElement= document.querySelector('.Pagination');
-    scrollToElement.scrollIntoView({block: "end", inline: "nearest"});
+    scrollToElement?.scrollIntoView({block: "end", inline: "nearest"});
     
   }, [items, itemsPerPage, visiblePages, pageCount, setPageList, currentPage, setCurrentPage, onChange])
 
