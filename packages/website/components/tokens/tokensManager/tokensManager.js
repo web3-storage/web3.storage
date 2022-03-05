@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import clsx from 'clsx';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useQueryClient } from 'react-query';
 
 import TokenRowItem from './tokenRowItem';
@@ -13,12 +13,13 @@ import Filterable from 'ZeroComponents/filterable/filterable';
 import Sortable from 'ZeroComponents/sortable/sortable';
 import Pagination from 'ZeroComponents/pagination/pagination';
 import SearchIcon from 'assets/icons/search';
+import { useRouter } from 'next/router';
 
+const defaultQueryOrder = 'a-z';
 /**
  * @typedef {Object} TokensManagerProps
  * @property {object} [content]
  */
-
 /**
  *
  * @param {TokensManagerProps} props
@@ -27,13 +28,35 @@ import SearchIcon from 'assets/icons/search';
 const TokensManager = ({ content }) => {
   const { tokens, fetchDate, isFetchingTokens, deleteToken, getTokens, isCreating } = useTokens();
   const [deletingTokenId, setDeletingTokenId] = useState('');
+  const { query, replace } = useRouter();
   const queryClient = useQueryClient();
+  const queryOrderRef = useRef(query.order);
 
   const [filteredTokens, setFilteredTokens] = useState([]);
   const [sortedTokens, setSortedTokens] = useState([]);
   const [paginatedTokens, setPaginatedTokens] = useState([]);
   const [itemsPerPage, setItemsPerPage] = useState(null);
   const tokenRowLabels = content.table.token_row_labels;
+
+  // Method to reset the pagination every time query order changes
+  useEffect(() => {
+    if (
+      (!queryOrderRef.current && !!query.order && query.order !== defaultQueryOrder) ||
+      (!!queryOrderRef.current && !!query.order && query.order !== queryOrderRef.current)
+    ) {
+      delete query.page;
+
+      replace(
+        {
+          query,
+        },
+        undefined,
+        { shallow: true }
+      );
+
+      queryOrderRef.current = query.order;
+    }
+  }, [query.order, query, replace]);
 
   const deleteTokenCallback = useCallback(
     async id => {
@@ -74,7 +97,7 @@ const TokensManager = ({ content }) => {
           items={filteredTokens}
           staticLabel={content.ui.sortby.label}
           options={content.ui.sortby.options}
-          value="a-z"
+          value={defaultQueryOrder}
           queryParam="order"
           onChange={setSortedTokens}
         />

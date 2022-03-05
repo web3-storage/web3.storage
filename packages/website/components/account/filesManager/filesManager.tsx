@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import filesize from 'filesize';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 // @ts-ignore
 import { useRouter } from 'next/router';
 import { Upload } from 'web3.storage';
@@ -22,6 +22,8 @@ import { formatTimestamp } from 'lib/utils';
 import { useUploads } from 'components/contexts/uploadsContext';
 import { useUser } from 'components/contexts/userContext';
 
+const defaultQueryOrder = 'a-z';
+
 type FilesManagerProps = {
   className?: string;
   content?: any;
@@ -32,8 +34,12 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
   const { uploads: files, fetchDate, getUploads, isFetchingUploads, deleteUpload, renameUpload } = useUploads();
   const {
     query: { filter },
+    query,
+    replace,
   } = useRouter();
-  const { storageData: { refetch } } = useUser();
+  const {
+    storageData: { refetch },
+  } = useUser();
   const [filteredFiles, setFilteredFiles] = useState(files);
   const [sortedFiles, setSortedFiles] = useState(filteredFiles);
   const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
@@ -41,6 +47,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
   const [keyword, setKeyword] = useState(filter);
   const [deleteSingleCid, setDeleteSingleCid] = useState('');
   const deleteModalState = useState(false);
+  const queryOrderRef = useRef(query.order);
 
   const [selectedFiles, setSelectedFiles] = useState<Upload[]>([]);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -53,6 +60,26 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
       getUploads();
     }
   }, [fetchDate, getUploads, isFetchingUploads]);
+
+  // Method to reset the pagination every time query order changes
+  useEffect(() => {
+    if (
+      (!queryOrderRef.current && !!query.order && query.order !== defaultQueryOrder) ||
+      (!!queryOrderRef.current && !!query.order && query.order !== queryOrderRef.current)
+    ) {
+      delete query.page;
+
+      replace(
+        {
+          query,
+        },
+        undefined,
+        { shallow: true }
+      );
+
+      queryOrderRef.current = query.order;
+    }
+  }, [query.order, query, replace]);
 
   const onSelectAllToggle = useCallback(
     e => {
@@ -116,7 +143,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
       deleteModalState[1](true);
       setDeleteSingleCid(cid);
     },
-    [deleteModalState,]
+    [deleteModalState]
   );
 
   const onEditToggle = useCallback(
@@ -159,7 +186,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
           items={filteredFiles}
           staticLabel={content?.ui.sortby.label}
           options={content?.ui.sortby.options}
-          value="a-z"
+          value={defaultQueryOrder}
           queryParam="order"
           onChange={setSortedFiles}
         />
