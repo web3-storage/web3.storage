@@ -58,7 +58,7 @@ const TokenCreator = ({ content }) => {
   }, [query.create, isCreating]);
 
   const handleInputValueChange = () => {
-    if (inputRef.current.value !== '') {
+    if (inputRef.current?.value !== '') {
       if (!inputHasValue) {
         setInputHasValue(true);
       }
