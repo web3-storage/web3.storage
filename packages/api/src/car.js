@@ -273,11 +273,11 @@ async function carStat (carBlob) {
     if (blockSize > MAX_BLOCK_SIZE) {
       throw new InvalidCarError(`block too big: ${blockSize} > ${MAX_BLOCK_SIZE}`)
     }
-    if (block.cid.multihash.code !== 0x12) {
+    if (block.cid.multihash.code !== sha256.code) {
       throw new InvalidCarError(`block with unsupported hash function: ${block.cid.multihash.code} for ${block.cid.toString()}`)
     }
     if (!isValidBlock(block)) {
-      throw new InvalidCarError(`block data does not match cid for ${block.cid.toString()}`)
+      throw new InvalidCarError(`block data does not match CID for ${block.cid.toString()}`)
     }
     if (!rawRootBlock && block.cid.equals(rootCid)) {
       rawRootBlock = block
