@@ -64,7 +64,7 @@
                 "content": "Since CIDs are immutable, it's currently not possible to edit files or add files to a folder. We are working on making mutable references available that you can use instead."
               },
               {
-                "heading": "How can I upload files to Web3.Storage from the browser?",
+                "heading": "How can my users upload files directly to Web3.Storage without them needing to create their own account?",
                 "content": "Currently the best way to upload to Web3.Storage from the browser is to relay data through an endpoint that you control that has access to the API token. Providing the API token in your front-end will allow anyone to upload files to your account and list already uploaded files. However, we are actively working on ways end-users can upload data directly to Web3.Storage without needing an intermediary!"
               }
             ]
