@@ -88,7 +88,7 @@ const TokensManager = ({ content }) => {
         <Filterable
           items={tokens}
           icon={<SearchIcon />}
-          filterKeys={['name']}
+          filterKeys={['name', 'secret']}
           placeholder={content.ui.filter.placeholder}
           queryParam="filter"
           onChange={setFilteredTokens}

@@ -5,7 +5,7 @@ import cone from '../images/cone.png'
  */
  const Cone = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={cone.src} />
+      <img className="image-full-width" alt="" src={cone.src} />
     </div>
 )
 

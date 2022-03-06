@@ -43,8 +43,8 @@
             "heading": "Storage that grows with you",
             "description": [
               "Web3.Storage is designed to scale to meet your storage needs. The economics of Filecoin allow us to offer all storage for free today.",
-              "The 1 TiB storage tier is open to everyone with no strings attached. If you need more than 1TiB, that's still free, but we need to know more about your project so we can scale the service to meet your needs.",
-              "In the future <sup>(~Q2 '22)</sup>, we'll move to a model where users can stake Filecoin to increase their storage limits. This will remain low-cost, and all limits already increased for free will continue to be respected!"
+              "The 1 TiB storage tier is open to everyone with no strings attached. If you need more than 1TiB, that's still free today, but we need to know more about your project so we can scale the service to meet your needs.",
+              "In the future <small>(~Q2 '22)</small>, we'll move to a model where users can stake Filecoin to increase their storage limits. This will remain low-cost, and all limits already increased for free will continue to be respected!"
             ]
           },
           {
@@ -80,7 +80,7 @@
                 "type": "E",
                 "label": "FREE",
                 "title": "Up to 1 TiB",
-                "description": "<ul><li>No strings attached</li></ul>",
+                "description": "<ul><li>Get started storing data on Filecoin and retrieving via the IPFS network</li><li>Integrate with your product or project, or just use for data storage</li><li>No strings attached</li></ul>",
                 "cta": {
                   "text": "START HERE",
                   "url": "/account",
@@ -94,7 +94,7 @@
                 "type": "E",
                 "label": "STILL FREE",
                 "title": "> 1 TiB",
-                "description": "<ul><li>Just fill out a form to tell us more about what you're building, and how much storage you think you need</li><li>This helps us know how we should scale with you!</li></ul>",
+                "description": "<ul><li>After you've started building on Web3.Storage, you might need more data</li><li>Just fill out a form to tell us more about what you're building, and how much storage you think you need</li><li>This helps us know how we should scale with you!</li></ul>",
                 "cta": {
                   "text": "REQUEST MORE STORAGE",
                   "url": "/account",
@@ -161,8 +161,8 @@
               {
                 "type": "F",
                 "label": "FAQ",
-                "title": "How is web3.storage different from pinning services for IPFS?",
-                "description": "Web3.Storage is currently not a pinning service. At the moment, files already on the IPFS network cannot be pinned to Web3.Storage via their…",
+                "title": "How is Web3.Storage different from NFT.Storage?",
+                "description": "Both services are offered by the same group and share much of the same architecture, but as the name suggests, NFT.Storage is…",
                 "cta": {
                   "url": "/faq",
                   "text": "READ MORE",
@@ -174,8 +174,8 @@
               },
               {
                 "type": "F",
-                "label": "FAQ",
-                "title": "What happens if web3.storage is discontinued?",
+                "label": " ",
+                "title": "What happens if Web3.Storage is discontinued?",
                 "description": "One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data…",
                 "cta": {
                   "url": "/faq",

@@ -42,7 +42,7 @@ const MessageBanner = ({ highlightMessage }) => {
 
   if (apiVersionData && apiVersionData.mode !== 'rw' && !maintenanceMessage) {
     maintenanceMessage =
-      'The web3.Storage API is currently undergoing maintenance...'
+      'The Web3.Storage API is currently undergoing maintenance...'
   }
 
   if (statusPageError) {

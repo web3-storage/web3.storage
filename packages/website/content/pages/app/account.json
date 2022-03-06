@@ -63,10 +63,10 @@
     },
     "storage_manager": {
       "heading": "Storage",
-      "prompt": "Need more free storage?",
+      "prompt": "An overview of your stored data usage",
       "buttons": {
         "search": "Search my files",
-        "request": "Submit a request"
+        "request": ""
       },
       "loading": "Loading...",
       "tiers": [
@@ -183,7 +183,7 @@
           "alert": "Are you sure? Deleted files cannot be recovered!",
           "ok": "Delete Files",
           "cancel": "Cancel",
-          "heading": "Web3.storage says"
+          "heading": "Web3.Storage says"
         },
         "results": {
           "options": [

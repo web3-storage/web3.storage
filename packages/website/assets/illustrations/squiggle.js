@@ -5,7 +5,7 @@ import squiggle from '../images/squiggle.png'
  */
  const Squiggle = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={squiggle.src} />
+      <img className="image-full-width" alt="" src={squiggle.src} />
     </div>
 )
 

@@ -5,7 +5,7 @@ import helix from '../images/helix.png'
  */
  const Helix = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={helix.src} />
+      <img className="image-full-width" alt="" src={helix.src} />
     </div>
 )
 

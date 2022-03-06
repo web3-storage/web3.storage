@@ -5,7 +5,7 @@ import cluster from '../images/cluster.png'
  */
  const Cluster = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={cluster.src} />
+      <img className="image-full-width" alt="" src={cluster.src} />
     </div>
 )
 

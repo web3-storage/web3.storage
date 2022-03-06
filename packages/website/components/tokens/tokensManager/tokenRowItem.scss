@@ -8,7 +8,7 @@ $date-delete: auto;
   @include fontSize_Tiny;
   display: grid;
   position: relative;
-  padding: 0 1.4rem 0.65rem 0;
+  padding: 0.3125rem 1.4rem 0.3125rem 0;
   grid-template-columns: $date-name $date-id $date-copy $date-delete;
   border-bottom: 0.0625rem solid rgba($white, 0.05);
 

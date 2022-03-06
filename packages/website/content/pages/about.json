@@ -23,7 +23,7 @@
             },
             "format": "header",
             "heading": "What is Web3.Storage?",
-            "subheading": "Web3.Storage is a service to make building on top of Filecoin as simple as possible - giving developers the power of distributed storage and content addressing via a simple HTTP API and handy client libraries."
+            "subheading": "Web3.Storage is a service to make building on top of Filecoin as simple as possible - giving developers the power of distributed storage and content addressing via simple client libraries or an HTTP API."
           }
         ]
       }
@@ -46,9 +46,10 @@
                 "type": "text_block",
                 "format": "small",
                 "description": [
-                  "Content uploaded to Web3.Storage is pinned redundantly in an IPFS Cluster of 3 geographically distributed nodes. When 32GiB of content is made available, a request is made to pin a new batch of content into a separate IPFS cluster - where a 32GiB CAR file is generated to store the data.",
-                  "Once this 31GiB CAR file is ready, a queue of geographically distributed storage providers - selected for performance and availability - bid for the right to store these deals, with the Web3.Storage client making a minimum of 5 deals with the various storage providers.",
-                  "<b>Please see the documentation</b> for how one can use the Status API to query for information regarding pin status and deal status for your uploaded content."
+                  "Content uploaded to Web3.Storage is pinned redundantly three times to an IPFS Cluster of 6+ geographically distributed nodes. Before uploading, our client side libraries convert data into a CAR file (that includes the CID of the file), which keeps things trustless: the client can cryptographically verify that the CID corresponds to their file when storing and retrieving.",
+                  "Once this 31GiB CAR file is uploaded, a queue of geographically distributed storage providers - selected for performance and availability - bid for the right to store these deals, with the Web3.Storage client making a minimum of 5 deals with the various storage providers.",
+                  "This data is made available to the public IPFS network, meaning you or anyone can access the data from anyone broadcasting the data via its CID.",
+                  "Please <a href='/docs' alt='Web3.Storage Documentation'>see the documentation</a> for how one can use the Status API to query for information regarding pin status and deal status for your uploaded content."
                 ]
               },
               {
@@ -112,7 +113,7 @@
                 "format": "small",
                 "heading": "Once the deals are active, the Web3.Storage client polls to ensure that the relevant sectors are still available.",
                 "description": [
-                  "In the event of an early termination (or a miner going offline), the Web3.Storage client will automatically add the relevant deals into the queue of upcoming deals to ensure at all times there are always a minimum of 5 copies of data being stored with Filecoin Storage Providers.",
+                  "If the Filecoin network finds that a copy of your data is no longer proven to be stored, e.g., a storage deal expires or a miner goes offline, the Web3.Storage client will automatically add the relevant data into the queue of upcoming deals to ensure at all times there are always a minimum of 5 copies of data being stored with Filecoin Storage Providers.",
                   "In the future, we hope to expand this service to offer a variety of options for storing data - including purely protocol-based approaches (e.g. via smart contracts) as well as other hosted options (e.g. HTTP endpoints). We also aim to provide more native tooling for automated deal management via tools like smart contracts - which may augment the offerings of this service in the future.",
                   "Our aim today is to provide a user-friendly experience that massively reduces the burden for onboarding new use cases into the web3 ecosystem today - while providing an upgrade path for the future."
                 ]
@@ -212,7 +213,7 @@
               },
               {
                 "heading": "Filecoin Deals",
-                "content": "Data stored via the website is guaranteed to be available in IPFS upon completion of a successful upload. Please not that once replication in IPFS is complete (at a minimum of 3 copies being stored), data is also pushed to be stored on Filecoin. Content is batched into deals on Filecoin and it is expected that there may be a delay between the content being uploaded to the website and being stored on Filecoin through a deal. You may query the status of any CID uploaded through Web3.Storage using the Status API (updated every five minutes) for the latest information regarding an individual CID’s pin status or deal status.<br><br>For reference, the following parameters and strategies are used to ensure highly redundant storage on the Filecoin network:<br><br>Deals with storage providers are set to last 18 months with automatic deal renewals, managed by Web3.Storage.<br><br>Each piece of content is stored with a minimum of 5 storage providers, typically exceeding this minimum (the specific list of storage providers being provided via the Status API). In the event of a terminated sector, Web3.Storage will automatically store an additional copy to meet the minimum of 5 copies being stored on the Filecoin network.<br><br>It is recommended that you do not rely on Filecoin deals directly for performant retrieval, and instead retrieve the data via IPFS (where Web3.Storage will be dual pinning the content). Retrieving data over the IPFS network is the recommended means of accessing Web3.Storage data."
+                "content": "Data stored via the website is guaranteed to be available in IPFS upon completion of a successful upload. Please note that once replication in IPFS is complete (at a minimum of 3 copies being stored), data is also pushed to be stored on Filecoin. Content is batched into deals on Filecoin and it is expected that there may be a delay between the content being uploaded to the website and being stored on Filecoin through a deal. You may query the status of any CID uploaded through Web3.Storage using the Status API (updated every five minutes) for the latest information regarding an individual CID’s pin status or deal status.<br><br>For reference, the following parameters and strategies are used to ensure highly redundant storage on the Filecoin network:<ul><li>Deals with storage providers are set to last 18 months with automatic deal renewals, managed by Web3.Storage.</li><li>Each piece of content is stored with a minimum of 5 storage providers, typically exceeding this minimum (the specific list of storage providers being provided via the Status API). In the event of a terminated sector, Web3.Storage will automatically store an additional copy to meet the minimum of 5 copies being stored on the Filecoin network.</li><li>It is recommended that you do not rely on Filecoin deals directly for performant retrieval, and instead retrieve the data via IPFS (where Web3.Storage will be dual pinning the content). Retrieving data over the IPFS network is the recommended means of accessing Web3.Storage data.</li><ul>"
               }
             ]
           }

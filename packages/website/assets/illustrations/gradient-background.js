@@ -5,7 +5,7 @@ import holographic from '../images/holographic-bg.png'
  */
  const GradientBackground = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={holographic.src} />
+      <img className="image-full-width" alt="background" src={holographic.src} />
     </div>
 )
 

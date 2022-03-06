@@ -5,7 +5,7 @@ import triangle from '../images/triangle.png'
  */
  const Triangle = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={triangle.src} />
+      <img className="image-full-width" alt="" src={triangle.src} />
     </div>
 )
 

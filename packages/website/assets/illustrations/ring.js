@@ -5,7 +5,7 @@ import ring from '../images/ring.png'
  */
  const Ring = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={ring.src} />
+      <img className="image-full-width" alt="" src={ring.src} />
     </div>
 )
 
