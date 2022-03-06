@@ -23,8 +23,9 @@
 }
 .menu__link--active:not(.menu__link--sublist) {
     &::before {
-        content: '>';
-        padding-right: toRem(10);
+        content: "→";
+        padding-right: toRem(8);
+        margin-top: -1px;
     }
     background: transparent;
     font-weight: $fontWeight_Medium;
