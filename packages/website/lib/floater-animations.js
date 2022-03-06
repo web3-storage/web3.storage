@@ -32,7 +32,7 @@ export const initFloaterAnimations = async (scenes) => {
         scrollMagicScenes[i].on('progress', (e) => {
             const element = document.getElementById(id);
 
-            if (element) {
+            if (element && !window.matchMedia(`(max-width: 40rem)`).matches) {
               const t = e.progress;
               const x = xi && xf ? (xf - xi) * t + xi : 0
               const y = yi && yf ? (yf - yi) * t + yi : 0
