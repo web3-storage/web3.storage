@@ -207,6 +207,7 @@
     }
 
     &:after {
+      transition: all $transitionDuration ease-in;
       border: 0.0625rem solid $alto;
       background: $charade;
       opacity: 0.6;
@@ -222,6 +223,12 @@
     &:hover {
       &:before {
         animation-play-state: running;
+      }
+    }
+    &:active {
+      &:after {
+        border-color: $white;
+        transform: scale(1.1);
       }
     }
   }
