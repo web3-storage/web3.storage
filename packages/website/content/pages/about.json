@@ -23,7 +23,7 @@
             },
             "format": "header",
             "heading": "What is Web3.Storage?",
-            "subheading": "Web3.Storage is a service to make building on top of Filecoin as simple as possible - giving developers the power of distributed storage and content addressing via a simple HTTP API and handy client libraries."
+            "subheading": "Web3.Storage is a service to make building on top of Filecoin as simple as possible - giving developers the power of distributed storage and content addressing via simple client libraries or an HTTP API."
           }
         ]
       }
@@ -46,9 +46,10 @@
                 "type": "text_block",
                 "format": "small",
                 "description": [
-                  "Content uploaded to Web3.Storage is pinned redundantly in an IPFS Cluster of 3 geographically distributed nodes. When 32GiB of content is made available, a request is made to pin a new batch of content into a separate IPFS cluster - where a 32GiB CAR file is generated to store the data.",
-                  "Once this 31GiB CAR file is ready, a queue of geographically distributed storage providers - selected for performance and availability - bid for the right to store these deals, with the Web3.Storage client making a minimum of 5 deals with the various storage providers.",
-                  "<b>Please see the documentation</b> for how one can use the Status API to query for information regarding pin status and deal status for your uploaded content."
+                  "Content uploaded to Web3.Storage is pinned redundantly three times to an IPFS Cluster of 6+ geographically distributed nodes. Before uploading, our client side libraries convert data into a CAR file (that includes the CID of the file), which keeps things trustless: the client can cryptographically verify that the CID corresponds to their file when storing and retrieving.",
+                  "Once this 31GiB CAR file is uploaded, a queue of geographically distributed storage providers - selected for performance and availability - bid for the right to store these deals, with the Web3.Storage client making a minimum of 5 deals with the various storage providers.",
+                  "This data is made available to the public IPFS network, meaning you or anyone can access the data from anyone broadcasting the data via its CID.",
+                  "Please <a href='/docs' alt='Web3.Storage Documentation'>see the documentation</a> for how one can use the Status API to query for information regarding pin status and deal status for your uploaded content."
                 ]
               },
               {

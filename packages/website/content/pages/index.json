@@ -516,6 +516,13 @@
             "cards": [
               {
                 "type": "C",
+                "image": "/images/index/testimonial-jacob-p.jpg",
+                "title": "Jacob P.",
+                "subtitle": "New York, USA",
+                "description": "Web3.Storage enables <a href='//www.strangemood.org' target='blank'>Strangemood</a> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
+              },
+              {
+                "type": "C",
                 "image": "/images/index/testimonial-ryan-w.jpg",
                 "title": "Ryan W.",
                 "subtitle": "Capetown, South Africa",
@@ -527,13 +534,6 @@
                 "title": "Frank J.",
                 "subtitle": "Toronto, Canada",
                 "description": "Web3.Storage was so simple to hook into, and does what you need it to do. We run the <a href='//galacticpunks.io' target='blank'>Galactic Punks</a> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS."
-              },
-              {
-                "type": "C",
-                "image": "/images/index/testimonial-jacob-p.jpg",
-                "title": "Jacob P.",
-                "subtitle": "New York, USA",
-                "description": "Web3.Storage enables <a href='//www.strangemood.org' target='blank'>Strangemood</a> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
               }
             ]
           },
@@ -550,6 +550,13 @@
             "slides": [
               {
                 "type": "C",
+                "image": "/images/index/testimonial-jacob-p.jpg",
+                "title": "Jacob P.",
+                "subtitle": "New York, USA",
+                "description": "Web3.Storage enables <a href='//www.strangemood.org' target='blank'>Strangemood</a> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
+              },
+              {
+                "type": "C",
                 "image": "/images/index/testimonial-ryan-w.jpg",
                 "title": "Ryan W.",
                 "subtitle": "Capetown, South Africa",
@@ -561,13 +568,6 @@
                 "title": "Frank J.",
                 "subtitle": "Toronto, Canada",
                 "description": "Web3.Storage was so simple to hook into, and does what you need it to do. We run the <a href='//galacticpunks.io' target='blank'>Galactic Punks</a> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS."
-              },
-              {
-                "type": "C",
-                "image": "/images/index/testimonial-jacob-p.jpg",
-                "title": "Jacob P.",
-                "subtitle": "New York, USA",
-                "description": "Web3.Storage enables <a href='//www.strangemood.org' target='blank'>Strangemood</a> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
               }
             ]
           }
