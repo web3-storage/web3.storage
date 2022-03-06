@@ -22,9 +22,9 @@ export default function AccordionContent({ open, toggle, uid, toggleOnLoad, chil
   useLayoutEffect(() => {
     setTimeout(() => {
       updateContentHeight(open)
-      if (toggleOnLoad ) { toggle(uid) }
+      if (toggleOnLoad) { toggle(uid) }
     }, 500)
-  }, [])
+  }, [toggleOnLoad])
 
   useEffect(() => {
     const resize = () => { updateContentHeight(open) }
