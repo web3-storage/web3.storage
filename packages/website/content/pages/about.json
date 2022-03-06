@@ -12,6 +12,12 @@
   "page_content": [
     [
       {
+        "type": "section-data",
+        "gradient": true,
+        "variant": "light",
+        "classlist": "header-variant"
+      },
+      {
         "id": "about_hero-header",
         "columns": [
           {

@@ -12,6 +12,12 @@
   "page_content": [
     [
       {
+        "type": "section-data",
+        "gradient": true,
+        "variant": "saturated",
+        "classlist": "header-variant"
+      },
+      {
         "id": "hero_header",
         "columns": [
           {
@@ -151,6 +157,11 @@
       }
     ],
     [
+      {
+        "type": "section-data",
+        "gradient": true,
+        "variant": "light"
+      },
       {
         "id": "intro_2-heading",
         "columns": [
