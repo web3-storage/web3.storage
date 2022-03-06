@@ -62,7 +62,7 @@ const FileRowItem = props => {
 
     // Splitting into highlighted content
     if (!!target && propsReturn[target].indexOf(text) !== -1) {
-      propsReturn[target] = propsReturn[target].replace(text, `<span class="highlight">${text}</span>`);
+      propsReturn[target] = propsReturn[target].replace(text, `<mark class="highlight">${text}</mark>`);
     }
 
     return propsReturn;
