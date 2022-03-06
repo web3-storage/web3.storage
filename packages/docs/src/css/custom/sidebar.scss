@@ -64,17 +64,30 @@ main > .container > .row > .col--3 > div {
         padding: toRem(15) toRem(20) toRem(10) toRem(25);
     }
     @media (max-width: 1200px) {
-        padding: toRem(10) toRem(15) toRem(5) toRem(20);
+        padding: toRem(10) toRem(8) toRem(10) toRem(15);
     }
-    li {
+    li {    
         padding: 0;
         margin: 0;
-        @include fontSize_Mini;
-        line-height: toRem(26);
-        padding: toRem(5) 0;
+        @include fontSize_Tiny;
+        line-height: toRem(22);
+        padding: toRem(3) 0;
         font-weight: $fontWeight_Medium;
+        transition: all 0.3s ease-in-out;
+        ul li {
+            padding-left: toRem(5);
+            font-weight: $fontWeight_Regular;
+            line-height: $leading_Small;
+        }
+        a {
+            transition: all 0.3s ease-in-out;
+        }
     }
 }
+.table-of-contents__link {
+    transition: all 0.3s ease-in-out;
+}
+li
 .table-of-contents__link--active {
     background: linear-gradient(175deg, $royalBlue 30%, $cerise 93.14%);
     background-clip: text;
@@ -84,9 +97,9 @@ main > .container > .row > .col--3 > div {
     text-fill-color: transparent;
 
     &::before {
-        content: '>';
-        padding-right: toRem(10);
+        content: '▸';
         line-height: 1;
+        padding: 0 toRem(3) 0 toRem(4);
     }
 }
 
