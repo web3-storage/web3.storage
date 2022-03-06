@@ -5,7 +5,7 @@ import blobs from '../images/blobs.png'
  */
  const Blobs = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={blobs.src} />
+      <img className="image-full-width" alt="" src={blobs.src} />
     </div>
 )
 

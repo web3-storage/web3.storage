@@ -5,7 +5,7 @@ import zigzag from '../images/zigzag.png'
  */
  const Zigzag = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={zigzag.src} />
+      <img className="image-full-width" alt="" src={zigzag.src} />
     </div>
 )
 

@@ -5,7 +5,7 @@ import cross from '../images/cross.png'
  */
  const Cross = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={cross.src} />
+      <img className="image-full-width" alt="" src={cross.src} />
     </div>
 )
 

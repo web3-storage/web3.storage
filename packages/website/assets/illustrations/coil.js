@@ -5,7 +5,7 @@ import coil from '../images/coil.png'
  */
  const Coil = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={coil.src} />
+      <img className="image-full-width" alt="" src={coil.src} />
     </div>
 )
 

@@ -5,7 +5,7 @@ import fidget from '../images/fidget.png'
  */
  const Fidget = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={fidget.src} />
+      <img className="image-full-width" alt="" src={fidget.src} />
     </div>
 )
 

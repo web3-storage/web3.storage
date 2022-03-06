@@ -5,7 +5,7 @@ import corkscrew from '../images/corkscrew.png'
  */
  const Corkscrew = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={corkscrew.src} />
+      <img className="image-full-width" alt="" src={corkscrew.src} />
     </div>
 )
 

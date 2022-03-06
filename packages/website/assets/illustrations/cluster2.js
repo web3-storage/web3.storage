@@ -5,7 +5,7 @@ import cluster2 from '../images/cluster2.png'
  */
  const ClusterMobile = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={cluster2.src} />
+      <img className="image-full-width" alt="" src={cluster2.src} />
     </div>
 )
 

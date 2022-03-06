@@ -5,7 +5,7 @@ import spring from '../images/spring.png'
  */
  const Spring = (props) => (
     <div {...props}>
-      <img className="image-full-width" src={spring.src} />
+      <img className="image-full-width" alt="" src={spring.src} />
     </div>
 )
 
