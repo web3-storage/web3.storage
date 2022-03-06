@@ -30,6 +30,11 @@
     ],
     [
       {
+        "type": "section-data",
+        "gradient": true,
+        "variant": "light"
+      },
+      {
         "id": "section_tiers",
         "grid": ["middle"],
         "columns": [

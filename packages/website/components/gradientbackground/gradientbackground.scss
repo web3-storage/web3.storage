@@ -1,0 +1,31 @@
+.gradient-background-component {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  // background-image: url('/images/index/holographic-bg-cropped-1.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: right 0 bottom 0rem;
+  // filter: blur(0.25rem);
+
+  &.header-variant {
+    background-image: url('/images/index/holographic-bg-cropped-1.png');
+    left: -9999px;
+    right: -9999px;
+    margin: 0 auto;
+    height: calc(100% + 2 * $navigationHeight);
+    transform: translateY(-1 * $navigationHeight);
+    min-width: 50rem;
+    @include tiny {
+      transform: translateX(-10rem) translateY(-1 * $navigationHeight);
+    }
+  }
+}
+
+.gradient-background-image-cover {
+  width: 100%;
+  height: 100%;
+}
