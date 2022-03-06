@@ -70,6 +70,18 @@
         transition: 200ms ease;
     }
 }
+.navbar__brand {
+    transition: all 200ms ease;
+    .navbar__title {
+        color: black;
+    }
+    &:hover {
+        transform: scale(1.1);
+        .navbar__title {
+            color: black;
+        }
+    }
+}
 
 // menu items
 .navbar__link {
