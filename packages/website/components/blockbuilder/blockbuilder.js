@@ -16,11 +16,13 @@ import Coil from '../../assets/illustrations/coil';
 import Cross from '../../assets/illustrations/cross';
 import Triangle from '../../assets/illustrations/triangle';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
+import GradientBackground from '../gradientbackground/gradientbackground.js';
 
 // ====================================================================== Export
 class BlockBuilder extends React.Component {
   constructor(props) {
     super(props);
+    this.parseSectionData = this.parseSectionData.bind(this);
     this.getGridClasses = this.getGridClasses.bind(this);
     this.getColumnPushCount = this.getColumnPushCount.bind(this);
     this.getCustomComponents = this.getCustomComponents.bind(this);
@@ -28,6 +30,13 @@ class BlockBuilder extends React.Component {
   }
 
   // ================================================================= Functions
+  parseSectionData(array) {
+    return {
+      content: array.filter(item => item.type !== 'section-data'),
+      data: array.find(item => item.hasOwnProperty('type') && item.type === 'section-data'),
+    };
+  }
+
   getGridClasses(sectionGrid) {
     const classList = ['grid'];
     if (Array.isArray(sectionGrid) && sectionGrid.length > 0) {
@@ -94,9 +103,18 @@ class BlockBuilder extends React.Component {
 
   // ====================================================== Template [Sectional]
   render(props) {
+    const section = this.parseSectionData(this.props.subsections);
+
     return (
       <div className="sectionals" id={this.props.id}>
-        {this.props.subsections.map(subsection => (
+        {section.data && (
+          <GradientBackground
+            variant={section.data.variant}
+            classlist={section.data.classlist ? section.data.classlist : ''}
+          />
+        )}
+
+        {section.content.map(subsection => (
           <section id={subsection.id} key={subsection.id} className="sectional">
             <div className={clsx(this.getGridClasses(subsection.grid), subsection.classNames)}>
               {subsection.columns.map((column, index) => (

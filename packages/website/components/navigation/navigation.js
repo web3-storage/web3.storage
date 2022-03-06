@@ -185,7 +185,7 @@ export default function Navigation({ isProductApp }) {
                     tabIndex={0}
                   >
                     <SiteLogo className="site-logo-image" />
-                    <div className={clsx('site-logo-text', theme)}>{logoText}</div>
+                    <div className={clsx('site-logo-text', theme, isMenuOpen ? 'menu-open' : '')}>{logoText}</div>
                   </a>
                 </Link>
               </div>

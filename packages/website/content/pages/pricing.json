@@ -30,6 +30,11 @@
     ],
     [
       {
+        "type": "section-data",
+        "gradient": true,
+        "variant": "light"
+      },
+      {
         "id": "section_tiers",
         "grid": ["middle"],
         "columns": [
@@ -164,7 +169,7 @@
                 "title": "How is Web3.Storage different from NFT.Storage?",
                 "description": "Both services are offered by the same group and share much of the same architecture, but as the name suggests, NFT.Storage is…",
                 "cta": {
-                  "url": "/faq",
+                  "url": "/faq/?section=service",
                   "text": "READ MORE",
                   "theme": "text-purple",
                   "event": "",
@@ -178,7 +183,7 @@
                 "title": "What happens if Web3.Storage is discontinued?",
                 "description": "One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data…",
                 "cta": {
-                  "url": "/faq",
+                  "url": "/faq/?section=data-security",
                   "text": "READ MORE",
                   "theme": "text-purple",
                   "event": "",

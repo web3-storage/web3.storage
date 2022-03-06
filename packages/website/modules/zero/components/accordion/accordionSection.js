@@ -1,5 +1,6 @@
 // ===================================================================== Imports
 import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from 'next/router';
 import clsx from 'clsx';
 
 import ZeroAccordionHeader from 'ZeroComponents/accordion/accordionHeader';
@@ -44,11 +45,14 @@ function AccordionSection({
   toggle,
   toggleOnLoad,
   reportUID,
+  slug,
   disabled,
   children
 }) {
   const [uid, setUID] = useState(generateUID)
+  const [openOnNavigate, setopenOnNavigate] = useState(false)
   const firstUpdate = useRef(true);
+  const router = useRouter();
   const header = children.find(child => child.type === Header)
   const content = children.find(child => child.type === Content)
   const open = active.includes(uid)
@@ -57,8 +61,21 @@ function AccordionSection({
     reportUID(uid)
   }, [uid])
 
+  useEffect(() => {
+    if (router.query.section === slug) {
+      const element = document.getElementById(`accordion-section_${slug}`)
+      if (element) {
+        const y = element.getBoundingClientRect().top + window.scrollY - 16
+        window.scrollTo(0, y)
+      }
+      setopenOnNavigate(true)
+    }
+  }, [router, slug])
+
   return (
-    <div className={ clsx("accordion-section", open ? 'open': '') }>
+    <div
+      id={`accordion-section_${slug}`}
+      className={ clsx("accordion-section", open ? 'open': '') }>
 
       <ZeroAccordionHeader
         uid={uid}
@@ -72,7 +89,7 @@ function AccordionSection({
         uid={uid}
         toggle={toggle}
         open={open}
-        toggleOnLoad={toggleOnLoad}>
+        toggleOnLoad={openOnNavigate || toggleOnLoad}>
 
         {content ? content.props.children : null}
 

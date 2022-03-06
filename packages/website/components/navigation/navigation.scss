@@ -93,7 +93,11 @@
     &.dark {
       color: $ebony;
     }
+    &.menu-open {
+      color: $ebony;
+    }
   }
+
   &:hover {
     .site-logo-image {
       transform: scale(0.85) translateX(-0.625rem);
