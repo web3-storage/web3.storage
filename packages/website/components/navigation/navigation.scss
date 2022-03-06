@@ -85,10 +85,14 @@
     @include fontWeight_Medium;
     margin: 0 0.375rem;
     line-height: 2rem;
+    transition: 250ms ease;
     &.light {
       color: $white;
     }
     &.dark {
+      color: $ebony;
+    }
+    &.menu-open {
       color: $ebony;
     }
   }
