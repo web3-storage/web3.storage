@@ -27,5 +27,16 @@
             top: calc(50% + 2rem);
             left: -15rem;
         }
+        &-img {
+            width: 22rem;
+            height: 32rem;
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            background-image: url(#{$imagePath}/shapes/squiggle.png);
+            background-repeat: no-repeat;
+            background-size: contain; 
+            background-position: center;
+        }
     }
 }

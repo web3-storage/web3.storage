@@ -47,13 +47,13 @@
 }
 
 @media (max-width: 1215px) {
-    .sidebar_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocSidebar-styles-module {
+    .theme-doc-sidebar-container > div {
         padding-top: 8.5rem !important;
     }
 }
 
 // right side
-.tableOfContents_node_modules-\@docusaurus-theme-classic-lib-next-theme-TOC-styles-module {
+.theme-doc-toc-desktop {
     background-color: $white;
     @include shadow1;
     border-radius: toRem(10);
@@ -92,30 +92,30 @@
 
 // right side mobile
 @include mobile {
-    .tocCollapsibleButton_node_modules-\@docusaurus-theme-classic-lib-next-theme-TOCCollapsible-styles-module {
-        padding: 0.8rem 1rem 1rem 1rem !important;
-        &:after {
-            filter: invert(1) !important;
-        }
-    }
-    .tocCollapsible_node_modules-\@docusaurus-theme-classic-lib-next-theme-TOCCollapsible-styles-module {
+    .theme-doc-toc-mobile {
         background-color: $sidenavBg !important;
         color: $white;
         a {
             color: $white;
             @include fontWeight_Regular;
         }
-    }
-    .tocCollapsibleContent_node_modules-\@docusaurus-theme-classic-lib-next-theme-TOCCollapsible-styles-module ul li {
-        margin: 0 1rem !important;
-        a:hover {
-            color: $white;
+        button {
+            padding: 0.8rem 1rem 1rem 1rem !important;
+            &:after {
+                filter: invert(1) !important;
+            }
         }
-        &:last-child {
-            margin-bottom: 0.5rem !important;
-        }
-        &:first-child {
-            margin-top: 0.5rem !important;
+        > div ul li {
+            margin: 0 1rem !important;
+            a:hover {
+                color: $white;
+            }
+            &:last-child {
+                margin-bottom: 0.5rem !important;
+            }
+            &:first-child {
+                margin-top: 0.5rem !important;
+            }
         }
     }
 }

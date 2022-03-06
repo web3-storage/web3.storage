@@ -535,6 +535,7 @@
 
 #section_FAQ_ctas {
   position: relative;
+  padding-bottom: 10rem;
   z-index: 1;
   @include small {
     padding-top: 0;
@@ -555,6 +556,7 @@
 
 // ------------------------------------------------------- Section [Get Started]
 #section_get-started {
+  padding-top: 1rem;
   padding-bottom: 0;
   position: relative;
   z-index: 1;
@@ -571,13 +573,16 @@
   }
 
   .column-1 {
-    margin-top: 14rem;
+    margin-top: 18rem;
     .heading {
       margin-bottom: 2.25rem;
       line-height: leading(50, 35);
     }
   }
   .column-2 {
+    .column-content {
+      position: relative;
+    }
     @include small {
       position: relative;
       padding-top: 20rem;
@@ -624,22 +629,29 @@
 }
 
 #get-started-image-storage {
-  margin-left: 2rem;
+  position: absolute;
+  left: -4rem;
   margin-bottom: 1rem;
-  width: 66%;
+  width: 80%;
+  transform: translateY(-100%);
+  @include small {
+    position: relative;
+    transform: unset;
+    left: 0;
+  }
 }
 
 #get-started-image-files {
-  margin-left: 7rem;
+  margin-left: 2rem;
   margin-bottom: 1rem;
-  width: 110%;
+  width: 100%;
 }
 
 #get-started-image-upload {
-  width: 56%;
+  width: 55%;
   margin-left: auto;
   right: 0;
-  transform: translateX(50%);
+  transform: translateX(25%);
 }
 
 #get-started-image-storage,
@@ -656,7 +668,10 @@
 #section_get-started-cards {
   position: relative;
   z-index: 1;
-  padding-top: 2rem;
+  padding-top: 5rem;
+  @include large {
+    padding-top: 2rem;
+  }
   &:before {
     display: none;
     content: '';

@@ -28,7 +28,7 @@ $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48
     @include h1;
     color: $ebony;
     line-height: leading(55, 45);
-    margin-top: calc(var(--ifm-h1-vertical-rhythm-top) * var(--ifm-leading));
+    margin-top: 0;
     margin-bottom: toRem(42);
   }
   .markdown > h2,
@@ -58,9 +58,6 @@ $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48
     color: $ebony;
     font-size: toRem(16);
     line-height: toRem(34);
-  }
-  header > h1 {
-    margin-top: 0;
   }
   pre code {
     background-color: $steelGray !important;
