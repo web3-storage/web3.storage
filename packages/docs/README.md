@@ -5,7 +5,7 @@
 [![](https://img.shields.io/badge/deployed%20on-Fleek-ff69b4.svg)](http://fleek.co/)
 
 
-This repository contains code and content for https://docs.web3.storage, the documentation site for the [Web3.Storage](https://web3.storage/) service.
+This repository contains code and content for [Web3.Storage/docs](https://web3.storage/docs, the documentation site for the [Web3.Storage](https://web3.storage/) service.
 
 _You can find the code for the main web3.storage website and the underlying API here: https://github.com/web3-storage/web3.storage_
 
@@ -64,7 +64,7 @@ Auto deployments are enabled on the `main` branch and preview builds are generat
 
 ### 🔗 Links:
 
-- Production (`main` branch): https://docs.web3.storage or https://web3-storage-docs.on.fleek.co/
+- ~~Production (`main` branch): https://docs.web3.storage or https://web3-storage-docs.on.fleek.co/~~ 
 - Preview builds (see screenshot above): `https://<cid>.on.fleek.co` (example: https://bafybeibwksog6le7t6anr4zenlcg2qntrmfznx6e64goree7hmzfsxcnl4.on.fleek.co/)
 
 ## Maintainers

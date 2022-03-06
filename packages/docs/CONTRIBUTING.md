@@ -10,7 +10,7 @@ The guidelines below can help you create content that's clear, compelling, and v
 
 ### Types of content
 
-Content on docs.web3.storage falls into four categories, all designed to help readers understand topics but each taking a slightly different approach to doing so:
+Content on web3.storage/docs falls into four categories, all designed to help readers understand topics but each taking a slightly different approach to doing so:
 - [Concept guides](#concept-guides)
 - [Tutorials](#tutorials)
 - [How-tos](#how-tos)

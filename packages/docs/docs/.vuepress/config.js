@@ -1,7 +1,7 @@
 // .vuepress/config.js
 
 const MAIN_DOMAIN = process.env.MAIN_DOMAIN || 'https://web3.storage'
-const DEPLOY_DOMAIN = 'https://docs.web3.storage'
+const DEPLOY_DOMAIN = 'https://web3.storage'
 const SPEEDCURVE_ID = process.env.SPEEDCURVE_ID || ''
 const COUNTLY_KEY = process.env.COUNTLY_KEY || ''
 const COUNTLY_URL = process.env.COUNTLY_URL || ''
@@ -108,7 +108,7 @@ module.exports = {
             title: 'Reference',
             collapsable: false,
             children: [
-              ['https://docs.web3.storage/http-api.html','HTTP API reference'],
+              ['https://web3.storage/docs/http-api.html','HTTP API reference'],
               '/reference/client-library',
               '/reference/js-utilities',
             ]
