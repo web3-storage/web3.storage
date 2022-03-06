@@ -267,9 +267,10 @@
   position: relative;
   .heading {
     @include h1;
+    word-break: keep-all;
     line-height: leading(55, 45);
     @include mini {
-      @include fontSize_Large;
+      @include fontSize_MediumExtraLarge;
       line-height: leading(45, 35);
     }
   }

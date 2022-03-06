@@ -63,8 +63,8 @@
                 "format": "medium",
                 "heading": "Store and retrieve with ease",
                 "description": [
-                  "Most decentralized storage services need you to compile your data into a specific format, find a storage provider to host your data, buy some cryptocurrency to pay the storage provider, and then send your data across the internet.",
-                  "With Web3.Storage, you can upload any data to our API our web UI for free, and the data will end up on a decentralized set of IPFS and Filecoin storage providers."
+                  "Most decentralized storage services either need you to jump through hoops (like buying some cryptocurrency) or aren't truly decentralized.",
+                  "With Web3.Storage, things are both easy-to-use and trustless! Upload any data via our API or our web UI for free. The data will end up on a decentralized set of IPFS and Filecoin storage providers."
                 ],
                 "cta": {
                   "url": "/about",
@@ -195,13 +195,13 @@
             "cards": [
               {
                 "type": "A",
-                "feature": "1400+",
+                "feature": "2500+",
                 "title": "Projects Worldwide",
                 "description": "Join a global community storing data on web3"
               },
               {
                 "type": "A",
-                "feature": "9M+",
+                "feature": "15M+",
                 "title": "Stored Objects",
                 "description": "Store data for free with our easy to use API or our JS library"
               },
@@ -247,19 +247,19 @@
                 "type": "text_block",
                 "format": "small",
                 "heading": "Simple",
-                "description": "With web3.storage, you get decentralized storage in minutes. All you need is a free API token and you can use the API directly or use our simple client library."
+                "description": "With Web3.Storage, you get decentralized storage in minutes. Use our simple client library or the HTTP API directly - all you need is a free API token."
               },
               {
                 "type": "text_block",
                 "format": "small",
                 "heading": "Open",
-                "description": "All data stored is accessible on the public IPFS network - interoperable with the tools and services building on the decentralized web."
+                "description": "All data stored is accessible on the public IPFS network via a content ID - interoperable with the tools and services building on the decentralized web."
               },
               {
                 "type": "text_block",
                 "format": "small",
                 "heading": "Free",
-                "description": "The unique economics of Filecoin allow Web3.Storage to be completely free to use, while still ensuring that storage providers have a strong incentive to preserve user data for the long term."
+                "description": "Data is stored on the Filecoin network, which has a unique economic model and over 15B TiB of capacity, allowing us to offer Web3.Storage for free today. This storage is cryptographically provable by anyone!"
               }
             ]
           }
@@ -327,8 +327,8 @@
               {
                 "type": "F",
                 "label": "FAQ",
-                "title": "How is web3.storage different from pinning services for IPFS?",
-                "description": "Web3.Storage is currently not a pinning service. At the moment, files already on the IPFS network cannot be pinned to Web3.Storage via their…",
+                "title": "How is Web3.Storage different from NFT.Storage?",
+                "description": "Both services are offered by the same group and share much of the same architecture, but as the name suggests, NFT.Storage is…",
                 "cta": {
                   "url": "/faq",
                   "text": "READ MORE",
@@ -340,8 +340,8 @@
               },
               {
                 "type": "F",
-                "label": "FAQ",
-                "title": "What happens if web3.storage is discontinued?",
+                "label": " ",
+                "title": "What happens if Web3.Storage is discontinued?",
                 "description": "One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data…",
                 "cta": {
                   "url": "/faq",
@@ -429,7 +429,7 @@
               {
                 "type": "B",
                 "label": "JS Client Library",
-                "feature": "<span class='highlight'>npm install</span> web3.storage",
+                "feature": "<span class='highlight'>npm install</span> Web3.Storage",
                 "description": "Import the lightweight Web3.Storage library into your project, and enjoy a simple and familiar way to store and retrieve.",
                 "icon_before": {
                   "url": "https://www.npmjs.com/package/web3.storage",
@@ -533,7 +533,7 @@
                 "image": "/images/index/testimonial-jacob-p.jpg",
                 "title": "Jacob P.",
                 "subtitle": "New York, USA",
-                "description": "Web3.storage enables <a href='//www.strangemood.org' target='blank'>Strangemood</a> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
+                "description": "Web3.Storage enables <a href='//www.strangemood.org' target='blank'>Strangemood</a> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
               }
             ]
           },
@@ -567,7 +567,7 @@
                 "image": "/images/index/testimonial-jacob-p.jpg",
                 "title": "Jacob P.",
                 "subtitle": "New York, USA",
-                "description": "Web3.storage enables <a href='//www.strangemood.org' target='blank'>Strangemood</a> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
+                "description": "Web3.Storage enables <a href='//www.strangemood.org' target='blank'>Strangemood</a> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
               }
             ]
           }

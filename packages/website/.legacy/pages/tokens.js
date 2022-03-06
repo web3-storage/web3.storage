@@ -16,7 +16,7 @@ import Loading from '../components/loading/loading'
 export function getStaticProps() {
   return {
     props: {
-      title: 'Manage API Tokens - web3.storage',
+      title: 'Manage API Tokens - Web3.Storage',
       redirectTo: '/',
       needsLoggedIn: true,
     },

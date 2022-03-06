@@ -161,8 +161,8 @@
               {
                 "type": "F",
                 "label": "FAQ",
-                "title": "How is web3.storage different from pinning services for IPFS?",
-                "description": "Web3.Storage is currently not a pinning service. At the moment, files already on the IPFS network cannot be pinned to Web3.Storage via their…",
+                "title": "How is Web3.Storage different from NFT.Storage?",
+                "description": "Both services are offered by the same group and share much of the same architecture, but as the name suggests, NFT.Storage is…",
                 "cta": {
                   "url": "/faq",
                   "text": "READ MORE",
@@ -174,8 +174,8 @@
               },
               {
                 "type": "F",
-                "label": "FAQ",
-                "title": "What happens if web3.storage is discontinued?",
+                "label": " ",
+                "title": "What happens if Web3.Storage is discontinued?",
                 "description": "One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data…",
                 "cta": {
                   "url": "/faq",

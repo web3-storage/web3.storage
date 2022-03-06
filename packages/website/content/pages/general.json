@@ -15,7 +15,7 @@
   "message_banner": {
     "content": "Looking to store NFTs? Check out <span class='banner-gradient-text'>NFT.Storage</span>",
     "url": "https://nft.storage/",
-    "maintenceAlert": "The web3.Storage API is currently undergoing maintenance..."
+    "maintenceAlert": "The Web3.Storage API is currently undergoing maintenance..."
   },
   "navigation": {
     "links": [
