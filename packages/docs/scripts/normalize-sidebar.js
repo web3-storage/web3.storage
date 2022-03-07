@@ -31,13 +31,19 @@
    const { data: frontMatter } = matter(mdString)
  
    const docPath = frontMatter.slug || docId
-   const href = [docusaurusConfig.baseUrl, docPath].join('/').replace(/\/$/, '').replace(/^\//, '').replace(/\/+/, '/')
+   const label = frontMatter.sidebar_label || frontMatter.title
+   let href = [docusaurusConfig.baseUrl, docPath].join('/').replace(/\/$/, '').replace(/^\//, '').replace(/\/+/, '/')
+
+   // make sure href is an absolute URL (if it's not already)
+   if (!href.startsWith('http') && !href.startsWith('/')) {
+    href = '/' + href
+   }
    
    return {
      type: 'link',
-     label: frontMatter.sidebar_label || frontMatter.title,
      collapsed: false,
-     href
+     label,
+     href,
    }
  }
  
