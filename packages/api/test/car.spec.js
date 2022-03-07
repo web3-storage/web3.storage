@@ -240,7 +240,7 @@ describe('POST /car', () => {
     assert.strictEqual(message, `Invalid CAR file received: block with unsupported hash function: 0x${sha512.code.toString(16)} for ${cid.toString()}`)
   })
 
-  it.only('should throw for CAR with a block where the bytes do match the CID', async () => {
+  it('should throw for CAR with a block where the bytes do match the CID', async () => {
     const token = await getTestJWT('test-upload', 'test-upload')
 
     const bytes = pb.encode({ Data: new Uint8Array(), Links: [] })
