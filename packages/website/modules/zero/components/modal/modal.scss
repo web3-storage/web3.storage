@@ -24,12 +24,9 @@
     max-height: 90vh;
     overflow-y: auto;
     overflow-x: hidden;
-    .modalInner {
-      position: relative;
-      overflow: hidden;
-      opacity: 0;
-      z-index: 2;
-    }
+    position: relative;
+    z-index: 2;
+
     .modalClose {
       pointer-events: auto;
       position: absolute;
@@ -58,19 +55,19 @@
 // DON animation (wiggly)
 .don {
   &.modal--open {
-    .modalInner {
+    .modalContainer {
       animation-name: anim-open-don;
     }
   }
   &.modal--close {
-    .modalInner {
+    .modalContainer {
       animation-name: anim-close-don;
       animation-duration: 0.3s;
       animation-timing-function: ease-out;
     }
   }
-  &.modal--open .modalInner,
-  &.modal--close .modalInner {
+  &.modal--open .modalContainer,
+  &.modal--close .modalContainer {
     animation-duration: 1s;
     animation-timing-function: linear;
     animation-fill-mode: forwards;
@@ -80,26 +77,25 @@
 // KEN
 .ken {
   align-items: flex-start;
-  &.modal--open .modalInner,
-  &.modal--close .modalInner {
+  &.modal--open .modalContainer,
+  &.modal--close .modalContainer {
     opacity: 1;
     animation-duration: 0.3s;
     animation-fill-mode: forwards;
   }
-  &.modal--open .modalInner {
+  &.modal--open .modalContainer {
     animation-name: anim-open-ken;
   }
-  &.modal--close .modalInner {
+  &.modal--close .modalContainer {
     animation-name: anim-close-ken;
-  }
-  &.modal--open .modalInner > div {
-    animation: anim-elem-ken 0.3s both;
   }
   &.modal--open .modalInner > div:nth-child(2) {
     animation-delay: 0.15s;
+    animation: anim-elem-ken 0.3s both;
   }
   &.modal--open .modalInner > div:nth-child(3) {
     animation-delay: 0.05s;
+    animation: anim-elem-ken 0.3s both;
   }
 }
 
