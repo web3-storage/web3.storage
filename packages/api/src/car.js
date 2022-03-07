@@ -274,9 +274,10 @@ async function carStat (carBlob) {
       throw new InvalidCarError(`block too big: ${blockSize} > ${MAX_BLOCK_SIZE}`)
     }
     if (block.cid.multihash.code !== sha256.code) {
-      throw new InvalidCarError(`block with unsupported hash function: ${block.cid.multihash.code} for ${block.cid.toString()}`)
+      throw new InvalidCarError(`block with unsupported hash function: 0x${block.cid.multihash.code.toString('16')} for ${block.cid.toString()}`)
     }
-    if (!isValidBlock(block)) {
+    const ourHash = await sha256.digest(block.bytes)
+    if (!equals(ourHash.digest, block.cid.multihash.digest)) {
       throw new InvalidCarError(`block data does not match CID for ${block.cid.toString()}`)
     }
     if (!rawRootBlock && block.cid.equals(rootCid)) {
@@ -310,16 +311,6 @@ async function carStat (carBlob) {
     }
   }
   return { size, blocks, rootCid }
-}
-
-/**
- * Verify the hash of the bytes matches the cid multihash
- * @param {import('@ipld/car/api'.Block)} block
- * @returns {boolean} if the cid multihash matches the hash of the bytes
- */
-async function isValidBlock (block) {
-  const hash = await sha256.digest(block.bytes)
-  return equals(hash.digest, block.cid.multihash.digest)
 }
 
 /**
