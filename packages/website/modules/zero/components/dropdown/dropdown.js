@@ -114,7 +114,11 @@ const Dropdown = ({
               tabIndex={-1}
               role="option"
               aria-selected={currentItem.value === option.value ? 'true' : 'false'}
-              onClick={() => setCurrentItem(option.value)}
+              onClick={() => {
+                setCurrentItem(option.value);
+                selectElRef.current.value = option.value;
+                selectElRef.current.dispatchEvent(new Event('change', { bubbles: true }));
+              }}
               onFocus={() => setIsOpen(true)}
               onBlur={() => setIsOpen(false)}
               onKeyUp={(event) => (event.key === 'Enter' && isOpen) && setIsOpen(false)}

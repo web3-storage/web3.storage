@@ -21,6 +21,7 @@ import CloseIcon from 'assets/icons/close';
 import { formatTimestamp } from 'lib/utils';
 import { useUploads } from 'components/contexts/uploadsContext';
 import { useUser } from 'components/contexts/userContext';
+import CheckIcon from 'assets/icons/check';
 
 const defaultQueryOrder = 'a-z';
 
@@ -46,6 +47,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
   const [itemsPerPage, setItemsPerPage] = useState(null);
   const [keyword, setKeyword] = useState(filter);
   const [deleteSingleCid, setDeleteSingleCid] = useState('');
+  const [showCheckOverlay, setShowCheckOverlay] = useState(false);
   const deleteModalState = useState(false);
   const queryOrderRef = useRef(query.order);
 
@@ -189,6 +191,14 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
           value={defaultQueryOrder}
           queryParam="order"
           onChange={setSortedFiles}
+          onSelectChange={
+            /** @type {import('react').ChangeEventHandler<HTMLSelectElement>} */ () => {
+              setShowCheckOverlay(true);
+              setTimeout(() => {
+                setShowCheckOverlay(false);
+              }, 500);
+            }
+          }
         />
       </div>
       <FileRowItem
@@ -307,6 +317,11 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
           </Button>
         </div>
       </Modal>
+      <div className={clsx('files-manager-overlay', showCheckOverlay ? 'show' : '')}>
+        <div className="files-manager-overlay-check">
+          <CheckIcon></CheckIcon>
+        </div>
+      </div>
     </div>
   );
 };
