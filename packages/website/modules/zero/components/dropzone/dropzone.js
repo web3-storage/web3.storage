@@ -33,7 +33,7 @@ const Dropzone = ({
   onError,
   filesInfo = [],
   content = {
-    loading: 'Loading...',
+    loading: 'Loading',
     complete: 'Complete',
     failed: 'Failed',
   },
@@ -71,7 +71,10 @@ const Dropzone = ({
               {!!fileInfo.failed
                 ? content.failed
                 : fileInfo.progress !== 100
-                ? `${content.loading} ${fileInfo.progress || 0}%`
+                ? <div className="loading-c">
+                    <span className="loading-label">{content.loading}</span>
+                    <span className="loading-count">{fileInfo.progress || 0}%</span>
+                  </div>
                 : content.complete}
             </div>
           </Fragment>
