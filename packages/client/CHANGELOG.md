@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.5.7](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.6...web3.storage-v3.5.7) (2022-03-07)
+
+
+### Bug Fixes
+
+* client rate limit error message ([#1078](https://github.com/web3-storage/web3.storage/issues/1078)) ([e4cf4a6](https://github.com/web3-storage/web3.storage/commit/e4cf4a63286699d46ac49f7e5eb54d63fefe433a))
+
 ### [3.5.6](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.5...web3.storage-v3.5.6) (2022-02-28)
 
 
