@@ -163,6 +163,13 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
     [renameUpload, files, nameEditingId]
   );
 
+  const showCheckOverlayHandler = useCallback(() => {
+    setShowCheckOverlay(true);
+    setTimeout(() => {
+      setShowCheckOverlay(false);
+    }, 500);
+  }, [setShowCheckOverlay]);
+
   return (
     <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
       <div className="files-manager-header">
@@ -191,14 +198,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
           value={defaultQueryOrder}
           queryParam="order"
           onChange={setSortedFiles}
-          onSelectChange={
-            /** @type {import('react').ChangeEventHandler<HTMLSelectElement>} */ () => {
-              setShowCheckOverlay(true);
-              setTimeout(() => {
-                setShowCheckOverlay(false);
-              }, 500);
-            }
-          }
+          onSelectChange={showCheckOverlayHandler}
         />
       </div>
       <FileRowItem
@@ -293,6 +293,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
             options={content?.ui.results.options}
             queryParam="items"
             onChange={value => setItemsPerPage(value)}
+            onSelectChange={showCheckOverlayHandler}
           />
         </div>
       )}

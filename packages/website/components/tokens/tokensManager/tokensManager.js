@@ -14,6 +14,7 @@ import Filterable from 'ZeroComponents/filterable/filterable';
 import Sortable from 'ZeroComponents/sortable/sortable';
 import Pagination from 'ZeroComponents/pagination/pagination';
 import SearchIcon from 'assets/icons/search';
+import CheckIcon from 'assets/icons/check';
 
 const defaultQueryOrder = 'a-z';
 /**
@@ -36,6 +37,7 @@ const TokensManager = ({ content }) => {
   const [sortedTokens, setSortedTokens] = useState([]);
   const [paginatedTokens, setPaginatedTokens] = useState([]);
   const [itemsPerPage, setItemsPerPage] = useState(null);
+  const [showCheckOverlay, setShowCheckOverlay] = useState(false);
   const tokenRowLabels = content.table.token_row_labels;
 
   // Method to reset the pagination every time query order changes
@@ -81,6 +83,13 @@ const TokensManager = ({ content }) => {
     [queryClient, deleteToken, setDeletingTokenId, getTokens]
   );
 
+  const showCheckOverlayHandler = useCallback(() => {
+    setShowCheckOverlay(true);
+    setTimeout(() => {
+      setShowCheckOverlay(false);
+    }, 500);
+  }, [setShowCheckOverlay]);
+
   return (
     <div className="section tokens-manager-container">
       <div className="tokens-manager-header">
@@ -100,6 +109,7 @@ const TokensManager = ({ content }) => {
           value={defaultQueryOrder}
           queryParam="order"
           onChange={setSortedTokens}
+          onSelectChange={showCheckOverlayHandler}
         />
       </div>
       <TokenRowItem name={tokenRowLabels.name.label} secret={tokenRowLabels.secret.label} isHeader />
@@ -146,7 +156,13 @@ const TokensManager = ({ content }) => {
           options={content.ui.results.options}
           queryParam="items"
           onChange={value => setItemsPerPage(value)}
+          onSelectChange={showCheckOverlayHandler}
         />
+      </div>
+      <div className={clsx('files-manager-overlay', showCheckOverlay ? 'show' : '')}>
+        <div className="files-manager-overlay-check">
+          <CheckIcon></CheckIcon>
+        </div>
       </div>
     </div>
   );
