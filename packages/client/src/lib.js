@@ -169,6 +169,10 @@ class Web3Storage {
             headers,
             body: carFile
           })
+          /* c8 ignore next 3 */
+          if (request.status === 429) {
+            throw new Error('rate limited')
+          }
           const res = await request.json()
           if (!request.ok) {
             throw new Error(res.message)
@@ -202,6 +206,10 @@ class Web3Storage {
       method: 'GET',
       headers: Web3Storage.headers(token)
     })
+    /* c8 ignore next 3 */
+    if (res.status === 429) {
+      throw new Error('rate limited')
+    }
     return toWeb3Response(res)
   }
 
@@ -227,6 +235,10 @@ class Web3Storage {
       method: 'GET',
       headers: Web3Storage.headers(token)
     })
+    /* c8 ignore next 3 */
+    if (res.status === 429) {
+      throw new Error('rate limited')
+    }
     if (res.status === 404) {
       return undefined
     }
@@ -264,6 +276,11 @@ class Web3Storage {
     const size = maxResults > 100 ? 100 : maxResults
     for await (const res of paginator(listPage, service, { before, size })) {
       if (!res.ok) {
+        /* c8 ignore next 3 */
+        if (res.status === 429) {
+          throw new Error('rate limited')
+        }
+
         /* c8 ignore next 2 */
         const errorMessage = await res.json()
         throw new Error(`${res.status} ${res.statusText} ${errorMessage ? '- ' + errorMessage.message : ''}`)
