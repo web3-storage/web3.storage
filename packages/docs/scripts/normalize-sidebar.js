@@ -32,7 +32,12 @@
  
    const docPath = frontMatter.slug || docId
    const label = frontMatter.sidebar_label || frontMatter.title
-   const href = '/' + [docusaurusConfig.baseUrl, docPath].join('/').replace(/\/$/, '').replace(/^\//, '').replace(/\/+/, '/')
+   let href = [docusaurusConfig.baseUrl, docPath].join('/').replace(/\/$/, '').replace(/^\//, '').replace(/\/+/, '/')
+
+   // make sure href is an absolute URL (if it's not already)
+   if (!href.startsWith('http') && !href.startsWith('/')) {
+    href = '/' + href
+   }
    
    return {
      type: 'link',
