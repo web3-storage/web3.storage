@@ -31,13 +31,14 @@
    const { data: frontMatter } = matter(mdString)
  
    const docPath = frontMatter.slug || docId
-   const href = [docusaurusConfig.baseUrl, docPath].join('/').replace(/\/$/, '').replace(/^\//, '').replace(/\/+/, '/')
+   const label = frontMatter.sidebar_label || frontMatter.title
+   const href = '/' + [docusaurusConfig.baseUrl, docPath].join('/').replace(/\/$/, '').replace(/^\//, '').replace(/\/+/, '/')
    
    return {
      type: 'link',
-     label: frontMatter.sidebar_label || frontMatter.title,
      collapsed: false,
-     href
+     label,
+     href,
    }
  }
  
