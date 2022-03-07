@@ -4,7 +4,7 @@
     animation: scaleYoyoIn $transitionDuration ease-in-out;
   }
   .unfocused {
-    animation: scaleYoyoOut $transitionDuration ease-out;
+    animation: scaleFadeOut $transitionDuration ease-out;
   }
 
   @include fontSize_Mini;
@@ -40,7 +40,7 @@
   }
 }
 
-@keyframes scaleYoyoOut {
+@keyframes scaleFadeOut {
   0% {
     transform: scaleX(1);
     opacity: 1;
