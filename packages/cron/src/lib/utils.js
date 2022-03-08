@@ -3,6 +3,8 @@ import { Cluster } from '@nftstorage/ipfs-cluster'
 import { DBClient } from '@web3-storage/db'
 import { IPFS } from './ipfs.js'
 
+export const MAX_CONCURRENT_QUERIES = 10
+
 /**
  * Create a new IPFS Cluster instance from the passed environment variables.
  * @param {Record<string, string|undefined>} env
@@ -63,6 +65,18 @@ export function getDBClient (env) {
  */
 export function getPg (env, mode) {
   return new pg.Client({ connectionString: getPgConnString(env, mode) })
+}
+
+/**
+ * Create a new Postgres pool instance from the passed environment variables.
+ * @param {Record<string, string|undefined>} env
+ * @param {'ro'|'rw'} [mode]
+ */
+export function getPgPool (env, mode = 'rw') {
+  return new pg.Pool({
+    connectionString: getPgConnString(env, mode),
+    max: MAX_CONCURRENT_QUERIES
+  })
 }
 
 /**
