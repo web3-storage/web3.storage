@@ -10,8 +10,9 @@ module.exports = async ({ params }) => {
       cid: { '/': params.cid },
       name: 'test-pin-name',
       peer_map: {
-        'test-peer-id': {
+        'test-cluster-peer-id': {
           peername: 'test-peer-name',
+          ipfs_peer_id: 'test-peer-id',
           status: 'pinned',
           timestamp: new Date().toISOString()
         }
