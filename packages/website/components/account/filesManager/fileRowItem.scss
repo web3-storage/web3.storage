@@ -100,22 +100,22 @@ $file-size: auto;
         opacity: 0;
       }
       svg.check {
-        opacity: 0;
-        transition: opacity $transitionDuration;
         color: $cyan;
-        top: -0.5rem;
+        top: -0.55rem;
         left: -0.25rem;
         position: absolute;
         pointer-events: none;
         width: 1.5rem;
+        .tick {
+          stroke-dashoffset: 0;
+          stroke-dasharray: 1000;
+          transition: stroke-dashoffset 250ms 0s ease-out;
+        }
       }
       input:checked ~ svg.check {
-        opacity: 1;
-        transition: opacity $transitionDuration;
-        .path {
-          stroke-dasharray: 1000;
+        .tick {
           stroke-dashoffset: -100;
-          animation: dash-check 0.8s 0s ease-in-out forwards;
+          transition: stroke-dashoffset 250ms 0s ease-in;
         }
       }
     }
@@ -250,15 +250,5 @@ $file-size: auto;
   }
   .highlight {
     @include gradient_Background_PinkBlue;
-  }
-}
-
-// check animation
-@keyframes dash-check {
-  0% {
-    stroke-dashoffset: -100;
-  }
-  100% {
-    stroke-dashoffset: 900;
   }
 }
