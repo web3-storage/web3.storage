@@ -43,7 +43,7 @@ router.get('/car/:cid',             mode['👀'](auth['🤲'](carGet)))
 router.head('/car/:cid',            mode['👀'](auth['🤲'](carHead)))
 
 router.post('/car',                 mode['📝'](auth['🔒'](auth['🚫'](carPost))))
-router.put('/car/:cid',             mode['📝'](auth['🔒'](carPut)))
+router.put('/car/:cid',             mode['📝'](auth['🔒'](auth['🚫'](carPut))))
 router.post('/upload',              mode['📝'](auth['🔒'](auth['🚫'](uploadPost))))
 router.get('/user/uploads',         mode['👀'](auth['🔒'](userUploadsGet)))
 
