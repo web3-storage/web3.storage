@@ -4,6 +4,11 @@ import retry from 'p-retry'
 import { piggyback } from 'piggybacker'
 import { downgradeCid } from '../lib/cid.js'
 
+/**
+ * @typedef {import('@nftstorage/ipfs-cluster').API.PinInfo} PinInfo
+ * @typedef {Record<string, PinInfo>} PeerMap
+ */
+
 const MAX_PIN_REQUESTS_PER_RUN = 400
 const log = debug('pins:updatePinStatuses')
 
@@ -20,9 +25,10 @@ export async function updatePinStatuses ({ cluster, db }) {
 
   // Cached status responses - since we pin on multiple nodes we'll often ask
   // multiple times about the same CID.
-  /** @type {Map<string, import('@nftstorage/ipfs-cluster').StatusResponse['peerMap']>} */
+  /** @type {Map<string, PeerMap>} */
   const statusCache = new Map()
 
+  /** @type {(cid: string) => Promise<PeerMap>} */
   const getPinStatus = piggyback(
     async cid => {
       let peerMap = statusCache.get(cid)
@@ -51,6 +57,7 @@ export async function updatePinStatuses ({ cluster, db }) {
     const reSyncPins = []
     let pinUpdates = await Promise.all(requests.map(async req => {
       const { pin } = req
+      /** @type {PeerMap} */
       let peerMap
 
       // Get status of pin or check later
@@ -61,10 +68,13 @@ export async function updatePinStatuses ({ cluster, db }) {
         return null // Cluster could not find the content, please check later
       }
 
-      // Is this pin tracked by our cluster?
-      if (!peerMap[pin.location.peerId]) return null
+      let pinInfo = Object.values(peerMap).find(i => pin.location.peerId === i.ipfsPeerId)
+      if (!pinInfo) {
+        log(`⚠️ ${pin.contentCid} is not tracked by our cluster!`)
+        return null
+      }
 
-      let status = toPinStatusEnum(peerMap[pin.location.peerId].status)
+      let status = toPinStatusEnum(pinInfo.status)
 
       // If "Unpinned" downgrade to v0 CID
       if (status === 'Unpinned') {
@@ -84,9 +94,13 @@ export async function updatePinStatuses ({ cluster, db }) {
           return null
         }
 
-        if (!peerMap[pin.location.peerId]) return null
+        pinInfo = Object.values(peerMap).find(i => pin.location.peerId === i.ipfsPeerId)
+        if (!pinInfo) {
+          log(`⚠️ ${cidV0} is not tracked by our cluster!`)
+          return null
+        }
 
-        status = toPinStatusEnum(peerMap[pin.location.peerId].status)
+        status = toPinStatusEnum(pinInfo.status)
       }
 
       if (status !== 'Pinned' && status !== 'Remote') reSyncPins.push(pin)

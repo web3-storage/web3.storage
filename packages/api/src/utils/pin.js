@@ -1,5 +1,5 @@
 /**
- * @typedef {import('@nftstorage/ipfs-cluster').TrackerStatus} TrackerStatus
+ * @typedef {import('@nftstorage/ipfs-cluster').API.TrackerStatus} TrackerStatus
  * @typedef {'Undefined'
  *  | 'ClusterError'
  *  | 'PinError'
