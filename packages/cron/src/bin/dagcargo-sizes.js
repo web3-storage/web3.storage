@@ -7,14 +7,15 @@ import { getPg } from '../lib/utils.js'
 const oneMonthAgo = () => new Date().setMonth(new Date().getMonth() - 1)
 
 async function main () {
-  const pg = getPg(process.env)
-  await pg.connect()
+  const rwPg = getPg(process.env, 'rw')
+  const roPg = getPg(process.env, 'ro')
 
   try {
     const after = new Date(process.env.AFTER || oneMonthAgo())
-    await updateDagSizes({ pg, after })
+    await updateDagSizes({ rwPg, roPg, after })
   } finally {
-    await pg.end()
+    await rwPg.end()
+    await roPg.end()
   }
 }
 
