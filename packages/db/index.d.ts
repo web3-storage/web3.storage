@@ -66,4 +66,6 @@ export class DBClient {
   createContent (content: ContentInput, opt?: {updatePinRequests?: boolean}) : Promise<string>
   deleteKey (id: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
+  isPinningAuthorized (userId: number): Promise<boolean>
+  isAccountRestricted (userId: number): Promise<boolean>
 }

@@ -158,7 +158,7 @@ export class DBClient {
       throw new DBError(error)
     }
 
-    return count > 0
+    return count === 1
   }
 
   /**
@@ -180,7 +180,7 @@ export class DBClient {
       throw new DBError(error)
     }
 
-    return count > 0
+    return count === 1
   }
 
   /**
