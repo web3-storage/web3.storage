@@ -59,16 +59,33 @@ export function getDBClient (env) {
 /**
  * Create a new Postgres client instance from the passed environment variables.
  * @param {Record<string, string|undefined>} env
+ * @param {'ro'|'rw'} [mode]
  */
-export function getPg (env) {
+export function getPg (env, mode) {
+  return new pg.Client({ connectionString: getPgConnString(env, mode) })
+}
+
+/**
+ * Get a postgres connection string from the passed environment variables.
+ * @param {Record<string, string|undefined>} env
+ * @param {'ro'|'rw'} [mode]
+ */
+function getPgConnString (env, mode = 'rw') {
   let connectionString
   if (env.ENV === 'production') {
-    connectionString = env.PROD_PG_CONNECTION
+    connectionString =
+      mode === 'rw'
+        ? env.PROD_PG_CONNECTION
+        : env.PROD_RO_PG_CONNECTION
   } else if (env.ENV === 'staging') {
-    connectionString = env.STAGING_PG_CONNECTION
+    connectionString =
+      mode === 'rw'
+        ? env.STAGING_PG_CONNECTION
+        : env.STAGING_RO_PG_CONNECTION
   } else {
-    connectionString = env.PG_CONNECTION
+    connectionString =
+      mode === 'rw' ? env.PG_CONNECTION : env.RO_PG_CONNECTION
   }
   if (!connectionString) throw new Error('missing Postgres connection string')
-  return new pg.Client({ connectionString })
+  return connectionString
 }

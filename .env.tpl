@@ -22,6 +22,7 @@ PG_REST_JWT="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0
 PG_REST_URL=http://127.0.0.1:3000
 # FOR TESTS ONLY: DB connection string for locally running postgres
 PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
+RO_PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 
 # IPFS Gateaway URL pointing to dockerised ipfs instance
 GATEWAY_URL=http://localhost:8080
