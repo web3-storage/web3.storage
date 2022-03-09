@@ -98,12 +98,19 @@ export function toPins (peerMap) {
   // Note: `clusterPeerId` is an internal id, and is only used for cluster admin.
   // The `ipfsPeerId` which we rename to `peerId` can be  used to connect to the underlying ipfs node
   // that stores a given pin, by passing it to `ipfs swarm connect <peerid>`.
-  return Object.entries(peerMap).map(([clusterPeerId, { peerName, status, ipfsPeerId: peerId }]) => {
+  const toPins = Object.entries(peerMap).map(([clusterPeerId, { peerName, status, ipfsPeerId: peerId }]) => {
     return {
       status: toPinStatusEnum(status),
       location: { peerId, peerName }
     }
   })
+
+  const filteredToPins = toPins.filter(pin => pin.location?.peerId)
+  if (toPins.length !== filteredToPins.length) {
+    console.log('Dropping pins that do not have "peerId" on it', toPins.filter(pin => !!pin.location?.peerId))
+  }
+
+  return filteredToPins
 }
 
 /**
