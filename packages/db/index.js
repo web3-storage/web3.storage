@@ -4,16 +4,6 @@ import {
   normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest
 } from './utils.js'
 import { DBError } from './errors.js'
-import {
-  getUserMetrics,
-  getUploadMetrics,
-  getPinMetrics,
-  getPinStatusMetrics,
-  getContentMetrics,
-  getPinBytesMetrics,
-  getPinRequestsMetrics,
-  getUploadTypeMetrics
-} from './metrics.js'
 
 const uploadQuery = `
         _id:id::text,
@@ -807,41 +797,18 @@ export class DBClient {
    * @param {string} key
    */
   async getMetricsValue (key) {
-    let res
-    switch (key) {
-      case 'users_total':
-        res = await getUserMetrics(this._client)
-        return res.total
-      case 'uploads_total':
-        res = await getUploadMetrics(this._client)
-        return res.total
-      case 'Car':
-      case 'Blob':
-      case 'Multipart':
-      case 'Upload':
-        res = await getUploadTypeMetrics(this._client, key)
-        return res.total
-      case 'content_bytes_total':
-        res = await getContentMetrics(this._client)
-        return res.totalBytes
-      case 'pins_total':
-        res = await getPinMetrics(this._client)
-        return res.total
-      case 'pins_bytes_total':
-        res = await getPinBytesMetrics(this._client)
-        return res.totalBytes
-      case 'PinQueued':
-      case 'Pinning':
-      case 'Pinned':
-      case 'PinError':
-        res = await getPinStatusMetrics(this._client, key)
-        return res.total
-      case 'pin_requests_total':
-        res = await getPinRequestsMetrics(this._client)
-        return res.total
-      default:
-        throw new Error(`unknown metric requested: ${key}`)
+    const query = this._client.from('metric')
+    const { data, error } = await query.select('value').eq('name', key)
+
+    if (error) {
+      throw new DBError(error)
     }
+
+    if (!data || !data.length) {
+      return undefined
+    }
+
+    return data[0].value
   }
 
   /**

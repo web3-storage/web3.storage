@@ -3,6 +3,8 @@ import { Cluster } from '@nftstorage/ipfs-cluster'
 import { DBClient } from '@web3-storage/db'
 import { IPFS } from './ipfs.js'
 
+export const MAX_CONCURRENT_QUERIES = 10
+
 /**
  * Create a new IPFS Cluster instance from the passed environment variables.
  * @param {Record<string, string|undefined>} env
@@ -59,16 +61,45 @@ export function getDBClient (env) {
 /**
  * Create a new Postgres client instance from the passed environment variables.
  * @param {Record<string, string|undefined>} env
+ * @param {'ro'|'rw'} [mode]
  */
-export function getPg (env) {
+export function getPg (env, mode) {
+  return new pg.Client({ connectionString: getPgConnString(env, mode) })
+}
+
+/**
+ * Create a new Postgres pool instance from the passed environment variables.
+ * @param {Record<string, string|undefined>} env
+ * @param {'ro'|'rw'} [mode]
+ */
+export function getPgPool (env, mode = 'rw') {
+  return new pg.Pool({
+    connectionString: getPgConnString(env, mode),
+    max: MAX_CONCURRENT_QUERIES
+  })
+}
+
+/**
+ * Get a postgres connection string from the passed environment variables.
+ * @param {Record<string, string|undefined>} env
+ * @param {'ro'|'rw'} [mode]
+ */
+function getPgConnString (env, mode = 'rw') {
   let connectionString
   if (env.ENV === 'production') {
-    connectionString = env.PROD_PG_CONNECTION
+    connectionString =
+      mode === 'rw'
+        ? env.PROD_PG_CONNECTION
+        : env.PROD_RO_PG_CONNECTION
   } else if (env.ENV === 'staging') {
-    connectionString = env.STAGING_PG_CONNECTION
+    connectionString =
+      mode === 'rw'
+        ? env.STAGING_PG_CONNECTION
+        : env.STAGING_RO_PG_CONNECTION
   } else {
-    connectionString = env.PG_CONNECTION
+    connectionString =
+      mode === 'rw' ? env.PG_CONNECTION : env.RO_PG_CONNECTION
   }
   if (!connectionString) throw new Error('missing Postgres connection string')
-  return new pg.Client({ connectionString })
+  return connectionString
 }

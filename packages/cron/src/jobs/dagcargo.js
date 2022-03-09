@@ -34,9 +34,12 @@ UPDATE public.content
 /**
  * Sets dag_size for content that does not yet have a size.
  *
- * @param {{ pg: import('pg').Client, after: Date }} config
+ * @param {Object} config
+ * @param {import('pg').Client} config.rwPg
+ * @param {import('pg').Client} config.roPg
+ * @param {Date} config.after
  */
-export async function updateDagSizes ({ pg, after }) {
+export async function updateDagSizes ({ rwPg, roPg, after }) {
   const log = debug('dagcargo:updateDagSizes')
   if (!log.enabled) {
     console.log('ℹ️ Enable logging by setting DEBUG=dagcargo:updateDagSizes')
@@ -44,7 +47,7 @@ export async function updateDagSizes ({ pg, after }) {
 
   log(`🎯 Updating DAG sizes for content inserted after ${after.toISOString()}`)
 
-  const countRes = await pg.query(COUNT_CONTENT_WITHOUT_SIZE, [
+  const countRes = await roPg.query(COUNT_CONTENT_WITHOUT_SIZE, [
     after.toISOString()
   ])
   const total = countRes.rows[0].count
@@ -53,7 +56,7 @@ export async function updateDagSizes ({ pg, after }) {
   let offset = 0
   const limit = 1000
   while (true) {
-    const { rows: contents } = await pg.query(FIND_CONTENT_WITHOUT_SIZE, [
+    const { rows: contents } = await roPg.query(FIND_CONTENT_WITHOUT_SIZE, [
       after.toISOString(),
       offset,
       limit
@@ -61,12 +64,12 @@ export async function updateDagSizes ({ pg, after }) {
     if (!contents.length) break
 
     const cids = contents.map((c) => c.cid)
-    const { rows: sizes } = await pg.query(FIND_DAG_SIZES, [cids])
+    const { rows: sizes } = await roPg.query(FIND_DAG_SIZES, [cids])
 
     /* eslint-disable camelcase */
     for (const { cid_v1, size_actual } of sizes) {
       log(`💪 ${cid_v1} ${size_actual} bytes`)
-      await pg.query(UPDATE_CONTENT_DAG_SIZE, [size_actual, cid_v1])
+      await rwPg.query(UPDATE_CONTENT_DAG_SIZE, [size_actual, cid_v1])
     }
     /* eslint-enable camelcase */
 

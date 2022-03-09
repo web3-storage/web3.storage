@@ -285,6 +285,15 @@ CREATE TABLE IF NOT EXISTS name
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+-- Metric contains the current values of collected metrics.
+CREATE TABLE IF NOT EXISTS metric
+(
+    name TEXT PRIMARY KEY,
+    value BIGINT NOT NULL,
+    inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 CREATE VIEW admin_search as
 select
   u.id::text as user_id,
