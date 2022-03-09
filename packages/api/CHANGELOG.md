@@ -1,5 +1,12 @@
 # Changelog
 
+### [5.4.1](https://github.com/web3-storage/web3.storage/compare/api-v5.4.0...api-v5.4.1) (2022-03-09)
+
+
+### Bug Fixes
+
+* tmp workaround for lack of ipfs peer id on status response ([#1090](https://github.com/web3-storage/web3.storage/issues/1090)) ([b0fce07](https://github.com/web3-storage/web3.storage/commit/b0fce07d6f13c294d15060d6158372343c088213))
+
 ## [5.4.0](https://github.com/web3-storage/web3.storage/compare/api-v5.3.0...api-v5.4.0) (2022-03-09)
 
 
