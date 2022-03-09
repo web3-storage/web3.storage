@@ -1,5 +1,19 @@
 # Changelog
 
+## [5.4.0](https://github.com/web3-storage/web3.storage/compare/api-v5.3.0...api-v5.4.0) (2022-03-09)
+
+
+### Features
+
+* use user tags to check PSA auth ([#1008](https://github.com/web3-storage/web3.storage/issues/1008)) ([6fc29e6](https://github.com/web3-storage/web3.storage/commit/6fc29e6aebde22210d3dbaf0f827876035c77b5e))
+
+
+### Bug Fixes
+
+* metrics computed async ([#1085](https://github.com/web3-storage/web3.storage/issues/1085)) ([99b52e5](https://github.com/web3-storage/web3.storage/commit/99b52e51689923426a857dc8693176dcbbceda7b))
+* pin status syncing ([#1083](https://github.com/web3-storage/web3.storage/issues/1083)) ([b7e0e7c](https://github.com/web3-storage/web3.storage/commit/b7e0e7c12b30f3c1136baa90907350f01d3cde22))
+* verify s3 backup integrity on upload ([#1068](https://github.com/web3-storage/web3.storage/issues/1068)) ([c18b6e7](https://github.com/web3-storage/web3.storage/commit/c18b6e713711cfe8a38a0120dbfda12158959295)), closes [#1036](https://github.com/web3-storage/web3.storage/issues/1036)
+
 ## [5.3.0](https://github.com/web3-storage/web3.storage/compare/api-v5.2.0...api-v5.3.0) (2022-02-24)
 
 
