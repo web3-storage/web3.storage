@@ -55,7 +55,7 @@ router.delete('/pins/:requestId',   mode['📝'](auth['🔒'](auth['📌'](pinDe
 
 router.get('/name/:key',            mode['👀'](auth['🤲'](nameGet)))
 router.get('/name/:key/watch',      mode['👀'](auth['🤲'](nameWatchGet)))
-router.post('/name/:key',           mode['📝'](auth['🔒'](namePost)))
+router.post('/name/:key',           mode['📝'](auth['🔒'](auth['🚫'](namePost))))
 
 router.delete('/user/uploads/:cid',      mode['📝'](auth['👮'](userUploadsDelete)))
 router.post('/user/uploads/:cid/rename', mode['📝'](auth['👮'](userUploadsRename)))
