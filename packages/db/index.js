@@ -452,16 +452,19 @@ export class DBClient {
    * @param {Array<import('./db-client-types').PinsUpsertInput>} pins
    */
   async upsertPins (pins) {
-    const now = new Date().toISOString()
-    const { error } = await this._client
-      .from('pin')
-      .upsert(pins.map(pin => ({
-        id: pin.id,
-        status: pin.status,
-        content_cid: pin.cid,
-        pin_location_id: pin.locationId,
-        updated_at: now
-      })), { count: 'exact', returning: 'minimal' })
+    const { data, error } = await this._client.rpc('upsert_pins', {
+      data: {
+        pins: pins.map((pin) => ({
+          status: pin.status,
+          cid: pin.cid,
+          location: {
+            peer_id: pin.location.peerId,
+            peer_name: pin.location.peerName,
+            region: pin.location.region
+          }
+        }))
+      }
+    })
 
     if (error) {
       throw new DBError(error)

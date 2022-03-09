@@ -149,7 +149,7 @@ export async function waitAndUpdateOkPins (cid, cluster, db, waitTime = MAX_PIN_
       id: pin._id,
       status: pin.status,
       cid,
-      locationId: pin.location._id
+      location: pin.location
     }
   })
   await db.upsertPins(pins)

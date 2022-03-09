@@ -214,6 +214,44 @@ BEGIN
 END
 $$;
 
+CREATE OR REPLACE FUNCTION upsert_pins(data json) RETURNS VOID
+    LANGUAGE plpgsql
+    volatile
+    PARALLEL UNSAFE
+AS
+$$
+DECLARE
+  pin_data json;
+  pin_location_result_id BIGINT;
+  pin_result_id BIGINT;
+BEGIN
+  FOREACH pin_data IN array json_arr_to_json_element_array(data -> 'pins')
+  LOOP
+    -- Add to pin_location table if new
+    INSERT INTO pin_location (peer_id, peer_name, region)
+    VALUES (pin_data -> 'location' ->> 'peer_id',
+            pin_data -> 'location' ->> 'peer_name',
+            pin_data -> 'location' ->> 'region')
+    -- Force update on conflict to get result, otherwise needs a follow up select
+    ON CONFLICT ( peer_id ) DO UPDATE
+      SET "peer_name" = pin_data -> 'location' ->> 'peer_name',
+          "region" = pin_data -> 'location' ->> 'region'
+    RETURNING id INTO pin_location_result_id;
+
+    INSERT INTO pin (content_cid, status, pin_location_id, updated_at)
+    VALUES  (pin_data ->> 'cid',
+            (pin_data ->> 'status')::pin_status_type,
+            pin_location_result_id,
+            (NOW())::timestamptz)
+    -- Force update on conflict to get result, otherwise needs a follow up select
+    ON CONFLICT ( content_cid, pin_location_id ) DO UPDATE
+      SET "status" = (pin_data ->> 'status')::pin_status_type,
+          "updated_at" = NOW()
+    RETURNING id INTO pin_result_id;
+  END LOOP;
+END
+$$;
+
 CREATE OR REPLACE FUNCTION upsert_pin(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile
