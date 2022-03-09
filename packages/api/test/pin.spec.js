@@ -79,8 +79,6 @@ const createPinRequest = async (cid, token) => {
 }
 
 describe('Pinning APIs endpoints', () => {
-  const supportEmailCheck = /support@web3.storage/
-
   describe('GET /pins', () => {
     let baseUrl
     let token
