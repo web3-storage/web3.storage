@@ -32,7 +32,7 @@ export async function metricsGet (request, env, ctx) {
     Promise.all(
       UPLOAD_TYPES.map(async (t) => ({
         type: t,
-        total: await env.db.getMetricsValue(t)
+        total: await env.db.getMetricsValue(`uploads_${t.toLowerCase()}_total`)
       }))
     ),
     env.db.getMetricsValue('content_bytes_total'),
@@ -40,7 +40,7 @@ export async function metricsGet (request, env, ctx) {
     Promise.all(
       PIN_STATUSES.map(async (s) => ({
         status: s,
-        total: await env.db.getMetricsValue(s)
+        total: await env.db.getMetricsValue(`pins_${s.toLowerCase()}_total`)
       }))
     ),
     env.db.getMetricsValue('pin_requests_total')
