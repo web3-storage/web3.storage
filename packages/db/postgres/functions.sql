@@ -5,8 +5,6 @@ DROP FUNCTION IF EXISTS create_upload;
 DROP FUNCTION IF EXISTS upsert_pin;
 DROP FUNCTION IF EXISTS user_used_storage;
 DROP FUNCTION IF EXISTS user_auth_keys_list;
-DROP FUNCTION IF EXISTS content_dag_size_total;
-DROP FUNCTION IF EXISTS pin_dag_size_total;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
 DROP FUNCTION IF EXISTS publish_name_record;
 
@@ -40,7 +38,6 @@ BEGIN
   return (inserted_key_id)::TEXT;
 END
 $$;
-
 
 -- Creates a content table, with relative pins and pin_requests
 CREATE OR REPLACE FUNCTION create_content(data json) RETURNS TEXT
@@ -284,45 +281,6 @@ SELECT (ak.id)::TEXT AS id,
        EXISTS(SELECT 42 FROM upload u WHERE u.auth_key_id = ak.id) AS has_uploads
   FROM auth_key ak
  WHERE ak.user_id = query_user_id AND ak.deleted_at IS NULL
-$$;
-
-CREATE OR REPLACE FUNCTION pin_from_status_total(query_status TEXT) RETURNS TEXT
-  LANGUAGE plpgsql
-AS
-$$
-BEGIN
-  return(
-    select count(*)
-    from pin
-    where status = (query_status)::pin_status_type
-  )::TEXT;
-END
-$$;
-
-CREATE OR REPLACE FUNCTION content_dag_size_total() RETURNS TEXT
-  LANGUAGE plpgsql
-AS
-$$
-BEGIN
-  return(
-    select sum(c.dag_size)
-    from content c
-  )::TEXT;
-END
-$$;
-
-CREATE OR REPLACE FUNCTION pin_dag_size_total() RETURNS TEXT
-  LANGUAGE plpgsql
-AS
-$$
-BEGIN
-  return(
-    select sum(c.dag_size)
-    from pin p
-    join content c on c.cid = p.content_cid
-    where p.status = ('Pinned')::pin_status_type
-  )::TEXT;
-END
 $$;
 
 CREATE OR REPLACE FUNCTION find_deals_by_content_cids(cids text[])

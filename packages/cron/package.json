@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "start": "run-s start:*",
-    "start:metrics": "node src/bin/metrics.js",
+    "start:metrics": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/metrics.js",
     "start:pins": "node src/bin/pins.js",
     "start:dagcargo:sizes": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/dagcargo-sizes.js",
     "test": "npm-run-all -p -r mock:cluster mock:pgrest test:e2e",
@@ -27,6 +27,7 @@
     "multiformats": "^9.6.2",
     "node-fetch": "^2.6.1",
     "p-retry": "^4.6.1",
+    "p-settle": "^5.0.0",
     "pg": "^8.7.1",
     "piggybacker": "^2.0.0"
   },
