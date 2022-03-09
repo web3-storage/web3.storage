@@ -469,6 +469,8 @@ export class DBClient {
     if (error) {
       throw new DBError(error)
     }
+
+    return data
   }
 
   /**
