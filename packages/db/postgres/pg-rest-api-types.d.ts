@@ -451,6 +451,102 @@ export interface paths {
       };
     };
   };
+  "/metric": {
+    get: {
+      parameters: {
+        query: {
+          name?: parameters["rowFilter.metric.name"];
+          value?: parameters["rowFilter.metric.value"];
+          inserted_at?: parameters["rowFilter.metric.inserted_at"];
+          updated_at?: parameters["rowFilter.metric.updated_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["metric"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** metric */
+          metric?: definitions["metric"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          name?: parameters["rowFilter.metric.name"];
+          value?: parameters["rowFilter.metric.value"];
+          inserted_at?: parameters["rowFilter.metric.inserted_at"];
+          updated_at?: parameters["rowFilter.metric.updated_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          name?: parameters["rowFilter.metric.name"];
+          value?: parameters["rowFilter.metric.value"];
+          inserted_at?: parameters["rowFilter.metric.inserted_at"];
+          updated_at?: parameters["rowFilter.metric.updated_at"];
+        };
+        body: {
+          /** metric */
+          metric?: definitions["metric"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/name": {
     get: {
       parameters: {
@@ -665,6 +761,7 @@ export interface paths {
           id?: parameters["rowFilter.pin_location.id"];
           peer_id?: parameters["rowFilter.pin_location.peer_id"];
           peer_name?: parameters["rowFilter.pin_location.peer_name"];
+          ipfs_peer_id?: parameters["rowFilter.pin_location.ipfs_peer_id"];
           region?: parameters["rowFilter.pin_location.region"];
           /** Filtering Columns */
           select?: parameters["select"];
@@ -719,6 +816,7 @@ export interface paths {
           id?: parameters["rowFilter.pin_location.id"];
           peer_id?: parameters["rowFilter.pin_location.peer_id"];
           peer_name?: parameters["rowFilter.pin_location.peer_name"];
+          ipfs_peer_id?: parameters["rowFilter.pin_location.ipfs_peer_id"];
           region?: parameters["rowFilter.pin_location.region"];
         };
         header: {
@@ -737,6 +835,7 @@ export interface paths {
           id?: parameters["rowFilter.pin_location.id"];
           peer_id?: parameters["rowFilter.pin_location.peer_id"];
           peer_name?: parameters["rowFilter.pin_location.peer_name"];
+          ipfs_peer_id?: parameters["rowFilter.pin_location.ipfs_peer_id"];
           region?: parameters["rowFilter.pin_location.region"];
         };
         body: {
@@ -1390,11 +1489,14 @@ export interface paths {
       };
     };
   };
-  "/rpc/pin_dag_size_total": {
+  "/rpc/user_auth_keys_list": {
     post: {
       parameters: {
         body: {
-          args: { [key: string]: unknown };
+          args: {
+            /** Format: bigint */
+            query_user_id: number;
+          };
         };
         header: {
           /** Preference */
@@ -1407,11 +1509,14 @@ export interface paths {
       };
     };
   };
-  "/rpc/uuid_ns_url": {
+  "/rpc/create_psa_pin_request": {
     post: {
       parameters: {
         body: {
-          args: { [key: string]: unknown };
+          args: {
+            /** Format: json */
+            data: string;
+          };
         };
         header: {
           /** Preference */
@@ -1424,11 +1529,14 @@ export interface paths {
       };
     };
   };
-  "/rpc/pgrst_watch": {
+  "/rpc/user_used_storage": {
     post: {
       parameters: {
         body: {
-          args: { [key: string]: unknown };
+          args: {
+            /** Format: bigint */
+            query_user_id: number;
+          };
         };
         header: {
           /** Preference */
@@ -1441,7 +1549,67 @@ export interface paths {
       };
     };
   };
-  "/rpc/uuid_nil": {
+  "/rpc/json_arr_to_json_element_array": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            _json: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/create_key": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/json_arr_to_text_arr": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            _json: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v1mc": {
     post: {
       parameters: {
         body: {
@@ -1475,11 +1643,148 @@ export interface paths {
       };
     };
   };
+  "/rpc/uuid_generate_v4": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/create_upload": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/upsert_pin": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/find_deals_by_content_cids": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: text[] */
+            cids: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/publish_name_record": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_ns_url": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v5": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: text */
+            name: string;
+            /** Format: uuid */
+            namespace: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/create_content": {
     post: {
       parameters: {
         body: {
           args: {
+            /** Format: json */
             data: string;
           };
         };
@@ -1511,90 +1816,11 @@ export interface paths {
       };
     };
   };
-  "/rpc/user_auth_keys_list": {
+  "/rpc/pgrst_watch": {
     post: {
       parameters: {
         body: {
-          args: {
-            query_user_id: number;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/pin_from_status_total": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            query_status: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/find_deals_by_content_cids": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            cids: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_generate_v5": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            namespace: string;
-            name: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/upsert_pin": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            data: string;
-          };
+          args: { [key: string]: unknown };
         };
         header: {
           /** Preference */
@@ -1624,101 +1850,7 @@ export interface paths {
       };
     };
   };
-  "/rpc/json_arr_to_text_arr": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            _json: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/publish_name_record": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            data: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_generate_v3": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            namespace: string;
-            name: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/content_dag_size_total": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/create_key": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            data: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_generate_v4": {
+  "/rpc/uuid_nil": {
     post: {
       parameters: {
         body: {
@@ -1752,86 +1884,15 @@ export interface paths {
       };
     };
   };
-  "/rpc/json_arr_to_json_element_array": {
+  "/rpc/uuid_generate_v3": {
     post: {
       parameters: {
         body: {
           args: {
-            _json: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/create_psa_pin_request": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            data: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/user_used_storage": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            query_user_id: number;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_generate_v1mc": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/create_upload": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            data: string;
+            /** Format: text */
+            name: string;
+            /** Format: uuid */
+            namespace: string;
           };
         };
         header: {
@@ -1849,91 +1910,173 @@ export interface paths {
 
 export interface definitions {
   admin_search: {
+    /** Format: text */
     user_id?: string;
+    /** Format: text */
     email?: string;
+    /** Format: text */
     token?: string;
+    /** Format: text */
     token_id?: string;
+    /** Format: timestamp with time zone */
     deleted_at?: string;
+    /** Format: timestamp with time zone */
     reason_inserted_at?: string;
+    /** Format: text */
     reason?: string;
+    /** Format: public.auth_key_blocked_status_type */
     status?: "Blocked" | "Unblocked";
   };
   auth_key: {
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: number;
+    /** Format: text */
     name: string;
+    /** Format: text */
     secret: string;
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
      */
     user_id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     inserted_at: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     updated_at: string;
+    /** Format: timestamp with time zone */
     deleted_at?: string;
   };
   auth_key_history: {
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: number;
+    /** Format: public.auth_key_blocked_status_type */
     status: "Blocked" | "Unblocked";
+    /** Format: text */
     reason: string;
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Foreign Key to `auth_key.id`.<fk table='auth_key' column='id'/>
      */
     auth_key_id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     inserted_at: string;
+    /** Format: timestamp with time zone */
     deleted_at?: string;
   };
   backup: {
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: number;
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Foreign Key to `upload.id`.<fk table='upload' column='id'/>
      */
     upload_id: number;
+    /** Format: text */
     url: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     inserted_at: string;
   };
   content: {
     /**
-     * Note:
+     * Format: text
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     cid: string;
+    /** Format: bigint */
     dag_size?: number;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     inserted_at: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
+    updated_at: string;
+  };
+  metric: {
+    /**
+     * Format: text
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    name: string;
+    /** Format: bigint */
+    value: number;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
+    inserted_at: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     updated_at: string;
   };
   name: {
     /**
-     * Note:
+     * Format: text
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     key: string;
+    /** Format: text */
     record: string;
+    /** Format: boolean */
     has_v2_sig: boolean;
+    /** Format: bigint */
     seqno: number;
+    /** Format: bigint */
     validity: number;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     inserted_at: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     updated_at: string;
   };
   pin: {
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: number;
+    /** Format: public.pin_status_type */
     status:
       | "Undefined"
       | "ClusterError"
@@ -1948,280 +2091,476 @@ export interface definitions {
       | "UnpinQueued"
       | "Sharded";
     /**
-     * Note:
+     * Format: text
+     * @description Note:
      * This is a Foreign Key to `content.cid`.<fk table='content' column='cid'/>
      */
     content_cid: string;
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Foreign Key to `pin_location.id`.<fk table='pin_location' column='id'/>
      */
     pin_location_id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     inserted_at: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     updated_at: string;
   };
   pin_location: {
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: number;
+    /** Format: text */
     peer_id: string;
+    /** Format: text */
     peer_name?: string;
+    /** Format: text */
+    ipfs_peer_id?: string;
+    /** Format: text */
     region?: string;
   };
   pin_request: {
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: number;
     /**
-     * Note:
+     * Format: text
+     * @description Note:
      * This is a Foreign Key to `content.cid`.<fk table='content' column='cid'/>
      */
     content_cid: string;
+    /** Format: integer */
     attempts?: number;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     inserted_at: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     updated_at: string;
   };
   pin_sync_request: {
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: number;
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Foreign Key to `pin.id`.<fk table='pin' column='id'/>
      */
     pin_id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     inserted_at: string;
   };
   psa_pin_request: {
     /**
-     * Note:
+     * Format: text
+     * @description Note:
      * This is a Primary Key.<pk/>
+     * @default public.uuid_generate_v4()
      */
     id: string;
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Foreign Key to `auth_key.id`.<fk table='auth_key' column='id'/>
      */
     auth_key_id: number;
     /**
-     * Note:
+     * Format: text
+     * @description Note:
      * This is a Foreign Key to `content.cid`.<fk table='content' column='cid'/>
      */
     content_cid: string;
+    /** Format: text */
     source_cid: string;
+    /** Format: text */
     name?: string;
+    /** Format: jsonb */
     origins?: string;
+    /** Format: jsonb */
     meta?: string;
+    /** Format: timestamp with time zone */
     deleted_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     inserted_at: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     updated_at: string;
   };
   upload: {
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: number;
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
      */
     user_id: number;
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Foreign Key to `auth_key.id`.<fk table='auth_key' column='id'/>
      */
     auth_key_id?: number;
     /**
-     * Note:
+     * Format: text
+     * @description Note:
      * This is a Foreign Key to `content.cid`.<fk table='content' column='cid'/>
      */
     content_cid: string;
+    /** Format: text */
     source_cid: string;
+    /** Format: public.upload_type */
     type: "Car" | "Upload" | "Blob" | "Multipart";
+    /** Format: text */
     name?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     inserted_at: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     updated_at: string;
+    /** Format: timestamp with time zone */
     deleted_at?: string;
   };
   user: {
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: number;
+    /** Format: text */
     name: string;
+    /** Format: text */
     picture?: string;
+    /** Format: text */
     email: string;
+    /** Format: text */
     issuer: string;
+    /** Format: text */
     github?: string;
+    /** Format: text */
     public_address: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     inserted_at: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     updated_at: string;
   };
   user_tag: {
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: number;
     /**
-     * Note:
+     * Format: bigint
+     * @description Note:
      * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
      */
     user_id: number;
+    /** Format: public.user_tag_type */
     tag: "HasAccountRestriction" | "HasPsaAccess" | "StorageLimitBytes";
+    /** Format: text */
     value: string;
+    /** Format: text */
     reason: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
     inserted_at: string;
+    /** Format: timestamp with time zone */
     deleted_at?: string;
   };
 }
 
 export interface parameters {
-  /** Preference */
+  /** @description Preference */
   preferParams: "params=single-object";
-  /** Preference */
+  /** @description Preference */
   preferReturn: "return=representation" | "return=minimal" | "return=none";
-  /** Preference */
+  /** @description Preference */
   preferCount: "count=none";
-  /** Filtering Columns */
+  /** @description Filtering Columns */
   select: string;
-  /** On Conflict */
+  /** @description On Conflict */
   on_conflict: string;
-  /** Ordering */
+  /** @description Ordering */
   order: string;
-  /** Limiting and Pagination */
+  /** @description Limiting and Pagination */
   range: string;
-  /** Limiting and Pagination */
+  /**
+   * @description Limiting and Pagination
+   * @default items
+   */
   rangeUnit: string;
-  /** Limiting and Pagination */
+  /** @description Limiting and Pagination */
   offset: string;
-  /** Limiting and Pagination */
+  /** @description Limiting and Pagination */
   limit: string;
-  /** admin_search */
+  /** @description admin_search */
   "body.admin_search": definitions["admin_search"];
+  /** Format: text */
   "rowFilter.admin_search.user_id": string;
+  /** Format: text */
   "rowFilter.admin_search.email": string;
+  /** Format: text */
   "rowFilter.admin_search.token": string;
+  /** Format: text */
   "rowFilter.admin_search.token_id": string;
+  /** Format: timestamp with time zone */
   "rowFilter.admin_search.deleted_at": string;
+  /** Format: timestamp with time zone */
   "rowFilter.admin_search.reason_inserted_at": string;
+  /** Format: text */
   "rowFilter.admin_search.reason": string;
+  /** Format: public.auth_key_blocked_status_type */
   "rowFilter.admin_search.status": string;
-  /** auth_key */
+  /** @description auth_key */
   "body.auth_key": definitions["auth_key"];
+  /** Format: bigint */
   "rowFilter.auth_key.id": string;
+  /** Format: text */
   "rowFilter.auth_key.name": string;
+  /** Format: text */
   "rowFilter.auth_key.secret": string;
+  /** Format: bigint */
   "rowFilter.auth_key.user_id": string;
+  /** Format: timestamp with time zone */
   "rowFilter.auth_key.inserted_at": string;
+  /** Format: timestamp with time zone */
   "rowFilter.auth_key.updated_at": string;
+  /** Format: timestamp with time zone */
   "rowFilter.auth_key.deleted_at": string;
-  /** auth_key_history */
+  /** @description auth_key_history */
   "body.auth_key_history": definitions["auth_key_history"];
+  /** Format: bigint */
   "rowFilter.auth_key_history.id": string;
+  /** Format: public.auth_key_blocked_status_type */
   "rowFilter.auth_key_history.status": string;
+  /** Format: text */
   "rowFilter.auth_key_history.reason": string;
+  /** Format: bigint */
   "rowFilter.auth_key_history.auth_key_id": string;
+  /** Format: timestamp with time zone */
   "rowFilter.auth_key_history.inserted_at": string;
+  /** Format: timestamp with time zone */
   "rowFilter.auth_key_history.deleted_at": string;
-  /** backup */
+  /** @description backup */
   "body.backup": definitions["backup"];
+  /** Format: bigint */
   "rowFilter.backup.id": string;
+  /** Format: bigint */
   "rowFilter.backup.upload_id": string;
+  /** Format: text */
   "rowFilter.backup.url": string;
+  /** Format: timestamp with time zone */
   "rowFilter.backup.inserted_at": string;
-  /** content */
+  /** @description content */
   "body.content": definitions["content"];
+  /** Format: text */
   "rowFilter.content.cid": string;
+  /** Format: bigint */
   "rowFilter.content.dag_size": string;
+  /** Format: timestamp with time zone */
   "rowFilter.content.inserted_at": string;
+  /** Format: timestamp with time zone */
   "rowFilter.content.updated_at": string;
-  /** name */
+  /** @description metric */
+  "body.metric": definitions["metric"];
+  /** Format: text */
+  "rowFilter.metric.name": string;
+  /** Format: bigint */
+  "rowFilter.metric.value": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.metric.inserted_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.metric.updated_at": string;
+  /** @description name */
   "body.name": definitions["name"];
+  /** Format: text */
   "rowFilter.name.key": string;
+  /** Format: text */
   "rowFilter.name.record": string;
+  /** Format: boolean */
   "rowFilter.name.has_v2_sig": string;
+  /** Format: bigint */
   "rowFilter.name.seqno": string;
+  /** Format: bigint */
   "rowFilter.name.validity": string;
+  /** Format: timestamp with time zone */
   "rowFilter.name.inserted_at": string;
+  /** Format: timestamp with time zone */
   "rowFilter.name.updated_at": string;
-  /** pin */
+  /** @description pin */
   "body.pin": definitions["pin"];
+  /** Format: bigint */
   "rowFilter.pin.id": string;
+  /** Format: public.pin_status_type */
   "rowFilter.pin.status": string;
+  /** Format: text */
   "rowFilter.pin.content_cid": string;
+  /** Format: bigint */
   "rowFilter.pin.pin_location_id": string;
+  /** Format: timestamp with time zone */
   "rowFilter.pin.inserted_at": string;
+  /** Format: timestamp with time zone */
   "rowFilter.pin.updated_at": string;
-  /** pin_location */
+  /** @description pin_location */
   "body.pin_location": definitions["pin_location"];
+  /** Format: bigint */
   "rowFilter.pin_location.id": string;
+  /** Format: text */
   "rowFilter.pin_location.peer_id": string;
+  /** Format: text */
   "rowFilter.pin_location.peer_name": string;
+  /** Format: text */
+  "rowFilter.pin_location.ipfs_peer_id": string;
+  /** Format: text */
   "rowFilter.pin_location.region": string;
-  /** pin_request */
+  /** @description pin_request */
   "body.pin_request": definitions["pin_request"];
+  /** Format: bigint */
   "rowFilter.pin_request.id": string;
+  /** Format: text */
   "rowFilter.pin_request.content_cid": string;
+  /** Format: integer */
   "rowFilter.pin_request.attempts": string;
+  /** Format: timestamp with time zone */
   "rowFilter.pin_request.inserted_at": string;
+  /** Format: timestamp with time zone */
   "rowFilter.pin_request.updated_at": string;
-  /** pin_sync_request */
+  /** @description pin_sync_request */
   "body.pin_sync_request": definitions["pin_sync_request"];
+  /** Format: bigint */
   "rowFilter.pin_sync_request.id": string;
+  /** Format: bigint */
   "rowFilter.pin_sync_request.pin_id": string;
+  /** Format: timestamp with time zone */
   "rowFilter.pin_sync_request.inserted_at": string;
-  /** psa_pin_request */
+  /** @description psa_pin_request */
   "body.psa_pin_request": definitions["psa_pin_request"];
+  /** Format: text */
   "rowFilter.psa_pin_request.id": string;
+  /** Format: bigint */
   "rowFilter.psa_pin_request.auth_key_id": string;
+  /** Format: text */
   "rowFilter.psa_pin_request.content_cid": string;
+  /** Format: text */
   "rowFilter.psa_pin_request.source_cid": string;
+  /** Format: text */
   "rowFilter.psa_pin_request.name": string;
+  /** Format: jsonb */
   "rowFilter.psa_pin_request.origins": string;
+  /** Format: jsonb */
   "rowFilter.psa_pin_request.meta": string;
+  /** Format: timestamp with time zone */
   "rowFilter.psa_pin_request.deleted_at": string;
+  /** Format: timestamp with time zone */
   "rowFilter.psa_pin_request.inserted_at": string;
+  /** Format: timestamp with time zone */
   "rowFilter.psa_pin_request.updated_at": string;
-  /** upload */
+  /** @description upload */
   "body.upload": definitions["upload"];
+  /** Format: bigint */
   "rowFilter.upload.id": string;
+  /** Format: bigint */
   "rowFilter.upload.user_id": string;
+  /** Format: bigint */
   "rowFilter.upload.auth_key_id": string;
+  /** Format: text */
   "rowFilter.upload.content_cid": string;
+  /** Format: text */
   "rowFilter.upload.source_cid": string;
+  /** Format: public.upload_type */
   "rowFilter.upload.type": string;
+  /** Format: text */
   "rowFilter.upload.name": string;
+  /** Format: timestamp with time zone */
   "rowFilter.upload.inserted_at": string;
+  /** Format: timestamp with time zone */
   "rowFilter.upload.updated_at": string;
+  /** Format: timestamp with time zone */
   "rowFilter.upload.deleted_at": string;
-  /** user */
+  /** @description user */
   "body.user": definitions["user"];
+  /** Format: bigint */
   "rowFilter.user.id": string;
+  /** Format: text */
   "rowFilter.user.name": string;
+  /** Format: text */
   "rowFilter.user.picture": string;
+  /** Format: text */
   "rowFilter.user.email": string;
+  /** Format: text */
   "rowFilter.user.issuer": string;
+  /** Format: text */
   "rowFilter.user.github": string;
+  /** Format: text */
   "rowFilter.user.public_address": string;
+  /** Format: timestamp with time zone */
   "rowFilter.user.inserted_at": string;
+  /** Format: timestamp with time zone */
   "rowFilter.user.updated_at": string;
-  /** user_tag */
+  /** @description user_tag */
   "body.user_tag": definitions["user_tag"];
+  /** Format: bigint */
   "rowFilter.user_tag.id": string;
+  /** Format: bigint */
   "rowFilter.user_tag.user_id": string;
+  /** Format: public.user_tag_type */
   "rowFilter.user_tag.tag": string;
+  /** Format: text */
   "rowFilter.user_tag.value": string;
+  /** Format: text */
   "rowFilter.user_tag.reason": string;
+  /** Format: timestamp with time zone */
   "rowFilter.user_tag.inserted_at": string;
+  /** Format: timestamp with time zone */
   "rowFilter.user_tag.deleted_at": string;
 }
 
