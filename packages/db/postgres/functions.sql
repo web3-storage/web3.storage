@@ -49,7 +49,6 @@ $$
 DECLARE
   pin json;
   pin_result_id BIGINT;
-  pin_location_result_id BIGINT;
   inserted_cid TEXT;
 BEGIN
   -- Set timeout as imposed by heroku
@@ -78,9 +77,9 @@ BEGIN
         INSERT INTO pin_location (peer_id, peer_name, ipfs_peer_id, region)
           SELECT * FROM (
             SELECT pin -> 'location' ->> 'peer_id' AS peer_id,
-                    pin -> 'location' ->> 'peer_name' AS peer_name,
-                    pin -> 'location' ->> 'ipfs_peer_id' AS ipfs_peer_id,
-                    pin -> 'location' ->> 'region' AS region
+                   pin -> 'location' ->> 'peer_name' AS peer_name,
+                   pin -> 'location' ->> 'ipfs_peer_id' AS ipfs_peer_id,
+                   pin -> 'location' ->> 'region' AS region
           ) AS tmp
           WHERE NOT EXISTS (
             SELECT 42 FROM pin_location WHERE peer_id = pin -> 'location' ->> 'peer_id'
@@ -121,9 +120,6 @@ AS
 $$
 DECLARE
   backup_url TEXT;
-  pin json;
-  pin_result_id BIGINT;
-  pin_location_result_id BIGINT;
   inserted_upload_id BIGINT;
 BEGIN
   -- Set timeout as imposed by heroku
@@ -226,22 +222,25 @@ BEGIN
   -- DATA => content_cid, pin(status, location(peer_id, peer_name, region))
 
   -- Add to pin_location table if new
-  insert into pin_location (peer_id, peer_name, ipfs_peer_id, region)
-  values (data -> 'pin' -> 'location' ->> 'peer_id',
-          data -> 'pin' -> 'location' ->> 'peer_name',
-          data -> 'pin' -> 'location' ->> 'ipfs_peer_id',
-          data -> 'pin' -> 'location' ->> 'region')
-  ON CONFLICT ( peer_id ) DO UPDATE
-          SET "peer_name" = data -> 'pin' -> 'location' ->> 'peer_name',
-              "region" = data -> 'pin' -> 'location' ->> 'region'
-  returning id into pin_location_result_id;
+  INSERT INTO pin_location (peer_id, peer_name, ipfs_peer_id, region)
+    SELECT * FROM (
+      SELECT data -> 'pin' -> 'location' ->> 'peer_id' AS peer_id,
+             data -> 'pin' -> 'location' ->> 'peer_name' AS peer_name,
+             data -> 'pin' -> 'location' ->> 'ipfs_peer_id' AS ipfs_peer_id,
+             data -> 'pin' -> 'location' ->> 'region' AS region
+    ) AS tmp
+    WHERE NOT EXISTS (
+      SELECT 42 FROM pin_location WHERE peer_id = data -> 'pin' -> 'location' ->> 'peer_id'
+    );
 
   -- Add to pin table if new
   insert into pin (content_cid, status, pin_location_id, updated_at)
-  values (data ->> 'content_cid',
-        (data -> 'pin' ->> 'status')::pin_status_type,
-        pin_location_result_id,
-        (NOW())::timestamptz)
+    SELECT data ->> 'content_cid' AS content_cid,
+           (data -> pin ->> 'status')::pin_status_type AS status,
+           id AS pin_location_id,
+           (NOW())::timestamptz AS updated_at
+      FROM pin_location
+     WHERE peer_id = data -> 'pin' -> 'location' ->> 'peer_id'
   ON CONFLICT ( content_cid, pin_location_id ) DO UPDATE
         SET "status" = (data -> 'pin' ->> 'status')::pin_status_type,
             "updated_at" = NOW()
