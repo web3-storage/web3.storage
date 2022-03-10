@@ -22,6 +22,7 @@ describe('status', () => {
     location: {
       peerId: 'peer_id',
       peerName: 'peer_name',
+      ipfsPeerId: 'ipfs_peer_id',
       region: 'region'
     }
   }

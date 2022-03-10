@@ -54,6 +54,7 @@ describe('upload', () => {
     location: {
       peerId: 'peer_id',
       peerName: 'peer_name',
+      ipfsPeerId: 'ipfs_peer_id',
       region: 'region'
     }
   }
@@ -90,7 +91,7 @@ describe('upload', () => {
     assert.strictEqual(upload.dagSize, dagSize, 'upload has correct dag size')
     assert.strictEqual(upload.pins.length, 1, 'upload has one pin')
     assert.strictEqual(upload.pins[0].status, initialPinData.status, 'pin has added status')
-    assert.strictEqual(upload.pins[0].peerId, initialPinData.location.peerId, 'pin has added peerId')
+    assert.strictEqual(upload.pins[0].peerId, initialPinData.location.ipfsPeerId, 'pin has added peerId')
     assert.strictEqual(upload.pins[0].peerName, initialPinData.location.peerName, 'pin has added peer name')
     assert.strictEqual(upload.pins[0].region, initialPinData.location.region, 'pin has added region')
     assert.strictEqual(upload.deals.length, 0, 'upload has no deals')

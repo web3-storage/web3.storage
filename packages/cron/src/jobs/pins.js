@@ -68,7 +68,7 @@ export async function updatePinStatuses ({ cluster, db }) {
         return null // Cluster could not find the content, please check later
       }
 
-      let pinInfo = Object.values(peerMap).find(i => pin.location.peerId === i.ipfsPeerId)
+      let pinInfo = peerMap[pin.location.peerId]
       if (!pinInfo) {
         log(`⚠️ ${pin.contentCid} is not tracked by our cluster!`)
         return null
@@ -94,7 +94,7 @@ export async function updatePinStatuses ({ cluster, db }) {
           return null
         }
 
-        pinInfo = Object.values(peerMap).find(i => pin.location.peerId === i.ipfsPeerId)
+        pinInfo = peerMap[pin.location.peerId]
         if (!pinInfo) {
           log(`⚠️ ${cidV0} is not tracked by our cluster!`)
           return null
