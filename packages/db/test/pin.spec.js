@@ -22,6 +22,7 @@ describe('pin', () => {
     location: {
       peerId: 'peer_id',
       peerName: 'peer_name',
+      ipfsPeerId: 'ipfs_peer_id',
       region: 'region'
     }
   }
@@ -69,7 +70,7 @@ describe('pin', () => {
       sourceCid: cid,
       authKey: authKeys[0]._id,
       type,
-      dagSize: dagSize,
+      dagSize,
       name,
       pins: [initialPinData],
       backupUrls: [initialBackupUrl]
@@ -91,7 +92,7 @@ describe('pin', () => {
     assert(pins[0].created, 'pin has inserted timestamp')
     assert(pins[0].updated, 'pin has inserted timestamp')
     assert.strictEqual(pins[0].status, initialPinData.status, 'pin has correct state')
-    assert.strictEqual(pins[0].peerId, initialPinData.location.peerId, 'pin has correct location peer id')
+    assert.strictEqual(pins[0].peerId, initialPinData.location.ipfsPeerId, 'pin has correct location peer id')
     assert.strictEqual(pins[0].peerName, initialPinData.location.peerName, 'pin has correct location peer name')
     assert.strictEqual(pins[0].region, initialPinData.location.region, 'pin has correct location peer region')
   })

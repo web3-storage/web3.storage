@@ -152,10 +152,12 @@ END$$;
 CREATE TABLE IF NOT EXISTS pin_location
 (
   id              BIGSERIAL PRIMARY KEY,
-  -- Libp2p peer ID of the node pinning this pin.
+  -- Libp2p peer ID of the Cluster node pinning this pin.
   peer_id         TEXT                                                          NOT NULL UNIQUE,
-  -- Name of the peer pinning this pin.
+  -- Name of the Cluster peer pinning this pin.
   peer_name       TEXT,
+  -- Libp2p peer ID of the IPFS node pinning this pin.
+  ipfs_peer_id    TEXT,
   -- Geographic region this node resides in.
   region          TEXT
 );
