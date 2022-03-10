@@ -75,24 +75,25 @@ BEGIN
   -- Iterate over received pins
   foreach pin in array json_arr_to_json_element_array(data -> 'pins')
   loop
-        -- Add to pin_location table if new
-        insert into pin_location (peer_id, peer_name, ipfs_peer_id, region)
-        values (pin -> 'location' ->> 'peer_id',
-                pin -> 'location' ->> 'peer_name',
-                pin -> 'location' ->> 'ipfs_peer_id',
-                pin -> 'location' ->> 'region')
-        -- Force update on conflict to get result, otherwise needs a follow up select
-        ON CONFLICT ( peer_id ) DO UPDATE
-          SET "peer_name" = pin -> 'location' ->> 'peer_name',
-              "region" = pin -> 'location' ->> 'region'
-        returning id into pin_location_result_id;
+        INSERT INTO pin_location (peer_id, peer_name, ipfs_peer_id, region)
+          SELECT * FROM (
+            SELECT pin -> 'location' ->> 'peer_id' AS peer_id,
+                    pin -> 'location' ->> 'peer_name' AS peer_name,
+                    pin -> 'location' ->> 'ipfs_peer_id' AS ipfs_peer_id,
+                    pin -> 'location' ->> 'region' AS region
+          ) AS tmp
+          WHERE NOT EXISTS (
+            SELECT 42 FROM pin_location WHERE peer_id = pin -> 'location' ->> 'peer_id'
+          );
 
-        insert into pin (content_cid, status, pin_location_id, updated_at, inserted_at)
-        values (data ->> 'content_cid',
-                (pin ->> 'status')::pin_status_type,
-                pin_location_result_id,
-                (data ->> 'updated_at')::timestamptz,
-                (data ->> 'inserted_at')::timestamptz)
+        INSERT INTO pin (content_cid, status, pin_location_id, updated_at, inserted_at)
+          SELECT data ->> 'content_cid' AS content_cid,
+                 (pin ->> 'status')::pin_status_type AS status,
+                 id AS pin_location_id,
+                 (data ->> 'updated_at')::timestamptz AS updated_at,
+                 (data ->> 'inserted_at')::timestamptz AS inserted_at
+            FROM pin_location
+           WHERE peer_id = pin -> 'location' ->> 'peer_id'
         -- Force update on conflict to get result, otherwise needs a follow up select
         ON CONFLICT ( content_cid, pin_location_id ) DO UPDATE
           SET "updated_at" = (data ->> 'updated_at')::timestamptz
