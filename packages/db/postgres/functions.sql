@@ -216,7 +216,6 @@ CREATE OR REPLACE FUNCTION upsert_pin(data json) RETURNS TEXT
 AS
 $$
 DECLARE
-  pin_location_result_id BIGINT;
   pin_result_id BIGINT;
 BEGIN
   -- DATA => content_cid, pin(status, location(peer_id, peer_name, region))
@@ -246,7 +245,7 @@ BEGIN
             "updated_at" = NOW()
   returning id into pin_result_id;
 
-  return (pin_location_result_id)::TEXT;
+  return (pin_result_id)::TEXT;
 END
 $$;
 
