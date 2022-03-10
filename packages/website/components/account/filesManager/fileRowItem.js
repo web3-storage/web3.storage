@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import Tooltip from 'modules/zero/components/tooltip/tooltip';
 import CheckIcon from 'assets/icons/check';
@@ -68,6 +68,7 @@ const FileRowItem = props => {
     return propsReturn;
   }, [props]);
 
+  const [showAll, setShowAll] = useState(false);
   const fileRowLabels = AppData.page_content.file_manager.table.file_row_labels;
   const statusMessages = fileRowLabels.status.tooltip;
   /** @type {import('react').RefObject<HTMLTextAreaElement>} */
@@ -82,6 +83,10 @@ const FileRowItem = props => {
       }[status]),
     [numberOfPins, status, statusMessages]
   );
+
+  const showAllToggle = useCallback(() => {
+    setShowAll(v => !v);
+  }, []);
 
   return (
     <div className={clsx('files-manager-row', className, isHeader && 'files-manager-row-header')}>
@@ -156,25 +161,32 @@ const FileRowItem = props => {
           <Tooltip content={fileRowLabels.storage_providers.tooltip.header} />
           {fileRowLabels.storage_providers.label}
         </span>
-        {storageProviders}
         {isHeader ? (
-          <Tooltip position="right" content={fileRowLabels.storage_providers.tooltip.header} />
+          <>
+            {storageProviders}
+            <Tooltip position="right" content={fileRowLabels.storage_providers.tooltip.header} />
+          </>
+        ) : !storageProviders.length ? (
+          <>
+            Queuing...
+            <Tooltip
+              className="medium-down-only"
+              position="left"
+              content={fileRowLabels.storage_providers.tooltip.queuing}
+            />
+            <Tooltip
+              className="medium-up-only"
+              position="right"
+              content={fileRowLabels.storage_providers.tooltip.queuing}
+            />
+          </>
         ) : (
-          !storageProviders.length && (
-            <>
-              Queuing...
-              <Tooltip
-                className="medium-down-only"
-                position="left"
-                content={fileRowLabels.storage_providers.tooltip.queuing}
-              />
-              <Tooltip
-                className="medium-up-only"
-                position="right"
-                content={fileRowLabels.storage_providers.tooltip.queuing}
-              />
-            </>
-          )
+          <div className={clsx('file-storage-providers-content', showAll ? '' : 'show-all')}>
+            <div className="content">{storageProviders}</div>
+            <button className="medium-up-only" onClick={showAllToggle}>
+              {showAll ? 'View fewer' : 'View all'}
+            </button>
+          </div>
         )}
       </span>
       <span className="file-size">

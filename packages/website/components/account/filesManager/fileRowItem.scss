@@ -198,9 +198,46 @@ $file-size: auto;
     &-storage-providers {
       padding-right: 2.3rem;
       flex-wrap: wrap;
-      > span:not(.file-row-label) {
-        @include monospace_Text;
+
+      &-content {
+        button {
+          margin-top: toRem(5);
+          transition: color $transitionDuration;
+          &:hover {
+            color: $cyan;
+            transition: color $transitionDuration;
+          }
+          &:before {
+            content: '❯ ';
+            margin-right: toRem(10);
+            display: inline-block;
+            transform: rotate(270deg);
+            transition: transform $transitionDuration;
+          }
+        }
+        .content {
+          overflow: hidden;
+          max-height: 1000px;
+          @include monospace_Text;
+          transition: max-height $transitionDuration ease-in;
+        }
+        &.show-all {
+          .content {
+            max-height: toRem(80);
+            transition: max-height $transitionDuration ease-out;
+            @include medium {
+              max-height: auto;
+            }
+          }
+          button {
+            &:before {
+              transform: rotate(90deg);
+              transition: transform $transitionDuration;
+            }
+          }
+        }
       }
+
       @include medium {
         padding-right: 1rem;
         flex-wrap: nowrap;
