@@ -1,5 +1,12 @@
 # Changelog
 
+### [5.4.2](https://github.com/web3-storage/web3.storage/compare/api-v5.4.1...api-v5.4.2) (2022-03-10)
+
+
+### Bug Fixes
+
+* store IPFS peer IDs ([#1093](https://github.com/web3-storage/web3.storage/issues/1093)) ([1f2dcda](https://github.com/web3-storage/web3.storage/commit/1f2dcdaf4fb49419967aae7f988e05e67c05506f))
+
 ### [5.4.1](https://github.com/web3-storage/web3.storage/compare/api-v5.4.0...api-v5.4.1) (2022-03-09)
 
 
