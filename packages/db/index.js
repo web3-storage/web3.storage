@@ -445,7 +445,7 @@ export class DBClient {
    * @param {Array<import('./db-client-types').PinsUpsertInput>} pins
    */
   async upsertPins (pins) {
-    const { data, error } = await this._client.rpc('upsert_pins', {
+    const { data: pinIds, error } = await this._client.rpc('upsert_pins', {
       data: {
         pins: pins.map((pin) => ({
           data: {
@@ -455,6 +455,7 @@ export class DBClient {
               location: {
                 peer_id: pin.location.peerId,
                 peer_name: pin.location.peerName,
+                ipf_peer_id: pin.location.ipfsPeerId,
                 region: pin.location.region
               }
             }
@@ -467,8 +468,7 @@ export class DBClient {
       throw new DBError(error)
     }
 
-    console.table(data)
-    return data
+    return pinIds
   }
 
   /**

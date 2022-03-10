@@ -3,6 +3,7 @@ DROP FUNCTION IF EXISTS json_arr_to_json_element_array;
 DROP FUNCTION IF EXISTS create_key;
 DROP FUNCTION IF EXISTS create_upload;
 DROP FUNCTION IF EXISTS upsert_pin;
+DROP FUNCTION IF EXISTS upsert_pins;
 DROP FUNCTION IF EXISTS user_used_storage;
 DROP FUNCTION IF EXISTS user_auth_keys_list;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
