@@ -58,6 +58,16 @@ describe('put', () => {
     }
   })
 
+  it('errors with wrong max chunk size', async () => {
+    const client = new Web3Storage({ endpoint, token })
+    try {
+      await client.put([], { maxChunkSize: 10 })
+      assert.unreachable('should have thrown')
+    } catch (err) {
+      assert.match(err.message, /maximum chunk size must be less than 100MiB and greater than or equal to 1MB/)
+    }
+  })
+
   it('adds files', async () => {
     const client = new Web3Storage({ token, endpoint })
     const files = prepareFiles()
@@ -78,6 +88,20 @@ describe('put', () => {
     const cid = await client.put(files, {
       wrapWithDirectory: false,
       name: 'web3-storage-dir-no-wrap',
+      onRootCidReady: (cid) => {
+        assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+      }
+    })
+    assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+  })
+
+  it('adds files {maxChunkSize: custom-size}', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const files = prepareFiles()
+    const expectedCid = 'bafybeiep3t2chy6e3dxk3fktnshm7tpopjrns6wevo4uwpnnz5aq352se4'
+    const cid = await client.put(files, {
+      name: 'web3-storage-dir-with-custom-max-chunk-size',
+      maxChunkSize: 1024 * 1024 * 5,
       onRootCidReady: (cid) => {
         assert.equal(cid, expectedCid, 'returned cid matches the CAR')
       }
@@ -140,6 +164,20 @@ describe('putCar', () => {
     assert.equal(cid, expectedCid, 'returned cid matches the CAR')
   })
 
+  it('adds CAR files {maxChunkSize: custom-size}', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const carReader = await createCar('hello world')
+    const expectedCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
+    const cid = await client.putCar(carReader, {
+      name: 'putCar test',
+      maxChunkSize: 1024 * 1024 * 5,
+      onRootCidReady: cid => {
+        assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+      }
+    })
+    assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+  })
+
   it('errors for CAR with zero roots', async () => {
     const client = new Web3Storage({ token, endpoint })
     const { writer, out } = CarWriter.create([])
@@ -166,6 +204,17 @@ describe('putCar', () => {
       assert.unreachable('should have thrown')
     } catch (err) {
       assert.match(err.message, /too many roots/)
+    }
+  })
+
+  it('errors for CAR with wrong max chunk size', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const carReader = await createCar('hello world')
+    try {
+      await client.putCar(carReader, {maxChunkSize: 10})
+      assert.unreachable('should have thrown')
+    } catch (err) {
+      assert.match(err.message, /maximum chunk size must be less than 100MiB and greater than or equal to 1MB/)
     }
   })
 
