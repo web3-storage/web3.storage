@@ -236,7 +236,7 @@ BEGIN
   -- Add to pin table if new
   insert into pin (content_cid, status, pin_location_id, updated_at)
     SELECT data ->> 'content_cid' AS content_cid,
-           (data -> pin ->> 'status')::pin_status_type AS status,
+           (data -> 'pin' ->> 'status')::pin_status_type AS status,
            id AS pin_location_id,
            (NOW())::timestamptz AS updated_at
       FROM pin_location
