@@ -462,7 +462,7 @@ export class DBClient {
           }
         }))
       }
-    })
+    }).single()
 
     if (error) {
       throw new DBError(error)
