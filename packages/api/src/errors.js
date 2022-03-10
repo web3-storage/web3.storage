@@ -30,7 +30,7 @@ export class PinningUnauthorizedError extends HTTPError {
 PinningUnauthorizedError.CODE = 'ERROR_PINNING_UNAUTHORIZED'
 
 export class AccountRestrictedError extends HTTPError {
-  constructor (msg = 'This account is restricted.') {
+  constructor (msg = 'This account is restricted, email support@web3.storage or visit https://github.com/web3-storage/web3.storage/tree/main/packages/api#account-restriction.') {
     super(msg, 403)
     this.name = 'AccountRestrictedError'
     this.code = AccountRestrictedError.CODE

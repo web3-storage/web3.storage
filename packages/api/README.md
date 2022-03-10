@@ -129,6 +129,10 @@ The given API has a set of three different authentication levels:
 
 The 👮 API methods are only allowed with a Magic Token, and consequently only available via https://web3.storage
 
+### Account restriction
+
+If your account is restricted, it means that you might have gone over the storage limit assigned to your user. This restriction disables several actions such as uploading files, adding and replacing pin requests, or publish a name record. Note that even if you have [pinning service API access](https://docs.web3.storage/how-tos/pinning-services-api/#requesting-access), account restriction will disable `WRITE` priviledges for pinning. Your are however still allowed to delete and create tokens. For more information, please email <support@web3.storage>.
+
 ### 🔒 `POST /car`
 
 Upload a CAR file for a root CID. _Authenticated_
