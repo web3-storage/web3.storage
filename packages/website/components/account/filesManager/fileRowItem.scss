@@ -107,15 +107,15 @@ $file-size: auto;
         pointer-events: none;
         width: 1.5rem;
         .tick {
-          stroke-dashoffset: 0;
+          stroke-dashoffset: -100;
           stroke-dasharray: 1000;
-          transition: stroke-dashoffset 250ms 0s ease-out;
+          transition: stroke-dashoffset $transitionDuration 0s ease-out;
         }
       }
       input:checked ~ svg.check {
         .tick {
-          stroke-dashoffset: -100;
-          transition: stroke-dashoffset 250ms 0s ease-in;
+          stroke-dashoffset: 0;
+          transition: stroke-dashoffset $transitionDuration 0s ease-in;
         }
       }
     }
