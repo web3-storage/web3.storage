@@ -38,10 +38,10 @@ export async function updatePinStatuses ({ cluster, db }) {
     log(`📥 Processing ${i} -> ${i + requests.length}`)
 
     const cids = Array.from(new Set(requests.map(r => r.pin.contentCid)))
-    log(`ℹ️ ${cids.length} deduped CIDs`)
     /** @type {Map<string, PeerMap>} */
     let statuses = new Map()
     try {
+      log(`⏳ Checking status of ${cids.length} CIDs`)
       statuses = await getPinStatuses(cluster, cids)
     } catch (err) {
       log('⚠️ failed to get pin statuses from cluster', err)
@@ -53,6 +53,7 @@ export async function updatePinStatuses ({ cluster, db }) {
       const { pin } = req
       let peerMap = statuses.get(pin.contentCid)
       if (!peerMap) {
+        log(`⚠️ Status not found for ${pin.contentCid}`)
         reSyncPins.push(pin)
         return null
       }
