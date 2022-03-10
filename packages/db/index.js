@@ -11,7 +11,7 @@ const uploadQuery = `
         name,
         created:inserted_at,
         updated:updated_at,
-        content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region)))
+        content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region)))
       `
 
 const psaPinRequestTableName = 'psa_pin_request'
@@ -26,7 +26,7 @@ const pinRequestSelect = `
   deleted:deleted_at,
   created:inserted_at,
   updated:updated_at,
-  content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, region)))`
+  content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region)))`
 
 const listPinsQuery = `
   _id:id::text,
@@ -48,6 +48,7 @@ const listPinsQuery = `
         _id:id,
         peerId:peer_id,
         peerName:peer_name,
+        ipfsPeerId:ipfs_peer_id,
         region
       )
     )
@@ -193,6 +194,7 @@ export class DBClient {
           location: {
             peer_id: pin.location.peerId,
             peer_name: pin.location.peerName,
+            ipfs_peer_id: pin.location.ipfsPeerId,
             region: pin.location.region
           }
         })),
@@ -360,7 +362,7 @@ export class DBClient {
         cid,
         dagSize:dag_size,
         created:inserted_at,
-        pins:pin(status, updated:updated_at, location:pin_location(peerId:peer_id, peerName:peer_name, region))
+        pins:pin(status, updated:updated_at, location:pin_location(peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region))
       `)
       .match({ cid })
 
@@ -421,6 +423,7 @@ export class DBClient {
           location: {
             peer_id: pin.location.peerId,
             peer_name: pin.location.peerName,
+            ipfs_peer_id: pin.location.ipfsPeerId,
             region: pin.location.region
           }
         }
@@ -483,7 +486,7 @@ export class DBClient {
         status,
         created:inserted_at,
         updated:updated_at,
-        location:pin_location(id::text, peerId:peer_id, peerName:peer_name, region)
+        location:pin_location(id::text, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region)
       `)
       .match({ content_cid: cid })
 
@@ -572,7 +575,7 @@ export class DBClient {
       .from('pin_sync_request')
       .select(`
         _id:id::text,
-        pin:pin(_id:id::text, status, contentCid:content_cid, created:inserted_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, region))
+        pin:pin(_id:id::text, status, contentCid:content_cid, created:inserted_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region))
       `)
       .order(
         'inserted_at',
@@ -842,6 +845,7 @@ export class DBClient {
           location: {
             peer_id: pin.location.peerId,
             peer_name: pin.location.peerName,
+            ipfs_peer_id: pin.location.ipfsPeerId,
             region: pin.location.region
           }
         }))

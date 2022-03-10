@@ -76,9 +76,10 @@ BEGIN
   foreach pin in array json_arr_to_json_element_array(data -> 'pins')
   loop
         -- Add to pin_location table if new
-        insert into pin_location (peer_id, peer_name, region)
+        insert into pin_location (peer_id, peer_name, ipfs_peer_id, region)
         values (pin -> 'location' ->> 'peer_id',
                 pin -> 'location' ->> 'peer_name',
+                pin -> 'location' ->> 'ipfs_peer_id',
                 pin -> 'location' ->> 'region')
         -- Force update on conflict to get result, otherwise needs a follow up select
         ON CONFLICT ( peer_id ) DO UPDATE
@@ -243,9 +244,10 @@ BEGIN
   -- DATA => content_cid, pin(status, location(peer_id, peer_name, region))
 
   -- Add to pin_location table if new
-  insert into pin_location (peer_id, peer_name, region)
+  insert into pin_location (peer_id, peer_name, ipfs_peer_id, region)
   values (data -> 'pin' -> 'location' ->> 'peer_id',
           data -> 'pin' -> 'location' ->> 'peer_name',
+          data -> 'pin' -> 'location' ->> 'ipfs_peer_id',
           data -> 'pin' -> 'location' ->> 'region')
   ON CONFLICT ( peer_id ) DO UPDATE
           SET "peer_name" = data -> 'pin' -> 'location' ->> 'peer_name',
