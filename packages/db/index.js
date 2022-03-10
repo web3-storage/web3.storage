@@ -445,12 +445,16 @@ export class DBClient {
     const { data, error } = await this._client.rpc('upsert_pins', {
       data: {
         pins: pins.map((pin) => ({
-          status: pin.status,
-          cid: pin.cid,
-          location: {
-            peer_id: pin.location.peerId,
-            peer_name: pin.location.peerName,
-            region: pin.location.region
+          data: {
+            content_cid: pin.contentCid,
+            pin: {
+              status: pin.status,
+              location: {
+                peer_id: pin.location.peerId,
+                peer_name: pin.location.peerName,
+                region: pin.location.region
+              }
+            }
           }
         }))
       }
@@ -460,6 +464,7 @@ export class DBClient {
       throw new DBError(error)
     }
 
+    console.table(data)
     return data
   }
 

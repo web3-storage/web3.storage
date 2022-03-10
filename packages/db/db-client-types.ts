@@ -76,7 +76,7 @@ export type PinItem = PinUpsertInput & {
 export type PinsUpsertInput = {
   id: string
   status: definitions['pin']['status']
-  cid: definitions['pin_request']['content_cid']
+  contentCid: definitions['pin_request']['content_cid']
   location: Location
 }
 

@@ -111,7 +111,7 @@ describe('pin-sync-request', () => {
     await client.upsertPins(pinSyncReqs.map(psr => ({
       id: psr.pin._id,
       status: 'Pinned',
-      cid: psr.pin.contentCid,
+      contentCid: psr.pin.contentCid,
       location: {
         ...psr.pin.location
       }

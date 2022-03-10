@@ -115,7 +115,7 @@ export async function updatePinStatuses ({ cluster, db }) {
       return {
         id: pin._id,
         status: status,
-        cid: pin.contentCid,
+        contentCid: pin.contentCid,
         location: pin.location
       }
     }))
