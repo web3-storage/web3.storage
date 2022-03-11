@@ -183,22 +183,17 @@ function renderCSV ({ users, userUploads }, dest, options = {}) {
 }
 
 /**
- * Create a new Fauna DB client instance from the passed environment variables.
+ * Create a new DB client instance from the passed environment variables.
  * @param {Record<string, string|undefined>} env
  */
 function getDBClient (env) {
-  let token
-  if (env.ENV === 'production') {
-    if (!env.FAUNA_KEY) throw new Error('missing FAUNA_KEY environment var')
-    token = env.FAUNA_KEY
-  } else if (env.ENV === 'staging') {
-    if (!env.STAGING_FAUNA_KEY) throw new Error('missing STAGING_FAUNA_KEY environment var')
-    token = env.STAGING_FAUNA_KEY
-  } else if (env.ENV === 'dev') {
-    if (!env.DEV_FAUNA_KEY) throw new Error('missing DEV_FAUNA_KEY environment var')
-    token = env.DEV_FAUNA_KEY
-  } else {
-    throw new Error(`unsupported environment ${env.ENV}`)
+  const token = env.PG_REST_JWT
+  const endpoint = env.PG_REST_URL
+  if (!token) {
+    throw new Error('missing PG_REST_JWT environment var')
   }
-  return new DBClient({ token })
+  if (!endpoint) {
+    throw new Error('missing PG_REST_URL environment var')
+  }
+  return new DBClient({ token, endpoint, postgres: true })
 }
