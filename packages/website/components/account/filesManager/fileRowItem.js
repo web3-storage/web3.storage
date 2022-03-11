@@ -183,9 +183,11 @@ const FileRowItem = props => {
         ) : (
           <div className={clsx('file-storage-providers-content', showAll ? '' : 'show-all')}>
             <div className="content">{storageProviders}</div>
-            <button className="medium-up-only" onClick={showAllToggle}>
-              {showAll ? 'View fewer' : 'View all'}
-            </button>
+            {storageProviders.length > 5 && (
+              <button className="medium-up-only" onClick={showAllToggle}>
+                {showAll ? 'View fewer' : 'View all'}
+              </button>
+            )}
           </div>
         )}
       </span>
