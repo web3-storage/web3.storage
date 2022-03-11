@@ -30,9 +30,9 @@ npm run stop
 ```
 
 ## Setting up a cloudflare worker
-While in most cases the [Getting Started](## Getting started) is enough to develop locally, if you want to test and preview you worker on Cloudfare infrastructure here's the instructions to setup your worker and environment.  
+While in most cases the [Getting Started](#getting-started) section is enough to develop locally, if you want to test and preview you worker on Cloudflare's infrastructure here's the instructions to setup your worker and environment.  
 
-If you want more in depth information please look at [Cloudfare Get Started guide](https://developers.cloudflare.com/workers/get-started/guide#1-sign-up-for-a-workers-account).  
+If you want more in depth information please look at [Cloudflare Get Started guide](https://developers.cloudflare.com/workers/get-started/guide#1-sign-up-for-a-workers-account).  
 
 The following instructions assume that you did go through the Getting started section.
 
