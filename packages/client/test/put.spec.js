@@ -211,7 +211,7 @@ describe('putCar', () => {
     const client = new Web3Storage({ token, endpoint })
     const carReader = await createCar('hello world')
     try {
-      await client.putCar(carReader, {maxChunkSize: 10})
+      await client.putCar(carReader, { maxChunkSize: 10 })
       assert.unreachable('should have thrown')
     } catch (err) {
       assert.match(err.message, /maximum chunk size must be less than 100MiB and greater than or equal to 1MB/)
