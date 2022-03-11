@@ -45,10 +45,10 @@ Start a docker compose with a Postgres Database and Postgrest.
 npm start
 ```
 
-### 2. Populate Database
+### 2. Load schema
 
 ```bash
-node scripts/cli.js db-sql --cargo --testing
+npm run load-schema
 ```
 
 ### 3. Ready to go
