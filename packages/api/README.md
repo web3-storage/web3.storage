@@ -131,7 +131,7 @@ The 👮 API methods are only allowed with a Magic Token, and consequently only 
 
 ### Account restriction
 
-If your account is restricted, it means that you might have gone over the storage limit assigned to your user. This restriction disables several actions such as uploading files, adding and replacing pin requests, or publish a name record. Note that even if you have [pinning service API access](https://docs.web3.storage/how-tos/pinning-services-api/#requesting-access), account restriction will disable `WRITE` priviledges for pinning. Your are however still allowed to delete and create tokens. For more information, please email <support@web3.storage>.
+If a user's account is restricted, it means that they might have gone over the storage limit assigned to them. This restriction disables several actions such as uploading files, adding and replacing pin requests, or publish a name record. Note that even if the account has [pinning service API access](https://docs.web3.storage/how-tos/pinning-services-api/#requesting-access), account restriction will disable `WRITE` priviledges for pinning. It is however still possible to delete and create tokens. For more information, please email <support@web3.storage>.
 
 ### 🔒 `POST /car`
 

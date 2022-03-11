@@ -28,6 +28,7 @@ describe('Pinning service API access', () => {
           'Content-Type': 'application/json'
         }
       })
+
       assert(!res.ok)
       const { message, code } = await res.json()
       assert.match(message, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
@@ -97,6 +98,7 @@ describe('Pinning service API access', () => {
           'Content-Type': 'application/json'
         }
       })
+
       assert(!res.ok)
       const { message, code } = await res.json()
       assert.match(message, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
