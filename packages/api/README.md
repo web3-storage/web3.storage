@@ -61,7 +61,7 @@ Update `wrangler.toml` with a new `env`. Set your env name to be the value of `w
     account_id = "<what does the `wrangler whoami` say>"
     vars = { CLUSTER_API_URL = "https://USER-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://USER-postgres-api-web3-storage.loca.lt", ENV = "dev" }
     ```
-Copy your cloudflare account id from `wrangler whoami`.
+Copy your Cloudflare account id from `wrangler whoami`.
 
 Add the required secrets:
 ```sh
@@ -81,11 +81,11 @@ Note this might not be up to date, please look to the [.env.tpl](../../.env.tpl)
 Run `npm run build` to build the bundle
 Run `npm run publish` to publish the worker under your env.
 
-To preview your worker using cloudfare development environment you can run
+To preview your worker using the Cloudflare development environment you can run
 ```sh
 npm start:preview
 ```
-The script spins up the cluster, Postgres DB, Posgrest Rest interface and creates the required localtunnels to make them available to the worker.
+The script spins up the cluster, Postgres DB, Posgres Rest interface and creates the required localtunnels to make them available to the worker.
 
 PR your env config to the wrangler.toml, to celebrate 🎉
 
