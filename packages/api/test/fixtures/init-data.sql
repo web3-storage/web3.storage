@@ -51,8 +51,8 @@ VALUES (3, 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 'bafyb
        (3, 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 'Car', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        (3, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 'Car', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z');
 
-INSERT INTO pin_location (peer_id, peer_name, region)
-VALUES ('12D3KooWR1Js', 'who?', 'where?');
+INSERT INTO pin_location (peer_id, peer_name, ipfs_peer_id, region)
+VALUES ('12D3KooEL1Jc', 'who?', '12D3KooWR1Js', 'where?');
 
 INSERT INTO pin (status, content_cid, pin_location_id, inserted_at, updated_at)
 VALUES ('Pinned', 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
@@ -82,10 +82,9 @@ VALUES (
 );
 
 -- user 'test-pinning' is authorized
-INSERT INTO pinning_authorization (user_id)
-VALUES (4);
-INSERT INTO pinning_authorization (user_id)
-VALUES (5);
+INSERT INTO public.user_tag (user_id, tag, value, reason)
+VALUES  (4, 'HasPsaAccess', true, 'test'),
+        (5, 'HasPsaAccess', true, 'test');
 
 INSERT INTO content (cid)
 VALUES  ('bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4'),

@@ -223,6 +223,7 @@ export type UploadOutput = definitions['upload'] & {
 export type Location = {
   _id?: string
   peerId: definitions['pin_location']['peer_id']
+  ipfsPeerId?: definitions['pin_location']['ipfs_peer_id']
   peerName?: definitions['pin_location']['peer_name']
   region?: definitions['pin_location']['region']
 }

@@ -1,5 +1,5 @@
 /**
- * @typedef {import('@nftstorage/ipfs-cluster').TrackerStatus} TrackerStatus
+ * @typedef {import('@nftstorage/ipfs-cluster').API.TrackerStatus} TrackerStatus
  * @typedef {'Undefined'
  *  | 'ClusterError'
  *  | 'PinError'
@@ -59,7 +59,7 @@ export function toPinStatusEnum (trackerStatus) {
  *
  * @param {string} cid cid to be looked for
  * @param {import('@nftstorage/ipfs-cluster').Cluster} cluster
- * @param {import('@nftstorage/ipfs-cluster').StatusResponse['peerMap']} [peerMap] Optional list of peers, if not provided the fuctions queries the cluster.
+ * @param {import('@nftstorage/ipfs-cluster').API.StatusResponse['peerMap']} [peerMap] Optional list of peers, if not provided the fuctions queries the cluster.
  * @return {Promise.<import('@web3-storage/db/db-client-types').PinUpsertInput[]>}
  */
 export async function getPins (cid, cluster, peerMap) {
@@ -81,29 +81,27 @@ export async function getPins (cid, cluster, peerMap) {
  *
  * @param {string} cid cid to be looked for
  * @param {import('@nftstorage/ipfs-cluster').Cluster} cluster
- * @param {import('@nftstorage/ipfs-cluster').StatusResponse['peerMap']} [peerMap] Optional list of peers, if not provided the fuctions queries the cluster.
+ * @param {import('@nftstorage/ipfs-cluster').API.StatusResponse['peerMap']} [peerMap] Optional list of peers, if not provided the function queries the cluster.
  * @return {Promise.<import('@web3-storage/db/db-client-types').PinUpsertInput[]>}
  */
-export async function getOKpins (cid, cluster, peerMap) {
+async function getOKpins (cid, cluster, peerMap) {
   const pins = await getPins(cid, cluster, peerMap)
 
   return pins.filter(p => PIN_OK_STATUS.includes(p.status))
 }
 
 /**
- * @param {import('@nftstorage/ipfs-cluster').StatusResponse['peerMap']} peerMap
+ * @param {import('@nftstorage/ipfs-cluster').API.StatusResponse['peerMap']} peerMap
  * @return {Array.<import('@web3-storage/db/db-client-types').PinUpsertInput>}
  */
-export function toPins (peerMap) {
-  // Note: `clusterPeerId` is an internal id, and is only used for cluster admin.
-  // The `ipfsPeerId` which we rename to `peerId` can be  used to connect to the underlying ipfs node
+function toPins (peerMap) {
+  // Note: `peerId` is the ID of the Cluster node, and is only used for cluster
+  // admin. The `ipfsPeerId` can be  used to connect to the underlying ipfs node
   // that stores a given pin, by passing it to `ipfs swarm connect <peerid>`.
-  return Object.entries(peerMap).map(([clusterPeerId, { peerName, status, ipfsPeerId: peerId }]) => {
-    return {
-      status: toPinStatusEnum(status),
-      location: { peerId, peerName }
-    }
-  })
+  return Object.entries(peerMap).map(([peerId, { peerName, ipfsPeerId, status }]) => ({
+    status: toPinStatusEnum(status),
+    location: { peerId, peerName, ipfsPeerId }
+  }))
 }
 
 /**

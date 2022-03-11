@@ -152,10 +152,12 @@ END$$;
 CREATE TABLE IF NOT EXISTS pin_location
 (
   id              BIGSERIAL PRIMARY KEY,
-  -- Libp2p peer ID of the node pinning this pin.
+  -- Libp2p peer ID of the Cluster node pinning this pin.
   peer_id         TEXT                                                          NOT NULL UNIQUE,
-  -- Name of the peer pinning this pin.
+  -- Name of the Cluster peer pinning this pin.
   peer_name       TEXT,
+  -- Libp2p peer ID of the IPFS node pinning this pin.
+  ipfs_peer_id    TEXT,
   -- Geographic region this node resides in.
   region          TEXT
 );
@@ -244,6 +246,7 @@ CREATE TABLE IF NOT EXISTS pin_sync_request
 );
 
 CREATE INDEX IF NOT EXISTS pin_sync_request_pin_id_idx ON pin_sync_request (pin_id);
+CREATE INDEX IF NOT EXISTS pin_sync_request_inserted_at_idx ON pin_sync_request (inserted_at);
 
 -- Setting search_path to public scope for uuid function(s)
 SET search_path TO public;
@@ -285,13 +288,13 @@ CREATE TABLE IF NOT EXISTS name
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS pinning_authorization
+-- Metric contains the current values of collected metrics.
+CREATE TABLE IF NOT EXISTS metric
 (
-  id              BIGSERIAL PRIMARY KEY,
-  -- Points to user allowed to pin content.
-  user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  deleted_at      TIMESTAMP WITH TIME ZONE
+    name TEXT PRIMARY KEY,
+    value BIGINT NOT NULL,
+    inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 CREATE VIEW admin_search as

@@ -63,6 +63,7 @@ describe('pin-sync-request', () => {
           id: 1,
           peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
           peerName: 'web3-storage-sv15',
+          ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE2',
           region: 'region'
         }
       },
@@ -72,6 +73,7 @@ describe('pin-sync-request', () => {
           id: 2,
           peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
           peerName: 'web3-storage-sv16',
+          ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE3',
           region: 'region'
         }
       },
@@ -81,6 +83,7 @@ describe('pin-sync-request', () => {
           id: 3,
           peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK8',
           peerName: 'web3-storage-sv17',
+          ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE4',
           region: 'region'
         }
       }
