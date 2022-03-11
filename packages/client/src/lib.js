@@ -30,7 +30,9 @@ import {
 
 const MAX_PUT_RETRIES = 5
 const MAX_CONCURRENT_UPLOADS = 3
-const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
+const DEFAULT_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
+const MAX_BLOCK_SIZE = 1048576
+const MAX_CHUNK_SIZE = 104857600
 
 /** @typedef { import('./lib/interface.js').API } API */
 /** @typedef { import('./lib/interface.js').Status} Status */
@@ -97,9 +99,13 @@ class Web3Storage {
     onRootCidReady,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
+    maxChunkSize = DEFAULT_CHUNK_SIZE,
     wrapWithDirectory = true,
     name
   } = {}) {
+    if (maxChunkSize >= MAX_CHUNK_SIZE || maxChunkSize < MAX_BLOCK_SIZE) {
+      throw new Error('maximum chunk size must be less than 100MiB and greater than or equal to 1MB')
+    }
     const blockstore = new Blockstore()
     try {
       const { out, root } = await pack({
@@ -109,12 +115,12 @@ class Web3Storage {
         })),
         blockstore,
         wrapWithDirectory,
-        maxChunkSize: 1048576,
+        maxChunkSize: MAX_BLOCK_SIZE,
         maxChildrenPerNode: 1024
       })
       onRootCidReady && onRootCidReady(root.toString())
       const car = await CarReader.fromIterable(out)
-      return await Web3Storage.putCar({ endpoint, token }, car, { onStoredChunk, maxRetries, name })
+      return await Web3Storage.putCar({ endpoint, token }, car, { onStoredChunk, maxRetries, maxChunkSize, name })
     } finally {
       await blockstore.close()
     }
@@ -130,9 +136,13 @@ class Web3Storage {
     name,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
+    maxChunkSize = DEFAULT_CHUNK_SIZE,
     decoders
   } = {}) {
-    const targetSize = MAX_CHUNK_SIZE
+    if (maxChunkSize >= MAX_CHUNK_SIZE || maxChunkSize < MAX_BLOCK_SIZE) {
+      throw new Error('maximum chunk size must be less than 100MiB and greater than or equal to 1MB')
+    }
+    const targetSize = maxChunkSize
     const url = new URL('car', endpoint)
     let headers = Web3Storage.headers(token)
 
