@@ -1,7 +1,6 @@
 import pg from 'pg'
 import { Cluster } from '@nftstorage/ipfs-cluster'
 import { DBClient } from '@web3-storage/db'
-import { IPFS } from './ipfs.js'
 
 export const MAX_CONCURRENT_QUERIES = 10
 
@@ -14,19 +13,6 @@ export function getCluster (env) {
   if (!clusterApiUrl) throw new Error('missing CLUSTER_API_URL environment var')
   const basicAuthToken = env.CLUSTER_BASIC_AUTH_TOKEN
   return new Cluster(clusterApiUrl, {
-    headers: basicAuthToken ? { Authorization: `Basic ${basicAuthToken}` } : {}
-  })
-}
-
-/**
- * Create a new IPFS client instance from the passed environment variables.
- * @param {Record<string, string|undefined>} env
- */
-export function getClusterIPFSProxy (env) {
-  const ipfsApiUrl = env.CLUSTER_IPFS_PROXY_API_URL
-  if (!ipfsApiUrl) throw new Error('missing CLUSTER_IPFS_PROXY_API_URL environment var')
-  const basicAuthToken = env.CLUSTER_IPFS_PROXY_BASIC_AUTH_TOKEN
-  return new IPFS(ipfsApiUrl, {
     headers: basicAuthToken ? { Authorization: `Basic ${basicAuthToken}` } : {}
   })
 }
