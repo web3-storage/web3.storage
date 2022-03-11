@@ -127,7 +127,9 @@ BEGIN
       'UnpinQueued',
       -- The IPFS daemon is not pinning the item through this CID but it is tracked
       -- in a cluster dag
-      'Sharded'
+      'Sharded',
+      -- The item should be pinned, but it is not pinned and not queued/pinning.
+      'UnexpectedlyUnpinned'
     );
   END IF;
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'upload_type') THEN

@@ -2089,7 +2089,8 @@ export interface definitions {
       | "Remote"
       | "PinQueued"
       | "UnpinQueued"
-      | "Sharded";
+      | "Sharded"
+      | "UnexpectedlyUnpinned";
     /**
      * Format: text
      * @description Note:

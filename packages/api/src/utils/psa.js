@@ -44,6 +44,7 @@ const psaStatusesToDBStatusesMap = {
   queued: ['PinQueued'],
   pinning: ['Pinning'],
   failed: [
+    'UnexpectedlyUnpinned',
     'ClusterError',
     'PinError'
   ]
