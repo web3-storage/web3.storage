@@ -2,9 +2,10 @@
  * Add some mock deals to your database for your existing content.
  *
  * Usage:
- *     FAUNA_KEY=<SECRET> node add-mock-deals.js
+ *     node add-mock-deals.js
  */
-import { DBClient, gql } from '@web3-storage/db'
+import { gql } from '@web3-storage/db'
+import { getDBClient } from '../lib/utils.js'
 import { CID } from 'multiformats/cid'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
@@ -106,10 +107,7 @@ function mockDeal (dataCid) {
 }
 
 async function main () {
-  const { FAUNA_KEY } = process.env
-  if (!FAUNA_KEY) throw new Error('missing FAUNA_KEY environment variable')
-
-  const db = new DBClient({ token: FAUNA_KEY })
+  const db = getDBClient(process.env)
 
   let cursor = null
   while (true) {
