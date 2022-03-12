@@ -64,7 +64,7 @@ export class DBClient {
     this._client = new PostgrestClient(endpoint, {
       headers: {
         Authorization: `Bearer ${token}`,
-        accept: '*/*'
+        Accept: '*/*'
       }
     })
   }
