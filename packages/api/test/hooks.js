@@ -67,6 +67,10 @@ export const mochaHooks = () => {
         console.log('🛑 Stopping PostgreSQL and PostgREST')
         execa(dbCli, ['db', '--stop', '--clean', '--project', projectDb])
       }
+    },
+
+    async beforeEach () {
+      await execa(dbCli, ['db-sql', '--skipCreate', '--truncate', `--customSqlPath=${initScript}`])
     }
   }
 }
