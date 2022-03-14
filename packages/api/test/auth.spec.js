@@ -55,7 +55,7 @@ describe('Pinning service API access', () => {
   })
 
   describe('POST /pins', () => {
-    it('should theow if user not authorized to pin', async () => {
+    it('should throw if user not authorized to pin', async () => {
       const res = await fetch(new URL('pins', endpoint).toString(), {
         method: 'POST',
         headers: {
