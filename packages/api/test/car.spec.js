@@ -9,6 +9,7 @@ import { endpoint, clusterApi, clusterApiAuthHeader } from './scripts/constants.
 import { createCar } from './scripts/car.js'
 import { MAX_BLOCK_SIZE } from '../src/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
+import { PIN_OK_STATUS } from '../src/utils/pin.js'
 
 describe('POST /car', () => {
   it('should add posted CARs to Cluster', async () => {
@@ -41,8 +42,8 @@ describe('POST /car', () => {
 
     const statusRes = await fetch(new URL(`status/${cid}`, endpoint))
     const status = await statusRes.json()
-    const pinned = status.pins.find(pin => pin.status === 'Pinned')
-    assert(pinned, 'CID is Pinned')
+    const pinInfo = status.pins.find(pin => PIN_OK_STATUS.includes(pin.status))
+    assert(pinInfo, `status is one of ${PIN_OK_STATUS}`)
 
     const clusterPeersRes = await fetch(new URL('peers', clusterApi), {
       headers: {
@@ -51,7 +52,7 @@ describe('POST /car', () => {
     })
     const clusterPeers = await clusterPeersRes.json()
     // assert that peerId from the status belongs to one of the cluster ipfs nodes.
-    assert(clusterPeers.some(peer => peer.ipfs.id === pinned.peerId))
+    assert(clusterPeers.some(peer => peer.ipfs.id === pinInfo.peerId))
   })
 
   it('should throw for blocks bigger than the maximum permitted size', async () => {

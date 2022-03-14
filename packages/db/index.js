@@ -4,16 +4,6 @@ import {
   normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest
 } from './utils.js'
 import { CustomDBError, DBError } from './errors.js'
-import {
-  getUserMetrics,
-  getUploadMetrics,
-  getPinMetrics,
-  getPinStatusMetrics,
-  getContentMetrics,
-  getPinBytesMetrics,
-  getPinRequestsMetrics,
-  getUploadTypeMetrics
-} from './metrics.js'
 
 const uploadQuery = `
         _id:id::text,
@@ -21,7 +11,7 @@ const uploadQuery = `
         name,
         created:inserted_at,
         updated:updated_at,
-        content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, region)))
+        content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region)))
       `
 
 const psaPinRequestTableName = 'psa_pin_request'
@@ -36,7 +26,7 @@ const pinRequestSelect = `
   deleted:deleted_at,
   created:inserted_at,
   updated:updated_at,
-  content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, region)))`
+  content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region)))`
 
 const listPinsQuery = `
   _id:id::text,
@@ -58,6 +48,7 @@ const listPinsQuery = `
         _id:id,
         peerId:peer_id,
         peerName:peer_name,
+        ipfsPeerId:ipfs_peer_id,
         region
       )
     )
@@ -228,6 +219,7 @@ export class DBClient {
           location: {
             peer_id: pin.location.peerId,
             peer_name: pin.location.peerName,
+            ipfs_peer_id: pin.location.ipfsPeerId,
             region: pin.location.region
           }
         })),
@@ -395,7 +387,7 @@ export class DBClient {
         cid,
         dagSize:dag_size,
         created:inserted_at,
-        pins:pin(status, updated:updated_at, location:pin_location(peerId:peer_id, peerName:peer_name, region))
+        pins:pin(status, updated:updated_at, location:pin_location(peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region))
       `)
       .match({ cid })
 
@@ -456,6 +448,7 @@ export class DBClient {
           location: {
             peer_id: pin.location.peerId,
             peer_name: pin.location.peerName,
+            ipfs_peer_id: pin.location.ipfsPeerId,
             region: pin.location.region
           }
         }
@@ -508,7 +501,7 @@ export class DBClient {
         status,
         created:inserted_at,
         updated:updated_at,
-        location:pin_location(id::text, peerId:peer_id, peerName:peer_name, region)
+        location:pin_location(id::text, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region)
       `)
       .match({ content_cid: cid })
 
@@ -597,7 +590,7 @@ export class DBClient {
       .from('pin_sync_request')
       .select(`
         _id:id::text,
-        pin:pin(_id:id::text, status, contentCid:content_cid, created:inserted_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, region))
+        pin:pin(_id:id::text, status, contentCid:content_cid, created:inserted_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region))
       `)
       .order(
         'inserted_at',
@@ -827,41 +820,18 @@ export class DBClient {
    * @param {string} key
    */
   async getMetricsValue (key) {
-    let res
-    switch (key) {
-      case 'users_total':
-        res = await getUserMetrics(this._client)
-        return res.total
-      case 'uploads_total':
-        res = await getUploadMetrics(this._client)
-        return res.total
-      case 'Car':
-      case 'Blob':
-      case 'Multipart':
-      case 'Upload':
-        res = await getUploadTypeMetrics(this._client, key)
-        return res.total
-      case 'content_bytes_total':
-        res = await getContentMetrics(this._client)
-        return res.totalBytes
-      case 'pins_total':
-        res = await getPinMetrics(this._client)
-        return res.total
-      case 'pins_bytes_total':
-        res = await getPinBytesMetrics(this._client)
-        return res.totalBytes
-      case 'PinQueued':
-      case 'Pinning':
-      case 'Pinned':
-      case 'PinError':
-        res = await getPinStatusMetrics(this._client, key)
-        return res.total
-      case 'pin_requests_total':
-        res = await getPinRequestsMetrics(this._client)
-        return res.total
-      default:
-        throw new Error(`unknown metric requested: ${key}`)
+    const query = this._client.from('metric')
+    const { data, error } = await query.select('value').eq('name', key)
+
+    if (error) {
+      throw new DBError(error)
     }
+
+    if (!data || !data.length) {
+      return undefined
+    }
+
+    return data[0].value
   }
 
   /**
@@ -890,6 +860,7 @@ export class DBClient {
           location: {
             peer_id: pin.location.peerId,
             peer_name: pin.location.peerName,
+            ipfs_peer_id: pin.location.ipfsPeerId,
             region: pin.location.region
           }
         }))

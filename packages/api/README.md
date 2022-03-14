@@ -3,12 +3,12 @@
 The HTTP interface implemented as a Cloudflare Worker
 
 ## Getting started
+Please follow the instructions in the main monorepo [Readme](../../README.md#getting-started) to setup the project.
 
-Copy the `.env.tpl` to `.env` in root of the project monorepo. 
+We use miniflare to run the api locally, and docker to run ipfs-cluster and postgres with PostgREST.
 
-Create an account on https://magic.link and fill in the `MAGIC_SECRET_KEY` variable in the .env file.
-
-We use miniflare to run the api locally, and docker to run ipfs-cluster and postgres with postREST.
+If you want to run this package in isolation, you can easily do it as follows:
+Please be aware that you will need to have the environment variable setup as described in the root [README](../../README.md#getting-started).
 
 ```sh
 # Install the deps
@@ -30,49 +30,28 @@ npm run stop
 ```
 
 ## Setting up a cloudflare worker
+While in most cases the [Getting Started](#getting-started) section is enough to develop locally, if you want to test and preview you worker on Cloudflare's infrastructure here's the instructions to setup your worker and environment.  
 
-One time set up of your cloudflare worker subdomain. You only need to do this if you want to test in a real cloudflare worker.
+If you want more in depth information please look at [Cloudflare Get Started guide](https://developers.cloudflare.com/workers/get-started/guide#1-sign-up-for-a-workers-account).  
 
-- `npm install` - Install the project dependencies
-- Sign up to Cloudflare and log in with your default browser.
-- `npm i @cloudflare/wrangler -g` - Install the Cloudflare wrangler CLI
-- `wrangler login` - Authenticate your wrangler cli; it'll open your browser.
-- Setup Cluster
-  - You need to run a cluster locally and make it accessible from the internet for development. 
-    ```
-    npm run cluster:start
-    ```
-    to start the IPFS cluster.
+The following instructions assume that you did go through the Getting started section.
 
-    You can stop the cluster by
-    ```
-    npm run cluster:stop
-    ```
+### 1. Sign up for a Workers account
+Before you can start publishing your Workers on your own domain or a free *.workers.dev subdomain, you must sign up for a Cloudflare Workers account
+### 2. Install the Workers CLI
+Install `wrangler` cli on your local machine
+```bash 
+npm install -g @cloudflare/wrangler
+```
+### 3. Configure the Workers CLI
+With installation complete, wrangler will need access to a Cloudflare OAuth token to manage Workers resources on your behalf.
+```bash 
+wrangler login
+```
+Open the browser, log into your account, and select Allow.
 
-    The data is persisted among different runs, if you'd like to reset your cluster you can run
-    ```
-    npm run cluster:reset
-    ```
-  - 
-    ```sh
-    npm install -g localtunnel
-    npm run lt:cluster
-    ```
-
-    - There is an npm script you can use to quickly establish these tunnels during development:
-
-    ```sh
-    npm run lt
-    ```
-- Copy your cloudflare account id from `wrangler whoami`
-- Setup database
-    - For setting up a local database check [Local DB setup](../db/README.md).
-    - Once a DB is running, you will need a local tunnel similar to cluster:
-
-    ```sh
-    npm run lt:postgres
-    ```
-- Update `wrangler.toml` with a new `env`. Set your env name to be the value of `whoami` on your system you can use `npm start` to run the worker in dev mode for you.
+### 4. Configure your worker
+Update `wrangler.toml` with a new `env`. Set your env name to be the value of `whoami` on your system you can use `npm start` to run the worker in dev mode for you.
 
     [**wrangler.toml**](./wrangler.toml)
 
@@ -82,11 +61,10 @@ One time set up of your cloudflare worker subdomain. You only need to do this if
     account_id = "<what does the `wrangler whoami` say>"
     vars = { CLUSTER_API_URL = "https://USER-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://USER-postgres-api-web3-storage.loca.lt", ENV = "dev" }
     ```
+Copy your Cloudflare account id from `wrangler whoami`.
 
-- `npm run build` - Build the bundle
-- Add secrets
-
-    ```sh
+Add the required secrets:
+```sh
     wrangler secret put MAGIC_SECRET_KEY --env $(whoami) # Get from magic.link account
     wrangler secret put SALT --env $(whoami) # open `https://csprng.xyz/v1/api` in the browser and use the value of `Data`
     wrangler secret put CLUSTER_BASIC_AUTH_TOKEN --env $(whoami) # Get from web3.storage vault in 1password (not required for dev)
@@ -96,12 +74,20 @@ One time set up of your cloudflare worker subdomain. You only need to do this if
     wrangler secret put S3_SECRET_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3 (not required for dev)
     wrangler secret put S3_BUCKET_NAME --env $(whoami) # e.g web3.storage-staging-us-east-2 (not required for dev)
     wrangler secret put PG_REST_JWT --env $(whoami) # Get from database postgrest
-    ```
+```
+Note this might not be up to date, please look to the [.env.tpl](../../.env.tpl) in the root directory for the up to date secrets required.
 
-- `npm run publish` - Publish the worker under your env. An alias for `wrangler publish --env $(whoami)`
-- `npm start` - Run the worker in dev mode. An alias for `wrangler dev --env $(whoami)
+## Run the code
+Run `npm run build` to build the bundle
+Run `npm run publish` to publish the worker under your env.
 
-You only need to `npm start` for subsequent runs. PR your env config to the wrangler.toml, to celebrate 🎉
+To preview your worker using the Cloudflare development environment you can run
+```sh
+npm start:preview
+```
+The script spins up the cluster, Postgres DB, Posgres Rest interface and creates the required localtunnels to make them available to the worker.
+
+PR your env config to the wrangler.toml, to celebrate 🎉
 
 ## Maintenance Mode
 
