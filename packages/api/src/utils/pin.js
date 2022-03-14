@@ -11,7 +11,8 @@
  *  | 'Remote'
  *  | 'PinQueued'
  *  | 'UnpinQueued'
- *  | 'Sharded'} PinStatus
+ *  | 'Sharded'
+ *  | 'UnexpectedlyUnpinned' } PinStatus
  */
 
 /** @type {Record<TrackerStatus, PinStatus>} */
@@ -27,7 +28,8 @@ const PinStatusMap = {
   remote: 'Remote',
   pin_queued: 'PinQueued',
   unpin_queued: 'UnpinQueued',
-  sharded: 'Sharded'
+  sharded: 'Sharded',
+  unexpectedly_unpinned: 'UnexpectedlyUnpinned'
 }
 
 // Duration between status check polls in ms.
