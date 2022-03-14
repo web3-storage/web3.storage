@@ -5,10 +5,7 @@
  *     FAUNA_KEY=<SECRET> node add-mock-deals.js
  */
 import { DBClient, gql } from '@web3-storage/db'
-import { CID } from 'multiformats/cid'
-import { sha256 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
-import crypto from 'crypto'
 import { randomCid } from '../test/scripts/helpers'
 
 const FIND_UPLOADS = gql`
