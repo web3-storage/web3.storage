@@ -62,7 +62,7 @@ function AccordionSection({
   }, [uid])
 
   useEffect(() => {
-    if (router.query.section === slug) {
+    if (!!slug && !!router.query.section && router.query.section === slug) {
       const element = document.getElementById(`accordion-section_${slug}`)
       if (element) {
         const y = element.getBoundingClientRect().top + window.scrollY - 16

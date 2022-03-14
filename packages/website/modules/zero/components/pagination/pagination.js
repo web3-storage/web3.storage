@@ -12,6 +12,7 @@ import useQueryParams from 'ZeroHooks/useQueryParams'
  * @prop {number} [defaultPage]
  * @prop {string} [queryParam]
  * @prop {function} [onChange]
+ * @prop {string} [scrollTarget]
  */
 
 /**
@@ -24,7 +25,8 @@ const Pagination = ({
   visiblePages,
   defaultPage,
   queryParam,
-  onChange
+  onChange,
+  scrollTarget,
 }) => {
   const [queryValue, setQueryValue] = useQueryParams(queryParam, defaultPage);
 
@@ -37,7 +39,10 @@ const Pagination = ({
 
   const setCurrentPage = useCallback((page) => {
     queryParam ? setQueryValue(page) : setActivePage(page)
-  }, [queryParam, setQueryValue, setActivePage])
+    const scrollToElement= document.querySelector(scrollTarget);
+    scrollToElement?.scrollIntoView(true);
+    
+  }, [queryParam, setQueryValue, setActivePage, scrollTarget])
 
   useEffect(() => {
     pageCount && setPageList(
@@ -51,9 +56,6 @@ const Pagination = ({
     const firstItem = (currentPage - 1) * parseInt(/** @type {string} */(itemsPerPage))
     onChange && onChange(items.slice(firstItem, firstItem + parseInt(/** @type {string} */(itemsPerPage))))
 
-    const scrollToElement= document.querySelector('.Pagination');
-    scrollToElement?.scrollIntoView({block: "end", inline: "nearest"});
-    
   }, [items, itemsPerPage, visiblePages, pageCount, setPageList, currentPage, setCurrentPage, onChange])
 
   return (
