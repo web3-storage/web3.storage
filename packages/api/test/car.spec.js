@@ -210,7 +210,7 @@ describe('POST /car', () => {
     assert.strictEqual(message, 'Invalid CAR file received: CAR must contain at least one non-root block')
   })
 
-  it('should throw for CAR with unsupported hash function', async () => {
+  it('should allow a CAR with unsupported hash function', async () => {
     const token = await getTestJWT('test-upload', 'test-upload')
 
     const bytes = pb.encode({ Data: new Uint8Array(), Links: [] })
@@ -236,9 +236,11 @@ describe('POST /car', () => {
       body: new Blob(carBytes)
     })
 
-    assert.strictEqual(res.ok, false)
-    const { message } = await res.json()
-    assert.strictEqual(message, `Invalid CAR file received: block with unsupported hash function: 0x${sha512.code.toString(16)} for ${cid.toString()}`)
+    assert(res, 'Server responded')
+    assert(res.ok, 'Server response ok')
+    const resBody = await res.json()
+    assert(resBody.cid, 'Server response payload has `cid` property')
+    assert.strictEqual(resBody.cid, cid.toString(), 'Server responded with expected CID')
   })
 
   it('should throw for CAR with a block where the bytes do match the CID', async () => {
