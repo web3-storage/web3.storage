@@ -56,6 +56,9 @@ const TokensManager = ({ content }) => {
         { shallow: true }
       );
 
+      const scrollToElement = document.querySelector('.tokens-manager-container');
+      scrollToElement?.scrollIntoView(true);
+
       queryOrderRef.current = query.order;
     }
   }, [query.order, query, replace]);
@@ -149,6 +152,7 @@ const TokensManager = ({ content }) => {
           visiblePages={2}
           queryParam="page"
           onChange={setPaginatedTokens}
+          scrollTarget={'.tokens-manager-container'}
         />
         <Dropdown
           className="tokens-manager-result-dropdown"

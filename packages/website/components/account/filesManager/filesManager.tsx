@@ -79,6 +79,9 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
         { shallow: true }
       );
 
+      const scrollToElement = document.querySelector('.account-files-manager');
+      scrollToElement?.scrollIntoView(true);
+
       queryOrderRef.current = query.order;
     }
   }, [query.order, query, replace]);
@@ -286,6 +289,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
             visiblePages={1}
             queryParam="page"
             onChange={setPaginatedFiles}
+            scrollTarget={'.account-files-manager'}
           />
           <Dropdown
             className="files-manager-result-dropdown"
