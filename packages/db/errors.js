@@ -15,3 +15,19 @@ export class DBError extends Error {
 }
 
 DBError.CODE = 'ERROR_DB'
+
+export class CustomDBError extends Error {
+  /**
+   * @param {{
+   *   message: string
+   *   details?: string
+   * }} cause
+   */
+  constructor ({ message, details }) {
+    super(`${message}, details: ${details}`)
+    this.name = 'CustomDBError'
+    this.code = CustomDBError.CODE
+  }
+}
+
+CustomDBError.CODE = 'CUSTOM_ERROR_DB'

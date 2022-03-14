@@ -3,7 +3,7 @@ import { PostgrestClient } from '@supabase/postgrest-js'
 import {
   normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest
 } from './utils.js'
-import { DBError } from './errors.js'
+import { CustomDBError, DBError } from './errors.js'
 import {
   getUserMetrics,
   getUploadMetrics,
@@ -146,19 +146,7 @@ export class DBClient {
    * @returns {Promise<boolean>}
    */
   async isAccountRestricted (userId) {
-    const { error, count } = await this._client
-      .from('user_tag')
-      .select('id', { count: 'exact' })
-      .eq('user_id', userId)
-      .eq('tag', 'HasAccountRestriction')
-      .eq('value', true)
-      .filter('deleted_at', 'is', null)
-
-    if (error) {
-      throw new DBError(error)
-    }
-
-    return count === 1
+    return await this.getUserTagValue(userId, 'HasAccountRestriction') === 'true'
   }
 
   /**
@@ -168,19 +156,34 @@ export class DBClient {
    * @returns {Promise<boolean>}
    */
   async isPinningAuthorized (userId) {
-    const { count, error } = await this._client
+    return await this.getUserTagValue(userId, 'HasPsaAccess') === 'true'
+  }
+
+  /**
+   * Returns the value stored for a user tag.
+   *
+   * @param {number} userId
+   * @param {string} tag
+   * @returns {Promise<string>}
+   */
+  async getUserTagValue (userId, tag) {
+    const { data, error } = await this._client
       .from('user_tag')
-      .select('value', { count: 'exact' })
+      .select('value')
       .eq('user_id', userId)
-      .eq('tag', 'HasPsaAccess')
-      .eq('value', true)
+      .eq('tag', tag)
       .filter('deleted_at', 'is', null)
 
     if (error) {
       throw new DBError(error)
     }
 
-    return count === 1
+    // Expects unique entries.
+    if (data.length > 1) {
+      throw new CustomDBError({ message: `More than one row found for user tag ${tag}` })
+    }
+
+    return data.length ? data[0].value : undefined
   }
 
   /**
