@@ -164,7 +164,7 @@ export class DBClient {
    *
    * @param {number} userId
    * @param {string} tag
-   * @returns {Promise<string>}
+   * @returns {Promise<string | undefined>}
    */
   async getUserTagValue (userId, tag) {
     const { data, error } = await this._client
