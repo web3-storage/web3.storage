@@ -8,7 +8,6 @@ import { keys } from 'libp2p-crypto'
 import * as JWT from '../../src/utils/jwt.js'
 import { JWT_ISSUER } from '../../src/constants.js'
 import { SALT } from './worker-globals.js'
-import crypto from 'crypto'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
 
@@ -61,7 +60,6 @@ export function getTestJWT (sub = 'test-magic-issuer', name = 'test-magic-issuer
  * @returns {Promise<string>}
  */
 export async function randomCid (code = pb.code) {
-  const bytes = crypto.randomBytes(10)
-  const hash = await sha256.digest(bytes)
+  const hash = await sha256.digest(Buffer.from(`${Math.random()}`))
   return CID.create(1, code, hash).toString()
 }
