@@ -26,8 +26,8 @@ export function getDBClient (env) {
   if (env.ENV === 'production') {
     if (!env.PROD_PG_REST_JWT) throw new Error('missing PROD_PG_REST_JWT environment var')
     if (!env.PROD_PG_REST_URL) throw new Error('missing PROD_PG_REST_URL environment var')
-    token = env.PG_REST_JWT
-    endpoint = env.PG_REST_URL
+    token = env.PROD_PG_REST_JWT
+    endpoint = env.PROD_PG_REST_URL
   } else if (env.ENV === 'staging') {
     if (!env.STAGING_PG_REST_JWT) throw new Error('missing STAGING_PG_REST_JWT environment var')
     if (!env.STAGING_PG_REST_URL) throw new Error('missing STAGING_PG_REST_URL environment var')
@@ -36,8 +36,8 @@ export function getDBClient (env) {
   } else if (env.ENV === 'dev') {
     if (!env.PG_REST_JWT) throw new Error('missing PG_REST_JWT environment var')
     if (!env.PG_REST_URL) throw new Error('missing PG_REST_URL environment var')
-    token = env.DEV_PG_REST_JWT
-    endpoint = env.DEV_PG_REST_URL
+    token = env.PG_REST_JWT
+    endpoint = env.PG_REST_URL
   } else {
     throw new Error(`unsupported environment ${env.ENV}`)
   }
