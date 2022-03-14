@@ -41,7 +41,7 @@ export const getEffectivePinStatus = (pins) => {
 
 const psaStatusesToDBStatusesMap = {
   pinned: ['Pinned'],
-  queued: ['PinQueued'],
+  queued: ['PinQueued', 'Unpinned', 'Remote'],
   pinning: ['Pinning'],
   failed: [
     'UnexpectedlyUnpinned',
