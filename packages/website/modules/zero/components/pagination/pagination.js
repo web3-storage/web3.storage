@@ -39,9 +39,10 @@ const Pagination = ({
 
   const setCurrentPage = useCallback((page) => {
     queryParam ? setQueryValue(page) : setActivePage(page)
-    const scrollToElement= document.querySelector(scrollTarget);
-    scrollToElement?.scrollIntoView(true);
-    
+    if(!!scrollTarget) {
+      const scrollToElement= document.querySelector(scrollTarget);
+      scrollToElement?.scrollIntoView(true);
+    }
   }, [queryParam, setQueryValue, setActivePage, scrollTarget])
 
   useEffect(() => {
