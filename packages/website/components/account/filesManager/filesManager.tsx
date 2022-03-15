@@ -173,6 +173,11 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
     }, 500);
   }, [setShowCheckOverlay]);
 
+  const refreshHandler = useCallback(() => {
+    getUploads();
+    showCheckOverlayHandler();
+  }, [getUploads, showCheckOverlayHandler]);
+
   return (
     <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
       <div className="files-manager-header">
@@ -187,10 +192,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
           onChange={setFilteredFiles}
           onValueChange={setKeyword}
         />
-        <button
-          className={clsx('refresh', isFetchingUploads && 'disabled')}
-          onClick={useCallback(_ => getUploads(), [getUploads])}
-        >
+        <button className={clsx('refresh', isFetchingUploads && 'disabled')} onClick={refreshHandler}>
           <RefreshIcon />
           <span>{content?.ui.refresh}</span>
         </button>
