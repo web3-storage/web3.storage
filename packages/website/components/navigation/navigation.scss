@@ -178,11 +178,6 @@
 
 .navigation-loader-text {
   visibility: hidden;
-  // IE11 fix
-  _:-ms-fullscreen,
-  :root & {
-    visibility: visible;
-  }
 }
 
 // ///////////////////////////////////////////////////////////////////////// App
