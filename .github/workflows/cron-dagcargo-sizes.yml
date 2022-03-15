@@ -24,5 +24,7 @@ jobs:
           DEBUG: '*'
           ENV: ${{ matrix.env }}
           STAGING_PG_CONNECTION: ${{ secrets.STAGING_PG_CONNECTION }}
+          STAGING_RO_PG_CONNECTION: ${{ secrets.STAGING_PG_CONNECTION }} # no replica for staging
           PROD_PG_CONNECTION: ${{ secrets.PROD_PG_CONNECTION }}
+          PROD_RO_PG_CONNECTION: ${{ secrets.PROD_RO_PG_CONNECTION }}
         run: npm run start:dagcargo:sizes -w packages/cron
