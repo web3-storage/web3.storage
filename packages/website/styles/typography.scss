@@ -264,6 +264,11 @@ $letterSpacing_Large: 0.03em;
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
   text-fill-color: transparent;
+
+  _:-ms-fullscreen,
+  :root & {
+    background: none;
+  }
 }
 
 // @mixin subheading {
