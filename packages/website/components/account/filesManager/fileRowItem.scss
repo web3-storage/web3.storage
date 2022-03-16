@@ -39,6 +39,14 @@ $file-size: auto;
     border-bottom: 0.125rem solid rgba(white, 0.15);
   }
 
+  .Tooltip {
+    .tooltip-content {
+      @include medium {
+        max-width: 30vw;
+      }
+    }
+  }
+
   // Targeting all columns
   > span {
     display: flex;
