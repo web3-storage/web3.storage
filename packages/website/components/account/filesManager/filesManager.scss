@@ -100,6 +100,7 @@
 .files-manager-table-content {
   display: flex;
   flex-direction: column;
+  min-height: toRem(300);
 }
 
 .files-manager-upload-cta {
