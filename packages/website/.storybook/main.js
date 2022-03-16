@@ -8,9 +8,12 @@ module.exports = {
   "addons": [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    'storybook-addon-next-router'
-    // "@storybook/addon-knobs"
+    "@storybook/addon-interactions"
   ],
+  "framework": "@storybook/react",
+  "core": {
+    "builder": "webpack5"
+  },
   webpackFinal: async (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,

@@ -13,8 +13,8 @@
     "lint:ts": "tsc --noEmit",
     "lint:es": "eslint '{pages,components,hooks,content,store}/**/*.{js,ts,tsx}' --max-warnings=0",
     "lint:es:fix": "eslint '{pages,components,hooks,content,store}/**/*.{js,ts,tsx}' --fix --max-warnings=0",
-    "storybook": "start-storybook -p 9000",
-    "build-storybook": "build-storybook"
+    "storybook": "start-storybook -p 6006 -s ./public",
+    "build-storybook": "build-storybook -s public"
   },
   "dependencies": {
     "@magic-ext/oauth": "^0.7.0",
@@ -42,7 +42,16 @@
     "web3.storage": "^3.5.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.8",
     "@next/eslint-plugin-next": "12.0.8",
+    "@storybook/addon-actions": "^6.4.20",
+    "@storybook/addon-essentials": "^6.4.20",
+    "@storybook/addon-interactions": "^6.4.20",
+    "@storybook/addon-links": "^6.4.20",
+    "@storybook/builder-webpack5": "^6.4.20",
+    "@storybook/manager-webpack5": "^6.4.20",
+    "@storybook/react": "^6.4.20",
+    "@storybook/testing-library": "^0.0.9",
     "@svgr/webpack": "^6.2.1",
     "@types/react": "17.0.36",
     "@types/react-dom": "17.0.11",
@@ -50,6 +59,7 @@
     "@typescript-eslint/eslint-plugin": "^5.12.1",
     "@typescript-eslint/parser": "^5.12.1",
     "babel-eslint": "10.1.0",
+    "babel-loader": "^8.2.4",
     "css-loader": "5.2.7",
     "env-cmd": "^10.1.0",
     "eslint": "^8.0.0",
@@ -65,6 +75,7 @@
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-react": "7.28.0",
     "eslint-plugin-react-hooks": "4.3.0",
+    "eslint-plugin-storybook": "^0.5.7",
     "git-rev-sync": "^3.0.2",
     "git-revision-webpack-plugin": "^5.0.0",
     "husky": "4.3.8",
