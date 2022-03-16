@@ -53,7 +53,7 @@ export default function MessageBanner() {
   }
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && bannerContent === marketingPrompt) {
+    if (typeof window !== 'undefined') {
       const oldMessage = localStorage.getItem('web3StorageBannerMessage');
       const oldDate = /** @type {string} */ (
         localStorage.getItem('web3StorageBannerClickDate') ? localStorage.getItem('web3StorageBannerClickDate') : '0'
