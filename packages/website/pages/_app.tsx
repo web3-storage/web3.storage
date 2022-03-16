@@ -1,7 +1,6 @@
 import '../styles/global.scss';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
-import Script from 'next/script';
 
 import Metadata from 'components/general/metadata';
 import RestrictedRoute from 'components/general/restrictedRoute';
@@ -21,16 +20,6 @@ const App = ({ Component, pageProps }: any) => {
 
   return (
     <AppProviders authorizationProps={{ ...pageProps }}>
-      <Script id="browser-update-lib">
-        {`var $buoop = {required:{e:-2,f:-2,o:-2,s:-1,c:-2,i:12},insecure:true,unsupported:true,api:2022.03 }; 
-        function $buo_f(){ 
-        var e = document.createElement("script"); 
-        e.src = "//browser-update.org/update.min.js"; 
-        document.body.appendChild(e);
-        };
-        try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
-        catch(e){window.attachEvent("onload", $buo_f)}`}
-      </Script>
       <Metadata {...pageProps} />
       <RestrictedRoute {...pageProps}>
         <div id="master-container" className={clsx(productApp ? 'product-app' : 'marketing-site')}>
