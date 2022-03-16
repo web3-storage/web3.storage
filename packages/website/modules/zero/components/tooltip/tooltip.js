@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import InfoAIcon from 'assets/icons/infoA';
+import InfoAIcon from 'Icons/infoA';
 
 /**
  * @typedef {Object} InfoProps
