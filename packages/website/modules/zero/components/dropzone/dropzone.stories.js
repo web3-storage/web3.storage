@@ -3,7 +3,7 @@
 
 // import Button from 'ZeroComponents/button/button';
 // import Dropzone from './dropzone';
-// import { ReactComponent as OpenIcon } from 'assets/icons/open.svg'
+// import { ReactComponent as OpenIcon } from 'Icons/open.svg'
 
 // export default {
 //   title: 'Zero/Dropzone'
