@@ -52,7 +52,8 @@ VALUES (3, 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 'bafyb
        (3, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 'Car', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z');
 
 INSERT INTO pin_location (peer_id, peer_name, ipfs_peer_id, region)
-VALUES ('12D3KooEL1Jc', 'who?', '12D3KooWR1Js', 'where?');
+VALUES ('12D3KooEL1Jc', 'who?', '12D3KooWR1Js', 'where?'),
+       ('12D3KooEL1Jd', 'whoTwo?', '12D3KooWR1Jd', 'whereTwo?');
 
 INSERT INTO pin (status, content_cid, pin_location_id, inserted_at, updated_at)
 VALUES ('Pinned', 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
@@ -94,6 +95,7 @@ VALUES  ('bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4'),
         ('bafybeidrzt6t4k25qjeasydgi3fyh6ejos5x4d6tk2pdzxkb66bkomezy4'),
         ('bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm'),
         ('bafybeiaqu6ijhfhwzjipwesbqf4myz6uczyigahib5joqbo5jw2xmjczfa'),
+        ('bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47s5'),
         ('bafybeidqts3rbwkprggjojbvcxy4jzpgzgcvs4a73y3gx2jjxphjeerbcy');
 
 INSERT INTO pin (status, content_cid, pin_location_id, inserted_at, updated_at)
@@ -103,6 +105,8 @@ VALUES
        ('PinError', 'bafybeia45bscvzxngto555xsel4gwoclb5fxd7zpxige7rl3maoleznswu', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
        ('Pinning', 'bafybeidw7pc6nvm7u4rfhpctac4qgtpmwxapw4duugvsl3ppivvzibdlgy', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
        ('Pinning', 'bafybeidrzt6t4k25qjeasydgi3fyh6ejos5x4d6tk2pdzxkb66bkomezy4', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
+       ('Unpinned', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47s5', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
+       ('Unpinned', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47s5', 2, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
        ('Pinning', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00');
 
 INSERT INTO psa_pin_request (id, auth_key_id, content_cid, source_cid, name, origins, meta, inserted_at, updated_at)
@@ -112,5 +116,6 @@ VALUES ('ab62cf3c-c98d-494b-a756-b3a3fb6ddcab', 4, 'bafybeid46f7zggioxjm5p2ze2l6
        ('63992f6e-5bbf-4d01-8a69-9e0561c38b04', 4, 'bafybeidw7pc6nvm7u4rfhpctac4qgtpmwxapw4duugvsl3ppivvzibdlgy', 'bafybeidw7pc6nvm7u4rfhpctac4qgtpmwxapw4duugvsl3ppivvzibdlgy', 'Image.jpeg', null, '{"app_id": "99986338-1113-4706-8302-4420da6158bb", "region": "europe", "vendor_policy": "1"}', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('3fa630f2-f22c-486f-ad1c-b36d4d740e31', 4, 'bafybeidrzt6t4k25qjeasydgi3fyh6ejos5x4d6tk2pdzxkb66bkomezy4', 'bafybeidrzt6t4k25qjeasydgi3fyh6ejos5x4d6tk2pdzxkb66bkomezy4', 'Image.png', null, '{"app_id": "99986338-1113-4706-8302-4420da6158bb"}', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('5c7e7885-7f68-462d-bdfb-3f0abfb367b5', 4, 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 'Image.jpg', null, null, '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       ('5c7e7885-7f68-462d-bdfb-3f0abfb367b6', 4, 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47s5', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 'Image.jpg', null, null, '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('3a19e48d-d6db-4f36-b686-fb8bc37c9d48', 2, 'bafybeiaqu6ijhfhwzjipwesbqf4myz6uczyigahib5joqbo5jw2xmjczfa', 'bafybeiaqu6ijhfhwzjipwesbqf4myz6uczyigahib5joqbo5jw2xmjczfa', 'Image.jpg', null, null, '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('9be23b92-918e-44b8-98f4-6043c346fb4e', 2, 'bafybeidqts3rbwkprggjojbvcxy4jzpgzgcvs4a73y3gx2jjxphjeerbcy', 'bafybeidqts3rbwkprggjojbvcxy4jzpgzgcvs4a73y3gx2jjxphjeerbcy', 'Image.jpg', null, null, '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z');
