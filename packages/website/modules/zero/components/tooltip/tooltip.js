@@ -1,9 +1,5 @@
 import clsx from 'clsx';
-<<<<<<< HEAD
 import InfoAIcon from './infoA';
-=======
-import InfoAIcon from 'Icons/infoA';
->>>>>>> 0acbb76 (fix: add original stories)
 
 /**
  * @typedef {Object} InfoProps
