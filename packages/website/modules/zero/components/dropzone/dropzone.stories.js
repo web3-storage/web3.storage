@@ -1,88 +1,83 @@
-// import React, { useCallback } from 'react'
-// import useState from 'storybook-addon-state';
+import React, { useCallback } from 'react';
+import useState from 'storybook-addon-state';
 
-// import Button from 'ZeroComponents/button/button';
-// import Dropzone from './dropzone';
-// import { ReactComponent as OpenIcon } from 'Icons/open.svg'
+import Button from 'ZeroComponents/button/button';
+import Dropzone from './dropzone';
+import OpenIcon from '../../assets/search';
 
-// export default {
-//   title: 'Zero/Dropzone'
-// };
+export default {
+  title: 'Zero/Dropzone',
+};
 
-// export const Default = () => (
-//   <Dropzone
-//     icon={<OpenIcon />}
-//     dragAreaText="Drag and drop your files here"
-//   />
-// );
+export const Default = () => <Dropzone icon={<OpenIcon />} dragAreaText="Drag and drop your files here" />;
 
-// export const FileReader = () => {
-//   const [files, setFiles] = useState('files', null);
+export const FileReader = () => {
+  const [files, setFiles] = useState('files', null);
 
-//   const onFileChangeSuccess = useCallback((acceptedFiles) => setFiles(acceptedFiles), []);
-//   const onFileChangeError = useCallback((rejectedFiles) => console.error(rejectedFiles), []);
+  const onFileChangeSuccess = useCallback(acceptedFiles => setFiles(acceptedFiles), []);
+  const onFileChangeError = useCallback(rejectedFiles => console.error(rejectedFiles), []);
 
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
+  const handleSubmit = e => {
+    e.preventDefault();
 
-//     if(files) {
-//       /** @type {any} */ (files).forEach((file) => {
-//         //@ts-ignore TODO: Fix implementation for typescript instantiation
-//         const reader = new FileReader()
-//         reader.onabort = () => console.log('file reading was aborted')
-//         reader.onerror = () => console.log('file reading has failed')
-//         reader.onload = () => console.log(reader.result)
-//         reader.readAsArrayBuffer(file)
-//       })
-//     }
-//   };
+    if (files) {
+      /** @type {any} */ (files).forEach(file => {
+        //@ts-ignore TODO: Fix implementation for typescript instantiation
+        const reader = new FileReader();
+        reader.onabort = () => console.log('file reading was aborted');
+        reader.onerror = () => console.log('file reading has failed');
+        reader.onload = () => console.log(reader.result);
+        reader.readAsArrayBuffer(file);
+      });
+    }
+  };
 
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <Dropzone
-//         icon={<OpenIcon />}
-//         dragAreaText="Drag and drop your files here"
-//         maxFiles={2}
-//         accept={'image/jpeg, image/png'}
-//         multiple={true}
-//         onChange={onFileChangeSuccess}
-//         onError={onFileChangeError}
-//       />
-//       <Button type="submit">Upload</Button>
-//     </form> 
-//   )
-// };
+  return (
+    <form onSubmit={handleSubmit}>
+      <Dropzone
+        icon={<OpenIcon />}
+        dragAreaText="Drag and drop your files here"
+        maxFiles={2}
+        accept={'image/jpeg, image/png'}
+        multiple={true}
+        onChange={onFileChangeSuccess}
+        onError={onFileChangeError}
+      />
+      <Button type="submit">Upload</Button>
+    </form>
+  );
+};
 
-// export const FormData = () => {
-//   const [files, setFiles] = useState('files', null);
+export const FormData = () => {
+  const [files, setFiles] = useState('files', null);
 
-//   const onFileChangeSuccess = useCallback((acceptedFiles) => setFiles(acceptedFiles), []);
-//   const onFileChangeError = useCallback((rejectedFiles) => console.error(rejectedFiles), []);
+  const onFileChangeSuccess = useCallback(acceptedFiles => setFiles(acceptedFiles), []);
+  const onFileChangeError = useCallback(rejectedFiles => console.error(rejectedFiles), []);
 
-//   const handleSubmit = useCallback((e) => {
-//     e.preventDefault();
-//      //@ts-ignore TODO: Fix implementation for typescript instantiation
-//     let formData = new FormData(e.target);
+  const handleSubmit = useCallback(e => {
+    e.preventDefault();
+    //@ts-ignore TODO: Fix implementation for typescript instantiation
+    let formData = new FormData(e.target);
 
-//     if(files)
-//       /** @type {any} */ (files).forEach((file) => {
-//         formData.append('files', file, file.name)
-//       })
-//   }, []);
+    if (files)
+      /** @type {any} */ (files).forEach(file => {
+        formData.append('files', file, file.name);
+      });
+  }, []);
 
-//   return (
-//     <form encType="multipart/form-data" onSubmit={handleSubmit}>
-//       <input type="text" name="test" />
-//       <Dropzone
-//         icon={<OpenIcon />}
-//         dragAreaText="Drag and drop your files here"
-//         maxFiles={2}
-//         accept={'image/jpeg, image/png'}
-//         multiple={true}
-//         onChange={onFileChangeSuccess}
-//         onError={onFileChangeError}
-//       />
-//       <Button type="submit">Upload</Button>
-//     </form> 
-//   )
-// };
+  return (
+    <form encType="multipart/form-data" onSubmit={handleSubmit}>
+      <input type="text" name="test" />
+      <Dropzone
+        icon={<OpenIcon />}
+        dragAreaText="Drag and drop your files here"
+        maxFiles={2}
+        accept={'image/jpeg, image/png'}
+        multiple={true}
+        onChange={onFileChangeSuccess}
+        onError={onFileChangeError}
+      />
+      <Button type="submit">Upload</Button>
+    </form>
+  );
+};

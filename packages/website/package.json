@@ -14,7 +14,7 @@
     "lint:es": "eslint '{pages,components,hooks,content,store}/**/*.{js,ts,tsx}' --max-warnings=0",
     "lint:es:fix": "eslint '{pages,components,hooks,content,store}/**/*.{js,ts,tsx}' --fix --max-warnings=0",
     "storybook": "start-storybook -p 6006 -s ./public",
-     "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public"
   },
   "dependencies": {
     "@magic-ext/oauth": "^0.7.0",
@@ -85,6 +85,8 @@
     "react-query": "3.33.5",
     "sass": "1.43.4",
     "sass-loader": "10.1.1",
+    "storybook-addon-next-router": "^3.1.1",
+    "storybook-addon-state": "^1.0.3",
     "style-loader": "2.0.0",
     "typescript": "^4.6.0",
     "url-loader": "4.1.1"

@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
-import Dropdown from 'ZeroComponents/dropdown/dropdown'
+import Dropdown from 'ZeroComponents/dropdown/dropdown';
 
 export default {
-  title: 'Zero/Dropdown'
-}
+  title: 'Zero/Dropdown',
+};
 
 export const Default = () => {
   const [selectValue, setSelectValue] = useState(null);
@@ -14,9 +14,9 @@ export const Default = () => {
       <div>
         <input type="text" defaultValue="Select me and tab to dropdown" readOnly style={{ width: '100%' }} />
       </div>
-      <br/>
+      <br />
       <div>Selected: {selectValue}</div>
-      <br/>
+      <br />
       <Dropdown
         value="fourth"
         options={[
@@ -30,6 +30,5 @@ export const Default = () => {
         onChange={value => setSelectValue(value)}
       />
     </>
-  )
-}
-
+  );
+};
