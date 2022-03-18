@@ -440,7 +440,7 @@
               {
                 "type": "B",
                 "label": "JS Client Library",
-                "feature": "<span class='highlight'>npm install</span> Web3.Storage",
+                "feature": "<span class='highlight'>npm install</span> web3.storage",
                 "description": "Import the lightweight Web3.Storage library into your project, and enjoy a simple and familiar way to store and retrieve.",
                 "icon_before": {
                   "url": "https://www.npmjs.com/package/web3.storage",
