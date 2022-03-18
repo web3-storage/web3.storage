@@ -455,7 +455,7 @@ export class DBClient {
               location: {
                 peer_id: pin.location.peerId,
                 peer_name: pin.location.peerName,
-                ipf_peer_id: pin.location.ipfsPeerId,
+                ipfs_peer_id: pin.location.ipfsPeerId,
                 region: pin.location.region
               }
             }
