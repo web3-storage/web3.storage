@@ -35,7 +35,8 @@ const DEFAULT_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 const MAX_BLOCK_SIZE = 1048576
 const MAX_CHUNK_SIZE = 104857600
 // These need to match what is configured in the Cloudflare dashboard
-const RATE_LIMIT_REQUESTS = 30
+// The limit is 30, but throttledQueue has an off-by-one bug!
+const RATE_LIMIT_REQUESTS = 29
 // We deduct a 100ms buffer from the Cloudflare time period to ensure we stay *under* the limit, as
 // as we get punished with a 30 second wait if we hit it
 const RATE_LIMIT_PERIOD = 10 * 1000 - 100
