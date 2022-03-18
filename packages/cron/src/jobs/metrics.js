@@ -1,181 +1,173 @@
-import { gql } from '@web3-storage/db'
-import retry from 'p-retry'
+import debug from 'debug'
+import settle from 'p-settle'
 
-const EPOCH = '2021-07-01T00:00:00.000Z'
+import {
+  UPLOAD_TYPES,
+  PIN_STATUSES
+} from '../../../api/src/constants.js'
 
-const COUNT_USERS = gql`
-  query CountUsers($from: Time!, $to: Time!, $after: String) {
-    countUsers(from: $from, to: $to, _size: 80000, _cursor: $after) {
-      data,
-      after
-    }
-  }
-`
+import { MAX_CONCURRENT_QUERIES } from '../lib/utils.js'
+const log = debug('metrics:updateMetrics')
 
-const COUNT_UPLOADS = gql`
-  query CountUploads($from: Time!, $to: Time!, $after: String) {
-    countUploads(from: $from, to: $to, _size: 80000, _cursor: $after) {
-      data,
-      after
-    }
-  }
-`
+/**
+ * @typedef {import('pg').Pool} Client
+ * @typedef {{ name: string, value: number }} Metric
+ */
 
-const COUNT_CIDS = gql`
-  query countContent($from: Time!, $to: Time!, $after: String) {
-    countContent(from: $from, to: $to, _size: 80000, _cursor: $after) {
-      data,
-      after
-    }
-  }
-`
+const COUNT_USERS = 'SELECT COUNT(*) AS total FROM public.user'
 
-const COUNT_PINS = gql`
-  query CountPins($from: Time!, $to: Time!, $after: String) {
-    countPins(from: $from, to: $to, _size: 80000, _cursor: $after) {
-      data,
-      after
-    }
-  }
-`
+const SUM_CONTENT_DAG_SIZE = 'SELECT SUM(c.dag_size) AS "total" FROM content c'
 
-const COUNT_PINS_BY_STATUS = gql`
-  query CountPinsByStatus($status: PinStatus!, $from: Time!, $to: Time!, $after: String) {
-    countPinsByStatus(status: $status, from: $from, to: $to, _size: 80000, _cursor: $after) {
-      data,
-      after
-    }
-  }
-`
+const COUNT_UPLOADS = 'SELECT COUNT(*) AS total FROM upload'
 
-const SUM_PIN_DAG_SIZE = gql`
-  query SumPinDagSize($from: Time!, $to: Time!, $after: String) {
-    sumPinDagSize(from: $from, to: $to, _size: 25000, _cursor: $after) {
-      data
-      after
-    }
-  }
-`
+const COUNT_UPLOADS_PER_TYPE = 'SELECT COUNT(*) AS total FROM upload WHERE type = $1'
 
-const SUM_CONTENT_DAG_SIZE = gql`
-  query SumContentDagSize($from: Time!, $to: Time!, $after: String) {
-    sumContentDagSize(from: $from, to: $to, _size: 25000, _cursor: $after) {
-      data
-      after
-    }
-  }
-`
+const COUNT_PINS =
+  'SELECT COUNT(*) AS total FROM pin'
 
-const FIND_METRIC = gql`
-  query FindMetric($key: String!) {
-    findMetricByKey(key: $key) {
-      key
-      value
-      updated
-    }
-  }
-`
+const COUNT_PINS_PER_STATUS =
+  'SELECT COUNT(*) AS total FROM pin WHERE status = $1'
 
-const CREATE_OR_UPDATE_METRIC = gql`
-  mutation CreateOrUpdateMetric($data: CreateOrUpdateMetricInput!) {
-    createOrUpdateMetric(data: $data) {
-      key
-      value
-      updated
-    }
-  }
+const COUNT_PIN_REQUESTS = 'SELECT COUNT(*) AS total FROM psa_pin_request'
+
+const UPDATE_METRIC = `
+INSERT INTO metric (name, value, updated_at)
+     VALUES ($1, $2, TIMEZONE('utc', NOW()))
+ON CONFLICT (name) DO UPDATE
+        SET value = $2, updated_at = TIMEZONE('utc', NOW())
 `
 
 /**
- * @param {import('@web3-storage/db').DBClient} db
- * @param {typeof gql} query
- * @param {any} vars
- * @param {string} dataProp
+ * Calculate metrics from RO DB and update their current values in the RW DB.
+ *
+ * @param {{ rwPg: Client, roPg: Client }} config
  */
-async function sumPaginate (db, query, vars, dataProp, onPage) {
-  let after
-  let total = 0
-  while (true) {
-    const res = await retry(() => db.query(query, { after, ...vars }), { onFailedAttempt: console.error })
-    const data = res[dataProp]
-    total += data.data[0] || 0
-    onPage(total)
-    after = data.after
-    if (!after) break
+export async function updateMetrics ({ roPg, rwPg }) {
+  const results = await settle([
+    withTimeLog('updateUsersCount', () => updateUsersCount(roPg, rwPg)),
+    withTimeLog('updateContentRootDagSizeSum', () =>
+      updateContentRootDagSizeSum(roPg, rwPg)
+    ),
+    withTimeLog('updateUploadsCount', () => updateUploadsCount(roPg, rwPg)),
+    ...UPLOAD_TYPES.map((t) =>
+      withTimeLog(`updateUploadsCount[${t}]`, () =>
+        updateUploadsCount(roPg, rwPg, { type: t })
+      )
+    ),
+    withTimeLog('updatePinsCount', () => updatePinsCount(roPg, rwPg)),
+    ...PIN_STATUSES.map((s) =>
+      withTimeLog(`updatePinsCount[${s}]`, () =>
+        updatePinsCount(roPg, rwPg, { status: s })
+      )
+    ),
+    withTimeLog('updatePinRequestsCount', () => updatePinRequestsCount(roPg, rwPg)),
+    { concurrency: MAX_CONCURRENT_QUERIES }
+  ])
+
+  let error
+  for (const promise of results) {
+    if (promise.isFulfilled) continue
+    error = error || promise.reason
+    console.error(promise.reason)
   }
-  return total
+
+  if (error) throw error
+  log('✅ Done')
 }
 
 /**
- * @param {import('@web3-storage/db').DBClient} db
- * @param {string} key
+ * @param {Client} roPg
+ * @param {Client} rwPg
  */
-async function getMetric (db, key) {
-  const { findMetricByKey } = await retry(() => db.query(FIND_METRIC, { key }))
-  return findMetricByKey || { key, value: 0, updated: EPOCH }
+async function updateUsersCount (roPg, rwPg) {
+  const { rows } = await roPg.query(COUNT_USERS)
+  if (!rows.length) throw new Error('no rows returned counting users')
+  await rwPg.query(UPDATE_METRIC, ['users_total', rows[0].total])
 }
 
 /**
- * @param {{ db: import('@web3-storage/db').DBClient }} config
+ * @param {Client} roPg
+ * @param {Client} rwPg
  */
-export async function updateMetrics ({ db }) {
-  await Promise.all([
-    updateMetric(db, 'users_total', COUNT_USERS, {}, 'countUsers'),
-    updateMetric(db, 'uploads_total', COUNT_UPLOADS, {}, 'countUploads'),
-    updateMetric(db, 'content_total', COUNT_CIDS, {}, 'countContent'),
-    updateMetric(db, 'content_bytes_total', SUM_CONTENT_DAG_SIZE, {}, 'sumContentDagSize'),
-    updateMetric(db, 'pins_total', COUNT_PINS, {}, 'countPins'),
-    updateMetric(db, 'pins_bytes_total', SUM_PIN_DAG_SIZE, {}, 'sumPinDagSize'),
-    createMetric(db, 'pins_status_queued_total', COUNT_PINS_BY_STATUS, { status: 'PinQueued' }, 'countPinsByStatus'),
-    createMetric(db, 'pins_status_pinning_total', COUNT_PINS_BY_STATUS, { status: 'Pinning' }, 'countPinsByStatus'),
-    createMetric(db, 'pins_status_pinned_total', COUNT_PINS_BY_STATUS, { status: 'Pinned' }, 'countPinsByStatus'),
-    createMetric(db, 'pins_status_failed_total', COUNT_PINS_BY_STATUS, { status: 'PinError' }, 'countPinsByStatus')
+async function updateContentRootDagSizeSum (roPg, rwPg) {
+  const { rows } = await roPg.query(SUM_CONTENT_DAG_SIZE)
+  if (!rows.length) throw new Error('no rows returned counting users')
+  await rwPg.query(UPDATE_METRIC, ['content_bytes_total', String(rows[0].total)])
+}
+
+/**
+ * @param {Client} roPg
+ * @param {Client} rwPg
+ * @param {Object} [options]
+ * @param {string} [options.type]
+ */
+async function updateUploadsCount (roPg, rwPg, { type } = {}) {
+  if (type) {
+    const { rows } = await roPg.query(COUNT_UPLOADS_PER_TYPE, [type])
+    if (!rows.length) throw new Error(`no rows returned counting ${type} uploads`)
+    return rwPg.query(UPDATE_METRIC, [
+      `uploads_${type.toLowerCase()}_total`,
+      rows[0].total
+    ])
+  }
+
+  const { rows } = await roPg.query(COUNT_UPLOADS)
+  if (!rows.length) throw new Error('no rows returned counting uploads')
+  return rwPg.query(UPDATE_METRIC, [
+    'uploads_total',
+    rows[0].total
   ])
 }
 
 /**
- * @param {import('@web3-storage/db').DBClient} db
- * @param {string} key
- * @param {typeof gql} query
- * @param {any} vars
- * @param {string} dataProp
+ * @param {Client} roPg
+ * @param {Client} rwPg
+ * @param {Object} [options]
+ * @param {string} [options.status]
  */
-async function createMetric (db, key, query, vars, dataProp) {
-  const to = new Date(Date.now() - 1000)
-  console.log(`ℹ️ Creating "${key}" metric from ${EPOCH} to ${to.toISOString()}`)
+async function updatePinsCount (roPg, rwPg, { status } = {}) {
+  if (status) {
+    const { rows } = await roPg.query(COUNT_PINS_PER_STATUS, [status])
+    if (!rows.length) {
+      throw new Error(`no rows returned counting ${status} pins`)
+    }
+    await rwPg.query(UPDATE_METRIC, [
+      `pins_${status.toLowerCase()}_total`,
+      rows[0].total
+    ])
+  }
 
-  vars = { ...vars, from: EPOCH, to: to.toISOString() }
-  const total = await sumPaginate(db, query, vars, dataProp, total => {
-    if (total) console.log(`➕ Incrementing "${key}" to ${total}`)
-  })
-
-  console.log(`💾 Saving value for "${key}": ${total}`)
-  await db.query(CREATE_OR_UPDATE_METRIC, { data: { key, value: total, updated: to.toISOString() } })
+  const { rows } = await roPg.query(COUNT_PINS)
+  if (!rows.length) {
+    throw new Error('no rows returned counting pins')
+  }
+  await rwPg.query(UPDATE_METRIC, [
+    'pins_total',
+    rows[0].total
+  ])
 }
 
 /**
- * @param {import('@web3-storage/db').DBClient} db
- * @param {string} key
- * @param {typeof gql} query
- * @param {any} vars
- * @param {string} dataProp
+ * @param {Client} roPg
+ * @param {Client} rwPg
  */
-async function updateMetric (db, key, query, vars, dataProp) {
-  const to = new Date(Date.now() - 1000)
-  console.log(`🦴 Fetching current metric "${key}"...`)
+async function updatePinRequestsCount (roPg, rwPg) {
+  const { rows } = await roPg.query(COUNT_PIN_REQUESTS)
+  if (!rows.length) throw new Error('no rows returned counting pin requests')
+  await rwPg.query(UPDATE_METRIC, ['pin_requests_total', rows[0].total])
+}
 
-  const metric = await getMetric(db, key)
-  console.log(`ℹ️ Updating "${key}" metric from ${metric.updated} to ${to.toISOString()}`)
-
-  vars = { ...vars, from: metric.updated, to: to.toISOString() }
-  const total = await sumPaginate(db, query, vars, dataProp, total => {
-    if (total) console.log(`➕ Incrementing "${key}" to ${metric.value + total}`)
-  })
-
-  if (!total) {
-    return console.log(`🙅 "${key}" did not change value (${metric.value})`)
+/**
+ * @template T
+ * @param {string} name
+ * @param {() => Promise<T>} fn
+ * @returns {Promise<T>}
+ */
+async function withTimeLog (name, fn) {
+  const start = Date.now()
+  try {
+    return await fn()
+  } finally {
+    log(`${name} took: ${Date.now() - start}ms`)
   }
-
-  console.log(`💾 Saving new value for "${key}": ${metric.value + total}`)
-  await db.query(CREATE_OR_UPDATE_METRIC, { data: { key, value: metric.value + total, updated: to.toISOString() } })
 }

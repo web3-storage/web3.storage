@@ -339,7 +339,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
-      assert.strictEqual(data.count, 3)
+      assert.strictEqual(data.count, 4)
     })
 
     it('filters pins by status', async () => {
@@ -381,7 +381,27 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
-      assert.strictEqual(data.count, 4)
+      assert.strictEqual(data.count, 5)
+    })
+
+    it('filters pins by queued', async () => {
+      const opts = new URLSearchParams({
+        status: 'queued'
+      })
+      const url = new URL(`${baseUrl}?${opts}`).toString()
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Server response is ok')
+      const data = await res.json()
+      assert.strictEqual(data.count, 1)
     })
 
     it('filters pins created before a date', async () => {
@@ -424,8 +444,8 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
-      assert.strictEqual(data.results.length, 1)
-      assert.strictEqual(data.count, 1)
+      assert.strictEqual(data.results.length, 2)
+      assert.strictEqual(data.count, 2)
     })
 
     it('limits the number of pins returned for this user and includes the total', async () => {
@@ -446,7 +466,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
-      assert.strictEqual(data.count, 6)
+      assert.strictEqual(data.count, 7)
       assert.strictEqual(data.results.length, 3)
     })
 
@@ -852,16 +872,6 @@ describe('Pinning APIs endpoints', () => {
         createPinWithStatus('PinError'),
         createPinWithStatus('PinQueued')
       ]
-      assert.strictEqual(getEffectivePinStatus(pins), 'queued')
-    })
-
-    it('should return "queued" if at least 1 pin has remote status', () => {
-      const pins = [
-        createPinWithStatus('UnpinQueued'),
-        createPinWithStatus('PinError'),
-        createPinWithStatus('PinQueued')
-      ]
-
       assert.strictEqual(getEffectivePinStatus(pins), 'queued')
     })
 

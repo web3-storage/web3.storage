@@ -16,9 +16,9 @@ Verify that the following are set in the `.env` file in root of the project mono
 ```ini
 ENV=dev
 
-DEV_PG_REST_URL=http://localhost:3000
-DEV_PG_REST_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU
-DEV_PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
+PG_REST_URL=http://localhost:3000
+PG_REST_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU
+PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 
 CLUSTER_API_URL=http://127.0.0.1:9094/
 CLUSTER_IPFS_PROXY_API_URL=http://127.0.0.1:9095/api/v0/

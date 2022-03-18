@@ -3,10 +3,9 @@ DROP FUNCTION IF EXISTS json_arr_to_json_element_array;
 DROP FUNCTION IF EXISTS create_key;
 DROP FUNCTION IF EXISTS create_upload;
 DROP FUNCTION IF EXISTS upsert_pin;
+DROP FUNCTION IF EXISTS upsert_pins;
 DROP FUNCTION IF EXISTS user_used_storage;
 DROP FUNCTION IF EXISTS user_auth_keys_list;
-DROP FUNCTION IF EXISTS content_dag_size_total;
-DROP FUNCTION IF EXISTS pin_dag_size_total;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
 DROP FUNCTION IF EXISTS publish_name_record;
 
@@ -41,7 +40,6 @@ BEGIN
 END
 $$;
 
-
 -- Creates a content table, with relative pins and pin_requests
 CREATE OR REPLACE FUNCTION create_content(data json) RETURNS TEXT
     LANGUAGE plpgsql
@@ -52,7 +50,6 @@ $$
 DECLARE
   pin json;
   pin_result_id BIGINT;
-  pin_location_result_id BIGINT;
   inserted_cid TEXT;
 BEGIN
   -- Set timeout as imposed by heroku
@@ -78,23 +75,25 @@ BEGIN
   -- Iterate over received pins
   foreach pin in array json_arr_to_json_element_array(data -> 'pins')
   loop
-        -- Add to pin_location table if new
-        insert into pin_location (peer_id, peer_name, region)
-        values (pin -> 'location' ->> 'peer_id',
-                pin -> 'location' ->> 'peer_name',
-                pin -> 'location' ->> 'region')
-        -- Force update on conflict to get result, otherwise needs a follow up select
-        ON CONFLICT ( peer_id ) DO UPDATE
-          SET "peer_name" = pin -> 'location' ->> 'peer_name',
-              "region" = pin -> 'location' ->> 'region'
-        returning id into pin_location_result_id;
+        INSERT INTO pin_location (peer_id, peer_name, ipfs_peer_id, region)
+          SELECT * FROM (
+            SELECT pin -> 'location' ->> 'peer_id' AS peer_id,
+                   pin -> 'location' ->> 'peer_name' AS peer_name,
+                   pin -> 'location' ->> 'ipfs_peer_id' AS ipfs_peer_id,
+                   pin -> 'location' ->> 'region' AS region
+          ) AS tmp
+          WHERE NOT EXISTS (
+            SELECT 42 FROM pin_location WHERE peer_id = pin -> 'location' ->> 'peer_id'
+          );
 
-        insert into pin (content_cid, status, pin_location_id, updated_at, inserted_at)
-        values (data ->> 'content_cid',
-                (pin ->> 'status')::pin_status_type,
-                pin_location_result_id,
-                (data ->> 'updated_at')::timestamptz,
-                (data ->> 'inserted_at')::timestamptz)
+        INSERT INTO pin (content_cid, status, pin_location_id, updated_at, inserted_at)
+          SELECT data ->> 'content_cid' AS content_cid,
+                 (pin ->> 'status')::pin_status_type AS status,
+                 id AS pin_location_id,
+                 (data ->> 'updated_at')::timestamptz AS updated_at,
+                 (data ->> 'inserted_at')::timestamptz AS inserted_at
+            FROM pin_location
+           WHERE peer_id = pin -> 'location' ->> 'peer_id'
         -- Force update on conflict to get result, otherwise needs a follow up select
         ON CONFLICT ( content_cid, pin_location_id ) DO UPDATE
           SET "updated_at" = (data ->> 'updated_at')::timestamptz
@@ -122,9 +121,6 @@ AS
 $$
 DECLARE
   backup_url TEXT;
-  pin json;
-  pin_result_id BIGINT;
-  pin_location_result_id BIGINT;
   inserted_upload_id BIGINT;
 BEGIN
   -- Set timeout as imposed by heroku
@@ -221,33 +217,55 @@ CREATE OR REPLACE FUNCTION upsert_pin(data json) RETURNS TEXT
 AS
 $$
 DECLARE
-  pin_location_result_id BIGINT;
   pin_result_id BIGINT;
 BEGIN
   -- DATA => content_cid, pin(status, location(peer_id, peer_name, region))
 
   -- Add to pin_location table if new
-  insert into pin_location (peer_id, peer_name, region)
-  values (data -> 'pin' -> 'location' ->> 'peer_id',
-          data -> 'pin' -> 'location' ->> 'peer_name',
-          data -> 'pin' -> 'location' ->> 'region')
-  ON CONFLICT ( peer_id ) DO UPDATE
-          SET "peer_name" = data -> 'pin' -> 'location' ->> 'peer_name',
-              "region" = data -> 'pin' -> 'location' ->> 'region'
-  returning id into pin_location_result_id;
+  INSERT INTO pin_location (peer_id, peer_name, ipfs_peer_id, region)
+    SELECT * FROM (
+      SELECT data -> 'pin' -> 'location' ->> 'peer_id' AS peer_id,
+             data -> 'pin' -> 'location' ->> 'peer_name' AS peer_name,
+             data -> 'pin' -> 'location' ->> 'ipfs_peer_id' AS ipfs_peer_id,
+             data -> 'pin' -> 'location' ->> 'region' AS region
+    ) AS tmp
+    WHERE NOT EXISTS (
+      SELECT 42 FROM pin_location WHERE peer_id = data -> 'pin' -> 'location' ->> 'peer_id'
+    );
 
   -- Add to pin table if new
   insert into pin (content_cid, status, pin_location_id, updated_at)
-  values (data ->> 'content_cid',
-        (data -> 'pin' ->> 'status')::pin_status_type,
-        pin_location_result_id,
-        (NOW())::timestamptz)
+    SELECT data ->> 'content_cid' AS content_cid,
+           (data -> 'pin' ->> 'status')::pin_status_type AS status,
+           id AS pin_location_id,
+           (NOW())::timestamptz AS updated_at
+      FROM pin_location
+     WHERE peer_id = data -> 'pin' -> 'location' ->> 'peer_id'
   ON CONFLICT ( content_cid, pin_location_id ) DO UPDATE
         SET "status" = (data -> 'pin' ->> 'status')::pin_status_type,
             "updated_at" = NOW()
   returning id into pin_result_id;
 
-  return (pin_location_result_id)::TEXT;
+  return (pin_result_id)::TEXT;
+END
+$$;
+
+CREATE OR REPLACE FUNCTION upsert_pins(data json) RETURNS TEXT[]
+    LANGUAGE plpgsql
+    volatile
+    PARALLEL UNSAFE
+AS
+$$
+DECLARE
+  pin json;
+  pin_ids TEXT[];
+BEGIN
+  FOREACH pin IN array json_arr_to_json_element_array(data -> 'pins')
+  LOOP
+    SELECT pin_ids || upsert_pin(pin -> 'data') INTO pin_ids;
+  END LOOP;
+
+  RETURN pin_ids;
 END
 $$;
 
@@ -284,45 +302,6 @@ SELECT (ak.id)::TEXT AS id,
        EXISTS(SELECT 42 FROM upload u WHERE u.auth_key_id = ak.id) AS has_uploads
   FROM auth_key ak
  WHERE ak.user_id = query_user_id AND ak.deleted_at IS NULL
-$$;
-
-CREATE OR REPLACE FUNCTION pin_from_status_total(query_status TEXT) RETURNS TEXT
-  LANGUAGE plpgsql
-AS
-$$
-BEGIN
-  return(
-    select count(*)
-    from pin
-    where status = (query_status)::pin_status_type
-  )::TEXT;
-END
-$$;
-
-CREATE OR REPLACE FUNCTION content_dag_size_total() RETURNS TEXT
-  LANGUAGE plpgsql
-AS
-$$
-BEGIN
-  return(
-    select sum(c.dag_size)
-    from content c
-  )::TEXT;
-END
-$$;
-
-CREATE OR REPLACE FUNCTION pin_dag_size_total() RETURNS TEXT
-  LANGUAGE plpgsql
-AS
-$$
-BEGIN
-  return(
-    select sum(c.dag_size)
-    from pin p
-    join content c on c.cid = p.content_cid
-    where p.status = ('Pinned')::pin_status_type
-  )::TEXT;
-END
 $$;
 
 CREATE OR REPLACE FUNCTION find_deals_by_content_cids(cids text[])

@@ -20,3 +20,11 @@ USER MAPPING FOR :WEB3_STORAGE_USER
       user :'DAG_CARGO_USER', 
       password :'DAG_CARGO_PASSWORD'
     );
+
+CREATE
+USER MAPPING IF NOT EXISTS FOR :WEB3_STORAGE_STATS_USER
+  SERVER dag_cargo_server
+  OPTIONS (
+      user :'DAG_CARGO_USER', 
+      password :'DAG_CARGO_PASSWORD'
+    );

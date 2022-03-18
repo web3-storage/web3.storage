@@ -5,6 +5,16 @@
 ENV=dev
 
 
+## ---- common ---------------------------------------------------------------
+
+# PostgREST API token, for role "postgres", using secret value PGRST_JWT_SECRET from './postgres/docker/docker-compose.yml' see: https://postgrest.org/en/v8.0/tutorials/tut1.html#step-3-sign-a-token
+PG_REST_JWT="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU"
+PG_REST_URL=http://127.0.0.1:3000
+# FOR TESTS ONLY: DB connection string for locally running postgres
+PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
+RO_PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
+
+
 ## ---- api -------------------------------------------------------------------
 
 # Create a https://magic.link account and set secret keys here. Set NEXT_PUBLIC_MAGIC with the publi key.
@@ -16,12 +26,6 @@ SALT="Q6d8sTZa+wpIPrppPq6VdIKEbknjrsSCQklh/hVU4U0="
 # base64 test:test - the creds for the local cluster test container
 CLUSTER_BASIC_AUTH_TOKEN="dGVzdDp0ZXN0"
 CLUSTER_API_URL=http://127.0.0.1:9094
-
-# PostgREST API token, for role "postgres", using secret value PGRST_JWT_SECRET from './postgres/docker/docker-compose.yml' see: https://postgrest.org/en/v8.0/tutorials/tut1.html#step-3-sign-a-token
-PG_REST_JWT="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU"
-PG_REST_URL=http://127.0.0.1:3000
-# FOR TESTS ONLY: DB connection string for locally running postgres
-PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 
 # IPFS Gateaway URL pointing to dockerised ipfs instance
 GATEWAY_URL=http://localhost:8080
@@ -41,11 +45,6 @@ NEXT_PUBLIC_ENV=dev
 
 
 ## ---- cron ------------------------------------------------------------------
-
-# TODO: these are a duplicate of the api vars. Fix cron jobs so we can reuse the api vars.
-DEV_PG_REST_JWT="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU"
-DEV_PG_REST_URL=http://127.0.0.1:3000
-DEV_PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 
 CLUSTER_IPFS_PROXY_API_URL=http://127.0.0.1:9095/api/v0/
 

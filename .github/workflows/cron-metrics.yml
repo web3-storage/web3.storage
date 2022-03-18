@@ -1,18 +1,18 @@
-name: Cron dagcargo Populate Content DAG Sizes
+name: Cron Metrics
 
 on:
   schedule:
-    - cron: '38 * * * *'
+    - cron: '*/20 * * * *'
   workflow_dispatch:
 
 jobs:
   update:
-    name: Populate Missing Content DAG Sizes
+    name: Calculate metrics
     runs-on: ubuntu-latest
     strategy:
       matrix:
         env: ['staging', 'production']
-    timeout-minutes: 60
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -27,4 +27,4 @@ jobs:
           STAGING_RO_PG_CONNECTION: ${{ secrets.STAGING_PG_CONNECTION }} # no replica for staging
           PROD_PG_CONNECTION: ${{ secrets.PROD_PG_CONNECTION }}
           PROD_RO_PG_CONNECTION: ${{ secrets.PROD_RO_PG_CONNECTION }}
-        run: npm run start:dagcargo:sizes -w packages/cron
+        run: yarn --cwd packages/cron start:metrics

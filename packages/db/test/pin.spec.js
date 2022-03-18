@@ -22,6 +22,7 @@ describe('pin', () => {
     location: {
       peerId: 'peer_id',
       peerName: 'peer_name',
+      ipfsPeerId: 'ipfs_peer_id',
       region: 'region'
     }
   }
@@ -69,7 +70,7 @@ describe('pin', () => {
       sourceCid: cid,
       authKey: authKeys[0]._id,
       type,
-      dagSize: dagSize,
+      dagSize,
       name,
       pins: [initialPinData],
       backupUrls: [initialBackupUrl]
@@ -91,37 +92,31 @@ describe('pin', () => {
     assert(pins[0].created, 'pin has inserted timestamp')
     assert(pins[0].updated, 'pin has inserted timestamp')
     assert.strictEqual(pins[0].status, initialPinData.status, 'pin has correct state')
-    assert.strictEqual(pins[0].peerId, initialPinData.location.peerId, 'pin has correct location peer id')
+    assert.strictEqual(pins[0].peerId, initialPinData.location.ipfsPeerId, 'pin has correct location peer id')
     assert.strictEqual(pins[0].peerName, initialPinData.location.peerName, 'pin has correct location peer name')
     assert.strictEqual(pins[0].region, initialPinData.location.region, 'pin has correct location peer region')
   })
 
   it('can update previously created pin', async () => {
     const newStatus = 'Pinned'
-    const newName = 'peer_name_2'
 
     const pinsPreUpdated = await client.getPins(cid)
     assert.strictEqual(pinsPreUpdated[0].status, initialPinData.status, 'pin has correct state')
     assert.strictEqual(pinsPreUpdated[0].peerName, initialPinData.location.peerName, 'pin has correct location peer name')
     assert.notStrictEqual(pinsPreUpdated[0].status, newStatus, 'pin is pinning')
-    assert.notStrictEqual(pinsPreUpdated[0].peerName, newName, 'pin has first name')
 
     // Update pin status to Pinned
     const updatedPin = await client.upsertPin(cid, {
       status: newStatus,
-      location: {
-        ...initialPinData.location,
-        peerName: newName
-      }
+      location: initialPinData.location
     })
     assert(updatedPin, 'pin updated')
     assert.strictEqual(updatedPin, pinsPreUpdated[0]._id, 'id of previous pin')
 
     const pinsAfterUpdated = await client.getPins(cid)
     assert.strictEqual(pinsAfterUpdated[0].status, newStatus, 'pin is pinned')
-    assert.strictEqual(pinsAfterUpdated[0].peerName, newName, 'pin has second name')
+    assert.strictEqual(pinsAfterUpdated[0].peerName, initialPinData.location.peerName, 'pin has second name')
     assert.notStrictEqual(pinsAfterUpdated[0].status, initialPinData.status, 'pin has correct state')
-    assert.notStrictEqual(pinsAfterUpdated[0].peerName, initialPinData.location.peerName, 'pin has correct location peer name')
   })
 
   it('can insert a new pin for a cid', async () => {

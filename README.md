@@ -19,6 +19,10 @@ npm install
 npm start
 ```
 
+To be able to run the APIs you need to make sure the underlying DB is populated with the required tables.
+Please follow the instructions in the [Populate Database](./packages/db/README.md#2-populate-database) section in the db package README.
+
+
 To add a new workspace to the repo:
 
 ```console

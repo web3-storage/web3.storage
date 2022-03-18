@@ -1,4 +1,4 @@
-export const ENV = 'dev'
+export const ENV = 'test'
 export const MAINTENANCE_MODE = 'rw'
 export const SALT = 'test-salt'
 export const MAGIC_SECRET_KEY = 'test-magic-secret-key'
