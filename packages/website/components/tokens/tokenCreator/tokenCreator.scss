@@ -65,13 +65,18 @@
     width: 100%;
     min-width: 0;
   }
-  &:hover {
-    border-color: $waterloo;
+  &:focus {
+    border-color: $seaShell;
   }
 
   &::placeholder {
     color: $cyan;
     @include fontSize_Mini;
+  }
+  &::-webkit-input-placeholder,
+  &::-moz-placeholder {
+    color: $cyan;
+    opacity: 0.8;
   }
 }
 
