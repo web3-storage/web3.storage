@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 175 175">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.044" y1="1" x2="0.967" y2="0.03" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#31e7ea"/>
+      <stop offset="0.496" stop-color="#3064e0"/>
+      <stop offset="1" stop-color="#d726d7"/>
+    </linearGradient>
+    <filter id="second-gradient" x="0" y="0" width="174" height="174" filterUnits="userSpaceOnUse">
+      <feOffset dy="2" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood flood-color="#714cdd" flood-opacity="0.325"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g transform="translate(14.953 -4.969)">
+    <g transform="matrix(1, 0, 0, 1, -14.95, 4.97)" filter="url(#second-gradient)">
+      <rect id="second-gradient-2" width="150" height="150" rx="5" transform="translate(12 10)" fill="url(#linear-gradient)"/>
+    </g>
+    <g id="w3storage-logo" transform="translate(107.047 124.969) rotate(180)">
+      <path id="Path_4196" d="M35.046,0A35,35,0,1,1,.02,34.974,35,35,0,0,1,35.046,0Zm0,64.849A29.849,29.849,0,1,0,5.171,34.974,29.849,29.849,0,0,0,35.046,64.849Z" transform="translate(-0.02)" fill="#fff"/>
+      <path id="Path_4197" d="M21.486,11.246V4.73H17.366v6.516L11.983,8.13,10,11.246l5.563,3.4L10,18.045l1.983,3.116,5.383-3.116v6.516h4.121V18.045l5.151,3.116,2.112-3.116-5.666-3.4,5.666-3.4L26.74,8.13Z" transform="translate(15.548 33.258)" fill="#fff"/>
+      <path id="Path_4198" d="M26.488,19.11V12.62H22.47v6.49l-5.331-3.116L15.13,19.084l5.563,3.425-5.563,3.3,2.009,3.065L22.5,25.78v6.645h3.992V25.832L31.9,28.871l1.983-3.091-5.563-3.4,5.563-3.425L31.9,15.994Z" transform="translate(-2.794 5.073)" fill="#fff"/>
+      <path id="Path_4199" d="M16.756,19.11V12.62H12.739v6.49L7.253,15.994,5.27,19.084l5.563,3.425-5.46,3.3L7.253,29l5.486-3.168v6.593h4.018V25.832l5.357,3.039,2.009-3.091-5.563-3.348,5.563-3.425-2.009-3.013Z" transform="translate(32.357 5.073)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

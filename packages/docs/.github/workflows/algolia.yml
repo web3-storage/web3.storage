@@ -1,0 +1,19 @@
+name: Update Algolia Index
+
+on:
+  schedule:
+    - cron: '0 12 * * *' # run daily at 12:00 UTC
+
+jobs:
+  algolia:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Update Algolia
+        uses: darrenjennings/algolia-docsearch-action@master
+        with:
+          algolia_application_id: ${{ secrets.ALGOLIA_APP_ID }}
+          algolia_api_key: ${{ secrets.ALGOLIA_UPDATE_API_KEY }}
+          file: 'algolia-config.json'

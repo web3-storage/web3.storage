@@ -1,0 +1,54 @@
+.admonition {
+    margin-bottom: toRem(60);
+    background-color: $white;
+    h5 {
+        text-transform: none;
+        @include fontSize_Regular;
+    }
+    p {
+        color: $ebony;
+    }
+    a {
+        color: $ebony;
+        &:hover {
+            color: $ebony;
+        }
+    }
+    position: relative;
+    border: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    &:before {
+        content: '';
+        border-radius: 10px;
+        width: var(--ifm-blockquote-border-left-width);
+        @include gradient_Background_PinkBlue_Reverse;
+        height: 100%;
+        position: absolute;
+        left: calc(var(--ifm-blockquote-border-left-width) * -1);
+        top: 0;
+    }
+    .admonition-icon {
+        margin-right: toRem(20);
+    }
+    &.admonition-tip .admonition-icon {
+        background-image: url(#{$imagePath}/icon-bulb.svg);
+        background-repeat: no-repeat;
+        width: 24px;
+        height: 30px;
+        background-size: cover;
+        svg {
+            display: none;
+        }
+    }
+    &.admonition-warning .admonition-icon,
+    &.admonition-danger .admonition-icon {
+        background-image: url(#{$imagePath}/icon-caution.svg);
+        background-repeat: no-repeat;
+        width: 25.5px;
+        height: 23.5px;
+        svg {
+            display: none;
+        }
+    }
+}

@@ -1,0 +1,41 @@
+name: CI
+
+# Controls when the action will run.
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  cicheck:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # No shallow clone, we need all history!
+      - name: Setup Python
+        uses: actions/setup-python@v2.2.2
+      # Runs a set of commands using the runners shell
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y optipng jpegoptim jq
+          pip install bs4
+          pip install requests
+          pip install scour
+      - name: Run CI Checks
+        env:
+          GH_USERNAME: ${{ secrets.GH_USERNAME }}
+          GH_USER_EMAIL: ${{ secrets.GH_USER_EMAIL }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_USER_ID: ${{ secrets.GH_USER_ID }}
+          LANGUAGETOOLS_API_KEY: ${{ secrets.LANGUAGETOOLS_API_KEY }}
+          LANGUAGETOOLS_USERNAME: ${{ secrets.LANGUAGETOOLS_USERNAME }}
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          FIRST_COMMIT: ${{ github.event.pull_request.base.sha }}
+          LAST_COMMIT: ${{ github.event.after }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: bash ${{github.workspace}}/scripts/cicheck.sh

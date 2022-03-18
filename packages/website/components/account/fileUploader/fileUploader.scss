@@ -1,0 +1,109 @@
+.file-uploader-container {
+  color: $ebony;
+  padding: 3.125rem 8.5rem 3.125rem 8.125rem;
+
+  @include medium {
+    padding: 2.375rem 1.3125rem;
+    width: 100%;
+  }
+
+  > * {
+    position: relative;
+  }
+  h5 {
+    text-align: center;
+    margin-bottom: 0.85rem;
+  }
+}
+
+.file-upload-subheading {
+  @include fontSize_Small;
+  @include fontWeight_Regular;
+  text-align: center;
+  margin-bottom: 1rem;
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+.file-uploader-dropzone {
+  .droparea {
+    padding: 1.875rem 0;
+    background: rgba($white, 0.1);
+    border: solid;
+    border-image: url('../../../assets/images/dashed-border.png') 2 round;
+    @include borderRadius_Large;
+  }
+
+  .filelist {
+    @include fontSize_Tiny;
+    @include fontWeight_Regular;
+
+    > * {
+      border-top: 0.0625rem solid rgba($white, 0.25);
+      padding: 0.25rem 0;
+    }
+    border-bottom: 0.0625rem solid rgba($white, 0.25);
+    grid-row-gap: 0;
+    margin-bottom: 0.85rem;
+  }
+  margin-bottom: 0.5rem;
+}
+
+.file-upload-modal {
+  .modalContainer {
+    max-width: calc($containerWidth - 10%);
+    @include borderRadius_Large;
+    @include medium {
+      width: 90%;
+    }
+  }
+  .modalClose {
+    color: $ebony;
+    font-size: 2rem;
+  }
+
+  svg {
+    color: $ebony;
+  }
+
+  .dragAreaText {
+    @include fontSize_Small;
+    @include fontWeight_Regular;
+    letter-spacing: $letterSpacing_None;
+  }
+}
+
+.upload-content-block {
+  @include leading_Small;
+  padding-left: 1.25rem;
+  padding-right: 0.25rem;
+  &:not(:last-child) {
+    margin-bottom: 1.5rem;
+  }
+  &:last-child {
+    padding-bottom: 0.75rem;
+  }
+  @include medium {
+    padding: 0;
+  }
+}
+
+.upload-content-block-heading {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  @include fontSize_Small;
+  @include fontWeight_Semibold;
+
+  svg {
+    margin-right: 1.4375rem;
+  }
+}
+
+.upload-content-block-description {
+  @include fontSize_Tiny;
+  @include fontWeight_Regular;
+  letter-spacing: $letterSpacing_None;
+}
