@@ -79,6 +79,15 @@ $file-size: auto;
       }
     }
   }
+  a {
+    padding-bottom: 0;
+    border-bottom: 0.03125rem solid rgba(255, 255, 255, 0.25);
+    line-height: 1.6;
+    transition: all $transitionDuration linear;
+    &:hover {
+      border-bottom-color: rgba(255, 255, 255, 0.75);
+    }
+  }
 
   .file {
     &-select-container {
