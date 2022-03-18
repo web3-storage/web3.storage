@@ -56,8 +56,11 @@ const RATE_LIMIT_PERIOD = 10 * 1000 - 100
 /**
  * @returns {RateLimiter}
  */
-export function createRateLimiter() {
-  const throttle = throttledQueue(RATE_LIMIT_REQUESTS, RATE_LIMIT_PERIOD)
+export function createRateLimiter (
+  requestsLimit = RATE_LIMIT_REQUESTS,
+  timePeriod = RATE_LIMIT_PERIOD
+) {
+  const throttle = throttledQueue(requestsLimit, timePeriod)
   return () => throttle(() => {})
 }
 
@@ -67,7 +70,6 @@ export function createRateLimiter() {
  * This is because rate limits are enforced per API token.
  */
 const globalRateLimiter = createRateLimiter()
-
 
 /**
  * @implements Service

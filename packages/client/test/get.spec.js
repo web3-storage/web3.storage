@@ -1,14 +1,15 @@
 /* eslint-env mocha */
 import * as assert from 'uvu/assert'
-import { Web3Storage } from 'web3.storage'
+import { Web3Storage, createRateLimiter } from 'web3.storage'
 
 describe('get', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
   const token = AUTH_TOKEN || 'good'
   const endpoint = new URL(API_PORT ? `http://localhost:${API_PORT}` : '')
+  const rateLimiter = createRateLimiter(Infinity, 1000)
 
   it('get a CAR', async () => {
-    const client = new Web3Storage({ token, endpoint })
+    const client = new Web3Storage({ token, endpoint, rateLimiter })
     const cid = 'bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e'
     const res = await client.get(cid)
     assert.ok(res.ok)
@@ -21,7 +22,7 @@ describe('get', () => {
   })
 
   it('get files', async () => {
-    const client = new Web3Storage({ token, endpoint })
+    const client = new Web3Storage({ token, endpoint, rateLimiter })
     const cid = 'bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e'
     const res = await client.get(cid)
     assert.ok(res.ok)
@@ -44,7 +45,7 @@ describe('get', () => {
   })
 
   it('get dirs', async () => {
-    const client = new Web3Storage({ token, endpoint })
+    const client = new Web3Storage({ token, endpoint, rateLimiter })
     const cid = 'bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'
     const res = await client.get(cid)
     assert.ok(res.ok)
@@ -62,7 +63,7 @@ describe('get', () => {
   })
 
   it('res.files throws on 404', async () => {
-    const client = new Web3Storage({ token, endpoint })
+    const client = new Web3Storage({ token, endpoint, rateLimiter })
     const cid = 'bafkreieq5jui4j25lacwomsqgjeswwl3y5zcdrresptwgmfylxo2depppq'
     try {
       const res = await client.get(cid)
@@ -75,7 +76,7 @@ describe('get', () => {
   })
 
   it('res.unixFsIteratory throws on invalid cid', async () => {
-    const client = new Web3Storage({ token, endpoint })
+    const client = new Web3Storage({ token, endpoint, rateLimiter })
     const cid = 'bafkreieq'
     try {
       const res = await client.get(cid)
