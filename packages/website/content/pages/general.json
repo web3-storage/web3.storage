@@ -164,10 +164,10 @@
         "text": "2021 Protocol Labs"
       },
       "right": {
-        "text": "Want more free storage?",
+        "text": "",
         "link": {
-          "text": "Submit a request",
-          "url": "/account"
+          "text": "",
+          "url": ""
         }
       }
     }

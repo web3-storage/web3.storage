@@ -63,10 +63,10 @@
     },
     "storage_manager": {
       "heading": "Storage",
-      "prompt": "An overview of your stored data usage",
+      "prompt": "Need more free storage?",
       "buttons": {
         "search": "Search my files",
-        "request": ""
+        "request": "Submit a request"
       },
       "loading": "Loading...",
       "tiers": [
