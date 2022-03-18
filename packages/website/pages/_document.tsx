@@ -23,6 +23,7 @@ class MyDocument extends Document {
           <meta name="msapplication-TileColor" content="#3a0839" />
           <meta name="msapplication-config" content="/browserconfig.xml" />
           <meta name="theme-color" content="#5bbad5" />
+          <script type="text/javascript" dangerouslySetInnerHTML={{ __html: process.env.rawJsFromFile! }}></script>
         </Head>
         <body>
           <Main />

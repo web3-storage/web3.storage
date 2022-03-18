@@ -100,6 +100,7 @@
 .files-manager-table-content {
   display: flex;
   flex-direction: column;
+  min-height: toRem(300);
 }
 
 .files-manager-upload-cta {
@@ -191,6 +192,42 @@
     justify-content: flex-end;
     .button {
       margin-left: 0.5rem;
+    }
+  }
+}
+
+.files-manager-overlay {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  text-align: center;
+  z-index: 1;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 250ms;
+  &.show {
+    opacity: 1;
+    transition: opacity 250ms;
+  }
+  &-check {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: toRem(286);
+    height: toRem(286);
+    border-radius: 10px;
+    background: rgba(#757a9b, 0.25);
+    mix-blend-mode: normal;
+    border: toRem(4) solid rgba($white, 0.25);
+    box-shadow: 0px 12.6176px 25.2353px rgba(0, 0, 0, 0.160784);
+    border-radius: toRem(8.5);
+    svg {
+      opacity: 0.49;
     }
   }
 }

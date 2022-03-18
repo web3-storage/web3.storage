@@ -121,6 +121,7 @@ export function envAll (req, env, ctx) {
     env.s3BucketRegion = env.S3_BUCKET_REGION
 
     env.s3Client = new S3Client({
+      // logger: console, // use me to get some debug info on what the client is up to
       endpoint: env.S3_BUCKET_ENDPOINT,
       forcePathStyle: !!env.S3_BUCKET_ENDPOINT, // Force path if endpoint provided
       region: env.S3_BUCKET_REGION,
@@ -129,5 +130,17 @@ export function envAll (req, env, ctx) {
         secretAccessKey: env.S3_SECRET_ACCESS_KEY_ID
       }
     })
+    if (env.ENV === 'dev') {
+      // show me what s3 sdk is up to.
+      env.s3Client.middlewareStack.add(
+        (next, context) => async (args) => {
+          console.log('s3 request headers', args.request.headers)
+          return next(args)
+        },
+        {
+          step: 'finalizeRequest'
+        }
+      )
+    }
   }
 }

@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const git = require('git-rev-sync')
 const { GitRevisionPlugin } = require('git-revision-webpack-plugin')
 
@@ -46,6 +47,9 @@ const nextConfig = {
       '/ipfs-404.html': { page: '/404' },
     }
   },
+  env: {
+    rawJsFromFile: fs.readFileSync('./rawJsFromFile.js').toString()
+  }
 }
 
 module.exports = nextConfig
