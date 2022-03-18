@@ -20,6 +20,7 @@ import Dropdown from 'ZeroComponents/dropdown/dropdown'
  * @prop {string} [staticLabel]
  * @prop {number} [defaultIndex]
  * @prop {function} [onChange]
+ * @prop {import('react').ChangeEventHandler<HTMLSelectElement>} [onSelectChange]
  */
 
 export const SortDirection = {
@@ -90,7 +91,8 @@ const Sortable = ({
   value,
   queryParam,
   onChange,
-  staticLabel
+  staticLabel,
+  onSelectChange
 }) => {
   const [currentOption, setCurrentOption] = useState(/** @type {any} */(null))
 
@@ -120,6 +122,7 @@ const Sortable = ({
         queryParam={queryParam}
         onChange={handleDropdownChange}
         staticLabel={staticLabel}
+        onSelectChange={onSelectChange}
       />
     </div>
   )

@@ -21,6 +21,7 @@ import CloseIcon from 'assets/icons/close';
 import { formatTimestamp } from 'lib/utils';
 import { useUploads } from 'components/contexts/uploadsContext';
 import { useUser } from 'components/contexts/userContext';
+import CheckIcon from 'assets/icons/check';
 
 const defaultQueryOrder = 'a-z';
 
@@ -46,6 +47,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
   const [itemsPerPage, setItemsPerPage] = useState(null);
   const [keyword, setKeyword] = useState(filter);
   const [deleteSingleCid, setDeleteSingleCid] = useState('');
+  const [showCheckOverlay, setShowCheckOverlay] = useState(false);
   const deleteModalState = useState(false);
   const queryOrderRef = useRef(query.order);
 
@@ -76,6 +78,9 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
         undefined,
         { shallow: true }
       );
+
+      const scrollToElement = document.querySelector('.account-files-manager');
+      scrollToElement?.scrollIntoView(true);
 
       queryOrderRef.current = query.order;
     }
@@ -161,6 +166,18 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
     [renameUpload, files, nameEditingId]
   );
 
+  const showCheckOverlayHandler = useCallback(() => {
+    setShowCheckOverlay(true);
+    setTimeout(() => {
+      setShowCheckOverlay(false);
+    }, 500);
+  }, [setShowCheckOverlay]);
+
+  const refreshHandler = useCallback(() => {
+    getUploads();
+    showCheckOverlayHandler();
+  }, [getUploads, showCheckOverlayHandler]);
+
   return (
     <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
       <div className="files-manager-header">
@@ -175,10 +192,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
           onChange={setFilteredFiles}
           onValueChange={setKeyword}
         />
-        <button
-          className={clsx('refresh', isFetchingUploads && 'disabled')}
-          onClick={useCallback(_ => getUploads(), [getUploads])}
-        >
+        <button className={clsx('refresh', isFetchingUploads && 'disabled')} onClick={refreshHandler}>
           <RefreshIcon />
           <span>{content?.ui.refresh}</span>
         </button>
@@ -189,6 +203,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
           value={defaultQueryOrder}
           queryParam="order"
           onChange={setSortedFiles}
+          onSelectChange={showCheckOverlayHandler}
         />
       </div>
       <FileRowItem
@@ -276,6 +291,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
             visiblePages={1}
             queryParam="page"
             onChange={setPaginatedFiles}
+            scrollTarget={'.account-files-manager'}
           />
           <Dropdown
             className="files-manager-result-dropdown"
@@ -283,6 +299,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
             options={content?.ui.results.options}
             queryParam="items"
             onChange={value => setItemsPerPage(value)}
+            onSelectChange={showCheckOverlayHandler}
           />
         </div>
       )}
@@ -307,6 +324,11 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
           </Button>
         </div>
       </Modal>
+      <div className={clsx('files-manager-overlay', showCheckOverlay ? 'show' : '')}>
+        <div className="files-manager-overlay-check">
+          <CheckIcon></CheckIcon>
+        </div>
+      </div>
     </div>
   );
 };

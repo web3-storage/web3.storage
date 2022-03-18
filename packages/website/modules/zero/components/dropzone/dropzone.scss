@@ -16,4 +16,25 @@
     grid-template-columns: auto minmax(0, max-content);
     row-gap: 0.5rem;
   }
+
+  .loading-c {
+    position: relative;
+    display: flex;
+    .loading-label {
+      min-width: toRem(70);
+      &:after {
+        display: inline-block;
+        animation: dotty steps(1, end) 1s infinite;
+        content: '';
+      }
+    }
+  }
+}
+
+@keyframes dotty {
+  0%   { content: ''; }
+  25%  { content: '.'; }
+  50%  { content: '..'; }
+  75%  { content: '...'; }
+  100% { content: ''; }
 }

@@ -79,6 +79,15 @@ $file-size: auto;
       }
     }
   }
+  a {
+    padding-bottom: 0;
+    border-bottom: 0.03125rem solid rgba(255, 255, 255, 0.25);
+    line-height: 1.6;
+    transition: all $transitionDuration linear;
+    &:hover {
+      border-bottom-color: rgba(255, 255, 255, 0.75);
+    }
+  }
 
   .file {
     &-select-container {
@@ -100,22 +109,22 @@ $file-size: auto;
         opacity: 0;
       }
       svg.check {
-        opacity: 0;
-        transition: opacity $transitionDuration;
         color: $cyan;
-        top: -0.5rem;
+        top: -0.55rem;
         left: -0.25rem;
         position: absolute;
         pointer-events: none;
         width: 1.5rem;
+        .tick {
+          stroke-dashoffset: -100;
+          stroke-dasharray: 1000;
+          transition: stroke-dashoffset $transitionDuration 0s ease-out;
+        }
       }
       input:checked ~ svg.check {
-        opacity: 1;
-        transition: opacity $transitionDuration;
-        .path {
-          stroke-dasharray: 1000;
-          stroke-dashoffset: -100;
-          animation: dash-check 0.8s 0s ease-in-out forwards;
+        .tick {
+          stroke-dashoffset: 0;
+          transition: stroke-dashoffset $transitionDuration 0s ease-in;
         }
       }
     }
@@ -198,9 +207,46 @@ $file-size: auto;
     &-storage-providers {
       padding-right: 2.3rem;
       flex-wrap: wrap;
-      > span:not(.file-row-label) {
-        @include monospace_Text;
+
+      &-content {
+        button {
+          margin-top: toRem(5);
+          transition: color $transitionDuration;
+          &:hover {
+            color: $cyan;
+            transition: color $transitionDuration;
+          }
+          &:before {
+            content: '❯ ';
+            margin-right: toRem(10);
+            display: inline-block;
+            transform: rotate(270deg);
+            transition: transform $transitionDuration;
+          }
+        }
+        .content {
+          overflow: hidden;
+          max-height: 1000px;
+          @include monospace_Text;
+          transition: max-height $transitionDuration ease-in;
+        }
+        &.show-all {
+          .content {
+            max-height: toRem(80);
+            transition: max-height $transitionDuration ease-out;
+            @include medium {
+              max-height: auto;
+            }
+          }
+          button {
+            &:before {
+              transform: rotate(90deg);
+              transition: transform $transitionDuration;
+            }
+          }
+        }
       }
+
       @include medium {
         padding-right: 1rem;
         flex-wrap: nowrap;
@@ -250,15 +296,5 @@ $file-size: auto;
   }
   .highlight {
     @include gradient_Background_PinkBlue;
-  }
-}
-
-// check animation
-@keyframes dash-check {
-  0% {
-    stroke-dashoffset: -100;
-  }
-  100% {
-    stroke-dashoffset: 900;
   }
 }
