@@ -1,10 +1,9 @@
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import countly from 'lib/countly';
 import Button, { ButtonVariant } from 'components/button/button';
-import CheckIcon from 'assets/icons/check';
 import { useTokens } from 'components/contexts/tokensContext';
 
 /**
@@ -21,7 +20,7 @@ const TokenCreator = ({ content }) => {
   const inputRef = useRef(/** @type {HTMLInputElement|null} */ (null));
   const [inputHasValue, setInputHasValue] = useState(/** @type {boolean} */ (false));
 
-  const { query, push } = useRouter();
+  const { query, push, replace } = useRouter();
   const { tokens, createToken, isCreating, getTokens } = useTokens();
 
   const onTokenCreate = useCallback(
@@ -51,9 +50,34 @@ const TokenCreator = ({ content }) => {
     [push, tokens, getTokens, createToken]
   );
 
+  useEffect(() => {
+    const onAnimationEnd = () => {
+      if (inputRef.current?.classList.contains('unfocused')) {
+        delete query.create;
+
+        replace(
+          {
+            query,
+          },
+          undefined,
+          { shallow: true }
+        );
+      }
+
+      inputRef.current?.classList.remove('unfocused');
+      inputRef.current?.classList.remove('focused');
+    };
+    inputRef.current?.addEventListener('animationend', onAnimationEnd);
+
+    return () => {
+      inputRef.current?.removeEventListener('animationend', onAnimationEnd);
+    };
+  }, [replace, query]);
+
   useLayoutEffect(() => {
     if (!!query.create && !isCreating) {
       inputRef.current?.focus();
+      inputRef.current?.classList.add('focused');
     }
   }, [query.create, isCreating]);
 
@@ -82,10 +106,11 @@ const TokenCreator = ({ content }) => {
               className="token-creator-input"
               placeholder={content.placeholder}
               onChange={handleInputValueChange}
+              onBlur={() => {
+                inputRef.current?.classList.add('unfocused');
+              }}
             />
-            <button className="token-creator-submit">
-              {inputHasValue ? <CheckIcon className="token-creator-check" /> : '+'}
-            </button>
+            <button className="token-creator-submit">{inputHasValue ? '→' : '+'}</button>
           </form>
           <Button
             className={clsx('token-creator-create', query.create && 'hidden')}

@@ -1,8 +1,10 @@
 .token-creator-container {
   color: $cyan;
-  transition: all $transitionDuration ease-in-out;
-  &:focus-within {
-    transform: scale(1.05);
+  .focused {
+    animation: scaleYoyoIn $transitionDuration ease-in-out;
+  }
+  .unfocused {
+    animation: scaleFadeOut $transitionDuration ease-out;
   }
 
   @include fontSize_Mini;
@@ -16,6 +18,36 @@
         align-items: end;
       }
     }
+  }
+}
+
+@keyframes scaleYoyoIn {
+  0% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+  25% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+  50% {
+    transform: scaleX(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleFadeOut {
+  0% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1.05);
+    opacity: 0;
   }
 }
 
@@ -33,13 +65,18 @@
     width: 100%;
     min-width: 0;
   }
-  &:hover {
-    border-color: $waterloo;
+  &:focus {
+    border-color: $seaShell;
   }
 
   &::placeholder {
     color: $cyan;
     @include fontSize_Mini;
+  }
+  &::-webkit-input-placeholder,
+  &::-moz-placeholder {
+    color: $cyan;
+    opacity: 0.8;
   }
 }
 
