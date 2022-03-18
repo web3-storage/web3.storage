@@ -1,5 +1,15 @@
 # Changelog
 
+### [5.4.3](https://github.com/web3-storage/web3.storage/compare/api-v5.4.2...api-v5.4.3) (2022-03-18)
+
+
+### Bug Fixes
+
+* add missing status UnexpectedlyUnpinned ([#1105](https://github.com/web3-storage/web3.storage/issues/1105)) ([118ceb0](https://github.com/web3-storage/web3.storage/commit/118ceb0b1d768ac6585124385994199173deefac))
+* check bytes match cid ([#1069](https://github.com/web3-storage/web3.storage/issues/1069)) ([72b8073](https://github.com/web3-storage/web3.storage/commit/72b8073d829773b795069cf88681d6adfaf33d87))
+* filter PSA requests by queued status for Unpinned CIDs ([#1110](https://github.com/web3-storage/web3.storage/issues/1110)) ([dc2d359](https://github.com/web3-storage/web3.storage/commit/dc2d3590e243d94d569c38f4a07ec73582a6aafb))
+* use rpc for pins upsert ([#1088](https://github.com/web3-storage/web3.storage/issues/1088)) ([6a8e394](https://github.com/web3-storage/web3.storage/commit/6a8e394af8a63315db91bed82c17e77c13fb9fc2))
+
 ### [5.4.2](https://github.com/web3-storage/web3.storage/compare/api-v5.4.1...api-v5.4.2) (2022-03-10)
 
 
