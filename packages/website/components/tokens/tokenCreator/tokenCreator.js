@@ -4,7 +4,6 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 
 import countly from 'lib/countly';
 import Button, { ButtonVariant } from 'components/button/button';
-import CheckIcon from 'assets/icons/check';
 import { useTokens } from 'components/contexts/tokensContext';
 
 /**
@@ -111,9 +110,7 @@ const TokenCreator = ({ content }) => {
                 inputRef.current?.classList.add('unfocused');
               }}
             />
-            <button className="token-creator-submit">
-              {inputHasValue ? <CheckIcon className="token-creator-check" /> : '+'}
-            </button>
+            <button className="token-creator-submit">{inputHasValue ? '→' : '+'}</button>
           </form>
           <Button
             className={clsx('token-creator-create', query.create && 'hidden')}
