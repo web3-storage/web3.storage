@@ -44,6 +44,7 @@
     "libp2p-crypto": "^0.21.0",
     "p-retry": "^4.5.0",
     "streaming-iterables": "^6.2.0",
+    "throttled-queue": "^2.1.2",
     "uint8arrays": "^3.0.0"
   },
   "devDependencies": {

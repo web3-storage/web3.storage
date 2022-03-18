@@ -12,10 +12,12 @@ export type Tagged<T, Tag> = T & { tag?: Tag }
 export interface Service {
   endpoint: URL
   token: string
+  rateLimiter?: RateLimiter
 }
 
 export interface PublicService {
   endpoint: URL
+  rateLimiter?: RateLimiter
 }
 
 /**
@@ -254,4 +256,12 @@ export interface Status {
 
 export interface Upload extends Status {
   name: string
+}
+
+/**
+ * RateLimiter returns a promise that resolves when it is safe to send a request
+ * that does not exceed the rate limit.
+ */
+export interface RateLimiter {
+  (): Promise<void>
 }
