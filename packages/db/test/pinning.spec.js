@@ -85,13 +85,13 @@ describe('Pin Request', () => {
   ]
 
   // Create user and auth key
-  before(async () => {
+  beforeEach(async () => {
     user = await createUser(client)
     authKey = await createUserAuthKey(client, parseInt(user._id, 10))
   })
 
   // Guarantee no Pin requests exist and create the ones needed for our tests
-  before(async () => {
+  beforeEach(async () => {
     // Make sure we don't have pinRequest and content
     await client._client.from(pinRequestTable).delete()
     const { count: countR } = await client._client.from(pinRequestTable).select('id', {
@@ -160,7 +160,7 @@ describe('Pin Request', () => {
   describe('Get Pin', () => {
     let savedPinRequest
 
-    before(async () => {
+    beforeEach(async () => {
       savedPinRequest = await client.getPsaPinRequest(authKey, aPinRequestOutput._id)
     })
 
@@ -194,7 +194,7 @@ describe('Pin Request', () => {
     let pinRequestsInputs
     let totalPinned
 
-    before(async () => {
+    beforeEach(async () => {
       userPinList = await createUser(client)
       authKeyPinList = await createUserAuthKey(client, parseInt(userPinList._id, 10))
 

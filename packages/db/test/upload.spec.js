@@ -13,7 +13,7 @@ describe('upload', () => {
   let user
 
   // Setup testing user
-  before(async () => {
+  beforeEach(async () => {
     const name = 'test-name'
     const email = 'test@email.com'
     const issuer = `issuer${Math.random()}`
@@ -34,7 +34,7 @@ describe('upload', () => {
   })
 
   // Create auth key
-  before(async () => {
+  beforeEach(async () => {
     const name = 'test-key-name'
     const secret = 'test-secret'
     await client.createKey({
@@ -62,7 +62,7 @@ describe('upload', () => {
   let upload
 
   // Setup first user upload
-  before(async () => {
+  beforeEach(async () => {
     authKeys = await client.listKeys(user._id)
     const createdUpload = await client.createUpload({
       user: user._id,

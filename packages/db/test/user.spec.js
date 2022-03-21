@@ -18,7 +18,7 @@ describe('user operations', () => {
   let user
 
   // Setup testing user
-  before(async () => {
+  beforeEach(async () => {
     const upsertUser = await client.upsertUser({
       name,
       email,

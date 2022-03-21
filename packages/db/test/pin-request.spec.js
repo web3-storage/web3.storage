@@ -42,19 +42,19 @@ describe('pin-request', () => {
   const uploads = []
 
   // Setup testing user
-  before(async () => {
+  beforeEach(async () => {
     user = await createUser(client)
     authKey = await createUserAuthKey(client, user._id)
   })
 
   // Guarantee no pin requests exist
-  before(async () => {
+  beforeEach(async () => {
     const pinReqs = await client.getPinRequests()
     await client.deletePinRequests(pinReqs.map(pr => pr._id))
   })
 
   // Setup two uploads: first with default one pin and second with two pins
-  before(async () => {
+  beforeEach(async () => {
     const upload0 = await createUpload(client, user._id, authKey, cids[0])
     const upload1 = await createUpload(client, user._id, authKey, cids[1], { pins: pins1 })
     uploads.push(upload0)

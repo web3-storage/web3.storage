@@ -3,7 +3,7 @@ import assert from 'assert'
 import { DBClient } from '../index.js'
 import { token } from './utils.js'
 
-describe.only('backup', () => {
+describe('backup', () => {
   /** @type {DBClient} */
   const client = new DBClient({
     endpoint: 'http://127.0.0.1:3000',
@@ -51,7 +51,7 @@ describe.only('backup', () => {
   })
 
   // Create auth key
-  before(async () => {
+  beforeEach(async () => {
     const name = 'test-key-name'
     const secret = 'test-secret'
     await client.createKey({
@@ -62,7 +62,7 @@ describe.only('backup', () => {
   })
 
   // Setup upload
-  before(async () => {
+  beforeEach(async () => {
     authKeys = await client.listKeys(user._id)
     const createdUpload = await client.createUpload({
       user: user._id,
