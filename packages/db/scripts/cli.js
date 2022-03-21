@@ -18,6 +18,8 @@ prog
   .command('db-sql')
   .describe('Database scripts')
   .option('--reset', 'Reset db before running SQL.', false)
+  .option('--truncate', 'Truncates existing data before running SQL', false)
+  .option('--skipCreate', 'Skip creating tables from schema', false)
   .option('--cargo', 'Import cargo data.', false)
   .option('--testing', 'Tweak schema for testing.', false)
   .action(dbSqlCmd)

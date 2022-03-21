@@ -1,18 +1,18 @@
 -- Mock DB data for API tests
-INSERT INTO public.user (id, name, email, issuer, public_address)
-VALUES (1, 'test-user', 'test@user.com', 'test-magic-issuer', 'test-magic');
+INSERT INTO public.user ( name, email, issuer, public_address)
+VALUES ('test-user', 'test@user.com', 'test-magic-issuer', 'test-magic');
 
-INSERT INTO public.user (id, name, email, issuer, public_address)
-VALUES (2, 'test-upload-user', 'test-upload@user.com', 'test-upload', 'test-upload');
+INSERT INTO public.user ( name, email, issuer, public_address)
+VALUES ('test-upload-user', 'test-upload@user.com', 'test-upload', 'test-upload');
 
-INSERT INTO public.user (id, name, email, issuer, public_address)
-VALUES (3, 'test-status-user', 'test-status@user.com', 'test-status', 'test-status');
+INSERT INTO public.user ( name, email, issuer, public_address)
+VALUES ('test-status-user', 'test-status@user.com', 'test-status', 'test-status');
 
-INSERT INTO public.user (id, name, email, issuer, public_address)
-VALUES (4, 'test-pinning-user', 'test-pinning@user.com', 'test-pinning', 'test-pinning');
+INSERT INTO public.user ( name, email, issuer, public_address)
+VALUES ('test-pinning-user', 'test-pinning@user.com', 'test-pinning', 'test-pinning');
 
-INSERT INTO public.user (id, name, email, issuer, public_address)
-VALUES (5, 'test-pinning-2-user', 'test-pinning2@user.com', 'test-pinning-2', 'test-pinning-2');
+INSERT INTO public.user ( name, email, issuer, public_address)
+VALUES ('test-pinning-2-user', 'test-pinning2@user.com', 'test-pinning-2', 'test-pinning-2');
 
 INSERT INTO auth_key (name, secret, user_id)
 VALUES ('test-key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LW1hZ2ljLWlzc3VlciIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtbWFnaWMtaXNzdWVyIn0.p2nD1Q4X4Z6DtJ0vxk35hhZOqSPVymhN5uyXrXth1zs', 1);

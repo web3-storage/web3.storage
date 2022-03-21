@@ -5,10 +5,8 @@
  *     FAUNA_KEY=<SECRET> node add-mock-deals.js
  */
 import { DBClient, gql } from '@web3-storage/db'
-import { CID } from 'multiformats/cid'
-import { sha256 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
-import crypto from 'crypto'
+import { randomCid } from '../test/scripts/helpers'
 
 const FIND_UPLOADS = gql`
   query FindUploads($cursor: String, $size: Int) {
@@ -57,16 +55,6 @@ function randomInt (min, max) {
   min = Math.ceil(min)
   max = Math.floor(max)
   return Math.floor(Math.random() * (max - min) + min)
-}
-
-/**
- * @param {number} code
- * @returns {Promise<string>}
- */
-async function randomCid (code) {
-  const bytes = crypto.randomBytes(10)
-  const hash = await sha256.digest(bytes)
-  return CID.create(1, code, hash).toString()
 }
 
 async function mockAggregate () {
