@@ -28,6 +28,7 @@ import type {
   ContentInput,
   ListPsaPinRequestOptions,
   ListPsaPinRequestResults,
+  UserStorageUsed,
 } from './db-client-types'
 
 export { gql }
@@ -38,7 +39,10 @@ export class DBClient {
   getMetricsValue (key: string): Promise<{ total: number }>
   upsertUser (user: UpsertUserInput): Promise<UpsertUserOutput>
   getUser (issuer: string): Promise<UserOutput>
-  getUsedStorage (userId: number): Promise<number>
+  getUsedStorage (userId: number): Promise<{ uploaded: number, pinned: number, total: number }>
+  getUsersByStorageUsed ({fromPercent, toPercent}: {fromPercent: number, toPercent?: number}): Promise<Array<UserStorageUsed>>
+  emailSentRecently(email: string, emailType: string, numberOfDays: number): Promise<boolean>
+  logEmailSent(email: string, emailType: string, messageId: string): Promise<{id: string}>
   createUpload (data: CreateUploadInput): Promise<CreateUploadOutput>
   getUpload (cid: string, userId: number): Promise<UploadItemOutput>
   listUploads (userId: number, opts?: ListUploadsOptions): Promise<UploadItemOutput[]>

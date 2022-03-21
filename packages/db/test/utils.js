@@ -1,3 +1,5 @@
+import { normalizeCid } from '../../api/src/utils/cid'
+
 export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU'
 
 /**
@@ -19,6 +21,30 @@ export async function createUser (dbClient, options = {}) {
   })
 
   return dbClient.getUser(issuer)
+}
+
+/**
+ * @param {import('../index').DBClient & {_client: import('@supabase/postgrest-js').PostgrestClient }} dbClient
+ * @param {number} userId
+ * @param {Object} [options]
+ * @param {string} [options.tag]
+ * @param {string} [options.value]
+ * @param {string} [options.reason]
+ */
+export async function createUserTag (dbClient, userId, options = {}) {
+  const { data } = await dbClient._client
+    .from('user_tag')
+    .upsert({
+      user_id: userId,
+      tag: options.tag || '',
+      value: options.value || '',
+      reason: options.reason || 'test reason'
+    })
+    .single()
+
+  return {
+    user_tag: data
+  }
 }
 
 /**
@@ -76,4 +102,26 @@ export async function createUpload (dbClient, user, authKey, cid, options = {}) 
   })
 
   return dbClient.getUpload(cid, user)
+}
+
+/**
+ * @param {import('../index').DBClient} dbClient
+ * @param {string} authKey
+ * @param {string} cid
+ * @param {Object} [options]
+ * @param {number} [options.dagSize]
+ * @param {*} [options.origins]
+ * @param {*} [options.meta]
+ * @param {Array<Object>} [options.pins]
+ */
+export async function createPsaPinRequest (dbClient, authKey, cid, options = {}) {
+  await dbClient.createPsaPinRequest({
+    authKey,
+    sourceCid: cid,
+    contentCid: normalizeCid(cid),
+    dagSize: options.dagSize || 1000,
+    origins: options.origins || null,
+    meta: options.meta || null,
+    pins: options.pins || []
+  })
 }

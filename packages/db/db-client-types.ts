@@ -330,3 +330,25 @@ export type ListPsaPinRequestResults = {
 export type NameItem = {
   record: definitions['name']['record']
 }
+
+export type UsedStorageItem = {
+  uploaded: string,
+  pinned: string,
+  total: string
+}
+export type UsedStorage = {
+  uploaded: number,
+  pinned: number,
+  total: number
+}
+export type UserStorageUsed = {
+  id: string,
+  name: string,
+  email: string,
+  storageQuota: number,
+  storageUsed: number,
+  percentStorageUsed: number
+}
+export type Email = {
+  type: definitions['email_notification_history']['email_type']
+}

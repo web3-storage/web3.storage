@@ -106,3 +106,10 @@ const DEAL_STATUS = new Set([
   'published',
   'active'
 ])
+
+export function parseTextToNumber (n) {
+  if (!Number.isSafeInteger(n)) {
+    throw Error()
+  }
+  return Number(n)
+}

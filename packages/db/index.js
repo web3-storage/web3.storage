@@ -1,7 +1,12 @@
 import { PostgrestClient } from '@supabase/postgrest-js'
 
 import {
-  normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest
+  normalizeUpload,
+  normalizeContent,
+  normalizePins,
+  normalizeDeals,
+  normalizePsaPinRequest,
+  parseTextToNumber
 } from './utils.js'
 import { DBError } from './errors.js'
 
@@ -156,17 +161,109 @@ export class DBClient {
    * Get used storage in bytes.
    *
    * @param {number} userId
-   * @returns {Promise<number>}
+   * @returns {Promise<import('./db-client-types').UsedStorage>}
    */
   async getUsedStorage (userId) {
-    /** @type {{ data: string, error: PostgrestError }} */
+    /** @type {{ data: import('./db-client-types').UsedStorageItem, error: PostgrestError }} */
     const { data, error } = await this._client.rpc('user_used_storage', { query_user_id: userId }).single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    return data || 0 // No uploads for the user
+    return {
+      uploaded: parseTextToNumber(data.uploaded),
+      pinned: parseTextToNumber(data.pinned),
+      total: parseTextToNumber(data.total)
+    }
+  }
+
+  /**
+   * Get all users with storage used in a percentage range of their allocated quota
+   *
+   * @param {{fromPercent: number, toPercent: number}} range
+   * @returns {Promise<Array<import('./db-client-types').UserStorageUsed>>}
+   */
+  async getUsersByStorageUsed (range) {
+    const {
+      fromPercent,
+      toPercent = null
+    } = range
+
+    const { data, error } = await this._client
+      .rpc('users_by_storage_used', {
+        from_percent: fromPercent,
+        to_percent: toPercent
+      })
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return data.map((user) => {
+      const quota = (user.storage_quota)
+      const used = (user.storage_used)
+      const percentUsed = Math.round((used / quota) * 100)
+
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        storageQuota: quota,
+        storageUsed: used,
+        percentStorageUsed: percentUsed
+      }
+    })
+  }
+
+  /**
+   * Check the email history for a specified email type to see if it has
+   * been sent within a specified number of days. If not, it is resent.
+   * @param {*} userId
+   * @param {*} emailType
+   * @param {*} numberOfDays
+   * @returns boolean
+   */
+  async emailSentRecently (userId, emailType, numberOfDays = 7) {
+    const d = new Date()
+    d.setDate(d.getDate() - numberOfDays)
+    const numberOfDaysAgo = d.toISOString()
+
+    const { count, error } = await this._client
+      .from('email_notification_history')
+      .select('id', { count: 'exact' })
+      .eq('user_id', userId)
+      .eq('email_type', emailType)
+      .gt('sent_at', numberOfDaysAgo)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return count > 0
+  }
+
+  /**
+   * Log that an email has been sent
+   * @param {string} userId
+   * @param {string} emailType
+   * @param {string} messageId
+   * @returns
+   */
+  async logEmailSent (userId, emailType, messageId) {
+    const { data, error } = await this._client
+      .from('email_notification_history')
+      .upsert({
+        user_id: userId,
+        email_type: emailType,
+        message_id: messageId
+      })
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return data[0].id
   }
 
   /**
