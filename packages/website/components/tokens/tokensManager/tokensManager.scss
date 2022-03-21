@@ -94,6 +94,9 @@
     line-height: 1.5;
     padding: 0.5rem 1rem 0.5rem 0;
     word-break: break-word;
+    @include medium {
+      padding: 0.85rem 3.975rem 0.85rem 1.375rem;
+    }
   }
 
   @include medium {
