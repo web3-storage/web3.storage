@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import assert from 'assert'
-import { createUpload, getUpload, createUser, createUserAuthKey, getPinSyncRequests } from './utils.js'
+import { createUpload, getUpload, createUser, createUserAuthKey, getPinSyncRequests } from '@web3-storage/db/test-utils'
 import fetch from '@web-std/fetch'
 import { getCluster, getDBClient } from '../src/lib/utils.js'
 import { updatePinStatuses } from '../src/jobs/pins.js'
