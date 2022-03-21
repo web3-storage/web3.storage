@@ -63,7 +63,7 @@ describe('cron - pins', () => {
   let user, userId, authKey, dbClient, cluster
   const cids = ['bafy1', 'bafy3', 'bafy4']
 
-  before(async () => {
+  beforeEach(async () => {
     dbClient = getDBClient(env)
     cluster = getCluster(env)
 
