@@ -1,9 +1,9 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
-import { DBClient } from '../index'
+import { DBClient } from '../index.js'
 import { token } from './utils.js'
 
-describe('backup', () => {
+describe.only('backup', () => {
   /** @type {DBClient} */
   const client = new DBClient({
     endpoint: 'http://127.0.0.1:3000',
@@ -30,7 +30,7 @@ describe('backup', () => {
   let upload
 
   // Setup testing user
-  before(async () => {
+  beforeEach(async () => {
     const name = 'test-name'
     const email = 'test@email.com'
     const issuer = `issuer${Math.random()}`

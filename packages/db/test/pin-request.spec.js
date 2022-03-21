@@ -1,8 +1,8 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
-import { DBClient } from '../index'
+import { DBClient } from '../index.js'
 
-import { createUser, createUserAuthKey, createUpload, token } from './utils'
+import { createUser, createUserAuthKey, createUpload, token } from './utils.js'
 
 describe('pin-request', () => {
   /** @type {DBClient} */

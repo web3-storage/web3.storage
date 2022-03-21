@@ -1,7 +1,7 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
-import { normalizeCid } from '../../api/src/utils/cid'
-import { DBClient } from '../index'
+import { normalizeCid } from '../../api/src/utils/cid.js'
+import { DBClient } from '../index.js'
 import { createUser, createUserAuthKey, token } from './utils.js'
 import { CID } from 'multiformats/cid'
 import { sha256 } from 'multiformats/hashes/sha2'
