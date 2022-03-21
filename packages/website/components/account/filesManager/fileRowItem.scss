@@ -44,6 +44,7 @@ $file-size: auto;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    word-break: break-word;
     @include fontWeight_Regular;
     @include medium {
       padding: 0.85rem 1rem 0.85rem 1.975rem;
