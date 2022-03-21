@@ -90,6 +90,12 @@
     @include monospace_Text;
   }
 
+  .token-name {
+    line-height: 1.5;
+    padding: 0.5rem 1rem 0.5rem 0;
+    word-break: break-word;
+  }
+
   @include medium {
     .token-name {
       padding-top: 1.375rem;
