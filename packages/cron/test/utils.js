@@ -80,3 +80,21 @@ export async function createUpload (dbClient, user, authKey, cid, options = {}) 
 
   return dbClient.getUpload(cid, user)
 }
+
+/**
+ *
+ * @param {import('../../db/index').DBClient} dbClient
+ * @param {string} cid
+ * @param {number} userId
+ */
+export async function getUpload (dbClient, cid, userId) {
+  return dbClient.getUpload(cid, userId)
+}
+
+/**
+ *
+ * @param {import('../../db/index').DBClient} dbClient
+ */
+export async function getPinSyncRequests (dbClient, size = 10) {
+  return dbClient.getPinSyncRequests({ size })
+}
