@@ -17,9 +17,9 @@ export class EmailService {
    * @param {number} daysSince
    * @returns void
    */
-  async sendEmail (user, emailType, daysSince = 7) {
+  async sendEmail (user, emailType, daysSince) {
     // See if this email type has been sent recently
-    if (await this.db.emailSentRecently(user.id, emailType, daysSince)) {
+    if (daysSince && await this.db.emailSentRecently(user.id, emailType, daysSince)) {
       return
     }
 
