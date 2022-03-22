@@ -43,7 +43,7 @@ export async function checkStorageUsed (db) {
   log('🗄  Checking users storage quotas')
 
   let users
-  const emailService = new EmailService(db, log)
+  const emailService = new EmailService(db)
 
   for (const emailNotification of emailNotifications) {
     users = await db.getUsersByStorageUsed({
