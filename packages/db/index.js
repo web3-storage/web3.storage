@@ -161,7 +161,7 @@ export class DBClient {
    * Returns all the active (non-deleted) user tags for a user id.
    *
    * @param {number} userId
-   * @returns {Promise<string[] | undefined>}
+   * @returns {Promise<{ tag: string, value: string }[]>}
    */
   async getUserTags (userId) {
     const { data, error } = await this._client
