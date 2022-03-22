@@ -1,0 +1,74 @@
+$base-row-width: 52.8125rem;
+$date-name: calculateWidthPercentage(15.5rem, $base-row-width);
+$date-id: calculateWidthPercentage(34rem, $base-row-width);
+$date-copy: calculateWidthPercentage(3rem, $base-row-width);
+$date-delete: auto;
+
+.tokens-manager-row {
+  @include fontSize_Tiny;
+  display: grid;
+  position: relative;
+  padding: 0.3125rem 1.4rem 0.3125rem 0;
+  grid-template-columns: $date-name $date-id $date-copy $date-delete;
+  border-bottom: 0.0625rem solid rgba($white, 0.05);
+
+  @include medium {
+    @include border_Background_Waterloo_White;
+    grid-template-columns: auto;
+    border-bottom: 0;
+    padding: 0;
+    margin-bottom: 1rem;
+  }
+
+  > span {
+    @include medium {
+      @include leading_Tiny;
+      padding: 0.85rem 3.975rem 0.85rem 1.375rem;
+      justify-content: flex-start;
+      border-bottom: 0.0625rem solid rgba(white, 0.05);
+      .file-row-label {
+        @include fontWeight_Semibold;
+        width: 4.5rem;
+        flex-shrink: 0;
+        display: inline-block;
+      }
+    }
+  }
+
+  &.tokens-manager-row-header {
+    padding-bottom: 0;
+    padding-left: 1.125rem;
+    @include fontWeight_Semibold;
+    @include medium {
+      display: none;
+    }
+  }
+}
+
+.token-copy,
+.token-delete {
+  > * {
+    position: relative;
+    cursor: pointer;
+  }
+  @include medium {
+    position: absolute;
+    right: 1rem;
+  }
+  svg {
+    @include hoverSvg;
+  }
+}
+
+.token-copy {
+  display: flex;
+  @include medium {
+    bottom: 1rem;
+  }
+}
+
+.token-delete {
+  @include medium {
+    top: 1rem;
+  }
+}

@@ -7,6 +7,7 @@
   "type": "module",
   "scripts": {
     "start": "node scripts/cli.js db --start --project web3-storage",
+    "load-schema": "node scripts/cli.js db-sql --cargo --testing",
     "stop": "node scripts/cli.js db --stop --project web3-storage",
     "stop:clean": "node scripts/cli.js db --stop --clean --project web3-storage",
     "pg-rest-api-types": "./scripts/cli.js pg-rest-api-types",
@@ -20,7 +21,7 @@
   "author": "Alan Shaw",
   "license": "(Apache-2.0 OR MIT)",
   "dependencies": {
-    "@supabase/postgrest-js": "^0.34.0",
+    "@supabase/postgrest-js": "^0.37.0",
     "p-retry": "^4.6.1"
   },
   "devDependencies": {
@@ -35,5 +36,9 @@
     "playwright-test": "^7.0.1",
     "sade": "^1.7.4",
     "standard": "^16.0.3"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./test-utils": "./test/utils.js"
   }
 }

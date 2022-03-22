@@ -1,0 +1,47 @@
+.Dropdown {
+
+  .dropdownButton {
+    cursor: pointer;
+    border: none;
+    background: transparent;
+  }
+  
+  .dropdownContent {
+    position: absolute;
+    overflow: hidden;
+    max-height: 0;
+    z-index: 5000;
+    transition: max-height 350ms ease-in-out;
+
+    .dropdownItemList {
+      border: 1px solid black;
+      background: white;
+      display: inline-flex;
+      flex-direction: column;
+
+      .dropdownItem {
+        cursor: pointer;
+
+        &.current {
+          background: cyan;
+        }
+      }
+    }
+  }
+
+  .dropdownSelect {
+    display: none;
+  }
+
+  &.open {
+    .dropdownContent {
+      max-height: 100vh;
+    }
+  }
+
+  &.scrollable {
+    .dropdownContent {
+      overflow-y: scroll;
+    }
+  }
+}

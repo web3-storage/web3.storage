@@ -1,7 +1,6 @@
 import pg from 'pg'
 import { Cluster } from '@nftstorage/ipfs-cluster'
 import { DBClient } from '@web3-storage/db'
-import { IPFS } from './ipfs.js'
 
 export const MAX_CONCURRENT_QUERIES = 10
 
@@ -19,39 +18,26 @@ export function getCluster (env) {
 }
 
 /**
- * Create a new IPFS client instance from the passed environment variables.
- * @param {Record<string, string|undefined>} env
- */
-export function getClusterIPFSProxy (env) {
-  const ipfsApiUrl = env.CLUSTER_IPFS_PROXY_API_URL
-  if (!ipfsApiUrl) throw new Error('missing CLUSTER_IPFS_PROXY_API_URL environment var')
-  const basicAuthToken = env.CLUSTER_IPFS_PROXY_BASIC_AUTH_TOKEN
-  return new IPFS(ipfsApiUrl, {
-    headers: basicAuthToken ? { Authorization: `Basic ${basicAuthToken}` } : {}
-  })
-}
-
-/**
  * Create a new DB client instance from the passed environment variables.
  * @param {Record<string, string|undefined>} env
  */
 export function getDBClient (env) {
   let token, endpoint
   if (env.ENV === 'production') {
-    if (!env.PG_REST_JWT) throw new Error('missing PG_REST_JWT environment var')
-    if (!env.PG_REST_URL) throw new Error('missing PG_REST_URL environment var')
-    token = env.PG_REST_JWT
-    endpoint = env.PG_REST_URL
+    if (!env.PROD_PG_REST_JWT) throw new Error('missing PROD_PG_REST_JWT environment var')
+    if (!env.PROD_PG_REST_URL) throw new Error('missing PROD_PG_REST_URL environment var')
+    token = env.PROD_PG_REST_JWT
+    endpoint = env.PROD_PG_REST_URL
   } else if (env.ENV === 'staging') {
     if (!env.STAGING_PG_REST_JWT) throw new Error('missing STAGING_PG_REST_JWT environment var')
     if (!env.STAGING_PG_REST_URL) throw new Error('missing STAGING_PG_REST_URL environment var')
     token = env.STAGING_PG_REST_JWT
     endpoint = env.STAGING_PG_REST_URL
   } else if (env.ENV === 'dev') {
-    if (!env.DEV_PG_REST_JWT) throw new Error('missing DEV_PG_REST_JWT environment var')
-    if (!env.DEV_PG_REST_URL) throw new Error('missing DEV_PG_REST_URL environment var')
-    token = env.DEV_PG_REST_JWT
-    endpoint = env.DEV_PG_REST_URL
+    if (!env.PG_REST_JWT) throw new Error('missing PG_REST_JWT environment var')
+    if (!env.PG_REST_URL) throw new Error('missing PG_REST_URL environment var')
+    token = env.PG_REST_JWT
+    endpoint = env.PG_REST_URL
   } else {
     throw new Error(`unsupported environment ${env.ENV}`)
   }

@@ -1,0 +1,434 @@
+// /////////////////////////////////////////////////////////// General Variables
+// =============================================================================
+@use 'sass:math';
+
+// --------------------------------------------------------------------- General
+$containerWidth: 61.25rem; // 980px
+$underlineSpacing: 0.1875rem;
+$messageBannerHeight: 3.25rem;
+$navigationHeight: 8.5rem;
+
+$borderRadius_Small: 0.3125rem;
+$borderRadius_Medium: 0.25rem;
+$borderRadius_Large: 0.625rem;
+$borderRadius_ExtraLarge: 0.875rem;
+$borderRadius_UltraLarge: 1rem;
+$borderRadius_Huge: 1.5rem;
+
+// --------------------------------------------------------------------- Colours
+$gray50: #fafafa;
+$gray100: hsl(0, 0%, 96%);
+$gray200: #eeeeee;
+$gray300: #e0e0e0;
+$gray400: #bdbdbd;
+$gray500: #9e9e9e;
+$gray600: #757575;
+$gray700: #616161;
+$gray800: #424242;
+$gray900: #212121;
+
+$black: #000000; // full black
+$waterloo: #757a9b; // A grayish blue
+$charade: #2b2d39; // A light black blue
+$shark: #1d2027; // A blackish blue
+$vulcan: #0f111a;
+$white: #ffffff; // full white
+$seaShell: #f1f1f1; // pale matte gray
+$alto: #d1d1d1; // dark matte gray
+$steelGray: #1c1e29; // almost black gray
+$ebony: #03040a; // almost black
+$doveGray: #626262; // gray
+$malibu: #7e81ff; // bluish violet
+$heliotrope: #714cdd; // darker bluish violet
+$cerise: #d726d7; // purplish pink
+$royalBlue: #3064e0; // royal blue
+$pictonBlue: #31e7ea; // violetish blue
+$cyan: #3effe9; // full cyan
+$martinique: #392d52; // bluish purple
+$blue: #3d04fb; // bluest blue
+$woodsmoke: #161b24; // blue almost black
+// ----------------------------------------------------------------- Breakpoints
+$breakpoint_Tiny: 25.9375rem; // 415px
+$breakpoint_Mini: 40rem; // 640px
+$breakpoint_Small: 53.125rem; // 850px
+$breakpoint_Medium: 64rem; // 1024px
+$breakpoint_Large: 75rem; // 1200px
+$breakpoint_Xlarge: 90rem; // 1440px
+$breakpoint_UltraLarge: 140.625rem; // 2250px
+
+// ------------------------------------------------------------------- Gradients
+@mixin magentaCyan_Gradient {
+  background: linear-gradient(to right, $cerise 0%, $royalBlue 50%, $pictonBlue 100%);
+}
+
+@mixin magentaCyan_Gradient_Reverse {
+  background: linear-gradient(to left, $cerise 0%, $royalBlue 50%, $pictonBlue 100%);
+}
+
+$gradient_PinkBlue: linear-gradient(45deg, $cerise 0%, $royalBlue 48%, $pictonBlue 100%);
+$gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotrope 100%);
+
+// ////////////////////////////////////////////////////////////////////// Mixins
+// =============================================================================
+// --------------------------------------------------------------------- Styling
+@mixin shadow1 {
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.16);
+}
+
+@mixin shadow2 {
+  box-shadow: 1px 0px 6px rgba(0, 0, 0, 0.1);
+}
+
+@mixin shadow3 {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+@mixin shadow4 {
+  box-shadow: 0 0.1875rem 0 rgba($black, 0.15);
+}
+
+@mixin shadow5 {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+@mixin shadow6 {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+
+@mixin focus_BoxShadow_Small {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+@mixin focus_BoxShadow_Regular {
+  box-shadow: 0 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+@mixin focus_BoxShadow_Link {
+  box-shadow: 0 0 0 5px rgba(0, 123, 255, 0.5);
+  border-radius: 0.125rem;
+}
+
+@mixin selection_Dark {
+  ::-moz-selection {
+    background: $translucentWhite;
+    color: black;
+  }
+  ::selection {
+    background: $translucentWhite;
+    color: black;
+  }
+}
+
+@mixin selection_Light {
+  ::-moz-selection {
+    background: $translucentBlack;
+    color: white;
+  }
+  ::selection {
+    background: $translucentBlack;
+    color: white;
+  }
+}
+
+@mixin selection_Invisible {
+  ::-moz-selection {
+    background: transparent;
+    color: transparent;
+  }
+  ::selection {
+    background: transparent;
+    color: transparent;
+  }
+}
+
+// --------------------------------------------------------------------- Styling
+@mixin borderRadius_Small {
+  border-radius: $borderRadius_Small;
+}
+@mixin borderRadius_Medium {
+  border-radius: $borderRadius_Medium;
+}
+@mixin borderRadius_Large {
+  border-radius: $borderRadius_Large;
+}
+@mixin borderRadius_ExtraLarge {
+  border-radius: $borderRadius_ExtraLarge;
+}
+@mixin borderRadius_UltraLarge {
+  border-radius: $borderRadius_UltraLarge;
+}
+@mixin borderRadius_Huge {
+  border-radius: $borderRadius_Huge;
+}
+
+@mixin border_Background_Waterloo_White {
+  @include borderRadius_Large;
+  background: rgba($waterloo, 0.15);
+  border: 0.0625rem solid rgba($white, 0.15);
+}
+
+@mixin gradient_BlurryBox_PinkBlue {
+  content: ' ';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  filter: blur(0.1875rem);
+  @include gradient_Background_PinkBlue;
+}
+
+@mixin gradient_Background_PinkBlue {
+  background: $gradient_PinkBlue;
+}
+
+@mixin gradient_Background_BluePurple {
+  background: $gradient_BluePurple;
+}
+
+@mixin gradient_Blurry_Background_PinkBlue {
+  &:before {
+    @include gradient_BlurryBox_PinkBlue;
+    @include borderRadius_UltraLarge;
+    content: ' ';
+    position: absolute;
+    filter: blur(0.25rem);
+    margin: auto;
+    box-shadow: 0 0.125rem $heliotrope;
+    opacity: 0.5;
+  }
+}
+
+// --------------------------------------------------------------------- General
+@mixin optional-at-root($sel) {
+  @at-root #{if(not &, $sel, selector-append(&, $sel))} {
+    @content;
+  }
+}
+@mixin placeholder {
+  @include optional-at-root('::-webkit-input-placeholder') {
+    @content;
+  }
+  @include optional-at-root(':-moz-placeholder') {
+    @content;
+  }
+  @include optional-at-root('::-moz-placeholder') {
+    @content;
+  }
+  @include optional-at-root(':-ms-input-placeholder') {
+    @content;
+  }
+  @include optional-at-root('::-ms-input-placeholder') {
+    @content;
+  }
+  @include optional-at-root('::placeholder') {
+    @content;
+  }
+}
+
+// --------------------------------------------------------------- Media Queries
+@mixin tiny {
+  @media screen and (max-width: $breakpoint_Tiny) {
+    @content;
+  }
+}
+@mixin mini {
+  @media screen and (max-width: $breakpoint_Mini) {
+    @content;
+  }
+}
+@mixin small {
+  @media screen and (max-width: $breakpoint_Small) {
+    @content;
+  }
+}
+@mixin medium {
+  @media screen and (max-width: $breakpoint_Medium) {
+    @content;
+  }
+}
+@mixin large {
+  @media screen and (max-width: $breakpoint_Large) {
+    @content;
+  }
+}
+@mixin xlarge {
+  @media screen and (max-width: $breakpoint_Xlarge) {
+    @content;
+  }
+}
+@mixin ultraLarge {
+  @media screen and (max-width: $breakpoint_UltraLarge) {
+    @content;
+  }
+}
+
+@mixin containerMaxMQ {
+  @media screen and (max-width: $containerWidth) {
+    @content;
+  }
+}
+@mixin containerMinMQ {
+  @media screen and (max-width: $containerWidthPlusOnePixel) {
+    @content;
+  }
+}
+@mixin customMaxMQ($width) {
+  @media screen and (max-width: $width) {
+    @content;
+  }
+}
+@mixin customMinMQ($width) {
+  @media screen and (min-width: $width) {
+    @content;
+  }
+}
+
+@mixin FireFox {
+  @-moz-document url-prefix() {
+    @content;
+  }
+}
+
+@mixin Edge {
+  @supports (-ms-ime-align: auto) {
+    @content;
+  }
+}
+
+@mixin Safari9 {
+  @supports (overflow: -webkit-marquee) and (justify-content: inherit) {
+    @content;
+  }
+}
+
+@mixin Safari7Plus($item) {
+  _::-webkit-full-page-media,
+  _:future,
+  :root #{$item} {
+    @content;
+  }
+}
+
+@mixin Safari9Plus($item) {
+  _:default:not(:root:root),
+  #{$item} {
+    @content;
+  }
+}
+
+@mixin IE10and11 {
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    @content;
+  }
+}
+
+@mixin iOSonly {
+  @supports (-webkit-overflow-scrolling: touch) {
+    @content;
+  }
+}
+
+@mixin everythingExceptIOS {
+  @supports not (-webkit-overflow-scrolling: touch) {
+    @content;
+  }
+}
+
+// --------------------------------------------------------------------- Styling
+@mixin centerImage {
+  position: absolute;
+  top: -9999px;
+  bottom: -9999px;
+  left: -9999px;
+  right: -9999px;
+  margin: auto;
+}
+
+// --------------------------------------------------------------------- Functions
+@function calculateWidthPercentage($width-section, $width-actual) {
+  @return math.percentage(math.div($width-section, $width-actual));
+}
+
+@function toRem($value) {
+  $remValue: math.div($value, 16) + rem;
+  @return $remValue;
+}
+
+// ------------------------------------------------------------------- Animation
+@mixin animation($animate...) {
+  $max: length($animate);
+  $animations: '';
+  @for $i from 1 through $max {
+    $animations: #{$animations + nth($animate, $i)};
+    @if $i < $max {
+      $animations: #{$animations + ', '};
+    }
+  }
+  -webkit-animation: $animations;
+  -moz-animation: $animations;
+  -o-animation: $animations;
+  animation: $animations;
+}
+
+@mixin animationName($animationName) {
+  -webkit-animation-name: $animationName;
+  animation-name: $animationName;
+} // string
+@mixin animationDuration($animationDuration) {
+  -webkit-animation-duration: $animationDuration;
+  animation-duration: $animationDuration;
+} // num in ms or s
+@mixin animationDirection($animationDirection) {
+  -webkit-animation-direction: $animationDirection;
+  animation-direction: $animationDirection;
+} // 'normal', 'reverse', 'alternate', 'alternate-reverse'
+@mixin animationDelay($animationDelay) {
+  -webkit-animation-delay: $animationDelay;
+  animation-delay: $animationDelay;
+}
+@mixin animationIterationCount($animationIterationCount) {
+  -webkit-animation-iteration-count: $animationIterationCount;
+  animation-iteration-count: $animationIterationCount;
+} // num or 'infinite'
+@mixin animationTimingFunction($animationTimingFunction) {
+  -webkit-animation-timing-function: $animationTimingFunction;
+  animation-timing-function: $animationTimingFunction;
+} // bezier curve or 'linear'
+@mixin animationFillMode($animationFillMode) {
+  -webkit-animation-fill-mode: $animationFillMode;
+  animation-fill-mode: $animationFillMode;
+} // forwards or backwards or both
+
+@mixin keyframes($animationName) {
+  @-webkit-keyframes #{$animationName} {
+    @content;
+  }
+  @-moz-keyframes #{$animationName} {
+    @content;
+  }
+  @-o-keyframes #{$animationName} {
+    @content;
+  }
+  @keyframes #{$animationName} {
+    @content;
+  }
+}
+
+@mixin transform($transforms) {
+  -moz-transform: $transforms;
+  -o-transform: $transforms;
+  -ms-transform: $transforms;
+  -webkit-transform: $transforms;
+  transform: $transforms;
+}
+
+@mixin transformOrigin($transformOrigin) {
+  -moz-transform-origin: $transformOrigin;
+  -o-transform-origin: $transformOrigin;
+  -ms-transform-origin: $transformOrigin;
+  -webkit-transform-origin: $transformOrigin;
+  transform-origin: $transformOrigin;
+}
+
+// ////////////////////////////////////////////////////////////// [Post] Imports
+// =============================================================================
+@import 'typography';

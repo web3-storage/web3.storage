@@ -1,0 +1,7 @@
+# Makes Git translate the line ending for the specified extensions while always keeping things with "unix endings" in repo. This means that scripts in this repo won't break if things are checked out and in on a Windows machine.
+
+*.bash      eol=lf
+*.sh        eol=lf
+
+# Keep this line in.
+*         text=auto

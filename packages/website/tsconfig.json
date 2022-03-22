@@ -19,7 +19,16 @@
     "module": "esnext",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "baseUrl": "./",
     "paths": {
+      "ZeroComponents/*": [
+        "modules/zero/components/*"
+      ],
+      "ZeroHooks/*": [
+        "modules/zero/hooks/*"
+      ],
       "web3.storage": [
         "../client"
       ]
@@ -29,11 +38,18 @@
   "include": [
     "lib",
     "pages",
-    "components"
+    "components",
+    "content",
+    "hooks",
+    "modules",
+    "store",
+    "declaration.d.ts"
   ],
   "exclude": [
-    "node_modules/",
-    ".next/"
+    "node_modules",
+    ".next/",
+    "{pages,components,content,hooks,modules}/**/*.js",
+    "lib/countly.js"
   ],
   "references": [
     {

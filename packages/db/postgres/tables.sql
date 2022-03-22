@@ -127,7 +127,9 @@ BEGIN
       'UnpinQueued',
       -- The IPFS daemon is not pinning the item through this CID but it is tracked
       -- in a cluster dag
-      'Sharded'
+      'Sharded',
+      -- The item should be pinned, but it is not pinned and not queued/pinning.
+      'UnexpectedlyUnpinned'
     );
   END IF;
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'upload_type') THEN
@@ -246,6 +248,7 @@ CREATE TABLE IF NOT EXISTS pin_sync_request
 );
 
 CREATE INDEX IF NOT EXISTS pin_sync_request_pin_id_idx ON pin_sync_request (pin_id);
+CREATE INDEX IF NOT EXISTS pin_sync_request_inserted_at_idx ON pin_sync_request (inserted_at);
 
 -- Setting search_path to public scope for uuid function(s)
 SET search_path TO public;

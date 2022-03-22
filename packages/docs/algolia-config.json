@@ -1,0 +1,35 @@
+{
+  "index_name": "web3-storage-docusaurus",
+  "start_urls": [
+    "https://docs.web3.storage"
+  ],
+  "stop_urls": [],
+  "selectors": {
+    "lvl0": {
+      "selector": "li.theme-doc-sidebar-item-category > a.menu__link",
+      "global": true,
+      "default_value": "Documentation"
+    },
+    "lvl1": "main div.container h1",
+    "lvl2": "main div.container h2",
+    "lvl3": "main div.container h3",
+    "lvl4": "main div.container h4",
+    "lvl5": "main div.container h5",
+    "text": "main div.container p, main div.container li",
+    "lang": {
+      "selector": "/html/@lang",
+      "type": "xpath",
+      "global": true,
+      "default_value": "en-US"
+    }
+  },
+  "selectors_exclude": [
+    ".table-of-contents"
+  ],
+  "strip_chars": " .,;:#",
+  "custom_settings": {
+    "attributesForFaceting": [
+      "lang"
+    ]
+  }
+}

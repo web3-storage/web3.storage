@@ -12,7 +12,8 @@
     "packages/w3",
     "packages/website",
     "packages/pinpin",
-    "packages/tools"
+    "packages/tools",
+    "packages/docs"
   ],
   "scripts": {
     "start": "npm-run-all --print-label -p web api",
@@ -29,7 +30,8 @@
   },
   "standard": {
     "ignore": [
-      "packages/website"
+      "packages/website",
+      "packages/docs"
     ]
   },
   "engines": {

@@ -1,7 +1,7 @@
 /* eslint-env serviceworker */
 import { PutObjectCommand } from '@aws-sdk/client-s3/dist-es/commands/PutObjectCommand.js'
 import { CarBlockIterator } from '@ipld/car'
-import { toString } from 'uint8arrays'
+import { toString, equals } from 'uint8arrays'
 import { Block } from 'multiformats/block'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as raw from 'multiformats/codecs/raw'
@@ -292,6 +292,12 @@ async function carStat (carBlob) {
     const blockSize = block.bytes.byteLength
     if (blockSize > MAX_BLOCK_SIZE) {
       throw new InvalidCarError(`block too big: ${blockSize} > ${MAX_BLOCK_SIZE}`)
+    }
+    if (block.cid.multihash.code === sha256.code) {
+      const ourHash = await sha256.digest(block.bytes)
+      if (!equals(ourHash.digest, block.cid.multihash.digest)) {
+        throw new InvalidCarError(`block data does not match CID for ${block.cid.toString()}`)
+      }
     }
     if (!rawRootBlock && block.cid.equals(rootCid)) {
       rawRootBlock = block

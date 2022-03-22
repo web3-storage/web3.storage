@@ -11,7 +11,8 @@
  *  | 'Remote'
  *  | 'PinQueued'
  *  | 'UnpinQueued'
- *  | 'Sharded'} PinStatus
+ *  | 'Sharded'
+ *  | 'UnexpectedlyUnpinned' } PinStatus
  */
 
 /** @type {Record<TrackerStatus, PinStatus>} */
@@ -27,7 +28,8 @@ const PinStatusMap = {
   remote: 'Remote',
   pin_queued: 'PinQueued',
   unpin_queued: 'UnpinQueued',
-  sharded: 'Sharded'
+  sharded: 'Sharded',
+  unexpectedly_unpinned: 'UnexpectedlyUnpinned'
 }
 
 // Duration between status check polls in ms.
@@ -146,8 +148,8 @@ export async function waitAndUpdateOkPins (cid, cluster, db, waitTime = MAX_PIN_
     return {
       id: pin._id,
       status: pin.status,
-      cid,
-      locationId: pin.location._id
+      contentCid: cid,
+      location: pin.location
     }
   })
   await db.upsertPins(pins)

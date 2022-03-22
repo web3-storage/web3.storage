@@ -1,0 +1,42 @@
+// footer custom
+#site-footer {
+    letter-spacing: $letterSpacing_Large;
+    .footer-link {
+        letter-spacing: 0;
+        &:hover {
+            text-decoration: none;
+        }
+    }
+    .button {
+        border: none;
+        padding: 0;
+        button {
+            color: $white;
+        }
+    }
+    #footer_squiggle {
+        top: 9rem;
+        z-index: 1;
+        transform: translateY(-50%) scaleX(-1);
+        width: 22rem;
+        left: -8rem;
+        @include large {
+            left: calc(50% - #{math.div($containerWidth, 2)} - 19rem);
+        }
+        @include small {
+            top: calc(50% + 2rem);
+            left: -15rem;
+        }
+        &-img {
+            width: 22rem;
+            height: 32rem;
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            background-image: url(#{$imagePath}/shapes/squiggle.png);
+            background-repeat: no-repeat;
+            background-size: contain; 
+            background-position: center;
+        }
+    }
+}

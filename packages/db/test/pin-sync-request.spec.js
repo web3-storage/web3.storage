@@ -105,7 +105,6 @@ describe('pin-sync-request', () => {
   it('can update multiple pin status', async () => {
     const to = new Date().toISOString()
     const { data: pinSyncReqs } = await client.getPinSyncRequests({ to })
-
     // Assert Previous pin state
     pinSyncReqs.forEach(psr => {
       assert.strictEqual(psr.pin.status, 'Pinning', 'pin sync requests have Pinning state')
@@ -115,8 +114,10 @@ describe('pin-sync-request', () => {
     await client.upsertPins(pinSyncReqs.map(psr => ({
       id: psr.pin._id,
       status: 'Pinned',
-      cid: psr.pin.contentCid,
-      locationId: psr.pin.location._id
+      contentCid: psr.pin.contentCid,
+      location: {
+        ...psr.pin.location
+      }
     })))
 
     const { data: pinSyncReqsAfterUpdate } = await client.getPinSyncRequests({ to })
