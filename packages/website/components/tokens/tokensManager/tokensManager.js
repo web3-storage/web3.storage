@@ -67,24 +67,21 @@ const TokensManager = ({ content }) => {
     }
   }, [query.order, query, replace]);
 
-  const deleteTokenCallback = useCallback(
-    async id => {
-      try {
-        await deleteToken(id);
-      } finally {
-        await queryClient.invalidateQueries('get-tokens');
+  const deleteTokenCallback = useCallback(async () => {
+    try {
+      await deleteToken(deletingTokenId);
+    } finally {
+      await queryClient.invalidateQueries('get-tokens');
 
-        countly.trackEvent(countly.events.TOKEN_DELETE, {
-          ui: countly.ui.TOKENS,
-        });
+      countly.trackEvent(countly.events.TOKEN_DELETE, {
+        ui: countly.ui.TOKENS,
+      });
 
-        await getTokens();
-        setDeletingTokenId('');
-      }
-      deleteModalState[1](false);
-    },
-    [deleteModalState, deleteToken, queryClient, getTokens]
-  );
+      await getTokens();
+      setDeletingTokenId('');
+    }
+    deleteModalState[1](false);
+  }, [deleteModalState, deleteToken, deletingTokenId, queryClient, getTokens]);
 
   const onDeleteSingle = useCallback(
     async id => {
