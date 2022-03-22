@@ -131,27 +131,7 @@ export class DBClient {
   }
 
   /**
-   * Check that a user account is restricted.
-   *
-   * @param {number} userId
-   * @returns {Promise<boolean>}
-   */
-  async isAccountRestricted (userId) {
-    return await this.getUserTagValue(userId, 'HasAccountRestriction') === 'true'
-  }
-
-  /**
-   * Check that a user is authorized to pin.
-   *
-   * @param {number} userId
-   * @returns {Promise<boolean>}
-   */
-  async isPinningAuthorized (userId) {
-    return await this.getUserTagValue(userId, 'HasPsaAccess') === 'true'
-  }
-
-  /**
-   * Returns the value stored for a user tag.
+   * Returns the value stored for an active (non-deleted) user tag.
    *
    * @param {number} userId
    * @param {string} tag
@@ -175,6 +155,38 @@ export class DBClient {
     }
 
     return data.length ? data[0].value : undefined
+  }
+
+  /**
+   * Returns all the active (non-deleted) user tags for a user id.
+   *
+   * @param {number} userId
+   * @returns {Promise<string[] | undefined>}
+   */
+  async getUserTags (userId) {
+    const { data, error } = await this._client
+      .from('user_tag')
+      .select(`
+        tag,
+        value
+      `)
+      .eq('user_id', userId)
+      .filter('deleted_at', 'is', null)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    // Ensure active user tags are unique.
+    const tags = new Set()
+    data.forEach(item => {
+      if (tags.has(item.tag)) {
+        throw new CustomDBError({ message: `More than one row found for user tag ${item.tag}` })
+      }
+      tags.add(item.tag)
+    })
+
+    return data
   }
 
   /**

@@ -8,10 +8,11 @@ import {
   UnrecognisedTokenError,
   UserNotFoundError
 } from './errors.js'
+import { USER_TAGS } from './constants.js'
 
 /**
  * Middleware: verify the request is authenticated with a valid magic link token.
- * On successful login, adds `auth.user` to the Request
+ * On successful login, adds `auth.user` and `auth.userTags` to the Request
  *
  * @param {import('itty-router').RouteHandler} handler
  * @returns {import('itty-router').RouteHandler}
@@ -27,7 +28,8 @@ export function withMagicToken (handler) {
 
     const magicUser = await tryMagicToken(token, env)
     if (magicUser) {
-      request.auth = { user: magicUser }
+      const userTags = await getUserTags(magicUser._id, env)
+      request.auth = { user: magicUser, userTags }
       env.sentry && env.sentry.setUser(magicUser)
       return handler(request, env, ctx)
     }
@@ -38,7 +40,7 @@ export function withMagicToken (handler) {
 
 /**
  * Middleware: verify the request is authenticated with a valid an api token *or* a magic link token.
- * On successful login, adds `auth.user` and `auth.auth.token` to the Request
+ * On successful login, adds `auth.user`, `auth.authToken`, and `auth.userTags` to the Request
  *
  * @param {import('itty-router').RouteHandler} handler
  * @returns {import('itty-router').RouteHandler}
@@ -54,14 +56,23 @@ export function withApiOrMagicToken (handler) {
 
     const magicUser = await tryMagicToken(token, env)
     if (magicUser) {
-      request.auth = { user: magicUser }
+      const userTags = await getUserTags(magicUser._id, env)
+      request.auth = {
+        user: magicUser,
+        userTags
+      }
       env.sentry && env.sentry.setUser(magicUser)
       return handler(request, env, ctx)
     }
 
     const apiToken = await tryWeb3ApiToken(token, env)
     if (apiToken) {
-      request.auth = { authToken: apiToken, user: apiToken.user }
+      const userTags = await getUserTags(apiToken.user._id, env)
+      request.auth = {
+        authToken: apiToken,
+        user: apiToken.user,
+        userTags
+      }
       env.sentry && env.sentry.setUser(apiToken.user)
       return handler(request, env, ctx)
     }
@@ -79,7 +90,7 @@ export function withApiOrMagicToken (handler) {
  */
 export function withAccountNotRestricted (handler) {
   return async (request, env, ctx) => {
-    const isAccountRestricted = await env.db.isAccountRestricted(request.auth.user._id)
+    const isAccountRestricted = request.auth.userTags.find(v => (v.tag === USER_TAGS.ACCOUNT_RESTRICTION && v.value === 'true'))
     if (!isAccountRestricted) {
       return handler(request, env, ctx)
     }
@@ -96,7 +107,7 @@ export function withAccountNotRestricted (handler) {
  */
 export function withPinningAuthorized (handler) {
   return async (request, env, ctx) => {
-    const authorized = await env.db.isPinningAuthorized(request.auth.user._id)
+    const authorized = request.auth.userTags.find(v => (v.tag === USER_TAGS.PSA_ACCESS && v.value === 'true'))
     if (authorized) {
       return handler(request, env, ctx)
     }
@@ -162,6 +173,10 @@ async function tryWeb3ApiToken (token, env) {
 
 function findUserByIssuer (issuer, env) {
   return env.db.getUser(issuer)
+}
+
+function getUserTags (userId, env) {
+  return env.db.getUserTags(userId)
 }
 
 function verifyAuthToken (token, decoded, env) {
