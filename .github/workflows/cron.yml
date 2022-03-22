@@ -21,3 +21,7 @@ jobs:
           node-version: 16
       - uses: bahmutov/npm-install@v1
       - run: npm test --workspace packages/cron
+        env:
+          PG_REST_URL: ${{secrets.PG_REST_URL}}
+          PG_REST_JWT: ${{secrets.PG_REST_JWT}}
+          PG_CONNECTION: ${{secrets.PG_CONNECTION}}
