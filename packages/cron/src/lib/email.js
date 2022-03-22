@@ -1,10 +1,3 @@
-export const emailType = {
-  Used75PercentStorage: 'Used75PercentStorage',
-  Used80PercentStorage: 'Used80PercentStorage',
-  Used85PercentStorage: 'Used85PercentStorage',
-  Used90PercentStorage: 'Used90PercentStorage',
-  UsedOver100PercentStorage: 'UsedOver100PercentStorage'
-}
 
 export class EmailService {
   /**
@@ -20,13 +13,13 @@ export class EmailService {
    * Checks email notification history for this user and email type to avoid
    * re-sending if user has been recently notified.
    * @param {import('@web3-storage/db/db-client-types').UserStorageUsed} user
-   * @param {string} email
+   * @param {string} emailType
    * @param {number} daysSince
    * @returns void
    */
-  async sendEmail (user, email, daysSince = 7) {
+  async sendEmail (user, emailType, daysSince = 7) {
     // See if this email type has been sent recently
-    if (await this.db.emailSentRecently(user.id, emailType[email], daysSince)) {
+    if (await this.db.emailSentRecently(user.id, emailType, daysSince)) {
       return
     }
 
@@ -37,6 +30,6 @@ export class EmailService {
     const messageId = '1'
 
     // Log the email
-    await this.db.logEmailSent(user.id, emailType[email], messageId)
+    await this.db.logEmailSent(user.id, emailType, messageId)
   }
 }
