@@ -11,8 +11,8 @@
     "start:pins": "node src/bin/pins.js",
     "start:dagcargo:sizes": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/dagcargo-sizes.js",
     "start:storage": "node src/bin/storage.js",
-    "test": "npm-run-all -p -r mock:cluster mock:pgrest test:e2e",
-    "test:e2e": "mocha test/*.spec.js --exit"
+    "test": "npm-run-all -p -r test:e2e",
+    "test:e2e": "mocha --require ./test/hooks.js test/*.spec.js --timeout 5000"
   },
   "author": "Alan Shaw",
   "license": "(Apache-2.0 OR MIT)",
