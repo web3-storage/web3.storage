@@ -179,7 +179,8 @@ export class DBClient {
   }
 
   /**
-   * Get all users with storage used in a percentage range of their allocated quota
+   * Get all users with storage used in a percentage range of their allocated quota.
+   * The filtering is inclusive of the lower limit of the range and exclusive of the upper limit.
    *
    * @param {{fromPercent: number, toPercent: number}} range
    * @returns {Promise<Array<import('./db-client-types').UserStorageUsed>>}
