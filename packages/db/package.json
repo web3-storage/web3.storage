@@ -11,7 +11,7 @@
     "stop": "node scripts/cli.js db --stop --project web3-storage",
     "stop:clean": "node scripts/cli.js db --stop --clean --project web3-storage",
     "pg-rest-api-types": "./scripts/cli.js pg-rest-api-types",
-    "test": "playwright-test \"test/**/*.spec.js\" --sw index.js"
+    "test": "mocha --require test/hooks.js --experimental-vm-modules --timeout 5000"
   },
   "keywords": [
     "postgres",
@@ -33,7 +33,6 @@
     "mocha": "^9.1.3",
     "openapi-typescript": "^4.0.2",
     "pg": "^8.7.1",
-    "playwright-test": "^7.0.1",
     "sade": "^1.7.4",
     "standard": "^16.0.3"
   },
