@@ -20,7 +20,7 @@
     @include medium {
       padding-left: 0;
     }
-
+    &:not(.delete-modal),
     &:not(.tokens-manager-footer) {
       max-width: 52.8125rem;
       @include medium {
