@@ -1,0 +1,25 @@
+{
+  "name": "web3-storage-how-to-examples",
+  "version": "1.0.0",
+  "description": "Code snippets for https://web3.storage/docs how-to articles",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/web3-storage/docs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/web3-storage/docs/issues"
+  },
+  "homepage": "https://github.com/web3-storage/docs#readme",
+  "dependencies": {
+    "@ipld/dag-json": "^8.0.0",
+    "ipfs-unixfs-importer": "^8.0.1",
+    "web3.storage": "^3.3.0"
+  }
+}

@@ -1,6 +1,6 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
-import { DBClient } from '../index'
+import { DBClient } from '../index.js'
 import { token } from './utils.js'
 
 describe('backup', () => {
@@ -30,7 +30,7 @@ describe('backup', () => {
   let upload
 
   // Setup testing user
-  before(async () => {
+  beforeEach(async () => {
     const name = 'test-name'
     const email = 'test@email.com'
     const issuer = `issuer${Math.random()}`
@@ -51,7 +51,7 @@ describe('backup', () => {
   })
 
   // Create auth key
-  before(async () => {
+  beforeEach(async () => {
     const name = 'test-key-name'
     const secret = 'test-secret'
     await client.createKey({
@@ -62,7 +62,7 @@ describe('backup', () => {
   })
 
   // Setup upload
-  before(async () => {
+  beforeEach(async () => {
     authKeys = await client.listKeys(user._id)
     const createdUpload = await client.createUpload({
       user: user._id,

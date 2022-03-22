@@ -1,0 +1,8 @@
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 1.5rem;
+  @include shadow2;
+  @include border_Background_Waterloo_White;
+}

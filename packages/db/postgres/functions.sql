@@ -3,6 +3,7 @@ DROP FUNCTION IF EXISTS json_arr_to_json_element_array;
 DROP FUNCTION IF EXISTS create_key;
 DROP FUNCTION IF EXISTS create_upload;
 DROP FUNCTION IF EXISTS upsert_pin;
+DROP FUNCTION IF EXISTS upsert_pins;
 DROP FUNCTION IF EXISTS user_used_storage;
 DROP FUNCTION IF EXISTS user_auth_keys_list;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
@@ -331,14 +332,29 @@ BEGIN
             (user_used_storage(u.id)).total                 AS storage_used
     FROM public.user u
     FULL OUTER JOIN user_tag ut ON u.id = ut.user_id
-    WHERE (ut.tag IS NULL
-        OR (ut.tag = 'StorageLimitBytes' AND ut.deleted_at IS NULL))
-    AND (user_used_storage(u.id)).total::BIGINT 
-            >= (from_percent::NUMERIC/100) * COALESCE(ut.value::BIGINT, default_quota)
-    AND (to_percent IS NULL
-        OR (user_used_storage(u.id)).total::BIGINT 
-            < (to_percent::NUMERIC/100) * COALESCE(ut.value::BIGINT, default_quota))
+    WHERE (ut.tag IS NULL OR (ut.tag = 'StorageLimitBytes' AND ut.deleted_at IS NULL))
+    AND (user_used_storage(u.id)).total::BIGINT >= (from_percent::NUMERIC/100) * COALESCE(ut.value::BIGINT, default_quota)
+    AND (to_percent IS NULL OR (user_used_storage(u.id)).total::BIGINT < (to_percent::NUMERIC/100) * COALESCE(ut.value::BIGINT, default_quota))
     ORDER BY (user_used_storage(u.id)).total::BIGINT DESC;
+END
+$$;
+
+CREATE OR REPLACE FUNCTION upsert_pins(data json) RETURNS TEXT[]
+    LANGUAGE plpgsql
+    volatile
+    PARALLEL UNSAFE
+AS
+$$
+DECLARE
+  pin json;
+  pin_ids TEXT[];
+BEGIN
+  FOREACH pin IN array json_arr_to_json_element_array(data -> 'pins')
+  LOOP
+    SELECT pin_ids || upsert_pin(pin -> 'data') INTO pin_ids;
+  END LOOP;
+
+  RETURN pin_ids;
 END
 $$;
 

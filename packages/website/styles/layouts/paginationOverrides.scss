@@ -1,0 +1,18 @@
+.Pagination {
+  @include label_5;
+  .pageList {
+    .page {
+      &.current {
+        color: $cyan;
+      }
+      &:hover {
+        color: $cerise;
+        transition: color $transitionDuration;
+      }
+    }
+    button:hover {
+      color: $cerise;
+      transition: color $transitionDuration;
+    }
+  }
+}

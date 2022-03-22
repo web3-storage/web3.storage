@@ -1,0 +1,340 @@
+.button {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  @include borderRadius_Huge;
+  @include fontSize_Tiny;
+  @include fontWeight_Semibold;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1;
+  height: 2.1875rem;
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition: 250ms ease;
+
+  &[disabled] {
+    cursor: default;
+  }
+
+  button {
+    background: transparent;
+    box-sizing: border-box;
+    border: none;
+    width: 100%;
+    height: 100%;
+    padding: 0.25rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    @include fontWeight_Semibold;
+    line-height: inherit;
+    letter-spacing: inherit;
+    transition: inherit;
+
+    &:active,
+    &:hover,
+    &:focus {
+      background: transparent;
+      outline: 0;
+    }
+  }
+
+  &.dark,
+  &.light {
+    position: relative;
+    z-index: 0;
+
+    &:before {
+      content: '';
+      background: linear-gradient(65deg, #d726d7, #3064e0, #31e7ea, #714cdd, #d726d7);
+      position: absolute;
+      top: -0.125rem;
+      left: -0.125rem;
+      border-radius: 8rem;
+      background-size: 500%;
+      z-index: -1;
+      filter: blur(0.25rem);
+      width: calc(100% + 0.25rem);
+      height: calc(100% + 0.25rem);
+      animation: gradient-position 40s linear infinite;
+      opacity: 0;
+      transition: opacity 500ms ease-out;
+      transition: all 200ms linear;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      border-radius: 8rem;
+    }
+
+    &:hover {
+      background-color: transparent;
+      &:before {
+        opacity: 1;
+      }
+    }
+
+    &:active {
+      color: #000;
+      &:after {
+        background: transparent;
+      }
+      &:before {
+        filter: blur(0);
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  &.dark {
+    background-color: $ebony;
+
+    &:after {
+      background: $ebony;
+    }
+
+    &:active {
+      button {
+        color: $ebony;
+      }
+    }
+
+    button {
+      color: $white;
+    }
+  }
+
+  &.light {
+    background-color: $white;
+
+    &:after {
+      background: $white;
+    }
+
+    &:active {
+      button {
+        color: $white;
+      }
+    }
+
+    button {
+      color: $ebony;
+    }
+  }
+
+  &.text-purple {
+    background-color: unset;
+    padding-left: 0;
+    position: relative;
+    button {
+      color: $malibu;
+      @include fontSize_Small;
+      @include fontWeight_Semibold;
+      padding-left: 0;
+    }
+    &:after {
+      content: '➔';
+      position: absolute;
+      right: -0.75rem;
+      top: calc(50% - 1px);
+      transform: translate(0, -50%);
+      color: $malibu;
+      @include fontSize_Small;
+      @include fontWeight_Semibold;
+      transition: inherit;
+    }
+    &:hover {
+      &:after {
+        transform: translate(0.75rem, -50%);
+      }
+    }
+  }
+
+  &.blue {
+    background-color: unset;
+    padding: 0;
+    button {
+      color: $blue;
+      @include fontWeight_Semibold;
+      @include fontSize_Small;
+      line-height: leading(34, 16);
+      padding: 0;
+    }
+    &:after {
+      content: '➔';
+      position: absolute;
+      right: -1.75rem;
+      top: calc(50% - 1px);
+      transform: translate(0, -50%);
+      @include fontWeight_Semibold;
+      @include fontSize_Small;
+      color: $blue;
+      transition: inherit;
+    }
+    &:hover {
+      &:after {
+        transform: translate(0.75rem, -50%);
+      }
+    }
+  }
+
+  &.pink-blue {
+    position: relative;
+
+    &:before,
+    &:after {
+      @include borderRadius_Huge;
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    &:before {
+      @include gradient_BlurryDoubleBG_PinkBlue;
+    }
+
+    &:after {
+      transition: all $transitionDuration ease-in;
+      border: 0.0625rem solid $alto;
+      background: $charade;
+      opacity: 0.6;
+      @include shadow4;
+    }
+
+    button {
+      @include fontWeight_Regular;
+      position: relative;
+      z-index: 1;
+    }
+
+    &:hover {
+      &:before {
+        animation-play-state: running;
+      }
+    }
+    &:active {
+      &:after {
+        border-color: $white;
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  &.text {
+    line-height: 0;
+    color: $cyan;
+    text-transform: none;
+
+    button {
+      @include fontWeight_Regular;
+    }
+  }
+
+  &.outline-dark,
+  &.outline-light {
+    position: relative;
+    z-index: 0;
+    &:hover {
+      &:before {
+        opacity: 1;
+      }
+    }
+    &:active {
+      &:after {
+        opacity: 0;
+      }
+      &:before {
+        filter: unset;
+      }
+    }
+    &:before {
+      content: '';
+      position: absolute;
+      top: -0.25rem;
+      left: -0.25rem;
+      width: calc(100% + 0.5rem);
+      height: calc(100% + 0.5rem);
+      background: linear-gradient(65deg, #d726d7, #3064e0, #31e7ea, #714cdd, #d726d7);
+      background-size: 500%;
+      filter: blur(0.25rem);
+      opacity: 0;
+      border-radius: 8rem;
+      z-index: -1;
+      transition: all 200ms linear;
+      transition: opacity 500ms ease-out;
+      animation: gradient-position 40s linear infinite;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      top: -0.125rem;
+      left: -0.125rem;
+      width: calc(100% + 0.25rem);
+      height: calc(100% + 0.25rem);
+      border-radius: 8rem;
+      z-index: -1;
+      transition: inherit;
+    }
+  }
+
+  &.outline-light {
+    button {
+      color: $white;
+    }
+    &:hover {
+      button {
+        color: $ebony;
+      }
+      &:after {
+        background-color: $white;
+      }
+    }
+    &:after {
+      border: solid 2px $white;
+      background-color: rgba($white, 0);
+    }
+  }
+
+  &.outline-dark {
+    button {
+      color: $ebony;
+    }
+    &:hover {
+      button {
+        color: $white;
+      }
+      &:after {
+        background-color: $ebony;
+      }
+    }
+    &:after {
+      border: solid 2px $ebony;
+      background-color: rgba($ebony, 0);
+    }
+  }
+}
+
+@keyframes gradient-position {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 500% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
