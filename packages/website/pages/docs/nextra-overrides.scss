@@ -1,0 +1,225 @@
+ // base
+ .nextra-container {
+
+    $primary: #3C3CD0;
+$mobileActiveText: #7E81FF;
+$borderColor: #dbdada;
+$breakpoint: 997px;
+$imagePath: '../../static/img';
+$sidenavBg: #1C1E29;
+$gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48%, $cerise 100%);
+
+@mixin gradient_Background_PinkBlue_Reverse {
+  background: $gradient_PinkBlue_Reverse;
+}
+
+@mixin desktop {
+  @media screen and (min-width: $breakpoint) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media screen and (max-width: ($breakpoint - 1px)) {
+    @content;
+  }
+}
+
+// Typography
+@mixin headings {
+  h1 {
+    @include h1;
+    color: $ebony;
+    line-height: leading(55, 45);
+    margin-top: 0;
+    margin-bottom: toRem(42);
+  }
+  .markdown > h2,
+  h2 {
+    color: $ebony;
+    font-size: toRem(30);
+    margin-bottom: toRem(24);
+    line-height: toRem(34);
+    margin-top: calc(var(--ifm-h2-vertical-rhythm-top) * var(--ifm-leading));
+  }
+  h3 {
+    color: $ebony;
+    margin-bottom: toRem(20);
+    font-size: toRem(18);
+    line-height: toRem(34);
+    @include fontWeight_Semibold;
+    margin-top: calc(var(--ifm-h3-vertical-rhythm-top) * var(--ifm-leading));
+  }
+  h4 {
+    @include h4;
+    color: $ebony;
+    @include fontSize_Medium;
+  }
+  h5 {
+    @include h5;
+    text-transform: none;
+    color: $ebony;
+    font-size: toRem(16);
+    line-height: toRem(34);
+  }
+  pre code {
+    background-color: $steelGray !important;
+    font-size: toRem(14.4);
+  }
+  li code,
+  p code  {
+    color: $ebony !important;
+    background-color: $white;
+    font-family: 'Suisse Intl Mono' !important;
+    border-radius: var(--ifm-code-border-radius);
+    font-size: toRem(13);
+    padding: var(--ifm-code-padding-vertical) var(--ifm-code-padding-horizontal);
+    border: none;
+  }
+}
+
+
+
+ html,
+ body {
+   @include headings;
+   background-color: $seaShell;
+   -moz-osx-font-smoothing: grayscale;
+   -webkit-font-smoothing: antialiased;
+   height: auto !important;
+   ::-moz-selection {
+     background: white;
+     color: black;
+   }
+   ::selection {
+     background: white;
+     color: black;
+   }
+   * {
+     box-sizing: border-box;
+     &:before,
+     &:after {
+       box-sizing: border-box;
+     }
+   }
+ }
+ 
+ html {
+//    background-image: url(#{$imagePath}/shapes/corkscrewBlurred.jpg);
+   background-repeat: repeat;
+   background-size: cover;
+ }
+ 
+ article {
+   a {
+     @include fontWeight_Semibold;
+   }
+   ol, ul {
+     padding-left: 1rem;
+     li {
+       padding-left: 3rem;
+     }
+   }
+ }
+ 
+ .label {
+   margin-bottom: 1.25rem;
+ }
+ 
+ // prevent the external link icon showing in the navbar and footer
+ svg[class^="iconExternalLink"] {
+   display: none;
+ }
+ 
+ .theme-doc-breadcrumbs {
+   display: none;
+ }
+ 
+ // grid from website
+ [class~='grid'],
+ [class*='grid-'],
+ [class*='grid_'] {
+   width: $containerWidth;
+   margin: 0 auto;
+   @include customMaxMQ($containerWidth + 4rem) {
+     padding: 0 4.1665%;
+     width: 100%;
+   }
+   &[class*='-noGutter'] {
+     margin: 0 auto;
+   }
+   &.full {
+     width: 100%;
+     padding: 0 0.5rem;
+     &.maxed {
+       max-width: 90rem;
+     }
+   }
+   &.no-padding {
+     padding: 0;
+   }
+   [class~='grid'],
+   [class*='grid-'],
+   [class*='grid_'] {
+     width: 100%;
+     padding: 0;
+   }
+ }
+ 
+ .main-wrapper,
+ .docs-wrapper {
+   z-index: 100;
+ }
+ 
+ // pagination 
+ .pagination-nav__link {
+   border: 0;
+ }
+ 
+ table {
+   td {
+     min-width: toRem(150);
+     line-height: 1.4;
+     &:last-child {
+       width: 100%;
+     }
+   }
+ }
+ 
+ .container {
+   .row {
+     flex-wrap: nowrap;
+     .col {
+       width: 50vw;
+       @media (max-width: 1300px) {
+         width: 48vw;
+       }
+       @media (max-width: 1200px) {
+         width: 44vw;
+       }
+       @media (max-width: 1100px) {
+         width: 40vw;
+       }
+       &.col--3 {
+         flex-shrink: 0 !important;
+         width: toRem(300) !important;
+       }
+     }
+   }
+ }
+ 
+ // position anchor lower so it stops on top of page
+ a.anchor {
+   display: block;
+   position: relative;
+   top: 180px;
+   @include mobile {
+     top: 230px;
+   }
+   visibility: hidden;
+ }
+ 
+ .theme-back-to-top-button {
+   background-color: $primary;
+ }
+}
