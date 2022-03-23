@@ -6,7 +6,7 @@ import { envConfig } from '../lib/env.js'
 
 async function main () {
   const db = getDBClient(process.env)
-  await checkStorageUsed(db)
+  await checkStorageUsed({ db })
 }
 
 envConfig()

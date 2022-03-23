@@ -8,11 +8,12 @@ export const emailType = {
 
 export class EmailService {
   /**
-   * @param {import('@web3-storage/db').DBClient} db
+   * @param {{
+ *   db: import('@web3-storage/db').DBClient
+   * }} config
    */
-  constructor (db, log) {
+  constructor ({ db }) {
     this.db = db
-    this.log = log
   }
 
   /**
@@ -30,10 +31,9 @@ export class EmailService {
       return
     }
 
-    // Send the email
-    this.log(`📧 Sending an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
+    // TODO Send the email
 
-    // Get the message id from the mailing service
+    // Get the message id from the mailing service for the email logging
     const messageId = '1'
 
     // Log the email

@@ -1,4 +1,4 @@
-import { normalizeCid } from '../../api/src/utils/cid'
+import { normalizeCid } from '../../api/src/utils/cid.js'
 
 export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU'
 

@@ -1,6 +1,6 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
-import { DBClient } from '../index'
+import { DBClient } from '../index.js'
 import {
   createUser,
   createUserAuthKey,
@@ -51,7 +51,7 @@ describe('Users used storage', () => {
     }
   ]
 
-  before(async () => {
+  beforeEach(async () => {
     user1 = await createUser(client, {
       name: 'test1-name',
       email: 'test1@email.com'

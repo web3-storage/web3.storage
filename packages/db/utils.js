@@ -107,9 +107,10 @@ const DEAL_STATUS = new Set([
   'active'
 ])
 
-export function parseTextToNumber (n) {
-  if (!Number.isSafeInteger(n)) {
-    throw Error()
+export function parseTextToNumber (numberText) {
+  const number = Number(numberText)
+  if (!Number.isSafeInteger(number)) {
+    throw Error('Invalid number')
   }
-  return Number(n)
+  return number
 }
