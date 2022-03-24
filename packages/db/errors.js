@@ -16,7 +16,7 @@ export class DBError extends Error {
 
 DBError.CODE = 'ERROR_DB'
 
-export class CustomDBError extends Error {
+export class ConstraintError extends Error {
   /**
    * @param {{
    *   message: string
@@ -25,9 +25,9 @@ export class CustomDBError extends Error {
    */
   constructor ({ message, details }) {
     super(`${message}, details: ${details}`)
-    this.name = 'CustomDBError'
-    this.code = CustomDBError.CODE
+    this.name = 'ConstraintError'
+    this.code = ConstraintError.CODE
   }
 }
 
-CustomDBError.CODE = 'CUSTOM_ERROR_DB'
+ConstraintError.CODE = 'CONSTRAINT_ERROR_DB'

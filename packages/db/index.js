@@ -3,7 +3,7 @@ import { PostgrestClient } from '@supabase/postgrest-js'
 import {
   normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest
 } from './utils.js'
-import { CustomDBError, DBError } from './errors.js'
+import { ConstraintError, DBError } from './errors.js'
 
 const uploadQuery = `
         _id:id::text,
@@ -151,7 +151,7 @@ export class DBClient {
 
     // Expects unique entries.
     if (data.length > 1) {
-      throw new CustomDBError({ message: `More than one row found for user tag ${tag}` })
+      throw new ConstraintError({ message: `More than one row found for user tag ${tag}` })
     }
 
     return data.length ? data[0].value : undefined
@@ -181,7 +181,7 @@ export class DBClient {
     const tags = new Set()
     data.forEach(item => {
       if (tags.has(item.tag)) {
-        throw new CustomDBError({ message: `More than one row found for user tag ${item.tag}` })
+        throw new ConstraintError({ message: `More than one row found for user tag ${item.tag}` })
       }
       tags.add(item.tag)
     })
