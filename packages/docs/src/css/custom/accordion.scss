@@ -1,0 +1,12 @@
+details {
+    color: $ebony;
+    margin-bottom: toRem(20) !important;
+    padding: toRem(20);
+}
+
+summary {
+    @include label_1;
+    &:before {
+        top: 0.35rem !important;
+    }
+}

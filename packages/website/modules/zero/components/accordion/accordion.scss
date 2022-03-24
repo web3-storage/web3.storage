@@ -1,0 +1,35 @@
+// /////////////////////////////////////////////////////// Accordion [Accordion]
+// -----------------------------------------------------------------------------
+.accordion-control-bar {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+// ///////////////////////////////////////////////////////// Accordion [Section]
+// -----------------------------------------------------------------------------
+.accordion-section {
+  position: relative;
+  overflow: hidden;
+}
+
+// ////////////////////////////////////////////////////////// Accordion [Header]
+// -----------------------------------------------------------------------------
+.accordion-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+// ///////////////////////////////////////////////////////// Accordion [Content]
+// -----------------------------------------------------------------------------
+.accordion-content {
+  position: relative;
+  transition: height 150ms ease-in-out;
+  &.measuring-content {
+    position: absolute;
+    visibility: hidden;
+    z-index: -1000px;
+  }
+}

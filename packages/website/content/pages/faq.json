@@ -1,0 +1,158 @@
+{
+  "seo": {
+    "title": "",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "page_content": [
+    [
+      {
+        "id": "faq_hero-header",
+        "grid": ["middle", "noGutter"],
+        "columns": [
+          {
+            "type": "hero",
+            "page": "faq",
+            "cols": {
+              "num": "col-8_md-10_sm-8",
+              "push_left": "off-2_md-1_sm-2"
+            },
+            "format": "header",
+            "heading": "Frequently Asked Questions",
+            "subheading": "<span>Frequently</span><div id='faq_hero_title-triangle'></div><span>Asked</span><div id='faq_hero_title-coil'></div><span>Questions</span>"
+          }
+        ]
+      },
+      {
+        "id": "faq_section-main",
+        "columns": [
+          {
+            "type": "accordion_block",
+            "cols": {
+              "num": "col-12"
+            },
+            "multiple": true,
+            "toggleOnLoad": false,
+            "sections": [
+              {
+                "id": "service",
+                "heading": "How is Web3.Storage different from NFT.Storage?",
+                "content": "Both services are offered by the same group and share much of the same architecture, but as the name suggests, NFT.Storage is a service that is focused on NFTs specifically, with the mission to perpetually store all off-chain NFT data as a public good (so for free, forever). On the other hand, Web3.Storage looks to offer very inexpensive, decentralized data storage for any kind of data."
+              },
+              {
+                "id": "cryptoeconomics",
+                "heading": "How can you offer this service for free?",
+                "content": "Due to the cryptoeconomics of Filecoin, data storage is provided for free today. This will likely change to some form of crypto-native payment model in the near future (e.g., staking Filecoin to increase storage limits), but will remain highly inexpensive due to Filecoin's economic model and 15B+ PiB of capacity. Today, we do subsidize the cost of overhead of running Web3.Storage, but the goal is to reduce this as Filecoin continues to improve (e.g., faster storage and retrieval). Please see <a href='https://spec.filecoin.io/algorithms/cryptoecon/' alt='Filecoin Cryptoeconomics' target='_blank'>here for more on Filecoin economics</a>."
+              },
+              {
+                "id": "data-security",
+                "heading": "What happens if Web3.Storage is discontinued?",
+                "content": "One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data is accessible via IPFS, and you can simply export all of your CIDs and ask a pinning service to pin them without need to download or upload any data. You have this option even if you use Web3.Storage today and just want another redundant copy of your data persisted. And you don't need to change the URLs that your application is pointing to, since IPFS URLs are content addressable.<br><br>We don't expect to ever discontinue Web3.Storage, but if we need to, we'll give you 90 days' notice for you to make the easy switch."
+              },
+              {
+                "id": "how-to-delete",
+                "heading": "How can I delete items from Web3.Storage?",
+                "content": "You can delete files listed in your account. Simply log-in to your account and use the file manager on the files page. It's currently not possible to delete files via the API or the client libraries, but we are working on enabling that feature in the near future.<br><br>However, once a file is uploaded to Web3.Storage, there cannot be a guarantee that all copies of the file are gone from the IPFS network. As soon as a file is uploaded, other IPFS nodes can access and store a copy of the data. The data only becomes unavailable when the last IPFS node has stopped pinning the file, and all copies are garbage collected. As a consequence you should only upload to Web3.Storage files that you know can be shared with anyone forever, or are securely encrypted."
+              },
+              {
+                "id": "using-api-directly",
+                "heading": "Can I use Web3.Storage, even if I don't want to use the Javascript or go client libraries?",
+                "content": "Yes, you can use the Web3.Storage APIs directly, but in that case you need to ensure that you provide the API with the right format. The API won't accept raw files above 100MB, so you'll need to package them as .CAR files and chunk them to the right size using CLI tools like <a href='https://github.com/web3-storage/ipfs-car' target='_blank'>ipfs-car</a> and <a href='https://github.com/nftstorage/carbites-cli' target='_blank'>carbites.</a>"
+              },
+              {
+                "id": "editing-files",
+                "heading": "How can I edit a file or add files to a folder?",
+                "content": "Since CIDs are immutable, it's currently not possible to edit files or add files to a folder. We are working on making mutable references available that you can use instead."
+              },
+              {
+                "id": "uploading-without-account",
+                "heading": "How can my users upload files directly to Web3.Storage without them needing to create their own account?",
+                "content": "Currently the best way to upload to Web3.Storage from the browser is to relay data through an endpoint that you control that has access to the API token. Providing the API token in your front-end will allow anyone to upload files to your account and list already uploaded files. However, we are actively working on ways end-users can upload data directly to Web3.Storage without needing an intermediary!"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  ],
+  "floater_animations": [
+    {
+      "trigger": "faq_hero-header",
+      "duration": 900,
+      "offset": 700,
+      "floaters": [
+        {
+          "id": "faq_hero-corkscrew",
+          "default": "scaleX(-1)",
+          "start": {
+            "rotate": -1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": 24,
+            "x": -60,
+            "y": 10
+          }
+        },
+        {
+          "id": "faq_hero-helix",
+          "start": {
+            "rotate": -79,
+            "scale": 1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -120,
+            "scale": 1.4,
+            "x": -120,
+            "y": 80
+          }
+        },
+        {
+          "id": "faq_hero-ring",
+          "start": {
+            "rotate": -23,
+            "scale": 1,
+            "x": 321,
+            "y": 321
+          },
+          "end": {
+            "rotate": 10,
+            "scale": 1.3,
+            "x": 501,
+            "y": 421
+          }
+        },
+        {
+          "id": "faq_hero_title-triangle",
+          "start": {
+            "scale": 1,
+            "rotate": 1
+          },
+          "end": {
+            "scale": 1.25,
+            "rotate": 20
+          }
+        },
+        {
+          "id": "faq_hero_title-coil",
+          "start": {
+            "scale": 1,
+            "rotate": -1
+          },
+          "end": {
+            "scale": 1.25,
+            "rotate": -20
+          }
+        }
+      ]
+    }
+  ]
+}

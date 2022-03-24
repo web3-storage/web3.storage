@@ -109,10 +109,7 @@ class Web3Storage {
     const blockstore = new Blockstore()
     try {
       const { out, root } = await pack({
-        input: Array.from(files).map((f) => ({
-          path: f.name,
-          content: f.stream()
-        })),
+        input: Array.from(files).map(toImportCandidate),
         blockstore,
         wrapWithDirectory,
         maxChunkSize: MAX_BLOCK_SIZE,
@@ -484,6 +481,25 @@ function toWeb3Response (res) {
     }
   })
   return response
+}
+
+/**
+ * Convert the passed file to an "import candidate" - an object suitable for
+ * passing to the ipfs-unixfs-importer. Note: content is an accessor so that
+ * the stream is only created when needed.
+ *
+ * @param {Filelike} file
+ */
+function toImportCandidate (file) {
+  /** @type {ReadableStream} */
+  let stream
+  return {
+    path: file.name,
+    get content () {
+      stream = stream || file.stream()
+      return stream
+    }
+  }
 }
 
 /**

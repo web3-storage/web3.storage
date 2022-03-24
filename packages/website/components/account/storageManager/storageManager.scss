@@ -1,0 +1,162 @@
+.storage-manager-container {
+  display: flex;
+  flex-direction: column;
+  > * {
+    width: 100%;
+  }
+  padding: 1.875rem 0 0.9375rem 2.375rem;
+  @include medium {
+    padding: 2.25rem 1.375rem 2.25rem 1rem;
+  }
+}
+
+.storage-manager-info,
+.storage-manager-space {
+  display: flex;
+  padding-left: 0.5625rem;
+  padding-right: 3.15rem;
+  align-items: center;
+}
+
+.storage-manager-space {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.325rem;
+  @include medium {
+    margin-bottom: 0.4rem;
+  }
+  .button {
+    height: auto;
+    line-height: 1;
+    button {
+      @include hoverArrowRight;
+      display: inline-block;
+    }
+  }
+}
+
+.storage-manager-info {
+  @include fontSize_Tiny;
+  @include fontWeight_Regular;
+  a {
+    @include hoverTextLinkColor;
+  }
+  margin-top: 1.25rem;
+  @include medium {
+    @include leading_Small;
+    button a {
+      &::after {
+        margin-left: 0.5rem;
+        content: '❯';
+      }
+    }
+  }
+}
+
+// Mobile override after
+.storage-manager-info,
+.storage-manager-space {
+  @include medium {
+    padding-left: 0;
+    flex-direction: column;
+    align-items: flex-start;
+
+    button {
+      padding-left: 0;
+    }
+  }
+}
+
+.storage-manager-meter-container {
+  display: flex;
+  position: relative;
+  color: $white;
+  width: 100%;
+  gap: 0.95rem;
+  padding-right: 2.25rem;
+
+  @include medium {
+    gap: 0.625rem;
+  }
+
+  .button {
+    padding: 0;
+    height: auto;
+    svg {
+      margin-right: 0.35rem;
+      @include hoverSvg;
+    }
+    button {
+      @include fontSize_Atom;
+      @include fontWeight_Regular;
+      padding: 0;
+      min-height: auto;
+      width: auto;
+      a {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+  }
+  @include medium {
+    flex-direction: column;
+    padding-right: 0;
+    .button {
+      align-self: flex-end;
+    }
+  }
+}
+
+.storage-manager-meter {
+  @include borderRadius_UltraLarge;
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 1.375rem;
+  background: rgba($vulcan, 0.15);
+  border: 0.0625rem solid rgba($waterloo, 0.15);
+  flex: 1;
+  &:only-child {
+    flex: 1;
+    max-width: 35.5rem;
+  }
+  span {
+    @include fontSize_Atom;
+    position: absolute;
+    right: 0.75rem;
+    text-shadow: 0 0 0.125rem rgba(0, 0, 0, 0.94);
+  }
+}
+
+.storage-manager-used {
+  margin-bottom: 0.5rem;
+  .storage-label {
+    @include fontWeight_Semibold;
+  }
+  .storage-number {
+    font-style: italic;
+  }
+}
+
+.storage-manager-meter-used {
+  background: linear-gradient(
+    45deg,
+    $cyan 0%,
+    $royalBlue 12.5%,
+    $heliotrope 25%,
+    $cyan 37.5%,
+    $royalBlue 50%,
+    $heliotrope 62.5%,
+    $cyan 75%,
+    $royalBlue 87.5%,
+    $heliotrope 100%
+  );
+  background-size: 410%;
+  background-position: 50% 0;
+  @include borderRadius_UltraLarge;
+  height: 1.5rem;
+  top: 0;
+  left: 0;
+  transition: 250ms ease-out;
+}

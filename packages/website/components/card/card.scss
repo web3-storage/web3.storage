@@ -1,0 +1,491 @@
+// ///////////////////////////////////////////////////////////////////// General
+// -----------------------------------------------------------------------------
+.card {
+  flex: 1 1 0px;
+  padding: 1.5rem;
+  .feature-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  .title,
+  .subtitle,
+  .description {
+    text-align: center;
+  }
+}
+
+// //////////////////////////////////////////////// Card [Type A] -> Big Numbers
+// -----------------------------------------------------------------------------
+.card.type__A {
+  @include gradient_Text_Selection;
+
+  .feature-wrapper {
+    margin-top: 1rem;
+  }
+  .feature {
+    @include gradient_Text;
+    @include fontSize_ExtraLarge;
+    @include fontWeight_Bold;
+    background-size: 200%;
+    transform: scaleY(1.2) translateY(0.375px);
+  }
+
+  .title {
+    @include fontSize_Small;
+    @include fontWeight_Semibold;
+    text-transform: uppercase;
+    line-height: leading(34, 16);
+    margin-bottom: 0.25rem;
+  }
+
+  .description {
+    @include fontSize_Mini;
+    @include fontWeight_Regular;
+    line-height: leading(25, 15);
+  }
+
+  .title,
+  .description {
+    max-width: 16.25rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+// ///////////////////////////////////////////////// Card [Type B] -> Code Cards
+// -----------------------------------------------------------------------------
+.card.type__B {
+  .label {
+    margin: 0;
+    text-align: left;
+    @include fontSize_Medium;
+    @include fontWeight_Semibold;
+    line-height: leading(34, 20);
+  }
+
+  .feature-wrapper {
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 1.75rem 0;
+    height: fit-content;
+    @include small {
+      margin: 0.5rem 0;
+    }
+  }
+
+  .code-wrapper {
+    display: flex;
+    justify-content: center;
+    height: fit-content;
+    padding: 0.5rem 1rem;
+    background-color: $gray50;
+    border: solid 1px white;
+    border-radius: 0.5rem;
+    @include mini {
+      padding: 0.5rem 1rem;
+    }
+    @include shadow2;
+  }
+
+  .code-feature {
+    text-align: left;
+    @include monospace_Text;
+    @include fontSize_Tiny;
+    @include fontWeight_Regular;
+    line-height: leading(19, 13);
+    color: #0008d9;
+    word-break: break-all;
+
+    @include mini {
+      font-size: 0.75rem;
+    }
+
+    .highlight {
+      color: #925fdc;
+    }
+  }
+
+  .description {
+    @include fontSize_Mini;
+    @include fontWeight_Regular;
+    line-height: leading(26, 15);
+    text-align: left;
+  }
+
+  .description.height-standard-target {
+    @include mini {
+      min-height: auto !important;
+    }
+  }
+
+  .icon-before {
+    display: inline-block;
+    margin-right: 1rem;
+    font-family: 'Courier', monospace;
+    @include fontWeight_Bold;
+    @include fontSize_MediumLarge;
+    line-height: leading(29, 24);
+    color: $blue;
+    svg {
+      transform: translateY(0.40625rem);
+    }
+  }
+}
+
+// /////////////////////////////////////////////// Card [Type C] -> Shadow Cards
+// -----------------------------------------------------------------------------
+.card.type__C {
+  background-color: $ebony;
+  border-radius: 5px;
+  position: relative;
+  margin-right: 1.125rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    border-radius: 0px;
+    height: calc(100% + 2px);
+    width: calc(100% + 2px);
+    top: -1px;
+    left: -1px;
+    background: linear-gradient(135deg, #d726d7 0%, #3064e0 50%, #31e7ea 100%);
+    z-index: -1;
+    filter: blur(6px);
+    opacity: 0;
+    transition: 250ms ease;
+  }
+
+  &:hover {
+    &:before {
+      opacity: 1;
+    }
+  }
+
+  .feature-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    .image-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+      img {
+        border-radius: 50%;
+        border: solid 4px white !important;
+      }
+    }
+    .title {
+      @include fontSize_Small;
+      @include fontWeight_Semibold;
+      line-height: leading(34, 16);
+      margin-bottom: 0.625rem;
+    }
+
+    .subtitle {
+      @include fontSize_Tiny;
+      @include fontWeight_Regular;
+      line-height: leading(22, 16);
+      margin-bottom: 1rem;
+    }
+  }
+
+  .description {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    @include fontSize_Mini;
+    @include fontWeight_Regular;
+    line-height: leading(22, 15);
+    a {
+      border-bottom: 1px solid;
+      transition: all $transitionDuration;
+      &:hover {
+        color: $malibu;
+      }
+    }
+  }
+}
+
+// ////////////////////////////////////////////// Card [Type D] -> Explore Cards
+// -----------------------------------------------------------------------------
+.card.type__D {
+  padding: 2rem;
+  padding-right: 2.5rem;
+  margin-right: 1.5rem;
+  background-color: $gray50;
+  border-radius: 0.5rem;
+  @include shadow3;
+  @include gradient_Text_Selection;
+
+  .feature-wrapper,
+  .category {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .feature-wrapper {
+    margin-bottom: 0;
+
+    .category {
+      &:not(:first-child) {
+        margin-top: 1.5rem;
+      }
+    }
+    .category-heading {
+      margin-bottom: 0.5rem;
+      @include fontSize_Medium;
+      @include fontWeight_Semibold;
+      line-height: leading(34, 20);
+    }
+    .category-link {
+      display: block;
+      padding: 0.25rem 0;
+      @include gradient_Text;
+      @include fontSize_Regular;
+      background-size: 150%;
+      transition: 200ms ease;
+      text-align: left;
+      cursor: pointer;
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0.25rem;
+        left: 0;
+        width: 2.25rem;
+        height: 100%;
+        padding: 0.75rem 0;
+        background-image: url('../../assets/images/zigzag-tiny.png');
+        background-position: 0 4px;
+        background-size: 0 1.75rem;
+        background-repeat: no-repeat;
+        transform: translate(0);
+        transition: inherit;
+        opacity: 0;
+      }
+      &:hover {
+        transform: translateX(2.25rem);
+        &:before {
+          background-size: 1.75rem 1.75rem;
+          transform: translate(-2.25rem);
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+// //////////////////////////////////////////////// Card [Type E] -> Tiers Cards
+// -----------------------------------------------------------------------------
+.card.type__E {
+  margin-bottom: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: rgba($waterloo, 0.15);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.024);
+  &:last-child {
+    margin-bottom: 0;
+  }
+  @include mini {
+    padding: 3rem 1.5rem;
+  }
+
+  .feature_storage-bar {
+    position: relative;
+    margin: 0 1rem;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: calc(100% - 2rem);
+    border-radius: 1.125rem;
+    background-color: rgba($steelGray, 0.15);
+    border: solid 1px rgba($waterloo, 0.15);
+    @include mini {
+      margin: 0;
+      width: 100%;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      height: calc(100% + 2px);
+      width: 1px;
+      left: 50%;
+      top: -1px;
+      opacity: 0.3;
+      background-color: white;
+      z-index: 1;
+    }
+
+    .feature_storage-bar-highlight {
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 2.5rem;
+      height: calc(100% + 2px);
+      border-radius: 1.125rem;
+      background: linear-gradient(
+        80deg,
+        #1ffbff 0%,
+        #4880ff 17%,
+        #9c48ff 34%,
+        #1ffbff 50%,
+        #4880ff 67%,
+        #9c48ff 83%,
+        #1ffbff 100%
+      );
+      background-size: 300%;
+      background-position: 0 0;
+      box-shadow: 0 2px 8px rgba(#210f55, 0.33);
+      z-index: 1;
+      transition: 250ms ease-out;
+    }
+
+    .storage-bar-tier {
+      &:nth-child(2) {
+        margin-left: 2rem;
+        @include tiny {
+          margin-left: 1rem;
+        }
+      }
+      &:last-child {
+        // margin-right: 2rem;
+        margin-right: calc(
+          50% - 1.25rem
+        ); // added to satisfy a case where there are two pricing tiers, as opposed the three from the original design
+        @include tiny {
+          margin-right: calc(50% - 0.75rem);
+        }
+      }
+
+      .storage-bar-tier-label {
+        text-align: center;
+        @include fontSize_Tiny;
+        z-index: 2;
+        position: relative;
+        display: inline-block;
+        white-space: nowrap;
+        transform: translateY(-2.25rem);
+        &:after {
+          z-index: 2;
+          display: none;
+          position: relative;
+          width: 100%;
+          height: 100%;
+          right: -0.5rem;
+          top: 0.125rem;
+          content: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='8.702' height='13.07' viewBox='0 0 8.702 13.07'%3e%3cpath id='Path_19112' data-name='Path 19112' d='M190.974-73.061c0-.026,0-.051,0-.077a1.157,1.157,0,0,0-1.139-1.11c-.082,0-.091-.029-.091-.1,0-.817,0-1.633,0-2.45a3.412,3.412,0,0,0-.046-.645,3.033,3.033,0,0,0-1.971-2.4,2.943,2.943,0,0,0-2.669.221A2.987,2.987,0,0,0,183.512-77c-.022.882,0,1.765,0,2.648,0,.053.015.1-.077.1a1.151,1.151,0,0,0-1.153,1.194c0,1.611.009,3.223,0,4.834a1.2,1.2,0,0,0,1.221,1.225c1.043-.017,2.086,0,3.13,0h3.141a1.353,1.353,0,0,0,.327-.033,1.159,1.159,0,0,0,.883-1.14Q190.977-70.616,190.974-73.061Zm-3.93,2.468c.1.363.194.727.289,1.091.044.168-.026.278-.2.288s-.344,0-.516,0v0c-.15,0-.3,0-.45,0-.227-.006-.3-.108-.246-.326.094-.357.187-.714.285-1.069a.132.132,0,0,0-.05-.165.713.713,0,0,1-.213-.8.732.732,0,0,1,.689-.469.717.717,0,0,1,.677.5.682.682,0,0,1-.213.764A.153.153,0,0,0,187.045-70.592Zm1.438-3.656c-.622,0-1.244,0-1.866,0s-1.236,0-1.855,0c-.076,0-.1-.018-.1-.1,0-.893,0-1.786,0-2.679a1.959,1.959,0,0,1,1.232-1.73,1.958,1.958,0,0,1,2.65,1.453,1.96,1.96,0,0,1,.034.4c0,.849,0,1.7,0,2.547C188.585-74.266,188.565-74.248,188.483-74.248Z' transform='translate(-182.273 80.064)' fill='%2303040A'/%3e%3c/svg%3e ");
+        }
+        &.display {
+          &:after {
+            display: inline;
+          }
+        }
+      }
+    }
+  }
+
+  .card_panel-left {
+    padding: 0 2.625rem;
+    @include mini {
+      padding: 0 1rem;
+      margin-bottom: 1rem;
+    }
+    .description {
+      display: none;
+      padding-top: 0.5rem;
+      padding-bottom: 1.5rem;
+      @include mini {
+        display: block;
+      }
+    }
+  }
+  .card_panel-right {
+    .description {
+      padding: 0.5rem 0;
+      @include mini {
+        display: none;
+      }
+    }
+  }
+
+  .label,
+  .title,
+  .subtitle,
+  .description {
+    text-align: left;
+  }
+
+  .label {
+    @include fontWeight_Semibold;
+    @include fontSize_Small;
+    font-style: italic;
+    margin-bottom: 1.25rem;
+  }
+
+  .title {
+    @include fontSize_Large;
+    @include fontWeight_Semibold;
+    margin-bottom: 1.5rem;
+    @include small {
+      @include fontSize_Large;
+    }
+    @include mini {
+      @include fontSize_ExtraLarge;
+    }
+  }
+
+  .description {
+    margin-left: 1.25rem;
+    margin-bottom: 0;
+    padding-right: 2rem;
+    @include fontSize_Mini;
+    @include fontWeight_Regular;
+    line-height: leading(26, 15);
+    li {
+      &:not(:last-child) {
+        margin-bottom: 0.375rem;
+      }
+    }
+  }
+}
+
+// ////////////////////////////////////////////////// Card [Type F] -> FAQ Cards
+// -----------------------------------------------------------------------------
+.card.type__F {
+  position: relative;
+  z-index: 1;
+  padding: 0 0.5rem 1rem;
+  margin: 0 1.75rem;
+  .feature-wrapper {
+    display: none;
+  }
+  .label,
+  .title,
+  .description {
+    text-align: left;
+  }
+  .label {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    @include fontSize_Small;
+    @include fontWeight_Semibold;
+  }
+  .title {
+    margin-bottom: 0.5rem;
+    @include fontSize_Medium;
+    @include fontWeight_Semibold;
+  }
+  .description {
+    @include fontSize_Regular;
+    margin-bottom: 1.25rem;
+  }
+}
