@@ -1,5 +1,22 @@
 # Changelog
 
+## [4.0.0](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.7...web3.storage-v4.0.0) (2022-03-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* new website frontend and app ui (#1001)
+
+### Features
+
+* add custom max chunk size to client put and putCar options ([#1000](https://github.com/web3-storage/web3.storage/issues/1000)) ([d525324](https://github.com/web3-storage/web3.storage/commit/d52532409b5e62dfcd8136e0c7ef057b1a410749))
+* new website frontend and app ui ([#1001](https://github.com/web3-storage/web3.storage/issues/1001)) ([dc61e36](https://github.com/web3-storage/web3.storage/commit/dc61e362001859605300f525b51e0fdd54d84704))
+
+
+### Bug Fixes
+
+* create stream when needed ([#1158](https://github.com/web3-storage/web3.storage/issues/1158)) ([0b4c4a0](https://github.com/web3-storage/web3.storage/commit/0b4c4a0f079d35a847f99385fa387ee79064c8d2))
+
 ### [3.5.7](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.6...web3.storage-v3.5.7) (2022-03-07)
 
 
