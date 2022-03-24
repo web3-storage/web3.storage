@@ -64,8 +64,8 @@ CREATE TABLE IF NOT EXISTS public.user_tag
   tag             user_tag_type                                                 NOT NULL,
   value           TEXT                                                          NOT NULL,
   reason          TEXT                                                          NOT NULL,
-  inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())     NOT NULL,
-  deleted_at  TIMESTAMP WITH TIME ZONE
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  deleted_at      TIMESTAMP WITH TIME ZONE
 );
 CREATE UNIQUE INDEX IF NOT EXISTS user_tag_is_deleted_idx ON user_tag (user_id, tag, deleted_at)
 WHERE deleted_at IS NOT NULL;

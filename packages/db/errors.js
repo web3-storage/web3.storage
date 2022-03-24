@@ -15,3 +15,19 @@ export class DBError extends Error {
 }
 
 DBError.CODE = 'ERROR_DB'
+
+export class ConstraintError extends Error {
+  /**
+   * @param {{
+   *   message: string
+   *   details?: string
+   * }} cause
+   */
+  constructor ({ message, details }) {
+    super(`${message}, details: ${details}`)
+    this.name = 'ConstraintError'
+    this.code = ConstraintError.CODE
+  }
+}
+
+ConstraintError.CODE = 'CONSTRAINT_ERROR_DB'

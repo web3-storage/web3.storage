@@ -8,7 +8,7 @@ import {
   normalizePsaPinRequest,
   parseTextToNumber
 } from './utils.js'
-import { DBError } from './errors.js'
+import { ConstraintError, DBError } from './errors.js'
 
 const uploadQuery = `
         _id:id::text,
@@ -136,25 +136,62 @@ export class DBClient {
   }
 
   /**
-   * Check that a user is authorized to pin.
+   * Returns the value stored for an active (non-deleted) user tag.
    *
    * @param {number} userId
-   * @returns {Promise<boolean>}
+   * @param {string} tag
+   * @returns {Promise<string | undefined>}
    */
-  async isPinningAuthorized (userId) {
-    const { count, error } = await this._client
+  async getUserTagValue (userId, tag) {
+    const { data, error } = await this._client
       .from('user_tag')
-      .select('value', { count: 'exact' })
+      .select('value')
       .eq('user_id', userId)
-      .eq('tag', 'HasPsaAccess')
-      .eq('value', true)
+      .eq('tag', tag)
       .filter('deleted_at', 'is', null)
 
     if (error) {
       throw new DBError(error)
     }
 
-    return count > 0
+    // Expects unique entries.
+    if (data.length > 1) {
+      throw new ConstraintError({ message: `More than one row found for user tag ${tag}` })
+    }
+
+    return data.length ? data[0].value : undefined
+  }
+
+  /**
+   * Returns all the active (non-deleted) user tags for a user id.
+   *
+   * @param {number} userId
+   * @returns {Promise<{ tag: string, value: string }[]>}
+   */
+  async getUserTags (userId) {
+    const { data, error } = await this._client
+      .from('user_tag')
+      .select(`
+        tag,
+        value
+      `)
+      .eq('user_id', userId)
+      .filter('deleted_at', 'is', null)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    // Ensure active user tags are unique.
+    const tags = new Set()
+    data.forEach(item => {
+      if (tags.has(item.tag)) {
+        throw new ConstraintError({ message: `More than one row found for user tag ${item.tag}` })
+      }
+      tags.add(item.tag)
+    })
+
+    return data
   }
 
   /**
