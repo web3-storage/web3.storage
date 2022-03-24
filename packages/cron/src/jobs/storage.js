@@ -2,6 +2,7 @@ import debug from 'debug'
 import { emailType, EmailService } from '../lib/email.js'
 
 const log = debug('storage:checkStorageUsed')
+let emailService
 
 /**
  * Get users with storage quota usage in percentage range and email them as
@@ -18,15 +19,26 @@ export async function checkStorageUsed ({ db }) {
   log('🗄 Checking users storage quotas')
 
   let users
-  const emailService = new EmailService({ db })
+  emailService = new EmailService({ db })
 
   // Send email every day
   users = await db.getUsersByStorageUsed({
-    fromPercent: 90
+    fromPercent: 100
   })
-  users.forEach(async (user) => {
-    log(`📧 Sending an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
-    await emailService.sendEmail(user, emailType.Used90PercentStorage, 1)
+  await emailService.sendEmails({
+    users,
+    email: emailType.UsedOver100PercentStorage,
+    numberOfDays: 1
+  })
+
+  users = await db.getUsersByStorageUsed({
+    fromPercent: 90,
+    toPercent: 100
+  })
+  await emailService.sendEmails({
+    users,
+    email: emailType.Used90PercentStorage,
+    numberOfDays: 1
   })
 
   // Send email every 7 days
@@ -34,27 +46,27 @@ export async function checkStorageUsed ({ db }) {
     fromPercent: 85,
     toPercent: 90
   })
-  users.forEach(async (user) => {
-    log(`📧 Sending an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
-    await emailService.sendEmail(user, emailType.Used85PercentStorage)
+  await emailService.sendEmails({
+    users,
+    email: emailType.Used90PercentStorage
   })
 
   users = await db.getUsersByStorageUsed({
     fromPercent: 80,
     toPercent: 85
   })
-  users.forEach(async (user) => {
-    log(`📧 Sending an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
-    await emailService.sendEmail(user, emailType.Used80PercentStorage)
+  await emailService.sendEmails({
+    users,
+    email: emailType.Used90PercentStorage
   })
 
   users = await db.getUsersByStorageUsed({
     fromPercent: 75,
     toPercent: 80
   })
-  users.forEach(async (user) => {
-    log(`📧 Sending an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
-    await emailService.sendEmail(user, emailType.Used75PercentStorage)
+  await emailService.sendEmails({
+    users,
+    email: emailType.Used90PercentStorage
   })
 
   log('✅ Done')

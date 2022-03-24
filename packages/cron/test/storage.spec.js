@@ -22,7 +22,8 @@ const env = {
 }
 
 describe('cron - check user storage quotas', () => {
-  let dbClient, user1, user2, user3, user4, authKey1, authKey2, authKey3, authKey4
+  const dbClient = getDBClient(env)
+  let user1, user2, user3, user4, authKey1, authKey2, authKey3, authKey4
   const cids = [
     'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47fgf111',
     'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47fgf112',
@@ -34,7 +35,7 @@ describe('cron - check user storage quotas', () => {
   ]
   const uploadSize = 439804651110
   const pinnedSize = 109951162800
-  const largeFileSize = 2199023255550
+  const largeFileSize = 3199023255550
   const pins = [
     {
       status: 'Pinning',
@@ -55,7 +56,6 @@ describe('cron - check user storage quotas', () => {
   ]
 
   beforeEach(async () => {
-    dbClient = getDBClient(env)
     user1 = await createUser(dbClient, {
       name: 'test1-name',
       email: 'test1@email.com'
@@ -125,11 +125,15 @@ describe('cron - check user storage quotas', () => {
   })
 
   it('can be executed', async () => {
-    const { stderr } = await execa('./src/bin/storage.js', { env })
-    assert.match(stderr, /storage:checkStorageUsed 🗄 Checking users storage quotas/)
-    assert.match(stderr, /storage:checkStorageUsed 📧 Sending an email to test4-name: 100% of quota used/)
-    assert.match(stderr, /storage:checkStorageUsed 📧 Sending an email to test3-name: 90% of quota used/)
-    assert.match(stderr, /storage:checkStorageUsed 📧 Sending an email to test2-name: 80% of quota used/)
-    assert.match(stderr, /storage:checkStorageUsed ✅ Done/)
+    const { stderr: emailLog1 } = await execa('./src/bin/storage.js', { env })
+    assert.match(emailLog1, /storage:checkStorageUsed 🗄 Checking users storage quotas/)
+    assert.match(emailLog1, /email:EmailService 📧 Sending a quota exceeded email to test4-name: 145% of quota used/)
+    assert.match(emailLog1, /email:EmailService 📧 Sending an email to test3-name: 90% of quota used/)
+    assert.match(emailLog1, /email:EmailService 📧 Sending an email to test2-name: 80% of quota used/)
+    assert.match(emailLog1, /storage:checkStorageUsed ✅ Done/)
+
+    const { stderr: emailLog2 } = await execa('./src/bin/storage.js', { env })
+    assert.match(emailLog2, /storage:checkStorageUsed 🗄 Checking users storage quotas/)
+    assert.match(emailLog2, /storage:checkStorageUsed ✅ Done/)
   })
 })

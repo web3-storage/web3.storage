@@ -1,3 +1,5 @@
+import debug from 'debug'
+
 export const emailType = {
   Used75PercentStorage: 'Used75PercentStorage',
   Used80PercentStorage: 'Used80PercentStorage',
@@ -6,6 +8,8 @@ export const emailType = {
   UsedOver100PercentStorage: 'UsedOver100PercentStorage'
 }
 
+const log = debug('email:EmailService')
+
 export class EmailService {
   /**
    * @param {{
@@ -13,22 +17,61 @@ export class EmailService {
    * }} config
    */
   constructor ({ db }) {
+    if (!log.enabled) {
+      console.log('ℹ️ Enable logging by setting DEBUG=email:EmailService')
+    }
     this.db = db
+  }
+
+  /**
+   * Send an email to several users.
+   * @param {object} opts
+   * @param {Array<import('@web3-storage/db/db-client-types').UserStorageUsed>} opts.users
+   * @param {string} opts.email
+   * @param {number} [opts.numberOfDays]
+   */
+  async sendEmails ({
+    users,
+    email,
+    numberOfDays = 7
+  }) {
+    await Promise.all(users.map((user) => {
+      return this.sendEmail({
+        user,
+        email,
+        numberOfDays
+      })
+    }))
   }
 
   /**
    * Send an email to a user.
    * Checks email notification history for this user and email type to avoid
    * re-sending if user has been recently notified.
-   * @param {import('@web3-storage/db/db-client-types').UserStorageUsed} user
-   * @param {string} email
-   * @param {number} daysSince
-   * @returns void
+   * @param {object} opts
+   * @param {import('@web3-storage/db/db-client-types').UserStorageUsed} opts.user
+   * @param {string} opts.email
+   * @param {number} opts.numberOfDays
+  * @returns void
    */
-  async sendEmail (user, email, daysSince = 7) {
+  async sendEmail ({
+    user,
+    email,
+    numberOfDays
+  }) {
     // See if this email type has been sent recently
-    if (await this.db.emailSentRecently(user.id, emailType[email], daysSince)) {
+    if (await this.db.emailSentRecently({
+      userId: Number(user.id),
+      emailType: emailType[email],
+      numberOfDays
+    })) {
       return
+    }
+
+    if (email === emailType.UsedOver100PercentStorage) {
+      log(`📧 Sending a quota exceeded email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
+    } else {
+      log(`📧 Sending an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
     }
 
     // TODO Send the email
@@ -37,6 +80,10 @@ export class EmailService {
     const messageId = '1'
 
     // Log the email
-    await this.db.logEmailSent(user.id, emailType[email], messageId)
+    await this.db.logEmailSent({
+      userId: Number(user.id),
+      emailType: emailType[email],
+      messageId
+    })
   }
 }

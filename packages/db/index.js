@@ -219,12 +219,17 @@ export class DBClient {
   /**
    * Check the email history for a specified email type to see if it has
    * been sent within a specified number of days. If not, it is resent.
-   * @param {*} userId
-   * @param {*} emailType
-   * @param {*} numberOfDays
-   * @returns boolean
+   * @param {object} opts
+   * @param {number} opts.userId
+   * @param {string} opts.emailType
+   * @param {number} [opts.numberOfDays]
+   * @returns {Promise<boolean>}
    */
-  async emailSentRecently (userId, emailType, numberOfDays = 7) {
+  async emailSentRecently ({
+    userId,
+    emailType,
+    numberOfDays = 7
+  }) {
     const d = new Date()
     d.setDate(d.getDate() - numberOfDays)
     const numberOfDaysAgo = d.toISOString()
@@ -245,12 +250,17 @@ export class DBClient {
 
   /**
    * Log that an email has been sent
-   * @param {string} userId
-   * @param {string} emailType
-   * @param {string} messageId
-   * @returns
+   * @param {object} opts
+   * @param {number} opts.userId
+   * @param {string} opts.emailType
+   * @param {number} [opts.messageId]
+   * @returns {Promise<number>}
    */
-  async logEmailSent (userId, emailType, messageId) {
+  async logEmailSent ({
+    userId,
+    emailType,
+    messageId
+  }) {
     const { data, error } = await this._client
       .from('email_notification_history')
       .upsert({

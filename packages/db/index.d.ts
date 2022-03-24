@@ -41,8 +41,8 @@ export class DBClient {
   getUser (issuer: string): Promise<UserOutput>
   getUsedStorage (userId: number): Promise<{ uploaded: number, pinned: number, total: number }>
   getUsersByStorageUsed ({fromPercent, toPercent}: {fromPercent: number, toPercent?: number}): Promise<Array<UserStorageUsed>>
-  emailSentRecently(email: string, emailType: string, numberOfDays: number): Promise<boolean>
-  logEmailSent(email: string, emailType: string, messageId: string): Promise<{id: string}>
+  emailSentRecently({userId, emailType, numberOfDays}: {userId: number, emailType: string, numberOfDays?: number}): Promise<boolean>
+  logEmailSent({userId, emailType, messageId} : {userId: number, emailType: string, messageId: string}): Promise<{id: string}>
   createUpload (data: CreateUploadInput): Promise<CreateUploadOutput>
   getUpload (cid: string, userId: number): Promise<UploadItemOutput>
   listUploads (userId: number, opts?: ListUploadsOptions): Promise<UploadItemOutput[]>

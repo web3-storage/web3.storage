@@ -9,10 +9,11 @@ import {
   createPsaPinRequest,
   token
 } from './utils.js'
+import { emailType } from '../../cron/src/lib/email.js'
 
 describe('Users used storage', () => {
   /** @type {DBClient} */
-  const client = new DBClient({
+  const dbClient = new DBClient({
     endpoint: 'http://127.0.0.1:3000',
     token,
     postgres: true
@@ -31,7 +32,7 @@ describe('Users used storage', () => {
   ]
   const uploadSize = 439804651110
   const pinnedSize = 109951162800
-  const largeFileSize = 2199023255550
+  const largeFileSize = 3199023255550
   const pins = [
     {
       status: 'Pinning',
@@ -52,70 +53,70 @@ describe('Users used storage', () => {
   ]
 
   beforeEach(async () => {
-    user1 = await createUser(client, {
+    user1 = await createUser(dbClient, {
       name: 'test1-name',
       email: 'test1@email.com'
     })
-    authKey1 = await createUserAuthKey(client, Number(user1._id), {
+    authKey1 = await createUserAuthKey(dbClient, Number(user1._id), {
       name: 'test1-key'
     })
-    await createUpload(client, Number(user1._id), Number(authKey1), cids[0], {
+    await createUpload(dbClient, Number(user1._id), Number(authKey1), cids[0], {
       dagSize: uploadSize
     })
-    await createPsaPinRequest(client, authKey1, cidsPinned[0], {
+    await createPsaPinRequest(dbClient, authKey1, cidsPinned[0], {
       dagSize: pinnedSize,
       pins
     })
-    await createPsaPinRequest(client, authKey1, cidsPinned[1], {
+    await createPsaPinRequest(dbClient, authKey1, cidsPinned[1], {
       dagSize: pinnedSize,
       pins
     })
 
-    user2 = await createUser(client, {
+    user2 = await createUser(dbClient, {
       name: 'test2-name',
       email: 'test2@email.com'
     })
-    authKey2 = await createUserAuthKey(client, Number(user2._id), {
+    authKey2 = await createUserAuthKey(dbClient, Number(user2._id), {
       name: 'test2-key'
     })
-    await createUpload(client, Number(user2._id), Number(authKey2), cids[0], {
+    await createUpload(dbClient, Number(user2._id), Number(authKey2), cids[0], {
       dagSize: uploadSize
     })
-    await createUpload(client, Number(user2._id), Number(authKey2), cids[1], {
+    await createUpload(dbClient, Number(user2._id), Number(authKey2), cids[1], {
       dagSize: uploadSize
     })
 
-    user3 = await createUser(client, {
+    user3 = await createUser(dbClient, {
       name: 'test3-name',
       email: 'test3@email.com'
     })
-    authKey3 = await createUserAuthKey(client, Number(user3._id), {
+    authKey3 = await createUserAuthKey(dbClient, Number(user3._id), {
       name: 'test3-key'
     })
-    await createUpload(client, Number(user3._id), Number(authKey3), cids[0], {
+    await createUpload(dbClient, Number(user3._id), Number(authKey3), cids[0], {
       dagSize: uploadSize
     })
-    await createUpload(client, Number(user3._id), Number(authKey3), cids[1], {
+    await createUpload(dbClient, Number(user3._id), Number(authKey3), cids[1], {
       dagSize: Math.round(uploadSize * 1.2)
     })
-    await createPsaPinRequest(client, authKey3, cidsPinned[0], {
+    await createPsaPinRequest(dbClient, authKey3, cidsPinned[0], {
       dagSize: pinnedSize,
       pins
     })
 
-    user4 = await createUser(client, {
+    user4 = await createUser(dbClient, {
       name: 'test4-name',
       email: 'test4@email.com'
     })
-    authKey4 = await createUserAuthKey(client, Number(user4._id), {
+    authKey4 = await createUserAuthKey(dbClient, Number(user4._id), {
       name: 'test4-key'
     })
-    await createUserTag(client, Number(user4._id), {
+    await createUserTag(dbClient, Number(user4._id), {
       tag: 'StorageLimitBytes',
       value: '2199023255552'
     })
     const cid = 'bafybeibvuy3vcepqxy4plr34twv22vvxol2jjhmjxcrcvuhea5226whpsm'
-    await createUpload(client, Number(user4._id), Number(authKey4), cid, {
+    await createUpload(dbClient, Number(user4._id), Number(authKey4), cid, {
       dagSize: largeFileSize
     })
 
@@ -128,7 +129,7 @@ describe('Users used storage', () => {
   })
 
   it('returns user details needed for email', async () => {
-    const users = await client.getUsersByStorageUsed({
+    const users = await dbClient.getUsersByStorageUsed({
       fromPercent: 50
     })
 
@@ -140,7 +141,7 @@ describe('Users used storage', () => {
   })
 
   it('retrieves correct users in a range', async () => {
-    const users = await client.getUsersByStorageUsed({
+    const users = await dbClient.getUsersByStorageUsed({
       fromPercent: 70,
       toPercent: 95
     })
@@ -150,7 +151,7 @@ describe('Users used storage', () => {
   })
 
   it('retrieves users sorted by used storage descending', async () => {
-    const users = await client.getUsersByStorageUsed({
+    const users = await dbClient.getUsersByStorageUsed({
       fromPercent: 50,
       toPercent: 95
     })
@@ -161,11 +162,40 @@ describe('Users used storage', () => {
   })
 
   it('uses user quota instead of default if one has been specified', async () => {
-    const users = await client.getUsersByStorageUsed({
+    const users = await dbClient.getUsersByStorageUsed({
       fromPercent: 90
     })
     assert.strictEqual(users.length, 2, 'Users with non-default quota included')
     assert.strictEqual(users[0].email, 'test4@email.com')
     assert.strictEqual(users[1].email, 'test3@email.com')
+  })
+
+  it('checks email log before sending', async () => {
+    const user = await createUser(dbClient, {
+      name: 'test5-name',
+      email: 'test5@email.com'
+    })
+
+    // check an email has not been sent
+    let hasBeenSentRecently = await dbClient.emailSentRecently({
+      userId: Number(user._id),
+      emailType: emailType[emailType.UsedOver100PercentStorage]
+    })
+    assert.strictEqual(hasBeenSentRecently, false, 'Has not been sent')
+
+    // log an email
+    await dbClient.logEmailSent({
+      userId: Number(user._id),
+      emailType: emailType[emailType.UsedOver100PercentStorage],
+      messageId: '1'
+    })
+
+    // check the email has already been sent today
+    hasBeenSentRecently = await dbClient.emailSentRecently({
+      userId: Number(user._id),
+      emailType: emailType[emailType.UsedOver100PercentStorage],
+      numberOfDays: 1
+    })
+    assert.strictEqual(hasBeenSentRecently, true, 'Has been sent')
   })
 })
