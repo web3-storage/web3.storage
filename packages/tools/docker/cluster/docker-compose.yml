@@ -40,14 +40,14 @@ services:
       image: ipfs/go-ipfs:v0.10.0 # update this when go-ipfs M1 macs https://github.com/ipfs/go-ipfs/issues/8645
       volumes:
         - ipfs0:/data/ipfs
-      #ports:
+      ports:
+        - "8080:8080" # ipfs gateway - expose if needed/wanted
       #- "4001:4001" # ipfs swarm - expose if needed/wanted
       #- "5001:5001" # ipfs api - expose if needed/wanted
-      #- "8080:8080" # ipfs gateway - expose if needed/wanted
         
     cluster0:
       container_name: cluster0
-      image: ipfs/ipfs-cluster:latest
+      image: ipfs/ipfs-cluster:v0.14.5
       depends_on:
         - ipfs0
       environment:

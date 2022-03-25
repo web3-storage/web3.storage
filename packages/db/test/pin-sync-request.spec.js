@@ -1,8 +1,8 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
-import { DBClient } from '../index'
+import { DBClient } from '../index.js'
 
-import { createUser, createUserAuthKey, createUpload, defaultPinData, token } from './utils'
+import { createUser, createUserAuthKey, createUpload, defaultPinData, token } from './utils.js'
 
 describe('pin-sync-request', () => {
   /** @type {DBClient} */
@@ -22,13 +22,13 @@ describe('pin-sync-request', () => {
   const uploads = []
 
   // Setup testing user
-  before(async () => {
+  beforeEach(async () => {
     user = await createUser(client)
     authKey = await createUserAuthKey(client, user._id)
   })
 
   // Guarantee no pin sync requests exist
-  before(async () => {
+  beforeEach(async () => {
     const to = new Date().toISOString()
     const { data: pinSyncReqs } = await client.getPinSyncRequests({ to })
 
@@ -36,7 +36,7 @@ describe('pin-sync-request', () => {
   })
 
   // Setup two default uploads
-  before(async () => {
+  beforeEach(async () => {
     const upload0 = await createUpload(client, user._id, authKey, cids[0])
     const upload1 = await createUpload(client, user._id, authKey, cids[1])
 
@@ -63,6 +63,7 @@ describe('pin-sync-request', () => {
           id: 1,
           peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
           peerName: 'web3-storage-sv15',
+          ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE2',
           region: 'region'
         }
       },
@@ -72,6 +73,7 @@ describe('pin-sync-request', () => {
           id: 2,
           peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
           peerName: 'web3-storage-sv16',
+          ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE3',
           region: 'region'
         }
       },
@@ -81,6 +83,7 @@ describe('pin-sync-request', () => {
           id: 3,
           peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK8',
           peerName: 'web3-storage-sv17',
+          ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE4',
           region: 'region'
         }
       }
@@ -102,7 +105,6 @@ describe('pin-sync-request', () => {
   it('can update multiple pin status', async () => {
     const to = new Date().toISOString()
     const { data: pinSyncReqs } = await client.getPinSyncRequests({ to })
-
     // Assert Previous pin state
     pinSyncReqs.forEach(psr => {
       assert.strictEqual(psr.pin.status, 'Pinning', 'pin sync requests have Pinning state')
@@ -112,8 +114,10 @@ describe('pin-sync-request', () => {
     await client.upsertPins(pinSyncReqs.map(psr => ({
       id: psr.pin._id,
       status: 'Pinned',
-      cid: psr.pin.contentCid,
-      locationId: psr.pin.location._id
+      contentCid: psr.pin.contentCid,
+      location: {
+        ...psr.pin.location
+      }
     })))
 
     const { data: pinSyncReqsAfterUpdate } = await client.getPinSyncRequests({ to })
@@ -136,9 +140,6 @@ describe('pin-sync-request', () => {
   })
 
   it('can create pin sync requests', async () => {
-    const { data: pinSyncReqs } = await client.getPinSyncRequests({ to: new Date().toISOString() })
-    const previousLength = pinSyncReqs.length
-
     // Get pins
     const pins0 = await client.getPins(cids[0])
     const pins1 = await client.getPins(cids[1])
@@ -152,6 +153,6 @@ describe('pin-sync-request', () => {
     const { data: pinSyncReqsAfterUpdate } = await client.getPinSyncRequests({ to: new Date().toISOString() })
 
     assert(pinSyncReqsAfterUpdate, 'could get pin sync requests')
-    assert.strictEqual(pinSyncReqsAfterUpdate.length, pinIds.length + previousLength, 'all pin sync requests were created')
+    assert.strictEqual(pinSyncReqsAfterUpdate.length, pinIds.length, 'all pin sync requests were created')
   })
 })

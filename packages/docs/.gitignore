@@ -1,0 +1,23 @@
+# fs & dev
+.DS_Store
+node_modules
+dist
+.temp
+
+# logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# editor
+.vscode
+
+.docusaurus
+build
+
+# ignore generated files for http api component
+src/components/RedocPage/sidebars.json
+src/components/RedocPage/toc.json
+

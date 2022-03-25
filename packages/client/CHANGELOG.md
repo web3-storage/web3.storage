@@ -1,5 +1,43 @@
 # Changelog
 
+## [4.0.0](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.7...web3.storage-v4.0.0) (2022-03-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* new website frontend and app ui (#1001)
+
+### Features
+
+* add custom max chunk size to client put and putCar options ([#1000](https://github.com/web3-storage/web3.storage/issues/1000)) ([d525324](https://github.com/web3-storage/web3.storage/commit/d52532409b5e62dfcd8136e0c7ef057b1a410749))
+* new website frontend and app ui ([#1001](https://github.com/web3-storage/web3.storage/issues/1001)) ([dc61e36](https://github.com/web3-storage/web3.storage/commit/dc61e362001859605300f525b51e0fdd54d84704))
+
+
+### Bug Fixes
+
+* create stream when needed ([#1158](https://github.com/web3-storage/web3.storage/issues/1158)) ([0b4c4a0](https://github.com/web3-storage/web3.storage/commit/0b4c4a0f079d35a847f99385fa387ee79064c8d2))
+
+### [3.5.7](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.6...web3.storage-v3.5.7) (2022-03-07)
+
+
+### Bug Fixes
+
+* client rate limit error message ([#1078](https://github.com/web3-storage/web3.storage/issues/1078)) ([e4cf4a6](https://github.com/web3-storage/web3.storage/commit/e4cf4a63286699d46ac49f7e5eb54d63fefe433a))
+
+### [3.5.6](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.5...web3.storage-v3.5.6) (2022-02-28)
+
+
+### Bug Fixes
+
+* client update deps ([#1045](https://github.com/web3-storage/web3.storage/issues/1045)) ([6050b73](https://github.com/web3-storage/web3.storage/commit/6050b73c85924d70a7d33a3674aba65aca86e5a1))
+
+### [3.5.5](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.4...web3.storage-v3.5.5) (2022-02-24)
+
+
+### Bug Fixes
+
+* tests in CI ([#1034](https://github.com/web3-storage/web3.storage/issues/1034)) ([ad26c27](https://github.com/web3-storage/web3.storage/commit/ad26c27cdbe2b18ad5af32943403b7852e49e465))
+
 ### [3.5.4](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.3...web3.storage-v3.5.4) (2022-02-03)
 
 

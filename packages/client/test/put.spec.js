@@ -9,6 +9,7 @@ import { CID } from 'multiformats/cid'
 import { encode } from 'multiformats/block'
 import * as json from '@ipld/dag-json'
 import { sha256 } from 'multiformats/hashes/sha2'
+import { ReadableStream } from '@web-std/blob'
 
 describe('put', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
@@ -57,6 +58,16 @@ describe('put', () => {
     }
   })
 
+  it('errors with wrong max chunk size', async () => {
+    const client = new Web3Storage({ endpoint, token })
+    try {
+      await client.put([], { maxChunkSize: 10 })
+      assert.unreachable('should have thrown')
+    } catch (err) {
+      assert.match(err.message, /maximum chunk size must be less than 100MiB and greater than or equal to 1MB/)
+    }
+  })
+
   it('adds files', async () => {
     const client = new Web3Storage({ token, endpoint })
     const files = prepareFiles()
@@ -84,13 +95,46 @@ describe('put', () => {
     assert.equal(cid, expectedCid, 'returned cid matches the CAR')
   })
 
+  it('adds files {maxChunkSize: custom-size}', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const files = prepareFiles()
+    const expectedCid = 'bafybeiep3t2chy6e3dxk3fktnshm7tpopjrns6wevo4uwpnnz5aq352se4'
+    const cid = await client.put(files, {
+      name: 'web3-storage-dir-with-custom-max-chunk-size',
+      maxChunkSize: 1024 * 1024 * 5,
+      onRootCidReady: (cid) => {
+        assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+      }
+    })
+    assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+  })
+
   it('adds big files', async function () {
-    this.timeout(30e3)
+    this.timeout(60e3)
     const client = new Web3Storage({ token, endpoint })
     let uploadedChunks = 0
 
     const files = [
-      new File([randomBytes(1024e6)], '102mb.txt')
+      // Previously: new File([randomBytes(1024e6)], '102mb.txt')
+      //
+      // Node.js currently copies the buffer on every iteration when obtaining a
+      // stream from File.stream(). It also has a fixed and small chunk size of
+      // 65536 bytes. This makes reading the stream VERY slow and this test
+      // fails because it times out.
+      //
+      // TODO: revert to using File if this issue gets resolved:
+      // https://github.com/nodejs/node/issues/42108
+      {
+        name: '102mb.txt',
+        stream () {
+          return new ReadableStream({
+            pull (controller) {
+              controller.enqueue(randomBytes(1024e6))
+              controller.close()
+            }
+          })
+        }
+      }
     ]
 
     await client.put(files, {
@@ -113,6 +157,20 @@ describe('putCar', () => {
     const expectedCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
     const cid = await client.putCar(carReader, {
       name: 'putCar test',
+      onRootCidReady: cid => {
+        assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+      }
+    })
+    assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+  })
+
+  it('adds CAR files {maxChunkSize: custom-size}', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const carReader = await createCar('hello world')
+    const expectedCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
+    const cid = await client.putCar(carReader, {
+      name: 'putCar test',
+      maxChunkSize: 1024 * 1024 * 5,
       onRootCidReady: cid => {
         assert.equal(cid, expectedCid, 'returned cid matches the CAR')
       }
@@ -146,6 +204,17 @@ describe('putCar', () => {
       assert.unreachable('should have thrown')
     } catch (err) {
       assert.match(err.message, /too many roots/)
+    }
+  })
+
+  it('errors for CAR with wrong max chunk size', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const carReader = await createCar('hello world')
+    try {
+      await client.putCar(carReader, { maxChunkSize: 10 })
+      assert.unreachable('should have thrown')
+    } catch (err) {
+      assert.match(err.message, /maximum chunk size must be less than 100MiB and greater than or equal to 1MB/)
     }
   })
 

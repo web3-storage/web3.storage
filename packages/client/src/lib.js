@@ -16,7 +16,7 @@
 import { transform } from 'streaming-iterables'
 import pRetry from 'p-retry'
 import { pack } from 'ipfs-car/pack'
-import parseLink from 'parse-link-header'
+import { parseLinkHeader } from '@web3-storage/parse-link-header'
 import { unpackStream } from 'ipfs-car/unpack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
 import { CarReader } from '@ipld/car'
@@ -30,7 +30,9 @@ import {
 
 const MAX_PUT_RETRIES = 5
 const MAX_CONCURRENT_UPLOADS = 3
-const MAX_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
+const DEFAULT_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
+const MAX_BLOCK_SIZE = 1048576
+const MAX_CHUNK_SIZE = 104857600
 
 /** @typedef { import('./lib/interface.js').API } API */
 /** @typedef { import('./lib/interface.js').Status} Status */
@@ -97,24 +99,25 @@ class Web3Storage {
     onRootCidReady,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
+    maxChunkSize = DEFAULT_CHUNK_SIZE,
     wrapWithDirectory = true,
     name
   } = {}) {
+    if (maxChunkSize >= MAX_CHUNK_SIZE || maxChunkSize < MAX_BLOCK_SIZE) {
+      throw new Error('maximum chunk size must be less than 100MiB and greater than or equal to 1MB')
+    }
     const blockstore = new Blockstore()
     try {
       const { out, root } = await pack({
-        input: Array.from(files).map((f) => ({
-          path: f.name,
-          content: f.stream()
-        })),
+        input: Array.from(files).map(toImportCandidate),
         blockstore,
         wrapWithDirectory,
-        maxChunkSize: 1048576,
+        maxChunkSize: MAX_BLOCK_SIZE,
         maxChildrenPerNode: 1024
       })
       onRootCidReady && onRootCidReady(root.toString())
       const car = await CarReader.fromIterable(out)
-      return await Web3Storage.putCar({ endpoint, token }, car, { onStoredChunk, maxRetries, name })
+      return await Web3Storage.putCar({ endpoint, token }, car, { onStoredChunk, maxRetries, maxChunkSize, name })
     } finally {
       await blockstore.close()
     }
@@ -130,9 +133,13 @@ class Web3Storage {
     name,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
+    maxChunkSize = DEFAULT_CHUNK_SIZE,
     decoders
   } = {}) {
-    const targetSize = MAX_CHUNK_SIZE
+    if (maxChunkSize >= MAX_CHUNK_SIZE || maxChunkSize < MAX_BLOCK_SIZE) {
+      throw new Error('maximum chunk size must be less than 100MiB and greater than or equal to 1MB')
+    }
+    const targetSize = maxChunkSize
     const url = new URL('car', endpoint)
     let headers = Web3Storage.headers(token)
 
@@ -169,6 +176,10 @@ class Web3Storage {
             headers,
             body: carFile
           })
+          /* c8 ignore next 3 */
+          if (request.status === 429) {
+            throw new Error('rate limited')
+          }
           const res = await request.json()
           if (!request.ok) {
             throw new Error(res.message)
@@ -202,6 +213,10 @@ class Web3Storage {
       method: 'GET',
       headers: Web3Storage.headers(token)
     })
+    /* c8 ignore next 3 */
+    if (res.status === 429) {
+      throw new Error('rate limited')
+    }
     return toWeb3Response(res)
   }
 
@@ -227,6 +242,10 @@ class Web3Storage {
       method: 'GET',
       headers: Web3Storage.headers(token)
     })
+    /* c8 ignore next 3 */
+    if (res.status === 429) {
+      throw new Error('rate limited')
+    }
     if (res.status === 404) {
       return undefined
     }
@@ -264,6 +283,11 @@ class Web3Storage {
     const size = maxResults > 100 ? 100 : maxResults
     for await (const res of paginator(listPage, service, { before, size })) {
       if (!res.ok) {
+        /* c8 ignore next 3 */
+        if (res.status === 429) {
+          throw new Error('rate limited')
+        }
+
         /* c8 ignore next 2 */
         const errorMessage = await res.json()
         throw new Error(`${res.status} ${res.statusText} ${errorMessage ? '- ' + errorMessage.message : ''}`)
@@ -460,6 +484,25 @@ function toWeb3Response (res) {
 }
 
 /**
+ * Convert the passed file to an "import candidate" - an object suitable for
+ * passing to the ipfs-unixfs-importer. Note: content is an accessor so that
+ * the stream is only created when needed.
+ *
+ * @param {Filelike} file
+ */
+function toImportCandidate (file) {
+  /** @type {ReadableStream} */
+  let stream
+  return {
+    path: file.name,
+    get content () {
+      stream = stream || file.stream()
+      return stream
+    }
+  }
+}
+
+/**
  * Follow Link headers on a Response, to fetch all the things.
  *
  * @param {(service: Service, opts: any) => Promise<Response>} fn
@@ -469,13 +512,13 @@ function toWeb3Response (res) {
 async function * paginator (fn, service, opts) {
   let res = await fn(service, opts)
   yield res
-  let link = parseLink(res.headers.get('Link') || '')
+  let link = parseLinkHeader(res.headers.get('Link') || '')
   // @ts-ignore
   while (link && link.next) {
     // @ts-ignore
     res = await fn(service, link.next)
     yield res
-    link = parseLink(res.headers.get('Link') || '')
+    link = parseLinkHeader(res.headers.get('Link') || '')
   }
 }
 

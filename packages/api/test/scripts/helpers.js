@@ -8,6 +8,8 @@ import { keys } from 'libp2p-crypto'
 import * as JWT from '../../src/utils/jwt.js'
 import { JWT_ISSUER } from '../../src/constants.js'
 import { SALT } from './worker-globals.js'
+import { sha256 } from 'multiformats/hashes/sha2'
+import * as pb from '@ipld/dag-pb'
 
 const libp2pKeyCode = 0x72
 const lifetime = 1000 * 60 * 60
@@ -51,4 +53,13 @@ export async function updateNameRecord (privKey, existingRecord, newValue) {
 
 export function getTestJWT (sub = 'test-magic-issuer', name = 'test-magic-issuer') {
   return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
+}
+
+/**
+ * @param {number} code
+ * @returns {Promise<string>}
+ */
+export async function randomCid (code = pb.code) {
+  const hash = await sha256.digest(Buffer.from(`${Math.random()}`))
+  return CID.create(1, code, hash).toString()
 }

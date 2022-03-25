@@ -4,7 +4,10 @@
     "allowJs": true,
     "checkJs": true,
     "target": "esnext",
-    "lib": ["ESNext", "DOM"],
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
     "strict": true,
     "moduleResolution": "node",
     "sourceMap": true,
@@ -16,12 +19,38 @@
     "module": "esnext",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "baseUrl": "./",
     "paths": {
-      "web3.storage": ["../client"]
-    }
+      "ZeroComponents/*": [
+        "modules/zero/components/*"
+      ],
+      "ZeroHooks/*": [
+        "modules/zero/hooks/*"
+      ],
+      "web3.storage": [
+        "../client"
+      ]
+    },
+    "incremental": true
   },
-  "include": ["lib", "pages", "components"],
-  "exclude": ["node_modules/", ".next/"],
+  "include": [
+    "lib",
+    "pages",
+    "components",
+    "content",
+    "hooks",
+    "modules",
+    "store",
+    "declaration.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next/",
+    "{pages,components,content,hooks,modules}/**/*.js",
+    "lib/countly.js"
+  ],
   "references": [
     {
       "path": "../client"

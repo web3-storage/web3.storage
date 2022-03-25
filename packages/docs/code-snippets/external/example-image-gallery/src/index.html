@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web3.Storage | Image gallery example</title>
+  </head>
+  <body>
+    <header>
+      <a href="https://web3.storage">
+        <img src="https://web3.storage/w3storage-logo.svg" style="height:1.8rem" />
+      </a>
+      <nav>
+        <span class="nav-current-page">Upload</span>
+        <a href="./gallery.html">Gallery</a>
+        <a href="./settings.html">Settings</a>
+      </nav>
+    </header>
+    <div id="app">
+      <div id="upload-ui">
+
+        <div id="upload-input-area">
+          <div id="welcome-message">
+            Welcome to the image gallery example app for <a href="https://web3.storage">Web3.Storage</a>. 
+            Drag an image onto the box below, or use the button to select an image file!
+          </div>
+          <div id="drop-area">
+            <form id="inputs">
+              <!-- The label for the hidden file input is styled as a button and can be clicked to select a file -->
+              <label class="select-button" for="file-input">Select an image file</label>
+              <input class="hidden" type="file" id="file-input" accept=".jpeg,.jpg,.png,.gif,image/*" />
+
+              <img id="image-preview" class="preview-image" />
+
+              <div class="spacer"></div>
+              <label for="caption-input">Enter a caption</label>
+              <input id="caption-input" placeholder="Enter a caption"/>
+
+              <button id="upload-button" disabled="true">Upload to Web3.Storage</button>
+            </form>
+          </div>
+        </div>
+
+        <div id="upload-in-progress" class="hidden" >
+          <h3>Uploading to Web3.Storage...</h3>
+          <img id="uploading-preview-image" class="preview-image" />
+          <div>
+            <span id="uploading-caption"></span>
+          </div>
+          <div id="upload-spinner">
+            <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          </div>
+          <div id="output"></div>
+        </div>
+
+        <div id="upload-success" class="hidden">
+          <h3>🎉 Yay! Your upload is complete.</h3>
+          <img class="preview-image" />
+
+          <div id="success-links">
+            <a id="success-gallery-link">View in the Gallery</a>
+            <a id="success-gateway-link" target="_external">View on IPFS<span class="fontawesome-share"></span></a>
+            <a href=".">Upload another image</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="snackbar"></div>
+    <script type="module" src="./js/upload.js"></script>
+  </body>
+</html>

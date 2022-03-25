@@ -11,13 +11,15 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const prog = sade('api')
 
 dotenv.config({
-  path: path.join(__dirname, '../.env.local')
+  path: path.join(__dirname, '../../../.env')
 })
 
 prog
   .command('db-sql')
   .describe('Database scripts')
   .option('--reset', 'Reset db before running SQL.', false)
+  .option('--truncate', 'Truncates existing data before running SQL', false)
+  .option('--skipCreate', 'Skip creating tables from schema', false)
   .option('--cargo', 'Import cargo data.', false)
   .option('--testing', 'Tweak schema for testing.', false)
   .action(dbSqlCmd)

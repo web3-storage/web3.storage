@@ -1,4 +1,4 @@
-export const ENV = 'dev'
+export const ENV = 'test'
 export const MAINTENANCE_MODE = 'rw'
 export const SALT = 'test-salt'
 export const MAGIC_SECRET_KEY = 'test-magic-secret-key'
@@ -12,6 +12,7 @@ export const S3_SECRET_ACCESS_KEY_ID = 'secret-access-key'
 export const DATABASE = 'postgres'
 export const PG_REST_URL = 'http://localhost:3000'
 export const PG_REST_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU'
+export const GATEWAY_URL = 'http://localhost:8080'
 
 // Can be removed once we get a test mode for admin magic sdk.
 export const DANGEROUSLY_BYPASS_MAGIC_AUTH = true

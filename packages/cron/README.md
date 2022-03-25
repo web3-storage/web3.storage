@@ -11,21 +11,15 @@ The following jobs are available:
 
 ### pins
 
-To run this locally you will need the following in your `packages/cron/.env` file:
+Verify that the following are set in the `.env` file in root of the project monorepo.
 
 ```ini
 ENV=dev
 
-# PostgREST API URL
-DEV_PG_REST_URL=http://localhost:3000
-# PostgREST API token, for role "postgres", using secret value PGRST_JWT_SECRET from './postgres/docker/docker-compose.yml'
-# https://postgrest.org/en/v8.0/tutorials/tut1.html#step-3-sign-a-token
-DEV_PG_REST_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU
+PG_REST_URL=http://localhost:3000
+PG_REST_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU
+PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 
-# Connection string for locally running postgres used in tests
-DEV_PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
-
-# Cluster
 CLUSTER_API_URL=http://127.0.0.1:9094/
 CLUSTER_IPFS_PROXY_API_URL=http://127.0.0.1:9095/api/v0/
 ```
@@ -33,7 +27,7 @@ CLUSTER_IPFS_PROXY_API_URL=http://127.0.0.1:9095/api/v0/
 You also need to have:
 
 - a local ipfs-cluster node running as per https://cluster.ipfs.io/documentation/quickstart/
-- a dev account and db set up on FaunaDB with the latest schema imported as per [../db/README.md](../db/README.md)
+- a postgres db and postgREST interface running
 - a dev api running so you can create some test data as per [../api/README.md](../api/README.md)
 
 Run the job:

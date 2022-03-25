@@ -1,14 +1,14 @@
 /* eslint-env serviceworker */
 import { PutObjectCommand } from '@aws-sdk/client-s3/dist-es/commands/PutObjectCommand.js'
 import { CarBlockIterator } from '@ipld/car'
-import { toString } from 'uint8arrays'
+import { toString, equals } from 'uint8arrays'
 import { Block } from 'multiformats/block'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
 import { InvalidCarError } from './errors.js'
-import { GATEWAY, LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
+import { LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/cid.js'
@@ -58,8 +58,8 @@ export async function carGet (request, env, ctx) {
   } = request
   // gateway does not support `carversion` yet.
   // using it now means we can skip the cache if it is supported in the future
-  const url = new URL(`/api/v0/dag/export?arg=${cid}&carversion=1`, GATEWAY)
-  res = await fetch(url, { method: 'POST' })
+  const url = new URL(`/api/v0/dag/export?arg=${cid}&carversion=1`, env.GATEWAY_URL)
+  res = await fetch(url.toString(), { method: 'POST' })
   if (!res.ok) {
     // bail early. dont cache errors.
     return res
@@ -227,17 +227,37 @@ async function backup (blob, rootCid, userId, env, structure = 'Unknown') {
     return undefined
   }
 
-  const data = await blob.arrayBuffer()
-  const dataHash = await sha256.digest(new Uint8Array(data))
-  const keyStr = `raw/${rootCid.toString()}/${userId}/${toString(dataHash.bytes, 'base32')}.car`
+  const data = new Uint8Array(await blob.arrayBuffer())
+  const multihash = await sha256.digest(data)
+  const keyStr = `raw/${rootCid.toString()}/${userId}/${toString(multihash.bytes, 'base32')}.car`
+  // strip the multihash varint prefix to get the raw sha256 digest for aws upload integrity check
+  const rawSha256 = multihash.bytes.subarray(2)
+  const awsChecksum = toString(rawSha256, 'base64pad')
+
+  // see: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-s3/modules/putobjectrequest.html
   const cmdParams = {
     Bucket: env.s3BucketName,
     Key: keyStr,
-    Body: blob,
-    Metadata: { structure }
+    Body: data,
+    Metadata: { structure },
+    // ChecksumSHA256 specifies the base64-encoded, 256-bit SHA-256 digest of the object, used as a data integrity check to verify that the data received is the same data that was originally sent.
+    // see: https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html#AmazonS3-PutObject-request-header-ChecksumSHA256
+    ChecksumSHA256: awsChecksum
   }
 
-  await env.s3Client.send(new PutObjectCommand(cmdParams))
+  try {
+    await env.s3Client.send(new PutObjectCommand(cmdParams))
+  } catch (err) {
+    if (err.name === 'BadDigest') {
+      // s3 returns a 400 Bad Request `BadDigest` error if the hash does not match their calculation.
+      // see: https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html#RESTErrorResponses
+      // see: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-s3/index.html#troubleshooting
+      console.log('BadDigest: sha256 of data recieved did not match what we sent. Maybe bits flipped in transit. Retrying once.')
+      await env.s3Client.send(new PutObjectCommand(cmdParams))
+    } else {
+      throw err
+    }
+  }
   return keyStr
 }
 
@@ -272,6 +292,12 @@ async function carStat (carBlob) {
     const blockSize = block.bytes.byteLength
     if (blockSize > MAX_BLOCK_SIZE) {
       throw new InvalidCarError(`block too big: ${blockSize} > ${MAX_BLOCK_SIZE}`)
+    }
+    if (block.cid.multihash.code === sha256.code) {
+      const ourHash = await sha256.digest(block.bytes)
+      if (!equals(ourHash.digest, block.cid.multihash.digest)) {
+        throw new InvalidCarError(`block data does not match CID for ${block.cid.toString()}`)
+      }
     }
     if (!rawRootBlock && block.cid.equals(rootCid)) {
       rawRootBlock = block

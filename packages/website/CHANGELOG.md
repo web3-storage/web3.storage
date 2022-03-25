@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.0.0](https://github.com/web3-storage/web3.storage/compare/website-v1.10.0...website-v2.0.0) (2022-03-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* new website frontend and app ui (#1001)
+
+### Features
+
+* new website frontend and app ui ([#1001](https://github.com/web3-storage/web3.storage/issues/1001)) ([dc61e36](https://github.com/web3-storage/web3.storage/commit/dc61e362001859605300f525b51e0fdd54d84704))
+
+
+### Bug Fixes
+
+* disable swc minify ([#1040](https://github.com/web3-storage/web3.storage/issues/1040)) ([bcfa71c](https://github.com/web3-storage/web3.storage/commit/bcfa71cb119af8fabe4cd0cfd46a5659ae56cf51))
+* tests in CI ([#1034](https://github.com/web3-storage/web3.storage/issues/1034)) ([ad26c27](https://github.com/web3-storage/web3.storage/commit/ad26c27cdbe2b18ad5af32943403b7852e49e465))
+
 ## [1.10.0](https://github.com/web3-storage/web3.storage/compare/website-v1.9.1...website-v1.10.0) (2022-02-23)
 
 

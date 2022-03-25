@@ -1,0 +1,300 @@
+@use 'sass:math';
+
+$base-row-width: 60.125rem;
+$file-select: calculateWidthPercentage(3.375rem, $base-row-width);
+$file-date: calculateWidthPercentage(6.8125rem, $base-row-width);
+$file-name: calculateWidthPercentage(14rem, $base-row-width);
+$file-cid: calculateWidthPercentage(13.6875rem, $base-row-width);
+$file-availability: calculateWidthPercentage(0rem, $base-row-width);
+$file-pin-status: calculateWidthPercentage(7.5625rem, $base-row-width);
+$file-storage-providers: calculateWidthPercentage(8.875rem, $base-row-width);
+$file-size: auto;
+
+.files-manager-row {
+  @include fontSize_Tiny;
+  @include fontWeight_Semibold;
+  @include leading_Tiny;
+  letter-spacing: 0;
+  display: grid;
+  position: relative;
+  grid-template-columns: $file-select $file-date $file-name $file-cid $file-pin-status $file-storage-providers $file-size;
+  align-items: flex-start;
+  padding-left: 1.125rem;
+  min-height: 6.25rem;
+  border-bottom: 0.0625rem solid rgba(white, 0.05);
+  margin-top: 1.3rem;
+  padding-bottom: 1rem;
+
+  @include medium {
+    grid-template-columns: auto;
+    border-bottom: 0;
+    padding: 0;
+    margin-top: 1.25rem;
+    @include border_Background_Waterloo_White;
+  }
+
+  &-header {
+    padding-bottom: 1.25rem;
+    min-height: initial;
+    border-bottom: 0.125rem solid rgba(white, 0.15);
+  }
+
+  // Targeting all columns
+  > span {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    @include fontWeight_Regular;
+    @include medium {
+      padding: 0.85rem 1rem 0.85rem 1.975rem;
+      justify-content: flex-start;
+      border-bottom: 0.0625rem solid rgba(white, 0.05);
+      &.file-date {
+        padding-top: 1.375rem;
+      }
+      &:last-child {
+        padding-bottom: 1.375rem;
+      }
+      .file-row-label {
+        @include fontWeight_Semibold;
+        width: 6rem;
+        flex-shrink: 0;
+        &.delete {
+          width: auto;
+          padding-right: 1rem;
+          color: $pictonBlue;
+        }
+        .Tooltip {
+          position: absolute;
+          left: 0.5rem;
+          padding-left: 0;
+        }
+      }
+      .Tooltip {
+        padding-left: 0.5rem;
+        svg {
+          width: 1rem;
+          height: 1rem;
+        }
+      }
+    }
+  }
+  a {
+    padding-bottom: 0;
+    border-bottom: 0.03125rem solid rgba(255, 255, 255, 0.25);
+    line-height: 1.6;
+    transition: all $transitionDuration linear;
+    &:hover {
+      border-bottom-color: rgba(255, 255, 255, 0.75);
+    }
+  }
+
+  .file {
+    &-select-container {
+      @include medium {
+        justify-content: space-between;
+        order: 6;
+      }
+    }
+    &-select {
+      @include border_Background_Waterloo_White;
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 0.125rem;
+      cursor: pointer;
+      position: relative;
+      margin-bottom: 0.125rem;
+      input {
+        cursor: pointer;
+        opacity: 0;
+      }
+      svg.check {
+        color: $cyan;
+        top: -0.55rem;
+        left: -0.25rem;
+        position: absolute;
+        pointer-events: none;
+        width: 1.5rem;
+        .tick {
+          stroke-dashoffset: -100;
+          stroke-dasharray: 1000;
+          transition: stroke-dashoffset $transitionDuration 0s ease-out;
+        }
+      }
+      input:checked ~ svg.check {
+        .tick {
+          stroke-dashoffset: 0;
+          transition: stroke-dashoffset $transitionDuration 0s ease-in;
+        }
+      }
+    }
+    &-date {
+      padding-right: 2.1875rem;
+      @include medium {
+        padding-right: 1rem;
+      }
+    }
+    &-name {
+      padding-right: 2.1875rem;
+      @include medium {
+        padding-right: 1rem;
+      }
+      svg.pencil-icon {
+        flex-shrink: 0;
+        margin-left: 0.5rem;
+        @include hoverSvg;
+        @include medium {
+          display: none;
+        }
+      }
+      &.isEditingName {
+        height: 100%;
+        .textarea-container {
+          display: flex;
+          position: relative;
+          width: 100%;
+          height: calc(100% + 0.5rem);
+          margin-top: -0.65rem;
+          margin-left: -0.68rem;
+        }
+        svg.pencil-icon {
+          color: $pictonBlue;
+        }
+      }
+      textarea {
+        position: relative;
+        resize: none;
+        @include border_Background_Waterloo_White;
+        @include hoverInput;
+        padding: 0.625rem 0 0.625rem 0.625rem;
+        height: calc(100% + 0.5rem);
+        width: 100%;
+      }
+    }
+    &-cid {
+      padding-right: 3rem;
+      justify-content: flex-start;
+      .cid-truncate,
+      .cid-full {
+        @include monospace_Text;
+        word-break: break-all;
+        margin-right: 0.5rem;
+      }
+      @include medium {
+        justify-content: flex-start;
+        padding-right: 1rem;
+      }
+      svg {
+        @include hoverSvg;
+        @include medium {
+          display: none;
+        }
+      }
+    }
+    &-availability {
+      padding-right: 2.3rem;
+      @include medium {
+        padding-right: 1rem;
+      }
+    }
+    &-pin-status {
+      justify-content: flex-start;
+      gap: 0.5rem;
+      @include medium {
+        gap: 0;
+      }
+    }
+    &-storage-providers {
+      padding-right: 2.3rem;
+      flex-wrap: wrap;
+
+      &-content {
+        button {
+          margin-top: toRem(5);
+          transition: color $transitionDuration;
+          &:hover {
+            color: $cyan;
+            transition: color $transitionDuration;
+          }
+          &:before {
+            content: '❯ ';
+            margin-right: toRem(10);
+            display: inline-block;
+            transform: rotate(270deg);
+            transition: transform $transitionDuration;
+          }
+        }
+        .content {
+          overflow: hidden;
+          max-height: 1000px;
+          @include monospace_Text;
+          transition: max-height $transitionDuration ease-in;
+        }
+        &.show-all {
+          .content {
+            max-height: toRem(80);
+            transition: max-height $transitionDuration ease-out;
+            @include medium {
+              max-height: auto;
+            }
+          }
+          button {
+            &:before {
+              transform: rotate(90deg);
+              transition: transform $transitionDuration;
+            }
+          }
+        }
+      }
+
+      @include medium {
+        padding-right: 1rem;
+        flex-wrap: nowrap;
+        > span {
+          &:not(:last-child) {
+            margin-right: 0.3125rem;
+            @include medium {
+              margin-right: 0;
+            }
+          }
+        }
+      }
+      > span {
+        flex-shrink: none;
+      }
+    }
+  }
+
+  // Header overrides
+  &.files-manager-row-header {
+    align-items: end;
+    height: auto;
+    > span {
+      @include fontWeight_Semibold;
+    }
+    .file {
+      &-storage-providers {
+        padding-right: 2.5rem;
+        flex-direction: row;
+        flex-wrap: nowrap;
+      }
+      &-name {
+        align-items: end;
+      }
+      &-cid {
+        span {
+          font-family: $font_Primary, sans-serif;
+        }
+      }
+    }
+    @include medium {
+      display: none;
+    }
+  }
+  mark {
+    color: $white;
+  }
+  .highlight {
+    @include gradient_Background_PinkBlue;
+  }
+}

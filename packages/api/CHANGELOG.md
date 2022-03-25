@@ -1,5 +1,57 @@
 # Changelog
 
+### [5.4.3](https://github.com/web3-storage/web3.storage/compare/api-v5.4.2...api-v5.4.3) (2022-03-18)
+
+
+### Bug Fixes
+
+* add missing status UnexpectedlyUnpinned ([#1105](https://github.com/web3-storage/web3.storage/issues/1105)) ([118ceb0](https://github.com/web3-storage/web3.storage/commit/118ceb0b1d768ac6585124385994199173deefac))
+* check bytes match cid ([#1069](https://github.com/web3-storage/web3.storage/issues/1069)) ([72b8073](https://github.com/web3-storage/web3.storage/commit/72b8073d829773b795069cf88681d6adfaf33d87))
+* filter PSA requests by queued status for Unpinned CIDs ([#1110](https://github.com/web3-storage/web3.storage/issues/1110)) ([dc2d359](https://github.com/web3-storage/web3.storage/commit/dc2d3590e243d94d569c38f4a07ec73582a6aafb))
+* use rpc for pins upsert ([#1088](https://github.com/web3-storage/web3.storage/issues/1088)) ([6a8e394](https://github.com/web3-storage/web3.storage/commit/6a8e394af8a63315db91bed82c17e77c13fb9fc2))
+
+### [5.4.2](https://github.com/web3-storage/web3.storage/compare/api-v5.4.1...api-v5.4.2) (2022-03-10)
+
+
+### Bug Fixes
+
+* store IPFS peer IDs ([#1093](https://github.com/web3-storage/web3.storage/issues/1093)) ([1f2dcda](https://github.com/web3-storage/web3.storage/commit/1f2dcdaf4fb49419967aae7f988e05e67c05506f))
+
+### [5.4.1](https://github.com/web3-storage/web3.storage/compare/api-v5.4.0...api-v5.4.1) (2022-03-09)
+
+
+### Bug Fixes
+
+* tmp workaround for lack of ipfs peer id on status response ([#1090](https://github.com/web3-storage/web3.storage/issues/1090)) ([b0fce07](https://github.com/web3-storage/web3.storage/commit/b0fce07d6f13c294d15060d6158372343c088213))
+
+## [5.4.0](https://github.com/web3-storage/web3.storage/compare/api-v5.3.0...api-v5.4.0) (2022-03-09)
+
+
+### Features
+
+* use user tags to check PSA auth ([#1008](https://github.com/web3-storage/web3.storage/issues/1008)) ([6fc29e6](https://github.com/web3-storage/web3.storage/commit/6fc29e6aebde22210d3dbaf0f827876035c77b5e))
+
+
+### Bug Fixes
+
+* metrics computed async ([#1085](https://github.com/web3-storage/web3.storage/issues/1085)) ([99b52e5](https://github.com/web3-storage/web3.storage/commit/99b52e51689923426a857dc8693176dcbbceda7b))
+* pin status syncing ([#1083](https://github.com/web3-storage/web3.storage/issues/1083)) ([b7e0e7c](https://github.com/web3-storage/web3.storage/commit/b7e0e7c12b30f3c1136baa90907350f01d3cde22))
+* verify s3 backup integrity on upload ([#1068](https://github.com/web3-storage/web3.storage/issues/1068)) ([c18b6e7](https://github.com/web3-storage/web3.storage/commit/c18b6e713711cfe8a38a0120dbfda12158959295)), closes [#1036](https://github.com/web3-storage/web3.storage/issues/1036)
+
+## [5.3.0](https://github.com/web3-storage/web3.storage/compare/api-v5.2.0...api-v5.3.0) (2022-02-24)
+
+
+### Features
+
+* update metrics and add psa pin requests to metrics ([d647ecb](https://github.com/web3-storage/web3.storage/commit/d647ecb90bbf7e068b9394f42b1c535671346d71))
+
+
+### Bug Fixes
+
+* use ipfs peerId as pin location ([#966](https://github.com/web3-storage/web3.storage/issues/966)) ([5ae212d](https://github.com/web3-storage/web3.storage/commit/5ae212da21692da2fe9d08a53463b15875ec0cd7))
+* use upsertpins ([#938](https://github.com/web3-storage/web3.storage/issues/938)) ([d593a19](https://github.com/web3-storage/web3.storage/commit/d593a19a1c595b201ab27d62db23d2b6c4dc1bf2))
+* version endpoint info ([#1024](https://github.com/web3-storage/web3.storage/issues/1024)) ([049f9b8](https://github.com/web3-storage/web3.storage/commit/049f9b823a0b6406a6cc8105ca65c459a7646d15))
+
 ## [5.2.0](https://github.com/web3-storage/web3.storage/compare/api-v5.1.4...api-v5.2.0) (2022-02-22)
 
 

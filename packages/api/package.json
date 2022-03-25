@@ -1,17 +1,18 @@
 {
   "name": "@web3-storage/api",
-  "version": "5.2.0",
+  "version": "5.4.3",
   "private": true,
   "type": "module",
   "license": "(Apache-2.0 OR MIT)",
-  "main": "./dist/index.mjs",
+  "main": "./dist/worker.mjs",
   "scripts": {
     "lt": "npm-run-all -p lt:*",
     "lt:cluster": "npx localtunnel --port 9094 --subdomain \"$(whoami)-cluster-api-web3-storage\"",
     "lt:postgres": "npx localtunnel --port 3000 --subdomain \"$(whoami)-postgres-api-web3-storage\"",
     "start": "npm-run-all -p cluster:start pg:start -s miniflare",
+    "start:preview": "npm-run-all -p cluster:start pg:start -s -p lt  wrangler-dev",
     "stop": "npm-run-all -p cluster:stop pg:stop",
-    "dev": "wrangler dev --env $(whoami)",
+    "wrangler-dev": "wrangler dev --env $(whoami)",
     "publish": "wrangler publish --env $(whoami)",
     "build": "node scripts/cli.js build",
     "test": "npm-run-all -p -r mock:backup test:worker -s test:size",
@@ -23,7 +24,7 @@
     "cluster:reset": "web3-storage-tools cluster --clean",
     "pg:start": "cd ../db && npm start",
     "pg:stop": "cd ../db && npm run stop",
-    "miniflare": "miniflare --env .env.local --watch"
+    "miniflare": "miniflare --env ../../.env --watch"
   },
   "devDependencies": {
     "@sentry/cli": "^1.72.1",
@@ -50,7 +51,7 @@
     "websocket": "^1.0.34"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.28.0",
+    "@aws-sdk/client-s3": "^3.53.1",
     "@cfworker/json-schema": "^1.8.3",
     "@google-cloud/precise-date": "^2.0.4",
     "@ipld/car": "^3.1.4",
@@ -58,7 +59,7 @@
     "@ipld/dag-pb": "^2.0.2",
     "@magic-ext/oauth": "^0.8.0",
     "@magic-sdk/admin": "^1.3.0",
-    "@nftstorage/ipfs-cluster": "^3.5.0",
+    "@nftstorage/ipfs-cluster": "^4.0.0",
     "@web3-storage/db": "^4.0.0",
     "@web3-storage/multipart-parser": "^1.0.0",
     "cborg": "^1.6.0",
@@ -71,7 +72,7 @@
   },
   "bundlesize": [
     {
-      "path": "./dist/index.mjs",
+      "path": "./dist/worker.mjs",
       "maxSize": "1 MB"
     }
   ]

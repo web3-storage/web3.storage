@@ -20,6 +20,7 @@ import pkg from '../package.json'
  * @property {string} [CLUSTER_BASIC_AUTH_TOKEN]
  * @property {string} PG_REST_URL
  * @property {string} PG_REST_JWT
+ * @property {string} GATEWAY_URL
  * @property {string} [S3_BUCKET_ENDPOINT]
  * @property {string} [S3_BUCKET_NAME]
  * @property {string} [S3_BUCKET_REGION]
@@ -68,6 +69,10 @@ import pkg from '../package.json'
  * @param {import('./index.js').Ctx} ctx
  */
 export function envAll (req, env, ctx) {
+  // In dev, set these vars in a .env file in the parent monorepo project root.
+  if (!env.PG_REST_URL) {
+    throw new Error('MISSING ENV. Please set PG_REST_URL')
+  }
   // These values are replaced at build time by esbuild `define`
   env.BRANCH = BRANCH
   env.VERSION = VERSION
@@ -77,11 +82,13 @@ export function envAll (req, env, ctx) {
   env.sentry = env.SENTRY_DSN && new Toucan({
     dsn: env.SENTRY_DSN,
     context: ctx,
+    request: req,
     allowedHeaders: ['user-agent', 'x-client'],
     allowedSearchParams: /(.*)/,
     debug: false,
     rewriteFrames: {
-      root: '/'
+      // strip . from start of the filename ./worker.mjs as set by cloudflare, to make absolute path `/worker.mjs`
+      iteratee: (frame) => ({ ...frame, filename: frame.filename.substring(1) })
     },
     environment: env.ENV,
     release: env.SENTRY_RELEASE,
@@ -114,6 +121,7 @@ export function envAll (req, env, ctx) {
     env.s3BucketRegion = env.S3_BUCKET_REGION
 
     env.s3Client = new S3Client({
+      // logger: console, // use me to get some debug info on what the client is up to
       endpoint: env.S3_BUCKET_ENDPOINT,
       forcePathStyle: !!env.S3_BUCKET_ENDPOINT, // Force path if endpoint provided
       region: env.S3_BUCKET_REGION,
@@ -122,5 +130,17 @@ export function envAll (req, env, ctx) {
         secretAccessKey: env.S3_SECRET_ACCESS_KEY_ID
       }
     })
+    if (env.ENV === 'dev') {
+      // show me what s3 sdk is up to.
+      env.s3Client.middlewareStack.add(
+        (next, context) => async (args) => {
+          console.log('s3 request headers', args.request.headers)
+          return next(args)
+        },
+        {
+          step: 'finalizeRequest'
+        }
+      )
+    }
   }
 }

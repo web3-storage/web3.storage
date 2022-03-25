@@ -1,15 +1,20 @@
 #!/usr/bin/env node
 
-import dotenv from 'dotenv'
 import { updateMetrics } from '../jobs/metrics.js'
-import { getDBClient } from '../lib/utils.js'
+import { envConfig } from '../lib/env.js'
+import { getPgPool } from '../lib/utils.js'
 
 async function main () {
-  const env = process.env.ENV || 'dev'
-  const db = getDBClient(process.env)
+  const rwPg = getPgPool(process.env, 'rw')
+  const roPg = getPgPool(process.env, 'ro')
 
-  await updateMetrics({ env, db })
+  try {
+    await updateMetrics({ rwPg, roPg })
+  } finally {
+    await rwPg.end()
+    await roPg.end()
+  }
 }
 
-dotenv.config()
+envConfig()
 main()

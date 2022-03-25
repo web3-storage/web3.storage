@@ -76,8 +76,8 @@ export type PinItem = PinUpsertInput & {
 export type PinsUpsertInput = {
   id: string
   status: definitions['pin']['status']
-  cid: definitions['pin_request']['content_cid']
-  locationId: string
+  contentCid: definitions['pin_request']['content_cid']
+  location: Location
 }
 
 export type PinItemOutput = {
@@ -223,6 +223,7 @@ export type UploadOutput = definitions['upload'] & {
 export type Location = {
   _id?: string
   peerId: definitions['pin_location']['peer_id']
+  ipfsPeerId?: definitions['pin_location']['ipfs_peer_id']
   peerName?: definitions['pin_location']['peer_name']
   region?: definitions['pin_location']['region']
 }

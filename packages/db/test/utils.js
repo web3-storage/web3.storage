@@ -43,6 +43,7 @@ export const defaultPinData = [{
   location: {
     peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
     peerName: 'web3-storage-sv15',
+    ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE1',
     region: 'region'
   }
 }]
@@ -75,4 +76,22 @@ export async function createUpload (dbClient, user, authKey, cid, options = {}) 
   })
 
   return dbClient.getUpload(cid, user)
+}
+
+/**
+ *
+ * @param {import('../index').DBClient} dbClient
+ * @param {string} cid
+ * @param {number} userId
+ */
+export async function getUpload (dbClient, cid, userId) {
+  return dbClient.getUpload(cid, userId)
+}
+
+/**
+ *
+ * @param {import('../index').DBClient} dbClient
+ */
+export async function getPinSyncRequests (dbClient, size = 10) {
+  return dbClient.getPinSyncRequests({ size })
 }

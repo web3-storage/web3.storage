@@ -13,20 +13,26 @@
     "packages/w3",
     "packages/website",
     "packages/pinpin",
-    "packages/tools"
+    "packages/tools",
+    "packages/docs"
   ],
   "scripts": {
+    "start": "npm-run-all --print-label -p web api",
+    "api": "npm start -w packages/api",
+    "web": "npm start -w packages/website",
     "test": "npm run lint && npm run test --workspaces",
     "lint": "standard --verbose | snazzy",
     "lint:fix": "standard --fix "
   },
   "devDependencies": {
+    "npm-run-all": "^4.1.5",
     "snazzy": "^9.0.0",
     "standard": "^16.0.3"
   },
   "standard": {
     "ignore": [
-      "packages/website"
+      "packages/website",
+      "packages/docs"
     ]
   },
   "engines": {

@@ -1,7 +1,7 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
-import { normalizeCid } from '../../api/src/utils/cid'
-import { DBClient } from '../index'
+import { normalizeCid } from '../../api/src/utils/cid.js'
+import { DBClient } from '../index.js'
 import { createUser, createUserAuthKey, token } from './utils.js'
 import { CID } from 'multiformats/cid'
 import { sha256 } from 'multiformats/hashes/sha2'
@@ -70,6 +70,7 @@ describe('Pin Request', () => {
       location: {
         peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
         peerName: 'web3-storage-sv15',
+        ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE2',
         region: 'region'
       }
     },
@@ -78,6 +79,7 @@ describe('Pin Request', () => {
       location: {
         peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
         peerName: 'web3-storage-sv16',
+        ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE3',
         region: 'region'
       }
     },
@@ -100,13 +102,13 @@ describe('Pin Request', () => {
   ]
 
   // Create user and auth key
-  before(async () => {
+  beforeEach(async () => {
     user = await createUser(client)
     authKey = await createUserAuthKey(client, parseInt(user._id, 10))
   })
 
   // Guarantee no Pin requests exist and create the ones needed for our tests
-  before(async () => {
+  beforeEach(async () => {
     // Make sure we don't have pinRequest and content
     await client._client.from(pinRequestTable).delete()
     const { count: countR } = await client._client.from(pinRequestTable).select('id', {
@@ -194,7 +196,7 @@ describe('Pin Request', () => {
   describe('Get Pin', () => {
     let savedPinRequest
 
-    before(async () => {
+    beforeEach(async () => {
       savedPinRequest = await client.getPsaPinRequest(authKey, aPinRequestOutput._id)
     })
 
@@ -228,7 +230,7 @@ describe('Pin Request', () => {
     let pinRequestsInputs
     let totalPinned
 
-    before(async () => {
+    beforeEach(async () => {
       userPinList = await createUser(client)
       authKeyPinList = await createUserAuthKey(client, parseInt(userPinList._id, 10))
 

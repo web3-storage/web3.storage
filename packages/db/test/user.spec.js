@@ -1,6 +1,6 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
-import { DBClient } from '../index'
+import { DBClient } from '../index.js'
 import { token } from './utils.js'
 
 describe('user operations', () => {
@@ -18,7 +18,7 @@ describe('user operations', () => {
   let user
 
   // Setup testing user
-  before(async () => {
+  beforeEach(async () => {
     const upsertUser = await client.upsertUser({
       name,
       email,

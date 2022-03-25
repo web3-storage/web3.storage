@@ -1,8 +1,8 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
-import { DBClient } from '../index'
+import { DBClient } from '../index.js'
 
-import { createUser, createUserAuthKey, createUpload, token } from './utils'
+import { createUser, createUserAuthKey, createUpload, token } from './utils.js'
 
 describe('pin-request', () => {
   /** @type {DBClient} */
@@ -23,6 +23,7 @@ describe('pin-request', () => {
       location: {
         peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
         peerName: 'web3-storage-sv15',
+        ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE2',
         region: 'region'
       }
     },
@@ -31,6 +32,7 @@ describe('pin-request', () => {
       location: {
         peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
         peerName: 'web3-storage-sv16',
+        ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE3',
         region: 'region'
       }
     }
@@ -40,19 +42,19 @@ describe('pin-request', () => {
   const uploads = []
 
   // Setup testing user
-  before(async () => {
+  beforeEach(async () => {
     user = await createUser(client)
     authKey = await createUserAuthKey(client, user._id)
   })
 
   // Guarantee no pin requests exist
-  before(async () => {
+  beforeEach(async () => {
     const pinReqs = await client.getPinRequests()
     await client.deletePinRequests(pinReqs.map(pr => pr._id))
   })
 
   // Setup two uploads: first with default one pin and second with two pins
-  before(async () => {
+  beforeEach(async () => {
     const upload0 = await createUpload(client, user._id, authKey, cids[0])
     const upload1 = await createUpload(client, user._id, authKey, cids[1], { pins: pins1 })
     uploads.push(upload0)

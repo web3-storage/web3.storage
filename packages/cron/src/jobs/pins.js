@@ -1,10 +1,23 @@
 import debug from 'debug'
 import { toPinStatusEnum } from '@web3-storage/api/src/utils/pin.js'
 import retry from 'p-retry'
-import { piggyback } from 'piggybacker'
 import { downgradeCid } from '../lib/cid.js'
 
-const MAX_PIN_REQUESTS_PER_RUN = 400
+/**
+ * @typedef {import('@nftstorage/ipfs-cluster').API.PinInfo} PinInfo
+ * @typedef {Record<string, PinInfo>} PeerMap
+ */
+
+/**
+ * Bounded by URL length for deleting pin sync requests.
+ * e.g. DELEETE /pin_sync_request?id=in.%28227623241%2C227623242%2C227623243%2C227623244%2C227623245...
+ */
+const MAX_PIN_REQUESTS_PER_RUN = 700
+/**
+ * 8k max request length to cluster for statusAll, we hit this at around 126 CIDs
+ * http://nginx.org/en/docs/http/ngx_http_core_module.html#large_client_header_buffers
+ */
+const MAX_CLUSTER_STATUS_CIDS = 120
 const log = debug('pins:updatePinStatuses')
 
 /**
@@ -18,26 +31,6 @@ export async function updatePinStatuses ({ cluster, db }) {
     console.log('ℹ️ Enable logging by setting DEBUG=pins:updatePinStatuses')
   }
 
-  // Cached status responses - since we pin on multiple nodes we'll often ask
-  // multiple times about the same CID.
-  /** @type {Map<string, import('@nftstorage/ipfs-cluster').StatusResponse['peerMap']>} */
-  const statusCache = new Map()
-
-  const getPinStatus = piggyback(
-    async cid => {
-      let peerMap = statusCache.get(cid)
-      if (peerMap) {
-        log(`🥊 ${cid}: Cache hit for status...`)
-      } else {
-        log(`⏳ ${cid}: Checking status...`)
-        ;({ peerMap } = await cluster.status(cid))
-        statusCache.set(cid, peerMap)
-      }
-      return peerMap
-    },
-    cid => cid
-  )
-
   const to = new Date().toISOString()
   const size = MAX_PIN_REQUESTS_PER_RUN
   let queryRes, after
@@ -48,29 +41,43 @@ export async function updatePinStatuses ({ cluster, db }) {
     const requests = queryRes.data
     log(`📥 Processing ${i} -> ${i + requests.length}`)
 
+    const cids = Array.from(new Set(requests.map(r => r.pin.contentCid)))
+    /** @type {Map<string, PeerMap>} */
+    let statuses = new Map()
+    try {
+      log(`⏳ Checking status of ${cids.length} CIDs`)
+      statuses = await getPinStatuses(cluster, cids)
+    } catch (err) {
+      log('⚠️ failed to get pin statuses from cluster', err)
+      // ok to continue - these CIDs will be re-added to the back of the queue
+    }
+
     const reSyncPins = []
     let pinUpdates = await Promise.all(requests.map(async req => {
       const { pin } = req
-      let peerMap
-
-      // Get status of pin or check later
-      try {
-        peerMap = await getPinStatus(pin.contentCid)
-      } catch (err) {
+      let peerMap = statuses.get(pin.contentCid)
+      if (!peerMap) {
+        log(`⚠️ Status not found for ${pin.contentCid}`)
         reSyncPins.push(pin)
-        return null // Cluster could not find the content, please check later
+        return null
       }
 
-      // Is this pin tracked by our cluster?
-      if (!peerMap[pin.location.peerId]) return null
+      let pinInfo = peerMap[pin.location.peerId]
+      if (!pinInfo) {
+        log(`⚠️ ${pin.contentCid} is not tracked by our cluster!`)
+        return null
+      }
 
-      let status = toPinStatusEnum(peerMap[pin.location.peerId].status)
+      let status = toPinStatusEnum(pinInfo.status)
 
       // If "Unpinned" downgrade to v0 CID
       if (status === 'Unpinned') {
+        log(`⚠️ ${pin.contentCid} is Unpinned on ALL Cluster nodes`)
+
         let cidV0
         try {
           cidV0 = downgradeCid(pin.contentCid)
+          log(`⬇️ downgraded ${pin.contentCid} -> ${cidV0}`)
         } catch (err) {
           log(`⚠️ Unable to downgrade CID: ${pin.contentCid}`)
           reSyncPins.push(pin)
@@ -78,15 +85,20 @@ export async function updatePinStatuses ({ cluster, db }) {
         }
 
         try {
-          peerMap = await getPinStatus(cidV0)
+          const res = await cluster.status(cidV0)
+          peerMap = res.peerMap
         } catch (err) {
           reSyncPins.push(pin)
           return null
         }
 
-        if (!peerMap[pin.location.peerId]) return null
+        pinInfo = peerMap[pin.location.peerId]
+        if (!pinInfo) {
+          log(`⚠️ ${cidV0} is not tracked by our cluster!`)
+          return null
+        }
 
-        status = toPinStatusEnum(peerMap[pin.location.peerId].status)
+        status = toPinStatusEnum(pinInfo.status)
       }
 
       if (status !== 'Pinned' && status !== 'Remote') reSyncPins.push(pin)
@@ -101,8 +113,8 @@ export async function updatePinStatuses ({ cluster, db }) {
       return {
         id: pin._id,
         status: status,
-        cid: pin.contentCid,
-        locationId: pin.location._id
+        contentCid: pin.contentCid,
+        location: pin.location
       }
     }))
 
@@ -131,4 +143,32 @@ export async function updatePinStatuses ({ cluster, db }) {
     i += requests.length
   }
   log('🎉 Done')
+}
+
+/**
+ * Gets statuses for the passed CIDs, automatically batching them.
+ * @param {import('@nftstorage/ipfs-cluster').Cluster} cluster
+ * @param {string[]} cids
+ * @returns {Promise<Map<string, PeerMap>>}
+ */
+async function getPinStatuses (cluster, cids) {
+  /** @type {Map<string, PeerMap>} */
+  const statuses = new Map()
+
+  const batches = cids.reduce((batches, cid) => {
+    let batch = batches[batches.length - 1]
+    if (!batch || batch.length >= MAX_CLUSTER_STATUS_CIDS) {
+      batch = []
+      batches.push(batch)
+    }
+    batch.push(cid)
+    return batches
+  }, [])
+
+  for (const cids of batches) {
+    const res = await cluster.statusAll({ cids })
+    res.forEach(s => statuses.set(s.cid, s.peerMap))
+  }
+
+  return statuses
 }

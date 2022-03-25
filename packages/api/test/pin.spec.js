@@ -10,7 +10,7 @@ import {
   INVALID_REPLACE,
   getEffectivePinStatus
 } from '../src/utils/psa.js'
-import { PinningUnauthorizedError, PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from '../src/errors.js'
+import { PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from '../src/errors.js'
 
 /**
  *
@@ -79,8 +79,6 @@ const createPinRequest = async (cid, token) => {
 }
 
 describe('Pinning APIs endpoints', () => {
-  const supportEmailCheck = /support@web3.storage/
-
   describe('GET /pins', () => {
     let baseUrl
     let token
@@ -339,7 +337,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
-      assert.strictEqual(data.count, 3)
+      assert.strictEqual(data.count, 4)
     })
 
     it('filters pins by status', async () => {
@@ -381,7 +379,27 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
-      assert.strictEqual(data.count, 4)
+      assert.strictEqual(data.count, 5)
+    })
+
+    it('filters pins by queued', async () => {
+      const opts = new URLSearchParams({
+        status: 'queued'
+      })
+      const url = new URL(`${baseUrl}?${opts}`).toString()
+      const res = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+      assert(res, 'Server responded')
+      assert(res.ok, 'Server response is ok')
+      const data = await res.json()
+      assert.strictEqual(data.count, 1)
     })
 
     it('filters pins created before a date', async () => {
@@ -424,8 +442,8 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
-      assert.strictEqual(data.results.length, 1)
-      assert.strictEqual(data.count, 1)
+      assert.strictEqual(data.results.length, 2)
+      assert.strictEqual(data.count, 2)
     })
 
     it('limits the number of pins returned for this user and includes the total', async () => {
@@ -446,7 +464,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
-      assert.strictEqual(data.count, 6)
+      assert.strictEqual(data.count, 7)
       assert.strictEqual(data.results.length, 3)
     })
 
@@ -470,21 +488,6 @@ describe('Pinning APIs endpoints', () => {
       const data = await res.json()
       assert.strictEqual(data.count, 1)
       assert.strictEqual(data.results[0].pin.name, 'Image.jpeg')
-    })
-
-    it('error if user not authorized to pin', async () => {
-      const notAuthorizedToken = await getTestJWT('test-upload', 'test-upload')
-      const res = await fetch(new URL('pins', endpoint).toString(), {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${notAuthorizedToken}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      assert(!res.ok)
-      const data = await res.json()
-      assert.match(data.message, supportEmailCheck, 'Error message does not contain support email address')
-      assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
   })
 
@@ -638,25 +641,6 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(error.details, '#/meta: Instance type "number" is invalid. Expected "object".')
     })
 
-    it('error if user not authorized to pin', async () => {
-      const notAuthorizedToken = await getTestJWT()
-      const res = await fetch(new URL('pins', endpoint).toString(), {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${notAuthorizedToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
-        })
-      })
-
-      assert(!res.ok)
-      const data = await res.json()
-      assert.match(data.message, supportEmailCheck, 'Error message does not contain support email address')
-      assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
-    })
-
     it('returns the pin request', async () => {
       const sourceCid = 'bafybeidhbtemubjbsbuhyai5oaebqf2fdrvhnshbkncyqpnoy2bl2mpt4q'
       const res = await fetch(new URL('pins', endpoint).toString(), {
@@ -787,25 +771,6 @@ describe('Pinning APIs endpoints', () => {
       assert.deepStrictEqual(data.pin.meta, meta)
     })
 
-    it('error if user not authorized to pin', async () => {
-      const notAuthorizedToken = await getTestJWT()
-      const res = await fetch(new URL('pins', endpoint).toString(), {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${notAuthorizedToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          cid: 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
-        })
-      })
-
-      assert(!res.ok)
-      const data = await res.json()
-      assert.match(data.message, supportEmailCheck, 'Error message does not contain support email address')
-      assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
-    })
-
     it('returns the pin request with specified origins', async () => {
       const requestId = 'ab62cf3c-c98d-494b-a756-b3a3fb6ddcab'
       const origins = [
@@ -852,16 +817,6 @@ describe('Pinning APIs endpoints', () => {
         createPinWithStatus('PinError'),
         createPinWithStatus('PinQueued')
       ]
-      assert.strictEqual(getEffectivePinStatus(pins), 'queued')
-    })
-
-    it('should return "queued" if at least 1 pin has remote status', () => {
-      const pins = [
-        createPinWithStatus('UnpinQueued'),
-        createPinWithStatus('PinError'),
-        createPinWithStatus('PinQueued')
-      ]
-
       assert.strictEqual(getEffectivePinStatus(pins), 'queued')
     })
 
@@ -960,21 +915,6 @@ describe('Pinning APIs endpoints', () => {
       assert(res.ok, 'Server responded')
       assert.equal(res.status, 202)
     })
-
-    it('error if user not authorized to pin', async () => {
-      const notAuthorizedToken = await getTestJWT()
-      const res = await fetch(new URL('pins/1', endpoint).toString(), {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${notAuthorizedToken}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      assert(!res.ok)
-      const data = await res.json()
-      assert.match(data.message, supportEmailCheck, 'Error message does not contain support email address')
-      assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
-    })
   })
 
   describe('POST /pins/:requestId', () => {
@@ -1066,22 +1006,6 @@ describe('Pinning APIs endpoints', () => {
       assert.equal(res.status, ERROR_CODE)
       const error = await res.json()
       assert.equal(error.details, INVALID_REPLACE)
-    })
-
-    it('error if user not authorized to pin', async () => {
-      const notAuthorizedToken = await getTestJWT()
-      const res = await fetch(new URL('pins/UniqueIdOfPinRequest', endpoint).toString(), {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${notAuthorizedToken}`,
-          'Content-Type': 'application/json'
-        }
-      })
-
-      assert(!res.ok)
-      const data = await res.json()
-      assert.match(data.message, supportEmailCheck, 'Error message does not contain support email address')
-      assert.strictEqual(data.code, PinningUnauthorizedError.CODE)
     })
   })
 })

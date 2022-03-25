@@ -12,30 +12,15 @@ You will need to install docker (check official docker documentation) and postgr
 brew install postgres
 ```
 
-### 2. Define local env vars
+## Getting started
 
-Inside the `/packages/db` folder create a file called `.env.local` with the following content.
+Please follow the instructions in the main monorepo [Readme](../../README.md).
 
-```ini
-# PostgREST API URL
-PG_REST_URL=http://localhost:3000
-# PostgREST API token, for role "postgres", using secret value PGRST_JWT_SECRET from './postgres/docker/docker-compose.yml'
-# https://postgrest.org/en/v8.0/tutorials/tut1.html#step-3-sign-a-token
-PG_REST_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU
-
-# Connection string for locally running postgres used in tests
-PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
-```
-
-Production vars are set in Github Actions secrets.
-
-### 3. Ready to go
-
-You can now start your development and run DB tests. The test setup has hooks to start your local docker containers and stop/clean them in the end.
 
 ## Local DB Setup
 
-If you want to run your own local DB for development using this package DB client, you can easily do it as follows:
+If you want to run your own local DB in isolation using this package DB client, you can easily do it as follows:
+
 
 ### 1. Start Database and postgrest
 
@@ -45,10 +30,10 @@ Start a docker compose with a Postgres Database and Postgrest.
 npm start
 ```
 
-### 2. Populate Database
+### 2. Load schema
 
 ```bash
-node scripts/cli.js db-sql --cargo --testing
+npm run load-schema
 ```
 
 ### 3. Ready to go
@@ -67,7 +52,7 @@ If you'd like to also clear the database and all docker artifacts you can run
 npm run stop:clean
 ```
 
-### 4. Alter DB schema
+### 4. Alter DB schema and migrations
 
 1. Add the schema changes to `db/postgres` sql files as needed.
 
@@ -86,6 +71,13 @@ npm run stop:clean
 4. Add the schema changes to `db-client-types.ts` as well.
 
 5. If the schema changes include creating a new table, type or view update `reset.sql` as well.
+
+6. Add the required migration script(s) to [postgres/migrations](./postgres/migrations/) folder. Please follow the naming convention and add an incremental number prefix to the name of the migration file.
+
+7. Once the PR is merged to main please add a comment to the [release-please](https://github.com/googleapis/release-please) PR pointing to the migrations script.  
+    ie
+    > Required migration [000-fix-peer_location.peer_id.sql](./postgres/migrations/000-fix-peer_location.peer_id.sql)
+    
 
 ## DB package CLI
 The `scripts/cli.js` to run some common operations on the database.

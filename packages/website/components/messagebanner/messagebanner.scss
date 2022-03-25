@@ -1,0 +1,86 @@
+#section_message-banner {
+  position: relative;
+  z-index: 100;
+  transition: 200ms ease;
+
+  ::-moz-selection {
+    background-color: $white;
+    -webkit-text-fill-color: $ebony;
+    -moz-text-fill-color: $ebony;
+    text-fill-color: $ebony;
+  }
+  ::selection {
+    background-color: $white;
+    -webkit-text-fill-color: $ebony;
+    -moz-text-fill-color: $ebony;
+    text-fill-color: $ebony;
+  }
+}
+
+.message-banner-wrapper {
+  background-color: $ebony;
+  width: 100%;
+  bottom: 0;
+  &.mb-hidden {
+    position: absolute;
+  }
+}
+
+.message-banner-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 0.53125rem 0;
+  color: white;
+  @include small {
+    padding: 0.53125rem 2rem;
+  }
+}
+
+.message-banner-content {
+  margin: auto 0;
+  display: inline;
+  text-align: center;
+  transition: 200ms ease;
+  @include fontSize_Small;
+  @include fontWeight_Medium;
+  .banner-gradient-text {
+    @include gradient_Text;
+  }
+  @include tiny {
+    line-height: leading(24, 16);
+  }
+
+  &.banner-alert {
+    &:before {
+      content: '⚠';
+      display: inline;
+      margin-right: 0.25rem;
+      @include fontSize_Small;
+      @include fontWeight_Medium;
+      @include tiny {
+        line-height: leading(24, 16);
+      }
+    }
+  }
+
+  &.mb-reduced-fontsize {
+    @include fontSize_Tiny;
+  }
+}
+
+.message-banner-close-button {
+  position: absolute;
+  display: flex;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  svg,
+  path {
+    stroke: $white;
+    stroke-width: 2px;
+  }
+  &.hide-banner-close {
+    display: none;
+  }
+}

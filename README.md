@@ -5,9 +5,23 @@
 
 This project uses node v16 and npm v7. It's a monorepo that use [npm workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces) to handle resolving dependencies between the local `packages/*` folders.
 
+You need an account on https://magic.link, and Docker running locally.
+
+Copy the <.env.tpl> file to `.env` and set the values for the `MAGIC_SECRET_KEY` & `NEXT_PUBLIC_MAGIC`, from your magic.link account dashboard.
+
+Then install the deps with `npm` and then run all the things with `npm start`
+
 ```console
+# install deps
 npm install
+
+# start the api and website
+npm start
 ```
+
+To be able to run the APIs you need to make sure the underlying DB is populated with the required tables.
+Please follow the instructions in the [Populate Database](./packages/db/README.md#2-populate-database) section in the db package README.
+
 
 To add a new workspace to the repo:
 

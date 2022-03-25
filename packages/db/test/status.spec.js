@@ -1,6 +1,6 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
-import { DBClient } from '../index'
+import { DBClient } from '../index.js'
 import { token } from './utils.js'
 
 describe('status', () => {
@@ -22,6 +22,7 @@ describe('status', () => {
     location: {
       peerId: 'peer_id',
       peerName: 'peer_name',
+      ipfsPeerId: 'ipfs_peer_id',
       region: 'region'
     }
   }
@@ -29,7 +30,7 @@ describe('status', () => {
   let upload
 
   // Setup testing user
-  before(async () => {
+  beforeEach(async () => {
     const name = 'test-name'
     const email = 'test@email.com'
     const issuer = `issuer${Math.random()}`
@@ -50,7 +51,7 @@ describe('status', () => {
   })
 
   // Create auth key
-  before(async () => {
+  beforeEach(async () => {
     const name = 'test-key-name'
     const secret = 'test-secret'
     await client.createKey({
@@ -61,7 +62,7 @@ describe('status', () => {
   })
 
   // Setup upload
-  before(async () => {
+  beforeEach(async () => {
     authKeys = await client.listKeys(user._id)
     const createdUpload = await client.createUpload({
       user: user._id,

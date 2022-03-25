@@ -43,8 +43,8 @@ CREATE TABLE IF NOT EXISTS public.user_tag
   tag             user_tag_type                                                 NOT NULL,
   value           TEXT                                                          NOT NULL,
   reason          TEXT                                                          NOT NULL,
-  inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())     NOT NULL,
-  deleted_at  TIMESTAMP WITH TIME ZONE
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  deleted_at      TIMESTAMP WITH TIME ZONE
 );
 CREATE UNIQUE INDEX IF NOT EXISTS user_tag_is_deleted_idx ON user_tag (user_id, tag, deleted_at)
 WHERE deleted_at IS NOT NULL;
@@ -127,7 +127,9 @@ BEGIN
       'UnpinQueued',
       -- The IPFS daemon is not pinning the item through this CID but it is tracked
       -- in a cluster dag
-      'Sharded'
+      'Sharded',
+      -- The item should be pinned, but it is not pinned and not queued/pinning.
+      'UnexpectedlyUnpinned'
     );
   END IF;
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'upload_type') THEN
@@ -152,10 +154,12 @@ END$$;
 CREATE TABLE IF NOT EXISTS pin_location
 (
   id              BIGSERIAL PRIMARY KEY,
-  -- Libp2p peer ID of the node pinning this pin.
+  -- Libp2p peer ID of the Cluster node pinning this pin.
   peer_id         TEXT                                                          NOT NULL UNIQUE,
-  -- Name of the peer pinning this pin.
+  -- Name of the Cluster peer pinning this pin.
   peer_name       TEXT,
+  -- Libp2p peer ID of the IPFS node pinning this pin.
+  ipfs_peer_id    TEXT,
   -- Geographic region this node resides in.
   region          TEXT
 );
@@ -244,6 +248,7 @@ CREATE TABLE IF NOT EXISTS pin_sync_request
 );
 
 CREATE INDEX IF NOT EXISTS pin_sync_request_pin_id_idx ON pin_sync_request (pin_id);
+CREATE INDEX IF NOT EXISTS pin_sync_request_inserted_at_idx ON pin_sync_request (inserted_at);
 
 -- Setting search_path to public scope for uuid function(s)
 SET search_path TO public;
@@ -285,13 +290,13 @@ CREATE TABLE IF NOT EXISTS name
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS pinning_authorization
+-- Metric contains the current values of collected metrics.
+CREATE TABLE IF NOT EXISTS metric
 (
-  id              BIGSERIAL PRIMARY KEY,
-  -- Points to user allowed to pin content.
-  user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  deleted_at      TIMESTAMP WITH TIME ZONE
+    name TEXT PRIMARY KEY,
+    value BIGINT NOT NULL,
+    inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 CREATE VIEW admin_search as

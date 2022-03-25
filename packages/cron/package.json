@@ -7,18 +7,16 @@
   "type": "module",
   "scripts": {
     "start": "run-s start:*",
-    "start:metrics": "node src/bin/metrics.js",
+    "start:metrics": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/metrics.js",
     "start:pins": "node src/bin/pins.js",
     "start:dagcargo:sizes": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/dagcargo-sizes.js",
-    "test": "npm-run-all -p -r mock:cluster mock:pgrest test:e2e",
-    "test:e2e": "mocha test/*.spec.js --exit",
-    "mock:cluster": "smoke -p 9094 test/mocks/cluster",
-    "mock:pgrest": "smoke -p 9087 test/mocks/pgrest"
+    "test": "npm-run-all -p -r test:e2e",
+    "test:e2e": "mocha --require ./test/hooks.js test/*.spec.js --timeout 5000"
   },
   "author": "Alan Shaw",
   "license": "(Apache-2.0 OR MIT)",
   "dependencies": {
-    "@nftstorage/ipfs-cluster": "^3.3.1",
+    "@nftstorage/ipfs-cluster": "^4.0.0",
     "@web-std/fetch": "^2.0.1",
     "@web3-storage/db": "^4.0.0",
     "debug": "^4.3.1",
@@ -27,14 +25,13 @@
     "multiformats": "^9.6.2",
     "node-fetch": "^2.6.1",
     "p-retry": "^4.6.1",
-    "pg": "^8.7.1",
-    "piggybacker": "^2.0.0"
+    "p-settle": "^5.0.0",
+    "pg": "^8.7.1"
   },
   "devDependencies": {
     "@types/node": "^16.3.1",
     "execa": "^5.1.1",
     "mocha": "^8.3.2",
-    "npm-run-all": "^4.1.5",
-    "smoke": "^3.1.1"
+    "npm-run-all": "^4.1.5"
   }
 }

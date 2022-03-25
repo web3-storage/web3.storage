@@ -67,7 +67,7 @@ export function normalizePins (pins, {
       status: pin.status,
       created: pin.created,
       updated: pin.updated,
-      peerId: pin.location.peerId,
+      peerId: pin.location.ipfsPeerId,
       peerName: pin.location.peerName,
       region: pin.location.region
     }))

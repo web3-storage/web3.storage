@@ -1,0 +1,77 @@
+$primary: #3C3CD0;
+$mobileActiveText: #7E81FF;
+$borderColor: #dbdada;
+$breakpoint: 997px;
+$imagePath: '../../static/img';
+$sidenavBg: #1C1E29;
+$gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48%, $cerise 100%);
+
+@mixin gradient_Background_PinkBlue_Reverse {
+  background: $gradient_PinkBlue_Reverse;
+}
+
+@mixin desktop {
+  @media screen and (min-width: $breakpoint) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media screen and (max-width: ($breakpoint - 1px)) {
+    @content;
+  }
+}
+
+// Typography
+@mixin headings {
+  h1 {
+    @include h1;
+    color: $ebony;
+    line-height: leading(55, 45);
+    margin-top: 0;
+    margin-bottom: toRem(42);
+  }
+  .markdown > h2,
+  h2 {
+    color: $ebony;
+    font-size: toRem(30);
+    margin-bottom: toRem(24);
+    line-height: toRem(34);
+    margin-top: calc(var(--ifm-h2-vertical-rhythm-top) * var(--ifm-leading));
+  }
+  h3 {
+    color: $ebony;
+    margin-bottom: toRem(20);
+    font-size: toRem(18);
+    line-height: toRem(34);
+    @include fontWeight_Semibold;
+    margin-top: calc(var(--ifm-h3-vertical-rhythm-top) * var(--ifm-leading));
+  }
+  h4 {
+    @include h4;
+    color: $ebony;
+    @include fontSize_Medium;
+  }
+  h5 {
+    @include h5;
+    text-transform: none;
+    color: $ebony;
+    font-size: toRem(16);
+    line-height: toRem(34);
+  }
+  pre code {
+    background-color: $steelGray !important;
+    font-size: toRem(14.4);
+  }
+  li code,
+  p code  {
+    color: $ebony !important;
+    background-color: $white;
+    font-family: 'Suisse Intl Mono' !important;
+    border-radius: var(--ifm-code-border-radius);
+    font-size: toRem(13);
+    padding: var(--ifm-code-padding-vertical) var(--ifm-code-padding-horizontal);
+    border: none;
+  }
+}
+

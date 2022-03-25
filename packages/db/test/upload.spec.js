@@ -1,6 +1,6 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
-import { DBClient } from '../index'
+import { DBClient } from '../index.js'
 import { token } from './utils.js'
 
 describe('upload', () => {
@@ -13,7 +13,7 @@ describe('upload', () => {
   let user
 
   // Setup testing user
-  before(async () => {
+  beforeEach(async () => {
     const name = 'test-name'
     const email = 'test@email.com'
     const issuer = `issuer${Math.random()}`
@@ -34,7 +34,7 @@ describe('upload', () => {
   })
 
   // Create auth key
-  before(async () => {
+  beforeEach(async () => {
     const name = 'test-key-name'
     const secret = 'test-secret'
     await client.createKey({
@@ -54,6 +54,7 @@ describe('upload', () => {
     location: {
       peerId: 'peer_id',
       peerName: 'peer_name',
+      ipfsPeerId: 'ipfs_peer_id',
       region: 'region'
     }
   }
@@ -61,7 +62,7 @@ describe('upload', () => {
   let upload
 
   // Setup first user upload
-  before(async () => {
+  beforeEach(async () => {
     authKeys = await client.listKeys(user._id)
     const createdUpload = await client.createUpload({
       user: user._id,
@@ -90,7 +91,7 @@ describe('upload', () => {
     assert.strictEqual(upload.dagSize, dagSize, 'upload has correct dag size')
     assert.strictEqual(upload.pins.length, 1, 'upload has one pin')
     assert.strictEqual(upload.pins[0].status, initialPinData.status, 'pin has added status')
-    assert.strictEqual(upload.pins[0].peerId, initialPinData.location.peerId, 'pin has added peerId')
+    assert.strictEqual(upload.pins[0].peerId, initialPinData.location.ipfsPeerId, 'pin has added peerId')
     assert.strictEqual(upload.pins[0].peerName, initialPinData.location.peerName, 'pin has added peer name')
     assert.strictEqual(upload.pins[0].region, initialPinData.location.region, 'pin has added region')
     assert.strictEqual(upload.deals.length, 0, 'upload has no deals')

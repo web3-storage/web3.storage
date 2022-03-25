@@ -1,18 +1,24 @@
 -- Mock DB data for API tests
-INSERT INTO public.user (id, name, email, issuer, public_address)
-VALUES (1, 'test-user', 'test@user.com', 'test-magic-issuer', 'test-magic');
+INSERT INTO public.user ( name, email, issuer, public_address)
+VALUES ('test-user', 'test@user.com', 'test-magic-issuer', 'test-magic');
+
+INSERT INTO public.user ( name, email, issuer, public_address)
+VALUES ('test-upload-user', 'test-upload@user.com', 'test-upload', 'test-upload');
+
+INSERT INTO public.user ( name, email, issuer, public_address)
+VALUES ('test-status-user', 'test-status@user.com', 'test-status', 'test-status');
+
+INSERT INTO public.user ( name, email, issuer, public_address)
+VALUES ('test-pinning-user', 'test-pinning@user.com', 'test-pinning', 'test-pinning');
+
+INSERT INTO public.user ( name, email, issuer, public_address)
+VALUES ('test-pinning-2-user', 'test-pinning2@user.com', 'test-pinning-2', 'test-pinning-2');
 
 INSERT INTO public.user (id, name, email, issuer, public_address)
-VALUES (2, 'test-upload-user', 'test-upload@user.com', 'test-upload', 'test-upload');
+VALUES (6, 'test-pinning-and-restriction-user', 'test-pinning-and-restriction@user.com', 'test-pinning-and-restriction', 'test-pinning-and-restriction');
 
 INSERT INTO public.user (id, name, email, issuer, public_address)
-VALUES (3, 'test-status-user', 'test-status@user.com', 'test-status', 'test-status');
-
-INSERT INTO public.user (id, name, email, issuer, public_address)
-VALUES (4, 'test-pinning-user', 'test-pinning@user.com', 'test-pinning', 'test-pinning');
-
-INSERT INTO public.user (id, name, email, issuer, public_address)
-VALUES (5, 'test-pinning-2-user', 'test-pinning2@user.com', 'test-pinning-2', 'test-pinning-2');
+VALUES (7, 'test-restricted-user', 'test-restriction@user.com', 'test-restriction', 'test-restriction');
 
 INSERT INTO auth_key (name, secret, user_id)
 VALUES ('test-key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LW1hZ2ljLWlzc3VlciIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtbWFnaWMtaXNzdWVyIn0.p2nD1Q4X4Z6DtJ0vxk35hhZOqSPVymhN5uyXrXth1zs', 1);
@@ -29,6 +35,11 @@ INSERT INTO auth_key (name, secret, user_id)
 VALUES ('test-pinning', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmciLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2MzM5NTczODk4NzIsIm5hbWUiOiJ0ZXN0LXBpbm5pbmcifQ.li8kWohG90P8TdsKL_dUStJb2f6-43G98uZsLrVEaho', 4);
 INSERT INTO auth_key (name, secret, user_id)
 VALUES ('test-pinning-2', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmctMiIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtcGlubmluZy0yIn0.B0lwP5T2KLP0D1XGvz_f7AJcJ_j65NPN3BsxZ4Io2-g', 5);
+
+-- Used to test account restriction
+INSERT INTO auth_key (name, secret, user_id)
+VALUES  ('test-pinning-and-restriction', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmctYW5kLXJlc3RyaWN0aW9uIiwiaXNzIjoid2ViMy1zdG9yYWdlIiwiaWF0IjoxNjMzOTU3Mzg5ODcyLCJuYW1lIjoidGVzdC1waW5uaW5nLWFuZC1yZXN0cmljdGlvbiJ9.L2SCQ7C-gDm840m2l2shE-0HqiTwnWDXCwHjpT61msk', 6),
+        ('test-restriction', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXJlc3RyaWN0aW9uIiwiaXNzIjoid2ViMy1zdG9yYWdlIiwiaWF0IjoxNjMzOTU3Mzg5ODcyLCJuYW1lIjoidGVzdC1yZXN0cmljdGlvbiJ9.uAklG7dHOxRD85c564RBcBqeFGUGNBper7VLaXBGnFg', 7);
 
 -- /user route data testing
 INSERT INTO content (cid)
@@ -54,8 +65,9 @@ VALUES (3, 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 'bafyb
        (1, 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 'Car', 'image.jpg', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z')
        ;
 
-INSERT INTO pin_location (peer_id, peer_name, region)
-VALUES ('12D3KooWR1Js', 'who?', 'where?');
+INSERT INTO pin_location (peer_id, peer_name, ipfs_peer_id, region)
+VALUES ('12D3KooEL1Jc', 'who?', '12D3KooWR1Js', 'where?'),
+       ('12D3KooEL1Jd', 'whoTwo?', '12D3KooWR1Jd', 'whereTwo?');
 
 INSERT INTO pin (status, content_cid, pin_location_id, inserted_at, updated_at)
 VALUES ('Pinned', 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
@@ -84,11 +96,14 @@ VALUES (
   1669394359626000000
 );
 
--- user 'test-pinning' is authorized
-INSERT INTO pinning_authorization (user_id)
-VALUES (4);
-INSERT INTO pinning_authorization (user_id)
-VALUES (5);
+INSERT INTO user_tag (user_id, tag, value, reason, deleted_at)
+VALUES  (4, 'HasPsaAccess', true, 'test', null),
+        (5, 'HasPsaAccess', true, 'test', null),
+        (6, 'HasPsaAccess', true, 'test', null),
+        (5, 'HasAccountRestriction', true, 'Revoked access', '2021-07-14T19:27:14.934572+00:00'),
+        (5, 'HasAccountRestriction', false, 'Re-enabled access', null),
+        (6, 'HasAccountRestriction', true, 'Revoked access', null),
+        (7, 'HasAccountRestriction', true, 'Revoked access', null);
 
 INSERT INTO content (cid, dag_size)
 VALUES  ('bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4', 10000),
@@ -107,6 +122,8 @@ VALUES
        ('PinError', 'bafybeia45bscvzxngto555xsel4gwoclb5fxd7zpxige7rl3maoleznswu', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
        ('Pinning', 'bafybeidw7pc6nvm7u4rfhpctac4qgtpmwxapw4duugvsl3ppivvzibdlgy', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
        ('Pinning', 'bafybeidrzt6t4k25qjeasydgi3fyh6ejos5x4d6tk2pdzxkb66bkomezy4', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
+       ('Unpinned', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47s5', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
+       ('Unpinned', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47s5', 2, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
        ('Pinning', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00');
 
 INSERT INTO psa_pin_request (id, auth_key_id, content_cid, source_cid, name, origins, meta, inserted_at, updated_at)
@@ -116,6 +133,7 @@ VALUES ('ab62cf3c-c98d-494b-a756-b3a3fb6ddcab', 4, 'bafybeid46f7zggioxjm5p2ze2l6
        ('63992f6e-5bbf-4d01-8a69-9e0561c38b04', 4, 'bafybeidw7pc6nvm7u4rfhpctac4qgtpmwxapw4duugvsl3ppivvzibdlgy', 'bafybeidw7pc6nvm7u4rfhpctac4qgtpmwxapw4duugvsl3ppivvzibdlgy', 'Image.jpeg', null, '{"app_id": "99986338-1113-4706-8302-4420da6158bb", "region": "europe", "vendor_policy": "1"}', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('3fa630f2-f22c-486f-ad1c-b36d4d740e31', 4, 'bafybeidrzt6t4k25qjeasydgi3fyh6ejos5x4d6tk2pdzxkb66bkomezy4', 'bafybeidrzt6t4k25qjeasydgi3fyh6ejos5x4d6tk2pdzxkb66bkomezy4', 'Image.png', null, '{"app_id": "99986338-1113-4706-8302-4420da6158bb"}', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('5c7e7885-7f68-462d-bdfb-3f0abfb367b5', 4, 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 'Image.jpg', null, null, '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       ('5c7e7885-7f68-462d-bdfb-3f0abfb367b6', 4, 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47s5', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 'Image.jpg', null, null, '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('3a19e48d-d6db-4f36-b686-fb8bc37c9d48', 2, 'bafybeiaqu6ijhfhwzjipwesbqf4myz6uczyigahib5joqbo5jw2xmjczfa', 'bafybeiaqu6ijhfhwzjipwesbqf4myz6uczyigahib5joqbo5jw2xmjczfa', 'Image.jpg', null, null, '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('9be23b92-918e-44b8-98f4-6043c346fb4e', 2, 'bafybeidqts3rbwkprggjojbvcxy4jzpgzgcvs4a73y3gx2jjxphjeerbcy', 'bafybeidqts3rbwkprggjojbvcxy4jzpgzgcvs4a73y3gx2jjxphjeerbcy', 'Image.jpg', null, null, '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('aa62cf3c-c98d-494b-a756-b3a3fb6ddcab', 1, 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4', 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4', 'ReportDoc.pdf', '["/ip6/2606:4700:60::6/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N", "/ip4/172.65.0.13/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx4N"]', null, '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z')
