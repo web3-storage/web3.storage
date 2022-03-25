@@ -394,3 +394,26 @@ BEGIN
         ((data ->> 'has_v2_sig')::BOOLEAN = name.has_v2_sig AND (data ->> 'seqno')::BIGINT = name.seqno AND (data ->> 'validity')::BIGINT = name.validity AND DECODE(data ->> 'record', 'base64') > DECODE(name.record, 'base64'));
 END
 $$;
+
+
+-- Used to update content dag size using cargo actual_size column
+CREATE OR REPLACE FUNCTION fix_dag_size(start timestamptz) RETURNS VOID
+    LANGUAGE plpgsql
+    volatile
+    PARALLEL UNSAFE
+AS
+$$
+BEGIN
+ 
+  UPDATE public.content c
+    SET dag_size = size_actual
+  FROM cargo.dags d
+  WHERE
+      c.cid = d.cid_v1 AND
+      c.dag_size > 0 AND 
+      d.size_actual > 0 AND 
+      c.dag_size != d.size_actual AND 
+      c.inserted_at > start;
+END
+$$;
+

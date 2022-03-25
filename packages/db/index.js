@@ -587,6 +587,7 @@ export class DBClient {
    */
   async createPinSyncRequests (pinSyncRequests) {
     /** @type {{ error: PostgrestError }} */
+    this._client.schema = 'cargo'
     const { error } = await this._client
       .from('pin_sync_request')
       .upsert(pinSyncRequests.map(psr => ({
@@ -1073,6 +1074,20 @@ export class DBClient {
         validity: validity.toString()
       }
     })
+
+    if (error) {
+      throw new DBError(error)
+    }
+  }
+
+  /**
+   * Update public.content.dag_size using cargo.dag.size_actual.
+   * The latter is more accurate and does not rely on metadata.
+   *
+   * @param {Date} from Date to start update from
+   */
+  async fixDagSize (from) {
+    const { error } = await this._client.rpc('fix_dag_size', { start: from })
 
     if (error) {
       throw new DBError(error)
