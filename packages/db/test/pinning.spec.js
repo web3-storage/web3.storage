@@ -80,6 +80,22 @@ describe('Pin Request', () => {
         peerName: 'web3-storage-sv16',
         region: 'region'
       }
+    },
+    {
+      status: 'Pinned',
+      location: {
+        peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK8',
+        peerName: 'web3-storage-sv17',
+        region: 'region'
+      }
+    },
+    {
+      status: 'Pinned',
+      location: {
+        peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK9',
+        peerName: 'web3-storage-sv18',
+        region: 'region'
+      }
     }
   ]
 
@@ -101,7 +117,7 @@ describe('Pin Request', () => {
     aPinRequestInput = {
       sourceCid: cids[0],
       contentCid: normalizedCids[0],
-      dagSize: null,
+      dagSize: dagSize1,
       meta,
       origins,
       pins,
@@ -151,14 +167,14 @@ describe('Pin Request', () => {
 
     it('returns the right pins', async () => {
       // Only checking statuses for simplicity
-      const statuses = aPinRequestOutput.pins
-        .map((p) => p.status)
-      assert.deepStrictEqual(statuses, [pins[0].status, pins[1].status])
+      const statuses = aPinRequestOutput.pins.map((p) => p.status)
+      const expected = pins.map((p) => p.status)
+      assert.deepStrictEqual(statuses, expected, 'pin statuses match')
     })
 
-    it('includes pinned size in used storage', async () => {
+    it('sums pinned size for unique CIDs in used storage', async () => {
       let usedStorage = await client.getUsedStorage(user._id)
-      assert.strictEqual(usedStorage.pinned, 0, 'used storage for pinned')
+      assert.strictEqual(usedStorage.pinned, dagSize1, 'used storage for pinned')
 
       await client.createPsaPinRequest({
         sourceCid: cids[1],
@@ -171,7 +187,7 @@ describe('Pin Request', () => {
       })
 
       usedStorage = await client.getUsedStorage(user._id)
-      assert.strictEqual(usedStorage.pinned, dagSize1, 'used storage for pinned')
+      assert.strictEqual(usedStorage.pinned, dagSize1 * 2, 'used storage for pinned')
     })
   })
 
@@ -195,9 +211,9 @@ describe('Pin Request', () => {
 
     it('returns the right pins', async () => {
       // Only checking statuses for simplicity
-      const statuses = savedPinRequest.pins
-        .map((p) => p.status)
-      assert.deepStrictEqual(statuses, [pins[0].status, pins[1].status])
+      const statuses = savedPinRequest.pins.map((p) => p.status)
+      const expected = pins.map((p) => p.status)
+      assert.deepStrictEqual(statuses, expected, 'pin statuses match')
     })
 
     it('throws if does not exists', async () => {
