@@ -4,7 +4,7 @@ import assert from 'assert'
 import { DBClient } from '../index.js'
 import { createCargoDag, createUpload, createUser, createUserAuthKey, dbEndpoint, getUpload, randomCid, token } from './utils.js'
 
-describe('Fix dag sizes migration', () => {
+describe.only('Fix dag sizes migration', () => {
   /** @type {DBClient} */
   const dbClient = new DBClient({
     endpoint: dbEndpoint,
@@ -14,6 +14,7 @@ describe('Fix dag sizes migration', () => {
   let user
   let authKey
   let contentItems
+  let updatedCids
 
   beforeEach(async () => {
     user = await createUser(dbClient)
@@ -42,7 +43,7 @@ describe('Fix dag sizes migration', () => {
       ])
     }
 
-    await dbClient.fixDagSize(new Date(2010, 0, 0))
+    updatedCids = await dbClient.fixDagSize(new Date(2010, 0, 0))
   })
 
   it('updates the incorrect sizes', async () => {
@@ -51,9 +52,11 @@ describe('Fix dag sizes migration', () => {
       const u = await getUpload(dbClient, c[0], user._id)
       assert.strictEqual(u.dagSize, c[2])
     }))
+    assert.strictEqual(wrongSizes.length, updatedCids.length)
+    assert(wrongSizes.map(e => e[0]).every((e) => updatedCids.includes(e)))
   })
 
-  it('does not mess with correct ones', async () => {
+  it('does not update correct ones', async () => {
     const correctSizes = contentItems.filter((c) => c[1] === c[2])
     await Promise.all(correctSizes.map(async c => {
       const u = await getUpload(dbClient, c[0], user._id)

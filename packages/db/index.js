@@ -1085,12 +1085,17 @@ export class DBClient {
    * The latter is more accurate and does not rely on metadata.
    *
    * @param {Date} from Date to start update from
+   * @returns the cids of modified content
    */
   async fixDagSize (from) {
-    const { error } = await this._client.rpc('fix_dag_size', { start: from })
+    /** @type {{ data: Array<{cid: string}>, error: PostgrestError }} */
+    const { data, error } = await this._client
+      .rpc('fix_dag_size', { start: from })
 
     if (error) {
       throw new DBError(error)
     }
+
+    return data.map(r => r.cid)
   }
 }

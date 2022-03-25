@@ -67,4 +67,5 @@ export class DBClient {
   deleteKey (id: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
   getUserTags (userId: number): Promise<{ tag: string, value: string }[]>
+  fixDagSize (from: Date): Promise<string[]>
 }
