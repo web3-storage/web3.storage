@@ -14,6 +14,7 @@ services:
       PGRST_DB_ANON_ROLE: postgres
       PGRST_JWT_SECRET: super-secret-jwt-token-with-at-least-32-characters-long
       PGRST_LOG_LEVEL: info
+      PGRST_DB_SCHEMAS: public, cargo
   db:
     build:
       context: ./postgres

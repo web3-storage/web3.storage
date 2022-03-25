@@ -1,4 +1,19 @@
+import { sha256 } from 'multiformats/hashes/sha2'
+import * as pb from '@ipld/dag-pb'
+import { CID } from 'multiformats/cid'
+import { PostgrestClient } from '@supabase/postgrest-js'
+
 export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU'
+export const dbEndpoint = 'http://127.0.0.1:3000'
+
+/**
+ * @param {number} code
+ * @returns {Promise<string>}
+ */
+export async function randomCid (code = pb.code) {
+  const hash = await sha256.digest(Buffer.from(`${Math.random()}`))
+  return CID.create(1, code, hash).toString()
+}
 
 /**
  * @param {import('../index').DBClient} dbClient
@@ -65,11 +80,11 @@ export async function createUpload (dbClient, user, authKey, cid, options = {}) 
 
   await dbClient.createUpload({
     user: user,
-    contentCid: cid,
-    sourceCid: cid,
+    contentCid: cid || randomCid(),
+    sourceCid: cid || randomCid(),
     authKey: authKey,
     type: options.type || 'Upload',
-    dagSize: options.dagSize || 1000,
+    dagSize: options.dagSize === undefined ? 1000 : options.dagSize,
     name: options.name || `Upload_${new Date().toISOString()}`,
     pins: options.pins || defaultPinData,
     backupUrls: options.backupUrls || [initialBackupUrl]
@@ -94,4 +109,48 @@ export async function getUpload (dbClient, cid, userId) {
  */
 export async function getPinSyncRequests (dbClient, size = 10) {
   return dbClient.getPinSyncRequests({ size })
+}
+
+/**
+ *
+ * @param {import('../index').DBClient} dbClient
+ * @param {object} [data]
+ * @param {string} [data.cid_v1]
+ * @param {number} [data.size_actual]
+ * @param {Date} [data.entry_created]
+ * @param {Date?} [data.entry_analyzed]
+ * @param {Date} [data.entry_last_updated]
+ *
+ */
+export async function createCargoDag (dbClient, data = {}) {
+  const now = new Date()
+  const dagData = {
+    cid_v1: await randomCid(),
+    size_actual: Math.ceil(Math.random() * 100000),
+    entry_created: now,
+    entry_analyzed: now,
+    entry_last_updated: now,
+    ...data
+  }
+
+  // For analyzis_markers constraint on dags table
+  if (dagData.size_actual === null || dagData.size_actual === undefined) {
+    dagData.entry_analyzed = null
+  }
+
+  const client = new PostgrestClient(dbEndpoint, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: '*/*'
+    },
+    schema: 'cargo'
+  })
+
+  const { error } = await client
+    .from('dags')
+    .upsert(dagData)
+
+  if (error) {
+    console.error(error)
+  }
 }
