@@ -78,7 +78,7 @@ async function retrieveFiles (cid) {
   // unpack File objects from the response
   const files = await res.files()
   for (const file of files) {
-    console.log(`${file.cid} -- ${file.path} -- ${file.size}`)
+    console.log(`${file.cid} -- ${file.name} -- ${file.size}`)
   }
 }
 // #endregion retrieve-unpack-files
