@@ -34,7 +34,7 @@ Here's a brief look at how to run the Node.js example:
 1. Run the `put-files.js` script, along with the associated variables:
 
     ```shell
-    node put-files.js --token="your-token" ~/file.txt
+    node put-files.js --token="your-token"
     ```
 
 1. That's it!
