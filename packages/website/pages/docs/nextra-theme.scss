@@ -1,18 +1,6 @@
 /* This is a custom scoped export of the themes styles */
 
 /*! tailwindcss v2.2.19 | MIT License | https://tailwindcss.com*/ /*! modern-normalize v1.1.0 | MIT License | https://github.com/sindresorhus/modern-normalize */
-.nextra-container html {
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
-  tab-size: 4;
-  line-height: 1.15;
-  -webkit-text-size-adjust: 100%;
-}
-.nextra-container body {
-  margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
-    sans-serif, Apple Color Emoji, Segoe UI Emoji;
-}
 .nextra-container abbr[title] {
   -webkit-text-decoration: underline dotted;
   text-decoration: underline dotted;
@@ -179,15 +167,6 @@
 .nextra-container table {
   border-collapse: collapse;
 }
-.nextra-container h1,
-.nextra-container h2,
-.nextra-container h3,
-.nextra-container h4,
-.nextra-container h5,
-.nextra-container h6 {
-  font-size: inherit;
-  font-weight: inherit;
-}
 .nextra-container a {
   --tw-text-opacity: 1;
   color: rgba(51, 107, 173, var(--tw-text-opacity));
@@ -295,54 +274,9 @@
   --tw-text-opacity: 1;
   color: rgba(247, 250, 252, var(--tw-text-opacity));
 }
-.nextra-container h1 {
-  margin-top: 0.5rem;
-  font-size: 2.25rem;
-  line-height: 1.25;
-  font-weight: 700;
-  letter-spacing: -0.015em;
-}
-.nextra-container h2 {
-  margin-top: 2.5rem;
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  padding-bottom: 0.25rem;
-}
 .nextra-container .dark h2 {
   --tw-border-opacity: 1;
   border-color: rgba(26, 32, 44, var(--tw-border-opacity));
-}
-.nextra-container h3 {
-  margin-top: 2rem;
-  font-size: 1.5rem;
-  line-height: 2rem;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-}
-.nextra-container h4 {
-  font-size: 1.25rem;
-}
-.nextra-container h4,
-.nextra-container h5 {
-  margin-top: 2rem;
-  line-height: 1.75rem;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-}
-.nextra-container h5 {
-  font-size: 1.125rem;
-}
-.nextra-container h6 {
-  margin-top: 2rem;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-}
-.nextra-container p {
-  line-height: 1.75rem;
 }
 .nextra-container .table-container:not(:first-child),
 .nextra-container blockquote:not(:first-child),

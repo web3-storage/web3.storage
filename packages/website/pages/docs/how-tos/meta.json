@@ -1,0 +1,10 @@
+{
+  "store": "Store",
+  "retrieve": "Retrieve",
+  "query": "Query",
+  "list": "List",
+  "list-directory-contents": "List directory contents",
+  "work-with-car-files": "Work with Content Archives",
+  "generate-api-token": "Generate an API token",
+  "troubleshooting": "Troubleshooting"
+}

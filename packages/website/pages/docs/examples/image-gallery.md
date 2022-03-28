@@ -5,7 +5,7 @@ description: Learn about Web3.Storage by walking through the code for a simple i
 ---
 
 <!-- imports for code snippets -->
-import CodeSnippet from '../../src/components/CodeSnippet'
+import CodeSnippet from 'components/mdx/CodeSnippet';
 import storageJsSource from '!!raw-loader!../../code-snippets/external/example-image-gallery/src/js/storage.js'
 
 To demonstrate how to use the Web3.Storage JavaScript library to build an application, we've written a simple image gallery app for uploading your favorite memes and GIFs to the decentralized web.

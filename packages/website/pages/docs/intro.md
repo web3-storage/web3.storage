@@ -2,7 +2,6 @@
 title: Welcome
 description: "Learn how to use Web3.Storage to decentralize your data storage without all the complicated details."
 id: intro
-slug: /
 ---
 
 import Callout from 'nextra-theme-docs/callout';

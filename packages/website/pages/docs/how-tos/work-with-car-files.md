@@ -4,9 +4,9 @@ sidebar_label: Work with Content Archives
 description: Learn how to work with Content Archives of IPLD data.
 ---
 
-<!-- imports for code snippets -->
-import CodeSnippet from '../../src/components/CodeSnippet'
-import dagCborSource from '!!raw-loader!../../code-snippets/how-to/dag-cbor.js'
+import Callout from 'nextra-theme-docs/callout';
+import CodeSnippet from from 'components/mdx/CodeSnippet';
+import dagCborSource from '!!raw-loader!../code-snippets/how-to/dag-cbor.js';
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -191,7 +191,8 @@ This section will demonstrate a few ways to split CARs in a way that's acceptabl
         join
   ```
 
-:::tip Running with npx
+<Callout>
+####tip Running with npx
   You can run the `carbites` command without installing it globally using the `npx` command, which is included with Node.js:
 
   ```shell
@@ -207,7 +208,7 @@ This section will demonstrate a few ways to split CARs in a way that's acceptabl
   ```
 
   After that, you can use `npx carbites-cli` instead of `carbites` for any of the commands below!
-:::
+</Callout>
 
   #### Splitting CARs
 

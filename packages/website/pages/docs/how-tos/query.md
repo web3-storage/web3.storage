@@ -5,9 +5,9 @@ description: Learn how to query Web3.Storage in this quick how-to guide.
 ---
 
 <!-- imports for code snippets and tabs -->
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import CodeSnippet from '../../src/components/CodeSnippet'
+import Callout from 'nextra-theme-docs/callout';
+import { Tabs, TabItem } from 'components/mdx/tabs';
+import CodeSnippet from from 'components/mdx/CodeSnippet';
 import howtoSource from '!!raw-loader!../../code-snippets/how-to/index.js'
 import golangStatus from '!!raw-loader!../../code-snippets/how-to/golang/status/status.go'
 
@@ -52,9 +52,10 @@ To create a `Web3Storage` client object, we need to pass an access token into th
 
 <CodeSnippet lang="js" src={howtoSource} region="makeStorageClient" />
 
-:::tip
+<Callout>
+#### tip
 Don't have an access token? Get your Web3.Storage API token in just a few minutes using the instructions in the [quickstart guide.][quickstart]
-:::
+</Callout>
 
 </TabItem>
 <TabItem value="go" label="Go">

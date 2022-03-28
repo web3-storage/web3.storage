@@ -1,5 +1,7 @@
 // theme.config.js
 const theme = {
+  prev: true,
+  next: true,
   projectLink: '',
   projectLinkIcon: null,
   docsRepositoryBase: '',

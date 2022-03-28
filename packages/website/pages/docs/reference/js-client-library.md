@@ -4,19 +4,22 @@ sidebar_label: JavaScript client library
 description: Integrate Web3.Storage into your code using the JavaScript client library.
 ---
 
+import Callout from 'nextra-theme-docs/callout';
+
 To use the JavaScript client library for Web3.Storage, you must first [obtain a free API token](../how-tos/generate-api-token.md).
 
 The client library automatically packs your uploads into a content addressible archive (CAR) for uploading to the Web3.Storage service, which [stores](#store-files) data as blocks prefixed with the [_content identifier_ (CID)](../concepts/content-addressing.md#cids-location-independent-globally-unique-keys) derived from a cryptographic hash of the data. You can then use a file's CID to [retrieve](#retrieve-files) it.
 
 This page covers the core functionality of the JavaScript client. See the [JavaScript utility libraries page](./js-utilities.md) for some additional packages that may be useful when working with Web3.Storage.
 
-:::warning Minimum requirements
+<Callout>
+#### warning Minimum requirements
 While we recommend that you install the latest _stable_ version of the following software, you must have _at least_:
 
 - [NPM](https://www.npmjs.com/) `7.0.0`
 - [Node.js](https://nodejs.org/en/) `14.0.0`
 - [Webpack](https://webpack.js.org/) `5.0.0`
-:::
+</Callout>
 
 ## Constructor
 
@@ -333,9 +336,10 @@ _Number._ The `dagSize` property is the total size, in bytes, of the [Merkle Dir
 
 _String._ The `created` property gives the creation date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
 
-:::tip
+<Callout>
+#### tip
 The `created` date returned by a call to `status()` is the date and time that the CID was first seen on the network. The date given by a call to `list()` is the date and time of a particular upload via a call to `put()`. These can differ if multiple users upload the same file(s).
-:::
+</Callout>
 
 </details>
 
@@ -441,9 +445,10 @@ The return value for `list()` is an `AsyncIterable` object, containing objects w
 }
 ```
 
-:::tip
+<Callout>
+#### tip
 The `created` date on these objects are the date and time that the user uploaded via `put()`. The `created` date given by a call to `status()` is the date and time that the CID was first seen on the network. These can differ if multiple users uploaded the same file(s).
-:::
+<Callout>
 
 ## Store CAR files
 

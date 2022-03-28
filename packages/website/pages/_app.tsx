@@ -17,12 +17,13 @@ const App = ({ Component, pageProps }: any) => {
   const productRoutes = ['/login', '/account', '/tokens'];
   // const marketingRoutes = ['/', '/pricing', '/about', '/faq', '/terms'];
   const productApp = productRoutes.includes(pathname);
+  const bodyClass = pathname.includes('docs') ? 'docs-site' : productApp ? 'product-app' : 'marketing-site';
 
   return (
     <AppProviders authorizationProps={{ ...pageProps }}>
       <Metadata {...pageProps} />
       <RestrictedRoute {...pageProps}>
-        <div id="master-container" className={clsx(productApp ? 'product-app' : 'marketing-site')}>
+        <div id="master-container" className={clsx(bodyClass)}>
           {productApp && <div className="corkscrew-background"></div>}
           <MessageBanner />
           <Navigation isProductApp={productApp} />

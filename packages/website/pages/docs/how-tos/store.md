@@ -4,14 +4,12 @@ sidebar_label: Store
 description: Learn how to store your data on the decentralized web with Web3.Storage.
 ---
 
-<!-- imports for code snippets -->
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import CodeSnippet from '../../src/components/CodeSnippet'
-import howtoSource from '!!raw-loader!../../code-snippets/how-to/index.js'
-import platformBrowserSource from '!!raw-loader!../../code-snippets/how-to/platform-browser.js'
-import platformNodeSource from '!!raw-loader!../../code-snippets/how-to/platform-node.js'
-import golangUpload from '!!raw-loader!../../code-snippets/how-to/golang/upload/upload.go'
+import Callout from 'nextra-theme-docs/callout';
+import CodeSnippet from 'components/mdx/CodeSnippet';
+import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
+import platformBrowserSource from '!!raw-loader!../../../assets/code-snippets/how-to/platform-browser.js'
+import platformNodeSource from '!!raw-loader!../../../assets/code-snippets/how-to/platform-node.js'
+import golangUpload from '!!raw-loader!../../../assets/code-snippets/how-to/golang/upload/upload.go'
 
 In this how-to guide, **you'll learn how to store data programmatically for your development projects using the Web3.Storage client libraries** in [JavaScript][reference-js] and [Go][reference-go]. This includes making your data available on the decentralized [IPFS](https://ipfs.io) network with persistent long-term storage provided by [Filecoin](https://filecoin.io) — all for free.
 
@@ -24,9 +22,10 @@ If you're using another language, see the [HTTP API reference][reference-http] f
 Uploading data to Web3.Storage using a client library requires a free API token, which in turn requires a Web3.Storage account. If you already have an account and a token, read on. If not, have a look at the [quickstart guide][quickstart-guide] to get up and running in just a few minutes.
 
 
-:::danger CAUTION
+<Callout emoji="💡">
+#### CAUTION
 All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. Do not store any private or sensitive information in an unencrypted form using Web3.Storage.
-:::
+</Callout>
 
 ## Installing the client
 
@@ -174,17 +173,19 @@ func opendir() {
 
 </Tabs>
 
-:::tip 
+<Callout emoji="💡">
+#### Tip
 **When uploading multiple files, try to give each file a unique name.** All the files in a `put` request will be bundled into one content archive, and linking to the files inside is much easier if each file has a unique, human-readable name.
-:::
+</Callout>
 
 ## Uploading to Web3.Storage
 
 Once your files are ready, uploading is a simple method call on the client object.
 
-:::warning IMPORTANT
+<Callout emoji="💡">
+#### IMPORTANT
 Deleting files from the Web3.Storage site's [Files page][site-files] will remove them from the file listing for your account, but that doesn't prevent nodes on the [decentralized storage network][concepts-decentralized-storage] from retaining copies of the data indefinitely. Do not use Web3.Storage for data that may need to be permanently deleted in the future.
-:::
+</Callout>
 
 <Tabs groupId="lang">
 <TabItem value="js" label="JavaScript">

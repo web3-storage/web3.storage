@@ -5,9 +5,10 @@ description: Learn how to list the files you've uploaded to Web3.Storage in this
 ---
 
 <!-- imports for code snippets -->
-import CodeSnippet from '../../src/components/CodeSnippet'
-import howtoSource from '!!raw-loader!../../code-snippets/how-to/index.js'
-import exampleUpload from '!!raw-loader!../../code-snippets/how-to/example-listing-upload.json.txt'
+import Callout from 'nextra-theme-docs/callout';
+import CodeSnippet from 'components/mdx/CodeSnippet';
+import howtoSource from '!!raw-loader!../code-snippets/how-to/index.js'
+import exampleUpload from '!!raw-loader!../code-snippets/how-to/example-listing-upload.json.txt'
 
 In this how-to guide, you'll learn about the different ways that you can **list the files that you've uploaded to Web3.Storage.**
 Once you've [stored some files][howto-store] using Web3.Storage, you'll want to see a list of what you've uplodaded. There are two ways you can do this:
@@ -36,9 +37,10 @@ To create a `Web3Storage` client object, we need to pass an access token into th
 
 <CodeSnippet lang="js" src={howtoSource} region="makeStorageClient" />
 
-:::tip
+<Callout>
+#### tip
 You can use any API token associated with your account, not just the one you originally used to upload your files! See the [Generate API token page][howto-gen-token] for more about token management.
-:::
+</Callout>
 
 ### Listing your uploads
 
@@ -61,9 +63,10 @@ What do all those fields mean? Here's a summary:
 - `pins` contains an array of objects describing the IPFS nodes that have [pinned][ipfs-docs-pinning] the data, making it available for fast retrieval using the IPFS network.
 - `deals` contains an array of objects describing the Filecoin storage providers that have made [storage deals][fil-docs-deals]. These storage providers have committed to storing the data for an agreed period of time.
 
-:::tip Want more details about storage?
+<Callout>
+#### tip Want more details about storage?
 The `Upload` objects returned by the `list` method include some basic status information about how the data is stored on IPFS and Filecoin. For more details, including the identity of the storage providers hosting your data, you can [query an upload's status][howto-query] using the `cid`.
-:::
+</Callout>
 
 #### Listing a subset of uploads
 
