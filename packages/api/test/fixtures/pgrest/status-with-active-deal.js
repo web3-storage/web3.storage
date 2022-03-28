@@ -1,7 +1,7 @@
 export default {
   cid: 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm',
   created: '2021-07-14T19:27:14.934572+00:00',
-  dagSize: 101,
+  dagSize: 1000,
   pins: [
     {
       peerId: '12D3KooWR1Js',

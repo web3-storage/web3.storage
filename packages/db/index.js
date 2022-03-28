@@ -1,7 +1,7 @@
 import { PostgrestClient } from '@supabase/postgrest-js'
 
 import {
-  normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest
+  normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest, parseTextToNumber
 } from './utils.js'
 import { ConstraintError, DBError } from './errors.js'
 
@@ -190,20 +190,23 @@ export class DBClient {
   }
 
   /**
-   * Get used storage in bytes.
+   * Get used storage in bytes, both uploaded and pinned.
    *
    * @param {number} userId
-   * @returns {Promise<number>}
+   * @returns {Promise<import('./db-client-types').UsedStorage>}
    */
   async getUsedStorage (userId) {
-    /** @type {{ data: string, error: PostgrestError }} */
+    /** @type {{ data: { uploaded: string, pinned: string }, error: PostgrestError }} */
     const { data, error } = await this._client.rpc('user_used_storage', { query_user_id: userId }).single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    return data || 0 // No uploads for the user
+    return {
+      uploaded: parseTextToNumber(data.uploaded),
+      pinned: parseTextToNumber(data.pinned)
+    }
   }
 
   /**
