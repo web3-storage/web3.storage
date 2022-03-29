@@ -15,7 +15,7 @@ function NotFound (props) {
       path: location?.pathname ?? 'unknown',
       referrer: typeof window !== 'undefined' ? document.referrer : null
     })
-  })
+  }, [])
   return <OriginalNotFound {...props} />
 }
 
