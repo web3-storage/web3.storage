@@ -22,6 +22,8 @@ PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 
 CLUSTER_API_URL=http://127.0.0.1:9094/
 CLUSTER_IPFS_PROXY_API_URL=http://127.0.0.1:9095/api/v0/
+
+EMAIL_PROVIDER=dummy
 ```
 
 You also need to have:

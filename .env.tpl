@@ -48,6 +48,7 @@ NEXT_PUBLIC_ENV=dev
 
 CLUSTER_IPFS_PROXY_API_URL=http://127.0.0.1:9095/api/v0/
 
+EMAIL_PROVIDER=dummy
 
 ## ---- pinpin ----------------------------------------------------------------
 

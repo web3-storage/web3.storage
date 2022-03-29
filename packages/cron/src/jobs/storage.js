@@ -53,7 +53,7 @@ export async function checkStorageUsed (db) {
     users.forEach(async (user) => await emailService.sendEmail(
       user,
       emailNotification.emailType,
-      emailNotification.maxFrequencyDays
+      {daysSince: emailNotification.maxFrequencyDays}
     ))
   }
 
