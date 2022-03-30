@@ -24,16 +24,19 @@ export default function MessageBanner() {
 
   let maintenanceMessage = '';
 
+  const incidents = statusPageData?.incidents || [];
+
   const scheduledMaintenances =
     statusPageData?.scheduled_maintenances.filter(
       (/** @type {{ status: string; }} */ maintenance) => maintenance.status !== 'completed'
     ) || [];
-
   const { data: apiVersionData, error: apiVersionError } = useQuery('get-version', () => getVersion(), {
     enabled: (statusPageData && scheduledMaintenances.length === 0) || statusPageError !== null,
   });
 
-  if (scheduledMaintenances.length > 0) {
+  if (incidents.length > 0) {
+    maintenanceMessage = statusPageData?.incidents[0].incident_updates[0].body;
+  } else if (scheduledMaintenances.length > 0) {
     maintenanceMessage = statusPageData.scheduled_maintenances[0].incident_updates[0].body;
   }
 
