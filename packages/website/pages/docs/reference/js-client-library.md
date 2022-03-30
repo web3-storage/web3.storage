@@ -49,9 +49,8 @@ Store files using the `put()` method.
 
 ### Examples
 
-<Tabs groupId="js-lib">>
+<Tabs groupId="js-lib">
 <TabItem value="browser" label="Browser">
-
 In the browser, using a file chooser to prompt the user for files to store:
 
 ```javascript
@@ -63,7 +62,9 @@ const rootCid = await client.put(fileInput.files, {
   maxRetries: 3
 })
 ```
+
 </TabItem>
+
 <TabItem value="node" label="Node.js">
 In Node.js, using the `getFilesFromPath` helper to load `File` objects from a local path:
 
@@ -73,6 +74,7 @@ import { getFilesFromPath } from 'web3.storage'
 const files = await getFilesFromPath('./files')
 const rootCid = await client.put(files)
 ```
+
 </TabItem>
 </Tabs>
 
@@ -191,13 +193,13 @@ Returns `undefined` if there are no matches for the given CID.
 
 If found, the method returns a `Web3Response` object, which extends the [Fetch API response object](https://developer.mozilla.org/en-US/docs/Web/API/Response) to add two iterator methods unique to the Web3.Storage client library: `files()` and `unixFsIterator()`.
 
-<Tabs>
+<Tabs groupId="return">
 <TabItem value="file" label="Using File objects">
 Calling the `files()` method returns your requested files as an `Array<Web3File>` object, which is an iterable collection of `Web3File` objects. Each object represents a file that was uploaded in the CAR with the supplied CID.
 
 The `Web3File` type extends [the generic JavaScript `File` type](https://developer.mozilla.org/en-US/docs/Web/API/File), adding a `string` property for the CID of the given file named `cid`, as shown in the example below. This is different from the CID of the CAR that contains the file, which you specified when calling `get()`.
 </TabItem>
-<TabItem value="file" label="Using UnixFS objects">
+<TabItem value="file-unix" label="Using UnixFS objects">
 In addition to the `files()` method, you can also use the `unixFsIterator()` method. This returns your requested files as a  `AsyncIterable<UnixFS>` object, which is an iterable collection of [`UnixFS`](https://github.com/ipfs/js-ipfs-unixfs/blob/master/packages/ipfs-unixfs/README.md) objects. Each object represents a file that was uploaded in the CAR with the supplied CID.
 
 Using `unixFS` is helpful in cases where you expect large responses or responses containing many files, since it does not buffer all files in memory before returning. Instead, the returned async iterator `yield`s an object for each entry.
@@ -239,7 +241,7 @@ Retrieve metadata about your file by using the `status()` method and supplying t
 
 ### Examples
 
-<Tabs>
+<Tabs groupId="examples">
 <TabItem value="call" label="Call">
 
 Here's an example of a call to the `status()` method:
@@ -426,7 +428,7 @@ The return value for `list()` is an `AsyncIterable` object, containing objects w
 <Callout>
 #### tip
 The `created` date on these objects are the date and time that the user uploaded via `put()`. The `created` date given by a call to `status()` is the date and time that the CID was first seen on the network. These can differ if multiple users uploaded the same file(s).
-<Callout>
+</Callout>
 
 ## Store CAR files
 
@@ -511,7 +513,6 @@ const cid = await client.putCar(car, { onStoredChunk })
 
 <Accordion heading="decoders">
 [_BlockDecoder_](https://github.com/multiformats/js-multiformats#ipld-codecs-multicodec). Used to specify additional IPLD block decoders which interpret the data in the CAR file  and split it into multiple chunks. Note these are only required if the CAR file was not encoded using the default encoders: `dag-pb`, `dag-cbor` and `raw`.
-
 
 <CodeSnippet src={dagJsonSource} lang="js" />
 

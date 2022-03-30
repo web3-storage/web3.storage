@@ -6,5 +6,6 @@
   "list-directory-contents": "List directory contents",
   "work-with-car-files": "Work with Content Archives",
   "generate-api-token": "Generate an API token",
-  "troubleshooting": "Troubleshooting"
+  "troubleshooting": "Troubleshooting",
+  "pinning-services-api": "Pinning Services API"
 }

@@ -1,0 +1,6 @@
+{
+  "js-client-library": "JavaScript client library",
+  "js-utilities": "JavaScript utility libraries",
+  "go-client-library": "Go client library",
+  "http-api": "HTTP API"
+}
