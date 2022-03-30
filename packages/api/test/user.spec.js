@@ -28,7 +28,8 @@ describe('GET /user/account', () => {
     })
     assert(res.ok)
     const data = await res.json()
-    assert.deepStrictEqual(data.usedStorage, { uploaded: 0, pinned: 0, total: 0 })
+    assert.strictEqual(data.usedStorage.uploaded, 32000)
+    assert.strictEqual(data.usedStorage.pinned, 10000)
   })
 })
 

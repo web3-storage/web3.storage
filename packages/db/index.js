@@ -195,7 +195,7 @@ export class DBClient {
   }
 
   /**
-   * Get used storage in bytes.
+   * Get used storage in bytes, both uploaded and pinned.
    *
    * @param {number} userId
    * @returns {Promise<import('./db-client-types').UsedStorage>}
@@ -1144,7 +1144,7 @@ export class DBClient {
    * @param {string} key
    */
   async resolveNameRecord (key) {
-    /** @type {{ error: Error, data: Array<import('../db-client-types').NameItem> }} */
+    /** @type {{ error: Error, data: Array<import('./db-client-types').NameItem> }} */
     const { data, error } = await this._client
       .from('name')
       .select('record')

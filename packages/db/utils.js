@@ -107,10 +107,19 @@ const DEAL_STATUS = new Set([
   'active'
 ])
 
+/**
+ * Convert a number string to a number.
+ *
+ * Note:
+ * Conversion needed since Postgres BIGINT type is returned from DB as a string.
+ *
+ * @param {string} numberText
+ * @returns number
+ */
 export function parseTextToNumber (numberText) {
-  const number = Number(numberText)
-  if (!Number.isSafeInteger(number)) {
-    throw Error('Invalid number')
+  const num = Number(numberText)
+  if (!Number.isSafeInteger(num)) {
+    throw new Error('Invalid number.')
   }
-  return number
+  return num
 }

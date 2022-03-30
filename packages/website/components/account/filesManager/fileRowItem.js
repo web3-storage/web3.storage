@@ -163,8 +163,14 @@ const FileRowItem = props => {
         </span>
         {isHeader ? (
           <>
-            {storageProviders}
-            <Tooltip position="right" content={fileRowLabels.storage_providers.tooltip.header} />
+            <span className="th-content">
+              <span>{storageProviders}</span>
+              <Tooltip
+                position="right"
+                className="tooltip-sp"
+                content={fileRowLabels.storage_providers.tooltip.header}
+              />
+            </span>
           </>
         ) : !storageProviders.length ? (
           <>
