@@ -68,6 +68,7 @@
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-react": "7.28.0",
     "eslint-plugin-react-hooks": "4.3.0",
+    "example-image-gallery": "github:web3-storage/example-image-gallery#main",
     "git-rev-sync": "^3.0.2",
     "git-revision-webpack-plugin": "^5.0.0",
     "husky": "4.3.8",

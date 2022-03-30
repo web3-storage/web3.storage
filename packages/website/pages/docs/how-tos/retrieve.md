@@ -1,14 +1,13 @@
 ---
 title: How to retrieve data from Web3.Storage
-sidebar_label: Retrieve
 description: Learn how to retrieve data stored using Web3.Storage in this quick how-to guide.
 ---
 
-import Callout from 'nextra-theme-docs/callout';
 import { Tabs, TabItem } from 'components/mdx/tabs';
-import CodeSnippet from from 'components/mdx/CodeSnippet';
-import howtoSource from '!!raw-loader!../code-snippets/how-to/index.js'
-import golangRetrieve from '!!raw-loader!../code-snippets/how-to/golang/retrieve/retrieve.go'
+import Callout from 'nextra-theme-docs/callout';
+import CodeSnippet from 'components/mdx/CodeSnippet';
+import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
+import golangRetrieve from '!!raw-loader!../../../assets/code-snippets/how-to/golang/retrieve/retrieve.go';
 
 # How to retrieve data from Web3.Storage
 
@@ -28,7 +27,17 @@ When you [store data using the Web3.Storage client][howto-store], the `put` meth
 
 You can use an IPFS gateway to view a list of all the files in that directory from your browser. To do so, simply create a gateway URL. For example, if your CID is `bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu`, you can make a URL for the `dweb.link` gateway as follows: [bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link](https://bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link/). Follow that link, and you'll see a page similar to this:
 
-![Screenshot of an IPFS gateway directory listing](./images/gateway-directory-listing.png)
+![Screenshot of an IPFS gateway directory listing](/images/docs/gateway-directory-listing.png)
+
+If you want to link directly to a file within that directory, just add the file path after the CID portion of the link. For example: [bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link/not-distributed.jpg](https://bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link/not-distributed.jpg) could be used as a shareable link for your new favorite wallpaper.
+
+You can easily fetch any data stored using Web3.Storage using an IPFS HTTP gateway. Because IPFS is a peer-to-peer, decentralized network, you can use any public HTTP gateway to fetch your data. In this guide, we'll use the gateway at `dweb.link`, but you can see more worldwide gateways on the [IPFS Public Gateway Checker](https://ipfs.github.io/public-gateway-checker/).
+
+When you [store data using the Web3.Storage client][howto-store], the `put` method returns an [IPFS content identifier (CID)][ipfs-docs-cid] string. That CID points to an IPFS directory that contains all the files you passed in using the `put` method.
+
+You can use an IPFS gateway to view a list of all the files in that directory from your browser. To do so, simply create a gateway URL. For example, if your CID is `bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu`, you can make a URL for the `dweb.link` gateway as follows: [bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link](https://bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link/). Follow that link, and you'll see a page similar to this:
+
+![Screenshot of an IPFS gateway directory listing](/images/docs/gateway-directory-listing.png)
 
 If you want to link directly to a file within that directory, just add the file path after the CID portion of the link. For example: [bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link/not-distributed.jpg](https://bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link/not-distributed.jpg) could be used as a shareable link for your new favorite wallpaper.
 
@@ -63,9 +72,8 @@ If you have such a link, you can override the default filename by adding a query
 ## Using the client libraries
 
 <Tabs groupId="lang">
+
 <TabItem value="js" label="JavaScript">
-
-
 The Web3.Storage JavaScript client provides a `get` method that allows you to retrieve any IPFS content using that content's [content identifier (CID)][ipfs-docs-cid].
 
 First, you'll need to create a Web3.Storage client using your API token. Getting an API token is free, but you'll need a free Web3.Storage account. If you already have an account and a token, read on. If not, have a look at the [quickstart guide][quickstart-guide] to get up and running in just a few minutes.
@@ -94,50 +102,38 @@ Here's the example from above, now with the code to unpack and inspect the files
 
 <CodeSnippet lang="js" src={howtoSource} region="retrieve-unpack-files" />
 
-:::tip
+<Callout>
+##### tip
 Another option is to use the array of `unixFs` objects provided by the `unixFsIterator()` method to iterate through your files. While in the vast majority of cases you'll want to use the `files()` method outlined above, existing IPFS users may prefer interacting with `unixFs` objects if they have existing code or tooling that supports it. For more details, see the [JavaScript client library reference][reference-js].
-:::
+</Callout>
 
 </TabItem>
+
 <TabItem value="go" label="Go">
-
-
 The Go client library's [`Client` interface](https://pkg.go.dev/github.com/web3-storage/go-w3s-client#Client) provides a `Get` method that accepts a [`context.Context`](https://pkg.go.dev/context#Context) and a [`Cid`](https://pkg.go.dev/github.com/ipfs/go-cid#Cid) from the [`go-cid` library](https://pkg.go.dev/github.com/ipfs/go-cid). 
 
 The `Get` method returns a [`w3http.Web3Response`](https://pkg.go.dev/github.com/web3-storage/go-w3s-client/http#Web3Response), which is a standard [`http.Response`](https://pkg.go.dev/net/http#Response) with an additional [`Files` method](https://pkg.go.dev/github.com/web3-storage/go-w3s-client/http#Web3Response.Files) that provides access to the downloaded files.
 
-
 First, import the client package and a few other things we'll be using:
 
-
 <CodeSnippet lang="go" src={golangRetrieve} region="imports" />
-
 
 Assuming you've already [created a Client](https://pkg.go.dev/github.com/web3-storage/go-w3s-client#NewClient),
 you can use it to `Get` files by cid. The method below takes a CID string and converts it to a [`Cid` type](https://pkg.go.dev/github.com/ipfs/go-cid#Cid), which is what the `Get` method expects. You may not need this step if you're already using the `Cid` type in your code base.
 
-
 <CodeSnippet lang="go" src={golangRetrieve} region="retrieveFiles" />
-
 
 The `Files` method returns an [`fs.File`](https://pkg.go.dev/io/fs#File) that may be either a single file or a directory, depending on the CID that you requested. To distinguish, you can call `Stat` on the file and check the `IsDir` method of the returned [`fs.FileInfo`](https://pkg.go.dev/io/fs#FileInfo). If it is a directory, you can type-cast to the [`fs.ReadDirFile`](https://pkg.go.dev/io/fs#ReadDirFile) interface and use `ReadDirFile`'s `ReadDir` method to list the contents:
 
-
 <CodeSnippet lang="go" src={golangRetrieve} region="listDirectory" />
-
 
 Alternatively, you can use the second return value of the `Files` method, which is an [`fs.FS`](https://pkg.go.dev/io/fs#FS) "file system" that represents all files included in the download. The [`fs.ReadDir` function](https://pkg.go.dev/io/fs#ReadDir) takes an `fs.FS` and the name of a directory to read, which can be `"/"` to read the root:
 
-
 <CodeSnippet lang="go" src={golangRetrieve} region="listDirectoryUsingFilesystem" />
-
 
 The examples above only list the direct contents of a directory, without descending into nested subdirectories. You can pass the returned `fs.FS` to [`fs.WalkDir`](https://pkg.go.dev/io/fs#WalkDir) to walk the entire structure, including all nested folders:
 
-
 <CodeSnippet lang="go" src={golangRetrieve} region="walkDirectory" />
-
-
 </TabItem>
 </Tabs>
 
@@ -186,8 +182,6 @@ Sometimes you may need to just download a specific file to your computer using t
     ```shell
     curl https://bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq.ipfs.dweb.link/example.txt -o ~/output-file.txt
     ```
-
-
 </TabItem>
 <TabItem value="mac" label="macOS">
 

@@ -1,14 +1,13 @@
 ---
 title: How to query Web3.Storage
-sidebar_label: Query
 description: Learn how to query Web3.Storage in this quick how-to guide.
 ---
 
-import Callout from 'nextra-theme-docs/callout';
 import { Tabs, TabItem } from 'components/mdx/tabs';
-import CodeSnippet from from 'components/mdx/CodeSnippet';
-import howtoSource from '!!raw-loader!../../code-snippets/how-to/index.js'
-import golangStatus from '!!raw-loader!../../code-snippets/how-to/golang/status/status.go'
+import Callout from 'nextra-theme-docs/callout';
+import CodeSnippet from 'components/mdx/CodeSnippet';
+import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js';
+import golangStatus from '!!raw-loader!../../../assets/code-snippets/how-to/golang/status/status.go';
 
 # How to query Web3.Storage
 
@@ -19,7 +18,6 @@ When you [store a file][howto-store] with Web3.Storage, you receive a [content i
 This guide will show you how to use Web3.Storage's [JavaScript client library][reference-js-client] or [Go client library][reference-go-client] to get information about content stored on the network. To follow along, you'll need the API token from your Web3.Storage account. If you already have an account and a token, read on. If not, have a look at the [quickstart guide][quickstart] to get up and running in just a few minutes for free.
 
 ## Installing the client
-
 
 <Tabs groupId="lang">
 <TabItem value="js" label="JavaScript">
@@ -88,9 +86,10 @@ The client object's `status` method accepts a CID string and returns a JSON obje
 
 <CodeSnippet lang="js" src={howtoSource} region="query-status" />
 
-:::warning IMPORTANT 
+<Callout>
+##### warning IMPORTANT 
 **Remember to check the return value!** If you ask for the status of a CID that Web3.Storage doesn't know about, the `status` method will return `undefined` instead of a status object. Make sure to check that a return value exists before trying to use it, as we're doing above with the `if (status)` conditional statement.
-:::
+</Callout>
 
 If the given CID is valid and has been uploaded to Web3.Storage, the `status` method will return an object that looks similar to this:
 
@@ -171,9 +170,10 @@ What do all those fields mean? Here's a summary:
 
 For more details about the fields in this JSON response, including the format of the `pins` and `deals` objects, see the [JavaScript client library reference][reference-js-status].
 
-:::tip
+<Callout>
+##### tip
 If you're looking for info on files you've uploaded, you can also use the [Files page](https://web3.storage/files) on Web3.Storage to see the values for some of the more commonly-used attributes returned by `query()`, namely `created`, `cid`, `dagSize`, and the `status` and `deals` objects of `pins`.
-:::
+</Callout>
 
 </TabItem>
 <TabItem value="go" label="Go">

@@ -1,12 +1,12 @@
 ---
 title: Working with Content Archives
-sidebar_label: Work with Content Archives
 description: Learn how to work with Content Archives of IPLD data.
 ---
 
 import { Tabs, TabItem } from 'components/mdx/tabs';
 import Callout from 'nextra-theme-docs/callout';
-import CodeSnippet from from 'components/mdx/CodeSnippet';
+import CodeSnippet from 'components/mdx/CodeSnippet';
+import Accordion from 'components/mdx/Accordion';
 import dagCborSource from '!!raw-loader!../../../assets/code-snippets/how-to/dag-cbor.js';
 
 # Working with Content Archives
@@ -251,9 +251,10 @@ This section will demonstrate a few ways to split CARs in a way that's acceptabl
 
   The [carbites library][github-carbites-js] provides an interface for splitting CARs that can be invoked from your application code.
 
-:::tip You probably don't need this!
+<Callout>
+##### tip You probably don't need this!
   If you're using JavaScript, you can [use the Web3.Storage client][howto-store] to upload your data and let the client take care of CAR splitting for you. If you're sure you want to split CARs from JavaScript yourself, read on!
-:::
+</Callout>
 
   To split CARs from your JavaScript code, install the `carbites` package:
 
@@ -368,26 +369,23 @@ First, you'll need to import some things:
 
 Now we'll define a convenience function to encode an IPLD block of CBOR data and hash with SHA2-256:
 
-<details>
-  <summary>encodeCborBlock(value)</summary>
+<Accordion heading="encodeCborBlock(value)">
   <CodeSnippet lang="js" src={dagCborSource} region="encodeCborBlock" />
-</details>
+</Accordion>
 
 And a function to make a CAR from a collection of blocks and a root CID:
 
-<details>
-  <summary>makeCar(rootCID, ipldBlocks)</summary>
+<Accordion heading="makeCar(rootCID, ipldBlocks)">
   <CodeSnippet lang="js" src={dagCborSource} region="makeCar" />
-</details>
+</Accordion>
 
 #### Storing simple CBOR data
 
 Using the helpers above, you can make a CAR file with a single block of simple CBOR data and send it to Web3.Storage:
 
-<details>
-  <summary>simpleCborExample()</summary>
+<Accordion heading="simpleCborExample()">
   <CodeSnippet lang="js" src={dagCborSource} region="simpleCborExample" />
-</details>
+</Accordion>
 
 If you have the IPFS command line app installed, you can view the object you stored with the [`ipfs dag get` command][ipfs-docs-dag-get], for example:
 
@@ -407,10 +405,9 @@ Note that the example output has been indented with [jq](https://stedolan.github
 
 You can link from one CBOR object to another using CIDs:
 
-<details>
-  <summary>cborLinkExample()</summary>
+<Accordion heading="cborLinkExample()">
   <CodeSnippet lang="js" src={dagCborSource} region="cborLinkExample" />
-</details>
+</Accordion>
 
 As with simple objects, you can use `ipfs dag get` to show the outer object:
 
@@ -446,16 +443,15 @@ First, we'll encode a file into UnixFS format. Normally, this is done by the cli
 
 Here's a helper function to make a UnixFS file and encode it to an IPLD block:
 
-<details>
-  <summary>makeUnixFsFile(source)</summary>
+<Accordion heading="makeUnixFsFile(source)">
   <CodeSnippet lang="js" src={dagCborSource} region="makeUnixFsFile" />
-</details>
+</Accordion>
 
 The helper returns a `root` block, which we can link to by CID, as well as a `blocks` array containing the encoded file data. When we create the CAR to send to Web3.Storage, it's important to include all the file blocks as well as the CBOR block.
-<details>
-  <summary>cborLinkToFileExample()</summary>
+
+<Accordion heading="cborLinkToFileExample()">
   <CodeSnippet lang="js" src={dagCborSource} region="cborLinkToFileExample" />
-</details>
+</Accordion>
 
 As before, we can view the root block with `ipfs dag get`:
 
@@ -502,9 +498,10 @@ However, the gateway *can* traverse the IPLD links inside our CBOR object, so yo
 
 [https://bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy.ipfs.dweb.link/file](https://bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy.ipfs.dweb.link/file).
 
-:::warning Gateway support
+<Callout>
+##### warning Gateway support
 Although Web3.Storage supports storing CAR files with `dag-cbor` content by default and can accept other codecs with the `decoders` option, the IPFS HTTP gateway does not currently "speak" these formats and will not return such data over HTTP. Please follow [this issue](https://github.com/ipfs/go-ipfs/issues/8234) to track the development of this feature.
-:::
+</Callout>
 
 ### Enabling IPLD codecs in the client library
 

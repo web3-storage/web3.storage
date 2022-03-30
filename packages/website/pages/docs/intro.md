@@ -1,7 +1,6 @@
 ---
 title: Welcome
 description: "Learn how to use Web3.Storage to decentralize your data storage without all the complicated details."
-id: intro
 ---
 
 import Callout from 'nextra-theme-docs/callout';
@@ -218,7 +217,7 @@ You've already done the most difficult work in this guide — getting your files
 
 If you ever need to find your files again, and you've forgotten the CID, head over to the [Files section](https://web3.storage/files/) in Web3.Storage:
 
-![A listing of files in Web3.Storage](./images/files-listing.png)
+![A listing of files in Web3.Storage](/images/docs/files-listing.png)
 
 ## Next steps
 

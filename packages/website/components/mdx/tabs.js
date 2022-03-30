@@ -1,5 +1,4 @@
 import React, { useState, cloneElement, Children, isValidElement } from 'react';
-
 import clsx from 'clsx';
 
 /**
@@ -59,6 +58,7 @@ export function Tabs(props) {
 
   const defaultValue = values.length > 0 ? values[0].value : null;
   const [selectedValue, setSelectedValue] = useState(defaultValue);
+
   /**
    * @type Array<HTMLLIElement | null>
    */

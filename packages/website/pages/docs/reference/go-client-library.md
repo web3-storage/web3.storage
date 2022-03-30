@@ -1,6 +1,5 @@
 ---
 title: Go client library reference
-sidebar_label: Go client library
 description: Integrate Web3.Storage into your code using the Go client library.
 ---
 
