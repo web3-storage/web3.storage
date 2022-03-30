@@ -60,6 +60,7 @@ describe('Pin Request', () => {
 
   const meta = { key: 'value' }
   const origins = ['origin1', 'origin2']
+  const dagSize1 = 200
 
   const normalizedCids = cids.map(cid => normalizeCid(cid))
 
@@ -74,11 +75,27 @@ describe('Pin Request', () => {
       }
     },
     {
-      status: 'Pinning',
+      status: 'Pinned',
       location: {
         peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
         peerName: 'web3-storage-sv16',
         ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE3',
+        region: 'region'
+      }
+    },
+    {
+      status: 'Pinned',
+      location: {
+        peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK8',
+        peerName: 'web3-storage-sv17',
+        region: 'region'
+      }
+    },
+    {
+      status: 'Pinned',
+      location: {
+        peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK9',
+        peerName: 'web3-storage-sv18',
         region: 'region'
       }
     }
@@ -102,6 +119,7 @@ describe('Pin Request', () => {
     aPinRequestInput = {
       sourceCid: cids[0],
       contentCid: normalizedCids[0],
+      dagSize: dagSize1,
       meta,
       origins,
       pins,
@@ -151,9 +169,27 @@ describe('Pin Request', () => {
 
     it('returns the right pins', async () => {
       // Only checking statuses for simplicity
-      const statuses = aPinRequestOutput.pins
-        .map((p) => p.status)
-      assert.deepStrictEqual(statuses, [pins[0].status, pins[1].status])
+      const statuses = aPinRequestOutput.pins.map((p) => p.status)
+      const expected = pins.map((p) => p.status)
+      assert.deepStrictEqual(statuses, expected, 'pin statuses match')
+    })
+
+    it('sums pinned size for unique CIDs in used storage', async () => {
+      let usedStorage = await client.getUsedStorage(user._id)
+      assert.strictEqual(usedStorage.pinned, dagSize1, 'used storage for pinned')
+
+      await client.createPsaPinRequest({
+        sourceCid: cids[1],
+        contentCid: normalizedCids[1],
+        dagSize: dagSize1,
+        meta,
+        origins,
+        pins,
+        authKey
+      })
+
+      usedStorage = await client.getUsedStorage(user._id)
+      assert.strictEqual(usedStorage.pinned, dagSize1 * 2, 'used storage for pinned')
     })
   })
 
@@ -177,9 +213,9 @@ describe('Pin Request', () => {
 
     it('returns the right pins', async () => {
       // Only checking statuses for simplicity
-      const statuses = savedPinRequest.pins
-        .map((p) => p.status)
-      assert.deepStrictEqual(statuses, [pins[0].status, pins[1].status])
+      const statuses = savedPinRequest.pins.map((p) => p.status)
+      const expected = pins.map((p) => p.status)
+      assert.deepStrictEqual(statuses, expected, 'pin statuses match')
     })
 
     it('throws if does not exists', async () => {
@@ -310,6 +346,7 @@ describe('Pin Request', () => {
           authKey: authKeyPinList,
           sourceCid: sourceCid,
           contentCid: normalizedCid,
+          dagSize: 10,
           pins: item.pins || pinnedPins,
           meta: item.meta
         })

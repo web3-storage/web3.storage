@@ -6,3 +6,7 @@ export const DAG_SIZE_CALC_LIMIT = 1024 * 1024 * 9
 export const MAX_BLOCK_SIZE = 1 << 20 // 1MiB
 export const UPLOAD_TYPES = ['Car', 'Blob', 'Multipart', 'Upload']
 export const PIN_STATUSES = ['PinQueued', 'Pinning', 'Pinned', 'PinError']
+export const USER_TAGS = {
+  ACCOUNT_RESTRICTION: 'HasAccountRestriction',
+  PSA_ACCESS: 'HasPsaAccess'
+}

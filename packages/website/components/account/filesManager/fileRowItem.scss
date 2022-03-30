@@ -55,6 +55,7 @@ $file-size: auto;
       &:last-child {
         padding-bottom: 1.375rem;
       }
+
       .file-row-label {
         @include fontWeight_Semibold;
         width: 6rem;
@@ -77,6 +78,20 @@ $file-size: auto;
           height: 1rem;
         }
       }
+    }
+  }
+  .th-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 0.25rem;
+    span,
+    .Tooltip {
+      flex-grow: 1;
+      flex-shrink: 1;
+    }
+    .Tooltip {
+      margin-right: 1rem;
     }
   }
   a {

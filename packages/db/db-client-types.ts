@@ -330,3 +330,8 @@ export type ListPsaPinRequestResults = {
 export type NameItem = {
   record: definitions['name']['record']
 }
+
+export type UsedStorage = {
+  uploaded: number,
+  pinned: number
+}
