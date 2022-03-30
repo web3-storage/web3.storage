@@ -1,11 +1,9 @@
-// ===================================================================== Imports
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Link from 'next/link';
 
 import GeneralPageData from '../../content/pages/general.json';
 
-// ====================================================================== Params
 /**
  * Breadcrumbs
  *
@@ -13,7 +11,6 @@ import GeneralPageData from '../../content/pages/general.json';
  * @callback props.click
  * @callback props.keyboard
  */
-// ====================================================================== Export
 export default function Breadcrumbs({ variant, click, keyboard }) {
   const router = useRouter();
   const breadcrumbs = GeneralPageData.breadcrumbs;
@@ -25,6 +22,9 @@ export default function Breadcrumbs({ variant, click, keyboard }) {
     },
   ];
 
+  if (routeName.includes('docs')) {
+    links.push({ url: '', text: breadcrumbs['docs'] });
+  }
   if (breadcrumbs.hasOwnProperty(routeName)) {
     links.push({ url: '', text: breadcrumbs[routeName] });
   }

@@ -1,4 +1,3 @@
-// ===================================================================== Imports
 import Markdown from 'markdown-to-jsx';
 
 import Helix from '../assets/illustrations/helix';
@@ -8,7 +7,7 @@ import Coil from '../assets/illustrations/coil';
 import Ring from '../assets/illustrations/ring';
 // @ts-ignore
 import termsOfService from '../content/terms-of-service.md';
-// ===================================================================== Exports
+
 export default function Home() {
   return (
     <>

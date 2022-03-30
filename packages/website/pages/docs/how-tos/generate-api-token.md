@@ -6,6 +6,8 @@ description: Learn how to get an API token for using Web3.Storage programmatical
 
 import Callout from 'nextra-theme-docs/callout';
 
+# How to generate an API token
+
 In this how-to guide, **you'll learn how to generate a Web3.Storage API token** so that you can interact with the service programmatically through the [JavaScript client library](../reference/js-client-library.md) or using the command line.
 
 You'll need a free Web3.Storage account in order to generate an API token. If you already have an account, read on. If not, have a look at the [quickstart guide](../intro.md#quickstart) to get up and running in just a few minutes.

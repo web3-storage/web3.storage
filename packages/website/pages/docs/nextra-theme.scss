@@ -1,6 +1,4 @@
 /* This is a custom scoped export of the themes styles */
-
-/*! tailwindcss v2.2.19 | MIT License | https://tailwindcss.com*/ /*! modern-normalize v1.1.0 | MIT License | https://github.com/sindresorhus/modern-normalize */
 .nextra-container abbr[title] {
   -webkit-text-decoration: underline dotted;
   text-decoration: underline dotted;
@@ -264,7 +262,7 @@
   font-feature-settings: 'rlig' 1, 'calt' 1, 'ss01' 1;
   scroll-behavior: smooth;
 }
-.nextra-container body {
+.docs-site body {
   --tw-bg-opacity: 1;
   background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
 }
@@ -442,7 +440,7 @@
 .nextra-container .inline {
   display: inline;
 }
-.nextra-container .flex {
+.docs-site .flex {
   display: flex;
 }
 .nextra-container .inline-flex {
@@ -511,13 +509,13 @@
   -moz-appearance: none;
   appearance: none;
 }
-.nextra-container .flex-row {
+.docs-site .flex-row {
   flex-direction: row;
 }
-.nextra-container .flex-col {
+.docs-site .flex-col {
   flex-direction: column;
 }
-.nextra-container .flex-col-reverse {
+.docs-site .flex-col-reverse {
   flex-direction: column-reverse;
 }
 .nextra-container .items-center {
@@ -742,7 +740,7 @@
 .nextra-container .filter {
   filter: var(--tw-filter);
 }
-.nextra-container .main-container {
+.docs-site .main-container {
   min-height: 100vh;
 }
 .nextra-container .sidebar {

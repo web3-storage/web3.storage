@@ -1,14 +1,3 @@
-import React from 'react';
-import CodeBlock from '@theme/CodeBlock';
-
-export default function CodeSnippet(props) {
-  const { src, region, lang, ...codeBlockProps } = props;
-  if (lang) {
-    codeBlockProps.className = `language-${lang}`;
-  }
-  return <CodeBlock {...codeBlockProps}>{extractRegion(src, region)}</CodeBlock>;
-}
-
 function extractRegion(src, regionName) {
   if (!regionName) {
     return src;
@@ -35,4 +24,16 @@ function extractRegion(src, regionName) {
     console.warn(`No region matching ${regionName} found in CodeSnippet src`);
   }
   return regionLines.join('\n');
+}
+
+export default function CodeSnippet(props) {
+  const { src, region, lang, ...codeBlockProps } = props;
+  if (lang) {
+    codeBlockProps.className = `language-${lang}`;
+  }
+  return (
+    <pre>
+      <code className={codeBlockProps.className}>{extractRegion(src, region)}</code>
+    </pre>
+  );
 }

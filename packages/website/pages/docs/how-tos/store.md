@@ -1,15 +1,17 @@
 ---
 title: How to store data using Web3.Storage
-sidebar_label: Store
 description: Learn how to store your data on the decentralized web with Web3.Storage.
 ---
 
+import { Tabs, TabItem } from 'components/mdx/tabs';
 import Callout from 'nextra-theme-docs/callout';
 import CodeSnippet from 'components/mdx/CodeSnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
 import platformBrowserSource from '!!raw-loader!../../../assets/code-snippets/how-to/platform-browser.js'
 import platformNodeSource from '!!raw-loader!../../../assets/code-snippets/how-to/platform-node.js'
 import golangUpload from '!!raw-loader!../../../assets/code-snippets/how-to/golang/upload/upload.go'
+
+# How to store data using Web3.Storage
 
 In this how-to guide, **you'll learn how to store data programmatically for your development projects using the Web3.Storage client libraries** in [JavaScript][reference-js] and [Go][reference-go]. This includes making your data available on the decentralized [IPFS](https://ipfs.io) network with persistent long-term storage provided by [Filecoin](https://filecoin.io) — all for free.
 
@@ -293,8 +295,6 @@ The client returns an IPFS [content identifier (CID)][ipfs-docs-cid] that can be
 
 You can also get more information about the status of your data. See the [query how-to guide][howto-query] to learn how to get more details about your data, including the status of any Filecoin storage deals.
 
-<!-- internal links -->
-
 [reference-js]: ../reference/js-client-library.md
 [reference-js-constructor]: ../reference/js-client-library.md#constructor
 [reference-js-put]: ../reference/js-client-library.md#store-files
@@ -314,10 +314,8 @@ You can also get more information about the status of your data. See the [query 
 [howto-list-dir]: ./list-directory-contents.md
 [concepts-decentralized-storage]: ../concepts/decentralized-storage.md
 
-<!-- links to the web3.storage site -->
 [site-files]: https://web3.storage/files/
 
-<!-- external links -->
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing/
 [ipfs-docs-cli-quickstart]: https://docs.ipfs.io/how-to/command-line-quick-start/
 [mdn-fetch]: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API

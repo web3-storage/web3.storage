@@ -4,12 +4,13 @@ sidebar_label: Query
 description: Learn how to query Web3.Storage in this quick how-to guide.
 ---
 
-<!-- imports for code snippets and tabs -->
 import Callout from 'nextra-theme-docs/callout';
 import { Tabs, TabItem } from 'components/mdx/tabs';
 import CodeSnippet from from 'components/mdx/CodeSnippet';
 import howtoSource from '!!raw-loader!../../code-snippets/how-to/index.js'
 import golangStatus from '!!raw-loader!../../code-snippets/how-to/golang/status/status.go'
+
+# How to query Web3.Storage
 
 In this how-to guide, you'll learn how to **query Web3.Storage for information about your files.**
 

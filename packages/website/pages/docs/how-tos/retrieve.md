@@ -4,13 +4,13 @@ sidebar_label: Retrieve
 description: Learn how to retrieve data stored using Web3.Storage in this quick how-to guide.
 ---
 
-<!-- imports for code snippets and tabs -->
 import Callout from 'nextra-theme-docs/callout';
 import { Tabs, TabItem } from 'components/mdx/tabs';
 import CodeSnippet from from 'components/mdx/CodeSnippet';
 import howtoSource from '!!raw-loader!../code-snippets/how-to/index.js'
 import golangRetrieve from '!!raw-loader!../code-snippets/how-to/golang/retrieve/retrieve.go'
 
+# How to retrieve data from Web3.Storage
 
 In this how-to guide, **you'll learn several methods for retrieving data from Web3.Storage.**
 
@@ -248,7 +248,6 @@ If you haven't yet explored in depth how to store data using Web3.Storage, check
 
 You can also use the client library to get more information about the status of your data. See the [query how-to guide][howto-query] to learn how to get more details about your data, including the status of any Filecoin storage deals.
 
-<!-- internal links -->
 [reference-js]: ../reference/js-client-library.md
 [quickstart-guide]: ../intro.md#quickstart
 [concepts-content-addressing]: ../concepts/content-addressing.md
@@ -258,7 +257,6 @@ You can also use the client library to get more information about the status of 
 [reference-js-web3response]: ../reference/js-client-library.md#return-value-2
 [reference-js-constructor]: ../reference/js-client-library.md#constructor
 
-<!-- external links -->
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing/
 [ipfs-docs-cli-quickstart]: https://docs.ipfs.io/how-to/command-line-quick-start/
 [ipfs-docs-desktop-quickstart]: https://docs.ipfs.io/install/ipfs-desktop/

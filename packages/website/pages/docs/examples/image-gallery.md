@@ -4,7 +4,6 @@ sidebar_label: Image gallery
 description: Learn about Web3.Storage by walking through the code for a simple image gallery app that runs entirely in the browser.
 ---
 
-<!-- imports for code snippets -->
 import CodeSnippet from 'components/mdx/CodeSnippet';
 import storageJsSource from '!!raw-loader!../../code-snippets/external/example-image-gallery/src/js/storage.js'
 

@@ -4,12 +4,12 @@ sidebar_label: Work with Content Archives
 description: Learn how to work with Content Archives of IPLD data.
 ---
 
+import { Tabs, TabItem } from 'components/mdx/tabs';
 import Callout from 'nextra-theme-docs/callout';
 import CodeSnippet from from 'components/mdx/CodeSnippet';
-import dagCborSource from '!!raw-loader!../code-snippets/how-to/dag-cbor.js';
+import dagCborSource from '!!raw-loader!../../../assets/code-snippets/how-to/dag-cbor.js';
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+# Working with Content Archives
 
 When you upload files to Web3.Storage using the [client library][reference-client-library], your data is converted into a graph of data structures, which are then packed into a format called a Content Archive (CAR) before being sent to the Web3.Storage service. 
 
@@ -148,7 +148,6 @@ The [`go-car` module](https://github.com/ipld/go-car) provides the main Golang i
 
 See the [API reference documentation](https://pkg.go.dev/github.com/ipld/go-car/v2) for more information.
 
-<!-- TODO: find / write simple go-car example -->
 
 ## Splitting CARs for upload to Web3.Storage
 
