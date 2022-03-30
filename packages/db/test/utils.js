@@ -106,6 +106,17 @@ export async function getUpload (dbClient, cid, userId) {
 /**
  *
  * @param {import('../index').DBClient} dbClient
+ * @param {string} userId
+ * @param {import('../db-client-types').ListUploadsOptions} [listUploadOptions]
+ *
+ */
+export async function listUploads (dbClient, userId, listUploadOptions) {
+  return dbClient.listUploads(userId, listUploadOptions)
+}
+
+/**
+ *
+ * @param {import('../index').DBClient} dbClient
  */
 export async function getPinSyncRequests (dbClient, size = 10) {
   return dbClient.getPinSyncRequests({ size })

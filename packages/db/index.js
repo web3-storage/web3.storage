@@ -1090,7 +1090,7 @@ export class DBClient {
   async fixDagSize (from) {
     /** @type {{ data: Array<{cid: string}>, error: PostgrestError }} */
     const { data, error } = await this._client
-      .rpc('fix_dag_size', { start: from })
+      .rpc('update_dag_size', { start: from })
 
     if (error) {
       throw new DBError(error)
