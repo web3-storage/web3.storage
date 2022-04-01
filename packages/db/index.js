@@ -1084,13 +1084,16 @@ export class DBClient {
    * Update public.content.dag_size using cargo.dag.size_actual.
    * The latter is more accurate and does not rely on metadata.
    *
-   * @param {Date} from Date to start update from
+   * @param {import('./db-client-types').UpdateDagSizeOptions} options Date to start update from
    * @returns the cids of modified content
    */
-  async fixDagSize (from) {
+  async updateDagSize ({
+    from,
+    limit = 1000
+  }) {
     /** @type {{ data: Array<{cid: string}>, error: PostgrestError }} */
     const { data, error } = await this._client
-      .rpc('update_dag_size', { start: from })
+      .rpc('update_dag_size', { options: { start: from, limit } })
 
     if (error) {
       throw new DBError(error)

@@ -28,6 +28,7 @@ import type {
   ContentInput,
   ListPsaPinRequestOptions,
   ListPsaPinRequestResults,
+  UpdateDagSizeOptions,
 } from './db-client-types'
 
 export { gql }
@@ -67,5 +68,5 @@ export class DBClient {
   deleteKey (id: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
   getUserTags (userId: number): Promise<{ tag: string, value: string }[]>
-  fixDagSize (from: Date): Promise<string[]>
+  updateDagSize (options: UpdateDagSizeOptions): Promise<string[]>
 }
