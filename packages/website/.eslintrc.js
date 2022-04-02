@@ -1,37 +1,24 @@
 module.exports = {
-  extends: [
-    'react-app',
-    'next',
-    'next/core-web-vitals',
-    'plugin:import/errors',
-    'plugin:import/warnings',
-    'plugin:jsx-a11y/recommended',
-    'plugin:import/typescript',
-    'plugin:@typescript-eslint/recommended',
-    'prettier',
-    'plugin:prettier/recommended',
-    'plugin:cypress/recommended',
-  ],
+  extends: ["react-app", "next", "next/core-web-vitals", "plugin:import/errors", "plugin:import/warnings", "plugin:jsx-a11y/recommended", "plugin:import/typescript", "plugin:@typescript-eslint/recommended", "prettier", "plugin:prettier/recommended", "plugin:cypress/recommended", "plugin:storybook/recommended"],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
-    sourceType: 'module', // Allows for the use of imports
+    ecmaVersion: 2018,
+    // Allows for the parsing of modern ECMAScript features
+    sourceType: 'module' // Allows for the use of imports
+
   },
   plugins: ['jsx-a11y', 'prettier', '@typescript-eslint', 'cypress'],
   settings: {
     'import/resolver': {
       node: {
         moduleDirectory: ['node_modules', 'lib', 'pages', 'components', 'content', 'hooks', 'modules'],
-        paths: ['.'],
+        paths: ['.']
       },
-      alias: [
-        ['ZeroComponents', './modules/zero/components'],
-        ['ZeroHooks', './modules/zero/hooks']
-      ]
+      alias: [['ZeroComponents', './modules/zero/components'], ['ZeroHooks', './modules/zero/hooks']]
     },
     react: {
-      version: 'detect',
-    },
+      version: 'detect'
+    }
   },
   rules: {
     '@typescript-eslint/no-inferrable-types': 2,
@@ -60,48 +47,47 @@ module.exports = {
     'import/export': 2,
     'import/namespace': 2,
     'import/no-unresolved': 2,
-    'import/order': [
-      'error',
-      {
-        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/order.md#groups-array
-        groups: ['builtin', 'external', ['internal', 'parent', 'sibling', 'index']],
-        'newlines-between': 'always',
-      },
-    ],
-    'no-unneeded-ternary': ['error', { defaultAssignment: false }],
+    'import/order': ['error', {
+      // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/order.md#groups-array
+      groups: ['builtin', 'external', ['internal', 'parent', 'sibling', 'index']],
+      'newlines-between': 'always'
+    }],
+    'no-unneeded-ternary': ['error', {
+      defaultAssignment: false
+    }],
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],
-    '@typescript-eslint/no-unused-vars': ['warn', { vars: 'local', args: 'none' }],
-    'max-len': [
-      'warn',
-      {
-        code: 120,
-        comments: 120,
-        ignoreComments: false,
-        ignoreTrailingComments: false,
-        // We ignore long import/exports and commented JSX blocks
-        ignorePattern: '^import .*|^export .*|<[A-Za-z].*',
-        ignoreTemplateLiterals: true,
-        ignoreStrings: true,
-        ignoreUrls: true,
-        ignoreRegExpLiterals: true,
-      },
-    ],
+    '@typescript-eslint/no-unused-vars': ['warn', {
+      vars: 'local',
+      args: 'none'
+    }],
+    'max-len': ['warn', {
+      code: 120,
+      comments: 120,
+      ignoreComments: false,
+      ignoreTrailingComments: false,
+      // We ignore long import/exports and commented JSX blocks
+      ignorePattern: '^import .*|^export .*|<[A-Za-z].*',
+      ignoreTemplateLiterals: true,
+      ignoreStrings: true,
+      ignoreUrls: true,
+      ignoreRegExpLiterals: true
+    }],
     'prefer-object-spread': 2,
     'prefer-spread': 1,
     'prettier/prettier': 'warn',
-    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
+    'react/jsx-filename-extension': [1, {
+      extensions: ['.js', '.jsx', '.ts', '.tsx']
+    }],
     'react/jsx-props-no-spreading': 0,
     'react/prop-types': 0,
     'react/no-array-index-key': 0,
     'react-hooks/exhaustive-deps': 1,
-    'spaced-comment': [
-      'warn',
-      'always',
-      {
-        // Ignore typescript triple slash directives
-        line: { markers: ['/'] },
-      },
-    ],
-  },
+    'spaced-comment': ['warn', 'always', {
+      // Ignore typescript triple slash directives
+      line: {
+        markers: ['/']
+      }
+    }]
+  }
 };

@@ -1,4 +1,5 @@
 import { RouterContext } from "next/dist/shared/lib/router-context"; 
+import * as NextImage from "next/image";
 
 import '!style-loader!css-loader!sass-loader!../styles/normalize.scss'
 import '!style-loader!css-loader!sass-loader!../styles/variables.scss'
@@ -17,3 +18,10 @@ export const parameters = {
     },
   },
 }
+
+const OriginalNextImage = NextImage.default;
+
+Object.defineProperty(NextImage, "default", {
+  configurable: true,
+  value: (props) => <OriginalNextImage {...props} unoptimized />,
+});

@@ -1,5 +1,7 @@
 @use 'sass:math';
 
+$martinique: #392d52;
+$cyan: #3effe9;
 $info-icon-size: 0.5625rem;
 $info-tooltip-arrow-size: 0.625rem;
 $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
@@ -38,10 +40,7 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
     border-radius: 0.75rem;
     width: max-content;
     max-width: 15rem;
-    @include medium {
-      max-width: 30vw;
-    }
-    color: $white;
+    color: white;
     z-index: 1;
     &:before {
       content: "";
