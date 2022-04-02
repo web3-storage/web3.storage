@@ -2,7 +2,7 @@ import React from 'react';
 import useState from 'storybook-addon-state';
 
 import SearchBar from './searchbar';
-// import { ReactComponent as SearchIcon } from '../../../assets/search.svg';
+import SearchIcon from '../../assets/search';
 
 export default {
   title: 'Zero/SearchBar',
@@ -17,7 +17,7 @@ export const Default = () => {
         className="customBar"
         value="initial search"
         placeholder="Enter filter text"
-        // icon={<SearchIcon />}
+        icon={<SearchIcon />}
         onChange={value => setValue(value)}
       />
       <br />

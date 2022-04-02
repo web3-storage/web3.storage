@@ -42,8 +42,16 @@ export const Default = () => {
       <Sortable
         items={names}
         options={[
-          { label: 'First Name', value: 'firstname', key: 'firstname' },
-          { label: 'Last Name Descending', value: 'lastname', key: 'lastname', direction: SortDirection.DESC },
+          { 
+            label: 'First Name', 
+            value: 'firstname', 
+            key: 'firstname' 
+          },
+          { label: 'Last Name Descending', 
+            value: 'lastname', 
+            key: 'lastname', 
+            direction: SortDirection.DESC 
+          },
           {
             label: 'Numeric (Newer)',
             value: 'numericASC',
@@ -56,8 +64,18 @@ export const Default = () => {
             direction: SortDirection.ASC,
             compareFn: SortType.ALPHANUMERIC,
           },
-          { label: 'Custom Ascending', value: 'customASC', direction: SortDirection.ASC, compareFn: customSort },
-          { label: 'Custom Descending', value: 'customDESC', direction: SortDirection.DESC, compareFn: customSort },
+          { 
+            label: 'Custom Ascending', 
+            value: 'customASC', 
+            direction: SortDirection.ASC, 
+            compareFn: customSort 
+          },
+          { 
+            label: 'Custom Descending', 
+            value: 'customDESC', 
+            direction: SortDirection.DESC, 
+            compareFn: customSort 
+          },
         ]}
         value="numericASC"
         queryParam="order"
