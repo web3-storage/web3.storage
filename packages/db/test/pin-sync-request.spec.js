@@ -1,8 +1,8 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
-import { DBClient } from '../index'
+import { DBClient } from '../index.js'
 
-import { createUser, createUserAuthKey, createUpload, defaultPinData, token } from './utils'
+import { createUser, createUserAuthKey, createUpload, defaultPinData, token } from './utils.js'
 
 describe('pin-sync-request', () => {
   /** @type {DBClient} */
@@ -22,13 +22,13 @@ describe('pin-sync-request', () => {
   const uploads = []
 
   // Setup testing user
-  before(async () => {
+  beforeEach(async () => {
     user = await createUser(client)
     authKey = await createUserAuthKey(client, user._id)
   })
 
   // Guarantee no pin sync requests exist
-  before(async () => {
+  beforeEach(async () => {
     const to = new Date().toISOString()
     const { data: pinSyncReqs } = await client.getPinSyncRequests({ to })
 
@@ -36,7 +36,7 @@ describe('pin-sync-request', () => {
   })
 
   // Setup two default uploads
-  before(async () => {
+  beforeEach(async () => {
     const upload0 = await createUpload(client, user._id, authKey, cids[0])
     const upload1 = await createUpload(client, user._id, authKey, cids[1])
 
@@ -140,9 +140,6 @@ describe('pin-sync-request', () => {
   })
 
   it('can create pin sync requests', async () => {
-    const { data: pinSyncReqs } = await client.getPinSyncRequests({ to: new Date().toISOString() })
-    const previousLength = pinSyncReqs.length
-
     // Get pins
     const pins0 = await client.getPins(cids[0])
     const pins1 = await client.getPins(cids[1])
@@ -156,6 +153,6 @@ describe('pin-sync-request', () => {
     const { data: pinSyncReqsAfterUpdate } = await client.getPinSyncRequests({ to: new Date().toISOString() })
 
     assert(pinSyncReqsAfterUpdate, 'could get pin sync requests')
-    assert.strictEqual(pinSyncReqsAfterUpdate.length, pinIds.length + previousLength, 'all pin sync requests were created')
+    assert.strictEqual(pinSyncReqsAfterUpdate.length, pinIds.length, 'all pin sync requests were created')
   })
 })

@@ -47,7 +47,7 @@ services:
         
     cluster0:
       container_name: cluster0
-      image: ipfs/ipfs-cluster:latest
+      image: ipfs/ipfs-cluster:v0.14.5
       depends_on:
         - ipfs0
       environment:

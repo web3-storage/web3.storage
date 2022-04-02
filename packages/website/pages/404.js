@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
+import countly from '../lib/countly';
 
 import GeneralPageData from '../content/pages/general.json';
 import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
-import countly from '../lib/countly';
 
-const blocks = GeneralPageData.error_404.sections;
+export default function Home() {
+  const blocks = GeneralPageData.error_404.sections;
 
-export default function Custom404() {
   useEffect(() => {
     countly.trackEvent(countly.events.NOT_FOUND, {
-      path: '/404',
+      path: window.location?.pathname ?? 'unknown',
+      referrer: typeof window !== 'undefined' ? document.referrer : null,
     });
   }, []);
 
@@ -18,4 +19,12 @@ export default function Custom404() {
       <BlockBuilder id="error_section-1" subsections={blocks} />
     </main>
   );
+}
+
+export function getStaticProps() {
+  return {
+    props: {
+      title: '404 - Web3 Storage - Simple file storage with IPFS & Filecoin',
+    },
+  };
 }
