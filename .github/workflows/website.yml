@@ -112,7 +112,7 @@ jobs:
 
       # Add the site to web3.storage, output the cid as `steps.ipfs.outputs.cid`
       - name: Add to web3.storage
-        if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'website' }}
+        if: ${{ steps.tag-release.outputs.release_created }}
         uses: web3-storage/add-to-web3@v2
         id: ipfs
         with:
@@ -122,7 +122,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy https://web3.storage
-        if: ${{ steps.tag-release.outputs.release_created && matrix.package == 'website' }}
+        if: ${{ steps.tag-release.outputs.release_created }}
         run: npx dnslink-cloudflare --record _dnslink --domain web3.storage --link /ipfs/${{ steps.ipfs.outputs.cid }}
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
