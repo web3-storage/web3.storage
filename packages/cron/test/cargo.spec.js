@@ -1,12 +1,11 @@
 /* eslint-env mocha */
 import assert from 'assert'
-import { createUpload, getUpload, createUser, createUserAuthKey, getPinSyncRequests } from '@web3-storage/db/test-utils'
 import fetch from '@web-std/fetch'
-import { getCluster, getDBClient } from '../src/lib/utils.js'
-import { updatePinStatuses } from '../src/jobs/pins.js'
+import { getDBClient } from '../src/lib/utils.js'
 import sinon from 'sinon'
 import { updateDagSizes } from '../src/jobs/dagcargo.js'
 
+/** @ts-ignore */
 global.fetch = fetch
 
 const env = {
