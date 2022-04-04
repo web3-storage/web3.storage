@@ -149,9 +149,9 @@ CREATE TABLE IF NOT EXISTS cargo.deals (
   start_epoch INTEGER NOT NULL CONSTRAINT valid_start CHECK ( start_epoch > 0 ),
   start_time TIMESTAMP WITH TIME ZONE NOT NULL GENERATED ALWAYS AS ( TO_TIMESTAMP( start_epoch*30 + 1598306400 ) ) STORED,
   end_epoch INTEGER NOT NULL CONSTRAINT valid_end CHECK ( end_epoch > 0 ),
-  end_time TIMESTAMP WITH TIME ZONE NOT NULL GENERATED ALWAYS AS ( TO_TIMESTAMP( end_epoch*30 + 1598306400 ) ) STORED,
+  end_time TIMESTAMP WITH TIME ZONE NOT NULL GENERATED ALWAYS AS ( TO_TIMESTAMP( start_epoch*30 + 1598306400 ) ) STORED,
   sector_start_epoch INTEGER CONSTRAINT valid_sector_start CHECK ( sector_start_epoch > 0 ),
-  sector_start_time TIMESTAMP WITH TIME ZONE GENERATED ALWAYS AS ( TO_TIMESTAMP( sector_start_epoch*30 + 1598306400 ) ) STORED,
+  sector_start_time TIMESTAMP WITH TIME ZONE GENERATED ALWAYS AS ( TO_TIMESTAMP( start_epoch*30 + 1598306400 ) ) STORED,
   entry_created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   entry_last_updated TIMESTAMP WITH TIME ZONE NOT NULL
 );
@@ -159,10 +159,11 @@ CREATE INDEX IF NOT EXISTS deals_aggregate_cid ON cargo.deals ( aggregate_cid );
 CREATE INDEX IF NOT EXISTS deals_client ON cargo.deals ( client );
 CREATE INDEX IF NOT EXISTS deals_provider ON cargo.deals ( provider );
 CREATE INDEX IF NOT EXISTS deals_status ON cargo.deals ( status );
-CREATE TRIGGER trigger_deal_insert
-  BEFORE INSERT ON cargo.deals
-  FOR EACH ROW
-  EXECUTE PROCEDURE cargo.update_entry_timestamp()
+-- Remove for easier testing
+-- CREATE TRIGGER trigger_deal_insert
+--   BEFORE INSERT ON cargo.deals
+--   FOR EACH ROW
+--   EXECUTE PROCEDURE cargo.update_entry_timestamp()
 ;
 CREATE TRIGGER trigger_deal_updated
   BEFORE UPDATE ON cargo.deals
