@@ -587,7 +587,6 @@ export class DBClient {
    */
   async createPinSyncRequests (pinSyncRequests) {
     /** @type {{ error: PostgrestError }} */
-    this._client.schema = 'cargo'
     const { error } = await this._client
       .from('pin_sync_request')
       .upsert(pinSyncRequests.map(psr => ({
