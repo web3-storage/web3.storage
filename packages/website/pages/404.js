@@ -9,7 +9,8 @@ export default function Home() {
 
   useEffect(() => {
     countly.trackEvent(countly.events.NOT_FOUND, {
-      path: '/404',
+      path: window.location?.pathname ?? 'unknown',
+      referrer: typeof window !== 'undefined' ? document.referrer : null,
     });
   }, []);
 

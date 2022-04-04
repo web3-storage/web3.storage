@@ -28,6 +28,7 @@ $date-delete: auto;
       border-bottom: 0.0625rem solid rgba(white, 0.05);
       .file-row-label {
         @include fontWeight_Semibold;
+        padding-bottom: 0.25rem;
         width: 4.5rem;
         flex-shrink: 0;
         display: inline-block;

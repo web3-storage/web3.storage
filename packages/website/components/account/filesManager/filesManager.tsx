@@ -252,19 +252,21 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
                 Object.values(PinStatus).find(status => item.pins.some(pin => status === pin.status)) ||
                 PinStatus.QUEUING
               }
-              storageProviders={item.deals.map((deal, indx, deals) => (
-                <span key={deal.dealId}>
-                  <a
-                    className="underline"
-                    href={`https://filfox.info/en/deal/${deal.dealId}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {`${deal.storageProvider}`}
-                  </a>
-                  {indx !== deals.length - 1 && ', '}
-                </span>
-              ))}
+              storageProviders={item.deals
+                .filter(deal => !!deal.storageProvider)
+                .map((deal, indx, deals) => (
+                  <span key={deal.dealId}>
+                    <a
+                      className="underline"
+                      href={`https://filfox.info/en/deal/${deal.dealId}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {`${deal.storageProvider}`}
+                    </a>
+                    {indx !== deals.length - 1 && ', '}
+                  </span>
+                ))}
               size={filesize(item.dagSize)}
               highlight={{ target: 'name', text: keyword?.toString() || '' }}
               numberOfPins={item.pins.length}
