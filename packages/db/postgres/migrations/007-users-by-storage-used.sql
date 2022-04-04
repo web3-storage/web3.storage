@@ -1,7 +1,7 @@
 ALTER TYPE used_storage ADD ATTRIBUTE total TEXT;
 
 -- Because function return type has changed
-DROP FUNCTION users_storage_used(integer, integer);
+DROP FUNCTION user_storage_used(integer, integer);
 
 -- Get storage used for a specified user: uploaded, pinned and total
 CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT) 
@@ -27,16 +27,20 @@ BEGIN
   pinned := 
     (
       SELECT COALESCE((
-        SELECT COALESCE(SUM(c.dag_size), 0)
-        FROM psa_pin_request psa_pr
-        JOIN content c ON c.cid = psa_pr.content_cid
-        JOIN pin p ON p.content_cid = psa_pr.content_cid
-        JOIN auth_key a ON a.id = psa_pr.auth_key_id
-        WHERE a.user_id = query_user_id::BIGINT
-        AND psa_pr.deleted_at is null
-        AND p.status = 'Pinned'
-        GROUP BY p.status
-      ), 0)
+        SELECT SUM(dag_size) 
+        FROM (
+          SELECT  psa_pr.content_cid,
+                  c.dag_size
+          FROM psa_pin_request psa_pr
+          JOIN content c ON c.cid = psa_pr.content_cid
+          JOIN pin p ON p.content_cid = psa_pr.content_cid
+          JOIN auth_key a ON a.id = psa_pr.auth_key_id
+          WHERE a.user_id = query_user_id::BIGINT
+          AND psa_pr.deleted_at is null
+          AND p.status = 'Pinned'
+          GROUP BY psa_pr.content_cid,
+                  c.dag_size
+        ) AS pinned_content), 0)
     ); 
 
   total := uploaded + pinned;
@@ -68,20 +72,20 @@ DECLARE
   default_quota BIGINT := 1099511627776;
 BEGIN
   RETURN QUERY
-    SELECT  u.name                                          AS name,
-            u.email                                         AS email,
-            COALESCE(ut.value::BIGINT, default_quota)::TEXT AS storage_quota,
-            (user_used_storage(u.id)).total                 AS storage_used
-    FROM public.user u
-    FULL OUTER JOIN user_tag ut ON u.id = ut.user_id
-    WHERE (ut.tag IS NULL
-        OR (ut.tag = 'StorageLimitBytes' AND ut.deleted_at IS NULL))
-    AND (user_used_storage(u.id)).total::BIGINT 
-            >= (from_percent::NUMERIC/100) * COALESCE(ut.value::BIGINT, default_quota)
-    AND (to_percent IS NULL
-        OR (user_used_storage(u.id)).total::BIGINT 
-            < (to_percent::NUMERIC/100) * COALESCE(ut.value::BIGINT, default_quota))
-    ORDER BY (user_used_storage(u.id)).total::BIGINT DESC;
+    SELECT * 
+    FROM (
+      SELECT  u.id::TEXT                                      AS id,
+              u.name                                          AS name,
+              u.email                                         AS email,
+              COALESCE(ut.value::BIGINT, default_quota)::TEXT AS storage_quota,
+              (user_used_storage(u.id)).total::TEXT         AS storage_used
+      FROM public.user u
+      LEFT JOIN user_tag ut ON u.id = ut.user_id
+      WHERE ut.tag IS NULL OR (ut.tag = 'StorageLimitBytes' AND ut.deleted_at IS NULL)
+      ) user_account
+    WHERE user_account.storage_used::BIGINT >= (from_percent/100::NUMERIC) * user_account.storage_quota::BIGINT
+    AND (to_percent IS NULL OR user_account.storage_used::BIGINT < (to_percent/100::NUMERIC) * user_account.storage_quota::BIGINT)
+    ORDER BY user_account.storage_used::BIGINT DESC;
 END
 $$;
 
@@ -96,13 +100,13 @@ BEGIN
         'Used80PercentStorage',
         'Used85PercentStorage',
         'Used90PercentStorage',
-        'UsedOver100PercentStorage'
+        'Used100PercentStorage'
       );
   END IF;
 END
 $$;
 
-CREATE TABLE IF NOT EXISTS email_notification_history 
+CREATE TABLE IF NOT EXISTS email_history 
 (
   id              BIGSERIAL PRIMARY KEY,
   -- The id of the user being notified

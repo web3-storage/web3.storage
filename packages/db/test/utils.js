@@ -24,30 +24,6 @@ export async function createUser (dbClient, options = {}) {
 }
 
 /**
- * @param {import('../index').DBClient & {_client: import('@supabase/postgrest-js').PostgrestClient }} dbClient
- * @param {number} userId
- * @param {Object} [options]
- * @param {string} [options.tag]
- * @param {string} [options.value]
- * @param {string} [options.reason]
- */
-export async function createUserTag (dbClient, userId, options = {}) {
-  const { data } = await dbClient._client
-    .from('user_tag')
-    .upsert({
-      user_id: userId,
-      tag: options.tag || '',
-      value: options.value || '',
-      reason: options.reason || 'test reason'
-    })
-    .single()
-
-  return {
-    user_tag: data
-  }
-}
-
-/**
  * @param {import('../index').DBClient} dbClient
  * @param {number} user
  * @param {Object} [options]

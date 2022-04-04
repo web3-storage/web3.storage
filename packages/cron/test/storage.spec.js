@@ -2,7 +2,6 @@
 import {
   createUser,
   createUserAuthKey,
-  createUserTag,
   createUpload,
   createPsaPinRequest
 } from '../../db/test/utils.js'
@@ -114,10 +113,12 @@ describe('cron - check user storage quotas', () => {
     authKey4 = await createUserAuthKey(dbClient, Number(user4._id), {
       name: 'test4-key'
     })
-    await createUserTag(dbClient, Number(user4._id), {
+
+    await dbClient.createUserTag(Number(user4._id), {
       tag: 'StorageLimitBytes',
       value: '2199023255552'
     })
+
     const cid = 'bafybeibvuy3vcepqxy4plr34twv22vvxol2jjhmjxcrcvuhea5226whpsm'
     await createUpload(dbClient, Number(user4._id), Number(authKey4), cid, {
       dagSize: largeFileSize

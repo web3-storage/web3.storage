@@ -28,7 +28,10 @@ import type {
   ContentInput,
   ListPsaPinRequestOptions,
   ListPsaPinRequestResults,
-  UserStorageUsed,
+  UserStorageUsedInput,
+  UserStorageUsedOutput,
+  StorageUsedOutput,
+  UserTagInput,
 } from './db-client-types'
 
 export { gql }
@@ -39,8 +42,8 @@ export class DBClient {
   getMetricsValue (key: string): Promise<{ total: number }>
   upsertUser (user: UpsertUserInput): Promise<UpsertUserOutput>
   getUser (issuer: string): Promise<UserOutput>
-  getUsedStorage (userId: number): Promise<{ uploaded: number, pinned: number, total: number }>
-  getUsersByStorageUsed ({fromPercent, toPercent}: {fromPercent: number, toPercent?: number}): Promise<Array<UserStorageUsed>>
+  getStorageUsed (userId: number): Promise<StorageUsedOutput>
+  getUsersByStorageUsed (percentRange: UserStorageUsedInput): Promise<Array<UserStorageUsedOutput>>
   emailSentRecently({userId, emailType, numberOfDays}: {userId: number, emailType: string, numberOfDays?: number}): Promise<boolean>
   logEmailSent({userId, emailType, messageId} : {userId: number, emailType: string, messageId: string}): Promise<{id: string}>
   createUpload (data: CreateUploadInput): Promise<CreateUploadOutput>
@@ -70,5 +73,6 @@ export class DBClient {
   createContent (content: ContentInput, opt?: {updatePinRequests?: boolean}) : Promise<string>
   deleteKey (id: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
+  createUserTag(userId: number, tag: UserTagInput): Promise<boolean>
   getUserTags (userId: number): Promise<{ tag: string, value: string }[]>
 }

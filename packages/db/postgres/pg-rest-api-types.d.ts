@@ -12,46 +12,6 @@ export interface paths {
       };
     };
   };
-  "/admin_search": {
-    get: {
-      parameters: {
-        query: {
-          user_id?: parameters["rowFilter.admin_search.user_id"];
-          email?: parameters["rowFilter.admin_search.email"];
-          token?: parameters["rowFilter.admin_search.token"];
-          token_id?: parameters["rowFilter.admin_search.token_id"];
-          deleted_at?: parameters["rowFilter.admin_search.deleted_at"];
-          reason_inserted_at?: parameters["rowFilter.admin_search.reason_inserted_at"];
-          reason?: parameters["rowFilter.admin_search.reason"];
-          status?: parameters["rowFilter.admin_search.status"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["admin_search"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-  };
   "/auth_key": {
     get: {
       parameters: {
@@ -451,15 +411,15 @@ export interface paths {
       };
     };
   };
-  "/email_notification_history": {
+  "/email_history": {
     get: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.email_notification_history.id"];
-          email?: parameters["rowFilter.email_notification_history.email"];
-          email_type?: parameters["rowFilter.email_notification_history.email_type"];
-          message_id?: parameters["rowFilter.email_notification_history.message_id"];
-          sent_at?: parameters["rowFilter.email_notification_history.sent_at"];
+          id?: parameters["rowFilter.email_history.id"];
+          user_id?: parameters["rowFilter.email_history.user_id"];
+          email_type?: parameters["rowFilter.email_history.email_type"];
+          message_id?: parameters["rowFilter.email_history.message_id"];
+          sent_at?: parameters["rowFilter.email_history.sent_at"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -481,7 +441,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["email_notification_history"][];
+          schema: definitions["email_history"][];
         };
         /** Partial Content */
         206: unknown;
@@ -490,8 +450,8 @@ export interface paths {
     post: {
       parameters: {
         body: {
-          /** email_notification_history */
-          email_notification_history?: definitions["email_notification_history"];
+          /** email_history */
+          email_history?: definitions["email_history"];
         };
         query: {
           /** Filtering Columns */
@@ -510,11 +470,11 @@ export interface paths {
     delete: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.email_notification_history.id"];
-          email?: parameters["rowFilter.email_notification_history.email"];
-          email_type?: parameters["rowFilter.email_notification_history.email_type"];
-          message_id?: parameters["rowFilter.email_notification_history.message_id"];
-          sent_at?: parameters["rowFilter.email_notification_history.sent_at"];
+          id?: parameters["rowFilter.email_history.id"];
+          user_id?: parameters["rowFilter.email_history.user_id"];
+          email_type?: parameters["rowFilter.email_history.email_type"];
+          message_id?: parameters["rowFilter.email_history.message_id"];
+          sent_at?: parameters["rowFilter.email_history.sent_at"];
         };
         header: {
           /** Preference */
@@ -529,15 +489,15 @@ export interface paths {
     patch: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.email_notification_history.id"];
-          email?: parameters["rowFilter.email_notification_history.email"];
-          email_type?: parameters["rowFilter.email_notification_history.email_type"];
-          message_id?: parameters["rowFilter.email_notification_history.message_id"];
-          sent_at?: parameters["rowFilter.email_notification_history.sent_at"];
+          id?: parameters["rowFilter.email_history.id"];
+          user_id?: parameters["rowFilter.email_history.user_id"];
+          email_type?: parameters["rowFilter.email_history.email_type"];
+          message_id?: parameters["rowFilter.email_history.message_id"];
+          sent_at?: parameters["rowFilter.email_history.sent_at"];
         };
         body: {
-          /** email_notification_history */
-          email_notification_history?: definitions["email_notification_history"];
+          /** email_history */
+          email_history?: definitions["email_history"];
         };
         header: {
           /** Preference */
@@ -1588,6 +1548,26 @@ export interface paths {
       };
     };
   };
+  "/rpc/upsert_pins": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/uuid_ns_url": {
     post: {
       parameters: {
@@ -1610,28 +1590,6 @@ export interface paths {
       parameters: {
         body: {
           args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/users_storage_used": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: integer */
-            to_percent?: number;
-            /** Format: integer */
-            from_percent: number;
-          };
         };
         header: {
           /** Preference */
@@ -1703,6 +1661,28 @@ export interface paths {
       parameters: {
         body: {
           args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/users_by_storage_used": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: integer */
+            to_percent?: number;
+            /** Format: integer */
+            from_percent: number;
+          };
         };
         header: {
           /** Preference */
@@ -2030,24 +2010,6 @@ export interface paths {
 }
 
 export interface definitions {
-  admin_search: {
-    /** Format: text */
-    user_id?: string;
-    /** Format: text */
-    email?: string;
-    /** Format: text */
-    token?: string;
-    /** Format: text */
-    token_id?: string;
-    /** Format: timestamp with time zone */
-    deleted_at?: string;
-    /** Format: timestamp with time zone */
-    reason_inserted_at?: string;
-    /** Format: text */
-    reason?: string;
-    /** Format: public.auth_key_blocked_status_type */
-    status?: "Blocked" | "Unblocked";
-  };
   auth_key: {
     /**
      * Format: bigint
@@ -2144,22 +2106,26 @@ export interface definitions {
      */
     updated_at: string;
   };
-  email_notification_history: {
+  email_history: {
     /**
      * Format: bigint
      * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: number;
-    /** Format: text */
-    email: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
+     */
+    user_id: number;
     /** Format: public.email_type */
     email_type:
       | "Used75PercentStorage"
       | "Used80PercentStorage"
       | "Used85PercentStorage"
       | "Used90PercentStorage"
-      | "UsedOver100PercentStorage";
+      | "Used100PercentStorage";
     /** Format: text */
     message_id: string;
     /**
@@ -2488,24 +2454,6 @@ export interface parameters {
   offset: string;
   /** @description Limiting and Pagination */
   limit: string;
-  /** @description admin_search */
-  "body.admin_search": definitions["admin_search"];
-  /** Format: text */
-  "rowFilter.admin_search.user_id": string;
-  /** Format: text */
-  "rowFilter.admin_search.email": string;
-  /** Format: text */
-  "rowFilter.admin_search.token": string;
-  /** Format: text */
-  "rowFilter.admin_search.token_id": string;
-  /** Format: timestamp with time zone */
-  "rowFilter.admin_search.deleted_at": string;
-  /** Format: timestamp with time zone */
-  "rowFilter.admin_search.reason_inserted_at": string;
-  /** Format: text */
-  "rowFilter.admin_search.reason": string;
-  /** Format: public.auth_key_blocked_status_type */
-  "rowFilter.admin_search.status": string;
   /** @description auth_key */
   "body.auth_key": definitions["auth_key"];
   /** Format: bigint */
@@ -2556,18 +2504,18 @@ export interface parameters {
   "rowFilter.content.inserted_at": string;
   /** Format: timestamp with time zone */
   "rowFilter.content.updated_at": string;
-  /** @description email_notification_history */
-  "body.email_notification_history": definitions["email_notification_history"];
+  /** @description email_history */
+  "body.email_history": definitions["email_history"];
   /** Format: bigint */
-  "rowFilter.email_notification_history.id": string;
-  /** Format: text */
-  "rowFilter.email_notification_history.email": string;
+  "rowFilter.email_history.id": string;
+  /** Format: bigint */
+  "rowFilter.email_history.user_id": string;
   /** Format: public.email_type */
-  "rowFilter.email_notification_history.email_type": string;
+  "rowFilter.email_history.email_type": string;
   /** Format: text */
-  "rowFilter.email_notification_history.message_id": string;
+  "rowFilter.email_history.message_id": string;
   /** Format: timestamp with time zone */
-  "rowFilter.email_notification_history.sent_at": string;
+  "rowFilter.email_history.sent_at": string;
   /** @description metric */
   "body.metric": definitions["metric"];
   /** Format: text */

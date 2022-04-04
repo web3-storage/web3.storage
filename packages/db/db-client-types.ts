@@ -28,6 +28,12 @@ export type UserOutput = {
   updated: definitions['user']['updated_at']
 }
 
+export type UserTagInput = {
+  tag: definitions['user_tag']['tag']
+  value: definitions['user_tag']['value']
+  reason?: definitions['user_tag']['reason']
+}
+
 // Auth key
 export interface CreateAuthKeyInput {
   name: definitions['auth_key']['name']
@@ -331,17 +337,21 @@ export type NameItem = {
   record: definitions['name']['record']
 }
 
-export type UsedStorageItem = {
+export type StorageUsedItem = {
   uploaded: string,
   pinned: string,
   total: string
 }
-export type UsedStorage = {
+export type StorageUsedOutput = {
   uploaded: number,
   pinned: number,
   total: number
 }
-export type UserStorageUsed = {
+export type UserStorageUsedInput = {
+  fromPercent: number,
+  toPercent?: number
+}
+export type UserStorageUsedOutput = {
   id: string,
   name: string,
   email: string,
@@ -350,5 +360,5 @@ export type UserStorageUsed = {
   percentStorageUsed: number
 }
 export type Email = {
-  type: definitions['email_notification_history']['email_type']
+  type: definitions['email_history']['email_type']
 }

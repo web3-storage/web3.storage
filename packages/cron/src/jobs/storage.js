@@ -1,5 +1,6 @@
 import debug from 'debug'
-import { emailType, EmailService } from '../lib/email.js'
+import { EmailService } from '../lib/email.js'
+import { emailType } from '@web3-storage/db'
 
 const log = debug('storage:checkStorageUsed')
 let emailService
@@ -27,7 +28,7 @@ export async function checkStorageUsed ({ db }) {
   })
   await emailService.sendEmails({
     users,
-    email: emailType.UsedOver100PercentStorage,
+    email: emailType.Used100PercentStorage,
     numberOfDays: 1
   })
 

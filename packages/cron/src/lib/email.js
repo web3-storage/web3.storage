@@ -1,12 +1,5 @@
 import debug from 'debug'
-
-export const emailType = {
-  Used75PercentStorage: 'Used75PercentStorage',
-  Used80PercentStorage: 'Used80PercentStorage',
-  Used85PercentStorage: 'Used85PercentStorage',
-  Used90PercentStorage: 'Used90PercentStorage',
-  UsedOver100PercentStorage: 'UsedOver100PercentStorage'
-}
+import { emailType } from '@web3-storage/db'
 
 const log = debug('email:EmailService')
 
@@ -26,7 +19,7 @@ export class EmailService {
   /**
    * Send an email to several users.
    * @param {object} opts
-   * @param {Array<import('@web3-storage/db/db-client-types').UserStorageUsed>} opts.users
+   * @param {Array<import('@web3-storage/db/db-client-types').UserStorageUsedOutput>} opts.users
    * @param {string} opts.email
    * @param {number} [opts.numberOfDays]
    */
@@ -49,7 +42,7 @@ export class EmailService {
    * Checks email notification history for this user and email type to avoid
    * re-sending if user has been recently notified.
    * @param {object} opts
-   * @param {import('@web3-storage/db/db-client-types').UserStorageUsed} opts.user
+   * @param {import('@web3-storage/db/db-client-types').UserStorageUsedOutput} opts.user
    * @param {string} opts.email
    * @param {number} opts.numberOfDays
   * @returns void
@@ -68,7 +61,7 @@ export class EmailService {
       return
     }
 
-    if (email === emailType.UsedOver100PercentStorage) {
+    if (email === emailType.Used100PercentStorage) {
       log(`📧 Sending a quota exceeded email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
     } else {
       log(`📧 Sending an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)

@@ -10,6 +10,9 @@ import {
 } from './utils.js'
 import { ConstraintError, DBError } from './errors.js'
 
+import { emailType } from './constants.js'
+export { emailType }
+
 const uploadQuery = `
         _id:id::text,
         type,
@@ -136,6 +139,48 @@ export class DBClient {
   }
 
   /**
+   * Create a user tag
+   * @param {number} userId
+   * @param {Object} [tag]
+   * @param {string} [tag.tag]
+   * @param {string} [tag.value]
+   * @param {string} [tag.reason]
+   * @returns {Promise<boolean>}
+   */
+  async createUserTag (userId, tag = {}) {
+    const { data: deleteData, status: deleteStatus } = await this._client
+      .from('user_tag')
+      .update({
+        deleted_at: new Date().toISOString()
+      })
+      .match({ user_id: userId, tag: tag.tag })
+      .is('deleted_at', null)
+      .single()
+
+    // the previous tag was marked as deleted
+    // or there was no previous tag of this type
+    // ^ if either of these 2 scenarios are true then we add a new tag
+    if (deleteStatus === 200 || (deleteStatus === 406 && !deleteData)) {
+      const { status: insertStatus } = await this._client
+        .from('user_tag')
+        .insert({
+          user_id: userId,
+          tag: tag.tag,
+          value: tag.value,
+          reason: tag.reason || '',
+          inserted_at: new Date().toISOString(),
+          deleted_at: null
+        })
+        .single()
+
+      if (insertStatus === 201) {
+        return true
+      }
+    }
+    return false
+  }
+
+  /**
    * Returns the value stored for an active (non-deleted) user tag.
    *
    * @param {number} userId
@@ -198,10 +243,10 @@ export class DBClient {
    * Get used storage in bytes, both uploaded and pinned.
    *
    * @param {number} userId
-   * @returns {Promise<import('./db-client-types').UsedStorage>}
+   * @returns {Promise<import('./db-client-types').StorageUsedOutput>}
    */
-  async getUsedStorage (userId) {
-    /** @type {{ data: import('./db-client-types').UsedStorageItem, error: PostgrestError }} */
+  async getStorageUsed (userId) {
+    /** @type {{ data: import('./db-client-types').StorageUsedItem, error: PostgrestError }} */
     const { data, error } = await this._client.rpc('user_used_storage', { query_user_id: userId }).single()
 
     if (error) {
@@ -219,7 +264,7 @@ export class DBClient {
    * Get all users with storage used in a percentage range of their allocated quota
    *
    * @param {{fromPercent: number, toPercent: number}} range
-   * @returns {Promise<Array<import('./db-client-types').UserStorageUsed>>}
+   * @returns {Promise<Array<import('./db-client-types').UserStorageUsedOutput>>}
    */
   async getUsersByStorageUsed (range) {
     const {
@@ -238,17 +283,13 @@ export class DBClient {
     }
 
     return data.map((user) => {
-      const quota = (user.storage_quota)
-      const used = (user.storage_used)
-      const percentUsed = Math.round((used / quota) * 100)
-
       return {
         id: user.id,
         name: user.name,
         email: user.email,
-        storageQuota: quota,
-        storageUsed: used,
-        percentStorageUsed: percentUsed
+        storageQuota: user.storage_quota,
+        storageUsed: user.storage_used,
+        percentStorageUsed: Math.round((user.storage_used / user.storage_quota) * 100)
       }
     })
   }
@@ -272,7 +313,7 @@ export class DBClient {
     const numberOfDaysAgo = d.toISOString()
 
     const { count, error } = await this._client
-      .from('email_notification_history')
+      .from('email_history')
       .select('id', { count: 'exact' })
       .eq('user_id', userId)
       .eq('email_type', emailType)
@@ -299,7 +340,7 @@ export class DBClient {
     messageId
   }) {
     const { data, error } = await this._client
-      .from('email_notification_history')
+      .from('email_history')
       .upsert({
         user_id: userId,
         email_type: emailType,

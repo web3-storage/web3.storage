@@ -4,12 +4,10 @@ import { DBClient } from '../index.js'
 import {
   createUser,
   createUserAuthKey,
-  createUserTag,
   createUpload,
   createPsaPinRequest,
   token
 } from './utils.js'
-import { emailType } from '../../cron/src/lib/email.js'
 
 describe('Users used storage', () => {
   /** @type {DBClient} */
@@ -111,7 +109,7 @@ describe('Users used storage', () => {
     authKey4 = await createUserAuthKey(dbClient, Number(user4._id), {
       name: 'test4-key'
     })
-    await createUserTag(dbClient, Number(user4._id), {
+    await dbClient.createUserTag(Number(user4._id), {
       tag: 'StorageLimitBytes',
       value: '2199023255552'
     })
@@ -168,34 +166,5 @@ describe('Users used storage', () => {
     assert.strictEqual(users.length, 2, 'Users with non-default quota included')
     assert.strictEqual(users[0].email, 'test4@email.com')
     assert.strictEqual(users[1].email, 'test3@email.com')
-  })
-
-  it('checks email log before sending', async () => {
-    const user = await createUser(dbClient, {
-      name: 'test5-name',
-      email: 'test5@email.com'
-    })
-
-    // check an email has not been sent
-    let hasBeenSentRecently = await dbClient.emailSentRecently({
-      userId: Number(user._id),
-      emailType: emailType[emailType.UsedOver100PercentStorage]
-    })
-    assert.strictEqual(hasBeenSentRecently, false, 'Has not been sent')
-
-    // log an email
-    await dbClient.logEmailSent({
-      userId: Number(user._id),
-      emailType: emailType[emailType.UsedOver100PercentStorage],
-      messageId: '1'
-    })
-
-    // check the email has already been sent today
-    hasBeenSentRecently = await dbClient.emailSentRecently({
-      userId: Number(user._id),
-      emailType: emailType[emailType.UsedOver100PercentStorage],
-      numberOfDays: 1
-    })
-    assert.strictEqual(hasBeenSentRecently, true, 'Has been sent')
   })
 })

@@ -32,7 +32,7 @@ BEGIN
         'Used80PercentStorage',
         'Used85PercentStorage',
         'Used90PercentStorage',
-        'UsedOver100PercentStorage'
+        'Used100PercentStorage'
       );
   END IF;
 END
@@ -344,7 +344,7 @@ BEGIN
 END
 $$;
 
-CREATE TABLE IF NOT EXISTS email_notification_history 
+CREATE TABLE IF NOT EXISTS email_history 
 (
   id              BIGSERIAL PRIMARY KEY,
   -- the id of the user being notified

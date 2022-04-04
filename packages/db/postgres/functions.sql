@@ -250,18 +250,11 @@ BEGIN
 END
 $$;
 
-DO 
-$$
-BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'used_storage') THEN
-    CREATE TYPE used_storage AS (uploaded TEXT, pinned TEXT, total TEXT);
-  END IF;
-END
-$$;
+CREATE TYPE used_storage AS (uploaded TEXT, pinned TEXT, total TEXT);
 
 CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT) 
-RETURNS used_storage
-LANGUAGE plpgsql
+  RETURNS used_storage
+  LANGUAGE plpgsql
 AS
 $$
 DECLARE 
@@ -282,16 +275,20 @@ BEGIN
   pinned := 
     (
       SELECT COALESCE((
-        SELECT COALESCE(SUM(c.dag_size), 0)
-        FROM psa_pin_request psa_pr
-        JOIN content c ON c.cid = psa_pr.content_cid
-        JOIN pin p ON p.content_cid = psa_pr.content_cid
-        JOIN auth_key a ON a.id = psa_pr.auth_key_id
-        WHERE a.user_id = query_user_id::BIGINT
-        AND psa_pr.deleted_at is null
-        AND p.status = 'Pinned'
-        GROUP BY p.status
-      ), 0)
+        SELECT SUM(dag_size) 
+        FROM (
+          SELECT  psa_pr.content_cid,
+                  c.dag_size
+          FROM psa_pin_request psa_pr
+          JOIN content c ON c.cid = psa_pr.content_cid
+          JOIN pin p ON p.content_cid = psa_pr.content_cid
+          JOIN auth_key a ON a.id = psa_pr.auth_key_id
+          WHERE a.user_id = query_user_id::BIGINT
+          AND psa_pr.deleted_at is null
+          AND p.status = 'Pinned'
+          GROUP BY psa_pr.content_cid,
+                  c.dag_size
+        ) AS pinned_content), 0)
     ); 
 
   total := uploaded + pinned;
@@ -325,17 +322,20 @@ DECLARE
   default_quota BIGINT := 1099511627776;
 BEGIN
   RETURN QUERY
-    SELECT  u.id::TEXT                                      AS id,
-            u.name                                          AS name,
-            u.email                                         AS email,
-            COALESCE(ut.value::BIGINT, default_quota)::TEXT AS storage_quota,
-            (user_used_storage(u.id)).total                 AS storage_used
-    FROM public.user u
-    FULL OUTER JOIN user_tag ut ON u.id = ut.user_id
-    WHERE (ut.tag IS NULL OR (ut.tag = 'StorageLimitBytes' AND ut.deleted_at IS NULL))
-    AND (user_used_storage(u.id)).total::BIGINT >= (from_percent::NUMERIC/100) * COALESCE(ut.value::BIGINT, default_quota)
-    AND (to_percent IS NULL OR (user_used_storage(u.id)).total::BIGINT < (to_percent::NUMERIC/100) * COALESCE(ut.value::BIGINT, default_quota))
-    ORDER BY (user_used_storage(u.id)).total::BIGINT DESC;
+    SELECT * 
+    FROM (
+      SELECT  u.id::TEXT                                      AS id,
+              u.name                                          AS name,
+              u.email                                         AS email,
+              COALESCE(ut.value::BIGINT, default_quota)::TEXT AS storage_quota,
+              (user_used_storage(u.id)).total::TEXT         AS storage_used
+      FROM public.user u
+      LEFT JOIN user_tag ut ON u.id = ut.user_id
+      WHERE ut.tag IS NULL OR (ut.tag = 'StorageLimitBytes' AND ut.deleted_at IS NULL)
+      ) user_account
+    WHERE user_account.storage_used::BIGINT >= (from_percent/100::NUMERIC) * user_account.storage_quota::BIGINT
+    AND (to_percent IS NULL OR user_account.storage_used::BIGINT < (to_percent/100::NUMERIC) * user_account.storage_quota::BIGINT)
+    ORDER BY user_account.storage_used::BIGINT DESC;
 END
 $$;
 
@@ -355,43 +355,6 @@ BEGIN
   END LOOP;
 
   RETURN pin_ids;
-END
-$$;
-
-CREATE TYPE used_storage AS (uploaded TEXT, pinned TEXT);
-
-CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT) 
-RETURNS used_storage
-LANGUAGE plpgsql
-AS
-$$
-DECLARE used_storage used_storage;
-BEGIN
-  SELECT COALESCE(SUM(c.dag_size), 0)
-  INTO used_storage.uploaded::TEXT
-  FROM upload u
-  JOIN content c ON c.cid = u.content_cid
-  WHERE u.user_id = query_user_id::BIGINT
-  AND u.deleted_at is null;
-
-  SELECT COALESCE((
-    SELECT SUM(dag_size) 
-    FROM (
-      SELECT  psa_pr.content_cid,
-              c.dag_size
-      FROM psa_pin_request psa_pr
-      JOIN content c ON c.cid = psa_pr.content_cid
-      JOIN pin p ON p.content_cid = psa_pr.content_cid
-      JOIN auth_key a ON a.id = psa_pr.auth_key_id
-      WHERE a.user_id = query_user_id::BIGINT
-      AND psa_pr.deleted_at is null
-      AND p.status = 'Pinned'
-      GROUP BY psa_pr.content_cid,
-              c.dag_size
-    ) AS pinned_content), 0)
-  INTO used_storage.pinned::TEXT;
-
-  return used_storage;
 END
 $$;
 
