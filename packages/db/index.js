@@ -262,15 +262,14 @@ export class DBClient {
 
   /**
    * Get all users with storage used in a percentage range of their allocated quota
-   *
-   * @param {{fromPercent: number, toPercent: number}} range
+   * @param {import('./db-client-types').UserStorageUsedInput} percentRange
    * @returns {Promise<Array<import('./db-client-types').UserStorageUsedOutput>>}
    */
-  async getUsersByStorageUsed (range) {
+  async getUsersByStorageUsed (percentRange) {
     const {
       fromPercent,
       toPercent = null
-    } = range
+    } = percentRange
 
     const { data, error } = await this._client
       .rpc('users_by_storage_used', {
@@ -297,17 +296,16 @@ export class DBClient {
   /**
    * Check the email history for a specified email type to see if it has
    * been sent within a specified number of days. If not, it is resent.
-   * @param {object} opts
-   * @param {number} opts.userId
-   * @param {string} opts.emailType
-   * @param {number} [opts.numberOfDays]
+   * @param {import('./db-client-types').EmailSentRecentlyInput} email
    * @returns {Promise<boolean>}
    */
-  async emailSentRecently ({
-    userId,
-    emailType,
-    numberOfDays = 7
-  }) {
+  async emailSentRecently (email) {
+    const {
+      userId,
+      emailType,
+      numberOfDays = 7
+    } = email
+
     const d = new Date()
     d.setDate(d.getDate() - numberOfDays)
     const numberOfDaysAgo = d.toISOString()
@@ -328,17 +326,16 @@ export class DBClient {
 
   /**
    * Log that an email has been sent
-   * @param {object} opts
-   * @param {number} opts.userId
-   * @param {string} opts.emailType
-   * @param {number} [opts.messageId]
+   * @param {import('./db-client-types').LogEmailSentInput} email
    * @returns {Promise<number>}
    */
-  async logEmailSent ({
-    userId,
-    emailType,
-    messageId
-  }) {
+  async logEmailSent (email) {
+    const {
+      userId,
+      emailType,
+      messageId
+    } = email
+
     const { data, error } = await this._client
       .from('email_history')
       .upsert({

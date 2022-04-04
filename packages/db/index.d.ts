@@ -32,6 +32,8 @@ import type {
   UserStorageUsedOutput,
   StorageUsedOutput,
   UserTagInput,
+  EmailSentRecentlyInput,
+  LogEmailSentInput,
 } from './db-client-types'
 
 export { gql }
@@ -44,8 +46,8 @@ export class DBClient {
   getUser (issuer: string): Promise<UserOutput>
   getStorageUsed (userId: number): Promise<StorageUsedOutput>
   getUsersByStorageUsed (percentRange: UserStorageUsedInput): Promise<Array<UserStorageUsedOutput>>
-  emailSentRecently({userId, emailType, numberOfDays}: {userId: number, emailType: string, numberOfDays?: number}): Promise<boolean>
-  logEmailSent({userId, emailType, messageId} : {userId: number, emailType: string, messageId: string}): Promise<{id: string}>
+  emailSentRecently(email: EmailSentRecentlyInput): Promise<boolean>
+  logEmailSent(email : LogEmailSentInput): Promise<{id: string}>
   createUpload (data: CreateUploadInput): Promise<CreateUploadOutput>
   getUpload (cid: string, userId: number): Promise<UploadItemOutput>
   listUploads (userId: number, opts?: ListUploadsOptions): Promise<UploadItemOutput[]>
