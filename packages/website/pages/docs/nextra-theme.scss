@@ -1,18 +1,18 @@
-/* This is a custom scoped export of the themes styles */
+// This is a custom scoped export of the themes styles with some modifications
+
 .nextra-container abbr[title] {
   -webkit-text-decoration: underline dotted;
   text-decoration: underline dotted;
 }
 .nextra-container b,
 .nextra-container strong {
-  font-weight: bolder;
+  font-weight: 600;
 }
 .nextra-container code,
 .nextra-container kbd,
 .nextra-container pre,
 .nextra-container samp {
-  font-family: ui-monospace, SFMono-Regular, Consolas, Liberation Mono, Menlo,
-    monospace;
+  font-family: ui-monospace, SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
   font-size: 1em;
 }
 .nextra-container small {
@@ -89,53 +89,18 @@
 .nextra-container summary {
   display: list-item;
 }
-.nextra-container blockquote,
-.nextra-container dd,
-.nextra-container dl,
-.nextra-container figure,
-.nextra-container h1,
-.nextra-container h2,
-.nextra-container h3,
-.nextra-container h4,
-.nextra-container h5,
-.nextra-container h6,
-.nextra-container hr,
-.nextra-container p,
-.nextra-container pre {
-  margin: 0;
-}
 .nextra-container button {
   background-color: transparent;
   background-image: none;
-}
-.nextra-container fieldset,
-.nextra-container ol,
-.nextra-container ul {
-  margin: 0;
-  padding: 0;
 }
 .nextra-container ol,
 .nextra-container ul {
   list-style: none;
 }
-.nextra-container html {
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
-    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-  line-height: 1.5;
-}
-.nextra-container body {
-  font-family: inherit;
-  line-height: inherit;
-}
 .nextra-container *,
 .nextra-container :after,
 .nextra-container :before {
   box-sizing: border-box;
-  border: 0 solid;
-}
-.nextra-container img {
-  border-style: solid;
 }
 .nextra-container textarea {
   resize: vertical;
@@ -167,9 +132,9 @@
 }
 .nextra-container a {
   --tw-text-opacity: 1;
-  color: rgba(51, 107, 173, var(--tw-text-opacity));
-  text-decoration: underline;
-  text-underline-position: under;
+  color: $docsPrimaryPurple;
+  font-weight: 600;
+  text-decoration: none;
 }
 .nextra-container button,
 .nextra-container input,
@@ -184,8 +149,7 @@
 .nextra-container kbd,
 .nextra-container pre,
 .nextra-container samp {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    Liberation Mono, Courier New, monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
 }
 .nextra-container audio,
 .nextra-container canvas,
@@ -229,10 +193,8 @@
   --tw-skew-y: 0;
   --tw-scale-x: 1;
   --tw-scale-y: 1;
-  --tw-transform: translateX(var(--tw-translate-x))
-    translateY(var(--tw-translate-y)) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
+  --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) rotate(var(--tw-rotate))
+    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   --tw-border-opacity: 1;
   border-color: rgba(237, 242, 247, var(--tw-border-opacity));
   --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
@@ -251,9 +213,8 @@
   --tw-saturate: var(--tw-empty, /*!*/ /*!*/);
   --tw-sepia: var(--tw-empty, /*!*/ /*!*/);
   --tw-drop-shadow: var(--tw-empty, /*!*/ /*!*/);
-  --tw-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast)
-    var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate)
-    var(--tw-sepia) var(--tw-drop-shadow);
+  --tw-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate)
+    var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 .nextra-container html {
   -webkit-font-smoothing: auto;
@@ -311,13 +272,11 @@
   color: rgba(226, 232, 240, var(--tw-text-opacity));
 }
 .nextra-container pre {
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
   overflow-x: auto;
   border-radius: 0.5rem;
-  --tw-bg-opacity: 1;
-  background-color: rgba(237, 242, 247, var(--tw-bg-opacity));
+  background-color: #1c1e29;
   padding: 1rem;
+  margin: 0;
 }
 .nextra-container .dark pre {
   --tw-bg-opacity: 1;
@@ -721,17 +680,14 @@
   opacity: 0.25;
 }
 .nextra-container .shadow-lg {
-  --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 .nextra-container .shadow-lg,
 .nextra-container .shadow-md {
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 transparent),
-    var(--tw-ring-shadow, 0 0 transparent), var(--tw-shadow);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 transparent), var(--tw-ring-shadow, 0 0 transparent), var(--tw-shadow);
 }
 .nextra-container .shadow-md {
-  --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 .nextra-container .outline-none {
   outline: 2px solid transparent;
@@ -750,24 +706,15 @@
   user-select: none;
   transform: translate3d(0, 0, 0);
 }
-@media (min-width: 768px) {
-  .nextra-container .sidebar {
-    border-right-width: 1px;
-  }
-}
-
 .nextra-container .sidebar ul ul {
   position: relative;
   margin-left: 1.25rem;
 }
 .nextra-container .sidebar a:focus-visible,
 .nextra-container .sidebar button:focus-visible {
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0
-    var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0
-    calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
-    var(--tw-shadow, 0 0 transparent);
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 transparent);
 }
 .nextra-container .sidebar .active-anchor {
   font-weight: 600;
@@ -789,11 +736,8 @@
   content: '-';
 }
 .nextra-container .sidebar li.active > a {
-  --tw-bg-opacity: 1;
-  background-color: rgba(237, 242, 247, var(--tw-bg-opacity));
-  font-weight: 600;
-  --tw-text-opacity: 1;
-  color: rgba(0, 0, 0, var(--tw-text-opacity));
+  font-weight: 500;
+  color: $docsPrimaryPurple;
 }
 .nextra-container .dark .sidebar li.active > a {
   --tw-bg-opacity: 1;
@@ -803,25 +747,31 @@
 }
 .nextra-container .sidebar a,
 .nextra-container .sidebar button {
-  margin-top: 0.25rem;
   display: block;
   width: 100%;
+  font-weight: normal;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
   border-radius: 0.25rem;
-  padding: 0.5rem;
+  padding: toRem(6) toRem(16);
   text-align: left;
   font-size: 1rem;
   line-height: 1.5rem;
   --tw-text-opacity: 1;
-  color: rgba(113, 128, 150, var(--tw-text-opacity));
+  color: $ebony;
   text-decoration: none;
   outline: 2px solid transparent;
   outline-offset: 2px;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
+}
+.nextra-container .sidebar button {
+  font-weight: 500;
+  font-size: toRem(22);
+  margin-top: toRem(30);
+  margin-bottom: toRem(8);
 }
 .nextra-container .dark .sidebar a,
 .nextra-container .dark .sidebar button {
@@ -830,10 +780,7 @@
 }
 .nextra-container .sidebar a:hover,
 .nextra-container .sidebar button:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgba(247, 250, 252, var(--tw-bg-opacity));
-  --tw-text-opacity: 1;
-  color: rgba(26, 32, 44, var(--tw-text-opacity));
+  color: $docsPrimaryPurple;
 }
 .nextra-container .dark .sidebar a:hover,
 .nextra-container .dark .sidebar button:hover {
@@ -843,27 +790,17 @@
   color: rgba(255, 255, 255, var(--tw-text-opacity));
 }
 .nextra-container article ul {
-  margin-left: 1.5rem;
-  margin-top: 1.5rem;
+  margin: 0 0 2.5rem;
+  padding-left: 1rem;
   list-style-type: disc;
 }
 .nextra-container article li {
-  margin-top: 0.5rem;
-  line-height: 1.5;
+  padding-left: 2.5rem;
 }
 .nextra-container article ol {
-  margin-left: 1.5rem;
-  margin-top: 1.5rem;
   list-style-type: decimal;
-}
-.nextra-container article blockquote {
-  border-left-width: 2px;
-  --tw-border-opacity: 1;
-  border-color: rgba(226, 232, 240, var(--tw-border-opacity));
-  padding-left: 1.5rem;
-  font-style: italic;
-  --tw-text-opacity: 1;
-  color: rgba(74, 85, 104, var(--tw-text-opacity));
+  margin: 0 0 2.5rem;
+  padding-left: 1rem;
 }
 .nextra-container .dark article blockquote {
   --tw-border-opacity: 1;
@@ -917,12 +854,9 @@
   user-select: none;
   outline: 2px solid transparent;
   outline-offset: 2px;
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0
-    var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0
-    calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
-    var(--tw-shadow, 0 0 transparent);
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 transparent);
 }
 .nextra-container .nextra-search input {
   --tw-border-opacity: 1;
@@ -979,10 +913,8 @@
   background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgba(247, 250, 252, var(--tw-text-opacity));
-  --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 transparent),
-    var(--tw-ring-shadow, 0 0 transparent), var(--tw-shadow);
+  --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 transparent), var(--tw-ring-shadow, 0 0 transparent), var(--tw-shadow);
 }
 .nextra-container .dark .nextra-search ul > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-opacity: 1;
@@ -1199,9 +1131,7 @@
   padding-left: 0;
 }
 @media (min-width: 1280px) {
-  .nextra-container
-    .nextra-container:not(.rtl):not(.page)
-    article.docs-container {
+  .nextra-container .nextra-container:not(.rtl):not(.page) article.docs-container {
     padding-right: 2rem;
   }
   .nextra-container .nextra-container.rtl:not(.page) .docs-container {
@@ -1209,10 +1139,7 @@
   }
 }
 @media (min-width: 768px) {
-  .nextra-container
-    .nextra-container:not(.page)
-    article.docs-container
-    .bleed.full {
+  .nextra-container .nextra-container:not(.page) article.docs-container .bleed.full {
     margin-left: calc(-50vw + 50% + 8rem);
     margin-right: calc(-50vw + 50% + 8rem);
   }
@@ -1222,17 +1149,11 @@
   }
 }
 @media (min-width: 1280px) {
-  .nextra-container
-    .nextra-container:not(.rtl):not(.page)
-    article.docs-container
-    .bleed.full {
+  .nextra-container .nextra-container:not(.rtl):not(.page) article.docs-container .bleed.full {
     margin-left: calc(50% - 50vw + 16rem);
     margin-right: calc(50% - 50vw);
   }
-  .nextra-container
-    .nextra-container.rtl:not(.page)
-    .docs-container
-    .bleed.full {
+  .nextra-container .nextra-container.rtl:not(.page) .docs-container .bleed.full {
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw + 16rem);
   }
@@ -1279,12 +1200,9 @@
   outline-offset: 2px;
 }
 .nextra-container .focus\:ring:focus {
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0
-    var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0
-    calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
-    var(--tw-shadow, 0 0 transparent);
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 transparent);
 }
 .nextra-container .dark .dark\:border-gray-700 {
   --tw-border-opacity: 1;

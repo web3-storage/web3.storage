@@ -5,7 +5,7 @@ description: Learn how to list the files you've uploaded to Web3.Storage in this
 ---
 
 import Callout from 'nextra-theme-docs/callout';
-import CodeSnippet from 'components/mdx/CodeSnippet';
+import CodeSnippet from 'components/mdx/codeSnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
 import exampleUpload from '!!raw-loader!../../../assets/code-snippets/how-to/example-listing-upload.json.txt'
 
@@ -21,7 +21,9 @@ You can see a list of everything you've uploaded to Web3.Storage on the [Files p
 ![A screenshot of the file listing available at https://web3.storage/files when logged in to your account](/images/docs/files-listing.png)
 
 This [Files page][site-files] provides a convenient overview of your stored data, including links to view your files in your browser via an [IPFS gateway][ipfs-docs-gateway] and information about how the data is being stored on the [decentralized storage networks][concepts-decentralized-storage] that Web3.Storage uses under the hood.
+
 ## Using the Web3.Storage client
+
 To easily integrate Web3.Storage programmatically in your apps or services, you can also access a listing of your uploads from your code using the Web3.Storage client. In the example below, this guide walks through how to use the [JavaScript client library][reference-js-client] to fetch a complete listing of all the data you've uploaded using Web3.Storage.
 
 ### Installing the client
@@ -72,6 +74,7 @@ The `Upload` objects returned by the `list` method include some basic status inf
 #### Listing a subset of uploads
 
 By default, the [`list` method][reference-js-list] returns information about all uploads made using your Web3.Storage account. You can optionally restrict the listing in two ways:
+
 - Only contain entries that were uploaded before a given timestamp.
 - Limit the total number of returned entries.
 
@@ -88,13 +91,11 @@ Here's an example of fetching the first 10 uploads made on the previous day:
 [reference-js-constructor]: ../reference/js-client-library.md#constructor
 [reference-js-list]: ../reference/js-client-library.md#list-uploads
 [site-files]: https://web3.storage/files
-
 [ipfs-docs-gateway]: https://docs.ipfs.io/concepts/ipfs-gateway/
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing/
 [ipfs-docs-merkle-dag]: https://docs.ipfs.io/concepts/merkle-dag/
 [ipfs-docs-pinning]: https://docs.ipfs.io/concepts/persistence/
 [fil-docs-deals]: https://docs.filecoin.io/about-filecoin/how-filecoin-works/#deals
-
 [iso-8601]: https://en.wikipedia.org/wiki/ISO_8601
 [js-async-iterable-explainer]: https://javascript.info/async-iterators-generators
 [mdn-for-await-of]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of

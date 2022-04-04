@@ -2,6 +2,14 @@ import React, { useState, cloneElement, Children, isValidElement } from 'react';
 import clsx from 'clsx';
 
 /**
+ * @param {React.ReactElement} comp
+ * @returns true if we think the given element is a tab item
+ */
+function isTabItem(comp) {
+  return typeof comp.props.value !== 'undefined';
+}
+
+/**
  * @typedef {object} TabItemProps
  * @property {React.ReactNode} children
  * @property {string} value a unique id for this tab item
@@ -91,6 +99,7 @@ export function Tabs(props) {
               key={value}
               ref={tr => tabRefs.push(tr)}
               onFocus={handleTabChange}
+              onKeyDown={handleTabChange}
               onClick={handleTabChange}
               {...attributes}
               className={clsx(
@@ -115,12 +124,4 @@ export function Tabs(props) {
       </div>
     </div>
   );
-}
-
-/**
- * @param {React.ReactElement} comp
- * @returns true if we think the given element is a tab item
- */
-function isTabItem(comp) {
-  return typeof comp.props.value !== 'undefined';
 }

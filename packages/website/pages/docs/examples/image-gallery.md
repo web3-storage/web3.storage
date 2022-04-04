@@ -4,7 +4,7 @@ description: Learn about Web3.Storage by walking through the code for a simple i
 ---
 
 import Callout from 'nextra-theme-docs/callout';
-import CodeSnippet from 'components/mdx/CodeSnippet';
+import CodeSnippet from 'components/mdx/codeSnippet';
 import Accordion from 'components/mdx/Accordion';
 import storageJsSource from '!!raw-loader!../../../node_modules/example-image-gallery/src/js/storage.js'
 import Image from 'next/image';
@@ -93,7 +93,6 @@ The Web3.Storage service and client library make getting your data onto [decentr
 [reference-js-put]: ../reference/js-client-library.md#store-files
 [reference-js-list]: ../reference/js-client-library.md#list-uploads
 [concepts-decentralized-storage]: ../concepts/decentralized-storage.md
-
 [github-example-repo]: https://github.com/web3-storage/example-image-gallery
 [github-storage.js]: https://github.com/web3-storage/example-image-gallery/blob/main/src/js/storage.js
 [github-helpers.js]: https://github.com/web3-storage/example-image-gallery/blob/main/src/js/helpers.js

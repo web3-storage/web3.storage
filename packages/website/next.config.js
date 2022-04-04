@@ -38,6 +38,7 @@ const nextConfig = {
       new options.webpack.DefinePlugin({
         COMMITHASH: JSON.stringify(git.long(dirName)),
         VERSION: JSON.stringify(gitRevisionPlugin.version()),
+        LASTCOMMITDATETIME: JSON.stringify(gitRevisionPlugin.lastcommitdatetime()),
       })
     );
 

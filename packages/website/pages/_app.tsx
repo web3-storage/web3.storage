@@ -1,5 +1,6 @@
 import '../styles/global.scss';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import clsx from 'clsx';
 
 import Metadata from 'components/general/metadata';
@@ -8,7 +9,6 @@ import AppProviders from 'components/general/appProviders';
 import MessageBanner from '../components/messagebanner/messagebanner.js';
 import Navigation from '../components/navigation/navigation.js';
 import Footer from '../components/footer/footer.js';
-import { useEffect } from 'react';
 
 /**
  * App root Component

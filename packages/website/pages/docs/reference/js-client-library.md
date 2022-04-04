@@ -5,7 +5,7 @@ description: Integrate Web3.Storage into your code using the JavaScript client l
 
 import { Tabs, TabItem } from 'components/mdx/tabs';
 import Callout from 'nextra-theme-docs/callout';
-import CodeSnippet from 'components/mdx/CodeSnippet';
+import CodeSnippet from 'components/mdx/codeSnippet';
 import Accordion from 'components/mdx/Accordion';
 import dagJsonSource from '!!raw-loader!../../../assets/code-snippets/how-to/dag-json.js'
 
@@ -24,17 +24,17 @@ While we recommend that you install the latest _stable_ version of the following
 - [NPM](https://www.npmjs.com/) `7.0.0`
 - [Node.js](https://nodejs.org/en/) `14.0.0`
 - [Webpack](https://webpack.js.org/) `5.0.0`
-</Callout>
+  </Callout>
 
 ## Constructor
 
 The constructor for Web3.Storage is simple; all you need is your API token.
 
 ```javascript
-import { Web3Storage } from 'web3.storage'
+import { Web3Storage } from 'web3.storage';
 
 // Construct with token and endpoint
-const client = new Web3Storage({ token: apiToken })
+const client = new Web3Storage({ token: apiToken });
 ```
 
 ## Store files
@@ -54,13 +54,13 @@ Store files using the `put()` method.
 In the browser, using a file chooser to prompt the user for files to store:
 
 ```javascript
-const fileInput = document.querySelector('input[type="file"]')
+const fileInput = document.querySelector('input[type="file"]');
 
 // Pack files into a CAR and send to web3.storage
 const rootCid = await client.put(fileInput.files, {
   name: 'cat pics',
-  maxRetries: 3
-})
+  maxRetries: 3,
+});
 ```
 
 </TabItem>
@@ -69,10 +69,10 @@ const rootCid = await client.put(fileInput.files, {
 In Node.js, using the `getFilesFromPath` helper to load `File` objects from a local path:
 
 ```javascript
-import { getFilesFromPath } from 'web3.storage'
+import { getFilesFromPath } from 'web3.storage';
 
-const files = await getFilesFromPath('./files')
-const rootCid = await client.put(files)
+const files = await getFilesFromPath('./files');
+const rootCid = await client.put(files);
 ```
 
 </TabItem>
@@ -86,10 +86,10 @@ The method returns a string containing the CID of the uploaded CAR.
 
 Method parameters are supplied in positional order.
 
-| Number | Type | Description |
-| ------ | ---- | ----------- |
-| 1 | `file[]` | An iterable collection of [Files](https://developer.mozilla.org/en-US/docs/Web/API/File) to be packed into a CAR and uploaded. |
-| 2 | `{options}` | _Optional._ An object whose properties define certain Web3.Storage options and metadata about the files being uploaded. See below for more details. |
+| Number | Type        | Description                                                                                                                                         |
+| ------ | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1      | `file[]`    | An iterable collection of [Files](https://developer.mozilla.org/en-US/docs/Web/API/File) to be packed into a CAR and uploaded.                      |
+| 2      | `{options}` | _Optional._ An object whose properties define certain Web3.Storage options and metadata about the files being uploaded. See below for more details. |
 
 An `{options}` object has the following properties that can be used as parameters when calling `put()`:
 
@@ -97,16 +97,18 @@ An `{options}` object has the following properties that can be used as parameter
 _String._ The `name` parameter lets you attach an arbitrary name to the uploaded content archive, which you can use to identify and organize your uploads. The name is not stored alongside the data on IPFS, but it is viewable within the file listing on the Web3.Storage site.
 
 ```js
-const cid = await client.put(files, { name: 'cat pics' })
+const cid = await client.put(files, { name: 'cat pics' });
 ```
+
 </Accordion>
 
 <Accordion heading="maxRetries">
 _Number._ You can specify how many times `put` should attempt to retry in case of failure by passing in a `maxRetries` option:
 
 ```js
-const cid = await client.put(files, { maxRetries: 3 })
+const cid = await client.put(files, { maxRetries: 3 });
 ```
+
 </Accordion>
 
 <Accordion heading="wrapWithDirectory">
@@ -136,7 +138,7 @@ bafybeigw6rik2dlxlfx354ofycpjzljon7zagjofcb35csrsdujf3zbfca/
 However, if you do this instead:
 
 ```javascript
-const cid = await client.put(files, { wrapWithDirectory: false })
+const cid = await client.put(files, { wrapWithDirectory: false });
 ```
 
 The _contents_ of the `files` directory will be at the top level, instead of the `files` directory itself:
@@ -147,24 +149,27 @@ bafybeiebez7epbidb7f6fcurnd5ukpokrpq5wkrsuakynukpxxo4y4ewvi/
 └── stuff
     └── things.md
 ```
+
 </Accordion>
 
 <Accordion heading="onRootCidReady">
 _Function._ Because the data is formatted for IPFS and Filecoin on the client, the root CID for the data is generated before the data is uploaded to Web3.Storage. If you want to display the CID to the user before the upload is complete, pass in an `onRootCidReady` function that accepts a CID string:
 
 ```js
-const onRootCidReady = rootCid => console.log('root cid:', rootCid)
-const cid = await client.put(files, { onRootCidReady })
+const onRootCidReady = rootCid => console.log('root cid:', rootCid);
+const cid = await client.put(files, { onRootCidReady });
 ```
+
 </Accordion>
 
 <Accordion heading="onStoredChunk">
 _Function._ You can also display progress updates by passing in an `onStoredChunk` callback. This is called after each chunk of data is uploaded, with the size of the chunk in bytes passed in as a parameter:
 
 ```js
-const onStoredChunk = chunkSize => console.log(`stored chunk of ${chunkSize} bytes`)
-const cid = await client.put(files, { onStoredChunk })
+const onStoredChunk = chunkSize => console.log(`stored chunk of ${chunkSize} bytes`);
+const cid = await client.put(files, { onStoredChunk });
 ```
+
 </Accordion>
 
 ## Retrieve files
@@ -180,10 +185,10 @@ Retrieve files using the `get()` method. You will need the CID you obtained at u
 ### Example
 
 ```javascript
-const res = await client.get(rootCid) // Web3Response
-const files = await res.files() // Web3File[]
+const res = await client.get(rootCid); // Web3Response
+const files = await res.files(); // Web3File[]
 for (const file of files) {
-  console.log(`${file.cid} ${file.name} ${file.size}`)
+  console.log(`${file.cid} ${file.name} ${file.size}`);
 }
 ```
 
@@ -200,17 +205,17 @@ Calling the `files()` method returns your requested files as an `Array<Web3File>
 The `Web3File` type extends [the generic JavaScript `File` type](https://developer.mozilla.org/en-US/docs/Web/API/File), adding a `string` property for the CID of the given file named `cid`, as shown in the example below. This is different from the CID of the CAR that contains the file, which you specified when calling `get()`.
 </TabItem>
 <TabItem value="file-unix" label="Using UnixFS objects">
-In addition to the `files()` method, you can also use the `unixFsIterator()` method. This returns your requested files as a  `AsyncIterable<UnixFS>` object, which is an iterable collection of [`UnixFS`](https://github.com/ipfs/js-ipfs-unixfs/blob/master/packages/ipfs-unixfs/README.md) objects. Each object represents a file that was uploaded in the CAR with the supplied CID.
+In addition to the `files()` method, you can also use the `unixFsIterator()` method. This returns your requested files as a `AsyncIterable<UnixFS>` object, which is an iterable collection of [`UnixFS`](https://github.com/ipfs/js-ipfs-unixfs/blob/master/packages/ipfs-unixfs/README.md) objects. Each object represents a file that was uploaded in the CAR with the supplied CID.
 
 Using `unixFS` is helpful in cases where you expect large responses or responses containing many files, since it does not buffer all files in memory before returning. Instead, the returned async iterator `yield`s an object for each entry.
 
 ```js
-const res = await client.get(cid)
+const res = await client.get(cid);
 for await (const entry of res.unixFsIterator()) {
-  console.log(`got unixfs of type ${entry.type}. cid: ${entry.cid} path: ${entry.path}`)
+  console.log(`got unixfs of type ${entry.type}. cid: ${entry.cid} path: ${entry.path}`);
   // entry.content() returns another async iterator for the chunked file contents
   for await (const chunk of entry.content()) {
-    console.log(`got a chunk of ${chunk.size} bytes of data`)
+    console.log(`got a chunk of ${chunk.size} bytes of data`);
   }
 }
 ```
@@ -225,9 +230,9 @@ For more details on `UnixFS` objects, see [the README file in the `UnixFS` GitHu
 
 Parameters are supplied in positional order.
 
-| Number | Type | Description |
-| ------ | ---- | ----------- |
-| 1 | `string` | A string containing the CID of the CAR to be retrieved. |
+| Number | Type     | Description                                             |
+| ------ | -------- | ------------------------------------------------------- |
+| 1      | `string` | A string containing the CID of the CAR to be retrieved. |
 
 ## Check status
 
@@ -247,9 +252,10 @@ Retrieve metadata about your file by using the `status()` method and supplying t
 Here's an example of a call to the `status()` method:
 
 ```javascript
-const info = await client.status(rootCid)
-console.log(`${info.cid} ${info.dagSize} ${info.created}`)
+const info = await client.status(rootCid);
+console.log(`${info.cid} ${info.dagSize} ${info.created}`);
 ```
+
 </TabItem>
 <TabItem value="response" label="Response">
 Here's an example response from the `status()` method:
@@ -294,6 +300,7 @@ Here's an example response from the `status()` method:
   }
 }
 ```
+
 </TabItem>
 </Tabs>
 
@@ -301,9 +308,9 @@ Here's an example response from the `status()` method:
 
 Parameters are supplied in positional order.
 
-| Number | Type | Description |
-| ------ | ---- | ----------- |
-| 1 | `string` | A string containing the CID of the CAR. |
+| Number | Type     | Description                             |
+| ------ | -------- | --------------------------------------- |
+| 1      | `string` | A string containing the CID of the CAR. |
 
 ### Return value
 
@@ -341,6 +348,7 @@ Pin {
   updated: string // Updated date in ISO 8601 format.
 }
 ```
+
 </Accordion>
 
 <Accordion heading="deals">
@@ -359,6 +367,7 @@ Deal {
   updated: string // Updated date, in ISO 8601 format.
 }
 ```
+
 </Accordion>
 
 ## List uploads
@@ -377,9 +386,9 @@ The following example stores return values from a call to `list()` into a JavaSc
 
 ```javascript
 // Return the names of 10 uploads
-const uploadNames = []
+const uploadNames = [];
 for await (const item of client.list({ maxResults: 10 })) {
-    uploadNames.push(item.name)
+  uploadNames.push(item.name);
 }
 ```
 
@@ -405,23 +414,27 @@ The return value for `list()` is an `AsyncIterable` object, containing objects w
   "cid": "bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e",
   "created": "2021-07-14T19:27:14.934572Z",
   "dagSize": 101,
-  "pins": [{
-    "peerId": "12D3KooWR1Js",
-    "peerName": "peerName",
-    "region": "peerRegion",
-    "status": "Pinned"
-  }],
-  "deals": [{
-    "dealId": 12345,
-    "storageProvider": "f099",
-    "status": "Active",
-    "pieceCid": "bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e",
-    "dataCid": "bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e",
-    "dataModelSelector": "Links/0/Links",
-    "activation": "2021-07-14T19:27:14.934572Z",
-    "created": "2021-07-14T19:27:14.934572Z",
-    "updated": "2021-07-14T19:27:14.934572Z"
-  }]
+  "pins": [
+    {
+      "peerId": "12D3KooWR1Js",
+      "peerName": "peerName",
+      "region": "peerRegion",
+      "status": "Pinned"
+    }
+  ],
+  "deals": [
+    {
+      "dealId": 12345,
+      "storageProvider": "f099",
+      "status": "Active",
+      "pieceCid": "bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e",
+      "dataCid": "bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e",
+      "dataModelSelector": "Links/0/Links",
+      "activation": "2021-07-14T19:27:14.934572Z",
+      "created": "2021-07-14T19:27:14.934572Z",
+      "updated": "2021-07-14T19:27:14.934572Z"
+    }
+  ]
 }
 ```
 
@@ -443,32 +456,32 @@ Store [a CAR file](https://github.com/ipld/js-car) using the `putCar()` method.
 ### Examples
 
 ```javascript
-import fs from 'fs'
-import { Readable } from 'stream'
-import { CarReader, CarWriter } from '@ipld/car'
-import * as raw from 'multiformats/codecs/raw'
-import { CID } from 'multiformats/cid'
-import { sha256 } from 'multiformats/hashes/sha2'
+import fs from 'fs';
+import { Readable } from 'stream';
+import { CarReader, CarWriter } from '@ipld/car';
+import * as raw from 'multiformats/codecs/raw';
+import { CID } from 'multiformats/cid';
+import { sha256 } from 'multiformats/hashes/sha2';
 
 async function getCar() {
-  const bytes = new TextEncoder().encode('random meaningless bytes')
-  const hash = await sha256.digest(raw.encode(bytes))
-  const cid = CID.create(1, raw.code, hash)
+  const bytes = new TextEncoder().encode('random meaningless bytes');
+  const hash = await sha256.digest(raw.encode(bytes));
+  const cid = CID.create(1, raw.code, hash);
   // create the writer and set the header with a single root
-  const { writer, out } = await CarWriter.create([cid])
-  Readable.from(out).pipe(fs.createWriteStream('example.car'))
+  const { writer, out } = await CarWriter.create([cid]);
+  Readable.from(out).pipe(fs.createWriteStream('example.car'));
   // store a new block, creates a new file entry in the CAR archive
-  await writer.put({ cid, bytes })
-  await writer.close()
-  const inStream = fs.createReadStream('example.car')
+  await writer.put({ cid, bytes });
+  await writer.close();
+  const inStream = fs.createReadStream('example.car');
   // read and parse the entire stream in one go, this will cache the contents of
   // the car in memory so is not suitable for large files.
-  const reader = await CarReader.fromIterable(inStream)
-  return reader
+  const reader = await CarReader.fromIterable(inStream);
+  return reader;
 }
 
-const car = await getCar()
-const cid = await client.putCar(car)
+const car = await getCar();
+const cid = await client.putCar(car);
 ```
 
 ### Return value
@@ -479,10 +492,10 @@ The method returns a string containing the CID of the uploaded CAR.
 
 Method parameters are supplied in positional order.
 
-| Number | Type | Description |
-| ------ | ---- | ----------- |
-| 1 | `car` | The CAR file to be uploaded. |
-| 2 | `{options}` | _Optional._ An object whose properties define certain Web3.Storage options and metadata about the files being uploaded. See below for more details. |
+| Number | Type        | Description                                                                                                                                         |
+| ------ | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1      | `car`       | The CAR file to be uploaded.                                                                                                                        |
+| 2      | `{options}` | _Optional._ An object whose properties define certain Web3.Storage options and metadata about the files being uploaded. See below for more details. |
 
 An `{options}` object has the following properties that can be used as parameters when calling `putCar()`:
 
@@ -490,25 +503,28 @@ An `{options}` object has the following properties that can be used as parameter
 _String._ The `name` parameter lets you attach an arbitrary name to the uploaded content archive, which you can use to identify and organize your uploads. The name is not stored alongside the data on IPFS, but it is viewable within the file listing on the Web3.Storage site.
 
 ```js
-const cid = await client.putCar(files, { name: 'cat pics' })
+const cid = await client.putCar(files, { name: 'cat pics' });
 ```
+
 </Accordion>
 
 <Accordion heading="maxRetries">
 _Number._ You can specify how many times `putCar` should attempt to retry in case of failure by passing in a `maxRetries` option. The default value is `5`.
 
 ```js
-const cid = await client.putCar(files, { maxRetries: 3 })
+const cid = await client.putCar(files, { maxRetries: 3 });
 ```
+
 </Accordion>
 
 <Accordion heading="onStoredChunk">
 _Function._ You can also display progress updates by passing in an `onStoredChunk` callback. This is called after each chunk of data is uploaded, with the size of the chunk in bytes passed in as a parameter. By default, data is split into chunks of around 10MB.
 
 ```js
-const onStoredChunk = chunkSize => console.log(`stored chunk of ${chunkSize} bytes`)
-const cid = await client.putCar(car, { onStoredChunk })
+const onStoredChunk = chunkSize => console.log(`stored chunk of ${chunkSize} bytes`);
+const cid = await client.putCar(car, { onStoredChunk });
 ```
+
 </Accordion>
 
 <Accordion heading="decoders">

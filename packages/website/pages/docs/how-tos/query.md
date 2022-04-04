@@ -5,7 +5,7 @@ description: Learn how to query Web3.Storage in this quick how-to guide.
 
 import { Tabs, TabItem } from 'components/mdx/tabs';
 import Callout from 'nextra-theme-docs/callout';
-import CodeSnippet from 'components/mdx/CodeSnippet';
+import CodeSnippet from 'components/mdx/codeSnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js';
 import golangStatus from '!!raw-loader!../../../assets/code-snippets/how-to/golang/status/status.go';
 
@@ -13,7 +13,7 @@ import golangStatus from '!!raw-loader!../../../assets/code-snippets/how-to/gola
 
 In this how-to guide, you'll learn how to **query Web3.Storage for information about your files.**
 
-When you [store a file][howto-store] with Web3.Storage, you receive a [content identifier (CID)][ipfs-docs-cid] that you can use to [retrieve the file][howto-retrieve]. However, this CID can also be used to query the service for more details about _how_ the data is stored on the [decentralized storage networks][concepts-decentralized-storage] that Web3.Storage uses under the hood. 
+When you [store a file][howto-store] with Web3.Storage, you receive a [content identifier (CID)][ipfs-docs-cid] that you can use to [retrieve the file][howto-retrieve]. However, this CID can also be used to query the service for more details about _how_ the data is stored on the [decentralized storage networks][concepts-decentralized-storage] that Web3.Storage uses under the hood.
 
 This guide will show you how to use Web3.Storage's [JavaScript client library][reference-js-client] or [Go client library][reference-go-client] to get information about content stored on the network. To follow along, you'll need the API token from your Web3.Storage account. If you already have an account and a token, read on. If not, have a look at the [quickstart guide][quickstart] to get up and running in just a few minutes for free.
 
@@ -21,7 +21,6 @@ This guide will show you how to use Web3.Storage's [JavaScript client library][r
 
 <Tabs groupId="lang">
 <TabItem value="js" label="JavaScript">
-
 
 In your JavaScript project, add the `web3.storage` package to your dependencies:
 
@@ -32,13 +31,12 @@ npm install web3.storage
 </TabItem>
 <TabItem value="go" label="Go">
 
+In your Go project, add the client package to your dependencies using `go get`:
 
-  In your Go project, add the client package to your dependencies using `go get`:
+```bash
+go get github.com/web3-storage/go-w3s-client
+```
 
-  ```bash
-  go get github.com/web3-storage/go-w3s-client
-  ```
-  
 </TabItem>
 </Tabs>
 
@@ -67,7 +65,6 @@ import "github.com/web3-storage/go-w3s-client"
 
 You can create a client instance with the [`NewClient` function][reference-go-newclient], passing in an API token using the [`WithToken` option][reference-go-withtoken]:
 
-
 ```go
 token := "<AUTH_TOKEN_GOES_HERE>"
 client, err := w3s.NewClient(w3s.WithToken(token))
@@ -81,7 +78,6 @@ client, err := w3s.NewClient(w3s.WithToken(token))
 <Tabs groupId="lang">
 <TabItem value="js" label="JavaScript">
 
-
 The client object's `status` method accepts a CID string and returns a JSON object with information about the upload. Here's how to include it in your project:
 
 <CodeSnippet lang="js" src={howtoSource} region="query-status" />
@@ -92,7 +88,6 @@ The client object's `status` method accepts a CID string and returns a JSON obje
 </Callout>
 
 If the given CID is valid and has been uploaded to Web3.Storage, the `status` method will return an object that looks similar to this:
-
 
 ```json
 {
@@ -158,8 +153,8 @@ If the given CID is valid and has been uploaded to Web3.Storage, the `status` me
     }
   ]
 }
-
 ```
+
 What do all those fields mean? Here's a summary:
 
 - `cid` contains the same CID that was passed into the `status` method, so you don't have to keep track of which response goes with which request.
@@ -201,10 +196,8 @@ To learn in greater detail how to fetch your data using the Web3.Storage client,
 [reference-js-constructor]: ../reference/js-client-library.md#constructor
 [reference-js-status]: ../reference/js-client-library.md#check-status
 [reference-go-client]: ../reference/go-client-library.md
-
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing/
 [ipfs-docs-merkle-dag]: https://docs.ipfs.io/concepts/merkle-dag/
 [ipfs-docs-pinning]: https://docs.ipfs.io/concepts/persistence/
 [fil-docs-deals]: https://docs.filecoin.io/about-filecoin/how-filecoin-works/#deals
-
 [iso-8601]: https://en.wikipedia.org/wiki/ISO_8601

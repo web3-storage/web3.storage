@@ -13,7 +13,7 @@
 // Function to generate the grid by number
 @mixin makeGridByNumber($grid)
 {
-  @for $i from 1 through $gl-colCount {
+  @for $i from 2 through $gl-colCount {
       [#{$gl-attributeName}*="#{$grid}-#{$i}"] > [#{$gl-attributeName}~="#{$gl-colName}"],
       [#{$gl-attributeName}*="#{$grid}-#{$i}"] > [#{$gl-attributeName}*="#{$gl-colName}-"],
       [#{$gl-attributeName}*="#{$grid}-#{$i}"] > [#{$gl-attributeName}*="#{$gl-colName}_"] {
@@ -32,7 +32,7 @@
   [#{$gl-attributeName}*="#{$gl-gridName}-"],
   [#{$gl-attributeName}*="#{$gl-gridName}_"] {
 
-    @for $i from 1 through $gl-colCount {
+    @for $i from 2 through $gl-colCount {
       > [#{$gl-attributeName}*="#{$col}-#{$i}"]{ flex-basis: map-get($gl-colPortions, $i); max-width: map-get($gl-colPortions, $i); }
     }
   }

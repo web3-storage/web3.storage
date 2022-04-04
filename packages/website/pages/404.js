@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import countly from '../lib/countly';
 
+import countly from '../lib/countly';
 import GeneralPageData from '../content/pages/general.json';
 import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
 
@@ -9,7 +9,8 @@ export default function Home() {
 
   useEffect(() => {
     countly.trackEvent(countly.events.NOT_FOUND, {
-      path: '/404',
+      path: window.location?.pathname ?? 'unknown',
+      referrer: typeof window !== 'undefined' ? document.referrer : null,
     });
   }, []);
 
