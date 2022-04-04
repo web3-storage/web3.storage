@@ -2,7 +2,7 @@
 import assert from 'assert'
 import { DBClient } from '../index.js'
 import { createUser, token } from './utils.js'
-import { emailType } from '../constants.js'
+import { EMAIL_TYPE } from '../constants.js'
 
 describe('Email', () => {
   /** @type {DBClient} */
@@ -21,21 +21,21 @@ describe('Email', () => {
     // check an email has not been sent
     let hasBeenSentRecently = await dbClient.emailSentRecently({
       userId: Number(user._id),
-      emailType: emailType[emailType.Used100PercentStorage]
+      emailType: EMAIL_TYPE[EMAIL_TYPE.Used100PercentStorage]
     })
     assert.strictEqual(hasBeenSentRecently, false, 'Has not been sent')
 
     // log an email
     await dbClient.logEmailSent({
       userId: Number(user._id),
-      emailType: emailType[emailType.Used100PercentStorage],
+      emailType: EMAIL_TYPE[EMAIL_TYPE.Used100PercentStorage],
       messageId: '1'
     })
 
     // check the email has already been sent today
     hasBeenSentRecently = await dbClient.emailSentRecently({
       userId: Number(user._id),
-      emailType: emailType[emailType.Used100PercentStorage],
+      emailType: EMAIL_TYPE[EMAIL_TYPE.Used100PercentStorage],
       numberOfDays: 1
     })
     assert.strictEqual(hasBeenSentRecently, true, 'Has been sent')

@@ -10,8 +10,7 @@ import {
 } from './utils.js'
 import { ConstraintError, DBError } from './errors.js'
 
-import { emailType } from './constants.js'
-export { emailType }
+export { EMAIL_TYPE } from './constants.js'
 
 const uploadQuery = `
         _id:id::text,

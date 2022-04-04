@@ -1,5 +1,5 @@
 import debug from 'debug'
-import { emailType } from '@web3-storage/db'
+import { EMAIL_TYPE } from '@web3-storage/db'
 
 const log = debug('email:EmailService')
 
@@ -55,13 +55,13 @@ export class EmailService {
     // See if this email type has been sent recently
     if (await this.db.emailSentRecently({
       userId: Number(user.id),
-      emailType: emailType[email],
+      emailType: EMAIL_TYPE[email],
       numberOfDays
     })) {
       return
     }
 
-    if (email === emailType.Used100PercentStorage) {
+    if (email === EMAIL_TYPE.Used100PercentStorage) {
       log(`📧 Sending a quota exceeded email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
     } else {
       log(`📧 Sending an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
@@ -75,7 +75,7 @@ export class EmailService {
     // Log the email
     await this.db.logEmailSent({
       userId: Number(user.id),
-      emailType: emailType[email],
+      emailType: EMAIL_TYPE[email],
       messageId
     })
   }
