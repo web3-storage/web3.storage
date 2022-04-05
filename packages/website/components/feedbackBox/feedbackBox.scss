@@ -12,13 +12,16 @@
     margin-right: toRem(16);
     margin-left: toRem(10);
     @extend .button;
-    @extend .dark;
+    background-color: $ebony;
     @include borderRadius_Small;
     @include fontSize_Small;
+    color: white;
     padding: toRem(10) toRem(12);
     height: auto;
+    border: 2px solid $ebony;
     &:hover {
       color: $ebony;
+      background-color: $white;
     }
   }
   .col {

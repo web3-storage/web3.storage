@@ -3,7 +3,7 @@ title: Listing the contents of an IPFS directory
 description: Learn how to list the contents of an IPFS directory without having to fetch the whole thing.
 ---
 
-import { Tabs, TabItem } from 'components/mdx/tabs';
+import { Tabs, TabItem } from 'components/tabs/tabs';
 import Accordion from 'components/mdx/Accordion';
 
 # Listing the contents of an IPFS directory
@@ -27,14 +27,14 @@ The function below uses the HTTP client package to call the `ls` method, which y
 import { create } from 'ipfs-http-client';
 
 async function getLinks(ipfsPath) {
-  const url = 'https://dweb.link/api/v0'
-  const ipfs = create({ url })
+  const url = 'https://dweb.link/api/v0';
+  const ipfs = create({ url });
 
-  const links = []
+  const links = [];
   for await (const link of ipfs.ls(ipfsPath)) {
-    links.push(link)
+    links.push(link);
   }
-  console.log(links)
+  console.log(links);
 }
 ```
 
@@ -45,31 +45,32 @@ See the example output below for the structure of the response objects.
 getLinks('bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu')
 ```
 
-``` js
+```js
 [
   {
     name: 'dr-is-tired.jpg',
     path: 'bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu/dr-is-tired.jpg',
     size: 94482,
     cid: CID(bafkreiabltrd5zm73pvi7plq25pef3hm7jxhbi3kv4hapegrkfpkqtkbme),
-    type: 'file'
+    type: 'file',
   },
   {
     name: 'not-distributed.jpg',
     path: 'bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu/not-distributed.jpg',
     size: 414201,
     cid: CID(bafkreidrsgkip425zjamc3pvmil7dpatss7ncedyaatepxyionxi7py5fq),
-    type: 'file'
+    type: 'file',
   },
   {
     name: 'youareanonsense.jpg',
     path: 'bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu/youareanonsense.jpg',
     size: 55415,
     cid: CID(bafkreiaqv66m5nd6mwgkk7h5lwqnjzj54s4f7knmnrjhb7ylzqfg2vdo54),
-    type: 'file'
-  }
-]
+    type: 'file',
+  },
+];
 ```
+
 </Accordion>
 
 ## Using HTTP requests
@@ -82,7 +83,7 @@ To get the contents of a directory using the HTTP API, make a `GET` request usin
 https://<gateway-host>/api/v0/ls?arg=<cid>
 ```
 
-Replace `<gateway-host>` with the address of an IPFS HTTP gateway, and replace `<cid>` with the Content Identifier of the directory you want to list. 
+Replace `<gateway-host>` with the address of an IPFS HTTP gateway, and replace `<cid>` with the Content Identifier of the directory you want to list.
 
 For the examples, we'll use the URL `https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu`.
 
@@ -167,36 +168,37 @@ $wc.DownloadString("https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndx
 
 ```json
 {
-    "Objects":  [
-                    {
-                        "Hash":  "bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu",
-                        "Links":  [
-                                      {
-                                          "Name":  "dr-is-tired.jpg",
-                                          "Hash":  "bafkreiabltrd5zm73pvi7plq25pef3hm7jxhbi3kv4hapegrkfpkqtkbme",
-                                          "Size":  94482,
-                                          "Type":  2,
-                                          "Target":  ""
-                                      },
-                                      {
-                                          "Name":  "not-distributed.jpg",
-                                          "Hash":  "bafkreidrsgkip425zjamc3pvmil7dpatss7ncedyaatepxyionxi7py5fq",
-                                          "Size":  414201,
-                                          "Type":  2,
-                                          "Target":  ""
-                                      },
-                                      {
-                                          "Name":  "youareanonsense.jpg",
-                                          "Hash":  "bafkreiaqv66m5nd6mwgkk7h5lwqnjzj54s4f7knmnrjhb7ylzqfg2vdo54",
-                                          "Size":  55415,
-                                          "Type":  2,
-                                          "Target":  ""
-                                      }
-                                  ]
-                    }
-                ]
+  "Objects": [
+    {
+      "Hash": "bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu",
+      "Links": [
+        {
+          "Name": "dr-is-tired.jpg",
+          "Hash": "bafkreiabltrd5zm73pvi7plq25pef3hm7jxhbi3kv4hapegrkfpkqtkbme",
+          "Size": 94482,
+          "Type": 2,
+          "Target": ""
+        },
+        {
+          "Name": "not-distributed.jpg",
+          "Hash": "bafkreidrsgkip425zjamc3pvmil7dpatss7ncedyaatepxyionxi7py5fq",
+          "Size": 414201,
+          "Type": 2,
+          "Target": ""
+        },
+        {
+          "Name": "youareanonsense.jpg",
+          "Hash": "bafkreiaqv66m5nd6mwgkk7h5lwqnjzj54s4f7knmnrjhb7ylzqfg2vdo54",
+          "Size": 55415,
+          "Type": 2,
+          "Target": ""
+        }
+      ]
+    }
+  ]
 }
 ```
+
 </Accordion>
 </TabItem>
 </Tabs>
@@ -205,7 +207,7 @@ $wc.DownloadString("https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndx
 
 If you have the [IPFS command line interface][ipfs-docs-cli-quickstart] installed, you can use the [`ipfs ls` command][ipfs-docs-cli-ls] to list the contents of a directory.
 
-```shell 
+```shell
 ipfs ls -v bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu
 ```
 
@@ -220,7 +222,6 @@ Note that omitting the `-v` flag will remove the header line from the output. Ru
 
 [howto-store]: ./store.md
 [howto-retrieve]: ./retrieve.md
-
 [ipfs-docs-cli-quickstart]: https://docs.ipfs.io/how-to/command-line-quick-start/
 [ipfs-docs-cli-ls]: https://docs.ipfs.io/reference/cli/#ipfs-ls
 [ipfs-docs-http-ls]: https://docs.ipfs.io/reference/http/api/#api-v0-ls

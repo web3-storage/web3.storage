@@ -3,7 +3,7 @@ title: How to retrieve data from Web3.Storage
 description: Learn how to retrieve data stored using Web3.Storage in this quick how-to guide.
 ---
 
-import { Tabs, TabItem } from 'components/mdx/tabs';
+import { Tabs, TabItem } from 'components/tabs/tabs';
 import Callout from 'nextra-theme-docs/callout';
 import CodeSnippet from 'components/mdx/codeSnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'

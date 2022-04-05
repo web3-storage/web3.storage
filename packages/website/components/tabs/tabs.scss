@@ -1,0 +1,29 @@
+.tabs-container {
+  .tabs {
+    padding-left: 0 !important;
+    .tabs__item {
+      margin-right: toRem(50);
+      display: inline-block;
+      padding: toRem(10);
+      font-weight: 600;
+      cursor: pointer;
+      &:hover,
+      &--active {
+        position: relative;
+        &:after {
+          height: 5px;
+          width: 100%;
+          @include gradient_Background_PinkBlue;
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          border-radius: 9px;
+        }
+      }
+    }
+  }
+  .tabs__content {
+    margin-top: 2rem;
+  }
+}

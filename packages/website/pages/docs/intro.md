@@ -4,8 +4,11 @@ description: 'Learn how to use Web3.Storage to decentralize your data storage wi
 ---
 
 import Callout from 'nextra-theme-docs/callout';
-import { Tabs, TabItem } from 'components/mdx/tabs';
+import { Tabs, TabItem } from 'components/tabs/tabs';
+import CodeSnippet from 'components/mdx/codeSnippet';
 import FeedbackBox from 'components/feedbackBox/feedbackBox';
+import PutFiles from '!!raw-loader!../../assets/code-snippets/quickstart/put-files.js';
+import PackageJson from '!!raw-loader!../../assets/code-snippets/quickstart/package.json.txt';
 
 # Better storage.<br/>Better transfers.<br/>Better internet.
 
@@ -49,19 +52,25 @@ node --version && npm --version
 You need a Web3.Storage account to get your API token and manage your stored data. You can sign up **for free** using your email address or GitHub.
 
 <Tabs>
-<TabItem value="Email" label="Sign up using Email">
+<TabItem value="Email" label="Email">
+
+##### Sign up using email
+
 1. Go to [web3.storage/login](https://web3.storage/login) to get started.
 1. Enter your email address.
 1. Check your inbox for a verification email from Web3.Storage, and click the **Log in** button in the email.
 1. You're all set!
-</TabItem>
-<TabItem value="github" label="Sign up using Github">
+   </TabItem>
+   <TabItem value="github" label="Github">
+
+##### Sign up using Github
+
 1. Go to [web3.storage/login](https://web3.storage/login) to get started.
 1. Click **GitHub** on the Login screen.
 1. **Authorize** Web3.Storage when asked by GitHub.
 1. You're all set!
-</TabItem>
-</Tabs>
+   </TabItem>
+   </Tabs>
 
 Now that you're signed up and logged in, it's time to [get your API token. ↓](#get-an-api-token)
 
@@ -99,59 +108,11 @@ All data uploaded to Web3.Storage is available to anyone who requests it using t
 
 1. Create a file called `put-files.js` and paste in the following code:
 
-   ```js
-   import process from 'process';
-   import minimist from 'minimist';
-   import { Web3Storage, getFilesFromPath } from 'web3.storage';
-
-   async function main() {
-     const args = minimist(process.argv.slice(2));
-     const token = args.token;
-
-     if (!token) {
-       return console.error('A token is needed. You can create one on https://web3.storage');
-     }
-
-     if (args._.length < 1) {
-       return console.error('Please supply the path to a file or directory');
-     }
-
-     const storage = new Web3Storage({ token });
-     const files = [];
-
-     for (const path of args._) {
-       const pathFiles = await getFilesFromPath(path);
-       files.push(...pathFiles);
-     }
-
-     console.log(`Uploading ${files.length} files`);
-     const cid = await storage.put(files);
-     console.log('Content added with CID:', cid);
-   }
-
-   main();
-   ```
+   <CodeSnippet lang="js" src={PutFiles}></CodeSnippet>
 
 1. Create another file called `package.json` and paste in the following code:
 
-   ```json
-   {
-     "name": "web3-storage-quickstart",
-     "version": "0.0.0",
-     "private": true,
-     "description": "Get started using web3.storage in Node.js",
-     "type": "module",
-     "scripts": {
-       "test": "echo \"Error: no test specified\" && exit 1"
-     },
-     "dependencies": {
-       "minimist": "^1.2.5",
-       "web3.storage": "^3.1.0"
-     },
-     "author": "YOUR NAME",
-     "license": "(Apache-2.0 AND MIT)"
-   }
-   ```
+   <CodeSnippet lang="js" src={PackageJson}></CodeSnippet>
 
 1. Save both files, and then run `npm install` from your project folder:
 

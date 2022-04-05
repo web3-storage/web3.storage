@@ -3,7 +3,7 @@ title: JavaScript client library reference
 description: Integrate Web3.Storage into your code using the JavaScript client library.
 ---
 
-import { Tabs, TabItem } from 'components/mdx/tabs';
+import { Tabs, TabItem } from 'components/tabs/tabs';
 import Callout from 'nextra-theme-docs/callout';
 import CodeSnippet from 'components/mdx/codeSnippet';
 import Accordion from 'components/mdx/Accordion';

@@ -53,49 +53,31 @@ $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48
   .text-gray-600 {
     color: $ebony;
   }
-  p {
+  p,
+  pre {
     margin-bottom: 2.5rem;
   }
-  // pre code {
-  //   background-color: $steelGray !important;
-  //   font-size: toRem(14.4);
-  // }
-  // li code,
-  // p code  {
-  //   color: $ebony !important;
-  //   background-color: $white;
-  //   font-family: 'Suisse Intl Mono' !important;
-  //   border-radius: var(--ifm-code-border-radius);
-  //   font-size: toRem(13);
-  //   padding: var(--ifm-code-padding-vertical) var(--ifm-code-padding-horizontal);
-  //   border: none;
-  // }
   h2 {
     font-size: toRem(30);
     margin-bottom: toRem(24);
     line-height: toRem(34);
     margin-top: toRem(80);
   }
-  // h3 {
-  //   color: $ebony;
-  //   margin-bottom: toRem(20);
-  //   font-size: toRem(18);
-  //   line-height: toRem(34);
-  //   @include fontWeight_Semibold;
-  //   margin-top: calc(var(--ifm-h3-vertical-rhythm-top) * var(--ifm-leading));
-  // }
-  // h4 {
-  //   @include h4;
-  //   color: $ebony;
-  //   @include fontSize_Medium;
-  // }
-  // h5 {
-  //   @include h5;
-  //   text-transform: none;
-  //   color: $ebony;
-  //   font-size: toRem(16);
-  //   line-height: toRem(34);
-  // }
+  h3 {
+    margin-bottom: toRem(20);
+    font-size: toRem(18);
+    line-height: toRem(34);
+    @include fontWeight_Semibold;
+    margin-top: calc(var(--ifm-h3-vertical-rhythm-top) * var(--ifm-leading));
+  }
+  h4 {
+    @include fontSize_Medium;
+  }
+  h5 {
+    font-size: toRem(16);
+    line-height: toRem(34);
+    margin-bottom: 1.7rem;
+  }
 
   > nav {
     display: none !important;
@@ -109,9 +91,6 @@ $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48
     margin-bottom: 3.75rem;
     position: relative;
     padding: toRem(23) toRem(37);
-    // warning
-    &.bg-yellow-200 {
-    }
     .select-none {
       display: none;
     }
@@ -120,8 +99,28 @@ $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48
       margin-top: 0;
       font-size: 1.125rem;
       text-transform: none;
+      line-height: 1;
+      &:before {
+        display: inline-block;
+        background-repeat: no-repeat;
+        height: 30px;
+        width: 24px;
+        vertical-align: middle;
+        margin-right: 1.25rem;
+        content: '';
+        background-size: cover;
+        background-image: url('../../assets/icons/bulb.png');
+      }
     }
-    p {
+    // warning
+    &.bg-yellow-200 {
+      h5:before {
+        height: 23.5px;
+        width: 25.5px;
+        background-image: url('../../assets/icons/caution.png');
+      }
+    }
+    *:last-child {
       margin: 0;
     }
     &:before {
@@ -186,45 +185,10 @@ $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48
       }
     }
   }
+  footer hr {
+    display: none;
+  }
 }
-
-// @mixin desktop {
-//   @media screen and (min-width: $breakpoint) {
-//     @content;
-//   }
-// }
-
-// @mixin mobile {
-//   @media screen and (max-width: ($breakpoint - 1px)) {
-//     @content;
-//   }
-// }
-
-// article {
-//   a {
-//     @include fontWeight_Semibold;
-//   }
-//   ol, ul {
-//     padding-left: 1rem;
-//     li {
-//       padding-left: 3rem;
-//     }
-//   }
-// }
-
-// .label {
-//   margin-bottom: 1.25rem;
-// }
-
-// .main-wrapper,
-// .docs-wrapper {
-//   z-index: 100;
-// }
-
-// // pagination
-// .pagination-nav__link {
-//   border: 0;
-// }
 
 // table {
 //   td {

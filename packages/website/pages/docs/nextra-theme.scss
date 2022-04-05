@@ -4,10 +4,6 @@
   -webkit-text-decoration: underline dotted;
   text-decoration: underline dotted;
 }
-.nextra-container b,
-.nextra-container strong {
-  font-weight: 600;
-}
 .nextra-container code,
 .nextra-container kbd,
 .nextra-container pre,
@@ -35,63 +31,8 @@
   text-indent: 0;
   border-color: inherit;
 }
-.nextra-container button,
-.nextra-container input,
-.nextra-container optgroup,
-.nextra-container select,
-.nextra-container textarea {
-  font-family: inherit;
-  font-size: 100%;
-  line-height: 1.15;
-  margin: 0;
-}
-.nextra-container button,
-.nextra-container select {
-  text-transform: none;
-}
-.nextra-container [type='button'],
-.nextra-container [type='reset'],
-.nextra-container [type='submit'],
-.nextra-container button {
-  -webkit-appearance: button;
-}
-.nextra-container ::-moz-focus-inner {
-  border-style: none;
-  padding: 0;
-}
-.nextra-container :-moz-focusring {
-  outline: 1px dotted ButtonText;
-}
-.nextra-container :-moz-ui-invalid {
-  box-shadow: none;
-}
-.nextra-container legend {
-  padding: 0;
-}
-.nextra-container progress {
-  vertical-align: baseline;
-}
-.nextra-container ::-webkit-inner-spin-button,
-.nextra-container ::-webkit-outer-spin-button {
-  height: auto;
-}
-.nextra-container [type='search'] {
-  -webkit-appearance: textfield;
-  outline-offset: -2px;
-}
-.nextra-container ::-webkit-search-decoration {
-  -webkit-appearance: none;
-}
-.nextra-container ::-webkit-file-upload-button {
-  -webkit-appearance: button;
-  font: inherit;
-}
 .nextra-container summary {
   display: list-item;
-}
-.nextra-container button {
-  background-color: transparent;
-  background-image: none;
 }
 .nextra-container ol,
 .nextra-container ul {
@@ -102,54 +43,18 @@
 .nextra-container :before {
   box-sizing: border-box;
 }
-.nextra-container textarea {
-  resize: vertical;
-}
-.nextra-container input::-moz-placeholder,
-.nextra-container textarea::-moz-placeholder {
-  opacity: 1;
-  color: #cbd5e0;
-}
-.nextra-container input:-ms-input-placeholder,
-.nextra-container textarea:-ms-input-placeholder {
-  opacity: 1;
-  color: #cbd5e0;
-}
 .nextra-container input::placeholder,
 .nextra-container textarea::placeholder {
   opacity: 1;
   color: #cbd5e0;
 }
-.nextra-container [role='button'],
-.nextra-container button {
-  cursor: pointer;
-}
-.nextra-container :-moz-focusring {
-  outline: auto;
-}
 .nextra-container table {
   border-collapse: collapse;
 }
 .nextra-container a {
-  --tw-text-opacity: 1;
   color: $docsPrimaryPurple;
   font-weight: 600;
   text-decoration: none;
-}
-.nextra-container button,
-.nextra-container input,
-.nextra-container optgroup,
-.nextra-container select,
-.nextra-container textarea {
-  padding: 0;
-  line-height: inherit;
-  color: inherit;
-}
-.nextra-container code,
-.nextra-container kbd,
-.nextra-container pre,
-.nextra-container samp {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
 }
 .nextra-container audio,
 .nextra-container canvas,
@@ -1066,52 +971,6 @@
 }
 .nextra-container .contains-task-list input[type='checkbox'] {
   margin-right: 0.25rem;
-}
-.nextra-container pre .prism-code {
-  --c-highlight: #cce0f5;
-}
-.nextra-container .dark pre .prism-code {
-  --c-highlight: #3d4b61;
-}
-.nextra-container pre .prism-code .token.builtin,
-.nextra-container pre .prism-code .token.char,
-.nextra-container pre .prism-code .token.constant,
-.nextra-container pre .prism-code .token.plain {
-  color: #000 !important;
-}
-.nextra-container .dark pre .prism-code .token.builtin,
-.nextra-container .dark pre .prism-code .token.char,
-.nextra-container .dark pre .prism-code .token.constant,
-.nextra-container .dark pre .prism-code .token.plain {
-  color: #fff !important;
-}
-.nextra-container pre .prism-code .token.attr-value,
-.nextra-container pre .prism-code .token.string,
-.nextra-container pre .prism-code .token.url {
-  color: #028265 !important;
-}
-.nextra-container .dark pre .prism-code .token.attr-value,
-.nextra-container .dark pre .prism-code .token.string,
-.nextra-container .dark pre .prism-code .token.url {
-  color: #20bb98 !important;
-}
-.nextra-container pre .prism-code .token.operator,
-.nextra-container pre .prism-code .token.punctuation {
-  color: #333 !important;
-}
-.nextra-container .dark pre .prism-code .token.operator,
-.nextra-container .dark pre .prism-code .token.punctuation {
-  color: #bbb !important;
-}
-.nextra-container pre .prism-code .token.function,
-.nextra-container pre .prism-code .token.number,
-.nextra-container pre .prism-code .token.tag:not(.script) {
-  color: #0076ff !important;
-}
-.nextra-container .dark pre .prism-code .token.function,
-.nextra-container .dark pre .prism-code .token.number,
-.nextra-container .dark pre .prism-code .token.tag:not(.script) {
-  color: #1e86ff !important;
 }
 .nextra-container .nextra-container.rtl {
   direction: rtl;

@@ -3,7 +3,7 @@ title: How to store data using Web3.Storage
 description: Learn how to store your data on the decentralized web with Web3.Storage.
 ---
 
-import { Tabs, TabItem } from 'components/mdx/tabs';
+import { Tabs, TabItem } from 'components/tabs/tabs';
 import Callout from 'nextra-theme-docs/callout';
 import CodeSnippet from 'components/mdx/codeSnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'

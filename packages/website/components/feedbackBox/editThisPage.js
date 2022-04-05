@@ -1,6 +1,5 @@
 const ISSUE_URL = 'https://github.com/web3-storage/web3.storage/issues/new/choose';
-const SUGGEST_CONTENT_URL =
-  'https://github.com/web3-storage/docs/issues/new?assignees=&labels=need%2Ftriage&template=content-or-feature-suggestion.md&title=%5BCONTENT+REQUEST%5D+%28add+your+title+here%21%29';
+const SUGGEST_CONTENT_URL = 'https://github.com/web3-storage/web3.storage/issues';
 
 export default function EditThisPage({ editUrl }) {
   const editThisPage = (

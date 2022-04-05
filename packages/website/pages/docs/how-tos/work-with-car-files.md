@@ -3,7 +3,7 @@ title: Working with Content Archives
 description: Learn how to work with Content Archives of IPLD data.
 ---
 
-import { Tabs, TabItem } from 'components/mdx/tabs';
+import { Tabs, TabItem } from 'components/tabs/tabs';
 import Callout from 'nextra-theme-docs/callout';
 import CodeSnippet from 'components/mdx/codeSnippet';
 import Accordion from 'components/mdx/Accordion';
