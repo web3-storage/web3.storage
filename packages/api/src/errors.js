@@ -17,7 +17,7 @@ export class HTTPError extends Error {
    * @param {number} [status]
    * @returns {never}
    */
-  static throw(message, status) {
+  static throw (message, status) {
     throw new this(message, status)
   }
 }
