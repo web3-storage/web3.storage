@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.5.0](https://github.com/web3-storage/web3.storage/compare/api-v5.4.3...api-v5.5.0) (2022-04-05)
+
+
+### Features
+
+* add pinned storage to user account API ([#1044](https://github.com/web3-storage/web3.storage/issues/1044)) ([3200a6e](https://github.com/web3-storage/web3.storage/commit/3200a6e20a3460cefe5887ab5d48ad320a84a86f))
+* implement account restriction ([#1053](https://github.com/web3-storage/web3.storage/issues/1053)) ([6f6f279](https://github.com/web3-storage/web3.storage/commit/6f6f2795a374c6df1e825f52d2c99afbe79131e5))
+
 ### [5.4.3](https://github.com/web3-storage/web3.storage/compare/api-v5.4.2...api-v5.4.3) (2022-03-18)
 
 
