@@ -50,22 +50,36 @@ Once enough data has been aggregated, the Web3.Storage service will propose seve
 
 When using the HTTP API or client library to check the upload status, information about Filecoin storage is provided in the `deals` array field within the status response object. The `deals` array will be empty while the upload is in the `Queuing` state.
 
-Once storage deals have been proposed, the `deals` array will contain JSON objects describing each deal. Each object has a `status` field, which will have a value of `"queued"` when the deal is pending. When the deal has been confirmed and published to the Filecoin blockchain, the `status` field will have a value of `"active"`.
+Once storage deals have been proposed, the `deals` array will contain JSON objects describing each deal. Each object has a `status` field, which will have a value of `"Queued"` when the deal is pending. When the deal has been confirmed and published to the Filecoin blockchain, the `status` field will have a value of `"Active"`.
 
-Here's an example JSON object that describes an active storage deal:
+Storage deal schema:
+
+| Key                 | Description |
+|---------------------|-------------|
+| `dealId`            | On-chain ID of the deal. |
+| `storageProvider`   | Address of the provider storing this data. |
+| `status`            | Current deal status: `"Queued"` `"Published"` `"Active"` |
+| `pieceCid`          | Filecoin [Piece CID](https://spec.filecoin.io/systems/filecoin_files/piece/) of the data in the deal. |
+| `dataCid`           | CID of the data aggregated in this deal. |
+| `dataModelSelector` | Selector for extracting stored data from the aggregated data root. |
+| `activation`        | Date when the deal will become active in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format. |
+| `created`           | Created date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format. |
+| `updated`           | Updated date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format. |
+
+Example JSON for an active storage deal:
 
 ```json
-{
-    "status": "active",
-    "lastChanged": "2022-03-13T04:17:47.969874+00:00",
-    "chainDealID": 4486352,
-    "datamodelSelector": "Links/197/Hash/Links/22/Hash/Links/0/Hash",
-    "statusText": "containing sector active as of 2022-03-13 09:18:00 at epoch 1628556",
-    "dealActivation": "2022-03-14T13:19:00+00:00",
-    "dealExpiration": "2023-08-06T13:19:00+00:00",
-    "miner": "f0840770",
-    "pieceCid": "baga6ea4seaqcfs2mrjyaqnwgdheb4ny76i6yaeeklcylqijaha3kpcwmutnb6ma",
-    "batchRootCid": "bafybeig2qsdu6nfmmaxlpnrpcz63jzyb6bzc4ngllv4mcj7q66ei4rq72y"
+ {
+    "dealId": 2229885,
+    "storageProvider": "f01278",
+    "status": "Active",
+    "pieceCid": "baga6ea4seaqawvtpgovz222raqk6zgawvjz4kjnnl7i3pduovtuivl2qxokoaji",
+    "dataCid": "bafybeigiytbwooh2ei74k6z4h7zqgo7y7rxx3zanlg4whd4g37rhh6o74m",
+    "dataModelSelector": "Links/100/Hash/Links/0/Hash/Links/0/Hash",
+    "activation": "2021-08-05T22:24:00+00:00",
+    "expiration": "2022-12-28T22:24:00+00:00",
+    "created": "2021-08-04T00:35:43.492403+00:00",
+    "updated": "2021-08-09T06:16:44.047003+00:00"
 }
 ```
 
