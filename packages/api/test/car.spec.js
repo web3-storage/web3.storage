@@ -28,7 +28,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car',
+        'Content-Type': 'application/vnd.ipld.car',
         'X-Name': name
       },
       body: carBody
@@ -75,7 +75,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car'
+        'Content-Type': 'application/vnd.ipld.car'
       },
       body: new Blob(carBytes)
     })
@@ -104,7 +104,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car'
+        'Content-Type': 'application/vnd.ipld.car'
       },
       body: new Blob(carBytes)
     })
@@ -134,7 +134,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car'
+        'Content-Type': 'application/vnd.ipld.car'
       },
       body: new Blob(carBytes)
     })
@@ -167,7 +167,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car'
+        'Content-Type': 'application/vnd.ipld.car'
       },
       body: new Blob(carBytes)
     })
@@ -200,7 +200,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car'
+        'Content-Type': 'application/vnd.ipld.car'
       },
       body: new Blob(carBytes)
     })
@@ -231,7 +231,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car'
+        'Content-Type': 'application/vnd.ipld.car'
       },
       body: new Blob(carBytes)
     })
@@ -264,7 +264,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car'
+        'Content-Type': 'application/vnd.ipld.car'
       },
       body: new Blob(carBytes)
     })

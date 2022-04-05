@@ -28,7 +28,7 @@ module.exports = async ({ params }) => {
     statusCode: 200,
     buffer: true,
     headers: {
-      'Content-Type': 'application/car'
+      'Content-Type': 'application/vnd.ipld.car'
     },
     body: fs.readFileSync(path.join(__dirname, carPath))
   }

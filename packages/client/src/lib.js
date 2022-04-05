@@ -168,7 +168,7 @@ class Web3Storage {
         carParts.push(part)
       }
 
-      const carFile = new Blob(carParts, { type: 'application/car' })
+      const carFile = new Blob(carParts, { type: 'application/vnd.ipld.car' })
       const res = await pRetry(
         async () => {
           const request = await fetch(url.toString(), {

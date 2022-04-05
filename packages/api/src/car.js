@@ -67,7 +67,7 @@ export async function carGet (request, env, ctx) {
   // Clone the response so that it's no longer immutable. Ditch the original headers.
   // Note: keeping the original headers seems to prevent the carHead function from setting Content-Length
   res = new Response(res.body)
-  res.headers.set('Content-Type', 'application/car')
+  res.headers.set('Content-Type', 'application/vnd.ipld.car')
   // cache for 1 year, the max max-age value.
   res.headers.set('Cache-Control', 'public, max-age=31536000')
   // without the content-disposition, firefox describes them as DMS files.
@@ -90,10 +90,7 @@ export async function carGet (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 export async function carPost (request, env, ctx) {
-  let blob = await request.blob()
-  // Ensure car blob.type is set; it is used by the cluster client to set the format=car flag on the /add call.
-  blob = blob.slice(0, blob.size, 'application/car')
-
+  const blob = await request.blob()
   return handleCarUpload(request, env, ctx, blob)
 }
 
