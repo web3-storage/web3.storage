@@ -43,7 +43,7 @@ export const UserProvider = ({ children, loadStorage }) => {
     enabled: isLoggedIn && loadStorage,
   });
 
-  return <UserContext.Provider value={{ ...data, storageData }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ ...data, storageData.uploaded }}>{children}</UserContext.Provider>;
 };
 
 /**
