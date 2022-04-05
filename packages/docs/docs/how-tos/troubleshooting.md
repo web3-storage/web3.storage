@@ -14,6 +14,12 @@ Some common situations where this might happen include:
 - Using Webpack 4 (e.g., for `create-react-app`)
 - Getting an error like `Can't resolve 'ipfs-car/blockstore/memory'`
 
+Add the following import to the top of your `.js` scripts:
+
+```javascript
+import { Web3Storage } from ‘web3.storage/dist/bundle.esm.min.js’
+```
+
 
 ## The status information for my content doesn't include any Filecoin deals
 
