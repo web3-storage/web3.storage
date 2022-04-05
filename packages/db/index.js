@@ -287,7 +287,7 @@ export class DBClient {
         email: user.email,
         storageQuota: user.storage_quota,
         storageUsed: user.storage_used,
-        percentStorageUsed: Math.round((user.storage_used / user.storage_quota) * 100)
+        percentStorageUsed: Math.floor((user.storage_used / user.storage_quota) * 100)
       }
     })
   }

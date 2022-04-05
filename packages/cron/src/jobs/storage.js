@@ -49,7 +49,7 @@ export async function checkStorageUsed ({ db }) {
   })
   await emailService.sendEmails({
     users,
-    email: EMAIL_TYPE.Used90PercentStorage
+    email: EMAIL_TYPE.Used85PercentStorage
   })
 
   users = await db.getUsersByStorageUsed({
@@ -58,7 +58,7 @@ export async function checkStorageUsed ({ db }) {
   })
   await emailService.sendEmails({
     users,
-    email: EMAIL_TYPE.Used90PercentStorage
+    email: EMAIL_TYPE.Used80PercentStorage
   })
 
   users = await db.getUsersByStorageUsed({
@@ -67,7 +67,7 @@ export async function checkStorageUsed ({ db }) {
   })
   await emailService.sendEmails({
     users,
-    email: EMAIL_TYPE.Used90PercentStorage
+    email: EMAIL_TYPE.Used75PercentStorage
   })
 
   log('✅ Done')
