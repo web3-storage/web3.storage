@@ -14,7 +14,6 @@ You'll need a free Web3.Storage account in order to generate an API token. If yo
 
 ## Create a new token
 
-
 1. From the Web3.Storage navigation menu, click **Account** to go to your [account page](https://web3.storage/account).
 1. Scroll down to the **API tokens** section and click **Create an API token**. (If you've never created an API token on Web3.Storage before, you'll also see an invitation to do this from the **Getting started** section of your account page.)
 
@@ -25,7 +24,7 @@ You'll need a free Web3.Storage account in order to generate an API token. If yo
 ![Screenshot of a Web3.Storage page for naming a new API token](/images/docs/account-page-name-token.png)
 
 <Callout>
-##### tip
+##### Tip
 You don't have to use the same API token for all of your projects! Creating an individual API token for each of your applications or services makes it easier to change or revoke access in the future to a specific project. You can have as many tokens as you need on Web3.Storage for free.
 </Callout>
 
@@ -35,8 +34,8 @@ You don't have to use the same API token for all of your projects! Creating an i
 
 5. Make a note of the **Token** field somewhere secure where you know you won't lose it. You can click **Copy** to copy your new API token to your clipboard.
 
-<Callout>
-##### warning Keep your API token private 
+<Callout type="warning">
+##### Keep your API token private 
 Do not share your API token with anyone else. This key is specific to your account.
 </Callout>
 
@@ -44,8 +43,8 @@ Do not share your API token with anyone else. This key is specific to your accou
 
 If you no longer need a particular Web3.Storage API token — for example, you've sunsetted a project using a particular token — you may wish to delete it for security reasons. To do so, simply visit your [API Tokens](https://web3.storage/tokens) page and click **Delete** to remove it.
 
-<Callout>
-##### danger Deleting a token is permanent 
+<Callout type="warning">
+##### Deleting a token is permanent 
 Remember that if you delete an API token, it's removed permanently and cannot be restored. Delete a token only if you're sure you won't need it again.
 </Callout>
 

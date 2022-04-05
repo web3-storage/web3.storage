@@ -190,7 +190,7 @@ carbites --help
 ```
 
 <Callout>
-####tip Running with npx
+##### Running with npx
   You can run the `carbites` command without installing it globally using the `npx` command, which is included with Node.js:
 
 ```shell
@@ -251,7 +251,7 @@ carbites join my-video-*.car --output my-video-joined.car
 The [carbites library][github-carbites-js] provides an interface for splitting CARs that can be invoked from your application code.
 
 <Callout>
-##### tip You probably don't need this!
+##### You probably don't need this!
   If you're using JavaScript, you can [use the Web3.Storage client][howto-store] to upload your data and let the client take care of CAR splitting for you. If you're sure you want to split CARs from JavaScript yourself, read on!
 </Callout>
 
@@ -496,8 +496,8 @@ However, the gateway _can_ traverse the IPLD links inside our CBOR object, so yo
 
 [https://bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy.ipfs.dweb.link/file](https://bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy.ipfs.dweb.link/file).
 
-<Callout>
-##### warning Gateway support
+<Callout type="warning">
+##### Gateway support
 Although Web3.Storage supports storing CAR files with `dag-cbor` content by default and can accept other codecs with the `decoders` option, the IPFS HTTP gateway does not currently "speak" these formats and will not return such data over HTTP. Please follow [this issue](https://github.com/ipfs/go-ipfs/issues/8234) to track the development of this feature.
 </Callout>
 

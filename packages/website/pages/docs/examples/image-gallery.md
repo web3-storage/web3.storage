@@ -47,8 +47,8 @@ Before saving the token, we call a `validateToken` function that tries to create
     <CodeSnippet lang="js" src={storageJsSource} region="validateToken" />
 </Accordion>
 
-<Callout>
-  ##### warning Keep it safe, and keep it secret!
+<Callout type="warning">
+  ##### Keep it safe, and keep it secret!
   Your API token gives access to your Web3.Storage account, so you shouldn't include a token directly into your front-end source code. This example has the user paste in their own token, which allows the app to run completely from the browser without hard-coding any tokens into the source code.. Alternatively, you could run a small backend service that manages the token and proxies calls from your users to Web3.Storage.
 </Callout>
 
@@ -80,8 +80,8 @@ The `getImageMetadata` function simply requests the `metadata.json` file from an
   <CodeSnippet lang="js" src={storageJsSource} region="getImageMetadata" />
 </Accordion>
 
-<Callout>
-  ##### warning State management at scale
+<Callout type="warning">
+  ##### State management at scale
   Listing all the uploads and filtering out the ones we don't want works for a simple example like this, but this approach will degrade in performance once a lot of data has been uploaded. A real application should use a database or other state management solution instead.
 </Callout>
 

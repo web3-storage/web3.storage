@@ -17,8 +17,8 @@ The client library automatically packs your uploads into a content addressible a
 
 This page covers the core functionality of the JavaScript client. See the [JavaScript utility libraries page](./js-utilities.md) for some additional packages that may be useful when working with Web3.Storage.
 
-<Callout>
-#### warning Minimum requirements
+<Callout type="warning">
+##### Minimum requirements
 While we recommend that you install the latest _stable_ version of the following software, you must have _at least_:
 
 - [NPM](https://www.npmjs.com/) `7.0.0`
@@ -330,7 +330,7 @@ _Number._ The `dagSize` property is the total size, in bytes, of the [Merkle Dir
 _String._ The `created` property gives the creation date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
 
 <Callout>
-#### tip
+##### Tip
 The `created` date returned by a call to `status()` is the date and time that the CID was first seen on the network. The date given by a call to `list()` is the date and time of a particular upload via a call to `put()`. These can differ if multiple users upload the same file(s).
 </Callout>
 
@@ -439,7 +439,7 @@ The return value for `list()` is an `AsyncIterable` object, containing objects w
 ```
 
 <Callout>
-#### tip
+##### Tip
 The `created` date on these objects are the date and time that the user uploaded via `put()`. The `created` date given by a call to `status()` is the date and time that the CID was first seen on the network. These can differ if multiple users uploaded the same file(s).
 </Callout>
 

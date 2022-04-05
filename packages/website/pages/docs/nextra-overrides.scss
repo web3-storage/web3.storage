@@ -47,6 +47,10 @@ $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48
 
 .nextra-container {
   letter-spacing: 0;
+  strong,
+  b {
+    font-weight: 600;
+  }
   h1 {
     margin-bottom: toRem(42);
   }

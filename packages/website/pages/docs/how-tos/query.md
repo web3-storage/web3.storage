@@ -50,7 +50,7 @@ To create a `Web3Storage` client object, we need to pass an access token into th
 <CodeSnippet lang="js" src={howtoSource} region="makeStorageClient" />
 
 <Callout>
-#### tip
+##### Tip
 Don't have an access token? Get your Web3.Storage API token in just a few minutes using the instructions in the [quickstart guide.][quickstart]
 </Callout>
 
@@ -82,8 +82,8 @@ The client object's `status` method accepts a CID string and returns a JSON obje
 
 <CodeSnippet lang="js" src={howtoSource} region="query-status" />
 
-<Callout>
-##### warning IMPORTANT 
+<Callout type="warning">
+##### IMPORTANT 
 **Remember to check the return value!** If you ask for the status of a CID that Web3.Storage doesn't know about, the `status` method will return `undefined` instead of a status object. Make sure to check that a return value exists before trying to use it, as we're doing above with the `if (status)` conditional statement.
 </Callout>
 
@@ -166,7 +166,7 @@ What do all those fields mean? Here's a summary:
 For more details about the fields in this JSON response, including the format of the `pins` and `deals` objects, see the [JavaScript client library reference][reference-js-status].
 
 <Callout>
-##### tip
+##### Tip
 If you're looking for info on files you've uploaded, you can also use the [Files page](https://web3.storage/files) on Web3.Storage to see the values for some of the more commonly-used attributes returned by `query()`, namely `created`, `cid`, `dagSize`, and the `status` and `deals` objects of `pins`.
 </Callout>
 

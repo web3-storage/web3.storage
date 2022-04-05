@@ -61,7 +61,8 @@ You need a Web3.Storage account to get your API token and manage your stored dat
 1. Check your inbox for a verification email from Web3.Storage, and click the **Log in** button in the email.
 1. You're all set!
    </TabItem>
-   <TabItem value="github" label="Github">
+
+<TabItem value="github" label="Github">
 
 ##### Sign up using Github
 
@@ -112,7 +113,7 @@ All data uploaded to Web3.Storage is available to anyone who requests it using t
 
 1. Create another file called `package.json` and paste in the following code:
 
-   <CodeSnippet lang="js" src={PackageJson}></CodeSnippet>
+   <CodeSnippet lang="json" src={PackageJson}></CodeSnippet>
 
 1. Save both files, and then run `npm install` from your project folder:
 
