@@ -5,19 +5,66 @@
   width: 100%;
   height: 100%;
   z-index: -1;
-  filter: blur(0.25rem);
+  filter: blur(1rem);
+  overflow: hidden;
 
-  &.header-variant {
+  &.header {
+    width: calc(100% + 2rem);
+    height: calc(100% + 2 * $navigationHeight + 2rem);
+    top: calc(-1 * $navigationHeight - 1rem);
+    left: -1rem;
+  }
+
+  .header-variant {
+    position: absolute;
     left: -9999px;
     right: -9999px;
     margin: 0 auto;
-    height: calc(100% + 2 * $navigationHeight);
+
+    width: 4400px;
+    opacity: 0.7;
     transform: translateY(-1 * $navigationHeight);
     min-width: 50rem;
+    @include ultraLarge {
+      width: 2600px;
+    }
+    @include xlarge {
+      width: 2200px;
+    }
     @include tiny {
       transform: translateX(-10rem) translateY(-1 * $navigationHeight);
     }
+    img {
+      transform: translateY(-35%);
+    }
   }
+
+  .light-variant {
+    position: absolute;
+    left: -9999px;
+    right: -9999px;
+    margin: 0 auto;
+
+    width: 3800px;
+    z-index: 1;
+    img {
+      // position: absolute;
+      // top: -20%;
+      transform: rotate(-50deg) translateY(-7%);
+    }
+  }
+
+  // .type__A {
+  //   left: -9999px;
+  //   right: -9999px;
+  //   margin: 0 auto;
+  //   height: calc(100% + 2 * $navigationHeight);
+  //   transform: translateY(-1 * $navigationHeight);
+  //   min-width: 50rem;
+  //   @include tiny {
+  //     transform: translateX(-10rem) translateY(-1 * $navigationHeight);
+  //   }
+  // }
 }
 
 .gradient-background-image-cover {

@@ -14,8 +14,7 @@
       {
         "type": "section-data",
         "gradient": true,
-        "variant": "saturated",
-        "classlist": "header-variant"
+        "variant": "header"
       },
       {
         "id": "hero_header",

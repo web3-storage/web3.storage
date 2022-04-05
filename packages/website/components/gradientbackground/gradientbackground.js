@@ -1,27 +1,29 @@
 // ===================================================================== Imports
 import clsx from 'clsx';
 
-import GradientBackgroundA from '../../assets/illustrations/gradient-background-a.js';
-import GradientBackgroundC from '../../assets/illustrations/gradient-background-c.js';
-import GradientBackgroundD from '../../assets/illustrations/gradient-background-d.js';
+import { GradientA } from '../../assets/illustrations/gradient-background.js';
+import { GradientB } from '../../assets/illustrations/gradient-background.js';
+import { GradientC } from '../../assets/illustrations/gradient-background.js';
+import { GradientD } from '../../assets/illustrations/gradient-background.js';
 // ====================================================================== Params
 /**
  * @param {Object} props
  * @param {string} props.variant
- * @param {string} props.classlist
  */
 // ====================================================================== Export
-export default function GradientBackground({ variant = 'saturated', classlist }) {
+export default function GradientBackground({ variant = 'saturated' }) {
   const getBackgroundImageType = type => {
     switch (type) {
       case 'mobile':
-        return <GradientBackgroundD className="gradient-background-image-cover" />;
+        return <GradientD className="mobile-variant" />;
       case 'light':
-        return <GradientBackgroundC className="gradient-background-image-cover" />;
+        return <GradientC className="light-variant" />;
+      case 'header':
+        return <GradientA className="header-variant" />;
       default:
-        return <GradientBackgroundA className="gradient-background-image-cover" />;
+        return <GradientB className="saturated-variant" />;
     }
   };
 
-  return <div className={clsx('gradient-background-component', classlist)}>{getBackgroundImageType(variant)}</div>;
+  return <div className={clsx("gradient-background-component", variant)}>{getBackgroundImageType(variant)}</div>;
 }
