@@ -5,7 +5,7 @@ class MyDocument extends Document {
    * @param {import("next/document").DocumentContext} ctx
    */
 
-  static async getInitialProps(ctx: any) {
+  static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
     return { ...initialProps };
   }
@@ -23,7 +23,10 @@ class MyDocument extends Document {
           <meta name="msapplication-TileColor" content="#3a0839" />
           <meta name="msapplication-config" content="/browserconfig.xml" />
           <meta name="theme-color" content="#5bbad5" />
-          <script type="text/javascript" dangerouslySetInnerHTML={{ __html: process.env.rawJsFromFile! }}></script>
+          <script
+            type="text/javascript"
+            dangerouslySetInnerHTML={{ __html: /** @type {string} */ (process.env.rawJsFromFile) }}
+          ></script>
         </Head>
         <body>
           <Main />
