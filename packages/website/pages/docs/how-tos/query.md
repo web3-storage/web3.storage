@@ -5,7 +5,7 @@ description: Learn how to query Web3.Storage in this quick how-to guide.
 
 import { Tabs, TabItem } from 'components/tabs/tabs';
 import Callout from 'nextra-theme-docs/callout';
-import CodeSnippet from 'components/mdx/codeSnippet';
+import CodeSnippet from 'components/codesnippet/codesnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js';
 import golangStatus from '!!raw-loader!../../../assets/code-snippets/how-to/golang/status/status.go';
 

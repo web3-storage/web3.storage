@@ -5,8 +5,8 @@ description: Learn how to work with Content Archives of IPLD data.
 
 import { Tabs, TabItem } from 'components/tabs/tabs';
 import Callout from 'nextra-theme-docs/callout';
-import CodeSnippet from 'components/mdx/codeSnippet';
-import Accordion from 'components/mdx/Accordion';
+import CodeSnippet from 'components/codesnippet/codesnippet';
+import AccordionSingle from 'components/accordionsingle/accordionsingle';
 import dagCborSource from '!!raw-loader!../../../assets/code-snippets/how-to/dag-cbor.js';
 
 # Working with Content Archives
@@ -199,7 +199,7 @@ npx carbites-cli --help
 
 The first time around, it will ask to make sure you want to install the package:
 
-```text output
+```shell
 Need to install the following packages:
   carbites-cli
 Ok to proceed? (y)
@@ -368,23 +368,23 @@ First, you'll need to import some things:
 
 Now we'll define a convenience function to encode an IPLD block of CBOR data and hash with SHA2-256:
 
-<Accordion heading="encodeCborBlock(value)">
+<AccordionSingle heading="encodeCborBlock(value)">
   <CodeSnippet lang="js" src={dagCborSource} region="encodeCborBlock" />
-</Accordion>
+</AccordionSingle>
 
 And a function to make a CAR from a collection of blocks and a root CID:
 
-<Accordion heading="makeCar(rootCID, ipldBlocks)">
+<AccordionSingle heading="makeCar(rootCID, ipldBlocks)">
   <CodeSnippet lang="js" src={dagCborSource} region="makeCar" />
-</Accordion>
+</AccordionSingle>
 
 #### Storing simple CBOR data
 
 Using the helpers above, you can make a CAR file with a single block of simple CBOR data and send it to Web3.Storage:
 
-<Accordion heading="simpleCborExample()">
+<AccordionSingle heading="simpleCborExample()">
   <CodeSnippet lang="js" src={dagCborSource} region="simpleCborExample" />
-</Accordion>
+</AccordionSingle>
 
 If you have the IPFS command line app installed, you can view the object you stored with the [`ipfs dag get` command][ipfs-docs-dag-get], for example:
 
@@ -404,9 +404,9 @@ Note that the example output has been indented with [jq](https://stedolan.github
 
 You can link from one CBOR object to another using CIDs:
 
-<Accordion heading="cborLinkExample()">
+<AccordionSingle heading="cborLinkExample()">
   <CodeSnippet lang="js" src={dagCborSource} region="cborLinkExample" />
-</Accordion>
+</AccordionSingle>
 
 As with simple objects, you can use `ipfs dag get` to show the outer object:
 
@@ -442,15 +442,15 @@ First, we'll encode a file into UnixFS format. Normally, this is done by the cli
 
 Here's a helper function to make a UnixFS file and encode it to an IPLD block:
 
-<Accordion heading="makeUnixFsFile(source)">
+<AccordionSingle heading="makeUnixFsFile(source)">
   <CodeSnippet lang="js" src={dagCborSource} region="makeUnixFsFile" />
-</Accordion>
+</AccordionSingle>
 
 The helper returns a `root` block, which we can link to by CID, as well as a `blocks` array containing the encoded file data. When we create the CAR to send to Web3.Storage, it's important to include all the file blocks as well as the CBOR block.
 
-<Accordion heading="cborLinkToFileExample()">
+<AccordionSingle heading="cborLinkToFileExample()">
   <CodeSnippet lang="js" src={dagCborSource} region="cborLinkToFileExample" />
-</Accordion>
+</AccordionSingle>
 
 As before, we can view the root block with `ipfs dag get`:
 
@@ -485,7 +485,7 @@ To avoid this, or to fetch binary files, you can use `ipfs get` to download the 
 ipfs get bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy/file
 ```
 
-```text
+```shell
 Saving file(s) to file
  33 B / 33 B [===============================================================] 100.00% 0s
 ```

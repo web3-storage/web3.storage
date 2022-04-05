@@ -5,8 +5,7 @@ description: 'Learn how to use Web3.Storage to decentralize your data storage wi
 
 import Callout from 'nextra-theme-docs/callout';
 import { Tabs, TabItem } from 'components/tabs/tabs';
-import CodeSnippet from 'components/mdx/codeSnippet';
-import FeedbackBox from 'components/feedbackBox/feedbackBox';
+import CodeSnippet from 'components/codesnippet/codesnippet';
 import PutFiles from '!!raw-loader!../../assets/code-snippets/quickstart/put-files.js';
 import PackageJson from '!!raw-loader!../../assets/code-snippets/quickstart/package.json.txt';
 
@@ -53,25 +52,20 @@ You need a Web3.Storage account to get your API token and manage your stored dat
 
 <Tabs>
 <TabItem value="Email" label="Email">
-
 ##### Sign up using email
-
 1. Go to [web3.storage/login](https://web3.storage/login) to get started.
 1. Enter your email address.
 1. Check your inbox for a verification email from Web3.Storage, and click the **Log in** button in the email.
 1. You're all set!
-   </TabItem>
-
+</TabItem>
 <TabItem value="github" label="Github">
-
 ##### Sign up using Github
-
 1. Go to [web3.storage/login](https://web3.storage/login) to get started.
 1. Click **GitHub** on the Login screen.
 1. **Authorize** Web3.Storage when asked by GitHub.
 1. You're all set!
-   </TabItem>
-   </Tabs>
+</TabItem>
+</Tabs>
 
 Now that you're signed up and logged in, it's time to [get your API token. ↓](#get-an-api-token)
 
@@ -192,5 +186,3 @@ Congratulations! You've just covered the basics of Web3.Storage. To learn more, 
 - For a deep dive into storing files, visit the [Store how-to guide.](/how-tos/store.md)
 - To learn more about the details of getting files, have a look at the [Retrieve how-to guide.](/how-tos/retrieve.md)
 - Visit the [reference API section](/reference/js-client-library.md) for more details on what else you can do with the Web3.Storage service and how to integrate it into your own projects.
-
-<FeedbackBox></FeedbackBox>

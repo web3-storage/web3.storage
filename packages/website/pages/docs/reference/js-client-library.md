@@ -5,8 +5,8 @@ description: Integrate Web3.Storage into your code using the JavaScript client l
 
 import { Tabs, TabItem } from 'components/tabs/tabs';
 import Callout from 'nextra-theme-docs/callout';
-import CodeSnippet from 'components/mdx/codeSnippet';
-import Accordion from 'components/mdx/Accordion';
+import CodeSnippet from 'components/codesnippet/codesnippet';
+import AccordionSingle from 'components/accordionsingle/accordionsingle';
 import dagJsonSource from '!!raw-loader!../../../assets/code-snippets/how-to/dag-json.js'
 
 # JavaScript client library reference
@@ -93,25 +93,25 @@ Method parameters are supplied in positional order.
 
 An `{options}` object has the following properties that can be used as parameters when calling `put()`:
 
-<Accordion heading="name">
+<AccordionSingle heading="name">
 _String._ The `name` parameter lets you attach an arbitrary name to the uploaded content archive, which you can use to identify and organize your uploads. The name is not stored alongside the data on IPFS, but it is viewable within the file listing on the Web3.Storage site.
 
 ```js
 const cid = await client.put(files, { name: 'cat pics' });
 ```
 
-</Accordion>
+</AccordionSingle>
 
-<Accordion heading="maxRetries">
+<AccordionSingle heading="maxRetries">
 _Number._ You can specify how many times `put` should attempt to retry in case of failure by passing in a `maxRetries` option:
 
 ```js
 const cid = await client.put(files, { maxRetries: 3 });
 ```
 
-</Accordion>
+</AccordionSingle>
 
-<Accordion heading="wrapWithDirectory">
+<AccordionSingle heading="wrapWithDirectory">
 _Boolean._ The `wrapWithDirectory` parameter controls whether the files will be wrapped in an IPFS directory when added to Web3.Storage. With the default value of `true`, all files provided to the `put` method will be wrapped in an IPFS directory listing.
 
 For example, when adding a file called `hello.txt` using the default behavior, the root CID returned by the `put` method identifies a directory containing a file named `hello.txt`, rather than the `hello.txt` file itself, which is accessible at `<rootCID>/hello.txt`.
@@ -150,9 +150,9 @@ bafybeiebez7epbidb7f6fcurnd5ukpokrpq5wkrsuakynukpxxo4y4ewvi/
     └── things.md
 ```
 
-</Accordion>
+</AccordionSingle>
 
-<Accordion heading="onRootCidReady">
+<AccordionSingle heading="onRootCidReady">
 _Function._ Because the data is formatted for IPFS and Filecoin on the client, the root CID for the data is generated before the data is uploaded to Web3.Storage. If you want to display the CID to the user before the upload is complete, pass in an `onRootCidReady` function that accepts a CID string:
 
 ```js
@@ -160,9 +160,9 @@ const onRootCidReady = rootCid => console.log('root cid:', rootCid);
 const cid = await client.put(files, { onRootCidReady });
 ```
 
-</Accordion>
+</AccordionSingle>
 
-<Accordion heading="onStoredChunk">
+<AccordionSingle heading="onStoredChunk">
 _Function._ You can also display progress updates by passing in an `onStoredChunk` callback. This is called after each chunk of data is uploaded, with the size of the chunk in bytes passed in as a parameter:
 
 ```js
@@ -170,7 +170,7 @@ const onStoredChunk = chunkSize => console.log(`stored chunk of ${chunkSize} byt
 const cid = await client.put(files, { onStoredChunk });
 ```
 
-</Accordion>
+</AccordionSingle>
 
 ## Retrieve files
 
@@ -318,15 +318,15 @@ Returns `undefined` if there are no matches for the given CID.
 
 If found, the `status()` method returns a `{Status}` object that contains the metadata for your object's storage deal on the Web3.Storage network, with the following properties:
 
-<Accordion heading="cid">
+<AccordionSingle heading="cid">
 _String._ The `cid` property is the content identifier of the data for which you are retrieving status information.
-</Accordion>
+</AccordionSingle>
 
-<Accordion heading="dagSize">
+<AccordionSingle heading="dagSize">
 _Number._ The `dagSize` property is the total size, in bytes, of the [Merkle Directed Acyclic Graph (DAG)](https://docs.ipfs.io/concepts/merkle-dag/) containing the queried CID.
-</Accordion>
+</AccordionSingle>
 
-<Accordion heading="created">
+<AccordionSingle heading="created">
 _String._ The `created` property gives the creation date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
 
 <Callout>
@@ -334,9 +334,9 @@ _String._ The `created` property gives the creation date in [ISO 8601](https://e
 The `created` date returned by a call to `status()` is the date and time that the CID was first seen on the network. The date given by a call to `list()` is the date and time of a particular upload via a call to `put()`. These can differ if multiple users upload the same file(s).
 </Callout>
 
-</Accordion>
+</AccordionSingle>
 
-<Accordion heading="pins">
+<AccordionSingle heading="pins">
 _Array._ The `pins` property is an array of `Pin` objects. Each `Pin` object represents a specific [peer in the IPFS network,](https://docs.libp2p.io/concepts/peer-id/) with the following structure:
 
 ```json
@@ -349,9 +349,9 @@ Pin {
 }
 ```
 
-</Accordion>
+</AccordionSingle>
 
-<Accordion heading="deals">
+<AccordionSingle heading="deals">
 _Array._ The `deals` property is an array of `Deal` objects. Each `Deal` object represents a specific [storage deal on the Filecoin network,](https://docs.filecoin.io/about-filecoin/how-filecoin-works/#deals) for a specific [Piece](https://spec.filecoin.io/systems/filecoin_files/piece/) of data, with the following structure:
 
 ```json
@@ -368,7 +368,7 @@ Deal {
 }
 ```
 
-</Accordion>
+</AccordionSingle>
 
 ## List uploads
 
@@ -396,13 +396,13 @@ for await (const item of client.list({ maxResults: 10 })) {
 
 The `list()` method accepts an `{options}` object with the following properties:
 
-<Accordion heading="before">
+<AccordionSingle heading="before">
 _String_. Specifies a date, in ISO 8601 format. Ensures that the call to `list()` will not return any results newer than the given date.
-</Accordion>
+</AccordionSingle>
 
-<Accordion heading="maxResults">
+<AccordionSingle heading="maxResults">
 _Number_. Specifies the maximum number of uploads to return when calling `list()`.
-</Accordion>
+</AccordionSingle>
 
 ### Return value
 
@@ -499,25 +499,25 @@ Method parameters are supplied in positional order.
 
 An `{options}` object has the following properties that can be used as parameters when calling `putCar()`:
 
-<Accordion heading="name">
+<AccordionSingle heading="name">
 _String._ The `name` parameter lets you attach an arbitrary name to the uploaded content archive, which you can use to identify and organize your uploads. The name is not stored alongside the data on IPFS, but it is viewable within the file listing on the Web3.Storage site.
 
 ```js
 const cid = await client.putCar(files, { name: 'cat pics' });
 ```
 
-</Accordion>
+</AccordionSingle>
 
-<Accordion heading="maxRetries">
+<AccordionSingle heading="maxRetries">
 _Number._ You can specify how many times `putCar` should attempt to retry in case of failure by passing in a `maxRetries` option. The default value is `5`.
 
 ```js
 const cid = await client.putCar(files, { maxRetries: 3 });
 ```
 
-</Accordion>
+</AccordionSingle>
 
-<Accordion heading="onStoredChunk">
+<AccordionSingle heading="onStoredChunk">
 _Function._ You can also display progress updates by passing in an `onStoredChunk` callback. This is called after each chunk of data is uploaded, with the size of the chunk in bytes passed in as a parameter. By default, data is split into chunks of around 10MB.
 
 ```js
@@ -525,11 +525,11 @@ const onStoredChunk = chunkSize => console.log(`stored chunk of ${chunkSize} byt
 const cid = await client.putCar(car, { onStoredChunk });
 ```
 
-</Accordion>
+</AccordionSingle>
 
-<Accordion heading="decoders">
+<AccordionSingle heading="decoders">
 [_BlockDecoder_](https://github.com/multiformats/js-multiformats#ipld-codecs-multicodec). Used to specify additional IPLD block decoders which interpret the data in the CAR file  and split it into multiple chunks. Note these are only required if the CAR file was not encoded using the default encoders: `dag-pb`, `dag-cbor` and `raw`.
 
 <CodeSnippet src={dagJsonSource} lang="js" />
 
-</Accordion>
+</AccordionSingle>

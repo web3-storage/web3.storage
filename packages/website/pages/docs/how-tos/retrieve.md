@@ -5,7 +5,7 @@ description: Learn how to retrieve data stored using Web3.Storage in this quick 
 
 import { Tabs, TabItem } from 'components/tabs/tabs';
 import Callout from 'nextra-theme-docs/callout';
-import CodeSnippet from 'components/mdx/codeSnippet';
+import CodeSnippet from 'components/codesnippet/codesnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
 import golangRetrieve from '!!raw-loader!../../../assets/code-snippets/how-to/golang/retrieve/retrieve.go';
 
@@ -160,7 +160,6 @@ Sometimes you may need to just download a specific file to your computer using t
 
 <Tabs groupId="os">
 <TabItem value="linux" label="Linux">
-
 1.  Open a terminal window.
 1.  Use `curl` to download your file:
 
@@ -188,51 +187,51 @@ Sometimes you may need to just download a specific file to your computer using t
 1.  Open a terminal window.
 1.  Use `curl` to download your file:
 
-    ```shell
-    curl https://<YOUR CID>.ipfs.dweb.link/<FILE NAME> -o ~/<OUTPUT FILE>
+        ```shell
+        curl https://<YOUR CID>.ipfs.dweb.link/<FILE NAME> -o ~/<OUTPUT FILE>
+        ```
+
+        Replace `<YOUR CID>`, `<FILE NAME>`, and `<OUTPUT FILE>` with their respective values.
+
+        | Variable        | Replace with                                                                                                | Example                                                       |
+        | --------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+        | `<YOUR CID>`    | The CID of the file you want to download.                                                                   | `bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq` |
+        | `<FILE NAME>`   | The _name_ of the file that you originally uploaded to Web3.Storage.                                        | `example.txt`                                                 |
+        | `<OUTPUT FILE>` | The path and filename that you want Powershell to save the file to. This can be different to `<FILE NAME>`. | `Desktop/output-file.txt`                                     |
+
+        Your complete command should look something like this:
+
+        ```shell
+        curl https://bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq.ipfs.dweb.link/example.txt -o ~/output-file.txt
+        ```
+
+    </TabItem>
+    <TabItem value="windows" label="Windows">
+
+1.  Open a Powershell window.
+1.  Use `Invoke-WebRequest` to download your file:
+
+    ```powershell
+     Invoke-WebRequest -Uri "https://<YOUR_CID>.ipfs.dweb.link/<FILE NAME>" -OutFile "C:\Users\<USERNAME>\<OUTPUT FILE>
     ```
 
-    Replace `<YOUR CID>`, `<FILE NAME>`, and `<OUTPUT FILE>` with their respective values.
+    Replace `<YOUR CID>`, `<FILE NAME>`, `<USERNAME>`, and `<OUTPUT FILE>` with their respective values.
 
     | Variable        | Replace with                                                                                                | Example                                                       |
     | --------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
     | `<YOUR CID>`    | The CID of the file you want to download.                                                                   | `bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq` |
     | `<FILE NAME>`   | The _name_ of the file that you originally uploaded to Web3.Storage.                                        | `example.txt`                                                 |
+    | `<USERNAME>`    | The username you use to log into Windows with.                                                              | `Laika`                                                       |
     | `<OUTPUT FILE>` | The path and filename that you want Powershell to save the file to. This can be different to `<FILE NAME>`. | `Desktop/output-file.txt`                                     |
 
     Your complete command should look something like this:
 
-    ```shell
-    curl https://bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq.ipfs.dweb.link/example.txt -o ~/output-file.txt
+    ```powershell
+    Invoke-WebRequest -Uri "https://bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq.ipfs.dweb.link/example.txt" -OutFile "C:\Users\Laika\Desktop\output-file.txt"
     ```
 
-</TabItem>
-<TabItem value="windows" label="Windows">
-
-1. Open a Powershell window.
-1. Use `Invoke-WebRequest` to download your file:
-
-   ```powershell
-    Invoke-WebRequest -Uri "https://<YOUR_CID>.ipfs.dweb.link/<FILE NAME>" -OutFile "C:\Users\<USERNAME>\<OUTPUT FILE>
-   ```
-
-   Replace `<YOUR CID>`, `<FILE NAME>`, `<USERNAME>`, and `<OUTPUT FILE>` with their respective values.
-
-   | Variable        | Replace with                                                                                                | Example                                                       |
-   | --------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-   | `<YOUR CID>`    | The CID of the file you want to download.                                                                   | `bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq` |
-   | `<FILE NAME>`   | The _name_ of the file that you originally uploaded to Web3.Storage.                                        | `example.txt`                                                 |
-   | `<USERNAME>`    | The username you use to log into Windows with.                                                              | `Laika`                                                       |
-   | `<OUTPUT FILE>` | The path and filename that you want Powershell to save the file to. This can be different to `<FILE NAME>`. | `Desktop/output-file.txt`                                     |
-
-   Your complete command should look something like this:
-
-   ```powershell
-   Invoke-WebRequest -Uri "https://bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq.ipfs.dweb.link/example.txt" -OutFile "C:\Users\Laika\Desktop\output-file.txt"
-   ```
-
-</TabItem>
-</Tabs>
+    </TabItem>
+    </Tabs>
 
 ## Next steps
 

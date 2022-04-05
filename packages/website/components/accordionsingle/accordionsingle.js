@@ -5,7 +5,7 @@ import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
 /**
  * @param {Object} props.block
  */
-export default function Accordion({ heading, children }) {
+export default function AccordionSingle({ heading, children }) {
   return (
     <div className="block accordion-block">
       <ZeroAccordion multiple={false} toggleOnLoad={false} toggleAllOption={false}>

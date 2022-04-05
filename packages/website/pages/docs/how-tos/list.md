@@ -1,11 +1,10 @@
 ---
 title: How to list files uploaded to Web3.Storage
-sidebar_label: List
 description: Learn how to list the files you've uploaded to Web3.Storage in this quick how-to guide.
 ---
 
 import Callout from 'nextra-theme-docs/callout';
-import CodeSnippet from 'components/mdx/codeSnippet';
+import CodeSnippet from 'components/codesnippet/codesnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
 import exampleUpload from '!!raw-loader!../../../assets/code-snippets/how-to/example-listing-upload.json.txt'
 

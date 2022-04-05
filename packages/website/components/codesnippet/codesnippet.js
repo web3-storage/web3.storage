@@ -41,7 +41,6 @@ export default function CodeSnippet(props) {
   const { src, region, lang, ...codeBlockProps } = props;
 
   useEffect(() => {
-    hljs.initHighlightingOnLoad();
     hljs.highlightAll();
   });
 
@@ -49,5 +48,9 @@ export default function CodeSnippet(props) {
     codeBlockProps.className = `language-${lang}`;
   }
 
-  return <pre>{src && <code className={codeBlockProps.className}>{extractRegion(src, region)}</code>}</pre>;
+  return (
+    <pre>
+      <code className={codeBlockProps.className}>{extractRegion(src, region)}</code>
+    </pre>
+  );
 }

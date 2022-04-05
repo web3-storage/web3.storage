@@ -1,6 +1,5 @@
 ---
 title: How to generate an API token
-sidebar_label: Generate an API token
 description: Learn how to get an API token for using Web3.Storage programmatically in this quick how-to guide.
 ---
 

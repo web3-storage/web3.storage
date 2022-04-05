@@ -4,10 +4,9 @@ description: Learn about Web3.Storage by walking through the code for a simple i
 ---
 
 import Callout from 'nextra-theme-docs/callout';
-import CodeSnippet from 'components/mdx/codeSnippet';
-import Accordion from 'components/mdx/Accordion';
+import CodeSnippet from 'components/codesnippet/codesnippet';
+import AccordionSingle from 'components/accordionsingle/accordionsingle';
 import storageJsSource from '!!raw-loader!../../../node_modules/example-image-gallery/src/js/storage.js'
-import Image from 'next/image';
 
 # Image gallery example
 
@@ -43,9 +42,9 @@ When you first start the app, it will check your browser's local storage for a s
 
 Before saving the token, we call a `validateToken` function that tries to create a new Web3.Storage client and call the [`list` method][reference-js-list]. This will throw an authorization error if the token is invalid, causing `validateToken` to return `false`. If `validateToken` returns `true`, we save the token to local storage and prompt the user to upload an image.
 
-<Accordion heading="validateToken(token)">
+<AccordionSingle heading="validateToken(token)">
     <CodeSnippet lang="js" src={storageJsSource} region="validateToken" />
-</Accordion>
+</AccordionSingle>
 
 <Callout type="warning">
   ##### Keep it safe, and keep it secret!
@@ -58,9 +57,9 @@ To upload images, we use the [`put` method][reference-js-put] to store a `File` 
 
 To identify our files for display in the image gallery, we use the `name` parameter to tag our uploads with the prefix `ImageGallery`. Later we'll filter out uploads that don't have the prefix when we're building the image gallery view.
 
-<Accordion heading="storeImage(imageFile, caption)">
+<AccordionSingle heading="storeImage(imageFile, caption)">
   <CodeSnippet lang="js" src={storageJsSource} region="storeImage" />
-</Accordion>
+</AccordionSingle>
 
 Note that the `storeImage` function uses a few utility functions that aren't included in this walkthrough. To see the details of the `jsonFile`, `getSavedToken`, `showMessage`, `showLink`, and `makeGatewayURL` functions, see [src/js/helpers.js][github-helpers.js]
 
@@ -68,17 +67,17 @@ Note that the `storeImage` function uses a few utility functions that aren't inc
 
 To build the image gallery UI, we use the Web3.Storage client's [`list` method][reference-js-list] to get metadata about each upload, filtering out any that don't have our `ImageGallery` name prefix.
 
-<Accordion heading="listImageMetadata()">
+<AccordionSingle heading="listImageMetadata()">
   <CodeSnippet lang="js" src={storageJsSource} region="listImageMetadata" />
-</Accordion>
+</AccordionSingle>
 
 For each matching upload, we call `getImageMetadata` to fetch the `metadata.json` file that was stored along with each image. The contents of `metadata.json` are returned along with an IPFS gateway URL to the image file, which can be used to display the images in the UI.
 
 The `getImageMetadata` function simply requests the `metadata.json` file from an IPFS HTTP gateway and parses the JSON content.
 
-<Accordion heading="getImageMetadata(cid)">
+<AccordionSingle heading="getImageMetadata(cid)">
   <CodeSnippet lang="js" src={storageJsSource} region="getImageMetadata" />
-</Accordion>
+</AccordionSingle>
 
 <Callout type="warning">
   ##### State management at scale

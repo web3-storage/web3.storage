@@ -4,7 +4,7 @@ description: Learn how to list the contents of an IPFS directory without having 
 ---
 
 import { Tabs, TabItem } from 'components/tabs/tabs';
-import Accordion from 'components/mdx/Accordion';
+import AccordionSingle from 'components/accordionsingle/accordionsingle';
 
 # Listing the contents of an IPFS directory
 
@@ -40,7 +40,7 @@ async function getLinks(ipfsPath) {
 
 See the example output below for the structure of the response objects.
 
-<Accordion heading="Show getLinks() usage example">
+<AccordionSingle heading="Show getLinks() usage example">
 ```js with-output
 getLinks('bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu')
 ```
@@ -71,7 +71,7 @@ getLinks('bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu')
 ];
 ```
 
-</Accordion>
+</AccordionSingle>
 
 ## Using HTTP requests
 
@@ -102,7 +102,7 @@ curl -s "https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndxtjgw3auuloy
 
 To format the response for display, you can install the [jq tool](https://stedolan.github.io/jq/) and add `| jq` to the end of the command above.
 
-<Accordion heading="Show formatted response">
+<AccordionSingle heading="Show formatted response">
 
 ```shell with-output
 curl -s "https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu" | jq
@@ -141,7 +141,7 @@ curl -s "https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndxtjgw3auuloy
 }
 ```
 
-</Accordion>
+</AccordionSingle>
 </TabItem>
 
 <TabItem value="powershell" label="PowerShell (Windows)">
@@ -159,7 +159,7 @@ $wc.DownloadString("https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndx
 
 To format the response for display, you can add ` | ConvertFrom-Json | ConvertTo-Json -Depth 100` to the end of the final command.
 
-<Accordion heading="Show formatted response">
+<AccordionSingle heading="Show formatted response">
 
 ```powershell with-output
 $wc = New-Object System.Net.WebClient
@@ -199,7 +199,7 @@ $wc.DownloadString("https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndx
 }
 ```
 
-</Accordion>
+</AccordionSingle>
 </TabItem>
 </Tabs>
 
