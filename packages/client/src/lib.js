@@ -55,6 +55,8 @@ const RATE_LIMIT_PERIOD = 10 * 1000
  * @returns {RateLimiter}
  */
 export function createRateLimiter (
+  // These defaults match the limit which is enforced server-side.
+  // They are configurable to allow a shorter timer period in the tests.
   requestsLimit = RATE_LIMIT_REQUESTS,
   timePeriod = RATE_LIMIT_PERIOD
 ) {
