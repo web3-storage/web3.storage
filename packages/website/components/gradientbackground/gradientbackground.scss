@@ -1,9 +1,9 @@
 .gradient-background-component {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  width: calc(100% + 2rem);
+  height: calc(100% + 2rem);
+  left: -1rem;
+  top: -1rem;
   z-index: -1;
   filter: blur(1rem);
   overflow: hidden;
@@ -45,26 +45,25 @@
     right: -9999px;
     margin: 0 auto;
 
-    width: 3800px;
     z-index: 1;
+    width: 4400px;
+    @include xlarge {
+      width: 3400px;
+    }
+    @include mini {
+      width: 1600px;
+      opacity: 0.6;
+    }
     img {
-      // position: absolute;
-      // top: -20%;
-      transform: rotate(-50deg) translateY(-7%);
+      transform: rotate(-40deg) translate(10%, -10%);
+      @include ultraLarge {
+        transform: rotate(-40deg) translateY(-7%);
+      }
+      @include mini {
+        transform: rotate(0deg) translateY(30%) scaleY(2);
+      }
     }
   }
-
-  // .type__A {
-  //   left: -9999px;
-  //   right: -9999px;
-  //   margin: 0 auto;
-  //   height: calc(100% + 2 * $navigationHeight);
-  //   transform: translateY(-1 * $navigationHeight);
-  //   min-width: 50rem;
-  //   @include tiny {
-  //     transform: translateX(-10rem) translateY(-1 * $navigationHeight);
-  //   }
-  // }
 }
 
 .gradient-background-image-cover {

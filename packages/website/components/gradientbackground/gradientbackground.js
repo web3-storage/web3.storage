@@ -1,10 +1,7 @@
 // ===================================================================== Imports
 import clsx from 'clsx';
 
-import { GradientA } from '../../assets/illustrations/gradient-background.js';
-import { GradientB } from '../../assets/illustrations/gradient-background.js';
-import { GradientC } from '../../assets/illustrations/gradient-background.js';
-import { GradientD } from '../../assets/illustrations/gradient-background.js';
+import { GradientImage } from '../../assets/illustrations/gradient-background.js';
 // ====================================================================== Params
 /**
  * @param {Object} props
@@ -15,13 +12,13 @@ export default function GradientBackground({ variant = 'saturated' }) {
   const getBackgroundImageType = type => {
     switch (type) {
       case 'mobile':
-        return <GradientD className="mobile-variant" />;
+        return <GradientImage className="mobile-variant" />;
       case 'light':
-        return <GradientC className="light-variant" />;
+        return <GradientImage className="light-variant" />;
       case 'header':
-        return <GradientA className="header-variant" />;
+        return <GradientImage className="header-variant" />;
       default:
-        return <GradientB className="saturated-variant" />;
+        return <GradientImage className="saturated-variant" />;
     }
   };
 
