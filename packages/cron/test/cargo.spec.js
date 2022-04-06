@@ -4,7 +4,6 @@ import { createCargoDag, createUpload, createUser, createUserAuthKey, dbEndpoint
 import { DBClient } from '@web3-storage/db'
 import { updateDagSizes } from '../src/jobs/dagcargo.js'
 import { getPg } from '../src/lib/utils.js'
-import sinon from 'sinon'
 
 const env = {
   DEBUG: '*',
@@ -26,7 +25,7 @@ function getToBeUpdatedWrong (cItem) {
     cItem[2] !== null // It's has a size in cargo
 }
 
-describe.only('Fix dag sizes migration', () => {
+describe('Fix dag sizes migration', () => {
   /** @type {DBClient} */
   let dbClient
   let user

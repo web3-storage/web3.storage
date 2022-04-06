@@ -26,7 +26,6 @@ UPDATE public.content
  * @param {Object} config
  * @param {import('pg').Client} config.rwPg
  * @param {import('pg').Client} config.roPg
- * @param {debug.Debugger} config.log
  * @param {number} [config.limit]
  * @param {Date} config.after
  */
