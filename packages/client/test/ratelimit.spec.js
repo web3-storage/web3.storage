@@ -12,12 +12,16 @@ describe('rate limiter', () => {
     // Check how many times the rate limiter returns within the time period
     let numRequests = 0
     await (async () => {
-      while (elapsedTime() < timePeriod) {
+      while (true) {
         await rateLimiter()
+        // If the rate limiter waited until the end of the time period before returning, then don't
+        // count it, as it belongs to the next period
+        if (elapsedTime() >= timePeriod) {
+          break
+        }
         numRequests++
       }
     })()
-    // throttledQueue has an off-by-one error, hence the plus one
-    assert.equal(numRequests, requestsLimit + 1)
+    assert.equal(numRequests, requestsLimit)
   })
 })
