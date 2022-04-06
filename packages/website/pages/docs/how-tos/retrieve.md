@@ -181,8 +181,8 @@ Sometimes you may need to just download a specific file to your computer using t
         curl https://bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq.ipfs.dweb.link/example.txt -o ~/output-file.txt
         ```
 
-    </TabItem>
-    <TabItem value="mac" label="macOS">
+</TabItem>
+<TabItem value="mac" label="macOS">
 
 1.  Open a terminal window.
 1.  Use `curl` to download your file:
@@ -205,8 +205,8 @@ Sometimes you may need to just download a specific file to your computer using t
         curl https://bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq.ipfs.dweb.link/example.txt -o ~/output-file.txt
         ```
 
-    </TabItem>
-    <TabItem value="windows" label="Windows">
+</TabItem>
+<TabItem value="windows" label="Windows">
 
 1.  Open a Powershell window.
 1.  Use `Invoke-WebRequest` to download your file:
@@ -230,8 +230,8 @@ Sometimes you may need to just download a specific file to your computer using t
     Invoke-WebRequest -Uri "https://bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq.ipfs.dweb.link/example.txt" -OutFile "C:\Users\Laika\Desktop\output-file.txt"
     ```
 
-    </TabItem>
-    </Tabs>
+</TabItem>
+</Tabs>
 
 ## Next steps
 

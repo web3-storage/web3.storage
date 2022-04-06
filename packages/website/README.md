@@ -10,13 +10,12 @@ If you don't have `nvm` installed to manage node versions, then it is highly sug
 
 ```
 - node >=v16.0.3
-- yarn v1.22.10
 ```
 
 ### Install dependencies
 
 ```
-yarn install
+npm i
 ```
 
 ### Setting up
@@ -45,44 +44,25 @@ NEXT_PUBLIC_MAGIC=<magic test mode publishable key>
 
 
 #### Development
-NPM:
+
 ```bash
 cd packages/website
 npm run dev
 ```
 
-Yarn: 
-```bash
-cd packages/website
-yarn dev
-```
-
 #### Production
-NPM:
+
 ```bash
 cd packages/website
 npm run build
 npm run start
 ```
 
-Yarn: 
-```bash
-cd packages/website
-yarn build
-yarn start
-```
-
 ### Linting
-NPM:
+
 ```bash
 cd packages/website
 npm run lint
-```
-
-Yarn: 
-```bash
-cd packages/website
-yarn lint
 ```
 
 ### Running Storybook
@@ -95,3 +75,17 @@ npm run storybook
 ## Deploy
 
 TBD
+
+## Docs
+
+Docs are written in markdown and uses Nextra.
+
+Notes
+- ensure that components (eg. `<Callout>... </Callout>`) are not indented
+- import statements are allowed
+
+Components used
+- components/tabs
+- components/feedback
+- components/codesnippet
+- components/accordionsingle

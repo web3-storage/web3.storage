@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "rm -rf .next && next dev -p 4000",
     "start": "env-cmd -f ../../.env next dev -p 4000",
+    "prebuild": "sh ./scripts/prebuild.sh",
     "build": "next build && next-sitemap && next export",
-    "postbuild": "./scripts/postbuild.sh",
+    "postbuild": "sh ./scripts/postbuild.sh",
     "export": "next export",
     "test": "eslint './**/*.js' && tsc --build",
     "lint": "npm run lint:ts && npm run lint:es:fix",

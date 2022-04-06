@@ -4,7 +4,7 @@ import { trackEvent, events } from '../../lib/countly';
 
 function Feedback({ strings: { title, yes, no, thanks, helpUsImprove }, children }) {
   const [voteSubmitted, setVoteSubmitted] = useState(false);
-  const lastUpdatedAt = 'FIX ME';
+  const lastUpdatedAt = process.env.NEXT_PUBLIC_DEPLOYDATE;
   const ISSUE_URL = 'https://github.com/web3-storage/web3.storage/issues/new/choose';
   const SUGGEST_CONTENT_URL = 'https://github.com/web3-storage/web3.storage/issues';
   const editUrl = useRef('https://github.com/web3-storage/web3.storage/tree/main/packages/website/pages/docs/');

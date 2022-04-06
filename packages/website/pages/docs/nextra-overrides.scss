@@ -19,9 +19,6 @@ $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48
       opacity: 1;
     }
   }
-  #footer_squiggle {
-    opacity: 0.2;
-  }
   // blockquote
   blockquote {
     padding-left: toRem(43);
@@ -151,7 +148,7 @@ $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48
   }
   // left side
   aside.bg-white {
-    background-color: transparent;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%);
     .sidebar {
       margin-top: 10rem;
       height: calc(100vh - 15rem) !important;
