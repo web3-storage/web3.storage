@@ -1,15 +1,22 @@
 #!/usr/bin/env node
+
 import { updateDagSizes } from '../jobs/dagcargo.js'
 import { envConfig } from '../lib/env.js'
-import { getDBClient } from '../lib/utils.js'
+import { getPg } from '../lib/utils.js'
 
 const oneMonthAgo = () => new Date().setMonth(new Date().getMonth() - 1)
 
 async function main () {
-  const dbClient = getDBClient(process.env)
+  const rwPg = getPg(process.env, 'rw')
+  const roPg = getPg(process.env, 'ro')
 
-  const after = new Date(process.env.AFTER || oneMonthAgo())
-  await updateDagSizes({ dbClient, after })
+  try {
+    const after = new Date(process.env.AFTER || oneMonthAgo())
+    await updateDagSizes({ rwPg, roPg, after })
+  } finally {
+    await rwPg.end()
+    await roPg.end()
+  }
 }
 
 envConfig()

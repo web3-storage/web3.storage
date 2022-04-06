@@ -335,8 +335,3 @@ export type UsedStorage = {
   uploaded: number,
   pinned: number
 }
-
-export type UpdateDagSizeOptions = {
-  from: Date,
-  limit?: number
-}
