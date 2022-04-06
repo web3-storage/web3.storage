@@ -2,7 +2,7 @@
 import { CID } from 'multiformats'
 import * as assert from 'uvu/assert'
 import { base36 } from 'multiformats/bases/base36'
-import { Web3Storage, createRateLimiter } from 'web3.storage'
+import { Web3Storage } from 'web3.storage'
 import { identity } from 'multiformats/hashes/identity'
 import * as Name from 'web3.storage/name'
 import { keys } from 'libp2p-crypto'
@@ -15,7 +15,6 @@ describe('name', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
   const token = AUTH_TOKEN || 'good'
   const endpoint = new URL(API_PORT ? `http://localhost:${API_PORT}` : '')
-  const rateLimiter = createRateLimiter(Infinity, 1000)
 
   it('creates a new name', async () => {
     const name = await Name.create()
@@ -100,7 +99,7 @@ describe('name', () => {
   })
 
   it('publishes and resolves', async () => {
-    const client = new Web3Storage({ endpoint, token, rateLimiter })
+    const client = new Web3Storage({ endpoint, token })
 
     const name = await Name.create()
     const value = '/ipfs/bafkreiem4twkqzsq2aj4shbycd4yvoj2cx72vezicletlhi7dijjciqpui'
@@ -121,7 +120,7 @@ describe('name', () => {
   })
 
   it('handles application/json error response', async () => {
-    const client = new Web3Storage({ endpoint, token, rateLimiter })
+    const client = new Web3Storage({ endpoint, token })
     const name = 'json-error'
 
     try {
@@ -133,7 +132,7 @@ describe('name', () => {
   })
 
   it('handles text/plain error response', async () => {
-    const client = new Web3Storage({ endpoint, token, rateLimiter })
+    const client = new Web3Storage({ endpoint, token })
     const name = 'text-error'
 
     try {
@@ -145,7 +144,7 @@ describe('name', () => {
   })
 
   it('throws without token', async () => {
-    const client = new Web3Storage({ endpoint, rateLimiter })
+    const client = new Web3Storage({ endpoint })
     const name = await Name.create()
     const value = '/ipfs/bafkreiem4twkqzsq2aj4shbycd4yvoj2cx72vezicletlhi7dijjciqpui'
     const revision = await Name.v0(name, value)

@@ -19,7 +19,7 @@ describe('put', () => {
 
   it('errors without token', async () => {
     // @ts-ignore
-    const client = new Web3Storage({ endpoint, rateLimiter })
+    const client = new Web3Storage({ endpoint })
     const files = prepareFiles()
     try {
       await client.put(files)
@@ -30,7 +30,7 @@ describe('put', () => {
   })
 
   it('errors without content', async () => {
-    const client = new Web3Storage({ endpoint, token, rateLimiter })
+    const client = new Web3Storage({ endpoint, token })
     try {
       await client.put([])
       assert.unreachable('should have thrown')
@@ -40,7 +40,7 @@ describe('put', () => {
   })
 
   it('errors with a file that will not be parsed by the Cluster', async function () {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     try {
       await client.put([new File(['test-put-fail'], 'file.txt')], { maxRetries: 1 })
       assert.unreachable('should have thrown')
@@ -50,7 +50,7 @@ describe('put', () => {
   })
 
   it('errors with a received CID that is not the same as generated in the client', async function () {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     try {
       await client.put([new File(['test-compromised-service'], 'file.txt')], { maxRetries: 1 })
       assert.unreachable('should have thrown')
@@ -60,7 +60,7 @@ describe('put', () => {
   })
 
   it('errors with wrong max chunk size', async () => {
-    const client = new Web3Storage({ endpoint, token, rateLimiter })
+    const client = new Web3Storage({ endpoint, token })
     try {
       await client.put([], { maxChunkSize: 10 })
       assert.unreachable('should have thrown')
@@ -70,7 +70,7 @@ describe('put', () => {
   })
 
   it('adds files', async () => {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     const files = prepareFiles()
     const expectedCid = 'bafybeiep3t2chy6e3dxk3fktnshm7tpopjrns6wevo4uwpnnz5aq352se4'
     const cid = await client.put(files, {
@@ -83,7 +83,7 @@ describe('put', () => {
   })
 
   it('adds files {wrapWithDirectory: false}', async () => {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     const files = prepareFiles()
     const expectedCid = 'bafybeifkc773a2s6gerq7ip7tikahlfflxe4fvagyxf74zfkr33j2yu5li'
     const cid = await client.put(files, {
@@ -97,7 +97,7 @@ describe('put', () => {
   })
 
   it('adds files {maxChunkSize: custom-size}', async () => {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     const files = prepareFiles()
     const expectedCid = 'bafybeiep3t2chy6e3dxk3fktnshm7tpopjrns6wevo4uwpnnz5aq352se4'
     const cid = await client.put(files, {
@@ -151,10 +151,9 @@ describe('putCar', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
   const token = AUTH_TOKEN || 'good'
   const endpoint = new URL(API_PORT ? `http://localhost:${API_PORT}` : '')
-  const rateLimiter = createRateLimiter(Infinity, 1000)
 
   it('adds CAR files', async () => {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     const carReader = await createCar('hello world')
     const expectedCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
     const cid = await client.putCar(carReader, {
@@ -167,7 +166,7 @@ describe('putCar', () => {
   })
 
   it('adds CAR files {maxChunkSize: custom-size}', async () => {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     const carReader = await createCar('hello world')
     const expectedCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
     const cid = await client.putCar(carReader, {
@@ -181,7 +180,7 @@ describe('putCar', () => {
   })
 
   it('errors for CAR with zero roots', async () => {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     const { writer, out } = CarWriter.create([])
     writer.close()
     const reader = await CarReader.fromIterable(out)
@@ -194,7 +193,7 @@ describe('putCar', () => {
   })
 
   it('errors for CAR with multiple roots', async () => {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     const { writer, out } = CarWriter.create([
       CID.parse('bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'),
       CID.parse('bafybeifkc773a2s6gerq7ip7tikahlfflxe4fvagyxf74zfkr33j2yu5li')
@@ -210,7 +209,7 @@ describe('putCar', () => {
   })
 
   it('errors for CAR with wrong max chunk size', async () => {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     const carReader = await createCar('hello world')
     try {
       await client.putCar(carReader, { maxChunkSize: 10 })
@@ -221,7 +220,7 @@ describe('putCar', () => {
   })
 
   it('put CAR with non-default decoder', async () => {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     const block = await encode({ value: { hello: 'world' }, codec: json, hasher: sha256 })
     const { writer, out } = CarWriter.create([block.cid])
     writer.put(block)
@@ -238,7 +237,7 @@ describe('putCar', () => {
   })
 
   it('encodes filename for header', async () => {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     const carReader = await createCar('hello world')
     const expectedCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
     const cid = await client.putCar(carReader, {

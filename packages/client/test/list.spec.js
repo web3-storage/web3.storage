@@ -1,15 +1,14 @@
 /* eslint-env mocha */
 import * as assert from 'uvu/assert'
-import { Web3Storage, createRateLimiter } from 'web3.storage'
+import { Web3Storage } from 'web3.storage'
 
 describe('list', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
   const token = AUTH_TOKEN || 'good'
   const endpoint = new URL(API_PORT ? `http://localhost:${API_PORT}` : '')
-  const rateLimiter = createRateLimiter(Infinity, 1000)
 
   it('fetches all uploads for account', async () => {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     const uploads = []
     for await (const item of client.list()) {
       uploads.push(item)
@@ -20,7 +19,7 @@ describe('list', () => {
   })
 
   it('fetches maxResults', async () => {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     const uploads = []
     const maxResults = 10
     for await (const item of client.list({ maxResults })) {
@@ -32,7 +31,7 @@ describe('list', () => {
   })
 
   it('fetches maxResults > 100', async () => {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     const uploads = []
     const maxResults = 101
     for await (const item of client.list({ maxResults })) {
@@ -44,7 +43,7 @@ describe('list', () => {
   })
 
   it('fetches maxResults > total results', async () => {
-    const client = new Web3Storage({ token, endpoint, rateLimiter })
+    const client = new Web3Storage({ token, endpoint })
     const uploads = []
     const maxResults = 110
     for await (const item of client.list({ maxResults })) {
@@ -56,7 +55,7 @@ describe('list', () => {
   })
 
   it('throws on error', async () => {
-    const client = new Web3Storage({ token: 'error', endpoint, rateLimiter })
+    const client = new Web3Storage({ token: 'error', endpoint })
     const uploads = []
     try {
       for await (const item of client.list()) {
