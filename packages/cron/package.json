@@ -11,7 +11,7 @@
     "start:pins": "node src/bin/pins.js",
     "start:dagcargo:sizes": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/dagcargo-sizes.js",
     "test": "npm-run-all -p -r test:e2e",
-    "test:e2e": "mocha --require ./test/hooks.js test/*.spec.js --timeout 50000"
+    "test:e2e": "mocha --require ./test/hooks.js test/*.spec.js --timeout 5000"
   },
   "author": "Alan Shaw",
   "license": "(Apache-2.0 OR MIT)",
@@ -32,7 +32,6 @@
     "@types/node": "^16.3.1",
     "execa": "^5.1.1",
     "mocha": "^8.3.2",
-    "npm-run-all": "^4.1.5",
-    "sinon": "^13.0.1"
+    "npm-run-all": "^4.1.5"
   }
 }
