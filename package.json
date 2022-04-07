@@ -20,6 +20,7 @@
     "api": "npm start -w packages/api",
     "web": "npm start -w packages/website",
     "test": "npm run lint && npm run test --workspaces",
+    "test:e2e": "npx playwright test",
     "lint": "standard --verbose | snazzy",
     "lint:fix": "standard --fix "
   },
