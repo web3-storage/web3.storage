@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.1.0](https://github.com/web3-storage/web3.storage/compare/website-v2.0.0...website-v2.1.0) (2022-04-05)
+
+
+### Features
+
+* minor update to copy in SP tooltips ([#1151](https://github.com/web3-storage/web3.storage/issues/1151)) ([aa4785f](https://github.com/web3-storage/web3.storage/commit/aa4785f66375c4647dec70dad4262bd2e786f4e0))
+
+
+### Bug Fixes
+
+* npm package name ([#1128](https://github.com/web3-storage/web3.storage/issues/1128)) ([5bae2a9](https://github.com/web3-storage/web3.storage/commit/5bae2a9cb67879078be368bd21c822644d207a94))
+* post-ship website fixes and enhancements ([#1150](https://github.com/web3-storage/web3.storage/issues/1150)) ([80be326](https://github.com/web3-storage/web3.storage/commit/80be3269d875795bc233f59322385297eaaf2b00))
+* trivial change to trigger release process ([#1220](https://github.com/web3-storage/web3.storage/issues/1220)) ([e3d5a2c](https://github.com/web3-storage/web3.storage/commit/e3d5a2cc963a1bce2a1a9103d8abba620dbacfed))
+* user storage display on web ([#1183](https://github.com/web3-storage/web3.storage/issues/1183)) ([1c8d36c](https://github.com/web3-storage/web3.storage/commit/1c8d36cb1f941cb940836af51451da4c72bdf685))
+* website 404 ([#1172](https://github.com/web3-storage/web3.storage/issues/1172)) ([8608735](https://github.com/web3-storage/web3.storage/commit/860873573018ea1ae6020d2ebfbc444138372ece))
+
 ## [2.0.0](https://github.com/web3-storage/web3.storage/compare/website-v1.10.0...website-v2.0.0) (2022-03-18)
 
 

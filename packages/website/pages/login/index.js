@@ -5,15 +5,14 @@ import { useQueryClient } from 'react-query';
 
 import GithubSVG from 'assets/icons/github';
 import Button from 'components/button/button';
+import LoginData from '../../content/pages/app/login.json';
 import countly, { trackEvent } from 'lib/countly';
 import { loginEmail, loginSocial } from 'lib/magic';
-import { PageProps } from 'components/types';
-import LoginData from '../../content/pages/app/login.json';
 
-enum LoginType {
-  GITHUB = 'github',
-  EMAIL = 'email',
-}
+const LoginType = {
+  GITHUB: 'github',
+  EMAIL: 'email',
+};
 
 const Login = () => {
   // App query client
@@ -23,10 +22,10 @@ const Login = () => {
   const { push } = useRouter();
 
   // Error states
-  const [errors, setErrors] = useState<{ email?: string }>({});
+  const [errors, setErrors] = useState(/** @type {{email?: string}} */ ({}));
 
   // User form data binding
-  const [{ email }, setFormData] = useState<{ email?: string }>({});
+  const [{ email }, setFormData] = useState(/** @type {{email?: string}} */ ({}));
 
   // Redirecting state
   const [isLoggingIn, setIsLoggingIn] = useState('');
@@ -98,7 +97,12 @@ const Login = () => {
   );
 };
 
-export function getStaticProps(): { props: PageProps } {
+/**
+ * Static Props
+ *
+ * @returns {{ props: import('components/types').PageProps}}
+ */
+export function getStaticProps() {
   return {
     props: {
       title: LoginData.seo.title,

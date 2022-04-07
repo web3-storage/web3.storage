@@ -1,9 +1,7 @@
 import clsx from 'clsx';
 import filesize from 'filesize';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-// @ts-ignore
 import { useRouter } from 'next/router';
-import { Upload } from 'web3.storage';
 
 import FileRowItem, { PinStatus } from './fileRowItem';
 import SearchIcon from 'assets/icons/search';
@@ -25,13 +23,23 @@ import CheckIcon from 'assets/icons/check';
 
 const defaultQueryOrder = 'a-z';
 
-type FilesManagerProps = {
-  className?: string;
-  content?: any;
-  onFileUpload: () => void;
-};
+/**
+ * @typedef {import('web3.storage').Upload} Upload
+ */
 
-const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) => {
+/**
+ * @typedef {Object} FilesManagerProps
+ * @prop {string} [className]
+ * @prop {any} [content]
+ * @prop {() => void} [onFileUpload]
+ */
+
+/**
+ *
+ * @param {FilesManagerProps} props
+ * @returns
+ */
+const FilesManager = ({ className, content, onFileUpload }) => {
   const { uploads: files, fetchDate, getUploads, isFetchingUploads, deleteUpload, renameUpload } = useUploads();
   const {
     query: { filter },
@@ -51,7 +59,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
   const deleteModalState = useState(false);
   const queryOrderRef = useRef(query.order);
 
-  const [selectedFiles, setSelectedFiles] = useState<Upload[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState(/** @type {Upload[]} */ ([]));
   const [isUpdating, setIsUpdating] = useState(false);
   const [nameEditingId, setNameEditingId] = useState();
   const fileRowLabels = content?.table.file_row_labels;
@@ -100,7 +108,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
   );
 
   const onFileSelect = useCallback(
-    (file: Upload) => {
+    /** @type {Upload} */ file => {
       const selectedIndex = selectedFiles.findIndex(fileSelected => fileSelected === file);
       if (selectedIndex !== -1) {
         selectedFiles.splice(selectedIndex, 1);
@@ -152,7 +160,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
   );
 
   const onEditToggle = useCallback(
-    targetCID => async (newFileName?: string) => {
+    targetCID => async (/** @type {string|undefined} */ newFileName) => {
       setNameEditingId(targetCID !== nameEditingId ? targetCID : undefined);
 
       const fileTarget = files.find(({ cid }) => cid === targetCID);

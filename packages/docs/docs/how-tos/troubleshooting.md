@@ -38,6 +38,10 @@ The HTTP API imposes rate limits to ensure that a single user cannot overwhelm t
 
 Rate limits are imposed when more than 30 requests from the same API token are received within a ten second window. To avoid being limited, try to throttle your requests to stay within this limit. Alternatively, you can respond to a 429 status by backing off for a few seconds and retrying the request.
 
+## I am experiencing slowness in uploads to web3.storage
+
+Please make sure that you are using the latest version of web3.storage client: v3.5.6 or greater. There is an issue in the latest Node version ([nodejs/node#42117](https://github.com/nodejs/node/pull/42117)) and we reverted using native version of Blob in latest release until that fix is shipped.
+
 [howto-store]: ./store.md
 [howto-query]: ./query.md
 [howto-retrieve]: ./retrieve.md

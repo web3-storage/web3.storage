@@ -13,7 +13,7 @@ import Footer from '../components/footer/footer.js';
 /**
  * App root Component
  */
-const App = ({ Component, pageProps }: any) => {
+const App = ({ Component, pageProps }) => {
   const { pathname } = useRouter();
   const productRoutes = ['/login', '/account', '/tokens'];
   // const marketingRoutes = ['/', '/pricing', '/about', '/faq', '/terms'];
