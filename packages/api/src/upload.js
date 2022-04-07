@@ -20,7 +20,10 @@ export async function uploadPost (request, env, ctx) {
 
   let input
   if (contentType.includes('multipart/form-data')) {
-    const form = await toFormData(request)
+    const form = await toFormData(request).catch(
+      error => HTTPError.throw(error.message),
+      400
+    )
     const files = form.getAll('file')
     input = files.map((f) => ({
       path: f.name,

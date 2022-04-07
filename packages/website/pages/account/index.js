@@ -8,16 +8,15 @@ import FileUploader from '../../components/account/fileUploader/fileUploader';
 import GradientBackground from '../../components/gradientbackground/gradientbackground.js';
 import countly from 'lib/countly';
 import AppData from '../../content/pages/app/account.json';
-import { PageProps } from 'components/types';
 import { useUploads } from 'components/contexts/uploadsContext';
 
-enum CTACardTypes {
-  API_TOKENS,
-  READ_DOCS,
-  UPLOAD_FILES,
-}
+export const CTACardTypes = {
+  API_TOKENS: 'API_TOKENS',
+  READ_DOCS: 'READ_DOCS',
+  UPLOAD_FILES: 'UPLOAD_FILES',
+};
 
-const Account: React.FC = () => {
+const Account = () => {
   const uploadModalState = useState(false);
   const dashboard = AppData.page_content.dashboard;
   const { uploads } = useUploads();
@@ -95,7 +94,12 @@ const Account: React.FC = () => {
   );
 };
 
-export function getStaticProps(): { props: PageProps } {
+/**
+ * Static Props
+ *
+ * @returns {{ props: import('components/types').PageProps}}
+ */
+export function getStaticProps() {
   return {
     props: {
       title: AppData.seo.title,

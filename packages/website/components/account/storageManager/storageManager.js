@@ -9,25 +9,31 @@ import { useUser } from 'components/contexts/userContext';
 import { elementIsInViewport } from 'lib/utils';
 
 // Tiers available
-enum StorageTiers {
-  TIER_1 = '0',
-  TIER_2 = '1',
-  TIER_3 = '2',
-}
+export const StorageTiers = {
+  TIER_1: '0',
+  TIER_2: '1',
+  TIER_3: '2',
+};
 
 // Raw TiB number of bytes, to be used in calculations
 const tebibyte = 1099511627776;
 
-type StorageManagerProps = {
-  className?: string;
-  content?: any;
-};
+/**
+ * @typedef {Object} StorageManagerProps
+ * @property {string} [className]
+ * @property {any} [content]
+ */
 
 const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body=${encodeURIComponent(
   emailContent.body.join('\n')
 )}`;
 
-const StorageManager = ({ className = '', content }: StorageManagerProps) => {
+/**
+ *
+ * @param {StorageManagerProps} props
+ * @returns
+ */
+const StorageManager = ({ className = '', content }) => {
   const storageTier = StorageTiers.TIER_1; // No tier available?
   const {
     storageData: { data, isLoading },
@@ -36,13 +42,9 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
   const pinned = useMemo(() => data?.usedStorage?.pinned || 0, [data]);
   const usedStorage = uploaded + pinned;
   const [componentInViewport, setComponentInViewport] = useState(false);
-  const storageManagerRef = useRef<HTMLDivElement>(null);
+  const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
 
-  const { maxSpaceLabel, unlockLabel, usedSpacePercentage } = useMemo<{
-    maxSpaceLabel: string;
-    unlockLabel?: string;
-    usedSpacePercentage: number;
-  }>(
+  const { maxSpaceLabel, unlockLabel, usedSpacePercentage } = useMemo(
     () =>
       // Storage information by tier
       ({
@@ -87,8 +89,8 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
   }, [componentInViewport]);
 
   const onSearchFiles = useCallback(() => {
-    const input: HTMLInputElement = document.querySelector('.search-input')!;
-    const container: HTMLInputElement = document.querySelector('.files-manager-container')!;
+    const input = /** @type {HTMLInputElement} */ (document.querySelector('.search-input'));
+    const container = /** @type {HTMLInputElement} */ (document.querySelector('.files-manager-container'));
     input.focus();
     container.scrollIntoView(true);
   }, []);
