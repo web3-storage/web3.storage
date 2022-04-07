@@ -59,6 +59,7 @@ jobs:
         env:
           NEXT_PUBLIC_API: http://localhost:8787
           NEXT_PUBLIC_ENV: dev
+          NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
       - name: Check for website test results
         id: check_website_test_results
         uses: andstor/file-existence-action@v1
