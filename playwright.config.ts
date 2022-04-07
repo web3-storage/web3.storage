@@ -112,9 +112,10 @@ const config: PlaywrightTestConfig = {
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    // @todo (bengo): consider using 'npm start' (but requires build first)
     command: "npm start",
     port: 4000,
+    // timeout: `npm start` can take awhile to boot up
+    timeout: 120 * 1000,
     // reuseExistingServer: !process.env.CI,
   },
 };
