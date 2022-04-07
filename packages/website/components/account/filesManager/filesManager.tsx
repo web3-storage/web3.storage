@@ -16,7 +16,7 @@ import Filterable from 'ZeroComponents/filterable/filterable';
 import Sortable from 'ZeroComponents/sortable/sortable';
 import Pagination from 'ZeroComponents/pagination/pagination';
 import Modal from 'modules/zero/components/modal/modal';
-import GradientBackgroundB from 'assets/illustrations/gradient-background-b';
+import GradientBackground from '../../gradientbackground/gradientbackground.js';
 import CloseIcon from 'assets/icons/close';
 import { formatTimestamp } from 'lib/utils';
 import { useUploads } from 'components/contexts/uploadsContext';
@@ -312,7 +312,7 @@ const FilesManager = ({ className, content, onFileUpload }: FilesManagerProps) =
         closeIcon={<CloseIcon className="file-uploader-close" />}
         showCloseButton
       >
-        <GradientBackgroundB className="account-gradient-background" />
+        <GradientBackground variant="saturated-variant" />
         <div className="delete-modal-content">
           <h5>{content?.ui.delete.heading}</h5>
           <p>{content?.ui.delete.alert}</p>

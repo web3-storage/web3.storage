@@ -76,3 +76,18 @@
     height: 100%;
   }
 }
+
+.account-upload-cta {
+  .saturated-variant {
+    @include medium {
+      transform: translate(-15%, -35%) scaleY(0.5) rotate(-40deg);
+    }
+    @include mini {
+      transform: translate(-15%, -35%) scaleY(0.75) rotate(-40deg);
+    }
+    @include tiny {
+      width: 40rem;
+      transform: translate(-20%, -20%) scaleY(1.4) rotate(-40deg);
+    }
+  }
+}

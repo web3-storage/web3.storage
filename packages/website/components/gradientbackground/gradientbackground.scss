@@ -15,6 +15,10 @@
     left: -1rem;
   }
 
+  &.upload-cta-gradient {
+    z-index: 0;
+  }
+
   .header-variant {
     position: absolute;
     left: -9999px;
@@ -63,6 +67,12 @@
         transform: rotate(0deg) translateY(30%) scaleY(2);
       }
     }
+  }
+
+  .saturated-variant {
+    width: 200%;
+    min-height: 150%;
+    transform: translate(-15%, -15%) scaleY(1.1) rotate(-40deg);
   }
 }
 

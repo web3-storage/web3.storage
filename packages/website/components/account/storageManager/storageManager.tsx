@@ -32,8 +32,8 @@ const StorageManager = ({ className = '', content }: StorageManagerProps) => {
   const {
     storageData: { data, isLoading },
   } = useUser();
-  const uploaded = useMemo(() => data?.usedStorage.uploaded || 0, [data]);
-  const pinned = useMemo(() => data?.usedStorage.pinned || 0, [data]);
+  const uploaded = useMemo(() => data?.usedStorage?.uploaded || 0, [data]);
+  const pinned = useMemo(() => data?.usedStorage?.pinned || 0, [data]);
   const usedStorage = uploaded + pinned;
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef<HTMLDivElement>(null);
