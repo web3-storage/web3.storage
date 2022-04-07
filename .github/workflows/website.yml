@@ -47,8 +47,7 @@ jobs:
           DEBUG: pw:install
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
       - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
-        working-directory: packages/website
-      - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm -w @web3-storage/website run test:e2e -- --project=${{ matrix.browser }}
+      - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run test:e2e -- --project=${{ matrix.browser }}
         env:
           NEXT_PUBLIC_API: http://localhost:8787
           NEXT_PUBLIC_ENV: dev
