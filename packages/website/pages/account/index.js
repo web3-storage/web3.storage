@@ -87,7 +87,7 @@ const Account = () => {
         <FileUploader
           content={AppData.page_content.file_uploader}
           uploadModalState={uploadModalState}
-          ackground={<GradientBackground variant="upload-cta-gradient" />}
+          background={<GradientBackground variant="upload-cta-gradient" />}
         />
       </div>
     </>

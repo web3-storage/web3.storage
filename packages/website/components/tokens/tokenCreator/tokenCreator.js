@@ -67,10 +67,11 @@ const TokenCreator = ({ content }) => {
       inputRef.current?.classList.remove('unfocused');
       inputRef.current?.classList.remove('focused');
     };
-    inputRef.current?.addEventListener('animationend', onAnimationEnd);
+    const input = inputRef.current;
+    input?.addEventListener('animationend', onAnimationEnd);
 
     return () => {
-      inputRef.current?.removeEventListener('animationend', onAnimationEnd);
+      input?.removeEventListener('animationend', onAnimationEnd);
     };
   }, [replace, query]);
 

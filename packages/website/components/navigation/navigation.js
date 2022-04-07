@@ -226,11 +226,10 @@ export default function Navigation({ isProductApp }) {
             )}
 
             <div className={clsx('nav-mobile-panel', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
-
               <div className="mobile-nav-gradient-wrapper">
-                <GradientBackground />
+                <GradientBackground variant={null} />
               </div>
-              
+
               <div className="mobile-items-wrapper">
                 {navItems.map((item, index) => (
                   <Link passHref href={item.url} key={`mobile-${item.text}`}>

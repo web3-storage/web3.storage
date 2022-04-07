@@ -5,7 +5,7 @@ import { GradientImage } from '../../assets/illustrations/gradient-background.js
 // ====================================================================== Params
 /**
  * @param {Object} props
- * @param {string} props.variant
+ * @param {?string} props.variant
  */
 // ====================================================================== Export
 export default function GradientBackground({ variant = 'saturated' }) {
@@ -22,5 +22,5 @@ export default function GradientBackground({ variant = 'saturated' }) {
     }
   };
 
-  return <div className={clsx("gradient-background-component", variant)}>{getBackgroundImageType(variant)}</div>;
+  return <div className={clsx('gradient-background-component', variant)}>{getBackgroundImageType(variant)}</div>;
 }
