@@ -52,6 +52,7 @@ jobs:
           NEXT_PUBLIC_ENV: test-e2e
           # @todo(bengo): consider using non-staging secret
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
+          NEXT_PUBLIC_API: http://localhost:8787
       - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
       - run: touch .env
       - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run test:e2e -- --project=${{ matrix.browser }}
