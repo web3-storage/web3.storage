@@ -55,7 +55,7 @@ const config: PlaywrightTestConfig = {
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "website-chromium",
+      name: "chromium",
       testDir: WEBSITE_TESTS_DIR_PATH,
       use: {
         ...devices["Desktop Chrome"],
@@ -63,7 +63,7 @@ const config: PlaywrightTestConfig = {
     },
 
     {
-      name: "website-firefox",
+      name: "firefox",
       testDir: WEBSITE_TESTS_DIR_PATH,
       use: {
         ...devices["Desktop Firefox"],
@@ -71,7 +71,7 @@ const config: PlaywrightTestConfig = {
     },
 
     {
-      name: "website-webkit",
+      name: "webkit",
       testDir: WEBSITE_TESTS_DIR_PATH,
       use: {
         ...devices["Desktop Safari"],
