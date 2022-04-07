@@ -7,8 +7,6 @@ on:
       - 'packages/website/**'
       - '.github/workflows/website.yml'
   pull_request:
-    branches:
-      - main
     paths:
       - 'packages/website/**'
       - '.github/workflows/website.yml'
