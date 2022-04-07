@@ -52,6 +52,7 @@ $docsPrimaryPurple: #3c3cd0;
 // Breakpoints
 $breakpoint_Tiny: 25.9375rem; // 415px
 $breakpoint_Mini: 40rem; // 640px
+$breakpoint_Smaller: 48rem; // 768px
 $breakpoint_Small: 53.125rem; // 850px
 $breakpoint_Medium: 64rem; // 1024px
 $breakpoint_Large: 75rem; // 1200px
@@ -283,6 +284,11 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
 }
 @mixin mini {
   @media screen and (max-width: $breakpoint_Mini) {
+    @content;
+  }
+}
+@mixin smaller {
+  @media screen and (max-width: $breakpoint_Smaller) {
     @content;
   }
 }
