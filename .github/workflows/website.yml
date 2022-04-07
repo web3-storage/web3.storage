@@ -51,7 +51,7 @@ jobs:
         env:
           NEXT_PUBLIC_API: http://localhost:8787
           NEXT_PUBLIC_ENV: test-e2e
-          # @todo(bengo): consider using non-staging secret
+          # todo: use non-staging secret
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
       - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
       - run: touch .env
