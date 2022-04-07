@@ -6,21 +6,12 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
 
-test.describe('nft.storage homepage', () => {
+test.describe('homepage', () => {
   test('should be screenshottable', async ({ page }, testInfo) => {
     await page.screenshot({
       fullPage: true,
       path: await E2EScreenshotPath(testInfo, `homepage`),
     });
-  });
-  // @todo(bengo)
-  test.skip('should explain the product', async ({ page }) => {
-    const nftStorage = await page.locator('.nft-storage');
-    expect(await nftStorage.innerText()).toMatch(/Free Storage for NFTs/gi);
-  });
-  // @todo(bengo)
-  test.skip('should have title', async ({ page }) => {
-    expect(page).toHaveTitle(/^NFT\.Storage/i);
   });
 });
 
