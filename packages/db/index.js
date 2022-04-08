@@ -326,13 +326,12 @@ export class DBClient {
   }
 
   /**
-   * List a users files, both uploads and pinned.
+   * List a users pinned files.
    * @param {number} userId
    * @param {import('./db-client-types').ListUploadsOptions} [opts]
    * @returns {Promise<Array<import('./db-client-types').UploadItemOutput>>}
    */
-  async listUserFiles (userId, opts = {}) {
-    const uploadedUserFiles = await this.listUploads(userId, opts)
+  async listPinned (userId, opts = {}) {
     // Query for pins the same shape as the uploads but with !inner joins
     const pinnedQuery = `
       _id:id::text,
@@ -382,26 +381,39 @@ export class DBClient {
       throw new DBError(error)
     }
 
-    // TODO get deals for pinned files?
-    const pinnedUserFiles = pins?.map((pin) => ({
+    const cids = pins?.map((u) => u.content.cid)
+    const deals = await this.getDealsForCids(cids)
+    return pins?.map((pin) => ({
       ...normalizePsaPinRequest(pin),
       type: 'PinRequest',
       ...pin.content,
-      deals: []
+      deals: deals[pin.content.cid] || []
     }))
+  }
+
+  /**
+   * List a users files, both uploads and pinned.
+   * @param {number} userId
+   * @param {import('./db-client-types').ListUploadsOptions} [opts]
+   * @returns {Promise<Array<import('./db-client-types').UploadItemOutput>>}
+   */
+  async listUserFiles (userId, opts = {}) {
+    const uploadedUserFiles = await this.listUploads(userId, opts)
+    const pinnedUserFiles = await this.listPinned(userId, opts)
 
     const userFiles = [
       ...uploadedUserFiles,
       ...pinnedUserFiles
     ]
 
-    // Sort applied to combined array instead of each of the queries
+    // Sort applied to combined array
     if (opts.sortBy === 'Name') {
       userFiles.sort((a, b) => ((opts.sortOrder === 'Asc') ? (a.name > b.name) : (a.name < b.name)) ? 1 : -1)
     } else {
       userFiles.sort((a, b) => ((opts.sortOrder === 'Asc') ? (new Date(a.created).getTime() - new Date(b.created).getTime()) : (new Date(b.created).getTime() - new Date(a.created).getTime())))
     }
 
+    const size = opts?.size || 10
     return userFiles.slice(0, size)
   }
 

@@ -4,7 +4,7 @@ import { DBClient } from '../index.js'
 import { normalizeCid } from '../../api/src/utils/cid.js'
 import { createUser, createUserAuthKey, token } from './utils.js'
 
-describe('user file list', () => {
+describe('User file list', () => {
   /** @type {DBClient} */
   const client = new DBClient({
     endpoint: 'http://127.0.0.1:3000',
@@ -82,6 +82,7 @@ describe('user file list', () => {
       }
     }
   ]
+  let lastUploadDate
 
   beforeEach(async () => {
     user1 = await createUser(client)
@@ -92,21 +93,31 @@ describe('user file list', () => {
     user2 = await createUser(client)
     authKey2 = await createUserAuthKey(client, parseInt(user2._id, 10))
 
-    // Uploads
-    await Promise.all(cids.map((cid, idx) => {
-      const key = keys[Math.floor(Math.random() * keys.length)]
-      return client.createUpload({
-        user: Number(user1._id),
-        contentCid: cid,
-        sourceCid: cid,
-        authKey: Number(key),
-        type: 'Upload',
-        dagSize: 1000000,
-        name: `Upload_${idx}`,
-        pins: [],
-        backupUrls: [initialBackupUrl]
-      })
-    }))
+    // Create some uploads
+    let created
+    const createUploads = async (cid) => {
+      let idx = 1
+      for (cid in cids) {
+        const key = keys[Math.floor(Math.random() * keys.length)]
+        created = new Date().toISOString()
+        await client.createUpload({
+          user: Number(user1._id),
+          contentCid: cid,
+          sourceCid: cid,
+          authKey: Number(key),
+          type: 'Upload',
+          dagSize: 1000000,
+          name: `Upload_${idx}`,
+          pins: [],
+          backupUrls: [initialBackupUrl],
+          created
+        })
+        idx++
+      }
+    }
+    await createUploads()
+    lastUploadDate = created
+
     await client.createUpload({
       user: Number(user2._id),
       contentCid: cids[0],
@@ -195,6 +206,18 @@ describe('user file list', () => {
       sortBy: 'Name'
     })
     assert(userFiles, 'user has files')
-    assert.strictEqual(userFiles[0].name, 'Upload_5', 'name order descending')
+    assert.strictEqual(userFiles[0].name, 'Upload_6', 'name order descending')
+  })
+
+  it('should filter the list', async () => {
+    let userFiles = await client.listUserFiles(user1._id, {
+      before: lastUploadDate
+    })
+    assert.strictEqual(userFiles.length, 5, 'files before the last upload')
+
+    userFiles = await client.listUserFiles(user1._id, {
+      after: lastUploadDate
+    })
+    assert.strictEqual(userFiles.length, 3, 'files on or after the last upload')
   })
 })
