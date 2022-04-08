@@ -47,6 +47,7 @@
   .banner-gradient-text {
     @include gradient_Text;
   }
+  line-height: 1.75;
   @include tiny {
     line-height: leading(24, 16);
   }
