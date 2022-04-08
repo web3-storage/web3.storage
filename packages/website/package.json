@@ -18,7 +18,6 @@
   },
   "dependencies": {
     "@magic-ext/oauth": "^0.7.0",
-    "@playwright/test": "^1.20.2",
     "clsx": "^1.1.1",
     "countly-sdk-web": "^20.11.2",
     "filesize": "^6.1.0",
