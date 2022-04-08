@@ -31,7 +31,7 @@ const defaultQueryOrder = 'a-z';
  * @typedef {Object} FilesManagerProps
  * @prop {string} [className]
  * @prop {any} [content]
- * @prop {() => void} [onFileUpload]
+ * @prop {() => void} onFileUpload
  */
 
 /**
