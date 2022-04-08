@@ -1,6 +1,6 @@
 // $mobileActiveText: #7E81FF;
 // $borderColor: #dbdada;
-// $sidenavBg: #1C1E29;
+$sidenavBg: #1c1e29;
 $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48%, $cerise 100%);
 
 @mixin gradient_Background_PinkBlue_Reverse {
@@ -11,6 +11,9 @@ $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48
   background-image: url('../../assets/images/corkscrewBlurred.jpg');
   background-repeat: repeat;
   background-size: cover;
+  &.overflow-hidden {
+    overflow: hidden;
+  }
   // very top nav
   .nav-item[href='/docs/'] {
     transform: translateY(-0.5rem);
@@ -90,12 +93,21 @@ $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48
     line-height: toRem(34);
     margin-bottom: 1.7rem;
   }
-
   > nav {
     display: none !important;
+    position: relative !important;
+    background-color: transparent !important;
     @include smaller {
       display: block !important;
-      z-index: 1000000 !important;
+      .block.md\:hidden {
+        text-align: left;
+        svg {
+          display: none;
+        }
+        &:after {
+          content: '>';
+        }
+      }
     }
   }
   // callout box
@@ -152,12 +164,27 @@ $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48
   // left side
   aside.bg-white {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%);
+    @include smaller {
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.6);
+      top: 0 !important;
+      height: 100% !important;
+    }
     .sidebar {
       margin-top: 10rem;
       height: calc(100vh - 15rem) !important;
       @media (max-width: 1215px) {
         margin-top: 0;
         height: calc(100vh - 5rem) !important;
+      }
+      @include smaller {
+        height: 100% !important;
+        background: $sidenavBg;
+        width: 80vw;
+        a,
+        button {
+          color: white;
+        }
       }
     }
     &:before {
