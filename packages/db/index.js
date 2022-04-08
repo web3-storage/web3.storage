@@ -326,6 +326,86 @@ export class DBClient {
   }
 
   /**
+   * List a users files, both uploads and pinned.
+   * @param {number} userId
+   * @param {import('./db-client-types').ListUploadsOptions} [opts]
+   * @returns {Promise<Array<import('./db-client-types').UploadItemOutput>>}
+   */
+  async listUserFiles (userId, opts = {}) {
+    const uploadedUserFiles = await this.listUploads(userId, opts)
+    // Query for pins the same shape as the uploads but with !inner joins
+    const pinnedQuery = `
+      _id:id::text,
+      name,
+      created:inserted_at,
+      updated:updated_at,
+      content!inner(
+        cid,
+        dagSize:dag_size,
+        pins:pin!inner(
+          status,
+          updated:updated_at,
+          location:pin_location(
+            _id:id,
+            peerId:peer_id,
+            peerName:peer_name,
+            ipfsPeerId:ipfs_peer_id,
+            region
+          )))`
+    const size = opts?.size || 10
+    // TODO get pinned for all of the users auth keys?
+    const authKeys = await this.listKeys(userId)
+    const authKeyIds = authKeys.map((authKey) => authKey._id)
+
+    let query = this._client
+      .from(psaPinRequestTableName)
+      .select(pinnedQuery)
+      .eq('content.pins.status', 'Pinned')
+      .in('auth_key_id', authKeyIds)
+      .is('deleted_at', null)
+      .limit(size)
+      .order(
+        opts.sortBy === 'Name' ? 'name' : 'inserted_at',
+        { ascending: opts.sortOrder === 'Asc' }
+      )
+
+    if (opts.before) {
+      query = query.lte('inserted_at', opts.before)
+    }
+
+    if (opts.after) {
+      query = query.gte('inserted_at', opts.after)
+    }
+
+    const { data: pins, error } = await query
+    if (error) {
+      throw new DBError(error)
+    }
+
+    // TODO get deals for pinned files?
+    const pinnedUserFiles = pins?.map((pin) => ({
+      ...normalizePsaPinRequest(pin),
+      type: 'PinRequest',
+      ...pin.content,
+      deals: []
+    }))
+
+    const userFiles = [
+      ...uploadedUserFiles,
+      ...pinnedUserFiles
+    ]
+
+    // Sort applied to combined array instead of each of the queries
+    if (opts.sortBy === 'Name') {
+      userFiles.sort((a, b) => ((opts.sortOrder === 'Asc') ? (a.name > b.name) : (a.name < b.name)) ? 1 : -1)
+    } else {
+      userFiles.sort((a, b) => ((opts.sortOrder === 'Asc') ? (new Date(a.created).getTime() - new Date(b.created).getTime()) : (new Date(b.created).getTime() - new Date(a.created).getTime())))
+    }
+
+    return userFiles.slice(0, size)
+  }
+
+  /**
    * Rename an upload.
    *
    * @param {number} userId
