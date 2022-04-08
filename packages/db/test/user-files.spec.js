@@ -95,24 +95,22 @@ describe('User file list', () => {
 
     // Create some uploads
     let created
-    const createUploads = async (cid) => {
-      let idx = 1
-      for (cid in cids) {
+    const createUploads = async () => {
+      for (const idx in cids) {
         const key = keys[Math.floor(Math.random() * keys.length)]
         created = new Date().toISOString()
         await client.createUpload({
           user: Number(user1._id),
-          contentCid: cid,
-          sourceCid: cid,
+          contentCid: cids[idx],
+          sourceCid: cids[idx],
           authKey: Number(key),
           type: 'Upload',
           dagSize: 1000000,
-          name: `Upload_${idx}`,
+          name: `Upload_${Number(idx) + 1}`,
           pins: [],
           backupUrls: [initialBackupUrl],
           created
         })
-        idx++
       }
     }
     await createUploads()
