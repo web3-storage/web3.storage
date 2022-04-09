@@ -8,5 +8,5 @@ pwd
 rm -rf packages/website/out/404.html && cp packages/website/out/404/index.html packages/website/out/404.html
 
 ## clean up deploydate that was set in prebuild
-sed -i '' '/^NEXT_PUBLIC_DEPLOYDATE/d' packages/website/.env 
-sed -i '' '/^$/d' packages/website/.env 
+sed -i '' '/^NEXT_PUBLIC_DEPLOYDATE/d' ./packages/website/.env
+sed -i '' '/^$/d' ./packages/website/.env

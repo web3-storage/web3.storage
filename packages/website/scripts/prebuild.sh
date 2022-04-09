@@ -5,8 +5,8 @@ pwd
 [[ "$PWD" =~ website ]] && cd ../..
 
 ## create .env file if it does not exist
-filename=packages/website/.env
+filename=./packages/website/.envSZ
 test -f $filename || touch $filename
 
 ## put deploy date on .env file
-echo "\n"NEXT_PUBLIC_DEPLOYDATE=`date +%m/%d/%Y` >> packages/website/.env
+echo "\n"NEXT_PUBLIC_DEPLOYDATE=`date +%m/%d/%Y` >> $filename
