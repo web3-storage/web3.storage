@@ -54,8 +54,9 @@ jobs:
           # todo: use non-staging secret
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
       - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
+        working-directory: packages/website
       - run: touch .env
-      - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run test:e2e -- --project=${{ matrix.browser }}
+      - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }}
         env:
           NEXT_PUBLIC_API: http://localhost:8787
           NEXT_PUBLIC_ENV: dev
