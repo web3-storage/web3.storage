@@ -13,6 +13,9 @@ test.describe('homepage', () => {
       path: await E2EScreenshotPath(testInfo, `homepage`),
     });
   });
+  test('should not error', async () => {
+    throw new Error('fail to ensure ci goes red');
+  });
 });
 
 /**
