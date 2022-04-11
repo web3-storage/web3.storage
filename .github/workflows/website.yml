@@ -46,12 +46,10 @@ jobs:
         env:
           DEBUG: pw:install
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-      - run: npm run build -w packages/api
       - run: npm run build -w packages/website
         env:
           NEXT_PUBLIC_API: http://localhost:8787
           NEXT_PUBLIC_ENV: test-e2e
-          # todo: use non-staging secret
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
       - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
         working-directory: packages/website
