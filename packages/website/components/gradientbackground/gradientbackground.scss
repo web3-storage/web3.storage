@@ -7,6 +7,7 @@
   z-index: -1;
   filter: blur(1rem);
   overflow: hidden;
+  transform: scale(1.05);
 
   &.header {
     width: calc(100% + 2rem);
