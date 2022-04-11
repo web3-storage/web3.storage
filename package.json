@@ -25,7 +25,6 @@
     "lint:fix": "standard --fix "
   },
   "devDependencies": {
-    "@playwright/test": "^1.20.2",
     "npm-run-all": "^4.1.5",
     "snazzy": "^9.0.0",
     "standard": "^16.0.3"
