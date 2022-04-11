@@ -8,7 +8,7 @@ import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
 import { InvalidCarError } from './errors.js'
-import { LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
+import { MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/cid.js'
@@ -198,10 +198,7 @@ async function addToCluster (car, env) {
   // `size` is UnixFS FileSize which is 0 for directories, and is not set for raw encoded files, only dag-pb ones.
   const { cid } = await env.cluster.addCAR(car, {
     metadata: { size: car.size.toString() },
-    // When >2.5MB, use local add, because waiting for blocks to be sent to
-    // other cluster nodes can take a long time. Replication to other nodes
-    // will be done async by bitswap instead.
-    local: car.size > LOCAL_ADD_THRESHOLD
+    local: false
   })
   const pins = await getPins(cid, env.cluster)
 
