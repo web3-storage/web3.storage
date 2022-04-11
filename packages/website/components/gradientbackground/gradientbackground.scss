@@ -8,6 +8,7 @@
   filter: blur(1rem);
   overflow: hidden;
   transform: scale(1.05);
+  background-color: $moonRaker;
 
   &.header {
     width: calc(100% + 2rem);
@@ -30,6 +31,7 @@
     opacity: 0.7;
     transform: translateY(-1 * $navigationHeight);
     min-width: 50rem;
+
     @include ultraLarge {
       width: 2600px;
     }
