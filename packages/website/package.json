@@ -9,6 +9,7 @@
     "build": "next build && next-sitemap && next export && ./scripts/docs.sh",
     "export": "next export",
     "test": "eslint './**/*.js' && tsc --build",
+    "test:e2e": "npx playwright test",
     "lint": "npm run lint:ts && npm run lint:es:fix",
     "lint:ts": "tsc --noEmit",
     "lint:es": "eslint '{pages,components,hooks,content,store}/**/*.{js,ts,tsx}' --max-warnings=0",

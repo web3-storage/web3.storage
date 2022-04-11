@@ -1,6 +1,6 @@
-import type { PlaywrightTestConfig } from "@playwright/test";
-import { devices } from "@playwright/test";
-import path from "path";
+import type { PlaywrightTestConfig } from '@playwright/test';
+import { devices } from '@playwright/test';
+import path from 'path';
 
 /**
  * Read environment variables from file.
@@ -8,13 +8,13 @@ import path from "path";
  */
 // require('dotenv').config();
 
-const WEBSITE_TESTS_DIR_PATH = "./packages/website/tests";
+const WEBSITE_TESTS_DIR_PATH = './tests';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 const config: PlaywrightTestConfig = {
-  testDir: "./tests",
+  testDir: WEBSITE_TESTS_DIR_PATH,
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
   expect: {
@@ -32,49 +32,42 @@ const config: PlaywrightTestConfig = {
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI
-    ? [
-        ["list"],
-        ["github"],
-        [
-          "json",
-          { outputFile: path.join(__dirname, "playwright-report.json") },
-        ],
-      ]
-    : "line",
+    ? [['list'], ['github'], ['json', { outputFile: path.join(__dirname, 'playwright-report.json') }]]
+    : 'line',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     actionTimeout: 0,
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: "http://localhost:4000",
+    baseURL: 'http://localhost:4000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on-first-retry",
+    trace: 'on-first-retry',
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "chromium",
+      name: 'chromium',
       testDir: WEBSITE_TESTS_DIR_PATH,
       use: {
-        ...devices["Desktop Chrome"],
+        ...devices['Desktop Chrome'],
       },
     },
 
     {
-      name: "firefox",
+      name: 'firefox',
       testDir: WEBSITE_TESTS_DIR_PATH,
       use: {
-        ...devices["Desktop Firefox"],
+        ...devices['Desktop Firefox'],
       },
     },
 
     {
-      name: "webkit",
+      name: 'webkit',
       testDir: WEBSITE_TESTS_DIR_PATH,
       use: {
-        ...devices["Desktop Safari"],
+        ...devices['Desktop Safari'],
       },
     },
 
@@ -112,7 +105,7 @@ const config: PlaywrightTestConfig = {
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: "npm start",
+    command: 'npm start',
     port: 4000,
     // timeout: `npm start` can take awhile to boot up
     timeout: 120 * 1000,
