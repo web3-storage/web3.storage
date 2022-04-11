@@ -214,6 +214,26 @@ describe('upload', () => {
     assert.strictEqual(uploadId, uploadIdRestored)
   })
 
+  it('delete uploads by normalized cid', async () => {
+    const contentCid = 'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
+    const name = `Upload_${new Date().toISOString()}`
+
+    await client.createUpload({
+      user: user._id,
+      contentCid,
+      sourceCid: 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR',
+      authKey: authKeys[0]._id,
+      type,
+      dagSize,
+      name,
+      pins: [initialPinData],
+      backupUrls: [`https://backup.cid/${new Date().toISOString()}`]
+    })
+
+    // Delete previously created upload
+    await client.deleteUpload(user._id, contentCid)
+  })
+
   it('creates a new upload for the same content when content uploaded by multiple users', async () => {
     // Create other user
     const name = 'test-other-name'

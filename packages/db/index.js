@@ -369,7 +369,7 @@ export class DBClient {
         updated_at: now
       })
       .match({
-        source_cid: cid,
+        content_cid: cid,
         user_id: userId
       })
       .is('deleted_at', null)
