@@ -16,7 +16,7 @@ import Pagination from 'ZeroComponents/pagination/pagination';
 import SearchIcon from 'assets/icons/search';
 import CheckIcon from 'assets/icons/check';
 import Modal from 'modules/zero/components/modal/modal';
-import GradientBackgroundB from 'assets/illustrations/gradient-background-b';
+import GradientBackground from '../../gradientbackground/gradientbackground.js';
 import CloseIcon from 'assets/icons/close';
 
 const defaultQueryOrder = 'a-z';
@@ -186,7 +186,7 @@ const TokensManager = ({ content }) => {
         closeIcon={<CloseIcon className="file-uploader-close" />}
         showCloseButton
       >
-        <GradientBackgroundB className="account-gradient-background" />
+        <GradientBackground variant="saturated-variant" />
         <div className="delete-modal-content">
           <h5>{content?.ui.delete.heading}</h5>
           <p>{content?.ui.delete.alert}</p>
