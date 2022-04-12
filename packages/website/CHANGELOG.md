@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.2.1](https://github.com/web3-storage/web3.storage/compare/website-v2.2.0...website-v2.2.1) (2022-04-12)
+
+
+### Bug Fixes
+
+* trigger website release ([b5a8b88](https://github.com/web3-storage/web3.storage/commit/b5a8b88d66e14bd763833eada1a8a01133450b4b))
+
 ## [2.2.0](https://github.com/web3-storage/web3.storage/compare/website-v2.1.0...website-v2.2.0) (2022-04-12)
 
 
