@@ -407,11 +407,8 @@ export class DBClient {
     ]
 
     // Sort applied to combined array
-    if (opts.sortBy === 'Name') {
-      userFiles.sort((a, b) => ((opts.sortOrder === 'Asc') ? (a.name > b.name) : (a.name < b.name)) ? 1 : -1)
-    } else {
-      userFiles.sort((a, b) => ((opts.sortOrder === 'Asc') ? (new Date(a.created).getTime() - new Date(b.created).getTime()) : (new Date(b.created).getTime() - new Date(a.created).getTime())))
-    }
+    const sortProperty = opts.sortBy === 'Name' ? 'name' : 'created'
+    userFiles.sort((a, b) => (((opts.sortOrder === 'Asc') === (a[sortProperty] > b[sortProperty])) ? 1 : -1))
 
     const size = opts?.size || 10
     return userFiles.slice(0, size)

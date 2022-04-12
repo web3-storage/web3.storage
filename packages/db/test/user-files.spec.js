@@ -187,7 +187,13 @@ describe('User file list', () => {
   it('should sort the list', async () => {
     let userFiles = await client.listUserFiles(user1._id)
     assert(userFiles, 'user has files')
-    assert.strictEqual(userFiles[0].name, 'PinRequest_3', 'default order is last created first')
+    assert.strictEqual(userFiles[0].name, 'PinRequest_3', 'default order is newest first')
+
+    userFiles = await client.listUserFiles(user1._id, {
+      sortOrder: 'Asc'
+    })
+    assert(userFiles, 'user has files')
+    assert.strictEqual(userFiles[0].name, 'Upload_1', 'created at order, oldest first')
 
     userFiles = await client.listUserFiles(user1._id, {
       sortBy: 'Name',
