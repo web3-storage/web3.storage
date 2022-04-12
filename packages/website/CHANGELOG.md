@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.2.0](https://github.com/web3-storage/web3.storage/compare/website-v2.1.0...website-v2.2.0) (2022-04-12)
+
+
+### Features
+
+* Gradient background optimization ([#1230](https://github.com/web3-storage/web3.storage/issues/1230)) ([3fbcc6e](https://github.com/web3-storage/web3.storage/commit/3fbcc6efaefa58534d1aaeaff54f83c803e13f70))
+
+
+### Bug Fixes
+
+* safari checkmark is always checked ([#1236](https://github.com/web3-storage/web3.storage/issues/1236)) ([6fa77e0](https://github.com/web3-storage/web3.storage/commit/6fa77e0a253d10f5e7c316eb8410ac45f675426e))
+* website copy filecoin storage capacity ([#1210](https://github.com/web3-storage/web3.storage/issues/1210)) ([07c4315](https://github.com/web3-storage/web3.storage/commit/07c4315727d163bd3c439b6e6ed1d9b3d91e50a8))
+
 ## [2.1.0](https://github.com/web3-storage/web3.storage/compare/website-v2.0.0...website-v2.1.0) (2022-04-05)
 
 
