@@ -65,6 +65,14 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
     [router]
   );
 
+  const navigateOnCardClick = useCallback(
+    item => {
+      if (!card.cta && card.action === 'next-link') {
+        router.push(card.url)
+      }
+    }
+  );
+
   const renderExploreCards = obj => {
     return (
       <>
@@ -152,8 +160,14 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
     return <CardTier card={card} cardsGroup={cardsGroup} index={index} onCardLoad={onCardLoad} />;
   }
 
+  const CustomTag = card.action === 'link' ? 'a' : 'div'
   return (
-    <div className={clsx('card', `type__${card.type}`)}>
+    <CustomTag
+      href={card.action === 'link' ? card.url : undefined}
+      target="_blank"
+      className={clsx('card', `type__${card.type}`, card.action ? `has-${card.action}` : '')}
+      onClick={card.action === 'next-link' ? () => navigateOnCardClick(card) : undefined}>
+
       {card.label && <div className="label">{card.label}</div>}
 
       {<div className={clsx('feature-wrapper', targetClass)}>{getFeaturedElement(card)}</div>}
@@ -181,6 +195,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
           {card.cta.text}
         </Button>
       )}
-    </div>
+
+    </CustomTag>
   );
 }
