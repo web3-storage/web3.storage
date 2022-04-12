@@ -27,9 +27,6 @@
   position: relative;
   z-index: 2;
   padding: 10.25rem 0;
-  // background-image: url('/images/index/holographic-bg-cropped-2.png');
-  // background-size: cover;
-  // background-repeat: no-repeat;
   @include selection_Light;
 
   &:before {

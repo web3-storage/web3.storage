@@ -3,7 +3,7 @@ import { useState, useCallback, useMemo } from 'react';
 
 import Modal from 'modules/zero/components/modal/modal';
 import Dropzone from 'modules/zero/components/dropzone/dropzone';
-import GradientBackgroundB from 'assets/illustrations/gradient-background-b';
+import GradientBackground from '../../gradientbackground/gradientbackground.js';
 import CloseIcon from 'assets/icons/close';
 import InfinityIcon from 'assets/icons/infinity';
 import GlobeIcon from 'assets/icons/globe';
@@ -88,8 +88,10 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
         }, [getUploads, clearUploadedFiles])}
       >
         <div className={clsx(className, 'file-uploader-container')}>
-          {background}
-          <GradientBackgroundB className="account-gradient-background" />
+          <div className="background-view-wrapper">
+            {background}
+            <GradientBackground variant="upload-cta-gradient" />
+          </div>
           <h5>{!!filesToUpload.length ? content.heading.option_1 : content.heading.option_2}</h5>
           <div className={'file-upload-subheading'} dangerouslySetInnerHTML={{ __html: content.subheading }}></div>
           <Dropzone

@@ -5,7 +5,7 @@ import StorageManager from '../../components/account/storageManager/storageManag
 import FilesManager from '../../components/account/filesManager/filesManager';
 import CTACard from '../../components/account/ctaCard/CTACard';
 import FileUploader from '../../components/account/fileUploader/fileUploader';
-import GradientBackgroundB from 'assets/illustrations/gradient-background-b';
+import GradientBackground from '../../components/gradientbackground/gradientbackground.js';
 import countly from 'lib/countly';
 import AppData from '../../content/pages/app/account.json';
 import { useUploads } from 'components/contexts/uploadsContext';
@@ -76,7 +76,7 @@ const Account = () => {
           <CTACard
             className="account-upload-cta"
             {...CTAConfigs[CTACardTypes.UPLOAD_FILES]}
-            background={<GradientBackgroundB className="account-gradient-background" />}
+            background={<GradientBackground variant="upload-cta-gradient" />}
           />
           <FilesManager
             content={AppData.page_content.file_manager}
@@ -87,7 +87,7 @@ const Account = () => {
         <FileUploader
           content={AppData.page_content.file_uploader}
           uploadModalState={uploadModalState}
-          background={<GradientBackgroundB className="account-gradient-background" />}
+          background={<GradientBackground variant="upload-cta-gradient" />}
         />
       </div>
     </>
