@@ -1,8 +1,9 @@
 /* eslint-env mocha */
 import * as assert from 'uvu/assert'
 import randomBytes from 'randombytes'
-import { Web3Storage, createRateLimiter } from 'web3.storage'
+import { Web3Storage } from 'web3.storage'
 import { File } from '../src/platform.js'
+import { createUnboundRateLimiter } from './utils.js'
 import { pack } from 'ipfs-car/pack'
 import { CarReader, CarWriter } from '@ipld/car'
 import { CID } from 'multiformats/cid'
@@ -15,7 +16,6 @@ describe('put', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
   const token = AUTH_TOKEN || 'good'
   const endpoint = new URL(API_PORT ? `http://localhost:${API_PORT}` : '')
-  const rateLimiter = createRateLimiter(Infinity, 1000)
 
   it('errors without token', async () => {
     // @ts-ignore
@@ -112,6 +112,7 @@ describe('put', () => {
 
   it('adds big files', async function () {
     this.timeout(60e3)
+    const rateLimiter = createUnboundRateLimiter()
     const client = new Web3Storage({ token, endpoint, rateLimiter })
     let uploadedChunks = 0
 

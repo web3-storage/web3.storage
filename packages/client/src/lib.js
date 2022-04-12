@@ -34,7 +34,7 @@ const MAX_CONCURRENT_UPLOADS = 3
 const DEFAULT_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 const MAX_BLOCK_SIZE = 1048576
 const MAX_CHUNK_SIZE = 104857600
-// These need to match what is configured in the Cloudflare dashboard
+// These match what is enforced server-side
 const RATE_LIMIT_REQUESTS = 30
 const RATE_LIMIT_PERIOD = 10 * 1000
 
@@ -52,15 +52,13 @@ const RATE_LIMIT_PERIOD = 10 * 1000
 /** @typedef { import('./lib/interface.js').Web3Response} Web3Response */
 
 /**
+ * Creates a rate limiter which limits at the same rate as is enforced
+ * server-side, to allow the client to avoid exceeding the requests limit and
+ * being blocked for 30 seconds.
  * @returns {RateLimiter}
  */
-export function createRateLimiter (
-  // These defaults match the limit which is enforced server-side.
-  // They are configurable to allow a shorter timer period in the tests.
-  requestsLimit = RATE_LIMIT_REQUESTS,
-  timePeriod = RATE_LIMIT_PERIOD
-) {
-  const throttle = throttledQueue(requestsLimit, timePeriod)
+export function createRateLimiter () {
+  const throttle = throttledQueue(RATE_LIMIT_REQUESTS, RATE_LIMIT_PERIOD)
   return () => throttle(() => {})
 }
 
