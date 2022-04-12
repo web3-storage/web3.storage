@@ -314,3 +314,17 @@ $file-size: auto;
     @include gradient_Background_PinkBlue;
   }
 }
+
+// safari hack since it does not support negative stroke-dashoffset
+// transition is opacity instead of tick drawing behaviour
+@include Safari7Plus('.files-manager-row .file-select svg.check .tick') {
+  // unchecked
+  stroke-dashoffset: 1000;
+  opacity: 0;
+  transition: opacity $transitionDuration 0s ease-out;
+}
+@include Safari7Plus('.files-manager-row .file-select input:checked ~ svg.check .tick') {
+  // checked
+  opacity: 1;
+  transition: opacity $transitionDuration 0s ease-in;
+}

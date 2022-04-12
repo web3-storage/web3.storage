@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/website",
-  "version": "2.1.0",
+  "version": "2.2.1",
   "description": "web3.storage website",
   "private": true,
   "scripts": {
@@ -11,6 +11,7 @@
     "postbuild": "sh ./scripts/postbuild.sh",
     "export": "next export",
     "test": "eslint './**/*.js' && tsc --build",
+    "test:e2e": "npx playwright test",
     "lint": "npm run lint:ts && npm run lint:es:fix",
     "lint:ts": "tsc --noEmit",
     "lint:es": "eslint '{pages,components,hooks,content,store}/**/*.{js,ts,tsx}' --max-warnings=0",
@@ -49,6 +50,7 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "12.0.8",
+    "@playwright/test": "^1.20.2",
     "@svgr/webpack": "^6.2.1",
     "@types/react": "17.0.36",
     "@types/react-dom": "17.0.11",

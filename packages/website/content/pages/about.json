@@ -14,8 +14,7 @@
       {
         "type": "section-data",
         "gradient": true,
-        "variant": "light",
-        "classlist": "header-variant"
+        "variant": "light"
       },
       {
         "id": "about_hero-header",

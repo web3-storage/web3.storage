@@ -69,9 +69,6 @@
   position: relative;
   padding: 9rem 0;
   z-index: 0;
-  // background-image: url('/images/index/holographic-bg-cropped-2.png');
-  // background-size: cover;
-  // background-repeat: no-repeat;
   @include gradient_Text_Selection;
 
   &:before {
