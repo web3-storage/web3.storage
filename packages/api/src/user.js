@@ -185,7 +185,7 @@ export async function userUploadsGet (request, env) {
   const sortBy = searchParams.get('sortBy') || 'Date'
   const sortOrder = searchParams.get('sortOrder') || 'Desc'
 
-  const uploads = await env.db.listUploads(request.auth.user._id, {
+  const uploads = await env.db.listUserFiles(request.auth.user._id, {
     size,
     before: before.toISOString(),
     sortBy,

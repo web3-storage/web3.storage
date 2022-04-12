@@ -2,7 +2,7 @@
 import assert from 'assert'
 import { DBClient } from '../index.js'
 import { normalizeCid } from '../../api/src/utils/cid.js'
-import { createUser, createUserAuthKey, token } from './utils.js'
+import { randomCid, createUser, createUserAuthKey, token } from './utils.js'
 
 describe('User file list', () => {
   /** @type {DBClient} */
@@ -23,16 +23,6 @@ describe('User file list', () => {
       region: 'region'
     }
   }
-
-  const cids = [
-    'QmdA5WkDNALetBn4iFeSepHjdLGJdxPBwZyY47ir1bZGAK',
-    'QmNvTjdqEPjZVWCvRWsFJA1vK7TTw1g9JP6we1WBJTRADM',
-    'bafybeibvuy3vcepqxy4plr34twv22vvxol2jjhmjxcrcvuhea5226whpsm',
-    'bafybeign5iv3opcs4hdlawuou4saeaynmpd4xabdhi3zrqluh5sxhc3zxu',
-    'bafybeidn3ofhjaxt56ysmem4zmlqhkrqydrv5r5r3smn3piljkeu3ijh4y',
-    'bafybeih7zshstbjjrkbzcqs2bvepo3aqp4c6vttm5oqx6jafqrmxc2eaay'
-  ]
-  const normalizedCids = cids.map(cid => normalizeCid(cid))
   const meta = { key: 'value' }
   const origins = ['origin1', 'origin2']
   const pinsPinning = [
@@ -96,17 +86,18 @@ describe('User file list', () => {
     // Create some uploads
     let created
     const createUploads = async () => {
-      for (const idx in cids) {
+      for (let i = 0; i < 6; i++) {
+        const cid = await randomCid()
         const key = keys[Math.floor(Math.random() * keys.length)]
         created = new Date().toISOString()
         await client.createUpload({
           user: Number(user1._id),
-          contentCid: cids[idx],
-          sourceCid: cids[idx],
+          contentCid: cid,
+          sourceCid: cid,
           authKey: Number(key),
           type: 'Upload',
           dagSize: 1000000,
-          name: `Upload_${Number(idx) + 1}`,
+          name: `Upload_${Number(i) + 1}`,
           pins: [],
           backupUrls: [initialBackupUrl],
           created
@@ -116,10 +107,11 @@ describe('User file list', () => {
     await createUploads()
     lastUploadDate = created
 
+    let cid = await randomCid()
     await client.createUpload({
       user: Number(user2._id),
-      contentCid: cids[0],
-      sourceCid: cids[0],
+      contentCid: cid,
+      sourceCid: cid,
       authKey: Number(authKey2),
       type: 'Upload',
       dagSize: 1000000,
@@ -129,9 +121,10 @@ describe('User file list', () => {
     })
 
     // Pin requests
+    cid = await randomCid()
     await client.createPsaPinRequest({
-      sourceCid: cids[1],
-      contentCid: normalizedCids[1],
+      sourceCid: cid,
+      contentCid: normalizeCid(cid),
       dagSize: 2000000,
       name: 'PinRequest_1',
       meta,
@@ -140,9 +133,10 @@ describe('User file list', () => {
       authKey: authKey1
     })
     // a pin request not yet pinned
+    cid = await randomCid()
     await client.createPsaPinRequest({
-      sourceCid: cids[2],
-      contentCid: normalizedCids[2],
+      sourceCid: cid,
+      contentCid: normalizeCid(cid),
       dagSize: 2000000,
       name: 'PinRequest_2',
       meta,
@@ -150,9 +144,10 @@ describe('User file list', () => {
       pins: pinsPinning,
       authKey: authKey1
     })
+    cid = await randomCid()
     await client.createPsaPinRequest({
-      sourceCid: cids[3],
-      contentCid: normalizedCids[3],
+      sourceCid: cid,
+      contentCid: normalizeCid(cid),
       dagSize: 2000000,
       name: 'PinRequest_3',
       meta,
@@ -160,9 +155,10 @@ describe('User file list', () => {
       pins,
       authKey: authKey1
     })
+    cid = await randomCid()
     await client.createPsaPinRequest({
-      sourceCid: cids[1],
-      contentCid: normalizedCids[1],
+      sourceCid: cid,
+      contentCid: normalizeCid(cid),
       dagSize: 2000000,
       name: 'PinRequest_4',
       meta,
