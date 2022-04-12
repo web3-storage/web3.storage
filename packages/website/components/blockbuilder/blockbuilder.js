@@ -107,12 +107,7 @@ class BlockBuilder extends React.Component {
 
     return (
       <div className="sectionals" id={this.props.id}>
-        {section.data && (
-          <GradientBackground
-            variant={section.data.variant}
-            classlist={section.data.classlist ? section.data.classlist : ''}
-          />
-        )}
+        {section.data && <GradientBackground variant={section.data.variant} />}
 
         {section.content.map(subsection => (
           <section id={subsection.id} key={subsection.id} className="sectional">

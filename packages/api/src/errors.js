@@ -9,6 +9,17 @@ export class HTTPError extends Error {
     this.name = 'HTTPError'
     this.status = status
   }
+
+  /**
+   * Creates and throws HTTPError
+   *
+   * @param {string} message
+   * @param {number} [status]
+   * @returns {never}
+   */
+  static throw (message, status) {
+    throw new this(message, status)
+  }
 }
 
 export class UserNotFoundError extends HTTPError {

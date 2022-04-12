@@ -17,18 +17,6 @@
   z-index: 1;
   padding-bottom: 5rem;
   @include selection_Light;
-  &:before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: calc(100% + $navigationHeight);
-    top: calc(-1 * $navigationHeight);
-    left: 0;
-    transform: scaleY(-1);
-    background-image: url('/images/index/holographic-bg-cropped-2.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
   &:after {
     content: '';
     position: absolute;
@@ -37,6 +25,22 @@
     width: 100%;
     height: calc(5rem + 2px);
     background-color: $ebony;
+  }
+
+  .gradient-background-component {
+    &.light {
+      width: calc(100% + 2rem);
+      height: calc(100% + 2 * $navigationHeight + 12rem);
+      top: calc(-1 * $navigationHeight - 11rem);
+      left: -1rem;
+    }
+    .light-variant {
+      @include mini {
+        img {
+          transform: rotate(90deg) translateX(-30%) scaleX(2) scaleY(-1);
+        }
+      }
+    }
   }
 }
 
