@@ -51,6 +51,29 @@ export default [
     updated: '2021-07-14T19:27:14.934572+00:00'
   },
   {
+    _id: 'aa62cf3c-c98d-494b-a756-b3a3fb6ddcab',
+    name: 'ReportDoc.pdf',
+    created: '2021-07-14T19:27:14.934572+00:00',
+    updated: '2021-07-14T19:27:14.934572+00:00',
+    pins: [
+      {
+        location: {
+          _id: 1,
+          ipfsPeerId: '12D3KooWR1Js',
+          peerId: '12D3KooEL1Jc',
+          peerName: 'who?',
+          region: 'where?'
+        },
+        status: 'Pinned',
+        updated: '2021-07-14T19:27:14.934572+00:00'
+      }
+    ],
+    type: 'PinRequest',
+    cid: 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4',
+    dagSize: 10000,
+    deals: []
+  },
+  {
     _id: '1',
     name: 'Upload at 2021-07-09T16:20:32.658Z',
     cid: 'bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae',

@@ -408,7 +408,7 @@ export class DBClient {
 
     // Sort applied to combined array
     const sortProperty = opts.sortBy === 'Name' ? 'name' : 'created'
-    userFiles.sort((a, b) => (((opts.sortOrder === 'Asc') === (a[sortProperty] > b[sortProperty])) ? 1 : -1))
+    userFiles.sort((a, b) => (((opts.sortOrder === 'Asc') === (a[sortProperty].toLocaleLowerCase() > b[sortProperty].toLocaleLowerCase())) ? 1 : -1))
 
     const size = opts?.size || 10
     return userFiles.slice(0, size)
