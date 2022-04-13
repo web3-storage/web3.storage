@@ -175,7 +175,7 @@ describe('Pin Request', () => {
     })
 
     it('sums pinned size for unique CIDs in used storage', async () => {
-      let usedStorage = await client.getUsedStorage(user._id)
+      let usedStorage = await client.getStorageUsed(user._id)
       assert.strictEqual(usedStorage.pinned, dagSize1, 'used storage for pinned')
 
       await client.createPsaPinRequest({
@@ -188,7 +188,7 @@ describe('Pin Request', () => {
         authKey
       })
 
-      usedStorage = await client.getUsedStorage(user._id)
+      usedStorage = await client.getStorageUsed(user._id)
       assert.strictEqual(usedStorage.pinned, dagSize1 * 2, 'used storage for pinned')
     })
   })

@@ -110,7 +110,7 @@ export async function userTokensPost (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userAccountGet (request, env) {
-  const usedStorage = await env.db.getUsedStorage(request.auth.user._id)
+  const usedStorage = await env.db.getStorageUsed(Number(request.auth.user._id))
 
   return new JSONResponse({
     usedStorage

@@ -1,3 +1,5 @@
+import { normalizeCid } from '../../api/src/utils/cid.js'
+
 export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU'
 
 /**
@@ -76,6 +78,28 @@ export async function createUpload (dbClient, user, authKey, cid, options = {}) 
   })
 
   return dbClient.getUpload(cid, user)
+}
+
+/**
+ * @param {import('../index').DBClient} dbClient
+ * @param {string} authKey
+ * @param {string} cid
+ * @param {Object} [options]
+ * @param {number} [options.dagSize]
+ * @param {*} [options.origins]
+ * @param {*} [options.meta]
+ * @param {Array<Object>} [options.pins]
+ */
+export async function createPsaPinRequest (dbClient, authKey, cid, options = {}) {
+  await dbClient.createPsaPinRequest({
+    authKey,
+    sourceCid: cid,
+    contentCid: normalizeCid(cid),
+    dagSize: options.dagSize || 1000,
+    origins: options.origins || null,
+    meta: options.meta || null,
+    pins: options.pins || []
+  })
 }
 
 /**

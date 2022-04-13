@@ -1,21 +1,42 @@
--- Auth key blocked status type is the type of blocking that has occurred on the api
--- key.  These are primarily used by the admin app.
-CREATE TYPE auth_key_blocked_status_type AS ENUM
-(
-  -- The api key is blocked.
-  'Blocked',
-  -- The api key is unblocked.
-  'Unblocked'
-);
+DO 
+$$
+BEGIN
+  -- Auth key blocked status type is the type of blocking that has occurred on the api
+  -- key.  These are primarily used by the admin app.
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'auth_key_blocked_status_type') THEN
+    CREATE TYPE auth_key_blocked_status_type AS ENUM
+    (
+      -- The api key is blocked.
+      'Blocked',
+      -- The api key is unblocked.
+      'Unblocked'
+    );
+  END IF;
 
--- User tags are associated to a user for the purpose of granting/restricting them
--- in the application.
-CREATE TYPE user_tag_type AS ENUM
-(
-  'HasAccountRestriction',
-  'HasPsaAccess',
-  'StorageLimitBytes'
-);
+  -- User tags are associated to a user for the purpose of granting/restricting them
+  -- in the application.
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_tag_type') THEN
+    CREATE TYPE user_tag_type AS ENUM
+    (
+      'HasAccountRestriction',
+      'HasPsaAccess',
+      'StorageLimitBytes'
+    );
+  END IF;
+
+  -- Types for notification emails
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'email_type') THEN
+    CREATE TYPE email_type AS ENUM 
+      (
+        'Used75PercentStorage',
+        'Used80PercentStorage',
+        'Used85PercentStorage',
+        'Used90PercentStorage',
+        'Used100PercentStorage'
+      );
+  END IF;
+END
+$$;
 
 -- A user of web3.storage.
 CREATE TABLE IF NOT EXISTS public.user
@@ -92,7 +113,7 @@ CREATE TABLE IF NOT EXISTS content
 CREATE INDEX IF NOT EXISTS content_inserted_at_idx ON content (inserted_at);
 CREATE INDEX IF NOT EXISTS content_updated_at_idx ON content (updated_at);
 -- TODO: Sync with @ribasushi as we can start using this as the primary key
-CREATE UNIQUE INDEX content_cid_with_size_idx ON content (cid) INCLUDE (dag_size);
+CREATE UNIQUE INDEX IF NOT EXISTS content_cid_with_size_idx ON content (cid) INCLUDE (dag_size);
 
 DO $$
 BEGIN
@@ -275,6 +296,8 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+CREATE INDEX IF NOT EXISTS psa_pin_request_content_cid_idx ON psa_pin_request (content_cid);
+
 CREATE TABLE IF NOT EXISTS name
 (
     -- base36 "libp2p-key" encoding of the public key
@@ -299,17 +322,35 @@ CREATE TABLE IF NOT EXISTS metric
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
-CREATE VIEW admin_search as
-select
-  u.id::text as user_id,
-  u.email as email,
-  ak.secret as token,
-  ak.id::text as token_id,
-  ak.deleted_at as deleted_at,
-  akh.inserted_at as reason_inserted_at,
-  akh.reason as reason,
-  akh.status as status
-from public.user u
-right join auth_key ak on ak.user_id = u.id
-full outer join (select * from auth_key_history where deleted_at is null) as akh on akh.auth_key_id = ak.id
-where ak.deleted_at is NULL or ak.deleted_at is not NULL and akh.status is not NULL;
+DO 
+$$
+BEGIN
+  IF NOT EXISTS (SELECT pg_get_viewdef('admin_search', true)) THEN
+    CREATE VIEW admin_search as
+    select
+      u.id::text as user_id,
+      u.email as email,
+      ak.secret as token,
+      ak.id::text as token_id,
+      ak.deleted_at as deleted_at,
+      akh.inserted_at as reason_inserted_at,
+      akh.reason as reason,
+      akh.status as status
+    from public.user u
+    right join auth_key ak on ak.user_id = u.id
+    full outer join (select * from auth_key_history where deleted_at is null) as akh on akh.auth_key_id = ak.id
+    where ak.deleted_at is NULL or ak.deleted_at is not NULL and akh.status is not NULL;
+  END IF;
+END
+$$;
+
+CREATE TABLE IF NOT EXISTS email_history 
+(
+  id              BIGSERIAL PRIMARY KEY,
+  -- the id of the user being notified
+  user_id         BIGINT NOT NULL REFERENCES public.user (id),
+  email_type      email_type NOT NULL,
+  -- the email service messages unique id
+  message_id      TEXT NOT NULL,
+  sent_at         TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);

@@ -10,6 +10,7 @@
     "start:metrics": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/metrics.js",
     "start:pins": "node src/bin/pins.js",
     "start:dagcargo:sizes": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/dagcargo-sizes.js",
+    "start:storage": "node src/bin/storage.js",
     "test": "npm-run-all -p -r test:e2e",
     "test:e2e": "mocha --require ./test/hooks.js test/*.spec.js --timeout 5000"
   },
