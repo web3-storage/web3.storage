@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@magic-ext/oauth": "^0.7.0",
+    "@mdx-js/react": "^2.1.1",
     "clsx": "^1.1.1",
     "countly-sdk-web": "^20.11.2",
     "filesize": "^6.1.0",
@@ -30,7 +31,6 @@
     "next": "^12.1.0",
     "next-optimized-images": "^2.6.2",
     "nextra": "^2.0.0-beta.5",
-    "nextra-theme-docs": "^2.0.0-beta.5",
     "p-map": "^5.1.0",
     "pretty-bytes": "^5.6.0",
     "raw-loader": "^4.0.2",

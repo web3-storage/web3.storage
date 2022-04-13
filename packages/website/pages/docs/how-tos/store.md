@@ -4,7 +4,7 @@ description: Learn how to store your data on the decentralized web with Web3.Sto
 ---
 
 import { Tabs, TabItem } from 'components/tabs/tabs';
-import Callout from 'nextra-theme-docs/callout';
+import Callout from 'components/callout';
 import CodeSnippet from 'components/codesnippet/codesnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
 import platformBrowserSource from '!!raw-loader!../../../assets/code-snippets/how-to/platform-browser.js'

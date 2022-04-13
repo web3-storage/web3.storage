@@ -1,14 +1,3 @@
-import { useEffect } from 'react';
-import hljs from 'highlight.js/lib/core';
-import javascript from 'highlight.js/lib/languages/javascript';
-import shell from 'highlight.js/lib/languages/shell';
-import go from 'highlight.js/lib/languages/go';
-import json from 'highlight.js/lib/languages/json';
-hljs.registerLanguage('javascript', javascript);
-hljs.registerLanguage('shell', shell);
-hljs.registerLanguage('go', go);
-hljs.registerLanguage('json', json);
-
 function extractRegion(src, regionName) {
   if (!regionName) {
     return src;
@@ -39,11 +28,6 @@ function extractRegion(src, regionName) {
 
 export default function CodeSnippet(props) {
   const { src, region, lang, ...codeBlockProps } = props;
-
-  useEffect(() => {
-    hljs.highlightAll();
-  });
-
   if (lang) {
     codeBlockProps.className = `language-${lang}`;
   }

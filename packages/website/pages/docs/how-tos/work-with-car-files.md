@@ -4,7 +4,7 @@ description: Learn how to work with Content Archives of IPLD data.
 ---
 
 import { Tabs, TabItem } from 'components/tabs/tabs';
-import Callout from 'nextra-theme-docs/callout';
+import Callout from 'components/callout';
 import CodeSnippet from 'components/codesnippet/codesnippet';
 import AccordionSingle from 'components/accordionsingle/accordionsingle';
 import dagCborSource from '!!raw-loader!../../../assets/code-snippets/how-to/dag-cbor.js';

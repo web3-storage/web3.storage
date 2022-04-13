@@ -5,12 +5,9 @@ const { GitRevisionPlugin } = require('git-revision-webpack-plugin');
 
 const gitRevisionPlugin = new GitRevisionPlugin();
 const dirName = path.resolve(__dirname);
+const nextra = require('nextra');
 
-const withNextra = require('nextra')({
-  theme: 'nextra-theme-docs',
-  themeConfig: './theme.config.js',
-  unstable_staticImage: true
-});
+const withNextra = nextra('./modules/docs-theme/layout.js');
 
 const nextConfig = {
   trailingSlash: true,
