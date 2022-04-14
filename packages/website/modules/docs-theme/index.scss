@@ -27,13 +27,24 @@
 
     .docs-body-container {
       flex: 1;
+      display: flex;
       background-color: hsla(0,0%,95%,.6);
       border-radius: 0.375rem;
       box-shadow: 0 4px 15px rgb(0 0 0 / 15%);
-      padding: 6.125vw 0 6.125vw 6.75vw;
+      padding: 6.125vw 1.5vw 6.125vw 6.75vw;
       width: 100%;
       max-width: 100%;
       position: relative;
+
+      main {
+        padding-right: toRem(30);
+      }
+
+      .toc-container {
+        width: 260px;
+        flex: 0 0 260px;
+      }
+  
       &:before {
         background-image: url('../../assets/images/triangle1.png');
         background-repeat: no-repeat;

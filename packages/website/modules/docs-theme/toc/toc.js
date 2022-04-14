@@ -1,3 +1,3 @@
 export default function Toc() {
-  return <aside className="toc-container"></aside>;
+  return <div className="toc-container"></div>;
 }

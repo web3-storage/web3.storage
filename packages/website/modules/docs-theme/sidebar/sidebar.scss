@@ -42,6 +42,14 @@ aside.sidebar {
                 color: $docsPrimaryPurple;
                 transition: color $transitionDuration;
             }
+            &.active {
+                font-weight: 500;
+                &:before {
+                    content: "→";
+                    margin-top: -1px;
+                    padding-right: 0.5rem;
+                }
+            }
         }
         h3 {
             font-size: 1.375rem;
@@ -49,6 +57,11 @@ aside.sidebar {
             line-height: 2rem;
             margin-top: 1.5rem;
             margin-bottom: 0.5rem;
+        }
+        .no-heading {
+            a {
+                padding-left: 0;
+            }
         }
     }
     &:before {

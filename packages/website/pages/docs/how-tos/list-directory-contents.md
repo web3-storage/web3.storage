@@ -96,8 +96,38 @@ The example below uses [`curl`](https://curl.se/), which is pre-installed on mac
 curl -s "https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu"
 ```
 
-```
-{"Objects":[{"Hash":"bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu","Links":[{"Name":"dr-is-tired.jpg","Hash":"bafkreiabltrd5zm73pvi7plq25pef3hm7jxhbi3kv4hapegrkfpkqtkbme","Size":94482,"Type":2,"Target":""},{"Name":"not-distributed.jpg","Hash":"bafkreidrsgkip425zjamc3pvmil7dpatss7ncedyaatepxyionxi7py5fq","Size":414201,"Type":2,"Target":""},{"Name":"youareanonsense.jpg","Hash":"bafkreiaqv66m5nd6mwgkk7h5lwqnjzj54s4f7knmnrjhb7ylzqfg2vdo54","Size":55415,"Type":2,"Target":""}]}]}
+```json
+{
+  "Objects": [
+    {
+      "Hash": "bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu",
+      "Links": [
+        {
+          "Name": "dr-is-tired.jpg",
+          "Hash": "bafkreiabltrd5zm73pvi7plq25pef3hm7jxhbi3kv4hapegrkfpkqtkbme",
+          "Size": 94482,
+          "Type": 2,
+          "Target": ""
+        },
+        {
+          "Name": "not-distributed.jpg",
+          "Hash": "bafkreidrsgkip425zjamc3pvmil7dpatss7ncedyaatepxyionxi7py5fq",
+          "Size": 414201,
+          "Type": 2,
+          "Target": ""
+        },
+        {
+          "Name": "youareanonsense.jpg",
+          "Hash": "bafkreiaqv66m5nd6mwgkk7h5lwqnjzj54s4f7knmnrjhb7ylzqfg2vdo54",
+          "Size": 55415,
+          "Type": 2,
+          "Target": ""
+        }
+      ]
+    }
+  ]
+}
+
 ```
 
 To format the response for display, you can install the [jq tool](https://stedolan.github.io/jq/) and add `| jq` to the end of the command above.
@@ -153,8 +183,38 @@ $wc = New-Object System.Net.WebClient
 $wc.DownloadString("https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu")
 ```
 
-```
-{"Objects":[{"Hash":"bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu","Links":[{"Name":"dr-is-tired.jpg","Hash":"bafkreiabltrd5zm73pvi7plq25pef3hm7jxhbi3kv4hapegrkfpkqtkbme","Size":94482,"Type":2,"Target":""},{"Name":"not-distributed.jpg","Hash":"bafkreidrsgkip425zjamc3pvmil7dpatss7ncedyaatepxyionxi7py5fq","Size":414201,"Type":2,"Target":""},{"Name":"youareanonsense.jpg","Hash":"bafkreiaqv66m5nd6mwgkk7h5lwqnjzj54s4f7knmnrjhb7ylzqfg2vdo54","Size":55415,"Type":2,"Target":""}]}]}
+```json
+{
+  "Objects": [
+    {
+      "Hash": "bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu",
+      "Links": [
+        {
+          "Name": "dr-is-tired.jpg",
+          "Hash": "bafkreiabltrd5zm73pvi7plq25pef3hm7jxhbi3kv4hapegrkfpkqtkbme",
+          "Size": 94482,
+          "Type": 2,
+          "Target": ""
+        },
+        {
+          "Name": "not-distributed.jpg",
+          "Hash": "bafkreidrsgkip425zjamc3pvmil7dpatss7ncedyaatepxyionxi7py5fq",
+          "Size": 414201,
+          "Type": 2,
+          "Target": ""
+        },
+        {
+          "Name": "youareanonsense.jpg",
+          "Hash": "bafkreiaqv66m5nd6mwgkk7h5lwqnjzj54s4f7knmnrjhb7ylzqfg2vdo54",
+          "Size": 55415,
+          "Type": 2,
+          "Target": ""
+        }
+      ]
+    }
+  ]
+}
+
 ```
 
 To format the response for display, you can add ` | ConvertFrom-Json | ConvertTo-Json -Depth 100` to the end of the final command.
