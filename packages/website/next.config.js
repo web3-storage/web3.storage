@@ -7,6 +7,8 @@ const gitRevisionPlugin = new GitRevisionPlugin();
 const dirName = path.resolve(__dirname);
 const nextra = require('nextra');
 
+const docsPages = require('./pages/docs/nav.json');
+
 const withNextra = nextra('./modules/docs-theme/index.js');
 
 const nextConfig = {
@@ -35,17 +37,25 @@ const nextConfig = {
       new options.webpack.DefinePlugin({
         COMMITHASH: JSON.stringify(git.long(dirName)),
         VERSION: JSON.stringify(gitRevisionPlugin.version()),
-        LASTCOMMITDATETIME: JSON.stringify(gitRevisionPlugin.lastcommitdatetime()),
       })
     );
 
     return config;
   },
   exportPathMap: async function () {
-    return {
+    const paths = {
       '/ipfs-404.html': { page: '/404' },
       '/docs/': { page: '/docs/intro', statusCode: 301 },
     };
+    // we have to specify the doc paths here to avoid 404 on reload
+    docsPages.map(item => {
+      item.menu.map(t => {
+        paths[`/docs/${t.src}`] = {
+          page: `/docs/${t.src}`,
+        };
+      });
+    });
+    return paths;
   },
   env: {
     rawJsFromFile: fs.readFileSync('./rawJsFromFile.js').toString(),
