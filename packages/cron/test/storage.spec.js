@@ -56,6 +56,11 @@ describe('cron - check user storage quotas', () => {
   ]
 
   beforeEach(async () => {
+    await createUser(dbClient, {
+      name: 'admin',
+      email: 'admin@web3.storage'
+    })
+
     user1 = await createUser(dbClient, {
       name: 'test1-name',
       email: 'test1@email.com'
@@ -128,35 +133,38 @@ describe('cron - check user storage quotas', () => {
 
   it('can be executed', async () => {
     const { stderr: emailLog1 } = await execa('./src/bin/storage.js', { env })
-    assert.match(emailLog1, /storage:checkStorageUsed 🗄 Checking users storage quotas/)
-    assert.match(emailLog1, /email:EmailService 📧 Sending a quota exceeded email to test4-name: 145% of quota used/)
-    assert.match(emailLog1, /email:EmailService 📧 Sending an email to test3-name: 90% of quota used/)
-    assert.match(emailLog1, /email:EmailService 📧 Sending an email to test2-name: 79% of quota used/)
-    assert.match(emailLog1, /storage:checkStorageUsed ✅ Done/)
+    const log1Lines = emailLog1.split('\n')
+    assert.match(log1Lines[0], /storage:checkStorageUsed 🗄 Checking users storage quotas/)
+    assert.match(log1Lines[1], /email:EmailService 📧 Sending a quota exceeded email to admin/)
+    assert.match(log1Lines[2], /email:EmailService 📧 Sending a quota exceeded email to test4-name: 145% of quota used/)
+    assert.match(log1Lines[3], /email:EmailService 📧 Sending an email to test3-name: 90% of quota used/)
+    assert.match(log1Lines[4], /email:EmailService 📧 Sending an email to test2-name: 79% of quota used/)
+    assert.match(log1Lines[5], /storage:checkStorageUsed ✅ Done/)
 
-    const over100EmailSent = await dbClient.emailSentRecently({
+    const over100EmailSent = await dbClient.emailHasBeenSent({
       userId: Number(user4._id),
-      emailType: EMAIL_TYPE.Used100PercentStorage,
-      numberOfDays: 1
+      emailType: EMAIL_TYPE.User100PercentStorage,
+      secondsSinceLastSent: 60 * 60 * 23
     })
     assert.strictEqual(over100EmailSent, true, 'Over 100% email sent')
 
-    const over90EmailSent = await dbClient.emailSentRecently({
+    const over90EmailSent = await dbClient.emailHasBeenSent({
       userId: Number(user3._id),
-      emailType: EMAIL_TYPE.Used90PercentStorage,
-      numberOfDays: 1
+      emailType: EMAIL_TYPE.User90PercentStorage,
+      secondsSinceLastSent: 60 * 60 * 23
     })
     assert.strictEqual(over90EmailSent, true, 'Over 90% email sent')
 
-    const over75EmailSent = await dbClient.emailSentRecently({
+    const over75EmailSent = await dbClient.emailHasBeenSent({
       userId: Number(user2._id),
-      emailType: EMAIL_TYPE.Used75PercentStorage,
-      numberOfDays: 1
+      emailType: EMAIL_TYPE.User75PercentStorage,
+      secondsSinceLastSent: 60 * 60 * 23
     })
     assert.strictEqual(over75EmailSent, true, 'Over 75% email sent')
 
     const { stderr: emailLog2 } = await execa('./src/bin/storage.js', { env })
-    assert.match(emailLog2, /storage:checkStorageUsed 🗄 Checking users storage quotas/)
-    assert.match(emailLog2, /storage:checkStorageUsed ✅ Done/)
+    const log2Lines = emailLog2.split('\n')
+    assert.match(log2Lines[0], /storage:checkStorageUsed 🗄 Checking users storage quotas/)
+    assert.match(log2Lines[1], /storage:checkStorageUsed ✅ Done/)
   })
 })

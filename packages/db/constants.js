@@ -1,7 +1,8 @@
 export const EMAIL_TYPE = {
-  Used75PercentStorage: 'Used75PercentStorage',
-  Used80PercentStorage: 'Used80PercentStorage',
-  Used85PercentStorage: 'Used85PercentStorage',
-  Used90PercentStorage: 'Used90PercentStorage',
-  Used100PercentStorage: 'Used100PercentStorage'
+  User75PercentStorage: 'User75PercentStorage',
+  User80PercentStorage: 'User80PercentStorage',
+  User85PercentStorage: 'User85PercentStorage',
+  User90PercentStorage: 'User90PercentStorage',
+  User100PercentStorage: 'User100PercentStorage',
+  AdminStorageExceeded: 'AdminStorageExceeded'
 }

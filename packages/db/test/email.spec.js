@@ -19,25 +19,25 @@ describe('Email', () => {
     })
 
     // check an email has not been sent
-    let hasBeenSentRecently = await dbClient.emailSentRecently({
+    let emailHasBeenSent = await dbClient.emailHasBeenSent({
       userId: Number(user._id),
-      emailType: EMAIL_TYPE[EMAIL_TYPE.Used100PercentStorage]
+      emailType: EMAIL_TYPE[EMAIL_TYPE.User100PercentStorage]
     })
-    assert.strictEqual(hasBeenSentRecently, false, 'Has not been sent')
+    assert.strictEqual(emailHasBeenSent, false, 'Has not been sent')
 
     // log an email
     await dbClient.logEmailSent({
       userId: Number(user._id),
-      emailType: EMAIL_TYPE[EMAIL_TYPE.Used100PercentStorage],
+      emailType: EMAIL_TYPE[EMAIL_TYPE.User100PercentStorage],
       messageId: '1'
     })
 
     // check the email has already been sent today
-    hasBeenSentRecently = await dbClient.emailSentRecently({
+    emailHasBeenSent = await dbClient.emailHasBeenSent({
       userId: Number(user._id),
-      emailType: EMAIL_TYPE[EMAIL_TYPE.Used100PercentStorage],
-      numberOfDays: 1
+      emailType: EMAIL_TYPE[EMAIL_TYPE.User100PercentStorage],
+      secondsSinceLastSent: 60 * 60 * 23
     })
-    assert.strictEqual(hasBeenSentRecently, true, 'Has been sent')
+    assert.strictEqual(emailHasBeenSent, true, 'Has been sent')
   })
 })

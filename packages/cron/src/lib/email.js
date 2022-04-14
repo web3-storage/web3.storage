@@ -21,18 +21,18 @@ export class EmailService {
    * @param {object} opts
    * @param {Array<import('@web3-storage/db/db-client-types').UserStorageUsedOutput>} opts.users
    * @param {string} opts.email
-   * @param {number} [opts.numberOfDays]
+   * @param {number} [opts.secondsSinceLastSent]
    */
-  async sendEmails ({
+  async sendUserEmails ({
     users,
     email,
-    numberOfDays = 7
+    secondsSinceLastSent = 60 * 60 * 23 * 7
   }) {
     await Promise.all(users.map((user) => {
       return this.sendEmail({
         user,
         email,
-        numberOfDays
+        secondsSinceLastSent
       })
     }))
   }
@@ -44,24 +44,24 @@ export class EmailService {
    * @param {object} opts
    * @param {import('@web3-storage/db/db-client-types').UserStorageUsedOutput} opts.user
    * @param {string} opts.email
-   * @param {number} opts.numberOfDays
-  * @returns void
+   * @param {number} opts.secondsSinceLastSent
+   * @returns void
    */
   async sendEmail ({
     user,
     email,
-    numberOfDays
+    secondsSinceLastSent
   }) {
     // See if this email type has been sent recently
-    if (await this.db.emailSentRecently({
+    if (await this.db.emailHasBeenSent({
       userId: Number(user.id),
       emailType: EMAIL_TYPE[email],
-      numberOfDays
+      secondsSinceLastSent
     })) {
       return
     }
 
-    if (email === EMAIL_TYPE.Used100PercentStorage) {
+    if (email === EMAIL_TYPE.User100PercentStorage) {
       log(`📧 Sending a quota exceeded email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
     } else {
       log(`📧 Sending an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
@@ -75,6 +75,44 @@ export class EmailService {
     // Log the email
     await this.db.logEmailSent({
       userId: Number(user.id),
+      emailType: EMAIL_TYPE[email],
+      messageId
+    })
+  }
+
+  /**
+   * Send an email to admin with a list of all users that have exceeded their storage quota
+   * @param {object} opts
+   * @param {Array<import('@web3-storage/db/db-client-types').UserStorageUsedOutput>} opts.users
+   * @param {string} opts.email
+   * @param {number} opts.secondsSinceLastSent
+   * @returns void
+   */
+  async sendAdminEmail ({
+    users,
+    email,
+    secondsSinceLastSent
+  }) {
+    const adminUser = await this.db.getUserByEmail('admin@web3.storage')
+    if (!adminUser) return
+
+    // See if this email type has been sent recently
+    if (await this.db.emailHasBeenSent({
+      userId: Number(adminUser._id),
+      emailType: EMAIL_TYPE[email],
+      secondsSinceLastSent
+    })) {
+      return
+    }
+
+    log('📧 Sending a quota exceeded email to admin')
+    // TODO Send the email
+    // Get the message id from the mailing service for the email logging
+    const messageId = '1'
+
+    // Log the email
+    await this.db.logEmailSent({
+      userId: Number(adminUser._id),
       emailType: EMAIL_TYPE[email],
       messageId
     })

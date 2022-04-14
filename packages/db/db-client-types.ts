@@ -362,10 +362,10 @@ export type UserStorageUsedOutput = {
 export type Email = {
   type: definitions['email_history']['email_type']
 }
-export type EmailSentRecentlyInput = {
+export type EmailSentInput = {
   userId: number,
   emailType: string,
-  numberOfDays?: number
+  secondsSinceLastSent?: number
 }
 export type LogEmailSentInput = {
   userId: number,
