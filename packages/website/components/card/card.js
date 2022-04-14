@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import Markdown from 'markdown-to-jsx';
 
 import CardTier from './card-tier';
 import Button from '../button/button';
@@ -164,7 +163,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
 
       {card.description && (
         <div className={clsx('description', targetClass)}>
-          <Markdown>{card.description}</Markdown>
+          <span dangerouslySetInnerHTML={{ __html: card.description }}></span>
         </div>
       )}
 

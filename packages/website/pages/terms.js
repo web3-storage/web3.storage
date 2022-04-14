@@ -1,12 +1,9 @@
-// @ts-nocheck
-import Markdown from 'markdown-to-jsx';
-
 import Helix from '../assets/illustrations/helix';
 import Triangle from '../assets/illustrations/triangle';
 import Cross from '../assets/illustrations/cross';
 import Coil from '../assets/illustrations/coil';
 import Ring from '../assets/illustrations/ring';
-import termsOfService from '../content/terms-of-service.md';
+import Terms from '../content/terms-of-service.mdx';
 
 export default function Home() {
   return (
@@ -20,8 +17,7 @@ export default function Home() {
               <Cross id={'terms_page_cross'} />
               <Ring id={'terms_page_ring'} />
               <Coil id={'terms_page_coil'} />
-
-              <Markdown>{termsOfService}</Markdown>
+              <Terms />
             </section>
           </div>
         </div>
