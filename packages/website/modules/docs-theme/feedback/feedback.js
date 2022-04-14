@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { trackEvent, events } from '../../../lib/countly';
 
-function Feedback({ strings: { title, yes, no, thanks, helpUsImprove }, children }) {
+function Feedback({ strings: { title, yes, no, thanks, helpUsImprove } }) {
   const [voteSubmitted, setVoteSubmitted] = useState(false);
   const lastUpdatedAt = process.env.NEXT_PUBLIC_DEPLOYDATE;
   const ISSUE_URL = 'https://github.com/web3-storage/web3.storage/issues/new/choose';
