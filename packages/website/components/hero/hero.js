@@ -80,7 +80,6 @@ export default function Hero({ block }) {
   const indexHero = () => {
     return (
       <>
-        <div id="index_hero_background-gradient"></div>
         <Grid3D id="index_hero-grid-3d" />
         <Squiggle id="index_hero-squiggle" className={'hero-illustration'} />
         <Corkscrew id="index_hero-corkscrew" className={'hero-illustration'} />

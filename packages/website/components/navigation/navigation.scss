@@ -342,19 +342,6 @@
   transition: 350ms ease;
   color: $ebony;
 
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    height: calc(100% + 9rem);
-    background-image: url('/images/index/holographic-bg-nav-mobile.png');
-    background-size: cover;
-    background-position: right 0px bottom 0;
-    background-repeat: no-repeat;
-  }
   @include tiny {
     transform: translateY(-100%);
     &:before {
@@ -419,5 +406,36 @@
     cursor: pointer;
     text-align: left;
     @include fontSize_Mini;
+  }
+}
+
+.mobile-nav-gradient-wrapper {
+  position: absolute;
+  left: calc(-75% - 3rem);
+  top: 0;
+  width: 200%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 100% 0% 82% 18% / 0% 75% 25% 100%;
+  @include mini {
+    border-radius: 100% 0% 54% 46% / 0% 81% 19% 100%;
+  }
+
+  .gradient-background-component {
+    .saturated-variant {
+      position: absolute;
+      left: -9999px;
+      right: -9999px;
+      margin: 0 auto;
+      transform: rotate(-40deg) translateX(12rem);
+      bottom: -30rem;
+      @include small {
+        width: 1800px;
+        bottom: -25rem;
+      }
+      @include mini {
+        width: 1600px;
+      }
+    }
   }
 }

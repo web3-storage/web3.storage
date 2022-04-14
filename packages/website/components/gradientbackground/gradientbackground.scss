@@ -1,22 +1,81 @@
 .gradient-background-component {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  width: calc(100% + 2rem);
+  height: calc(100% + 2rem);
+  left: -1rem;
+  top: -1rem;
   z-index: -1;
-  filter: blur(0.25rem);
+  filter: blur(1rem);
+  overflow: hidden;
+  transform: scale(1.05);
+  background-color: $moonRaker;
 
-  &.header-variant {
+  &.header {
+    width: calc(100% + 2rem);
+    height: calc(100% + 2 * $navigationHeight + 2rem);
+    top: calc(-1 * $navigationHeight - 1rem);
+    left: -1rem;
+  }
+
+  &.upload-cta-gradient {
+    z-index: 0;
+  }
+
+  .header-variant {
+    position: absolute;
     left: -9999px;
     right: -9999px;
     margin: 0 auto;
-    height: calc(100% + 2 * $navigationHeight);
+
+    width: 4400px;
+    opacity: 0.7;
     transform: translateY(-1 * $navigationHeight);
     min-width: 50rem;
+
+    @include ultraLarge {
+      width: 2600px;
+    }
+    @include xlarge {
+      width: 2200px;
+    }
     @include tiny {
       transform: translateX(-10rem) translateY(-1 * $navigationHeight);
     }
+    img {
+      transform: translateY(-35%);
+    }
+  }
+
+  .light-variant {
+    position: absolute;
+    left: -9999px;
+    right: -9999px;
+    margin: 0 auto;
+
+    z-index: 1;
+    width: 4400px;
+    @include xlarge {
+      width: 3400px;
+    }
+    @include mini {
+      width: 1600px;
+      opacity: 0.6;
+    }
+    img {
+      transform: rotate(-40deg) translate(10%, -10%);
+      @include ultraLarge {
+        transform: rotate(-40deg) translateY(-7%);
+      }
+      @include mini {
+        transform: rotate(0deg) translateY(30%) scaleY(2);
+      }
+    }
+  }
+
+  .saturated-variant {
+    width: 200%;
+    min-height: 150%;
+    transform: translate(-15%, -15%) scaleY(1.1) rotate(-40deg);
   }
 }
 
