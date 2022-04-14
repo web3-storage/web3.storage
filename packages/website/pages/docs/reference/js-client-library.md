@@ -4,7 +4,7 @@ description: Integrate Web3.Storage into your code using the JavaScript client l
 ---
 
 import { Tabs, TabItem } from 'components/tabs/tabs';
-import Callout from 'components/callout';
+import Callout from 'components/callout/callout';
 import CodeSnippet from 'components/codesnippet/codesnippet';
 import AccordionSingle from 'components/accordionsingle/accordionsingle';
 import dagJsonSource from '!!raw-loader!../../../assets/code-snippets/how-to/dag-json.js'
@@ -24,7 +24,7 @@ While we recommend that you install the latest _stable_ version of the following
 - [NPM](https://www.npmjs.com/) `7.0.0`
 - [Node.js](https://nodejs.org/en/) `14.0.0`
 - [Webpack](https://webpack.js.org/) `5.0.0`
-  </Callout>
+</Callout>
 
 ## Constructor
 

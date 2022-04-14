@@ -3,7 +3,7 @@ title: Image gallery example
 description: Learn about Web3.Storage by walking through the code for a simple image gallery app that runs entirely in the browser.
 ---
 
-import Callout from 'components/callout';
+import Callout from 'components/callout/callout';
 import CodeSnippet from 'components/codesnippet/codesnippet';
 import AccordionSingle from 'components/accordionsingle/accordionsingle';
 import storageJsSource from '!!raw-loader!../../../node_modules/example-image-gallery/src/js/storage.js'

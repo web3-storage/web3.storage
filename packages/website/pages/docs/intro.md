@@ -3,7 +3,7 @@ title: Welcome
 description: 'Learn how to use Web3.Storage to decentralize your data storage without all the complicated details.'
 ---
 
-import Callout from 'components/callout';
+import Callout from 'components/callout/callout';
 import { Tabs, TabItem } from 'components/tabs/tabs';
 import CodeSnippet from 'components/codesnippet/codesnippet';
 import PutFiles from '!!raw-loader!../../assets/code-snippets/quickstart/put-files.js';

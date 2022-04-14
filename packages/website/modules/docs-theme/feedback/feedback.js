@@ -1,22 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 
-import { trackEvent, events } from '../../lib/countly';
+import { trackEvent, events } from '../../../lib/countly';
 
 function Feedback({ strings: { title, yes, no, thanks, helpUsImprove }, children }) {
   const [voteSubmitted, setVoteSubmitted] = useState(false);
   const lastUpdatedAt = process.env.NEXT_PUBLIC_DEPLOYDATE;
   const ISSUE_URL = 'https://github.com/web3-storage/web3.storage/issues/new/choose';
   const SUGGEST_CONTENT_URL = 'https://github.com/web3-storage/web3.storage/issues';
-  const editUrl = useRef('https://github.com/web3-storage/web3.storage/tree/main/packages/website/pages/docs/');
-
-  useEffect(() => {
-    // grabbing the href from the template
-    // @ts-ignore
-    editUrl.current = document.querySelector('footer.mt-24 .mt-24 .text-sm')?.getAttribute('href');
-  }, [editUrl]);
+  const editUrl = '';
 
   const editThisPage = (
-    <a href={editUrl.current} target="_blank" rel="noreferrer noopener">
+    <a href={editUrl} target="_blank" rel="noreferrer noopener">
       Edit this page
     </a>
   );
@@ -51,7 +45,7 @@ function Feedback({ strings: { title, yes, no, thanks, helpUsImprove }, children
       {voteSubmitted ? thanksView : actions}
       <h4>{helpUsImprove}</h4>
       <div>
-        {editUrl.current && editThisPage} on GitHub or {openAnIssue} for it
+        {editUrl && editThisPage} on GitHub or {openAnIssue} for it
         <div>
           <a href={SUGGEST_CONTENT_URL} target="_blank" rel="noreferrer noopener">
             Suggest new content

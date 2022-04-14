@@ -3,7 +3,7 @@ title: How to list files uploaded to Web3.Storage
 description: Learn how to list the files you've uploaded to Web3.Storage in this quick how-to guide.
 ---
 
-import Callout from 'components/callout';
+import Callout from 'components/callout/callout';
 import CodeSnippet from 'components/codesnippet/codesnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
 import exampleUpload from '!!raw-loader!../../../assets/code-snippets/how-to/example-listing-upload.json.txt'

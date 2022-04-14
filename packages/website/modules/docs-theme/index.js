@@ -1,15 +1,16 @@
-import React, {useEffect} from 'react';
-import Head from 'next/head';
+import React, { useEffect } from 'react';
 import { MDXProvider } from '@mdx-js/react';
-
-import Sidebar from './sidebar';
-import Feedback from '../../components/feedback/feedback';
-
+import Head from 'next/head';
 import hljs from 'highlight.js/lib/core';
 import javascript from 'highlight.js/lib/languages/javascript';
 import shell from 'highlight.js/lib/languages/shell';
 import go from 'highlight.js/lib/languages/go';
 import json from 'highlight.js/lib/languages/json';
+
+import Sidebar from './sidebar/sidebar';
+import Feedback from './feedback/feedback';
+import Toc from './toc/toc';
+
 hljs.registerLanguage('javascript', javascript);
 hljs.registerLanguage('shell', shell);
 hljs.registerLanguage('go', go);
@@ -35,9 +36,16 @@ export default function Docs(props) {
       return (
         <>
           {sharedHead}
-          <Sidebar />
-          <MDXProvider>{children}</MDXProvider>
-          <Feedback />
+          <div className="docs-container">
+            <Sidebar />
+            <article className="docs-body-container">
+              <main className="docs-body">
+                <MDXProvider>{children}</MDXProvider>
+                <Feedback />
+              </main>
+              <Toc />
+            </article>
+          </div>
         </>
       );
     };

@@ -4,7 +4,7 @@ description: Learn how to retrieve data stored using Web3.Storage in this quick 
 ---
 
 import { Tabs, TabItem } from 'components/tabs/tabs';
-import Callout from 'components/callout';
+import Callout from 'components/callout/callout';
 import CodeSnippet from 'components/codesnippet/codesnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
 import golangRetrieve from '!!raw-loader!../../../assets/code-snippets/how-to/golang/retrieve/retrieve.go';

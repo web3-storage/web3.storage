@@ -71,6 +71,7 @@ $breakpoint_UltraLarge: 140.625rem; // 2250px
 
 $gradient_PinkBlue: linear-gradient(45deg, $cerise 0%, $royalBlue 48%, $pictonBlue 100%);
 $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotrope 100%);
+$gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48%, $cerise 100%);
 
 //  Mixins
 @mixin shadow1 {
@@ -195,6 +196,10 @@ $gradient_BluePurple: linear-gradient(45deg, $cyan 0%, $royalBlue 50%, $heliotro
 
 @mixin gradient_Background_PinkBlue {
   background: $gradient_PinkBlue;
+}
+
+@mixin gradient_Background_PinkBlue_Reverse {
+  background: $gradient_PinkBlue_Reverse;
 }
 
 @mixin gradient_BlurryDoubleBG_PinkBlue {

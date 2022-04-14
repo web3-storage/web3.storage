@@ -7,7 +7,7 @@ const gitRevisionPlugin = new GitRevisionPlugin();
 const dirName = path.resolve(__dirname);
 const nextra = require('nextra');
 
-const withNextra = nextra('./modules/docs-theme/layout.js');
+const withNextra = nextra('./modules/docs-theme/index.js');
 
 const nextConfig = {
   trailingSlash: true,

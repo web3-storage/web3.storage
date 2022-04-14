@@ -332,15 +332,18 @@
 .nav-mobile-panel {
   visibility: hidden;
   position: absolute;
-  padding: 0 3.5rem;
   top: 0;
-  left: -99999px;
-  right: -99999px;
-  margin: 0 auto;
-  width: 100vw;
-  transform: translateY(calc(-100% - 9rem));
-  transition: 350ms ease;
-  color: $ebony;
+
+  @include small {
+    padding: 0 3.5rem;
+    left: -99999px;
+    right: -99999px;
+    margin: 0 auto;
+    width: 100vw;
+    transform: translateY(calc(-100% - 9rem));
+    transition: 350ms ease;
+    color: $ebony;
+  }
 
   @include tiny {
     transform: translateY(-100%);
