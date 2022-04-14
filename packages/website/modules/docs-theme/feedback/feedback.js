@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 
 import { trackEvent, events } from '../../../lib/countly';
 
 function Feedback({ strings: { title, yes, no, thanks, helpUsImprove } }) {
+  const router = useRouter();
   const [voteSubmitted, setVoteSubmitted] = useState(false);
   const lastUpdatedAt = process.env.NEXT_PUBLIC_DEPLOYDATE;
   const ISSUE_URL = 'https://github.com/web3-storage/web3.storage/issues/new/choose';
   const SUGGEST_CONTENT_URL = 'https://github.com/web3-storage/web3.storage/issues';
-  const editUrl = '';
+  const editUrl = `https://github.com/web3-storage/web3.storage/tree/main/packages/website/pages${router.pathname}.md`;
 
   const editThisPage = (
     <a href={editUrl} target="_blank" rel="noreferrer noopener">

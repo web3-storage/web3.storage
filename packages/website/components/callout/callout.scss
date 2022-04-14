@@ -1,8 +1,8 @@
 .callout {
     background-color: $white;
     color: $ebony;
-    border-bottom-left-radius: 0;
-    border-top-left-radius: 0;
+    border-top-right-radius: 0.4rem;
+    border-bottom-right-radius: 0.4rem;
     margin-bottom: 3.75rem;
     position: relative;
     padding: toRem(23) toRem(37);
@@ -32,7 +32,7 @@
       }
     }
     *:last-child {
-      margin: 0;
+      margin-bottom: 0;
     }
     &:before {
       content: '';
