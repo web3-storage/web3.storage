@@ -123,7 +123,7 @@
                     "thumb": "RETRIEVE",
                     "lines": [
                       "// retrive.mjs",
-
+                      "",
                       "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
                       "",
                       "const token = process.env.API_TOKEN",
