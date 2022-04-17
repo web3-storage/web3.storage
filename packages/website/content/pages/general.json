@@ -40,11 +40,7 @@
         "text": "Account",
         "links": [
           {
-            "text": "Dashboard",
-            "url": "/account"
-          },
-          {
-            "text": "Files",
+            "text": "Manage Files",
             "url": "/account"
           },
           {
