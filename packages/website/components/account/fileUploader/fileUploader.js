@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 
 import Modal from 'modules/zero/components/modal/modal';
 import Dropzone from 'modules/zero/components/dropzone/dropzone';
@@ -60,7 +60,8 @@ const uploadContentBlock = (heading, iconType, description) => {
 const FileUploader = ({ className = '', content, uploadModalState, background }) => {
   const [filesToUpload, setFilesToUpload] = useState(/** @type {File[]} */ ([]));
   const { getUploads, uploadFiles, uploadsProgress, clearUploadedFiles } = useUploads();
-
+  const lastChunks = useRef(/** @type {object[]} */ ([]));
+  
   // Mapped out file progress info
   const filesInfo = useMemo(
     () =>
@@ -69,14 +70,30 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
         name: inputFile.name,
         progress: progress.percentage,
         failed: status === STATUS.FAILED,
-        index: i,
+        rate: 0.1,
+        chunkTime: Date.now(),
       })),
     [uploadsProgress]
   );
 
+  // Calculate upload rate using difference between percentages at chunk intervals
   useEffect(() => {
+    const array = [];
+    filesInfo.forEach((file, i) => {
+      const lastChunk = lastChunks.current[i];
+      if (lastChunk !== undefined) {
+        if (lastChunk.progress !== undefined && lastChunk.chunkTime !== undefined) {
+          file.rate = (file.progress - lastChunk.progress) / (Date.now() - lastChunk.chunkTime);
+        }
+      }
+      array[i] = {
+        progress: file.progress,
+        time: file.chunkTime,
+      };
+    });
+    lastChunks.current = array;
     console.log(filesInfo);
-  }, [filesInfo]);
+  }, [filesInfo, lastChunks]);
 
   return (
     <div className={'file-upload-modal'}>
