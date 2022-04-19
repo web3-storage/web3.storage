@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { useCallback, Fragment, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import UploadProgress from './uploadProgress';
 
 /**
  * @typedef {Object} DropzoneProps
@@ -64,18 +65,11 @@ const Dropzone = ({
         {dragAreaText && <p className="dragAreaText">{dragAreaText}</p>}
       </div>
       <div className="filelist">
-        {filesInfo.map(fileInfo => (
+        {filesInfo.map((fileInfo, i) => (
           <Fragment key={`file-${fileInfo.uploadId}`}>
             <div className="filename">{fileInfo.name}</div>
             <div className="status">
-              {!!fileInfo.failed
-                ? content.failed
-                : fileInfo.progress !== 100
-                ? <div className="loading-c">
-                    <span className="loading-label">{content.loading}</span>
-                    <span className="loading-count">{fileInfo.progress || 0}%</span>
-                  </div>
-                : content.complete}
+              <UploadProgress label={content.loading} progress={fileInfo.progress} />
             </div>
           </Fragment>
         ))}
@@ -87,3 +81,9 @@ const Dropzone = ({
 Dropzone.defaultProps = {};
 
 export default Dropzone;
+
+// {!!fileInfo.failed
+//   ? content.failed
+//   : fileInfo.progress !== 100
+//   ? <UploadProgress label={content.loading} progress={fileInfo.progress} />
+//   : content.complete}

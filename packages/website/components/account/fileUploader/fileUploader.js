@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 
 import Modal from 'modules/zero/components/modal/modal';
 import Dropzone from 'modules/zero/components/dropzone/dropzone';
@@ -64,14 +64,19 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
   // Mapped out file progress info
   const filesInfo = useMemo(
     () =>
-      Object.values(uploadsProgress.files).map(({ inputFile, progress, uploadId, status }) => ({
+      Object.values(uploadsProgress.files).map(({ inputFile, progress, uploadId, status }, i) => ({
         uploadId,
         name: inputFile.name,
         progress: progress.percentage,
         failed: status === STATUS.FAILED,
+        index: i
       })),
     [uploadsProgress]
   );
+
+  useEffect(() => {
+    console.log(filesInfo)
+  }, [uploadsProgress]);
 
   return (
     <div className={'file-upload-modal'}>
