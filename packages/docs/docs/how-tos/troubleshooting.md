@@ -7,13 +7,21 @@ description: A collection of common issues for new developers, and solutions to 
 
 This page contains a collection of common issues for new developers, and solutions to those problems.
 
-## I need to use Webpack 4
+## I'm getting import errors when importing the Javascript client library
 
-We recommend using Webpack 5 with your projects. However, some popular tools like create-react-app require Webpack 4 in order to run properly. To get around this issue, add the following import to the top of your `.js` scripts to import the pre-webpack-bundled version of Web3.Storage:
+Some common situations where this might happen include:
+
+- Using Webpack 4 (e.g., for `create-react-app`)
+- Getting an error like `Can't resolve 'ipfs-car/blockstore/memory'`
+
+To get around this issue, add the following import to the top of your `.js` scripts to import the pre-webpack-bundled version of Web3.Storage:
 
 ```javascript
 import { Web3Storage } from 'web3.storage/dist/bundle.esm.min.js'
 ```
+
+Alternatively, you can try upgrading to Webpack 5 or using a bundler that supports [`exports` in `package.json`](https://nodejs.org/api/packages.html#subpath-exports).
+
 
 ## The status information for my content doesn't include any Filecoin deals
 
