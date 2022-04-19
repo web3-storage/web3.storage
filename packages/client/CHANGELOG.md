@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.0](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.0.0...web3.storage-v4.1.0) (2022-04-19)
+
+
+### Features
+
+* add rate limiting to client library ([#1132](https://github.com/web3-storage/web3.storage/issues/1132)) ([038852d](https://github.com/web3-storage/web3.storage/commit/038852d8eee449788402b7b877268966d9b94f29))
+
 ## [4.0.0](https://github.com/web3-storage/web3.storage/compare/web3.storage-v3.5.7...web3.storage-v4.0.0) (2022-03-23)
 
 
