@@ -20,6 +20,8 @@ To get around this issue, add the following import to the top of your `.js` scri
 import { Web3Storage } from 'web3.storage/dist/bundle.esm.min.js'
 ```
 
+Alternatively, you can try upgrading to Webpack 5 or using a bundler that supports [`exports` in `package.json`](https://nodejs.org/api/packages.html#subpath-exports).
+
 
 ## The status information for my content doesn't include any Filecoin deals
 
