@@ -6,7 +6,8 @@ import {
   createUserAuthKey,
   createUpload,
   createPsaPinRequest,
-  token
+  token,
+  randomCid
 } from './utils.js'
 
 describe('Users used storage', () => {
@@ -17,17 +18,9 @@ describe('Users used storage', () => {
     postgres: true
   })
 
-  let user1, user2, user3, user4
-  let authKey1, authKey2, authKey3, authKey4
-  const cids = [
-    'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47fgf111',
-    'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47fgf112',
-    'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47fgf113'
-  ]
-  const cidsPinned = [
-    'QmdA5WkDNALetBn4iFeSepHjdLGJdxPBwZyY47ir1bZGAK',
-    'QmNvTjdqEPjZVWCvRWsFJA1vK7TTw1g9JP6we1WBJTRADM'
-  ]
+  let user1, user2, user3, user4, user5
+  let authKey1, authKey2, authKey3, authKey4, authKey5
+  let cid
   const uploadSize = 439804651110
   const pinnedSize = 109951162800
   const largeFileSize = 3199023255550
@@ -58,14 +51,17 @@ describe('Users used storage', () => {
     authKey1 = await createUserAuthKey(dbClient, Number(user1._id), {
       name: 'test1-key'
     })
-    await createUpload(dbClient, Number(user1._id), Number(authKey1), cids[0], {
+    cid = await randomCid()
+    await createUpload(dbClient, Number(user1._id), Number(authKey1), cid, {
       dagSize: uploadSize
     })
-    await createPsaPinRequest(dbClient, authKey1, cidsPinned[0], {
+    cid = await randomCid()
+    await createPsaPinRequest(dbClient, authKey1, cid, {
       dagSize: pinnedSize,
       pins
     })
-    await createPsaPinRequest(dbClient, authKey1, cidsPinned[1], {
+    cid = await randomCid()
+    await createPsaPinRequest(dbClient, authKey1, cid, {
       dagSize: pinnedSize,
       pins
     })
@@ -77,10 +73,12 @@ describe('Users used storage', () => {
     authKey2 = await createUserAuthKey(dbClient, Number(user2._id), {
       name: 'test2-key'
     })
-    await createUpload(dbClient, Number(user2._id), Number(authKey2), cids[0], {
+    cid = await randomCid()
+    await createUpload(dbClient, Number(user2._id), Number(authKey2), cid, {
       dagSize: uploadSize
     })
-    await createUpload(dbClient, Number(user2._id), Number(authKey2), cids[1], {
+    cid = await randomCid()
+    await createUpload(dbClient, Number(user2._id), Number(authKey2), cid, {
       dagSize: uploadSize
     })
 
@@ -91,13 +89,16 @@ describe('Users used storage', () => {
     authKey3 = await createUserAuthKey(dbClient, Number(user3._id), {
       name: 'test3-key'
     })
-    await createUpload(dbClient, Number(user3._id), Number(authKey3), cids[0], {
+    cid = await randomCid()
+    await createUpload(dbClient, Number(user3._id), Number(authKey3), cid, {
       dagSize: uploadSize
     })
-    await createUpload(dbClient, Number(user3._id), Number(authKey3), cids[1], {
-      dagSize: Math.round(uploadSize * 1.2)
+    cid = await randomCid()
+    await createUpload(dbClient, Number(user3._id), Number(authKey3), cid, {
+      dagSize: Math.round(uploadSize * 1.1)
     })
-    await createPsaPinRequest(dbClient, authKey3, cidsPinned[0], {
+    cid = await randomCid()
+    await createPsaPinRequest(dbClient, authKey3, cid, {
       dagSize: pinnedSize,
       pins
     })
@@ -113,8 +114,32 @@ describe('Users used storage', () => {
       tag: 'StorageLimitBytes',
       value: '2199023255552'
     })
-    const cid = 'bafybeibvuy3vcepqxy4plr34twv22vvxol2jjhmjxcrcvuhea5226whpsm'
+    cid = await randomCid()
     await createUpload(dbClient, Number(user4._id), Number(authKey4), cid, {
+      dagSize: largeFileSize
+    })
+
+    user5 = await createUser(dbClient, {
+      name: 'test5 restricted',
+      email: 'test5@email.com'
+    })
+    authKey5 = await createUserAuthKey(dbClient, Number(user5._id), {
+      name: 'test5-key'
+    })
+    await dbClient.createUserTag(Number(user5._id), {
+      tag: 'StorageLimitBytes',
+      value: '2199023255552'
+    })
+    await dbClient.createUserTag(Number(user5._id), {
+      tag: 'HasAccountRestriction',
+      value: 'true'
+    })
+    await dbClient.createUserTag(Number(user5._id), {
+      tag: 'HasPsaAccess',
+      value: 'true'
+    })
+    cid = await randomCid()
+    await createUpload(dbClient, Number(user5._id), Number(authKey5), cid, {
       dagSize: largeFileSize
     })
 
@@ -124,6 +149,7 @@ describe('Users used storage', () => {
     // test2@email.com    | 2       | 0       | 1TiB    | 80%
     // test3@email.com    | 2       | 1       | 1TiB    | 90%
     // test4@email.com    | 1 (XL)  | 0       | 2TiB    | > 90%
+    // test5@email.com    | 1 (XL)  | 0       | 2TiB    | ACCOUNT RESTRICTED
   })
 
   it('returns user details needed for email', async () => {
