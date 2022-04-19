@@ -1,5 +1,17 @@
 # Changelog
 
+## [5.7.0](https://github.com/web3-storage/web3.storage/compare/api-v5.6.0...api-v5.7.0) (2022-04-19)
+
+
+### Features
+
+* use IANA media type application/vnd.ipld.car ([#1215](https://github.com/web3-storage/web3.storage/issues/1215)) ([c6fa207](https://github.com/web3-storage/web3.storage/commit/c6fa20768f4bef7f715f08d518f90d3a355bf15b))
+
+
+### Bug Fixes
+
+* return 400 on malformed form data ([#1255](https://github.com/web3-storage/web3.storage/issues/1255)) ([976b0c6](https://github.com/web3-storage/web3.storage/commit/976b0c611d4556e530d6a52d48ae88a306c3ad9b))
+
 ## [5.6.0](https://github.com/web3-storage/web3.storage/compare/api-v5.5.0...api-v5.6.0) (2022-04-11)
 
 
