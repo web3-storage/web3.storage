@@ -3,6 +3,7 @@ import * as assert from 'uvu/assert'
 import randomBytes from 'randombytes'
 import { Web3Storage } from 'web3.storage'
 import { File } from '../src/platform.js'
+import { createUnboundRateLimiter } from './utils.js'
 import { pack } from 'ipfs-car/pack'
 import { CarReader, CarWriter } from '@ipld/car'
 import { CID } from 'multiformats/cid'
@@ -111,7 +112,8 @@ describe('put', () => {
 
   it('adds big files', async function () {
     this.timeout(60e3)
-    const client = new Web3Storage({ token, endpoint })
+    const rateLimiter = createUnboundRateLimiter()
+    const client = new Web3Storage({ token, endpoint, rateLimiter })
     let uploadedChunks = 0
 
     const files = [

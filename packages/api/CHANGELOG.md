@@ -1,5 +1,26 @@
 # Changelog
 
+## [5.6.0](https://github.com/web3-storage/web3.storage/compare/api-v5.5.0...api-v5.6.0) (2022-04-11)
+
+
+### Features
+
+* api support for ipfs-cluster@1.0 ([#1227](https://github.com/web3-storage/web3.storage/issues/1227)) ([57678fe](https://github.com/web3-storage/web3.storage/commit/57678fe60baf5fe5648bfff23c0144e1477b26e2)), closes [#1184](https://github.com/web3-storage/web3.storage/issues/1184)
+
+
+### Bug Fixes
+
+* api add to cluster always with local false ([#1241](https://github.com/web3-storage/web3.storage/issues/1241)) ([9100b8f](https://github.com/web3-storage/web3.storage/commit/9100b8fa7c5dcc464baab5cdd699d8dc2c3baf40))
+* Return 400 on malformed form-data ([#1219](https://github.com/web3-storage/web3.storage/issues/1219)) ([2e165ad](https://github.com/web3-storage/web3.storage/commit/2e165adb83b752c4bc1f1e5bdfdb35eb61db5c1b))
+
+## [5.5.0](https://github.com/web3-storage/web3.storage/compare/api-v5.4.3...api-v5.5.0) (2022-04-05)
+
+
+### Features
+
+* add pinned storage to user account API ([#1044](https://github.com/web3-storage/web3.storage/issues/1044)) ([3200a6e](https://github.com/web3-storage/web3.storage/commit/3200a6e20a3460cefe5887ab5d48ad320a84a86f))
+* implement account restriction ([#1053](https://github.com/web3-storage/web3.storage/issues/1053)) ([6f6f279](https://github.com/web3-storage/web3.storage/commit/6f6f2795a374c6df1e825f52d2c99afbe79131e5))
+
 ### [5.4.3](https://github.com/web3-storage/web3.storage/compare/api-v5.4.2...api-v5.4.3) (2022-03-18)
 
 
