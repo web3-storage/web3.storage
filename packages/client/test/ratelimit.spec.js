@@ -10,8 +10,8 @@ describe('rate limiter', () => {
   it('limits to correct rate', async function () {
     this.timeout(RATE_LIMIT_PERIOD * 2)
     const rateLimiter = createRateLimiter()
-    const start = new Date()
-    const elapsedTime = () => (new Date()) - start
+    const start = Date.now()
+    const elapsedTime = () => Date.now() - start
     // Check how many times the rate limiter returns within the time period
     let numRequests = 0
     await (async () => {
