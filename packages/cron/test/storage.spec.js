@@ -141,6 +141,15 @@ describe('cron - check user storage quotas', () => {
     assert.match(log1Lines[4], /email:EmailService 📧 Sending an email to test2-name: 79% of quota used/)
     assert.match(log1Lines[5], /storage:checkStorageUsed ✅ Done/)
 
+    const adminUser = await dbClient.getUserByEmail('admin@web3.storage')
+    assert.ok(adminUser, 'admin user found')
+    const adminStorageExceeded = await dbClient.emailHasBeenSent({
+      userId: Number(adminUser._id),
+      emailType: EMAIL_TYPE.AdminStorageExceeded,
+      secondsSinceLastSent: 60 * 60 * 23
+    })
+    assert.strictEqual(adminStorageExceeded, true, 'Admin storage exceeded email sent')
+
     const over100EmailSent = await dbClient.emailHasBeenSent({
       userId: Number(user4._id),
       emailType: EMAIL_TYPE.User100PercentStorage,
