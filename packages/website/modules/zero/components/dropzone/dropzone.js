@@ -69,7 +69,11 @@ const Dropzone = ({
           <Fragment key={`file-${fileInfo.uploadId}`}>
             <div className="filename">{fileInfo.name}</div>
             <div className="status">
-              <UploadProgress label={content.loading} progress={fileInfo.progress} />
+              {!!fileInfo.failed
+                ? content.failed
+                : fileInfo.progress !== 100
+                ? <UploadProgress label={content.loading} progress={fileInfo.progress} />
+                : content.complete}
             </div>
           </Fragment>
         ))}
@@ -81,9 +85,3 @@ const Dropzone = ({
 Dropzone.defaultProps = {};
 
 export default Dropzone;
-
-// {!!fileInfo.failed
-//   ? content.failed
-//   : fileInfo.progress !== 100
-//   ? <UploadProgress label={content.loading} progress={fileInfo.progress} />
-//   : content.complete}

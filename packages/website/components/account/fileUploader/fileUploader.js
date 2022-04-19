@@ -59,9 +59,10 @@ const uploadContentBlock = (heading, iconType, description) => {
  */
 const FileUploader = ({ className = '', content, uploadModalState, background }) => {
   const [filesToUpload, setFilesToUpload] = useState(/** @type {File[]} */ ([]));
+  const [uploadRates, setUploadRates] = useState(/** @type {number[]} */ ([]));
   const { getUploads, uploadFiles, uploadsProgress, clearUploadedFiles } = useUploads();
   const lastChunks = useRef(/** @type {object[]} */ ([]));
-  
+
   // Mapped out file progress info
   const filesInfo = useMemo(
     () =>
@@ -70,7 +71,6 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
         name: inputFile.name,
         progress: progress.percentage,
         failed: status === STATUS.FAILED,
-        rate: 0.1,
         chunkTime: Date.now(),
       })),
     [uploadsProgress]
@@ -79,11 +79,13 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
   // Calculate upload rate using difference between percentages at chunk intervals
   useEffect(() => {
     const array = [];
+    const rates = [];
     filesInfo.forEach((file, i) => {
+      rates.push(0.1);
       const lastChunk = lastChunks.current[i];
       if (lastChunk !== undefined) {
         if (lastChunk.progress !== undefined && lastChunk.chunkTime !== undefined) {
-          file.rate = (file.progress - lastChunk.progress) / (Date.now() - lastChunk.chunkTime);
+          rates[i] = (file.progress - lastChunk.progress) / (Date.now() - lastChunk.chunkTime);
         }
       }
       array[i] = {
@@ -92,9 +94,10 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
       };
     });
     lastChunks.current = array;
-    console.log(filesInfo);
+    setUploadRates(rates);
   }, [filesInfo, lastChunks]);
 
+  console.log(uploadRates);
   return (
     <div className={'file-upload-modal'}>
       <Modal
