@@ -69,14 +69,14 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
         name: inputFile.name,
         progress: progress.percentage,
         failed: status === STATUS.FAILED,
-        index: i
+        index: i,
       })),
     [uploadsProgress]
   );
 
   useEffect(() => {
-    console.log(filesInfo)
-  }, [uploadsProgress]);
+    console.log(filesInfo);
+  }, [filesInfo]);
 
   return (
     <div className={'file-upload-modal'}>
