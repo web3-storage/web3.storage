@@ -144,7 +144,7 @@ describe('Account restriction', () => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${restrictedToken}`,
-          'Content-Type': 'application/car',
+          'Content-Type': 'application/vnd.ipld.car',
           'X-Name': 'car'
         },
         body: carBody

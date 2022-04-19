@@ -27,7 +27,7 @@
     "conf": "^10.1.1",
     "enquirer": "^2.3.6",
     "hard-rejection": "^2.1.0",
-    "ipfs-car": "^0.6.1",
+    "ipfs-car": "^0.7.0",
     "ora": "^5.4.1",
     "sade": "^1.7.4",
     "uint8arrays": "^3.0.0",
