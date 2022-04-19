@@ -71,7 +71,7 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
         name: inputFile.name,
         progress: progress.percentage,
         failed: status === STATUS.FAILED,
-        chunkTime: Date.now(),
+        time: Date.now(),
       })),
     [uploadsProgress]
   );
@@ -89,7 +89,7 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
       }
       array[i] = {
         progress: file.progress,
-        time: file.chunkTime,
+        time: file.time,
       };
     });
     lastChunks.current = array;

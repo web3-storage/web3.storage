@@ -4,18 +4,18 @@ import { useState, useEffect, useRef } from 'react';
 /**
  * @prop {string} [label]
  * @prop {number} [progress]
- * @prop {boolean} [isRunning]
  */
 
-const UploadProgress = ({ label, progress, isRunning = true}) => {
+const UploadProgress = ({ label, progress }) => {
   const [displayValue, setDisplayValue] = useState(0);
+  const [running, setRunning] = useState(true);
   const now = useRef(0);
   const then = useRef(0);
   const fps = 1;
   const fpsInterval = 1000 / fps;
 
   const incrementDisplayValue = () => {
-    if (!isRunning) {
+    if (!running) {
       return;
     }
     now.current = Date.now();
@@ -28,9 +28,13 @@ const UploadProgress = ({ label, progress, isRunning = true}) => {
   }
 
   useEffect(() => {
-    setDisplayValue(progress)
+    setDisplayValue(progress);
     then.current = Date.now();
-    incrementDisplayValue()
+    incrementDisplayValue();
+
+    return () => {
+      setRunning(false);
+    };
   }, [progress]);
 
   return (
