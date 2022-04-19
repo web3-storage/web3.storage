@@ -83,10 +83,9 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
     filesInfo.forEach((file, i) => {
       rates.push(0.1);
       const lastChunk = lastChunks.current[i];
-      console.log(lastChunk);
       if (lastChunk !== undefined) {
         console.log(lastChunk);
-        rates[i] = (file.progress - lastChunk.progress) / (Date.now() - lastChunk.chunkTime);
+        rates[i] = (file.progress - lastChunk.progress) / (Date.now() - lastChunk.time);
       }
       array[i] = {
         progress: file.progress,
