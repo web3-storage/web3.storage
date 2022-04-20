@@ -5,7 +5,7 @@ const LIMIT = 1000
 const FIND_CONTENT_TO_UPDATE = `
 SELECT c.cid, d.size_actual
 FROM public.content c
-JOIN cargo.dags d on c.cid = d.cid_v1
+JOIN cargo.dags d ON c.cid = d.cid_v1
 WHERE
   d.size_actual > 0 AND 
   c.dag_size != d.size_actual AND 
@@ -38,7 +38,7 @@ export async function updateDagSizes ({ rwPg, roPg, after, limit = LIMIT }) {
 
   log(`🎯 Updating DAG sizes for content inserted after ${after.toISOString()}`)
 
-  const updatedCids = []
+  let updatedCids = 0
   while (true) {
     const { rows: contents } = await roPg.query(FIND_CONTENT_TO_UPDATE, [
       after.toISOString(),
@@ -53,12 +53,11 @@ export async function updateDagSizes ({ rwPg, roPg, after, limit = LIMIT }) {
     }
     /* eslint-enable camelcase */
 
-    updatedCids.push(...contents.map(r => r.cid))
-    log(`ℹ️ Updated ${updatedCids.length} in current iteration`)
+    updatedCids += contents.length
+    log(`ℹ️ Updated ${contents.length} in current iteration`)
   }
 
-  log(`ℹ️ Updated ${updatedCids.length} in total`)
+  log(`ℹ️ Updated ${updatedCids} in total`)
 
   log('✅ Done')
-  return updatedCids
 }

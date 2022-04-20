@@ -36,13 +36,17 @@ describe('Fix dag sizes migration', () => {
 
   async function updateDagSizesWrp ({ user, after = new Date(1990, 1, 1), limit = null }) {
     const allUploadsBefore = await listUploads(dbClient, user._id)
-    const updatedCids = await updateDagSizes({
+    await updateDagSizes({
       roPg,
       rwPg,
       after,
       limit
     })
     const allUploadsAfter = await listUploads(dbClient, user._id)
+    const updatedCids = allUploadsAfter.filter((uAfter) => {
+      const beforeUpload = allUploadsBefore.find((uBefore) => uAfter.cid === uBefore.cid)
+      return beforeUpload?.dagSize !== uAfter.dagSize
+    }).map(u => u.cid)
 
     return {
       allUploadsAfter,
