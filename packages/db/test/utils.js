@@ -1,5 +1,8 @@
 import { normalizeCid } from '../../api/src/utils/cid.js'
-
+import { CID } from 'multiformats/cid'
+import { sha256 } from 'multiformats/hashes/sha2'
+import * as pb from '@ipld/dag-pb'
+/* global crypto */
 export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU'
 
 /**
@@ -118,4 +121,14 @@ export async function getUpload (dbClient, cid, userId) {
  */
 export async function getPinSyncRequests (dbClient, size = 10) {
   return dbClient.getPinSyncRequests({ size })
+}
+
+/**
+ * @param {number} code
+ * @returns {Promise<string>}
+ */
+export async function randomCid (code = pb.code) {
+  const bytes = crypto.getRandomValues(new Uint8Array(10))
+  const hash = await sha256.digest(bytes)
+  return CID.create(1, code, hash).toString()
 }
