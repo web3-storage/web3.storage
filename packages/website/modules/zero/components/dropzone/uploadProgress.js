@@ -26,7 +26,7 @@ const UploadProgress = ({ label, progress, rate }) => {
       const increment = Math.min(10, Math.max(inc, 0.1));
       setDisplayValue(displayValue => displayValue + increment);
     }
-    window.requestAnimationFrame(incrementDisplayValue);
+    window.requestAnimationFrame(() => { incrementDisplayValue(inc) });
   }
 
   useEffect(() => {
