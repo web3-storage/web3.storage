@@ -149,17 +149,15 @@ describe('Fix dag sizes migration', () => {
     assert.strictEqual(toBeUpdated.length, updatedCids.length)
   })
 
-  // Skipping this since for some reason the updated_at field  gets back as unchanged
-  // Testing this manually shows the value is actually updated. Not sure what is wrong.
-  it.skip('updates the updated_at field', async () => {
+  it('updates the updated_at field', async () => {
     const { allUploadsBefore, allUploadsAfter } = await updateDagSizesWrp({ user })
 
     const nullOrZeroSizes = contentItems.filter((c) => getToBeUpdatedNull(c) || getToBeUpdatedWrong(c))
-    await Promise.all(nullOrZeroSizes.map(async c => {
+    nullOrZeroSizes.map(async c => {
       const u = allUploadsAfter.find(u => u.cid === c[0])
       assert.strictEqual(u.dagSize, c[2])
       assert.notStrictEqual(allUploadsBefore.find((u) => u.cid === c[0]).updated,
         allUploadsAfter.find((u) => u.cid === c[0]).updated, `Not updated updated_at of ${c[0]}`)
-    }))
+    })
   })
 })
