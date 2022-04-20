@@ -9,27 +9,37 @@ import { useState, useEffect, useRef } from 'react';
 
 const UploadProgress = ({ label, progress }) => {
   const [displayValue, setDisplayValue] = useState(0);
-  const [running, setRunning] = useState(true);
+  // const [running, setRunning] = useState(true);
   const lastChunkProgress = useRef(0);
   const lastChunkTime = useRef(0);
   const rate = useRef(0.1);
-  const now = useRef(0);
-  const then = useRef(0);
+  // const now = useRef(0);
+  // const then = useRef(0);
   const fps = 1;
   const fpsInterval = 1000 / fps;
 
   const incrementDisplayValue = () => {
-    if (!running) {
-      return;
-    }
-    now.current = Date.now();
-    const elapsed = now.current - then.current;
-    if (elapsed > fpsInterval) {
-      then.current = now.current - (elapsed % fpsInterval);
-      setDisplayValue(displayValue => displayValue + rate.current);
-    }
-    window.requestAnimationFrame(incrementDisplayValue);
+    // if (!running) {
+    //   return;
+    // }
+    // now.current = Date.now();
+    // const elapsed = now.current - then.current;
+    // if (elapsed > fpsInterval) {
+    //   then.current = now.current - (elapsed % fpsInterval);
+    //   setDisplayValue(displayValue => displayValue + rate.current);
+    // }
+    // window.requestAnimationFrame(incrementDisplayValue);
+    setDisplayValue(displayValue => displayValue + rate.current);
   }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      incrementDisplayValue();
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     if (lastChunkProgress.current === 0 || lastChunkTime.current === 0) {
@@ -39,22 +49,22 @@ const UploadProgress = ({ label, progress }) => {
     }
 
     setDisplayValue(progress);
-    then.current = Date.now();
-    incrementDisplayValue();
+    // then.current = Date.now();
+    // incrementDisplayValue();
 
     lastChunkProgress.current = progress;
     lastChunkTime.current = Date.now();
 
-    return () => {
-      setRunning(false);
-    };
+    // return () => {
+    //   setRunning(false);
+    // };
   }, [progress]);
 
   console.log(rate);
   return (
     <div className="loading-c">
       <span className="loading-label">{label}</span>
-      <span className="loading-count">{Math.min(displayValue, 99.9).toFixed(2)}%</span>
+      <span className="loading-count">{Math.min(displayValue, 99.9).toFixed(1)}%</span>
     </div>
   );
 }
