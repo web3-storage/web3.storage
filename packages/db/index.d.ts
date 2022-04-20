@@ -32,7 +32,7 @@ import type {
   UserStorageUsedOutput,
   StorageUsedOutput,
   UserTagInput,
-  EmailSentRecentlyInput,
+  EmailSentInput,
   LogEmailSentInput,
 } from './db-client-types'
 
@@ -44,9 +44,10 @@ export class DBClient {
   getMetricsValue (key: string): Promise<{ total: number }>
   upsertUser (user: UpsertUserInput): Promise<UpsertUserOutput>
   getUser (issuer: string): Promise<UserOutput>
+  getUserByEmail (email: string): Promise<UserOutput>
   getStorageUsed (userId: number): Promise<StorageUsedOutput>
   getUsersByStorageUsed (percentRange: UserStorageUsedInput): Promise<Array<UserStorageUsedOutput>>
-  emailSentRecently(email: EmailSentRecentlyInput): Promise<boolean>
+  emailHasBeenSent(email: EmailSentInput): Promise<boolean>
   logEmailSent(email : LogEmailSentInput): Promise<{id: string}>
   createUpload (data: CreateUploadInput): Promise<CreateUploadOutput>
   getUpload (cid: string, userId: number): Promise<UploadItemOutput>

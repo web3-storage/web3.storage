@@ -28,11 +28,12 @@ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'email_type') THEN
     CREATE TYPE email_type AS ENUM 
       (
-        'Used75PercentStorage',
-        'Used80PercentStorage',
-        'Used85PercentStorage',
-        'Used90PercentStorage',
-        'Used100PercentStorage'
+        'User75PercentStorage',
+        'User80PercentStorage',
+        'User85PercentStorage',
+        'User90PercentStorage',
+        'User100PercentStorage',
+        'AdminStorageExceeded'
       );
   END IF;
 END

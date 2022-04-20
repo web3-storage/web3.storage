@@ -19,56 +19,70 @@ export async function checkStorageUsed ({ db }) {
 
   log('🗄 Checking users storage quotas')
 
-  let users
   emailService = new EmailService({ db })
 
   // Send email every day
-  users = await db.getUsersByStorageUsed({
+  const usersStorageExceeded = await db.getUsersByStorageUsed({
     fromPercent: 100
   })
-  await emailService.sendEmails({
-    users,
-    email: EMAIL_TYPE.Used100PercentStorage,
-    numberOfDays: 1
-  })
+  if (usersStorageExceeded.length) {
+    await emailService.sendAdminEmail({
+      users: usersStorageExceeded,
+      email: EMAIL_TYPE.AdminStorageExceeded,
+      secondsSinceLastSent: 60 * 60 * 23
+    })
+    await emailService.sendUserEmails({
+      users: usersStorageExceeded,
+      email: EMAIL_TYPE.User100PercentStorage,
+      secondsSinceLastSent: 60 * 60 * 23
+    })
+  }
 
-  users = await db.getUsersByStorageUsed({
+  const usersFrom90to100 = await db.getUsersByStorageUsed({
     fromPercent: 90,
     toPercent: 100
   })
-  await emailService.sendEmails({
-    users,
-    email: EMAIL_TYPE.Used90PercentStorage,
-    numberOfDays: 1
-  })
+  if (usersFrom90to100.length) {
+    await emailService.sendUserEmails({
+      users: usersFrom90to100,
+      email: EMAIL_TYPE.User90PercentStorage,
+      secondsSinceLastSent: 60 * 60 * 23
+    })
+  }
 
   // Send email every 7 days
-  users = await db.getUsersByStorageUsed({
+  const usersFrom85to90 = await db.getUsersByStorageUsed({
     fromPercent: 85,
     toPercent: 90
   })
-  await emailService.sendEmails({
-    users,
-    email: EMAIL_TYPE.Used85PercentStorage
-  })
+  if (usersFrom85to90.length) {
+    await emailService.sendUserEmails({
+      users: usersFrom85to90,
+      email: EMAIL_TYPE.User85PercentStorage
+    })
+  }
 
-  users = await db.getUsersByStorageUsed({
+  const usersFrom80to85 = await db.getUsersByStorageUsed({
     fromPercent: 80,
     toPercent: 85
   })
-  await emailService.sendEmails({
-    users,
-    email: EMAIL_TYPE.Used80PercentStorage
-  })
+  if (usersFrom80to85.length) {
+    await emailService.sendUserEmails({
+      users: usersFrom80to85,
+      email: EMAIL_TYPE.User80PercentStorage
+    })
+  }
 
-  users = await db.getUsersByStorageUsed({
+  const usersFrom75to80 = await db.getUsersByStorageUsed({
     fromPercent: 75,
     toPercent: 80
   })
-  await emailService.sendEmails({
-    users,
-    email: EMAIL_TYPE.Used75PercentStorage
-  })
+  if (usersFrom75to80.length) {
+    await emailService.sendUserEmails({
+      users: usersFrom75to80,
+      email: EMAIL_TYPE.User75PercentStorage
+    })
+  }
 
   log('✅ Done')
 }

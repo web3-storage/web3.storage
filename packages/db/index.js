@@ -138,6 +138,27 @@ export class DBClient {
   }
 
   /**
+   * Get user by email.
+   * @param {string} email
+   * @return {Promise<import('./db-client-types').UserOutput | undefined>}
+   */
+  async getUserByEmail (email) {
+    /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
+    const { data, error } = await this._client
+      .from('user')
+      .select(`
+        _id:id::text
+      `)
+      .eq('email', email)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return data.length ? data[0] : undefined
+  }
+
+  /**
    * Create a user tag
    * @param {number} userId
    * @param {Object} [tag]
@@ -295,26 +316,26 @@ export class DBClient {
   /**
    * Check the email history for a specified email type to see if it has
    * been sent within a specified number of days. If not, it is resent.
-   * @param {import('./db-client-types').EmailSentRecentlyInput} email
+   * @param {import('./db-client-types').EmailSentInput} email
    * @returns {Promise<boolean>}
    */
-  async emailSentRecently (email) {
+  async emailHasBeenSent (email) {
     const {
       userId,
       emailType,
-      numberOfDays = 7
+      secondsSinceLastSent = 60 * 60 * 24 * 7
     } = email
 
-    const d = new Date()
-    d.setDate(d.getDate() - numberOfDays)
-    const numberOfDaysAgo = d.toISOString()
+    const now = new Date()
+    now.setSeconds(now.getSeconds() - secondsSinceLastSent)
+    const sentAt = now.toISOString()
 
     const { count, error } = await this._client
       .from('email_history')
       .select('id', { count: 'exact' })
       .eq('user_id', userId)
       .eq('email_type', emailType)
-      .gt('sent_at', numberOfDaysAgo)
+      .gt('sent_at', sentAt)
 
     if (error) {
       throw new DBError(error)
