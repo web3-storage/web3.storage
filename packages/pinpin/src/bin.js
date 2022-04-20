@@ -25,7 +25,7 @@ async function main () {
 }
 
 /**
- * Create a new Fauna DB client instance from the passed environment variables.
+ * Create a new DB client instance from the passed environment variables.
  * @param {Record<string, string|undefined>} env
  */
 function getDBClient (env) {

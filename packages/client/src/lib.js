@@ -21,6 +21,7 @@ import { unpackStream } from 'ipfs-car/unpack'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
 import { CarReader } from '@ipld/car'
 import { filesFromPath, getFilesFromPath } from 'files-from-path'
+import throttledQueue from 'throttled-queue'
 import {
   fetch,
   File,
@@ -33,6 +34,9 @@ const MAX_CONCURRENT_UPLOADS = 3
 const DEFAULT_CHUNK_SIZE = 1024 * 1024 * 10 // chunk to ~10MB CARs
 const MAX_BLOCK_SIZE = 1048576
 const MAX_CHUNK_SIZE = 104857600
+// These match what is enforced server-side
+const RATE_LIMIT_REQUESTS = 30
+const RATE_LIMIT_PERIOD = 10 * 1000
 
 /** @typedef { import('./lib/interface.js').API } API */
 /** @typedef { import('./lib/interface.js').Status} Status */
@@ -43,8 +47,27 @@ const MAX_CHUNK_SIZE = 104857600
 /** @typedef { import('./lib/interface.js').CIDString} CIDString */
 /** @typedef { import('./lib/interface.js').PutOptions} PutOptions */
 /** @typedef { import('./lib/interface.js').PutCarOptions} PutCarOptions */
+/** @typedef { import('./lib/interface.js').RateLimiter } RateLimiter */
 /** @typedef { import('./lib/interface.js').UnixFSEntry} UnixFSEntry */
 /** @typedef { import('./lib/interface.js').Web3Response} Web3Response */
+
+/**
+ * Creates a rate limiter which limits at the same rate as is enforced
+ * server-side, to allow the client to avoid exceeding the requests limit and
+ * being blocked for 30 seconds.
+ * @returns {RateLimiter}
+ */
+export function createRateLimiter () {
+  const throttle = throttledQueue(RATE_LIMIT_REQUESTS, RATE_LIMIT_PERIOD)
+  return () => throttle(() => {})
+}
+
+/**
+ * Rate limiter used by static API if no rate limiter is passed. Note that each
+ * instance of the Web3Storage class gets it's own limiter if none is passed.
+ * This is because rate limits are enforced per API token.
+ */
+const globalRateLimiter = createRateLimiter()
 
 /**
  * @implements Service
@@ -60,9 +83,13 @@ class Web3Storage {
    * const client = new Web3Storage({ token: API_TOKEN })
    * ```
    *
-   * @param {{token: string, endpoint?:URL}} options
+   * @param {{token: string, endpoint?:URL, rateLimiter?: RateLimiter}} options
    */
-  constructor ({ token, endpoint = new URL('https://api.web3.storage') }) {
+  constructor ({
+    token,
+    endpoint = new URL('https://api.web3.storage'),
+    rateLimiter
+  }) {
     /**
      * Authorization token.
      *
@@ -74,6 +101,10 @@ class Web3Storage {
      * @readonly
      */
     this.endpoint = endpoint
+    /**
+     * @readonly
+     */
+    this.rateLimiter = rateLimiter || createRateLimiter()
   }
 
   /**
@@ -95,7 +126,7 @@ class Web3Storage {
    * @param {PutOptions} [options]
    * @returns {Promise<CIDString>}
    */
-  static async put ({ endpoint, token }, files, {
+  static async put ({ endpoint, token, rateLimiter = globalRateLimiter }, files, {
     onRootCidReady,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
@@ -117,7 +148,7 @@ class Web3Storage {
       })
       onRootCidReady && onRootCidReady(root.toString())
       const car = await CarReader.fromIterable(out)
-      return await Web3Storage.putCar({ endpoint, token }, car, { onStoredChunk, maxRetries, maxChunkSize, name })
+      return await Web3Storage.putCar({ endpoint, token, rateLimiter }, car, { onStoredChunk, maxRetries, maxChunkSize, name })
     } finally {
       await blockstore.close()
     }
@@ -129,7 +160,7 @@ class Web3Storage {
    * @param {PutCarOptions} [options]
    * @returns {Promise<CIDString>}
    */
-  static async putCar ({ endpoint, token }, car, {
+  static async putCar ({ endpoint, token, rateLimiter = globalRateLimiter }, car, {
     name,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
@@ -168,9 +199,10 @@ class Web3Storage {
         carParts.push(part)
       }
 
-      const carFile = new Blob(carParts, { type: 'application/car' })
+      const carFile = new Blob(carParts, { type: 'application/vnd.ipld.car' })
       const res = await pRetry(
         async () => {
+          await rateLimiter()
           const request = await fetch(url.toString(), {
             method: 'POST',
             headers,
@@ -207,8 +239,9 @@ class Web3Storage {
    * @param {CIDString} cid
    * @returns {Promise<Web3Response | null>}
    */
-  static async get ({ endpoint, token }, cid) {
+  static async get ({ endpoint, token, rateLimiter = globalRateLimiter }, cid) {
     const url = new URL(`car/${cid}`, endpoint)
+    await rateLimiter()
     const res = await fetch(url.toString(), {
       method: 'GET',
       headers: Web3Storage.headers(token)
@@ -226,8 +259,8 @@ class Web3Storage {
    * @returns {Promise<CIDString>}
    */
   /* c8 ignore next 4 */
-  static async delete ({ endpoint, token }, cid) {
-    console.log('Not deleting', cid, endpoint, token)
+  static async delete ({ endpoint, token, rateLimiter = globalRateLimiter }, cid) {
+    console.log('Not deleting', cid, endpoint, token, rateLimiter)
     throw Error('.delete not implemented yet')
   }
 
@@ -236,8 +269,9 @@ class Web3Storage {
    * @param {CIDString} cid
    * @returns {Promise<Status | undefined>}
    */
-  static async status ({ endpoint, token }, cid) {
+  static async status ({ endpoint, token, rateLimiter = globalRateLimiter }, cid) {
     const url = new URL(`status/${cid}`, endpoint)
+    await rateLimiter()
     const res = await fetch(url.toString(), {
       method: 'GET',
       headers: Web3Storage.headers(token)
@@ -268,9 +302,10 @@ class Web3Storage {
    * @param {{before: string, size: number}} opts
    * @returns {Promise<Response>}
    */
-    function listPage ({ endpoint, token }, { before, size }) {
+    async function listPage ({ endpoint, token, rateLimiter = globalRateLimiter }, { before, size }) {
       const search = new URLSearchParams({ before, size: size.toString() })
       const url = new URL(`user/uploads?${search}`, endpoint)
+      await rateLimiter()
       return fetch(url.toString(), {
         method: 'GET',
         headers: {

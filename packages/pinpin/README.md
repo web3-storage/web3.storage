@@ -25,7 +25,7 @@ PG_REST_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0S
 
 You also need to have:
 
-- a dev account and db set up on FaunaDB with the latest schema imported as per [../db/README.md](../db/README.md)
+- a dev account and a Postgres db set up with the latest schema imported as per [../db/README.md](../db/README.md)
 
 Run the job:
 

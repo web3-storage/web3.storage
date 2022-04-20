@@ -322,28 +322,6 @@ CREATE TABLE IF NOT EXISTS metric
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
-DO 
-$$
-BEGIN
-  IF NOT EXISTS (SELECT pg_get_viewdef('admin_search', true)) THEN
-    CREATE VIEW admin_search as
-    select
-      u.id::text as user_id,
-      u.email as email,
-      ak.secret as token,
-      ak.id::text as token_id,
-      ak.deleted_at as deleted_at,
-      akh.inserted_at as reason_inserted_at,
-      akh.reason as reason,
-      akh.status as status
-    from public.user u
-    right join auth_key ak on ak.user_id = u.id
-    full outer join (select * from auth_key_history where deleted_at is null) as akh on akh.auth_key_id = ak.id
-    where ak.deleted_at is NULL or ak.deleted_at is not NULL and akh.status is not NULL;
-  END IF;
-END
-$$;
-
 CREATE TABLE IF NOT EXISTS email_history 
 (
   id              BIGSERIAL PRIMARY KEY,
@@ -354,3 +332,17 @@ CREATE TABLE IF NOT EXISTS email_history
   message_id      TEXT NOT NULL,
   sent_at         TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+CREATE VIEW admin_search as
+select
+  u.id::text as user_id,
+  u.email as email,
+  ak.secret as token,
+  ak.id::text as token_id,
+  ak.deleted_at as deleted_at,
+  akh.inserted_at as reason_inserted_at,
+  akh.reason as reason,
+  akh.status as status
+from public.user u
+full outer join auth_key ak on ak.user_id = u.id
+full outer join (select * from auth_key_history where deleted_at is null) as akh on akh.auth_key_id = ak.id;

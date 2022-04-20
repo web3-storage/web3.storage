@@ -5,11 +5,15 @@ import { sha256, sha512 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
 import { CarWriter } from '@ipld/car'
 import fetch, { Blob } from '@web-std/fetch'
+import { Cluster } from '@nftstorage/ipfs-cluster'
 import { endpoint, clusterApi, clusterApiAuthHeader } from './scripts/constants.js'
 import { createCar } from './scripts/car.js'
 import { MAX_BLOCK_SIZE } from '../src/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
 import { PIN_OK_STATUS } from '../src/utils/pin.js'
+
+// Cluster client needs global fetch
+Object.assign(global, { fetch })
 
 describe('POST /car', () => {
   it('should add posted CARs to Cluster', async () => {
@@ -28,7 +32,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car',
+        'Content-Type': 'application/vnd.ipld.car',
         'X-Name': name
       },
       body: carBody
@@ -44,13 +48,12 @@ describe('POST /car', () => {
     const status = await statusRes.json()
     const pinInfo = status.pins.find(pin => PIN_OK_STATUS.includes(pin.status))
     assert(pinInfo, `status is one of ${PIN_OK_STATUS}`)
-
-    const clusterPeersRes = await fetch(new URL('peers', clusterApi), {
+    const cluster = new Cluster(clusterApi, {
       headers: {
         Authorization: clusterApiAuthHeader
       }
     })
-    const clusterPeers = await clusterPeersRes.json()
+    const clusterPeers = await cluster.peerList()
     // assert that peerId from the status belongs to one of the cluster ipfs nodes.
     assert(clusterPeers.some(peer => peer.ipfs.id === pinInfo.peerId))
   })
@@ -75,7 +78,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car'
+        'Content-Type': 'application/vnd.ipld.car'
       },
       body: new Blob(carBytes)
     })
@@ -104,7 +107,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car'
+        'Content-Type': 'application/vnd.ipld.car'
       },
       body: new Blob(carBytes)
     })
@@ -134,7 +137,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car'
+        'Content-Type': 'application/vnd.ipld.car'
       },
       body: new Blob(carBytes)
     })
@@ -167,7 +170,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car'
+        'Content-Type': 'application/vnd.ipld.car'
       },
       body: new Blob(carBytes)
     })
@@ -200,7 +203,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car'
+        'Content-Type': 'application/vnd.ipld.car'
       },
       body: new Blob(carBytes)
     })
@@ -231,7 +234,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car'
+        'Content-Type': 'application/vnd.ipld.car'
       },
       body: new Blob(carBytes)
     })
@@ -264,7 +267,7 @@ describe('POST /car', () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/car'
+        'Content-Type': 'application/vnd.ipld.car'
       },
       body: new Blob(carBytes)
     })
