@@ -15,7 +15,7 @@ const UploadProgress = ({ label, progress, rate }) => {
   const fps = 1;
   const fpsInterval = 1000 / fps;
 
-  const incrementDisplayValue = () => {
+  const incrementDisplayValue = (inc) => {
     if (!running) {
       return;
     }
@@ -23,7 +23,7 @@ const UploadProgress = ({ label, progress, rate }) => {
     const elapsed = now.current - then.current;
     if (elapsed > fpsInterval) {
       then.current = now.current - (elapsed % fpsInterval);
-      const increment = Math.min(10, Math.max(rate, 0.1));
+      const increment = Math.min(10, Math.max(inc, 0.1));
       setDisplayValue(displayValue => displayValue + increment);
     }
     window.requestAnimationFrame(incrementDisplayValue);
@@ -32,12 +32,12 @@ const UploadProgress = ({ label, progress, rate }) => {
   useEffect(() => {
     setDisplayValue(progress);
     then.current = Date.now();
-    incrementDisplayValue();
+    incrementDisplayValue(rate);
 
     return () => {
       setRunning(false);
     };
-  }, [progress]);
+  }, [progress, rate]);
 
   return (
     <div className="loading-c">
