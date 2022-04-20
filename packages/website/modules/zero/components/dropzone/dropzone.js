@@ -19,6 +19,7 @@ import UploadProgress from './uploadProgress';
  *          string,
  *          failed: boolean
  *        }[]} [filesInfo] external upload information of files
+ * @prop {number[]} [uploadRates]
  * @prop {{loading: string, complete: string, failed: string}} [content]
  */
 
@@ -33,6 +34,7 @@ const Dropzone = ({
   onChange,
   onError,
   filesInfo = [],
+  uploadRates,
   content = {
     loading: 'Loading',
     complete: 'Complete',
@@ -72,7 +74,11 @@ const Dropzone = ({
               {!!fileInfo.failed
                 ? content.failed
                 : fileInfo.progress !== 100
-                ? <UploadProgress label={content.loading} progress={fileInfo.progress} />
+                ? <UploadProgress
+                    label={content.loading}
+                    progress={fileInfo.progress}
+                    rate={uploadRates[i] === undefined ? 0.1 : uploadRates[i]}
+                  />
                 : content.complete}
             </div>
           </Fragment>

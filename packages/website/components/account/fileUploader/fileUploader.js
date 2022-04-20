@@ -84,8 +84,7 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
       rates.push(0.1);
       const lastChunk = lastChunks.current[i];
       if (lastChunk !== undefined) {
-        console.log(lastChunk);
-        rates[i] = (file.progress - lastChunk.progress) / (Date.now() - lastChunk.time);
+        rates[i] = ((file.progress - lastChunk.progress) / (Date.now() - lastChunk.time)) * 100;
       }
       array[i] = {
         progress: file.progress,
@@ -93,11 +92,9 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
       };
     });
     lastChunks.current = array;
-    // console.log(rates);
     setUploadRates(rates);
   }, [filesInfo, lastChunks]);
 
-  console.log(uploadRates);
   return (
     <div className={'file-upload-modal'}>
       <Modal
@@ -136,6 +133,7 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
             maxFiles={3}
             multiple={true}
             filesInfo={filesInfo}
+            uploadRates={uploadRates}
           />
 
           {content.blocks.map(block => uploadContentBlock(block.heading, block.icon, block.description))}

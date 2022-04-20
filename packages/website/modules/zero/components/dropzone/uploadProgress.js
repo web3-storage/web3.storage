@@ -4,9 +4,10 @@ import { useState, useEffect, useRef } from 'react';
 /**
  * @prop {string} [label]
  * @prop {number} [progress]
+ * @prop {number} [rate]
  */
 
-const UploadProgress = ({ label, progress }) => {
+const UploadProgress = ({ label, progress, rate }) => {
   const [displayValue, setDisplayValue] = useState(0);
   const [running, setRunning] = useState(true);
   const now = useRef(0);
@@ -22,7 +23,8 @@ const UploadProgress = ({ label, progress }) => {
     const elapsed = now.current - then.current;
     if (elapsed > fpsInterval) {
       then.current = now.current - (elapsed % fpsInterval);
-      setDisplayValue(displayValue => displayValue + 0.1);
+      const increment = Math.min(10, Math.max(rate, 0.1));
+      setDisplayValue(displayValue => displayValue + increment);
     }
     window.requestAnimationFrame(incrementDisplayValue);
   }
@@ -40,7 +42,7 @@ const UploadProgress = ({ label, progress }) => {
   return (
     <div className="loading-c">
       <span className="loading-label">{label}</span>
-      <span className="loading-count">{Math.min(displayValue, 99.9).toFixed(1)}%</span>
+      <span className="loading-count">{Math.min(displayValue, 99.9).toFixed(2)}%</span>
     </div>
   );
 }
