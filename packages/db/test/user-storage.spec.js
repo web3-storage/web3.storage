@@ -152,12 +152,12 @@ describe('Users used storage', () => {
     // test5@email.com    | 1 (XL)  | 0       | 2TiB    | ACCOUNT RESTRICTED
   })
 
-  it('returns user details needed for email', async () => {
+  it.only('returns user details needed for email', async () => {
     const users = await dbClient.getUsersByStorageUsed({
       fromPercent: 50
     })
-
-    assert.strictEqual(users.length, 4, 'All users returned')
+    assert.strictEqual(users.length, 4, 'All valid users returned')
+    assert.ok(!users.some(user => user.email === 'test5@email.com'), 'User with account restricted is not included')
     assert(users[0].name, 'User has a name')
     assert(users[0].email, 'User has an email')
     assert(users[0].storageQuota, 'User has storage quota')
