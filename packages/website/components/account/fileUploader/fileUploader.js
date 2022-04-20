@@ -95,6 +95,9 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
     setUploadRates(rates);
   }, [filesInfo, lastChunks]);
 
+  // Rate added to files info
+  const uploadsInfo = filesInfo.map((upload, i) => ({ rate: uploadRates[i] ? uploadRates[i] : 0.1, ...upload }));
+
   return (
     <div className={'file-upload-modal'}>
       <Modal
@@ -132,8 +135,7 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
             dragAreaText={content.drop_prompt}
             maxFiles={3}
             multiple={true}
-            filesInfo={filesInfo}
-            uploadRates={uploadRates}
+            filesInfo={uploadsInfo}
           />
 
           {content.blocks.map(block => uploadContentBlock(block.heading, block.icon, block.description))}
