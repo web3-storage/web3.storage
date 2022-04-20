@@ -7,15 +7,18 @@ import { useState, useEffect, useRef } from 'react';
  * @prop {number} [rate]
  */
 
-const UploadProgress = ({ label, progress, rate }) => {
+const UploadProgress = ({ label, progress }) => {
   const [displayValue, setDisplayValue] = useState(0);
   const [running, setRunning] = useState(true);
+  const lastChunkProgress = useRef(0);
+  const lastChunkTime = useRef(0);
+  const rate = useRef(0.1);
   const now = useRef(0);
   const then = useRef(0);
   const fps = 1;
   const fpsInterval = 1000 / fps;
 
-  const incrementDisplayValue = (inc) => {
+  const incrementDisplayValue = () => {
     if (!running) {
       return;
     }
@@ -23,22 +26,31 @@ const UploadProgress = ({ label, progress, rate }) => {
     const elapsed = now.current - then.current;
     if (elapsed > fpsInterval) {
       then.current = now.current - (elapsed % fpsInterval);
-      const increment = Math.min(10, Math.max(inc, 0.1));
-      setDisplayValue(displayValue => displayValue + increment);
+      setDisplayValue(displayValue => displayValue + rate.current);
     }
-    window.requestAnimationFrame(() => { incrementDisplayValue(inc) });
+    window.requestAnimationFrame(incrementDisplayValue);
   }
 
   useEffect(() => {
+    if (lastChunkProgress.current === 0 || lastChunkTime.current === 0) {
+      rate.current = 0.1;
+    } else {
+      rate.current = Math.min(10, Math.max(0.1, ((progress - lastChunkProgress.current) / (Date.now() - lastChunkTime.current)) * 100));
+    }
+
     setDisplayValue(progress);
     then.current = Date.now();
-    incrementDisplayValue(rate);
+    incrementDisplayValue();
+
+    lastChunkProgress.current = progress;
+    lastChunkTime.current = Date.now();
 
     return () => {
       setRunning(false);
     };
-  }, [progress, rate]);
+  }, [progress]);
 
+  console.log(rate);
   return (
     <div className="loading-c">
       <span className="loading-label">{label}</span>

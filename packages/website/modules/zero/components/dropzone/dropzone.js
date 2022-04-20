@@ -18,7 +18,6 @@ import UploadProgress from './uploadProgress';
  *          name: string, uploadId:
  *          string,
  *          failed: boolean,
- *          rate: number,
  *        }[]} [filesInfo] external upload information of files
  * @prop {{loading: string, complete: string, failed: string}} [content]
  */
@@ -57,7 +56,7 @@ const Dropzone = ({
     onDropRejected,
     ...props,
   });
-  console.log(filesInfo);
+
   return (
     <div className={clsx(className, 'Dropzone')}>
       <div {...getRootProps({ className: 'droparea' })}>
@@ -76,7 +75,6 @@ const Dropzone = ({
                 ? <UploadProgress
                     label={content.loading}
                     progress={fileInfo.progress}
-                    rate={fileInfo.rate}
                   />
                 : content.complete}
             </div>

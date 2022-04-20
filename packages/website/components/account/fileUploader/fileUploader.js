@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 
 import Modal from 'modules/zero/components/modal/modal';
 import Dropzone from 'modules/zero/components/dropzone/dropzone';
@@ -59,9 +59,7 @@ const uploadContentBlock = (heading, iconType, description) => {
  */
 const FileUploader = ({ className = '', content, uploadModalState, background }) => {
   const [filesToUpload, setFilesToUpload] = useState(/** @type {File[]} */ ([]));
-  const [uploadRates, setUploadRates] = useState(/** @type {number[]} */ ([]));
   const { getUploads, uploadFiles, uploadsProgress, clearUploadedFiles } = useUploads();
-  const lastChunks = useRef(/** @type {object[]} */ ([]));
 
   // Mapped out file progress info
   const filesInfo = useMemo(
@@ -71,32 +69,9 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
         name: inputFile.name,
         progress: progress.percentage,
         failed: status === STATUS.FAILED,
-        time: Date.now(),
       })),
     [uploadsProgress]
   );
-
-  // Calculate upload rate using difference between percentages at chunk intervals
-  useEffect(() => {
-    const array = [];
-    const rates = [];
-    filesInfo.forEach((file, i) => {
-      rates.push(0.1);
-      const lastChunk = lastChunks.current[i];
-      if (lastChunk !== undefined) {
-        rates[i] = ((file.progress - lastChunk.progress) / (Date.now() - lastChunk.time)) * 100;
-      }
-      array[i] = {
-        progress: file.progress,
-        time: file.time,
-      };
-    });
-    lastChunks.current = array;
-    setUploadRates(rates);
-  }, [filesInfo, lastChunks]);
-
-  // Rate added to files info
-  const uploadsInfo = filesInfo.map((upload, i) => ({ rate: uploadRates[i] ? uploadRates[i] : 0.1, ...upload }));
 
   return (
     <div className={'file-upload-modal'}>
@@ -135,7 +110,7 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
             dragAreaText={content.drop_prompt}
             maxFiles={3}
             multiple={true}
-            filesInfo={uploadsInfo}
+            filesInfo={filesInfo}
           />
 
           {content.blocks.map(block => uploadContentBlock(block.heading, block.icon, block.description))}
