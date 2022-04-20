@@ -14,6 +14,7 @@ import Breadcrumbs from 'components/breadcrumbs/breadcrumbs';
 import Button from '../button/button';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Hamburger from '../../assets/icons/hamburger.js';
+import GradientBackground from '../gradientbackground/gradientbackground.js';
 import GeneralPageData from '../../content/pages/general.json';
 import emailContent from '../../content/file-a-request';
 
@@ -225,6 +226,10 @@ export default function Navigation({ isProductApp }) {
             )}
 
             <div className={clsx('nav-mobile-panel', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
+              <div className="mobile-nav-gradient-wrapper">
+                <GradientBackground variant={null} />
+              </div>
+
               <div className="mobile-items-wrapper">
                 {navItems.map((item, index) => (
                   <Link passHref href={item.url} key={`mobile-${item.text}`}>

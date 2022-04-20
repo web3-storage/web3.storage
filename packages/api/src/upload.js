@@ -20,13 +20,15 @@ export async function uploadPost (request, env, ctx) {
 
   let input
   if (contentType.includes('multipart/form-data')) {
-    const form = await toFormData(request)
+    const form = await toFormData(request).catch(
+      error => HTTPError.throw(error.message, 400)
+    )
     const files = form.getAll('file')
     input = files.map((f) => ({
       path: f.name,
       content: f.stream()
     }))
-  } else if (contentType.includes('application/car')) {
+  } else if (contentType.includes('application/vnd.ipld.car') || contentType.includes('application/car')) {
     throw new HTTPError('Please POST Content-addressed Archives to /car', 400)
   } else {
     const blob = await request.blob()

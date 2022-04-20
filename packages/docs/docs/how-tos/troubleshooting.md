@@ -7,13 +7,21 @@ description: A collection of common issues for new developers, and solutions to 
 
 This page contains a collection of common issues for new developers, and solutions to those problems.
 
-## I need to use Webpack 4
+## I'm getting import errors when importing the Javascript client library
 
-We recommend using Webpack 5 with your projects. However, some popular tools like create-react-app require Webpack 4 in order to run properly. To get around this issue, add the following import to the top of your `.js` scripts to import the pre-webpack-bundled version of Web3.Storage:
+Some common situations where this might happen include:
+
+- Using Webpack 4 (e.g., for `create-react-app`)
+- Getting an error like `Can't resolve 'ipfs-car/blockstore/memory'`
+
+To get around this issue, add the following import to the top of your `.js` scripts to import the pre-webpack-bundled version of Web3.Storage:
 
 ```javascript
 import { Web3Storage } from 'web3.storage/dist/bundle.esm.min.js'
 ```
+
+Alternatively, you can try upgrading to Webpack 5 or using a bundler that supports [`exports` in `package.json`](https://nodejs.org/api/packages.html#subpath-exports).
+
 
 ## The status information for my content doesn't include any Filecoin deals
 
@@ -37,6 +45,10 @@ See the [Directory Wrapping section](./store.md#directory-wrapping) of the [Stor
 The HTTP API imposes rate limits to ensure that a single user cannot overwhelm the service with a flood of requests.
 
 Rate limits are imposed when more than 30 requests from the same API token are received within a ten second window. To avoid being limited, try to throttle your requests to stay within this limit. Alternatively, you can respond to a 429 status by backing off for a few seconds and retrying the request.
+
+## I am experiencing slowness in uploads to web3.storage
+
+Please make sure that you are using the latest version of web3.storage client: v3.5.6 or greater. There is an issue in the latest Node version ([nodejs/node#42117](https://github.com/nodejs/node/pull/42117)) and we reverted using native version of Blob in latest release until that fix is shipped.
 
 [howto-store]: ./store.md
 [howto-query]: ./query.md

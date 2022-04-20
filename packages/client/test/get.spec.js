@@ -15,7 +15,7 @@ describe('get', () => {
     const blob = await res.blob()
     assert.is(
       blob.type,
-      'application/car',
+      'application/vnd.ipld.car',
       `car type should be set correctly ${blob.type}`
     )
   })

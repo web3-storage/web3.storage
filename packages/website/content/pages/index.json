@@ -14,8 +14,7 @@
       {
         "type": "section-data",
         "gradient": true,
-        "variant": "saturated",
-        "classlist": "header-variant"
+        "variant": "header"
       },
       {
         "id": "hero_header",
@@ -270,7 +269,7 @@
                 "type": "text_block",
                 "format": "small",
                 "heading": "Free",
-                "description": "Data is stored on the Filecoin network, which has a unique economic model and over 15B TiB of capacity, allowing us to offer Web3.Storage for free today. This storage is cryptographically provable by anyone!"
+                "description": "Data is stored on the Filecoin network, which has a unique economic model and over 15 EiB of capacity, allowing us to offer Web3.Storage for free today. This storage is cryptographically provable by anyone!"
               }
             ]
           }

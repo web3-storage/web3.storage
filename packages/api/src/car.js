@@ -8,7 +8,7 @@ import * as raw from 'multiformats/codecs/raw'
 import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
 import { InvalidCarError } from './errors.js'
-import { LOCAL_ADD_THRESHOLD, MAX_BLOCK_SIZE } from './constants.js'
+import { MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/cid.js'
@@ -67,7 +67,7 @@ export async function carGet (request, env, ctx) {
   // Clone the response so that it's no longer immutable. Ditch the original headers.
   // Note: keeping the original headers seems to prevent the carHead function from setting Content-Length
   res = new Response(res.body)
-  res.headers.set('Content-Type', 'application/car')
+  res.headers.set('Content-Type', 'application/vnd.ipld.car')
   // cache for 1 year, the max max-age value.
   res.headers.set('Cache-Control', 'public, max-age=31536000')
   // without the content-disposition, firefox describes them as DMS files.
@@ -90,10 +90,7 @@ export async function carGet (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 export async function carPost (request, env, ctx) {
-  let blob = await request.blob()
-  // Ensure car blob.type is set; it is used by the cluster client to set the format=car flag on the /add call.
-  blob = blob.slice(0, blob.size, 'application/car')
-
+  const blob = await request.blob()
   return handleCarUpload(request, env, ctx, blob)
 }
 
@@ -198,10 +195,7 @@ async function addToCluster (car, env) {
   // `size` is UnixFS FileSize which is 0 for directories, and is not set for raw encoded files, only dag-pb ones.
   const { cid } = await env.cluster.addCAR(car, {
     metadata: { size: car.size.toString() },
-    // When >2.5MB, use local add, because waiting for blocks to be sent to
-    // other cluster nodes can take a long time. Replication to other nodes
-    // will be done async by bitswap instead.
-    local: car.size > LOCAL_ADD_THRESHOLD
+    local: false
   })
   const pins = await getPins(cid, env.cluster)
 
