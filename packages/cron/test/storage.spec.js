@@ -57,8 +57,8 @@ describe('cron - check user storage quotas', () => {
 
   beforeEach(async () => {
     await createUser(dbClient, {
-      name: 'admin',
-      email: 'admin@web3.storage'
+      email: 'admin@web3.storage',
+      name: 'Web3 Storage Admin'
     })
 
     user1 = await createUser(dbClient, {
@@ -135,10 +135,10 @@ describe('cron - check user storage quotas', () => {
     const { stderr: emailLog1 } = await execa('./src/bin/storage.js', { env })
     const log1Lines = emailLog1.split('\n')
     assert.match(log1Lines[0], /storage:checkStorageUsed 🗄 Checking users storage quotas/)
-    assert.match(log1Lines[1], /email:EmailService 📧 Sending a quota exceeded email to admin/)
-    assert.match(log1Lines[2], /email:EmailService 📧 Sending a quota exceeded email to test4-name: 145% of quota used/)
-    assert.match(log1Lines[3], /email:EmailService 📧 Sending an email to test3-name: 90% of quota used/)
-    assert.match(log1Lines[4], /email:EmailService 📧 Sending an email to test2-name: 79% of quota used/)
+    assert.match(log1Lines[1], /storage:checkStorageUsed 📧 Sending a quota exceeded email to admin/)
+    assert.match(log1Lines[2], /storage:checkStorageUsed 📧 Sending a quota exceeded email to test4-name: 145% of quota used/)
+    assert.match(log1Lines[3], /storage:checkStorageUsed 📧 Sending an email to test3-name: 90% of quota used/)
+    assert.match(log1Lines[4], /storage:checkStorageUsed 📧 Sending an email to test2-name: 79% of quota used/)
     assert.match(log1Lines[5], /storage:checkStorageUsed ✅ Done/)
 
     const adminUser = await dbClient.getUserByEmail('admin@web3.storage')

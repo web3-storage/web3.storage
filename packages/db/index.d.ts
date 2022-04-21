@@ -79,3 +79,5 @@ export class DBClient {
   createUserTag(userId: number, tag: UserTagInput): Promise<boolean>
   getUserTags (userId: number): Promise<{ tag: string, value: string }[]>
 }
+
+export { EMAIL_TYPE } from './constants.js'

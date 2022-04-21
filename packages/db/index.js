@@ -326,16 +326,16 @@ export class DBClient {
       secondsSinceLastSent = 60 * 60 * 24 * 7
     } = email
 
-    const now = new Date()
-    now.setSeconds(now.getSeconds() - secondsSinceLastSent)
-    const sentAt = now.toISOString()
+    const lastSentAtDate = new Date()
+    lastSentAtDate.setSeconds(lastSentAtDate.getSeconds() - secondsSinceLastSent)
+    const lastSentAt = lastSentAtDate.toISOString()
 
     const { count, error } = await this._client
       .from('email_history')
       .select('id', { count: 'exact' })
       .eq('user_id', userId)
       .eq('email_type', emailType)
-      .gt('sent_at', sentAt)
+      .gt('sent_at', lastSentAt)
 
     if (error) {
       throw new DBError(error)
