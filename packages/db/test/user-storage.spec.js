@@ -152,7 +152,7 @@ describe('Users used storage', () => {
     // test5@email.com    | 1 (XL)  | 0       | 2TiB    | ACCOUNT RESTRICTED
   })
 
-  it.only('returns user details needed for email', async () => {
+  it('returns user details needed for email', async () => {
     const users = await dbClient.getUsersByStorageUsed({
       fromPercent: 50
     })
