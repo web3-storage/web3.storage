@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/api",
-  "version": "5.6.0",
+  "version": "5.7.0",
   "private": true,
   "type": "module",
   "license": "(Apache-2.0 OR MIT)",
@@ -63,7 +63,7 @@
     "@web3-storage/db": "^4.0.0",
     "@web3-storage/multipart-parser": "^1.0.0",
     "cborg": "^1.6.0",
-    "ipfs-car": "^0.6.1",
+    "ipfs-car": "^0.7.0",
     "itty-router": "^2.4.8",
     "multiformats": "^9.5.8",
     "protobufjs": "^6.11.2",
