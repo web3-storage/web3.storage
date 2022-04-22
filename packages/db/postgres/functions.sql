@@ -269,7 +269,7 @@ BEGIN
 END
 $$;
 
-CREATE TYPE used_storage AS (uploaded TEXT, pinned TEXT);
+CREATE TYPE used_storage AS (uploaded TEXT, psa_pinned TEXT);
 
 CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT) 
 RETURNS used_storage
@@ -300,7 +300,7 @@ BEGIN
       GROUP BY psa_pr.content_cid,
               c.dag_size
     ) AS pinned_content), 0)
-  INTO used_storage.pinned::TEXT;
+  INTO used_storage.psa_pinned::TEXT;
 
   return used_storage;
 END

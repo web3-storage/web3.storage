@@ -196,7 +196,7 @@ export class DBClient {
    * @returns {Promise<import('./db-client-types').UsedStorage>}
    */
   async getUsedStorage (userId) {
-    /** @type {{ data: { uploaded: string, pinned: string }, error: PostgrestError }} */
+    /** @type {{ data: { uploaded: string, psa_pinned: string }, error: PostgrestError }} */
     const { data, error } = await this._client.rpc('user_used_storage', { query_user_id: userId }).single()
 
     if (error) {
@@ -205,7 +205,7 @@ export class DBClient {
 
     return {
       uploaded: parseTextToNumber(data.uploaded),
-      pinned: parseTextToNumber(data.pinned)
+      psaPinned: parseTextToNumber(data.psa_pinned)
     }
   }
 

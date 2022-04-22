@@ -14,7 +14,7 @@ import { useAuthorization } from './authorizationContext.js';
  * @property {string} publicAddress
  * @property {string} created
  * @property {string} updated
- * @property {import('react-query').UseQueryResult<{usedStorage: {uploaded: number, pinned: number}}>} storageData
+ * @property {import('react-query').UseQueryResult<{usedStorage: {uploaded: number, psaPinned: number}}>} storageData
  * @property {string} isLoadingStorage
  */
 
