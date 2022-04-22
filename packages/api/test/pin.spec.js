@@ -35,8 +35,8 @@ const createPinWithStatus = (status) => {
  * @param {object} data
  */
 const assertCorrectPinResponse = (data) => {
-  assert.ok(typeof data.requestId === 'string', 'requestId should be a string')
-  assert.doesNotThrow(() => parseInt(data.requestId, 10), 'requestId is a stringified number')
+  assert.ok(typeof data.requestid === 'string', 'requestId should be a string')
+  assert.doesNotThrow(() => parseInt(data.requestid, 10), 'requestId is a stringified number')
   assert.ok(typeof data.status === 'string', 'status should be a string')
   assert.ok(['queued', 'pinning', 'pinned', 'failed'].includes(data.status), 'it has a valid status')
   assert.ok(Date.parse(data.created), 'created should be valid date string')
@@ -78,7 +78,7 @@ const createPinRequest = async (cid, token) => {
   })).json()
 }
 
-describe('Pinning APIs endpoints', () => {
+describe.only('Pinning APIs endpoints', () => {
   describe('GET /pins', () => {
     let baseUrl
     let token
@@ -729,7 +729,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       assertCorrectPinResponse(data)
-      assert.strictEqual(data.requestId, requestId)
+      assert.strictEqual(data.requestid, requestId)
       assert.strictEqual(data.status, 'pinned')
       assert.strictEqual(data.pin.cid, 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4')
     })
@@ -748,7 +748,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       assertCorrectPinResponse(data)
-      assert.strictEqual(data.requestId, requestId.toString())
+      assert.strictEqual(data.requestid, requestId.toString())
       assert.strictEqual(data.pin.name, 'reportdoc.pdf')
     })
 
@@ -767,7 +767,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       assertCorrectPinResponse(data)
-      assert.strictEqual(data.requestId, requestId.toString())
+      assert.strictEqual(data.requestid, requestId.toString())
       assert.deepStrictEqual(data.pin.meta, meta)
     })
 
@@ -790,7 +790,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response is ok')
       assertCorrectPinResponse(data)
-      assert.strictEqual(data.requestId, requestId.toString())
+      assert.strictEqual(data.requestid, requestId.toString())
       assert.deepStrictEqual(data.pin.origins, origins)
     })
   })
@@ -875,7 +875,7 @@ describe('Pinning APIs endpoints', () => {
       const cid = 'bafybeifzequu4ial7i4jdw4gxabi5xyx2qeci2o4scc65s2st5o7fsynqu'
       const pinRequest = await createPinRequest(cid, token)
 
-      const r = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+      const r = await fetch(new URL(`pins/${pinRequest.requestid}`, endpoint).toString(), {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`
@@ -884,7 +884,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(r.ok, 'It did not create the request in the first place')
 
-      const resD = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+      const resD = await fetch(new URL(`pins/${pinRequest.requestid}`, endpoint).toString(), {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`
@@ -893,7 +893,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert.equal(resD.status, 202, 'Delete request was not successful')
 
-      const res = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+      const res = await fetch(new URL(`pins/${pinRequest.requestid}`, endpoint).toString(), {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`
@@ -955,7 +955,7 @@ describe('Pinning APIs endpoints', () => {
       ]
       const meta = { app_id: '99986338-1113-4706-8302-4420da6158aa' }
 
-      const replaceResponse = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+      const replaceResponse = await fetch(new URL(`pins/${pinRequest.requestid}`, endpoint).toString(), {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`
@@ -978,7 +978,7 @@ describe('Pinning APIs endpoints', () => {
       assert.deepStrictEqual(data.pin.meta, meta)
 
       // Ensure the original pin request has been deleted.
-      const getResponse = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+      const getResponse = await fetch(new URL(`pins/${pinRequest.requestid}`, endpoint).toString(), {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`
@@ -991,7 +991,7 @@ describe('Pinning APIs endpoints', () => {
     it('should not replace the same pin request', async () => {
       const cid = 'bafybeieppxukl4i4acnjcdj2fueoa5oppuaciseggv2cvplj2iu6d7kx2e'
       const pinRequest = await createPinRequest(cid, token)
-      const res = await fetch(new URL(`pins/${pinRequest.requestId}`, endpoint).toString(), {
+      const res = await fetch(new URL(`pins/${pinRequest.requestid}`, endpoint).toString(), {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`

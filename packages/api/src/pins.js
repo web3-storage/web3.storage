@@ -29,7 +29,7 @@ import {
  *
  * Service API Pin Status definition
  * @typedef {Object} PsaPinStatusResponse
- * @property {string} requestId
+ * @property {string} requestid
  * @property {apiPinStatus} status
  * @property {string} created
  * @property {Array<string>} delegates
@@ -192,7 +192,7 @@ export async function pinsGet (request, env, ctx) {
  */
 function getPinStatus (pinRequest) {
   return {
-    requestId: pinRequest._id.toString(),
+    requestid: pinRequest._id.toString(),
     status: getEffectivePinStatus(pinRequest.pins),
     created: pinRequest.created,
     pin: {
