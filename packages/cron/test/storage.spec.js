@@ -181,10 +181,9 @@ describe('cron - check user storage quotas', () => {
   })
 
   it('calls the email service with the correct parameters', async () => {
-    const db = getDBClient(process.env)
-    const emailService = new EmailService({ db })
+    const emailService = new EmailService({ db: dbClient })
     const sendEmailStub = sinon.stub(emailService, 'sendEmail')
-    await checkStorageUsed({ db, emailService })
+    await checkStorageUsed({ db: dbClient, emailService })
 
     assert.strictEqual(sendEmailStub.getCalls().length, 4, 'email service called 4 times')
 
