@@ -10,7 +10,7 @@ On the [Account page](https://web3.storage/account) of the Web3.Storage site, yo
 
 The table on the account page has two columns related to the current status of the data storage process, [Status](#pin-status) and [Storage Providers](#storage-providers).
 
-The information in the account page file list is also available using the [JavaScript client's `check` method][client-js-check], and via the [HTTP API][client-http] by sending a `GET` request to the `/check/{cid}` endpoint.
+The information in the account page file list is also available using the [JavaScript client's `check` method][client-js-check], via the [HTTP API][client-http] by sending a `GET` request to the `/status/{cid}` endpoint, or using the `w3 status <cid>` command on the [CLI](https://github.com/web3-storage/web3.storage/tree/main/packages/w3#readme).
 
 ## Status
 
@@ -88,7 +88,7 @@ You can verify the status of your upload on the Filecoin blockchain at any time 
 [ipfs-docs-pinning]: https://docs.ipfs.io/how-to/pin-files
 [ipfs-cluster]: https://cluster.ipfs.io/
 
-[howto-retrieve]: /docs/how-to/retrieve/
+[howto-retrieve]: /docs/how-tos/retrieve
 [client-js]: /docs/reference/js-client-library/
 [client-js-check]: /docs/reference/js-client-library#check-status
 [client-http]: /docs/reference/http-api/
