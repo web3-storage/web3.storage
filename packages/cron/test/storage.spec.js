@@ -9,6 +9,9 @@ import execa from 'execa'
 import assert from 'assert'
 import { getDBClient } from '../src/lib/utils.js'
 import { EMAIL_TYPE } from '@web3-storage/db'
+import { checkStorageUsed } from '../src/jobs/storage.js'
+import { EmailService } from '../src/lib/email.js'
+import sinon from 'sinon'
 
 const env = {
   DEBUG: '*',
@@ -175,5 +178,31 @@ describe('cron - check user storage quotas', () => {
     const log2Lines = emailLog2.split('\n')
     assert.match(log2Lines[0], /storage:checkStorageUsed 🗄 Checking users storage quotas/)
     assert.match(log2Lines[1], /storage:checkStorageUsed ✅ Done/)
+  })
+
+  it('calls the email service with the correct parameters', async () => {
+    const db = getDBClient(process.env)
+    const emailService = new EmailService({ db })
+    const sendEmailStub = sinon.stub(emailService, 'sendEmail')
+    await checkStorageUsed({ db, emailService })
+
+    assert.strictEqual(sendEmailStub.getCalls().length, 4, 'email service called 4 times')
+
+    assert.strictEqual(sendEmailStub.getCall(0).args[0].email, 'admin@web3.storage')
+    assert.strictEqual(sendEmailStub.getCall(0).args[1], 'AdminStorageExceeded', 'admin exceeded daily check')
+    assert.strictEqual(sendEmailStub.getCall(0).args[2].secondsSinceLastSent, 60 * 60 * 23)
+    assert.ok(sendEmailStub.getCall(0).args[2].templateVars, 'users passed to email template')
+
+    assert.strictEqual(sendEmailStub.getCall(1).args[0].email, 'test4@email.com')
+    assert.strictEqual(sendEmailStub.getCall(1).args[1], 'User100PercentStorage', 'user exceeded daily check')
+    assert.strictEqual(sendEmailStub.getCall(1).args[2].secondsSinceLastSent, 60 * 60 * 23)
+
+    assert.strictEqual(sendEmailStub.getCall(2).args[0].email, 'test3@email.com')
+    assert.strictEqual(sendEmailStub.getCall(2).args[1], 'User90PercentStorage', 'user daily check over 90')
+    assert.strictEqual(sendEmailStub.getCall(2).args[2].secondsSinceLastSent, 60 * 60 * 23)
+
+    assert.strictEqual(sendEmailStub.getCall(3).args[0].email, 'test2@email.com')
+    assert.strictEqual(sendEmailStub.getCall(3).args[1], 'User75PercentStorage', 'user weekly check over 75')
+    assert.strictEqual(sendEmailStub.getCall(3).args[2].secondsSinceLastSent, 60 * 60 * 24 * 7)
   })
 })
