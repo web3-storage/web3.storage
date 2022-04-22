@@ -65,7 +65,7 @@ export async function checkStorageUsed ({ db, emailService }) {
 
         const emailSent = await emailService.sendEmail(to, EMAIL_TYPE.AdminStorageExceeded, {
           secondsSinceLastSent: email.secondsSinceLastSent,
-          templateVars: users
+          templateVars: { users }
         })
 
         if (emailSent) {

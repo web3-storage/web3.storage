@@ -22,10 +22,10 @@ export class EmailService {
    * re-sending if user has been recently notified.
    * @param {{id?: number, email: string, name: string}} user
    * @param {string} emailType
-   * @param {object} [options]
+   * @param {Object} [options]
    * @param {number} [options.secondsSinceLastSent]
    * @param {boolean} [options.failSilently]
-   * @param {object} [options.templateVars]
+   * @param {Object.<string, any>} [options.templateVars]
    * @returns {Promise<boolean>} true if email sent otherwise false
    */
   async sendEmail (user, emailType, {
