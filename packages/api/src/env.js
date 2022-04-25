@@ -108,7 +108,6 @@ export function envAll (req, env, ctx) {
     debug: env.DEBUG === 'true',
     sentry: env.sentry
   })
-  env.log.time('request')
 
   env.magic = new Magic(env.MAGIC_SECRET_KEY)
 

@@ -61,6 +61,10 @@ export class Logging {
         worker_started: this.startTs,
       },
     }
+
+    // As this class must be instantiated once per request, we can automatically
+    // start the timing of the request here
+    this.time('request')
   }
 
   /**
@@ -137,6 +141,9 @@ export class Logging {
     if (this.opts?.debug) {
       response.headers.set('Server-Timing', this._timersString())
     }
+    // Automatically stop the timer of the request
+    this.timeEnd('request')
+
     const run = async () => {
       const dt = this._date()
       const duration = Date.now() - this.startTs

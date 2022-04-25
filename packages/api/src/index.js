@@ -115,7 +115,6 @@ export default {
     } catch (error) {
       response = serverError(error, request, env)
     }
-    env.log.timeEnd('request')
     return env.log.end(response)
   }
 }
