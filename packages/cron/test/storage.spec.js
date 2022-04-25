@@ -24,10 +24,10 @@ const env = {
 
 describe('cron - check user storage quotas', () => {
   const dbClient = getDBClient(env)
-  let test2user, test3user, test4user
+  let adminUser, test2user, test3user, test4user
 
   beforeEach(async () => {
-    await createUser(dbClient, {
+    adminUser = await createUser(dbClient, {
       email: 'admin@web3.storage',
       name: 'Web3 Storage Admin'
     })
@@ -108,7 +108,7 @@ describe('cron - check user storage quotas', () => {
 
     assert.strictEqual(sendEmailStub.getCalls().length, 4, 'email service called 4 times')
 
-    assert.strictEqual(sendEmailStub.getCall(0).args[0].email, 'admin@web3.storage')
+    assert.strictEqual(sendEmailStub.getCall(0).args[0].id, adminUser.id)
     assert.strictEqual(sendEmailStub.getCall(0).args[1], 'AdminStorageExceeded', 'admin exceeded daily check')
     assert.strictEqual(sendEmailStub.getCall(0).args[2].secondsSinceLastSent, 60 * 60 * 23)
     assert.ok(sendEmailStub.getCall(0).args[2].templateVars, 'users passed to email template')

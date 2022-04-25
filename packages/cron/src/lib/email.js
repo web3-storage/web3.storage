@@ -6,7 +6,7 @@ const log = debug('email:EmailService')
 export class EmailService {
   /**
    * @param {{
- *   db: import('@web3-storage/db').DBClient
+   *   db: import('@web3-storage/db').DBClient
    * }} config
    */
   constructor ({ db }) {
@@ -20,7 +20,7 @@ export class EmailService {
    * Send an email to a user.
    * Optionally checks email sending history for this user and email type to avoid
    * re-sending if user has been recently notified.
-   * @param {{id?: number, email: string, name: string}} user
+   * @param {{id: number, email: string, name: string}} user
    * @param {string} emailType
    * @param {Object} [options]
    * @param {number} [options.secondsSinceLastSent]
@@ -33,18 +33,9 @@ export class EmailService {
     failSilently = false,
     templateVars = {}
   } = {}) {
-    let userId
-    if (!user.id) {
-      const toUser = await this.db.getUserByEmail(user.email)
-      if (!toUser) return false
-      userId = Number(toUser._id)
-    } else {
-      userId = user.id
-    }
-
     if (secondsSinceLastSent) {
       if (await this.db.emailHasBeenSent({
-        userId,
+        userId: user.id,
         emailType: EMAIL_TYPE[emailType],
         secondsSinceLastSent
       })) {
@@ -58,7 +49,7 @@ export class EmailService {
     const messageId = '1'
 
     await this.db.logEmailSent({
-      userId,
+      userId: user.id,
       emailType: EMAIL_TYPE[emailType],
       messageId
     })
