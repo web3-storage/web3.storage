@@ -1,5 +1,9 @@
+/* eslint-env serviceworker */
 import { nanoid } from 'nanoid/non-secure'
 import { MaintenanceError } from '../errors.js'
+
+// https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent
+/** @typedef {{ waitUntil(p: Promise): void }} Ctx */
 
 const logtailApiURL = 'https://in.logtail.com/'
 
@@ -14,14 +18,17 @@ const buildMetadataFromHeaders = (/** @type {Headers} */ headers) => {
 
 export class Logging {
   /**
-   * TODO: fix param definitions
-   * @param {FetchEvent} event
+   * @param {import('@web-std/fetch').Request} request
+   * @param {import('../index').Ctx} ctx
    * @param {Object} opts
    * @param {string} opts.token
-   * @param {boolean} [opts.debug]
+   * @param {string} opts.version
+   * @param {string} opts.branch
+   * @param {string} opts.commithash
    * @param {import('toucan-js').default} opts.sentry
+   * @param {boolean} [opts.debug]
    */
-  constructor(request, ctx, opts) {
+  constructor (request, ctx, opts) {
     this.ctx = ctx
     this.opts = opts
     this._times = new Map()
@@ -45,21 +52,21 @@ export class Logging {
     }
     this.metadata = {
       user: {
-        id: 0,
+        id: 0
       },
       request: {
         url: request.url,
         method: request.method,
         headers: buildMetadataFromHeaders(request.headers),
-        cf: rCf,
+        cf: rCf
       },
       cloudflare_worker: {
-        version: VERSION,
-        commit: COMMITHASH,
-        branch: BRANCH,
+        version: opts.version,
+        commit: opts.commithash,
+        branch: opts.branch,
         worker_id: nanoid(10),
-        worker_started: this.startTs,
-      },
+        worker_started: this.startTs
+      }
     }
 
     // As this class must be instantiated once per request, we can automatically
@@ -73,14 +80,14 @@ export class Logging {
    * @param {Object} user
    * @param {number} [user.id]
    */
-  setUser(user) {
+  setUser (user) {
     this.metadata.user.id = user.id || 0
     this.opts.sentry && this.opts.sentry.setUser({
-      id: `${user.id}`,
+      id: `${user.id}`
     })
   }
 
-  _date() {
+  _date () {
     const now = Date.now()
     if (now === this.currentTs) {
       const dt = new Date().toISOString()
@@ -103,11 +110,11 @@ export class Logging {
    *
    * @param {any} body
    */
-  _add(body) {
+  _add (body) {
     this.logEventsBatch.push(body)
   }
 
-  async postBatch() {
+  async postBatch () {
     if (this.logEventsBatch.length > 0) {
       const batchInFlight = [...this.logEventsBatch]
       this.logEventsBatch = []
@@ -118,9 +125,9 @@ export class Logging {
         headers: {
           Authorization: `Bearer ${this.opts?.token}`,
           'Content-Type': 'application/json',
-          'User-Agent': `Cloudflare Worker via ${rHost}`,
+          'User-Agent': `Cloudflare Worker via ${rHost}`
         },
-        body,
+        body
       }
       const resp = await fetch(logtailApiURL, request)
       if (this.opts?.debug) {
@@ -137,7 +144,7 @@ export class Logging {
    *
    * @param {Response} response
    */
-  async end(response) {
+  async end (response) {
     if (this.opts?.debug) {
       response.headers.set('Server-Timing', this._timersString())
     }
@@ -156,9 +163,9 @@ export class Logging {
           response: {
             headers: buildMetadataFromHeaders(response.headers),
             status_code: response.status,
-            duration,
-          },
-        },
+            duration
+          }
+        }
       }
       this._add(log)
       await this.postBatch()
@@ -176,13 +183,13 @@ export class Logging {
    * @param {any} [context]
    * @param {any} [metadata]
    */
-  log(message, level, context, metadata) {
+  log (message, level, context, metadata) {
     const dt = this._date()
     let log = {
       dt,
       level,
       metadata: { ...this.metadata, ...metadata },
-      ...context,
+      ...context
     }
 
     // This array of errors not to send to Sentry could be configurable in the
@@ -193,7 +200,7 @@ export class Logging {
       log = {
         ...log,
         stack: message.stack,
-        message: message.message,
+        message: message.message
       }
       if (this.opts.sentry && message.status >= 500 && !skipForSentry.some((cls) => message instanceof cls)) {
         this.opts.sentry.captureException(message)
@@ -201,7 +208,7 @@ export class Logging {
     } else {
       log = {
         ...log,
-        message,
+        message
       }
     }
 
@@ -215,7 +222,7 @@ export class Logging {
    * @param {string} message
    * @param {any} [context]
    */
-  debug(message, context) {
+  debug (message, context) {
     return this.log(message, 'debug', context)
   }
 
@@ -223,7 +230,7 @@ export class Logging {
    * @param {string} message
    * @param {any} [context]
    */
-  info(message, context) {
+  info (message, context) {
     return this.log(message, 'info', context)
   }
 
@@ -231,14 +238,15 @@ export class Logging {
    * @param {string} message
    * @param {any} [context]
    */
-  warn(message, context) {
+  warn (message, context) {
     return this.log(message, 'warn', context)
   }
+
   /**
    * @param {string | Error} message
    * @param {any} [context]
    */
-  error(message, context) {
+  error (message, context) {
     return this.log(message, 'error', context)
   }
 
@@ -247,14 +255,14 @@ export class Logging {
    * @param {string} name
    * @param {any} [description]
    */
-  time(name, description) {
+  time (name, description) {
     if (this._times.get(name)) {
       return console.warn(`A timer named ${name} has already been started`)
     }
     this._times.set(name, {
       name: name,
       description: description,
-      start: Date.now(),
+      start: Date.now()
     })
     this._timesOrder.push(name)
   }
@@ -263,7 +271,7 @@ export class Logging {
    * End the timer of the given name.
    * @param {string} name
    */
-  timeEnd(name) {
+  timeEnd (name) {
     const timeObj = this._times.get(name)
     if (!timeObj) {
       return console.warn(`No such name ${name}`)
@@ -276,7 +284,7 @@ export class Logging {
     this._times.set(name, {
       ...timeObj,
       end,
-      duration,
+      duration
     })
 
     if (this.opts?.debug) {
@@ -285,7 +293,7 @@ export class Logging {
     return timeObj
   }
 
-  _timersString() {
+  _timersString () {
     const result = []
     for (const key of this._timesOrder) {
       const { name, duration, description } = this._times.get(key)

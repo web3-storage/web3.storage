@@ -106,7 +106,10 @@ export function envAll (req, env, ctx) {
   env.log = new Logging(req, ctx, {
     token: env.log = env.LOGTAIL_TOKEN,
     debug: env.DEBUG === 'true',
-    sentry: env.sentry
+    sentry: env.sentry,
+    version: env.VERSION,
+    branch: env.BRANCH,
+    commithash: env.COMMITHASH
   })
 
   env.magic = new Magic(env.MAGIC_SECRET_KEY)

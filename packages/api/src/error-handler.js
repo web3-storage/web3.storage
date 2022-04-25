@@ -1,6 +1,6 @@
 import { ErrorCode as MagicErrors } from '@magic-sdk/admin'
 import { JSONResponse } from './utils/json-response.js'
-import { HTTPError, MaintenanceError } from './errors.js'
+import { HTTPError } from './errors.js'
 
 /**
  * @param {Error & {status?: number;code?: string;reason?: string; details?: string; IS_PSA_ERROR?: boolean;}} err
