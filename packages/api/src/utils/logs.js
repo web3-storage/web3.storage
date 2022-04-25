@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid/non-secure'
+import { MaintenanceError } from '../errors.js'
 
 const logtailApiURL = 'https://in.logtail.com/'
 
@@ -13,14 +14,15 @@ const buildMetadataFromHeaders = (/** @type {Headers} */ headers) => {
 
 export class Logging {
   /**
+   * TODO: fix param definitions
    * @param {FetchEvent} event
    * @param {Object} opts
    * @param {string} opts.token
    * @param {boolean} [opts.debug]
    * @param {import('toucan-js').default} opts.sentry
    */
-  constructor(event, opts) {
-    this.event = event
+  constructor(request, ctx, opts) {
+    this.ctx = ctx
     this.opts = opts
     this._times = new Map()
     /**
@@ -34,7 +36,6 @@ export class Logging {
     this.startTs = Date.now()
     this.currentTs = this.startTs
 
-    const { request } = this.event
     const cf = request.cf
     let rCf
     if (cf) {
@@ -70,7 +71,7 @@ export class Logging {
    */
   setUser(user) {
     this.metadata.user.id = user.id || 0
-    this.opts.sentry.setUser({
+    this.opts.sentry && this.opts.sentry.setUser({
       id: `${user.id}`,
     })
   }
@@ -155,7 +156,7 @@ export class Logging {
       this._add(log)
       await this.postBatch()
     }
-    this.event.waitUntil(run())
+    this.ctx.waitUntil(run())
 
     return response
   }
@@ -177,13 +178,19 @@ export class Logging {
       ...context,
     }
 
+    // This array of errors not to send to Sentry could be configurable in the
+    // constructor if we want to keep this Logging class more generic
+    const skipForSentry = [MaintenanceError]
+
     if (message instanceof Error) {
       log = {
         ...log,
         stack: message.stack,
         message: message.message,
       }
-      this.opts.sentry.captureException(message)
+      if (this.opts.sentry && message.status >= 500 && !skipForSentry.some((cls) => message instanceof cls)) {
+        this.opts.sentry.captureException(message)
+      }
     } else {
       log = {
         ...log,

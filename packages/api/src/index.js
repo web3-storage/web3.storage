@@ -109,11 +109,14 @@ function serverError (error, request, env) {
 
 export default {
   async fetch (request, env, ctx) {
+    let response
     try {
-      return await router.handle(request, env, ctx)
+      response = await router.handle(request, env, ctx)
     } catch (error) {
-      return serverError(error, request, env)
+      response = serverError(error, request, env)
     }
+    env.log.timeEnd('request')
+    return env.log.end(response)
   }
 }
 

@@ -74,6 +74,7 @@ Add the required secrets:
     wrangler secret put S3_SECRET_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3 (not required for dev)
     wrangler secret put S3_BUCKET_NAME --env $(whoami) # e.g web3.storage-staging-us-east-2 (not required for dev)
     wrangler secret put PG_REST_JWT --env $(whoami) # Get from database postgrest
+    wrangler secret put LOGTAIL_TOKEN --env $(whoami) # Get from Logtail (not required for dev)
 ```
 Note this might not be up to date, please look to the [.env.tpl](../../.env.tpl) in the root directory for the up to date secrets required.
 

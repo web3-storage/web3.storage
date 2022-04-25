@@ -66,6 +66,7 @@
     "ipfs-car": "^0.6.1",
     "itty-router": "^2.4.8",
     "multiformats": "^9.5.8",
+    "nanoid": "^3.1.30",
     "protobufjs": "^6.11.2",
     "tweetnacl": "^1.0.3",
     "uint8arrays": "^3.0.0"
