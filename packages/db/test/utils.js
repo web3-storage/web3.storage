@@ -25,11 +25,6 @@ export async function createUser (dbClient, options = {}) {
   return dbClient.getUser(issuer)
 }
 
-async function randomCid (code = pb.code) {
-  const hash = await sha256.digest(Buffer.from(`${Math.random()}`))
-  return CID.create(1, code, hash).toString()
-}
-
 const defaultUserPinnedRequests = [
   {
     status: 'Pinning',
@@ -201,4 +196,13 @@ export async function getUpload (dbClient, cid, userId) {
  */
 export async function getPinSyncRequests (dbClient, size = 10) {
   return dbClient.getPinSyncRequests({ size })
+}
+
+/**
+ * @param {number} code
+ * @returns {Promise<string>}
+ */
+export async function randomCid (code = pb.code) {
+  const hash = await sha256.digest(Buffer.from(`${Math.random()}`))
+  return CID.create(1, code, hash).toString()
 }
