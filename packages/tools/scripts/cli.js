@@ -3,6 +3,7 @@ import path from 'path'
 import dotenv from 'dotenv'
 import sade from 'sade'
 import { fileURLToPath } from 'url'
+import got from 'got'
 import execa from 'execa'
 import net from 'net'
 
@@ -21,6 +22,10 @@ prog
   .option('--project', 'Project name', 'ipfs-cluster')
   .option('--clean', 'Clean all dockers artifacts', false)
   .action(clusterCmd)
+  .command('heartbeat', 'Ping opsgenie heartbeat')
+  .option('--token', 'Opsgenie Token')
+  .option('--name', 'Heartbeat Name')
+  .action(heartbeatCmd)
 
 /**
  * @param {Object} opts
@@ -111,5 +116,18 @@ export default async function isPortReachable (
     return true
   } catch {
     return false
+  }
+}
+
+async function heartbeatCmd (opts) {
+  try {
+    await got(`https://api.opsgenie.com/v2/heartbeats/${opts.name}/ping`, {
+      headers: {
+        Authorization: `GenieKey ${opts.token}`
+      }
+    })
+  } catch (err) {
+    console.error(err)
+    process.exit(1)
   }
 }
