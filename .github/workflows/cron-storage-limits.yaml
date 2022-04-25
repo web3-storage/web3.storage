@@ -37,9 +37,5 @@ jobs:
           STAGING_PG_REST_JWT: ${{ secrets.STAGING_PG_REST_JWT }}
           PROD_PG_REST_URL: ${{ secrets.PROD_PG_REST_URL }}
           STAGING_PG_REST_URL: ${{ secrets.STAGING_PG_REST_URL }}
-          CLUSTER_API_URL: ${{ secrets.CLUSTER_API_URL }}
-          CLUSTER_BASIC_AUTH_TOKEN: ${{ secrets.CLUSTER_BASIC_AUTH_TOKEN }}
-          CLUSTER_IPFS_PROXY_API_URL: ${{ secrets.CLUSTER_IPFS_PROXY_API_URL }}
-          CLUSTER_IPFS_PROXY_BASIC_AUTH_TOKEN: ${{ secrets.CLUSTER_IPFS_PROXY_BASIC_AUTH_TOKEN }}
           MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
         run: npm run start:storage -w packages/cron
