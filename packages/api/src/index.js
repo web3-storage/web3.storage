@@ -23,12 +23,27 @@ const router = Router()
 router.options('*', corsOptions)
 router.all('*', envAll)
 
+/**
+ * Takes any number of functions and invokes them all one after the other
+ *
+ * @param  {...function(...any):any} fns
+ * @returns
+ */
+const compose = (...fns) => x => fns.reduceRight((y, f) => f(y), x)
+
+/**
+ * It defines a list of "middlewares" that need to be applied for a given authentication mode.
+ * Each value takes an endpoint handler and returns a "composed" version.
+ *
+ * @type {Object.<string, function(...any):any>}
+ */
 const auth = {
-  '🤲': handler => withCorsHeaders(handler),
-  '🔒': handler => withCorsHeaders(withApiOrMagicToken(handler)),
-  '👮': handler => withCorsHeaders(withMagicToken(handler)),
-  '📌': handler => withPinningAuthorized(handler),
-  '🚫': handler => withAccountNotRestricted(handler)
+  '🤲': withCorsHeaders,
+  '🔒': compose(withCorsHeaders, withApiOrMagicToken),
+  '👮': compose(withCorsHeaders, withMagicToken),
+  '🚫': compose(withCorsHeaders, withApiOrMagicToken, withAccountNotRestricted),
+  '👀📌': compose(withCorsHeaders, withApiOrMagicToken, withPinningAuthorized),
+  '📝📌': compose(withCorsHeaders, withApiOrMagicToken, withAccountNotRestricted, withPinningAuthorized)
 }
 
 const mode = {
@@ -37,37 +52,37 @@ const mode = {
 }
 
 /* eslint-disable no-multi-spaces */
-router.post('/user/login',          mode['👀'](auth['🤲'](userLoginPost)))
-router.get('/status/:cid',          mode['👀'](auth['🤲'](statusGet)))
-router.get('/car/:cid',             mode['👀'](auth['🤲'](carGet)))
-router.head('/car/:cid',            mode['👀'](auth['🤲'](carHead)))
+router.post('/user/login',          compose(mode['📝'], auth['🤲'])(userLoginPost))
+router.get('/status/:cid',          compose(mode['📝'], auth['🤲'])(statusGet))
+router.get('/car/:cid',             compose(mode['📝'], auth['🤲'])(carGet))
+router.head('/car/:cid',            compose(mode['📝'], auth['🤲'])(carHead))
 
-router.post('/car',                 mode['📝'](auth['🔒'](auth['🚫'](carPost))))
-router.put('/car/:cid',             mode['📝'](auth['🔒'](auth['🚫'](carPut))))
-router.post('/upload',              mode['📝'](auth['🔒'](auth['🚫'](uploadPost))))
-router.get('/user/uploads',         mode['👀'](auth['🔒'](userUploadsGet)))
+router.post('/car',                 compose(mode['📝'], auth['🚫'])(carPost))
+router.put('/car/:cid',             compose(mode['📝'], auth['🚫'])(carPut))
+router.post('/upload',              compose(mode['📝'], auth['🚫'])(uploadPost))
+router.get('/user/uploads',         compose(mode['👀'], auth['🔒'])(userUploadsGet))
 
-router.post('/pins',                mode['📝'](auth['🔒'](auth['🚫'](auth['📌'](pinPost)))))
-router.post('/pins/:requestId',     mode['📝'](auth['🔒'](auth['🚫'](auth['📌'](pinPost)))))
-router.get('/pins/:requestId',      mode['👀'](auth['🔒'](auth['📌'](pinGet))))
-router.get('/pins',                 mode['👀'](auth['🔒'](auth['📌'](pinsGet))))
-router.delete('/pins/:requestId',   mode['📝'](auth['🔒'](auth['📌'](pinDelete))))
+router.post('/pins',                compose(mode['📝'], auth['📝📌'])(pinPost))
+router.post('/pins/:requestId',     compose(mode['📝'], auth['📝📌'])(pinPost))
+router.get('/pins/:requestId',      compose(mode['👀'], auth['👀📌'])(pinGet))
+router.get('/pins',                 compose(mode['👀'], auth['👀📌'])(pinsGet))
+router.delete('/pins/:requestId',   compose(mode['📝'], auth['👀📌'])(pinDelete))
 
-router.get('/name/:key',            mode['👀'](auth['🤲'](nameGet)))
-router.get('/name/:key/watch',      mode['👀'](auth['🤲'](nameWatchGet)))
-router.post('/name/:key',           mode['📝'](auth['🔒'](auth['🚫'](namePost))))
+router.get('/name/:key',            compose(mode['👀'], auth['🤲'])(nameGet))
+router.get('/name/:key/watch',      compose(mode['👀'], auth['🤲'])(nameWatchGet))
+router.post('/name/:key',           compose(mode['📝'], auth['🚫'])(namePost))
 
-router.delete('/user/uploads/:cid',      mode['📝'](auth['👮'](userUploadsDelete)))
-router.post('/user/uploads/:cid/rename', mode['📝'](auth['👮'](userUploadsRename)))
-router.get('/user/tokens',               mode['👀'](auth['👮'](userTokensGet)))
-router.post('/user/tokens',              mode['📝'](auth['👮'](userTokensPost)))
-router.delete('/user/tokens/:id',        mode['📝'](auth['👮'](userTokensDelete)))
-router.get('/user/account',              mode['👀'](auth['👮'](userAccountGet)))
-router.get('/user/info',                 mode['👀'](auth['👮'](userInfoGet)))
+router.delete('/user/uploads/:cid',      compose(mode['📝'], auth['👮'])(userUploadsDelete))
+router.post('/user/uploads/:cid/rename', compose(mode['📝'], auth['👮'])(userUploadsRename))
+router.get('/user/tokens',               compose(mode['👀'], auth['👮'])(userTokensGet))
+router.post('/user/tokens',              compose(mode['📝'], auth['👮'])(userTokensPost))
+router.delete('/user/tokens/:id',        compose(mode['📝'], auth['👮'])(userTokensDelete))
+router.get('/user/account',              compose(mode['👀'], auth['👮'])(userAccountGet))
+router.get('/user/info',                 compose(mode['👀'], auth['👮'])(userInfoGet))
 /* eslint-enable no-multi-spaces */
 
 // Monitoring
-router.get('/metrics', mode['👀'](withCorsHeaders(metricsGet)))
+router.get('/metrics', compose(mode['👀'], withCorsHeaders)(metricsGet))
 
 // Version
 router.get('/version', withCorsHeaders(versionGet))
