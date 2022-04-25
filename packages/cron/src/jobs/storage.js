@@ -7,31 +7,36 @@ const STORAGE_QUOTA_EMAILS = [
   {
     emailType: EMAIL_TYPE.User100PercentStorage,
     fromPercent: 100,
-    secondsSinceLastSent: 60 * 60 * 23 // 1 day approx
+    // 1 day approx, with flexibility for cron irregularity
+    secondsSinceLastSent: 60 * 60 * 23
   },
   {
     emailType: EMAIL_TYPE.User90PercentStorage,
     fromPercent: 90,
     toPercent: 100,
-    secondsSinceLastSent: 60 * 60 * 23 // 1 day approx
+    // 1 day approx, with flexibility for cron irregularity
+    secondsSinceLastSent: 60 * 60 * 23
   },
   {
     emailType: EMAIL_TYPE.User85PercentStorage,
     fromPercent: 85,
     toPercent: 90,
-    secondsSinceLastSent: 60 * 60 * 24 * 7 // 1 week
+    // 1 week approx, with flexibility for cron irregularity
+    secondsSinceLastSent: 60 * 60 * 24 * 7 - (60 * 60)
   },
   {
     emailType: EMAIL_TYPE.User80PercentStorage,
     fromPercent: 80,
     toPercent: 85,
-    secondsSinceLastSent: 60 * 60 * 24 * 7 // 1 week
+    // 1 week approx, with flexibility for cron irregularity
+    secondsSinceLastSent: 60 * 60 * 24 * 7 - (60 * 60)
   },
   {
     emailType: EMAIL_TYPE.User75PercentStorage,
     fromPercent: 75,
     toPercent: 80,
-    secondsSinceLastSent: 60 * 60 * 24 * 7 // 1 week
+    // 1 week approx, with flexibility for cron irregularity
+    secondsSinceLastSent: 60 * 60 * 24 * 7 - (60 * 60)
   }
 ]
 

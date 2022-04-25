@@ -123,6 +123,6 @@ describe('cron - check user storage quotas', () => {
 
     assert.strictEqual(sendEmailStub.getCall(3).args[0].email, 'test2@email.com')
     assert.strictEqual(sendEmailStub.getCall(3).args[1], 'User75PercentStorage', 'user weekly check over 75')
-    assert.strictEqual(sendEmailStub.getCall(3).args[2].secondsSinceLastSent, 60 * 60 * 24 * 7)
+    assert.strictEqual(sendEmailStub.getCall(3).args[2].secondsSinceLastSent, 60 * 60 * 24 * 7 - (60 * 60))
   })
 })
