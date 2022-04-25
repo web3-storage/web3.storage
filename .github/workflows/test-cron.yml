@@ -1,0 +1,22 @@
+name: Test checkout tag cron
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Test checkout
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        ref: git describe --tags --abbrev=0 --match='cron-*'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - uses: bahmutov/npm-install@v1
+      - run: npm list --depth=0 @web3-storage/api
