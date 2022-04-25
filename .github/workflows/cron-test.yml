@@ -13,9 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: 16
+      - uses: bahmutov/npm-install@v1
       - run: npm install -g @web3-storage/w3
       - name: Add small file via w3
         run: |
@@ -37,3 +39,7 @@ jobs:
           echo "web3storage_upload_duration_seconds{endpoint=\"/car\",size=\"3MiB\",cmd=\"w3\"} $(cat ./duration_secs)" >> ./metric
           cat ./metric
           curl --silent --show-error --data-binary "@./metric" --basic --user "${{ secrets.PUSHGATEWAY_BASIC_AUTH }}" https://pushgateway.k8s.locotorp.info/metrics/job/web3storage_ci/instance/github_action
+
+      - name: Heartbeat
+        if: ${{ success() }}
+        run: ./packages/tools/scripts/cli.js heartbeat --token ${{ secrets.OPSGENIE_KEY }} --name cron-web3storage-upload-test
