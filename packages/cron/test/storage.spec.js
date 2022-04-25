@@ -1,9 +1,7 @@
 /* eslint-env mocha */
 import {
   createUser,
-  createUserAuthKey,
-  createUpload,
-  createPsaPinRequest
+  createUserWithFiles
 } from '../../db/test/utils.js'
 import execa from 'execa'
 import assert from 'assert'
@@ -11,9 +9,6 @@ import { getDBClient } from '../src/lib/utils.js'
 import { EMAIL_TYPE } from '@web3-storage/db'
 import { checkStorageUsed } from '../src/jobs/storage.js'
 import { EmailService } from '../src/lib/email.js'
-import { CID } from 'multiformats/cid'
-import { sha256 } from 'multiformats/hashes/sha2'
-import * as pb from '@ipld/dag-pb'
 import sinon from 'sinon'
 
 const env = {
@@ -30,77 +25,6 @@ const env = {
 describe('cron - check user storage quotas', () => {
   const dbClient = getDBClient(env)
   let test2user, test3user, test4user
-  const pins = [
-    {
-      status: 'Pinning',
-      location: {
-        peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
-        peerName: 'web3-storage-sv15',
-        region: 'region'
-      }
-    },
-    {
-      status: 'Pinned',
-      location: {
-        peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
-        peerName: 'web3-storage-sv16',
-        region: 'region'
-      }
-    }
-  ]
-
-  async function randomCid (code = pb.code) {
-    const hash = await sha256.digest(Buffer.from(`${Math.random()}`))
-    return CID.create(1, code, hash).toString()
-  }
-
-  /**
-   * Helper function to create a user with uploads and pin requests and a specified
-   * percentage of storage quota used
-   */
-  async function createUserWithFiles ({
-    email,
-    percentStorageUsed,
-    storageQuota = 1099511627776
-  }) {
-    const user = await createUser(dbClient, {
-      email,
-      name: email.replace('@email.com', '-name')
-    })
-
-    if (storageQuota !== 1099511627776) {
-      // non-default storage quota
-      await dbClient.createUserTag(Number(user._id), {
-        tag: 'StorageLimitBytes',
-        value: storageQuota.toString()
-      })
-    }
-
-    const authKey = await createUserAuthKey(dbClient, Number(user._id), {
-      name: `${email}-key`
-    })
-
-    const uploads = Math.floor(Math.random() * 5)
-    const pinRequests = Math.floor(Math.random() * 5)
-    const dagSize = Math.ceil(((percentStorageUsed / 100) * storageQuota) / (uploads + pinRequests))
-
-    for (let i = 0; i < uploads; i++) {
-      const cid = await randomCid()
-      await createUpload(dbClient, Number(user._id), Number(authKey), cid, {
-        dagSize
-      })
-    }
-
-    for (let i = 0; i < pinRequests; i++) {
-      const cid = await randomCid()
-      await createPsaPinRequest(dbClient, authKey, cid, {
-        dagSize,
-        pins
-      })
-    }
-
-    return user
-  }
 
   beforeEach(async () => {
     await createUser(dbClient, {
@@ -108,22 +32,22 @@ describe('cron - check user storage quotas', () => {
       name: 'Web3 Storage Admin'
     })
 
-    await createUserWithFiles({
+    await createUserWithFiles(dbClient, {
       email: 'test1@email.com',
       percentStorageUsed: 60
     })
 
-    test2user = await createUserWithFiles({
+    test2user = await createUserWithFiles(dbClient, {
       email: 'test2@email.com',
       percentStorageUsed: 79
     })
 
-    test3user = await createUserWithFiles({
+    test3user = await createUserWithFiles(dbClient, {
       email: 'test3@email.com',
       percentStorageUsed: 90
     })
 
-    test4user = await createUserWithFiles({
+    test4user = await createUserWithFiles(dbClient, {
       email: 'test4@email.com',
       percentStorageUsed: 145,
       storageQuota: 2199023255552
