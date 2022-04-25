@@ -243,10 +243,14 @@ export class Logging {
   }
 
   /**
+   * Start a timer to be logged under the given name.
    * @param {string} name
    * @param {any} [description]
    */
   time(name, description) {
+    if (this._times.get(name)) {
+      return console.warn(`A timer named ${name} has already been started`)
+    }
     this._times.set(name, {
       name: name,
       description: description,
@@ -256,6 +260,7 @@ export class Logging {
   }
 
   /**
+   * End the timer of the given name.
    * @param {string} name
    */
   timeEnd(name) {
