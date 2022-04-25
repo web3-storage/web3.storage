@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import execa from 'execa'
 import delay from 'delay'
 import { webcrypto } from 'crypto'
+import sinon from 'sinon'
 
 global.crypto = webcrypto
 
@@ -57,6 +58,10 @@ export const mochaHooks = () => {
     },
     async beforeEach () {
       await execa(dbCli, ['db-sql', '--skipCreate', '--truncate', `--customSqlPath=${initScript}`])
+      global.sandbox = sinon.createSandbox()
+    },
+    async afterEach () {
+      global.sandbox.restore()
     }
   }
 }

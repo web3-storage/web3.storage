@@ -2,12 +2,8 @@
 import assert from 'assert'
 import { DBClient } from '../index.js'
 import {
-  createUser,
-  createUserAuthKey,
-  createUpload,
-  createPsaPinRequest,
   token,
-  randomCid
+  createUserWithFiles
 } from './utils.js'
 
 describe('Users used storage', () => {
@@ -18,138 +14,27 @@ describe('Users used storage', () => {
     postgres: true
   })
 
-  let user1, user2, user3, user4, user5
-  let authKey1, authKey2, authKey3, authKey4, authKey5
-  let cid
-  const uploadSize = 439804651110
-  const pinnedSize = 109951162800
-  const largeFileSize = 3199023255550
-  const pins = [
-    {
-      status: 'Pinning',
-      location: {
-        peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
-        peerName: 'web3-storage-sv15',
-        region: 'region'
-      }
-    },
-    {
-      status: 'Pinned',
-      location: {
-        peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
-        peerName: 'web3-storage-sv16',
-        region: 'region'
-      }
-    }
-  ]
-
   beforeEach(async () => {
-    user1 = await createUser(dbClient, {
-      name: 'test1-name',
-      email: 'test1@email.com'
-    })
-    authKey1 = await createUserAuthKey(dbClient, Number(user1._id), {
-      name: 'test1-key'
-    })
-    cid = await randomCid()
-    await createUpload(dbClient, Number(user1._id), Number(authKey1), cid, {
-      dagSize: uploadSize
-    })
-    cid = await randomCid()
-    await createPsaPinRequest(dbClient, authKey1, cid, {
-      dagSize: pinnedSize,
-      pins
-    })
-    cid = await randomCid()
-    await createPsaPinRequest(dbClient, authKey1, cid, {
-      dagSize: pinnedSize,
-      pins
+    await createUserWithFiles(dbClient, {
+      email: 'test1@email.com',
+      percentStorageUsed: 60
     })
 
-    user2 = await createUser(dbClient, {
-      name: 'test2-name',
-      email: 'test2@email.com'
-    })
-    authKey2 = await createUserAuthKey(dbClient, Number(user2._id), {
-      name: 'test2-key'
-    })
-    cid = await randomCid()
-    await createUpload(dbClient, Number(user2._id), Number(authKey2), cid, {
-      dagSize: uploadSize
-    })
-    cid = await randomCid()
-    await createUpload(dbClient, Number(user2._id), Number(authKey2), cid, {
-      dagSize: uploadSize
+    await createUserWithFiles(dbClient, {
+      email: 'test2@email.com',
+      percentStorageUsed: 79
     })
 
-    user3 = await createUser(dbClient, {
-      name: 'test3-name',
-      email: 'test3@email.com'
-    })
-    authKey3 = await createUserAuthKey(dbClient, Number(user3._id), {
-      name: 'test3-key'
-    })
-    cid = await randomCid()
-    await createUpload(dbClient, Number(user3._id), Number(authKey3), cid, {
-      dagSize: uploadSize
-    })
-    cid = await randomCid()
-    await createUpload(dbClient, Number(user3._id), Number(authKey3), cid, {
-      dagSize: Math.round(uploadSize * 1.1)
-    })
-    cid = await randomCid()
-    await createPsaPinRequest(dbClient, authKey3, cid, {
-      dagSize: pinnedSize,
-      pins
+    await createUserWithFiles(dbClient, {
+      email: 'test3@email.com',
+      percentStorageUsed: 90
     })
 
-    user4 = await createUser(dbClient, {
-      name: 'test4-name',
-      email: 'test4@email.com'
+    await createUserWithFiles(dbClient, {
+      email: 'test4@email.com',
+      percentStorageUsed: 145,
+      storageQuota: 2199023255552
     })
-    authKey4 = await createUserAuthKey(dbClient, Number(user4._id), {
-      name: 'test4-key'
-    })
-    await dbClient.createUserTag(Number(user4._id), {
-      tag: 'StorageLimitBytes',
-      value: '2199023255552'
-    })
-    cid = await randomCid()
-    await createUpload(dbClient, Number(user4._id), Number(authKey4), cid, {
-      dagSize: largeFileSize
-    })
-
-    user5 = await createUser(dbClient, {
-      name: 'test5 restricted',
-      email: 'test5@email.com'
-    })
-    authKey5 = await createUserAuthKey(dbClient, Number(user5._id), {
-      name: 'test5-key'
-    })
-    await dbClient.createUserTag(Number(user5._id), {
-      tag: 'StorageLimitBytes',
-      value: '2199023255552'
-    })
-    await dbClient.createUserTag(Number(user5._id), {
-      tag: 'HasAccountRestriction',
-      value: 'true'
-    })
-    await dbClient.createUserTag(Number(user5._id), {
-      tag: 'HasPsaAccess',
-      value: 'true'
-    })
-    cid = await randomCid()
-    await createUpload(dbClient, Number(user5._id), Number(authKey5), cid, {
-      dagSize: largeFileSize
-    })
-
-    // User               | upload  | pinned  | quota   | percentage of quota
-    // ----------------------------------------------------------------------
-    // test1@email.com    | 1       | 2       | 1TiB    | < 75%
-    // test2@email.com    | 2       | 0       | 1TiB    | 80%
-    // test3@email.com    | 2       | 1       | 1TiB    | 90%
-    // test4@email.com    | 1 (XL)  | 0       | 2TiB    | > 90%
-    // test5@email.com    | 1 (XL)  | 0       | 2TiB    | ACCOUNT RESTRICTED
   })
 
   it('returns user details needed for email', async () => {
