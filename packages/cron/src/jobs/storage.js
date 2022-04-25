@@ -63,12 +63,9 @@ export async function checkStorageUsed ({ db, emailService }) {
 
     if (users.length) {
       if (email.emailType === EMAIL_TYPE.User100PercentStorage) {
-        const to = {
-          email: 'admin@web3.storage',
-          name: 'Web3 Storage Admin'
-        }
+        const adminUser = await db.getUserByEmail('admin@web3.storage')
 
-        const emailSent = await emailService.sendEmail(to, EMAIL_TYPE.AdminStorageExceeded, {
+        const emailSent = await emailService.sendEmail(adminUser, EMAIL_TYPE.AdminStorageExceeded, {
           secondsSinceLastSent: email.secondsSinceLastSent,
           templateVars: { users }
         })
