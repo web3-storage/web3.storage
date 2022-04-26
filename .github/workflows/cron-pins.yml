@@ -15,6 +15,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
+        ref: git describe --tags --abbrev=0 --match='cron-*'
 
       - name: Setup node
         uses: actions/setup-node@v1
