@@ -26,7 +26,9 @@ export default function Toc() {
 
   useEffect(() => {
     let start = 0;
-    let c = document.querySelector('.docs-body')?.children;
+    let c = window.location.pathname.includes('http-api')
+      ? document.querySelector('.renderedMarkdown')?.children
+      : document.querySelector('.docs-body')?.children;
     if (!c) {
       return;
     }
@@ -64,7 +66,7 @@ export default function Toc() {
     headings.current.map(item => {
       new ScrollMagic.Scene({ triggerElement: `#${item}` })
         .on('enter leave', function (event) {
-          document.querySelectorAll('#toc-container a').forEach((el) => {
+          document.querySelectorAll('#toc-container a').forEach(el => {
             el.classList.remove('active');
           });
           document.querySelector(`#toc-container a[href="#${item}"]`)?.classList.add('active');

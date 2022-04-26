@@ -12,6 +12,14 @@
     width: 25rem;
     left: -6.5rem;
     top: 5rem;
+    @include large {
+      left: -12.5rem;
+    }
+    @include small {
+      width: 33.125rem;
+      top: calc(50% + 2rem);
+      left: -20rem;
+    }
   }
 
   &.overflow-hidden {
@@ -150,33 +158,5 @@
     img {
       max-width: 100%;
     }
-    // > nav {
-    //   display: none !important;
-    //   position: relative !important;
-    //   background-color: transparent !important;
-    //   @include smaller {
-    //     display: block !important;
-    //     .block.md\:hidden {
-    //       text-align: left;
-    //       svg {
-    //         display: none;
-    //       }
-    //       &:after {
-    //         content: '>';
-    //       }
-    //     }
-    //   }
-    // }
   }
 }
-
-// position anchor lower so it stops on top of page
-// a.anchor {
-//   display: block;
-//   position: relative;
-//   top: 180px;
-//   @include mobile {
-//     top: 230px;
-//   }
-//   visibility: hidden;
-// }

@@ -1,6 +1,9 @@
 .tabs-container {
   .tabs {
     padding-left: 0 !important;
+    li {
+      padding-left: toRem(10) !important;
+    }
     .tabs__item {
       margin-right: toRem(50);
       display: inline-block;
