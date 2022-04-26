@@ -28,7 +28,18 @@
       font-size: toRem(13);
       color: $ebony;
       &.active {
-        color: $docsPrimaryPurple;
+        background: linear-gradient(175deg, $royalBlue 30%, $cerise 93.14%);
+        background-clip: text;
+        -moz-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -moz-text-fill-color: transparent;
+        text-fill-color: transparent;
+
+        &::before {
+            content: '▸';
+            line-height: 1;
+            padding: 0 toRem(3) 0 toRem(4);
+        }
       }
     }
     li > ul {
