@@ -26,7 +26,10 @@ export default function Toc() {
 
   useEffect(() => {
     let start = 0;
-    let c = document.querySelector('.docs-body').children;
+    let c = document.querySelector('.docs-body')?.children;
+    if (!c) {
+      return;
+    }
 
     for (let i = 0; i < c.length; i++) {
       if (c[i].nodeName.match(/^H2|H3|H4$/)) {
@@ -52,15 +55,16 @@ export default function Toc() {
     if (start) {
       toc.current += new Array(start + 1).join('</ul>');
     }
-    document.querySelector('#toc-container').innerHTML += toc.current;
+
+    // @ts-ignore
+    document.querySelector('#toc-container').innerHTML = toc.current;
 
     // add active class on scroll
     var controller = new ScrollMagic.Controller({ globalSceneOptions: { duration: 0 } });
     headings.current.map(item => {
       new ScrollMagic.Scene({ triggerElement: `#${item}` })
         .on('enter leave', function (event) {
-          console.log('enter', item);
-          [].forEach.call(document.querySelectorAll('#toc-container a'), el => {
+          document.querySelectorAll('#toc-container a').forEach((el) => {
             el.classList.remove('active');
           });
           document.querySelector(`#toc-container a[href="#${item}"]`)?.classList.add('active');
