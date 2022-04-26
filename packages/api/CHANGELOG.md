@@ -1,5 +1,12 @@
 # Changelog
 
+### [5.7.1](https://github.com/web3-storage/web3.storage/compare/api-v5.7.0...api-v5.7.1) (2022-04-26)
+
+
+### Bug Fixes
+
+* trigger api release with db change ([#1274](https://github.com/web3-storage/web3.storage/issues/1274)) ([459e033](https://github.com/web3-storage/web3.storage/commit/459e033566dc080efb4ee5484047879663d2398f))
+
 ## [5.7.0](https://github.com/web3-storage/web3.storage/compare/api-v5.6.0...api-v5.7.0) (2022-04-19)
 
 
