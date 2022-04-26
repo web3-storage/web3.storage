@@ -1,4 +1,5 @@
 .docs-feedback {
+  margin-top: 3rem;
   background-color: $white;
   @include shadow1;
   padding: toRem(32) toRem(29);
@@ -13,12 +14,12 @@
     margin-left: toRem(10);
     @extend .button;
     background-color: $ebony;
-    @include borderRadius_Small;
     @include fontSize_Small;
     color: white;
     padding: toRem(10) toRem(12);
     height: auto;
     border: 2px solid $ebony;
+    border-radius: 5px !important;
     &:hover {
       color: $ebony;
       background-color: $white;

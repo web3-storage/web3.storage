@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { MDXProvider } from '@mdx-js/react';
+
 import Head from 'next/head';
 import hljs from 'highlight.js/lib/core';
 import javascript from 'highlight.js/lib/languages/javascript';

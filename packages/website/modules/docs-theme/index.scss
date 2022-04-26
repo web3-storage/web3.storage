@@ -7,6 +7,13 @@
   background-image: url('../../assets/images/corkscrewBlurred.jpg');
   background-repeat: repeat;
   background-size: cover;
+
+  #footer_squiggle {
+    width: 25rem;
+    left: -6.5rem;
+    top: 5rem;
+  }
+
   &.overflow-hidden {
     overflow: hidden;
   }
@@ -38,6 +45,13 @@
 
       main {
         padding-right: toRem(30);
+      }
+
+      ul, ol {
+        padding-left: 1rem;
+        li {
+          padding-left: 3rem;
+        }
       }
 
       .toc-container {
@@ -123,11 +137,15 @@
       line-height: 1.25rem;
       color: white;
       padding: 1rem;
+      word-break: break-word;
       @include monospace_Text;
     }
     a {
       color: $docsPrimaryPurple;
       font-weight: 600;
+    }
+    h1 a, h2 a, h3 a, h4 a, h5 a {
+      color: $ebony;
     }
     img {
       max-width: 100%;
