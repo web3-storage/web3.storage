@@ -127,7 +127,7 @@ const FileRowItem = props => {
         </span>
         <a
           className="cid-truncate underline medium-up-only"
-          href={`//ipfs.io/ipfs/${cid}`}
+          href={`https://dweb.link/ipfs/${cid}`}
           target="_blank"
           rel="noreferrer"
         >
