@@ -77,7 +77,7 @@ export async function checkStorageUsed ({ db, emailService }) {
 
       for (const user of users) {
         const to = {
-          id: Number(user.id),
+          _id: Number(user.id),
           email: user.email,
           name: user.name
         }
