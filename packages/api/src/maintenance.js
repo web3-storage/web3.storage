@@ -33,11 +33,10 @@ export const DEFAULT_MODE = READ_WRITE
  * r- = only needs read permission so enabled in read-only AND read+write modes.
  * rw = needs to read and write so only enabled in read+write mode.
  *
- * @param {Handler} handler
  * @param {Mode} mode
  * @returns {Handler}
  */
-export function withMode (handler, mode) {
+export function withMode (mode) {
   if (mode === NO_READ_OR_WRITE) {
     throw new Error('invalid mode')
   }
@@ -60,12 +59,10 @@ export function withMode (handler, mode) {
       })
     }
 
-    // Enabled, just get the handler
-    if (enabled()) {
-      return handler(request, env, ctx)
+    // Not enabled, use maintenance handler.
+    if (!enabled()) {
+      return maintenanceHandler()
     }
-
-    return maintenanceHandler()
   }
 }
 
