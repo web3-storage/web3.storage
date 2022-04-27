@@ -34,7 +34,7 @@ export class EmailService {
    * Send an email to a user.
    * Optionally checks email sending history for this user and email type to avoid
    * re-sending if user has been recently notified.
-   * @param {{id: number, email: string, name: string}} user
+   * @param {{_id: number, email: string, name: string}} user
    * @param {string} emailType
    * @param {Object} [options]
    * @param {number} [options.secondsSinceLastSent]
@@ -53,7 +53,7 @@ export class EmailService {
 
     if (secondsSinceLastSent) {
       if (await this.db.emailHasBeenSent({
-        userId: user.id,
+        userId: user._id,
         emailType: emailType,
         secondsSinceLastSent
       })) {
@@ -67,7 +67,7 @@ export class EmailService {
     const messageId = await this.provider.sendEmail(emailType, user.email, user.name, formattedVars)
     if (messageId) {
       // Log the email
-      await this.db.logEmailSent(user.id, emailType, messageId)
+      await this.db.logEmailSent({ userId: user._id, emailType, messageId })
     } else {
       const msg = `📧 🚨 Failed to send ${emailType} email to ${user.name} (${user.email}) using ${this.providerStr}.`
       if (failSilently) {
