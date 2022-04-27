@@ -22,6 +22,7 @@
   "dependencies": {
     "@magic-ext/oauth": "^0.7.0",
     "@mdx-js/react": "^2.1.1",
+    "algoliasearch": "^4.13.0",
     "clsx": "^1.1.1",
     "core-js": "^3.22.2",
     "countly-sdk-web": "^20.11.2",
@@ -40,6 +41,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.4",
+    "react-instantsearch-dom": "^6.23.4",
     "react-markdown": "^6.0.2",
     "react-redux": "7.2.6",
     "react-syntax-highlighter": "^15.4.5",

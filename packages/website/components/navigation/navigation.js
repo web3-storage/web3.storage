@@ -17,6 +17,7 @@ import Hamburger from '../../assets/icons/hamburger.js';
 import GradientBackground from '../gradientbackground/gradientbackground.js';
 import GeneralPageData from '../../content/pages/general.json';
 import emailContent from '../../content/file-a-request';
+import Search from 'components/search/search';
 
 /**
  * Navbar Component
@@ -209,6 +210,8 @@ export default function Navigation({ isProductApp }) {
                   ? logoutButton(auth.logout, buttonTheme)
                   : loginButton(auth.login, buttonTheme)}
               </div>
+
+              <Search />
 
               <div className={clsx('nav-menu-toggle', theme, isMenuOpen ? 'menu-open' : '')}>
                 <button onClick={toggleMenu}>
