@@ -1,12 +1,9 @@
-aside.sidebar {
+.docs-site .docs-container .sidebar {
   width: toRem(300);
   flex-shrink: 0;
   flex-grow: 0;
-  @include smaller {
-    z-index: 1000;
-    background: rgba(0, 0, 0, 0.6);
-    top: 0;
-    height: 100%;
+  @include medium {
+    display: none;
   }
   .sidebar-wrapper {
     margin-top: 10rem;
@@ -69,7 +66,7 @@ aside.sidebar {
     background-size: cover;
     height: 18rem;
     left: -3.5rem;
-    top: 0;
+    top: -11rem;
     transform: rotate(-95deg);
     width: 18rem;
     content: '';
@@ -77,5 +74,22 @@ aside.sidebar {
     @media (max-width: 1400px) {
       left: calc(100vw - 91rem);
     }
+  }
+}
+
+// mobile
+.nav-mobile-panel .sidebar {
+  padding-left: 1rem;
+  padding-bottom: 1rem;
+  h3 {
+    font-size: 1rem;
+    line-height: 2;
+  }
+  a {
+    display: block;
+    padding-left: 1rem;
+  }
+  .no-heading a {
+    padding-left: 0;
   }
 }

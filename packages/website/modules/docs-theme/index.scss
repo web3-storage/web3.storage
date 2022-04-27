@@ -39,6 +39,23 @@
     width: 100%;
     flex: 1 1;
     height: 100%;
+    position: relative;
+
+    &:before {
+      background-image: url('../../assets/images/triangle1.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      height: 72px;
+      right: 2rem;
+      top: -2.5rem;
+      width: 72px;
+      content: '';
+      position: absolute;
+
+      @include medium {
+        display: none;
+      }
+    }
 
     .docs-body-container {
       flex: 1;
@@ -51,8 +68,18 @@
       max-width: 100%;
       position: relative;
 
+      @include medium {
+        flex-direction: column-reverse;
+        padding: 0 1rem 2rem 1rem;
+        background-color: transparent;
+        box-shadow: none;
+      }
+
       main {
         padding-right: toRem(30);
+        @include medium {
+          padding-right: 0;
+        }
       }
 
       ul, ol {
@@ -60,23 +87,6 @@
         li {
           padding-left: 3rem;
         }
-      }
-
-      .toc-container {
-        width: 260px;
-        flex: 0 0 260px;
-      }
-  
-      &:before {
-        background-image: url('../../assets/images/triangle1.png');
-        background-repeat: no-repeat;
-        background-size: contain;
-        height: 72px;
-        right: 2rem;
-        top: -2.5rem;
-        width: 72px;
-        content: '';
-        position: absolute;
       }
     }
 

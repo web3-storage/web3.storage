@@ -1,21 +1,57 @@
-// right side
-#toc-container {
+.toc-container {
+  flex: 0 0 265px;
+  @include medium {
+    margin-bottom: 1rem;
+    flex: none;
+  }
+}
+
+.toc-mobile-dropdown {
+  display: none;
+  cursor: pointer;
+  width: 100%;
+  padding: 0.8rem 1rem 1rem;
+  color: white;
+  background-color: $steelGray;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  position: relative;
+  line-height: 1;
+  &:after {
+    content: '>';
+    position: absolute;
+    right: 10px;
+  }
+  @include medium {
+    display: block;
+  }
+}
+
+#toc {
+  position: sticky;
+  top: 1rem;
+  @include medium {
+    display: none;
+    &.mobile-open {
+      display: block;
+    }
+  }
   ul {
     padding: 0;
   }
-  flex: 0 0 265px;
   > ul {
     box-shadow: 0 4px 15px rgb(0 0 0 / 15%);
     border-radius: 0.375rem;
     padding: 1.25rem 1.5625rem 1.25rem 1.875rem;
     background-color: $white;
-    position: sticky;
     display: block;
-    top: 1rem;
     @include medium {
-      padding: 1rem;
-      box-shadow: none;
-      flex-direction: column;
+      top: 1px;
+      position: relative;
+      background-color: $steelGray;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      padding: 0.8rem 1rem 1rem;
     }
     li {
       font-size: 0.8125rem;
@@ -27,18 +63,22 @@
       font-weight: 500;
       font-size: toRem(13);
       color: $ebony;
+      @include medium {
+        color: white;
+      }
       &.active {
-        background: linear-gradient(175deg, $royalBlue 30%, $cerise 93.14%);
-        background-clip: text;
-        -moz-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        -moz-text-fill-color: transparent;
-        text-fill-color: transparent;
-
-        &::before {
-            content: '▸';
-            line-height: 1;
-            padding: 0 toRem(3) 0 toRem(4);
+        @media screen and (min-width: $breakpoint_Medium) {
+          background: linear-gradient(175deg, $royalBlue 30%, $cerise 93.14%);
+          background-clip: text;
+          -moz-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          -moz-text-fill-color: transparent;
+          text-fill-color: transparent;
+          &::before {
+              content: '▸';
+              line-height: 1;
+              padding: 0 toRem(3) 0 toRem(4);
+          }
         }
       }
     }

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 
 import NavData from '../../../pages/docs/nav.json';
 
-export default function Sidebar() {
+export default function Sidebar({ openMenu }) {
   const router = useRouter();
 
   return (
@@ -17,6 +17,7 @@ export default function Sidebar() {
                 <a
                   href={`/docs/${secondary.src}`}
                   className={router.pathname === `/docs/${secondary.src}` ? 'active' : ''}
+                  onClick={openMenu ? () => openMenu(false) : undefined}
                 >
                   {secondary.name}
                 </a>

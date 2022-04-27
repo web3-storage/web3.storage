@@ -1,14 +1,18 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 let ScrollMagic;
 if (typeof window !== 'undefined') {
   ScrollMagic = require('scrollmagic');
 }
 
 export default function Toc() {
-  let toc = useRef('');
   let headings = useRef(['']);
+  const [isOpen, setOpen] = useState(false);
 
-  function string_to_slug(str) {
+  const toggleClass = () => {
+    setOpen(!isOpen);
+  };
+
+  const string_to_slug = str => {
     str = str.replace(/^\s+|\s+$/g, ''); // trim
     str = str.toLowerCase();
     // remove accents, swap ñ for n, etc
@@ -22,13 +26,15 @@ export default function Toc() {
       .replace(/\s+/g, '-') // collapse whitespace and replace by -
       .replace(/-+/g, '-'); // collapse dashes
     return str;
-  }
+  };
 
   useEffect(() => {
     let start = 0;
+    let html = '';
     let c = window.location.pathname.includes('http-api')
       ? document.querySelector('.renderedMarkdown')?.children
       : document.querySelector('.docs-body')?.children;
+
     if (!c) {
       return;
     }
@@ -43,37 +49,43 @@ export default function Toc() {
         c[i].innerHTML = '<a href="#' + anchor + '" id="' + anchor + '">' + headerText + '</a>';
         if (headerText) {
           if (level > start) {
-            toc.current += new Array(level - start + 1).join('<ul>');
+            html += new Array(level - start + 1).join('<ul>');
           } else if (level < start) {
-            toc.current += new Array(start - level + 1).join('</li></ul>');
+            html += new Array(start - level + 1).join('</li></ul>');
           } else {
-            toc.current += new Array(start + 1).join('</li>');
+            html += new Array(start + 1).join('</li>');
           }
           start = level;
-          toc.current += '<li><a href="#' + anchor + '">' + headerText + '</a>';
+          html += '<li><a href="#' + anchor + '">' + headerText + '</a>';
         }
       }
     }
     if (start) {
-      toc.current += new Array(start + 1).join('</ul>');
+      html += new Array(start + 1).join('</ul>');
     }
-
     // @ts-ignore
-    document.querySelector('#toc-container').innerHTML = toc.current;
+    // sorry ugly, fix later
+    document.querySelector('#toc').innerHTML = html;
 
-    // add active class on scroll
-    var controller = new ScrollMagic.Controller({ globalSceneOptions: { duration: 0 } });
+    const controller = new ScrollMagic.Controller({ globalSceneOptions: { duration: 0 } });
     headings.current.map(item => {
-      new ScrollMagic.Scene({ triggerElement: `#${item}` })
-        .on('enter leave', function (event) {
-          document.querySelectorAll('#toc-container a').forEach(el => {
+      return new ScrollMagic.Scene({ triggerElement: `#${item}` })
+        .on('enter leave', () => {
+          document.querySelectorAll('#toc a').forEach(el => {
             el.classList.remove('active');
           });
-          document.querySelector(`#toc-container a[href="#${item}"]`)?.classList.add('active');
+          document.querySelector(`#toc a[href="#${item}"]`)?.classList.add('active');
         })
         .addTo(controller);
     });
-  });
+  }, []);
 
-  return <div id="toc-container"></div>;
+  return (
+    <div className="toc-container">
+      <div tabIndex={0} onKeyPress={toggleClass} role="button" onClick={toggleClass} className="toc-mobile-dropdown">
+        On this page
+      </div>
+      <div id="toc" className={isOpen ? 'mobile-open' : ''}></div>
+    </div>
+  );
 }
