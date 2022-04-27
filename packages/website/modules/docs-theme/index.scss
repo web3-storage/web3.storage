@@ -7,6 +7,7 @@
   background-image: url('../../assets/images/corkscrewBlurred.jpg');
   background-repeat: repeat;
   background-size: cover;
+  word-break: break-word;
 
   #footer_squiggle {
     width: 25rem;
@@ -145,6 +146,7 @@
     pre {
       white-space: pre-wrap;
       word-wrap: break-word;
+      
     }
     pre code {
       background-color: $steelGray;
@@ -155,7 +157,6 @@
       line-height: 1.25rem;
       color: white;
       padding: 1rem;
-      word-break: break-word;
       @include monospace_Text;
     }
     a {
