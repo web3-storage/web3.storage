@@ -38,7 +38,7 @@ export default function Docs(props) {
         <>
           {sharedHead}
           <div className="docs-container">
-            <Sidebar />
+            <Sidebar openMenu={null} />
             <article className="docs-body-container">
               <main className="docs-body">
                 <MDXProvider>{children}</MDXProvider>
