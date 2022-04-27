@@ -2,6 +2,6 @@
 title: API
 ---
 
-import SwaggerUI from 'swagger-ui-react';
+import { RedocStandalone } from 'redoc';
 
-<SwaggerUI url="/schema.yml" />
+<RedocStandalone specUrl="/schema.yml"/>
