@@ -148,7 +148,14 @@ export class DBClient {
     const { data, error } = await this._client
       .from('user')
       .select(`
-        _id:id::text
+        _id:id::text,
+        issuer,
+        name,
+        email,
+        github,
+        publicAddress:public_address,
+        created:inserted_at,
+        updated:updated_at
       `)
       .eq('email', email)
 
