@@ -49,13 +49,13 @@ const auth = {
   // any key will do.
   '🔑': compose(withCorsHeaders, withApiOrMagicToken, withAccountNotRestricted),
 
-  // any key will do & blocked users allowed!
+  // any key will do & restricted users allowed!
   '🔑⚠️': compose(withCorsHeaders, withApiOrMagicToken),
 
   // must be a logged in user
   '👤': compose(withCorsHeaders, withMagicToken),
 
-  // needs PSA & blocked users allowed
+  // needs PSA & restricted users allowed
   '📌⚠️': compose(withCorsHeaders, withApiOrMagicToken, withPinningAuthorized),
 
   // needs PSA
@@ -63,33 +63,33 @@ const auth = {
 }
 
 /* eslint-disable no-multi-spaces */
-router.post('/user/login',          compose(auth['🌍'])(userLoginPost))
-router.get('/status/:cid',          compose(auth['🌍'])(statusGet))
-router.get('/car/:cid',             compose(auth['🌍'])(carGet))
-router.head('/car/:cid',            compose(auth['🌍'])(carHead))
+router.post('/user/login',          auth['🌍'](userLoginPost))
+router.get('/status/:cid',          auth['🌍'](statusGet))
+router.get('/car/:cid',             auth['🌍'](carGet))
+router.head('/car/:cid',            auth['🌍'](carHead))
 
-router.post('/car',                 compose(auth['🔑'])(carPost))
-router.put('/car/:cid',             compose(auth['🔑'])(carPut))
-router.post('/upload',              compose(auth['🔑'])(uploadPost))
-router.get('/user/uploads',         compose(auth['🔑⚠️'])(userUploadsGet))
+router.post('/car',                 auth['🔑'](carPost))
+router.put('/car/:cid',             auth['🔑'](carPut))
+router.post('/upload',              auth['🔑'](uploadPost))
+router.get('/user/uploads',         auth['🔑⚠️'](userUploadsGet))
 
-router.post('/pins',                compose(auth['📌'])(pinPost))
-router.post('/pins/:requestId',     compose(auth['📌'])(pinPost))
-router.get('/pins/:requestId',      compose(auth['📌⚠️'])(pinGet))
-router.get('/pins',                 compose(auth['📌⚠️'])(pinsGet))
-router.delete('/pins/:requestId',   compose(auth['📌⚠️'])(pinDelete))
+router.post('/pins',                auth['📌'](pinPost))
+router.post('/pins/:requestId',     auth['📌'](pinPost))
+router.get('/pins/:requestId',      auth['📌⚠️'](pinGet))
+router.get('/pins',                 auth['📌⚠️'](pinsGet))
+router.delete('/pins/:requestId',   auth['📌⚠️'](pinDelete))
 
-router.get('/name/:key',            compose(auth['🌍'])(nameGet))
-router.get('/name/:key/watch',      compose(auth['🌍'])(nameWatchGet))
-router.post('/name/:key',           compose(auth['🔑'])(namePost))
+router.get('/name/:key',            auth['🌍'](nameGet))
+router.get('/name/:key/watch',      auth['🌍'](nameWatchGet))
+router.post('/name/:key',           auth['🔑'](namePost))
 
-router.delete('/user/uploads/:cid',      compose(auth['👤'])(userUploadsDelete))
-router.post('/user/uploads/:cid/rename', compose(auth['👤'])(userUploadsRename))
-router.get('/user/tokens',               compose(auth['👤'])(userTokensGet))
-router.post('/user/tokens',              compose(auth['👤'])(userTokensPost))
-router.delete('/user/tokens/:id',        compose(auth['👤'])(userTokensDelete))
-router.get('/user/account',              compose(auth['👤'])(userAccountGet))
-router.get('/user/info',                 compose(auth['👤'])(userInfoGet))
+router.delete('/user/uploads/:cid',      auth['👤'](userUploadsDelete))
+router.post('/user/uploads/:cid/rename', auth['👤'](userUploadsRename))
+router.get('/user/tokens',               auth['👤'](userTokensGet))
+router.post('/user/tokens',              auth['👤'](userTokensPost))
+router.delete('/user/tokens/:id',        auth['👤'](userTokensDelete))
+router.get('/user/account',              auth['👤'](userAccountGet))
+router.get('/user/info',                 auth['👤'](userInfoGet))
 /* eslint-enable no-multi-spaces */
 
 // Monitoring
