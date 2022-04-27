@@ -8,7 +8,7 @@ import assert from 'assert'
 import { getDBClient } from '../src/lib/utils.js'
 import { EMAIL_TYPE } from '@web3-storage/db'
 import { checkStorageUsed } from '../src/jobs/storage.js'
-import { EmailService } from '../src/lib/email.js'
+import { EmailService } from '../src/lib/email/service.js'
 import sinon from 'sinon'
 
 const env = {
@@ -58,11 +58,11 @@ describe('cron - check user storage quotas', () => {
     const { stderr: emailLog1 } = await execa('./src/bin/storage.js', { env })
     const log1Lines = emailLog1.split('\n')
     assert.match(log1Lines[0], /storage:checkStorageUsed 🗄 Checking users storage quotas/)
-    assert.match(log1Lines[1], /storage:checkStorageUsed 📧 Sending a quota exceeded email to admin/)
-    assert.match(log1Lines[2], /storage:checkStorageUsed 📧 Sending a quota exceeded email to test4-name: 145% of quota used/)
-    assert.match(log1Lines[3], /storage:checkStorageUsed 📧 Sending an email to test3-name: 90% of quota used/)
-    assert.match(log1Lines[4], /storage:checkStorageUsed 📧 Sending an email to test2-name: 79% of quota used/)
-    assert.match(log1Lines[5], /storage:checkStorageUsed ✅ Done/)
+    assert.match(log1Lines[2], /storage:checkStorageUsed 📧 Sent a list of users exceeding their quotas to admin/)
+    assert.match(log1Lines[4], /storage:checkStorageUsed 📧 Sent a quota exceeded email to test4-name: 145% of quota used/)
+    assert.match(log1Lines[6], /storage:checkStorageUsed 📧 Sent an email to test3-name: 90% of quota used/)
+    assert.match(log1Lines[8], /storage:checkStorageUsed 📧 Sent an email to test2-name: 79% of quota used/)
+    assert.match(log1Lines[9], /storage:checkStorageUsed ✅ Done/)
 
     const adminUser = await dbClient.getUserByEmail('admin@web3.storage')
     assert.ok(adminUser, 'admin user found')
@@ -98,7 +98,7 @@ describe('cron - check user storage quotas', () => {
     const { stderr: emailLog2 } = await execa('./src/bin/storage.js', { env })
     const log2Lines = emailLog2.split('\n')
     assert.match(log2Lines[0], /storage:checkStorageUsed 🗄 Checking users storage quotas/)
-    assert.match(log2Lines[1], /storage:checkStorageUsed ✅ Done/)
+    assert.match(log2Lines[5], /storage:checkStorageUsed ✅ Done/)
   })
 
   it('calls the email service with the correct parameters', async () => {
