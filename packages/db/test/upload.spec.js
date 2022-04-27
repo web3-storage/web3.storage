@@ -255,6 +255,28 @@ describe('upload', () => {
     assert.notStrictEqual(uploadWithSameCid._id, upload._id, 'a new upload was created for a new user')
   })
 
+  it('lists user uploads with source cid', async () => {
+    const contentCid = 'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
+    const sourceCid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
+    const created = new Date().toISOString()
+    await client.createUpload({
+      user: user._id,
+      contentCid,
+      sourceCid,
+      authKey: authKeys[0]._id,
+      type,
+      dagSize,
+      name: 'ZZZZZZZZZ', // Name starting with Z for order testing
+      pins: [initialPinData],
+      backupUrls: [`https://backup.cid/${created}`],
+      created
+    })
+
+    // Default sort {inserted_at, Desc}
+    const userUploads = await client.listUploads(user._id)
+    assert.ok(userUploads.find(upload => upload.cid === sourceCid))
+  })
+
   it('can list user uploads with several options', async () => {
     const previousUserUploads = await client.listUploads(user._id)
     assert(previousUserUploads, 'user has uploads')

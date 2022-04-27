@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/api",
-  "version": "5.7.0",
+  "version": "5.7.1",
   "private": true,
   "type": "module",
   "license": "(Apache-2.0 OR MIT)",
