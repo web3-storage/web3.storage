@@ -71,7 +71,7 @@ export async function checkStorageUsed ({ db, emailService }) {
         })
 
         if (emailSent) {
-          log('📧 Sending a quota exceeded email to admin')
+          log('📧 Sent a list of users exceeding their quotas to admin')
         }
       }
 
@@ -88,9 +88,9 @@ export async function checkStorageUsed ({ db, emailService }) {
 
         if (emailSent) {
           if (email.emailType === EMAIL_TYPE.User100PercentStorage) {
-            log(`📧 Sending a quota exceeded email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
+            log(`📧 Sent a quota exceeded email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
           } else {
-            log(`📧 Sending an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
+            log(`📧 Sent an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
           }
         }
       }
