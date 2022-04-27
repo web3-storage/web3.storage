@@ -17,6 +17,7 @@
   "author": "Alan Shaw",
   "license": "(Apache-2.0 OR MIT)",
   "dependencies": {
+    "@mailchimp/mailchimp_transactional": "^1.0.47",
     "@nftstorage/ipfs-cluster": "^5.0.1",
     "@web-std/fetch": "^2.0.1",
     "@web3-storage/db": "^4.0.0",
