@@ -43,49 +43,60 @@ const compose = (...fns) => x => fns.reduceRight((y, f) => f(y), x)
  * @type {Object.<string, function(...any):any>}
  */
 const auth = {
-  '🤲': withCorsHeaders,
-  '🔒': compose(withCorsHeaders, withApiOrMagicToken),
-  '👮': compose(withCorsHeaders, withMagicToken),
-  '🚫': compose(withCorsHeaders, withApiOrMagicToken, withAccountNotRestricted),
-  '👀📌': compose(withCorsHeaders, withApiOrMagicToken, withPinningAuthorized),
-  '📝📌': compose(withCorsHeaders, withApiOrMagicToken, withAccountNotRestricted, withPinningAuthorized)
+  // world readable!
+  '🌍': withCorsHeaders,
+
+  // any key will do.
+  '🔑': compose(withCorsHeaders, withApiOrMagicToken, withAccountNotRestricted),
+
+  // any key will do & blocked users allowed!
+  '🔑⚠️': compose(withCorsHeaders, withApiOrMagicToken),
+
+  // must be a logged in user
+  '👤': compose(withCorsHeaders, withMagicToken),
+
+  // needs PSA & blocked users allowed
+  '📌⚠️': compose(withCorsHeaders, withApiOrMagicToken, withPinningAuthorized),
+
+  // needs PSA
+  '📌': compose(withCorsHeaders, withApiOrMagicToken, withAccountNotRestricted, withPinningAuthorized) // needs PSA
 }
 
 /* eslint-disable no-multi-spaces */
-router.post('/user/login',          compose(auth['🤲'])(userLoginPost))
-router.get('/status/:cid',          compose(auth['🤲'])(statusGet))
-router.get('/car/:cid',             compose(auth['🤲'])(carGet))
-router.head('/car/:cid',            compose(auth['🤲'])(carHead))
+router.post('/user/login',          compose(auth['🌍'])(userLoginPost))
+router.get('/status/:cid',          compose(auth['🌍'])(statusGet))
+router.get('/car/:cid',             compose(auth['🌍'])(carGet))
+router.head('/car/:cid',            compose(auth['🌍'])(carHead))
 
-router.post('/car',                 compose(auth['🚫'])(carPost))
-router.put('/car/:cid',             compose(auth['🚫'])(carPut))
-router.post('/upload',              compose(auth['🚫'])(uploadPost))
-router.get('/user/uploads',         compose(auth['🔒'])(userUploadsGet))
+router.post('/car',                 compose(auth['🔑'])(carPost))
+router.put('/car/:cid',             compose(auth['🔑'])(carPut))
+router.post('/upload',              compose(auth['🔑'])(uploadPost))
+router.get('/user/uploads',         compose(auth['🔑⚠️'])(userUploadsGet))
 
-router.post('/pins',                compose(auth['📝📌'])(pinPost))
-router.post('/pins/:requestId',     compose(auth['📝📌'])(pinPost))
-router.get('/pins/:requestId',      compose(auth['👀📌'])(pinGet))
-router.get('/pins',                 compose(auth['👀📌'])(pinsGet))
-router.delete('/pins/:requestId',   compose(auth['👀📌'])(pinDelete))
+router.post('/pins',                compose(auth['📌'])(pinPost))
+router.post('/pins/:requestId',     compose(auth['📌'])(pinPost))
+router.get('/pins/:requestId',      compose(auth['📌⚠️'])(pinGet))
+router.get('/pins',                 compose(auth['📌⚠️'])(pinsGet))
+router.delete('/pins/:requestId',   compose(auth['📌⚠️'])(pinDelete))
 
-router.get('/name/:key',            compose(auth['🤲'])(nameGet))
-router.get('/name/:key/watch',      compose(auth['🤲'])(nameWatchGet))
-router.post('/name/:key',           compose(auth['🚫'])(namePost))
+router.get('/name/:key',            compose(auth['🌍'])(nameGet))
+router.get('/name/:key/watch',      compose(auth['🌍'])(nameWatchGet))
+router.post('/name/:key',           compose(auth['🔑'])(namePost))
 
-router.delete('/user/uploads/:cid',      compose(auth['👮'])(userUploadsDelete))
-router.post('/user/uploads/:cid/rename', compose(auth['👮'])(userUploadsRename))
-router.get('/user/tokens',               compose(auth['👮'])(userTokensGet))
-router.post('/user/tokens',              compose(auth['👮'])(userTokensPost))
-router.delete('/user/tokens/:id',        compose(auth['👮'])(userTokensDelete))
-router.get('/user/account',              compose(auth['👮'])(userAccountGet))
-router.get('/user/info',                 compose(auth['👮'])(userInfoGet))
+router.delete('/user/uploads/:cid',      compose(auth['👤'])(userUploadsDelete))
+router.post('/user/uploads/:cid/rename', compose(auth['👤'])(userUploadsRename))
+router.get('/user/tokens',               compose(auth['👤'])(userTokensGet))
+router.post('/user/tokens',              compose(auth['👤'])(userTokensPost))
+router.delete('/user/tokens/:id',        compose(auth['👤'])(userTokensDelete))
+router.get('/user/account',              compose(auth['👤'])(userAccountGet))
+router.get('/user/info',                 compose(auth['👤'])(userInfoGet))
 /* eslint-enable no-multi-spaces */
 
 // Monitoring
-router.get('/metrics', compose(withCorsHeaders)(metricsGet))
+router.get('/metrics', auth['🌍'](metricsGet))
 
 // Version
-router.get('/version', withCorsHeaders(versionGet))
+router.get('/version', auth['🌍'](versionGet))
 
 router.get('/', () => {
   return new Response(
@@ -108,7 +119,7 @@ router.get('/', () => {
 })
 
 router.get('/error', () => { throw new Error('A deliberate error!') })
-router.all('*', withCorsHeaders(() => notFound()))
+router.all('*', auth['🌍'](() => notFound()))
 
 /**
  * @param {Error} error
