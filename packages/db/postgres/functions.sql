@@ -265,12 +265,21 @@ DECLARE
 BEGIN
   uploaded := 
     (
-      SELECT COALESCE(SUM(c.dag_size), 0)
-      FROM upload u
-      JOIN content c ON c.cid = u.content_cid
-      WHERE u.user_id = query_user_id::BIGINT
-      AND u.deleted_at is null
-    );
+      SELECT COALESCE((
+        SELECT SUM(dag_size) 
+        FROM (
+          SELECT  c.cid,
+                  c.dag_size
+          FROM upload u
+          JOIN content c ON c.cid = u.content_cid
+          JOIN pin p ON p.content_cid = u.content_cid
+          WHERE u.user_id = query_user_id::BIGINT
+          AND u.deleted_at is null
+          AND p.status = 'Pinned'
+          GROUP BY c.cid,
+                  c.dag_size
+        ) AS uploaded_content), 0)
+    ); 
 
   pinned := 
     (

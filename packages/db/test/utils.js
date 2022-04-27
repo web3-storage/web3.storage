@@ -25,7 +25,7 @@ export async function createUser (dbClient, options = {}) {
   return dbClient.getUser(issuer)
 }
 
-const defaultUserPinnedRequests = [
+export const defaultPinnedData = [
   {
     status: 'Pinning',
     location: {
@@ -58,8 +58,7 @@ export async function createUserWithFiles (dbClient, options = {}) {
   const {
     email,
     percentStorageUsed,
-    storageQuota = 1099511627776,
-    pins
+    storageQuota = 1099511627776
   } = options
 
   const user = await createUser(dbClient, {
@@ -79,22 +78,40 @@ export async function createUserWithFiles (dbClient, options = {}) {
     name: `${email}-key`
   })
 
+  // Calculate DAG size from the percent storage used
   const uploads = 5
   const pinRequests = 3
   const dagSize = Math.ceil(((percentStorageUsed / 100) * storageQuota) / (uploads + pinRequests))
 
+  // Create an upload that is not pinned, should not be included in storage quota
+  let cid = await randomCid()
+  await createUpload(dbClient, Number(user._id), Number(authKey), cid, {
+    dagSize,
+    pins: defaultPinData
+  })
+
+  // Create pinned uploads
   for (let i = 0; i < uploads; i++) {
     const cid = await randomCid()
     await createUpload(dbClient, Number(user._id), Number(authKey), cid, {
-      dagSize
+      dagSize,
+      pins: defaultPinnedData
     })
   }
 
+  // Create a pin request that is not pinned, should not be included in storage quota
+  cid = await randomCid()
+  await createPsaPinRequest(dbClient, authKey, cid, {
+    dagSize,
+    pins: defaultPinData
+  })
+
+  // Create pinned pin requests
   for (let i = 0; i < pinRequests; i++) {
     const cid = await randomCid()
     await createPsaPinRequest(dbClient, authKey, cid, {
       dagSize,
-      pins: pins || defaultUserPinnedRequests
+      pins: defaultPinnedData
     })
   }
 

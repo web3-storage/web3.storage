@@ -1,7 +1,10 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 import { DBClient } from '../index.js'
-import { token } from './utils.js'
+import {
+  defaultPinnedData,
+  token 
+} from './utils.js'
 
 describe('user operations', () => {
   const name = 'test-name'
@@ -173,7 +176,7 @@ describe('user operations', () => {
       authKey: authKey._id,
       type: 'Upload',
       dagSize: dagSize1,
-      pins: [],
+      pins: defaultPinnedData,
       backupUrls: []
     })
 
@@ -190,7 +193,7 @@ describe('user operations', () => {
       authKey: authKey._id,
       type: 'Upload',
       dagSize: dagSize2,
-      pins: [],
+      pins: defaultPinnedData,
       backupUrls: []
     })
 

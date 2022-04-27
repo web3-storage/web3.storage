@@ -59,15 +59,14 @@ describe('Users used storage', () => {
     assert.strictEqual(users[1].email, 'test2@email.com')
   })
 
-  it('retrieves users sorted by used storage descending', async () => {
+  it('retrieves users sorted by percent storage used descending', async () => {
     const users = await dbClient.getUsersByStorageUsed({
-      fromPercent: 50,
-      toPercent: 95
+      fromPercent: 50
     })
-    assert.strictEqual(users.length, 3, 'Users with quota in a range')
-    assert.strictEqual(users[0].email, 'test3@email.com', 'Sorted by used storage descending')
-    assert.strictEqual(users[1].email, 'test2@email.com')
-    assert.strictEqual(users[2].email, 'test1@email.com')
+    assert.strictEqual(users[0].percentStorageUsed, 145, 'Sorted by percent used storage descending')
+    assert.strictEqual(users[1].percentStorageUsed, 90, 'Sorted by percent used storage descending')
+    assert.strictEqual(users[2].percentStorageUsed, 79, 'Sorted by percent used storage descending')
+    assert.strictEqual(users[3].percentStorageUsed, 60, 'Sorted by percent used storage descending')
   })
 
   it('uses user quota instead of default if one has been specified', async () => {
