@@ -1,47 +1,54 @@
 .callout {
-    background-color: $white;
-    color: $ebony;
-    border-top-right-radius: 0.4rem;
-    border-bottom-right-radius: 0.4rem;
-    margin-bottom: 3.75rem;
-    position: relative;
-    padding: toRem(23) toRem(37);
-    width: 100%;
-    h5 {
-      margin-top: 0;
-      font-size: 1.125rem;
-      text-transform: none;
-      line-height: 1;
-      &:before {
-        display: inline-block;
-        background-repeat: no-repeat;
-        height: 30px;
-        width: 24px;
-        vertical-align: middle;
-        margin-right: 1.25rem;
-        content: '';
-        background-size: cover;
-        background-image: url('../../assets/icons/bulb.png');
-      }
-    }
-    &.warning {
-      h5:before {
-        height: 23.5px;
-        width: 25.5px;
-        background-image: url('../../assets/icons/caution.png');
-      }
-    }
-    *:last-child {
-      margin-bottom: 0 !important;
-    }
+  background-color: $white;
+  color: $ebony;
+  border-top-right-radius: 0.4rem;
+  border-bottom-right-radius: 0.4rem;
+  margin-bottom: 3.75rem;
+  position: relative;
+  padding: toRem(23) toRem(37);
+  width: 100%;
+  h5 {
+    margin-top: 0;
+    font-size: 1.125rem;
+    text-transform: none;
+    line-height: 1;
+  }
+  &.warning,
+  &.info {
     &:before {
+      display: inline-block;
+      background-repeat: no-repeat;
+      vertical-align: middle;
+      margin-right: 1.25rem;
       content: '';
-      border-radius: 10px;
-      width: 5px;
-      @include gradient_Background_PinkBlue_Reverse;
-      height: 100%;
-      position: absolute;
-      left: calc(5px * -1);
-      top: 0;
+      background-size: cover;
     }
   }
+  &.warning {
+    h5:before {
+      height: 23.5px;
+      width: 25.5px;
+      background-image: url('../../assets/icons/caution.png');
+    }
+  }
+  &.info {
+    h5:before {
+      height: 30px;
+      width: 24px;
+      background-image: url('../../assets/icons/bulb.png');
+    }
+  }
+  *:last-child {
+    margin-bottom: 0 !important;
+  }
+  &:before {
+    content: '';
+    border-radius: 10px;
+    width: 5px;
+    @include gradient_Background_PinkBlue_Reverse;
+    height: 100%;
+    position: absolute;
+    left: calc(5px * -1);
+    top: 0;
+  }
+}

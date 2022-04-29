@@ -91,6 +91,20 @@
       }
     }
 
+    table {
+      tr {
+        text-align: left;
+        border-top: 1px solid rgb(204, 204, 204);
+        td, th {
+          border: 1px solid #dbdada;
+          padding: 0 10px;
+        }
+        th:empty {
+          border: 0;
+        }
+      }
+    }
+
     // blockquote
     blockquote {
       padding-left: toRem(43);

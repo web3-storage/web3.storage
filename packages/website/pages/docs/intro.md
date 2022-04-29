@@ -144,7 +144,7 @@ Now that you've got your script ready to go, you just need to run it in your ter
    node put-files.js --token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGZFYTRhODlFNUVhRjY5YWI4QUZlZUU3MUE5OTgwQjFGQ2REZGQzNzIiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2MjY5Njk3OTY1NTQsIm5hbWUiOiJib25maXJlIn0.0S9Ua2FWEAZSwaemy92N7bW8ancRUtu4XtLS3Gy1ouA ~/hello.txt
    ```
 
-<Callout>
+<Callout type="info">
 ##### Multiple files
 
 You can upload a whole directory full of files at once by giving the script the path to a local directory. You can also upload multiple files by passing in more than one file path when you run the script.
@@ -158,7 +158,7 @@ You can upload a whole directory full of files at once by giving the script the 
 
 1. **Make a note of the CID, which looks like `bafyb...`.** You'll need it in order to get your file.
 
-<Callout>
+<Callout type="info">
 ##### Get the status of your upload
 
 It's possible to get a variety of details about your upload, including its CID, upload date, size on the network, and info on IPFS pinning and Filecoin storage deals, by using the `status()` method within the JavaScript client library. Check out the [Query how-to guide](./how-tos/query.md#querying-for-status-information) for more information.

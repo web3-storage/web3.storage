@@ -22,7 +22,7 @@ You'll need a free Web3.Storage account in order to generate an API token. If yo
 
 ![Screenshot of a Web3.Storage page for naming a new API token](/images/docs/account-page-name-token.png)
 
-<Callout>
+<Callout type="info">
 ##### Tip
 You don't have to use the same API token for all of your projects! Creating an individual API token for each of your applications or services makes it easier to change or revoke access in the future to a specific project. You can have as many tokens as you need on Web3.Storage for free.
 </Callout>

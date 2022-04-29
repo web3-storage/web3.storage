@@ -163,7 +163,7 @@ func opendir() {
 
 </Tabs>
 
-<Callout>
+<Callout type="info">
 ##### Tip
 **When uploading multiple files, try to give each file a unique name.** All the files in a `put` request will be bundled into one content archive, and linking to the files inside is much easier if each file has a unique, human-readable name.
 </Callout>

@@ -189,7 +189,7 @@ carbites --help
       join
 ```
 
-<Callout>
+<Callout type="info">
 ##### Running with npx
   You can run the `carbites` command without installing it globally using the `npx` command, which is included with Node.js:
 
@@ -250,7 +250,7 @@ carbites join my-video-*.car --output my-video-joined.car
 
 The [carbites library][github-carbites-js] provides an interface for splitting CARs that can be invoked from your application code.
 
-<Callout>
+<Callout type="info">
 ##### You probably don't need this!
   If you're using JavaScript, you can [use the Web3.Storage client][howto-store] to upload your data and let the client take care of CAR splitting for you. If you're sure you want to split CARs from JavaScript yourself, read on!
 </Callout>

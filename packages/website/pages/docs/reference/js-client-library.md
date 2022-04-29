@@ -24,7 +24,7 @@ While we recommend that you install the latest _stable_ version of the following
 - [NPM](https://www.npmjs.com/) `7.0.0`
 - [Node.js](https://nodejs.org/en/) `14.0.0`
 - [Webpack](https://webpack.js.org/) `5.0.0`
-</Callout>
+  </Callout>
 
 ## Constructor
 
@@ -329,7 +329,7 @@ _Number._ The `dagSize` property is the total size, in bytes, of the [Merkle Dir
 <AccordionSingle heading="created">
 _String._ The `created` property gives the creation date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
 
-<Callout>
+<Callout type="info">
 ##### Tip
 The `created` date returned by a call to `status()` is the date and time that the CID was first seen on the network. The date given by a call to `list()` is the date and time of a particular upload via a call to `put()`. These can differ if multiple users upload the same file(s).
 </Callout>
@@ -438,7 +438,7 @@ The return value for `list()` is an `AsyncIterable` object, containing objects w
 }
 ```
 
-<Callout>
+<Callout type="info">
 ##### Tip
 The `created` date on these objects are the date and time that the user uploaded via `put()`. The `created` date given by a call to `status()` is the date and time that the CID was first seen on the network. These can differ if multiple users uploaded the same file(s).
 </Callout>

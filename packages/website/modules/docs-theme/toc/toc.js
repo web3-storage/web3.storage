@@ -31,9 +31,7 @@ export default function Toc() {
   useEffect(() => {
     let start = 0;
     let html = '';
-    let c = window.location.pathname.includes('http-api')
-      ? document.querySelector('.renderedMarkdown')?.children
-      : document.querySelector('.docs-body')?.children;
+    let c = document.querySelector('.docs-body')?.children;
 
     if (!c) {
       return;
@@ -67,7 +65,7 @@ export default function Toc() {
     // sorry ugly, fix later
     document.querySelector('#toc').innerHTML = html;
 
-    const controller = new ScrollMagic.Controller({ globalSceneOptions: { duration: 0 } });
+    const controller = new ScrollMagic.Controller({ globalSceneOptions: { duration: 10 } });
     headings.current.map(item => {
       return new ScrollMagic.Scene({ triggerElement: `#${item}` })
         .on('enter leave', () => {
