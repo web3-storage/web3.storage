@@ -78,7 +78,7 @@ const createPinRequest = async (cid, token) => {
   })).json()
 }
 
-describe.only('Pinning APIs endpoints', () => {
+describe('Pinning APIs endpoints', () => {
   describe('GET /pins', () => {
     let baseUrl
     let token
