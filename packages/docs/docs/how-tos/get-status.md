@@ -8,7 +8,7 @@ On the [Account page](https://web3.storage/account) of the Web3.Storage site, yo
 
 ![Screenshot of Web3.Storage account page, showing a table of uploaded files](./images/account-page-files.png)
 
-The table on the account page has two columns related to the current status of the data storage process, [Status](#pin-status) and [Storage Providers](#storage-providers).
+The table on the account page has two columns related to the current status of the data storage process, [Status](#status) and [Storage Providers](#storage-providers).
 
 The information in the account page file list is also available using the [JavaScript client's `status` method][client-js-check], via the [HTTP API][client-http] by sending a `GET` request to the `/status/{cid}` endpoint, or using the `w3 status <cid>` command on the [CLI](https://github.com/web3-storage/web3.storage/tree/main/packages/w3#readme).
 
