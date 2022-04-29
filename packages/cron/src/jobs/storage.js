@@ -45,7 +45,7 @@ const STORAGE_QUOTA_EMAILS = [
  * appropriate when approaching their storage quota limit.
  * @param {{
  *  db: import('@web3-storage/db').DBClient
- *  emailService: import('../lib/email.js').EmailService
+ *  emailService: import('../lib/email/service').EmailService
  * }} config
  */
 export async function checkStorageUsed ({ db, emailService }) {
@@ -64,8 +64,13 @@ export async function checkStorageUsed ({ db, emailService }) {
     if (users.length) {
       if (email.emailType === EMAIL_TYPE.User100PercentStorage) {
         const adminUser = await db.getUserByEmail('admin@web3.storage')
+        const toAdmin = {
+          _id: Number(adminUser._id),
+          email: adminUser.email,
+          name: adminUser.name
+        }
 
-        const emailSent = await emailService.sendEmail(adminUser, EMAIL_TYPE.AdminStorageExceeded, {
+        const emailSent = await emailService.sendEmail(toAdmin, EMAIL_TYPE.AdminStorageExceeded, {
           secondsSinceLastSent: email.secondsSinceLastSent,
           templateVars: { users }
         })
