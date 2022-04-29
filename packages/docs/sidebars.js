@@ -12,6 +12,7 @@ module.exports = {
         'how-tos/list-directory-contents',
         'how-tos/work-with-car-files',
         'how-tos/generate-api-token',
+        'how-tos/get-status',
         'how-tos/troubleshooting'
       ]
     },
