@@ -22,6 +22,17 @@ const uploadQuery = `
         content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region)))
       `
 
+const userQuery = `
+  _id:id::text,
+  issuer,
+  name,
+  email,
+  github,
+  publicAddress:public_address,
+  created:inserted_at,
+  updated:updated_at
+`
+
 const psaPinRequestTableName = 'psa_pin_request'
 const pinRequestSelect = `
   _id:id::text,
@@ -119,16 +130,7 @@ export class DBClient {
     /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
-      .select(`
-        _id:id::text,
-        issuer,
-        name,
-        email,
-        github,
-        publicAddress:public_address,
-        created:inserted_at,
-        updated:updated_at
-      `)
+      .select(userQuery)
       .eq('issuer', issuer)
 
     if (error) {
@@ -147,16 +149,7 @@ export class DBClient {
     /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
-      .select(`
-        _id:id::text,
-        issuer,
-        name,
-        email,
-        github,
-        publicAddress:public_address,
-        created:inserted_at,
-        updated:updated_at
-      `)
+      .select(userQuery)
       .eq('email', email)
 
     if (error) {

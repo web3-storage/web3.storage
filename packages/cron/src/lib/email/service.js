@@ -1,7 +1,6 @@
 import debug from 'debug'
-import { EMAIL_TYPE } from '@web3-storage/db'
 import * as EmailTypeClasses from './types.js'
-import * as mailchimp from '@mailchimp/mailchimp_transactional'
+import MailchimpFactory from '@mailchimp/mailchimp_transactional'
 
 // We might want to make these configurable via method parameters in future:
 const EMAIL_FROM_ADDR = 'support@web3.storage'
@@ -18,7 +17,7 @@ export class EmailService {
   /**
    * @param {{
    *   db: import('@web3-storage/db').DBClient,
-   *   [provider]: string
+   *   provider: string
    * }} config
    */
   constructor ({ db, provider }) {
@@ -98,11 +97,8 @@ class MailchimpEmailProvider {
     if (!process.env.MAILCHIMP_API_KEY) {
       throw new Error('MAILCHIMP_API_KEY environment variable is not set.')
     }
-    // log(typeof mailchimp_transactional)
-    // log(Object.keys(mailchimp_transactional))
-    const MailchimpFactory = mailchimp.default
+
     this.mailchimpTx = MailchimpFactory(process.env.MAILCHIMP_API_KEY)
-    // this.mailchimpTx = mailchimp_transactional.default(process.env.MAILCHIMP_API_KEY)
   }
 
   /**
@@ -111,7 +107,7 @@ class MailchimpEmailProvider {
    * @param {string} emailType
    * @param {string} toAddr
    * @param {string} toName
-   * @param {string} templateVars
+   * @param {Object.<string, any>} templateVars
    * @returns {Promise<string|undefined>}
    */
   async sendEmail (emailType, toAddr, toName, templateVars) {
@@ -172,10 +168,9 @@ class MailchimpEmailProvider {
    * Restructure the template vars into the format that Mailchimp requires.
    */
   _restructureVars (templateVars) {
-    const varDefs = []
-    for (const [key, value] of Object.entries(templateVars)) {
-      varDefs.push({ name: key, content: value })
-    }
+    const varDefs = Object.entries(templateVars).map(([key, content]) => {
+      return { key, content }
+    })
     return varDefs
   }
 }
