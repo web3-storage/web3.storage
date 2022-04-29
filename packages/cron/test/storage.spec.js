@@ -8,7 +8,7 @@ import assert from 'assert'
 import { getDBClient } from '../src/lib/utils.js'
 import { EMAIL_TYPE } from '@web3-storage/db'
 import { checkStorageUsed } from '../src/jobs/storage.js'
-import { EmailService } from '../src/lib/email/service.js'
+import { EmailService, EMAIL_PROVIDERS } from '../src/lib/email/service.js'
 import sinon from 'sinon'
 
 const env = {
@@ -24,9 +24,10 @@ const env = {
 
 describe('cron - check user storage quotas', () => {
   const dbClient = getDBClient(env)
-  let adminUser, test2user, test3user, test4user
+  let adminUser, test2user, test3user, test4user, emailService
 
   beforeEach(async () => {
+    emailService = new EmailService({ db: dbClient, provider: EMAIL_PROVIDERS.dummy })
     adminUser = await createUser(dbClient, {
       email: 'admin@web3.storage',
       name: 'Web3 Storage Admin'
@@ -102,7 +103,6 @@ describe('cron - check user storage quotas', () => {
   })
 
   it('calls the email service with the correct parameters', async () => {
-    const emailService = new EmailService({ db: dbClient })
     const sendEmailStub = sinon.stub(emailService, 'sendEmail')
     await checkStorageUsed({ db: dbClient, emailService })
 
