@@ -40,31 +40,33 @@ const StorageManager = ({ className = '', content }) => {
   } = useUser();
   const uploaded = useMemo(() => data?.usedStorage?.uploaded || 0, [data]);
   const pinned = useMemo(() => data?.usedStorage?.pinned || 0, [data]);
-  const usedStorage = uploaded + pinned;
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
 
-  const { maxSpaceLabel, unlockLabel, usedSpacePercentage } = useMemo(
+  const { maxSpaceLabel, unlockLabel, percentUploaded, percentPinned } = useMemo(
     () =>
       // Storage information by tier
       ({
         [StorageTiers.TIER_1]: {
           maxSpaceLabel: content.tiers[0].max_space_label,
           unlockLabel: content.tiers[0].unlock_label,
-          usedSpacePercentage: (usedStorage / tebibyte) * 100,
+          percentUploaded: (uploaded / tebibyte) * 100,
+          percentPinned: (pinned / tebibyte) * 100,
         },
         [StorageTiers.TIER_2]: {
           maxSpaceLabel: content.tiers[1].max_space_label,
           unlockLabel: content.tiers[1].unlock_label,
-          usedSpacePercentage: (usedStorage / (tebibyte * 10)) * 100,
+          percentUploaded: (uploaded / (tebibyte * 10)) * 100,
+          percentPinned: (pinned / (tebibyte * 10)) * 100,
         },
         [StorageTiers.TIER_3]: {
-          maxSpaceLabel: `${Math.floor(usedStorage / (tebibyte * 10) + 1) + content.tiers[2].max_space_label}`,
+          maxSpaceLabel: `${Math.floor(uploaded + pinned / (tebibyte * 10) + 1) + content.tiers[2].max_space_label}`,
           // every increment of 10 changes the amount of space used
-          usedSpacePercentage: ((usedStorage % (tebibyte * 10)) / (tebibyte * 10)) * 100,
+          percentUploaded: ((uploaded % (tebibyte * 10)) / (tebibyte * 10)) * 100,
+          percentPinned: ((pinned % (tebibyte * 10)) / (tebibyte * 10)) * 100,
         },
       }[storageTier]),
-    [storageTier, usedStorage, content.tiers]
+    [storageTier, uploaded, pinned, content.tiers]
   );
 
   useEffect(() => {
@@ -95,9 +97,16 @@ const StorageManager = ({ className = '', content }) => {
     container.scrollIntoView(true);
   }, []);
 
-  const progressBarStyles = {
-    width: !componentInViewport ? '0' : `${Math.min(usedSpacePercentage, 100)}%`,
-    transition: `${usedSpacePercentage * 25}ms ease-out`,
+  const uploadedStorageBarStyles = {
+    width: !componentInViewport ? '0' : `${Math.min(percentUploaded, 100)}%`,
+    transition: `${percentUploaded * 25}ms ease-out`,
+    backgroundPosition: !componentInViewport ? '50% 0' : `0% 0`,
+  };
+
+  const pinnedStorageBarStyles = {
+    width: !componentInViewport ? '0' : `calc(${Math.min(percentPinned, 100)}% + 2rem)`,
+    left: `calc(${percentUploaded}% - 2rem)`,
+    transition: `${percentPinned * 25}ms ease-out ${percentUploaded * 25}ms`,
     backgroundPosition: !componentInViewport ? '50% 0' : `0% 0`,
   };
 
@@ -112,7 +121,7 @@ const StorageManager = ({ className = '', content }) => {
               {/* Used storage in GB */}
               <span className="storage-label">{content.heading}</span>:{' '}
               <span className="storage-number">
-                {filesz(usedStorage, {
+                {filesz(uploaded + pinned, {
                   base: 2,
                   standard: 'iec',
                 })}
@@ -128,7 +137,8 @@ const StorageManager = ({ className = '', content }) => {
       <div className="storage-manager-meter-container">
         <div className="storage-manager-meter">
           {/* Mapping out tiers into labeled sections */}
-          <div className="storage-manager-meter-used" style={progressBarStyles} />
+          <div className="storage-manager-meter-pinned" style={pinnedStorageBarStyles} />
+          <div className="storage-manager-meter-uploaded" style={uploadedStorageBarStyles} />
           <span className="storage-manager-meter-label">{maxSpaceLabel}</span>
         </div>
         {!!unlockLabel && (
@@ -139,6 +149,22 @@ const StorageManager = ({ className = '', content }) => {
             </a>
           </Button>
         )}
+      </div>
+      <div className="storage-manager-legend">
+        <div className="sml-uploaded">
+          <span className="legend-label">{content.legend.uploaded}&nbsp;</span>
+          {filesz(uploaded, {
+            base: 2,
+            standard: 'iec',
+          })}
+        </div>
+        <div className="sml-pinned">
+          <span className="legend-label">{content.legend.pinned}&nbsp;</span>
+          {filesz(pinned, {
+            base: 2,
+            standard: 'iec',
+          })}
+        </div>
       </div>
       <div className="storage-manager-info">
         {content.prompt}&nbsp;
