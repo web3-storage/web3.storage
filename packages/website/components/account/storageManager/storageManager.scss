@@ -100,10 +100,14 @@
     }
   }
   @include medium {
-    flex-direction: column;
+    display: block;
     padding-right: 0;
+    position: relative;
     .button {
-      align-self: flex-end;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transform: translateY(calc(-100% - 0.625rem));
     }
   }
 }
@@ -115,9 +119,7 @@
   position: relative;
   height: 1.5rem;
   background: rgba($vulcan, 0.15);
-  // border: 0.0625rem solid rgba($waterloo, 0.15);
   flex: 1;
-  // box-sizing: content-box;
   overflow: hidden;
   z-index: 1;
   &:only-child {
@@ -180,6 +182,12 @@
   flex-direction: row;
   justify-content: flex-start;
   margin-top: 1rem;
+
+  @include small {
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+  }
+
   .sml-uploaded,
   .sml-pinned {
     position: relative;
@@ -198,6 +206,9 @@
       height: 0.9375rem;
       transform: translateY(-50%);
       border-radius: 50%;
+    }
+    @include small {
+      margin: 0.3125rem 2rem;
     }
   }
   .sml-uploaded {
