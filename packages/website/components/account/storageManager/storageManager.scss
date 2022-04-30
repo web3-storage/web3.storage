@@ -115,8 +115,11 @@
   position: relative;
   height: 1.5rem;
   background: rgba($vulcan, 0.15);
-  border: 0.0625rem solid rgba($waterloo, 0.15);
+  // border: 0.0625rem solid rgba($waterloo, 0.15);
   flex: 1;
+  // box-sizing: content-box;
+  overflow: hidden;
+  z-index: 1;
   &:only-child {
     flex: 1;
     max-width: 35.5rem;
@@ -126,6 +129,17 @@
     position: absolute;
     right: 0.75rem;
     text-shadow: 0 0 0.125rem rgba(0, 0, 0, 0.94);
+  }
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    border-radius: inherit;
+    border: 0.0625rem solid rgba($waterloo, 0.15);
+    box-sizing: border-box;
   }
 }
 
@@ -142,6 +156,7 @@
 .storage-manager-meter-uploaded,
 .storage-manager-meter-pinned {
   position: absolute;
+  z-index: 10;
   @include borderRadius_UltraLarge;
   height: 1.5rem;
   transition: 250ms ease-out;
