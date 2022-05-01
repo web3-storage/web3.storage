@@ -189,7 +189,24 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   return (
     <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
       <div className="files-manager-header">
-        <span>{content?.heading}</span>
+        <div className={clsx('files-manager-title', files.length ? 'has-upload-button' : '')}>
+          <div className="title">{content?.heading}</div>
+          {files.length ? (
+            <Button
+              onClick={onFileUpload}
+              variant={content?.upload.theme}
+              tracking={{
+                ui: countly.ui[content?.upload.ui],
+                action: content?.upload.action,
+                data: { isFirstFile: false },
+              }}
+            >
+              {content?.upload.text}
+            </Button>
+          ) : (
+            ''
+          )}
+        </div>
         <Filterable
           className="files-manager-search"
           items={files}
