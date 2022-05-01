@@ -147,6 +147,9 @@
     cursor: pointer;
     color: $cyan;
     transition: opacity $transitionDuration;
+    &.disabled {
+      color: #717171;
+    }
   }
 
   .files-manager-pagination {
