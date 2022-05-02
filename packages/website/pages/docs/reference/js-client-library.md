@@ -24,7 +24,8 @@ While we recommend that you install the latest _stable_ version of the following
 - [NPM](https://www.npmjs.com/) `7.0.0`
 - [Node.js](https://nodejs.org/en/) `14.0.0`
 - [Webpack](https://webpack.js.org/) `5.0.0`
-  </Callout>
+
+</Callout>
 
 ## Constructor
 
