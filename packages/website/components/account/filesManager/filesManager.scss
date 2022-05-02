@@ -3,7 +3,7 @@
   flex-direction: column;
   position: relative;
   justify-content: flex-start;
-  padding: 1.5rem 0;
+  padding: 1.6875rem 0;
 
   @include medium {
     background: none;
@@ -26,7 +26,7 @@
   align-items: center;
   justify-content: space-between;
   justify-items: center;
-  padding: 0 2.125rem 1.5rem;
+  padding: 0 2.390625rem 1.6875rem;
   flex-wrap: wrap;
 
   @include medium {
@@ -36,9 +36,9 @@
 
   // Title
   > :first-child {
-    margin-right: 8rem;
+    margin-right: 9rem;
     @include medium {
-      padding-left: 1rem;
+      padding-left: 1.125rem;
       margin-right: initial;
     }
   }
@@ -47,24 +47,24 @@
     @include medium {
       flex-basis: 100%;
       order: 4;
-      margin-top: 0.5rem;
-      margin-bottom: 0.375rem;
+      margin-top: 0.5625rem;
+      margin-bottom: 0.421875rem;
     }
   }
 
   .refresh {
     @include label_5;
     position: relative;
-    top: 0.1rem;
+    top: 0.140625rem;
     cursor: pointer;
-    margin-right: 2.5rem;
+    margin-right: 2.8125rem;
     @include medium {
       margin-right: 0;
     }
     svg {
       transition: transform $transitionDuration;
       color: $cyan;
-      margin-right: 0.625rem;
+      margin-right: 0.703125rem;
     }
     span {
       display: inline-block;
@@ -84,30 +84,30 @@
 
   .Sortable {
     @include medium {
-      padding-right: 1rem;
+      padding-right: 1.125rem;
     }
   }
 }
 
 .files-manager-table-header-divider {
-  border-bottom: 0.0625rem solid rgba($white, 0.05);
+  border-bottom: 0.0703125rem solid rgba($white, 0.05);
   position: absolute;
   width: 100%;
   left: 0;
-  top: 8.125rem;
+  top: 9.140625rem;
 }
 
 .files-manager-table-content {
   display: flex;
   flex-direction: column;
-  min-height: toRem(300);
+  min-height: 21.09375rem;
 }
 
 .files-manager-upload-cta {
   @include fontWeight_Regular;
   @include fontSize_Medium;
-  padding-left: 2.5rem;
-  padding-top: 0.85rem;
+  padding-left: 2.8125rem;
+  padding-top: 0.984375rem;
   .button {
     button {
       @include fontSize_Medium;
@@ -119,19 +119,19 @@
 .files-loading-spinner {
   width: 100%;
   padding: 0;
-  padding-top: 2em;
+  padding-top: 2.25rem;
 }
 
 .files-manager-footer {
   display: flex;
   justify-content: space-between;
   justify-items: center;
-  padding: 1.5rem 2rem 0;
+  padding: 1.6875rem 2.25rem 0;
   padding-bottom: 0rem;
   flex-wrap: wrap;
 
   @include medium {
-    padding: 1rem;
+    padding: 1.125rem;
     padding-bottom: 0rem;
     .Pagination .pageList {
       justify-content: center;
@@ -139,7 +139,7 @@
   }
 
   .files-manager-result-dropdown .dropdownContent {
-    right: -0.75rem;
+    right: -0.84375rem;
   }
 
   .delete {
@@ -163,35 +163,35 @@
     position: relative;
   }
   .modalContainer {
-    min-width: toRem(550);
+    min-width: 38.671875rem;
     @include medium {
       min-width: auto;
     }
     @include borderRadius_Large;
     .modalInner {
-      padding: toRem(49) 2rem toRem(29) 4rem;
+      padding: 3.4453125rem 2.25rem 2.0390625rem 4.5rem;
     }
   }
   .modalClose {
     color: $ebony;
-    font-size: 2rem;
+    font-size: 2.25rem;
   }
   &-content {
     position: relative;
     h5 {
-      font-size: toRem(24);
+      font-size: 1.6875rem;
     }
     p {
-      font-size: toRem(16);
+      font-size: 1.125rem;
       @include leading_Small;
     }
   }
   &-buttons {
-    margin-top: toRem(27);
+    margin-top: 1.8984375rem;
     display: flex;
     justify-content: flex-end;
     .button {
-      margin-left: 0.5rem;
+      margin-left: 0.5625rem;
     }
   }
 }
@@ -218,14 +218,14 @@
     align-items: center;
     justify-content: center;
     display: flex;
-    width: toRem(286);
-    height: toRem(286);
-    border-radius: 10px;
+    width: 20.109375rem;
+    height: 20.109375rem;
+    border-radius: 0.703125rem;
     background: rgba(#757a9b, 0.25);
     mix-blend-mode: normal;
-    border: toRem(4) solid rgba($white, 0.25);
-    box-shadow: 0px 12.6176px 25.2353px rgba(0, 0, 0, 0.160784);
-    border-radius: toRem(8.5);
+    border: 0.28125rem solid rgba($white, 0.25);
+    box-shadow: 0px 0.09765625rem 1.79296875rem rgba(0, 0, 0, 0.160784);
+    border-radius: 0.59765625rem;
     svg {
       opacity: 0.49;
     }

@@ -1,8 +1,8 @@
 .tokens-container {
-  max-width: 60rem;
+  max-width: 67.5rem;
   margin: auto;
   h3 {
-    padding: 0 1.75rem 0.75rem;
+    padding: 0 1.96875rem 0.84375rem;
   }
   .isDisabled {
     pointer-events: none;
@@ -27,9 +27,9 @@
 .tokens-footer {
   @include fontSize_Tiny;
   @include fontWeight_Regular;
-  margin-top: 0.75rem;
+  margin-top: 0.84375rem;
   @include medium {
-    margin-top: 2.36rem;
+    margin-top: 2.671875rem;
     justify-content: center;
     text-align: center;
   }
@@ -46,7 +46,7 @@
     display: none;
   }
   button {
-    padding-left: 1rem;
+    padding-left: 1.125rem;
     @include medium {
       padding-left: 0;
       align-items: center;
@@ -69,6 +69,6 @@
     @include hoverArrowRight;
   }
   @include medium {
-    margin-bottom: 1.59375rem;
+    margin-bottom: 1.79296875rem;
   }
 }

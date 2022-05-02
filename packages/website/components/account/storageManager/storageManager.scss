@@ -4,26 +4,26 @@
   > * {
     width: 100%;
   }
-  padding: 1.875rem 0 0.9375rem 2.375rem;
+  padding: 2.109375rem 0 1.0546875rem 2.671875rem;
   @include medium {
-    padding: 2.25rem 1.375rem 2.25rem 1rem;
+    padding: 2.53125rem 1.546875rem 2.53125rem 1.125rem;
   }
 }
 
 .storage-manager-info,
 .storage-manager-space {
   display: flex;
-  padding-left: 0.5625rem;
-  padding-right: 3.15rem;
+  padding-left: 0.6328125rem;
+  padding-right: 3.515625rem;
   align-items: center;
 }
 
 .storage-manager-space {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.325rem;
+  margin-bottom: 0.3515625rem;
   @include medium {
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.421875rem;
   }
   .button {
     height: auto;
@@ -41,12 +41,12 @@
   a {
     @include hoverTextLinkColor;
   }
-  margin-top: 1.25rem;
+  margin-top: 1.40625rem;
   @include medium {
     @include leading_Small;
     button a {
       &::after {
-        margin-left: 0.5rem;
+        margin-left: 0.5625rem;
         content: '❯';
       }
     }
@@ -72,18 +72,18 @@
   position: relative;
   color: $white;
   width: 100%;
-  gap: 0.95rem;
-  padding-right: 2.25rem;
+  gap: 1.125rem;
+  padding-right: 2.53125rem;
 
   @include medium {
-    gap: 0.625rem;
+    gap: 0.703125rem;
   }
 
   .button {
     padding: 0;
     height: auto;
     svg {
-      margin-right: 0.35rem;
+      margin-right: 0.421875rem;
       @include hoverSvg;
     }
     button {
@@ -113,24 +113,24 @@
   display: flex;
   align-items: center;
   position: relative;
-  height: 1.375rem;
+  height: 1.546875rem;
   background: rgba($vulcan, 0.15);
-  border: 0.0625rem solid rgba($waterloo, 0.15);
+  border: 0.0703125rem solid rgba($waterloo, 0.15);
   flex: 1;
   &:only-child {
     flex: 1;
-    max-width: 35.5rem;
+    max-width: 39.9375rem;
   }
   span {
     @include fontSize_Atom;
     position: absolute;
-    right: 0.75rem;
-    text-shadow: 0 0 0.125rem rgba(0, 0, 0, 0.94);
+    right: 0.84375rem;
+    text-shadow: 0 0 0.140625rem rgba(0, 0, 0, 0.94);
   }
 }
 
 .storage-manager-used {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5625rem;
   .storage-label {
     @include fontWeight_Semibold;
   }
@@ -155,7 +155,7 @@
   background-size: 410%;
   background-position: 50% 0;
   @include borderRadius_UltraLarge;
-  height: 1.5rem;
+  height: 1.6875rem;
   top: 0;
   left: 0;
   transition: 250ms ease-out;

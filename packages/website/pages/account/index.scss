@@ -1,14 +1,14 @@
 .account-container {
-  max-width: 61.125rem;
+  max-width: 68.765625rem;
   margin: auto;
   display: table;
-  padding-bottom: 10rem;
+  padding-bottom: 11.25rem;
   position: relative;
 
   h3 {
-    padding: 0 1.75rem 0.75rem;
+    padding: 0 1.96875rem 0.84375rem;
     @include medium {
-      padding: 2rem 0;
+      padding: 2.25rem 0;
     }
   }
 }
@@ -22,7 +22,7 @@
     'files-manager    files-manager   files-manager';
 
   grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 0.6875rem 0.9375rem;
+  grid-gap: 0.7734375rem 1.0546875rem;
 
   @include medium {
     grid-template-columns: 1fr;
@@ -32,7 +32,7 @@
       'tokens-cta'
       'docs-cta'
       'files-manager';
-    grid-gap: 1rem 0;
+    grid-gap: 1.125rem 0;
   }
 
   .account {
@@ -48,7 +48,7 @@
       justify-content: center;
 
       h4 {
-        padding-bottom: 0.5rem;
+        padding-bottom: 0.5625rem;
       }
     }
     &-tokens-cta {
@@ -59,7 +59,7 @@
     }
     &-files-manager {
       grid-area: files-manager;
-      min-height: 17.125rem;
+      min-height: 19.265625rem;
     }
   }
 }
@@ -86,7 +86,7 @@
       transform: translate(-15%, -35%) scaleY(0.75) rotate(-40deg);
     }
     @include tiny {
-      width: 40rem;
+      width: 45rem;
       transform: translate(-20%, -20%) scaleY(1.4) rotate(-40deg);
     }
   }

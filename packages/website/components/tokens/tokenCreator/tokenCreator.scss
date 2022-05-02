@@ -10,7 +10,7 @@
   @include fontSize_Mini;
   @include medium {
     position: absolute;
-    top: 8rem;
+    top: 9rem;
     width: 100%;
     .button {
       width: 100%;
@@ -55,9 +55,9 @@
   transition: all $transitionDurationLong ease-in-out;
   text-decoration: none;
   outline: none;
-  min-width: 22.625rem;
-  height: 2.375rem;
-  padding: 0 2.5rem 0 1rem;
+  min-width: 25.453125rem;
+  height: 2.671875rem;
+  padding: 0 2.8125rem 0 1.125rem;
   color: $cyan;
 
   @include border_Background_Waterloo_White;
@@ -86,15 +86,15 @@
 
 .token-creator-submit {
   position: absolute;
-  right: 1rem;
+  right: 1.125rem;
   @include fontSize_MediumLarge;
   @include hoverScale;
   .token-creator-check {
-    padding: 0.375rem 0;
-    width: 1.5rem;
-    transform: translate(3px, 1px);
+    padding: 0.421875rem 0;
+    width: 1.6875rem;
+    transform: translate(0.2109375rem, 0.0703125rem);
     path {
-      stroke-width: 0.75rem;
+      stroke-width: 0.84375rem;
     }
   }
 }
