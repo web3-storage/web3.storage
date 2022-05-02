@@ -11,6 +11,7 @@ import json from 'highlight.js/lib/languages/json';
 import Sidebar from './sidebar/sidebar';
 import Feedback from './feedback/feedback';
 import Toc from './toc/toc';
+import DocsPagination from './docspagination/docspagination';
 
 hljs.registerLanguage('javascript', javascript);
 hljs.registerLanguage('shell', shell);
@@ -43,6 +44,7 @@ export default function Docs(props) {
               <main className="docs-body">
                 <MDXProvider>{children}</MDXProvider>
                 <Feedback />
+                <DocsPagination />
               </main>
               <Toc />
             </article>
