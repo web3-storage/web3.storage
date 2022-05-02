@@ -1,5 +1,12 @@
 # Changelog
 
+### [5.7.2](https://github.com/web3-storage/web3.storage/compare/api-v5.7.1...api-v5.7.2) (2022-04-29)
+
+
+### Bug Fixes
+
+* Bump MAX_BLOCK_SIZE to 2MiB limit imposed by bitswap ([#1269](https://github.com/web3-storage/web3.storage/issues/1269)) ([f0d8d95](https://github.com/web3-storage/web3.storage/commit/f0d8d95df55e54d6d435c7fe11d6c3e81d12fca6))
+
 ### [5.7.1](https://github.com/web3-storage/web3.storage/compare/api-v5.7.0...api-v5.7.1) (2022-04-26)
 
 
