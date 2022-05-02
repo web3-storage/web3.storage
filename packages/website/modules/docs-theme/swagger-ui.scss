@@ -2522,68 +2522,6 @@
   }
 }
 
-.swagger-ui .sans-serif {
-  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica, helvetica neue, ubuntu, roboto, noto,
-    segoe ui, arial, sans-serif;
-}
-
-.swagger-ui .serif {
-  font-family: georgia, serif;
-}
-
-.swagger-ui .system-sans-serif {
-  font-family: sans-serif;
-}
-
-.swagger-ui .system-serif {
-  font-family: serif;
-}
-
-.swagger-ui .code,
-.swagger-ui code {
-  font-family: Consolas, monaco, monospace;
-}
-
-.swagger-ui .courier {
-  font-family: Courier Next, courier, monospace;
-}
-
-.swagger-ui .helvetica {
-  font-family: helvetica neue, helvetica, sans-serif;
-}
-
-.swagger-ui .avenir {
-  font-family: avenir next, avenir, sans-serif;
-}
-
-.swagger-ui .athelas {
-  font-family: athelas, georgia, serif;
-}
-
-.swagger-ui .georgia {
-  font-family: georgia, serif;
-}
-
-.swagger-ui .times {
-  font-family: times, serif;
-}
-
-.swagger-ui .bodoni {
-  font-family: Bodoni MT, serif;
-}
-
-.swagger-ui .calisto {
-  font-family: Calisto MT, serif;
-}
-
-.swagger-ui .garamond {
-  font-family: garamond, serif;
-}
-
-.swagger-ui .baskerville {
-  font-family: baskerville, serif;
-}
-
 .swagger-ui .i {
   font-style: italic;
 }
@@ -9846,18 +9784,26 @@
   display: none;
 }
 
-.swagger-ui .markdown code,
-.swagger-ui .renderedMarkdown code {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
-  color: #9012fe;
-  font-family: monospace;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 5px 7px;
-}
-
 .swagger-ui .markdown pre > code,
 .swagger-ui .renderedMarkdown pre > code {
   display: block;
+}
+
+// overwrite
+.docs-site .docs-container {
+  .swagger-ui {
+    .title {
+      @include h1;
+      margin-top: 0;
+      span {
+        display: none;
+      }
+    }
+  }
+}
+
+.swagger-ui {
+  .topbar {
+    display: none;
+  }
 }

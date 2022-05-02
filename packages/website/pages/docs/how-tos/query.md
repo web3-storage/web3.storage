@@ -33,7 +33,7 @@ npm install web3.storage
 
 In your Go project, add the client package to your dependencies using `go get`:
 
-```bash
+```shell
 go get github.com/web3-storage/go-w3s-client
 ```
 

@@ -3,7 +3,7 @@
   color: $ebony;
   border-top-right-radius: 0.4rem;
   border-bottom-right-radius: 0.4rem;
-  margin-bottom: 3.75rem;
+  margin: 3rem 0;
   position: relative;
   padding: toRem(23) toRem(37);
   width: 100%;
@@ -15,7 +15,7 @@
   }
   &.warning,
   &.info {
-    &:before {
+    h5:before {
       display: inline-block;
       background-repeat: no-repeat;
       vertical-align: middle;

@@ -1,12 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 let ScrollMagic;
 if (typeof window !== 'undefined') {
   ScrollMagic = require('scrollmagic');
 }
 
 export default function Toc() {
-  let headings = useRef(['']);
   const [isOpen, setOpen] = useState(false);
+  const [nestedHeadings, setNestedHeadings] = useState([]);
+  let controller;
+  // const controller = new ScrollMagic.Controller();
 
   const toggleClass = () => {
     setOpen(!isOpen);
@@ -28,62 +30,80 @@ export default function Toc() {
     return str;
   };
 
-  useEffect(() => {
-    let start = 0;
-    let html = '';
-    let c = document.querySelector('.docs-body')?.children;
-
-    if (!c) {
-      return;
-    }
-
-    for (let i = 0; i < c.length; i++) {
-      if (c[i].nodeName.match(/^H2|H3|H4$/)) {
-        const level = parseInt(c[i].nodeName.substr(1));
-        const headerText = c[i].innerHTML;
-        const anchor = string_to_slug(headerText);
-        headings.current.push(anchor);
-        // edit main doc
-        c[i].innerHTML = '<a href="#' + anchor + '" id="' + anchor + '">' + headerText + '</a>';
-        if (headerText) {
-          if (level > start) {
-            html += new Array(level - start + 1).join('<ul>');
-          } else if (level < start) {
-            html += new Array(start - level + 1).join('</li></ul>');
-          } else {
-            html += new Array(start + 1).join('</li>');
-          }
-          start = level;
-          html += '<li><a href="#' + anchor + '">' + headerText + '</a>';
-        }
+  const getNestedHeadings = headingElements => {
+    const nestedHeadings = [];
+    headingElements.forEach((heading, index) => {
+      const id = string_to_slug(heading.innerText);
+      const title = heading.innerText;
+      // add a[href] to headings
+      heading.innerHTML = '<a href="#' + id + '" id="' + id + '">' + title + '</a>';
+      // store toc data
+      if (heading.nodeName === 'H2') {
+        nestedHeadings.push({ id, title, items: [] });
+      } else if (heading.nodeName === 'H3' && nestedHeadings.length > 0) {
+        nestedHeadings[nestedHeadings.length - 1].items.push({
+          id,
+          title,
+        });
       }
-    }
-    if (start) {
-      html += new Array(start + 1).join('</ul>');
-    }
-    // @ts-ignore
-    // sorry ugly, fix later
-    document.querySelector('#toc').innerHTML = html;
-
-    const controller = new ScrollMagic.Controller({ globalSceneOptions: { duration: 10 } });
-    headings.current.map(item => {
-      return new ScrollMagic.Scene({ triggerElement: `#${item}` })
+      // scroll effects / add active class
+      new ScrollMagic.Scene({ triggerElement: `#${id}` })
         .on('enter leave', () => {
           document.querySelectorAll('#toc a').forEach(el => {
             el.classList.remove('active');
           });
-          document.querySelector(`#toc a[href="#${item}"]`)?.classList.add('active');
+          document.querySelector(`#toc a[href="#${id}"]`)?.classList.add('active');
         })
         .addTo(controller);
     });
+    return nestedHeadings;
+  };
+
+  const Headings = ({ headings }) => (
+    <ul>
+      {headings.map(heading => (
+        <li key={heading.id}>
+          <a href={`#${heading.id}`}>{heading.title}</a>
+          {heading.items.length > 0 && (
+            <ul>
+              {heading.items.map(child => (
+                <li key={child.id}>
+                  <a href={`#${child.id}`}>{child.title}</a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+
+  useEffect(() => {
+    controller = new ScrollMagic.Controller();
+    const headingElements = Array.from(document.querySelectorAll('.docs-body h2, .docs-body h3'));
+    const newNestedHeadings = getNestedHeadings(headingElements);
+    // @ts-ignore
+    setNestedHeadings(newNestedHeadings);
   }, []);
 
   return (
-    <div className="toc-container">
-      <div tabIndex={0} onKeyPress={toggleClass} role="button" onClick={toggleClass} className="toc-mobile-dropdown">
-        On this page
-      </div>
-      <div id="toc" className={isOpen ? 'mobile-open' : ''}></div>
-    </div>
+    <>
+      {nestedHeadings.length !== 0 && (
+        <div className="toc-container">
+          <div
+            tabIndex={0}
+            onKeyPress={toggleClass}
+            role="button"
+            onClick={toggleClass}
+            className="toc-mobile-dropdown"
+          >
+            On this page
+          </div>
+          <div id="toc" className={isOpen ? 'mobile-open' : ''}>
+            <Headings headings={nestedHeadings} />
+          </div>
+        </div>
+      )}
+    </>
   );
 }

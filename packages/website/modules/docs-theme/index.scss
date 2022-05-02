@@ -162,20 +162,27 @@
       word-wrap: break-word;
       
     }
+    code {
+      @include monospace_Text;
+      font-size: .875rem;
+      line-height: 1.25rem;
+    }
     pre code {
+      @include monospace_Text;
       background-color: $steelGray;
       border-radius: 0.4rem;
       display: inline-block;
       min-width: 100%;
-      font-size: .875rem;
-      line-height: 1.25rem;
       color: white;
       padding: 1rem;
-      @include monospace_Text;
+      font-size: .875rem;
+      line-height: 1.25rem;
     }
     a {
       color: $docsPrimaryPurple;
       font-weight: 600;
+      border-bottom: none;
+      padding-bottom: 0;
     }
     h1 a, h2 a, h3 a, h4 a, h5 a {
       color: $ebony;
