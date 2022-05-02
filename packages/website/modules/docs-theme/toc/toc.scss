@@ -17,13 +17,23 @@
   border-top-right-radius: 5px;
   position: relative;
   line-height: 1;
-  &:after {
-    content: '>';
-    position: absolute;
-    right: 10px;
-  }
   @include medium {
-    display: block;
+    display: flex;
+  }
+  justify-content: space-between;
+  align-items: center;
+  path {
+    stroke: white;
+    opacity: 0.6;
+  }
+  svg {
+    transition: transform $transitionDuration;
+  }
+  &.mobile-open {
+    svg {
+      transform: rotate(180deg);
+      transition: transform $transitionDuration;
+    }
   }
 }
 

@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+
+import { ReactComponent as Chevron } from '../../../assets/icons/chevron.svg';
+
 let ScrollMagic;
 if (typeof window !== 'undefined') {
   ScrollMagic = require('scrollmagic');
@@ -95,9 +98,10 @@ export default function Toc() {
             onKeyPress={toggleClass}
             role="button"
             onClick={toggleClass}
-            className="toc-mobile-dropdown"
+            className={isOpen ? 'toc-mobile-dropdown mobile-open' : 'toc-mobile-dropdown'}
           >
             On this page
+            <Chevron />
           </div>
           <div id="toc" className={isOpen ? 'mobile-open' : ''}>
             <Headings headings={nestedHeadings} />
