@@ -107,8 +107,8 @@
           "status": {
             "label": "Status",
             "tooltip": {
-              "header": "Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes.",
-              "queuing": "The upload has been received or is in progress and has not yet been queued for pinning.",
+              "header": "Reports the status of a file or piece of data stored on the IPFS Cluster. Status might not be fully up-to-date. Data is still available even when in Queued state.",
+              "queuing": "",
               "pin_queued": "The upload has been received and is in the queue to be pinned.",
               "pinning": "The upload is being replicated to multiple IPFS nodes.",
               "pinned": "The upload is fully pinned on *numberOfPins* IPFS nodes."
