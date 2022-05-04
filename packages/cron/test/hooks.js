@@ -58,10 +58,9 @@ export const mochaHooks = () => {
     },
     async beforeEach () {
       await execa(dbCli, ['db-sql', '--skipCreate', '--truncate', `--customSqlPath=${initScript}`])
-      global.sandbox = sinon.createSandbox()
     },
     async afterEach () {
-      global.sandbox.restore()
+      sinon.restore()
     }
   }
 }
