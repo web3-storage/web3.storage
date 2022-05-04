@@ -19,7 +19,7 @@ export class EmailService {
   /**
    * @param {{
    *   db: import('@web3-storage/db').DBClient,
-   *   provider: string
+   *   provider?: string
    * }} config
    */
   constructor ({ db, provider }) {
@@ -69,6 +69,7 @@ export class EmailService {
     // Send the email
     log(`📧 Sending email '${emailType}' to ${user.name} (${user.email}).`)
     const messageId = await this.provider.sendEmail(emailType, user.email, user.name, this.fromAddr, this.fromName, formattedVars)
+
     if (messageId) {
       // Log the email
       await this.db.logEmailSent({ userId: user._id, emailType, messageId })
