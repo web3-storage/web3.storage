@@ -18,6 +18,7 @@ import {
 } from './maintenance.js'
 import { notFound } from './utils/json-response.js'
 import { nameGet, nameWatchGet, namePost } from './name.js'
+import { compose } from './utils/fn.js'
 
 const router = Router()
 router.options('*', corsOptions)
@@ -27,14 +28,6 @@ router.get('*', withMode(READ_ONLY))
 router.head('*', withMode(READ_ONLY))
 router.post('*', withMode(READ_WRITE))
 router.delete('*', withMode(READ_WRITE))
-
-/**
- * Takes any number of functions and invokes them all one after the other
- *
- * @param  {...function(...any):any} fns
- * @returns
- */
-const compose = (...fns) => x => fns.reduceRight((y, f) => f(y), x)
 
 /**
  * It defines a list of "middlewares" that need to be applied for a given authentication mode.
