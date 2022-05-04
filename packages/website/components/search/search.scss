@@ -8,6 +8,8 @@ span.DocSearch-Button-Keys {
 .DocSearch-Button {
   background: none;
   transition: 200ms ease;
+  margin: 0;
+  padding: 0;
 }
 .DocSearch-Button:hover {
   background: none;
@@ -20,5 +22,14 @@ span.DocSearch-Button-Keys {
   &:hover {
     transform: translateY(-0.5rem);
     transition: 200ms ease;
+  }
+}
+
+.product-app {
+  .DocSearch-Button .DocSearch-Search-Icon {
+    color: $white;
+    &:hover {
+      color: $white;
+    }
   }
 }
