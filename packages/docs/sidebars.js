@@ -13,6 +13,7 @@ module.exports = {
         'how-tos/work-with-car-files',
         'how-tos/generate-api-token',
         'how-tos/get-status',
+        'how-tos/pinning-services-api',
         'how-tos/troubleshooting'
       ]
     },
