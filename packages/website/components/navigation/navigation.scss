@@ -312,7 +312,10 @@
 .nav-menu-toggle {
   display: none;
   @include small {
-    display: block;
+    display: flex;
+    .DocSearch {
+      margin-right: 1rem;
+    }
   }
   &.light {
     svg,

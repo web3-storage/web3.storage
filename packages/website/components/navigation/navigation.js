@@ -213,6 +213,7 @@ export default function Navigation({ isProductApp }) {
               </div>
 
               <div className={clsx('nav-menu-toggle', theme, isMenuOpen ? 'menu-open' : '')}>
+                <Search />
                 <button onClick={toggleMenu}>
                   <Hamburger aria-label="Toggle Navbar" />
                 </button>
