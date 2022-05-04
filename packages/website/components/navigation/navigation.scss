@@ -110,6 +110,8 @@
 
 .nav-items-wrapper {
   .button {
+    margin: 0 1.5rem;
+    padding: 0 0.5rem;
     position: relative;
     div {
       display: flex;
@@ -153,10 +155,6 @@
         opacity: 1;
       }
     }
-  }
-  & > *:last-child {
-    margin-left: 1.5rem;
-    margin-right: 0;
   }
   &.light {
     .nav-item {

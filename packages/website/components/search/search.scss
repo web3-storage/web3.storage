@@ -1,0 +1,24 @@
+@import '@docsearch/css';
+
+// search bar
+.DocSearch-Button-Placeholder,
+span.DocSearch-Button-Keys {
+  display: none;
+}
+.DocSearch-Button {
+  background: none;
+  transition: 200ms ease;
+}
+.DocSearch-Button:hover {
+  background: none;
+  box-shadow: none;
+  svg {
+    color: $docsPrimaryPurple;
+  }
+  transform: translateY(0rem);
+  transition: 200ms ease;
+  &:hover {
+    transform: translateY(-0.5rem);
+    transition: 200ms ease;
+  }
+}
