@@ -85,6 +85,12 @@
     },
     "file_manager": {
       "heading": "Files",
+      "upload": {
+        "text": "Upload +",
+        "theme": "text",
+        "ui": "FILES",
+        "action": "Upload File"
+      },
       "table": {
         "message": "You don't have any files uploaded yet.",
         "cta": {
