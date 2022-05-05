@@ -148,7 +148,7 @@
     color: $cyan;
     transition: opacity $transitionDuration;
     &.disabled {
-      color: #717171;
+      color: $gray600;
     }
   }
 
