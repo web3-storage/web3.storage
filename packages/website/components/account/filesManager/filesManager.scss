@@ -3,7 +3,7 @@
   flex-direction: column;
   position: relative;
   justify-content: flex-start;
-  padding: 1.5rem 0;
+  padding: 1.875rem 0;
 
   @include medium {
     background: none;
@@ -26,7 +26,7 @@
   align-items: center;
   justify-content: space-between;
   justify-items: center;
-  padding: 0 2.125rem 1.5rem;
+  padding: 0 2.6875rem 1.875rem;
   flex-wrap: wrap;
 
   @include medium {
@@ -36,9 +36,9 @@
 
   // Title
   > :first-child {
-    margin-right: 8rem;
+    margin-right: 10rem;
     @include medium {
-      padding-left: 1rem;
+      padding-left: 1.25rem;
       margin-right: initial;
     }
   }
@@ -47,24 +47,24 @@
     @include medium {
       flex-basis: 100%;
       order: 4;
-      margin-top: 0.5rem;
-      margin-bottom: 0.375rem;
+      margin-top: 0.625rem;
+      margin-bottom: 0.5rem;
     }
   }
 
   .refresh {
     @include label_5;
     position: relative;
-    top: 0.1rem;
+    top: 0.125rem;
     cursor: pointer;
-    margin-right: 2.5rem;
+    margin-right: 3.125rem;
     @include medium {
       margin-right: 0;
     }
     svg {
       transition: transform $transitionDuration;
       color: $cyan;
-      margin-right: 0.625rem;
+      margin-right: 0.8125rem;
     }
     span {
       display: inline-block;
@@ -84,30 +84,30 @@
 
   .Sortable {
     @include medium {
-      padding-right: 1rem;
+      padding-right: 1.25rem;
     }
   }
 }
 
 .files-manager-table-header-divider {
-  border-bottom: 0.0625rem solid rgba($white, 0.05);
+  border-bottom: 0.078125rem solid rgba($white, 0.05);
   position: absolute;
   width: 100%;
   left: 0;
-  top: 8.125rem;
+  top: 10.1875rem;
 }
 
 .files-manager-table-content {
   display: flex;
   flex-direction: column;
-  min-height: toRem(300);
+  min-height: 23.4375rem;
 }
 
 .files-manager-upload-cta {
   @include fontWeight_Regular;
   @include fontSize_Medium;
-  padding-left: 2.5rem;
-  padding-top: 0.85rem;
+  padding-left: 3.125rem;
+  padding-top: 1.0625rem;
   .button {
     button {
       @include fontSize_Medium;
@@ -119,19 +119,19 @@
 .files-loading-spinner {
   width: 100%;
   padding: 0;
-  padding-top: 2em;
+  padding-top: 2.5rem;
 }
 
 .files-manager-footer {
   display: flex;
   justify-content: space-between;
   justify-items: center;
-  padding: 1.5rem 2rem 0;
+  padding: 1.875rem 2.5rem 0;
   padding-bottom: 0rem;
   flex-wrap: wrap;
 
   @include medium {
-    padding: 1rem;
+    padding: 1.25rem;
     padding-bottom: 0rem;
     .Pagination .pageList {
       justify-content: center;
@@ -139,7 +139,7 @@
   }
 
   .files-manager-result-dropdown .dropdownContent {
-    right: -0.75rem;
+    right: -0.9375rem;
   }
 
   .delete {
@@ -166,35 +166,35 @@
     position: relative;
   }
   .modalContainer {
-    min-width: toRem(550);
+    min-width: 43rem;
     @include medium {
       min-width: auto;
     }
     @include borderRadius_Large;
     .modalInner {
-      padding: toRem(49) 2rem toRem(29) 4rem;
+      padding: 3.875rem 2.5rem 2.25rem 5rem;
     }
   }
   .modalClose {
     color: $ebony;
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
   &-content {
     position: relative;
     h5 {
-      font-size: toRem(24);
+      font-size: 1.875rem;
     }
     p {
-      font-size: toRem(16);
+      font-size: 1.25rem;
       @include leading_Small;
     }
   }
   &-buttons {
-    margin-top: toRem(27);
+    margin-top: 2.125rem;
     display: flex;
     justify-content: flex-end;
     .button {
-      margin-left: 0.5rem;
+      margin-left: 0.625rem;
     }
   }
 }
@@ -221,14 +221,14 @@
     align-items: center;
     justify-content: center;
     display: flex;
-    width: toRem(286);
-    height: toRem(286);
-    border-radius: 10px;
+    width: 22.375rem;
+    height: 22.375rem;
+    border-radius: 12.5px;
     background: rgba(#757a9b, 0.25);
     mix-blend-mode: normal;
-    border: toRem(4) solid rgba($white, 0.25);
-    box-shadow: 0px 12.6176px 25.2353px rgba(0, 0, 0, 0.160784);
-    border-radius: toRem(8.5);
+    border: 0.3125rem solid rgba($white, 0.25);
+    box-shadow: 0px 15.772px 31.544125px rgba(0, 0, 0, 0.160784);
+    border-radius: 0.6875rem;
     svg {
       opacity: 0.49;
     }

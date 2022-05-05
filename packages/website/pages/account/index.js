@@ -67,7 +67,7 @@ const Account = () => {
 
   return (
     <>
-      <div className="page-container account-container grid">
+      <div className="page-container account-container">
         <h3>{dashboard.heading}</h3>
         <div className="account-content">
           <StorageManager content={AppData.page_content.storage_manager} className="account-storage-manager" />
