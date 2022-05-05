@@ -2,6 +2,8 @@
 title: Getting upload status
 ---
 
+# Getting upload status
+
 The Web3.Storage service provides a few ways to check on the status of an upload.
 
 On the [Account page](https://web3.storage/account) of the Web3.Storage site, you can see a list of files that you've uploaded to Web3.Storage.

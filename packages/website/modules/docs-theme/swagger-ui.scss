@@ -7820,7 +7820,7 @@
 
 .swagger-ui .parameter__type {
   color: #3b4151;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-size: 12px;
   font-weight: 600;
   padding: 5px 0;
@@ -7971,7 +7971,7 @@
   align-items: center;
   color: #3b4151;
   display: flex;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-size: 16px;
   font-weight: 600;
   padding: 0 10px;
@@ -8321,7 +8321,7 @@
 
 .swagger-ui .response-col_status .response-undocumented {
   color: #909090;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-size: 11px;
   font-weight: 600;
 }
@@ -8336,7 +8336,7 @@
 
 .swagger-ui .response-col_links .response-undocumented {
   color: #909090;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-size: 11px;
   font-weight: 600;
 }
@@ -8356,17 +8356,15 @@
 
 .swagger-ui .opblock-body pre.microlight {
   word-wrap: break-word;
-  background: #333;
   border-radius: 4px;
-  color: #fff;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-size: 12px;
-  font-weight: 600;
   -webkit-hyphens: auto;
   -ms-hyphens: auto;
   hyphens: auto;
   margin: 0;
   padding: 10px;
+  background: transparent !important;
   white-space: pre-wrap;
   word-break: break-all;
   word-break: break-word;
@@ -8936,7 +8934,7 @@
   border: none;
   border-radius: 4px;
   color: #3b4151;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-size: 12px;
   font-weight: 600;
   min-height: 280px;
@@ -8953,7 +8951,7 @@
   background: #41444e;
   border-radius: 4px;
   color: #fff;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-size: 12px;
   font-weight: 600;
   margin: 0;
@@ -8974,7 +8972,7 @@
 
 .swagger-ui .checkbox p {
   color: #3b4151;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-style: italic;
   font-weight: 400 !important;
   font-weight: 600;
@@ -9093,7 +9091,7 @@
 
 .swagger-ui .model {
   color: #3b4151;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-size: 12px;
   font-weight: 300;
   font-weight: 600;
@@ -9425,7 +9423,7 @@
 
 .swagger-ui table.headers td {
   color: #3b4151;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-size: 12px;
   font-weight: 300;
   font-weight: 600;
@@ -9500,7 +9498,7 @@
 .swagger-ui .parameter__extension,
 .swagger-ui .parameter__in {
   color: gray;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-size: 12px;
   font-style: italic;
   font-weight: 600;
@@ -9508,7 +9506,7 @@
 
 .swagger-ui .parameter__deprecated {
   color: red;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-size: 12px;
   font-style: italic;
   font-weight: 600;
@@ -9543,7 +9541,7 @@
 
 .swagger-ui .response__extension {
   color: gray;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-size: 12px;
   font-style: italic;
   font-weight: 600;
@@ -9676,7 +9674,7 @@
   border-radius: 4px;
   color: red;
   color: #3b4151;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-size: 12px;
   font-weight: 600;
   margin: 1em;
@@ -9722,7 +9720,7 @@
 
 .swagger-ui .errors-wrapper .errors h4 {
   color: #3b4151;
-  font-family: monospace;
+  font-family: 'Suisse Intl Mono';
   font-size: 14px;
   font-weight: 600;
   margin: 0;
