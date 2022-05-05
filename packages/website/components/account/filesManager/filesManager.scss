@@ -37,6 +37,22 @@
   // Title
   > :first-child {
     margin-right: 10rem;
+  }
+  .files-manager-title {
+    display: flex;
+    flex-direction: row;
+    &:not(.has-upload-button) {
+      margin-right: 8rem;
+    }
+    .button {
+      @include fontSize_Atom;
+      transform: translateY(1px);
+      @include tiny {
+        button {
+          padding: 0.25rem 0.75rem;
+        }
+      }
+    }
     @include medium {
       padding-left: 1.25rem;
       margin-right: initial;
