@@ -21,7 +21,7 @@ import { useUploads } from 'components/contexts/uploadsContext';
 import { useUser } from 'components/contexts/userContext';
 import CheckIcon from 'assets/icons/check';
 
-const defaultQueryOrder = 'a-z';
+const defaultQueryOrder = 'newest';
 
 /**
  * @typedef {import('web3.storage').Upload} Upload

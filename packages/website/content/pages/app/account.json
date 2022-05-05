@@ -139,6 +139,18 @@
           "label": "Sort By",
           "options": [
             {
+              "label": "Newest Upload",
+              "value": "newest",
+              "direction": "NEWEST",
+              "compareFn": "TIMEBASED"
+            },
+            {
+              "label": "Oldest Upload",
+              "value": "oldest",
+              "direction": "OLDEST",
+              "compareFn": "TIMEBASED"
+            },
+            {
               "label": "Alphabetical A-Z",
               "key": "name",
               "value": "a-z",
@@ -151,18 +163,6 @@
               "value": "z-a",
               "direction": "DESC",
               "compareFn": "ALPHANUMERIC"
-            },
-            {
-              "label": "Newest Upload",
-              "value": "newest",
-              "direction": "NEWEST",
-              "compareFn": "TIMEBASED"
-            },
-            {
-              "label": "Oldest Upload",
-              "value": "oldest",
-              "direction": "OLDEST",
-              "compareFn": "TIMEBASED"
             },
             {
               "label": "Largest size",
