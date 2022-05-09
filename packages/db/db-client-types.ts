@@ -120,10 +120,8 @@ export type PinSyncRequestOutput = {
 
 // Backup
 export type BackupOutput = {
-  _id: string
-  created: definitions['backup']['inserted_at']
-  url: definitions['backup']['url']
-  uploadId: definitions['backup']['upload_id']
+  created: string
+  url: string
 }
 
 // Deal

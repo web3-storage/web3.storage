@@ -89,7 +89,6 @@ describe('backup', () => {
 
     assert(backups, 'backups created')
     assert.strictEqual(backups.length, 1, 'upload has a single backup')
-    assert(backups[0]._id, 'backup has id')
     assert(backups[0].created, 'backup has inserted timestamp')
     assert.strictEqual(backups[0].url, initialBackupUrl, 'backup has correct url')
   })

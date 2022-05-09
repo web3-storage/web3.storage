@@ -120,22 +120,23 @@ CREATE OR REPLACE FUNCTION create_upload(data json) RETURNS TEXT
 AS
 $$
 DECLARE
-  backup_url TEXT;
   inserted_upload_id BIGINT;
+
 BEGIN
   -- Set timeout as imposed by heroku
   SET LOCAL statement_timeout = '30s';
 
   PERFORM create_content(data);
 
-  insert into upload (user_id,
+  insert into upload as upld (user_id,
                       auth_key_id,
                       content_cid,
                       source_cid,
                       type,
                       name,
                       inserted_at,
-                      updated_at)
+                      updated_at,
+                      backup_urls)
   values ((data ->> 'user_id')::BIGINT,
             (data ->> 'auth_key_id')::BIGINT,
             data ->> 'content_cid',
@@ -143,24 +144,14 @@ BEGIN
             (data ->> 'type')::upload_type,
             data ->> 'name',
             (data ->> 'inserted_at')::timestamptz,
-            (data ->> 'updated_at')::timestamptz)
+            (data ->> 'updated_at')::timestamptz,
+            json_arr_to_jsonb_element_array(data -> 'backup_urls'))
   ON CONFLICT ( user_id, source_cid ) DO UPDATE
     SET "updated_at" = (data ->> 'updated_at')::timestamptz,
         "name" = data ->> 'name',
-        "deleted_at" = null
+        "deleted_at" = null,
+        "backup_urls" = array_cat(upld.backup_urls, json_arr_to_jsonb_element_array(data -> 'backup_urls'))
   returning id into inserted_upload_id;
-
-  foreach backup_url in array json_arr_to_text_arr(data -> 'backup_urls')
-  loop
-    -- insert into backup with update
-    insert into backup (upload_id,
-                        url,
-                        inserted_at)
-    values (inserted_upload_id,
-            backup_url,
-            (data ->> 'inserted_at')::timestamptz)
-    ON CONFLICT ( upload_id, url ) DO NOTHING;
-  end loop;
 
   return (inserted_upload_id)::TEXT;
 END

@@ -223,6 +223,7 @@ CREATE TABLE IF NOT EXISTS upload
   type            upload_type                                                   NOT NULL,
   -- User provided name for this upload.
   name            TEXT,
+  backup_urls     JSONB[],
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   deleted_at      TIMESTAMP WITH TIME ZONE,
@@ -232,20 +233,6 @@ CREATE TABLE IF NOT EXISTS upload
 CREATE INDEX IF NOT EXISTS upload_auth_key_id_idx ON upload (auth_key_id);
 CREATE INDEX IF NOT EXISTS upload_content_cid_idx ON upload (content_cid);
 CREATE INDEX IF NOT EXISTS upload_updated_at_idx ON upload (updated_at);
-
--- Details of the backups created for an upload.
-CREATE TABLE IF NOT EXISTS backup
-(
-  id              BIGSERIAL PRIMARY KEY,
-  -- Upload that resulted in this backup.
-  upload_id       BIGINT                                                        NOT NULL REFERENCES upload (id) ON DELETE CASCADE,
-  -- Backup url location.
-  url             TEXT                                                          NOT NULL,
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  UNIQUE (upload_id, url)
-);
-
-CREATE INDEX IF NOT EXISTS backup_upload_id_idx ON backup (upload_id);
 
 -- Tracks requests to replicate content to more nodes.
 CREATE TABLE IF NOT EXISTS pin_request

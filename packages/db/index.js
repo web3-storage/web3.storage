@@ -413,7 +413,10 @@ export class DBClient {
             region: pin.location.region
           }
         })),
-        backup_urls: data.backupUrls
+        backup_urls: data.backupUrls.map(url => ({
+          url,
+          created: data.created || now
+        }))
       }
     }).single()
 
@@ -604,21 +607,20 @@ export class DBClient {
    */
   async getBackups (uploadId) {
     /** @type {{ data: Array<definitions['backup']>, error: PostgrestError }} */
-    const { data: backups, error } = await this._client
-      .from('backup')
-      .select(`
-        _id:id::text,
-        created:inserted_at,
-        uploadId:upload_id::text,
-        url
-      `)
-      .match({ upload_id: uploadId })
+    const { data, error } = await this._client
+      .from('upload')
+      .select('backup_urls')
+      .eq('id', uploadId)
 
     if (error) {
       throw new DBError(error)
     }
 
-    return backups
+    if (!data || !data.length) {
+      return []
+    }
+
+    return data[0].backup_urls
   }
 
   /**
