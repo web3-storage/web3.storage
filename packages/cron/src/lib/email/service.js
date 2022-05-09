@@ -76,7 +76,7 @@ export class EmailService {
     } else {
       const msg = `📧 🚨 Failed to send ${emailType} email to ${user.name} (${user.email}) using ${this.providerStr}.`
       if (failSilently) {
-        log(msg)
+        console.error(msg)
       } else {
         throw new Error(msg)
       }
