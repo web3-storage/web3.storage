@@ -19,6 +19,11 @@ CREATE OR REPLACE FUNCTION json_arr_to_json_element_array(_json json)
   RETURNS json[] LANGUAGE sql IMMUTABLE PARALLEL SAFE AS
 'SELECT ARRAY(SELECT * FROM json_array_elements(_json))';
 
+-- transform a JSON array property into an array of SQL jsonb elements
+CREATE OR REPLACE FUNCTION json_arr_to_jsonb_element_array(_json json)
+  RETURNS jsonb[] LANGUAGE sql IMMUTABLE PARALLEL SAFE AS
+'SELECT ARRAY(SELECT * FROM json_array_elements(_json))';
+
 CREATE OR REPLACE FUNCTION create_key(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile
