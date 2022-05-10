@@ -1,5 +1,6 @@
 import MailchimpFactory from '@mailchimp/mailchimp_transactional'
 import * as EmailTypeClasses from '../types.js'
+import { EmailSendError } from '../errors.js'
 
 /**
  * An email provider which sends emails using Mailchimp.
@@ -24,7 +25,8 @@ export default class MailchimpEmailProvider {
 
   /**
      * Sends the email of the given type to the given recipient.
-     * Returns the unique message ID if successful, or undefined if the sending failed.
+     * Returns the unique message ID.
+     * Throws EmailSendError if the sending failed.
      * @param {string} emailType
      * @param {string} toAddr
      * @param {string} toName
@@ -60,13 +62,11 @@ export default class MailchimpEmailProvider {
     // array of responses, one for each recipient.
     let response = await this.mailchimpTx.messages.sendTemplate(messageDef)
     if (!Array.isArray(response)) {
-      console.error(`📧 🚨 Mailchimp error: ${response.response.data.message}`)
-      return
+      throw new EmailSendError(`📧 🚨 Mailchimp error: ${response.response.data.message}`)
     }
     response = response[0]
     if (response.status !== 'sent') {
-      console.error(`📧 🚨 Mailchimp failed to send. Status: ${response.status}, reason: ${response.reject_reason}.`)
-      return
+      throw new EmailSendError(`📧 🚨 Mailchimp failed to send. Status: ${response.status}, reason: ${response.reject_reason}.`)
     }
     return response._id
   }
