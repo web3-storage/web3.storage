@@ -222,7 +222,9 @@ async function backup (blob, rootCid, userId, env, structure = 'Unknown') {
   }
 
   const data = new Uint8Array(await blob.arrayBuffer())
+  console.log('debug backup:', sha256)
   const multihash = await sha256.digest(data)
+  console.log('debug backup digest:', sha256.digest(data))
   const keyStr = `raw/${rootCid.toString()}/${userId}/${toString(multihash.bytes, 'base32')}.car`
   // strip the multihash varint prefix to get the raw sha256 digest for aws upload integrity check
   const rawSha256 = multihash.bytes.subarray(2)
@@ -240,6 +242,7 @@ async function backup (blob, rootCid, userId, env, structure = 'Unknown') {
   }
 
   try {
+    console.log('TEST', env.s3Client, env.S3_BUCKET_ENDPOINT)
     await env.s3Client.send(new PutObjectCommand(cmdParams))
   } catch (err) {
     if (err.name === 'BadDigest') {
