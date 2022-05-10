@@ -77,6 +77,14 @@ describe('POST /upload', () => {
     })
 
     assert(res, 'Server responded')
+    console.log('adam-debug: token:', token)
+    console.log('adam-debug: URL:', new URL('upload', endpoint).toString())
+    console.log('adam-debug: object keys:', Object.keys(res))
+    console.log('adam-debug: res.ok:', res.ok)
+    console.log('adam-debug: res.status:', res.status)
+    console.log('adam-debug: res.body:', res.body)
+    console.log('adam-debug: res.headers:', res.headers)
+    console.log('adam-debug: res.text:', await res.text())
     // db mock throws 500 if filename was not decoded
     assert(res.ok, 'Server response not ok: filename might not have been decoded.')
   })
