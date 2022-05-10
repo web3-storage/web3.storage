@@ -91,8 +91,8 @@ export default class MailchimpEmailProvider {
      * Restructure the template vars into the format that Mailchimp requires.
      */
   _restructureVars (templateVars) {
-    const varDefs = Object.entries(templateVars).map(([key, content]) => {
-      return { key, content }
+    const varDefs = Object.entries(templateVars).map(([name, content]) => {
+      return { name, content }
     })
     return varDefs
   }
