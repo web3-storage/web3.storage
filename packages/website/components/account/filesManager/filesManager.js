@@ -21,7 +21,7 @@ import { useUploads } from 'components/contexts/uploadsContext';
 import { useUser } from 'components/contexts/userContext';
 import CheckIcon from 'assets/icons/check';
 
-const defaultQueryOrder = 'a-z';
+const defaultQueryOrder = 'newest';
 
 /**
  * @typedef {import('web3.storage').Upload} Upload
@@ -189,7 +189,20 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   return (
     <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
       <div className="files-manager-header">
-        <span>{content?.heading}</span>
+        <div className="files-manager-title has-upload-button">
+          <div className="title">{content?.heading}</div>
+          <Button
+            onClick={onFileUpload}
+            variant={content?.upload.theme}
+            tracking={{
+              ui: countly.ui[content?.upload.ui],
+              action: content?.upload.action,
+              data: { isFirstFile: false },
+            }}
+          >
+            {content?.upload.text}
+          </Button>
+        </div>
         <Filterable
           className="files-manager-search"
           items={files}
