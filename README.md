@@ -5,13 +5,15 @@
 
 Store your files with web3.storage and retrieve them via their unique Content ID. Our tools make it simple to hash your content locally, so you can verify the service only ever stores the exact bytes you asked us to. Pick the method of using with web3.storage that works for you!
 
+
 ### Website
 
 Create an account via https://web3.storage and upload right from the website using our uploader. Under the hood it use the web3.storage client we publish to npm to chunk and hash your files to calculate the root IPFS CID **in your browser** before sending them to https://api.web3.storage.
 
-Once uploaded you can fetch your data from any IPFS gateway via [https://dweb.link/ipfs/<root cid>](https://dweb.link/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy)
+Once uploaded you can fetch your data from any IPFS gateway via [`https://dweb.link/ipfs/<root cid>`](https://dweb.link/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy)
 
 Create an api token for your account and you can use any of the following alternatives to upload your data.
+
 
 ### JS Client
 
@@ -32,7 +34,7 @@ See https://web3.storage/docs/#quickstart for a guide to using the js client for
 
 ### CLI
 
-Our command line tool `w3` is a simple wrapper around the JS Client to make adding files from your terminal as simple as `w3 put ~/Pictures/room-guardian.jpg`.
+Our command line tool `w3` is a wrapper around the JS Client to make adding files from your terminal as simple as `w3 put ~/gifs`.
 
 Install [`@web3-storage/w3`](https://www.npmjs.com/package/@web3-storage/w3) globally and save your api token then add your files to web3! It calculates the root CID for your files locally before sending them to web3.storage.
 
@@ -49,11 +51,12 @@ $ w3 put ~/Pictures/ayy-lamo.jpg
 
 Use it anywhere you can get a shell. Get creative! For example, we use this for perfomance testing the [upload speed in CI](https://github.com/web3-storage/web3.storage/blob/9fafc830b841da0dd6bd5319c77febaded232240/.github/workflows/cron-test.yml#L36)!
 
-run `w3 --help` or have a look at https://github.com/web3-storage/web3.storage/tree/main/packages/w3#readme to find out everything it can do.
+Run `w3 --help` or have a look at https://github.com/web3-storage/web3.storage/tree/main/packages/w3#readme to find out everything it can do.
+
 
 ### GitHub Action 
 
-The Action [`add_to_web3`](https://github.com/marketplace/actions/add-to-web3) is simple wrapper around the `w3` CLI to let you add files to web3.storage from your GitHub Workflows. 
+The Action [`add_to_web3`](https://github.com/marketplace/actions/add-to-web3) wraps the `w3` CLI to let you add files to web3.storage from your GitHub Workflows.
 
 **github-workflow.yaml**
 ```yaml
@@ -76,16 +79,17 @@ Set your api token and the `path_to_add` and watch it fly! We use `add_to_web3` 
 
 ### cURL
 
-Want to try it out? You can POST a file smaller than 100MB straight to the `/upload` endpoint with `cURL`.
+Want to try it out? You can POST a file smaller than 100MB straight to https://api.web3.storage/upload with `cURL`.
 
 ```console
-curl -X POST --data-binary @file.txt -H 'Authorization: Bearer YOUR_API_KEY' http://127.0.0.1:8787/upload  -s | jq
+curl -X POST --data-binary @file.txt -H 'Authorization: Bearer YOUR_API_KEY' https://api.web3.storage/upload  -s | jq
 {
   "cid":"bafkreid65ervf7fmfnbhyr2uqiqipufowox4tgkrw4n5cxgeyls4mha3ma"
 }
 ```
 
 **See https://web3.storage/docs/ for our complete documentation 📖🔍**
+
 
 ## Building web3.storage
 
