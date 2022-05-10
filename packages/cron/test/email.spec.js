@@ -203,12 +203,12 @@ describe('Mailchimp provider', () => {
     assert.equal(mergeVars[0].rcpt, 'user@example.com')
     assert.ok(
       mergeVars[0].vars.every((varDef) => {
-        return JSON.stringify(Object.keys(varDef).sort()) === JSON.stringify(['content', 'key'])
+        return JSON.stringify(Object.keys(varDef).sort()) === JSON.stringify(['content', 'name'])
       })
     )
     assert.ok(
       mergeVars[0].vars.filter((varDef) => {
-        return varDef.key === 'colour' && varDef.content === 'blue'
+        return varDef.name === 'colour' && varDef.content === 'blue'
       })
     )
   })
