@@ -7,6 +7,7 @@ import { EMAIL_TYPE } from '@web3-storage/db'
 import assert from 'assert'
 import { getDBClient } from '../src/lib/utils.js'
 import MailchimpEmailProvider from '../src/lib/email/providers/mailchimp.js'
+import { EmailSendError } from '../src/lib/email/errors.js'
 import { User100PercentStorage } from '../src/lib/email/types.js'
 
 const env = {
@@ -149,18 +150,26 @@ describe('Mailchimp provider', () => {
     assert.ok(mailchimpSendTemplate.calledOnce)
   })
 
-  it('should return undefined if API call fails', async () => {
+  it('should raise EmailSendError if API call fails', async () => {
     // The sendTemplate method has two different types of return value, depending on how it fails
     mailchimpSendTemplate.returns({ response: { data: { message: 'There was an error' } } })
-    let returnVal = await provider.sendEmail(
-      'User75PercentStorage', 'user@example.com', 'User Person', 'support@web3.storage', 'Web3.Storage', {}
+    assert.rejects(
+      async () => {
+        await provider.sendEmail(
+          'User75PercentStorage', 'user@example.com', 'User Person', 'support@web3.storage', 'Web3.Storage', {}
+        )
+      },
+      EmailSendError
     )
-    assert.equal(returnVal, undefined)
     mailchimpSendTemplate.returns([{ status: 'not sent', reject_reason: 'something bad' }])
-    returnVal = await provider.sendEmail(
-      'User75PercentStorage', 'user@example.com', 'User Person', 'support@web3.storage', 'Web3.Storage', {}
+    assert.rejects(
+      async () => {
+        await provider.sendEmail(
+          'User75PercentStorage', 'user@example.com', 'User Person', 'support@web3.storage', 'Web3.Storage', {}
+        )
+      },
+      EmailSendError
     )
-    assert.equal(returnVal, undefined)
   })
 
   it('should return message ID if API call succeeds', async () => {

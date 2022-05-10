@@ -1,6 +1,7 @@
 import debug from 'debug'
 import * as EmailTypeClasses from './types.js'
 
+import { EmailSendError } from './errors.js'
 import MailchimpEmailProvider from './providers/mailchimp.js'
 import DummyEmailProvider from './providers/dummy.js'
 
@@ -54,6 +55,7 @@ export class EmailService {
     const type = new EmailTypeClasses[emailType]()
     type.validateTemplateVars(templateVars)
     const formattedVars = type.formatTemplateVars(templateVars)
+    let messageId
 
     if (secondsSinceLastSent) {
       if (await this.db.emailHasBeenSent({
@@ -68,20 +70,19 @@ export class EmailService {
 
     // Send the email
     log(`📧 Sending email '${emailType}' to ${user.name} (${user.email}).`)
-    const messageId = await this.provider.sendEmail(emailType, user.email, user.name, this.fromAddr, this.fromName, formattedVars)
-
-    if (messageId) {
-      // Log the email
-      await this.db.logEmailSent({ userId: user._id, emailType, messageId })
-    } else {
-      const msg = `📧 🚨 Failed to send ${emailType} email to ${user.name} (${user.email}) using ${this.providerStr}.`
-      if (failSilently) {
-        console.error(msg)
+    try {
+      messageId = await this.provider.sendEmail(emailType, user.email, user.name, this.fromAddr, this.fromName, formattedVars)
+    } catch (error) {
+      console.error(`📧 🚨 Failed to send ${emailType} email to ${user.name} (${user.email}) using ${this.providerStr}.`)
+      if (failSilently && error instanceof EmailSendError) {
+        console.error(error)
+        return
       } else {
-        throw new Error(msg)
+        throw error
       }
     }
-
+    // Log the email
+    await this.db.logEmailSent({ userId: user._id, emailType, messageId })
     return true
   }
 }
