@@ -133,7 +133,7 @@
   }
 }
 
-// /////////////////////////////////////////////// Card [Type C] -> Shadow Cards
+// //////////////////////////////// Card [Type C] -> Shadow Cards (Testimonials)
 // -----------------------------------------------------------------------------
 .card.type__C {
   background-color: $ebony;
@@ -163,9 +163,19 @@
     transition: 250ms ease;
   }
 
-  &:hover {
-    &:before {
-      opacity: 1;
+  // &:hover {
+  //   &:before {
+  //     opacity: 1;
+  //   }
+  // }
+
+  &.has-link,
+  &.has-next-link {
+    &:hover {
+      cursor: pointer;
+      &:before {
+        opacity: 1;
+      }
     }
   }
 
@@ -206,7 +216,7 @@
     @include fontSize_Mini;
     @include fontWeight_Regular;
     line-height: leading(22, 15);
-    a {
+    .description-link {
       border-bottom: 1px solid;
       transition: all $transitionDuration;
       &:hover {

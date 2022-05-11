@@ -7,10 +7,12 @@
 export function normalizeUpload (upload) {
   const nUpload = { ...upload }
   delete nUpload.content
+  delete nUpload.sourceCid
 
   return {
     ...nUpload,
     ...upload.content,
+    cid: upload.sourceCid, // Overwrite cid to source cid
     pins: normalizePins(upload.content.pins, {
       isOkStatuses: true
     })
