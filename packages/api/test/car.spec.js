@@ -16,7 +16,7 @@ import { PIN_OK_STATUS } from '../src/utils/pin.js'
 Object.assign(global, { fetch })
 
 describe('POST /car', () => {
-  it('should add posted CARs to Cluster', async () => {
+  it.only('should add posted CARs to Cluster', async () => {
     const name = 'car'
     // Create token
     const token = await getTestJWT('test-upload', 'test-upload')
@@ -37,6 +37,15 @@ describe('POST /car', () => {
       },
       body: carBody
     })
+
+    console.log('paolo-debug: token:', token)
+    console.log('paolo-debug: URL:', new URL('upload', endpoint).toString())
+    console.log('paolo-debug: object keys:', Object.keys(res))
+    console.log('paolo-debug: res.ok:', res.ok)
+    console.log('paolo-debug: res.status:', res.status)
+    console.log('paolo-debug: res.body:', res.body)
+    console.log('paolo-debug: res.headers:', res.headers)
+    console.log('paolo-debug: res.text:', await res.text())
 
     assert(res, 'Server responded')
     assert(res.ok, 'Server response ok')
