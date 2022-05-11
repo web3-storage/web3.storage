@@ -8,7 +8,7 @@ Store your files with web3.storage and retrieve them via their unique Content ID
 
 ### Website
 
-Create an account via https://web3.storage and upload right from the website using our uploader. Under the hood it use the web3.storage client we publish to npm to chunk and hash your files to calculate the root IPFS CID **in your browser** before sending them to https://api.web3.storage.
+Create an account via https://web3.storage and upload right from the website using our uploader. Under the hood it uses the web3.storage client that we publish to npm to chunk and hash your files to calculate the root IPFS CID **in your browser** before sending them to https://api.web3.storage.
 
 Once uploaded you can fetch your data from any IPFS gateway via [`https://dweb.link/ipfs/<root cid>`](https://dweb.link/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy)
 
