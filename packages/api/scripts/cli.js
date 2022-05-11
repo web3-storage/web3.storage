@@ -53,7 +53,8 @@ prog
         BRANCH: JSON.stringify(git.branch(__dirname)),
         global: 'globalThis'
       },
-      minify: opts.env !== 'dev',
+      minify: false,
+      // minify: opts.env !== 'dev',
       sourcemap: 'external'
     })
 
