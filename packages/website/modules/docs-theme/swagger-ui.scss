@@ -8273,6 +8273,7 @@
 .swagger-ui .execute-wrapper {
   padding: 20px;
   text-align: right;
+  display: flex;
 }
 
 .swagger-ui .execute-wrapper .btn {
@@ -8451,6 +8452,7 @@
 
 .swagger-ui .loading-container .loading {
   position: relative;
+  width: 100px;
 }
 
 .swagger-ui .loading-container .loading:after {
