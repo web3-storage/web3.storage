@@ -33,7 +33,7 @@ export default class MailchimpEmailProvider {
      * @param {string} fromAddr
      * @param {string} fromName
      * @param {Object.<string, any>} templateVars
-     * @returns {Promise<string|undefined>}
+     * @returns {Promise<string>}
      */
   async sendEmail (emailType, toAddr, toName, fromAddr, fromName, templateVars) {
     const type = new EmailTypeClasses[emailType]()
