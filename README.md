@@ -21,7 +21,7 @@ Use npm to install the [`web3.storage`](https://www.npmjs.com/package/web3.stora
  
 **node.js**
 ```js
-import { Web3Storage, getFilesFromPath } from 'web3.storage'
+const { Web3Storage, getFilesFromPath } = require('web3.storage')
 const storage = new Web3Storage({ token: process.env.WEB3_TOKEN })
 const files = await getFilesFromPath(process.env.PATH_TO_ADD)
 const cid = await storage.put(files)
