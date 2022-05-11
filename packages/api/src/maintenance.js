@@ -33,6 +33,8 @@ export const DEFAULT_MODE = READ_WRITE
  * r- = only needs read permission so enabled in read-only AND read+write modes.
  * rw = needs to read and write so only enabled in read+write mode.
  *
+ * This is expected to be used as a multi-route (Upstream) Middleware like `router.get('*', withMode(READ_ONLY))`.
+ *
  * @param {Mode} mode
  * @returns {Handler}
  */
