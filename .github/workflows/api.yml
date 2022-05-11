@@ -21,7 +21,7 @@ jobs:
       - uses: microsoft/playwright-github-action@v1
       - uses: actions/setup-node@v2
         with:
-          node-version: 16.14.0
+          node-version: 16
       - uses: bahmutov/npm-install@v1
       - run: npm run build --workspace packages/api
       - run: npm test --workspace packages/api
