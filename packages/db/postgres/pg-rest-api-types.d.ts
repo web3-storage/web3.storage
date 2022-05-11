@@ -12,6 +12,46 @@ export interface paths {
       };
     };
   };
+  "/admin_search": {
+    get: {
+      parameters: {
+        query: {
+          user_id?: parameters["rowFilter.admin_search.user_id"];
+          email?: parameters["rowFilter.admin_search.email"];
+          token?: parameters["rowFilter.admin_search.token"];
+          token_id?: parameters["rowFilter.admin_search.token_id"];
+          deleted_at?: parameters["rowFilter.admin_search.deleted_at"];
+          reason_inserted_at?: parameters["rowFilter.admin_search.reason_inserted_at"];
+          reason?: parameters["rowFilter.admin_search.reason"];
+          status?: parameters["rowFilter.admin_search.status"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["admin_search"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+  };
   "/auth_key": {
     get: {
       parameters: {
@@ -2010,6 +2050,24 @@ export interface paths {
 }
 
 export interface definitions {
+  admin_search: {
+    /** Format: text */
+    user_id?: string;
+    /** Format: text */
+    email?: string;
+    /** Format: text */
+    token?: string;
+    /** Format: text */
+    token_id?: string;
+    /** Format: timestamp with time zone */
+    deleted_at?: string;
+    /** Format: timestamp with time zone */
+    reason_inserted_at?: string;
+    /** Format: text */
+    reason?: string;
+    /** Format: public.auth_key_blocked_status_type */
+    status?: "Blocked" | "Unblocked";
+  };
   auth_key: {
     /**
      * Format: bigint
@@ -2121,11 +2179,12 @@ export interface definitions {
     user_id: number;
     /** Format: public.email_type */
     email_type:
-      | "Used75PercentStorage"
-      | "Used80PercentStorage"
-      | "Used85PercentStorage"
-      | "Used90PercentStorage"
-      | "Used100PercentStorage";
+      | "User75PercentStorage"
+      | "User80PercentStorage"
+      | "User85PercentStorage"
+      | "User90PercentStorage"
+      | "User100PercentStorage"
+      | "AdminStorageExceeded";
     /** Format: text */
     message_id: string;
     /**
@@ -2454,6 +2513,24 @@ export interface parameters {
   offset: string;
   /** @description Limiting and Pagination */
   limit: string;
+  /** @description admin_search */
+  "body.admin_search": definitions["admin_search"];
+  /** Format: text */
+  "rowFilter.admin_search.user_id": string;
+  /** Format: text */
+  "rowFilter.admin_search.email": string;
+  /** Format: text */
+  "rowFilter.admin_search.token": string;
+  /** Format: text */
+  "rowFilter.admin_search.token_id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.admin_search.deleted_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.admin_search.reason_inserted_at": string;
+  /** Format: text */
+  "rowFilter.admin_search.reason": string;
+  /** Format: public.auth_key_blocked_status_type */
+  "rowFilter.admin_search.status": string;
   /** @description auth_key */
   "body.auth_key": definitions["auth_key"];
   /** Format: bigint */

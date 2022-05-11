@@ -125,9 +125,14 @@ const FileRowItem = props => {
           <Tooltip content={fileRowLabels.cid.tooltip} />
           {fileRowLabels.cid.label}
         </span>
-        <span className="cid-truncate medium-up-only">
+        <a
+          className="cid-truncate underline medium-up-only"
+          href={`https://dweb.link/ipfs/${cid}`}
+          target="_blank"
+          rel="noreferrer"
+        >
           {useMemo(() => truncateString(cid, 5, '...', 'double'), [cid])}
-        </span>
+        </a>
         <span className="cid-full medium-down-only">{cid}</span>
         {isHeader ? (
           <Tooltip content={fileRowLabels.cid.tooltip} />
