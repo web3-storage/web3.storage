@@ -2313,8 +2313,7 @@ export interface definitions {
     /** Format: timestamp with time zone */
     deleted_at?: string;
     /**
-     * Format: text[]
-     * @description Note:
+     * Format: created is a timestamp with time zone
      */
     backup_urls: {url: string, created: string}[];
   };

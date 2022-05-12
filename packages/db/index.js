@@ -606,21 +606,18 @@ export class DBClient {
    * @return {Promise<Array<import('./db-client-types').BackupOutput>>}
    */
   async getBackups (uploadId) {
-    /** @type {{ data: Array<definitions['backup']>, error: PostgrestError }} */
-    const { data, error } = await this._client
+    /** @type {{ data: definitions['upload']['backup_urls'], error: PostgrestError }} */
+    const { data: backupUrls, error } = await this._client
       .from('upload')
-      .select('backup_urls')
+      .select('backupUrls:backup_urls')
       .eq('id', uploadId)
+      .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    if (!data || !data.length) {
-      return []
-    }
-
-    return data[0].backup_urls
+    return backupUrls
   }
 
   /**
