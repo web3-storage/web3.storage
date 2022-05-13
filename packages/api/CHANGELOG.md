@@ -1,5 +1,17 @@
 # Changelog
 
+### [5.7.3](https://github.com/web3-storage/web3.storage/compare/api-v5.7.2...api-v5.7.3) (2022-05-13)
+
+
+### Bug Fixes
+
+* upgrade miniflare to ^2.4.0 ([#1312](https://github.com/web3-storage/web3.storage/issues/1312)) ([69b2004](https://github.com/web3-storage/web3.storage/commit/69b2004c95dd86e534e1503d8f78c5f068140c71))
+
+
+### Other Changes
+
+* refactor auth middleware ([#1271](https://github.com/web3-storage/web3.storage/issues/1271)) ([cf9b8e2](https://github.com/web3-storage/web3.storage/commit/cf9b8e217f1852bcf15568a73a1cf6a2871d9d6f))
+
 ### [5.7.2](https://github.com/web3-storage/web3.storage/compare/api-v5.7.1...api-v5.7.2) (2022-04-29)
 
 
