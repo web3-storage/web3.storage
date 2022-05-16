@@ -34,8 +34,10 @@ import pkg from '../package.json'
  * @property {string} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
  * // Derived values and class dependencies
  * @property {Cluster} cluster
- * @property {Magic} magic
  * @property {DBClient} db
+ * @property {Logging} log
+ * @property {Magic} magic
+ * @property {Toucan} sentry
  * @property {import('./maintenance').Mode} MODE
  * @property {S3Client} [s3Client]
  * @property {string} [s3BucketName]
