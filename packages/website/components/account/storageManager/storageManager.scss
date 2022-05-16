@@ -183,6 +183,10 @@
   justify-content: flex-start;
   margin-top: 1rem;
 
+  &.no-margin {
+    margin: 0;
+  }
+
   @include small {
     flex-direction: column;
     margin-bottom: 0.5rem;

@@ -150,21 +150,25 @@ const StorageManager = ({ className = '', content }) => {
           </Button>
         )}
       </div>
-      <div className="storage-manager-legend">
-        <div className="sml-uploaded">
-          <span className="legend-label">{content.legend.uploaded}&nbsp;</span>
-          {filesz(uploaded, {
-            base: 2,
-            standard: 'iec',
-          })}
-        </div>
-        <div className="sml-pinned">
-          <span className="legend-label">{content.legend.pinned}&nbsp;</span>
-          {filesz(pinned, {
-            base: 2,
-            standard: 'iec',
-          })}
-        </div>
+      <div className={clsx('storage-manager-legend', uploaded > 0 || pinned > 0 ? '' : 'no-margin')}>
+        {uploaded > 0 ? (
+          <div className="sml-uploaded">
+            <span className="legend-label">{content.legend.uploaded}&nbsp;</span>
+            {filesz(uploaded, {
+              base: 2,
+              standard: 'iec',
+            })}
+          </div>
+        ) : null}
+        {pinned > 0 ? (
+          <div className="sml-pinned">
+            <span className="legend-label">{content.legend.pinned}&nbsp;</span>
+            {filesz(pinned, {
+              base: 2,
+              standard: 'iec',
+            })}
+          </div>
+        ) : null}
       </div>
       <div className="storage-manager-info">
         {content.prompt}&nbsp;
