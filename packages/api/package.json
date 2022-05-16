@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/api",
-  "version": "5.7.2",
+  "version": "5.7.3",
   "private": true,
   "type": "module",
   "license": "(Apache-2.0 OR MIT)",
@@ -38,7 +38,7 @@
     "dotenv": "^10.0.0",
     "esbuild": "^0.14.14",
     "git-rev-sync": "^3.0.1",
-    "miniflare": "^2.2.0",
+    "miniflare": "^2.4.0",
     "mocha": "^9.2.0",
     "npm-run-all": "^4.1.5",
     "p-defer": "^4.0.0",
@@ -66,6 +66,7 @@
     "ipfs-car": "^0.7.0",
     "itty-router": "^2.4.8",
     "multiformats": "^9.5.8",
+    "nanoid": "^3.1.30",
     "protobufjs": "^6.11.2",
     "tweetnacl": "^1.0.3",
     "uint8arrays": "^3.0.0"

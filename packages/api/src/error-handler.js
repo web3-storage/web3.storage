@@ -1,19 +1,17 @@
 import { ErrorCode as MagicErrors } from '@magic-sdk/admin'
 import { JSONResponse } from './utils/json-response.js'
-import { HTTPError, MaintenanceError } from './errors.js'
+import { HTTPError } from './errors.js'
 
 /**
  * @param {Error & {status?: number;code?: string;reason?: string; details?: string; IS_PSA_ERROR?: boolean;}} err
  * @param {import('./env').Env} env
  */
-export function errorHandler (err, { sentry }) {
+export function errorHandler (err, { log }) {
   console.error(err.stack)
 
   let status = err.status || 500
 
-  if (sentry && status >= 500 && err.code !== MaintenanceError.CODE) {
-    sentry.captureException(err)
-  }
+  log.error(err)
 
   // TODO: improve error handler
   // https://github.com/web3-storage/web3.storage/issues/976

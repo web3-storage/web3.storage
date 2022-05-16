@@ -5,6 +5,7 @@ import { Magic } from '@magic-sdk/admin'
 import { DBClient } from '@web3-storage/db'
 import { Cluster } from '@nftstorage/ipfs-cluster'
 import { DEFAULT_MODE } from './maintenance.js'
+import { Logging } from './utils/logs.js'
 import pkg from '../package.json'
 
 /**
@@ -28,12 +29,15 @@ import pkg from '../package.json'
  * @property {string} [S3_SECRET_ACCESS_KEY_ID]
  * @property {string} [SENTRY_DSN]
  * @property {string} [SENTRY_RELEASE]
+ * @property {string} [LOGTAIL_TOKEN]
  * @property {string} MAINTENANCE_MODE
  * @property {string} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
  * // Derived values and class dependencies
  * @property {Cluster} cluster
- * @property {Magic} magic
  * @property {DBClient} db
+ * @property {Logging} log
+ * @property {Magic} magic
+ * @property {Toucan} sentry
  * @property {import('./maintenance').Mode} MODE
  * @property {S3Client} [s3Client]
  * @property {string} [s3BucketName]
@@ -64,6 +68,8 @@ import pkg from '../package.json'
  */
 
 /**
+ * Modifies the given env object by adding other items to it, mostly things
+ * which are configured from the initial env values.
  * @param {Request} req
  * @param {Env} env
  * @param {import('./index.js').Ctx} ctx
@@ -85,7 +91,7 @@ export function envAll (req, env, ctx) {
     request: req,
     allowedHeaders: ['user-agent', 'x-client'],
     allowedSearchParams: /(.*)/,
-    debug: false,
+    debug: env.DEBUG === 'true',
     rewriteFrames: {
       // strip . from start of the filename ./worker.mjs as set by cloudflare, to make absolute path `/worker.mjs`
       iteratee: (frame) => ({ ...frame, filename: frame.filename.substring(1) })
@@ -94,6 +100,20 @@ export function envAll (req, env, ctx) {
     release: env.SENTRY_RELEASE,
     pkg
   })
+
+  // Attach a `Logging` instance, which provides methods for logging and writes
+  // the logs to LogTail. This must be a new instance per request.
+  // Note that we pass `ctx` as the `event` param here, because it's kind of both:
+  // https://developers.cloudflare.com/workers/runtime-apis/fetch-event/#syntax-module-worker
+  env.log = new Logging(req, ctx, {
+    token: env.log = env.LOGTAIL_TOKEN,
+    debug: env.DEBUG === 'true',
+    sentry: env.sentry,
+    version: env.VERSION,
+    branch: env.BRANCH,
+    commithash: env.COMMITHASH
+  })
+
   env.magic = new Magic(env.MAGIC_SECRET_KEY)
 
   // We can remove this when magic admin sdk supports test mode

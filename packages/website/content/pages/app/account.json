@@ -89,6 +89,12 @@
     },
     "file_manager": {
       "heading": "Files",
+      "upload": {
+        "text": "Upload +",
+        "theme": "text",
+        "ui": "FILES",
+        "action": "Upload File"
+      },
       "table": {
         "message": "You don't have any files uploaded yet.",
         "cta": {
@@ -111,8 +117,8 @@
           "status": {
             "label": "Status",
             "tooltip": {
-              "header": "Reports the status of a file or piece of data stored on Web3.Storage’s IPFS nodes.",
-              "queuing": "The upload has been received or is in progress and has not yet been queued for pinning.",
+              "header": "Reports the status of a file or piece of data stored on the IPFS Cluster. Status might not be fully up-to-date. Data is still available even when in Queued state.",
+              "queuing": "",
               "pin_queued": "The upload has been received and is in the queue to be pinned.",
               "pinning": "The upload is being replicated to multiple IPFS nodes.",
               "pinned": "The upload is fully pinned on *numberOfPins* IPFS nodes."
@@ -143,6 +149,18 @@
           "label": "Sort By",
           "options": [
             {
+              "label": "Newest Upload",
+              "value": "newest",
+              "direction": "NEWEST",
+              "compareFn": "TIMEBASED"
+            },
+            {
+              "label": "Oldest Upload",
+              "value": "oldest",
+              "direction": "OLDEST",
+              "compareFn": "TIMEBASED"
+            },
+            {
               "label": "Alphabetical A-Z",
               "key": "name",
               "value": "a-z",
@@ -155,18 +173,6 @@
               "value": "z-a",
               "direction": "DESC",
               "compareFn": "ALPHANUMERIC"
-            },
-            {
-              "label": "Newest Upload",
-              "value": "newest",
-              "direction": "NEWEST",
-              "compareFn": "TIMEBASED"
-            },
-            {
-              "label": "Oldest Upload",
-              "value": "oldest",
-              "direction": "OLDEST",
-              "compareFn": "TIMEBASED"
             },
             {
               "label": "Largest size",

@@ -21,7 +21,7 @@ const Account = () => {
   const dashboard = AppData.page_content.dashboard;
   const { uploads } = useUploads();
 
-  const onFileUploead = useCallback(() => {
+  const onFileUpload = useCallback(() => {
     uploadModalState[1](true);
   }, [uploadModalState]);
 
@@ -55,19 +55,19 @@ const Account = () => {
         heading: !!uploads.length ? dashboard.card_right.heading.option_1 : dashboard.card_right.heading.option_2,
         description: dashboard.card_right.description,
         ctas: dashboard.card_right.ctas.map(cta => ({
-          onClick: onFileUploead,
+          onClick: onFileUpload,
           variant: cta.theme,
           tracking: { ui: countly.ui[cta.ui], action: cta.action, isFirstFile: !uploads.length },
           children: cta.text,
         })),
       },
     }),
-    [uploads.length, onFileUploead, dashboard]
+    [uploads.length, onFileUpload, dashboard]
   );
 
   return (
     <>
-      <div className="page-container account-container grid">
+      <div className="page-container account-container">
         <h3>{dashboard.heading}</h3>
         <div className="account-content">
           <StorageManager content={AppData.page_content.storage_manager} className="account-storage-manager" />
@@ -81,7 +81,7 @@ const Account = () => {
           <FilesManager
             content={AppData.page_content.file_manager}
             className="account-files-manager"
-            onFileUpload={onFileUploead}
+            onFileUpload={onFileUpload}
           />
         </div>
         <FileUploader
