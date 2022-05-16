@@ -25,3 +25,17 @@ jobs:
           PG_REST_URL: ${{secrets.PG_REST_URL}}
           PG_REST_JWT: ${{secrets.PG_REST_JWT}}
           PG_CONNECTION: ${{secrets.PG_CONNECTION}}
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v3
+        id: tag-release
+        with:
+          path: packages/cron
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          monorepo-tags: true
+          package-name: cron

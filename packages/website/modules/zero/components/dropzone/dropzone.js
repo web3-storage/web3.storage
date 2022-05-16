@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { useCallback, Fragment, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import UploadProgress from './uploadProgress';
 
 /**
  * @typedef {Object} DropzoneProps
@@ -16,7 +17,7 @@ import { useDropzone } from 'react-dropzone';
  *          progress: number,
  *          name: string, uploadId:
  *          string,
- *          failed: boolean
+ *          failed: boolean,
  *        }[]} [filesInfo] external upload information of files
  * @prop {{loading: string, complete: string, failed: string}} [content]
  */
@@ -64,17 +65,17 @@ const Dropzone = ({
         {dragAreaText && <p className="dragAreaText">{dragAreaText}</p>}
       </div>
       <div className="filelist">
-        {filesInfo.map(fileInfo => (
+        {filesInfo.map((fileInfo, i) => (
           <Fragment key={`file-${fileInfo.uploadId}`}>
             <div className="filename">{fileInfo.name}</div>
             <div className="status">
               {!!fileInfo.failed
                 ? content.failed
                 : fileInfo.progress !== 100
-                ? <div className="loading-c">
-                    <span className="loading-label">{content.loading}</span>
-                    <span className="loading-count">{fileInfo.progress || 0}%</span>
-                  </div>
+                ? <UploadProgress
+                    label={content.loading}
+                    progress={fileInfo.progress}
+                  />
                 : content.complete}
             </div>
           </Fragment>
