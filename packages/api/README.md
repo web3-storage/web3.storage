@@ -182,7 +182,7 @@ Get the CAR file containing all blocks in the tree starting at the root `:cid`
 $ curl -sD - 'http://127.0.0.1:8787/car/bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'
 HTTP/1.1 200 OK
 date: Mon, 14 Jun 2021 09:12:41 GMT
-content-type: application/car
+content-type: application/vnd.ipld.car
 cache-control: public, max-age=10
 content-disposition: attachment; filename="bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.car"
 ```

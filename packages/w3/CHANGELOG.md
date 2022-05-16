@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.0](https://github.com/web3-storage/web3.storage/compare/w3-v2.5.0...w3-v2.6.0) (2022-04-19)
+
+
+### Features
+
+* use IANA media type application/vnd.ipld.car ([#1215](https://github.com/web3-storage/web3.storage/issues/1215)) ([c6fa207](https://github.com/web3-storage/web3.storage/commit/c6fa20768f4bef7f715f08d518f90d3a355bf15b))
+
 ## [2.5.0](https://www.github.com/web3-storage/web3.storage/compare/w3-v2.4.2...w3-v2.5.0) (2022-01-19)
 
 

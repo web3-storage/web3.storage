@@ -2,10 +2,10 @@ export const files = [
   {
     _id: '315318962238628132',
     type: 'Car',
-    name: '5126a4-view-all-xrays.dat',
+    name: 'Energy Efficiency Programming Languages 2018.pdf',
     created: '2021-12-17T20:04:45.427+00:00',
     updated: '2021-12-17T20:04:45.427+00:00',
-    cid: 'bafybeiewemrhochdwcr5orsjm2cmqnbl7oqeppgn356lirtjqfucxsxyq41',
+    cid: 'bafybeig4vkvymf5p2ri747cuiaw3bzbjaxtdvb365vqqnb6f3nzdrvd4ym',
     dagSize: 25189,
     pins: [],
     deals: [],
@@ -16,7 +16,7 @@ export const files = [
     name: '2021-human-genome-sequence-trials-kyoto-jp.toml',
     created: '2021-12-01T01:41:03.681+00:00',
     updated: '2021-12-01T01:41:03.681+00:00',
-    cid: 'bafybeih7oh42dqynvdjio7icegtbdbn4mvhr5wu7a4umm2sfgws362kkma2',
+    cid: 'bafybeicsabmjzr4vrok3asajmvmdsra7qhxlj2wfg6vv2ua5vweda6a74e',
     dagSize: 41538,
     pins: [
       {

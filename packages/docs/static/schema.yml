@@ -43,7 +43,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/car:
+          application/vnd.ipld.car:
             schema:
               type: string
               format: binary
@@ -84,7 +84,7 @@ paths:
         '200':
           description: OK
           content:
-            'application/car':
+            'application/vnd.ipld.car':
               schema:
                 type: string
                 format: binary

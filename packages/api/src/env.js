@@ -10,7 +10,7 @@ import pkg from '../package.json'
 
 /**
  * @typedef {object} Env
- * // Environment vars
+ * // Environment and global vars
  * @property {string} ENV
  * @property {string} BRANCH
  * @property {string} VERSION
