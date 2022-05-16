@@ -13,6 +13,7 @@ export interface Service {
   endpoint: URL
   token: string
   rateLimiter?: RateLimiter
+  pre?: (requestInit: RequestInit) => RequestInit;
 }
 
 export interface PublicService {
