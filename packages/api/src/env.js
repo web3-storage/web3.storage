@@ -103,8 +103,8 @@ export function envAll (req, env, ctx) {
 
   // Attach a `Logging` instance, which provides methods for logging and writes
   // the logs to LogTail. This must be a new instance per request.
-  // Note that we pass `ctx` as the `event` param here, because that's what it
-  // actually is, we seem to have just misnamed it "ctx".
+  // Note that we pass `ctx` as the `event` param here, because it's kind of both:
+  // https://developers.cloudflare.com/workers/runtime-apis/fetch-event/#syntax-module-worker
   env.log = new Logging(req, ctx, {
     token: env.log = env.LOGTAIL_TOKEN,
     debug: env.DEBUG === 'true',
