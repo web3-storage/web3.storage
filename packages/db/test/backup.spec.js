@@ -114,4 +114,31 @@ describe('backup', () => {
     assert.strictEqual(backups.length, 1, 'upload has a single backup')
     assert(new Date(backups[0].created) < new Date(upload.updated), 'backup was created before the new upload')
   })
+
+  it('can backup chunked uploads', async () => {
+    const backupUrlSecondChunk = `https://backup.cid/${new Date().toISOString()}/${Math.random()}`
+
+    await client.createUpload({
+      user: user._id,
+      contentCid: cid,
+      sourceCid: cid,
+      authKey: authKeys[0]._id,
+      type,
+      dagSize: dagSize,
+      name,
+      pins: [initialPinData],
+      backupUrls: [backupUrlSecondChunk]
+    })
+
+    const upload = await client.getUpload(cid, user._id)
+    assert(upload, 'upload created')
+
+    const backups = await client.getBackups(upload._id)
+    assert.strictEqual(backups.length, 2, 'upload has a two backups')
+
+    const backupUrls = backups.map(backup => backup.url).sort()
+    const expectedBackupUrls = [initialBackupUrl, backupUrlSecondChunk].sort()
+    assert.equal(backupUrls[0], expectedBackupUrls[0])
+    assert.equal(backupUrls[1], expectedBackupUrls[1])
+  })
 })
