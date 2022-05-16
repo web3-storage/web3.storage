@@ -134,7 +134,8 @@ export default {
     } catch (error) {
       response = serverError(error, request, env)
     }
-    return env.log.end(response)
+    await env.log.end(response)
+    return response
   }
 }
 
