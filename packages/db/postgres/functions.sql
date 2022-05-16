@@ -19,11 +19,6 @@ CREATE OR REPLACE FUNCTION json_arr_to_json_element_array(_json json)
   RETURNS json[] LANGUAGE sql IMMUTABLE PARALLEL SAFE AS
 'SELECT ARRAY(SELECT * FROM json_array_elements(_json))';
 
--- transform a JSON array property into an array of SQL jsonb elements
-CREATE OR REPLACE FUNCTION json_arr_to_jsonb_element_array(_json json)
-  RETURNS jsonb[] LANGUAGE sql IMMUTABLE PARALLEL SAFE AS
-'SELECT ARRAY(SELECT * FROM json_array_elements(_json))';
-
 CREATE OR REPLACE FUNCTION create_key(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile
@@ -150,12 +145,12 @@ BEGIN
             data ->> 'name',
             (data ->> 'inserted_at')::timestamptz,
             (data ->> 'updated_at')::timestamptz,
-            json_arr_to_jsonb_element_array(data -> 'backup_urls'))
+            data -> 'backup_urls')
   ON CONFLICT ( user_id, source_cid ) DO UPDATE
     SET "updated_at" = (data ->> 'updated_at')::timestamptz,
         "name" = data ->> 'name',
         "deleted_at" = null,
-        "backup_urls" = array_cat(upld.backup_urls, json_arr_to_jsonb_element_array(data -> 'backup_urls'))
+        "backup_urls" = (data -> 'backup_urls')::jsonb || upld.backup_urls
   returning id into inserted_upload_id;
 
   return (inserted_upload_id)::TEXT;

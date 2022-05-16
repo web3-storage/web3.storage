@@ -92,4 +92,26 @@ describe('backup', () => {
     assert(backups[0].created, 'backup has inserted timestamp')
     assert.strictEqual(backups[0].url, initialBackupUrl, 'backup has correct url')
   })
+
+  it('backup urls are unique', async () => {
+    await client.createUpload({
+      user: user._id,
+      contentCid: cid,
+      sourceCid: cid,
+      authKey: authKeys[0]._id,
+      type,
+      dagSize: dagSize,
+      name,
+      pins: [initialPinData],
+      backupUrls: [initialBackupUrl]
+    })
+
+    upload = await client.getUpload(cid, user._id)
+    assert(upload, 'second upload created')
+
+    const backups = await client.getBackups(upload._id)
+
+    assert.strictEqual(backups.length, 1, 'upload has a single backup')
+    assert(new Date(backups[0].created) < new Date(upload.updated), 'backup was created before the new upload')
+  })
 })
