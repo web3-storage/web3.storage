@@ -1,5 +1,6 @@
 import '../styles/global.scss';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import clsx from 'clsx';
 
 import Metadata from 'components/general/metadata';
@@ -17,12 +18,17 @@ const App = ({ Component, pageProps }) => {
   const productRoutes = ['/login', '/account', '/tokens'];
   // const marketingRoutes = ['/', '/pricing', '/about', '/faq', '/terms'];
   const productApp = productRoutes.includes(pathname);
+  const pageClass = pathname.includes('docs') ? 'docs-site' : productApp ? 'product-app' : 'marketing-site';
+
+  useEffect(() => {
+    document.querySelector('body')?.classList.add(pageClass);
+  });
 
   return (
     <AppProviders authorizationProps={{ ...pageProps }}>
       <Metadata {...pageProps} />
       <RestrictedRoute {...pageProps}>
-        <div id="master-container" className={clsx(productApp ? 'product-app' : 'marketing-site')}>
+        <div id="master-container" className={clsx(pageClass)}>
           {productApp && <div className="corkscrew-background"></div>}
           <MessageBanner />
           <Navigation isProductApp={productApp} />

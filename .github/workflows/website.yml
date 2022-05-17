@@ -87,7 +87,6 @@ jobs:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           NEXT_PUBLIC_COUNTLY_URL: ${{ secrets.COUNTLY_URL }}
           NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
-      - run: npm run build -w packages/docs
 
       # Add the site to web3.storage, output the cid as `steps.ipfs.outputs.cid`
       - name: Add to web3.storage

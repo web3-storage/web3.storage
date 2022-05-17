@@ -1,4 +1,3 @@
-// ====================================================================== Imports
 import { useEffect } from 'react';
 
 import IndexPageData from '../content/pages/index.json';

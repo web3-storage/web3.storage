@@ -1,0 +1,116 @@
+[
+  {
+    "name": "",
+    "menu": [
+      {
+        "name": "Welcome",
+        "src": "intro"
+      }
+    ]
+  },
+  {
+    "name": "How-tos",
+    "menu": [
+      {
+        "name": "Store",
+        "src": "how-tos/store"
+      },
+      {
+        "name": "Retrieve",
+        "src": "how-tos/retrieve"
+      },
+      {
+        "name": "Query",
+        "src": "how-tos/query"
+      },
+      {
+        "name": "List",
+        "src": "how-tos/list"
+      },
+      {
+        "name": "List directory contents",
+        "src": "how-tos/list-directory-contents"
+      },
+      {
+        "name": "Work with Content Archives",
+        "src": "how-tos/work-with-car-files"
+      },
+      {
+        "name": "Generate an API token",
+        "src": "how-tos/generate-api-token"
+      },
+      {
+        "name": "Getting Upload Status",
+        "src": "how-tos/get-status"
+      },
+      {
+        "name": "Troubleshooting",
+        "src": "how-tos/troubleshooting"
+      },
+      {
+        "name": "Pinning Services API",
+        "src": "how-tos/pinning-services-api"
+      }
+    ]
+  },
+  {
+    "name": "Concepts",
+    "menu": [
+      {
+        "name": "Content addressing",
+        "src": "concepts/content-addressing"
+      },
+      {
+        "name": "Decentralized storage",
+        "src": "concepts/decentralized-storage"
+      },
+      {
+        "name": "Web3.Storage economics",
+        "src": "concepts/storage-economics"
+      }
+    ]
+  },
+  {
+    "name": "Examples",
+    "menu": [
+      {
+        "name": "Getting started",
+        "src": "examples/getting-started"
+      },
+      {
+        "name": "Image gallery",
+        "src": "examples/image-gallery"
+      }
+    ]
+  },
+  {
+    "name": "Reference",
+    "menu": [
+      {
+        "name": "JavaScript client library",
+        "src": "reference/js-client-library"
+      },
+      {
+        "name": "JavaScript utility libraries",
+        "src": "reference/js-utilities"
+      },
+      {
+        "name": "Go client library",
+        "src": "reference/go-client-library"
+      },
+      {
+        "name": "HTTP API",
+        "src": "reference/http-api"
+      }
+    ]
+  },
+  {
+    "name": "Community",
+    "menu": [
+      {
+        "name": "Help & support",
+        "src": "community/help-and-support"
+      }
+    ]
+  }
+]

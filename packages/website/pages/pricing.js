@@ -1,4 +1,3 @@
-// ===================================================================== Imports
 import { useEffect } from 'react';
 
 import TiersPageData from '../content/pages/pricing.json';
@@ -6,7 +5,6 @@ import Scroll2Top from '../components/scroll2top/scroll2top.js';
 import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
 import { initFloaterAnimations } from '../lib/floater-animations.js';
 
-// ===================================================================== Exports
 export default function Home() {
   const sections = TiersPageData.page_content;
   const animations = TiersPageData.floater_animations;

@@ -1,0 +1,12 @@
+.docs-pagination {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 3rem;
+    .sublabel {
+        font-size: 0.875rem;
+        line-height: 1;
+    }
+    .next {
+        text-align: right;
+    }
+}

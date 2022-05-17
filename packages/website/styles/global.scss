@@ -1,11 +1,10 @@
-// ///////////////////////////////////////////////////////// Imports & Variables
-// -----------------------------------------------------------------------------
 @import 'normalize';
 @import 'variables';
 @import 'grid/gridlex-2.7.1';
 
 // Modules
 @import '../modules/zero/components/components.scss';
+@import '../modules/docs-theme';
 
 // Layouts
 @import 'layouts/messagebanner';
@@ -39,6 +38,9 @@
 @import '../components/breadcrumbs/breadcrumbs.scss';
 @import '../components/scroll2top/scroll2top.scss';
 @import '../components/gradientbackground/gradientbackground.scss';
+@import '../components/tabs/tabs.scss';
+@import '../components/callout/callout.scss';
+@import '../components/search/search.scss';
 
 // Pages
 @import '../pages/index.scss';
@@ -51,11 +53,9 @@
 @import '../pages/account';
 @import '../pages/tokens';
 
-// /////////////////////////////////////////////////////////////////////// Fonts
-// -----------------------------------------------------------------------------
+// Fonts
 $fontAssetPath: '../assets/fonts';
 
-//////////////////////////////////////////////////////////////////// Suisse Intl
 @font-face {
   font-family: 'SuisseIntl';
   src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Light.otf') format('opentype');
@@ -91,7 +91,6 @@ $fontAssetPath: '../assets/fonts';
   font-display: swap;
 }
 
-/////////////////////////////////////////////////////////////// Suisse Intl Mono
 @font-face {
   font-family: 'Suisse Intl Mono';
   src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Thin.otf') format('opentype');
@@ -113,8 +112,6 @@ $fontAssetPath: '../assets/fonts';
   font-display: swap;
 }
 
-// ///////////////////////////////////////////////////////////////////// General
-// -----------------------------------------------------------------------------
 html,
 body {
   font-family: $font_Primary, helvetica, sans-serif;
@@ -162,9 +159,8 @@ button {
   cursor: pointer;
 }
 
-// ///////////////////////////////////////////////////////////////// Next & Grid
-// -----------------------------------------------------------------------------
-#__next {
+//  Next & Grid
+body:not(.docs-site) #__next {
   position: relative;
   z-index: 2;
   overflow-x: hidden;
@@ -208,8 +204,7 @@ button {
   }
 }
 
-// ////////////////////////////////////////////////////////////////// Typography
-// -----------------------------------------------------------------------------
+// Typography
 h1,
 .h1 {
   @include h1;
@@ -236,8 +231,7 @@ h5,
   @include h5;
 }
 
-// ////////////////////////////////////////////////////////////////// Components
-// -----------------------------------------------------------------------------
+// Components
 .video-wrapper {
   position: relative;
   padding-bottom: 56.25%; /* 16:9 */
@@ -252,10 +246,7 @@ h5,
   }
 }
 
-/* ================================================================================
-   Layout
-   ================================================================================ */
-
+// Layout
 .loading {
   position: absolute;
   top: 50%;
