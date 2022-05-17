@@ -1,0 +1,281 @@
+{
+  "pluginId": "default",
+  "version": "current",
+  "label": "Next",
+  "banner": null,
+  "badge": false,
+  "className": "docs-version-current",
+  "isLast": true,
+  "docsSidebars": {
+    "docs": [
+      {
+        "type": "link",
+        "label": "Welcome",
+        "href": "/docs/",
+        "docId": "intro"
+      },
+      {
+        "type": "category",
+        "label": "How-tos",
+        "items": [
+          {
+            "type": "link",
+            "label": "Store",
+            "href": "/docs/how-tos/store",
+            "docId": "how-tos/store"
+          },
+          {
+            "type": "link",
+            "label": "Retrieve",
+            "href": "/docs/how-tos/retrieve",
+            "docId": "how-tos/retrieve"
+          },
+          {
+            "type": "link",
+            "label": "Query",
+            "href": "/docs/how-tos/query",
+            "docId": "how-tos/query"
+          },
+          {
+            "type": "link",
+            "label": "List",
+            "href": "/docs/how-tos/list",
+            "docId": "how-tos/list"
+          },
+          {
+            "type": "link",
+            "label": "List directory contents",
+            "href": "/docs/how-tos/list-directory-contents",
+            "docId": "how-tos/list-directory-contents"
+          },
+          {
+            "type": "link",
+            "label": "Work with Content Archives",
+            "href": "/docs/how-tos/work-with-car-files",
+            "docId": "how-tos/work-with-car-files"
+          },
+          {
+            "type": "link",
+            "label": "Generate an API token",
+            "href": "/docs/how-tos/generate-api-token",
+            "docId": "how-tos/generate-api-token"
+          },
+          {
+            "type": "link",
+            "label": "Troubleshooting",
+            "href": "/docs/how-tos/troubleshooting",
+            "docId": "how-tos/troubleshooting"
+          }
+        ],
+        "collapsed": false,
+        "collapsible": false
+      },
+      {
+        "type": "category",
+        "label": "Concepts",
+        "items": [
+          {
+            "type": "link",
+            "label": "Content addressing",
+            "href": "/docs/concepts/content-addressing",
+            "docId": "concepts/content-addressing"
+          },
+          {
+            "type": "link",
+            "label": "Decentralized storage",
+            "href": "/docs/concepts/decentralized-storage",
+            "docId": "concepts/decentralized-storage"
+          },
+          {
+            "type": "link",
+            "label": "Web3.Storage economics",
+            "href": "/docs/concepts/storage-economics",
+            "docId": "concepts/storage-economics"
+          }
+        ],
+        "collapsed": false,
+        "collapsible": false
+      },
+      {
+        "type": "category",
+        "label": "Examples",
+        "items": [
+          {
+            "type": "link",
+            "label": "Getting started",
+            "href": "/docs/examples/getting-started",
+            "docId": "examples/getting-started"
+          },
+          {
+            "type": "link",
+            "label": "Image gallery",
+            "href": "/docs/examples/image-gallery",
+            "docId": "examples/image-gallery"
+          }
+        ],
+        "collapsed": false,
+        "collapsible": false
+      },
+      {
+        "type": "category",
+        "label": "Reference",
+        "items": [
+          {
+            "type": "link",
+            "label": "JavaScript client library",
+            "href": "/docs/reference/js-client-library",
+            "docId": "reference/js-client-library"
+          },
+          {
+            "type": "link",
+            "label": "JavaScript utility libraries",
+            "href": "/docs/reference/js-utilities",
+            "docId": "reference/js-utilities"
+          },
+          {
+            "type": "link",
+            "label": "Go client library",
+            "href": "/docs/reference/go-client-library",
+            "docId": "reference/go-client-library"
+          },
+          {
+            "type": "link",
+            "label": "HTTP API",
+            "href": "/reference/http-api/"
+          }
+        ],
+        "collapsed": false,
+        "collapsible": false
+      },
+      {
+        "type": "category",
+        "label": "Community",
+        "items": [
+          {
+            "type": "link",
+            "label": "Help & support",
+            "href": "/docs/community/help-and-support",
+            "docId": "community/help-and-support"
+          }
+        ],
+        "collapsed": false,
+        "collapsible": false
+      }
+    ]
+  },
+  "docs": {
+    "community/help-and-support": {
+      "id": "community/help-and-support",
+      "title": "Help & support",
+      "description": "Get help using or building with the Web3.Storage service.",
+      "sidebar": "docs"
+    },
+    "concepts/content-addressing": {
+      "id": "concepts/content-addressing",
+      "title": "Content addressing",
+      "description": "A conceptual overview of content-based addressing for storing and locating files on a decentralized network with Web3.storage.",
+      "sidebar": "docs"
+    },
+    "concepts/decentralized-storage": {
+      "id": "concepts/decentralized-storage",
+      "title": "Decentralized storage",
+      "description": "Learn about decentralized storage works and how it's key to Web3.Storage.",
+      "sidebar": "docs"
+    },
+    "concepts/storage-economics": {
+      "id": "concepts/storage-economics",
+      "title": "Web3.Storage economics",
+      "description": "Learn how Web3.Storage can offer decentralized storage at no cost by leveraging the unique economics of the Filecoin network.",
+      "sidebar": "docs"
+    },
+    "examples/getting-started": {
+      "id": "examples/getting-started",
+      "title": "Getting started",
+      "description": "Learn Web3.Storage by example with sample applications and starter projects.",
+      "sidebar": "docs"
+    },
+    "examples/image-gallery": {
+      "id": "examples/image-gallery",
+      "title": "Image gallery example",
+      "description": "Learn about Web3.Storage by walking through the code for a simple image gallery app that runs entirely in the browser.",
+      "sidebar": "docs"
+    },
+    "how-tos/generate-api-token": {
+      "id": "how-tos/generate-api-token",
+      "title": "How to generate an API token",
+      "description": "Learn how to get an API token for using Web3.Storage programmatically in this quick how-to guide.",
+      "sidebar": "docs"
+    },
+    "how-tos/list": {
+      "id": "how-tos/list",
+      "title": "How to list files uploaded to Web3.Storage",
+      "description": "Learn how to list the files you've uploaded to Web3.Storage in this quick how-to guide.",
+      "sidebar": "docs"
+    },
+    "how-tos/list-directory-contents": {
+      "id": "how-tos/list-directory-contents",
+      "title": "Listing the contents of an IPFS directory",
+      "description": "Learn how to list the contents of an IPFS directory without having to fetch the whole thing.",
+      "sidebar": "docs"
+    },
+    "how-tos/pinning-services-api": {
+      "id": "how-tos/pinning-services-api",
+      "title": "Pinning Services API",
+      "description": "Learn how to pin a file to IPFS using the Pinning Services API"
+    },
+    "how-tos/query": {
+      "id": "how-tos/query",
+      "title": "How to query Web3.Storage",
+      "description": "Learn how to query Web3.Storage in this quick how-to guide.",
+      "sidebar": "docs"
+    },
+    "how-tos/retrieve": {
+      "id": "how-tos/retrieve",
+      "title": "How to retrieve data from Web3.Storage",
+      "description": "Learn how to retrieve data stored using Web3.Storage in this quick how-to guide.",
+      "sidebar": "docs"
+    },
+    "how-tos/store": {
+      "id": "how-tos/store",
+      "title": "How to store data using Web3.Storage",
+      "description": "Learn how to store your data on the decentralized web with Web3.Storage.",
+      "sidebar": "docs"
+    },
+    "how-tos/troubleshooting": {
+      "id": "how-tos/troubleshooting",
+      "title": "Troubleshooting",
+      "description": "A collection of common issues for new developers, and solutions to those problems.",
+      "sidebar": "docs"
+    },
+    "how-tos/work-with-car-files": {
+      "id": "how-tos/work-with-car-files",
+      "title": "Working with Content Archives",
+      "description": "Learn how to work with Content Archives of IPLD data.",
+      "sidebar": "docs"
+    },
+    "intro": {
+      "id": "intro",
+      "title": "Welcome",
+      "description": "Learn how to use Web3.Storage to decentralize your data storage without all the complicated details.",
+      "sidebar": "docs"
+    },
+    "reference/go-client-library": {
+      "id": "reference/go-client-library",
+      "title": "Go client library reference",
+      "description": "Integrate Web3.Storage into your code using the Go client library.",
+      "sidebar": "docs"
+    },
+    "reference/js-client-library": {
+      "id": "reference/js-client-library",
+      "title": "JavaScript client library reference",
+      "description": "Integrate Web3.Storage into your code using the JavaScript client library.",
+      "sidebar": "docs"
+    },
+    "reference/js-utilities": {
+      "id": "reference/js-utilities",
+      "title": "JavaScript utility libraries",
+      "description": "Learn about some helpful utility libraries that make working with Web3.Storage easier.",
+      "sidebar": "docs"
+    }
+  }
+}

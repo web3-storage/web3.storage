@@ -1,0 +1,89 @@
+{
+  "/docs/reference/http-api/-6d3": {
+    "component": "a8bbb1ab",
+    "config": "5e9f5e1a"
+  },
+  "/docs/search-cab": {
+    "component": "1a4e3797"
+  },
+  "/docs/-838": {
+    "component": "1be78505",
+    "versionMetadata": "935f2afb"
+  },
+  "/docs/-fb0": {
+    "component": "17896441",
+    "content": "0e384e19"
+  },
+  "/docs/community/help-and-support-542": {
+    "component": "17896441",
+    "content": "e779c299"
+  },
+  "/docs/concepts/content-addressing-4bc": {
+    "component": "17896441",
+    "content": "c1dae1db"
+  },
+  "/docs/concepts/decentralized-storage-6e1": {
+    "component": "17896441",
+    "content": "25f10ba4"
+  },
+  "/docs/concepts/storage-economics-13a": {
+    "component": "17896441",
+    "content": "ce6e0b2b"
+  },
+  "/docs/examples/getting-started-5ef": {
+    "component": "17896441",
+    "content": "aae6473c"
+  },
+  "/docs/examples/image-gallery-8d1": {
+    "component": "17896441",
+    "content": "e7c70168"
+  },
+  "/docs/how-tos/generate-api-token-205": {
+    "component": "17896441",
+    "content": "f3840bdd"
+  },
+  "/docs/how-tos/list-6a5": {
+    "component": "17896441",
+    "content": "83b6496d"
+  },
+  "/docs/how-tos/list-directory-contents-3fd": {
+    "component": "17896441",
+    "content": "20d36b43"
+  },
+  "/docs/how-tos/pinning-services-api-442": {
+    "component": "17896441",
+    "content": "4802efb7"
+  },
+  "/docs/how-tos/query-18b": {
+    "component": "17896441",
+    "content": "f8a7d68a"
+  },
+  "/docs/how-tos/retrieve-f38": {
+    "component": "17896441",
+    "content": "992b14aa"
+  },
+  "/docs/how-tos/store-4c7": {
+    "component": "17896441",
+    "content": "995c4428"
+  },
+  "/docs/how-tos/troubleshooting-cbc": {
+    "component": "17896441",
+    "content": "75bdeed9"
+  },
+  "/docs/how-tos/work-with-car-files-1f1": {
+    "component": "17896441",
+    "content": "b5195524"
+  },
+  "/docs/reference/go-client-library-075": {
+    "component": "17896441",
+    "content": "69a359a3"
+  },
+  "/docs/reference/js-client-library-f5f": {
+    "component": "17896441",
+    "content": "d99456e9"
+  },
+  "/docs/reference/js-utilities-9cc": {
+    "component": "17896441",
+    "content": "a0f44ed8"
+  }
+}

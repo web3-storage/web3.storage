@@ -1,0 +1,49 @@
+{
+  "docusaurusVersion": "2.0.0-beta.17",
+  "siteVersion": "1.0.0",
+  "pluginVersions": {
+    "docusaurus-plugin-content-docs": {
+      "type": "package",
+      "name": "@docusaurus/plugin-content-docs",
+      "version": "2.0.0-beta.17"
+    },
+    "docusaurus-plugin-content-pages": {
+      "type": "package",
+      "name": "@docusaurus/plugin-content-pages",
+      "version": "2.0.0-beta.17"
+    },
+    "docusaurus-plugin-sitemap": {
+      "type": "package",
+      "name": "@docusaurus/plugin-sitemap",
+      "version": "2.0.0-beta.17"
+    },
+    "docusaurus-theme-classic": {
+      "type": "package",
+      "name": "@docusaurus/theme-classic",
+      "version": "2.0.0-beta.17"
+    },
+    "docusaurus-theme-search-algolia": {
+      "type": "package",
+      "name": "@docusaurus/theme-search-algolia",
+      "version": "2.0.0-beta.17"
+    },
+    "docusaurus-theme-redoc": {
+      "type": "package",
+      "name": "docusaurus-theme-redoc",
+      "version": "0.4.6"
+    },
+    "docusaurus-plugin-sass": {
+      "type": "package",
+      "name": "docusaurus-plugin-sass",
+      "version": "0.2.2"
+    },
+    "docusaurus-plugin-client-redirects": {
+      "type": "package",
+      "name": "@docusaurus/plugin-client-redirects",
+      "version": "2.0.0-beta.17"
+    },
+    "docusaurus-plugin-web3storage-docs": {
+      "type": "local"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "unversionedId": "how-tos/list",
+  "id": "how-tos/list",
+  "title": "How to list files uploaded to Web3.Storage",
+  "description": "Learn how to list the files you've uploaded to Web3.Storage in this quick how-to guide.",
+  "source": "@site/docs/how-tos/list.md",
+  "sourceDirName": "how-tos",
+  "slug": "/how-tos/list",
+  "permalink": "/docs/how-tos/list",
+  "editUrl": "https://github.com/web3-storage/docs/edit/main/docs/how-tos/list.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": 1647598505,
+  "formattedLastUpdatedAt": "3/18/2022",
+  "frontMatter": {
+    "title": "How to list files uploaded to Web3.Storage",
+    "sidebar_label": "List",
+    "description": "Learn how to list the files you've uploaded to Web3.Storage in this quick how-to guide."
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Query",
+    "permalink": "/docs/how-tos/query"
+  },
+  "next": {
+    "title": "List directory contents",
+    "permalink": "/docs/how-tos/list-directory-contents"
+  }
+}

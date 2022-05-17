@@ -1,0 +1,29 @@
+{
+  "unversionedId": "how-tos/generate-api-token",
+  "id": "how-tos/generate-api-token",
+  "title": "How to generate an API token",
+  "description": "Learn how to get an API token for using Web3.Storage programmatically in this quick how-to guide.",
+  "source": "@site/docs/how-tos/generate-api-token.md",
+  "sourceDirName": "how-tos",
+  "slug": "/how-tos/generate-api-token",
+  "permalink": "/docs/how-tos/generate-api-token",
+  "editUrl": "https://github.com/web3-storage/docs/edit/main/docs/how-tos/generate-api-token.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": 1647598505,
+  "formattedLastUpdatedAt": "3/18/2022",
+  "frontMatter": {
+    "title": "How to generate an API token",
+    "sidebar_label": "Generate an API token",
+    "description": "Learn how to get an API token for using Web3.Storage programmatically in this quick how-to guide."
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Work with Content Archives",
+    "permalink": "/docs/how-tos/work-with-car-files"
+  },
+  "next": {
+    "title": "Troubleshooting",
+    "permalink": "/docs/how-tos/troubleshooting"
+  }
+}

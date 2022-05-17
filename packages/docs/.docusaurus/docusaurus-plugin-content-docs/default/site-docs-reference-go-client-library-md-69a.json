@@ -1,0 +1,29 @@
+{
+  "unversionedId": "reference/go-client-library",
+  "id": "reference/go-client-library",
+  "title": "Go client library reference",
+  "description": "Integrate Web3.Storage into your code using the Go client library.",
+  "source": "@site/docs/reference/go-client-library.md",
+  "sourceDirName": "reference",
+  "slug": "/reference/go-client-library",
+  "permalink": "/docs/reference/go-client-library",
+  "editUrl": "https://github.com/web3-storage/docs/edit/main/docs/reference/go-client-library.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": 1647598505,
+  "formattedLastUpdatedAt": "3/18/2022",
+  "frontMatter": {
+    "title": "Go client library reference",
+    "sidebar_label": "Go client library",
+    "description": "Integrate Web3.Storage into your code using the Go client library."
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "JavaScript utility libraries",
+    "permalink": "/docs/reference/js-utilities"
+  },
+  "next": {
+    "title": "Help & support",
+    "permalink": "/docs/community/help-and-support"
+  }
+}

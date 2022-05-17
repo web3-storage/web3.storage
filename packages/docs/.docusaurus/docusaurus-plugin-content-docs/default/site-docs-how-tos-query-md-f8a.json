@@ -1,0 +1,29 @@
+{
+  "unversionedId": "how-tos/query",
+  "id": "how-tos/query",
+  "title": "How to query Web3.Storage",
+  "description": "Learn how to query Web3.Storage in this quick how-to guide.",
+  "source": "@site/docs/how-tos/query.md",
+  "sourceDirName": "how-tos",
+  "slug": "/how-tos/query",
+  "permalink": "/docs/how-tos/query",
+  "editUrl": "https://github.com/web3-storage/docs/edit/main/docs/how-tos/query.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": 1647598505,
+  "formattedLastUpdatedAt": "3/18/2022",
+  "frontMatter": {
+    "title": "How to query Web3.Storage",
+    "sidebar_label": "Query",
+    "description": "Learn how to query Web3.Storage in this quick how-to guide."
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Retrieve",
+    "permalink": "/docs/how-tos/retrieve"
+  },
+  "next": {
+    "title": "List",
+    "permalink": "/docs/how-tos/list"
+  }
+}

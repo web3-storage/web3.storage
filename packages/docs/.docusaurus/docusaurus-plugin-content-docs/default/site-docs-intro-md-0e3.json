@@ -1,0 +1,26 @@
+{
+  "unversionedId": "intro",
+  "id": "intro",
+  "title": "Welcome",
+  "description": "Learn how to use Web3.Storage to decentralize your data storage without all the complicated details.",
+  "source": "@site/docs/intro.md",
+  "sourceDirName": ".",
+  "slug": "/",
+  "permalink": "/docs/",
+  "editUrl": "https://github.com/web3-storage/docs/edit/main/docs/intro.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": 1647598505,
+  "formattedLastUpdatedAt": "3/18/2022",
+  "frontMatter": {
+    "title": "Welcome",
+    "description": "Learn how to use Web3.Storage to decentralize your data storage without all the complicated details.",
+    "id": "intro",
+    "slug": "/"
+  },
+  "sidebar": "docs",
+  "next": {
+    "title": "Store",
+    "permalink": "/docs/how-tos/store"
+  }
+}

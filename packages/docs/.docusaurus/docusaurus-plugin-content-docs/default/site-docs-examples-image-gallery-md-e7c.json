@@ -1,0 +1,29 @@
+{
+  "unversionedId": "examples/image-gallery",
+  "id": "examples/image-gallery",
+  "title": "Image gallery example",
+  "description": "Learn about Web3.Storage by walking through the code for a simple image gallery app that runs entirely in the browser.",
+  "source": "@site/docs/examples/image-gallery.md",
+  "sourceDirName": "examples",
+  "slug": "/examples/image-gallery",
+  "permalink": "/docs/examples/image-gallery",
+  "editUrl": "https://github.com/web3-storage/docs/edit/main/docs/examples/image-gallery.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": 1647598505,
+  "formattedLastUpdatedAt": "3/18/2022",
+  "frontMatter": {
+    "title": "Image gallery example",
+    "sidebar_label": "Image gallery",
+    "description": "Learn about Web3.Storage by walking through the code for a simple image gallery app that runs entirely in the browser."
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Getting started",
+    "permalink": "/docs/examples/getting-started"
+  },
+  "next": {
+    "title": "JavaScript client library",
+    "permalink": "/docs/reference/js-client-library"
+  }
+}

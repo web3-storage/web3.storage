@@ -1,0 +1,20 @@
+{
+  "unversionedId": "how-tos/pinning-services-api",
+  "id": "how-tos/pinning-services-api",
+  "title": "Pinning Services API",
+  "description": "Learn how to pin a file to IPFS using the Pinning Services API",
+  "source": "@site/docs/how-tos/pinning-services-api.md",
+  "sourceDirName": "how-tos",
+  "slug": "/how-tos/pinning-services-api",
+  "permalink": "/docs/how-tos/pinning-services-api",
+  "editUrl": "https://github.com/web3-storage/docs/edit/main/docs/how-tos/pinning-services-api.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": 1648658391,
+  "formattedLastUpdatedAt": "3/30/2022",
+  "frontMatter": {
+    "title": "Pinning Services API",
+    "sidebar_label": "Pinning Services API",
+    "description": "Learn how to pin a file to IPFS using the Pinning Services API"
+  }
+}

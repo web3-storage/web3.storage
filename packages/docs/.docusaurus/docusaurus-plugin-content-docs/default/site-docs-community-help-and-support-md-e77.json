@@ -1,0 +1,24 @@
+{
+  "unversionedId": "community/help-and-support",
+  "id": "community/help-and-support",
+  "title": "Help & support",
+  "description": "Get help using or building with the Web3.Storage service.",
+  "source": "@site/docs/community/help-and-support.md",
+  "sourceDirName": "community",
+  "slug": "/community/help-and-support",
+  "permalink": "/docs/community/help-and-support",
+  "editUrl": "https://github.com/web3-storage/docs/edit/main/docs/community/help-and-support.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": 1647598505,
+  "formattedLastUpdatedAt": "3/18/2022",
+  "frontMatter": {
+    "title": "Help & support",
+    "description": "Get help using or building with the Web3.Storage service."
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Go client library",
+    "permalink": "/docs/reference/go-client-library"
+  }
+}

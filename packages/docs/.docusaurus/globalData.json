@@ -1,0 +1,209 @@
+{
+  "docusaurus-theme-redoc": {
+    "default": {
+      "redocOptions": {},
+      "lightTheme": {
+        "colors": {
+          "primary": {
+            "main": "#25c2a0"
+          }
+        },
+        "typography": {
+          "fontFamily": "var(--ifm-font-family-base)",
+          "fontSize": "var(--ifm-font-size-base)",
+          "lineHeight": "var(--ifm-line-height-base)",
+          "fontWeightLight": "var(--ifm-font-weight-light)",
+          "fontWeightRegular": "var(--ifm-font-weight-base)",
+          "fontWeightBold": "var(--ifm-font-weight-bold)",
+          "headings": {
+            "fontFamily": "var(--ifm-font-family-base)",
+            "fontWeight": "var(--ifm-font-weight-semibold)",
+            "lineHeight": "var(--ifm-line-height-base)"
+          },
+          "code": {
+            "fontFamily": "var(--ifm-font-family-monospace)",
+            "lineHeight": "var(--ifm-pre-line-height)"
+          }
+        },
+        "sidebar": {
+          "width": "300px",
+          "backgroundColor": "#ffffff"
+        },
+        "rightPanel": {
+          "backgroundColor": "#303846"
+        }
+      },
+      "darkTheme": {
+        "colors": {
+          "primary": {
+            "main": "#25c2a0"
+          },
+          "text": {
+            "primary": "#f5f6f7",
+            "secondary": "rgba(255, 255, 255, 1)"
+          },
+          "gray": {
+            "50": "#FAFAFA",
+            "100": "#F5F5F5"
+          },
+          "border": {
+            "dark": "#ffffff",
+            "light": "rgba(0,0,0, 0.1)"
+          }
+        },
+        "typography": {
+          "fontFamily": "var(--ifm-font-family-base)",
+          "fontSize": "var(--ifm-font-size-base)",
+          "lineHeight": "var(--ifm-line-height-base)",
+          "fontWeightLight": "var(--ifm-font-weight-light)",
+          "fontWeightRegular": "var(--ifm-font-weight-base)",
+          "fontWeightBold": "var(--ifm-font-weight-bold)",
+          "headings": {
+            "fontFamily": "var(--ifm-font-family-base)",
+            "fontWeight": "var(--ifm-font-weight-semibold)",
+            "lineHeight": "var(--ifm-line-height-base)"
+          },
+          "code": {
+            "fontFamily": "var(--ifm-font-family-monospace)",
+            "lineHeight": "var(--ifm-pre-line-height)"
+          }
+        },
+        "sidebar": {
+          "width": "300px",
+          "backgroundColor": "rgb(24, 25, 26)",
+          "textColor": "#f5f6f7",
+          "arrow": {
+            "color": "#f5f6f7"
+          }
+        },
+        "rightPanel": {
+          "backgroundColor": "#303846"
+        },
+        "schema": {
+          "nestedBackground": "rgb(24, 25, 26)",
+          "typeNameColor": "rgba(255, 255, 255, 1)",
+          "typeTitleColor": "rgba(255, 255, 255, 1)"
+        }
+      }
+    }
+  },
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/docs/",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs/",
+          "mainDocId": "intro",
+          "docs": [
+            {
+              "id": "community/help-and-support",
+              "path": "/docs/community/help-and-support",
+              "sidebar": "docs"
+            },
+            {
+              "id": "concepts/content-addressing",
+              "path": "/docs/concepts/content-addressing",
+              "sidebar": "docs"
+            },
+            {
+              "id": "concepts/decentralized-storage",
+              "path": "/docs/concepts/decentralized-storage",
+              "sidebar": "docs"
+            },
+            {
+              "id": "concepts/storage-economics",
+              "path": "/docs/concepts/storage-economics",
+              "sidebar": "docs"
+            },
+            {
+              "id": "examples/getting-started",
+              "path": "/docs/examples/getting-started",
+              "sidebar": "docs"
+            },
+            {
+              "id": "examples/image-gallery",
+              "path": "/docs/examples/image-gallery",
+              "sidebar": "docs"
+            },
+            {
+              "id": "how-tos/generate-api-token",
+              "path": "/docs/how-tos/generate-api-token",
+              "sidebar": "docs"
+            },
+            {
+              "id": "how-tos/list",
+              "path": "/docs/how-tos/list",
+              "sidebar": "docs"
+            },
+            {
+              "id": "how-tos/list-directory-contents",
+              "path": "/docs/how-tos/list-directory-contents",
+              "sidebar": "docs"
+            },
+            {
+              "id": "how-tos/pinning-services-api",
+              "path": "/docs/how-tos/pinning-services-api"
+            },
+            {
+              "id": "how-tos/query",
+              "path": "/docs/how-tos/query",
+              "sidebar": "docs"
+            },
+            {
+              "id": "how-tos/retrieve",
+              "path": "/docs/how-tos/retrieve",
+              "sidebar": "docs"
+            },
+            {
+              "id": "how-tos/store",
+              "path": "/docs/how-tos/store",
+              "sidebar": "docs"
+            },
+            {
+              "id": "how-tos/troubleshooting",
+              "path": "/docs/how-tos/troubleshooting",
+              "sidebar": "docs"
+            },
+            {
+              "id": "how-tos/work-with-car-files",
+              "path": "/docs/how-tos/work-with-car-files",
+              "sidebar": "docs"
+            },
+            {
+              "id": "intro",
+              "path": "/docs/",
+              "sidebar": "docs"
+            },
+            {
+              "id": "reference/go-client-library",
+              "path": "/docs/reference/go-client-library",
+              "sidebar": "docs"
+            },
+            {
+              "id": "reference/js-client-library",
+              "path": "/docs/reference/js-client-library",
+              "sidebar": "docs"
+            },
+            {
+              "id": "reference/js-utilities",
+              "path": "/docs/reference/js-utilities",
+              "sidebar": "docs"
+            }
+          ],
+          "sidebars": {
+            "docs": {
+              "link": {
+                "path": "/docs/",
+                "label": "intro"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

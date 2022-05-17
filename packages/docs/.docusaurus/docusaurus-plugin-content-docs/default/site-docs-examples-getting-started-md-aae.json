@@ -1,0 +1,28 @@
+{
+  "unversionedId": "examples/getting-started",
+  "id": "examples/getting-started",
+  "title": "Getting started",
+  "description": "Learn Web3.Storage by example with sample applications and starter projects.",
+  "source": "@site/docs/examples/getting-started.md",
+  "sourceDirName": "examples",
+  "slug": "/examples/getting-started",
+  "permalink": "/docs/examples/getting-started",
+  "editUrl": "https://github.com/web3-storage/docs/edit/main/docs/examples/getting-started.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": 1648480827,
+  "formattedLastUpdatedAt": "3/28/2022",
+  "frontMatter": {
+    "title": "Getting started",
+    "description": "Learn Web3.Storage by example with sample applications and starter projects."
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Web3.Storage economics",
+    "permalink": "/docs/concepts/storage-economics"
+  },
+  "next": {
+    "title": "Image gallery",
+    "permalink": "/docs/examples/image-gallery"
+  }
+}
