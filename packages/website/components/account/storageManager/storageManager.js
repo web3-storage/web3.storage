@@ -98,13 +98,14 @@ const StorageManager = ({ className = '', content }) => {
   }, []);
 
   const uploadedStorageBarStyles = {
-    width: !componentInViewport ? '0' : `${Math.min(percentUploaded, 100)}%`,
+    width: !componentInViewport || percentUploaded === 0 ? '0' : `max(${Math.min(percentUploaded, 100)}%, 0.25rem)`,
     transition: `${percentUploaded * 25}ms ease-out`,
     backgroundPosition: !componentInViewport ? '50% 0' : `0% 0`,
   };
 
   const pinnedStorageBarStyles = {
-    width: !componentInViewport ? '0' : `calc(${Math.min(percentPinned, 100)}% + 2rem)`,
+    width:
+      !componentInViewport || percentPinned === 0 ? '0' : `max(calc(${Math.min(percentPinned, 100)}% + 2rem), 0.25rem)`,
     left: `calc(${percentUploaded}% - 2rem)`,
     transition: `${percentPinned * 25}ms ease-out ${percentUploaded * 25}ms`,
     backgroundPosition: !componentInViewport ? '50% 0' : `0% 0`,
