@@ -117,7 +117,7 @@ All data uploaded to Web3.Storage is available to anyone who requests it using t
 
    This step may take a few moments. Once it's done, the command should output something like this:
 
-   ```shell output
+   ```shell
    added 224 packages, and audited 225 packages in 14s
 
    40 packages are looking for funding
@@ -152,7 +152,7 @@ You can upload a whole directory full of files at once by giving the script the 
 
 1. The command will output a CID:
 
-   ```shell output
+   ```shell
    Content added with CID: bafybeig7sgl52pc6ihypxhk2yy7gcllu4flxgfwygp7klb5xdjdrm7onse
    ```
 
