@@ -1,0 +1,100 @@
+{
+  "page": {
+    "id": "93qc8z4vnx93",
+    "name": "Web3 Storage",
+    "url": "https://status.web3.storage",
+    "time_zone": "Etc/UTC",
+    "updated_at": "2022-03-30T00:32:56.297Z"
+  },
+  "components": [
+    {
+      "id": "wzppx4zzx3x5",
+      "name": "API",
+      "status": "partial_outage",
+      "created_at": "2021-07-21T12:04:31.011Z",
+      "updated_at": "2022-03-30T00:06:37.789Z",
+      "position": 3,
+      "description": null,
+      "showcase": true,
+      "start_date": "2021-07-21",
+      "group_id": null,
+      "page_id": "93qc8z4vnx93",
+      "group": false,
+      "only_show_if_degraded": false
+    },
+    {
+      "id": "fy2sj2v6876n",
+      "name": "Website",
+      "status": "operational",
+      "created_at": "2021-07-21T12:04:42.338Z",
+      "updated_at": "2022-02-24T17:55:28.313Z",
+      "position": 4,
+      "description": null,
+      "showcase": true,
+      "start_date": "2021-07-21",
+      "group_id": null,
+      "page_id": "93qc8z4vnx93",
+      "group": false,
+      "only_show_if_degraded": false
+    }
+  ],
+  "incidents": [
+    {
+      "id": "km6g0w0fpjk1",
+      "name": "Reads unreliable for content recently uploaded Web3.Storage",
+      "status": "investigating",
+      "created_at": "2022-03-30T00:06:37.748Z",
+      "updated_at": "2022-03-30T00:06:37.847Z",
+      "monitoring_at": null,
+      "resolved_at": null,
+      "impact": "major",
+      "shortlink": "https://stspg.io/kq62n14xnbfv",
+      "started_at": "2022-03-30T00:06:37.742Z",
+      "page_id": "93qc8z4vnx93",
+      "incident_updates": [
+        {
+          "id": "q3g0zc9frhqk",
+          "status": "investigating",
+          "body": "Currently, we are seeing an increased number of reports of users unable to read data they have just uploaded to Web3.Storage from the IPFS network, including from gateways. We are investigating the issue further.",
+          "incident_id": "km6g0w0fpjk1",
+          "created_at": "2022-03-30T00:06:37.843Z",
+          "updated_at": "2022-03-30T00:06:37.843Z",
+          "display_at": "2022-03-30T00:06:37.843Z",
+          "affected_components": [
+            {
+              "code": "wzppx4zzx3x5",
+              "name": "API",
+              "old_status": "operational",
+              "new_status": "partial_outage"
+            }
+          ],
+          "deliver_notifications": true,
+          "custom_tweet": null,
+          "tweet_id": null
+        }
+      ],
+      "components": [
+        {
+          "id": "wzppx4zzx3x5",
+          "name": "API",
+          "status": "partial_outage",
+          "created_at": "2021-07-21T12:04:31.011Z",
+          "updated_at": "2022-03-30T00:06:37.789Z",
+          "position": 3,
+          "description": null,
+          "showcase": true,
+          "start_date": "2021-07-21",
+          "group_id": null,
+          "page_id": "93qc8z4vnx93",
+          "group": false,
+          "only_show_if_degraded": false
+        }
+      ]
+    }
+  ],
+  "scheduled_maintenances": [],
+  "status": {
+    "indicator": "minor",
+    "description": "Minor Service Outage"
+  }
+}

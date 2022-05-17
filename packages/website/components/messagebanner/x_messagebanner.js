@@ -11,23 +11,37 @@ import GeneralPageData from '../../content/pages/general.json';
 // ===================================================================== Exports
 export default function MessageBanner() {
   const marketingPrompt = GeneralPageData.message_banner.content;
-  const messageBannerRef = useRef(/** @type {any} */ (null));
+  const maintenceAlert = GeneralPageData.message_banner.maintenceAlert;
+  let link = GeneralPageData.message_banner.url;
+
   const [bannerHeight, setBannerHeight] = useState('unset');
-  const [bannerContent, setBannerContent] = useState({
-    html: GeneralPageData.message_banner.content,
-    url: GeneralPageData.message_banner.url,
-  });
+  const [bannerContent, setBannerContent] = useState(marketingPrompt);
+  const messageBannerRef = useRef(/** @type {any} */ (null));
 
   const { data: statusPageData, error: statusPageError } = useQuery('get-statuspage-summary', () =>
     getStatusPageSummary()
   );
+
+  let maintenanceMessage = '';
+
   const incidents = statusPageData?.incidents || [];
+
   const scheduledMaintenances = (statusPageData?.scheduled_maintenances || []).filter(
     (/** @type {{ status: string; }} */ maintenance) => maintenance.status !== 'completed'
   );
   const { data: apiVersionData, error: apiVersionError } = useQuery('get-version', () => getVersion(), {
     enabled: (statusPageData && scheduledMaintenances.length === 0) || statusPageError !== null,
   });
+
+  if (incidents.length > 0) {
+    maintenanceMessage = incidents?.[0].incident_updates?.[0]?.body;
+  } else if (scheduledMaintenances.length > 0) {
+    maintenanceMessage = scheduledMaintenances?.[0].incident_updates?.[0]?.body;
+  }
+
+  if (apiVersionData && apiVersionData.mode !== 'rw' && !maintenanceMessage) {
+    maintenanceMessage = maintenceAlert;
+  }
 
   if (statusPageError) {
     console.error(statusPageError);
@@ -36,36 +50,19 @@ export default function MessageBanner() {
     console.error(apiVersionError);
   }
 
-  if (incidents.length > 0) {
-    if (bannerContent.html !== incidents[0].name) {
-      setBannerContent({ html: incidents[0].name, url: incidents[0].shortlink });
-    }
-  } else if (scheduledMaintenances.length > 0) {
-    if (bannerContent.html !== scheduledMaintenances[0].name) {
-      setBannerContent({ html: scheduledMaintenances[0].name, url: scheduledMaintenances[0].shortlink });
-    }
-  }
-  if (
-    apiVersionData &&
-    apiVersionData.mode !== 'rw' &&
-    (bannerContent.html === '' || bannerContent.html === undefined)
-  ) {
-    if (bannerContent.html !== GeneralPageData.message_banner.maintenceAlert) {
-      setBannerContent({ html: GeneralPageData.message_banner.maintenceAlert, url: '' });
-    }
+  if (maintenanceMessage && bannerContent !== maintenanceMessage) {
+    setBannerContent(maintenanceMessage);
   }
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const oldMessage = /** @type {string} */ (
-        localStorage.getItem('web3StorageBannerMessage') ? localStorage.getItem('web3StorageBannerMessage') : ''
-      );
+      const oldMessage = localStorage.getItem('web3StorageBannerMessage');
       const oldDate = /** @type {string} */ (
         localStorage.getItem('web3StorageBannerClickDate') ? localStorage.getItem('web3StorageBannerClickDate') : '0'
       );
       const elapsedTime = Date.now() - parseInt(oldDate);
 
-      if (bannerContent.html === oldMessage && elapsedTime < 604800000) {
+      if (bannerContent === oldMessage && elapsedTime < 604800000) {
         setBannerHeight('0px');
       } else {
         const resize = () => {
@@ -79,7 +76,7 @@ export default function MessageBanner() {
         return () => window.removeEventListener('resize', resize);
       }
     }
-  }, [bannerContent]);
+  }, [bannerContent, marketingPrompt]);
 
   const messageBannerClick = useCallback(
     message => {
@@ -87,12 +84,14 @@ export default function MessageBanner() {
         localStorage.setItem('web3StorageBannerMessage', message);
         localStorage.setItem('web3StorageBannerClickDate', Date.now().toString());
       }
-      if (message === bannerContent.html) {
+      if (marketingPrompt === bannerContent) {
         setBannerHeight('0px');
       }
     },
-    [bannerContent]
+    [marketingPrompt, bannerContent]
   );
+
+  const CustomElement = marketingPrompt === bannerContent ? 'a' : 'div';
 
   return (
     <section id="section_message-banner" style={{ height: bannerHeight }}>
@@ -100,20 +99,19 @@ export default function MessageBanner() {
         <div className="grid-noGutter">
           <div className="col">
             <div className="message-banner-container">
-              <a
-                href={bannerContent.url}
+              <CustomElement
+                href={link}
                 target="_blank"
                 className={clsx(
                   'message-banner-content',
-                  marketingPrompt !== bannerContent.html ? 'banner-alert' : '',
-                  bannerContent.html.length > 120 ? 'mb-reduced-fontsize' : '',
-                  bannerContent.url === '' || bannerContent.url === undefined ? 'disabled' : ''
+                  marketingPrompt !== bannerContent ? 'banner-alert' : '',
+                  bannerContent.length > 120 ? 'mb-reduced-fontsize' : ''
                 )}
-                dangerouslySetInnerHTML={{ __html: bannerContent.html }}
+                dangerouslySetInnerHTML={{ __html: bannerContent }}
                 onClick={() => messageBannerClick(marketingPrompt)}
                 onKeyPress={() => messageBannerClick(marketingPrompt)}
                 rel="noreferrer"
-              ></a>
+              ></CustomElement>
             </div>
           </div>
         </div>
@@ -121,7 +119,7 @@ export default function MessageBanner() {
         <button
           className={clsx(
             'message-banner-close-button',
-            marketingPrompt !== bannerContent.html || bannerHeight === '0px' ? 'hide-banner-close' : ''
+            marketingPrompt !== bannerContent || bannerHeight === '0px' ? 'hide-banner-close' : ''
           )}
           onClick={() => messageBannerClick(marketingPrompt)}
           onKeyPress={() => messageBannerClick(marketingPrompt)}
