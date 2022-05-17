@@ -231,11 +231,11 @@ export default function Navigation({ isProductApp }) {
 
               <div className="mobile-items-wrapper">
                 {navItems.map((item, index) => (
-                    <Link passHref href={item.url} key={`mobile-${item.text}`}>
-                      <a href="replace" className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
-                        {item.text}
-                      </a>
-                    </Link>
+                  <Link passHref href={item.url} key={`mobile-${item.text}`}>
+                    <a href="replace" className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
+                      {item.text}
+                    </a>
+                  </Link>
                 ))}
 
                 {isDocs && <Sidebar openMenu={setMenuOpen} />}
