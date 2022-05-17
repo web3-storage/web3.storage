@@ -30,7 +30,8 @@ export function withMagicToken (handler) {
     if (magicUser) {
       const userTags = await getUserTags(magicUser._id, env)
       request.auth = { user: magicUser, userTags }
-      env.sentry && env.sentry.setUser(magicUser)
+      // If env.log is not set, then the middlewares may be being run in the wrong order
+      env.log.setUser({ id: magicUser._id })
       return handler(request, env, ctx)
     }
 
@@ -61,7 +62,8 @@ export function withApiOrMagicToken (handler) {
         user: magicUser,
         userTags
       }
-      env.sentry && env.sentry.setUser(magicUser)
+      // If env.log is not set, then the middlewares may be being run in the wrong order
+      env.log.setUser({ id: magicUser._id })
       return handler(request, env, ctx)
     }
 
@@ -73,7 +75,8 @@ export function withApiOrMagicToken (handler) {
         user: apiToken.user,
         userTags
       }
-      env.sentry && env.sentry.setUser(apiToken.user)
+      // If env.log is not set, then the middlewares may be being run in the wrong order
+      env.log.setUser({ id: apiToken.user._id })
       return handler(request, env, ctx)
     }
 

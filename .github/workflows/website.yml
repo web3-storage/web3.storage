@@ -87,7 +87,6 @@ jobs:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           NEXT_PUBLIC_COUNTLY_URL: ${{ secrets.COUNTLY_URL }}
           NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
-      - run: npm run build -w packages/docs
 
       # Add the site to web3.storage, output the cid as `steps.ipfs.outputs.cid`
       - name: Add to web3.storage
@@ -127,6 +126,7 @@ jobs:
           release-type: node
           monorepo-tags: true
           package-name: website
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false}]'
       - uses: actions/checkout@v2
         if: ${{ steps.tag-release.outputs.releases_created }}
       - uses: actions/setup-node@v2

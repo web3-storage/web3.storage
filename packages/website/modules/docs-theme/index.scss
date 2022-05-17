@@ -1,0 +1,196 @@
+@import 'sidebar/sidebar';
+@import 'feedback/feedback';
+@import 'toc/toc';
+@import 'swagger-ui';
+@import 'docspagination/docspagination';
+
+.docs-site {
+  background-image: url('../../assets/images/corkscrewBlurred.jpg');
+  background-repeat: repeat;
+  background-size: cover;
+  word-break: break-word;
+
+  #footer_squiggle {
+    width: 25rem;
+    left: -6.5rem;
+    top: 5rem;
+    @include large {
+      left: -12.5rem;
+    }
+    @include small {
+      width: 33.125rem;
+      top: calc(50% + 2rem);
+      left: -20rem;
+    }
+  }
+
+  &.overflow-hidden {
+    overflow: hidden;
+  }
+  // very top nav
+  .nav-item[href='/docs/'] {
+    transform: translateY(-0.5rem);
+    &:after {
+      opacity: 1;
+    }
+  }
+
+  .docs-container {
+    display: flex;
+    letter-spacing: 0;
+    width: 100%;
+    flex: 1 1;
+    height: 100%;
+    position: relative;
+
+    &:before {
+      background-image: url('../../assets/images/triangle1.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      height: 72px;
+      right: 2rem;
+      top: -2.5rem;
+      width: 72px;
+      content: '';
+      position: absolute;
+
+      @include medium {
+        display: none;
+      }
+    }
+
+    .docs-body-container {
+      flex: 1;
+      display: flex;
+      background-color: hsla(0,0%,95%,.6);
+      border-radius: 0.375rem;
+      box-shadow: 0 4px 15px rgb(0 0 0 / 15%);
+      padding: 6.125vw 1.5vw 6.125vw 6.75vw;
+      width: 100%;
+      max-width: 100%;
+      position: relative;
+
+      @include medium {
+        flex-direction: column-reverse;
+        padding: 0 1rem 2rem 1rem;
+        background-color: transparent;
+        box-shadow: none;
+      }
+
+      main {
+        padding-right: toRem(30);
+        @include medium {
+          padding-right: 0;
+        }
+      }
+
+      ul, ol {
+        padding-left: 1rem;
+        li {
+          padding-left: 3rem;
+        }
+      }
+    }
+
+    table {
+      margin-bottom: 2rem;
+      tr {
+        text-align: left;
+        border-top: 1px solid rgb(204, 204, 204);
+        td, th {
+          border: 1px solid #dbdada;
+          padding: 0 10px;
+        }
+        th:empty {
+          border: 0;
+        }
+      }
+    }
+
+    // blockquote
+    blockquote {
+      padding-left: toRem(43);
+      @include fontSize_Medium;
+      position: relative;
+      margin: 2.5rem 0;
+      p {
+        color: $ebony;
+        font-style: normal;
+      }
+      &:before {
+        content: '';
+        border-radius: 10px;
+        width: 5px;
+        @include gradient_Background_PinkBlue_Reverse;
+        height: 100%;
+        position: absolute;
+        left: toRem(-3);
+      }
+    }
+    strong,
+    b {
+      font-weight: 600;
+    }
+    h1 {
+      margin-bottom: toRem(42);
+    }
+    p,
+    pre {
+      margin-bottom: 2.5rem;
+    }
+    h2 {
+      font-size: toRem(30);
+      margin-bottom: toRem(24);
+      line-height: toRem(34);
+      margin-top: toRem(80);
+    }
+    h3 {
+      margin-bottom: toRem(20);
+      font-size: toRem(18);
+      line-height: toRem(34);
+      @include fontWeight_Semibold;
+      margin-top: calc(var(--ifm-h3-vertical-rhythm-top) * var(--ifm-leading));
+    }
+    h4 {
+      @include fontSize_Medium;
+    }
+    h5 {
+      font-size: toRem(16);
+      line-height: toRem(34);
+      margin-bottom: 1.7rem;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      
+    }
+    code {
+      @include monospace_Text;
+      font-size: .875rem;
+      line-height: 1.25rem;
+    }
+    pre code {
+      @include monospace_Text;
+      background-color: $steelGray;
+      border-radius: 0.4rem;
+      display: inline-block;
+      min-width: 100%;
+      color: white;
+      padding: 1rem;
+      font-size: .875rem;
+      line-height: 1.25rem;
+    }
+    a {
+      color: $docsPrimaryPurple;
+      font-weight: 600;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    h1 a, h2 a, h3 a, h4 a, h5 a {
+      color: $ebony;
+    }
+    img {
+      max-width: 100%;
+    }
+  }
+}

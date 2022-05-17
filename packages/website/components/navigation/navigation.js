@@ -1,4 +1,3 @@
-// ===================================================================== Imports
 import { useCallback, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
@@ -11,22 +10,21 @@ import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
 import { trackCustomLinkClick, events, ui } from 'lib/countly';
 import Loading from 'components/loading/loading';
 import Breadcrumbs from 'components/breadcrumbs/breadcrumbs';
+import Sidebar from 'modules/docs-theme/sidebar/sidebar';
 import Button from '../button/button';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Hamburger from '../../assets/icons/hamburger.js';
 import GradientBackground from '../gradientbackground/gradientbackground.js';
 import GeneralPageData from '../../content/pages/general.json';
 import emailContent from '../../content/file-a-request';
+import Search from 'components/search/search';
 
-// ====================================================================== Params
 /**
  * Navbar Component
  *
  * @param {Object} props
  * @param {Boolean} props.isProductApp
  */
-
-// ===================================================================== Exports
 export default function Navigation({ isProductApp }) {
   const router = useRouter();
   const { isLoggedIn, isLoading, isFetching, logout } = useAuthorization();
@@ -45,8 +43,7 @@ export default function Navigation({ isProductApp }) {
   const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body=${encodeURIComponent(
     emailContent.body.join('\n')
   )}`;
-
-  // ================================================================= Functions
+  const isDocs = router.route.includes('docs');
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
@@ -212,9 +209,11 @@ export default function Navigation({ isProductApp }) {
                   : isLoggedIn
                   ? logoutButton(auth.logout, buttonTheme)
                   : loginButton(auth.login, buttonTheme)}
+                <Search />
               </div>
 
               <div className={clsx('nav-menu-toggle', theme, isMenuOpen ? 'menu-open' : '')}>
+                <Search />
                 <button onClick={toggleMenu}>
                   <Hamburger aria-label="Toggle Navbar" />
                 </button>
@@ -232,12 +231,16 @@ export default function Navigation({ isProductApp }) {
 
               <div className="mobile-items-wrapper">
                 {navItems.map((item, index) => (
-                  <Link passHref href={item.url} key={`mobile-${item.text}`}>
-                    <a href="replace" className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
-                      {item.text}
-                    </a>
-                  </Link>
+                  <>
+                    <Link passHref href={item.url} key={`mobile-${item.text}`}>
+                      <a href="replace" className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
+                        {item.text}
+                      </a>
+                    </Link>
+                  </>
                 ))}
+
+                {isDocs && <Sidebar openMenu={setMenuOpen} />}
 
                 {isLoggedIn && account && (
                   <ZeroAccordion multiple={false} toggleOnLoad={false} toggleAllOption={false}>
