@@ -73,6 +73,7 @@ const FileRowItem = props => {
   const statusMessages = fileRowLabels.status.tooltip;
   /** @type {import('react').RefObject<HTMLTextAreaElement>} */
   const editingNameRef = useRef(null);
+  const truncatedCID = useMemo(() => truncateString(cid, 5, '...', 'double'), [cid]);
   const statusTooltip = useMemo(
     () =>
       ({
@@ -125,9 +126,18 @@ const FileRowItem = props => {
           <Tooltip content={fileRowLabels.cid.tooltip} />
           {fileRowLabels.cid.label}
         </span>
-        <span className="cid-truncate medium-up-only">
-          {useMemo(() => truncateString(cid, 5, '...', 'double'), [cid])}
-        </span>
+        {isHeader ? (
+          <span className="cid-full medium-up-only">{cid}</span>
+        ) : (
+          <a
+            className="cid-truncate underline medium-up-only"
+            href={`https://dweb.link/ipfs/${cid}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {truncatedCID}
+          </a>
+        )}
         <span className="cid-full medium-down-only">{cid}</span>
         {isHeader ? (
           <Tooltip content={fileRowLabels.cid.tooltip} />

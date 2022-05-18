@@ -1,6 +1,5 @@
 /* eslint-env mocha */
 import assert from 'assert'
-import { Response } from '@web-std/fetch'
 import {
   withMode,
   READ_WRITE,
@@ -10,8 +9,7 @@ import {
 
 describe('maintenance middleware', () => {
   it('should throw error when in maintenance for a READ_ONLY route', () => {
-    const routeHandler = () => new Response()
-    const handler = withMode(routeHandler, READ_ONLY)
+    const handler = withMode(READ_ONLY)
     const block = (request, env) => {
       handler(request, env)
     }
@@ -33,8 +31,7 @@ describe('maintenance middleware', () => {
   })
 
   it('should throw error when in maintenance and READ_ONLY for a READ_WRITE route', () => {
-    const routeHandler = () => new Response()
-    const handler = withMode(routeHandler, READ_WRITE)
+    const handler = withMode(READ_WRITE)
     const block = (request, env) => {
       handler(request, env)
     }
@@ -56,8 +53,7 @@ describe('maintenance middleware', () => {
   })
 
   it('should throw for invalid maintenance mode', () => {
-    const routeHandler = () => new Response()
-    const handler = withMode(routeHandler, READ_WRITE)
+    const handler = withMode(READ_WRITE)
     const block = (request, env) => {
       handler(request, env)
     }
@@ -72,7 +68,7 @@ describe('maintenance middleware', () => {
 
   it('should not allow invalid handler mode', () => {
     assert.throws(
-      () => withMode(() => new Response(), NO_READ_OR_WRITE),
+      () => withMode(NO_READ_OR_WRITE),
       /invalid mode/
     )
   })

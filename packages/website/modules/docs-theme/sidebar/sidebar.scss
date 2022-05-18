@@ -1,0 +1,95 @@
+.docs-site .docs-container .sidebar {
+  width: toRem(300);
+  flex-shrink: 0;
+  flex-grow: 0;
+  @include medium {
+    display: none;
+  }
+  .sidebar-wrapper {
+    margin-top: 10rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 100vh;
+    position: sticky;
+    top: 0;
+    transition: opacity 50ms;
+    padding: 0 toRem(40) toRem(60) toRem(25);
+    overflow: scroll;
+    @media (max-width: 1215px) {
+      margin-top: 0;
+    }
+    @include smaller {
+      background: $steelGray;
+      width: 80vw;
+      a,
+      button {
+        color: white;
+      }
+    }
+    a {
+      display: block;
+      color: $ebony;
+      font-weight: normal;
+      padding: 0.5rem 1rem;
+      line-height: 1.5;
+      transition: color $transitionDuration;
+      &.active,
+      &:hover {
+        color: $docsPrimaryPurple;
+        transition: color $transitionDuration;
+      }
+      &.active {
+        font-weight: 500;
+        &:before {
+          content: '→';
+          margin-top: -1px;
+          padding-right: 0.5rem;
+        }
+      }
+    }
+    h3 {
+      font-size: 1.375rem;
+      font-weight: 500;
+      line-height: 2rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .no-heading {
+      a {
+        padding-left: 0;
+      }
+    }
+  }
+  &:before {
+    background-image: url('../../../assets/images/helix.png');
+    background-size: cover;
+    height: 18rem;
+    left: -3.5rem;
+    top: -11rem;
+    transform: rotate(-95deg);
+    width: 18rem;
+    content: '';
+    position: absolute;
+    @media (max-width: 1400px) {
+      left: calc(100vw - 91rem);
+    }
+  }
+}
+
+// mobile
+.nav-mobile-panel .sidebar {
+  padding-left: 1rem;
+  padding-bottom: 1rem;
+  h3 {
+    font-size: 1rem;
+    line-height: 2;
+  }
+  a {
+    display: block;
+    padding-left: 1rem;
+  }
+  .no-heading a {
+    padding-left: 0;
+  }
+}

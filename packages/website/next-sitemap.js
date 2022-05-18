@@ -3,6 +3,7 @@ const routes = [
   { loc: '/', priority: 1 },
   { loc: '/about', priority: 0.8 },
   { loc: '/login', priority: 0.8 },
+  { loc: '/docs', priority: 0.8 },
   { loc: '/callback', exclude: true },
   { loc: '/account', exclude: true },
   { loc: '/files', exclude: true },

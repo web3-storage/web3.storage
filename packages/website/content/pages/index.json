@@ -123,7 +123,7 @@
                     "thumb": "RETRIEVE",
                     "lines": [
                       "// retrive.mjs",
-
+                      "",
                       "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
                       "",
                       "const token = process.env.API_TOKEN",
@@ -526,10 +526,12 @@
             "cards": [
               {
                 "type": "C",
+                "action": "link",
+                "url": "//www.strangemood.org",
                 "image": "/images/index/testimonial-jacob-p.jpg",
                 "title": "Jacob P.",
                 "subtitle": "New York, USA",
-                "description": "Web3.Storage enables <a href='//www.strangemood.org' target='blank'>Strangemood</a> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
+                "description": "Web3.Storage enables <span className='description-link'>Strangemood</span> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
               },
               {
                 "type": "C",
@@ -540,10 +542,12 @@
               },
               {
                 "type": "C",
+                "action": "link",
+                "url": "//galacticpunks.io",
                 "image": "/images/index/testimonial-frank-j.jpg",
                 "title": "Frank J.",
                 "subtitle": "Toronto, Canada",
-                "description": "Web3.Storage was so simple to hook into, and does what you need it to do. We run the <a href='//galacticpunks.io' target='blank'>Galactic Punks</a> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS."
+                "description": "Web3.Storage was so simple to hook into, and does what you need it to do. We run the <span className='description-link'>Galactic Punks</span> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS."
               }
             ]
           },
@@ -560,10 +564,12 @@
             "slides": [
               {
                 "type": "C",
+                "action": "link",
+                "url": "//www.strangemood.org",
                 "image": "/images/index/testimonial-jacob-p.jpg",
                 "title": "Jacob P.",
                 "subtitle": "New York, USA",
-                "description": "Web3.Storage enables <a href='//www.strangemood.org' target='blank'>Strangemood</a> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
+                "description": "Web3.Storage enables <span className='description-link'>Strangemood</span> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
               },
               {
                 "type": "C",
@@ -574,10 +580,12 @@
               },
               {
                 "type": "C",
+                "action": "link",
+                "url": "//galacticpunks.io",
                 "image": "/images/index/testimonial-frank-j.jpg",
                 "title": "Frank J.",
                 "subtitle": "Toronto, Canada",
-                "description": "Web3.Storage was so simple to hook into, and does what you need it to do. We run the <a href='//galacticpunks.io' target='blank'>Galactic Punks</a> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS."
+                "description": "Web3.Storage was so simple to hook into, and does what you need it to do. We run the <span className='description-link'>Galactic Punks</span> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS."
               }
             ]
           }

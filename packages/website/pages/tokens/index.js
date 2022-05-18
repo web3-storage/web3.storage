@@ -19,7 +19,7 @@ const Tokens = () => {
   }, [fetchDate, getTokens, isFetchingTokens]);
 
   return (
-    <div className="page-container tokens-container grid">
+    <div className="page-container tokens-container">
       <div className="tokens-header">
         <h3>{content.heading}</h3>
         <TokenCreator content={TokensData.page_content.token_creator} />

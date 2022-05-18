@@ -1,0 +1,40 @@
+.docs-feedback {
+  margin-top: 3rem;
+  background-color: $white;
+  @include shadow1;
+  padding: toRem(32) toRem(29);
+  @include borderRadius_Large;
+  h4 {
+    margin-bottom: toRem(5);
+  }
+  button {
+    color: $white;
+    margin-bottom: toRem(20);
+    margin-right: toRem(16);
+    margin-left: toRem(10);
+    @extend .button;
+    background-color: $ebony;
+    @include fontSize_Small;
+    color: white;
+    padding: toRem(10) toRem(12);
+    height: auto;
+    border: 2px solid $ebony;
+    border-radius: 5px !important;
+    &:hover {
+      color: $ebony;
+      background-color: $white;
+    }
+  }
+  .col {
+    padding: 0;
+    div {
+      margin-top: toRem(5);
+      margin-bottom: toRem(5);
+    }
+  }
+  .last-updated {
+    margin-top: 0.2rem;
+    font-style: italic;
+    font-size: smaller;
+  }
+}

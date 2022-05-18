@@ -15,7 +15,12 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
-
+        with: 
+          fetch-depth: 0
+      - name: Checkout latest cron release tag
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 --match='cron-*')
+          git checkout $LATEST_TAG
       - name: Setup node
         uses: actions/setup-node@v1
         with:
@@ -37,3 +42,7 @@ jobs:
           CLUSTER_IPFS_PROXY_API_URL: ${{ secrets.CLUSTER_IPFS_PROXY_API_URL }}
           CLUSTER_IPFS_PROXY_BASIC_AUTH_TOKEN: ${{ secrets.CLUSTER_IPFS_PROXY_BASIC_AUTH_TOKEN }}
         run: npm run start:pins -w packages/cron
+
+      - name: Heartbeat
+        if: ${{ success() }}
+        run: ./packages/tools/scripts/cli.js heartbeat --token ${{ secrets.OPSGENIE_KEY }} --name cron-web3storage-pins

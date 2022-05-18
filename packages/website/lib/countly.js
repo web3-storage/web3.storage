@@ -26,6 +26,9 @@ export const events = {
   TOKEN_COPY: 'tokenCopy',
   TOKEN_DELETE: 'tokenDelete',
   NOT_FOUND: 'notFound',
+  FEEDBACK_HELPFUL: 'feedbackHelpful',
+  FEEDBACK_IMPORTANT: 'feedbackImportant',
+  FEEDBACK_GENERAL: 'feedbackGeneral',
 }
 
 /** @constant */

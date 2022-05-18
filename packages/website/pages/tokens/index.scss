@@ -1,8 +1,14 @@
 .tokens-container {
-  max-width: 60rem;
+  max-width: 64rem;
   margin: auto;
+
+  @include medium {
+    padding: 0 4.1665%;
+    width: 100%;
+  }
+
   h3 {
-    padding: 0 1.75rem 0.75rem;
+    padding: 0 2.1875rem 0.9375rem;
   }
   .isDisabled {
     pointer-events: none;
@@ -27,9 +33,9 @@
 .tokens-footer {
   @include fontSize_Tiny;
   @include fontWeight_Regular;
-  margin-top: 0.75rem;
+  margin-top: 0.9375rem;
   @include medium {
-    margin-top: 2.36rem;
+    margin-top: 3rem;
     justify-content: center;
     text-align: center;
   }
@@ -38,7 +44,11 @@
 .dashboard-link {
   @include fontSize_Mini;
   @include fontWeight_Semibold;
+  @include large {
+    margin-left: 3rem;
+  }
   @include medium {
+    margin-left: unset;
     order: 2;
     flex-basis: 100%;
   }
@@ -46,7 +56,7 @@
     display: none;
   }
   button {
-    padding-left: 1rem;
+    padding-left: 1.25rem;
     @include medium {
       padding-left: 0;
       align-items: center;
@@ -69,6 +79,6 @@
     @include hoverArrowRight;
   }
   @include medium {
-    margin-bottom: 1.59375rem;
+    margin-bottom: 2rem;
   }
 }
