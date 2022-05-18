@@ -21,8 +21,8 @@ import { nameGet, nameWatchGet, namePost } from './name.js'
 import { compose } from './utils/fn.js'
 
 const router = Router()
-router.options('*', corsOptions)
 router.all('*', envAll)
+router.options('*', corsOptions)
 
 router.get('*', withMode(READ_ONLY))
 router.head('*', withMode(READ_ONLY))
