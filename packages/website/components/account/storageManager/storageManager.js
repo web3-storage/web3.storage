@@ -8,13 +8,6 @@ import Button, { ButtonVariant } from 'components/button/button';
 import { useUser } from 'components/contexts/userContext';
 import { elementIsInViewport } from 'lib/utils';
 
-// Tiers available
-export const StorageTiers = {
-  TIER_1: '0',
-  TIER_2: '1',
-  TIER_3: '2',
-};
-
 // Raw TiB number of bytes, to be used in calculations
 const tebibyte = 1099511627776;
 
@@ -34,7 +27,6 @@ const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body
  * @returns
  */
 const StorageManager = ({ className = '', content }) => {
-  const storageTier = StorageTiers.TIER_1; // No tier available?
   const {
     storageData: { data, isLoading },
   } = useUser();
@@ -44,29 +36,13 @@ const StorageManager = ({ className = '', content }) => {
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
 
   const { maxSpaceLabel, unlockLabel, percentUploaded, percentPinned } = useMemo(
-    () =>
-      // Storage information by tier
-      ({
-        [StorageTiers.TIER_1]: {
-          maxSpaceLabel: content.tiers[0].max_space_label,
-          unlockLabel: content.tiers[0].unlock_label,
-          percentUploaded: (uploaded / tebibyte) * 100,
-          percentPinned: (pinned / tebibyte) * 100,
-        },
-        [StorageTiers.TIER_2]: {
-          maxSpaceLabel: content.tiers[1].max_space_label,
-          unlockLabel: content.tiers[1].unlock_label,
-          percentUploaded: (uploaded / (tebibyte * 10)) * 100,
-          percentPinned: (pinned / (tebibyte * 10)) * 100,
-        },
-        [StorageTiers.TIER_3]: {
-          maxSpaceLabel: `${Math.floor(uploaded + pinned / (tebibyte * 10) + 1) + content.tiers[2].max_space_label}`,
-          // every increment of 10 changes the amount of space used
-          percentUploaded: ((uploaded % (tebibyte * 10)) / (tebibyte * 10)) * 100,
-          percentPinned: ((pinned % (tebibyte * 10)) / (tebibyte * 10)) * 100,
-        },
-      }[storageTier]),
-    [storageTier, uploaded, pinned, content.tiers]
+    () => ({
+      maxSpaceLabel: content.max_space_label,
+      unlockLabel: content.unlock_label,
+      percentUploaded: (uploaded / tebibyte) * 100,
+      percentPinned: (pinned / tebibyte) * 100,
+    }),
+    [uploaded, pinned, content]
   );
 
   useEffect(() => {
