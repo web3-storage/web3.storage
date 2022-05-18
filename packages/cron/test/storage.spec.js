@@ -3,7 +3,6 @@ import {
   createUser,
   createUserWithFiles
 } from '../../db/test/utils.js'
-import execa from 'execa'
 import assert from 'assert'
 import { getDBClient } from '../src/lib/utils.js'
 import { EMAIL_TYPE } from '@web3-storage/db'
@@ -56,14 +55,19 @@ describe('cron - check user storage quotas', () => {
   })
 
   it('can be executed', async () => {
-    const { stderr: emailLog1 } = await execa('./src/bin/storage.js', { env })
-    const log1Lines = emailLog1.split('\n')
-    assert.match(log1Lines[0], /storage:checkStorageUsed 🗄 Checking users storage quotas/)
-    assert.match(log1Lines[2], /storage:checkStorageUsed 📧 Sent a list of users exceeding their quotas to admin/)
-    assert.match(log1Lines[4], /storage:checkStorageUsed 📧 Sent a quota exceeded email to test4-name: 145% of quota used/)
-    assert.match(log1Lines[6], /storage:checkStorageUsed 📧 Sent an email to test3-name: 90% of quota used/)
-    assert.match(log1Lines[8], /storage:checkStorageUsed 📧 Sent an email to test2-name: 79% of quota used/)
-    assert.match(log1Lines[9], /storage:checkStorageUsed ✅ Done/)
+    sinon.spy(emailService.provider, 'sendEmail')
+
+    await checkStorageUsed({ db: dbClient, emailService })
+
+    assert.equal(emailService.provider.sendEmail.callCount, 4)
+
+    // Admin email
+    emailService.provider.sendEmail.calledWith(EMAIL_TYPE.AdminStorageExceeded, 'admin@web3.storage')
+
+    // Users email
+    emailService.provider.sendEmail.calledWith(EMAIL_TYPE.User75PercentStorage, 'test2@email.com')
+    emailService.provider.sendEmail.calledWith(EMAIL_TYPE.User85PercentStorage, 'test3@email.com')
+    emailService.provider.sendEmail.calledWith(EMAIL_TYPE.User100PercentStorage, 'test4@email.com')
 
     const adminUser = await dbClient.getUserByEmail('admin@web3.storage')
     assert.ok(adminUser, 'admin user found')
@@ -96,10 +100,10 @@ describe('cron - check user storage quotas', () => {
     assert.strictEqual(over100EmailSent, true, 'Over 100% email sent')
 
     // Ensure emails are not re-sent
-    const { stderr: emailLog2 } = await execa('./src/bin/storage.js', { env })
-    const log2Lines = emailLog2.split('\n')
-    assert.match(log2Lines[0], /storage:checkStorageUsed 🗄 Checking users storage quotas/)
-    assert.match(log2Lines[5], /storage:checkStorageUsed ✅ Done/)
+    emailService.provider.sendEmail.resetHistory()
+    await checkStorageUsed({ db: dbClient, emailService })
+
+    sinon.assert.notCalled(emailService.provider.sendEmail)
   })
 
   it('calls the email service with the correct parameters', async () => {
