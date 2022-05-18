@@ -10,6 +10,7 @@ import { elementIsInViewport } from 'lib/utils';
 
 // Raw TiB number of bytes, to be used in calculations
 const tebibyte = 1099511627776;
+const defaultStorageLimit = tebibyte;
 
 /**
  * @typedef {Object} StorageManagerProps
@@ -32,17 +33,18 @@ const StorageManager = ({ className = '', content }) => {
   } = useUser();
   const uploaded = useMemo(() => data?.usedStorage?.uploaded || 0, [data]);
   const pinned = useMemo(() => data?.usedStorage?.pinned || 0, [data]);
+  const limit = useMemo(() => data?.storageLimitBytes || defaultStorageLimit, [data]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
 
   const { maxSpaceLabel, unlockLabel, percentUploaded, percentPinned } = useMemo(
     () => ({
-      maxSpaceLabel: content.max_space_label,
+      maxSpaceLabel: `${limit / tebibyte} ${content.max_space_tib_label}`,
       unlockLabel: content.unlock_label,
-      percentUploaded: (uploaded / tebibyte) * 100,
-      percentPinned: (pinned / tebibyte) * 100,
+      percentUploaded: (uploaded / limit) * 100,
+      percentPinned: (pinned / limit) * 100,
     }),
-    [uploaded, pinned, content]
+    [uploaded, pinned, limit, content]
   );
 
   useEffect(() => {

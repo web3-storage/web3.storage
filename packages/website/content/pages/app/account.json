@@ -73,7 +73,7 @@
         "request": "Submit a request"
       },
       "loading": "Loading...",
-      "max_space_label": "1 TiB",
+      "max_space_tib_label": "TiB",
       "unlock_label": "1 TiB+"
     },
     "file_manager": {
