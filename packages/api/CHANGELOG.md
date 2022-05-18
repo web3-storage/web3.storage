@@ -1,5 +1,31 @@
 # Changelog
 
+### [5.7.3](https://github.com/web3-storage/web3.storage/compare/api-v5.7.2...api-v5.7.3) (2022-05-13)
+
+
+### Bug Fixes
+
+* upgrade miniflare to ^2.4.0 ([#1312](https://github.com/web3-storage/web3.storage/issues/1312)) ([69b2004](https://github.com/web3-storage/web3.storage/commit/69b2004c95dd86e534e1503d8f78c5f068140c71))
+
+
+### Other Changes
+
+* refactor auth middleware ([#1271](https://github.com/web3-storage/web3.storage/issues/1271)) ([cf9b8e2](https://github.com/web3-storage/web3.storage/commit/cf9b8e217f1852bcf15568a73a1cf6a2871d9d6f))
+
+### [5.7.2](https://github.com/web3-storage/web3.storage/compare/api-v5.7.1...api-v5.7.2) (2022-04-29)
+
+
+### Bug Fixes
+
+* Bump MAX_BLOCK_SIZE to 2MiB limit imposed by bitswap ([#1269](https://github.com/web3-storage/web3.storage/issues/1269)) ([f0d8d95](https://github.com/web3-storage/web3.storage/commit/f0d8d95df55e54d6d435c7fe11d6c3e81d12fca6))
+
+### [5.7.1](https://github.com/web3-storage/web3.storage/compare/api-v5.7.0...api-v5.7.1) (2022-04-26)
+
+
+### Bug Fixes
+
+* trigger api release with db change ([#1274](https://github.com/web3-storage/web3.storage/issues/1274)) ([459e033](https://github.com/web3-storage/web3.storage/commit/459e033566dc080efb4ee5484047879663d2398f))
+
 ## [5.7.0](https://github.com/web3-storage/web3.storage/compare/api-v5.6.0...api-v5.7.0) (2022-04-19)
 
 

@@ -1,20 +1,20 @@
 .login-container {
   .section {
     svg {
-      margin-right: 0.6875rem;
+      margin-right: 0.875rem;
     }
     &-email {
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1.5625rem;
     }
     &-github {
       @include hoverInput;
     }
     .button {
-      width: 8.5625rem;
-      height: 2.1875rem;
+      width: 10.75rem;
+      height: 2.75rem;
       button {
-        min-height: 1.5rem;
+        min-height: 1.875rem;
       }
     }
   }
@@ -23,16 +23,16 @@
 .login-content {
   position: relative;
   margin: auto;
-  max-width: 19.75rem;
+  max-width: 24.6875rem;
   display: flex;
   flex-direction: column;
   text-align: center;
-  gap: 0.25rem;
+  gap: 0.3125rem;
 }
 
 .login-email {
   @include border_Background_Waterloo_White;
-  padding: 1rem 2rem;
+  padding: 1.25rem 2.5rem;
   width: 100%;
   border-radius: 0;
   @include hoverInput;
