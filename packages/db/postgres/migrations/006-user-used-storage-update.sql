@@ -1,4 +1,4 @@
-DROP TYPE used_storage
+DROP TYPE used_storage;
 CREATE TYPE used_storage AS (uploaded TEXT, psa_pinned TEXT);
 
 DROP FUNCTION user_used_storage(bigint);
