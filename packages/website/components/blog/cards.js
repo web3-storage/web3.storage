@@ -1,6 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
 // import Tags from './tags';
 // custom styles from /styles/blog.css
 
@@ -12,7 +10,7 @@ import Image from 'next/image';
  */
 
 export const Card = ({ post }) => (
-  <Link passHref href={`/blog/post/${post.slug}`}>
+  <a href={`/blog/post/${post.slug}`}>
     <h3 className="blog-card-title" title={post.title}>
       {post.title}
     </h3>
@@ -20,11 +18,12 @@ export const Card = ({ post }) => (
     <span className="blog-card-date">{post.date}</span>
 
     <div className="blog-card-img">
-      <Image src={post.thumbnail} alt={`Banner for ${post.title}`} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={post.thumbnail} alt={`Banner for ${post.title}`} />
     </div>
     {/* <div className="blog-card-tags">{post.tags && <Tags tags={post.tags} />}</div> */}
     <p className="blog-card-desc" title={post.description}>
       {post.description}
     </p>
-  </Link>
+  </a>
 );

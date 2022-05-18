@@ -4,7 +4,6 @@ import matter from 'gray-matter';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote } from 'next-mdx-remote';
 import Link from 'next/link';
-import Image from 'next/image';
 
 import Tags from '../../../components/blog/tags';
 
@@ -45,7 +44,8 @@ const Post = ({ post }) => {
   return (
     <div className="blog">
       <div className="post">
-        <Image src={post.meta.thumbnail} alt={`Banner for ${post.meta.title}`} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={post.meta.thumbnail} alt={`Banner for ${post.meta.title}`} />
         <div>
           <div className="post-meta mb4">
             <Link href="/blog/subscribe">Subscribe</Link>
