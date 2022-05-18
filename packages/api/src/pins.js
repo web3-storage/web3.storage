@@ -100,7 +100,7 @@ async function createPin (normalizedCid, pinData, authTokenId, env, ctx) {
   const pinRequest = await env.db.createPsaPinRequest(pinRequestData)
 
   /** @type {PsaPinStatusResponse} */
-  const pinStatus = getPinStatus(pinRequest)
+  const pinStatus = toPinStatusResponse(pinRequest)
 
   /** @type {(() => Promise<any>)[]} */
   const tasks = []
@@ -145,7 +145,7 @@ export async function pinGet (request, env, ctx) {
   }
 
   /** @type { PsaPinStatusResponse } */
-  return new JSONResponse(getPinStatus(pinRequest))
+  return new JSONResponse(toPinStatusResponse(pinRequest))
 }
 
 /**
@@ -176,7 +176,7 @@ export async function pinsGet (request, env, ctx) {
     throw new PSAErrorResourceNotFound()
   }
 
-  const pins = pinRequests.results.map((pinRequest) => getPinStatus(pinRequest))
+  const pins = pinRequests.results.map((pinRequest) => toPinStatusResponse(pinRequest))
 
   return new JSONResponse({
     count: pinRequests.count,
@@ -190,7 +190,7 @@ export async function pinsGet (request, env, ctx) {
  * @param { Object } pinRequest
  * @returns { PsaPinStatusResponse }
  */
-function getPinStatus (pinRequest) {
+function toPinStatusResponse (pinRequest) {
   return {
     requestid: pinRequest._id.toString(),
     status: getEffectivePinStatus(pinRequest.pins),
