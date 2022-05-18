@@ -269,14 +269,14 @@ BEGIN
 END
 $$;
 
-CREATE TYPE used_storage AS (uploaded TEXT, psa_pinned TEXT);
+CREATE TYPE stored_bytes AS (uploaded TEXT, psa_pinned TEXT);
 
 CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT) 
-RETURNS used_storage
+RETURNS stored_bytes
 LANGUAGE plpgsql
 AS
 $$
-DECLARE used_storage used_storage;
+DECLARE used_storage stored_bytes;
 BEGIN
   SELECT COALESCE(SUM(c.dag_size), 0)
   INTO used_storage.uploaded::TEXT
