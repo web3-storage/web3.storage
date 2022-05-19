@@ -16,7 +16,7 @@ import InfoAIcon from 'assets/icons/infoA';
  */
 const Tooltip = ({ content, icon = null, className, position }) => {
   return (
-    <div className={clsx(className, 'Tooltip', position)}>
+    <div role="tooltip" className={clsx(className, 'Tooltip', position)}>
       {icon || <InfoAIcon />}
       <span className="tooltip-content" dangerouslySetInnerHTML={{ __html: content }} />
     </div>
