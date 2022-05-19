@@ -393,15 +393,14 @@ export class DBClient {
   async createUpload (data) {
     const now = new Date().toISOString()
 
-    const backupsObjects = data.backupUrls.map(url => ({
-      url,
-      created: data.created || now
-    }))
-
     const backupsObjectsByURL = {}
-    backupsObjects.forEach(
-      backup => (backupsObjectsByURL[backup.url] = backup)
-    )
+
+    data.backupUrls.forEach((url) => {
+      backupsObjectsByURL[url] = {
+        url,
+        created: data.created || now
+      }
+    })
 
     /** @type {{ data: string, error: PostgrestError }} */
     const { data: uploadResponse, error } = await this._client.rpc('create_upload', {

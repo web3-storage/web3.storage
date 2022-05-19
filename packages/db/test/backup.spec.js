@@ -1,7 +1,7 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 import { DBClient } from '../index.js'
-import { token } from './utils.js'
+import { token, randomCid } from './utils.js'
 
 describe('backup', () => {
   /** @type {DBClient} */
@@ -12,7 +12,6 @@ describe('backup', () => {
   })
   let user
 
-  const cid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354'
   const type = 'Upload'
   const dagSize = 1000
   const name = `Upload_${new Date().toISOString()}`
@@ -59,11 +58,13 @@ describe('backup', () => {
       secret,
       user: user._id
     })
+
+    authKeys = await client.listKeys(user._id)
   })
 
-  // Setup upload
-  beforeEach(async () => {
-    authKeys = await client.listKeys(user._id)
+  it('can get upload backups', async () => {
+    const cid = await randomCid()
+
     const createdUpload = await client.createUpload({
       user: user._id,
       contentCid: cid,
@@ -80,11 +81,8 @@ describe('backup', () => {
     assert(createdUpload.cid, 'upload has root cid')
 
     upload = await client.getUpload(cid, user._id)
-
     assert(upload, 'upload created')
-  })
 
-  it('can get upload backups', async () => {
     const backups = await client.getBackups(upload._id)
 
     assert(backups, 'backups created')
@@ -93,7 +91,48 @@ describe('backup', () => {
     assert.strictEqual(backups[0].url, initialBackupUrl, 'backup has correct url')
   })
 
-  it('backup urls are unique', async () => {
+  it('creates unique backup urls', async () => {
+    const cid = await randomCid()
+
+    await client.createUpload({
+      user: user._id,
+      contentCid: cid,
+      sourceCid: cid,
+      authKey: authKeys[0]._id,
+      type,
+      dagSize: dagSize,
+      name,
+      pins: [initialPinData],
+      backupUrls: [initialBackupUrl, initialBackupUrl]
+    })
+
+    await client.createUpload({
+      user: user._id,
+      contentCid: cid,
+      sourceCid: cid,
+      authKey: authKeys[0]._id,
+      type,
+      dagSize: dagSize,
+      name,
+      pins: [initialPinData],
+      backupUrls: [initialBackupUrl, initialBackupUrl]
+    })
+
+    upload = await client.getUpload(cid, user._id)
+    assert(upload, 'second upload created')
+
+    const backups = await client.getBackups(upload._id)
+
+    assert.strictEqual(backups.length, 1, 'upload has a single backup')
+    assert.strictEqual(backups[0].url, initialBackupUrl)
+    assert(new Date(backups[0].created) < new Date(upload.updated), 'backup was created before the new upload')
+  })
+
+  it('can backup chunked uploads', async () => {
+    const cid = await randomCid()
+
+    const backupUrlSecondChunk = `https://backup.cid/${new Date().toISOString()}/${Math.random()}`
+
     await client.createUpload({
       user: user._id,
       contentCid: cid,
@@ -105,18 +144,6 @@ describe('backup', () => {
       pins: [initialPinData],
       backupUrls: [initialBackupUrl]
     })
-
-    upload = await client.getUpload(cid, user._id)
-    assert(upload, 'second upload created')
-
-    const backups = await client.getBackups(upload._id)
-
-    assert.strictEqual(backups.length, 1, 'upload has a single backup')
-    assert(new Date(backups[0].created) < new Date(upload.updated), 'backup was created before the new upload')
-  })
-
-  it('can backup chunked uploads', async () => {
-    const backupUrlSecondChunk = `https://backup.cid/${new Date().toISOString()}/${Math.random()}`
 
     await client.createUpload({
       user: user._id,
