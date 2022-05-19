@@ -43,11 +43,11 @@ export async function getStaticProps({ ...ctx }) {
 const Post = ({ post }) => {
   return (
     <div className="blog">
-      <div className="post">
+      <div className="post grid">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={post.meta.thumbnail} alt={`Banner for ${post.meta.title}`} />
         <div>
-          <div className="post-meta mb4">
+          <div className="post-meta">
             <Link href="/blog/subscribe">Subscribe</Link>
             <h1>{post.meta.title}</h1>
             {post.meta?.tags ? <Tags tags={post.meta.tags} /> : <div></div>}

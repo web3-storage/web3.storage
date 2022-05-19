@@ -10,7 +10,7 @@ import React from 'react';
  */
 
 export const Card = ({ post }) => (
-  <a href={`/blog/post/${post.slug}`}>
+  <a className="blog-card" href={`/blog/post/${post.slug}`}>
     <h3 className="blog-card-title" title={post.title}>
       {post.title}
     </h3>

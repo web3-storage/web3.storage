@@ -167,11 +167,7 @@ const Paginated = ({ items, pageNumber, setPageNumber }) => {
   return (
     <div className="blog-container">
       {currentItems.length > 0 ? <Items currentItems={currentItems} /> : <div>More blogs coming soon</div>}
-      {items.length > BLOG_ITEMS_PER_PAGE && (
-        <div className="flex justify-center mt13">
-          <PaginatedNav />
-        </div>
-      )}
+      {items.length > BLOG_ITEMS_PER_PAGE && <PaginatedNav />}
     </div>
   );
 };
