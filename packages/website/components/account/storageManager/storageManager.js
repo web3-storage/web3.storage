@@ -39,7 +39,7 @@ const StorageManager = ({ className = '', content }) => {
     storageData: { data, isLoading },
   } = useUser();
   const uploaded = useMemo(() => data?.usedStorage?.uploaded || 0, [data]);
-  const pinned = useMemo(() => data?.usedStorage?.pinned || 0, [data]);
+  const psaPinned = useMemo(() => data?.usedStorage?.psaPinned || 0, [data]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
 
@@ -51,22 +51,22 @@ const StorageManager = ({ className = '', content }) => {
           maxSpaceLabel: content.tiers[0].max_space_label,
           unlockLabel: content.tiers[0].unlock_label,
           percentUploaded: (uploaded / tebibyte) * 100,
-          percentPinned: (pinned / tebibyte) * 100,
+          percentPinned: (psaPinned / tebibyte) * 100,
         },
         [StorageTiers.TIER_2]: {
           maxSpaceLabel: content.tiers[1].max_space_label,
           unlockLabel: content.tiers[1].unlock_label,
           percentUploaded: (uploaded / (tebibyte * 10)) * 100,
-          percentPinned: (pinned / (tebibyte * 10)) * 100,
+          percentPinned: (psaPinned / (tebibyte * 10)) * 100,
         },
         [StorageTiers.TIER_3]: {
-          maxSpaceLabel: `${Math.floor(uploaded + pinned / (tebibyte * 10) + 1) + content.tiers[2].max_space_label}`,
+          maxSpaceLabel: `${Math.floor(uploaded + psaPinned / (tebibyte * 10) + 1) + content.tiers[2].max_space_label}`,
           // every increment of 10 changes the amount of space used
           percentUploaded: ((uploaded % (tebibyte * 10)) / (tebibyte * 10)) * 100,
-          percentPinned: ((pinned % (tebibyte * 10)) / (tebibyte * 10)) * 100,
+          percentPinned: ((psaPinned % (tebibyte * 10)) / (tebibyte * 10)) * 100,
         },
       }[storageTier]),
-    [storageTier, uploaded, pinned, content.tiers]
+    [storageTier, uploaded, psaPinned, content.tiers]
   );
 
   useEffect(() => {
@@ -121,7 +121,7 @@ const StorageManager = ({ className = '', content }) => {
               {/* Used storage in GB */}
               <span className="storage-label">{content.heading}</span>:{' '}
               <span className="storage-number">
-                {filesz(uploaded + pinned, {
+                {filesz(uploaded + psaPinned, {
                   base: 2,
                   standard: 'iec',
                 })}
@@ -150,7 +150,7 @@ const StorageManager = ({ className = '', content }) => {
           </Button>
         )}
       </div>
-      <div className={clsx('storage-manager-legend', uploaded > 0 || pinned > 0 ? '' : 'no-margin')}>
+      <div className={clsx('storage-manager-legend', uploaded > 0 || psaPinned > 0 ? '' : 'no-margin')}>
         {uploaded > 0 ? (
           <div className="sml-uploaded">
             <span className="legend-label">{content.legend.uploaded}&nbsp;</span>
@@ -160,10 +160,10 @@ const StorageManager = ({ className = '', content }) => {
             })}
           </div>
         ) : null}
-        {pinned > 0 ? (
+        {psaPinned > 0 ? (
           <div className="sml-pinned">
             <span className="legend-label">{content.legend.pinned}&nbsp;</span>
-            {filesz(pinned, {
+            {filesz(psaPinned, {
               base: 2,
               standard: 'iec',
             })}

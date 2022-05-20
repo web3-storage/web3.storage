@@ -334,5 +334,5 @@ export type NameItem = {
 
 export type UsedStorage = {
   uploaded: number,
-  pinned: number
+  psaPinned: number
 }
