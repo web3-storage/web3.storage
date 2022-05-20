@@ -74,27 +74,17 @@ VALUES ('Pinned', 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm',
        ('Pinned', 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00'),
        ('Pinned', 'bafybeiaiipiibr7aletbbrzmpklw4l5go6sodl22xs6qtcqo3lqogfogy4', 1, '2021-07-14T19:27:14.934572+00:00', '2021-07-14T19:27:14.934572+00:00');
 
-INSERT INTO cargo.dags(cid_v1) VALUES
-('bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm'),
-('bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q');
+INSERT INTO cargo.aggregate_entries (aggregate_cid, cid_v1, datamodel_selector) VALUES
+('bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bme', 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 'Links/0/Links'),
+('bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bmf', 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 'Links/0/Links');
 
 INSERT INTO cargo.aggregates (aggregate_cid, piece_cid, sha256hex, export_size, metadata, entry_created) VALUES
 ('bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bme', 'bafybeidymjmzqihaz7oeiod3zyolzgcxwbum4b4nvo4aublm6quh6zb3ae', '9ad34a5221cc171dcc61c0862680634ca065c32972ab59f92626b7f2f18ca3fc', 25515304172, '{"Version": 1, "RecordType": "DagAggregate UnixFS"}', '2021-09-09 14:41:14.099613+00'),
 ('bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bmf', 'bafybeidymjmzqihaz7oeiod3zyolzgcxwbum4b4nvo4aublm6quh6zb5af', '9ad34a5221cc171dcc61c0862680634ca065c32972ab59f92626b7f2f18ca3fc', 25515304172, '{"Version": 1, "RecordType": "DagAggregate UnixFS"}', '2021-09-09 14:41:14.099613+00');
 
-INSERT INTO cargo.aggregate_entries (aggregate_cid, cid_v1, datamodel_selector) VALUES
-('bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bme', 'bafybeifnfkzjeohjf2dch2iqqpef3bfjylwxlcjws2msvdfyze5bvdprfm', 'Links/0/Links'),
-('bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bmf', 'bafybeica6klnrhlrbx6z24icefykpbwyypouglnypvnwb5esdm6yzcie3q', 'Links/0/Links');
-
-INSERT INTO cargo.clients (client, filp_available) VALUES
-('f144zep4gitj73rrujd3jw6iprljicx6vl4wbeavi', 1);
-
-INSERT INTO cargo.providers (provider) VALUES
-('f0678914');
-
-INSERT INTO cargo.deals (deal_id, aggregate_cid, client, provider, status, start_epoch, end_epoch, entry_created, entry_last_updated, status_meta, sector_start_epoch) VALUES
-(2424132, 'bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bme', 'f144zep4gitj73rrujd3jw6iprljicx6vl4wbeavi', 'f0678914', 'active', 1102102, 2570902, '2021-09-09 16:30:52.252233+00', '2021-09-10 00:45:50.408956+00', 'containing sector active as of 2021-09-10 00:36:30 at epoch 1097593', 1097593),
-(2424133, 'bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bmf', 'f144zep4gitj73rrujd3jw6iprljicx6vl4wbeavi', 'f0678914', 'queued', 1102102, 2570902, '2021-09-09 16:30:52.252233+00', '2021-09-10 00:45:50.408956+00', 'containing sector active as of 2021-09-10 00:36:30 at epoch 1097593', 1097593);
+INSERT INTO cargo.deals (deal_id, aggregate_cid, client, provider, status, start_epoch, end_epoch, entry_created, entry_last_updated, status_meta, start_time, sector_start_epoch, sector_start_time, end_time) VALUES
+(2424132, 'bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bme', 'f144zep4gitj73rrujd3jw6iprljicx6vl4wbeavi', 'f0678914', 'active', 1102102, 2570902, '2021-09-09 16:30:52.252233+00', '2021-09-10 00:45:50.408956+00', 'containing sector active as of 2021-09-10 00:36:30 at epoch 1097593', '2021-09-11 14:11:00+00', 1097593, '2021-09-10 00:36:30+00', '2023-02-03 14:11:00+00'),
+(2424133, 'bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bmf', 'f144zep4gitj73rrujd3jw6iprljicx6vl4wbeavi', 'f0678914', 'queued', 1102102, 2570902, '2021-09-09 16:30:52.252233+00', '2021-09-10 00:45:50.408956+00', 'containing sector active as of 2021-09-10 00:36:30 at epoch 1097593', '2021-09-11 14:11:00+00', 1097593, '2021-09-10 00:36:30+00', '2023-02-03 14:11:00+00');
 
 -- /name route data testing
 INSERT INTO public.name (key, record, has_v2_sig, seqno, validity)

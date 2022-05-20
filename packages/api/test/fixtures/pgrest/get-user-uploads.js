@@ -11,7 +11,7 @@ export default [
         dataCid: 'bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bmf',
         dataModelSelector: 'Links/0/Links',
         dealId: 2424133,
-        expiration: '2021-09-11T14:11:00+00:00',
+        expiration: '2023-02-03T14:11:00+00:00',
         pieceCid: 'bafybeidymjmzqihaz7oeiod3zyolzgcxwbum4b4nvo4aublm6quh6zb5af',
         status: 'Queued',
         storageProvider: 'f0678914',

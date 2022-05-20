@@ -20,7 +20,7 @@ export default {
       dataCid: 'bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bmf',
       dataModelSelector: 'Links/0/Links',
       activation: '2021-09-11T14:11:00+00:00',
-      expiration: '2021-09-11T14:11:00+00:00',
+      expiration: '2023-02-03T14:11:00+00:00',
       created: '2021-09-09T16:30:52.252233+00:00',
       updated: '2021-09-10T00:45:50.408956+00:00'
     }
