@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.4.1](https://github.com/web3-storage/web3.storage/compare/website-v2.4.0...website-v2.4.1) (2022-05-20)
+
+
+### Other Changes
+
+* rename pinned to psaPinned ([#1268](https://github.com/web3-storage/web3.storage/issues/1268)) ([aeae342](https://github.com/web3-storage/web3.storage/commit/aeae342547b1fb15c17069f6d019beae250564f5))
+
 ## [2.4.0](https://github.com/web3-storage/web3.storage/compare/website-v2.3.0...website-v2.4.0) (2022-05-18)
 
 
