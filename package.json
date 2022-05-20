@@ -9,18 +9,17 @@
     "packages/cron",
     "packages/db",
     "packages/pinpin",
-    "packages/report",
     "packages/w3",
     "packages/website",
     "packages/pinpin",
-    "packages/tools",
-    "packages/docs"
+    "packages/tools"
   ],
   "scripts": {
     "start": "npm-run-all --print-label -p web api",
     "api": "npm start -w packages/api",
     "web": "npm start -w packages/website",
     "test": "npm run lint && npm run test --workspaces",
+    "test:e2e": "npm run test:e2e --if-present --workspaces",
     "lint": "standard --verbose | snazzy",
     "lint:fix": "standard --fix "
   },
@@ -31,8 +30,7 @@
   },
   "standard": {
     "ignore": [
-      "packages/website",
-      "packages/docs"
+      "packages/website"
     ]
   },
   "engines": {

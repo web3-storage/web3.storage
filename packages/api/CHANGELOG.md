@@ -1,5 +1,64 @@
 # Changelog
 
+### [5.7.3](https://github.com/web3-storage/web3.storage/compare/api-v5.7.2...api-v5.7.3) (2022-05-13)
+
+
+### Bug Fixes
+
+* upgrade miniflare to ^2.4.0 ([#1312](https://github.com/web3-storage/web3.storage/issues/1312)) ([69b2004](https://github.com/web3-storage/web3.storage/commit/69b2004c95dd86e534e1503d8f78c5f068140c71))
+
+
+### Other Changes
+
+* refactor auth middleware ([#1271](https://github.com/web3-storage/web3.storage/issues/1271)) ([cf9b8e2](https://github.com/web3-storage/web3.storage/commit/cf9b8e217f1852bcf15568a73a1cf6a2871d9d6f))
+
+### [5.7.2](https://github.com/web3-storage/web3.storage/compare/api-v5.7.1...api-v5.7.2) (2022-04-29)
+
+
+### Bug Fixes
+
+* Bump MAX_BLOCK_SIZE to 2MiB limit imposed by bitswap ([#1269](https://github.com/web3-storage/web3.storage/issues/1269)) ([f0d8d95](https://github.com/web3-storage/web3.storage/commit/f0d8d95df55e54d6d435c7fe11d6c3e81d12fca6))
+
+### [5.7.1](https://github.com/web3-storage/web3.storage/compare/api-v5.7.0...api-v5.7.1) (2022-04-26)
+
+
+### Bug Fixes
+
+* trigger api release with db change ([#1274](https://github.com/web3-storage/web3.storage/issues/1274)) ([459e033](https://github.com/web3-storage/web3.storage/commit/459e033566dc080efb4ee5484047879663d2398f))
+
+## [5.7.0](https://github.com/web3-storage/web3.storage/compare/api-v5.6.0...api-v5.7.0) (2022-04-19)
+
+
+### Features
+
+* use IANA media type application/vnd.ipld.car ([#1215](https://github.com/web3-storage/web3.storage/issues/1215)) ([c6fa207](https://github.com/web3-storage/web3.storage/commit/c6fa20768f4bef7f715f08d518f90d3a355bf15b))
+
+
+### Bug Fixes
+
+* return 400 on malformed form data ([#1255](https://github.com/web3-storage/web3.storage/issues/1255)) ([976b0c6](https://github.com/web3-storage/web3.storage/commit/976b0c611d4556e530d6a52d48ae88a306c3ad9b))
+
+## [5.6.0](https://github.com/web3-storage/web3.storage/compare/api-v5.5.0...api-v5.6.0) (2022-04-11)
+
+
+### Features
+
+* api support for ipfs-cluster@1.0 ([#1227](https://github.com/web3-storage/web3.storage/issues/1227)) ([57678fe](https://github.com/web3-storage/web3.storage/commit/57678fe60baf5fe5648bfff23c0144e1477b26e2)), closes [#1184](https://github.com/web3-storage/web3.storage/issues/1184)
+
+
+### Bug Fixes
+
+* api add to cluster always with local false ([#1241](https://github.com/web3-storage/web3.storage/issues/1241)) ([9100b8f](https://github.com/web3-storage/web3.storage/commit/9100b8fa7c5dcc464baab5cdd699d8dc2c3baf40))
+* Return 400 on malformed form-data ([#1219](https://github.com/web3-storage/web3.storage/issues/1219)) ([2e165ad](https://github.com/web3-storage/web3.storage/commit/2e165adb83b752c4bc1f1e5bdfdb35eb61db5c1b))
+
+## [5.5.0](https://github.com/web3-storage/web3.storage/compare/api-v5.4.3...api-v5.5.0) (2022-04-05)
+
+
+### Features
+
+* add pinned storage to user account API ([#1044](https://github.com/web3-storage/web3.storage/issues/1044)) ([3200a6e](https://github.com/web3-storage/web3.storage/commit/3200a6e20a3460cefe5887ab5d48ad320a84a86f))
+* implement account restriction ([#1053](https://github.com/web3-storage/web3.storage/issues/1053)) ([6f6f279](https://github.com/web3-storage/web3.storage/commit/6f6f2795a374c6df1e825f52d2c99afbe79131e5))
+
 ### [5.4.3](https://github.com/web3-storage/web3.storage/compare/api-v5.4.2...api-v5.4.3) (2022-03-18)
 
 

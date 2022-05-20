@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import Markdown from 'markdown-to-jsx';
 
 import CardTier from './card-tier';
 import Button from '../button/button';
@@ -60,6 +59,15 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
     cta => {
       if (cta.url) {
         router.push(cta.url);
+      }
+    },
+    [router]
+  );
+
+  const navigateOnCardClick = useCallback(
+    item => {
+      if (!item.cta && item.action === 'next-link') {
+        router.push(item.url);
       }
     },
     [router]
@@ -152,8 +160,14 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
     return <CardTier card={card} cardsGroup={cardsGroup} index={index} onCardLoad={onCardLoad} />;
   }
 
+  const CustomTag = card.action === 'link' ? 'a' : 'div';
   return (
-    <div className={clsx('card', `type__${card.type}`)}>
+    <CustomTag
+      href={card.action === 'link' ? card.url : undefined}
+      target="_blank"
+      className={clsx('card', `type__${card.type}`, card.action ? `has-${card.action}` : '')}
+      onClick={card.action === 'next-link' ? () => navigateOnCardClick(card) : undefined}
+    >
       {card.label && <div className="label">{card.label}</div>}
 
       {<div className={clsx('feature-wrapper', targetClass)}>{getFeaturedElement(card)}</div>}
@@ -164,7 +178,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
 
       {card.description && (
         <div className={clsx('description', targetClass)}>
-          <Markdown>{card.description}</Markdown>
+          <span dangerouslySetInnerHTML={{ __html: card.description }}></span>
         </div>
       )}
 
@@ -181,6 +195,6 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
           {card.cta.text}
         </Button>
       )}
-    </div>
+    </CustomTag>
   );
 }

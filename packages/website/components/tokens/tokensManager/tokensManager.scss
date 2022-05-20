@@ -4,7 +4,7 @@
   position: relative;
   align-items: baseline;
   justify-content: flex-start;
-  padding: 1.5rem 0 1.5rem 1.5rem;
+  padding: 1.875rem 0 1.875rem 1.875rem;
   width: 100%;
 
   @include medium {
@@ -15,14 +15,14 @@
 
   > * {
     width: 100%;
-    padding-left: 1.125rem;
+    padding-left: 1.40625rem;
 
     @include medium {
       padding-left: 0;
     }
-
+    &:not(.delete-modal),
     &:not(.tokens-manager-footer) {
-      max-width: 52.8125rem;
+      max-width: 64rem;
       @include medium {
         max-width: none;
       }
@@ -30,37 +30,37 @@
   }
 
   > h4 {
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
   }
 }
 
 .tokens-manager-header {
   display: flex;
-  padding-bottom: 0.75rem;
+  padding-bottom: 0.9375rem;
   align-items: center;
-  padding-right: 1.5rem;
+  padding-right: 1.875rem;
   flex-wrap: wrap;
 
   @include medium {
-    padding-bottom: 1.625rem;
+    padding-bottom: 2rem;
     padding-right: 0;
     justify-content: space-between;
   }
 
   // Title
   > :first-child {
-    margin-right: 7.85rem;
+    margin-right: 9.8125rem;
     @include medium {
-      margin-left: 1rem;
+      margin-left: 1.25rem;
       margin-right: 0;
     }
   }
 
   .Filterable {
-    margin-right: 3.75rem;
+    margin-right: 4.6875rem;
     @include medium {
       flex-basis: 100%;
-      margin-top: 4rem;
+      margin-top: 5rem;
       order: 3;
       margin-right: 0;
     }
@@ -68,13 +68,13 @@
 
   .Sortable {
     @include medium {
-      margin-right: 1rem;
+      margin-right: 1.25rem;
     }
   }
 }
 
 .tokens-manager-table-content {
-  min-height: 21.25rem;
+  min-height: 26.5625rem;
 
   @include medium {
     min-height: auto;
@@ -82,21 +82,30 @@
 
   .tokens-manager-upload-cta {
     position: relative;
-    top: 1.25rem;
-    left: 0.25rem;
+    top: 1.5625rem;
+    left: 0.3125rem;
   }
 
   .token-id {
     @include monospace_Text;
   }
 
+  .token-name {
+    line-height: 1.5;
+    padding: 0.625rem 1.25rem 0.625rem 0;
+    word-break: break-word;
+    @include medium {
+      padding: 1.0625rem 5rem 1.0625rem 1.75rem;
+    }
+  }
+
   @include medium {
     .token-name {
-      padding-top: 1.375rem;
+      padding-top: 1.75rem;
     }
     .token-id-container {
       display: flex;
-      padding-bottom: 1.375rem;
+      padding-bottom: 1.75rem;
       .token-id {
         word-break: break-all;
         @include leading_Tiny;
@@ -113,25 +122,25 @@
 }
 
 .tokens-manager-result-dropdown .dropdownContent {
-  right: -0.75rem;
+  right: -0.9375rem;
 }
 
 .tokens-manager-loading-spinner {
   width: 100%;
   padding: 0;
-  padding-top: 2em;
+  padding-top: 2.5rem;
 }
 
 .tokens-manager-footer {
   display: flex;
   justify-content: space-between;
-  padding-right: 4.125rem;
+  padding-right: 5.125rem;
   flex-wrap: wrap;
   &:before {
     content: '';
   }
   @include medium {
-    padding-right: 1rem;
+    padding-right: 1.25rem;
     .Pagination {
       flex-basis: 100%;
       order: 2;

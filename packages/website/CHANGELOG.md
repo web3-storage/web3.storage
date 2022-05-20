@@ -1,5 +1,54 @@
 # Changelog
 
+## [2.3.0](https://github.com/web3-storage/web3.storage/compare/website-v2.2.1...website-v2.3.0) (2022-04-26)
+
+
+### Features
+
+* CID links in files table ([#1243](https://github.com/web3-storage/web3.storage/issues/1243)) ([dccf457](https://github.com/web3-storage/web3.storage/commit/dccf457a4005dace47d685b57dbfb66d52e36b5b))
+* consolidate subnav account menu ([#1252](https://github.com/web3-storage/web3.storage/issues/1252)) ([0a9b1b1](https://github.com/web3-storage/web3.storage/commit/0a9b1b17b5e2acf25fcc0f4fd5bc91b59aa695df))
+
+
+### Bug Fixes
+
+* statuspage incidents appear in message banner ([#1188](https://github.com/web3-storage/web3.storage/issues/1188)) ([a086fcc](https://github.com/web3-storage/web3.storage/commit/a086fcc0f0d6d751bd0a4c014ef02e9d75a4fa13))
+
+### [2.2.1](https://github.com/web3-storage/web3.storage/compare/website-v2.2.0...website-v2.2.1) (2022-04-12)
+
+
+### Bug Fixes
+
+* trigger website release ([b5a8b88](https://github.com/web3-storage/web3.storage/commit/b5a8b88d66e14bd763833eada1a8a01133450b4b))
+
+## [2.2.0](https://github.com/web3-storage/web3.storage/compare/website-v2.1.0...website-v2.2.0) (2022-04-12)
+
+
+### Features
+
+* Gradient background optimization ([#1230](https://github.com/web3-storage/web3.storage/issues/1230)) ([3fbcc6e](https://github.com/web3-storage/web3.storage/commit/3fbcc6efaefa58534d1aaeaff54f83c803e13f70))
+
+
+### Bug Fixes
+
+* safari checkmark is always checked ([#1236](https://github.com/web3-storage/web3.storage/issues/1236)) ([6fa77e0](https://github.com/web3-storage/web3.storage/commit/6fa77e0a253d10f5e7c316eb8410ac45f675426e))
+* website copy filecoin storage capacity ([#1210](https://github.com/web3-storage/web3.storage/issues/1210)) ([07c4315](https://github.com/web3-storage/web3.storage/commit/07c4315727d163bd3c439b6e6ed1d9b3d91e50a8))
+
+## [2.1.0](https://github.com/web3-storage/web3.storage/compare/website-v2.0.0...website-v2.1.0) (2022-04-05)
+
+
+### Features
+
+* minor update to copy in SP tooltips ([#1151](https://github.com/web3-storage/web3.storage/issues/1151)) ([aa4785f](https://github.com/web3-storage/web3.storage/commit/aa4785f66375c4647dec70dad4262bd2e786f4e0))
+
+
+### Bug Fixes
+
+* npm package name ([#1128](https://github.com/web3-storage/web3.storage/issues/1128)) ([5bae2a9](https://github.com/web3-storage/web3.storage/commit/5bae2a9cb67879078be368bd21c822644d207a94))
+* post-ship website fixes and enhancements ([#1150](https://github.com/web3-storage/web3.storage/issues/1150)) ([80be326](https://github.com/web3-storage/web3.storage/commit/80be3269d875795bc233f59322385297eaaf2b00))
+* trivial change to trigger release process ([#1220](https://github.com/web3-storage/web3.storage/issues/1220)) ([e3d5a2c](https://github.com/web3-storage/web3.storage/commit/e3d5a2cc963a1bce2a1a9103d8abba620dbacfed))
+* user storage display on web ([#1183](https://github.com/web3-storage/web3.storage/issues/1183)) ([1c8d36c](https://github.com/web3-storage/web3.storage/commit/1c8d36cb1f941cb940836af51451da4c72bdf685))
+* website 404 ([#1172](https://github.com/web3-storage/web3.storage/issues/1172)) ([8608735](https://github.com/web3-storage/web3.storage/commit/860873573018ea1ae6020d2ebfbc444138372ece))
+
 ## [2.0.0](https://github.com/web3-storage/web3.storage/compare/website-v1.10.0...website-v2.0.0) (2022-03-18)
 
 

@@ -74,6 +74,7 @@ Add the required secrets:
     wrangler secret put S3_SECRET_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3 (not required for dev)
     wrangler secret put S3_BUCKET_NAME --env $(whoami) # e.g web3.storage-staging-us-east-2 (not required for dev)
     wrangler secret put PG_REST_JWT --env $(whoami) # Get from database postgrest
+    wrangler secret put LOGTAIL_TOKEN --env $(whoami) # Get from Logtail (not required for dev)
 ```
 Note this might not be up to date, please look to the [.env.tpl](../../.env.tpl) in the root directory for the up to date secrets required.
 
@@ -181,7 +182,7 @@ Get the CAR file containing all blocks in the tree starting at the root `:cid`
 $ curl -sD - 'http://127.0.0.1:8787/car/bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'
 HTTP/1.1 200 OK
 date: Mon, 14 Jun 2021 09:12:41 GMT
-content-type: application/car
+content-type: application/vnd.ipld.car
 cache-control: public, max-age=10
 content-disposition: attachment; filename="bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.car"
 ```

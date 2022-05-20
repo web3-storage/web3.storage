@@ -69,9 +69,6 @@
   position: relative;
   padding: 9rem 0;
   z-index: 0;
-  // background-image: url('/images/index/holographic-bg-cropped-2.png');
-  // background-size: cover;
-  // background-repeat: no-repeat;
   @include gradient_Text_Selection;
 
   &:before {
@@ -234,7 +231,7 @@
     content: '';
     position: absolute;
     width: 101%;
-    height: 20rem;
+    height: 16rem;
     top: 3px;
     left: 0;
     transform: translateY(-100%);
@@ -246,6 +243,17 @@
   @include ultraLarge {
     &:before {
       display: block;
+      height: 20rem;
+    }
+  }
+  @include xlarge {
+    &:before {
+      height: 16rem;
+    }
+  }
+  @include large {
+    &:before {
+      height: 12rem;
     }
   }
   @include small {
@@ -734,6 +742,9 @@
   padding-bottom: 12rem;
 
   @include ultraLarge {
+    padding-bottom: 19rem;
+  }
+  @include xlarge {
     padding-bottom: 15rem;
   }
   @include large {

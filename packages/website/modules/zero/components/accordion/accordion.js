@@ -1,7 +1,5 @@
-// ===================================================================== Imports
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from 'react';
 
-// ====================================================================== Params
 /**
  * @param {object} props
  * @param {boolean} props.multiple
@@ -10,23 +8,16 @@ import React, { useState, useEffect, useRef } from "react";
  * @param {any} props.children
  */
 
-// =============================================================================
-function Accordion ({
-  multiple,
-  toggleOnLoad,
-  toggleAllOption,
-  children
-}) {
-  const [active, setActive] = useState(/** @type {string[]} */([]));
+function Accordion({ multiple, toggleOnLoad, toggleAllOption, children }) {
+  const [active, setActive] = useState(/** @type {string[]} */ ([]));
   const [expanded, setExpanded] = useState(false);
-  const sections = useRef(/** @type {string[]} */([]));
+  const sections = useRef(/** @type {string[]} */ ([]));
   const buttonMessage = expanded ? 'collapse all' : 'expand all';
 
-  // ================================================================= Functions
-  const setActiveSections = (id) => {
+  const setActiveSections = id => {
     if (multiple) {
       if (active.includes(id)) {
-        setActive(active.filter((_id) => _id !== id));
+        setActive(active.filter(_id => _id !== id));
       } else {
         setActive([...active, id]);
       }
@@ -37,11 +28,11 @@ function Accordion ({
         setActive([id]);
       }
     }
-  }
+  };
 
-  const reportUID = (id) => {
-    sections.current.push(id)
-  }
+  const reportUID = id => {
+    sections.current.push(id);
+  };
 
   const childrenWithProps = React.Children.map(children, child => {
     if (React.isValidElement(child)) {
@@ -49,45 +40,39 @@ function Accordion ({
         active: active,
         toggle: setActiveSections,
         toggleOnLoad: toggleOnLoad,
-        reportUID: reportUID
-      })
+        reportUID: reportUID,
+      });
     }
-    return child
-  })
+    return child;
+  });
 
   const toggleExpanded = () => {
     if (expanded) {
-      setActive([])
+      setActive([]);
     } else {
-      setActive(sections.current)
+      setActive(sections.current);
     }
 
     setExpanded(!expanded);
-  }
+  };
 
-  // ================================================================== Template
   return (
     <>
-      { toggleAllOption && <div className="accordion-control-bar">
-        <button
-          className="accordion-expand-all-toggle"
-          onClick={toggleExpanded}>
-          { buttonMessage }
-        </button>
-      </div>}
+      {toggleAllOption && (
+        <div className="accordion-control-bar">
+          <button className="accordion-expand-all-toggle" onClick={toggleExpanded}>
+            {buttonMessage}
+          </button>
+        </div>
+      )}
 
-      <div className="accordion">
-
-        { childrenWithProps }
-
-      </div>
+      <div className="accordion">{childrenWithProps}</div>
     </>
-  )
+  );
 }
 
 Accordion.defaultProps = {
-  multiple: false
-}
+  multiple: false,
+};
 
-// ===================================================================== Export
-export default Accordion
+export default Accordion;

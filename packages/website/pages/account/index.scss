@@ -1,14 +1,19 @@
 .account-container {
-  max-width: 61.125rem;
+  max-width: 64rem;
   margin: auto;
   display: table;
-  padding-bottom: 10rem;
+  padding-bottom: 12.5rem;
   position: relative;
 
+  @include medium {
+    padding: 0 4.1665%;
+    width: 100%;
+  }
+
   h3 {
-    padding: 0 1.75rem 0.75rem;
+    padding: 0 2.1875rem 0.9375rem;
     @include medium {
-      padding: 2rem 0;
+      padding: 2.5rem 0;
     }
   }
 }
@@ -22,7 +27,7 @@
     'files-manager    files-manager   files-manager';
 
   grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 0.6875rem 0.9375rem;
+  grid-gap: 0.875rem 1.1875rem;
 
   @include medium {
     grid-template-columns: 1fr;
@@ -32,7 +37,7 @@
       'tokens-cta'
       'docs-cta'
       'files-manager';
-    grid-gap: 1rem 0;
+    grid-gap: 1.25rem 0;
   }
 
   .account {
@@ -48,7 +53,7 @@
       justify-content: center;
 
       h4 {
-        padding-bottom: 0.5rem;
+        padding-bottom: 0.625rem;
       }
     }
     &-tokens-cta {
@@ -59,7 +64,7 @@
     }
     &-files-manager {
       grid-area: files-manager;
-      min-height: 17.125rem;
+      min-height: 21.375rem;
     }
   }
 }
@@ -74,5 +79,28 @@
 
   img {
     height: 100%;
+  }
+}
+
+.account-upload-cta {
+  .saturated-variant {
+    @include medium {
+      transform: translate(-15%, -35%) scaleY(0.5) rotate(-40deg);
+    }
+    @include mini {
+      transform: translate(-15%, -35%) scaleY(0.75) rotate(-40deg);
+    }
+    @include tiny {
+      width: 50rem;
+      transform: translate(-20%, -20%) scaleY(1.4) rotate(-40deg);
+    }
+  }
+}
+
+.account-tokens-cta {
+  .cta-buttons-container {
+    @include medium {
+      width: unset;
+    }
   }
 }

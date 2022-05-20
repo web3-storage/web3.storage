@@ -190,6 +190,7 @@ export type CreateUploadOutput = {
 
 export type UploadItem = {
   id: string
+  sourceCid: definitions['upload']['source_cid']
   type: definitions['upload']['type']
   name?: definitions['upload']['name']
   created?: definitions['upload']['inserted_at']

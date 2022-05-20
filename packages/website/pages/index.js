@@ -1,4 +1,3 @@
-// ===================================================================== Imports
 import { useEffect } from 'react';
 
 import IndexPageData from '../content/pages/index.json';
@@ -6,7 +5,7 @@ import Scroll2Top from '../components/scroll2top/scroll2top.js';
 import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
 import { initFloaterAnimations } from '../lib/floater-animations.js';
 
-// ===================================================================== Exports
+// ====================================================================== Exports
 export default function Home() {
   const sections = IndexPageData.page_content;
   const animations = IndexPageData.floater_animations;

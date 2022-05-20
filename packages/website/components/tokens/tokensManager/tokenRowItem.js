@@ -42,22 +42,16 @@ const TokenRowItem = ({ className = '', name, secret, id = '', isHeader, onToken
     </span>
     {!isHeader && (
       <>
-        {deletingTokenId !== id ? (
-          <>
-            <div className="token-copy">
-              <button onClick={() => addTextToClipboard(secret)}>
-                <CopyIcon />
-              </button>
-            </div>
-            <div className="token-delete">
-              <button onClick={() => onTokenDelete?.(id)}>
-                <TrashIcon />
-              </button>
-            </div>
-          </>
-        ) : (
-          'Deleting...'
-        )}
+        <div className="token-copy">
+          <button onClick={() => addTextToClipboard(secret)}>
+            <CopyIcon />
+          </button>
+        </div>
+        <div className="token-delete">
+          <button onClick={() => onTokenDelete?.(id)}>
+            <TrashIcon />
+          </button>
+        </div>
       </>
     )}
   </div>
