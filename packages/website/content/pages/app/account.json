@@ -89,6 +89,16 @@
     },
     "file_manager": {
       "heading": "Files",
+      "tabs": [
+        {
+          "file_type": "uploaded",
+          "text": "Uploaded Directly"
+        },
+        {
+          "file_type": "pinned",
+          "text": "Uploaded via Pinned API"
+        }
+      ],
       "upload": {
         "text": "Upload +",
         "theme": "text",

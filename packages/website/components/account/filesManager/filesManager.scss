@@ -3,7 +3,8 @@
   flex-direction: column;
   position: relative;
   justify-content: flex-start;
-  padding: 1.875rem 0;
+  padding-top: 1rem;
+  padding-bottom: 1.875rem;
 
   @include medium {
     background: none;
@@ -22,22 +23,38 @@
 }
 
 .files-manager-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  justify-items: center;
-  padding: 0 2.6875rem 1.875rem;
-  flex-wrap: wrap;
+  // display: flex;
+  // align-items: center;
+  // justify-content: space-between;
+  // justify-items: center;
+  // padding: 0 2.6875rem 1.875rem;
+  // flex-wrap: wrap;
+  //
+  // @include medium {
+  //   padding: 0;
+  //   justify-content: space-between;
+  // }
 
-  @include medium {
-    padding: 0;
-    justify-content: space-between;
+  .upload-pinned-selector {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+
+    .filetype-tab {
+      padding: 0.875rem 2rem;
+
+      .tab-button {
+        &.selected {
+          color: $cyan;
+        }
+      }
+    }
   }
 
   // Title
-  > :first-child {
-    margin-right: 10rem;
-  }
+  // > :first-child {
+  //   margin-right: 10rem;
+  // }
   .files-manager-title {
     display: flex;
     flex-direction: row;

@@ -119,7 +119,7 @@ export async function createToken(name) {
 
 /**
  * Gets files
- * 
+ *
  * @param {UploadArgs} args
  * @returns {Promise<import('web3.storage').Upload[]>}
  * @throws {Error} When it fails to get uploads
@@ -133,7 +133,7 @@ export async function getUploads({ size, before, sortBy, sortOrder }) {
   if (sortOrder) {
     params.set('setOrder', sortOrder)
   }
-
+  console.log(API);
   const res = await fetch(`${API}/user/uploads?${params}`, {
     method: 'GET',
     headers: {
@@ -141,7 +141,7 @@ export async function getUploads({ size, before, sortBy, sortOrder }) {
       Authorization: 'Bearer ' + (await getToken()),
     },
   })
-
+  console.log(res);
   if (!res.ok) {
     throw new Error(`failed to get uploads: ${await res.text()}`)
   }

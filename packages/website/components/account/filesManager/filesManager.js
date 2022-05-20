@@ -40,7 +40,7 @@ const defaultQueryOrder = 'newest';
  * @returns
  */
 const FilesManager = ({ className, content, onFileUpload }) => {
-  const { uploads: files, fetchDate, getUploads, isFetchingUploads, deleteUpload, renameUpload } = useUploads();
+  const { uploads: allFiles, fetchDate, getUploads, isFetchingUploads, deleteUpload, renameUpload } = useUploads();
   const {
     query: { filter },
     query,
@@ -49,6 +49,15 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const {
     storageData: { refetch },
   } = useUser();
+
+  // memoize this ?
+  const filesByType = {
+    uploaded: allFiles.filter(file => file.pins.length === 0),
+    pinned: allFiles.filter(file => file.pins.length !== 0),
+  };
+
+  const [currentTab, setCurrentTab] = useState('uploaded');
+  const [files, setFiles] = useState(allFiles);
   const [filteredFiles, setFilteredFiles] = useState(files);
   const [sortedFiles, setSortedFiles] = useState(filteredFiles);
   const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
@@ -70,6 +79,15 @@ const FilesManager = ({ className, content, onFileUpload }) => {
       getUploads();
     }
   }, [fetchDate, getUploads, isFetchingUploads]);
+
+  // Set displayed files based on tab selection: 'uploaded' or 'pinned'
+  useEffect(() => {
+    if (currentTab === 'uploaded') {
+      setFiles(allFiles.filter(file => file.pins.length === 0));
+    } else if (currentTab === 'pinned') {
+      setFiles(allFiles.filter(file => file.pins.length !== 0));
+    }
+  }, [allFiles, currentTab]);
 
   // Method to reset the pagination every time query order changes
   useEffect(() => {
@@ -93,6 +111,13 @@ const FilesManager = ({ className, content, onFileUpload }) => {
       queryOrderRef.current = query.order;
     }
   }, [query.order, query, replace]);
+
+  const changeCurrentTab = useCallback(
+    /** @type {string} */ tab => {
+      setCurrentTab(tab);
+    },
+    [setCurrentTab]
+  );
 
   const onSelectAllToggle = useCallback(
     e => {
@@ -189,44 +214,73 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   return (
     <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
       <div className="files-manager-header">
-        <div className="files-manager-title has-upload-button">
-          <div className="title">{content?.heading}</div>
-          <Button
-            onClick={onFileUpload}
-            variant={content?.upload.theme}
-            tracking={{
-              ui: countly.ui[content?.upload.ui],
-              action: content?.upload.action,
-              data: { isFirstFile: false },
-            }}
-          >
-            {content?.upload.text}
-          </Button>
+        <div className="grid-noGutter">
+          <div className="col-12">
+            <div className="upload-pinned-selector">
+              {content?.tabs.map(tab => (
+                <div key={tab.file_type} className="filetype-tab">
+                  <button
+                    className={clsx('tab-button', currentTab === tab.file_type ? 'selected' : '')}
+                    onClick={() => changeCurrentTab(tab.file_type)}
+                  >
+                    {tab.text + ` (${filesByType[tab.file_type].length})`}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="col-6">
+            <Filterable
+              className="files-manager-search"
+              items={files}
+              icon={<SearchIcon />}
+              filterKeys={['name', 'cid']}
+              placeholder={content?.ui.filter_placeholder}
+              queryParam="filter"
+              onChange={setFilteredFiles}
+              onValueChange={setKeyword}
+            />
+          </div>
+
+          <div className="col-2" data-push-left="off-2">
+            <button className={clsx('refresh', isFetchingUploads && 'disabled')} onClick={refreshHandler}>
+              <RefreshIcon />
+              <span>{content?.ui.refresh}</span>
+            </button>
+          </div>
+
+          <div className="col-2">
+            <Sortable
+              items={filteredFiles}
+              staticLabel={content?.ui.sortby.label}
+              options={content?.ui.sortby.options}
+              value={defaultQueryOrder}
+              queryParam="order"
+              onChange={setSortedFiles}
+              onSelectChange={showCheckOverlayHandler}
+            />
+          </div>
+
+          <div className="col-6">
+            <div className="files-manager-title has-upload-button">
+              <div className="title">{content?.heading}</div>
+              <Button
+                onClick={onFileUpload}
+                variant={content?.upload.theme}
+                tracking={{
+                  ui: countly.ui[content?.upload.ui],
+                  action: content?.upload.action,
+                  data: { isFirstFile: false },
+                }}
+              >
+                {content?.upload.text}
+              </Button>
+            </div>
+          </div>
         </div>
-        <Filterable
-          className="files-manager-search"
-          items={files}
-          icon={<SearchIcon />}
-          filterKeys={['name', 'cid']}
-          placeholder={content?.ui.filter_placeholder}
-          queryParam="filter"
-          onChange={setFilteredFiles}
-          onValueChange={setKeyword}
-        />
-        <button className={clsx('refresh', isFetchingUploads && 'disabled')} onClick={refreshHandler}>
-          <RefreshIcon />
-          <span>{content?.ui.refresh}</span>
-        </button>
-        <Sortable
-          items={filteredFiles}
-          staticLabel={content?.ui.sortby.label}
-          options={content?.ui.sortby.options}
-          value={defaultQueryOrder}
-          queryParam="order"
-          onChange={setSortedFiles}
-          onSelectChange={showCheckOverlayHandler}
-        />
       </div>
+
       <FileRowItem
         onSelect={onSelectAllToggle}
         date={fileRowLabels.date.label}
