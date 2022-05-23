@@ -39,7 +39,7 @@ const StorageManager = ({ className = '', content }) => {
 
   const { maxSpaceLabel, unlockLabel, percentUploaded, percentPinned } = useMemo(
     () => ({
-      maxSpaceLabel: `${limit / tebibyte} ${content.max_space_tib_label}`,
+      maxSpaceLabel: `${Math.floor(limit / tebibyte)} ${content.max_space_tib_label}`,
       unlockLabel: content.unlock_label,
       percentUploaded: (uploaded / limit) * 100,
       percentPinned: (pinned / limit) * 100,
