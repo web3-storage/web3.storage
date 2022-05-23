@@ -145,12 +145,12 @@ BEGIN
             data ->> 'name',
             (data ->> 'inserted_at')::timestamptz,
             (data ->> 'updated_at')::timestamptz,
-            data -> 'backup_urls')
+            json_arr_to_text_arr(data -> 'backup_urls'))
   ON CONFLICT ( user_id, source_cid ) DO UPDATE
     SET "updated_at" = (data ->> 'updated_at')::timestamptz,
         "name" = data ->> 'name',
         "deleted_at" = null,
-        "backup_urls" = (data -> 'backup_urls')::jsonb || upld.backup_urls
+        "backup_urls" = upld.backup_urls || json_arr_to_text_arr(data -> 'backup_urls')
   returning id into inserted_upload_id;
 
   return (inserted_upload_id)::TEXT;

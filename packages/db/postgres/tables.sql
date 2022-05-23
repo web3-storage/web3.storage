@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS upload
   type            upload_type                                                   NOT NULL,
   -- User provided name for this upload.
   name            TEXT,
-  backup_urls     JSONB,
+  backup_urls     TEXT[],
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   deleted_at      TIMESTAMP WITH TIME ZONE,

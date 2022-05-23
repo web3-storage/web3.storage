@@ -87,11 +87,10 @@ describe('backup', () => {
 
     assert(backups, 'backups created')
     assert.strictEqual(backups.length, 1, 'upload has a single backup')
-    assert(backups[0].created, 'backup has inserted timestamp')
-    assert.strictEqual(backups[0].url, initialBackupUrl, 'backup has correct url')
+    assert.strictEqual(backups[0], initialBackupUrl, 'backup has correct url')
   })
 
-  it('creates unique backup urls', async () => {
+  it('get unique backup urls', async () => {
     const cid = await randomCid()
 
     await client.createUpload({
@@ -124,8 +123,7 @@ describe('backup', () => {
     const backups = await client.getBackups(upload._id)
 
     assert.strictEqual(backups.length, 1, 'upload has a single backup')
-    assert.strictEqual(backups[0].url, initialBackupUrl)
-    assert(new Date(backups[0].created) < new Date(upload.updated), 'backup was created before the new upload')
+    assert.strictEqual(backups[0], initialBackupUrl)
   })
 
   it('can backup chunked uploads', async () => {
@@ -163,7 +161,7 @@ describe('backup', () => {
     const backups = await client.getBackups(upload._id)
     assert.strictEqual(backups.length, 2, 'upload has a two backups')
 
-    const backupUrls = backups.map(backup => backup.url).sort()
+    const backupUrls = backups.sort()
     const expectedBackupUrls = [initialBackupUrl, backupUrlSecondChunk].sort()
     assert.equal(backupUrls[0], expectedBackupUrls[0])
     assert.equal(backupUrls[1], expectedBackupUrls[1])

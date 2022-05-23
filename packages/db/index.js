@@ -393,15 +393,6 @@ export class DBClient {
   async createUpload (data) {
     const now = new Date().toISOString()
 
-    const backupsObjectsByURL = {}
-
-    data.backupUrls.forEach((url) => {
-      backupsObjectsByURL[url] = {
-        url,
-        created: data.created || now
-      }
-    })
-
     /** @type {{ data: string, error: PostgrestError }} */
     const { data: uploadResponse, error } = await this._client.rpc('create_upload', {
       data: {
@@ -423,7 +414,7 @@ export class DBClient {
             region: pin.location.region
           }
         })),
-        backup_urls: backupsObjectsByURL
+        backup_urls: data.backupUrls
       }
     }).single()
 
@@ -613,7 +604,7 @@ export class DBClient {
    * @return {Promise<Array<import('./db-client-types').BackupOutput>>}
    */
   async getBackups (uploadId) {
-    /** @type {{ data: definitions['upload']['backup_urls'], error: PostgrestError }} */
+    /** @type {{ data: {backupUrls: definitions['upload']['backup_urls']}, error: PostgrestError }} */
     const { data: { backupUrls }, error } = await this._client
       .from('upload')
       .select('backupUrls:backup_urls')
@@ -624,7 +615,9 @@ export class DBClient {
       throw new DBError(error)
     }
 
-    return Object.values(backupUrls)
+    const uniqueUrls = new Set(backupUrls)
+
+    return Array.from(uniqueUrls)
   }
 
   /**

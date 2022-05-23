@@ -181,7 +181,7 @@ export interface CreateUploadInput {
     status: definitions['pin']['status']
     location: Location
   }>,
-  backupUrls: Array<definitions['upload']['backup_urls']>
+  backupUrls: definitions['upload']['backup_urls']
 }
 
 export type CreateUploadOutput = {
