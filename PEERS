@@ -7,33 +7,41 @@
 # Note: this list may be incorrect, may change, or become out of date at any
 # time without notice.
 
-# web3-storage-sv15
-/ip4/139.178.69.155/tcp/4001/p2p/12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE1
-# web3-storage-sv15-2
-/ip4/139.178.68.91/tcp/4001/p2p/12D3KooWEDMw7oRqQkdCJbyeqS5mUmWGwTp8JJ2tjCzTkHboF6wK
-# web3-storage-sv15-3
-/ip4/139.178.69.93/tcp/4001/p2p/12D3KooWRi18oHN1j8McxS9RMnuibcTwxu6VCTYHyLNH2R14qhTy
-# web3-storage-sv15-4
-/ip4/139.178.91.227/tcp/4001/p2p/12D3KooWKhPb9tSnCqBswVfC5EPE7iSTXhbF4Ywwz2MKg5UCagbr
-# web3-storage-sv15-5
-/ip4/139.178.91.231/tcp/4001/p2p/12D3KooWAdxvJCV5KXZ6zveTJmnYGrSzAKuLUKZYkZssLk7UKv4i
 # web3-storage-am6
 /ip4/147.75.33.191/tcp/4001/p2p/12D3KooWPySxxWQjBgX9Jp6uAHQfVmdq8HG1gVvS1fRawHNSrmqW
-# web3-storage-am6-2
-/ip4/147.75.32.73/tcp/4001/p2p/12D3KooWNuoVEfVLJvU3jWY2zLYjGUaathsecwT19jhByjnbQvkj
 # web3-storage-am6-3
 /ip4/147.75.80.9/tcp/4001/p2p/12D3KooWQYBPcvxFnnWzPGEx6JuBnrbF1FZq4jTahczuG2teEk1m
 # web3-storage-am6-4
 /ip4/147.75.80.39/tcp/4001/p2p/12D3KooWDdzN3snjaMJEH9zuq3tjKUFpYHeSGNkiAreF6dQSbCiL
 # web3-storage-am6-5
 /ip4/147.75.80.143/tcp/4001/p2p/12D3KooWEzCun34s9qpYEnKkG6epx2Ts9oVGRGnzCvM2s2edioLA
-# web3-storage-dc13
-/ip4/145.40.89.195/tcp/4001/p2p/12D3KooWSnniGsyAF663gvHdqhyfJMCjWJv54cGSzcPiEMAfanvU
-# web3-storage-dc13-2
-/ip4/136.144.56.153/tcp/4001/p2p/12D3KooWKytRAd2ujxhGzaLHKJuje8sVrHXvjGNvHXovpar5KaKQ
+# web3-storage-am6-6
+/ip4/147.75.84.119/tcp/4001/p2p/12D3KooWQE3CWA3MJ1YhrYNP8EE3JErGbrCtpKRkFrWgi45nYAMn
+# web3-storage-am6-7
+/ip4/147.75.84.175/tcp/4001/p2p/12D3KooWDYVuVFGb9Yj6Gi9jWwSLqdnzZgqJg1a1scQMDc4R6RUJ
+# web3-storage-am6-8
+/ip4/147.75.84.173/tcp/4001/p2p/12D3KooWSafoW6yrSL7waghFAaiCqGy5mdjpQx4jn4CRNqbG7eqG
 # web3-storage-dc13-3
 /ip4/136.144.57.15/tcp/4001/p2p/12D3KooWJEfH2MB4RsUoaJPogDPRWbFTi8iehsxsqrQpiJwFNDrP
 # web3-storage-dc13-4
 /ip4/147.75.63.131/tcp/4001/p2p/12D3KooWHpE5KiQTkqbn8KbU88ZxwJxYJFaqP4mp9Z9bhNPhym9V
 # web3-storage-dc13-5
 /ip4/147.75.62.95/tcp/4001/p2p/12D3KooWBHvsSSKHeragACma3HUodK5FcPUpXccLu2vHooNsDf9k
+# web3-storage-dc13-6
+/ip4/147.75.50.77/tcp/4001/p2p/12D3KooWMaTJKNwQJyP1fw3ftGb5uqqM2U24Kam8aWqMRXzWHNiF
+# web3-storage-dc13-7
+/ip4/147.75.50.141/tcp/4001/p2p/12D3KooWNCmYvqPbeXmNC4rnTr7hbuVtJKDNpL1vvNz6mq9Sr2Xf
+# web3-storage-dc13-8
+/ip4/147.28.147.193/tcp/4001/p2p/12D3KooWDRak1XzURGh9MvGR4EWaP9kcbmdoagAcGMcNxBXXLzTF
+# web3-storage-sv15-3
+/ip4/139.178.69.93/tcp/4001/p2p/12D3KooWRi18oHN1j8McxS9RMnuibcTwxu6VCTYHyLNH2R14qhTy
+# web3-storage-sv15-4
+/ip4/139.178.91.227/tcp/4001/p2p/12D3KooWKhPb9tSnCqBswVfC5EPE7iSTXhbF4Ywwz2MKg5UCagbr
+# web3-storage-sv15-5
+/ip4/139.178.91.231/tcp/4001/p2p/12D3KooWAdxvJCV5KXZ6zveTJmnYGrSzAKuLUKZYkZssLk7UKv4i
+# web3-storage-sv15-6
+/ip4/147.75.49.91/tcp/4001/p2p/12D3KooWRgXWwnZQJgdW1GHW7hJ5UvZ8MLp7HBCSWS596PypAs8M
+# web3-storage-sv15-7
+/ip4/139.178.88.145/tcp/4001/p2p/12D3KooWPbxiW4wFYHs7MwCQNqK9YVedH7QYZXJKMFVduhwR1Lcs
+# web3-storage-sv15-8
+/ip4/145.40.90.155/tcp/4001/p2p/12D3KooWSH5uLrYe7XSFpmnQj1NCsoiGeKSRCV7T5xijpX2Po2aT

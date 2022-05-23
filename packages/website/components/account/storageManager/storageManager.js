@@ -32,7 +32,7 @@ const StorageManager = ({ className = '', content }) => {
     storageData: { data, isLoading },
   } = useUser();
   const uploaded = useMemo(() => data?.usedStorage?.uploaded || 0, [data]);
-  const pinned = useMemo(() => data?.usedStorage?.pinned || 0, [data]);
+  const psaPinned = useMemo(() => data?.usedStorage?.psaPinned || 0, [data]);
   const limit = useMemo(() => data?.storageLimitBytes || defaultStorageLimit, [data]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
@@ -42,9 +42,9 @@ const StorageManager = ({ className = '', content }) => {
       maxSpaceLabel: `${Math.floor(limit / tebibyte)} ${content.max_space_tib_label}`,
       unlockLabel: content.unlock_label,
       percentUploaded: (uploaded / limit) * 100,
-      percentPinned: (pinned / limit) * 100,
+      percentPinned: (psaPinned / limit) * 100,
     }),
-    [uploaded, pinned, limit, content]
+    [uploaded, psaPinned, limit, content]
   );
 
   useEffect(() => {
@@ -99,7 +99,7 @@ const StorageManager = ({ className = '', content }) => {
               {/* Used storage in GB */}
               <span className="storage-label">{content.heading}</span>:{' '}
               <span className="storage-number">
-                {filesz(uploaded + pinned, {
+                {filesz(uploaded + psaPinned, {
                   base: 2,
                   standard: 'iec',
                 })}
@@ -128,7 +128,7 @@ const StorageManager = ({ className = '', content }) => {
           </Button>
         )}
       </div>
-      <div className={clsx('storage-manager-legend', uploaded > 0 || pinned > 0 ? '' : 'no-margin')}>
+      <div className={clsx('storage-manager-legend', uploaded > 0 || psaPinned > 0 ? '' : 'no-margin')}>
         {uploaded > 0 ? (
           <div className="sml-uploaded">
             <span className="legend-label">{content.legend.uploaded}&nbsp;</span>
@@ -138,10 +138,10 @@ const StorageManager = ({ className = '', content }) => {
             })}
           </div>
         ) : null}
-        {pinned > 0 ? (
+        {psaPinned > 0 ? (
           <div className="sml-pinned">
             <span className="legend-label">{content.legend.pinned}&nbsp;</span>
-            {filesz(pinned, {
+            {filesz(psaPinned, {
               base: 2,
               standard: 'iec',
             })}

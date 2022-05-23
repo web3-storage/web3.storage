@@ -152,8 +152,8 @@ export const UploadsProvider = ({ children }) => {
       setIsFetchingUploads(true);
       const updatedUploads = await getUploads(args);
       setUploads(updatedUploads);
-      setIsFetchingUploads(false);
       setFetchDate(Date.now());
+      setIsFetchingUploads(false);
 
       return updatedUploads;
     },

@@ -197,7 +197,7 @@ export class DBClient {
    * @returns {Promise<import('./db-client-types').UsedStorage>}
    */
   async getUsedStorage (userId) {
-    /** @type {{ data: { uploaded: string, pinned: string }, error: PostgrestError }} */
+    /** @type {{ data: { uploaded: string, psa_pinned: string }, error: PostgrestError }} */
     const { data, error } = await this._client.rpc('user_used_storage', { query_user_id: userId }).single()
 
     if (error) {
@@ -206,7 +206,7 @@ export class DBClient {
 
     return {
       uploaded: parseTextToNumber(data.uploaded),
-      pinned: parseTextToNumber(data.pinned)
+      psaPinned: parseTextToNumber(data.psa_pinned)
     }
   }
 
@@ -751,13 +751,13 @@ export class DBClient {
         keys:auth_key_user_id_fkey(
           _id:id::text,
           name,
-          secret
+          secret,
+          deleted_at
         )
       `)
       .match({
         issuer
       })
-      .filter('keys.deleted_at', 'is', null)
       .eq('keys.secret', secret)
 
     if (error) {
@@ -776,11 +776,27 @@ export class DBClient {
     return {
       _id: keyData.keys[0]._id,
       name: keyData.keys[0].name,
+      isDeleted: Boolean(keyData.keys[0].deleted_at),
       user: {
         _id: keyData._id,
         issuer: keyData.issuer
       }
     }
+  }
+
+  async checkIsTokenBlocked (token) {
+    const { data, error } = await this._client
+      .from('auth_key_history')
+      .select('status')
+      .filter('deleted_at', 'is', null)
+      .eq('auth_key_id', token._id)
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return data?.status === 'Blocked'
   }
 
   /**

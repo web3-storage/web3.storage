@@ -4,6 +4,7 @@ import {
   MagicTokenRequiredError,
   NoTokenError,
   PinningUnauthorizedError,
+  TokenBlockedError,
   TokenNotFoundError,
   UnrecognisedTokenError,
   UserNotFoundError
@@ -171,6 +172,17 @@ async function tryWeb3ApiToken (token, env) {
     // we have a web3 api token, but it's no longer valid
     throw new TokenNotFoundError()
   }
+
+  if (apiToken.isDeleted) {
+    const isBlocked = await checkIsTokenBlocked(apiToken, env)
+
+    if (isBlocked) {
+      throw new TokenBlockedError()
+    } else {
+      throw new TokenNotFoundError()
+    }
+  }
+
   return apiToken
 }
 
@@ -180,6 +192,10 @@ function findUserByIssuer (issuer, env) {
 
 function getUserTags (userId, env) {
   return env.db.getUserTags(userId)
+}
+
+function checkIsTokenBlocked (token, env) {
+  return env.db.checkIsTokenBlocked(token)
 }
 
 function verifyAuthToken (token, decoded, env) {
