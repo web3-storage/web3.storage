@@ -1,7 +1,7 @@
 # web3.storage wrangler config.
 
 name = "web3-storage"
-# `javascript` means our we'll send pre-built javascript code. 
+# `javascript` means our we'll send pre-built javascript code.
 #  ...as opposed to `webpack` where wrangler builds our code for us.
 type = "javascript"
 
@@ -129,6 +129,14 @@ account_id = "a454b0d1615f83ee5d00a63ae152f36f"
 vars = { CLUSTER_API_URL = "https://alexandra-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://alexandra-postgres-api-web3-storage.loca.lt", ENV = "dev" }
 
 [env.alexandra.durable_objects]
+bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
+
+[env.josh]
+workers_dev = true
+account_id = "b649c9389ef9c1d318ac2945b2415046"
+vars = { CLUSTER_API_URL = "https://josh-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://josh-postgres-api-web3-storage.loca.lt", ENV = "dev" }
+
+[env.josh.durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 
 # Add your env here. Override the the values you need to change.
