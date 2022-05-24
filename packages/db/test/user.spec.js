@@ -161,7 +161,7 @@ describe('user operations', () => {
     const emptyUsedStorage = await client.getStorageUsed(user._id)
     assert.deepEqual(emptyUsedStorage.total, 0, 'received empty used storage')
     assert.strictEqual(emptyUsedStorage.uploaded, 0, 'empty used storage for uploaded')
-    assert.strictEqual(emptyUsedStorage.pinned, 0, 'empty used storage for pinned')
+    assert.strictEqual(emptyUsedStorage.psaPinned, 0, 'empty used storage for pinned')
 
     // Create Upload 1
     const cid1 = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47fgf111'

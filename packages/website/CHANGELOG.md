@@ -1,5 +1,31 @@
 # Changelog
 
+### [2.4.1](https://github.com/web3-storage/web3.storage/compare/website-v2.4.0...website-v2.4.1) (2022-05-20)
+
+
+### Other Changes
+
+* rename pinned to psaPinned ([#1268](https://github.com/web3-storage/web3.storage/issues/1268)) ([aeae342](https://github.com/web3-storage/web3.storage/commit/aeae342547b1fb15c17069f6d019beae250564f5))
+
+## [2.4.0](https://github.com/web3-storage/web3.storage/compare/website-v2.3.0...website-v2.4.0) (2022-05-18)
+
+
+### Features
+
+* Additional file upload button ([#1290](https://github.com/web3-storage/web3.storage/issues/1290)) ([9fafc83](https://github.com/web3-storage/web3.storage/commit/9fafc830b841da0dd6bd5319c77febaded232240))
+* Pinned/uploaded storage bar feedback ([#1288](https://github.com/web3-storage/web3.storage/issues/1288)) ([d47962d](https://github.com/web3-storage/web3.storage/commit/d47962df7a51bbfd15c3efa5564c676b0228876b))
+* re-platform docs to nextra ([#1229](https://github.com/web3-storage/web3.storage/issues/1229)) ([5a7f53b](https://github.com/web3-storage/web3.storage/commit/5a7f53b7a43d4a66435a4b515ce2fea663608b42))
+* Upload progress feedback ([#1261](https://github.com/web3-storage/web3.storage/issues/1261)) ([3392a06](https://github.com/web3-storage/web3.storage/commit/3392a068ff7e765cc1288fd5eae5df11e7d3db73))
+
+
+### Bug Fixes
+
+* Change hover over description for Queuing in individual file rows ([#1296](https://github.com/web3-storage/web3.storage/issues/1296)) ([04dafec](https://github.com/web3-storage/web3.storage/commit/04dafec1781bfd7c4741f36f028d9c4d8f357cab))
+* Default sort by should be newest to oldest ([#1295](https://github.com/web3-storage/web3.storage/issues/1295)) ([b0da078](https://github.com/web3-storage/web3.storage/commit/b0da078962d3715c66f29a013102aab2fd5d1cf4))
+* JS errors from docs changes ([#1334](https://github.com/web3-storage/web3.storage/issues/1334)) ([2dd88f4](https://github.com/web3-storage/web3.storage/commit/2dd88f492ca6c7f1adf8a07a675afd1668f29a4c))
+* Removed mistakenly generated link on CID header item in filemanager ([#1336](https://github.com/web3-storage/web3.storage/issues/1336)) ([83201cf](https://github.com/web3-storage/web3.storage/commit/83201cf1c26be981991e11983bf77cdca500f622))
+* testimonial cards link behavior ([#1247](https://github.com/web3-storage/web3.storage/issues/1247)) ([67facbe](https://github.com/web3-storage/web3.storage/commit/67facbe08bd58d65da6367b3072caa13360fe5b3))
+
 ## [2.3.0](https://github.com/web3-storage/web3.storage/compare/website-v2.2.1...website-v2.3.0) (2022-04-26)
 
 

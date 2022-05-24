@@ -58,6 +58,15 @@ export class TokenNotFoundError extends HTTPError {
 }
 TokenNotFoundError.CODE = 'ERROR_TOKEN_NOT_FOUND'
 
+export class TokenBlockedError extends HTTPError {
+  constructor (msg = 'API token is blocked, please contact support@web3.storage') {
+    super(msg, 403)
+    this.name = 'TokenBlocked'
+    this.code = TokenBlockedError.CODE
+  }
+}
+TokenBlockedError.CODE = 'ERROR_TOKEN_BLOCKED'
+
 export class UnrecognisedTokenError extends HTTPError {
   constructor (msg = 'Could not parse provided API token') {
     super(msg, 401)

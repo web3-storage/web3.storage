@@ -338,14 +338,9 @@ export type NameItem = {
   record: definitions['name']['record']
 }
 
-export type StorageUsedItem = {
-  uploaded: string,
-  pinned: string,
-  total: string
-}
 export type StorageUsedOutput = {
   uploaded: number,
-  pinned: number,
+  psaPinned: number,
   total: number
 }
 export type UserStorageUsedInput = {
