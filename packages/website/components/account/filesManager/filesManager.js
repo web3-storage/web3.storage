@@ -72,6 +72,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [nameEditingId, setNameEditingId] = useState();
   const fileRowLabels = content?.table.file_row_labels;
+  const title = content?.tabs.find(item => item.file_type === currentTab);
 
   // Initial fetch on component load
   useEffect(() => {
@@ -223,7 +224,8 @@ const FilesManager = ({ className, content, onFileUpload }) => {
                     className={clsx('tab-button', currentTab === tab.file_type ? 'selected' : '')}
                     onClick={() => changeCurrentTab(tab.file_type)}
                   >
-                    {tab.text + ` (${filesByType[tab.file_type].length})`}
+                    <span>{tab.button_text}</span>
+                    <span>{` (${filesByType[tab.file_type].length})`}</span>
                   </button>
                 </div>
               ))}
@@ -264,18 +266,29 @@ const FilesManager = ({ className, content, onFileUpload }) => {
 
           <div className="col-6">
             <div className="files-manager-title has-upload-button">
-              <div className="title">{content?.heading}</div>
-              <Button
-                onClick={onFileUpload}
-                variant={content?.upload.theme}
-                tracking={{
-                  ui: countly.ui[content?.upload.ui],
-                  action: content?.upload.action,
-                  data: { isFirstFile: false },
-                }}
-              >
-                {content?.upload.text}
-              </Button>
+              <div className="title">
+                { keyword
+                  ? title.searchHeading
+                    .replace('%resultsNumber%', filteredFiles.length)
+                    .replace('%searchQuery%', `'${keyword}'`)
+                  : title.heading
+                }
+              </div>
+              { title.file_type === 'uploaded' ?
+                (
+                  <Button
+                    onClick={onFileUpload}
+                    variant={content?.upload.theme}
+                    tracking={{
+                      ui: countly.ui[content?.upload.ui],
+                      action: content?.upload.action,
+                      data: { isFirstFile: false },
+                    }}
+                  >
+                    {content?.upload.text}
+                  </Button>
+                ) : ''
+              }
             </div>
           </div>
         </div>

@@ -20,10 +20,10 @@ $file-size: auto;
   grid-template-columns: $file-select $file-date $file-name $file-cid $file-pin-status $file-storage-providers $file-size;
   align-items: flex-start;
   padding-left: 1.4375rem;
-  min-height: 7.8125rem;
+  min-height: 5.125rem;
   border-bottom: 0.078125rem solid rgba(white, 0.05);
   margin-top: 1.625rem;
-  padding-bottom: 1.25rem;
+  padding-bottom: 1.625rem;
 
   @include medium {
     grid-template-columns: auto;
@@ -92,7 +92,7 @@ $file-size: auto;
       flex-shrink: 1;
     }
     .Tooltip {
-      margin-right: 1.25rem;
+      margin-right: auto;
     }
   }
   a {

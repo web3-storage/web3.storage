@@ -23,13 +23,8 @@
 }
 
 .files-manager-header {
-  // display: flex;
-  // align-items: center;
-  // justify-content: space-between;
-  // justify-items: center;
-  // padding: 0 2.6875rem 1.875rem;
-  // flex-wrap: wrap;
-  //
+  padding: 0 2rem;
+
   // @include medium {
   //   padding: 0;
   //   justify-content: space-between;
@@ -42,24 +37,34 @@
 
     .filetype-tab {
       padding: 0.875rem 2rem;
+      margin-bottom: 1.1875rem;
+
+      &:first-child {
+        padding-left: 0;
+      }
 
       .tab-button {
+        @include fontSize_Regular;
         &.selected {
           color: $cyan;
+        }
+        :first-child {
+          @include fontWeight_Semibold;
         }
       }
     }
   }
 
-  // Title
-  // > :first-child {
-  //   margin-right: 10rem;
-  // }
   .files-manager-title {
     display: flex;
     flex-direction: row;
+    margin-top: 1.75rem;
     &:not(.has-upload-button) {
       margin-right: 8rem;
+    }
+    .title {
+      @include fontSize_Regular;
+      @include fontWeight_Semibold;
     }
     .button {
       @include fontSize_Atom;
