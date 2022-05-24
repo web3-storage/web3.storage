@@ -119,7 +119,7 @@
   position: relative;
   height: 1.75rem;
   background: rgba($vulcan, 0.15);
-  border: 0.078125rem solid rgba($waterloo, 0.15);
+  // border: 0.078125rem solid rgba($waterloo, 0.15);
   flex: 1;
   overflow: hidden;
   z-index: 1;
@@ -161,7 +161,7 @@
   position: absolute;
   z-index: 10;
   @include borderRadius_UltraLarge;
-  height: 1.875rem;
+  height: 100%;
   top: 0;
   left: 0;
   transition: 250ms ease-out;
