@@ -1,21 +1,21 @@
 ALTER TYPE used_storage ADD ATTRIBUTE total TEXT;
 
 -- Because function return type has changed
-DROP FUNCTION user_storage_used(integer, integer);
+DROP FUNCTION user_used_storage(bigint);
 
 -- Get storage used for a specified user: uploaded, pinned and total
-CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT) 
+CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT)
   RETURNS used_storage
   LANGUAGE plpgsql
 AS
 $$
-DECLARE 
+DECLARE
   used_storage  used_storage;
   uploaded      BIGINT;
-  pinned        BIGINT;
+  psa_pinned        BIGINT;
   total         BIGINT;
 BEGIN
-  uploaded := 
+  uploaded :=
     (
       SELECT COALESCE(SUM(c.dag_size), 0)
       FROM upload u
@@ -24,10 +24,10 @@ BEGIN
       AND u.deleted_at is null
     );
 
-  pinned := 
+  psa_pinned :=
     (
       SELECT COALESCE((
-        SELECT SUM(dag_size) 
+        SELECT SUM(dag_size)
         FROM (
           SELECT  psa_pr.content_cid,
                   c.dag_size
@@ -41,12 +41,12 @@ BEGIN
           GROUP BY psa_pr.content_cid,
                   c.dag_size
         ) AS pinned_content), 0)
-    ); 
+    );
 
-  total := uploaded + pinned;
+  total := uploaded + psa_pinned;
 
   SELECT  uploaded::TEXT,
-          pinned::TEXT,
+          psa_pinned::TEXT,
           total::TEXT
   INTO    used_storage;
 
@@ -72,7 +72,7 @@ DECLARE
   default_quota BIGINT := 1099511627776;
 BEGIN
   RETURN QUERY
-    SELECT * 
+    SELECT *
     FROM (
       SELECT  u.id::TEXT                                      AS id,
               u.name                                          AS name,
@@ -89,12 +89,12 @@ BEGIN
 END
 $$;
 
-DO 
+DO
 $$
 BEGIN
   -- Types for notification emails
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'email_type') THEN
-    CREATE TYPE email_type AS ENUM 
+    CREATE TYPE email_type AS ENUM
       (
         'User75PercentStorage',
         'User80PercentStorage',
@@ -107,7 +107,7 @@ BEGIN
 END
 $$;
 
-CREATE TABLE IF NOT EXISTS email_history 
+CREATE TABLE IF NOT EXISTS email_history
 (
   id              BIGSERIAL PRIMARY KEY,
   -- The id of the user being notified
