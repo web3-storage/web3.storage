@@ -1,4 +1,4 @@
-import MailchimpFactory from '@mailchimp/mailchimp_transactional'
+import fetch from '@web-std/fetch'
 import * as EmailTypeClasses from '../types.js'
 import { EmailSendError } from '../errors.js'
 
@@ -19,8 +19,7 @@ export default class MailchimpEmailProvider {
     if (!process.env.MAILCHIMP_API_KEY) {
       throw new Error('MAILCHIMP_API_KEY environment variable is not set.')
     }
-
-    this.mailchimpTx = MailchimpFactory(process.env.MAILCHIMP_API_KEY)
+    this._apiKey = process.env.MAILCHIMP_API_KEY
   }
 
   /**
@@ -56,11 +55,10 @@ export default class MailchimpEmailProvider {
         // https://mailchimp.com/developer/transactional/api/messages/send-using-message-template/
       }
     }
-    // It appears that the API returns a different type of response depending on the success or not.
     // If there's an overall problem with the request, the response is an object, but if it's
     // successful or if there's a problem with the message-level part of the request, it gives an
     // array of responses, one for each recipient.
-    let response = await this.mailchimpTx.messages.sendTemplate(messageDef)
+    let response = await this._sendTemplate(messageDef)
     if (!Array.isArray(response)) {
       throw new EmailSendError(`📧 🚨 Mailchimp error: ${response.response.data.message}`)
     }
@@ -95,5 +93,36 @@ export default class MailchimpEmailProvider {
       return { name, content }
     })
     return varDefs
+  }
+
+  /**
+   * Call the endpoint for the Mailchimp Transactional `sendTemplate` method.
+   * This avoids us having to install the whole "mailchimp_transactional" package.
+   * It mimics the behaviour of mailchimp_transactional.templates.sendTemplate
+   * in terms of error responses.
+   */
+  _sendTemplate (body) {
+    const url = 'https://mandrillapp.com/api/1.0/messages/send-template'
+    body.key = this._apiKey
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
+      .then(async (response) => {
+        if (response.ok) {
+          return await response.json()
+        }
+        return {
+          response: { data: await response.json() }
+        }
+      })
+      .catch((error) => {
+        return {
+          response: { data: { message: error } }
+        }
+      })
   }
 }

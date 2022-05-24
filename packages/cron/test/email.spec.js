@@ -135,24 +135,24 @@ describe('Mail service', () => {
 
 describe('Mailchimp provider', () => {
   let provider
-  let mailchimpSendTemplate
+  let sendTemplate
 
   beforeEach(() => {
     process.env.MAILCHIMP_API_KEY = 'test'
     provider = new MailchimpEmailProvider()
-    mailchimpSendTemplate = sinon.stub(provider.mailchimpTx.messages, 'sendTemplate')
+    sendTemplate = sinon.stub(provider, '_sendTemplate')
   })
 
-  it('should call messages.sendTemplate on MailChimp API', () => {
+  it('should call _sendTemplate', () => {
     provider.sendEmail(
       'User75PercentStorage', 'user@example.com', 'User Person', 'support@web3.storage', 'Web3.Storage', {}
     )
-    assert.ok(mailchimpSendTemplate.calledOnce)
+    assert.ok(sendTemplate.calledOnce)
   })
 
   it('should raise EmailSendError if API call fails', async () => {
     // The sendTemplate method has two different types of return value, depending on how it fails
-    mailchimpSendTemplate.returns({ response: { data: { message: 'There was an error' } } })
+    sendTemplate.returns({ response: { data: { message: 'There was an error' } } })
     assert.rejects(
       async () => {
         await provider.sendEmail(
@@ -161,7 +161,7 @@ describe('Mailchimp provider', () => {
       },
       EmailSendError
     )
-    mailchimpSendTemplate.returns([{ status: 'not sent', reject_reason: 'something bad' }])
+    sendTemplate.returns([{ status: 'not sent', reject_reason: 'something bad' }])
     assert.rejects(
       async () => {
         await provider.sendEmail(
@@ -173,7 +173,7 @@ describe('Mailchimp provider', () => {
   })
 
   it('should return message ID if API call succeeds', async () => {
-    mailchimpSendTemplate.returns([{ status: 'sent', _id: 'abc' }])
+    sendTemplate.returns([{ status: 'sent', _id: 'abc' }])
     const returnVal = await provider.sendEmail(
       'User75PercentStorage', 'user@example.com', 'User Person', 'support@web3.storage', 'Web3.Storage', {}
     )
@@ -181,16 +181,16 @@ describe('Mailchimp provider', () => {
   })
 
   it('should pass template name corresponding to email type', async () => {
-    mailchimpSendTemplate.returns([{ status: 'sent', _id: 'abc' }])
+    sendTemplate.returns([{ status: 'sent', _id: 'abc' }])
     await provider.sendEmail(
       'User75PercentStorage', 'user@example.com', 'User Person', 'support@web3.storage', 'Web3.Storage', {}
     )
-    const templateId = mailchimpSendTemplate.getCall(0).args[0].template_name
+    const templateId = sendTemplate.getCall(0).args[0].template_name
     assert.equal(templateId, 'user-storage-quota-warning')
   })
 
   it('should pass vars in correct format', async () => {
-    mailchimpSendTemplate.returns([{ status: 'sent', _id: 'abc' }])
+    sendTemplate.returns([{ status: 'sent', _id: 'abc' }])
     await provider.sendEmail(
       'User75PercentStorage',
       'user@example.com',
@@ -199,7 +199,7 @@ describe('Mailchimp provider', () => {
       'Web3.Storage',
       { colour: 'blue' }
     )
-    const mergeVars = mailchimpSendTemplate.getCall(0).args[0].message.merge_vars
+    const mergeVars = sendTemplate.getCall(0).args[0].message.merge_vars
     assert.equal(mergeVars[0].rcpt, 'user@example.com')
     assert.ok(
       mergeVars[0].vars.every((varDef) => {
