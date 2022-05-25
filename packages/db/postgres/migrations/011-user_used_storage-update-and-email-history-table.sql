@@ -1,16 +1,21 @@
-ALTER TYPE used_storage ADD ATTRIBUTE total TEXT;
-
 -- Because function return type has changed
-DROP FUNCTION user_used_storage(bigint);
+DROP FUNCTION IF EXISTS user_used_storage(bigint);
+
+DROP TYPE IF EXISTS stored_bytes;
+DROP TYPE IF EXISTS used_storage;
+
+CREATE TYPE stored_bytes AS (uploaded TEXT, psa_pinned TEXT, total TEXT);
+
+
 
 -- Get storage used for a specified user: uploaded, pinned and total
 CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT)
-  RETURNS used_storage
+  RETURNS stored_bytes
   LANGUAGE plpgsql
 AS
 $$
 DECLARE
-  used_storage  used_storage;
+  used_storage  stored_bytes;
   uploaded      BIGINT;
   psa_pinned        BIGINT;
   total         BIGINT;
