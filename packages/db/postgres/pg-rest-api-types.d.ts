@@ -451,6 +451,105 @@ export interface paths {
       };
     };
   };
+  "/email_history": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.email_history.id"];
+          user_id?: parameters["rowFilter.email_history.user_id"];
+          email_type?: parameters["rowFilter.email_history.email_type"];
+          message_id?: parameters["rowFilter.email_history.message_id"];
+          sent_at?: parameters["rowFilter.email_history.sent_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["email_history"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** email_history */
+          email_history?: definitions["email_history"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.email_history.id"];
+          user_id?: parameters["rowFilter.email_history.user_id"];
+          email_type?: parameters["rowFilter.email_history.email_type"];
+          message_id?: parameters["rowFilter.email_history.message_id"];
+          sent_at?: parameters["rowFilter.email_history.sent_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.email_history.id"];
+          user_id?: parameters["rowFilter.email_history.user_id"];
+          email_type?: parameters["rowFilter.email_history.email_type"];
+          message_id?: parameters["rowFilter.email_history.message_id"];
+          sent_at?: parameters["rowFilter.email_history.sent_at"];
+        };
+        body: {
+          /** email_history */
+          email_history?: definitions["email_history"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/metric": {
     get: {
       parameters: {
@@ -1614,6 +1713,28 @@ export interface paths {
       };
     };
   };
+  "/rpc/users_by_storage_used": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: integer */
+            to_percent?: number;
+            /** Format: integer */
+            from_percent: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/user_auth_keys_list": {
     post: {
       parameters: {
@@ -2043,6 +2164,35 @@ export interface definitions {
      */
     updated_at: string;
   };
+  email_history: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
+     */
+    user_id: number;
+    /** Format: public.email_type */
+    email_type:
+      | "User75PercentStorage"
+      | "User80PercentStorage"
+      | "User85PercentStorage"
+      | "User90PercentStorage"
+      | "User100PercentStorage"
+      | "AdminStorageExceeded";
+    /** Format: text */
+    message_id: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
+    sent_at: string;
+  };
   metric: {
     /**
      * Format: text
@@ -2431,6 +2581,18 @@ export interface parameters {
   "rowFilter.content.inserted_at": string;
   /** Format: timestamp with time zone */
   "rowFilter.content.updated_at": string;
+  /** @description email_history */
+  "body.email_history": definitions["email_history"];
+  /** Format: bigint */
+  "rowFilter.email_history.id": string;
+  /** Format: bigint */
+  "rowFilter.email_history.user_id": string;
+  /** Format: public.email_type */
+  "rowFilter.email_history.email_type": string;
+  /** Format: text */
+  "rowFilter.email_history.message_id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.email_history.sent_at": string;
   /** @description metric */
   "body.metric": definitions["metric"];
   /** Format: text */
