@@ -134,7 +134,7 @@ bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 [env.josh]
 workers_dev = true
 account_id = "b649c9389ef9c1d318ac2945b2415046"
-vars = { CLUSTER_API_URL = "https://josh-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://josh-postgres-api-web3-storage.loca.lt", ENV = "dev" }
+vars = { CLUSTER_API_URL = "https://josh-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://josh-postgres-api-web3-storage.loca.lt", ENV = "dev", GATEWAY_URL = "https://ipfs.io" }
 
 [env.josh.durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
