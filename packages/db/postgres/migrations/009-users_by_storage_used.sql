@@ -32,12 +32,12 @@ BEGIN
         SELECT 42
         FROM user_tag r
         WHERE u.id = r.user_id 
-        AND r.tag = 'HasAccountRestriction' 
+        AND r.tag = 'HasAccountRestriction'
         AND r.value ILIKE 'true'
         AND r.deleted_at IS NULL
       )
     )
-    SELECT * 
+    SELECT *
     FROM user_account
     WHERE user_account.storage_used::BIGINT >= (from_percent/100::NUMERIC) * user_account.storage_quota::BIGINT
     AND (to_percent IS NULL OR user_account.storage_used::BIGINT < (to_percent/100::NUMERIC) * user_account.storage_quota::BIGINT)
