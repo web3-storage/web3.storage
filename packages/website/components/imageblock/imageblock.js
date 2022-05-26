@@ -1,5 +1,7 @@
 import clsx from 'clsx';
+
 import Img from 'components/cloudflareImage';
+
 /**
  * @param {Object} props.block
  */
