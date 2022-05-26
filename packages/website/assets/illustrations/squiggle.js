@@ -1,12 +1,12 @@
-// @ts-ignore
-import squiggle from '../images/squiggle.png'
+import Img from 'components/cloudflareImage';
+
 /**
  * @param {any} props
  */
- const Squiggle = (props) => (
-    <div {...props}>
-      <img className="image-full-width" alt="" src={squiggle.src} />
-    </div>
-)
+const Squiggle = props => (
+  <div {...props}>
+    <Img className="image-full-width" alt="" src="/images/illustrations/squiggle.png" width="464" height="464" />
+  </div>
+);
 
-export default Squiggle
+export default Squiggle;

@@ -1,12 +1,11 @@
-// @ts-ignore
-import cone from '../images/cone.png'
+import Img from 'components/cloudflareImage';
 /**
  * @param {any} props
  */
- const Cone = (props) => (
-    <div {...props}>
-      <img className="image-full-width" alt="" src={cone.src} />
-    </div>
-)
+const Cone = props => (
+  <div {...props}>
+    <Img width="389" height="389" className="image-full-width" alt="" src="/images/illustrations/cone.png" />
+  </div>
+);
 
-export default Cone
+export default Cone;

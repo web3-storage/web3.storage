@@ -1,10 +1,13 @@
 // @ts-ignore
-import image from '../images/holographic-background.png';
 /**
  * @param {any} props
  */
-export const GradientImage = (props) => (
+export const GradientImage = props => (
   <div {...props}>
-    <img className="image-full-width" src={image.src} alt="gradient-background" />
+    <img
+      className="image-full-width"
+      src="/images/illustrations/holographic-background.png"
+      alt="gradient-background"
+    />
   </div>
 );

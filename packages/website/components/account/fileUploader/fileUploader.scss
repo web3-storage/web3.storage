@@ -42,7 +42,7 @@
     padding: 1.875rem 0;
     background: rgba($white, 0.1);
     border: solid;
-    border-image: url('../../../assets/images/dashed-border.png') 2 round;
+    border-image: url('/images/illustration/dashed-border.png') 2 round;
     @include borderRadius_Large;
   }
 

@@ -5,7 +5,7 @@
 @import 'docspagination/docspagination';
 
 .docs-site {
-  background-image: url('../../assets/images/corkscrewBlurred.jpg');
+  background-image: url('/images/illustration/corkscrewBlurred.jpg');
   background-repeat: repeat;
   background-size: cover;
   word-break: break-word;
@@ -44,7 +44,7 @@
     position: relative;
 
     &:before {
-      background-image: url('../../assets/images/triangle1.png');
+      background-image: url('/images/illustration/triangle1.png');
       background-repeat: no-repeat;
       background-size: contain;
       height: 72px;

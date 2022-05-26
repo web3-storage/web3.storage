@@ -1,12 +1,11 @@
-// @ts-ignore
-import zigzag from '../images/zigzag.png'
+import Img from 'components/cloudflareImage';
 /**
  * @param {any} props
  */
- const Zigzag = (props) => (
-    <div {...props}>
-      <img className="image-full-width" alt="" src={zigzag.src} />
-    </div>
-)
+const Zigzag = props => (
+  <div {...props}>
+    <Img className="image-full-width" alt="" src="/images/illustrations/zigzag.png" width="236" height="236" />
+  </div>
+);
 
-export default Zigzag
+export default Zigzag;

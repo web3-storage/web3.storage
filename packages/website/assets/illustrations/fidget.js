@@ -1,12 +1,12 @@
-// @ts-ignore
-import fidget from '../images/fidget.png'
+import Img from 'components/cloudflareImage';
+
 /**
  * @param {any} props
  */
- const Fidget = (props) => (
-    <div {...props}>
-      <img className="image-full-width" alt="" src={fidget.src} />
-    </div>
-)
+const Fidget = props => (
+  <div {...props}>
+    <Img height="480" width="480" className="image-full-width" alt="" src="/images/illustrations/fidget.png" />
+  </div>
+);
 
-export default Fidget
+export default Fidget;

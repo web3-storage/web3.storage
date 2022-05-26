@@ -8,7 +8,7 @@ import Image from 'next/image';
  * @param  {number} [logo.quality]
  */
 const cloudflareImageLoader = ({ src, width, quality = 75 }) =>
-  `https://nft.storage/cdn-cgi/image/format=auto,width=${width},quality=${quality}${src}`;
+  `https://web3.storage/cdn-cgi/image/format=auto,width=${width},quality=${quality}${src}`;
 
 /**
  * @param {{
@@ -23,6 +23,7 @@ const cloudflareImageLoader = ({ src, width, quality = 75 }) =>
  */
 export default function Img({ src, alt, width, height, className, layout }) {
   if (src.includes('.svg') || src.includes('https://')) {
+    // eslint-disable-next-line @next/next/no-img-element
     return <img src={src} alt={alt} width={width} height={height} className={className} />;
   }
   if (process.env.NODE_ENV === 'development') {

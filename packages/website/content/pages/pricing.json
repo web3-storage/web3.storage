@@ -65,7 +65,9 @@
               },
               {
                 "type": "image_block",
-                "src": "/images/tiers/holo-graph.png"
+                "src": "/images/tiers/holo-graph.png",
+                "width": "800",
+                "height": "805"
               }
             ]
           }
@@ -147,7 +149,9 @@
               "num": "col-5_sm-8_mi-10_ti-12",
               "push_left": "off-1_sm-2_mi-1_ti-0"
             },
-            "src": "/images/index/cluster-1.png"
+            "src": "/images/index/cluster-1.png",
+            "width": "700",
+            "height": "853"
           }
         ]
       },

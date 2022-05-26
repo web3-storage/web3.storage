@@ -1,12 +1,12 @@
-// @ts-ignore
-import cluster2 from '../images/cluster2.png'
+import Img from 'components/cloudflareImage';
+
 /**
  * @param {any} props
  */
- const ClusterMobile = (props) => (
-    <div {...props}>
-      <img className="image-full-width" alt="" src={cluster2.src} />
-    </div>
-)
+const ClusterMobile = props => (
+  <div {...props}>
+    <Img width="600" height="773" className="image-full-width" alt="" src="/images/illustrations/cluster2.png" />
+  </div>
+);
 
-export default ClusterMobile
+export default ClusterMobile;

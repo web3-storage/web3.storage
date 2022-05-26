@@ -1,12 +1,12 @@
-// @ts-ignore
-import ring from '../images/ring.png'
+import Img from 'components/cloudflareImage';
+
 /**
  * @param {any} props
  */
- const Ring = (props) => (
-    <div {...props}>
-      <img className="image-full-width" alt="" src={ring.src} />
-    </div>
-)
+const Ring = props => (
+  <div {...props}>
+    <Img width="900" height="900" className="image-full-width" alt="" src="/images/illustrations/ring.png" />
+  </div>
+);
 
-export default Ring
+export default Ring;
