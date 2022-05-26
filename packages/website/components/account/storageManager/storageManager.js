@@ -38,11 +38,11 @@ const StorageManager = ({ className = '', content }) => {
   const {
     storageData: { data, isLoading },
   } = useUser();
-  const uploaded = useMemo(() => data?.usedStorage?.uploaded || 439804651110, [data]);
-  const psaPinned = useMemo(() => data?.usedStorage?.psaPinned || 329853488332, [data]);
+  const uploaded = useMemo(() => data?.usedStorage?.uploaded || 0, [data]);
+  const psaPinned = useMemo(() => data?.usedStorage?.psaPinned || 0, [data]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
-
+  console.log(data);
   const { maxSpaceLabel, unlockLabel, percentUploaded, percentPinned } = useMemo(
     () =>
       // Storage information by tier

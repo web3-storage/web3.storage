@@ -57,7 +57,6 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   };
 
   console.log(allFiles);
-  console.log(storageData);
 
   const [currentTab, setCurrentTab] = useState('uploaded');
   const [files, setFiles] = useState(allFiles);
@@ -270,28 +269,27 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           <div className="col-6">
             <div className="files-manager-title has-upload-button">
               <div className="title">
-                { keyword
+                {keyword
                   ? title.searchHeading
-                    .replace('%resultsNumber%', filteredFiles.length)
-                    .replace('%searchQuery%', `'${keyword}'`)
-                  : title.heading
-                }
+                      .replace('%resultsNumber%', filteredFiles.length)
+                      .replace('%searchQuery%', `'${keyword}'`)
+                  : title.heading}
               </div>
-              { title.file_type === 'uploaded' ?
-                (
-                  <Button
-                    onClick={onFileUpload}
-                    variant={content?.upload.theme}
-                    tracking={{
-                      ui: countly.ui[content?.upload.ui],
-                      action: content?.upload.action,
-                      data: { isFirstFile: false },
-                    }}
-                  >
-                    {content?.upload.text}
-                  </Button>
-                ) : ''
-              }
+              {title.file_type === 'uploaded' ? (
+                <Button
+                  onClick={onFileUpload}
+                  variant={content?.upload.theme}
+                  tracking={{
+                    ui: countly.ui[content?.upload.ui],
+                    action: content?.upload.action,
+                    data: { isFirstFile: false },
+                  }}
+                >
+                  {content?.upload.text}
+                </Button>
+              ) : (
+                ''
+              )}
             </div>
           </div>
         </div>
