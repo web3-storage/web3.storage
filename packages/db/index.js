@@ -33,6 +33,18 @@ const userQuery = `
   updated:updated_at
 `
 
+const userQueryWithTags = `
+  _id:id::text,
+  issuer,
+  name,
+  email,
+  github,
+  publicAddress:public_address,
+  created:inserted_at,
+  updated:updated_at,
+  tags:user_tag_user_id_fkey(user_id,id,tag,value)
+`
+
 const psaPinRequestTableName = 'psa_pin_request'
 const pinRequestSelect = `
   _id:id::text,
@@ -126,11 +138,11 @@ export class DBClient {
    * @param {string} issuer
    * @return {Promise<import('./db-client-types').UserOutput | undefined>}
    */
-  async getUser (issuer) {
+  async getUser (issuer, { includeTags } = { includeTags: false }) {
     /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
-      .select(userQuery)
+      .select(includeTags ? userQueryWithTags : userQuery)
       .eq('issuer', issuer)
 
     if (error) {

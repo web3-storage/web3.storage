@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import clsx from 'clsx'
+import Link from 'next/link';
+import clsx from 'clsx';
 
 /**
  * @typedef {Object} ButtonProps
@@ -13,41 +13,34 @@ import clsx from 'clsx'
  */
 
 /**
- * 
- * @param {ButtonProps} props 
- * @returns 
+ *
+ * @param {ButtonProps} props
+ * @returns
  */
-const Button = ({
-  className,
-  onClick,
-  href,
-  type,
-  disabled,
-  openInNewWindow,
-  children
-}) => {
-
+const Button = ({ className, onClick, href, type, disabled, openInNewWindow, children }) => {
   return (
-    <div className={clsx(className, 'Button')}>
-      { href
-        ? (
-          openInNewWindow
-          ?
-            <a href={href} target="_blank">{children}</a>
-          :
-            <Link href={href}>{children}</Link>
+    <div className={clsx(className, 'Button', disabled ? 'disabled' : undefined)}>
+      {href && !disabled ? (
+        openInNewWindow ? (
+          <a href={href} target="_blank">
+            {children}
+          </a>
+        ) : (
+          <Link href={href}>{<span className="button-contents">{children}</span>}</Link>
         )
-        :
-          <button type={type} onClick={onClick} disabled={disabled}>{children}</button>
-      }
+      ) : (
+        <button className="button-contents" type={type} onClick={onClick} disabled={disabled}>
+          {children}
+        </button>
+      )}
     </div>
-  )
-}
+  );
+};
 
 Button.defaultProps = {
-  type: "button",
+  type: 'button',
   openInNewWindow: false,
   disabled: false,
-}
+};
 
-export default Button
+export default Button;

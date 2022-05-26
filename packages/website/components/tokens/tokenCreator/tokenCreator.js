@@ -5,6 +5,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import countly from 'lib/countly';
 import Button, { ButtonVariant } from 'components/button/button';
 import { useTokens } from 'components/contexts/tokensContext';
+import { useUser } from 'hooks/use-user';
 
 /**
  * @typedef {Object} TokenCreatorProps
@@ -22,6 +23,7 @@ const TokenCreator = ({ content }) => {
 
   const { query, push, replace } = useRouter();
   const { tokens, createToken, isCreating, getTokens } = useTokens();
+  const user = useUser();
 
   const onTokenCreate = useCallback(
     async e => {
@@ -114,10 +116,16 @@ const TokenCreator = ({ content }) => {
             <button className="token-creator-submit">{inputHasValue ? '→' : '+'}</button>
           </form>
           <Button
+            disabled={user?.info?.tags?.['HasAccountRestriction']}
             className={clsx('token-creator-create', query.create && 'hidden')}
             href="/account"
             onClick={() => push('/tokens?create=true')}
             variant={ButtonVariant.TEXT}
+            tooltip={
+              user?.info?.tags?.['HasAccountRestriction']
+                ? 'You are unable to create API tokens when your account is blocked. Please contact support@web3.storage'
+                : ''
+            }
           >
             {content.prompt}
           </Button>
