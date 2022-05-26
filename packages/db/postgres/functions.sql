@@ -250,15 +250,15 @@ BEGIN
 END
 $$;
 
-CREATE TYPE used_storage AS (uploaded TEXT, psa_pinned TEXT, total TEXT);
+CREATE TYPE stored_bytes AS (uploaded TEXT, psa_pinned TEXT, total TEXT);
 
 CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT)
-  RETURNS used_storage
+  RETURNS stored_bytes
   LANGUAGE plpgsql
 AS
 $$
 DECLARE
-  used_storage  used_storage;
+  used_storage  stored_bytes;
   uploaded      BIGINT;
   psa_pinned    BIGINT;
   total         BIGINT;
