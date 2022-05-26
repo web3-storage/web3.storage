@@ -56,6 +56,9 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     pinned: allFiles.filter(file => file.pins.length !== 0),
   };
 
+  console.log(allFiles);
+  console.log(storageData);
+
   const [currentTab, setCurrentTab] = useState('uploaded');
   const [files, setFiles] = useState(allFiles);
   const [filteredFiles, setFilteredFiles] = useState(files);
