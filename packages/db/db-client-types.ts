@@ -249,6 +249,10 @@ export type ListUploadsOptions = {
    */
   size?: number
   /**
+   * Offset records (default: 0).
+   */
+  offset?: number
+  /**
    * Sort by given property.
    */
   sortBy?: 'Date' | 'Name'

@@ -164,13 +164,22 @@ export async function userUploadsGet (request, env) {
   const requestUrl = new URL(request.url)
   const { searchParams } = requestUrl
 
-  let size = 25
+  let size = 10
   if (searchParams.has('size')) {
     const parsedSize = parseInt(searchParams.get('size'))
     if (isNaN(parsedSize) || parsedSize <= 0 || parsedSize > 1000) {
       throw Object.assign(new Error('invalid page size'), { status: 400 })
     }
     size = parsedSize
+  }
+
+  let offset = 0
+  if (searchParams.has('offset')) {
+    const parsedOffset = parseInt(searchParams.get('offset'))
+    if (isNaN(parsedOffset) || parsedOffset <= 0 || parsedOffset > 1000) {
+      throw Object.assign(new Error('invalid page offset'), { status: 400 })
+    }
+    offset = parsedOffset
   }
 
   let before = new Date()
@@ -182,11 +191,21 @@ export async function userUploadsGet (request, env) {
     before = parsedBefore
   }
 
+  let after = new Date()
+  if (searchParams.has('after')) {
+    const parsedBefore = new Date(searchParams.get('after'))
+    if (isNaN(parsedBefore.getTime())) {
+      throw Object.assign(new Error('invalid after date'), { status: 400 })
+    }
+    after = parsedAfter
+  }
+
   const sortBy = searchParams.get('sortBy') || 'Date'
   const sortOrder = searchParams.get('sortOrder') || 'Desc'
 
   const uploads = await env.db.listUploads(request.auth.user._id, {
     size,
+    offset,
     before: before.toISOString(),
     sortBy,
     sortOrder

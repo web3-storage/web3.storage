@@ -452,23 +452,39 @@ export class DBClient {
    * @returns {Promise<Array<import('./db-client-types').UploadItemOutput>>}
    */
   async listUploads (userId, opts = {}) {
+    const offset = opts.offset || 0
+    const limit = offset + (opts.size || 10)
+
+    const sortBy = opts.sortBy === 'Name'
+    ? 'name'
+    : 'inserted_at'
+
+    const isAscendingSortOrder =  opts.sortOrder === 'Asc'
+
     let query = this._client
       .from('upload')
       .select(uploadQuery)
       .eq('user_id', userId)
       .is('deleted_at', null)
-      .limit(opts.size || 10)
       .order(
-        opts.sortBy === 'Name' ? 'name' : 'inserted_at',
-        { ascending: opts.sortOrder === 'Asc' }
+        sortBy,
+        { ascending: isAscendingSortOrder }
       )
 
+    // Apply filtering
     if (opts.before) {
       query = query.lt('inserted_at', opts.before)
     }
 
     if (opts.after) {
       query = query.gte('inserted_at', opts.after)
+    }
+
+    // Apply pagination
+    if (opts.offset) {
+      query = query.range(offset, limit - 1)
+    } else if (opts.limit) {
+      query = query.limit(limit)
     }
 
     /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error }} */

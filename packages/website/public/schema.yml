@@ -9,7 +9,7 @@ info:
     ## API endpoint URL
 
     The main public API endpoint URL for Web3.Storage is `https://api.web3.storage`. All endpoints described in this document should be made relative to this root URL. For example, to post to the `/car` endpoint, send your request to `https://api.web3.storage/car`.
-    
+
     ### Rate limits
 
     This API imposes rate limits to ensure quality of service. You may receive a 429 "Too many requests" error if you make more than 30 requests with the same API token within a ten second window. Upon receiving a response with a 429 status, clients should retry the failed request after a small delay. To avoid 429 responses, you may wish to implement client-side request throttling to stay within the limits.
@@ -398,7 +398,16 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
   parameters:
     before:
-      description: Specifies a date, in ISO 8601 format. Ensures that the call to `/list` will not return any results newer than the given date.
+      description: Specifies a date, in ISO 8601 format. Ensures that the call to `user/uploads` will not return any results newer than the given date.
+      name: before
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date-time  # RFC 3339, section 5.6
+      example: "2020-07-27T17:32:28Z"
+    after:
+      description: Specifies a date, in ISO 8601 format. Ensures that the call to `user/uploads` will not return any results older than the given date.
       name: before
       in: query
       required: false
@@ -416,6 +425,32 @@ components:
         format: int32
         minimum: 1
         maximum: 1000
-        default: 25
+        default: 10
+    offset:
+      description: Specifies the offset of returned results, used for pagination.
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        default: 0
+    sortBy:
+      description: Sorts results by a given parameter.
+      name: sortBy
+      in: query
+      required: false
+      schema:
+        type: string
+        enum: [Date, Name]
+    sortOrder:
+      description: Sorts results by a given parameter.
+      name: sortOrder
+      in: query
+      required: false
+      schema:
+        type: string
+        enum: [Asc, Desc]
 security:
   - bearerAuth: []

@@ -30,9 +30,9 @@ npm run stop
 ```
 
 ## Setting up a cloudflare worker
-While in most cases the [Getting Started](#getting-started) section is enough to develop locally, if you want to test and preview you worker on Cloudflare's infrastructure here's the instructions to setup your worker and environment.  
+While in most cases the [Getting Started](#getting-started) section is enough to develop locally, if you want to test and preview you worker on Cloudflare's infrastructure here's the instructions to setup your worker and environment.
 
-If you want more in depth information please look at [Cloudflare Get Started guide](https://developers.cloudflare.com/workers/get-started/guide#1-sign-up-for-a-workers-account).  
+If you want more in depth information please look at [Cloudflare Get Started guide](https://developers.cloudflare.com/workers/get-started/guide#1-sign-up-for-a-workers-account).
 
 The following instructions assume that you did go through the Getting started section.
 
@@ -40,12 +40,12 @@ The following instructions assume that you did go through the Getting started se
 Before you can start publishing your Workers on your own domain or a free *.workers.dev subdomain, you must sign up for a Cloudflare Workers account
 ### 2. Install the Workers CLI
 Install `wrangler` cli on your local machine
-```bash 
+```bash
 npm install -g @cloudflare/wrangler
 ```
 ### 3. Configure the Workers CLI
 With installation complete, wrangler will need access to a Cloudflare OAuth token to manage Workers resources on your behalf.
-```bash 
+```bash
 wrangler login
 ```
 Open the browser, log into your account, and select Allow.
@@ -168,7 +168,7 @@ curl -H 'Authorization: Bearer YOUR_API_KEY' 'http://127.0.0.1:8787/user/uploads
   "deals": []
 ```
 
-By default, 25 uploads are requested, but more can be requested up to a maximum of 1000. A `size` parameter should be used as follows:
+By default, 10 uploads are requested, but more can be requested up to a maximum of 1000. A `size` parameter should be used as follows:
 
 ```console
 curl -H 'Authorization: Bearer YOUR_API_KEY' 'http://127.0.0.1:8787/user/uploads?size=1000'
