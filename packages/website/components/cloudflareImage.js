@@ -8,7 +8,7 @@ import Image from 'next/image';
  * @param  {number} [logo.quality]
  */
 const cloudflareImageLoader = ({ src, width, quality = 75 }) =>
-  `https://web3.storage/cdn-cgi/image/format=auto,width=${width},quality=${quality}${src}`;
+  `/cdn-cgi/image/format=auto,width=${width},quality=${quality}${src}`;
 
 /**
  * @param {{

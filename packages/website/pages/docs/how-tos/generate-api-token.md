@@ -4,6 +4,7 @@ description: Learn how to get an API token for using Web3.Storage programmatical
 ---
 
 import Callout from 'components/callout/callout';
+import Img from 'components/cloudflareImage';
 
 # How to generate an API token
 
@@ -16,11 +17,11 @@ You'll need a free Web3.Storage account in order to generate an API token. If yo
 1. From the Web3.Storage navigation menu, click **Account** to go to your [account page](https://web3.storage/account).
 1. Scroll down to the **API tokens** section and click **Create an API token**. (If you've never created an API token on Web3.Storage before, you'll also see an invitation to do this from the **Getting started** section of your account page.)
 
-![Screenshot of a Web3.Storage account page](/images/docs/account-page-no-tokens.png)
+<Img src="/images/docs/account-page-no-tokens.png" alt="Screenshot of a Web3.Storage account page" width="1100" height="614" />
 
 3. Give your new API token a descriptive name that will be easy for you to remember later.
 
-![Screenshot of a Web3.Storage page for naming a new API token](/images/docs/account-page-name-token.png)
+<Img src="/images/docs/account-page-name-token.png" alt="Screenshot of a Web3.Storage page for naming a new API token" width="1100" height="741" />
 
 <Callout type="info">
 ##### Tip
@@ -29,7 +30,7 @@ You don't have to use the same API token for all of your projects! Creating an i
 
 4. Click **Create**. You'll then be taken to your [API Tokens](https://web3.storage/tokens) page, where you can manage all of your Web3.Storage API tokens.
 
-![Screenshot of a Web3.Storage page showing a user's API tokens](/images/docs/tokens-page.png)
+<Img src="/images/docs/tokens-page.png" alt="Screenshot of a Web3.Storage page showing a user's API tokens" width="1100" height="741" />
 
 5. Make a note of the **Token** field somewhere secure where you know you won't lose it. You can click **Copy** to copy your new API token to your clipboard.
 
