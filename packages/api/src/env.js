@@ -106,7 +106,7 @@ export function envAll (req, env, ctx) {
   // Note that we pass `ctx` as the `event` param here, because it's kind of both:
   // https://developers.cloudflare.com/workers/runtime-apis/fetch-event/#syntax-module-worker
   env.log = new Logging(req, ctx, {
-    token: env.log = env.LOGTAIL_TOKEN,
+    token: env.LOGTAIL_TOKEN,
     debug: env.DEBUG === 'true',
     sentry: env.sentry,
     version: env.VERSION,
