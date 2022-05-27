@@ -20,7 +20,7 @@ const env = {
   PG_REST_URL: 'http://localhost:3000',
   PG_REST_JWT: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTYwMzk2ODgzNCwiZXhwIjoyNTUwNjUzNjM0LCJyb2xlIjoic2VydmljZV9yb2xlIn0.necIJaiP7X2T2QjGeV-FhpkizcNTX8HjDDBAxpgQTEI'
 }
-const aUser = { _id: 1, email: 'some.email@mail.com', name: 'aName' }
+const aUser = { _id: '1', email: 'some.email@mail.com', name: 'aName' }
 
 describe('Mail service', () => {
   let db
