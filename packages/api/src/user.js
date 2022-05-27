@@ -2,6 +2,7 @@ import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
 import { HTTPError } from './errors.js'
+import { getTagValue, hasTag } from './utils/tags.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -111,7 +112,7 @@ export async function userTokensPost (request, env) {
  */
 export async function userAccountGet (request, env) {
   const [usedStorage, storageLimitBytes] = await Promise.all([
-    env.db.getUsedStorage(request.auth.user._id),
+    env.db.getStorageUsed(request.auth.user._id),
     env.db.getUserTagValue(request.auth.user._id, 'StorageLimitBytes')
   ])
   return new JSONResponse({
@@ -127,9 +128,18 @@ export async function userAccountGet (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userInfoGet (request, env) {
-  const info = await env.db.getUser(request.auth.user.issuer)
+  const user = await env.db.getUser(request.auth.user.issuer, { includeTags: true })
+
   return new JSONResponse({
-    info
+    info: {
+      ...user,
+      tags: {
+        HasAccountRestriction: hasTag(user, 'HasAccountRestriction', 'true'),
+        HasPsaAccess: hasTag(user, 'HasPsaAccess', 'true'),
+        HasSuperHotAccess: hasTag(user, 'HasSuperHotAccess', 'true'),
+        StorageLimitBytes: getTagValue(user, 'StorageLimitBytes', '')
+      }
+    }
   })
 }
 

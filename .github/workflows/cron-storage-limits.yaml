@@ -1,0 +1,41 @@
+name: Storage Limit Email Notifications
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  # Including 'workflow_dispatch' here allows the job to be triggered manually,
+  # as well as on the schedule.
+  workflow_dispatch:
+
+jobs:
+  send-notifications:
+    name: Send notifications
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # TODO: Update this to include production once it's been successfully
+        # tested on staging
+        # env: ['staging', 'production']
+        env: ['staging']
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Run job
+        env:
+          DEBUG: '*'
+          ENV: ${{ matrix.env }}
+          PROD_PG_REST_JWT: ${{ secrets.PROD_PG_REST_JWT }}
+          STAGING_PG_REST_JWT: ${{ secrets.STAGING_PG_REST_JWT }}
+          PROD_PG_REST_URL: ${{ secrets.PROD_PG_REST_URL }}
+          STAGING_PG_REST_URL: ${{ secrets.STAGING_PG_REST_URL }}
+          MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
+        run: npm run start:storage -w packages/cron
