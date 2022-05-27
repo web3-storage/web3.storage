@@ -76,7 +76,7 @@ export class DBClient {
   createContent (content: ContentInput, opt?: {updatePinRequests?: boolean}) : Promise<string>
   deleteKey (id: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
-  createUserTag(userId: number, tag: UserTagInput): Promise<boolean>
+  createUserTag(userId: string, tag: UserTagInput): Promise<boolean>
   getUserTags (userId: number): Promise<{ tag: string, value: string }[]>
 }
 

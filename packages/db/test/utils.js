@@ -69,7 +69,7 @@ export async function createUserWithFiles (dbClient, options = {}) {
 
   if (storageQuota !== 1099511627776) {
     // non-default storage quota
-    await dbClient.createUserTag(Number(user._id), {
+    createUserTag(dbClient, user._id, {
       tag: 'StorageLimitBytes',
       value: storageQuota.toString()
     })
@@ -205,4 +205,14 @@ export async function getPinSyncRequests (dbClient, size = 10) {
 export async function randomCid (code = pb.code) {
   const hash = await sha256.digest(Buffer.from(`${Math.random()}`))
   return CID.create(1, code, hash).toString()
+}
+
+/**
+ *
+ * @param {import('../index').DBClient} dbClient
+ * @param {string} userId
+ * @param {import('../db-client-types').UserTagInput} tag
+ */
+export async function createUserTag (dbClient, userId, tag) {
+  await dbClient.createUserTag(userId, tag)
 }
