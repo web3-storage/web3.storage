@@ -54,7 +54,6 @@ export async function updateNameRecord (privKey, existingRecord, newValue) {
 export function getTestJWT (sub = 'test-magic-issuer', name = 'test-magic-issuer') {
   return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
 }
-
 /**
  * @param {number} code
  * @returns {Promise<string>}
