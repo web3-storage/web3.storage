@@ -5,7 +5,7 @@ INSERT INTO public.user (
   public_address
 )
 VALUES (
-  'admin@web3.storage',
+  'support@web3.storage',
   'Web3 Storage Admin',
   'Web3 Storage Admin',
   'Web3 Storage Admin'

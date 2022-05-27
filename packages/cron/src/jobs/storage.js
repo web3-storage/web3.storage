@@ -63,7 +63,7 @@ export async function checkStorageUsed ({ db, emailService }) {
 
     if (users.length) {
       if (email.emailType === EMAIL_TYPE.User100PercentStorage) {
-        const adminUser = await db.getUserByEmail('admin@web3.storage')
+        const adminUser = await db.getUserByEmail('support@web3.storage')
         const toAdmin = {
           _id: adminUser._id,
           email: adminUser.email,
