@@ -1,7 +1,7 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 import { DBClient } from '../index.js'
-import { token } from './utils.js'
+import { createUserTag, token } from './utils.js'
 
 describe('user operations', () => {
   const name = 'test-name'
@@ -45,6 +45,47 @@ describe('user operations', () => {
   it('should return undefined to get a non existing user', async () => {
     const user = await client.getUser('fake-issuer')
     assert.strictEqual(user, undefined)
+  })
+
+  it('should return no tags if not there', async () => {
+    const userWithTags = await client.getUser(issuer, {
+      includeTags: true
+    })
+    assert.strictEqual(userWithTags.tags.length, 0)
+  })
+
+  it.only('should return the tags if exists', async () => {
+    const tagPsa = {
+      tag: 'HasPsaAccess',
+      value: 'true'
+    }
+    await createUserTag(client, user._id, tagPsa)
+
+    const tagStorageOld = {
+      tag: 'StorageLimitBytes',
+      value: '10000'
+    }
+    await createUserTag(client, user._id, tagStorageOld)
+
+    const tagStorageNew = {
+      tag: 'StorageLimitBytes',
+      value: '110'
+    }
+    await createUserTag(client, user._id, tagStorageNew)
+
+    const userWithTags = await client.getUser(issuer, {
+      includeTags: true
+    })
+
+    assert.strictEqual(userWithTags.tags.length, 2)
+
+    const savedPSATag = userWithTags.tags.find((i) => i.tag === 'HasPsaAccess')
+
+    assert.strictEqual(savedPSATag.value, tagPsa.value)
+
+    const savedStorageTag = userWithTags.tags.find((i) => i.tag === 'StorageLimitBytes')
+
+    assert.strictEqual(savedStorageTag.value, tagStorageNew.value)
   })
 
   it('should update user with same issuer (login)', async () => {

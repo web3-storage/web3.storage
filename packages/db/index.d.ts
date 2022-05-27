@@ -34,6 +34,7 @@ import type {
   UserTagInput,
   EmailSentInput,
   LogEmailSentInput,
+  GetUserOptions,
 } from './db-client-types'
 
 export { gql }
@@ -43,7 +44,7 @@ export class DBClient {
   client: PostgrestClient
   getMetricsValue (key: string): Promise<{ total: number }>
   upsertUser (user: UpsertUserInput): Promise<UpsertUserOutput>
-  getUser (issuer: string): Promise<UserOutput>
+  getUser (issuer: string, options?: GetUserOptions): Promise<UserOutput>
   getUserByEmail (email: string): Promise<UserOutput>
   getStorageUsed (userId: number): Promise<StorageUsedOutput>
   getUsersByStorageUsed (percentRange: UserStorageUsedInput): Promise<Array<UserStorageUsedOutput>>
@@ -77,7 +78,7 @@ export class DBClient {
   deleteKey (id: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
   createUserTag(userId: string, tag: UserTagInput): Promise<boolean>
-  getUserTags (userId: number): Promise<{ tag: string, value: string }[]>
+  getUserTags (userId: string, options: GetUserOptions): Promise<{ tag: string, value: string }[]>
 }
 
 export { EMAIL_TYPE } from './constants.js'

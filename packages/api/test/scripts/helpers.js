@@ -10,6 +10,7 @@ import { JWT_ISSUER } from '../../src/constants.js'
 import { SALT } from './worker-globals.js'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
+import { DBClient } from '@web3-storage/db'
 
 const libp2pKeyCode = 0x72
 const lifetime = 1000 * 60 * 60
@@ -62,4 +63,17 @@ export function getTestJWT (sub = 'test-magic-issuer', name = 'test-magic-issuer
 export async function randomCid (code = pb.code) {
   const hash = await sha256.digest(Buffer.from(`${Math.random()}`))
   return CID.create(1, code, hash).toString()
+}
+
+export const dbToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+
+/**
+ *
+ * @returns { DBClient }
+ */
+export function getDBClient () {
+  return new DBClient({
+    endpoint: 'http://127.0.0.1:3000',
+    token: dbToken
+  })
 }

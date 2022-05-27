@@ -136,6 +136,7 @@ export class DBClient {
    * Get user by its issuer.
    *
    * @param {string} issuer
+   * @param {import('./db-client-types').GetUserOptions?} options
    * @return {Promise<import('./db-client-types').UserOutput | undefined>}
    */
   async getUser (issuer, { includeTags } = { includeTags: false }) {
@@ -144,6 +145,7 @@ export class DBClient {
       .from('user')
       .select(includeTags ? userQueryWithTags : userQuery)
       .eq('issuer', issuer)
+      .filter('tags.deleted_at', 'is', null)
 
     if (error) {
       throw new DBError(error)

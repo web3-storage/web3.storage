@@ -15,6 +15,10 @@ export type UpsertUserOutput = {
   issuer: string
 }
 
+export type GetUserOptions = {
+  includeTags?: boolean
+}
+
 export type User = definitions['user']
 
 export type UserOutput = {
@@ -26,6 +30,7 @@ export type UserOutput = {
   publicAddress: definitions['user']['public_address']
   created: definitions['user']['inserted_at'],
   updated: definitions['user']['updated_at']
+  tags:[]
 }
 
 export type UserTagInput = {

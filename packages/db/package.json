@@ -11,7 +11,7 @@
     "stop": "node scripts/cli.js db --stop --project web3-storage",
     "stop:clean": "node scripts/cli.js db --stop --clean --project web3-storage",
     "pg-rest-api-types": "./scripts/cli.js pg-rest-api-types",
-    "test": "mocha --require test/hooks.js --experimental-vm-modules --timeout 5000"
+    "test": "mocha --require test/hooks.js --experimental-vm-modules --timeout 50000"
   },
   "keywords": [
     "postgres",
