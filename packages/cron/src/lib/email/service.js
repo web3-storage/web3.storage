@@ -39,7 +39,7 @@ export class EmailService {
    * Send an email to a user.
    * Optionally checks email sending history for this user and email type to avoid
    * re-sending if user has been recently notified.
-   * @param {{_id: number, email: string, name: string}} user
+   * @param {{_id: string, email: string, name: string}} user
    * @param {string} emailType
    * @param {Object} [options]
    * @param {number} [options.secondsSinceLastSent]

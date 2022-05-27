@@ -359,12 +359,12 @@ export type Email = {
   type: definitions['email_history']['email_type']
 }
 export type EmailSentInput = {
-  userId: number,
+  userId: string,
   emailType: string,
   secondsSinceLastSent?: number
 }
 export type LogEmailSentInput = {
-  userId: number,
+  userId: string,
   emailType: string,
   messageId: string
 }
