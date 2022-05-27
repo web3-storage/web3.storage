@@ -8,6 +8,7 @@ import Callout from 'components/callout/callout';
 import CodeSnippet from 'components/codesnippet/codesnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
 import golangRetrieve from '!!raw-loader!../../../assets/code-snippets/how-to/golang/retrieve/retrieve.go';
+import Img from 'components/cloudflareImage';
 
 # How to retrieve data from Web3.Storage
 
