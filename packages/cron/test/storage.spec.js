@@ -28,7 +28,7 @@ describe('cron - check user storage quotas', () => {
   beforeEach(async () => {
     emailService = new EmailService({ db: dbClient, provider: EMAIL_PROVIDERS.dummy })
     adminUser = await createUser(dbClient, {
-      email: 'admin@web3.storage',
+      email: 'support@web3.storage',
       name: 'Web3 Storage Admin'
     })
 
@@ -62,14 +62,14 @@ describe('cron - check user storage quotas', () => {
     assert.equal(emailService.provider.sendEmail.callCount, 4)
 
     // Admin email
-    emailService.provider.sendEmail.calledWith(EMAIL_TYPE.AdminStorageExceeded, 'admin@web3.storage')
+    emailService.provider.sendEmail.calledWith(EMAIL_TYPE.AdminStorageExceeded, 'support@web3.storage')
 
     // Users email
     emailService.provider.sendEmail.calledWith(EMAIL_TYPE.User75PercentStorage, 'test2@email.com')
     emailService.provider.sendEmail.calledWith(EMAIL_TYPE.User85PercentStorage, 'test3@email.com')
     emailService.provider.sendEmail.calledWith(EMAIL_TYPE.User100PercentStorage, 'test4@email.com')
 
-    const adminUser = await dbClient.getUserByEmail('admin@web3.storage')
+    const adminUser = await dbClient.getUserByEmail('support@web3.storage')
     assert.ok(adminUser, 'admin user found')
     const adminStorageExceeded = await dbClient.emailHasBeenSent({
       userId: Number(adminUser._id),
