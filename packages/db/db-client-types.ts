@@ -119,12 +119,7 @@ export type PinSyncRequestOutput = {
 }
 
 // Backup
-export type BackupOutput = {
-  _id: string
-  created: definitions['backup']['inserted_at']
-  url: definitions['backup']['url']
-  uploadId: definitions['backup']['upload_id']
-}
+export type BackupOutput = definitions['upload']['backup_urls']
 
 // Deal
 export type Deal = {
@@ -186,7 +181,7 @@ export interface CreateUploadInput {
     status: definitions['pin']['status']
     location: Location
   }>,
-  backupUrls: Array<definitions['backup']['url']>
+  backupUrls: definitions['upload']['backup_urls']
 }
 
 export type CreateUploadOutput = {

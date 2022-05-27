@@ -19,3 +19,6 @@ DROP SERVER IF EXISTS dag_cargo_server CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS public.aggregate_entry CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS public.deal CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS public.aggregate CASCADE;
+
+-- Reset settings from config.sql
+ALTER DATABASE postgres RESET ALL;
