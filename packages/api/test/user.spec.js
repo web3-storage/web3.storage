@@ -2,8 +2,9 @@
 import assert from 'assert'
 import fetch from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
-import { getTestJWT } from './scripts/helpers.js'
+import { getDBClient, getTestJWT } from './scripts/helpers.js'
 import userUploads from './fixtures/pgrest/get-user-uploads.js'
+import { createUser, createUserAuthKey } from '@web3-storage/db/test-utils'
 
 describe('GET /user/account', () => {
   it('error if not authenticated with magic.link', async () => {
@@ -30,6 +31,40 @@ describe('GET /user/account', () => {
     const data = await res.json()
     assert.strictEqual(data.usedStorage.uploaded, 32000)
     assert.strictEqual(data.usedStorage.psaPinned, 10000)
+  })
+})
+
+describe('GET /user/info', () => {
+  let dbClient
+
+  before(async () => {
+    dbClient = getDBClient()
+  })
+
+  it('error if not authenticated with magic.link', async () => {
+    const token = await getTestJWT()
+    const res = await fetch(new URL('user/account', endpoint), {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(!res.ok)
+    assert.strictEqual(res.status, 401)
+  })
+
+  it('error if no auth header', async () => {
+    const res = await fetch(new URL('user/account', endpoint))
+    assert(!res.ok)
+    assert.strictEqual(res.status, 401)
+  })
+
+  it('retrieves user account data', async () => {
+    // Token of a user that has PSA enabled
+    const token = 'test-magic'
+
+    const res = await fetch(new URL('user/info', endpoint), {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    const userInfo = await res.json()
+    assert.strictEqual(userInfo.info.tags.HasPsaAccess, false)
   })
 })
 
