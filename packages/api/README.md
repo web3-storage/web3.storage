@@ -3,22 +3,30 @@
 The HTTP interface implemented as a Cloudflare Worker
 
 ## Getting started
-Please follow the instructions in the main monorepo [Readme](../../README.md#getting-started) to setup the project.
 
-We use miniflare to run the api locally, and docker to run ipfs-cluster and postgres with PostgREST.
+We use miniflare to run the api locally, and docker to run ipfs-cluster and postgres with PostgREST. 
 
-If you want to run this package in isolation, you can easily do it as follows:
-Please be aware that you will need to have the environment variable setup as described in the root [README](../../README.md#getting-started).
+This project uses node v16 and npm v7. It's a monorepo that use [npm workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces) to handle resolving dependencies between the local `packages/*` folders.
+
+To run it you will need:
+
+- node.js >= v16 installed
+- The dependencies installed. Run `npm i` from the root of the project.
+- The environment variables setup as described in the root [README](../../README.md#getting-started).
+- The web3.storage [datebase setup](../db/README.md)
+
+With docker running locally, from the monorepo root:
 
 ```sh
-# Install the deps
-npm install
+# first run you will need to set up the db, from the repo root:
+npm run load-schema -w packages/db
 ```
 
-With docker running locally, start all the things:
+start just the api:
 
-```
-npm start
+```sh
+# run me from the root of the monorepo!
+npm start -w packages/api
 ```
 
 🎉 miniflare is running in watch mode; you can save changes to the api code and the worker will update.
@@ -26,11 +34,10 @@ npm start
 Kill the process to stop miniflare, then run `npm run stop` to shutdown the cluster and postgres
 
 ```sh
-npm run stop
+# run me from the root of the monorepo!
+npm run stop -w packages/api
 ```
 
-You may need to make sure the underlying DB is populated with the required tables.
-Please follow the instructions in the [Populate Database](../../packages/db/README.md#2-populate-database) section in the db package README.
 
 ## Setting up a cloudflare worker
 While in most cases the [Getting Started](#getting-started) section is enough to develop locally, if you want to test and preview you worker on Cloudflare's infrastructure here's the instructions to setup your worker and environment.

@@ -99,30 +99,50 @@ You need an account on https://magic.link, and Docker running locally.
 
 Copy the <.env.tpl> file to `.env` and set the values for the `MAGIC_SECRET_KEY` & `NEXT_PUBLIC_MAGIC`, from your magic.link account dashboard.
 
-Then install the deps with `npm` and then run all the things with `npm start`
+Install the deps with `npm`
 
 ```console
 # install deps
 npm install
+```
 
+To be able to run the APIs you need to make sure the underlying [DB is populated with the required tables](./packages/db/README.md). 
+
+```console
+# init the db. requires docker running locally
+npm run load-schema -w packages/db
+```
+
+Run all the things with `npm start`,
+
+```console
 # start the api and website
 npm start
 ```
 
-To be able to run the APIs you need to make sure the underlying DB is populated with the required tables.
-Please follow the instructions in the [Populate Database](./packages/db/README.md#2-populate-database) section in the db package README.
+## Monorepo
 
+This project is a monorepo that uses [npm workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces).
 
-To add a new workspace to the repo:
+All `npm` commands should be run from the root of the repo. To run a command for a specific package add the `--workspace` or `-w` flag
 
 ```console
-npm init -w ./packages/website
+# Start just the api
+npm start -w packages/api
+```
+
+To add a new workspace (aka package) to the monorepo
+
+```console
+# adds the path to the `website` package to the `workspaces` property in package.json
+npm init -w packages/website
 ```
 
 To run an npm script in one or more workspaces
 
 ```console
-npm run test --workspace=a --workspace=b
+# run test commmand in package `a` and `b`
+npm run test --workspace=packages/a --workspace=packages/b
 ```
 
 ## Testing
