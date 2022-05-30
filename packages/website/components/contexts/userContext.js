@@ -26,7 +26,10 @@ import AccountBlockedModal from 'components/account/accountBlockedModal/accountB
  * @property {string} publicAddress
  * @property {string} created
  * @property {string} updated
- * @property {import('react-query').UseQueryResult<{usedStorage: {uploaded: number, psaPinned: number}}>} storageData
+ * @property {import('react-query').UseQueryResult<{
+ *   usedStorage: {uploaded: number, psaPinned: number},
+ *   storageLimitBytes: number
+ * }>} storageData
  * @property {string} isLoadingStorage
  */
 

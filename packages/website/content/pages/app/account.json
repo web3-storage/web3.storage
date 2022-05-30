@@ -75,19 +75,8 @@
         "request": "Submit a request"
       },
       "loading": "Loading...",
-      "tiers": [
-        {
-          "max_space_label": "1 TiB",
-          "unlock_label": "1 TiB+"
-        },
-        {
-          "max_space_label": "10 TiB",
-          "unlock_label": "10 TiB+"
-        },
-        {
-          "max_space_label": "0 TiB+"
-        }
-      ]
+      "max_space_tib_label": "TiB",
+      "unlock_label": "1 TiB+"
     },
     "file_manager": {
       "heading": "Files",

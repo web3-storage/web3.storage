@@ -111,10 +111,13 @@ export async function userTokensPost (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userAccountGet (request, env) {
-  const usedStorage = await env.db.getStorageUsed(Number(request.auth.user._id))
-
+  const [usedStorage, storageLimitBytes] = await Promise.all([
+    env.db.getStorageUsed(request.auth.user._id),
+    env.db.getUserTagValue(request.auth.user._id, 'StorageLimitBytes')
+  ])
   return new JSONResponse({
-    usedStorage
+    usedStorage,
+    storageLimitBytes
   })
 }
 
