@@ -1,7 +1,7 @@
 # web3.storage wrangler config.
 
 name = "web3-storage"
-# `javascript` means our we'll send pre-built javascript code. 
+# `javascript` means our we'll send pre-built javascript code.
 #  ...as opposed to `webpack` where wrangler builds our code for us.
 type = "javascript"
 
@@ -32,7 +32,7 @@ new_classes = ["NameRoom0"]
 # Test!
 [env.test]
 workers_dev = true
-vars = { DEBUG = "true", ENV= "test" }
+vars = { DEBUG = "false", ENV= "test" }
 
 [env.test.durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
