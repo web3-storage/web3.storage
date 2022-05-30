@@ -1,5 +1,18 @@
 # Changelog
 
+## [6.1.0](https://github.com/web3-storage/web3.storage/compare/api-v6.0.0...api-v6.1.0) (2022-05-28)
+
+
+### Features
+
+* add user blocking functionality to web3 ([#1322](https://github.com/web3-storage/web3.storage/issues/1322)) ([5803876](https://github.com/web3-storage/web3.storage/commit/5803876b6ab6672ce82ebe3e641a8729993743ef))
+* send email notifications for storage quota usage ([#1273](https://github.com/web3-storage/web3.storage/issues/1273)) ([0b1eb09](https://github.com/web3-storage/web3.storage/commit/0b1eb09b32dfb6cb1b3a5a8b5034dc4ac54ba3e2))
+
+
+### Bug Fixes
+
+* typo in Logging constructor ([#1346](https://github.com/web3-storage/web3.storage/issues/1346)) ([0e9c0ae](https://github.com/web3-storage/web3.storage/commit/0e9c0ae18229e5b851d58fb62348181550578e5d))
+
 ## [6.0.0](https://github.com/web3-storage/web3.storage/compare/api-v5.7.3...api-v6.0.0) (2022-05-20)
 
 
