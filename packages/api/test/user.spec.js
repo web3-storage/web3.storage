@@ -178,7 +178,7 @@ describe('GET /user/uploads', () => {
     assert.deepStrictEqual(uploads, userUploads)
   })
 
-  it('paginates', async () => {
+  it.only('paginates by offset', async () => {
     const token = await getTestJWT()
     const size = 1
     const res = await fetch(new URL(`/user/uploads?size=${size}`, endpoint).toString(), {
@@ -190,7 +190,7 @@ describe('GET /user/uploads', () => {
     const expected = [userUploads[0]]
     const link = res.headers.get('Link')
     assert(link, 'has a Link header for the next page')
-    assert.strictEqual(link, `</user/uploads?size=${size}&before=${encodeURIComponent(expected[0].created)}>; rel="next"`)
+    assert.strictEqual(link, `</user/uploads?size=${size}&offset=${size}>; rel="next"`)
     const uploads = await res.json()
     assert.deepStrictEqual(uploads, expected)
   })

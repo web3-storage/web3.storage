@@ -453,7 +453,7 @@ export class DBClient {
    */
   async listUploads (userId, opts = {}) {
     const offset = opts.offset || 0
-    const limit = offset + (opts.size || 10)
+    const limit = offset + (opts.size || 25)
 
     const sortBy = opts.sortBy === 'Name'
     ? 'name'
