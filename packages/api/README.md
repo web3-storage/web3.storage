@@ -12,7 +12,7 @@ To run it you will need:
 
 - node.js >= v16 installed
 - The dependencies installed. Run `npm i` from the root of the project.
-- The environment variables setup as described in the root [README](../../README.md#getting-started).
+- The environment variables setup as described in the root [README](../../README.md#building-web3storage).
 - The web3.storage [datebase setup](../db/README.md)
 
 With docker running locally, from the monorepo root:
