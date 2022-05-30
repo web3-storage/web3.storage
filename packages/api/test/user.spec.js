@@ -2,7 +2,7 @@
 import assert from 'assert'
 import fetch from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
-import { getTestJWT } from './scripts/helpers.js'
+import { getTestJWT, getDBClient } from './scripts/helpers.js'
 import userUploads from './fixtures/pgrest/get-user-uploads.js'
 
 describe('GET /user/account', () => {
@@ -50,13 +50,27 @@ describe('GET /user/info', () => {
   })
 
   it('retrieves user account data', async () => {
-    // Token of a user that has PSA enabled
+    const db = getDBClient()
     const token = 'test-magic'
+    const user = await db.getUser('test-magic-issuer')
+    let res, userInfo
 
-    const res = await fetch(new URL('user/info', endpoint), {
+    // Set PSA access to true and check response
+    await db.createUserTag(user._id, { tag: 'HasPsaAccess', value: 'true', reason: 'testing' })
+    res = await fetch(new URL('user/info', endpoint), {
       headers: { Authorization: `Bearer ${token}` }
     })
-    const userInfo = await res.json()
+    userInfo = await res.json()
+    assert.strictEqual(userInfo.info._id, user._id)
+    assert.strictEqual(userInfo.info.tags.HasPsaAccess, true)
+
+    // Set PSA access to false and check response
+    await db.createUserTag(user._id, { tag: 'HasPsaAccess', value: 'false', reason: 'testing' })
+    res = await fetch(new URL('user/info', endpoint), {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    userInfo = await res.json()
+    assert.strictEqual(userInfo.info._id, user._id)
     assert.strictEqual(userInfo.info.tags.HasPsaAccess, false)
   })
 })
