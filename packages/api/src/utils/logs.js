@@ -152,6 +152,7 @@ export class Logging {
         You must make a new instance per request.`
       )
     }
+    this._finished = true
     if (this.opts?.debug) {
       response.headers.set('Server-Timing', this._timersString())
     }
@@ -178,7 +179,6 @@ export class Logging {
       await this.postBatch()
     }
     this.ctx.waitUntil(run())
-    this._finished = true
     return response
   }
 
