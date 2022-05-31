@@ -1,5 +1,18 @@
 # Changelog
 
+### [6.1.1](https://github.com/web3-storage/web3.storage/compare/api-v6.1.0...api-v6.1.1) (2022-05-31)
+
+
+### Bug Fixes
+
+* show custom storage quota to user ([#1338](https://github.com/web3-storage/web3.storage/issues/1338)) ([51abb35](https://github.com/web3-storage/web3.storage/commit/51abb35b9c6f53ed1023a7dbb162ce2838fe09e9))
+
+
+### Other Changes
+
+* add test for CORS OPTIONS handler ([#1331](https://github.com/web3-storage/web3.storage/issues/1331)) ([63328b5](https://github.com/web3-storage/web3.storage/commit/63328b576b8440886d8d22b763751027406bbb7f))
+* fix tags in api user info ([#1379](https://github.com/web3-storage/web3.storage/issues/1379)) ([fdf6c76](https://github.com/web3-storage/web3.storage/commit/fdf6c760ea41c6befb6308d651d1621e31572d37))
+
 ## [6.1.0](https://github.com/web3-storage/web3.storage/compare/api-v6.0.0...api-v6.1.0) (2022-05-28)
 
 
