@@ -136,6 +136,7 @@ export class DBClient {
    * Get user by its issuer.
    *
    * @param {string} issuer
+   * @param {import('./db-client-types').GetUserOptions?} options
    * @return {Promise<import('./db-client-types').UserOutput | undefined>}
    */
   async getUser (issuer, { includeTags } = { includeTags: false }) {
@@ -174,10 +175,7 @@ export class DBClient {
   /**
    * Create a user tag
    * @param {string} userId
-   * @param {Object} [tag]
-   * @param {string} [tag.tag]
-   * @param {string} [tag.value]
-   * @param {string} [tag.reason]
+   * @param {import('./db-client-types').UserTagInput?} tag
    * @returns {Promise<boolean>}
    */
   async createUserTag (userId, tag = {}) {

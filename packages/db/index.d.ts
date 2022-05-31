@@ -34,6 +34,7 @@ import type {
   UserTagInput,
   EmailSentInput,
   LogEmailSentInput,
+  GetUserOptions,
 } from './db-client-types'
 
 export { gql }
@@ -76,8 +77,8 @@ export class DBClient {
   createContent (content: ContentInput, opt?: {updatePinRequests?: boolean}) : Promise<string>
   deleteKey (id: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
-  createUserTag(userId: number, tag: UserTagInput): Promise<boolean>
-  getUserTags (userId: number): Promise<{ tag: string, value: string }[]>
+  createUserTag(userId: string, tag: UserTagInput): Promise<boolean>
+  getUserTags(userId: string, options: GetUserOptions): Promise<{ tag: string, value: string }[]>
 }
 
 export { EMAIL_TYPE } from './constants.js'
