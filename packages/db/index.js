@@ -178,7 +178,10 @@ export class DBClient {
    * @param {import('./db-client-types').UserTagInput?} tag
    * @returns {Promise<boolean>}
    */
-  async createUserTag (userId, tag = {}) {
+  async createUserTag (userId, tag) {
+    if (!tag || !tag.tag) {
+      throw new Error('createUserTag requires a tag')
+    }
     const { data: deleteData, status: deleteStatus } = await this._client
       .from('user_tag')
       .update({
