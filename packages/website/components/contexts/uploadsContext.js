@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Web3Storage } from 'web3.storage';
 
-import { API, deleteUpload, getToken, getUploads, renameUpload } from 'lib/api';
+import { API, deleteUpload, getToken, getUploads, renameUpload, listPins } from 'lib/api';
 import { useUploadProgress } from './uploadProgressContext';
 import { useUser } from './userContext';
 
@@ -43,11 +43,43 @@ export const STATUS = {
  */
 
 /**
+ * @typedef {Object} PinObject
+ * @property {string} cid
+ * @property {string} _id
+ * @property {string} sourceCid
+ * @property {string} contentCid
+ * @property {string} authKey
+ * @property {string} name
+ * @property {any} meta
+ * @property {boolean | null} deleted
+ * @property {string} created
+ * @property {string} updated
+ * @property {Pin[]} pins
+ * @property {string[]} delegates
+ */
+
+/**
+ * @typedef {Object} PinStatus
+ * @property {string} requestid
+ * @property {string} status
+ * @property {string} created
+ * @property {PinObject} pin
+ */
+
+/**
+ * @typedef {Object} PinsList
+ * @property {number} count
+ * @property {PinStatus[]} results
+ */
+
+/**
  * @typedef {Object} UploadsContextProps
  * @property {Upload[]} uploads Uploads available in this account
+ * @property {PinStatus[]} pinned Files uploaded through the pinning service on this account
  * @property {(cid: string) => Promise<void>} deleteUpload Method to delete an existing upload
  * @property {(cid: string, name: string)=>Promise<void>} renameUpload Method to rename an existing upload
  * @property {(args?: UploadArgs) => Promise<Upload[]>} getUploads Method that refetches list of uploads based on certain params
+ * @property {() => Promise<PinStatus[]>} listPinned Method that fetches list of pins
  * @property {(file:FileProgress) => Promise<void>} uploadFiles Method to upload a new file
  * @property {boolean} isFetchingUploads Whether or not new uploads are being fetched
  * @property {number|undefined} fetchDate The date in which the last uploads list fetch happened
@@ -78,6 +110,7 @@ export const UploadsProvider = ({ children }) => {
   } = useUser();
 
   const [uploads, setUploads] = useState(/** @type {Upload[]} */ ([]));
+  const [pinned, setPinned] = useState(/** @type {PinStatus[]} */ ([]));
   const [isFetchingUploads, setIsFetchingUploads] = useState(false);
   const [fetchDate, setFetchDate] = useState(/** @type {number|undefined} */ (undefined));
   const [filesToUpload, setFilesToUpload] = useState(/** @type {FileProgress[]} */ ([]));
@@ -160,6 +193,18 @@ export const UploadsProvider = ({ children }) => {
     [setUploads, setIsFetchingUploads]
   );
 
+  const listPinnedCallback = useCallback(
+    /** @type {() => Promise<PinStatus[]>} */
+    async () => {
+      const pinsResponse = await listPins('pinned');
+      const updatedPinned = pinsResponse.results;
+      setPinned(updatedPinned);
+
+      return updatedPinned;
+    },
+    [setPinned]
+  );
+
   return (
     <UploadsContext.Provider
       value={
@@ -169,7 +214,9 @@ export const UploadsProvider = ({ children }) => {
           deleteUpload,
           renameUpload,
           getUploads: getUploadsCallback,
+          listPinned: listPinnedCallback,
           uploads,
+          pinned,
           isFetchingUploads,
           fetchDate,
           uploadsProgress: progress,

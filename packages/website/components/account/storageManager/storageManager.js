@@ -42,7 +42,7 @@ const StorageManager = ({ className = '', content }) => {
   const psaPinned = useMemo(() => data?.usedStorage?.psaPinned || 0, [data]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
-  console.log(data);
+
   const { maxSpaceLabel, unlockLabel, percentUploaded, percentPinned } = useMemo(
     () =>
       // Storage information by tier

@@ -111,6 +111,12 @@ $file-size: auto;
         justify-content: space-between;
         order: 6;
       }
+      &.pinned {
+        .file-select,
+        .file-row-label {
+          display: none;
+        }
+      }
     }
     &-select {
       @include border_Background_Waterloo_White;
@@ -160,6 +166,9 @@ $file-size: auto;
         margin-left: 0.625rem;
         @include hoverSvg;
         @include medium {
+          display: none;
+        }
+        &.pinned {
           display: none;
         }
       }

@@ -25,6 +25,7 @@ const defaultQueryOrder = 'newest';
 
 /**
  * @typedef {import('web3.storage').Upload} Upload
+ * @typedef {import('../../contexts/uploadsContext').PinObject} PinObject
  */
 
 /**
@@ -40,7 +41,8 @@ const defaultQueryOrder = 'newest';
  * @returns
  */
 const FilesManager = ({ className, content, onFileUpload }) => {
-  const { uploads: allFiles, fetchDate, getUploads, isFetchingUploads, deleteUpload, renameUpload } = useUploads();
+  const { uploads, pinned, fetchDate, getUploads, listPinned, isFetchingUploads, deleteUpload, renameUpload } =
+    useUploads();
   const {
     query: { filter },
     query,
@@ -50,16 +52,11 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     storageData: { refetch },
   } = useUser();
 
-  // memoize this ?
-  const filesByType = {
-    uploaded: allFiles.filter(file => file.pins.length === 0),
-    pinned: allFiles.filter(file => file.pins.length !== 0),
-  };
-
-  console.log(allFiles);
+  console.log(uploads);
+  console.log(pinned);
 
   const [currentTab, setCurrentTab] = useState('uploaded');
-  const [files, setFiles] = useState(allFiles);
+  const [files, setFiles] = useState(/** @type {any} */ (uploads));
   const [filteredFiles, setFilteredFiles] = useState(files);
   const [sortedFiles, setSortedFiles] = useState(filteredFiles);
   const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
@@ -76,21 +73,26 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const fileRowLabels = content?.table.file_row_labels;
   const title = content?.tabs.find(item => item.file_type === currentTab);
 
-  // Initial fetch on component load
+  // Initial uploads fetch on component load
   useEffect(() => {
     if (!fetchDate && !isFetchingUploads) {
       getUploads();
     }
   }, [fetchDate, getUploads, isFetchingUploads]);
 
+  // Initial pinned files fetch on component load
+  useEffect(() => {
+    listPinned();
+  }, [listPinned]);
+
   // Set displayed files based on tab selection: 'uploaded' or 'pinned'
   useEffect(() => {
     if (currentTab === 'uploaded') {
-      setFiles(allFiles.filter(file => file.pins.length === 0));
+      setFiles(uploads);
     } else if (currentTab === 'pinned') {
-      setFiles(allFiles.filter(file => file.pins.length !== 0));
+      setFiles(pinned.map(item => item.pin));
     }
-  }, [allFiles, currentTab]);
+  }, [uploads, pinned, currentTab]);
 
   // Method to reset the pagination every time query order changes
   useEffect(() => {
@@ -121,6 +123,17 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     },
     [setCurrentTab]
   );
+
+  const getFilesTotal = type => {
+    switch (type) {
+      case 'uploaded':
+        return uploads.length;
+      case 'pinned':
+        return pinned.length;
+      default:
+        return '';
+    }
+  };
 
   const onSelectAllToggle = useCallback(
     e => {
@@ -227,7 +240,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
                     onClick={() => changeCurrentTab(tab.file_type)}
                   >
                     <span>{tab.button_text}</span>
-                    <span>{` (${filesByType[tab.file_type].length})`}</span>
+                    <span>{` (${getFilesTotal(tab.file_type)})`}</span>
                   </button>
                 </div>
               ))}
@@ -301,7 +314,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
         name={fileRowLabels.name.label}
         cid={fileRowLabels.cid.label}
         status={fileRowLabels.status.label}
-        storageProviders={fileRowLabels.storage_providers.label}
+        storageProviders={currentTab === 'uploaded' ? fileRowLabels.storage_providers.label : null}
         size={fileRowLabels.size.label}
         isHeader
         isSelected={
@@ -309,6 +322,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           paginatedFiles.every(file => selectedFiles.find(fileSelected => file === fileSelected)) &&
           !!fetchDate
         }
+        tabType={currentTab}
       />
       <div className="files-manager-table-content">
         {isFetchingUploads || !fetchDate ? (
@@ -341,28 +355,35 @@ const FilesManager = ({ className, content, onFileUpload }) => {
                 Object.values(PinStatus).find(status => item.pins.some(pin => status === pin.status)) ||
                 PinStatus.QUEUING
               }
-              storageProviders={item.deals
-                .filter(deal => !!deal.storageProvider)
-                .map((deal, indx, deals) => (
-                  <span key={deal.dealId}>
-                    <a
-                      className="underline"
-                      href={`https://filfox.info/en/deal/${deal.dealId}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {`${deal.storageProvider}`}
-                    </a>
-                    {indx !== deals.length - 1 && ', '}
-                  </span>
-                ))}
-              size={filesize(item.dagSize)}
+              storageProviders={
+                Array.isArray(item.deals)
+                  ? item.deals
+                      .filter(deal => !!deal.storageProvider)
+                      .map((deal, indx, deals) => (
+                        <span key={deal.dealId}>
+                          <a
+                            className="underline"
+                            href={`https://filfox.info/en/deal/${deal.dealId}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {`${deal.storageProvider}`}
+                          </a>
+                          {indx !== deals.length - 1 && ', '}
+                        </span>
+                      ))
+                  : null
+              }
+              size={
+                item.hasOwnProperty('dagSize') ? filesize(item.dagSize) : item.info?.dag_size ? item.info.dag_size : '-'
+              }
               highlight={{ target: 'name', text: keyword?.toString() || '' }}
               numberOfPins={item.pins.length}
               isSelected={!!selectedFiles.find(fileSelected => fileSelected === item)}
               onDelete={() => onDeleteSingle(item.cid)}
               isEditingName={item.cid === nameEditingId}
               onEditToggle={onEditToggle(item.cid)}
+              tabType={currentTab}
             />
           ))
         )}
