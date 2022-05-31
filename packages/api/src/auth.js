@@ -1,6 +1,7 @@
 import * as JWT from './utils/jwt.js'
 import {
   AccountRestrictedError,
+  DeleteRestrictedError,
   MagicTokenRequiredError,
   NoTokenError,
   PinningUnauthorizedError,
@@ -99,6 +100,23 @@ export function withAccountNotRestricted (handler) {
       return handler(request, env, ctx)
     }
     throw new AccountRestrictedError()
+  }
+}
+
+/**
+ * Middleware: verify that the authenticated request is for a user whose
+ * ability to delete is not restricted.
+ *
+ * @param {import('itty-router').RouteHandler} handler
+ * @returns {import('itty-router').RouteHandler}
+ */
+export function withDeleteNotRestricted (handler) {
+  return async (request, env, ctx) => {
+    const isDeleteRestricted = request.auth.userTags.find(v => (v.tag === USER_TAGS.DELETE_RESTRICTION && v.value === 'true'))
+    if (!isDeleteRestricted) {
+      return handler(request, env, ctx)
+    }
+    throw new DeleteRestrictedError()
   }
 }
 

@@ -135,6 +135,7 @@ export async function userInfoGet (request, env) {
       ...user,
       tags: {
         HasAccountRestriction: hasTag(user, 'HasAccountRestriction', 'true'),
+        HasDeleteRestriction: hasTag(user, 'HasDeleteRestriction', 'true'),
         HasPsaAccess: hasTag(user, 'HasPsaAccess', 'true'),
         HasSuperHotAccess: hasTag(user, 'HasSuperHotAccess', 'true'),
         StorageLimitBytes: getTagValue(user, 'StorageLimitBytes', '')

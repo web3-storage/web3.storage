@@ -1,4 +1,4 @@
-DO 
+DO
 $$
 BEGIN
   -- Auth key blocked status type is the type of blocking that has occurred on the api
@@ -19,6 +19,7 @@ BEGIN
     CREATE TYPE user_tag_type AS ENUM
     (
       'HasAccountRestriction',
+      'HasDeleteRestriction',
       'HasPsaAccess',
       'StorageLimitBytes'
     );
@@ -26,7 +27,7 @@ BEGIN
 
   -- Types for notification emails
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'email_type') THEN
-    CREATE TYPE email_type AS ENUM 
+    CREATE TYPE email_type AS ENUM
       (
         'User75PercentStorage',
         'User80PercentStorage',
@@ -310,7 +311,7 @@ CREATE TABLE IF NOT EXISTS metric
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS email_history 
+CREATE TABLE IF NOT EXISTS email_history
 (
   id              BIGSERIAL PRIMARY KEY,
   -- the id of the user being notified
