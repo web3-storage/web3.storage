@@ -11,7 +11,6 @@ export default function Toc() {
   const [isOpen, setOpen] = useState(false);
   const [nestedHeadings, setNestedHeadings] = useState([]);
   let controller;
-  // const controller = new ScrollMagic.Controller();
 
   const toggleClass = () => {
     setOpen(!isOpen);
@@ -49,15 +48,16 @@ export default function Toc() {
           title,
         });
       }
+
       // scroll effects / add active class
-      new ScrollMagic.Scene({ triggerElement: `#${id}` })
-        .on('enter leave', () => {
-          document.querySelectorAll('#toc a').forEach(el => {
-            el.classList.remove('active');
-          });
-          document.querySelector(`#toc a[href="#${id}"]`)?.classList.add('active');
-        })
-        .addTo(controller);
+      const toggleClass = () => {
+        document.querySelectorAll('#toc a').forEach(el => {
+          el.classList.remove('active');
+        });
+        document.querySelector(`#toc a[href="#${id}"]`)?.classList.add('active');
+      };
+      new ScrollMagic.Scene({ triggerElement: `#${id}` }).on('enter', toggleClass).addTo(controller);
+      new ScrollMagic.Scene({ triggerElement: `#${id}`, triggerHook: 0 }).on('leave', toggleClass).addTo(controller);
     });
     return nestedHeadings;
   };
