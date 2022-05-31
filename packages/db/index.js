@@ -42,7 +42,7 @@ const userQueryWithTags = `
   publicAddress:public_address,
   created:inserted_at,
   updated:updated_at,
-  tags:user_tag_user_id_fkey(user_id,id,tag,value, deleted_at)
+  tags:user_tag_user_id_fkey(user_id,id,tag,value,deleted_at)
 `
 
 const psaPinRequestTableName = 'psa_pin_request'
