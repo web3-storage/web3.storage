@@ -196,7 +196,7 @@ export const UploadsProvider = ({ children }) => {
   const listPinnedCallback = useCallback(
     /** @type {() => Promise<PinStatus[]>} */
     async () => {
-      const pinsResponse = await listPins('pinned');
+      const pinsResponse = await listPins('pinning');
       const updatedPinned = pinsResponse.results;
       setPinned(updatedPinned);
 

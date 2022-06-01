@@ -1,0 +1,210 @@
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGVlNWNDY0E2N2IzNkRBYTRkNjkzQzYxNjk1Rjk1NzE2M2FFZTgxRjciLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTM1MDM0OTgxNDYsIm5hbWUiOiJ0ZXN0In0.71xqyzpzr3wx4oXwRSiRWqBO9WVfp7nnIetrJGt6So8
+
+curl -X POST 'https://api.web3.storage/pins' \
+  --header 'Accept: */*' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGVlNWNDY0E2N2IzNkRBYTRkNjkzQzYxNjk1Rjk1NzE2M2FFZTgxRjciLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTM1MDM0OTgxNDYsIm5hbWUiOiJ0ZXN0In0.71xqyzpzr3wx4oXwRSiRWqBO9WVfp7nnIetrJGt6So8' \
+  --header 'Content-Type: application/json' \
+  -d '{
+  "cid": "bafybeid3zip5wdk4syn6o5mhb7z4lwkfsz5zvuv4ncgti677frfl4hzo7q",
+  "name": "Urban Roar A Psychophysical Approach to the Design of Affective Environments (Jordan Lacey) (z-lib.org).pdf"
+}'
+
+
+
+curl -X POST 'https://api.web3.storage/pins' \
+  --header 'Accept: */*' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGVlNWNDY0E2N2IzNkRBYTRkNjkzQzYxNjk1Rjk1NzE2M2FFZTgxRjciLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTM1MDM0OTgxNDYsIm5hbWUiOiJ0ZXN0In0.71xqyzpzr3wx4oXwRSiRWqBO9WVfp7nnIetrJGt6So8' \
+  --header 'Content-Type: application/json' \
+  -d '{
+  "cid": "bafybeigzvsz5ukua2b7eapvzkv4mnbiv2fmhw46xy5k3m3nv2jqxy7jcom",
+  "name": "Marina_Herlop--Pripyat-WEB-2022-BABAS.zip"
+}'
+
+
+{"requestid":"dd671eac-0ee3-445d-99db-b76accaa90e9","status":"pinned","created":"2022-05-26T13:42:47.721+00:00","pin":{"cid":"bafybeigzvsz5ukua2b7eapvzkv4mnbiv2fmhw46xy5k3m3nv2jqxy7jcom","_id":"dd671eac-0ee3-445d-99db-b76accaa90e9","sourceCid":"bafybeigzvsz5ukua2b7eapvzkv4mnbiv2fmhw46xy5k3m3nv2jqxy7jcom","contentCid":"bafybeigzvsz5ukua2b7eapvzkv4mnbiv2fmhw46xy5k3m3nv2jqxy7jcom","authKey":"315318824629966040","name":"Marina_Herlop--Pripyat-WEB-2022-BABAS.zip","origins":null,"meta":null,"deleted":null,"created":"2022-05-26T13:42:47.721+00:00","updated":"2022-05-26T13:42:47.721+00:00","pins":[{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE1","peerName":"web3-storage-sv15","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWSnniGsyAF663gvHdqhyfJMCjWJv54cGSzcPiEMAfanvU","peerName":"web3-storage-dc13","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWPySxxWQjBgX9Jp6uAHQfVmdq8HG1gVvS1fRawHNSrmqW","peerName":"web3-storage-am6","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWEDMw7oRqQkdCJbyeqS5mUmWGwTp8JJ2tjCzTkHboF6wK","peerName":"web3-storage-sv15-2","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWNuoVEfVLJvU3jWY2zLYjGUaathsecwT19jhByjnbQvkj","peerName":"web3-storage-am6-2","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWKytRAd2ujxhGzaLHKJuje8sVrHXvjGNvHXovpar5KaKQ","peerName":"web3-storage-dc13-2","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWJEfH2MB4RsUoaJPogDPRWbFTi8iehsxsqrQpiJwFNDrP","peerName":"web3-storage-dc13-3","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWRi18oHN1j8McxS9RMnuibcTwxu6VCTYHyLNH2R14qhTy","peerName":"web3-storage-sv15-3","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWQYBPcvxFnnWzPGEx6JuBnrbF1FZq4jTahczuG2teEk1m","peerName":"web3-storage-am6-3","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWDdzN3snjaMJEH9zuq3tjKUFpYHeSGNkiAreF6dQSbCiL","peerName":"web3-storage-am6-4","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWEzCun34s9qpYEnKkG6epx2Ts9oVGRGnzCvM2s2edioLA","peerName":"web3-storage-am6-5","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWHpE5KiQTkqbn8KbU88ZxwJxYJFaqP4mp9Z9bhNPhym9V","peerName":"web3-storage-dc13-4","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWBHvsSSKHeragACma3HUodK5FcPUpXccLu2vHooNsDf9k","peerName":"web3-storage-dc13-5","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWAdxvJCV5KXZ6zveTJmnYGrSzAKuLUKZYkZssLk7UKv4i","peerName":"web3-storage-sv15-5","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWKhPb9tSnCqBswVfC5EPE7iSTXhbF4Ywwz2MKg5UCagbr","peerName":"web3-storage-sv15-4","region":null},{"status":"Pinned","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWQE3CWA3MJ1YhrYNP8EE3JErGbrCtpKRkFrWgi45nYAMn","peerName":"web3-storage-am6-6","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWSafoW6yrSL7waghFAaiCqGy5mdjpQx4jn4CRNqbG7eqG","peerName":"web3-storage-am6-8","region":null},{"status":"Pinned","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWDRak1XzURGh9MvGR4EWaP9kcbmdoagAcGMcNxBXXLzTF","peerName":"web3-storage-dc13-8","region":null},{"status":"Pinned","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWSH5uLrYe7XSFpmnQj1NCsoiGeKSRCV7T5xijpX2Po2aT","peerName":"web3-storage-sv15-8","region":null}]},"delegates":[]}%
+
+
+
+
+curl -X GET 'https://api.web3.storage/pins' \
+  --header 'Accept: */*' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGVlNWNDY0E2N2IzNkRBYTRkNjkzQzYxNjk1Rjk1NzE2M2FFZTgxRjciLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTM1MDM0OTgxNDYsIm5hbWUiOiJ0ZXN0In0.71xqyzpzr3wx4oXwRSiRWqBO9WVfp7nnIetrJGt6So8'
+
+  {
+    "requestid": "dd671eac-0ee3-445d-99db-b76accaa90e9",
+    "status":"pinned",
+    "created":"2022-05-26T13:42:47.721+00:00",
+    "pin":{
+      "cid":"bafybeigzvsz5ukua2b7eapvzkv4mnbiv2fmhw46xy5k3m3nv2jqxy7jcom",
+      "_id":"dd671eac-0ee3-445d-99db-b76accaa90e9",
+      "sourceCid":"bafybeigzvsz5ukua2b7eapvzkv4mnbiv2fmhw46xy5k3m3nv2jqxy7jcom",
+      "contentCid":"bafybeigzvsz5ukua2b7eapvzkv4mnbiv2fmhw46xy5k3m3nv2jqxy7jcom",
+      "authKey":"315318824629966040",
+      "name":"Marina_Herlop--Pripyat-WEB-2022-BABAS.zip",
+      "origins":null,
+      "meta":null,
+      "deleted":null,
+      "created":"2022-05-26T13:42:47.721+00:00",
+      "updated":"2022-05-26T13:42:47.721+00:00",
+      "pins":[
+        {
+          "status":"Remote",
+          "updated":"2022-05-26T13:42:47.721+00:00",
+          "peerId":"12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE1",
+          "peerName":"web3-storage-sv15",
+          "region":null
+        },{
+          "status":"Remote",
+          "updated":"2022-05-26T13:42:47.721+00:00",
+          "peerId":"12D3KooWSnniGsyAF663gvHdqhyfJMCjWJv54cGSzcPiEMAfanvU",
+          "peerName":"web3-storage-dc13",
+          "region":null
+        },{
+          "status":"Remote",
+          "updated":"2022-05-26T13:42:47.721+00:00",
+          "peerId":"12D3KooWPySxxWQjBgX9Jp6uAHQfVmdq8HG1gVvS1fRawHNSrmqW",
+          "peerName":"web3-storage-am6",
+          "region":null
+        },{
+          "status":"Remote",
+          "updated":"2022-05-26T13:42:47.721+00:00",
+          "peerId":"12D3KooWEDMw7oRqQkdCJbyeqS5mUmWGwTp8JJ2tjCzTkHboF6wK",
+          "peerName":"web3-storage-sv15-2",
+          "region":null
+        },{
+          "status":"Remote",
+          "updated":"2022-05-26T13:42:47.721+00:00",
+          "peerId":"12D3KooWNuoVEfVLJvU3jWY2zLYjGUaathsecwT19jhByjnbQvkj",
+          "peerName":"web3-storage-am6-2",
+          "region":null
+        },{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00",
+          "peerId":"12D3KooWKytRAd2ujxhGzaLHKJuje8sVrHXvjGNvHXovpar5KaKQ","peerName":"web3-storage-dc13-2","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWJEfH2MB4RsUoaJPogDPRWbFTi8iehsxsqrQpiJwFNDrP","peerName":"web3-storage-dc13-3","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWRi18oHN1j8McxS9RMnuibcTwxu6VCTYHyLNH2R14qhTy","peerName":"web3-storage-sv15-3","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWQYBPcvxFnnWzPGEx6JuBnrbF1FZq4jTahczuG2teEk1m","peerName":"web3-storage-am6-3","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWDdzN3snjaMJEH9zuq3tjKUFpYHeSGNkiAreF6dQSbCiL","peerName":"web3-storage-am6-4","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWEzCun34s9qpYEnKkG6epx2Ts9oVGRGnzCvM2s2edioLA","peerName":"web3-storage-am6-5","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWHpE5KiQTkqbn8KbU88ZxwJxYJFaqP4mp9Z9bhNPhym9V","peerName":"web3-storage-dc13-4","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWBHvsSSKHeragACma3HUodK5FcPUpXccLu2vHooNsDf9k","peerName":"web3-storage-dc13-5","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWAdxvJCV5KXZ6zveTJmnYGrSzAKuLUKZYkZssLk7UKv4i","peerName":"web3-storage-sv15-5","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWKhPb9tSnCqBswVfC5EPE7iSTXhbF4Ywwz2MKg5UCagbr","peerName":"web3-storage-sv15-4","region":null},{"status":"Pinned","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWQE3CWA3MJ1YhrYNP8EE3JErGbrCtpKRkFrWgi45nYAMn","peerName":"web3-storage-am6-6","region":null},{"status":"Remote","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWSafoW6yrSL7waghFAaiCqGy5mdjpQx4jn4CRNqbG7eqG","peerName":"web3-storage-am6-8","region":null},{"status":"Pinned","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWDRak1XzURGh9MvGR4EWaP9kcbmdoagAcGMcNxBXXLzTF","peerName":"web3-storage-dc13-8","region":null},{"status":"Pinned","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWSH5uLrYe7XSFpmnQj1NCsoiGeKSRCV7T5xijpX2Po2aT","peerName":"web3-storage-sv15-8","region":null}]},"delegates":[]}%
+
+
+
+
+
+
+
+api-staging.web3.storage
+
+curl -X POST 'https://api-staging.web3.storage/pins' \
+  --header 'Accept: */*' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDhBNzNFNGIxRGY2QmQ5OWM1QjQ5ZjQ1MDJGZTg1N0E1RDg3NTdGQmQiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTM1NzY4MTIxMDMsIm5hbWUiOiJ0ZXN0aW5nIn0.wgHkjn7n5QYXQd4Lm18cKrbZg1ZIpH-Z9p5phNWImkY' \
+  --header 'Content-Type: application/json' \
+  -d '{
+  "cid": "bafybeiejgdu6vwkzo5hstynnrrrgau23dtkwr2dbdghvohke4avy62j4iy",
+  "name": "MVI_9821.MOV"
+}'
+
+
+GET
+curl -X GET 'https://api-staging.web3.storage/pins?status=pinned' \
+  --header 'Accept: */*' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDhBNzNFNGIxRGY2QmQ5OWM1QjQ5ZjQ1MDJGZTg1N0E1RDg3NTdGQmQiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTM1NzY4MTIxMDMsIm5hbWUiOiJ0ZXN0aW5nIn0.wgHkjn7n5QYXQd4Lm18cKrbZg1ZIpH-Z9p5phNWImkY' \
+RES
+{"count":1,"results":[
+  {
+    "requestid":"70fc4633-0daf-434f-8e81-aef3cbd89c66",
+    "status":"pinning",
+    "created":"2022-05-30T18:08:23.98+00:00",
+    "pin": {
+      "cid":"bafybeiejgdu6vwkzo5hstynnrrrgau23dtkwr2dbdghvohke4avy62j4iy",
+      "_id":"70fc4633-0daf-434f-8e81-aef3cbd89c66",
+      "sourceCid":"bafybeiejgdu6vwkzo5hstynnrrrgau23dtkwr2dbdghvohke4avy62j4iy",
+      "contentCid":"bafybeiejgdu6vwkzo5hstynnrrrgau23dtkwr2dbdghvohke4avy62j4iy",
+      "authKey":313903969865827000,
+      "name":"MVI_9821.MOV",
+      "meta":null,"deleted":null,
+      "created":"2022-05-30T18:08:23.98+00:00",
+      "updated":"2022-05-30T18:08:23.98+00:00",
+      "pins":[
+        {
+          "status":"Pinning",
+          "updated":"2022-05-30T18:08:23.98+00:00",
+          "peerId":"12D3KooWSGCJYbM6uCvCF7cGWSitXSJTgEb7zjVCaxDyYNASTa8i",
+          "peerName":"nft-storage-sv15",
+          "region":null
+          },{"status":"Pinning","updated":"2022-05-30T18:08:23.98+00:00","peerId":"12D3KooWJbARcvvEEF4AAqvAEaVYRkEUNPC3Rv3joebqfPh4LaKq","peerName":"nft-storage-dc13","region":null},{"status":"Pinning","updated":"2022-05-30T18:08:23.98+00:00","peerId":"12D3KooWNcshtC1XTbPxew2kq3utG2rRGLeMN8y5vSfAMTJMV7fE","peerName":"nft-storage-am6","region":null}]},"delegates":[]}]}%
+
+GET
+curl -X GET 'https://api-staging.web3.storage/user/uploads' \
+  --header 'Accept: */*' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDhBNzNFNGIxRGY2QmQ5OWM1QjQ5ZjQ1MDJGZTg1N0E1RDg3NTdGQmQiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTM1NzY4MTIxMDMsIm5hbWUiOiJ0ZXN0aW5nIn0.wgHkjn7n5QYXQd4Lm18cKrbZg1ZIpH-Z9p5phNWImkY' \
+RES
+[
+{
+  "_id":"314956607203051253",
+  "type":"Car",
+  "name":"MVI_9821.MOV",
+  "created":"2022-05-26T14:57:29.072+00:00",
+  "updated":"2022-05-26T15:01:08.744+00:00",
+  "cid":"bafybeiejgdu6vwkzo5hstynnrrrgau23dtkwr2dbdghvohke4avy62j4iy",
+  "dagSize":262084102,
+  "pins":[
+    {
+      "status": "Pinning",
+      "updated":"2022-05-30T18:08:23.98+00:00",
+      "peerId":"12D3KooWSGCJYbM6uCvCF7cGWSitXSJTgEb7zjVCaxDyYNASTa8i",
+      "peerName":"nft-storage-sv15",
+      "region":null
+    },
+    {"status":"Pinning","updated":"2022-05-30T18:08:23.98+00:00","peerId":"12D3KooWJbARcvvEEF4AAqvAEaVYRkEUNPC3Rv3joebqfPh4LaKq","peerName":"nft-storage-dc13","region":null},{"status":"Pinning","updated":"2022-05-30T18:08:23.98+00:00","peerId":"12D3KooWNcshtC1XTbPxew2kq3utG2rRGLeMN8y5vSfAMTJMV7fE","peerName":"nft-storage-am6","region":null}],"deals":[]},{"_id":"314956607203051245","type":"Car","name":"Marina_Herlop--Pripyat-WEB-2022-BABAS.zip","created":"2022-05-26T14:51:48.581+00:00","updated":"2022-05-26T14:52:44.264+00:00","cid":"bafybeigzvsz5ukua2b7eapvzkv4mnbiv2fmhw46xy5k3m3nv2jqxy7jcom","dagSize":70930983,"pins":[{"status":"Pinned","updated":"2022-05-26T14:52:44.264+00:00","peerId":"12D3KooWSGCJYbM6uCvCF7cGWSitXSJTgEb7zjVCaxDyYNASTa8i","peerName":"nft-storage-sv15","region":null},{"status":"Pinned","updated":"2022-05-26T14:52:44.264+00:00","peerId":"12D3KooWJbARcvvEEF4AAqvAEaVYRkEUNPC3Rv3joebqfPh4LaKq","peerName":"nft-storage-dc13","region":null},{"status":"Pinned","updated":"2022-05-26T14:52:44.264+00:00","peerId":"12D3KooWNcshtC1XTbPxew2kq3utG2rRGLeMN8y5vSfAMTJMV7fE","peerName":"nft-storage-am6","region":null}],"deals":[]},{"_id":"314956607203051235","type":"Car","name":"jah cure dj loudmouth edit.wav","created":"2022-05-20T15:44:07.654+00:00","updated":"2022-05-20T15:44:10.302+00:00","cid":"bafybeidizyi5fvbyhfyjowsofcom2tiarkfxq3yzr7jwin4qz4s2akn7xa","dagSize":17842152,"pins":[{"status":"Pinned","updated":"2022-05-20T15:44:21.113224+00:00","peerId":"12D3KooWSGCJYbM6uCvCF7cGWSitXSJTgEb7zjVCaxDyYNASTa8i","peerName":"nft-storage-sv15","region":null},{"status":"Pinned","updated":"2022-05-20T15:44:21.113224+00:00","peerId":"12D3KooWJbARcvvEEF4AAqvAEaVYRkEUNPC3Rv3joebqfPh4LaKq","peerName":"nft-storage-dc13","region":null},{"status":"Pinned","updated":"2022-05-20T15:44:21.113224+00:00","peerId":"12D3KooWNcshtC1XTbPxew2kq3utG2rRGLeMN8y5vSfAMTJMV7fE","peerName":"nft-storage-am6","region":null}],"deals":[]}]%
+
+{
+  "requestid":"70fc4633-0daf-434f-8e81-aef3cbd89c66",
+  "status":"pinning",
+  "created":"2022-05-30T18:08:23.98+00:00",
+  "pin": {
+    "cid":"bafybeiejgdu6vwkzo5hstynnrrrgau23dtkwr2dbdghvohke4avy62j4iy",
+    "_id":"70fc4633-0daf-434f-8e81-aef3cbd89c66",
+    "sourceCid":"bafybeiejgdu6vwkzo5hstynnrrrgau23dtkwr2dbdghvohke4avy62j4iy",
+    "contentCid":"bafybeiejgdu6vwkzo5hstynnrrrgau23dtkwr2dbdghvohke4avy62j4iy",
+    "authKey":"313903969865826988",
+    "name":"MVI_9821.MOV",
+    "origins":null,
+    "meta":null,
+    "deleted":null,
+    "created":"2022-05-30T18:08:23.98+00:00",
+    "updated":"2022-05-30T18:08:23.98+00:00",
+    "pins": [
+      {
+        "status": "Pinning",
+        "updated": "2022-05-30T18:08:23.98+00:00",
+        "peerId":"12D3KooWSGCJYbM6uCvCF7cGWSitXSJTgEb7zjVCaxDyYNASTa8i",
+        "peerName":"nft-storage-sv15",
+        "region":null
+      },{
+        "status": "Pinning",
+        "updated":"2022-05-30T18:08:23.98+00:00",
+        "peerId":"12D3KooWJbARcvvEEF4AAqvAEaVYRkEUNPC3Rv3joebqfPh4LaKq",
+        "peerName":"nft-storage-dc13",
+        "region":null
+      },{
+        "status": "Pinning",
+        "updated":"2022-05-30T18:08:23.98+00:00",
+        "peerId":"12D3KooWNcshtC1XTbPxew2kq3utG2rRGLeMN8y5vSfAMTJMV7fE",
+        "peerName": "nft-storage-am6",
+        "region":null
+      }
+    ]
+  },
+  "delegates":[]
+}
+
+
+
+
+
+
+
+curl -X GET 'https://api.web3.storage/pins' \
+ --header 'Accept: */*' \
+ --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGVlNWNDY0E2N2IzNkRBYTRkNjkzQzYxNjk1Rjk1NzE2M2FFZTgxRjciLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTM1MDM0OTgxNDYsIm5hbWUiOiJ0ZXN0In0.71xqyzpzr3wx4oXwRSiRWqBO9WVfp7nnIetrJGt6So8'
+
+
+
+
+
+
+{"count":2,"results":[{"requestid":"e68727f2-bd62-436a-be84-059fe80d3dd2","status":"pinned","created":"2022-05-30T20:32:33.806+00:00","pin":{"cid":"bafybeid3zip5wdk4syn6o5mhb7z4lwkfsz5zvuv4ncgti677frfl4hzo7q","_id":"e68727f2-bd62-436a-be84-059fe80d3dd2","sourceCid":"bafybeid3zip5wdk4syn6o5mhb7z4lwkfsz5zvuv4ncgti677frfl4hzo7q","contentCid":"bafybeid3zip5wdk4syn6o5mhb7z4lwkfsz5zvuv4ncgti677frfl4hzo7q","authKey":315318824629966000,"name":"Urban Roar A Psychophysical Approach to the Design of Affective Environments (Jordan Lacey) (z-lib.org).pdf","meta":null,"deleted":null,"created":"2022-05-30T20:32:33.806+00:00","updated":"2022-05-30T20:32:33.806+00:00","pins":[{"status":"Pinned","updated":"2022-05-30T20:41:41.117444+00:00","peerId":"12D3KooWSafoW6yrSL7waghFAaiCqGy5mdjpQx4jn4CRNqbG7eqG","peerName":"web3-storage-am6-8","region":null},{"status":"Pinned","updated":"2022-05-30T20:41:41.117444+00:00","peerId":"12D3KooWDRak1XzURGh9MvGR4EWaP9kcbmdoagAcGMcNxBXXLzTF","peerName":"web3-storage-dc13-8","region":null},{"status":"Pinned","updated":"2022-05-30T20:41:41.117444+00:00","peerId":"12D3KooWSH5uLrYe7XSFpmnQj1NCsoiGeKSRCV7T5xijpX2Po2aT","peerName":"web3-storage-sv15-8","region":null}]},"delegates":[]},{"requestid":"dd671eac-0ee3-445d-99db-b76accaa90e9","status":"pinned","created":"2022-05-26T13:42:47.721+00:00","pin":{"cid":"bafybeigzvsz5ukua2b7eapvzkv4mnbiv2fmhw46xy5k3m3nv2jqxy7jcom","_id":"dd671eac-0ee3-445d-99db-b76accaa90e9","sourceCid":"bafybeigzvsz5ukua2b7eapvzkv4mnbiv2fmhw46xy5k3m3nv2jqxy7jcom","contentCid":"bafybeigzvsz5ukua2b7eapvzkv4mnbiv2fmhw46xy5k3m3nv2jqxy7jcom","authKey":315318824629966000,"name":"Marina_Herlop--Pripyat-WEB-2022-BABAS.zip","meta":null,"deleted":null,"created":"2022-05-26T13:42:47.721+00:00","updated":"2022-05-26T13:42:47.721+00:00","pins":[{"status":"Pinned","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWQE3CWA3MJ1YhrYNP8EE3JErGbrCtpKRkFrWgi45nYAMn","peerName":"web3-storage-am6-6","region":null},{"status":"Pinned","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWDRak1XzURGh9MvGR4EWaP9kcbmdoagAcGMcNxBXXLzTF","peerName":"web3-storage-dc13-8","region":null},{"status":"Pinned","updated":"2022-05-26T13:42:47.721+00:00","peerId":"12D3KooWSH5uLrYe7XSFpmnQj1NCsoiGeKSRCV7T5xijpX2Po2aT","peerName":"web3-storage-sv15-8","region":null}]},"delegates":[]}]}

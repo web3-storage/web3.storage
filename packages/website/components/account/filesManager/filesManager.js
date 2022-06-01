@@ -52,9 +52,6 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     storageData: { refetch },
   } = useUser();
 
-  console.log(uploads);
-  console.log(pinned);
-
   const [currentTab, setCurrentTab] = useState('uploaded');
   const [files, setFiles] = useState(/** @type {any} */ (uploads));
   const [filteredFiles, setFilteredFiles] = useState(files);
