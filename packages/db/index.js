@@ -293,38 +293,6 @@ export class DBClient {
     }
   }
 
-  /**
-   * Get all users with storage used in a percentage range of their allocated quota
-   * @param {import('./db-client-types').UserStorageUsedInput} percentRange
-   * @returns {Promise<Array<import('./db-client-types').UserStorageUsedOutput>>}
-   */
-  async getUsersByStorageUsed (percentRange) {
-    const {
-      fromPercent,
-      toPercent = null
-    } = percentRange
-
-    const { data, error } = await this._client
-      .rpc('users_by_storage_used', {
-        from_percent: fromPercent,
-        to_percent: toPercent
-      })
-
-    if (error) {
-      throw new DBError(error)
-    }
-
-    return data.map((user) => {
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        storageQuota: user.storage_quota,
-        storageUsed: user.storage_used,
-        percentStorageUsed: Math.floor((user.storage_used / user.storage_quota) * 100)
-      }
-    })
-  }
 
   /**
    * Check the email history for a specified email type to see if it has

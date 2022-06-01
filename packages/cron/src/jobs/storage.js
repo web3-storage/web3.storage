@@ -3,6 +3,16 @@ import { EMAIL_TYPE } from '@web3-storage/db'
 
 const log = debug('storage:checkStorageUsed')
 
+const supportEmail = 'support@web3.storage'
+
+const USER_BY_USED_STORAGE_QUERY = `
+  SELECT users_by_storage_used($1, $2, $3, $4)
+`
+
+const USER_BY_EMAIL_QUERY = `
+  SELECT id AS _id , email, name FROM public.user WHERE email=$1
+`
+
 const STORAGE_QUOTA_EMAILS = [
   {
     emailType: EMAIL_TYPE.User100PercentStorage,
@@ -45,10 +55,12 @@ const STORAGE_QUOTA_EMAILS = [
  * appropriate when approaching their storage quota limit.
  * @param {{
  *  db: import('@web3-storage/db').DBClient
+ *  roPg: import('pg').Client
  *  emailService: import('../lib/email/service').EmailService
+ *  userBatchSize?: number
  * }} config
  */
-export async function checkStorageUsed ({ db, emailService }) {
+export async function checkStorageUsed ({ db, roPg, emailService, userBatchSize = 100 }) {
   if (!log.enabled) {
     console.log('ℹ️ Enable logging by setting DEBUG=storage:checkStorageUsed')
   }
@@ -56,19 +68,37 @@ export async function checkStorageUsed ({ db, emailService }) {
   log('🗄 Checking users storage quotas')
 
   for (const email of STORAGE_QUOTA_EMAILS) {
-    const users = await db.getUsersByStorageUsed({
-      fromPercent: email.fromPercent,
-      ...(email.toPercent && { toPercent: email.toPercent })
-    })
+    let offset = 0
 
-    if (users.length) {
-      if (email.emailType === EMAIL_TYPE.User100PercentStorage) {
-        const adminUser = await db.getUserByEmail('support@web3.storage')
-        const toAdmin = {
-          _id: adminUser._id,
-          email: adminUser.email,
-          name: adminUser.name
+    while (true) {
+      const { rows: results } = await roPg.query(USER_BY_USED_STORAGE_QUERY, [
+        email.fromPercent,
+        email.toPercent || 100,
+        userBatchSize,
+        offset
+      ])
+
+      if (!results.length) break
+
+      const users = results.map((user) => {
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          storageQuota: user.storage_quota,
+          storageUsed: user.storage_used,
+          percentStorageUsed: Math.floor((user.storage_used / user.storage_quota) * 100)
         }
+      })
+
+      if (email.emailType === EMAIL_TYPE.User100PercentStorage) {
+        const { rows: results } = await roPg.query(USER_BY_EMAIL_QUERY, [supportEmail])
+
+        if (results.length) {
+          throw new Error(`${supportEmail} does not exists`)
+        }
+
+        const toAdmin = results[0]
 
         const emailSent = await emailService.sendEmail(toAdmin, EMAIL_TYPE.AdminStorageExceeded, {
           secondsSinceLastSent: email.secondsSinceLastSent,
@@ -99,6 +129,7 @@ export async function checkStorageUsed ({ db, emailService }) {
           }
         }
       }
+      offset += userBatchSize
     }
   }
 

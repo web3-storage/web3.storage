@@ -295,7 +295,9 @@ $$;
 
 CREATE OR REPLACE FUNCTION users_by_storage_used(
   from_percent INTEGER,
-  to_percent INTEGER DEFAULT NULL
+  to_percent INTEGER DEFAULT NULL,
+  q_limit INTEGER DEFAULT 100,
+  q_offset INTEGER DEFAULT 0
 )
   RETURNS TABLE
     (
@@ -331,6 +333,9 @@ BEGIN
         AND r.value ILIKE 'true'
         AND r.deleted_at IS NULL
       )
+      ORDER BY u.inserted_at
+      LIMIT q_limit
+      OFFSET q_offset
     )
     SELECT *
     FROM user_account

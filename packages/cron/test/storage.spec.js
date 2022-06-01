@@ -4,26 +4,21 @@ import {
   createUserWithFiles
 } from '../../db/test/utils.js'
 import assert from 'assert'
-import { getDBClient } from '../src/lib/utils.js'
+import { getDBClient, getPg } from '../src/lib/utils.js'
 import { EMAIL_TYPE } from '@web3-storage/db'
 import { checkStorageUsed } from '../src/jobs/storage.js'
 import { EmailService, EMAIL_PROVIDERS } from '../src/lib/email/service.js'
 import sinon from 'sinon'
 
-const env = {
-  DEBUG: '*',
-  ENV: 'dev',
-  CLUSTER_API_URL: 'http://localhost:9094',
-  CLUSTER_IPFS_PROXY_API_URL: 'http://127.0.0.1:9095/api/v0/',
-  CLUSTER_BASIC_AUTH_TOKEN: 'dGVzdDp0ZXN0',
-  DATABASE: 'postgres',
-  PG_REST_URL: 'http://localhost:3000',
-  PG_REST_JWT: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTYwMzk2ODgzNCwiZXhwIjoyNTUwNjUzNjM0LCJyb2xlIjoic2VydmljZV9yb2xlIn0.necIJaiP7X2T2QjGeV-FhpkizcNTX8HjDDBAxpgQTEI'
-}
-
 describe('cron - check user storage quotas', () => {
-  const dbClient = getDBClient(env)
+  let dbClient
+  let roPg
   let adminUser, test2user, test3user, test4user, emailService
+  before(async () => {
+    dbClient = getDBClient(process.env)
+    roPg = getPg(process.env, 'ro')
+    await roPg.connect()
+  })
 
   beforeEach(async () => {
     emailService = new EmailService({ db: dbClient, provider: EMAIL_PROVIDERS.dummy })
@@ -54,10 +49,10 @@ describe('cron - check user storage quotas', () => {
     })
   })
 
-  it('can be executed', async () => {
+  it.only('can be executed', async () => {
     sinon.spy(emailService.provider, 'sendEmail')
 
-    await checkStorageUsed({ db: dbClient, emailService })
+    await checkStorageUsed({ db: dbClient, roPg, emailService })
 
     assert.equal(emailService.provider.sendEmail.callCount, 4)
 
@@ -72,28 +67,28 @@ describe('cron - check user storage quotas', () => {
     const adminUser = await dbClient.getUserByEmail('support@web3.storage')
     assert.ok(adminUser, 'admin user found')
     const adminStorageExceeded = await dbClient.emailHasBeenSent({
-      userId: Number(adminUser._id),
+      userId: adminUser._id,
       emailType: EMAIL_TYPE.AdminStorageExceeded,
       secondsSinceLastSent: 60 * 60 * 23
     })
     assert.strictEqual(adminStorageExceeded, true, 'Admin storage exceeded email sent')
 
     const over75EmailSent = await dbClient.emailHasBeenSent({
-      userId: Number(test2user._id),
+      userId: test2user._id,
       emailType: EMAIL_TYPE.User75PercentStorage,
       secondsSinceLastSent: 60 * 60 * 23
     })
     assert.strictEqual(over75EmailSent, true, 'Over 75% email sent')
 
     const over90EmailSent = await dbClient.emailHasBeenSent({
-      userId: Number(test3user._id),
+      userId: test3user._id,
       emailType: EMAIL_TYPE.User90PercentStorage,
       secondsSinceLastSent: 60 * 60 * 23
     })
     assert.strictEqual(over90EmailSent, true, 'Over 90% email sent')
 
     const over100EmailSent = await dbClient.emailHasBeenSent({
-      userId: Number(test4user._id),
+      userId: test4user._id,
       emailType: EMAIL_TYPE.User100PercentStorage,
       secondsSinceLastSent: 60 * 60 * 23
     })
@@ -101,14 +96,14 @@ describe('cron - check user storage quotas', () => {
 
     // Ensure emails are not re-sent
     emailService.provider.sendEmail.resetHistory()
-    await checkStorageUsed({ db: dbClient, emailService })
+    await checkStorageUsed({ db: dbClient, roPg, emailService })
 
     sinon.assert.notCalled(emailService.provider.sendEmail)
   })
 
   it('calls the email service with the correct parameters', async () => {
     const sendEmailStub = sinon.stub(emailService, 'sendEmail')
-    await checkStorageUsed({ db: dbClient, emailService })
+    await checkStorageUsed({ db: dbClient, roPg, emailService })
 
     assert.strictEqual(sendEmailStub.getCalls().length, 4, 'email service called 4 times')
 
