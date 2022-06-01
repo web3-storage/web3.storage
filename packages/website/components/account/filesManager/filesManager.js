@@ -41,8 +41,18 @@ const defaultQueryOrder = 'newest';
  * @returns
  */
 const FilesManager = ({ className, content, onFileUpload }) => {
-  const { uploads, pinned, fetchDate, getUploads, listPinned, isFetchingUploads, deleteUpload, renameUpload } =
-    useUploads();
+  const {
+    uploads,
+    pinned,
+    fetchDate,
+    fetchPinsDate,
+    getUploads,
+    listPinned,
+    isFetchingUploads,
+    isFetchingPinned,
+    deleteUpload,
+    renameUpload,
+  } = useUploads();
   const {
     query: { filter },
     query,
@@ -79,8 +89,10 @@ const FilesManager = ({ className, content, onFileUpload }) => {
 
   // Initial pinned files fetch on component load
   useEffect(() => {
-    listPinned();
-  }, [listPinned]);
+    if (!fetchPinsDate && !isFetchingPinned) {
+      listPinned();
+    }
+  }, [fetchPinsDate, listPinned, isFetchingPinned]);
 
   // Set displayed files based on tab selection: 'uploaded' or 'pinned'
   useEffect(() => {
@@ -224,6 +236,17 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     showCheckOverlayHandler();
   }, [getUploads, showCheckOverlayHandler]);
 
+  const tableContentLoading = tab => {
+    switch (tab) {
+      case 'uploaded':
+        return isFetchingUploads || !fetchDate;
+      case 'pinned':
+        return isFetchingPinned || !fetchPinsDate;
+      default:
+        return true;
+    }
+  };
+
   return (
     <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
       <div className="files-manager-header">
@@ -322,7 +345,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
         tabType={currentTab}
       />
       <div className="files-manager-table-content">
-        {isFetchingUploads || !fetchDate ? (
+        {tableContentLoading(currentTab) ? (
           <Loading className={'files-loading-spinner'} />
         ) : !files.length ? (
           <span className="files-manager-upload-cta">
