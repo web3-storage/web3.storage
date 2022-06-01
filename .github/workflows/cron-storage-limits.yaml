@@ -2,7 +2,8 @@ name: Storage Limit Email Notifications
 
 on:
   schedule:
-    - cron: '0 5 * * *'
+    # Every 6 hours
+    - cron: '0 */6 * * *'
   # Including 'workflow_dispatch' here allows the job to be triggered manually,
   # as well as on the schedule.
   workflow_dispatch:
@@ -13,10 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # TODO: Update this to include production once it's been successfully
-        # tested on staging
-        # env: ['staging', 'production']
-        env: ['staging']
+        env: ['staging', 'production']
     timeout-minutes: 100
     steps:
       - uses: actions/checkout@v2
