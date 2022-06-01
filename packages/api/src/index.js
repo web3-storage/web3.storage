@@ -136,6 +136,7 @@ export default {
   async fetch (request, env, ctx) {
     let response
     try {
+      env = { ...env } // new env object for every request (it is shared otherwise)!
       response = await router.handle(request, env, ctx)
     } catch (error) {
       response = serverError(error, request, env)
