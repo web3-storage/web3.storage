@@ -1,9 +1,16 @@
 import { PostgrestClient } from '@supabase/postgrest-js'
 
 import {
-  normalizeUpload, normalizeContent, normalizePins, normalizeDeals, normalizePsaPinRequest, parseTextToNumber
+  normalizeUpload,
+  normalizeContent,
+  normalizePins,
+  normalizeDeals,
+  normalizePsaPinRequest,
+  parseTextToNumber
 } from './utils.js'
 import { ConstraintError, DBError } from './errors.js'
+
+export { EMAIL_TYPE } from './constants.js'
 
 const uploadQuery = `
         _id:id::text,
@@ -14,6 +21,29 @@ const uploadQuery = `
         updated:updated_at,
         content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region)))
       `
+
+const userQuery = `
+  _id:id::text,
+  issuer,
+  name,
+  email,
+  github,
+  publicAddress:public_address,
+  created:inserted_at,
+  updated:updated_at
+`
+
+const userQueryWithTags = `
+  _id:id::text,
+  issuer,
+  name,
+  email,
+  github,
+  publicAddress:public_address,
+  created:inserted_at,
+  updated:updated_at,
+  tags:user_tag_user_id_fkey(user_id,id,tag,value,deleted_at)
+`
 
 const psaPinRequestTableName = 'psa_pin_request'
 const pinRequestSelect = `
@@ -108,20 +138,11 @@ export class DBClient {
    * @param {string} issuer
    * @return {Promise<import('./db-client-types').UserOutput | undefined>}
    */
-  async getUser (issuer) {
+  async getUser (issuer, { includeTags } = { includeTags: false }) {
     /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
-      .select(`
-        _id:id::text,
-        issuer,
-        name,
-        email,
-        github,
-        publicAddress:public_address,
-        created:inserted_at,
-        updated:updated_at
-      `)
+      .select(includeTags ? userQueryWithTags : userQuery)
       .eq('issuer', issuer)
 
     if (error) {
@@ -129,6 +150,67 @@ export class DBClient {
     }
 
     return data.length ? data[0] : undefined
+  }
+
+  /**
+   * Get user by email.
+   * @param {string} email
+   * @return {Promise<import('./db-client-types').UserOutput | undefined>}
+   */
+  async getUserByEmail (email) {
+    /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
+    const { data, error } = await this._client
+      .from('user')
+      .select(userQuery)
+      .eq('email', email)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return data.length ? data[0] : undefined
+  }
+
+  /**
+   * Create a user tag
+   * @param {string} userId
+   * @param {Object} [tag]
+   * @param {string} [tag.tag]
+   * @param {string} [tag.value]
+   * @param {string} [tag.reason]
+   * @returns {Promise<boolean>}
+   */
+  async createUserTag (userId, tag = {}) {
+    const { data: deleteData, status: deleteStatus } = await this._client
+      .from('user_tag')
+      .update({
+        deleted_at: new Date().toISOString()
+      })
+      .match({ user_id: userId, tag: tag.tag })
+      .is('deleted_at', null)
+      .single()
+
+    // the previous tag was marked as deleted
+    // or there was no previous tag of this type
+    // ^ if either of these 2 scenarios are true then we add a new tag
+    if (deleteStatus === 200 || (deleteStatus === 406 && !deleteData)) {
+      const { status: insertStatus } = await this._client
+        .from('user_tag')
+        .insert({
+          user_id: userId,
+          tag: tag.tag,
+          value: tag.value,
+          reason: tag.reason || '',
+          inserted_at: new Date().toISOString(),
+          deleted_at: null
+        })
+        .single()
+
+      if (insertStatus === 201) {
+        return true
+      }
+    }
+    return false
   }
 
   /**
@@ -194,10 +276,10 @@ export class DBClient {
    * Get used storage in bytes, both uploaded and pinned.
    *
    * @param {number} userId
-   * @returns {Promise<import('./db-client-types').UsedStorage>}
+   * @returns {Promise<import('./db-client-types').StorageUsedOutput>}
    */
-  async getUsedStorage (userId) {
-    /** @type {{ data: { uploaded: string, psa_pinned: string }, error: PostgrestError }} */
+  async getStorageUsed (userId) {
+    /** @type {{ data: { uploaded: string, psa_pinned: string, total: string }, error: PostgrestError }} */
     const { data, error } = await this._client.rpc('user_used_storage', { query_user_id: userId }).single()
 
     if (error) {
@@ -206,8 +288,100 @@ export class DBClient {
 
     return {
       uploaded: parseTextToNumber(data.uploaded),
-      psaPinned: parseTextToNumber(data.psa_pinned)
+      psaPinned: parseTextToNumber(data.psa_pinned),
+      total: parseTextToNumber(data.total)
     }
+  }
+
+  /**
+   * Get all users with storage used in a percentage range of their allocated quota
+   * @param {import('./db-client-types').UserStorageUsedInput} percentRange
+   * @returns {Promise<Array<import('./db-client-types').UserStorageUsedOutput>>}
+   */
+  async getUsersByStorageUsed (percentRange) {
+    const {
+      fromPercent,
+      toPercent = null
+    } = percentRange
+
+    const { data, error } = await this._client
+      .rpc('users_by_storage_used', {
+        from_percent: fromPercent,
+        to_percent: toPercent
+      })
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return data.map((user) => {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        storageQuota: user.storage_quota,
+        storageUsed: user.storage_used,
+        percentStorageUsed: Math.floor((user.storage_used / user.storage_quota) * 100)
+      }
+    })
+  }
+
+  /**
+   * Check the email history for a specified email type to see if it has
+   * been sent within a specified number of days. If not, it is resent.
+   * @param {import('./db-client-types').EmailSentInput} email
+   * @returns {Promise<boolean>}
+   */
+  async emailHasBeenSent (email) {
+    const {
+      userId,
+      emailType,
+      secondsSinceLastSent = 60 * 60 * 24 * 7
+    } = email
+
+    const lastSentAtDate = new Date()
+    lastSentAtDate.setSeconds(lastSentAtDate.getSeconds() - secondsSinceLastSent)
+    const lastSentAt = lastSentAtDate.toISOString()
+
+    const { count, error } = await this._client
+      .from('email_history')
+      .select('id', { count: 'exact' })
+      .eq('user_id', userId)
+      .eq('email_type', emailType)
+      .gt('sent_at', lastSentAt)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return count > 0
+  }
+
+  /**
+   * Log that an email has been sent
+   * @param {import('./db-client-types').LogEmailSentInput} email
+   * @returns {Promise<number>}
+   */
+  async logEmailSent (email) {
+    const {
+      userId,
+      emailType,
+      messageId
+    } = email
+
+    const { data, error } = await this._client
+      .from('email_history')
+      .upsert({
+        user_id: userId,
+        email_type: emailType,
+        message_id: messageId
+      })
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return data[0].id
   }
 
   /**
@@ -218,6 +392,7 @@ export class DBClient {
    */
   async createUpload (data) {
     const now = new Date().toISOString()
+
     /** @type {{ data: string, error: PostgrestError }} */
     const { data: uploadResponse, error } = await this._client.rpc('create_upload', {
       data: {
@@ -429,22 +604,20 @@ export class DBClient {
    * @return {Promise<Array<import('./db-client-types').BackupOutput>>}
    */
   async getBackups (uploadId) {
-    /** @type {{ data: Array<definitions['backup']>, error: PostgrestError }} */
-    const { data: backups, error } = await this._client
-      .from('backup')
-      .select(`
-        _id:id::text,
-        created:inserted_at,
-        uploadId:upload_id::text,
-        url
-      `)
-      .match({ upload_id: uploadId })
+    /** @type {{ data: {backupUrls: definitions['upload']['backup_urls']}, error: PostgrestError }} */
+    const { data: { backupUrls }, error } = await this._client
+      .from('upload')
+      .select('backupUrls:backup_urls')
+      .eq('id', uploadId)
+      .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    return backups
+    const uniqueUrls = new Set(backupUrls)
+
+    return Array.from(uniqueUrls)
   }
 
   /**
@@ -751,13 +924,13 @@ export class DBClient {
         keys:auth_key_user_id_fkey(
           _id:id::text,
           name,
-          secret
+          secret,
+          deleted_at
         )
       `)
       .match({
         issuer
       })
-      .filter('keys.deleted_at', 'is', null)
       .eq('keys.secret', secret)
 
     if (error) {
@@ -776,11 +949,27 @@ export class DBClient {
     return {
       _id: keyData.keys[0]._id,
       name: keyData.keys[0].name,
+      isDeleted: Boolean(keyData.keys[0].deleted_at),
       user: {
         _id: keyData._id,
         issuer: keyData.issuer
       }
     }
+  }
+
+  async checkIsTokenBlocked (token) {
+    const { data, error } = await this._client
+      .from('auth_key_history')
+      .select('status')
+      .filter('deleted_at', 'is', null)
+      .eq('auth_key_id', token._id)
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return data?.status === 'Blocked'
   }
 
   /**
@@ -1041,7 +1230,7 @@ export class DBClient {
    * @param {string} key
    */
   async resolveNameRecord (key) {
-    /** @type {{ error: Error, data: Array<import('../db-client-types').NameItem> }} */
+    /** @type {{ error: Error, data: Array<import('./db-client-types').NameItem> }} */
     const { data, error } = await this._client
       .from('name')
       .select('record')

@@ -60,6 +60,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   } = useRouter();
   const {
     storageData: { refetch },
+    info,
   } = useUser();
 
   const [currentTab, setCurrentTab] = useState('uploaded');
@@ -311,7 +312,9 @@ const FilesManager = ({ className, content, onFileUpload }) => {
               {title.file_type === 'uploaded' ? (
                 <Button
                   onClick={onFileUpload}
+                  disabled={info?.tags['HasAccountRestriction']}
                   variant={content?.upload.theme}
+                  tooltip={info?.tags['HasAccountRestriction'] ? content.upload.accountRestrictedText : ''}
                   tracking={{
                     ui: countly.ui[content?.upload.ui],
                     action: content?.upload.action,
@@ -359,6 +362,8 @@ const FilesManager = ({ className, content, onFileUpload }) => {
                 action: content?.table.cta.action,
                 data: { isFirstFile: true },
               }}
+              disabled={info?.tags?.['HasAccountRestriction']}
+              tooltip={info?.tags?.['HasAccountRestriction'] ? content?.table.cta.accountRestrictedText : ''}
             >
               {content?.table.cta.text}
             </Button>

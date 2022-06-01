@@ -26,6 +26,8 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
   }
 
   .tooltip-content {
+    font-size: 1rem;
+    line-height: 1.4375rem;
     transition: opacity 250ms;
     opacity: 0;
     pointer-events: none;
@@ -42,7 +44,7 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
       max-width: 30vw;
     }
     color: $white;
-    z-index: 1;
+    z-index: 2;
     &:before {
       content: "";
       width: 0;

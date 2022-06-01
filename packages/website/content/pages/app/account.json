@@ -21,7 +21,8 @@
             "text": "Create a Token",
             "theme": "pink-blue",
             "ui": "PROFILE_GETTING_STARTED",
-            "action": "Create an API Token"
+            "action": "Create an API Token",
+            "accountRestrictedText": "You are unable to create new tokens when your account is blocked. Please contact support@web3.storage"
           },
           {
             "link": "/tokens",
@@ -56,7 +57,8 @@
             "text": "Upload Files",
             "theme": "outline-dark",
             "ui": "FILES",
-            "action": "Upload File"
+            "action": "Upload File",
+            "accountRestrictedText": "You are unable to upload files when your account is blocked. Please contact support@web3.storage"
           }
         ]
       }
@@ -73,19 +75,8 @@
         "request": "Submit a request"
       },
       "loading": "Loading...",
-      "tiers": [
-        {
-          "max_space_label": "1 TiB",
-          "unlock_label": "1 TiB+"
-        },
-        {
-          "max_space_label": "10 TiB",
-          "unlock_label": "10 TiB+"
-        },
-        {
-          "max_space_label": "0 TiB+"
-        }
-      ]
+      "max_space_tib_label": "TiB",
+      "unlock_label": "1 TiB+"
     },
     "file_manager": {
       "tabs": [
@@ -106,7 +97,8 @@
         "text": "Upload +",
         "theme": "text",
         "ui": "FILES",
-        "action": "Upload File"
+        "action": "Upload File",
+        "accountRestrictedText": "You are unable to upload files when your account is blocked. Please contact support@web3.storage"
       },
       "table": {
         "message": "You don't have any files uploaded yet.",
@@ -114,7 +106,8 @@
           "text": "Upload your first file",
           "theme": "text",
           "ui": "FILES",
-          "action": "Upload File"
+          "action": "Upload File",
+          "accountRestrictedText": "You are unable to upload files when your account is blocked. Please contact support@web3.storage"
         },
         "file_row_labels": {
           "date": {

@@ -259,102 +259,6 @@ export interface paths {
       };
     };
   };
-  "/backup": {
-    get: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.backup.id"];
-          upload_id?: parameters["rowFilter.backup.upload_id"];
-          url?: parameters["rowFilter.backup.url"];
-          inserted_at?: parameters["rowFilter.backup.inserted_at"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["backup"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-    post: {
-      parameters: {
-        body: {
-          /** backup */
-          backup?: definitions["backup"];
-        };
-        query: {
-          /** Filtering Columns */
-          select?: parameters["select"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** Created */
-        201: unknown;
-      };
-    };
-    delete: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.backup.id"];
-          upload_id?: parameters["rowFilter.backup.upload_id"];
-          url?: parameters["rowFilter.backup.url"];
-          inserted_at?: parameters["rowFilter.backup.inserted_at"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-    patch: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.backup.id"];
-          upload_id?: parameters["rowFilter.backup.upload_id"];
-          url?: parameters["rowFilter.backup.url"];
-          inserted_at?: parameters["rowFilter.backup.inserted_at"];
-        };
-        body: {
-          /** backup */
-          backup?: definitions["backup"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-  };
   "/content": {
     get: {
       parameters: {
@@ -439,6 +343,105 @@ export interface paths {
         body: {
           /** content */
           content?: definitions["content"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/email_history": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.email_history.id"];
+          user_id?: parameters["rowFilter.email_history.user_id"];
+          email_type?: parameters["rowFilter.email_history.email_type"];
+          message_id?: parameters["rowFilter.email_history.message_id"];
+          sent_at?: parameters["rowFilter.email_history.sent_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["email_history"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** email_history */
+          email_history?: definitions["email_history"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.email_history.id"];
+          user_id?: parameters["rowFilter.email_history.user_id"];
+          email_type?: parameters["rowFilter.email_history.email_type"];
+          message_id?: parameters["rowFilter.email_history.message_id"];
+          sent_at?: parameters["rowFilter.email_history.sent_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.email_history.id"];
+          user_id?: parameters["rowFilter.email_history.user_id"];
+          email_type?: parameters["rowFilter.email_history.email_type"];
+          message_id?: parameters["rowFilter.email_history.message_id"];
+          sent_at?: parameters["rowFilter.email_history.sent_at"];
+        };
+        body: {
+          /** email_history */
+          email_history?: definitions["email_history"];
         };
         header: {
           /** Preference */
@@ -1614,6 +1617,28 @@ export interface paths {
       };
     };
   };
+  "/rpc/users_by_storage_used": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: integer */
+            to_percent?: number;
+            /** Format: integer */
+            from_percent: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/user_auth_keys_list": {
     post: {
       parameters: {
@@ -2002,27 +2027,6 @@ export interface definitions {
     /** Format: timestamp with time zone */
     deleted_at?: string;
   };
-  backup: {
-    /**
-     * Format: bigint
-     * @description Note:
-     * This is a Primary Key.<pk/>
-     */
-    id: number;
-    /**
-     * Format: bigint
-     * @description Note:
-     * This is a Foreign Key to `upload.id`.<fk table='upload' column='id'/>
-     */
-    upload_id: number;
-    /** Format: text */
-    url: string;
-    /**
-     * Format: timestamp with time zone
-     * @default timezone('utc'::text, now())
-     */
-    inserted_at: string;
-  };
   content: {
     /**
      * Format: text
@@ -2042,6 +2046,35 @@ export interface definitions {
      * @default timezone('utc'::text, now())
      */
     updated_at: string;
+  };
+  email_history: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
+     */
+    user_id: number;
+    /** Format: public.email_type */
+    email_type:
+      | "User75PercentStorage"
+      | "User80PercentStorage"
+      | "User85PercentStorage"
+      | "User90PercentStorage"
+      | "User100PercentStorage"
+      | "AdminStorageExceeded";
+    /** Format: text */
+    message_id: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
+    sent_at: string;
   };
   metric: {
     /**
@@ -2279,6 +2312,10 @@ export interface definitions {
     updated_at: string;
     /** Format: timestamp with time zone */
     deleted_at?: string;
+    /**
+     * Format: created is a timestamp with time zone
+     */
+    backup_urls: string[];
   };
   user: {
     /**
@@ -2411,16 +2448,6 @@ export interface parameters {
   "rowFilter.auth_key_history.inserted_at": string;
   /** Format: timestamp with time zone */
   "rowFilter.auth_key_history.deleted_at": string;
-  /** @description backup */
-  "body.backup": definitions["backup"];
-  /** Format: bigint */
-  "rowFilter.backup.id": string;
-  /** Format: bigint */
-  "rowFilter.backup.upload_id": string;
-  /** Format: text */
-  "rowFilter.backup.url": string;
-  /** Format: timestamp with time zone */
-  "rowFilter.backup.inserted_at": string;
   /** @description content */
   "body.content": definitions["content"];
   /** Format: text */
@@ -2431,6 +2458,18 @@ export interface parameters {
   "rowFilter.content.inserted_at": string;
   /** Format: timestamp with time zone */
   "rowFilter.content.updated_at": string;
+  /** @description email_history */
+  "body.email_history": definitions["email_history"];
+  /** Format: bigint */
+  "rowFilter.email_history.id": string;
+  /** Format: bigint */
+  "rowFilter.email_history.user_id": string;
+  /** Format: public.email_type */
+  "rowFilter.email_history.email_type": string;
+  /** Format: text */
+  "rowFilter.email_history.message_id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.email_history.sent_at": string;
   /** @description metric */
   "body.metric": definitions["metric"];
   /** Format: text */
