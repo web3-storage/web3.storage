@@ -81,6 +81,15 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const fileRowLabels = content?.table.file_row_labels;
   const title = content?.tabs.find(item => item.file_type === currentTab);
 
+  // Set current tab based on url param on load
+  useEffect(() => {
+    if (query.hasOwnProperty('table') && currentTab !== query?.table) {
+      if (typeof query.table === 'string') {
+        setCurrentTab(query.table);
+      }
+    }
+  }, [query, currentTab]);
+
   // Initial uploads fetch on component load
   useEffect(() => {
     if (!fetchDate && !isFetchingUploads) {
@@ -130,8 +139,17 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const changeCurrentTab = useCallback(
     /** @type {string} */ tab => {
       setCurrentTab(tab);
+      query.table = tab;
+
+      replace(
+        {
+          query,
+        },
+        undefined,
+        { shallow: true }
+      );
     },
-    [setCurrentTab]
+    [setCurrentTab, query, replace]
   );
 
   const getFilesTotal = type => {
