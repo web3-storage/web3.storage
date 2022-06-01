@@ -83,6 +83,7 @@ export const STATUS = {
  * @property {(file:FileProgress) => Promise<void>} uploadFiles Method to upload a new file
  * @property {boolean} isFetchingUploads Whether or not new uploads are being fetched
  * @property {number|undefined} fetchDate The date in which the last uploads list fetch happened
+ * @property {boolean} isFetchingPinned Whether or not pinned files are being fetched
  * @property {UploadProgress} uploadsProgress The progress of any current uploads
  * @property {() => boolean } clearUploadedFiles clears completed files from uploads list
  */
@@ -113,6 +114,7 @@ export const UploadsProvider = ({ children }) => {
   const [pinned, setPinned] = useState(/** @type {PinStatus[]} */ ([]));
   const [isFetchingUploads, setIsFetchingUploads] = useState(false);
   const [fetchDate, setFetchDate] = useState(/** @type {number|undefined} */ (undefined));
+  const [isFetchingPinned, setIsFetchingPinned] = useState(false);
   const [filesToUpload, setFilesToUpload] = useState(/** @type {FileProgress[]} */ ([]));
   const { initialize, updateFileProgress, progress, markFileCompleted, markFileFailed } = useUploadProgress([]);
 
@@ -196,9 +198,11 @@ export const UploadsProvider = ({ children }) => {
   const listPinnedCallback = useCallback(
     /** @type {() => Promise<PinStatus[]>} */
     async () => {
-      const pinsResponse = await listPins('pinning');
+      setIsFetchingPinned(true);
+      const pinsResponse = await listPins('pinning'); // *** CHANGE TO 'pinned' ***
       const updatedPinned = pinsResponse.results;
       setPinned(updatedPinned);
+      setIsFetchingPinned(false);
 
       return updatedPinned;
     },
@@ -219,6 +223,7 @@ export const UploadsProvider = ({ children }) => {
           pinned,
           isFetchingUploads,
           fetchDate,
+          isFetchingPinned,
           uploadsProgress: progress,
           clearUploadedFiles,
         })

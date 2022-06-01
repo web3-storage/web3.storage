@@ -205,11 +205,6 @@ export async function getVersion() {
   }
 }
 
-// /**
-//  * @typedef {Object} PinsListArgs
-//  * @property {string} status
-//  */
-
 /**
  * Gets files pinned through the pinning API
  *
