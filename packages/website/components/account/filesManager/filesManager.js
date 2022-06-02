@@ -287,7 +287,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   return (
     <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
       <div className="files-manager-header">
-        <div className="grid-noGutter">
+        <div className="grid-noGutter header-grid-wrapper">
           <div className="col-12">
             <div className="upload-pinned-selector">
               {content?.tabs.map(tab => (
@@ -305,7 +305,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
             </div>
           </div>
 
-          <div className="col-6">
+          <div className="col-6_sm-12">
             <Filterable
               className="files-manager-search"
               items={files}
@@ -318,26 +318,26 @@ const FilesManager = ({ className, content, onFileUpload }) => {
             />
           </div>
 
-          <div className="col-2" data-push-left="off-2">
-            <button className={clsx('refresh', isFetchingUploads && 'disabled')} onClick={refreshHandler}>
-              <RefreshIcon />
-              <span>{content?.ui.refresh}</span>
-            </button>
+          <div className="col-4_sm-6_mi-12" data-push-left="off-2_sm-0">
+            <div className="files-manager-controls">
+              <button className={clsx('refresh', isFetchingUploads && 'disabled')} onClick={refreshHandler}>
+                <RefreshIcon />
+                <span>{content?.ui.refresh}</span>
+              </button>
+
+              <Sortable
+                items={filteredFiles}
+                staticLabel={content?.ui.sortby.label}
+                options={content?.ui.sortby.options}
+                value={defaultQueryOrder}
+                queryParam="order"
+                onChange={setSortedFiles}
+                onSelectChange={showCheckOverlayHandler}
+              />
+            </div>
           </div>
 
-          <div className="col-2">
-            <Sortable
-              items={filteredFiles}
-              staticLabel={content?.ui.sortby.label}
-              options={content?.ui.sortby.options}
-              value={defaultQueryOrder}
-              queryParam="order"
-              onChange={setSortedFiles}
-              onSelectChange={showCheckOverlayHandler}
-            />
-          </div>
-
-          <div className="col-6">
+          <div className="col-6_sm-12">
             <div className="files-manager-title has-upload-button">
               <div className="title">
                 {keyword
@@ -365,6 +365,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
               )}
             </div>
           </div>
+
         </div>
       </div>
 

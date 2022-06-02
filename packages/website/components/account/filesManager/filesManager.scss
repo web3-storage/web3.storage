@@ -25,14 +25,30 @@
 .files-manager-header {
   padding: 0 2rem;
 
+  @include medium {
+    padding: 0;
+  }
+
+  .header-grid-wrapper {
+    width: 100%;
+  }
+
   .upload-pinned-selector {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
 
+    @include mini {
+      flex-direction: column;
+    }
+
     .filetype-tab {
       padding: 0.875rem 2rem;
       margin-bottom: 1.1875rem;
+
+      @include mini {
+        padding: 0.875rem 0;
+      }
 
       &:first-child {
         padding-left: 0;
@@ -82,11 +98,18 @@
 
   .files-manager-search {
     @include medium {
+      width: 100%;
       flex-basis: 100%;
       order: 4;
       margin-top: 0.625rem;
       margin-bottom: 0.5rem;
     }
+  }
+
+  .files-manager-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .refresh {
