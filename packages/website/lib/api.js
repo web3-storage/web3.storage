@@ -216,7 +216,7 @@ export async function listPins(status) {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + (await getToken()),
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDhBNzNFNGIxRGY2QmQ5OWM1QjQ5ZjQ1MDJGZTg1N0E1RDg3NTdGQmQiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTM1NzY4MTIxMDMsIm5hbWUiOiJ0ZXN0aW5nIn0.wgHkjn7n5QYXQd4Lm18cKrbZg1ZIpH-Z9p5phNWImkY',
     },
   })
   if (!res.ok) {
