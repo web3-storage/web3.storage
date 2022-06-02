@@ -1,5 +1,17 @@
 # Changelog
 
+## [6.2.0](https://github.com/web3-storage/web3.storage/compare/api-v6.1.1...api-v6.2.0) (2022-06-01)
+
+
+### Features
+
+* Adding HasDeleteRestriction user_tag ([#1390](https://github.com/web3-storage/web3.storage/issues/1390)) ([0c3bb58](https://github.com/web3-storage/web3.storage/commit/0c3bb5874cc5d4ad313080fa5b1966748918481d))
+
+
+### Bug Fixes
+
+* clone env so new each request ([#1396](https://github.com/web3-storage/web3.storage/issues/1396)) ([9dd026b](https://github.com/web3-storage/web3.storage/commit/9dd026b9777d0bd235574e40b645ca67d2df19f9))
+
 ### [6.1.1](https://github.com/web3-storage/web3.storage/compare/api-v6.1.0...api-v6.1.1) (2022-05-31)
 
 
