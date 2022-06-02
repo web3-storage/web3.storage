@@ -102,7 +102,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
         setCurrentTab(query.table);
       }
     }
-  }, [query, currentTab]);
+  }, [query, currentTab, pinned, replace]);
 
   // Initial uploads fetch on component load
   useEffect(() => {
