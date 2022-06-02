@@ -215,6 +215,7 @@ export async function getVersion() {
  */
 export async function listPins(status, token) {
   console.log(token);
+  console.log(`${API}/pins?status=${status}`);
   const res = await fetch(`${API}/pins?status=${status}`, {
     method: 'GET',
     headers: {
