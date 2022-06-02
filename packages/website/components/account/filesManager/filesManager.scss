@@ -25,11 +25,6 @@
 .files-manager-header {
   padding: 0 2rem;
 
-  // @include medium {
-  //   padding: 0;
-  //   justify-content: space-between;
-  // }
-
   .upload-pinned-selector {
     display: flex;
     flex-direction: row;
@@ -50,6 +45,10 @@
         }
         :first-child {
           @include fontWeight_Semibold;
+        }
+        &:disabled {
+          color: #757575;
+          opacity: 0.5;
         }
       }
     }

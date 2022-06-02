@@ -88,6 +88,17 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   useEffect(() => {
     if (query.hasOwnProperty('table') && currentTab !== query?.table) {
       if (typeof query.table === 'string') {
+        if (query.table === 'pinned' && pinned.length === 0) {
+          delete query.table;
+          replace(
+            {
+              query,
+            },
+            undefined,
+            { shallow: true }
+          );
+          return;
+        }
         setCurrentTab(query.table);
       }
     }
@@ -103,7 +114,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   // Initial pinned files fetch on component load
   useEffect(() => {
     if (!fetchPinsDate && !isFetchingPinned && apiToken) {
-      listPinned('pinning', apiToken);
+      listPinned('pinned', apiToken);
     }
   }, [fetchPinsDate, listPinned, isFetchingPinned, apiToken]);
 
@@ -257,7 +268,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     if (currentTab === 'uploaded') {
       getUploads();
     } else if (currentTab === 'pinned' && apiToken) {
-      listPinned('pinning', apiToken);
+      listPinned('pinned', apiToken);
     }
     showCheckOverlayHandler();
   }, [currentTab, getUploads, listPinned, showCheckOverlayHandler, apiToken]);
@@ -282,6 +293,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
               {content?.tabs.map(tab => (
                 <div key={tab.file_type} className="filetype-tab">
                   <button
+                    disabled={tab.file_type === 'pinned' && pinned.length === 0}
                     className={clsx('tab-button', currentTab === tab.file_type ? 'selected' : '')}
                     onClick={() => changeCurrentTab(tab.file_type)}
                   >
