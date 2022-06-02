@@ -79,7 +79,7 @@ export const STATUS = {
  * @property {(cid: string) => Promise<void>} deleteUpload Method to delete an existing upload
  * @property {(cid: string, name: string)=>Promise<void>} renameUpload Method to rename an existing upload
  * @property {(args?: UploadArgs) => Promise<Upload[]>} getUploads Method that refetches list of uploads based on certain params
- * @property {() => Promise<PinStatus[]>} listPinned Method that fetches list of pins
+ * @property {(status: string, token: string) => Promise<PinStatus[]>} listPinned Method that fetches list of pins
  * @property {(file:FileProgress) => Promise<void>} uploadFiles Method to upload a new file
  * @property {boolean} isFetchingUploads Whether or not new uploads are being fetched
  * @property {number|undefined} fetchDate The date in which the last uploads list fetch happened
@@ -198,10 +198,10 @@ export const UploadsProvider = ({ children }) => {
   );
 
   const listPinnedCallback = useCallback(
-    /** @type {() => Promise<PinStatus[]>} */
-    async () => {
+    /** @type {(status: string, token: string) => Promise<PinStatus[]>} */
+    async (status, token) => {
       setIsFetchingPinned(true);
-      const pinsResponse = await listPins('pinning'); // *** CHANGE TO 'pinned' ***
+      const pinsResponse = await listPins(status, token); // *** CHANGE TO 'pinned' ***
       const updatedPinned = pinsResponse.results;
       setPinned(updatedPinned);
       setFetchPinsDate(Date.now());

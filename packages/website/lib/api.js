@@ -208,15 +208,18 @@ export async function getVersion() {
 /**
  * Gets files pinned through the pinning API
  *
+ * @param {string} status
+ * @param {string} token
  * @returns {Promise<import('../components/contexts/uploadsContext').PinsList>}
  * @throws {Error} When it fails to get uploads
  */
-export async function listPins(status) {
+export async function listPins(status, token) {
+  console.log(token);
   const res = await fetch(`${API}/pins?status=${status}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + (await getToken()), // **** this needs to be a token generated from the tokens context
+      Authorization: 'Bearer ' + token, // **** this needs to be a token generated from the tokens context
     },
   })
   if (!res.ok) {

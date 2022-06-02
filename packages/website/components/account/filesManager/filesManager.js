@@ -19,6 +19,7 @@ import CloseIcon from 'assets/icons/close';
 import { formatTimestamp } from 'lib/utils';
 import { useUploads } from 'components/contexts/uploadsContext';
 import { useUser } from 'components/contexts/userContext';
+import { useTokens } from 'components/contexts/tokensContext';
 import CheckIcon from 'assets/icons/check';
 
 const defaultQueryOrder = 'newest';
@@ -62,6 +63,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     storageData: { refetch },
     info,
   } = useUser();
+  const { tokens } = useTokens();
 
   const [currentTab, setCurrentTab] = useState('uploaded');
   const [files, setFiles] = useState(/** @type {any} */ (uploads));
@@ -74,6 +76,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const [showCheckOverlay, setShowCheckOverlay] = useState(false);
   const deleteModalState = useState(false);
   const queryOrderRef = useRef(query.order);
+  const apiToken = tokens.length ? tokens[0].secret : undefined;
 
   const [selectedFiles, setSelectedFiles] = useState(/** @type {Upload[]} */ ([]));
   const [isUpdating, setIsUpdating] = useState(false);
@@ -99,10 +102,10 @@ const FilesManager = ({ className, content, onFileUpload }) => {
 
   // Initial pinned files fetch on component load
   useEffect(() => {
-    if (!fetchPinsDate && !isFetchingPinned) {
-      listPinned();
+    if (!fetchPinsDate && !isFetchingPinned && apiToken) {
+      listPinned('pinning', apiToken);
     }
-  }, [fetchPinsDate, listPinned, isFetchingPinned]);
+  }, [fetchPinsDate, listPinned, isFetchingPinned, apiToken]);
 
   // Set displayed files based on tab selection: 'uploaded' or 'pinned'
   useEffect(() => {
@@ -251,9 +254,13 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   }, [setShowCheckOverlay]);
 
   const refreshHandler = useCallback(() => {
-    getUploads();
+    if (currentTab === 'uploaded') {
+      getUploads();
+    } else if (currentTab === 'pinned' && apiToken) {
+      listPinned('pinning', apiToken);
+    }
     showCheckOverlayHandler();
-  }, [getUploads, showCheckOverlayHandler]);
+  }, [currentTab, getUploads, listPinned, showCheckOverlayHandler, apiToken]);
 
   const tableContentLoading = tab => {
     switch (tab) {
