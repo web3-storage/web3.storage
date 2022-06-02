@@ -4,7 +4,7 @@ import constants from './constants'
 /** @typedef {{ name?: string } & import('web3.storage').Upload} Upload */
 
 export const API = constants.API
-
+console.log(API);
 const LIFESPAN = constants.MAGIC_TOKEN_LIFESPAN / 1000
 /** @type {string | undefined} */
 let token
@@ -17,6 +17,7 @@ export async function getToken() {
     token = await magic.user.getIdToken({ lifespan: LIFESPAN })
     created = Date.now() / 1000
   }
+  console.log(token);
   return token
 }
 
