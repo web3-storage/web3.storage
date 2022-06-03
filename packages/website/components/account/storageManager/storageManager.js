@@ -97,7 +97,7 @@ const StorageManager = ({ className = '', content }) => {
           ) : (
             <>
               {/* Used storage in GB */}
-              <span className="storage-label">{content.heading}</span>:{' '}
+              <h2 className="storage-heading">{content.heading}</h2>:{' '}
               <span className="storage-number">
                 {filesz(uploaded + psaPinned, {
                   base: 2,

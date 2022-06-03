@@ -148,8 +148,11 @@
 
 .storage-manager-used {
   margin-bottom: 0.625rem;
-  .storage-label {
+  .storage-heading {
+    display: inline;
     @include fontWeight_Semibold;
+    @include fontSize_Medium;
+    line-height: 35px;
   }
   .storage-number {
     font-style: italic;

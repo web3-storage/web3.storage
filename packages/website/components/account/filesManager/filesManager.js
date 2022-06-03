@@ -339,13 +339,13 @@ const FilesManager = ({ className, content, onFileUpload }) => {
 
           <div className="col-6_sm-12">
             <div className="files-manager-title has-upload-button">
-              <div className="title">
+              <h2 className="files-manager-heading">
                 {keyword
                   ? title.searchHeading
                       .replace('%resultsNumber%', filteredFiles.length)
                       .replace('%searchQuery%', `'${keyword}'`)
                   : title.heading}
-              </div>
+              </h2>
               {title.file_type === 'uploaded' ? (
                 <Button
                   onClick={onFileUpload}

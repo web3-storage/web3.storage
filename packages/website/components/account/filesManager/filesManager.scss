@@ -77,9 +77,11 @@
     &:not(.has-upload-button) {
       margin-right: 8rem;
     }
-    .title {
+    .files-manager-heading {
+      display: inline;
       @include fontSize_Regular;
       @include fontWeight_Semibold;
+      line-height: 35px;
     }
     .button {
       @include fontSize_Atom;
