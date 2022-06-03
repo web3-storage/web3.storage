@@ -157,6 +157,13 @@ export async function userInfoGet (request, env) {
   })
 }
 
+export async function userRequestPost (request, env) {
+  const userId = request.auth.user._id
+  const { tagName, requestedTagValue, userProposalForm } = await request.json()
+  const res = await env.db.createUserRequest(userId, tagName, requestedTagValue, userProposalForm)
+  return new JSONResponse(res)
+}
+
 /**
  * Retrieve user auth tokens.
  *

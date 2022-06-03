@@ -1,23 +1,23 @@
-import { getMagic } from './magic'
-import constants from './constants'
+import { getMagic } from './magic';
+import constants from './constants';
 
 /** @typedef {{ name?: string } & import('web3.storage').Upload} Upload */
 
-export const API = constants.API
+export const API = constants.API;
 
-const LIFESPAN = constants.MAGIC_TOKEN_LIFESPAN / 1000
+const LIFESPAN = constants.MAGIC_TOKEN_LIFESPAN / 1000;
 /** @type {string | undefined} */
-let token
-let created = Date.now() / 1000
+let token;
+let created = Date.now() / 1000;
 
 export async function getToken() {
-  const magic = getMagic()
-  const now = Date.now() / 1000
+  const magic = getMagic();
+  const now = Date.now() / 1000;
   if (token === undefined || now - created > LIFESPAN - 10) {
-    token = await magic.user.getIdToken({ lifespan: LIFESPAN })
-    created = Date.now() / 1000
+    token = await magic.user.getIdToken({ lifespan: LIFESPAN });
+    created = Date.now() / 1000;
   }
-  return token
+  return token;
 }
 
 export async function getTokens() {
@@ -27,13 +27,13 @@ export async function getTokens() {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + (await getToken()),
     },
-  })
+  });
 
   if (!res.ok) {
-    throw new Error(`failed to get auth tokens: ${await res.text()}`)
+    throw new Error(`failed to get auth tokens: ${await res.text()}`);
   }
 
-  return res.json()
+  return res.json();
 }
 
 export async function getStorage() {
@@ -43,13 +43,13 @@ export async function getStorage() {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + (await getToken()),
     },
-  })
+  });
 
   if (!res.ok) {
-    throw new Error(`failed to get storage info: ${await res.text()}`)
+    throw new Error(`failed to get storage info: ${await res.text()}`);
   }
 
-  return res.json()
+  return res.json();
 }
 
 export async function getInfo() {
@@ -59,13 +59,13 @@ export async function getInfo() {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + (await getToken()),
     },
-  })
+  });
 
   if (!res.ok) {
-    throw new Error(`failed to get user info: ${await res.text()}`)
+    throw new Error(`failed to get user info: ${await res.text()}`);
   }
 
-  return res.json()
+  return res.json();
 }
 
 /**
@@ -79,12 +79,39 @@ export async function deleteToken(_id) {
     headers: {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + (await getToken()),
-    }
-  })
+    },
+  });
 
   if (!res.ok) {
-    throw new Error(`failed to delete auth token: ${await res.text()}`)
+    throw new Error(`failed to delete auth token: ${await res.text()}`);
   }
+}
+
+export async function createUserRequest(tagName, requestedTagValue, userProposalForm) {
+  const res = await fetch(`${API}/user/request`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + (await getToken()),
+    },
+    body: JSON.stringify({ tagName, requestedTagValue, userProposalForm }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`failed to create user request: ${await res.text()}`);
+  }
+}
+
+export async function createUnlimitedStorageRequest(authMethod, links, dataVolume) {
+  await createUserRequest(
+    'StorageLimitBytes',
+    '',
+    JSON.stringify([
+      { label: 'Auth Method', value: authMethod },
+      { label: 'Links', value: links },
+      { label: 'Data Volume', value: dataVolume },
+    ])
+  );
 }
 
 /**
@@ -100,13 +127,13 @@ export async function createToken(name) {
       Authorization: 'Bearer ' + (await getToken()),
     },
     body: JSON.stringify({ name }),
-  })
+  });
 
   if (!res.ok) {
-    throw new Error(`failed to create auth token: ${await res.text()}`)
+    throw new Error(`failed to create auth token: ${await res.text()}`);
   }
 
-  return res.json()
+  return res.json();
 }
 
 /**
@@ -125,13 +152,13 @@ export async function createToken(name) {
  * @throws {Error} When it fails to get uploads
  */
 export async function getUploads({ size, before, sortBy, sortOrder }) {
-  const params = new URLSearchParams({ before, size: String(size) })
+  const params = new URLSearchParams({ before, size: String(size) });
   if (sortBy) {
-    params.set('sortBy', sortBy)
+    params.set('sortBy', sortBy);
   }
 
   if (sortOrder) {
-    params.set('setOrder', sortOrder)
+    params.set('setOrder', sortOrder);
   }
   const res = await fetch(`${API}/user/uploads?${params}`, {
     method: 'GET',
@@ -140,11 +167,12 @@ export async function getUploads({ size, before, sortBy, sortOrder }) {
       Authorization: 'Bearer ' + (await getToken()),
     },
   })
+
   if (!res.ok) {
-    throw new Error(`failed to get uploads: ${await res.text()}`)
+    throw new Error(`failed to get uploads: ${await res.text()}`);
   }
 
-  return res.json()
+  return res.json();
 }
 
 /**
@@ -152,17 +180,17 @@ export async function getUploads({ size, before, sortBy, sortOrder }) {
  *
  * @param {string} cid
  */
-export async function deleteUpload (cid) {
+export async function deleteUpload(cid) {
   const res = await fetch(`${API}/user/uploads/${cid}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + (await getToken()),
-    }
-  })
+    },
+  });
 
   if (!res.ok) {
-    throw new Error(`failed to delete upload: ${await res.text()}`)
+    throw new Error(`failed to delete upload: ${await res.text()}`);
   }
 }
 
@@ -172,7 +200,7 @@ export async function deleteUpload (cid) {
  * @param {string} cid
  * @param {string} name
  */
- export async function renameUpload (cid, name) {
+export async function renameUpload(cid, name) {
   const res = await fetch(`${API}/user/uploads/${cid}/rename`, {
     method: 'POST',
     headers: {
@@ -180,28 +208,28 @@ export async function deleteUpload (cid) {
       Authorization: 'Bearer ' + (await getToken()),
     },
     body: JSON.stringify({
-      name
-    })
-  })
+      name,
+    }),
+  });
 
   if (!res.ok) {
-    throw new Error(`failed to delete upload: ${await res.text()}`)
+    throw new Error(`failed to delete upload: ${await res.text()}`);
   }
 }
 
 export async function getVersion() {
-  const route = '/version'
+  const route = '/version';
   const res = await fetch(`${API}${route}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
-  })
+  });
 
   if (res.ok) {
-    return await res.json()
+    return await res.json();
   } else {
-    throw new Error(await res.text())
+    throw new Error(await res.text());
   }
 }
 

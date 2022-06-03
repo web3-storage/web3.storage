@@ -33,7 +33,7 @@
 .storage-manager-info {
   @include fontSize_Tiny;
   @include fontWeight_Regular;
-  a {
+  .storage-manager__storage-request-button {
     @include hoverTextLinkColor;
   }
   margin-top: 1.5625rem;
@@ -88,7 +88,7 @@
       padding: 0;
       min-height: auto;
       width: auto;
-      a {
+      > span {
         display: flex;
         flex-direction: row;
         align-items: center;

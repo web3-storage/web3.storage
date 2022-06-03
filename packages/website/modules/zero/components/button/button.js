@@ -22,11 +22,23 @@ const Button = ({ className, onClick, href, type, disabled, openInNewWindow, chi
     <div className={clsx(className, 'Button', disabled ? 'disabled' : undefined)}>
       {href && !disabled ? (
         openInNewWindow ? (
-          <a href={href} target="_blank">
+          <a href={href} onClick={e => onClick?.(e)} target="_blank">
             {children}
           </a>
         ) : (
-          <Link href={href}>{<span className="button-contents">{children}</span>}</Link>
+          <Link href={href}>
+            {
+              <span
+                role="button"
+                tabIndex={0}
+                onClick={e => onClick?.(e)}
+                onKeyDown={e => onClick?.(e)}
+                className="button-contents"
+              >
+                {children}
+              </span>
+            }
+          </Link>
         )
       ) : (
         <button className="button-contents" type={type} onClick={onClick} disabled={disabled}>
