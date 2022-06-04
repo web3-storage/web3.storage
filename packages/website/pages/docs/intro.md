@@ -161,7 +161,7 @@ You can upload a whole directory full of files at once by giving the script the 
 <Callout type="info">
 ##### Get the status of your upload
 
-It's possible to get a variety of details about your upload, including its CID, upload date, size on the network, and info on IPFS pinning and Filecoin storage deals, by using the `status()` method within the JavaScript client library. Check out the [Query how-to guide](./how-tos/query.md#querying-for-status-information) for more information.
+It's possible to get a variety of details about your upload, including its CID, upload date, size on the network, and info on IPFS pinning and Filecoin storage deals, by using the `status()` method within the JavaScript client library. Check out the [Query how-to guide](./how-tos/query#querying-for-status-information) for more information.
 </Callout>
 
 Next up, we'll go over two methods for you to [retrieve your data from Web3.Storage ↓](#get-your-file)
