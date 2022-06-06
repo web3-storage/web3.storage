@@ -30,7 +30,7 @@ NEXT_PUBLIC_API=http://127.0.0.1:8787
 NEXT_PUBLIC_MAGIC=<magic test mode publishable key>
 ```
 
-for local debugging API:
+To hit the local mock API:
 
 ```ini
 NEXT_PUBLIC_ENV=dev

@@ -5,11 +5,11 @@ on:
       - main
     paths:
       - 'packages/cron/**'
-      - '.github/workflows/cron.yml'
+      - '.github/workflows/cron*'
   pull_request:
     paths:
       - 'packages/cron/**'
-      - '.github/workflows/cron.yml'
+      - '.github/workflows/cron*'
 jobs:
   test:
     runs-on: ubuntu-latest

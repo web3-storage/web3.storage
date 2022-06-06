@@ -48,6 +48,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   } = useRouter();
   const {
     storageData: { refetch },
+    info,
   } = useUser();
   const [filteredFiles, setFilteredFiles] = useState(files);
   const [sortedFiles, setSortedFiles] = useState(filteredFiles);
@@ -192,6 +193,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
         <div className="files-manager-title has-upload-button">
           <div className="title">{content?.heading}</div>
           <Button
+            disabled={info?.tags?.['HasAccountRestriction']}
             onClick={onFileUpload}
             variant={content?.upload.theme}
             tracking={{
@@ -199,6 +201,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
               action: content?.upload.action,
               data: { isFirstFile: false },
             }}
+            tooltip={info?.tags?.['HasAccountRestriction'] ? content?.upload.accountRestrictedText : ''}
           >
             {content?.upload.text}
           </Button>
@@ -257,6 +260,8 @@ const FilesManager = ({ className, content, onFileUpload }) => {
                 action: content?.table.cta.action,
                 data: { isFirstFile: true },
               }}
+              disabled={info?.tags?.['HasAccountRestriction']}
+              tooltip={info?.tags?.['HasAccountRestriction'] ? content?.table.cta.accountRestrictedText : ''}
             >
               {content?.table.cta.text}
             </Button>
