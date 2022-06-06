@@ -26,6 +26,10 @@ describe('cron - check user storage quotas', () => {
     await roPg.connect()
   })
 
+  after(async () => {
+    await roPg.end()
+  })
+
   beforeEach(async () => {
     emailService = new EmailService({ db: dbClient, provider: EMAIL_PROVIDERS.dummy })
     adminUser = await createUser(dbClient, {
