@@ -171,7 +171,7 @@ curl -H 'Authorization: Bearer YOUR_API_KEY' 'http://127.0.0.1:8787/user/uploads
   "deals": []
 ```
 
-By default, 10 uploads are requested, but more can be requested up to a maximum of 1000. A `size` parameter should be used as follows:
+By default, 25 uploads are requested, but more can be requested up to a maximum of 1000. A `size` parameter should be used as follows:
 
 ```console
 curl -H 'Authorization: Bearer YOUR_API_KEY' 'http://127.0.0.1:8787/user/uploads?size=1000'

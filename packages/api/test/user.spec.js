@@ -230,7 +230,7 @@ describe('GET /user/uploads', () => {
     assert(res.ok)
 
     const uploads = await res.json()
-    const sortedUploads = [...userUploads].sort((a, b) => a.name.localeCompare(b.name));
+    const sortedUploads = [...userUploads].sort((a, b) => a.name.localeCompare(b.name))
 
     assert.deepStrictEqual(uploads, sortedUploads)
   })
@@ -253,7 +253,6 @@ describe('GET /user/uploads', () => {
 
     // Filter uploads fixture by the filter date.
     const uploadsBeforeFilterDate = userUploads.filter((upload) => {
-      console.log(upload.created, beforeFilterDate)
       return upload.created <= beforeFilterDate
     })
 
@@ -278,7 +277,6 @@ describe('GET /user/uploads', () => {
 
     // Filter uploads fixture by the filter date.
     const uploadsAfterFilterDate = userUploads.filter((upload) => {
-      console.log(upload.created, afterFilterDate)
       return upload.created >= afterFilterDate
     })
 
