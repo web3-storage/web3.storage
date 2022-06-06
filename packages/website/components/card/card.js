@@ -2,7 +2,7 @@
 import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
-import Image from 'next/image';
+import Img from '../cloudflareImage.js';
 import Link from 'next/link';
 
 import CardTier from './card-tier';
@@ -113,7 +113,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
         return (
           <>
             <div className="image-wrapper">
-              <Image unoptimized alt="" src={obj.image} width="64" height="64" />
+              <Img src={obj.image} width="64" height="64" />
             </div>
             {card.title && <div className="title">{card.title}</div>}
             {card.subtitle && <div className="subtitle">{card.subtitle}</div>}

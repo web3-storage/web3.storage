@@ -318,9 +318,7 @@
               "num": "col-5_sm-8_mi-10_ti-12",
               "push_left": "off-1_sm-2_mi-1_ti-0"
             },
-            "src": "/images/index/cluster-1.png",
-            "width": "700",
-            "height": "853"
+            "src": "/images/index/cluster-1.png"
           }
         ]
       },
@@ -410,23 +408,17 @@
               {
                 "type": "image_block",
                 "id": "get-started-image-storage",
-                "src": "/images/index/app-ui-screenshot-storage-manager.png",
-                "width": "981",
-                "height": "530"
+                "src": "/images/index/app-ui-screenshot-storage-manager.png"
               },
               {
                 "type": "image_block",
                 "id": "get-started-image-files",
-                "src": "/images/index/app-ui-screenshot-file-manager.png",
-                "width": "600",
-                "height": "744"
+                "src": "/images/index/app-ui-screenshot-file-manager.png"
               },
               {
                 "type": "image_block",
                 "id": "get-started-image-upload",
-                "src": "/images/index/app-ui-screenshot-file-upload.png",
-                "width": "660",
-                "height": "157"
+                "src": "/images/index/app-ui-screenshot-file-upload.png"
               }
             ]
           }

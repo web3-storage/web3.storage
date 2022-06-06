@@ -1,10 +1,12 @@
-import Img from 'components/cloudflareImage';
+import Img from '../../components/cloudflareImage.js';
+import ImgCoil from '../../public/images/illustrations/coil.png';
+
 /**
  * @param {any} props
  */
 const Coil = props => (
   <div {...props}>
-    <Img className="image-full-width" alt="" src="/images/illustrations/coil.png" width="231" height="231" />
+    <Img alt="" src={ImgCoil} />
   </div>
 );
 

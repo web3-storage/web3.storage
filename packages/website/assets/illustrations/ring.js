@@ -6,7 +6,7 @@ import ImgRing from '../../public/images/illustrations/ring.png';
  */
 const Ring = props => (
   <div {...props}>
-    <Img alt="" src={ImgRing} priority />
+    <Img alt="" src={ImgRing} />
   </div>
 );
 

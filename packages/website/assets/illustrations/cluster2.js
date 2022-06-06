@@ -1,11 +1,12 @@
-import Img from 'components/cloudflareImage';
+import Img from '../../components/cloudflareImage.js';
+import ImgCluster2 from '../../public/images/illustrations/cluster2.png';
 
 /**
  * @param {any} props
  */
 const ClusterMobile = props => (
   <div {...props}>
-    <Img width="600" height="773" className="image-full-width" alt="" src="/images/illustrations/cluster2.png" />
+    <Img alt="" src={ImgCluster2} />
   </div>
 );
 

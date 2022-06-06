@@ -1,17 +1,12 @@
-import Img from 'components/cloudflareImage';
+import Img from '../../components/cloudflareImage.js';
+import ImgCorkscrewBlurred from '../../public/images/illustrations/corkscrewBlurred.png';
 
 /**
  * @param {any} props
  */
 const CorkscrewBlurred = props => (
   <div className="corkscrew-background" {...props}>
-    <Img
-      width="800"
-      height="800"
-      className="image-full-width"
-      src="/images/illustrations/corkscrewBlurred.png"
-      alt="background"
-    />
+    <Img src={ImgCorkscrewBlurred} />
   </div>
 );
 

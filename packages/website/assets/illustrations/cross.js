@@ -1,11 +1,12 @@
-import Img from 'components/cloudflareImage';
+import Img from '../../components/cloudflareImage.js';
+import ImgCross from '../../public/images/illustrations/cross.png';
 
 /**
  * @param {any} props
  */
 const Cross = props => (
   <div {...props}>
-    <Img width="169" height="167" className="image-full-width" alt="" src="/images/illustrations/cross.png" />
+    <Img alt="" src={ImgCross} />
   </div>
 );
 

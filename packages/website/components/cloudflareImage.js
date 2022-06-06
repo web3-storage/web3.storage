@@ -7,6 +7,7 @@ import Image from 'next/image';
 const normalizeSrc = (/** @type {string} */ src) => {
   return src.startsWith('/') ? src.slice(1) : src;
 };
+
 /**
  * Logo Component
  *
@@ -17,7 +18,6 @@ const normalizeSrc = (/** @type {string} */ src) => {
  */
 const cloudflareImageLoader = ({ src, width, quality = 75 }) => {
   let source = normalizeSrc(src);
-
   return `https://images.web3.storage/width=${width},quality=${quality}/${source}`;
 };
 

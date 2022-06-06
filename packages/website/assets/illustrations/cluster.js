@@ -1,10 +1,12 @@
-import Img from 'components/cloudflareImage';
+import Img from '../../components/cloudflareImage.js';
+import ImgCluster from '../../public/images/illustrations/cluster.png';
+
 /**
  * @param {any} props
  */
 const Cluster = props => (
   <div {...props}>
-    <Img width="1200" height="1464" className="image-full-width" alt="" src="/images/illustrations/cluster.png" />
+    <Img alt="" src={ImgCluster} />
   </div>
 );
 

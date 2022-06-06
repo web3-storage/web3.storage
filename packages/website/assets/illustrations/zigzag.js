@@ -1,10 +1,12 @@
-import Img from 'components/cloudflareImage';
+import Img from '../../components/cloudflareImage.js';
+import ImgZigzag from '../../public/images/illustrations/zigzag.png';
+
 /**
  * @param {any} props
  */
 const Zigzag = props => (
   <div {...props}>
-    <Img className="image-full-width" alt="" src="/images/illustrations/zigzag.png" width="236" height="236" />
+    <Img alt="" src={ImgZigzag} />
   </div>
 );
 

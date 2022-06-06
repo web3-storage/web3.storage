@@ -1,10 +1,12 @@
-import Img from 'components/cloudflareImage';
+import Img from '../../components/cloudflareImage.js';
+import ImgTriangle from '../../public/images/illustrations/triangle.png';
+
 /**
  * @param {any} props
  */
 const Triangle = props => (
   <div {...props}>
-    <Img width="114" height="114" className="image-full-width" alt="" src="/images/illustrations/triangle.png" />
+    <Img alt="" src={ImgTriangle} />
   </div>
 );
 
