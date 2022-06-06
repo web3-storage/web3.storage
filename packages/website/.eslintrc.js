@@ -12,6 +12,10 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:cypress/recommended',
   ],
+  env: {
+    browser: true,
+    es2020: true,
+  },
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 9, // Allows for the parsing of modern ECMAScript features
@@ -26,8 +30,8 @@ module.exports = {
       },
       alias: [
         ['ZeroComponents', './modules/zero/components'],
-        ['ZeroHooks', './modules/zero/hooks']
-      ]
+        ['ZeroHooks', './modules/zero/hooks'],
+      ],
     },
     react: {
       version: 'detect',

@@ -1,12 +1,14 @@
-import Img from 'components/cloudflareImage';
-
+import Img from '../../components/cloudflareImage.js';
+import ImgSquiggle from '../../public/images/illustrations/squiggle.png';
 /**
  * @param {any} props
  */
-const Squiggle = props => (
-  <div {...props}>
-    <Img className="image-full-width" alt="" src="/images/illustrations/squiggle.png" width="464" height="464" />
-  </div>
-);
+const Squiggle = props => {
+  return (
+    <div {...props}>
+      <Img src={ImgSquiggle} />
+    </div>
+  );
+};
 
 export default Squiggle;

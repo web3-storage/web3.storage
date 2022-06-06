@@ -15,6 +15,10 @@ import Spring from '../../assets/illustrations/spring';
 import Cone from '../../assets/illustrations/cone';
 import Fidget from '../../assets/illustrations/fidget';
 import Blobs from '../../assets/illustrations/blobs';
+import HeroIllustration from '../../components/hero-illustration';
+import ImageCorkscrew from '../../public/images/illustrations/corkscrew.png';
+import ImageRing from '../../public/images/illustrations/ring.png';
+import ImageSpring from '../../public/images/illustrations/spring.png';
 
 // ====================================================================== Params
 /**
@@ -34,9 +38,9 @@ export default function Hero({ block }) {
         <Triangle id="error_hero-triangle-3" className={'hero-illustration'} />
         <Cross id="error_hero-cross-1" className={'hero-illustration'} />
         <Cross id="error_hero-cross-2" className={'hero-illustration'} />
-        <Corkscrew id="error_hero-corkscrew" className={'hero-illustration'} />
-        <Ring id="error_hero-ring" className={'hero-illustration'} />
-        <Spring id="error_hero-spring" className={'hero-illustration'} />
+        <HeroIllustration id="error_hero-corkscrew" src={ImageCorkscrew} />
+        <HeroIllustration id="error_hero-ring" src={ImageRing} />
+        <HeroIllustration id="error_hero-spring" src={ImageSpring} />
       </>
     );
   };

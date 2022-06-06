@@ -1,11 +1,12 @@
-import Img from 'components/cloudflareImage';
+import Img from '../../components/cloudflareImage.js';
+import ImgRing from '../../public/images/illustrations/ring.png';
 
 /**
  * @param {any} props
  */
 const Ring = props => (
   <div {...props}>
-    <Img width="900" height="900" className="image-full-width" alt="" src="/images/illustrations/ring.png" />
+    <Img alt="" src={ImgRing} priority />
   </div>
 );
 
