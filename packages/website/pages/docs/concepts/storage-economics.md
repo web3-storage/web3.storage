@@ -4,12 +4,13 @@ description: Learn how Web3.Storage can offer decentralized storage at no cost b
 ---
 
 import Img from 'components/cloudflareImage';
+import ImgFilPlus from '../../public/images/docs/web3-storage-fil-plus.gif';
 
 # Web3.Storage economics
 
 Web3.Storage offers a simple interface that allows users and developers to take advantage of the vast array of [decentralized storage][concepts-decentralized-storage] provided by the [Filecoin][fil] network. The unique economics of Filecoin allow Web3.Storage to be completely **free to use**, while still ensuring that storage providers have a strong incentive to preserve user data for the long term.
 
-<Img src="/images/docs/web3-storage-fil-plus.gif" alt="An animation showing the increased profits available to Filecoin storage providers who store useful data." width="960" height="540" />
+<Img src={ImgFilPlus} alt="An animation showing the increased profits available to Filecoin storage providers who store useful data." />
 
 Filecoin storage providers commit their hard drive capacity to the Filecoin network, and earn significant block rewards for doing so. This translates into real-world profits for storage providers, which incentivizes them to continue committing additional hard disk space to the Filecoin network.
 

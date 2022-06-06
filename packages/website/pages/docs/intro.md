@@ -9,6 +9,7 @@ import CodeSnippet from 'components/codesnippet/codesnippet';
 import PutFiles from '!!raw-loader!../../assets/code-snippets/quickstart/put-files.js';
 import PackageJson from '!!raw-loader!../../assets/code-snippets/quickstart/package.json.txt';
 import Img from 'components/cloudflareImage';
+import ImgFilesListing from '../../public/images/docs/files-listing.png';
 
 # Better storage.<br/>Better transfers.<br/>Better internet.
 
@@ -179,7 +180,7 @@ You've already done the most difficult work in this guide — getting your files
 
 If you ever need to find your files again, and you've forgotten the CID, head over to the [Files section](https://web3.storage/files/) in Web3.Storage:
 
-<Img src="/images/docs/files-listing.png" alt="A listing of files in Web3.Storage" width="1200" height="521" />
+<Img src={ImgFilesListing} alt="A listing of files in Web3.Storage" />
 
 ## Next steps
 
