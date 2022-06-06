@@ -458,11 +458,17 @@ export class DBClient {
   }
 
   /**
+   * @typedef {Object} listUploadReturn
+   * @property {number} count - The total number of uploads for that user (used for pagination)
+   * @property {Promise<Array<import('./db-client-types').UploadItemOutput>>} uploads - The list of requested uploads.
+   */
+
+  /**
    * List uploads of a given user.
    *
    * @param {number} userId
    * @param {import('./db-client-types').ListUploadsOptions} [opts]
-   * @returns {Promise<Array<import('./db-client-types').UploadItemOutput>>}
+   * @returns {listUploadReturn}
    */
   async listUploads (userId, opts = {}) {
     const offset = opts.offset || 0
@@ -476,7 +482,7 @@ export class DBClient {
 
     let query = this._client
       .from('upload')
-      .select(uploadQuery)
+      .select(uploadQuery, { count: 'exact' })
       .eq('user_id', userId)
       .is('deleted_at', null)
       .order(
@@ -498,8 +504,8 @@ export class DBClient {
       ? query.range(offset, limit - 1)
       : query.limit(limit)
 
-    /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error }} */
-    const { data: uploads, error } = await query
+    /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error, count: Number }} */
+    const { data: uploads, error, count } = await query;
 
     if (error) {
       throw new DBError(error)
@@ -509,10 +515,13 @@ export class DBClient {
     const cids = uploads?.map((u) => u.content.cid)
     const deals = await this.getDealsForCids(cids)
 
-    return uploads?.map((u) => ({
-      ...normalizeUpload(u),
-      deals: deals[u.content.cid] || []
-    }))
+    return {
+      count,
+      uploads: uploads?.map((u) => ({
+        ...normalizeUpload(u),
+        deals: deals[u.content.cid] || []
+      }))
+    }
   }
 
   /**

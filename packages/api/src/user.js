@@ -217,7 +217,7 @@ export async function userUploadsGet (request, env) {
   const sortBy = searchParams.get('sortBy') || 'Date'
   const sortOrder = searchParams.get('sortOrder') || 'Desc'
 
-  const uploads = await env.db.listUploads(request.auth.user._id, {
+  const data = await env.db.listUploads(request.auth.user._id, {
     size,
     offset,
     before,
@@ -226,11 +226,23 @@ export async function userUploadsGet (request, env) {
     sortOrder
   })
 
-  const nextOffset = offset + size
-  const headers = uploads.length < size
-    ? undefined
-    : { Link: `<${requestUrl.pathname}?size=${size}&offset=${encodeURIComponent(nextOffset)}>; rel="next"` }
-  return new JSONResponse(uploads, { headers })
+  const headers = {
+    Count: data.count,
+    Size: size,
+    Offset: offset
+  }
+
+  if (data.uploads.length + offset < data.count) {
+    const nextOffset = offset + size
+    headers.Next_link = `<${requestUrl.pathname}?size=${size}&offset=${encodeURIComponent(nextOffset)}>; rel="next"`
+  }
+
+  if (offset) {
+    const previousOffset = offset - size
+    headers.Prev_link = `<${requestUrl.pathname}?size=${size}&offset=${encodeURIComponent(previousOffset)}>; rel="next"`
+  }
+
+  return new JSONResponse(data.uploads, { headers })
 }
 
 /**

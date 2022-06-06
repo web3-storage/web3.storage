@@ -294,21 +294,37 @@ describe('GET /user/uploads', () => {
     assert.deepStrictEqual(uploads, userUploads)
   })
 
-  it('paginates by offset', async () => {
+  it.only('paginates by offset', async () => {
     const token = await getTestJWT()
     const size = 1
-    const res = await fetch(new URL(`/user/uploads?size=${size}`, endpoint).toString(), {
+    const offset = 2
+    const res = await fetch(new URL(`/user/uploads?size=${size}&offset=${offset}`, endpoint).toString(), {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
     })
     assert(res.ok)
 
-    const link = res.headers.get('Link')
-    assert(link, 'has a Link header for the next page')
+    // Ensure we have all pagination metadata in the headers.
+    const nextLink = res.headers.get('Next_link')
+    assert(nextLink, 'has a Next link header for the next page')
+    assert.strictEqual(nextLink, `</user/uploads?size=${size}&offset=${offset + size}>; rel="next"`)
 
-    assert.strictEqual(link, `</user/uploads?size=${size}&offset=${size}>; rel="next"`)
+    const prevLink = res.headers.get('Prev_link')
+    assert(prevLink, 'has a Prev link header for the previous page')
+    assert.strictEqual(prevLink, `</user/uploads?size=${size}&offset=${offset - size}>; rel="next"`)
+
+    const resCount = res.headers.get('Count');
+    assert.strictEqual(parseInt(resCount), userUploads.length, 'has a count for calculating page numbers')
+
+    const resSize = res.headers.get('Size');
+    assert.strictEqual(parseInt(resSize), size, 'has a size for calculating page numbers')
+
+    const resOffset = res.headers.get('Offset');
+    assert.strictEqual(parseInt(resOffset), offset, 'has an offset for calculating page numbers')
+
+    // Ensure the returned result is expected.
     const uploads = await res.json()
-    const expected = [userUploads[0]]
+    const expected = [userUploads[2]]
     assert.deepStrictEqual(uploads, expected)
   })
 
