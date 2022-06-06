@@ -10,13 +10,18 @@ import { checkStorageUsed } from '../src/jobs/storage.js'
 import { EmailService, EMAIL_PROVIDERS } from '../src/lib/email/service.js'
 import sinon from 'sinon'
 
+const env = {
+  ...process.env,
+  ENV: 'dev'
+}
+
 describe('cron - check user storage quotas', () => {
   let dbClient
   let roPg
   let adminUser, test2user, testUser90percent1, testUser90percent2, test4user, emailService
   before(async () => {
-    dbClient = getDBClient(process.env)
-    roPg = getPg(process.env, 'ro')
+    dbClient = getDBClient(env)
+    roPg = getPg(env, 'ro')
     await roPg.connect()
   })
 
