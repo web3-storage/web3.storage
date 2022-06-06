@@ -13,7 +13,7 @@ import sinon from 'sinon'
 describe('cron - check user storage quotas', () => {
   let dbClient
   let roPg
-  let adminUser, test2user, test3user, test4user, emailService
+  let adminUser, test2user, testUser90percent1, testUser90percent2, test4user, emailService
   before(async () => {
     dbClient = getDBClient(process.env)
     roPg = getPg(process.env, 'ro')
@@ -37,9 +37,14 @@ describe('cron - check user storage quotas', () => {
       percentStorageUsed: 79
     })
 
-    test3user = await createUserWithFiles(dbClient, {
-      email: 'test3@email.com',
+    testUser90percent1 = await createUserWithFiles(dbClient, {
+      email: 'testUser90percent1@email.com',
       percentStorageUsed: 90
+    })
+
+    testUser90percent2 = await createUserWithFiles(dbClient, {
+      email: 'testUser90percent2@email.com',
+      percentStorageUsed: 91
     })
 
     test4user = await createUserWithFiles(dbClient, {
@@ -49,12 +54,12 @@ describe('cron - check user storage quotas', () => {
     })
   })
 
-  it.only('can be executed', async () => {
+  it('can be executed', async () => {
     sinon.spy(emailService.provider, 'sendEmail')
 
-    await checkStorageUsed({ db: dbClient, roPg, emailService })
+    await checkStorageUsed({ db: dbClient, roPg, emailService, userBatchSize: 1 })
 
-    assert.equal(emailService.provider.sendEmail.callCount, 4)
+    assert.equal(emailService.provider.sendEmail.callCount, 5)
 
     // Admin email
     emailService.provider.sendEmail.calledWith(EMAIL_TYPE.AdminStorageExceeded, 'support@web3.storage')
@@ -80,12 +85,19 @@ describe('cron - check user storage quotas', () => {
     })
     assert.strictEqual(over75EmailSent, true, 'Over 75% email sent')
 
-    const over90EmailSent = await dbClient.emailHasBeenSent({
-      userId: test3user._id,
+    const over90Email1Sent = await dbClient.emailHasBeenSent({
+      userId: testUser90percent1._id,
       emailType: EMAIL_TYPE.User90PercentStorage,
       secondsSinceLastSent: 60 * 60 * 23
     })
-    assert.strictEqual(over90EmailSent, true, 'Over 90% email sent')
+    assert.strictEqual(over90Email1Sent, true, 'Over 90% email sent')
+
+    const over90Email2Sent = await dbClient.emailHasBeenSent({
+      userId: testUser90percent2._id,
+      emailType: EMAIL_TYPE.User90PercentStorage,
+      secondsSinceLastSent: 60 * 60 * 23
+    })
+    assert.strictEqual(over90Email2Sent, true, 'Over 90% email sent')
 
     const over100EmailSent = await dbClient.emailHasBeenSent({
       userId: test4user._id,
@@ -103,25 +115,29 @@ describe('cron - check user storage quotas', () => {
 
   it('calls the email service with the correct parameters', async () => {
     const sendEmailStub = sinon.stub(emailService, 'sendEmail')
-    await checkStorageUsed({ db: dbClient, roPg, emailService })
+    await checkStorageUsed({ db: dbClient, roPg, emailService, userBatchSize: 1 })
 
-    assert.strictEqual(sendEmailStub.getCalls().length, 4, 'email service called 4 times')
+    assert.strictEqual(sendEmailStub.getCalls().length, 5, 'email service called 5 times')
 
-    assert.strictEqual(sendEmailStub.getCall(0).args[0].id, adminUser.id)
-    assert.strictEqual(sendEmailStub.getCall(0).args[1], 'AdminStorageExceeded', 'admin exceeded daily check')
+    assert.strictEqual(sendEmailStub.getCall(0).args[0].email, 'test4@email.com')
+    assert.strictEqual(sendEmailStub.getCall(0).args[1], 'User100PercentStorage', 'user exceeded daily check')
     assert.strictEqual(sendEmailStub.getCall(0).args[2].secondsSinceLastSent, 60 * 60 * 23)
-    assert.ok(sendEmailStub.getCall(0).args[2].templateVars, 'users passed to email template')
 
-    assert.strictEqual(sendEmailStub.getCall(1).args[0].email, 'test4@email.com')
-    assert.strictEqual(sendEmailStub.getCall(1).args[1], 'User100PercentStorage', 'user exceeded daily check')
+    assert.strictEqual(sendEmailStub.getCall(1).args[0].id, adminUser.id)
+    assert.strictEqual(sendEmailStub.getCall(1).args[1], 'AdminStorageExceeded', 'admin exceeded daily check')
     assert.strictEqual(sendEmailStub.getCall(1).args[2].secondsSinceLastSent, 60 * 60 * 23)
+    assert.ok(sendEmailStub.getCall(1).args[2].templateVars, 'users passed to email template')
 
-    assert.strictEqual(sendEmailStub.getCall(2).args[0].email, 'test3@email.com')
+    assert.strictEqual(sendEmailStub.getCall(2).args[0].email, 'testUser90percent1@email.com')
     assert.strictEqual(sendEmailStub.getCall(2).args[1], 'User90PercentStorage', 'user daily check over 90')
     assert.strictEqual(sendEmailStub.getCall(2).args[2].secondsSinceLastSent, 60 * 60 * 23)
 
-    assert.strictEqual(sendEmailStub.getCall(3).args[0].email, 'test2@email.com')
-    assert.strictEqual(sendEmailStub.getCall(3).args[1], 'User75PercentStorage', 'user weekly check over 75')
-    assert.strictEqual(sendEmailStub.getCall(3).args[2].secondsSinceLastSent, 60 * 60 * 24 * 7 - (60 * 60))
+    assert.strictEqual(sendEmailStub.getCall(3).args[0].email, 'testUser90percent2@email.com')
+    assert.strictEqual(sendEmailStub.getCall(3).args[1], 'User90PercentStorage', 'user daily check over 90')
+    assert.strictEqual(sendEmailStub.getCall(3).args[2].secondsSinceLastSent, 60 * 60 * 23)
+
+    assert.strictEqual(sendEmailStub.getCall(4).args[0].email, 'test2@email.com')
+    assert.strictEqual(sendEmailStub.getCall(4).args[1], 'User75PercentStorage', 'user weekly check over 75')
+    assert.strictEqual(sendEmailStub.getCall(4).args[2].secondsSinceLastSent, 60 * 60 * 24 * 7 - (60 * 60))
   })
 })

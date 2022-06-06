@@ -79,4 +79,5 @@ export class DBClient {
   getUserTags (userId: number): Promise<{ tag: string, value: string }[]>
 }
 
+export function parseTextToNumber(n: string): number
 export { EMAIL_TYPE } from './constants.js'

@@ -11,6 +11,7 @@ import {
 import { ConstraintError, DBError } from './errors.js'
 
 export { EMAIL_TYPE } from './constants.js'
+export { parseTextToNumber } from './utils.js'
 
 const uploadQuery = `
         _id:id::text,
@@ -292,7 +293,6 @@ export class DBClient {
       total: parseTextToNumber(data.total)
     }
   }
-
 
   /**
    * Check the email history for a specified email type to see if it has
