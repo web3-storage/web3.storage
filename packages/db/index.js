@@ -456,10 +456,10 @@ export class DBClient {
     const limit = offset + (opts.size || 25)
 
     const sortBy = opts.sortBy === 'Name'
-    ? 'name'
-    : 'inserted_at'
+      ? 'name'
+      : 'inserted_at'
 
-    const isAscendingSortOrder =  opts.sortOrder === 'Asc'
+    const isAscendingSortOrder = opts.sortOrder === 'Asc'
 
     let query = this._client
       .from('upload')
@@ -480,12 +480,10 @@ export class DBClient {
       query = query.gte('inserted_at', opts.after)
     }
 
-    // Apply pagination
-    if (opts.offset) {
-      query = query.range(offset, limit - 1)
-    } else if (opts.limit) {
-      query = query.limit(limit)
-    }
+    // Apply pagination or limiting.
+    query = opts.offset
+      ? query.range(offset, limit - 1)
+      : query.limit(limit)
 
     /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error }} */
     const { data: uploads, error } = await query

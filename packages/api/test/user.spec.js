@@ -167,6 +167,67 @@ describe('GET /user/uploads', () => {
     assert.deepStrictEqual(uploads, [...userUploads].sort((a, b) => b.name.localeCompare(a.name)))
   })
 
+  it('lists uploads sorted by date', async () => {
+    const token = await getTestJWT()
+    const res = await fetch(new URL('/user/uploads?sortBy=Date', endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(res.ok)
+    const uploads = await res.json()
+    assert.deepStrictEqual(uploads, [...userUploads].sort((a, b) => b.created.localeCompare(a.created)))
+  })
+
+  it('filters results by before date', async () => {
+    const token = await getTestJWT()
+
+    const beforeFilterDate = new Date('2021-07-10T00:00:00.000000+00:00').toISOString()
+    const res = await fetch(new URL(`/user/uploads?before=${beforeFilterDate}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+
+    assert(res.ok)
+
+    const uploads = await res.json()
+
+    assert(uploads.length < userUploads.length, 'Ensure some results are filtered out.')
+    assert(uploads.length > 0, 'Ensure some results are returned.')
+
+    // Filter uploads fixture by the filter date.
+    const uploadsBeforeFilterDate = userUploads.filter((upload) => {
+      console.log(upload.created, beforeFilterDate)
+      return upload.created <= beforeFilterDate
+    })
+
+    assert.deepStrictEqual(uploads, [...uploadsBeforeFilterDate])
+  })
+
+  it('filters results by after date', async () => {
+    const token = await getTestJWT()
+
+    const afterFilterDate = new Date('2021-07-10T00:00:00.000000+00:00').toISOString()
+    const res = await fetch(new URL(`/user/uploads?after=${afterFilterDate}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+
+    assert(res.ok)
+
+    const uploads = await res.json()
+
+    assert(uploads.length < userUploads.length, 'Ensure some results are filtered out.')
+    assert(uploads.length > 0, 'Ensure some results are returned.')
+
+    // Filter uploads fixture by the filter date.
+    const uploadsAfterFilterDate = userUploads.filter((upload) => {
+      console.log(upload.created, afterFilterDate)
+      return upload.created >= afterFilterDate
+    })
+
+    assert.deepStrictEqual(uploads, [...uploadsAfterFilterDate])
+  })
+
   it('lists uploads via magic auth', async () => {
     const token = 'test-magic'
     const res = await fetch(new URL('/user/uploads', endpoint).toString(), {
@@ -178,7 +239,7 @@ describe('GET /user/uploads', () => {
     assert.deepStrictEqual(uploads, userUploads)
   })
 
-  it.only('paginates by offset', async () => {
+  it('paginates by offset', async () => {
     const token = await getTestJWT()
     const size = 1
     const res = await fetch(new URL(`/user/uploads?size=${size}`, endpoint).toString(), {
@@ -187,11 +248,28 @@ describe('GET /user/uploads', () => {
     })
     assert(res.ok)
 
-    const expected = [userUploads[0]]
     const link = res.headers.get('Link')
     assert(link, 'has a Link header for the next page')
+
     assert.strictEqual(link, `</user/uploads?size=${size}&offset=${size}>; rel="next"`)
     const uploads = await res.json()
+    const expected = [userUploads[0]]
+    assert.deepStrictEqual(uploads, expected)
+  })
+
+  it('does not paginate when all results are returned', async () => {
+    const token = await getTestJWT()
+    const size = 1000
+    const res = await fetch(new URL(`/user/uploads?size=${size}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(res.ok)
+
+    assert.notEqual('link' in res.headers, 'does not have a Link header for the next page')
+
+    const uploads = await res.json()
+    const expected = userUploads
     assert.deepStrictEqual(uploads, expected)
   })
 })

@@ -182,22 +182,22 @@ export async function userUploadsGet (request, env) {
     offset = parsedOffset
   }
 
-  let before = new Date()
+  let before
   if (searchParams.has('before')) {
     const parsedBefore = new Date(searchParams.get('before'))
     if (isNaN(parsedBefore.getTime())) {
       throw Object.assign(new Error('invalid before date'), { status: 400 })
     }
-    before = parsedBefore
+    before = parsedBefore.toISOString()
   }
 
-  let after = new Date()
+  let after
   if (searchParams.has('after')) {
-    const parsedBefore = new Date(searchParams.get('after'))
-    if (isNaN(parsedBefore.getTime())) {
+    const parsedAfter = new Date(searchParams.get('after'))
+    if (isNaN(parsedAfter.getTime())) {
       throw Object.assign(new Error('invalid after date'), { status: 400 })
     }
-    after = parsedAfter
+    after = parsedAfter.toISOString()
   }
 
   const sortBy = searchParams.get('sortBy') || 'Date'
@@ -206,16 +206,16 @@ export async function userUploadsGet (request, env) {
   const uploads = await env.db.listUploads(request.auth.user._id, {
     size,
     offset,
-    before: before.toISOString(),
+    before,
+    after,
     sortBy,
     sortOrder
   })
 
-  const nextOffset = offset + size;
-  console.log(uploads.length, size)
+  const nextOffset = offset + size
   const headers = uploads.length < size
-    ? { Link: `<${requestUrl.pathname}?size=${size}&offset=${encodeURIComponent(nextOffset)}>; rel="next"` }
-    : undefined
+    ? undefined
+    : { Link: `<${requestUrl.pathname}?size=${size}&offset=${encodeURIComponent(nextOffset)}>; rel="next"` }
   return new JSONResponse(uploads, { headers })
 }
 
