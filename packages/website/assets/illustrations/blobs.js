@@ -1,10 +1,12 @@
-import Img from 'components/cloudflareImage';
+import Img from '../../components/cloudflareImage.js';
+import ImgBlobs from '../../public/images/illustrations/blobs.png';
+
 /**
  * @param {any} props
  */
 const Blobs = props => (
   <div {...props}>
-    <Img width="600" height="600" className="image-full-width" alt="" src="/images/illustrations/blobs.png" />
+    <Img alt="" src={ImgBlobs} />
   </div>
 );
 

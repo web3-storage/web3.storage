@@ -367,14 +367,14 @@
 #faq_hero_title-triangle {
   &:after {
     transform: scaleX(-1) rotate(-90deg);
-    background-image: url('/images/illustration/triangle.png');
+    background-image: url('/images/illustrations/triangle.png');
   }
 }
 
 #faq_hero_title-coil {
   &:after {
     transform: rotate(31deg);
-    background-image: url('/images/illustration/coil.png');
+    background-image: url('/images/illustrations/coil.png');
     @include small {
       display: none;
     }
