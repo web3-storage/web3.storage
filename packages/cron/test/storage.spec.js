@@ -136,7 +136,11 @@ describe('cron - check user storage quotas', () => {
     assert.strictEqual(sendEmailStub.getCall(1).args[0].id, adminUser.id)
     assert.strictEqual(sendEmailStub.getCall(1).args[1], 'AdminStorageExceeded', 'admin exceeded daily check')
     assert.strictEqual(sendEmailStub.getCall(1).args[2].secondsSinceLastSent, 60 * 60 * 23)
-    assert.ok(sendEmailStub.getCall(1).args[2].templateVars, 'users passed to email template')
+
+    const tVars = sendEmailStub.getCall(1).args[2].templateVars
+    assert.ok(tVars, 'users passed to email template')
+    assert.strictEqual(tVars.users.length, 1)
+    assert.ok(tVars.users.some((u) => u.id === test4user._id))
 
     assert.strictEqual(sendEmailStub.getCall(2).args[0].email, 'testUser90percent1@email.com')
     assert.strictEqual(sendEmailStub.getCall(2).args[1], 'User90PercentStorage', 'user daily check over 90')
