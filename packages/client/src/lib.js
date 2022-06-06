@@ -83,13 +83,13 @@ class Web3Storage {
    * const client = new Web3Storage({ token: API_TOKEN })
    * ```
    *
-   * @param {{token: string, endpoint?:URL, rateLimiter?: RateLimiter, pre: (requestInit: RequestInit) => RequestInit}} options
+   * @param {{token: string, endpoint?:URL, rateLimiter?: RateLimiter, customFetch: typeof fetch}} options
    */
   constructor ({
     token,
     endpoint = new URL('https://api.web3.storage'),
     rateLimiter,
-    pre,
+    customFetch,
   }) {
     /**
      * Authorization token.
@@ -107,10 +107,10 @@ class Web3Storage {
      */
     this.rateLimiter = rateLimiter || createRateLimiter()
     /**
-     * pre-middleware can process requestInit options
+     * if a custom fetch function existed, will use it instead of the original fetch function
      * @readonly
      */
-    this.pre = pre;
+    this.customFetch = customFetch;
   }
 
   /**
@@ -132,7 +132,7 @@ class Web3Storage {
    * @param {PutOptions} [options]
    * @returns {Promise<CIDString>}
    */
-  static async put ({ endpoint, token, rateLimiter = globalRateLimiter, pre }, files, {
+  static async put ({ endpoint, token, rateLimiter = globalRateLimiter, customFetch }, files, {
     onRootCidReady,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
@@ -154,7 +154,7 @@ class Web3Storage {
       })
       onRootCidReady && onRootCidReady(root.toString())
       const car = await CarReader.fromIterable(out)
-      return await Web3Storage.putCar({ endpoint, token, rateLimiter, pre }, car, { onStoredChunk, maxRetries, maxChunkSize, name })
+      return await Web3Storage.putCar({ endpoint, token, rateLimiter, customFetch }, car, { onStoredChunk, maxRetries, maxChunkSize, name })
     } finally {
       await blockstore.close()
     }
@@ -166,7 +166,7 @@ class Web3Storage {
    * @param {PutCarOptions} [options]
    * @returns {Promise<CIDString>}
    */
-  static async putCar ({ endpoint, token, rateLimiter = globalRateLimiter, pre }, car, {
+  static async putCar ({ endpoint, token, rateLimiter = globalRateLimiter, customFetch }, car, {
     name,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
@@ -209,12 +209,11 @@ class Web3Storage {
       const res = await pRetry(
         async () => {
           await rateLimiter()
-          const init = {
+          const request = await (customFetch||fetch)(url.toString(), {
             method: 'POST',
             headers,
             body: carFile,
-          };
-          const request = await fetch(url.toString(), pre ? pre(init) : init)
+          })
           /* c8 ignore next 3 */
           if (request.status === 429) {
             throw new Error('rate limited')
@@ -246,14 +245,13 @@ class Web3Storage {
    * @param {CIDString} cid
    * @returns {Promise<Web3Response | null>}
    */
-  static async get ({ endpoint, token, rateLimiter = globalRateLimiter, pre }, cid) {
+  static async get ({ endpoint, token, rateLimiter = globalRateLimiter, customFetch }, cid) {
     const url = new URL(`car/${cid}`, endpoint)
     await rateLimiter()
-    const init = {
+    const res = await (customFetch||fetch)(url.toString(), {
       method: 'GET',
       headers: Web3Storage.headers(token),
-    }
-    const res = await fetch(url.toString(), pre ? pre(init) : init)
+    })
     /* c8 ignore next 3 */
     if (res.status === 429) {
       throw new Error('rate limited')
@@ -277,14 +275,13 @@ class Web3Storage {
    * @param {CIDString} cid
    * @returns {Promise<Status | undefined>}
    */
-  static async status ({ endpoint, token, rateLimiter = globalRateLimiter, pre }, cid) {
+  static async status ({ endpoint, token, rateLimiter = globalRateLimiter, customFetch }, cid) {
     const url = new URL(`status/${cid}`, endpoint)
     await rateLimiter()
-    const init = {
+    const res = await (customFetch||fetch)(url.toString(), {
       method: 'GET',
       headers: Web3Storage.headers(token),
-    }
-    const res = await fetch(url.toString(), pre ? pre(init) : init)
+    })
     /* c8 ignore next 3 */
     if (res.status === 429) {
       throw new Error('rate limited')
@@ -311,18 +308,17 @@ class Web3Storage {
    * @param {{before: string, size: number}} opts
    * @returns {Promise<Response>}
    */
-    async function listPage ({ endpoint, token, rateLimiter = globalRateLimiter, pre }, { before, size }) {
+    async function listPage ({ endpoint, token, rateLimiter = globalRateLimiter, customFetch }, { before, size }) {
       const search = new URLSearchParams({ before, size: size.toString() })
       const url = new URL(`user/uploads?${search}`, endpoint)
       await rateLimiter()
-      const init = {
+      return (customFetch||fetch)(url.toString(), {
         method: 'GET',
         headers: {
           ...Web3Storage.headers(token),
           'Access-Control-Request-Headers': 'Link'
         },
-      }
-      return fetch(url.toString(), pre ? pre(init) : init);
+      });
     }
     let count = 0
     const size = maxResults > 100 ? 100 : maxResults
