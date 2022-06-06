@@ -71,13 +71,12 @@ const STORAGE_QUOTA_EMAILS = [
  * Get users with storage quota usage in percentage range and email them as
  * appropriate when approaching their storage quota limit.
  * @param {{
- *  db: import('@web3-storage/db').DBClient
  *  roPg: import('pg').Client
  *  emailService: import('../lib/email/service').EmailService
  *  userBatchSize?: number
  * }} config
  */
-export async function checkStorageUsed ({ db, roPg, emailService, userBatchSize = 100 }) {
+export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 100 }) {
   if (!log.enabled) {
     console.log('ℹ️ Enable logging by setting DEBUG=storage:checkStorageUsed')
   }

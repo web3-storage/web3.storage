@@ -57,7 +57,7 @@ describe('cron - check user storage quotas', () => {
   it('can be executed', async () => {
     sinon.spy(emailService.provider, 'sendEmail')
 
-    await checkStorageUsed({ db: dbClient, roPg, emailService, userBatchSize: 1 })
+    await checkStorageUsed({ roPg, emailService, userBatchSize: 1 })
 
     assert.equal(emailService.provider.sendEmail.callCount, 5)
 
@@ -108,14 +108,14 @@ describe('cron - check user storage quotas', () => {
 
     // Ensure emails are not re-sent
     emailService.provider.sendEmail.resetHistory()
-    await checkStorageUsed({ db: dbClient, roPg, emailService })
+    await checkStorageUsed({ roPg, emailService })
 
     sinon.assert.notCalled(emailService.provider.sendEmail)
   })
 
   it('calls the email service with the correct parameters', async () => {
     const sendEmailStub = sinon.stub(emailService, 'sendEmail')
-    await checkStorageUsed({ db: dbClient, roPg, emailService, userBatchSize: 1 })
+    await checkStorageUsed({ roPg, emailService, userBatchSize: 1 })
 
     assert.strictEqual(sendEmailStub.getCalls().length, 5, 'email service called 5 times')
 
