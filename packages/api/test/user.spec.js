@@ -220,6 +220,21 @@ describe('GET /user/uploads', () => {
     assert.deepStrictEqual(uploads, [...userUploads].sort((a, b) => b.created.localeCompare(a.created)))
   })
 
+  it('lists uploads in reverse order when sorting by Asc', async () => {
+    const token = await getTestJWT()
+    const res = await fetch(new URL('/user/uploads?sortBy=Name&sortOrder=Asc', endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+
+    assert(res.ok)
+
+    const uploads = await res.json()
+    const sortedUploads = [...userUploads].sort((a, b) => a.name.localeCompare(b.name));
+
+    assert.deepStrictEqual(uploads, sortedUploads)
+  })
+
   it('filters results by before date', async () => {
     const token = await getTestJWT()
 
