@@ -296,8 +296,8 @@ $$;
 CREATE OR REPLACE FUNCTION users_by_storage_used(
   from_percent INTEGER,
   to_percent INTEGER DEFAULT NULL,
-  start_id INTEGER DEFAULT 0,
-  end_id INTEGER DEFAULT NULL
+  start_id BIGINT DEFAULT 0,
+  end_id BIGINT DEFAULT NULL
 )
   RETURNS TABLE
     (
