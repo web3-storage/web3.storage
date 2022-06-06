@@ -25,4 +25,19 @@ describe('CORS', () => {
     assert.strictEqual(res.status, 500, 'Expected 500 on /error')
     assert.strictEqual(res.headers.get('Access-Control-Allow-Origin'), '*')
   })
+
+  it('correctly responds to preflight request', async () => {
+    const res = await fetch(new URL('version', endpoint), {
+      method: 'OPTIONS',
+      headers: {
+        Origin: 'web3.storage',
+        'Access-Control-Request-Method': 'whatever',
+        'Access-Control-Request-Headers': 'whatever'
+      }
+    })
+    assert(res.ok)
+    assert.strictEqual(res.status, 204, 'Expected 204 status for OPTIONS request')
+    assert.strictEqual(res.headers.get('Access-Control-Allow-Origin'), 'web3.storage')
+    assert.strictEqual(res.headers.get('Access-Control-Allow-Methods'), 'GET,POST,DELETE,OPTIONS')
+  })
 })

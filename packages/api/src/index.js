@@ -2,7 +2,7 @@
 import { Router } from 'itty-router'
 import { errorHandler } from './error-handler.js'
 import { addCorsHeaders, withCorsHeaders, corsOptions } from './cors.js'
-import { withAccountNotRestricted, withApiOrMagicToken, withMagicToken, withPinningAuthorized } from './auth.js'
+import { withAccountNotRestricted, withDeleteNotRestricted, withApiOrMagicToken, withMagicToken, withPinningAuthorized } from './auth.js'
 import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
@@ -48,8 +48,14 @@ const auth = {
   // must be a logged in user
   '👤': compose(withCorsHeaders, withMagicToken),
 
+  // must be a logged in user with no delete restriction
+  '👤🗑️': compose(withCorsHeaders, withMagicToken, withDeleteNotRestricted),
+
   // needs PSA & restricted users allowed
   '📌⚠️': compose(withCorsHeaders, withApiOrMagicToken, withPinningAuthorized),
+
+  // needs PSA & restricted users with no delete restriction allowed
+  '📌⚠️🗑️': compose(withCorsHeaders, withApiOrMagicToken, withDeleteNotRestricted, withPinningAuthorized),
 
   // needs PSA
   '📌': compose(withCorsHeaders, withApiOrMagicToken, withAccountNotRestricted, withPinningAuthorized) // needs PSA
@@ -70,17 +76,17 @@ router.post('/pins',                auth['📌'](pinPost))
 router.post('/pins/:requestId',     auth['📌'](pinPost))
 router.get('/pins/:requestId',      auth['📌⚠️'](pinGet))
 router.get('/pins',                 auth['📌⚠️'](pinsGet))
-router.delete('/pins/:requestId',   auth['📌⚠️'](pinDelete))
+router.delete('/pins/:requestId',   auth['📌⚠️🗑️'](pinDelete))
 
 router.get('/name/:key',            auth['🌍'](nameGet))
 router.get('/name/:key/watch',      auth['🌍'](nameWatchGet))
 router.post('/name/:key',           auth['🔑'](namePost))
 
-router.delete('/user/uploads/:cid',      auth['👤'](userUploadsDelete))
+router.delete('/user/uploads/:cid',      auth['👤🗑️'](userUploadsDelete))
 router.post('/user/uploads/:cid/rename', auth['👤'](userUploadsRename))
 router.get('/user/tokens',               auth['👤'](userTokensGet))
 router.post('/user/tokens',              auth['👤'](userTokensPost))
-router.delete('/user/tokens/:id',        auth['👤'](userTokensDelete))
+router.delete('/user/tokens/:id',        auth['👤🗑️'](userTokensDelete))
 router.get('/user/account',              auth['👤'](userAccountGet))
 router.get('/user/info',                 auth['👤'](userInfoGet))
 /* eslint-enable no-multi-spaces */
@@ -130,6 +136,7 @@ export default {
   async fetch (request, env, ctx) {
     let response
     try {
+      env = { ...env } // new env object for every request (it is shared otherwise)!
       response = await router.handle(request, env, ctx)
     } catch (error) {
       response = serverError(error, request, env)

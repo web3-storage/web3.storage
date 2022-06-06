@@ -29,6 +29,9 @@ Kill the process to stop miniflare, then run `npm run stop` to shutdown the clus
 npm run stop
 ```
 
+You may need to make sure the underlying DB is populated with the required tables.
+Please follow the instructions in the [Populate Database](../../packages/db/README.md#2-populate-database) section in the db package README.
+
 ## Setting up a cloudflare worker
 While in most cases the [Getting Started](#getting-started) section is enough to develop locally, if you want to test and preview you worker on Cloudflare's infrastructure here's the instructions to setup your worker and environment.
 

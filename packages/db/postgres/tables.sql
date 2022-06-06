@@ -1,4 +1,4 @@
-DO 
+DO
 $$
 BEGIN
   -- Auth key blocked status type is the type of blocking that has occurred on the api
@@ -19,14 +19,25 @@ BEGIN
     CREATE TYPE user_tag_type AS ENUM
     (
       'HasAccountRestriction',
+      'HasDeleteRestriction',
       'HasPsaAccess',
       'StorageLimitBytes'
     );
   END IF;
 
+  -- Proposal decision types are used by admins to denote approval/denial of a
+  -- request by the user to receive more permissions int he application.
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_tag_proposal_decision_type') THEN
+    CREATE TYPE user_tag_proposal_decision_type AS ENUM
+    (
+      'Approved',
+      'Declined'
+    );
+  END IF;
+
   -- Types for notification emails
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'email_type') THEN
-    CREATE TYPE email_type AS ENUM 
+    CREATE TYPE email_type AS ENUM
       (
         'User75PercentStorage',
         'User80PercentStorage',
@@ -71,6 +82,31 @@ CREATE TABLE IF NOT EXISTS public.user_tag
 CREATE UNIQUE INDEX IF NOT EXISTS user_tag_is_deleted_idx ON user_tag (user_id, tag, deleted_at)
 WHERE deleted_at IS NOT NULL;
 CREATE UNIQUE INDEX IF NOT EXISTS user_tag_is_not_deleted_idx ON user_tag (user_id, tag)
+WHERE deleted_at IS NULL;
+
+-- These are user_tag(s) that a user has requested.  It is assumed that a user can
+-- only request one type of user_tag at any given time, hence the index associated
+-- with this table.  The admin app will have to create an entry in the user_tag
+-- table once a proposal has been approved.  These proposals are visible to both
+-- users and admins.
+CREATE TABLE IF NOT EXISTS public.user_tag_proposal
+(
+  id                     BIGSERIAL      PRIMARY KEY,
+  user_id                BIGINT         NOT NULL REFERENCES public.user (id),
+  tag                    user_tag_type  NOT NULL,
+  proposed_tag_value     TEXT           NOT NULL,
+  user_proposal_form     jsonb          NOT NULL,
+  admin_decision_message TEXT                   ,
+  admin_decision_type    user_tag_proposal_decision_type,
+  inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  deleted_at  TIMESTAMP WITH TIME ZONE
+);
+-- Note: We index active user_tag_proposals with deleted_at IS NULL to enforce only 1 active
+-- tag type proposal per user.  We allow there to be multiple deleted user_tag_proposals of the same type per
+-- user to handle the scenario where a user has been denied multiple times by admins.
+-- If deleted_at is populated, it means the user_tag_proposal has been cancelled by
+-- a user or a decision has been provided by an admin.
+CREATE UNIQUE INDEX IF NOT EXISTS user_tag_proposal_is_not_deleted_idx ON user_tag_proposal (user_id, tag)
 WHERE deleted_at IS NULL;
 
 -- User authentication keys.
@@ -223,6 +259,7 @@ CREATE TABLE IF NOT EXISTS upload
   type            upload_type                                                   NOT NULL,
   -- User provided name for this upload.
   name            TEXT,
+  backup_urls     TEXT[],
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   deleted_at      TIMESTAMP WITH TIME ZONE,
@@ -232,20 +269,6 @@ CREATE TABLE IF NOT EXISTS upload
 CREATE INDEX IF NOT EXISTS upload_auth_key_id_idx ON upload (auth_key_id);
 CREATE INDEX IF NOT EXISTS upload_content_cid_idx ON upload (content_cid);
 CREATE INDEX IF NOT EXISTS upload_updated_at_idx ON upload (updated_at);
-
--- Details of the backups created for an upload.
-CREATE TABLE IF NOT EXISTS backup
-(
-  id              BIGSERIAL PRIMARY KEY,
-  -- Upload that resulted in this backup.
-  upload_id       BIGINT                                                        NOT NULL REFERENCES upload (id) ON DELETE CASCADE,
-  -- Backup url location.
-  url             TEXT                                                          NOT NULL,
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  UNIQUE (upload_id, url)
-);
-
-CREATE INDEX IF NOT EXISTS backup_upload_id_idx ON backup (upload_id);
 
 -- Tracks requests to replicate content to more nodes.
 CREATE TABLE IF NOT EXISTS pin_request
@@ -323,7 +346,7 @@ CREATE TABLE IF NOT EXISTS metric
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS email_history 
+CREATE TABLE IF NOT EXISTS email_history
 (
   id              BIGSERIAL PRIMARY KEY,
   -- the id of the user being notified

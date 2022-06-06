@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.5.0](https://github.com/web3-storage/web3.storage/compare/website-v2.4.1...website-v2.5.0) (2022-05-30)
+
+
+### Features
+
+* add user blocking functionality to web3 ([#1322](https://github.com/web3-storage/web3.storage/issues/1322)) ([5803876](https://github.com/web3-storage/web3.storage/commit/5803876b6ab6672ce82ebe3e641a8729993743ef))
+
+
+### Bug Fixes
+
+* Set fetch date before changing isFetching state ([#1341](https://github.com/web3-storage/web3.storage/issues/1341)) ([0e07f1f](https://github.com/web3-storage/web3.storage/commit/0e07f1f72b3037b56a4a236ffa9696ab982c22f5))
+* show custom storage quota to user ([#1338](https://github.com/web3-storage/web3.storage/issues/1338)) ([51abb35](https://github.com/web3-storage/web3.storage/commit/51abb35b9c6f53ed1023a7dbb162ce2838fe09e9))
+
 ### [2.4.1](https://github.com/web3-storage/web3.storage/compare/website-v2.4.0...website-v2.4.1) (2022-05-20)
 
 

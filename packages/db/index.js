@@ -33,6 +33,18 @@ const userQuery = `
   updated:updated_at
 `
 
+const userQueryWithTags = `
+  _id:id::text,
+  issuer,
+  name,
+  email,
+  github,
+  publicAddress:public_address,
+  created:inserted_at,
+  updated:updated_at,
+  tags:user_tag_user_id_fkey(user_id,id,tag,value,deleted_at)
+`
+
 const psaPinRequestTableName = 'psa_pin_request'
 const pinRequestSelect = `
   _id:id::text,
@@ -126,11 +138,11 @@ export class DBClient {
    * @param {string} issuer
    * @return {Promise<import('./db-client-types').UserOutput | undefined>}
    */
-  async getUser (issuer) {
+  async getUser (issuer, { includeTags } = { includeTags: false }) {
     /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
-      .select(userQuery)
+      .select(includeTags ? userQueryWithTags : userQuery)
       .eq('issuer', issuer)
 
     if (error) {
@@ -161,7 +173,7 @@ export class DBClient {
 
   /**
    * Create a user tag
-   * @param {number} userId
+   * @param {string} userId
    * @param {Object} [tag]
    * @param {string} [tag.tag]
    * @param {string} [tag.value]
@@ -380,6 +392,7 @@ export class DBClient {
    */
   async createUpload (data) {
     const now = new Date().toISOString()
+
     /** @type {{ data: string, error: PostgrestError }} */
     const { data: uploadResponse, error } = await this._client.rpc('create_upload', {
       data: {
@@ -605,22 +618,20 @@ export class DBClient {
    * @return {Promise<Array<import('./db-client-types').BackupOutput>>}
    */
   async getBackups (uploadId) {
-    /** @type {{ data: Array<definitions['backup']>, error: PostgrestError }} */
-    const { data: backups, error } = await this._client
-      .from('backup')
-      .select(`
-        _id:id::text,
-        created:inserted_at,
-        uploadId:upload_id::text,
-        url
-      `)
-      .match({ upload_id: uploadId })
+    /** @type {{ data: {backupUrls: definitions['upload']['backup_urls']}, error: PostgrestError }} */
+    const { data: { backupUrls }, error } = await this._client
+      .from('upload')
+      .select('backupUrls:backup_urls')
+      .eq('id', uploadId)
+      .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    return backups
+    const uniqueUrls = new Set(backupUrls)
+
+    return Array.from(uniqueUrls)
   }
 
   /**
