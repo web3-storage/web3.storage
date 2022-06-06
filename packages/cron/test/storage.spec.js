@@ -12,7 +12,8 @@ import sinon from 'sinon'
 
 const env = {
   ...process.env,
-  ENV: 'dev'
+  ENV: 'dev',
+  RO_PG_CONNECTION: 'postgres://postgres:postgres@127.0.0.1:5432/postgres'
 }
 
 describe('cron - check user storage quotas', () => {
