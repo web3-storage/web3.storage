@@ -19,7 +19,7 @@ const env = {
 describe('cron - check user storage quotas', () => {
   let dbClient
   let roPg
-  let adminUser, test2user, testUser90percent1, testUser90percent2, test4user, emailService
+  let adminUser, test2user, testUser90percent1, testUser90percent2, testUserOver100, emailService
   before(async () => {
     dbClient = getDBClient(env)
     roPg = getPg(env, 'ro')
@@ -57,7 +57,7 @@ describe('cron - check user storage quotas', () => {
       percentStorageUsed: 91
     })
 
-    test4user = await createUserWithFiles(dbClient, {
+    testUserOver100 = await createUserWithFiles(dbClient, {
       email: 'test4@email.com',
       percentStorageUsed: 145,
       storageQuota: 2199023255552
@@ -110,7 +110,7 @@ describe('cron - check user storage quotas', () => {
     assert.strictEqual(over90Email2Sent, true, 'Over 90% email sent')
 
     const over100EmailSent = await dbClient.emailHasBeenSent({
-      userId: test4user._id,
+      userId: testUserOver100._id,
       emailType: EMAIL_TYPE.User100PercentStorage,
       secondsSinceLastSent: 60 * 60 * 23
     })
@@ -140,7 +140,7 @@ describe('cron - check user storage quotas', () => {
     const tVars = sendEmailStub.getCall(1).args[2].templateVars
     assert.ok(tVars, 'users passed to email template')
     assert.strictEqual(tVars.users.length, 1)
-    assert.ok(tVars.users.some((u) => u.id === test4user._id))
+    assert.ok(tVars.users.some((u) => u.id === testUserOver100._id))
 
     assert.strictEqual(sendEmailStub.getCall(2).args[0].email, 'testUser90percent1@email.com')
     assert.strictEqual(sendEmailStub.getCall(2).args[1], 'User90PercentStorage', 'user daily check over 90')
