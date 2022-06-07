@@ -179,7 +179,7 @@ export class DBClient {
    * @returns {Promise<boolean>}
    */
   async createUserTag (userId, tag) {
-    if (!tag || !tag.tag) {
+    if (!tag?.tag) {
       throw new Error('createUserTag requires a tag')
     }
     const { data: deleteData, status: deleteStatus } = await this._client
