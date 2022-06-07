@@ -42,6 +42,7 @@ export class Logging {
     this.logEventsBatch = []
     this.startTs = Date.now()
     this.currentTs = this.startTs
+    this._finished = false
 
     const cf = request.cf
     let rCf
@@ -145,6 +146,13 @@ export class Logging {
    * @param {Response} response
    */
   async end (response) {
+    if (this._finished) {
+      throw new Error(
+        `end() has already been called on this Logging instance.
+        You must make a new instance per request.`
+      )
+    }
+    this._finished = true
     if (this.opts?.debug) {
       response.headers.set('Server-Timing', this._timersString())
     }
@@ -171,7 +179,6 @@ export class Logging {
       await this.postBatch()
     }
     this.ctx.waitUntil(run())
-
     return response
   }
 
@@ -276,7 +283,7 @@ export class Logging {
     if (!timeObj) {
       return console.warn(`No such name ${name}`)
     }
-
+    this._times.delete(name)
     const end = Date.now()
     const duration = end - timeObj.start
     const value = duration

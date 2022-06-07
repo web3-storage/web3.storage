@@ -22,6 +22,16 @@ $cta-card-padding-top: 5rem;
     padding-bottom: 1.5625rem;
     @include label_4;
   }
+
+  &__background {
+    position: absolute;
+    border-radius: 0.625rem;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
 }
 
 .cta-buttons-container {

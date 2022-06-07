@@ -63,7 +63,7 @@ BEGIN
           (data ->> 'inserted_at')::timestamptz)
     ON CONFLICT ( cid ) DO NOTHING
   returning cid into inserted_cid;
-  
+
   -- Add to pin_request table if new
   insert into pin_request (content_cid, attempts, updated_at, inserted_at)
   values (data ->> 'content_cid',
@@ -120,22 +120,23 @@ CREATE OR REPLACE FUNCTION create_upload(data json) RETURNS TEXT
 AS
 $$
 DECLARE
-  backup_url TEXT;
   inserted_upload_id BIGINT;
+
 BEGIN
   -- Set timeout as imposed by heroku
   SET LOCAL statement_timeout = '30s';
 
   PERFORM create_content(data);
 
-  insert into upload (user_id,
+  insert into upload as upld (user_id,
                       auth_key_id,
                       content_cid,
                       source_cid,
                       type,
                       name,
                       inserted_at,
-                      updated_at)
+                      updated_at,
+                      backup_urls)
   values ((data ->> 'user_id')::BIGINT,
             (data ->> 'auth_key_id')::BIGINT,
             data ->> 'content_cid',
@@ -143,24 +144,14 @@ BEGIN
             (data ->> 'type')::upload_type,
             data ->> 'name',
             (data ->> 'inserted_at')::timestamptz,
-            (data ->> 'updated_at')::timestamptz)
+            (data ->> 'updated_at')::timestamptz,
+            json_arr_to_text_arr(data -> 'backup_urls'))
   ON CONFLICT ( user_id, source_cid ) DO UPDATE
     SET "updated_at" = (data ->> 'updated_at')::timestamptz,
         "name" = data ->> 'name',
-        "deleted_at" = null
+        "deleted_at" = null,
+        "backup_urls" = upld.backup_urls || json_arr_to_text_arr(data -> 'backup_urls')
   returning id into inserted_upload_id;
-
-  foreach backup_url in array json_arr_to_text_arr(data -> 'backup_urls')
-  loop
-    -- insert into backup with update
-    insert into backup (upload_id,
-                        url,
-                        inserted_at)
-    values (inserted_upload_id,
-            backup_url,
-            (data ->> 'inserted_at')::timestamptz)
-    ON CONFLICT ( upload_id, url ) DO NOTHING;
-  end loop;
 
   return (inserted_upload_id)::TEXT;
 END
@@ -250,6 +241,105 @@ BEGIN
 END
 $$;
 
+CREATE TYPE stored_bytes AS (uploaded TEXT, psa_pinned TEXT, total TEXT);
+
+CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT)
+  RETURNS stored_bytes
+  LANGUAGE plpgsql
+AS
+$$
+DECLARE
+  used_storage  stored_bytes;
+  uploaded      BIGINT;
+  psa_pinned    BIGINT;
+  total         BIGINT;
+BEGIN
+  uploaded :=
+    (
+      SELECT COALESCE(SUM(c.dag_size), 0)
+      FROM upload u
+      JOIN content c ON c.cid = u.content_cid
+      WHERE u.user_id = query_user_id::BIGINT
+      AND u.deleted_at is null
+    );
+
+  psa_pinned :=
+    (
+      SELECT COALESCE((
+        SELECT SUM(dag_size)
+        FROM (
+          SELECT  psa_pr.content_cid,
+                  c.dag_size
+          FROM psa_pin_request psa_pr
+          JOIN content c ON c.cid = psa_pr.content_cid
+          JOIN pin p ON p.content_cid = psa_pr.content_cid
+          JOIN auth_key a ON a.id = psa_pr.auth_key_id
+          WHERE a.user_id = query_user_id::BIGINT
+          AND psa_pr.deleted_at is null
+          AND p.status = 'Pinned'
+          GROUP BY psa_pr.content_cid,
+                  c.dag_size
+        ) AS pinned_content), 0)
+    );
+
+  total := uploaded + psa_pinned;
+
+  SELECT  uploaded::TEXT,
+          psa_pinned::TEXT,
+          total::TEXT
+  INTO    used_storage;
+
+  return used_storage;
+END
+$$;
+
+CREATE OR REPLACE FUNCTION users_by_storage_used(
+  from_percent INTEGER,
+  to_percent INTEGER DEFAULT NULL
+)
+  RETURNS TABLE
+    (
+      id            TEXT,
+      name          TEXT,
+      email         TEXT,
+      storage_quota TEXT,
+      storage_used  TEXT
+    )
+LANGUAGE plpgsql
+AS
+$$
+DECLARE
+  -- Default storage quota 1TiB = 1099511627776 bytes
+  default_quota BIGINT := 1099511627776;
+BEGIN
+  RETURN QUERY
+    WITH user_account AS (
+      SELECT  u.id::TEXT                                        AS id,
+              u.name                                            AS name,
+              u.email                                           AS email,
+              COALESCE(ut.value::BIGINT, default_quota)::TEXT   AS storage_quota,
+              (user_used_storage(u.id)).total::TEXT             AS storage_used
+      FROM public.user u
+      LEFT JOIN user_tag ut ON u.id = ut.user_id
+      WHERE (ut.tag IS NULL OR ut.tag = 'StorageLimitBytes')
+      AND ut.deleted_at IS NULL
+      AND NOT EXISTS (
+        SELECT 42
+        FROM user_tag r
+        WHERE u.id = r.user_id
+        AND r.tag = 'HasAccountRestriction'
+        AND r.value ILIKE 'true'
+        AND r.deleted_at IS NULL
+      )
+    )
+    SELECT *
+    FROM user_account
+    WHERE user_account.storage_used::BIGINT >= (from_percent/100::NUMERIC) * user_account.storage_quota::BIGINT
+    AND (to_percent IS NULL OR user_account.storage_used::BIGINT < (to_percent/100::NUMERIC) * user_account.storage_quota::BIGINT)
+    ORDER BY user_account.storage_used::BIGINT DESC;
+END
+$$;
+
 CREATE OR REPLACE FUNCTION upsert_pins(data json) RETURNS TEXT[]
     LANGUAGE plpgsql
     volatile
@@ -266,43 +356,6 @@ BEGIN
   END LOOP;
 
   RETURN pin_ids;
-END
-$$;
-
-CREATE TYPE used_storage AS (uploaded TEXT, pinned TEXT);
-
-CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT) 
-RETURNS used_storage
-LANGUAGE plpgsql
-AS
-$$
-DECLARE used_storage used_storage;
-BEGIN
-  SELECT COALESCE(SUM(c.dag_size), 0)
-  INTO used_storage.uploaded::TEXT
-  FROM upload u
-  JOIN content c ON c.cid = u.content_cid
-  WHERE u.user_id = query_user_id::BIGINT
-  AND u.deleted_at is null;
-
-  SELECT COALESCE((
-    SELECT SUM(dag_size) 
-    FROM (
-      SELECT  psa_pr.content_cid,
-              c.dag_size
-      FROM psa_pin_request psa_pr
-      JOIN content c ON c.cid = psa_pr.content_cid
-      JOIN pin p ON p.content_cid = psa_pr.content_cid
-      JOIN auth_key a ON a.id = psa_pr.auth_key_id
-      WHERE a.user_id = query_user_id::BIGINT
-      AND psa_pr.deleted_at is null
-      AND p.status = 'Pinned'
-      GROUP BY psa_pr.content_cid,
-              c.dag_size
-    ) AS pinned_content), 0)
-  INTO used_storage.pinned::TEXT;
-
-  return used_storage;
 END
 $$;
 

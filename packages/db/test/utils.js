@@ -1,3 +1,7 @@
+import { normalizeCid } from '../../api/src/utils/cid.js'
+import { CID } from 'multiformats/cid'
+import { sha256 } from 'multiformats/hashes/sha2'
+import * as pb from '@ipld/dag-pb'
 export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU'
 
 /**
@@ -19,6 +23,82 @@ export async function createUser (dbClient, options = {}) {
   })
 
   return dbClient.getUser(issuer)
+}
+
+const defaultUserPinnedRequests = [
+  {
+    status: 'Pinning',
+    location: {
+      peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
+      peerName: 'web3-storage-sv15',
+      region: 'region'
+    }
+  },
+  {
+    status: 'Pinned',
+    location: {
+      peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
+      peerName: 'web3-storage-sv16',
+      region: 'region'
+    }
+  }
+]
+
+/**
+ * Create a user and files with a specified storage quota used
+ * @param {import('../index').DBClient} dbClient
+ * @param {Object} [options]
+ * @param {string} [options.email]
+ * @param {number} [options.percentStorageUsed]
+ * @param {number} [options.storageQuota]
+ * @param {Array<Object>} [options.pins]
+ * @returns {Promise.<import('../db-client-types').UserOutput>}
+ */
+export async function createUserWithFiles (dbClient, options = {}) {
+  const {
+    email,
+    percentStorageUsed,
+    storageQuota = 1099511627776,
+    pins
+  } = options
+
+  const user = await createUser(dbClient, {
+    email,
+    name: email.replace('@email.com', '-name')
+  })
+
+  if (storageQuota !== 1099511627776) {
+    // non-default storage quota
+    await dbClient.createUserTag(Number(user._id), {
+      tag: 'StorageLimitBytes',
+      value: storageQuota.toString()
+    })
+  }
+
+  const authKey = await createUserAuthKey(dbClient, Number(user._id), {
+    name: `${email}-key`
+  })
+
+  const uploads = 5
+  const pinRequests = 3
+  const dagSize = Math.ceil(((percentStorageUsed / 100) * storageQuota) / (uploads + pinRequests))
+
+  for (let i = 0; i < uploads; i++) {
+    const cid = await randomCid()
+    await createUpload(dbClient, Number(user._id), Number(authKey), cid, {
+      dagSize
+    })
+  }
+
+  for (let i = 0; i < pinRequests; i++) {
+    const cid = await randomCid()
+    await createPsaPinRequest(dbClient, authKey, cid, {
+      dagSize,
+      pins: pins || defaultUserPinnedRequests
+    })
+  }
+
+  return user
 }
 
 /**
@@ -79,6 +159,28 @@ export async function createUpload (dbClient, user, authKey, cid, options = {}) 
 }
 
 /**
+ * @param {import('../index').DBClient} dbClient
+ * @param {string} authKey
+ * @param {string} cid
+ * @param {Object} [options]
+ * @param {number} [options.dagSize]
+ * @param {*} [options.origins]
+ * @param {*} [options.meta]
+ * @param {Array<Object>} [options.pins]
+ */
+export async function createPsaPinRequest (dbClient, authKey, cid, options = {}) {
+  await dbClient.createPsaPinRequest({
+    authKey,
+    sourceCid: cid,
+    contentCid: normalizeCid(cid),
+    dagSize: options.dagSize || 1000,
+    origins: options.origins || null,
+    meta: options.meta || null,
+    pins: options.pins || []
+  })
+}
+
+/**
  *
  * @param {import('../index').DBClient} dbClient
  * @param {string} cid
@@ -94,4 +196,13 @@ export async function getUpload (dbClient, cid, userId) {
  */
 export async function getPinSyncRequests (dbClient, size = 10) {
   return dbClient.getPinSyncRequests({ size })
+}
+
+/**
+ * @param {number} code
+ * @returns {Promise<string>}
+ */
+export async function randomCid (code = pb.code) {
+  const hash = await sha256.digest(Buffer.from(`${Math.random()}`))
+  return CID.create(1, code, hash).toString()
 }

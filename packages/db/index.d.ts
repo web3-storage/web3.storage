@@ -28,6 +28,12 @@ import type {
   ContentInput,
   ListPsaPinRequestOptions,
   ListPsaPinRequestResults,
+  UserStorageUsedInput,
+  UserStorageUsedOutput,
+  StorageUsedOutput,
+  UserTagInput,
+  EmailSentInput,
+  LogEmailSentInput,
 } from './db-client-types'
 
 export { gql }
@@ -38,7 +44,11 @@ export class DBClient {
   getMetricsValue (key: string): Promise<{ total: number }>
   upsertUser (user: UpsertUserInput): Promise<UpsertUserOutput>
   getUser (issuer: string): Promise<UserOutput>
-  getUsedStorage (userId: number): Promise<{ uploaded: number, pinned: number }>
+  getUserByEmail (email: string): Promise<UserOutput>
+  getStorageUsed (userId: number): Promise<StorageUsedOutput>
+  getUsersByStorageUsed (percentRange: UserStorageUsedInput): Promise<Array<UserStorageUsedOutput>>
+  emailHasBeenSent(email: EmailSentInput): Promise<boolean>
+  logEmailSent(email : LogEmailSentInput): Promise<{id: string}>
   createUpload (data: CreateUploadInput): Promise<CreateUploadOutput>
   getUpload (cid: string, userId: number): Promise<UploadItemOutput>
   listUploads (userId: number, opts?: ListUploadsOptions): Promise<UploadItemOutput[]>
@@ -66,5 +76,8 @@ export class DBClient {
   createContent (content: ContentInput, opt?: {updatePinRequests?: boolean}) : Promise<string>
   deleteKey (id: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
+  createUserTag(userId: number, tag: UserTagInput): Promise<boolean>
   getUserTags (userId: number): Promise<{ tag: string, value: string }[]>
 }
+
+export { EMAIL_TYPE } from './constants.js'

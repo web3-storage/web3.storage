@@ -3,6 +3,17 @@ import { useQuery } from 'react-query';
 
 import { getInfo, getStorage } from 'lib/api.js';
 import { useAuthorization } from './authorizationContext.js';
+import AccountBlockedModal from 'components/account/accountBlockedModal/accountBlockedModal.js';
+
+/**
+ * @typedef Tags
+ * @property {boolean} [HasAccountRestriction]
+ */
+
+/**
+ * @typedef {Object} Info
+ * @property {Tags} tags
+ */
 
 /**
  * @typedef {Object} UserContextProps
@@ -11,10 +22,14 @@ import { useAuthorization } from './authorizationContext.js';
  * @property {string} name
  * @property {string} email
  * @property {string} github
+ * @property {Info} info
  * @property {string} publicAddress
  * @property {string} created
  * @property {string} updated
- * @property {import('react-query').UseQueryResult<{usedStorage: {uploaded: number, pinned: number}}>} storageData
+ * @property {import('react-query').UseQueryResult<{
+ *   usedStorage: {uploaded: number, psaPinned: number},
+ *   storageLimitBytes: number
+ * }>} storageData
  * @property {string} isLoadingStorage
  */
 
@@ -43,7 +58,12 @@ export const UserProvider = ({ children, loadStorage }) => {
     enabled: isLoggedIn && loadStorage,
   });
 
-  return <UserContext.Provider value={{ ...data, storageData }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ ...data, storageData }}>
+      <AccountBlockedModal hasAccountRestriction={data?.info?.tags?.['HasAccountRestriction']} />
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 /**

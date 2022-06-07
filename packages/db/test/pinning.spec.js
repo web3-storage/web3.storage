@@ -2,23 +2,14 @@
 import assert from 'assert'
 import { normalizeCid } from '../../api/src/utils/cid.js'
 import { DBClient } from '../index.js'
-import { createUser, createUserAuthKey, token } from './utils.js'
-import { CID } from 'multiformats/cid'
-import { sha256 } from 'multiformats/hashes/sha2'
-import * as pb from '@ipld/dag-pb'
-/* global crypto */
+import {
+  createUser,
+  createUserAuthKey,
+  token,
+  randomCid
+} from './utils.js'
 
 const pinRequestTable = 'psa_pin_request'
-
-/**
- * @param {number} code
- * @returns {Promise<string>}
- */
-async function randomCid (code = pb.code) {
-  const bytes = crypto.getRandomValues(new Uint8Array(10))
-  const hash = await sha256.digest(bytes)
-  return CID.create(1, code, hash).toString()
-}
 
 /**
  *
@@ -175,9 +166,8 @@ describe('Pin Request', () => {
     })
 
     it('sums pinned size for unique CIDs in used storage', async () => {
-      let usedStorage = await client.getUsedStorage(user._id)
-      assert.strictEqual(usedStorage.pinned, dagSize1, 'used storage for pinned')
-
+      let usedStorage = await client.getStorageUsed(user._id)
+      assert.strictEqual(usedStorage.psaPinned, dagSize1, 'used storage for pinned')
       await client.createPsaPinRequest({
         sourceCid: cids[1],
         contentCid: normalizedCids[1],
@@ -188,8 +178,8 @@ describe('Pin Request', () => {
         authKey
       })
 
-      usedStorage = await client.getUsedStorage(user._id)
-      assert.strictEqual(usedStorage.pinned, dagSize1 * 2, 'used storage for pinned')
+      usedStorage = await client.getStorageUsed(user._id)
+      assert.strictEqual(usedStorage.psaPinned, dagSize1 * 2, 'used storage for pinned')
     })
   })
 

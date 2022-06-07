@@ -1,5 +1,41 @@
 # Changelog
 
+## [6.1.0](https://github.com/web3-storage/web3.storage/compare/api-v6.0.0...api-v6.1.0) (2022-05-28)
+
+
+### Features
+
+* add user blocking functionality to web3 ([#1322](https://github.com/web3-storage/web3.storage/issues/1322)) ([5803876](https://github.com/web3-storage/web3.storage/commit/5803876b6ab6672ce82ebe3e641a8729993743ef))
+* send email notifications for storage quota usage ([#1273](https://github.com/web3-storage/web3.storage/issues/1273)) ([0b1eb09](https://github.com/web3-storage/web3.storage/commit/0b1eb09b32dfb6cb1b3a5a8b5034dc4ac54ba3e2))
+
+
+### Bug Fixes
+
+* typo in Logging constructor ([#1346](https://github.com/web3-storage/web3.storage/issues/1346)) ([0e9c0ae](https://github.com/web3-storage/web3.storage/commit/0e9c0ae18229e5b851d58fb62348181550578e5d))
+
+## [6.0.0](https://github.com/web3-storage/web3.storage/compare/api-v5.7.3...api-v6.0.0) (2022-05-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* psa pinning APIs - rename requestId to requestid
+
+### Features
+
+* respond with unique error message when blocked API key is used ([#1302](https://github.com/web3-storage/web3.storage/issues/1302)) ([faae1db](https://github.com/web3-storage/web3.storage/commit/faae1db8d635678fd6b9f36294e0c0dc0f243f22))
+
+
+### Bug Fixes
+
+* psa pinning APIs - rename requestId to requestid ([b95b786](https://github.com/web3-storage/web3.storage/commit/b95b7868d59bf7ce01ac98abfad8d9cec377f5f9))
+* swap the order of `corsOptions` and `envAll` to avoid error ([#1329](https://github.com/web3-storage/web3.storage/issues/1329)) ([fe15698](https://github.com/web3-storage/web3.storage/commit/fe156984178bf7a1ff320621a437c347758a114d))
+
+
+### Other Changes
+
+* add Logtail logging to the API ([d0c9b04](https://github.com/web3-storage/web3.storage/commit/d0c9b04bd998789f148e32f85ad841396aa069ff))
+* rename pinned to psaPinned ([#1268](https://github.com/web3-storage/web3.storage/issues/1268)) ([aeae342](https://github.com/web3-storage/web3.storage/commit/aeae342547b1fb15c17069f6d019beae250564f5))
+
 ### [5.7.3](https://github.com/web3-storage/web3.storage/compare/api-v5.7.2...api-v5.7.3) (2022-05-13)
 
 

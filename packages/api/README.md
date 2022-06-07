@@ -29,10 +29,13 @@ Kill the process to stop miniflare, then run `npm run stop` to shutdown the clus
 npm run stop
 ```
 
-## Setting up a cloudflare worker
-While in most cases the [Getting Started](#getting-started) section is enough to develop locally, if you want to test and preview you worker on Cloudflare's infrastructure here's the instructions to setup your worker and environment.  
+You may need to make sure the underlying DB is populated with the required tables.
+Please follow the instructions in the [Populate Database](../../packages/db/README.md#2-populate-database) section in the db package README.
 
-If you want more in depth information please look at [Cloudflare Get Started guide](https://developers.cloudflare.com/workers/get-started/guide#1-sign-up-for-a-workers-account).  
+## Setting up a cloudflare worker
+While in most cases the [Getting Started](#getting-started) section is enough to develop locally, if you want to test and preview you worker on Cloudflare's infrastructure here's the instructions to setup your worker and environment.
+
+If you want more in depth information please look at [Cloudflare Get Started guide](https://developers.cloudflare.com/workers/get-started/guide#1-sign-up-for-a-workers-account).
 
 The following instructions assume that you did go through the Getting started section.
 
@@ -40,12 +43,12 @@ The following instructions assume that you did go through the Getting started se
 Before you can start publishing your Workers on your own domain or a free *.workers.dev subdomain, you must sign up for a Cloudflare Workers account
 ### 2. Install the Workers CLI
 Install `wrangler` cli on your local machine
-```bash 
+```bash
 npm install -g @cloudflare/wrangler
 ```
 ### 3. Configure the Workers CLI
 With installation complete, wrangler will need access to a Cloudflare OAuth token to manage Workers resources on your behalf.
-```bash 
+```bash
 wrangler login
 ```
 Open the browser, log into your account, and select Allow.

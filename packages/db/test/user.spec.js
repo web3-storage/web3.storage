@@ -158,9 +158,10 @@ describe('user operations', () => {
       user: user._id
     })
 
-    const emptyUsedStorage = await client.getUsedStorage(user._id)
+    const emptyUsedStorage = await client.getStorageUsed(user._id)
+    assert.deepEqual(emptyUsedStorage.total, 0, 'received empty used storage')
     assert.strictEqual(emptyUsedStorage.uploaded, 0, 'empty used storage for uploaded')
-    assert.strictEqual(emptyUsedStorage.pinned, 0, 'empty used storage for pinned')
+    assert.strictEqual(emptyUsedStorage.psaPinned, 0, 'empty used storage for pinned')
 
     // Create Upload 1
     const cid1 = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47fgf111'
@@ -176,7 +177,7 @@ describe('user operations', () => {
       backupUrls: []
     })
 
-    const firstUsedStorage = await client.getUsedStorage(user._id)
+    const firstUsedStorage = await client.getStorageUsed(user._id)
     assert.strictEqual(firstUsedStorage.uploaded, dagSize1, 'used storage with first upload')
 
     // Create Upload 2
@@ -193,7 +194,7 @@ describe('user operations', () => {
       backupUrls: []
     })
 
-    const secondUsedStorage = await client.getUsedStorage(user._id)
+    const secondUsedStorage = await client.getStorageUsed(user._id)
     assert.strictEqual(secondUsedStorage.uploaded, dagSize1 + dagSize2, 'used storage with second upload')
 
     // Confirm auth key has uploads
@@ -203,7 +204,7 @@ describe('user operations', () => {
     // Delete Upload 2
     await client.deleteUpload(user._id, cid2)
 
-    const thirdUsedStorage = await client.getUsedStorage(user._id)
+    const thirdUsedStorage = await client.getStorageUsed(user._id)
     assert.strictEqual(thirdUsedStorage.uploaded, dagSize1, 'used storage with only first upload again')
   })
 })

@@ -1,0 +1,54 @@
+.account-blocked-container {
+  position: relative;
+  color: $ebony;
+  padding: 3.125rem 8.5rem 3.125rem 8.125rem;
+
+  @include medium {
+    padding: 2.375rem 1.3125rem;
+    width: 100%;
+  }
+
+  > * {
+    position: relative;
+  }
+
+  .saturated-variant {
+    @include mini {
+      transform: translate(-5rem, 0) scaleY(2) rotate(-40deg) !important;
+    }
+    @include tiny {
+      width: 1000px !important;
+    }
+  }
+
+  .content {
+    margin-bottom: 20px;
+  }
+}
+
+.account-blocked-modal {
+  .modalContainer {
+    max-width: calc($containerWidth - 10%);
+    @include borderRadius_Large;
+    @include medium {
+      width: 90%;
+    }
+  }
+  .modalClose {
+    color: $ebony;
+    font-size: 2rem;
+  }
+
+  svg {
+    color: $ebony;
+  }
+}
+
+.background-view-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
