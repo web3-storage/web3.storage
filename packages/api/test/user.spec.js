@@ -294,7 +294,7 @@ describe('GET /user/uploads', () => {
     assert.deepStrictEqual(uploads, userUploads)
   })
 
-  it.only('paginates by offset', async () => {
+  it('paginates by offset', async () => {
     const token = await getTestJWT()
     const size = 1
     const offset = 2
@@ -328,7 +328,7 @@ describe('GET /user/uploads', () => {
     assert.deepStrictEqual(uploads, expected)
   })
 
-  it('does not paginate when all results are returned', async () => {
+  it.only('does not paginate when all results are returned', async () => {
     const token = await getTestJWT()
     const size = 1000
     const res = await fetch(new URL(`/user/uploads?size=${size}`, endpoint).toString(), {
@@ -337,7 +337,7 @@ describe('GET /user/uploads', () => {
     })
     assert(res.ok)
 
-    assert.not('link' in res.headers, 'does not have a Link header for the next page')
+    assert.notStrictEqual('link' in res.headers, 'does not have a Link header for the next page')
 
     const uploads = await res.json()
     const expected = userUploads
