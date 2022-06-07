@@ -2,9 +2,9 @@
 import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
-import Img from '../cloudflareImage.js';
 import Link from 'next/link';
 
+import Img from '../cloudflareImage.js';
 import CardTier from './card-tier';
 import Button from '../button/button';
 import NpmIcon from '../../assets/icons/npmicon';

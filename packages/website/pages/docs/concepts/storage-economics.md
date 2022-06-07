@@ -4,7 +4,7 @@ description: Learn how Web3.Storage can offer decentralized storage at no cost b
 ---
 
 import Img from 'components/cloudflareImage';
-import ImgFilPlus from '../../public/images/docs/web3-storage-fil-plus.gif';
+import ImgFilPlus from '../../../public/images/docs/web3-storage-fil-plus.gif';
 
 # Web3.Storage economics
 
