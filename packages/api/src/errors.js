@@ -49,6 +49,15 @@ export class AccountRestrictedError extends HTTPError {
 }
 AccountRestrictedError.CODE = 'ERROR_ACCOUNT_RESTRICTED'
 
+export class DeleteRestrictedError extends HTTPError {
+  constructor (msg = 'Delete operations restricted.') {
+    super(msg, 403)
+    this.name = 'DeleteRestrictedError'
+    this.code = DeleteRestrictedError.CODE
+  }
+}
+DeleteRestrictedError.CODE = 'ERROR_DELETE_RESTRICTED'
+
 export class TokenNotFoundError extends HTTPError {
   constructor (msg = 'API token no longer valid') {
     super(msg, 401)
