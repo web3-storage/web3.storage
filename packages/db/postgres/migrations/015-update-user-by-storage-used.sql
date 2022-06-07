@@ -1,3 +1,6 @@
+-- Due to the parameters differing from the old function definition, if we don't drop the old one then it's not replaced.
+DROP FUNCTION IF EXISTS users_by_storage_used;
+
 CREATE OR REPLACE FUNCTION users_by_storage_used(
   from_percent INTEGER,
   to_percent INTEGER DEFAULT NULL,
