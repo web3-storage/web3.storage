@@ -50,7 +50,11 @@ export function getDBClient (env) {
  * @param {'ro'|'rw'} [mode]
  */
 export function getPg (env, mode) {
-  return new pg.Client({ connectionString: getPgConnString(env, mode) })
+  return new pg.Client({
+    connectionString: getPgConnString(env, mode),
+    // https://help.heroku.com/MDM23G46/why-am-i-getting-an-error-when-i-upgrade-to-pg-8
+    ssl: { rejectUnauthorized: false }
+  })
 }
 
 /**
