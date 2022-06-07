@@ -313,13 +313,13 @@ describe('GET /user/uploads', () => {
     assert(prevLink, 'has a Prev link header for the previous page')
     assert.strictEqual(prevLink, `</user/uploads?size=${size}&offset=${offset - size}>; rel="next"`)
 
-    const resCount = res.headers.get('Count');
+    const resCount = res.headers.get('Count')
     assert.strictEqual(parseInt(resCount), userUploads.length, 'has a count for calculating page numbers')
 
-    const resSize = res.headers.get('Size');
+    const resSize = res.headers.get('Size')
     assert.strictEqual(parseInt(resSize), size, 'has a size for calculating page numbers')
 
-    const resOffset = res.headers.get('Offset');
+    const resOffset = res.headers.get('Offset')
     assert.strictEqual(parseInt(resOffset), offset, 'has an offset for calculating page numbers')
 
     // Ensure the returned result is expected.
@@ -337,7 +337,7 @@ describe('GET /user/uploads', () => {
     })
     assert(res.ok)
 
-    assert.notEqual('link' in res.headers, 'does not have a Link header for the next page')
+    assert.not('link' in res.headers, 'does not have a Link header for the next page')
 
     const uploads = await res.json()
     const expected = userUploads

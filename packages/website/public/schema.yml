@@ -441,14 +441,16 @@ components:
       name: sortBy
       in: query
       required: false
+      default: Name
       schema:
         type: string
         enum: [Date, Name]
     sortOrder:
-      description: Sorts results by a given parameter.
+      description: Sorts the order of the results.
       name: sortOrder
       in: query
       required: false
+      default: Desc
       schema:
         type: string
         enum: [Asc, Desc]

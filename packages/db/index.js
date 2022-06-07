@@ -505,7 +505,7 @@ export class DBClient {
       : query.limit(limit)
 
     /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error, count: Number }} */
-    const { data: uploads, error, count } = await query;
+    const { data: uploads, error, count } = await query
 
     if (error) {
       throw new DBError(error)

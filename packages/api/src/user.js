@@ -190,7 +190,7 @@ export async function userUploadsGet (request, env) {
   let offset = 0
   if (searchParams.has('offset')) {
     const parsedOffset = parseInt(searchParams.get('offset'))
-    if (isNaN(parsedOffset) || parsedOffset <= 0 || parsedOffset > 1000) {
+    if (isNaN(parsedOffset) || parsedOffset <= 0) {
       throw Object.assign(new Error('invalid page offset'), { status: 400 })
     }
     offset = parsedOffset
