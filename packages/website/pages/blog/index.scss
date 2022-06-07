@@ -1,3 +1,13 @@
+// very top nav
+.blog-site {
+  .nav-item[href='/blog/'] {
+    transform: translateY(-0.5rem);
+    &:after {
+      opacity: 1;
+    }
+  }
+}
+
 .blog-index {
   padding-top: 4rem;
 }

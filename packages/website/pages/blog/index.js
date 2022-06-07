@@ -10,7 +10,7 @@ import Tags from '../../components/blog/tags';
 import { Card } from '../../components/blog/cards';
 import Button, { ButtonVariant } from '../../components/button/button';
 
-const BLOG_ITEMS_PER_PAGE = 10;
+const BLOG_ITEMS_PER_PAGE = 4;
 const allTags = ['all', 'events', 'updates', 'news'];
 
 /**

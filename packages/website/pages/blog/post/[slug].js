@@ -8,6 +8,8 @@ import { MDXRemote } from 'next-mdx-remote';
 import { ReactComponent as TwitterIcon } from '../../../assets/icons/twitter.svg';
 import { ReactComponent as FacebookIcon } from '../../../assets/icons/facebook.svg';
 import { ReactComponent as LinkedinIcon } from '../../../assets/icons/linkedin.svg';
+import { ReactComponent as RedditIcon } from '../../../assets/icons/reddit.svg';
+import { ReactComponent as LinkIcon } from '../../../assets/icons/link.svg';
 import SocialLink from '../../../components/social-link';
 import Tags from '../../../components/blog/tags';
 import { Card } from '../../../components/blog/cards';
@@ -85,6 +87,8 @@ const Post = ({ post, posts }) => {
   };
   const linkedinShareLink = new URL('https://www.linkedin.com/sharing/share-offsite');
   const linkedinParams = { url: currentUrl };
+  const redditShareLink = new URL('https://www.reddit.com/submit');
+  const redditParams = { url: currentUrl };
 
   // add image caption
   useEffect(() => {
@@ -127,7 +131,9 @@ const Post = ({ post, posts }) => {
           <div className="post-social">
             <SocialLink url={twitterShareLink} params={twitterParams} Icon={TwitterIcon} />
             <SocialLink url={facebookShareLink} params={facebookParams} Icon={FacebookIcon} />
+            <SocialLink url={redditShareLink} params={redditParams} Icon={RedditIcon} />
             <SocialLink url={linkedinShareLink} params={linkedinParams} Icon={LinkedinIcon} />
+            <LinkIcon />
           </div>
           <div className="post-meta-tags">
             <Tags tags={post.meta.tags} />
