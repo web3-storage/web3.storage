@@ -46,7 +46,6 @@ export class DBClient {
   getUser (issuer: string): Promise<UserOutput>
   getUserByEmail (email: string): Promise<UserOutput>
   getStorageUsed (userId: number): Promise<StorageUsedOutput>
-  getUsersByStorageUsed (percentRange: UserStorageUsedInput): Promise<Array<UserStorageUsedOutput>>
   emailHasBeenSent(email: EmailSentInput): Promise<boolean>
   logEmailSent(email : LogEmailSentInput): Promise<{id: string}>
   createUpload (data: CreateUploadInput): Promise<CreateUploadOutput>
@@ -80,4 +79,5 @@ export class DBClient {
   getUserTags (userId: number): Promise<{ tag: string, value: string }[]>
 }
 
+export function parseTextToNumber(n: string): number
 export { EMAIL_TYPE } from './constants.js'
