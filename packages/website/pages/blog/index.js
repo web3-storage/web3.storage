@@ -1,7 +1,6 @@
 import fs from 'fs';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import clsx from 'clsx';
 import matter from 'gray-matter';
 import { useRouter } from 'next/router';
@@ -9,9 +8,9 @@ import { useRouter } from 'next/router';
 import { usePagination } from '../../components/blog/usePagination';
 import Tags from '../../components/blog/tags';
 import { Card } from '../../components/blog/cards';
-import Button from 'ZeroComponents/button/button';
+import Button, { ButtonVariant } from '../../components/button/button';
 
-const BLOG_ITEMS_PER_PAGE = 9;
+const BLOG_ITEMS_PER_PAGE = 10;
 const allTags = ['all', 'events', 'updates', 'news'];
 
 /**
@@ -135,7 +134,7 @@ const Paginated = ({ items, pageNumber, setPageNumber }) => {
         key={`pag-nav-item-${page || children}`}
         onClick={!page || isActive ? undefined : () => handlePageClick(page)}
         disabled={disabled}
-        className={clsx('btn-secondary ttu items-center', isActive && 'active', disabled && 'disabled')}
+        className={clsx(isActive && 'active', disabled && 'disabled')}
       >
         {children}
       </Button>
@@ -167,7 +166,11 @@ const Paginated = ({ items, pageNumber, setPageNumber }) => {
   return (
     <div className="blog-container">
       {currentItems.length > 0 ? <Items currentItems={currentItems} /> : <div>More blogs coming soon</div>}
-      {items.length > BLOG_ITEMS_PER_PAGE && <PaginatedNav />}
+      {items.length > BLOG_ITEMS_PER_PAGE && (
+        <div className="blog-pagination">
+          <PaginatedNav />
+        </div>
+      )}
     </div>
   );
 };
@@ -182,18 +185,16 @@ const Paginated = ({ items, pageNumber, setPageNumber }) => {
  */
 function TagsContainer({ tags, filters, handleTagClick }) {
   return (
-    <div className="button-tags-container">
-      <Tags
-        tags={tags.map(tag => {
-          const normTag = tag.toLowerCase();
-          return {
-            label: normTag,
-            onClick: () => handleTagClick(normTag),
-            selected: filters.includes(normTag),
-          };
-        })}
-      />
-    </div>
+    <Tags
+      tags={tags.map(tag => {
+        const normTag = tag.toLowerCase();
+        return {
+          label: normTag,
+          onClick: () => handleTagClick(normTag),
+          selected: filters.includes(normTag),
+        };
+      })}
+    />
   );
 }
 
@@ -247,10 +248,24 @@ const Blog = ({ posts }) => {
   if (posts.length === 0) return <Backdrop>There are no blogs yet 😞</Backdrop>;
 
   return (
-    <main className="grid">
-      <h1>Updates from our organization and across the Web3 universe. </h1>
-      <Link href="/blog/subscribe">Subscribe</Link>
-      <TagsContainer filters={filters} handleTagClick={handleTagClick} tags={allTags} />
+    <main className="grid blog-page">
+      <div className="blog-heading">
+        <h4>Web3.Storage Blog</h4>
+        <h1>Updates from our organization and across the Web3 universe. </h1>
+        <Button variant={ButtonVariant.DARK} href="/blog/subscribe">
+          Subscribe
+        </Button>
+      </div>
+      <div className="blog-search-c">
+        <div>
+          <form>
+            <input type="text"></input>
+            <input type="submit"></input>
+          </form>
+          <div>Tag one, Tag two, More Tags</div>
+        </div>
+        <TagsContainer filters={filters} handleTagClick={handleTagClick} tags={allTags} />
+      </div>
       <Paginated key={pageNumber} items={currentPosts} pageNumber={pageNumber} setPageNumber={setPageNumber} />
     </main>
   );

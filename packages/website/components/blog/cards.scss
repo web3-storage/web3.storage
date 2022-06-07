@@ -1,0 +1,41 @@
+.blog-card {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin-bottom: toRem(50);
+  &:nth-child(odd) {
+    padding-right: 1rem;
+  }
+  &:nth-child(even) {
+    padding-left: 1rem;
+  }
+}
+.blog-card-img {
+  position: relative;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: toRem(5);
+  }
+}
+.blog-card-meta {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: toRem(20) 0 toRem(10) 0;
+  @include leading_Small;
+  @include fontSize_Mini;
+  @include fontWeight_Semibold;
+  .blog-card-date {
+    flex: 0 0 8rem;
+    text-align: right;
+  }
+  .blog-card-author {
+    font-style: italic;
+  }
+}
+.blog-card-title {
+  @include fontSize_Medium;
+  line-height: 1.5;
+}

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import Button from 'ZeroComponents/button/button';
+import Button, { ButtonVariant } from '../../components/button/button';
 
 /**
  * Tag Component
@@ -10,17 +10,13 @@ import Button from 'ZeroComponents/button/button';
  */
 export const Tag = ({ tag }) => {
   const isString = typeof tag === 'string';
-  const inner = (
-    <span className={clsx('ph2 pv1 f6 ba ttc mr1 mb1', isString && 'select-none')}>{isString ? tag : tag.label}</span>
-  );
+  const inner = <span className={clsx(isString && 'select-none')}>{isString ? tag : tag.label}</span>;
   return isString ? (
     inner
   ) : (
-    <div>
-      <Button onClick={tag.onClick} className={clsx('btn-secondary ttc items-center', tag.selected && 'active')}>
-        {tag.label}
-      </Button>
-    </div>
+    <Button variant={ButtonVariant.OUTLINE_DARK} onClick={tag.onClick} className={clsx(tag.selected && 'active')}>
+      {tag.label}
+    </Button>
   );
 };
 
@@ -31,7 +27,7 @@ export const Tag = ({ tag }) => {
  * @returns {JSX.Element}
  */
 const Tags = ({ tags }) => (
-  <div className={clsx('blog-tags', typeof tags[0] !== 'string' && 'blog-tags-buttons')}>
+  <div className={clsx(typeof tags[0] !== 'string' && 'blog-tags-buttons')}>
     {tags.map((tag, index) => (
       <Tag tag={tag} key={`blog-tag-${tag}-${index}`} />
     ))}
