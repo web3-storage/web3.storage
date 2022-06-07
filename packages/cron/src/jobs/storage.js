@@ -90,15 +90,18 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
   const max = BigInt(minMax[0].max)
   const batchSize = BigInt(userBatchSize)
 
+  console.log('🗄 Checking users storage quotas.')
   log('🗄 Checking users storage quotas')
 
   for (const email of STORAGE_QUOTA_EMAILS) {
+    console.log(`doing email type: ${email.emailType}`)
     const usersOverQuota = []
     let start = min
     let isLastBatch = false
 
     while (!isLastBatch) {
       let to = start + batchSize
+      console.log(`doing a batch, from ${start} to ${to}`)
 
       if (to > max) {
         // set `to` for the last batch to be null so that we take instances that might have been created
@@ -113,9 +116,12 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
         to
       ])
 
+      console.log(`got ${results.length} results`)
+
       const users = results
         .map(userByStorageRowToUser)
 
+      console.log(`got ${users.length} users`)
       if (email.emailType === EMAIL_TYPE.User100PercentStorage && users.length > 0) {
         usersOverQuota.push(...users)
       }
@@ -134,14 +140,17 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
         if (emailSent) {
           if (email.emailType === EMAIL_TYPE.User100PercentStorage) {
             log(`📧 Sent a quota exceeded email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
+            console.log(`📧 Sent a quota exceeded email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
           } else {
             log(`📧 Sent an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
+            console.log(`📧 Sent an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
           }
         }
       }
       start = to
     }
 
+    console.log(`Got ${usersOverQuota.length} users over quota`)
     if (usersOverQuota.length > 0) {
       const { rows: results } = await roPg.query(USER_BY_EMAIL_QUERY, [supportEmail])
 
@@ -158,9 +167,11 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
 
       if (emailSent) {
         log('📧 Sent a list of users exceeding their quotas to admin')
+        console.log('📧 Sent a list of users exceeding their quotas to admin')
       }
     }
   }
 
   log('✅ Done')
+  console.log('✅ Done')
 }
