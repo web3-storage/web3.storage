@@ -63,7 +63,7 @@ export async function getStaticProps() {
  * Pagination Component
  *
  * @param {Object} props
- * @param {import('../../components/types').PostMeta[]} props.items
+ * @param {Object} props.items
  * @param {number} props.pageNumber
  * @param {(pageNumber: number) => void} props.setPageNumber
  * @param {string[]} [props.filters]
@@ -78,7 +78,7 @@ const Paginated = ({ items, pageNumber, setPageNumber }) => {
 
   /**
    * items hook
-   * @param {import('../../components/types').PostMeta[]} items
+   * @param {Object} items
    */
   const useItems = items => {
     const [currentItems, setCurrentItems] = useState(items);

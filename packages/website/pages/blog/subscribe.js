@@ -72,7 +72,7 @@ export default function Subcribe({ user }) {
         value={email}
       />
 
-      <Button disabled={disabled} type="submit" title="Subscribe to the Mailing List">
+      <Button disabled={disabled} type="submit">
         Subscribe
       </Button>
       <br />
