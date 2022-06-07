@@ -10,7 +10,12 @@ async function main () {
   const roPg = getPg(process.env, 'ro')
   const emailService = new EmailService({ db })
   console.log('About to run checkStorageUsed.')
-  await checkStorageUsed({ roPg, emailService })
+  await roPg.connect()
+  try {
+    await checkStorageUsed({ roPg, emailService })
+  } finally {
+    await roPg.end()
+  }
 }
 
 envConfig()

@@ -82,6 +82,7 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
   if (!log.enabled) {
     console.log('ℹ️ Enable logging by setting DEBUG=storage:checkStorageUsed')
   }
+  console.log(`got to first DB query`)
 
   /** @type {{ rows: Array.<{min: string, max: string}> }} */
   const { rows: minMax } = await roPg.query(MIN_MAX_USER_ID)
