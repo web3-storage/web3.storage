@@ -1,7 +1,7 @@
 /**
  * @param {import('@web3-storage/db/db-client-types').UserOutput} user
  * @param {string} tagName
- * @param {string|undefined} defaultValue
+ * @param {string} [defaultValue]
  * @returns {string|undefined}
  */
 export function getTagValue (user, tagName, defaultValue) {
