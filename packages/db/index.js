@@ -175,7 +175,7 @@ export class DBClient {
   /**
    * Create a user tag
    * @param {string} userId
-   * @param {import('./db-client-types').UserTagInput?} tag
+   * @param {import('./db-client-types').UserTagInput} tag
    * @returns {Promise<boolean>}
    */
   async createUserTag (userId, tag) {
@@ -244,8 +244,8 @@ export class DBClient {
   /**
    * Returns all the active (non-deleted) user tags for a user id.
    *
-   * @param {number} userId
-   * @returns {Promise<{ tag: string, value: string }[]>}
+   * @param {string} userId
+   * @returns {Promise<import('./db-client-types').UserTagInfo[]>}
    */
   async getUserTags (userId) {
     const { data, error } = await this._client
