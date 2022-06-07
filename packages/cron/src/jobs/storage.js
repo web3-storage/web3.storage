@@ -1,6 +1,7 @@
 import debug from 'debug'
 import { EMAIL_TYPE, parseTextToNumber } from '@web3-storage/db'
 
+console.log('packages/cron/src/jobs/storage.js loaded')
 const log = debug('storage:checkStorageUsed')
 
 const supportEmail = 'support@web3.storage'
@@ -77,6 +78,7 @@ const STORAGE_QUOTA_EMAILS = [
  * }} config
  */
 export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 1000 }) {
+  console.log('checkStorageUsed has been called.')
   if (!log.enabled) {
     console.log('ℹ️ Enable logging by setting DEBUG=storage:checkStorageUsed')
   }
