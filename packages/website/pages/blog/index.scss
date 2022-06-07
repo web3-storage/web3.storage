@@ -1,4 +1,4 @@
-.blog-page {
+.blog-index {
   padding-top: 4rem;
 }
 .blog-heading {
@@ -16,14 +16,18 @@
   width: 100%;
   justify-content: space-between;
 }
-.blog-container {
+.blog-list-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   padding-top: toRem(72);
   width: 100%;
-  padding-right: 3rem;
-  padding-left: 3rem;
+  padding-right: toRem(83);
+  padding-left: toRem(83);
+  &.no-side-padding {
+    padding-right: 0;
+    padding-left: 0;
+  }
 }
 .blog-pagination {
   width: 100%;

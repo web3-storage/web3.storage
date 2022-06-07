@@ -16,13 +16,26 @@ import Footer from '../components/footer/footer.js';
 const App = ({ Component, pageProps }) => {
   const { pathname } = useRouter();
   const productRoutes = ['/login', '/account', '/tokens'];
-  // const marketingRoutes = ['/', '/pricing', '/about', '/faq', '/terms'];
   const productApp = productRoutes.includes(pathname);
-  const pageClass = pathname.includes('docs') ? 'docs-site' : productApp ? 'product-app' : 'marketing-site';
+
+  // set class name on body
+  let pageClass = 'marketing-site';
+  if (pathname.includes('docs')) {
+    pageClass = 'docs-site';
+  } else if (pathname.includes('blog')) {
+    pageClass = 'blog-site';
+  } else if (productApp) {
+    pageClass = 'product-app';
+  } else {
+    pageClass = 'marketing-site';
+  }
 
   useEffect(() => {
-    document.querySelector('body')?.classList.add(pageClass);
-  });
+    let body = document.querySelector('body');
+    // @ts-ignore
+    body?.classList.remove(...body?.classList);
+    body?.classList.add(pageClass);
+  }, [pageClass]);
 
   return (
     <AppProviders authorizationProps={{ ...pageProps }}>

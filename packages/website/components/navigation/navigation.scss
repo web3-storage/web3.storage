@@ -119,16 +119,16 @@
   }
   .nav-item {
     position: relative;
-    @include fontSize_Small;
+    font-size: toRem(14);
     @include fontWeight_Semibold;
     text-transform: uppercase;
-    margin: 0 1rem;
+    margin: 0 0.5rem;
     padding: 0 0.5rem;
     transform: translateY(0rem);
     transition: 200ms ease;
     cursor: pointer;
     @include medium {
-      margin: 0 0.875rem;
+      margin: 0 0.25rem;
     }
     &:after {
       content: '';

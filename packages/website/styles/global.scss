@@ -55,6 +55,10 @@
 @import '../pages/account';
 @import '../pages/tokens';
 @import '../pages/blog';
+@import '../pages/blog/post';
+
+// content for blog and docs
+@import 'article';
 
 // Fonts
 $fontAssetPath: '../assets/fonts';

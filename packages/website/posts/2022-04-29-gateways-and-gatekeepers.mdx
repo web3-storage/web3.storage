@@ -11,7 +11,7 @@ tags:
   - web2
 ---
 
-NFT.Storage launched our IPFS HTTP gateway in early March, which has largely been a success - it is currently performantly providing 25 to 30 million reads of NFTs per day without users needing to install any specialized software, supporting dozens of NFT marketplaces and projects. 
+> NFT.Storage launched our IPFS HTTP gateway in early March, which has largely been a success - it is currently performantly providing 25 to 30 million reads of NFTs per day without users needing to install any specialized software, supporting dozens of NFT marketplaces and projects. 
 
 However, it has not been completely smooth sailing. This post discusses pain points that the NFT.Storage team has faced since launch due to “gatekeepers” of the web today. This has included outages caused by Google Chrome Safe Browsing on two separate instances, where false positives caused them to flag the entire gateway domain to effectively the entire web browsing population for 4+ hours each time (blocking users from accessing ~5,000,000 NFT requests in each instance), as well as smaller instances where security vendors flagged the domain, causing issues for users from unpredictable places. In these situations, generally we have seen these parties have good intentions, but bad outcomes in practice simply due to their level of concentrated power in the web. We share our experiences to open a dialogue across the IPFS ecosystem and the powerful entities that control the web experience today, like browsers, security vendors, and large websites.
 
@@ -39,17 +39,11 @@ We also quickly found oversized hammers from the web2 world that were able whole
 
 On March 29, 2022, user reports started coming in that all content accessed via nftstorage.link through any major web browser would result in a Google Safe Browsing warning. However, in all reported cases, the content was harmless - NFT JSON, PNGs, JPEGs, and the like.
 
-![image](https://user-images.githubusercontent.com/11778450/165970697-a91621bc-372c-4a39-a134-1ed22b64f137.png)
-<span style={{ display: 'block', textAlign: 'center', fontStyle: 'italic', marginBottom: 20, fontSize: 14 }}>
-  Screenshot from an NFT.Storage user who was trying to access an NFT metadata JSON file.
-</span>
+![image](https://user-images.githubusercontent.com/11778450/165970697-a91621bc-372c-4a39-a134-1ed22b64f137.png "Screenshot from an NFT.Storage user who was trying to access an NFT metadata JSON file.")
 
 After some furious searching (and guidance from random help websites), we learned that we had to log into Google Search Console to learn more about why our domain was blocked. The console was clear that a specific CID was the culprit, and we verified that the content was a phishing form. However, even after immediately blocking this CID all we could do was “request a review” that could take up to 72 hours. This was extremely opaque, without a request tracker or even an email telling us our request was in review.
 
 ![image](https://user-images.githubusercontent.com/11778450/165974381-9df88205-3e88-45aa-b8c9-64de1140088c.png)
-<span style={{ display: 'block', textAlign: 'center', fontStyle: 'italic', marginBottom: 20, fontSize: 14 }}>
-  You can only clear up false positive reports in Google Search Console, and the experience does not match the needs of the user urgently trying to clear their domain.
-</span>
 
 And it was quickly evident that many browsers and services used this list - not just Chrome, but Firefox, Twitter, Phantom Wallet, and more! So given that being on this list resulted in effectively a complete outage of nftstorage.link, we couldn’t wait 72 hours. We tried other methods to get back online, like having nftstorage.link directly CNAME to the dweb.link public gateway, though this did not work because nftstorage.link was blocked at the domain level.
 
@@ -68,9 +62,6 @@ Adding to further trouble is that sometimes users experience these errors throug
 To try and isolate the individual software vendors that have been creating these issues, we looked at websites like [Virus Total](https://www.virustotal.com/gui/domain/nftstorage.link) to tell us which security vendors had flagged nftstorage.link or ipfs.nftstorage.link (confusingly, a different subset of vendors marked each of these domains as suspicious) and reached out to these teams letting them know there were false positives. Folks like Avast were very responsive, and immediately resolved these issues. Others, like Webroot, pushed back without any explanation or an easy opportunity to continue the dialogue. Still others never responded even after multiple follow-ups. Ultimately, by not resolving our requests, these software vendors are ultimately increasing their false positive rate by blocking all URLs with gateway domains.
 
 ![image](https://user-images.githubusercontent.com/11778450/165976450-8bdad80e-85e0-4508-a210-e4a7d13b97da.png)
-<span style={{ display: 'block', textAlign: 'center', fontStyle: 'italic', marginBottom: 20, fontSize: 14 }}>
-  Virus Total was handy in identifying which security vendors had flagged nftstorage.link, though not all of these vendors were willing to even have a discussion.
-</span>
 
 One observation was that these vendors likely used Google’s list to inform their lists (explaining why some of these lists had marked nftstorage.link as suspicious). In turn, ISPs, VPNs, and others use these security vendors’ lists, with some asynchronicity (for instance, the ISP Swisscom had blocked all nftstorage.link domains, but when we requested they remove the domain from their denylist, they complied, saying that it had been taken off the 3rd party list they use). In every case, the entire dependency chain was extremely opaque.
 
@@ -92,6 +83,17 @@ A little bit later, the issue had suddenly resolved itself - minus URLs with the
 The next day, one of our Google contacts let us know that the relevant team had admitted that they had put in a bad regex statement. We’ve all been there before, and we were thankful that this confirmed the team's intent was to make sure the entire domain wouldn't ever get blacklisted again. However, but it once again did show the inherent issues of one party having so much power (why wasn’t there better testing? why was the resolution process so opaque?).
 
 # Suggestions for web operators
+
+```
+ <div className="blog-single-post">
+      <div className="post grid">
+        <div className="post-heading">
+          <h1>{post.meta.title}</h1>
+          <p className="post-author">{post.meta.author}</p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={post.meta.thumbnail} />
+        </div>
+```
 
 In just over a month of operation, there are millions of requests for nftstorage.link a day. And until IPFS nodes get wider adoption in browsers, mobile, and other places, one would not be surprised to see hundreds to thousands more gateways appear for different purposes. There’s a ways to go before we decentralization reaches enough of a critical mass to ensure these issues don’t happen again for the average web user. For now, we detail some advice and conversation topics to ideally kick off the dialogue for the various groups involved.
 

@@ -1,0 +1,119 @@
+// global styles
+// used for articles on blog and docs
+// content only
+
+.post-content,
+.docs-container {
+  table {
+    margin-bottom: 2rem;
+    tr {
+      text-align: left;
+      border-top: 1px solid rgb(204, 204, 204);
+      td,
+      th {
+        border: 1px solid #dbdada;
+        padding: 0 10px;
+      }
+      th:empty {
+        border: 0;
+      }
+    }
+  }
+
+  // blockquote
+  blockquote {
+    padding-left: toRem(43);
+    @include fontSize_Medium;
+    position: relative;
+    margin: 2.5rem 0;
+    p {
+      color: $ebony;
+      font-style: normal;
+    }
+    &:before {
+      content: '';
+      border-radius: 10px;
+      width: 5px;
+      @include gradient_Background_PinkBlue_Reverse;
+      height: 100%;
+      position: absolute;
+      left: toRem(-3);
+    }
+  }
+  strong,
+  b {
+    font-weight: 600;
+  }
+  h1 {
+    margin-bottom: toRem(42);
+  }
+  p,
+  pre {
+    margin-bottom: 2.5rem;
+  }
+  h2 {
+    font-size: toRem(30);
+    margin-bottom: toRem(24);
+    line-height: toRem(34);
+    margin-top: toRem(80);
+  }
+  h3 {
+    margin-bottom: toRem(20);
+    font-size: toRem(18);
+    line-height: toRem(34);
+    @include fontWeight_Semibold;
+    margin-top: calc(var(--ifm-h3-vertical-rhythm-top) * var(--ifm-leading));
+  }
+  h4 {
+    @include fontSize_Medium;
+  }
+  h5 {
+    font-size: toRem(16);
+    line-height: toRem(34);
+    margin-bottom: 1.7rem;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  code {
+    @include monospace_Text;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  pre code {
+    @include monospace_Text;
+    background-color: $steelGray;
+    border-radius: 0.4rem;
+    display: inline-block;
+    min-width: 100%;
+    color: white;
+    padding: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  a {
+    color: $docsPrimaryPurple;
+    font-weight: 600;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  h1 a,
+  h2 a,
+  h3 a,
+  h4 a,
+  h5 a {
+    color: $ebony;
+  }
+  img {
+    max-width: 100%;
+  }
+
+  ul,
+  ol {
+    padding-left: 1rem;
+    li {
+      padding-left: 3rem;
+    }
+  }
+}

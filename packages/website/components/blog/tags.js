@@ -10,7 +10,7 @@ import Button, { ButtonVariant } from '../../components/button/button';
  */
 export const Tag = ({ tag }) => {
   const isString = typeof tag === 'string';
-  const inner = <span className={clsx(isString && 'select-none')}>{isString ? tag : tag.label}</span>;
+  const inner = <span>{isString ? tag : tag.label}</span>;
   return isString ? (
     inner
   ) : (
@@ -27,9 +27,12 @@ export const Tag = ({ tag }) => {
  * @returns {JSX.Element}
  */
 const Tags = ({ tags }) => (
-  <div className={clsx(typeof tags[0] !== 'string' && 'blog-tags-buttons')}>
-    {tags.map((tag, index) => (
-      <Tag tag={tag} key={`blog-tag-${tag}-${index}`} />
+  <div className={clsx('tags-container', typeof tags[0] !== 'string' && 'blog-tags-buttons')}>
+    {tags.map((tag, index, row) => (
+      <>
+        <Tag tag={tag} key={`blog-tag-${tag}-${index}`} />
+        <span>{index + 1 === row.length ? '' : ', '}</span>
+      </>
     ))}
   </div>
 );

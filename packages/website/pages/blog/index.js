@@ -30,8 +30,6 @@ export async function getStaticProps() {
 
   let featuredImage = null;
 
-  // we can create a "featured" flag if we want and feature blogs that way
-
   /**
    * @param {string} date
    */
@@ -57,9 +55,6 @@ export async function getStaticProps() {
       posts,
       title: 'Blog - Web3.Storage',
       image: featuredImage,
-      navBgColor: 'bg-nsltblue',
-      altLogo: true,
-      needsUser: false,
     },
   };
 }
@@ -164,7 +159,7 @@ const Paginated = ({ items, pageNumber, setPageNumber }) => {
     );
   };
   return (
-    <div className="blog-container">
+    <div className="blog-list-container">
       {currentItems.length > 0 ? <Items currentItems={currentItems} /> : <div>More blogs coming soon</div>}
       {items.length > BLOG_ITEMS_PER_PAGE && (
         <div className="blog-pagination">
@@ -248,7 +243,7 @@ const Blog = ({ posts }) => {
   if (posts.length === 0) return <Backdrop>There are no blogs yet 😞</Backdrop>;
 
   return (
-    <main className="grid blog-page">
+    <main className="grid blog-index">
       <div className="blog-heading">
         <h4>Web3.Storage Blog</h4>
         <h1>Updates from our organization and across the Web3 universe. </h1>
