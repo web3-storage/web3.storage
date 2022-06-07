@@ -131,9 +131,10 @@ describe('upload', () => {
     assert.strictEqual(backups.length, 3, 'upload has three backups')
 
     // Lists single upload
-    const userUploads = await client.listUploads(user._id)
+    const { uploads: userUploads, count } = await client.listUploads(user._id)
     assert(userUploads, 'user has uploads')
-    assert.strictEqual(userUploads.length, 1, 'partial uploads result in a single upload for a user')
+    assert.strictEqual(userUploads.length, 1, 'partial uploads result in a single upload returned for a user')
+    assert.strictEqual(count, 1, 'partial uploads result in a single upload count for a user')
   })
 
   it('can rename uploads', async () => {
@@ -178,7 +179,7 @@ describe('upload', () => {
     })
 
     // Lists current user uploads
-    const userUploads = await client.listUploads(user._id)
+    const { uploads: userUploads } = await client.listUploads(user._id)
 
     // Delete previously created upload
     await client.deleteUpload(user._id, otherCid)
@@ -194,7 +195,7 @@ describe('upload', () => {
     const wasDeletedAgain = await client.deleteUpload(user._id, otherCid)
     assert.strictEqual(wasDeletedAgain, undefined, 'should fail to delete upload again')
 
-    const finalUserUploads = await client.listUploads(user._id)
+    const { uploads: finalUserUploads } = await client.listUploads(user._id)
     assert(finalUserUploads, 'user upload deleted')
     assert.strictEqual(finalUserUploads.length, userUploads.length - 1, 'user upload deleted')
 
@@ -273,12 +274,12 @@ describe('upload', () => {
     })
 
     // Default sort {inserted_at, Desc}
-    const userUploads = await client.listUploads(user._id)
+    const { uploads: userUploads } = await client.listUploads(user._id)
     assert.ok(userUploads.find(upload => upload.cid === sourceCid))
   })
 
   it('can list user uploads with several options', async () => {
-    const previousUserUploads = await client.listUploads(user._id)
+    const { uploads: previousUserUploads } = await client.listUploads(user._id)
     assert(previousUserUploads, 'user has uploads')
 
     const differentCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf355'
@@ -297,24 +298,24 @@ describe('upload', () => {
     })
 
     // Default sort {inserted_at, Desc}
-    const userUploadsDefaultSort = await client.listUploads(user._id)
+    const { uploads: userUploadsDefaultSort } = await client.listUploads(user._id)
     assert.strictEqual(userUploadsDefaultSort.length, previousUserUploads.length + 1, 'user has the second upload')
     assert.strictEqual(userUploadsDefaultSort[0].cid, differentCid, 'last upload first')
 
     // Sort {inserted_at, Asc}
-    const userUploadsAscAndInsertedSort = await client.listUploads(user._id, {
+    const { uploads: userUploadsAscAndInsertedSort } = await client.listUploads(user._id, {
       sortOrder: 'Asc'
     })
     assert.notStrictEqual(userUploadsAscAndInsertedSort[0].cid, differentCid, 'first upload first')
 
     // Sort {name, Desc}
-    const userUploadsByNameSort = await client.listUploads(user._id, {
+    const { uploads: userUploadsByNameSort } = await client.listUploads(user._id, {
       sortBy: 'Name'
     })
     assert.strictEqual(userUploadsByNameSort[0].cid, differentCid, 'last upload first')
 
-    // Sort {name, Asc} with size
-    const userUploadsAscAndByNameSort = await client.listUploads(user._id, {
+    // Sort {name, Asc} with size and offset
+    const { uploads: userUploadsAscAndByNameSort } = await client.listUploads(user._id, {
       sortBy: 'Name',
       sortOrder: 'Asc',
       size: 1
@@ -323,7 +324,11 @@ describe('upload', () => {
     assert.notStrictEqual(userUploadsAscAndByNameSort[0].cid, differentCid, 'first upload first')
 
     // Filter with before second upload
-    const userUploadsBeforeTheLatest = await client.listUploads(user._id, { before: created })
+    const { uploads: userUploadsBeforeTheLatest } = await client.listUploads(user._id, { before: created })
     assert.strictEqual(userUploadsBeforeTheLatest.length, previousUserUploads.length, 'list without the second upload')
+
+    // Filter with after second upload
+    const { uploads: userUploadsAfterTheLatest } = await client.listUploads(user._id, { after: created })
+    assert.strictEqual(userUploadsAfterTheLatest.length, 1, 'list with only the second upload')
   })
 })
