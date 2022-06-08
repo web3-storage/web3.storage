@@ -1,7 +1,34 @@
 import debug from 'debug'
-import { EMAIL_TYPE } from '@web3-storage/db'
+import { EMAIL_TYPE, parseTextToNumber } from '@web3-storage/db'
 
 const log = debug('storage:checkStorageUsed')
+
+const supportEmail = 'support@web3.storage'
+
+const USER_BY_USED_STORAGE_QUERY = `
+  SELECT * FROM users_by_storage_used($1, $2, $3, $4)
+`
+
+const MIN_MAX_USER_ID = `
+ SELECT min(id)::TEXT as min, max(id)::TEXT as max from public.user
+`
+
+const USER_BY_EMAIL_QUERY = `
+  SELECT id AS _id , email, name FROM public.user WHERE email=$1
+`
+
+const userByStorageRowToUser = (row) => {
+  const storageQuota = parseTextToNumber(row.storage_quota)
+  const storageUsed = parseTextToNumber(row.storage_used)
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    storageQuota,
+    storageUsed,
+    percentStorageUsed: Math.floor((storageUsed / storageQuota) * 100)
+  }
+}
 
 const STORAGE_QUOTA_EMAILS = [
   {
@@ -44,40 +71,51 @@ const STORAGE_QUOTA_EMAILS = [
  * Get users with storage quota usage in percentage range and email them as
  * appropriate when approaching their storage quota limit.
  * @param {{
- *  db: import('@web3-storage/db').DBClient
+ *  roPg: import('pg').Client
  *  emailService: import('../lib/email/service').EmailService
+ *  userBatchSize?: number
  * }} config
  */
-export async function checkStorageUsed ({ db, emailService }) {
+export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 1000 }) {
   if (!log.enabled) {
     console.log('ℹ️ Enable logging by setting DEBUG=storage:checkStorageUsed')
   }
 
+  /** @type {{ rows: Array.<{min: string, max: string}> }} */
+  const { rows: minMax } = await roPg.query(MIN_MAX_USER_ID)
+
+  const min = BigInt(minMax[0].min)
+  const max = BigInt(minMax[0].max)
+  const batchSize = BigInt(userBatchSize)
+
   log('🗄 Checking users storage quotas')
 
   for (const email of STORAGE_QUOTA_EMAILS) {
-    const users = await db.getUsersByStorageUsed({
-      fromPercent: email.fromPercent,
-      ...(email.toPercent && { toPercent: email.toPercent })
-    })
+    const usersOverQuota = []
+    let start = min
+    let isLastBatch = false
 
-    if (users.length) {
-      if (email.emailType === EMAIL_TYPE.User100PercentStorage) {
-        const adminUser = await db.getUserByEmail('support@web3.storage')
-        const toAdmin = {
-          _id: adminUser._id,
-          email: adminUser.email,
-          name: adminUser.name
-        }
+    while (!isLastBatch) {
+      let to = start + batchSize
 
-        const emailSent = await emailService.sendEmail(toAdmin, EMAIL_TYPE.AdminStorageExceeded, {
-          secondsSinceLastSent: email.secondsSinceLastSent,
-          templateVars: { users }
-        })
+      if (to > max) {
+        // set `to` for the last batch to be null so that we take instances that might have been created
+        // since the initial query.
+        to = null
+        isLastBatch = true
+      }
+      const { rows: results } = await roPg.query(USER_BY_USED_STORAGE_QUERY, [
+        email.fromPercent,
+        email.toPercent,
+        start,
+        to
+      ])
 
-        if (emailSent) {
-          log('📧 Sent a list of users exceeding their quotas to admin')
-        }
+      const users = results
+        .map(userByStorageRowToUser)
+
+      if (email.emailType === EMAIL_TYPE.User100PercentStorage && users.length > 0) {
+        usersOverQuota.push(...users)
       }
 
       for (const user of users) {
@@ -98,6 +136,26 @@ export async function checkStorageUsed ({ db, emailService }) {
             log(`📧 Sent an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
           }
         }
+      }
+      start = to
+    }
+
+    if (usersOverQuota.length > 0) {
+      const { rows: results } = await roPg.query(USER_BY_EMAIL_QUERY, [supportEmail])
+
+      if (!results.length) {
+        throw new Error(`${supportEmail} does not exists`)
+      }
+
+      const toAdmin = results[0]
+
+      const emailSent = await emailService.sendEmail(toAdmin, EMAIL_TYPE.AdminStorageExceeded, {
+        secondsSinceLastSent: email.secondsSinceLastSent,
+        templateVars: { users: usersOverQuota }
+      })
+
+      if (emailSent) {
+        log('📧 Sent a list of users exceeding their quotas to admin')
       }
     }
   }
