@@ -16,13 +16,13 @@ const env = {
 }
 
 function getToBeUpdatedNull (cItem) {
-  return cItem[1] === null && // It's null in web3.storage
-    cItem[2] !== null// It's has a size in cargo
+  return cItem.dagSize === null && // It's null in web3.storage
+    cItem.actualSize !== null// It's has a size in cargo
 }
 
 function getToBeUpdatedWrong (cItem) {
-  return cItem[1] !== cItem[2] && //  web3.storage value is different from cargo
-    cItem[2] !== null // It's has a size in cargo
+  return cItem.dagSize !== cItem.actualSize && //  web3.storage value is different from cargo
+    cItem.actualSize !== null // It's has a size in cargo
 }
 
 describe('Fix dag sizes migration', () => {
@@ -77,24 +77,49 @@ describe('Fix dag sizes migration', () => {
     authKey = await createUserAuthKey(dbClient, user._id)
     // cid, public.content.dag_size, cargo.dag.size_actual
     contentItems = [
-      [await randomCid(), 120, 120],
-      [await randomCid(), 105, 1000], // To be updated
-      [await randomCid(), 110, 110],
-      [await randomCid(), 125, 90], // To be updated
-      [await randomCid(), 0, 90], // To be updated
-      [await randomCid(), 100, null],
-      [await randomCid(), null, null],
-      [await randomCid(), 0, 0]
+      {
+        cid: await randomCid(),
+        dagSize: 120,
+        actualSize: 120
+      }, {
+        cid: await randomCid(),
+        dagSize: 105,
+        actualSize: 1000 // To be updated
+      }, {
+        cid: await randomCid(),
+        dagSize: 110,
+        actualSize: 110
+      }, {
+        cid: await randomCid(),
+        dagSize: 125,
+        actualSize: 90 // To be updated
+      }, {
+        cid: await randomCid(),
+        dagSize: 0,
+        actualSize: 90 // To be updated
+      }, {
+        cid: await randomCid(),
+        dagSize: 100,
+        actualSize: null
+      }, {
+        cid: await randomCid(),
+        dagSize: null,
+        actualSize: null
+      }, {
+        cid: await randomCid(),
+        dagSize: 0,
+        actualSize: 0
+      }
     ]
     for (let i = 0; i < contentItems.length; i++) {
       const c = contentItems[i]
       await Promise.all([
-        createUpload(dbClient, user._id, authKey, c[0], {
-          dagSize: c[1]
+        createUpload(dbClient, user._id, authKey, c.cid, {
+          dagSize: c.dagSize
         }),
         createCargoDag(dbClient, {
-          cid_v1: c[0],
-          size_actual: c[2]
+          cid_v1: c.cid,
+          size_actual: c.actualSize
         })
       ])
     }
@@ -104,8 +129,8 @@ describe('Fix dag sizes migration', () => {
     await updateDagSizesWrp({ user })
     const wrongSizes = contentItems.filter(getToBeUpdatedWrong)
     await Promise.all(wrongSizes.map(async c => {
-      const u = await getUpload(dbClient, c[0], user._id)
-      assert.strictEqual(u.dagSize, c[2], `Not updated ${c[0]}`)
+      const u = await getUpload(dbClient, c.cid, user._id)
+      assert.strictEqual(u.dagSize, c.actualSize, `Not updated ${c.cid}`)
     }))
   })
 
@@ -113,26 +138,27 @@ describe('Fix dag sizes migration', () => {
     await updateDagSizesWrp({ user })
     const nullSizes = contentItems.filter(getToBeUpdatedNull)
     await Promise.all(nullSizes.map(async c => {
-      const u = await getUpload(dbClient, c[0], user._id)
-      assert.strictEqual(u.dagSize, c[2], `Not updated ${c[0]}`)
+      const u = await getUpload(dbClient, c.cid, user._id)
+      assert.strictEqual(u.dagSize, c.actualSize, `Not updated ${c.cid}`)
     }))
   })
 
   it('returns the cids of all the updated content', async () => {
     const { updatedCids } = await updateDagSizesWrp({ user })
     const toBeUpdated = contentItems.filter((c) => getToBeUpdatedNull(c) || getToBeUpdatedWrong(c))
+
     assert.strictEqual(toBeUpdated.length, updatedCids.length)
-    assert(toBeUpdated.map(e => e[0]).every((e) => updatedCids.includes(e)))
+    assert(toBeUpdated.map(e => e.cid).every((e) => updatedCids.includes(e)))
   })
 
   it('does not mess with correct ones', async () => {
     const { allUploadsBefore, allUploadsAfter } = await updateDagSizesWrp({ user })
     const correctSizes = contentItems.filter((c) => !getToBeUpdatedNull(c) && !getToBeUpdatedWrong(c))
     await Promise.all(correctSizes.map(async c => {
-      const u = await getUpload(dbClient, c[0], user._id)
-      assert.strictEqual(u.dagSize, c[1])
-      assert.strictEqual(allUploadsBefore.find((u) => u.cid === c[0]).updated,
-        allUploadsAfter.find((u) => u.cid === c[0]).updated, `Updated date of ${c[0]}`)
+      const u = await getUpload(dbClient, c.cid, user._id)
+      assert.strictEqual(u.dagSize, c.dagSize)
+      assert.strictEqual(allUploadsBefore.find((u) => u.cid === c.cid).updated,
+        allUploadsAfter.find((u) => u.cid === c.cid).updated, `Updated date of ${c.cid}`)
     }))
   })
 
@@ -141,8 +167,8 @@ describe('Fix dag sizes migration', () => {
     const { updatedCids } = await updateDagSizesWrp({ user, limit: 1 })
     const wrongSizes = contentItems.filter(getToBeUpdatedWrong)
     await Promise.all(wrongSizes.map(async c => {
-      const u = await getUpload(dbClient, c[0], user._id)
-      assert.strictEqual(u.dagSize, c[2], `Not updated ${c[0]}`)
+      const u = await getUpload(dbClient, c.cid, user._id)
+      assert.strictEqual(u.dagSize, c.actualSize, `Not updated ${c.cid}`)
     }))
     const toBeUpdated = contentItems.filter((c) => getToBeUpdatedNull(c) || getToBeUpdatedWrong(c))
 
@@ -154,10 +180,10 @@ describe('Fix dag sizes migration', () => {
 
     const nullOrZeroSizes = contentItems.filter((c) => getToBeUpdatedNull(c) || getToBeUpdatedWrong(c))
     nullOrZeroSizes.map(async c => {
-      const u = allUploadsAfter.find(u => u.cid === c[0])
-      assert.strictEqual(u.dagSize, c[2])
-      assert.notStrictEqual(allUploadsBefore.find((u) => u.cid === c[0]).updated,
-        allUploadsAfter.find((u) => u.cid === c[0]).updated, `Not updated updated_at of ${c[0]}`)
+      const u = allUploadsAfter.find(u => u.cid === c.cid)
+      assert.strictEqual(u.dagSize, c.actualSize)
+      assert.notStrictEqual(allUploadsBefore.find((u) => u.cid === c.cid).updated,
+        allUploadsAfter.find((u) => u.cid === c.cid).updated, `Not updated updated_at of ${c.cid}`)
     })
   })
 })
