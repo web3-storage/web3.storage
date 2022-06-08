@@ -9,6 +9,10 @@ const USER_BY_USED_STORAGE_QUERY = `
   SELECT * FROM users_by_storage_used($1, $2, $3, $4)
 `
 
+const MAX_USER_ID_QUERY = `
+ SELECT max(id)::TEXT as max from public.user
+`
+
 const USER_BY_EMAIL_QUERY = `
   SELECT id AS _id , email, name FROM public.user WHERE email=$1
 `
@@ -78,6 +82,10 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
   }
   log('🗄 Checking users storage quotas')
 
+  /** @type {{ rows: Array.<{max: string}> }} */
+  const { rows: maxIdResult } = await roPg.query(MAX_USER_ID_QUERY)
+  const maxId = BigInt(maxIdResult[0].max)
+
   for (const email of STORAGE_QUOTA_EMAILS) {
     const usersOverQuota = []
     let startId = 0
@@ -117,11 +125,12 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
         }
       }
 
-      if (users.length < userBatchSize) {
+      const maxFetchedId = users.pop().id
+      if (maxFetchedId >= maxId) {
         log('🗄 Reached last user')
         break
       } else {
-        startId = users.pop().id + 1
+        startId = maxFetchedId + 1
       }
     }
 
