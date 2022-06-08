@@ -1,6 +1,5 @@
 /* eslint-env mocha */
 import {
-  createUpload,
   createUser,
   createUserWithFiles
 } from '../../db/test/utils.js'
