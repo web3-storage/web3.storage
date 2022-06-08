@@ -157,8 +157,8 @@ export async function createUpload (dbClient, user, authKey, cid, options = {}) 
 
   await dbClient.createUpload({
     user: user,
-    contentCid: cid || randomCid(),
-    sourceCid: cid || randomCid(),
+    contentCid: cid || await randomCid(),
+    sourceCid: cid || await randomCid(),
     authKey: authKey,
     type: options.type || 'Upload',
     dagSize: options.dagSize === undefined ? 1000 : options.dagSize,
