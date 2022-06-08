@@ -19,12 +19,10 @@
   transition: left 300ms ease-in-out;
 }
 
-// ////////////////////////////////////////////////////////////// Slider Content
 .zero_click-wrapper {
   padding: 1rem;
 }
 
-// ///////////////////////////////////////////////////////////// Slider Controls
 .zero_slider-range-input {
   position: relative;
   display: block;
@@ -43,7 +41,6 @@
   }
 }
 
-// ////////////////////////////////////////////////////////////////////// Inputs
 .zero_slide-selector {
   display: flex;
   flex-direction: row;
@@ -53,10 +50,6 @@
 
 .zero_slider-dummy-thumb {
   position: absolute;
-  // height: 20px;
-  // width: 50px;
-  // background-color: #ffffff;
-  // border: 2px solid gray;
   z-index: -1;
   top: 50%;
   transform: translateY(-50%);

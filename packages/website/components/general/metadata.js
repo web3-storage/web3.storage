@@ -1,6 +1,5 @@
 import Head from 'next/head';
 
-// ====================================================================== Metadata
 /**
  * @typedef {Object} MetadataProps
  * @property {string} [title] - The title of the page

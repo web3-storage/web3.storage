@@ -1,4 +1,3 @@
-// ===================================================================== Imports
 import { useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -10,14 +9,13 @@ import Squiggle from '../../assets/illustrations/squiggle.js';
 import GeneralPageData from '../../content/pages/general.json';
 import { trackCustomLinkClick, events } from 'lib/countly';
 
-// ====================================================================== Params
 /**
  * Footer Component
  *
  * @param {Object} props
  * @param {Boolean} props.isProductApp
  */
-// ===================================================================== Exports
+
 export default function Footer({ isProductApp }) {
   const router = useRouter();
   const contact = GeneralPageData.footer.contact;
@@ -25,7 +23,6 @@ export default function Footer({ isProductApp }) {
   const getStarted = GeneralPageData.footer.get_started;
   const copyright = GeneralPageData.footer.copyright;
 
-  // ================================================================= Functions
   const onLinkClick = useCallback(e => {
     trackCustomLinkClick(events.LINK_CLICK_FOOTER, e.currentTarget);
   }, []);
@@ -47,7 +44,6 @@ export default function Footer({ isProductApp }) {
     [router, onLinkClick]
   );
 
-  // ========================================================= Template [Footer]
   return (
     <footer id="site-footer" className={clsx(isProductApp ? 'clear-bg' : '')}>
       <section id="site-footer-section">

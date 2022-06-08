@@ -74,7 +74,6 @@ export default function Navigation({ isProductApp }) {
     [router, onLinkClick]
   );
 
-  // ======================================================= Templates [Buttons]
   const getAccountMenu = () => {
     if (account && account.links) {
       return (
@@ -158,7 +157,6 @@ export default function Navigation({ isProductApp }) {
     );
   };
 
-  // ================================================ Main Template [Navigation]
   return (
     <section id="section_navigation" className={clsx('section-navigation', theme, isProductApp ? 'clear-bg' : '')}>
       <div className="grid-noGutter">

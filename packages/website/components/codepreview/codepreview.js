@@ -1,4 +1,3 @@
-// ===================================================================== Imports
 import { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import hljs from 'highlight.js/lib/core';
@@ -8,12 +7,12 @@ import { elementIsInViewport } from '../../lib/utils.js';
 import CopyIcon from '../../assets/icons/copy.js';
 
 hljs.registerLanguage('javascript', javascript);
-// ====================================================================== Params
+
 /**
  * @param {Object} props
  * @param {Object} props.block
  */
-// ====================================================================== Export
+
 export default function CodePreview({ block }) {
   const [selectedTab, setSelectedTab] = useState(0);
   const [contentHeight, setContentHeight] = useState('unset');

@@ -1,4 +1,3 @@
-// ===================================================================== Imports
 import TextBlock from '../textblock/textblock';
 import Grid3D from '../../assets/illustrations/grid3D';
 import Squiggle from '../../assets/illustrations/squiggle';
@@ -16,14 +15,12 @@ import Cone from '../../assets/illustrations/cone';
 import Fidget from '../../assets/illustrations/fidget';
 import Blobs from '../../assets/illustrations/blobs';
 
-// ====================================================================== Params
 /**
  * @param {Object} props.block
  */
-// ====================================================================== Export
+
 export default function Hero({ block }) {
   const page = block.page || '';
-  // ================================================================= Functions
   const hero404 = () => {
     return (
       <>
@@ -108,7 +105,6 @@ export default function Hero({ block }) {
     }
   };
 
-  // ==================================================== Template [Hero Header]
   return (
     <div id={`${page}_hero-container`}>
       <div className={`${page}_hero-top-section`}>

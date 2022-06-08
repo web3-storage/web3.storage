@@ -1,12 +1,10 @@
-// ===================================================================== Imports
 import Card from '../card/card';
 import ZeroSlider from 'ZeroComponents/slider/slider';
 
-// ====================================================================== Params
 /**
  * @param {Object} props.block
  */
-// ====================================================================== Export
+
 export default function SliderBlock({ block }) {
   return (
     <div className="block slider-block">

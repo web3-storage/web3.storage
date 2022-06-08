@@ -1,5 +1,3 @@
-// /////////////////////////////////////////////////////// Accordion [Accordion]
-// -----------------------------------------------------------------------------
 .accordion-control-bar {
   display: flex;
   flex-direction: row-reverse;
@@ -7,23 +5,18 @@
   width: 100%;
 }
 
-// ///////////////////////////////////////////////////////// Accordion [Section]
-// -----------------------------------------------------------------------------
 .accordion-section {
   position: relative;
   overflow: hidden;
 }
 
-// ////////////////////////////////////////////////////////// Accordion [Header]
-// -----------------------------------------------------------------------------
 .accordion-header {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   cursor: pointer;
 }
-// ///////////////////////////////////////////////////////// Accordion [Content]
-// -----------------------------------------------------------------------------
+
 .accordion-content {
   position: relative;
   transition: height 150ms ease-in-out;

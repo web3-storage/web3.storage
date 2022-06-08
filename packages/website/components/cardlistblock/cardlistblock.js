@@ -1,13 +1,11 @@
-// ===================================================================== Imports
 import { useRef, useEffect, useCallback } from 'react';
-
 import { standardizeSiblingHeights } from '../../lib/utils.js';
 import Card from '../card/card';
-// ====================================================================== Params
+
 /**
  * @param {Object} props.block
  */
-// ====================================================================== Export
+
 export default function CardListBlock({ block }) {
   const childrenLoaded = useRef(/** @type {string[]} */ ([]));
   const direction = block.direction || 'row';
@@ -42,7 +40,6 @@ export default function CardListBlock({ block }) {
     }
   }, [standardHeights, block.cards.length, setCardContentHeights]);
 
-  // ================================================================== Template
   return (
     <div className="block card-list-block">
       <div className={`card-${direction}`}>

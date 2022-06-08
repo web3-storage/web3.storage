@@ -1,8 +1,5 @@
 @use 'sass:math';
 
-// ///////////////////////////////////////////////////// General [Page Sections]
-// -----------------------------------------------------------------------------
-
 .page-index {
   position: relative;
   .heading {
@@ -267,10 +264,6 @@
   }
 }
 
-// /////////////////////////////////////////////////////////////// [Subsections]
-// -----------------------------------------------------------------------------
-
-// ------------------------------------------------------------ Section [Header]
 #hero_header {
   position: relative;
   .heading {
@@ -289,7 +282,7 @@
     margin-bottom: 1.25rem;
   }
 }
-// ----------------------------------------------------------- Section [Intro 1]
+
 #intro_1 {
   position: relative;
   margin-top: 7rem;
@@ -378,7 +371,6 @@
   }
 }
 
-// ----------------------------------------------------------- Section [Intro 2]
 #intro_2-heading,
 #intro_2-statistics,
 #intro_2-cta {
@@ -469,7 +461,6 @@
   }
 }
 
-// --------------------------------------------------------------- Section [FAQ]
 #section_FAQ_info,
 #section_FAQ_ctas {
   color: white;
@@ -563,7 +554,6 @@
   }
 }
 
-// ------------------------------------------------------- Section [Get Started]
 #section_get-started {
   padding-top: 1rem;
   padding-bottom: 0;
@@ -715,8 +705,6 @@
   }
 }
 
-// ------------------------------------------------------ Section [Testimonials]
-
 #section_testimonials,
 #section_testimonials-cards {
   position: relative;
@@ -797,7 +785,6 @@
   }
 }
 
-// ------------------------------------------------------ Section [Explore Docs]
 #section_explore-docs {
   @include small {
     padding-top: 0;

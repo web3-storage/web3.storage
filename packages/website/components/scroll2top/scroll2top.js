@@ -1,10 +1,7 @@
-// ===================================================================== Imports
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
-
 import { ReactComponent as Chevron } from '../../assets/icons/chevron.svg';
 
-// ===================================================================== Exports
 export default function Scroll2Top() {
   const [display, setDisplay] = useState(false);
 

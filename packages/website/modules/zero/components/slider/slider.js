@@ -1,7 +1,6 @@
-// ===================================================================== Imports
 import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import clsx from 'clsx'
-// ====================================================================== Params
+
 /**
  * @param {Object} props
  * @param {Array} props.collection
@@ -10,7 +9,6 @@ import clsx from 'clsx'
  * @param {number} props.rows
  * @param {Object} props.displayOptions
  */
-// =================================================================== Functions
 
 /**
  * @param {any} props TODO: Define props
@@ -61,7 +59,6 @@ function mapColumnNumbertoBreakpoints (obj, cols) {
   return options
 }
 
-// ====================================================================== Export
 function Slider ({
     collection,
     arrowSelectors,
@@ -93,7 +90,6 @@ function Slider ({
   const indices = columns - display + 1
   const visibleColumns = mapColumnNumbertoBreakpoints(displayOptions, columns)
 
-  // ================================================================= Functions
   useEffect(() => {
     if (columns < display) {
       setDisplay(columns)
@@ -182,7 +178,6 @@ function Slider ({
     left: `${thumbPosition}px`
   }
 
-  // ========================================================= Template [Slider]
   return (
     <div className="zero_slider-container">
 
@@ -259,5 +254,4 @@ Slider.defaultProps = {
   displayOptions: { default: 3 }
 }
 
-// ====================================================================== Export
 export default Slider

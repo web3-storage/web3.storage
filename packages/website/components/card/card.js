@@ -1,4 +1,3 @@
-// ===================================================================== Imports
 import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
@@ -11,7 +10,6 @@ import NpmIcon from '../../assets/icons/npmicon';
 import Windows from '../../assets/icons/windows';
 import countly from '../../lib/countly';
 
-// ====================================================================== Params
 /**
  * @param {Object} props
  * @param {Object} props.card
@@ -20,7 +18,7 @@ import countly from '../../lib/countly';
  * @param {string|null} props.targetClass
  * @param {any} props.onCardLoad
  */
-// ====================================================================== Export
+
 export default function Card({ card, cardsGroup = [], index = 0, targetClass, onCardLoad }) {
   const router = useRouter();
   const hasIcon = card.hasOwnProperty('icon_before') && typeof card.icon_before === 'object';
@@ -36,7 +34,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
       tracking.action = card.cta.action;
     }
   }
-  // ================================================================= Functions
+
   useEffect(() => {
     if (onCardLoad) {
       onCardLoad('loaded');
@@ -155,7 +153,6 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
     );
   };
 
-  // ========================================================= Templates [Cards]
   if (card.type === 'E') {
     return <CardTier card={card} cardsGroup={cardsGroup} index={index} onCardLoad={onCardLoad} />;
   }
