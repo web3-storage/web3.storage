@@ -1,9 +1,11 @@
 import * as JWT from './utils/jwt.js'
 import {
   AccountRestrictedError,
+  DeleteRestrictedError,
   MagicTokenRequiredError,
   NoTokenError,
   PinningUnauthorizedError,
+  TokenBlockedError,
   TokenNotFoundError,
   UnrecognisedTokenError,
   UserNotFoundError
@@ -102,6 +104,23 @@ export function withAccountNotRestricted (handler) {
 }
 
 /**
+ * Middleware: verify that the authenticated request is for a user whose
+ * ability to delete is not restricted.
+ *
+ * @param {import('itty-router').RouteHandler} handler
+ * @returns {import('itty-router').RouteHandler}
+ */
+export function withDeleteNotRestricted (handler) {
+  return async (request, env, ctx) => {
+    const isDeleteRestricted = request.auth.userTags.find(v => (v.tag === USER_TAGS.DELETE_RESTRICTION && v.value === 'true'))
+    if (!isDeleteRestricted) {
+      return handler(request, env, ctx)
+    }
+    throw new DeleteRestrictedError()
+  }
+}
+
+/**
  * Middleware: verify that the authenticated request is for a user who is
  * authorized to pin.
  *
@@ -171,6 +190,17 @@ async function tryWeb3ApiToken (token, env) {
     // we have a web3 api token, but it's no longer valid
     throw new TokenNotFoundError()
   }
+
+  if (apiToken.isDeleted) {
+    const isBlocked = await checkIsTokenBlocked(apiToken, env)
+
+    if (isBlocked) {
+      throw new TokenBlockedError()
+    } else {
+      throw new TokenNotFoundError()
+    }
+  }
+
   return apiToken
 }
 
@@ -180,6 +210,10 @@ function findUserByIssuer (issuer, env) {
 
 function getUserTags (userId, env) {
   return env.db.getUserTags(userId)
+}
+
+function checkIsTokenBlocked (token, env) {
+  return env.db.checkIsTokenBlocked(token)
 }
 
 function verifyAuthToken (token, decoded, env) {

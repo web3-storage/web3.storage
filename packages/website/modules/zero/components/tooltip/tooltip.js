@@ -6,6 +6,7 @@ import InfoAIcon from 'assets/icons/infoA';
  * @property {string} content
  * @property {string} [position]
  * @property {React.ReactNode} [icon]
+ * @property {string|React.ReactNode} [children]
  * @prop {string} [className]
  */
 
@@ -14,10 +15,11 @@ import InfoAIcon from 'assets/icons/infoA';
  * @param {InfoProps} props
  * @returns
  */
-const Tooltip = ({ content, icon = null, className, position }) => {
+const Tooltip = ({ children, content, icon = null, className, position }) => {
   return (
     <div role="tooltip" className={clsx(className, 'Tooltip', position)}>
-      {icon || <InfoAIcon />}
+      {!children && (icon || <InfoAIcon />)}
+      {children}
       <span className="tooltip-content" dangerouslySetInnerHTML={{ __html: content }} />
     </div>
   );
