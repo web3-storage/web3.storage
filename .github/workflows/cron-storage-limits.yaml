@@ -39,4 +39,5 @@ jobs:
           PROD_PG_REST_URL: ${{ secrets.PROD_PG_REST_URL }}
           STAGING_PG_REST_URL: ${{ secrets.STAGING_PG_REST_URL }}
           MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
+          NODE_TLS_REJECT_UNAUTHORIZED: '0'
         run: npm run start:storage -w packages/cron
