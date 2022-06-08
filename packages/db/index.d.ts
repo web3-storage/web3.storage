@@ -61,7 +61,7 @@ export class DBClient {
   getPinRequests ({ size }: { size: number }): Promise<Array<PinRequestItemOutput>>
   deletePinRequests (ids: Array<number>): Promise<void>
   createPinSyncRequests (pinSyncRequests: Array<string>): Promise<void>
-  getPinSyncRequests ({ to, after, size }: { to: string, after?: string, size?: number }): Promise<PinSyncRequestOutput>
+  getPinSyncRequests ({ to, after, size }: { to?: string, after?: string, size?: number }): Promise<PinSyncRequestOutput>
   deletePinSyncRequests (ids: Array<string>): Promise<void>
   getDeals (cid: string): Promise<Deal[]>
   getDealsForCids (cids: string[]): Promise<Record<string, Deal[]>>
