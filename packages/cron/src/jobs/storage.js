@@ -9,10 +9,6 @@ const USER_BY_USED_STORAGE_QUERY = `
   SELECT * FROM users_by_storage_used($1, $2, $3, $4)
 `
 
-const MIN_MAX_USER_ID = `
- SELECT min(id)::TEXT as min, max(id)::TEXT as max from public.user
-`
-
 const USER_BY_EMAIL_QUERY = `
   SELECT id AS _id , email, name FROM public.user WHERE email=$1
 `
@@ -80,35 +76,18 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
   if (!log.enabled) {
     console.log('ℹ️ Enable logging by setting DEBUG=storage:checkStorageUsed')
   }
-
-  /** @type {{ rows: Array.<{min: string, max: string}> }} */
-  const { rows: minMax } = await roPg.query(MIN_MAX_USER_ID)
-
-  const min = BigInt(minMax[0].min)
-  const max = BigInt(minMax[0].max)
-  const batchSize = BigInt(userBatchSize)
-
   log('🗄 Checking users storage quotas')
 
   for (const email of STORAGE_QUOTA_EMAILS) {
     const usersOverQuota = []
-    let start = min
-    let isLastBatch = false
+    let startId = 0
 
-    while (!isLastBatch) {
-      let to = start + batchSize
-
-      if (to > max) {
-        // set `to` for the last batch to be null so that we take instances that might have been created
-        // since the initial query.
-        to = null
-        isLastBatch = true
-      }
+    while (true) {
       const { rows: results } = await roPg.query(USER_BY_USED_STORAGE_QUERY, [
         email.fromPercent,
         email.toPercent,
-        start,
-        to
+        startId,
+        userBatchSize
       ])
 
       const users = results
@@ -137,7 +116,13 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
           }
         }
       }
-      start = to
+
+      if (users.length < userBatchSize) {
+        log('🗄 Reached last user')
+        break
+      } else {
+        startId = users.pop().id + 1
+      }
     }
 
     if (usersOverQuota.length > 0) {
