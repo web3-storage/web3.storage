@@ -50,5 +50,5 @@ Please make sure that you are using the latest version of web3.storage client: v
 [howto-query]: ./query.md
 [howto-retrieve]: ./retrieve.md
 [howto-retrieve-gateway-filenames]: ./retrieve.md#setting-the-filename-for-downloads-via-gateways
-[reference-http]: ../reference/http-api/
+[reference-http]: ../../reference/http-api/
 [contact-us]: ../community/help-and-support.md

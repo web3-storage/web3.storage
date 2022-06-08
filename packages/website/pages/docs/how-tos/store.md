@@ -285,7 +285,7 @@ You can also get more information about the status of your data. See the [query 
 [reference-go-newclient]: https://pkg.go.dev/github.com/web3-storage/go-w3s-client#NewClient
 [reference-go-withtoken]: https://pkg.go.dev/github.com/web3-storage/go-w3s-client#WithToken
 [reference-go-client-interface]: https://pkg.go.dev/github.com/web3-storage/go-w3s-client#Client
-[reference-http]: ../reference/http-api/
+[reference-http]: ../../reference/http-api/
 [quickstart-guide]: ../intro.md#quickstart
 [howto-retrieve]: ./retrieve.md
 [howto-query]: ./query.md
