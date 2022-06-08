@@ -3,6 +3,9 @@
   flex-direction: column;
   width: 50%;
   margin-bottom: toRem(50);
+  @include small {
+    width: 100%;
+  }
   &:nth-child(odd) {
     padding-right: 1rem;
   }
@@ -13,6 +16,16 @@
     .blog-card-img img {
       transform: scale(0.98);
       transition: transform $transitionDuration;
+    }
+    .blue:after {
+      transform: translate(0.75rem, -50%);
+    }
+  }
+  .button {
+    align-self: flex-start;
+    top: 1rem;
+    .button-contents {
+      @include fontWeight_Medium;
     }
   }
 }
