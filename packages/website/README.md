@@ -78,7 +78,7 @@ TBD
 
 ## Docs
 
-Docs are written in markdown and uses Nextra.
+Docs are written in markdown and use Nextra.
 
 Notes
 - ensure that components (eg. `<Callout>... </Callout>`) are not indented
