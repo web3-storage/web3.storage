@@ -24,6 +24,8 @@ export const Card = ({ post }) => (
       {post.title}
     </h4>
 
-    <Button variant={ButtonVariant.TEXT}>Read More</Button>
+    <Button variant={ButtonVariant.TEXT} className="blue">
+      Read More
+    </Button>
   </a>
 );

@@ -257,7 +257,7 @@ const Blog = ({ posts }) => {
             <input type="text"></input>
             <input type="submit"></input>
           </form>
-          <div>Tag one, Tag two, More Tags</div>
+          <Button variant={ButtonVariant.TEXT}>More Tags</Button>
         </div>
         <TagsContainer filters={filters} handleTagClick={handleTagClick} tags={allTags} />
       </div>

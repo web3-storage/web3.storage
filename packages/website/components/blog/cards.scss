@@ -9,13 +9,31 @@
   &:nth-child(even) {
     padding-left: 1rem;
   }
+  &:hover {
+    .blog-card-img img {
+      transform: scale(0.98);
+      transition: transform $transitionDuration;
+    }
+  }
 }
 .blog-card-img {
   position: relative;
   img {
+    transition: transform $transitionDuration;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: toRem(5);
+  }
+  &:before {
+    width: 100%;
+    z-index: -1;
+    height: 100%;
+    content: '';
+    background: $gradient_PinkBlue;
+    position: absolute;
+    top: 0;
+    left: 0;
     border-radius: toRem(5);
   }
 }
