@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
+
 import { ReactComponent as Chevron } from '../../assets/icons/chevron.svg';
 
 export default function Scroll2Top() {

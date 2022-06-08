@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useQuery } from 'react-query';
 import clsx from 'clsx';
+
 import { getVersion } from 'lib/api';
 import { getStatusPageSummary } from 'lib/statuspage-api';
 import CloseIcon from '../../assets/icons/close.js';

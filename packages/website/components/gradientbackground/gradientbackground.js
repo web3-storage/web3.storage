@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+
 import { GradientImage } from '../../assets/illustrations/gradient-background.js';
 
 /**
