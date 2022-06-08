@@ -12,7 +12,8 @@ async function main () {
   console.log('About to run checkStorageUsed.')
   await roPg.connect()
   try {
-    await checkStorageUsed({ roPg, emailService })
+    console.log('bailing')
+    // await checkStorageUsed({ roPg, emailService })
   } finally {
     await roPg.end()
   }
