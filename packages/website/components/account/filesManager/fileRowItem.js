@@ -196,8 +196,8 @@ const FileRowItem = props => {
         ) : (
           <>
             Stored ({storageProviders.length})
-            <Tooltip className="medium-down-only" position="left" content={renderToString(storageProviders)} />
-            <Tooltip className="medium-up-only" position="right" content={renderToString(storageProviders)} />
+            <Tooltip className="medium-down-only" position="left" content={renderToString(<p>{storageProviders}</p>)} />
+            <Tooltip className="medium-up-only" position="right" content={renderToString(<p>{storageProviders}</p>)} />
           </>
         )}
       </span>
