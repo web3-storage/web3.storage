@@ -13,6 +13,13 @@ const MAX_USER_ID_QUERY = `
  SELECT max(id)::TEXT as max from public.user
 `
 
+const ID_RANGE_QUERY = `
+ SELECT max(id)::TEXT as max from public.user
+ WHERE id >= $1
+ ORDER BY id
+ LIMIT $1
+`
+
 const USER_BY_EMAIL_QUERY = `
   SELECT id AS _id , email, name FROM public.user WHERE email=$1
 `
@@ -91,11 +98,23 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
     let startId = 0
 
     while (true) {
+      // We iterate in batches, but we can't use a simple LIMIT/OFFSET approach, because
+      // the `users_by_storage_used` SQL function in turn calls `user_used_storage` for
+      // each user that it iterates, even the ones that it doesn't return, so a LIMIT of
+      // 1000 users could still involve `user_used_storage` being run on many thousands
+      // of users. Hence we get batches of user ID ranges to ensure that we only inflict
+      // a small amount of pain on the DB in each query.
+      const { rows: maxIdOfBatchResult } = await roPg.query(ID_RANGE_QUERY, [
+        startId,
+        userBatchSize
+      ])
+      const maxIdOfBatch = BigInt(maxIdOfBatchResult[0].max)
+
       const { rows: results } = await roPg.query(USER_BY_USED_STORAGE_QUERY, [
         email.fromPercent,
         email.toPercent,
         startId,
-        userBatchSize
+        maxIdOfBatch
       ])
 
       const users = results
@@ -125,12 +144,11 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
         }
       }
 
-      const maxFetchedId = users.length ? BigInt(users.pop().id) : null
-      if (maxFetchedId === null || maxFetchedId >= maxId) {
+      if (maxIdOfBatch >= maxId) {
         log('🗄 Reached last user')
         break
       } else {
-        startId = maxFetchedId + 1
+        startId += userBatchSize
       }
     }
 

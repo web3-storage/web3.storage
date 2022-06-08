@@ -5,7 +5,7 @@ CREATE OR REPLACE FUNCTION users_by_storage_used(
   from_percent INTEGER,
   to_percent INTEGER DEFAULT NULL,
   start_id BIGINT DEFAULT 0,
-  max_results INTEGER DEFAULT NULL
+  end_id BIGINT DEFAULT NULL
 )
   RETURNS TABLE
     (
@@ -42,8 +42,7 @@ BEGIN
         AND r.deleted_at IS NULL
       )
       AND u.id >= start_id
-      ORDER BY u.id
-      LIMIT max_results
+      AND u.id < end_id
     )
     SELECT *
     FROM user_account
