@@ -125,7 +125,7 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
         }
       }
 
-      const maxFetchedId = users.length ? users.pop().id : null
+      const maxFetchedId = users.length ? BigInt(users.pop().id) : null
       if (maxFetchedId === null || maxFetchedId >= maxId) {
         log('🗄 Reached last user')
         break
