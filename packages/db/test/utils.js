@@ -7,6 +7,54 @@ import { normalizeCid } from '../../api/src/utils/cid.js'
 export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU'
 export const dbEndpoint = 'http://127.0.0.1:3000'
 
+export const initialPinsNotPinned = [{
+  status: 'Pinning',
+  location: {
+    peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
+    peerName: 'web3-storage-sv15',
+    ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE1',
+    region: 'region'
+  }
+}]
+
+export const pinsPinned = [
+  {
+    status: 'Pinning',
+    location: {
+      peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
+      peerName: 'web3-storage-sv15',
+      region: 'region'
+    }
+  },
+  {
+    status: 'Pinned',
+    location: {
+      peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
+      peerName: 'web3-storage-sv16',
+      region: 'region'
+    }
+  }
+]
+
+export const pinsError = [
+  {
+    status: 'PinError',
+    location: {
+      peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
+      peerName: 'web3-storage-sv15',
+      region: 'region'
+    }
+  },
+  {
+    status: 'PinError',
+    location: {
+      peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
+      peerName: 'web3-storage-sv16',
+      region: 'region'
+    }
+  }
+]
+
 /**
  * @param {number} code
  * @returns {Promise<string>}
@@ -37,27 +85,10 @@ export async function createUser (dbClient, options = {}) {
   return dbClient.getUser(issuer)
 }
 
-const defaultUserPinnedRequests = [
-  {
-    status: 'Pinning',
-    location: {
-      peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
-      peerName: 'web3-storage-sv15',
-      region: 'region'
-    }
-  },
-  {
-    status: 'Pinned',
-    location: {
-      peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
-      peerName: 'web3-storage-sv16',
-      region: 'region'
-    }
-  }
-]
-
 /**
- * Create a user and files with a specified storage quota used
+ * Create a user and files with a specified storage quota used.
+ *
+ * It creates some failed and yet to be pinned content.
  * @param {import('../index').DBClient} dbClient
  * @param {Object} [options]
  * @param {string} [options.email]
@@ -95,6 +126,18 @@ export async function createUserWithFiles (dbClient, options = {}) {
   const pinRequests = 3
   const dagSize = Math.ceil(((percentStorageUsed / 100) * storageQuota) / (uploads + pinRequests))
 
+  // Create a failed upload.
+  await createUpload(dbClient, Number(user._id), Number(authKey), await randomCid(), {
+    dagSize,
+    pins: pinsError
+  })
+
+  // Create a yet to be pinned upload.
+  await createUpload(dbClient, Number(user._id), Number(authKey), await randomCid(), {
+    dagSize,
+    pins: initialPinsNotPinned
+  })
+
   for (let i = 0; i < uploads; i++) {
     const cid = await randomCid()
     await createUpload(dbClient, Number(user._id), Number(authKey), cid, {
@@ -102,11 +145,23 @@ export async function createUserWithFiles (dbClient, options = {}) {
     })
   }
 
+  // Create a failed PinRequest.
+  await createPsaPinRequest(dbClient, authKey, await randomCid(), {
+    dagSize,
+    pins: pinsError
+  })
+
+  // Create a yet to be pinned PinRequest.
+  await createPsaPinRequest(dbClient, authKey, await randomCid(), {
+    dagSize,
+    pins: initialPinsNotPinned
+  })
+
   for (let i = 0; i < pinRequests; i++) {
     const cid = await randomCid()
     await createPsaPinRequest(dbClient, authKey, cid, {
       dagSize,
-      pins: pins || defaultUserPinnedRequests
+      pins: pins || pinsPinned
     })
   }
 
@@ -129,16 +184,6 @@ export async function createUserAuthKey (dbClient, user, options = {}) {
 
   return _id
 }
-
-export const defaultPinData = [{
-  status: 'Pinning',
-  location: {
-    peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
-    peerName: 'web3-storage-sv15',
-    ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE1',
-    region: 'region'
-  }
-}]
 
 /**
  * @param {import('../index').DBClient} dbClient
@@ -163,7 +208,7 @@ export async function createUpload (dbClient, user, authKey, cid, options = {}) 
     type: options.type || 'Upload',
     dagSize: options.dagSize === undefined ? 1000 : options.dagSize,
     name: options.name || `Upload_${new Date().toISOString()}`,
-    pins: options.pins || defaultPinData,
+    pins: options.pins || pinsPinned,
     backupUrls: options.backupUrls || [initialBackupUrl]
   })
 
