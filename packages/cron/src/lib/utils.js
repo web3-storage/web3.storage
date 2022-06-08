@@ -91,7 +91,7 @@ function getPgConnString (env, mode = 'rw') {
       mode === 'rw' ? env.PG_CONNECTION : env.RO_PG_CONNECTION
   }
   if (!connectionString) throw new Error('missing Postgres connection string')
-  const connHost = connectionString.match(/https?:\/\/[^:\/]+/)[0]
+  const connHost = connectionString.match(/^(?:[a-z]+:\/\/)?[^:\/]+/)[0]
   console.log(`Connecting host: ${connHost}`)
   if (connectionString.match(/ssl/)) {
     console.log(`ssl string: ${connectionString.match(/ssl.{0,20}/)}`)
