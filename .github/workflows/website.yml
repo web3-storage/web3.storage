@@ -139,10 +139,7 @@ jobs:
       # --- Website deploy steps ----------------------------------------------
       - name: Deploy to Cloudflare pages
         if: ${{ steps.tag-release.outputs.releases_created }}
-        # Reset the `website-prod` branch to trigger a production build & deploy on Cloudflare Pages.
-        run: |
-          git push origin --delete website-prod
-          git push origin main:website-prod
+        run: npx wrangler pages publish --project-name web3-storage --branch main ./packages/website/out
 
       - run: npm run build -w packages/client
         if: ${{ steps.tag-release.outputs.releases_created }}
