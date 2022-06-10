@@ -29,22 +29,37 @@
     }
     a {
       display: block;
+      position: relative;
       color: $ebony;
       font-weight: normal;
       padding: 0.5rem 1rem;
       line-height: 1.5;
-      transition: color $transitionDuration;
+      transition: 300ms ease;
+      &:before {
+        content: '→';
+        position: absolute;
+        left: -0.3125rem;
+        margin-top: -1px;
+        opacity: 0;
+        transition: inherit;
+        color: $ebony;
+      }
       &.active,
       &:hover {
         color: $docsPrimaryPurple;
-        transition: color $transitionDuration;
+        transition: 300ms ease;
+        &:before {
+          color: $docsPrimaryPurple;
+          transition: inherit;
+          opacity: 1;
+        }
       }
       &.active {
         font-weight: 500;
+        animation: headingSlideIn 300ms ease;
+        animation-fill-mode: forwards;
         &:before {
-          content: '→';
-          margin-top: -1px;
-          padding-right: 0.5rem;
+          opacity: 1;
         }
       }
     }
@@ -91,5 +106,14 @@
   }
   .no-heading a {
     padding-left: 0;
+  }
+}
+
+@keyframes headingSlideIn {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(1.3125rem);
   }
 }

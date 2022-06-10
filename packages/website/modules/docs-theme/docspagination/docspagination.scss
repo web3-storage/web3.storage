@@ -1,12 +1,53 @@
 .docs-pagination {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 3rem;
-    .sublabel {
-        font-size: 0.875rem;
-        line-height: 1;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 3rem;
+  .sublabel {
+    font-size: 0.875rem;
+    line-height: 1;
+  }
+  .prev,
+  .next {
+    a {
+      position: relative;
+      &:before {
+        position: absolute;
+        top: calc(50% - 2px);
+        transform: translate(0, -50%);
+        color: inherit;
+        transition: 250ms ease;
+      }
     }
-    .next {
-        text-align: right;
+  }
+  .prev {
+    a {
+      margin-left: 0.875rem;
+      &:before {
+        content: '«';
+        left: -0.875rem;
+        padding-right: 0.5rem;
+      }
+      &:hover {
+        &:before {
+          transform: translate(-0.75rem, -50%);
+        }
+      }
     }
+  }
+  .next {
+    text-align: right;
+    a {
+      margin-right: 0.75rem;
+      &:before {
+        content: '»';
+        right: -0.875rem;
+        padding-left: 0.5rem;
+      }
+      &:hover {
+        &:before {
+          transform: translate(0.75rem, -50%);
+        }
+      }
+    }
+  }
 }

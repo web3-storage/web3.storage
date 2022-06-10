@@ -81,7 +81,7 @@ First, you'll need to create a Web3.Storage client using your API token. Getting
 
 First you'll need to add the `web3.storage` package to your project's dependencies:
 
-```shell
+```bash
 npm install web3.storage
 ```
 
@@ -144,13 +144,13 @@ If you have the [IPFS command line interface][ipfs-docs-cli-quickstart] installe
 
 To get the whole bundle and save it to a directory, run the following command:
 
-```shell
+```bash
 ipfs get bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu
 ```
 
 If you want to get a specific file out of the bundle, add its name onto the end of the `ipfs get bafybie...` command:
 
-```shell
+```bash
 ipfs get bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu/youareanonsense.jpg
 ```
 
@@ -163,7 +163,7 @@ Sometimes you may need to just download a specific file to your computer using t
 1.  Open a terminal window.
 1.  Use `curl` to download your file:
 
-        ```shell
+        ```bash
         curl https://<YOUR CID>.ipfs.dweb.link/<FILE NAME> -o ~/<OUTPUT FILE>
         ```
 
@@ -177,7 +177,7 @@ Sometimes you may need to just download a specific file to your computer using t
 
         Your complete command should look something like this:
 
-        ```shell
+        ```bash
         curl https://bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq.ipfs.dweb.link/example.txt -o ~/output-file.txt
         ```
 
@@ -187,7 +187,7 @@ Sometimes you may need to just download a specific file to your computer using t
 1.  Open a terminal window.
 1.  Use `curl` to download your file:
 
-        ```shell
+        ```bash
         curl https://<YOUR CID>.ipfs.dweb.link/<FILE NAME> -o ~/<OUTPUT FILE>
         ```
 
@@ -201,7 +201,7 @@ Sometimes you may need to just download a specific file to your computer using t
 
         Your complete command should look something like this:
 
-        ```shell
+        ```bash
         curl https://bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq.ipfs.dweb.link/example.txt -o ~/output-file.txt
         ```
 

@@ -38,7 +38,7 @@ With Web3.Storage, you get all the benefits of decentralized storage technologie
 
 You'll need **Node version 14** or higher and **NPM version 7** or higher to complete this guide. Check your local versions like this:
 
-```shell
+```bash
 node --version && npm --version
 > v16.4.2
 > 7.18.1
@@ -79,7 +79,7 @@ It only takes a few moments to get a free API token from Web3.Storage. This toke
 1. Make a note of the **Token** field somewhere secure where you know you won't lose it. You can click **Copy** to copy your new API token to your clipboard.
 
 <Callout type="warning">
-##### Keep your API token private 
+##### Keep your API token private
 Do not share your API token with anyone else. This key is specific to your account.
 </Callout>
 
@@ -96,7 +96,7 @@ All data uploaded to Web3.Storage is available to anyone who requests it using t
 
 1. Create a folder for this quickstart project, and move into that folder:
 
-   ```shell
+   ```bash
    mkdir web3-storage-quickstart
    cd web3-storage-quickstart
    ```
@@ -111,13 +111,13 @@ All data uploaded to Web3.Storage is available to anyone who requests it using t
 
 1. Save both files, and then run `npm install` from your project folder:
 
-   ```shell
+   ```bash
    npm install
    ```
 
    This step may take a few moments. Once it's done, the command should output something like this:
 
-   ```shell
+   ```
    added 224 packages, and audited 225 packages in 14s
 
    40 packages are looking for funding
@@ -134,13 +134,13 @@ Now that you've got your script ready to go, you just need to run it in your ter
 
 1. Run the script by calling `node put-files.js`, using `--token` to supply your API token and specifying the path and name of the file you want to upload. If you'd like to upload more than one file at a time, simply specify their paths/names one after the other in a single command. Here's how that looks in template form:
 
-   ```shell
+   ```bash
    node put-files.js --token=<YOUR_TOKEN> ~/filename1 ~/filename2 ~/filenameN
    ```
 
    Once you've filled in your details, your command should look something like this:
 
-   ```shell
+   ```bash
    node put-files.js --token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGZFYTRhODlFNUVhRjY5YWI4QUZlZUU3MUE5OTgwQjFGQ2REZGQzNzIiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2MjY5Njk3OTY1NTQsIm5hbWUiOiJib25maXJlIn0.0S9Ua2FWEAZSwaemy92N7bW8ancRUtu4XtLS3Gy1ouA ~/hello.txt
    ```
 
@@ -152,7 +152,7 @@ You can upload a whole directory full of files at once by giving the script the 
 
 1. The command will output a CID:
 
-   ```shell
+   ```bash
    Content added with CID: bafybeig7sgl52pc6ihypxhk2yy7gcllu4flxgfwygp7klb5xdjdrm7onse
    ```
 

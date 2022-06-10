@@ -8713,9 +8713,9 @@
   padding: 0;
 }
 
-.swagger-ui .model-box-control:focus,
-.swagger-ui .models-control:focus,
-.swagger-ui .opblock-summary-control:focus {
+.swagger-ui .model-box-control:focus-visible,
+.swagger-ui .models-control:focus-visible,
+.swagger-ui .opblock-summary-control:focus-visible {
   outline: auto;
 }
 
@@ -9210,7 +9210,7 @@
 .swagger-ui section.models {
   border: 1px solid rgba(59, 65, 81, 0.3);
   border-radius: 4px;
-  margin: 30px 0;
+  margin-bottom: 30px;
 }
 
 .swagger-ui section.models .pointer {

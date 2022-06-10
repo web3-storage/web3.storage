@@ -29,7 +29,7 @@ To easily integrate Web3.Storage programmatically in your apps or services, you 
 
 In your JavaScript project, add the `web3.storage` package to your dependencies:
 
-```shell
+```bash
 npm install web3.storage
 ```
 

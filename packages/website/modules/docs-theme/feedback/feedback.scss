@@ -16,9 +16,9 @@
     background-color: $ebony;
     @include fontSize_Small;
     color: white;
-    padding: toRem(10) toRem(12);
-    height: auto;
+    padding: toRem(8) toRem(12);
     border: 2px solid $ebony;
+    box-sizing: border-box;
     border-radius: 5px !important;
     &:hover {
       color: $ebony;
