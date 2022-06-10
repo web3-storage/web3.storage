@@ -9806,4 +9806,26 @@
   .topbar {
     display: none;
   }
+  .wrapper {
+    .block {
+      .no-margin {
+        max-height: auto;
+        overflow: hidden;
+        animation: animateOpen 600ms ease;
+        animation-fill-mode: forwards;
+      }
+    }
+  }
+}
+
+@keyframes animateOpen {
+  0% {
+    max-height: 0;
+  }
+  90% {
+    max-height: 1000px;
+  }
+  100% {
+    max-height: auto;
+  }
 }
