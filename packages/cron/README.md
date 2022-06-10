@@ -3,6 +3,8 @@
 
 Resist chaos! Periodically update the db with exciting new facts about the size of pins and anything else that doesn't need to be on the critical path.
 
+Notify users when they are approaching or exceeding their storage quota, and notify admins of any users who are exceeding their quota.
+
 ## Getting started
 
 Ensure you have all the dependencies, by running `npm i` in the parent project.

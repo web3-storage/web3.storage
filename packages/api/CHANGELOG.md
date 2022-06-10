@@ -1,5 +1,30 @@
 # Changelog
 
+## [6.2.0](https://github.com/web3-storage/web3.storage/compare/api-v6.1.1...api-v6.2.0) (2022-06-01)
+
+
+### Features
+
+* Adding HasDeleteRestriction user_tag ([#1390](https://github.com/web3-storage/web3.storage/issues/1390)) ([0c3bb58](https://github.com/web3-storage/web3.storage/commit/0c3bb5874cc5d4ad313080fa5b1966748918481d))
+
+
+### Bug Fixes
+
+* clone env so new each request ([#1396](https://github.com/web3-storage/web3.storage/issues/1396)) ([9dd026b](https://github.com/web3-storage/web3.storage/commit/9dd026b9777d0bd235574e40b645ca67d2df19f9))
+
+### [6.1.1](https://github.com/web3-storage/web3.storage/compare/api-v6.1.0...api-v6.1.1) (2022-05-31)
+
+
+### Bug Fixes
+
+* show custom storage quota to user ([#1338](https://github.com/web3-storage/web3.storage/issues/1338)) ([51abb35](https://github.com/web3-storage/web3.storage/commit/51abb35b9c6f53ed1023a7dbb162ce2838fe09e9))
+
+
+### Other Changes
+
+* add test for CORS OPTIONS handler ([#1331](https://github.com/web3-storage/web3.storage/issues/1331)) ([63328b5](https://github.com/web3-storage/web3.storage/commit/63328b576b8440886d8d22b763751027406bbb7f))
+* fix tags in api user info ([#1379](https://github.com/web3-storage/web3.storage/issues/1379)) ([fdf6c76](https://github.com/web3-storage/web3.storage/commit/fdf6c760ea41c6befb6308d651d1621e31572d37))
+
 ## [6.1.0](https://github.com/web3-storage/web3.storage/compare/api-v6.0.0...api-v6.1.0) (2022-05-28)
 
 
