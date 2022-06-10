@@ -7769,6 +7769,25 @@
 .swagger-ui .opblock-tag-section {
   display: flex;
   flex-direction: column;
+  .arrow {
+    margin-right: 10px;
+  }
+  h1,
+  h2,
+  h3 {
+    .arrow {
+      margin-right: 0;
+    }
+  }
+}
+
+@keyframes rotateChevron {
+  from {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(0);
+  }
 }
 
 .swagger-ui .try-out.btn-group {
@@ -8692,7 +8711,7 @@
 .swagger-ui .authorization__btn {
   background: none;
   border: none;
-  padding: 0 10px;
+  padding-right: 10px;
 }
 
 .swagger-ui .authorization__btn.locked {
