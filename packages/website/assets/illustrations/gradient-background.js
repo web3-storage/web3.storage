@@ -1,13 +1,11 @@
-// @ts-ignore
+import Img from '../../components/cloudflareImage.js';
+import ImgBlobs from '../../public/images/illustrations/holographic-background.png';
+
 /**
  * @param {any} props
  */
 export const GradientImage = props => (
   <div {...props}>
-    <img
-      className="image-full-width"
-      src="/images/illustrations/holographic-background.png"
-      alt="gradient-background"
-    />
+    <Img className="image-full-width" src={ImgBlobs} alt="gradient-background" layout="fill" />
   </div>
 );
