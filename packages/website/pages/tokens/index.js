@@ -1,15 +1,19 @@
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import TokenCreator from 'components/tokens/tokenCreator/tokenCreator';
 import TokensManager from 'components/tokens/tokensManager/tokensManager';
-import Button from 'components/button/button';
+import Button, { ButtonVariant } from 'components/button/button';
 import { useTokens } from 'components/contexts/tokensContext';
 import TokensData from '../../content/pages/app/tokens.json';
+import { useUser } from 'hooks/use-user';
+import PinningRequestModal from 'components/pinningRequestModal/pinningRequestModal';
 
 const Tokens = () => {
   const { tokens, fetchDate, isFetchingTokens, getTokens } = useTokens();
+  const [isPinningRequestModalOpen, setIsPinningRequestModalOpen] = useState(false);
+  const user = useUser();
   const content = TokensData.page_content;
   // Initial fetch on component load
   useEffect(() => {
@@ -22,6 +26,12 @@ const Tokens = () => {
     <div className="page-container tokens-container">
       <div className="tokens-header">
         <h3>{content.heading}</h3>
+        {user?.info && !user.info.tags.HasPsaAccess && !user.info.tagProposals.HasPsaAccess && (
+          <Button variant={ButtonVariant.TEXT} onClick={() => setIsPinningRequestModalOpen(true)}>
+            {content.pinning_request.text}
+          </Button>
+        )}
+
         <TokenCreator content={TokensData.page_content.token_creator} />
       </div>
       <TokensManager content={TokensData.page_content.tokens_manager} />
@@ -35,6 +45,9 @@ const Tokens = () => {
         </Button>
         <div dangerouslySetInnerHTML={{ __html: content.ui.test_token }} className="testing-cta-container"></div>
       </div>
+      {isPinningRequestModalOpen && (
+        <PinningRequestModal isOpen={isPinningRequestModalOpen} onClose={() => setIsPinningRequestModalOpen(false)} />
+      )}
     </div>
   );
 };

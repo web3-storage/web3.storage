@@ -17,7 +17,7 @@ import Hamburger from '../../assets/icons/hamburger.js';
 import GradientBackground from '../gradientbackground/gradientbackground.js';
 import GeneralPageData from '../../content/pages/general.json';
 import Search from 'components/search/search';
-import UserRequestModal from 'components/user-request-modal/user-request-modal';
+import StorageLimitRequestModal from 'components/storageLimitRequestModal/storageLimitRequestModal';
 
 /**
  * Navbar Component
@@ -297,7 +297,7 @@ export default function Navigation({ isProductApp }) {
           </nav>
         </div>
       </div>
-      <UserRequestModal isOpen={isUserRequestModalOpen} onClose={() => setIsUserRequestModalOpen(false)} />
+      <StorageLimitRequestModal isOpen={isUserRequestModalOpen} onClose={() => setIsUserRequestModalOpen(false)} />
     </section>
   );
 }

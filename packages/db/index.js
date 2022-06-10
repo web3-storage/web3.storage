@@ -23,8 +23,8 @@ const uploadQuery = `
         content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region)))
       `
 
-const userQuery = `
-  _id:id::text,
+const getUserQuery = options => `
+   _id:id::text,
   issuer,
   name,
   email,
@@ -32,18 +32,8 @@ const userQuery = `
   publicAddress:public_address,
   created:inserted_at,
   updated:updated_at
-`
-
-const userQueryWithTags = `
-  _id:id::text,
-  issuer,
-  name,
-  email,
-  github,
-  publicAddress:public_address,
-  created:inserted_at,
-  updated:updated_at,
-  tags:user_tag_user_id_fkey(user_id,id,tag,value,deleted_at)
+  ${options?.includeTags ? ',tags:user_tag_user_id_fkey(user_id,id,tag,value,deleted_at)' : ''}
+  ${options?.includeTagProposals ? ',tagProposals:user_tag_proposal_user_id_fkey(user_id,id,admin_decision_type,tag,proposed_tag_value,deleted_at)' : ''}
 `
 
 const psaPinRequestTableName = 'psa_pin_request'
@@ -143,11 +133,11 @@ export class DBClient {
    * @param {import('./db-client-types').GetUserOptions?} options
    * @return {Promise<import('./db-client-types').UserOutput | undefined>}
    */
-  async getUser (issuer, { includeTags } = { includeTags: false }) {
+  async getUser (issuer, options) {
     /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
-      .select(includeTags ? userQueryWithTags : userQuery)
+      .select(getUserQuery(options))
       .eq('issuer', issuer)
 
     if (error) {
@@ -166,7 +156,7 @@ export class DBClient {
     /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
-      .select(userQuery)
+      .select(getUserQuery())
       .eq('email', email)
 
     if (error) {

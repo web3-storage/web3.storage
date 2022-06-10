@@ -2,12 +2,13 @@ import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
 import { HTTPError } from './errors.js'
-import { getTagValue, hasTag } from './utils/tags.js'
+import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
 import {
   NO_READ_OR_WRITE,
   READ_WRITE,
   maintenanceHandler
 } from './maintenance.js'
+
 /**
  * @typedef {{ _id: string, issuer: string }} User
  * @typedef {{ _id: string, name: string }} AuthToken
@@ -42,9 +43,10 @@ async function loginOrRegister (request, env) {
     throw new Error('missing required metadata')
   }
 
-  const parsed = data.type === 'github'
-    ? parseGitHub(data.data, metadata)
-    : parseMagic(metadata)
+  const parsed =
+    data.type === 'github'
+      ? parseGitHub(data.data, metadata)
+      : parseMagic(metadata)
 
   let user
   // check if maintenance mode
@@ -141,7 +143,10 @@ export async function userAccountGet (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userInfoGet (request, env) {
-  const user = await env.db.getUser(request.auth.user.issuer, { includeTags: true })
+  const user = await env.db.getUser(request.auth.user.issuer, {
+    includeTags: true,
+    includeTagProposals: true
+  })
 
   return new JSONResponse({
     info: {
@@ -152,6 +157,13 @@ export async function userInfoGet (request, env) {
         HasPsaAccess: hasTag(user, 'HasPsaAccess', 'true'),
         HasSuperHotAccess: hasTag(user, 'HasSuperHotAccess', 'true'),
         StorageLimitBytes: getTagValue(user, 'StorageLimitBytes', '')
+      },
+      tagProposals: {
+        HasAccountRestriction: hasPendingTagProposal(user, 'HasAccountRestriction'),
+        HasDeleteRestriction: hasPendingTagProposal(user, 'HasDeleteRestriction'),
+        HasPsaAccess: hasPendingTagProposal(user, 'HasPsaAccess'),
+        HasSuperHotAccess: hasPendingTagProposal(user, 'HasSuperHotAccess'),
+        StorageLimitBytes: hasPendingTagProposal(user, 'StorageLimitBytes')
       }
     }
   })
@@ -160,7 +172,12 @@ export async function userInfoGet (request, env) {
 export async function userRequestPost (request, env) {
   const userId = request.auth.user._id
   const { tagName, requestedTagValue, userProposalForm } = await request.json()
-  const res = await env.db.createUserRequest(userId, tagName, requestedTagValue, userProposalForm)
+  const res = await env.db.createUserRequest(
+    userId,
+    tagName,
+    requestedTagValue,
+    userProposalForm
+  )
   return new JSONResponse(res)
 }
 
@@ -227,9 +244,16 @@ export async function userUploadsGet (request, env) {
   })
 
   const oldest = uploads[uploads.length - 1]
-  const headers = uploads.length === size
-    ? { Link: `<${requestUrl.pathname}?size=${size}&before=${encodeURIComponent(oldest.created)}>; rel="next"` }
-    : undefined
+  const headers =
+    uploads.length === size
+      ? {
+          Link: `<${
+            requestUrl.pathname
+          }?size=${size}&before=${encodeURIComponent(
+            oldest.created
+          )}>; rel="next"`
+        }
+      : undefined
   return new JSONResponse(uploads, { headers })
 }
 

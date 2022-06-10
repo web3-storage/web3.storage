@@ -14,6 +14,7 @@
 @import 'layouts/dropdownOverrides';
 @import 'layouts/paginationOverrides';
 @import 'layouts/filterableOverrides';
+@import 'layouts/userRequestsModals.scss';
 @import '../components/navigation/navigation.scss';
 @import '../components/footer/footer.scss';
 
@@ -42,7 +43,6 @@
 @import '../components/callout/callout.scss';
 @import '../components/search/search.scss';
 @import '../components/account/accountBlockedModal/accountBlockedModal.scss';
-@import '../components/user-request-modal/user-request-modal.scss';
 
 // Pages
 @import '../pages/index.scss';

@@ -6,7 +6,7 @@ import LockIcon from 'assets/icons/lock';
 import Button, { ButtonVariant } from 'components/button/button';
 import { useUser } from 'components/contexts/userContext';
 import { elementIsInViewport } from 'lib/utils';
-import UserRequestModal from 'components/user-request-modal/user-request-modal';
+import StorageLimitRequestModal from 'components/storageLimitRequestModal/storageLimitRequestModal';
 
 // Raw TiB number of bytes, to be used in calculations
 const tebibyte = 1099511627776;
@@ -64,10 +64,6 @@ const StorageManager = ({ className = '', content }) => {
       clearTimeout(timeout);
     };
   }, [componentInViewport]);
-
-  const toggleUserRequestModal = () => {
-    setIsUserRequestModalOpen(!isUserRequestModalOpen);
-  };
 
   const onSearchFiles = useCallback(() => {
     const input = /** @type {HTMLInputElement} */ (document.querySelector('.search-input'));
@@ -158,7 +154,7 @@ const StorageManager = ({ className = '', content }) => {
         </button>
       </div>
       {isUserRequestModalOpen && (
-        <UserRequestModal isOpen={isUserRequestModalOpen} onClose={() => setIsUserRequestModalOpen(false)} />
+        <StorageLimitRequestModal isOpen={isUserRequestModalOpen} onClose={() => setIsUserRequestModalOpen(false)} />
       )}
     </div>
   );

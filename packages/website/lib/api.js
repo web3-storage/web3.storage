@@ -114,6 +114,18 @@ export async function createUnlimitedStorageRequest(authMethod, links, dataVolum
   );
 }
 
+export async function createPinningServiceRequest(reason, examples, profile) {
+  await createUserRequest(
+    'HasPsaAccess',
+    '',
+    JSON.stringify([
+      { label: 'Reason', value: reason },
+      { label: 'Examples', value: examples },
+      { label: 'Profile', value: profile },
+    ])
+  );
+}
+
 /**
  * Create Token
  *
