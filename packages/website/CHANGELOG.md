@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.5.1](https://github.com/web3-storage/web3.storage/compare/website-v2.5.0...website-v2.5.1) (2022-06-08)
+
+
+### Bug Fixes
+
+* 404 API http reference links ([#1358](https://github.com/web3-storage/web3.storage/issues/1358)) ([09550b9](https://github.com/web3-storage/web3.storage/commit/09550b904b6f2d05d298ab6917f04a0a21a628bd)), closes [#1359](https://github.com/web3-storage/web3.storage/issues/1359)
+* **http docs:** incorrect endpoint in description ([#1429](https://github.com/web3-storage/web3.storage/issues/1429)) ([f445cda](https://github.com/web3-storage/web3.storage/commit/f445cda5da6fef3893bb291bce61f42f02506927))
+
 ## [2.5.0](https://github.com/web3-storage/web3.storage/compare/website-v2.4.1...website-v2.5.0) (2022-05-30)
 
 
