@@ -1,10 +1,9 @@
 import clsx from 'clsx';
 import { useMemo, useRef } from 'react';
 import { renderToString } from 'react-dom/server';
-import { BsFillInfoCircleFill as InfoBIcon } from 'react-icons/bs';
+import { BsFillInfoCircleFill } from 'react-icons/bs';
 
 import CheckIcon from '../../../assets/icons/check';
-// import InfoBIcon from '../../../assets/icons/infoB';
 import CopyIcon from '../../../assets/icons/copy';
 import PencilIcon from '../../../assets/icons/pencil';
 import { addTextToClipboard, truncateString } from '../../../lib/utils';
@@ -160,7 +159,7 @@ const FileRowItem = props => {
         {isHeader ? (
           <Tooltip content={statusMessages.header} />
         ) : (
-          statusTooltip && <Tooltip icon={<InfoBIcon />} content={statusTooltip} />
+          statusTooltip && <Tooltip icon={<BsFillInfoCircleFill />} content={statusTooltip} />
         )}
       </span>
       <span className="file-storage-providers">

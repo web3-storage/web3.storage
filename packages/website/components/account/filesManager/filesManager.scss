@@ -35,15 +35,9 @@
   }
 
   // Title
-  > :first-child {
-    // margin-right: 10rem;
-  }
   .files-manager-title {
     display: flex;
     flex-direction: row;
-    &:not(.has-upload-button) {
-      // margin-right: 8rem;
-    }
     .button {
       @include fontSize_Atom;
       transform: translateY(1px);
@@ -73,7 +67,6 @@
     position: relative;
     top: 0.125rem;
     cursor: pointer;
-    // margin-right: 3.125rem;
     @include medium {
       margin-right: 0;
     }
