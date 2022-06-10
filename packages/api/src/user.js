@@ -3,7 +3,11 @@ import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
 import { HTTPError } from './errors.js'
 import { getTagValue, hasTag } from './utils/tags.js'
-
+import {
+  NO_READ_OR_WRITE,
+  READ_WRITE,
+  maintenanceHandler
+} from './maintenance.js'
 /**
  * @typedef {{ _id: string, issuer: string }} User
  * @typedef {{ _id: string, name: string }} AuthToken
@@ -42,7 +46,16 @@ async function loginOrRegister (request, env) {
     ? parseGitHub(data.data, metadata)
     : parseMagic(metadata)
 
-  const user = await env.db.upsertUser(parsed)
+  let user
+  // check if maintenance mode
+  if (env.mode === NO_READ_OR_WRITE) {
+    return maintenanceHandler()
+  } else if (env.mode === READ_WRITE) {
+    user = await env.db.upsertUser(parsed)
+  } else {
+    user = await env.db.getUser(parsed.issuer)
+  }
+
   return user
 }
 
