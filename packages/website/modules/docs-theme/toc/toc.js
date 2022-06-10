@@ -13,6 +13,7 @@ export default function Toc() {
   const [nestedHeadings, setNestedHeadings] = useState([]);
   const [updateKey, setUpdateKey] = useState(0);
   const activeHeadings = useRef({});
+  const lastActive = useRef('');
   let controller;
 
   const toggleClass = () => {
@@ -36,13 +37,19 @@ export default function Toc() {
   };
 
   const updateHeadings = (id) => {
+    let lastId = '';
     for (const element in activeHeadings.current) {
       if (activeHeadings.current[element]) {
         activeHeadings.current[element] = false;
+        lastId = element;
+        break;
       }
     }
-    activeHeadings.current[id] = true;
-    setUpdateKey(key => key + 1);
+    if (lastId !== id) {
+      activeHeadings.current[id] = true;
+      lastActive.current = lastId;
+      setUpdateKey(key => key + 1);
+    }
   }
 
   const getNestedHeadings = headingElements => {
@@ -85,7 +92,10 @@ export default function Toc() {
         <li key={heading.id}>
           <a
             href={`#${heading.id}`}
-            className={clsx(activeHeadings.current[heading.id] ? 'active' : '')}>
+            className={clsx(
+              activeHeadings.current[heading.id] ? 'active' : '',
+              heading.id === lastActive.current ? 'heading-slide-out' : ''
+            )}>
             {heading.title}
           </a>
           {heading.items.length > 0 && (
@@ -94,7 +104,10 @@ export default function Toc() {
                 <li key={child.id}>
                   <a
                     href={`#${child.id}`}
-                    className={clsx(activeHeadings.current[child.id] ? 'active' : '')}>
+                    className={clsx(
+                      activeHeadings.current[child.id] ? 'active' : '',
+                      child.id === lastActive.current ? 'heading-slide-out' : ''
+                    )}>
                     {child.title}
                   </a>
                 </li>

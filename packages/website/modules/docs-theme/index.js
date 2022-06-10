@@ -62,7 +62,7 @@ export default function Docs(props) {
 
         pre.appendChild(button);
       }
-      
+
     });
 
     hljs.highlightAll();
