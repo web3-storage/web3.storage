@@ -1,17 +1,19 @@
 import fs from 'fs';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import matter from 'gray-matter';
 import { useRouter } from 'next/router';
+import { uniq } from 'lodash';
 
 import { usePagination } from '../../components/blog/usePagination';
+import Categories from '../../components/blog/categories';
 import Tags from '../../components/blog/tags';
 import { Card } from '../../components/blog/cards';
 import Button, { ButtonVariant } from '../../components/button/button';
+import useQueryParams from 'ZeroHooks/useQueryParams';
 
 const BLOG_ITEMS_PER_PAGE = 4;
-const allTags = ['all', 'events', 'updates', 'news'];
 
 /**
  * Blog Cards
@@ -66,7 +68,7 @@ export async function getStaticProps() {
  * @param {Object} props.items
  * @param {number} props.pageNumber
  * @param {(pageNumber: number) => void} props.setPageNumber
- * @param {string[]} [props.filters]
+ * @param {string[]} [props.selectedCategory]
  * @returns {JSX.Element}
  */
 const Paginated = ({ items, pageNumber, setPageNumber }) => {
@@ -97,8 +99,10 @@ const Paginated = ({ items, pageNumber, setPageNumber }) => {
 
   const pageCount = Math.ceil(items.length / BLOG_ITEMS_PER_PAGE);
 
-  const router = useRouter();
-  const { page } = router.query;
+  const {
+    push,
+    query: { page, ...query },
+  } = useRouter();
 
   useEffect(() => {
     const newPage = typeof page === 'string' ? parseInt(page) : 1;
@@ -110,9 +114,9 @@ const Paginated = ({ items, pageNumber, setPageNumber }) => {
    * @param {number} newPage
    */
   const handlePageClick = newPage => {
-    router.push({
+    push({
       pathname: '/blog',
-      query: newPage === 1 ? undefined : { page: encodeURI(newPage.toString()) },
+      query: newPage === 1 ? query : { page: encodeURI(newPage.toString()), ...query },
     });
   };
 
@@ -173,20 +177,20 @@ const Paginated = ({ items, pageNumber, setPageNumber }) => {
 /**
  *
  * @param {Object} props
- * @param {string[]} props.tags
- * @param {string[]} props.filters
- * @param {(tag: string) => void} props.handleTagClick
+ * @param {string[]} props.categories
+ * @param {string} props.selectedCategory
+ * @param {(tag: string) => void} props.handleCategoryClick
  * @returns {JSX.Element}
  */
-function TagsContainer({ tags, filters, handleTagClick }) {
+function CategoryContainer({ categories, selectedCategory, handleCategoryClick }) {
   return (
-    <Tags
-      tags={tags.map(tag => {
-        const normTag = tag.toLowerCase();
+    <Categories
+      categories={categories.map(category => {
+        const normCategory = category.toLowerCase();
         return {
-          label: normTag,
-          onClick: () => handleTagClick(normTag),
-          selected: filters.includes(normTag),
+          label: category,
+          onClick: () => handleCategoryClick(normCategory),
+          selected: (normCategory === 'all' && !selectedCategory) || selectedCategory === normCategory,
         };
       })}
     />
@@ -197,42 +201,75 @@ function TagsContainer({ tags, filters, handleTagClick }) {
  * Blog Page
  * @param {Object} props
  */
-const Blog = ({ posts }) => {
-  const [currentPosts, setCurrentPosts] = useState(posts);
+const Blog = ({ posts = [] }) => {
   const [pageNumber, setPageNumber] = useState(0);
-  const [filters, setFilters] = useState(['all']);
 
-  const router = useRouter();
+  const [category, setCategory] = useQueryParams('category');
+  const [keyword, setKeyword] = useQueryParams('keyword');
+  const [tagsRaw, setTags] = useQueryParams('tags');
+  const tags = useMemo(() => (!!tagsRaw ? JSON.parse(tagsRaw) : []), [tagsRaw]);
 
-  useEffect(() => {
-    if (!posts) return;
+  const categories = useMemo(() => ['All', ...uniq(posts.map(({ category }) => category)).sort()], [posts]);
 
-    const shouldFilterPosts = filters[0] !== 'all';
-    const _posts = shouldFilterPosts
-      ? posts.filter(post => post.tags?.some(t => filters.includes(t.toLowerCase())))
-      : posts;
+  // Almagamating all tags available across all posts
+  const allTags = useMemo(
+    () =>
+      ['All', ...uniq(posts.map(({ tags }) => tags).flat()).sort()].map(tag => {
+        const normCategory = tag.toLowerCase();
+        return {
+          label: tag,
+          onClick: () => {
+            if (normCategory === 'all') {
+              return setTags('');
+            }
+            if (tags.includes(normCategory)) {
+              tags.splice(tags.indexOf(normCategory), 1);
+            } else {
+              tags.push(normCategory);
+            }
+            return setTags(!!tags.length ? JSON.stringify(tags) : '');
+          },
+          selected: (normCategory === 'all' && !tags.length) || tags.includes(normCategory),
+        };
+      }),
+    [posts, tags, setTags]
+  );
 
-    setCurrentPosts(_posts);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, posts]);
+  const filteredPosts = useMemo(
+    () =>
+      posts.filter(
+        ({ tags: postTags, category: postCategory, title: postTitle, description: postDescription }) =>
+          // Filter by tags
+          (!tags || tags.every(tag => postTags.includes(tag))) &&
+          // Filter by category
+          (!category || postCategory.toLowerCase() === category) &&
+          // Filter by title
+          (!keyword || [postTitle, postDescription].some(item => item.toLowerCase().indexOf(keyword) >= 0))
+      ),
+    [posts, category, keyword, tags]
+  );
 
   /**
    *
-   * @param {string} tag
+   * @param {string} category
    */
-  const handleTagClick = tag => {
-    setFilters(prev => {
-      if (tag === 'all') return ['all'];
-      let newTags = prev.includes(tag) ? prev.filter(t => t.toLowerCase() !== tag) : [...prev, tag.toLowerCase()];
-      newTags = newTags.filter(t => t.toLowerCase() !== 'all');
-      return newTags.length > 0 ? newTags : ['all'];
-    });
-    if (pageNumber !== 0) {
-      router.push({
-        pathname: '/blog',
-      });
-    }
-  };
+  const handleCategoryClick = useCallback(
+    category => {
+      setCategory(category === 'all' ? '' : category);
+    },
+    [setCategory]
+  );
+
+  /**
+   *
+   * @param {string} category
+   */
+  const onSearch = useCallback(
+    event => {
+      setKeyword(event.currentTarget.value.toLowerCase() || '');
+    },
+    [setKeyword]
+  );
 
   /**
    * @param {Object} props
@@ -254,14 +291,19 @@ const Blog = ({ posts }) => {
       <div className="blog-search-c">
         <div>
           <form>
-            <input type="text"></input>
-            <input type="submit"></input>
+            <input defaultValue={keyword} type="text" onChange={onSearch} />
+            <input type="submit" />
           </form>
+          <Tags tags={allTags} />
           <Button variant={ButtonVariant.TEXT}>More Tags</Button>
         </div>
-        <TagsContainer filters={filters} handleTagClick={handleTagClick} tags={allTags} />
+        <CategoryContainer
+          selectedCategory={category}
+          handleCategoryClick={handleCategoryClick}
+          categories={categories}
+        />
       </div>
-      <Paginated key={pageNumber} items={currentPosts} pageNumber={pageNumber} setPageNumber={setPageNumber} />
+      <Paginated key={pageNumber} items={filteredPosts} pageNumber={pageNumber} setPageNumber={setPageNumber} />
     </main>
   );
 };

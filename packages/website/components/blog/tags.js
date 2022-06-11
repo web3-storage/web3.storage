@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import React from 'react';
 
 import Button, { ButtonVariant } from '../../components/button/button';
 
@@ -14,7 +15,7 @@ export const Tag = ({ tag }) => {
   return isString ? (
     inner
   ) : (
-    <Button variant={ButtonVariant.OUTLINE_DARK} onClick={tag.onClick} className={clsx(tag.selected && 'active')}>
+    <Button variant={ButtonVariant.TEXT} onClick={tag.onClick} className={clsx(tag.selected && 'active')}>
       {tag.label}
     </Button>
   );
@@ -28,11 +29,10 @@ export const Tag = ({ tag }) => {
  */
 const Tags = ({ tags }) => (
   <div className={clsx('tags-container', typeof tags[0] !== 'string' && 'blog-tags-buttons')}>
-    {tags.map((tag, index, row) => (
-      <>
-        <Tag tag={tag} key={`blog-tag-${tag}-${index}`} />
-        <span>{index + 1 === row.length ? '' : ', '}</span>
-      </>
+    {tags.map(tag => (
+      <React.Fragment key={`blog-tag-${tag}`}>
+        <Tag tag={tag} />
+      </React.Fragment>
     ))}
   </div>
 );
