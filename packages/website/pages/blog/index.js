@@ -240,7 +240,7 @@ const Blog = ({ posts = [] }) => {
       posts.filter(
         ({ tags: postTags, category: postCategory, title: postTitle, description: postDescription }) =>
           // Filter by tags
-          (!tags || tags.every(tag => postTags.includes(tag))) &&
+          (!tags || tags.every(tag => postTags.map(postTag => postTag.toLowerCase()).includes(tag))) &&
           // Filter by category
           (!category || postCategory.toLowerCase() === category) &&
           // Filter by title
