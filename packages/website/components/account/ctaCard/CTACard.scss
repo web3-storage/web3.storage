@@ -17,6 +17,12 @@ $cta-card-padding-top: 5rem;
     position: relative;
   }
 
+  .cta-card-heading {
+    @include fontSize_Regular;
+    @include fontWeight_Semibold;
+    line-height: 35px;
+  }
+
   span {
     padding-top: 0.625rem;
     padding-bottom: 1.5625rem;

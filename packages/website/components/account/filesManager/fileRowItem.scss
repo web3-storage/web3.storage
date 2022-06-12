@@ -20,10 +20,10 @@ $file-size: auto;
   grid-template-columns: $file-select $file-date $file-name $file-cid $file-pin-status $file-storage-providers $file-size;
   align-items: flex-start;
   padding-left: 1.4375rem;
-  min-height: 7.8125rem;
+  min-height: 4.375rem;
   border-bottom: 0.078125rem solid rgba(white, 0.05);
   margin-top: 1.625rem;
-  padding-bottom: 1.25rem;
+  padding-bottom: 1.625rem;
 
   @include medium {
     grid-template-columns: auto;
@@ -71,6 +71,9 @@ $file-size: auto;
           left: 0.625rem;
           padding-left: 0;
         }
+        @include tiny {
+          width: 6rem;
+        }
       }
       .Tooltip {
         padding-left: 0.625rem;
@@ -92,7 +95,7 @@ $file-size: auto;
       flex-shrink: 1;
     }
     .Tooltip {
-      margin-right: 1.25rem;
+      margin-right: auto;
     }
   }
   a {
@@ -110,6 +113,12 @@ $file-size: auto;
       @include medium {
         justify-content: space-between;
         order: 6;
+      }
+      &.pinned {
+        .file-select,
+        .file-row-label {
+          display: none;
+        }
       }
     }
     &-select {
@@ -145,7 +154,8 @@ $file-size: auto;
       }
     }
     &-date {
-      padding-right: 2.75rem;
+      padding-right: 2.5rem;
+      overflow-wrap: break-word;
       @include medium {
         padding-right: 1.25rem;
       }
@@ -160,6 +170,9 @@ $file-size: auto;
         margin-left: 0.625rem;
         @include hoverSvg;
         @include medium {
+          display: none;
+        }
+        &.pinned {
           display: none;
         }
       }
@@ -248,7 +261,7 @@ $file-size: auto;
         }
         &.show-all {
           .content {
-            max-height: 6.25rem;
+            max-height: 2.625rem;
             transition: max-height $transitionDuration ease-out;
             @include medium {
               max-height: auto;
