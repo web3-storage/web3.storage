@@ -5,8 +5,8 @@ import { envConfig } from '../lib/env.js'
 import { getPgPool } from '../lib/utils.js'
 
 async function main () {
-  const rwPg = await getPgPool(process.env, 'rw')
-  const roPg = await getPgPool(process.env, 'ro')
+  const rwPg = getPgPool(process.env, 'rw')
+  const roPg = getPgPool(process.env, 'ro')
 
   try {
     await updateMetrics({ rwPg, roPg })
