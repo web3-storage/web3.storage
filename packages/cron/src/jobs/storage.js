@@ -14,10 +14,12 @@ const MAX_USER_ID_QUERY = `
 `
 
 const ID_RANGE_QUERY = `
- SELECT max(id)::TEXT as max from public.user
- WHERE id >= $1
- ORDER BY id
- LIMIT $1
+SELECT max(id)::TEXT as max FROM (
+  SELECT id FROM public.user
+  WHERE id >= $1
+  ORDER BY id
+  LIMIT $1
+) as user_range
 `
 
 const USER_BY_EMAIL_QUERY = `
