@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/web3-storage/web3.storage/compare/cron-v1.1.0...cron-v1.1.1) (2022-06-08)
+
+
+### Bug Fixes
+
+* optimise getUserByStorage query to avoid timeouts ([#1412](https://github.com/web3-storage/web3.storage/issues/1412)) ([8291115](https://github.com/web3-storage/web3.storage/commit/829111591445b519b86fb46bb28d27b2f940890c))
+* update incorrect dag sizes job ([#1059](https://github.com/web3-storage/web3.storage/issues/1059)) ([#1196](https://github.com/web3-storage/web3.storage/issues/1196)) ([dd9ce3b](https://github.com/web3-storage/web3.storage/commit/dd9ce3b89ccfb0b8b5a663e1673937c992720617))
+
 ## [1.1.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.0.0...cron-v1.1.0) (2022-05-27)
 
 
