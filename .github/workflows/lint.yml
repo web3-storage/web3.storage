@@ -1,10 +1,10 @@
-name: Pull Request Lint
+name: Lint
 
 on:
-  pull_request_target:
+  pull_request:
     types:
-      - opened
-      - edited
+      # Triggered when a pull request's head branch is updated. 
+      # For example, when the head branch is updated from the base branch, when new commits are pushed to the head branch, or when the base branch is changed.
       - synchronize
 
 jobs:
@@ -12,9 +12,6 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: amannn/action-semantic-pull-request@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
       - uses: codepunkt/npm-lockfile-changes@v1.0.0
         with:
