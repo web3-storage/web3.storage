@@ -1,22 +1,26 @@
-name: Lint
-on: 
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+name: Pull Request Lint
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+
 jobs:
-  lint:
-    name: Lint
+  main:
+    name: Check
     runs-on: ubuntu-latest
     steps:
+      - uses: amannn/action-semantic-pull-request@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
+      - uses: codepunkt/npm-lockfile-changes@v1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-node@v2
         with:
           node-version: 16
       - uses: bahmutov/npm-install@v1
       - run: npm run lint
-      - uses: codepunkt/npm-lockfile-changes@v1.0.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
