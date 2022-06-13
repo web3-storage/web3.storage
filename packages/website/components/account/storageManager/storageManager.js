@@ -36,7 +36,7 @@ const StorageManager = ({ className = '', content }) => {
   const limit = useMemo(() => data?.storageLimitBytes || defaultStorageLimit, [data]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
-
+  console.log(data);
   const { maxSpaceLabel, unlockLabel, percentUploaded, percentPinned } = useMemo(
     () => ({
       maxSpaceLabel: `${Math.floor(limit / tebibyte)} ${content.max_space_tib_label}`,

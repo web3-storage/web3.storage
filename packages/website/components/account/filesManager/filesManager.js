@@ -114,7 +114,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   // Initial pinned files fetch on component load
   useEffect(() => {
     if (!fetchPinsDate && !isFetchingPinned && apiToken) {
-      listPinned('pinned', apiToken);
+      listPinned('pinning', apiToken);
     }
   }, [fetchPinsDate, listPinned, isFetchingPinned, apiToken]);
 
