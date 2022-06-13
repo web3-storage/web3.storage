@@ -3,6 +3,9 @@ import type { CID } from 'multiformats'
 export type { CID, UnixFSEntry }
 import type { CarReader } from '@ipld/car/api'
 import type { BlockDecoder } from 'multiformats/codecs/interface'
+import {
+  fetch as _fetch,
+} from '../platform'
 
 /**
  * Define nominal type of U based on type of T. Similar to Opaque types in Flow
@@ -13,7 +16,7 @@ export interface Service {
   endpoint: URL
   token: string
   rateLimiter?: RateLimiter
-  customFetch?: typeof fetch
+  fetch?: typeof _fetch
 }
 
 export interface PublicService {

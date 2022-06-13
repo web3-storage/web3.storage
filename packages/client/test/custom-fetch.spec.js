@@ -35,7 +35,7 @@ describe('test customFetch', () => {
       fetch(...opts);
     }
 
-    const client = new Web3Storage({ endpoint, token, customFetch })
+    const client = new Web3Storage({ endpoint, token, fetch: customFetch })
     const files = prepareFiles()
     const cid = 'bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e'
     
