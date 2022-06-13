@@ -296,8 +296,8 @@ $$;
 CREATE OR REPLACE FUNCTION users_by_storage_used(
   from_percent INTEGER,
   to_percent INTEGER DEFAULT NULL,
-  start_id BIGINT DEFAULT 0,
-  end_id BIGINT DEFAULT NULL
+  user_id_gt BIGINT DEFAULT 0,
+  user_id_lte BIGINT DEFAULT NULL
 )
   RETURNS TABLE
     (
@@ -333,8 +333,8 @@ BEGIN
         AND r.value ILIKE 'true'
         AND r.deleted_at IS NULL
       )
-      AND u.id >= start_id
-      AND u.id < end_id
+      AND u.id > user_id_gt
+      AND u.id <= user_id_lte
     )
     SELECT *
     FROM user_account

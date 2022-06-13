@@ -16,7 +16,7 @@ const MAX_USER_ID_QUERY = `
 const ID_RANGE_QUERY = `
 SELECT max(id)::TEXT as max FROM (
   SELECT id FROM public.user
-  WHERE id >= $1
+  WHERE id > $1
   ORDER BY id
   LIMIT $2
 ) as user_range
@@ -97,7 +97,7 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
 
   for (const email of STORAGE_QUOTA_EMAILS) {
     const usersOverQuota = []
-    let startId = 0
+    let startId = BigInt(0)
 
     while (true) {
       // We iterate in batches, but we can't use a simple LIMIT/OFFSET approach, because
@@ -150,7 +150,7 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
         log('🗄 Reached last user')
         break
       } else {
-        startId += userBatchSize
+        startId = maxIdOfBatch
       }
     }
 
