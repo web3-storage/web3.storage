@@ -14,15 +14,20 @@ services:
       PGRST_DB_ANON_ROLE: postgres
       PGRST_JWT_SECRET: super-secret-jwt-token-with-at-least-32-characters-long
       PGRST_LOG_LEVEL: info
+      PGRST_DB_SCHEMAS: public, cargo
   db:
     build:
       context: ./postgres
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
     ports:
       - 5432:5432
-    command:
-      - postgres
-      - -c
-      - wal_level=logical
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres

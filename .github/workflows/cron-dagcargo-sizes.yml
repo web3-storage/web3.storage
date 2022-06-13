@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '38 * * * *'
   workflow_dispatch:
+    inputs:
+      after:
+        required: false
+        description: Date used as a starting point for dag_sizes updates. This should be a string value specified in a format recognized by the Date.parse() method
+        type: string
 
 jobs:
   update:
@@ -33,6 +38,7 @@ jobs:
           STAGING_RO_PG_CONNECTION: ${{ secrets.STAGING_PG_CONNECTION }} # no replica for staging
           PROD_PG_CONNECTION: ${{ secrets.PROD_PG_CONNECTION }}
           PROD_RO_PG_CONNECTION: ${{ secrets.PROD_RO_PG_CONNECTION }}
+          AFTER: ${{ inputs.after }}
         run: npm run start:dagcargo:sizes -w packages/cron
 
       - name: Heartbeat

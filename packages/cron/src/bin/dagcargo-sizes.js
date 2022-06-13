@@ -4,14 +4,18 @@ import { updateDagSizes } from '../jobs/dagcargo.js'
 import { envConfig } from '../lib/env.js'
 import { getPg } from '../lib/utils.js'
 
-const oneMonthAgo = () => new Date().setMonth(new Date().getMonth() - 1)
+/**
+ *
+ * @param {number} days
+ */
+const xDaysAgo = (days) => new Date().setDate(new Date().getDate() - days)
 
 async function main () {
   const rwPg = getPg(process.env, 'rw')
   const roPg = getPg(process.env, 'ro')
 
   try {
-    const after = new Date(process.env.AFTER || oneMonthAgo())
+    const after = new Date(process.env.AFTER || xDaysAgo(7))
     await updateDagSizes({ rwPg, roPg, after })
   } finally {
     await rwPg.end()

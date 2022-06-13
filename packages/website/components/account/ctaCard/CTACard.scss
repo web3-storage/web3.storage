@@ -17,10 +17,26 @@ $cta-card-padding-top: 5rem;
     position: relative;
   }
 
+  .cta-card-heading {
+    @include fontSize_Regular;
+    @include fontWeight_Semibold;
+    line-height: 35px;
+  }
+
   span {
     padding-top: 0.625rem;
     padding-bottom: 1.5625rem;
     @include label_4;
+  }
+
+  &__background {
+    position: absolute;
+    border-radius: 0.625rem;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
   }
 }
 

@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 
-import Button from 'components/button/button';
+import Button, { ButtonVariant } from 'components/button/button';
+import Tooltip from 'ZeroComponents/tooltip/tooltip';
 
 export const CTAThemeType = {
   LIGHT: 'light',
@@ -25,16 +26,30 @@ export const CTAThemeType = {
 const CTACard = ({ className = '', heading, description, ctas, theme = CTAThemeType.LIGHT, background }) => {
   return (
     <div className={clsx('section cta-card', className, `cta-card__${theme}`)}>
-      {background}
-      <h4>{heading}</h4>
+      <div className="cta-card__background">{background}</div>
+      <h3 className="cta-card-heading">{heading}</h3>
       <span>{description}</span>
       {!!ctas?.length && (
         <div className="cta-buttons-container">
-          {ctas.map(({ onClick = () => null, children: text, ...buttonProps }) => (
-            <Button key={buttonProps.href || text} onClick={onClick} {...buttonProps}>
-              {text}
-            </Button>
-          ))}
+          {ctas.map(({ onClick = () => null, children: text, ...buttonProps }) => {
+            const btn = (
+              <Button
+                href={buttonProps.href}
+                key={buttonProps.href || text}
+                onClick={onClick}
+                {...buttonProps}
+                variant={buttonProps.disabled ? ButtonVariant.GRAY : buttonProps.variant}
+              >
+                {text}
+              </Button>
+            );
+
+            if (buttonProps.tooltip) {
+              return <Tooltip content={buttonProps.tooltip}>{btn}</Tooltip>;
+            }
+
+            return btn;
+          })}
         </div>
       )}
     </div>

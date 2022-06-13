@@ -30,7 +30,7 @@ NEXT_PUBLIC_API=http://127.0.0.1:8787
 NEXT_PUBLIC_MAGIC=<magic test mode publishable key>
 ```
 
-for local debugging API:
+To hit the local mock API:
 
 ```ini
 NEXT_PUBLIC_ENV=dev
@@ -78,7 +78,7 @@ TBD
 
 ## Docs
 
-Docs are written in markdown and uses Nextra.
+Docs are written in markdown and uses [Nextra](https://nextra.vercel.app/).
 
 Notes
 - ensure that components (eg. `<Callout>... </Callout>`) are not indented

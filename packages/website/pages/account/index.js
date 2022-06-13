@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { useCallback, useMemo, useState } from 'react';
 
 import StorageManager from '../../components/account/storageManager/storageManager';
@@ -9,6 +8,7 @@ import GradientBackground from '../../components/gradientbackground/gradientback
 import countly from 'lib/countly';
 import AppData from '../../content/pages/app/account.json';
 import { useUploads } from 'components/contexts/uploadsContext';
+import { useUser } from 'hooks/use-user';
 
 export const CTACardTypes = {
   API_TOKENS: 'API_TOKENS',
@@ -20,6 +20,7 @@ const Account = () => {
   const uploadModalState = useState(false);
   const dashboard = AppData.page_content.dashboard;
   const { uploads } = useUploads();
+  const user = useUser();
 
   const onFileUpload = useCallback(() => {
     uploadModalState[1](true);
@@ -31,10 +32,15 @@ const Account = () => {
         heading: dashboard.card_left.heading,
         description: dashboard.card_left.description,
         ctas: dashboard.card_left.ctas.map(cta => ({
+          disabled: user?.info?.tags?.['HasAccountRestriction'] && cta.accountRestrictedText,
           href: cta.link,
           variant: cta.theme,
           tracking: { ui: countly.ui[cta.ui], action: cta.action },
-          children: <Link href={cta.link}>{cta.text}</Link>,
+          children: cta.text,
+          tooltip:
+            user?.info?.tags?.['HasAccountRestriction'] && cta.accountRestrictedText
+              ? cta.accountRestrictedText
+              : undefined,
         })),
       },
       [CTACardTypes.READ_DOCS]: {
@@ -55,20 +61,25 @@ const Account = () => {
         heading: !!uploads.length ? dashboard.card_right.heading.option_1 : dashboard.card_right.heading.option_2,
         description: dashboard.card_right.description,
         ctas: dashboard.card_right.ctas.map(cta => ({
+          disabled: user?.info?.tags?.['HasAccountRestriction'] && cta.accountRestrictedText,
           onClick: onFileUpload,
           variant: cta.theme,
           tracking: { ui: countly.ui[cta.ui], action: cta.action, isFirstFile: !uploads.length },
           children: cta.text,
+          tooltip:
+            user?.info?.tags?.['HasAccountRestriction'] && cta.accountRestrictedText
+              ? cta.accountRestrictedText
+              : undefined,
         })),
       },
     }),
-    [uploads.length, onFileUpload, dashboard]
+    [uploads.length, onFileUpload, dashboard, user]
   );
 
   return (
     <>
       <div className="page-container account-container">
-        <h3>{dashboard.heading}</h3>
+        <h1 className="account-heading">{dashboard.heading}</h1>
         <div className="account-content">
           <StorageManager content={AppData.page_content.storage_manager} className="account-storage-manager" />
           <CTACard className="account-tokens-cta" {...CTAConfigs[CTACardTypes.API_TOKENS]} />

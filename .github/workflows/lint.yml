@@ -1,17 +1,21 @@
 name: Lint
-on: 
-  push:
-    branches:
-      - main
+
+on:
   pull_request:
-    branches:
-      - main
+    types:
+      # Triggered when a pull request's head branch is updated. 
+      # For example, when the head branch is updated from the base branch, when new commits are pushed to the head branch, or when the base branch is changed.
+      - synchronize
+
 jobs:
   lint:
-    name: Standard JS
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: codepunkt/npm-lockfile-changes@v1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-node@v2
         with:
           node-version: 16

@@ -1,5 +1,66 @@
 # Changelog
 
+## [6.2.0](https://github.com/web3-storage/web3.storage/compare/api-v6.1.1...api-v6.2.0) (2022-06-01)
+
+
+### Features
+
+* Adding HasDeleteRestriction user_tag ([#1390](https://github.com/web3-storage/web3.storage/issues/1390)) ([0c3bb58](https://github.com/web3-storage/web3.storage/commit/0c3bb5874cc5d4ad313080fa5b1966748918481d))
+
+
+### Bug Fixes
+
+* clone env so new each request ([#1396](https://github.com/web3-storage/web3.storage/issues/1396)) ([9dd026b](https://github.com/web3-storage/web3.storage/commit/9dd026b9777d0bd235574e40b645ca67d2df19f9))
+
+### [6.1.1](https://github.com/web3-storage/web3.storage/compare/api-v6.1.0...api-v6.1.1) (2022-05-31)
+
+
+### Bug Fixes
+
+* show custom storage quota to user ([#1338](https://github.com/web3-storage/web3.storage/issues/1338)) ([51abb35](https://github.com/web3-storage/web3.storage/commit/51abb35b9c6f53ed1023a7dbb162ce2838fe09e9))
+
+
+### Other Changes
+
+* add test for CORS OPTIONS handler ([#1331](https://github.com/web3-storage/web3.storage/issues/1331)) ([63328b5](https://github.com/web3-storage/web3.storage/commit/63328b576b8440886d8d22b763751027406bbb7f))
+* fix tags in api user info ([#1379](https://github.com/web3-storage/web3.storage/issues/1379)) ([fdf6c76](https://github.com/web3-storage/web3.storage/commit/fdf6c760ea41c6befb6308d651d1621e31572d37))
+
+## [6.1.0](https://github.com/web3-storage/web3.storage/compare/api-v6.0.0...api-v6.1.0) (2022-05-28)
+
+
+### Features
+
+* add user blocking functionality to web3 ([#1322](https://github.com/web3-storage/web3.storage/issues/1322)) ([5803876](https://github.com/web3-storage/web3.storage/commit/5803876b6ab6672ce82ebe3e641a8729993743ef))
+* send email notifications for storage quota usage ([#1273](https://github.com/web3-storage/web3.storage/issues/1273)) ([0b1eb09](https://github.com/web3-storage/web3.storage/commit/0b1eb09b32dfb6cb1b3a5a8b5034dc4ac54ba3e2))
+
+
+### Bug Fixes
+
+* typo in Logging constructor ([#1346](https://github.com/web3-storage/web3.storage/issues/1346)) ([0e9c0ae](https://github.com/web3-storage/web3.storage/commit/0e9c0ae18229e5b851d58fb62348181550578e5d))
+
+## [6.0.0](https://github.com/web3-storage/web3.storage/compare/api-v5.7.3...api-v6.0.0) (2022-05-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* psa pinning APIs - rename requestId to requestid
+
+### Features
+
+* respond with unique error message when blocked API key is used ([#1302](https://github.com/web3-storage/web3.storage/issues/1302)) ([faae1db](https://github.com/web3-storage/web3.storage/commit/faae1db8d635678fd6b9f36294e0c0dc0f243f22))
+
+
+### Bug Fixes
+
+* psa pinning APIs - rename requestId to requestid ([b95b786](https://github.com/web3-storage/web3.storage/commit/b95b7868d59bf7ce01ac98abfad8d9cec377f5f9))
+* swap the order of `corsOptions` and `envAll` to avoid error ([#1329](https://github.com/web3-storage/web3.storage/issues/1329)) ([fe15698](https://github.com/web3-storage/web3.storage/commit/fe156984178bf7a1ff320621a437c347758a114d))
+
+
+### Other Changes
+
+* add Logtail logging to the API ([d0c9b04](https://github.com/web3-storage/web3.storage/commit/d0c9b04bd998789f148e32f85ad841396aa069ff))
+* rename pinned to psaPinned ([#1268](https://github.com/web3-storage/web3.storage/issues/1268)) ([aeae342](https://github.com/web3-storage/web3.storage/commit/aeae342547b1fb15c17069f6d019beae250564f5))
+
 ### [5.7.3](https://github.com/web3-storage/web3.storage/compare/api-v5.7.2...api-v5.7.3) (2022-05-13)
 
 

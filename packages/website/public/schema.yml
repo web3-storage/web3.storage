@@ -398,7 +398,7 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
   parameters:
     before:
-      description: Specifies a date, in ISO 8601 format. Ensures that the call to `/list` will not return any results newer than the given date.
+      description: Specifies a date, in ISO 8601 format. Ensures that the call to `/user/uploads` will not return any results newer than the given date.
       name: before
       in: query
       required: false

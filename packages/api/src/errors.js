@@ -49,6 +49,15 @@ export class AccountRestrictedError extends HTTPError {
 }
 AccountRestrictedError.CODE = 'ERROR_ACCOUNT_RESTRICTED'
 
+export class DeleteRestrictedError extends HTTPError {
+  constructor (msg = 'Delete operations restricted.') {
+    super(msg, 403)
+    this.name = 'DeleteRestrictedError'
+    this.code = DeleteRestrictedError.CODE
+  }
+}
+DeleteRestrictedError.CODE = 'ERROR_DELETE_RESTRICTED'
+
 export class TokenNotFoundError extends HTTPError {
   constructor (msg = 'API token no longer valid') {
     super(msg, 401)
@@ -57,6 +66,15 @@ export class TokenNotFoundError extends HTTPError {
   }
 }
 TokenNotFoundError.CODE = 'ERROR_TOKEN_NOT_FOUND'
+
+export class TokenBlockedError extends HTTPError {
+  constructor (msg = 'API token is blocked, please contact support@web3.storage') {
+    super(msg, 403)
+    this.name = 'TokenBlocked'
+    this.code = TokenBlockedError.CODE
+  }
+}
+TokenBlockedError.CODE = 'ERROR_TOKEN_BLOCKED'
 
 export class UnrecognisedTokenError extends HTTPError {
   constructor (msg = 'Could not parse provided API token') {

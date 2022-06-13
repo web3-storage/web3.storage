@@ -3,7 +3,8 @@
   flex-direction: column;
   position: relative;
   justify-content: flex-start;
-  padding: 1.875rem 0;
+  padding-top: 1rem;
+  padding-bottom: 1.875rem;
 
   @include medium {
     background: none;
@@ -22,27 +23,65 @@
 }
 
 .files-manager-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  justify-items: center;
-  padding: 0 2.6875rem 1.875rem;
-  flex-wrap: wrap;
+  padding: 0 2rem;
 
   @include medium {
     padding: 0;
-    justify-content: space-between;
   }
 
-  // Title
-  > :first-child {
-    margin-right: 10rem;
+  .header-grid-wrapper {
+    width: 100%;
   }
+
+  .upload-pinned-selector {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+
+    @include mini {
+      flex-direction: column;
+    }
+
+    .filetype-tab {
+      padding: 0.875rem 2rem;
+      margin-bottom: 1.1875rem;
+
+      @include mini {
+        padding: 0.875rem 0;
+      }
+
+      &:first-child {
+        padding-left: 0;
+      }
+
+      .tab-button {
+        @include fontSize_Regular;
+        &.selected {
+          color: $cyan;
+        }
+        :first-child {
+          @include fontWeight_Semibold;
+        }
+        &:disabled {
+          color: #757575;
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+
   .files-manager-title {
     display: flex;
     flex-direction: row;
+    margin-top: 1.75rem;
     &:not(.has-upload-button) {
       margin-right: 8rem;
+    }
+    .files-manager-heading {
+      display: inline;
+      @include fontSize_Regular;
+      @include fontWeight_Semibold;
+      line-height: 35px;
     }
     .button {
       @include fontSize_Atom;
@@ -61,11 +100,18 @@
 
   .files-manager-search {
     @include medium {
+      width: 100%;
       flex-basis: 100%;
       order: 4;
       margin-top: 0.625rem;
       margin-bottom: 0.5rem;
     }
+  }
+
+  .files-manager-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .refresh {

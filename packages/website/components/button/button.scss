@@ -3,8 +3,6 @@
   position: relative;
   display: inline-block;
   @include borderRadius_Huge;
-  @include fontSize_Tiny;
-  @include fontWeight_Semibold;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   line-height: 1;
@@ -17,7 +15,16 @@
     cursor: default;
   }
 
-  button {
+  &.disabled {
+    .button-contents {
+      cursor: not-allowed;
+    }
+  }
+
+  .button-contents {
+    @include fontSize_Tiny;
+    @include fontWeight_Semibold;
+    text-transform: none;
     background: transparent;
     box-sizing: border-box;
     border: none;
@@ -104,12 +111,12 @@
     }
 
     &:active {
-      button {
+      .button-contents {
         color: $ebony;
       }
     }
 
-    button {
+    .button-contents {
       color: $white;
     }
   }
@@ -122,12 +129,12 @@
     }
 
     &:active {
-      button {
+      .button-contents {
         color: $white;
       }
     }
 
-    button {
+    .button-contents {
       color: $ebony;
     }
   }
@@ -136,7 +143,7 @@
     background-color: unset;
     padding-left: 0;
     position: relative;
-    button {
+    .button-contents {
       color: $malibu;
       @include fontSize_Small;
       @include fontWeight_Semibold;
@@ -163,7 +170,7 @@
   &.blue {
     background-color: unset;
     padding: 0;
-    button {
+    .button-contents {
       color: $blue;
       @include fontWeight_Semibold;
       @include fontSize_Small;
@@ -185,6 +192,35 @@
       &:after {
         transform: translate(0.75rem, -50%);
       }
+    }
+  }
+
+  &.gray {
+    position: relative;
+
+    &:before,
+    &:after {
+      @include borderRadius_Huge;
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    &:after {
+      transition: all $transitionDuration ease-in;
+      border: 0.0625rem solid $alto;
+      background: $charade;
+      opacity: 0.6;
+      @include shadow4;
+    }
+
+    .button-contents {
+      @include fontWeight_Regular;
+      position: relative;
+      z-index: 1;
     }
   }
 
@@ -214,7 +250,7 @@
       @include shadow4;
     }
 
-    button {
+    .button-contents {
       @include fontWeight_Regular;
       position: relative;
       z-index: 1;
@@ -238,7 +274,7 @@
     color: $cyan;
     text-transform: none;
 
-    button {
+    .button-contents {
       @include fontWeight_Regular;
     }
   }
@@ -291,11 +327,11 @@
   }
 
   &.outline-light {
-    button {
+    .button-contents {
       color: $white;
     }
     &:hover {
-      button {
+      .button-contents {
         color: $ebony;
       }
       &:after {
@@ -309,7 +345,7 @@
   }
 
   &.outline-dark {
-    button {
+    .button-contents {
       color: $ebony;
     }
     &:hover {
