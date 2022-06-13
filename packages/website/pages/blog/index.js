@@ -12,6 +12,8 @@ import Tags from '../../components/blog/tags';
 import { Card } from '../../components/blog/cards';
 import Button, { ButtonVariant } from '../../components/button/button';
 import useQueryParams from 'ZeroHooks/useQueryParams';
+import Modal from 'ZeroComponents/modal/modal';
+import CloseIcon from 'assets/icons/close';
 
 const BLOG_ITEMS_PER_PAGE = 4;
 
@@ -207,6 +209,7 @@ const Blog = ({ posts = [] }) => {
   const [category, setCategory] = useQueryParams('category');
   const [keyword, setKeyword] = useQueryParams('keyword');
   const [tagsRaw, setTags] = useQueryParams('tags');
+  const tagsModalOpenState = useState(false);
   const tags = useMemo(() => (!!tagsRaw ? JSON.parse(tagsRaw) : []), [tagsRaw]);
 
   const categories = useMemo(() => ['All', ...uniq(posts.map(({ category }) => category)).sort()], [posts]);
@@ -214,24 +217,26 @@ const Blog = ({ posts = [] }) => {
   // Almagamating all tags available across all posts
   const allTags = useMemo(
     () =>
-      ['All', ...uniq(posts.map(({ tags }) => tags).flat()).sort()].map(tag => {
-        const normCategory = tag.toLowerCase();
-        return {
-          label: tag,
-          onClick: () => {
-            if (normCategory === 'all') {
-              return setTags('');
-            }
-            if (tags.includes(normCategory)) {
-              tags.splice(tags.indexOf(normCategory), 1);
-            } else {
-              tags.push(normCategory);
-            }
-            return setTags(!!tags.length ? JSON.stringify(tags) : '');
-          },
-          selected: (normCategory === 'all' && !tags.length) || tags.includes(normCategory),
-        };
-      }),
+      uniq(posts.map(({ tags }) => tags).flat())
+        .sort()
+        .map(tag => {
+          const normCategory = tag.toLowerCase();
+          return {
+            label: tag,
+            onClick: () => {
+              if (normCategory === 'all') {
+                return setTags('');
+              }
+              if (tags.includes(normCategory)) {
+                tags.splice(tags.indexOf(normCategory), 1);
+              } else {
+                tags.push(normCategory);
+              }
+              return setTags(!!tags.length ? JSON.stringify(tags) : '');
+            },
+            selected: (normCategory === 'all' && !tags.length) || tags.includes(normCategory),
+          };
+        }),
     [posts, tags, setTags]
   );
 
@@ -292,10 +297,13 @@ const Blog = ({ posts = [] }) => {
         <div>
           <form>
             <input defaultValue={keyword} type="text" onChange={onSearch} />
-            <input type="submit" />
           </form>
-          <Tags tags={allTags} />
-          <Button variant={ButtonVariant.TEXT}>More Tags</Button>
+          {tags.map(tag => (
+            <div key={tag}>{allTags.find(({ label }) => label.toLowerCase() === tag)?.label}</div>
+          ))}
+          <Button variant={ButtonVariant.TEXT} onClick={() => tagsModalOpenState[1](true)}>
+            More Tags
+          </Button>
         </div>
         <CategoryContainer
           selectedCategory={category}
@@ -304,6 +312,16 @@ const Blog = ({ posts = [] }) => {
         />
       </div>
       <Paginated key={pageNumber} items={filteredPosts} pageNumber={pageNumber} setPageNumber={setPageNumber} />
+      <Modal
+        className="tags-modal"
+        animation="ken"
+        modalState={tagsModalOpenState}
+        closeIcon={<CloseIcon />}
+        showCloseButton
+      >
+        <h1>All Tags</h1>
+        <Tags tags={allTags} />
+      </Modal>
     </main>
   );
 };
