@@ -438,11 +438,9 @@
       transform: rotate(-40deg) translateX(12rem);
       bottom: -30rem;
       @include small {
-        width: 1800px;
         bottom: -25rem;
-      }
-      @include mini {
-        width: 1600px;
+        width: 3000px;
+        height: 1700px;
       }
     }
   }
