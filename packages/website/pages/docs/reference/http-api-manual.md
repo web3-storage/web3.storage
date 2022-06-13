@@ -53,7 +53,7 @@ Upload a [CAR](https://ipld.io/specs/transport/car/) (Content Addressable aRchiv
 
 See the [Working with Content Archives guide](https://web3.storage/docs/how-tos/work-with-car-files/) for details on creating CARs and splitting them into chunks for upload using the [carbites JavaScript API](https://github.com/nftstorage/carbites), [command line tool](https://github.com/nftstorage/carbites-cli/), or [Go library](https://github.com/alanshaw/go-carbites).
 
-Requests to this endpoint have a maximum payload size of 100MB but partial DAGs are supported, so multiple CAR files with the same root but with different sub-trees can be sent. This enables uploading of files that are bigger than the maximum payload size.
+Requests to this endpoint have a theoretical maximum payload size of 100MB, but you may experience a high error rate when sending requests this large. Partial DAGs are supported, so multiple CAR files with the same root but with different sub-trees can be sent. This enables uploading of large in multiple smaller payloads. We recommend a payload size of around 10mb.
 
 Note that only one CAR can be uploaded at a time, and only CAR files are accepted. This is in contrast to `/upload`, which can upload multiple files at once and accepts both CAR files and files from the client.
 
