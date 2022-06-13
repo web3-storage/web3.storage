@@ -13,6 +13,8 @@ const xDaysAgo = (days) => new Date().setDate(new Date().getDate() - days)
 async function main () {
   const rwPg = getPg(process.env, 'rw')
   const roPg = getPg(process.env, 'ro')
+  rwPg.connect()
+  roPg.connect()
 
   try {
     const after = new Date(process.env.AFTER || xDaysAgo(7))
