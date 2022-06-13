@@ -9,9 +9,9 @@ import { JSONResponse } from './utils/json-response.js'
  * to an ES6 module. So this view function is to allow us to test whether this problem
  * still occurs on Cloudflare or not.
  */
-export function cloudflareInstanceofTest(request, env) {
+export function cloudflareInstanceofTest (request, env) {
   const httpError = new HTTPError('I am an HTTP error')
-  const bugExhibited = httpError instanceof PinningServiceApiError;
+  const bugExhibited = httpError instanceof PinningServiceApiError
   const data = { bugExhibited }
   return new JSONResponse(data)
 }
