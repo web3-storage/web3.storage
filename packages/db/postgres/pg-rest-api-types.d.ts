@@ -1627,9 +1627,9 @@ export interface paths {
             /** Format: integer */
             from_percent: number;
             /** Format: integer */
-            start_id?: number;
+            user_id_gt?: number;
             /** Format: integer */
-            max_results?: number;
+            user_id_lte?: number;
           };
         };
         header: {
