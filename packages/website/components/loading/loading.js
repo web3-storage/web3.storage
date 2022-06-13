@@ -18,8 +18,8 @@ export const SpinnerColor = {
 /**
  * @param {Object} [props]
  * @param {string} [props.className]
- * @param {SpinnerSize} [props.size]
- * @param {SpinnerColor} [props.color]
+ * @param {string} [props.size]
+ * @param {string} [props.color]
  */
 const Loading = ({ className, size, color }) => (
   <div className={clsx(className, styles.loading)}>
@@ -28,6 +28,7 @@ const Loading = ({ className, size, color }) => (
 );
 
 Loading.defaultProps = {
+  className: '',
   size: SpinnerSize.LARGE,
   color: SpinnerColor.GRADIENT,
 };
