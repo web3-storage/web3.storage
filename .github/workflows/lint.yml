@@ -17,3 +17,6 @@ jobs:
           node-version: 16
       - uses: bahmutov/npm-install@v1
       - run: npm run lint
+      - name: codepunkt/npm-lockfile-changes@v1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
