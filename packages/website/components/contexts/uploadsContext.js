@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Web3Storage } from 'web3.storage';
-import { API, deleteUpload, getToken, getUploads, renameUpload, listPins } from 'lib/api';
 
+import { API, deleteUpload, getToken, getUploads, renameUpload, listPins } from 'lib/api';
 import { useUploadProgress } from './uploadProgressContext';
 import { useUser } from './userContext';
 

@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import filesize from 'filesize';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import countly from 'lib/countly';
 import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
@@ -14,12 +15,10 @@ import CloseIcon from 'assets/icons/close';
 import { useUploads } from 'components/contexts/uploadsContext';
 import { useUser } from 'components/contexts/userContext';
 import { useTokens } from 'components/contexts/tokensContext';
-
 import CheckIcon from 'assets/icons/check';
 import SearchIcon from 'assets/icons/search';
 import RefreshIcon from 'assets/icons/refresh';
 import FileRowItem, { PinStatus } from './fileRowItem';
-
 import GradientBackground from '../../gradientbackground/gradientbackground.js';
 
 const defaultQueryOrder = 'newest';
@@ -66,7 +65,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const { tokens } = useTokens();
 
   const [currentTab, setCurrentTab] = useState('uploaded');
-  const [files, setFiles] = useState(/** @type {any} */(uploads));
+  const [files, setFiles] = useState(/** @type {any} */ (uploads));
   const [filteredFiles, setFilteredFiles] = useState(files);
   const [sortedFiles, setSortedFiles] = useState(filteredFiles);
   const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
@@ -78,7 +77,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const queryOrderRef = useRef(query.order);
   const apiToken = tokens.length ? tokens[0].secret : undefined;
 
-  const [selectedFiles, setSelectedFiles] = useState(/** @type {Upload[]} */([]));
+  const [selectedFiles, setSelectedFiles] = useState(/** @type {Upload[]} */ ([]));
   const [isUpdating, setIsUpdating] = useState(false);
   const [nameEditingId, setNameEditingId] = useState();
   const fileRowLabels = content?.table.file_row_labels;
@@ -285,7 +284,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
 
   return (
     <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
-      { pinned.length > 0 && (
+      {pinned.length > 0 && (
         <div className="upload-pinned-selector">
           {content?.tabs.map(tab => (
             <div key={tab.file_type} className="filetype-tab">
@@ -356,6 +355,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           paginatedFiles.every(file => selectedFiles.find(fileSelected => file === fileSelected)) &&
           !!fetchDate
         }
+        tabType={currentTab}
       />
       <div className="files-manager-table-content">
         {tableContentLoading(currentTab) ? (
@@ -393,20 +393,20 @@ const FilesManager = ({ className, content, onFileUpload }) => {
               storageProviders={
                 Array.isArray(item.deals)
                   ? item.deals
-                    .filter(deal => !!deal.storageProvider)
-                    .map((deal, indx, deals) => (
-                      <span key={deal.dealId}>
-                        <a
-                          className="underline"
-                          href={`https://filfox.info/en/deal/${deal.dealId}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {`${deal.storageProvider}`}
-                        </a>
-                        {indx !== deals.length - 1 && ', '}
-                      </span>
-                    ))
+                      .filter(deal => !!deal.storageProvider)
+                      .map((deal, indx, deals) => (
+                        <span key={deal.dealId}>
+                          <a
+                            className="underline"
+                            href={`https://filfox.info/en/deal/${deal.dealId}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {`${deal.storageProvider}`}
+                          </a>
+                          {indx !== deals.length - 1 && ', '}
+                        </span>
+                      ))
                   : null
               }
               size={

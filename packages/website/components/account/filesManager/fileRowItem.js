@@ -35,7 +35,7 @@ export const PinStatus = {
  * @property {()=>void} [onDelete]
  * @property {(newFileName?: string) => void} [onEditToggle]
  * @property {boolean} [isEditingName]
- * @property {string} tabType
+ * @property {string?} tabType
  */
 
 /**
@@ -79,12 +79,12 @@ const FileRowItem = props => {
   const truncatedCID = useMemo(() => truncateString(cid, 5, '...', 'double'), [cid]);
   const statusTooltip = useMemo(
     () =>
-    ({
-      [PinStatus.QUEUING]: statusMessages.queuing,
-      [PinStatus.PIN_QUEUED]: statusMessages.pin_queued,
-      [PinStatus.PINNING]: statusMessages.pinning,
-      [PinStatus.PINNED]: statusMessages.pinned.replace('*numberOfPins*', `${numberOfPins}`),
-    }[status]),
+      ({
+        [PinStatus.QUEUING]: statusMessages.queuing,
+        [PinStatus.PIN_QUEUED]: statusMessages.pin_queued,
+        [PinStatus.PINNING]: statusMessages.pinning,
+        [PinStatus.PINNED]: statusMessages.pinned.replace('*numberOfPins*', `${numberOfPins}`),
+      }[status]),
     [numberOfPins, status, statusMessages]
   );
 
@@ -95,8 +95,8 @@ const FileRowItem = props => {
         className,
         isHeader && 'files-manager-row-header',
         isSelected && 'files-manager-row-active'
-      )
-    }>
+      )}
+    >
       <span className={clsx('file-select-container', tabType)}>
         <span className="file-select">
           <input checked={isSelected} type="checkbox" id={`${name}-select`} onChange={onSelect} />
@@ -122,7 +122,6 @@ const FileRowItem = props => {
             onClick={() => (isEditingName ? onEditToggle?.(editingNameRef.current?.value) : onEditToggle?.())}
           />
         )}
-
       </span>
       <span className="file-cid" title={cid}>
         <span className="file-row-label medium-down-only">
@@ -203,8 +202,16 @@ const FileRowItem = props => {
           ) : (
             <>
               Stored ({storageProviders.length})
-              <Tooltip className="medium-down-only" position="left" content={renderToString(<p>{storageProviders}</p>)} />
-              <Tooltip className="medium-up-only" position="right" content={renderToString(<p>{storageProviders}</p>)} />
+              <Tooltip
+                className="medium-down-only"
+                position="left"
+                content={renderToString(<p>{storageProviders}</p>)}
+              />
+              <Tooltip
+                className="medium-up-only"
+                position="right"
+                content={renderToString(<p>{storageProviders}</p>)}
+              />
             </>
           )}
         </span>
