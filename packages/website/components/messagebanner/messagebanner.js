@@ -1,4 +1,3 @@
-// ===================================================================== Imports
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useQuery } from 'react-query';
 import clsx from 'clsx';
@@ -8,7 +7,6 @@ import { getStatusPageSummary } from 'lib/statuspage-api';
 import CloseIcon from '../../assets/icons/close.js';
 import GeneralPageData from '../../content/pages/general.json';
 
-// ===================================================================== Exports
 export default function MessageBanner() {
   const marketingPrompt = GeneralPageData.message_banner.content;
   const messageBannerRef = useRef(/** @type {any} */ (null));

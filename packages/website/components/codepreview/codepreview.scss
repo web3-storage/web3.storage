@@ -7,7 +7,6 @@ $doveGrayLight: #707070;
 $cpWindowColor: #1f1d29;
 $cpTabColor: #2a272e;
 
-// ////////////////////////////////////////////////////////////////// tab thumbs
 .cp-thumb-container {
   position: relative;
   display: flex;
@@ -78,7 +77,6 @@ $cpTabColor: #2a272e;
   }
 }
 
-// //////////////////////////////////////////////////////////////////////// code
 .code-preview-wrapper {
   position: relative;
   padding: 0.75rem;
@@ -202,7 +200,6 @@ $cpTabColor: #2a272e;
   opacity: 0.7;
 }
 
-// ////////////////////////////////////////////////////////////////// scroll bar
 pre::-webkit-scrollbar {
   height: 0.5rem;
 }
@@ -217,8 +214,6 @@ pre::-webkit-scrollbar-thumb {
   border-radius: 0.5rem;
   outline: 1px solid #333038;
 }
-
-// /////////////////////////////////////////////////////////////////// animation
 
 .cp-typed {
   display: inline-flex;

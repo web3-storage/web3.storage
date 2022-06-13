@@ -1,7 +1,5 @@
 @use 'sass:math';
 
-// ///////////////////////////////////////////////////// General [Page Sections]
-// -----------------------------------------------------------------------------
 .page-about {
   position: relative;
   .heading {
@@ -87,10 +85,6 @@
   }
 }
 
-// /////////////////////////////////////////////////////////////// [Subsections]
-// -----------------------------------------------------------------------------
-
-// -------------------------------------------------------------- Section [Hero]
 #about_hero-header {
   position: relative;
   padding-top: 7rem;
@@ -166,7 +160,7 @@
     left: 0;
   }
 }
-// ------------------------------------------------------ Section [Architecture]
+
 #section_architecture-1 {
   position: relative;
   padding-bottom: 0;
@@ -290,7 +284,6 @@
   }
 }
 
-// ------------------------------------------------------ Section [How it Works]
 #section_how-it-works {
   padding-top: 3rem;
   padding-bottom: 4rem;

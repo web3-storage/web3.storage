@@ -1,4 +1,3 @@
-// ===================================================================== Imports
 import { useCallback } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
@@ -6,11 +5,10 @@ import clsx from 'clsx';
 import Button from '../button/button';
 import countly from '../../lib/countly';
 
-// ====================================================================== Params
 /**
  * @param {Object} block
  */
-// ====================================================================== Export
+
 export default function TextBlock({ block }) {
   const router = useRouter();
   const format = block.format || 'medium';
@@ -28,7 +26,6 @@ export default function TextBlock({ block }) {
     }
   }
 
-  // ================================================================= Functions
   const formatDescription = text => {
     if (Array.isArray(text)) {
       return (
@@ -62,7 +59,6 @@ export default function TextBlock({ block }) {
     [router]
   );
 
-  // ==================================================================== Export
   return (
     <div className={clsx('block text-block', `format__${format}`)}>
       {typeof block.label === 'string' && (

@@ -1,8 +1,7 @@
-// ===================================================================== Imports
 import React from 'react';
 import clsx from 'clsx';
 
-import Hero from '../hero';
+import Hero from '../hero/hero';
 import TextBlock from '../textblock/textblock.js';
 import ImageBlock from '../imageblock/imageblock.js';
 import CardListBlock from '../cardlistblock/cardlistblock';
@@ -18,7 +17,6 @@ import Triangle from '../../assets/illustrations/triangle';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import GradientBackground from '../gradientbackground/gradientbackground.js';
 
-// ====================================================================== Export
 class BlockBuilder extends React.Component {
   constructor(props) {
     super(props);
@@ -29,7 +27,6 @@ class BlockBuilder extends React.Component {
     this.getComponent = this.getComponent.bind(this);
   }
 
-  // ================================================================= Functions
   parseSectionData(array) {
     return {
       content: array.filter(item => item.type !== 'section-data'),
@@ -101,7 +98,6 @@ class BlockBuilder extends React.Component {
     }
   }
 
-  // ====================================================== Template [Sectional]
   render(props) {
     const section = this.parseSectionData(this.props.subsections);
 

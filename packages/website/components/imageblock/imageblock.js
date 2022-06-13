@@ -1,11 +1,10 @@
-// ===================================================================== Imports
 import clsx from 'clsx';
 import Image from 'next/image';
-// ====================================================================== Params
+
 /**
  * @param {Object} props.block
  */
-// ====================================================================== Export
+
 export default function ImageBlock({ block }) {
   return (
     <>

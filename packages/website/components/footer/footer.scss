@@ -1,8 +1,6 @@
-// ------------------------------------------------------------------- Variables
 @use 'sass:math';
 $footerLogoWidth: 2.25rem;
 
-// --------------------------------------------------------------------- Styling
 #site-footer {
   @include background_Dark;
   color: white;

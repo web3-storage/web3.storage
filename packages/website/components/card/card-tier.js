@@ -1,4 +1,3 @@
-// ===================================================================== Imports
 import { useCallback, useEffect, useState, useRef, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
@@ -7,7 +6,6 @@ import Button from '../button/button';
 import countly from '../../lib/countly';
 import { elementIsInViewport } from '../../lib/utils.js';
 
-// ====================================================================== Params
 /**
  * @param {Object} props
  * @param {Object} props.card
@@ -15,7 +13,7 @@ import { elementIsInViewport } from '../../lib/utils.js';
  * @param {number} props.index
  * @param {any} props.onCardLoad
  */
-// ====================================================================== Export
+
 export default function Card({ card, cardsGroup = [], index = 0, onCardLoad }) {
   const [cardIsInViewport, setCardIsInViewport] = useState(false);
   const cardRef = useRef(/** @type {any} */ (null));
@@ -32,7 +30,7 @@ export default function Card({ card, cardsGroup = [], index = 0, onCardLoad }) {
       tracking.action = card.cta.action;
     }
   }
-  // ================================================================= Functions
+
   useEffect(() => {
     if (onCardLoad) {
       onCardLoad('loaded');
@@ -85,7 +83,6 @@ export default function Card({ card, cardsGroup = [], index = 0, onCardLoad }) {
     backgroundPosition: !cardIsInViewport ? '0 0' : `-75% 0`,
   };
 
-  // ========================================================= Templates [Cards]
   return (
     <div ref={cardRef} className={clsx('card', `type__${card.type}`)}>
       <div className="grid-middle-noGutter">

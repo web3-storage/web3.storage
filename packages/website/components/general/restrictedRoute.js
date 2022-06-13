@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import Loading from 'components/loading/loading';
 import { useAuthorization } from 'components/contexts/authorizationContext';
 
-// ====================================================================== Restricted Route
 /**
  * @typedef {Object} RestrictedRouteProps
  * @property {JSX.Element} children

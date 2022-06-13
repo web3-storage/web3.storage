@@ -1,10 +1,6 @@
-// ////////////////////////////////////////////////////////////////// Typography
-// =============================================================================
-// -------------------------------------------------------------------- Families
 $font_Primary: 'SuisseIntl';
 $font_Monospace: 'Suisse Intl Mono';
 
-// ---------------------------------------------------------------------- Sizing
 // fontSize_Atom | 11pt
 // fontSize_Tiny | 13pt
 // fontSize_Mini | 15pt
@@ -29,14 +25,12 @@ $fontSize_Large: 2.1875rem;
 $fontSize_ExtraLarge: 2.8125rem;
 $fontSize_Huge: 4.1875rem;
 
-// ---------------------------------------------------------------------- Weight
 $fontWeight_Light: 300;
 $fontWeight_Regular: 400;
 $fontWeight_Medium: 500;
 $fontWeight_Semibold: 600;
 $fontWeight_Bold: 700;
 
-// --------------------------------------------------------------------- Leading
 // leading_Small | 23pt
 // leading_Regular | 35pt
 // leading_Medium | 40pt
@@ -60,14 +54,9 @@ $leading_Massive: 6.4375rem;
   @return math.div(math.round(10 * math.div($lineHeight, $fontSize)), 10);
 }
 
-// -------------------------------------------------------------- Letter Spacing
 $letterSpacing_None: 0;
 $letterSpacing_Regular: 0.02em;
 $letterSpacing_Large: 0.03em;
-
-// ////////////////////////////////////////////////////////////////////// Mixins
-// =============================================================================
-// ------------------------------------------------------ Typography | Font Size
 
 @mixin fontSize_Atom {
   font-size: $fontSize_Atom;
@@ -104,7 +93,6 @@ $letterSpacing_Large: 0.03em;
   font-size: $fontSize_Huge;
 }
 
-// ---------------------------------------------------- Typography | Font Weight
 @mixin fontWeight_Light {
   font-weight: $fontWeight_Light;
 }
@@ -121,7 +109,6 @@ $letterSpacing_Large: 0.03em;
   font-weight: $fontWeight_Bold;
 }
 
-// -------------------------------------------------------- Typography | Leading
 @mixin leading_Tiny {
   line-height: $leading_Tiny;
 }
@@ -150,7 +137,6 @@ $letterSpacing_Large: 0.03em;
   line-height: $leading_Massive;
 }
 
-// --------------------------------------------------------- Typography | Groups
 // fontSize_Tiny | 14pt
 // fontSize_Mini | 16pt
 // fontSize_Small | 18pt
