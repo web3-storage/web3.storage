@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { BsFillQuestionCircleFill } from 'react-icons/bs';
+import { BsFillInfoCircleFill } from 'react-icons/bs';
 
 
 /**
@@ -19,7 +19,7 @@ import { BsFillQuestionCircleFill } from 'react-icons/bs';
 const Tooltip = ({ children, content, icon = null, className, position }) => {
   return (
     <div role="tooltip" className={clsx(className, 'Tooltip', position)}>
-      {!children && (icon || <BsFillQuestionCircleFill />)}
+      {!children && (icon || <BsFillInfoCircleFill />)}
       {children}
       <span className="tooltip-content" dangerouslySetInnerHTML={{ __html: content }} />
     </div>

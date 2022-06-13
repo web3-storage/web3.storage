@@ -2,13 +2,13 @@
 
 $base-row-width: 75.125rem;
 $file-select: calculateWidthPercentage(3.5rem, $base-row-width);
-$file-date: calculateWidthPercentage(9rem, $base-row-width);
 $file-name: calculateWidthPercentage(23rem, $base-row-width);
 $file-cid: calculateWidthPercentage(16rem, $base-row-width);
 $file-availability: calculateWidthPercentage(0rem, $base-row-width);
 $file-pin-status: calculateWidthPercentage(8rem, $base-row-width);
 $file-storage-providers: calculateWidthPercentage(10rem, $base-row-width);
-$file-size: auto;
+$file-size: calculateWidthPercentage(8rem, $base-row-width);
+$file-date: auto;
 
 .files-manager-row {
   @include fontSize_Tiny;
@@ -17,13 +17,13 @@ $file-size: auto;
   letter-spacing: 0;
   display: grid;
   position: relative;
-  grid-template-columns: $file-select $file-date $file-name $file-cid $file-pin-status $file-storage-providers $file-size;
+  grid-template-columns: $file-select $file-name $file-cid $file-pin-status $file-storage-providers $file-size $file-date ;
   align-items: flex-start;
   padding: .75rem 2rem;
-
+  transition: all .2s ease-in-out;
   border-bottom: 0.078125rem solid rgba(white, 0.05);
 
-  &:nth-child(odd) {
+  &:nth-child(even) {
     background-color: rgba(255, 255, 255, 0.05);
   }
 
@@ -33,6 +33,10 @@ $file-size: auto;
     padding: 0;
     margin-top: 1.5625rem;
     @include border_Background_Waterloo_White;
+
+    &-active {
+      border: 1px solid $pictonBlue;
+    }
   }
 
   &-header {
@@ -52,7 +56,7 @@ $file-size: auto;
       padding: .5rem .75rem .5rem 1.5rem;
       justify-content: flex-start;
       border-bottom: 0.078125rem solid rgba(white, 0.05);
-      &.file-date {
+      &.file-name {
         padding-top: 1.75rem;
       }
       &:last-child {
@@ -75,8 +79,14 @@ $file-size: auto;
     }
     .Tooltip {
       line-height: 1;
+
+      .tooltip-content {
+        font-size: inherit;
+        line-height: 1.5;
+      }
+
       svg {
-        display: inline-block;
+        display: block;
         vertical-align: middle;
         width: 0.75rem;
         height: 0.75rem;
@@ -150,10 +160,13 @@ $file-size: auto;
       }
     }
     &-date {
-      padding-right: 2.75rem;
+      white-space: nowrap;
       @include medium {
         padding-right: 1.25rem;
       }
+    }
+    &-size {
+      padding-right: 2rem;
     }
     &-name {
       padding-right: 2.75rem;
@@ -238,6 +251,10 @@ $file-size: auto;
         gap: 0;
       }
 
+      a[href*="filfox"] {
+        @include monospace_Text;
+      }
+
       &-content {
         button {
           margin-top: 0.40625rem;
@@ -295,10 +312,15 @@ $file-size: auto;
     }
   }
 
+  &.files-manager-row-active {
+    background: rgba(0,0,0,0.25);
+  }
+
   // Header overrides
   &.files-manager-row-header {
     align-items: end;
     height: auto;
+    background: transparent;
     > span {
       @include fontWeight_Semibold;
     }
