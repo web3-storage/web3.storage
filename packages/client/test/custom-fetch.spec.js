@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import * as assert from 'uvu/assert'
 import { Web3Storage } from 'web3.storage'
-import { File } from '../src/platform.js'
+import { File, fetch } from '../src/platform.js'
 
 describe('test customFetch', () => {
   const { AUTH_TOKEN, API_PORT } = process.env
