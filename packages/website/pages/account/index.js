@@ -82,8 +82,6 @@ const Account = () => {
         <h1 className="account-heading">{dashboard.heading}</h1>
         <div className="account-content">
           <StorageManager content={AppData.page_content.storage_manager} className="account-storage-manager" />
-          <CTACard className="account-tokens-cta" {...CTAConfigs[CTACardTypes.API_TOKENS]} />
-          <CTACard className="account-docs-cta" {...CTAConfigs[CTACardTypes.READ_DOCS]} />
           <CTACard
             className="account-upload-cta"
             {...CTAConfigs[CTACardTypes.UPLOAD_FILES]}

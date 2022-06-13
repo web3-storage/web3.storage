@@ -10,11 +10,8 @@
     width: 100%;
   }
 
-  .account-heading {
-    padding: 0 2.1875rem 0.9375rem;
-    @include fontSize_MediumExtraLarge;
-    @include fontWeight_Semibold;
-    line-height: 3.75rem;
+  h3 {
+    padding: 0 2rem 1rem;
     @include medium {
       padding: 2.5rem 0;
     }
@@ -26,11 +23,10 @@
   width: 100%;
   grid-template-areas:
     'storage-manager  storage-manager upload-cta'
-    'tokens-cta       docs-cta        upload-cta'
     'files-manager    files-manager   files-manager';
 
   grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 0.875rem 1.1875rem;
+  grid-gap: 1.2rem;
 
   @include medium {
     grid-template-columns: 1fr;
@@ -53,6 +49,7 @@
       border: none;
       color: $ebony;
       justify-content: center;
+      padding: 2rem;
 
       h4 {
         padding-bottom: 0.625rem;

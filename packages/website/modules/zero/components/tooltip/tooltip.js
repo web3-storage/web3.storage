@@ -1,5 +1,8 @@
 import clsx from 'clsx';
-import InfoAIcon from 'assets/icons/infoA';
+import { BsFillQuestionCircleFill as InfoAIcon } from 'react-icons/bs';
+
+// import InfoAIcon from 'assets/icons/infoA';
+
 
 /**
  * @typedef {Object} InfoProps
