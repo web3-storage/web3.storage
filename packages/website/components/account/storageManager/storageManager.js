@@ -41,8 +41,8 @@ const StorageManager = ({ className = '', content }) => {
     () => ({
       maxSpaceLabel: `${Math.floor(limit / tebibyte)} ${content.max_space_tib_label}`,
       unlockLabel: content.unlock_label,
-      percentUploaded: (uploaded / limit) * 100,
-      percentPinned: (psaPinned / limit) * 100,
+      percentUploaded: Math.min((uploaded / limit) * 100, 100),
+      percentPinned: Math.min((psaPinned / limit) * 100, 100)
     }),
     [uploaded, psaPinned, limit, content]
   );
@@ -76,15 +76,16 @@ const StorageManager = ({ className = '', content }) => {
   }, []);
 
   const uploadedStorageBarStyles = {
-    width: !componentInViewport || percentUploaded === 0 ? '0' : `max(${Math.min(percentUploaded, 100)}%, 0.25rem)`,
+    width: !componentInViewport || percentUploaded === 0 ? '0' : `calc( max(${percentUploaded}%, 0.25rem) + 2rem)`,
+    left: `-2rem`,
     transition: `${percentUploaded * 25}ms ease-out`,
     backgroundPosition: !componentInViewport ? '50% 0' : `0% 0`,
   };
 
   const pinnedStorageBarStyles = {
     width:
-      !componentInViewport || percentPinned === 0 ? '0' : `max(calc(${Math.min(percentPinned, 100)}% + 2rem), 0.25rem)`,
-    left: `calc(${percentUploaded}% - 2rem)`,
+      !componentInViewport || percentPinned === 0 ? '0' : `calc( max(${percentPinned}%, 0.25rem) + 2rem)`,
+    left: `calc( max(${percentUploaded}%, 0.25rem) - 2rem)`,
     transition: `${percentPinned * 25}ms ease-out ${percentUploaded * 25}ms`,
     backgroundPosition: !componentInViewport ? '50% 0' : `0% 0`,
   };
