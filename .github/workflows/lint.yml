@@ -8,7 +8,7 @@ on:
       - main
 jobs:
   lint:
-    name: Standard JS
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
