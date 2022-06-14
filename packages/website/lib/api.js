@@ -162,7 +162,6 @@ export async function getUploads({ size, before, after, sortBy, sortOrder, offse
   if (after) {
     params.set('after', after)
   }
-
   const res = await fetch(`${API}/user/uploads?${params}`, {
     method: 'GET',
     headers: {
@@ -251,4 +250,27 @@ export async function getVersion() {
   } else {
     throw new Error(await res.text())
   }
+}
+
+/**
+ * Gets files pinned through the pinning API
+ *
+ * @param {string} status
+ * @param {string} token
+ * @returns {Promise<import('../components/contexts/uploadsContext').PinsList>}
+ * @throws {Error} When it fails to get uploads
+ */
+export async function listPins(status, token) {
+  const res = await fetch(`${API}/pins?status=${status}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token, // **** this needs to be a token generated from the tokens context
+    },
+  })
+  if (!res.ok) {
+    throw new Error(`failed to get pinned files: ${await res.text()}`)
+  }
+
+  return res.json()
 }

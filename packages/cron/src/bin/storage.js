@@ -7,7 +7,7 @@ import { envConfig } from '../lib/env.js'
 
 async function main () {
   const db = getDBClient(process.env)
-  const roPg = getPg(process.env, 'ro')
+  const roPg = await getPg(process.env, 'ro')
   const emailService = new EmailService({ db })
   await checkStorageUsed({ roPg, emailService })
 }

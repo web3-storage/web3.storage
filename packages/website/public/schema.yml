@@ -398,7 +398,7 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
   parameters:
     before:
-      description: Specifies a date, in ISO 8601 format. Ensures that the call to `user/uploads` will not return any results newer than the given date.
+      description: Specifies a date, in ISO 8601 format. Ensures that the call to `/user/uploads` will not return any results newer than the given date.
       name: before
       in: query
       required: false
@@ -407,7 +407,7 @@ components:
         format: date-time  # RFC 3339, section 5.6
       example: "2020-07-27T17:32:28Z"
     after:
-      description: Specifies a date, in ISO 8601 format. Ensures that the call to `user/uploads` will not return any results older than the given date.
+      description: Specifies a date, in ISO 8601 format. Ensures that the call to `/user/uploads` will not return any results newer than the given date.
       name: before
       in: query
       required: false
