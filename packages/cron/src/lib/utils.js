@@ -45,12 +45,14 @@ export function getDBClient (env) {
 }
 
 /**
- * Create a new Postgres client instance from the passed environment variables.
+ * Create a new Postgres client instance from the passed environment variables and connects to it.
  * @param {Record<string, string|undefined>} env
  * @param {'ro'|'rw'} [mode]
  */
-export function getPg (env, mode) {
-  return new pg.Client({ connectionString: getPgConnString(env, mode) })
+export async function getPg (env, mode) {
+  const client = new pg.Client({ connectionString: getPgConnString(env, mode) })
+  await client.connect()
+  return client
 }
 
 /**

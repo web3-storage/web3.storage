@@ -23,6 +23,7 @@ const TokenCreator = ({ content }) => {
 
   const { query, push, replace } = useRouter();
   const { tokens, createToken, isCreating, getTokens } = useTokens();
+
   const user = useUser();
 
   const onTokenCreate = useCallback(

@@ -11,6 +11,7 @@ import {
 import { ConstraintError, DBError } from './errors.js'
 
 export { EMAIL_TYPE } from './constants.js'
+export { parseTextToNumber } from './utils.js'
 
 const uploadQuery = `
         _id:id::text,
@@ -136,6 +137,7 @@ export class DBClient {
    * Get user by its issuer.
    *
    * @param {string} issuer
+   * @param {import('./db-client-types').GetUserOptions?} options
    * @return {Promise<import('./db-client-types').UserOutput | undefined>}
    */
   async getUser (issuer, { includeTags } = { includeTags: false }) {
@@ -174,13 +176,13 @@ export class DBClient {
   /**
    * Create a user tag
    * @param {string} userId
-   * @param {Object} [tag]
-   * @param {string} [tag.tag]
-   * @param {string} [tag.value]
-   * @param {string} [tag.reason]
+   * @param {import('./db-client-types').UserTagInput} tag
    * @returns {Promise<boolean>}
    */
-  async createUserTag (userId, tag = {}) {
+  async createUserTag (userId, tag) {
+    if (!tag?.tag) {
+      throw new Error('createUserTag requires a tag')
+    }
     const { data: deleteData, status: deleteStatus } = await this._client
       .from('user_tag')
       .update({
@@ -243,8 +245,8 @@ export class DBClient {
   /**
    * Returns all the active (non-deleted) user tags for a user id.
    *
-   * @param {number} userId
-   * @returns {Promise<{ tag: string, value: string }[]>}
+   * @param {string} userId
+   * @returns {Promise<import('./db-client-types').UserTagInfo[]>}
    */
   async getUserTags (userId) {
     const { data, error } = await this._client
@@ -291,39 +293,6 @@ export class DBClient {
       psaPinned: parseTextToNumber(data.psa_pinned),
       total: parseTextToNumber(data.total)
     }
-  }
-
-  /**
-   * Get all users with storage used in a percentage range of their allocated quota
-   * @param {import('./db-client-types').UserStorageUsedInput} percentRange
-   * @returns {Promise<Array<import('./db-client-types').UserStorageUsedOutput>>}
-   */
-  async getUsersByStorageUsed (percentRange) {
-    const {
-      fromPercent,
-      toPercent = null
-    } = percentRange
-
-    const { data, error } = await this._client
-      .rpc('users_by_storage_used', {
-        from_percent: fromPercent,
-        to_percent: toPercent
-      })
-
-    if (error) {
-      throw new DBError(error)
-    }
-
-    return data.map((user) => {
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        storageQuota: user.storage_quota,
-        storageUsed: user.storage_used,
-        percentStorageUsed: Math.floor((user.storage_used / user.storage_quota) * 100)
-      }
-    })
   }
 
   /**

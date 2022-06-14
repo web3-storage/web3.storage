@@ -31,3 +31,14 @@ CREATE TABLE IF NOT EXISTS cargo.deals (
   entry_created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   entry_last_updated TIMESTAMP WITH TIME ZONE NOT NULL
 );
+
+
+CREATE TABLE IF NOT EXISTS cargo.dags (
+  cid_v1  TEXT NOT NULL,
+  size_actual BIGINT CONSTRAINT valid_actual_size CHECK ( size_actual >= 0 ),
+  entry_created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  entry_analyzed TIMESTAMP WITH TIME ZONE,
+  entry_last_updated TIMESTAMP WITH TIME ZONE NOT NULL,
+  meta JSONB,
+  CONSTRAINT analyzis_markers CHECK ( ( size_actual IS NULL ) = ( entry_analyzed IS NULL ) )
+);
