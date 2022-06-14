@@ -1,5 +1,5 @@
 -- Due to the parameters differing from the old function definition, if we don't drop the old one then it's not replaced.
-DROP FUNCTION IF EXISTS users_by_storage_used;
+DROP FUNCTION IF EXISTS user_used_storage;
 
 CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT)
   RETURNS stored_bytes
