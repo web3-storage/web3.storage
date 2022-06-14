@@ -11,8 +11,8 @@ import { getPg } from '../lib/utils.js'
 const xDaysAgo = (days) => new Date().setDate(new Date().getDate() - days)
 
 async function main () {
-  const rwPg = getPg(process.env, 'rw')
-  const roPg = getPg(process.env, 'ro')
+  const rwPg = await getPg(process.env, 'rw')
+  const roPg = await getPg(process.env, 'ro')
 
   try {
     const after = new Date(process.env.AFTER || xDaysAgo(7))
