@@ -25,7 +25,7 @@
     align-self: flex-start;
     top: 1rem;
     .button-contents {
-      @include fontWeight_Medium;
+      @include fontWeight_Semibold;
     }
   }
 }

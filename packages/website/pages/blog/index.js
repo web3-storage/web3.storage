@@ -295,13 +295,13 @@ const Blog = ({ posts = [] }) => {
       </div>
       <div className="blog-search-c">
         <div>
-          <form>
-            <input defaultValue={keyword} type="text" onChange={onSearch} />
-          </form>
+          <div className="blog-search-input">
+            <input placeholder="Search" defaultValue={keyword} type="text" onChange={onSearch} />
+          </div>
           {tags.map(tag => (
             <div key={tag}>{allTags.find(({ label }) => label.toLowerCase() === tag)?.label}</div>
           ))}
-          <Button variant={ButtonVariant.TEXT} onClick={() => tagsModalOpenState[1](true)}>
+          <Button className="blue" variant={ButtonVariant.TEXT} onClick={() => tagsModalOpenState[1](true)}>
             More Tags
           </Button>
         </div>
