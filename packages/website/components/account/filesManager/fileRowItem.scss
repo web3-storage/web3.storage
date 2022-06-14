@@ -167,6 +167,10 @@ $file-date: auto;
     }
     &-size {
       padding-right: 2rem;
+      justify-content: flex-end;
+      @include medium {
+        justify-content: flex-start;
+      }
     }
     &-name {
       padding-right: 2.75rem;
