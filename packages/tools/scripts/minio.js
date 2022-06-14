@@ -40,7 +40,7 @@ export function minioCmd (prog) {
     .describe('Create a new bucket')
     .action(bucketCreateCmd)
     .command('minio bucket remove <name>')
-    .describe('Remove a bucket')
+    .describe('Remove a bucket, automatically removing all contents')
     .action(bucketRemoveCmd)
 }
 
@@ -124,6 +124,16 @@ async function bucketRemoveCmd (name) {
 
   if (!(await minio.bucketExists(name))) {
     return console.log(`Cannot remove bucket "${name}": not found`)
+  }
+
+  const keys = []
+  for await (const item of minio.listObjectsV2(name, '', true)) {
+    keys.push(item.name)
+  }
+
+  if (keys.length) {
+    console.log(`Removing ${keys.length} items...`)
+    await minio.removeObjects(name, keys)
   }
 
   await minio.removeBucket(name)
