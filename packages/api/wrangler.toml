@@ -1,19 +1,8 @@
 # web3.storage wrangler config.
-
 name = "web3-storage"
-# `javascript` means our we'll send pre-built javascript code.
-#  ...as opposed to `webpack` where wrangler builds our code for us.
-type = "javascript"
 
-# tell wrangler how to build our service-worker bundle
 [build]
 command = "npm run build"
-watch_dir = "src"
-[build.upload]
-format = "modules"
-dir = "dist"
-main = "worker.mjs"
-# NOTE: Make sure the main field in your package.json references the Worker script you want to publish.
 
 [durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
@@ -41,7 +30,6 @@ bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 [env.production]
 # name = "web3-storage-production"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
-zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api.web3.storage/*"
 vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "production", PG_REST_URL = "https://web3-storage-pgrest-prod.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
 
@@ -51,7 +39,6 @@ bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
 [env.staging]
 # name = "web3-storage-staging"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
-zone_id = "7eee3323c1b35b6650568604c65f441e"    # web3.storage zone
 route = "https://api-staging.web3.storage/*"
 # nft.storage.ipfscluster.io is the staging cluster
 vars = { CLUSTER_API_URL = "https://nft.storage.ipfscluster.io/api/", ENV = "staging", PG_REST_URL = "https://web3-storage-pgrest-staging.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
