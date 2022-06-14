@@ -76,7 +76,8 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const [showCheckOverlay, setShowCheckOverlay] = useState(false);
   const deleteModalState = useState(false);
   const queryOrderRef = useRef(query.order);
-  const apiToken = tokens.length ? tokens[0].secret : undefined;
+  // const apiToken = tokens.length ? tokens[0].secret : undefined;
+  const apiToken = tokens.length ? tokens[0].secret : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGVlNWNDY0E2N2IzNkRBYTRkNjkzQzYxNjk1Rjk1NzE2M2FFZTgxRjciLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTUxMzExMzQ0MzAsIm5hbWUiOiJuZXcgdGVzdCB0b2tlbiJ9.nj2x_hNtGA50PGM2plp8xy7D9AkPt4A9NLqL31lE5gY';
 
   const [selectedFiles, setSelectedFiles] = useState(/** @type {Upload[]} */ ([]));
   const [isUpdating, setIsUpdating] = useState(false);
@@ -285,16 +286,23 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   };
 
   return (
-    <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
-      <div className="files-manager-header">
+    <div className={clsx('section files-manager-container', className, isUpdating && 'disabled', `filetype-${currentTab}`)}>
+
+      <div className="tabs-section-wrapper">
         <div className="grid-noGutter header-grid-wrapper">
           <div className="col-12">
             <div className="upload-pinned-selector">
               {content?.tabs.map(tab => (
-                <div key={tab.file_type} className="filetype-tab">
+                <div
+                  key={tab.file_type}
+                  className={clsx('filetype-tab', currentTab === tab.file_type ? 'selected' : '')}>
+                  <div className="tab-background">
+                    <div className="corner-left"></div>
+                    <div className="corner-right"></div>
+                  </div>
                   <button
                     disabled={tab.file_type === 'pinned' && pinned.length === 0}
-                    className={clsx('tab-button', currentTab === tab.file_type ? 'selected' : '')}
+                    className="tab-button"
                     onClick={() => changeCurrentTab(tab.file_type)}
                   >
                     <span>{tab.button_text}</span>
@@ -304,6 +312,11 @@ const FilesManager = ({ className, content, onFileUpload }) => {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="files-manager-header">
+        <div className="grid-noGutter header-grid-wrapper">
 
           <div className="col-6_sm-12">
             <Filterable
