@@ -295,7 +295,7 @@ export class Logging {
     })
 
     if (this.opts?.debug) {
-      console.log(`[${this._date()}] `, `name: ${duration} ms`)
+      console.log(`[${this._date()}] `, `${name}: ${duration} ms`)
     }
     return timeObj
   }

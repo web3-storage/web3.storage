@@ -146,9 +146,16 @@ export function envAll (req, env, ctx) {
   env.s3BucketName = env.S3_BUCKET_NAME
   env.s3BucketRegion = env.S3_BUCKET_REGION
 
+  // https://github.com/aws/aws-sdk-js-v3/issues/1941
+  let endpoint
+  if (env.S3_BUCKET_ENDPOINT) {
+    const endpointUrl = new URL(env.S3_BUCKET_ENDPOINT)
+    endpoint = { protocol: endpointUrl.protocol, hostname: endpointUrl.host }
+  }
+
   env.s3Client = new S3Client({
     // logger: console, // use me to get some debug info on what the client is up to
-    endpoint: env.S3_BUCKET_ENDPOINT,
+    endpoint,
     forcePathStyle: !!env.S3_BUCKET_ENDPOINT, // Force path if endpoint provided
     region: env.S3_BUCKET_REGION,
     credentials: {
