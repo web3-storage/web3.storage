@@ -331,7 +331,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
             />
           </div>
 
-          <div className="col-4_sm-6_mi-12" data-push-left="off-2_sm-0">
+          <div className="col-4_sm-12" data-push-left="off-2_sm-0">
             <div className="files-manager-controls">
               <button className={clsx('refresh', isFetchingUploads && 'disabled')} onClick={refreshHandler}>
                 <RefreshIcon />

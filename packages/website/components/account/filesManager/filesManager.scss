@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 .files-manager-container {
   display: flex;
   flex-direction: column;
@@ -12,6 +14,7 @@
   @include medium {
     background: none;
     border: none;
+    margin-top: 4rem;
   }
 
   > * {
@@ -33,7 +36,10 @@
     height: calc(100% - 4rem);
     @include shadow2;
     @include border_Background_Waterloo_White;
-    // border-top: none;
+    @include medium {
+      height: 100%;
+      top: 0;
+    }
   }
 
   &.filetype-uploaded {
@@ -41,11 +47,27 @@
       border-top-left-radius: 0;
     }
   }
+  &.filetype-pinned {
+    @include mini {
+      &:before {
+        border-top-right-radius: 0;
+      }
+    }
+  }
 }
 
 .tabs-section-wrapper {
   position: relative;
   z-index: 2;
+
+  @include medium {
+    position: absolute;
+    left: 0;
+    transform: translateY(-100%);
+    .header-grid-wrapper {
+      padding: 0;
+    }
+  }
 }
 
 .upload-pinned-selector {
@@ -53,16 +75,26 @@
   flex-direction: row;
   justify-content: flex-start;
 
-  @include mini {
-    flex-direction: column;
-  }
-
   .filetype-tab {
     padding: 0.875rem 2rem;
     margin-bottom: 1.1875rem;
     position: relative;
     left: -1.5rem;
-    transform: translateY(1.5px);
+    transform: translateY(1px);
+
+    @include medium {
+      margin-bottom: 0;
+      left: 0;
+    }
+
+    @include mini {
+      padding: 0.625rem 1rem;
+      width: 50%;
+    }
+
+    // @include mini {
+    //   width: 50%;
+    // }
 
     .tab-background {
       position: absolute;
@@ -83,10 +115,6 @@
       }
     }
 
-    @include mini {
-      padding: 0.875rem 0;
-    }
-
     .tab-button {
       position: relative;
       @include fontSize_Regular;
@@ -96,6 +124,12 @@
       &:disabled {
         color: #757575;
         opacity: 0.5;
+      }
+      @include mini {
+        @include fontSize_Tiny;
+        width: 100%;
+        line-height: 1.3;
+        padding: 0.125rem 0;
       }
     }
 
@@ -116,7 +150,6 @@
           width: calc(100% + 0.625rem - 1px);
         }
       }
-
 
       .tab-button {
         color: $cyan;
@@ -183,19 +216,25 @@
           .corner-left {
             display: none;
           }
+        }
+      }
 
-          // &:after {
-          //   // border-left: 0.0625rem solid rgba($white, 0.1);
-          //   content: '';
-          //   position: absolute;
-          //   width: calc(2 * #{$borderRadius_Large});
-          //   height: calc(2 * #{$borderRadius_Large});
-          //   top: 100%;
-          //   left: calc(-1 * #{$borderRadius_Large});
-          //   // background: rgb(0,0,0);
-          //   background: radial-gradient(circle, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 65%, rgba(255, 255, 255, 0.25) 65%, rgba(255, 255, 255, 0.25) 70%, rgba(117, 122, 155, 0.38) 70%, rgba(117, 122, 155, 0.38) 100%);
-          //   // background-size: 100% 100%;
-          // }
+      @include mini {
+        &:last-child {
+          .tab-background {
+            &:before {
+              content: '';
+              position: absolute;
+              right: -1px;
+              top: 100%;
+              width: 1px;
+              height: 0.625rem;
+              background-color: rgba($white, 0.15);
+            }
+            .corner-right {
+              display: none;
+            }
+          }
         }
       }
     }
@@ -214,12 +253,18 @@
 
   @include medium {
     padding: 0;
+    margin-top: 1.1875rem;
   }
 
   .files-manager-title {
     display: flex;
     flex-direction: row;
     margin-top: 1.75rem;
+
+    @include tiny {
+      justify-content: space-between;
+    }
+
     &:not(.has-upload-button) {
       margin-right: 8rem;
     }
@@ -241,6 +286,9 @@
     @include medium {
       padding-left: 1.25rem;
       margin-right: initial;
+    }
+    @include tiny {
+      padding-left: 0;
     }
   }
 
