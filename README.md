@@ -106,18 +106,18 @@ Install the deps with `npm`
 npm install
 ```
 
-To be able to run the APIs you need to make sure the underlying [DB is populated with the required tables](./packages/db/README.md). 
-
-```console
-# init the db. requires docker running locally
-npm run load-schema -w packages/db
-```
-
-Run all the things with `npm start`,
+Run all the things with `npm start`. Double check you have Docker running first.
 
 ```console
 # start the api and website
 npm start
+```
+
+If it's your first run you need to [create the database schema](./packages/db/README.md).
+
+```console
+# init the db. Run me once after `npm start`, on first set up.
+npm run load-schema -w packages/db
 ```
 
 ## Monorepo

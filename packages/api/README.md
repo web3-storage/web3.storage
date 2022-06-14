@@ -15,14 +15,7 @@ To run it you will need:
 - The environment variables setup as described in the root [README](../../README.md#building-web3storage).
 - The web3.storage [datebase setup](../db/README.md)
 
-With docker running locally, from the monorepo root:
-
-```sh
-# first run you will need to set up the db, from the repo root:
-npm run load-schema -w packages/db
-```
-
-start just the api:
+With docker running locally, from the monorepo root, start just the api:
 
 ```sh
 # run me from the root of the monorepo!
@@ -30,6 +23,13 @@ npm start -w packages/api
 ```
 
 🎉 miniflare is running in watch mode; you can save changes to the api code and the worker will update.
+
+If it's your first run you need to [create the database schema](../db/README.md).
+
+```sh
+# init the db. Run me once after `npm start`, on first set up.
+npm run load-schema -w packages/db
+```
 
 Kill the process to stop miniflare, then run `npm run stop` to shutdown the cluster and postgres
 
