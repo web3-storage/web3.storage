@@ -3,14 +3,13 @@ import filesize from 'filesize';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import FileRowItem, { PinStatus } from './fileRowItem';
 import SearchIcon from 'assets/icons/search';
 import RefreshIcon from 'assets/icons/refresh';
 import countly from 'lib/countly';
 import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
-import Filterable from 'ZeroComponents/filterable/filterable';
+// import Filterable from 'ZeroComponents/filterable/filterable';
 import Sortable from 'ZeroComponents/sortable/sortable';
 import Pagination from 'ZeroComponents/pagination/pagination';
 import Modal from 'modules/zero/components/modal/modal';
@@ -20,6 +19,7 @@ import { formatTimestamp } from 'lib/utils';
 import { useUploads } from 'components/contexts/uploadsContext';
 import { useUser } from 'components/contexts/userContext';
 import CheckIcon from 'assets/icons/check';
+import FileRowItem, { PinStatus } from './fileRowItem';
 
 const defaultQueryOrder = 'newest';
 
@@ -40,7 +40,7 @@ const defaultQueryOrder = 'newest';
  * @returns
  */
 const FilesManager = ({ className, content, onFileUpload }) => {
-  const { uploads: files, fetchDate, getUploads, isFetchingUploads, deleteUpload, renameUpload } = useUploads();
+  const { fetchDate, totalNumberOfUploads, getUploads, isFetchingUploads, deleteUpload, renameUpload } = useUploads();
   const {
     query: { filter },
     query,
@@ -50,36 +50,35 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     storageData: { refetch },
     info,
   } = useUser();
-  const [filteredFiles, setFilteredFiles] = useState(files);
-  const [sortedFiles, setSortedFiles] = useState(filteredFiles);
-  const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
-  const [itemsPerPage, setItemsPerPage] = useState(null);
+  const [files, setFiles] = useState(/** @type {Upload[]} */ ([]));
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [keyword, setKeyword] = useState(filter);
   const [deleteSingleCid, setDeleteSingleCid] = useState('');
   const [showCheckOverlay, setShowCheckOverlay] = useState(false);
   const deleteModalState = useState(false);
   const queryOrderRef = useRef(query.order);
+  const queryItemsRef = useRef(query.items);
 
   const [selectedFiles, setSelectedFiles] = useState(/** @type {Upload[]} */ ([]));
   const [isUpdating, setIsUpdating] = useState(false);
   const [nameEditingId, setNameEditingId] = useState();
   const fileRowLabels = content?.table.file_row_labels;
 
-  // Initial fetch on component load
-  useEffect(() => {
-    if (!fetchDate && !isFetchingUploads) {
-      getUploads();
-    }
-  }, [fetchDate, getUploads, isFetchingUploads]);
+  const fetchData = useCallback(
+    async args => {
+      if (args.page) {
+        args.offset = args.size * (args.page - 1);
+      }
+      const uploads = await getUploads(args);
+      setFiles(uploads);
+    },
+    [getUploads]
+  );
 
-  // Method to reset the pagination every time query order changes
   useEffect(() => {
-    if (
-      (!queryOrderRef.current && !!query.order && query.order !== defaultQueryOrder) ||
-      (!!queryOrderRef.current && !!query.order && query.order !== queryOrderRef.current)
-    ) {
+    // Method to reset the pagination every time query order or size changes
+    if (query.items !== queryItemsRef.current || query.order !== queryOrderRef.current) {
       delete query.page;
-
       replace(
         {
           query,
@@ -91,13 +90,46 @@ const FilesManager = ({ className, content, onFileUpload }) => {
       const scrollToElement = document.querySelector('.account-files-manager');
       scrollToElement?.scrollIntoView(true);
 
+      queryItemsRef.current = query.items;
       queryOrderRef.current = query.order;
     }
-  }, [query.order, query, replace]);
+    if (query.items) {
+      setItemsPerPage(parseInt(typeof query.items === 'string' ? query.items : '10'));
+    }
+
+    let sortingQuery = {};
+    if (query.order) {
+      switch (query.order) {
+        case 'a-z':
+          sortingQuery = { sortBy: 'name', sortOrder: 'desc' };
+          break;
+
+        case 'z-a':
+          sortingQuery = { sortBy: 'name', sortOrder: 'asc' };
+          break;
+
+        case 'newest':
+          sortingQuery = { sortBy: 'data', sortOrder: 'desc' };
+          break;
+
+        case 'oldest':
+          sortingQuery = { sortBy: 'date', sortOrder: 'asc' };
+          break;
+
+        default:
+          break;
+      }
+    }
+    fetchData({
+      ...sortingQuery,
+      size: query.items || 10,
+      page: query.page || null,
+    });
+  }, [query.order, query.page, query.items, query, replace, fetchData]);
 
   const onSelectAllToggle = useCallback(
     e => {
-      const filesToSelect = paginatedFiles.filter(file => !selectedFiles.some(fileSelected => fileSelected === file));
+      const filesToSelect = files.filter(file => !selectedFiles.some(fileSelected => fileSelected === file));
 
       if (!filesToSelect.length) {
         return setSelectedFiles([]);
@@ -105,7 +137,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
 
       return setSelectedFiles(selectedFiles.concat(filesToSelect));
     },
-    [selectedFiles, setSelectedFiles, paginatedFiles]
+    [files, selectedFiles, setSelectedFiles]
   );
 
   const onFileSelect = useCallback(
@@ -206,27 +238,26 @@ const FilesManager = ({ className, content, onFileUpload }) => {
             {content?.upload.text}
           </Button>
         </div>
-        <Filterable
+        {/* TODO: We'll need to do this searching on the API as we're now paginating results. */}
+        {/* <Filterable
           className="files-manager-search"
           items={files}
           icon={<SearchIcon />}
           filterKeys={['name', 'cid']}
           placeholder={content?.ui.filter_placeholder}
           queryParam="filter"
-          onChange={setFilteredFiles}
           onValueChange={setKeyword}
-        />
+        /> */}
         <button className={clsx('refresh', isFetchingUploads && 'disabled')} onClick={refreshHandler}>
           <RefreshIcon />
           <span>{content?.ui.refresh}</span>
         </button>
         <Sortable
-          items={filteredFiles}
+          items={files}
           staticLabel={content?.ui.sortby.label}
           options={content?.ui.sortby.options}
           value={defaultQueryOrder}
           queryParam="order"
-          onChange={setSortedFiles}
           onSelectChange={showCheckOverlayHandler}
         />
       </div>
@@ -241,7 +272,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
         isHeader
         isSelected={
           !!selectedFiles.length &&
-          paginatedFiles.every(file => selectedFiles.find(fileSelected => file === fileSelected)) &&
+          files.every(file => selectedFiles.find(fileSelected => file === fileSelected)) &&
           !!fetchDate
         }
       />
@@ -267,7 +298,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
             </Button>
           </span>
         ) : (
-          paginatedFiles.map(item => (
+          files?.map(item => (
             <FileRowItem
               key={item.cid}
               onSelect={() => onFileSelect(item)}
@@ -314,11 +345,11 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           </button>
           <Pagination
             className="files-manager-pagination"
-            items={sortedFiles}
-            itemsPerPage={itemsPerPage || 10}
+            items={files}
+            totalItemCount={totalNumberOfUploads || files.length}
+            itemsPerPage={itemsPerPage}
             visiblePages={1}
             queryParam="page"
-            onChange={setPaginatedFiles}
             scrollTarget={'.account-files-manager'}
           />
           <Dropdown
@@ -326,7 +357,6 @@ const FilesManager = ({ className, content, onFileUpload }) => {
             value={content?.ui.results.options[0].value}
             options={content?.ui.results.options}
             queryParam="items"
-            onChange={value => setItemsPerPage(value)}
             onSelectChange={showCheckOverlayHandler}
           />
         </div>

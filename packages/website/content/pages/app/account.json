@@ -166,18 +166,6 @@
               "value": "z-a",
               "direction": "DESC",
               "compareFn": "ALPHANUMERIC"
-            },
-            {
-              "label": "Largest size",
-              "value": "largest",
-              "direction": "LARGEST",
-              "compareFn": "SIZEBASED"
-            },
-            {
-              "label": "Smallest size",
-              "value": "smallest",
-              "direction": "SMALLEST",
-              "compareFn": "SIZEBASED"
             }
           ]
         },

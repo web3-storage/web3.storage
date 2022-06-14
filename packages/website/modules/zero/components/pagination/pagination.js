@@ -9,6 +9,7 @@ import useQueryParams from 'ZeroHooks/useQueryParams'
  * @prop {any[]} items
  * @prop {string|number} itemsPerPage
  * @prop {number} visiblePages
+ * @prop {number} totalItemCount
  * @prop {number} [defaultPage]
  * @prop {string} [queryParam]
  * @prop {function} [onChange]
@@ -22,6 +23,7 @@ const Pagination = ({
   className,
   items,
   itemsPerPage,
+  totalItemCount,
   visiblePages,
   defaultPage,
   queryParam,
@@ -33,7 +35,10 @@ const Pagination = ({
   const [pageList, setPageList] = useState(/** @type {number[]} */([]))
   const [activePage, setActivePage] = useState(defaultPage)
 
-  const pageCount = useMemo(() => itemsPerPage ? Math.ceil(items.length/parseInt(/** @type {string} */(itemsPerPage))) : null, [items, itemsPerPage])
+  const pageCount = useMemo(
+    () => (itemsPerPage ? Math.ceil(totalItemCount / parseInt(/** @type {string} */ (itemsPerPage))) : null),
+    [totalItemCount, itemsPerPage]
+  );
 
   const currentPage = useMemo(() => parseInt(queryParam ? queryValue : activePage), [queryParam, queryValue, activePage])
 

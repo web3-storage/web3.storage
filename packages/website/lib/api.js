@@ -111,42 +111,88 @@ export async function createToken(name) {
 
 /**
  * @typedef {Object} UploadArgs
- * @property {number} args.size
- * @property {string} args.before
+ * @property {number} args.size Defines the amount of results to return
+ * @property {number} [args.offset] Return results offset by a given number (used for API pagination)
+ * @property {string} [args.before] Filter results before a given date in ISO 8601 format
+ * @property {string} [args.after] Filter results after a given date in ISO 8601 format
  * @property {string} [args.sortBy] Can be either "Date" or "Name" - uses "Date" as default
  * @property {string} [args.sortOrder] Can be either "Asc" or "Desc" - uses "Desc" as default
  */
 
 /**
+ * @typedef {Object} HeaderMeta
+ * @property {?string} [args.size] Defines the amount of results to return
+ * @property {?string} [args.offset] Return results offset by a given number (used for API pagination)
+ * @property {?string} [args.count] Can be either "Date" or "Name" - uses "Date" as default
+ * @property {?string} [args.nextLink]
+ * @property {?string} [args.prevLink]
+ */
+
+/**
+ * @typedef {Object} UploadResults
+ * @property {import('web3.storage').Upload[]} results - List of requested uploads
+ * @property {HeaderMeta} meta - Metadata relating to the pagination of results
+ */
+
+/**
  * Gets files
- * 
  * @param {UploadArgs} args
- * @returns {Promise<import('web3.storage').Upload[]>}
+ * @returns {Promise<UploadResults>}
  * @throws {Error} When it fails to get uploads
  */
-export async function getUploads({ size, before, sortBy, sortOrder }) {
-  const params = new URLSearchParams({ before, size: String(size) })
+export async function getUploads({ size, before, after, sortBy, sortOrder, offset }) {
+  const params = new URLSearchParams({ size: String(size) })
+
+  if (offset) {
+    params.set('offset', String(offset))
+  }
+
   if (sortBy) {
     params.set('sortBy', sortBy)
   }
 
   if (sortOrder) {
-    params.set('setOrder', sortOrder)
+    params.set('sortOrder', sortOrder)
+  }
+
+  if (before) {
+    params.set('before', before)
+  }
+
+  if (after) {
+    params.set('after', after)
   }
 
   const res = await fetch(`${API}/user/uploads?${params}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'Access-Control-Expose-Headers': '*',
+      'Access-Control-Allow-Headers': 'count',
+      'Access-Control-Response-Headers': 'count',
       Authorization: 'Bearer ' + (await getToken()),
     },
   })
+
+  /** @type HeaderMeta */
+  const meta = {
+    offset: res.headers.get('Offset'),
+    nextLink: res.headers.get('Next_link'),
+    prevLink: res.headers.get('Prev_link'),
+    size: res.headers.get('Size'),
+    count: res.headers.get('Count'),
+  }
 
   if (!res.ok) {
     throw new Error(`failed to get uploads: ${await res.text()}`)
   }
 
-  return res.json()
+  const results = await res.json()
+
+  return {
+    meta,
+    results,
+  }
 }
 
 /**
@@ -174,7 +220,7 @@ export async function deleteUpload (cid) {
  * @param {string} cid
  * @param {string} name
  */
- export async function renameUpload (cid, name) {
+export async function renameUpload (cid, name) {
   const res = await fetch(`${API}/user/uploads/${cid}/rename`, {
     method: 'POST',
     headers: {

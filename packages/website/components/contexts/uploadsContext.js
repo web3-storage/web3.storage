@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Web3Storage } from 'web3.storage';
-
 import { API, deleteUpload, getToken, getUploads, renameUpload } from 'lib/api';
+
 import { useUploadProgress } from './uploadProgressContext';
 import { useUser } from './userContext';
 
@@ -53,6 +53,7 @@ export const STATUS = {
  * @property {number|undefined} fetchDate The date in which the last uploads list fetch happened
  * @property {UploadProgress} uploadsProgress The progress of any current uploads
  * @property {() => boolean } clearUploadedFiles clears completed files from uploads list
+ * @property {number|null} totalNumberOfUploads the total number of uploads gathered from the API header
  */
 
 /**
@@ -78,6 +79,7 @@ export const UploadsProvider = ({ children }) => {
   } = useUser();
 
   const [uploads, setUploads] = useState(/** @type {Upload[]} */ ([]));
+  const [totalNumberOfUploads, setTotalNumberOfUploads] = useState(/** @type {number|null} */ (null));
   const [isFetchingUploads, setIsFetchingUploads] = useState(false);
   const [fetchDate, setFetchDate] = useState(/** @type {number|undefined} */ (undefined));
   const [filesToUpload, setFilesToUpload] = useState(/** @type {FileProgress[]} */ ([]));
@@ -145,19 +147,24 @@ export const UploadsProvider = ({ children }) => {
     /** @type {(args?: UploadArgs) => Promise<Upload[]>}} */
     async (
       args = {
-        size: 1000,
-        before: new Date().toISOString(),
+        size: 10,
       }
     ) => {
       setIsFetchingUploads(true);
       const updatedUploads = await getUploads(args);
-      setUploads(updatedUploads);
+
+      if (updatedUploads.meta.count) {
+        setTotalNumberOfUploads(parseInt(updatedUploads.meta.count));
+      }
+
+      setUploads(updatedUploads.results);
+
       setFetchDate(Date.now());
       setIsFetchingUploads(false);
 
-      return updatedUploads;
+      return updatedUploads.results;
     },
-    [setUploads, setIsFetchingUploads]
+    [setUploads, setIsFetchingUploads, setTotalNumberOfUploads]
   );
 
   return (
@@ -172,6 +179,7 @@ export const UploadsProvider = ({ children }) => {
           uploads,
           isFetchingUploads,
           fetchDate,
+          totalNumberOfUploads,
           uploadsProgress: progress,
           clearUploadedFiles,
         })
