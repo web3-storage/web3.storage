@@ -14,18 +14,18 @@ The [files-from-path package][files-from-path] provides a simple way for Node.js
 Here's a quick example:
 
 ```js
-import { getFilesFromPath } from 'web3.storage'
+import { getFilesFromPath } from 'web3.storage';
 
 async function storeFiles(path = 'path/to/somewhere') {
-  const files = await getFilesFromPath(path)
+  const files = await getFilesFromPath(path);
   for (const f of files) {
-    console.log(f)
+    console.log(f);
     // { name: '/path/to/me', stream: [Function: stream] }
   }
 
-  const web3Storage = getStorageClient()
-  const cid = await web3storage.put(files)
-  console.log(`stored ${files.length} files. cid: ${cid}`)
+  const web3Storage = getStorageClient();
+  const cid = await web3storage.put(files);
+  console.log(`stored ${files.length} files. cid: ${cid}`);
 }
 ```
 
@@ -44,9 +44,8 @@ The [carbites](https://github.com/nftstorage/carbites) package includes a comman
 See the how-to guide on [working with Content Archives][howto-car] for more information on using the carbites tool.
 
 [concepts-content-addressing]: ../concepts/content-addressing.md
-[reference-http-api]: ../reference/http-api/
-[reference-http-post-car]: ../reference/http-api/#operation/post-car
+[reference-http-api]: ../http-api/
+[reference-http-post-car]: ../http-api/#operation/post-car
 [howto-car]: ../how-tos/work-with-car-files.md
-
 [files-from-path]: https://github.com/web3-storage/files-from-path
 [ipfs-car]: https://github.com/web3-storage/ipfs-car

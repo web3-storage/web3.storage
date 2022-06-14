@@ -32,8 +32,10 @@ import type {
   UserStorageUsedOutput,
   StorageUsedOutput,
   UserTagInput,
+  UserTagInfo,
   EmailSentInput,
   LogEmailSentInput,
+  GetUserOptions,
 } from './db-client-types'
 
 export { gql }
@@ -43,7 +45,7 @@ export class DBClient {
   client: PostgrestClient
   getMetricsValue (key: string): Promise<{ total: number }>
   upsertUser (user: UpsertUserInput): Promise<UpsertUserOutput>
-  getUser (issuer: string): Promise<UserOutput>
+  getUser(issuer: string, options: GetUserOptions): Promise<UserOutput>
   getUserByEmail (email: string): Promise<UserOutput>
   getStorageUsed (userId: number): Promise<StorageUsedOutput>
   emailHasBeenSent(email: EmailSentInput): Promise<boolean>
@@ -61,7 +63,7 @@ export class DBClient {
   getPinRequests ({ size }: { size: number }): Promise<Array<PinRequestItemOutput>>
   deletePinRequests (ids: Array<number>): Promise<void>
   createPinSyncRequests (pinSyncRequests: Array<string>): Promise<void>
-  getPinSyncRequests ({ to, after, size }: { to: string, after?: string, size?: number }): Promise<PinSyncRequestOutput>
+  getPinSyncRequests ({ to, after, size }: { to?: string, after?: string, size?: number }): Promise<PinSyncRequestOutput>
   deletePinSyncRequests (ids: Array<string>): Promise<void>
   getDeals (cid: string): Promise<Deal[]>
   getDealsForCids (cids: string[]): Promise<Record<string, Deal[]>>
@@ -75,8 +77,8 @@ export class DBClient {
   createContent (content: ContentInput, opt?: {updatePinRequests?: boolean}) : Promise<string>
   deleteKey (id: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
-  createUserTag(userId: number, tag: UserTagInput): Promise<boolean>
-  getUserTags (userId: number): Promise<{ tag: string, value: string }[]>
+  createUserTag(userId: string, tag: UserTagInput): Promise<boolean>
+  getUserTags(userId: string): Promise<UserTagInfo[]>
 }
 
 export function parseTextToNumber(n: string): number

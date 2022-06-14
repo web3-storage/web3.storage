@@ -119,7 +119,7 @@
   position: relative;
   height: 1.75rem;
   background: rgba($vulcan, 0.15);
-  border: 0.078125rem solid rgba($waterloo, 0.15);
+  // border: 0.078125rem solid rgba($waterloo, 0.15);
   flex: 1;
   overflow: hidden;
   z-index: 1;
@@ -148,8 +148,11 @@
 
 .storage-manager-used {
   margin-bottom: 0.625rem;
-  .storage-label {
+  .storage-heading {
+    display: inline;
     @include fontWeight_Semibold;
+    @include fontSize_Medium;
+    line-height: 35px;
   }
   .storage-number {
     font-style: italic;
@@ -161,7 +164,7 @@
   position: absolute;
   z-index: 10;
   @include borderRadius_UltraLarge;
-  height: 1.875rem;
+  height: 100%;
   top: 0;
   left: 0;
   transition: 250ms ease-out;
