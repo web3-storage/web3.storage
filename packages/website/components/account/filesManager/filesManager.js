@@ -3,9 +3,6 @@ import filesize from 'filesize';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import FileRowItem, { PinStatus } from './fileRowItem';
-import SearchIcon from 'assets/icons/search';
-import RefreshIcon from 'assets/icons/refresh';
 import countly from 'lib/countly';
 import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
@@ -14,13 +11,15 @@ import Filterable from 'ZeroComponents/filterable/filterable';
 import Sortable from 'ZeroComponents/sortable/sortable';
 import Pagination from 'ZeroComponents/pagination/pagination';
 import Modal from 'modules/zero/components/modal/modal';
-import GradientBackground from '../../gradientbackground/gradientbackground.js';
 import CloseIcon from 'assets/icons/close';
-import { formatTimestamp } from 'lib/utils';
 import { useUploads } from 'components/contexts/uploadsContext';
 import { useUser } from 'components/contexts/userContext';
 import { useTokens } from 'components/contexts/tokensContext';
 import CheckIcon from 'assets/icons/check';
+import SearchIcon from 'assets/icons/search';
+import RefreshIcon from 'assets/icons/refresh';
+import FileRowItem, { PinStatus } from './fileRowItem';
+import GradientBackground from '../../gradientbackground/gradientbackground.js';
 
 const defaultQueryOrder = 'newest';
 
@@ -82,7 +81,6 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [nameEditingId, setNameEditingId] = useState();
   const fileRowLabels = content?.table.file_row_labels;
-  const title = content?.tabs.find(item => item.file_type === currentTab);
 
   // Set current tab based on url param on load
   useEffect(() => {
@@ -104,7 +102,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     }
   }, [query, currentTab, pinned, replace]);
 
-  // Initial uploads fetch on component load
+  // Initial fetch on component load
   useEffect(() => {
     if (!fetchDate && !isFetchingUploads) {
       getUploads();
@@ -286,89 +284,63 @@ const FilesManager = ({ className, content, onFileUpload }) => {
 
   return (
     <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
-      <div className="files-manager-header">
-        <div className="grid-noGutter header-grid-wrapper">
-          <div className="col-12">
-            <div className="upload-pinned-selector">
-              {content?.tabs.map(tab => (
-                <div key={tab.file_type} className="filetype-tab">
-                  <button
-                    disabled={tab.file_type === 'pinned' && pinned.length === 0}
-                    className={clsx('tab-button', currentTab === tab.file_type ? 'selected' : '')}
-                    onClick={() => changeCurrentTab(tab.file_type)}
-                  >
-                    <span>{tab.button_text}</span>
-                    <span>{` (${getFilesTotal(tab.file_type)})`}</span>
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="col-6_sm-12">
-            <Filterable
-              className="files-manager-search"
-              items={files}
-              icon={<SearchIcon />}
-              filterKeys={['name', 'cid']}
-              placeholder={content?.ui.filter_placeholder}
-              queryParam="filter"
-              onChange={setFilteredFiles}
-              onValueChange={setKeyword}
-            />
-          </div>
-
-          <div className="col-4_sm-6_mi-12" data-push-left="off-2_sm-0">
-            <div className="files-manager-controls">
-              <button className={clsx('refresh', isFetchingUploads && 'disabled')} onClick={refreshHandler}>
-                <RefreshIcon />
-                <span>{content?.ui.refresh}</span>
+      {pinned.length > 0 && (
+        <div className="upload-pinned-selector">
+          {content?.tabs.map(tab => (
+            <div key={tab.file_type} className="filetype-tab">
+              <button
+                disabled={tab.file_type === 'pinned' && pinned.length === 0}
+                className={clsx('tab-button', currentTab === tab.file_type ? 'selected' : '')}
+                onClick={() => changeCurrentTab(tab.file_type)}
+              >
+                <span>{tab.button_text}</span>
+                <span>{` (${getFilesTotal(tab.file_type)})`}</span>
               </button>
-
-              <Sortable
-                items={filteredFiles}
-                staticLabel={content?.ui.sortby.label}
-                options={content?.ui.sortby.options}
-                value={defaultQueryOrder}
-                queryParam="order"
-                onChange={setSortedFiles}
-                onSelectChange={showCheckOverlayHandler}
-              />
             </div>
-          </div>
-
-          <div className="col-6_sm-12">
-            <div className="files-manager-title has-upload-button">
-              <h2 className="files-manager-heading">
-                {keyword
-                  ? title.searchHeading
-                      .replace('%resultsNumber%', filteredFiles.length)
-                      .replace('%searchQuery%', `'${keyword}'`)
-                  : title.heading}
-              </h2>
-              {title.file_type === 'uploaded' ? (
-                <Button
-                  onClick={onFileUpload}
-                  disabled={info?.tags['HasAccountRestriction']}
-                  variant={content?.upload.theme}
-                  tooltip={info?.tags['HasAccountRestriction'] ? content.upload.accountRestrictedText : ''}
-                  tracking={{
-                    ui: countly.ui[content?.upload.ui],
-                    action: content?.upload.action,
-                    data: { isFirstFile: false },
-                  }}
-                >
-                  {content?.upload.text}
-                </Button>
-              ) : (
-                ''
-              )}
-            </div>
-          </div>
-
+          ))}
         </div>
+      )}
+      <div className="files-manager-header">
+        <div className="files-manager-title has-upload-button">
+          <div className="title">Files</div>
+          <Button
+            disabled={info?.tags?.['HasAccountRestriction']}
+            onClick={onFileUpload}
+            variant={content?.upload.theme}
+            tracking={{
+              ui: countly.ui[content?.upload.ui],
+              action: content?.upload.action,
+              data: { isFirstFile: false },
+            }}
+            tooltip={info?.tags?.['HasAccountRestriction'] ? content?.upload.accountRestrictedText : ''}
+          >
+            {content?.upload.text}
+          </Button>
+        </div>
+        <Filterable
+          className="files-manager-search"
+          items={files}
+          icon={<SearchIcon />}
+          filterKeys={['name', 'cid']}
+          placeholder={content?.ui.filter_placeholder}
+          queryParam="filter"
+          onChange={setFilteredFiles}
+          onValueChange={setKeyword}
+        />
+        <button className={clsx('refresh', isFetchingUploads && 'disabled')} onClick={refreshHandler}>
+          <RefreshIcon />
+          <span>{content?.ui.refresh}</span>
+        </button>
+        <Sortable
+          items={filteredFiles}
+          staticLabel={content?.ui.sortby.label}
+          options={content?.ui.sortby.options}
+          value={defaultQueryOrder}
+          queryParam="order"
+          onChange={setSortedFiles}
+          onSelectChange={showCheckOverlayHandler}
+        />
       </div>
-
       <FileRowItem
         onSelect={onSelectAllToggle}
         date={fileRowLabels.date.label}
@@ -411,7 +383,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
             <FileRowItem
               key={item.cid}
               onSelect={() => onFileSelect(item)}
-              date={formatTimestamp(item.created)}
+              date={item.created}
               name={item.name}
               cid={item.cid}
               status={
