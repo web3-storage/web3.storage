@@ -42,8 +42,7 @@ jobs:
           node-version: 16
       - uses: bahmutov/npm-install@v1
       - name: Publish api worker
-        # workaround for https://github.com/cloudflare/wrangler-action/issues/59 to use node 16
-        uses: web3-storage/wrangler-action@node16
+        uses: cloudflare/wrangler-action@2.0.0
         env:
           ENV: 'staging' # inform the build process what the env is
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
@@ -83,8 +82,7 @@ jobs:
       # --- API deploy steps -------------------------------------------------
       - name: API - Deploy to Cloudflare
         if: ${{ steps.tag-release.outputs.releases_created }}
-        # workaround for https://github.com/cloudflare/wrangler-action/issues/59 to use node 16
-        uses: web3-storage/wrangler-action@node16
+        uses: cloudflare/wrangler-action@2.0.0
         env:
           ENV: 'production' # inform the build process what the env is
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}

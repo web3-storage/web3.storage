@@ -9,8 +9,17 @@ const USER_BY_USED_STORAGE_QUERY = `
   SELECT * FROM users_by_storage_used($1, $2, $3, $4)
 `
 
-const MIN_MAX_USER_ID = `
- SELECT min(id)::TEXT as min, max(id)::TEXT as max from public.user
+const MAX_USER_ID_QUERY = `
+ SELECT max(id)::TEXT as max from public.user
+`
+
+const ID_RANGE_QUERY = `
+SELECT max(id)::TEXT as max FROM (
+  SELECT id FROM public.user
+  WHERE id > $1
+  ORDER BY id
+  LIMIT $2
+) as user_range
 `
 
 const USER_BY_EMAIL_QUERY = `
@@ -76,39 +85,38 @@ const STORAGE_QUOTA_EMAILS = [
  *  userBatchSize?: number
  * }} config
  */
-export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 1000 }) {
+export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 20 }) {
   if (!log.enabled) {
     console.log('ℹ️ Enable logging by setting DEBUG=storage:checkStorageUsed')
   }
-
-  /** @type {{ rows: Array.<{min: string, max: string}> }} */
-  const { rows: minMax } = await roPg.query(MIN_MAX_USER_ID)
-
-  const min = BigInt(minMax[0].min)
-  const max = BigInt(minMax[0].max)
-  const batchSize = BigInt(userBatchSize)
-
   log('🗄 Checking users storage quotas')
+
+  /** @type {{ rows: Array.<{max: string}> }} */
+  const { rows: maxIdResult } = await roPg.query(MAX_USER_ID_QUERY)
+  const maxId = BigInt(maxIdResult[0].max)
 
   for (const email of STORAGE_QUOTA_EMAILS) {
     const usersOverQuota = []
-    let start = min
-    let isLastBatch = false
+    let startId = BigInt(0)
 
-    while (!isLastBatch) {
-      let to = start + batchSize
+    while (true) {
+      // We iterate in batches, but we can't use a simple LIMIT/OFFSET approach, because
+      // the `users_by_storage_used` SQL function in turn calls `user_used_storage` for
+      // each user that it iterates, even the ones that it doesn't return, so a LIMIT of
+      // 1000 users could still involve `user_used_storage` being run on many thousands
+      // of users. Hence we get batches of user ID ranges to ensure that we only inflict
+      // a small amount of pain on the DB in each query.
+      const { rows: maxIdOfBatchResult } = await roPg.query(ID_RANGE_QUERY, [
+        startId,
+        userBatchSize
+      ])
+      const maxIdOfBatch = BigInt(maxIdOfBatchResult[0].max)
 
-      if (to > max) {
-        // set `to` for the last batch to be null so that we take instances that might have been created
-        // since the initial query.
-        to = null
-        isLastBatch = true
-      }
       const { rows: results } = await roPg.query(USER_BY_USED_STORAGE_QUERY, [
         email.fromPercent,
         email.toPercent,
-        start,
-        to
+        startId,
+        maxIdOfBatch
       ])
 
       const users = results
@@ -137,7 +145,13 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 10
           }
         }
       }
-      start = to
+
+      if (maxIdOfBatch >= maxId) {
+        log('🗄 Reached last user')
+        break
+      } else {
+        startId = maxIdOfBatch
+      }
     }
 
     if (usersOverQuota.length > 0) {

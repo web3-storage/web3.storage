@@ -22,8 +22,7 @@ describe('cron - check user storage quotas', () => {
   let adminUser, test2user, testUser90percent1, testUser90percent2, testUserOver100, emailService
   before(async () => {
     dbClient = getDBClient(env)
-    roPg = getPg(env, 'ro')
-    await roPg.connect()
+    roPg = await getPg(env, 'ro')
   })
 
   after(async () => {

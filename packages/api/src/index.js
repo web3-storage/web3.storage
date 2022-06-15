@@ -19,6 +19,7 @@ import {
 import { notFound } from './utils/json-response.js'
 import { nameGet, nameWatchGet, namePost } from './name.js'
 import { compose } from './utils/fn.js'
+import { cloudflareInstanceofTest } from './temporary.js'
 
 const router = Router()
 router.all('*', envAll)
@@ -89,6 +90,8 @@ router.post('/user/tokens',              auth['👤'](userTokensPost))
 router.delete('/user/tokens/:id',        auth['👤🗑️'](userTokensDelete))
 router.get('/user/account',              auth['👤'](userAccountGet))
 router.get('/user/info',                 auth['👤'](userInfoGet))
+
+router.get('/cloudflare-instanceof-test', cloudflareInstanceofTest)
 /* eslint-enable no-multi-spaces */
 
 // Monitoring
