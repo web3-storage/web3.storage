@@ -1,9 +1,10 @@
 import fs from 'fs';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import matter from 'gray-matter';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote } from 'next-mdx-remote';
+import { isEqual } from 'lodash';
 
 import { ReactComponent as TwitterIcon } from '../../../assets/icons/twitter.svg';
 import { ReactComponent as FacebookIcon } from '../../../assets/icons/facebook.svg';
@@ -90,6 +91,51 @@ const Post = ({ post, posts }) => {
   const redditShareLink = new URL('https://www.reddit.com/submit');
   const redditParams = { url: currentUrl };
 
+  const relatedPosts = useMemo(() => {
+    const currentRelatedPosts = [];
+    const currentPost = posts.find(filteredPost => isEqual(filteredPost, post.meta));
+
+    // Add posts by category first, sorting by newest
+    currentRelatedPosts.push(
+      ...posts
+        .filter(filteredPost => filteredPost !== currentPost && filteredPost.category === currentPost.category)
+        .sort(({ date: dateA }, { date: dateB }) => new Date(dateB).getTime() - new Date(dateA).getTime())
+        .slice(0, 4)
+    );
+
+    if (currentRelatedPosts.length < 4) {
+      // Adding posts that have similar tags
+      currentRelatedPosts.push(
+        ...posts
+          .filter(
+            filteredPost =>
+              filteredPost !== currentPost &&
+              // Filtering out posts already added
+              currentRelatedPosts.indexOf(filteredPost) === -1 &&
+              // Filtering out posts that do not contain any of the same tags
+              currentPost.tags.some(tag => filteredPost.tags.indexOf(tag) >= 0)
+          )
+          // Sort by most amount of common tags
+          .sort(
+            ({ tags: tagsA }, { tags: tagsB }) =>
+              tagsB.filter(tag => currentPost.tags.indexOf(tag) >= 0).length -
+              tagsA.filter(tag => currentPost.tags.indexOf(tag) >= 0).length
+          )
+          .slice(0, 4 - currentRelatedPosts.length)
+          // Sort by latest
+          .sort(({ date: dateA }, { date: dateB }) => new Date(dateB).getTime() - new Date(dateA).getTime())
+      );
+    }
+
+    const unusedPosts = posts.filter(filteredPost => currentRelatedPosts.indexOf(filteredPost) === -1);
+    while (currentRelatedPosts.length < 4 && !!unusedPosts.length) {
+      // Adding in posts by random if they exist
+      currentRelatedPosts.push(unusedPosts.splice(Math.floor(Math.random() * (unusedPosts.length - 1)), 1).pop());
+    }
+
+    return currentRelatedPosts;
+  }, [post, posts]);
+
   // add image caption
   useEffect(() => {
     const allImages = document.querySelectorAll('.post-content img');
@@ -152,7 +198,7 @@ const Post = ({ post, posts }) => {
           If the blog itself has fewer than 4 posts, only show as many cards as we have
         */}
         <div className="blog-list-container no-side-padding">
-          <RelatedPosts items={posts.slice(0, 4)} />
+          <RelatedPosts items={relatedPosts} />
         </div>
       </div>
     </div>
