@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.1](https://github.com/web3-storage/web3.storage/compare/website-v2.7.0...website-v2.7.1) (2022-06-15)
+
+
+### Bug Fixes
+
+* account view priority and table size ([#1431](https://github.com/web3-storage/web3.storage/issues/1431)) ([5352ca4](https://github.com/web3-storage/web3.storage/commit/5352ca43094606b4826ba61f98dca8f382c71d4c))
+
 ## [2.7.0](https://github.com/web3-storage/web3.storage/compare/website-v2.6.0...website-v2.7.0) (2022-06-14)
 
 
