@@ -1,22 +1,20 @@
 import fs from 'fs';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import matter from 'gray-matter';
-import { useRouter } from 'next/router';
 import { uniq } from 'lodash';
 
-import { usePagination } from '../../components/blog/usePagination';
-import Categories from '../../components/blog/categories';
-import Tags from '../../components/blog/tags';
-import { Card } from '../../components/blog/cards';
-import Button, { ButtonVariant } from '../../components/button/button';
 import useQueryParams from 'ZeroHooks/useQueryParams';
 import Modal from 'ZeroComponents/modal/modal';
-import CloseIcon from 'assets/icons/close';
 import Pagination from 'ZeroComponents/pagination/pagination';
+import CloseIcon from 'assets/icons/close';
+import Button, { ButtonVariant } from '../../components/button/button';
+import Tags from '../../components/blog/tags';
+import Categories from '../../components/blog/categories';
+import { Card } from '../../components/blog/cards';
 
-const BLOG_ITEMS_PER_PAGE = 4;
+const BLOG_ITEMS_PER_PAGE = 10;
 
 /**
  * Blog Cards

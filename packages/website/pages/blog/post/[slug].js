@@ -9,7 +9,6 @@ import { isEqual } from 'lodash';
 import { ReactComponent as TwitterIcon } from '../../../assets/icons/twitter.svg';
 import { ReactComponent as FacebookIcon } from '../../../assets/icons/facebook.svg';
 import { ReactComponent as LinkedinIcon } from '../../../assets/icons/linkedin.svg';
-import { ReactComponent as RedditIcon } from '../../../assets/icons/reddit.svg';
 import { ReactComponent as LinkIcon } from '../../../assets/icons/link.svg';
 import SocialLink from '../../../components/social-link';
 import Tags from '../../../components/blog/tags';
@@ -88,17 +87,13 @@ const Post = ({ post, posts }) => {
   };
   const linkedinShareLink = new URL('https://www.linkedin.com/sharing/share-offsite');
   const linkedinParams = { url: currentUrl };
-  const redditShareLink = new URL('https://www.reddit.com/submit');
-  const redditParams = { url: currentUrl };
 
   /*
    * Related Posts
    *
-   * if category has > 4 posts, show latest (most recent first) from that category
-   * else if category has 0 to 3 posts show as many as possible first, and then just show
-   * recent posts from any category until we have 4 posts
-   *
-   * If the blog itself has fewer than 4 posts, only show as many cards as we have
+   * Add in most recent posts of same category first
+   * If related posts < 4 still, add in posts with matching tags (sorted by most tags which match first)
+   * If related posts < 4 still, add in posts at random from the remaining pool
    */
   const relatedPosts = useMemo(() => {
     const currentRelatedPosts = [];
@@ -186,7 +181,6 @@ const Post = ({ post, posts }) => {
           <div className="post-social">
             <SocialLink url={twitterShareLink} params={twitterParams} Icon={TwitterIcon} />
             <SocialLink url={facebookShareLink} params={facebookParams} Icon={FacebookIcon} />
-            <SocialLink url={redditShareLink} params={redditParams} Icon={RedditIcon} />
             <SocialLink url={linkedinShareLink} params={linkedinParams} Icon={LinkedinIcon} />
             <LinkIcon />
           </div>
