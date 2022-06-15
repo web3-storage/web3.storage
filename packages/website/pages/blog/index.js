@@ -277,6 +277,18 @@ const Blog = ({ posts = [] }) => {
   );
 
   /**
+   *
+   * @param {string} category
+   */
+  const onRemoveTag = useCallback(
+    tag => () => {
+      tags.splice(tags.indexOf(tag), 1);
+      setTags(JSON.stringify(tags));
+    },
+    [setTags, tags]
+  );
+
+  /**
    * @param {Object} props
    * @param {JSX.Element | string} props.children
    */
@@ -299,7 +311,12 @@ const Blog = ({ posts = [] }) => {
             <input placeholder="Search" defaultValue={keyword} type="text" onChange={onSearch} />
           </div>
           {tags.map(tag => (
-            <div key={tag}>{allTags.find(({ label }) => label.toLowerCase() === tag)?.label}</div>
+            <div key={tag}>
+              {allTags.find(({ label }) => label.toLowerCase() === tag)?.label}
+              <Button variant={ButtonVariant.TEXT} onClick={onRemoveTag(tag)}>
+                X
+              </Button>
+            </div>
           ))}
           <Button className="blue" variant={ButtonVariant.TEXT} onClick={() => tagsModalOpenState[1](true)}>
             More Tags
