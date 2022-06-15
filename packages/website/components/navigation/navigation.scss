@@ -388,6 +388,7 @@
   .accordion-content {
     margin-left: 2rem;
     transition: 300ms ease-in-out;
+    padding: 0.25rem 1rem 0.5rem 0rem !important;
     a {
       border-bottom: none;
       padding-bottom: 0;
