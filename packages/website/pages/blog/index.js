@@ -14,6 +14,7 @@ import Button, { ButtonVariant } from '../../components/button/button';
 import useQueryParams from 'ZeroHooks/useQueryParams';
 import Modal from 'ZeroComponents/modal/modal';
 import CloseIcon from 'assets/icons/close';
+import Pagination from 'ZeroComponents/pagination/pagination';
 
 const BLOG_ITEMS_PER_PAGE = 4;
 
@@ -68,108 +69,25 @@ export async function getStaticProps() {
  *
  * @param {Object} props
  * @param {Object} props.items
- * @param {number} props.pageNumber
- * @param {(pageNumber: number) => void} props.setPageNumber
  * @param {string[]} [props.selectedCategory]
  * @returns {JSX.Element}
  */
-const Paginated = ({ items, pageNumber, setPageNumber }) => {
-  const paginationRange = usePagination({
-    totalCount: items.length,
-    pageSize: BLOG_ITEMS_PER_PAGE,
-    currentPage: pageNumber,
-  });
+const Paginated = ({ items }) => {
+  const [paginatedFiles, setPaginatedFiles] = useState(items);
 
-  /**
-   * items hook
-   * @param {Object} items
-   */
-  const useItems = items => {
-    const [currentItems, setCurrentItems] = useState(items);
-
-    useEffect(() => {
-      const offset = (pageNumber * BLOG_ITEMS_PER_PAGE) % items.length;
-      const endOffset = offset + BLOG_ITEMS_PER_PAGE;
-      const sliced = items.slice(offset, endOffset);
-      setCurrentItems(sliced);
-    }, [items]);
-
-    return currentItems;
-  };
-
-  const currentItems = useItems(items);
-
-  const pageCount = Math.ceil(items.length / BLOG_ITEMS_PER_PAGE);
-
-  const {
-    push,
-    query: { page, ...query },
-  } = useRouter();
-
-  useEffect(() => {
-    const newPage = typeof page === 'string' ? parseInt(page) : 1;
-    setPageNumber(newPage - 1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
-
-  /**
-   * @param {number} newPage
-   */
-  const handlePageClick = newPage => {
-    push({
-      pathname: '/blog',
-      query: newPage === 1 ? query : { page: encodeURI(newPage.toString()), ...query },
-    });
-  };
-
-  /**
-   * @param {Object} props
-   * @param {string} props.children
-   * @param {boolean} [props.disabled]
-   * @param {boolean} [props.isActive]
-   * @param {number} [props.page]
-   */
-  const PagNavButton = ({ page, children, disabled, isActive }) => {
-    return (
-      <Button
-        key={`pag-nav-item-${page || children}`}
-        onClick={!page || isActive ? undefined : () => handlePageClick(page)}
-        disabled={disabled}
-        className={clsx(isActive && 'active', disabled && 'disabled')}
-      >
-        {children}
-      </Button>
-    );
-  };
-
-  const PaginatedNav = () => {
-    const rangeButtons = paginationRange?.map(item => (
-      <PagNavButton
-        key={`nav-button-${item}`}
-        page={typeof item === 'string' ? undefined : item}
-        isActive={typeof item !== 'string' && item - 1 === pageNumber}
-      >
-        {item.toString()}
-      </PagNavButton>
-    ));
-    return (
-      <>
-        <PagNavButton page={pageNumber} disabled={pageNumber === 0}>
-          prev
-        </PagNavButton>
-        {rangeButtons}
-        <PagNavButton page={pageNumber + 2} disabled={pageNumber === pageCount - 1}>
-          next
-        </PagNavButton>
-      </>
-    );
-  };
   return (
     <div className="blog-list-container">
-      {currentItems.length > 0 ? <Items currentItems={currentItems} /> : <div>More blogs coming soon</div>}
+      {paginatedFiles.length > 0 ? <Items currentItems={paginatedFiles} /> : <div>More blogs coming soon</div>}
       {items.length > BLOG_ITEMS_PER_PAGE && (
         <div className="blog-pagination">
-          <PaginatedNav />
+          <Pagination
+            className="files-manager-pagination"
+            items={items}
+            itemsPerPage={BLOG_ITEMS_PER_PAGE}
+            visiblePages={1}
+            queryParam="page"
+            onChange={setPaginatedFiles}
+          />
         </div>
       )}
     </div>
@@ -204,8 +122,6 @@ function CategoryContainer({ categories, selectedCategory, handleCategoryClick }
  * @param {Object} props
  */
 const Blog = ({ posts = [] }) => {
-  const [pageNumber, setPageNumber] = useState(0);
-
   const [category, setCategory] = useQueryParams('category');
   const [keyword, setKeyword] = useQueryParams('keyword');
   const [tagsRaw, setTags] = useQueryParams('tags');
@@ -311,7 +227,7 @@ const Blog = ({ posts = [] }) => {
           categories={categories}
         />
       </div>
-      <Paginated key={pageNumber} items={filteredPosts} pageNumber={pageNumber} setPageNumber={setPageNumber} />
+      <Paginated items={filteredPosts} />
       <Modal
         className="tags-modal"
         animation="ken"
