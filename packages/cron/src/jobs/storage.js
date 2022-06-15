@@ -85,7 +85,7 @@ const STORAGE_QUOTA_EMAILS = [
  *  userBatchSize?: number
  * }} config
  */
-export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 1000 }) {
+export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 20 }) {
   if (!log.enabled) {
     console.log('ℹ️ Enable logging by setting DEBUG=storage:checkStorageUsed')
   }
