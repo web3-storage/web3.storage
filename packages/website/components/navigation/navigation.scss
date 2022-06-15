@@ -382,15 +382,23 @@
     @include fontSize_Small;
     @include fontWeight_Semibold;
   }
+  .accordion-header {
+    margin-bottom: 0;
+  }
   .accordion-content {
     margin-left: 2rem;
-    transition: height 300ms ease-in-out;
+    transition: 300ms ease-in-out;
+    a {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
   }
   .accordion-section {
     margin-bottom: 0.375rem;
   }
   .button {
-    margin: 0.375rem 0;
+    margin-top: 0.75rem;
+    margin-bottom: 0.375rem;
   }
   .button {
     position: relative;
