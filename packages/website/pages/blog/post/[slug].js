@@ -91,6 +91,15 @@ const Post = ({ post, posts }) => {
   const redditShareLink = new URL('https://www.reddit.com/submit');
   const redditParams = { url: currentUrl };
 
+  /*
+   * Related Posts
+   *
+   * if category has > 4 posts, show latest (most recent first) from that category
+   * else if category has 0 to 3 posts show as many as possible first, and then just show
+   * recent posts from any category until we have 4 posts
+   *
+   * If the blog itself has fewer than 4 posts, only show as many cards as we have
+   */
   const relatedPosts = useMemo(() => {
     const currentRelatedPosts = [];
     const currentPost = posts.find(filteredPost => isEqual(filteredPost, post.meta));
@@ -189,14 +198,6 @@ const Post = ({ post, posts }) => {
 
       <div className="post-related grid">
         <h1>You may also like</h1>
-        {/* TODO: modify logic here:
- 
-          - if category has > 4 posts, show latest (most recent first) from that category
-          - else if category has 0 to 3 posts show as many as possible first, and then just show 
-          recent posts from any category until we have 4 posts
-
-          If the blog itself has fewer than 4 posts, only show as many cards as we have
-        */}
         <div className="blog-list-container no-side-padding">
           <RelatedPosts items={relatedPosts} />
         </div>
