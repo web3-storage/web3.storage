@@ -31,7 +31,7 @@ describe('test customFetch', () => {
     function customFetch (...opts) {
       result = true
 
-      fetch(...opts)
+      return fetch(...opts)
     }
 
     const client = new Web3Storage({ endpoint, token, fetch: customFetch })
