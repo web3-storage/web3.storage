@@ -50,9 +50,9 @@ async function loginOrRegister (request, env) {
 
   let user
   // check if maintenance mode
-  if (env.mode === NO_READ_OR_WRITE) {
+  if (env.MODE === NO_READ_OR_WRITE) {
     return maintenanceHandler()
-  } else if (env.mode === READ_WRITE) {
+  } else if (env.MODE === READ_WRITE) {
     user = await env.db.upsertUser(parsed)
   } else {
     user = await env.db.getUser(parsed.issuer)
@@ -170,14 +170,21 @@ export async function userInfoGet (request, env) {
 }
 
 export async function userRequestPost (request, env) {
-  const userId = request.auth.user._id
+  const user = request.auth.user
   const { tagName, requestedTagValue, userProposalForm } = await request.json()
   const res = await env.db.createUserRequest(
-    userId,
+    user._id,
     tagName,
     requestedTagValue,
     userProposalForm
   )
+
+  try {
+    notifySlack(user, tagName, requestedTagValue, userProposalForm, env)
+  } catch (e) {
+    console.error('Failed to notify Slack: ', e)
+  }
+
   return new JSONResponse(res)
 }
 
@@ -289,4 +296,68 @@ export async function userUploadsRename (request, env) {
 
   const res = await env.db.renameUpload(user, cid, name)
   return new JSONResponse(res)
+}
+
+/**
+ *
+ * @param {number} userId
+ * @param {string} userProposalForm
+ * @param {string} tagName
+ * @param {string} requestedTagValue
+ * @param {DBClient} db
+ */
+const notifySlack = async (
+  user,
+  tagName,
+  requestedTagValue,
+  userProposalForm,
+  env
+) => {
+  const webhookUrl = env.SLACK_USER_REQUEST_WEBHOOK_URL
+
+  if (!webhookUrl) {
+    return
+  }
+
+  /** @type {import('../bindings').RequestForm} */
+  let form
+  try {
+    form = JSON.parse(userProposalForm)
+  } catch (e) {
+    console.error('Failed to parse user request form: ', e)
+    return
+  }
+
+  fetch(webhookUrl, {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      text: `
+>*Username*
+>${user.name}
+>
+>*Email*
+>${user.email}
+>
+>*User Id*
+>${user._id}
+>
+>*Requested Tag Name*
+>${tagName}
+>
+>*Requested Tag Value*
+>${requestedTagValue}
+>${form
+        .map(
+          ({ label, value }) => `
+>*${label}*
+>${value}
+>`
+        )
+        .join('')}
+`,
+    }),
+  })
 }
