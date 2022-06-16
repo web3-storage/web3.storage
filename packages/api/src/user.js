@@ -2,12 +2,13 @@ import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
 import { HTTPError } from './errors.js'
-import { getTagValue, hasTag } from './utils/tags.js'
+import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
 import {
   NO_READ_OR_WRITE,
   READ_WRITE,
   maintenanceHandler
 } from './maintenance.js'
+
 /**
  * @typedef {{ _id: string, issuer: string }} User
  * @typedef {{ _id: string, name: string }} AuthToken
@@ -42,15 +43,16 @@ async function loginOrRegister (request, env) {
     throw new Error('missing required metadata')
   }
 
-  const parsed = data.type === 'github'
-    ? parseGitHub(data.data, metadata)
-    : parseMagic(metadata)
+  const parsed =
+    data.type === 'github'
+      ? parseGitHub(data.data, metadata)
+      : parseMagic(metadata)
 
   let user
   // check if maintenance mode
-  if (env.mode === NO_READ_OR_WRITE) {
+  if (env.MODE === NO_READ_OR_WRITE) {
     return maintenanceHandler()
-  } else if (env.mode === READ_WRITE) {
+  } else if (env.MODE === READ_WRITE) {
     user = await env.db.upsertUser(parsed)
   } else {
     user = await env.db.getUser(parsed.issuer)
@@ -141,7 +143,10 @@ export async function userAccountGet (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userInfoGet (request, env) {
-  const user = await env.db.getUser(request.auth.user.issuer, { includeTags: true })
+  const user = await env.db.getUser(request.auth.user.issuer, {
+    includeTags: true,
+    includeTagProposals: true
+  })
 
   return new JSONResponse({
     info: {
@@ -152,9 +157,41 @@ export async function userInfoGet (request, env) {
         HasPsaAccess: hasTag(user, 'HasPsaAccess', 'true'),
         HasSuperHotAccess: hasTag(user, 'HasSuperHotAccess', 'true'),
         StorageLimitBytes: getTagValue(user, 'StorageLimitBytes', '')
+      },
+      tagProposals: {
+        HasAccountRestriction: hasPendingTagProposal(user, 'HasAccountRestriction'),
+        HasDeleteRestriction: hasPendingTagProposal(user, 'HasDeleteRestriction'),
+        HasPsaAccess: hasPendingTagProposal(user, 'HasPsaAccess'),
+        HasSuperHotAccess: hasPendingTagProposal(user, 'HasSuperHotAccess'),
+        StorageLimitBytes: hasPendingTagProposal(user, 'StorageLimitBytes')
       }
     }
   })
+}
+
+/**
+ * Post a new user request.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userRequestPost (request, env) {
+  const user = request.auth.user
+  const { tagName, requestedTagValue, userProposalForm } = await request.json()
+  const res = await env.db.createUserRequest(
+    user._id,
+    tagName,
+    requestedTagValue,
+    userProposalForm
+  )
+
+  try {
+    notifySlack(user, tagName, requestedTagValue, userProposalForm, env)
+  } catch (e) {
+    console.error('Failed to notify Slack: ', e)
+  }
+
+  return new JSONResponse(res)
 }
 
 /**
@@ -220,9 +257,16 @@ export async function userUploadsGet (request, env) {
   })
 
   const oldest = uploads[uploads.length - 1]
-  const headers = uploads.length === size
-    ? { Link: `<${requestUrl.pathname}?size=${size}&before=${encodeURIComponent(oldest.created)}>; rel="next"` }
-    : undefined
+  const headers =
+    uploads.length === size
+      ? {
+          Link: `<${
+            requestUrl.pathname
+          }?size=${size}&before=${encodeURIComponent(
+            oldest.created
+          )}>; rel="next"`
+        }
+      : undefined
   return new JSONResponse(uploads, { headers })
 }
 
@@ -258,4 +302,68 @@ export async function userUploadsRename (request, env) {
 
   const res = await env.db.renameUpload(user, cid, name)
   return new JSONResponse(res)
+}
+
+/**
+ *
+ * @param {number} userId
+ * @param {string} userProposalForm
+ * @param {string} tagName
+ * @param {string} requestedTagValue
+ * @param {DBClient} db
+ */
+const notifySlack = async (
+  user,
+  tagName,
+  requestedTagValue,
+  userProposalForm,
+  env
+) => {
+  const webhookUrl = env.SLACK_USER_REQUEST_WEBHOOK_URL
+
+  if (!webhookUrl) {
+    return
+  }
+
+  /** @type {import('../bindings').RequestForm} */
+  let form
+  try {
+    form = JSON.parse(userProposalForm)
+  } catch (e) {
+    console.error('Failed to parse user request form: ', e)
+    return
+  }
+
+  fetch(webhookUrl, {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      text: `
+>*Username*
+>${user.name}
+>
+>*Email*
+>${user.email}
+>
+>*User Id*
+>${user._id}
+>
+>*Requested Tag Name*
+>${tagName}
+>
+>*Requested Tag Value*
+>${requestedTagValue}
+>${form
+        .map(
+          ({ label, value }) => `
+>*${label}*
+>${value}
+>`
+        )
+        .join('')}
+`
+    })
+  })
 }

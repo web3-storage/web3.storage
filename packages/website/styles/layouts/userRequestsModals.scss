@@ -1,0 +1,55 @@
+.user-request-modal {
+  .modalContainer {
+    max-width: calc($containerWidth - 10%);
+    background: white;
+    font-size: 1rem;
+    @include borderRadius_Large;
+    @include medium {
+      width: 90%;
+    }
+  }
+
+  .modalClose {
+    color: $ebony;
+    font-size: 2rem;
+  }
+
+  .input-container {
+    margin-top: 30px;
+  }
+
+  label {
+    line-height: 1rem;
+  }
+
+  textarea {
+    display: block;
+    width: 100%;
+    height: 150px;
+    line-height: 1rem;
+    resize: none;
+  }
+
+  svg {
+    color: $ebony;
+  }
+}
+
+.user-request-modal__container {
+  position: relative;
+  color: $ebony;
+  padding: 3.125rem 8.5rem 3.125rem 8.125rem;
+
+  @include medium {
+    padding: 2.375rem 1.3125rem;
+    width: 100%;
+  }
+
+  > * {
+    position: relative;
+  }
+}
+
+.user-request-modal__heading {
+  font-size: 1.5rem;
+}

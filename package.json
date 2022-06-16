@@ -30,6 +30,7 @@
     "wrangler": "^2.0.6"
   },
   "standard": {
+    "globals": ["fetch"],
     "ignore": [
       "packages/website"
     ]
