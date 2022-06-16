@@ -77,6 +77,16 @@ export default function Hero({ block }) {
     );
   };
 
+  const blogHero = () => {
+    return (
+      <>
+        <Coil id="blog_hero-coil" className={'hero-illustration'} />
+        <Corkscrew id="blog_hero-corkscrew" className={'hero-illustration'} />
+        <Helix id="blog_hero-helix" className={'hero-illustration'} />
+      </>
+    );
+  };
+
   const indexHero = () => {
     return (
       <>
@@ -103,6 +113,8 @@ export default function Hero({ block }) {
         return faqHero();
       case 'error':
         return hero404();
+      case 'blog':
+        return blogHero();
       default:
         return null;
     }

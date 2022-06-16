@@ -1,0 +1,84 @@
+{
+  "seo": {
+    "title": "",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "page_content": [
+    [
+      {
+        "id": "blog_hero_header",
+        "columns": [
+          {
+            "type": "hero",
+            "page": "blog",
+            "cols": {
+              "num": "col-7_md-7_sm-10_ti-12",
+              "push_right": "off-5_md-5_sm-2_ti-0"
+            },
+            "format": "header",
+            "subheading": "Web3.Storage Blog",
+            "heading": "Updates from our organization and across the Web3 universe."
+          }
+        ]
+      }
+    ]
+  ],
+  "floater_animations": [
+    {
+      "trigger": "blog_hero_header",
+      "duration": 1000,
+      "offset": 700,
+      "floaters": [
+        {
+          "id": "blog_hero-coil",
+          "default": "rotate(17deg)",
+          "start": {
+            "x": 1,
+            "y": 20
+          },
+          "end": {
+            "x": 10,
+            "y": -20
+          }
+        },
+        {
+          "id": "blog_hero-corkscrew",
+          "default": "rotate(179deg)",
+          "start": {
+            "rotate": -1,
+            "scale": 1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -25,
+            "scale": 1.3,
+            "x": -60,
+            "y": 30
+          }
+        },
+        {
+          "id": "blog_hero-helix",
+          "start": {
+            "rotate": -79,
+            "scale": 1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -120,
+            "scale": 1.4,
+            "x": -120,
+            "y": 80
+          }
+        }
+      ]
+    }
+  ]
+}

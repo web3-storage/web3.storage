@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 // very top nav
 .blog-site {
   .nav-item[href='/blog/'] {
@@ -10,15 +12,6 @@
 
 .blog-index {
   padding-top: 4rem;
-}
-.blog-heading {
-  h4 {
-    padding-bottom: 1.5rem;
-  }
-  h1 {
-    width: 65%;
-    padding-bottom: 1.5rem;
-  }
 }
 .blog-search-c {
   padding-top: toRem(117);
@@ -144,4 +137,82 @@
 
 .tags-container {
   @include fontWeight_Semibold;
+}
+
+#blog_section_1 {
+  position: relative;
+  z-index: 5;
+  top: -1px;
+}
+
+#blog_hero_header {
+  padding: 0;
+  .text-block {
+    display: flex;
+    flex-direction: column;
+    .heading {
+      order: 2;
+    }
+    .subheading {
+      @include fontSize_Medium;
+      @include fontWeight_Semibold;
+      margin-bottom: 1rem;
+      line-height: leading(34, 20);
+      order: 1;
+    }
+  }
+}
+
+#blog_hero-coil {
+  position: absolute;
+  width: 7.25rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 15rem);
+  top: 60rem;
+  transform: rotate(17deg);
+  @include small {
+    display: none;
+  }
+}
+
+#blog_hero-corkscrew {
+  position: absolute;
+  width: 39rem;
+  right: calc(50% - #{math.div($containerWidth, 2)} - 14rem);
+  top: -13rem;
+  transform: rotate(179deg);
+  @include xlarge {
+    right: -3rem;
+  }
+  @include large {
+    width: 32rem;
+    right: 0rem;
+    top: 0;
+  }
+  @include medium {
+    right: calc(50% - #{math.div($containerWidth, 2)} - 3rem);
+  }
+  @include small {
+    width: 24rem;
+    top: -4rem;
+    right: calc(50% - #{math.div($containerWidth, 2)} + 14rem);
+  }
+  @include tiny {
+    right: -4.125rem;
+  }
+}
+
+#blog_hero-helix {
+  width: 18rem;
+  top: -10rem;
+  left: -4rem;
+  transform: rotate(-79deg);
+  left: calc(50% - #{math.div($containerWidth, 2)} - 21rem);
+  @include medium {
+    width: 14rem;
+    left: -4rem;
+  }
+  @include small {
+    width: 10rem;
+    top: -1rem;
+  }
 }

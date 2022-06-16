@@ -1,20 +1,23 @@
 import fs from 'fs';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import matter from 'gray-matter';
 import { uniq } from 'lodash';
 
+import CloseIcon from 'assets/icons/close';
 import useQueryParams from 'ZeroHooks/useQueryParams';
 import Modal from 'ZeroComponents/modal/modal';
 import Pagination from 'ZeroComponents/pagination/pagination';
-import CloseIcon from 'assets/icons/close';
+import BlogPageData from '../../content/pages/blog.json';
+import BlockBuilder from '../../components/blockbuilder/blockbuilder.js';
+import { initFloaterAnimations } from '../../lib/floater-animations.js';
 import Button, { ButtonVariant } from '../../components/button/button';
 import Tags from '../../components/blog/tags';
 import Categories from '../../components/blog/categories';
 import { Card } from '../../components/blog/cards';
 
-const BLOG_ITEMS_PER_PAGE = 5;
+const BLOG_ITEMS_PER_PAGE = 4;
 
 /**
  * Blog Cards
@@ -125,8 +128,21 @@ const Blog = ({ posts = [] }) => {
   const [tagsRaw, setTags] = useQueryParams('tags');
   const tagsModalOpenState = useState(false);
   const tags = useMemo(() => (!!tagsRaw ? JSON.parse(tagsRaw) : []), [tagsRaw]);
-
   const categories = useMemo(() => ['All', ...uniq(posts.map(({ category }) => category)).sort()], [posts]);
+  const sections = BlogPageData.page_content;
+  const animations = BlogPageData.floater_animations;
+
+  useEffect(() => {
+    let pageFloaters = {};
+    initFloaterAnimations(animations).then(result => {
+      pageFloaters = result;
+    });
+    return () => {
+      if (pageFloaters.hasOwnProperty('destroy')) {
+        pageFloaters.destroy();
+      }
+    };
+  }, [animations]);
 
   // Almagamating all tags available across all posts
   const allTags = useMemo(
@@ -212,13 +228,12 @@ const Blog = ({ posts = [] }) => {
 
   return (
     <main className="grid blog-index">
-      <div className="blog-heading">
-        <h4>Web3.Storage Blog</h4>
-        <h1>Updates from our organization and across the Web3 universe. </h1>
-        <Button variant={ButtonVariant.DARK} href="/blog/subscribe">
-          Subscribe
-        </Button>
-      </div>
+      {sections.map((section, index) => (
+        <BlockBuilder id={`blog_section_${index + 1}`} key={`section_${index}`} subsections={section} />
+      ))}
+      <Button variant={ButtonVariant.DARK} href="/blog/subscribe">
+        Subscribe
+      </Button>
       <div className="blog-search-c">
         <div>
           <div className="blog-search-input">
