@@ -29,8 +29,8 @@ export const Tag = ({ tag }) => {
  */
 const Tags = ({ tags }) => (
   <div className={clsx('tags-container', typeof tags[0] !== 'string' && 'blog-tags-buttons')}>
-    {tags.map(tag => (
-      <React.Fragment key={`blog-tag-${tag}`}>
+    {tags.map((tag, i) => (
+      <React.Fragment key={`blog-tag-${i}`}>
         <Tag tag={tag} />
       </React.Fragment>
     ))}

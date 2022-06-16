@@ -14,7 +14,7 @@ import Tags from '../../components/blog/tags';
 import Categories from '../../components/blog/categories';
 import { Card } from '../../components/blog/cards';
 
-const BLOG_ITEMS_PER_PAGE = 10;
+const BLOG_ITEMS_PER_PAGE = 5;
 
 /**
  * Blog Cards
