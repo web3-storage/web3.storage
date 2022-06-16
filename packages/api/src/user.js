@@ -6,6 +6,7 @@ import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
 import {
   NO_READ_OR_WRITE,
   READ_WRITE,
+  READ_ONLY,
   maintenanceHandler
 } from './maintenance.js'
 
@@ -54,8 +55,10 @@ async function loginOrRegister (request, env) {
     return maintenanceHandler()
   } else if (env.MODE === READ_WRITE) {
     user = await env.db.upsertUser(parsed)
-  } else {
+  } else if (env.MODE === READ_ONLY) {
     user = await env.db.getUser(parsed.issuer)
+  } else {
+    throw new Error('Unknown maintenance mode')
   }
 
   return user
