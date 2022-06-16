@@ -259,14 +259,16 @@ const Blog = ({ posts = [] }) => {
       </div>
       <Paginated items={filteredPosts} />
       <Modal
-        className="tags-modal"
-        animation="ken"
+        className="blog-tags-modal"
+        animation="don"
         modalState={tagsModalOpenState}
         closeIcon={<CloseIcon />}
         showCloseButton
       >
-        <h1>All Tags</h1>
-        <Tags tags={allTags} />
+        <div className="blog-tags-modal-inner">
+          <h5>All Tags</h5>
+          <Tags tags={allTags} comma={false} />
+        </div>
       </Modal>
     </main>
   );

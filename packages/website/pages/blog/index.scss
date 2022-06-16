@@ -139,12 +139,11 @@
   @include fontWeight_Semibold;
 }
 
+// floating illustrations
 #blog_section_1 {
   position: relative;
-  z-index: 5;
-  top: -1px;
+  top: 0;
 }
-
 #blog_hero_header {
   padding: 0;
   .text-block {
@@ -162,7 +161,6 @@
     }
   }
 }
-
 #blog_hero-coil {
   position: absolute;
   width: 7.25rem;
@@ -173,7 +171,6 @@
     display: none;
   }
 }
-
 #blog_hero-corkscrew {
   position: absolute;
   width: 39rem;
@@ -200,7 +197,6 @@
     right: -4.125rem;
   }
 }
-
 #blog_hero-helix {
   width: 18rem;
   top: -10rem;
@@ -214,5 +210,49 @@
   @include small {
     width: 10rem;
     top: -1rem;
+  }
+}
+
+// modal
+.blog-tags-modal {
+  .modalContainer {
+    max-width: calc($containerWidth - 10%);
+    @include borderRadius_Large;
+    @include medium {
+      width: 90%;
+    }
+  }
+  .modalClose {
+    color: white;
+    font-size: 2rem;
+  }
+  &-inner {
+    background-color: black;
+    position: relative;
+    color: $ebony;
+    padding: 3rem;
+    @include medium {
+      padding: 2.375rem 1.3125rem;
+      width: 100%;
+    }
+    h5 {
+      color: white;
+      margin-bottom: 0.85rem;
+    }
+    .button.text {
+      color: white;
+      border: 2px solid transparent;
+      border-radius: 5px;
+      .button-contents {
+        @include fontWeight_Semibold;
+        padding: 0.25rem 1rem;
+      }
+      &:hover {
+        border-color: #818184;
+      }
+      &.active {
+        border-color: red;
+      }
+    }
   }
 }

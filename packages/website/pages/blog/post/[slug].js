@@ -168,7 +168,7 @@ const Post = ({ post, posts }) => {
         <div className="post-meta">
           <div className="post-meta-date">{post.meta.date}</div>
           <div className="post-meta-tags">
-            <Tags tags={post.meta.tags} />
+            <Tags tags={post.meta.tags} comma={true} />
           </div>
         </div>
         <div className="post-content">
@@ -185,7 +185,7 @@ const Post = ({ post, posts }) => {
             <LinkIcon />
           </div>
           <div className="post-meta-tags">
-            <Tags tags={post.meta.tags} />
+            <Tags tags={post.meta.tags} comma={true} />
           </div>
         </div>
       </div>

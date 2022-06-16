@@ -27,8 +27,8 @@ export const Tag = ({ tag }) => {
  * @param {Object} props
  * @returns {JSX.Element}
  */
-const Tags = ({ tags }) => (
-  <div className="tags-container">{tags.map((tag, i) => [i > 0 && ', ', <Tag key={i} tag={tag} />])}</div>
+const Tags = ({ tags, comma }) => (
+  <div className="tags-container">{tags.map((tag, i) => [comma ? i > 0 && ', ' : '', <Tag key={i} tag={tag} />])}</div>
 );
 
 export default Tags;
