@@ -47,7 +47,8 @@ describe('test customFetch', () => {
     assert.is(result, true)
 
     result = false
-    await client.list()
+    for await (const item of client.list()) {
+    }
     assert.is(result, true)
   })
 })
