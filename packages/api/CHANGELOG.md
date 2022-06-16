@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.3.1](https://github.com/web3-storage/web3.storage/compare/api-v6.3.0...api-v6.3.1) (2022-06-16)
+
+
+### Bug Fixes
+
+* ensure valid mode ([#1499](https://github.com/web3-storage/web3.storage/issues/1499)) ([45e3d1e](https://github.com/web3-storage/web3.storage/commit/45e3d1e99a3f5d7abaa9f21f8c120efad07ad312))
+
 ## [6.3.0](https://github.com/web3-storage/web3.storage/compare/api-v6.2.2...api-v6.3.0) (2022-06-16)
 
 
