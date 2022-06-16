@@ -89,7 +89,7 @@ class Web3Storage {
     token,
     endpoint = new URL('https://api.web3.storage'),
     rateLimiter,
-    fetch = _fetch,
+    fetch = _fetch
   }) {
     /**
      * Authorization token.
@@ -110,7 +110,7 @@ class Web3Storage {
      * Optional custom fetch function. Defaults to global fetch in browsers or @web-std/fetch on node.
      * @readonly
      */
-    this.fetch = fetch;
+    this.fetch = fetch
   }
 
   /**
