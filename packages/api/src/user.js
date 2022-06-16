@@ -169,6 +169,12 @@ export async function userInfoGet (request, env) {
   })
 }
 
+/**
+ * Post a new user request.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
 export async function userRequestPost (request, env) {
   const user = request.auth.user
   const { tagName, requestedTagValue, userProposalForm } = await request.json()
@@ -331,7 +337,7 @@ const notifySlack = async (
   fetch(webhookUrl, {
     method: 'POST',
     headers: {
-      'Content-type': 'application/json',
+      'Content-type': 'application/json'
     },
     body: JSON.stringify({
       text: `
@@ -357,7 +363,7 @@ const notifySlack = async (
 >`
         )
         .join('')}
-`,
-    }),
+`
+    })
   })
 }
