@@ -62,7 +62,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     storageData: { refetch },
     info,
   } = useUser();
-  const { tokens } = useTokens();
+  const { tokens, getTokens } = useTokens();
 
   const [currentTab, setCurrentTab] = useState('uploaded');
   const [files, setFiles] = useState(/** @type {any} */ (uploads));
@@ -115,6 +115,9 @@ const FilesManager = ({ className, content, onFileUpload }) => {
       listPinned('pinned', apiToken);
     }
   }, [fetchPinsDate, listPinned, isFetchingPinned, apiToken]);
+  useEffect(() => {
+    getTokens()
+  }, []);
 
   // Set displayed files based on tab selection: 'uploaded' or 'pinned'
   useEffect(() => {
