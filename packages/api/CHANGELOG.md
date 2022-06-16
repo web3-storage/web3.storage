@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.3.0](https://github.com/web3-storage/web3.storage/compare/api-v6.2.2...api-v6.3.0) (2022-06-16)
+
+
+### Features
+
+* Add basic storage limit request functionality ([#1398](https://github.com/web3-storage/web3.storage/issues/1398)) ([1347ed5](https://github.com/web3-storage/web3.storage/commit/1347ed50abe2831076fb61118d931226d47e2028))
+
 ## [6.2.2](https://github.com/web3-storage/web3.storage/compare/api-v6.2.1...api-v6.2.2) (2022-06-16)
 
 
