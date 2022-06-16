@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.2.2](https://github.com/web3-storage/web3.storage/compare/api-v6.2.1...api-v6.2.2) (2022-06-16)
+
+
+### Bug Fixes
+
+* add modules to miniflare ([#1492](https://github.com/web3-storage/web3.storage/issues/1492)) ([cba24c8](https://github.com/web3-storage/web3.storage/commit/cba24c8e25749fb2b0db6cce01baa67fabb73241))
+* user login without mode middleware ([#1443](https://github.com/web3-storage/web3.storage/issues/1443)) ([a608e06](https://github.com/web3-storage/web3.storage/commit/a608e06aaf269e40018e1079451af31cab41fe5a))
+
 ## [6.2.1](https://github.com/web3-storage/web3.storage/compare/api-v6.2.0...api-v6.2.1) (2022-06-14)
 
 
