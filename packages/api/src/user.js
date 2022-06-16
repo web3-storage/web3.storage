@@ -50,9 +50,9 @@ async function loginOrRegister (request, env) {
 
   let user
   // check if maintenance mode
-  if (env.MODE === NO_READ_OR_WRITE) {
+  if (env.mode === NO_READ_OR_WRITE) {
     return maintenanceHandler()
-  } else if (env.MODE === READ_WRITE) {
+  } else if (env.mode === READ_WRITE) {
     user = await env.db.upsertUser(parsed)
   } else {
     user = await env.db.getUser(parsed.issuer)
