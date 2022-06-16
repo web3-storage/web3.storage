@@ -85,7 +85,7 @@ function modeBits (m) {
 /**
  * @returns {never}
  */
-function maintenanceHandler () {
+export function maintenanceHandler () {
   const url = 'https://status.web3.storage'
   throw new MaintenanceError(`API undergoing maintenance, check ${url} for more info`)
 }
