@@ -141,3 +141,7 @@
     }
   }
 }
+
+.tags-container {
+  @include fontWeight_Semibold;
+}
