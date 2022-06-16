@@ -62,7 +62,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     storageData: { refetch },
     info,
   } = useUser();
-  const tokensContext = useTokens();
+  const { tokens, getTokens } = useTokens();
 
   const [currentTab, setCurrentTab] = useState('uploaded');
   const [files, setFiles] = useState(/** @type {any} */ (uploads));
@@ -75,6 +75,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const [showCheckOverlay, setShowCheckOverlay] = useState(false);
   const deleteModalState = useState(false);
   const queryOrderRef = useRef(query.order);
+  const apiToken = tokens.length ? tokens[0].secret : undefined;
 
   const [selectedFiles, setSelectedFiles] = useState(/** @type {Upload[]} */ ([]));
   const [isUpdating, setIsUpdating] = useState(false);
@@ -110,13 +111,12 @@ const FilesManager = ({ className, content, onFileUpload }) => {
 
   // Initial pinned files fetch on component load
   useEffect(() => {
-    const apiToken = tokensContext.tokens.length ? tokensContext.tokens[0].secret : undefined;
     if (!fetchPinsDate && !isFetchingPinned && apiToken) {
       listPinned('pinned', apiToken);
     }
-  }, [fetchPinsDate, listPinned, isFetchingPinned, tokensContext.tokens]);
+  }, [fetchPinsDate, listPinned, isFetchingPinned, apiToken]);
   useEffect(() => {
-    tokensContext.getTokens()
+    getTokens()
   }, []);
 
   // Set displayed files based on tab selection: 'uploaded' or 'pinned'
@@ -266,14 +266,13 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   }, [setShowCheckOverlay]);
 
   const refreshHandler = useCallback(() => {
-    const apiToken = tokensContext.tokens.length ? tokensContext.tokens[0].secret : undefined;
     if (currentTab === 'uploaded') {
       getUploads();
     } else if (currentTab === 'pinned' && apiToken) {
       listPinned('pinned', apiToken);
     }
     showCheckOverlayHandler();
-  }, [currentTab, getUploads, listPinned, showCheckOverlayHandler, tokensContext.tokens]);
+  }, [currentTab, getUploads, listPinned, showCheckOverlayHandler, apiToken]);
 
   const tableContentLoading = tab => {
     switch (tab) {
