@@ -168,6 +168,11 @@
           border: solid 2px $malibu;
         }
       }
+      &.current-page {
+        &:after {
+          border: solid 2px $white;
+        }
+      }
     }
   }
 }
