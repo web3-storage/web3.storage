@@ -97,6 +97,7 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 20
 
   for (const email of STORAGE_QUOTA_EMAILS) {
     const usersOverQuota = []
+    let batchIndex = 0
     let startId = BigInt(0)
 
     while (true) {
@@ -106,6 +107,7 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 20
       // 1000 users could still involve `user_used_storage` being run on many thousands
       // of users. Hence we get batches of user ID ranges to ensure that we only inflict
       // a small amount of pain on the DB in each query.
+      const startBatchTime = Date.now()
       const { rows: maxIdOfBatchResult } = await roPg.query(ID_RANGE_QUERY, [
         startId,
         userBatchSize
@@ -146,12 +148,16 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 20
         }
       }
 
+      const batchTime = Math.floor(Date.now() - startBatchTime / 1000)
+      log(`Batch #${batchIndex} of ${userBatchSize} users completed in ${batchTime}s`)
+
       if (maxIdOfBatch >= maxId) {
         log('🗄 Reached last user')
         break
       } else {
         startId = maxIdOfBatch
       }
+      batchIndex++
     }
 
     if (usersOverQuota.length > 0) {
