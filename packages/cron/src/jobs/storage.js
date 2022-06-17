@@ -160,7 +160,7 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 20
       }
     }
 
-    const batchTime = Math.floor(Date.now() - startBatchTime / 1000)
+    const batchTime = Math.floor((Date.now() - startBatchTime) / 1000)
     log(`Batch #${batchIndex} of ${userBatchSize} users completed in ${batchTime}s`)
     if (maxIdOfBatch >= maxId) {
       log('🗄 Reached last user')
