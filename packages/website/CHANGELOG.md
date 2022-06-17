@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.1](https://github.com/web3-storage/web3.storage/compare/website-v2.8.0...website-v2.8.1) (2022-06-17)
+
+
+### Bug Fixes
+
+* UI was sending empty string for HasPinningAccess user request form tag value ([#1513](https://github.com/web3-storage/web3.storage/issues/1513)) ([e253929](https://github.com/web3-storage/web3.storage/commit/e2539298669d5406526dee898637180ae4c50380))
+
 ## [2.8.0](https://github.com/web3-storage/web3.storage/compare/website-v2.7.1...website-v2.8.0) (2022-06-16)
 
 
