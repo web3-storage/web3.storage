@@ -47,7 +47,9 @@ describe('test customFetch', () => {
     assert.is(result, true)
 
     result = false
+    const uploads = []
     for await (const item of client.list()) {
+      uploads.push(item)
     }
     assert.is(result, true)
   })
