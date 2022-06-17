@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.4.0](https://github.com/web3-storage/web3.storage/compare/api-v6.3.1...api-v6.4.0) (2022-06-17)
+
+
+### Features
+
+* update Storage Limit Request slack message to display 1TiB ([#1517](https://github.com/web3-storage/web3.storage/issues/1517)) ([e3f904f](https://github.com/web3-storage/web3.storage/commit/e3f904f54706a4452aa2e48daed32cb727db875f))
+
 ## [6.3.1](https://github.com/web3-storage/web3.storage/compare/api-v6.3.0...api-v6.3.1) (2022-06-16)
 
 
