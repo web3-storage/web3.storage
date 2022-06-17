@@ -357,7 +357,7 @@ const notifySlack = async (
 >${tagName}
 >
 >*Requested Tag Value*
->${requestedTagValue}
+>${tagName === 'StorageLimitBytes' && requestedTagValue === '' ? '1TiB' : requestedTagValue}
 >${form
         .map(
           ({ label, value }) => `
