@@ -39,6 +39,13 @@ const userByStorageRowToUser = (row) => {
   }
 }
 
+const adminStorageEmail = {
+  emailType: EMAIL_TYPE.AdminStorageExceeded,
+  fromPercent: 100,
+  // 1 day approx, with flexibility for cron irregularity
+  secondsSinceLastSent: 60 * 60 * 23
+}
+
 const STORAGE_QUOTA_EMAILS = [
   {
     emailType: EMAIL_TYPE.User100PercentStorage,
@@ -95,88 +102,91 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 20
   const { rows: maxIdResult } = await roPg.query(MAX_USER_ID_QUERY)
   const maxId = BigInt(maxIdResult[0].max)
 
-  for (const email of STORAGE_QUOTA_EMAILS) {
-    const usersOverQuota = []
-    let batchIndex = 0
-    let startId = BigInt(0)
+  const usersOverQuota = []
+  let startId = BigInt(0)
+  let batchIndex = 0
 
-    while (true) {
-      // We iterate in batches, but we can't use a simple LIMIT/OFFSET approach, because
-      // the `users_by_storage_used` SQL function in turn calls `user_used_storage` for
-      // each user that it iterates, even the ones that it doesn't return, so a LIMIT of
-      // 1000 users could still involve `user_used_storage` being run on many thousands
-      // of users. Hence we get batches of user ID ranges to ensure that we only inflict
-      // a small amount of pain on the DB in each query.
-      const startBatchTime = Date.now()
-      const { rows: maxIdOfBatchResult } = await roPg.query(ID_RANGE_QUERY, [
-        startId,
-        userBatchSize
-      ])
-      const maxIdOfBatch = BigInt(maxIdOfBatchResult[0].max)
+  while (true) {
+    // We iterate in batches, but we can't use a simple LIMIT/OFFSET approach, because
+    // the `users_by_storage_used` SQL function in turn calls `user_used_storage` for
+    // each user that it iterates, even the ones that it doesn't return, so a LIMIT of
+    // 1000 users could still involve `user_used_storage` being run on many thousands
+    // of users. Hence we get batches of user ID ranges to ensure that we only inflict
+    // a small amount of pain on the DB in each query.
+    const startBatchTime = Date.now()
+    const { rows: maxIdOfBatchResult } = await roPg.query(ID_RANGE_QUERY, [
+      startId,
+      userBatchSize
+    ])
+    const maxIdOfBatch = BigInt(maxIdOfBatchResult[0].max)
 
-      const { rows: results } = await roPg.query(USER_BY_USED_STORAGE_QUERY, [
-        email.fromPercent,
-        email.toPercent,
-        startId,
-        maxIdOfBatch
-      ])
+    const { rows: results } = await roPg.query(USER_BY_USED_STORAGE_QUERY, [
+      Math.min(...STORAGE_QUOTA_EMAILS.map(email => email.fromPercent)),
+      undefined,
+      startId,
+      maxIdOfBatch
+    ])
 
-      const users = results
-        .map(userByStorageRowToUser)
+    const users = results
+      .map(userByStorageRowToUser)
 
-      if (email.emailType === EMAIL_TYPE.User100PercentStorage && users.length > 0) {
-        usersOverQuota.push(...users)
+    for (const user of users) {
+      const to = {
+        _id: user.id,
+        email: user.email,
+        name: user.name
       }
 
-      for (const user of users) {
-        const to = {
-          _id: user.id,
-          email: user.email,
-          name: user.name
-        }
+      const emailToSend = STORAGE_QUOTA_EMAILS
+        .sort((a, b) => b.fromPercent - a.fromPercent)
+        .find((email) => user.percentStorageUsed >= email.fromPercent && (!email.toPercent || user.percentStorageUsed < email.toPercent))
 
-        const emailSent = await emailService.sendEmail(to, email.emailType, {
-          ...(email.secondsSinceLastSent && { secondsSinceLastSent: email.secondsSinceLastSent })
+      if (emailToSend) {
+        const emailSent = await emailService.sendEmail(to, emailToSend.emailType, {
+          ...(emailToSend.secondsSinceLastSent && { secondsSinceLastSent: emailToSend.secondsSinceLastSent })
         })
 
+        if (emailToSend.emailType === EMAIL_TYPE.User100PercentStorage) {
+          usersOverQuota.push(user)
+        }
+
         if (emailSent) {
-          if (email.emailType === EMAIL_TYPE.User100PercentStorage) {
+          if (emailToSend.emailType === EMAIL_TYPE.User100PercentStorage) {
             log(`📧 Sent a quota exceeded email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
           } else {
             log(`📧 Sent an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
           }
         }
       }
-
-      const batchTime = Math.floor(Date.now() - startBatchTime / 1000)
-      log(`Batch #${batchIndex} of ${userBatchSize} users completed in ${batchTime}s`)
-
-      if (maxIdOfBatch >= maxId) {
-        log('🗄 Reached last user')
-        break
-      } else {
-        startId = maxIdOfBatch
-      }
-      batchIndex++
     }
 
-    if (usersOverQuota.length > 0) {
-      const { rows: results } = await roPg.query(USER_BY_EMAIL_QUERY, [supportEmail])
+    const batchTime = Math.floor(Date.now() - startBatchTime / 1000)
+    log(`Batch #${batchIndex} of ${userBatchSize} users completed in ${batchTime}s`)
+    if (maxIdOfBatch >= maxId) {
+      log('🗄 Reached last user')
+      break
+    } else {
+      startId = maxIdOfBatch
+    }
+    batchIndex++
+  }
 
-      if (!results.length) {
-        throw new Error(`${supportEmail} does not exists`)
-      }
+  if (usersOverQuota.length > 0) {
+    const { rows: results } = await roPg.query(USER_BY_EMAIL_QUERY, [supportEmail])
 
-      const toAdmin = results[0]
+    if (!results.length) {
+      throw new Error(`${supportEmail} does not exists`)
+    }
 
-      const emailSent = await emailService.sendEmail(toAdmin, EMAIL_TYPE.AdminStorageExceeded, {
-        secondsSinceLastSent: email.secondsSinceLastSent,
-        templateVars: { users: usersOverQuota }
-      })
+    const toAdmin = results[0]
 
-      if (emailSent) {
-        log('📧 Sent a list of users exceeding their quotas to admin')
-      }
+    const emailSent = await emailService.sendEmail(toAdmin, adminStorageEmail.emailType, {
+      secondsSinceLastSent: adminStorageEmail.secondsSinceLastSent,
+      templateVars: { users: usersOverQuota }
+    })
+
+    if (emailSent) {
+      log('📧 Sent a list of users exceeding their quotas to admin')
     }
   }
 
