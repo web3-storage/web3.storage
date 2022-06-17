@@ -261,16 +261,72 @@ export async function getVersion() {
  * @throws {Error} When it fails to get uploads
  */
 export async function listPins(status, token) {
-  const res = await fetch(`${API}/pins?status=${status}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token, // **** this needs to be a token generated from the tokens context
-    },
-  })
-  if (!res.ok) {
-    throw new Error(`failed to get pinned files: ${await res.text()}`)
-  }
+  console.log('gettin pins')
+  // const res = await fetch(`${API}/pins?status=${status}`, {
+  //   method: 'GET',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     Authorization: 'Bearer ' + token, // **** this needs to be a token generated from the tokens context
+  //   },
+  // })
+  // if (!res.ok) {
+  //   throw new Error(`failed to get pinned files: ${await res.text()}`)
+  // }
 
-  return res.json()
+  const mockPins = {
+    count: 1,
+    result: [
+      {
+        requestid: '',
+        status: '',
+        created: '',
+        pinObject: {
+          cid: '',
+          _id: '',
+          contentCid: '',
+          sourceCid: '',
+          authKey: '',
+          name: '',
+          meta: '',
+          deleted: false,
+          created: '',
+          updated: '',
+          pins: [],
+          delegates: '',
+        },
+      },
+    ],
+  };
+
+/**
+ * @typedef {Object} PinObject
+ * @property {string} cid
+ * @property {string} _id
+ * @property {string} sourceCid
+ * @property {string} contentCid
+ * @property {string} authKey
+ * @property {string} name
+ * @property {any} meta
+ * @property {boolean | null} deleted
+ * @property {string} created
+ * @property {string} updated
+ * @property {Pin[]} pins
+ * @property {string[]} delegates
+ */
+
+/**
+ * @typedef {Object} PinStatus
+ * @property {string} requestid
+ * @property {string} status
+ * @property {string} created
+ * @property {PinObject} pin
+ */
+
+/**
+ * @typedef {Object} PinsList
+ * @property {number} count
+ * @property {PinStatus[]} results
+ */
+
+  return mockPins;
 }
