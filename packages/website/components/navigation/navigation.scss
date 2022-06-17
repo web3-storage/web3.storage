@@ -190,6 +190,7 @@
 // ///////////////////////////////////////////////////////////////////////// App
 .nav-account-button {
   position: relative;
+  display: contents;
   &:hover {
     .nav-account-dropdown {
       transform: translate(-50%, 0rem);
@@ -206,7 +207,7 @@
   padding: 1.5rem;
   padding-right: 3.5rem;
   top: calc(100% + 1rem);
-  left: 50%;
+  right: 0;
   opacity: 0;
   transform: translate(-50%, 1.5rem);
   transition: 250ms ease;
