@@ -24,3 +24,14 @@ export function hasTag (user, tagName, value) {
     )
   )
 }
+
+export function hasPendingTagProposal (user, tagName) {
+  return Boolean(
+    user.tagProposals?.find(
+      (proposal) =>
+        proposal.tag === tagName &&
+        !proposal.admin_decision_type &&
+        !proposal.deleted_at
+    )
+  )
+}

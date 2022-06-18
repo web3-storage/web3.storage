@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/api",
-  "version": "6.2.1",
+  "version": "6.4.0",
   "private": true,
   "type": "module",
   "license": "(Apache-2.0 OR MIT)",
@@ -24,7 +24,7 @@
     "cluster:reset": "web3-storage-tools cluster --clean",
     "pg:start": "cd ../db && npm start",
     "pg:stop": "cd ../db && npm run stop",
-    "miniflare": "miniflare dist/worker.mjs --env ../../.env --watch"
+    "miniflare": "miniflare dist/worker.mjs --modules --env ../../.env --watch"
   },
   "devDependencies": {
     "@sentry/cli": "^1.72.1",

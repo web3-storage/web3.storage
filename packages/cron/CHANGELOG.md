@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.1.3](https://github.com/web3-storage/web3.storage/compare/cron-v1.1.2...cron-v1.1.3) (2022-06-15)
+
+
+### Bug Fixes
+
+* close connection at the end of cron ([#1488](https://github.com/web3-storage/web3.storage/issues/1488)) ([ea14612](https://github.com/web3-storage/web3.storage/commit/ea14612b510d56d13cdef2ee7f3417a6bcf9877d))
+
+## [1.1.2](https://github.com/web3-storage/web3.storage/compare/cron-v1.1.1...cron-v1.1.2) (2022-06-15)
+
+
+### Bug Fixes
+
+* change batching strategy for user storage cron ([#1419](https://github.com/web3-storage/web3.storage/issues/1419)) ([ac10cb0](https://github.com/web3-storage/web3.storage/commit/ac10cb05011747fbd76f33bc0d79252f3924ce06))
+* make the default batch size for storage limit cron smaller ([#1485](https://github.com/web3-storage/web3.storage/issues/1485)) ([4df878f](https://github.com/web3-storage/web3.storage/commit/4df878f0707f102ac8609abf685fdbef249b8ad6))
+* update getPg to automatically connect to the db ([#1465](https://github.com/web3-storage/web3.storage/issues/1465)) ([2ad46a0](https://github.com/web3-storage/web3.storage/commit/2ad46a0bd6a27048b9a9f62a2a068fafe2417759))
+* use NODE_TLS_REJECT_UNAUTHORIZED=0 env var for storage cron job ([#1418](https://github.com/web3-storage/web3.storage/issues/1418)) ([179ef95](https://github.com/web3-storage/web3.storage/commit/179ef950376dcf86bfdd1301955ab3e6bccf1d3d))
+
 ## [1.1.1](https://github.com/web3-storage/web3.storage/compare/cron-v1.1.0...cron-v1.1.1) (2022-06-08)
 
 

@@ -3,10 +3,10 @@ import filesz from 'filesize';
 import { useCallback, useMemo, useEffect, useState, useRef } from 'react';
 
 import LockIcon from 'assets/icons/lock';
-import emailContent from '../../../content/file-a-request';
 import Button, { ButtonVariant } from 'components/button/button';
 import { useUser } from 'components/contexts/userContext';
 import { elementIsInViewport } from 'lib/utils';
+import StorageLimitRequestModal from 'components/storageLimitRequestModal/storageLimitRequestModal';
 
 // Raw TiB number of bytes, to be used in calculations
 const tebibyte = 1099511627776;
@@ -17,10 +17,6 @@ const defaultStorageLimit = tebibyte;
  * @property {string} [className]
  * @property {any} [content]
  */
-
-const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body=${encodeURIComponent(
-  emailContent.body.join('\n')
-)}`;
 
 /**
  *
@@ -36,6 +32,7 @@ const StorageManager = ({ className = '', content }) => {
   const limit = useMemo(() => data?.storageLimitBytes || defaultStorageLimit, [data]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
+  const [isUserRequestModalOpen, setIsUserRequestModalOpen] = useState(false);
 
   const { maxSpaceLabel, unlockLabel, percentUploaded, percentPinned } = useMemo(
     () => ({
@@ -121,11 +118,11 @@ const StorageManager = ({ className = '', content }) => {
           <span className="storage-manager-meter-label">{maxSpaceLabel}</span>
         </div>
         {!!unlockLabel && (
-          <Button variant={ButtonVariant.TEXT} href={mailTo}>
-            <a href={mailTo} target="_blank" rel="noreferrer">
+          <Button variant={ButtonVariant.TEXT} onClick={() => setIsUserRequestModalOpen(true)}>
+            <span>
               <LockIcon />
               {unlockLabel}
-            </a>
+            </span>
           </Button>
         )}
       </div>
@@ -151,10 +148,13 @@ const StorageManager = ({ className = '', content }) => {
       </div>
       <div className="storage-manager-info">
         {content.prompt}&nbsp;
-        <a href={mailTo} target="_blank" rel="noreferrer">
+        <button className="storage-manager__storage-request-button" onClick={() => setIsUserRequestModalOpen(true)}>
           {content.buttons.request}
-        </a>
+        </button>
       </div>
+      {isUserRequestModalOpen && (
+        <StorageLimitRequestModal isOpen={isUserRequestModalOpen} onClose={() => setIsUserRequestModalOpen(false)} />
+      )}
     </div>
   );
 };

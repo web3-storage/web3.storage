@@ -7,7 +7,7 @@ import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { uploadPost } from './upload.js'
-import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, userUploadsRename, userInfoGet } from './user.js'
+import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, userUploadsRename, userInfoGet, userRequestPost } from './user.js'
 import { pinDelete, pinGet, pinPost, pinsGet } from './pins.js'
 import { metricsGet } from './metrics.js'
 import { versionGet } from './version.js'
@@ -22,13 +22,6 @@ import { compose } from './utils/fn.js'
 import { cloudflareInstanceofTest } from './temporary.js'
 
 const router = Router()
-router.all('*', envAll)
-router.options('*', corsOptions)
-
-router.get('*', withMode(READ_ONLY))
-router.head('*', withMode(READ_ONLY))
-router.post('*', withMode(READ_WRITE))
-router.delete('*', withMode(READ_WRITE))
 
 /**
  * It defines a list of "middlewares" that need to be applied for a given authentication mode.
@@ -63,7 +56,18 @@ const auth = {
 }
 
 /* eslint-disable no-multi-spaces */
+router.all('*', envAll)
+router.options('*', corsOptions)
+
+// Exception for login to not be handled by POST mode middleware
+// Needs to be added first
 router.post('/user/login',          auth['🌍'](userLoginPost))
+
+router.get('*', withMode(READ_ONLY))
+router.head('*', withMode(READ_ONLY))
+router.delete('*', withMode(READ_WRITE))
+router.post('*', withMode(READ_WRITE))
+
 router.get('/status/:cid',          auth['🌍'](statusGet))
 router.get('/car/:cid',             auth['🌍'](carGet))
 router.head('/car/:cid',            auth['🌍'](carHead))
@@ -87,6 +91,7 @@ router.delete('/user/uploads/:cid',      auth['👤🗑️'](userUploadsDelete))
 router.post('/user/uploads/:cid/rename', auth['👤'](userUploadsRename))
 router.get('/user/tokens',               auth['👤'](userTokensGet))
 router.post('/user/tokens',              auth['👤'](userTokensPost))
+router.post('/user/request',             auth['👤'](userRequestPost))
 router.delete('/user/tokens/:id',        auth['👤🗑️'](userTokensDelete))
 router.get('/user/account',              auth['👤'](userAccountGet))
 router.get('/user/info',                 auth['👤'](userInfoGet))
