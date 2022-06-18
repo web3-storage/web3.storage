@@ -18,8 +18,8 @@
             "type": "hero",
             "page": "blog",
             "cols": {
-              "num": "col-7_md-7_sm-10_ti-12",
-              "push_right": "off-5_md-5_sm-2_ti-0"
+              "num": "col-7_md-8_sm-12_ti-12",
+              "push_right": "off-5_md-4_sm-0_ti-0"
             },
             "format": "header",
             "subheading": "Web3.Storage Blog",

@@ -8,9 +8,15 @@
   }
   &:nth-child(odd) {
     padding-right: 1rem;
+    @include medium {
+      padding-right: 0;
+    }
   }
   &:nth-child(even) {
     padding-left: 1rem;
+    @include medium {
+      padding-left: 0;
+    }
   }
   &:hover {
     .blog-card-img img {

@@ -234,8 +234,8 @@ const Blog = ({ posts = [] }) => {
       <Button variant={ButtonVariant.DARK} href="/blog/subscribe">
         Subscribe
       </Button>
-      <div className="blog-search-c">
-        <div>
+      <div className="blog-search-c grid">
+        <div className="col-5_md-12_sm-12_ti-12">
           <div className="blog-search-input">
             <input placeholder="Search" defaultValue={keyword} type="text" onChange={onSearch} />
           </div>
@@ -248,14 +248,16 @@ const Blog = ({ posts = [] }) => {
             </div>
           ))}
           <Button className="blue" variant={ButtonVariant.TEXT} onClick={() => tagsModalOpenState[1](true)}>
-            More Tags
+            View All Tags
           </Button>
         </div>
-        <CategoryContainer
-          selectedCategory={category}
-          handleCategoryClick={handleCategoryClick}
-          categories={categories}
-        />
+        <div className="blog-search-category col-7_md-12_sm-12_ti-12">
+          <CategoryContainer
+            selectedCategory={category}
+            handleCategoryClick={handleCategoryClick}
+            categories={categories}
+          />
+        </div>
       </div>
       <Paginated items={filteredPosts} />
       <Modal

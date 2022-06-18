@@ -8,18 +8,39 @@
       opacity: 1;
     }
   }
+  .grid > [class*='col'] {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
 }
 
 .blog-index {
   padding-top: 4rem;
+  @include medium {
+    padding-top: 4rem !important;
+  }
+  @include small {
+    padding-right: 3em !important;
+    padding-left: 3em !important;
+    padding-top: 1rem !important;
+  }
+}
+.blog-search-category {
+  text-align: right;
+  @include medium {
+    text-align: left;
+  }
 }
 .blog-search-c {
-  padding-top: toRem(117);
+  padding-top: toRem(117) !important;
   display: flex;
   justify-content: space-between;
   width: 100%;
+  @include medium {
+    padding-top: toRem(44) !important;
+  }
   .blog-search-input {
-    width: 400px;
+    width: 100%;
     position: relative;
     height: 38px;
     ::placeholder {
@@ -56,7 +77,13 @@
     }
   }
   .button.outline-dark {
-    margin-left: 10px;
+    margin-right: 10px;
+    @include medium {
+      margin-bottom: 0.5rem;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
     &:after {
       border-radius: 5px;
     }
@@ -95,6 +122,11 @@
   width: 100%;
   padding-right: toRem(83);
   padding-left: toRem(83);
+  @include medium {
+    padding-right: 0;
+    padding-left: 0;
+    padding-top: toRem(40);
+  }
   &.no-side-padding {
     padding-right: 0;
     padding-left: 0;
@@ -106,6 +138,9 @@
   align-items: center;
   justify-content: center;
   padding: toRem(80) 0 toRem(100) 0;
+  @include medium {
+    padding: toRem(40) 0 toRem(50) 0;
+  }
   .Pagination {
     .pageList {
       grid-gap: 0.3rem;
@@ -177,39 +212,23 @@
   right: calc(50% - #{math.div($containerWidth, 2)} - 14rem);
   top: -13rem;
   transform: rotate(179deg);
-  @include xlarge {
-    right: -3rem;
-  }
-  @include large {
-    width: 32rem;
-    right: 0rem;
-    top: 0;
-  }
-  @include medium {
-    right: calc(50% - #{math.div($containerWidth, 2)} - 3rem);
-  }
+  z-index: -1;
   @include small {
-    width: 24rem;
-    top: -4rem;
-    right: calc(50% - #{math.div($containerWidth, 2)} + 14rem);
-  }
-  @include tiny {
-    right: -4.125rem;
+    width: toRem(172);
+    top: -6rem;
+    right: calc(50% - #{math.div($containerWidth, 3)} + 2rem);
   }
 }
 #blog_hero-helix {
   width: 18rem;
-  top: -10rem;
-  left: -4rem;
+  top: -7rem;
   transform: rotate(-79deg);
-  left: calc(50% - #{math.div($containerWidth, 2)} - 21rem);
-  @include medium {
-    width: 14rem;
-    left: -4rem;
-  }
+  z-index: -1;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 18rem);
   @include small {
-    width: 10rem;
-    top: -1rem;
+    width: toRem(66);
+    top: -5rem;
+    left: -3.7rem;
   }
 }
 
