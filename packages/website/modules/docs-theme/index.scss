@@ -31,6 +31,9 @@
   .docs-site {
     .nav-item[href='/docs/'] {
       transform: translateY(-0.5rem);
+      @include medium {
+        transform: none;
+      }
       &:after {
         opacity: 1;
       }

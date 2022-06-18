@@ -4,6 +4,9 @@
 .blog-site {
   .nav-item[href='/blog/'] {
     transform: translateY(-0.5rem);
+    @include medium {
+      transform: none;
+    }
     &:after {
       opacity: 1;
     }

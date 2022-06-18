@@ -32,12 +32,12 @@
         "text": "FAQ"
       },
       {
-        "url": "/docs",
-        "text": "Docs"
-      },
-      {
         "url": "/blog",
         "text": "Blog"
+      },
+      {
+        "url": "/docs",
+        "text": "Docs"
       },
       {
         "url": "/account",
