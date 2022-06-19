@@ -144,7 +144,7 @@ const Blog = ({ posts = [] }) => {
     };
   }, [animations]);
 
-  // Almagamating all tags available across all posts
+  // Amalgamating all tags available across all posts
   const allTags = useMemo(
     () =>
       uniq(posts.map(({ tags }) => tags).flat())

@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 .blog-single-post {
   > .grid {
     width: toRem(814);
@@ -10,6 +12,12 @@
     padding-left: toRem(83);
     padding-right: toRem(83);
     text-align: center;
+    @include medium {
+      padding-left: 0;
+      padding-right: 0;
+      text-align: left;
+      padding-top: toRem(70);
+    }
     .post-author {
       padding-top: toRem(15);
       padding-bottom: toRem(30);
@@ -46,4 +54,65 @@
   .post-related {
     padding-bottom: 2rem;
   }
+}
+
+// floating illustrations
+#blog-article_section_1 {
+  position: relative;
+  width: 100vw;
+  padding: 0;
+  width: 100vw;
+  height: 0;
+  left: 0;
+  top: 0;
+}
+
+// floating illustrations
+#blog-article_hero_header {
+  padding: 0;
+  width: 100vw;
+  height: 0;
+  left: 0;
+  top: 0;
+}
+#blog-article_hero-coil {
+  position: absolute;
+  width: 6rem;
+  z-index: -1;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 12rem);
+  top: 32rem;
+  transform: rotate(30deg);
+  @include small {
+    display: none;
+  }
+}
+#blog-article_hero-cross {
+  position: absolute;
+  z-index: -1;
+  width: 3rem;
+  top: 60rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 36rem);
+  @include small {
+    left: 3rem;
+  }
+}
+#blog-article_hero-helix {
+  width: 18rem;
+  top: -7rem;
+  transform: rotate(-79deg);
+  z-index: -1;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 48rem);
+  @include small {
+    width: toRem(66);
+    top: -5rem;
+    left: -3.7rem;
+  }
+}
+#blog-article_hero-ring {
+  width: toRem(430);
+  right: 0;
+  top: 0;
+  z-index: -1;
+  transform: translate(321px, 321px) rotate(200deg);
+  right: calc(50% - #{math.div($containerWidth, 2)} + 13rem);
 }

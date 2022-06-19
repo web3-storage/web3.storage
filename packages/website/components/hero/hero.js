@@ -87,6 +87,17 @@ export default function Hero({ block }) {
     );
   };
 
+  const blogArticleHero = () => {
+    return (
+      <>
+        <Coil id="blog-article_hero-coil" className={'hero-illustration'} />
+        <Cross id="blog-article_hero-cross" className={'hero-illustration'} />
+        <Helix id="blog-article_hero-helix" className={'hero-illustration'} />
+        <Ring id="blog-article_hero-ring" className={'hero-illustration'} />
+      </>
+    );
+  };
+
   const indexHero = () => {
     return (
       <>
@@ -115,6 +126,8 @@ export default function Hero({ block }) {
         return hero404();
       case 'blog':
         return blogHero();
+      case 'blog-article':
+        return blogArticleHero();
       default:
         return null;
     }

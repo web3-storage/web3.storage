@@ -1,0 +1,95 @@
+{
+  "seo": {
+    "title": "",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "page_content": [
+    [
+      {
+        "id": "blog-article_hero_header",
+        "columns": [
+          {
+            "type": "hero",
+            "page": "blog-article",
+            "cols": {
+              "num": "col-12"
+            },
+            "format": "header"
+          }
+        ]
+      }
+    ]
+  ],
+  "floater_animations": [
+    {
+      "trigger": "blog-article_hero_header",
+      "duration": 1000,
+      "offset": 700,
+      "floaters": [
+        {
+          "id": "blog_article_hero-coil",
+          "default": "rotate(30deg)",
+          "start": {
+            "x": 1,
+            "y": 20
+          },
+          "end": {
+            "x": 10,
+            "y": -20
+          }
+        },
+        {
+          "id": "blog-article_hero-ring",
+          "start": {
+            "rotate": 200,
+            "scale": 1,
+            "x": 321,
+            "y": 321
+          },
+          "end": {
+            "rotate": 250,
+            "scale": 1.3,
+            "x": 400,
+            "y": 400
+          }
+        },
+        {
+          "id": "blog-article_hero-cross",
+          "start": {
+            "scale": 1,
+            "rotate": -1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "scale": 1.3,
+            "rotate": -30,
+            "x": -30,
+            "y": 20
+          }
+        },
+        {
+          "id": "blog-article_hero-helix",
+          "start": {
+            "rotate": -79,
+            "scale": 1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -120,
+            "scale": 1.4,
+            "x": -120,
+            "y": 80
+          }
+        }
+      ]
+    }
+  ]
+}

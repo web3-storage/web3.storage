@@ -10,6 +10,9 @@ import { ReactComponent as TwitterIcon } from '../../../assets/icons/twitter.svg
 import { ReactComponent as FacebookIcon } from '../../../assets/icons/facebook.svg';
 import { ReactComponent as LinkedinIcon } from '../../../assets/icons/linkedin.svg';
 import { ReactComponent as LinkIcon } from '../../../assets/icons/link.svg';
+import BlogArticlePageData from '../../../content/pages/blog-article.json';
+import BlockBuilder from '../../../components/blockbuilder/blockbuilder.js';
+import { initFloaterAnimations } from '../../../lib/floater-animations.js';
 import SocialLink from '../../../components/social-link';
 import Tags from '../../../components/blog/tags';
 import { Card } from '../../../components/blog/cards';
@@ -69,6 +72,8 @@ const RelatedPosts = ({ items }) => (
  * @returns {JSX.Element}
  */
 const Post = ({ post, posts }) => {
+  const sections = BlogArticlePageData.page_content;
+  const animations = BlogArticlePageData.floater_animations;
   const SHARE_TEXT = '';
   // localhost will not work as currentUrl with fb or linkedin
   const [currentUrl, setCurrentUrl] = useState('');
@@ -156,8 +161,25 @@ const Post = ({ post, posts }) => {
     }
   }, []);
 
+  // floater animations
+  useEffect(() => {
+    let pageFloaters = {};
+    initFloaterAnimations(animations).then(result => {
+      pageFloaters = result;
+    });
+    return () => {
+      if (pageFloaters.hasOwnProperty('destroy')) {
+        pageFloaters.destroy();
+      }
+    };
+  }, [animations]);
+
   return (
-    <div className="blog-single-post">
+    <div className="blog-single-post grid">
+      {sections.map((section, index) => (
+        <BlockBuilder id={`blog-article_section_${index + 1}`} key={`section_${index}`} subsections={section} />
+      ))}
+
       <div className="post grid">
         <div className="post-heading">
           <h1>{post.meta.title}</h1>
