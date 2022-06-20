@@ -32,6 +32,7 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
           <div id="modal-root"></div>
+          <div className="grid-lines"></div>
         </body>
       </Html>
     );
