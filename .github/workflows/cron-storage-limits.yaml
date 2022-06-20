@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         env: ['staging', 'production']
-    timeout-minutes: 100
+    timeout-minutes: 340
     steps:
       - uses: actions/checkout@v2
 
