@@ -51,8 +51,7 @@
                 "type": "text_block",
                 "format": "small",
                 "description": [
-                  "Content uploaded to Web3.Storage is pinned redundantly three times to an IPFS Cluster of 6+ geographically distributed nodes. Before uploading, our client side libraries convert data into a CAR file (that includes the CID of the file), which keeps things trustless: the client can cryptographically verify that the CID corresponds to their file when storing and retrieving.",
-                  "Once this 31GiB CAR file is uploaded, a queue of geographically distributed storage providers - selected for performance and availability - bid for the right to store these deals, with the Web3.Storage client making a minimum of 5 deals with the various storage providers.",
+                  "Content uploaded to Web3.Storage is pinned redundantly three times to an IPFS Cluster of 18+ geographically distributed nodes. Before uploading, our client side libraries convert data into a CAR file (that includes the CID of the file), which keeps things trustless: the client can cryptographically verify that the CID corresponds to their file when storing and retrieving.",
                   "This data is made available to the public IPFS network, meaning you or anyone can access the data from anyone broadcasting the data via its CID.",
                   "Please <a href='/docs' alt='Web3.Storage Documentation'>see the documentation</a> for how one can use the Status API to query for information regarding pin status and deal status for your uploaded content."
                 ]
@@ -116,9 +115,9 @@
               {
                 "type": "text_block",
                 "format": "small",
-                "heading": "Once the deals are active, the Web3.Storage client polls to ensure that the relevant sectors are still available.",
+                "heading": "Once this 31GiB CAR file is uploaded, a queue of geographically distributed storage providers - selected for performance and availability - bid for the right to store these deals.",
                 "description": [
-                  "If the Filecoin network finds that a copy of your data is no longer proven to be stored, e.g., a storage deal expires or a miner goes offline, the Web3.Storage client will automatically add the relevant data into the queue of upcoming deals to ensure at all times there are always a minimum of 5 copies of data being stored with Filecoin Storage Providers.",
+                  "Web3.Storage makes a minimum of 5 deals with the various storage providers.",
                   "In the future, we hope to expand this service to offer a variety of options for storing data - including purely protocol-based approaches (e.g. via smart contracts) as well as other hosted options (e.g. HTTP endpoints). We also aim to provide more native tooling for automated deal management via tools like smart contracts - which may augment the offerings of this service in the future.",
                   "Our aim today is to provide a user-friendly experience that massively reduces the burden for onboarding new use cases into the web3 ecosystem today - while providing an upgrade path for the future."
                 ]
