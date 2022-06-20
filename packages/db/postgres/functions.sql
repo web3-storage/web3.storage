@@ -256,11 +256,20 @@ DECLARE
 BEGIN
   uploaded :=
     (
-      SELECT COALESCE(SUM(c.dag_size), 0)
-      FROM upload u
-      JOIN content c ON c.cid = u.content_cid
-      WHERE u.user_id = query_user_id::BIGINT
-      AND u.deleted_at is null
+      SELECT COALESCE((
+        SELECT SUM(dag_size) 
+        FROM (
+          SELECT  c.cid,
+                  c.dag_size
+          FROM upload u
+          JOIN content c ON c.cid = u.content_cid
+          JOIN pin p ON p.content_cid = u.content_cid
+          WHERE u.user_id = query_user_id::BIGINT
+          AND u.deleted_at is null
+          AND p.status = 'Pinned'
+          GROUP BY c.cid,
+                  c.dag_size
+        ) AS uploaded_content), 0)
     );
 
   psa_pinned :=
@@ -296,8 +305,8 @@ $$;
 CREATE OR REPLACE FUNCTION users_by_storage_used(
   from_percent INTEGER,
   to_percent INTEGER DEFAULT NULL,
-  start_id BIGINT DEFAULT 0,
-  end_id BIGINT DEFAULT NULL
+  user_id_gt BIGINT DEFAULT 0,
+  user_id_lte BIGINT DEFAULT NULL
 )
   RETURNS TABLE
     (
@@ -333,9 +342,8 @@ BEGIN
         AND r.value ILIKE 'true'
         AND r.deleted_at IS NULL
       )
-      AND u.id >= start_id
-      AND (end_id is NULL OR  u.id < end_id)
-      ORDER BY u.inserted_at
+      AND u.id > user_id_gt
+      AND u.id <= user_id_lte
     )
     SELECT *
     FROM user_account

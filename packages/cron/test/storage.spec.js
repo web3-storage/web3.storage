@@ -16,6 +16,15 @@ const env = {
   RO_PG_CONNECTION: 'postgres://postgres:postgres@127.0.0.1:5432/postgres'
 }
 
+/**
+ *
+ * @param {sinon.SinonStub} stub
+ * @param {string} emailType
+ */
+function getEmailStubCallFromEmailType (stub, emailType) {
+  return stub.getCalls().filter((call) => call.args[1] === emailType)
+}
+
 describe('cron - check user storage quotas', () => {
   let dbClient
   let roPg
@@ -128,29 +137,40 @@ describe('cron - check user storage quotas', () => {
 
     assert.strictEqual(sendEmailStub.getCalls().length, 5, 'email service called 5 times')
 
-    assert.strictEqual(sendEmailStub.getCall(0).args[0].email, 'test4@email.com')
-    assert.strictEqual(sendEmailStub.getCall(0).args[1], 'User100PercentStorage', 'user exceeded daily check')
-    assert.strictEqual(sendEmailStub.getCall(0).args[2].secondsSinceLastSent, 60 * 60 * 23)
+    const emailUsers100Calls = getEmailStubCallFromEmailType(sendEmailStub, 'User100PercentStorage')
+    assert.strictEqual(emailUsers100Calls.length, 1, 'User100PercentStorage called once')
 
-    assert.strictEqual(sendEmailStub.getCall(1).args[0].id, adminUser.id)
-    assert.strictEqual(sendEmailStub.getCall(1).args[1], 'AdminStorageExceeded', 'admin exceeded daily check')
-    assert.strictEqual(sendEmailStub.getCall(1).args[2].secondsSinceLastSent, 60 * 60 * 23)
+    assert.strictEqual(emailUsers100Calls[0].args[0].email, 'test4@email.com')
+    assert.strictEqual(emailUsers100Calls[0].args[2].secondsSinceLastSent, 60 * 60 * 23)
 
-    const tVars = sendEmailStub.getCall(1).args[2].templateVars
+    const emailAdminCalls = getEmailStubCallFromEmailType(sendEmailStub, 'AdminStorageExceeded')
+    assert.strictEqual(emailAdminCalls.length, 1, 'AdminStorageExceeded called once')
+
+    assert.strictEqual(emailAdminCalls[0].args[0].id, adminUser.id)
+    assert.strictEqual(emailAdminCalls[0].args[1], 'AdminStorageExceeded', 'admin exceeded daily check')
+    assert.strictEqual(emailAdminCalls[0].args[2].secondsSinceLastSent, 60 * 60 * 23)
+
+    const tVars = emailAdminCalls[0].args[2].templateVars
     assert.ok(tVars, 'users passed to email template')
     assert.strictEqual(tVars.users.length, 1)
     assert.ok(tVars.users.some((u) => u.id === testUserOver100._id))
 
-    assert.strictEqual(sendEmailStub.getCall(2).args[0].email, 'testUser90percent1@email.com')
-    assert.strictEqual(sendEmailStub.getCall(2).args[1], 'User90PercentStorage', 'user daily check over 90')
-    assert.strictEqual(sendEmailStub.getCall(2).args[2].secondsSinceLastSent, 60 * 60 * 23)
+    const emailUsers90Calls = getEmailStubCallFromEmailType(sendEmailStub, 'User90PercentStorage')
+    assert.strictEqual(emailUsers90Calls.length, 2, 'User90PercentStorage called twice')
 
-    assert.strictEqual(sendEmailStub.getCall(3).args[0].email, 'testUser90percent2@email.com')
-    assert.strictEqual(sendEmailStub.getCall(3).args[1], 'User90PercentStorage', 'user daily check over 90')
-    assert.strictEqual(sendEmailStub.getCall(3).args[2].secondsSinceLastSent, 60 * 60 * 23)
+    assert.strictEqual(emailUsers90Calls[0].args[0].email, 'testUser90percent1@email.com')
+    assert.strictEqual(emailUsers90Calls[0].args[1], 'User90PercentStorage', 'user daily check over 90')
+    assert.strictEqual(emailUsers90Calls[0].args[2].secondsSinceLastSent, 60 * 60 * 23)
 
-    assert.strictEqual(sendEmailStub.getCall(4).args[0].email, 'test2@email.com')
-    assert.strictEqual(sendEmailStub.getCall(4).args[1], 'User75PercentStorage', 'user weekly check over 75')
-    assert.strictEqual(sendEmailStub.getCall(4).args[2].secondsSinceLastSent, 60 * 60 * 24 * 7 - (60 * 60))
+    assert.strictEqual(emailUsers90Calls[1].args[0].email, 'testUser90percent2@email.com')
+    assert.strictEqual(emailUsers90Calls[1].args[1], 'User90PercentStorage', 'user daily check over 90')
+    assert.strictEqual(emailUsers90Calls[1].args[2].secondsSinceLastSent, 60 * 60 * 23)
+
+    const emailUsers75Calls = getEmailStubCallFromEmailType(sendEmailStub, 'User75PercentStorage')
+    assert.strictEqual(emailUsers75Calls.length, 1, 'User75PercentStorage called twice')
+
+    assert.strictEqual(emailUsers75Calls[0].args[0].email, 'test2@email.com')
+    assert.strictEqual(emailUsers75Calls[0].args[1], 'User75PercentStorage', 'user weekly check over 75')
+    assert.strictEqual(emailUsers75Calls[0].args[2].secondsSinceLastSent, 60 * 60 * 24 * 7 - (60 * 60))
   })
 })

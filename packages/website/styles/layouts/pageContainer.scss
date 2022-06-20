@@ -6,6 +6,10 @@
   @include fontSize_Medium;
   @include fontWeight_Regular;
 
+  .product-app & {
+    flex: 1 1 auto;
+  }
+
   h3 {
     font-size: $fontSize_MediumExtraLarge;
   }

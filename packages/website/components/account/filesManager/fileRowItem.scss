@@ -1,14 +1,14 @@
 @use 'sass:math';
 
 $base-row-width: 75.125rem;
-$file-select: calculateWidthPercentage(4.25rem, $base-row-width);
-$file-date: calculateWidthPercentage(8.5rem, $base-row-width);
-$file-name: calculateWidthPercentage(17.5rem, $base-row-width);
-$file-cid: calculateWidthPercentage(17.125rem, $base-row-width);
+$file-select: calculateWidthPercentage(3.5rem, $base-row-width);
+$file-name: calculateWidthPercentage(23rem, $base-row-width);
+$file-cid: calculateWidthPercentage(16rem, $base-row-width);
 $file-availability: calculateWidthPercentage(0rem, $base-row-width);
-$file-pin-status: calculateWidthPercentage(9.5rem, $base-row-width);
-$file-storage-providers: calculateWidthPercentage(11.125rem, $base-row-width);
-$file-size: auto;
+$file-pin-status: calculateWidthPercentage(8rem, $base-row-width);
+$file-storage-providers: calculateWidthPercentage(10rem, $base-row-width);
+$file-size: calculateWidthPercentage(8rem, $base-row-width);
+$file-date: auto;
 
 .files-manager-row {
   @include fontSize_Tiny;
@@ -17,13 +17,15 @@ $file-size: auto;
   letter-spacing: 0;
   display: grid;
   position: relative;
-  grid-template-columns: $file-select $file-date $file-name $file-cid $file-pin-status $file-storage-providers $file-size;
+  grid-template-columns: $file-select $file-name $file-cid $file-pin-status $file-storage-providers $file-size $file-date ;
   align-items: flex-start;
-  padding-left: 1.4375rem;
-  min-height: 4.375rem;
+  padding: .75rem 2rem;
+  transition: all .2s ease-in-out;
   border-bottom: 0.078125rem solid rgba(white, 0.05);
-  margin-top: 1.625rem;
-  padding-bottom: 1.625rem;
+
+  &:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
 
   @include medium {
     grid-template-columns: auto;
@@ -31,6 +33,10 @@ $file-size: auto;
     padding: 0;
     margin-top: 1.5625rem;
     @include border_Background_Waterloo_White;
+
+    &-active {
+      border: 1px solid $pictonBlue;
+    }
   }
 
   &-header {
@@ -47,10 +53,10 @@ $file-size: auto;
     word-break: break-word;
     @include fontWeight_Regular;
     @include medium {
-      padding: 1.25rem 1.5625rem 1.25rem 3.125rem;
+      padding: .5rem .75rem .5rem 1.5rem;
       justify-content: flex-start;
       border-bottom: 0.078125rem solid rgba(white, 0.05);
-      &.file-date {
+      &.file-name {
         padding-top: 1.75rem;
       }
       &:last-child {
@@ -66,36 +72,42 @@ $file-size: auto;
           padding-right: 1.25rem;
           color: $pictonBlue;
         }
-        .Tooltip {
-          position: absolute;
-          left: 0.625rem;
-          padding-left: 0;
-        }
-        @include tiny {
-          width: 6rem;
-        }
       }
       .Tooltip {
         padding-left: 0.625rem;
-        svg {
-          width: 1.25rem;
-          height: 1.25rem;
-        }
+      }
+    }
+    .Tooltip {
+      line-height: 1;
+
+      .tooltip-content {
+        font-size: inherit;
+        line-height: 1.5;
+      }
+
+      svg {
+        display: block;
+        vertical-align: middle;
+        width: 0.75rem;
+        height: 0.75rem;
+        color: #c4c4c7;
+        fill: currentColor;
       }
     }
   }
   .th-content {
     display: flex;
     align-items: center;
-    justify-content: center;
-    column-gap: 0.3125rem;
+    justify-content: flex-start;
+    grid-gap: 0.625rem;
+    gap: 0.625rem;
     span,
     .Tooltip {
       flex-grow: 1;
       flex-shrink: 1;
     }
     .Tooltip {
-      margin-right: auto;
+      margin-right: 1.25rem;
     }
   }
   a {
@@ -114,12 +126,6 @@ $file-size: auto;
         justify-content: space-between;
         order: 6;
       }
-      &.pinned {
-        .file-select,
-        .file-row-label {
-          display: none;
-        }
-      }
     }
     &-select {
       @include border_Background_Waterloo_White;
@@ -128,7 +134,7 @@ $file-size: auto;
       border-radius: 0.15625rem;
       cursor: pointer;
       position: relative;
-      margin-bottom: 0.15625rem;
+      margin: 1px 0;
       input {
         cursor: pointer;
         opacity: 0;
@@ -154,10 +160,16 @@ $file-size: auto;
       }
     }
     &-date {
-      padding-right: 2.5rem;
-      overflow-wrap: break-word;
+      white-space: nowrap;
       @include medium {
         padding-right: 1.25rem;
+      }
+    }
+    &-size {
+      padding-right: 2rem;
+      justify-content: flex-end;
+      @include medium {
+        justify-content: flex-start;
       }
     }
     &-name {
@@ -167,12 +179,9 @@ $file-size: auto;
       }
       svg.pencil-icon {
         flex-shrink: 0;
-        margin-left: 0.625rem;
+        margin: 4px 0px 0px .5rem;
         @include hoverSvg;
         @include medium {
-          display: none;
-        }
-        &.pinned {
           display: none;
         }
       }
@@ -201,8 +210,10 @@ $file-size: auto;
       }
     }
     &-cid {
-      padding-right: 3.75rem;
+      padding-right: 2rem;
+      margin-top: -.1rem;
       justify-content: flex-start;
+      align-items: center;
       .cid-truncate,
       .cid-full {
         @include monospace_Text;
@@ -221,21 +232,32 @@ $file-size: auto;
       }
     }
     &-availability {
-      padding-right: 2.875rem;
+      padding-right: 2rem;
       @include medium {
         padding-right: 1.25rem;
       }
     }
     &-pin-status {
       justify-content: flex-start;
+      align-items: center;
       gap: 0.625rem;
       @include medium {
         gap: 0;
       }
     }
     &-storage-providers {
-      padding-right: 2.875rem;
+      justify-content: flex-start;
+      align-items: center;
+      padding-right: 2rem;
       flex-wrap: wrap;
+      gap: 0.625rem;
+      @include medium {
+        gap: 0;
+      }
+
+      a[href*="filfox"] {
+        @include monospace_Text;
+      }
 
       &-content {
         button {
@@ -261,7 +283,7 @@ $file-size: auto;
         }
         &.show-all {
           .content {
-            max-height: 2.625rem;
+            max-height: 6.25rem;
             transition: max-height $transitionDuration ease-out;
             @include medium {
               max-height: auto;
@@ -294,16 +316,21 @@ $file-size: auto;
     }
   }
 
+  &.files-manager-row-active {
+    background: rgba(0,0,0,0.25);
+  }
+
   // Header overrides
   &.files-manager-row-header {
     align-items: end;
     height: auto;
+    background: transparent;
     > span {
       @include fontWeight_Semibold;
     }
     .file {
       &-storage-providers {
-        padding-right: 3.125rem;
+        padding-right: 2rem;
         flex-direction: row;
         flex-wrap: nowrap;
       }

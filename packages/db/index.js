@@ -23,8 +23,8 @@ const uploadQuery = `
         content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region)))
       `
 
-const userQuery = `
-  _id:id::text,
+const getUserQuery = options => `
+   _id:id::text,
   issuer,
   name,
   email,
@@ -32,18 +32,8 @@ const userQuery = `
   publicAddress:public_address,
   created:inserted_at,
   updated:updated_at
-`
-
-const userQueryWithTags = `
-  _id:id::text,
-  issuer,
-  name,
-  email,
-  github,
-  publicAddress:public_address,
-  created:inserted_at,
-  updated:updated_at,
-  tags:user_tag_user_id_fkey(user_id,id,tag,value,deleted_at)
+  ${options?.includeTags ? ',tags:user_tag_user_id_fkey(user_id,id,tag,value,deleted_at)' : ''}
+  ${options?.includeTagProposals ? ',tagProposals:user_tag_proposal_user_id_fkey(user_id,id,admin_decision_type,tag,proposed_tag_value,deleted_at)' : ''}
 `
 
 const psaPinRequestTableName = 'psa_pin_request'
@@ -111,17 +101,20 @@ export class DBClient {
     /** @type {{ data: definitions['user'], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
-      .upsert({
-        id: user.id,
-        name: user.name,
-        picture: user.picture,
-        email: user.email,
-        issuer: user.issuer,
-        github: user.github,
-        public_address: user.publicAddress
-      }, {
-        onConflict: 'issuer'
-      })
+      .upsert(
+        {
+          id: user.id,
+          name: user.name,
+          picture: user.picture,
+          email: user.email,
+          issuer: user.issuer,
+          github: user.github,
+          public_address: user.publicAddress
+        },
+        {
+          onConflict: 'issuer'
+        }
+      )
       .single()
 
     if (error) {
@@ -140,11 +133,11 @@ export class DBClient {
    * @param {import('./db-client-types').GetUserOptions?} options
    * @return {Promise<import('./db-client-types').UserOutput | undefined>}
    */
-  async getUser (issuer, { includeTags } = { includeTags: false }) {
+  async getUser (issuer, options) {
     /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
-      .select(includeTags ? userQueryWithTags : userQuery)
+      .select(getUserQuery(options))
       .eq('issuer', issuer)
 
     if (error) {
@@ -163,7 +156,7 @@ export class DBClient {
     /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
-      .select(userQuery)
+      .select(getUserQuery())
       .eq('email', email)
 
     if (error) {
@@ -216,6 +209,56 @@ export class DBClient {
   }
 
   /**
+   * Creates a user tag change request
+   *
+   * @param {string} userId
+   * @param {string} tagName
+   * @param {string} requestedTagValue
+   * @param {JSON} userProposalForm
+   * @returns
+   */
+  async createUserRequest (
+    userId,
+    tagName,
+    requestedTagValue,
+    userProposalForm
+  ) {
+    const { data: deleteData, status: deleteStatus } = await this._client
+      .from('user_tag_proposal')
+      .update({
+        deleted_at: new Date().toISOString()
+      })
+      .match({ user_id: userId, tag: tagName })
+      .is('deleted_at', null)
+
+    if (
+      deleteStatus === 200 ||
+      ((deleteStatus === 406 || deleteStatus === 404) && !deleteData)
+    ) {
+      const { error: insertError, status: insertStatus } = await this._client
+        .from('user_tag_proposal')
+        .insert({
+          user_id: userId,
+          tag: tagName,
+          proposed_tag_value: requestedTagValue,
+          inserted_at: new Date().toISOString(),
+          user_proposal_form: userProposalForm
+        })
+        .single()
+
+      if (insertError) {
+        throw new DBError(insertError)
+      }
+
+      if (insertStatus === 201) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  /**
    * Returns the value stored for an active (non-deleted) user tag.
    *
    * @param {number} userId
@@ -236,7 +279,9 @@ export class DBClient {
 
     // Expects unique entries.
     if (data.length > 1) {
-      throw new ConstraintError({ message: `More than one row found for user tag ${tag}` })
+      throw new ConstraintError({
+        message: `More than one row found for user tag ${tag}`
+      })
     }
 
     return data.length ? data[0].value : undefined
@@ -251,10 +296,12 @@ export class DBClient {
   async getUserTags (userId) {
     const { data, error } = await this._client
       .from('user_tag')
-      .select(`
+      .select(
+        `
         tag,
         value
-      `)
+      `
+      )
       .eq('user_id', userId)
       .filter('deleted_at', 'is', null)
 
@@ -264,9 +311,11 @@ export class DBClient {
 
     // Ensure active user tags are unique.
     const tags = new Set()
-    data.forEach(item => {
+    data.forEach((item) => {
       if (tags.has(item.tag)) {
-        throw new ConstraintError({ message: `More than one row found for user tag ${item.tag}` })
+        throw new ConstraintError({
+          message: `More than one row found for user tag ${item.tag}`
+        })
       }
       tags.add(item.tag)
     })
@@ -282,7 +331,9 @@ export class DBClient {
    */
   async getStorageUsed (userId) {
     /** @type {{ data: { uploaded: string, psa_pinned: string, total: string }, error: PostgrestError }} */
-    const { data, error } = await this._client.rpc('user_used_storage', { query_user_id: userId }).single()
+    const { data, error } = await this._client
+      .rpc('user_used_storage', { query_user_id: userId })
+      .single()
 
     if (error) {
       throw new DBError(error)
@@ -293,6 +344,37 @@ export class DBClient {
       psaPinned: parseTextToNumber(data.psa_pinned),
       total: parseTextToNumber(data.total)
     }
+  }
+
+  /**
+   * Get all users with storage used in a percentage range of their allocated quota
+   * @param {import('./db-client-types').UserStorageUsedInput} percentRange
+   * @returns {Promise<Array<import('./db-client-types').UserStorageUsedOutput>>}
+   */
+  async getUsersByStorageUsed (percentRange) {
+    const { fromPercent, toPercent = null } = percentRange
+
+    const { data, error } = await this._client.rpc('users_by_storage_used', {
+      from_percent: fromPercent,
+      to_percent: toPercent
+    })
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return data.map((user) => {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        storageQuota: user.storage_quota,
+        storageUsed: user.storage_used,
+        percentStorageUsed: Math.floor(
+          (user.storage_used / user.storage_quota) * 100
+        )
+      }
+    })
   }
 
   /**
@@ -309,7 +391,9 @@ export class DBClient {
     } = email
 
     const lastSentAtDate = new Date()
-    lastSentAtDate.setSeconds(lastSentAtDate.getSeconds() - secondsSinceLastSent)
+    lastSentAtDate.setSeconds(
+      lastSentAtDate.getSeconds() - secondsSinceLastSent
+    )
     const lastSentAt = lastSentAtDate.toISOString()
 
     const { count, error } = await this._client
@@ -332,19 +416,13 @@ export class DBClient {
    * @returns {Promise<number>}
    */
   async logEmailSent (email) {
-    const {
-      userId,
-      emailType,
-      messageId
-    } = email
+    const { userId, emailType, messageId } = email
 
-    const { data, error } = await this._client
-      .from('email_history')
-      .upsert({
-        user_id: userId,
-        email_type: emailType,
-        message_id: messageId
-      })
+    const { data, error } = await this._client.from('email_history').upsert({
+      user_id: userId,
+      email_type: emailType,
+      message_id: messageId
+    })
 
     if (error) {
       throw new DBError(error)
@@ -363,29 +441,31 @@ export class DBClient {
     const now = new Date().toISOString()
 
     /** @type {{ data: string, error: PostgrestError }} */
-    const { data: uploadResponse, error } = await this._client.rpc('create_upload', {
-      data: {
-        user_id: data.user,
-        auth_key_id: data.authKey,
-        content_cid: data.contentCid,
-        source_cid: data.sourceCid,
-        type: data.type,
-        name: data.name,
-        dag_size: data.dagSize,
-        inserted_at: data.created || now,
-        updated_at: data.updated || now,
-        pins: data.pins.map(pin => ({
-          status: pin.status,
-          location: {
-            peer_id: pin.location.peerId,
-            peer_name: pin.location.peerName,
-            ipfs_peer_id: pin.location.ipfsPeerId,
-            region: pin.location.region
-          }
-        })),
-        backup_urls: data.backupUrls
-      }
-    }).single()
+    const { data: uploadResponse, error } = await this._client
+      .rpc('create_upload', {
+        data: {
+          user_id: data.user,
+          auth_key_id: data.authKey,
+          content_cid: data.contentCid,
+          source_cid: data.sourceCid,
+          type: data.type,
+          name: data.name,
+          dag_size: data.dagSize,
+          inserted_at: data.created || now,
+          updated_at: data.updated || now,
+          pins: data.pins.map((pin) => ({
+            status: pin.status,
+            location: {
+              peer_id: pin.location.peerId,
+              peer_name: pin.location.peerName,
+              ipfs_peer_id: pin.location.ipfsPeerId,
+              region: pin.location.region
+            }
+          })),
+          backup_urls: data.backupUrls
+        }
+      })
+      .single()
 
     if (error) {
       throw new DBError(error)
@@ -566,12 +646,14 @@ export class DBClient {
     /** @type {{ data: Array<import('./db-client-types').ContentItem>, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('content')
-      .select(`
+      .select(
+        `
         cid,
         dagSize:dag_size,
         created:inserted_at,
         pins:pin(status, updated:updated_at, location:pin_location(peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region))
-      `)
+      `
+      )
       .match({ cid })
 
     if (error) {
@@ -597,7 +679,10 @@ export class DBClient {
    */
   async getBackups (uploadId) {
     /** @type {{ data: {backupUrls: definitions['upload']['backup_urls']}, error: PostgrestError }} */
-    const { data: { backupUrls }, error } = await this._client
+    const {
+      data: { backupUrls },
+      error
+    } = await this._client
       .from('upload')
       .select('backupUrls:backup_urls')
       .eq('id', uploadId)
@@ -621,20 +706,22 @@ export class DBClient {
    */
   async upsertPin (cid, pin) {
     /** @type {{ data: string, error: PostgrestError }} */
-    const { data: pinId, error } = await this._client.rpc('upsert_pin', {
-      data: {
-        content_cid: cid,
-        pin: {
-          status: pin.status,
-          location: {
-            peer_id: pin.location.peerId,
-            peer_name: pin.location.peerName,
-            ipfs_peer_id: pin.location.ipfsPeerId,
-            region: pin.location.region
+    const { data: pinId, error } = await this._client
+      .rpc('upsert_pin', {
+        data: {
+          content_cid: cid,
+          pin: {
+            status: pin.status,
+            location: {
+              peer_id: pin.location.peerId,
+              peer_name: pin.location.peerName,
+              ipfs_peer_id: pin.location.ipfsPeerId,
+              region: pin.location.region
+            }
           }
         }
-      }
-    }).single()
+      })
+      .single()
 
     if (error) {
       throw new DBError(error)
@@ -651,24 +738,26 @@ export class DBClient {
    * @param {Array<import('./db-client-types').PinsUpsertInput>} pins
    */
   async upsertPins (pins) {
-    const { data: pinIds, error } = await this._client.rpc('upsert_pins', {
-      data: {
-        pins: pins.map((pin) => ({
-          data: {
-            content_cid: pin.contentCid,
-            pin: {
-              status: pin.status,
-              location: {
-                peer_id: pin.location.peerId,
-                peer_name: pin.location.peerName,
-                ipfs_peer_id: pin.location.ipfsPeerId,
-                region: pin.location.region
+    const { data: pinIds, error } = await this._client
+      .rpc('upsert_pins', {
+        data: {
+          pins: pins.map((pin) => ({
+            data: {
+              content_cid: pin.contentCid,
+              pin: {
+                status: pin.status,
+                location: {
+                  peer_id: pin.location.peerId,
+                  peer_name: pin.location.peerName,
+                  ipfs_peer_id: pin.location.ipfsPeerId,
+                  region: pin.location.region
+                }
               }
             }
-          }
-        }))
-      }
-    }).single()
+          }))
+        }
+      })
+      .single()
 
     if (error) {
       throw new DBError(error)
@@ -687,13 +776,15 @@ export class DBClient {
     /** @type {{ data: Array<import('./db-client-types').PinItem>, error: PostgrestError }} */
     const { data: pins, error } = await this._client
       .from('pin')
-      .select(`
+      .select(
+        `
         _id:id::text,
         status,
         created:inserted_at,
         updated:updated_at,
         location:pin_location(id::text, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region)
-      `)
+      `
+      )
       .match({ content_cid: cid })
 
     if (error) {
@@ -714,11 +805,13 @@ export class DBClient {
     /** @type {{ data: Array<import('./db-client-types').PinRequestItemOutput>, error: PostgrestError }} */
     const { data: pinReqs, error } = await this._client
       .from('pin_request')
-      .select(`
+      .select(
+        `
         _id:id::text,
         cid:content_cid,
         created:inserted_at
-      `)
+      `
+      )
       .limit(size)
 
     if (error) {
@@ -753,14 +846,15 @@ export class DBClient {
    */
   async createPinSyncRequests (pinSyncRequests) {
     /** @type {{ error: PostgrestError }} */
-    const { error } = await this._client
-      .from('pin_sync_request')
-      .upsert(pinSyncRequests.map(psr => ({
+    const { error } = await this._client.from('pin_sync_request').upsert(
+      pinSyncRequests.map((psr) => ({
         pin_id: psr,
         inserted_at: new Date().toISOString()
-      })), {
+      })),
+      {
         onConflict: 'pin_id'
-      })
+      }
+    )
 
     if (error) {
       throw new DBError(error)
@@ -779,14 +873,13 @@ export class DBClient {
   async getPinSyncRequests ({ to, after, size }) {
     let query = this._client
       .from('pin_sync_request')
-      .select(`
+      .select(
+        `
         _id:id::text,
         pin:pin(_id:id::text, status, contentCid:content_cid, created:inserted_at, location:pin_location(_id:id::text, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region))
-      `)
-      .order(
-        'inserted_at',
-        { ascending: true }
+      `
       )
+      .order('inserted_at', { ascending: true })
       .limit(size)
 
     if (to) {
@@ -804,7 +897,8 @@ export class DBClient {
 
     return {
       data: pinSyncReqs,
-      after: !!size && pinSyncReqs.length === size && pinSyncReqs[0].pin.created // return after if more
+      after:
+        !!size && pinSyncReqs.length === size && pinSyncReqs[0].pin.created // return after if more
     }
   }
 
@@ -847,10 +941,12 @@ export class DBClient {
    */
   async getDealsForCids (cids = []) {
     /** @type {{ data: Array<import('./db-client-types').Deal>, error: PostgrestError }} */
-    const { data, error } = await this._client
-      .rpc('find_deals_by_content_cids', {
+    const { data, error } = await this._client.rpc(
+      'find_deals_by_content_cids',
+      {
         cids
-      })
+      }
+    )
 
     if (error) {
       return {}
@@ -880,15 +976,17 @@ export class DBClient {
     const now = new Date().toISOString()
 
     /** @type {{ data: string, error: PostgrestError }} */
-    const { data, error } = await this._client.rpc('create_key', {
-      data: {
-        name,
-        secret,
-        user_id: user,
-        inserted_at: now,
-        updated_at: now
-      }
-    }).single()
+    const { data, error } = await this._client
+      .rpc('create_key', {
+        data: {
+          name,
+          secret,
+          user_id: user,
+          inserted_at: now,
+          updated_at: now
+        }
+      })
+      .single()
 
     if (error) {
       throw new DBError(error)
@@ -910,7 +1008,8 @@ export class DBClient {
     /** @type {{ data, error: PostgrestError }} */
     const { data, error } = await this._client
       .from('user')
-      .select(`
+      .select(
+        `
         _id:id::text,
         issuer,
         keys:auth_key_user_id_fkey(
@@ -919,7 +1018,8 @@ export class DBClient {
           secret,
           deleted_at
         )
-      `)
+      `
+      )
       .match({
         issuer
       })
@@ -972,13 +1072,15 @@ export class DBClient {
    */
   async listKeys (userId) {
     /** @type {{ error: PostgrestError, data: Array<import('./db-client-types').AuthKeyItem> }} */
-    const { data, error } = await this._client.rpc('user_auth_keys_list', { query_user_id: userId })
+    const { data, error } = await this._client.rpc('user_auth_keys_list', {
+      query_user_id: userId
+    })
 
     if (error) {
       throw new DBError(error)
     }
 
-    return data.map(ki => ({
+    return data.map((ki) => ({
       _id: ki.id,
       name: ki.name,
       secret: ki.secret,
@@ -1051,28 +1153,30 @@ export class DBClient {
     const now = new Date().toISOString()
 
     /** @type {{ data: string, error: PostgrestError }} */
-    const { data: pinRequestId, error } = await this._client.rpc('create_psa_pin_request', {
-      data: {
-        auth_key_id: pinRequestData.authKey,
-        content_cid: pinRequestData.contentCid,
-        source_cid: pinRequestData.sourceCid,
-        name: pinRequestData.name,
-        origins: pinRequestData.origins,
-        meta: pinRequestData.meta,
-        dag_size: pinRequestData.dagSize,
-        inserted_at: pinRequestData.created || now,
-        updated_at: pinRequestData.updated || now,
-        pins: pinRequestData.pins.map(pin => ({
-          status: pin.status,
-          location: {
-            peer_id: pin.location.peerId,
-            peer_name: pin.location.peerName,
-            ipfs_peer_id: pin.location.ipfsPeerId,
-            region: pin.location.region
-          }
-        }))
-      }
-    }).single()
+    const { data: pinRequestId, error } = await this._client
+      .rpc('create_psa_pin_request', {
+        data: {
+          auth_key_id: pinRequestData.authKey,
+          content_cid: pinRequestData.contentCid,
+          source_cid: pinRequestData.sourceCid,
+          name: pinRequestData.name,
+          origins: pinRequestData.origins,
+          meta: pinRequestData.meta,
+          dag_size: pinRequestData.dagSize,
+          inserted_at: pinRequestData.created || now,
+          updated_at: pinRequestData.updated || now,
+          pins: pinRequestData.pins.map((pin) => ({
+            status: pin.status,
+            location: {
+              peer_id: pin.location.peerId,
+              peer_name: pin.location.peerName,
+              ipfs_peer_id: pin.location.ipfsPeerId,
+              region: pin.location.region
+            }
+          }))
+        }
+      })
+      .single()
 
     if (error) {
       throw new DBError(error)
@@ -1174,13 +1278,13 @@ export class DBClient {
     }
 
     /** @type {{ data: Array<import('./db-client-types').PsaPinRequestItem>, count: number, error: PostgrestError }} */
-    const { data, count, error } = (await query)
+    const { data, count, error } = await query
 
     if (error) {
       throw new DBError(error)
     }
 
-    const pins = data.map(pinRequest => normalizePsaPinRequest(pinRequest))
+    const pins = data.map((pinRequest) => normalizePsaPinRequest(pinRequest))
 
     return {
       count,

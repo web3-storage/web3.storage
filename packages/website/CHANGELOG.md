@@ -1,5 +1,51 @@
 # Changelog
 
+## [2.8.2](https://github.com/web3-storage/web3.storage/compare/website-v2.8.1...website-v2.8.2) (2022-06-20)
+
+
+### Bug Fixes
+
+* nav active states ([#1505](https://github.com/web3-storage/web3.storage/issues/1505)) ([1157d3a](https://github.com/web3-storage/web3.storage/commit/1157d3a4b0c8bd47ffab3c8674a5c9baacf92e50))
+* replace markdown links in docs with absolute non-md format ([#1524](https://github.com/web3-storage/web3.storage/issues/1524)) ([981470b](https://github.com/web3-storage/web3.storage/commit/981470b93d7b39cf9551f39b3e9ae3086526a6be))
+
+## [2.8.1](https://github.com/web3-storage/web3.storage/compare/website-v2.8.0...website-v2.8.1) (2022-06-17)
+
+
+### Bug Fixes
+
+* UI was sending empty string for HasPinningAccess user request form tag value ([#1513](https://github.com/web3-storage/web3.storage/issues/1513)) ([e253929](https://github.com/web3-storage/web3.storage/commit/e2539298669d5406526dee898637180ae4c50380))
+
+## [2.8.0](https://github.com/web3-storage/web3.storage/compare/website-v2.7.1...website-v2.8.0) (2022-06-16)
+
+
+### Features
+
+* Add basic storage limit request functionality ([#1398](https://github.com/web3-storage/web3.storage/issues/1398)) ([1347ed5](https://github.com/web3-storage/web3.storage/commit/1347ed50abe2831076fb61118d931226d47e2028))
+
+
+### Bug Fixes
+
+* pins missing ([#1494](https://github.com/web3-storage/web3.storage/issues/1494)) ([4fe0120](https://github.com/web3-storage/web3.storage/commit/4fe01205326ed093f9e577a04b52c1cdca547574))
+
+## [2.7.1](https://github.com/web3-storage/web3.storage/compare/website-v2.7.0...website-v2.7.1) (2022-06-15)
+
+
+### Bug Fixes
+
+* account view priority and table size ([#1431](https://github.com/web3-storage/web3.storage/issues/1431)) ([5352ca4](https://github.com/web3-storage/web3.storage/commit/5352ca43094606b4826ba61f98dca8f382c71d4c))
+
+## [2.7.0](https://github.com/web3-storage/web3.storage/compare/website-v2.6.0...website-v2.7.0) (2022-06-14)
+
+
+### Features
+
+* cases for visual minimums to both stored and pinned meters ([#1333](https://github.com/web3-storage/web3.storage/issues/1333)) ([9ed73f3](https://github.com/web3-storage/web3.storage/commit/9ed73f372110856acec1078f5e556890662289db))
+
+
+### Bug Fixes
+
+* login screens jarring ([#1446](https://github.com/web3-storage/web3.storage/issues/1446)) ([87554bd](https://github.com/web3-storage/web3.storage/commit/87554bdab54aa9c2ad7725f44cfd130a1f51cbc6))
+
 ## [2.6.0](https://github.com/web3-storage/web3.storage/compare/website-v2.5.1...website-v2.6.0) (2022-06-13)
 
 

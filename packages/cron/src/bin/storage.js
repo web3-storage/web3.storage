@@ -9,7 +9,12 @@ async function main () {
   const db = getDBClient(process.env)
   const roPg = await getPg(process.env, 'ro')
   const emailService = new EmailService({ db })
-  await checkStorageUsed({ roPg, emailService })
+
+  try {
+    await checkStorageUsed({ roPg, emailService })
+  } finally {
+    await roPg.end()
+  }
 }
 
 envConfig()

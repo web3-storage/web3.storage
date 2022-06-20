@@ -4,13 +4,23 @@
  * @returns {string}
  */
 export const formatTimestamp = timestamp => {
-  return new Date(timestamp).toLocaleDateString(undefined, {
+  const formattedDate = new Date(timestamp).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  });
+  return formattedDate;
+};
+
+export const formatTimestampFull = timestamp => {
+  const formattedDate = new Date(timestamp).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
     hour: 'numeric',
     minute: 'numeric',
   });
+  return formattedDate;
 };
 
 /**
