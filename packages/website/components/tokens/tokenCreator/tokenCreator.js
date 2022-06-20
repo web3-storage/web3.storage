@@ -22,7 +22,7 @@ const TokenCreator = ({ content }) => {
   const [inputHasValue, setInputHasValue] = useState(/** @type {boolean} */ (false));
 
   const { query, push, replace } = useRouter();
-  const { tokens, createToken, isCreating, getTokens } = useTokens();
+  const { tokens, createToken, isCreating, getTokens, hasError, errorMessage } = useTokens();
 
   const user = useUser();
 
