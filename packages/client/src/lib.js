@@ -455,7 +455,8 @@ class Web3Storage {
 }
 
 /**
- * Map a UnixFSEntry to a File with a cid property
+ * Map a UnixFSEntry to a File with a cid property.
+ *
  * @param {UnixFSEntry} entry
  * @returns {Promise<Web3File>}
  */
