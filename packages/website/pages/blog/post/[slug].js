@@ -74,6 +74,7 @@ const RelatedPosts = ({ items }) => (
  * @returns {JSX.Element}
  */
 const Post = ({ post, posts }) => {
+  const [showCopied, setShowCopied] = useState(false);
   const sections = BlogArticlePageData.page_content;
   const animations = BlogArticlePageData.floater_animations;
   const SHARE_TEXT = '';
@@ -211,8 +212,13 @@ const Post = ({ post, posts }) => {
               <LinkIcon
                 onClick={() => {
                   addTextToClipboard(currentUrl);
+                  setShowCopied(true);
+                  setTimeout(() => {
+                    setShowCopied(false);
+                  }, 2000);
                 }}
               />
+              <span className={showCopied ? 'copied show' : 'copied'}>copied!</span>
             </button>
           </div>
           <div className="post-meta-tags">

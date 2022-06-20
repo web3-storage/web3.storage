@@ -17,6 +17,7 @@ import Tags from '../../components/blog/tags/tags';
 import Categories from '../../components/blog/categories/categories';
 import { Card } from '../../components/blog/cards/cards';
 import Subscribe from '../../components/blog/subscribe/subscribe';
+import GradientBackground from '../../components/gradientbackground/gradientbackground';
 
 const BLOG_ITEMS_PER_PAGE = 4;
 
@@ -283,6 +284,9 @@ const Blog = ({ posts = [] }) => {
         showCloseButton
       >
         <div className="blog-subscribe-modal-inner">
+          <div className="background-view-wrapper">
+            <GradientBackground variant="upload-cta-gradient" />
+          </div>
           <Subscribe></Subscribe>
         </div>
       </Modal>

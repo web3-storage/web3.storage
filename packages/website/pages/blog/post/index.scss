@@ -107,6 +107,14 @@
         }
       }
     }
+    .copied {
+      @include fontSize_Atom;
+      opacity: 0;
+      transition: opacity $transitionDuration;
+      &.show {
+        opacity: 1;
+      }
+    }
   }
   .post-footer {
     padding-bottom: toRem(70);
