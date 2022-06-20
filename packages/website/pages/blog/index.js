@@ -13,9 +13,10 @@ import BlogPageData from '../../content/pages/blog.json';
 import BlockBuilder from '../../components/blockbuilder/blockbuilder.js';
 import { initFloaterAnimations } from '../../lib/floater-animations.js';
 import Button, { ButtonVariant } from '../../components/button/button';
-import Tags from '../../components/blog/tags';
-import Categories from '../../components/blog/categories';
-import { Card } from '../../components/blog/cards';
+import Tags from '../../components/blog/tags/tags';
+import Categories from '../../components/blog/categories/categories';
+import { Card } from '../../components/blog/cards/cards';
+import Subscribe from '../../components/blog/subscribe/subscribe';
 
 const BLOG_ITEMS_PER_PAGE = 4;
 
@@ -127,6 +128,7 @@ const Blog = ({ posts = [] }) => {
   const [keyword, setKeyword] = useQueryParams('keyword');
   const [tagsRaw, setTags] = useQueryParams('tags');
   const tagsModalOpenState = useState(false);
+  const subscribeModalOpenState = useState(false);
   const tags = useMemo(() => (!!tagsRaw ? JSON.parse(tagsRaw) : []), [tagsRaw]);
   const categories = useMemo(() => ['All', ...uniq(posts.map(({ category }) => category)).sort()], [posts]);
   const sections = BlogPageData.page_content;
@@ -231,7 +233,7 @@ const Blog = ({ posts = [] }) => {
       {sections.map((section, index) => (
         <BlockBuilder id={`blog_section_${index + 1}`} key={`section_${index}`} subsections={section} />
       ))}
-      <Button variant={ButtonVariant.DARK} href="/blog/subscribe">
+      <Button variant={ButtonVariant.DARK} onClick={() => subscribeModalOpenState[1](true)}>
         Subscribe
       </Button>
       <div className="blog-search-c grid">
@@ -270,6 +272,17 @@ const Blog = ({ posts = [] }) => {
         <div className="blog-tags-modal-inner">
           <h5>All Tags</h5>
           <Tags tags={allTags} comma={false} />
+        </div>
+      </Modal>
+      <Modal
+        className="blog-subscribe-modal"
+        animation="don"
+        modalState={subscribeModalOpenState}
+        closeIcon={<CloseIcon />}
+        showCloseButton
+      >
+        <div className="blog-subscribe-modal-inner">
+          <Subscribe></Subscribe>
         </div>
       </Modal>
     </main>

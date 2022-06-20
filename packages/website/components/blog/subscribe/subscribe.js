@@ -17,11 +17,11 @@ export function getStaticProps() {
 /**
  * Subscribe Page
  */
-export default function Subcribe({ user }) {
+export default function Subcribe() {
   const [status, setStatus] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [disabled, setDisabled] = useState(false);
-  const [email, setEmail] = useState(user?.email || '');
+  const [email, setEmail] = useState('');
 
   useEffect(() => setStatus(''), [email]);
   useEffect(() => {
@@ -91,9 +91,5 @@ export default function Subcribe({ user }) {
     );
   }
 
-  return (
-    <main>
-      <div>{content}</div>
-    </main>
-  );
+  return <div>{content}</div>;
 }

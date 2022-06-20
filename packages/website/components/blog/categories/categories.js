@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Button, { ButtonVariant } from '../../components/button/button';
+import Button, { ButtonVariant } from '../../button/button';
 
 /**
  * Category Component

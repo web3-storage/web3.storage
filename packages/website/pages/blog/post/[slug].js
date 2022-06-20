@@ -14,8 +14,8 @@ import BlogArticlePageData from '../../../content/pages/blog-article.json';
 import BlockBuilder from '../../../components/blockbuilder/blockbuilder.js';
 import { initFloaterAnimations } from '../../../lib/floater-animations.js';
 import SocialLink from '../../../components/social-link';
-import Tags from '../../../components/blog/tags';
-import { Card } from '../../../components/blog/cards';
+import Tags from '../../../components/blog/tags/tags';
+import { Card } from '../../../components/blog/cards/cards';
 import { addTextToClipboard } from '../../../lib/utils';
 
 export async function getStaticProps({ ...ctx }) {

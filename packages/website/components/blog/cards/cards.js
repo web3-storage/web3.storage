@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Button, { ButtonVariant } from '../../components/button/button';
+import Button, { ButtonVariant } from '../../button/button';
 
 /**
  * Blog Card Component

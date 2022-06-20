@@ -38,8 +38,8 @@
       @include fontWeight_Semibold;
     }
     .post-meta-tags {
-      font-size: toRem(15);
       padding-right: toRem(30);
+      font-size: toRem(15);
       @include fontWeight_Medium;
     }
   }
@@ -51,13 +51,13 @@
   }
   .post-footer {
     padding-bottom: toRem(70);
-  } 
+  }
   .caption {
     font-style: italic;
     font-size: toRem(15);
   }
   .post-related {
-    padding-bottom: 2rem;
+    padding-bottom: 4rem !important;
   }
   .post-meta-category {
     display: flex;
@@ -93,9 +93,8 @@
 }
 #blog-article_hero-coil {
   position: absolute;
-  width: 6rem;
-  z-index: -1;
-  left: calc(50% - #{math.div($containerWidth, 2)} - 12rem);
+  width: toRem(50);
+  left: calc(50% - #{math.div($containerWidth, 2)} - 7rem);
   top: 32rem;
   transform: rotate(30deg);
   @include small {
