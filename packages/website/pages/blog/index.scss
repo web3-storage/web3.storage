@@ -224,13 +224,13 @@
 }
 #blog_hero-helix {
   width: 18rem;
-  top: -7rem;
+  top: -10rem;
   transform: rotate(-79deg);
   z-index: -1;
-  left: calc(50% - #{math.div($containerWidth, 2)} - 18rem);
+  left: calc(50% - #{math.div($containerWidth, 2)} - 23rem);
   @include small {
     width: toRem(66);
-    top: -5rem;
+    top: -7rem;
     left: -3.7rem;
   }
 }
