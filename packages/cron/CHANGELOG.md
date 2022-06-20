@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.4](https://github.com/web3-storage/web3.storage/compare/cron-v1.1.3...cron-v1.1.4) (2022-06-20)
+
+
+### Bug Fixes
+
+* add logging to storage cron ([#1502](https://github.com/web3-storage/web3.storage/issues/1502)) ([a9b8d57](https://github.com/web3-storage/web3.storage/commit/a9b8d577e31eee69131d687627d1a612e61115d4))
+* fix storage logging ([#1510](https://github.com/web3-storage/web3.storage/issues/1510)) ([13fe24b](https://github.com/web3-storage/web3.storage/commit/13fe24bb478fb4431c3414812a0a65665df81951))
+* reduce loops on users and improve testing ([#1503](https://github.com/web3-storage/web3.storage/issues/1503)) ([f214121](https://github.com/web3-storage/web3.storage/commit/f2141213cedf57d8dc89c1dede86eb60b7c7c390))
+
 ## [1.1.3](https://github.com/web3-storage/web3.storage/compare/cron-v1.1.2...cron-v1.1.3) (2022-06-15)
 
 
