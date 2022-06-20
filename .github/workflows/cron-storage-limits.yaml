@@ -18,6 +18,8 @@ jobs:
     timeout-minutes: 340
     steps:
       - uses: actions/checkout@v2
+        with: 
+          fetch-depth: 0
       - name: Checkout latest cron release tag
         run: |
           LATEST_TAG=$(git describe --tags --abbrev=0 --match='cron-*')
