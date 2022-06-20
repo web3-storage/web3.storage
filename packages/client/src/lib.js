@@ -83,7 +83,7 @@ class Web3Storage {
    * const client = new Web3Storage({ token: API_TOKEN })
    * ```
    *
-   * @param {{token: string, endpoint?:URL, rateLimiter?: RateLimiter, fetch: typeof _fetch}} options
+    @param {Service} options
    */
   constructor ({
     token,
