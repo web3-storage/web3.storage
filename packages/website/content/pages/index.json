@@ -130,7 +130,7 @@
                       "const client = new Web3Storage({ token })",
                       "",
                       "async function retrieveFiles () {",
-                      "  const id =",
+                      "  const cid =",
                       "     'bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu'",
                       "",
                       "  const res = await client.get(cid)",
