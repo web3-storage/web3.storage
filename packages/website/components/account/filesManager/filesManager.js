@@ -116,8 +116,8 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     }
   }, [fetchPinsDate, listPinned, isFetchingPinned, apiToken]);
   useEffect(() => {
-    getTokens()
-  }, []);
+    getTokens();
+  }, [getTokens]);
 
   // Set displayed files based on tab selection: 'uploaded' or 'pinned'
   useEffect(() => {
