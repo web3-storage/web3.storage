@@ -16,6 +16,7 @@ import { initFloaterAnimations } from '../../../lib/floater-animations.js';
 import SocialLink from '../../../components/social-link';
 import Tags from '../../../components/blog/tags';
 import { Card } from '../../../components/blog/cards';
+import { addTextToClipboard } from '../../../lib/utils';
 
 export async function getStaticProps({ ...ctx }) {
   // get individual post
@@ -204,7 +205,11 @@ const Post = ({ post, posts }) => {
             <SocialLink url={twitterShareLink} params={twitterParams} Icon={TwitterIcon} />
             <SocialLink url={facebookShareLink} params={facebookParams} Icon={FacebookIcon} />
             <SocialLink url={linkedinShareLink} params={linkedinParams} Icon={LinkedinIcon} />
-            <LinkIcon />
+            <LinkIcon
+              onClick={() => {
+                addTextToClipboard(currentUrl);
+              }}
+            />
           </div>
           <div className="post-meta-tags">
             <Tags tags={post.meta.tags} comma={true} />
