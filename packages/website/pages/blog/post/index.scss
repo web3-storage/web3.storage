@@ -33,26 +33,42 @@
     padding-bottom: toRem(63);
     padding-top: toRem(20);
     .post-meta-date {
+      flex: 1;
       @include fontSize_Small;
       @include fontWeight_Semibold;
     }
     .post-meta-tags {
       font-size: toRem(15);
+      padding-right: toRem(30);
       @include fontWeight_Medium;
+    }
+  }
+  .post-social {
+    flex: 1;
+    a {
+      padding-right: toRem(20);
     }
   }
   .post-footer {
     padding-bottom: toRem(70);
-  }
-  .post-social > a {
-    padding-right: toRem(20);
-  }
+  } 
   .caption {
     font-style: italic;
     font-size: toRem(15);
   }
   .post-related {
     padding-bottom: 2rem;
+  }
+  .post-meta-category {
+    display: flex;
+    align-items: center;
+    height: toRem(35);
+    min-width: toRem(129);
+    justify-content: center;
+    font-size: toRem(15);
+    border-radius: toRem(5);
+    border: toRem(2) solid $black;
+    @include fontWeight_Semibold;
   }
 }
 

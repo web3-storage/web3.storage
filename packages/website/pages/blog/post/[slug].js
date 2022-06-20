@@ -193,6 +193,7 @@ const Post = ({ post, posts }) => {
           <div className="post-meta-tags">
             <Tags tags={post.meta.tags} comma={true} />
           </div>
+          <div className="post-meta-category">{post.meta.category}</div>
         </div>
         <div className="post-content">
           <MDXRemote {...post.content} />
@@ -214,6 +215,7 @@ const Post = ({ post, posts }) => {
           <div className="post-meta-tags">
             <Tags tags={post.meta.tags} comma={true} />
           </div>
+          <div className="post-meta-category">{post.meta.category}</div>
         </div>
       </div>
 
