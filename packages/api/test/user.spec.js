@@ -238,6 +238,29 @@ describe('GET /user/uploads', () => {
   })
 })
 
+describe.only('GET /user/upload/:cid', () => {
+  it('gets a single upload', async () => {
+    const token = await getTestJWT()
+    const res = await fetch(new URL(`/user/upload/${userUploads[0].cid}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(res.ok)
+    const uploads = await res.json()
+    assert.deepStrictEqual(uploads, userUploads[0])
+  })
+
+  it('returns 404 when no upload is found', async () => {
+    const token = await getTestJWT()
+    const res = await fetch(new URL('/user/upload/010101', endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(!res.ok)
+    assert.strictEqual(res.status, 404)
+  })
+})
+
 describe('DELETE /user/uploads/:cid', () => {
   it('error if not authenticated with magic.link', async () => {
     const token = await getTestJWT()

@@ -274,6 +274,21 @@ export async function userUploadsGet (request, env) {
 }
 
 /**
+ * Retrieve a single user upload.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userUploadGet (request, env) {
+  const cid = request.params.cid
+  const res = await env.db.getUpload(cid, request.auth.user._id)
+  if (!res) {
+    throw new HTTPError('Upload not found', 404)
+  }
+  return new JSONResponse(res)
+}
+
+/**
  * Delete an user upload. This actually raises a tombstone rather than
  * deleting it entirely.
  *
