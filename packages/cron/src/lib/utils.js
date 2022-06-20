@@ -91,3 +91,20 @@ function getPgConnString (env, mode = 'rw') {
   if (!connectionString) throw new Error('missing Postgres connection string')
   return connectionString
 }
+
+/**
+ * Create a new Postgres pool instance to connect directly to cargo replica from the passed environment variables.
+ * This is a readOnly connection.
+ * @param {Record<string, string|undefined>} env
+ */
+export function getCargoPgPool (env) {
+  const connection = env.CARGO_PG_CONNECTION
+  if (!connection && env.ENV === 'dev') {
+    throw new Error('Missing CARGO_PG_CONNECTION string. Please add it to .env using env.tpl as reference')
+  }
+
+  return new pg.Pool({
+    connectionString: env.CARGO_PG_CONNECTION,
+    max: MAX_CONCURRENT_QUERIES
+  })
+}

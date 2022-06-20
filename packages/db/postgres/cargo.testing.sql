@@ -34,11 +34,24 @@ CREATE TABLE IF NOT EXISTS cargo.deals (
 
 
 CREATE TABLE IF NOT EXISTS cargo.dags (
-  cid_v1  TEXT NOT NULL,
+  cid_v1  TEXT NOT NULL UNIQUE,
   size_actual BIGINT CONSTRAINT valid_actual_size CHECK ( size_actual >= 0 ),
   entry_created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   entry_analyzed TIMESTAMP WITH TIME ZONE,
   entry_last_updated TIMESTAMP WITH TIME ZONE NOT NULL,
   meta JSONB,
   CONSTRAINT analyzis_markers CHECK ( ( size_actual IS NULL ) = ( entry_analyzed IS NULL ) )
+);
+
+
+CREATE TABLE IF NOT EXISTS cargo.dag_sources (
+  srcid BIGSERIAL NOT NULL UNIQUE, -- This is a reference to source(srcid) in the original cargo schema
+  cid_v1 TEXT NOT NULL REFERENCES cargo.dags ( cid_v1 ),
+  source_key TEXT NOT NULL,
+  size_claimed BIGINT CHECK ( size_claimed >= 0 ),
+  details JSONB,
+  entry_created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  entry_last_updated TIMESTAMP WITH TIME ZONE NOT NULL,
+  entry_removed TIMESTAMP WITH TIME ZONE,
+  CONSTRAINT singleton_dag_source_record UNIQUE ( srcid, source_key )
 );

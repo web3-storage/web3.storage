@@ -14,6 +14,8 @@ PG_REST_URL=http://127.0.0.1:3000
 PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 RO_PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 
+CARGO_PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres?currentSchema=cargo
+
 
 ## ---- api -------------------------------------------------------------------
 
