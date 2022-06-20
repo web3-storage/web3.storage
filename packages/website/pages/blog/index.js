@@ -241,17 +241,6 @@ const Blog = ({ posts = [] }) => {
           <div className="blog-search-input">
             <input placeholder="Search" defaultValue={keyword} type="text" onChange={onSearch} />
           </div>
-          {tags.map(tag => (
-            <div key={tag}>
-              {allTags.find(({ label }) => label.toLowerCase() === tag)?.label}
-              <Button variant={ButtonVariant.TEXT} onClick={onRemoveTag(tag)}>
-                X
-              </Button>
-            </div>
-          ))}
-          <Button className="blue" variant={ButtonVariant.TEXT} onClick={() => tagsModalOpenState[1](true)}>
-            View All Tags
-          </Button>
         </div>
         <div className="blog-search-category col-7_md-12_sm-12_ti-12">
           <CategoryContainer
@@ -260,6 +249,18 @@ const Blog = ({ posts = [] }) => {
             categories={categories}
           />
         </div>
+      </div>
+      <div className="blog-tag-selected-c">
+        <div className="blog-tag-selected-inner">
+          {tags.map(tag => (
+            <Button key={tag} variant={ButtonVariant.TEXT} onClick={onRemoveTag(tag)}>
+              ✕&nbsp;&nbsp;{allTags.find(({ label }) => label.toLowerCase() === tag)?.label}
+            </Button>
+          ))}
+        </div>
+        <Button className="blue" variant={ButtonVariant.TEXT} onClick={() => tagsModalOpenState[1](true)}>
+          View All Tags
+        </Button>
       </div>
       <Paginated items={filteredPosts} />
       <Modal

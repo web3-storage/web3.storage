@@ -93,11 +93,19 @@
   }
   .post-social {
     flex: 1;
-    > * {
-      cursor: pointer;
-    }
-    a {
+    > a,
+    button {
       padding-right: toRem(20);
+      cursor: pointer;
+      path {
+        transition: all $transitionDuration;
+      }
+      &:hover {
+        path {
+          fill: $docsPrimaryPurple;
+          transition: all $transitionDuration;
+        }
+      }
     }
   }
   .post-footer {

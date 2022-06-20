@@ -14,6 +14,7 @@
   .grid > [class*='col'] {
     padding-right: 0 !important;
     padding-left: 0 !important;
+    padding-bottom: 0;
   }
 }
 
@@ -46,6 +47,26 @@
     width: 100%;
     position: relative;
     height: 38px;
+
+    transition: all $transitionDuration ease-in-out;
+    @include gradient_Blurry_Background_PinkBlue;
+    height: 95%;
+    &:hover,
+    &:focus-within {
+      &:before {
+        filter: blur(0.5rem);
+        opacity: 1;
+      }
+      &:focus-within {
+        .search-icon svg {
+          transform: scale(1.2);
+        }
+      }
+    }
+
+    @include medium {
+      margin-bottom: 1rem;
+    }
     ::placeholder {
       color: $ebony;
       @include fontSize_Mini;
@@ -67,16 +88,10 @@
       height: 38px;
       @include fontSize_Small;
       padding: 5px 55px 5px 15px;
-    }
-  }
-  .button.text {
-    .button-contents {
-      font-style: italic;
-      @include fontWeight_Semibold;
-      @include fontSize_Mini;
-    }
-    &:after {
-      display: none;
+      position: relative;
+      &:focus {
+        outline: 0;
+      }
     }
   }
   .button.outline-dark {
@@ -114,6 +129,44 @@
           border-color: $ebony;
         }
       }
+    }
+  }
+}
+.blog-tag-selected-c {
+  margin-top: 0.5rem;
+  > div {
+    display: inline-block;
+  }
+  // individual tags
+  .blog-tag-selected-inner {
+    @include fontWeight_Semibold;
+    @include fontSize_Mini;
+    .button.text {
+      margin-right: 1rem;
+      .button-contents {
+        transition: color $transitionDuration;
+        @include fontWeight_Semibold;
+        @include fontSize_Mini;
+        padding: 0;
+        color: $ebony;
+      }
+      &:hover {
+        .button-contents {
+          color: $blue;
+          transition: color $transitionDuration;
+        }
+      }
+    }
+  }
+  // view all tags
+  .button.text.blue {
+    .button-contents {
+      font-style: italic;
+      @include fontWeight_Semibold;
+      @include fontSize_Mini;
+    }
+    &:after {
+      display: none;
     }
   }
 }

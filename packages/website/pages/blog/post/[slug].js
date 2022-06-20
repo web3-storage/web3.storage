@@ -207,11 +207,13 @@ const Post = ({ post, posts }) => {
             <SocialLink url={twitterShareLink} params={twitterParams} Icon={TwitterIcon} />
             <SocialLink url={facebookShareLink} params={facebookParams} Icon={FacebookIcon} />
             <SocialLink url={linkedinShareLink} params={linkedinParams} Icon={LinkedinIcon} />
-            <LinkIcon
-              onClick={() => {
-                addTextToClipboard(currentUrl);
-              }}
-            />
+            <button>
+              <LinkIcon
+                onClick={() => {
+                  addTextToClipboard(currentUrl);
+                }}
+              />
+            </button>
           </div>
           <div className="post-meta-tags">
             <Tags tags={post.meta.tags} comma={true} />
