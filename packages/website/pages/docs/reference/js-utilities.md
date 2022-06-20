@@ -5,7 +5,7 @@ description: Learn about some helpful utility libraries that make working with W
 
 # JavaScript utility libraries
 
-The Web3.Storage [JavaScript client library](./js-client-library.md) provides a simple interface for interacting with Web3.Storage. This page highlights some additional libraries that may be helpful when working with the client library, or when using the [HTTP API][reference-http-api] directly.
+The Web3.Storage [JavaScript client library](/docs/reference/js-client-library) provides a simple interface for interacting with Web3.Storage. This page highlights some additional libraries that may be helpful when working with the client library, or when using the [HTTP API][reference-http-api] directly.
 
 ## files-from-path
 
