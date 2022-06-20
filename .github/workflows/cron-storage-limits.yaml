@@ -14,7 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        env: ['staging', 'production']
+        env: [
+          'staging',
+          # 'production'
+        ]
     timeout-minutes: 340
     steps:
       - uses: actions/checkout@v2
