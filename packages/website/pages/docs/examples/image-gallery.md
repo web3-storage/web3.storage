@@ -88,10 +88,10 @@ The `getImageMetadata` function simply requests the `metadata.json` file from an
 
 The Web3.Storage service and client library make getting your data onto [decentralized storage][concepts-decentralized-storage] easier than ever. In this guide we saw how to use Web3.Storage to build a simple image gallery using vanilla JavaScript. We hope that this example will help you build amazing things, and we can't wait to see what you make!
 
-[howto-token]: ../how-tos/generate-api-token.md
-[reference-js-put]: ../reference/js-client-library.md#store-files
-[reference-js-list]: ../reference/js-client-library.md#list-uploads
-[concepts-decentralized-storage]: ../concepts/decentralized-storage.md
+[howto-token]: /docs/how-tos/generate-api-token/
+[reference-js-put]: /docs/reference/js-client-library/#store-files
+[reference-js-list]: /docs/reference/js-client-library/#list-uploads
+[concepts-decentralized-storage]: /docs/concepts/decentralized-storage/
 [github-example-repo]: https://github.com/web3-storage/example-image-gallery
 [github-storage.js]: https://github.com/web3-storage/example-image-gallery/blob/main/src/js/storage.js
 [github-helpers.js]: https://github.com/web3-storage/example-image-gallery/blob/main/src/js/helpers.js

@@ -81,14 +81,14 @@ Here's an example of fetching the first 10 uploads made on the previous day:
 
 <CodeSnippet lang="js" src={howtoSource} region="listWithLimits" />
 
-[howto-store]: ./store.md
-[howto-retrieve]: ./retrieve.md
-[howto-query]: ./query.md
-[howto-gen-token]: ./generate-api-token.md
-[concepts-decentralized-storage]: ../concepts/decentralized-storage.md
-[reference-js-client]: ../reference/js-client-library.md
-[reference-js-constructor]: ../reference/js-client-library.md#constructor
-[reference-js-list]: ../reference/js-client-library.md#list-uploads
+[howto-store]: /docs/how-tos/store/
+[howto-retrieve]: /docs/how-tos/retrieve/
+[howto-query]: /docs/how-tos/query/
+[howto-gen-token]: /docs/how-tos/generate-api-token/
+[concepts-decentralized-storage]: /docs/concepts/decentralized-storage/
+[reference-js-client]: /docs/reference/js-client-library/
+[reference-js-constructor]: /docs/reference/js-client-library/#constructor
+[reference-js-list]: /docs/reference/js-client-library/#list-uploads
 [site-files]: https://web3.storage/account
 [ipfs-docs-gateway]: https://docs.ipfs.io/concepts/ipfs-gateway/
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing/

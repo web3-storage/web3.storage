@@ -49,8 +49,8 @@ Remember that if you delete an API token, it's removed permanently and cannot be
 
 ## Next steps
 
-Now that you have an API token, you can store and retrieve data from your apps and services, as well as from the command line. If you haven't yet explored in depth how to store data using Web3.Storage, check out the [storage how-to guide](/docs/store) for a deep dive on how to upload files using the [JavaScript client library](/docs/reference/js-client-library).
+Now that you have an API token, you can store and retrieve data from your apps and services, as well as from the command line. If you haven't yet explored in depth how to store data using Web3.Storage, check out the [storage how-to guide](/docs/how-tos/store) for a deep dive on how to upload files using the [JavaScript client library](/docs/reference/js-client-library).
 
-To learn in greater detail how to fetch your data using the Web3.Storage client, or directly from IPFS using a gateway or the IPFS command line, see the [how-to guide on retrieval](/docs/retrieve).
+To learn in greater detail how to fetch your data using the Web3.Storage client, or directly from IPFS using a gateway or the IPFS command line, see the [how-to guide on retrieval](/docs/how-tos/retrieve).
 
 You can also use the JavaScript client library to get more information about the status of your data. See the [query how-to guide](/docs/how-tos/query) to learn how to get more details about your data, including the status of any Filecoin storage deals.
