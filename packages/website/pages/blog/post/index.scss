@@ -29,8 +29,11 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding-bottom: toRem(63);
+    padding-bottom: toRem(37);
     padding-top: toRem(20);
+    @include small {
+      flex-direction: column;
+    }
     .post-meta-date {
       flex: 1;
       @include fontSize_Small;
@@ -42,8 +45,57 @@
       @include fontWeight_Medium;
     }
   }
+  .post-pagination {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 2.5rem toRem(113) 2.5rem;
+    .post-prev,
+    .post-next {
+      background-color: unset;
+      padding: 0;
+      .button-contents {
+        color: $ebony;
+        @include fontWeight_Semibold;
+        @include fontSize_Mini;
+        padding: 0;
+      }
+      &:after {
+        content: '➔';
+        position: absolute;
+        top: calc(50%);
+        transform: translate(0, -50%);
+        color: $ebony;
+        transition: inherit;
+      }
+    }
+    .post-next {
+      &:after {
+        right: -1.5rem;
+      }
+      &:hover {
+        &:after {
+          transform: translate(0.75rem, -50%);
+        }
+      }
+    }
+    .post-prev {
+      &:after {
+        left: -1.5rem;
+        transform: rotate(180deg);
+      }
+      &:hover {
+        &:after {
+          transform: rotate(180deg) translate(0.75rem, -50%);
+        }
+      }
+    }
+  }
   .post-social {
     flex: 1;
+    > * {
+      cursor: pointer;
+    }
     a {
       padding-right: toRem(20);
     }
@@ -67,7 +119,11 @@
     font-size: toRem(15);
     border-radius: toRem(5);
     border: toRem(2) solid $black;
+    width: fit-content;
     @include fontWeight_Semibold;
+    @include small {
+      margin-top: 0.5rem;
+    }
   }
 }
 

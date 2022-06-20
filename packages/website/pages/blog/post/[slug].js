@@ -17,6 +17,7 @@ import SocialLink from '../../../components/social-link';
 import Tags from '../../../components/blog/tags/tags';
 import { Card } from '../../../components/blog/cards/cards';
 import { addTextToClipboard } from '../../../lib/utils';
+import Button, { ButtonVariant } from '../../../components/button/button';
 
 export async function getStaticProps({ ...ctx }) {
   // get individual post
@@ -218,7 +219,14 @@ const Post = ({ post, posts }) => {
           <div className="post-meta-category">{post.meta.category}</div>
         </div>
       </div>
-
+      <div className="post-pagination">
+        <Button className="post-prev" variant={ButtonVariant.TEXT}>
+          Previous
+        </Button>
+        <Button className="post-next" variant={ButtonVariant.TEXT}>
+          Next
+        </Button>
+      </div>
       <div className="post-related grid">
         <h1>You may also like</h1>
         <div className="blog-list-container no-side-padding">
