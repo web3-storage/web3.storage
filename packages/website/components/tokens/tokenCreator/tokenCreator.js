@@ -122,7 +122,6 @@ const TokenCreator = ({ content }) => {
             <Button
               disabled={user?.info?.tags?.['HasAccountRestriction']}
               className={clsx('token-creator-create', query.create && 'hidden')}
-              href="/account"
               onClick={() => push('/tokens?create=true')}
               variant={ButtonVariant.TEXT}
               tooltip={
