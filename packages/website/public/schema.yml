@@ -9,7 +9,7 @@ info:
     ## API endpoint URL
 
     The main public API endpoint URL for Web3.Storage is `https://api.web3.storage`. All endpoints described in this document should be made relative to this root URL. For example, to post to the `/car` endpoint, send your request to `https://api.web3.storage/car`.
-    
+
     ### Rate limits
 
     This API imposes rate limits to ensure quality of service. You may receive a 429 "Too many requests" error if you make more than 30 requests with the same API token within a ten second window. Upon receiving a response with a 429 status, clients should retry the failed request after a small delay. To avoid 429 responses, you may wish to implement client-side request throttling to stay within the limits.
@@ -203,6 +203,33 @@ paths:
             'application/json':
               schema:
                 type: array
+                items:
+                  $ref: '#/components/schemas/Status'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '5XX':
+          $ref: '#/components/responses/internalServerError'
+  /user/uploads/{cid}:
+    get:
+      tags:
+        - Web3.Storage HTTP API
+      summary: Returns a single upload
+      description: |
+        Retrieve the upload metadata of as single upload.
+
+        The information returned includes the creation date and file size, as well as details about how the network is storing your data. Using this information, you can identify peers on the [IPFS (InterPlanetary File System)](https://ipfs.io) network that are pinning the data, and [Filecoin](https://filecoin.io) storage providers that have accepted deals to store the data.
+      operationId: get-user-upload
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                type: object
                 items:
                   $ref: '#/components/schemas/Status'
         '400':
