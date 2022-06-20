@@ -188,12 +188,14 @@ export async function userUploadsGet (request, env) {
   }
 
   let offset = 0
-  if (searchParams.has('offset')) {
-    const parsedOffset = parseInt(searchParams.get('offset'))
-    if (isNaN(parsedOffset) || parsedOffset <= 0) {
-      throw Object.assign(new Error('invalid page offset'), { status: 400 })
+  let page = 1
+  if (searchParams.has('page')) {
+    const parsedPage = parseInt(searchParams.get('page'))
+    if (isNaN(parsedPage) || parsedPage <= 0) {
+      throw Object.assign(new Error('invalid page number'), { status: 400 })
     }
-    offset = parsedOffset
+    offset = (parsedPage - 1) * size
+    page = parsedPage
   }
 
   let before
@@ -229,17 +231,17 @@ export async function userUploadsGet (request, env) {
   const headers = {
     Count: data.count,
     Size: size,
-    Offset: offset
+    Page: page
   }
 
   if (data.uploads.length + offset < data.count) {
-    const nextOffset = offset + size
-    headers.Next_link = `<${requestUrl.pathname}?size=${size}&offset=${encodeURIComponent(nextOffset)}>; rel="next"`
+    const nextPage = page + 1
+    headers.Next_link = `<${requestUrl.pathname}?size=${size}&page=${encodeURIComponent(nextPage)}>; rel="next"`
   }
 
-  if (offset) {
-    const previousOffset = offset - size
-    headers.Prev_link = `<${requestUrl.pathname}?size=${size}&offset=${encodeURIComponent(previousOffset)}>; rel="next"`
+  if (page > 1) {
+    const previousPage = page - 1
+    headers.Prev_link = `<${requestUrl.pathname}?size=${size}&page=${encodeURIComponent(previousPage)}>; rel="previous"`
   }
 
   return new JSONResponse(data.uploads, { headers })

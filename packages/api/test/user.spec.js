@@ -294,11 +294,11 @@ describe('GET /user/uploads', () => {
     assert.deepStrictEqual(uploads, userUploads)
   })
 
-  it('paginates by offset', async () => {
+  it('paginates by page', async () => {
     const token = await getTestJWT()
     const size = 1
-    const offset = 2
-    const res = await fetch(new URL(`/user/uploads?size=${size}&offset=${offset}`, endpoint).toString(), {
+    const page = 2
+    const res = await fetch(new URL(`/user/uploads?size=${size}&page=${page}`, endpoint).toString(), {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -307,11 +307,11 @@ describe('GET /user/uploads', () => {
     // Ensure we have all pagination metadata in the headers.
     const nextLink = res.headers.get('Next_link')
     assert(nextLink, 'has a Next link header for the next page')
-    assert.strictEqual(nextLink, `</user/uploads?size=${size}&offset=${offset + size}>; rel="next"`)
+    assert.strictEqual(nextLink, `</user/uploads?size=${size}&page=${page + 1}>; rel="next"`)
 
     const prevLink = res.headers.get('Prev_link')
     assert(prevLink, 'has a Prev link header for the previous page')
-    assert.strictEqual(prevLink, `</user/uploads?size=${size}&offset=${offset - size}>; rel="next"`)
+    assert.strictEqual(prevLink, `</user/uploads?size=${size}&page=${page - 1}>; rel="previous"`)
 
     const resCount = res.headers.get('Count')
     assert.strictEqual(parseInt(resCount), userUploads.length, 'has a count for calculating page numbers')
@@ -319,12 +319,12 @@ describe('GET /user/uploads', () => {
     const resSize = res.headers.get('Size')
     assert.strictEqual(parseInt(resSize), size, 'has a size for calculating page numbers')
 
-    const resOffset = res.headers.get('Offset')
-    assert.strictEqual(parseInt(resOffset), offset, 'has an offset for calculating page numbers')
+    const resPage = res.headers.get('Page')
+    assert.strictEqual(parseInt(resPage), page, 'has a page number for calculating page numbers')
 
-    // Ensure the returned result is expected.
+    // Should get second result (page 2).
     const uploads = await res.json()
-    const expected = [userUploads[2]]
+    const expected = [userUploads[1]]
     assert.deepStrictEqual(uploads, expected)
   })
 
