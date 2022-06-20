@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.5](https://github.com/web3-storage/web3.storage/compare/cron-v1.1.4...cron-v1.1.5) (2022-06-20)
+
+
+### Bug Fixes
+
+* use dummy provider in staging ([#1523](https://github.com/web3-storage/web3.storage/issues/1523)) ([c566d16](https://github.com/web3-storage/web3.storage/commit/c566d16e5c435e1dd85d931baac7ded3140912da))
+
 ## [1.1.4](https://github.com/web3-storage/web3.storage/compare/cron-v1.1.3...cron-v1.1.4) (2022-06-20)
 
 
