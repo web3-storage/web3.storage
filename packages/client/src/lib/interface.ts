@@ -56,12 +56,12 @@ export interface API {
   /**
    * Remove a users record of an upload. Does not make CID unavailable.
    */
-  delete(service: Service, cid: CIDString): Promise<CIDString>
+  delete(service: Service, cid: CIDString, options?: RequestOptions): Promise<CIDString>
 
   /**
    * Get info on Filecoin deals and IPFS pins that a CID is replicated in.
    */
-  status(service: Service, cid: CIDString): Promise<Status | undefined>
+  status(service: Service, cid: CIDString, options?: RequestOptions): Promise<Status | undefined>
 
   /**
    * Find all uploads for this account. Use a `for await...of` loop to fetch them all.
@@ -75,7 +75,7 @@ export interface API {
    * ```
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of}
    */
-  list(service: Service, opts: {before?: string, maxResults?: number}):  AsyncIterable<Upload>
+  list(service: Service, options?: ListOptions):  AsyncIterable<Upload>
 }
 
 export interface Filelike {
@@ -90,7 +90,14 @@ export interface Filelike {
   stream: () => ReadableStream
 }
 
-export type PutOptions = {
+export type RequestOptions = {
+  /**
+   * A signal that can be used to abort the request.
+   */
+  signal?: AbortSignal
+}
+
+export type PutOptions = RequestOptions & {
   /**
    * Callback called after the data has been assembled into a DAG, but before
    * any upload requests begin. It is passed the CID of the root node of the
@@ -133,7 +140,7 @@ export type PutOptions = {
   name?: string
 }
 
-export type PutCarOptions = {
+export type PutCarOptions = RequestOptions & {
   /**
    * Human readable name for this upload, for use in file listings.
    */
@@ -159,6 +166,19 @@ export type PutCarOptions = {
     * `raw`.
     */
    decoders?: BlockDecoder<any, any>[]
+}
+
+export type ListOptions = RequestOptions & {
+  /**
+   * Return items uploaded before this ISO 8601 date string.
+   * Default: `new Date().toISOString()`.
+   */
+  before?: string
+  /**
+   * Maximum number of results to return.
+   * Default: `Infinity`.
+   */
+  maxResults?: number
 }
 
 export interface Web3File extends File {
