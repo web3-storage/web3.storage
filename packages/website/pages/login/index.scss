@@ -13,6 +13,10 @@
     .button {
       width: 10.75rem;
       height: 2.75rem;
+      text-align: center;
+      width: fit-content;
+      margin: auto;
+      padding: 0.25rem 1.25rem;
       button {
         min-height: 1.875rem;
       }
@@ -36,6 +40,7 @@
   width: 100%;
   border-radius: 0;
   @include hoverInput;
+  text-align: center;
   &::placeholder {
     color: $white;
   }
