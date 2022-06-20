@@ -1,5 +1,5 @@
 import * as JWT from './utils/jwt.js'
-import { JSONResponse } from './utils/json-response.js'
+import { JSONResponse, notFound } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
 import { HTTPError } from './errors.js'
 import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
@@ -281,10 +281,13 @@ export async function userUploadsGet (request, env) {
  */
 export async function userUploadGet (request, env) {
   const cid = request.params.cid
-  const res = await env.db.getUpload(cid, request.auth.user._id)
-  if (!res) {
-    throw new HTTPError('Upload not found', 404)
+  let res
+  try {
+    res = await env.db.getUpload(cid, request.auth.user._id)
+  } catch (error) {
+    return notFound()
   }
+
   return new JSONResponse(res)
 }
 

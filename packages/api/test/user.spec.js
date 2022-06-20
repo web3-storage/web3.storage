@@ -238,10 +238,10 @@ describe('GET /user/uploads', () => {
   })
 })
 
-describe.only('GET /user/upload/:cid', () => {
+describe('GET /user/upload/:cid', () => {
   it('gets a single upload', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL(`/user/upload/${userUploads[0].cid}`, endpoint).toString(), {
+    const res = await fetch(new URL(`/user/uploads/${userUploads[0].cid}`, endpoint).toString(), {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -252,7 +252,7 @@ describe.only('GET /user/upload/:cid', () => {
 
   it('returns 404 when no upload is found', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('/user/upload/010101', endpoint).toString(), {
+    const res = await fetch(new URL('/user/uploads/notfound', endpoint).toString(), {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
     })
