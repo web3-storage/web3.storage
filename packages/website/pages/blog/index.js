@@ -81,18 +81,16 @@ const Paginated = ({ items }) => {
   return (
     <div className="blog-list-container">
       {paginatedFiles.length > 0 ? <Items currentItems={paginatedFiles} /> : <div>More blogs coming soon</div>}
-      {items.length > BLOG_ITEMS_PER_PAGE && (
-        <div className="blog-pagination">
-          <Pagination
-            className="files-manager-pagination"
-            items={items}
-            itemsPerPage={BLOG_ITEMS_PER_PAGE}
-            visiblePages={1}
-            queryParam="page"
-            onChange={setPaginatedFiles}
-          />
-        </div>
-      )}
+      <div className="blog-pagination">
+        <Pagination
+          className="files-manager-pagination"
+          items={items}
+          itemsPerPage={BLOG_ITEMS_PER_PAGE}
+          visiblePages={1}
+          queryParam="page"
+          onChange={setPaginatedFiles}
+        />
+      </div>
     </div>
   );
 };
@@ -178,7 +176,8 @@ const Blog = ({ posts = [] }) => {
       posts.filter(
         ({ tags: postTags, category: postCategory, title: postTitle, description: postDescription }) =>
           // Filter by tags
-          (!tags || tags.every(tag => postTags.map(postTag => postTag.toLowerCase()).includes(tag))) &&
+          (!tags.length ||
+            tags.every(tag => postTags.map(postTag => postTag.toLowerCase()).includes(tag.toLowerCase()))) &&
           // Filter by category
           (!category || postCategory.toLowerCase() === category) &&
           // Filter by title
