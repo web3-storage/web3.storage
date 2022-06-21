@@ -61,10 +61,8 @@ describe('Fix dag sizes migration', () => {
       token,
       postgres: true
     })
-    rwPg = getPg(env, 'rw')
-    roPg = getPg(env, 'ro')
-    await rwPg.connect()
-    await roPg.connect()
+    rwPg = await getPg(env, 'rw')
+    roPg = await getPg(env, 'ro')
   })
 
   after(async () => {

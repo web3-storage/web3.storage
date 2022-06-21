@@ -18,7 +18,7 @@ Once you've [stored some files][howto-store] using Web3.Storage, you'll want to 
 
 You can see a list of everything you've uploaded to Web3.Storage on the [Files page][site-files] on the Web3.Storage website. If you don't need to work with this list programmatically, using the website may be a simpler choice.
 
-<Img src="/images/docs/files-listing.png" alt="A screenshot of the file listing available at https://web3.storage/files when logged in to your account" width="1200" height="521" />
+<Img src="/images/docs/files-listing.png" alt="A screenshot of the file listing available at https://web3.storage/account when logged in to your account" />
 
 This [Files page][site-files] provides a convenient overview of your stored data, including links to view your files in your browser via an [IPFS gateway][ipfs-docs-gateway] and information about how the data is being stored on the [decentralized storage networks][concepts-decentralized-storage] that Web3.Storage uses under the hood.
 
@@ -90,7 +90,7 @@ Here's an example of fetching the first 10 uploads made on the previous day:
 [reference-js-client]: ../reference/js-client-library.md
 [reference-js-constructor]: ../reference/js-client-library.md#constructor
 [reference-js-list]: ../reference/js-client-library.md#list-uploads
-[site-files]: https://web3.storage/files
+[site-files]: https://web3.storage/account
 [ipfs-docs-gateway]: https://docs.ipfs.io/concepts/ipfs-gateway/
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing/
 [ipfs-docs-merkle-dag]: https://docs.ipfs.io/concepts/merkle-dag/

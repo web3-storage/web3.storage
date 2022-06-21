@@ -292,7 +292,7 @@ You can also get more information about the status of your data. See the [query 
 [howto-car-files]: ./work-with-car-files.md
 [howto-list-dir]: ./list-directory-contents.md
 [concepts-decentralized-storage]: ../concepts/decentralized-storage.md
-[site-files]: https://web3.storage/files/
+[site-files]: https://web3.storage/account/
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing/
 [ipfs-docs-cli-quickstart]: https://docs.ipfs.io/how-to/command-line-quick-start/
 [mdn-fetch]: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API

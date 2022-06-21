@@ -23,7 +23,7 @@ import { CarReader } from '@ipld/car'
 import { filesFromPath, getFilesFromPath } from 'files-from-path'
 import throttledQueue from 'throttled-queue'
 import {
-  fetch,
+  fetch as _fetch,
   File,
   Blob,
   Blockstore
@@ -83,12 +83,13 @@ class Web3Storage {
    * const client = new Web3Storage({ token: API_TOKEN })
    * ```
    *
-   * @param {{token: string, endpoint?:URL, rateLimiter?: RateLimiter}} options
+    @param {Service} options
    */
   constructor ({
     token,
     endpoint = new URL('https://api.web3.storage'),
-    rateLimiter
+    rateLimiter,
+    fetch = _fetch
   }) {
     /**
      * Authorization token.
@@ -105,6 +106,11 @@ class Web3Storage {
      * @readonly
      */
     this.rateLimiter = rateLimiter || createRateLimiter()
+    /**
+     * Optional custom fetch function. Defaults to global fetch in browsers or @web-std/fetch on node.
+     * @readonly
+     */
+    this.fetch = fetch
   }
 
   /**
@@ -126,7 +132,7 @@ class Web3Storage {
    * @param {PutOptions} [options]
    * @returns {Promise<CIDString>}
    */
-  static async put ({ endpoint, token, rateLimiter = globalRateLimiter }, files, {
+  static async put ({ endpoint, token, rateLimiter = globalRateLimiter, fetch = _fetch }, files, {
     onRootCidReady,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
@@ -148,7 +154,7 @@ class Web3Storage {
       })
       onRootCidReady && onRootCidReady(root.toString())
       const car = await CarReader.fromIterable(out)
-      return await Web3Storage.putCar({ endpoint, token, rateLimiter }, car, { onStoredChunk, maxRetries, maxChunkSize, name })
+      return await Web3Storage.putCar({ endpoint, token, rateLimiter, fetch }, car, { onStoredChunk, maxRetries, maxChunkSize, name })
     } finally {
       await blockstore.close()
     }
@@ -160,7 +166,7 @@ class Web3Storage {
    * @param {PutCarOptions} [options]
    * @returns {Promise<CIDString>}
    */
-  static async putCar ({ endpoint, token, rateLimiter = globalRateLimiter }, car, {
+  static async putCar ({ endpoint, token, rateLimiter = globalRateLimiter, fetch = _fetch }, car, {
     name,
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
@@ -239,7 +245,7 @@ class Web3Storage {
    * @param {CIDString} cid
    * @returns {Promise<Web3Response | null>}
    */
-  static async get ({ endpoint, token, rateLimiter = globalRateLimiter }, cid) {
+  static async get ({ endpoint, token, rateLimiter = globalRateLimiter, fetch = _fetch }, cid) {
     const url = new URL(`car/${cid}`, endpoint)
     await rateLimiter()
     const res = await fetch(url.toString(), {
@@ -269,7 +275,7 @@ class Web3Storage {
    * @param {CIDString} cid
    * @returns {Promise<Status | undefined>}
    */
-  static async status ({ endpoint, token, rateLimiter = globalRateLimiter }, cid) {
+  static async status ({ endpoint, token, rateLimiter = globalRateLimiter, fetch = _fetch }, cid) {
     const url = new URL(`status/${cid}`, endpoint)
     await rateLimiter()
     const res = await fetch(url.toString(), {
@@ -302,7 +308,7 @@ class Web3Storage {
    * @param {{before: string, size: number}} opts
    * @returns {Promise<Response>}
    */
-    async function listPage ({ endpoint, token, rateLimiter = globalRateLimiter }, { before, size }) {
+    async function listPage ({ endpoint, token, rateLimiter = globalRateLimiter, fetch = _fetch }, { before, size }) {
       const search = new URLSearchParams({ before, size: size.toString() })
       const url = new URL(`user/uploads?${search}`, endpoint)
       await rateLimiter()
@@ -449,7 +455,8 @@ class Web3Storage {
 }
 
 /**
- * Map a UnixFSEntry to a File with a cid property
+ * Map a UnixFSEntry to a File with a cid property.
+ *
  * @param {UnixFSEntry} entry
  * @returns {Promise<Web3File>}
  */

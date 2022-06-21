@@ -46,7 +46,7 @@ If you want to link directly to a file within that directory, just add the file 
 
 <Callout type="info">
 ##### Tip
-Your [Files page](https://web3.storage/files/) on Web3.Storage includes IPFS gateway links to all the content you've uploaded, so if you're looking to link to one of your own files, you don't even have to create a gateway URL.
+Your [Files page](https://web3.storage/account) on Web3.Storage includes IPFS gateway links to all the content you've uploaded, so if you're looking to link to one of your own files, you don't even have to create a gateway URL.
 </Callout>
 
 ### Setting the filename for downloads via gateways

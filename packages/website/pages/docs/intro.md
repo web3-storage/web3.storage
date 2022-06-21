@@ -32,8 +32,8 @@ With Web3.Storage, you get all the benefits of decentralized storage technologie
 
 **This guide uses Node.js since it's the fastest way to get started using the Web3.Storage JavaScript client programmatically**, but don't worry if Node isn't your favorite runtime environment — or if you'd rather not do any coding at all. You can also use Web3.Storage in the following ways:
 
-- Work with the API methods in the [JavaScript client library](/reference/js-client-library.md) using the JS runtime of your choice.
-- Upload and retrieve files directly from your [Files page](https://web3.storage/files/) on the Web3.Storage website.
+- Work with the API methods in the [JavaScript client library](/docs/reference/js-client-library) using the JS runtime of your choice.
+- Upload and retrieve files directly from your [Account page](https://web3.storage/account/) on the Web3.Storage website.
 
 <Callout type="warning">
 ##### PREREQUISITES
@@ -89,7 +89,7 @@ Now that you have your new API token, it's time to use a simple script to [uploa
 
 ## Create the upload script
 
-You can use the Web3.Storage site to upload files, but it's also quick and easy to create and run a simple upload script — making it especially convenient to add large numbers of files. This script contains logic to upload a file to Web3.Storage and get a [_content identifier_ (CID)](/concepts/content-addressing.md) back in return.
+You can use the Web3.Storage site to upload files, but it's also quick and easy to create and run a simple upload script — making it especially convenient to add large numbers of files. This script contains logic to upload a file to Web3.Storage and get a [_content identifier_ (CID)](/docs/concepts/content-addressing) back in return.
 
 <Callout type="warning">
 ##### CAUTION
@@ -178,7 +178,7 @@ You've already done the most difficult work in this guide — getting your files
 
 ### Finding your files again
 
-If you ever need to find your files again, and you've forgotten the CID, head over to the [Files section](https://web3.storage/files/) in Web3.Storage:
+If you ever need to find your files again, and you've forgotten the CID, head over to the [Files table](https://web3.storage/account/) in Web3.Storage:
 
 <Img src={ImgFilesListing} alt="A listing of files in Web3.Storage" />
 
@@ -187,6 +187,6 @@ If you ever need to find your files again, and you've forgotten the CID, head ov
 Congratulations! You've just covered the basics of Web3.Storage. To learn more, take a look at these useful resources:
 
 - Checkout some [example projects in the Web3.Storage GitHub repo](https://github.com/web3-storage/web3.storage/tree/main/packages/client/examples)
-- For a deep dive into storing files, visit the [Store how-to guide.](/how-tos/store.md)
-- To learn more about the details of getting files, have a look at the [Retrieve how-to guide.](/how-tos/retrieve.md)
-- Visit the [reference API section](/reference/js-client-library.md) for more details on what else you can do with the Web3.Storage service and how to integrate it into your own projects.
+- For a deep dive into storing files, visit the [Store how-to guide.](/docs/how-tos/store)
+- To learn more about the details of getting files, have a look at the [Retrieve how-to guide.](/docs/how-tos/retrieve)
+- Visit the [reference API section](/docs/reference/js-client-library) for more details on what else you can do with the Web3.Storage service and how to integrate it into your own projects.
