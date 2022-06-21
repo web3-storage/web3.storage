@@ -40,12 +40,26 @@ export const TokensProvider = ({ children }) => {
   const [hasError, setHasError] = useState(/** @type {boolean} */ (false));
   const [errorMessage, setErrorMessage] = useState(/** @type {string} */ (''));
 
-  const processApiError = useCallback((error) => {
-    const message = error.message || error;
-    const errorObject = JSON.parse(error.message.substring(error.message.indexOf('{'), error.message.lastIndexOf('}') + 1));
+  const processApiError = useCallback(
+    error => {
+      if (!error.message) {
+        setHasError(true);
+        setErrorMessage('An unknown error has occurred');
+        return;
+      }
+      const errorObject = JSON.parse(
+        error.message.substring(error.message.indexOf('{'), error.message.lastIndexOf('}') + 1)
+      );
+      setHasError(true);
+      if (errorObject.code === 'ERROR_MAINTENANCE') {
+        setErrorMessage('Tokens API undergoing maintenance. Please try again later.');
+        return;
+      }
 
-    return errorObject;
-  });
+      setErrorMessage('Tokens API error has occurred. Please try again later.');
+    },
+    [setErrorMessage, setHasError]
+  );
 
   const getTokensCallback = useCallback(
     /** @type {() => Promise<Token[]>}} */
@@ -59,27 +73,33 @@ export const TokensProvider = ({ children }) => {
 
         return updatedTokens;
       } catch (e) {
-        const errorObject = processApiError(e);
-        setHasError(true);
-        setErrorMessage(errorObject.message);
+        processApiError(e);
 
         return new Promise((resolve, reject) => {
-          throw e;
+          reject(errorMessage);
         });
       }
     },
-    [setTokens, setFetchDate, setIsFetchingTokens]
+    [setTokens, setFetchDate, setIsFetchingTokens, processApiError, errorMessage]
   );
 
   const createTokensCallback = useCallback(
     /** @type {(name: string) => Promise<Token>}} */
     async name => {
-      setIsCreating(true);
-      const newToken = await createToken(name);
-      setIsCreating(false);
-      return newToken;
+      try {
+        setIsCreating(true);
+        const newToken = await createToken(name);
+        setIsCreating(false);
+        return newToken;
+      } catch (e) {
+        processApiError(e);
+
+        return new Promise((resolve, reject) => {
+          reject(errorMessage);
+        });
+      }
     },
-    [setIsCreating]
+    [setIsCreating, processApiError, errorMessage]
   );
 
   return (
