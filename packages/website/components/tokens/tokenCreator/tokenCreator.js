@@ -98,9 +98,9 @@ const TokenCreator = ({ content }) => {
   };
 
   return (
-    <div className={clsx('token-creator-container', isCreating && 'isDisabled')}>
+    <div className={clsx('token-creator-container', isCreating && !hasError && 'isDisabled')}>
       {isCreating ? (
-        content.loading_message
+        <> {hasError ? <span>⚠ {errorMessage}</span> : content.loading_message} </>
       ) : (
         <>
           <form className={clsx(!query.create && 'hidden', 'token-creator-input-container')} onSubmit={onTokenCreate}>
@@ -116,20 +116,24 @@ const TokenCreator = ({ content }) => {
             />
             <button className="token-creator-submit">{inputHasValue ? '→' : '+'}</button>
           </form>
-          <Button
-            disabled={user?.info?.tags?.['HasAccountRestriction']}
-            className={clsx('token-creator-create', query.create && 'hidden')}
-            href="/account"
-            onClick={() => push('/tokens?create=true')}
-            variant={ButtonVariant.TEXT}
-            tooltip={
-              user?.info?.tags?.['HasAccountRestriction']
-                ? 'You are unable to create API tokens when your account is blocked. Please contact support@web3.storage'
-                : ''
-            }
-          >
-            {content.prompt}
-          </Button>
+          {hasError ? (
+            <>⚠ {errorMessage}</>
+          ) : (
+            <Button
+              disabled={user?.info?.tags?.['HasAccountRestriction']}
+              className={clsx('token-creator-create', query.create && 'hidden')}
+              href="/account"
+              onClick={() => push('/tokens?create=true')}
+              variant={ButtonVariant.TEXT}
+              tooltip={
+                user?.info?.tags?.['HasAccountRestriction']
+                  ? 'You are unable to create API tokens when your account is blocked. Please contact support@web3.storage'
+                  : ''
+              }
+            >
+              {content.prompt}
+            </Button>
+          )}
         </>
       )}
     </div>
