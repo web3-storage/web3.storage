@@ -209,7 +209,7 @@ export class Logging {
         stack: message.stack,
         message: message.message
       }
-      if (this.opts.sentry && message.status >= 500 && !skipForSentry.some((cls) => message instanceof cls)) {
+      if (this.opts.sentry && !skipForSentry.some((cls) => message instanceof cls)) {
         this.opts.sentry.captureException(message)
       }
     } else {
