@@ -80,7 +80,7 @@ const Paginated = ({ items }) => {
 
   return (
     <div className="blog-list-container">
-      {paginatedFiles.length > 0 ? <Items currentItems={paginatedFiles} /> : <div>More blogs coming soon</div>}
+      {paginatedFiles.length > 0 ? <Items currentItems={paginatedFiles} /> : <div>More posts coming soon</div>}
       <div className="blog-pagination">
         <Pagination
           className="files-manager-pagination"

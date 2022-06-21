@@ -9,6 +9,7 @@
     max-width: 100%;
   }
   .post-heading {
+    width: 100%;
     padding-left: toRem(83);
     padding-right: toRem(83);
     text-align: center;
@@ -146,7 +147,8 @@
     background: none;
     padding: 0;
 
-    &:before, pre {
+    &:before,
+    pre {
       background: none;
       padding: 0;
     }
