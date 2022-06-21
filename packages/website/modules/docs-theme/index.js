@@ -2,28 +2,19 @@ import React, { useEffect } from 'react';
 import { MDXProvider } from '@mdx-js/react';
 
 import Head from 'next/head';
-import hljs from 'highlight.js/lib/core';
-import javascript from 'highlight.js/lib/languages/javascript';
-import shell from 'highlight.js/lib/languages/shell';
-import go from 'highlight.js/lib/languages/go';
-import json from 'highlight.js/lib/languages/json';
 
+import CodeHighlightCopy from '../../components/blog/codehighlightcopy/codehighlightcopy';
 import Sidebar from './sidebar/sidebar';
 import Feedback from './feedback/feedback';
 import Toc from './toc/toc';
 import DocsPagination from './docspagination/docspagination';
 
-hljs.registerLanguage('javascript', javascript);
-hljs.registerLanguage('shell', shell);
-hljs.registerLanguage('go', go);
-hljs.registerLanguage('json', json);
-
 export default function Docs(props) {
   const { meta, route, ...rest } = props;
 
   useEffect(() => {
-    hljs.highlightAll();
-  });
+    CodeHighlightCopy('.docs-body pre');
+  }, []);
 
   const sharedHead = (
     <Head>

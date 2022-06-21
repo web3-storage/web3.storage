@@ -1,10 +1,5 @@
 import fs from 'fs';
 
-import hljs from 'highlight.js/lib/core';
-import javascript from 'highlight.js/lib/languages/javascript';
-import shell from 'highlight.js/lib/languages/shell';
-import go from 'highlight.js/lib/languages/go';
-import json from 'highlight.js/lib/languages/json';
 import { useEffect, useMemo, useState } from 'react';
 import matter from 'gray-matter';
 import { serialize } from 'next-mdx-remote/serialize';
@@ -23,11 +18,7 @@ import Tags from '../../../components/blog/tags/tags';
 import { Card } from '../../../components/blog/cards/cards';
 import Button, { ButtonVariant } from '../../../components/button/button';
 import { addTextToClipboard } from '../../../lib/utils';
-
-hljs.registerLanguage('javascript', javascript);
-hljs.registerLanguage('shell', shell);
-hljs.registerLanguage('go', go);
-hljs.registerLanguage('json', json);
+import CodeHighlightCopy from '../../../components/blog/codehighlightcopy/codehighlightcopy';
 
 export async function getStaticProps({ ...ctx }) {
   // get individual post
@@ -91,13 +82,13 @@ const Post = ({ post, posts }) => {
   // localhost will not work as currentUrl with fb or linkedin
   const [currentUrl, setCurrentUrl] = useState('');
   useEffect(() => setCurrentUrl(window.location.href), []);
-  const twitterShareLink = new URL(`https://twitter.com/intent/tweet`);
+  const twitterShareLink = new URL('https://twitter.com/intent/tweet');
   const twitterParams = {
     url: currentUrl,
     text: SHARE_TEXT,
     hashtags: 'web3.storage',
   };
-  const facebookShareLink = new URL(`https://www.facebook.com/sharer/sharer.php`);
+  const facebookShareLink = new URL('https://www.facebook.com/sharer/sharer.php');
   const facebookParams = {
     u: currentUrl,
     quote: SHARE_TEXT,
@@ -167,10 +158,9 @@ const Post = ({ post, posts }) => {
     return currentRelatedPosts;
   }, [post, posts]);
 
-  // code highlighting
   useEffect(() => {
-    hljs.highlightAll();
-  });
+    CodeHighlightCopy('.post-content pre');
+  }, []);
 
   // add image caption
   useEffect(() => {
@@ -239,7 +229,7 @@ const Post = ({ post, posts }) => {
                   setShowCopied(true);
                   setTimeout(() => {
                     setShowCopied(false);
-                  }, 2000);
+                  }, 1000);
                 }}
               />
               <span className={showCopied ? 'copied show' : 'copied'}>copied!</span>

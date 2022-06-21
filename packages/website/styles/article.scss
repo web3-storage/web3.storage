@@ -75,6 +75,19 @@
   pre {
     white-space: pre-wrap;
     word-wrap: break-word;
+    position: relative;
+    .cp-copy-icon {
+      color: white;
+      cursor: pointer;
+      * {
+        pointer-events: none;
+      }
+    }
+    &:hover {
+      .cp-copy-icon {
+        opacity: 1;
+      }
+    }
   }
   code {
     @include monospace_Text;

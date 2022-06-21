@@ -14,9 +14,7 @@ const SocialLink = ({ url, Icon, params }) => {
   }
   return (
     <a href={url.href} target="_blank" rel="noreferrer" aria-label="social media icon">
-      <span className="text-black social-link hologram interactive ltblue flex flex-col items-center justify-center border-solid border-black bg-white w-8 h-8 mr-4">
-        <Icon className="text-current" />
-      </span>
+      <Icon className="text-current" />
     </a>
   );
 };
