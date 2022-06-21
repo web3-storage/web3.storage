@@ -50,47 +50,7 @@
     display: flex;
     width: 100%;
     justify-content: space-between;
-    padding: 0 2.5rem toRem(113) 2.5rem;
-    .post-prev,
-    .post-next {
-      background-color: unset;
-      padding: 0;
-      .button-contents {
-        color: $ebony;
-        @include fontWeight_Semibold;
-        @include fontSize_Mini;
-        padding: 0;
-      }
-      &:after {
-        content: '➔';
-        position: absolute;
-        top: calc(50%);
-        transform: translate(0, -50%);
-        color: $ebony;
-        transition: inherit;
-      }
-    }
-    .post-next {
-      &:after {
-        right: -1.5rem;
-      }
-      &:hover {
-        &:after {
-          transform: translate(0.75rem, -50%);
-        }
-      }
-    }
-    .post-prev {
-      &:after {
-        left: -1.5rem;
-        transform: rotate(180deg);
-      }
-      &:hover {
-        &:after {
-          transform: rotate(180deg) translate(0.75rem, -50%);
-        }
-      }
-    }
+    padding: 0 1rem toRem(113) 1rem;
   }
   .post-social {
     flex: 1;

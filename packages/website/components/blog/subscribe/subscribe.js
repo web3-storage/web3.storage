@@ -1,27 +1,34 @@
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 
-import Button from 'ZeroComponents/button/button';
-// import { subscribe } from '../../lib/subscribe.js';
-
-export function getStaticProps() {
-  return {
-    props: {
-      title: 'Subscribe - NFT Storage',
-      description: 'Subscribe to the Web3.Storage blog',
-      altLogo: true,
-    },
-  };
-}
+import Button, { ButtonVariant } from '../../../components/button/button';
+import constants from '../../../lib/constants';
 
 /**
- * Subscribe Page
+ * Subscribe Modal
  */
-export default function Subcribe() {
+export default function Subscribe() {
   const [status, setStatus] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [disabled, setDisabled] = useState(false);
   const [email, setEmail] = useState('');
+  const API = constants.API;
+
+  const subscribe = async email => {
+    const subscribeURL = '/internal/blog/subscribe';
+    const res = await fetch(API + subscribeURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+      }),
+    });
+    const body = await res.json();
+    if (!body.ok) {
+      throw new Error(body.error);
+    }
+  };
 
   useEffect(() => setStatus(''), [email]);
   useEffect(() => {
@@ -45,7 +52,7 @@ export default function Subcribe() {
     setDisabled(true);
     // try to subscribe user
     try {
-      // await subscribe(userMail);
+      await subscribe(userMail);
       setStatus('success');
     } catch (/** @type {any} */ error) {
       console.error('ERROR SUBSCRIBING USER: ', error);
@@ -56,23 +63,25 @@ export default function Subcribe() {
   };
 
   let content = (
-    <form onSubmit={onSubmit}>
-      <h1>Subscribe</h1>
-      <label id="email-entry-label" htmlFor="email">
-        Enter Your Email
-      </label>
-      <input
-        aria-labelledby="email-entry-label"
-        type="email"
-        name="email"
-        required
-        placeholder="Enter your email"
-        onChange={e => setEmail(e.target.value)}
-        disabled={status === 'pending'}
-        value={email}
-      />
-
-      <Button disabled={disabled} type="submit">
+    <form className="file-uploader-container" onSubmit={onSubmit}>
+      <h5>Subscribe to our blog</h5>
+      <p>
+        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
+        aperiam, eaque ipsa illo
+      </p>
+      <div className="blog-search-input">
+        <input
+          aria-labelledby="email-entry-label"
+          type="email"
+          name="email"
+          required
+          placeholder="Enter your email"
+          onChange={e => setEmail(e.target.value)}
+          disabled={status === 'pending'}
+          value={email}
+        />
+      </div>
+      <Button variant={ButtonVariant.TEXT_ARROW} disabled={disabled} type="submit">
         Subscribe
       </Button>
       <br />
@@ -85,11 +94,9 @@ export default function Subcribe() {
       <div>
         <h1>Success!</h1>
         <p>You are subscribed to the Mailing List.</p>
-        <br />
-        <Link href="/blog">Go Back to Reading</Link>
       </div>
     );
   }
 
-  return <div>{content}</div>;
+  return content;
 }

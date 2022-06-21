@@ -35,13 +35,7 @@ const Items = ({ currentItems }) => (
 
 export async function getStaticProps() {
   const files = fs.readdirSync('posts');
-
   let featuredImage = null;
-
-  /**
-   * @param {string} date
-   */
-
   files.sort().reverse();
 
   const posts = files
@@ -80,7 +74,11 @@ const Paginated = ({ items }) => {
 
   return (
     <div className="blog-list-container">
-      {paginatedFiles.length > 0 ? <Items currentItems={paginatedFiles} /> : <div>More posts coming soon</div>}
+      {paginatedFiles.length > 0 ? (
+        <Items currentItems={paginatedFiles} />
+      ) : (
+        <h5>Hmmm... there is nothing here. Try another search term!</h5>
+      )}
       <div className="blog-pagination">
         <Pagination
           className="files-manager-pagination"
@@ -276,10 +274,10 @@ const Blog = ({ posts = [] }) => {
         </div>
       </Modal>
       <Modal
-        className="blog-subscribe-modal"
+        className="file-upload-modal"
         animation="don"
         modalState={subscribeModalOpenState}
-        closeIcon={<CloseIcon />}
+        closeIcon={<CloseIcon className="file-uploader-close" />}
         showCloseButton
       >
         <div className="blog-subscribe-modal-inner">

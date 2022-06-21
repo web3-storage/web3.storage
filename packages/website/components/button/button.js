@@ -12,6 +12,8 @@ export const ButtonVariant = {
   PURPLE: 'purple',
   PINK_BLUE: 'pink-blue',
   TEXT: 'text',
+  TEXT_ARROW: 'text-arrow',
+  TEXT_ARROW_LEFT: 'text-arrow-left',
   OUTLINE_DARK: 'outline-dark',
   OUTLINE_LIGHT: 'outline-light',
 };

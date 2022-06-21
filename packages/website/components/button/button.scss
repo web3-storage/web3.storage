@@ -279,6 +279,51 @@
     }
   }
 
+  &.text-arrow-left,
+  &.text-arrow {
+    line-height: 0;
+    color: $cyan;
+    text-transform: none;
+    padding: 0;
+    .button-contents {
+      color: $ebony;
+      @include fontWeight_Semibold;
+      @include fontSize_Mini;
+      padding: 0;
+      padding-right: 1.5rem;
+    }
+    &:after {
+      content: '➔';
+      right: 0;
+      position: absolute;
+      top: calc(50%);
+      transform: translate(0, -50%);
+      color: $ebony;
+      transition: inherit;
+    }
+    &:hover {
+      &:after {
+        transform: translate(0.75rem, -50%);
+      }
+    }
+  }
+
+  &.text-arrow-left {
+    .button-contents {
+      padding-left: 1.5rem;
+    }
+    &:after {
+      right: auto;
+      left: 0;
+      transform: rotate(180deg);
+    }
+    &:hover {
+      &:after {
+        transform: rotate(180deg) translate(0.75rem, -50%);
+      }
+    }
+  }
+
   &.outline-dark,
   &.outline-light {
     position: relative;

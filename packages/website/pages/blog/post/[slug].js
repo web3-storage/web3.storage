@@ -244,14 +244,14 @@ const Post = ({ post, posts }) => {
       </div>
       <div className="post-pagination">
         {prevPostSlug ? (
-          <Button className="post-prev" variant={ButtonVariant.TEXT} href={`/blog/post/${prevPostSlug}`}>
+          <Button variant={ButtonVariant.TEXT_ARROW_LEFT} href={`/blog/post/${prevPostSlug}`}>
             Previous
           </Button>
         ) : (
           <span />
         )}
         {nextPostSlug ? (
-          <Button className="post-next" variant={ButtonVariant.TEXT} href={`/blog/post/${nextPostSlug}`}>
+          <Button variant={ButtonVariant.TEXT_ARROW} href={`/blog/post/${nextPostSlug}`}>
             Next
           </Button>
         ) : (

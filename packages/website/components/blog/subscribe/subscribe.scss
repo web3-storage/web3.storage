@@ -1,0 +1,16 @@
+.blog-subscribe-modal-inner {
+  .file-uploader-container {
+    padding: 5rem 8.5rem 5rem 8.125rem;
+    text-align: right;
+  }
+  p {
+    text-align: center;
+    @include fontSize_Regular;
+    @include leading_Small;
+    padding-bottom: 2em;
+    padding-top: 0.5rem;
+  }
+  .text-arrow {
+    margin-top: 1rem;
+  }
+}
