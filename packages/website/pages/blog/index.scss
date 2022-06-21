@@ -45,7 +45,6 @@
 
   transition: all $transitionDuration ease-in-out;
   @include gradient_Blurry_Background_PinkBlue;
-  height: 95%;
   &:hover,
   &:focus-within {
     &:before {
