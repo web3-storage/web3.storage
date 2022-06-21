@@ -96,6 +96,15 @@ const Post = ({ post, posts }) => {
   const linkedinShareLink = new URL('https://www.linkedin.com/sharing/share-offsite');
   const linkedinParams = { url: currentUrl };
 
+  const { prevPostSlug, nextPostSlug } = useMemo(() => {
+    const currentPostIndex = posts.findIndex(targetPost => isEqual(targetPost, post.meta));
+
+    return {
+      prevPostSlug: posts[currentPostIndex - 1]?.slug,
+      nextPostSlug: posts[currentPostIndex + 1]?.slug,
+    };
+  }, [posts, post]);
+
   /*
    * Related Posts
    *
@@ -228,12 +237,20 @@ const Post = ({ post, posts }) => {
         </div>
       </div>
       <div className="post-pagination">
-        <Button className="post-prev" variant={ButtonVariant.TEXT}>
-          Previous
-        </Button>
-        <Button className="post-next" variant={ButtonVariant.TEXT}>
-          Next
-        </Button>
+        {prevPostSlug ? (
+          <Button className="post-prev" variant={ButtonVariant.TEXT} href={`/blog/post/${prevPostSlug}`}>
+            Previous
+          </Button>
+        ) : (
+          <span />
+        )}
+        {nextPostSlug ? (
+          <Button className="post-next" variant={ButtonVariant.TEXT} href={`/blog/post/${nextPostSlug}`}>
+            Next
+          </Button>
+        ) : (
+          <span />
+        )}
       </div>
       <div className="post-related grid">
         <h1>You may also like</h1>
