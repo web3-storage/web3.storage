@@ -147,7 +147,7 @@
   &:before {
     content: '';
     position: absolute;
-    right: calc(50% - #{math.div($containerWidth, 2)} - 15rem - 50vw);
+    right: calc(50% - #{math.div($containerWidth, 2)} - 12rem - 50vw);
     top: -1px;
     width: 50vw;
     height: calc(54.5rem + 1px);
