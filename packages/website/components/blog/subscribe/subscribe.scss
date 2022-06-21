@@ -13,4 +13,9 @@
   .text-arrow {
     margin-top: 1rem;
   }
+  .blog-search-input {
+    &:after {
+      display: none;
+    }
+  }
 }

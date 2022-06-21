@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import Button, { ButtonVariant } from '../../../components/button/button';
 import constants from '../../../lib/constants';
@@ -30,12 +30,6 @@ export default function Subscribe() {
     }
   };
 
-  useEffect(() => setStatus(''), [email]);
-  useEffect(() => {
-    if (status === '') setDisabled(false);
-    setErrorMsg('');
-  }, [status]);
-
   /**
    * @param {import('react').ChangeEvent<HTMLFormElement>} e
    */
@@ -50,12 +44,12 @@ export default function Subscribe() {
       setErrorMsg('You could not subscribe to the list');
     }
     setDisabled(true);
-    // try to subscribe user
+
     try {
       await subscribe(userMail);
       setStatus('success');
     } catch (/** @type {any} */ error) {
-      console.error('ERROR SUBSCRIBING USER: ', error);
+      console.error('ERROR SUBSCRIBING USER');
       setDisabled(false);
       setStatus('error');
       setErrorMsg('Something went wrong. Please try again later.');
