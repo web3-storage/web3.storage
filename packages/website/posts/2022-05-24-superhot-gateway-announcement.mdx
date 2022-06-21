@@ -28,33 +28,28 @@ So the [NFT.Storage](http://NFT.Storage) Gateway is already making an impact for
 
 Today, we’re soft launching SuperHot Gateway, a feature that allows users to pay to perma-cache data on a global CDN with over 270 points of presence. As a wider variety of content is accessed through the [NFT.Storage](http://NFT.Storage) Gateway, users might want to guarantee that the content they care about is always performantly available on the edge. This feature is currently in Private Beta.
 
-```js
-// Amalgamating all tags available across all posts
-const allTags = useMemo(
-  () =>
-    uniq(posts.map(({ tags }) => tags).flat())
-      .sort()
-      .map(tag => {
-        const normCategory = tag.toLowerCase();
-        return {
-          label: tag,
-          onClick: () => {
-            if (normCategory === 'all') {
-              return setTags('');
-            }
-            if (tags.includes(normCategory)) {
-              tags.splice(tags.indexOf(normCategory), 1);
-            } else {
-              tags.push(normCategory);
-            }
-            return setTags(!!tags.length ? JSON.stringify(tags) : '');
-          },
-          selected: (normCategory === 'all' && !tags.length) || tags.includes(normCategory),
-        };
-      }),
-  [posts, tags, setTags]
-);
-```
+<CodePreview block={{
+  tabs: [
+    {
+      lines: [
+        "// store.mjs",
+        "",
+        "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
+        "",
+        "const token = process.env.API_TOKEN",
+        "const client = new Web3Storage({ token })",
+        "",
+        "async function storeFiles () {",
+        "  const files = await getFilesFromPath('/path/to/file')",
+        "  const cid = await client.put(files)",
+        "  console.log(cid)",
+        "}",
+        "",
+      ],
+      disableCursor: true
+    }
+  ]
+}}/>
 
 This is `something that users were` asking for right after initially launching the [NFT.Storage](http://NFT.Storage) Gateway. Read performance of off-chain NFT data is something that many users, from NFT tooling providers to marketplaces, have been dealing with, often spinning up entirely new infrastructure efforts just to provide good performance to their end-users. SuperHot allows these users focus less on infra and more on delivering innovation in the NFT space. Not to mention that pricing is best-in-class, given that our costs to do this caching can be amortized `across multiple users!`
 

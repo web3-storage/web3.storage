@@ -18,6 +18,7 @@ import Tags from '../../../components/blog/tags/tags';
 import { Card } from '../../../components/blog/cards/cards';
 import { addTextToClipboard } from '../../../lib/utils';
 import Button, { ButtonVariant } from '../../../components/button/button';
+import CodePreview from 'components/codepreview/codepreview';
 
 export async function getStaticProps({ ...ctx }) {
   // get individual post
@@ -207,7 +208,12 @@ const Post = ({ post, posts }) => {
           <div className="post-meta-category">{post.meta.category}</div>
         </div>
         <div className="post-content">
-          <MDXRemote {...post.content} />
+          <MDXRemote
+            {...post.content}
+            components={{
+              CodePreview,
+            }}
+          />
         </div>
       </div>
 

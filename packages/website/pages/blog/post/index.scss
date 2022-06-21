@@ -141,6 +141,15 @@
       margin-top: 0.5rem;
     }
   }
+
+  .code-preview-wrapper {
+    background: none;
+    padding: 0;
+
+    &:before, pre {
+      background: none;
+    }
+  }
 }
 
 // floating illustrations
