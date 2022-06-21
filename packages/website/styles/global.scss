@@ -355,15 +355,3 @@ h5,
 .gap-2 { grid-gap: 0 2rem; }
 .gap-3 { grid-gap: 0 3rem; }
 .gap-4 { grid-gap: 0 4rem; }
-
-.grid-lines {
-    width: 64rem;
-    height: 100vh;
-    position: fixed;
-    border: 1px solid orange;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100000000;
-    top: 0;
-    pointer-events: none;
-}
