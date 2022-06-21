@@ -10,10 +10,11 @@ import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index
 import platformBrowserSource from '!!raw-loader!../../../assets/code-snippets/how-to/platform-browser.js'
 import platformNodeSource from '!!raw-loader!../../../assets/code-snippets/how-to/platform-node.js'
 import golangUpload from '!!raw-loader!../../../assets/code-snippets/how-to/golang/upload/upload.go'
+import Link from 'next/link';
 
 # How to store data using Web3.Storage
 
-In this how-to guide, **you'll learn how to store data programmatically for your development projects using the Web3.Storage client libraries** in [JavaScript][reference-js] and [Go][reference-go]. This includes making your data available on the decentralized [IPFS](https://ipfs.io) network with persistent long-term storage provided by [Filecoin](https://filecoin.io) — all for free.
+In this how-to guide, **you'll learn how to store data programmatically for your development projects using the Web3.Storage client libraries** in [JavaScript][reference-js] and [Go][reference-go]. This includes making your data available on the decentralized <Link href="/docs/how-tos/retrieve">local link</Link> network with persistent long-term storage provided by [Filecoin](https://filecoin.io) — all for free.
 
 **If you just want to quickly store a few files using Web3.Storage rather than include upload functionality in an app or service you're building**, you may want to skip this guide for now and simply use the [Files page][site-files] on the Web3.Storage site.
 

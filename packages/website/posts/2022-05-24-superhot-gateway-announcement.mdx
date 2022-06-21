@@ -28,28 +28,20 @@ So the [NFT.Storage](http://NFT.Storage) Gateway is already making an impact for
 
 Today, we’re soft launching SuperHot Gateway, a feature that allows users to pay to perma-cache data on a global CDN with over 270 points of presence. As a wider variety of content is accessed through the [NFT.Storage](http://NFT.Storage) Gateway, users might want to guarantee that the content they care about is always performantly available on the edge. This feature is currently in Private Beta.
 
-<CodePreview block={{
-  tabs: [
-    {
-      lines: [
-        "// store.mjs",
-        "",
-        "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
-        "",
-        "const token = process.env.API_TOKEN",
-        "const client = new Web3Storage({ token })",
-        "",
-        "async function storeFiles () {",
-        "  const files = await getFilesFromPath('/path/to/file')",
-        "  const cid = await client.put(files)",
-        "  console.log(cid)",
-        "}",
-        "",
-      ],
-      disableCursor: true
-    }
-  ]
-}}/>
+```
+// store.mjs
+ 
+import { Web3Storage, getFilesFromPath } from 'web3.storage'
+
+const token = process.env.API_TOKEN
+const client = new Web3Storage({ token })
+
+async function storeFiles () {
+  const files = await getFilesFromPath('/path/to/file')
+  const cid = await client.put(files)
+  console.log(cid)
+}
+```
 
 This is `something that users were` asking for right after initially launching the [NFT.Storage](http://NFT.Storage) Gateway. Read performance of off-chain NFT data is something that many users, from NFT tooling providers to marketplaces, have been dealing with, often spinning up entirely new infrastructure efforts just to provide good performance to their end-users. SuperHot allows these users focus less on infra and more on delivering innovation in the NFT space. Not to mention that pricing is best-in-class, given that our costs to do this caching can be amortized `across multiple users!`
 

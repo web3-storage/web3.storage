@@ -1,7 +1,6 @@
 import fs from 'fs';
 
 import { useCallback, useMemo, useState, useEffect } from 'react';
-import clsx from 'clsx';
 import matter from 'gray-matter';
 import { uniq } from 'lodash';
 
@@ -21,23 +20,10 @@ import GradientBackground from '../../components/gradientbackground/gradientback
 
 const BLOG_ITEMS_PER_PAGE = 4;
 
-/**
- * Blog Cards
- * @param {Object} props
- */
-const Items = ({ currentItems }) => (
-  <>
-    {currentItems.map((post, i) => (
-      <Card key={i} post={post} />
-    ))}
-  </>
-);
-
 export async function getStaticProps() {
   const files = fs.readdirSync('posts');
   let featuredImage = null;
   files.sort().reverse();
-
   const posts = files
     ? files
         .filter(filename => !filename.startsWith('.'))
@@ -51,7 +37,6 @@ export async function getStaticProps() {
           };
         })
     : [];
-
   return {
     props: {
       posts,
@@ -59,61 +44,6 @@ export async function getStaticProps() {
       image: featuredImage,
     },
   };
-}
-
-/**
- * Pagination Component
- *
- * @param {Object} props
- * @param {Object} props.items
- * @param {string[]} [props.selectedCategory]
- * @returns {JSX.Element}
- */
-const Paginated = ({ items }) => {
-  const [paginatedFiles, setPaginatedFiles] = useState(items);
-
-  return (
-    <div className="blog-list-container">
-      {paginatedFiles.length > 0 ? (
-        <Items currentItems={paginatedFiles} />
-      ) : (
-        <h5>Hmmm... there is nothing here. Try another search term!</h5>
-      )}
-      <div className="blog-pagination">
-        <Pagination
-          className="files-manager-pagination"
-          items={items}
-          itemsPerPage={BLOG_ITEMS_PER_PAGE}
-          visiblePages={1}
-          queryParam="page"
-          onChange={setPaginatedFiles}
-        />
-      </div>
-    </div>
-  );
-};
-
-/**
- *
- * @param {Object} props
- * @param {string[]} props.categories
- * @param {string} props.selectedCategory
- * @param {(tag: string) => void} props.handleCategoryClick
- * @returns {JSX.Element}
- */
-function CategoryContainer({ categories, selectedCategory, handleCategoryClick }) {
-  return (
-    <Categories
-      categories={categories.map(category => {
-        const normCategory = category.toLowerCase();
-        return {
-          label: category,
-          onClick: () => handleCategoryClick(normCategory),
-          selected: (normCategory === 'all' && !selectedCategory) || selectedCategory === normCategory,
-        };
-      })}
-    />
-  );
 }
 
 /**
@@ -130,6 +60,48 @@ const Blog = ({ posts = [] }) => {
   const categories = useMemo(() => ['All', ...uniq(posts.map(({ category }) => category)).sort()], [posts]);
   const sections = BlogPageData.page_content;
   const animations = BlogPageData.floater_animations;
+
+  const Paginated = ({ items }) => {
+    const [paginatedFiles, setPaginatedFiles] = useState(items);
+    return (
+      <div className="blog-list-container">
+        {paginatedFiles.length > 0 ? (
+          <>
+            {paginatedFiles.map((post, i) => (
+              <Card key={i} post={post} />
+            ))}
+          </>
+        ) : (
+          <h5>Hmmm... there is nothing here. Try another search term!</h5>
+        )}
+        <div className="blog-pagination">
+          <Pagination
+            className="files-manager-pagination"
+            items={items}
+            itemsPerPage={BLOG_ITEMS_PER_PAGE}
+            visiblePages={1}
+            queryParam="page"
+            onChange={setPaginatedFiles}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const CategoryContainer = ({ categories, selectedCategory, handleCategoryClick }) => {
+    return (
+      <Categories
+        categories={categories.map(category => {
+          const normCategory = category.toLowerCase();
+          return {
+            label: category,
+            onClick: () => handleCategoryClick(normCategory),
+            selected: (normCategory === 'all' && !selectedCategory) || selectedCategory === normCategory,
+          };
+        })}
+      />
+    );
+  };
 
   useEffect(() => {
     let pageFloaters = {};
@@ -184,10 +156,6 @@ const Blog = ({ posts = [] }) => {
     [posts, category, keyword, tags]
   );
 
-  /**
-   *
-   * @param {string} category
-   */
   const handleCategoryClick = useCallback(
     category => {
       setCategory(category === 'all' ? '' : category);
@@ -195,10 +163,6 @@ const Blog = ({ posts = [] }) => {
     [setCategory]
   );
 
-  /**
-   *
-   * @param {string} category
-   */
   const onSearch = useCallback(
     event => {
       setKeyword(event.currentTarget.value.toLowerCase() || '');
@@ -206,10 +170,6 @@ const Blog = ({ posts = [] }) => {
     [setKeyword]
   );
 
-  /**
-   *
-   * @param {string} category
-   */
   const onRemoveTag = useCallback(
     tag => () => {
       tags.splice(tags.indexOf(tag), 1);
@@ -218,13 +178,9 @@ const Blog = ({ posts = [] }) => {
     [setTags, tags]
   );
 
-  /**
-   * @param {Object} props
-   * @param {JSX.Element | string} props.children
-   */
-  const Backdrop = ({ children }) => <div className={clsx('grid')}>{children}</div>;
-
-  if (posts.length === 0) return <Backdrop>There are no blogs yet 😞</Backdrop>;
+  if (posts.length === 0) {
+    return <h5 className="grid">There are no posts yet 😞</h5>;
+  }
 
   return (
     <main className="grid blog-index">

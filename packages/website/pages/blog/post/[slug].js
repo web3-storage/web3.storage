@@ -1,5 +1,10 @@
 import fs from 'fs';
 
+import hljs from 'highlight.js/lib/core';
+import javascript from 'highlight.js/lib/languages/javascript';
+import shell from 'highlight.js/lib/languages/shell';
+import go from 'highlight.js/lib/languages/go';
+import json from 'highlight.js/lib/languages/json';
 import { useEffect, useMemo, useState } from 'react';
 import matter from 'gray-matter';
 import { serialize } from 'next-mdx-remote/serialize';
@@ -16,9 +21,13 @@ import { initFloaterAnimations } from '../../../lib/floater-animations.js';
 import SocialLink from '../../../components/social-link';
 import Tags from '../../../components/blog/tags/tags';
 import { Card } from '../../../components/blog/cards/cards';
-import { addTextToClipboard } from '../../../lib/utils';
 import Button, { ButtonVariant } from '../../../components/button/button';
-import CodePreview from 'components/codepreview/codepreview';
+import { addTextToClipboard } from '../../../lib/utils';
+
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('shell', shell);
+hljs.registerLanguage('go', go);
+hljs.registerLanguage('json', json);
 
 export async function getStaticProps({ ...ctx }) {
   // get individual post
@@ -158,6 +167,11 @@ const Post = ({ post, posts }) => {
     return currentRelatedPosts;
   }, [post, posts]);
 
+  // code highlighting
+  useEffect(() => {
+    hljs.highlightAll();
+  });
+
   // add image caption
   useEffect(() => {
     const allImages = document.querySelectorAll('.post-content img');
@@ -208,12 +222,7 @@ const Post = ({ post, posts }) => {
           <div className="post-meta-category">{post.meta.category}</div>
         </div>
         <div className="post-content">
-          <MDXRemote
-            {...post.content}
-            components={{
-              CodePreview,
-            }}
-          />
+          <MDXRemote {...post.content} />
         </div>
       </div>
 
