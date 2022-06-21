@@ -4,11 +4,14 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import clsx from 'clsx';
 
+import { trackCustomLinkClick, events } from 'lib/countly';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Button from '../button/button';
 import Squiggle from '../../assets/illustrations/squiggle.js';
+import { ReactComponent as SlackIcon } from '../../assets/icons/slack.svg';
+import { ReactComponent as DiscordIcon } from '../../assets/icons/discord.svg';
+import { ReactComponent as GithubIcon } from '../../assets/icons/github2.svg';
 import GeneralPageData from '../../content/pages/general.json';
-import { trackCustomLinkClick, events } from 'lib/countly';
 
 // ====================================================================== Params
 /**
@@ -75,6 +78,28 @@ export default function Footer({ isProductApp }) {
                   {contact.cta.text}
                 </Button>
               )}
+
+              <div className="footer-social">
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="slack"
+                  href="https://filecoinproject.slack.com/join/shared_invite/zt-1a8parx1w-vn2yG5atZVw_dUOUmedeLQ#/shared-invite/email"
+                >
+                  <SlackIcon />
+                </a>
+                <a target="_blank" rel="noreferrer" aria-label="discord" href="https://discord.com/invite/4zEkFVqwms">
+                  <DiscordIcon />
+                </a>
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="github"
+                  href="https://github.com/web3-storage/web3.storage"
+                >
+                  <GithubIcon />
+                </a>
+              </div>
             </div>
           </div>
 

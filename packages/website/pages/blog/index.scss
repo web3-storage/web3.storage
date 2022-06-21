@@ -49,11 +49,6 @@
       filter: blur(0.5rem);
       opacity: 1;
     }
-    &:focus-within {
-      .search-icon svg {
-        transform: scale(1.2);
-      }
-    }
   }
 
   @include medium {

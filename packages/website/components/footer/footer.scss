@@ -160,3 +160,25 @@ $footerLogoWidth: 2.25rem;
     padding-top: 1rem;
   }
 }
+
+.footer-social {
+  margin-top: 1.5rem;
+  a {
+    position: relative;
+    display: inline-block;
+    width: 45px;
+    height: 45px;
+    margin-right: 0.75rem;
+    transition: all $transitionDuration ease-in-out;
+    @include gradient_Blurry_Background_PinkBlue;
+    &:before {
+      z-index: -1;
+    }
+    &:hover {
+      &:before {
+        filter: blur(0.5rem);
+        opacity: 1;
+      }
+    }
+  }
+}
