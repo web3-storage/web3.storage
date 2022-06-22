@@ -28,11 +28,11 @@ UPDATE public.content
  *
  * @param {Object} config
  * @param {import('pg').Client} config.rwPg
- * @param {import('pg').Client} config.roPg
+ * @param {import('pg').Pool} config.cargoPool
  * @param {number} [config.limit]
  * @param {Date} config.after
  */
-export async function updateDagSizes ({ rwPg, roPg, after, limit = LIMIT }) {
+export async function updateDagSizes ({ rwPg, cargoPool, after, limit = LIMIT }) {
   const log = debug('dagcargo:updateDagSizes')
 
   if (!log.enabled) {
@@ -44,7 +44,7 @@ export async function updateDagSizes ({ rwPg, roPg, after, limit = LIMIT }) {
   let updatedCids = 0
   let offset = 0
   while (true) {
-    const { rows: contents } = await roPg.query(FIND_CONTENT_TO_UPDATE, [
+    const { rows: contents } = await cargoPool.query(FIND_CONTENT_TO_UPDATE, [
       after.toISOString(),
       limit,
       offset

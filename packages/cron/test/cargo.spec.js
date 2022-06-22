@@ -3,12 +3,12 @@ import assert from 'assert'
 import { createCargoDag, createUpload, createUser, createUserAuthKey, dbEndpoint, getUpload, listUploads, randomCid, token } from '@web3-storage/db/test-utils'
 import { DBClient } from '@web3-storage/db'
 import { updateDagSizes } from '../src/jobs/dagcargo.js'
-import { getPg } from '../src/lib/utils.js'
+import { getCargoPgPool, getPg } from '../src/lib/utils.js'
 
 const env = {
   ...process.env,
   ENV: 'dev',
-  RO_PG_CONNECTION: 'postgres://postgres:postgres@127.0.0.1:5432/postgres'
+  CARGO_PG_CONNECTION: 'postgres://postgres:postgres@127.0.0.1:5432/postgres?currentSchema=cargo'
 }
 
 function getToBeUpdatedNull (cItem) {
@@ -27,13 +27,13 @@ describe('Fix dag sizes migration', () => {
   let user
   let authKey
   let contentItems
-  let roPg
+  let cargoPool
   let rwPg
 
   async function updateDagSizesWrp ({ user, after = new Date(1990, 1, 1), limit = 1000 }) {
     const allUploadsBefore = await listUploads(dbClient, user._id)
     await updateDagSizes({
-      roPg,
+      cargoPool,
       rwPg,
       after,
       limit
@@ -58,12 +58,12 @@ describe('Fix dag sizes migration', () => {
       postgres: true
     })
     rwPg = await getPg(env, 'rw')
-    roPg = await getPg(env, 'ro')
+    cargoPool = await getCargoPgPool(env)
   })
 
   after(async () => {
     await rwPg.end()
-    await roPg.end()
+    await cargoPool.end()
   })
 
   beforeEach(async () => {

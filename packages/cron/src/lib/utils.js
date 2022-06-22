@@ -99,8 +99,8 @@ function getPgConnString (env, mode = 'rw') {
  */
 export function getCargoPgPool (env) {
   const connection = env.CARGO_PG_CONNECTION
-  if (!connection && env.ENV === 'dev') {
-    throw new Error('Missing CARGO_PG_CONNECTION string. Please add it to .env using env.tpl as reference')
+  if (!connection) {
+    throw new Error('Missing CARGO_PG_CONNECTION string. Please add it to the environment.')
   }
 
   return new pg.Pool({
