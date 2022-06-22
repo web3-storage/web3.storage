@@ -296,6 +296,7 @@ export async function createCargoDag (dbClient, dag = {}, source = {}) {
     size_claimed: Math.ceil(Math.random() * 100000),
     entry_created: now,
     entry_last_updated: now,
+    srcid: 1, // This assumes a cargo.sources has been initialised with a row.
     ...source
   }
 

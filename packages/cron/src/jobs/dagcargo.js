@@ -6,10 +6,12 @@ const FIND_CONTENT_TO_UPDATE = `
 SELECT d.cid_v1 as cid, d.size_actual
   FROM cargo.dag_sources ds
   JOIN cargo.dags d using ( cid_v1 )
+  JOIN cargo.sources s USING ( srcid )
 WHERE
   d.size_actual > 0 AND 
   d.size_actual != ds.size_claimed AND 
-  ds.entry_last_updated > $1
+  ds.entry_last_updated > $1 AND
+  s.project = 1
 LIMIT $2
 OFFSET $3
 `
