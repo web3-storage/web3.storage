@@ -95,6 +95,10 @@ function getPgConnString (env, mode = 'rw') {
 /**
  * Create a new Postgres pool instance to connect directly to cargo replica from the passed environment variables.
  * This is a readOnly connection.
+ *
+ * A direct connection to Cargo proved to be more performant than going through FDW.
+ * This hasn't been thoroughly investigated or audited.
+ *
  * @param {Record<string, string|undefined>} env
  */
 export function getCargoPgPool (env) {
