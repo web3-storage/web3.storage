@@ -73,6 +73,7 @@ describe('list', () => {
     const controller = new AbortController()
     controller.abort()
     try {
+      // eslint-disable-next-line no-unused-vars
       for await (const _ of client.list({ signal: controller.signal })) {
         assert.unreachable('item should not have been yielded')
       }
