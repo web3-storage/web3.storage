@@ -67,4 +67,18 @@ describe('list', () => {
       assert.ok(true)
     }
   })
+
+  it('aborts', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const controller = new AbortController()
+    controller.abort()
+    try {
+      for await (const _ of client.list({ signal: controller.signal })) {
+        assert.unreachable('item should not have been yielded')
+      }
+      assert.unreachable('request should not have succeeded')
+    } catch (err) {
+      assert.equal(err.name, 'AbortError')
+    }
+  })
 })
