@@ -145,6 +145,7 @@
   width: toRem(50);
   left: calc(50% - #{math.div($containerWidth, 2)} + 12rem);
   top: 32rem;
+  z-index: -1;
   transform: rotate(30deg);
   @include small {
     display: none;
