@@ -10,8 +10,9 @@ export function errorHandler (err, { log }) {
   console.error(err.stack)
 
   let status = err.status || 500
-
-  log.error(err)
+  if (status >= 500) {
+    log.error(err)
+  }
 
   // TODO: improve error handler
   // https://github.com/web3-storage/web3.storage/issues/976
