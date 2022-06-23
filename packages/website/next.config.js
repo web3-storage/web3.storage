@@ -11,6 +11,8 @@ const docsPages = require('./pages/docs/nav.json');
 
 const withNextra = nextra('./modules/docs-theme/index.js');
 
+const { withSentryConfig } = require("@sentry/nextjs");
+
 const nextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
@@ -62,4 +64,19 @@ const nextConfig = {
   },
 };
 
-module.exports = withNextra({ ...nextConfig });
+const configWithDocs = withNextra({ ...nextConfig });
+
+const config =
+  env === 'dev' || process.env.SENTRY_UPLOAD !== 'true'
+    ? configWithDocs
+    : withSentryConfig(configWithDocs, {
+        debug: false,
+        silent: true,
+        setCommits: { auto: true, ignoreEmpty: true, ignoreMissing: true },
+        release,
+        dist: shortHash,
+        deploy: { env },
+      })
+
+module.exports = config
+
