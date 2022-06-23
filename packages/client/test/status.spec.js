@@ -35,4 +35,17 @@ describe('status', () => {
       assert.is(err.message, 'Internal Server Error')
     }
   })
+
+  it('aborts', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const cid = 'bafkreieq5jui4j25lacwomsqgjeswwl3y5zcdrresptwgmfylxo2depppq'
+    const controller = new AbortController()
+    controller.abort()
+    try {
+      await client.status(cid, { signal: controller.signal })
+      assert.unreachable('request should not have succeeded')
+    } catch (err) {
+      assert.equal(err.name, 'AbortError')
+    }
+  })
 })
