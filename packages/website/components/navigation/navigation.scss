@@ -119,12 +119,13 @@
   }
   .nav-item {
     position: relative;
+    align-self: flex-end;
     @include fontSize_Small;
     @include fontWeight_Semibold;
     text-transform: uppercase;
     margin: 0 1rem;
     padding: 0 0.5rem;
-    transform: translateY(0rem);
+    height: 100%;
     transition: 200ms ease;
     cursor: pointer;
     @include medium {
@@ -133,7 +134,7 @@
     &:after {
       content: '';
       position: absolute;
-      bottom: -0.5rem;
+      bottom: 0rem;
       left: 0.25rem;
       width: calc(100% - 0.5rem);
       height: 0.25rem;
@@ -144,13 +145,13 @@
     }
     &:hover {
       color: $blue;
-      transform: translateY(-0.5rem);
+      height: 120%;
       &:after {
         border: solid 2px $blue;
       }
     }
     &.current-page {
-      transform: translateY(-0.5rem);
+      height: 120%;
       &:after {
         opacity: 1;
       }
