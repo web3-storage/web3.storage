@@ -153,7 +153,6 @@
       },
       {
         "id": "section_FAQ_ctas",
-        "grid": ["noGutter"],
         "columns": [
           {
             "type": "card_list_block",
@@ -162,6 +161,7 @@
               "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "direction": "row",
+            "gap": "3",
             "cards": [
               {
                 "type": "F",

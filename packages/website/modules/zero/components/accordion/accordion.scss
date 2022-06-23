@@ -26,11 +26,11 @@
 // -----------------------------------------------------------------------------
 .accordion-content {
   max-height: 0;
-  padding: 0 1em;
+  padding: 0;
   transition: all 0.35s;
 }
 
 .accordion-section.open .accordion-content {
   max-height: 100vh;
-  padding: 1em;
+  padding: 1em 0;
 }
