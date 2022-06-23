@@ -47,17 +47,23 @@ jobs:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
       - run: npm run build -w packages/website
         env:
+          ENV: test-e2e
           NEXT_PUBLIC_API: http://localhost:8787
           NEXT_PUBLIC_ENV: test-e2e
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
+          SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
+          SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
       - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
         working-directory: packages/website
       - run: touch .env
       - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }}
         env:
+          ENV: dev
           NEXT_PUBLIC_API: http://localhost:8787
           NEXT_PUBLIC_ENV: dev
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
+          SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
+          SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
       - name: Check for website test results
         id: check_website_test_results
         uses: andstor/file-existence-action@v1
@@ -82,11 +88,14 @@ jobs:
       - run: npm run build -w packages/client
       - run: npm run build -w packages/website
         env:
+          ENV: staging
           NEXT_PUBLIC_ENV: staging
           NEXT_PUBLIC_API: https://api-staging.web3.storage
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           NEXT_PUBLIC_COUNTLY_URL: ${{ secrets.COUNTLY_URL }}
           NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
+          SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
+          SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
 
       # Add the site to web3.storage, output the cid as `steps.ipfs.outputs.cid`
       - name: Add to web3.storage
@@ -149,11 +158,14 @@ jobs:
       - run: npm run build -w packages/website
         if: ${{ steps.tag-release.outputs.releases_created }}
         env:
+          ENV: production
           NEXT_PUBLIC_ENV: production
           NEXT_PUBLIC_API: https://api.web3.storage
           NEXT_PUBLIC_MAGIC: ${{ secrets.PROD_MAGIC_PUBLIC_KEY }}
           NEXT_PUBLIC_COUNTLY_URL: ${{ secrets.COUNTLY_URL }}
           NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
+          SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
+          SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
 
       # Add the site to web3.storage, output the cid as `steps.ipfs.outputs.cid`
       - name: Add to web3.storage
