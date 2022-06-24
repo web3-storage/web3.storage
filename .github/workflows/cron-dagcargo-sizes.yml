@@ -1,4 +1,4 @@
-name: Cron dagcargo Populate Content DAG Sizes
+name: Update Content DAG Sizes
 
 on:
   schedule:
@@ -38,7 +38,8 @@ jobs:
           STAGING_RO_PG_CONNECTION: ${{ secrets.STAGING_PG_CONNECTION }} # no replica for staging
           PROD_PG_CONNECTION: ${{ secrets.PROD_PG_CONNECTION }}
           PROD_RO_PG_CONNECTION: ${{ secrets.PROD_RO_PG_CONNECTION }}
-          AFTER: ${{ inputs.after }}
+          CARGO_PG_CONNECTION: ${{ secrets.CARGO_PG_CONNECTION }}
+          AFTER: ${{ github.event.inputs.after }}
         run: npm run start:dagcargo:sizes -w packages/cron
 
       - name: Heartbeat

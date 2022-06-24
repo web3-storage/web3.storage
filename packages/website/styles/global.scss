@@ -195,12 +195,15 @@ body:not(.docs-site) #__next {
 [class*='grid_'] {
   width: $containerWidth;
   margin: 0 auto;
-  @include customMaxMQ($containerWidth + 4rem) {
-    padding: 0 4.1665%;
+  @include customMaxMQ($containerWidth) {
+    padding-left: clamp(2rem, 8vw, 6rem);
+    padding-right: clamp(2rem, 8vw, 6rem);
     width: 100%;
   }
   &[class*='-noGutter'] {
     margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
   }
   &.full {
     width: 100%;
@@ -245,6 +248,11 @@ h4,
 h5,
 .h5 {
   @include h5;
+}
+
+.table-heading {
+  padding: 0 2rem 2rem;
+  font-size: 1.875rem;
 }
 
 // Components
@@ -348,4 +356,17 @@ h5,
   @include medium {
     display: none;
   }
+}
+
+.gap-1 {
+  grid-gap: 0 1rem;
+}
+.gap-2 {
+  grid-gap: 0 2rem;
+}
+.gap-3 {
+  grid-gap: 0 3rem;
+}
+.gap-4 {
+  grid-gap: 0 4rem;
 }

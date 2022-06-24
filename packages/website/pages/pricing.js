@@ -11,9 +11,11 @@ export default function Home() {
 
   useEffect(() => {
     let pageFloaters = {};
-    initFloaterAnimations(animations).then(result => {
-      pageFloaters = result;
-    });
+    if (animations) {
+      initFloaterAnimations(animations).then(result => {
+        pageFloaters = result;
+      });
+    }
     return () => {
       if (pageFloaters.hasOwnProperty('destroy')) {
         pageFloaters.destroy();

@@ -119,12 +119,13 @@
   }
   .nav-item {
     position: relative;
-    font-size: toRem(14);
+    align-self: flex-end;
+    font-size: 14px;
     @include fontWeight_Semibold;
     text-transform: uppercase;
     margin: 0 0.5rem;
     padding: 0 0.5rem;
-    transform: translateY(0rem);
+    height: 100%;
     transition: 200ms ease;
     cursor: pointer;
     @include medium {
@@ -133,7 +134,7 @@
     &:after {
       content: '';
       position: absolute;
-      bottom: -0.5rem;
+      bottom: 0rem;
       left: 0.25rem;
       width: calc(100% - 0.5rem);
       height: 0.25rem;
@@ -144,13 +145,13 @@
     }
     &:hover {
       color: $blue;
-      transform: translateY(-0.5rem);
+      height: 120%;
       &:after {
         border: solid 2px $blue;
       }
     }
     &.current-page {
-      transform: translateY(-0.5rem);
+      height: 120%;
       &:after {
         opacity: 1;
       }
@@ -305,29 +306,30 @@
   &.mobile-panel {
     z-index: 50;
   }
-  @include small {
-    padding: 0 1.5rem;
-  }
 }
 
 .nav-items-wrapper {
-  @include small {
+  @include medium {
     display: none;
   }
 }
 
 .nav-menu-toggle {
   display: none;
-  @include small {
+  @include medium {
     display: flex;
     .DocSearch {
       margin-right: 1rem;
+    }
+    button {
+      display: flex;
+      align-items: center;
     }
   }
   &.light {
     svg,
     path {
-      fill: white;
+      // fill: white;
       stroke: white;
       transition: 250ms ease;
     }
@@ -346,7 +348,7 @@
   position: absolute;
   top: 0;
 
-  @include small {
+  @include medium {
     padding: 0 3.5rem;
     left: -99999px;
     right: -99999px;
@@ -366,7 +368,7 @@
   }
 
   &.open {
-    @include small {
+    @include medium {
       visibility: visible;
     }
     transform: translateY(0%);
@@ -444,7 +446,7 @@
       margin: 0 auto;
       transform: rotate(-40deg) translateX(12rem);
       bottom: -30rem;
-      @include small {
+      @include medium {
         width: 1800px;
         bottom: -25rem;
       }

@@ -202,6 +202,7 @@
               "push_left": "off-0_mi-1_ti-0"
             },
             "direction": "row",
+            "gap": "4",
             "cards": [
               {
                 "type": "A",
@@ -324,7 +325,6 @@
       },
       {
         "id": "section_FAQ_ctas",
-        "grid": ["noGutter"],
         "columns": [
           {
             "type": "card_list_block",
@@ -333,6 +333,7 @@
               "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "direction": "row",
+            "gap": "4",
             "cards": [
               {
                 "type": "F",
@@ -426,7 +427,6 @@
       },
       {
         "id": "section_get-started-cards",
-        "grid": ["noGutter"],
         "columns": [
           {
             "type": "card_list_block",
@@ -435,6 +435,7 @@
               "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "direction": "row",
+            "gap": "3",
             "cards": [
               {
                 "type": "B",
@@ -523,6 +524,7 @@
               "num": "col-12"
             },
             "direction": "row",
+            "gap": "1",
             "cards": [
               {
                 "type": "C",
@@ -600,7 +602,7 @@
           {
             "type": "text_block",
             "cols": {
-              "num": "col-3_md-7_ti-8",
+              "num": "col-4_md-7_ti-8",
               "push_left": "off-0_md-1_sm-0"
             },
             "format": "medium",

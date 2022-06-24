@@ -7,9 +7,6 @@
     width: 100%;
   }
 
-  h3 {
-    padding: 0 2.1875rem 0.9375rem;
-  }
   .isDisabled {
     pointer-events: none;
     opacity: 0.5;
@@ -34,6 +31,7 @@
   @include fontSize_Tiny;
   @include fontWeight_Regular;
   margin-top: 0.9375rem;
+  padding: 0 2rem 0 0.75rem;
   @include medium {
     margin-top: 3rem;
     justify-content: center;

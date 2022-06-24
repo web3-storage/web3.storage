@@ -91,3 +91,24 @@ function getPgConnString (env, mode = 'rw') {
   if (!connectionString) throw new Error('missing Postgres connection string')
   return connectionString
 }
+
+/**
+ * Create a new Postgres pool instance to connect directly to cargo replica from the passed environment variables.
+ * This is a readOnly connection.
+ *
+ * A direct connection to Cargo proved to be more performant than going through FDW.
+ * This hasn't been thoroughly investigated or audited.
+ *
+ * @param {Record<string, string|undefined>} env
+ */
+export function getCargoPgPool (env) {
+  const connection = env.CARGO_PG_CONNECTION
+  if (!connection) {
+    throw new Error('Missing CARGO_PG_CONNECTION string. Please add it to the environment.')
+  }
+
+  return new pg.Pool({
+    connectionString: env.CARGO_PG_CONNECTION,
+    max: MAX_CONCURRENT_QUERIES
+  })
+}
