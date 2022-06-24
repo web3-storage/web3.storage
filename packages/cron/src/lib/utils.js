@@ -103,7 +103,7 @@ function getPgConnString (env, mode = 'rw') {
  * @param {number} [dbOptions.port]
  * @returns
  */
-function buildConnectionString ({
+function buildPgConnectionString ({
   host,
   database,
   user,
@@ -139,7 +139,7 @@ export function getCargoPgPool (env) {
       }
     })
 
-    connectionString = buildConnectionString({
+    connectionString = buildPgConnectionString({
       user: env.DAG_CARGO_USER,
       database: env.DAG_CARGO_DATABASE,
       password: env.DAG_CARGO_PASSWORD,
