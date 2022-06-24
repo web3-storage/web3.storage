@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.3.0](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.2.0...web3.storage-v4.3.0) (2022-06-23)
+
+
+### Features
+
+* abortable API method calls ([#1532](https://github.com/web3-storage/web3.storage/issues/1532)) ([f80833c](https://github.com/web3-storage/web3.storage/commit/f80833ceb8c86086f535a20408a6febdff23140c)), closes [#1516](https://github.com/web3-storage/web3.storage/issues/1516)
+* fetch function is configureable ([#1324](https://github.com/web3-storage/web3.storage/issues/1324)) ([24dfbe0](https://github.com/web3-storage/web3.storage/commit/24dfbe0600a5797b46588ac7308bc0c107b8d423))
+
+
+### Bug Fixes
+
+* client trigger ci ([#1536](https://github.com/web3-storage/web3.storage/issues/1536)) ([bfa88cb](https://github.com/web3-storage/web3.storage/commit/bfa88cbb330274b287de90ca7d4b244919f18a5f))
+* reuse Service type sig for client options ([#1531](https://github.com/web3-storage/web3.storage/issues/1531)) ([3a0a78f](https://github.com/web3-storage/web3.storage/commit/3a0a78f5c7213a558c5a7b0db96c1668e7243b5e))
+
 ## [4.2.0](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.1.0...web3.storage-v4.2.0) (2022-04-19)
 
 

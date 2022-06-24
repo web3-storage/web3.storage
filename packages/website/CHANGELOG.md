@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.8.2](https://github.com/web3-storage/web3.storage/compare/website-v2.8.1...website-v2.8.2) (2022-06-20)
+
+
+### Bug Fixes
+
+* nav active states ([#1505](https://github.com/web3-storage/web3.storage/issues/1505)) ([1157d3a](https://github.com/web3-storage/web3.storage/commit/1157d3a4b0c8bd47ffab3c8674a5c9baacf92e50))
+* replace markdown links in docs with absolute non-md format ([#1524](https://github.com/web3-storage/web3.storage/issues/1524)) ([981470b](https://github.com/web3-storage/web3.storage/commit/981470b93d7b39cf9551f39b3e9ae3086526a6be))
+
 ## [2.8.1](https://github.com/web3-storage/web3.storage/compare/website-v2.8.0...website-v2.8.1) (2022-06-17)
 
 

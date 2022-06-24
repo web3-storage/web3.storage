@@ -11,6 +11,7 @@ import Card from '../card/card';
 export default function CardListBlock({ block }) {
   const childrenLoaded = useRef(/** @type {string[]} */ ([]));
   const direction = block.direction || 'row';
+  const gap = block.gap || '2';
   const blockB = block.cards.every(card => card.type === 'B');
   const blockF = block.cards.every(card => card.type === 'F');
   const standardHeights = blockB || blockF;
@@ -45,7 +46,7 @@ export default function CardListBlock({ block }) {
   // ================================================================== Template
   return (
     <div className="block card-list-block">
-      <div className={`card-${direction}`}>
+      <div className={`card-${direction} gap-${gap}`}>
         {block.cards.map((card, index) => (
           <Card
             key={`card-${index}`}

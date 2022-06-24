@@ -30,7 +30,7 @@
     "wrangler": "^2.0.6"
   },
   "standard": {
-    "globals": ["fetch"],
+    "globals": ["fetch", "AbortController"],
     "ignore": [
       "packages/website"
     ]

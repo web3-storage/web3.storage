@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.4.1](https://github.com/web3-storage/web3.storage/compare/api-v6.4.0...api-v6.4.1) (2022-06-22)
+
+
+### Bug Fixes
+
+* sentry not receiving errors ([#1548](https://github.com/web3-storage/web3.storage/issues/1548)) ([1dd8d6f](https://github.com/web3-storage/web3.storage/commit/1dd8d6f2df6ae316980fd070a695aca6bfdc7e10))
+
 ## [6.4.0](https://github.com/web3-storage/web3.storage/compare/api-v6.3.1...api-v6.4.0) (2022-06-17)
 
 

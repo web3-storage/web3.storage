@@ -79,7 +79,7 @@ const Account = () => {
   return (
     <>
       <div className="page-container account-container">
-        <h1 className="account-heading">{dashboard.heading}</h1>
+        <h1 className="table-heading">{dashboard.heading}</h1>
         <div className="account-content">
           <StorageManager content={AppData.page_content.storage_manager} className="account-storage-manager" />
           <CTACard
