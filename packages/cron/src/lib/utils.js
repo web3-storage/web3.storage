@@ -93,7 +93,7 @@ function getPgConnString (env, mode = 'rw') {
 }
 
 /**
- * Builds a post connections string
+ * Builds a pg connections string
  *
  * @param {object} dbOptions
  * @param {string} dbOptions.host
