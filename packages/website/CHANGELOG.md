@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.8.3](https://github.com/web3-storage/web3.storage/compare/website-v2.8.2...website-v2.8.3) (2022-06-24)
+
+
+### Bug Fixes
+
+* 1528 gutter alignment ([#1549](https://github.com/web3-storage/web3.storage/issues/1549)) ([dda568e](https://github.com/web3-storage/web3.storage/commit/dda568eeeac3a2f5c7eea1693bc6980d02be1549))
+* explain api maintenance mode ([#1545](https://github.com/web3-storage/web3.storage/issues/1545)) ([cabc458](https://github.com/web3-storage/web3.storage/commit/cabc458bc6cf98156aaf6491608d811b1e05ac43))
+* rename `id` -> `cid`... ([#1470](https://github.com/web3-storage/web3.storage/issues/1470)) ([a5cb811](https://github.com/web3-storage/web3.storage/commit/a5cb81136bee4c197eaa0813488dadfea99768e9))
+
+
+### Other Changes
+
+* update year in footer ([#1551](https://github.com/web3-storage/web3.storage/issues/1551)) ([ce4a7f2](https://github.com/web3-storage/web3.storage/commit/ce4a7f296fa83c3a36fcfb273ae23176a393046b))
+
 ## [2.8.2](https://github.com/web3-storage/web3.storage/compare/website-v2.8.1...website-v2.8.2) (2022-06-20)
 
 
