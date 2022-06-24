@@ -19,7 +19,9 @@ const pkg = JSON.parse(
 )
 
 const env = process.env.NEXT_PUBLIC_ENV;
-const release = `${pkg.name}@${pkg.version}-${env}+${shortHash}`
+const release = `${pkg.name .replace('/', '_')}@${pkg.version}-${env}+${shortHash}`;
+
+console.error(release);
 
 const nextConfig = {
   trailingSlash: true,
@@ -77,13 +79,14 @@ const configWithDocs = withNextra({ ...nextConfig });
 const config =
   env === 'dev' || process.env.SENTRY_UPLOAD !== 'true'
     ? configWithDocs
-    : withSentryConfig(configWithDocs, {
+    : withSentryConfig(configWithDocs, { 
         debug: false,
         silent: true,
         setCommits: { auto: true, ignoreEmpty: true, ignoreMissing: true },
         release,
         dist: shortHash,
         deploy: { env },
+        org: 'protocol-labs-it',
       });
 
 module.exports = config;
