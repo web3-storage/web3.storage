@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.8.4](https://github.com/web3-storage/web3.storage/compare/website-v2.8.3...website-v2.8.4) (2022-06-24)
+
+
+### Bug Fixes
+
+* allow delete file modal to close on error ([#1542](https://github.com/web3-storage/web3.storage/issues/1542)) ([8dd4174](https://github.com/web3-storage/web3.storage/commit/8dd417486c3a03f9ed2ea5890059aa542fdc11c9))
+* stop navigating to account screen from token creator button ([#1541](https://github.com/web3-storage/web3.storage/issues/1541)) ([dc752ad](https://github.com/web3-storage/web3.storage/commit/dc752ad35af24b6f0300f2c1b53899aa60bab704))
+
 ## [2.8.3](https://github.com/web3-storage/web3.storage/compare/website-v2.8.2...website-v2.8.3) (2022-06-24)
 
 
