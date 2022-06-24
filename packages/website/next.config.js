@@ -13,6 +13,14 @@ const withNextra = nextra('./modules/docs-theme/index.js');
 
 const { withSentryConfig } = require("@sentry/nextjs");
 
+const shortHash = git.short(__dirname)
+const pkg = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8')
+)
+
+const env = process.env.NEXT_PUBLIC_ENV;
+const release = `${pkg.name}@${pkg.version}-${env}+${shortHash}`
+
 const nextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
@@ -76,7 +84,6 @@ const config =
         release,
         dist: shortHash,
         deploy: { env },
-      })
+      });
 
-module.exports = config
-
+module.exports = config;
