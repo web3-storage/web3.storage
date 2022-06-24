@@ -110,7 +110,7 @@ function buildPgConnectionString ({
   password,
   port = 5432
 }) {
-  return `postgres//${user}:${password}@${host}:${port}/${database}`
+  return `postgres://${user}:${password}@${host}:${port}/${database}`
 }
 
 /**
