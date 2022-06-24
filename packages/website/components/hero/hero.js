@@ -3,6 +3,7 @@ import TextBlock from '../textblock/textblock';
 import Grid3D from '../../assets/illustrations/grid3D';
 import Squiggle from '../../assets/illustrations/squiggle';
 import Corkscrew from '../../assets/illustrations/corkscrew';
+import Corkscrew2 from '../../assets/illustrations/corkscrew2';
 import Helix from '../../assets/illustrations/helix';
 import Zigzag from '../../assets/illustrations/zigzag';
 import Cross from '../../assets/illustrations/cross';
@@ -81,7 +82,7 @@ export default function Hero({ block }) {
     return (
       <>
         <Coil id="blog_hero-coil" className={'hero-illustration'} />
-        <Corkscrew id="blog_hero-corkscrew" className={'hero-illustration'} />
+        <Corkscrew2 id="blog_hero-corkscrew" className={'hero-illustration'} />
         <Helix id="blog_hero-helix" className={'hero-illustration'} />
       </>
     );

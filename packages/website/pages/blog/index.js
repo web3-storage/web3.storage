@@ -187,8 +187,12 @@ const Blog = ({ posts = [] }) => {
       {sections.map((section, index) => (
         <BlockBuilder id={`blog_section_${index + 1}`} key={`section_${index}`} subsections={section} />
       ))}
-      <Button variant={ButtonVariant.DARK} onClick={() => subscribeModalOpenState[1](true)}>
-        Subscribe&nbsp;&nbsp;+
+      <Button
+        className="blog-subscribe-btn"
+        variant={ButtonVariant.DARK}
+        onClick={() => subscribeModalOpenState[1](true)}
+      >
+        <span>Subscribe</span>
       </Button>
       <div className="blog-search-c grid">
         <div className="col-5_md-12_sm-12_ti-12">

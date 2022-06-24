@@ -9,13 +9,13 @@
   }
   &:nth-child(odd) {
     padding-right: 1rem;
-    @include medium {
+    @include small {
       padding-right: 0;
     }
   }
   &:nth-child(even) {
     padding-left: 1rem;
-    @include medium {
+    @include small {
       padding-left: 0;
     }
   }
@@ -75,5 +75,5 @@
 }
 .blog-card-title {
   @include fontSize_Medium;
-  line-height: 1.5;
+  line-height: 1.7;
 }
