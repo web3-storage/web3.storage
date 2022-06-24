@@ -74,6 +74,12 @@
     min-height: auto;
   }
 
+  .table-error {
+    padding: 1.875rem;
+    text-align: center;
+    color: $cyan;
+  }
+
   .tokens-manager-upload-cta {
     position: relative;
     top: 1.5625rem;
