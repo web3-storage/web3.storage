@@ -15,7 +15,7 @@ async function main () {
   const cargoPool = getCargoPgPool(process.env)
 
   try {
-    const after = new Date(process.env.AFTER || xDaysAgo(7))
+    const after = new Date(process.env.AFTER || xDaysAgo(1))
     await updateDagSizes({ rwPg, cargoPool, after })
   } finally {
     await rwPg.end()
