@@ -288,13 +288,11 @@ export async function userUploadsGet (request, env) {
   }
 
   if (data.uploads.length + offset < data.count) {
-    const nextPage = page + 1
-    headers.Next_link = `<${requestUrl.pathname}?size=${size}&page=${encodeURIComponent(nextPage)}>; rel="next"`
+    headers.Next_link = `<${requestUrl.pathname}?size=${size}&page=${encodeURIComponent(page + 1)}>; rel="next"`
   }
 
   if (page > 1) {
-    const previousPage = page - 1
-    headers.Prev_link = `<${requestUrl.pathname}?size=${size}&page=${encodeURIComponent(previousPage)}>; rel="previous"`
+    headers.Prev_link = `<${requestUrl.pathname}?size=${size}&page=${encodeURIComponent(page - 1)}>; rel="previous"`
   }
 
   return new JSONResponse(data.uploads, { headers })

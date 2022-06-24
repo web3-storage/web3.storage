@@ -314,7 +314,7 @@ describe('upload', () => {
     })
     assert.strictEqual(userUploadsByNameSort[0].cid, differentCid, 'last upload first')
 
-    // Sort {name, Asc} with size and offset
+    // Sort {name, Asc} with size and page
     const { uploads: userUploadsAscAndByNameSort } = await client.listUploads(user._id, {
       sortBy: 'Name',
       sortOrder: 'Asc',
