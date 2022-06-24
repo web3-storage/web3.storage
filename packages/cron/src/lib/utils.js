@@ -123,31 +123,27 @@ function buildPgConnectionString ({
  * @param {Record<string, string|undefined>} env
  */
 export function getCargoPgPool (env) {
-  let connectionString = env.CARGO_PG_CONNECTION
-  // if a connection string isn't specified try to build the connection string from other variables.
-  if (!connectionString) {
-    const cargoEnvVariables = [
-      'DAG_CARGO_HOST',
-      'DAG_CARGO_DATABASE',
-      'DAG_CARGO_USER',
-      'DAG_CARGO_PASSWORD'
-    ]
+  const cargoEnvVariables = [
+    'DAG_CARGO_HOST',
+    'DAG_CARGO_DATABASE',
+    'DAG_CARGO_USER',
+    'DAG_CARGO_PASSWORD'
+  ]
 
-    cargoEnvVariables.forEach((variable) => {
-      if (!env[variable]) {
-        throw new Error(`Missing ${variable} string. Please add it to the environment.`)
-      }
-    })
+  cargoEnvVariables.forEach((variable) => {
+    if (!env[variable]) {
+      throw new Error(`Missing ${variable} string. Please add it to the environment.`)
+    }
+  })
 
-    connectionString = buildPgConnectionString({
-      user: env.DAG_CARGO_USER,
-      database: env.DAG_CARGO_DATABASE,
-      password: env.DAG_CARGO_PASSWORD,
-      host: env.DAG_CARGO_HOST
-    })
+  const connectionString = buildPgConnectionString({
+    user: env.DAG_CARGO_USER,
+    database: env.DAG_CARGO_DATABASE,
+    password: env.DAG_CARGO_PASSWORD,
+    host: env.DAG_CARGO_HOST
+  })
 
-    throw new Error('Missing CARGO_PG_CONNECTION string. Please add it to the environment.')
-  }
+  console.log(`Using ${connectionString}`)
 
   return new pg.Pool({
     connectionString,
