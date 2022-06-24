@@ -39,7 +39,7 @@ jobs:
           PROD_PG_CONNECTION: ${{ secrets.PROD_PG_CONNECTION }}
           PROD_RO_PG_CONNECTION: ${{ secrets.PROD_RO_PG_CONNECTION }}
           CARGO_PG_CONNECTION: ${{ secrets.CARGO_PG_CONNECTION }}
-          AFTER: ${{ inputs.after }}
+          AFTER: ${{ github.event.inputs.after }}
         run: npm run start:dagcargo:sizes -w packages/cron
 
       - name: Heartbeat
