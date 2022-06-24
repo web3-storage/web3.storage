@@ -1,4 +1,4 @@
-name: Cron dagcargo Populate Content DAG Sizes
+name: Update Content DAG Sizes
 
 on:
   schedule:
