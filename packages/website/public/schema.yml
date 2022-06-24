@@ -195,6 +195,10 @@ paths:
       operationId: get-user-uploads
       parameters:
         - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/sortBy'
+        - $ref: '#/components/parameters/sortOrder'
+        - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/size'
       responses:
         '200':
@@ -441,7 +445,6 @@ components:
       name: sortBy
       in: query
       required: false
-      default: Name
       schema:
         type: string
         enum: [Date, Name]
@@ -450,7 +453,6 @@ components:
       name: sortOrder
       in: query
       required: false
-      default: Desc
       schema:
         type: string
         enum: [Asc, Desc]

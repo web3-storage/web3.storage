@@ -268,8 +268,12 @@ export type ListUploadsOptions = {
   sortOrder?: 'Asc' | 'Desc'
 }
 
+export type ListUploadReturn = {
+  count: number,
+  uploads: Promise<UploadItemOutput[]>,
+}
 
-// Pinninng
+// Pinning
 
 // PinRequest
 export type PsaPinRequestUpsertInput = {

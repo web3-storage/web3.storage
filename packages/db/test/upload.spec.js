@@ -279,8 +279,9 @@ describe('upload', () => {
   })
 
   it('can list user uploads with several options', async () => {
-    const { uploads: previousUserUploads } = await client.listUploads(user._id)
+    const { uploads: previousUserUploads, count: previousUserUploadCount } = await client.listUploads(user._id)
     assert(previousUserUploads, 'user has uploads')
+    assert(previousUserUploadCount > 0, 'user has counted uploads')
 
     const differentCid = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf355'
     const created = new Date().toISOString()
@@ -330,5 +331,14 @@ describe('upload', () => {
     // Filter with after second upload
     const { uploads: userUploadsAfterTheLatest } = await client.listUploads(user._id, { after: created })
     assert.strictEqual(userUploadsAfterTheLatest.length, 1, 'list with only the second upload')
+
+    // offset uploads
+    const { uploads: offsetUserUploads } = await client.listUploads(user._id, { offset: previousUserUploads.length })
+    assert.strictEqual(offsetUserUploads.length, 1, 'list with only the second upload')
+
+    // paginate uploads
+    const { uploads: paginatedUserUploads, count: paginatedUserUploadCount } = await client.listUploads(user._id, { offset: 1, size: 1 })
+    assert.strictEqual(paginatedUserUploads.length, 1, 'only returns the paginated uploads')
+    assert.strictEqual(paginatedUserUploadCount, previousUserUploads.length + 1, 'only returns the paginated uploads')
   })
 })

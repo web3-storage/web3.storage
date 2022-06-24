@@ -305,7 +305,7 @@ describe('GET /user/uploads', () => {
     assert(res.ok)
 
     // Ensure we have all pagination metadata in the headers.
-    const nextLink = res.headers.get('Next_link')
+    const nextLink = res.headers.get('Link')
     assert(nextLink, 'has a Next link header for the next page')
     assert.strictEqual(nextLink, `</user/uploads?size=${size}&page=${page + 1}>; rel="next"`)
 
@@ -336,8 +336,6 @@ describe('GET /user/uploads', () => {
       headers: { Authorization: `Bearer ${token}` }
     })
     assert(res.ok)
-
-    assert.ok('link' in res.headers === false)
 
     const uploads = await res.json()
     const expected = userUploads

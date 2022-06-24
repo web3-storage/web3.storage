@@ -76,6 +76,12 @@ const listPinsQuery = `
     )
   )`
 
+/**  Mapping of Upload table sortable columns to ListUploads sortBy arguments. */
+const sortableColumnToUploadArgMap = {
+  inserted_at: 'Date',
+  name: 'Name'
+}
+
 /**
  * @typedef {import('./postgres/pg-rest-api-types').definitions} definitions
  * @typedef {import('@supabase/postgrest-js').PostgrestError} PostgrestError
@@ -507,27 +513,19 @@ export class DBClient {
   }
 
   /**
-   * @typedef {Object} listUploadReturn
-   * @property {number} count - The total number of uploads for that user (used for pagination)
-   * @property {Promise<Array<import('./db-client-types').UploadItemOutput>>} uploads - The list of requested uploads.
-   */
-
-  /**
    * List uploads of a given user.
    *
    * @param {number} userId
    * @param {import('./db-client-types').ListUploadsOptions} [opts]
-   * @returns {listUploadReturn}
+   * @returns {import('./db-client-types').ListUploadReturn}
    */
   async listUploads (userId, opts = {}) {
-    const offset = opts.offset || 0
-    const limit = offset + (opts.size || 25)
-
-    const sortBy = opts.sortBy === 'Name'
-      ? 'name'
-      : 'inserted_at'
-
+    const rangeFrom = opts.offset || 0
+    const rangeTo = rangeFrom + (opts.size || 25)
     const isAscendingSortOrder = opts.sortOrder === 'Asc'
+    const defaultSortByColumn = Object.keys(sortableColumnToUploadArgMap)[0]
+    const sortByColumn = Object.keys(sortableColumnToUploadArgMap).find(key => sortableColumnToUploadArgMap[key] === opts.sortBy)
+    const sortBy = sortByColumn || defaultSortByColumn
 
     let query = this._client
       .from('upload')
@@ -549,9 +547,7 @@ export class DBClient {
     }
 
     // Apply pagination or limiting.
-    query = opts.offset
-      ? query.range(offset, limit - 1)
-      : query.limit(limit)
+    query = query.range(rangeFrom, rangeTo - 1)
 
     /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error, count: Number }} */
     const { data: uploads, error, count } = await query

@@ -22,7 +22,7 @@ export function corsOptions (request) {
       // such as Authorization (Bearer) or X-Client-Name-Version
       'Access-Control-Allow-Headers':
         headers.get('Access-Control-Request-Headers') || '',
-      'Access-Control-Expose-Headers': 'Link, Next_link, Prev_link, Count, Page, Size'
+      'Access-Control-Expose-Headers': 'Link, Count, Page, Size'
     }
 
     return new Response(null, {
@@ -67,6 +67,6 @@ export function addCorsHeaders (request, response) {
   } else {
     response.headers.set('Access-Control-Allow-Origin', '*')
   }
-  response.headers.set('Access-Control-Expose-Headers', 'Next_link, Prev_link, Count, Page, Size')
+  response.headers.set('Access-Control-Expose-Headers', 'Link, Count, Page, Size')
   return response
 }
