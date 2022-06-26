@@ -21,7 +21,7 @@
   }
   &:hover {
     .blog-card-img img {
-      transform: scale(0.98);
+      transform: scale(0.98, 0.965);
       transition: transform $transitionDuration;
     }
     .blue:after {

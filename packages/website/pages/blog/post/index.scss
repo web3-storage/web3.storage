@@ -25,6 +25,11 @@
       @include fontWeight_Medium;
       @include leading_Small;
     }
+    h1 {
+      @include small {
+        @include fontSize_Large;
+      }
+    }
   }
   .post-meta {
     width: 100%;
@@ -54,6 +59,9 @@
   }
   .post-social {
     flex: 1;
+    @include small {
+      text-align: center;
+    }
     > a,
     button {
       padding-right: toRem(20);
@@ -127,10 +135,10 @@
   top: -10rem;
   transform: rotate(-79deg);
   z-index: -1;
-  left: calc(50% - #{math.div($containerWidth, 2)} - 23rem);
-  @include large {
-    left: calc(50% - #{math.div($containerWidth, 2)} - 17rem);
-  }
+  left: calc(50% - #{math.div($containerWidth, 2)} - 17rem);
+  // @include large {
+  //   left: calc(50% - #{math.div($containerWidth, 2)} - 17rem);
+  // }
   @include medium {
     left: calc(50% - #{math.div($containerWidth, 2)} - 13rem);
   }
@@ -147,9 +155,6 @@
   top: 32rem;
   z-index: -1;
   transform: rotate(30deg);
-  @include small {
-    display: none;
-  }
 }
 #blog-article_hero-cross {
   position: absolute;
@@ -161,22 +166,25 @@
     left: calc(50% - #{math.div($containerWidth, 2)} - 5rem);
   }
   @include medium {
-    left: -2.5rem;
+    left: -3.5rem;
+  }
+  @include small {
+    left: -4.5rem;
   }
 }
 #blog-article_hero-ring {
-  width: toRem(430);
+  width: toRem(300);
   right: 0;
-  top: -19rem;
+  top: -16rem;
   z-index: -1;
-  transform: translate(321px, 321px) rotate(200deg);
-  right: calc(50% - #{math.div($containerWidth, 2)} - 13rem);
-  @include xlarge {
-    right: calc(50% - #{math.div($containerWidth, 2)});
+  transform: translate(321px, 321px) rotate(205deg);
+  right: calc(50% - #{math.div($containerWidth, 2)} + 4.5rem);
+  @include medium {
+    width: toRem(240);
+    right: 10rem;
   }
   @include small {
     width: toRem(240);
-    right: -15rem;
-    top: 1rem;
+    right: 5rem;
   }
 }
