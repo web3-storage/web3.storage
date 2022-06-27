@@ -37,8 +37,10 @@ jobs:
           STAGING_PG_CONNECTION: ${{ secrets.STAGING_PG_CONNECTION }}
           STAGING_RO_PG_CONNECTION: ${{ secrets.STAGING_PG_CONNECTION }} # no replica for staging
           PROD_PG_CONNECTION: ${{ secrets.PROD_PG_CONNECTION }}
-          PROD_RO_PG_CONNECTION: ${{ secrets.PROD_RO_PG_CONNECTION }}
-          CARGO_PG_CONNECTION: ${{ secrets.CARGO_PG_CONNECTION }}
+          DAG_CARGO_HOST: ${{ secrets.DAG_CARGO_HOST }}
+          DAG_CARGO_DATABASE: ${{ secrets.DAG_CARGO_DATABASE }}
+          DAG_CARGO_USER: ${{ secrets.DAG_CARGO_USER }}
+          DAG_CARGO_PASSWORD: ${{ secrets.DAG_CARGO_PASSWORD }}
           AFTER: ${{ github.event.inputs.after }}
         run: npm run start:dagcargo:sizes -w packages/cron
 
