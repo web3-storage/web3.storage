@@ -241,6 +241,7 @@ CREATE INDEX IF NOT EXISTS pin_location_id_idx ON pin (pin_location_id);
 CREATE INDEX IF NOT EXISTS pin_updated_at_idx ON pin (updated_at);
 CREATE INDEX IF NOT EXISTS pin_status_idx ON pin (status);
 CREATE INDEX IF NOT EXISTS pin_composite_updated_at_and_content_cid_idx ON pin (updated_at, content_cid);
+CREATE INDEX IF NOT EXISTS pin_content_cid_status_idx ON pin (content_cid, status);
 
 -- An upload created by a user.
 CREATE TABLE IF NOT EXISTS upload
