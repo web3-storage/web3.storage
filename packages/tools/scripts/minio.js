@@ -49,7 +49,7 @@ export function minioCmd (prog) {
  */
 async function serverStartCmd ({ project = 'minio' }) {
   if (await isPortReachable(MINIO_API_PORT)) {
-    return console.log('Skipped starting minio. Port 9000 is already in use, so assuming minio is already running.')
+    return console.log(`Skipped starting minio. Port ${MINIO_API_PORT} is already in use, so assuming minio is already running.`)
   }
 
   await execa('docker-compose', [
