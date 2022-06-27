@@ -32,6 +32,8 @@
     }
     .post-heading-img {
       position: relative;
+      max-width: 640px;
+      margin: 0 auto;
       &:before {
         content: '';
         width: 50px;
