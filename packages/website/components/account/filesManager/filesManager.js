@@ -215,11 +215,13 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const onDeleteSelected = useCallback(async () => {
     setIsUpdating(true);
 
-    if (deleteSingleCid !== '') {
-      await deleteUpload(deleteSingleCid);
-    } else {
-      await Promise.all(selectedFiles.map(({ cid }) => deleteUpload(cid)));
-    }
+    try {
+      if (deleteSingleCid !== '') {
+        await deleteUpload(deleteSingleCid);
+      } else {
+        await Promise.all(selectedFiles.map(({ cid }) => deleteUpload(cid)));
+      }
+    } catch (e) {}
 
     countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
       ui: countly.ui.FILES,

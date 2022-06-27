@@ -25,7 +25,8 @@ const Tokens = () => {
   return (
     <div className="page-container tokens-container">
       <div className="tokens-header">
-        <h3>{content.heading}</h3>
+        <h1 className="table-heading">{content.heading}</h1>
+
         {user?.info && !user.info.tags.HasPsaAccess && !user.info.tagProposals.HasPsaAccess && (
           <Button variant={ButtonVariant.TEXT} onClick={() => setIsPinningRequestModalOpen(true)}>
             {content.pinning_request.text}
