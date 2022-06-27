@@ -154,9 +154,6 @@ export class PinningServiceApiError extends Error {
     this.details = message
     this.status = status
     this.reason = code
-    // TODO: improve error handler
-    // https://github.com/web3-storage/web3.storage/issues/976
-    this.IS_PSA_ERROR = true
   }
 }
 
