@@ -22,6 +22,8 @@ PG_REST_URL=http://localhost:3000
 PG_REST_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU
 PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 
+CARGO_PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres?currentSchema=cargo
+
 CLUSTER_API_URL=http://127.0.0.1:9094/
 CLUSTER_IPFS_PROXY_API_URL=http://127.0.0.1:9095/api/v0/
 ```

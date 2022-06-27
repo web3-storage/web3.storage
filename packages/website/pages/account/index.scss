@@ -1,5 +1,5 @@
 .account-container {
-  max-width: 64rem;
+  max-width: map-get($gl-mq-list, 'md');
   margin: auto;
   display: table;
   padding-bottom: 12.5rem;
