@@ -125,11 +125,11 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     name = `Upload at ${new Date().toISOString()}`
   }
 
-  const normalizedCid = normalizeCid(sourceCid)
+  const contentCid = normalizeCid(sourceCid)
   await env.db.createUpload({
     user: user._id,
     authKey: authToken?._id,
-    contentCid: normalizedCid,
+    contentCid,
     sourceCid,
     name,
     type: uploadType,
@@ -150,7 +150,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
 
     await env.db.upsertPins(pins.map(p => ({
       status: p.status,
-      contentCid: normalizedCid,
+      contentCid,
       location: p.location
     })))
 
@@ -158,7 +158,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     // Keep querying Cluster until one of the nodes reports something other than
     // Unpinned i.e. PinQueued or Pinning or Pinned.
     if (!pins.some(p => PIN_OK_STATUS.includes(p.status))) {
-      await waitAndUpdateOkPins(normalizedCid, env.cluster, env.db)
+      await waitAndUpdateOkPins(contentCid, env.cluster, env.db)
     }
   }]
 
