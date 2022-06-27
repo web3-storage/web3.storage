@@ -143,8 +143,6 @@ export function getCargoPgPool (env) {
     host: env.DAG_CARGO_HOST
   })
 
-  console.log(`Using ${connectionString}`)
-
   return new pg.Pool({
     connectionString,
     max: MAX_CONCURRENT_QUERIES
