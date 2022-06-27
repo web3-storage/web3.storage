@@ -117,7 +117,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     structure = 'Complete'
   }
 
-  const bucketKey = await uploadToBucket(env.s3Client, env.s3BucketName, car, rootCid, user._id, structure)
+  const bucketKey = await uploadToBucket(env.s3Client, env.s3BucketName, car, sourceCid, user._id, structure)
 
   const xName = headers.get('x-name')
   let name = xName && decodeURIComponent(xName)
@@ -224,19 +224,19 @@ async function pinToCluster (cid, env) {
  */
 
 /**
- * Upload given CAR file keyed by /raw/${rootCid}/${userId}/${carHash}.car
+ * Upload given CAR file keyed by /raw/${sourceCid}/${userId}/${carHash}.car
  *
  * @param {import('@aws-sdk/client-s3').S3Client} s3
  * @param {string} bucketName
  * @param {Blob} blob
- * @param {CID} rootCid
+ * @param {string} sourceCid
  * @param {string} userId
  * @param {('Unknown' | 'Partial' | 'Complete')} structure The known structural completeness of a given DAG.
  */
-async function uploadToBucket (s3, bucketName, blob, rootCid, userId, structure = 'Unknown') {
+async function uploadToBucket (s3, bucketName, blob, sourceCid, userId, structure = 'Unknown') {
   const data = new Uint8Array(await blob.arrayBuffer())
   const multihash = await sha256.digest(data)
-  const keyStr = `raw/${rootCid.toString()}/${userId}/${toString(multihash.bytes, 'base32')}.car`
+  const keyStr = `raw/${sourceCid}/${userId}/${toString(multihash.bytes, 'base32')}.car`
   // strip the multihash varint prefix to get the raw sha256 digest for aws upload integrity check
   const rawSha256 = multihash.bytes.subarray(2)
   const awsChecksum = toString(rawSha256, 'base64pad')
