@@ -43,8 +43,8 @@
     z-index: 0;
     left: calc(50% - #{math.div($containerWidth, 2)} - 4.5rem);
     @include medium {
-      left: calc(50% - #{math.div($containerWidth, 2)});
-      width: calc($containerWidth - 1rem);
+      left: 10px;
+      width: calc(100% - 20px);
     }
   }
 }

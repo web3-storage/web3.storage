@@ -45,12 +45,14 @@ export function getDBClient (env) {
 }
 
 /**
- * Create a new Postgres client instance from the passed environment variables.
+ * Create a new Postgres client instance from the passed environment variables and connects to it.
  * @param {Record<string, string|undefined>} env
  * @param {'ro'|'rw'} [mode]
  */
-export function getPg (env, mode) {
-  return new pg.Client({ connectionString: getPgConnString(env, mode) })
+export async function getPg (env, mode) {
+  const client = new pg.Client({ connectionString: getPgConnString(env, mode) })
+  await client.connect()
+  return client
 }
 
 /**
@@ -88,4 +90,61 @@ function getPgConnString (env, mode = 'rw') {
   }
   if (!connectionString) throw new Error('missing Postgres connection string')
   return connectionString
+}
+
+/**
+ * Builds a pg connections string
+ *
+ * @param {object} dbOptions
+ * @param {string} dbOptions.host
+ * @param {string} dbOptions.database
+ * @param {string} dbOptions.user
+ * @param {string} dbOptions.password
+ * @param {number} [dbOptions.port]
+ * @returns
+ */
+function buildPgConnectionString ({
+  host,
+  database,
+  user,
+  password,
+  port = 5432
+}) {
+  return `postgres://${user}:${password}@${host}:${port}/${database}`
+}
+
+/**
+ * Create a new Postgres pool instance to connect directly to cargo replica from the passed environment variables.
+ * This is a readOnly connection.
+ *
+ * A direct connection to Cargo proved to be more performant than going through FDW.
+ * This hasn't been thoroughly investigated or audited.
+ *
+ * @param {Record<string, string|undefined>} env
+ */
+export function getCargoPgPool (env) {
+  const cargoEnvVariables = [
+    'DAG_CARGO_HOST',
+    'DAG_CARGO_DATABASE',
+    'DAG_CARGO_USER',
+    'DAG_CARGO_PASSWORD'
+  ]
+
+  cargoEnvVariables.forEach((variable) => {
+    if (!env[variable]) {
+      throw new Error(`Missing ${variable} string. Please add it to the environment.`)
+    }
+  })
+
+  const connectionString = buildPgConnectionString({
+    user: env.DAG_CARGO_USER,
+    database: env.DAG_CARGO_DATABASE,
+    password: env.DAG_CARGO_PASSWORD,
+    host: env.DAG_CARGO_HOST
+  })
+
+  return new pg.Pool({
+    connectionString,
+    max: MAX_CONCURRENT_QUERIES
+  })
 }

@@ -19,6 +19,47 @@
     opacity: 0.5;
     pointer-events: none;
   }
+
+  .header-grid-wrapper {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-gap: 2rem;
+  }
+}
+
+.upload-pinned-selector {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+
+  @include mini {
+    flex-direction: column;
+  }
+
+  .filetype-tab {
+    padding: 0rem 2rem;
+    margin-bottom: 2rem;
+
+    .tab-button {
+      font-size: 1rem;
+      text-transform: uppercase;
+      
+      &.selected {
+        color: $cyan;
+        border-bottom: 1px solid $cyan;
+      }
+      :first-child {
+        @include fontWeight_Semibold;
+      }
+      &:not(.selected) {
+        color: #fff;
+        opacity: 0.8;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
 }
 
 .files-manager-header {
@@ -26,7 +67,7 @@
   align-items: center;
   justify-content: space-between;
   justify-items: center;
-  padding: 0 2.6875rem 1.875rem;
+  padding: 0 3rem 2rem 2rem;
   flex-wrap: wrap;
 
   @include medium {
@@ -34,16 +75,14 @@
     justify-content: space-between;
   }
 
-  // Title
-  > :first-child {
-    margin-right: 10rem;
+  .upload-button {
+    margin-left: auto;
   }
+
+  // Title
   .files-manager-title {
     display: flex;
     flex-direction: row;
-    &:not(.has-upload-button) {
-      margin-right: 8rem;
-    }
     .button {
       @include fontSize_Atom;
       transform: translateY(1px);
@@ -54,7 +93,7 @@
       }
     }
     @include medium {
-      padding-left: 1.25rem;
+      padding-left: 1.75rem;
       margin-right: initial;
     }
   }
@@ -68,14 +107,22 @@
     }
   }
 
+  .files-manager-controls {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    justify-content: flex-end;
+    grid-gap: 3rem;
+  }
+
   .refresh {
     @include label_5;
     position: relative;
     top: 0.125rem;
     cursor: pointer;
-    margin-right: 3.125rem;
     @include medium {
-      margin-right: 0;
+      margin-right: 3rem;
+      margin-left: auto;
     }
     svg {
       transition: transform $transitionDuration;
@@ -92,7 +139,8 @@
         transition: transform $transitionDuration;
       }
       span {
-        transform: scale(1.1);
+        // transform: scale(1.1);
+        color: $cyan;
         transition: transform $transitionDuration ease-in-out;
       }
     }

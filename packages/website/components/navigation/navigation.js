@@ -16,8 +16,8 @@ import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Hamburger from '../../assets/icons/hamburger.js';
 import GradientBackground from '../gradientbackground/gradientbackground.js';
 import GeneralPageData from '../../content/pages/general.json';
-import emailContent from '../../content/file-a-request';
 import Search from 'components/search/search';
+import StorageLimitRequestModal from 'components/storageLimitRequestModal/storageLimitRequestModal';
 
 /**
  * Navbar Component
@@ -31,6 +31,7 @@ export default function Navigation({ isProductApp }) {
   const isLoadingUser = useMemo(() => isLoading || isFetching, [isLoading, isFetching]);
   // component State
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [isUserRequestModalOpen, setIsUserRequestModalOpen] = useState(false);
   // Navigation Content
   const links = GeneralPageData.navigation.links;
   const account = links?.find(item => item.text.toLowerCase() === 'account');
@@ -40,9 +41,6 @@ export default function Navigation({ isProductApp }) {
   const logoText = GeneralPageData.site_logo.text;
   const theme = router.route === '/pricing' || isProductApp ? 'light' : 'dark';
   const buttonTheme = isProductApp ? 'pink-blue' : '';
-  const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body=${encodeURIComponent(
-    emailContent.body.join('\n')
-  )}`;
   const isDocs = router.route.includes('docs');
 
   const toggleMenu = () => {
@@ -90,21 +88,31 @@ export default function Navigation({ isProductApp }) {
             </a>
           </Link>
           <div className="nav-account-dropdown">
-            {account.links.map(link => (
-              <Link passHref href={link.url === 'request-more-storage' ? mailTo : link.url} key={link.text}>
-                <a
-                  href="replace"
-                  className={clsx(
-                    'nav-dropdown-link',
-                    link.url === router.asPath || link.url === router.route ? 'current-route' : ''
-                  )}
-                  onClick={onLinkClick}
-                  onKeyPress={e => handleKeySelect(e, link.url)}
+            {account.links.map(link =>
+              link.url === 'request-more-storage' ? (
+                <button
+                  key={link.text}
+                  onClick={() => setIsUserRequestModalOpen(true)}
+                  className={clsx(['nav-dropdown-button'])}
                 >
                   {link.text}
-                </a>
-              </Link>
-            ))}
+                </button>
+              ) : (
+                <Link passHref href={link.url} key={link.text}>
+                  <a
+                    href="replace"
+                    className={clsx(
+                      'nav-dropdown-link',
+                      link.url === router.asPath || link.url === router.route ? 'current-route' : ''
+                    )}
+                    onClick={onLinkClick}
+                    onKeyPress={e => handleKeySelect(e, link.url)}
+                  >
+                    {link.text}
+                  </a>
+                </Link>
+              )
+            )}
           </div>
         </div>
       );
@@ -161,7 +169,7 @@ export default function Navigation({ isProductApp }) {
   // ================================================ Main Template [Navigation]
   return (
     <section id="section_navigation" className={clsx('section-navigation', theme, isProductApp ? 'clear-bg' : '')}>
-      <div className="grid-noGutter">
+      <div className="grid">
         <div className="col">
           <nav id="navigation">
             <div
@@ -224,7 +232,7 @@ export default function Navigation({ isProductApp }) {
               <Breadcrumbs variant={theme} click={onLinkClick} keyboard={handleKeySelect} />
             )}
 
-            <div className={clsx('nav-mobile-panel', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
+            <div className={clsx('nav-mobile-panel grid', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
               <div className="mobile-nav-gradient-wrapper">
                 <GradientBackground variant={null} />
               </div>
@@ -250,22 +258,28 @@ export default function Navigation({ isProductApp }) {
                       <ZeroAccordionSection.Content>
                         {Array.isArray(account.links) && (
                           <div className="nav-sublinks-wrapper">
-                            {account.links.map(link => (
-                              <Link
-                                passHref
-                                href={link.url === 'request-more-storage' ? mailTo : link.url}
-                                key={link.text}
-                              >
-                                <a
-                                  href="replace"
-                                  className="nav-sublink"
-                                  onClick={onLinkClick}
-                                  onKeyPress={e => handleKeySelect(e, link.url)}
+                            {account.links.map(link =>
+                              link.url === 'request-more-storage' ? (
+                                <button
+                                  key={link.text}
+                                  onClick={() => setIsUserRequestModalOpen(true)}
+                                  className={clsx(['nav-sublink', 'a'])}
                                 >
                                   {link.text}
-                                </a>
-                              </Link>
-                            ))}
+                                </button>
+                              ) : (
+                                <Link passHref href={link.url} key={link.text}>
+                                  <a
+                                    href="replace"
+                                    className="nav-sublink"
+                                    onClick={onLinkClick}
+                                    onKeyPress={e => handleKeySelect(e, link.url)}
+                                  >
+                                    {link.text}
+                                  </a>
+                                </Link>
+                              )
+                            )}
                           </div>
                         )}
                       </ZeroAccordionSection.Content>
@@ -283,6 +297,7 @@ export default function Navigation({ isProductApp }) {
           </nav>
         </div>
       </div>
+      <StorageLimitRequestModal isOpen={isUserRequestModalOpen} onClose={() => setIsUserRequestModalOpen(false)} />
     </section>
   );
 }

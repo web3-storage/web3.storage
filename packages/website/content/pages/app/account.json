@@ -79,7 +79,20 @@
       "unlock_label": "1 TiB+"
     },
     "file_manager": {
-      "heading": "Files",
+      "tabs": [
+        {
+          "file_type": "uploaded",
+          "button_text": "Uploaded Directly",
+          "heading": "All Uploaded Files",
+          "searchHeading": "Showing %resultsNumber% uploaded results for %searchQuery%"
+        },
+        {
+          "file_type": "pinned",
+          "button_text": "Uploaded via Pinning API",
+          "heading": "All Pinned Files",
+          "searchHeading": "Showing %resultsNumber% pinned results for %searchQuery%"
+        }
+      ],
       "upload": {
         "text": "Upload +",
         "theme": "text",
@@ -118,11 +131,12 @@
             }
           },
           "storage_providers": {
-            "label": "Storage Providers",
+            "label": "Storage",
             "tooltip": {
               "header": "Filecoin storage providers provably storing replicas of this data. <a href='https://filecoin.io/blog/posts/what-sets-us-apart-filecoin-s-proof-system/' alt='Filecoin proof system article' target='_blank' rel='noreferrer'>Learn more</a>",
               "queuing": "The content from this upload is being aggregated for redundant storage on Filecoin.<br> Filecoin deals will be active within 48 hours of upload.<br> While Queuing, data is still available on the IPFS network."
-            }
+            },
+            "toggle_threshold": 2
           },
           "size": {
             "label": "Size"

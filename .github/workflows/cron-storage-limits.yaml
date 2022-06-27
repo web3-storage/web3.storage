@@ -15,18 +15,21 @@ jobs:
     strategy:
       matrix:
         env: ['staging', 'production']
-    timeout-minutes: 100
+    timeout-minutes: 340
     steps:
       - uses: actions/checkout@v2
-
+        with: 
+          fetch-depth: 0
+      - name: Checkout latest cron release tag
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 --match='cron-*')
+          git checkout $LATEST_TAG
       - name: Setup node
         uses: actions/setup-node@v2
         with:
           node-version: 16
-
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
-
       - name: Run job
         env:
           DEBUG: '*'
@@ -38,4 +41,6 @@ jobs:
           PROD_PG_REST_URL: ${{ secrets.PROD_PG_REST_URL }}
           STAGING_PG_REST_URL: ${{ secrets.STAGING_PG_REST_URL }}
           MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
+          EMAIL_PROVIDER: ${{ (matrix.env == 'staging' && 'dummy') || '' }} # use dummy provider in staging, while using the default provider in prod.
         run: npm run start:storage -w packages/cron
+

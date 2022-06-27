@@ -1,21 +1,20 @@
 import { ErrorCode as MagicErrors } from '@magic-sdk/admin'
 import { JSONResponse } from './utils/json-response.js'
-import { HTTPError } from './errors.js'
+import { HTTPError, PinningServiceApiError } from './errors.js'
 
 /**
- * @param {Error & {status?: number;code?: string;reason?: string; details?: string; IS_PSA_ERROR?: boolean;}} err
+ * @param {Error & {status?: number;code?: string;reason?: string; details?: string; }} err
  * @param {import('./env').Env} env
  */
 export function errorHandler (err, { log }) {
   console.error(err.stack)
 
   let status = err.status || 500
+  if (status >= 500) {
+    log.error(err)
+  }
 
-  log.error(err)
-
-  // TODO: improve error handler
-  // https://github.com/web3-storage/web3.storage/issues/976
-  if (err.IS_PSA_ERROR) {
+  if (err instanceof PinningServiceApiError) {
     const error = {
       reason: err.reason,
       details: err.details

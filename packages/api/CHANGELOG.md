@@ -1,5 +1,68 @@
 # Changelog
 
+## [7.0.0](https://github.com/web3-storage/web3.storage/compare/api-v6.4.1...api-v7.0.0) (2022-06-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* uploaded files are no longer _instantly_ available via gateways or on the DHT. They may take a few seconds to become indexed by Elastic Provider.
+
+### Features
+
+* switch to Elastic IPFS ([#1455](https://github.com/web3-storage/web3.storage/issues/1455)) ([9fac681](https://github.com/web3-storage/web3.storage/commit/9fac681b121f2902f0570c15e7e6b4bf16521d3c))
+* use direct connection to cargo to get claimed size ([#1535](https://github.com/web3-storage/web3.storage/issues/1535)) ([e4087a9](https://github.com/web3-storage/web3.storage/commit/e4087a9f4d4202d672938d339e121c19344866b4))
+
+## [6.4.1](https://github.com/web3-storage/web3.storage/compare/api-v6.4.0...api-v6.4.1) (2022-06-22)
+
+
+### Bug Fixes
+
+* sentry not receiving errors ([#1548](https://github.com/web3-storage/web3.storage/issues/1548)) ([1dd8d6f](https://github.com/web3-storage/web3.storage/commit/1dd8d6f2df6ae316980fd070a695aca6bfdc7e10))
+
+## [6.4.0](https://github.com/web3-storage/web3.storage/compare/api-v6.3.1...api-v6.4.0) (2022-06-17)
+
+
+### Features
+
+* update Storage Limit Request slack message to display 1TiB ([#1517](https://github.com/web3-storage/web3.storage/issues/1517)) ([e3f904f](https://github.com/web3-storage/web3.storage/commit/e3f904f54706a4452aa2e48daed32cb727db875f))
+
+## [6.3.1](https://github.com/web3-storage/web3.storage/compare/api-v6.3.0...api-v6.3.1) (2022-06-16)
+
+
+### Bug Fixes
+
+* ensure valid mode ([#1499](https://github.com/web3-storage/web3.storage/issues/1499)) ([45e3d1e](https://github.com/web3-storage/web3.storage/commit/45e3d1e99a3f5d7abaa9f21f8c120efad07ad312))
+
+## [6.3.0](https://github.com/web3-storage/web3.storage/compare/api-v6.2.2...api-v6.3.0) (2022-06-16)
+
+
+### Features
+
+* Add basic storage limit request functionality ([#1398](https://github.com/web3-storage/web3.storage/issues/1398)) ([1347ed5](https://github.com/web3-storage/web3.storage/commit/1347ed50abe2831076fb61118d931226d47e2028))
+
+## [6.2.2](https://github.com/web3-storage/web3.storage/compare/api-v6.2.1...api-v6.2.2) (2022-06-16)
+
+
+### Bug Fixes
+
+* add modules to miniflare ([#1492](https://github.com/web3-storage/web3.storage/issues/1492)) ([cba24c8](https://github.com/web3-storage/web3.storage/commit/cba24c8e25749fb2b0db6cce01baa67fabb73241))
+* user login without mode middleware ([#1443](https://github.com/web3-storage/web3.storage/issues/1443)) ([a608e06](https://github.com/web3-storage/web3.storage/commit/a608e06aaf269e40018e1079451af31cab41fe5a))
+
+## [6.2.1](https://github.com/web3-storage/web3.storage/compare/api-v6.2.0...api-v6.2.1) (2022-06-14)
+
+
+### Bug Fixes
+
+* add wrangler entry point ([85aea7b](https://github.com/web3-storage/web3.storage/commit/85aea7b79147e2f543bdfb0428215113bcef94ac))
+* upgrade wrangler ([#1432](https://github.com/web3-storage/web3.storage/issues/1432)) ([e2d10e7](https://github.com/web3-storage/web3.storage/commit/e2d10e7127ace2de4af462043183e3337ad9bc3e))
+
+
+### Other Changes
+
+* add API endpoint to test instanceof behaviour on Cloudflare ([#1462](https://github.com/web3-storage/web3.storage/issues/1462)) ([b5f9163](https://github.com/web3-storage/web3.storage/commit/b5f9163b066372b05c900b4d4a8805b337a7205e))
+* add Wrangler worker env for Josh ([#1351](https://github.com/web3-storage/web3.storage/issues/1351)) ([74f4656](https://github.com/web3-storage/web3.storage/commit/74f4656123863089d0df86c2ab916262df59f26f))
+* fix typedefs for user tag functions ([#1387](https://github.com/web3-storage/web3.storage/issues/1387)) ([6f3500c](https://github.com/web3-storage/web3.storage/commit/6f3500cf93e22c37af09d12a0f5e1f5e68194286))
+
 ## [6.2.0](https://github.com/web3-storage/web3.storage/compare/api-v6.1.1...api-v6.2.0) (2022-06-01)
 
 

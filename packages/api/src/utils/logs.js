@@ -133,8 +133,8 @@ export class Logging {
       const resp = await fetch(logtailApiURL, request)
       if (this.opts?.debug) {
         console.info(
-          `[${this._date()}] `,
-          `${batchInFlight.length} Logs pushed with status ${resp.status}.`
+          `[${this._date()}]`,
+          `${batchInFlight.length} logs pushed with status ${resp.status}.`
         )
       }
     }
@@ -209,19 +209,22 @@ export class Logging {
         stack: message.stack,
         message: message.message
       }
-      if (this.opts.sentry && message.status >= 500 && !skipForSentry.some((cls) => message instanceof cls)) {
+      if (this.opts.sentry && !skipForSentry.some((cls) => message instanceof cls)) {
         this.opts.sentry.captureException(message)
+      }
+      if (this.opts?.debug) {
+        console[level](`[${dt}]`, message)
       }
     } else {
       log = {
         ...log,
         message
       }
+      if (this.opts?.debug) {
+        console[level](`[${dt}]`, log.message, context)
+      }
     }
 
-    if (this.opts?.debug) {
-      console[level](`[${dt}] `, log.message, context)
-    }
     this._add(log)
   }
 
@@ -295,7 +298,7 @@ export class Logging {
     })
 
     if (this.opts?.debug) {
-      console.log(`[${this._date()}] `, `name: ${duration} ms`)
+      console.log(`[${this._date()}]`, `${name}: ${duration} ms`)
     }
     return timeObj
   }

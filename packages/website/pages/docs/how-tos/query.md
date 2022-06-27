@@ -167,7 +167,7 @@ For more details about the fields in this JSON response, including the format of
 
 <Callout type="info">
 ##### Tip
-If you're looking for info on files you've uploaded, you can also use the [Files page](https://web3.storage/files) on Web3.Storage to see the values for some of the more commonly-used attributes returned by `query()`, namely `created`, `cid`, `dagSize`, and the `status` and `deals` objects of `pins`.
+If you're looking for info on files you've uploaded, you can also use the [Files page](https://web3.storage/account) on Web3.Storage to see the values for some of the more commonly-used attributes returned by `query()`, namely `created`, `cid`, `dagSize`, and the `status` and `deals` objects of `pins`.
 </Callout>
 
 </TabItem>

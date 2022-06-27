@@ -1,7 +1,7 @@
 @use 'sass:math';
 
 // General
-$containerWidth: 61.25rem; // 980px
+$containerWidth: 64rem; //1040px
 $underlineSpacing: 0.1875rem;
 $messageBannerHeight: 3.25rem;
 $navigationHeight: 8.5rem;
@@ -182,7 +182,7 @@ $gradient_PinkBlue_Reverse: linear-gradient(45deg, $pictonBlue 0%, $royalBlue 48
 @mixin border_Background_Waterloo_White {
   @include borderRadius_Large;
   background: rgba($waterloo, 0.15);
-  border: 0.0625rem solid rgba($white, 0.1);
+  border: 0.0625rem solid rgba($white, 0.5);
 }
 
 @mixin gradient_BlurryBox_PinkBlue {

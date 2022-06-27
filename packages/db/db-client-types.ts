@@ -15,6 +15,10 @@ export type UpsertUserOutput = {
   issuer: string
 }
 
+export type GetUserOptions = {
+  includeTags?: boolean
+}
+
 export type User = definitions['user']
 
 export type UserOutput = {
@@ -22,10 +26,17 @@ export type UserOutput = {
   name: definitions['user']['name'],
   email: definitions['user']['email'],
   issuer: definitions['user']['issuer'],
-  github?: definitions['user']['github']
-  publicAddress: definitions['user']['public_address']
+  github?: definitions['user']['github'],
+  publicAddress: definitions['user']['public_address'],
   created: definitions['user']['inserted_at'],
-  updated: definitions['user']['updated_at']
+  updated: definitions['user']['updated_at'],
+  tags?: Array<UserTagInfo>
+}
+
+export type UserTagInfo = {
+  tag: definitions['user_tag']['tag']
+  value: definitions['user_tag']['value']
+  deleted_at?: definitions['user_tag']['deleted_at']
 }
 
 export type UserTagInput = {

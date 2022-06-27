@@ -21,6 +21,8 @@ export const mochaHooks = () => {
   let projectDb
   /** @type {string} */
   let projectCluster
+  /** @type {string} */
+  let projectMinio
   /** @type {import('http').Server} */
   let srv
 
@@ -32,12 +34,17 @@ export const mochaHooks = () => {
       srv = await new Miniflare({
         // Autoload configuration from `.env`, `package.json` and `wrangler.toml`
         envPath: true,
+        scriptPath: 'dist/worker.mjs',
         packagePath: true,
         wranglerConfigPath: true,
         wranglerConfigEnv: 'test',
         modules: true,
         bindings: workerGlobals
       }).startServer()
+
+      console.log('⚡️ Starting Minio')
+      projectMinio = `web3-storage-minio-${Date.now()}`
+      await execa(toolsCli, ['minio', 'server', 'start', '--project', projectMinio])
 
       console.log('⚡️ Starting IPFS Cluster')
       projectCluster = `web3-storage-cluster-${Date.now()}`
@@ -59,6 +66,10 @@ export const mochaHooks = () => {
         console.log('🛑 Stopping Miniflare')
         srv.close()
       }
+      if (projectMinio) {
+        console.log('🛑 Stopping Minio')
+        execa(toolsCli, ['minio', 'server', 'stop', '--clean', '--project', projectMinio])
+      }
       if (projectCluster) {
         console.log('🛑 Stopping IPFS Cluster')
         execa(toolsCli, ['cluster', '--stop', '--clean', '--project', projectCluster])
@@ -70,6 +81,8 @@ export const mochaHooks = () => {
     },
 
     async beforeEach () {
+      await execa(toolsCli, ['minio', 'bucket', 'remove', 'dotstorage-test-0'])
+      await execa(toolsCli, ['minio', 'bucket', 'create', 'dotstorage-test-0'])
       await execa(dbCli, ['db-sql', '--skipCreate', '--truncate', `--customSqlPath=${initScript}`])
     }
   }

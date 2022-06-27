@@ -3,10 +3,10 @@ import filesz from 'filesize';
 import { useCallback, useMemo, useEffect, useState, useRef } from 'react';
 
 import LockIcon from 'assets/icons/lock';
-import emailContent from '../../../content/file-a-request';
 import Button, { ButtonVariant } from 'components/button/button';
 import { useUser } from 'components/contexts/userContext';
 import { elementIsInViewport } from 'lib/utils';
+import StorageLimitRequestModal from 'components/storageLimitRequestModal/storageLimitRequestModal';
 
 // Raw TiB number of bytes, to be used in calculations
 const tebibyte = 1099511627776;
@@ -17,10 +17,6 @@ const defaultStorageLimit = tebibyte;
  * @property {string} [className]
  * @property {any} [content]
  */
-
-const mailTo = `mailto:${emailContent.mail}?subject=${emailContent.subject}&body=${encodeURIComponent(
-  emailContent.body.join('\n')
-)}`;
 
 /**
  *
@@ -36,13 +32,14 @@ const StorageManager = ({ className = '', content }) => {
   const limit = useMemo(() => data?.storageLimitBytes || defaultStorageLimit, [data]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
+  const [isUserRequestModalOpen, setIsUserRequestModalOpen] = useState(false);
 
   const { maxSpaceLabel, unlockLabel, percentUploaded, percentPinned } = useMemo(
     () => ({
       maxSpaceLabel: `${Math.floor(limit / tebibyte)} ${content.max_space_tib_label}`,
       unlockLabel: content.unlock_label,
-      percentUploaded: (uploaded / limit) * 100,
-      percentPinned: (psaPinned / limit) * 100,
+      percentUploaded: Math.min((uploaded / limit) * 100, 100),
+      percentPinned: Math.min((psaPinned / limit) * 100, 100)
     }),
     [uploaded, psaPinned, limit, content]
   );
@@ -76,14 +73,16 @@ const StorageManager = ({ className = '', content }) => {
   }, []);
 
   const uploadedStorageBarStyles = {
-    width: !componentInViewport ? '0' : `${Math.min(percentUploaded, 100)}%`,
+    width: !componentInViewport || percentUploaded === 0 ? '0' : `calc( max(${percentUploaded}%, 0.25rem) + 2rem)`,
+    left: `-2rem`,
     transition: `${percentUploaded * 25}ms ease-out`,
     backgroundPosition: !componentInViewport ? '50% 0' : `0% 0`,
   };
 
   const pinnedStorageBarStyles = {
-    width: !componentInViewport ? '0' : `calc(${Math.min(percentPinned, 100)}% + 2rem)`,
-    left: `calc(${percentUploaded}% - 2rem)`,
+    width:
+      !componentInViewport || percentPinned === 0 ? '0' : `calc( max(${percentPinned}%, 0.25rem) + 2rem)`,
+    left: `calc( max(${percentUploaded}%, 0.25rem) - 2rem)`,
     transition: `${percentPinned * 25}ms ease-out ${percentUploaded * 25}ms`,
     backgroundPosition: !componentInViewport ? '50% 0' : `0% 0`,
   };
@@ -97,7 +96,7 @@ const StorageManager = ({ className = '', content }) => {
           ) : (
             <>
               {/* Used storage in GB */}
-              <span className="storage-label">{content.heading}</span>:{' '}
+              <h2 className="storage-heading">{content.heading}</h2>:{' '}
               <span className="storage-number">
                 {filesz(uploaded + psaPinned, {
                   base: 2,
@@ -120,11 +119,11 @@ const StorageManager = ({ className = '', content }) => {
           <span className="storage-manager-meter-label">{maxSpaceLabel}</span>
         </div>
         {!!unlockLabel && (
-          <Button variant={ButtonVariant.TEXT} href={mailTo}>
-            <a href={mailTo} target="_blank" rel="noreferrer">
+          <Button variant={ButtonVariant.TEXT} onClick={() => setIsUserRequestModalOpen(true)}>
+            <span>
               <LockIcon />
               {unlockLabel}
-            </a>
+            </span>
           </Button>
         )}
       </div>
@@ -150,10 +149,13 @@ const StorageManager = ({ className = '', content }) => {
       </div>
       <div className="storage-manager-info">
         {content.prompt}&nbsp;
-        <a href={mailTo} target="_blank" rel="noreferrer">
+        <button className="storage-manager__storage-request-button" onClick={() => setIsUserRequestModalOpen(true)}>
           {content.buttons.request}
-        </a>
+        </button>
       </div>
+      {isUserRequestModalOpen && (
+        <StorageLimitRequestModal isOpen={isUserRequestModalOpen} onClose={() => setIsUserRequestModalOpen(false)} />
+      )}
     </div>
   );
 };

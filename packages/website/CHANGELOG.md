@@ -1,5 +1,88 @@
 # Changelog
 
+## [2.8.4](https://github.com/web3-storage/web3.storage/compare/website-v2.8.3...website-v2.8.4) (2022-06-24)
+
+
+### Bug Fixes
+
+* allow delete file modal to close on error ([#1542](https://github.com/web3-storage/web3.storage/issues/1542)) ([8dd4174](https://github.com/web3-storage/web3.storage/commit/8dd417486c3a03f9ed2ea5890059aa542fdc11c9))
+* stop navigating to account screen from token creator button ([#1541](https://github.com/web3-storage/web3.storage/issues/1541)) ([dc752ad](https://github.com/web3-storage/web3.storage/commit/dc752ad35af24b6f0300f2c1b53899aa60bab704))
+
+## [2.8.3](https://github.com/web3-storage/web3.storage/compare/website-v2.8.2...website-v2.8.3) (2022-06-24)
+
+
+### Bug Fixes
+
+* 1528 gutter alignment ([#1549](https://github.com/web3-storage/web3.storage/issues/1549)) ([dda568e](https://github.com/web3-storage/web3.storage/commit/dda568eeeac3a2f5c7eea1693bc6980d02be1549))
+* explain api maintenance mode ([#1545](https://github.com/web3-storage/web3.storage/issues/1545)) ([cabc458](https://github.com/web3-storage/web3.storage/commit/cabc458bc6cf98156aaf6491608d811b1e05ac43))
+* rename `id` -> `cid`... ([#1470](https://github.com/web3-storage/web3.storage/issues/1470)) ([a5cb811](https://github.com/web3-storage/web3.storage/commit/a5cb81136bee4c197eaa0813488dadfea99768e9))
+
+
+### Other Changes
+
+* update year in footer ([#1551](https://github.com/web3-storage/web3.storage/issues/1551)) ([ce4a7f2](https://github.com/web3-storage/web3.storage/commit/ce4a7f296fa83c3a36fcfb273ae23176a393046b))
+
+## [2.8.2](https://github.com/web3-storage/web3.storage/compare/website-v2.8.1...website-v2.8.2) (2022-06-20)
+
+
+### Bug Fixes
+
+* nav active states ([#1505](https://github.com/web3-storage/web3.storage/issues/1505)) ([1157d3a](https://github.com/web3-storage/web3.storage/commit/1157d3a4b0c8bd47ffab3c8674a5c9baacf92e50))
+* replace markdown links in docs with absolute non-md format ([#1524](https://github.com/web3-storage/web3.storage/issues/1524)) ([981470b](https://github.com/web3-storage/web3.storage/commit/981470b93d7b39cf9551f39b3e9ae3086526a6be))
+
+## [2.8.1](https://github.com/web3-storage/web3.storage/compare/website-v2.8.0...website-v2.8.1) (2022-06-17)
+
+
+### Bug Fixes
+
+* UI was sending empty string for HasPinningAccess user request form tag value ([#1513](https://github.com/web3-storage/web3.storage/issues/1513)) ([e253929](https://github.com/web3-storage/web3.storage/commit/e2539298669d5406526dee898637180ae4c50380))
+
+## [2.8.0](https://github.com/web3-storage/web3.storage/compare/website-v2.7.1...website-v2.8.0) (2022-06-16)
+
+
+### Features
+
+* Add basic storage limit request functionality ([#1398](https://github.com/web3-storage/web3.storage/issues/1398)) ([1347ed5](https://github.com/web3-storage/web3.storage/commit/1347ed50abe2831076fb61118d931226d47e2028))
+
+
+### Bug Fixes
+
+* pins missing ([#1494](https://github.com/web3-storage/web3.storage/issues/1494)) ([4fe0120](https://github.com/web3-storage/web3.storage/commit/4fe01205326ed093f9e577a04b52c1cdca547574))
+
+## [2.7.1](https://github.com/web3-storage/web3.storage/compare/website-v2.7.0...website-v2.7.1) (2022-06-15)
+
+
+### Bug Fixes
+
+* account view priority and table size ([#1431](https://github.com/web3-storage/web3.storage/issues/1431)) ([5352ca4](https://github.com/web3-storage/web3.storage/commit/5352ca43094606b4826ba61f98dca8f382c71d4c))
+
+## [2.7.0](https://github.com/web3-storage/web3.storage/compare/website-v2.6.0...website-v2.7.0) (2022-06-14)
+
+
+### Features
+
+* cases for visual minimums to both stored and pinned meters ([#1333](https://github.com/web3-storage/web3.storage/issues/1333)) ([9ed73f3](https://github.com/web3-storage/web3.storage/commit/9ed73f372110856acec1078f5e556890662289db))
+
+
+### Bug Fixes
+
+* login screens jarring ([#1446](https://github.com/web3-storage/web3.storage/issues/1446)) ([87554bd](https://github.com/web3-storage/web3.storage/commit/87554bdab54aa9c2ad7725f44cfd130a1f51cbc6))
+
+## [2.6.0](https://github.com/web3-storage/web3.storage/compare/website-v2.5.1...website-v2.6.0) (2022-06-13)
+
+
+### Features
+
+* Message bar incident/maintenance name ([#1335](https://github.com/web3-storage/web3.storage/issues/1335)) ([0e4ec06](https://github.com/web3-storage/web3.storage/commit/0e4ec066f702da5f57c4779c30315296197f8ee5))
+* reduce font size ([#1411](https://github.com/web3-storage/web3.storage/issues/1411)) ([345c171](https://github.com/web3-storage/web3.storage/commit/345c1712d8951e58b05ad4a488a091c1b48390bf))
+* Split file manager table into uploaded & pinned ([#1363](https://github.com/web3-storage/web3.storage/issues/1363)) ([df181ed](https://github.com/web3-storage/web3.storage/commit/df181ed947da3bcffc563c6c15dbbb3af84dda38))
+
+
+### Bug Fixes
+
+* docs toc highlight on click ([#1392](https://github.com/web3-storage/web3.storage/issues/1392)) ([29f45ca](https://github.com/web3-storage/web3.storage/commit/29f45cad67f0c3797c4605f9d6eb58394d3ce3d2))
+* refactor accordion content ([#1391](https://github.com/web3-storage/web3.storage/issues/1391)) ([1817d3b](https://github.com/web3-storage/web3.storage/commit/1817d3b4edbd3aa8a019024c4d53b9acd6ebad5b))
+
 ## [2.5.1](https://github.com/web3-storage/web3.storage/compare/website-v2.5.0...website-v2.5.1) (2022-06-08)
 
 

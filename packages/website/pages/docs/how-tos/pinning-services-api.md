@@ -13,7 +13,7 @@ For a full list and documentation of all the available pinning service endpoints
 
 ## Requesting access
 
-To request access to the pinning service for your Web3.Storage account, you will need to create a [new issue](https://github.com/web3-storage/web3.storage/issues/new/choose) with a type of **Pinning Service Access Request** on the Web3.Storage GitHub repo. Once approved, you will be able to access the pinning service API endpoints using your [API token](/how-tos/generate-api-token).
+To request access to the pinning service for your Web3.Storage account, you will need to navigate to  [your token management page](https://web3.storage/tokens) and click the button labeled "Request API Pinning Access".  Fill out the form and then, once approved, you will be able to access the pinning service API endpoints using your [API token](/how-tos/generate-api-token).
 
 ## Using the HTTP API
 

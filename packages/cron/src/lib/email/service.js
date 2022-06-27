@@ -31,6 +31,8 @@ export class EmailService {
     this.providerStr = provider || process.env.EMAIL_PROVIDER || 'mailchimp'
     this.provider = new EMAIL_PROVIDERS_MAP[this.providerStr]()
 
+    log(`ℹ️ Using Email ${this.providerStr} provider`)
+
     this.fromAddr = EMAIL_FROM_ADDR
     this.fromName = EMAIL_FROM_NAME
   }

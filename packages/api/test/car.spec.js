@@ -6,17 +6,28 @@ import * as pb from '@ipld/dag-pb'
 import { CarWriter } from '@ipld/car'
 import fetch, { Blob } from '@web-std/fetch'
 import { Cluster } from '@nftstorage/ipfs-cluster'
+import retry from 'p-retry'
+import { S3Client, ListObjectsV2Command, GetObjectCommand } from '@aws-sdk/client-s3'
+import { concat, equals } from 'uint8arrays'
 import { endpoint, clusterApi, clusterApiAuthHeader } from './scripts/constants.js'
 import { createCar } from './scripts/car.js'
 import { MAX_BLOCK_SIZE } from '../src/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
 import { PIN_OK_STATUS } from '../src/utils/pin.js'
+import {
+  S3_BUCKET_ENDPOINT,
+  S3_BUCKET_REGION,
+  S3_BUCKET_NAME,
+  S3_ACCESS_KEY_ID,
+  S3_SECRET_ACCESS_KEY_ID
+} from './scripts/worker-globals.js'
 
 // Cluster client needs global fetch
 Object.assign(global, { fetch })
 
 describe('POST /car', () => {
-  it('should add posted CARs to Cluster', async () => {
+  it('should eventually add posted CARs to Cluster', async function () {
+    this.timeout(10000)
     const name = 'car'
     // Create token
     const token = await getTestJWT('test-upload', 'test-upload')
@@ -44,10 +55,14 @@ describe('POST /car', () => {
     assert(cid, 'Server response payload has `cid` property')
     assert.strictEqual(cid, expectedCid, 'Server responded with expected CID')
 
-    const statusRes = await fetch(new URL(`status/${cid}`, endpoint))
-    const status = await statusRes.json()
-    const pinInfo = status.pins.find(pin => PIN_OK_STATUS.includes(pin.status))
-    assert(pinInfo, `status is one of ${PIN_OK_STATUS}`)
+    const pinInfo = await retry(async () => {
+      const statusRes = await fetch(new URL(`status/${cid}`, endpoint))
+      const status = await statusRes.json()
+      const pinInfo = status.pins.find(pin => PIN_OK_STATUS.includes(pin.status))
+      assert(pinInfo, `status is one of ${PIN_OK_STATUS}`)
+      return pinInfo
+    }, { retries: 3 })
+
     const cluster = new Cluster(clusterApi, {
       headers: {
         Authorization: clusterApiAuthHeader
@@ -56,6 +71,56 @@ describe('POST /car', () => {
     const clusterPeers = await cluster.peerList()
     // assert that peerId from the status belongs to one of the cluster ipfs nodes.
     assert(clusterPeers.some(peer => peer.ipfs.id === pinInfo.peerId))
+  })
+
+  it('should add posted CARs to S3', async () => {
+    const token = await getTestJWT('test-upload', 'test-upload')
+    const { root, car: carBody } = await createCar('hello world! s3')
+    const expectedCid = root.toString()
+
+    const res = await fetch(new URL('car', endpoint), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/vnd.ipld.car'
+      },
+      body: carBody
+    })
+
+    const { cid } = await res.json()
+    assert.strictEqual(cid, expectedCid, 'Server responded with expected CID')
+
+    const s3 = new S3Client({
+      endpoint: S3_BUCKET_ENDPOINT,
+      forcePathStyle: true,
+      region: S3_BUCKET_REGION,
+      credentials: {
+        accessKeyId: S3_ACCESS_KEY_ID,
+        secretAccessKey: S3_SECRET_ACCESS_KEY_ID
+      }
+    })
+
+    const listRes = await s3.send(new ListObjectsV2Command({
+      Bucket: S3_BUCKET_NAME
+    }))
+    assert.strictEqual(listRes.Contents.length, 1, '1 item uploaded')
+
+    const getRes = await s3.send(new GetObjectCommand({
+      Bucket: S3_BUCKET_NAME,
+      Key: listRes.Contents[0].Key
+    }))
+
+    const chunks = []
+    for await (const chunk of getRes.Body) {
+      chunks.push(chunk)
+    }
+    assert.ok(
+      equals(
+        concat(chunks),
+        new Uint8Array(await carBody.arrayBuffer())
+      ),
+      'stored CAR is the same as uploaded CAR'
+    )
   })
 
   it('should throw for blocks bigger than the maximum permitted size', async () => {
@@ -246,7 +311,7 @@ describe('POST /car', () => {
     assert.strictEqual(resBody.cid, cid.toString(), 'Server responded with expected CID')
   })
 
-  it('should throw for CAR with a block where the bytes do match the CID', async () => {
+  it('should throw for CAR with a block where the bytes do not match the CID', async () => {
     const token = await getTestJWT('test-upload', 'test-upload')
 
     const bytes = pb.encode({ Data: new Uint8Array(), Links: [] })

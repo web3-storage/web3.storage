@@ -14,6 +14,7 @@
 @import 'layouts/dropdownOverrides';
 @import 'layouts/paginationOverrides';
 @import 'layouts/filterableOverrides';
+@import 'layouts/userRequestsModals.scss';
 @import '../components/navigation/navigation.scss';
 @import '../components/footer/footer.scss';
 
@@ -57,61 +58,65 @@
 // Fonts
 $fontAssetPath: '../assets/fonts';
 
-@font-face {
-  font-family: 'SuisseIntl';
-  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Light.otf') format('opentype');
-  font-weight: 300;
-  font-display: swap;
-}
+// @font-face {
+//   font-family: 'SuisseIntl';
+//   src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Light.otf') format('opentype');
+//   font-weight: 300;
+//   font-display: swap;
+// }
 
 @font-face {
   font-family: 'SuisseIntl';
-  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Regular.otf') format('opentype');
-  font-weight: 400;
+  src: url('#{$fontAssetPath}/subset-SuisseIntl-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'SuisseIntl';
-  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Medium.otf') format('opentype');
-  font-weight: 500;
-  font-display: swap;
-}
+// @font-face {
+//   font-family: 'SuisseIntl';
+//   src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Medium.otf') format('opentype');
+//   font-weight: 500;
+//   font-display: swap;
+// }
 
 @font-face {
   font-family: 'SuisseIntl';
-  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-SemiBold.otf') format('opentype');
+  src: url('#{$fontAssetPath}/subset-SuisseIntl-SemiBold.woff2') format('woff2');
   font-weight: 600;
+  font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'SuisseIntl';
-  src: url('#{$fontAssetPath}/SuisseIntl/SuisseIntl-Bold.otf') format('opentype');
-  font-weight: 700;
+  src: url('#{$fontAssetPath}/subset-SuisseIntl-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'Suisse Intl Mono';
-  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Thin.otf') format('opentype');
-  font-weight: 300;
-  font-display: swap;
-}
+// @font-face {
+//   font-family: 'Suisse Intl Mono';
+//   src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Thin.otf') format('opentype');
+//   font-weight: 300;
+//   font-display: swap;
+// }
 
 @font-face {
   font-family: 'Suisse Intl Mono';
-  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Regular.otf') format('opentype');
-  font-weight: 400;
+  src: url('#{$fontAssetPath}/subset-SuisseIntlMono-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'Suisse Intl Mono';
-  src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-display: swap;
-}
+// @font-face {
+//   font-family: 'Suisse Intl Mono';
+//   src: url('#{$fontAssetPath}/SuisseIntlMono/SuisseIntlMono-Bold.otf') format('opentype');
+//   font-weight: 700;
+//   font-display: swap;
+// }
 
 html,
 body {
@@ -170,6 +175,9 @@ body:not(.docs-site) #__next {
 #master-container {
   position: relative;
   &.product-app {
+    min-height: 100vh;
+    display: flex;
+    flex-flow: column nowrap;
     background-color: $ebony;
     @include background_Dark;
   }
@@ -180,12 +188,15 @@ body:not(.docs-site) #__next {
 [class*='grid_'] {
   width: $containerWidth;
   margin: 0 auto;
-  @include customMaxMQ($containerWidth + 4rem) {
-    padding: 0 4.1665%;
+  @include customMaxMQ($containerWidth) {
+    padding-left: clamp(2rem, 8vw, 6rem);
+    padding-right: clamp(2rem, 8vw, 6rem);
     width: 100%;
   }
   &[class*='-noGutter'] {
     margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
   }
   &.full {
     width: 100%;
@@ -230,6 +241,11 @@ h4,
 h5,
 .h5 {
   @include h5;
+}
+
+.table-heading {
+  padding: 0 2rem 2rem;
+  font-size: 1.875rem;
 }
 
 // Components
@@ -334,3 +350,8 @@ h5,
     display: none;
   }
 }
+
+.gap-1 { grid-gap: 0 1rem; }
+.gap-2 { grid-gap: 0 2rem; }
+.gap-3 { grid-gap: 0 3rem; }
+.gap-4 { grid-gap: 0 4rem; }
