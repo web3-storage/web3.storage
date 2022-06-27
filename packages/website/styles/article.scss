@@ -123,6 +123,11 @@
   h5 a {
     color: $ebony;
   }
+  p {
+    @include small {
+      @include fontSize_Regular;
+    }
+  }
   img {
     max-width: 100%;
   }

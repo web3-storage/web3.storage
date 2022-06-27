@@ -44,6 +44,9 @@
       flex: 1;
       @include fontSize_Small;
       @include fontWeight_Semibold;
+      @include small {
+        @include fontSize_Regular;
+      }
     }
     .post-meta-tags {
       padding-right: toRem(30);
@@ -136,13 +139,7 @@
   transform: rotate(-79deg);
   z-index: -1;
   left: calc(50% - #{math.div($containerWidth, 2)} - 17rem);
-  // @include large {
-  //   left: calc(50% - #{math.div($containerWidth, 2)} - 17rem);
-  // }
   @include medium {
-    left: calc(50% - #{math.div($containerWidth, 2)} - 13rem);
-  }
-  @include small {
     width: toRem(66);
     top: -7rem;
     left: -3.7rem;
@@ -155,6 +152,9 @@
   top: 32rem;
   z-index: -1;
   transform: rotate(30deg);
+  @include small {
+    display: none;
+  }
 }
 #blog-article_hero-cross {
   position: absolute;
