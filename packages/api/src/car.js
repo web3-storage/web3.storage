@@ -139,13 +139,13 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
 
   /** @type {(() => Promise<any>)[]} */
   const tasks = [async () => {
-    let pins = []
     try {
-      pins = await addToCluster(car, env)
+      await pinToCluster(rootCid.toString(), env)
     } catch (err) {
-      env.log.warn(new Error('failed to upload to cluster', { cause: err }))
-      pins = await pinToCluster(rootCid.toString(), env)
+      console.warn('failed to pin to cluster', err)
     }
+
+    const pins = await addToCluster(car, env)
 
     await env.db.upsertPins(pins.map(p => ({
       status: p.status,
