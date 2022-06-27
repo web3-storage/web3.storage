@@ -111,6 +111,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   // Throws if CAR is invalid by our standards.
   // Returns either the sum of the block sizes in the CAR, or the cumulative size of the DAG for a dag-pb root.
   const { size: dagSize, rootCid } = await carStat(car)
+  const sourceCid = rootCid.toString()
 
   if (structure === 'Unknown' && rootCid.code === raw.code) {
     structure = 'Complete'
@@ -124,12 +125,12 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     name = `Upload at ${new Date().toISOString()}`
   }
 
-  const normalizedCid = normalizeCid(rootCid.toString())
+  const normalizedCid = normalizeCid(sourceCid)
   await env.db.createUpload({
     user: user._id,
     authKey: authToken?._id,
     contentCid: normalizedCid,
-    sourceCid: rootCid.toString(),
+    sourceCid,
     name,
     type: uploadType,
     backupUrls: [`https://${env.s3BucketName}.s3.${env.s3BucketRegion}.amazonaws.com/${bucketKey}`],
@@ -140,7 +141,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   /** @type {(() => Promise<any>)[]} */
   const tasks = [async () => {
     try {
-      await pinToCluster(rootCid.toString(), env)
+      await pinToCluster(sourceCid, env)
     } catch (err) {
       console.warn('failed to pin to cluster', err)
     }
@@ -165,7 +166,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     tasks.forEach(t => ctx.waitUntil(t()))
   }
 
-  return new JSONResponse({ cid: rootCid.toString() })
+  return new JSONResponse({ cid: sourceCid })
 }
 
 export async function carPut (request, env, ctx) {
