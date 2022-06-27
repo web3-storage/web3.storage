@@ -33,18 +33,6 @@
       "offset": 700,
       "floaters": [
         {
-          "id": "blog_article_hero-coil",
-          "default": "rotate(30deg)",
-          "start": {
-            "x": 1,
-            "y": 20
-          },
-          "end": {
-            "x": 10,
-            "y": -20
-          }
-        },
-        {
           "id": "blog-article_hero-ring",
           "start": {
             "rotate": 200,

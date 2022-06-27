@@ -201,8 +201,10 @@ const Post = ({ post, posts }) => {
         <div className="post-heading">
           <h1>{post.meta.title}</h1>
           <p className="post-author">{post.meta.author}</p>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={post.meta.thumbnail} alt={`Banner for ${post.meta.title}`} />
+          <div className="post-heading-img">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={post.meta.thumbnail} alt={`Banner for ${post.meta.title}`} />
+          </div>
         </div>
         <div className="post-meta">
           <div className="post-meta-date">{post.meta.date}</div>
