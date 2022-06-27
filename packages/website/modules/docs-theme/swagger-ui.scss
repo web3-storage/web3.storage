@@ -8744,11 +8744,67 @@
   border: none;
 }
 
+// accordion arrow //
+@mixin swagger-ui-arrow-down {
+  content: '';
+  width: 17px;
+  height: 10px;
+  display: inline-block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17.404' height='10.823'%3E%3Cpath data-name='Path 19091' d='M15.283 2.124 8.702 8.705 2.121 2.124' fill='none' stroke='%2303040a' stroke-linecap='round' stroke-width='3'%3E%3C/path%3E%3C/svg%3E");
+  transition: 250ms ease;
+  transform-origin: center;
+  transform: none;
+}
+@mixin swagger-ui-arrow-up {
+  transition: 250ms ease;
+  transform-origin: center;
+  transform: rotate(180deg);
+}
+
+.swagger-ui .expand-operation:before {
+  @include swagger-ui-arrow-down();
+}
+.swagger-ui .opblock-tag-section.is-open {
+  .expand-operation:before {
+    @include swagger-ui-arrow-up();
+  }
+}
+.swagger-ui .models-control svg,
+.swagger-ui .opblock-tag-section .arrow,
 .swagger-ui .expand-methods svg,
 .swagger-ui .expand-operation svg {
-  height: 20px;
-  width: 20px;
+  display: none;
 }
+
+.swagger-ui .opblock-summary-control {
+  position: relative;
+  &:before {
+    @include swagger-ui-arrow-down();
+    right: 0;
+    margin-right: 1rem;
+    position: absolute;
+  }
+}
+.swagger-ui .opblock.is-open {
+  .opblock-summary-control:before {
+    @include swagger-ui-arrow-up();
+  }
+}
+.swagger-ui .models-control {
+  position: relative;
+  &:before {
+    @include swagger-ui-arrow-down();
+    right: 0;
+    position: absolute;
+  }
+}
+.swagger-ui .models.is-open {
+  .models-control:before {
+    @include swagger-ui-arrow-up();
+  }
+}
+// accordion arrow //
+
 
 .swagger-ui .expand-methods {
   padding: 0 10px;
