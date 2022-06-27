@@ -2,6 +2,11 @@
 
 // very top nav
 .blog-site {
+  background-image: url('../../assets/images/corkscrewBlurred.jpg');
+  background-repeat: repeat;
+  background-size: cover;
+  word-break: break-word;
+
   .nav-item[href='/blog/'] {
     transform: translateY(-0.5rem);
     @include medium {
@@ -283,10 +288,9 @@
   right: calc(50% - #{math.div($containerWidth, 2)} - 14rem);
   top: -5rem;
   transform: rotate(179deg);
-  z-index: -1;
   @include small {
     width: toRem(172);
-    top: -6rem;
+    top: -3rem;
     right: calc(50% - #{math.div($containerWidth, 3)} + 2rem);
   }
 }
@@ -294,7 +298,6 @@
   width: 18rem;
   top: -10rem;
   transform: rotate(-79deg);
-  z-index: -1;
   left: calc(50% - #{math.div($containerWidth, 2)} - 23rem);
   @include small {
     width: toRem(66);

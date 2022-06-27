@@ -40,7 +40,6 @@
         height: 50px;
         bottom: -15px;
         left: 1rem;
-        z-index: -1;
         transform: rotate(25deg);
         position: absolute;
         background-position: center;
@@ -158,7 +157,6 @@
   width: 18rem;
   top: -10rem;
   transform: rotate(-79deg);
-  z-index: -1;
   left: calc(50% - #{math.div($containerWidth, 2)} - 17rem);
   @include medium {
     width: toRem(66);
@@ -168,7 +166,6 @@
 }
 #blog-article_hero-cross {
   position: absolute;
-  z-index: -1;
   width: 3rem;
   top: 60rem;
   left: calc(50% - #{math.div($containerWidth, 2)} - 10rem);
@@ -186,7 +183,6 @@
   width: toRem(300);
   right: 0;
   top: -16rem;
-  z-index: -1;
   transform: translate(321px, 321px) rotate(205deg);
   right: calc(50% - #{math.div($containerWidth, 2)} + 4.5rem);
   @include medium {
