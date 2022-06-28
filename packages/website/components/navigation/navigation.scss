@@ -20,10 +20,12 @@
       fill: white;
       transition: 250ms ease;
     }
-    &.menu-open {
-      color: $ebony;
-      svg {
-        fill: $ebony;
+    @include small {
+      &.menu-open {
+        color: $ebony;
+        svg {
+          fill: $ebony;
+        }
       }
     }
   }
@@ -93,8 +95,10 @@
     &.dark {
       color: $ebony;
     }
-    &.menu-open {
-      color: $ebony;
+    @include small {
+      &.menu-open {
+        color: $ebony;
+      }
     }
   }
 

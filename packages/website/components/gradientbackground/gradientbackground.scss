@@ -20,6 +20,13 @@
   &.upload-cta-gradient {
     z-index: 0;
   }
+  &.upload-cta-gradient-small {
+    z-index: 0;
+    .saturated-variant {
+      width: 750px;
+      height: 1000px;
+    }
+  }
 
   .header-variant {
     position: absolute;
