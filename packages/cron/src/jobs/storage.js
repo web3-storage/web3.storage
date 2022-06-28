@@ -152,9 +152,9 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 20
 
         if (emailSent) {
           if (emailToSend.emailType === EMAIL_TYPE.User100PercentStorage) {
-            log(`📧 Sent a quota exceeded email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
+            log(`📧 Sent a quota exceeded email to user ${user.id}: ${user.percentStorageUsed}% of quota used`)
           } else {
-            log(`📧 Sent an email to ${user.name}: ${user.percentStorageUsed}% of quota used`)
+            log(`📧 Sent an email to user ${user.id}: ${user.percentStorageUsed}% of quota used`)
           }
         }
       }
