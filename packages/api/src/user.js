@@ -222,6 +222,7 @@ export async function userTokensDelete (request, env) {
 }
 
 const sortableValues = ['Name', 'Date']
+const sortableOrders = ['Asc', 'Desc']
 
 /**
  * Retrieve a page of user uploads.
@@ -274,8 +275,12 @@ export async function userUploadsGet (request, env) {
   const sortBy = searchParams.get('sortBy') || 'Date'
   const sortOrder = searchParams.get('sortOrder') || 'Desc'
 
+  if (!sortableOrders.includes(sortOrder)) {
+    throw Object.assign(new Error(`Sort ordering by '${sortOrder}' is not supported. Supported sort orders are: [${sortableOrders.toString()}]`), { status: 400 })
+  }
+
   if (!sortableValues.includes(sortBy)) {
-    throw Object.assign(new Error(`Sorting by '${sortBy}' is not supported.`), { status: 400 })
+    throw Object.assign(new Error(`Sorting by '${sortBy}' is not supported. Supported sort orders are: [${sortableValues.toString()}]`), { status: 400 })
   }
 
   const data = await env.db.listUploads(request.auth.user._id, {
@@ -290,12 +295,12 @@ export async function userUploadsGet (request, env) {
   let link = ''
   // If there's more results to show...
   if (page > 1) {
-    link += `<${requestUrl.pathname}?size=${size}&page=${encodeURIComponent(page - 1)}>; rel="previous"`
+    link += `<${requestUrl.pathname}?size=${size}&page=${page - 1}>; rel="previous"`
   }
 
   if (data.uploads.length + offset < data.count) {
     if (link !== '') link += ', '
-    link += `<${requestUrl.pathname}?size=${size}&page=${encodeURIComponent(page + 1)}>; rel="next"`
+    link += `<${requestUrl.pathname}?size=${size}&page=${page + 1}>; rel="next"`
   }
 
   const headers = {
