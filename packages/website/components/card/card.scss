@@ -18,6 +18,7 @@
 // //////////////////////////////////////////////// Card [Type A] -> Big Numbers
 // -----------------------------------------------------------------------------
 .card.type__A {
+  padding: 2rem 0;
   @include gradient_Text_Selection;
 
   .feature-wrapper {
@@ -56,6 +57,9 @@
 // ///////////////////////////////////////////////// Card [Type B] -> Code Cards
 // -----------------------------------------------------------------------------
 .card.type__B {
+  padding-left: 0;
+  padding-right: 0;
+
   .label {
     margin: 0;
     text-align: left;
@@ -139,10 +143,10 @@
   background-color: $ebony;
   border-radius: 5px;
   position: relative;
-  margin-right: 1.125rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  padding: 2rem 2.5rem 1.5rem;
 
   &:last-child {
     margin-right: 0;
@@ -473,8 +477,7 @@
 .card.type__F {
   position: relative;
   z-index: 1;
-  padding: 0 0.5rem 1rem;
-  margin: 0 1.75rem;
+  padding: 0 0rem 1rem;
   .feature-wrapper {
     display: none;
   }

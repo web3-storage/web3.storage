@@ -111,15 +111,13 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   // Throws if CAR is invalid by our standards.
   // Returns either the sum of the block sizes in the CAR, or the cumulative size of the DAG for a dag-pb root.
   const { size: dagSize, rootCid } = await carStat(car)
+  const sourceCid = rootCid.toString()
 
   if (structure === 'Unknown' && rootCid.code === raw.code) {
     structure = 'Complete'
   }
 
-  const [{ cid, pins }, backupKey] = await Promise.all([
-    addToCluster(car, env),
-    backup(car, rootCid, user._id, env, structure)
-  ])
+  const bucketKey = await uploadToBucket(env.s3Client, env.s3BucketName, car, sourceCid, user._id, structure)
 
   const xName = headers.get('x-name')
   let name = xName && decodeURIComponent(xName)
@@ -127,41 +125,48 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     name = `Upload at ${new Date().toISOString()}`
   }
 
-  const normalizedCid = normalizeCid(cid)
+  const contentCid = normalizeCid(sourceCid)
   await env.db.createUpload({
     user: user._id,
     authKey: authToken?._id,
-    contentCid: normalizedCid,
-    sourceCid: cid,
+    contentCid,
+    sourceCid,
     name,
     type: uploadType,
-    backupUrls: backupKey
-      ? [`https://${env.s3BucketName}.s3.${env.s3BucketRegion}.amazonaws.com/${backupKey}`]
-      : [],
-    pins,
+    backupUrls: [`https://${env.s3BucketName}.s3.${env.s3BucketRegion}.amazonaws.com/${bucketKey}`],
+    pins: [],
     dagSize
   })
 
   /** @type {(() => Promise<any>)[]} */
-  const tasks = []
+  const tasks = [async () => {
+    try {
+      await pinToCluster(sourceCid, env)
+    } catch (err) {
+      console.warn('failed to pin to cluster', err)
+    }
 
-  // Retrieve current pin status and info about the nodes pinning the content.
-  // Keep querying Cluster until one of the nodes reports something other than
-  // Unpinned i.e. PinQueued or Pinning or Pinned.
-  if (!pins.some(p => PIN_OK_STATUS.includes(p.status))) {
-    tasks.push(waitAndUpdateOkPins.bind(
-      null,
-      normalizedCid,
-      env.cluster,
-      env.db)
-    )
-  }
+    const pins = await addToCluster(car, env)
+
+    await env.db.upsertPins(pins.map(p => ({
+      status: p.status,
+      contentCid,
+      location: p.location
+    })))
+
+    // Retrieve current pin status and info about the nodes pinning the content.
+    // Keep querying Cluster until one of the nodes reports something other than
+    // Unpinned i.e. PinQueued or Pinning or Pinned.
+    if (!pins.some(p => PIN_OK_STATUS.includes(p.status))) {
+      await waitAndUpdateOkPins(contentCid, env.cluster, env.db)
+    }
+  }]
 
   if (ctx.waitUntil) {
     tasks.forEach(t => ctx.waitUntil(t()))
   }
 
-  return new JSONResponse({ cid })
+  return new JSONResponse({ cid: sourceCid })
 }
 
 export async function carPut (request, env, ctx) {
@@ -184,7 +189,7 @@ export async function sizeOf (response) {
 }
 
 /**
- * Adds car to local cluster and returns its content identifier and pins
+ * Adds car to local cluster and returns its pins.
  *
  * @param {Blob} car
  * @param {import('./env').Env} env
@@ -197,9 +202,19 @@ async function addToCluster (car, env) {
     metadata: { size: car.size.toString() },
     local: false
   })
-  const pins = await getPins(cid, env.cluster)
 
-  return { cid, pins }
+  return getPins(cid, env.cluster)
+}
+
+/**
+ * Pins a CID to Cluster and returns its pins.
+ *
+ * @param {string} cid
+ * @param {import('./env').Env} env
+ */
+async function pinToCluster (cid, env) {
+  await env.cluster.pin(cid)
+  return getPins(cid, env.cluster)
 }
 
 /**
@@ -209,28 +224,26 @@ async function addToCluster (car, env) {
  */
 
 /**
- * Backup given Car file keyed by /raw/${rootCid}/${userId}/${carHash}.car
+ * Upload given CAR file keyed by /raw/${sourceCid}/${userId}/${carHash}.car
+ *
+ * @param {import('@aws-sdk/client-s3').S3Client} s3
+ * @param {string} bucketName
  * @param {Blob} blob
- * @param {CID} rootCid
+ * @param {string} sourceCid
  * @param {string} userId
- * @param {import('./env').Env} env
  * @param {('Unknown' | 'Partial' | 'Complete')} structure The known structural completeness of a given DAG.
  */
-async function backup (blob, rootCid, userId, env, structure = 'Unknown') {
-  if (!env.s3Client) {
-    return undefined
-  }
-
+async function uploadToBucket (s3, bucketName, blob, sourceCid, userId, structure = 'Unknown') {
   const data = new Uint8Array(await blob.arrayBuffer())
   const multihash = await sha256.digest(data)
-  const keyStr = `raw/${rootCid.toString()}/${userId}/${toString(multihash.bytes, 'base32')}.car`
+  const keyStr = `raw/${sourceCid}/${userId}/${toString(multihash.bytes, 'base32')}.car`
   // strip the multihash varint prefix to get the raw sha256 digest for aws upload integrity check
   const rawSha256 = multihash.bytes.subarray(2)
   const awsChecksum = toString(rawSha256, 'base64pad')
 
   // see: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-s3/modules/putobjectrequest.html
   const cmdParams = {
-    Bucket: env.s3BucketName,
+    Bucket: bucketName,
     Key: keyStr,
     Body: data,
     Metadata: { structure },
@@ -240,14 +253,14 @@ async function backup (blob, rootCid, userId, env, structure = 'Unknown') {
   }
 
   try {
-    await env.s3Client.send(new PutObjectCommand(cmdParams))
+    await s3.send(new PutObjectCommand(cmdParams))
   } catch (err) {
     if (err.name === 'BadDigest') {
       // s3 returns a 400 Bad Request `BadDigest` error if the hash does not match their calculation.
       // see: https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html#RESTErrorResponses
       // see: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-s3/index.html#troubleshooting
       console.log('BadDigest: sha256 of data recieved did not match what we sent. Maybe bits flipped in transit. Retrying once.')
-      await env.s3Client.send(new PutObjectCommand(cmdParams))
+      await s3.send(new PutObjectCommand(cmdParams))
     } else {
       throw err
     }

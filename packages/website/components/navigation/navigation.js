@@ -169,7 +169,7 @@ export default function Navigation({ isProductApp }) {
   // ================================================ Main Template [Navigation]
   return (
     <section id="section_navigation" className={clsx('section-navigation', theme, isProductApp ? 'clear-bg' : '')}>
-      <div className="grid-noGutter">
+      <div className="grid">
         <div className="col">
           <nav id="navigation">
             <div
@@ -232,7 +232,7 @@ export default function Navigation({ isProductApp }) {
               <Breadcrumbs variant={theme} click={onLinkClick} keyboard={handleKeySelect} />
             )}
 
-            <div className={clsx('nav-mobile-panel', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
+            <div className={clsx('nav-mobile-panel grid', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
               <div className="mobile-nav-gradient-wrapper">
                 <GradientBackground variant={null} />
               </div>

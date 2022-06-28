@@ -23,10 +23,10 @@ import pkg from '../package.json'
  * @property {string} PG_REST_JWT
  * @property {string} GATEWAY_URL
  * @property {string} [S3_BUCKET_ENDPOINT]
- * @property {string} [S3_BUCKET_NAME]
- * @property {string} [S3_BUCKET_REGION]
- * @property {string} [S3_ACCESS_KEY_ID]
- * @property {string} [S3_SECRET_ACCESS_KEY_ID]
+ * @property {string} S3_BUCKET_NAME
+ * @property {string} S3_BUCKET_REGION
+ * @property {string} S3_ACCESS_KEY_ID
+ * @property {string} S3_SECRET_ACCESS_KEY_ID
  * @property {string} [SENTRY_DSN]
  * @property {string} [SENTRY_RELEASE]
  * @property {string} [LOGTAIL_TOKEN]
@@ -39,9 +39,9 @@ import pkg from '../package.json'
  * @property {Magic} magic
  * @property {Toucan} sentry
  * @property {import('./maintenance').Mode} MODE
- * @property {S3Client} [s3Client]
- * @property {string} [s3BucketName]
- * @property {string} [s3BucketRegion]
+ * @property {S3Client} s3Client
+ * @property {string} s3BucketName
+ * @property {string} s3BucketRegion
  * // Durable Objects
  * @property {DurableObjectNamespace} NAME_ROOM
  *
@@ -133,34 +133,46 @@ export function envAll (req, env, ctx) {
   const headers = clusterAuthToken ? { Authorization: `Basic ${clusterAuthToken}` } : {}
   env.cluster = new Cluster(env.CLUSTER_API_URL, { headers })
 
-  // backups not required in dev mode
-  if (env.ENV === 'dev' && !env.S3_ACCESS_KEY_ID) {
-    console.log('running without backups wired up')
-  } else {
-    env.s3BucketName = env.S3_BUCKET_NAME
-    env.s3BucketRegion = env.S3_BUCKET_REGION
+  if (!env.S3_BUCKET_NAME) {
+    throw new Error('MISSING ENV. Please set S3_BUCKET_NAME')
+  } else if (!env.S3_BUCKET_REGION) {
+    throw new Error('MISSING ENV. Please set S3_BUCKET_REGION')
+  } else if (!env.S3_ACCESS_KEY_ID) {
+    throw new Error('MISSING ENV. Please set S3_ACCESS_KEY_ID')
+  } else if (!env.S3_SECRET_ACCESS_KEY_ID) {
+    throw new Error('MISSING ENV. Please set S3_SECRET_ACCESS_KEY_ID')
+  }
 
-    env.s3Client = new S3Client({
-      // logger: console, // use me to get some debug info on what the client is up to
-      endpoint: env.S3_BUCKET_ENDPOINT,
-      forcePathStyle: !!env.S3_BUCKET_ENDPOINT, // Force path if endpoint provided
-      region: env.S3_BUCKET_REGION,
-      credentials: {
-        accessKeyId: env.S3_ACCESS_KEY_ID,
-        secretAccessKey: env.S3_SECRET_ACCESS_KEY_ID
-      }
-    })
-    if (env.ENV === 'dev') {
-      // show me what s3 sdk is up to.
-      env.s3Client.middlewareStack.add(
-        (next, context) => async (args) => {
-          console.log('s3 request headers', args.request.headers)
-          return next(args)
-        },
-        {
-          step: 'finalizeRequest'
-        }
-      )
+  env.s3BucketName = env.S3_BUCKET_NAME
+  env.s3BucketRegion = env.S3_BUCKET_REGION
+
+  // https://github.com/aws/aws-sdk-js-v3/issues/1941
+  let endpoint
+  if (env.S3_BUCKET_ENDPOINT) {
+    const endpointUrl = new URL(env.S3_BUCKET_ENDPOINT)
+    endpoint = { protocol: endpointUrl.protocol, hostname: endpointUrl.host }
+  }
+
+  env.s3Client = new S3Client({
+    // logger: console, // use me to get some debug info on what the client is up to
+    endpoint,
+    forcePathStyle: !!env.S3_BUCKET_ENDPOINT, // Force path if endpoint provided
+    region: env.S3_BUCKET_REGION,
+    credentials: {
+      accessKeyId: env.S3_ACCESS_KEY_ID,
+      secretAccessKey: env.S3_SECRET_ACCESS_KEY_ID
     }
+  })
+  if (env.ENV === 'dev') {
+    // show me what s3 sdk is up to.
+    env.s3Client.middlewareStack.add(
+      (next, context) => async (args) => {
+        console.log('s3 request headers', args.request.headers)
+        return next(args)
+      },
+      {
+        step: 'finalizeRequest'
+      }
+    )
   }
 }

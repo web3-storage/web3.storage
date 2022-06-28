@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <main className="page page-terms">
       <div className="grid">
-        <div className="col-10_mi-12" data-push-left="off-1_mi-0">
+        <div>
           <section id="terms_page-main-body" className="sectional">
             <div id={'terms_page_helix'}>
               <Img alt="" src={ImageHelix} />

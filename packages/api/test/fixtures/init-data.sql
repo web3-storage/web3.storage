@@ -139,3 +139,7 @@ VALUES ('ab62cf3c-c98d-494b-a756-b3a3fb6ddcab', 4, 'bafybeid46f7zggioxjm5p2ze2l6
        ('9be23b92-918e-44b8-98f4-6043c346fb4e', 2, 'bafybeidqts3rbwkprggjojbvcxy4jzpgzgcvs4a73y3gx2jjxphjeerbcy', 'bafybeidqts3rbwkprggjojbvcxy4jzpgzgcvs4a73y3gx2jjxphjeerbcy', 'Image.jpg', null, null, '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('aa62cf3c-c98d-494b-a756-b3a3fb6ddcab', 1, 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4', 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4', 'ReportDoc.pdf', '["/ip6/2606:4700:60::6/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N", "/ip4/172.65.0.13/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx4N"]', null, '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z')
        ;
+
+-- Cargo source web3.storage source project
+INSERT INTO cargo.sources (project, source_label)
+VALUES (1, 'web3.storage');
