@@ -305,13 +305,9 @@ describe('GET /user/uploads', () => {
     assert(res.ok)
 
     // Ensure we have all pagination metadata in the headers.
-    const nextLink = res.headers.get('Link')
-    assert(nextLink, 'has a Next link header for the next page')
-    assert.strictEqual(nextLink, `</user/uploads?size=${size}&page=${page + 1}>; rel="next"`)
-
-    const prevLink = res.headers.get('Prev_link')
-    assert(prevLink, 'has a Prev link header for the previous page')
-    assert.strictEqual(prevLink, `</user/uploads?size=${size}&page=${page - 1}>; rel="previous"`)
+    const link = res.headers.get('link')
+    assert(link, 'has a link header for the next page')
+    assert.strictEqual(link, `</user/uploads?size=${size}&page=${page - 1}>; rel="previous", </user/uploads?size=${size}&page=${page + 1}>; rel="next"`)
 
     const resCount = res.headers.get('Count')
     assert.strictEqual(parseInt(resCount), userUploads.length, 'has a count for calculating page numbers')

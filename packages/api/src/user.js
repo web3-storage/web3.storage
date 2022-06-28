@@ -287,23 +287,23 @@ export async function userUploadsGet (request, env) {
     sortOrder
   })
 
-  const headers = {
-    Count: data.count,
-    Size: size,
-    Page: page
-  }
-
-  let Link = ''
+  let link = ''
   // If there's more results to show...
   if (page > 1) {
-    Link += `<${requestUrl.pathname}?size=${size}&page=${encodeURIComponent(page - 1)}>; rel="previous"`
+    link += `<${requestUrl.pathname}?size=${size}&page=${encodeURIComponent(page - 1)}>; rel="previous"`
   }
 
   if (data.uploads.length + offset < data.count) {
-    if (Link !== '') Link += ', '
-    Link += `<${requestUrl.pathname}?size=${size}&page=${encodeURIComponent(page + 1)}>; rel="next"`
+    if (link !== '') link += ', '
+    link += `<${requestUrl.pathname}?size=${size}&page=${encodeURIComponent(page + 1)}>; rel="next"`
   }
 
+  const headers = {
+    Count: data.count,
+    Size: size,
+    Page: page,
+    Link: link
+  }
 
   return new JSONResponse(data.uploads, { headers })
 }
