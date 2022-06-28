@@ -101,6 +101,7 @@ function getPgConnString (env, mode = 'rw') {
  * @param {string} dbOptions.user
  * @param {string} dbOptions.password
  * @param {number} [dbOptions.port]
+ * @param {boolean} [dbOptions.ssl]
  * @returns
  */
 function buildPgConnectionString ({
@@ -108,9 +109,10 @@ function buildPgConnectionString ({
   database,
   user,
   password,
-  port = 5432
+  port = 5432,
+  ssl = true
 }) {
-  return `postgres://${user}:${password}@${host}:${port}/${database}`
+  return `postgres://${user}:${password}@${host}:${port}/${database}${ssl === true ? '?ssl=true' : ''}`
 }
 
 /**
@@ -140,7 +142,8 @@ export function getCargoPgPool (env) {
     user: env.DAG_CARGO_USER,
     database: env.DAG_CARGO_DATABASE,
     password: env.DAG_CARGO_PASSWORD,
-    host: env.DAG_CARGO_HOST
+    host: env.DAG_CARGO_HOST,
+    ssl: env.ENV !== 'dev'
   })
 
   return new pg.Pool({
