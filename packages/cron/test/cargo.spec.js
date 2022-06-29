@@ -8,7 +8,12 @@ import { getCargoPgPool, getPg } from '../src/lib/utils.js'
 const env = {
   ...process.env,
   ENV: 'dev',
-  CARGO_PG_CONNECTION: 'postgres://postgres:postgres@127.0.0.1:5432/postgres?currentSchema=cargo'
+  // These DB vars aren't necessary if you're using the latest .env.tpl, but are here
+  // to avoid errors if people are still using the old version before these were added
+  DAG_CARGO_HOST: '127.0.0.1',
+  DAG_CARGO_DATABASE: 'postgres',
+  DAG_CARGO_USER: 'postgres',
+  DAG_CARGO_PASSWORD: 'postgres'
 }
 
 function getToBeUpdatedNull (cItem) {

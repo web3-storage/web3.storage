@@ -20,10 +20,12 @@
       fill: white;
       transition: 250ms ease;
     }
-    &.menu-open {
-      color: $ebony;
-      svg {
-        fill: $ebony;
+    @include small {
+      &.menu-open {
+        color: $ebony;
+        svg {
+          fill: $ebony;
+        }
       }
     }
   }
@@ -93,8 +95,10 @@
     &.dark {
       color: $ebony;
     }
-    &.menu-open {
-      color: $ebony;
+    @include small {
+      &.menu-open {
+        color: $ebony;
+      }
     }
   }
 
@@ -265,7 +269,7 @@
       width: 2.25rem;
       height: 100%;
       padding: 0.75rem 0;
-      background-image: url('../../assets/images/zigzag-tiny.png');
+      background-image: url('/images/illustrations/zigzag-tiny.png');
       background-position: 0 4px;
       background-size: 0 1.75rem;
       background-repeat: no-repeat;
@@ -449,9 +453,8 @@
       @include medium {
         width: 1800px;
         bottom: -25rem;
-      }
-      @include mini {
-        width: 1600px;
+        width: 3000px;
+        height: 1700px;
       }
     }
   }

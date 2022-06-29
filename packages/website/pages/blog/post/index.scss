@@ -44,7 +44,7 @@
         position: absolute;
         background-position: center;
         background-size: contain;
-        background-image: url('../../../assets/images/coil.png');
+        background-image: url('/images/illustrations/coil.png');
         @include small {
           left: -15px;
         }

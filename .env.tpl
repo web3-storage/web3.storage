@@ -14,8 +14,10 @@ PG_REST_URL=http://127.0.0.1:3000
 PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 RO_PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 
-CARGO_PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres?currentSchema=cargo
-
+DAG_CARGO_HOST=127.0.0.1
+DAG_CARGO_DATABASE=postgres
+DAG_CARGO_USER=postgres
+DAG_CARGO_PASSWORD=postgres
 
 ## ---- api -------------------------------------------------------------------
 
@@ -29,8 +31,15 @@ SALT="Q6d8sTZa+wpIPrppPq6VdIKEbknjrsSCQklh/hVU4U0="
 CLUSTER_BASIC_AUTH_TOKEN="dGVzdDp0ZXN0"
 CLUSTER_API_URL=http://127.0.0.1:9094
 
-# IPFS Gateaway URL pointing to dockerised ipfs instance
+# IPFS Gateway URL pointing to dockerised ipfs instance
 GATEWAY_URL=http://localhost:8080
+
+# S3 bucket details, pointing to dockerised Minio instance
+S3_BUCKET_ENDPOINT = 'http://localhost:9000'
+S3_BUCKET_NAME = 'dotstorage-dev-0'
+S3_BUCKET_REGION = 'us-east-1'
+S3_ACCESS_KEY_ID = 'minioadmin'
+S3_SECRET_ACCESS_KEY_ID = 'minioadmin'
 
 ## ---- website ---------------------------------------------------------------
 

@@ -4,14 +4,15 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import clsx from 'clsx';
 
-import { trackCustomLinkClick, events } from 'lib/countly';
+import { trackCustomLinkClick, events } from '../../lib/countly';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Button from '../button/button';
-import Squiggle from '../../assets/illustrations/squiggle.js';
+import Img from '../cloudflareImage.js';
+import ImageSquiggle from '../../public/images/illustrations/squiggle.png';
+import GeneralPageData from '../../content/pages/general.json';
 import { ReactComponent as SlackIcon } from '../../assets/icons/slack.svg';
 import { ReactComponent as DiscordIcon } from '../../assets/icons/discord.svg';
 import { ReactComponent as GithubIcon } from '../../assets/icons/github2.svg';
-import GeneralPageData from '../../content/pages/general.json';
 
 // ====================================================================== Params
 /**
@@ -54,7 +55,9 @@ export default function Footer({ isProductApp }) {
   return (
     <footer id="site-footer" className={clsx(isProductApp ? 'clear-bg' : '')}>
       <section id="site-footer-section">
-        <Squiggle id="footer_squiggle" />
+        <div id="footer_squiggle">
+          <Img alt="" src={ImageSquiggle} />
+        </div>
 
         <div className="grid">
           <div className="col-4_sm-8_mi-12" data-push-left="off-1_sm-1_mi-0">

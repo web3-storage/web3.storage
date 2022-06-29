@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.0.0](https://github.com/web3-storage/web3.storage/compare/api-v6.4.1...api-v7.0.0) (2022-06-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* uploaded files are no longer _instantly_ available via gateways or on the DHT. They may take a few seconds to become indexed by Elastic Provider.
+
+### Features
+
+* switch to Elastic IPFS ([#1455](https://github.com/web3-storage/web3.storage/issues/1455)) ([9fac681](https://github.com/web3-storage/web3.storage/commit/9fac681b121f2902f0570c15e7e6b4bf16521d3c))
+* use direct connection to cargo to get claimed size ([#1535](https://github.com/web3-storage/web3.storage/issues/1535)) ([e4087a9](https://github.com/web3-storage/web3.storage/commit/e4087a9f4d4202d672938d339e121c19344866b4))
+
 ## [6.4.1](https://github.com/web3-storage/web3.storage/compare/api-v6.4.0...api-v6.4.1) (2022-06-22)
 
 
