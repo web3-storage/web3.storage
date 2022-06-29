@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1](https://github.com/web3-storage/web3.storage/compare/cron-v1.2.0...cron-v1.2.1) (2022-06-29)
+
+
+### Bug Fixes
+
+* don't allow individual email sending failures to halt cron job ([#1589](https://github.com/web3-storage/web3.storage/issues/1589)) ([2d7a4e0](https://github.com/web3-storage/web3.storage/commit/2d7a4e0028a8275a60089ce243297020c249dcd9))
+* pg connection string append ssl-true ([#1576](https://github.com/web3-storage/web3.storage/issues/1576)) ([1d10181](https://github.com/web3-storage/web3.storage/commit/1d101812cbb8db2099dc2fb03447bf2f94f72f40))
+
 ## [1.2.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.1.5...cron-v1.2.0) (2022-06-27)
 
 
