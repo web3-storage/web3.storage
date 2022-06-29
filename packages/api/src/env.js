@@ -92,6 +92,10 @@ export function envAll (req, env, ctx) {
     allowedHeaders: ['user-agent', 'x-client'],
     allowedSearchParams: /(.*)/,
     debug: env.DEBUG === 'true',
+    rewriteFrames: {
+      // sourcemaps only work if stack filepath are absolute like `/worker.js`
+      root: '/'
+    },
     environment: env.ENV,
     release: env.SENTRY_RELEASE,
     pkg
