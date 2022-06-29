@@ -18,7 +18,6 @@ import { useTokens } from 'components/contexts/tokensContext';
 import CheckIcon from 'assets/icons/check';
 import SearchIcon from 'assets/icons/search';
 import RefreshIcon from 'assets/icons/refresh';
-
 import FileRowItem, { PinStatus } from './fileRowItem';
 import GradientBackground from '../../gradientbackground/gradientbackground.js';
 
@@ -118,7 +117,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   }, [fetchPinsDate, listPinned, isFetchingPinned, apiToken]);
   useEffect(() => {
     getTokens();
-  }, []);
+  }, [getTokens]);
 
   // Set displayed files based on tab selection: 'uploaded' or 'pinned'
   useEffect(() => {

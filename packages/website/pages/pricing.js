@@ -11,7 +11,7 @@ export default function Home() {
 
   useEffect(() => {
     let pageFloaters = {};
-    if( animations ) {
+    if (animations) {
       initFloaterAnimations(animations).then(result => {
         pageFloaters = result;
       });
