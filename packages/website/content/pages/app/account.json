@@ -69,7 +69,7 @@
         "uploaded": "Stored files",
         "pinned": "Pinned files"
       },
-      "prompt": "Need more free storage?",
+      "prompt": "Need more storage?",
       "buttons": {
         "search": "Search my files",
         "request": "Submit a request"
