@@ -30,7 +30,8 @@ const defaultQueryOrder = 'a-z';
  * @returns
  */
 const TokensManager = ({ content }) => {
-  const { tokens, fetchDate, isFetchingTokens, deleteToken, getTokens, isCreating, hasError, errorMessage } = useTokens();
+  const { tokens, fetchDate, isFetchingTokens, deleteToken, getTokens, isCreating, hasError, errorMessage } =
+    useTokens();
   const [deletingTokenId, setDeletingTokenId] = useState('');
   const { query, replace } = useRouter();
   const queryClient = useQueryClient();

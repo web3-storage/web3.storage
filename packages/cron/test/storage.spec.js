@@ -8,7 +8,7 @@ import { getDBClient, getPg } from '../src/lib/utils.js'
 import { EMAIL_TYPE } from '@web3-storage/db'
 import { checkStorageUsed } from '../src/jobs/storage.js'
 import { EmailService, EMAIL_PROVIDERS } from '../src/lib/email/service.js'
-import DummyEmailProvider from '../src/lib/email/providers/dummy.js'
+// import DummyEmailProvider from '../src/lib/email/providers/dummy.js'
 import sinon from 'sinon'
 import { EmailSendError } from '../src/lib/email/errors.js'
 
