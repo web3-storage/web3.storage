@@ -76,6 +76,12 @@ const listPinsQuery = `
     )
   )`
 
+/**  Mapping of Upload table sortable columns to ListUploads sortBy arguments. */
+const sortableColumnToUploadArgMap = {
+  inserted_at: 'Date',
+  name: 'Name'
+}
+
 /**
  * @typedef {import('./postgres/pg-rest-api-types').definitions} definitions
  * @typedef {import('@supabase/postgrest-js').PostgrestError} PostgrestError
@@ -511,19 +517,27 @@ export class DBClient {
    *
    * @param {number} userId
    * @param {import('./db-client-types').ListUploadsOptions} [opts]
-   * @returns {Promise<Array<import('./db-client-types').UploadItemOutput>>}
+   * @returns {import('./db-client-types').ListUploadReturn}
    */
   async listUploads (userId, opts = {}) {
+    const rangeFrom = opts.offset || 0
+    const rangeTo = rangeFrom + (opts.size || 25)
+    const isAscendingSortOrder = opts.sortOrder === 'Asc'
+    const defaultSortByColumn = Object.keys(sortableColumnToUploadArgMap)[0]
+    const sortByColumn = Object.keys(sortableColumnToUploadArgMap).find(key => sortableColumnToUploadArgMap[key] === opts.sortBy)
+    const sortBy = sortByColumn || defaultSortByColumn
+
     let query = this._client
       .from('upload')
-      .select(uploadQuery)
+      .select(uploadQuery, { count: 'exact' })
       .eq('user_id', userId)
       .is('deleted_at', null)
-      .limit(opts.size || 10)
-      .order(opts.sortBy === 'Name' ? 'name' : 'inserted_at', {
-        ascending: opts.sortOrder === 'Asc'
-      })
+      .order(
+        sortBy,
+        { ascending: isAscendingSortOrder }
+      )
 
+    // Apply filtering
     if (opts.before) {
       query = query.lt('inserted_at', opts.before)
     }
@@ -532,8 +546,11 @@ export class DBClient {
       query = query.gte('inserted_at', opts.after)
     }
 
-    /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error }} */
-    const { data: uploads, error } = await query
+    // Apply pagination or limiting.
+    query = query.range(rangeFrom, rangeTo - 1)
+
+    /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error, count: Number }} */
+    const { data: uploads, error, count } = await query
 
     if (error) {
       throw new DBError(error)
@@ -543,10 +560,13 @@ export class DBClient {
     const cids = uploads?.map((u) => u.content.cid)
     const deals = await this.getDealsForCids(cids)
 
-    return uploads?.map((u) => ({
-      ...normalizeUpload(u),
-      deals: deals[u.content.cid] || []
-    }))
+    return {
+      count,
+      uploads: uploads?.map((u) => ({
+        ...normalizeUpload(u),
+        deals: deals[u.content.cid] || []
+      }))
+    }
   }
 
   /**
