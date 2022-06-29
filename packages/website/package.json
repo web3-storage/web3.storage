@@ -16,8 +16,10 @@
     "lint:ts": "tsc --noEmit",
     "lint:es": "eslint '{pages,components,hooks,content,store}/**/*.{js,ts,tsx}' --max-warnings=0",
     "lint:es:fix": "eslint '{pages,components,hooks,content,store}/**/*.{js,ts,tsx}' --fix --max-warnings=0",
+    "lint-staged": "lint-staged",
     "storybook": "start-storybook -p 9000",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "prepare": "cd ../.. && husky install packages/website/.husky"
   },
   "dependencies": {
     "@docsearch/react": "^3.0.0",
@@ -78,8 +80,8 @@
     "eslint-plugin-react-hooks": "4.3.0",
     "git-rev-sync": "^3.0.2",
     "git-revision-webpack-plugin": "^5.0.0",
-    "husky": "4.3.8",
-    "lint-staged": "12.1.2",
+    "husky": "^8.0.0",
+    "lint-staged": "^12.2.4",
     "next-sitemap": "1.6.173",
     "prettier": "2.4.1",
     "react-query": "3.33.5",
@@ -88,11 +90,6 @@
     "style-loader": "2.0.0",
     "typescript": "^4.6.0",
     "url-loader": "4.1.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "{pages,components,hooks,content,styles,store}/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [

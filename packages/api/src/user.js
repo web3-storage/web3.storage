@@ -221,6 +221,9 @@ export async function userTokensDelete (request, env) {
   return new JSONResponse(res)
 }
 
+const sortableValues = ['Name', 'Date']
+const sortableOrders = ['Asc', 'Desc']
+
 /**
  * Retrieve a page of user uploads.
  *
@@ -240,37 +243,74 @@ export async function userUploadsGet (request, env) {
     size = parsedSize
   }
 
-  let before = new Date()
+  let offset = 0
+  let page = 1
+  if (searchParams.has('page')) {
+    const parsedPage = parseInt(searchParams.get('page'))
+    if (isNaN(parsedPage) || parsedPage <= 0) {
+      throw Object.assign(new Error('invalid page number'), { status: 400 })
+    }
+    offset = (parsedPage - 1) * size
+    page = parsedPage
+  }
+
+  let before
   if (searchParams.has('before')) {
     const parsedBefore = new Date(searchParams.get('before'))
     if (isNaN(parsedBefore.getTime())) {
       throw Object.assign(new Error('invalid before date'), { status: 400 })
     }
-    before = parsedBefore
+    before = parsedBefore.toISOString()
+  }
+
+  let after
+  if (searchParams.has('after')) {
+    const parsedAfter = new Date(searchParams.get('after'))
+    if (isNaN(parsedAfter.getTime())) {
+      throw Object.assign(new Error('invalid after date'), { status: 400 })
+    }
+    after = parsedAfter.toISOString()
   }
 
   const sortBy = searchParams.get('sortBy') || 'Date'
   const sortOrder = searchParams.get('sortOrder') || 'Desc'
 
-  const uploads = await env.db.listUploads(request.auth.user._id, {
+  if (!sortableOrders.includes(sortOrder)) {
+    throw Object.assign(new Error(`Sort ordering by '${sortOrder}' is not supported. Supported sort orders are: [${sortableOrders.toString()}]`), { status: 400 })
+  }
+
+  if (!sortableValues.includes(sortBy)) {
+    throw Object.assign(new Error(`Sorting by '${sortBy}' is not supported. Supported sort orders are: [${sortableValues.toString()}]`), { status: 400 })
+  }
+
+  const data = await env.db.listUploads(request.auth.user._id, {
     size,
-    before: before.toISOString(),
+    offset,
+    before,
+    after,
     sortBy,
     sortOrder
   })
 
-  const oldest = uploads[uploads.length - 1]
-  const headers =
-    uploads.length === size
-      ? {
-          Link: `<${
-            requestUrl.pathname
-          }?size=${size}&before=${encodeURIComponent(
-            oldest.created
-          )}>; rel="next"`
-        }
-      : undefined
-  return new JSONResponse(uploads, { headers })
+  let link = ''
+  // If there's more results to show...
+  if (page > 1) {
+    link += `<${requestUrl.pathname}?size=${size}&page=${page - 1}>; rel="previous"`
+  }
+
+  if (data.uploads.length + offset < data.count) {
+    if (link !== '') link += ', '
+    link += `<${requestUrl.pathname}?size=${size}&page=${page + 1}>; rel="next"`
+  }
+
+  const headers = {
+    Count: data.count,
+    Size: size,
+    Page: page,
+    Link: link
+  }
+
+  return new JSONResponse(data.uploads, { headers })
 }
 
 /**

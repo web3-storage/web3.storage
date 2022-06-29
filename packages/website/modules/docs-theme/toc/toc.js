@@ -36,7 +36,7 @@ export default function Toc() {
     return str;
   };
 
-  const updateHeadings = (id) => {
+  const updateHeadings = id => {
     let lastId = '';
     for (const element in activeHeadings.current) {
       if (activeHeadings.current[element]) {
@@ -50,7 +50,7 @@ export default function Toc() {
       lastActive.current = lastId;
       setUpdateKey(key => key + 1);
     }
-  }
+  };
 
   const getNestedHeadings = headingElements => {
     const nestedHeadings = [];
@@ -70,17 +70,21 @@ export default function Toc() {
       }
 
       // scroll effects / add active class
-      const exitScene = (e) => {
+      const exitScene = e => {
         if (e.scrollDirection === 'REVERSE' && index !== 0) {
           updateHeadings(headingIds[index - 1]);
         }
-      }
+      };
 
       const scene = new ScrollMagic.Scene({
         triggerElement: `#${id}`,
         triggerHook: 0.25,
-        duration: 200
-      }).on('enter', () => { updateHeadings(id) }).addTo(controller);
+        duration: 200,
+      })
+        .on('enter', () => {
+          updateHeadings(id);
+        })
+        .addTo(controller);
       scene.on('leave', exitScene).addTo(controller);
     });
     return nestedHeadings;
@@ -95,7 +99,8 @@ export default function Toc() {
             className={clsx(
               activeHeadings.current[heading.id] ? 'active' : '',
               heading.id === lastActive.current ? 'heading-slide-out' : ''
-            )}>
+            )}
+          >
             {heading.title}
           </a>
           {heading.items.length > 0 && (
@@ -107,7 +112,8 @@ export default function Toc() {
                     className={clsx(
                       activeHeadings.current[child.id] ? 'active' : '',
                       child.id === lastActive.current ? 'heading-slide-out' : ''
-                    )}>
+                    )}
+                  >
                     {child.title}
                   </a>
                 </li>
