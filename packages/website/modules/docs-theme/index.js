@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { MDXProvider } from '@mdx-js/react';
 
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import hljs from 'highlight.js/lib/core';
 import javascript from 'highlight.js/lib/languages/javascript';
 import shell from 'highlight.js/lib/languages/shell';
 import go from 'highlight.js/lib/languages/go';
 import json from 'highlight.js/lib/languages/json';
-
 import Sidebar from './sidebar/sidebar';
 import Feedback from './feedback/feedback';
 import Toc from './toc/toc';
@@ -20,10 +20,21 @@ hljs.registerLanguage('json', json);
 
 export default function Docs(props) {
   const { meta, route, ...rest } = props;
+  const router = useRouter();
 
   useEffect(() => {
     hljs.highlightAll();
-  });
+
+    // no reload on local links
+    const localLinks = document.querySelectorAll('.docs-body a[href^="/docs/"]');
+    localLinks?.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        // @ts-ignore
+        router.push(e.currentTarget.href);
+      });
+    });
+  }, [router]);
 
   const sharedHead = (
     <Head>
