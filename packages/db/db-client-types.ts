@@ -255,6 +255,10 @@ export type ListUploadsOptions = {
    */
   size?: number
   /**
+   * Offset records (default: 0).
+   */
+  offset?: number
+  /**
    * Sort by given property.
    */
   sortBy?: 'Date' | 'Name'
@@ -264,8 +268,12 @@ export type ListUploadsOptions = {
   sortOrder?: 'Asc' | 'Desc'
 }
 
+export type ListUploadReturn = {
+  count: number,
+  uploads: Promise<UploadItemOutput[]>,
+}
 
-// Pinninng
+// Pinning
 
 // PinRequest
 export type PsaPinRequestUpsertInput = {
