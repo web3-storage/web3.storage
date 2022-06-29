@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/web3-storage/web3.storage/compare/cron-v1.2.1...cron-v1.2.2) (2022-06-29)
+
+
+### Bug Fixes
+
+* make sure null claimed sizes are updated ([#1594](https://github.com/web3-storage/web3.storage/issues/1594)) ([3f585f3](https://github.com/web3-storage/web3.storage/commit/3f585f36b6c1b661aeef22919c519dfde0b99d1c))
+
 ## [1.2.1](https://github.com/web3-storage/web3.storage/compare/cron-v1.2.0...cron-v1.2.1) (2022-06-29)
 
 
