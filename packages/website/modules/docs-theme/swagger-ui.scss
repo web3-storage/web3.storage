@@ -9573,8 +9573,8 @@
         padding-top: 1rem;
       }
       &:last-child {
-        padding-bottom: 1rem;
-        border-bottom: 1px solid #cccccc !important;
+        // padding-bottom: 1rem;
+        // border-bottom: 1px solid #cccccc !important;
       }
     }
     @include small {
