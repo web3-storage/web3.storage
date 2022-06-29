@@ -21,7 +21,7 @@
   }
   &:hover {
     .blog-card-img img {
-      transform: scale(0.98, 0.965);
+      transform: scale(0.98);
       transition: transform $transitionDuration;
     }
     .blue:after {
@@ -38,14 +38,22 @@
 }
 .blog-card-img {
   position: relative;
+  height: 0;
+  overflow: hidden;
+  padding-top: 100%;
+  position: relative;
+  width: 100%;
   img {
     transition: transform $transitionDuration;
     width: 100%;
+    vertical-align: top;
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
     object-fit: cover;
     border-radius: toRem(5);
     z-index: 2;
-    position: relative;
   }
   &:before {
     width: 100%;

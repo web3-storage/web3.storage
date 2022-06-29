@@ -227,7 +227,7 @@ body:not(.docs-site) #__next {
 h1,
 .h1 {
   @include h1;
-  line-height: leading(55, 45);
+  line-height: 1.33;
 }
 
 h2,
