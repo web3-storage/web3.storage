@@ -18,7 +18,7 @@ import { Card } from '../../components/blog/cards/cards';
 import Subscribe from '../../components/blog/subscribe/subscribe';
 import GradientBackground from '../../components/gradientbackground/gradientbackground';
 
-const BLOG_ITEMS_PER_PAGE = 4;
+const BLOG_ITEMS_PER_PAGE = 8;
 
 export async function getStaticProps() {
   const files = fs.readdirSync('posts');
