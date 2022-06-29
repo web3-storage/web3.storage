@@ -30,7 +30,6 @@ export default function Docs(props) {
     localLinks?.forEach(link => {
       link.addEventListener('click', e => {
         e.preventDefault();
-        e.stopPropagation();
         // @ts-ignore
         router.push(e.currentTarget.href);
       });
