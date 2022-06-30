@@ -154,6 +154,27 @@ export class DBClient {
   }
 
   /**
+   * Get user by its issuer.
+   *
+   * @param {string} userId
+   * @return {Promise<import('./db-client-types').UserOutput | undefined>}
+   */
+  async getUserProposalTags (userId) {
+    /** @type {{ data: import('./db-client-types').UserOutput[], error: PostgrestError }} */
+    const { data, error } = await this._client
+      .from('user_tag_proposal')
+      .select()
+      .eq('user_id', userId)
+      .is('deleted_at', null)
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return data ?? []
+  }
+
+  /**
    * Get user by email.
    * @param {string} email
    * @return {Promise<import('./db-client-types').UserOutput | undefined>}

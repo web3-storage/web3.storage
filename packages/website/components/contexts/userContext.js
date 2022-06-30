@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 
-import { getInfo, getStorage } from 'lib/api.js';
+import { getInfo } from 'lib/api.js';
 import { useAuthorization } from './authorizationContext.js';
 import AccountBlockedModal from 'components/account/accountBlockedModal/accountBlockedModal.js';
 
@@ -26,11 +26,12 @@ import AccountBlockedModal from 'components/account/accountBlockedModal/accountB
  * @property {string} publicAddress
  * @property {string} created
  * @property {string} updated
- * @property {import('react-query').UseQueryResult<{
- *   usedStorage: {uploaded: number, psaPinned: number},
- *   storageLimitBytes: number
- * }>} storageData
- * @property {string} isLoadingStorage
+ * @property {number} uploaded
+ * @property {number} psaPinned
+ * @property {number} storageLimitBytes
+ * @property {Function} refetch
+ * @property {{uploaded: number, psaPinned: number}} usedStorage
+ * @property {string} isLoading
  */
 
 /**
@@ -51,15 +52,12 @@ export const UserContext = React.createContext(/** @type {any} */ (undefined));
  */
 export const UserProvider = ({ children, loadStorage }) => {
   const { isLoggedIn } = useAuthorization();
-  const { data } = useQuery('get-info', getInfo, {
+  const { data, refetch } = useQuery('get-info', getInfo, {
     enabled: isLoggedIn,
-  });
-  const storageData = useQuery('get-storage', getStorage, {
-    enabled: isLoggedIn && loadStorage,
   });
 
   return (
-    <UserContext.Provider value={{ ...data, storageData }}>
+    <UserContext.Provider value={{ ...data, refetch: () => refetch() }}>
       <AccountBlockedModal hasAccountRestriction={data?.info?.tags?.['HasAccountRestriction']} />
       {children}
     </UserContext.Provider>

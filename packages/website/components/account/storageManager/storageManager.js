@@ -25,11 +25,13 @@ const defaultStorageLimit = tebibyte;
  */
 const StorageManager = ({ className = '', content }) => {
   const {
-    storageData: { data, isLoading },
+    usedStorage,
+    storageLimitBytes,
+    isLoading
   } = useUser();
-  const uploaded = useMemo(() => data?.usedStorage?.uploaded || 0, [data]);
-  const psaPinned = useMemo(() => data?.usedStorage?.psaPinned || 0, [data]);
-  const limit = useMemo(() => data?.storageLimitBytes || defaultStorageLimit, [data]);
+  const uploaded = useMemo(() => usedStorage?.uploaded || 0, [usedStorage]);
+  const psaPinned = useMemo(() => usedStorage?.psaPinned || 0, [usedStorage]);
+  const limit = useMemo(() => storageLimitBytes || defaultStorageLimit, [storageLimitBytes]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
   const [isUserRequestModalOpen, setIsUserRequestModalOpen] = useState(false);

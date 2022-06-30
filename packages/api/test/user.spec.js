@@ -5,38 +5,10 @@ import { endpoint } from './scripts/constants.js'
 import { getTestJWT, getDBClient } from './scripts/helpers.js'
 import userUploads from './fixtures/pgrest/get-user-uploads.js'
 
-describe('GET /user/account', () => {
-  it('error if not authenticated with magic.link', async () => {
-    const token = await getTestJWT()
-    const res = await fetch(new URL('user/account', endpoint), {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    assert(!res.ok)
-    assert.strictEqual(res.status, 401)
-  })
-
-  it('error if no auth header', async () => {
-    const res = await fetch(new URL('user/account', endpoint))
-    assert(!res.ok)
-    assert.strictEqual(res.status, 401)
-  })
-
-  it('retrieves user account data', async () => {
-    const token = 'test-magic'
-    const res = await fetch(new URL('user/account', endpoint), {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    assert(res.ok)
-    const data = await res.json()
-    assert.strictEqual(data.usedStorage.uploaded, 32000)
-    assert.strictEqual(data.usedStorage.psaPinned, 10000)
-  })
-})
-
 describe('GET /user/info', () => {
   it('error if not authenticated with magic.link', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('user/account', endpoint), {
+    const res = await fetch(new URL('user/info', endpoint), {
       headers: { Authorization: `Bearer ${token}` }
     })
     assert(!res.ok)
@@ -44,7 +16,7 @@ describe('GET /user/info', () => {
   })
 
   it('error if no auth header', async () => {
-    const res = await fetch(new URL('user/account', endpoint))
+    const res = await fetch(new URL('user/info', endpoint))
     assert(!res.ok)
     assert.strictEqual(res.status, 401)
   })

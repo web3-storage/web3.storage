@@ -59,7 +59,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     replace,
   } = useRouter();
   const {
-    storageData: { refetch },
+    refetch,
     info,
   } = useUser();
   const { tokens, getTokens } = useTokens();

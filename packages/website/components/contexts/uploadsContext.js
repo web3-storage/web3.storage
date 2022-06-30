@@ -108,7 +108,7 @@ let client;
  */
 export const UploadsProvider = ({ children }) => {
   const {
-    storageData: { refetch },
+    refetch
   } = useUser();
 
   const [uploads, setUploads] = useState(/** @type {Upload[]} */ ([]));

@@ -36,22 +36,6 @@ export async function getTokens() {
   return res.json();
 }
 
-export async function getStorage() {
-  const res = await fetch(API + '/user/account', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + (await getToken()),
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error(`failed to get storage info: ${await res.text()}`);
-  }
-
-  return res.json();
-}
-
 export async function getInfo() {
   const res = await fetch(API + '/user/info', {
     method: 'GET',

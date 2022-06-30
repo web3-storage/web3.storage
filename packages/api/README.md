@@ -243,10 +243,6 @@ Create a new user token.
 
 Delete a given user token.
 
-### 👮 `GET /user/account`
-
-Get the user account information.
-
 ### 🔒 `POST /name/:key`
 
 **❗️Experimental** this API may not work, may change, and may be removed in a future version.

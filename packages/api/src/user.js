@@ -123,50 +123,33 @@ export async function userTokensPost (request, env) {
 }
 
 /**
- * Retrieve user account data.
- *
- * @param {AuthenticatedRequest} request
- * @param {import('./env').Env} env
- */
-export async function userAccountGet (request, env) {
-  const [usedStorage, storageLimitBytes] = await Promise.all([
-    env.db.getStorageUsed(request.auth.user._id),
-    env.db.getUserTagValue(request.auth.user._id, 'StorageLimitBytes')
-  ])
-  return new JSONResponse({
-    usedStorage,
-    storageLimitBytes
-  })
-}
-
-/**
  * Retrieve user info
  *
  * @param {AuthenticatedRequest} request
  * @param {import('./env').Env} env
  */
 export async function userInfoGet (request, env) {
-  const user = await env.db.getUser(request.auth.user.issuer, {
-    includeTags: true,
-    includeTagProposals: true
-  })
+  const { user, userTags } = request.auth
+  const storageUsed = await env.db.getStorageUsed(request.auth.user._id)
+  const proposalTags = await env.db.getUserProposalTags(request.auth.user._id)
 
   return new JSONResponse({
     info: {
       ...user,
+      storageUsed,
       tags: {
-        HasAccountRestriction: hasTag(user, 'HasAccountRestriction', 'true'),
-        HasDeleteRestriction: hasTag(user, 'HasDeleteRestriction', 'true'),
-        HasPsaAccess: hasTag(user, 'HasPsaAccess', 'true'),
-        HasSuperHotAccess: hasTag(user, 'HasSuperHotAccess', 'true'),
-        StorageLimitBytes: getTagValue(user, 'StorageLimitBytes', '')
+        HasAccountRestriction: hasTag(userTags, 'HasAccountRestriction', 'true'),
+        HasDeleteRestriction: hasTag(userTags, 'HasDeleteRestriction', 'true'),
+        HasPsaAccess: hasTag(userTags, 'HasPsaAccess', 'true'),
+        HasSuperHotAccess: hasTag(userTags, 'HasSuperHotAccess', 'true'),
+        StorageLimitBytes: getTagValue(userTags, 'StorageLimitBytes', '')
       },
       tagProposals: {
-        HasAccountRestriction: hasPendingTagProposal(user, 'HasAccountRestriction'),
-        HasDeleteRestriction: hasPendingTagProposal(user, 'HasDeleteRestriction'),
-        HasPsaAccess: hasPendingTagProposal(user, 'HasPsaAccess'),
-        HasSuperHotAccess: hasPendingTagProposal(user, 'HasSuperHotAccess'),
-        StorageLimitBytes: hasPendingTagProposal(user, 'StorageLimitBytes')
+        HasAccountRestriction: hasPendingTagProposal(proposalTags, 'HasAccountRestriction'),
+        HasDeleteRestriction: hasPendingTagProposal(proposalTags, 'HasDeleteRestriction'),
+        HasPsaAccess: hasPendingTagProposal(proposalTags, 'HasPsaAccess'),
+        HasSuperHotAccess: hasPendingTagProposal(proposalTags, 'HasSuperHotAccess'),
+        StorageLimitBytes: hasPendingTagProposal(proposalTags, 'StorageLimitBytes')
       }
     }
   })
