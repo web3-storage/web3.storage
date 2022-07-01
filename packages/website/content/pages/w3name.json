@@ -1,0 +1,330 @@
+{
+  "seo": {
+    "title": "",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "page_content": [
+    [
+      {
+        "type": "section-data",
+        "gradient": true,
+        "variant": "light"
+      },
+      {
+        "id": "product_hero-header",
+        "columns": [
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col"
+            },
+            "customizations": [
+              {
+                "type": "image_block",
+                "id": "w3name-logo",
+                "src": "/images/logos/w3name-logo.svg"
+              }
+            ]
+          },
+          {
+            "type": "hero",
+            "page": "w3name",
+            "cols": {
+              "num": "col-12",
+              "push_left": ""
+            },
+            "format": "header",
+            "heading": "Content addressing for a dynamic web.",
+            "subheading": "Your data model should be immutable and hash-linked, but you’re building for users that are anything but static. Harness w3name, magnifying the power of IPFS content IDs for real-world use cases to bring both dynamicity and security all the way up and down your stack."
+          }
+        ]
+      },
+      {
+        "id": "product_hero-card",
+        "columns": [
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col"
+            },
+            "customizations": [
+              {
+                "type": "image_block",
+                "id": "",
+                "src": "/images/products/w3name-graphic.png"
+              }
+            ]
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col"
+            },
+            "customizations": [
+              {
+                "type": "text_block",
+                "format": "small",
+                "heading": "",
+                "description": [
+                  "w3name sits on top of IPFS, generating names that have cryptographically verifiable and performantly updatable pointers. That way, even if your application’s data is always changing, these names can simply be updated to point to new CIDs. Build rich experiences for your users while still taking advantage of content addressing and the other superpowers of IPFS!"
+                ],
+                "cta": {
+                  "url": "/get-started",
+                  "text": "GET STARTED",
+                  "theme": "dark",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "w3name_how",
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col"
+            },
+            "format": "small",
+            "heading": "How does w3name work?",
+            "description": [
+              "w3name is a service and client library that implements IPNS, which is a protocol that uses public key cryptography to allow for updatable naming in an atomically verifiable way. This means the service is trustless, since all updates can be verified to have come from the associated keypair.",
+              "Because updates just point to a CID, it can be used with IPFS regardless of where your data is stored - Web3.Storage, elsewhere, or all of the above!"
+            ],
+            "cta": {
+              "url": "/about",
+              "text": "VIEW THE IPNS DOCS",
+              "theme": "light",
+              "event": "",
+              "ui": "",
+              "action": ""
+            }
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col"
+            },
+            "customizations": [
+              {
+                "type": "text_block",
+                "cols": {
+                  "num": "col"
+                },
+                "format": "small",
+                "heading": "Why not just use IPNS Directly with IPFS?",
+                "description": [
+                  "IPNS is baked into most IPFS implementations, but has trouble with performance, since updates are broadcasted to the network but not guaranteed to be resolved quickly or even correctly. This is an issue for production use cases, where users will want the data associated with the latest update at lightning speeds. Further, IPNS records generally have to be rebroadcast every 24 hours.",
+                  "w3name is a service layer that handles this broadcasting and performant resolution for you."
+                ],
+                "cta": {
+                  "url": "/about",
+                  "text": "GET STARTED",
+                  "theme": "light",
+                  "event": "",
+                  "ui": "",
+                  "action": ""
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "w3name_quality",
+        "columns": [
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col"
+            },
+            "customizations": [
+              {
+                "type": "image_block",
+                "id": "w3name-shield",
+                "src": "/images/products/check-shield.svg"
+              }
+            ]
+          },
+          {
+            "type": "text_block",
+            "page": "w3name",
+            "cols": {
+              "num": "col-12",
+              "push_left": ""
+            },
+            "description": [
+                "Your data model should be immutable and hash-linked, but you’re building for users that are anything but static. Harness w3name, magnifying the power of IPFS content IDs for real-world use cases to bring both dynamicity and security all the way up and down your stack."
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "section_explore-docs",
+        "grid": ["noGutter"],
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-3_md-7_ti-8",
+              "push_left": "off-0_md-1_sm-0"
+            },
+            "format": "medium",
+            "heading": "Open product. Open book.",
+            "cta": {
+              "url": "/docs",
+              "text": "EXPLORE DOCS",
+              "theme": "dark",
+              "event": "",
+              "ui": "",
+              "action": ""
+            }
+          },
+          {
+            "type": "card_list_block",
+            "cols": {
+              "num": "col-8_md-10_sm-12_mi-10",
+              "push_left": "off-1_md-1_sm-0_mi-1"
+            },
+            "cards": [
+              {
+                "type": "D",
+                "categories": [
+                  {
+                    "heading": "Welcome",
+                    "links": [
+                      {
+                        "url": "/docs/#quickstart",
+                        "text": "Quickstart"
+                      },
+                      {
+                        "url": "/docs/#create-an-account",
+                        "text": "Create an Account"
+                      },
+                      {
+                        "url": "/docs/#get-an-api-token",
+                        "text": "Get an API token"
+                      },
+                      {
+                        "url": "/docs/#create-the-upload-script",
+                        "text": "Create the Upload Script"
+                      },
+                      {
+                        "url": "/docs/#run-the-script",
+                        "text": "Run the Script"
+                      },
+                      {
+                        "url": "/docs/#get-your-file",
+                        "text": "Get your file"
+                      },
+                      {
+                        "url": "/docs/#next-steps",
+                        "text": "Next Steps"
+                      }
+                    ]
+                  },
+                  {
+                    "heading": "Concepts",
+                    "links": [
+                      {
+                        "url": "/docs/concepts/content-addressing",
+                        "text": "Content Addressing"
+                      },
+                      {
+                        "url": "/docs/concepts/decentralized-storage",
+                        "text": "Decentralized Storage"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "D",
+                "categories": [
+                  {
+                    "heading": "How-tos",
+                    "links": [
+                      {
+                        "url": "/docs/how-tos/store/",
+                        "text": "Store"
+                      },
+                      {
+                        "url": "/docs/how-tos/retrieve",
+                        "text": "Retrieve"
+                      },
+                      {
+                        "url": "/docs/how-tos/query",
+                        "text": "Query"
+                      },
+                      {
+                        "url": "/docs/how-tos/list",
+                        "text": "List"
+                      },
+                      {
+                        "url": "/docs/how-tos/work-with-car-files",
+                        "text": "Work with Content"
+                      },
+                      {
+                        "url": "/docs/how-tos/generate-api-token",
+                        "text": "Generate an API Token"
+                      },
+                      {
+                        "url": "/docs/how-tos/troubleshooting",
+                        "text": "Troubleshooting"
+                      }
+                    ]
+                  },
+                  {
+                    "heading": "Reference",
+                    "links": [
+                      {
+                        "url": "/docs/reference/http-api/",
+                        "text": "HTTP API Reference"
+                      },
+                      {
+                        "url": "/docs/reference/js-client-library",
+                        "text": "Javascript Client Library"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-3"
+            },
+            "format": "medium",
+            "heading": "Open product. Open book.",
+            "cta": {
+              "url": "/docs/",
+              "text": "EXPLORE DOCS",
+              "theme": "dark",
+              "event": "",
+              "ui": "",
+              "action": ""
+            }
+          }
+        ]
+      }
+    ]
+  ]
+}

@@ -76,7 +76,7 @@ export default function Navigation({ isProductApp }) {
   const getAccountMenu = () => {
     if (account && account.links) {
       return (
-        <div className="nav-account-button">
+        <div className="nav-dd-button">
           <Link passHref href={account.url}>
             <a
               href="replace"
@@ -87,7 +87,7 @@ export default function Navigation({ isProductApp }) {
               {account.text}
             </a>
           </Link>
-          <div className="nav-account-dropdown">
+          <div className="nav-dropdown">
             {account.links.map(link =>
               link.url === 'request-more-storage' ? (
                 <button
@@ -197,17 +197,51 @@ export default function Navigation({ isProductApp }) {
               </div>
 
               <div className={clsx('nav-items-wrapper', theme)}>
-                {navItems.map(item => (
-                  <Link passHref key={item.text} href={item.url}>
-                    <a
-                      href="replace"
-                      className={clsx('nav-item', item.url === router.route ? 'current-page' : '')}
-                      onClick={onLinkClick}
-                      onKeyPress={e => handleKeySelect(e, item.url)}
-                    >
-                      {item.text}
-                    </a>
-                  </Link>
+                {navItems.map((item, i) => (
+                  <>
+                    {item.links ? (
+                      <div className="nav-dd-button">
+                        <Link passHref key={item.text} href={item.url}>
+                          <a
+                            href="replace"
+                            className={clsx('nav-item', item.url === router.route ? 'current-page' : '')}
+                            onClick={onLinkClick}
+                            onKeyPress={e => handleKeySelect(e, item.url)}
+                          >
+                            {item.text}
+                          </a>
+                        </Link>
+                        <div className="nav-dropdown">
+                          {item.links.map(link => (
+                            <Link passHref href={link.url} key={link.text}>
+                              <a
+                                href="replace"
+                                className={clsx(
+                                  'nav-dropdown-link',
+                                  link.url === router.asPath || link.url === router.route ? 'current-route' : ''
+                                )}
+                                onClick={onLinkClick}
+                                onKeyPress={e => handleKeySelect(e, link.url)}
+                              >
+                                {link.text}
+                              </a>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <Link passHref key={item.text} href={item.url}>
+                        <a
+                          href="replace"
+                          className={clsx('nav-item', item.url === router.route ? 'current-page' : '')}
+                          onClick={onLinkClick}
+                          onKeyPress={e => handleKeySelect(e, item.url)}
+                        >
+                          {item.text}
+                        </a>
+                      </Link>
+                    )}
+                  </>
                 ))}
 
                 {isLoggedIn && getAccountMenu()}
@@ -215,8 +249,8 @@ export default function Navigation({ isProductApp }) {
                 {isLoadingUser
                   ? loadingButton(auth.login, buttonTheme)
                   : isLoggedIn
-                  ? logoutButton(auth.logout, buttonTheme)
-                  : loginButton(auth.login, buttonTheme)}
+                    ? logoutButton(auth.logout, buttonTheme)
+                    : loginButton(auth.login, buttonTheme)}
                 <Search />
               </div>
 
@@ -239,11 +273,42 @@ export default function Navigation({ isProductApp }) {
 
               <div className="mobile-items-wrapper">
                 {navItems.map((item, index) => (
-                  <Link passHref href={item.url} key={`mobile-${item.text}`}>
-                    <a href="replace" className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
-                      {item.text}
-                    </a>
-                  </Link>
+                  <>
+                    {item.links ? (
+                      <ZeroAccordion multiple={false} toggleOnLoad={false} toggleAllOption={false}>
+                        <ZeroAccordionSection disabled={!Array.isArray(item.links)}>
+                          <ZeroAccordionSection.Header>
+                            <div className="nav-item-heading">{item.text}</div>
+                          </ZeroAccordionSection.Header>
+
+                          <ZeroAccordionSection.Content>
+                            {Array.isArray(item.links) && (
+                              <div className="nav-sublinks-wrapper">
+                                {item.links.map(link =>
+                                  <Link passHref href={link.url} key={link.text}>
+                                    <a
+                                      href="replace"
+                                      className={clsx('nav-sublink', link.url === router.route ? 'current-page' : '')}
+                                      onClick={onLinkClick}
+                                      onKeyPress={e => handleKeySelect(e, link.url)}
+                                    >
+                                      {link.text}
+                                    </a>
+                                  </Link>
+                                )}
+                              </div>
+                            )}
+                          </ZeroAccordionSection.Content>
+                        </ZeroAccordionSection>
+                      </ZeroAccordion>
+                    ) : (
+                      <Link passHref href={item.url} key={`mobile-${item.text}`}>
+                        <a href="replace" className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
+                          {item.text}
+                        </a>
+                      </Link>
+                    )}
+                  </>
                 ))}
 
                 {isDocs && <Sidebar openMenu={setMenuOpen} />}
@@ -290,8 +355,8 @@ export default function Navigation({ isProductApp }) {
                 {isLoadingUser
                   ? loadingButton(auth.login, 'light')
                   : isLoggedIn
-                  ? logoutButton(auth.logout, 'light')
-                  : loginButton(auth.login, 'light')}
+                    ? logoutButton(auth.logout, 'light')
+                    : loginButton(auth.login, 'light')}
               </div>
             </div>
           </nav>
