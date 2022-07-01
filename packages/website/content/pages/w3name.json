@@ -36,7 +36,7 @@
             "type": "hero",
             "page": "w3name",
             "cols": {
-              "num": "col-12",
+              "num": "col col-12",
               "push_left": ""
             },
             "format": "header",
@@ -104,7 +104,7 @@
               "Because updates just point to a CID, it can be used with IPFS regardless of where your data is stored - Web3.Storage, elsewhere, or all of the above!"
             ],
             "cta": {
-              "url": "/about",
+              "url": "https://docs.ipfs.io/concepts/ipns/",
               "text": "VIEW THE IPNS DOCS",
               "theme": "light",
               "event": "",
@@ -130,7 +130,7 @@
                   "w3name is a service layer that handles this broadcasting and performant resolution for you."
                 ],
                 "cta": {
-                  "url": "/about",
+                  "url": "#get-started",
                   "text": "GET STARTED",
                   "theme": "light",
                   "event": "",

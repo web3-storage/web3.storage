@@ -5,7 +5,7 @@
   padding: 6rem 0 3rem;
 
   @include mini {
-    text-align: left
+    text-align: left;
   }
 
   .subheading {
@@ -60,6 +60,12 @@
   width: 200px;
   @include mini {
     margin: 0;
+  }
+}
+
+#w3name_quality {
+  .grid > div {
+    padding: 0;
   }
 }
 
@@ -138,7 +144,7 @@
     display: grid;
     grid-gap: 2rem;
     grid-template-columns: 40px auto;
-    padding: 2rem 4rem;
+    padding: 2rem 3rem;
     align-items: center;
     border-radius: 0.5rem;
     background-color: rgba($waterloo, 0.15);
@@ -146,16 +152,19 @@
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.024);
     font-style: italic;
     color: #c7c7c7;
-    font-size: 16px;
-    line-height: 1.6;
+
+    .description {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
 
     @include mini {
-        padding: 2rem;
-        grid-gap: 1rem;
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        margin: 0 10px;
-        max-width: calc(100% - 20px);
+      padding: 2rem;
+      grid-gap: 1rem;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      margin: 0 10px;
+      max-width: calc(100% - 20px);
     }
   }
 
