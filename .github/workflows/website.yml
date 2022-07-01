@@ -105,7 +105,7 @@ jobs:
       - name: Deploy preview build to Cloudflare Pages
         run: npx wrangler pages publish --project-name web3-storage-staging --branch $GITHUB_REF_NAME --commit-hash $GITHUB_SHA ./packages/website/out
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_PAGES_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
   changelog:
@@ -164,5 +164,5 @@ jobs:
       - name: Deploy https://web3.storage to Cloudflare Pages
         run: npx wrangler pages publish --project-name web3-storage --branch main --commit-hash $GITHUB_SHA ./packages/website/out
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_PAGES_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
