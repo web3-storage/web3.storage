@@ -1,9 +1,9 @@
 .docs-feedback {
   margin-top: 3rem;
   background-color: $white;
-  @include shadow1;
   padding: toRem(32) toRem(29);
   @include borderRadius_Large;
+  @include shadow1;
   h4 {
     margin-bottom: toRem(5);
   }
@@ -14,15 +14,13 @@
     margin-left: toRem(10);
     @extend .button;
     background-color: $ebony;
-    @include fontSize_Small;
-    color: white;
+    font-size: 0.875rem;
     padding: toRem(8) toRem(12);
     border: 2px solid $ebony;
     box-sizing: border-box;
-    border-radius: 5px !important;
+    border-radius: 0.325rem !important;
     &:hover {
-      color: $ebony;
-      background-color: $white;
+      transform: scale(1.1);
     }
   }
   .col {
@@ -33,7 +31,7 @@
     }
   }
   .last-updated {
-    margin-top: 0.2rem;
+    margin-top: 0.25rem;
     font-style: italic;
     font-size: smaller;
   }
