@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.0.1](https://github.com/web3-storage/web3.storage/compare/api-v7.0.0...api-v7.0.1) (2022-06-29)
+
+
+### Bug Fixes
+
+* add pagination to user/uploads endpoint ([#1408](https://github.com/web3-storage/web3.storage/issues/1408)) ([3e0a14f](https://github.com/web3-storage/web3.storage/commit/3e0a14fc8407ae549d19ba8b48ddab23bd2a5141))
+
+
+### Other Changes
+
+* use `instanceof` for error type inference ([#1463](https://github.com/web3-storage/web3.storage/issues/1463)) ([a42e762](https://github.com/web3-storage/web3.storage/commit/a42e762e4935b4cbad864bd3b9edc0499b7c225c))
+
 ## [7.0.0](https://github.com/web3-storage/web3.storage/compare/api-v6.4.1...api-v7.0.0) (2022-06-27)
 
 

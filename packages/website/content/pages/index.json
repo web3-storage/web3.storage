@@ -23,8 +23,7 @@
             "type": "hero",
             "page": "index",
             "cols": {
-              "num": "col-6_sm-8_mi-10_ti-12",
-              "push_left": "off-3_sm-2_mi-1_ti-0"
+              "num": "col-12"
             },
             "format": "header",
             "heading": "The easiest way to store data on the decentralized web.",
