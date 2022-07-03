@@ -100,9 +100,9 @@
           font-weight: 600;
           border-bottom: 0.125rem solid rgba($moonRaker, 0);
           padding-bottom: 0.1875rem;
-          transition: all 0.3s ease;
+          transition: all 0.25s ease;
           &:hover {
-            border-bottom-color: rgba($moonRaker, 1);
+            color: $cerise;
           }
         }
         h1 a, h2 a, h3 a, h4 a, h5 a {
