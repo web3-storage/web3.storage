@@ -88,7 +88,23 @@
 
       ul,
       ol {
-        padding-left: 1rem;
+        padding-left: 1.625rem;
+        li {
+          padding-left: 0.5rem;
+        }
+        ul {
+         list-style-type: square; 
+        }
+        ul,
+        ol {
+          ul {
+            list-style-type: circle;
+          }
+        }
+      }
+
+      ul {
+        list-style-type: "\2042";
         li {
           padding-left: 1.25rem;
         }
