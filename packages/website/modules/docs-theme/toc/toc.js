@@ -11,7 +11,9 @@ if (typeof window !== 'undefined') {
 export default function Toc() {
   const [isOpen, setOpen] = useState(false);
   const [nestedHeadings, setNestedHeadings] = useState([]);
+  const [updateKey, setUpdateKey] = useState(0);
   const activeHeadings = useRef({});
+  const lastActive = useRef('');
   let controller;
 
   const toggleClass = () => {
@@ -35,12 +37,19 @@ export default function Toc() {
   };
 
   const updateHeadings = id => {
+    let lastId = '';
     for (const element in activeHeadings.current) {
       if (activeHeadings.current[element]) {
         activeHeadings.current[element] = false;
+        lastId = element;
+        break;
       }
     }
-    activeHeadings.current[id] = true;
+    if (lastId !== id) {
+      activeHeadings.current[id] = true;
+      lastActive.current = lastId;
+      setUpdateKey(key => key + 1);
+    }
   };
 
   const getNestedHeadings = headingElements => {
@@ -85,14 +94,26 @@ export default function Toc() {
     <ul>
       {headings.map((heading, i) => (
         <li key={heading.id}>
-          <a href={`#${heading.id}`} className={clsx(activeHeadings.current[heading.id] ? 'active' : '')}>
+          <a
+            href={`#${heading.id}`}
+            className={clsx(
+              activeHeadings.current[heading.id] ? 'active' : '',
+              heading.id === lastActive.current ? 'heading-slide-out' : ''
+            )}
+          >
             {heading.title}
           </a>
           {heading.items.length > 0 && (
             <ul>
               {heading.items.map((child, j) => (
                 <li key={child.id}>
-                  <a href={`#${child.id}`} className={clsx(activeHeadings.current[child.id] ? 'active' : '')}>
+                  <a
+                    href={`#${child.id}`}
+                    className={clsx(
+                      activeHeadings.current[child.id] ? 'active' : '',
+                      child.id === lastActive.current ? 'heading-slide-out' : ''
+                    )}
+                  >
                     {child.title}
                   </a>
                 </li>
@@ -105,7 +126,6 @@ export default function Toc() {
   );
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     controller = new ScrollMagic.Controller();
     const headingElements = Array.from(document.querySelectorAll('.docs-body h2, .docs-body h3'));
     const newNestedHeadings = getNestedHeadings(headingElements);

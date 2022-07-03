@@ -88,9 +88,52 @@
 
       ul,
       ol {
-        padding-left: 1rem;
+        padding-left: 1.625rem;
         li {
-          padding-left: 3rem;
+          padding-left: 0.5rem;
+        }
+        ul {
+         list-style-type: square; 
+        }
+        ul,
+        ol {
+          ul {
+            list-style-type: circle;
+          }
+        }
+      }
+
+      ul {
+        list-style-type: "\2042";
+        li {
+          padding-left: 1.25rem;
+        }
+      }
+
+      .docs-body {
+        a {
+          color: $docsPrimaryPurple;
+          font-weight: 600;
+          border-bottom: 0.125rem solid rgba($moonRaker, 0);
+          padding-bottom: 0.1875rem;
+          transition: all 0.25s ease;
+          &:hover {
+            color: $cerise;
+          }
+        }
+        h1 a, h2 a, h3 a, h4 a, h5 a {
+          color: $ebony;
+          border-bottom: none;
+          padding-bottom: 0;
+        }
+        .accordion-block {
+          margin-left: 2rem;
+          .accordion-header-text {
+            margin-left: 0.875rem;
+          }
+          .accordion-content {
+            margin-left: 2rem;
+          }
         }
       }
     }
@@ -138,7 +181,12 @@
     h1 {
       margin-bottom: toRem(42);
     }
-    p,
+    p {
+      margin-bottom: 1rem;
+    }
+    p + p {
+      margin-top: 2.5rem;
+    }
     pre {
       margin-bottom: 2.5rem;
     }
@@ -166,11 +214,40 @@
     pre {
       white-space: pre-wrap;
       word-wrap: break-word;
+      position: relative;
+      &:hover {
+        .code-copy-button {
+          opacity: 0.75;
+          transform: scale(1.5)
+        }
+      }
+      .code-copy-button {
+        position: absolute;
+        opacity: 0;
+        top: 1rem;
+        right: 1rem;
+        width: 12px;
+        height: 14px;
+        transition: 200ms ease;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='14'%3e%3cpath data-name='copy-frame' d='M7.682.126 7.552 0h-3a1.518 1.518 0 0 0-1.516 1.518V2.6H1.518A1.518 1.518 0 0 0 0 4.121v8.242a1.518 1.518 0 0 0 1.518 1.518h5.639a1.518 1.518 0 0 0 1.518-1.518v-1.085h1.518a1.518 1.518 0 0 0 1.519-1.518v-5.6l-.126-.13Zm.126 1.353L10.233 3.9H8.459a.651.651 0 0 1-.651-.651Zm0 9.8v1.084a.651.651 0 0 1-.651.651H1.518a.651.651 0 0 1-.651-.651V4.121a.651.651 0 0 1 .651-.651H3.9v2.386a1.518 1.518 0 0 0 1.522 1.518h2.386ZM4.772 5.856V4.082L7.2 6.507H5.422a.651.651 0 0 1-.65-.651Zm6.073 3.9a.651.651 0 0 1-.651.651H8.676V6.763l-.126-.13-3.9-3.9-.134-.133H3.9V1.518a.651.651 0 0 1 .655-.65h2.386v2.385a1.518 1.518 0 0 0 1.518 1.518h2.386Z' fill='white' /%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        transform: scale(1.2);
+        &:active, 
+        &:focus {
+          transform: scale(2);
+          opacity: 0.25;
+        }
+      }
     }
     code {
       @include monospace_Text;
       font-size: 0.875rem;
       line-height: 1.25rem;
+      padding: 0 0.375rem;
+      margin: 0 0.125rem;
+      border: 1px solid $gray400;
+      @include borderRadius_Small;
+      box-shadow: inset -2px -3px 15px $gray300;
     }
     pre code {
       @include monospace_Text;
@@ -180,8 +257,12 @@
       min-width: 100%;
       color: white;
       padding: 1rem;
-      font-size: 0.875rem;
+      padding-right: 2.25rem;
+      font-size: .875rem;
       line-height: 1.25rem;
+      box-shadow: none;
+      border: none;
+      margin: 0;
     }
     a {
       color: $docsPrimaryPurple;
@@ -198,6 +279,16 @@
     }
     img {
       max-width: 100%;
+    }
+  }
+  // overwrite for algolia search
+  .DocSearch-NoResults-Prefill-List li {
+    list-style-position: inherit;
+    list-style-type: "»    ";
+    line-height: 1;
+    .DocSearch-Prefill {
+      text-align: left;
+      line-height: 1.4;
     }
   }
 }
