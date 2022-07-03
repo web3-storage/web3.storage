@@ -111,7 +111,7 @@ jobs:
       - uses: mathiasvr/command-output@v1.1.0
         id: cloudflare_url
         with:
-          run: egrep -o 'https?://[^ ]+' <(echo ${{ steps.cloudflare.outputs.stdout }}) 
+          run: egrep -o 'https?://[^ ]+' <(echo "${{ steps.cloudflare.outputs.stdout }}") 
       - name: Set Cloudflare Pages URL as commit status
         run: 'gh api --method POST -H "Accept: application/vnd.github+json" "/repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" -f state="success" -f target_url="${{ steps.cloudflare_url.outputs.stdout }}" -f description="Preview URL" -f context="Cloudflare Pages"'
 
