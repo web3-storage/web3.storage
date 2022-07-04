@@ -1,7 +1,7 @@
 @use 'sass:math';
 
 // General
-$containerWidth: 61.25rem; // 980px
+$containerWidth: 60rem; //1040px
 $underlineSpacing: 0.1875rem;
 $messageBannerHeight: 3.25rem;
 $navigationHeight: 8.5rem;
@@ -55,7 +55,7 @@ $breakpoint_Tiny: 25.9375rem; // 415px
 $breakpoint_Mini: 40rem; // 640px
 $breakpoint_Smaller: 48rem; // 768px
 $breakpoint_Small: 53.125rem; // 850px
-$breakpoint_Medium: 64rem; // 1024px
+$breakpoint_Medium: 60rem; // 960px
 $breakpoint_Large: 75rem; // 1200px
 $breakpoint_Xlarge: 90rem; // 1440px
 $breakpoint_UltraLarge: 140.625rem; // 2250px

@@ -14,7 +14,7 @@
  * @module
  */
 import { transform } from 'streaming-iterables'
-import pRetry from 'p-retry'
+import pRetry, { AbortError } from 'p-retry'
 import { pack } from 'ipfs-car/pack'
 import { parseLinkHeader } from '@web3-storage/parse-link-header'
 import { unpackStream } from 'ipfs-car/unpack'
@@ -45,8 +45,10 @@ const RATE_LIMIT_PERIOD = 10 * 1000
 /** @typedef { import('./lib/interface.js').Web3File} Web3File */
 /** @typedef { import('./lib/interface.js').Filelike } Filelike */
 /** @typedef { import('./lib/interface.js').CIDString} CIDString */
+/** @typedef { import('./lib/interface.js').RequestOptions} RequestOptions */
 /** @typedef { import('./lib/interface.js').PutOptions} PutOptions */
 /** @typedef { import('./lib/interface.js').PutCarOptions} PutCarOptions */
+/** @typedef { import('./lib/interface.js').ListOptions} ListOptions */
 /** @typedef { import('./lib/interface.js').RateLimiter } RateLimiter */
 /** @typedef { import('./lib/interface.js').UnixFSEntry} UnixFSEntry */
 /** @typedef { import('./lib/interface.js').Web3Response} Web3Response */
@@ -83,7 +85,7 @@ class Web3Storage {
    * const client = new Web3Storage({ token: API_TOKEN })
    * ```
    *
-   * @param {{token: string, endpoint?:URL, rateLimiter?: RateLimiter, fetch: typeof _fetch}} options
+    @param {Service} options
    */
   constructor ({
     token,
@@ -138,7 +140,8 @@ class Web3Storage {
     maxRetries = MAX_PUT_RETRIES,
     maxChunkSize = DEFAULT_CHUNK_SIZE,
     wrapWithDirectory = true,
-    name
+    name,
+    signal
   } = {}) {
     if (maxChunkSize >= MAX_CHUNK_SIZE || maxChunkSize < MAX_BLOCK_SIZE) {
       throw new Error('maximum chunk size must be less than 100MiB and greater than or equal to 1MB')
@@ -154,7 +157,7 @@ class Web3Storage {
       })
       onRootCidReady && onRootCidReady(root.toString())
       const car = await CarReader.fromIterable(out)
-      return await Web3Storage.putCar({ endpoint, token, rateLimiter, fetch }, car, { onStoredChunk, maxRetries, maxChunkSize, name })
+      return await Web3Storage.putCar({ endpoint, token, rateLimiter, fetch }, car, { onStoredChunk, maxRetries, maxChunkSize, name, signal })
     } finally {
       await blockstore.close()
     }
@@ -171,7 +174,8 @@ class Web3Storage {
     onStoredChunk,
     maxRetries = MAX_PUT_RETRIES,
     maxChunkSize = DEFAULT_CHUNK_SIZE,
-    decoders
+    decoders,
+    signal
   } = {}) {
     if (maxChunkSize >= MAX_CHUNK_SIZE || maxChunkSize < MAX_BLOCK_SIZE) {
       throw new Error('maximum chunk size must be less than 100MiB and greater than or equal to 1MB')
@@ -209,17 +213,24 @@ class Web3Storage {
       const res = await pRetry(
         async () => {
           await rateLimiter()
-          const request = await fetch(url.toString(), {
-            method: 'POST',
-            headers,
-            body: carFile
-          })
+          /** @type {Response} */
+          let response
+          try {
+            response = await fetch(url.toString(), {
+              method: 'POST',
+              headers,
+              body: carFile,
+              signal
+            })
+          } catch (/** @type {any} */err) {
+            throw signal && signal.aborted ? new AbortError(err) : err
+          }
           /* c8 ignore next 3 */
-          if (request.status === 429) {
+          if (response.status === 429) {
             throw new Error('rate limited')
           }
-          const res = await request.json()
-          if (!request.ok) {
+          const res = await response.json()
+          if (!response.ok) {
             throw new Error(res.message)
           }
 
@@ -243,14 +254,16 @@ class Web3Storage {
   /**
    * @param {Service} service
    * @param {CIDString} cid
+   * @param {RequestOptions} [options]
    * @returns {Promise<Web3Response | null>}
    */
-  static async get ({ endpoint, token, rateLimiter = globalRateLimiter, fetch = _fetch }, cid) {
+  static async get ({ endpoint, token, rateLimiter = globalRateLimiter, fetch = _fetch }, cid, options = {}) {
     const url = new URL(`car/${cid}`, endpoint)
     await rateLimiter()
     const res = await fetch(url.toString(), {
       method: 'GET',
-      headers: Web3Storage.headers(token)
+      headers: Web3Storage.headers(token),
+      signal: options.signal
     })
     /* c8 ignore next 3 */
     if (res.status === 429) {
@@ -262,25 +275,28 @@ class Web3Storage {
   /**
    * @param {Service} service
    * @param {CIDString} cid
+   * @param {RequestOptions} [options]
    * @returns {Promise<CIDString>}
    */
   /* c8 ignore next 4 */
-  static async delete ({ endpoint, token, rateLimiter = globalRateLimiter }, cid) {
-    console.log('Not deleting', cid, endpoint, token, rateLimiter)
+  static async delete ({ endpoint, token, rateLimiter = globalRateLimiter }, cid, options = {}) {
+    console.log('Not deleting', cid, endpoint, token, rateLimiter, options)
     throw Error('.delete not implemented yet')
   }
 
   /**
    * @param {Service} service
    * @param {CIDString} cid
+   * @param {RequestOptions} [options]
    * @returns {Promise<Status | undefined>}
    */
-  static async status ({ endpoint, token, rateLimiter = globalRateLimiter, fetch = _fetch }, cid) {
+  static async status ({ endpoint, token, rateLimiter = globalRateLimiter, fetch = _fetch }, cid, options = {}) {
     const url = new URL(`status/${cid}`, endpoint)
     await rateLimiter()
     const res = await fetch(url.toString(), {
       method: 'GET',
-      headers: Web3Storage.headers(token)
+      headers: Web3Storage.headers(token),
+      signal: options.signal
     })
     /* c8 ignore next 3 */
     if (res.status === 429) {
@@ -297,17 +313,15 @@ class Web3Storage {
 
   /**
    * @param {Service} service
-   * @param {object} [opts]
-   * @param {string} [opts.before] list items uploaded before this ISO 8601 date string
-   * @param {number} [opts.maxResults] maximum number of results to return
+   * @param {ListOptions} [opts]
    * @returns {AsyncIterable<Upload>}
    */
-  static async * list (service, { before = new Date().toISOString(), maxResults = Infinity } = {}) {
-  /**
-   * @param {Service} service
-   * @param {{before: string, size: number}} opts
-   * @returns {Promise<Response>}
-   */
+  static async * list (service, { before = new Date().toISOString(), maxResults = Infinity, signal } = {}) {
+    /**
+     * @param {Service} service
+     * @param {{before: string, size: number}} opts
+     * @returns {Promise<Response>}
+     */
     async function listPage ({ endpoint, token, rateLimiter = globalRateLimiter, fetch = _fetch }, { before, size }) {
       const search = new URLSearchParams({ before, size: size.toString() })
       const url = new URL(`user/uploads?${search}`, endpoint)
@@ -317,7 +331,8 @@ class Web3Storage {
         headers: {
           ...Web3Storage.headers(token),
           'Access-Control-Request-Headers': 'Link'
-        }
+        },
+        signal
       })
     }
     let count = 0
@@ -412,25 +427,28 @@ class Web3Storage {
   /**
    * Fetch the Content Addressed Archive by its root CID.
    * @param {CIDString} cid
+   * @param {RequestOptions} [options]
    */
-  get (cid) {
-    return Web3Storage.get(this, cid)
+  get (cid, options) {
+    return Web3Storage.get(this, cid, options)
   }
 
   /**
    * @param {CIDString} cid
+   * @param {RequestOptions} [options]
    */
   /* c8 ignore next 3 */
-  delete (cid) {
-    return Web3Storage.delete(this, cid)
+  delete (cid, options) {
+    return Web3Storage.delete(this, cid, options)
   }
 
   /**
    * Fetch info on Filecoin deals and IPFS pins that a given CID is replicated in.
    * @param {CIDString} cid
+   * @param {RequestOptions} [options]
    */
-  status (cid) {
-    return Web3Storage.status(this, cid)
+  status (cid, options) {
+    return Web3Storage.status(this, cid, options)
   }
 
   /**
@@ -444,9 +462,7 @@ class Web3Storage {
    * }
    * ```
    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of
-   * @param {object} [opts]
-   * @param {string} [opts.before] list items uploaded before this ISO 8601 date string
-   * @param {number} [opts.maxResults] maximum number of results to return
+   * @param {ListOptions} [opts]
    * @returns {AsyncIterable<Upload>}
    */
   list (opts) {
@@ -455,7 +471,8 @@ class Web3Storage {
 }
 
 /**
- * Map a UnixFSEntry to a File with a cid property
+ * Map a UnixFSEntry to a File with a cid property.
+ *
  * @param {UnixFSEntry} entry
  * @returns {Promise<Web3File>}
  */

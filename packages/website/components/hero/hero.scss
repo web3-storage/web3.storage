@@ -11,7 +11,7 @@
 // -----------------------------------------------------------------------------
 #index_hero-container {
   width: 100%;
-  padding: 0 1.75rem;
+  // padding: 0 1.75rem;
   z-index: 0;
   display: flex;
   .text-block {
@@ -367,14 +367,14 @@
 #faq_hero_title-triangle {
   &:after {
     transform: scaleX(-1) rotate(-90deg);
-    background-image: url('../../assets/images/triangle.png');
+    background-image: url('/images/illustrations/triangle.png');
   }
 }
 
 #faq_hero_title-coil {
   &:after {
     transform: rotate(31deg);
-    background-image: url('../../assets/images/coil.png');
+    background-image: url('/images/illustrations/coil.png');
     @include small {
       display: none;
     }

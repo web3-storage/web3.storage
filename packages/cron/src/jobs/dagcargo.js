@@ -3,14 +3,17 @@ import debug from 'debug'
 const LIMIT = 1000
 
 const FIND_CONTENT_TO_UPDATE = `
-SELECT c.cid, d.size_actual
-FROM public.content c
-JOIN cargo.dags d ON c.cid = d.cid_v1
+SELECT d.cid_v1 as cid, d.size_actual
+  FROM cargo.dag_sources ds
+  JOIN cargo.dags d using ( cid_v1 )
+  JOIN cargo.sources s USING ( srcid )
 WHERE
-  d.size_actual > 0 AND 
-  c.dag_size != d.size_actual AND 
-  c.inserted_at > $1
+  d.size_actual IS NOT NULL AND
+  (d.size_actual != ds.size_claimed OR ds.size_claimed is NULL) AND 
+  ds.entry_last_updated > $1 AND
+  s.project = 1
 LIMIT $2
+OFFSET $3
 `
 
 const UPDATE_CONTENT_DAG_SIZE = `
@@ -25,11 +28,11 @@ UPDATE public.content
  *
  * @param {Object} config
  * @param {import('pg').Client} config.rwPg
- * @param {import('pg').Client} config.roPg
+ * @param {import('pg').Pool} config.cargoPool
  * @param {number} [config.limit]
  * @param {Date} config.after
  */
-export async function updateDagSizes ({ rwPg, roPg, after, limit = LIMIT }) {
+export async function updateDagSizes ({ rwPg, cargoPool, after, limit = LIMIT }) {
   const log = debug('dagcargo:updateDagSizes')
 
   if (!log.enabled) {
@@ -39,10 +42,12 @@ export async function updateDagSizes ({ rwPg, roPg, after, limit = LIMIT }) {
   log(`🎯 Updating DAG sizes for content inserted after ${after.toISOString()}`)
 
   let updatedCids = 0
+  let offset = 0
   while (true) {
-    const { rows: contents } = await roPg.query(FIND_CONTENT_TO_UPDATE, [
+    const { rows: contents } = await cargoPool.query(FIND_CONTENT_TO_UPDATE, [
       after.toISOString(),
-      limit
+      limit,
+      offset
     ])
     if (!contents.length) break
 
@@ -55,6 +60,7 @@ export async function updateDagSizes ({ rwPg, roPg, after, limit = LIMIT }) {
 
     updatedCids += contents.length
     log(`ℹ️ Updated ${contents.length} in current iteration`)
+    offset += limit
   }
 
   log(`ℹ️ Updated ${updatedCids} in total`)

@@ -7,18 +7,20 @@ import Callout from 'components/callout/callout';
 import CodeSnippet from 'components/codesnippet/codesnippet';
 import AccordionSingle from 'components/accordionsingle/accordionsingle';
 import storageJsSource from '!!raw-loader!../../../../../node_modules/example-image-gallery/src/js/storage.js'
+import Img from 'components/cloudflareImage';
+import ImgGalleryExample from '../../../public/images/docs/image-gallery-example.gif';
 
 # Image gallery example
 
 To demonstrate how to use the Web3.Storage JavaScript library to build an application, we've written a simple image gallery app for uploading your favorite memes and GIFs to the decentralized web.
 
-![Animated screen capture of the example app, showing a user uploading an image and viewing it in their gallery.](/images/docs/image-gallery-example.gif)
+<Img src={ImgGalleryExample} alt="Animated screen capture of the example app, showing a user uploading an image and viewing it in their gallery." />
 
 You can [play with the app in your browser][example-demo], since it has been uploaded to Web3.Storage and is available using any IPFS HTTP gateway. All you need is an [API token][howto-token] for Web3.Storage.
 
 If you want to run locally, you just need git and a recent version of Node.js. Here's how to start a hot-reloading development server that will update the app as you play with the source code:
 
-```shell
+```bash
 # Clone the repository.
 git clone https://github.com/web3-storage/example-image-gallery
 cd example-image-gallery

@@ -209,6 +209,80 @@ describe('GET /user/uploads', () => {
     assert.deepStrictEqual(uploads, [...userUploads].sort((a, b) => b.name.localeCompare(a.name)))
   })
 
+  it('lists uploads sorted by date', async () => {
+    const token = await getTestJWT()
+    const res = await fetch(new URL('/user/uploads?sortBy=Date', endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(res.ok)
+    const uploads = await res.json()
+    assert.deepStrictEqual(uploads, [...userUploads].sort((a, b) => b.created.localeCompare(a.created)))
+  })
+
+  it('lists uploads in reverse order when sorting by Asc', async () => {
+    const token = await getTestJWT()
+    const res = await fetch(new URL('/user/uploads?sortBy=Name&sortOrder=Asc', endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+
+    assert(res.ok)
+
+    const uploads = await res.json()
+    const sortedUploads = [...userUploads].sort((a, b) => a.name.localeCompare(b.name))
+
+    assert.deepStrictEqual(uploads, sortedUploads)
+  })
+
+  it('filters results by before date', async () => {
+    const token = await getTestJWT()
+
+    const beforeFilterDate = new Date('2021-07-10T00:00:00.000000+00:00').toISOString()
+    const res = await fetch(new URL(`/user/uploads?before=${beforeFilterDate}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+
+    assert(res.ok)
+
+    const uploads = await res.json()
+
+    assert(uploads.length < userUploads.length, 'Ensure some results are filtered out.')
+    assert(uploads.length > 0, 'Ensure some results are returned.')
+
+    // Filter uploads fixture by the filter date.
+    const uploadsBeforeFilterDate = userUploads.filter((upload) => {
+      return upload.created <= beforeFilterDate
+    })
+
+    assert.deepStrictEqual(uploads, [...uploadsBeforeFilterDate])
+  })
+
+  it('filters results by after date', async () => {
+    const token = await getTestJWT()
+
+    const afterFilterDate = new Date('2021-07-10T00:00:00.000000+00:00').toISOString()
+    const res = await fetch(new URL(`/user/uploads?after=${afterFilterDate}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+
+    assert(res.ok)
+
+    const uploads = await res.json()
+
+    assert(uploads.length < userUploads.length, 'Ensure some results are filtered out.')
+    assert(uploads.length > 0, 'Ensure some results are returned.')
+
+    // Filter uploads fixture by the filter date.
+    const uploadsAfterFilterDate = userUploads.filter((upload) => {
+      return upload.created >= afterFilterDate
+    })
+
+    assert.deepStrictEqual(uploads, [...uploadsAfterFilterDate])
+  })
+
   it('lists uploads via magic auth', async () => {
     const token = 'test-magic'
     const res = await fetch(new URL('/user/uploads', endpoint).toString(), {
@@ -220,20 +294,47 @@ describe('GET /user/uploads', () => {
     assert.deepStrictEqual(uploads, userUploads)
   })
 
-  it('paginates', async () => {
+  it('paginates by page', async () => {
     const token = await getTestJWT()
     const size = 1
+    const page = 2
+    const res = await fetch(new URL(`/user/uploads?size=${size}&page=${page}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    assert(res.ok)
+
+    // Ensure we have all pagination metadata in the headers.
+    const link = res.headers.get('link')
+    assert(link, 'has a link header for the next page')
+    assert.strictEqual(link, `</user/uploads?size=${size}&page=${page - 1}>; rel="previous", </user/uploads?size=${size}&page=${page + 1}>; rel="next"`)
+
+    const resCount = res.headers.get('Count')
+    assert.strictEqual(parseInt(resCount), userUploads.length, 'has a count for calculating page numbers')
+
+    const resSize = res.headers.get('Size')
+    assert.strictEqual(parseInt(resSize), size, 'has a size for calculating page numbers')
+
+    const resPage = res.headers.get('Page')
+    assert.strictEqual(parseInt(resPage), page, 'has a page number for calculating page numbers')
+
+    // Should get second result (page 2).
+    const uploads = await res.json()
+    const expected = [userUploads[1]]
+    assert.deepStrictEqual(uploads, expected)
+  })
+
+  it('does not paginate when all results are returned', async () => {
+    const token = await getTestJWT()
+    const size = 1000
     const res = await fetch(new URL(`/user/uploads?size=${size}`, endpoint).toString(), {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
     })
     assert(res.ok)
 
-    const expected = [userUploads[0]]
-    const link = res.headers.get('Link')
-    assert(link, 'has a Link header for the next page')
-    assert.strictEqual(link, `</user/uploads?size=${size}&before=${encodeURIComponent(expected[0].created)}>; rel="next"`)
     const uploads = await res.json()
+    const expected = userUploads
     assert.deepStrictEqual(uploads, expected)
   })
 })

@@ -241,6 +241,7 @@ CREATE INDEX IF NOT EXISTS pin_location_id_idx ON pin (pin_location_id);
 CREATE INDEX IF NOT EXISTS pin_updated_at_idx ON pin (updated_at);
 CREATE INDEX IF NOT EXISTS pin_status_idx ON pin (status);
 CREATE INDEX IF NOT EXISTS pin_composite_updated_at_and_content_cid_idx ON pin (updated_at, content_cid);
+CREATE INDEX IF NOT EXISTS pin_content_cid_status_idx ON pin (content_cid, status);
 
 -- An upload created by a user.
 CREATE TABLE IF NOT EXISTS upload
@@ -270,7 +271,6 @@ CREATE INDEX IF NOT EXISTS upload_auth_key_id_idx ON upload (auth_key_id);
 CREATE INDEX IF NOT EXISTS upload_user_id_deleted_at_idx ON upload (user_id) WHERE deleted_at IS NULL;
 CREATE INDEX IF NOT EXISTS upload_content_cid_idx ON upload (content_cid);
 CREATE INDEX IF NOT EXISTS upload_updated_at_idx ON upload (updated_at);
-CREATE INDEX IF NOT EXISTS upload_user_id_idx ON upload (user_id);
 
 -- Tracks requests to replicate content to more nodes.
 CREATE TABLE IF NOT EXISTS pin_request

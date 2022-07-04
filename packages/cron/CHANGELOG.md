@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.2.2](https://github.com/web3-storage/web3.storage/compare/cron-v1.2.1...cron-v1.2.2) (2022-06-29)
+
+
+### Bug Fixes
+
+* make sure null claimed sizes are updated ([#1594](https://github.com/web3-storage/web3.storage/issues/1594)) ([3f585f3](https://github.com/web3-storage/web3.storage/commit/3f585f36b6c1b661aeef22919c519dfde0b99d1c))
+
+## [1.2.1](https://github.com/web3-storage/web3.storage/compare/cron-v1.2.0...cron-v1.2.1) (2022-06-29)
+
+
+### Bug Fixes
+
+* don't allow individual email sending failures to halt cron job ([#1589](https://github.com/web3-storage/web3.storage/issues/1589)) ([2d7a4e0](https://github.com/web3-storage/web3.storage/commit/2d7a4e0028a8275a60089ce243297020c249dcd9))
+* pg connection string append ssl-true ([#1576](https://github.com/web3-storage/web3.storage/issues/1576)) ([1d10181](https://github.com/web3-storage/web3.storage/commit/1d101812cbb8db2099dc2fb03447bf2f94f72f40))
+
+## [1.2.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.1.5...cron-v1.2.0) (2022-06-27)
+
+
+### Features
+
+* use direct connection to cargo to get claimed size ([#1535](https://github.com/web3-storage/web3.storage/issues/1535)) ([e4087a9](https://github.com/web3-storage/web3.storage/commit/e4087a9f4d4202d672938d339e121c19344866b4))
+
+
+### Bug Fixes
+
+* build-cargo-connection-string ([#1564](https://github.com/web3-storage/web3.storage/issues/1564)) ([0663ee2](https://github.com/web3-storage/web3.storage/commit/0663ee28fe97e8bb6d4c10bcd3a18bc0a2e9a839))
+* use github.event.inputs instead ([#1563](https://github.com/web3-storage/web3.storage/issues/1563)) ([044cff8](https://github.com/web3-storage/web3.storage/commit/044cff85c6876c5cf493d3ec98bb84a3c6d5a856))
+
 ## [1.1.5](https://github.com/web3-storage/web3.storage/compare/cron-v1.1.4...cron-v1.1.5) (2022-06-20)
 
 

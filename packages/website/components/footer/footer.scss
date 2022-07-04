@@ -40,7 +40,7 @@ $footerLogoWidth: 2.25rem;
 .footer_contact,
 .footer_resources,
 .footer_get-started {
-  margin-left: 1.5rem;
+  margin-left: 2rem;
   @include small {
     margin-bottom: 3rem;
   }
@@ -107,7 +107,7 @@ $footerLogoWidth: 2.25rem;
       width: 2.25rem;
       height: 100%;
       padding: 0.75rem 0;
-      background-image: url('../../assets/images/zigzag-tiny.png');
+      background-image: url('/images/illustrations/zigzag-tiny.png');
       background-position: 0 4px;
       background-size: 0 1.75rem;
       background-repeat: no-repeat;

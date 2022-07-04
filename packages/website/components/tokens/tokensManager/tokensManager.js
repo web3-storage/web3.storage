@@ -30,7 +30,8 @@ const defaultQueryOrder = 'a-z';
  * @returns
  */
 const TokensManager = ({ content }) => {
-  const { tokens, fetchDate, isFetchingTokens, deleteToken, getTokens, isCreating } = useTokens();
+  const { tokens, fetchDate, isFetchingTokens, deleteToken, getTokens, isCreating, hasError, errorMessage } =
+    useTokens();
   const [deletingTokenId, setDeletingTokenId] = useState('');
   const { query, replace } = useRouter();
   const queryClient = useQueryClient();
@@ -128,7 +129,13 @@ const TokensManager = ({ content }) => {
         <TokenRowItem name={tokenRowLabels.name.label} secret={tokenRowLabels.secret.label} isHeader />
         <div className="tokens-manager-table-content">
           {isFetchingTokens || !fetchDate ? (
-            <Loading className={'tokens-manager-loading-spinner'} />
+            <>
+              {hasError ? (
+                <div className="table-error">⚠ {errorMessage}</div>
+              ) : (
+                <Loading className={'tokens-manager-loading-spinner'} />
+              )}
+            </>
           ) : !tokens.length ? (
             <span className="tokens-manager-upload-cta">
               {content.table.message}

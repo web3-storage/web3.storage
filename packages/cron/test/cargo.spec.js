@@ -3,16 +3,17 @@ import assert from 'assert'
 import { createCargoDag, createUpload, createUser, createUserAuthKey, dbEndpoint, getUpload, listUploads, randomCid, token } from '@web3-storage/db/test-utils'
 import { DBClient } from '@web3-storage/db'
 import { updateDagSizes } from '../src/jobs/dagcargo.js'
-import { getPg } from '../src/lib/utils.js'
+import { getCargoPgPool, getPg } from '../src/lib/utils.js'
 
 const env = {
-  DEBUG: '*',
+  ...process.env,
   ENV: 'dev',
-  PG_CONNECTION: 'postgresql://postgres:postgres@localhost:5432/postgres',
-  RO_PG_CONNECTION: 'postgresql://postgres:postgres@localhost:5432/postgres',
-  DATABASE: 'postgres',
-  PG_REST_URL: 'http://localhost:3000',
-  PG_REST_JWT: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTYwMzk2ODgzNCwiZXhwIjoyNTUwNjUzNjM0LCJyb2xlIjoic2VydmljZV9yb2xlIn0.necIJaiP7X2T2QjGeV-FhpkizcNTX8HjDDBAxpgQTEI'
+  // These DB vars aren't necessary if you're using the latest .env.tpl, but are here
+  // to avoid errors if people are still using the old version before these were added
+  DAG_CARGO_HOST: '127.0.0.1',
+  DAG_CARGO_DATABASE: 'postgres',
+  DAG_CARGO_USER: 'postgres',
+  DAG_CARGO_PASSWORD: 'postgres'
 }
 
 function getToBeUpdatedNull (cItem) {
@@ -31,18 +32,18 @@ describe('Fix dag sizes migration', () => {
   let user
   let authKey
   let contentItems
-  let roPg
+  let cargoPool
   let rwPg
 
-  async function updateDagSizesWrp ({ user, after = new Date(1990, 1, 1), limit = null }) {
-    const allUploadsBefore = await listUploads(dbClient, user._id)
+  async function updateDagSizesWrp ({ user, after = new Date(1990, 1, 1), limit = 1000 }) {
+    const allUploadsBefore = (await listUploads(dbClient, user._id)).uploads
     await updateDagSizes({
-      roPg,
+      cargoPool,
       rwPg,
       after,
       limit
     })
-    const allUploadsAfter = await listUploads(dbClient, user._id)
+    const allUploadsAfter = (await listUploads(dbClient, user._id)).uploads
     const updatedCids = allUploadsAfter.filter((uAfter) => {
       const beforeUpload = allUploadsBefore.find((uBefore) => uAfter.cid === uBefore.cid)
       return beforeUpload?.dagSize !== uAfter.dagSize
@@ -62,12 +63,12 @@ describe('Fix dag sizes migration', () => {
       postgres: true
     })
     rwPg = await getPg(env, 'rw')
-    roPg = await getPg(env, 'ro')
+    cargoPool = await getCargoPgPool(env)
   })
 
   after(async () => {
     await rwPg.end()
-    await roPg.end()
+    await cargoPool.end()
   })
 
   beforeEach(async () => {
@@ -102,6 +103,10 @@ describe('Fix dag sizes migration', () => {
       }, {
         cid: await randomCid(),
         dagSize: null,
+        actualSize: 10
+      }, {
+        cid: await randomCid(),
+        dagSize: null,
         actualSize: null
       }, {
         cid: await randomCid(),
@@ -118,6 +123,9 @@ describe('Fix dag sizes migration', () => {
         createCargoDag(dbClient, {
           cid_v1: c.cid,
           size_actual: c.actualSize
+        }, {
+          cid_v1: c.cid,
+          size_claimed: c.dagSize
         })
       ])
     }

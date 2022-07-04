@@ -2,13 +2,16 @@
 title: Getting upload status
 ---
 
+import Img from 'components/cloudflareImage';
+import ImgPageFiles from '../../../public/images/docs/account-page-files.png';
+
 # Getting upload status
 
 The Web3.Storage service provides a few ways to check on the status of an upload.
 
 On the [Account page](https://web3.storage/account) of the Web3.Storage site, you can see a list of files that you've uploaded to Web3.Storage.
 
-![Screenshot of Web3.Storage account page, showing a table of uploaded files](/images/docs/account-page-files.png)
+<Img src={ImgPageFiles} alt="Screenshot of Web3.Storage account page, showing a table of uploaded files" />
 
 The table on the account page has two columns related to the current status of the data storage process, [Status](#status) and [Storage Providers](#storage-providers).
 

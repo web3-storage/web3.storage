@@ -2,7 +2,7 @@
 
 import { updateDagSizes } from '../jobs/dagcargo.js'
 import { envConfig } from '../lib/env.js'
-import { getPg } from '../lib/utils.js'
+import { getCargoPgPool, getPg } from '../lib/utils.js'
 
 /**
  *
@@ -12,14 +12,14 @@ const xDaysAgo = (days) => new Date().setDate(new Date().getDate() - days)
 
 async function main () {
   const rwPg = await getPg(process.env, 'rw')
-  const roPg = await getPg(process.env, 'ro')
+  const cargoPool = getCargoPgPool(process.env)
 
   try {
-    const after = new Date(process.env.AFTER || xDaysAgo(7))
-    await updateDagSizes({ rwPg, roPg, after })
+    const after = new Date(process.env.AFTER || xDaysAgo(1))
+    await updateDagSizes({ rwPg, cargoPool, after })
   } finally {
     await rwPg.end()
-    await roPg.end()
+    await cargoPool.end()
   }
 }
 

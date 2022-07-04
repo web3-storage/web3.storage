@@ -83,8 +83,8 @@
     z-index: 0;
     left: calc(50% - #{math.div($containerWidth, 2)} - 4.5rem);
     @include medium {
-      left: calc(50% - #{math.div($containerWidth, 2)});
-      width: calc($containerWidth - 1rem);
+      left: 10px;
+      width: calc(100% - 20px);
     }
   }
 }
@@ -147,7 +147,7 @@
   &:before {
     content: '';
     position: absolute;
-    right: calc(50% - #{math.div($containerWidth, 2)} - 15rem - 50vw);
+    right: calc(50% - #{math.div($containerWidth, 2)} - 12rem - 50vw);
     top: -1px;
     width: 50vw;
     height: calc(54.5rem + 1px);
@@ -273,6 +273,14 @@
 // ------------------------------------------------------------ Section [Header]
 #hero_header {
   position: relative;
+  .grid {
+      justify-content: center;
+      width: 420px;
+      max-width: calc(100% - 4rem);
+      @include medium {
+        padding: 0
+      }
+  }
   .heading {
     @include h1;
     word-break: keep-all;
@@ -420,14 +428,8 @@
 
 #intro_2-statistics {
   padding: 0;
-  .card-list-block {
-    position: relative;
-    width: calc(100% + 2rem);
-    left: -1rem;
-    padding: 0.5rem;
-    border-radius: 0.375rem;
-    background-color: rgba(241, 241, 241, 0.6);
-    @include shadow1;
+  .title, .description {
+    max-width: none;
   }
   @include mini {
     .card-row {
@@ -829,7 +831,7 @@
   }
 
   .text-block {
-    margin: 2.125rem 0 0 3rem;
+    margin: 2.125rem 0 0 2rem;
     .heading {
       @include fontSize_MediumLarge;
       line-height: leading(40, 25);
