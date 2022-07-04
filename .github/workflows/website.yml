@@ -23,7 +23,7 @@ jobs:
       - run: npm run lint:ts -w packages/website
 
   test-e2e:
-    name: ${{ matrix.os }} (${{ matrix.browser }})
+    name: "E2E Test: ${{ matrix.browser }}""
     strategy:
       fail-fast: false
       matrix:
@@ -124,7 +124,7 @@ jobs:
             - 🙂 https://nftstorage.link/ipfs/${{ steps.ipfs.outputs.cid }}
             - ⛅️ ${{ steps.cloudflare_url.outputs.stdout }}
 
-            [build log]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)
+            [build log](/${{ $github.repository }}/actions/runs/${{ github.run_id }})
 
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
