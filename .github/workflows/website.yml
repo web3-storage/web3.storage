@@ -87,20 +87,20 @@ jobs:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           NEXT_PUBLIC_COUNTLY_URL: ${{ secrets.COUNTLY_URL }}
           NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
-      # - name: Add to web3.storage
-      #   uses: web3-storage/add-to-web3@v2
-      #   id: ipfs
-      #   with:
-      #     path_to_add: packages/website/out
-      #     web3_token: ${{ secrets.WEB3_TOKEN }}
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Deploy https://staging.web3.storage to IPFS via DNSLink
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      #   run: npx dnslink-cloudflare --record staging --domain web3.storage --link /ipfs/${{ needs.build.outputs.cid }}
-      #   env:
-      #     CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-      - name: Deploy preview build to Cloudflare Pages          
+      - name: Add to web3.storage
+        uses: web3-storage/add-to-web3@v2
+        id: ipfs
+        with:
+          path_to_add: packages/website/out
+          web3_token: ${{ secrets.WEB3_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy https://staging.web3.storage to IPFS via DNSLink
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npx dnslink-cloudflare --record staging --domain web3.storage --link /ipfs/${{ needs.build.outputs.cid }}
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+      - name: Deploy preview build to Cloudflare Pages
         uses: mathiasvr/command-output@v1.1.0
         id: cloudflare
         with:
@@ -111,14 +111,20 @@ jobs:
       - uses: mathiasvr/command-output@v1.1.0
         id: cloudflare_url
         with:
-          run: egrep -o 'https?://[^ ]+' <(echo "${{ steps.cloudflare.outputs.stdout }}") 
-      - name: Set Cloudflare Pages URL as PR check
-        uses: LouisBrunner/checks-action@v1.2.0
+          run: egrep -o 'https?://[^ ]+' <(echo "${{ steps.cloudflare.outputs.stdout }}")
+      - name: Find Current Pull Request
+        uses: jwalton/gh-find-current-pr@v1.3.0
+        id: finder
+      - name: Set Cloudflare Pages URL as PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2.2.0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: "Pages Preview URL"
-          details_url: ${{ steps.cloudflare_url.outputs.stdout }}
-          conclusion: success
+          number: ${{ steps.finder.outputs.pr }}
+          message: |
+            ### Website preview
+            - 🙂 https://nftstorage.link/ipfs/${{ steps.ipfs.outputs.cid }}
+            - ⛅️ ${{ steps.cloudflare_url.outputs.stdout }}
+
+            [build log]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)
 
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
