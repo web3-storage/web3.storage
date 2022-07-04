@@ -29,6 +29,17 @@ RETURNING cid
 /**
  * Sets dag_size for content that does not yet have a size.
  *
+ * The approach taken in this function has been iterated upon a few times.
+ * The current implementation uses a direct connection to cargo, given FDW cross-joins proved to be expensive.
+ * Given we can't cross check sizes easily, the current implementation uses a naive approach.
+ * We get all the cids, and sizes of dags that originally claimed the wrong dag_size. This implies getting also
+ * dags which size has already been updated and fixed.
+ *
+ * If that's the case, we don't update the size in w3 content.
+ *
+ * This means we're going through content that shouldn't really be "considered" by the cron, however given this happens in the background
+ * and we mostly run this on the latest day content, the implementation should be good enough.
+ *
  * @param {Object} config
  * @param {import('pg').Client} config.rwPg
  * @param {import('pg').Pool} config.cargoPool
