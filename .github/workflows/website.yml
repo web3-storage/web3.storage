@@ -124,7 +124,7 @@ jobs:
             - 🙂 https://nftstorage.link/ipfs/${{ steps.ipfs.outputs.cid }}
             - ⛅️ ${{ steps.cloudflare_url.outputs.stdout }}
 
-            [build log](/${{ $github.repository }}/actions/runs/${{ github.run_id }})
+            [build log](/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
