@@ -9,6 +9,10 @@ on:
         required: false
         description: Date used as a starting point for dag_sizes updates. This should be a string value specified in a format recognized by the Date.parse() method
         type: string
+      before:
+        required: false
+        description: Date used as confine dag_sizes updates. This should be a string value specified in a format recognized by the Date.parse() method
+        type: string
 
 jobs:
   update:
@@ -42,6 +46,7 @@ jobs:
           DAG_CARGO_USER: ${{ secrets.DAG_CARGO_USER }}
           DAG_CARGO_PASSWORD: ${{ secrets.DAG_CARGO_PASSWORD }}
           AFTER: ${{ github.event.inputs.after }}
+          BEFORE: ${{ github.event.inputs.before }}
         run: npm run start:dagcargo:sizes -w packages/cron
 
       - name: Heartbeat

@@ -11,9 +11,10 @@ WHERE
   d.size_actual IS NOT NULL AND
   (d.size_actual != ds.size_claimed OR ds.size_claimed is NULL) AND 
   ds.entry_last_updated > $1 AND
+  ($2::TIMESTAMP IS NULL OR ds.entry_last_updated < $2) AND
   s.project = 1
-LIMIT $2
-OFFSET $3
+LIMIT $3
+OFFSET $4
 `
 
 const UPDATE_CONTENT_DAG_SIZE = `
@@ -33,15 +34,16 @@ RETURNING cid
  * @param {import('pg').Pool} config.cargoPool
  * @param {number} [config.limit]
  * @param {Date} config.after
+ * @param {Date} [config.before]
  */
-export async function updateDagSizes ({ rwPg, cargoPool, after, limit = LIMIT }) {
+export async function updateDagSizes ({ rwPg, cargoPool, after, before, limit = LIMIT }) {
   const log = debug('dagcargo:updateDagSizes')
 
   if (!log.enabled) {
     console.log('ℹ️ Enable logging by setting DEBUG=dagcargo:updateDagSizes')
   }
-
-  log(`🎯 Updating DAG sizes for content inserted after ${after.toISOString()}`)
+  const beforeLog = before ? ` and before ${before.toISOString()}` : ''
+  log(`🎯 Updating DAG sizes for content inserted after ${after.toISOString()}${beforeLog}.`)
 
   let updatedCids = 0
   let offset = 0
@@ -49,6 +51,7 @@ export async function updateDagSizes ({ rwPg, cargoPool, after, limit = LIMIT })
     let updatedInBatch = 0
     const { rows: contents } = await cargoPool.query(FIND_CONTENT_TO_UPDATE, [
       after.toISOString(),
+      before?.toISOString(),
       limit,
       offset
     ])
