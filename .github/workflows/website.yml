@@ -112,10 +112,23 @@ jobs:
         id: cloudflare_url
         with:
           run: egrep -o 'https?://[^ ]+' <(echo "${{ steps.cloudflare.outputs.stdout }}") 
-      - name: Set Cloudflare Pages URL as commit status
-        run: 'gh api --method POST -H "Accept: application/vnd.github+json" "/repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" -f state="success" -f target_url="${{ steps.cloudflare_url.outputs.stdout }}" -f description="Preview URL" -f context="Cloudflare Pages"'
+      - name: Set Cloudflare Pages URL as PR check
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/{repo}/check-runs
+          repo: ${{ github.repository }}
+          name: "Preview URL"
+          head_sha: ${{ github.sha }}
+          conclusion: "success"
+          status: "completed"
+          output: | # The | is significant!
+            title: Cloudflare Pages Preview URL
+            details_url: ${{ steps.cloudflare_url.outputs.stdout }}
+            images:
+              - alt: Cloudflare
+                image_url: https://avatars.githubusercontent.com/u/314135?s=200&v=4
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
