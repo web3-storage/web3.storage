@@ -341,7 +341,7 @@ export async function getContents (dbClient, cids) {
     .from('content')
     .select()
     .in('cid', cids)
-  if (error``) {
+  if (error) {
     throw new DBError(error)
   }
   return data

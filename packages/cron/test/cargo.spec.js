@@ -194,8 +194,8 @@ describe('Fix dag sizes migration', () => {
       const beforeContent = beforeContents.find((cBefore) => cAfter.cid === cBefore.cid)
       return beforeContent?.updated_at !== cAfter.updated_at
     })
-    toBeUpdatedCids = toBeUpdated.map(c => ci.cid)
-    assert.strictEqual(updatedCidsFirstRound.slice().sort(), toBeUpdatedCids.slice().sort())
+
+    assert.deepStrictEqual(updatedCidsFirstRound.map(c => c.cid).sort(), toBeUpdated.slice().sort())
 
     await updateDagSizesWrp({ user })
     const afterSecondRoundContents = await getContents(dbClient, toBeUpdated)
