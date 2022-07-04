@@ -87,19 +87,19 @@ jobs:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           NEXT_PUBLIC_COUNTLY_URL: ${{ secrets.COUNTLY_URL }}
           NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
-      - name: Add to web3.storage
-        uses: web3-storage/add-to-web3@v2
-        id: ipfs
-        with:
-          path_to_add: packages/website/out
-          web3_token: ${{ secrets.WEB3_TOKEN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Deploy https://staging.web3.storage to IPFS via DNSLink
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: npx dnslink-cloudflare --record staging --domain web3.storage --link /ipfs/${{ needs.build.outputs.cid }}
-        env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+      # - name: Add to web3.storage
+      #   uses: web3-storage/add-to-web3@v2
+      #   id: ipfs
+      #   with:
+      #     path_to_add: packages/website/out
+      #     web3_token: ${{ secrets.WEB3_TOKEN }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Deploy https://staging.web3.storage to IPFS via DNSLink
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #   run: npx dnslink-cloudflare --record staging --domain web3.storage --link /ipfs/${{ needs.build.outputs.cid }}
+      #   env:
+      #     CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
       - name: Deploy preview build to Cloudflare Pages          
         uses: mathiasvr/command-output@v1.1.0
         id: cloudflare
