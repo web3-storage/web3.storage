@@ -118,6 +118,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: "Pages Preview URL"
           details_url: ${{ steps.cloudflare_url.outputs.stdout }}
+          conclusion: success
 
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
