@@ -3,6 +3,7 @@ import * as pb from '@ipld/dag-pb'
 import { CID } from 'multiformats/cid'
 import { PostgrestClient } from '@supabase/postgrest-js'
 import { normalizeCid } from '../../api/src/utils/cid.js'
+import { DBError } from '../errors.js'
 
 export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU'
 export const dbEndpoint = 'http://127.0.0.1:3000'
@@ -340,5 +341,8 @@ export async function getContents (dbClient, cids) {
     .from('content')
     .select()
     .in('cid', cids)
+  if (error``) {
+    throw new DBError(error)
+  }
   return data
 }
