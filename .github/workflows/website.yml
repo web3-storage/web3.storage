@@ -23,7 +23,7 @@ jobs:
       - run: npm run lint:ts -w packages/website
 
   test-e2e:
-    name: "E2E Test: ${{ matrix.browser }}""
+    name: "Test e2e - ${{ matrix.browser }}"
     strategy:
       fail-fast: false
       matrix:
