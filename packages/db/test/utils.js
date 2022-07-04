@@ -329,3 +329,16 @@ export async function createCargoDag (dbClient, dag = {}, source = {}) {
     console.error(errorSources)
   }
 }
+
+/**
+ * Get contents from cids
+ *
+ * @param {string[]} cids
+ */
+export async function getContents (dbClient, cids) {
+  const { data, error } = await dbClient._client
+    .from('content')
+    .select()
+    .in('cid', cids)
+  return data
+}

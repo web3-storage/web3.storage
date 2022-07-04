@@ -18,9 +18,11 @@ OFFSET $3
 
 const UPDATE_CONTENT_DAG_SIZE = `
 UPDATE public.content
-   SET dag_size = $1,
-       updated_at = timezone('utc'::TEXT, NOW())
- WHERE cid = $2
+  SET dag_size = $1,
+    updated_at = timezone('utc'::TEXT, NOW())
+WHERE cid = $2 AND 
+dag_size IS DISTINCT FROM $1
+RETURNING cid
 `
 
 /**
@@ -44,6 +46,7 @@ export async function updateDagSizes ({ rwPg, cargoPool, after, limit = LIMIT })
   let updatedCids = 0
   let offset = 0
   while (true) {
+    let updatedInBatch = 0
     const { rows: contents } = await cargoPool.query(FIND_CONTENT_TO_UPDATE, [
       after.toISOString(),
       limit,
@@ -53,13 +56,16 @@ export async function updateDagSizes ({ rwPg, cargoPool, after, limit = LIMIT })
 
     /* eslint-disable camelcase */
     for (const { cid, size_actual } of contents) {
-      log(`💪 ${cid} ${size_actual} bytes`)
-      await rwPg.query(UPDATE_CONTENT_DAG_SIZE, [size_actual, cid])
-    }
-    /* eslint-enable camelcase */
+      const result = await rwPg.query(UPDATE_CONTENT_DAG_SIZE, [size_actual, cid])
 
-    updatedCids += contents.length
-    log(`ℹ️ Updated ${contents.length} in current iteration`)
+      if (result.rowCount > 0) {
+        log(`💪 Succsesfully updated ${cid} dag_size to ${size_actual} bytes`)
+        updatedInBatch++
+      }
+    }
+
+    updatedCids += updatedInBatch
+    log(`ℹ️ Updated ${updatedInBatch} in current iteration`)
     offset += limit
   }
 
