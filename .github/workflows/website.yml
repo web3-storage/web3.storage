@@ -125,7 +125,7 @@ jobs:
             - 🙂 https://nftstorage.link/ipfs/${{ steps.ipfs.outputs.cid }}
             - ⛅️ ${{ steps.cloudflare_url.outputs.stdout }}
 
-            [build log](/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+            [build log](/${{ github.repository }}/actions/runs/${{ github.run_id }})
       - name: Add Preview URLs as Job Summary
         run: |
           echo "
