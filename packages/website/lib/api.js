@@ -267,3 +267,28 @@ export async function listPins(status, token) {
 
   return res.json()
 }
+
+
+/**
+ * Subscribes to the blog
+ *
+ * @param {string} email
+ * @returns {Promise<{}>}
+ * @throws {Error} When it fails to get uploads
+ */
+ export async function blogSubscriptionCreate(email) {
+  const res = await fetch(`${API}/blog/subscription`, {
+    method: 'POST',
+    body: JSON.stringify({
+      email,
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  })
+  if (!res.ok) {
+    throw new Error(`failed to get subscribe to blog: ${await res.text()}`)
+  }
+
+  return res.json()
+}
