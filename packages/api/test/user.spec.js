@@ -35,6 +35,8 @@ describe('GET /user/info', () => {
     userInfo = await res.json()
     assert.strictEqual(userInfo.info._id, user._id)
     assert.strictEqual(userInfo.info.tags.HasPsaAccess, true)
+    assert.strictEqual(userInfo.info.storageUsed.uploaded, 32000)
+    assert.strictEqual(userInfo.info.storageUsed.psaPinned, 10000)
 
     // Set PSA access to false and check response
     await db.createUserTag(user._id, { tag: 'HasPsaAccess', value: 'false', reason: 'testing' })
