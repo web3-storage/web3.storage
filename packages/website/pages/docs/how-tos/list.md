@@ -8,6 +8,7 @@ import CodeSnippet from 'components/codesnippet/codesnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
 import exampleUpload from '!!raw-loader!../../../assets/code-snippets/how-to/example-listing-upload.json.txt'
 import Img from 'components/cloudflareImage';
+import ImgFilesListing from '../../../public/images/docs/files-listing.png';
 
 # How to list files uploaded to Web3.Storage
 
@@ -18,7 +19,7 @@ Once you've [stored some files][howto-store] using Web3.Storage, you'll want to 
 
 You can see a list of everything you've uploaded to Web3.Storage on the [Files page][site-files] on the Web3.Storage website. If you don't need to work with this list programmatically, using the website may be a simpler choice.
 
-<Img src="/images/docs/files-listing.png" alt="A screenshot of the file listing available at https://web3.storage/account when logged in to your account" />
+<Img src={ImgFilesListing} alt="A screenshot of the file listing available when logged in to your account" />
 
 This [Files page][site-files] provides a convenient overview of your stored data, including links to view your files in your browser via an [IPFS gateway][ipfs-docs-gateway] and information about how the data is being stored on the [decentralized storage networks][concepts-decentralized-storage] that Web3.Storage uses under the hood.
 
@@ -30,7 +31,7 @@ To easily integrate Web3.Storage programmatically in your apps or services, you 
 
 In your JavaScript project, add the `web3.storage` package to your dependencies:
 
-```shell
+```bash
 npm install web3.storage
 ```
 

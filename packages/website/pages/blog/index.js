@@ -13,7 +13,7 @@ import BlockBuilder from '../../components/blockbuilder/blockbuilder.js';
 import { initFloaterAnimations } from '../../lib/floater-animations.js';
 import Button, { ButtonVariant } from '../../components/button/button';
 import Tags from '../../components/blog/tags/tags';
-import Categories from '../../components/blog/categories/categories';
+import { Categories } from '../../components/blog/categories/categories';
 import { Card } from '../../components/blog/cards/cards';
 import Subscribe from '../../components/blog/subscribe/subscribe';
 import GradientBackground from '../../components/gradientbackground/gradientbackground';

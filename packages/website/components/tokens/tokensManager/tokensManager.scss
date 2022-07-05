@@ -18,7 +18,7 @@
 
     &:not(.delete-modal),
     &:not(.tokens-manager-footer) {
-      max-width: 64rem;
+      max-width: 60rem;
       @include medium {
         max-width: none;
       }

@@ -20,7 +20,7 @@ You can [play with the app in your browser][example-demo], since it has been upl
 
 If you want to run locally, you just need git and a recent version of Node.js. Here's how to start a hot-reloading development server that will update the app as you play with the source code:
 
-```shell
+```bash
 # Clone the repository.
 git clone https://github.com/web3-storage/example-image-gallery
 cd example-image-gallery

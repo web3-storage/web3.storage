@@ -76,6 +76,7 @@
   }
   &:before {
     top: 3px;
+    border-radius: 10px;
     height: calc(100% - 6px);
   }
   &:after {

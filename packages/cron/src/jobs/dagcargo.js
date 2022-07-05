@@ -8,8 +8,8 @@ SELECT d.cid_v1 as cid, d.size_actual
   JOIN cargo.dags d using ( cid_v1 )
   JOIN cargo.sources s USING ( srcid )
 WHERE
-  d.size_actual > 0 AND 
-  d.size_actual != ds.size_claimed AND 
+  d.size_actual IS NOT NULL AND
+  (d.size_actual != ds.size_claimed OR ds.size_claimed is NULL) AND 
   ds.entry_last_updated > $1 AND
   s.project = 1
 LIMIT $2

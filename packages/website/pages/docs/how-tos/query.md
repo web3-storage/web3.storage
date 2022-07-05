@@ -24,7 +24,7 @@ This guide will show you how to use Web3.Storage's [JavaScript client library][r
 
 In your JavaScript project, add the `web3.storage` package to your dependencies:
 
-```shell
+```bash
 npm install web3.storage
 ```
 
@@ -33,7 +33,7 @@ npm install web3.storage
 
 In your Go project, add the client package to your dependencies using `go get`:
 
-```shell
+```bash
 go get github.com/web3-storage/go-w3s-client
 ```
 
@@ -83,7 +83,7 @@ The client object's `status` method accepts a CID string and returns a JSON obje
 <CodeSnippet lang="js" src={howtoSource} region="query-status" />
 
 <Callout type="warning">
-##### IMPORTANT 
+##### IMPORTANT
 **Remember to check the return value!** If you ask for the status of a CID that Web3.Storage doesn't know about, the `status` method will return `undefined` instead of a status object. Make sure to check that a return value exists before trying to use it, as we're doing above with the `if (status)` conditional statement.
 </Callout>
 

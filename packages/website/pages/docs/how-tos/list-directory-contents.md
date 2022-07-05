@@ -92,7 +92,7 @@ For the examples, we'll use the URL `https://dweb.link/api/v0/ls?arg=bafybeifpae
 
 The example below uses [`curl`](https://curl.se/), which is pre-installed on macOS and many Linux distributions.
 
-```shell with-output
+```bash with-output
 curl -s "https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu"
 ```
 
@@ -127,14 +127,13 @@ curl -s "https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndxtjgw3auuloy
     }
   ]
 }
-
 ```
 
 To format the response for display, you can install the [jq tool](https://stedolan.github.io/jq/) and add `| jq` to the end of the command above.
 
 <AccordionSingle heading="Show formatted response">
 
-```shell with-output
+```bash with-output
 curl -s "https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu" | jq
 ```
 
@@ -214,7 +213,6 @@ $wc.DownloadString("https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndx
     }
   ]
 }
-
 ```
 
 To format the response for display, you can add ` | ConvertFrom-Json | ConvertTo-Json -Depth 100` to the end of the final command.
@@ -267,7 +265,7 @@ $wc.DownloadString("https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndx
 
 If you have the [IPFS command line interface][ipfs-docs-cli-quickstart] installed, you can use the [`ipfs ls` command][ipfs-docs-cli-ls] to list the contents of a directory.
 
-```shell
+```bash
 ipfs ls -v bafybeifpaez32hlrz5tmr7scndxtjgw3auuloyuyxblynqmjw5saapewmu
 ```
 

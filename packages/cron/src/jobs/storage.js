@@ -143,7 +143,8 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 20
 
       if (emailToSend) {
         const emailSent = await emailService.sendEmail(to, emailToSend.emailType, {
-          ...(emailToSend.secondsSinceLastSent && { secondsSinceLastSent: emailToSend.secondsSinceLastSent })
+          ...(emailToSend.secondsSinceLastSent && { secondsSinceLastSent: emailToSend.secondsSinceLastSent }),
+          failSilently: true
         })
 
         if (emailToSend.emailType === EMAIL_TYPE.User100PercentStorage) {

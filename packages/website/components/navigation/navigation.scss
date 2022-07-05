@@ -10,6 +10,12 @@
     background-color: unset;
     @include selection_Light;
   }
+  @include medium {
+    > .grid {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
 }
 
 .site-logo-container {
@@ -48,6 +54,10 @@
   justify-content: center;
   height: $navigationHeight;
   z-index: 50;
+  @include medium {
+    padding-left: clamp(2rem, 8vw, 6rem);
+    padding-right: clamp(2rem, 8vw, 6rem);
+  }
 }
 
 .nav-bar {
@@ -305,7 +315,6 @@
 .nav-bar {
   position: relative;
   z-index: 1;
-  padding: 0 0;
   transition: 350 ease;
   &.mobile-panel {
     z-index: 50;
@@ -351,6 +360,7 @@
   visibility: hidden;
   position: absolute;
   top: 0;
+  overflow: hidden;
 
   @include medium {
     padding: 0 3.5rem;
@@ -361,6 +371,10 @@
     transform: translateY(calc(-100% - 9rem));
     transition: 350ms ease;
     color: $ebony;
+    > div {
+      padding-left: clamp(2rem, 8vw, 6rem);
+      padding-right: clamp(2rem, 8vw, 6rem);
+    }
   }
 
   @include tiny {
@@ -451,7 +465,6 @@
       transform: rotate(-40deg) translateX(12rem);
       bottom: -30rem;
       @include medium {
-        width: 1800px;
         bottom: -25rem;
         width: 3000px;
         height: 1700px;

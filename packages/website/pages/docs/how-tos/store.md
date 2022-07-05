@@ -35,7 +35,7 @@ All data uploaded to Web3.Storage is available to anyone who requests it using t
 <TabItem value="js" label="JavaScript">
   In your JavaScript project, add the `web3.storage` package to your dependencies:
 
-```shell
+```bash
 npm install web3.storage
 ```
 
@@ -45,7 +45,7 @@ npm install web3.storage
 
 In your Go project, add the client package to your dependencies using `go get`:
 
-```shell
+```bash
 go get github.com/web3-storage/go-w3s-client
 ```
 

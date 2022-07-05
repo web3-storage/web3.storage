@@ -91,4 +91,14 @@
       }
     }
   }
+  // overwrite for algolia search
+  .DocSearch-NoResults-Prefill-List li {
+    list-style-position: inherit;
+    list-style-type: "»    ";
+    line-height: 1;
+    .DocSearch-Prefill {
+      text-align: left;
+      line-height: 1.4;
+    }
+  }
 }
