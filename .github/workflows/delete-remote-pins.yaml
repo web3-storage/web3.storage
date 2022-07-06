@@ -1,4 +1,4 @@
-name: Storage Limit Email Notifications
+name: Delete Remote Pins
 
 on:
   workflow_dispatch:
