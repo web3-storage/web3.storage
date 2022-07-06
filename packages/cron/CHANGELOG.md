@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.3](https://github.com/web3-storage/web3.storage/compare/cron-v1.2.2...cron-v1.2.3) (2022-07-06)
+
+
+### Bug Fixes
+
+* update content dag_size only if it has changed ([#1611](https://github.com/web3-storage/web3.storage/issues/1611)) ([0b99566](https://github.com/web3-storage/web3.storage/commit/0b99566acc6c34bba675891ccebe3607296a37e2))
+
 ## [1.2.2](https://github.com/web3-storage/web3.storage/compare/cron-v1.2.1...cron-v1.2.2) (2022-06-29)
 
 
