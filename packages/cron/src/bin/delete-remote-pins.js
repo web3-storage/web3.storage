@@ -9,7 +9,6 @@ async function main () {
   const batchSize = process.env.BATCH_SIZE ? parseInt(process.env.BATCH_SIZE, 10) : undefined
 
   try {
-    // do things
     deleteRemotePins({ rwPgPool, batchSize })
   } finally {
     await rwPgPool.end()

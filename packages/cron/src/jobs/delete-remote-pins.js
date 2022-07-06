@@ -16,8 +16,9 @@ const log = debug('pins:deleteRemotePins')
  * It deletes "Remote" pins in batches
  *
  * Rationale behind going for a cron job instead of a data migration).
- * 1. avoid to match strain on the DB a single operation on several thousands millions of
- * rows might be holding quite a lot of stuff in memory*.
+ * 1. avoid to match strain on the DB a single operation on several thousands millions of rows.
+ * Deletes hold ROW EXCLUSIVE lock that might affect other process trying to update that data.
+ * Also updating that amount of rows might be holding quite a lot of stuff in memory.
  * 2. cron can be easily run once deployed and does not require db write access.
  * 3. it can easily be run again if any other Remote pins happen to slip in.
  *
