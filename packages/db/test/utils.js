@@ -188,8 +188,8 @@ export async function createUserAuthKey (dbClient, user, options = {}) {
 /**
  * @param {import('../index').DBClient} dbClient
  * @param {number} user
- * @param {number} authKey
- * @param {string} cid
+ * @param {number} [authKey]
+ * @param {string} [cid]
  * @param {Object} [options]
  * @param {string} [options.type]
  * @param {number} [options.dagSize]
