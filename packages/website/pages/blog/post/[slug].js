@@ -209,9 +209,15 @@ const Post = ({ post, posts }) => {
         <div className="post-meta">
           <div className="post-meta-date">{post.meta.date}</div>
           <div className="post-meta-tags">
-            <Tags tags={post.meta.tags} comma={true} />
+            <Tags tags={post.meta.tags} comma={true} isLinks />
           </div>
-          <div className="post-meta-category">{post.meta.category}</div>
+          <Button
+            className="blog-category-button"
+            variant={ButtonVariant.OUTLINE_DARK}
+            href={`/blog?category=${post.meta.category.toLowerCase()}`}
+          >
+            {post.meta.category}
+          </Button>
         </div>
         <div className="post-content">
           <MDXRemote {...post.content} />
@@ -238,9 +244,15 @@ const Post = ({ post, posts }) => {
             </button>
           </div>
           <div className="post-meta-tags">
-            <Tags tags={post.meta.tags} comma={true} />
+            <Tags tags={post.meta.tags} comma={true} isLinks />
           </div>
-          <div className="post-meta-category">{post.meta.category}</div>
+          <Button
+            className="blog-category-button"
+            variant={ButtonVariant.OUTLINE_DARK}
+            href={`/blog?category=${post.meta.category.toLowerCase()}`}
+          >
+            {post.meta.category}
+          </Button>
         </div>
       </div>
       <div className="post-pagination">

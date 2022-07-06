@@ -47,12 +47,6 @@
     }
   }
 }
-.blog-search-category {
-  text-align: right;
-  @include medium {
-    text-align: left;
-  }
-}
 .blog-search-input {
   width: 100%;
   position: relative;
@@ -109,43 +103,44 @@
   @include medium {
     padding-top: toRem(44) !important;
   }
-  .button.outline-dark {
-    margin-right: 10px;
+}
+.blog-category-button.outline-dark {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  .button-contents {
+    @include fontSize_Mini;
+  }
+  @include medium {
+    margin-bottom: 0.5rem;
+  }
+  &:last-child {
+    margin-right: 0;
+  }
+  &:after {
+    border-radius: 5px;
+  }
+  &:before {
+    display: none;
+  }
+  &:hover {
     .button-contents {
-      @include fontSize_Mini;
-    }
-    @include medium {
-      margin-bottom: 0.5rem;
-    }
-    &:last-child {
-      margin-right: 0;
+      color: $docsPrimaryPurple;
     }
     &:after {
-      border-radius: 5px;
+      border-color: $docsPrimaryPurple;
+      background-color: transparent;
     }
-    &:before {
-      display: none;
+  }
+  &.active {
+    .button-contents {
+      color: white;
+    }
+    &:after {
+      background-color: $ebony;
     }
     &:hover {
-      .button-contents {
-        color: $docsPrimaryPurple;
-      }
       &:after {
-        border-color: $docsPrimaryPurple;
-        background-color: transparent;
-      }
-    }
-    &.active {
-      .button-contents {
-        color: white;
-      }
-      &:after {
-        background-color: $ebony;
-      }
-      &:hover {
-        &:after {
-          border-color: $ebony;
-        }
+        border-color: $ebony;
       }
     }
   }
@@ -246,6 +241,13 @@
 
 .tags-container {
   @include fontWeight_Semibold;
+  a {
+    transition: color $transitionDuration;
+    &:hover {
+      color: $docsPrimaryPurple;
+      transition: color $transitionDuration;
+    }
+  }
 }
 
 // floating illustrations

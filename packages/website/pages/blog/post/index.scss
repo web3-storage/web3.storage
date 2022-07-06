@@ -118,21 +118,6 @@
   .post-related {
     padding-bottom: 4rem !important;
   }
-  .post-meta-category {
-    display: flex;
-    align-items: center;
-    height: toRem(35);
-    min-width: toRem(129);
-    justify-content: center;
-    font-size: toRem(15);
-    border-radius: toRem(5);
-    border: toRem(2) solid $black;
-    width: fit-content;
-    @include fontWeight_Semibold;
-    @include small {
-      margin-top: 0.5rem;
-    }
-  }
 
   .code-preview-wrapper {
     background: none;

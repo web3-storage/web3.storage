@@ -18,7 +18,7 @@ export const Category = ({ category }) => {
     <Button
       variant={ButtonVariant.OUTLINE_DARK}
       onClick={category.onClick}
-      className={clsx(category.selected && 'active')}
+      className={clsx('blog-category-button', category.selected && 'active')}
     >
       {category.label}
     </Button>

@@ -13,7 +13,7 @@ import BlockBuilder from '../../components/blockbuilder/blockbuilder.js';
 import { initFloaterAnimations } from '../../lib/floater-animations.js';
 import Button, { ButtonVariant } from '../../components/button/button';
 import Tags from '../../components/blog/tags/tags';
-import { Categories } from '../../components/blog/categories/categories';
+import Categories from '../../components/blog/categories/categories';
 import { Card } from '../../components/blog/cards/cards';
 import Subscribe from '../../components/blog/subscribe/subscribe';
 import GradientBackground from '../../components/gradientbackground/gradientbackground';
@@ -194,31 +194,31 @@ const Blog = ({ posts = [] }) => {
       >
         <span>Subscribe</span>
       </Button>
-      <div className="blog-search-c grid">
+      <div className="blog-search-c grid grid-spaceBetween">
         <div className="col-5_md-12_sm-12_ti-12">
           <div className="blog-search-input">
             <input placeholder="Search" defaultValue={keyword} type="text" onChange={onSearch} />
           </div>
+          <div className="blog-tag-selected-c">
+            <div className="blog-tag-selected-inner">
+              {tags.map(tag => (
+                <Button key={tag} variant={ButtonVariant.TEXT} onClick={onRemoveTag(tag)}>
+                  ✕&nbsp;&nbsp;{allTags.find(({ label }) => label.toLowerCase() === tag)?.label}
+                </Button>
+              ))}
+            </div>
+            <Button className="blue" variant={ButtonVariant.TEXT} onClick={() => tagsModalOpenState[1](true)}>
+              View All Tags
+            </Button>
+          </div>
         </div>
-        <div className="blog-search-category col-7_md-12_sm-12_ti-12">
+        <div className="blog-search-category col-6_md-12_sm-12_ti-12">
           <CategoryContainer
             selectedCategory={category}
             handleCategoryClick={handleCategoryClick}
             categories={categories}
           />
         </div>
-      </div>
-      <div className="blog-tag-selected-c">
-        <div className="blog-tag-selected-inner">
-          {tags.map(tag => (
-            <Button key={tag} variant={ButtonVariant.TEXT} onClick={onRemoveTag(tag)}>
-              ✕&nbsp;&nbsp;{allTags.find(({ label }) => label.toLowerCase() === tag)?.label}
-            </Button>
-          ))}
-        </div>
-        <Button className="blue" variant={ButtonVariant.TEXT} onClick={() => tagsModalOpenState[1](true)}>
-          View All Tags
-        </Button>
       </div>
       <Paginated items={filteredPosts} />
       <Modal
