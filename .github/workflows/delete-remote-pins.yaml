@@ -2,11 +2,11 @@ name: Delete Remote Pins
 
 on:
   workflow_dispatch:
-  inputs:
-      batch_size:
-        required: false
-        description: Size of a delete batch
-        type: number
+    inputs:
+        batch_size:
+          required: false
+          description: Size of a delete batch
+          type: number
 
 jobs:
   delete-remote-pins:
