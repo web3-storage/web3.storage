@@ -1,0 +1,44 @@
+name: Storage Limit Email Notifications
+
+on:
+  workflow_dispatch:
+  inputs:
+      batch_size:
+        required: false
+        description: Size of a delete batch
+        type: number
+
+jobs:
+  delete-remote-pins:
+    name: Delete remote pins
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: [
+          'staging', 
+          # 'production' Enable once tested in staging
+        ]
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v2
+        with: 
+          fetch-depth: 0
+      - name: Checkout latest cron release tag
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 --match='cron-*')
+          git checkout $LATEST_TAG
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+      - name: Run job
+        env:
+          DEBUG: '*'
+          ENV: ${{ matrix.env }}
+          STAGING_RO_PG_CONNECTION: ${{ secrets.STAGING_PG_CONNECTION }} # no replica for staging
+          PROD_RO_PG_CONNECTION: ${{ secrets.PROD_RO_PG_CONNECTION }}
+          BATCH_SIZE:  ${{ github.event.inputs.batch_size }}
+        run: npm run start:delete-remote-pins -w packages/cron
+
