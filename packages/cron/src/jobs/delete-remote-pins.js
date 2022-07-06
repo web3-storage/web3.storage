@@ -3,10 +3,11 @@ import debug from 'debug'
 const BATCH_SIZE = 1_000_000
 
 const DELETE_QUERY = `
-  DELETE FROM pin 
-  WHERE id IN 
-  (SELECT id FROM pin WHERE status='Remote' LIMIT $1)
-  RETURNING id;
+WITH pins_to_delete as (SELECT id FROM pin WHERE status='Remote' LIMIT $1),
+p_sync_delete as (
+  DELETE FROM pin_sync_request WHERE pin_id IN (SELECT id FROM pins_to_delete)
+)
+DELETE FROM pin WHERE id IN (SELECT id FROM pins_to_delete) returning id;
 `
 
 const log = debug('pins:deleteRemotePins')
