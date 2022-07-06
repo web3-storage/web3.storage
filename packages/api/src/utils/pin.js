@@ -69,10 +69,10 @@ export async function getPins (cid, cluster, peerMap) {
     peerMap = (await cluster.status(cid)).peerMap
   }
 
-  const pins = toPins(peerMap)
+  let pins = toPins(peerMap)
 
   // Ignore Remote Pins
-  pins.filter(p => p.status !== 'Remote')
+  pins = pins.filter(p => p.status !== 'Remote')
 
   if (!pins.length) {
     throw new Error('not pinning on any node')
