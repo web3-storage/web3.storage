@@ -74,16 +74,6 @@ describe('Delete remote pins', () => {
   before(async () => {
     rwPgPool = await getPgPool(env, 'rw')
     dbClient = await getDBClient(env)
-
-    const user = await createUser(dbClient)
-    cid = await randomCid()
-    await createUpload(dbClient, user._id, undefined, cid, {
-      pins: [...remotePins, ...otherPins]
-    })
-    const pins = await dbClient.getPins(cid)
-    assert.strictEqual(pins.length, remotePins.length + otherPins.length)
-
-    await deleteRemotePins({ rwPgPool, batchSize: 5 })
   })
 
   after(async () => {

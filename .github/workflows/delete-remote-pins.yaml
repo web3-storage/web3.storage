@@ -37,8 +37,8 @@ jobs:
         env:
           DEBUG: '*'
           ENV: ${{ matrix.env }}
-          STAGING_RO_PG_CONNECTION: ${{ secrets.STAGING_PG_CONNECTION }} # no replica for staging
-          PROD_RO_PG_CONNECTION: ${{ secrets.PROD_RO_PG_CONNECTION }}
+          STAGING_PG_CONNECTION: ${{ secrets.STAGING_PG_CONNECTION }} # no replica for staging
+          PROD_PG_CONNECTION: ${{ secrets.PROD_RO_PG_CONNECTION }}
           BATCH_SIZE:  ${{ github.event.inputs.batch_size }}
         run: npm run start:delete-remote-pins -w packages/cron
 
