@@ -24,7 +24,11 @@
     }
   }
   .gradient-background-component .saturated-variant {
-    width: 1800px;
-    height: 1800px;
+    width: 1150px;
+    height: 1000px;
+    transform: translate(-15%, -15%) scaleY(1.1) rotate(-80deg);
+    @include small {
+      transform: translate(-15%, -15%) scaleY(-1.1) rotate(11deg);
+    }
   }
 }
