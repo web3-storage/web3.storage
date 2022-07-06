@@ -1,7 +1,6 @@
 /* eslint-env mocha */
 import assert from 'assert'
 import { createUser, createUpload, randomCid } from '@web3-storage/db/test-utils'
-import { DBClient } from '@web3-storage/db'
 import { getDBClient, getPgPool } from '../src/lib/utils.js'
 import { deleteRemotePins } from '../src/jobs/delete-remote-pins.js'
 
@@ -22,7 +21,7 @@ function getRandomLocation () {
 }
 
 describe('Delete remote pins', () => {
-  /** @type {DBClient} */
+  /** @type {import('@web3-storage/db').DBClient} */
   let dbClient
   let rwPgPool
   let cid
