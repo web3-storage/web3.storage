@@ -177,8 +177,6 @@ BEGIN
       'Unpinning',
       -- The IPFS daemon is not pinning the item.
       'Unpinned',
-      -- The IPFS daemon is not pinning the item but it is being tracked.
-      'Remote',
       -- The item has been queued for pinning on the IPFS daemon.
       'PinQueued',
       -- The item has been queued for unpinning on the IPFS daemon.
