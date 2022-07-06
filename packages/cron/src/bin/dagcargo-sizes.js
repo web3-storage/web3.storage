@@ -16,7 +16,8 @@ async function main () {
 
   try {
     const after = new Date(process.env.AFTER || xDaysAgo(1))
-    await updateDagSizes({ rwPg, cargoPool, after })
+    const before = process.env.BEFORE ? new Date(process.env.BEFORE) : undefined
+    await updateDagSizes({ rwPg, cargoPool, after, before })
   } finally {
     await rwPg.end()
     await cargoPool.end()
