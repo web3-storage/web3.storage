@@ -323,7 +323,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           </Button>
         </div>
         <Filterable
-          className="files-manager-search"
+          className="files-manager-search disabled"
           items={files}
           icon={<SearchIcon />}
           filterKeys={['name', 'cid']}

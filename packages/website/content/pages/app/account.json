@@ -150,7 +150,7 @@
         }
       },
       "ui": {
-        "filter_placeholder": "Search for a file",
+        "filter_placeholder": "-- Upgrade to search underway --",
         "refresh": "Refresh",
         "sortby": {
           "label": "Sort By",
