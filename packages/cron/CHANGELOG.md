@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.2.3...cron-v1.3.0) (2022-07-07)
+
+
+### Features
+
+* stop tracking remote pins and remote them from db ([#1615](https://github.com/web3-storage/web3.storage/issues/1615)) ([faa9d6a](https://github.com/web3-storage/web3.storage/commit/faa9d6a546a095a24e9a36ab48bedc77ad7d4787))
+
 ## [1.2.3](https://github.com/web3-storage/web3.storage/compare/cron-v1.2.2...cron-v1.2.3) (2022-07-06)
 
 
