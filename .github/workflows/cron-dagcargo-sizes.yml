@@ -2,7 +2,7 @@ name: Update Content DAG Sizes
 
 on:
   schedule:
-    - cron: '61 * * * *'
+    - cron: '38 * * * *'
   workflow_dispatch:
     inputs:
       env:
