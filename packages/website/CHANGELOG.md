@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.0](https://github.com/web3-storage/web3.storage/compare/website-v2.9.0...website-v2.10.0) (2022-07-08)
+
+
+### Features
+
+* copy change to pricing ([#1630](https://github.com/web3-storage/web3.storage/issues/1630)) ([78e72c2](https://github.com/web3-storage/web3.storage/commit/78e72c28eba6a05ec5bfa98b78724ba1676afbfb))
+
 ## [2.9.0](https://github.com/web3-storage/web3.storage/compare/website-v2.8.4...website-v2.9.0) (2022-07-03)
 
 
