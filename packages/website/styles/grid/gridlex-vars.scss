@@ -10,11 +10,17 @@ $gl-gutter-vertical: 1rem !default;
 $gl-mq-width: 'max-width' !default;
 
 $gl-mq-list: (
-  ulg: 140.625rem, // 2250px
-  xlg: 90rem, // 1440px
-  lg: 75rem, // 1200px
-  md: 60rem, // 960px
-  sm: 53.125rem, // 850px
-  mi: 40rem, // 640px
-  ti: 25.9375rem // 415px
+  ulg: 140.625rem,
+  // 2250px
+  xlg: 90rem,
+  // 1440px
+  lg: 75rem,
+  // 1200px
+  md: 60rem,
+  // 960px
+  sm: 53.125rem,
+  // 850px
+  mi: 40rem,
+  // 640px
+  ti: 25.9375rem // 415px,
 ) !default;

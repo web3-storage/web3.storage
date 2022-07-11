@@ -1,0 +1,34 @@
+.blog-subscribe-modal-inner {
+  position: relative;
+  .file-uploader-container {
+    padding: 5rem 8.5rem 5rem 8.125rem;
+    text-align: right;
+    @include medium {
+      padding: 5rem 1.5rem 2rem 1.5rem;
+      width: 100%;
+    }
+  }
+  p {
+    text-align: center;
+    @include fontSize_Regular;
+    @include leading_Small;
+    padding-bottom: 2em;
+    padding-top: 0.5rem;
+  }
+  .text-arrow {
+    margin-top: 1rem;
+  }
+  .blog-search-input {
+    &:after {
+      display: none;
+    }
+  }
+  .gradient-background-component .saturated-variant {
+    width: 1150px;
+    height: 1000px;
+    transform: translate(-15%, -15%) scaleY(1.1) rotate(-80deg);
+    @include small {
+      transform: translate(-15%, -15%) scaleY(-1.1) rotate(11deg);
+    }
+  }
+}

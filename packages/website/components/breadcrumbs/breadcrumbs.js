@@ -23,7 +23,11 @@ export default function Breadcrumbs({ variant, click, keyboard }) {
   ];
 
   if (routeName.includes('docs')) {
-    links.push({ url: '', text: breadcrumbs['docs'] });
+    links.push({ url: '', text: breadcrumbs.docs });
+  }
+  if (routeName.includes('blog/post')) {
+    links.push({ url: '/blog', text: breadcrumbs.blog });
+    links.push({ url: '', text: 'Article' });
   }
   if (breadcrumbs.hasOwnProperty(routeName)) {
     links.push({ url: '', text: breadcrumbs[routeName] });
@@ -48,7 +52,7 @@ export default function Breadcrumbs({ variant, click, keyboard }) {
             <div className={clsx('breadcrumb', 'breadcrumb-text', variant)}>{item.text}</div>
           )}
 
-          <div className={clsx('breadcrumb-divider', variant)}>{item.url}</div>
+          <div className={clsx('breadcrumb-divider', variant)}>/</div>
         </div>
       ))}
     </div>

@@ -10,6 +10,9 @@ import Button from '../button/button';
 import Img from '../cloudflareImage.js';
 import ImageSquiggle from '../../public/images/illustrations/squiggle.png';
 import GeneralPageData from '../../content/pages/general.json';
+import { ReactComponent as SlackIcon } from '../../assets/icons/slack.svg';
+import { ReactComponent as DiscordIcon } from '../../assets/icons/discord.svg';
+import { ReactComponent as GithubIcon } from '../../assets/icons/github2.svg';
 
 // ====================================================================== Params
 /**
@@ -78,6 +81,28 @@ export default function Footer({ isProductApp }) {
                   {contact.cta.text}
                 </Button>
               )}
+
+              <div className="footer-social">
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="slack"
+                  href="https://filecoinproject.slack.com/join/shared_invite/zt-1a8parx1w-vn2yG5atZVw_dUOUmedeLQ#/shared-invite/email"
+                >
+                  <SlackIcon />
+                </a>
+                <a target="_blank" rel="noreferrer" aria-label="discord" href="https://discord.com/invite/4zEkFVqwms">
+                  <DiscordIcon />
+                </a>
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="github"
+                  href="https://github.com/web3-storage/web3.storage"
+                >
+                  <GithubIcon />
+                </a>
+              </div>
             </div>
           </div>
 

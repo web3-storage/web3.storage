@@ -43,6 +43,8 @@
 @import '../components/callout/callout.scss';
 @import '../components/search/search.scss';
 @import '../components/account/accountBlockedModal/accountBlockedModal.scss';
+@import '../components/blog/cards/cards.scss';
+@import '../components/blog/subscribe/subscribe.scss';
 
 // Pages
 @import '../pages/index.scss';
@@ -54,6 +56,11 @@
 @import '../pages/login';
 @import '../pages/account';
 @import '../pages/tokens';
+@import '../pages/blog';
+@import '../pages/blog/post';
+
+// content for blog and docs
+@import 'article';
 
 // Fonts
 $fontAssetPath: '../assets/fonts';
@@ -220,7 +227,7 @@ body:not(.docs-site) #__next {
 h1,
 .h1 {
   @include h1;
-  line-height: leading(55, 45);
+  line-height: 1.33;
 }
 
 h2,

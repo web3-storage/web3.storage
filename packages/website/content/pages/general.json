@@ -32,6 +32,10 @@
         "text": "FAQ"
       },
       {
+        "url": "/blog",
+        "text": "Blog"
+      },
+      {
         "url": "/docs",
         "text": "Docs"
       },
@@ -81,6 +85,7 @@
     "about": "About",
     "pricing": "Pricing",
     "faq": "FAQ",
+    "blog": "Blog",
     "docs": "Docs",
     "terms": "ToS",
     "login": "Login",

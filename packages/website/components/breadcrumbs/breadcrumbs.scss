@@ -12,13 +12,12 @@
 }
 
 .breadcrumb {
-  @include fontWeight_Regular;
   @include fontSize_Mini;
+  @include fontWeight_Medium;
   line-height: leading(34, 15);
   &.breadcrumb-link {
     font-size: inherit;
     line-height: inherit;
-    font-weight: inherit;
     cursor: pointer;
     &:hover {
       text-decoration: underline;
@@ -27,13 +26,12 @@
       color: #eaeaf2;
     }
     &.dark {
-      color: $ebony;
+      color: $docsPrimaryPurple;
     }
   }
   &.breadcrumb-text {
     font-size: inherit;
     line-height: inherit;
-    font-weight: inherit;
     + .breadcrumb-divider {
       display: none;
     }
@@ -41,7 +39,7 @@
       color: #9a9aa3;
     }
     &.dark {
-      color: #4d4f5f;
+      color: $ebony;
     }
   }
 }
@@ -53,6 +51,6 @@
     color: #9a9aa3;
   }
   &.dark {
-    color: #4d4f5f;
+    color: $ebony;
   }
 }

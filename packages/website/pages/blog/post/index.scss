@@ -1,0 +1,181 @@
+@use 'sass:math';
+
+.blog-single-post {
+  > .grid {
+    width: toRem(814);
+  }
+  padding-top: toRem(70) !important;
+  img {
+    max-width: 100%;
+  }
+  .post-heading {
+    width: 100%;
+    padding-left: toRem(83);
+    padding-right: toRem(83);
+    text-align: center;
+    @include large {
+      padding-left: 0;
+      padding-right: 0;
+      text-align: left;
+    }
+    .post-author {
+      padding-top: toRem(15);
+      padding-bottom: toRem(30);
+      font-size: toRem(18);
+      @include fontWeight_Medium;
+      @include leading_Small;
+    }
+    h1 {
+      @include small {
+        @include fontSize_Large;
+      }
+    }
+    .post-heading-img {
+      position: relative;
+      max-width: 640px;
+      margin: 0 auto;
+      &:before {
+        content: '';
+        width: 50px;
+        height: 50px;
+        bottom: -15px;
+        left: 1rem;
+        transform: rotate(25deg);
+        position: absolute;
+        background-position: center;
+        background-size: contain;
+        background-image: url('/images/illustrations/coil.png');
+        @include small {
+          left: -15px;
+        }
+      }
+    }
+  }
+  .post-meta {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: toRem(37);
+    padding-top: toRem(20);
+    @include small {
+      flex-direction: column;
+    }
+    .post-meta-date {
+      flex: 1;
+      @include fontSize_Small;
+      @include fontWeight_Semibold;
+      @include small {
+        @include fontSize_Regular;
+      }
+    }
+    .post-meta-tags {
+      padding-right: toRem(30);
+      font-size: toRem(15);
+      @include fontWeight_Medium;
+    }
+  }
+  .post-pagination {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 1rem toRem(113) 1rem;
+  }
+  .post-social {
+    flex: 1;
+    @include small {
+      text-align: center;
+    }
+    > a,
+    button {
+      padding-right: toRem(20);
+      cursor: pointer;
+      path {
+        transition: all $transitionDuration;
+      }
+      &:hover {
+        path {
+          fill: $docsPrimaryPurple;
+          transition: all $transitionDuration;
+        }
+      }
+    }
+    .copied {
+      @include fontSize_Atom;
+      opacity: 0;
+      transition: opacity $transitionDuration;
+      &.show {
+        opacity: 1;
+      }
+    }
+  }
+  .post-footer {
+    padding-bottom: toRem(70);
+  }
+  .caption {
+    font-style: italic;
+    font-size: toRem(15);
+  }
+  .post-related {
+    padding-bottom: 4rem !important;
+  }
+
+  .code-preview-wrapper {
+    background: none;
+    padding: 0;
+
+    &:before,
+    pre {
+      background: none;
+      padding: 0;
+    }
+  }
+}
+
+// floating illustrations
+#blog-article_section_1 {
+  position: relative;
+  width: 100vw;
+  height: 0;
+  top: 0;
+}
+#blog-article_hero-helix {
+  width: 18rem;
+  top: -10rem;
+  transform: rotate(-79deg);
+  left: calc(50% - #{math.div($containerWidth, 2)} - 17rem);
+  @include medium {
+    width: toRem(66);
+    top: -7rem;
+    left: -3.7rem;
+  }
+}
+#blog-article_hero-cross {
+  position: absolute;
+  width: 3rem;
+  top: 60rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 10rem);
+  @include large {
+    left: calc(50% - #{math.div($containerWidth, 2)} - 5rem);
+  }
+  @include medium {
+    left: -3.5rem;
+  }
+  @include small {
+    left: -4.5rem;
+  }
+}
+#blog-article_hero-ring {
+  width: toRem(300);
+  right: 0;
+  top: -16rem;
+  transform: translate(321px, 321px) rotate(205deg);
+  right: calc(50% - #{math.div($containerWidth, 2)} + 4.5rem);
+  @include medium {
+    width: toRem(240);
+    right: 10rem;
+  }
+  @include small {
+    width: toRem(240);
+    right: 5rem;
+  }
+}

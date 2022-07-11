@@ -13,6 +13,7 @@ import ImageClusterMobile from '../../public/images/illustrations/cluster2.png';
 import ImageCone from '../../public/images/illustrations/cone.png';
 import ImageFidget from '../../public/images/illustrations/fidget.png';
 import ImageCorkscrew from '../../public/images/illustrations/corkscrew.png';
+import ImageCorkscrew2 from '../../public/images/illustrations/corkscrew2.png';
 import ImageRing from '../../public/images/illustrations/ring.png';
 import ImageSpring from '../../public/images/illustrations/spring.png';
 import ImageBlobs from '../../public/images/illustrations/blobs.png';
@@ -78,6 +79,26 @@ export default function Hero({ block }) {
     );
   };
 
+  const blogHero = () => {
+    return (
+      <>
+        <HeroIllustration id="blog_hero-coil" src={ImageCoil} />
+        <HeroIllustration id="blog_hero-corkscrew" src={ImageCorkscrew2} />
+        <HeroIllustration id="blog_hero-helix" src={ImageHelix} />
+      </>
+    );
+  };
+
+  const blogArticleHero = () => {
+    return (
+      <>
+        <HeroIllustration id="blog-article_hero-cross" src={ImageCross} />
+        <HeroIllustration id="blog-article_hero-helix" src={ImageHelix} />
+        <HeroIllustration id="blog-article_hero-ring" src={ImageRing} />
+      </>
+    );
+  };
+
   const indexHero = () => {
     return (
       <>
@@ -104,6 +125,10 @@ export default function Hero({ block }) {
         return faqHero();
       case 'error':
         return hero404();
+      case 'blog':
+        return blogHero();
+      case 'blog-article':
+        return blogArticleHero();
       default:
         return null;
     }

@@ -127,7 +127,6 @@ curl -s "https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndxtjgw3auuloy
     }
   ]
 }
-
 ```
 
 To format the response for display, you can install the [jq tool](https://stedolan.github.io/jq/) and add `| jq` to the end of the command above.
@@ -214,7 +213,6 @@ $wc.DownloadString("https://dweb.link/api/v0/ls?arg=bafybeifpaez32hlrz5tmr7scndx
     }
   ]
 }
-
 ```
 
 To format the response for display, you can add ` | ConvertFrom-Json | ConvertTo-Json -Depth 100` to the end of the final command.

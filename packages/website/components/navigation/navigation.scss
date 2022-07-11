@@ -134,16 +134,16 @@
   .nav-item {
     position: relative;
     align-self: flex-end;
-    @include fontSize_Small;
+    font-size: 14px;
     @include fontWeight_Semibold;
     text-transform: uppercase;
-    margin: 0 1rem;
+    margin: 0 0.5rem;
     padding: 0 0.5rem;
     height: 100%;
     transition: 200ms ease;
     cursor: pointer;
     @include medium {
-      margin: 0 0.875rem;
+      margin: 0 0.25rem;
     }
     &:after {
       content: '';

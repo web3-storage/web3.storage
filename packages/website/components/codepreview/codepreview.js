@@ -116,7 +116,7 @@ export default function CodePreview({ block }) {
       const nextLine =
         j < tab.lines.length - 1
           ? `${lineNumber} ${hljs.highlight(line, { language: 'javascript' }).value}<br>`
-          : contentInViewport
+          : contentInViewport && !tab.disableCursor
           ? `${lineNumber} <span class="cp-typed">${line}<span class="cp-cursor">|</span></span><br>`
           : `${lineNumber} <br>`;
       highlightedCode[i].html = highlightedCode[i].html + nextLine;
@@ -130,22 +130,24 @@ export default function CodePreview({ block }) {
 
   return (
     <div className="code-preview-window">
-      <div className="cp-thumb-container">
-        {block.tabs.map((tab, index) => (
-          <button
-            key={tab.thumb}
-            onClick={e => {
-              handleTabSelection(e, index);
-            }}
-            onKeyPress={e => {
-              handleTabSelection(e, index);
-            }}
-            className={clsx('cp-thumb', index === selectedTab ? 'cp-selected' : '')}
-          >
-            {tab.thumb}
-          </button>
-        ))}
-      </div>
+      {block.tabs.some(({ thumb }) => !!thumb) && (
+        <div className="cp-thumb-container">
+          {block.tabs.map((tab, index) => (
+            <button
+              key={tab.thumb}
+              onClick={e => {
+                handleTabSelection(e, index);
+              }}
+              onKeyPress={e => {
+                handleTabSelection(e, index);
+              }}
+              className={clsx('cp-thumb', index === selectedTab ? 'cp-selected' : '')}
+            >
+              {tab.thumb}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="code-preview-wrapper" style={{ height: contentHeight }}>
         <div ref={contentRef} className="code-preview-content">
