@@ -31,4 +31,13 @@
       transform: translate(-15%, -15%) scaleY(-1.1) rotate(11deg);
     }
   }
+  .blog-thanks {
+    p {
+      padding: 0;
+      margin-bottom: -0.5rem;
+      @include fontWeight_Semibold;
+    }
+    text-align: center;
+    position: relative;
+  }
 }

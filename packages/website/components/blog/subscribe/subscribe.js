@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 import Button, { ButtonVariant } from '../../../components/button/button';
 import constants from '../../../lib/constants';
+import Img from '../../../components/cloudflareImage';
+import ImageZigzag from '../../../public/images/illustrations/zigzag-tiny.png';
 
 /**
  * Subscribe Modal
@@ -24,7 +26,7 @@ export default function Subscribe() {
         email,
       }),
     });
-    if (res.status !== 200 && res.status !== 202) {
+    if (res.status !== 200 && res.status !== 404) {
       throw new Error();
     }
   };
@@ -47,41 +49,40 @@ export default function Subscribe() {
     }
   };
 
-  let content = (
-    <form className="file-uploader-container" onSubmit={onSubmit}>
-      <h5>Subscribe to our blog</h5>
+  return (
+    <div className="file-uploader-container">
+      {status !== 'success' && <h5>Subscribe to our blog</h5>}
+      {status === 'success' && <h5>You’re subscribed!</h5>}
       <p>
         Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
         aperiam, eaque ipsa illo
       </p>
-      <div className="blog-search-input">
-        <input
-          aria-labelledby="email-entry-label"
-          type="email"
-          name="email"
-          required
-          placeholder="Enter your email"
-          onChange={e => setEmail(e.target.value)}
-          disabled={status === 'pending'}
-          value={email}
-        />
+      <div className="blog-thanks">
+        <p>Thank you!</p>
+        <Img src={ImageZigzag} />
       </div>
-      <Button variant={ButtonVariant.TEXT_ARROW} disabled={disabled} type="submit">
-        Subscribe
-      </Button>
-      <br />
-      {errorMsg && <p className="error">{errorMsg}</p>}
-    </form>
+      {status === 'success' && <div className="blog-thanks">Thank you!</div>}
+      {status !== 'success' && (
+        <form onSubmit={onSubmit}>
+          <div className="blog-search-input">
+            <input
+              aria-labelledby="email-entry-label"
+              type="email"
+              name="email"
+              required
+              placeholder="Enter your email"
+              onChange={e => setEmail(e.target.value)}
+              disabled={status === 'pending'}
+              value={email}
+            />
+          </div>
+          <Button variant={ButtonVariant.TEXT_ARROW} disabled={disabled} type="submit">
+            Subscribe
+          </Button>
+          <br />
+          {errorMsg && <p className="error">{errorMsg}</p>}
+        </form>
+      )}
+    </div>
   );
-
-  if (status === 'success') {
-    content = (
-      <div>
-        <h1>Success!</h1>
-        <p>You are subscribed to the Mailing List.</p>
-      </div>
-    );
-  }
-
-  return content;
 }
