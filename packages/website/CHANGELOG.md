@@ -1,5 +1,33 @@
 # Changelog
 
+## [2.10.0](https://github.com/web3-storage/web3.storage/compare/website-v2.9.0...website-v2.10.0) (2022-07-08)
+
+
+### Features
+
+* copy change to pricing ([#1630](https://github.com/web3-storage/web3.storage/issues/1630)) ([78e72c2](https://github.com/web3-storage/web3.storage/commit/78e72c28eba6a05ec5bfa98b78724ba1676afbfb))
+
+## [2.9.0](https://github.com/web3-storage/web3.storage/compare/website-v2.8.4...website-v2.9.0) (2022-07-03)
+
+
+### Features
+
+* add cloudflare img component ([#1361](https://github.com/web3-storage/web3.storage/issues/1361)) ([1477646](https://github.com/web3-storage/web3.storage/commit/14776460e3436cb24e6d3f77c66501373668ef62))
+* Docs polish ([#1444](https://github.com/web3-storage/web3.storage/issues/1444)) ([d952b61](https://github.com/web3-storage/web3.storage/commit/d952b613bf0c7c5c77b69e8e3d781650ee5683b6))
+
+
+### Bug Fixes
+
+* add pagination to user/uploads endpoint ([#1408](https://github.com/web3-storage/web3.storage/issues/1408)) ([3e0a14f](https://github.com/web3-storage/web3.storage/commit/3e0a14fc8407ae549d19ba8b48ddab23bd2a5141))
+* aligns hero text to center of grid background ([#1590](https://github.com/web3-storage/web3.storage/issues/1590)) ([05415a8](https://github.com/web3-storage/web3.storage/commit/05415a8168aac21a53c7c827f85bbc2f0b148196))
+* don't prompt free ([#1598](https://github.com/web3-storage/web3.storage/issues/1598)) ([9969027](https://github.com/web3-storage/web3.storage/commit/996902754ac51f628e4570855d7b3a0da7bb9e2f))
+* no page reload when pointing to relative path in docs ([#1559](https://github.com/web3-storage/web3.storage/issues/1559)) ([78bb7e5](https://github.com/web3-storage/web3.storage/commit/78bb7e562ae58d2bfd695e607dd359b8df36f861))
+
+
+### Other Changes
+
+* update husky package for web ([#1355](https://github.com/web3-storage/web3.storage/issues/1355)) ([913be2c](https://github.com/web3-storage/web3.storage/commit/913be2c931f8fdd04a78d42a41419cd6260e8c10))
+
 ## [2.8.4](https://github.com/web3-storage/web3.storage/compare/website-v2.8.3...website-v2.8.4) (2022-06-24)
 
 
