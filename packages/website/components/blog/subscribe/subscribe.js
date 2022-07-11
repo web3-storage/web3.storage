@@ -14,7 +14,7 @@ export default function Subscribe() {
   const API = constants.API;
 
   const subscribe = async email => {
-    const subscribeURL = '/internal/blog/subscribe';
+    const subscribeURL = '/blog/subscription';
     const res = await fetch(API + subscribeURL, {
       method: 'POST',
       headers: {
