@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.1](https://github.com/web3-storage/web3.storage/compare/website-v2.10.0...website-v2.10.1) (2022-07-11)
+
+
+### Bug Fixes
+
+* broken inter-doc links ([#1538](https://github.com/web3-storage/web3.storage/issues/1538)) ([45e715f](https://github.com/web3-storage/web3.storage/commit/45e715f36812d62dff3a98e6a3fab5a6839fb403))
+
 ## [2.10.0](https://github.com/web3-storage/web3.storage/compare/website-v2.9.0...website-v2.10.0) (2022-07-08)
 
 
