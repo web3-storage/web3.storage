@@ -170,7 +170,7 @@ export async function getUploads({ size, before, sortBy, sortOrder }) {
   }
 
   if (sortOrder) {
-    params.set('setOrder', sortOrder);
+    params.set('sortOrder', sortOrder);
   }
   const res = await fetch(`${API}/user/uploads?${params}`, {
     method: 'GET',
