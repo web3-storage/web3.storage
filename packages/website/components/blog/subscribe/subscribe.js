@@ -13,7 +13,7 @@ export default function Subscribe() {
   const [email, setEmail] = useState('');
   const API = constants.API;
 
-  const subscribe = async email => {
+  const subscribe = async () => {
     const subscribeURL = '/blog/subscription';
     const res = await fetch(API + subscribeURL, {
       method: 'POST',
@@ -24,9 +24,8 @@ export default function Subscribe() {
         email,
       }),
     });
-    const body = await res.json();
-    if (!body.ok) {
-      throw new Error(body.error);
+    if (res.status !== 200 && res.status !== 202) {
+      throw new Error();
     }
   };
 
@@ -35,18 +34,10 @@ export default function Subscribe() {
    */
   const onSubmit = async e => {
     e.preventDefault();
-    const userMail = email;
-
-    if (status === 'pending' || !userMail) return;
-
+    if (status === 'pending') return;
     setStatus('pending');
-    if (errorMsg) {
-      setErrorMsg('You could not subscribe to the list');
-    }
-    setDisabled(true);
-
     try {
-      await subscribe(userMail);
+      await subscribe();
       setStatus('success');
     } catch (/** @type {any} */ error) {
       console.error('ERROR SUBSCRIBING USER');
