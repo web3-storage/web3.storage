@@ -83,6 +83,7 @@
     "faq": "FAQ",
     "docs": "Docs",
     "terms": "ToS",
+    "contact": "Contact",
     "login": "Login",
     "callback": "Authenticating",
     "account": "Account",
@@ -115,7 +116,7 @@
         },
         {
           "text": "Contact Us",
-          "url": "/docs/community/help-and-support/#questions-and-community-discussion"
+          "url": "/contact"
         },
         {
           "text": "Terms of Use",

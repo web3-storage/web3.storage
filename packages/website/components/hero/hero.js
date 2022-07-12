@@ -92,6 +92,18 @@ export default function Hero({ block }) {
     );
   };
 
+  const contactHero = () => {
+    return (
+      <>
+        <HeroIllustration id="contact_hero-corkscrew" src={ImageCorkscrew} />
+        <HeroIllustration id="contact_hero-helix" src={ImageHelix} />
+        <HeroIllustration id="contact_hero-helix2" src={ImageHelix} />
+        <HeroIllustration id="contact_hero-cross" src={ImageCross} />
+        <HeroIllustration id="contact_hero-triangle" src={ImageTriangle} />
+      </>
+    );
+  };
+
   const getPageHeroHeader = string => {
     switch (string) {
       case 'index':
@@ -104,6 +116,8 @@ export default function Hero({ block }) {
         return faqHero();
       case 'error':
         return hero404();
+      case 'contact':
+        return contactHero();
       default:
         return null;
     }

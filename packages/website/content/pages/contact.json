@@ -1,0 +1,227 @@
+{
+  "seo": {
+    "title": "",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "page_content": [
+    [
+      {
+        "id": "contact_hero-header",
+        "columns": [
+          {
+            "type": "hero",
+            "page": "contact",
+            "cols": {
+              "num": "col-8_md-10_sm-8"
+            },
+            "format": "header",
+            "subheading": "Contact",
+            "heading": "Reach out to Web3.Storage"
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "",
+        "columns": [
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-5_md-4_sm-12"
+            },
+            "customizations": [
+              {
+                "type": "image_block",
+                "id": "",
+                "src": "/images/contact/contact-hero.jpg"
+              }
+            ]
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-6_md-7_sm-12",
+              "push_left": "off-1_sm-0"
+            },
+            "customizations": [
+              {
+                "type": "text_block",
+                "format": "small",
+                "heading": "Get help or support",
+                "description": [
+                  "Web3.Storage is easy to use and integrate into your developer workflow, but we could all use a little help now and then. If you're having trouble getting started with or using Web3.Storage, or just want to get advice and support from a global community of decentralized web builders, here's where to start."
+                ]
+              },
+              {
+                "type": "text_block",
+                "format": "small",
+                "heading": "Questions and community discussion",
+                "description": [
+                  "Have a question about using Web3.Storage? Want to discuss problems, opportunities, or ideas for integrating Web3.Storage into your project or product? <a href='mailto:support@web3.storage' target='_blank'>Send us an email</a> or join your peers in the developer community in the #web3-storage channel on <a href='https://discord.gg/4zEkFVqwms' target='_blank'>Discord</a> or <a href='https://filecoin.io/slack' target='_blank'>Slack</a>."
+                ]
+              },
+              {
+                "type": "text_block",
+                "format": "small",
+                "heading": "Bug reports or feature requests",
+                "description": [
+                  "Found a bug, or have a feature request for how to make Web3.Storage better? File an issue and make your voice heard.<br><br><a href='https://github.com/web3-storage/web3.storage/issues/new/choose' target='_blank'>File an issue for the Web3.Storage service</a><br><a href='https://github.com/web3-storage/docs/issues/new/choose' target='_blank'>File an issue for the Web3.Storage docs</a>"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "",
+        "columns": [
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-12"
+            },
+            "customizations": [
+              {
+                "type": "text_block",
+                "format": "small",
+                "heading": "Other ways to contact us"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "",
+        "grid": ["center"],
+        "columns": [
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-12"
+            },
+            "customizations": [
+              {
+                "type": "text_block",
+                "format": "small",
+                "description": [
+                  "<a href='https://github.com/web3-storage/web3.storage/issues/new/choose' target='_blank'><img src='/images/contact/slack-big.svg'><a href='https://github.com/web3-storage/web3.storage/issues/new/choose' target='_blank'><img src='/images/contact/discord-big.svg'><a href='https://github.com/web3-storage/web3.storage/issues/new/choose' target='_blank'><img src='/images/contact/github-big.svg'>"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "",
+        "grid": ["center"],
+        "columns": [
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col-12"
+            },
+            "customizations": [
+              {
+                "type": "text_block",
+                "format": "small",
+                "description": [
+                  "<a href='/docs'>read our docs</a> or <a href='https://github.com/web3-storage/web3.storage/issues/new/choose' target='_blank'>open an issue</a>"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  ],
+  "floater_animations": [
+    {
+      "trigger": "contact_hero-header",
+      "duration": 900,
+      "offset": 500,
+      "floaters": [
+        {
+          "id": "contact_hero-corkscrew",
+          "start": {
+            "rotate": -114,
+            "x": 1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -180,
+            "x": -120,
+            "y": 80
+          }
+        },
+        {
+          "id": "contact_hero-helix",
+          "start": {
+            "rotate": -140,
+            "scale": 1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -180,
+            "scale": 1.4,
+            "x": 120,
+            "y": 80
+          }
+        },
+        {
+          "id": "contact_hero-helix2",
+          "start": {
+            "rotate": -75,
+            "scale": 1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -100,
+            "scale": 1.4,
+            "x": -1,
+            "y": 1
+          }
+        },
+        {
+          "id": "contact_hero-cross",
+          "default": "scaleX(-1)",
+          "start": {
+            "rotate": -1,
+            "x": -1,
+            "y": 1
+          },
+          "end": {
+            "rotate": -30,
+            "x": -30,
+            "y": 20
+          }
+        },
+        {
+          "id": "contact_hero-triangle",
+          "start": {
+            "scale": 1,
+            "rotate": -25
+          },
+          "end": {
+            "scale": 1.25,
+            "rotate": 20
+          }
+        }
+      ]
+    }
+  ]
+}
