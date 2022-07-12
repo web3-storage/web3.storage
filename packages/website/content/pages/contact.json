@@ -64,7 +64,7 @@
                 "format": "small",
                 "heading": "Questions and community discussion",
                 "description": [
-                  "Have a question about using Web3.Storage? Want to discuss problems, opportunities, or ideas for integrating Web3.Storage into your project or product? <a href='mailto:support@web3.storage' target='_blank'>Send us an email</a> or join your peers in the developer community in the #web3-storage channel on <a href='https://discord.gg/4zEkFVqwms' target='_blank'>Discord</a> or <a href='https://filecoin.io/slack' target='_blank'>Slack</a>."
+                  "Have a question about using Web3.Storage? Want to discuss problems, opportunities, or ideas for integrating Web3.Storage into your project or product? Send us an email at <a href='mailto:support@web3.storage' target='_blank'>support@web3.storage</a> or join your peers in the developer community in the #web3-storage channel on the <a href='https://discord.gg/4zEkFVqwms' target='_blank'>IPFS Community Discord</a> or <a href='https://filecoin.io/slack' target='_blank'>Filecoin Community Slack</a>."
                 ]
               },
               {
@@ -74,26 +74,6 @@
                 "description": [
                   "Found a bug, or have a feature request for how to make Web3.Storage better? File an issue and make your voice heard.<br><br><a href='https://github.com/web3-storage/web3.storage/issues/new/choose' target='_blank'>File an issue for the Web3.Storage service</a><br><a href='https://github.com/web3-storage/docs/issues/new/choose' target='_blank'>File an issue for the Web3.Storage docs</a>"
                 ]
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    [
-      {
-        "id": "",
-        "columns": [
-          {
-            "type": "custom",
-            "cols": {
-              "num": "col-12"
-            },
-            "customizations": [
-              {
-                "type": "text_block",
-                "format": "small",
-                "heading": "Other ways to contact us"
               }
             ]
           }

@@ -3,10 +3,8 @@
 .page-contact {
   position: relative;
   a {
-    color: #4622fc;
-    @include fontWeight_Semibold;
-    text-decoration: underline;
-    border-bottom: 0;
+    color: #3c3cd6;
+    font-weight: 600;
   }
   .h3 {
     @include fontSize_MediumLarge;
@@ -40,13 +38,10 @@
   #contact_section_3 .sectional {
     text-align: center;
     padding: 0;
-  }
-  #contact_section_4 .sectional {
-    text-align: center;
-    padding: 0;
     a {
       margin-left: 1rem;
       margin-right: 1rem;
+      border-bottom: 0;
       @include small {
         margin-left: 0.5rem;
         margin-right: 0.5rem;
@@ -79,7 +74,7 @@
       }
     }
   }
-  #contact_section_5 .sectional {
+  #contact_section_4 .sectional {
     text-align: center;
     padding-top: 0;
     .description {
