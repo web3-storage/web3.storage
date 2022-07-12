@@ -9,9 +9,11 @@ import useQueryParams from 'ZeroHooks/useQueryParams'
  * @prop {any[]} items
  * @prop {string|number} itemsPerPage
  * @prop {number} visiblePages
+ * @prop {number|undefined} [itemCount]
  * @prop {number} [defaultPage]
  * @prop {string} [queryParam]
  * @prop {function} [onChange]
+ * @prop {function} [onSelectChange]
  * @prop {string} [scrollTarget]
  */
 
@@ -22,18 +24,25 @@ const Pagination = ({
   className,
   items,
   itemsPerPage,
+  itemCount,
   visiblePages,
   defaultPage,
   queryParam,
   onChange,
   scrollTarget,
+  onSelectChange,
 }) => {
   const [queryValue, setQueryValue] = useQueryParams(queryParam, defaultPage);
 
   const [pageList, setPageList] = useState(/** @type {number[]} */([]))
   const [activePage, setActivePage] = useState(defaultPage)
 
-  const pageCount = useMemo(() => itemsPerPage ? Math.ceil(items.length/parseInt(/** @type {string} */(itemsPerPage))) : null, [items, itemsPerPage])
+  const itemsPerPageNbr = parseInt(/** @type {string} */(itemsPerPage))
+  const itemsToPage = itemCount ?? items.length
+  const pageCount = useMemo(
+    () => itemsToPage ? Math.ceil(itemsToPage / itemsPerPageNbr) : null,
+    [items, itemsToPage, itemsPerPage]
+  )
 
   const currentPage = useMemo(() => parseInt(queryParam ? queryValue : activePage), [queryParam, queryValue, activePage])
 
@@ -51,13 +60,17 @@ const Pagination = ({
         .filter(page => page >= currentPage - visiblePages && page <= currentPage + visiblePages)
     )
 
-    pageCount && currentPage < 1 && setCurrentPage(defaultPage)
-    pageCount && currentPage > pageCount && setCurrentPage(pageCount)
+    pageCount && currentPage < 1 && currentPage !== defaultPage && setCurrentPage(defaultPage)
+    pageCount && currentPage > pageCount &&  currentPage !== pageCount && setCurrentPage(pageCount)
 
     const firstItem = (currentPage - 1) * parseInt(/** @type {string} */(itemsPerPage))
     onChange && onChange(items.slice(firstItem, firstItem + parseInt(/** @type {string} */(itemsPerPage))))
 
   }, [items, itemsPerPage, visiblePages, pageCount, setPageList, currentPage, setCurrentPage, onChange])
+
+  useEffect(() => {
+    onSelectChange && onSelectChange(currentPage)
+  }, [currentPage, onSelectChange])
 
   return (
     <div className={clsx(className, 'Pagination')}>

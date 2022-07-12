@@ -18,9 +18,9 @@ import { useTokens } from 'components/contexts/tokensContext';
 import CheckIcon from 'assets/icons/check';
 import SearchIcon from 'assets/icons/search';
 import RefreshIcon from 'assets/icons/refresh';
+import useQueryParams from 'ZeroHooks/useQueryParams';
 import FileRowItem, { PinStatus } from './fileRowItem';
 import GradientBackground from '../../gradientbackground/gradientbackground.js';
-import useQueryParams from 'ZeroHooks/useQueryParams';
 
 const defaultQueryOrder = 'newest';
 
@@ -44,6 +44,7 @@ const defaultQueryOrder = 'newest';
 const FilesManager = ({ className, content, onFileUpload }) => {
   const {
     uploads,
+    uploadCount,
     pinned,
     fetchDate,
     fetchPinsDate,
@@ -66,7 +67,8 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const { tokens, getTokens } = useTokens();
 
   const [currentTab, setCurrentTab] = useState('uploaded');
-  const [itemsPerPage] = useState(null);
+  const [itemsPerPage, setItemsPerPage] = useQueryParams('itemsPerPage', 10);
+  const [currentPage, setCurrentPage] = useQueryParams('page', 1);
   const [orderBy, setOrderBy] = useQueryParams('order', defaultQueryOrder);
   const [keyword, setKeyword] = useQueryParams('filter', filter && (typeof filter === 'string' ? filter : filter[0]));
   const [deleteSingleCid, setDeleteSingleCid] = useState('');
@@ -127,12 +129,13 @@ const FilesManager = ({ className, content, onFileUpload }) => {
 
       getUploads({
         ...sortingQuery,
-        size: 1000,
+        itemsPerPage,
+        offset: (currentPage - 1) * itemsPerPage,
         before: new Date().toISOString(),
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keyword, itemsPerPage, orderBy]);
+  }, [keyword, orderBy, currentPage, itemsPerPage]);
 
   // Initial pinned files fetch on component load
   useEffect(() => {
@@ -464,11 +467,14 @@ const FilesManager = ({ className, content, onFileUpload }) => {
             className="files-manager-pagination"
             items={uploads}
             itemsPerPage={itemsPerPage || 10}
+            itemCount={uploadCount}
             visiblePages={1}
             queryParam="page"
-            onChange={() => {
-              /* TODO: not sure what goes here yet */
-            }}
+            onSelectChange={
+              /** @type {number} */ e => {
+                e !== currentPage && setCurrentPage(e);
+              }
+            }
             scrollTarget={'.account-files-manager'}
           />
           <Dropdown
@@ -476,7 +482,10 @@ const FilesManager = ({ className, content, onFileUpload }) => {
             value={content?.ui.results.options[0].value}
             options={content?.ui.results.options}
             queryParam="items"
-            onSelectChange={showCheckOverlayHandler}
+            onSelectChange={e => {
+              showCheckOverlayHandler();
+              setItemsPerPage(e.target.value);
+            }}
           />
         </div>
       )}

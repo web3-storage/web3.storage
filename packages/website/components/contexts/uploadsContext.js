@@ -76,6 +76,7 @@ export const STATUS = {
  * @typedef {Object} UploadsContextProps
  * @property {Upload[]} uploads Uploads available in this account
  * @property {PinStatus[]} pinned Files uploaded through the pinning service on this account
+ * @property {number|undefined} uploadCount Number of total uploads
  * @property {(cid: string) => Promise<void>} deleteUpload Method to delete an existing upload
  * @property {(cid: string, name: string)=>Promise<void>} renameUpload Method to rename an existing upload
  * @property {(args?: UploadArgs) => Promise<Upload[]>} getUploads Method that refetches list of uploads based on certain params
@@ -112,6 +113,7 @@ export const UploadsProvider = ({ children }) => {
   } = useUser();
 
   const [uploads, setUploads] = useState(/** @type {Upload[]} */ ([]));
+  const [uploadCount, setUploadCount] = useState(/** @type {number|undefined} */);
   const [pinned, setPinned] = useState(/** @type {PinStatus[]} */ ([]));
   const [isFetchingUploads, setIsFetchingUploads] = useState(false);
   const [fetchDate, setFetchDate] = useState(/** @type {number|undefined} */ (undefined));
@@ -182,17 +184,17 @@ export const UploadsProvider = ({ children }) => {
     /** @type {(args?: UploadArgs) => Promise<Upload[]>}} */
     async (
       args = {
-        size: 1000,
         before: new Date().toISOString(),
       }
     ) => {
       setIsFetchingUploads(true);
       const updatedUploads = await getUploads(args);
-      setUploads(updatedUploads);
+      setUploads(updatedUploads.results);
+      setUploadCount(updatedUploads.count);
       setFetchDate(Date.now());
       setIsFetchingUploads(false);
 
-      return updatedUploads;
+      return updatedUploads.results;
     },
     [setUploads, setIsFetchingUploads]
   );
@@ -223,6 +225,7 @@ export const UploadsProvider = ({ children }) => {
           getUploads: getUploadsCallback,
           listPinned: listPinnedCallback,
           uploads,
+          uploadCount,
           pinned,
           isFetchingUploads,
           fetchDate,
