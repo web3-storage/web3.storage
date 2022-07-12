@@ -150,21 +150,28 @@ export async function createToken(name) {
 
 /**
  * @typedef {Object} UploadArgs
- * @property {number} args.size
  * @property {string} args.before
  * @property {string} [args.sortBy] Can be either "Date" or "Name" - uses "Date" as default
  * @property {string} [args.sortOrder] Can be either "Asc" or "Desc" - uses "Desc" as default
+ * @property {number} [args.itemsPerPage]
+ * @property {number} [args.offset]
+ */
+
+/**
+ * @typedef {Object} UploadResults
+ * @property {import('web3.storage').Upload[]} results - List of requested uploads
+ * @property {number} count - count of returned uploads
  */
 
 /**
  * Gets files
  *
  * @param {UploadArgs} args
- * @returns {Promise<import('web3.storage').Upload[]>}
+ * @returns {Promise<UploadResults>}
  * @throws {Error} When it fails to get uploads
  */
-export async function getUploads({ size, before, sortBy, sortOrder }) {
-  const params = new URLSearchParams({ before, size: String(size) });
+export async function getUploads({ before, sortBy, sortOrder, itemsPerPage, offset }) {
+  const params = new URLSearchParams({ before });
   if (sortBy) {
     params.set('sortBy', sortBy);
   }
@@ -172,6 +179,15 @@ export async function getUploads({ size, before, sortBy, sortOrder }) {
   if (sortOrder) {
     params.set('sortOrder', sortOrder);
   }
+
+  if (itemsPerPage) {
+    params.set('size', itemsPerPage.toString());
+  }
+
+  if (offset) {
+    params.set('offset', offset.toString());
+  }
+
   const res = await fetch(`${API}/user/uploads?${params}`, {
     method: 'GET',
     headers: {
@@ -183,8 +199,13 @@ export async function getUploads({ size, before, sortBy, sortOrder }) {
   if (!res.ok) {
     throw new Error(`failed to get uploads: ${await res.text()}`);
   }
+  const results = await res.json();
+  const count = parseInt((res.headers.get('count') ?? '0'), 10);
 
-  return res.json();
+  return {
+    results,
+    count
+  };
 }
 
 /**

@@ -546,11 +546,14 @@ export class DBClient {
       query = query.gte('inserted_at', opts.after)
     }
 
+    // count before paging
+    const count = (await query).count
+
     // Apply pagination or limiting.
     query = query.range(rangeFrom, rangeTo - 1)
 
     /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error, count: Number }} */
-    const { data: uploads, error, count } = await query
+    const { data: uploads, error } = await query
 
     if (error) {
       throw new DBError(error)
