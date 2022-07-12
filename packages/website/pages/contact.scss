@@ -8,6 +8,10 @@
     text-decoration: underline;
     border-bottom: 0;
   }
+  .h3 {
+    @include fontSize_MediumLarge;
+    @include leading_Regular;
+  }
   .contact_hero-top-section {
     > .text-block {
       display: flex;
@@ -26,10 +30,6 @@
   #contact_section_2 .sectional {
     padding-top: 1.75rem;
     padding-bottom: 1.75rem;
-    .h3 {
-      @include fontSize_MediumLarge;
-      @include leading_MediumLarge;
-    }
     .description {
       padding-bottom: 1rem;
     }
@@ -44,13 +44,39 @@
   #contact_section_4 .sectional {
     text-align: center;
     padding: 0;
-    .h3 {
-      @include fontSize_MediumLarge;
-      @include leading_MediumLarge;
-    }
     a {
       margin-left: 1rem;
       margin-right: 1rem;
+      @include small {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+      }
+      position: relative;
+      @include gradient_Blurry_Background_PinkBlue;
+      img {
+        width: toRem(108);
+        height: toRem(108);
+        @include small {
+          width: toRem(80);
+          height: toRem(80);
+        }
+      }
+      &:before {
+        z-index: -1;
+        width: toRem(108);
+        height: toRem(108);
+        border-radius: 3.5rem;
+        @include small {
+          width: toRem(80);
+          height: toRem(80);
+        }
+      }
+      &:hover {
+        &:before {
+          filter: blur(0.5rem);
+          opacity: 1;
+        }
+      }
     }
   }
   #contact_section_5 .sectional {
@@ -74,8 +100,8 @@
 #contact_hero-helix {
   position: absolute;
   width: toRem(168);
-  top: -3rem;
-  right: -5rem;
+  top: -7rem;
+  right: calc(50% - #{math.div($containerWidth, 2)} - 18rem);
   transform: rotate(-140deg);
 }
 
@@ -101,4 +127,7 @@
   top: 59rem;
   transform: rotate(-25deg);
   left: calc(50% - #{math.div($containerWidth, 2)} + 16rem);
+  @include medium {
+    display: none;
+  }
 }
