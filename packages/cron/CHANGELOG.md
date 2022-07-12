@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.3.1...cron-v1.4.0) (2022-07-12)
+
+
+### Features
+
+* dag size job improvements ([#1634](https://github.com/web3-storage/web3.storage/issues/1634)) ([b6b3de8](https://github.com/web3-storage/web3.storage/commit/b6b3de81be175d09e2488d7c3f7d6c4ad13b2c37))
+
 ## [1.3.1](https://github.com/web3-storage/web3.storage/compare/cron-v1.3.0...cron-v1.3.1) (2022-07-07)
 
 
