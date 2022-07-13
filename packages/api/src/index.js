@@ -9,6 +9,7 @@ import { carHead, carGet, carPut, carPost } from './car.js'
 import { uploadPost } from './upload.js'
 import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, userUploadsRename, userInfoGet, userRequestPost } from './user.js'
 import { pinDelete, pinGet, pinPost, pinsGet } from './pins.js'
+import { blogSubscriptionCreate } from './blog.js'
 import { metricsGet } from './metrics.js'
 import { versionGet } from './version.js'
 import {
@@ -85,6 +86,8 @@ router.delete('/pins/:requestId',   auth['📌⚠️🗑️'](pinDelete))
 router.get('/name/:key',            auth['🌍'](nameGet))
 router.get('/name/:key/watch',      auth['🌍'](nameWatchGet))
 router.post('/name/:key',           auth['🔑'](namePost))
+
+router.post('/blog/subscription',   auth['🌍'](blogSubscriptionCreate))
 
 router.delete('/user/uploads/:cid',      auth['👤🗑️'](userUploadsDelete))
 router.post('/user/uploads/:cid/rename', auth['👤'](userUploadsRename))

@@ -41,7 +41,7 @@ const MAX_PIN_STATUS_CHECK_TIME = 30000
 /**
  * List of statuses we don't want to track
  * @type {PinStatus[]}
- * */
+ */
 const PIN_STATUSES_TO_IGNORE = ['Remote']
 
 // Pin statuses considered OK.

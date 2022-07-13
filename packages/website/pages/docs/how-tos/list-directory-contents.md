@@ -280,8 +280,8 @@ bafkreiaqv66m5nd6mwgkk7h5lwqnjzj54s4f7knmnrjhb7ylzqfg2vdo54 55415  youareanonsen
 
 Note that omitting the `-v` flag will remove the header line from the output. Run `ipfs ls --help` for more usage information.
 
-[howto-store]: ./store.md
-[howto-retrieve]: ./retrieve.md
+[howto-store]: /docs/how-tos/store/
+[howto-retrieve]: /docs/how-tos/retrieve/
 [ipfs-docs-cli-quickstart]: https://docs.ipfs.io/how-to/command-line-quick-start/
 [ipfs-docs-cli-ls]: https://docs.ipfs.io/reference/cli/#ipfs-ls
 [ipfs-docs-http-ls]: https://docs.ipfs.io/reference/http/api/#api-v0-ls
