@@ -178,7 +178,6 @@
         },
         {
           "id": "contact_hero-cross",
-          "default": "scaleX(-1)",
           "start": {
             "rotate": -1,
             "x": -1,

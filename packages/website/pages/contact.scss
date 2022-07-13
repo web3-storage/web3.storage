@@ -16,10 +16,14 @@
       flex-direction: column;
       .heading {
         order: 2;
+        @include fontSize_Large;
       }
       .subheading {
         order: 1;
       }
+    }
+    .subheading {
+      margin-bottom: 1.5rem;
     }
   }
   #contact_section_1 .sectional {
@@ -42,28 +46,27 @@
       margin-left: 1rem;
       margin-right: 1rem;
       border-bottom: 0;
+      width: toRem(108);
+      height: toRem(108);
+      position: relative;
+      display: inline-block;
       @include small {
         margin-left: 0.5rem;
         margin-right: 0.5rem;
+        width: toRem(80);
+        height: toRem(80);
       }
-      position: relative;
       @include gradient_Blurry_Background_PinkBlue;
-      img {
-        width: toRem(108);
-        height: toRem(108);
-        @include small {
-          width: toRem(80);
-          height: toRem(80);
-        }
-      }
       &:before {
         z-index: -1;
-        width: toRem(108);
-        height: toRem(108);
+        width: toRem(103);
+        height: toRem(103);
+        left: toRem(2);
+        top: toRem(2);
         border-radius: 3.5rem;
         @include small {
-          width: toRem(80);
-          height: toRem(80);
+          width: toRem(75);
+          height: toRem(75);
         }
       }
       &:hover {
@@ -98,6 +101,10 @@
   top: -7rem;
   right: calc(50% - #{math.div($containerWidth, 2)} - 18rem);
   transform: rotate(-140deg);
+  @include medium {
+    right: -1rem;
+    width: toRem(100);
+  }
 }
 
 #contact_hero-helix2 {
@@ -110,10 +117,13 @@
 
 #contact_hero-cross {
   position: absolute;
-  width: toRem(241);
+  width: toRem(341);
   top: 2rem;
-  transform: scaleX(-1);
-  right: calc(50% - #{math.div($containerWidth, 2)} - 3rem);
+  right: calc(50% - #{math.div($containerWidth, 2)} - 14rem);
+  @include medium {
+    right: 1rem;
+    width: toRem(130);
+  }
 }
 
 #contact_hero-triangle {
