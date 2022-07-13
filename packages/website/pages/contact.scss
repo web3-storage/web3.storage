@@ -38,23 +38,33 @@
     img {
       border-radius: 5px;
     }
+    .image-block {
+      @include small {
+        margin-bottom: 2rem;
+      }
+    }
   }
   #contact_section_3 .sectional {
     text-align: center;
     padding: 0;
     a {
+      display: inline-block;
+      border-bottom: 0;
+      position: relative;
       margin-left: 1rem;
       margin-right: 1rem;
-      border-bottom: 0;
-      width: toRem(108);
-      height: toRem(108);
-      position: relative;
-      display: inline-block;
       @include small {
-        margin-left: 0.5rem;
-        margin-right: 0.5rem;
-        width: toRem(80);
-        height: toRem(80);
+        margin-left: 0.25rem;
+        margin-right: 0.25rem;
+      }
+      img {
+        width: toRem(108);
+        height: toRem(108);
+        position: relative;
+        @include small {
+          width: toRem(75);
+          height: toRem(75);
+        }
       }
       @include gradient_Blurry_Background_PinkBlue;
       &:before {
@@ -65,8 +75,8 @@
         top: toRem(2);
         border-radius: 3.5rem;
         @include small {
-          width: toRem(75);
-          height: toRem(75);
+          width: toRem(70);
+          height: toRem(70);
         }
       }
       &:hover {
@@ -102,6 +112,7 @@
   right: calc(50% - #{math.div($containerWidth, 2)} - 18rem);
   transform: rotate(-140deg);
   @include medium {
+    top: -3rem;
     right: -1rem;
     width: toRem(100);
   }
@@ -121,6 +132,7 @@
   top: 2rem;
   right: calc(50% - #{math.div($containerWidth, 2)} - 14rem);
   @include medium {
+    top: 4rem;
     right: 1rem;
     width: toRem(130);
   }
