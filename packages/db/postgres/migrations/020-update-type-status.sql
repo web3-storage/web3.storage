@@ -1,4 +1,4 @@
--hardALTER TYPE pin_status_type RENAME TO pin_status_type_old;
+ALTER TYPE pin_status_type RENAME TO pin_status_type_old;
 
 CREATE TYPE pin_status_type AS ENUM
 (
