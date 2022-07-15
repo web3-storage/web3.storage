@@ -71,7 +71,7 @@
                   "With Web3.Storage, things are both easy-to-use and trustless! Upload any data via our API or our web UI for free. The data will end up on a decentralized set of IPFS and Filecoin storage providers."
                 ],
                 "cta": {
-                  "url": "/about",
+                  "url": "/products/web3storage",
                   "text": "LEARN MORE",
                   "theme": "light",
                   "event": "",

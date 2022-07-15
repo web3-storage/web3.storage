@@ -1,7 +1,8 @@
 // overrides and explicit exclusion of routes to sitemap and robots file
 const routes = [
   { loc: '/', priority: 1 },
-  { loc: '/about', priority: 0.8 },
+  { loc: '/products/web3storage', priority: 0.8 },
+  { loc: '/products/w3name', priority: 0.8 },
   { loc: '/login', priority: 0.8 },
   { loc: '/docs', priority: 0.8 },
   { loc: '/callback', exclude: true },
