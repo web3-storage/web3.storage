@@ -34,24 +34,36 @@ but the templates that you create in Mailchimp can't be used directly for transa
 (1) they need to be exported to Mandrill first, and
 (2) they need some manual adaptations and fixes in order to fully work.
 
+Be aware that once you send a template to Mandril that templates is automatically published.
+If the template requires some code changes, makes sure those are merged and deployed first.
+Alternatively duplicate the template, update it and make sure you update the ID to the new one in your PR.
+Even if no code changes are required, please allow for some buffer between exporting the template to Mandrill and the mail is supposed to go out. You need some time go through the list below.
+
 To add or edit a template:
 
-* If you're editing an existing template and you want to keep the same template ID (so that you don't have to update it in the code), then you'll need to first delete the existing template from Mandrill so that its ID isn't already taken. But note that doing so will cause any attempts to send that email to break until you replace the template.
 * Go to the [templates page in Mailchimp](https://us5.admin.mailchimp.com/templates/) and create/edit your template.
 * Export the template from Mailchimp to Mandrill using the "Send to Mandrill" option.
 * Go to the [templates page in Mandrill](https://mandrillapp.com/templates)
 * Click on the template to edit the HTML, and make the following changes/fixes:
   - Add `background: linear-gradient` to `#bodyTable` (see below), the Mailchimp editor restricts you to a hex code only.
+  - Add `#templateHeader` and `#templateBody` styles (see below).
   - Edit the `#bodyCell` style from `padding: 30px` to `padding:30px` (this doesn't seem to be editable in the Mailchimp editor).
   - Swap the Mailchimp placeholders such as `*|SUBJECT|*` and `<!--*|IF:MC_PREVIEW_TEXT|*-->` for their Handlebars equivalents, e.g. `{{SUBJECT}}` or `{{#if MC_PREVIEW_TEXT}}`. Mailchimp doesn't support Handlebars, but Mandrill does, and Handlebars supports logic (if/else/for/etc), which the Mailchimp tags don't; so we have to convert.
   - If the template uses any `{{#each users}}...{{/each}}` tags then you'll need to fix their placement so that they're actually wrapping the HTML fragment which we want to repeat. Mailchimp moves these tags when you save the template, which breaks them.
   - If you're editing the `AdminStorageExceeded` email, add `id="usersQuotaTable"` to the `<table>` containing the list of users, and then add the CSS below into the `<style>` section somewhere.
-* If you're adding a new template, or if you didn't delete the old template first, then get the new template ID/slug from the URL and add/update it in the `MailchimpEmailProvider.templates` object.
 * Ensure that any variables which you've used or changed in the template are correctly specified in the corresponding `EmailType` subclass.
 
 ```css
 body,#bodyTable{
   background: linear-gradient(to top left, #d169db, rgba(199, 166, 251, 0), #5da9e7), linear-gradient(to top right, #5a69da, rgba(199, 166, 251, 0), #d4a8e7) rgba(199, 166, 251, 1);
+}
+
+#templateHeader {
+    border-radius: 6px 6px 0 0;
+}
+
+#templateBody {
+    border-radius:  0 0 6px 6px;
 }
 ```
 
