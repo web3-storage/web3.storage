@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.4.0...cron-v1.5.0) (2022-07-18)
+
+
+### Features
+
+* admin limit notification email improv ([#1641](https://github.com/web3-storage/web3.storage/issues/1641)) ([0669734](https://github.com/web3-storage/web3.storage/commit/06697341166616fee906c5d81320e94ee7524fda))
+* update pin remote type ([#1619](https://github.com/web3-storage/web3.storage/issues/1619)) ([939edd1](https://github.com/web3-storage/web3.storage/commit/939edd15f0a6cb1db511b2b5b78ccd216142cb05))
+
 ## [1.4.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.3.1...cron-v1.4.0) (2022-07-12)
 
 
