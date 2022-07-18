@@ -13,7 +13,7 @@ import {
 export type Tagged<T, Tag> = T & { tag?: Tag }
 
 export interface Service {
-  endpoint: URL
+  endpoint?: URL
   token: string
   rateLimiter?: RateLimiter
   fetch?: typeof _fetch
