@@ -34,8 +34,8 @@ but the templates that you create in Mailchimp can't be used directly for transa
 (1) they need to be exported to Mandrill first, and
 (2) they need some manual adaptations and fixes in order to fully work.
 
-Be aware that once you send a template to Mandril that templates is automatically published.
-If the template requires some code changes, makes sure those are merged and deployed first.
+Once you send a template to Mandril that template is automatically published.
+If the work requires some code changes, those needs to be merged and deployed first.
 Alternatively duplicate the template, update it and make sure you update the ID to the new one in your PR.
 Even if no code changes are required, please allow for some buffer between exporting the template to Mandrill and the mail is supposed to go out. You need some time go through the list below.
 
