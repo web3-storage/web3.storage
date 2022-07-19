@@ -270,19 +270,6 @@ CREATE INDEX IF NOT EXISTS upload_user_id_deleted_at_idx ON upload (user_id) WHE
 CREATE INDEX IF NOT EXISTS upload_content_cid_idx ON upload (content_cid);
 CREATE INDEX IF NOT EXISTS upload_updated_at_idx ON upload (updated_at);
 
--- Tracks requests to replicate content to more nodes.
-CREATE TABLE IF NOT EXISTS pin_request
-(
-  id              BIGSERIAL PRIMARY KEY,
-  -- Root CID of the Pin we want to replicate.
-  content_cid     TEXT                                                          NOT NULL UNIQUE REFERENCES content (cid),
-  attempts        INT DEFAULT 0,
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS pin_request_content_cid_idx ON pin_request (content_cid);
-
 -- A request to keep a Pin in sync with the nodes that are pinning it.
 CREATE TABLE IF NOT EXISTS pin_sync_request
 (

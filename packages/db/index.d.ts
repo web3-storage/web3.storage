@@ -17,7 +17,6 @@ import type {
   AuthKey,
   AuthKeyItemOutput,
   PinItemOutput,
-  PinRequestItemOutput,
   PinSyncRequestOutput,
   PinUpsertInput,
   PinsUpsertInput,
@@ -25,11 +24,8 @@ import type {
   PsaPinRequestItem,
   PsaPinRequestUpsertOutput,
   PsaPinRequestUpsertInput,
-  ContentInput,
   ListPsaPinRequestOptions,
   ListPsaPinRequestResults,
-  UserStorageUsedInput,
-  UserStorageUsedOutput,
   StorageUsedOutput,
   UserTagInput,
   UserTagInfo,
@@ -60,8 +56,6 @@ export class DBClient {
   upsertPin (cid: string, pin: PinUpsertInput): Promise<number>
   upsertPins (pins: Array<PinsUpsertInput>): Promise<void>
   getPins (cid: string): Promise<Array<PinItemOutput>>
-  getPinRequests ({ size }: { size: number }): Promise<Array<PinRequestItemOutput>>
-  deletePinRequests (ids: Array<number>): Promise<void>
   createPinSyncRequests (pinSyncRequests: Array<string>): Promise<void>
   getPinSyncRequests ({ to, after, size }: { to?: string, after?: string, size?: number }): Promise<PinSyncRequestOutput>
   deletePinSyncRequests (ids: Array<string>): Promise<void>
@@ -74,7 +68,6 @@ export class DBClient {
   getPsaPinRequest (authKey: string, pinRequestId: string) : Promise<PsaPinRequestUpsertOutput>
   listPsaPinRequests (authKey: string, opts?: ListPsaPinRequestOptions ) : Promise<ListPsaPinRequestResults>
   deletePsaPinRequest (pinRequestId: string, authKey: string) : Promise<PsaPinRequestItem>
-  createContent (content: ContentInput, opt?: {updatePinRequests?: boolean}) : Promise<string>
   deleteKey (id: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
   createUserTag(userId: string, tag: UserTagInput): Promise<boolean>
