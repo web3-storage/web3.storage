@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.0...cron-v1.5.1) (2022-07-19)
+
+
+### Bug Fixes
+
+* cron pins delete ([#1653](https://github.com/web3-storage/web3.storage/issues/1653)) ([7d14907](https://github.com/web3-storage/web3.storage/commit/7d1490746fc9d719dd2fb0c2a080a03368d223be))
+
 ## [1.5.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.4.0...cron-v1.5.0) (2022-07-18)
 
 
