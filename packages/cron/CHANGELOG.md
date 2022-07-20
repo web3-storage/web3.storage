@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.3](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.2...cron-v1.5.3) (2022-07-20)
+
+
+### Bug Fixes
+
+* cron should await on delete remote pins ([f258108](https://github.com/web3-storage/web3.storage/commit/f258108c42677a90a9ca10229184aa57103f2256))
+
 ## [1.5.2](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.1...cron-v1.5.2) (2022-07-20)
 
 
