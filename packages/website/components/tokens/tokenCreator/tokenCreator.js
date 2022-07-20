@@ -1,3 +1,4 @@
+import { BsPlus, BsArrowRight } from 'react-icons/bs';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -6,7 +7,6 @@ import countly from 'lib/countly';
 import Button, { ButtonVariant } from 'components/button/button';
 import { useTokens } from 'components/contexts/tokensContext';
 import { useUser } from 'hooks/use-user';
-import { BsPlus, BsArrowRight } from 'react-icons/bs';
 
 /**
  * @typedef {Object} TokenCreatorProps
@@ -19,8 +19,8 @@ import { BsPlus, BsArrowRight } from 'react-icons/bs';
  * @returns
  */
 const TokenCreator = ({ content }) => {
-  const inputRef = useRef(/** @type {HTMLInputElement|null} */(null));
-  const [inputHasValue, setInputHasValue] = useState(/** @type {boolean} */(false));
+  const inputRef = useRef(/** @type {HTMLInputElement|null} */ (null));
+  const [inputHasValue, setInputHasValue] = useState(/** @type {boolean} */ (false));
 
   const { query, push, replace } = useRouter();
   const { tokens, createToken, isCreating, getTokens, hasError, errorMessage } = useTokens();
@@ -34,13 +34,13 @@ const TokenCreator = ({ content }) => {
         countly.events.TOKEN_CREATE,
         !tokens.length
           ? {
-            ui: countly.ui.TOKENS_EMPTY,
-            action: 'New API Token',
-          }
+              ui: countly.ui.TOKENS_EMPTY,
+              action: 'New API Token',
+            }
           : {
-            ui: countly.ui.NEW_TOKEN,
-            action: 'Create new token',
-          }
+              ui: countly.ui.NEW_TOKEN,
+              action: 'Create new token',
+            }
       );
 
       e.preventDefault();
