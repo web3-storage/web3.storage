@@ -70,6 +70,11 @@ export async function updatePinStatuses ({ cluster, db }) {
 
       let status = toPinStatusEnum(pinInfo.status)
 
+      // Do not track remote status
+      if (status === 'Remote') {
+        return null
+      }
+
       // If "Unpinned" downgrade to v0 CID
       if (status === 'Unpinned') {
         log(`⚠️ ${pin.contentCid} is Unpinned on ALL Cluster nodes`)
