@@ -321,6 +321,7 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
 );
 
 CREATE INDEX IF NOT EXISTS psa_pin_request_content_cid_idx ON psa_pin_request (content_cid);
+CREATE INDEX IF NOT EXISTS psa_pin_request_deleted_at_idx ON psa_pin_request (deleted_at) INCLUDE (content_cid, auth_key_id);
 
 CREATE TABLE IF NOT EXISTS name
 (
