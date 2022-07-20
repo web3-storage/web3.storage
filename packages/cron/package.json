@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/cron",
-  "version": "1.5.1",
+  "version": "1.5.3",
   "description": "Web3 Storage Cron Jobs",
   "private": true,
   "main": "src/index.js",
@@ -11,6 +11,7 @@
     "start:pins": "node src/bin/pins.js",
     "start:dagcargo:sizes": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/dagcargo-sizes.js",
     "start:storage": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/storage.js",
+    "start:delete-remote-pins": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/delete-remote-pins.js",
     "test": "npm-run-all -p -r test:e2e",
     "test:e2e": "mocha --require ./test/hooks.js test/*.spec.js --timeout 5000"
   },
