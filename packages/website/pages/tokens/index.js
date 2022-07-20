@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import TokenCreator from 'components/tokens/tokenCreator/tokenCreator';
