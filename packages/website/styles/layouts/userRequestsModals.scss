@@ -15,21 +15,24 @@
   }
 
   .input-container {
-    margin-top: 30px;
+    margin-top: 50px;
   }
 
   label {
     display: inline-block;
     line-height: 1.4;
+    font-size: 0.9rem;
   }
 
   textarea {
     display: block;
     width: 100%;
-    height: 150px;
     line-height: 1.5;
-    padding: .5rem;
-    resize: none;
+    padding: 0.5rem;
+    // resize: none;
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255,255,255,.7);
+    border-radius: 4px;
   }
 
   svg {
