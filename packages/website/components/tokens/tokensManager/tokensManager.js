@@ -1,9 +1,9 @@
-import Link from 'next/link';
 import clsx from 'clsx';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 
+import Link from 'components/link/link';
 import TokenRowItem from './tokenRowItem';
 import countly from 'lib/countly';
 import Loading from 'components/loading/loading';
