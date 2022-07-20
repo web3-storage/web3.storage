@@ -111,9 +111,6 @@ const TokenCreator = ({ content }) => {
               className="token-creator-input"
               placeholder={content.placeholder}
               onChange={handleInputValueChange}
-              onBlur={() => {
-                inputRef.current?.classList.add('unfocused');
-              }}
             />
             <button className="token-creator-submit">
               {inputHasValue ? <BsArrowRight></BsArrowRight> : <BsPlus></BsPlus>}
