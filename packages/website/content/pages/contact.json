@@ -72,7 +72,7 @@
                 "format": "small",
                 "heading": "Bug reports or feature requests",
                 "description": [
-                  "Found a bug, or have a feature request for how to make Web3.Storage better? File an issue and make your voice heard.<br><br><a href='https://github.com/web3-storage/web3.storage/issues/new/choose' target='_blank'>File an issue for the Web3.Storage service</a><br><a href='https://github.com/web3-storage/docs/issues/new/choose' target='_blank'>File an issue for the Web3.Storage docs</a>"
+                  "Found a bug, or have a feature request for how to make Web3.Storage better? File an issue and make your voice heard."
                 ]
               }
             ]
@@ -95,7 +95,7 @@
                 "type": "text_block",
                 "format": "small",
                 "description": [
-                  "<a href='https://github.com/web3-storage/web3.storage/issues/new/choose' target='_blank'><img src='/images/contact/slack-big.svg'><a href='https://github.com/web3-storage/web3.storage/issues/new/choose' target='_blank'><img src='/images/contact/discord-big.svg'><a href='https://github.com/web3-storage/web3.storage/issues/new/choose' target='_blank'><img src='/images/contact/github-big.svg'>"
+                  "<a href='https://filecoin.io/slack' target='_blank'><img src='/images/contact/slack-big.svg'><a href='https://discord.gg/4zEkFVqwms' target='_blank'><img src='/images/contact/discord-big.svg'><a href='https://github.com/web3-storage/web3.storage/issues/new/choose' target='_blank'><img src='/images/contact/github-big.svg'>"
                 ]
               }
             ]
