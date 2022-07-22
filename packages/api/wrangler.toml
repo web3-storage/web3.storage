@@ -1,6 +1,6 @@
 # web3.storage wrangler config.
 name = "web3-storage"
-main = "./dist/worker.mjs"
+main = "./dist/worker.js"
 compatibility_date = "2022-06-14"
 
 [build]
