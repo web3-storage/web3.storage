@@ -6,9 +6,6 @@ on:
     paths:
       - 'packages/db/**'
       - '.github/workflows/db.yml'
-
-  # Nothing to do on PR yet, but having the check appear on the PR serves as a reminder 
-  # that we don't have proper tests for db changes yet, and that merging it will deploy.
   pull_request:
     paths:
       - 'packages/db/**'
@@ -34,20 +31,49 @@ jobs:
           DAG_CARGO_USER: ${{secrets.DAG_CARGO_USER}}
           DAG_CARGO_PASSWORD: ${{secrets.DAG_CARGO_PASSWORD}}
 
-  deploy-staging:
-    name: Deploy Staging DB
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  # this doesn't *do* anything, so commenting out until we can actually deploy to staging db from CI.
+  # deploy-staging:
+  #   name: Deploy Staging DB
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v2
+  #       with:
+  #         node-version: 16
+  #     - uses: bahmutov/npm-install@v1 
+  #     # TODO: fork prod db
+  #     # TODO: Update staging schema!!!
+  #     - name: Test upload to staging
+  #       run: |
+  #         npm run build -w packages/client
+  #         echo "$(date --utc --iso-8601=seconds) web3.storage upload test" > ./upload-test-small
+  #         ./packages/w3/bin.js put ./upload-test-small --api https://api-staging.web3.storage --token ${{ secrets.STAGING_WEB3_TOKEN }}
+
+  release:
+    name: Release
     runs-on: ubuntu-latest
+    needs: test
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: GoogleCloudPlatform/release-please-action@v3
+        id: tag-release
         with:
-          node-version: 16
-      - uses: bahmutov/npm-install@v1
-      # TODO: Update schema on changes
-      # - name: Update Postgres resources
-      - name: Test upload to staging
-        run: |
-          npm run build -w packages/client
-          echo "$(date --utc --iso-8601=seconds) web3.storage upload test" > ./upload-test-small
-          ./packages/w3/bin.js put ./upload-test-small --api https://api-staging.web3.storage --token ${{ secrets.STAGING_WEB3_TOKEN }}
+          path: packages/db
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          monorepo-tags: true
+          package-name: db
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false}]'
+      # --- DB deploy steps ---------------------------------------------------
+      # - uses: actions/checkout@v2
+      #   if: ${{ steps.tag-release.outputs.releases_created }}
+      # - uses: actions/setup-node@v2
+      #   if: ${{ steps.tag-release.outputs.releases_created }}
+      #   with:
+      #     node-version: '16'
+      #     registry-url: https://registry.npmjs.org/
+      # - uses: bahmutov/npm-install@v1
+      #   if: ${{ steps.tag-release.outputs.releases_created }}
+
+      # TODO: snapshot prod db
+      # TODO: Update prod schema!!!
