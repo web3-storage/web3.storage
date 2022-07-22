@@ -64,14 +64,6 @@ BEGIN
     ON CONFLICT ( cid ) DO NOTHING
   returning cid into inserted_cid;
 
-  -- Add to pin_request table if new
-  insert into pin_request (content_cid, attempts, updated_at, inserted_at)
-  values (data ->> 'content_cid',
-          0,
-          (data ->> 'updated_at')::timestamptz,
-          (data ->> 'inserted_at')::timestamptz)
-    ON CONFLICT ( content_cid ) DO NOTHING;
-
   -- Iterate over received pins
   foreach pin in array json_arr_to_json_element_array(data -> 'pins')
   loop
@@ -112,7 +104,7 @@ BEGIN
 END
 $$;
 
--- Creates an upload with relative content, pins, pin_requests and backups.
+-- Creates an upload with relative content, pins and backups.
 CREATE OR REPLACE FUNCTION create_upload(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile

@@ -6,7 +6,6 @@ DROP TYPE IF EXISTS user_tag_proposal_decision_type CASCADE;
 DROP TABLE IF EXISTS upload CASCADE;
 DROP TABLE IF EXISTS pin CASCADE;
 DROP TABLE IF EXISTS pin_location;
-DROP TABLE IF EXISTS pin_request;
 DROP TABLE IF EXISTS pin_sync_request;
 DROP TABLE IF EXISTS psa_pin_request;
 DROP TABLE IF EXISTS content;
