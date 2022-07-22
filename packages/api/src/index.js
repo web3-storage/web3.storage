@@ -7,7 +7,7 @@ import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { uploadPost } from './upload.js'
-import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, userUploadsRename, userInfoGet, userRequestPost } from './user.js'
+import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadGet, userUploadsDelete, userAccountGet, userUploadsRename, userInfoGet, userRequestPost } from './user.js'
 import { pinDelete, pinGet, pinPost, pinsGet } from './pins.js'
 import { blogSubscriptionCreate } from './blog.js'
 import { metricsGet } from './metrics.js'
@@ -76,6 +76,7 @@ router.post('/car',                 auth['🔑'](carPost))
 router.put('/car/:cid',             auth['🔑'](carPut))
 router.post('/upload',              auth['🔑'](uploadPost))
 router.get('/user/uploads',         auth['🔑⚠️'](userUploadsGet))
+router.get('/user/uploads/:cid',    auth['🔑⚠️'](userUploadGet))
 
 router.post('/pins',                auth['📌'](pinPost))
 router.post('/pins/:requestId',     auth['📌'](pinPost))
