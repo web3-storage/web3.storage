@@ -1,3 +1,4 @@
+import { BsPlus, BsArrowRight } from 'react-icons/bs';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -110,11 +111,10 @@ const TokenCreator = ({ content }) => {
               className="token-creator-input"
               placeholder={content.placeholder}
               onChange={handleInputValueChange}
-              onBlur={() => {
-                inputRef.current?.classList.add('unfocused');
-              }}
             />
-            <button className="token-creator-submit">{inputHasValue ? '→' : '+'}</button>
+            <button className="token-creator-submit">
+              {inputHasValue ? <BsArrowRight></BsArrowRight> : <BsPlus></BsPlus>}
+            </button>
           </form>
           {hasError ? (
             <>⚠ {errorMessage}</>

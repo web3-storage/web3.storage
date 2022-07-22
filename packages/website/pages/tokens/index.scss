@@ -16,6 +16,13 @@
 .tokens-header {
   position: relative;
   z-index: 1;
+
+  @include medium {
+    margin-bottom: 2rem;
+    .table-heading {
+      display: none;
+    }
+  }
 }
 
 .tokens-header,
@@ -49,6 +56,9 @@
     margin-left: unset;
     order: 2;
     flex-basis: 100%;
+  }
+  .button-contents {
+    display: inline-block;
   }
   div {
     display: none;
