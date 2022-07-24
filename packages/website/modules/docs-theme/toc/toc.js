@@ -55,8 +55,12 @@ export default function Toc() {
   const getNestedHeadings = headingElements => {
     const nestedHeadings = [];
     const headingIds = [];
+    const idCounts = {};
+
     headingElements.forEach((heading, index) => {
-      const id = string_to_slug(heading.innerText);
+      const innerTextSlug = string_to_slug(heading.innerText);
+      idCounts[innerTextSlug] = idCounts[innerTextSlug] ? idCounts[innerTextSlug] + 1 : 1;
+      const id = `${innerTextSlug}${idCounts[innerTextSlug] > 1 ? `-${idCounts[innerTextSlug]}` : ''}`;
       const title = heading.innerText;
       activeHeadings.current[id] = false;
       headingIds.push(id);
