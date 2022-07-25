@@ -131,6 +131,16 @@ export default function Toc() {
     const newNestedHeadings = getNestedHeadings(headingElements);
     // @ts-ignore
     setNestedHeadings(newNestedHeadings);
+
+    // setTimeout needed to wait for the dom to be rendered
+    setTimeout(() => {
+      if (window.location.hash) {
+        const el = document.getElementById(window.location.hash.substring(1));
+        if (el) {
+          controller.scrollTo(window.location.hash);
+        }
+      }
+    });
   }, []);
 
   return (

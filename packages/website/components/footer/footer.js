@@ -40,14 +40,6 @@ export default function Footer({ isProductApp }) {
     [router]
   );
 
-  const handleKeySelect = useCallback(
-    (e, url) => {
-      onLinkClick(e);
-      router.push(url);
-    },
-    [router, onLinkClick]
-  );
-
   // ========================================================= Template [Footer]
   return (
     <footer id="site-footer" className={clsx(isProductApp ? 'clear-bg' : '')}>
