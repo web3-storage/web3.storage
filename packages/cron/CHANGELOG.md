@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.4](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.3...cron-v1.5.4) (2022-07-26)
+
+
+### Bug Fixes
+
+* cron remote status ([#1675](https://github.com/web3-storage/web3.storage/issues/1675)) ([02fc600](https://github.com/web3-storage/web3.storage/commit/02fc600ef5afb2fc6344c98ef29c01010cee76bb))
+
 ## [1.5.3](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.2...cron-v1.5.3) (2022-07-20)
 
 
