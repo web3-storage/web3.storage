@@ -5,6 +5,13 @@ on:
     - cron: '38 * * * *'
   workflow_dispatch:
     inputs:
+      env:
+        required: true
+        description: The env to run the cron against. Default is staging.
+        options: 
+          - staging
+          - production
+        default: production
       after:
         required: false
         description: Date used as a starting point for dag_sizes updates. This should be a string value specified in a format recognized by the Date.parse() method
@@ -18,15 +25,14 @@ jobs:
   update:
     name: Populate Missing Content DAG Sizes
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env: ['staging', 'production']
-    timeout-minutes: 60
+    timeout-minutes: ${{ (github.event_name == 'workflow_dispatch' && 360) || 60  }}
     steps:
       - uses: actions/checkout@v2
         with: 
           fetch-depth: 0
       - name: Checkout latest cron release tag
+       # Be able to run from latest main in staging
+        if: github.event.inputs.env != 'staging'
         run: |
           LATEST_TAG=$(git describe --tags --abbrev=0 --match='cron-*')
           git checkout $LATEST_TAG
@@ -37,7 +43,8 @@ jobs:
       - name: Run job
         env:
           DEBUG: '*'
-          ENV: ${{ matrix.env }}
+          ## By default let's fix only dags in production
+          ENV: ${{ github.event.inputs.env || 'production' }}
           STAGING_PG_CONNECTION: ${{ secrets.STAGING_PG_CONNECTION }}
           STAGING_RO_PG_CONNECTION: ${{ secrets.STAGING_PG_CONNECTION }} # no replica for staging
           PROD_PG_CONNECTION: ${{ secrets.PROD_PG_CONNECTION }}

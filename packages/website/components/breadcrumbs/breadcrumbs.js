@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
-import Link from 'next/link';
 
+import Link from '../link/link';
 import GeneralPageData from '../../content/pages/general.json';
 
 /**
@@ -9,9 +9,8 @@ import GeneralPageData from '../../content/pages/general.json';
  *
  * @param String props.variant
  * @callback props.click
- * @callback props.keyboard
  */
-export default function Breadcrumbs({ variant, click, keyboard }) {
+export default function Breadcrumbs({ variant, click }) {
   const router = useRouter();
   const breadcrumbs = GeneralPageData.breadcrumbs;
   const routeName = router.route.replace('/', '');
@@ -38,15 +37,8 @@ export default function Breadcrumbs({ variant, click, keyboard }) {
       {links.map(item => (
         <div key={item.text} className="breadcrumb-wrapper">
           {item.url ? (
-            <Link href={item.url} passHref>
-              <a
-                href="replace"
-                className={clsx('breadcrumb', 'breadcrumb-link', variant)}
-                onClick={e => click(e)}
-                onKeyPress={e => keyboard(e, item.url)}
-              >
-                {item.text}
-              </a>
+            <Link href={item.url} className={clsx('breadcrumb', 'breadcrumb-link', variant)} onClick={click}>
+              {item.text}
             </Link>
           ) : (
             <div className={clsx('breadcrumb', 'breadcrumb-text', variant)}>{item.text}</div>

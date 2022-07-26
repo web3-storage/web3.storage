@@ -1,17 +1,15 @@
-// ===================================================================== Imports
 import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
-import Link from 'next/link';
 
 import Img from '../cloudflareImage.js';
+import Link from '../link/link';
 import CardTier from './card-tier';
 import Button from '../button/button';
 import NpmIcon from '../../assets/icons/npmicon';
 import Windows from '../../assets/icons/windows';
 import countly from '../../lib/countly';
 
-// ====================================================================== Params
 /**
  * @param {Object} props
  * @param {Object} props.card
@@ -20,7 +18,6 @@ import countly from '../../lib/countly';
  * @param {string|null} props.targetClass
  * @param {any} props.onCardLoad
  */
-// ====================================================================== Export
 export default function Card({ card, cardsGroup = [], index = 0, targetClass, onCardLoad }) {
   const router = useRouter();
   const hasIcon = card.hasOwnProperty('icon_before') && typeof card.icon_before === 'object';
@@ -36,7 +33,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
       tracking.action = card.cta.action;
     }
   }
-  // ================================================================= Functions
+
   useEffect(() => {
     if (onCardLoad) {
       onCardLoad('loaded');
@@ -46,14 +43,6 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
   const onLinkClick = useCallback(e => {
     countly.trackCustomLinkClick(countly.events.LINK_CLICK_EXPLORE_DOCS, e.currentTarget);
   }, []);
-
-  const handleKeySelect = useCallback(
-    (e, url) => {
-      onLinkClick(e);
-      router.push(url);
-    },
-    [router, onLinkClick]
-  );
 
   const handleButtonClick = useCallback(
     cta => {
@@ -80,17 +69,8 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
           <div key={category.heading} className="category">
             <div className="category-heading">{category.heading}</div>
             {category.links.map(link => (
-              <Link href={link.url} key={link.text} passHref>
-                <a
-                  href="replace"
-                  className="category-link"
-                  onClick={onLinkClick}
-                  onKeyPress={e => handleKeySelect(e, link.url)}
-                  tabIndex={0}
-                  role="button"
-                >
-                  {link.text}
-                </a>
+              <Link className="category-link" onClick={onLinkClick} href={link.url} key={link.text}>
+                {link.text}
               </Link>
             ))}
           </div>
@@ -155,7 +135,6 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
     );
   };
 
-  // ========================================================= Templates [Cards]
   if (card.type === 'E') {
     return <CardTier card={card} cardsGroup={cardsGroup} index={index} onCardLoad={onCardLoad} />;
   }

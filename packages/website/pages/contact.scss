@@ -1,0 +1,150 @@
+@use 'sass:math';
+
+.page-contact {
+  position: relative;
+  a {
+    color: #3c3cd6;
+    font-weight: 600;
+  }
+  .h3 {
+    @include fontSize_MediumLarge;
+    @include leading_Regular;
+  }
+  .contact_hero-top-section {
+    > .text-block {
+      display: flex;
+      flex-direction: column;
+      .heading {
+        order: 2;
+        @include fontSize_Large;
+      }
+      .subheading {
+        order: 1;
+      }
+    }
+    .subheading {
+      margin-bottom: 1.5rem;
+    }
+  }
+  #contact_section_1 .sectional {
+    padding-bottom: 1.75rem;
+  }
+  #contact_section_2 .sectional {
+    padding-top: 1.75rem;
+    padding-bottom: 1.75rem;
+    .description {
+      padding-bottom: 1rem;
+    }
+    img {
+      border-radius: 5px;
+    }
+    .image-block {
+      @include small {
+        margin-bottom: 2rem;
+      }
+    }
+  }
+  #contact_section_3 .sectional {
+    text-align: center;
+    padding: 0;
+    a {
+      display: inline-block;
+      border-bottom: 0;
+      position: relative;
+      margin-left: 1rem;
+      margin-right: 1rem;
+      @include small {
+        margin-left: 0.25rem;
+        margin-right: 0.25rem;
+      }
+      img {
+        width: toRem(108);
+        height: toRem(108);
+        position: relative;
+        @include small {
+          width: toRem(75);
+          height: toRem(75);
+        }
+      }
+      @include gradient_Blurry_Background_PinkBlue;
+      &:before {
+        z-index: -1;
+        width: toRem(103);
+        height: toRem(103);
+        left: toRem(2);
+        top: toRem(2);
+        border-radius: 3.5rem;
+        @include small {
+          width: toRem(70);
+          height: toRem(70);
+        }
+      }
+      &:hover {
+        &:before {
+          filter: blur(0.5rem);
+          opacity: 1;
+        }
+      }
+    }
+  }
+  #contact_section_4 .sectional {
+    text-align: center;
+    padding-top: 0;
+    .description {
+      @include fontSize_MediumLarge;
+      @include leading_MediumLarge;
+    }
+  }
+}
+
+#contact_hero-corkscrew {
+  position: absolute;
+  width: toRem(295);
+  top: -14.5rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 16rem);
+  transform: rotate(-114deg);
+}
+
+#contact_hero-helix {
+  position: absolute;
+  width: toRem(168);
+  top: -7rem;
+  right: calc(50% - #{math.div($containerWidth, 2)} - 18rem);
+  transform: rotate(-140deg);
+  @include medium {
+    top: -3rem;
+    right: -1rem;
+    width: toRem(100);
+  }
+}
+
+#contact_hero-helix2 {
+  position: absolute;
+  width: toRem(199);
+  top: 60rem;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 3rem);
+  transform: rotate(-75deg);
+}
+
+#contact_hero-cross {
+  position: absolute;
+  width: toRem(341);
+  top: 2rem;
+  right: calc(50% - #{math.div($containerWidth, 2)} - 14rem);
+  @include medium {
+    top: 4rem;
+    right: 1rem;
+    width: toRem(130);
+  }
+}
+
+#contact_hero-triangle {
+  position: absolute;
+  width: toRem(79);
+  top: 59rem;
+  transform: rotate(-25deg);
+  left: calc(50% - #{math.div($containerWidth, 2)} + 16rem);
+  @include medium {
+    display: none;
+  }
+}

@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.11.0](https://github.com/web3-storage/web3.storage/compare/website-v2.10.1...website-v2.11.0) (2022-07-21)
+
+
+### Features
+
+* contact ([#1637](https://github.com/web3-storage/web3.storage/issues/1637)) ([8599408](https://github.com/web3-storage/web3.storage/commit/85994082778c3907368a8cbd386d4d7b47426db8))
+
+
+### Bug Fixes
+
+* **docs:** fix upload percent calculation in example ([#1652](https://github.com/web3-storage/web3.storage/issues/1652)) ([1173580](https://github.com/web3-storage/web3.storage/commit/11735808d96aa3508bfa265c900271a379da10f0))
+* links to slack and discord ([#1668](https://github.com/web3-storage/web3.storage/issues/1668)) ([49259b2](https://github.com/web3-storage/web3.storage/commit/49259b24c49ed7859cd826d6421783f061e70f0e))
+* terms of service ([#1666](https://github.com/web3-storage/web3.storage/issues/1666)) ([dcee174](https://github.com/web3-storage/web3.storage/commit/dcee1743e8545f11d97788e8caa0a744ca99e878))
+
+## [2.10.1](https://github.com/web3-storage/web3.storage/compare/website-v2.10.0...website-v2.10.1) (2022-07-11)
+
+
+### Bug Fixes
+
+* broken inter-doc links ([#1538](https://github.com/web3-storage/web3.storage/issues/1538)) ([45e715f](https://github.com/web3-storage/web3.storage/commit/45e715f36812d62dff3a98e6a3fab5a6839fb403))
+
 ## [2.10.0](https://github.com/web3-storage/web3.storage/compare/website-v2.9.0...website-v2.10.0) (2022-07-08)
 
 

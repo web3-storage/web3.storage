@@ -8,10 +8,8 @@
     "packages/client",
     "packages/cron",
     "packages/db",
-    "packages/pinpin",
     "packages/w3",
     "packages/website",
-    "packages/pinpin",
     "packages/tools"
   ],
   "scripts": {

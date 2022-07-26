@@ -44,4 +44,3 @@ jobs:
           PROD_PG_CONNECTION: ${{ secrets.PROD_PG_CONNECTION }}
           BATCH_SIZE:  ${{ github.event.inputs.batch_size }}
         run: npm run start:delete-remote-pins -w packages/cron
-
