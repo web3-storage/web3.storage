@@ -17,4 +17,4 @@ async function main () {
 
 envConfig()
 
-main()
+await main()
