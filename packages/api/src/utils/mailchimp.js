@@ -10,7 +10,7 @@ export const isChimpUser = async (email, prefix, listId, headers) => {
   )}`
   const res = await fetch(url, {
     method: 'GET',
-    headers,
+    headers
   })
   return res.ok
 }
@@ -26,13 +26,13 @@ export const addSubscriber = async (email, prefix, listId, headers) => {
   const body = JSON.stringify({
     email_address: email,
     status: 'subscribed',
-    tags: ['web3_blog_subscriber'],
+    tags: ['web3_blog_subscriber']
   })
 
   return await fetch(url, {
     method: 'POST',
     headers,
-    body,
+    body
   })
 }
 
@@ -47,12 +47,12 @@ export const updateSubscriber = async (email, prefix, listId, headers) => {
     email
   )}/tags`
   const body = JSON.stringify({
-    tags: [{ name: 'web3_blog_subscriber', status: 'active' }],
+    tags: [{ name: 'web3_blog_subscriber', status: 'active' }]
   })
 
   return await fetch(url, {
     method: 'POST',
     headers,
-    body,
+    body
   })
 }

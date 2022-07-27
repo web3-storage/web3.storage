@@ -8,11 +8,11 @@ import { isChimpUser, updateSubscriber, addSubscriber } from './utils/mailchimp.
  * @return {Promise<JSONResponse>}
  */
 export async function blogSubscriptionCreate (request, env, ctx) {
-  const  prefix = env.MAILCHIMP_API_PREFIX
-  const  listId = env.MAILCHIMP_BLOG_LIST_ID
-  const  apiKey = env.MAILCHIMP_API_KEY
-  const  token = btoa(`:${apiKey}`)
-  const  headers = {
+  const prefix = env.MAILCHIMP_API_PREFIX
+  const listId = env.MAILCHIMP_BLOG_LIST_ID
+  const apiKey = env.MAILCHIMP_API_KEY
+  const token = btoa(`:${apiKey}`)
+  const headers = {
     'Content-Type': 'application/json; charset=UTF-8',
     Authorization: `Basic ${token}`,
   }
