@@ -3,7 +3,7 @@
 import fetch from '@web-std/fetch'
 import { postNamesToW3name } from '../jobs/names.js'
 import { envConfig } from '../lib/env.js'
-import { getCluster, getDBClient } from '../lib/utils.js'
+import { getDBClient } from '../lib/utils.js'
 
 /** @ts-ignore */
 global.fetch = fetch

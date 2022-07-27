@@ -12,7 +12,7 @@ const log = debug('names:postNamesToW3name')
  *   db: import('@web3-storage/db').DBClient
  * }} config
  */
-export async function postNamesToW3name({ env, db }) {
+export async function postNamesToW3name ({ env, db }) {
   const w3nameApiURL = getW3NameAPIURL(env)
   let from = 0
   let to = MAX_REQUEST_PAGE - 1
@@ -41,7 +41,7 @@ export async function postNamesToW3name({ env, db }) {
  * @param {string} env
  * @returns {string}
  */
-function getW3NameAPIURL(env) {
+function getW3NameAPIURL (env) {
   switch (env) {
     case 'dev':
       return 'http://localhost:8989'
@@ -57,7 +57,7 @@ function getW3NameAPIURL(env) {
  * @param {import('@web3-storage/db/db-client-types').NameItem} name
  * @returns {Promise<void>}
  */
-async function postKeyW3Name(name, w3nameApiURL = '') {
+async function postKeyW3Name (name, w3nameApiURL = '') {
   const key = name.key
 
   if (!w3nameApiURL) { return }

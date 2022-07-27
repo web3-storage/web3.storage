@@ -1316,14 +1316,13 @@ export class DBClient {
     }
   }
 
-
   /**
    * List IPNS records
    *
    * @param {{ from: number, to: number }} [opts]
    * @returns {Promise<Array<import('./db-client-types').NameItem>>}
    */
-  async listNames(opts = {}) {
+  async listNames (opts = {}) {
     const query = this._client
       .from('name')
       .select('*')
