@@ -310,21 +310,6 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
 CREATE INDEX IF NOT EXISTS psa_pin_request_content_cid_idx ON psa_pin_request (content_cid);
 CREATE INDEX IF NOT EXISTS psa_pin_request_deleted_at_idx ON psa_pin_request (deleted_at) INCLUDE (content_cid, auth_key_id);
 
-CREATE TABLE IF NOT EXISTS name
-(
-    -- base36 "libp2p-key" encoding of the public key
-    key         TEXT PRIMARY KEY,
-    -- the serialized IPNS record - base64 encoded
-    record      TEXT NOT NULL,
-    -- next 3 fields are derived from the record & used for newness comparisons
-    -- see: https://github.com/ipfs/go-ipns/blob/a8379aa25ef287ffab7c5b89bfaad622da7e976d/ipns.go#L325
-    has_v2_sig  BOOLEAN NOT NULL,
-    seqno       BIGINT NOT NULL,
-    validity    BIGINT NOT NULL, -- nanoseconds since 00:00, Jan 1 1970 UTC
-    inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-    updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
 -- Metric contains the current values of collected metrics.
 CREATE TABLE IF NOT EXISTS metric
 (

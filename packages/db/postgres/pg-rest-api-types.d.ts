@@ -1765,26 +1765,6 @@ export interface paths {
       };
     };
   };
-  "/rpc/publish_name_record": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: json */
-            data: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
   "/rpc/uuid_ns_url": {
     post: {
       parameters: {
