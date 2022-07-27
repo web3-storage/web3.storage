@@ -11,10 +11,9 @@ export async function blogSubscriptionCreate (request, env, ctx) {
   const prefix = env.MAILCHIMP_API_PREFIX
   const listId = env.MAILCHIMP_BLOG_LIST_ID
   const apiKey = env.MAILCHIMP_API_KEY
-  const token = btoa(`:${apiKey}`)
   const headers = {
     'Content-Type': 'application/json; charset=UTF-8',
-    Authorization: `Basic ${token}`,
+    Authorization: `Basic: ${apiKey}`
   }
 
   const body = await request.json();
@@ -22,6 +21,6 @@ export async function blogSubscriptionCreate (request, env, ctx) {
     ? await updateSubscriber(body.email, prefix, listId, headers)
     : await addSubscriber(body.email, prefix, listId, headers)
   return new JSONResponse({
-    ok: true,
+    ok: true
   })
 }
