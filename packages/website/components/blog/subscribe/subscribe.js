@@ -57,11 +57,12 @@ export default function Subscribe() {
         Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
         aperiam, eaque ipsa illo
       </p>
-      <div className="blog-thanks">
-        <p>Thank you!</p>
-        <Img src={ImageZigzag} />
-      </div>
-      {status === 'success' && <div className="blog-thanks">Thank you!</div>}
+      {status === 'success' && (
+        <div className="blog-thanks">
+          <p>Thank you!</p>
+          <Img src={ImageZigzag} />
+        </div>
+      )}
       {status !== 'success' && (
         <form onSubmit={onSubmit}>
           <div className="blog-search-input">

@@ -53,7 +53,7 @@ export async function getStaticProps({ ...ctx }) {
     props: {
       posts,
       post: post,
-      title: data.title,
+      title: data.title + ' - Web3.Storage',
       image: data.thumbnail,
       description: data.description,
     },

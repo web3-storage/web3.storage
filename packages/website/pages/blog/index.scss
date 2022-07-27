@@ -216,12 +216,13 @@
       gap: 0.3rem;
       .page,
       button {
+        @include fontWeight_Semibold;
+        transition: border-color $transitionDuration;
         border: 2px solid transparent;
         padding: 0 7px;
         border-radius: 5px;
         height: 29px;
         line-height: 1;
-        @include fontWeight_Semibold;
       }
       .page.current {
         color: white;
@@ -231,6 +232,7 @@
       .page:hover {
         opacity: 1;
         border-color: $ebony;
+        transition: border-color $transitionDuration;
       }
       button:hover {
         color: $ebony;
@@ -338,6 +340,7 @@
     .button.text {
       color: white;
       border-radius: 5px;
+      margin: 0 0.15rem;
       &:after {
         border-radius: 5px;
         content: '';
