@@ -4,6 +4,14 @@ on:
   schedule:
     - cron: '* */24 * * *'
   workflow_dispatch:
+    inputs:
+      env:
+        required: true
+        description: The env to run the cron against. Default is staging.
+        options: 
+          - staging
+          - production
+        default: staging
 
 jobs:
   update:
