@@ -272,7 +272,7 @@ const Post = ({ post, posts }) => {
         )}
       </div>
       <div className="post-related grid">
-        <h1>You may also like</h1>
+        <h2 className="h1">You may also like</h2>
         <div className="blog-list-container no-side-padding">
           <RelatedPosts items={relatedPosts} />
         </div>

@@ -114,8 +114,12 @@
   a {
     color: $docsPrimaryPurple;
     font-weight: 600;
-    border-bottom: none;
-    padding-bottom: 0;
+    border-bottom: 0.125rem solid rgba($moonRaker, 0);
+    padding-bottom: 0.1875rem;
+    transition: all 0.25s ease;
+    &:hover {
+      color: $cerise;
+    }
   }
   h1 a,
   h2 a,
@@ -123,6 +127,17 @@
   h4 a,
   h5 a {
     color: $ebony;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .accordion-block {
+    margin-left: 2rem;
+    .accordion-header-text {
+      margin-left: 0.875rem;
+    }
+    .accordion-content {
+      margin-left: 2rem;
+    }
   }
   p {
     @include small {
@@ -135,8 +150,8 @@
 
   ul,
   ol {
-    padding-left: 1rem;
     margin-bottom: 2rem;
+    padding-left: 1.625rem;
     li {
       padding-left: 2rem;
     }
