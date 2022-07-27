@@ -1,9 +1,8 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
-import * as uint8arrays from 'uint8arrays'
 import fetch, { Blob } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
-import { createNameKeypair, createNameRecord, getTestJWT } from './scripts/helpers.js'
+import { getTestJWT } from './scripts/helpers.js'
 import { AccountRestrictedError, PinningUnauthorizedError } from '../src/errors.js'
 import { createCar } from './scripts/car.js'
 
