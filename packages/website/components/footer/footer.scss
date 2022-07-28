@@ -164,13 +164,13 @@ $footerLogoWidth: 2.25rem;
 .footer-social {
   margin-top: 1.5rem;
   a {
+    @include gradient_Blurry_Background_PinkBlue;
     position: relative;
     display: inline-block;
     width: 45px;
     height: 45px;
     margin-right: 0.75rem;
     transition: all $transitionDuration ease-in-out;
-    @include gradient_Blurry_Background_PinkBlue;
     &:before {
       z-index: -1;
       top: 3px;
@@ -180,7 +180,7 @@ $footerLogoWidth: 2.25rem;
     }
     &:hover {
       &:before {
-        filter: blur(0.5rem);
+        filter: blur(0.75rem);
         opacity: 1;
       }
     }

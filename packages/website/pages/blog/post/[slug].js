@@ -162,6 +162,15 @@ const Post = ({ post, posts }) => {
     CodeHighlightCopy('.post-content pre');
   }, []);
 
+  // open external links in new tab
+  useEffect(() => {
+    const externalLinks = document.querySelectorAll('.post-content a[href*="://"]');
+    externalLinks?.forEach(link => {
+      // @ts-ignore
+      link.getAttribute('href') && link.hostname !== window.location.hostname && (link.target = '_blank');
+    });
+  }, []);
+
   // floater animations
   useEffect(() => {
     let pageFloaters = {};

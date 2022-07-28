@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { MDXProvider } from '@mdx-js/react';
 
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 import CodeHighlightCopy from '../../components/blog/codehighlightcopy/codehighlightcopy';
 import Sidebar from './sidebar/sidebar';
@@ -11,10 +12,23 @@ import DocsPagination from './docspagination/docspagination';
 
 export default function Docs(props) {
   const { meta, route, ...rest } = props;
+  const router = useRouter();
 
   useEffect(() => {
     CodeHighlightCopy('.docs-body pre');
   }, []);
+
+  useEffect(() => {
+    // no reload on local links
+    const localLinks = document.querySelectorAll('.docs-body a[href^="/docs/"]');
+    localLinks?.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        // @ts-ignore
+        router.push(e.currentTarget.href);
+      });
+    });
+  }, [router]);
 
   const sharedHead = (
     <Head>
