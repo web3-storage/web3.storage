@@ -20,6 +20,7 @@ import SearchIcon from 'assets/icons/search';
 import RefreshIcon from 'assets/icons/refresh';
 import FileRowItem, { PinStatus } from './fileRowItem';
 import GradientBackground from '../../gradientbackground/gradientbackground.js';
+import FileTable from 'components/file-table/FileTable';
 
 const defaultQueryOrder = 'newest';
 
@@ -43,6 +44,7 @@ const defaultQueryOrder = 'newest';
 const FilesManager = ({ className, content, onFileUpload }) => {
   const {
     uploads,
+    totalUploads,
     pinned,
     fetchDate,
     fetchPinsDate,
@@ -53,6 +55,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     deleteUpload,
     renameUpload,
   } = useUploads();
+
   const {
     query: { filter },
     query,
@@ -69,7 +72,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const [filteredFiles, setFilteredFiles] = useState(files);
   const [sortedFiles, setSortedFiles] = useState(filteredFiles);
   const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
-  const [itemsPerPage, setItemsPerPage] = useState(null);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [keyword, setKeyword] = useState(filter);
   const [deleteSingleCid, setDeleteSingleCid] = useState('');
   const [showCheckOverlay, setShowCheckOverlay] = useState(false);
@@ -166,6 +169,13 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     },
     [setCurrentTab, query, replace]
   );
+
+  const onSelectedPage = page => {
+    getUploads({
+      page,
+      size: itemsPerPage,
+    });
+  };
 
   const getFilesTotal = type => {
     switch (type) {
@@ -287,6 +297,83 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     }
   };
 
+  const tableEmptyState = () => {
+    return (
+      <span className="files-manager-upload-cta">
+        {content?.table.message}
+        {'\u00A0'}
+        <Button
+          onClick={onFileUpload}
+          variant={content?.table.cta.theme}
+          tracking={{
+            ui: countly.ui[content?.table.cta.ui],
+            action: content?.table.cta.action,
+            data: { isFirstFile: true },
+          }}
+          disabled={info?.tags?.['HasAccountRestriction']}
+          tooltip={info?.tags?.['HasAccountRestriction'] ? content?.table.cta.accountRestrictedText : ''}
+        >
+          {content?.table.cta.text}
+        </Button>
+      </span>
+    );
+  };
+
+  const tableDropdown = () => {
+    return (
+      <Dropdown
+        className="files-manager-result-dropdown"
+        value={content?.ui.results.options[0].value}
+        options={content?.ui.results.options}
+        queryParam="items"
+        onChange={value => setItemsPerPage(value)}
+        onSelectChange={showCheckOverlayHandler}
+      />
+    );
+  };
+
+  const tableRow = item => {
+    return (
+      <FileRowItem
+        key={item.cid}
+        onSelect={() => onFileSelect(item)}
+        date={item.created}
+        name={item.name}
+        cid={item.cid}
+        status={
+          Object.values(PinStatus).find(status => item.pins.some(pin => status === pin.status)) || PinStatus.QUEUING
+        }
+        storageProviders={
+          Array.isArray(item.deals)
+            ? item.deals
+                .filter(deal => !!deal.storageProvider)
+                .map((deal, indx, deals) => (
+                  <span key={deal.dealId}>
+                    <a
+                      className="underline"
+                      href={`https://filfox.info/en/deal/${deal.dealId}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {`${deal.storageProvider}`}
+                    </a>
+                    {indx !== deals.length - 1 && ', '}
+                  </span>
+                ))
+            : null
+        }
+        size={item.hasOwnProperty('dagSize') ? filesize(item.dagSize) : item.info?.dag_size ? item.info.dag_size : '-'}
+        highlight={{ target: 'name', text: keyword?.toString() || '' }}
+        numberOfPins={item.pins.length}
+        isSelected={!!selectedFiles.find(fileSelected => fileSelected === item)}
+        onDelete={() => onDeleteSingle(item.cid)}
+        isEditingName={item.cid === nameEditingId}
+        onEditToggle={onEditToggle(item.cid)}
+        tabType={currentTab}
+      />
+    );
+  };
+
   return (
     <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
       {pinned.length > 0 && (
@@ -362,7 +449,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
         }
         tabType={currentTab}
       />
-      <div className="files-manager-table-content">
+      {/* <div className="files-manager-table-content">
         {tableContentLoading(currentTab) ? (
           <Loading className={'files-loading-spinner'} />
         ) : !files.length ? (
@@ -454,7 +541,28 @@ const FilesManager = ({ className, content, onFileUpload }) => {
             onSelectChange={showCheckOverlayHandler}
           />
         </div>
-      )}
+      )} */}
+
+      <FileTable
+        rows={files.map(file => tableRow(file))}
+        totalRows={totalUploads}
+        itemsPerPage={itemsPerPage}
+        isEmpty={totalUploads === 0}
+        isLoading={isFetchingUploads || !fetchDate}
+        onPageSelect={onSelectedPage}
+        emptyState={tableEmptyState()}
+        dropdown={tableDropdown()}
+        deleteRowBtn={
+          <button
+            className={clsx('delete', !selectedFiles.length && 'disabled')}
+            onClick={() => deleteModalState[1](true)}
+          >
+            {content?.ui.delete.text}
+          </button>
+        }
+        scrollTarget={'.account-files-manager'}
+      />
+
       <Modal
         className="delete-modal"
         animation="ken"
@@ -476,6 +584,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           </Button>
         </div>
       </Modal>
+
       <div className={clsx('files-manager-overlay', showCheckOverlay ? 'show' : '')}>
         <div className="files-manager-overlay-check">
           <CheckIcon></CheckIcon>
