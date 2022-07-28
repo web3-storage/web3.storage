@@ -1,8 +1,14 @@
 @use 'sass:math';
 
+@mixin blogContentWidth {
+  max-width: 45rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
 .blog-single-post {
-  > .grid {
-    width: toRem(814);
+  .post.grid {
+    position: relative;
   }
   padding-top: toRem(70) !important;
   img {
@@ -13,7 +19,7 @@
     padding-left: toRem(83);
     padding-right: toRem(83);
     text-align: center;
-    @include large {
+    @include small {
       padding-left: 0;
       padding-right: 0;
       text-align: left;
@@ -51,9 +57,13 @@
       }
     }
   }
+  .post-content {
+    @include blogContentWidth;
+  }
   .post-meta {
-    width: 100%;
+    @include blogContentWidth;
     display: flex;
+    align-items: flex-start;
     justify-content: space-between;
     padding-bottom: toRem(37);
     padding-top: toRem(20);
@@ -75,8 +85,8 @@
     }
   }
   .post-pagination {
+    @include blogContentWidth;
     display: flex;
-    width: 100%;
     justify-content: space-between;
     padding: 0 1rem toRem(113) 1rem;
   }
