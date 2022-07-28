@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.12.0](https://github.com/web3-storage/web3.storage/compare/website-v2.11.0...website-v2.12.0) (2022-07-25)
+
+
+### Features
+
+* add a section explaining how to request more storage space ([#1672](https://github.com/web3-storage/web3.storage/issues/1672)) ([88cf588](https://github.com/web3-storage/web3.storage/commit/88cf58823bc6d95da8a3f49594785a8bb06d6546))
+* add error tooltips to file uploader ([#1665](https://github.com/web3-storage/web3.storage/issues/1665)) ([7275531](https://github.com/web3-storage/web3.storage/commit/72755317758fb9c7975293675225e58f9617820f))
+
+
+### Bug Fixes
+
+* properly direct user to /tokens instead of /account for token creation ([#1671](https://github.com/web3-storage/web3.storage/issues/1671)) ([a6eaed3](https://github.com/web3-storage/web3.storage/commit/a6eaed326f31018d47a81d136ed7c0d60bb65d52))
+* properly scroll to section when navigating to docs with a hash fragment ([#1673](https://github.com/web3-storage/web3.storage/issues/1673)) ([85fd2dc](https://github.com/web3-storage/web3.storage/commit/85fd2dc0af41b982e1a0e08eaff55d8adfa46b86))
+* show only a single selected nav item at a time ([#1669](https://github.com/web3-storage/web3.storage/issues/1669)) ([c445008](https://github.com/web3-storage/web3.storage/commit/c44500884403b7334789fa04ccb858d27b583d51))
+
 ## [2.11.0](https://github.com/web3-storage/web3.storage/compare/website-v2.10.1...website-v2.11.0) (2022-07-21)
 
 
