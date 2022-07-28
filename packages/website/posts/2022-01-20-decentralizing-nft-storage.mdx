@@ -36,9 +36,7 @@ For the remainder of this post, we discuss how [NFT.Storage](http://NFT.Storage)
 Web3 unlocks a number of big paradigm shifts. One is around how [public goods are funded](https://fundingthecommons.io/). With cryptographic guarantees and smart economics, new mechanisms to create and sustain common goods in a decentralized manner are blossoming, expanding the potential pie of public goods outside those that rely on governments, faith in private companies, and/or the philanthropy of a few.
 
 ![image](https://user-images.githubusercontent.com/11778450/150448351-b15c498c-643e-4b3a-8491-c4cc76969300.png)
-<span style={{ display: 'block', textAlign: 'center', fontStyle: 'italic', marginBottom: 20, fontSize: 14 }}>
-  A number of innovations using Web3 primitives are being explored to provide better support for funding common goods.
-</span>
+*A number of innovations using Web3 primitives are being explored to provide better support for funding common goods.*
 
 In addition to NFT.Storage’s mission to store the world’s NFTs, we believe that most NFTs should be treated as public goods. One can debate whether specific NFTs should go for millions of dollars, but the debate around artistic value is independent of the public value that NFTs as a primitive can unlock, making it an ideal candidate for public goods funding. In addition, given the decreasing cost of storage (potentially [converging to $0](https://jcmit.net/disk2015.htm)), the societal return on investment for this data storage will only continue to increase. NFT.Storage plans to use these public funding mechanisms in the context of the Filecoin network, which provides provable and economically incentivized storage for any duration of time.
 
@@ -55,7 +53,7 @@ A lot of what we’ve built in NFT.Storage is an API tier that makes the process
 Since most browsers do not yet support IPFS natively, our HTTP APIs are centered around CIDs, with the client sending and receiving data that is easy to verify cryptographically. This eliminates the need for trust when using these APIs as on-boarding ramps for data onto IPFS and Filecoin.
 
 ![image](https://user-images.githubusercontent.com/11778450/150448398-f8c90d8a-66fe-415f-ac2f-23cbffa99861.png)
-<span style={{ display: 'block', textAlign: 'center', fontStyle: 'italic', marginBottom: 20, fontSize: 14 }}>It’s easy to upload data via NFT.Storage’s API endpoint, and thanks to CIDs, also the uploaded data is verifiable!</span>
+*It’s easy to upload data via NFT.Storage’s API endpoint, and thanks to CIDs, also the uploaded data is verifiable!*
 
 Further, we are seeing early adoption of IPFS in browsers (Brave, Opera Mobile, etc.) and with that adoption the need for these API services will continue to diminish (e.g., uploading data to Filecoin from the IPFS node in your browser with a click). In the meantime, our existing APIs will continue to operate, and we’ll continue to solve new problems with APIs until sufficient decentralized alternatives have matured.
 
@@ -87,9 +85,7 @@ And as the Filecoin retrieval market develops, ensuring availability of all this
 Tens of thousands of users, including some of the largest marketplaces, rely on NFT.Storage. As a result, we do what we need to in order to offer competitive performance to traditional web services. Given that browser adoption of IPFS has not yet reached critical mass, most users use [public IPFS gateways](https://ipfs.github.io/public-gateway-checker/), and we currently run an [IPFS Cluster](https://cluster.ipfs.io/) and other IPFS nodes to support faster retrieval via these gateways. For the near-term, we will optimize an HTTP endpoint called NFT.Storage Gateway (URL: nftstorage.link) that fetches from multiple public gateways, intelligently caches, and utilizes a CDN.
 
 ![image](https://user-images.githubusercontent.com/11778450/150448422-971b3320-27fd-4c90-b74c-2708779e0667.png)
-<p style={{ textAlign: 'center', fontStyle: 'italic', marginBottom: 20, fontSize: 14 }}>
-  Any operational public IPFS gateway can fetch data from NFT.Storage.
-</p>
+*Any operational public IPFS gateway can fetch data from NFT.Storage.*
 
 Users are always welcome to run their own IPFS nodes and access data that way. Though this would be less reliant on centralized infrastructure, this might not always be the most performant option. And like our storage APIs, since gateways use CIDs to retrieve content, retrieving from a gateway can be trustless - you *can* *verify* that the content you’re retrieving is correct.
 
@@ -104,9 +100,7 @@ We are using Filecoin for decentralized persistence because, as a protocol, it u
 Today, [NFT.Storage](http://NFT.Storage) monitors this manually, but with the upcoming [Filecoin Virtual Machine](https://fvm.filecoin.io/) (FVM), we can trustlessly automate these activities to ensure NFTs are *perpetually* stored. On the FVM, we will migrate our current processes to be entirely protocol-managed - a smart contract-based system can easily monitor the health of stored data, trigger repair deals when necessary, and automatically renew deals when they are approaching expiry, even if any individual party goes away.
 
 ![image](https://user-images.githubusercontent.com/11778450/150448432-47cccf5a-4ab7-40dd-b771-38c97583015f.png)
-<p style={{ textAlign: 'center', fontStyle: 'italic', marginBottom: 20, fontSize: 14 }}>
-  The Filecoin Virtual Machine will be a powerful tool in decentralizing services like NFT.Storage, providing the ability to democratize multi-generational storage of public data.
-</p>
+*The Filecoin Virtual Machine will be a powerful tool in decentralizing services like NFT.Storage, providing the ability to democratize multi-generational storage of public data.*
 
 The FVM will also open up a lot of new opportunities to turn these renewal activities into a truly public good (e.g., as part of an ongoing endowment). With a [decentralized autonomous organization](https://en.wikipedia.org/wiki/Decentralized_autonomous_organization) (DAO), a community treasury can be established to fund storage - with on-chain activities (e.g. loans + DeFi) being used to generate revenue to perpetually fund storage on the Filecoin network (which is ~free today given [Filecoin Plus's](https://docs.filecoin.io/store/filecoin-plus/) economics, and with the DAO in position to hedge storage price changes moving forward). And, depending the DAO(s) is structured, we even plan to have direction of the product governed autonomously.
 

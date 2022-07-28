@@ -162,22 +162,6 @@ const Post = ({ post, posts }) => {
     CodeHighlightCopy('.post-content pre');
   }, []);
 
-  // add image caption
-  useEffect(() => {
-    const allImages = document.querySelectorAll('.post-content img');
-    if (allImages) {
-      for (let i = 0; i < allImages.length; i++) {
-        let caption = allImages[i].getAttribute('title');
-        if (caption) {
-          let captionDiv = document.createElement('div');
-          captionDiv.className = 'caption';
-          captionDiv.innerHTML = caption;
-          allImages[i].after(captionDiv);
-        }
-      }
-    }
-  }, []);
-
   // floater animations
   useEffect(() => {
     let pageFloaters = {};

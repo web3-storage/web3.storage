@@ -111,9 +111,10 @@
   .post-footer {
     padding-bottom: toRem(70);
   }
-  .caption {
+  img + em {
     font-style: italic;
     font-size: toRem(15);
+    display: block;
   }
   .post-related {
     padding-bottom: 4rem !important;
