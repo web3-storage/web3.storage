@@ -20,7 +20,7 @@ import SearchIcon from 'assets/icons/search';
 import RefreshIcon from 'assets/icons/refresh';
 import FileRowItem, { PinStatus } from './fileRowItem';
 import GradientBackground from '../../gradientbackground/gradientbackground.js';
-import FileTable from 'components/file-table/FileTable';
+import Table from 'components/table/table';
 
 const defaultQueryOrder = 'newest';
 
@@ -374,82 +374,165 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     );
   };
 
+  // =================
+
+  const cellRenderer = ({ value, click }) => {
+    return (
+      <button onClick={() => click()} onKeyPress={click}>
+        {value}
+      </button>
+    );
+  };
+
+  const columns = [
+    {
+      id: 'date',
+      headerContent: (
+        <span>
+          {fileRowLabels.date.label} <button onClick={() => alert('header')}> i</button>
+        </span>
+      ),
+      cellRenderer,
+      getCellProps: cellData => ({
+        value: cellData,
+        click: () => alert('hi'),
+      }),
+    },
+    {
+      id: 'name',
+      headerContent: fileRowLabels.name.label,
+    },
+    {
+      id: 'cid',
+      headerContent: fileRowLabels.cid.label,
+    },
+    {
+      id: 'status',
+      headerContent: fileRowLabels.status.label,
+    },
+    {
+      id: 'storageProviders',
+      headerContent: currentTab === 'uploaded' ? fileRowLabels.storage_providers.label : null,
+    },
+    {
+      id: 'size',
+      headerContent: fileRowLabels.size.label,
+    },
+  ];
+
+  /**
+   *
+   * @param {import('web3.storage').Upload[]} file
+   */
+  const fileToTableRow = file => {
+    return {
+      key: file.cid,
+      date: file.created,
+      name: file.name,
+      cid: file.cid,
+      status:
+        Object.values(PinStatus).find(status => file.pins.some(pin => status === pin.status)) || PinStatus.QUEUING,
+      storageProviders: Array.isArray(file.deals)
+        ? file.deals
+            .filter(deal => !!deal.storageProvider)
+            .map((deal, indx, deals) => (
+              <span key={deal.dealId}>
+                <a
+                  className="underline"
+                  href={`https://filfox.info/en/deal/${deal.dealId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {`${deal.storageProvider}`}
+                </a>
+                {indx !== deals.length - 1 && ', '}
+              </span>
+            ))
+        : null,
+      size: file.hasOwnProperty('dagSize') ? filesize(file.dagSize) : file.info?.dag_size ? file.info.dag_size : '-',
+    };
+  };
+
   return (
-    <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
-      {pinned.length > 0 && (
-        <div className="upload-pinned-selector">
-          {content?.tabs.map(tab => (
-            <div key={tab.file_type} className="filetype-tab">
-              <button
-                disabled={tab.file_type === 'pinned' && pinned.length === 0}
-                className={clsx('tab-button', currentTab === tab.file_type ? 'selected' : '')}
-                onClick={() => changeCurrentTab(tab.file_type)}
-              >
-                <span>{tab.button_text}</span>
-                <span>{` (${getFilesTotal(tab.file_type)})`}</span>
-              </button>
-            </div>
-          ))}
+    <>
+      <div
+        style={{ display: 'none' }}
+        className={clsx('section files-manager-container', className, isUpdating && 'disabled')}
+      >
+        {pinned.length > 0 && (
+          <div className="upload-pinned-selector">
+            {content?.tabs.map(tab => (
+              <div key={tab.file_type} className="filetype-tab">
+                <button
+                  disabled={tab.file_type === 'pinned' && pinned.length === 0}
+                  className={clsx('tab-button', currentTab === tab.file_type ? 'selected' : '')}
+                  onClick={() => changeCurrentTab(tab.file_type)}
+                >
+                  <span>{tab.button_text}</span>
+                  <span>{` (${getFilesTotal(tab.file_type)})`}</span>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="files-manager-header">
+          <div className="files-manager-title has-upload-button">
+            <div className="title">Files</div>
+            <Button
+              disabled={info?.tags?.['HasAccountRestriction']}
+              onClick={onFileUpload}
+              variant={content?.upload.theme}
+              tracking={{
+                ui: countly.ui[content?.upload.ui],
+                action: content?.upload.action,
+                data: { isFirstFile: false },
+              }}
+              tooltip={info?.tags?.['HasAccountRestriction'] ? content?.upload.accountRestrictedText : ''}
+            >
+              {content?.upload.text}
+            </Button>
+          </div>
+          <Filterable
+            className="files-manager-search"
+            items={files}
+            icon={<SearchIcon />}
+            filterKeys={['name', 'cid']}
+            placeholder={content?.ui.filter_placeholder}
+            queryParam="filter"
+            onChange={setFilteredFiles}
+            onValueChange={setKeyword}
+          />
+          <button className={clsx('refresh', isFetchingUploads && 'disabled')} onClick={refreshHandler}>
+            <RefreshIcon />
+            <span>{content?.ui.refresh}</span>
+          </button>
+          <Sortable
+            items={filteredFiles}
+            staticLabel={content?.ui.sortby.label}
+            options={content?.ui.sortby.options}
+            value={defaultQueryOrder}
+            queryParam="order"
+            onChange={setSortedFiles}
+            onSelectChange={showCheckOverlayHandler}
+          />
         </div>
-      )}
-      <div className="files-manager-header">
-        <div className="files-manager-title has-upload-button">
-          <div className="title">Files</div>
-          <Button
-            disabled={info?.tags?.['HasAccountRestriction']}
-            onClick={onFileUpload}
-            variant={content?.upload.theme}
-            tracking={{
-              ui: countly.ui[content?.upload.ui],
-              action: content?.upload.action,
-              data: { isFirstFile: false },
-            }}
-            tooltip={info?.tags?.['HasAccountRestriction'] ? content?.upload.accountRestrictedText : ''}
-          >
-            {content?.upload.text}
-          </Button>
-        </div>
-        <Filterable
-          className="files-manager-search"
-          items={files}
-          icon={<SearchIcon />}
-          filterKeys={['name', 'cid']}
-          placeholder={content?.ui.filter_placeholder}
-          queryParam="filter"
-          onChange={setFilteredFiles}
-          onValueChange={setKeyword}
+        <FileRowItem
+          onSelect={onSelectAllToggle}
+          date={fileRowLabels.date.label}
+          name={fileRowLabels.name.label}
+          cid={fileRowLabels.cid.label}
+          status={fileRowLabels.status.label}
+          storageProviders={currentTab === 'uploaded' ? fileRowLabels.storage_providers.label : null}
+          size={fileRowLabels.size.label}
+          isHeader
+          isSelected={
+            !!selectedFiles.length &&
+            paginatedFiles.every(file => selectedFiles.find(fileSelected => file === fileSelected)) &&
+            !!fetchDate
+          }
+          tabType={currentTab}
         />
-        <button className={clsx('refresh', isFetchingUploads && 'disabled')} onClick={refreshHandler}>
-          <RefreshIcon />
-          <span>{content?.ui.refresh}</span>
-        </button>
-        <Sortable
-          items={filteredFiles}
-          staticLabel={content?.ui.sortby.label}
-          options={content?.ui.sortby.options}
-          value={defaultQueryOrder}
-          queryParam="order"
-          onChange={setSortedFiles}
-          onSelectChange={showCheckOverlayHandler}
-        />
-      </div>
-      <FileRowItem
-        onSelect={onSelectAllToggle}
-        date={fileRowLabels.date.label}
-        name={fileRowLabels.name.label}
-        cid={fileRowLabels.cid.label}
-        status={fileRowLabels.status.label}
-        storageProviders={currentTab === 'uploaded' ? fileRowLabels.storage_providers.label : null}
-        size={fileRowLabels.size.label}
-        isHeader
-        isSelected={
-          !!selectedFiles.length &&
-          paginatedFiles.every(file => selectedFiles.find(fileSelected => file === fileSelected)) &&
-          !!fetchDate
-        }
-        tabType={currentTab}
-      />
-      {/* <div className="files-manager-table-content">
+        {/* <div className="files-manager-table-content">
         {tableContentLoading(currentTab) ? (
           <Loading className={'files-loading-spinner'} />
         ) : !files.length ? (
@@ -543,54 +626,57 @@ const FilesManager = ({ className, content, onFileUpload }) => {
         </div>
       )} */}
 
-      <FileTable
-        rows={files.map(file => tableRow(file))}
-        totalRows={totalUploads}
-        itemsPerPage={itemsPerPage}
-        isEmpty={totalUploads === 0}
-        isLoading={isFetchingUploads || !fetchDate}
-        onPageSelect={onSelectedPage}
-        emptyState={tableEmptyState()}
-        dropdown={tableDropdown()}
-        deleteRowBtn={
-          <button
-            className={clsx('delete', !selectedFiles.length && 'disabled')}
-            onClick={() => deleteModalState[1](true)}
-          >
-            {content?.ui.delete.text}
-          </button>
-        }
-        scrollTarget={'.account-files-manager'}
-      />
+        <Modal
+          className="delete-modal"
+          animation="ken"
+          modalState={deleteModalState}
+          closeIcon={<CloseIcon className="file-uploader-close" />}
+          showCloseButton
+        >
+          <GradientBackground variant="saturated-variant" />
+          <div className="delete-modal-content">
+            <h5>{content?.ui.delete.heading}</h5>
+            <p>{content?.ui.delete.alert}</p>
+          </div>
+          <div className="delete-modal-buttons">
+            <Button variant={ButtonVariant.OUTLINE_DARK} onClick={onDeleteSelected}>
+              {content?.ui.delete.ok}
+            </Button>
+            <Button variant={ButtonVariant.OUTLINE_DARK} onClick={closeDeleteModal}>
+              {content?.ui.delete.cancel}
+            </Button>
+          </div>
+        </Modal>
 
-      <Modal
-        className="delete-modal"
-        animation="ken"
-        modalState={deleteModalState}
-        closeIcon={<CloseIcon className="file-uploader-close" />}
-        showCloseButton
-      >
-        <GradientBackground variant="saturated-variant" />
-        <div className="delete-modal-content">
-          <h5>{content?.ui.delete.heading}</h5>
-          <p>{content?.ui.delete.alert}</p>
-        </div>
-        <div className="delete-modal-buttons">
-          <Button variant={ButtonVariant.OUTLINE_DARK} onClick={onDeleteSelected}>
-            {content?.ui.delete.ok}
-          </Button>
-          <Button variant={ButtonVariant.OUTLINE_DARK} onClick={closeDeleteModal}>
-            {content?.ui.delete.cancel}
-          </Button>
-        </div>
-      </Modal>
-
-      <div className={clsx('files-manager-overlay', showCheckOverlay ? 'show' : '')}>
-        <div className="files-manager-overlay-check">
-          <CheckIcon></CheckIcon>
+        <div className={clsx('files-manager-overlay', showCheckOverlay ? 'show' : '')}>
+          <div className="files-manager-overlay-check">
+            <CheckIcon></CheckIcon>
+          </div>
         </div>
       </div>
-    </div>
+      <div className="section files-manager-container account-files-manager">
+        <Table
+          columns={columns}
+          rows={files.map(file => fileToTableRow(file))}
+          totalRows={totalUploads}
+          itemsPerPage={itemsPerPage}
+          isEmpty={totalUploads === 0}
+          isLoading={isFetchingUploads || !fetchDate}
+          onPageSelect={onSelectedPage}
+          emptyState={tableEmptyState()}
+          dropdown={tableDropdown()}
+          deleteRowBtn={
+            <button
+              className={clsx('delete', !selectedFiles.length && 'disabled')}
+              onClick={() => deleteModalState[1](true)}
+            >
+              {content?.ui.delete.text}
+            </button>
+          }
+          scrollTarget={'.account-files-manager'}
+        />
+      </div>
+    </>
   );
 };
 

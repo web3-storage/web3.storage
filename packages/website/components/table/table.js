@@ -9,9 +9,10 @@ import Pagination from './pagination';
 
 /**
  * @typedef {Object} ColumnDefinition
- * @property {string} headerContent
+ * @property {string | import('react').ReactComponentElement } headerContent
  * @property {string} id
- * @property {string} [cellRender]
+ * @property {import('react').FC} [cellRenderer]
+ * @property {function} [getCellProps]
  *
  */
 
@@ -52,8 +53,12 @@ export default function Table({
     <div role="rowgroup">
       <div className="storage-table-row" role="row" aria-rowindex={index}>
         {columns.map(c => (
-          <span key={index} role="cell">
-            {row[c.id]}
+          <span key={`${c.id}-${index}`} role="cell">
+            {c.cellRenderer ? (
+              <c.cellRenderer {...(c.getCellProps ? c.getCellProps(row[c.id]) : {})}></c.cellRenderer>
+            ) : (
+              row[c.id]
+            )}
           </span>
         ))}
       </div>
