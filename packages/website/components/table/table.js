@@ -1,14 +1,12 @@
 // ===================================================================== Imports
 
 import CheckIcon from 'assets/icons/check';
-import clsx from 'clsx';
 import Loading from 'components/loading/loading';
-import filesize from 'filesize';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
 import Pagination from './pagination';
 
-//TODO Move to his own compoent file
+// TODO Move to his own compoent file
 /**
  *
  * @param {Object} props
@@ -37,32 +35,36 @@ function SelectCell({ selected = false, id, onSelectChange }) {
  * @param {Object} props
  * @param {ColumnDefinition[]} props.columns
  * @param {Array<object>} props.rows
- * @param {number} props.totalRows
+ * @param {number} props.totalRowCount
+ * @param {number} props.page
  * @param {number} props.itemsPerPage
+ * @param {number[]} props.itemsPerPageOptions
  * @param {boolean} props.isEmpty
  * @param {boolean} props.isLoading
  * @param {string} props.scrollTarget
  * @param {boolean} props.withRowSelection
  * @param {import('react').ReactComponentElement}  props.emptyState
- * @param {import('react').ReactComponentElement}  props.dropdown
- * @param {import('react').ReactComponentElement}  props.deleteRowBtn
+ * @param {import('react').ReactComponentElement}  [props.leftFooterSlot]
  * @param {function} props.onPageSelect
+ * @param {function} props.onSetItemsPerPage
  * @param {(selectedRows: number[]) => void} [props.onRowSelect]
  */
 // ====================================================================== Export
 export default function Table({
   columns,
   rows,
-  totalRows,
+  totalRowCount,
+  page,
   itemsPerPage,
+  itemsPerPageOptions,
   isEmpty,
   emptyState,
   isLoading,
   withRowSelection,
-  dropdown,
+  leftFooterSlot,
   onRowSelect,
   onPageSelect,
-  deleteRowBtn,
+  onSetItemsPerPage,
   scrollTarget,
 }) {
   /**
@@ -72,31 +74,51 @@ export default function Table({
 
   const [selectedRows, setSelectedRows] = useState(/** @type {number[]} */ ([]));
 
+  // clear selected when rows changes, items per page changes
+  useEffect(() => {
+    setSelectedRows([]);
+  }, [rows, itemsPerPage]);
+
+  // clear selected when rows changes, items per page changes
   useEffect(() => {
     if (onRowSelect) {
       onRowSelect(selectedRows);
     }
   }, [selectedRows, onRowSelect]);
 
-  const onSelectAllRows = selected => {
-    let newSelected;
-    if (selected) {
-      newSelected = rows.map((r, i) => i).sort();
-    } else {
-      newSelected = [];
-    }
-    setSelectedRows(newSelected);
-  };
+  const onSelectAllRows = useCallback(
+    selected => {
+      let newSelected;
+      if (selected) {
+        newSelected = rows.map((r, i) => i).sort();
+      } else {
+        newSelected = [];
+      }
+      setSelectedRows(newSelected);
+    },
+    [rows]
+  );
 
-  const onSelectRow = (rowIndex, value) => {
-    let newSelected;
-    if (value) {
-      newSelected = [...selectedRows, rowIndex];
-    } else {
-      newSelected = selectedRows.filter(i => i !== rowIndex);
-    }
-    setSelectedRows(newSelected.sort());
-  };
+  const onSelectRow = useCallback(
+    (rowIndex, value) => {
+      let newSelected;
+      if (value) {
+        newSelected = [...selectedRows, rowIndex];
+      } else {
+        newSelected = selectedRows.filter(i => i !== rowIndex);
+      }
+      setSelectedRows(newSelected.sort());
+    },
+    [selectedRows]
+  );
+
+  const onPageSelectHandler = useCallback(
+    page => {
+      setSelectedRows([]);
+      onPageSelect();
+    },
+    [onPageSelect]
+  );
 
   if (withRowSelection) {
     /**
@@ -126,7 +148,7 @@ export default function Table({
 
   const getRowComponent = (row, index, selected) => (
     <div role="rowgroup">
-      <div className="storage-table-row" role="row" aria-rowindex={index}>
+      <div className="storage-table-row" role="row" aria-rowindex={index} aria-selected={selectedRows.includes(index)}>
         {effectiveColumns.map(c => (
           <span key={`${c.id}-${index}`} role="cell">
             {c.cellRenderer ? (
@@ -160,18 +182,26 @@ export default function Table({
 
         {!isEmpty && (
           <div className="storage-table-footer">
-            {deleteRowBtn}
+            <div>{!!leftFooterSlot && leftFooterSlot}</div>
 
             <Pagination
               className="storage-table-pagination"
-              totalItems={totalRows}
-              itemsPerPage={itemsPerPage || 10}
+              page={page}
+              totalRowCount={totalRowCount}
+              itemsPerPage={itemsPerPage}
               visiblePages={1}
-              queryParam="page"
-              onChange={onPageSelect}
+              onPageChange={onPageSelectHandler}
               scrollTarget={scrollTarget}
             />
-            {dropdown}
+            <Dropdown
+              className="storage-table-result-dropdown"
+              value={itemsPerPage}
+              options={itemsPerPageOptions.map(ipp => ({
+                label: `View ${ipp} results`,
+                value: ipp.toString(),
+              }))}
+              onChange={value => onSetItemsPerPage && onSetItemsPerPage(parseInt(value))}
+            />
           </div>
         )}
       </div>

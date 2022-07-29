@@ -1,120 +1,90 @@
 import clsx from 'clsx';
-import { useMemo, useCallback, useState, useEffect } from 'react';
-import useQueryParams from 'ZeroHooks/useQueryParams';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 /**
  * @typedef {Object} PaginationProps
  * @prop {string} [className]
- * @prop {number} totalItems
- * @prop {string|number} itemsPerPage
- * @prop {number} visiblePages
- * @prop {number} [defaultPage]
- * @prop {string} [queryParam]
- * @prop {function} [onChange]
+ * @prop {number} totalRowCount
+ * @prop {number} itemsPerPage
+ * @prop {number} [visiblePages]
+ * @prop {number} page
+ * @prop {function} [onPageChange]
  * @prop {string} [scrollTarget]
  */
-
-/**
- * @param {PaginationProps} props
- */
-const Pagination = ({
+export default function Pagination({
   className,
-  totalItems,
+  totalRowCount,
   itemsPerPage,
   visiblePages,
-  defaultPage,
-  queryParam,
-  onChange,
+  page,
+  onPageChange,
   scrollTarget,
-}) => {
-  const [queryValue, setQueryValue] = useQueryParams(queryParam, defaultPage);
-
+}) {
   const [pageList, setPageList] = useState(/** @type {number[]} */ ([]));
-  const [activePage, setActivePage] = useState(defaultPage);
 
-  const pageCount = useMemo(
-    () => (itemsPerPage ? Math.ceil(totalItems / parseInt(/** @type {string} */ (itemsPerPage))) : null),
-    [totalItems, itemsPerPage]
-  );
-
-  const currentPage = useMemo(() => parseInt(queryParam ? queryValue : activePage), [
-    queryParam,
-    queryValue,
-    activePage,
+  const pageCount = useMemo(() => (itemsPerPage ? Math.ceil(totalRowCount / itemsPerPage) : null), [
+    totalRowCount,
+    itemsPerPage,
   ]);
 
-  const setCurrentPage = useCallback(
+  const pageChangeHandler = useCallback(
     page => {
-      queryParam ? setQueryValue(page) : setActivePage(page);
-      onChange && onChange(page);
       if (!!scrollTarget) {
         const scrollToElement = document.querySelector(scrollTarget);
         scrollToElement?.scrollIntoView(true);
       }
+      onPageChange && onPageChange(page);
     },
-    [queryParam, setQueryValue, setActivePage, scrollTarget]
+    [scrollTarget]
   );
-
   useEffect(() => {
-    pageCount &&
-      setPageList(
-        Array.from({ length: pageCount }, (_, i) => i + 1).filter(
-          page => page >= currentPage - visiblePages && page <= currentPage + visiblePages
-        )
-      );
-
-    pageCount && currentPage < 1 && setCurrentPage(defaultPage);
-    pageCount && currentPage > pageCount && setCurrentPage(pageCount);
-
-    const firstItem = (currentPage - 1) * parseInt(/** @type {string} */ (itemsPerPage));
-  }, [totalItems, itemsPerPage, visiblePages, pageCount, setPageList, currentPage, setCurrentPage, onChange]);
+    setPageList(
+      Array.from({ length: pageCount }, (_, i) => i).filter(p => p >= page - visiblePages && p <= page + visiblePages)
+    );
+  }, [visiblePages, page, pageCount]);
 
   return (
     <div className={clsx(className, 'Pagination')}>
       <ul className="pageList">
-        {currentPage > visiblePages + 1 && (
-          <button type="button" className="firstPage" onClick={() => setCurrentPage(1)}>
+        {page > visiblePages + 1 && (
+          <button type="button" className="firstPage" onClick={() => pageChangeHandler(0)}>
             First
           </button>
         )}
-        {currentPage > 1 && (
-          <button type="button" className="prevPage" onClick={() => setCurrentPage(currentPage - 1)}>
+        {page > 1 && (
+          <button type="button" className="prevPage" onClick={() => pageChangeHandler(page - 1)}>
             Prev
           </button>
         )}
-        {currentPage > visiblePages + 1 && <div className="prevEllipses">...</div>}
+        {page > visiblePages + 1 && <div className="prevEllipses">...</div>}
         {pageCount !== 1 &&
           pageList &&
-          pageList.map(page => (
+          pageList.map(p => (
             <button
               type="button"
-              key={`page-${page}`}
-              className={clsx('page', { current: currentPage === page })}
-              onClick={() => setCurrentPage(page)}
+              key={`page-${p}`}
+              className={clsx('page', { current: p === page })}
+              onClick={() => pageChangeHandler(p)}
             >
-              {page}
+              {p + 1}
             </button>
           ))}
-        {pageCount != null && currentPage < pageCount - visiblePages && <div className="nextEllipses">...</div>}
-        {pageCount != null && currentPage < pageCount && (
-          <button type="button" className="nextPage" onClick={() => setCurrentPage(currentPage + 1)}>
+        {pageCount != null && page < pageCount - visiblePages && <div className="nextEllipses">...</div>}
+        {pageCount != null && page < pageCount && (
+          <button type="button" className="nextPage" onClick={() => pageChangeHandler(page + 1)}>
             Next
           </button>
         )}
-        {pageCount != null && currentPage < pageCount - visiblePages && (
-          <button type="button" className="lastPage" onClick={() => setCurrentPage(pageCount)}>
+        {pageCount != null && page < pageCount - visiblePages && (
+          <button type="button" className="lastPage" onClick={() => pageChangeHandler(pageCount)}>
             Last
           </button>
         )}
       </ul>
     </div>
   );
-};
+}
 
 Pagination.defaultProps = {
-  itemsPerPage: 10,
-  defaultPage: 1,
-  queryParam: null,
+  visiblePages: 1,
 };
-
-export default Pagination;

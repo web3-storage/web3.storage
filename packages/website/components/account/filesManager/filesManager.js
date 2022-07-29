@@ -72,7 +72,6 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const [filteredFiles, setFilteredFiles] = useState(files);
   const [sortedFiles, setSortedFiles] = useState(filteredFiles);
   const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [keyword, setKeyword] = useState(filter);
   const [deleteSingleCid, setDeleteSingleCid] = useState('');
   const [showCheckOverlay, setShowCheckOverlay] = useState(false);
@@ -86,31 +85,24 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const fileRowLabels = content?.table.file_row_labels;
 
   // Set current tab based on url param on load
-  useEffect(() => {
-    if (query.hasOwnProperty('table') && currentTab !== query?.table) {
-      if (typeof query.table === 'string') {
-        if (query.table === 'pinned' && pinned.length === 0) {
-          delete query.table;
-          replace(
-            {
-              query,
-            },
-            undefined,
-            { shallow: true }
-          );
-          return;
-        }
-        setCurrentTab(query.table);
-      }
-    }
-  }, [query, currentTab, pinned, replace]);
-
-  // Initial fetch on component load
-  useEffect(() => {
-    if (!fetchDate && !isFetchingUploads) {
-      getUploads();
-    }
-  }, [fetchDate, getUploads, isFetchingUploads]);
+  // useEffect(() => {
+  //   if (query.hasOwnProperty('table') && currentTab !== query?.table) {
+  //     if (typeof query.table === 'string') {
+  //       if (query.table === 'pinned' && pinned.length === 0) {
+  //         delete query.table;
+  //         replace(
+  //           {
+  //             query,
+  //           },
+  //           undefined,
+  //           { shallow: true }
+  //         );
+  //         return;
+  //       }
+  //       setCurrentTab(query.table);
+  //     }
+  //   }
+  // }, [query, currentTab, pinned, replace]);
 
   // Initial pinned files fetch on component load
   useEffect(() => {
@@ -132,27 +124,27 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   }, [uploads, pinned, currentTab]);
 
   // Method to reset the pagination every time query order changes
-  useEffect(() => {
-    if (
-      (!queryOrderRef.current && !!query.order && query.order !== defaultQueryOrder) ||
-      (!!queryOrderRef.current && !!query.order && query.order !== queryOrderRef.current)
-    ) {
-      delete query.page;
+  // useEffect(() => {
+  //   if (
+  //     (!queryOrderRef.current && !!query.order && query.order !== defaultQueryOrder) ||
+  //     (!!queryOrderRef.current && !!query.order && query.order !== queryOrderRef.current)
+  //   ) {
+  //     delete query.page;
 
-      replace(
-        {
-          query,
-        },
-        undefined,
-        { shallow: true }
-      );
+  //     replace(
+  //       {
+  //         query,
+  //       },
+  //       undefined,
+  //       { shallow: true }
+  //     );
 
-      const scrollToElement = document.querySelector('.account-files-manager');
-      scrollToElement?.scrollIntoView(true);
+  //     const scrollToElement = document.querySelector('.account-files-manager');
+  //     scrollToElement?.scrollIntoView(true);
 
-      queryOrderRef.current = query.order;
-    }
-  }, [query.order, query, replace]);
+  //     queryOrderRef.current = query.order;
+  //   }
+  // }, [query.order, query, replace]);
 
   const changeCurrentTab = useCallback(
     /** @type {string} */ tab => {
@@ -169,13 +161,6 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     },
     [setCurrentTab, query, replace]
   );
-
-  const onSelectedPage = page => {
-    getUploads({
-      page,
-      size: itemsPerPage,
-    });
-  };
 
   const getFilesTotal = type => {
     switch (type) {
@@ -319,19 +304,6 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     );
   };
 
-  const tableDropdown = () => {
-    return (
-      <Dropdown
-        className="files-manager-result-dropdown"
-        value={content?.ui.results.options[0].value}
-        options={content?.ui.results.options}
-        queryParam="items"
-        onChange={value => setItemsPerPage(value)}
-        onSelectChange={showCheckOverlayHandler}
-      />
-    );
-  };
-
   const tableRow = item => {
     return (
       <FileRowItem
@@ -375,6 +347,24 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   };
 
   // =================
+  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const onSelectedPage = async page => {
+    await getUploads({
+      page,
+      size: itemsPerPage,
+    });
+    setCurrentPage(page);
+  };
+
+  const setItemsPerPageHandler = ipp => {
+    setItemsPerPage(ipp);
+    getUploads({
+      page: currentPage,
+      size: ipp,
+    });
+  };
 
   const cellRenderer = ({ value, click }) => {
     return (
@@ -658,14 +648,15 @@ const FilesManager = ({ className, content, onFileUpload }) => {
         <Table
           columns={columns}
           rows={files.map(file => fileToTableRow(file))}
-          totalRows={totalUploads}
+          totalRowCount={totalUploads}
+          page={currentPage}
           itemsPerPage={itemsPerPage}
+          itemsPerPageOptions={[2, 20, 50, 100, 500]}
           isEmpty={totalUploads === 0}
           withRowSelection={true}
           isLoading={isFetchingUploads || !fetchDate}
           onPageSelect={onSelectedPage}
           emptyState={tableEmptyState()}
-          dropdown={tableDropdown()}
           onRowSelect={rows => console.log(rows)}
           deleteRowBtn={
             <button
@@ -675,6 +666,9 @@ const FilesManager = ({ className, content, onFileUpload }) => {
               {content?.ui.delete.text}
             </button>
           }
+          onSetItemsPerPage={ipp => {
+            setItemsPerPageHandler(ipp);
+          }}
           scrollTarget={'.account-files-manager'}
         />
       </div>
