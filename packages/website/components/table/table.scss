@@ -14,96 +14,6 @@ $file-storage-providers: calculateWidthPercentage(10rem, $base-row-width);
 $file-size: calculateWidthPercentage(8rem, $base-row-width);
 $file-date: auto;
 
-.storage-table-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  justify-items: center;
-  padding: 0 3rem 2rem 2rem;
-  flex-wrap: wrap;
-
-  @include medium {
-    padding: 0;
-    justify-content: space-between;
-  }
-
-  .upload-button {
-    margin-left: auto;
-  }
-
-  // Title
-  .storage-table-title {
-    display: flex;
-    flex-direction: row;
-    .button {
-      @include fontSize_Atom;
-      transform: translateY(1px);
-      @include tiny {
-        button {
-          padding: 0.25rem 0.75rem;
-        }
-      }
-    }
-    @include medium {
-      padding-left: 1.75rem;
-      margin-right: initial;
-    }
-  }
-
-  .storage-table-search {
-    @include medium {
-      flex-basis: 100%;
-      order: 4;
-      margin-top: 0.625rem;
-      margin-bottom: 0.5rem;
-    }
-  }
-
-  .storage-table-controls {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    align-items: center;
-    justify-content: flex-end;
-    grid-gap: 3rem;
-  }
-
-  .refresh {
-    @include label_5;
-    position: relative;
-    top: 0.125rem;
-    cursor: pointer;
-    @include medium {
-      margin-right: 3rem;
-      margin-left: auto;
-    }
-    svg {
-      transition: transform $transitionDuration;
-      color: $cyan;
-      margin-right: 0.8125rem;
-    }
-    span {
-      display: inline-block;
-      transition: transform $transitionDuration ease-in-out;
-    }
-    &:hover {
-      svg {
-        transform: rotate(90deg);
-        transition: transform $transitionDuration;
-      }
-      span {
-        // transform: scale(1.1);
-        color: $cyan;
-        transition: transform $transitionDuration ease-in-out;
-      }
-    }
-  }
-
-  .Sortable {
-    @include medium {
-      padding-right: 1.25rem;
-    }
-  }
-}
 
 .storage-table-table-header-divider {
   border-bottom: 0.078125rem solid rgba($white, 0.05);
@@ -508,6 +418,98 @@ $file-date: auto;
   }
 }
 
+
+.storage-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  justify-items: center;
+  padding: 0 3rem 2rem 2rem;
+  flex-wrap: wrap;
+
+  @include medium {
+    padding: 0;
+    justify-content: space-between;
+  }
+
+  .upload-button {
+    margin-left: auto;
+  }
+
+  // Title
+  .storage-table-title {
+    display: flex;
+    flex-direction: row;
+    .button {
+      @include fontSize_Atom;
+      transform: translateY(1px);
+      @include tiny {
+        button {
+          padding: 0.25rem 0.75rem;
+        }
+      }
+    }
+    @include medium {
+      padding-left: 1.75rem;
+      margin-right: initial;
+    }
+  }
+
+  .storage-table-search {
+    @include medium {
+      flex-basis: 100%;
+      order: 4;
+      margin-top: 0.625rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .storage-table-controls {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    justify-content: flex-end;
+    grid-gap: 3rem;
+  }
+
+  .refresh {
+    @include label_5;
+    position: relative;
+    top: 0.125rem;
+    cursor: pointer;
+    @include medium {
+      margin-right: 3rem;
+      margin-left: auto;
+    }
+    svg {
+      transition: transform $transitionDuration;
+      color: $cyan;
+      margin-right: 0.8125rem;
+    }
+    span {
+      display: inline-block;
+      transition: transform $transitionDuration ease-in-out;
+    }
+    &:hover {
+      svg {
+        transform: rotate(90deg);
+        transition: transform $transitionDuration;
+      }
+      span {
+        // transform: scale(1.1);
+        color: $cyan;
+        transition: transform $transitionDuration ease-in-out;
+      }
+    }
+  }
+
+  .Sortable {
+    @include medium {
+      padding-right: 1.25rem;
+    }
+  }
+}
+
 // safari hack since it does not support negative stroke-dashoffset
 // transition is opacity instead of tick drawing behaviour
 @include Safari7Plus('.storage-table-row .file-select svg.check .tick') {
@@ -521,3 +523,4 @@ $file-date: auto;
   opacity: 1;
   transition: opacity $transitionDuration 0s ease-in;
 }
+

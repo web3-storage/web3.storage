@@ -661,10 +661,12 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           totalRows={totalUploads}
           itemsPerPage={itemsPerPage}
           isEmpty={totalUploads === 0}
+          withRowSelection={true}
           isLoading={isFetchingUploads || !fetchDate}
           onPageSelect={onSelectedPage}
           emptyState={tableEmptyState()}
           dropdown={tableDropdown()}
+          onRowSelect={rows => console.log(rows)}
           deleteRowBtn={
             <button
               className={clsx('delete', !selectedFiles.length && 'disabled')}

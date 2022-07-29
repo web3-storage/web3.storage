@@ -1,11 +1,27 @@
 // ===================================================================== Imports
 
+import CheckIcon from 'assets/icons/check';
 import clsx from 'clsx';
 import Loading from 'components/loading/loading';
 import filesize from 'filesize';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
 import Pagination from './pagination';
+
+//TODO Move to his own compoent file
+/**
+ *
+ * @param {Object} props
+ * @returns
+ */
+function SelectCell({ selected = false, id, onSelectChange }) {
+  return (
+    <span className="file-select">
+      <input checked={selected} type="checkbox" id={id} onChange={e => onSelectChange(e.target.checked)} />
+      <CheckIcon className="check" />
+    </span>
+  );
+}
 
 /**
  * @typedef {Object} ColumnDefinition
@@ -26,10 +42,12 @@ import Pagination from './pagination';
  * @param {boolean} props.isEmpty
  * @param {boolean} props.isLoading
  * @param {string} props.scrollTarget
+ * @param {boolean} props.withRowSelection
  * @param {import('react').ReactComponentElement}  props.emptyState
  * @param {import('react').ReactComponentElement}  props.dropdown
  * @param {import('react').ReactComponentElement}  props.deleteRowBtn
  * @param {function} props.onPageSelect
+ * @param {(selectedRows: number[]) => void} [props.onRowSelect]
  */
 // ====================================================================== Export
 export default function Table({
@@ -40,22 +58,79 @@ export default function Table({
   isEmpty,
   emptyState,
   isLoading,
+  withRowSelection,
   dropdown,
+  onRowSelect,
   onPageSelect,
   deleteRowBtn,
   scrollTarget,
 }) {
-  if (isEmpty && !isLoading) {
-    return <div className="storage-table-table-content">{emptyState}</div>;
+  /**
+   * @type { ColumnDefinition[]}
+   */
+  let effectiveColumns = [...columns];
+
+  const [selectedRows, setSelectedRows] = useState(/** @type {number[]} */ ([]));
+
+  useEffect(() => {
+    if (onRowSelect) {
+      onRowSelect(selectedRows);
+    }
+  }, [selectedRows, onRowSelect]);
+
+  const onSelectAllRows = selected => {
+    let newSelected;
+    if (selected) {
+      newSelected = rows.map((r, i) => i).sort();
+    } else {
+      newSelected = [];
+    }
+    setSelectedRows(newSelected);
+  };
+
+  const onSelectRow = (rowIndex, value) => {
+    let newSelected;
+    if (value) {
+      newSelected = [...selectedRows, rowIndex];
+    } else {
+      newSelected = selectedRows.filter(i => i !== rowIndex);
+    }
+    setSelectedRows(newSelected.sort());
+  };
+
+  if (withRowSelection) {
+    /**
+     * @type { ColumnDefinition}
+     */
+    const selectionColumn = {
+      id: 'rowSelection',
+      headerContent: (
+        <SelectCell
+          selected={selectedRows.length === rows.length}
+          id={`table-storage-select-all`}
+          onSelectChange={selected => onSelectAllRows(selected)}
+        />
+      ),
+      cellRenderer: SelectCell,
+      getCellProps: (cell, index) => {
+        return {
+          selected: selectedRows.includes(index),
+          onSelectChange: selected => onSelectRow(index, selected),
+          id: `table-storage-row-${index}-select`,
+        };
+      },
+    };
+
+    effectiveColumns = [selectionColumn, ...effectiveColumns];
   }
 
-  const getRowComponent = (row, index) => (
+  const getRowComponent = (row, index, selected) => (
     <div role="rowgroup">
       <div className="storage-table-row" role="row" aria-rowindex={index}>
-        {columns.map(c => (
+        {effectiveColumns.map(c => (
           <span key={`${c.id}-${index}`} role="cell">
             {c.cellRenderer ? (
-              <c.cellRenderer {...(c.getCellProps ? c.getCellProps(row[c.id]) : {})}></c.cellRenderer>
+              <c.cellRenderer {...(c.getCellProps ? c.getCellProps(row[c.id], index) : {})}></c.cellRenderer>
             ) : (
               row[c.id]
             )}
@@ -65,11 +140,15 @@ export default function Table({
     </div>
   );
 
+  if (isEmpty && !isLoading) {
+    return <div className="storage-table-table-content">{emptyState}</div>;
+  }
+
   return (
     <div className="storage-table" role="table">
       <div role="rowgroup">
         <div className="storage-table-row storage-table-header" role="row">
-          {columns.map(c => (
+          {effectiveColumns.map(c => (
             <div key={c.id} role="columnheader">
               {c.headerContent}
             </div>
