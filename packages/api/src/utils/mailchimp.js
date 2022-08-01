@@ -3,6 +3,7 @@
  *  @param {string} prefix
  *  @param {string} listId
  *  @param {object} headers
+ *  @returns {Boolean}
  */
 export const isChimpUser = async (email, prefix, listId, headers) => {
   const url = `https://${prefix}.api.mailchimp.com/3.0/lists/${listId}/members/${encodeURIComponent(
@@ -20,6 +21,7 @@ export const isChimpUser = async (email, prefix, listId, headers) => {
  *  @param {string} prefix
  *  @param {string} listId
  *  @param {object} headers
+ * @returns {Promise<Response>}
  */
 export const addSubscriber = async (email, prefix, listId, headers) => {
   const url = `https://${prefix}.api.mailchimp.com/3.0/lists/${listId}/members/`
@@ -41,6 +43,7 @@ export const addSubscriber = async (email, prefix, listId, headers) => {
  *  @param {string} prefix
  *  @param {string} listId
  *  @param {object} headers
+ * @returns {Promise<Response>}
  */
 export const updateSubscriber = async (email, prefix, listId, headers) => {
   const url = `https://${prefix}.api.mailchimp.com/3.0/lists/${listId}/members/${encodeURIComponent(
