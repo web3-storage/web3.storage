@@ -157,15 +157,6 @@ const revision = await Name.resolve(name);
 console.log('Resolved value:', revision.value);
 ```
 
-{/\*
-
-TODO:
-
-- [ ] show curl example of fetching latest value (no verification)
-- [ ] show `ipfs cat` example to demo DHT interop
-
-\*/}
-
 ## Saving and loading keys
 
 To create revisions to a name after publication, you'll need the original signing key. You can get the binary representation of a name with the `key.bytes` property, which can then be saved to disk or stored in a secure key management system.
