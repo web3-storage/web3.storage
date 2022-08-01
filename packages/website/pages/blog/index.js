@@ -12,7 +12,7 @@ import BlogPageData from '../../content/pages/blog.json';
 import BlockBuilder from '../../components/blockbuilder/blockbuilder.js';
 import { initFloaterAnimations } from '../../lib/floater-animations.js';
 import Button, { ButtonVariant } from '../../components/button/button';
-import Tags from '../../components/blog/tags/tags';
+import Tags, { convertSluggableTags } from '../../components/blog/tags/tags';
 import Categories from '../../components/blog/categories/categories';
 import { Card } from '../../components/blog/cards/cards';
 import Subscribe from '../../components/blog/subscribe/subscribe';
@@ -51,12 +51,16 @@ export async function getStaticProps() {
  * @param {Object} props
  */
 const Blog = ({ posts = [] }) => {
-  const [category, setCategory] = useQueryParams('category');
-  const [keyword, setKeyword] = useQueryParams('keyword');
-  const [tagsRaw, setTags] = useQueryParams('tags');
+  const [categoryRaw, setCategory] = useQueryParams('category', undefined, true);
+  const [keyword, setKeyword] = useQueryParams('keyword', undefined, true);
+  const [tagsRaw, setTags] = useQueryParams('tags', undefined, true);
   const tagsModalOpenState = useState(false);
   const subscribeModalOpenState = useState(false);
-  const tags = useMemo(() => (!!tagsRaw ? JSON.parse(tagsRaw) : []), [tagsRaw]);
+  const tags = useMemo(
+    () => (!!tagsRaw ? /** @type {Array<string>} */ (convertSluggableTags(tagsRaw)) : []),
+    [tagsRaw]
+  );
+  const category = useMemo(() => categoryRaw?.split('-').join(' '), [categoryRaw]);
   const categories = useMemo(() => ['All', ...uniq(posts.map(({ category }) => category)).sort()], [posts]);
   const sections = BlogPageData.page_content;
   const animations = BlogPageData.floater_animations;
@@ -133,7 +137,7 @@ const Blog = ({ posts = [] }) => {
               } else {
                 tags.push(normCategory);
               }
-              return setTags(!!tags.length ? JSON.stringify(tags) : '');
+              return setTags(!!tags.length ? convertSluggableTags(tags) : '');
             },
             selected: (normCategory === 'all' && !tags.length) || tags.includes(normCategory),
           };
@@ -158,7 +162,7 @@ const Blog = ({ posts = [] }) => {
 
   const handleCategoryClick = useCallback(
     category => {
-      setCategory(category === 'all' ? '' : category);
+      setCategory(category === 'all' ? '' : category.split(' ').join('-'));
     },
     [setCategory]
   );
@@ -173,7 +177,7 @@ const Blog = ({ posts = [] }) => {
   const onRemoveTag = useCallback(
     tag => () => {
       tags.splice(tags.indexOf(tag), 1);
-      setTags(JSON.stringify(tags));
+      setTags(tags.map(tag => tag.split(' ').join('-')).join(','));
     },
     [setTags, tags]
   );

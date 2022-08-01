@@ -7,8 +7,8 @@ import { get } from 'lodash';
  * @param {string|number|null} [defaultValue]
  * @returns {[queryValue: any, setQueryValue: any] | []}
  */
-export default function useQueryParams(param = '', defaultValue) {
-  const { isReady, query, replace } = useRouter();
+export default function useQueryParams(param = '', defaultValue, noEncode = false) {
+  const { isReady, query, replace, pathname, push } = useRouter();
   const initialized = useRef(false);
 
   const setValue = useCallback(
@@ -18,13 +18,19 @@ export default function useQueryParams(param = '', defaultValue) {
         key => newQuery[key] === undefined || (newQuery[key] === '' && delete newQuery[key])
       );
 
-      replace(
-        {
-          query: newQuery,
-        },
-        undefined,
-        { shallow: true }
-      );
+      if (!noEncode) {
+        replace(
+          {
+            query: newQuery,
+          },
+          undefined,
+          { shallow: true }
+        );
+      } else {
+        const queryParams = decodeURIComponent(new URLSearchParams(newQuery).toString());
+        const url = `${pathname}${!!queryParams ? `?${queryParams}` : ''}`;
+        push(url, url, { shallow: true });
+      }
     },
     [param, query, replace]
   );

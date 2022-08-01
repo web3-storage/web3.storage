@@ -5,6 +5,16 @@ import React from 'react';
 import Button, { ButtonVariant } from '../../button/button';
 
 /**
+ * Helper utility method that converts tags to/from string/array
+ *
+ * @param {string|Array<string>} tags
+ * @returns string|Array<string>
+ */
+export const convertSluggableTags = tags =>
+  Array.isArray(tags)
+    ? tags.map(tag => tag.split(' ').join('-')).join(',')
+    : tags.split(',').map(tag => tag.split('-').join(' '));
+/**
  * Tag Component
  *
  * @param {Object} props
@@ -15,7 +25,7 @@ export const Tag = ({ tag, isLink }) => {
   const inner = <span>{isString ? tag : tag.label}</span>;
   return isString ? (
     isLink ? (
-      <Link href={isLink && `/blog?tags=${JSON.stringify([tag.toLowerCase()])}`} passHref>
+      <Link href={isLink && `/blog?tags=${convertSluggableTags([tag.toLowerCase()])}`} passHref>
         {tag}
       </Link>
     ) : (
