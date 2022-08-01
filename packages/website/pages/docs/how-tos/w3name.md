@@ -61,12 +61,12 @@ To import the library into your code, use the syntax that matches your JS enviro
 <Tabs>
 <TabItem value="esm" label="ES Modules">
 ```js
-import * as Name from 'w3name'
+import * as Name from 'w3name';
 ```
 </TabItem>
 <TabItem value="cjs" label="Common JS">
 ```
-const Name = require('w3name')
+const Name = require('w3name');
 ```
 </TabItem>
 </Tabs>
