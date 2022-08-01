@@ -5,7 +5,7 @@
 // As it stands they are tightly coupled with the file table in the Account Page.
 
 $base-row-width: 75.125rem;
-$file-select: calculateWidthPercentage(3.5rem, $base-row-width);
+$cell-select: calculateWidthPercentage(3.5rem, $base-row-width);
 $file-name: calculateWidthPercentage(23rem, $base-row-width);
 $file-cid: calculateWidthPercentage(16rem, $base-row-width);
 $file-availability: calculateWidthPercentage(0rem, $base-row-width);
@@ -80,7 +80,7 @@ $file-date: auto;
   letter-spacing: 0;
   display: grid;
   position: relative;
-  grid-template-columns: $file-select $file-name $file-cid $file-pin-status $file-storage-providers $file-size $file-date ;
+  grid-template-columns: $cell-select $file-name $file-cid $file-pin-status $file-storage-providers $file-size $file-date ;
   align-items: flex-start;
   padding: .75rem 2rem;
   transition: all .2s ease-in-out;
@@ -512,13 +512,13 @@ $file-date: auto;
 
 // safari hack since it does not support negative stroke-dashoffset
 // transition is opacity instead of tick drawing behaviour
-@include Safari7Plus('.storage-table-row .file-select svg.check .tick') {
+@include Safari7Plus('.storage-table-row .cell-select svg.check .tick') {
   // unchecked
   stroke-dashoffset: 1000;
   opacity: 0;
   transition: opacity $transitionDuration 0s ease-out;
 }
-@include Safari7Plus('.storage-table-row .file-select input:checked ~ svg.check .tick') {
+@include Safari7Plus('.storage-table-row .cell-select input:checked ~ svg.check .tick') {
   // checked
   opacity: 1;
   transition: opacity $transitionDuration 0s ease-in;

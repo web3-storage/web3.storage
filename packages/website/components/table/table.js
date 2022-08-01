@@ -1,25 +1,8 @@
-// ===================================================================== Imports
-
-import CheckIcon from 'assets/icons/check';
-import Loading from 'components/loading/loading';
 import React, { useCallback, useEffect, useState } from 'react';
+import Loading from 'components/loading/loading';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
-import Pagination from './pagination';
-
-// TODO Move to his own compoent file
-/**
- *
- * @param {Object} props
- * @returns
- */
-function SelectCell({ selected = false, id, onSelectChange }) {
-  return (
-    <span className="file-select">
-      <input checked={selected} type="checkbox" id={id} onChange={e => onSelectChange(e.target.checked)} />
-      <CheckIcon className="check" />
-    </span>
-  );
-}
+import Pagination from 'components/table/pagination';
+import SelectCell from 'components/table/selectCell';
 
 /**
  * @typedef {Object} ColumnDefinition
@@ -30,114 +13,115 @@ function SelectCell({ selected = false, id, onSelectChange }) {
  *
  */
 
-// ====================================================================== Params
 /**
+ * @type {import('react').FC}
+ *
  * @param {Object} props
  * @param {ColumnDefinition[]} props.columns
  * @param {Array<object>} props.rows
- * @param {number} props.totalRowCount
- * @param {number} props.page
- * @param {number} props.itemsPerPage
- * @param {number[]} props.itemsPerPageOptions
- * @param {boolean} props.isEmpty
- * @param {boolean} props.isLoading
- * @param {string} props.scrollTarget
- * @param {boolean} props.withRowSelection
- * @param {import('react').ReactComponentElement}  props.emptyState
+ * @param {number} [props.totalRowCount]
+ * @param {number} [props.page]
+ * @param {number} [props.rowsPerPage]
+ * @param {number[]} [props.rowsPerPageOptions]
+ * @param {boolean} [props.isEmpty]
+ * @param {boolean} [props.isLoading]
+ * @param {string} [props.scrollTarget]
+ * @param {boolean} [props.withRowSelection]
+ * @param {import('react').ReactComponentElement}  [props.emptyState]
  * @param {import('react').ReactComponentElement}  [props.leftFooterSlot]
- * @param {function} props.onPageSelect
- * @param {function} props.onSetItemsPerPage
- * @param {(selectedRows: number[]) => void} [props.onRowSelect]
+ * @param {number[]} [props.selectedRows] List of keys of the selected rows
+ * @param {function} [props.onPageSelect]
+ * @param {function} [props.onSetItemsPerPage]
+ * @param {(key: number|string, value: boolean) => void} [props.onRowSelectedChange]
+ * @param {(value: boolean) => void} [props.onSelectAll]
  */
-// ====================================================================== Export
-export default function Table({
+
+function Table({
   columns,
   rows,
   totalRowCount,
-  page,
-  itemsPerPage,
-  itemsPerPageOptions,
-  isEmpty,
+  page = 0,
+  rowsPerPage,
+  rowsPerPageOptions,
+  isEmpty = false,
   emptyState,
-  isLoading,
-  withRowSelection,
+  isLoading = false,
+  withRowSelection = false,
   leftFooterSlot,
-  onRowSelect,
+  selectedRows,
+  onRowSelectedChange,
+  onSelectAll,
   onPageSelect,
   onSetItemsPerPage,
-  scrollTarget,
+  scrollTarget = '.storage-table',
 }) {
   /**
    * @type { ColumnDefinition[]}
    */
   let effectiveColumns = [...columns];
 
-  const [selectedRows, setSelectedRows] = useState(/** @type {number[]} */ ([]));
-
-  // clear selected when rows changes, items per page changes
-  useEffect(() => {
-    setSelectedRows([]);
-  }, [rows, itemsPerPage]);
-
-  // clear selected when rows changes, items per page changes
-  useEffect(() => {
-    if (onRowSelect) {
-      onRowSelect(selectedRows);
-    }
-  }, [selectedRows, onRowSelect]);
-
-  const onSelectAllRows = useCallback(
-    selected => {
-      let newSelected;
-      if (selected) {
-        newSelected = rows.map((r, i) => i).sort();
-      } else {
-        newSelected = [];
-      }
-      setSelectedRows(newSelected);
+  const selectAllRowsHandler = useCallback(
+    value => {
+      onSelectAll && onSelectAll(value);
     },
-    [rows]
+    [onSelectAll]
   );
 
-  const onSelectRow = useCallback(
-    (rowIndex, value) => {
-      let newSelected;
-      if (value) {
-        newSelected = [...selectedRows, rowIndex];
-      } else {
-        newSelected = selectedRows.filter(i => i !== rowIndex);
-      }
-      setSelectedRows(newSelected.sort());
+  const selectRowHandler = useCallback(
+    (rowKey, value) => {
+      onRowSelectedChange && onRowSelectedChange(rowKey, value);
     },
-    [selectedRows]
+    [onRowSelectedChange]
   );
 
-  const onPageSelectHandler = useCallback(
+  const pageSelectHandler = useCallback(
     page => {
-      setSelectedRows([]);
-      onPageSelect();
+      onPageSelect && onPageSelect(page);
     },
     [onPageSelect]
   );
 
+  const keysAllEqual = function areEqual(array1, array2) {
+    if (array1.length === array2.length) {
+      return array1.every(element => {
+        if (array2.includes(element)) {
+          return true;
+        }
+
+        return false;
+      });
+    }
+
+    return false;
+  };
+
   if (withRowSelection) {
+    // If row selection is enabled add a column with checkboxes at the start.
+
     /**
      * @type { ColumnDefinition}
      */
     const selectionColumn = {
       id: 'rowSelection',
       headerContent: (
+        // Select all checkbox in the header.
         <SelectCell
-          selected={selectedRows.length === rows.length}
+          selected={
+            rows.length !== 0 &&
+            keysAllEqual(
+              selectedRows,
+              rows.map(r => r.key)
+            )
+          }
           id={`table-storage-select-all`}
-          onSelectChange={selected => onSelectAllRows(selected)}
+          onSelectChange={selected => selectAllRowsHandler(selected)}
         />
       ),
       cellRenderer: SelectCell,
       getCellProps: (cell, index) => {
         return {
-          selected: selectedRows.includes(index),
-          onSelectChange: selected => onSelectRow(index, selected),
+          selected: selectedRows?.includes(index),
+          onSelectChange: selected => selectRowHandler(index, selected),
           id: `table-storage-row-${index}-select`,
         };
       },
@@ -146,24 +130,36 @@ export default function Table({
     effectiveColumns = [selectionColumn, ...effectiveColumns];
   }
 
-  const getRowComponent = (row, index, selected) => (
-    <div role="rowgroup">
-      <div className="storage-table-row" role="row" aria-rowindex={index} aria-selected={selectedRows.includes(index)}>
-        {effectiveColumns.map(c => (
-          <span key={`${c.id}-${index}`} role="cell">
-            {c.cellRenderer ? (
-              <c.cellRenderer {...(c.getCellProps ? c.getCellProps(row[c.id], index) : {})}></c.cellRenderer>
-            ) : (
-              row[c.id]
-            )}
-          </span>
-        ))}
+  const renderRowComponent = (row, index, selected) => {
+    const rowKey = row.key || index;
+    return (
+      <div role="rowgroup" key={rowKey}>
+        <div
+          className="storage-table-row"
+          role="row"
+          aria-rowindex={index}
+          aria-selected={selectedRows?.includes(index) || false}
+        >
+          {effectiveColumns.map(c => (
+            <span key={`${c.id}-${rowKey}`} role="cell">
+              {c.cellRenderer ? (
+                <c.cellRenderer {...(c.getCellProps ? c.getCellProps(row[c.id], rowKey) : {})}></c.cellRenderer>
+              ) : (
+                row[c.id]
+              )}
+            </span>
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
-  if (isEmpty && !isLoading) {
-    return <div className="storage-table-table-content">{emptyState}</div>;
+  if (isEmpty && !isLoading && emptyState) {
+    return (
+      <div className="storage-table">
+        <div className="storage-table-table-content">{emptyState}</div>
+      </div>
+    );
   }
 
   return (
@@ -178,7 +174,7 @@ export default function Table({
         </div>
       </div>
       <div className="storage-table-content">
-        {isLoading ? <Loading className={'files-loading-spinner'} /> : rows.map((row, i) => getRowComponent(row, i))}
+        {isLoading ? <Loading className={'files-loading-spinner'} /> : rows.map((row, i) => renderRowComponent(row, i))}
 
         {!isEmpty && (
           <div className="storage-table-footer">
@@ -187,24 +183,28 @@ export default function Table({
             <Pagination
               className="storage-table-pagination"
               page={page}
-              totalRowCount={totalRowCount}
-              itemsPerPage={itemsPerPage}
+              totalRowCount={totalRowCount || rows.length}
+              itemsPerPage={rowsPerPage}
               visiblePages={1}
-              onPageChange={onPageSelectHandler}
+              onPageChange={pageSelectHandler}
               scrollTarget={scrollTarget}
             />
-            <Dropdown
-              className="storage-table-result-dropdown"
-              value={itemsPerPage}
-              options={itemsPerPageOptions.map(ipp => ({
-                label: `View ${ipp} results`,
-                value: ipp.toString(),
-              }))}
-              onChange={value => onSetItemsPerPage && onSetItemsPerPage(parseInt(value))}
-            />
+            {rowsPerPageOptions && rowsPerPageOptions.length !== 0 && (
+              <Dropdown
+                className="storage-table-result-dropdown"
+                value={rowsPerPage}
+                options={rowsPerPageOptions.map(ipp => ({
+                  label: `View ${ipp} results`,
+                  value: ipp.toString(),
+                }))}
+                onChange={value => onSetItemsPerPage && onSetItemsPerPage(parseInt(value))}
+              />
+            )}
           </div>
         )}
       </div>
     </div>
   );
 }
+
+export default Table;
