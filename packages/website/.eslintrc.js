@@ -1,6 +1,5 @@
 module.exports = {
   extends: [
-    'react-app',
     'next',
     'next/core-web-vitals',
     'plugin:import/errors',

@@ -207,7 +207,7 @@ const Post = ({ post, posts }) => {
           <Button
             className="blog-category-button"
             variant={ButtonVariant.OUTLINE_DARK}
-            href={`/blog?category=${post.meta.category.toLowerCase()}`}
+            href={`/blog?category=${post.meta.category.toLowerCase().split(' ').join('-')}`}
           >
             {post.meta.category}
           </Button>
@@ -242,7 +242,7 @@ const Post = ({ post, posts }) => {
           <Button
             className="blog-category-button"
             variant={ButtonVariant.OUTLINE_DARK}
-            href={`/blog?category=${post.meta.category.toLowerCase()}`}
+            href={`/blog?category=${post.meta.category.toLowerCase().split(' ').join('-')}`}
           >
             {post.meta.category}
           </Button>
