@@ -46,7 +46,7 @@
     "streaming-iterables": "^6.2.0",
     "throttled-queue": "^2.1.2",
     "uint8arrays": "^3.0.0",
-    "w3name": "^1.0.0"
+    "w3name": "^1.0.3"
   },
   "devDependencies": {
     "@ipld/dag-json": "^8.0.7",
