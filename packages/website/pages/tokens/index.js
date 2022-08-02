@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
-import Link from 'components/link/link';
 import TokenCreator from 'components/tokens/tokenCreator/tokenCreator';
 import TokensManager from 'components/tokens/tokensManager/tokensManager';
 import Button, { ButtonVariant } from 'components/button/button';
@@ -42,7 +41,7 @@ const Tokens = () => {
           href={content.ui.return.url}
           variant={content.ui.return.theme}
         >
-          <Link href={content.ui.return.url}>{content.ui.return.text}</Link>
+          {content.ui.return.text}
         </Button>
         <div dangerouslySetInnerHTML={{ __html: content.ui.test_token }} className="testing-cta-container"></div>
       </div>
