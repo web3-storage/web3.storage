@@ -1,3 +1,9 @@
+/**
+ * This module is just providing backwards compatability for functionality which has
+ * now moved to the separate 'w3name' package. This can be removed once users have had
+ * sufficient time to migrate.
+ */
+
 import * as Name from 'w3name'
 import * as uint8arrays from 'uint8arrays'
 import { config } from './lib.js'
