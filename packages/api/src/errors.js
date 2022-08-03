@@ -22,6 +22,21 @@ export class HTTPError extends Error {
   }
 }
 
+export class PinningServiceApiError extends Error {
+  /**
+   *
+   * @param {string} [message]
+   * @param {number} [status]
+   * @param {string} code
+   */
+  constructor (message, status = 400, code = 'PSA_ERROR') {
+    super(message)
+    this.details = message
+    this.status = status
+    this.reason = code
+  }
+}
+
 export class UserNotFoundError extends HTTPError {
   constructor (msg = 'No user found for user token') {
     super(msg, 401)
@@ -31,7 +46,7 @@ export class UserNotFoundError extends HTTPError {
 }
 UserNotFoundError.CODE = 'ERROR_USER_NOT_FOUND'
 
-export class PinningUnauthorizedError extends HTTPError {
+export class PinningUnauthorizedError extends PinningServiceApiError {
   constructor (msg = 'Pinning not authorized for this user, email support@web3.storage to request authorization.') {
     super(msg, 403)
     this.name = 'PinningUnauthorizedError'
@@ -141,21 +156,6 @@ export class MaintenanceError extends Error {
   }
 }
 MaintenanceError.CODE = 'ERROR_MAINTENANCE'
-
-export class PinningServiceApiError extends Error {
-  /**
-   *
-   * @param {string} [message]
-   * @param {number} [status]
-   * @param {string} code
-   */
-  constructor (message, status = 400, code = 'PSA_ERROR') {
-    super(message)
-    this.details = message
-    this.status = status
-    this.reason = code
-  }
-}
 
 export class PSAErrorInvalidData extends PinningServiceApiError {
   /**
