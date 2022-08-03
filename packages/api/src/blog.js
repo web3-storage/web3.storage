@@ -15,17 +15,17 @@ export async function blogSubscriptionCreate (request, env, ctx) {
     'Content-Type': 'application/json; charset=UTF-8',
     Authorization: `Basic: ${apiKey}`
   }
-  const body = await request.json();
+  const body = await request.json()
   const userExists = isChimpUser(body.email, prefix, listId, headers)
   let res
 
-  if(userExists) {
+  if (userExists) {
     res = await updateSubscriber(body.email, prefix, listId, headers)
   } else {
     res = await addSubscriber(body.email, prefix, listId, headers)
   }
 
-  if(res.ok) {
+  if (res.ok) {
     return new JSONResponse({
       ok: true
     })
