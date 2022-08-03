@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.5](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.4...cron-v1.5.5) (2022-08-03)
+
+
+### Bug Fixes
+
+* add ipns migration cron job ([#1705](https://github.com/web3-storage/web3.storage/issues/1705)) ([4b6e67f](https://github.com/web3-storage/web3.storage/commit/4b6e67f07983b06e9bad9c27deb5d6c5b993258e))
+
 ## [1.5.4](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.3...cron-v1.5.4) (2022-07-26)
 
 
