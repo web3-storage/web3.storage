@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
+
 import Loading from 'components/loading/loading';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
 import Pagination from 'components/table/pagination';
@@ -95,9 +96,8 @@ function Table({
     return false;
   };
 
+  // If row selection is enabled add a column with checkboxes at the start.
   if (withRowSelection) {
-    // If row selection is enabled add a column with checkboxes at the start.
-
     /**
      * @type { ColumnDefinition}
      */
