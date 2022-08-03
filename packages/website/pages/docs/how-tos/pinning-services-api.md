@@ -13,7 +13,7 @@ For a full list and documentation of all the available pinning service endpoints
 
 ## Requesting access
 
-To request access to the pinning service for your Web3.Storage account, you will need to navigate to  [your token management page](https://web3.storage/tokens) and click the button labeled "Request API Pinning Access".  Fill out the form and then, once approved, you will be able to access the pinning service API endpoints using your [API token](/how-tos/generate-api-token).
+To request access to the pinning service for your Web3.Storage account, you will need to navigate to  [your token management page](https://web3.storage/tokens) and click the button labeled "Request API Pinning Access".  Fill out the form and then, once approved, you will be able to access the pinning service API endpoints using your [API token](/docs/how-tos/generate-api-token).
 
 ## Using the HTTP API
 
@@ -21,7 +21,7 @@ The Web3.Storage pinning service endpoint for all requests is [https://api.web3.
 
 ### Add a pin
 
-```shell
+```bash
 curl -X POST 'https://api.web3.storage/pins' \
   --header 'Accept: */*' \
   --header 'Authorization: Bearer <YOUR_AUTH_KEY_JWT>' \
@@ -34,7 +34,7 @@ curl -X POST 'https://api.web3.storage/pins' \
 
 ### List successful pins
 
-```shell
+```bash
 curl -X GET 'https://api.web3.storage/pins' \
   --header 'Accept: */*' \
   --header 'Authorization: Bearer <YOUR_AUTH_KEY_JWT>'
@@ -42,7 +42,7 @@ curl -X GET 'https://api.web3.storage/pins' \
 
 ### Delete a pin
 
-```shell
+```bash
 curl -X DELETE 'https://api-staging.web3.storage/pins/<REQUEST_ID>' \
   --header 'Accept: */*' \
   --header 'Authorization: Bearer <YOUR_AUTH_KEY_JWT>'
@@ -52,24 +52,24 @@ curl -X DELETE 'https://api-staging.web3.storage/pins/<REQUEST_ID>' \
 
 The [IPFS CLI](https://docs.ipfs.io/reference/cli/) can be used to maintain pins by first adding the Web3.Storage pinning service.
 
-```shell
+```bash
 ipfs pin remote service add web3.storage https://api.web3.storage/ <YOUR_AUTH_KEY_JWT>
 ```
 
 ### Add a pin
 
-```shell
+```bash
 ipfs pin remote add --service=web3.storage --name=<PIN_NAME> <CID>
 ```
 
 ### List pins
 
-```shell
+```bash
 ipfs pin remote ls --service=web3.storage
 ```
 
 ### Remove a pin
 
-```shell
+```bash
 ipfs pin remote rm --service=web3.storage --cid=<CID>
 ```

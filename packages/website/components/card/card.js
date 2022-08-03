@@ -2,9 +2,9 @@
 import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
-import Image from 'next/image';
-import Link from 'next/link';
 
+import Img from '../cloudflareImage.js';
+import Link from '../link/link';
 import CardTier from './card-tier';
 import Button from '../button/button';
 import NpmIcon from '../../assets/icons/npmicon';
@@ -80,17 +80,8 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
           <div key={category.heading} className="category">
             <div className="category-heading">{category.heading}</div>
             {category.links.map(link => (
-              <Link href={link.url} key={link.text} passHref>
-                <a
-                  href="replace"
-                  className="category-link"
-                  onClick={onLinkClick}
-                  onKeyPress={e => handleKeySelect(e, link.url)}
-                  tabIndex={0}
-                  role="button"
-                >
-                  {link.text}
-                </a>
+              <Link className="category-link" onClick={onLinkClick} href={link.url} key={link.text}>
+                {link.text}
               </Link>
             ))}
           </div>
@@ -113,7 +104,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
         return (
           <>
             <div className="image-wrapper">
-              <Image unoptimized alt="" src={obj.image} width="64" height="64" />
+              <Img src={obj.image} width="64" height="64" />
             </div>
             {card.title && <div className="title">{card.title}</div>}
             {card.subtitle && <div className="subtitle">{card.subtitle}</div>}

@@ -93,6 +93,29 @@ function getPgConnString (env, mode = 'rw') {
 }
 
 /**
+ * Builds a pg connections string
+ *
+ * @param {object} dbOptions
+ * @param {string} dbOptions.host
+ * @param {string} dbOptions.database
+ * @param {string} dbOptions.user
+ * @param {string} dbOptions.password
+ * @param {number} [dbOptions.port]
+ * @param {boolean} [dbOptions.ssl]
+ * @returns
+ */
+function buildPgConnectionString ({
+  host,
+  database,
+  user,
+  password,
+  port = 5432,
+  ssl = true
+}) {
+  return `postgres://${user}:${password}@${host}:${port}/${database}${ssl === true ? '?ssl=true' : ''}`
+}
+
+/**
  * Create a new Postgres pool instance to connect directly to cargo replica from the passed environment variables.
  * This is a readOnly connection.
  *
@@ -102,13 +125,29 @@ function getPgConnString (env, mode = 'rw') {
  * @param {Record<string, string|undefined>} env
  */
 export function getCargoPgPool (env) {
-  const connection = env.CARGO_PG_CONNECTION
-  if (!connection) {
-    throw new Error('Missing CARGO_PG_CONNECTION string. Please add it to the environment.')
-  }
+  const cargoEnvVariables = [
+    'DAG_CARGO_HOST',
+    'DAG_CARGO_DATABASE',
+    'DAG_CARGO_USER',
+    'DAG_CARGO_PASSWORD'
+  ]
+
+  cargoEnvVariables.forEach((variable) => {
+    if (!env[variable]) {
+      throw new Error(`Missing ${variable} string. Please add it to the environment.`)
+    }
+  })
+
+  const connectionString = buildPgConnectionString({
+    user: env.DAG_CARGO_USER,
+    database: env.DAG_CARGO_DATABASE,
+    password: env.DAG_CARGO_PASSWORD,
+    host: env.DAG_CARGO_HOST,
+    ssl: env.ENV !== 'dev'
+  })
 
   return new pg.Pool({
-    connectionString: env.CARGO_PG_CONNECTION,
+    connectionString,
     max: MAX_CONCURRENT_QUERIES
   })
 }

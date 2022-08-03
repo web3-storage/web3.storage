@@ -1,14 +1,15 @@
 // ===================================================================== Imports
 import { useCallback } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import clsx from 'clsx';
 
+import { trackCustomLinkClick, events } from '../../lib/countly';
+import Link from '../link/link';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Button from '../button/button';
-import Squiggle from '../../assets/illustrations/squiggle.js';
+import Img from '../cloudflareImage.js';
+import ImageSquiggle from '../../public/images/illustrations/squiggle.png';
 import GeneralPageData from '../../content/pages/general.json';
-import { trackCustomLinkClick, events } from 'lib/countly';
 
 // ====================================================================== Params
 /**
@@ -39,19 +40,13 @@ export default function Footer({ isProductApp }) {
     [router]
   );
 
-  const handleKeySelect = useCallback(
-    (e, url) => {
-      onLinkClick(e);
-      router.push(url);
-    },
-    [router, onLinkClick]
-  );
-
   // ========================================================= Template [Footer]
   return (
     <footer id="site-footer" className={clsx(isProductApp ? 'clear-bg' : '')}>
       <section id="site-footer-section">
-        <Squiggle id="footer_squiggle" />
+        <div id="footer_squiggle">
+          <Img alt="" src={ImageSquiggle} />
+        </div>
 
         <div className="grid">
           <div className="col-4_sm-8_mi-12" data-push-left="off-1_sm-1_mi-0">
@@ -82,15 +77,8 @@ export default function Footer({ isProductApp }) {
             <div className="footer_resources">
               <div className="label">{resources.heading}</div>
               {resources.items.map(item => (
-                <Link href={item.url} key={item.text} passHref>
-                  <a
-                    href="replace"
-                    className="footer-link"
-                    onClick={onLinkClick}
-                    onKeyPress={e => handleKeySelect(e, item.url)}
-                  >
-                    {item.text}
-                  </a>
+                <Link href={item.url} key={item.text} className="footer-link" onClick={onLinkClick}>
+                  {item.text}
                 </Link>
               ))}
             </div>
@@ -100,15 +88,8 @@ export default function Footer({ isProductApp }) {
             <div className="footer_get-started">
               <div className="label">{getStarted.heading}</div>
               {getStarted.items.map(item => (
-                <Link href={item.url} key={item.text} passHref>
-                  <a
-                    href="replace"
-                    className="footer-link"
-                    onClick={onLinkClick}
-                    onKeyPress={e => handleKeySelect(e, item.url)}
-                  >
-                    {item.text}
-                  </a>
+                <Link className="footer-link" href={item.url} key={item.text} onClick={onLinkClick}>
+                  {item.text}
                 </Link>
               ))}
             </div>

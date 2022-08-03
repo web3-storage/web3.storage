@@ -1,5 +1,97 @@
 # Changelog
 
+## [1.5.4](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.3...cron-v1.5.4) (2022-07-26)
+
+
+### Bug Fixes
+
+* cron remote status ([#1675](https://github.com/web3-storage/web3.storage/issues/1675)) ([02fc600](https://github.com/web3-storage/web3.storage/commit/02fc600ef5afb2fc6344c98ef29c01010cee76bb))
+
+## [1.5.3](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.2...cron-v1.5.3) (2022-07-20)
+
+
+### Bug Fixes
+
+* cron should await on delete remote pins ([f258108](https://github.com/web3-storage/web3.storage/commit/f258108c42677a90a9ca10229184aa57103f2256))
+
+## [1.5.2](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.1...cron-v1.5.2) (2022-07-20)
+
+
+### Bug Fixes
+
+* cron pins skips remote status ([#1660](https://github.com/web3-storage/web3.storage/issues/1660)) ([0cb4ff3](https://github.com/web3-storage/web3.storage/commit/0cb4ff3ec068ac490086a7b1264765e278a9ca29))
+
+## [1.5.1](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.0...cron-v1.5.1) (2022-07-19)
+
+
+### Bug Fixes
+
+* cron pins delete ([#1653](https://github.com/web3-storage/web3.storage/issues/1653)) ([7d14907](https://github.com/web3-storage/web3.storage/commit/7d1490746fc9d719dd2fb0c2a080a03368d223be))
+
+## [1.5.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.4.0...cron-v1.5.0) (2022-07-18)
+
+
+### Features
+
+* admin limit notification email improv ([#1641](https://github.com/web3-storage/web3.storage/issues/1641)) ([0669734](https://github.com/web3-storage/web3.storage/commit/06697341166616fee906c5d81320e94ee7524fda))
+* update pin remote type ([#1619](https://github.com/web3-storage/web3.storage/issues/1619)) ([939edd1](https://github.com/web3-storage/web3.storage/commit/939edd15f0a6cb1db511b2b5b78ccd216142cb05))
+
+## [1.4.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.3.1...cron-v1.4.0) (2022-07-12)
+
+
+### Features
+
+* dag size job improvements ([#1634](https://github.com/web3-storage/web3.storage/issues/1634)) ([b6b3de8](https://github.com/web3-storage/web3.storage/commit/b6b3de81be175d09e2488d7c3f7d6c4ad13b2c37))
+
+## [1.3.1](https://github.com/web3-storage/web3.storage/compare/cron-v1.3.0...cron-v1.3.1) (2022-07-07)
+
+
+### Bug Fixes
+
+* cron drop remote pins needs await ([#1625](https://github.com/web3-storage/web3.storage/issues/1625)) ([7d6f15b](https://github.com/web3-storage/web3.storage/commit/7d6f15b562cf89a14ce18732a6e068db1bdb6684))
+
+## [1.3.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.2.3...cron-v1.3.0) (2022-07-07)
+
+
+### Features
+
+* stop tracking remote pins and remote them from db ([#1615](https://github.com/web3-storage/web3.storage/issues/1615)) ([faa9d6a](https://github.com/web3-storage/web3.storage/commit/faa9d6a546a095a24e9a36ab48bedc77ad7d4787))
+
+## [1.2.3](https://github.com/web3-storage/web3.storage/compare/cron-v1.2.2...cron-v1.2.3) (2022-07-06)
+
+
+### Bug Fixes
+
+* update content dag_size only if it has changed ([#1611](https://github.com/web3-storage/web3.storage/issues/1611)) ([0b99566](https://github.com/web3-storage/web3.storage/commit/0b99566acc6c34bba675891ccebe3607296a37e2))
+
+## [1.2.2](https://github.com/web3-storage/web3.storage/compare/cron-v1.2.1...cron-v1.2.2) (2022-06-29)
+
+
+### Bug Fixes
+
+* make sure null claimed sizes are updated ([#1594](https://github.com/web3-storage/web3.storage/issues/1594)) ([3f585f3](https://github.com/web3-storage/web3.storage/commit/3f585f36b6c1b661aeef22919c519dfde0b99d1c))
+
+## [1.2.1](https://github.com/web3-storage/web3.storage/compare/cron-v1.2.0...cron-v1.2.1) (2022-06-29)
+
+
+### Bug Fixes
+
+* don't allow individual email sending failures to halt cron job ([#1589](https://github.com/web3-storage/web3.storage/issues/1589)) ([2d7a4e0](https://github.com/web3-storage/web3.storage/commit/2d7a4e0028a8275a60089ce243297020c249dcd9))
+* pg connection string append ssl-true ([#1576](https://github.com/web3-storage/web3.storage/issues/1576)) ([1d10181](https://github.com/web3-storage/web3.storage/commit/1d101812cbb8db2099dc2fb03447bf2f94f72f40))
+
+## [1.2.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.1.5...cron-v1.2.0) (2022-06-27)
+
+
+### Features
+
+* use direct connection to cargo to get claimed size ([#1535](https://github.com/web3-storage/web3.storage/issues/1535)) ([e4087a9](https://github.com/web3-storage/web3.storage/commit/e4087a9f4d4202d672938d339e121c19344866b4))
+
+
+### Bug Fixes
+
+* build-cargo-connection-string ([#1564](https://github.com/web3-storage/web3.storage/issues/1564)) ([0663ee2](https://github.com/web3-storage/web3.storage/commit/0663ee28fe97e8bb6d4c10bcd3a18bc0a2e9a839))
+* use github.event.inputs instead ([#1563](https://github.com/web3-storage/web3.storage/issues/1563)) ([044cff8](https://github.com/web3-storage/web3.storage/commit/044cff85c6876c5cf493d3ec98bb84a3c6d5a856))
+
 ## [1.1.5](https://github.com/web3-storage/web3.storage/compare/cron-v1.1.4...cron-v1.1.5) (2022-06-20)
 
 

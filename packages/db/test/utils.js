@@ -3,6 +3,7 @@ import * as pb from '@ipld/dag-pb'
 import { CID } from 'multiformats/cid'
 import { PostgrestClient } from '@supabase/postgrest-js'
 import { normalizeCid } from '../../api/src/utils/cid.js'
+import { DBError } from '../errors.js'
 
 export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU'
 export const dbEndpoint = 'http://127.0.0.1:3000'
@@ -188,8 +189,8 @@ export async function createUserAuthKey (dbClient, user, options = {}) {
 /**
  * @param {import('../index').DBClient} dbClient
  * @param {number} user
- * @param {number} authKey
- * @param {string} cid
+ * @param {number} [authKey]
+ * @param {string} [cid]
  * @param {Object} [options]
  * @param {string} [options.type]
  * @param {number} [options.dagSize]
@@ -328,4 +329,20 @@ export async function createCargoDag (dbClient, dag = {}, source = {}) {
   if (errorSources) {
     console.error(errorSources)
   }
+}
+
+/**
+ * Get contents from cids
+ *
+ * @param {string[]} cids
+ */
+export async function getContents (dbClient, cids) {
+  const { data, error } = await dbClient._client
+    .from('content')
+    .select()
+    .in('cid', cids)
+  if (error) {
+    throw new DBError(error)
+  }
+  return data
 }

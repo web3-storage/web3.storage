@@ -58,6 +58,7 @@
 @import '../pages/login';
 @import '../pages/account';
 @import '../pages/tokens';
+@import '../pages/contact';
 
 // Fonts
 $fontAssetPath: '../assets/fonts';
@@ -355,7 +356,15 @@ h5,
   }
 }
 
-.gap-1 { grid-gap: 0 1rem; }
-.gap-2 { grid-gap: 0 2rem; }
-.gap-3 { grid-gap: 0 3rem; }
-.gap-4 { grid-gap: 0 4rem; }
+.gap-1 {
+  grid-gap: 0 1rem;
+}
+.gap-2 {
+  grid-gap: 0 2rem;
+}
+.gap-3 {
+  grid-gap: 0 3rem;
+}
+.gap-4 {
+  grid-gap: 0 4rem;
+}

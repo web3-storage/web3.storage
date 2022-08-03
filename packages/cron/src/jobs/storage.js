@@ -26,6 +26,20 @@ const USER_BY_EMAIL_QUERY = `
   SELECT id AS _id , email, name FROM public.user WHERE email=$1
 `
 
+const GET_DATE_LATEST_UPLOAD_OR_PSA_REQUEST = `
+  SELECT max(updated_at) as last_updated
+  FROM (
+    SELECT updated_at
+    FROM upload up
+    WHERE user_id=$1
+    UNION ALL
+    SELECT psa.updated_at
+    FROM psa_pin_request psa
+    JOIN auth_key a ON a.id = psa.auth_key_id
+    WHERE a.user_id=$1
+  ) sq
+`
+
 const userByStorageRowToUser = (row) => {
   const storageQuota = parseTextToNumber(row.storage_quota)
   const storageUsed = parseTextToNumber(row.storage_used)
@@ -143,7 +157,8 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 20
 
       if (emailToSend) {
         const emailSent = await emailService.sendEmail(to, emailToSend.emailType, {
-          ...(emailToSend.secondsSinceLastSent && { secondsSinceLastSent: emailToSend.secondsSinceLastSent })
+          ...(emailToSend.secondsSinceLastSent && { secondsSinceLastSent: emailToSend.secondsSinceLastSent }),
+          failSilently: true
         })
 
         if (emailToSend.emailType === EMAIL_TYPE.User100PercentStorage) {
@@ -178,11 +193,23 @@ export async function checkStorageUsed ({ roPg, emailService, userBatchSize = 20
       throw new Error(`${supportEmail} does not exists`)
     }
 
+    const usersOverQuotaAugmented = await Promise.all(
+      usersOverQuota.map(async u => {
+        const { rows } = await roPg.query(GET_DATE_LATEST_UPLOAD_OR_PSA_REQUEST, [
+          u.id
+        ])
+
+        return {
+          ...u,
+          lastUpdate: new Date(rows[0].last_updated)
+        }
+      }))
+
     const toAdmin = results[0]
 
     const emailSent = await emailService.sendEmail(toAdmin, adminStorageEmail.emailType, {
       secondsSinceLastSent: adminStorageEmail.secondsSinceLastSent,
-      templateVars: { users: usersOverQuota }
+      templateVars: { users: usersOverQuotaAugmented }
     })
 
     if (emailSent) {

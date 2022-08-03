@@ -1,9 +1,9 @@
-import Link from 'next/link';
 import clsx from 'clsx';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 
+import Link from 'components/link/link';
 import TokenRowItem from './tokenRowItem';
 import countly from 'lib/countly';
 import Loading from 'components/loading/loading';
@@ -30,7 +30,8 @@ const defaultQueryOrder = 'a-z';
  * @returns
  */
 const TokensManager = ({ content }) => {
-  const { tokens, fetchDate, isFetchingTokens, deleteToken, getTokens, isCreating, hasError, errorMessage } = useTokens();
+  const { tokens, fetchDate, isFetchingTokens, deleteToken, getTokens, isCreating, hasError, errorMessage } =
+    useTokens();
   const [deletingTokenId, setDeletingTokenId] = useState('');
   const { query, replace } = useRouter();
   const queryClient = useQueryClient();

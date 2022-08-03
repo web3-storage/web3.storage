@@ -177,8 +177,6 @@ BEGIN
       'Unpinning',
       -- The IPFS daemon is not pinning the item.
       'Unpinned',
-      -- The IPFS daemon is not pinning the item but it is being tracked.
-      'Remote',
       -- The item has been queued for pinning on the IPFS daemon.
       'PinQueued',
       -- The item has been queued for unpinning on the IPFS daemon.
@@ -241,6 +239,7 @@ CREATE INDEX IF NOT EXISTS pin_location_id_idx ON pin (pin_location_id);
 CREATE INDEX IF NOT EXISTS pin_updated_at_idx ON pin (updated_at);
 CREATE INDEX IF NOT EXISTS pin_status_idx ON pin (status);
 CREATE INDEX IF NOT EXISTS pin_composite_updated_at_and_content_cid_idx ON pin (updated_at, content_cid);
+CREATE INDEX IF NOT EXISTS pin_content_cid_status_idx ON pin (content_cid, status);
 
 -- An upload created by a user.
 CREATE TABLE IF NOT EXISTS upload
@@ -270,19 +269,6 @@ CREATE INDEX IF NOT EXISTS upload_auth_key_id_idx ON upload (auth_key_id);
 CREATE INDEX IF NOT EXISTS upload_user_id_deleted_at_idx ON upload (user_id) WHERE deleted_at IS NULL;
 CREATE INDEX IF NOT EXISTS upload_content_cid_idx ON upload (content_cid);
 CREATE INDEX IF NOT EXISTS upload_updated_at_idx ON upload (updated_at);
-
--- Tracks requests to replicate content to more nodes.
-CREATE TABLE IF NOT EXISTS pin_request
-(
-  id              BIGSERIAL PRIMARY KEY,
-  -- Root CID of the Pin we want to replicate.
-  content_cid     TEXT                                                          NOT NULL UNIQUE REFERENCES content (cid),
-  attempts        INT DEFAULT 0,
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS pin_request_content_cid_idx ON pin_request (content_cid);
 
 -- A request to keep a Pin in sync with the nodes that are pinning it.
 CREATE TABLE IF NOT EXISTS pin_sync_request
@@ -322,6 +308,7 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
 );
 
 CREATE INDEX IF NOT EXISTS psa_pin_request_content_cid_idx ON psa_pin_request (content_cid);
+CREATE INDEX IF NOT EXISTS psa_pin_request_deleted_at_idx ON psa_pin_request (deleted_at) INCLUDE (content_cid, auth_key_id);
 
 CREATE TABLE IF NOT EXISTS name
 (

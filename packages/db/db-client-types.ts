@@ -93,7 +93,7 @@ export type PinItem = PinUpsertInput & {
 export type PinsUpsertInput = {
   id: string
   status: definitions['pin']['status']
-  contentCid: definitions['pin_request']['content_cid']
+  contentCid: definitions['pin']['content_cid']
   location: Location
 }
 
@@ -105,12 +105,6 @@ export type PinItemOutput = {
   peerId: definitions['pin_location']['peer_id']
   peerName: definitions['pin_location']['peer_name']
   region: definitions['pin_location']['region']
-}
-
-export type PinRequestItemOutput = {
-  _id: string
-  cid: definitions['pin_request']['content_cid']
-  created: definitions['pin_request']['inserted_at']
 }
 
 export type PinSyncRequestItem = {
@@ -275,7 +269,7 @@ export type ListUploadReturn = {
 
 // Pinning
 
-// PinRequest
+// PsaPinRequest
 export type PsaPinRequestUpsertInput = {
   id?: string,
   name?: definitions['psa_pin_request']['name'],

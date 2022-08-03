@@ -5,7 +5,7 @@
   left: -1rem;
   top: -1rem;
   z-index: -1;
-  filter: blur(1rem);
+  filter: blur(2rem);
   overflow: hidden;
   transform: scale(1.05);
   background-color: $moonRaker;
@@ -20,6 +20,13 @@
   &.upload-cta-gradient {
     z-index: 0;
   }
+  &.upload-cta-gradient-small {
+    z-index: 0;
+    .saturated-variant {
+      width: 750px;
+      height: 1000px;
+    }
+  }
 
   .header-variant {
     position: absolute;
@@ -28,15 +35,18 @@
     margin: 0 auto;
 
     width: 4400px;
+    height: 4400px;
     opacity: 0.7;
     transform: translateY(-1 * $navigationHeight);
     min-width: 50rem;
 
     @include ultraLarge {
       width: 2600px;
+      height: 2600px;
     }
     @include xlarge {
       width: 2200px;
+      height: 2200px;
     }
     @include tiny {
       transform: translateX(-10rem) translateY(-1 * $navigationHeight);
@@ -54,11 +64,14 @@
 
     z-index: 1;
     width: 4400px;
+    height: 4400px;
     @include xlarge {
       width: 3400px;
+      height: 3400px;
     }
     @include mini {
       width: 1600px;
+      height: 1600px;
       opacity: 0.6;
     }
     img {

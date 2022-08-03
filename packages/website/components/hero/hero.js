@@ -1,20 +1,22 @@
 // ===================================================================== Imports
 import TextBlock from '../textblock/textblock';
+import HeroIllustration from '../../components/hero-illustration';
 import Grid3D from '../../assets/illustrations/grid3D';
-import Squiggle from '../../assets/illustrations/squiggle';
-import Corkscrew from '../../assets/illustrations/corkscrew';
-import Helix from '../../assets/illustrations/helix';
-import Zigzag from '../../assets/illustrations/zigzag';
-import Cross from '../../assets/illustrations/cross';
-import Coil from '../../assets/illustrations/coil';
-import Triangle from '../../assets/illustrations/triangle';
-import Cluster from '../../assets/illustrations/cluster';
-import ClusterMobile from '../../assets/illustrations/cluster2';
-import Ring from '../../assets/illustrations/ring';
-import Spring from '../../assets/illustrations/spring';
-import Cone from '../../assets/illustrations/cone';
-import Fidget from '../../assets/illustrations/fidget';
-import Blobs from '../../assets/illustrations/blobs';
+import ImageSquiggle from '../../public/images/illustrations/squiggle.png';
+import ImageHelix from '../../public/images/illustrations/helix.png';
+import ImageZigzag from '../../public/images/illustrations/zigzag.png';
+import ImageCross from '../../public/images/illustrations/cross.png';
+import ImageCoil from '../../public/images/illustrations/coil.png';
+import ImageTriangle from '../../public/images/illustrations/triangle.png';
+import ImageCluster from '../../public/images/illustrations/cluster.png';
+import ImageClusterMobile from '../../public/images/illustrations/cluster2.png';
+import ImageCone from '../../public/images/illustrations/cone.png';
+import ImageFidget from '../../public/images/illustrations/fidget.png';
+import ImageCorkscrew from '../../public/images/illustrations/corkscrew.png';
+import ImageRing from '../../public/images/illustrations/ring.png';
+import ImageSpring from '../../public/images/illustrations/spring.png';
+import ImageBlobs from '../../public/images/illustrations/blobs.png';
+import ImageCross2 from '../../public/images/illustrations/cross2.png';
 
 // ====================================================================== Params
 /**
@@ -28,15 +30,15 @@ export default function Hero({ block }) {
     return (
       <>
         <Grid3D id="error_hero-grid-3d" />
-        <Helix id="error_hero-helix" className={'hero-illustration'} />
-        <Triangle id="error_hero-triangle-1" className={'hero-illustration'} />
-        <Triangle id="error_hero-triangle-2" className={'hero-illustration'} />
-        <Triangle id="error_hero-triangle-3" className={'hero-illustration'} />
-        <Cross id="error_hero-cross-1" className={'hero-illustration'} />
-        <Cross id="error_hero-cross-2" className={'hero-illustration'} />
-        <Corkscrew id="error_hero-corkscrew" className={'hero-illustration'} />
-        <Ring id="error_hero-ring" className={'hero-illustration'} />
-        <Spring id="error_hero-spring" className={'hero-illustration'} />
+        <HeroIllustration id="error_hero-helix" src={ImageHelix} />
+        <HeroIllustration id="error_hero-triangle-1" src={ImageTriangle} />
+        <HeroIllustration id="error_hero-triangle-2" src={ImageTriangle} />
+        <HeroIllustration id="error_hero-triangle-3" src={ImageTriangle} />
+        <HeroIllustration id="error_hero-cross-1" src={ImageCross} />
+        <HeroIllustration id="error_hero-cross-2" src={ImageCross} />
+        <HeroIllustration id="error_hero-corkscrew" src={ImageCorkscrew} />
+        <HeroIllustration id="error_hero-ring" src={ImageRing} />
+        <HeroIllustration id="error_hero-spring" src={ImageSpring} />
       </>
     );
   };
@@ -45,9 +47,9 @@ export default function Hero({ block }) {
     return (
       <>
         <Grid3D id="faq_hero-grid-3d" />
-        <Corkscrew id="faq_hero-corkscrew" className={'hero-illustration'} />
-        <Helix id="faq_hero-helix" className={'hero-illustration'} />
-        <Ring id="faq_hero-ring" className={'hero-illustration'} />
+        <HeroIllustration id="faq_hero-corkscrew" src={ImageCorkscrew} />
+        <HeroIllustration id="faq_hero-helix" src={ImageHelix} />
+        <HeroIllustration id="faq_hero-ring" src={ImageRing} />
       </>
     );
   };
@@ -55,14 +57,14 @@ export default function Hero({ block }) {
   const aboutHero = () => {
     return (
       <>
-        <Cluster id="about_hero-cluster" className={'hero-illustration'} />
-        <ClusterMobile id="about_hero-cluster-mobile" />
-        <Blobs id="about_hero-blobs" className={'hero-illustration'} />
-        <Ring id="about_hero-ring" className={'hero-illustration'} />
-        <Helix id="about_hero-helix" className={'hero-illustration'} />
-        <Spring id="about_hero-spring" className={'hero-illustration'} />
-        <Cone id="about_hero-cone" className={'hero-illustration'} />
-        <Fidget id="about_hero-fidget" className={'hero-illustration'} />
+        <HeroIllustration id="about_hero-cluster" src={ImageCluster} />
+        <HeroIllustration id="about_hero-cluster-mobile" src={ImageClusterMobile} />
+        <HeroIllustration id="about_hero-blobs" src={ImageBlobs} />
+        <HeroIllustration id="about_hero-ring" src={ImageRing} />
+        <HeroIllustration id="about_hero-helix" src={ImageHelix} />
+        <HeroIllustration id="about_hero-spring" src={ImageSpring} />
+        <HeroIllustration id="about_hero-cone" src={ImageCone} />
+        <HeroIllustration id="about_hero-fidget" src={ImageFidget} />
       </>
     );
   };
@@ -70,9 +72,9 @@ export default function Hero({ block }) {
   const tiersHero = () => {
     return (
       <>
-        <Coil id="pricing_hero-coil" className={'hero-illustration'} />
-        <Corkscrew id="pricing_hero-corkscrew" className={'hero-illustration'} />
-        <Cross id="pricing_hero-cross" className={'hero-illustration'} />
+        <HeroIllustration id="pricing_hero-coil" src={ImageCoil} />
+        <HeroIllustration id="pricing_hero-corkscrew" src={ImageCorkscrew} />
+        <HeroIllustration id="pricing_hero-cross" src={ImageCross} />
       </>
     );
   };
@@ -81,12 +83,24 @@ export default function Hero({ block }) {
     return (
       <>
         <Grid3D id="index_hero-grid-3d" />
-        <Squiggle id="index_hero-squiggle" className={'hero-illustration'} />
-        <Corkscrew id="index_hero-corkscrew" className={'hero-illustration'} />
-        <Zigzag id="index_hero-zigzag" className={'hero-illustration'} />
-        <Helix id="index_hero-helix" className={'hero-illustration'} />
-        <Cross id="index_hero-cross" className={'hero-illustration'} />
-        <Triangle id="index_hero-triangle" className={'hero-illustration'} />
+        <HeroIllustration id="index_hero-squiggle" src={ImageSquiggle} />
+        <HeroIllustration id="index_hero-corkscrew" src={ImageCorkscrew} />
+        <HeroIllustration id="index_hero-zigzag" src={ImageZigzag} />
+        <HeroIllustration id="index_hero-helix" src={ImageHelix} />
+        <HeroIllustration id="index_hero-cross" src={ImageCross} />
+        <HeroIllustration id="index_hero-triangle" src={ImageTriangle} />
+      </>
+    );
+  };
+
+  const contactHero = () => {
+    return (
+      <>
+        <HeroIllustration id="contact_hero-corkscrew" src={ImageCorkscrew} />
+        <HeroIllustration id="contact_hero-helix" src={ImageHelix} />
+        <HeroIllustration id="contact_hero-helix2" src={ImageHelix} />
+        <HeroIllustration id="contact_hero-cross" src={ImageCross2} />
+        <HeroIllustration id="contact_hero-triangle" src={ImageTriangle} />
       </>
     );
   };
@@ -103,6 +117,8 @@ export default function Hero({ block }) {
         return faqHero();
       case 'error':
         return hero404();
+      case 'contact':
+        return contactHero();
       default:
         return null;
     }

@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import assert from 'assert'
-import { createCargoDag, createUpload, createUser, createUserAuthKey, dbEndpoint, getUpload, listUploads, randomCid, token } from '@web3-storage/db/test-utils'
+import { createCargoDag, createUpload, createUser, createUserAuthKey, dbEndpoint, getContents, getUpload, listUploads, randomCid, token } from '@web3-storage/db/test-utils'
 import { DBClient } from '@web3-storage/db'
 import { updateDagSizes } from '../src/jobs/dagcargo.js'
 import { getCargoPgPool, getPg } from '../src/lib/utils.js'
@@ -8,7 +8,12 @@ import { getCargoPgPool, getPg } from '../src/lib/utils.js'
 const env = {
   ...process.env,
   ENV: 'dev',
-  CARGO_PG_CONNECTION: 'postgres://postgres:postgres@127.0.0.1:5432/postgres?currentSchema=cargo'
+  // These DB vars aren't necessary if you're using the latest .env.tpl, but are here
+  // to avoid errors if people are still using the old version before these were added
+  DAG_CARGO_HOST: '127.0.0.1',
+  DAG_CARGO_DATABASE: 'postgres',
+  DAG_CARGO_USER: 'postgres',
+  DAG_CARGO_PASSWORD: 'postgres'
 }
 
 function getToBeUpdatedNull (cItem) {
@@ -31,14 +36,14 @@ describe('Fix dag sizes migration', () => {
   let rwPg
 
   async function updateDagSizesWrp ({ user, after = new Date(1990, 1, 1), limit = 1000 }) {
-    const allUploadsBefore = await listUploads(dbClient, user._id)
+    const allUploadsBefore = (await listUploads(dbClient, user._id)).uploads
     await updateDagSizes({
       cargoPool,
       rwPg,
       after,
       limit
     })
-    const allUploadsAfter = await listUploads(dbClient, user._id)
+    const allUploadsAfter = (await listUploads(dbClient, user._id)).uploads
     const updatedCids = allUploadsAfter.filter((uAfter) => {
       const beforeUpload = allUploadsBefore.find((uBefore) => uAfter.cid === uBefore.cid)
       return beforeUpload?.dagSize !== uAfter.dagSize
@@ -77,24 +82,28 @@ describe('Fix dag sizes migration', () => {
         actualSize: 120
       }, {
         cid: await randomCid(),
-        dagSize: 105,
-        actualSize: 1000 // To be updated
+        dagSize: 105, // To be updated
+        actualSize: 1000
       }, {
         cid: await randomCid(),
         dagSize: 110,
         actualSize: 110
       }, {
         cid: await randomCid(),
-        dagSize: 125,
-        actualSize: 90 // To be updated
+        dagSize: 125, // To be updated
+        actualSize: 90
       }, {
         cid: await randomCid(),
-        dagSize: 0,
-        actualSize: 90 // To be updated
+        dagSize: 0, // To be updated
+        actualSize: 90
       }, {
         cid: await randomCid(),
         dagSize: 100,
         actualSize: null
+      }, {
+        cid: await randomCid(),
+        dagSize: null, // To be updated
+        actualSize: 10
       }, {
         cid: await randomCid(),
         dagSize: null,
@@ -172,15 +181,29 @@ describe('Fix dag sizes migration', () => {
     assert.strictEqual(toBeUpdated.length, updatedCids.length)
   })
 
-  it('updates the updated_at field', async () => {
-    const { allUploadsBefore, allUploadsAfter } = await updateDagSizesWrp({ user })
+  it('updates only when needed', async () => {
+    const toBeUpdated = contentItems
+      .filter((c) => getToBeUpdatedNull(c) || getToBeUpdatedWrong(c))
+      .map(c => c.cid)
 
-    const nullOrZeroSizes = contentItems.filter((c) => getToBeUpdatedNull(c) || getToBeUpdatedWrong(c))
-    nullOrZeroSizes.map(async c => {
-      const u = allUploadsAfter.find(u => u.cid === c.cid)
-      assert.strictEqual(u.dagSize, c.actualSize)
-      assert.notStrictEqual(allUploadsBefore.find((u) => u.cid === c.cid).updated,
-        allUploadsAfter.find((u) => u.cid === c.cid).updated, `Not updated updated_at of ${c.cid}`)
+    const beforeContents = await getContents(dbClient, toBeUpdated)
+    await updateDagSizesWrp({ user })
+    const afterFirstRoundContents = await getContents(dbClient, toBeUpdated)
+
+    const updatedCidsFirstRound = afterFirstRoundContents.filter((cAfter) => {
+      const beforeContent = beforeContents.find((cBefore) => cAfter.cid === cBefore.cid)
+      return beforeContent?.updated_at !== cAfter.updated_at
     })
+
+    assert.deepStrictEqual(updatedCidsFirstRound.map(c => c.cid).sort(), toBeUpdated.slice().sort())
+
+    await updateDagSizesWrp({ user })
+    const afterSecondRoundContents = await getContents(dbClient, toBeUpdated)
+
+    const updatedCidsSecondRound = afterSecondRoundContents.filter((cAfter) => {
+      const firstRoundContent = afterFirstRoundContents.find((cFirstRound) => cAfter.cid === cFirstRound.cid)
+      return firstRoundContent?.updated_at !== cAfter.updated_at
+    })
+    assert.strictEqual(updatedCidsSecondRound.length, 0)
   })
 })

@@ -9,6 +9,7 @@ import { carHead, carGet, carPut, carPost } from './car.js'
 import { uploadPost } from './upload.js'
 import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, userUploadsRename, userInfoGet, userRequestPost } from './user.js'
 import { pinDelete, pinGet, pinPost, pinsGet } from './pins.js'
+import { blogSubscriptionCreate } from './blog.js'
 import { metricsGet } from './metrics.js'
 import { versionGet } from './version.js'
 import {
@@ -19,7 +20,6 @@ import {
 import { notFound } from './utils/json-response.js'
 import { nameGet, nameWatchGet, namePost } from './name.js'
 import { compose } from './utils/fn.js'
-import { cloudflareInstanceofTest } from './temporary.js'
 
 const router = Router()
 
@@ -87,6 +87,8 @@ router.get('/name/:key',            auth['🌍'](nameGet))
 router.get('/name/:key/watch',      auth['🌍'](nameWatchGet))
 router.post('/name/:key',           auth['🔑'](namePost))
 
+router.post('/blog/subscription',   auth['🌍'](blogSubscriptionCreate))
+
 router.delete('/user/uploads/:cid',      auth['👤🗑️'](userUploadsDelete))
 router.post('/user/uploads/:cid/rename', auth['👤'](userUploadsRename))
 router.get('/user/tokens',               auth['👤'](userTokensGet))
@@ -95,8 +97,6 @@ router.post('/user/request',             auth['👤'](userRequestPost))
 router.delete('/user/tokens/:id',        auth['👤🗑️'](userTokensDelete))
 router.get('/user/account',              auth['👤'](userAccountGet))
 router.get('/user/info',                 auth['👤'](userInfoGet))
-
-router.get('/cloudflare-instanceof-test', cloudflareInstanceofTest)
 /* eslint-enable no-multi-spaces */
 
 // Monitoring

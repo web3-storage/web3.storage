@@ -14,8 +14,10 @@ PG_REST_URL=http://127.0.0.1:3000
 PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 RO_PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres
 
-CARGO_PG_CONNECTION=postgres://postgres:postgres@127.0.0.1:5432/postgres?currentSchema=cargo
-
+DAG_CARGO_HOST=127.0.0.1
+DAG_CARGO_DATABASE=postgres
+DAG_CARGO_USER=postgres
+DAG_CARGO_PASSWORD=postgres
 
 ## ---- api -------------------------------------------------------------------
 
@@ -57,9 +59,3 @@ NEXT_PUBLIC_ENV=dev
 
 CLUSTER_IPFS_PROXY_API_URL=http://127.0.0.1:9095/api/v0/
 EMAIL_PROVIDER=dummy
-
-
-## ---- pinpin ----------------------------------------------------------------
-
-# set me to test repinning our pins on pinata
-PINATA_JWT="<your jwt here>"

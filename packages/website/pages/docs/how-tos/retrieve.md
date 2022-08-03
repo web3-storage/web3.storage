@@ -8,6 +8,8 @@ import Callout from 'components/callout/callout';
 import CodeSnippet from 'components/codesnippet/codesnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
 import golangRetrieve from '!!raw-loader!../../../assets/code-snippets/how-to/golang/retrieve/retrieve.go';
+import Img from 'components/cloudflareImage';
+import ImgGatewayDir from '../../../public/images/docs/gateway-directory-listing.png';
 
 # How to retrieve data from Web3.Storage
 
@@ -28,7 +30,7 @@ When you [store data using the Web3.Storage client][howto-store], the `put` meth
 
 You can use an IPFS gateway to view a list of all the files in that directory from your browser. To do so, simply create a gateway URL. For example, if your CID is `bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu`, you can make a URL for the `dweb.link` gateway as follows: [bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link](https://bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link/). Follow that link, and you'll see a page similar to this:
 
-![Screenshot of an IPFS gateway directory listing](/images/docs/gateway-directory-listing.png)
+<Img src={ImgGatewayDir} alt="Screenshot of an IPFS gateway directory listing" />
 
 If you want to link directly to a file within that directory, just add the file path after the CID portion of the link. For example: [bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link/not-distributed.jpg](https://bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link/not-distributed.jpg) could be used as a shareable link for your new favorite wallpaper.
 
@@ -38,7 +40,7 @@ When you [store data using the Web3.Storage client][howto-store], the `put` meth
 
 You can use an IPFS gateway to view a list of all the files in that directory from your browser. To do so, simply create a gateway URL. For example, if your CID is `bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu`, you can make a URL for the `dweb.link` gateway as follows: [bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link](https://bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link/). Follow that link, and you'll see a page similar to this:
 
-![Screenshot of an IPFS gateway directory listing](/images/docs/gateway-directory-listing.png)
+<Img src={ImgGatewayDir} alt="Screenshot of an IPFS gateway directory listing" />
 
 If you want to link directly to a file within that directory, just add the file path after the CID portion of the link. For example: [bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link/not-distributed.jpg](https://bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.dweb.link/not-distributed.jpg) could be used as a shareable link for your new favorite wallpaper.
 
@@ -55,7 +57,7 @@ When downloading files from an HTTP gateway, web browsers will set the default f
 
 In the link above, the CID `bafybeicfnbaeigdtklwkrj35r4wtfppix732zromsadvgiu33mowah74yq` points to an IPFS directory listing, which maps from the filename `treehouse.jpeg` to the CID for the image itself.
 
-Since the Web3.Storage client [wraps your uploaded files in a directory by default](./store.md#directory-wrapping), this is the most common kind of gateway link you're likely to need, and your users should get nice filenames when they download their content.
+Since the Web3.Storage client [wraps your uploaded files in a directory by default](/docs/how-tos/store/#directory-wrapping), this is the most common kind of gateway link you're likely to need, and your users should get nice filenames when they download their content.
 
 However, the behavior is a bit different if you make a gateway link directly to the image CID:
 
@@ -81,7 +83,7 @@ First, you'll need to create a Web3.Storage client using your API token. Getting
 
 First you'll need to add the `web3.storage` package to your project's dependencies:
 
-```shell
+```bash
 npm install web3.storage
 ```
 
@@ -144,13 +146,13 @@ If you have the [IPFS command line interface][ipfs-docs-cli-quickstart] installe
 
 To get the whole bundle and save it to a directory, run the following command:
 
-```shell
+```bash
 ipfs get bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu
 ```
 
 If you want to get a specific file out of the bundle, add its name onto the end of the `ipfs get bafybie...` command:
 
-```shell
+```bash
 ipfs get bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu/youareanonsense.jpg
 ```
 
@@ -163,7 +165,7 @@ Sometimes you may need to just download a specific file to your computer using t
 1.  Open a terminal window.
 1.  Use `curl` to download your file:
 
-        ```shell
+        ```bash
         curl https://<YOUR CID>.ipfs.dweb.link/<FILE NAME> -o ~/<OUTPUT FILE>
         ```
 
@@ -177,7 +179,7 @@ Sometimes you may need to just download a specific file to your computer using t
 
         Your complete command should look something like this:
 
-        ```shell
+        ```bash
         curl https://bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq.ipfs.dweb.link/example.txt -o ~/output-file.txt
         ```
 
@@ -187,7 +189,7 @@ Sometimes you may need to just download a specific file to your computer using t
 1.  Open a terminal window.
 1.  Use `curl` to download your file:
 
-        ```shell
+        ```bash
         curl https://<YOUR CID>.ipfs.dweb.link/<FILE NAME> -o ~/<OUTPUT FILE>
         ```
 
@@ -201,7 +203,7 @@ Sometimes you may need to just download a specific file to your computer using t
 
         Your complete command should look something like this:
 
-        ```shell
+        ```bash
         curl https://bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq.ipfs.dweb.link/example.txt -o ~/output-file.txt
         ```
 
@@ -239,13 +241,13 @@ If you haven't yet explored in depth how to store data using Web3.Storage, check
 
 You can also use the client library to get more information about the status of your data. See the [query how-to guide][howto-query] to learn how to get more details about your data, including the status of any Filecoin storage deals.
 
-[reference-js]: ../reference/js-client-library.md
-[quickstart-guide]: ../intro.md#quickstart
-[concepts-content-addressing]: ../concepts/content-addressing.md
-[howto-store]: ./store.md
-[howto-query]: ./query.md
-[reference-js-web3response]: ../reference/js-client-library.md#return-value-2
-[reference-js-constructor]: ../reference/js-client-library.md#constructor
+[reference-js]: /docs/reference/js-client-library/
+[quickstart-guide]: /docs/intro.md#quickstart
+[concepts-content-addressing]: /docs/concepts/content-addressing/
+[howto-store]: /docs/how-tos/store/
+[howto-query]: /docs/how-tos/query/
+[reference-js-web3response]: /docs/reference/js-client-library/#return-value-2
+[reference-js-constructor]: /docs/reference/js-client-library/#constructor
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing/
 [ipfs-docs-cli-quickstart]: https://docs.ipfs.io/how-to/command-line-quick-start/
 [ipfs-docs-desktop-quickstart]: https://docs.ipfs.io/install/ipfs-desktop/

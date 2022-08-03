@@ -791,51 +791,6 @@ export class DBClient {
   }
 
   /**
-   * Get All Pin requests.
-   *
-   * @param {Object} [options]
-   * @param {number} [options.size = 600]
-   * @return {Promise<Array<import('./db-client-types').PinRequestItemOutput>>}
-   */
-  async getPinRequests ({ size = 600 } = {}) {
-    /** @type {{ data: Array<import('./db-client-types').PinRequestItemOutput>, error: PostgrestError }} */
-    const { data: pinReqs, error } = await this._client
-      .from('pin_request')
-      .select(
-        `
-        _id:id::text,
-        cid:content_cid,
-        created:inserted_at
-      `
-      )
-      .limit(size)
-
-    if (error) {
-      throw new DBError(error)
-    }
-
-    return pinReqs
-  }
-
-  /**
-   * Delete pin requests with provided ids.
-   *
-   * @param {Array<number>} ids
-   * @return {Promise<void>}
-   */
-  async deletePinRequests (ids) {
-    /** @type {{ error: PostgrestError }} */
-    const { error } = await this._client
-      .from('pin_request')
-      .delete()
-      .in('id', ids)
-
-    if (error) {
-      throw new DBError(error)
-    }
-  }
-
-  /**
    * Create pin sync requests.
    *
    * @param {Array<number>} pinSyncRequests
