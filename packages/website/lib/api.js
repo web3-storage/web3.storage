@@ -1,5 +1,3 @@
-import { parseLinkHeader } from '@web3-storage/parse-link-header';
-
 import { getMagic } from './magic';
 import constants from './constants';
 
@@ -152,57 +150,27 @@ export async function createToken(name) {
 
 /**
  * @typedef {Object} UploadArgs
- * @property {number} args.size Defines the amount of results to return
- * @property {number} [args.page] Return given number page
- * @property {string} [args.before] Filter results before a given date in ISO 8601 format
- * @property {string} [args.after] Filter results after a given date in ISO 8601 format
+ * @property {number} args.size
+ * @property {string} args.before
  * @property {string} [args.sortBy] Can be either "Date" or "Name" - uses "Date" as default
  * @property {string} [args.sortOrder] Can be either "Asc" or "Desc" - uses "Desc" as default
- */
-
-/**
- * @typedef {Object} HeaderMeta
- * @property {number} [args.size] Amount of results returned
- * @property {number} [args.page] The page returned
- * @property {number} [args.count] Total amount of items
- * @property {?import('@web3-storage/parse-link-header').Link} [args.nextLink]
- * @property {?import('@web3-storage/parse-link-header').Link} [args.prevLink]
- */
-
-/**
- * @typedef {Object} UploadResults
- * @property {import('web3.storage').Upload[]} results - List of requested uploads
- * @property {HeaderMeta} meta - Metadata relating to the pagination of results
  */
 
 /**
  * Gets files
  *
  * @param {UploadArgs} args
- * @returns {Promise<UploadResults>}
+ * @returns {Promise<import('web3.storage').Upload[]>}
  * @throws {Error} When it fails to get uploads
  */
-export async function getUploads({ size, before, after, sortBy, sortOrder, page }) {
-  const params = new URLSearchParams({ size: String(size) });
-
-  if (page) {
-    params.set('page', String(page));
-  }
-
+export async function getUploads({ size, before, sortBy, sortOrder }) {
+  const params = new URLSearchParams({ before, size: String(size) });
   if (sortBy) {
     params.set('sortBy', sortBy);
   }
 
   if (sortOrder) {
-    params.set('sortOrder', sortOrder);
-  }
-
-  if (before) {
-    params.set('before', before);
-  }
-
-  if (after) {
-    params.set('after', after);
+    params.set('setOrder', sortOrder);
   }
   const res = await fetch(`${API}/user/uploads?${params}`, {
     method: 'GET',
@@ -210,38 +178,13 @@ export async function getUploads({ size, before, after, sortBy, sortOrder, page 
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + (await getToken()),
     },
-  });
+  })
 
   if (!res.ok) {
     throw new Error(`failed to get uploads: ${await res.text()}`);
   }
 
-  const linkHeader = res.headers.get('link');
-  const pageHeader = res.headers.get('page');
-  const sizeHeader = res.headers.get('size');
-  const countHeader = res.headers.get('count');
-
-  if (!pageHeader || !sizeHeader || !countHeader) {
-    throw Error('Response is missing required headers');
-  }
-
-  const parsedLink = parseLinkHeader(linkHeader);
-
-  /** @type HeaderMeta */
-  const meta = {
-    page: parseInt(pageHeader),
-    nextLink: parsedLink?.next,
-    prevLink: parsedLink?.prev,
-    size: parseInt(sizeHeader),
-    count: parseInt(countHeader),
-  };
-
-  const results = await res.json();
-
-  return {
-    meta,
-    results,
-  };
+  return res.json();
 }
 
 /**
@@ -317,10 +260,10 @@ export async function listPins(status, token) {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token, // **** this needs to be a token generated from the tokens context
     },
-  });
+  })
   if (!res.ok) {
-    throw new Error(`failed to get pinned files: ${await res.text()}`);
+    throw new Error(`failed to get pinned files: ${await res.text()}`)
   }
 
-  return res.json();
+  return res.json()
 }
