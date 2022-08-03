@@ -134,7 +134,7 @@ router.all('*', auth['🌍'](() => notFound()))
  * @param {import('./env').Env} env
  */
 function serverError (error, request, env) {
-  return addCorsHeaders(request, errorHandler(error, env))
+  return addCorsHeaders(request, errorHandler(error, env, request))
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent
