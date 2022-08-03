@@ -13,6 +13,7 @@ import GradientBackground from 'components/gradientbackground/gradientbackground
 import CloseIcon from 'assets/icons/close';
 import { ButtonVariant } from 'components/button/button';
 import CheckIcon from 'assets/icons/check';
+import useQueryParams from 'ZeroHooks/useQueryParams';
 // import Filterable from 'ZeroComponents/filterable/filterable';
 // import SearchIcon from 'assets/icons/search';
 
@@ -36,6 +37,7 @@ const ROWS_PER_PAGE_OPTIONS = [2, 4, 20, 50, 100, 500];
  * - Need to figure out 'isUpdating' state
  * - Consider moving some state/components might need to be lifted
  *   to parent component (Modal, overlay et) to be shared with pins
+ * - Fix issue with onSetItemsPerPage being called on load and always resetting page to 1
  */
 export default function UploadsContainer({ content, onFileUpload }) {
   const fileRowLabels = content?.table.file_row_labels;
@@ -51,7 +53,7 @@ export default function UploadsContainer({ content, onFileUpload }) {
   } = useUploads();
   const { info } = useUser();
 
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useQueryParams('page', 0);
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[0]);
   const [selectedRows, setSelectedRows] = useState(/** @type{string[]}*/ []);
   // const [keyword, setKeyword] = useState(/** @type{string[]}*/ []);
@@ -59,11 +61,6 @@ export default function UploadsContainer({ content, onFileUpload }) {
   const [refetchDate, setRefetchDate] = useState();
   const [deleteModalState, setDeleteModalState] = useState(false);
   const [showCheckOverlay, setShowCheckOverlay] = useState(false);
-
-  // Set the first page when changing the items per page.
-  useEffect(() => {
-    setCurrentPage(0);
-  }, [getUploads, rowsPerPage]);
 
   // Fetch uploads when query changes.
   // TODO: consider tidying up state with url query
@@ -74,7 +71,7 @@ export default function UploadsContainer({ content, onFileUpload }) {
     // rowsPerPage here contains the old value.
     getUploads({
       size: rowsPerPage,
-      page: currentPage + 1,
+      page: parseInt(currentPage),
     });
   }, [getUploads, currentPage, rowsPerPage, refetchDate]);
 
@@ -171,9 +168,12 @@ export default function UploadsContainer({ content, onFileUpload }) {
     );
   };
 
-  const onSelectedPage = useCallback(async page => {
-    setCurrentPage(page);
-  }, []);
+  const onSelectedPage = useCallback(
+    async page => {
+      setCurrentPage(page);
+    },
+    [setCurrentPage]
+  );
 
   const onRowSelectedChange = useCallback(
     (key, value) => {
@@ -268,7 +268,7 @@ export default function UploadsContainer({ content, onFileUpload }) {
         columns={columns}
         rows={uploads.map(file => fileToTableRow(file))}
         totalRowCount={totalUploads}
-        page={currentPage}
+        page={parseInt(currentPage)}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
         isEmpty={totalUploads === 0}
@@ -289,6 +289,7 @@ export default function UploadsContainer({ content, onFileUpload }) {
         }
         onSetItemsPerPage={rpp => {
           setRowsPerPage(rpp);
+          setCurrentPage(1);
 
           // TODO: Do we need this now that the loader spins for the request happening?
           setShowCheckOverlay(true);
