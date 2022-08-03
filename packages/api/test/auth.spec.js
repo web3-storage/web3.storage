@@ -30,9 +30,9 @@ describe('Pinning service API access', () => {
       })
 
       assert(!res.ok)
-      const { message, code } = await res.json()
-      assert.match(message, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
-      assert.strictEqual(code, PinningUnauthorizedError.CODE)
+      const { error: { reason, details } } = await res.json()
+      assert.match(details, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
+      assert.strictEqual(reason, PinningUnauthorizedError.CODE)
     })
   })
 
@@ -48,9 +48,9 @@ describe('Pinning service API access', () => {
       })
 
       assert(!res.ok)
-      const { message, code } = await res.json()
-      assert.match(message, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
-      assert.strictEqual(code, PinningUnauthorizedError.CODE)
+      const { error: { reason, details } } = await res.json()
+      assert.match(details, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
+      assert.strictEqual(reason, PinningUnauthorizedError.CODE)
     })
   })
 
@@ -66,9 +66,9 @@ describe('Pinning service API access', () => {
       })
 
       assert(!res.ok)
-      const { message, code } = await res.json()
-      assert.match(message, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
-      assert.strictEqual(code, PinningUnauthorizedError.CODE)
+      const { error: { reason, details } } = await res.json()
+      assert.match(details, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
+      assert.strictEqual(reason, PinningUnauthorizedError.CODE)
     })
   })
 
@@ -83,9 +83,9 @@ describe('Pinning service API access', () => {
       })
 
       assert(!res.ok)
-      const { message, code } = await res.json()
-      assert.match(message, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
-      assert.strictEqual(code, PinningUnauthorizedError.CODE)
+      const { error: { reason, details } } = await res.json()
+      assert.match(details, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
+      assert.strictEqual(reason, PinningUnauthorizedError.CODE)
     })
   })
 
@@ -100,9 +100,9 @@ describe('Pinning service API access', () => {
       })
 
       assert(!res.ok)
-      const { message, code } = await res.json()
-      assert.match(message, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
-      assert.strictEqual(code, PinningUnauthorizedError.CODE)
+      const { error: { reason, details } } = await res.json()
+      assert.match(details, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
+      assert.strictEqual(reason, PinningUnauthorizedError.CODE)
     })
   })
 })
@@ -178,10 +178,10 @@ describe('Account restriction', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, 403)
-      const { code, message } = await res.json()
-      assert.strictEqual(code, AccountRestrictedError.CODE)
-      assert.match(message, RESTRICTED_ERROR_CHECK)
-      assert.match(message, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
+      const { error: { reason, details } } = await res.json()
+      assert.strictEqual(reason, AccountRestrictedError.CODE)
+      assert.match(details, RESTRICTED_ERROR_CHECK)
+      assert.match(details, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
     })
 
     it('should throw if account is restricted', async () => {
@@ -197,10 +197,10 @@ describe('Account restriction', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, 403)
-      const { code, message } = await res.json()
-      assert.strictEqual(code, AccountRestrictedError.CODE)
-      assert.match(message, RESTRICTED_ERROR_CHECK)
-      assert.match(message, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
+      const { error: { reason, details } } = await res.json()
+      assert.strictEqual(reason, AccountRestrictedError.CODE)
+      assert.match(details, RESTRICTED_ERROR_CHECK)
+      assert.match(details, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
     })
   })
 
@@ -224,10 +224,10 @@ describe('Account restriction', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, 403)
-      const { code, message } = await res.json()
-      assert.strictEqual(code, AccountRestrictedError.CODE)
-      assert.match(message, RESTRICTED_ERROR_CHECK)
-      assert.match(message, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
+      const { error: { reason, details } } = await res.json()
+      assert.strictEqual(reason, AccountRestrictedError.CODE)
+      assert.match(details, RESTRICTED_ERROR_CHECK)
+      assert.match(details, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
     })
 
     it('should throw if account is restricted', async () => {
@@ -243,10 +243,10 @@ describe('Account restriction', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, 403)
-      const { code, message } = await res.json()
-      assert.strictEqual(code, AccountRestrictedError.CODE)
-      assert.match(message, RESTRICTED_ERROR_CHECK)
-      assert.match(message, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
+      const { error: { reason, details } } = await res.json()
+      assert.strictEqual(reason, AccountRestrictedError.CODE)
+      assert.match(details, RESTRICTED_ERROR_CHECK)
+      assert.match(details, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
     })
   })
 
