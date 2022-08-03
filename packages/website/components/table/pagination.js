@@ -22,10 +22,10 @@ export default function Pagination({
 }) {
   const [pageList, setPageList] = useState(/** @type {number[]} */ ([]));
 
-  const pageCount = useMemo(() => (itemsPerPage ? Math.ceil(totalRowCount / itemsPerPage) : null), [
-    totalRowCount,
-    itemsPerPage,
-  ]);
+  const pageCount = useMemo(
+    () => (itemsPerPage ? Math.ceil(totalRowCount / itemsPerPage) : null),
+    [totalRowCount, itemsPerPage]
+  );
 
   const pageChangeHandler = useCallback(
     page => {
@@ -35,11 +35,13 @@ export default function Pagination({
       }
       onPageChange && onPageChange(page);
     },
-    [scrollTarget]
+    [scrollTarget, onPageChange]
   );
   useEffect(() => {
     setPageList(
-      Array.from({ length: pageCount }, (_, i) => i).filter(p => p >= page - visiblePages && p <= page + visiblePages)
+      Array.from({ length: pageCount }, (_, i) => i + 1).filter(
+        p => p >= page - visiblePages && p <= page + visiblePages
+      )
     );
   }, [visiblePages, page, pageCount]);
 
@@ -47,7 +49,7 @@ export default function Pagination({
     <div className={clsx(className, 'Pagination')}>
       <ul className="pageList">
         {page > visiblePages + 1 && (
-          <button type="button" className="firstPage" onClick={() => pageChangeHandler(0)}>
+          <button type="button" className="firstPage" onClick={() => pageChangeHandler(1)}>
             First
           </button>
         )}
@@ -66,7 +68,7 @@ export default function Pagination({
               className={clsx('page', { current: p === page })}
               onClick={() => pageChangeHandler(p)}
             >
-              {p + 1}
+              {p}
             </button>
           ))}
         {pageCount != null && page < pageCount - visiblePages && <div className="nextEllipses">...</div>}
