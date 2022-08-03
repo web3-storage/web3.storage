@@ -2,8 +2,8 @@ import debug from 'debug'
 import retry from 'p-retry'
 
 const MAX_REQUEST_PAGE = 10
-const W3NAME_API_URL_STAGING = 'https://w3name-staging.protocol-labs.workers.dev/'
-const W3NAME_API_URL_PRODUCTION = 'https://w3name-production.protocol-labs.workers.dev/'
+const W3NAME_API_URL_STAGING = 'https://name.web3.storage/'
+const W3NAME_API_URL_PRODUCTION = 'https://name-staging.web3.storage/'
 const log = debug('names:postNamesToW3name')
 
 /**
