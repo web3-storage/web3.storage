@@ -90,6 +90,7 @@ const Account = () => {
           <FilesManager
             content={AppData.page_content.file_manager}
             className="account-files-manager"
+            hasPSAEnabled={user?.info?.tags?.['HasPsaAccess']}
             onFileUpload={onFileUpload}
           />
         </div>

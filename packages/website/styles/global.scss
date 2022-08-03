@@ -23,7 +23,7 @@
 @import '../components/account/ctaCard/CTACard';
 @import '../components/account/storageManager/storageManager';
 @import '../components/account/filesManager/filesManager';
-@import '../components/account/filesManager/fileRowItem';
+@import '../components/account/pinsContainer/fileRowItem';
 @import '../components/tokens/tokenCreator/tokenCreator';
 @import '../components/tokens/tokensManager/tokensManager';
 @import '../components/tokens/tokensManager/tokenRowItem';
@@ -43,7 +43,6 @@
 @import '../components/callout/callout.scss';
 @import '../components/search/search.scss';
 @import '../components/account/accountBlockedModal/accountBlockedModal.scss';
-
 
 // ==== table
 @import '../components/table/table.scss';
