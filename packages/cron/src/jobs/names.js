@@ -1,10 +1,12 @@
 import debug from 'debug'
 import retry from 'p-retry'
+import throttledQueue from 'throttled-queue'
 
 const MAX_REQUEST_PAGE = 10
 const W3NAME_API_URL_STAGING = 'https://name.web3.storage/'
 const W3NAME_API_URL_PRODUCTION = 'https://name-staging.web3.storage/'
 const log = debug('names:postNamesToW3name')
+const throttle = throttledQueue(2, 1000) // at most 2 requests per second
 
 /**
  * @param {{
@@ -25,7 +27,7 @@ export async function postNamesToW3name ({ env, db }) {
     const queryRes = await retry(() => db.listNames({ from, to }), { onFailedAttempt: log })
 
     if (queryRes.length > 0) {
-      await Promise.all(queryRes.map((name) => postKeyW3Name(name, w3nameApiURL)))
+      await Promise.all(queryRes.map((name) => throttle(() => postKeyW3Name(name, w3nameApiURL))))
       from = to + 1
       to = from + MAX_REQUEST_PAGE - 1
     } else {
