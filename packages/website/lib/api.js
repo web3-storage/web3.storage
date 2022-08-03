@@ -212,6 +212,10 @@ export async function getUploads({ size, before, after, sortBy, sortOrder, page 
     },
   });
 
+  if (!res.ok) {
+    throw new Error(`failed to get uploads: ${await res.text()}`);
+  }
+
   const linkHeader = res.headers.get('link');
   const pageHeader = res.headers.get('page');
   const sizeHeader = res.headers.get('size');
@@ -231,10 +235,6 @@ export async function getUploads({ size, before, after, sortBy, sortOrder, page 
     size: parseInt(sizeHeader),
     count: parseInt(countHeader),
   };
-
-  if (!res.ok) {
-    throw new Error(`failed to get uploads: ${await res.text()}`);
-  }
 
   const results = await res.json();
 
