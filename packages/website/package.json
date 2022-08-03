@@ -33,7 +33,6 @@
     "highlight.js": "11.4.0",
     "magic-sdk": "^4.2.1",
     "next": "^12.1.0",
-    "next-mdx-remote": "^4.0.3",
     "next-optimized-images": "^2.6.2",
     "nextra": "^2.0.0-beta.5",
     "p-map": "^5.1.0",

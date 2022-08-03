@@ -2,22 +2,21 @@ import fs from 'fs';
 
 import { useEffect, useMemo, useState } from 'react';
 import matter from 'gray-matter';
-import { serialize } from 'next-mdx-remote/serialize';
-import { MDXRemote } from 'next-mdx-remote';
 import { isEqual } from 'lodash';
+import dynamic from 'next/dynamic';
 
 import { ReactComponent as TwitterIcon } from '../../../assets/icons/twitter.svg';
 import { ReactComponent as FacebookIcon } from '../../../assets/icons/facebook.svg';
 import { ReactComponent as LinkedinIcon } from '../../../assets/icons/linkedin.svg';
 import { ReactComponent as LinkIcon } from '../../../assets/icons/link.svg';
+import { initFloaterAnimations } from '../../../lib/floater-animations.js';
+import { addTextToClipboard } from '../../../lib/utils';
 import BlogArticlePageData from '../../../content/pages/blog-article.json';
 import BlockBuilder from '../../../components/blockbuilder/blockbuilder.js';
-import { initFloaterAnimations } from '../../../lib/floater-animations.js';
 import SocialLink from '../../../components/social-link';
 import Tags from '../../../components/blog/tags/tags';
 import { Card } from '../../../components/blog/cards/cards';
 import Button, { ButtonVariant } from '../../../components/button/button';
-import { addTextToClipboard } from '../../../lib/utils';
 import CodeHighlightCopy from '../../../components/blog/codehighlightcopy/codehighlightcopy';
 
 export async function getStaticProps({ ...ctx }) {
@@ -30,7 +29,7 @@ export async function getStaticProps({ ...ctx }) {
       ...data,
       slug,
     },
-    content: await serialize(content),
+    content: content,
   };
 
   // get all posts
@@ -60,6 +59,9 @@ export async function getStaticProps({ ...ctx }) {
   };
 }
 
+/**
+ * Related Posts
+ */
 const RelatedPosts = ({ items }) => (
   <>
     {items.map((post, i) => (
@@ -75,31 +77,53 @@ const RelatedPosts = ({ items }) => (
  * @returns {JSX.Element}
  */
 const Post = ({ post, posts }) => {
+  const MainContent = dynamic(() =>
+    import(`/posts/${post.meta.slug}.mdx`).then(component => {
+      // Client-side post-render javascript functionality
+      if (typeof window === 'object') {
+        requestAnimationFrame(() => {
+          CodeHighlightCopy('.post-content pre');
+          // open external links in new tab
+          const externalLinks = document.querySelectorAll('.post-content a[href*="://"]');
+          externalLinks?.forEach(link => {
+            // @ts-ignore
+            link.getAttribute('href') && link.hostname !== window.location.hostname && (link.target = '_blank');
+          });
+        });
+      }
+      return component;
+    })
+  );
+
   const [showCopied, setShowCopied] = useState(false);
   const sections = BlogArticlePageData.page_content;
   const animations = BlogArticlePageData.floater_animations;
-  const SHARE_TEXT = '';
-  // localhost will not work as currentUrl with fb or linkedin
+
+  /**
+   * share links
+   */
   const [currentUrl, setCurrentUrl] = useState('');
   useEffect(() => setCurrentUrl(window.location.href), []);
   const twitterShareLink = new URL('https://twitter.com/intent/tweet');
   const twitterParams = {
     url: currentUrl,
-    text: SHARE_TEXT,
+    text: '',
     hashtags: 'web3.storage',
   };
   const facebookShareLink = new URL('https://www.facebook.com/sharer/sharer.php');
   const facebookParams = {
     u: currentUrl,
-    quote: SHARE_TEXT,
+    quote: '',
     hashtag: '#web3.storage',
   };
   const linkedinShareLink = new URL('https://www.linkedin.com/sharing/share-offsite');
   const linkedinParams = { url: currentUrl };
 
+  /**
+   * get next and previous slugs
+   */
   const { prevPostSlug, nextPostSlug } = useMemo(() => {
     const currentPostIndex = posts.findIndex(targetPost => isEqual(targetPost, post.meta));
-
     return {
       prevPostSlug: posts[currentPostIndex - 1]?.slug,
       nextPostSlug: posts[currentPostIndex + 1]?.slug,
@@ -158,19 +182,6 @@ const Post = ({ post, posts }) => {
     return currentRelatedPosts;
   }, [post, posts]);
 
-  useEffect(() => {
-    CodeHighlightCopy('.post-content pre');
-  }, []);
-
-  // open external links in new tab
-  useEffect(() => {
-    const externalLinks = document.querySelectorAll('.post-content a[href*="://"]');
-    externalLinks?.forEach(link => {
-      // @ts-ignore
-      link.getAttribute('href') && link.hostname !== window.location.hostname && (link.target = '_blank');
-    });
-  }, []);
-
   // floater animations
   useEffect(() => {
     let pageFloaters = {};
@@ -213,7 +224,7 @@ const Post = ({ post, posts }) => {
           </Button>
         </div>
         <div className="post-content">
-          <MDXRemote {...post.content} />
+          <MainContent />
         </div>
       </div>
 
