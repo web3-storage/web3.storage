@@ -31,7 +31,7 @@
     "ora": "^5.4.1",
     "sade": "^1.7.4",
     "uint8arrays": "^3.0.0",
-    "w3name": "^1.0.3",
+    "w3name": "^1.0.4",
     "web3.storage": "^3.5.2"
   },
   "devDependencies": {
