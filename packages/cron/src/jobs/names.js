@@ -64,7 +64,7 @@ async function postKeyW3Name (name, w3nameApiURL = '') {
 
   if (!w3nameApiURL) { return }
 
-  const res = await fetch(`${w3nameApiURL}/name/${key}`, {
+  const res = await fetch(new URL(`/name/${key}`, w3nameApiURL), {
     method: 'POST',
     body: name.record
   })
