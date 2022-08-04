@@ -2,7 +2,7 @@
  * This module exists only to provide maintain the existing functionality to allow a
  * smooth transition to the new 'w3name' package. This module will be later removed.
  */
-import * as w3name from 'w3name/dist/src/'
+import * as w3name from 'w3name'
 
 console.warn('The name.js module is deprecated. You should use the new \'w3name\' npm package instead.')
 
