@@ -22,10 +22,7 @@ export default function Pagination({
 }) {
   const [pageList, setPageList] = useState(/** @type {number[]} */ ([]));
 
-  const pageCount = useMemo(
-    () => (itemsPerPage ? Math.ceil(totalRowCount / itemsPerPage) : null),
-    [totalRowCount, itemsPerPage]
-  );
+  const pageCount = useMemo(() => Math.ceil(totalRowCount / itemsPerPage), [totalRowCount, itemsPerPage]);
 
   const pageChangeHandler = useCallback(
     page => {
