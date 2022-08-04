@@ -15,7 +15,7 @@ export const {
   v0,
   increment,
   Revision
-} = w3name;
+} = w3name
 
 /**
  * @typedef {{
