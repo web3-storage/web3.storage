@@ -2,7 +2,7 @@
  * This module exists only to provide maintain the existing functionality to allow a
  * smooth transition to the new 'w3name' package. This module will be later removed.
  */
-import * as w3name from 'w3name'
+import * as w3name from 'w3name/dist/src/'
 
 console.warn('The name.js module is deprecated. You should use the new \'w3name\' npm package instead.')
 
@@ -43,6 +43,7 @@ export async function publish (service, revision, key) {
   // this library is only really intended for use with the w3name endpoint anyway. The
   // most likely use case for overriding it is for tests, which no longer exist for this
   // module because it's now just a proxy.
+  // @ts-ignore key type is libp2p-crypto PrivateKey instead of SigningKey
   return await w3name.publish(revision, key)
 }
 
