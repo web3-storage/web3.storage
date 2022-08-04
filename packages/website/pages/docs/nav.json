@@ -32,6 +32,10 @@
         "src": "how-tos/list-directory-contents"
       },
       {
+        "name": "Update data with w3name",
+        "src": "how-tos/w3name"
+      },
+      {
         "name": "Work with Content Archives",
         "src": "how-tos/work-with-car-files"
       },
