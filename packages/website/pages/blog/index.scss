@@ -175,8 +175,15 @@
   .button.text.blue {
     .button-contents {
       font-style: italic;
+      transition: color $transitionDuration;
       @include fontWeight_Semibold;
       @include fontSize_Mini;
+    }
+    &:hover {
+      .button-contents {
+        color: $cerise;
+        transition: color $transitionDuration;
+      }
     }
     &:after {
       display: none;
