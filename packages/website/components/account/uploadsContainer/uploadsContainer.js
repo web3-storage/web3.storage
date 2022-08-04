@@ -4,14 +4,13 @@ import clsx from 'clsx';
 
 import { useUploads } from 'components/contexts/uploadsContext';
 import Table from 'components/table/table';
-import Button from 'ZeroComponents/button/button';
 import countly from 'lib/countly';
 import { useUser } from 'components/contexts/userContext';
 import RefreshIcon from 'assets/icons/refresh';
 import Modal from 'modules/zero/components/modal/modal';
 import GradientBackground from 'components/gradientbackground/gradientbackground';
 import CloseIcon from 'assets/icons/close';
-import { ButtonVariant } from 'components/button/button';
+import Button, { ButtonVariant } from 'components/button/button';
 import CheckIcon from 'assets/icons/check';
 import useQueryParams from 'ZeroHooks/useQueryParams';
 // import Filterable from 'ZeroComponents/filterable/filterable';
@@ -55,10 +54,10 @@ export default function UploadsContainer({ content, onFileUpload }) {
 
   const [currentPage, setCurrentPage] = useQueryParams('page', 0);
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[0]);
-  const [selectedRows, setSelectedRows] = useState(/** @type{string[]}*/ []);
+  const [selectedRows, setSelectedRows] = useState(/** @type{string[]}*/ ([]));
   // const [keyword, setKeyword] = useState(/** @type{string[]}*/ []);
   // const [sort, setSort] = useState();
-  const [refetchDate, setRefetchDate] = useState();
+  const [refetchDate, setRefetchDate] = useState(/** @type{number | undefined}*/ (undefined));
   const [deleteModalState, setDeleteModalState] = useState(false);
   const [showCheckOverlay, setShowCheckOverlay] = useState(false);
 
@@ -115,7 +114,7 @@ export default function UploadsContainer({ content, onFileUpload }) {
 
   /**
    *
-   * @param {import('web3.storage').Upload} file
+   * @param {any} file
    */
   const fileToTableRow = file => {
     return {

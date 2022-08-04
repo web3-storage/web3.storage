@@ -30,7 +30,7 @@ import SelectCell from 'components/table/selectCell';
  * @param {boolean} [props.withRowSelection]
  * @param {import('react').ReactComponentElement}  [props.emptyState]
  * @param {import('react').ReactComponentElement}  [props.leftFooterSlot]
- * @param {number[]} [props.selectedRows] List of keys of the selected rows
+ * @param {number|string[]} [props.selectedRows] List of keys of the selected rows
  * @param {function} [props.onPageSelect]
  * @param {function} [props.onSetItemsPerPage]
  * @param {(key: number|string, value: boolean) => void} [props.onRowSelectedChange]
