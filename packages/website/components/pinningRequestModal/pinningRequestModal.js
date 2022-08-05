@@ -42,17 +42,17 @@ const PinningRequestModal = ({ isOpen, onClose }) => {
           <form onSubmit={handleCreateUserRequest}>
             <div className="input-container">
               <label htmlFor="reason">Why you are looking for pinning service API access:</label>
-              <textarea id="reason" name="reason" required rows={4}/>
+              <textarea id="reason" name="reason" required rows={4} />
             </div>
             <div className="input-container">
               <label htmlFor="examples">
                 Please provide a sample of 5-10 CIDs of NFTs / metadata you are looking to pin:{' '}
               </label>
-              <textarea id="examples" name="examples" required rows={5}/>
+              <textarea id="examples" name="examples" required rows={5} />
             </div>
             <div className="input-container">
               <label htmlFor="profile">Please provide a profile on a service (artist profile, collector, etc): </label>
-              <textarea id="profile" name="profile" required rows={1}/>
+              <textarea id="profile" name="profile" required rows={1} />
             </div>
 
             <div className="input-container">

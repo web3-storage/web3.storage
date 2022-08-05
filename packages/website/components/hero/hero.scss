@@ -43,6 +43,7 @@
 
 #index_hero-grid-3d,
 #faq_hero-grid-3d,
+#w3name_hero-grid-3d,
 #error_hero-grid-3d {
   position: absolute;
   top: -9999px;
@@ -51,6 +52,19 @@
   right: -9999px;
   margin: auto !important;
   z-index: 1;
+}
+
+.w3name_hero-artwork-container {
+  position: absolute;
+  display: none;
+  top: -20rem;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: -1;
 }
 
 #index_hero-squiggle {
