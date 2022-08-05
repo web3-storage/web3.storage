@@ -2,6 +2,9 @@
 
 // ///////////////////////////////////////////////////// General [Page Sections]
 // -----------------------------------------------------------------------------
+#marketing-site {
+  overflow: hidden;
+}
 
 .page-index {
   position: relative;
@@ -273,6 +276,14 @@
 // ------------------------------------------------------------ Section [Header]
 #hero_header {
   position: relative;
+  .grid {
+      justify-content: center;
+      width: 420px;
+      max-width: calc(100% - 4rem);
+      @include medium {
+        padding: 0
+      }
+  }
   .heading {
     @include h1;
     word-break: keep-all;

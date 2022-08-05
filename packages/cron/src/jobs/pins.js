@@ -12,7 +12,7 @@ import { downgradeCid } from '../lib/cid.js'
  * Bounded by URL length for deleting pin sync requests.
  * e.g. DELEETE /pin_sync_request?id=in.%28227623241%2C227623242%2C227623243%2C227623244%2C227623245...
  */
-const MAX_PIN_REQUESTS_PER_RUN = 700
+const MAX_PIN_REQUESTS_PER_RUN = 500
 /**
  * 8k max request length to cluster for statusAll, we hit this at around 126 CIDs
  * http://nginx.org/en/docs/http/ngx_http_core_module.html#large_client_header_buffers
@@ -101,7 +101,12 @@ export async function updatePinStatuses ({ cluster, db }) {
         status = toPinStatusEnum(pinInfo.status)
       }
 
-      if (status !== 'Pinned' && status !== 'Remote') reSyncPins.push(pin)
+      // Do not track remote status
+      if (status === 'Remote') {
+        return null
+      }
+
+      if (status !== 'Pinned') reSyncPins.push(pin)
 
       if (status === pin.status) {
         log(`🙅 ${pin.contentCid}@${pin.location.peerId}: No status change (${status})`)

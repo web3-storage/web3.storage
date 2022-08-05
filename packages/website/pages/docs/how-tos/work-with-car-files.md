@@ -51,31 +51,31 @@ To install it, you'll need [Node.js](https://nodejs.org) - we recommend the late
 
 You can install the command globally:
 
-```shell
+```bash
 npm install -g ipfs-car
 ```
 
 Or run the command with `npx` without installing it to your PATH:
 
-```shell
+```bash
 npx ipfs-car --help
 ```
 
 The `--pack` flag will create a new CAR file from a collection of input files:
 
-```shell
+```bash
 ipfs-car --pack path/to/files --output path/to/write/a.car
 ```
 
 Or extract files from a CAR with `--unpack`:
 
-```shell
+```bash
 ipfs-car --unpack path/to/my.car --output /path/to/unpack/files/to
 ```
 
 You can also list the contents of a CAR with `--list`:
 
-```shell
+```bash
 ipfs-car --list path/to/my.car
 ```
 
@@ -89,7 +89,7 @@ The [`ipfs dag export`][ipfs-docs-dag-export] command will fetch an IPFS object 
 
 To create a CAR file using go-ipfs, you can redirect the output of `ipfs dag export` to a file:
 
-```shell
+```bash
 cid="bafybeigdmvh2wgmryq5ovlfu4bd3yiljokhzdep7abpe4c4lrf6rukkx4m"
 ipfs dag export $cid > path/to/output.car
 ```
@@ -100,7 +100,7 @@ If you don't have the CID in your local IPFS repository, the `dag export` comman
 
 To add the contents of a CAR file to your local IPFS repository, you can use `ipfs dag import`:
 
-```shell
+```bash
 ipfs dag import path/to/input.car
 ```
 
@@ -163,7 +163,7 @@ The JavaScript [carbites library][github-carbites-js] includes a package called 
 
 You can install the tool globally with `npm`:
 
-```shell with-output
+```bash with-output
 npm install -g carbites-cli
 ```
 
@@ -176,7 +176,7 @@ found 0 vulnerabilities
 
 This will add a `carbites` command to your shell's environment:
 
-```shell with-output
+```bash with-output
 carbites --help
 ```
 
@@ -193,13 +193,13 @@ carbites --help
 ##### Running with npx
   You can run the `carbites` command without installing it globally using the `npx` command, which is included with Node.js:
 
-```shell
+```bash
 npx carbites-cli --help
 ```
 
 The first time around, it will ask to make sure you want to install the package:
 
-```shell
+```
 Need to install the following packages:
   carbites-cli
 Ok to proceed? (y)
@@ -218,17 +218,17 @@ The other important flag is `--strategy`, which determines how the CAR files are
 
 Here's an example, using an input car file called `my-video.car` that weighs in at 455MB:
 
-```shell
+```bash
 carbites split --size 100MB --strategy treewalk my-video.car
 ```
 
 This will create five new files in the same directory as the input file, named `my-video-0.car` through `my-video-4.car`. If you list their sizes, you can see that all the chunked cars are less than or equal to 100 MB:
 
-```shell with-output
+```bash with-output
 ls -lh my-video*
 ```
 
-```
+```bash
 -rw-r--r--  1 user  staff   100M Sep 15 13:56 my-video-1.car
 -rw-r--r--  1 user  staff   100M Sep 15 13:56 my-video-0.car
 -rw-r--r--  1 user  staff   100M Sep 15 13:56 my-video-2.car
@@ -241,7 +241,7 @@ ls -lh my-video*
 
 To combine CARs that have been previously split, you can use the `carbites join` command:
 
-```shell
+```bash
 carbites join my-video-*.car --output my-video-joined.car
 ```
 
@@ -257,7 +257,7 @@ The [carbites library][github-carbites-js] provides an interface for splitting C
 
 To split CARs from your JavaScript code, install the `carbites` package:
 
-```shell
+```bash
 npm install carbites
 ```
 
@@ -298,7 +298,7 @@ The [go-carbites](https://github.com/alanshaw/go-carbites) module can be used to
 
 Install the module with `go get`:
 
-```shell
+```bash
 go get github.com/alanshaw/go-carbites
 ```
 
@@ -388,7 +388,7 @@ Using the helpers above, you can make a CAR file with a single block of simple C
 
 If you have the IPFS command line app installed, you can view the object you stored with the [`ipfs dag get` command][ipfs-docs-dag-get], for example:
 
-```shell with-output
+```bash with-output
 ipfs dag get bafyreidykglsfhoixmivffc5uwhcgshx4j465xwqntbmu43nb2dzqwfvae
 ```
 
@@ -410,7 +410,7 @@ You can link from one CBOR object to another using CIDs:
 
 As with simple objects, you can use `ipfs dag get` to show the outer object:
 
-```shell with-output
+```bash with-output
 ipfs dag get bafyreieq6bftbe3o46lrdbzj6vrvyee4njfschajxgmpxwbqex3czifhry
 ```
 
@@ -426,7 +426,7 @@ ipfs dag get bafyreieq6bftbe3o46lrdbzj6vrvyee4njfschajxgmpxwbqex3czifhry
 
 The `contact` field above contains an IPLD link, which can be included in the `ipfs dag get` command to resolve the linked object:
 
-```shell with-output
+```bash with-output
 ipfs dag get bafyreieq6bftbe3o46lrdbzj6vrvyee4njfschajxgmpxwbqex3czifhry/contact
 ```
 
@@ -454,7 +454,7 @@ The helper returns a `root` block, which we can link to by CID, as well as a `bl
 
 As before, we can view the root block with `ipfs dag get`:
 
-```shell with-output
+```bash with-output
 ipfs dag get bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy
 ```
 
@@ -469,7 +469,7 @@ ipfs dag get bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy
 
 Since the file data is plain text, you can use `ipfs dag get` to fetch its contents:
 
-```shell with-output
+```bash with-output
 ipfs dag get bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy/file
 ```
 
@@ -481,11 +481,11 @@ Notice that the file content is wrapped in quotes because `dag get` is interpret
 
 To avoid this, or to fetch binary files, you can use `ipfs get` to download the file:
 
-```shell with-output
+```bash with-output
 ipfs get bafyreid7hvce4pzcy56s4hwu7xrt3dnnzzfvilzfwsadvf6q4eqild6ndy/file
 ```
 
-```shell
+```bash
 Saving file(s) to file
  33 B / 33 B [===============================================================] 100.00% 0s
 ```
@@ -507,12 +507,12 @@ By default, the client's [`putCar` method][reference-client-putcar] will accept 
 
 See the [`putCar` parameter reference][reference-client-putcar-params] for more details and an example that uses `dag-json`.
 
-[concepts-content-addressing]: ../concepts/content-addressing.md
-[howto-store]: ./store.md
-[reference-client-library]: ../reference/js-client-library.md
-[reference-client-putcar]: ../reference/js-client-library.md#store-car-files
-[reference-client-putcar-params]: ../reference/js-client-library.md#parameters-5
-[reference-http-api]: ../../reference/http-api/
+[concepts-content-addressing]: /docs/concepts/content-addressing/
+[howto-store]: /docs/how-tos/store/
+[reference-client-library]: /docs/reference/js-client-library/
+[reference-client-putcar]: /docs/reference/js-client-library/#store-car-files
+[reference-client-putcar-params]: /docs/reference/js-client-library/#parameters-5
+[reference-http-api]: /docs/reference/http-api/
 [github-ipfs-car]: https://github.com/web3-storage/ipfs-car
 [github-carbites-js]: https://github.com/nftstorage/carbites
 [ipfs-docs-dag-export]: https://docs.ipfs.io/reference/cli/#ipfs-dag-export

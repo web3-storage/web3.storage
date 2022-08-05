@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import W3namePageData from '../../../content/pages/w3name.json';
 import Scroll2Top from '../../../components/scroll2top/scroll2top.js';
 import BlockBuilder from '../../../components/blockbuilder/blockbuilder.js';
@@ -18,7 +16,7 @@ const W3name = () => {
       <Scroll2Top />
     </>
   );
-}
+};
 
 export function getStaticProps() {
   return {

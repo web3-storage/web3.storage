@@ -40,7 +40,7 @@ With Web3.Storage, you get all the benefits of decentralized storage technologie
 
 You'll need **Node version 14** or higher and **NPM version 7** or higher to complete this guide. Check your local versions like this:
 
-```shell
+```bash
 node --version && npm --version
 > v16.4.2
 > 7.18.1
@@ -75,13 +75,12 @@ Now that you're signed up and logged in, it's time to [get your API token. ↓](
 
 It only takes a few moments to get a free API token from Web3.Storage. This token enables you to interact with the Web3.Storage service without using the main website, enabling you to incorporate files stored using Web3.Storage directly into your applications and services.
 
-1. Click **Account** to go to your [Web3.Storage account page](https://web3.storage/account).
-1. Click **Create an API token**.
+1. Hover over **Account** and click **Create an API Token** in the dropdown menu to go to your [Web3.Storage API Tokens page](https://web3.storage/tokens).
 1. Enter a descriptive name for your API token and click **Create**.
 1. Make a note of the **Token** field somewhere secure where you know you won't lose it. You can click **Copy** to copy your new API token to your clipboard.
 
 <Callout type="warning">
-##### Keep your API token private 
+##### Keep your API token private
 Do not share your API token with anyone else. This key is specific to your account.
 </Callout>
 
@@ -98,7 +97,7 @@ All data uploaded to Web3.Storage is available to anyone who requests it using t
 
 1. Create a folder for this quickstart project, and move into that folder:
 
-   ```shell
+   ```bash
    mkdir web3-storage-quickstart
    cd web3-storage-quickstart
    ```
@@ -113,13 +112,13 @@ All data uploaded to Web3.Storage is available to anyone who requests it using t
 
 1. Save both files, and then run `npm install` from your project folder:
 
-   ```shell
+   ```bash
    npm install
    ```
 
    This step may take a few moments. Once it's done, the command should output something like this:
 
-   ```shell
+   ```
    added 224 packages, and audited 225 packages in 14s
 
    40 packages are looking for funding
@@ -136,13 +135,13 @@ Now that you've got your script ready to go, you just need to run it in your ter
 
 1. Run the script by calling `node put-files.js`, using `--token` to supply your API token and specifying the path and name of the file you want to upload. If you'd like to upload more than one file at a time, simply specify their paths/names one after the other in a single command. Here's how that looks in template form:
 
-   ```shell
+   ```bash
    node put-files.js --token=<YOUR_TOKEN> ~/filename1 ~/filename2 ~/filenameN
    ```
 
    Once you've filled in your details, your command should look something like this:
 
-   ```shell
+   ```bash
    node put-files.js --token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGZFYTRhODlFNUVhRjY5YWI4QUZlZUU3MUE5OTgwQjFGQ2REZGQzNzIiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2MjY5Njk3OTY1NTQsIm5hbWUiOiJib25maXJlIn0.0S9Ua2FWEAZSwaemy92N7bW8ancRUtu4XtLS3Gy1ouA ~/hello.txt
    ```
 
@@ -154,7 +153,7 @@ You can upload a whole directory full of files at once by giving the script the 
 
 1. The command will output a CID:
 
-   ```shell
+   ```bash
    Content added with CID: bafybeig7sgl52pc6ihypxhk2yy7gcllu4flxgfwygp7klb5xdjdrm7onse
    ```
 
@@ -163,7 +162,7 @@ You can upload a whole directory full of files at once by giving the script the 
 <Callout type="info">
 ##### Get the status of your upload
 
-It's possible to get a variety of details about your upload, including its CID, upload date, size on the network, and info on IPFS pinning and Filecoin storage deals, by using the `status()` method within the JavaScript client library. Check out the [Query how-to guide](./how-tos/query.md#querying-for-status-information) for more information.
+It's possible to get a variety of details about your upload, including its CID, upload date, size on the network, and info on IPFS pinning and Filecoin storage deals, by using the `status()` method within the JavaScript client library. Check out the [Query how-to guide](/docs/how-tos/query/#querying-for-status-information) for more information.
 </Callout>
 
 Next up, we'll go over two methods for you to [retrieve your data from Web3.Storage ↓](#get-your-file)

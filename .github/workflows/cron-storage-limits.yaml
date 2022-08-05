@@ -13,6 +13,7 @@ jobs:
     name: Send notifications
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         env: ['staging', 'production']
     timeout-minutes: 340

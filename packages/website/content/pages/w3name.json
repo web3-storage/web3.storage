@@ -75,7 +75,7 @@
                   "w3name sits on top of IPFS, generating names that have cryptographically verifiable and performantly updatable pointers. That way, even if your application’s data is always changing, these names can simply be updated to point to new CIDs. Build rich experiences for your users while still taking advantage of content addressing and the other superpowers of IPFS!"
                 ],
                 "cta": {
-                  "url": "/get-started",
+                  "url": "/docs/how-tos/w3name/",
                   "text": "GET STARTED",
                   "theme": "dark",
                   "event": "",
@@ -104,7 +104,7 @@
               "Because updates just point to a CID, it can be used with IPFS regardless of where your data is stored - Web3.Storage, elsewhere, or all of the above!"
             ],
             "cta": {
-              "url": "https://docs.ipfs.io/concepts/ipns/",
+              "url": "https://docs.ipfs.tech/concepts/ipns/",
               "text": "VIEW THE IPNS DOCS",
               "theme": "light",
               "event": "",
@@ -130,7 +130,7 @@
                   "w3name is a service layer that handles this broadcasting and performant resolution for you."
                 ],
                 "cta": {
-                  "url": "#get-started",
+                  "url": "/docs/how-tos/w3name/",
                   "text": "GET STARTED",
                   "theme": "light",
                   "event": "",

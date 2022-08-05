@@ -6,10 +6,12 @@ on:
     paths:
       - 'packages/cron/**'
       - '.github/workflows/cron*'
+      - 'packages/db/**'
   pull_request:
     paths:
       - 'packages/cron/**'
       - '.github/workflows/cron*'
+      - 'packages/db/**'
 jobs:
   test:
     runs-on: ubuntu-latest

@@ -64,11 +64,12 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
   // Mapped out file progress info
   const filesInfo = useMemo(
     () =>
-      Object.values(uploadsProgress.files).map(({ inputFile, progress, uploadId, status }, i) => ({
+      Object.values(uploadsProgress.files).map(({ inputFile, progress, uploadId, status, error }, i) => ({
         uploadId,
         name: inputFile.name,
         progress: progress.percentage,
         failed: status === STATUS.FAILED,
+        error,
       })),
     [uploadsProgress]
   );

@@ -29,24 +29,43 @@
     }
     a {
       display: block;
+      position: relative;
       color: $ebony;
       font-weight: normal;
       padding: 0.5rem 1rem;
       line-height: 1.5;
-      transition: color $transitionDuration;
+      transition: 300ms ease;
+      &:before {
+        content: '→';
+        position: absolute;
+        left: -0.3125rem;
+        margin-top: -1px;
+        opacity: 0;
+        transition: inherit;
+        color: $ebony;
+      }
       &.active,
       &:hover {
         color: $docsPrimaryPurple;
-        transition: color $transitionDuration;
-      }
-      &.active {
-        font-weight: 500;
+        transition: 300ms ease;
         &:before {
-          content: '→';
-          margin-top: -1px;
-          padding-right: 0.5rem;
+          color: $docsPrimaryPurple;
+          transition: inherit;
+          opacity: 1;
         }
       }
+      &.active {
+        &:not(.testing-testing-testing) {
+          font-weight: 500;
+          animation: headingSlideIn 300ms ease;
+          animation-fill-mode: forwards;
+          &:before {
+            opacity: 1;
+          }
+        }
+      }
+
+
     }
     h3 {
       font-size: 1.375rem;
@@ -58,6 +77,9 @@
     .no-heading {
       a {
         padding-left: 0;
+        &:before {
+          left: -1.3125rem;
+        }
       }
     }
   }
@@ -91,5 +113,34 @@
   }
   .no-heading a {
     padding-left: 0;
+  }
+}
+
+@keyframes headingSlideIn {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(1.3125rem);
+  }
+}
+
+.heading-slide-out {
+  &:not(.active) {
+    font-weight: normal;
+    animation: headingSlideOut 300ms ease;
+    animation-fill-mode: forwards;
+    &:before {
+      opacity: 0;
+    }
+  }
+}
+
+@keyframes headingSlideOut {
+  from {
+    transform: translateX(1.3125rem);
+  }
+  to {
+    transform: translateX(0);
   }
 }

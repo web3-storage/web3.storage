@@ -45,7 +45,7 @@ function mapColumnNumbertoBreakpoints (obj, cols) {
   if (obj.hasOwnProperty('ultralarge')) { breakpoints['140.625rem'] = obj.ultralarge }
   if (obj.hasOwnProperty('xlarge')) { breakpoints['90rem'] = obj.xlarge }
   if (obj.hasOwnProperty('large')) { breakpoints['75rem'] = obj.large }
-  if (obj.hasOwnProperty('medium')) { breakpoints['64rem'] = obj.medium }
+  if (obj.hasOwnProperty('medium')) { breakpoints['60rem'] = obj.medium }
   if (obj.hasOwnProperty('small')) { breakpoints['53.125rem'] = obj.small }
   if (obj.hasOwnProperty('mini')) { breakpoints['40rem'] = obj.mini }
   if (obj.hasOwnProperty('tiny')) { breakpoints['25.9375rem'] = obj.tiny }

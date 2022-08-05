@@ -38,7 +38,7 @@ You don't have to use the same API token for all of your projects! Creating an i
 5. Make a note of the **Token** field somewhere secure where you know you won't lose it. You can click **Copy** to copy your new API token to your clipboard.
 
 <Callout type="warning">
-##### Keep your API token private 
+##### Keep your API token private
 Do not share your API token with anyone else. This key is specific to your account.
 </Callout>
 
@@ -47,14 +47,14 @@ Do not share your API token with anyone else. This key is specific to your accou
 If you no longer need a particular Web3.Storage API token — for example, you've sunsetted a project using a particular token — you may wish to delete it for security reasons. To do so, simply visit your [API Tokens](https://web3.storage/tokens) page and click **Delete** to remove it.
 
 <Callout type="warning">
-##### Deleting a token is permanent 
+##### Deleting a token is permanent
 Remember that if you delete an API token, it's removed permanently and cannot be restored. Delete a token only if you're sure you won't need it again.
 </Callout>
 
 ## Next steps
 
-Now that you have an API token, you can store and retrieve data from your apps and services, as well as from the command line. If you haven't yet explored in depth how to store data using Web3.Storage, check out the [storage how-to guide](/docs/store) for a deep dive on how to upload files using the [JavaScript client library](/docs/reference/js-client-library).
+Now that you have an API token, you can store and retrieve data from your apps and services, as well as from the command line. If you haven't yet explored in depth how to store data using Web3.Storage, check out the [storage how-to guide](/docs/how-tos/store) for a deep dive on how to upload files using the [JavaScript client library](/docs/reference/js-client-library).
 
-To learn in greater detail how to fetch your data using the Web3.Storage client, or directly from IPFS using a gateway or the IPFS command line, see the [how-to guide on retrieval](/docs/retrieve).
+To learn in greater detail how to fetch your data using the Web3.Storage client, or directly from IPFS using a gateway or the IPFS command line, see the [how-to guide on retrieval](/docs/how-tos/retrieve).
 
 You can also use the JavaScript client library to get more information about the status of your data. See the [query how-to guide](/docs/how-tos/query) to learn how to get more details about your data, including the status of any Filecoin storage deals.

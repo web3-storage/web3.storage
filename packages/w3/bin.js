@@ -52,25 +52,25 @@ cli.command('status <cid>')
   .action(status)
 
 cli.command('name create')
-  .describe('Create a new IPNS name and associated signing key that can be used to create and publish IPNS record revisions. Prints the IPNS name and stores the signing key in config.')
+  .describe('DEPRECATED: Use w3name package instead. Create a new IPNS name and associated signing key that can be used to create and publish IPNS record revisions. Prints the IPNS name and stores the signing key in config.')
   .action(Name.create)
 
 cli.command('name list')
-  .describe('List IPNS names managed by this utility.')
+  .describe('DEPRECATED: Use w3name package instead. List IPNS names managed by this utility.')
   .action(Name.list)
 
 cli.command('name publish <keyId> <value>')
-  .describe('Publish a name revision to Web3.Storage.')
+  .describe('DEPRECATED: Use w3name package instead. Publish a name revision to Web3.Storage.')
   .example('name publish k51qzi5uqu5dlcuzv5xhg1zqn48gobcvn2mx13uoig7zfj8rz6zvqdxsugka9z /ipfs/bafkreid7fbwjx4swwewit5txzttoja4t4xnkj3rx3q7dlbj76gvixuq35y')
   .action(Name.publish)
 
 cli.command('name resolve <keyId>')
-  .describe('Resolve the current IPNS record revision for the passed name.')
+  .describe('DEPRECATED: Use w3name package instead. Resolve the current IPNS record revision for the passed name.')
   .example('name resolve k51qzi5uqu5dlcuzv5xhg1zqn48gobcvn2mx13uoig7zfj8rz6zvqdxsugka9z')
   .action(Name.resolve)
 
 cli.command('name rm <keyId>')
-  .describe('Remove an IPNS name managed by this utility. Note: this does NOT unpublish the IPNS name, it simply removes the IPNS name and signing key from local config.')
+  .describe('DEPRECATED: Use w3name package instead. Remove an IPNS name managed by this utility. Note: this does NOT unpublish the IPNS name, it simply removes the IPNS name and signing key from local config.')
   .example('name rm k51qzi5uqu5dlcuzv5xhg1zqn48gobcvn2mx13uoig7zfj8rz6zvqdxsugka9z')
   .action(Name.rm)
 

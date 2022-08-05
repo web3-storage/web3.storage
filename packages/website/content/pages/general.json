@@ -93,6 +93,7 @@
     "faq": "FAQ",
     "docs": "Docs",
     "terms": "ToS",
+    "contact": "Contact",
     "login": "Login",
     "callback": "Authenticating",
     "account": "Account",
@@ -124,8 +125,8 @@
           "url": "/docs/community/help-and-support"
         },
         {
-          "text": "Contact Us",
-          "url": "/docs/community/help-and-support/#questions-and-community-discussion"
+          "text": "Contact",
+          "url": "/contact"
         },
         {
           "text": "Terms of Use",
