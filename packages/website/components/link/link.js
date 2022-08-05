@@ -4,7 +4,8 @@ import Link from 'next/link';
 
 const WrappedLink = ({ tabIndex = 0, href, ...otherProps }) => (
   <Link href={href} {...otherProps}>
-    <a href={href} {...otherProps} tabIndex={tabIndex} onClick={otherProps.onClick}>
+    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+    <a {...otherProps} tabIndex={tabIndex} onClick={otherProps.onClick}>
       {otherProps.children}
     </a>
   </Link>
