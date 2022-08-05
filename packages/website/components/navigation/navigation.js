@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo } from 'react';
+import { useCallback, useState, useMemo, Fragment } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 
@@ -183,7 +183,7 @@ export default function Navigation({ isProductApp }) {
 
               <div className={clsx('nav-items-wrapper', theme)}>
                 {navItems.map((item, i) => (
-                  <>
+                  <Fragment key={item.text}>
                     {item.links ? (
                       <div className="nav-dd-button">
                         <Link
@@ -217,7 +217,7 @@ export default function Navigation({ isProductApp }) {
                         {item.text}
                       </Link>
                     )}
-                  </>
+                  </Fragment>
                 ))}
 
                 {isLoggedIn && getAccountMenu()}
@@ -225,8 +225,8 @@ export default function Navigation({ isProductApp }) {
                 {isLoadingUser
                   ? loadingButton(auth.login, buttonTheme)
                   : isLoggedIn
-                    ? logoutButton(auth.logout, buttonTheme)
-                    : loginButton(auth.login, buttonTheme)}
+                  ? logoutButton(auth.logout, buttonTheme)
+                  : loginButton(auth.login, buttonTheme)}
                 <Search />
               </div>
 
@@ -247,7 +247,7 @@ export default function Navigation({ isProductApp }) {
 
               <div className="mobile-items-wrapper">
                 {navItems.map((item, index) => (
-                  <>
+                  <Fragment key={item.text}>
                     {item.links ? (
                       <ZeroAccordion multiple={false} toggleOnLoad={false} toggleAllOption={false}>
                         <ZeroAccordionSection disabled={!Array.isArray(item.links)}>
@@ -258,31 +258,27 @@ export default function Navigation({ isProductApp }) {
                           <ZeroAccordionSection.Content>
                             {Array.isArray(item.links) && (
                               <div className="nav-sublinks-wrapper">
-                                {item.links.map(link =>
-                                  <Link passHref href={link.url} key={link.text}>
-                                    <a
-                                      href={link.url}
-                                      className={clsx('nav-sublink', link.url === router.route ? 'current-page' : '')}
-                                      onClick={onLinkClick}
-                                      onKeyPress={e => handleKeySelect(e, link.url)}
-                                    >
-                                      {link.text}
-                                    </a>
+                                {item.links.map(link => (
+                                  <Link
+                                    href={link.url}
+                                    key={link.text}
+                                    onClick={onLinkClick}
+                                    className={clsx('nav-sublink', link.url === router.route ? 'current-page' : '')}
+                                  >
+                                    {link.text}
                                   </Link>
-                                )}
+                                ))}
                               </div>
                             )}
                           </ZeroAccordionSection.Content>
                         </ZeroAccordionSection>
                       </ZeroAccordion>
                     ) : (
-                      <Link passHref href={item.url} key={`mobile-${item.text}`}>
-                        <a className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
-                          {item.text}
-                        </a>
+                      <Link href={item.url} key={`mobile-${item.text}`} className="nav-item" onClick={onLinkClick}>
+                        {item.text}
                       </Link>
                     )}
-                  </>
+                  </Fragment>
                 ))}
 
                 {isDocs && <Sidebar openMenu={setMenuOpen} />}
@@ -329,8 +325,8 @@ export default function Navigation({ isProductApp }) {
                 {isLoadingUser
                   ? loadingButton(auth.login, 'light')
                   : isLoggedIn
-                    ? logoutButton(auth.logout, 'light')
-                    : loginButton(auth.login, 'light')}
+                  ? logoutButton(auth.logout, 'light')
+                  : loginButton(auth.login, 'light')}
               </div>
             </div>
           </nav>

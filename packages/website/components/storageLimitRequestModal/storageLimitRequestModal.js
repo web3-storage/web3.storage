@@ -44,20 +44,20 @@ const UserRequestModal = ({ isOpen, onClose }) => {
               <label htmlFor="auth-method">
                 Please share the user authentication method (Github, Email) associated with your account{' '}
               </label>
-              <textarea id="auth-method" name="auth-method" required rows={1}/>
+              <textarea id="auth-method" name="auth-method" required rows={1} />
             </div>
             <div className="input-container">
               <label htmlFor="links">
                 Please share links (Github, website, etc) for what you&apos;re building. This is to help ensure the
                 service is not being used in violation of our terms of service.{' '}
               </label>
-              <textarea id="links" name="links" required rows={4}/>
+              <textarea id="links" name="links" required rows={4} />
             </div>
             <div className="input-container">
               <label htmlFor="data-volume">
                 Please provide a ballpark estimate for your data volume (both in aggregate and over a given week).
               </label>
-              <textarea id="data-volume" name="data-volume" required  rows={1}/>
+              <textarea id="data-volume" name="data-volume" required rows={1} />
             </div>
 
             <div className="input-container">
