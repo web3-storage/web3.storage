@@ -19,11 +19,6 @@ export interface Service {
   fetch?: typeof _fetch
 }
 
-export interface PublicService {
-  endpoint: URL
-  rateLimiter?: RateLimiter
-}
-
 /**
  * CID in string representation.
  */

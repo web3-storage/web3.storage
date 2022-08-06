@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.13.0](https://github.com/web3-storage/web3.storage/compare/website-v2.12.1...website-v2.13.0) (2022-08-05)
+
+
+### Features
+
+* create w3name landing page, rework nav to reflec update ([#1607](https://github.com/web3-storage/web3.storage/issues/1607)) ([e9b0d78](https://github.com/web3-storage/web3.storage/commit/e9b0d780b10b565dbfe3cdc1db50ae19d7c49a49))
+* **website/docs:** add draft of w3name how-to ([#1694](https://github.com/web3-storage/web3.storage/issues/1694)) ([9cd4f2c](https://github.com/web3-storage/web3.storage/commit/9cd4f2c0d33e2760b4b68f6c3d5e63a017a2d7d3))
+
+
+### Bug Fixes
+
+* add ipns migration cron job ([#1705](https://github.com/web3-storage/web3.storage/issues/1705)) ([4b6e67f](https://github.com/web3-storage/web3.storage/commit/4b6e67f07983b06e9bad9c27deb5d6c5b993258e))
+* footer 404s ([#1693](https://github.com/web3-storage/web3.storage/issues/1693)) ([32cb036](https://github.com/web3-storage/web3.storage/commit/32cb03693148d8856eb011869002cc8bf5214f1e))
+
 ## [2.12.1](https://github.com/web3-storage/web3.storage/compare/website-v2.12.0...website-v2.12.1) (2022-07-29)
 
 

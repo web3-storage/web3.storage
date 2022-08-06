@@ -16,7 +16,6 @@ import Footer from '../components/footer/footer.js';
 const App = ({ Component, pageProps }) => {
   const { pathname } = useRouter();
   const productRoutes = ['/login', '/account', '/tokens', '/callback'];
-  // const marketingRoutes = ['/', '/pricing', '/about', '/faq', '/terms'];
   const productApp = productRoutes.includes(pathname);
 
   // set class name on body

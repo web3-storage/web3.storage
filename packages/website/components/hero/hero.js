@@ -100,6 +100,14 @@ export default function Hero({ block }) {
     );
   };
 
+  const w3nameHero = () => {
+    return (
+      <>
+        <Grid3D id="w3name_hero-grid-3d" />
+      </>
+    );
+  };
+
   const indexHero = () => {
     return (
       <>
@@ -136,6 +144,8 @@ export default function Hero({ block }) {
         return aboutHero();
       case 'faq':
         return faqHero();
+      case 'w3name':
+        return w3nameHero();
       case 'error':
         return hero404();
       case 'blog':

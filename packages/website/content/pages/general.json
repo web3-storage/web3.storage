@@ -20,8 +20,18 @@
   "navigation": {
     "links": [
       {
-        "url": "/about",
-        "text": "About"
+        "url": "/products/web3storage",
+        "text": "Products",
+        "links": [
+          {
+            "url": "/products/web3storage",
+            "text": "Web3.Storage"
+          },
+          {
+            "url": "/products/w3name",
+            "text": "w3name"
+          }
+        ]
       },
       {
         "url": "/pricing",

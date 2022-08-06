@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.6](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.5...cron-v1.5.6) (2022-08-04)
+
+
+### Bug Fixes
+
+* throttled names cron job requests ([#1708](https://github.com/web3-storage/web3.storage/issues/1708)) ([7df9ad9](https://github.com/web3-storage/web3.storage/commit/7df9ad9b1ae88cdeead219e0dadb3152fd1cda83))
+
 ## [1.5.5](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.4...cron-v1.5.5) (2022-08-03)
 
 
