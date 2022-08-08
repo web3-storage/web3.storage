@@ -20,6 +20,7 @@ const App = ({ Component, pageProps }) => {
   const pageClass = pathname.includes('docs') ? 'docs-site' : productApp ? 'product-app' : 'marketing-site';
 
   useEffect(() => {
+    document.querySelector('body')?.classList.remove('docs-site', 'product-app', 'marketing-site');
     document.querySelector('body')?.classList.add(pageClass);
   });
 
