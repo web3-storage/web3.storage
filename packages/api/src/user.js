@@ -300,6 +300,39 @@ export async function userUploadsRename (request, env) {
 }
 
 /**
+ * List a users pins regardless of the token used.
+ * As we don't want to scope the Pinning Service API to users
+ * we need a new endpoint as an umbrella.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userPinsGet (request, env) {
+  // const requestUrl = new URL(request.url)
+  // const { searchParams } = requestUrl
+
+  // const { size, page, offset, before, after, sortBy, sortOrder } = pagination(searchParams)
+
+  const tokens = (await env.db.listKeys(request.auth.user._id)).map((key) => key._id)
+
+  let pinRequests
+
+  try {
+    pinRequests = await env.db.listPsaPinRequests(tokens, {})
+  } catch (e) {
+    console.error(e)
+    throw new HTTPError('No pinning resources found for user', 404)
+  }
+
+  const pins = pinRequests.results.map((pinRequest) => toPinStatusResponse(pinRequest))
+
+  return new JSONResponse({
+    count: pinRequests.count,
+    results: pins
+  })
+}
+
+/**
  *
  * @param {number} userId
  * @param {string} userProposalForm

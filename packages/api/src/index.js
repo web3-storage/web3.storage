@@ -7,7 +7,7 @@ import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { uploadPost } from './upload.js'
-import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, userUploadsRename, userInfoGet, userRequestPost } from './user.js'
+import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, userUploadsRename, userInfoGet, userRequestPost, userPinsGet } from './user.js'
 import { pinDelete, pinGet, pinPost, pinsGet } from './pins.js'
 import { blogSubscriptionCreate } from './blog.js'
 import { metricsGet } from './metrics.js'
@@ -97,6 +97,8 @@ router.post('/user/request',             auth['👤'](userRequestPost))
 router.delete('/user/tokens/:id',        auth['👤🗑️'](userTokensDelete))
 router.get('/user/account',              auth['👤'](userAccountGet))
 router.get('/user/info',                 auth['👤'](userInfoGet))
+router.get('/user/pins', auth['📌⚠️'](userPinsGet))
+
 /* eslint-enable no-multi-spaces */
 
 // Monitoring
