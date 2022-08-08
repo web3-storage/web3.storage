@@ -14,7 +14,6 @@ $file-storage-providers: calculateWidthPercentage(10rem, $base-row-width);
 $file-size: calculateWidthPercentage(8rem, $base-row-width);
 $file-date: auto;
 
-
 .storage-table-table-header-divider {
   border-bottom: 0.078125rem solid rgba($white, 0.05);
   position: absolute;
@@ -80,10 +79,10 @@ $file-date: auto;
   letter-spacing: 0;
   display: grid;
   position: relative;
-  grid-template-columns: $cell-select $file-name $file-cid $file-pin-status $file-storage-providers $file-size $file-date ;
+  grid-template-columns: $cell-select $file-name $file-cid $file-pin-status $file-storage-providers $file-size $file-date;
   align-items: flex-start;
-  padding: .75rem 2rem;
-  transition: all .2s ease-in-out;
+  padding: 0.75rem 2rem;
+  transition: all 0.2s ease-in-out;
   border-bottom: 0.078125rem solid rgba(white, 0.05);
 
   &:nth-child(even) {
@@ -109,17 +108,18 @@ $file-date: auto;
   }
 
   // Targeting all columns
-  > span {
+  [role='cell'],
+  [role='columnheader'] {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     word-break: break-word;
     @include fontWeight_Regular;
     @include medium {
-      padding: .5rem .75rem .5rem 1.5rem;
+      padding: 0.5rem 0.75rem 0.5rem 1.5rem;
       justify-content: flex-start;
       border-bottom: 0.078125rem solid rgba(white, 0.05);
-      &.file-name {
+      &.storage-table-cell-name {
         padding-top: 1.75rem;
       }
       &:last-child {
@@ -183,45 +183,47 @@ $file-date: auto;
     }
   }
 
-  .file {
-    &-select-container {
-      @include medium {
-        justify-content: space-between;
-        order: 6;
-      }
+  .select-container {
+    @include medium {
+      justify-content: space-between;
+      order: 6;
     }
-    &-select {
-      @include border_Background_Waterloo_White;
-      width: 0.9375rem;
-      height: 0.9375rem;
-      border-radius: 0.15625rem;
+  }
+
+  .select-cell {
+    @include border_Background_Waterloo_White;
+    width: 0.9375rem;
+    height: 0.9375rem;
+    border-radius: 0.15625rem;
+    cursor: pointer;
+    position: relative;
+    margin: 1px 0;
+    input {
       cursor: pointer;
-      position: relative;
-      margin: 1px 0;
-      input {
-        cursor: pointer;
-        opacity: 0;
-      }
-      svg.check {
-        color: $cyan;
-        top: -0.6875rem;
-        left: -0.3125rem;
-        position: absolute;
-        pointer-events: none;
-        width: 1.875rem;
-        .tick {
-          stroke-dashoffset: -100;
-          stroke-dasharray: 1000;
-          transition: stroke-dashoffset $transitionDuration 0s ease-out;
-        }
-      }
-      input:checked ~ svg.check {
-        .tick {
-          stroke-dashoffset: 0;
-          transition: stroke-dashoffset $transitionDuration 0s ease-in;
-        }
+      opacity: 0;
+    }
+    svg.check {
+      color: $cyan;
+      top: -0.6875rem;
+      left: -0.3125rem;
+      position: absolute;
+      pointer-events: none;
+      width: 1.875rem;
+      .tick {
+        stroke-dashoffset: -100;
+        stroke-dasharray: 1000;
+        transition: stroke-dashoffset $transitionDuration 0s ease-out;
       }
     }
+    input:checked ~ svg.check {
+      .tick {
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset $transitionDuration 0s ease-in;
+      }
+    }
+  }
+
+  .storage-table-cell {
     &-date {
       white-space: nowrap;
       @include medium {
@@ -242,7 +244,7 @@ $file-date: auto;
       }
       svg.pencil-icon {
         flex-shrink: 0;
-        margin: 4px 0px 0px .5rem;
+        margin: 4px 0px 0px 0.5rem;
         @include hoverSvg;
         @include medium {
           display: none;
@@ -274,7 +276,7 @@ $file-date: auto;
     }
     &-cid {
       padding-right: 2rem;
-      margin-top: -.1rem;
+      margin-top: -0.1rem;
       justify-content: flex-start;
       align-items: center;
       .cid-truncate,
@@ -300,7 +302,7 @@ $file-date: auto;
         padding-right: 1.25rem;
       }
     }
-    &-pin-status {
+    &-status {
       justify-content: flex-start;
       align-items: center;
       gap: 0.625rem;
@@ -308,7 +310,7 @@ $file-date: auto;
         gap: 0;
       }
     }
-    &-storage-providers {
+    &-storageProviders {
       justify-content: flex-start;
       align-items: center;
       padding-right: 2rem;
@@ -318,7 +320,7 @@ $file-date: auto;
         gap: 0;
       }
 
-      a[href*="filfox"] {
+      a[href*='filfox'] {
         @include monospace_Text;
       }
 
@@ -380,7 +382,7 @@ $file-date: auto;
   }
 
   &.storage-table-row-active {
-    background: rgba(0,0,0,0.25);
+    background: rgba(0, 0, 0, 0.25);
   }
 
   // Header overrides
@@ -388,10 +390,12 @@ $file-date: auto;
     align-items: end;
     height: auto;
     background: transparent;
-    > span {
+
+    [role='columnheader'] {
       @include fontWeight_Semibold;
     }
-    .file {
+
+    .storage-table-cell {
       &-storage-providers {
         padding-right: 2rem;
         flex-direction: row;
@@ -417,7 +421,6 @@ $file-date: auto;
     @include gradient_Background_PinkBlue;
   }
 }
-
 
 .storage-table-header {
   display: flex;
@@ -523,4 +526,3 @@ $file-date: auto;
   opacity: 1;
   transition: opacity $transitionDuration 0s ease-in;
 }
-

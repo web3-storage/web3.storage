@@ -9,7 +9,7 @@ import SelectCell from 'components/table/selectCell';
  * @typedef {Object} ColumnDefinition
  * @property {string | import('react').ReactComponentElement } headerContent
  * @property {string} id
- * @property {import('react').FC} [cellRenderer]
+ * @property {import('react').FC<any>} [cellRenderer]
  * @property {function} [getCellProps]
  *
  */
@@ -141,7 +141,7 @@ function Table({
           aria-selected={selectedRows?.includes(index) || false}
         >
           {effectiveColumns.map(c => (
-            <span key={`${c.id}-${rowKey}`} role="cell">
+            <span key={`${c.id}-${rowKey}`} role="cell" className={`storage-table-cell-${c.id}`}>
               {c.cellRenderer ? (
                 <c.cellRenderer {...(c.getCellProps ? c.getCellProps(row[c.id], rowKey) : {})}></c.cellRenderer>
               ) : (
@@ -165,7 +165,7 @@ function Table({
   return (
     <div className="storage-table" role="table">
       <div role="rowgroup">
-        <div className="storage-table-row storage-table-header" role="row">
+        <div className="storage-table-row storage-table-row-header" role="row">
           {effectiveColumns.map(c => (
             <div key={c.id} role="columnheader">
               {c.headerContent}

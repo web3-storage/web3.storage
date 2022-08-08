@@ -6,14 +6,19 @@ import CheckIcon from 'assets/icons/check';
  * Used to render a checkbox cell within a table component.
  *
  * @param {Object} props
+ * @param {boolean} props.selected
+ * @param {string|number} props.id
+ * @param {function} props.onSelectChange
  * @returns
  */
 function SelectCell({ selected = false, id, onSelectChange }) {
   return (
-    <span className="file-select">
-      <input checked={selected} type="checkbox" id={id} onChange={e => onSelectChange(e.target.checked)} />
-      <CheckIcon className="check" />
-    </span>
+    <div className="select-cell-container">
+      <span className="select-cell">
+        <input checked={selected} type="checkbox" id={id.toString()} onChange={e => onSelectChange(e.target.checked)} />
+        <CheckIcon className="check" />
+      </span>
+    </div>
   );
 }
 

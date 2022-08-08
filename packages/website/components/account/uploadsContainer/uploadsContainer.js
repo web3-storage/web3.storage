@@ -1,5 +1,5 @@
 import filesize from 'filesize';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 
 import { useUploads } from 'components/contexts/uploadsContext';
@@ -13,6 +13,8 @@ import CloseIcon from 'assets/icons/close';
 import Button, { ButtonVariant } from 'components/button/button';
 import CheckIcon from 'assets/icons/check';
 import useQueryParams from 'ZeroHooks/useQueryParams';
+import { addTextToClipboard, formatTimestamp, formatTimestampFull, truncateString } from 'lib/utils';
+import CopyIcon from 'assets/icons/copy';
 // import Filterable from 'ZeroComponents/filterable/filterable';
 // import SearchIcon from 'assets/icons/search';
 
@@ -74,22 +76,39 @@ export default function UploadsContainer({ content, onFileUpload }) {
     });
   }, [getUploads, currentPage, rowsPerPage, refetchDate]);
 
+  // TODO: move to its own component
+  /**
+   * @type {import('react').FC}
+   * @param {object} props
+   * @param {string} props.cid
+   * @returns
+   */
+  function CidCellRenderer({ cid }) {
+    const truncatedCID = useMemo(() => truncateString(cid, 5, '...', 'double'), [cid]);
+    return (
+      <>
+        <a
+          className="cid-truncate underline medium-up-only"
+          href={`https://dweb.link/ipfs/${cid}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {truncatedCID}
+        </a>
+        <CopyIcon
+          className="copy-icon"
+          onClick={() => {
+            addTextToClipboard(cid);
+          }}
+        />
+      </>
+    );
+  }
+
   /**
    * @type {import('components/table/table').ColumnDefinition[]}
    */
   const columns = [
-    {
-      id: 'date',
-      headerContent: (
-        <span>
-          {fileRowLabels.date.label} <button onClick={() => alert('header')}> i</button>
-        </span>
-      ),
-      getCellProps: cellData => ({
-        value: cellData,
-        click: () => alert('hi'),
-      }),
-    },
     {
       id: 'name',
       headerContent: fileRowLabels.name.label,
@@ -97,6 +116,10 @@ export default function UploadsContainer({ content, onFileUpload }) {
     {
       id: 'cid',
       headerContent: fileRowLabels.cid.label,
+      cellRenderer: CidCellRenderer,
+      getCellProps: cellData => ({
+        cid: cellData,
+      }),
     },
     {
       id: 'status',
@@ -109,6 +132,18 @@ export default function UploadsContainer({ content, onFileUpload }) {
     {
       id: 'size',
       headerContent: fileRowLabels.size.label,
+    },
+    {
+      id: 'date',
+      headerContent: (
+        <span>
+          {fileRowLabels.date.label} <button onClick={() => alert('header')}> i</button>
+        </span>
+      ),
+      cellRenderer: ({ date }) => <span title={formatTimestampFull(date)}>{formatTimestamp(date)}</span>,
+      getCellProps: cellData => ({
+        date: cellData,
+      }),
     },
   ];
 
