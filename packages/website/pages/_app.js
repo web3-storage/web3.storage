@@ -19,11 +19,6 @@ const App = ({ Component, pageProps }) => {
   const productApp = productRoutes.includes(pathname);
   const pageClass = pathname.includes('docs') ? 'docs-site' : productApp ? 'product-app' : 'marketing-site';
 
-  useEffect(() => {
-    document.querySelector('body')?.classList.remove('docs-site', 'product-app', 'marketing-site');
-    document.querySelector('body')?.classList.add(pageClass);
-  });
-
   return (
     <AppProviders authorizationProps={{ ...pageProps }}>
       <Metadata {...pageProps} />

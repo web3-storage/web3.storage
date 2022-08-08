@@ -168,7 +168,7 @@ button {
 }
 
 //  Next & Grid
-body:not(.docs-site) #__next {
+body #__next {
   position: relative;
   z-index: 2;
   overflow-x: hidden;
