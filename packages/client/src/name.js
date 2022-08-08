@@ -41,7 +41,8 @@ export const {
 export async function publish (service, revision, key) {
   // The user _might_ have overridden the endpoint in the service, but it's unlikely and
   // this library is only really intended for use with the w3name endpoint anyway. The
-  // most likely use case for overriding it is for tests, which no longer exist for this
+  // most likely use case for overriding it is for tests, which other than for the e2e
+  // test (which wants to use the real endpoint anyway), tests no longer exist for this
   // module because it's now just a proxy.
   // @ts-ignore key type is libp2p-crypto PrivateKey instead of SigningKey
   return await w3name.publish(revision, key)
