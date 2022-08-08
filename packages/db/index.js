@@ -1165,7 +1165,7 @@ export class DBClient {
   /**
    * Get a filtered list of pin requests for a user
    *
-   * @param {string} authKey
+   * @param {string | array} authKey
    * @param {import('./db-client-types').ListPsaPinRequestOptions} [opts]
    * @return {Promise<import('./db-client-types').ListPsaPinRequestResults> }> }
    */
@@ -1178,10 +1178,15 @@ export class DBClient {
       .select(listPinsQuery, {
         count: 'exact'
       })
-      .eq('auth_key_id', authKey)
       .is('deleted_at', null)
       .limit(limit)
       .order('inserted_at', { ascending: false })
+
+    if (Array.isArray(authKey)) {
+      query.in('auth_key_id', authKey)
+    } else {
+      query.eq('auth_key_id', authKey)
+    }
 
     if (!opts.cid && !opts.name && !opts.statuses) {
       query = query.eq('content.pins.status', 'Pinned')
