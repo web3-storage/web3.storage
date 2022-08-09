@@ -49,7 +49,6 @@ UserNotFoundError.CODE = 'ERROR_USER_NOT_FOUND'
 export class PinningUnauthorizedError extends PinningServiceApiError {
   constructor (msg = 'Pinning not authorized for this user, email support@web3.storage to request authorization.') {
     super(msg, 403)
-    this.name = 'PinningUnauthorizedError'
     this.reason = PinningUnauthorizedError.CODE
   }
 }
