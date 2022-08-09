@@ -5,6 +5,7 @@ import { HTTPError, PinningServiceApiError } from './errors.js'
 /**
  * @param {Error & {status?: number;code?: string;reason?: string; details?: string; }} err
  * @param {import('./env').Env} env
+ * @param {Request} request
  */
 export function errorHandler (err, { log }, request) {
   console.error(err.stack)
