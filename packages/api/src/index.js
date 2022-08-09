@@ -97,7 +97,7 @@ router.post('/user/request',             auth['👤'](userRequestPost))
 router.delete('/user/tokens/:id',        auth['👤🗑️'](userTokensDelete))
 router.get('/user/account',              auth['👤'](userAccountGet))
 router.get('/user/info',                 auth['👤'](userInfoGet))
-router.get('/user/pins', auth['📌⚠️'](userPinsGet))
+router.get('/user/pins',                 auth['📌⚠️'](userPinsGet))
 
 /* eslint-enable no-multi-spaces */
 
