@@ -11,6 +11,7 @@ import {
 } from './maintenance.js'
 import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
+import { validateSearchParams } from './utils/psa.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -308,17 +309,32 @@ export async function userUploadsRename (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userPinsGet (request, env) {
-  // const requestUrl = new URL(request.url)
-  // const { searchParams } = requestUrl
+  const requestUrl = new URL(request.url)
+  const { searchParams } = requestUrl
 
-  // const { size, page, offset, before, after, sortBy, sortOrder } = pagination(searchParams)
+  const { size, page, offset, before, after, sortBy, sortOrder } = pagination(searchParams)
+  const urlParams = new URLSearchParams(requestUrl.search)
+  const params = Object.fromEntries(urlParams)
+
+  const psaParams = validateSearchParams(params)
+  if (psaParams.error) {
+    throw psaParams.error
+  }
 
   const tokens = (await env.db.listKeys(request.auth.user._id)).map((key) => key._id)
 
   let pinRequests
 
   try {
-    pinRequests = await env.db.listPsaPinRequests(tokens, {})
+    pinRequests = await env.db.listPsaPinRequests(tokens, {
+      ...psaParams.data,
+      limit: size,
+      offset,
+      before,
+      after,
+      sortBy,
+      sortOrder
+    })
   } catch (e) {
     console.error(e)
     throw new HTTPError('No pinning resources found for user', 404)
@@ -326,10 +342,28 @@ export async function userPinsGet (request, env) {
 
   const pins = pinRequests.results.map((pinRequest) => toPinStatusResponse(pinRequest))
 
+  let link = ''
+  // If there's more results to show...
+  if (page > 1) {
+    link += `<${requestUrl.pathname}?size=${size}&page=${page - 1}>; rel="previous"`
+  }
+
+  if (pins.length + offset < pinRequests.count) {
+    if (link !== '') link += ', '
+    link += `<${requestUrl.pathname}?size=${size}&page=${page + 1}>; rel="next"`
+  }
+
+  const headers = {
+    Count: pinRequests.count || 0,
+    Size: size,
+    Page: page,
+    Link: link
+  }
+
   return new JSONResponse({
     count: pinRequests.count,
     results: pins
-  })
+  }, { headers })
 }
 
 /**
