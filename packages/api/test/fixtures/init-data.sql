@@ -41,6 +41,10 @@ INSERT INTO auth_key (name, secret, user_id)
 VALUES  ('test-pinning-and-restriction', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmctYW5kLXJlc3RyaWN0aW9uIiwiaXNzIjoid2ViMy1zdG9yYWdlIiwiaWF0IjoxNjMzOTU3Mzg5ODcyLCJuYW1lIjoidGVzdC1waW5uaW5nLWFuZC1yZXN0cmljdGlvbiJ9.L2SCQ7C-gDm840m2l2shE-0HqiTwnWDXCwHjpT61msk', 6),
         ('test-restriction', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXJlc3RyaWN0aW9uIiwiaXNzIjoid2ViMy1zdG9yYWdlIiwiaWF0IjoxNjMzOTU3Mzg5ODcyLCJuYW1lIjoidGVzdC1yZXN0cmljdGlvbiJ9.uAklG7dHOxRD85c564RBcBqeFGUGNBper7VLaXBGnFg', 7);
 
+-- Used to test pinning from an existing user with a different token
+INSERT INTO auth_key (name, secret, user_id)
+VALUES ('test-pinning-b', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmctYiIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtcGlubmluZy1iIn0.B2qeE5mHW93saJx-Nu8p8Io_z7_3VRaHoBAVxPbCP5c', 4);
+
 -- /user route data testing
 INSERT INTO content (cid)
 VALUES ('bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae'),
@@ -135,6 +139,7 @@ VALUES ('ab62cf3c-c98d-494b-a756-b3a3fb6ddcab', 4, 'bafybeid46f7zggioxjm5p2ze2l6
        ('3fa630f2-f22c-486f-ad1c-b36d4d740e31', 4, 'bafybeidrzt6t4k25qjeasydgi3fyh6ejos5x4d6tk2pdzxkb66bkomezy4', 'bafybeidrzt6t4k25qjeasydgi3fyh6ejos5x4d6tk2pdzxkb66bkomezy4', 'Image.png', null, '{"app_id": "99986338-1113-4706-8302-4420da6158bb"}', '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('5c7e7885-7f68-462d-bdfb-3f0abfb367b5', 4, 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 'Image.jpg', null, null, '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('5c7e7885-7f68-462d-bdfb-3f0abfb367b6', 4, 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47s5', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 'Image.jpg', null, null, '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
+       ('f0a0da36-d1ac-4148-84ac-4dc59089f75a', 8, 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47s5', 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm', 'Image2.jpg', null, null, '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('3a19e48d-d6db-4f36-b686-fb8bc37c9d48', 2, 'bafybeiaqu6ijhfhwzjipwesbqf4myz6uczyigahib5joqbo5jw2xmjczfa', 'bafybeiaqu6ijhfhwzjipwesbqf4myz6uczyigahib5joqbo5jw2xmjczfa', 'Image.jpg', null, null, '2021-07-20T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('9be23b92-918e-44b8-98f4-6043c346fb4e', 2, 'bafybeidqts3rbwkprggjojbvcxy4jzpgzgcvs4a73y3gx2jjxphjeerbcy', 'bafybeidqts3rbwkprggjojbvcxy4jzpgzgcvs4a73y3gx2jjxphjeerbcy', 'Image.jpg', null, null, '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z'),
        ('aa62cf3c-c98d-494b-a756-b3a3fb6ddcab', 1, 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4', 'bafybeid46f7zggioxjm5p2ze2l6s6wbqvoo4gzbdzfjtdosthmfyxdign4', 'ReportDoc.pdf', '["/ip6/2606:4700:60::6/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx5N", "/ip4/172.65.0.13/tcp/4009/p2p/QmYyQSo1c1Ym7orWxLYvCrM2EmxFTANf8wXmmE7DWjhx4N"]', null, '2021-07-14T19:27:14.934572Z', '2021-07-14T19:27:14.934572Z')
