@@ -4,6 +4,7 @@ import fetch from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { getTestJWT, getDBClient } from './scripts/helpers.js'
 import userUploads from './fixtures/pgrest/get-user-uploads.js'
+import userPins from './fixtures/pgrest/get-user-pins.js'
 
 describe('GET /user/account', () => {
   it('error if not authenticated with magic.link', async () => {
@@ -368,4 +369,78 @@ describe('DELETE /user/uploads/:cid', () => {
     const { _id } = await res.json()
     assert(_id)
   })
+})
+
+describe('GET /user/pins', () => {
+  it('accepts the `size` and `page` options', async () => {
+    const size = 1
+    const opts = new URLSearchParams({
+      page: 1,
+      size,
+      status: 'queued,pinning,pinned,failed'
+    })
+    const token = await getTestJWT('test-pinning', 'test-pinning')
+    const res = await fetch(new URL(`user/pins?${opts}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+    })
+    assert(res.ok)
+    const body = await res.json()
+    assert(body.results.length, size)
+    assert(res.headers.get('size'), size)
+    assert.strictEqual(res.headers.get('link'), '</user/pins?size=1&page=2>; rel="next"')
+  })
+  it('accepts the `sortBy` parameter', async () => {
+    const sortBy = 'Name'
+    const opts = new URLSearchParams({
+      sortBy,
+      status: 'queued,pinning,pinned,failed'
+    })
+    const token = await getTestJWT('test-pinning', 'test-pinning')
+    const res = await fetch(new URL(`user/pins?${opts}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+    })
+    assert(res.ok)
+    const body = await res.json()
+    console.log(JSON.stringify(body))
+    assert.deepStrictEqual(body.results, userPins)
+  })
+  it('accepts the `sortOrder` parameter', async () => {
+    const sortOrder = 'Asc'
+    const opts = new URLSearchParams({
+      sortOrder,
+      status: 'queued,pinning,pinned,failed'
+    })
+    const token = await getTestJWT('test-pinning', 'test-pinning')
+    const res = await fetch(new URL(`user/pins?${opts}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+    })
+    assert(res.ok)
+    const body = await res.json()
+    assert(body.results, userPins)
+  })
+  it('returns the correct headers for pagination', async () => {
+    const size = 1
+    const page = 2
+    const opts = new URLSearchParams({
+      page,
+      size,
+      status: 'queued,pinning,pinned,failed'
+    })
+    const token = await getTestJWT('test-pinning', 'test-pinning')
+    const res = await fetch(new URL(`user/pins?${opts}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+    })
+    assert(res.ok)
+    const body = await res.json()
+    assert(body.results.length, size)
+    assert(res.headers.get('size'), size)
+    assert(res.headers.get('count'))
+    assert(res.headers.get('page'), page)
+    assert.strictEqual(res.headers.get('link'), '</user/pins?size=1&page=1>; rel="previous", </user/pins?size=1&page=3>; rel="next"')
+  })
+  it('returns all pins regardless of the token used', async () => {})
 })
