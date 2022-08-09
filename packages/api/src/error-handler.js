@@ -18,7 +18,7 @@ export function errorHandler (err, { log }, request) {
   // As the pinning service requires a certain specification
   // Always return the nested error object for any pinning service endpoints
   const requestUrl = new URL(request.url)
-  if (err instanceof PinningServiceApiError || (requestUrl && /^\/pins/.test(requestUrl.pathname))) {
+  if (err instanceof PinningServiceApiError || /^\/pins/.test(requestUrl.pathname)) {
     const error = {
       error: {
         reason: err.reason || err.code,
