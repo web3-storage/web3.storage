@@ -1,5 +1,5 @@
 /**
- * Get a parsed and validating list of pagination properties to pass to the DB query.
+ * Get a parsed and validated list of pagination properties to pass to the DB query.
  * This standard is used across the website
  *
  * It accepts the searchParams from the request url

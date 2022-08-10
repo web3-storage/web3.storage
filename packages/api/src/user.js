@@ -301,7 +301,7 @@ export async function userUploadsRename (request, env) {
 }
 
 /**
- * List a users pins regardless of the token used.
+ * List a user's pins regardless of the token used.
  * As we don't want to scope the Pinning Service API to users
  * we need a new endpoint as an umbrella.
  *
