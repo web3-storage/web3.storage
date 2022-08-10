@@ -392,7 +392,7 @@ describe('GET /user/pins', () => {
   })
   // For some reason the sort function for this data does not work correctly.
   // Skip for now but wise to have this test.
-  it.skip('accepts the `sortBy` parameter', async () => {
+  it('accepts the `sortBy` parameter', async () => {
     const sortBy = 'Name'
     const opts = new URLSearchParams({
       sortBy,
@@ -405,8 +405,7 @@ describe('GET /user/pins', () => {
     })
     assert(res.ok)
     const body = await res.json()
-    console.log(JSON.stringify(body))
-    assert.deepStrictEqual(body.results, [...userPins].sort((a, b) => b.pin.name.localeCompare(a.pin.name)))
+    assert.deepStrictEqual(body.results, [...userPins].sort((a, b) => a.pin.name.localeCompare(b.pin.name)))
   })
   it('accepts the `sortOrder` parameter', async () => {
     const sortOrder = 'Asc'
