@@ -390,8 +390,7 @@ describe('GET /user/pins', () => {
     assert(res.headers.get('size'), size)
     assert.strictEqual(res.headers.get('link'), '</user/pins?size=1&page=2>; rel="next"')
   })
-  // For some reason the sort function for this data does not work correctly.
-  // Skip for now but wise to have this test.
+
   it('accepts the `sortBy` parameter', async () => {
     const sortBy = 'Name'
     const opts = new URLSearchParams({
