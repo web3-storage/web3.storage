@@ -18,6 +18,7 @@ import ImageHelix from '../../public/images/illustrations/helix.png';
 import ImageCross from '../../public/images/illustrations/cross.png';
 import ImageCoil from '../../public/images/illustrations/coil.png';
 import ImageCorkscrew from '../../public/images/illustrations/corkscrew.png';
+import W3linkForm from 'components/w3link_form/w3link_form';
 
 // ====================================================================== Export
 class BlockBuilder extends React.Component {
@@ -115,6 +116,12 @@ class BlockBuilder extends React.Component {
         return (
           <div id={column.id}>
             <Img alt="" src={ImageTriangle} />
+          </div>
+        );
+      case 'w3link_form':
+        return (
+          <div id={column.id}>
+            <W3linkForm />
           </div>
         );
       case 'site_logo':
