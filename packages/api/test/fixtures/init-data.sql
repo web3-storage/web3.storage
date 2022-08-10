@@ -20,30 +20,30 @@ VALUES (6, 'test-pinning-and-restriction-user', 'test-pinning-and-restriction@us
 INSERT INTO public.user (id, name, email, issuer, public_address)
 VALUES (7, 'test-restricted-user', 'test-restriction@user.com', 'test-restriction', 'test-restriction');
 
-INSERT INTO auth_key (name, secret, user_id)
-VALUES ('test-key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LW1hZ2ljLWlzc3VlciIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtbWFnaWMtaXNzdWVyIn0.p2nD1Q4X4Z6DtJ0vxk35hhZOqSPVymhN5uyXrXth1zs', 1);
+INSERT INTO auth_key (id, name, secret, user_id)
+VALUES (1, 'test-key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LW1hZ2ljLWlzc3VlciIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtbWFnaWMtaXNzdWVyIn0.p2nD1Q4X4Z6DtJ0vxk35hhZOqSPVymhN5uyXrXth1zs', 1);
 
 -- Used for testing with DANGEROUSLY_BYPASS_MAGIC_AUTH
-INSERT INTO auth_key (name, secret, user_id)
-VALUES ('test-magic-key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LW1hZ2ljLWlzc3VlciIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtbWFnaWMtaXNzdWVyIn0.p2nD1Q4X4Z6DtJ0vxk35hhZOqSPVymhN5uyXrXth1zs', 1);
+INSERT INTO auth_key (id, name, secret, user_id)
+VALUES (2, 'test-magic-key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LW1hZ2ljLWlzc3VlciIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtbWFnaWMtaXNzdWVyIn0.p2nD1Q4X4Z6DtJ0vxk35hhZOqSPVymhN5uyXrXth1zs', 1);
 
-INSERT INTO auth_key (name, secret, user_id)
-VALUES ('test-upload-key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXVwbG9hZCIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtdXBsb2FkIn0.K30NZxNOTUdJ0u-2dRGbZYXu2A2-TqcNdRV-G1HkKnI', 2);
+INSERT INTO auth_key (id, name, secret, user_id)
+VALUES (3, 'test-upload-key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXVwbG9hZCIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtdXBsb2FkIn0.K30NZxNOTUdJ0u-2dRGbZYXu2A2-TqcNdRV-G1HkKnI', 2);
 
 -- Used to test pinning
-INSERT INTO auth_key (name, secret, user_id)
-VALUES ('test-pinning', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmciLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2MzM5NTczODk4NzIsIm5hbWUiOiJ0ZXN0LXBpbm5pbmcifQ.li8kWohG90P8TdsKL_dUStJb2f6-43G98uZsLrVEaho', 4);
-INSERT INTO auth_key (name, secret, user_id)
-VALUES ('test-pinning-2', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmctMiIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtcGlubmluZy0yIn0.B0lwP5T2KLP0D1XGvz_f7AJcJ_j65NPN3BsxZ4Io2-g', 5);
+INSERT INTO auth_key (id, name, secret, user_id)
+VALUES (4, 'test-pinning', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmciLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2MzM5NTczODk4NzIsIm5hbWUiOiJ0ZXN0LXBpbm5pbmcifQ.li8kWohG90P8TdsKL_dUStJb2f6-43G98uZsLrVEaho', 4);
+INSERT INTO auth_key (id, name, secret, user_id)
+VALUES (5, 'test-pinning-2', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmctMiIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtcGlubmluZy0yIn0.B0lwP5T2KLP0D1XGvz_f7AJcJ_j65NPN3BsxZ4Io2-g', 5);
 
 -- Used to test account restriction
-INSERT INTO auth_key (name, secret, user_id)
-VALUES  ('test-pinning-and-restriction', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmctYW5kLXJlc3RyaWN0aW9uIiwiaXNzIjoid2ViMy1zdG9yYWdlIiwiaWF0IjoxNjMzOTU3Mzg5ODcyLCJuYW1lIjoidGVzdC1waW5uaW5nLWFuZC1yZXN0cmljdGlvbiJ9.L2SCQ7C-gDm840m2l2shE-0HqiTwnWDXCwHjpT61msk', 6),
-        ('test-restriction', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXJlc3RyaWN0aW9uIiwiaXNzIjoid2ViMy1zdG9yYWdlIiwiaWF0IjoxNjMzOTU3Mzg5ODcyLCJuYW1lIjoidGVzdC1yZXN0cmljdGlvbiJ9.uAklG7dHOxRD85c564RBcBqeFGUGNBper7VLaXBGnFg', 7);
+INSERT INTO auth_key (id, name, secret, user_id)
+VALUES  (6, 'test-pinning-and-restriction', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmctYW5kLXJlc3RyaWN0aW9uIiwiaXNzIjoid2ViMy1zdG9yYWdlIiwiaWF0IjoxNjMzOTU3Mzg5ODcyLCJuYW1lIjoidGVzdC1waW5uaW5nLWFuZC1yZXN0cmljdGlvbiJ9.L2SCQ7C-gDm840m2l2shE-0HqiTwnWDXCwHjpT61msk', 6),
+        (7, 'test-restriction', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXJlc3RyaWN0aW9uIiwiaXNzIjoid2ViMy1zdG9yYWdlIiwiaWF0IjoxNjMzOTU3Mzg5ODcyLCJuYW1lIjoidGVzdC1yZXN0cmljdGlvbiJ9.uAklG7dHOxRD85c564RBcBqeFGUGNBper7VLaXBGnFg', 7);
 
 -- Used to test pinning from an existing user with a different token
-INSERT INTO auth_key (name, secret, user_id)
-VALUES ('test-pinning-b', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmctYiIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtcGlubmluZy1iIn0.B2qeE5mHW93saJx-Nu8p8Io_z7_3VRaHoBAVxPbCP5c', 4);
+INSERT INTO auth_key (id, name, secret, user_id)
+VALUES (8, 'test-pinning-b', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmctYiIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtcGlubmluZy1iIn0.B2qeE5mHW93saJx-Nu8p8Io_z7_3VRaHoBAVxPbCP5c', 4);
 
 -- /user route data testing
 INSERT INTO content (cid)
