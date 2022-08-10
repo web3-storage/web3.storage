@@ -213,7 +213,7 @@ export default [
       sourceCid: 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47sm',
       contentCid: 'bafybeifsrhq2qtkcgjt4gzi7rkafrv2gaai24ptt6rohe2ebqzydkz47s5',
       authKey: 8,
-      name: 'Image2.jpg',
+      name: 'AnotherImage.jpg',
       meta: null,
       deleted: null,
       created: '2021-07-20T19:27:14.934572+00:00',
