@@ -1,77 +1,58 @@
-.w3link_form {
-  display: block;
-  margin: 1rem 0 0;
-  max-width: 72rem;
-  border-radius: 0.375rem;
-  position: relative;
-  border-radius: 40px;
-  font-size: 1rem;
-
-  @media (min-width: 640px) {
-    display: flex;
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+.kwes-form {
+  .fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-gap: 1rem 3rem;
   }
 
-  &--preinput {
-    color: #fff;
-    /* Gradient1 */
-    background: linear-gradient(99.94deg, rgb(228, 31, 235, 0.6) -7.08%, rgb(61, 71, 221, 0.6) 47.33%);
-    align-items: center;
-    padding: 0.75rem 1.25rem;
-    display: inline-block;
+  .input-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
 
-    @media (min-width: 640px) {
-      display: inline-flex;
-      background-color: #f3f4f6;
-      border-top-left-radius: 40px;
-      border-bottom-left-radius: 40px;
-      border-width: 2px;
-      border-right-width: 0;
-      border-color: #000000;
-    }
+  label {
+    // text-transform: uppercase;
+    line-height: 1.6;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.75);
+    font-family: inherit;
+    margin: 4px 0px;
+  }
+
+  small {
+    margin: 0px;
   }
 
   input {
-    display: block;
-    padding-top: 1.25rem;
-    padding-bottom: 1.25rem;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-    color: #000000;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    flex: 1 1 0%;
-    width: 100%;
-    min-width: 0;
-    border-radius: 0rem;
-    border: 0;
-    outline: none;
-
-    @media (min-width: 640px) {
-      border-radius: 0;
-      border-top-right-radius: 40px;
-      border-bottom-right-radius: 40px;
-      padding-right: 6rem;
-    }
+    padding: 10px 15px;
+    border-radius: 4px;
+    background-color: rgba(117, 122, 155, 0.15);
+    border: 1px solid rgba(117, 122, 155, 0.35);
   }
 
   button {
-    background-color: #000000;
-    font-weight: bold;
-    color: #fff;
-    padding: 0.5rem 1.5rem;
-    box-sizing: border-box;
-    height: calc(100% - 12px);
-    display: flex;
-    align-items: center;
-    @media (min-width: 640px) {
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      margin: 6px;
-      border-radius: 40px;
-
+    min-width: 100px;
+    margin-top: 1rem;
+    &:hover {
+      color: #000;
     }
+  }
+
+  .kw-alert {
+    background-color: transparent;
+    border: 1px solid;
+  }
+
+  .kw-alert-error {
+    border: 1px solid;
+    color: rgb(192, 111, 111);
+    background-color: transparent;
+    display: none;
+  }
+
+  .fields .kw-border-success,
+  .kw-alert-success {
+    border: 1px solid $malibu;
   }
 }

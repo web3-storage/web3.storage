@@ -1,34 +1,101 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
+import kwesforms from 'kwesforms';
 
 const W3linkForm = () => {
-  const [cid, setCid] = useState('bafybeiedv7sowwxamly4oicivudp45rsfvbklnf3fvbvonxrwoxqylhtwq/0.json');
-  // QmcMBwDT8wEjNaVgFpQjhZMKPEgHAwNHTErpZTvPzLdvvi
-  const handleCIDLink = e => {
-    e.preventDefault();
-    window.open(`https://w3s.link/ipfs/${cid}`, '_blank');
-  };
+  useEffect(() => {
+    kwesforms.init();
+  }, []);
 
   return (
-    <form className="w3link_form">
-      <span className="w3link_form--preinput">
-        https://w3s.link/ipfs/
-      </span>
-      <input
-        type="text"
-        name="cid"
-        id="cid"
-        onChange={e => setCid(e.target.value)}
-        value={cid}
-        className="truncate flex-1 min-w-0 block w-full px-3 py-3 rounded sm:rounded-none sm:rounded-r-md md:text-lg border-2 border-black text-black placeholder:text-gray-500 focus:ring-blue focus:border-blue"
-        placeholder="cid..."
-      />
-      <button
-        type="submit"
-        onClick={e => handleCIDLink(e)}
-        className="btn inline-flex items-center px-5 py-2 rounded-lg sm:ml-4 bg-orange text-white sm:text-sm md:text-lg font-semibold hover:bg-blue transition-colors"
-      >
-        GO
-      </button>
+    <form
+      className="kwes-form text-left max-w-lg text-lg mx-auto mt-12"
+      action="https://kwesforms.com/api/foreign/forms/YKmGgxCJeFWb8c9zWtDk"
+    >
+      <p>Fill out the form below and we will reach out to discuss plans and pricing.</p>
+      <br />
+      <div className="fields">
+        <div className="input-wrapper">
+          <label htmlFor="first-name">
+            First name<span className="text-red">*</span>
+          </label>
+          <input
+            type="text"
+            name="first-name"
+            id="first-name"
+            autoComplete="given-name"
+            // @ts-ignore
+            rules="required"
+            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
+          />
+        </div>
+
+        <div className="input-wrapper">
+          <label htmlFor="last-name">
+            Last name<span className="text-red">*</span>
+          </label>
+          <input
+            type="text"
+            name="last-name"
+            id="last-name"
+            // @ts-ignore
+            rules="required"
+            autoComplete="family-name"
+            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
+          />
+        </div>
+
+        <div className="input-wrapper">
+          <label htmlFor="email">
+            Email address associated with your NFT.Storage account
+            <span className="text-red">*</span>
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            placeholder="name@email.com"
+            // @ts-ignore
+            rules="required|email"
+            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
+          />
+        </div>
+        <div className="input-wrapper">
+          <label htmlFor="email">Estimated number of files you&apos;d like to cache</label>
+          <input
+            id="size"
+            name="size"
+            type="text"
+            placeholder="10,000"
+            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
+          />
+        </div>
+        <div className="input-wrapper">
+          <label htmlFor="email">Organization</label>
+          <input
+            id="org"
+            name="org"
+            type="text"
+            placeholder="Acme Corp."
+            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
+          />
+        </div>
+        <div className="input-wrapper">
+          <label htmlFor="email">Job Title</label>
+          <input
+            id="title"
+            name="title"
+            type="text"
+            placeholder="Engineer"
+            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
+          />
+        </div>
+        <div className="sm:col-span-6">
+          <button type="submit" className="button outline-light cta Button">
+            Send
+          </button>
+        </div>
+      </div>
     </form>
   );
 };

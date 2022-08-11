@@ -246,17 +246,33 @@
     @media screen and (min-width: 768px) {
       padding: 3rem;
       display: grid;
+      grid-template-areas:
+        'topLeft topRight'
+        'form form'
+        'bottomLeft bottomRight';
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto;
+      grid-template-rows: auto auto auto;
       grid-gap: 3rem;
       align-items: flex-end;
       border-radius: 10px;
     }
   }
 
-  // .column-1 {
-  //   padding: 0 3rem;
-  // }
+  .column-1 {
+    grid-area: topLeft;
+  }
+  .column-2 {
+    grid-area: topRight;
+  }
+  .column-3 {
+    grid-area: form;
+  }
+  .column-4 {
+    grid-area: bottomLeft;
+  }
+  .column-5 {
+    grid-area: bottomRight;
+  }
 
   .column-2 {
     position: relative;
@@ -271,8 +287,7 @@
     }
 
     p {
-      font-size: 14px;
-      text-transform: uppercase;
+      font-size: 15px;
       line-height: 1.4;
       padding-left: 40px;
       position: relative;
@@ -299,8 +314,8 @@
     }
   }
 
-  .column-3,
-  .column-4 {
+  .column-4,
+  .column-5 {
     padding: 0;
     .column-content {
       border-radius: 10px;
@@ -325,7 +340,7 @@
     }
 
     .description {
-      font-size: 12px;
+      font-size: 14px;
       margin: 0;
       line-height: 1.75;
 

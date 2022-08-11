@@ -44,7 +44,7 @@
             "subheading": "Read data available on the public IPFS network with <strong>w3link</strong> using an HTTP connection (at https://w3s.link/), no additional software necessary. Plug your content ID (CID) below to try it out."
           },
           {
-            "type": "w3link_form",
+            "type": "w3link_gateway",
             "cols": {
               "num": "col col-12",
               "push_left": ""
@@ -145,15 +145,7 @@
             "heading": "Want more speed? 🔥",
             "description": [
               "Use w3link’s SuperHot feature to perma-cache data of up to 5GB per content ID on the edge. Guarantee your users the fastest possible read performance on the web for less than pennies a month."
-            ],
-            "cta": {
-              "url": "/docs",
-              "text": "Read More",
-              "theme": "outline-light",
-              "event": "",
-              "ui": "",
-              "action": ""
-            }
+            ]
           },
           {
             "type": "custom",
@@ -174,6 +166,13 @@
             ]
           },
           {
+            "type": "w3link_form",
+            "cols": {
+              "num": "col col-12",
+              "push_left": ""
+            }
+          },
+          {
             "type": "custom",
             "cols": {
               "num": "col"
@@ -184,9 +183,7 @@
                 "format": "small",
                 "label": "Coming Soon",
                 "heading": "Image Resizing",
-                "description": [
-                  "Image resizing in the Web3.Storage Gateway. Great for thumbnails, etc."
-                ]
+                "description": ["Image resizing in the Web3.Storage Gateway. Great for thumbnails, etc."]
               }
             ]
           },
@@ -201,9 +198,7 @@
                 "format": "small",
                 "label": "Coming Soon",
                 "heading": "IPNS Caching",
-                "description": [
-                  "Auto-cache updates to IPNS records for fast updates to mutable content."
-                ]
+                "description": ["Auto-cache updates to IPNS records for fast updates to mutable content."]
               }
             ]
           }
