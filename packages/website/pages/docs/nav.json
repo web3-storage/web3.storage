@@ -103,8 +103,12 @@
         "src": "reference/go-client-library"
       },
       {
-        "name": "HTTP API",
+        "name": "web3.storage HTTP API",
         "src": "reference/http-api"
+      },
+      {
+        "name": "w3name HTTP API",
+        "src": "reference/w3name-http-api"
       }
     ]
   },
