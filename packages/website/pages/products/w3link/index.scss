@@ -238,14 +238,19 @@
     background-color: rgb(117, 122, 155, 0.15);
 
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 100%;
     grid-template-rows: auto;
-    grid-gap: 3rem;
+    grid-gap: 2rem;
     align-items: flex-end;
+    grid-template-areas:
+      'topLeft'
+      'topRight'
+      'form'
+      'bottomLeft'
+      'bottomRight';
 
     @media screen and (min-width: 768px) {
       padding: 3rem;
-      display: grid;
       grid-template-areas:
         'topLeft topRight'
         'form form'
