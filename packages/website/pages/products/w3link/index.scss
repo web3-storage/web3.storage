@@ -60,9 +60,12 @@
 
 #w3link-logo {
   margin: 0 auto;
-  width: 200px;
+  width: 162px;
   @include mini {
     margin: 0;
+  }
+  img {
+    max-height: 48px;
   }
 }
 
@@ -85,7 +88,7 @@
     aspect-ratio: 1400/150;
     z-index: -1;
     // background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='1845.701' height='242.942' viewBox='0 0 1845.701 242.942'%3e%3cdefs%3e%3cclipPath id='clip-path'%3e%3crect y='659' width='1845.701' height='242.942' fill='none'/%3e%3c/clipPath%3e%3c/defs%3e%3cg id='Scroll_Group_1' data-name='Scroll Group 1' transform='translate(0 -659)' clip-path='url(%23clip-path)' style='isolation: isolate'%3e%3cpath id='Path_19292' data-name='Path 19292' d='M-21173,9737.463s429.527-45.37,890.953,1,781.068,131.782,954.748,184.479V9050H-21173Z' transform='translate(21173 -9050)' fill='%2303040a'/%3e%3c/g%3e%3c/svg%3e");
-    background-image: url("data:image/svg+xml,%3Csvg width='1400' height='150' viewBox='0 0 1400 150' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 54.0955V150H1400C488.593 -63.8343 86.9136 -3.03399 0 54.0955Z' fill='black'/%3E%3C/svg%3E%0A");
+    background-image: url("data:image/svg+xml,%3Csvg width='1400' height='150' viewBox='0 0 1400 150' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 54.0955V150H1400C488.593 -63.8343 86.9136 -3.03399 0 54.0955Z' fill='%2303040a'/%3E%3C/svg%3E%0A");
     background-size: 100%;
     background-repeat: no-repeat;
   }
@@ -108,11 +111,27 @@
 
 #w3link_section_2 {
   position: relative;
+  overflow: hidden;
   z-index: 1;
   @include background_Dark;
   color: white;
   padding-top: 0;
   padding-bottom: 0;
+
+  &:before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 120%;
+    top: 0%;
+    background-image: url('/images/index/corkscrew-bg.png');
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    z-index: -1;
+    opacity: 0.25;
+    filter: blur(40px);
+    transform: rotate(10deg) translateX(-10%) translateY(10%);
+  }
 
   &:after {
     content: '';
@@ -123,7 +142,7 @@
     width: 110vw;
     aspect-ratio: 1365/81;
     z-index: -1;
-    background-image: url("data:image/svg+xml,%3Csvg width='1365' height='81' viewBox='0 0 1365 81' fill='%23000' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1364 1H1C72.3333 27.3333 307 80 675 80C1043 80 1287.67 27.3333 1364 1Z' stroke='black'/%3E%3C/svg%3E%0A");
+    background-image: url("data:image/svg+xml,%3Csvg width='1365' height='81' viewBox='0 0 1365 81' fill='%2303040a' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1364 1H1C72.3333 27.3333 307 80 675 80C1043 80 1287.67 27.3333 1364 1Z' /%3E%3C/svg%3E%0A");
     background-size: 100%;
     background-repeat: no-repeat;
     transform: translateY(100%);
@@ -188,8 +207,11 @@
 
   .grid {
     padding: 2.5rem 3rem;
-    border-radius: 10px;
     background-color: rgb(117, 122, 155, 0.15);
+
+    @media screen and (min-width: 768px) {
+      border-radius: 10px;
+    }
   }
 
   p:last-of-type,
@@ -199,7 +221,11 @@
 }
 
 #w3link_premium {
-  padding: 2rem 0 0;
+  padding: 0;
+
+  @media screen and (min-width: 768px) {
+    padding: 2rem 0 0;
+  }
 
   .label {
     text-align: left;
@@ -209,8 +235,7 @@
   }
 
   .grid {
-    border-radius: 10px;
-    padding: 3rem;
+    padding: 1rem 3rem 3rem;
     background-color: rgb(117, 122, 155, 0.15);
 
     display: grid;
@@ -220,11 +245,13 @@
     align-items: flex-end;
 
     @media screen and (min-width: 768px) {
+      padding: 3rem;
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: auto auto;
       grid-gap: 3rem;
       align-items: flex-end;
+      border-radius: 10px;
     }
   }
 
@@ -239,21 +266,8 @@
     align-items: center;
 
     .column-content {
-
       @media screen and (min-width: 768px) {
-        max-width: 300px;
-      }
-    }
-
-    @media screen and (min-width: 768px) {
-      &:after {
-        content: '';
-        border-left: 1px solid #000;
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 1px;
+        max-width: 320px;
       }
     }
 
