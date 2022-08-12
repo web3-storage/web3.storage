@@ -6,6 +6,7 @@ on:
     paths:
       - 'packages/db/**'
       - '.github/workflows/db.yml'
+      - 'package-lock.json'
 
   # Nothing to do on PR yet, but having the check appear on the PR serves as a reminder 
   # that we don't have proper tests for db changes yet, and that merging it will deploy.
@@ -13,6 +14,7 @@ on:
     paths:
       - 'packages/db/**'
       - '.github/workflows/db.yml'
+      - 'package-lock.json'
 jobs:
   test:
     runs-on: ubuntu-latest
