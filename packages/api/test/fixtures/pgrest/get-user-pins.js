@@ -236,5 +236,5 @@ export default [
       ]
     },
     delegates: []
-  },
+  }
 ]
