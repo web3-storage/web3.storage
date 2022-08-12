@@ -269,6 +269,38 @@ cid, err := client.PutCar(context.Background(), carfile)
 ```
 
 </TabItem>
+<TabItem value="curl" label="HTTP API (curl)">
+
+If you're using the [HTTP API][reference-http] directly, you can upload a CAR file by sending a `POST` request to the `/car` endpoint.
+
+Your request must include an `Authorization` header with a value of `Bearer $API_TOKEN`, where `$API_TOKEN` is a valid JWT token for the Web3.Storage service. 
+
+The body of the request should be the binary CAR data, with no additional padding or encoding. Please note that the maximum size for a single CAR upload is 100 MiB. See [Working with CAR files][howto-car-files] for information about splitting CARs into smaller chunks for upload.
+
+The example below assumes that you have a CAR file named `mydata.car` that you want to upload.
+
+<Callout>
+When using `curl`, it's important to set the `--data-binary` flag. A common mistake is to use the `-d` flag instead, which sets the `Content-Type` header to the wrong value.
+</Callout>
+
+```bash
+curl --headers "Authorization: Bearer $API_TOKEN" --data-binary @mydata.car
+```
+
+The above example uses the generic `--headers` flag to set the `Authorization` header, since setting headers is supported by all HTTP clients. If you are using `curl`, you can optionally use the more consise `--oauth2-bearer` flag:
+
+```bash
+curl --oauth2-bearer $API_TOKEN --data-binary @mydata.car
+```
+
+You can also upload CAR data from non-file sources (for example, another network request) by piping it into the `curl` commmand and setting the input to `/dev/stdin`:
+
+```bash
+some-command-that-outputs-car-data | curl --oauth2-bearer $API_TOKEN --data-binary @/dev/stdin
+```
+
+</TabItem>
+
 </Tabs>
 
 ## Next steps
