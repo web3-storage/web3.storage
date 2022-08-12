@@ -133,7 +133,7 @@ const FileRowItem = props => {
         ) : (
           <a
             className="cid-truncate underline medium-up-only"
-            href={`https://dweb.link/ipfs/${cid}`}
+            href={`https://w3s.link/ipfs/${cid}`}
             target="_blank"
             rel="noreferrer"
           >
