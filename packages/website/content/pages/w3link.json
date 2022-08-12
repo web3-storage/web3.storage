@@ -41,7 +41,7 @@
             },
             "format": "header",
             "heading": "Lightning fast reads from the IPFS network",
-            "subheading": "Read data available on the public IPFS network with <strong>w3link</strong> using an HTTP connection (at https://w3s.link/), no additional software necessary. Plug your content ID (CID) below to try it out."
+            "subheading": "Read data available on the public IPFS network with <strong>w3link</strong> using an HTTP endpoint (at https://w3s.link), no additional software necessary. Add your content ID (CID) below to try it out."
           },
           {
             "type": "w3link_gateway",
