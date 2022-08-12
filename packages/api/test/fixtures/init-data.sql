@@ -45,6 +45,9 @@ VALUES  (6, 'test-pinning-and-restriction', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ
 INSERT INTO auth_key (id, name, secret, user_id)
 VALUES (8, 'test-pinning-b', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmctYiIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtcGlubmluZy1iIn0.B2qeE5mHW93saJx-Nu8p8Io_z7_3VRaHoBAVxPbCP5c', 4);
 
+-- Reset the primary key next value
+SELECT pg_catalog.setval(pg_get_serial_sequence('auth_key', 'id'), MAX(id)) FROM auth_key;
+
 -- /user route data testing
 INSERT INTO content (cid)
 VALUES ('bafkreigpimx5kl6thyfysh2witvbo5nexvu3q3uc3y65rj5sr5czcc7wae'),
