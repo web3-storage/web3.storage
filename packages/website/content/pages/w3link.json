@@ -141,10 +141,10 @@
               "num": "col"
             },
             "format": "small",
-            "label": "Premium",
+            "label": "Premium (Coming Soon)",
             "heading": "Want more speed? 🔥",
             "description": [
-              "Use w3link’s SuperHot feature to perma-cache data of up to 5GB per content ID on the edge. Guarantee your users the fastest possible read performance on the web for less than pennies a month."
+              "Soon, you’ll be able to use w3link’s SuperHot feature to perma-cache data of up to 5GB per content ID on the edge. Guarantee your users the fastest possible read performance on the web for less than pennies a month."
             ]
           },
           {
@@ -159,8 +159,8 @@
                 "description": [
                   "Perma-cache data up to 5GB per CID",
                   "100 ms time-to-first-byte for 95% of the world’s Internet-connected population",
-                  "<small>Coming Soon</small>Centralized URL support (cache even non-IPFS data)",
-                  "<small>Coming Soon</small>Perma-cache files of any size"
+                  "Centralized URL support (cache even non-IPFS data)",
+                  "Perma-cache files of any size"
                 ]
               }
             ]
@@ -181,7 +181,6 @@
               {
                 "type": "text_block",
                 "format": "small",
-                "label": "Coming Soon",
                 "heading": "Image Resizing",
                 "description": ["Image resizing in the Web3.Storage Gateway. Great for thumbnails, etc."]
               }
@@ -196,7 +195,6 @@
               {
                 "type": "text_block",
                 "format": "small",
-                "label": "Coming Soon",
                 "heading": "IPNS Caching",
                 "description": ["Auto-cache updates to IPNS records for fast updates to mutable content."]
               }

@@ -11,7 +11,10 @@ const W3linkForm = () => {
       className="kwes-form text-left max-w-lg text-lg mx-auto mt-12"
       action="https://kwesforms.com/api/foreign/forms/YKmGgxCJeFWb8c9zWtDk"
     >
-      <p>Fill out the form below and we will reach out to discuss plans and pricing.</p>
+      <p>
+        If you’re interested in being added to the waitlist for SuperHot, fill out the form below and we will reach out
+        to discuss plans and pricing.
+      </p>
       <br />
       <div className="fields">
         <div className="input-wrapper">
