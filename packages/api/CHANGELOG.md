@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.1.1](https://github.com/web3-storage/web3.storage/compare/api-v7.1.0...api-v7.1.1) (2022-08-12)
+
+
+### Bug Fixes
+
+* add ipns migration cron job ([#1705](https://github.com/web3-storage/web3.storage/issues/1705)) ([4b6e67f](https://github.com/web3-storage/web3.storage/commit/4b6e67f07983b06e9bad9c27deb5d6c5b993258e))
+* Make PSA Errors compliant ([#1710](https://github.com/web3-storage/web3.storage/issues/1710)) ([4080363](https://github.com/web3-storage/web3.storage/commit/4080363193893f8ce72d4cf28d8153e2f4faee14))
+
 ## [7.1.0](https://github.com/web3-storage/web3.storage/compare/api-v7.0.1...api-v7.1.0) (2022-07-07)
 
 
