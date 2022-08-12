@@ -1152,23 +1152,41 @@ export class DBClient {
   /**
    * Get a filtered list of pin requests for a user
    *
-   * @param {string} authKey
-   * @param {import('./db-client-types').ListPsaPinRequestOptions} [opts]
+   * @param {string | [string]} authKey
+   * @param {import('./db-client-types').ListPsaPinRequestOptions & import('./db-client-types').ListUploadsOptions} [opts]
    * @return {Promise<import('./db-client-types').ListPsaPinRequestResults> }> }
    */
   async listPsaPinRequests (authKey, opts = {}) {
     const match = opts?.match || 'exact'
     const limit = opts?.limit || 10
 
+    const isAscendingSortOrder = opts.sortOrder ?? opts.sortOrder === 'Asc'
+    const defaultSortByColumn = Object.keys(sortableColumnToUploadArgMap)[0]
+    const sortByColumn = Object.keys(sortableColumnToUploadArgMap).find(key => sortableColumnToUploadArgMap[key] === opts.sortBy)
+    const sortBy = sortByColumn || defaultSortByColumn
+
     let query = this._client
       .from(psaPinRequestTableName)
       .select(listPinsQuery, {
         count: 'exact'
       })
-      .eq('auth_key_id', authKey)
       .is('deleted_at', null)
       .limit(limit)
-      .order('inserted_at', { ascending: false })
+      .order(
+        sortBy,
+        { ascending: isAscendingSortOrder })
+
+    if (Array.isArray(authKey)) {
+      query.in('auth_key_id', authKey)
+    } else {
+      query.eq('auth_key_id', authKey)
+    }
+
+    if (opts.offset) {
+      const rangeFrom = opts.offset || 0
+      const rangeTo = rangeFrom + limit
+      query = query.range(rangeFrom, rangeTo - 1)
+    }
 
     if (!opts.cid && !opts.name && !opts.statuses) {
       query = query.eq('content.pins.status', 'Pinned')

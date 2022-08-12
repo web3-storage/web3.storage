@@ -6,10 +6,12 @@ on:
     paths:
       - 'packages/website/**'
       - '.github/workflows/website.yml'
+      - 'package-lock.json'
   pull_request:
     paths:
       - 'packages/website/**'
       - '.github/workflows/website.yml'
+      - 'package-lock.json'
 jobs:
   test:
     name: Test

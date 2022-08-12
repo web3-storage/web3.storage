@@ -9,6 +9,9 @@ import {
   READ_ONLY,
   maintenanceHandler
 } from './maintenance.js'
+import { pagination } from './utils/pagination.js'
+import { toPinStatusResponse } from './pins.js'
+import { validateSearchParams } from './utils/psa.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -221,9 +224,6 @@ export async function userTokensDelete (request, env) {
   return new JSONResponse(res)
 }
 
-const sortableValues = ['Name', 'Date']
-const sortableOrders = ['Asc', 'Desc']
-
 /**
  * Retrieve a page of user uploads.
  *
@@ -234,54 +234,7 @@ export async function userUploadsGet (request, env) {
   const requestUrl = new URL(request.url)
   const { searchParams } = requestUrl
 
-  let size = 25
-  if (searchParams.has('size')) {
-    const parsedSize = parseInt(searchParams.get('size'))
-    if (isNaN(parsedSize) || parsedSize <= 0 || parsedSize > 1000) {
-      throw Object.assign(new Error('invalid page size'), { status: 400 })
-    }
-    size = parsedSize
-  }
-
-  let offset = 0
-  let page = 1
-  if (searchParams.has('page')) {
-    const parsedPage = parseInt(searchParams.get('page'))
-    if (isNaN(parsedPage) || parsedPage <= 0) {
-      throw Object.assign(new Error('invalid page number'), { status: 400 })
-    }
-    offset = (parsedPage - 1) * size
-    page = parsedPage
-  }
-
-  let before
-  if (searchParams.has('before')) {
-    const parsedBefore = new Date(searchParams.get('before'))
-    if (isNaN(parsedBefore.getTime())) {
-      throw Object.assign(new Error('invalid before date'), { status: 400 })
-    }
-    before = parsedBefore.toISOString()
-  }
-
-  let after
-  if (searchParams.has('after')) {
-    const parsedAfter = new Date(searchParams.get('after'))
-    if (isNaN(parsedAfter.getTime())) {
-      throw Object.assign(new Error('invalid after date'), { status: 400 })
-    }
-    after = parsedAfter.toISOString()
-  }
-
-  const sortBy = searchParams.get('sortBy') || 'Date'
-  const sortOrder = searchParams.get('sortOrder') || 'Desc'
-
-  if (!sortableOrders.includes(sortOrder)) {
-    throw Object.assign(new Error(`Sort ordering by '${sortOrder}' is not supported. Supported sort orders are: [${sortableOrders.toString()}]`), { status: 400 })
-  }
-
-  if (!sortableValues.includes(sortBy)) {
-    throw Object.assign(new Error(`Sorting by '${sortBy}' is not supported. Supported sort orders are: [${sortableValues.toString()}]`), { status: 400 })
-  }
+  const { size, page, offset, before, after, sortBy, sortOrder } = pagination(searchParams)
 
   const data = await env.db.listUploads(request.auth.user._id, {
     size,
@@ -345,6 +298,72 @@ export async function userUploadsRename (request, env) {
 
   const res = await env.db.renameUpload(user, cid, name)
   return new JSONResponse(res)
+}
+
+/**
+ * List a user's pins regardless of the token used.
+ * As we don't want to scope the Pinning Service API to users
+ * we need a new endpoint as an umbrella.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userPinsGet (request, env) {
+  const requestUrl = new URL(request.url)
+  const { searchParams } = requestUrl
+
+  const { size, page, offset, before, after, sortBy, sortOrder } = pagination(searchParams)
+  const urlParams = new URLSearchParams(requestUrl.search)
+  const params = Object.fromEntries(urlParams)
+
+  const psaParams = validateSearchParams(params)
+  if (psaParams.error) {
+    throw psaParams.error
+  }
+
+  const tokens = (await env.db.listKeys(request.auth.user._id)).map((key) => key._id)
+
+  let pinRequests
+
+  try {
+    pinRequests = await env.db.listPsaPinRequests(tokens, {
+      ...psaParams.data,
+      limit: size,
+      offset,
+      before,
+      after,
+      sortBy,
+      sortOrder
+    })
+  } catch (e) {
+    console.error(e)
+    throw new HTTPError('No pinning resources found for user', 404)
+  }
+
+  const pins = pinRequests.results.map((pinRequest) => toPinStatusResponse(pinRequest))
+
+  let link = ''
+  // If there's more results to show...
+  if (page > 1) {
+    link += `<${requestUrl.pathname}?size=${size}&page=${page - 1}>; rel="previous"`
+  }
+
+  if (pins.length + offset < pinRequests.count) {
+    if (link !== '') link += ', '
+    link += `<${requestUrl.pathname}?size=${size}&page=${page + 1}>; rel="next"`
+  }
+
+  const headers = {
+    Count: pinRequests.count || 0,
+    Size: size,
+    Page: page,
+    Link: link
+  }
+
+  return new JSONResponse({
+    count: pinRequests.count,
+    results: pins
+  }, { headers })
 }
 
 /**
