@@ -352,7 +352,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           staticLabel="Gateway"
           value={linkPrefix}
           options={[
-            { value: 'https://w3s.link/ipfs/', label: 'w3s' },
+            { value: 'https://w3s.link/ipfs/', label: 'w3link' },
             { value: 'https://dweb.link/ipfs/', label: 'dweb' },
           ]}
           onChange={value => setLinkPrefix(value)}
