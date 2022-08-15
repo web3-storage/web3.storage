@@ -26,7 +26,7 @@ export function getStaticProps() {
     props: {
       title: AccountPageData.seo.title,
       isRestricted: true,
-      redirectTo: '/login/',
+      redirectTo: '/login/'
     },
   };
 }
