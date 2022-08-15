@@ -1,7 +1,7 @@
 import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
-import { HTTPError } from './errors.js'
+import { HTTPError, RangeNotSatisfiableError } from './errors.js'
 import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
 import {
   NO_READ_OR_WRITE,
@@ -236,34 +236,77 @@ export async function userUploadsGet (request, env) {
 
   const { size, page, offset, before, after, sortBy, sortOrder } = pagination(searchParams)
 
-  const data = await env.db.listUploads(request.auth.user._id, {
-    size,
-    offset,
-    before,
-    after,
-    sortBy,
-    sortOrder
-  })
-
-  let link = ''
-  // If there's more results to show...
-  if (page > 1) {
-    link += `<${requestUrl.pathname}?size=${size}&page=${page - 1}>; rel="previous"`
-  }
-
-  if (data.uploads.length + offset < data.count) {
-    if (link !== '') link += ', '
-    link += `<${requestUrl.pathname}?size=${size}&page=${page + 1}>; rel="next"`
+  /** @type {import('@web3-storage/db').UploadItemOutput[]} */
+  let data
+  try {
+    data = await env.db.listUploads(request.auth.user._id, {
+      size,
+      offset,
+      before,
+      after,
+      sortBy,
+      sortOrder
+    })
+  } catch (err) {
+    if (err.code === 'RANGE_NOT_SATISFIABLE_ERROR_DB') {
+      throw new RangeNotSatisfiableError()
+    }
+    throw err
   }
 
   const headers = {
-    Count: data.count,
-    Size: size,
-    Page: page,
-    Link: link
+    Count: data.count, // Deprecated, do not use!
+    Size: size, // Deprecated, do not use!
+    Page: page, // Deprecated, do not use!
+    Link: getLinkHeader({
+      url: requestUrl.pathname,
+      size,
+      page,
+      pages: Math.ceil(data.count / size),
+      rest: {
+        before,
+        after,
+        sortBy,
+        sortOrder
+      }
+    })
   }
 
   return new JSONResponse(data.uploads, { headers })
+}
+
+/**
+ * Generates a HTTP `Link` header for the given pagination paramaters.
+ *
+ * @param {Object} args
+ * @param {string|URL} args.url Base URL
+ * @param {number} args.size Page size
+ * @param {number} args.page Current page
+ * @param {number} args.pages Total pages
+ * @param {Record<string, string>} args.rest Other optional params
+ */
+function getLinkHeader ({ url, size, page, pages, rest = {} }) {
+  const rels = []
+  // filter out null/undefined
+  const restParams = Object.fromEntries(Object.entries(rest).filter(([, v]) => v != null))
+
+  if (page < pages) {
+    const nextParams = new URLSearchParams({ size, page: page + 1, ...restParams })
+    rels.push(`<${url}?${nextParams}>; rel="next"`)
+  }
+
+  const lastParams = new URLSearchParams({ size, page: pages, ...restParams })
+  rels.push(`<${url}?${lastParams}>; rel="last"`)
+
+  const firstParams = new URLSearchParams({ size, page: 1, ...restParams })
+  rels.push(`<${url}?${firstParams}>; rel="first"`)
+
+  if (page > 1) {
+    const prevParams = new URLSearchParams({ size, page: page - 1, ...restParams })
+    rels.push(`<${url}?${prevParams}>; rel="previous"`)
+  }
+
+  return rels.join(', ')
 }
 
 /**

@@ -157,41 +157,19 @@
           "options": [
             {
               "label": "Newest Upload",
-              "value": "newest",
-              "direction": "NEWEST",
-              "compareFn": "TIMEBASED"
+              "value": "Date,Desc"
             },
             {
               "label": "Oldest Upload",
-              "value": "oldest",
-              "direction": "OLDEST",
-              "compareFn": "TIMEBASED"
+              "value": "Date,Asc"
             },
             {
               "label": "Alphabetical A-Z",
-              "key": "name",
-              "value": "a-z",
-              "direction": "ASC",
-              "compareFn": "ALPHANUMERIC"
+              "value": "Name,Asc"
             },
             {
               "label": "Alphabetical Z-A",
-              "key": "name",
-              "value": "z-a",
-              "direction": "DESC",
-              "compareFn": "ALPHANUMERIC"
-            },
-            {
-              "label": "Largest size",
-              "value": "largest",
-              "direction": "LARGEST",
-              "compareFn": "SIZEBASED"
-            },
-            {
-              "label": "Smallest size",
-              "value": "smallest",
-              "direction": "SMALLEST",
-              "compareFn": "SIZEBASED"
+              "value": "Name,Desc"
             }
           ]
         },

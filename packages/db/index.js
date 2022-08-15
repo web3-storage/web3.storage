@@ -8,7 +8,7 @@ import {
   normalizePsaPinRequest,
   parseTextToNumber
 } from './utils.js'
-import { ConstraintError, DBError } from './errors.js'
+import { ConstraintError, DBError, RangeNotSatisfiableDBError } from './errors.js'
 
 export { EMAIL_TYPE } from './constants.js'
 export { parseTextToNumber } from './utils.js'
@@ -537,7 +537,13 @@ export class DBClient {
     query = query.range(rangeFrom, rangeTo - 1)
 
     /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error, count: Number }} */
-    const { data: uploads, error, count } = await query
+    const { data: uploads, error, count, status } = await query
+
+    // For some reason, error comes back as empty array when out of range.
+    // (416 = Range Not Satisfiable)
+    if (status === 416) {
+      throw new RangeNotSatisfiableDBError()
+    }
 
     if (error) {
       throw new DBError(error)

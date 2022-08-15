@@ -1,5 +1,6 @@
 import { getMagic } from './magic';
 import constants from './constants';
+import { parseLinkHeader } from '@web3-storage/parse-link-header';
 
 /** @typedef {{ name?: string } & import('web3.storage').Upload} Upload */
 
@@ -150,8 +151,8 @@ export async function createToken(name) {
 
 /**
  * @typedef {Object} UploadArgs
- * @property {number} args.size
- * @property {string} args.before
+ * @property {number} [args.size]
+ * @property {number} [args.page]
  * @property {string} [args.sortBy] Can be either "Date" or "Name" - uses "Date" as default
  * @property {string} [args.sortOrder] Can be either "Asc" or "Desc" - uses "Desc" as default
  */
@@ -159,18 +160,18 @@ export async function createToken(name) {
 /**
  * Gets files
  *
- * @param {UploadArgs} args
- * @returns {Promise<import('web3.storage').Upload[]>}
+ * @param {UploadArgs} [args]
+ * @returns {Promise<{ uploads: import('web3.storage').Upload[], pages: number }>}
  * @throws {Error} When it fails to get uploads
  */
-export async function getUploads({ size, before, sortBy, sortOrder }) {
-  const params = new URLSearchParams({ before, size: String(size) });
+export async function getUploads({ size, page, sortBy, sortOrder } = {}) {
+  const params = new URLSearchParams({ page: String(page || 1), size: String(size || 10) });
   if (sortBy) {
     params.set('sortBy', sortBy);
   }
 
   if (sortOrder) {
-    params.set('setOrder', sortOrder);
+    params.set('sortOrder', sortOrder);
   }
   const res = await fetch(`${API}/user/uploads?${params}`, {
     method: 'GET',
@@ -184,7 +185,12 @@ export async function getUploads({ size, before, sortBy, sortOrder }) {
     throw new Error(`failed to get uploads: ${await res.text()}`);
   }
 
-  return res.json();
+  const links = parseLinkHeader(res.headers.get('Link') || '')
+  if (!links?.last?.page) {
+    throw new Error('missing last rel in pagination Link header')
+  }
+
+  return { uploads: await res.json(), pages: parseInt(links.last.page) };
 }
 
 /**

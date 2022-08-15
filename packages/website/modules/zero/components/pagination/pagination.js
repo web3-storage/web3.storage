@@ -6,12 +6,12 @@ import useQueryParams from 'ZeroHooks/useQueryParams'
 /**
  * @typedef {Object} PaginationProps
  * @prop {string} [className]
- * @prop {any[]} items
  * @prop {string|number} itemsPerPage
+ * @prop {number} pageCount
  * @prop {number} visiblePages
  * @prop {number} [defaultPage]
  * @prop {string} [queryParam]
- * @prop {function} [onChange]
+ * @prop {(page: number) => void} [onChange]
  * @prop {string} [scrollTarget]
  */
 
@@ -20,8 +20,8 @@ import useQueryParams from 'ZeroHooks/useQueryParams'
  */
 const Pagination = ({
   className,
-  items,
   itemsPerPage,
+  pageCount,
   visiblePages,
   defaultPage,
   queryParam,
@@ -33,16 +33,15 @@ const Pagination = ({
   const [pageList, setPageList] = useState(/** @type {number[]} */([]))
   const [activePage, setActivePage] = useState(defaultPage)
 
-  const pageCount = useMemo(() => itemsPerPage ? Math.ceil(items.length/parseInt(/** @type {string} */(itemsPerPage))) : null, [items, itemsPerPage])
-
   const currentPage = useMemo(() => parseInt(queryParam ? queryValue : activePage), [queryParam, queryValue, activePage])
 
   const setCurrentPage = useCallback((page) => {
     queryParam ? setQueryValue(page) : setActivePage(page)
     if(!!scrollTarget) {
-      const scrollToElement= document.querySelector(scrollTarget);
+      const scrollToElement = document.querySelector(scrollTarget);
       scrollToElement?.scrollIntoView(true);
     }
+    onChange && onChange(page);
   }, [queryParam, setQueryValue, setActivePage, scrollTarget])
 
   useEffect(() => {
@@ -50,14 +49,7 @@ const Pagination = ({
       Array.from({length: pageCount}, (_, i) => i + 1)
         .filter(page => page >= currentPage - visiblePages && page <= currentPage + visiblePages)
     )
-
-    pageCount && currentPage < 1 && setCurrentPage(defaultPage)
-    pageCount && currentPage > pageCount && setCurrentPage(pageCount)
-
-    const firstItem = (currentPage - 1) * parseInt(/** @type {string} */(itemsPerPage))
-    onChange && onChange(items.slice(firstItem, firstItem + parseInt(/** @type {string} */(itemsPerPage))))
-
-  }, [items, itemsPerPage, visiblePages, pageCount, setPageList, currentPage, setCurrentPage, onChange])
+  }, [itemsPerPage, visiblePages, pageCount, setPageList, currentPage, setCurrentPage, onChange])
 
   return (
     <div className={clsx(className, 'Pagination')}>

@@ -308,16 +308,7 @@ describe('GET /user/uploads', () => {
     // Ensure we have all pagination metadata in the headers.
     const link = res.headers.get('link')
     assert(link, 'has a link header for the next page')
-    assert.strictEqual(link, `</user/uploads?size=${size}&page=${page - 1}>; rel="previous", </user/uploads?size=${size}&page=${page + 1}>; rel="next"`)
-
-    const resCount = res.headers.get('Count')
-    assert.strictEqual(parseInt(resCount), userUploads.length, 'has a count for calculating page numbers')
-
-    const resSize = res.headers.get('Size')
-    assert.strictEqual(parseInt(resSize), size, 'has a size for calculating page numbers')
-
-    const resPage = res.headers.get('Page')
-    assert.strictEqual(parseInt(resPage), page, 'has a page number for calculating page numbers')
+    assert.strictEqual(link, `</user/uploads?size=${size}&page=${page + 1}>; rel="next", </user/uploads?size=${size}&page=${Math.ceil(userUploads.length / size)}>; rel="last", </user/uploads?size=${size}&page=1>; rel="first", </user/uploads?size=${size}&page=${page - 1}>; rel="previous"`)
 
     // Should get second result (page 2).
     const uploads = await res.json()

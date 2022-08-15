@@ -205,3 +205,12 @@ export class PSAErrorDB extends PinningServiceApiError {
   }
 }
 PSAErrorDB.CODE = 'PSA_DB_ERROR'
+
+export class RangeNotSatisfiableError extends HTTPError {
+  constructor (msg = 'Range Not Satisfiable') {
+    super(msg, 416)
+    this.name = 'RangeNotSatisfiableError'
+    this.code = RangeNotSatisfiableError.CODE
+  }
+}
+RangeNotSatisfiableError.CODE = 'ERROR_RANGE_NOT_SATISFIABLE'

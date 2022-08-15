@@ -75,6 +75,7 @@ export const STATUS = {
 /**
  * @typedef {Object} UploadsContextProps
  * @property {Upload[]} uploads Uploads available in this account
+ * @property {number} pages Total pages of uploads
  * @property {PinStatus[]} pinned Files uploaded through the pinning service on this account
  * @property {(cid: string) => Promise<void>} deleteUpload Method to delete an existing upload
  * @property {(cid: string, name: string)=>Promise<void>} renameUpload Method to rename an existing upload
@@ -112,6 +113,7 @@ export const UploadsProvider = ({ children }) => {
   } = useUser();
 
   const [uploads, setUploads] = useState(/** @type {Upload[]} */ ([]));
+  const [pages, setPages] = useState(0);
   const [pinned, setPinned] = useState(/** @type {PinStatus[]} */ ([]));
   const [isFetchingUploads, setIsFetchingUploads] = useState(false);
   const [fetchDate, setFetchDate] = useState(/** @type {number|undefined} */ (undefined));
@@ -180,19 +182,15 @@ export const UploadsProvider = ({ children }) => {
 
   const getUploadsCallback = useCallback(
     /** @type {(args?: UploadArgs) => Promise<Upload[]>}} */
-    async (
-      args = {
-        size: 1000,
-        before: new Date().toISOString(),
-      }
-    ) => {
+    async args => {
       setIsFetchingUploads(true);
-      const updatedUploads = await getUploads(args);
-      setUploads(updatedUploads);
+      const { uploads, pages } = await getUploads(args);
+      setUploads(uploads);
+      setPages(pages);
       setFetchDate(Date.now());
       setIsFetchingUploads(false);
 
-      return updatedUploads;
+      return uploads;
     },
     [setUploads, setIsFetchingUploads]
   );
@@ -223,6 +221,7 @@ export const UploadsProvider = ({ children }) => {
           getUploads: getUploadsCallback,
           listPinned: listPinnedCallback,
           uploads,
+          pages,
           pinned,
           isFetchingUploads,
           fetchDate,
