@@ -1,9 +1,9 @@
 ---
 title: IPFS Gateways
-description: An overview of IPFS Gateways background and w3link.
+description: An overview of IPFS HTTP Gateways and w3link.
 ---
 
-# IPFS Gateways
+# IPFS HTTP Gateways
 
 Web3.Storage uses the [InterPlanetary File System (IPFS)](https://ipfs.io) as a key part of its [storage and retrieval infrastructure][concepts-decentralized-storage].
 
@@ -19,7 +19,7 @@ For more information about fetching content from gateways, see our [guide to dat
 
 ## w3link
 
-Providing a great retrieval experience on the web is a key part of Web3.Storage's mission, as we work to make [decentralized data storage][concepts-decentralized-storage] the default choice for web3 developers.
+Providing a great retrieval experience on the web is a key part of the Web3.Storage platform, as we work to make [decentralized data storage][concepts-decentralized-storage] the default choice for web3 developers.
 
 To further this goal, we created a new HTTP gateway that uses existing public IPFS infrastructure and cloud-native caching strategies to provide a high-performance, CID-based HTTP retrieval solution.
 
@@ -48,6 +48,8 @@ curl -L https://w3s.link/ipfs/bafybeid4gwmvbza257a7rx52bheeplwlaogshu4rgse3eaudf
 The gateway always redirects path-style URLs into subdomain-style URLs, so that web content served through the gateway can be isolated with the [same-origin policy](https://en.wikipedia.org/wiki/Same-origin_policy). In some cases, this may result in the CID being re-encoded to a format that's compatible with subdomain addressing. In particular, "version 0" CIDs beginning with `Qm` will be encoded to CID version 1 (`bafy...`) in the base32 string encoding. Although the encodings are different, the CIDs are still equivalent for the purposes of content identification and verification, and you can convert back into CIDv0 without losing any information.
 
 You can avoid the redirect from path to subdomain URL by creating a [subdomain style URL](#subdomain-style-urls) directly, but you'll need to make sure that you're only using CIDv1, as CIDv0's case-sensitive encoding is incompatible with subdomain URLs. The Web3.Storage APIs always return CIDv1, but if you have other sources of IPFS CIDs you can [convert CIDv0 to v1][ipfs-docs-cid-convert] yourself before constructing the gateway URL.
+
+`w3s.link` is the default gateway used in your Web3.Storage uploads table to view and download content, but you can switch the gateway used for URLs to another popular gateway, `dweb.link`, by selecting it in the `Gateway` field in the dropdown menu at the top of the uploads table.
 
 ### Rate limits
 
