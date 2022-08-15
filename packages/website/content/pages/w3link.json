@@ -69,7 +69,7 @@
               "In addition, like other IPFS HTTP gateways, w3link takes requests over HTTP, making it easy to integrate with today’s existing web infrastructure."
             ],
             "cta": {
-              "url": "https://docs.ipfs.tech/concepts/ipns/",
+              "url": "/docs/concepts/w3link/",
               "text": "VIEW THE DOCS",
               "theme": "light",
               "event": "",
