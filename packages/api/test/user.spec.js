@@ -395,7 +395,7 @@ describe('GET /user/pins', () => {
     })
     assert(res.ok)
     const body = await res.json()
-    assert.deepStrictEqual(body.results, [...userPins].sort((a, b) => a.pin.name.localeCompare(b.pin.name)))
+    assert.deepStrictEqual(body.results, [...userPins].sort((a, b) => 0 - a.pin.name.localeCompare(b.pin.name)))
   })
   it('accepts the `sortOrder` parameter', async () => {
     const sortOrder = 'Asc'
