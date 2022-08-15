@@ -1,0 +1,359 @@
+{
+  "seo": {
+    "title": "",
+    "description": ""
+  },
+  "og": {
+    "site_name": "",
+    "url": "",
+    "type": "website",
+    "image": ""
+  },
+  "page_content": [
+    [
+      {
+        "type": "section-data",
+        "gradient": true,
+        "variant": "light"
+      },
+      {
+        "id": "product_hero-header",
+        "columns": [
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col"
+            },
+            "customizations": [
+              {
+                "type": "image_block",
+                "id": "w3link-logo",
+                "src": "/images/logos/w3link-logo.svg"
+              }
+            ]
+          },
+          {
+            "type": "hero",
+            "page": "w3link",
+            "cols": {
+              "num": "col col-12",
+              "push_left": ""
+            },
+            "format": "header",
+            "heading": "Lightning fast reads from the IPFS network",
+            "subheading": "Read data available on the public IPFS network with <strong>w3link</strong> using an HTTP endpoint (at https://w3s.link), no additional software necessary. Add your content ID (CID) below to try it out."
+          },
+          {
+            "type": "w3link_gateway",
+            "cols": {
+              "num": "col col-12",
+              "push_left": ""
+            }
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "w3link_how",
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col"
+            },
+            "format": "small",
+            "heading": "The best of both worlds",
+            "description": [
+              "IPFS unlocks a ton of value at the data layer, but its peer-to-peer nature means reading data from the network isn’t always performant by today’s web standards. w3link marries IPFS content IDs with CDNs to provide a much more performant read experience - and is especially fast for content stored on the Web3.Storage platform - while still taking advantage of the benefits of IPFS.",
+              "In addition, like other IPFS HTTP gateways, w3link takes requests over HTTP, making it easy to integrate with today’s existing web infrastructure."
+            ],
+            "cta": {
+              "url": "/docs/concepts/w3link/",
+              "text": "VIEW THE DOCS",
+              "theme": "light",
+              "event": "",
+              "ui": "",
+              "action": ""
+            }
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col"
+            },
+            "customizations": [
+              {
+                "type": "text_block",
+                "cols": {
+                  "num": "col"
+                },
+                "format": "small",
+                "description": [
+                  "<strong>2-3x</strong>",
+                  "Faster than other public IPFS Gateways for average reads",
+                  "<strong>1PiB+</strong>",
+                  "Served per month",
+                  "<strong>270+</strong>",
+                  "Points of Presence"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "w3link_choose",
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-12"
+            },
+            "heading": "Choose the lane that works for you"
+          }
+        ]
+      },
+      {
+        "id": "w3link_free",
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col"
+            },
+            "format": "small",
+            "label": "Free for public use",
+            "heading": "No lock-in, just speed",
+            "description": [
+              "The most common way for users to read data available on the public IPFS network is via IPFS HTTP gateways like w3link, which are generally run as public services.",
+              "Since they use IPFS, you’re never locked into a single gateway and its infrastructure - just swap the domain name. In addition, you can always fetch data from Web3.Storage using your own IPFS nodes instead or as a backup."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "w3link_premium",
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col"
+            },
+            "format": "small",
+            "label": "Premium (Coming Soon)",
+            "heading": "Want more speed? 🔥",
+            "description": [
+              "Soon, you’ll be able to use w3link’s SuperHot feature to perma-cache data of up to 5GB per content ID on the edge. Guarantee your users the fastest possible read performance on the web for less than pennies a month."
+            ]
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col"
+            },
+            "customizations": [
+              {
+                "type": "text_block",
+                "format": "small",
+                "description": [
+                  "Perma-cache data up to 5GB per CID",
+                  "100 ms time-to-first-byte for 95% of the world’s Internet-connected population",
+                  "Centralized URL support (cache even non-IPFS data)",
+                  "Perma-cache files of any size"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "w3link_form",
+            "cols": {
+              "num": "col col-12",
+              "push_left": ""
+            }
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col"
+            },
+            "customizations": [
+              {
+                "type": "text_block",
+                "format": "small",
+                "heading": "Image Resizing",
+                "description": ["Image resizing in the Web3.Storage Gateway. Great for thumbnails, etc."]
+              }
+            ]
+          },
+          {
+            "type": "custom",
+            "cols": {
+              "num": "col"
+            },
+            "customizations": [
+              {
+                "type": "text_block",
+                "format": "small",
+                "heading": "IPNS Caching",
+                "description": ["Auto-cache updates to IPNS records for fast updates to mutable content."]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "id": "section_explore-docs",
+        "grid": ["noGutter"],
+        "columns": [
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-3_md-7_ti-8",
+              "push_left": "off-0_md-1_sm-0"
+            },
+            "format": "medium",
+            "heading": "Open product. Open book.",
+            "cta": {
+              "url": "/docs",
+              "text": "EXPLORE DOCS",
+              "theme": "dark",
+              "event": "",
+              "ui": "",
+              "action": ""
+            }
+          },
+          {
+            "type": "card_list_block",
+            "cols": {
+              "num": "col-8_md-10_sm-12_mi-10",
+              "push_left": "off-1_md-1_sm-0_mi-1"
+            },
+            "cards": [
+              {
+                "type": "D",
+                "categories": [
+                  {
+                    "heading": "Welcome",
+                    "links": [
+                      {
+                        "url": "/docs/#quickstart",
+                        "text": "Quickstart"
+                      },
+                      {
+                        "url": "/docs/#create-an-account",
+                        "text": "Create an Account"
+                      },
+                      {
+                        "url": "/docs/#get-an-api-token",
+                        "text": "Get an API token"
+                      },
+                      {
+                        "url": "/docs/#create-the-upload-script",
+                        "text": "Create the Upload Script"
+                      },
+                      {
+                        "url": "/docs/#run-the-script",
+                        "text": "Run the Script"
+                      },
+                      {
+                        "url": "/docs/#get-your-file",
+                        "text": "Get your file"
+                      },
+                      {
+                        "url": "/docs/#next-steps",
+                        "text": "Next Steps"
+                      }
+                    ]
+                  },
+                  {
+                    "heading": "Concepts",
+                    "links": [
+                      {
+                        "url": "/docs/concepts/content-addressing",
+                        "text": "Content Addressing"
+                      },
+                      {
+                        "url": "/docs/concepts/decentralized-storage",
+                        "text": "Decentralized Storage"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "D",
+                "categories": [
+                  {
+                    "heading": "How-tos",
+                    "links": [
+                      {
+                        "url": "/docs/how-tos/store/",
+                        "text": "Store"
+                      },
+                      {
+                        "url": "/docs/how-tos/retrieve",
+                        "text": "Retrieve"
+                      },
+                      {
+                        "url": "/docs/how-tos/query",
+                        "text": "Query"
+                      },
+                      {
+                        "url": "/docs/how-tos/list",
+                        "text": "List"
+                      },
+                      {
+                        "url": "/docs/how-tos/work-with-car-files",
+                        "text": "Work with Content"
+                      },
+                      {
+                        "url": "/docs/how-tos/generate-api-token",
+                        "text": "Generate an API Token"
+                      },
+                      {
+                        "url": "/docs/how-tos/troubleshooting",
+                        "text": "Troubleshooting"
+                      }
+                    ]
+                  },
+                  {
+                    "heading": "Reference",
+                    "links": [
+                      {
+                        "url": "/docs/reference/http-api/",
+                        "text": "HTTP API Reference"
+                      },
+                      {
+                        "url": "/docs/reference/js-client-library",
+                        "text": "Javascript Client Library"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "text_block",
+            "cols": {
+              "num": "col-3"
+            },
+            "format": "medium",
+            "heading": "Open product. Open book.",
+            "cta": {
+              "url": "/docs/",
+              "text": "EXPLORE DOCS",
+              "theme": "dark",
+              "event": "",
+              "ui": "",
+              "action": ""
+            }
+          }
+        ]
+      }
+    ]
+  ]
+}
