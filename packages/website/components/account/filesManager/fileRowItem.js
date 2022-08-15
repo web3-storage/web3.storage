@@ -25,6 +25,7 @@ export const PinStatus = {
  * @property {string} cid
  * @property {string} status
  * @property {string} size
+ * @property {string} linkPrefix
  * @property {string | import('react').ReactNode[] | null} storageProviders
  * @property {(e: any)=>void} onSelect
  * @property {(e: any)=>void} onSelect
@@ -52,6 +53,7 @@ const FileRowItem = props => {
     status,
     storageProviders,
     size,
+    linkPrefix,
     onSelect,
     numberOfPins,
     isHeader = false,
@@ -133,7 +135,7 @@ const FileRowItem = props => {
         ) : (
           <a
             className="cid-truncate underline medium-up-only"
-            href={`https://dweb.link/ipfs/${cid}`}
+            href={`${linkPrefix}${cid}`}
             target="_blank"
             rel="noreferrer"
           >
