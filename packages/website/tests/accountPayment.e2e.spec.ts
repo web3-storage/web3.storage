@@ -24,17 +24,20 @@ test.describe('/account/payment', () => {
     });
   });
   test('can access when authenticated', async ({ page }, testInfo) => {
-    await Promise.all([
-      page.waitForNavigation({
-        waitUntil: 'networkidle',
-      }),
-      page.goto('/account/payment'),
-    ]);
-    await page.locator('.login-email').fill(MAGIC_SUCCESS_EMAIL);
-    await page.locator('.login-content .section-email button').click();
-    console.log('clicked login form button');
-    await page.waitForTimeout(30 * 1000);
-    await expect(page).toHaveURL('/account/payment/');
+    const goToPayment = (page: Page) =>
+      Promise.all([
+        page.waitForNavigation({
+          waitUntil: 'networkidle',
+        }),
+        page.goto('/account/payment'),
+      ]);
+    await goToPayment(page);
+    await AccountPaymentTester().login(page, {
+      email: MAGIC_SUCCESS_EMAIL,
+    });
+    // @todo - this should redirect you back to where you wanted to go: /account/payment
+    await expect(page).toHaveURL('/account/');
+    await goToPayment(page);
     await page.screenshot({
       fullPage: true,
       path: await E2EScreenshotPath(testInfo, `accountPayment`),

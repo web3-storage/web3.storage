@@ -146,12 +146,12 @@ export function withPinningAuthorized (handler) {
  */
 async function tryMagicToken (token, env) {
   let issuer = null
-  let tokenIsValid = false
+  let tokenWasValidated = false
   const isMagicTestMode = magicTestModeFromEnv(env)
-  let requiresTokenValidation = ! isMagicTestMode
+  const requiresTokenValidation = !isMagicTestMode
   try {
     env.magic.token.validate(token)
-    validated = true
+    tokenWasValidated = true
   } catch (error) {
     if (error.code === 'ERROR_INCORRECT_SIGNER_ADDR' && magicTestModeFromEnv(env)) {
       // allow validation failure
@@ -159,8 +159,8 @@ async function tryMagicToken (token, env) {
       throw error
     }
   }
-  if (requiresTokenValidation && ! validated) {
-    return null;
+  if (requiresTokenValidation && !tokenWasValidated) {
+    return null
   }
   try {
     const [, claim] = env.magic.token.decode(token)

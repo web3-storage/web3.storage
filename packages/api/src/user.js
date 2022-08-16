@@ -40,16 +40,11 @@ async function loginOrRegister (request, env) {
   const auth = request.headers.get('Authorization') || ''
 
   const token = env.magic.utils.parseAuthorizationHeader(auth)
-  const isMagicTestMode = magicTestModeFromEnv(env);
-  let isAllowedTestmodeAuthn = false;
+  const isMagicTestMode = magicTestModeFromEnv(env)
+  let isAllowedTestmodeAuthn = false
   try {
     env.magic.token.validate(token)
   } catch (error) {
-    console.error('error validating token 123', {
-      isMagicTestMode,
-      code: error.code,
-      conditional: Boolean(error.code === 'ERROR_INCORRECT_SIGNER_ADDR' && isMagicTestMode)
-    })
     if (error.code === 'ERROR_INCORRECT_SIGNER_ADDR' && isMagicTestMode) {
       // ignore error
       isAllowedTestmodeAuthn = true
@@ -57,9 +52,6 @@ async function loginOrRegister (request, env) {
       throw error
     }
   }
-  console.log('loginOrRegister validated', {
-    isAllowedTestmodeAuthn
-  })
   let metadata
   try {
     metadata = await env.magic.users.getMetadataByToken(token)
@@ -69,7 +61,7 @@ async function loginOrRegister (request, env) {
       metadata = {
         issuer: claim.iss,
         email: 'testMode@magic.link',
-        publicAddress: claim.iss,
+        publicAddress: claim.iss
       }
     } else {
       throw error
