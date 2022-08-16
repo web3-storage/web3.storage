@@ -11,12 +11,10 @@ export function getMagic() {
   if (magic) {
     return magic;
   }
-  const options = {
+  magic = new Magic(constants.MAGIC_TOKEN, {
     extensions: [new OAuthExtension()],
     testMode: constants.MAGIC_TESTMODE_ENABLED,
-  };
-  console.log('getMagic() using options', options)
-  magic = new Magic(constants.MAGIC_TOKEN, options);
+  });
   return magic;
 }
 
