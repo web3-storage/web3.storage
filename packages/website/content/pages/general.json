@@ -30,6 +30,10 @@
           {
             "url": "/products/w3name",
             "text": "w3name"
+          },
+          {
+            "url": "/products/w3link",
+            "text": "w3link"
           }
         ]
       },

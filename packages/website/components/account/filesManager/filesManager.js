@@ -71,6 +71,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const [sortOrder, setSortOrder] = useState('Desc');
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [linkPrefix, setLinkPrefix] = useState('w3s.link/ipfs/');
   const [keyword] = useState(filter);
   const [deleteSingleCid, setDeleteSingleCid] = useState('');
   const [showCheckOverlay, setShowCheckOverlay] = useState(false);
@@ -313,6 +314,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           ))}
         </div>
       )}
+
       <div className="files-manager-header">
         <div className="files-manager-title has-upload-button">
           <div className="title">Files</div>
@@ -351,6 +353,16 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           queryParam="order"
           onChange={onSortChange}
         />
+        <Dropdown
+          className="files-manager-gateway"
+          staticLabel="Gateway"
+          value={linkPrefix}
+          options={[
+            { value: 'https://w3s.link/ipfs/', label: 'w3link' },
+            { value: 'https://dweb.link/ipfs/', label: 'dweb' },
+          ]}
+          onChange={value => setLinkPrefix(value)}
+        />
       </div>
       <FileRowItem
         onSelect={onSelectAllToggle}
@@ -360,6 +372,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
         status={fileRowLabels.status.label}
         storageProviders={currentTab === 'uploaded' ? fileRowLabels.storage_providers.label : null}
         size={fileRowLabels.size.label}
+        linkPrefix={linkPrefix}
         isHeader
         isSelected={
           !!selectedFiles.length &&
@@ -423,6 +436,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
               size={
                 item.hasOwnProperty('dagSize') ? filesize(item.dagSize) : item.info?.dag_size ? item.info.dag_size : '-'
               }
+              linkPrefix={linkPrefix}
               highlight={{ target: 'name', text: keyword?.toString() || '' }}
               numberOfPins={item.pins.length}
               isSelected={!!selectedFiles.find(fileSelected => fileSelected === item)}

@@ -41,6 +41,8 @@
 @import '../components/gradientbackground/gradientbackground.scss';
 @import '../components/tabs/tabs.scss';
 @import '../components/callout/callout.scss';
+@import '../components/w3link_form/w3link_form.scss';
+@import '../components/w3link_gateway/w3link_gateway.scss';
 @import '../components/search/search.scss';
 @import '../components/account/accountBlockedModal/accountBlockedModal.scss';
 
@@ -54,6 +56,7 @@
 @import '../pages/account';
 @import '../pages/tokens';
 @import '../pages/products/w3name/index.scss';
+@import '../pages/products/w3link/index.scss';
 @import '../pages/products/web3storage/index.scss';
 @import '../pages/contact';
 
@@ -126,7 +129,6 @@ body {
   font-size: 16px;
   font-weight: $fontWeight_Regular;
   line-height: $leading_Regular;
-  letter-spacing: $letterSpacing_Large;
   color: $ebony;
   @include background_Light;
   -moz-osx-font-smoothing: grayscale;
