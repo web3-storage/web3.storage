@@ -114,6 +114,11 @@ export function envAll (req, env, ctx) {
     commithash: env.COMMITHASH
   })
 
+  console.log('api assigning env.magic', {
+    'envMagicSecretKeyExists': 'MAGIC_SECRET_KEY' in env,
+    'envMagicSecretKeyTypeof': typeof env.MAGIC_SECRET_KEY,
+    'envMagicSecretKeyLength': String(env.MAGIC_SECRET_KEY).length,
+  })
   env.magic = new Magic(env.MAGIC_SECRET_KEY)
 
   // We can remove this when magic admin sdk supports test mode
