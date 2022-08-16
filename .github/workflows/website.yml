@@ -62,19 +62,26 @@ jobs:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
           PLAYWRIGHT_TIMEOUT: 120000
-      - name: upload artifact playwright-report
-        if: failure()
+      - if: always()
+        name: Check for website playwright-report
+        id: check_website_playwright_report
+        uses: andstor/file-existence-action@v1
+        with:
+          files: packages/website/playwright-report
+      - name: upload playwright-report artifact
+        if: steps.check_website_playwright_report.outputs.files_exists == 'true'
         uses: actions/upload-artifact@v1
         with:
           name: ${{ matrix.browser }}-${{ matrix.os }}-playwright-report
           path: packages/website/playwright-report
-      - if: failure()
+      - if: always()
         name: Check for website test results
         id: check_website_test_results
         uses: andstor/file-existence-action@v1
         with:
           files: ${{ matrix.test_results_path }}
-      - if: failure() || steps.check_website_test_results.outputs.files_exists == 'true'
+      - name: upload test-results artifact
+        if: steps.check_website_test_results.outputs.files_exists == 'true'
         uses: actions/upload-artifact@v1
         with:
           name: ${{ matrix.browser }}-${{ matrix.os }}-test-results
