@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/website",
-  "version": "2.13.0",
+  "version": "2.15.0",
   "description": "web3.storage website",
   "private": true,
   "scripts": {
@@ -31,6 +31,7 @@
     "example-image-gallery": "github:web3-storage/example-image-gallery#main",
     "filesize": "^6.1.0",
     "highlight.js": "11.4.0",
+    "kwesforms": "^2.1.22",
     "magic-sdk": "^4.2.1",
     "next": "^12.1.0",
     "next-optimized-images": "^2.6.2",

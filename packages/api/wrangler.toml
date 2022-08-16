@@ -2,6 +2,7 @@
 name = "web3-storage"
 main = "./dist/worker.mjs"
 compatibility_date = "2022-06-14"
+no_bundle = true
 
 [build]
 command = "npm run build"

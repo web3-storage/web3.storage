@@ -71,6 +71,10 @@
       {
         "name": "Web3.Storage economics",
         "src": "concepts/storage-economics"
+      },
+      {
+        "name": "IPFS Gateways",
+        "src": "concepts/w3link"
       }
     ]
   },

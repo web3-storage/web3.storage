@@ -7,11 +7,13 @@ on:
       - 'packages/api/**'
       - 'packages/db/**'
       - '.github/workflows/api.yml'
+      - 'package-lock.json'
   pull_request:
     paths:
       - 'packages/api/**'
       - 'packages/db/**'
       - '.github/workflows/api.yml'
+      - 'package-lock.json'
 jobs:
   test:
     runs-on: ubuntu-latest
