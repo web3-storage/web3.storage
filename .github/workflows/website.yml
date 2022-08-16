@@ -57,7 +57,8 @@ jobs:
         working-directory: packages/website
       - run: touch .env
       - run: npm -w '@web3-storage/website' run ci:envfile --silent | sed '/NEXT_PUBLIC_MAGIC=/d' | sed '/MAGIC_SECRET_KEY=/d' > .env
-      - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }} --reporter=html
+      - id: website_test_e2e
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }} --reporter=html
         continue-on-error: true
         env:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
@@ -77,6 +78,10 @@ jobs:
         with:
           name: ${{ matrix.browser }}-${{ matrix.os }}-test-results
           path: ${{ matrix.test_results_path }}
+      - if: steps.website_test_e2e.outcome != 'success'
+        run:
+          echo "website test:e2e did not succeed"
+          exit 1
 
   preview:
     name: Preview
