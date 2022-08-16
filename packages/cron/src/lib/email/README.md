@@ -45,30 +45,27 @@ To add or edit a template:
 * Export the template from Mailchimp to Mandrill using the "Send to Mandrill" option.
 * Go to the [templates page in Mandrill](https://mandrillapp.com/templates)
 * Click on the template to edit the HTML, and make the following changes/fixes:
-  - Add `background: linear-gradient` to `#bodyTable` (see below), the Mailchimp editor restricts you to a hex code only.
-  - Add `#templateHeader` and `#templateBody` styles (see below).
-  - Edit the `#bodyCell` style from `padding: 30px` to `padding:30px` (this doesn't seem to be editable in the Mailchimp editor).
-  - Swap the Mailchimp placeholders such as `*|SUBJECT|*` and `<!--*|IF:MC_PREVIEW_TEXT|*-->` for their Handlebars equivalents, e.g. `{{SUBJECT}}` or `{{#if MC_PREVIEW_TEXT}}`. Mailchimp doesn't support Handlebars, but Mandrill does, and Handlebars supports logic (if/else/for/etc), which the Mailchimp tags don't; so we have to convert.
+  - Add the block of CSS (see below) just before the last closing `</style>` tag in the `<head>`.
+  - Swap the Mailchimp placeholders such as `*|SUBJECT|*`, `<!--*|IF:MC_PREVIEW_TEXT|*-->` and `*|END:IF|*` for their Handlebars equivalents, e.g. `{{SUBJECT}}`, `{{#if MC_PREVIEW_TEXT}}` and `{{/if}}`. Mailchimp doesn't support Handlebars, but Mandrill does, and Handlebars supports logic (if/else/for/etc), which the Mailchimp tags don't; so we have to convert.
   - If the template uses any `{{#each users}}...{{/each}}` tags then you'll need to fix their placement so that they're actually wrapping the HTML fragment which we want to repeat. Mailchimp moves these tags when you save the template, which breaks them.
-  - If you're editing the `AdminStorageExceeded` email, add `id="usersQuotaTable"` to the `<table>` containing the list of users, and then add the CSS below into the `<style>` section somewhere.
+  - If you're editing the `AdminStorageExceeded` email, add `id="usersQuotaTable"` to the `<table>` containing the list of users.
 * Ensure that any variables which you've used or changed in the template are correctly specified in the corresponding `EmailType` subclass.
 
 ```css
-body,#bodyTable{
+/* The Mailchimp editor restricts you to a hex code only for backgrounds, so we have to add this manually: */
+#bodyTable{
   background: linear-gradient(to top left, #d169db, rgba(199, 166, 251, 0), #5da9e7), linear-gradient(to top right, #5a69da, rgba(199, 166, 251, 0), #d4a8e7) rgba(199, 166, 251, 1);
 }
 
+/* Mailchimp does allow rounded corners, but it seems to inject the CSS for them into an inline `<style>` tag in the body, which then gets ignored by mail clients, so we have to add this manually: */
 #templateHeader {
     border-radius: 6px 6px 0 0;
 }
-
 #templateBody {
     border-radius:  0 0 6px 6px;
 }
-```
 
-For the `AdminStorageExceeded` email:
-```css
+/* This is only used for the `AdminStorageExceeded` email: */
 #usersQuotaTable {
   border-spacing: 5px;
   border-collapse: separate;
