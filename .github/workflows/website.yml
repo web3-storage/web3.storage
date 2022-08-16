@@ -48,15 +48,14 @@ jobs:
       - uses: bahmutov/npm-install@v1
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-      - run: npm run build -w packages/website
-        env:
-          NEXT_PUBLIC_API: http://localhost:8787
-          NEXT_PUBLIC_ENV: test-e2e
-          NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
-      - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
-        working-directory: packages/website
       - run: touch .env
       - run: (npm -w '@web3-storage/website' run ci:envfile --silent | sed '/NEXT_PUBLIC_MAGIC=/d' | sed '/MAGIC_SECRET_KEY=/d'; echo 'NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED="1"') > .env
+      - run: npm run build -w packages/website
+        env:
+          NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
+          MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
+      - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
+        working-directory: packages/website
       - id: website_test_e2e
         run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }} --reporter=html
         env:
