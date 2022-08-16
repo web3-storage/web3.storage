@@ -6,7 +6,7 @@ export default async function main() {
     cwd: path.join(__dirname, '../../../../'),
   });
   w3storageProcess.on('exit', code => {
-    process.exit(code);
+    process.exit(code ?? undefined);
   });
 }
 
