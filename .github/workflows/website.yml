@@ -56,7 +56,7 @@ jobs:
       - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
         working-directory: packages/website
       - run: touch .env
-      - run: npm -w '@web3-storage/website' run ci:envfile --silent | sed '/NEXT_PUBLIC_MAGIC=/d' | sed '/MAGIC_SECRET_KEY=/d' > .env
+      - run: (npm -w '@web3-storage/website' run ci:envfile --silent | sed '/NEXT_PUBLIC_MAGIC=/d' | sed '/MAGIC_SECRET_KEY=/d'; echo 'NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED="1"') > .env
       - id: website_test_e2e
         run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }} --reporter=html
         continue-on-error: true

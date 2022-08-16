@@ -103,7 +103,7 @@ const config: PlaywrightTestConfig = {
 
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
   // outputDir: 'test-results/',
-
+  globalSetup: require.resolve('tests/playwright/globalSetup.js'),
   /* Run your local dev server before starting the tests */
   webServer: {
     command: '(cd ../../; npm start)',
