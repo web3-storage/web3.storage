@@ -105,13 +105,13 @@ const config: PlaywrightTestConfig = {
   // outputDir: 'test-results/',
   globalSetup: require.resolve('tests/playwright/globalSetup.js'),
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: '(cd ../../; npm start)',
-    port: 4000,
-    // timeout: `npm start` can take awhile to boot up
-    timeout: 120 * 1000,
-    // reuseExistingServer: !process.env.CI,
-  },
+  // webServer: {
+  //   command: '(cd ../../; npm start)',
+  //   port: 4000,
+  //   // timeout: `npm start` can take awhile to boot up
+  //   timeout: 120 * 1000,
+  //   // reuseExistingServer: !process.env.CI,
+  // },
 };
 
 export default config;
