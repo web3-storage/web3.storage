@@ -4,6 +4,7 @@
   "description": "web3.storage website",
   "private": true,
   "scripts": {
+    "ci:envfile": "ts-node -O '{\"module\": \"commonjs\"}' scripts/envfile.ts ",
     "dev": "rm -rf .next && next dev -p 4000",
     "start": "env-cmd -f ../../.env next dev -p 4000",
     "prebuild": "sh ./scripts/prebuild.sh",
@@ -89,6 +90,7 @@
     "sass": "1.43.4",
     "sass-loader": "10.1.1",
     "style-loader": "2.0.0",
+    "ts-node": "^10.9.1",
     "typescript": "^4.6.0",
     "url-loader": "4.1.1"
   },
