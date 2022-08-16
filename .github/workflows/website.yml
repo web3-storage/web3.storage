@@ -62,9 +62,9 @@ jobs:
           MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
       - name: load db schema
         run: |
-          npm -w '@web3-storage/db' start
-          npm -w '@web3-storage/db' load-schema
-          npm -w '@web3-storage/db' stop
+          npm -w '@web3-storage/db' run start
+          npm -w '@web3-storage/db' run load-schema
+          npm -w '@web3-storage/db' run stop
       - run: node -r dotenv/config $(which npm) run build -w packages/website
       - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
         working-directory: packages/website
