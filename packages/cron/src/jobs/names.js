@@ -3,8 +3,8 @@ import retry from 'p-retry'
 import throttledQueue from 'throttled-queue'
 
 const MAX_REQUEST_PAGE = 10
-const W3NAME_API_URL_STAGING = 'https://name.web3.storage/'
-const W3NAME_API_URL_PRODUCTION = 'https://name-staging.web3.storage/'
+const W3NAME_API_URL_PRODUCTION = 'https://name.web3.storage/'
+const W3NAME_API_URL_STAGING = 'https://name-staging.web3.storage/'
 const log = debug('names:postNamesToW3name')
 const throttle = throttledQueue(2, 1000) // at most 2 requests per second
 
