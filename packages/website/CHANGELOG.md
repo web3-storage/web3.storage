@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.15.0](https://github.com/web3-storage/web3.storage/compare/website-v2.14.0...website-v2.15.0) (2022-08-16)
+
+
+### Features
+
+* add gateway dropdown to uploads list ([#1740](https://github.com/web3-storage/web3.storage/issues/1740)) ([01e3339](https://github.com/web3-storage/web3.storage/commit/01e33399987de8d1540a037b078b5bfaf7af7dd9))
+
 ## [2.14.0](https://github.com/web3-storage/web3.storage/compare/website-v2.13.0...website-v2.14.0) (2022-08-15)
 
 
