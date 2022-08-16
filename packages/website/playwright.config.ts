@@ -1,6 +1,7 @@
+import path from 'path';
+
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
-import path from 'path';
 
 /**
  * Read environment variables from file.
@@ -42,7 +43,7 @@ const config: PlaywrightTestConfig = {
     baseURL: 'http://localhost:4000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'on',
   },
 
   /* Configure projects for major browsers */

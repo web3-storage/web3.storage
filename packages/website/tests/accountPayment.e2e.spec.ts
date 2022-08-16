@@ -24,6 +24,9 @@ test.describe('/account/payment', () => {
     });
   });
   test('can access when authenticated', async ({ page }, testInfo) => {
+    page.on('pageerror', err => {
+      console.error('pageerror', err);
+    });
     const goToPayment = (page: Page) =>
       Promise.all([
         page.waitForNavigation({
