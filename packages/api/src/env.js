@@ -7,6 +7,7 @@ import { Cluster } from '@nftstorage/ipfs-cluster'
 import { DEFAULT_MODE } from './maintenance.js'
 import { Logging } from './utils/logs.js'
 import pkg from '../package.json'
+import { magicTestModeFromEnv } from './utils/env.js'
 
 /**
  * @typedef {object} Env
@@ -114,12 +115,9 @@ export function envAll (req, env, ctx) {
     commithash: env.COMMITHASH
   })
 
-  console.log('api assigning env.magic', {
-    'envMagicSecretKeyExists': 'MAGIC_SECRET_KEY' in env,
-    'envMagicSecretKeyTypeof': typeof env.MAGIC_SECRET_KEY,
-    'envMagicSecretKeyLength': String(env.MAGIC_SECRET_KEY).length,
+  env.magic = new Magic(env.MAGIC_SECRET_KEY, {
+    testMode: magicTestModeFromEnv(env)
   })
-  env.magic = new Magic(env.MAGIC_SECRET_KEY)
 
   // We can remove this when magic admin sdk supports test mode
   if (new URL(req.url).origin === 'http://testing.web3.storage' && env.DANGEROUSLY_BYPASS_MAGIC_AUTH !== 'undefined') {
