@@ -56,10 +56,11 @@ jobs:
       - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
         working-directory: packages/website
       - run: touch .env
-      - run: npm -w '@web3-storage/website' run ci:envfile --silent > .env
+      - run: npm -w '@web3-storage/website' run ci:envfile --silent | sed '/NEXT_PUBLIC_MAGIC=/d' | sed '/MAGIC_SECRET_KEY=/d' > .env
       - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }}
         env:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
+          MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
       - name: Check for website test results
         id: check_website_test_results
         uses: andstor/file-existence-action@v1
