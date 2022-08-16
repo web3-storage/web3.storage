@@ -145,6 +145,7 @@ jobs:
         id: finder
       - name: Update Preview URLs PR Comment
         uses: marocchino/sticky-pull-request-comment@v2.2.0
+        continue-on-error: true
         with:
           number: ${{ steps.finder.outputs.pr }}
           message: |
