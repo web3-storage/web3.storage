@@ -106,7 +106,7 @@ function Slider ({
     return () => window.removeEventListener('resize', resize)
   }, [])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     updateElementWidths()
   }, [display])
 

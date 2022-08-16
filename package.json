@@ -22,13 +22,17 @@
     "lint:fix": "standard --fix "
   },
   "devDependencies": {
+    "@typescript-eslint/parser": "^5.33.1",
     "npm-run-all": "^4.1.5",
     "snazzy": "^9.0.0",
     "standard": "^16.0.3",
     "wrangler": "^2.0.23"
   },
   "standard": {
-    "globals": ["fetch", "AbortController"],
+    "globals": [
+      "fetch",
+      "AbortController"
+    ],
     "ignore": [
       "packages/website"
     ]

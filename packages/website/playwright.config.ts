@@ -105,7 +105,7 @@ const config: PlaywrightTestConfig = {
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'cd ../../; npm start',
+    command: '(cd ../../; npm start)',
     port: 4000,
     // timeout: `npm start` can take awhile to boot up
     timeout: 120 * 1000,
