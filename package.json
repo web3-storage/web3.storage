@@ -14,8 +14,11 @@
   ],
   "scripts": {
     "start": "npm-run-all --print-label -p web api",
+    "stop": "npm-run-all --print-label -p web:stop api:stop",
     "api": "npm start -w packages/api",
+    "api:stop": "npm run stop -w packages/api",
     "web": "npm start -w packages/website",
+    "web:stop": "npm run --if-present stop -w packages/website",
     "test": "npm run lint && npm run test --workspaces",
     "test:e2e": "npm run test:e2e --if-present --workspaces",
     "lint": "standard --verbose | snazzy",
