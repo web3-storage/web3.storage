@@ -50,7 +50,7 @@ jobs:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
       - run: touch .env
       - run: (npm -w '@web3-storage/website' run ci:envfile --silent | sed '/NEXT_PUBLIC_MAGIC=/d' | sed '/MAGIC_SECRET_KEY=/d'; echo 'NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED="1"') > .env
-      - run: npm run build -w packages/website
+      - run: node -r dotenv/config $(which npm) run build -w packages/website
         env:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
