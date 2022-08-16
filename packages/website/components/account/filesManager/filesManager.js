@@ -8,8 +8,8 @@ import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
 // import Filterable from 'ZeroComponents/filterable/filterable';
-import Sortable from 'ZeroComponents/sortable/sortable';
-import Pagination from 'ZeroComponents/pagination/pagination';
+import { ServerSortable } from 'ZeroComponents/sortable/sortable';
+import { ServerPagination } from 'ZeroComponents/pagination/pagination';
 import Modal from 'modules/zero/components/modal/modal';
 import CloseIcon from 'assets/icons/close';
 import { useUploads } from 'components/contexts/uploadsContext';
@@ -344,7 +344,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           <RefreshIcon />
           <span>{content?.ui.refresh}</span>
         </button>
-        <Sortable
+        <ServerSortable
           staticLabel={content?.ui.sortby.label}
           options={content?.ui.sortby.options}
           value={defaultQueryOrder}
@@ -442,7 +442,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           >
             {content?.ui.delete.text}
           </button>
-          <Pagination
+          <ServerPagination
             className="files-manager-pagination"
             items={files}
             itemsPerPage={itemsPerPage}
