@@ -9,8 +9,9 @@ import {
   parseTextToNumber
 } from './utils.js'
 import { ConstraintError, DBError, RangeNotSatisfiableDBError } from './errors.js'
+import { DATE_TIME_PAGE_REQUEST, PAGE_NUMBER_PAGE_REQUEST } from './constants.js'
 
-export { EMAIL_TYPE } from './constants.js'
+export * from './constants.js'
 export { parseTextToNumber } from './utils.js'
 
 const uploadQuery = `
@@ -503,40 +504,42 @@ export class DBClient {
    * List uploads of a given user.
    *
    * @param {number} userId
-   * @param {import('./db-client-types').ListUploadsOptions} [opts]
-   * @returns {import('./db-client-types').ListUploadReturn}
+   * @param {import('./index').PageRequest} pageRequest
+   * @returns {Promise<import('./db-client-types').ListUploadReturn>}
    */
-  async listUploads (userId, opts = {}) {
-    const rangeFrom = opts.offset || 0
-    const rangeTo = rangeFrom + (opts.size || 25)
-    const isAscendingSortOrder = opts.sortOrder === 'Asc'
-    const defaultSortByColumn = Object.keys(sortableColumnToUploadArgMap)[0]
-    const sortByColumn = Object.keys(sortableColumnToUploadArgMap).find(key => sortableColumnToUploadArgMap[key] === opts.sortBy)
-    const sortBy = sortByColumn || defaultSortByColumn
+  async listUploads (userId, pageRequest) {
+    let query
+    if (pageRequest.type === DATE_TIME_PAGE_REQUEST) {
+      query = this._client
+        .from('upload')
+        .select(uploadQuery, { count: 'exact' })
+        .eq('user_id', userId)
+        .is('deleted_at', null)
+        .order('inserted_at', { ascending: false })
+        .range(0, pageRequest.size - 1)
 
-    let query = this._client
-      .from('upload')
-      .select(uploadQuery, { count: 'exact' })
-      .eq('user_id', userId)
-      .is('deleted_at', null)
-      .order(
-        sortBy,
-        { ascending: isAscendingSortOrder }
-      )
+      if (pageRequest.before) {
+        query = query.lt('inserted_at', pageRequest.before.toISOString())
+      }
+    } else if (pageRequest.type === PAGE_NUMBER_PAGE_REQUEST) {
+      const rangeFrom = (pageRequest.page - 1) * pageRequest.size
+      const rangeTo = rangeFrom + pageRequest.size
+      const isAscendingSortOrder = pageRequest.sortOrder === 'Asc'
+      const defaultSortByColumn = Object.keys(sortableColumnToUploadArgMap)[0]
+      const sortByColumn = Object.keys(sortableColumnToUploadArgMap).find(key => sortableColumnToUploadArgMap[key] === pageRequest.sortBy)
+      const sortBy = sortByColumn || defaultSortByColumn
 
-    // Apply filtering
-    if (opts.before) {
-      query = query.lt('inserted_at', opts.before)
+      query = this._client
+        .from('upload')
+        .select(uploadQuery, { count: 'exact' })
+        .eq('user_id', userId)
+        .is('deleted_at', null)
+        .order(sortBy, { ascending: isAscendingSortOrder })
+        .range(rangeFrom, rangeTo - 1)
+    } else {
+      throw new Error(`unknown page request type: ${pageRequest.type}`)
     }
 
-    if (opts.after) {
-      query = query.gte('inserted_at', opts.after)
-    }
-
-    // Apply pagination or limiting.
-    query = query.range(rangeFrom, rangeTo - 1)
-
-    /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error, count: Number }} */
     const { data: uploads, error, count, status } = await query
 
     // For some reason, error comes back as empty array when out of range.

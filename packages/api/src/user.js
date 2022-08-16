@@ -12,12 +12,15 @@ import {
 import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
+import { DATE_TIME_PAGE_REQUEST, PAGE_NUMBER_PAGE_REQUEST } from '@web3-storage/db'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
  * @typedef {{ _id: string, name: string }} AuthToken
  * @typedef {{ user: User authToken?: AuthToken }} Auth
  * @typedef {Request & { auth: Auth }} AuthenticatedRequest
+ * @typedef {import('@web3-storage/db').DateTimePageRequest} DateTimePageRequest
+ * @typedef {import('@web3-storage/db').PageNumberPageRequest} PageNumberPageRequest
  */
 
 /**
@@ -234,19 +237,11 @@ export async function userUploadsGet (request, env) {
   const requestUrl = new URL(request.url)
   const { searchParams } = requestUrl
 
-  const { size, page, offset, before, after, sortBy, sortOrder } = pagination(searchParams)
+  const pageRequest = pagination(searchParams)
 
-  /** @type {import('@web3-storage/db').UploadItemOutput[]} */
   let data
   try {
-    data = await env.db.listUploads(request.auth.user._id, {
-      size,
-      offset,
-      before,
-      after,
-      sortBy,
-      sortOrder
-    })
+    data = await env.db.listUploads(request.auth.user._id, pageRequest)
   } catch (err) {
     if (err.code === 'RANGE_NOT_SATISFIABLE_ERROR_DB') {
       throw new RangeNotSatisfiableError()
@@ -256,54 +251,66 @@ export async function userUploadsGet (request, env) {
 
   const headers = {
     Count: data.count, // Deprecated, do not use!
-    Size: size, // Deprecated, do not use!
-    Page: page, // Deprecated, do not use!
-    Link: getLinkHeader({
-      url: requestUrl.pathname,
-      size,
-      page,
-      pages: Math.ceil(data.count / size),
-      rest: {
-        before,
-        after,
-        sortBy,
-        sortOrder
-      }
-    })
+    Size: pageRequest.size // Deprecated, do not use!
+  }
+
+  if (pageRequest.page != null) {
+    headers.Page = pageRequest.page // Deprecated, do not use!
+  }
+
+  const link = getLinkHeader({
+    url: requestUrl.pathname,
+    pageRequest,
+    items: data.uploads,
+    count: data.count
+  })
+
+  if (link) {
+    headers.Link = link
   }
 
   return new JSONResponse(data.uploads, { headers })
 }
 
 /**
- * Generates a HTTP `Link` header for the given pagination paramaters.
+ * Generates a HTTP `Link` header for the given page request and data.
  *
  * @param {Object} args
  * @param {string|URL} args.url Base URL
- * @param {number} args.size Page size
- * @param {number} args.page Current page
- * @param {number} args.pages Total pages
- * @param {Record<string, string>} args.rest Other optional params
+ * @param {DateTimePageRequest|PageNumberPageRequest} args.pageRequest Details for the requested page of data
+ * @param {Array<{ created: string }>} args.items Page items
+ * @param {number} args.count Total items available
  */
-function getLinkHeader ({ url, size, page, pages, rest = {} }) {
+function getLinkHeader ({ url, pageRequest, items, count }) {
   const rels = []
-  // filter out null/undefined
-  const restParams = Object.fromEntries(Object.entries(rest).filter(([, v]) => v != null))
 
-  if (page < pages) {
-    const nextParams = new URLSearchParams({ size, page: page + 1, ...restParams })
-    rels.push(`<${url}?${nextParams}>; rel="next"`)
-  }
+  if (pageRequest.type === DATE_TIME_PAGE_REQUEST) {
+    const { size } = pageRequest
+    if (items.length === size) {
+      const oldest = items[items.length - 1]
+      const nextParams = new URLSearchParams({ size, before: oldest.created })
+      rels.push(`<${url}?${nextParams}>; rel="next"`)
+    }
+  } else if (pageRequest.type === PAGE_NUMBER_PAGE_REQUEST) {
+    const { size, page } = pageRequest
+    const pages = Math.ceil(count / size)
+    if (page < pages) {
+      const nextParams = new URLSearchParams({ size, page: page + 1 })
+      rels.push(`<${url}?${nextParams}>; rel="next"`)
+    }
 
-  const lastParams = new URLSearchParams({ size, page: pages, ...restParams })
-  rels.push(`<${url}?${lastParams}>; rel="last"`)
+    const lastParams = new URLSearchParams({ size, page: pages })
+    rels.push(`<${url}?${lastParams}>; rel="last"`)
 
-  const firstParams = new URLSearchParams({ size, page: 1, ...restParams })
-  rels.push(`<${url}?${firstParams}>; rel="first"`)
+    const firstParams = new URLSearchParams({ size, page: 1 })
+    rels.push(`<${url}?${firstParams}>; rel="first"`)
 
-  if (page > 1) {
-    const prevParams = new URLSearchParams({ size, page: page - 1, ...restParams })
-    rels.push(`<${url}?${prevParams}>; rel="previous"`)
+    if (page > 1) {
+      const prevParams = new URLSearchParams({ size, page: page - 1 })
+      rels.push(`<${url}?${prevParams}>; rel="previous"`)
+    }
+  } else {
+    throw new Error(`unknown page request type: ${pageRequest.type}`)
   }
 
   return rels.join(', ')

@@ -264,7 +264,7 @@ export type ListUploadsOptions = {
 
 export type ListUploadReturn = {
   count: number,
-  uploads: Promise<UploadItemOutput[]>,
+  uploads: UploadItemOutput[],
 }
 
 // Pinning

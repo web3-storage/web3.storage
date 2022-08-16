@@ -1,6 +1,5 @@
-import { gql } from 'graphql-request'
-import { RequestDocument } from 'graphql-request/dist/types'
 import { PostgrestClient } from '@supabase/postgrest-js'
+import { DATE_TIME_PAGE_REQUEST, PAGE_NUMBER_PAGE_REQUEST } from './constants.js'
 
 import type {
   UpsertUserInput,
@@ -8,6 +7,7 @@ import type {
   UserOutput,
   CreateUploadInput,
   ListUploadsOptions,
+  ListUploadReturn,
   CreateUploadOutput,
   UploadItemOutput,
   ContentItemOutput,
@@ -34,8 +34,6 @@ import type {
   GetUserOptions,
 } from './db-client-types'
 
-export { gql }
-
 export class DBClient {
   constructor(config: { endpoint?: string; token: string, postgres?: boolean })
   client: PostgrestClient
@@ -48,7 +46,7 @@ export class DBClient {
   logEmailSent(email : LogEmailSentInput): Promise<{id: string}>
   createUpload (data: CreateUploadInput): Promise<CreateUploadOutput>
   getUpload (cid: string, userId: number): Promise<UploadItemOutput>
-  listUploads (userId: number, opts?: ListUploadsOptions): Promise<UploadItemOutput[]>
+  listUploads (userId: number, pageRequest: PageRequest): Promise<ListUploadReturn>
   renameUpload (userId: number, cid: string, name: string): Promise<{ name: string }>
   deleteUpload (userId: number, cid: string): Promise<{ _id: number }>
   getStatus (cid: string): Promise<ContentItemOutput>
@@ -75,4 +73,33 @@ export class DBClient {
 }
 
 export function parseTextToNumber(n: string): number
-export { EMAIL_TYPE } from './constants.js'
+export * from './constants.js'
+
+/**
+ * Request for a paginated page of data.
+ */
+export interface PageRequest {
+  type: string
+  size: number
+}
+
+/**
+ * A pagination page request that is before a specific date.
+ */
+export interface DateTimePageRequest extends PageRequest {
+  type: typeof DATE_TIME_PAGE_REQUEST
+  before?: Date
+}
+
+/**
+ * A pagination page request that for a specific page number.
+ */
+export interface PageNumberPageRequest extends PageRequest {
+  type: typeof PAGE_NUMBER_PAGE_REQUEST
+  page: number
+  sortBy?: SortField
+  sortOrder?: SortOrder
+}
+
+export type SortField = 'Name'|'Date'
+export type SortOrder = 'Asc'|'Desc'

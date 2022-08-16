@@ -201,7 +201,7 @@ describe('GET /user/uploads', () => {
 
   it('lists uploads sorted by name', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('/user/uploads?sortBy=Name', endpoint).toString(), {
+    const res = await fetch(new URL('/user/uploads?page=1&sortBy=Name', endpoint).toString(), {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -212,7 +212,7 @@ describe('GET /user/uploads', () => {
 
   it('lists uploads sorted by date', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('/user/uploads?sortBy=Date', endpoint).toString(), {
+    const res = await fetch(new URL('/user/uploads?page=1&sortBy=Date', endpoint).toString(), {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -223,7 +223,7 @@ describe('GET /user/uploads', () => {
 
   it('lists uploads in reverse order when sorting by Asc', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('/user/uploads?sortBy=Name&sortOrder=Asc', endpoint).toString(), {
+    const res = await fetch(new URL('/user/uploads?page=1&sortBy=Name&sortOrder=Asc', endpoint).toString(), {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -258,30 +258,6 @@ describe('GET /user/uploads', () => {
     })
 
     assert.deepStrictEqual(uploads, [...uploadsBeforeFilterDate])
-  })
-
-  it('filters results by after date', async () => {
-    const token = await getTestJWT()
-
-    const afterFilterDate = new Date('2021-07-10T00:00:00.000000+00:00').toISOString()
-    const res = await fetch(new URL(`/user/uploads?after=${afterFilterDate}`, endpoint).toString(), {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${token}` }
-    })
-
-    assert(res.ok)
-
-    const uploads = await res.json()
-
-    assert(uploads.length < userUploads.length, 'Ensure some results are filtered out.')
-    assert(uploads.length > 0, 'Ensure some results are returned.')
-
-    // Filter uploads fixture by the filter date.
-    const uploadsAfterFilterDate = userUploads.filter((upload) => {
-      return upload.created >= afterFilterDate
-    })
-
-    assert.deepStrictEqual(uploads, [...uploadsAfterFilterDate])
   })
 
   it('lists uploads via magic auth', async () => {

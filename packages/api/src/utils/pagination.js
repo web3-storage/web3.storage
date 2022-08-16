@@ -1,3 +1,10 @@
+import { PAGE_NUMBER_PAGE_REQUEST, DATE_TIME_PAGE_REQUEST } from '@web3-storage/db'
+
+/** @type {import('@web3-storage/db').SortField[]} */
+const sortableValues = ['Name', 'Date']
+/** @type {import('@web3-storage/db').SortOrder[]} */
+const sortableOrders = ['Asc', 'Desc']
+
 /**
  * Get a parsed and validated list of pagination properties to pass to the DB query.
  * This standard is used across the website
@@ -11,12 +18,9 @@
  * ```
  *
  * @param  {URLSearchParams} searchParams
- *
+ * @returns {import('@web3-storage/db').PageRequest}
  */
 export function pagination (searchParams) {
-  const sortableValues = ['Name', 'Date']
-  const sortableOrders = ['Asc', 'Desc']
-
   let size = 25
   if (searchParams.has('size')) {
     const parsedSize = parseInt(searchParams.get('size'))
@@ -26,33 +30,26 @@ export function pagination (searchParams) {
     size = parsedSize
   }
 
-  let offset = 0
-  let page = 1
-  if (searchParams.has('page')) {
-    const parsedPage = parseInt(searchParams.get('page'))
-    if (isNaN(parsedPage) || parsedPage <= 0) {
-      throw Object.assign(new Error('invalid page number'), { status: 400 })
+  const type = searchParams.has('page')
+    ? PAGE_NUMBER_PAGE_REQUEST
+    : DATE_TIME_PAGE_REQUEST
+
+  if (type === DATE_TIME_PAGE_REQUEST) {
+    let before
+    if (searchParams.has('before')) {
+      const parsedBefore = new Date(searchParams.get('before'))
+      if (isNaN(parsedBefore.getTime())) {
+        throw Object.assign(new Error('invalid before date'), { status: 400 })
+      }
+      before = parsedBefore
     }
-    offset = (parsedPage - 1) * size
-    page = parsedPage
+
+    return { type, before, size }
   }
 
-  let before
-  if (searchParams.has('before')) {
-    const parsedBefore = new Date(searchParams.get('before'))
-    if (isNaN(parsedBefore.getTime())) {
-      throw Object.assign(new Error('invalid before date'), { status: 400 })
-    }
-    before = parsedBefore.toISOString()
-  }
-
-  let after
-  if (searchParams.has('after')) {
-    const parsedAfter = new Date(searchParams.get('after'))
-    if (isNaN(parsedAfter.getTime())) {
-      throw Object.assign(new Error('invalid after date'), { status: 400 })
-    }
-    after = parsedAfter.toISOString()
+  const page = parseInt(searchParams.get('page'))
+  if (isNaN(page) || page <= 0) {
+    throw Object.assign(new Error('invalid page number'), { status: 400 })
   }
 
   let sortOrder
@@ -73,13 +70,5 @@ export function pagination (searchParams) {
     }
   }
 
-  return {
-    page,
-    size,
-    offset,
-    before,
-    after,
-    sortBy,
-    sortOrder
-  }
+  return { type, page, size, sortBy, sortOrder }
 }
