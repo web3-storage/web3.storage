@@ -155,16 +155,15 @@ async function tryMagicToken (token, env) {
   } catch (error) {
     switch (error.code) {
       case 'ERROR_INCORRECT_SIGNER_ADDR':
-        if (! isMagicTestMode) {
+        if (!isMagicTestMode) {
           throw error
         }
         // allow validation failure
-        break;
+        break
       case 'ERROR_MALFORMED_TOKEN':
-        // allow validation failure
-        break;
+        break
       default:
-        throw error
+        console.warn('unexpected error validating magic token: ', error.name, error.message)
     }
   }
   if (requiresTokenValidation && !tokenWasValidated) {
