@@ -153,11 +153,7 @@ async function tryMagicToken (token, env) {
     env.magic.token.validate(token)
     tokenWasValidated = true
   } catch (error) {
-    if (error.code === 'ERROR_INCORRECT_SIGNER_ADDR' && magicTestModeFromEnv(env)) {
-      // allow validation failure
-    } else {
-      throw error
-    }
+    throw error
   }
   if (requiresTokenValidation && !tokenWasValidated) {
     return null
