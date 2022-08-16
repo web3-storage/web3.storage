@@ -153,10 +153,18 @@ async function tryMagicToken (token, env) {
     env.magic.token.validate(token)
     tokenWasValidated = true
   } catch (error) {
-    if (error.code === 'ERROR_INCORRECT_SIGNER_ADDR' && magicTestModeFromEnv(env)) {
-      // allow validation failure
-    } else {
-      throw error
+    switch (error.code) {
+      case 'ERROR_INCORRECT_SIGNER_ADDR':
+        if (! isMagicTestMode) {
+          throw error
+        }
+        // allow validation failure
+        break;
+      case 'ERROR_MALFORMED_TOKEN':
+        // allow validation failure
+        break;
+      default:
+        throw error
     }
   }
   if (requiresTokenValidation && !tokenWasValidated) {
