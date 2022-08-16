@@ -11,6 +11,7 @@ import {
   UserNotFoundError
 } from './errors.js'
 import { USER_TAGS } from './constants.js'
+import { magicTestModeFromEnv } from './utils/env.js'
 
 /**
  * Middleware: verify the request is authenticated with a valid magic link token.
@@ -145,8 +146,23 @@ export function withPinningAuthorized (handler) {
  */
 async function tryMagicToken (token, env) {
   let issuer = null
+  let tokenIsValid = false
+  const isMagicTestMode = magicTestModeFromEnv(env)
+  let requiresTokenValidation = ! isMagicTestMode
   try {
     env.magic.token.validate(token)
+    validated = true
+  } catch (error) {
+    if (error.code === 'ERROR_INCORRECT_SIGNER_ADDR' && magicTestModeFromEnv(env)) {
+      // allow validation failure
+    } else {
+      throw error
+    }
+  }
+  if (requiresTokenValidation && ! validated) {
+    return null;
+  }
+  try {
     const [, claim] = env.magic.token.decode(token)
     issuer = claim.iss
   } catch (_) {

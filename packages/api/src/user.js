@@ -2,6 +2,7 @@ import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
 import { HTTPError } from './errors.js'
+import { magicTestModeFromEnv } from './utils/env.js'
 import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
 import {
   NO_READ_OR_WRITE,
@@ -39,9 +40,41 @@ async function loginOrRegister (request, env) {
   const auth = request.headers.get('Authorization') || ''
 
   const token = env.magic.utils.parseAuthorizationHeader(auth)
-  env.magic.token.validate(token)
-
-  const metadata = await env.magic.users.getMetadataByToken(token)
+  const isMagicTestMode = magicTestModeFromEnv(env);
+  let isAllowedTestmodeAuthn = false;
+  try {
+    env.magic.token.validate(token)
+  } catch (error) {
+    console.error('error validating token 123', {
+      isMagicTestMode,
+      code: error.code,
+      conditional: Boolean(error.code === 'ERROR_INCORRECT_SIGNER_ADDR' && isMagicTestMode)
+    })
+    if (error.code === 'ERROR_INCORRECT_SIGNER_ADDR' && isMagicTestMode) {
+      // ignore error
+      isAllowedTestmodeAuthn = true
+    } else {
+      throw error
+    }
+  }
+  console.log('loginOrRegister validated', {
+    isAllowedTestmodeAuthn
+  })
+  let metadata
+  try {
+    metadata = await env.magic.users.getMetadataByToken(token)
+  } catch (error) {
+    if (error.code === 'SERVICE_ERROR' && isAllowedTestmodeAuthn) {
+      const [, claim] = env.magic.token.decode(token)
+      metadata = {
+        issuer: claim.iss,
+        email: 'testMode@magic.link',
+        publicAddress: claim.iss,
+      }
+    } else {
+      throw error
+    }
+  }
   const { issuer, email, publicAddress } = metadata
   if (!issuer || !email || !publicAddress) {
     throw new Error('missing required metadata')
