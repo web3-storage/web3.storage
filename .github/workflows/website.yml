@@ -49,18 +49,23 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
       - run: touch .env
-      - run: (npm -w '@web3-storage/website' run ci:envfile --silent | sed '/^NEXT_PUBLIC_MAGIC=/d' | sed '/^MAGIC_SECRET_KEY=/d'; echo 'NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED="1"') > .env
-      - run: node -r dotenv/config $(which npm) run build -w packages/website
+      - run: |
+          (
+            npm -w '@web3-storage/website' run ci:envfile --silent \
+            | sed "s/^NEXT_PUBLIC_MAGIC=$/NEXT_PUBLIC_MAGIC=$NEXT_PUBLIC_MAGIC/" \
+            | sed "s/^MAGIC_SECRET_KEY=$/MAGIC_SECRET_KEY=$MAGIC_SECRET_KEY/" \
+            ;
+            echo 'NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED="1"';
+          ) > .env
         env:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
+      - run: node -r dotenv/config $(which npm) run build -w packages/website
       - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
         working-directory: packages/website
       - id: website_test_e2e
         run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- node -r dotenv/config $(which npm) run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }} --reporter=html
         env:
-          NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
-          MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
           PLAYWRIGHT_TIMEOUT: 120000
       - if: always()
         name: Check for website playwright-report
