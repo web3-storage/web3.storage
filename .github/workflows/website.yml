@@ -58,11 +58,12 @@ jobs:
       - run: touch .env
       - run: npm -w '@web3-storage/website' run ci:envfile --silent | sed '/NEXT_PUBLIC_MAGIC=/d' | sed '/MAGIC_SECRET_KEY=/d' > .env
       - id: website_test_e2e
-        run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }} --reporter=html --timeout=120000
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }} --reporter=html
         continue-on-error: true
         env:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
+          PLAYWRIGHT_TIMEOUT: 120000
       - name: upload artifact playwright-report
         uses: actions/upload-artifact@v1
         with:

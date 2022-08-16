@@ -17,7 +17,7 @@ const WEBSITE_TESTS_DIR_PATH = './tests';
 const config: PlaywrightTestConfig = {
   testDir: WEBSITE_TESTS_DIR_PATH,
   /* Maximum time one test can run for. */
-  timeout: 30 * 1000,
+  timeout: process.env.PLAYWRIGHT_TIMEOUT ? parseInt(process.env.PLAYWRIGHT_TIMEOUT, 10) : 30 * 1000,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
