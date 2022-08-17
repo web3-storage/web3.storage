@@ -68,7 +68,6 @@ jobs:
       - uses: bahmutov/npm-install@v1
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-      - run: touch .env
       - run: |
           (
             npm -w '@web3-storage/website' run ci:envfile --silent \
