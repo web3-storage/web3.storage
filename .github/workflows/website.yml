@@ -114,13 +114,19 @@ jobs:
         if: inputs.add_playwright_report_to_web3_storage && steps.check_website_playwright_report.outputs.files_exists == 'true'
         run: |
           echo cid: ${{ steps.ipfs.outputs.cid }}
-          echo url: https://nftstorage.link/ipfs/${{ steps.ipfs.outputs.cid }}
+          echo url: https://w3.link/ipfs/${{ steps.ipfs.outputs.cid }}
       - id: create_output_playwright_reporter_url
         if: inputs.add_playwright_report_to_web3_storage && steps.check_website_playwright_report.outputs.files_exists == 'true'
-        run: echo "::set-output name=url::https://nftstorage.link/ipfs/${{ steps.ipfs.outputs.cid }}"
+        run: echo "::set-output name=url::https://w3.link/ipfs/${{ steps.ipfs.outputs.cid }}"
       - id: create_output_playwright_reporter_cid
         if: inputs.add_playwright_report_to_web3_storage && steps.check_website_playwright_report.outputs.files_exists == 'true'
         run: echo "::set-output name=cid::${{ steps.ipfs.outputs.cid }}"
+      - name: add url to GITHUB_STEP_SUMMARY
+        if: inputs.add_playwright_report_to_web3_storage && steps.check_website_playwright_report.outputs.files_exists == 'true'
+        run: |
+          cat << EOF >> $GITHUB_STEP_SUMMARY
+          https://w3.link/ipfs/${{ steps.ipfs.outputs.cid }}"
+          EOF
 
       - name: upload playwright-report artifact
         if: steps.check_website_playwright_report.outputs.files_exists == 'true'
