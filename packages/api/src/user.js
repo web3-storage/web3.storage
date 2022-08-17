@@ -393,6 +393,14 @@ export async function userPinsGet (request, env) {
     Count: pinRequests.count
   }
 
+  if (pageRequest.size != null) {
+    headers.Size = pageRequest.size // Deprecated, use Link header instead.
+  }
+
+  if (pageRequest.page != null) {
+    headers.Page = pageRequest.page // Deprecated, use Link header instead.
+  }
+
   const link = getLinkHeader({
     url: requestUrl.pathname,
     pageRequest,

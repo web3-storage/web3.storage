@@ -1166,11 +1166,6 @@ export class DBClient {
     const match = opts?.match || 'exact'
     const limit = opts?.limit || 10
 
-    const isAscendingSortOrder = opts.sortOrder ?? opts.sortOrder === 'Asc'
-    const defaultSortByColumn = Object.keys(sortableColumnToUploadArgMap)[0]
-    const sortByColumn = Object.keys(sortableColumnToUploadArgMap).find(key => sortableColumnToUploadArgMap[key] === opts.sortBy)
-    const sortBy = sortByColumn || defaultSortByColumn
-
     let query = this._client
       .from(psaPinRequestTableName)
       .select(listPinsQuery, {
@@ -1178,9 +1173,7 @@ export class DBClient {
       })
       .is('deleted_at', null)
       .limit(limit)
-      .order(
-        sortBy,
-        { ascending: isAscendingSortOrder })
+      .order('inserted_at', { ascending: false })
 
     if (Array.isArray(authKey)) {
       query.in('auth_key_id', authKey)
