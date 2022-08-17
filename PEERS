@@ -7,6 +7,9 @@
 # Note: this list may be incorrect, may change, or become out of date at any
 # time without notice.
 
+# Elastic IPFS
+# NOTE: temporary domain
+/dns4/peer.ipfs-elastic-provider-aws.com/tcp/3000/ws/p2p/bafzbeibhqavlasjc7dvbiopygwncnrtvjd2xmryk5laib7zyjor6kf3avm
 # web3-storage-am6
 /ip4/147.75.33.191/tcp/4001/p2p/12D3KooWPySxxWQjBgX9Jp6uAHQfVmdq8HG1gVvS1fRawHNSrmqW
 # web3-storage-am6-3

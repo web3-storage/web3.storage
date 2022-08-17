@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.5.7](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.6...cron-v1.5.7) (2022-08-16)
+
+
+### Bug Fixes
+
+* correct w3name staging and prod urls in cron job. ([#1752](https://github.com/web3-storage/web3.storage/issues/1752)) ([7f52962](https://github.com/web3-storage/web3.storage/commit/7f5296234db5fe516cd4474c056a1e835447ca33))
+
+## [1.5.6](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.5...cron-v1.5.6) (2022-08-04)
+
+
+### Bug Fixes
+
+* throttled names cron job requests ([#1708](https://github.com/web3-storage/web3.storage/issues/1708)) ([7df9ad9](https://github.com/web3-storage/web3.storage/commit/7df9ad9b1ae88cdeead219e0dadb3152fd1cda83))
+
+## [1.5.5](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.4...cron-v1.5.5) (2022-08-03)
+
+
+### Bug Fixes
+
+* add ipns migration cron job ([#1705](https://github.com/web3-storage/web3.storage/issues/1705)) ([4b6e67f](https://github.com/web3-storage/web3.storage/commit/4b6e67f07983b06e9bad9c27deb5d6c5b993258e))
+
 ## [1.5.4](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.3...cron-v1.5.4) (2022-07-26)
 
 

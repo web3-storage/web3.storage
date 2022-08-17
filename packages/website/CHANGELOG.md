@@ -1,5 +1,58 @@
 # Changelog
 
+## [2.16.0](https://github.com/web3-storage/web3.storage/compare/website-v2.15.0...website-v2.16.0) (2022-08-17)
+
+
+### Features
+
+* **@web3-storage/website:** add /account/payment page in website ([#1744](https://github.com/web3-storage/web3.storage/issues/1744)) ([5410378](https://github.com/web3-storage/web3.storage/commit/54103786a927711b686cced7569356f3e2d07b84))
+* remove status column from uploads table ([#1761](https://github.com/web3-storage/web3.storage/issues/1761)) ([4db3acc](https://github.com/web3-storage/web3.storage/commit/4db3acccc2d1512b410c79266077b34799a85df5))
+* update pinning api access tooltip copy ([#1726](https://github.com/web3-storage/web3.storage/issues/1726)) ([a9d2798](https://github.com/web3-storage/web3.storage/commit/a9d27986472d72d043d3c7dfb4204395e92f0137))
+
+
+### Bug Fixes
+
+* remove incorrect 'last updated on' text ([#1717](https://github.com/web3-storage/web3.storage/issues/1717)) ([3e29e92](https://github.com/web3-storage/web3.storage/commit/3e29e92a6c67868d3ed64998ab96f9c574f2527a))
+* update verbiage on the help and support docs page ([#1720](https://github.com/web3-storage/web3.storage/issues/1720)) ([0da2b57](https://github.com/web3-storage/web3.storage/commit/0da2b57e35a7edab281376986c0588e960b2e9be))
+
+## [2.15.0](https://github.com/web3-storage/web3.storage/compare/website-v2.14.0...website-v2.15.0) (2022-08-16)
+
+
+### Features
+
+* add gateway dropdown to uploads list ([#1740](https://github.com/web3-storage/web3.storage/issues/1740)) ([01e3339](https://github.com/web3-storage/web3.storage/commit/01e33399987de8d1540a037b078b5bfaf7af7dd9))
+
+## [2.14.0](https://github.com/web3-storage/web3.storage/compare/website-v2.13.0...website-v2.14.0) (2022-08-15)
+
+
+### Features
+
+* add w3s.link url on files table ([#1729](https://github.com/web3-storage/web3.storage/issues/1729)) ([50dd4e5](https://github.com/web3-storage/web3.storage/commit/50dd4e59d472bfdba8d3411ace7b631e3d1b2414))
+* create w3link page ([#1728](https://github.com/web3-storage/web3.storage/issues/1728)) ([25f58f9](https://github.com/web3-storage/web3.storage/commit/25f58f9b96e874653471ad327b10aaca2602a774))
+* w3link docs ([#1736](https://github.com/web3-storage/web3.storage/issues/1736)) ([8539ae5](https://github.com/web3-storage/web3.storage/commit/8539ae5c3833c0c9670e24f9ed027dfbfea53403))
+
+## [2.13.0](https://github.com/web3-storage/web3.storage/compare/website-v2.12.1...website-v2.13.0) (2022-08-05)
+
+
+### Features
+
+* create w3name landing page, rework nav to reflec update ([#1607](https://github.com/web3-storage/web3.storage/issues/1607)) ([e9b0d78](https://github.com/web3-storage/web3.storage/commit/e9b0d780b10b565dbfe3cdc1db50ae19d7c49a49))
+* **website/docs:** add draft of w3name how-to ([#1694](https://github.com/web3-storage/web3.storage/issues/1694)) ([9cd4f2c](https://github.com/web3-storage/web3.storage/commit/9cd4f2c0d33e2760b4b68f6c3d5e63a017a2d7d3))
+
+
+### Bug Fixes
+
+* add ipns migration cron job ([#1705](https://github.com/web3-storage/web3.storage/issues/1705)) ([4b6e67f](https://github.com/web3-storage/web3.storage/commit/4b6e67f07983b06e9bad9c27deb5d6c5b993258e))
+* footer 404s ([#1693](https://github.com/web3-storage/web3.storage/issues/1693)) ([32cb036](https://github.com/web3-storage/web3.storage/commit/32cb03693148d8856eb011869002cc8bf5214f1e))
+
+## [2.12.1](https://github.com/web3-storage/web3.storage/compare/website-v2.12.0...website-v2.12.1) (2022-07-29)
+
+
+### Bug Fixes
+
+* overlap on token creator and a few mobile issues ([#1658](https://github.com/web3-storage/web3.storage/issues/1658)) ([945a2f7](https://github.com/web3-storage/web3.storage/commit/945a2f76a67a2d2e5c757348b44ddd70fe529970))
+* update user req modals to match site ([#1664](https://github.com/web3-storage/web3.storage/issues/1664)) ([1e6c19b](https://github.com/web3-storage/web3.storage/commit/1e6c19bbcffaa7290a78709e726cec135726ba30))
+
 ## [2.12.0](https://github.com/web3-storage/web3.storage/compare/website-v2.11.0...website-v2.12.0) (2022-07-25)
 
 

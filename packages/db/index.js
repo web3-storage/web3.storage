@@ -229,36 +229,23 @@ export class DBClient {
     requestedTagValue,
     userProposalForm
   ) {
-    const { data: deleteData, status: deleteStatus } = await this._client
+    const { error: insertError, status: insertStatus } = await this._client
       .from('user_tag_proposal')
-      .update({
-        deleted_at: new Date().toISOString()
+      .insert({
+        user_id: userId,
+        tag: tagName,
+        proposed_tag_value: requestedTagValue,
+        inserted_at: new Date().toISOString(),
+        user_proposal_form: userProposalForm
       })
-      .match({ user_id: userId, tag: tagName })
-      .is('deleted_at', null)
+      .single()
 
-    if (
-      deleteStatus === 200 ||
-      ((deleteStatus === 406 || deleteStatus === 404) && !deleteData)
-    ) {
-      const { error: insertError, status: insertStatus } = await this._client
-        .from('user_tag_proposal')
-        .insert({
-          user_id: userId,
-          tag: tagName,
-          proposed_tag_value: requestedTagValue,
-          inserted_at: new Date().toISOString(),
-          user_proposal_form: userProposalForm
-        })
-        .single()
+    if (insertError) {
+      throw new DBError(insertError)
+    }
 
-      if (insertError) {
-        throw new DBError(insertError)
-      }
-
-      if (insertStatus === 201) {
-        return true
-      }
+    if (insertStatus === 201) {
+      return true
     }
 
     return false
@@ -1165,23 +1152,41 @@ export class DBClient {
   /**
    * Get a filtered list of pin requests for a user
    *
-   * @param {string} authKey
-   * @param {import('./db-client-types').ListPsaPinRequestOptions} [opts]
+   * @param {string | [string]} authKey
+   * @param {import('./db-client-types').ListPsaPinRequestOptions & import('./db-client-types').ListUploadsOptions} [opts]
    * @return {Promise<import('./db-client-types').ListPsaPinRequestResults> }> }
    */
   async listPsaPinRequests (authKey, opts = {}) {
     const match = opts?.match || 'exact'
     const limit = opts?.limit || 10
 
+    const isAscendingSortOrder = opts.sortOrder ?? opts.sortOrder === 'Asc'
+    const defaultSortByColumn = Object.keys(sortableColumnToUploadArgMap)[0]
+    const sortByColumn = Object.keys(sortableColumnToUploadArgMap).find(key => sortableColumnToUploadArgMap[key] === opts.sortBy)
+    const sortBy = sortByColumn || defaultSortByColumn
+
     let query = this._client
       .from(psaPinRequestTableName)
       .select(listPinsQuery, {
         count: 'exact'
       })
-      .eq('auth_key_id', authKey)
       .is('deleted_at', null)
       .limit(limit)
-      .order('inserted_at', { ascending: false })
+      .order(
+        sortBy,
+        { ascending: isAscendingSortOrder })
+
+    if (Array.isArray(authKey)) {
+      query.in('auth_key_id', authKey)
+    } else {
+      query.eq('auth_key_id', authKey)
+    }
+
+    if (opts.offset) {
+      const rangeFrom = opts.offset || 0
+      const rangeTo = rangeFrom + limit
+      query = query.range(rangeFrom, rangeTo - 1)
+    }
 
     if (!opts.cid && !opts.name && !opts.statuses) {
       query = query.eq('content.pins.status', 'Pinned')
@@ -1314,5 +1319,28 @@ export class DBClient {
     if (error) {
       throw new DBError(error)
     }
+  }
+
+  /**
+   * List IPNS records
+   *
+   * @param {{ from: number, to: number }} [opts]
+   * @returns {Promise<Array<import('./db-client-types').NameItem>>}
+   */
+  async listNames (opts = {}) {
+    const query = this._client
+      .from('name')
+      .select('*')
+      .order('inserted_at', { ascending: true })
+      .range(opts.from || 0, opts.to || 10)
+
+    /** @type {{ data: Array<import('./db-client-types').NameItem>, error: Error }} */
+    const { data: names, error } = await query
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return names
   }
 }

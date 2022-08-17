@@ -18,7 +18,7 @@ import { useTokens } from 'components/contexts/tokensContext';
 import CheckIcon from 'assets/icons/check';
 import SearchIcon from 'assets/icons/search';
 import RefreshIcon from 'assets/icons/refresh';
-import FileRowItem, { PinStatus } from './fileRowItem';
+import FileRowItem from './fileRowItem';
 import GradientBackground from '../../gradientbackground/gradientbackground.js';
 
 const defaultQueryOrder = 'newest';
@@ -70,6 +70,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const [sortedFiles, setSortedFiles] = useState(filteredFiles);
   const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
   const [itemsPerPage, setItemsPerPage] = useState(null);
+  const [linkPrefix, setLinkPrefix] = useState('w3s.link/ipfs/');
   const [keyword, setKeyword] = useState(filter);
   const [deleteSingleCid, setDeleteSingleCid] = useState('');
   const [showCheckOverlay, setShowCheckOverlay] = useState(false);
@@ -305,6 +306,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           ))}
         </div>
       )}
+
       <div className="files-manager-header">
         <div className="files-manager-title has-upload-button">
           <div className="title">Files</div>
@@ -345,15 +347,25 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           onChange={setSortedFiles}
           onSelectChange={showCheckOverlayHandler}
         />
+        <Dropdown
+          className="files-manager-gateway"
+          staticLabel="Gateway"
+          value={linkPrefix}
+          options={[
+            { value: 'https://w3s.link/ipfs/', label: 'w3link' },
+            { value: 'https://dweb.link/ipfs/', label: 'dweb' },
+          ]}
+          onChange={value => setLinkPrefix(value)}
+        />
       </div>
       <FileRowItem
         onSelect={onSelectAllToggle}
         date={fileRowLabels.date.label}
         name={fileRowLabels.name.label}
         cid={fileRowLabels.cid.label}
-        status={fileRowLabels.status.label}
         storageProviders={currentTab === 'uploaded' ? fileRowLabels.storage_providers.label : null}
         size={fileRowLabels.size.label}
+        linkPrefix={linkPrefix}
         isHeader
         isSelected={
           !!selectedFiles.length &&
@@ -391,10 +403,6 @@ const FilesManager = ({ className, content, onFileUpload }) => {
               date={item.created}
               name={item.name}
               cid={item.cid}
-              status={
-                Object.values(PinStatus).find(status => item.pins.some(pin => status === pin.status)) ||
-                PinStatus.QUEUING
-              }
               storageProviders={
                 Array.isArray(item.deals)
                   ? item.deals
@@ -417,8 +425,8 @@ const FilesManager = ({ className, content, onFileUpload }) => {
               size={
                 item.hasOwnProperty('dagSize') ? filesize(item.dagSize) : item.info?.dag_size ? item.info.dag_size : '-'
               }
+              linkPrefix={linkPrefix}
               highlight={{ target: 'name', text: keyword?.toString() || '' }}
-              numberOfPins={item.pins.length}
               isSelected={!!selectedFiles.find(fileSelected => fileSelected === item)}
               onDelete={() => onDeleteSingle(item.cid)}
               isEditingName={item.cid === nameEditingId}

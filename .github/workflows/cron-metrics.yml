@@ -34,3 +34,7 @@ jobs:
           PROD_PG_CONNECTION: ${{ secrets.PROD_PG_CONNECTION }}
           PROD_RO_PG_CONNECTION: ${{ secrets.PROD_RO_PG_CONNECTION }}
         run: yarn --cwd packages/cron start:metrics
+
+      - name: Heartbeat
+        if: ${{ success() }}
+        run: ./packages/tools/scripts/cli.js heartbeat --token ${{ secrets.OPSGENIE_KEY }} --name cron-web3storage-metrics        
