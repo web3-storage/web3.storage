@@ -145,9 +145,12 @@ jobs:
       - name: add url to GITHUB_STEP_SUMMARY
         if: steps.create_output_playwright_reporter_url.outputs.url
         run: |
-          cat << EOF >> $GITHUB_STEP_SUMMARY
-          ${{ steps.create_output_playwright_reporter_url.outputs.url }}
-          EOF
+          echo "
+          ### playwright-report
+
+          * url: ${{ steps.create_output_playwright_reporter_url.outputs.url }}
+          * cid: ${{ steps.create_output_playwright_reporter_cid.outputs.cid }}
+          " >> $GITHUB_STEP_SUMMARY
 
       # if test-results, upload as artifact
       - name: Check for website test results
