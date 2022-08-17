@@ -13,6 +13,7 @@ import {
 import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
+import fetch from '@web-std/fetch'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -35,7 +36,7 @@ export async function userLoginPost (request, env) {
  * Controller for logging in using a magic.link token
  * @param {Magic} magic - magic sdk instance
  */
-function createMagicLoginController(magic, testModeAllowed=false) {
+function createMagicLoginController (magic, testModeAllowed = false) {
   const createTestmodeMetadata = (token) => {
     const [, claim] = magic.token.decode(token)
     return {
@@ -59,7 +60,7 @@ function createMagicLoginController(magic, testModeAllowed=false) {
     try {
       magic.token.validate(token)
     } catch (error) {
-      if ( ! isAllowedValidateError(error)) {
+      if (!isAllowedValidateError(error)) {
         throw error
       }
       isTestmodeToken = true
@@ -70,7 +71,7 @@ function createMagicLoginController(magic, testModeAllowed=false) {
     return magic.users.getMetadataByToken(token)
   }
   return {
-    authenticate,
+    authenticate
   }
 }
 
