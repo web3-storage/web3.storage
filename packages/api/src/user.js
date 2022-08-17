@@ -42,16 +42,9 @@ async function loginOrRegister (request, env) {
   const token = env.magic.utils.parseAuthorizationHeader(auth)
   const isMagicTestMode = magicTestModeFromEnv(env)
   let isAllowedTestmodeAuthn = false
-  try {
-    env.magic.token.validate(token)
-  } catch (error) {
-    if (error.code === 'ERROR_INCORRECT_SIGNER_ADDR' && isMagicTestMode) {
-      // ignore error
-      isAllowedTestmodeAuthn = true
-    } else {
-      throw error
-    }
-  }
+
+  env.magic.token.validate(token)
+
   let metadata
   try {
     metadata = await env.magic.users.getMetadataByToken(token)
