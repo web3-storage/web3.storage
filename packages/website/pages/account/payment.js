@@ -11,7 +11,9 @@ import { plans } from '../../components/contexts/plansContext';
 import Button from '../../components/button/button.js';
 import AccountPageData from '../../content/pages/app/account.json';
 
-const stripePromise = loadStripe('pk_test_QQ7rmXacxFCKeELa1ITqybmN');
+const stripePromise = loadStripe(
+  'pk_test_51LW5iZIfErzTm2rEq2poZhHidav6vMKnpywbLgfM7YtRpWUO1QyQjyoG4h5nO0wzzoLyqOocDb6h8fFcqw4RItB700OjnutXXx'
+);
 
 const currentPlan = plans.find(p => p.current);
 
