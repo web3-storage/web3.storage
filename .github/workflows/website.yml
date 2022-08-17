@@ -27,7 +27,7 @@ on:
         description: Whether to add add_playwright_report_to_web3_storage to web3.storage (publicly)
         required: true
         type: boolean
-        default: false
+        default: true
 
 jobs:
   test:
