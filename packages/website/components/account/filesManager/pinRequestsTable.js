@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import filesize from 'filesize';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import countly from 'lib/countly';
@@ -189,13 +188,9 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
               cid={item.pin.cid}
               requestid={item.requestid}
               status={item.status}
-              size={
-                item.hasOwnProperty('dagSize') ? filesize(item.dagSize) : item.info?.dag_size ? item.info.dag_size : '-'
-              }
               linkPrefix={linkPrefix}
               isSelected={!!selectedPinRequests.find(fileSelected => fileSelected === item)}
               onDelete={() => onDeleteSingle(item.requestid)}
-              tabType="pinned"
             />
           ))
         )}
