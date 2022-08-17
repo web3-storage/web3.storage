@@ -333,9 +333,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
                       ))
                   : null
               }
-              size={
-                item.hasOwnProperty('dagSize') ? filesize(item.dagSize) : item.info?.dag_size ? item.info.dag_size : '-'
-              }
+              size={'dagSize' in item ? filesize(item.dagSize) : '-'}
               linkPrefix={linkPrefix}
               highlight={{ target: 'name', text: keyword?.toString() || '' }}
               numberOfPins={item.pins.length}
