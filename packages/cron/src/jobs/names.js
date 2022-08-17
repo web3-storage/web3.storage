@@ -1,5 +1,5 @@
 import debug from 'debug'
-import retry from 'p-retry'
+import { pRetry, retry } from 'p-retry'
 import throttledQueue from 'throttled-queue'
 
 const MAX_REQUEST_PAGE = 10
@@ -64,12 +64,16 @@ async function postKeyW3Name (name, w3nameApiURL = '') {
 
   if (!w3nameApiURL) { return }
 
-  const res = await fetch(new URL(`/name/${key}`, w3nameApiURL), {
-    method: 'POST',
-    body: name.record
-  })
+  // Very occasionally this gets a FetchError due to the connection being reset, which
+  // if not caught causes the whole cron job to fail. Hence
+  pRetry(async () => {
+    const res = await fetch(new URL(`/name/${key}`, w3nameApiURL), {
+      method: 'POST',
+      body: name.record
+    })
 
-  if (log.enabled) {
-    console.log(res.status, res.statusText, await res.text())
-  }
+    if (log.enabled) {
+      console.log(res.status, res.statusText, await res.text())
+    }
+  }, { retries: 1, onFailedAttempt: log })
 }
