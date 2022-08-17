@@ -107,3 +107,102 @@
     }
   }
 }
+
+.billing-container {
+  max-width: 64rem;
+  margin: auto;
+  padding-bottom: 12.5rem;
+  position: relative;
+
+  @include medium {
+    padding: 0 4.1665%;
+    width: 100%;
+  }
+}
+
+.billing-content {
+  padding: 0 2rem 2rem;
+}
+
+.billing-settings-layout {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  grid-gap: 2rem;
+}
+
+.billing-plans {
+  display: flex;
+  gap: 2rem;
+}
+
+.billing-card {
+  margin: 0.5rem 0;
+}
+
+.billing-plan-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin: 0.5rem 0 0rem 0;
+}
+
+.billing-plan-desc {
+  font-size: 1rem;
+  color: $alto;
+  margin-bottom: 1rem;
+}
+
+.billing-label {
+  font-size: 1rem;
+  line-height: 1;
+  margin-top: 1rem;
+}
+
+.billing-plan-usage {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 14px;
+  color: $moonRaker;
+  .billing-plan-meter {
+    width: 100%;
+    height: 8px;
+    border-radius: 16px;
+    background-color: $moonRaker;
+    position: relative;
+    overflow: hidden;
+  }
+  .billing-plan-meter-used {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    background-color: $heliotrope;
+  }
+}
+
+.payment-history-layout {
+  margin-top: 4rem;
+}
+
+.payment-history-table {
+  width: 100%;
+  font-size: 1rem;
+}
+
+.payment-history-table-header,
+.payment-history-table-row {
+  display: grid;
+  grid-template-columns: 20% auto 150px 150px;
+  text-align: left;
+  grid-gap: 1rem;
+  padding: 0.4rem 0;
+}
+
+.payment-history-table-row {
+  color: $alto;
+}
+
+.payment-history-table-row:not(:last-child) {
+  border-bottom: 1px solid $waterloo;
+}
