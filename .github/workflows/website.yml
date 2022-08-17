@@ -94,7 +94,7 @@ jobs:
         env:
           PLAYWRIGHT_TIMEOUT: 120000
 
-      - if: always()
+      - if: always() # even if previous steps fail, we still want to save this report so we can debug the failures
         name: Check for website playwright-report
         id: check_website_playwright_report
         uses: andstor/file-existence-action@v1
