@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.2.0](https://github.com/web3-storage/web3.storage/compare/api-v7.1.1...api-v7.2.0) (2022-08-17)
+
+
+### Features
+
+* New Users Pins Endpoint ([#1718](https://github.com/web3-storage/web3.storage/issues/1718)) ([0d8eb86](https://github.com/web3-storage/web3.storage/commit/0d8eb86862783006bdeed131c5099e3ca3ecfb5b))
+
+
+### Bug Fixes
+
+* stracktraces with wrangler no bundle ([#1731](https://github.com/web3-storage/web3.storage/issues/1731)) ([763442c](https://github.com/web3-storage/web3.storage/commit/763442cb985f5297f04b25f4451605ab38431e44))
+
 ## [7.1.1](https://github.com/web3-storage/web3.storage/compare/api-v7.1.0...api-v7.1.1) (2022-08-12)
 
 
