@@ -40,6 +40,9 @@ jobs:
           # corresponds to playwright invocation/configuration
           - packages/website/test-results
     runs-on: ${{ matrix.os }}
+    outputs:
+      playwright-report: ${{ steps.create_output_playwright_reporter.outputs.url }}
+      playwright-report-cid: ${{ steps.create_output_playwright_reporter_cid.outputs.cid }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -93,6 +96,10 @@ jobs:
         run: |
           echo cid: ${{ steps.ipfs.outputs.cid }}
           echo url: https://nftstorage.link/ipfs/${{ steps.ipfs.outputs.cid }}
+      - id: create_output_playwright_reporter_url
+        run: echo "::set-output name=url::https://nftstorage.link/ipfs/${{ steps.ipfs.outputs.cid }}"
+      - id: create_output_playwright_reporter_cid
+        run: echo "::set-output name=cid::${{ steps.ipfs.outputs.cid }}"
 
       - name: upload playwright-report artifact
         if: steps.check_website_playwright_report.outputs.files_exists == 'true'
