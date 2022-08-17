@@ -2,67 +2,18 @@
  * @fileoverview Account Payment Settings
  */
 
+import { useState } from 'react';
 import { CardElement, Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
+import AccountPlansModal from '../../components/accountPlansModal/accountPlansModal.js';
+import { plans } from '../../components/contexts/plansContext';
 import Button from '../../components/button/button.js';
 import AccountPageData from '../../content/pages/app/account.json';
 
 const stripePromise = loadStripe('pk_test_QQ7rmXacxFCKeELa1ITqybmN');
 
-const plans = [
-  {
-    title: 'Free',
-    description: 'The service you already know and love',
-    price: '$0/mo',
-    amount: '10GB',
-    overage: '',
-    current: false,
-  },
-  {
-    title: 'Starter',
-    description: 'For those that want to take advantage of more storage',
-    price: '$10/mo',
-    amount: '100GB',
-    overage: '$4/GB',
-    current: true,
-  },
-  {
-    title: 'Enterprise',
-    description: 'All the sauce, all the toppings.',
-    price: '$50/mo',
-    amount: '500GB',
-    overage: '$2/GB',
-    current: false,
-  },
-];
-
 const currentPlan = plans.find(p => p.current);
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const PaymentPlansCards = props => {
-  return (
-    <div className="billing-plans">
-      {plans.map(plan => (
-        <div key={plan.title} className="billing-plan">
-          <h4 className="billing-plan-title">{plan.title}</h4>
-          <p className="billing-plan-desc">{plan.description}</p>
-          <div className="billing-plan-info">{plan.price}</div>
-          <div className="billing-plan-amount">
-            {plan.amount}
-            <small className="billing-plan-overage">{plan.overage}</small>
-          </div>
-          <div className="billing-plan-usage">
-            <div className="billing-plan-meter">
-              <span className="billing-plan-meter-used"></span>
-            </div>
-            21.1/50GB
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
 
 const CurrentBillingPlanCard = props => {
   return (
@@ -71,11 +22,11 @@ const CurrentBillingPlanCard = props => {
         <div key={currentPlan.title} className="billing-plan">
           <h4 className="billing-plan-title">{currentPlan.title}</h4>
           <p className="billing-plan-desc">{currentPlan.description}</p>
-          <div className="billing-plan-info">{currentPlan.price}</div>
-          <div className="billing-plan-amount">
-            {currentPlan.amount}
-            <small className="billing-plan-overage">{currentPlan.overage}</small>
-          </div>
+          <p className="billing-plan-limit">
+            <span>Limit: {currentPlan.amount}</span>
+            <span>Overage: {currentPlan.overage}</span>
+          </p>
+          <div className="billing-plan-amount">{currentPlan.price}</div>
           <div className="billing-plan-usage-container">
             <p className="billing-label">Current Usage:</p>
             <div className="billing-plan-usage">
@@ -119,6 +70,8 @@ const PaymentHistoryTable = props => {
 
 const PaymentSettingsPage = props => {
   const { dashboard } = AccountPageData.page_content;
+  const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
+
   return (
     <>
       <>
@@ -127,7 +80,12 @@ const PaymentSettingsPage = props => {
           <div className="billing-content">
             <div className="billing-settings-layout">
               <div>
-                <h4>Your Current Plan</h4>
+                <div className="billing-plan-header">
+                  <h4>Your Current Plan</h4>
+                  <Button variant="text" onClick={() => setIsPaymentPlanModalOpen(true)}>
+                    Change Plan
+                  </Button>
+                </div>
                 <CurrentBillingPlanCard />
               </div>
               <div>
@@ -161,6 +119,7 @@ const PaymentSettingsPage = props => {
             </div>
           </div>
         </div>
+        <AccountPlansModal isOpen={isPaymentPlanModalOpen} onClose={() => setIsPaymentPlanModalOpen(false)} />
       </>
     </>
   );

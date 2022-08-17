@@ -132,11 +132,18 @@
 
 .billing-plans {
   display: flex;
+  flex-direction: column;
   gap: 2rem;
 }
 
 .billing-card {
   margin: 0.5rem 0;
+}
+
+.billing-plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .billing-plan-title {
@@ -148,7 +155,6 @@
 .billing-plan-desc {
   font-size: 1rem;
   color: $alto;
-  margin-bottom: 1rem;
 }
 
 .billing-label {
@@ -179,6 +185,19 @@
     height: 100%;
     background-color: $heliotrope;
   }
+}
+
+.billing-plan-amount {
+  font-size: 2rem;
+  font-weight: bold;
+  color: $moonRaker;
+}
+
+.billing-plan-limit {
+  font-size: 0.9rem;
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1rem;
 }
 
 .payment-history-layout {
