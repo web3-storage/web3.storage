@@ -105,8 +105,6 @@ jobs:
       - name: debug stuff
         run: |
           echo "steps.check_website_playwright_report.outputs.files_exists=${{ steps.check_website_playwright_report.outputs.files_exists }}"
-          echo "conditional1=${{ always() && steps.check_website_playwright_report.outputs.files_exists == 'true' }}"
-          echo "conditional2=${{ always() || steps.check_website_playwright_report.outputs.files_exists == 'true' }}"
       - name: upload playwright-report artifact
         if: ${{ always() && steps.check_website_playwright_report.outputs.files_exists == 'true' }}
         uses: actions/upload-artifact@v1
