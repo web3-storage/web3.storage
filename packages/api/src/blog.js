@@ -16,7 +16,7 @@ export async function blogSubscriptionCreate (request, env, ctx) {
     Authorization: `Basic: ${apiKey}`
   }
   const body = await request.json()
-  const userExists = isChimpUser(body.email, prefix, listId, headers)
+  const userExists = await isChimpUser(body.email, prefix, listId, headers)
   let res
 
   if (userExists) {
