@@ -161,7 +161,7 @@ export async function createToken(name) {
  * Gets files
  *
  * @param {UploadArgs} [args]
- * @returns {Promise<{ uploads: import('web3.storage').Upload[], pages: number }>}
+ * @returns {Promise<{ uploads: import('web3.storage').Upload[], pages: number, count: number }>}
  * @throws {Error} When it fails to get uploads
  */
 export async function getUploads({ size, page, sortBy, sortOrder } = {}) {
@@ -190,7 +190,10 @@ export async function getUploads({ size, page, sortBy, sortOrder } = {}) {
     throw new Error('missing last rel in pagination Link header')
   }
 
-  return { uploads: await res.json(), pages: parseInt(links.last.page) };
+  const pages = parseInt(links.last.page)
+  const count = parseInt(res.headers.get('Count') || '0')
+
+  return { uploads: await res.json(), pages, count };
 }
 
 /**
@@ -252,24 +255,45 @@ export async function getVersion() {
 }
 
 /**
- * Gets files pinned through the pinning API
+ * Gets pin requests.
  *
- * @param {string} status
- * @param {string} token
- * @returns {Promise<import('../components/contexts/uploadsContext').PinsList>}
- * @throws {Error} When it fails to get uploads
+ * @param {{ status: string, page: number, size: number }} args
+ * @returns {Promise<{ count: number, results: import('../components/contexts/pinRequestsContext').PinStatus[] }>}
  */
-export async function listPins(status, token) {
-  const res = await fetch(`${API}/pins?status=${status}`, {
+export async function getPinRequests({ status, size, page }) {
+  const res = await fetch(`${API}/user/pins?status=${status}&size=${size}&page=${page}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token, // **** this needs to be a token generated from the tokens context
+      Authorization: 'Bearer ' + (await getToken()),
     },
-  })
+  });
   if (!res.ok) {
-    throw new Error(`failed to get pinned files: ${await res.text()}`)
+    throw new Error(`failed to get pinned files: ${await res.text()}`);
   }
 
-  return res.json()
+  return res.json();
+}
+
+/**
+ * Deletes a pin request.
+ *
+ * @param {string} requestid
+ */
+export async function deletePinRequest(requestid) {
+  const tokens = await getTokens();
+  if (!tokens[0]) {
+    throw new Error('missing API token');
+  }
+  const res = await fetch(`${API}/pins/${encodeURIComponent(requestid)}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + tokens[0].secret,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`failed to delete pin request: ${await res.text()}`);
+  }
 }

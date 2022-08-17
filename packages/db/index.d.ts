@@ -6,7 +6,6 @@ import type {
   UpsertUserOutput,
   UserOutput,
   CreateUploadInput,
-  ListUploadsOptions,
   ListUploadReturn,
   CreateUploadOutput,
   UploadItemOutput,
@@ -78,25 +77,22 @@ export * from './constants.js'
 /**
  * Request for a paginated page of data.
  */
-export interface PageRequest {
-  type: string
-  size: number
-}
+export type PageRequest = BeforeDatePageRequest|PageNumberPageRequest
 
 /**
  * A pagination page request that is before a specific date.
  */
-export interface DateTimePageRequest extends PageRequest {
-  type: typeof DATE_TIME_PAGE_REQUEST
-  before?: Date
+export interface BeforeDatePageRequest {
+  before: Date
+  size?: number
 }
 
 /**
  * A pagination page request that for a specific page number.
  */
-export interface PageNumberPageRequest extends PageRequest {
-  type: typeof PAGE_NUMBER_PAGE_REQUEST
+export interface PageNumberPageRequest {
   page: number
+  size?: number
   sortBy?: SortField
   sortOrder?: SortOrder
 }

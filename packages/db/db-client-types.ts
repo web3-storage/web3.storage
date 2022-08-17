@@ -235,33 +235,6 @@ export type Location = {
   region?: definitions['pin_location']['region']
 }
 
-export type ListUploadsOptions = {
-  /**
-   * Uploads created before a given timestamp.
-   */
-  before?: string
-  /**
-   * Uploads created after a given timestamp.
-   */
-  after?: string
-  /**
-   * Max records (default: 10).
-   */
-  size?: number
-  /**
-   * Offset records (default: 0).
-   */
-  offset?: number
-  /**
-   * Sort by given property.
-   */
-  sortBy?: 'Date' | 'Name'
-  /**
-   * Sort order.
-   */
-  sortOrder?: 'Asc' | 'Desc'
-}
-
 export type ListUploadReturn = {
   count: number,
   uploads: UploadItemOutput[],

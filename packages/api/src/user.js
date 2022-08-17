@@ -12,15 +12,13 @@ import {
 import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
-import { DATE_TIME_PAGE_REQUEST, PAGE_NUMBER_PAGE_REQUEST } from '@web3-storage/db'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
  * @typedef {{ _id: string, name: string }} AuthToken
  * @typedef {{ user: User authToken?: AuthToken }} Auth
  * @typedef {Request & { auth: Auth }} AuthenticatedRequest
- * @typedef {import('@web3-storage/db').DateTimePageRequest} DateTimePageRequest
- * @typedef {import('@web3-storage/db').PageNumberPageRequest} PageNumberPageRequest
+ * @typedef {import('@web3-storage/db').PageRequest} PageRequest
  */
 
 /**
@@ -250,12 +248,12 @@ export async function userUploadsGet (request, env) {
   }
 
   const headers = {
-    Count: data.count, // Deprecated, do not use!
-    Size: pageRequest.size // Deprecated, do not use!
+    Count: data.count,
+    Size: pageRequest.size // Deprecated, use Link header instead.
   }
 
   if (pageRequest.page != null) {
-    headers.Page = pageRequest.page // Deprecated, do not use!
+    headers.Page = pageRequest.page // Deprecated, use Link header instead.
   }
 
   const link = getLinkHeader({
@@ -277,21 +275,21 @@ export async function userUploadsGet (request, env) {
  *
  * @param {Object} args
  * @param {string|URL} args.url Base URL
- * @param {DateTimePageRequest|PageNumberPageRequest} args.pageRequest Details for the requested page of data
+ * @param {PageRequest} args.pageRequest Details for the current page of data
  * @param {Array<{ created: string }>} args.items Page items
  * @param {number} args.count Total items available
  */
 function getLinkHeader ({ url, pageRequest, items, count }) {
   const rels = []
 
-  if (pageRequest.type === DATE_TIME_PAGE_REQUEST) {
+  if ('before' in pageRequest) {
     const { size } = pageRequest
     if (items.length === size) {
       const oldest = items[items.length - 1]
       const nextParams = new URLSearchParams({ size, before: oldest.created })
       rels.push(`<${url}?${nextParams}>; rel="next"`)
     }
-  } else if (pageRequest.type === PAGE_NUMBER_PAGE_REQUEST) {
+  } else if ('page' in pageRequest) {
     const { size, page } = pageRequest
     const pages = Math.ceil(count / size)
     if (page < pages) {
@@ -310,7 +308,7 @@ function getLinkHeader ({ url, pageRequest, items, count }) {
       rels.push(`<${url}?${prevParams}>; rel="previous"`)
     }
   } else {
-    throw new Error(`unknown page request type: ${pageRequest.type}`)
+    throw new Error('unknown page request type')
   }
 
   return rels.join(', ')
@@ -362,7 +360,7 @@ export async function userPinsGet (request, env) {
   const requestUrl = new URL(request.url)
   const { searchParams } = requestUrl
 
-  const { size, page, offset, before, after, sortBy, sortOrder } = pagination(searchParams)
+  const pageRequest = pagination(searchParams)
   const urlParams = new URLSearchParams(requestUrl.search)
   const params = Object.fromEntries(urlParams)
 
@@ -378,36 +376,31 @@ export async function userPinsGet (request, env) {
   try {
     pinRequests = await env.db.listPsaPinRequests(tokens, {
       ...psaParams.data,
-      limit: size,
-      offset,
-      before,
-      after,
-      sortBy,
-      sortOrder
+      limit: pageRequest.size,
+      offset: pageRequest.size * (pageRequest.page - 1)
     })
-  } catch (e) {
-    console.error(e)
-    throw new HTTPError('No pinning resources found for user', 404)
+  } catch (err) {
+    if (err.code === 'RANGE_NOT_SATISFIABLE_ERROR_DB') {
+      throw new RangeNotSatisfiableError()
+    }
+    throw err
   }
 
   const pins = pinRequests.results.map((pinRequest) => toPinStatusResponse(pinRequest))
 
-  let link = ''
-  // If there's more results to show...
-  if (page > 1) {
-    link += `<${requestUrl.pathname}?size=${size}&page=${page - 1}>; rel="previous"`
-  }
-
-  if (pins.length + offset < pinRequests.count) {
-    if (link !== '') link += ', '
-    link += `<${requestUrl.pathname}?size=${size}&page=${page + 1}>; rel="next"`
-  }
-
   const headers = {
-    Count: pinRequests.count || 0,
-    Size: size,
-    Page: page,
-    Link: link
+    Count: pinRequests.count
+  }
+
+  const link = getLinkHeader({
+    url: requestUrl.pathname,
+    pageRequest,
+    items: pinRequests.results,
+    count: pinRequests.count
+  })
+
+  if (link) {
+    headers.Link = link
   }
 
   return new JSONResponse({

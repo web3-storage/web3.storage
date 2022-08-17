@@ -186,7 +186,6 @@ export const ServerPagination = ({
 }
 
 ServerPagination.defaultProps = {
-  items: [],
   itemsPerPage: 10,
   defaultPage: 1,
   queryParam: null

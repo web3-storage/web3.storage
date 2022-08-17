@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { AuthorizationProvider } from 'components/contexts/authorizationContext';
 import { UserProvider } from 'components/contexts/userContext';
 import { UploadsProvider } from 'components/contexts/uploadsContext';
+import { PinRequestsProvider } from 'components/contexts/pinRequestsContext';
 import { TokensProvider } from 'components/contexts/tokensContext';
 
 const queryClient = new QueryClient({
@@ -27,7 +28,9 @@ const AppProviders = ({ authorizationProps, children }) => {
       <AuthorizationProvider {...authorizationProps}>
         <UserProvider loadStorage={pathname.indexOf('/account') !== -1}>
           <UploadsProvider>
-            <TokensProvider>{children}</TokensProvider>
+            <PinRequestsProvider>
+              <TokensProvider>{children}</TokensProvider>
+            </PinRequestsProvider>
           </UploadsProvider>
         </UserProvider>
       </AuthorizationProvider>

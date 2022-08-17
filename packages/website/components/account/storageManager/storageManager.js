@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import filesz from 'filesize';
-import { useCallback, useMemo, useEffect, useState, useRef } from 'react';
+import { useMemo, useEffect, useState, useRef } from 'react';
 
 import LockIcon from 'assets/icons/lock';
 import Button, { ButtonVariant } from 'components/button/button';
@@ -65,12 +65,12 @@ const StorageManager = ({ className = '', content }) => {
     };
   }, [componentInViewport]);
 
-  const onSearchFiles = useCallback(() => {
-    const input = /** @type {HTMLInputElement} */ (document.querySelector('.search-input'));
-    const container = /** @type {HTMLInputElement} */ (document.querySelector('.files-manager-container'));
-    input.focus();
-    container.scrollIntoView(true);
-  }, []);
+  // const onSearchFiles = useCallback(() => {
+  //   const input = /** @type {HTMLInputElement} */ (document.querySelector('.search-input'));
+  //   const container = /** @type {HTMLInputElement} */ (document.querySelector('.files-manager-container'));
+  //   input.focus();
+  //   container.scrollIntoView(true);
+  // }, []);
 
   const uploadedStorageBarStyles = {
     width: !componentInViewport || percentUploaded === 0 ? '0' : `calc( max(${percentUploaded}%, 0.25rem) + 2rem)`,
@@ -106,9 +106,9 @@ const StorageManager = ({ className = '', content }) => {
             </>
           )}
         </div>
-        <Button onClick={onSearchFiles} variant={ButtonVariant.TEXT}>
+        {/* <Button onClick={onSearchFiles} variant={ButtonVariant.TEXT}>
           {content.buttons.search}
-        </Button>
+        </Button> */}
       </div>
       <div className="storage-manager-meter-container">
         <div className="storage-manager-meter">

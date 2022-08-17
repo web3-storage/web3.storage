@@ -1,5 +1,3 @@
-import { PAGE_NUMBER_PAGE_REQUEST, DATE_TIME_PAGE_REQUEST } from '@web3-storage/db'
-
 /** @type {import('@web3-storage/db').SortField[]} */
 const sortableValues = ['Name', 'Date']
 /** @type {import('@web3-storage/db').SortOrder[]} */
@@ -21,7 +19,7 @@ const sortableOrders = ['Asc', 'Desc']
  * @returns {import('@web3-storage/db').PageRequest}
  */
 export function pagination (searchParams) {
-  let size = 25
+  let size
   if (searchParams.has('size')) {
     const parsedSize = parseInt(searchParams.get('size'))
     if (isNaN(parsedSize) || parsedSize <= 0 || parsedSize > 1000) {
@@ -30,12 +28,8 @@ export function pagination (searchParams) {
     size = parsedSize
   }
 
-  const type = searchParams.has('page')
-    ? PAGE_NUMBER_PAGE_REQUEST
-    : DATE_TIME_PAGE_REQUEST
-
-  if (type === DATE_TIME_PAGE_REQUEST) {
-    let before
+  if (!searchParams.has('page')) {
+    let before = new Date().toISOString()
     if (searchParams.has('before')) {
       const parsedBefore = new Date(searchParams.get('before'))
       if (isNaN(parsedBefore.getTime())) {
@@ -43,8 +37,7 @@ export function pagination (searchParams) {
       }
       before = parsedBefore
     }
-
-    return { type, before, size }
+    return { before, size }
   }
 
   const page = parseInt(searchParams.get('page'))
@@ -55,7 +48,6 @@ export function pagination (searchParams) {
   let sortOrder
   if (searchParams.has('sortOrder')) {
     sortOrder = searchParams.get('sortOrder')
-
     if (!sortableOrders.includes(sortOrder)) {
       throw Object.assign(new Error(`Sort ordering by '${sortOrder}' is not supported. Supported sort orders are: [${sortableOrders.toString()}]`), { status: 400 })
     }
@@ -64,11 +56,10 @@ export function pagination (searchParams) {
   let sortBy
   if (searchParams.has('sortBy')) {
     sortBy = searchParams.get('sortBy')
-
     if (!sortableValues.includes(sortBy)) {
       throw Object.assign(new Error(`Sorting by '${sortBy}' is not supported. Supported sort orders are: [${sortableValues.toString()}]`), { status: 400 })
     }
   }
 
-  return { type, page, size, sortBy, sortOrder }
+  return { page, size, sortBy, sortOrder }
 }

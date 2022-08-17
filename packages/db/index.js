@@ -9,9 +9,8 @@ import {
   parseTextToNumber
 } from './utils.js'
 import { ConstraintError, DBError, RangeNotSatisfiableDBError } from './errors.js'
-import { DATE_TIME_PAGE_REQUEST, PAGE_NUMBER_PAGE_REQUEST } from './constants.js'
 
-export * from './constants.js'
+export { EMAIL_TYPE } from './constants.js'
 export { parseTextToNumber } from './utils.js'
 
 const uploadQuery = `
@@ -509,19 +508,16 @@ export class DBClient {
    */
   async listUploads (userId, pageRequest) {
     let query
-    if (pageRequest.type === DATE_TIME_PAGE_REQUEST) {
+    if ('before' in pageRequest) {
       query = this._client
         .from('upload')
         .select(uploadQuery, { count: 'exact' })
         .eq('user_id', userId)
         .is('deleted_at', null)
+        .lt('inserted_at', pageRequest.before.toISOString())
         .order('inserted_at', { ascending: false })
-        .range(0, pageRequest.size - 1)
-
-      if (pageRequest.before) {
-        query = query.lt('inserted_at', pageRequest.before.toISOString())
-      }
-    } else if (pageRequest.type === PAGE_NUMBER_PAGE_REQUEST) {
+        .range(0, (pageRequest.size || 25) - 1)
+    } else if ('page' in pageRequest) {
       const rangeFrom = (pageRequest.page - 1) * pageRequest.size
       const rangeTo = rangeFrom + pageRequest.size
       const isAscendingSortOrder = pageRequest.sortOrder === 'Asc'
@@ -537,7 +533,7 @@ export class DBClient {
         .order(sortBy, { ascending: isAscendingSortOrder })
         .range(rangeFrom, rangeTo - 1)
     } else {
-      throw new Error(`unknown page request type: ${pageRequest.type}`)
+      throw new Error('unknown page request type')
     }
 
     const { data: uploads, error, count, status } = await query
@@ -1162,7 +1158,7 @@ export class DBClient {
    * Get a filtered list of pin requests for a user
    *
    * @param {string | [string]} authKey
-   * @param {import('./db-client-types').ListPsaPinRequestOptions & import('./db-client-types').ListUploadsOptions} [opts]
+   * @param {import('./db-client-types').ListPsaPinRequestOptions} [opts]
    * @return {Promise<import('./db-client-types').ListPsaPinRequestResults> }> }
    */
   async listPsaPinRequests (authKey, opts = {}) {
@@ -1227,11 +1223,11 @@ export class DBClient {
     }
 
     if (opts.before) {
-      query = query.lte('inserted_at', opts.before)
+      query = query.lt('inserted_at', opts.before)
     }
 
     if (opts.after) {
-      query = query.gte('inserted_at', opts.after)
+      query = query.gt('inserted_at', opts.after)
     }
 
     if (opts.meta) {
