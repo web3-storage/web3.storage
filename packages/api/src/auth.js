@@ -155,18 +155,16 @@ async function tryMagicToken (token, env) {
   } catch (error) {
     switch (error.code) {
       case 'ERROR_INCORRECT_SIGNER_ADDR':
-        if (!isMagicTestMode) {
-          throw error
-        }
-        // allow validation failure
-        break
       case 'ERROR_MALFORMED_TOKEN':
         break
       default:
         console.warn('unexpected error validating magic token: ', error.name, error.message)
     }
   }
-  if (requiresTokenValidation && !tokenWasValidated) {
+  const isAllowedTest = (env, token) => {
+    return Boolean(env.DANGEROUSLY_BYPASS_MAGIC_AUTH && token === 'test-magic')
+  }
+  if (requiresTokenValidation && !tokenWasValidated && !isAllowedTest(env, token)) {
     return null
   }
   try {
@@ -175,7 +173,7 @@ async function tryMagicToken (token, env) {
   } catch (_) {
     // test mode for magic admin sdk is "coming soon"
     // see: https://magic.link/docs/introduction/test-mode#coming-soon
-    if (env.DANGEROUSLY_BYPASS_MAGIC_AUTH && token === 'test-magic') {
+    if (isAllowedTest(env, token)) {
       console.log(`!!! tryMagicToken bypassed with test token "${token}" !!!`)
       issuer = 'test-magic-issuer'
     } else {
