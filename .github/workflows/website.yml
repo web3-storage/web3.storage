@@ -135,7 +135,7 @@ jobs:
       # output playwright-report on web3.storage url
       - id: create_output_playwright_reporter_url
         if: steps.add_playwright_report_to_web3_storage.outputs.cid
-        run: echo "::set-output name=url::https://w3.link/ipfs/${{ steps.add_playwright_report_to_web3_storage.outputs.cid }}"
+        run: echo "::set-output name=url::https://w3s.link/ipfs/${{ steps.add_playwright_report_to_web3_storage.outputs.cid }}"
       # log playwright-report on web3.storage url
       - name: log playwright-report on web3.storage url
         if: steps.create_output_playwright_reporter_url.outputs.url
