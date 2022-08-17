@@ -13,6 +13,7 @@ import {
 import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
+import fetch from '@web-std/fetch'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -32,6 +33,49 @@ export async function userLoginPost (request, env) {
 }
 
 /**
+ * Controller for logging in using a magic.link token
+ * @param {Magic} magic - magic sdk instance
+ */
+function createMagicLoginController (magic, testModeAllowed = false) {
+  const createTestmodeMetadata = (token) => {
+    const [, claim] = magic.token.decode(token)
+    return {
+      issuer: claim.iss,
+      email: 'testMode@magic.link',
+      publicAddress: claim.iss
+    }
+  }
+  // These tokens are sometimes used when testing, but they won't work with `magic.token.validate(token)`
+  // This funtion returns true if the error that comes from validate(token) is because the token was a testMode token
+  const isAllowedValidateError = (error) => {
+    return testModeAllowed && (error.code === 'ERROR_INCORRECT_SIGNER_ADDR')
+  }
+  /**
+   * authenticate an incoming request that has a magic.link token.
+   * throws error if token isnt valid
+   * @returns {Promise} metadata about the validated token
+   */
+  const authenticate = async ({ token }) => {
+    let isTestmodeToken = false
+    try {
+      magic.token.validate(token)
+    } catch (error) {
+      if (!isAllowedValidateError(error)) {
+        throw error
+      }
+      isTestmodeToken = true
+    }
+    if (isTestmodeToken) {
+      return createTestmodeMetadata(token)
+    }
+    return magic.users.getMetadataByToken(token)
+  }
+  return {
+    authenticate
+  }
+}
+
+/**
  * @param {Request} request
  * @param {import('./env').Env} env
  */
@@ -40,33 +84,7 @@ async function loginOrRegister (request, env) {
   const auth = request.headers.get('Authorization') || ''
 
   const token = env.magic.utils.parseAuthorizationHeader(auth)
-  const isMagicTestMode = magicTestModeFromEnv(env)
-  let isAllowedTestmodeAuthn = false
-  try {
-    env.magic.token.validate(token)
-  } catch (error) {
-    if (error.code === 'ERROR_INCORRECT_SIGNER_ADDR' && isMagicTestMode) {
-      // ignore error
-      isAllowedTestmodeAuthn = true
-    } else {
-      throw error
-    }
-  }
-  let metadata
-  try {
-    metadata = await env.magic.users.getMetadataByToken(token)
-  } catch (error) {
-    if (error.code === 'SERVICE_ERROR' && isAllowedTestmodeAuthn) {
-      const [, claim] = env.magic.token.decode(token)
-      metadata = {
-        issuer: claim.iss,
-        email: 'testMode@magic.link',
-        publicAddress: claim.iss
-      }
-    } else {
-      throw error
-    }
-  }
+  const metadata = await (createMagicLoginController(env.magic, magicTestModeFromEnv(env)).authenticate({ token }))
   const { issuer, email, publicAddress } = metadata
   if (!issuer || !email || !publicAddress) {
     throw new Error('missing required metadata')

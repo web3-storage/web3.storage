@@ -89,13 +89,15 @@ jobs:
       - run: node -r dotenv/config $(which npm) run build -w packages/website
       - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
         working-directory: packages/website
+      
+      # run e2e tests
       - id: website_test_e2e
+        continue-on-error: true # when this fails, we still want to do some cleanup
         run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- node -r dotenv/config $(which npm) run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }} --reporter=html
         env:
           PLAYWRIGHT_TIMEOUT: 120000
 
-      - if: always() # even if previous steps fail, we still want to save this report so we can debug the failures
-        name: Check for website playwright-report
+      - name: Check for website playwright-report
         id: check_website_playwright_report
         uses: andstor/file-existence-action@v1
         with:
@@ -148,8 +150,7 @@ jobs:
           EOF
 
       # if test-results, upload as artifact
-      - if: always()
-        name: Check for website test results
+      - name: Check for website test results
         id: check_website_test_results
         uses: andstor/file-existence-action@v1
         with:
@@ -160,6 +161,13 @@ jobs:
         with:
           name: ${{ matrix.browser }}-${{ matrix.os }}-test-results
           path: ${{ matrix.test_results_path }}
+
+      - name: fail if test:e2e didn't succeed
+        if: steps.website_test_e2e.outcome != 'success'
+        uses: actions/github-script@v3
+        with:
+          script: |
+              core.setFailed('e2e tests did not succeed')
   preview:
     name: Preview
     runs-on: ubuntu-latest
