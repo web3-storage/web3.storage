@@ -13,7 +13,6 @@ import {
 import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
-import fetch from '@web-std/fetch'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -439,7 +438,7 @@ const notifySlack = async (
     return
   }
 
-  fetch(webhookUrl, {
+  globalThis.fetch(webhookUrl, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json'
