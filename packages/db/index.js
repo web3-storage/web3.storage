@@ -507,6 +507,7 @@ export class DBClient {
    * @returns {Promise<import('./db-client-types').ListUploadReturn>}
    */
   async listUploads (userId, pageRequest) {
+    const size = pageRequest.size || 25
     let query
     if ('before' in pageRequest) {
       query = this._client
@@ -516,10 +517,10 @@ export class DBClient {
         .is('deleted_at', null)
         .lt('inserted_at', pageRequest.before.toISOString())
         .order('inserted_at', { ascending: false })
-        .range(0, (pageRequest.size || 25) - 1)
+        .range(0, size - 1)
     } else if ('page' in pageRequest) {
-      const rangeFrom = (pageRequest.page - 1) * pageRequest.size
-      const rangeTo = rangeFrom + pageRequest.size
+      const rangeFrom = (pageRequest.page - 1) * size
+      const rangeTo = rangeFrom + size
       const isAscendingSortOrder = pageRequest.sortOrder === 'Asc'
       const defaultSortByColumn = Object.keys(sortableColumnToUploadArgMap)[0]
       const sortByColumn = Object.keys(sortableColumnToUploadArgMap).find(key => sortableColumnToUploadArgMap[key] === pageRequest.sortBy)

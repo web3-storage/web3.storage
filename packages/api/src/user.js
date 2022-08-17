@@ -247,9 +247,10 @@ export async function userUploadsGet (request, env) {
     throw err
   }
 
-  const headers = {
-    Count: data.count,
-    Size: pageRequest.size // Deprecated, use Link header instead.
+  const headers = { Count: data.count }
+
+  if (pageRequest.size != null) {
+    headers.Size = pageRequest.size // Deprecated, use Link header instead.
   }
 
   if (pageRequest.page != null) {

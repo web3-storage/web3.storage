@@ -29,7 +29,7 @@ export function pagination (searchParams) {
   }
 
   if (!searchParams.has('page')) {
-    let before = new Date().toISOString()
+    let before = new Date()
     if (searchParams.has('before')) {
       const parsedBefore = new Date(searchParams.get('before'))
       if (isNaN(parsedBefore.getTime())) {

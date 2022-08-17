@@ -187,7 +187,7 @@ describe('DELETE /user/tokens/:id', () => {
   })
 })
 
-describe('GET /user/uploads', () => {
+describe.only('GET /user/uploads', () => {
   it('lists uploads', async () => {
     const token = await getTestJWT()
     const res = await fetch(new URL('/user/uploads', endpoint).toString(), {
