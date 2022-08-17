@@ -47,6 +47,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
     countly.trackCustomLinkClick(countly.events.LINK_CLICK_EXPLORE_DOCS, e.currentTarget);
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleKeySelect = useCallback(
     (e, url) => {
       onLinkClick(e);
