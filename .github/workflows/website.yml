@@ -12,6 +12,23 @@ on:
       - 'packages/website/**'
       - '.github/workflows/website.yml'
       - 'package-lock.json'
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+      add_playwright_report_to_web3_storage:
+        description: Whether to add add_playwright_report_to_web3_storage to web3.storage (publicly)
+        required: true
+        type: boolean
+        default: false
+
 jobs:
   test:
     name: Test
@@ -84,7 +101,7 @@ jobs:
           files: packages/website/playwright-report
 
       - name: add playwright-report to web3.storage
-        if: steps.check_website_playwright_report.outputs.files_exists == 'true'
+        if: ${{ inputs.add_playwright_report_to_web3_storage }} && steps.check_website_playwright_report.outputs.files_exists == 'true'
         uses: web3-storage/add-to-web3@v2
         id: ipfs
         with:
@@ -93,12 +110,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: log playwright-report on web3.storage cid, url
+        if: ${{ inputs.add_playwright_report_to_web3_storage }} && steps.check_website_playwright_report.outputs.files_exists == 'true'
         run: |
           echo cid: ${{ steps.ipfs.outputs.cid }}
           echo url: https://nftstorage.link/ipfs/${{ steps.ipfs.outputs.cid }}
       - id: create_output_playwright_reporter_url
+        if: ${{ inputs.add_playwright_report_to_web3_storage }} && steps.check_website_playwright_report.outputs.files_exists == 'true'
         run: echo "::set-output name=url::https://nftstorage.link/ipfs/${{ steps.ipfs.outputs.cid }}"
       - id: create_output_playwright_reporter_cid
+        if: ${{ inputs.add_playwright_report_to_web3_storage }} && steps.check_website_playwright_report.outputs.files_exists == 'true'
         run: echo "::set-output name=cid::${{ steps.ipfs.outputs.cid }}"
 
       - name: upload playwright-report artifact
