@@ -104,28 +104,31 @@ jobs:
       - name: add playwright-report to web3.storage
         if: inputs.add_playwright_report_to_web3_storage && steps.check_website_playwright_report.outputs.files_exists == 'true'
         uses: web3-storage/add-to-web3@v2
-        id: ipfs
+        id: add_playwright_report_to_web3_storage
         with:
           path_to_add: packages/website/playwright-report
           web3_token: ${{ secrets.WEB3_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: log playwright-report on web3.storage cid, url
-        if: inputs.add_playwright_report_to_web3_storage && steps.check_website_playwright_report.outputs.files_exists == 'true'
-        run: |
-          echo cid: ${{ steps.ipfs.outputs.cid }}
-          echo url: https://w3.link/ipfs/${{ steps.ipfs.outputs.cid }}
+
       - id: create_output_playwright_reporter_url
         if: inputs.add_playwright_report_to_web3_storage && steps.check_website_playwright_report.outputs.files_exists == 'true'
         run: echo "::set-output name=url::https://w3.link/ipfs/${{ steps.ipfs.outputs.cid }}"
       - id: create_output_playwright_reporter_cid
         if: inputs.add_playwright_report_to_web3_storage && steps.check_website_playwright_report.outputs.files_exists == 'true'
         run: echo "::set-output name=cid::${{ steps.ipfs.outputs.cid }}"
+
+      - name: log playwright-report on web3.storage cid, url
+        if: inputs.add_playwright_report_to_web3_storage && steps.check_website_playwright_report.outputs.files_exists == 'true'
+        run: |
+          echo cid: ${{ steps.create_output_playwright_reporter_cid.outputs.cid }}
+          echo url: ${{ steps.create_output_playwright_reporter_url.outputs.url }}
+
       - name: add url to GITHUB_STEP_SUMMARY
         if: inputs.add_playwright_report_to_web3_storage && steps.check_website_playwright_report.outputs.files_exists == 'true'
         run: |
           cat << EOF >> $GITHUB_STEP_SUMMARY
-          https://w3.link/ipfs/${{ steps.ipfs.outputs.cid }}"
+          ${{ steps.create_output_playwright_reporter_url.outputs.url }}
           EOF
 
       - name: upload playwright-report artifact
