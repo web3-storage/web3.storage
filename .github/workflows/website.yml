@@ -101,6 +101,15 @@ jobs:
         with:
           files: packages/website/playwright-report
 
+      # if playwright-report exists, upload it as artifact
+      - name: upload playwright-report artifact
+        if: steps.check_website_playwright_report.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.browser }}-${{ matrix.os }}-playwright-report
+          path: packages/website/playwright-report
+
+      # add playwright-report to web3.storage
       - name: add playwright-report to web3.storage
         if: ${{ inputs.add_playwright_report_to_web3_storage }} && steps.check_website_playwright_report.outputs.files_exists == 'true'
         uses: web3-storage/add-to-web3@v2
@@ -111,32 +120,34 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - id: create_output_playwright_reporter_url
-        if: ${{ inputs.add_playwright_report_to_web3_storage }} && steps.check_website_playwright_report.outputs.files_exists == 'true'
-        run: echo "::set-output name=url::https://w3.link/ipfs/${{ steps.add_playwright_report_to_web3_storage.outputs.cid }}"
+      # output playwright-report on web3.storage cid
       - id: create_output_playwright_reporter_cid
-        if: ${{ inputs.add_playwright_report_to_web3_storage }} && steps.check_website_playwright_report.outputs.files_exists == 'true'
+        if: steps.add_playwright_report_to_web3_storage.outputs.cid
         run: echo "::set-output name=cid::${{ steps.add_playwright_report_to_web3_storage.outputs.cid }}"
-
-      - name: log playwright-report on web3.storage cid, url
-        if: ${{ inputs.add_playwright_report_to_web3_storage }} && steps.check_website_playwright_report.outputs.files_exists == 'true'
+      # log playwright-report on web3.storage cid
+      - name: log playwright-report on web3.storage cid
+        if: steps.add_playwright_report_to_web3_storage.outputs.cid
         run: |
           echo cid: ${{ steps.create_output_playwright_reporter_cid.outputs.cid }}
+
+      # output playwright-report on web3.storage url
+      - id: create_output_playwright_reporter_url
+        if: steps.add_playwright_report_to_web3_storage.outputs.cid
+        run: echo "::set-output name=url::https://w3.link/ipfs/${{ steps.add_playwright_report_to_web3_storage.outputs.cid }}"
+      # log playwright-report on web3.storage url
+      - name: log playwright-report on web3.storage url
+        if: steps.create_output_playwright_reporter_url.outputs.url
+        run: |
           echo url: ${{ steps.create_output_playwright_reporter_url.outputs.url }}
 
       - name: add url to GITHUB_STEP_SUMMARY
-        if: ${{ inputs.add_playwright_report_to_web3_storage }} && steps.check_website_playwright_report.outputs.files_exists == 'true'
+        if: steps.create_output_playwright_reporter_url.outputs.url
         run: |
           cat << EOF >> $GITHUB_STEP_SUMMARY
           ${{ steps.create_output_playwright_reporter_url.outputs.url }}
           EOF
 
-      - name: upload playwright-report artifact
-        if: steps.check_website_playwright_report.outputs.files_exists == 'true'
-        uses: actions/upload-artifact@v1
-        with:
-          name: ${{ matrix.browser }}-${{ matrix.os }}-playwright-report
-          path: packages/website/playwright-report
+      # if test-results, upload as artifact
       - if: always()
         name: Check for website test results
         id: check_website_test_results
