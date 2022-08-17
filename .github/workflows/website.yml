@@ -146,7 +146,7 @@ jobs:
         if: steps.create_output_playwright_reporter_url.outputs.url
         run: |
           echo "
-          ### playwright-report
+          ### playwright-report-${{ matrix.browser }}-${{ matrix.os }}
 
           * url: ${{ steps.create_output_playwright_reporter_url.outputs.url }}
           * cid: ${{ steps.create_output_playwright_reporter_cid.outputs.cid }}
