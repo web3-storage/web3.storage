@@ -3,17 +3,13 @@
  */
 
 import { useState } from 'react';
-import { CardElement, Elements } from '@stripe/react-stripe-js';
+import { Elements, CardElement, useStripe, useElements, ElementsConsumer } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
 import AccountPlansModal from '../../components/accountPlansModal/accountPlansModal.js';
 import { plans } from '../../components/contexts/plansContext';
 import Button from '../../components/button/button.js';
 import AccountPageData from '../../content/pages/app/account.json';
-
-const stripePromise = loadStripe(
-  'pk_test_51LW5iZIfErzTm2rEq2poZhHidav6vMKnpywbLgfM7YtRpWUO1QyQjyoG4h5nO0wzzoLyqOocDb6h8fFcqw4RItB700OjnutXXx'
-);
 
 const currentPlan = plans.find(p => p.current);
 
@@ -70,9 +66,59 @@ const PaymentHistoryTable = props => {
   );
 };
 
+const CheckoutForm = () => {
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+
+    if (!stripe || !elements) {
+      // Stripe.js has not yet loaded.
+      return;
+    }
+
+    const cardElement = elements.getElement(CardElement);
+    if (cardElement) {
+      const { error, paymentMethod } = await stripe.createPaymentMethod({
+        type: 'card',
+        card: cardElement,
+      });
+      console.log(paymentMethod);
+      if (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  return (
+    <form>
+      <div className="billing-card card-transparent">
+        <CardElement
+          options={{
+            style: {
+              base: {
+                iconColor: '#cebcf4',
+                color: '#fff',
+                '::placeholder': {
+                  color: '#ddd',
+                },
+              },
+            },
+          }}
+        />
+      </div>
+      <Button onClick={handleSubmit} disabled={!stripe}>
+        Add Card
+      </Button>
+    </form>
+  );
+};
+
 const PaymentSettingsPage = props => {
   const { dashboard } = AccountPageData.page_content;
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
+  const stripePromise = loadStripe(props.stripeKey);
 
   return (
     <>
@@ -84,34 +130,26 @@ const PaymentSettingsPage = props => {
               <div>
                 <div className="billing-plan-header">
                   <h4>Your Current Plan</h4>
-                  <Button variant="text" onClick={() => setIsPaymentPlanModalOpen(true)}>
+                  <Button variant="dark" onClick={() => setIsPaymentPlanModalOpen(true)}>
                     Change Plan
                   </Button>
                 </div>
                 <CurrentBillingPlanCard />
+                <small>Billing Cycle: Aug 18 - Sept 18</small>
               </div>
               <div>
                 <h4>Add A Payment Method</h4>
-                <div className="billing-card card-transparent">
-                  <Elements stripe={stripePromise}>
-                    <div className="mb-5">
-                      <CardElement
-                        options={{
-                          style: {
-                            base: {
-                              iconColor: '#cebcf4',
-                              color: '#fff',
-                              '::placeholder': {
-                                color: '#ddd',
-                              },
-                            },
-                          },
-                        }}
+                <Elements stripe={stripePromise}>
+                  <ElementsConsumer>
+                    {({ stripe, elements }) => (
+                      <CheckoutForm
+                        // @ts-ignore
+                        stripe={stripe}
+                        elements={elements}
                       />
-                    </div>
-                  </Elements>
-                </div>
-                <Button>Add Card</Button>
+                    )}
+                  </ElementsConsumer>
+                </Elements>
               </div>
             </div>
 
@@ -128,7 +166,7 @@ const PaymentSettingsPage = props => {
 };
 
 /**
- * @returns {{ props: import('components/types').PageProps}}
+ * @returns {{ props: import('components/types').PageAccountProps}}
  */
 export function getStaticProps() {
   return {
@@ -136,6 +174,7 @@ export function getStaticProps() {
       title: AccountPageData.seo.title,
       isRestricted: true,
       redirectTo: '/login/',
+      stripeKey: process.env.STRIPE_TEST_PK,
     },
   };
 }
