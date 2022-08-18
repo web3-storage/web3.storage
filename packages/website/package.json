@@ -15,7 +15,7 @@
     "lint": "npm run lint:ts && npm run lint:es",
     "lint:fix": "npm run lint:es:fix",
     "lint:ts": "tsc --noEmit",
-    "lint:es": "eslint '{pages,components,hooks,content,store,lib}/**/*.{js,ts,tsx}' --max-warnings=0",
+    "lint:es": "eslint --max-warnings=0",
     "lint:es:fix": "npm run lint:es -- --fix",
     "lint-staged": "lint-staged",
     "storybook": "start-storybook -p 9000",
