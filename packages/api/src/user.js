@@ -439,9 +439,8 @@ const notifySlack = async (
  * @param {import('./env').Env} env
  */
 export async function userPaymentGet (request, env) {
-  console.log('userPaymentGet', {
-    authorizationHeader: request.headers.get('authorization')
-  })
-  const userPaymentGetResponse = { working: true }
+  const userPaymentGetResponse = {
+    method: null
+  }
   return new JSONResponse(userPaymentGetResponse)
 }
