@@ -84,11 +84,12 @@ const PaymentSettingsPage = props => {
               <div>
                 <div className="billing-plan-header">
                   <h4>Your Current Plan</h4>
-                  <Button variant="text" onClick={() => setIsPaymentPlanModalOpen(true)}>
+                  <Button variant="dark" onClick={() => setIsPaymentPlanModalOpen(true)}>
                     Change Plan
                   </Button>
                 </div>
                 <CurrentBillingPlanCard />
+                <small>Billing Cycle: Aug 18 - Sept 18</small>
               </div>
               <div>
                 <h4>Add A Payment Method</h4>
