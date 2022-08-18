@@ -1,20 +1,6 @@
-const symbol = Symbol.for('AuthorizationTestContext')
+import * as magic from '../../src/magic.link.js'
 
-export const createMagicTestTokenHack = (
-  requiredVariableName,
-  requiredTokenValue
-) => {
-  return {
-    requiredVariableName,
-    requiredTokenValue,
-    summary: [
-      'This is a hack for testing our APIs even though most of them require a valid magic token.',
-      'When testing, we\'ll use a special-use token.',
-      'And our token-validating middleware will allow that token,',
-      `but *only* when env.${requiredVariableName} is truthy.`
-    ].join(' ')
-  }
-}
+const symbol = Symbol.for('AuthorizationTestContext')
 
 export class AuthorizationTestContext {
   static install (testContext, constructorArgs = []) {
@@ -30,18 +16,15 @@ export class AuthorizationTestContext {
   }
 
   constructor (
-    magicBypassHack = createMagicTestTokenHack(
-      'DANGEROUSLY_BYPASS_MAGIC_AUTH',
-      'test-magic'
-    )
+    bypass = magic.magicLinkBypass
   ) {
-    this.magicBypassHack = magicBypassHack
+    this.bypass = bypass
   }
 
   /**
    * Create a bearer token that can be used by tests that require one to test something behind basic is-user checks
    */
   createUserToken () {
-    return this.magicBypassHack.requiredTokenValue
+    return this.bypass.requiredTokenValue
   }
 }
