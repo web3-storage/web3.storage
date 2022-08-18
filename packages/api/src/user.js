@@ -429,3 +429,19 @@ const notifySlack = async (
     })
   })
 }
+
+/**
+ * List a user's pins regardless of the token used.
+ * As we don't want to scope the Pinning Service API to users
+ * we need a new endpoint as an umbrella.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userPaymentGet (request, env) {
+  console.log('userPaymentGet', {
+    authorizationHeader: request.headers.get('authorization')
+  })
+  const userPaymentGetResponse = { working: true }
+  return new JSONResponse(userPaymentGetResponse)
+}
