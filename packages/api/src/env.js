@@ -7,6 +7,7 @@ import { Cluster } from '@nftstorage/ipfs-cluster'
 import { DEFAULT_MODE } from './maintenance.js'
 import { Logging } from './utils/logs.js'
 import pkg from '../package.json'
+import { defaultBypassMagicLinkVariableName } from './magic.link.js'
 
 /**
  * @typedef {object} Env
@@ -117,9 +118,9 @@ export function envAll (req, env, ctx) {
   env.magic = new Magic(env.MAGIC_SECRET_KEY)
 
   // We can remove this when magic admin sdk supports test mode
-  if (new URL(req.url).origin === 'http://testing.web3.storage' && env.DANGEROUSLY_BYPASS_MAGIC_AUTH !== 'undefined') {
+  if (new URL(req.url).origin === 'http://testing.web3.storage' && env[defaultBypassMagicLinkVariableName] !== 'undefined') {
     // only set this in test/scripts/worker-globals.js
-    console.log(`!!! DANGEROUSLY_BYPASS_MAGIC_AUTH=${env.DANGEROUSLY_BYPASS_MAGIC_AUTH} !!!`)
+    console.log(`!!! ${defaultBypassMagicLinkVariableName}=${env[defaultBypassMagicLinkVariableName]} !!!`)
   }
 
   env.db = new DBClient({
