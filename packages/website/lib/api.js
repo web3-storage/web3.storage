@@ -178,7 +178,7 @@ export async function getUploads({ size, before, sortBy, sortOrder }) {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + (await getToken()),
     },
-  })
+  });
 
   if (!res.ok) {
     throw new Error(`failed to get uploads: ${await res.text()}`);
@@ -260,10 +260,10 @@ export async function listPins(status, token) {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token, // **** this needs to be a token generated from the tokens context
     },
-  })
+  });
   if (!res.ok) {
-    throw new Error(`failed to get pinned files: ${await res.text()}`)
+    throw new Error(`failed to get pinned files: ${await res.text()}`);
   }
 
-  return res.json()
+  return res.json();
 }

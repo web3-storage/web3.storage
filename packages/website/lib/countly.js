@@ -1,12 +1,12 @@
-import { useEffect } from 'react'
-import countly from 'countly-sdk-web'
-import Router from 'next/router'
-
+/* eslint-disable */
+import { useEffect } from 'react';
+import countly from 'countly-sdk-web';
+import Router from 'next/router';
 
 const config = {
   key: process.env.NEXT_PUBLIC_COUNTLY_KEY,
-  url: process.env.NEXT_PUBLIC_COUNTLY_URL
-}
+  url: process.env.NEXT_PUBLIC_COUNTLY_URL,
+};
 
 /** @constant */
 export const events = {
@@ -29,7 +29,7 @@ export const events = {
   FEEDBACK_HELPFUL: 'feedbackHelpful',
   FEEDBACK_IMPORTANT: 'feedbackImportant',
   FEEDBACK_GENERAL: 'feedbackGeneral',
-}
+};
 
 /** @constant */
 export const ui = {
@@ -44,110 +44,110 @@ export const ui = {
   TOKENS_EMPTY: 'tokens/empty',
   PROFILE_GETTING_STARTED: 'profile/getting-started',
   PROFILE_API_TOKENS: 'profile/api-tokens',
-}
+};
 
 /**
  * Initialize countly analytics object
  */
-export function init () {
+export function init() {
   if (typeof window === 'undefined') {
-      return
+    return;
   }
-  
+
   if (ready) {
-    return
+    return;
   }
-  
+
   if (!config.key || !config.url) {
-    console.warn('[lib/countly]', 'Countly config not found.')
+    console.warn('[lib/countly]', 'Countly config not found.');
 
-    return
+    return;
   }
-  
-  countly.init({ app_key: config.key, url: config.url, debug: false })
-  
-  countly.track_sessions()
-  countly.track_pageview()
-  countly.track_clicks()
-  countly.track_links()
-  countly.track_scrolls()
 
-  ready = true
+  countly.init({ app_key: config.key, url: config.url, debug: false });
+
+  countly.track_sessions();
+  countly.track_pageview();
+  countly.track_clicks();
+  countly.track_links();
+  countly.track_scrolls();
+
+  ready = true;
 
   // Track other not-so-easy to access links
   // NFT.Storage Banner link
-  document.querySelector('div > a[href*="https://nft.storage"]')?.addEventListener('click', (event) => {
-    const target = /** @type {HTMLLinkElement} **/ (event?.currentTarget)
-    
+  document.querySelector('div > a[href*="https://nft.storage"]')?.addEventListener('click', event => {
+    const target = /** @type {HTMLLinkElement} **/ (event?.currentTarget);
+
     trackEvent(events.LINK_CLICK_BANNER_NFTSTORAGE, {
       link: target?.href,
       text: target?.innerText,
-    })
-  })
+    });
+  });
 }
 
 /**
  * Track an event to countly with custom data
  *
- * @param {string} event Event name to be sent to countly. 
+ * @param {string} event Event name to be sent to countly.
  * @param {Object} [segmentation] Custom data object to be used as segmentation data in countly.
-*/
-export function trackEvent (event, segmentation = {}) {
+ */
+export function trackEvent(event, segmentation = {}) {
   if (!ready) {
-    init()
+    init();
   }
 
-  ready && countly.add_event({
-    key: event,
-    segmentation: {
-      path: location.pathname,
-      ...segmentation,
-    }
-  })
+  ready &&
+    countly.add_event({
+      key: event,
+      segmentation: {
+        path: location.pathname,
+        ...segmentation,
+      },
+    });
 }
 
 /**
  * Track page view to countly.
- * 
+ *
  * @param {string} [path] Page route to track. Defaults to window.location.pathname if not provided.
-*/
-export function trackPageView (path) {
+ */
+export function trackPageView(path) {
   if (!ready) {
-    init()
+    init();
   }
 
-  ready && countly.track_pageview(path)
+  ready && countly.track_pageview(path);
 }
 
 /**
  * Track custom link click.
- * 
- * @param {string} event Event name to be sent to countly. 
+ *
+ * @param {string} event Event name to be sent to countly.
  * @param {HTMLLinkElement} target DOM element target of the clicked link.
-*/
-export function trackCustomLinkClick (event, target) {
+ */
+export function trackCustomLinkClick(event, target) {
   if (!ready) {
-    init()
+    init();
   }
 
-  ready && trackEvent(event, {
-    link: target.href.includes(location.origin) ?
-      new URL(target.href).pathname :
-      target.href,
-    text: target.innerText
-  })
+  ready &&
+    trackEvent(event, {
+      link: target.href.includes(location.origin) ? new URL(target.href).pathname : target.href,
+      text: target.innerText,
+    });
 }
 
-export function useCountly () {
+export function useCountly() {
   useEffect(() => {
-    init()
-    Router.events.on('routeChangeComplete', (route) => {
-      trackPageView(route)
-    })
-  }, [])
+    init();
+    Router.events.on('routeChangeComplete', route => {
+      trackPageView(route);
+    });
+  }, []);
 }
 
-export let ready = false
+export let ready = false;
 
 export default {
   events,
@@ -156,5 +156,5 @@ export default {
   trackEvent,
   trackPageView,
   trackCustomLinkClick,
-  ready
-}
+  ready,
+};
