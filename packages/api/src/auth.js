@@ -11,6 +11,7 @@ import {
   UserNotFoundError
 } from './errors.js'
 import { USER_TAGS } from './constants.js'
+import { magicLinkBypass } from './magic.link.js'
 import { magicTestModeFromEnv } from './utils/env.js'
 
 /**
@@ -144,7 +145,7 @@ export function withPinningAuthorized (handler) {
  * @throws UserNotFoundError
  * @returns {Promise<import('@web3-storage/db/db-client-types').UserOutput> | null }
  */
-async function tryMagicToken (token, env) {
+async function tryMagicToken (token, env, bypass = magicLinkBypass) {
   let issuer = null
   let tokenWasValidated = false
   const isMagicTestMode = magicTestModeFromEnv(env)
@@ -162,7 +163,7 @@ async function tryMagicToken (token, env) {
     }
   }
   const isAllowedTest = (env, token) => {
-    return Boolean(env.DANGEROUSLY_BYPASS_MAGIC_AUTH && token === 'test-magic')
+    return (env[bypass.requiredVariableName] && token === bypass.requiredTokenValue)
   }
   if (requiresTokenValidation && !tokenWasValidated && !isAllowedTest(env, token)) {
     return null
@@ -175,7 +176,7 @@ async function tryMagicToken (token, env) {
     // see: https://magic.link/docs/introduction/test-mode#coming-soon
     if (isAllowedTest(env, token)) {
       console.log(`!!! tryMagicToken bypassed with test token "${token}" !!!`)
-      issuer = 'test-magic-issuer'
+      issuer = bypass.defaults.issuer
     } else {
       // not a magic token, give up.
       return null

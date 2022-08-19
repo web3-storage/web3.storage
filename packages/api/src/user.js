@@ -471,3 +471,16 @@ const notifySlack = async (
     })
   })
 }
+
+/**
+ * Get a user's payment settings.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userPaymentGet (request, env) {
+  const userPaymentGetResponse = {
+    method: null
+  }
+  return new JSONResponse(userPaymentGetResponse)
+}
