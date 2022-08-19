@@ -4,14 +4,14 @@ on:
     branches:
       - main
     paths:
-      - 'packages/website/**'
-      - '.github/workflows/website.yml'
-      - 'package-lock.json'
+      - "packages/website/**"
+      - ".github/workflows/website.yml"
+      - "package-lock.json"
   pull_request:
     paths:
-      - 'packages/website/**'
-      - '.github/workflows/website.yml'
-      - 'package-lock.json'
+      - "packages/website/**"
+      - ".github/workflows/website.yml"
+      - "package-lock.json"
 jobs:
   test:
     name: Test
@@ -75,6 +75,8 @@ jobs:
   preview:
     name: Preview
     runs-on: ubuntu-latest
+    outputs:
+      previewurl: ${{ steps.cloudflare_url.outputs.stdout }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -137,6 +139,20 @@ jobs:
 
             [build log](/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
 
+  lighthouseci:
+    needs: preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lighthouse
+        uses: treosh/lighthouse-ci-action@v9
+        with:
+          urls: |
+            ${{ needs.preview.outputs.previewurl }}
+          budgetPath: ./budget.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Changelog
@@ -167,7 +183,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: "16"
           registry-url: https://registry.npmjs.org/
       - uses: bahmutov/npm-install@v1
       - run: npm run build -w packages/client

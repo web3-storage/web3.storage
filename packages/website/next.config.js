@@ -9,6 +9,10 @@ const nextra = require('nextra');
 
 const docsPages = require('./pages/docs/nav.json');
 
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+const withPlugins = require('next-compose-plugins');
 const withNextra = nextra('./modules/docs-theme/index.js');
 
 const nextConfig = {
@@ -62,4 +66,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withNextra({ ...nextConfig });
+module.exports = withPlugins([withNextra, withBundleAnalyzer], nextConfig);
