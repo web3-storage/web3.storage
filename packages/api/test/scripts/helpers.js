@@ -11,6 +11,7 @@ import { SALT } from './worker-globals.js'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
 import { DBClient } from '@web3-storage/db'
+import { magicLinkBypass } from '../../src/magic.link.js'
 
 const libp2pKeyCode = 0x72
 const lifetime = 1000 * 60 * 60
@@ -52,7 +53,7 @@ export async function updateNameRecord (privKey, existingRecord, newValue) {
   return ipns.marshal(newEntry)
 }
 
-export function getTestJWT (sub = 'test-magic-issuer', name = 'test-magic-issuer') {
+export function getTestJWT (sub = magicLinkBypass.defaults.issuer, name = magicLinkBypass.defaults.issuer) {
   return JWT.sign({ sub, iss: JWT_ISSUER, iat: 1633957389872, name }, SALT)
 }
 /**
