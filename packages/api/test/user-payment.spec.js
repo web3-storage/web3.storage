@@ -31,7 +31,7 @@ function createUserPaymentRequest (arg) {
 describe('GET /user/payment', () => {
   it('error if no auth header', async () => {
     const res = await fetch(createUserPaymentRequest())
-    assert(!res.ok)
+    assert(!res.ok, 'response is not ok without proof of authorization')
   })
   it('error if bad auth header', async () => {
     const createRandomString = () => Math.random().toString().slice(2)
