@@ -26,5 +26,6 @@ export function maybeJsonParseable (value) {
  * @returns {boolean} whether magic.link testMode should be enabled
  */
 export function magicTestModeIsEnabledFromEnv (env, varName = 'NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED') {
-  return Boolean(maybeJsonParseable(env[varName]))
+  const envValue = env[varName]
+  return Boolean(maybeJsonParseable(envValue))
 }

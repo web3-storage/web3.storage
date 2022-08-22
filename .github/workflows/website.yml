@@ -108,6 +108,7 @@ jobs:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
           NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: "true"
+          API_MINIFLARE_FLAGS: '--binding NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED=$NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED --binding MAGIC_SECRET_KEY=$MAGIC_SECRET_KEY --binding NEXT_PUBLIC_MAGIC=$NEXT_PUBLIC_MAGIC'
       - name: Check for website playwright-report
         id: check_website_playwright_report
         uses: andstor/file-existence-action@v1
