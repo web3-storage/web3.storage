@@ -11,8 +11,7 @@ import {
   UserNotFoundError
 } from './errors.js'
 import { USER_TAGS } from './constants.js'
-import { magicLinkBypass } from './magic.link.js'
-import { magicTestModeFromEnv as magicTestModeEnabledFromEnv } from './utils/env.js'
+import { magicLinkBypassForUnitTestingWithTestToken, magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
 
 /**
  * Middleware: verify the request is authenticated with a valid magic link token.
@@ -139,31 +138,6 @@ export function withPinningAuthorized (handler) {
   }
 }
 
-function isDangerouslyAllowedToken (env, token, dangerousBypass) {
-  return (env[dangerousBypass.requiredVariableName] && token === dangerousBypass.requiredTokenValue)
-}
-
-function isMagicTestModeToken (token) {
-  const parsed = JSON.parse(globalThis.atob(token))
-  if (parsed.length !== 2) {
-    // unexpeced parse
-    return false
-  }
-  const claims = JSON.parse(parsed[1])
-  const isTestModeSub = (claims) => claims.sub === 'TEST_MODE_USER_ID'
-  const isTestModeAud = (claims) => claims.aud === 'TEST_MODE_CLIENT_ID'
-  const isTestModeToken = [isTestModeAud(claims), isTestModeSub(claims)].every(Boolean)
-  return isTestModeToken
-}
-
-function isDangerouslyAllowedMagicTestmodeToken (env, token) {
-  if (!magicTestModeEnabledFromEnv(env)) {
-    // magic testMode isn't enabled, so it can't be an allowed testMode token
-    return false
-  }
-  return isMagicTestModeToken(token)
-}
-
 /**
  * Given an api token, try to parse it and determine the issuer of the token.
  * Allowed tokens:
@@ -174,26 +148,27 @@ function isDangerouslyAllowedMagicTestmodeToken (env, token) {
  *   These are allowed based on param dangerousAuthBypassForTesting. The issuer comes from dangerousAuthBypassForTesting.defaults.issuer
  * @param {Record<string,string>} - e.g. env variables to load configuration from
  * @param {string} token - api token sent in a request
- * @param {AuthBypass} dangerousAuthBypassForTesting - configures how to handle testing tokens
+ * @param dangerousAuthBypassForUnitTesting - configures how to handle unit testing tokens
+ * @param dangerousAuthBypassForE2eTesting - configures how to handle authenticating e2e test tokens
  * @returns {null | {issuer: string}} information about the api token
  */
-function authenticateMagicToken (env, token, dangerousAuthBypassForTesting) {
-  let tokenWasValidated = false
-  // check if this is a special case allowed token (e.g. used when unit testing api)
-  if (isDangerouslyAllowedToken(env, token, dangerousAuthBypassForTesting)) {
-    return dangerousAuthBypassForTesting.defaults
+function authenticateMagicToken (
+  env, token,
+  dangerousAuthBypassForUnitTesting = magicLinkBypassForUnitTestingWithTestToken,
+  dangerousAuthBypassForE2eTesting = magicLinkBypassForE2ETestingInTestmode
+) {
+  // handle if the token is allowed based on the e2e testing bypass
+  if (dangerousAuthBypassForE2eTesting.isEnabledForToken(env, token)) {
+    return dangerousAuthBypassForE2eTesting.authenticateMagicToken(env, token)
   }
-  const tokenRequiresValidation = !isDangerouslyAllowedMagicTestmodeToken(env, token)
-  if (tokenRequiresValidation) {
-    try {
-      env.magic.token.validate(token)
-      tokenWasValidated = true
-    } catch (error) {
-      console.warn('error validating magic token: ', error.name, error.message)
-    }
+  // handle if this is a special case allowed token (e.g. used when unit testing api)
+  if (dangerousAuthBypassForUnitTesting.isAllowedToken(env, token)) {
+    return dangerousAuthBypassForUnitTesting.defaults
   }
-  // invalid tokens return a null issuer
-  if (tokenRequiresValidation && !tokenWasValidated) {
+  try {
+    env.magic.token.validate(token)
+  } catch (error) {
+    console.warn('error validating magic token: ', error.name, error.message)
     return null
   }
   // token is magic token and doesn't require further validation
@@ -210,12 +185,11 @@ function authenticateMagicToken (env, token, dangerousAuthBypassForTesting) {
 /**
  * @param {string} token
  * @param {import('./env').Env} env
- * @param {AuthBypass} [dangerousAuthBypassForTesting] - configures how to handle testing tokens
  * @throws UserNotFoundError
  * @returns {Promise<import('@web3-storage/db/db-client-types').UserOutput> | null }
  */
-async function tryMagicToken (token, env, dangerousAuthBypassForTesting = magicLinkBypass) {
-  const { issuer } = authenticateMagicToken(env, token, dangerousAuthBypassForTesting)
+async function tryMagicToken (token, env) {
+  const { issuer } = authenticateMagicToken(env, token)
   const user = await findUserByIssuer(issuer, env)
   if (!user) {
     // we have a magic token, but no user for them!
