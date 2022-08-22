@@ -2,7 +2,6 @@ import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
 import { HTTPError } from './errors.js'
-import { magicTestModeIsEnabledFromEnv } from './utils/env.js'
 import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
 import {
   NO_READ_OR_WRITE,
@@ -36,13 +35,13 @@ export async function userLoginPost (request, env) {
  * Controller for logging in using a magic.link token
  * @param {Magic} magic - magic sdk instance
  */
-function createMagicLoginController (env, testModeBypass=magicLinkBypassForE2ETestingInTestmode) {
+function createMagicLoginController (env, testModeBypass = magicLinkBypassForE2ETestingInTestmode) {
   const createTestmodeMetadata = (token) => {
     const { issuer } = testModeBypass.authenticateMagicToken(env, token)
     return {
       issuer,
       email: 'testMode@magic.link',
-      publicAddress: issuer,
+      publicAddress: issuer
     }
   }
   /**
