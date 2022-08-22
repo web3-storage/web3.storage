@@ -47,7 +47,9 @@ function createMagicTestmodeBypasss () {
     },
     authenticateMagicToken (env, token) {
       const [, magicClaims] = env.magic.token.decode(token)
-      return magicClaims
+      return {
+        issuer: magicClaims.iss
+      }
     }
   }
 }

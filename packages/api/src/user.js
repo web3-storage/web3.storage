@@ -13,6 +13,7 @@ import {
 import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
+import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -35,19 +36,14 @@ export async function userLoginPost (request, env) {
  * Controller for logging in using a magic.link token
  * @param {Magic} magic - magic sdk instance
  */
-function createMagicLoginController (magic, testModeAllowed = false) {
+function createMagicLoginController (env, testModeBypass=magicLinkBypassForE2ETestingInTestmode) {
   const createTestmodeMetadata = (token) => {
-    const [, claim] = magic.token.decode(token)
+    const { issuer } = testModeBypass.authenticateMagicToken(env, token)
     return {
-      issuer: claim.iss,
+      issuer,
       email: 'testMode@magic.link',
-      publicAddress: claim.iss
+      publicAddress: issuer,
     }
-  }
-  // These tokens are sometimes used when testing, but they won't work with `magic.token.validate(token)`
-  // This funtion returns true if the error that comes from validate(token) is because the token was a testMode token
-  const isAllowedValidateError = (error) => {
-    return testModeAllowed && (error.code === 'ERROR_INCORRECT_SIGNER_ADDR')
   }
   /**
    * authenticate an incoming request that has a magic.link token.
@@ -55,19 +51,11 @@ function createMagicLoginController (magic, testModeAllowed = false) {
    * @returns {Promise} metadata about the validated token
    */
   const authenticate = async ({ token }) => {
-    let isTestmodeToken = false
-    try {
-      magic.token.validate(token)
-    } catch (error) {
-      if (!isAllowedValidateError(error)) {
-        throw error
-      }
-      isTestmodeToken = true
-    }
-    if (isTestmodeToken) {
+    if (testModeBypass.isEnabledForToken(env, token)) {
       return createTestmodeMetadata(token)
     }
-    return magic.users.getMetadataByToken(token)
+    await env.magic.token.validate(token)
+    return env.magic.users.getMetadataByToken(token)
   }
   return {
     authenticate
@@ -83,7 +71,7 @@ async function loginOrRegister (request, env) {
   const auth = request.headers.get('Authorization') || ''
 
   const token = env.magic.utils.parseAuthorizationHeader(auth)
-  const metadata = await (createMagicLoginController(env.magic, magicTestModeIsEnabledFromEnv(env)).authenticate({ token }))
+  const metadata = await (createMagicLoginController(env).authenticate({ token }))
   const { issuer, email, publicAddress } = metadata
   if (!issuer || !email || !publicAddress) {
     throw new Error('missing required metadata')
