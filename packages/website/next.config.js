@@ -2,6 +2,8 @@ const path = require('path');
 const fs = require('fs');
 const git = require('git-rev-sync');
 const { GitRevisionPlugin } = require('git-revision-webpack-plugin');
+const withCss = require('@zeit/next-css');
+const withPurgeCss = require('next-purgecss');
 
 const gitRevisionPlugin = new GitRevisionPlugin();
 const dirName = path.resolve(__dirname);
@@ -66,4 +68,17 @@ const nextConfig = {
   },
 };
 
-module.exports = withPlugins([withNextra, withBundleAnalyzer], nextConfig);
+module.exports = withPlugins(
+  [
+    [
+      withPurgeCss,
+      {
+        purgeCssPaths: ['pages/**/*', 'components/**/*', 'modules/**/*'],
+        purgeCssEnabled: ({ dev, isServer }) => !dev && !isServer,
+      },
+    ],
+    withNextra,
+    withBundleAnalyzer,
+  ],
+  nextConfig
+);
