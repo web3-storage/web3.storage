@@ -6,6 +6,7 @@ import execa from 'execa'
 import delay from 'delay'
 import { webcrypto } from 'crypto'
 import * as workerGlobals from './scripts/worker-globals.js'
+import { AuthorizationTestContext } from './contexts/authorization.js'
 
 global.crypto = webcrypto
 
@@ -29,6 +30,7 @@ export const mochaHooks = () => {
   return {
     async beforeAll () {
       this.timeout(120_000)
+      AuthorizationTestContext.install(this)
 
       console.log('⚡️ Starting Miniflare')
       srv = await new Miniflare({

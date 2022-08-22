@@ -47,14 +47,6 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
     countly.trackCustomLinkClick(countly.events.LINK_CLICK_EXPLORE_DOCS, e.currentTarget);
   }, []);
 
-  const handleKeySelect = useCallback(
-    (e, url) => {
-      onLinkClick(e);
-      router.push(url);
-    },
-    [router, onLinkClick]
-  );
-
   const handleButtonClick = useCallback(
     cta => {
       if (cta.url) {

@@ -1,6 +1,5 @@
 # Specific to .eslintignore
 # Don't lint files we do not commit: Below are same as .gitignore
-lib
 
 # dependencies
 /node_modules

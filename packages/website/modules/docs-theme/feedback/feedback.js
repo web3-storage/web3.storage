@@ -6,7 +6,6 @@ import { trackEvent, events } from '../../../lib/countly';
 function Feedback({ strings: { title, yes, no, thanks, helpUsImprove } }) {
   const router = useRouter();
   const [voteSubmitted, setVoteSubmitted] = useState(false);
-  const lastUpdatedAt = process.env.NEXT_PUBLIC_DEPLOYDATE;
   const ISSUE_URL = 'https://github.com/web3-storage/web3.storage/issues/new/choose';
   const SUGGEST_CONTENT_URL = 'https://github.com/web3-storage/web3.storage/issues';
   const editUrl = `https://github.com/web3-storage/web3.storage/tree/main/packages/website/pages${router.pathname}.md`;
@@ -53,7 +52,6 @@ function Feedback({ strings: { title, yes, no, thanks, helpUsImprove } }) {
             Suggest new content
           </a>
         </div>
-        {lastUpdatedAt && <div className="last-updated">Last updated on {lastUpdatedAt}</div>}
       </div>
     </div>
   );
