@@ -68,20 +68,6 @@ jobs:
       - uses: bahmutov/npm-install@v1
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-      - name: add magic config to .env
-        # writing to this file is only way of making them available to `api`
-        run: |
-          (
-            npm -w '@web3-storage/website' run ci:envfile --silent \
-            | sed "s/^NEXT_PUBLIC_MAGIC=$/NEXT_PUBLIC_MAGIC=$NEXT_PUBLIC_MAGIC/" \
-            | sed "s/^MAGIC_SECRET_KEY=$/MAGIC_SECRET_KEY=$MAGIC_SECRET_KEY/" \
-            ;
-            echo 'NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED="1"';
-          ) > .env
-        env:
-          NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
-          MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
-          NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: "true"
       - name: load db schema
         run: |
           npm run start -w packages/db
