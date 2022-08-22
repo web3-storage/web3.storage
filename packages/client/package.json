@@ -40,7 +40,6 @@
     "cborg": "^1.8.0",
     "files-from-path": "^0.2.4",
     "ipfs-car": "^0.7.0",
-    "ipns": "^0.16.0",
     "libp2p-crypto": "^0.21.0",
     "p-retry": "^4.5.0",
     "streaming-iterables": "^6.2.0",
