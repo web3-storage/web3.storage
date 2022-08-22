@@ -81,12 +81,20 @@ jobs:
         env:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
+          NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: "true"
       - name: load db schema
         run: |
           npm run start -w packages/db
           npm run load-schema -w packages/db
           npm run stop -w packages/db
+        env:
+          NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
+          MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
       - run: node -r dotenv/config $(which npm) run build -w packages/website
+        env:
+          NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
+          MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
+          NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: "true"
       - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
         working-directory: packages/website
       
@@ -96,7 +104,9 @@ jobs:
         run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- node -r dotenv/config $(which npm) run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }} --reporter=html
         env:
           PLAYWRIGHT_TIMEOUT: 120000
-
+          NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
+          MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
+          NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: "true"
       - name: Check for website playwright-report
         id: check_website_playwright_report
         uses: andstor/file-existence-action@v1
