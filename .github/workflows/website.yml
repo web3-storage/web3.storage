@@ -78,14 +78,7 @@ jobs:
           npm run start -w packages/db
           npm run load-schema -w packages/db
           npm run stop -w packages/db
-        env:
-          NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
-          MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
       - run: node -r dotenv/config $(which npm) run build -w packages/website
-        env:
-          NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
-          MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
-          NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: "true"
       - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
         working-directory: packages/website
       
