@@ -28,7 +28,6 @@ export function withMagicToken (handler) {
    */
   return async (request, env, ctx) => {
     const token = getTokenFromRequest(request, env)
-
     const magicUser = await tryMagicToken(token, env)
     if (magicUser) {
       const userTags = await getUserTags(magicUser._id, env)
@@ -57,7 +56,6 @@ export function withApiOrMagicToken (handler) {
    */
   return async (request, env, ctx) => {
     const token = getTokenFromRequest(request, env)
-
     const magicUser = await tryMagicToken(token, env)
     if (magicUser) {
       const userTags = await getUserTags(magicUser._id, env)
@@ -165,6 +163,13 @@ function authenticateMagicToken (
   if (dangerousAuthBypassForUnitTesting.isAllowedToken(env, token)) {
     return dangerousAuthBypassForUnitTesting.defaults
   }
+  let decodedToken = null
+  try {
+    decodedToken = env.magic.token.decode(token)
+  } catch (error) {
+    console.warn('error decoding magic token', error.name, error.message)
+    return null
+  }
   try {
     env.magic.token.validate(token)
   } catch (error) {
@@ -173,10 +178,10 @@ function authenticateMagicToken (
   }
   // token is magic token and doesn't require further validation
   try {
-    const [, magicClaims] = env.magic.token.decode(token)
+    const [, magicClaims] = decodedToken
     return magicClaims
   } catch (error) {
-    console.warn('error decoding magic token', error.name, error.message)
+    console.warn('error parsing decoded magic token', error.name, error.message)
   }
   // no info could be determined from token
   return null
@@ -189,8 +194,11 @@ function authenticateMagicToken (
  * @returns {Promise<import('@web3-storage/db/db-client-types').UserOutput> | null }
  */
 async function tryMagicToken (token, env) {
-  const { issuer } = authenticateMagicToken(env, token)
-  const user = await findUserByIssuer(issuer, env)
+  const authenticatedToken = await authenticateMagicToken(env, token)
+  if (!authenticatedToken?.issuer) {
+    return null
+  }
+  const user = await findUserByIssuer(authenticatedToken.issuer, env)
   if (!user) {
     // we have a magic token, but no user for them!
     throw new UserNotFoundError()

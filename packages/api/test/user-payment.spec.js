@@ -39,11 +39,12 @@ describe('GET /user/payment', () => {
     const res = await fetch(createUserPaymentRequest({ authorization }))
     assert(!res.ok)
   })
-  it('retrieves user account data', async function () {
+  it('retrieves user payment settings', async function () {
     const token = AuthorizationTestContext.use(this).createUserToken()
     const authorization = createBearerAuthorization(token)
     const res = await fetch(createUserPaymentRequest({ authorization }))
-    assert(res.ok)
+    assert.equal(res.status, 200, 'response.status is 200')
+    assert(res.ok, 'response status is ok')
     const userPaymentSettings = await res.json()
     assert.equal(typeof userPaymentSettings, 'object')
     assert.ok(!userPaymentSettings.method, 'userPaymentSettings.method is falsy')
