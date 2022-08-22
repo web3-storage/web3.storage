@@ -1,4 +1,4 @@
-import { magicTestModeFromEnv, maybeJsonParseable } from './utils/env'
+import { magicTestModeIsEnabledFromEnv, maybeJsonParseable } from './utils/env.js'
 
 export const createMagicTestTokenBypass = (
   requiredVariableName,
@@ -39,7 +39,7 @@ export const magicLinkBypassForUnitTestingWithTestToken = createMagicTestTokenBy
 function createMagicTestmodeBypasss () {
   return {
     isEnabledForToken (env, token) {
-      if (!magicTestModeFromEnv(env)) {
+      if (!magicTestModeIsEnabledFromEnv(env)) {
         // magic testMode isn't enabled, so it can't be an allowed testMode token
         return false
       }

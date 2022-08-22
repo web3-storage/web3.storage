@@ -2,7 +2,7 @@ import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
 import { HTTPError } from './errors.js'
-import { magicTestModeFromEnv } from './utils/env.js'
+import { magicTestModeIsEnabledFromEnv } from './utils/env.js'
 import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
 import {
   NO_READ_OR_WRITE,
@@ -83,7 +83,7 @@ async function loginOrRegister (request, env) {
   const auth = request.headers.get('Authorization') || ''
 
   const token = env.magic.utils.parseAuthorizationHeader(auth)
-  const metadata = await (createMagicLoginController(env.magic, magicTestModeFromEnv(env)).authenticate({ token }))
+  const metadata = await (createMagicLoginController(env.magic, magicTestModeIsEnabledFromEnv(env)).authenticate({ token }))
   const { issuer, email, publicAddress } = metadata
   if (!issuer || !email || !publicAddress) {
     throw new Error('missing required metadata')

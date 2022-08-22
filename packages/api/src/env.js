@@ -7,7 +7,7 @@ import { Cluster } from '@nftstorage/ipfs-cluster'
 import { DEFAULT_MODE } from './maintenance.js'
 import { Logging } from './utils/logs.js'
 import pkg from '../package.json'
-import { magicTestModeFromEnv } from './utils/env.js'
+import { magicTestModeIsEnabledFromEnv } from './utils/env.js'
 import { defaultBypassMagicLinkVariableName } from './magic.link.js'
 
 /**
@@ -117,7 +117,7 @@ export function envAll (req, env, ctx) {
   })
 
   env.magic = new Magic(env.MAGIC_SECRET_KEY, {
-    testMode: magicTestModeFromEnv(env)
+    testMode: magicTestModeIsEnabledFromEnv(env)
   })
 
   // We can remove this when magic admin sdk supports test mode

@@ -1,10 +1,10 @@
 /* eslint-env mocha */
 import assertModule from 'assert'
-import { magicTestModeFromEnv } from '../src/utils/env.js'
+import { magicTestModeIsEnabledFromEnv } from '../src/utils/env.js'
 
 describe('env utils', () => {
   it('magicTestModeFromEnv parses env', async () => {
-    testMagicTestModeFromEnv(magicTestModeFromEnv, assertModule)
+    testMagicTestModeFromEnv(magicTestModeIsEnabledFromEnv, assertModule)
   })
 })
 

@@ -25,6 +25,6 @@ export function maybeJsonParseable (value) {
  * @param {string} [varName] - environment variable name to use, defaults to NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED
  * @returns {boolean} whether magic.link testMode should be enabled
  */
-export function magicTestModeFromEnv (env, varName = 'NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED') {
+export function magicTestModeIsEnabledFromEnv (env, varName = 'NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED') {
   return Boolean(maybeJsonParseable(env[varName]))
 }
