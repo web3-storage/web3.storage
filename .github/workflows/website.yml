@@ -70,19 +70,9 @@ jobs:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
       # sed removes tempalted env vars that we want set from actual env and not env file
       - name: write .env
-        run: |
-          (
-            npm -w '@web3-storage/website' run ci:envfile --silent \
-          ) \
-          | (
-            sed "s/^NEXT_PUBLIC_MAGIC=$//" \
-            | sed "s/^MAGIC_SECRET_KEY=$//" \
-            ;
-          ) > .env
+        run: npm -w '@web3-storage/website' run ci:envfile --silent > .env
         env:
-          NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
-          MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
-          NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: "true"
+          ENVFILE_WITHOUT: 'MAGIC_SECRET_KEY,NEXT_PUBLIC_MAGIC,NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED'
       - name: load db schema
         run: |
           npm run start -w packages/db
