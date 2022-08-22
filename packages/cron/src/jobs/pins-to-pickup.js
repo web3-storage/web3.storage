@@ -1,5 +1,10 @@
 import debug from 'debug'
+import fs from 'fs'
+import util from 'util'
 import AWS from 'aws-sdk'
+import mime from 'mime-types'
+
+const streamPipeline = util.promisify(require('stream').pipeline)
 
 const log = debug('pins:sendPinsToPickupBucket')
 
@@ -11,9 +16,9 @@ const GET_PINNED_PINS_QUERY = `
 const s3 = new AWS.S3({})
 
 /**
- * @param {{ rwPg: Client, roPg: Client, cluster: import('@nftstorage/ipfs-cluster').Cluster }} config
+ * @param {{ env: NodeJS.ProcessEnv, rwPg: Client, roPg: Client, cluster: import('@nftstorage/ipfs-cluster').Cluster }} config
  */
-export async function sendPinsToPickupBucket ({ roPg, rwPg, cluster }) {
+export async function sendPinsToPickupBucket ({ env, roPg, rwPg, cluster }) {
   if (!log.enabled) {
     console.log('ℹ️ Enable logging by setting DEBUG=pins:sendPinsToPickupBucket')
   }
@@ -28,15 +33,23 @@ export async function sendPinsToPickupBucket ({ roPg, rwPg, cluster }) {
       const fileUrl = `${cluster.url}/${row.content_cid}`
 
       // Download the file from IPFS
-      // TODO: Make this download the file
       const fileData = await fetch(fileUrl)
-
       const bucketKey = `pins/${row.id}/${row.content_cid}`
+      if (!fileData.ok) {
+        log('Failed to correctly fetch the file. Skipping.')
+        continue
+      }
+
+      const fileType = fileData.headers.get('Content-Type')
+      const fileName = `./${bucketKey}.${mime.extension(fileType)}`
+      await streamPipeline(fileData.body, fs.createWriteStream(fileName))
+
+      const fileContent = fs.readFileSync(fileName)
 
       // Upload it to S3
       await s3.putObject({
         Bucket: env.s3PickupBucketName,
-        Body: fileData,
+        Body: fileContent,
         Key: bucketKey
       }).promise()
 

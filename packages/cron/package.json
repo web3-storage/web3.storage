@@ -26,6 +26,7 @@
     "debug": "^4.3.1",
     "dotenv": "^9.0.2",
     "limiter": "2.0.1",
+    "mime-types": "^2.1.35",
     "multiformats": "^9.6.2",
     "node-fetch": "^2.6.1",
     "p-retry": "^4.6.1",
