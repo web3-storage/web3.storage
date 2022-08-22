@@ -69,8 +69,9 @@ const PaymentHistoryTable = props => {
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
+  const [paymentMethodError, setPaymentMethodError] = useState('');
 
-  const handleSubmit = async event => {
+  const handlePaymentMethodAdd = async event => {
     event.preventDefault();
 
     if (!stripe || !elements) {
@@ -80,13 +81,20 @@ const CheckoutForm = () => {
 
     const cardElement = elements.getElement(CardElement);
     if (cardElement) {
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
-        type: 'card',
-        card: cardElement,
-      });
-      console.log(paymentMethod);
-      if (error) {
-        console.log(error);
+      try {
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+          type: 'card',
+          card: cardElement,
+        });
+        if (error) throw new Error(error.message);
+        // await savePaymentMethodForUser(paymentMethod.id);
+        console.log(paymentMethod);
+        setPaymentMethodError('');
+      } catch (error) {
+        let message;
+        if (error instanceof Error) message = error.message;
+        else message = String(error);
+        setPaymentMethodError(message);
       }
     }
   };
@@ -108,7 +116,8 @@ const CheckoutForm = () => {
           }}
         />
       </div>
-      <Button onClick={handleSubmit} disabled={!stripe}>
+      <div className="billing-validation">{paymentMethodError}</div>
+      <Button onClick={handlePaymentMethodAdd} disabled={!stripe}>
         Add Card
       </Button>
     </form>
