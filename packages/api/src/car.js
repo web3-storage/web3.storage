@@ -106,6 +106,8 @@ export async function carPost (request, env, ctx) {
 export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car') {
   const { user, authToken } = request.auth
   const { headers } = request
+  
+  /** @type { 'Complete' | 'Unknown' } */
   let structure = uploadType === 'Upload' ? 'Complete' : 'Unknown'
 
   // Throws if CAR is invalid by our standards.
@@ -134,33 +136,43 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     name,
     type: uploadType,
     backupUrls: [`https://${env.s3BucketName}.s3.${env.s3BucketRegion}.amazonaws.com/${bucketKey}`],
-    pins: [],
+    pins: [{
+      status: structure === 'Complete' ? 'Pinned' : 'Pinning',
+      contentCid,
+      location: {
+        peerId: env.ELASTIC_IPFS_PEER_ID,
+        peerName: 'elastic-ipfs',
+      }
+    }],
     dagSize
   })
 
   /** @type {(() => Promise<any>)[]} */
-  const tasks = [async () => {
-    try {
-      await pinToCluster(sourceCid, env)
-    } catch (err) {
-      console.warn('failed to pin to cluster', err)
-    }
-
-    const pins = await addToCluster(car, env)
-
-    await env.db.upsertPins(pins.map(p => ({
-      status: p.status,
-      contentCid,
-      location: p.location
-    })))
-
-    // Retrieve current pin status and info about the nodes pinning the content.
-    // Keep querying Cluster until one of the nodes reports something other than
-    // Unpinned i.e. PinQueued or Pinning or Pinned.
-    if (!pins.some(p => PIN_OK_STATUS.includes(p.status))) {
-      await waitAndUpdateOkPins(contentCid, env.cluster, env.db)
-    }
-  }]
+  const tasks = []
+  if (env.ENABLE_ADD_TO_CLUSTER === 'true') {
+    tasks.push(async () => {
+      try {
+        await pinToCluster(sourceCid, env)
+      } catch (err) {
+        console.warn('failed to pin to cluster', err)
+      }
+  
+      const pins = await addToCluster(car, env)
+  
+      await env.db.upsertPins(pins.map(p => ({
+        status: p.status,
+        contentCid,
+        location: p.location
+      })))
+  
+      // Retrieve current pin status and info about the nodes pinning the content.
+      // Keep querying Cluster until one of the nodes reports something other than
+      // Unpinned i.e. PinQueued or Pinning or Pinned.
+      if (!pins.some(p => PIN_OK_STATUS.includes(p.status))) {
+        await waitAndUpdateOkPins(contentCid, env.cluster, env.db)
+      }
+    })
+  }
 
   if (ctx.waitUntil) {
     tasks.forEach(t => ctx.waitUntil(t()))

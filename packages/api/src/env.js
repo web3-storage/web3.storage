@@ -33,6 +33,8 @@ import { defaultBypassMagicLinkVariableName } from './magic.link.js'
  * @property {string} [LOGTAIL_TOKEN]
  * @property {string} MAINTENANCE_MODE
  * @property {string} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
+ * @property {string} [ELASTIC_IPFS_PEER_ID]
+ * @property {string} [ENABLE_ADD_TO_CLUSTER]
  * // Derived values and class dependencies
  * @property {Cluster} cluster
  * @property {DBClient} db
@@ -106,6 +108,8 @@ export function envAll (req, env, ctx) {
   })
 
   env.MODE = env.MAINTENANCE_MODE || DEFAULT_MODE
+
+  env.ELASTIC_IPFS_PEER_ID = env.ELASTIC_IPFS_PEER_ID ?? 'bafzbeibhqavlasjc7dvbiopygwncnrtvjd2xmryk5laib7zyjor6kf3avm'
 
   const clusterAuthToken = env.CLUSTER_BASIC_AUTH_TOKEN
   const headers = clusterAuthToken ? { Authorization: `Basic ${clusterAuthToken}` } : {}
