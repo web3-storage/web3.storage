@@ -153,4 +153,9 @@ export function envAll (req, env, ctx) {
       }
     )
   }
+
+  // via https://stripe.com/docs/api/payment_methods/object
+  // this can be used to mock realistic values of a stripe.com paymentMethod id
+  // after fulls tripe integration, this may not be needed on the env
+  env.mockStripePaymentMethodId = 'pm_1LZnQ1IfErzTm2rETa7IGoVm'
 }
