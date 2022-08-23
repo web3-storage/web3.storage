@@ -437,8 +437,10 @@ const notifySlack = async (
  * @param {import('./env').Env} env
  */
 export async function userPaymentGet (request, env) {
+  const { searchParams } = new URL(request.url)
+  const paramMethodId = searchParams.get('method.id')
   const userPaymentGetResponse = {
-    method: null
+    method: paramMethodId ? { id: paramMethodId } : null,
   }
   return new JSONResponse(userPaymentGetResponse)
 }
@@ -450,10 +452,19 @@ export async function userPaymentGet (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userPaymentPut (request, env) {
+  const method = {
+    // stubbing this for now with the value from the docs.
+    //   https://stripe.com/docs/api/payment_methods/object
+    id: env.mockStripePaymentMethodId,
+    warning: 'this method is a stub. The id here is different than anything you might have sent in the request.'
+  }
   const savePaymentSettingsResponse = {
-    method: null
+    method
   }
   return new JSONResponse(savePaymentSettingsResponse, {
-    status: 202
+    status: 202,
+    headers: {
+      location: `/user/payment?method.id=${method.id}`
+    }
   })
 }

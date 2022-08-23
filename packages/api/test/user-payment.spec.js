@@ -102,5 +102,20 @@ describe('PUT /user/payment', () => {
     const savePaymentSettingsResponse = await res.json()
     assert.equal(typeof savePaymentSettingsResponse, 'object')
     assert.ok('method' in savePaymentSettingsResponse, '"method" is in userPaymentSettings.method')
+    assert.equal(typeof savePaymentSettingsResponse.method, 'object', 'response.method is an object')
+    assert.equal(typeof savePaymentSettingsResponse.method?.id, 'string', 'response.method.id is a string')
+    const savedMethodId = savePaymentSettingsResponse.method.id
+    assert.equal(typeof res.headers.get('location'), 'string', 'response.headers.location is a string')
+
+    // see if we can then GET the response.headers.location url
+    const paymentSettingsUrl = new URL(res.headers.get('location'), res.url)
+    const paymentSettingsResponse = await fetch(paymentSettingsUrl, {
+      headers: {
+        authorization,
+      }
+    })
+    assert.equal(paymentSettingsResponse.status, 200, 'paymentSettingsResponse.status is 200')
+    const paymentSettings = await paymentSettingsResponse.json()
+    assert.equal(paymentSettings.method.id, savedMethodId, 'paymentSettings.method.id from location header is same as response to PUT')
   })
 })
