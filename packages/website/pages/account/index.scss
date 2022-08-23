@@ -270,3 +270,8 @@
 .payment-history-table-row:not(:last-child) {
   border-bottom: 1px solid $waterloo;
 }
+
+.saved-card {
+  display: flex;
+  justify-content: space-between;
+}
