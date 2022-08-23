@@ -84,10 +84,6 @@ jobs:
           node-version: 16
       - uses: bahmutov/npm-install@v1
       - run: npm run build -w packages/client
-      - name: write .env
-        run: npm -w '@web3-storage/website' run ci:envfile --silent > .env
-        env:
-          ENVFILE_WITHOUT: 'NEXT_PUBLIC_ENV,NEXT_PUBLIC_API,NEXT_PUBLIC_MAGIC,MAGIC_SECRET_KEY,NEXT_PUBLIC_COUNTLY_URL,NEXT_PUBLIC_COUNTLY_KEY'
       - run: npm run build -w packages/website
         env:
           NEXT_PUBLIC_ENV: staging
@@ -95,6 +91,7 @@ jobs:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           NEXT_PUBLIC_COUNTLY_URL: ${{ secrets.COUNTLY_URL }}
           NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
+          NEXT_PUBLIC_STRIPE_TEST_PK: ${{ secrets.TESTING_STRIPE_TEST_PK}}
       - name: Add to web3.storage
         uses: web3-storage/add-to-web3@v2
         id: ipfs
