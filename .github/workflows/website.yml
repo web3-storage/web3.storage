@@ -14,6 +14,23 @@ on:
       - 'packages/website/**'
       - '.github/workflows/website.yml'
       - 'package-lock.json'
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+      add_playwright_report_to_web3_storage:
+        description: Whether to add add_playwright_report_to_web3_storage to web3.storage (publicly)
+        required: true
+        type: boolean
+        default: true
+
 jobs:
   test:
     name: Test
@@ -42,6 +59,9 @@ jobs:
           # corresponds to playwright invocation/configuration
           - packages/website/test-results
     runs-on: ${{ matrix.os }}
+    outputs:
+      playwright-report: ${{ steps.create_output_playwright_reporter.outputs.url }}
+      playwright-report-cid: ${{ steps.create_output_playwright_reporter_cid.outputs.cid }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -50,30 +70,104 @@ jobs:
       - uses: bahmutov/npm-install@v1
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-      - run: npm run build -w packages/website
+      # sed removes tempalted env vars that we want set from actual env and not env file
+      - name: write .env
+        run: npm -w '@web3-storage/website' run ci:envfile --silent > .env
         env:
-          NEXT_PUBLIC_API: http://localhost:8787
-          NEXT_PUBLIC_ENV: test-e2e
-          NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
+          ENVFILE_WITHOUT: 'MAGIC_SECRET_KEY,NEXT_PUBLIC_MAGIC,NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED'
+      - name: load db schema
+        run: |
+          npm run start -w packages/db
+          npm run load-schema -w packages/db
+          npm run stop -w packages/db
+
       - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
         working-directory: packages/website
-      - run: touch .env
-      - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }}
+      
+      # run e2e tests
+      - id: website_test_e2e
+        continue-on-error: true # when this fails, we still want to do some cleanup
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- node -r dotenv/config $(which npm) run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }} --reporter=html
         env:
-          NEXT_PUBLIC_API: http://localhost:8787
-          NEXT_PUBLIC_ENV: dev
+          PLAYWRIGHT_TIMEOUT: 120000
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
+          MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
+          NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: "true"
+          API_MINIFLARE_FLAGS: '--binding NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED=$NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED --binding MAGIC_SECRET_KEY=$MAGIC_SECRET_KEY --binding NEXT_PUBLIC_MAGIC=$NEXT_PUBLIC_MAGIC'
+      - name: Check for website playwright-report
+        id: check_website_playwright_report
+        uses: andstor/file-existence-action@v1
+        with:
+          files: packages/website/playwright-report
+
+      # if playwright-report exists, upload it as artifact
+      - name: upload playwright-report artifact
+        if: steps.check_website_playwright_report.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.browser }}-${{ matrix.os }}-playwright-report
+          path: packages/website/playwright-report
+
+      # add playwright-report to web3.storage
+      - name: add playwright-report to web3.storage
+        if: ${{ inputs.add_playwright_report_to_web3_storage }} && steps.check_website_playwright_report.outputs.files_exists == 'true'
+        uses: web3-storage/add-to-web3@v2
+        id: add_playwright_report_to_web3_storage
+        with:
+          path_to_add: packages/website/playwright-report
+          web3_token: ${{ secrets.WEB3_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # output playwright-report on web3.storage cid
+      - id: create_output_playwright_reporter_cid
+        if: steps.add_playwright_report_to_web3_storage.outputs.cid
+        run: echo "::set-output name=cid::${{ steps.add_playwright_report_to_web3_storage.outputs.cid }}"
+      # log playwright-report on web3.storage cid
+      - name: log playwright-report on web3.storage cid
+        if: steps.add_playwright_report_to_web3_storage.outputs.cid
+        run: |
+          echo cid: ${{ steps.create_output_playwright_reporter_cid.outputs.cid }}
+
+      # output playwright-report on web3.storage url
+      - id: create_output_playwright_reporter_url
+        if: steps.add_playwright_report_to_web3_storage.outputs.cid
+        run: echo "::set-output name=url::https://w3s.link/ipfs/${{ steps.add_playwright_report_to_web3_storage.outputs.cid }}"
+      # log playwright-report on web3.storage url
+      - name: log playwright-report on web3.storage url
+        if: steps.create_output_playwright_reporter_url.outputs.url
+        run: |
+          echo url: ${{ steps.create_output_playwright_reporter_url.outputs.url }}
+
+      - name: add url to GITHUB_STEP_SUMMARY
+        if: steps.create_output_playwright_reporter_url.outputs.url
+        run: |
+          echo "
+          ### playwright-report-${{ matrix.browser }}-${{ matrix.os }}
+
+          * url: ${{ steps.create_output_playwright_reporter_url.outputs.url }}
+          * cid: ${{ steps.create_output_playwright_reporter_cid.outputs.cid }}
+          " >> $GITHUB_STEP_SUMMARY
+
+      # if test-results, upload as artifact
       - name: Check for website test results
         id: check_website_test_results
         uses: andstor/file-existence-action@v1
         with:
           files: ${{ matrix.test_results_path }}
-      - if: steps.check_website_test_results.outputs.files_exists == 'true'
+      - name: upload test-results artifact
+        if: steps.check_website_test_results.outputs.files_exists == 'true'
         uses: actions/upload-artifact@v1
         with:
           name: ${{ matrix.browser }}-${{ matrix.os }}-test-results
           path: ${{ matrix.test_results_path }}
 
+      - name: fail if test:e2e didn't succeed
+        if: steps.website_test_e2e.outcome != 'success'
+        uses: actions/github-script@v3
+        with:
+          script: |
+              core.setFailed('e2e tests did not succeed')
   preview:
     name: Preview
     runs-on: ubuntu-latest
