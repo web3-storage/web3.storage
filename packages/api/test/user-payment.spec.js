@@ -52,11 +52,11 @@ describe('GET /user/payment', () => {
 
 /**
  * Create a request to SaveUserPaymentSettings
- * @param {object} arg
+ * @param {object} [arg]
  * @param {BodyInit|undefined|string} arg.body - body of request
  * @returns
  */
-function createSaveUserPaymentSettingsRequest (arg) {
+function createSaveUserPaymentSettingsRequest (arg = {}) {
   const body = (typeof arg.body === 'object') ? JSON.stringify(arg.body) : arg.body
   const { path, baseUrl, authorization, accept, method } = {
     authorization: undefined,
