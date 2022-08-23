@@ -26,6 +26,15 @@ jobs:
           node-version: 16
       - uses: bahmutov/npm-install@v1
       - run: npx playwright install-deps
+      - run: ./packages/db/scripts/cli.js db --start --project web3-storage-db-$(date +%s)
+        env:
+          PG_REST_URL: ${{secrets.PG_REST_URL}}
+          PG_REST_JWT: ${{secrets.PG_REST_JWT}}
+          PG_CONNECTION: ${{secrets.PG_CONNECTION}}
+          DAG_CARGO_HOST: ${{secrets.DAG_CARGO_HOST}}
+          DAG_CARGO_DATABASE: ${{secrets.DAG_CARGO_DATABASE}}
+          DAG_CARGO_USER: ${{secrets.DAG_CARGO_USER}}
+          DAG_CARGO_PASSWORD: ${{secrets.DAG_CARGO_PASSWORD}}
       - run: npm test --workspace packages/db
         env:
           PG_REST_URL: ${{secrets.PG_REST_URL}}
