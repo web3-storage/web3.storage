@@ -442,3 +442,18 @@ export async function userPaymentGet (request, env) {
   }
   return new JSONResponse(userPaymentGetResponse)
 }
+
+/**
+ * Save a user's payment settings.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userPaymentPut (request, env) {
+  const savePaymentSettingsResponse = {
+    method: null
+  }
+  return new JSONResponse(savePaymentSettingsResponse, {
+    status: 202
+  })
+}

@@ -12,6 +12,7 @@ import {
   userInfoGet,
   userLoginPost,
   userPaymentGet,
+  userPaymentPut,
   userPinsGet,
   userRequestPost,
   userTokensDelete,
@@ -107,6 +108,7 @@ router.get('/user/account',              auth['👤'](userAccountGet))
 router.get('/user/info',                 auth['👤'](userInfoGet))
 router.get('/user/pins',                 auth['📌⚠️'](userPinsGet))
 router.get('/user/payment',              auth['👤'](userPaymentGet))
+router.put('/user/payment',              auth['👤'](userPaymentPut))
 
 /* eslint-enable no-multi-spaces */
 
