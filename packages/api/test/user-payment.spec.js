@@ -57,7 +57,8 @@ describe('GET /user/payment', () => {
  * @returns
  */
 function createSaveUserPaymentSettingsRequest (arg) {
-  const { path, baseUrl, authorization, accept, body, method } = {
+  const body = (typeof arg.body === 'object') ? JSON.stringify(arg.body) : arg.body
+  const { path, baseUrl, authorization, accept, method } = {
     authorization: undefined,
     path: '/user/payment',
     baseUrl: endpoint,
@@ -92,7 +93,8 @@ describe('PUT /user/payment', () => {
   it('saves user payment settings', async function () {
     const token = AuthorizationTestContext.use(this).createUserToken()
     const authorization = createBearerAuthorization(token)
-    const res = await fetch(createSaveUserPaymentSettingsRequest({ authorization }))
+    const desiredPaymentMethodId = `w3-test-${Math.random().toString().slice(2)}`
+    const res = await fetch(createSaveUserPaymentSettingsRequest({ authorization, body: { method: { id: desiredPaymentMethodId } } }))
     try {
       assert.equal(res.status, 202, 'response.status is 202')
     } catch (error) {
@@ -104,6 +106,7 @@ describe('PUT /user/payment', () => {
     assert.ok('method' in savePaymentSettingsResponse, '"method" is in userPaymentSettings.method')
     assert.equal(typeof savePaymentSettingsResponse.method, 'object', 'response.method is an object')
     assert.equal(typeof savePaymentSettingsResponse.method?.id, 'string', 'response.method.id is a string')
+    assert.equal(savePaymentSettingsResponse.method?.id, desiredPaymentMethodId, `response.method.id is desiredPaymentMethodId=${desiredPaymentMethodId}`)
     const savedMethodId = savePaymentSettingsResponse.method.id
     assert.equal(typeof res.headers.get('location'), 'string', 'response.headers.location is a string')
 

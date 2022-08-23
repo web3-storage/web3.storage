@@ -4,6 +4,8 @@ on:
     branches:
       - main
     paths:
+      # test-e2e depends on api running too
+      - 'packages/api/**'
       - 'packages/website/**'
       - '.github/workflows/website.yml'
       - 'package-lock.json'

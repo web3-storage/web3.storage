@@ -452,12 +452,15 @@ export async function userPaymentGet (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userPaymentPut (request, env) {
-  const method = {
-    // stubbing this for now with the value from the docs.
-    //   https://stripe.com/docs/api/payment_methods/object
-    id: env.mockStripePaymentMethodId,
-    warning: 'this method is a stub. The id here is different than anything you might have sent in the request.'
-  }
+  const requestBody = await request.json()
+  const method = requestBody?.method?.id
+    ? { id: requestBody?.method?.id }
+    : {
+      // stubbing this for now with the value from the docs.
+      //   https://stripe.com/docs/api/payment_methods/object
+        id: env.mockStripePaymentMethodId,
+        warning: 'this method is a stub. The id here is different than anything you might have sent in the request.'
+      }
   const savePaymentSettingsResponse = {
     method
   }
