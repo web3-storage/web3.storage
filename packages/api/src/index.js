@@ -12,6 +12,7 @@ import {
   userInfoGet,
   userLoginPost,
   userPaymentGet,
+  userPaymentPut,
   userPinsGet,
   userRequestPost,
   userTokensDelete,
@@ -31,7 +32,6 @@ import {
   READ_WRITE
 } from './maintenance.js'
 import { notFound } from './utils/json-response.js'
-import { nameGet, nameWatchGet, namePost } from './name.js'
 import { compose } from './utils/fn.js'
 
 const router = Router()
@@ -96,10 +96,6 @@ router.get('/pins/:requestId',      auth['📌⚠️'](pinGet))
 router.get('/pins',                 auth['📌⚠️'](pinsGet))
 router.delete('/pins/:requestId',   auth['📌⚠️🗑️'](pinDelete))
 
-router.get('/name/:key',            auth['🌍'](nameGet))
-router.get('/name/:key/watch',      auth['🌍'](nameWatchGet))
-router.post('/name/:key',           auth['🔑'](namePost))
-
 router.post('/blog/subscription',   auth['🌍'](blogSubscriptionCreate))
 
 router.delete('/user/uploads/:cid',      auth['👤🗑️'](userUploadsDelete))
@@ -112,6 +108,7 @@ router.get('/user/account',              auth['👤'](userAccountGet))
 router.get('/user/info',                 auth['👤'](userInfoGet))
 router.get('/user/pins',                 auth['📌⚠️'](userPinsGet))
 router.get('/user/payment',              auth['👤'](userPaymentGet))
+router.put('/user/payment',              auth['👤'](userPaymentPut))
 
 /* eslint-enable no-multi-spaces */
 
@@ -169,5 +166,3 @@ export default {
     return response
   }
 }
-
-export { NameRoom as NameRoom0 } from './name.js'

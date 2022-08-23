@@ -1,5 +1,23 @@
 # Changelog
 
+## [4.4.0](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.3.0...web3.storage-v4.4.0) (2022-08-22)
+
+
+### Features
+
+* add w3name proxy ([#1707](https://github.com/web3-storage/web3.storage/issues/1707)) ([f2f9662](https://github.com/web3-storage/web3.storage/commit/f2f9662fc74ea24a24141aa1bf42288c95b5bd35))
+* embed w3name package ([#1683](https://github.com/web3-storage/web3.storage/issues/1683)) ([20d1c94](https://github.com/web3-storage/web3.storage/commit/20d1c9446ca1da475a4d783ef3bc1fc09c0ee43f))
+
+
+### Bug Fixes
+
+* add ipns migration cron job ([#1705](https://github.com/web3-storage/web3.storage/issues/1705)) ([4b6e67f](https://github.com/web3-storage/web3.storage/commit/4b6e67f07983b06e9bad9c27deb5d6c5b993258e))
+
+
+### Other Changes
+
+* remove /name API endpoints and storage ([#1686](https://github.com/web3-storage/web3.storage/issues/1686)) ([ab93278](https://github.com/web3-storage/web3.storage/commit/ab93278ebe0a9fadc53171a72237bfe3d4a5e32a))
+
 ## [4.3.0](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.2.0...web3.storage-v4.3.0) (2022-06-23)
 
 

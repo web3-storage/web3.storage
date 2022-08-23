@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.3.0](https://github.com/web3-storage/web3.storage/compare/api-v7.2.0...api-v7.3.0) (2022-08-22)
+
+
+### Features
+
+* add to api GET /user/payment, add AuthorizationTestContext to encapsulate magic.link test bypass ([#1769](https://github.com/web3-storage/web3.storage/issues/1769)) ([7722acc](https://github.com/web3-storage/web3.storage/commit/7722acc91a5c105f4865b47861000147fb227f26))
+
+
+### Other Changes
+
+* remove /name API endpoints and storage ([#1686](https://github.com/web3-storage/web3.storage/issues/1686)) ([ab93278](https://github.com/web3-storage/web3.storage/commit/ab93278ebe0a9fadc53171a72237bfe3d4a5e32a))
+
 ## [7.2.0](https://github.com/web3-storage/web3.storage/compare/api-v7.1.1...api-v7.2.0) (2022-08-17)
 
 
