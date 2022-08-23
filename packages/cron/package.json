@@ -19,12 +19,16 @@
   "author": "Alan Shaw",
   "license": "(Apache-2.0 OR MIT)",
   "dependencies": {
+    "@aws-sdk/lib-storage": "^3.154.0",
     "@nftstorage/ipfs-cluster": "^5.0.1",
     "@web-std/fetch": "^2.0.1",
     "@web3-storage/db": "^4.0.0",
     "aws-sdk": "^2.1196.0",
     "debug": "^4.3.1",
     "dotenv": "^9.0.2",
+    "format-number": "^3.0.0",
+    "it-batch": "^1.0.9",
+    "it-pipe": "^2.0.4",
     "limiter": "2.0.1",
     "mime-types": "^2.1.35",
     "multiformats": "^9.6.2",
@@ -32,6 +36,7 @@
     "p-retry": "^4.6.1",
     "p-settle": "^5.0.0",
     "pg": "^8.7.1",
+    "stream": "^0.0.2",
     "throttled-queue": "^2.1.4"
   },
   "devDependencies": {
