@@ -3,9 +3,10 @@
 $base-row-width: 75.125rem;
 $file-select: calculateWidthPercentage(3.5rem, $base-row-width);
 $file-name: calculateWidthPercentage(23rem, $base-row-width);
-$file-cid: calculateWidthPercentage(20rem, $base-row-width);
+$file-cid: calculateWidthPercentage(16rem, $base-row-width);
 $file-availability: calculateWidthPercentage(0rem, $base-row-width);
-$file-storage-providers: calculateWidthPercentage(14rem, $base-row-width);
+$file-pin-status: calculateWidthPercentage(8rem, $base-row-width);
+$file-storage-providers: calculateWidthPercentage(10rem, $base-row-width);
 $file-size: calculateWidthPercentage(8rem, $base-row-width);
 $file-date: auto;
 
@@ -16,10 +17,10 @@ $file-date: auto;
   letter-spacing: 0;
   display: grid;
   position: relative;
-  grid-template-columns: $file-select $file-name $file-cid $file-storage-providers $file-size $file-date;
+  grid-template-columns: $file-select $file-name $file-cid $file-pin-status $file-storage-providers $file-size $file-date ;
   align-items: flex-start;
-  padding: 0.75rem 2rem;
-  transition: all 0.2s ease-in-out;
+  padding: .75rem 2rem;
+  transition: all .2s ease-in-out;
   border-bottom: 0.078125rem solid rgba(white, 0.05);
 
   &:nth-child(even) {
@@ -52,7 +53,7 @@ $file-date: auto;
     word-break: break-word;
     @include fontWeight_Regular;
     @include medium {
-      padding: 0.5rem 0.75rem 0.5rem 1.5rem;
+      padding: .5rem .75rem .5rem 1.5rem;
       justify-content: flex-start;
       border-bottom: 0.078125rem solid rgba(white, 0.05);
       &.file-name {
@@ -178,7 +179,7 @@ $file-date: auto;
       }
       svg.pencil-icon {
         flex-shrink: 0;
-        margin: 4px 0px 0px 0.5rem;
+        margin: 4px 0px 0px .5rem;
         @include hoverSvg;
         @include medium {
           display: none;
@@ -210,7 +211,7 @@ $file-date: auto;
     }
     &-cid {
       padding-right: 2rem;
-      margin-top: -0.1rem;
+      margin-top: -.1rem;
       justify-content: flex-start;
       align-items: center;
       .cid-truncate,
@@ -236,6 +237,14 @@ $file-date: auto;
         padding-right: 1.25rem;
       }
     }
+    &-pin-status {
+      justify-content: flex-start;
+      align-items: center;
+      gap: 0.625rem;
+      @include medium {
+        gap: 0;
+      }
+    }
     &-storage-providers {
       justify-content: flex-start;
       align-items: center;
@@ -246,7 +255,7 @@ $file-date: auto;
         gap: 0;
       }
 
-      a[href*='filfox'] {
+      a[href*="filfox"] {
         @include monospace_Text;
       }
 
@@ -308,7 +317,7 @@ $file-date: auto;
   }
 
   &.files-manager-row-active {
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0,0,0,0.25);
   }
 
   // Header overrides

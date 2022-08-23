@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { useMemo, useRef } from 'react';
 import { renderToString } from 'react-dom/server';
+import { BsFillInfoCircleFill } from 'react-icons/bs';
 
 import CheckIcon from '../../../assets/icons/check';
 import CopyIcon from '../../../assets/icons/copy';
@@ -9,12 +10,20 @@ import { addTextToClipboard, formatTimestamp, formatTimestampFull, truncateStrin
 import Tooltip from '../../../modules/zero/components/tooltip/tooltip';
 import AppData from '../../../content/pages/app/account.json';
 
+export const PinStatus = {
+  PINNED: 'Pinned',
+  PINNING: 'Pinning',
+  PIN_QUEUED: 'PinQueued',
+  QUEUING: 'Queuing...',
+};
+
 /**
  * @typedef {Object} FileRowItemProps
  * @property {string} [className]
  * @property {string} date
  * @property {string} name
  * @property {string} cid
+ * @property {string} status
  * @property {string} size
  * @property {string} linkPrefix
  * @property {string | import('react').ReactNode[] | null} storageProviders
@@ -41,10 +50,12 @@ const FileRowItem = props => {
     date,
     name,
     cid,
+    status,
     storageProviders,
     size,
     linkPrefix,
     onSelect,
+    numberOfPins,
     isHeader = false,
     isSelected,
     onDelete,
@@ -64,9 +75,20 @@ const FileRowItem = props => {
   }, [props]);
 
   const fileRowLabels = AppData.page_content.file_manager.table.file_row_labels;
+  const statusMessages = fileRowLabels.status.tooltip;
   /** @type {import('react').RefObject<HTMLTextAreaElement>} */
   const editingNameRef = useRef(null);
   const truncatedCID = useMemo(() => truncateString(cid, 5, '...', 'double'), [cid]);
+  const statusTooltip = useMemo(
+    () =>
+      ({
+        [PinStatus.QUEUING]: statusMessages.queuing,
+        [PinStatus.PIN_QUEUED]: statusMessages.pin_queued,
+        [PinStatus.PINNING]: statusMessages.pinning,
+        [PinStatus.PINNED]: statusMessages.pinned.replace('*numberOfPins*', `${numberOfPins}`),
+      }[status]),
+    [numberOfPins, status, statusMessages]
+  );
 
   return (
     <div
@@ -136,6 +158,18 @@ const FileRowItem = props => {
         <span className="file-row-label medium-down-only">{fileRowLabels.available.label}</span>
         {isHeader ? 'Availability' : 'Available'}
       </span> */}
+      <span className="file-pin-status">
+        <span className="file-row-label medium-down-only">
+          {fileRowLabels.status.label}
+          <Tooltip content={statusMessages.header} />
+        </span>
+        {status}
+        {isHeader ? (
+          <Tooltip content={statusMessages.header} />
+        ) : (
+          statusTooltip && <Tooltip icon={<BsFillInfoCircleFill />} content={statusTooltip} />
+        )}
+      </span>
       {storageProviders && (
         <span className="file-storage-providers">
           <span className="file-row-label medium-down-only">

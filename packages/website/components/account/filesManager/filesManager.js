@@ -18,7 +18,7 @@ import { useTokens } from 'components/contexts/tokensContext';
 import CheckIcon from 'assets/icons/check';
 import SearchIcon from 'assets/icons/search';
 import RefreshIcon from 'assets/icons/refresh';
-import FileRowItem from './fileRowItem';
+import FileRowItem, { PinStatus } from './fileRowItem';
 import GradientBackground from '../../gradientbackground/gradientbackground.js';
 
 const defaultQueryOrder = 'newest';
@@ -363,6 +363,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
         date={fileRowLabels.date.label}
         name={fileRowLabels.name.label}
         cid={fileRowLabels.cid.label}
+        status={fileRowLabels.status.label}
         storageProviders={currentTab === 'uploaded' ? fileRowLabels.storage_providers.label : null}
         size={fileRowLabels.size.label}
         linkPrefix={linkPrefix}
@@ -403,6 +404,10 @@ const FilesManager = ({ className, content, onFileUpload }) => {
               date={item.created}
               name={item.name}
               cid={item.cid}
+              status={
+                Object.values(PinStatus).find(status => item.pins.some(pin => status === pin.status)) ||
+                PinStatus.QUEUING
+              }
               storageProviders={
                 Array.isArray(item.deals)
                   ? item.deals
@@ -427,6 +432,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
               }
               linkPrefix={linkPrefix}
               highlight={{ target: 'name', text: keyword?.toString() || '' }}
+              numberOfPins={item.pins.length}
               isSelected={!!selectedFiles.find(fileSelected => fileSelected === item)}
               onDelete={() => onDeleteSingle(item.cid)}
               isEditingName={item.cid === nameEditingId}
