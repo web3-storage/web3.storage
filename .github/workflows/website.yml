@@ -79,7 +79,7 @@ jobs:
           npm run load-schema -w packages/db
           npm run stop -w packages/db
       - name: build website
-        run: node -r dotenv/config $(which npm) run build -w packages/website
+        run: npm run build -w packages/website
         env:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: "true"
