@@ -4,6 +4,8 @@ on:
     branches:
       - main
     paths:
+      # test-e2e depends on api running too
+      - 'packages/api/**'
       - 'packages/website/**'
       - '.github/workflows/website.yml'
       - 'package-lock.json'
@@ -89,6 +91,7 @@ jobs:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           NEXT_PUBLIC_COUNTLY_URL: ${{ secrets.COUNTLY_URL }}
           NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
+          NEXT_PUBLIC_STRIPE_TEST_PK: ${{ secrets.TESTING_STRIPE_TEST_PK}}
       - name: Add to web3.storage
         uses: web3-storage/add-to-web3@v2
         id: ipfs
