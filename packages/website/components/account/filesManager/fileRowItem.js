@@ -94,6 +94,7 @@ const FileRowItem = props => {
     <div
       className={clsx(
         'files-manager-row',
+        tabType,
         className,
         isHeader && 'files-manager-row-header',
         isSelected && 'files-manager-row-active'
