@@ -440,7 +440,7 @@ export async function userPaymentGet (request, env) {
   const { searchParams } = new URL(request.url)
   const paramMethodId = searchParams.get('method.id')
   const userPaymentGetResponse = {
-    method: paramMethodId ? { id: paramMethodId } : null,
+    method: paramMethodId ? { id: paramMethodId } : null
   }
   return new JSONResponse(userPaymentGetResponse)
 }

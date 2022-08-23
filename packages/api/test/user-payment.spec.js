@@ -111,7 +111,7 @@ describe('PUT /user/payment', () => {
     const paymentSettingsUrl = new URL(res.headers.get('location'), res.url)
     const paymentSettingsResponse = await fetch(paymentSettingsUrl, {
       headers: {
-        authorization,
+        authorization
       }
     })
     assert.equal(paymentSettingsResponse.status, 200, 'paymentSettingsResponse.status is 200')
