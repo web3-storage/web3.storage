@@ -72,12 +72,16 @@ const PaymentSettingsPage = props => {
  * @returns {{ props: import('components/types').PageAccountProps}}
  */
 export function getStaticProps() {
+  const stripeKey = process.env.NEXT_PUBLIC_STRIPE_TEST_PK;
+  if (!stripeKey) {
+    console.warn(`account payment page missing required process.env.NEXT_PUBLIC_STRIPE_TEST_PK`);
+  }
   return {
     props: {
       title: AccountPageData.seo.title,
       isRestricted: true,
       redirectTo: '/login/',
-      stripeKey: process.env.STRIPE_TEST_PK,
+      stripeKey: stripeKey ?? '',
     },
   };
 }

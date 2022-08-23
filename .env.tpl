@@ -20,7 +20,7 @@ DAG_CARGO_USER=postgres
 DAG_CARGO_PASSWORD=postgres
 
 # this pk is for a test account
-STRIPE_TEST_PK=pk_test_51LW5iZIfErzTm2rEq2poZhHidav6vMKnpywbLgfM7YtRpWUO1QyQjyoG4h5nO0wzzoLyqOocDb6h8fFcqw4RItB700OjnutXXx
+NEXT_PUBLIC_STRIPE_TEST_PK=pk_test_51LW5iZIfErzTm2rEq2poZhHidav6vMKnpywbLgfM7YtRpWUO1QyQjyoG4h5nO0wzzoLyqOocDb6h8fFcqw4RItB700OjnutXXx
 
 ## ---- api -------------------------------------------------------------------
 
