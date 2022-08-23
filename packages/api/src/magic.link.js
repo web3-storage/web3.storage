@@ -1,6 +1,6 @@
 import { magicTestModeIsEnabledFromEnv, maybeJsonParseable } from './utils/env.js'
 
-export const createMagicTestTokenBypass = (
+const createMagicTestTokenBypass = (
   requiredVariableName,
   requiredTokenValue
 ) => {
