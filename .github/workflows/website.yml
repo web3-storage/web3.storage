@@ -84,6 +84,10 @@ jobs:
           node-version: 16
       - uses: bahmutov/npm-install@v1
       - run: npm run build -w packages/client
+      - name: write .env
+        run: npm -w '@web3-storage/website' run ci:envfile --silent > .env
+        env:
+          ENVFILE_WITHOUT: 'NEXT_PUBLIC_ENV,NEXT_PUBLIC_API,NEXT_PUBLIC_MAGIC,MAGIC_SECRET_KEY,NEXT_PUBLIC_COUNTLY_URL,NEXT_PUBLIC_COUNTLY_KEY'
       - run: npm run build -w packages/website
         env:
           NEXT_PUBLIC_ENV: staging
