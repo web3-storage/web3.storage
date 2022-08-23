@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { sendPinsToPickupBucket } from '../jobs/pins-to-pickup.js'
+import { backupPins } from '../jobs/pins-backup.js'
 import { envConfig } from '../lib/env.js'
 import { getCluster, getPgPool } from '../lib/utils.js'
 
@@ -10,7 +10,7 @@ async function main () {
   const cluster = getCluster(process.env)
 
   try {
-    await sendPinsToPickupBucket({ env: process.env, rwPg, roPg, cluster })
+    await backupPins({ env: process.env, rwPg, roPg, cluster })
   } finally {
     await rwPg.end()
     await roPg.end()
