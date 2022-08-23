@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
-import { API } from '../../../lib/api';
+import { API, getToken } from '../../../lib/api';
 import Button from '../../../components/button/button';
 
 export async function putPaymentMethod(pm_id) {
@@ -10,6 +10,7 @@ export async function putPaymentMethod(pm_id) {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + (await getToken()),
     },
     body: JSON.stringify(putBody),
   });
@@ -20,7 +21,7 @@ export async function putPaymentMethod(pm_id) {
   return res.json();
 }
 
-const AddPaymentMethodForm = () => {
+const AddPaymentMethodForm = ({ setHasPaymentMethods }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [paymentMethodError, setPaymentMethodError] = useState('');
@@ -41,8 +42,8 @@ const AddPaymentMethodForm = () => {
           card: cardElement,
         });
         if (error) throw new Error(error.message);
-        const apiRes = await putPaymentMethod(paymentMethod.id);
-        console.log(apiRes);
+        await putPaymentMethod(paymentMethod.id);
+        setHasPaymentMethods(true);
         setPaymentMethodError('');
       } catch (error) {
         let message;

@@ -274,4 +274,18 @@
 .saved-card {
   display: flex;
   justify-content: space-between;
+  gap: 1rem;
+  font-size: 14px;
+  margin: 0.5rem 0;
+  line-height: 1;
+  span {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+}
+
+.payments-none {
+  font-size: 14px;
+  margin: 1rem 0;
 }
