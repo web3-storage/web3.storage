@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.6.1 (2022-08-24)
+
+
+### Features
+
+* add w3name proxy ([#1707](https://github.com/web3-storage/web3.storage/issues/1707)) ([f2f9662](https://github.com/web3-storage/web3.storage/commit/f2f9662fc74ea24a24141aa1bf42288c95b5bd35))
+* embed w3name package ([#1683](https://github.com/web3-storage/web3.storage/issues/1683)) ([20d1c94](https://github.com/web3-storage/web3.storage/commit/20d1c9446ca1da475a4d783ef3bc1fc09c0ee43f))
+
+
+### Bug Fixes
+
+* add ipns migration cron job ([#1705](https://github.com/web3-storage/web3.storage/issues/1705)) ([4b6e67f](https://github.com/web3-storage/web3.storage/commit/4b6e67f07983b06e9bad9c27deb5d6c5b993258e))
+* undeprecate the `w3 name...` commands. ([#1777](https://github.com/web3-storage/web3.storage/issues/1777)) ([a9ee094](https://github.com/web3-storage/web3.storage/commit/a9ee094512433572f55c74900ec20c9d5c72d72a))
+
 ## [2.6.0](https://github.com/web3-storage/web3.storage/compare/w3-v2.5.0...w3-v2.6.0) (2022-04-19)
 
 
