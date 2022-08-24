@@ -4,11 +4,7 @@ import fetch from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { getTestJWT, getDBClient } from './scripts/helpers.js'
 import userUploads from './fixtures/pgrest/get-user-uploads.js'
-<<<<<<< HEAD
-=======
-import userPins from './fixtures/pgrest/get-user-pins.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
->>>>>>> 21596197017950b63a7f148364c0d65c74aecea8
 
 describe('GET /user/account', () => {
   it('error if not authenticated with magic.link', async () => {
