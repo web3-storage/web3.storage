@@ -31,7 +31,7 @@ function createUserPaymentRequest (arg) {
 describe('GET /user/payment', () => {
   it('error if no auth header', async () => {
     const res = await fetch(createUserPaymentRequest())
-    assert(!res.ok)
+    assert(!res.ok, 'response is not ok without proof of authorization')
   })
   it('error if bad auth header', async () => {
     const createRandomString = () => Math.random().toString().slice(2)
@@ -39,11 +39,12 @@ describe('GET /user/payment', () => {
     const res = await fetch(createUserPaymentRequest({ authorization }))
     assert(!res.ok)
   })
-  it('retrieves user account data', async function () {
+  it('retrieves user payment settings', async function () {
     const token = AuthorizationTestContext.use(this).createUserToken()
     const authorization = createBearerAuthorization(token)
     const res = await fetch(createUserPaymentRequest({ authorization }))
-    assert(res.ok)
+    assert.equal(res.status, 200, 'response.status is 200')
+    assert(res.ok, 'response status is ok')
     const userPaymentSettings = await res.json()
     assert.equal(typeof userPaymentSettings, 'object')
     assert.ok(!userPaymentSettings.method, 'userPaymentSettings.method is falsy')
