@@ -66,7 +66,7 @@ async function postKeyW3Name (name, w3nameApiURL = '') {
 
   // Very occasionally this gets a FetchError due to the connection being reset, which
   // if not caught causes the whole cron job to fail. Hence
-  pRetry(async () => {
+  await pRetry(async () => {
     const res = await fetch(new URL(`/name/${key}`, w3nameApiURL), {
       method: 'POST',
       body: name.record
