@@ -107,3 +107,185 @@
     }
   }
 }
+
+.billing-container {
+  max-width: 64rem;
+  margin: auto;
+  padding-bottom: 12.5rem;
+  position: relative;
+
+  @include medium {
+    padding: 0 4.1665%;
+    width: 100%;
+  }
+}
+
+.billing-content {
+  padding: 0 2rem 2rem;
+}
+
+.billing-settings-layout {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  grid-gap: 2rem;
+
+  @include medium {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
+}
+
+.billing-plans {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.billing-card {
+  margin: 0.5rem 0;
+}
+
+.billing-validation {
+  font-size: 12px;
+  color: #f97fc8;
+  line-height: 1.5;
+  margin: 1rem 0;
+}
+
+.billing-plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.billing-plan-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin: 0.5rem 0 0rem 0;
+}
+
+.billing-plan-desc {
+  font-size: 1rem;
+  color: $alto;
+}
+
+.billing-label {
+  font-size: 1rem;
+  line-height: 1;
+  margin-top: 1rem;
+}
+
+.billing-plan-usage {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 14px;
+  color: $moonRaker;
+  .billing-plan-meter {
+    width: 100%;
+    height: 8px;
+    border-radius: 16px;
+    background-color: $moonRaker;
+    position: relative;
+    overflow: hidden;
+  }
+  .billing-plan-meter-used {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    background-color: $heliotrope;
+  }
+}
+
+.billing-plan-amount {
+  font-size: 2rem;
+  font-weight: bold;
+  color: $moonRaker;
+}
+
+.billing-plan-limit {
+  font-size: 0.9rem;
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.payment-history-layout {
+  margin-top: 4rem;
+}
+
+.payment-history-table {
+  width: 100%;
+  font-size: 1rem;
+}
+
+.payment-history-table-header,
+.payment-history-table-row {
+  display: grid;
+  grid-template-columns: 20% auto 150px 150px;
+  text-align: left;
+  grid-gap: 1rem;
+  padding: 0.4rem 0;
+}
+
+.payment-history-table-header {
+  @include small {
+    display: none;
+  }
+}
+
+.payment-history-table-row {
+  color: $alto;
+
+  @include small {
+    // justify-content: space-between;
+    grid-gap: 0 1rem;
+    grid-template-areas:
+      'date  date  date'
+      'title amount invoice';
+    grid-template-columns: 1fr auto auto;
+    grid-template-rows: auto auto;
+
+    span {
+      display: block;
+      line-height: 1.7;
+    }
+    span:nth-child(1) {
+      grid-area: date;
+    }
+    span:nth-child(2) {
+      grid-area: title;
+    }
+    span:nth-child(3) {
+      grid-area: amount;
+    }
+    span:nth-child(4) {
+      grid-area: invoice;
+    }
+  }
+}
+
+.payment-history-table-row:not(:last-child) {
+  border-bottom: 1px solid $waterloo;
+}
+
+.saved-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 14px;
+  margin: 0.5rem 0;
+  line-height: 1;
+  span {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+}
+
+.payments-none {
+  font-size: 14px;
+  margin: 1rem 0;
+}

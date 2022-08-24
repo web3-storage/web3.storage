@@ -4,3 +4,5 @@ public/robots.txt
 .package.lock
 .yarn.lock
 /test-results
+/playwright-report
+

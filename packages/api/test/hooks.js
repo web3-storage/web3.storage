@@ -59,7 +59,7 @@ export const mochaHooks = () => {
       console.log('⚡️ Loading DB schema')
       await execa(dbCli, ['db-sql', '--cargo', '--testing', `--customSqlPath=${initScript}`])
 
-      await delay(2000)
+      await delay(1000)
     },
     async afterAll () {
       // Note: not awaiting promises here so we see the test results overview sooner.

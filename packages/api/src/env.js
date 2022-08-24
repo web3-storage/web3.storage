@@ -7,6 +7,7 @@ import { Cluster } from '@nftstorage/ipfs-cluster'
 import { DEFAULT_MODE } from './maintenance.js'
 import { Logging } from './utils/logs.js'
 import pkg from '../package.json'
+import { magicTestModeIsEnabledFromEnv } from './utils/env.js'
 import { defaultBypassMagicLinkVariableName } from './magic.link.js'
 
 /**
@@ -92,7 +93,9 @@ export function envAll (req, env, ctx) {
     commithash: env.COMMITHASH
   })
 
-  env.magic = new Magic(env.MAGIC_SECRET_KEY)
+  env.magic = new Magic(env.MAGIC_SECRET_KEY, {
+    testMode: magicTestModeIsEnabledFromEnv(env)
+  })
 
   // We can remove this when magic admin sdk supports test mode
   if (new URL(req.url).origin === 'http://testing.web3.storage' && env[defaultBypassMagicLinkVariableName] !== 'undefined') {
@@ -153,4 +156,9 @@ export function envAll (req, env, ctx) {
       }
     )
   }
+
+  // via https://stripe.com/docs/api/payment_methods/object
+  // this can be used to mock realistic values of a stripe.com paymentMethod id
+  // after fulls tripe integration, this may not be needed on the env
+  env.mockStripePaymentMethodId = 'pm_1LZnQ1IfErzTm2rETa7IGoVm'
 }

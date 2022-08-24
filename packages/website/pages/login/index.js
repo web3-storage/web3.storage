@@ -3,11 +3,11 @@ import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 
-import GithubSVG from 'assets/icons/github';
-import Button from 'components/button/button';
+import GithubSVG from '../../assets/icons/github.js';
+import Button from '../../components/button/button.js';
+import { loginEmail, loginSocial } from '../../lib/magic.js';
+import countly, { trackEvent } from '../../lib/countly.js';
 import LoginData from '../../content/pages/app/login.json';
-import countly, { trackEvent } from 'lib/countly';
-import { loginEmail, loginSocial } from 'lib/magic';
 
 const LoginType = {
   GITHUB: 'github',
@@ -36,7 +36,6 @@ const Login = () => {
   const onLoginWithEmail = useCallback(async () => {
     setErrors({ email: undefined });
     setIsLoggingIn(LoginType.EMAIL);
-
     try {
       await loginEmail(email || '');
       await queryClient.invalidateQueries('magic-user');

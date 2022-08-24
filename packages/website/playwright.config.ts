@@ -1,6 +1,7 @@
+import path from 'path';
+
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
-import path from 'path';
 
 /**
  * Read environment variables from file.
@@ -10,13 +11,26 @@ import path from 'path';
 
 const WEBSITE_TESTS_DIR_PATH = './tests';
 
+// if an env var is defined, return it as a number
+// if it can't be parsed, throw
+const envNumber = (varName: string, defaultValue: number, env = process.env) => {
+  if (!(varName in env)) {
+    return defaultValue;
+  }
+  const parsedNum = parseInt(env[varName] ?? '', 10);
+  if (isNaN(parsedNum)) {
+    throw new Error(`error parsing env[${varName}] as number`);
+  }
+  return parsedNum;
+};
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 const config: PlaywrightTestConfig = {
   testDir: WEBSITE_TESTS_DIR_PATH,
   /* Maximum time one test can run for. */
-  timeout: 30 * 1000,
+  timeout: envNumber('PLAYWRIGHT_TIMEOUT', 30 * 1000),
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
@@ -42,7 +56,7 @@ const config: PlaywrightTestConfig = {
     baseURL: 'http://localhost:4000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'on',
   },
 
   /* Configure projects for major browsers */
@@ -102,15 +116,7 @@ const config: PlaywrightTestConfig = {
 
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
   // outputDir: 'test-results/',
-
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'npm start',
-    port: 4000,
-    // timeout: `npm start` can take awhile to boot up
-    timeout: 120 * 1000,
-    // reuseExistingServer: !process.env.CI,
-  },
+  globalSetup: require.resolve('tests/playwright/globalSetup.js'),
 };
 
 export default config;

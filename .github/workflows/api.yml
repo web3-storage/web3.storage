@@ -50,7 +50,7 @@ jobs:
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
           SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
         with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
+          apiToken: ${{ secrets.CF_TOKEN }}
           workingDirectory: 'packages/api'
           environment: 'staging'
       - name: Test upload to staging
@@ -90,6 +90,6 @@ jobs:
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
           SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
         with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
+          apiToken: ${{ secrets.CF_TOKEN }}
           workingDirectory: 'packages/api'
           environment: 'production'
