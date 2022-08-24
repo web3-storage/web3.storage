@@ -63,8 +63,6 @@ jobs:
           monorepo-tags: true
           package-name: w3
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false}]'
-          release-as: '2.6.1'
-          last-release-sha: 4da1a7dba4503ce73baf89a511158e29d0b8d0bf
       - uses: actions/checkout@v2
         if: ${{ steps.tag-release.outputs.releases_created }}
       - uses: actions/setup-node@v2
