@@ -19,6 +19,8 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 9, // Allows for the parsing of modern ECMAScript features
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
     sourceType: 'module', // Allows for the use of imports
   },
   plugins: ['jsx-a11y', 'prettier', '@typescript-eslint', 'cypress'],
@@ -37,6 +39,7 @@ module.exports = {
       version: 'detect',
     },
   },
+  ignorePatterns: [".eslintrc.js"],
   rules: {
     '@typescript-eslint/no-inferrable-types': 2,
     '@typescript-eslint/explicit-function-return-type': 0,

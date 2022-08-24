@@ -15,7 +15,7 @@ import { useUploads } from 'components/contexts/uploadsContext';
 import { useUser } from 'components/contexts/userContext';
 // import SearchIcon from 'assets/icons/search';
 import RefreshIcon from 'assets/icons/refresh';
-import FileRowItem, { PinStatus } from './fileRowItem';
+import FileRowItem from './fileRowItem';
 import GradientBackground from '../../gradientbackground/gradientbackground.js';
 
 const defaultSortBy = 'Date';
@@ -310,10 +310,6 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
               date={item.created}
               name={item.name}
               cid={item.cid}
-              status={
-                Object.values(PinStatus).find(status => item.pins.some(pin => status === pin.status)) ||
-                PinStatus.QUEUING
-              }
               storageProviders={
                 Array.isArray(item.deals)
                   ? item.deals

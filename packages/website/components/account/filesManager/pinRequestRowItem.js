@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import { useMemo } from 'react';
-import { BsFillInfoCircleFill } from 'react-icons/bs';
 
 import CheckIcon from '../../../assets/icons/check';
 import CopyIcon from '../../../assets/icons/copy';
@@ -47,19 +46,8 @@ const PinRequestRowItem = ({
   onDelete,
 }) => {
   const fileRowLabels = AppData.page_content.file_manager.table.file_row_labels;
-  const statusMessages = fileRowLabels.status.tooltip;
   const truncatedCID = useMemo(() => truncateString(cid, 5, '...', 'double'), [cid]);
   const truncatedRequestid = useMemo(() => truncateString(requestid, 5, '...', 'double'), [requestid]);
-  const statusTooltip = useMemo(
-    () =>
-      ({
-        [PinStatus.PIN_QUEUED]: statusMessages.pin_queued,
-        [PinStatus.PINNING]: statusMessages.pinning,
-        [PinStatus.PINNED]: statusMessages.pinned.replace('*numberOfPins*', 'at least 1'),
-        [PinStatus.FAILED]: statusMessages.pin_queued,
-      }[status]),
-    [status, statusMessages]
-  );
 
   return (
     <div
@@ -139,7 +127,7 @@ const PinRequestRowItem = ({
         <span className="file-row-label medium-down-only">{fileRowLabels.available.label}</span>
         {isHeader ? 'Availability' : 'Available'}
       </span> */}
-      <span className="file-pin-status">
+      {/* <span className="file-pin-status">
         <span className="file-row-label medium-down-only">
           {fileRowLabels.status.label}
           <Tooltip content={statusMessages.header} />
@@ -150,7 +138,7 @@ const PinRequestRowItem = ({
         ) : (
           statusTooltip && <Tooltip icon={<BsFillInfoCircleFill />} content={statusTooltip} />
         )}
-      </span>
+      </span> */}
       <span className="file-date">
         {isHeader ? (
           <span>Date</span>

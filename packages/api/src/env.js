@@ -7,6 +7,7 @@ import { Cluster } from '@nftstorage/ipfs-cluster'
 import { DEFAULT_MODE } from './maintenance.js'
 import { Logging } from './utils/logs.js'
 import pkg from '../package.json'
+import { defaultBypassMagicLinkVariableName } from './magic.link.js'
 
 /**
  * @typedef {object} Env
@@ -42,29 +43,6 @@ import pkg from '../package.json'
  * @property {S3Client} s3Client
  * @property {string} s3BucketName
  * @property {string} s3BucketRegion
- * // Durable Objects
- * @property {DurableObjectNamespace} NAME_ROOM
- *
- * From: https://github.com/cloudflare/workers-types
- *
- * @typedef {{
- *  toString(): string
- *  equals(other: DurableObjectId): boolean
- *  readonly name?: string
- * }} DurableObjectId
- *
- * @typedef {{
- *   newUniqueId(options?: { jurisdiction?: string }): DurableObjectId
- *   idFromName(name: string): DurableObjectId
- *   idFromString(id: string): DurableObjectId
- *   get(id: DurableObjectId): DurableObjectStub
- * }} DurableObjectNamespace
- *
- * @typedef {{
- *   readonly id: DurableObjectId
- *   readonly name?: string
- *   fetch(requestOrUrl: Request | string, requestInit?: RequestInit | Request): Promise<Response>
- * }} DurableObjectStub
  */
 
 /**
@@ -117,9 +95,9 @@ export function envAll (req, env, ctx) {
   env.magic = new Magic(env.MAGIC_SECRET_KEY)
 
   // We can remove this when magic admin sdk supports test mode
-  if (new URL(req.url).origin === 'http://testing.web3.storage' && env.DANGEROUSLY_BYPASS_MAGIC_AUTH !== 'undefined') {
+  if (new URL(req.url).origin === 'http://testing.web3.storage' && env[defaultBypassMagicLinkVariableName] !== 'undefined') {
     // only set this in test/scripts/worker-globals.js
-    console.log(`!!! DANGEROUSLY_BYPASS_MAGIC_AUTH=${env.DANGEROUSLY_BYPASS_MAGIC_AUTH} !!!`)
+    console.log(`!!! ${defaultBypassMagicLinkVariableName}=${env[defaultBypassMagicLinkVariableName]} !!!`)
   }
 
   env.db = new DBClient({

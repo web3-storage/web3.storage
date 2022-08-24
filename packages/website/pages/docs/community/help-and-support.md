@@ -9,7 +9,7 @@ Web3.Storage is easy to use and integrate into your developer workflow, but we c
 
 ## Requesting more storage space
 
-Need more space on Web3.Storage? Log into your Web3.storage account, visit your [account page](https://web3.storage/account/), and submit a request for more storage. The Web3.Storage team will get right back to you.
+Need more space on Web3.Storage? You can request more from your Web3.Storage [account management page](https://web3.storage/account/). The Web3.Storage team will get right back to you.
 
 ## Questions and community discussion
 
@@ -17,6 +17,4 @@ Have a question about using Web3.Storage? Want to discuss problems, opportunitie
 
 ## Bug reports or feature requests
 
-Found a bug, or have a feature request for how to make Web3.Storage better? File an issue and make your voice heard.
-
-- [File an issue for the Web3.Storage service or docs](https://github.com/web3-storage/web3.storage/issues/new/choose)
+Found a bug, or have a feature request for how to make Web3.Storage better? [File an issue](https://github.com/web3-storage/web3.storage/issues/new/choose) and make your voice heard.

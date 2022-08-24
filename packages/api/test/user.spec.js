@@ -4,6 +4,11 @@ import fetch from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { getTestJWT, getDBClient } from './scripts/helpers.js'
 import userUploads from './fixtures/pgrest/get-user-uploads.js'
+<<<<<<< HEAD
+=======
+import userPins from './fixtures/pgrest/get-user-pins.js'
+import { AuthorizationTestContext } from './contexts/authorization.js'
+>>>>>>> 21596197017950b63a7f148364c0d65c74aecea8
 
 describe('GET /user/account', () => {
   it('error if not authenticated with magic.link', async () => {
@@ -21,8 +26,8 @@ describe('GET /user/account', () => {
     assert.strictEqual(res.status, 401)
   })
 
-  it('retrieves user account data', async () => {
-    const token = 'test-magic'
+  it('retrieves user account data', async function () {
+    const token = AuthorizationTestContext.use(this).createUserToken()
     const res = await fetch(new URL('user/account', endpoint), {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -49,10 +54,11 @@ describe('GET /user/info', () => {
     assert.strictEqual(res.status, 401)
   })
 
-  it('retrieves user account data', async () => {
+  it('retrieves user account data', async function () {
     const db = getDBClient()
-    const token = 'test-magic'
-    const user = await db.getUser('test-magic-issuer')
+    const authorization = AuthorizationTestContext.use(this)
+    const token = authorization.createUserToken()
+    const user = await db.getUser(authorization.bypass.defaults.issuer)
     let res, userInfo
 
     // Set PSA access to true and check response
@@ -91,8 +97,8 @@ describe('GET /user/tokens', () => {
     assert.strictEqual(res.status, 401)
   })
 
-  it('retrieves user tokens', async () => {
-    const token = 'test-magic'
+  it('retrieves user tokens', async function () {
+    const token = AuthorizationTestContext.use(this).createUserToken()
     const res = await fetch(new URL('user/tokens', endpoint), {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -129,8 +135,8 @@ describe('POST /user/tokens', () => {
     assert.strictEqual(res.status, 401)
   })
 
-  it('creates a new token', async () => {
-    const token = 'test-magic'
+  it('creates a new token', async function () {
+    const token = AuthorizationTestContext.use(this).createUserToken()
     const res = await fetch(new URL('user/tokens', endpoint), {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
@@ -142,8 +148,8 @@ describe('POST /user/tokens', () => {
     assert(_id)
   })
 
-  it('requires valid name', async () => {
-    const token = 'test-magic'
+  it('requires valid name', async function () {
+    const token = AuthorizationTestContext.use(this).createUserToken()
     const res = await fetch(new URL('user/tokens', endpoint), {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
@@ -174,8 +180,8 @@ describe('DELETE /user/tokens/:id', () => {
     assert.strictEqual(res.status, 401)
   })
 
-  it('removes a token', async () => {
-    const token = 'test-magic'
+  it('removes a token', async function () {
+    const token = AuthorizationTestContext.use(this).createUserToken()
     const res = await fetch(new URL('user/tokens/2', endpoint), {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
@@ -259,8 +265,32 @@ describe('GET /user/uploads', () => {
     assert.deepStrictEqual(uploads, [...uploadsBeforeFilterDate])
   })
 
-  it('lists uploads via magic auth', async () => {
-    const token = 'test-magic'
+  it('filters results by after date', async () => {
+    const token = await getTestJWT()
+
+    const afterFilterDate = new Date('2021-07-10T00:00:00.000000+00:00').toISOString()
+    const res = await fetch(new URL(`/user/uploads?after=${afterFilterDate}`, endpoint).toString(), {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+
+    assert(res.ok)
+
+    const uploads = await res.json()
+
+    assert(uploads.length < userUploads.length, 'Ensure some results are filtered out.')
+    assert(uploads.length > 0, 'Ensure some results are returned.')
+
+    // Filter uploads fixture by the filter date.
+    const uploadsAfterFilterDate = userUploads.filter((upload) => {
+      return upload.created >= afterFilterDate
+    })
+
+    assert.deepStrictEqual(uploads, [...uploadsAfterFilterDate])
+  })
+
+  it('lists uploads via magic auth', async function () {
+    const token = AuthorizationTestContext.use(this).createUserToken()
     const res = await fetch(new URL('/user/uploads', endpoint).toString(), {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
@@ -325,8 +355,8 @@ describe('DELETE /user/uploads/:cid', () => {
     assert.strictEqual(res.status, 401)
   })
 
-  it('removes an upload', async () => {
-    const token = 'test-magic'
+  it('removes an upload', async function () {
+    const token = AuthorizationTestContext.use(this).createUserToken()
     const res = await fetch(new URL('user/uploads/bafkreiajkbmpugz75eg2tmocmp3e33sg5kuyq2amzngslahgn6ltmqxxfa', endpoint), {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }

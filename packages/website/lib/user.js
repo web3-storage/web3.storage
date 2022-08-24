@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
-import { isLoggedIn } from './magic.js'
-import { useQuery } from 'react-query'
-import { useRouter } from 'next/router'
-import constants from './constants.js'
+import { useEffect } from 'react';
+import { useQuery } from 'react-query';
+import { useRouter } from 'next/router';
+
+import { isLoggedIn } from './magic.js';
+import constants from './constants.js';
 
 /**
  * User Logged In Hook
@@ -14,16 +15,22 @@ import constants from './constants.js'
  * @returns
  */
 export function useLoggedIn({ redirectTo, redirectIfFound, enabled } = {}) {
-  const router = useRouter()
-  const { status, data: loggedIn, error, isFetching, isLoading } = useQuery('magic-user', isLoggedIn, {
+  const router = useRouter();
+  const {
+    status,
+    data: loggedIn,
+    error,
+    isFetching,
+    isLoading,
+  } = useQuery('magic-user', isLoggedIn, {
     staleTime: constants.MAGIC_TOKEN_LIFESPAN,
     refetchOnWindowFocus: false,
-    refetchOnReconnect: false
-  })
+    refetchOnReconnect: false,
+  });
 
   useEffect(() => {
     if (!redirectTo || isLoading || isFetching) {
-      return
+      return;
     }
     if (
       // If redirectTo is set, redirect if the user was not found.
@@ -31,9 +38,9 @@ export function useLoggedIn({ redirectTo, redirectIfFound, enabled } = {}) {
       // If redirectIfFound is also set, redirect if the user was found
       (redirectIfFound && loggedIn)
     ) {
-      router.push(redirectTo)
+      router.push(redirectTo);
     }
-  }, [redirectTo, redirectIfFound, status, isFetching, isLoading, loggedIn, router, enabled])
+  }, [redirectTo, redirectIfFound, status, isFetching, isLoading, loggedIn, router, enabled]);
 
-  return { status, isLoggedIn: loggedIn, error, isFetching, isLoading }
+  return { status, isLoggedIn: loggedIn, error, isFetching, isLoading };
 }

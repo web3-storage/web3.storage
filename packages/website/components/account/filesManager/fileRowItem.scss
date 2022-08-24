@@ -4,10 +4,9 @@ $base-row-width: 75.125rem;
 $file-select: calculateWidthPercentage(3.5rem, $base-row-width);
 $file-name: calculateWidthPercentage(23rem, $base-row-width);
 $file-requestid: calculateWidthPercentage(16rem, $base-row-width);
-$file-cid: calculateWidthPercentage(16rem, $base-row-width);
+$file-cid: calculateWidthPercentage(20rem, $base-row-width);
 $file-availability: calculateWidthPercentage(0rem, $base-row-width);
-$file-pin-status: calculateWidthPercentage(8rem, $base-row-width);
-$file-storage-providers: calculateWidthPercentage(10rem, $base-row-width);
+$file-storage-providers: calculateWidthPercentage(14rem, $base-row-width);
 $file-size: calculateWidthPercentage(8rem, $base-row-width);
 $file-date: auto;
 
@@ -18,7 +17,7 @@ $file-date: auto;
   letter-spacing: 0;
   display: grid;
   position: relative;
-  grid-template-columns: $file-select $file-name $file-cid $file-pin-status $file-storage-providers $file-size $file-date;
+  grid-template-columns: $file-select $file-name $file-cid $file-storage-providers $file-size $file-date;
   align-items: flex-start;
   padding: 0.75rem 2rem;
   transition: all 0.2s ease-in-out;
@@ -241,14 +240,6 @@ $file-date: auto;
         padding-right: 1.25rem;
       }
     }
-    &-pin-status {
-      justify-content: flex-start;
-      align-items: center;
-      gap: 0.625rem;
-      @include medium {
-        gap: 0;
-      }
-    }
     &-storage-providers {
       justify-content: flex-start;
       align-items: center;
@@ -361,7 +352,7 @@ $file-date: auto;
 }
 
 .pin-request-row {
-  grid-template-columns: $file-select $file-name $file-requestid $file-cid $file-pin-status $file-date;
+  grid-template-columns: $file-select $file-name $file-requestid $file-cid $file-date;
   @include medium {
     grid-template-columns: auto;
   }

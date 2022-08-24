@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 16
       - uses: bahmutov/npm-install@v1
-      - run: npm run lint:ts -w packages/website
+      - run: npm run lint -w packages/website
 
   test-e2e:
     name: "Test e2e - ${{ matrix.browser }}"
@@ -124,7 +124,7 @@ jobs:
           number: ${{ steps.finder.outputs.pr }}
           message: |
             ### Website preview 🔗✨
-            - 🙂 https://nftstorage.link/ipfs/${{ steps.ipfs.outputs.cid }}
+            - 🙂 https://w3s.link/ipfs/${{ steps.ipfs.outputs.cid }}
             - ⛅️ ${{ steps.cloudflare_url.outputs.stdout }}
 
             [build log](/${{ github.repository }}/actions/runs/${{ github.run_id }})
@@ -132,7 +132,7 @@ jobs:
         run: |
           echo "
           ### Website preview 🔗✨
-            - 🙂 https://nftstorage.link/ipfs/${{ steps.ipfs.outputs.cid }}
+            - 🙂 https://w3s.link/ipfs/${{ steps.ipfs.outputs.cid }}
             - ⛅️ ${{ steps.cloudflare_url.outputs.stdout }}
 
             [build log](/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY

@@ -179,7 +179,7 @@ export async function getUploads({ size, page, sortBy, sortOrder } = {}) {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + (await getToken()),
     },
-  })
+  });
 
   if (!res.ok) {
     throw new Error(`failed to get uploads: ${await res.text()}`);
