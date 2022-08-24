@@ -198,7 +198,7 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: npx dnslink-cloudflare --record staging --domain web3.storage --link /ipfs/${{ steps.ipfs.outputs.cid }}
         env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_API_TOKEN: ${{ secrets.CF_TOKEN }}
       - name: Deploy preview build to Cloudflare Pages
         uses: mathiasvr/command-output@v1.1.0
         id: cloudflare
@@ -286,7 +286,7 @@ jobs:
       - name: Update IPFS DNSLink https://web3.storage
         run: npx dnslink-cloudflare --record _dnslink --domain web3.storage --link /ipfs/${{ steps.ipfs.outputs.cid }}
         env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_API_TOKEN: ${{ secrets.CF_TOKEN }}
       - name: Deploy https://web3.storage to Cloudflare Pages
         run: npx wrangler pages publish --project-name web3-storage --branch "main" --commit-hash "$GITHUB_SHA" ./packages/website/out
         env:
