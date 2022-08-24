@@ -43,7 +43,7 @@
     .tab-button {
       font-size: 1rem;
       text-transform: uppercase;
-      
+
       &.selected {
         color: $cyan;
         border-bottom: 1px solid $cyan;
@@ -73,6 +73,14 @@
   @include medium {
     padding: 0;
     justify-content: space-between;
+
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      'title title title'
+      'refresh sort gateway'
+      'search search search';
   }
 
   .upload-button {
@@ -93,17 +101,23 @@
       }
     }
     @include medium {
-      padding-left: 1.75rem;
+      padding-left: 1.5rem;
       margin-right: initial;
+      grid-area: title;
+      width: 100%;
     }
   }
 
   .files-manager-search {
+    margin-right: 1rem;
     @include medium {
       flex-basis: 100%;
       order: 4;
       margin-top: 0.625rem;
       margin-bottom: 0.5rem;
+      margin-right: 0;
+      grid-area: search;
+      width: calc(100% - 3rem);
     }
   }
 
@@ -121,8 +135,8 @@
     top: 0.125rem;
     cursor: pointer;
     @include medium {
-      margin-right: 3rem;
-      margin-left: auto;
+      margin: 0 auto 0 1.5rem;
+      grid-area: refresh;
     }
     svg {
       transition: transform $transitionDuration;
@@ -148,7 +162,18 @@
 
   .Sortable {
     @include medium {
-      padding-right: 1.25rem;
+      grid-area: sort;
+    }
+  }
+
+  .files-manager-gateway {
+    @include medium {
+      grid-area: gateway;
+      margin-right: 1.5rem;
+    }
+
+    .dropdownContent {
+      right: 0;
     }
   }
 }

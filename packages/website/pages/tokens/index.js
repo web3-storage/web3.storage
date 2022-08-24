@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
-import Link from 'components/link/link';
 import TokenCreator from 'components/tokens/tokenCreator/tokenCreator';
 import TokensManager from 'components/tokens/tokensManager/tokensManager';
 import Button, { ButtonVariant } from 'components/button/button';

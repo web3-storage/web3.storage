@@ -7,11 +7,13 @@ on:
       - 'packages/api/**'
       - 'packages/db/**'
       - '.github/workflows/api.yml'
+      - 'package-lock.json'
   pull_request:
     paths:
       - 'packages/api/**'
       - 'packages/db/**'
       - '.github/workflows/api.yml'
+      - 'package-lock.json'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -48,7 +50,7 @@ jobs:
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
           SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
         with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
+          apiToken: ${{ secrets.CF_TOKEN }}
           workingDirectory: 'packages/api'
           environment: 'staging'
       - name: Test upload to staging
@@ -88,6 +90,6 @@ jobs:
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
           SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
         with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
+          apiToken: ${{ secrets.CF_TOKEN }}
           workingDirectory: 'packages/api'
           environment: 'production'

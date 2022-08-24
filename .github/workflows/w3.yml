@@ -6,12 +6,14 @@ on:
     paths:
       - 'packages/w3/**'
       - '.github/workflows/w3.yml'
+      - 'package-lock.json'
   pull_request:
     branches:
       - main
     paths:
       - 'packages/w3/**'
       - '.github/workflows/w3.yml'
+      - 'package-lock.json'
 jobs:
   test:
     runs-on: ubuntu-latest

@@ -57,3 +57,13 @@
 .user-request-modal__heading {
   font-size: 1.5rem;
 }
+
+.user-request-modal__description {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 18px;
+
+  a {
+    text-decoration: underline;
+  }
+}

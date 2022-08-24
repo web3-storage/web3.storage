@@ -1,0 +1,76 @@
+.w3link_gateway {
+  display: block;
+  margin: 1rem 0 0;
+  max-width: 72rem;
+  border-radius: 0.375rem;
+  position: relative;
+  border-radius: 40px;
+  font-size: 1rem;
+
+  @media (min-width: 640px) {
+    display: flex;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  &--preinput {
+    color: #fff;
+    /* Gradient1 */
+    background: linear-gradient(99.94deg, rgb(228, 31, 235, 0.6) -7.08%, rgb(61, 71, 221, 0.6) 47.33%);
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    display: inline-block;
+
+    @media (min-width: 640px) {
+      display: inline-flex;
+      background-color: #f3f4f6;
+      border-top-left-radius: 40px;
+      border-bottom-left-radius: 40px;
+      border-width: 2px;
+      border-right-width: 0;
+      border-color: #000000;
+    }
+  }
+
+  input {
+    display: block;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    color: #000000;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1 1 0%;
+    width: 100%;
+    min-width: 0;
+    border-radius: 0rem;
+    border: 0;
+    outline: none;
+
+    @media (min-width: 640px) {
+      border-radius: 0;
+      border-top-right-radius: 40px;
+      border-bottom-right-radius: 40px;
+      padding-right: 6rem;
+    }
+  }
+
+  button {
+    background-color: #000000;
+    font-weight: bold;
+    color: #fff;
+    padding: 0.5rem 1.5rem;
+    box-sizing: border-box;
+    height: calc(100% - 12px);
+    display: flex;
+    align-items: center;
+    @media (min-width: 640px) {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      margin: 6px;
+      border-radius: 40px;
+    }
+  }
+}

@@ -117,7 +117,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, ERROR_CODE)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
       assert.strictEqual(error.details, '#/limit: Instance type "number" is invalid. Expected "integer".')
     })
@@ -135,7 +135,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, ERROR_CODE)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.strictEqual(error.reason, PSAErrorRequiredData.CODE)
       assert.strictEqual(error.details, 'Instance does not have required property "status".')
     })
@@ -159,7 +159,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, ERROR_CODE)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
       assert.strictEqual(error.details, '#/meta: Instance type "array" is invalid. Expected "object".')
     })
@@ -183,7 +183,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, ERROR_CODE)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
       assert.strictEqual(error.details, '#/meta/not-a-string-value: Instance type "number" is invalid. Expected "string".')
     })
@@ -206,7 +206,7 @@ describe('Pinning APIs endpoints', () => {
         })
 
       assert.strictEqual(res.status, ERROR_CODE)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
       assert.strictEqual(error.details, INVALID_CID)
     })
@@ -226,7 +226,7 @@ describe('Pinning APIs endpoints', () => {
         })
 
       assert.strictEqual(res.status, ERROR_CODE)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
       assert.strictEqual(error.details, '#/status/1: Instance does not match any of ["queued","pinning","pinned","failed"].')
     })
@@ -246,7 +246,7 @@ describe('Pinning APIs endpoints', () => {
         })
 
       assert.strictEqual(res.status, ERROR_CODE)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
       assert.strictEqual(error.details, '#/match: Instance does not match any of ["exact","iexact","ipartial","partial"].')
     })
@@ -527,7 +527,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, ERROR_CODE)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.strictEqual(error.reason, PSAErrorRequiredData.CODE)
       assert.strictEqual(error.details, 'Instance does not have required property "cid".')
     })
@@ -545,7 +545,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, ERROR_CODE)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
       assert.strictEqual(error.details, INVALID_CID)
     })
@@ -596,7 +596,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, ERROR_CODE)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
       assert.strictEqual(error.details, '#/name: Instance type "number" is invalid. Expected "string".')
     })
@@ -616,7 +616,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, ERROR_CODE)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
       assert.strictEqual(error.details, '#/origins: Instance type "number" is invalid. Expected "array".')
     })
@@ -636,7 +636,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.strictEqual(res.status, ERROR_CODE)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
       assert.strictEqual(error.details, '#/meta: Instance type "number" is invalid. Expected "object".')
     })
@@ -866,7 +866,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.deepEqual(res.status, 404)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.deepEqual(error.reason, PSAErrorResourceNotFound.CODE)
       assert.deepEqual(error.details, DATA_NOT_FOUND)
     })
@@ -936,7 +936,7 @@ describe('Pinning APIs endpoints', () => {
 
       assert(res, 'Server responded')
       assert.equal(res.status, 404)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.equal(error.reason, PSAErrorResourceNotFound.CODE)
       assert.equal(error.details, DATA_NOT_FOUND)
     })
@@ -1004,7 +1004,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(!res.ok)
       assert.equal(res.status, ERROR_CODE)
-      const error = await res.json()
+      const { error } = await res.json()
       assert.equal(error.details, INVALID_REPLACE)
     })
   })

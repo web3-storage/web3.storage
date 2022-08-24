@@ -14,21 +14,32 @@
   ],
   "scripts": {
     "start": "npm-run-all --print-label -p web api",
+    "stop": "npm-run-all --print-label -p web:stop api:stop",
     "api": "npm start -w packages/api",
+    "api:stop": "npm run stop -w packages/api",
     "web": "npm start -w packages/website",
+    "web:stop": "npm run --if-present stop -w packages/website",
     "test": "npm run lint && npm run test --workspaces",
     "test:e2e": "npm run test:e2e --if-present --workspaces",
-    "lint": "standard --verbose | snazzy",
-    "lint:fix": "standard --fix "
+    "lint": "npm-run-all -p lint:workspaces lint:standard",
+    "lint:workspaces": "npm -ws run --if-present lint",
+    "lint:fix": "npm-run-all lint:standard:fix lint:fix:workspaces",
+    "lint:fix:workspaces": "npm -ws run --if-present lint:fix",
+    "lint:standard": "standard --verbose | snazzy",
+    "lint:standard:fix": "standard --fix"
   },
   "devDependencies": {
+    "@typescript-eslint/parser": "^5.33.1",
     "npm-run-all": "^4.1.5",
     "snazzy": "^9.0.0",
     "standard": "^16.0.3",
-    "wrangler": "^2.0.15"
+    "wrangler": "^2.0.23"
   },
   "standard": {
-    "globals": ["fetch", "AbortController"],
+    "globals": [
+      "fetch",
+      "AbortController"
+    ],
     "ignore": [
       "packages/website"
     ]
