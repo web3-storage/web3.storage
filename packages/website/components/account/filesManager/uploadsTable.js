@@ -269,7 +269,6 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
         date={fileRowLabels.date.label}
         name={fileRowLabels.name.label}
         cid={fileRowLabels.cid.label}
-        status={fileRowLabels.status.label}
         storageProviders={fileRowLabels.storage_providers.label}
         size={fileRowLabels.size.label}
         linkPrefix={linkPrefix}
