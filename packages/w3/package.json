@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/w3",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "description": "The CLI to save your things in web3.storage ⁂",
   "type": "module",
   "bin": {

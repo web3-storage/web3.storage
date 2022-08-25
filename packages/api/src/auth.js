@@ -142,7 +142,7 @@ export function withPinningAuthorized (handler) {
  * * magic.link token: common in prod. the token may be a magic link token. The issuer is a claim in the token's JWT.
  * * magic.link testMode token: common during e2e tests using testMode. The tokens syntactically like non-testMode tokens, but they may throw errors with some magic sdk methods.
  *   These should only be allowed when the magicTestModeEnabledFromEnv is true. The issuer comes from the token's JWT.
- * * testing token: the token may be a special allowlisted token that are used for testing routes behind an authz middleware.
+ * * testing token: the token may be a special allowlisted token that are used for testing routes behind an auth middleware.
  *   These are allowed based on param dangerousAuthBypassForTesting. The issuer comes from dangerousAuthBypassForTesting.defaults.issuer
  * @param {Record<string,string>} - e.g. env variables to load configuration from
  * @param {string} token - api token sent in a request
@@ -163,7 +163,10 @@ function authenticateMagicToken (
   if (dangerousAuthBypassForUnitTesting.isAllowedToken(env, token)) {
     return dangerousAuthBypassForUnitTesting.defaults
   }
+
+  /** @type {import('@magic-sdk/admin').ParsedDIDToken} */
   let decodedToken = null
+
   try {
     decodedToken = env.magic.token.decode(token)
   } catch (error) {
@@ -178,8 +181,9 @@ function authenticateMagicToken (
   }
   // token is magic token and doesn't require further validation
   try {
-    const [, magicClaims] = decodedToken
-    return magicClaims
+    const magicClaims = decodedToken[1]
+
+    return { issuer: magicClaims.iss }
   } catch (error) {
     console.warn('error parsing decoded magic token', error.name, error.message)
   }
