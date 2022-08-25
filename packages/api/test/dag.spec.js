@@ -5,7 +5,6 @@ import * as pb from '@ipld/dag-pb'
 import * as json from '@ipld/dag-json'
 import { sha256 as hasher } from 'multiformats/hashes/sha2'
 import { LinkIndexer } from '../src/utils/dag.js'
-import { CID } from 'multiformats/cid'
 
 describe('utils/dag.js', () => {
   it('should index dag-pb with no links', async () => {
@@ -20,7 +19,7 @@ describe('utils/dag.js', () => {
 
   it('should index dag-pb with links for complete dag', async () => {
     const child = await encode({ value: pb.prepare({ Links: [] }), codec: pb, hasher })
-    const block = await encode({ value: pb.prepare({ Links: [child.cid] }), codec: pb, hasher }) 
+    const block = await encode({ value: pb.prepare({ Links: [child.cid] }), codec: pb, hasher })
     const linkIndexer = new LinkIndexer()
 
     linkIndexer.decodeAndIndex({ cid: block.cid, bytes: block.bytes })
@@ -35,7 +34,7 @@ describe('utils/dag.js', () => {
   })
 
   it('should index dag-json with no links', async () => {
-    const block = await encode({ value: { foo: 'bar '}, codec: json, hasher })
+    const block = await encode({ value: { foo: 'bar ' }, codec: json, hasher })
     const linkIndexer = new LinkIndexer()
     linkIndexer.decodeAndIndex({ cid: block.cid, bytes: block.bytes })
     assert.deepEqual(linkIndexer.links.get(block.cid.toString()), [])
@@ -46,7 +45,7 @@ describe('utils/dag.js', () => {
 
   it('should index dag-json with links for complete dag', async () => {
     const child = await encode({ value: { foo: 'bar' }, codec: json, hasher })
-    const block = await encode({ value: { child: child.cid }, codec: json, hasher }) 
+    const block = await encode({ value: { child: child.cid }, codec: json, hasher })
     const linkIndexer = new LinkIndexer()
 
     linkIndexer.decodeAndIndex({ cid: block.cid, bytes: block.bytes })
@@ -61,11 +60,11 @@ describe('utils/dag.js', () => {
   })
 
   it('should handle unknown codecs', async () => {
-    const block = await encode({ value: { foo: 'bar '}, codec: json, hasher })
+    const block = await encode({ value: { foo: 'bar ' }, codec: json, hasher })
     const linkIndexer = new LinkIndexer()
     // simulate not having a codec
     const codecs = []
-    linkIndexer.decodeAndIndex({ cid: block.cid, bytes: block.bytes }, { codecs }) 
+    linkIndexer.decodeAndIndex({ cid: block.cid, bytes: block.bytes }, { codecs })
     assert.equal(linkIndexer.getDagStructureLabel(), 'Unknown')
     assert.throws(() => linkIndexer.isCompleteDag())
   })

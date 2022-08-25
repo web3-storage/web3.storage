@@ -16,10 +16,10 @@ const decoders = {
  * Decoding allows us to find out if that block links to any others by CID.
  * @param {import('@ipld/car/api').Block} block
  * @param {object} [opts]
- * @param {object} [opts.codecs] 
+ * @param {object} [opts.codecs]
  * @returns {Block.Block | undefined}
  */
-export function maybeDecode ({ cid, bytes}, { codecs = decoders } = {}) {
+export function maybeDecode ({ cid, bytes }, { codecs = decoders } = {}) {
   const codec = codecs[cid.code]
   if (codec) {
     return Block.createUnsafe({ cid, bytes, codec })
@@ -43,7 +43,7 @@ export class LinkIndexer {
    * Decode the block and index any CIDs it links to
    * @param {import('@ipld/car/api').Block} block
    * @param {object} [opts]
-   * @param {object} [opts.codecs] 
+   * @param {object} [opts.codecs]
    */
   decodeAndIndex ({ cid, bytes }, opts) {
     const block = maybeDecode({ cid, bytes }, opts)
