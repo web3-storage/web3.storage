@@ -2,22 +2,19 @@
 import { PutObjectCommand } from '@aws-sdk/client-s3/dist-es/commands/PutObjectCommand.js'
 import { CarBlockIterator } from '@ipld/car'
 import { toString, equals } from 'uint8arrays'
-import { Block } from 'multiformats/block'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as raw from 'multiformats/codecs/raw'
-import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
 import { InvalidCarError } from './errors.js'
 import { MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/cid.js'
+import { LinkIndexer, maybeDecode } from './utils/dag.js'
 
 /**
  * @typedef {import('multiformats/cid').CID} CID
  */
-
-const decoders = [pb, raw, cbor]
 
 /**
  * TODO: ipfs should let us ask the size of a CAR file.
@@ -106,18 +103,11 @@ export async function carPost (request, env, ctx) {
 export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car') {
   const { user, authToken } = request.auth
   const { headers } = request
-  
-  /** @type { 'Complete' | 'Unknown' } */
-  let structure = uploadType === 'Upload' ? 'Complete' : 'Unknown'
 
   // Throws if CAR is invalid by our standards.
   // Returns either the sum of the block sizes in the CAR, or the cumulative size of the DAG for a dag-pb root.
-  const { size: dagSize, rootCid } = await carStat(car)
+  const { size: dagSize, rootCid, structure } = await carStat(car)
   const sourceCid = rootCid.toString()
-
-  if (structure === 'Unknown' && rootCid.code === raw.code) {
-    structure = 'Complete'
-  }
 
   const bucketKey = await uploadToBucket(env.s3Client, env.s3BucketName, car, sourceCid, user._id, structure)
 
@@ -141,7 +131,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
       contentCid,
       location: {
         peerId: env.ELASTIC_IPFS_PEER_ID,
-        peerName: 'elastic-ipfs',
+        peerName: 'elastic-ipfs'
       }
     }],
     dagSize
@@ -156,15 +146,15 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
       } catch (err) {
         console.warn('failed to pin to cluster', err)
       }
-  
+
       const pins = await addToCluster(car, env)
-  
+
       await env.db.upsertPins(pins.map(p => ({
         status: p.status,
         contentCid,
         location: p.location
       })))
-  
+
       // Retrieve current pin status and info about the nodes pinning the content.
       // Keep querying Cluster until one of the nodes reports something other than
       // Unpinned i.e. PinQueued or Pinning or Pinned.
@@ -304,6 +294,7 @@ async function carStat (carBlob) {
   if (roots.length > 1) {
     throw new InvalidCarError('too many roots')
   }
+  const linkIndexer = new LinkIndexer()
   const rootCid = roots[0]
   let rawRootBlock
   let blocks = 0
@@ -321,6 +312,7 @@ async function carStat (carBlob) {
     if (!rawRootBlock && block.cid.equals(rootCid)) {
       rawRootBlock = block
     }
+    linkIndexer.decodeAndIndex(block)
     blocks++
   }
   if (blocks === 0) {
@@ -330,13 +322,12 @@ async function carStat (carBlob) {
     throw new InvalidCarError('missing root block')
   }
   let size
-  const decoder = decoders.find(d => d.code === rootCid.code)
-  if (decoder) {
-    // if there's only 1 block (the root block) and it's a raw node, we know the size.
-    if (blocks === 1 && rootCid.code === raw.code) {
-      size = rawRootBlock.bytes.byteLength
-    } else {
-      const rootBlock = new Block({ cid: rootCid, bytes: rawRootBlock.bytes, value: decoder.decode(rawRootBlock.bytes) })
+  // if there's only 1 block (the root block) and it's a raw node, we know the size.
+  if (blocks === 1 && rootCid.code === raw.code) {
+    size = rawRootBlock.bytes.byteLength
+  } else {
+    const rootBlock = maybeDecode(rawRootBlock)
+    if (rootBlock) {
       const hasLinks = !rootBlock.links()[Symbol.iterator]().next().done
       // if the root block has links, then we should have at least 2 blocks in the CAR
       if (hasLinks && blocks < 2) {
@@ -348,7 +339,8 @@ async function carStat (carBlob) {
       }
     }
   }
-  return { size, blocks, rootCid }
+  const structure = linkIndexer.getDagStructureLabel()
+  return { size, blocks, rootCid, structure }
 }
 
 /**
