@@ -42,22 +42,12 @@
               {
                 "id": "service",
                 "heading": "How is Web3.Storage different from NFT.Storage?",
-                "content": "Both services are offered by the same group and share much of the same architecture, but as the name suggests, NFT.Storage is a service that is focused on NFTs specifically, with the mission to perpetually store all off-chain NFT data as a public good (so for free, forever). On the other hand, Web3.Storage looks to offer very inexpensive, decentralized data storage for any kind of data."
-              },
-              {
-                "id": "cryptoeconomics",
-                "heading": "How can you offer this service for free?",
-                "content": "Due to the cryptoeconomics of Filecoin, data storage is provided for free today. This will likely change to some form of crypto-native payment model in the near future (e.g., staking Filecoin to increase storage limits), but will remain highly inexpensive due to Filecoin's economic model and 15B+ PiB of capacity. Today, we do subsidize the cost of overhead of running Web3.Storage, but the goal is to reduce this as Filecoin continues to improve (e.g., faster storage and retrieval). Please see <a href='https://spec.filecoin.io/algorithms/cryptoecon/' alt='Filecoin Cryptoeconomics' target='_blank'>here for more on Filecoin economics</a>."
-              },
-              {
-                "id": "data-security",
-                "heading": "What happens if Web3.Storage is discontinued?",
-                "content": "One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data is accessible via IPFS, and you can simply export all of your CIDs and ask a pinning service to pin them without need to download or upload any data. You have this option even if you use Web3.Storage today and just want another redundant copy of your data persisted. And you don't need to change the URLs that your application is pointing to, since IPFS URLs are content addressable.<br><br>We don't expect to ever discontinue Web3.Storage, but if we need to, we'll give you 90 days' notice for you to make the easy switch."
+                "content": "Web3.Storage is a platform that enables developers, applications, and users to interact with data independently of where it is stored, using decentralized protocols like <a href='https://ipfs.io/' alt='IPFS' target='_blank'>IPFS and <a href='https://ucan.xyz/' alt='UCAN' target='_blank'>UCAN. This includes an easy-to-use, performant storage service that makes data available on IPFS and persists it on the Filecoin decentralized storage network. NFT.Storage is a service whose mission to perpetually store all off-chain NFT data as a public good (so for free, forever). It currently runs on the Web3.Storage platform today, but has future plans to provide its services in a fully decentralized manner (run by a DAO with operations and governance instrumented on smart contracts)."
               },
               {
                 "id": "how-to-delete",
                 "heading": "How can I delete items from Web3.Storage?",
-                "content": "You can delete files listed in your account. Simply log-in to your account and use the file manager on the files page. It's currently not possible to delete files via the API or the client libraries, but we are working on enabling that feature in the near future.<br><br>However, once a file is uploaded to Web3.Storage, there cannot be a guarantee that all copies of the file are gone from the IPFS network. As soon as a file is uploaded, other IPFS nodes can access and store a copy of the data. The data only becomes unavailable when the last IPFS node has stopped pinning the file, and all copies are garbage collected. As a consequence you should only upload to Web3.Storage files that you know can be shared with anyone forever, or are securely encrypted."
+                "content": "You can delete files listed in your account. Simply log-in to your account and use the file manager on the files page. It's currently not possible to delete files via the API or the client libraries, but we are working on enabling that feature in the near future.<br><br>However, once a file is uploaded to Web3.Storage, there cannot be a guarantee that all copies of the file are gone from the IPFS network. As soon as a file is uploaded, other IPFS nodes can access and store a copy of the data. The data only becomes unavailable when the last IPFS node has stopped pinning the file, and all copies are garbage collected. As a consequence you should only upload to Web3.Storage files that you know can be shared with anyone forever, or are securely encrypted.<br><br>We are in the process of rolling out a new client and service called w3up that allows you to unlink uploads from being associated with your account. The Alpha version CLI can be found <a href='https://github.com/nftstorage/w3up-cli' alt='w3up' target='_blank'>here. Later, the current Javascript client will use w3up and all existing uploads and accounts will be migrated to the new service.""
               },
               {
                 "id": "using-api-directly",
@@ -67,12 +57,12 @@
               {
                 "id": "editing-files",
                 "heading": "How can I edit a file or add files to a folder?",
-                "content": "Since CIDs are immutable, it's currently not possible to edit files or add files to a folder. We are working on making mutable references available that you can use instead."
+                "content": "Since CIDs are immutable, it's currently not possible to edit files or add files to a folder. We recommend checking out w3name, our hosted <a href='https://docs.ipfs.io/concepts/ipns/' alt='IPNS' target='_blank'>IPNS service, if you are interested in dynamic data."
               },
               {
                 "id": "uploading-without-account",
                 "heading": "How can my users upload files directly to Web3.Storage without them needing to create their own account?",
-                "content": "Currently the best way to upload to Web3.Storage from the browser is to relay data through an endpoint that you control that has access to the API token. Providing the API token in your front-end will allow anyone to upload files to your account and list already uploaded files. However, we are actively working on ways end-users can upload data directly to Web3.Storage without needing an intermediary!"
+                "content": "The current Javascript client and API requires you to provide the API token in your front-end, allowing anyone to upload files to your account and list already uploaded files. However, we are in the process of rolling out a new client and service called w3up that natively uses UCAN for authentication, meaning you can cryptographically delegate permission to other actors to directly upload to your account. The Alpha version CLI can be found <a href='https://github.com/nftstorage/w3up-cli' alt='w3up' target='_blank'>here. Later, the current Javascript client will use w3up and all existing uploads and accounts will be migrated to the new service."
               }
             ]
           }
