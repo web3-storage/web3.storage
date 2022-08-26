@@ -1275,27 +1275,4 @@ export class DBClient {
       _id: data.id
     }
   }
-
-  /**
-   * List IPNS records
-   *
-   * @param {{ from: number, to: number }} [opts]
-   * @returns {Promise<Array<import('./db-client-types').NameItem>>}
-   */
-  async listNames (opts = {}) {
-    const query = this._client
-      .from('name')
-      .select('*')
-      .order('inserted_at', { ascending: true })
-      .range(opts.from || 0, opts.to || 10)
-
-    /** @type {{ data: Array<import('./db-client-types').NameItem>, error: Error }} */
-    const { data: names, error } = await query
-
-    if (error) {
-      throw new DBError(error)
-    }
-
-    return names
-  }
 }
