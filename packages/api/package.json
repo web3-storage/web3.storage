@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/api",
-  "version": "7.2.0",
+  "version": "7.3.0",
   "private": true,
   "type": "module",
   "license": "(Apache-2.0 OR MIT)",
@@ -27,7 +27,9 @@
     "minio:reset": "web3-storage-tools minio server clean",
     "pg:start": "cd ../db && npm start",
     "pg:stop": "cd ../db && npm run stop",
-    "miniflare": "miniflare dist/worker.mjs --modules --env ../../.env --watch"
+    "miniflare": "miniflare dist/worker.mjs --modules --env ../../.env $API_MINIFLARE_FLAGS --watch",
+    "lint": "standard --verbose",
+    "lint:fix": "npm run lint -- --fix"
   },
   "devDependencies": {
     "@sentry/cli": "^1.72.1",

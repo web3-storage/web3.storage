@@ -50,7 +50,7 @@ jobs:
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
           SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
         with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
+          apiToken: ${{ secrets.CF_TOKEN }}
           workingDirectory: 'packages/api'
           environment: 'staging'
       - name: Test upload to staging
@@ -93,6 +93,6 @@ jobs:
           MAILCHIMP_BLOG_LIST_ID: 64f6e3fd11
           MAILCHIMP_BLOG_API_PREFIX: us5
         with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
+          apiToken: ${{ secrets.CF_TOKEN }}
           workingDirectory: 'packages/api'
           environment: 'production'

@@ -12,6 +12,7 @@ import {
 import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
+import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -31,6 +32,36 @@ export async function userLoginPost (request, env) {
 }
 
 /**
+ * Controller for logging in using a magic.link token
+ * @param {Magic} magic - magic sdk instance
+ */
+function createMagicLoginController (env, testModeBypass = magicLinkBypassForE2ETestingInTestmode) {
+  const createTestmodeMetadata = (token) => {
+    const { issuer } = testModeBypass.authenticateMagicToken(env, token)
+    return {
+      issuer,
+      email: 'testMode@magic.link',
+      publicAddress: issuer
+    }
+  }
+  /**
+   * authenticate an incoming request that has a magic.link token.
+   * throws error if token isnt valid
+   * @returns {Promise} metadata about the validated token
+   */
+  const authenticate = async ({ token }) => {
+    if (testModeBypass.isEnabledForToken(env, token)) {
+      return createTestmodeMetadata(token)
+    }
+    await env.magic.token.validate(token)
+    return env.magic.users.getMetadataByToken(token)
+  }
+  return {
+    authenticate
+  }
+}
+
+/**
  * @param {Request} request
  * @param {import('./env').Env} env
  */
@@ -39,9 +70,7 @@ async function loginOrRegister (request, env) {
   const auth = request.headers.get('Authorization') || ''
 
   const token = env.magic.utils.parseAuthorizationHeader(auth)
-  env.magic.token.validate(token)
-
-  const metadata = await env.magic.users.getMetadataByToken(token)
+  const metadata = await (createMagicLoginController(env).authenticate({ token }))
   const { issuer, email, publicAddress } = metadata
   if (!issuer || !email || !publicAddress) {
     throw new Error('missing required metadata')
@@ -396,7 +425,7 @@ const notifySlack = async (
     return
   }
 
-  fetch(webhookUrl, {
+  globalThis.fetch(webhookUrl, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json'
@@ -427,5 +456,47 @@ const notifySlack = async (
         .join('')}
 `
     })
+  })
+}
+
+/**
+ * Get a user's payment settings.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userPaymentGet (request, env) {
+  const { searchParams } = new URL(request.url)
+  const paramMethodId = searchParams.get('method.id')
+  const userPaymentGetResponse = {
+    method: paramMethodId ? { id: paramMethodId } : null
+  }
+  return new JSONResponse(userPaymentGetResponse)
+}
+
+/**
+ * Save a user's payment settings.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userPaymentPut (request, env) {
+  const requestBody = await request.json()
+  const method = requestBody?.method?.id
+    ? { id: requestBody?.method?.id }
+    : {
+      // stubbing this for now with the value from the docs.
+      //   https://stripe.com/docs/api/payment_methods/object
+        id: env.mockStripePaymentMethodId,
+        warning: 'this method is a stub. The id here is different than anything you might have sent in the request.'
+      }
+  const savePaymentSettingsResponse = {
+    method
+  }
+  return new JSONResponse(savePaymentSettingsResponse, {
+    status: 202,
+    headers: {
+      location: `/user/payment?method.id=${method.id}`
+    }
   })
 }
