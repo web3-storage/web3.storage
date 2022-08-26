@@ -31,9 +31,9 @@ import pkg from '../package.json'
  * @property {string} [SENTRY_RELEASE]
  * @property {string} [LOGTAIL_TOKEN]
  * @property {string} MAINTENANCE_MODE
- * @property {string} MAILCHIMP_API_KEY
+ * @property {string} MAILCHIMP_BLOG_API_KEY
  * @property {string} MAILCHIMP_BLOG_LIST_ID
- * @property {string} MAILCHIMP_API_PREFIX
+ * @property {string} MAILCHIMP_BLOG_API_PREFIX
  * @property {string} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
  * // Derived values and class dependencies
  * @property {Cluster} cluster

@@ -24,7 +24,7 @@ export const isChimpUser = async (email, prefix, listId, headers) => {
  *  @returns {Promise<Response>}
  */
 export const addSubscriber = async (email, prefix, listId, headers) => {
-  const tag = process.env.MAILCHIMP_API_LIST_TAG || 'web3_blog_subscriber'
+  const tag = process.env.MAILCHIMP_BLOG_API_LIST_TAG || 'web3_blog_subscriber'
   const url = `https://${prefix}.api.mailchimp.com/3.0/lists/${listId}/members/`
   const body = JSON.stringify({
     email_address: email,
@@ -47,7 +47,7 @@ export const addSubscriber = async (email, prefix, listId, headers) => {
  *  @returns {Promise<Response>}
  */
 export const updateSubscriber = async (email, prefix, listId, headers) => {
-  const tag = process.env.MAILCHIMP_API_LIST_TAG || 'web3_blog_subscriber'
+  const tag = process.env.MAILCHIMP_BLOG_API_LIST_TAG || 'web3_blog_subscriber'
   const url = `https://${prefix}.api.mailchimp.com/3.0/lists/${listId}/members/${encodeURIComponent(
     email
   )}/tags`

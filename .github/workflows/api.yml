@@ -89,6 +89,9 @@ jobs:
           ENV: 'production' # inform the build process what the env is
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
           SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD}}
+          MAILCHIMP_BLOG_API_KEY: ${{ secrets.MAILCHIMP_BLOG_API_KEY }}
+          MAILCHIMP_BLOG_LIST_ID: 64f6e3fd11
+          MAILCHIMP_BLOG_API_PREFIX: us5
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           workingDirectory: 'packages/api'
