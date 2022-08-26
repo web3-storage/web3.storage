@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 /**
  *  @param {string} email
  *  @param {string} prefix

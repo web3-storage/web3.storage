@@ -28,7 +28,10 @@
     "wrangler": "^2.0.23"
   },
   "standard": {
-    "globals": ["fetch", "AbortController"],
+    "globals": [
+      "fetch",
+      "AbortController"
+    ],
     "ignore": [
       "packages/website"
     ]
@@ -36,5 +39,8 @@
   "engines": {
     "node": "16.x",
     "npm": ">=7.x"
+  },
+  "dependencies": {
+    "node-fetch": "^3.2.10"
   }
 }
