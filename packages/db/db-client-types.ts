@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { definitions } from './postgres/pg-rest-api-types'
 
 // User

@@ -18,6 +18,7 @@
     "test": "run-s test:worker test:size",
     "test:worker": "mocha --require test/hooks.js --experimental-vm-modules --timeout 5000",
     "test:size": "bundlesize",
+    "typecheck": "tsc -b ./tsconfig.json",
     "cluster:start": "web3-storage-tools cluster --start",
     "cluster:stop": "web3-storage-tools cluster --stop",
     "cluster:reset": "web3-storage-tools cluster --clean",

@@ -13,6 +13,7 @@ import { defaultBypassMagicLinkVariableName } from './magic.link.js'
 /**
  * @typedef {object} Env
  * // Environment and global vars
+ * @property {string} DEBUG
  * @property {string} ENV
  * @property {string} BRANCH
  * @property {string} VERSION
@@ -44,6 +45,7 @@ import { defaultBypassMagicLinkVariableName } from './magic.link.js'
  * @property {S3Client} s3Client
  * @property {string} s3BucketName
  * @property {string} s3BucketRegion
+ * @property {string} mockStripePaymentMethodId
  */
 
 /**
@@ -59,11 +61,16 @@ export function envAll (req, env, ctx) {
     throw new Error('MISSING ENV. Please set PG_REST_URL')
   }
   // These values are replaced at build time by esbuild `define`
+  // @ts-ignore
   env.BRANCH = BRANCH
+  // @ts-ignore
   env.VERSION = VERSION
+  // @ts-ignore
   env.COMMITHASH = COMMITHASH
+  // @ts-ignore
   env.SENTRY_RELEASE = SENTRY_RELEASE
 
+  // @ts-ignore
   env.sentry = env.SENTRY_DSN && new Toucan({
     dsn: env.SENTRY_DSN,
     context: ctx,
@@ -73,7 +80,7 @@ export function envAll (req, env, ctx) {
     debug: env.DEBUG === 'true',
     rewriteFrames: {
       // strip . from start of the filename ./worker.mjs as set by cloudflare, to make absolute path `/worker.mjs`
-      iteratee: (frame) => ({ ...frame, filename: frame.filename.substring(1) })
+      iteratee: (frame) => ({ ...frame, filename: frame.filename?.substring(1) })
     },
     environment: env.ENV,
     release: env.SENTRY_RELEASE,
@@ -84,6 +91,7 @@ export function envAll (req, env, ctx) {
   // the logs to LogTail. This must be a new instance per request.
   // Note that we pass `ctx` as the `event` param here, because it's kind of both:
   // https://developers.cloudflare.com/workers/runtime-apis/fetch-event/#syntax-module-worker
+  // @ts-ignore
   env.log = new Logging(req, ctx, {
     token: env.LOGTAIL_TOKEN,
     debug: env.DEBUG === 'true',
@@ -94,6 +102,7 @@ export function envAll (req, env, ctx) {
   })
 
   env.magic = new Magic(env.MAGIC_SECRET_KEY, {
+    // @ts-ignore
     testMode: magicTestModeIsEnabledFromEnv(env)
   })
 
@@ -108,10 +117,12 @@ export function envAll (req, env, ctx) {
     token: env.PG_REST_JWT
   })
 
+  // @ts-ignore
   env.MODE = env.MAINTENANCE_MODE || DEFAULT_MODE
 
   const clusterAuthToken = env.CLUSTER_BASIC_AUTH_TOKEN
   const headers = clusterAuthToken ? { Authorization: `Basic ${clusterAuthToken}` } : {}
+  // @ts-ignore
   env.cluster = new Cluster(env.CLUSTER_API_URL, { headers })
 
   if (!env.S3_BUCKET_NAME) {

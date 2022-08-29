@@ -19,7 +19,7 @@ export function pagination (searchParams) {
 
   let size = 25
   if (searchParams.has('size')) {
-    const parsedSize = parseInt(searchParams.get('size'))
+    const parsedSize = parseInt(searchParams.get('size') ?? '')
     if (isNaN(parsedSize) || parsedSize <= 0 || parsedSize > 1000) {
       throw Object.assign(new Error('invalid page size'), { status: 400 })
     }
@@ -29,7 +29,7 @@ export function pagination (searchParams) {
   let offset = 0
   let page = 1
   if (searchParams.has('page')) {
-    const parsedPage = parseInt(searchParams.get('page'))
+    const parsedPage = parseInt(searchParams.get('page') ?? '')
     if (isNaN(parsedPage) || parsedPage <= 0) {
       throw Object.assign(new Error('invalid page number'), { status: 400 })
     }
@@ -39,7 +39,7 @@ export function pagination (searchParams) {
 
   let before
   if (searchParams.has('before')) {
-    const parsedBefore = new Date(searchParams.get('before'))
+    const parsedBefore = new Date(searchParams.get('before') ?? '')
     if (isNaN(parsedBefore.getTime())) {
       throw Object.assign(new Error('invalid before date'), { status: 400 })
     }
@@ -48,7 +48,7 @@ export function pagination (searchParams) {
 
   let after
   if (searchParams.has('after')) {
-    const parsedAfter = new Date(searchParams.get('after'))
+    const parsedAfter = new Date(searchParams.get('after') ?? '')
     if (isNaN(parsedAfter.getTime())) {
       throw Object.assign(new Error('invalid after date'), { status: 400 })
     }

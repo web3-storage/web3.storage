@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-env serviceworker */
 import { PutObjectCommand } from '@aws-sdk/client-s3/dist-es/commands/PutObjectCommand.js'
 import { CarBlockIterator } from '@ipld/car'

@@ -3,6 +3,8 @@ import assert from 'assert'
 import fetch, { Request } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
+import { StripeBillingService } from '../src/utils/stripe.js'
+import { savePaymentSettings } from '../src/utils/billing'
 
 function createBearerAuthorization (bearerToken) {
   return `Bearer ${bearerToken}`
@@ -121,5 +123,41 @@ describe('PUT /user/payment', () => {
     assert.equal(paymentSettingsResponse.status, 200, 'paymentSettingsResponse.status is 200')
     const paymentSettings = await paymentSettingsResponse.json()
     assert.equal(paymentSettings.method.id, savedMethodId, 'paymentSettings.method.id from location header is same as response to PUT')
+  })
+
+  it('saves payment method which can then be retrieved via GET', async function () {
+    const token = AuthorizationTestContext.use(this).createUserToken()
+    const authorization = createBearerAuthorization(token)
+    const desiredPaymentMethodId = `w3-test-${Math.random().toString().slice(2)}`
+    const responseFromSaveSettings = await fetch(createSaveUserPaymentSettingsRequest({ authorization, body: { method: { id: desiredPaymentMethodId } } }))
+    assert.equal(responseFromSaveSettings.status, 202, 'responseFromSaveSettings.status is 202')
+    const responseFromGetSettings = await fetch(createUserPaymentRequest({ authorization }))
+    assert.equal(responseFromGetSettings.status, 200, 'responseFromGetSettings.status is 200')
+    const payment1 = await responseFromGetSettings.json()
+    console.log({ payment1 })
+    assert.equal(payment1.method?.id, desiredPaymentMethodId, 'payment1.method.id is desiredPaymentMethodId')
+  })
+})
+
+describe('StripeBillingService', async function () {
+  it('can savePaymentMethod', async function () {
+    const paymentMethodId = `pm_w3-test-${Math.random().toString().slice(2)}`
+    const billing = StripeBillingService.create()
+    await billing.savePaymentMethod({ id: paymentMethodId })
+  })
+})
+
+describe('savePaymentSettings', async function () {
+  it('saves payment method using billingService', async () => {
+    const paymentMethodsSaved = []
+    const billingService = {
+      savePaymentMethod (method) {
+        paymentMethodsSaved.push(method)
+      }
+    }
+    const method = { id: 'w3-test-1' }
+    await savePaymentSettings({ billingService }, method)
+    assert.equal(paymentMethodsSaved.length, 1, 'savePaymentMethod was called once')
+    assert.equal(paymentMethodsSaved[0], method, 'savePaymentMethod was called with method')
   })
 })

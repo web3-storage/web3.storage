@@ -23,7 +23,7 @@ import { magicLinkBypassForUnitTestingWithTestToken, magicLinkBypassForE2ETestin
 export function withMagicToken (handler) {
   /**
    * @param {Request} request
-   * @param {import('./env').Env}
+   * @param {import('./env').Env} env
    * @returns {Promise<Response>}
    */
   return async (request, env, ctx) => {
@@ -31,9 +31,10 @@ export function withMagicToken (handler) {
     const magicUser = await tryMagicToken(token, env)
     if (magicUser) {
       const userTags = await getUserTags(magicUser._id, env)
+      // @ts-ignore
       request.auth = { user: magicUser, userTags }
       // If env.log is not set, then the middlewares may be being run in the wrong order
-      env.log.setUser({ id: magicUser._id })
+      env.log.setUser({ id: parseInt(magicUser._id) })
       return handler(request, env, ctx)
     }
 
@@ -51,7 +52,7 @@ export function withMagicToken (handler) {
 export function withApiOrMagicToken (handler) {
   /**
    * @param {Request} request
-   * @param {import('./env').Env}
+   * @param {import('./env').Env} env
    * @returns {Promise<Response>}
    */
   return async (request, env, ctx) => {
@@ -59,24 +60,29 @@ export function withApiOrMagicToken (handler) {
     const magicUser = await tryMagicToken(token, env)
     if (magicUser) {
       const userTags = await getUserTags(magicUser._id, env)
+      // @ts-ignore
       request.auth = {
         user: magicUser,
         userTags
       }
       // If env.log is not set, then the middlewares may be being run in the wrong order
-      env.log.setUser({ id: magicUser._id })
+      env.log.setUser({ id: parseInt(magicUser._id) })
       return handler(request, env, ctx)
     }
 
     const apiToken = await tryWeb3ApiToken(token, env)
     if (apiToken) {
+      // @ts-ignore
       const userTags = await getUserTags(apiToken.user._id, env)
+      // @ts-ignore
       request.auth = {
         authToken: apiToken,
+        // @ts-ignore
         user: apiToken.user,
         userTags
       }
       // If env.log is not set, then the middlewares may be being run in the wrong order
+      // @ts-ignore
       env.log.setUser({ id: apiToken.user._id })
       return handler(request, env, ctx)
     }
@@ -144,7 +150,7 @@ export function withPinningAuthorized (handler) {
  *   These should only be allowed when the magicTestModeEnabledFromEnv is true. The issuer comes from the token's JWT.
  * * testing token: the token may be a special allowlisted token that are used for testing routes behind an auth middleware.
  *   These are allowed based on param dangerousAuthBypassForTesting. The issuer comes from dangerousAuthBypassForTesting.defaults.issuer
- * @param {Record<string,string>} - e.g. env variables to load configuration from
+ * @param {import('./env').Env} env - e.g. env variables to load configuration from
  * @param {string} token - api token sent in a request
  * @param dangerousAuthBypassForUnitTesting - configures how to handle unit testing tokens
  * @param dangerousAuthBypassForE2eTesting - configures how to handle authenticating e2e test tokens
@@ -164,19 +170,19 @@ function authenticateMagicToken (
     return dangerousAuthBypassForUnitTesting.defaults
   }
 
-  /** @type {import('@magic-sdk/admin').ParsedDIDToken} */
+  /** @type {import('@magic-sdk/admin').ParsedDIDToken | null} */
   let decodedToken = null
 
   try {
     decodedToken = env.magic.token.decode(token)
   } catch (error) {
-    console.warn('error decoding magic token', error.name, error.message)
+    console.warn('error decoding magic token', error)
     return null
   }
   try {
     env.magic.token.validate(token)
   } catch (error) {
-    console.warn('error validating magic token: ', error.name, error.message)
+    console.warn('error validating magic token: ', error)
     return null
   }
   // token is magic token and doesn't require further validation
@@ -185,7 +191,7 @@ function authenticateMagicToken (
 
     return { issuer: magicClaims.iss }
   } catch (error) {
-    console.warn('error parsing decoded magic token', error.name, error.message)
+    console.warn('error parsing decoded magic token', error)
   }
   // no info could be determined from token
   return null
@@ -195,7 +201,7 @@ function authenticateMagicToken (
  * @param {string} token
  * @param {import('./env').Env} env
  * @throws UserNotFoundError
- * @returns {Promise<import('@web3-storage/db/db-client-types').UserOutput> | null }
+ * @returns {Promise<import('@web3-storage/db/db-client-types').UserOutput | null> }
  */
 async function tryMagicToken (token, env) {
   const authenticatedToken = await authenticateMagicToken(env, token)
@@ -212,9 +218,9 @@ async function tryMagicToken (token, env) {
 
 /**
  * @param {string} token
- * @param {import('./env').Env}
+ * @param {import('./env').Env} env
  * @throws TokenNotFoundError
- * @returns {import(./user).AuthToken | null }
+ * @returns {Promise<import('./user').AuthToken|null>}
  */
 async function tryWeb3ApiToken (token, env) {
   let decoded = null

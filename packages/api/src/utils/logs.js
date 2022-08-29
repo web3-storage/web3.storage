@@ -44,6 +44,7 @@ export class Logging {
     this.currentTs = this.startTs
     this._finished = false
 
+    // @ts-ignore
     const cf = request.cf
     let rCf
     if (cf) {

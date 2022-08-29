@@ -7,9 +7,10 @@ import { normalizeCid } from './utils/cid.js'
  * @see {@link ../test/fixtures/status.json|Example response}
  * @param {Request} request
  * @param {import('./env').Env} env
- * @returns {Response}
+ * @returns {Promise<Response>}
  */
 export async function statusGet (request, env) {
+  // @ts-ignore
   const cid = request.params.cid
   const normalizedCid = normalizeCid(cid)
   const res = await env.db.getStatus(normalizedCid)
