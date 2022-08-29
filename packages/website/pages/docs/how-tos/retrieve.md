@@ -74,6 +74,10 @@ If you have such a link, you can override the default filename by adding a query
 
 ## Using the client libraries
 
+<Callout>
+Please note: retrieval using the client libraries is currently not as reliable as we'd like. We're working on a permanent fix to greatly improve this situation. In the meantime, if you experience errors trying to fetch data using a client library, please try [using an HTTP gateway](#using-an-ipfs-http-gateway) or [the ipfs command line tool](#using-the-ipfs-command-line).
+</Callout>
+
 <Tabs groupId="lang">
 
 <TabItem value="js" label="JavaScript">
