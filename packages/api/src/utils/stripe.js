@@ -1,5 +1,5 @@
 /**
- * @typedef {import("./billing").BillingService} BillingService
+ * @typedef {import("./billing-types").BillingService} BillingService
  */
 
 /**
@@ -21,8 +21,8 @@ export class StripeBillingService {
   }
 
   /**
-   * @param {import('./billing').StripeCustomerId} customer
-   * @param {import('./billing').StripePaymentMethodId} method
+   * @param {import('./billing-types').StripeCustomerId} customer
+   * @param {import('./billing-types').StripePaymentMethodId} method
    * @returns {Promise<void>}
    */
   async savePaymentMethod (customer, method) {

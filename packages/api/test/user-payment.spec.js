@@ -4,7 +4,7 @@ import fetch, { Request } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
 import { StripeBillingService } from '../src/utils/stripe.js'
-import { savePaymentSettings } from '../src/utils/billing'
+import { savePaymentSettings } from '../src/utils/billing.js'
 
 function createBearerAuthorization (bearerToken) {
   return `Bearer ${bearerToken}`
