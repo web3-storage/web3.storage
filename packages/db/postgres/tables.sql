@@ -271,6 +271,7 @@ CREATE INDEX IF NOT EXISTS upload_auth_key_id_idx ON upload (auth_key_id);
 CREATE INDEX IF NOT EXISTS upload_user_id_deleted_at_idx ON upload (user_id) WHERE deleted_at IS NULL;
 CREATE INDEX IF NOT EXISTS upload_content_cid_idx ON upload (content_cid);
 CREATE INDEX IF NOT EXISTS upload_updated_at_idx ON upload (updated_at);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS source_cid_idx ON upload (source_cid);
 
 -- Tracks requests to replicate content to more nodes.
 CREATE TABLE IF NOT EXISTS pin_request
