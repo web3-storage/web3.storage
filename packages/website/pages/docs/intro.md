@@ -75,8 +75,7 @@ Now that you're signed up and logged in, it's time to [get your API token. ↓](
 
 It only takes a few moments to get a free API token from Web3.Storage. This token enables you to interact with the Web3.Storage service without using the main website, enabling you to incorporate files stored using Web3.Storage directly into your applications and services.
 
-1. Click **Account** to go to your [Web3.Storage account page](https://web3.storage/account).
-1. Click **Create an API token**.
+1. Hover over **Account** and click **Create an API Token** in the dropdown menu to go to your [Web3.Storage API Tokens page](https://web3.storage/tokens).
 1. Enter a descriptive name for your API token and click **Create**.
 1. Make a note of the **Token** field somewhere secure where you know you won't lose it. You can click **Copy** to copy your new API token to your clipboard.
 
@@ -163,7 +162,7 @@ You can upload a whole directory full of files at once by giving the script the 
 <Callout type="info">
 ##### Get the status of your upload
 
-It's possible to get a variety of details about your upload, including its CID, upload date, size on the network, and info on IPFS pinning and Filecoin storage deals, by using the `status()` method within the JavaScript client library. Check out the [Query how-to guide](./how-tos/query.md#querying-for-status-information) for more information.
+It's possible to get a variety of details about your upload, including its CID, upload date, size on the network, and info on IPFS pinning and Filecoin storage deals, by using the `status()` method within the JavaScript client library. Check out the [Query how-to guide](/docs/how-tos/query/#querying-for-status-information) for more information.
 </Callout>
 
 Next up, we'll go over two methods for you to [retrieve your data from Web3.Storage ↓](#get-your-file)

@@ -19,6 +19,9 @@ DAG_CARGO_DATABASE=postgres
 DAG_CARGO_USER=postgres
 DAG_CARGO_PASSWORD=postgres
 
+# this pk is for a test account
+NEXT_PUBLIC_STRIPE_TEST_PK=pk_test_51LW5iZIfErzTm2rEq2poZhHidav6vMKnpywbLgfM7YtRpWUO1QyQjyoG4h5nO0wzzoLyqOocDb6h8fFcqw4RItB700OjnutXXx
+
 ## ---- api -------------------------------------------------------------------
 
 # Create a https://magic.link account and set secret keys here. Set NEXT_PUBLIC_MAGIC with the publi key.
@@ -59,9 +62,3 @@ NEXT_PUBLIC_ENV=dev
 
 CLUSTER_IPFS_PROXY_API_URL=http://127.0.0.1:9095/api/v0/
 EMAIL_PROVIDER=dummy
-
-
-## ---- pinpin ----------------------------------------------------------------
-
-# set me to test repinning our pins on pinata
-PINATA_JWT="<your jwt here>"

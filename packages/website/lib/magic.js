@@ -1,20 +1,21 @@
-import { Magic } from 'magic-sdk'
-import { OAuthExtension } from '@magic-ext/oauth'
-import constants from './constants'
+import { Magic } from 'magic-sdk';
+import { OAuthExtension } from '@magic-ext/oauth';
 
-const API = constants.API
+import constants from './constants';
+
+const API = constants.API;
 /** @type {import('magic-sdk').Magic | null} */
-let magic = null
+let magic = null;
 
 export function getMagic() {
   if (magic) {
-    return magic
+    return magic;
   }
   magic = new Magic(constants.MAGIC_TOKEN, {
     extensions: [new OAuthExtension()],
-  })
-
-  return magic
+    testMode: constants.MAGIC_TESTMODE_ENABLED,
+  });
+  return magic;
 }
 
 /**
@@ -33,15 +34,15 @@ export async function login(token, type = 'magic', data = {}) {
       type,
       data,
     }),
-  })
+  });
   if (!res.ok) {
-    throw new Error(`failed to login user: ${await res.text()}`)
+    throw new Error(`failed to login user: ${await res.text()}`);
   }
-  return res.json()
+  return res.json();
 }
 
 export async function isLoggedIn() {
-  return getMagic().user.isLoggedIn()
+  return getMagic().user.isLoggedIn();
 }
 
 /**
@@ -53,14 +54,14 @@ export async function loginEmail(email) {
   const didToken = await getMagic().auth.loginWithMagicLink({
     email: email,
     redirectURI: new URL('/callback/', window.location.origin).href,
-  })
+  });
 
   if (didToken) {
-    const data = await login(didToken)
-    return data
+    const data = await login(didToken);
+    return data;
   }
 
-  throw new Error('Login failed.')
+  throw new Error('Login failed.');
 }
 
 /**
@@ -73,32 +74,32 @@ export async function loginSocial(provider) {
   await getMagic().oauth.loginWithRedirect({
     provider,
     redirectURI: new URL('/callback/', window.location.origin).href,
-  })
+  });
 }
 
 export async function redirectMagic() {
-  const idToken = await getMagic().auth.loginWithCredential()
+  const idToken = await getMagic().auth.loginWithCredential();
   if (idToken) {
     try {
-      const data = await login(idToken)
-      return { ...data, idToken }
+      const data = await login(idToken);
+      return { ...data, idToken };
     } catch (err) {
-      await getMagic().user.logout()
-      throw err
+      await getMagic().user.logout();
+      throw err;
     }
   }
 
-  throw new Error('Login failed.')
+  throw new Error('Login failed.');
 }
 
 export async function redirectSocial() {
   // @ts-ignore - TODO fix Magic extension types
-  const result = await getMagic().oauth.getRedirectResult()
+  const result = await getMagic().oauth.getRedirectResult();
   try {
-    const data = await login(result.magic.idToken, 'github', result)
-    return { ...data, idToken: result.magic.idToken }
+    const data = await login(result.magic.idToken, 'github', result);
+    return { ...data, idToken: result.magic.idToken };
   } catch (err) {
-    await getMagic().user.logout()
-    throw err
+    await getMagic().user.logout();
+    throw err;
   }
 }

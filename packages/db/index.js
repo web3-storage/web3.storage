@@ -229,36 +229,23 @@ export class DBClient {
     requestedTagValue,
     userProposalForm
   ) {
-    const { data: deleteData, status: deleteStatus } = await this._client
+    const { error: insertError, status: insertStatus } = await this._client
       .from('user_tag_proposal')
-      .update({
-        deleted_at: new Date().toISOString()
+      .insert({
+        user_id: userId,
+        tag: tagName,
+        proposed_tag_value: requestedTagValue,
+        inserted_at: new Date().toISOString(),
+        user_proposal_form: userProposalForm
       })
-      .match({ user_id: userId, tag: tagName })
-      .is('deleted_at', null)
+      .single()
 
-    if (
-      deleteStatus === 200 ||
-      ((deleteStatus === 406 || deleteStatus === 404) && !deleteData)
-    ) {
-      const { error: insertError, status: insertStatus } = await this._client
-        .from('user_tag_proposal')
-        .insert({
-          user_id: userId,
-          tag: tagName,
-          proposed_tag_value: requestedTagValue,
-          inserted_at: new Date().toISOString(),
-          user_proposal_form: userProposalForm
-        })
-        .single()
+    if (insertError) {
+      throw new DBError(insertError)
+    }
 
-      if (insertError) {
-        throw new DBError(insertError)
-      }
-
-      if (insertStatus === 201) {
-        return true
-      }
+    if (insertStatus === 201) {
+      return true
     }
 
     return false
@@ -791,51 +778,6 @@ export class DBClient {
   }
 
   /**
-   * Get All Pin requests.
-   *
-   * @param {Object} [options]
-   * @param {number} [options.size = 600]
-   * @return {Promise<Array<import('./db-client-types').PinRequestItemOutput>>}
-   */
-  async getPinRequests ({ size = 600 } = {}) {
-    /** @type {{ data: Array<import('./db-client-types').PinRequestItemOutput>, error: PostgrestError }} */
-    const { data: pinReqs, error } = await this._client
-      .from('pin_request')
-      .select(
-        `
-        _id:id::text,
-        cid:content_cid,
-        created:inserted_at
-      `
-      )
-      .limit(size)
-
-    if (error) {
-      throw new DBError(error)
-    }
-
-    return pinReqs
-  }
-
-  /**
-   * Delete pin requests with provided ids.
-   *
-   * @param {Array<number>} ids
-   * @return {Promise<void>}
-   */
-  async deletePinRequests (ids) {
-    /** @type {{ error: PostgrestError }} */
-    const { error } = await this._client
-      .from('pin_request')
-      .delete()
-      .in('id', ids)
-
-    if (error) {
-      throw new DBError(error)
-    }
-  }
-
-  /**
    * Create pin sync requests.
    *
    * @param {Array<number>} pinSyncRequests
@@ -1210,23 +1152,41 @@ export class DBClient {
   /**
    * Get a filtered list of pin requests for a user
    *
-   * @param {string} authKey
-   * @param {import('./db-client-types').ListPsaPinRequestOptions} [opts]
+   * @param {string | [string]} authKey
+   * @param {import('./db-client-types').ListPsaPinRequestOptions & import('./db-client-types').ListUploadsOptions} [opts]
    * @return {Promise<import('./db-client-types').ListPsaPinRequestResults> }> }
    */
   async listPsaPinRequests (authKey, opts = {}) {
     const match = opts?.match || 'exact'
     const limit = opts?.limit || 10
 
+    const isAscendingSortOrder = opts.sortOrder ?? opts.sortOrder === 'Asc'
+    const defaultSortByColumn = Object.keys(sortableColumnToUploadArgMap)[0]
+    const sortByColumn = Object.keys(sortableColumnToUploadArgMap).find(key => sortableColumnToUploadArgMap[key] === opts.sortBy)
+    const sortBy = sortByColumn || defaultSortByColumn
+
     let query = this._client
       .from(psaPinRequestTableName)
       .select(listPinsQuery, {
         count: 'exact'
       })
-      .eq('auth_key_id', authKey)
       .is('deleted_at', null)
       .limit(limit)
-      .order('inserted_at', { ascending: false })
+      .order(
+        sortBy,
+        { ascending: isAscendingSortOrder })
+
+    if (Array.isArray(authKey)) {
+      query.in('auth_key_id', authKey)
+    } else {
+      query.eq('auth_key_id', authKey)
+    }
+
+    if (opts.offset) {
+      const rangeFrom = opts.offset || 0
+      const rangeTo = rangeFrom + limit
+      query = query.range(rangeFrom, rangeTo - 1)
+    }
 
     if (!opts.cid && !opts.name && !opts.statuses) {
       query = query.eq('content.pins.status', 'Pinned')
@@ -1313,51 +1273,6 @@ export class DBClient {
 
     return {
       _id: data.id
-    }
-  }
-
-  /**
-   * Get the raw IPNS record for a given key.
-   *
-   * @param {string} key
-   */
-  async resolveNameRecord (key) {
-    /** @type {{ error: Error, data: Array<import('./db-client-types').NameItem> }} */
-    const { data, error } = await this._client
-      .from('name')
-      .select('record')
-      .match({ key })
-
-    if (error) {
-      throw new DBError(error)
-    }
-
-    return data.length ? data[0].record : undefined
-  }
-
-  /**
-   * Publish a new IPNS record, ensuring the sequence number is greater than
-   * the sequence number of an existing record for the given key.
-   *
-   * @param {string} key
-   * @param {string} record Base 64 encoded serialized IPNS record.
-   * @param {boolean} hasV2Sig If the record has a v2 signature.
-   * @param {bigint} seqno Sequence number from the record.
-   * @param {bigint} validity Validity from the record in nanoseconds since 00:00, Jan 1 1970 UTC.
-   */
-  async publishNameRecord (key, record, hasV2Sig, seqno, validity) {
-    const { error } = await this._client.rpc('publish_name_record', {
-      data: {
-        key,
-        record,
-        has_v2_sig: hasV2Sig,
-        seqno: seqno.toString(),
-        validity: validity.toString()
-      }
-    })
-
-    if (error) {
-      throw new DBError(error)
     }
   }
 }

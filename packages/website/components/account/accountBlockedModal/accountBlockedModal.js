@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 
+import Link from 'components/link/link';
 import Modal from 'modules/zero/components/modal/modal';
 import CloseIcon from 'assets/icons/close';
 import Button from 'components/button/button.js';

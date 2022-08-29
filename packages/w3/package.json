@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/w3",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "description": "The CLI to save your things in web3.storage ⁂",
   "type": "module",
   "bin": {
@@ -31,6 +31,7 @@
     "ora": "^5.4.1",
     "sade": "^1.7.4",
     "uint8arrays": "^3.0.0",
+    "w3name": "^1.0.4",
     "web3.storage": "^3.5.2"
   },
   "devDependencies": {

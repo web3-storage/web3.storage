@@ -6,6 +6,7 @@ import execa from 'execa'
 import delay from 'delay'
 import { webcrypto } from 'crypto'
 import * as workerGlobals from './scripts/worker-globals.js'
+import { AuthorizationTestContext } from './contexts/authorization.js'
 
 global.crypto = webcrypto
 
@@ -29,6 +30,7 @@ export const mochaHooks = () => {
   return {
     async beforeAll () {
       this.timeout(120_000)
+      AuthorizationTestContext.install(this)
 
       console.log('⚡️ Starting Miniflare')
       srv = await new Miniflare({
@@ -57,7 +59,7 @@ export const mochaHooks = () => {
       console.log('⚡️ Loading DB schema')
       await execa(dbCli, ['db-sql', '--cargo', '--testing', `--customSqlPath=${initScript}`])
 
-      await delay(2000)
+      await delay(1000)
     },
     async afterAll () {
       // Note: not awaiting promises here so we see the test results overview sooner.

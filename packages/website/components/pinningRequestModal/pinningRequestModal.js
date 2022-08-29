@@ -1,9 +1,11 @@
 import { useState } from 'react';
 
 import Modal from 'modules/zero/components/modal/modal';
+import Link from 'components/link/link';
 import CloseIcon from 'assets/icons/close';
 import Button from 'components/button/button.js';
 import { createPinningServiceRequest } from 'lib/api';
+import GradientBackground from 'components/gradientbackground/gradientbackground';
 
 const PinningRequestModal = ({ isOpen, onClose }) => {
   const [requesting, setRequesting] = useState(false);
@@ -36,21 +38,28 @@ const PinningRequestModal = ({ isOpen, onClose }) => {
         showCloseButton
       >
         <div className="user-request-modal__container">
-          <h1 className="user-request-modal__heading">Request API Pinning Access</h1>
+          <GradientBackground variant="saturated-variant" />
+          <h1 className="user-request-modal__heading">Request Bulk Pinning API Access</h1>
+          <p className="user-request-modal__description">
+            Web3.Storage is capable of efficiently ingesting billions of records. Whether or not your data is already on
+            IPFS, we have simple API for bulk data import. You do not need to request bulk API access if you are just
+            looking to upload your data to Web3.Storage. Check out{' '}
+            <Link href="/docs/how-tos/pinning-services-api/">the docs</Link> for more details.
+          </p>
           <form onSubmit={handleCreateUserRequest}>
             <div className="input-container">
               <label htmlFor="reason">Why you are looking for pinning service API access:</label>
-              <textarea id="reason" name="reason" required />
+              <textarea id="reason" name="reason" required rows={4} />
             </div>
             <div className="input-container">
               <label htmlFor="examples">
                 Please provide a sample of 5-10 CIDs of NFTs / metadata you are looking to pin:{' '}
               </label>
-              <textarea id="examples" name="examples" required />
+              <textarea id="examples" name="examples" required rows={5} />
             </div>
             <div className="input-container">
               <label htmlFor="profile">Please provide a profile on a service (artist profile, collector, etc): </label>
-              <textarea id="profile" name="profile" required />
+              <textarea id="profile" name="profile" required rows={1} />
             </div>
 
             <div className="input-container">

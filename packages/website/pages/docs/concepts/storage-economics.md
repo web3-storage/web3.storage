@@ -20,8 +20,7 @@ As a result, most storage providers offer free storage and retrieval on Filecoin
 
 While there is some additional infrastructure cost associated with running the Web3.Storage service, [Protocol Labs][pl] is committed to maintaining this infrastructure indefinitely as part of our mission to grow the decentralized storage ecosystem and preserve humanity's information for future generations.
 
-[concepts-decentralized-storage]: ./decentralized-storage.md
-
+[concepts-decentralized-storage]: /docs/concepts/decentralized-storage/
 [pl]: https://protocol.ai
 [fil]: https://filecoin.io
 [fil-plus]: https://docs.filecoin.io/store/filecoin-plus/

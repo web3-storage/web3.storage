@@ -1,5 +1,37 @@
 # Changelog
 
+## [7.3.0](https://github.com/web3-storage/web3.storage/compare/api-v7.2.0...api-v7.3.0) (2022-08-22)
+
+
+### Features
+
+* add to api GET /user/payment, add AuthorizationTestContext to encapsulate magic.link test bypass ([#1769](https://github.com/web3-storage/web3.storage/issues/1769)) ([7722acc](https://github.com/web3-storage/web3.storage/commit/7722acc91a5c105f4865b47861000147fb227f26))
+
+
+### Other Changes
+
+* remove /name API endpoints and storage ([#1686](https://github.com/web3-storage/web3.storage/issues/1686)) ([ab93278](https://github.com/web3-storage/web3.storage/commit/ab93278ebe0a9fadc53171a72237bfe3d4a5e32a))
+
+## [7.2.0](https://github.com/web3-storage/web3.storage/compare/api-v7.1.1...api-v7.2.0) (2022-08-17)
+
+
+### Features
+
+* New Users Pins Endpoint ([#1718](https://github.com/web3-storage/web3.storage/issues/1718)) ([0d8eb86](https://github.com/web3-storage/web3.storage/commit/0d8eb86862783006bdeed131c5099e3ca3ecfb5b))
+
+
+### Bug Fixes
+
+* stracktraces with wrangler no bundle ([#1731](https://github.com/web3-storage/web3.storage/issues/1731)) ([763442c](https://github.com/web3-storage/web3.storage/commit/763442cb985f5297f04b25f4451605ab38431e44))
+
+## [7.1.1](https://github.com/web3-storage/web3.storage/compare/api-v7.1.0...api-v7.1.1) (2022-08-12)
+
+
+### Bug Fixes
+
+* add ipns migration cron job ([#1705](https://github.com/web3-storage/web3.storage/issues/1705)) ([4b6e67f](https://github.com/web3-storage/web3.storage/commit/4b6e67f07983b06e9bad9c27deb5d6c5b993258e))
+* Make PSA Errors compliant ([#1710](https://github.com/web3-storage/web3.storage/issues/1710)) ([4080363](https://github.com/web3-storage/web3.storage/commit/4080363193893f8ce72d4cf28d8153e2f4faee14))
+
 ## [7.1.0](https://github.com/web3-storage/web3.storage/compare/api-v7.0.1...api-v7.1.0) (2022-07-07)
 
 

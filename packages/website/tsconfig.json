@@ -26,7 +26,7 @@
     },
     "incremental": true
   },
-  "include": ["lib", "pages", "components", "content", "hooks", "modules", "store", "declaration.d.ts"],
+  "include": ["lib", "pages", "components", "content", "hooks", "modules", "store", "declaration.d.ts", "tests/**/*", "scripts", "playwright.config.ts"],
   "exclude": ["node_modules", "public", ".next/", "{pages,components,content,hooks,modules}/**/*.js", "lib/countly.js"],
   "references": [
     {

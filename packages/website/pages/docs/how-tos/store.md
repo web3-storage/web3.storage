@@ -277,21 +277,21 @@ The client returns an IPFS [content identifier (CID)][ipfs-docs-cid] that can be
 
 You can also get more information about the status of your data. See the [query how-to guide][howto-query] to learn how to get more details about your data, including the status of any Filecoin storage deals.
 
-[reference-js]: ../reference/js-client-library.md
-[reference-js-constructor]: ../reference/js-client-library.md#constructor
-[reference-js-put]: ../reference/js-client-library.md#store-files
-[reference-js-put-car]: ../reference/js-client-library.md#store-car-files
-[reference-go]: ../reference/go-client-library.md
+[reference-js]: /docs/reference/js-client-library/
+[reference-js-constructor]: /docs/reference/js-client-library/#constructor
+[reference-js-put]: /docs/reference/js-client-library/#store-files
+[reference-js-put-car]: /docs/reference/js-client-library/#store-car-files
+[reference-go]: /docs/reference/go-client-library/
 [reference-go-newclient]: https://pkg.go.dev/github.com/web3-storage/go-w3s-client#NewClient
 [reference-go-withtoken]: https://pkg.go.dev/github.com/web3-storage/go-w3s-client#WithToken
 [reference-go-client-interface]: https://pkg.go.dev/github.com/web3-storage/go-w3s-client#Client
-[reference-http]: ../../reference/http-api/
-[quickstart-guide]: ../intro.md#quickstart
-[howto-retrieve]: ./retrieve.md
-[howto-query]: ./query.md
-[howto-car-files]: ./work-with-car-files.md
-[howto-list-dir]: ./list-directory-contents.md
-[concepts-decentralized-storage]: ../concepts/decentralized-storage.md
+[reference-http]: /docs/reference/http-api/
+[quickstart-guide]: /docs/intro/#quickstart
+[howto-retrieve]: /docs/how-tos/retrieve/
+[howto-query]: /docs/how-tos/query/
+[howto-car-files]: /docs/how-tos/work-with-car-files/
+[howto-list-dir]: /docs/how-tos/list-directory-contents/
+[concepts-decentralized-storage]: /docs/concepts/decentralized-storage/
 [site-files]: https://web3.storage/account/
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing/
 [ipfs-docs-cli-quickstart]: https://docs.ipfs.io/how-to/command-line-quick-start/

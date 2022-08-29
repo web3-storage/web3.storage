@@ -16,6 +16,7 @@ import ImageCorkscrew from '../../public/images/illustrations/corkscrew.png';
 import ImageRing from '../../public/images/illustrations/ring.png';
 import ImageSpring from '../../public/images/illustrations/spring.png';
 import ImageBlobs from '../../public/images/illustrations/blobs.png';
+import ImageCross2 from '../../public/images/illustrations/cross2.png';
 
 // ====================================================================== Params
 /**
@@ -78,6 +79,14 @@ export default function Hero({ block }) {
     );
   };
 
+  const w3nameHero = () => {
+    return (
+      <>
+        <Grid3D id="w3name_hero-grid-3d" />
+      </>
+    );
+  };
+
   const indexHero = () => {
     return (
       <>
@@ -92,6 +101,18 @@ export default function Hero({ block }) {
     );
   };
 
+  const contactHero = () => {
+    return (
+      <>
+        <HeroIllustration id="contact_hero-corkscrew" src={ImageCorkscrew} />
+        <HeroIllustration id="contact_hero-helix" src={ImageHelix} />
+        <HeroIllustration id="contact_hero-helix2" src={ImageHelix} />
+        <HeroIllustration id="contact_hero-cross" src={ImageCross2} />
+        <HeroIllustration id="contact_hero-triangle" src={ImageTriangle} />
+      </>
+    );
+  };
+
   const getPageHeroHeader = string => {
     switch (string) {
       case 'index':
@@ -102,8 +123,12 @@ export default function Hero({ block }) {
         return aboutHero();
       case 'faq':
         return faqHero();
+      case 'w3name':
+        return w3nameHero();
       case 'error':
         return hero404();
+      case 'contact':
+        return contactHero();
       default:
         return null;
     }

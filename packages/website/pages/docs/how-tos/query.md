@@ -188,14 +188,14 @@ If you haven't yet explored in depth how to store data using Web3.Storage, check
 
 To learn in greater detail how to fetch your data using the Web3.Storage client, or directly from IPFS using a gateway or the IPFS command line, see the [how-to guide on retrieval][howto-retrieve].
 
-[quickstart]: ../intro.md#quickstart
-[concepts-decentralized-storage]: ../concepts/decentralized-storage.md
-[howto-store]: ./store.md
-[howto-retrieve]: ./retrieve.md
-[reference-js-client]: ../reference/js-client-library.md
-[reference-js-constructor]: ../reference/js-client-library.md#constructor
-[reference-js-status]: ../reference/js-client-library.md#check-status
-[reference-go-client]: ../reference/go-client-library.md
+[quickstart]: /docs/intro/#quickstart
+[concepts-decentralized-storage]: /docs/concepts/decentralized-storage/
+[howto-store]: /docs/how-tos/store/
+[howto-retrieve]: /docs/how-tos/retrieve/
+[reference-js-client]: /docs/reference/js-client-library/
+[reference-js-constructor]: /docs/reference/js-client-library/#constructor
+[reference-js-status]: /docs/reference/js-client-library/#check-status
+[reference-go-client]: /docs/reference/go-client-library/
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing/
 [ipfs-docs-merkle-dag]: https://docs.ipfs.io/concepts/merkle-dag/
 [ipfs-docs-pinning]: https://docs.ipfs.io/concepts/persistence/
