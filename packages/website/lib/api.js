@@ -1,6 +1,6 @@
+import { parseLinkHeader } from '@web3-storage/parse-link-header';
 import { getMagic } from './magic';
 import constants from './constants';
-import { parseLinkHeader } from '@web3-storage/parse-link-header';
 
 /** @typedef {{ name?: string } & import('web3.storage').Upload} Upload */
 
@@ -185,13 +185,13 @@ export async function getUploads({ size, page, sortBy, sortOrder } = {}) {
     throw new Error(`failed to get uploads: ${await res.text()}`);
   }
 
-  const links = parseLinkHeader(res.headers.get('Link') || '')
+  const links = parseLinkHeader(res.headers.get('Link') || '');
   if (!links?.last?.page) {
-    throw new Error('missing last rel in pagination Link header')
+    throw new Error('missing last rel in pagination Link header');
   }
 
-  const pages = parseInt(links.last.page)
-  const count = parseInt(res.headers.get('Count') || '0')
+  const pages = parseInt(links.last.page);
+  const count = parseInt(res.headers.get('Count') || '0');
 
   return { uploads: await res.json(), pages, count };
 }
