@@ -48,19 +48,19 @@ export function pagination (searchParams) {
   let sortOrder
   if (searchParams.has('sortOrder')) {
     sortOrder = searchParams.get('sortOrder')
-  }
-  // @ts-ignore
-  if (!sortableOrders.includes(sortOrder)) {
-    throw Object.assign(new Error(`Sort ordering by '${sortOrder}' is not supported. Supported sort orders are: [${sortableOrders.toString()}]`), { status: 400 })
+    // @ts-ignore
+    if (!sortableOrders.includes(sortOrder)) {
+      throw Object.assign(new Error(`Sort ordering by '${sortOrder}' is not supported. Supported sort orders are: [${sortableOrders.toString()}]`), { status: 400 })
+    }
   }
 
   let sortBy
   if (searchParams.has('sortBy')) {
     sortBy = searchParams.get('sortBy') ?? undefined
-  }
-  // @ts-ignore
-  if (!sortableValues.includes(sortBy)) {
-    throw Object.assign(new Error(`Sorting by '${sortBy}' is not supported. Supported sort orders are: [${sortableValues.toString()}]`), { status: 400 })
+    // @ts-ignore
+    if (!sortableValues.includes(sortBy)) {
+      throw Object.assign(new Error(`Sorting by '${sortBy}' is not supported. Supported sort orders are: [${sortableValues.toString()}]`), { status: 400 })
+    }
   }
 
   // @ts-ignore
