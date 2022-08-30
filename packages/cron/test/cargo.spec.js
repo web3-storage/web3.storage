@@ -36,14 +36,14 @@ describe('Fix dag sizes migration', () => {
   let rwPg
 
   async function updateDagSizesWrp ({ user, after = new Date(1990, 1, 1), limit = 1000 }) {
-    const allUploadsBefore = (await listUploads(dbClient, user._id)).uploads
+    const allUploadsBefore = (await listUploads(dbClient, user._id, { page: 1 })).uploads
     await updateDagSizes({
       cargoPool,
       rwPg,
       after,
       limit
     })
-    const allUploadsAfter = (await listUploads(dbClient, user._id)).uploads
+    const allUploadsAfter = (await listUploads(dbClient, user._id, { page: 1 })).uploads
     const updatedCids = allUploadsAfter.filter((uAfter) => {
       const beforeUpload = allUploadsBefore.find((uBefore) => uAfter.cid === uBefore.cid)
       return beforeUpload?.dagSize !== uAfter.dagSize

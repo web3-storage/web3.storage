@@ -4,7 +4,6 @@ import fetch from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { getTestJWT, getDBClient } from './scripts/helpers.js'
 import userUploads from './fixtures/pgrest/get-user-uploads.js'
-import userPins from './fixtures/pgrest/get-user-pins.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
 
 describe('GET /user/account', () => {
@@ -203,7 +202,7 @@ describe('GET /user/uploads', () => {
 
   it('lists uploads sorted by name', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('/user/uploads?sortBy=Name', endpoint).toString(), {
+    const res = await fetch(new URL('/user/uploads?page=1&sortBy=Name', endpoint).toString(), {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -214,7 +213,7 @@ describe('GET /user/uploads', () => {
 
   it('lists uploads sorted by date', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('/user/uploads?sortBy=Date', endpoint).toString(), {
+    const res = await fetch(new URL('/user/uploads?page=1&sortBy=Date', endpoint).toString(), {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -225,7 +224,7 @@ describe('GET /user/uploads', () => {
 
   it('lists uploads in reverse order when sorting by Asc', async () => {
     const token = await getTestJWT()
-    const res = await fetch(new URL('/user/uploads?sortBy=Name&sortOrder=Asc', endpoint).toString(), {
+    const res = await fetch(new URL('/user/uploads?page=1&sortBy=Name&sortOrder=Asc', endpoint).toString(), {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -262,30 +261,6 @@ describe('GET /user/uploads', () => {
     assert.deepStrictEqual(uploads, [...uploadsBeforeFilterDate])
   })
 
-  it('filters results by after date', async () => {
-    const token = await getTestJWT()
-
-    const afterFilterDate = new Date('2021-07-10T00:00:00.000000+00:00').toISOString()
-    const res = await fetch(new URL(`/user/uploads?after=${afterFilterDate}`, endpoint).toString(), {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${token}` }
-    })
-
-    assert(res.ok)
-
-    const uploads = await res.json()
-
-    assert(uploads.length < userUploads.length, 'Ensure some results are filtered out.')
-    assert(uploads.length > 0, 'Ensure some results are returned.')
-
-    // Filter uploads fixture by the filter date.
-    const uploadsAfterFilterDate = userUploads.filter((upload) => {
-      return upload.created >= afterFilterDate
-    })
-
-    assert.deepStrictEqual(uploads, [...uploadsAfterFilterDate])
-  })
-
   it('lists uploads via magic auth', async function () {
     const token = AuthorizationTestContext.use(this).createUserToken()
     const res = await fetch(new URL('/user/uploads', endpoint).toString(), {
@@ -310,16 +285,7 @@ describe('GET /user/uploads', () => {
     // Ensure we have all pagination metadata in the headers.
     const link = res.headers.get('link')
     assert(link, 'has a link header for the next page')
-    assert.strictEqual(link, `</user/uploads?size=${size}&page=${page - 1}>; rel="previous", </user/uploads?size=${size}&page=${page + 1}>; rel="next"`)
-
-    const resCount = res.headers.get('Count')
-    assert.strictEqual(parseInt(resCount), userUploads.length, 'has a count for calculating page numbers')
-
-    const resSize = res.headers.get('Size')
-    assert.strictEqual(parseInt(resSize), size, 'has a size for calculating page numbers')
-
-    const resPage = res.headers.get('Page')
-    assert.strictEqual(parseInt(resPage), page, 'has a page number for calculating page numbers')
+    assert.strictEqual(link, `</user/uploads?size=${size}&page=${page + 1}>; rel="next", </user/uploads?size=${size}&page=${Math.ceil(userUploads.length / size)}>; rel="last", </user/uploads?size=${size}&page=1>; rel="first", </user/uploads?size=${size}&page=${page - 1}>; rel="previous"`)
 
     // Should get second result (page 2).
     const uploads = await res.json()
@@ -390,38 +356,7 @@ describe('GET /user/pins', () => {
     const body = await res.json()
     assert(body.results.length, size)
     assert(res.headers.get('size'), size)
-    assert.strictEqual(res.headers.get('link'), '</user/pins?size=1&page=2>; rel="next"')
-  })
-
-  it('accepts the `sortBy` parameter', async () => {
-    const sortBy = 'Name'
-    const opts = new URLSearchParams({
-      sortBy,
-      status: 'queued,pinning,pinned,failed'
-    })
-    const token = await getTestJWT('test-pinning', 'test-pinning')
-    const res = await fetch(new URL(`user/pins?${opts}`, endpoint).toString(), {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
-    })
-    assert(res.ok)
-    const body = await res.json()
-    assert.deepStrictEqual(body.results, [...userPins].sort((a, b) => a.pin.name.localeCompare(b.pin.name)))
-  })
-  it('accepts the `sortOrder` parameter', async () => {
-    const sortOrder = 'Asc'
-    const opts = new URLSearchParams({
-      sortOrder,
-      status: 'queued,pinning,pinned,failed'
-    })
-    const token = await getTestJWT('test-pinning', 'test-pinning')
-    const res = await fetch(new URL(`user/pins?${opts}`, endpoint).toString(), {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
-    })
-    assert(res.ok)
-    const body = await res.json()
-    assert(body.results, userPins)
+    assert.strictEqual(res.headers.get('link'), '</user/pins?size=1&page=2>; rel="next", </user/pins?size=1&page=8>; rel="last", </user/pins?size=1&page=1>; rel="first"')
   })
   it('returns the correct headers for pagination', async () => {
     const size = 1
@@ -442,7 +377,7 @@ describe('GET /user/pins', () => {
     assert(res.headers.get('size'), size)
     assert(res.headers.get('count'))
     assert(res.headers.get('page'), page)
-    assert.strictEqual(res.headers.get('link'), '</user/pins?size=1&page=1>; rel="previous", </user/pins?size=1&page=3>; rel="next"')
+    assert.strictEqual(res.headers.get('link'), '</user/pins?size=1&page=3>; rel="next", </user/pins?size=1&page=8>; rel="last", </user/pins?size=1&page=1>; rel="first", </user/pins?size=1&page=1>; rel="previous"')
   })
   it('returns all pins regardless of the token used', async () => {
     const opts = new URLSearchParams({

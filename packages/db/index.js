@@ -8,7 +8,7 @@ import {
   normalizePsaPinRequest,
   parseTextToNumber
 } from './utils.js'
-import { ConstraintError, DBError } from './errors.js'
+import { ConstraintError, DBError, RangeNotSatisfiableDBError } from './errors.js'
 
 export { EMAIL_TYPE } from './constants.js'
 export { parseTextToNumber } from './utils.js'
@@ -503,41 +503,47 @@ export class DBClient {
    * List uploads of a given user.
    *
    * @param {number} userId
-   * @param {import('./db-client-types').ListUploadsOptions} [opts]
-   * @returns {import('./db-client-types').ListUploadReturn}
+   * @param {import('./index').PageRequest} pageRequest
+   * @returns {Promise<import('./db-client-types').ListUploadReturn>}
    */
-  async listUploads (userId, opts = {}) {
-    const rangeFrom = opts.offset || 0
-    const rangeTo = rangeFrom + (opts.size || 25)
-    const isAscendingSortOrder = opts.sortOrder === 'Asc'
-    const defaultSortByColumn = Object.keys(sortableColumnToUploadArgMap)[0]
-    const sortByColumn = Object.keys(sortableColumnToUploadArgMap).find(key => sortableColumnToUploadArgMap[key] === opts.sortBy)
-    const sortBy = sortByColumn || defaultSortByColumn
+  async listUploads (userId, pageRequest) {
+    const size = pageRequest.size || 25
+    let query
+    if ('before' in pageRequest) {
+      query = this._client
+        .from('upload')
+        .select(uploadQuery, { count: 'exact' })
+        .eq('user_id', userId)
+        .is('deleted_at', null)
+        .lt('inserted_at', pageRequest.before.toISOString())
+        .order('inserted_at', { ascending: false })
+        .range(0, size - 1)
+    } else if ('page' in pageRequest) {
+      const rangeFrom = (pageRequest.page - 1) * size
+      const rangeTo = rangeFrom + size
+      const isAscendingSortOrder = pageRequest.sortOrder === 'Asc'
+      const defaultSortByColumn = Object.keys(sortableColumnToUploadArgMap)[0]
+      const sortByColumn = Object.keys(sortableColumnToUploadArgMap).find(key => sortableColumnToUploadArgMap[key] === pageRequest.sortBy)
+      const sortBy = sortByColumn || defaultSortByColumn
 
-    let query = this._client
-      .from('upload')
-      .select(uploadQuery, { count: 'exact' })
-      .eq('user_id', userId)
-      .is('deleted_at', null)
-      .order(
-        sortBy,
-        { ascending: isAscendingSortOrder }
-      )
-
-    // Apply filtering
-    if (opts.before) {
-      query = query.lt('inserted_at', opts.before)
+      query = this._client
+        .from('upload')
+        .select(uploadQuery, { count: 'exact' })
+        .eq('user_id', userId)
+        .is('deleted_at', null)
+        .order(sortBy, { ascending: isAscendingSortOrder })
+        .range(rangeFrom, rangeTo - 1)
+    } else {
+      throw new Error('unknown page request type')
     }
 
-    if (opts.after) {
-      query = query.gte('inserted_at', opts.after)
+    const { data: uploads, error, count, status } = await query
+
+    // For some reason, error comes back as empty array when out of range.
+    // (416 = Range Not Satisfiable)
+    if (status === 416) {
+      throw new RangeNotSatisfiableDBError()
     }
-
-    // Apply pagination or limiting.
-    query = query.range(rangeFrom, rangeTo - 1)
-
-    /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error, count: Number }} */
-    const { data: uploads, error, count } = await query
 
     if (error) {
       throw new DBError(error)
@@ -1153,17 +1159,12 @@ export class DBClient {
    * Get a filtered list of pin requests for a user
    *
    * @param {string | [string]} authKey
-   * @param {import('./db-client-types').ListPsaPinRequestOptions & import('./db-client-types').ListUploadsOptions} [opts]
+   * @param {import('./db-client-types').ListPsaPinRequestOptions} [opts]
    * @return {Promise<import('./db-client-types').ListPsaPinRequestResults> }> }
    */
   async listPsaPinRequests (authKey, opts = {}) {
     const match = opts?.match || 'exact'
     const limit = opts?.limit || 10
-
-    const isAscendingSortOrder = opts.sortOrder ?? opts.sortOrder === 'Asc'
-    const defaultSortByColumn = Object.keys(sortableColumnToUploadArgMap)[0]
-    const sortByColumn = Object.keys(sortableColumnToUploadArgMap).find(key => sortableColumnToUploadArgMap[key] === opts.sortBy)
-    const sortBy = sortByColumn || defaultSortByColumn
 
     let query = this._client
       .from(psaPinRequestTableName)
@@ -1172,9 +1173,7 @@ export class DBClient {
       })
       .is('deleted_at', null)
       .limit(limit)
-      .order(
-        sortBy,
-        { ascending: isAscendingSortOrder })
+      .order('inserted_at', { ascending: false })
 
     if (Array.isArray(authKey)) {
       query.in('auth_key_id', authKey)
@@ -1218,11 +1217,11 @@ export class DBClient {
     }
 
     if (opts.before) {
-      query = query.lte('inserted_at', opts.before)
+      query = query.lt('inserted_at', opts.before)
     }
 
     if (opts.after) {
-      query = query.gte('inserted_at', opts.after)
+      query = query.gt('inserted_at', opts.after)
     }
 
     if (opts.meta) {

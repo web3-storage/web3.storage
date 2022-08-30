@@ -1,7 +1,7 @@
 import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
-import { HTTPError } from './errors.js'
+import { HTTPError, RangeNotSatisfiableError } from './errors.js'
 import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
 import {
   NO_READ_OR_WRITE,
@@ -19,6 +19,7 @@ import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
  * @typedef {{ _id: string, name: string }} AuthToken
  * @typedef {{ user: User authToken?: AuthToken }} Auth
  * @typedef {Request & { auth: Auth }} AuthenticatedRequest
+ * @typedef {import('@web3-storage/db').PageRequest} PageRequest
  */
 
 /**
@@ -263,36 +264,84 @@ export async function userUploadsGet (request, env) {
   const requestUrl = new URL(request.url)
   const { searchParams } = requestUrl
 
-  const { size, page, offset, before, after, sortBy, sortOrder } = pagination(searchParams)
+  const pageRequest = pagination(searchParams)
 
-  const data = await env.db.listUploads(request.auth.user._id, {
-    size,
-    offset,
-    before,
-    after,
-    sortBy,
-    sortOrder
+  let data
+  try {
+    data = await env.db.listUploads(request.auth.user._id, pageRequest)
+  } catch (err) {
+    if (err.code === 'RANGE_NOT_SATISFIABLE_ERROR_DB') {
+      throw new RangeNotSatisfiableError()
+    }
+    throw err
+  }
+
+  const headers = { Count: data.count }
+
+  if (pageRequest.size != null) {
+    headers.Size = pageRequest.size // Deprecated, use Link header instead.
+  }
+
+  if (pageRequest.page != null) {
+    headers.Page = pageRequest.page // Deprecated, use Link header instead.
+  }
+
+  const link = getLinkHeader({
+    url: requestUrl.pathname,
+    pageRequest,
+    items: data.uploads,
+    count: data.count
   })
 
-  let link = ''
-  // If there's more results to show...
-  if (page > 1) {
-    link += `<${requestUrl.pathname}?size=${size}&page=${page - 1}>; rel="previous"`
-  }
-
-  if (data.uploads.length + offset < data.count) {
-    if (link !== '') link += ', '
-    link += `<${requestUrl.pathname}?size=${size}&page=${page + 1}>; rel="next"`
-  }
-
-  const headers = {
-    Count: data.count,
-    Size: size,
-    Page: page,
-    Link: link
+  if (link) {
+    headers.Link = link
   }
 
   return new JSONResponse(data.uploads, { headers })
+}
+
+/**
+ * Generates a HTTP `Link` header for the given page request and data.
+ *
+ * @param {Object} args
+ * @param {string|URL} args.url Base URL
+ * @param {PageRequest} args.pageRequest Details for the current page of data
+ * @param {Array<{ created: string }>} args.items Page items
+ * @param {number} args.count Total items available
+ */
+function getLinkHeader ({ url, pageRequest, items, count }) {
+  const rels = []
+
+  if ('before' in pageRequest) {
+    const { size } = pageRequest
+    if (items.length === size) {
+      const oldest = items[items.length - 1]
+      const nextParams = new URLSearchParams({ size, before: oldest.created })
+      rels.push(`<${url}?${nextParams}>; rel="next"`)
+    }
+  } else if ('page' in pageRequest) {
+    const { size, page } = pageRequest
+    const pages = Math.ceil(count / size)
+    if (page < pages) {
+      const nextParams = new URLSearchParams({ size, page: page + 1 })
+      rels.push(`<${url}?${nextParams}>; rel="next"`)
+    }
+
+    const lastParams = new URLSearchParams({ size, page: pages })
+    rels.push(`<${url}?${lastParams}>; rel="last"`)
+
+    const firstParams = new URLSearchParams({ size, page: 1 })
+    rels.push(`<${url}?${firstParams}>; rel="first"`)
+
+    if (page > 1) {
+      const prevParams = new URLSearchParams({ size, page: page - 1 })
+      rels.push(`<${url}?${prevParams}>; rel="previous"`)
+    }
+  } else {
+    throw new Error('unknown page request type')
+  }
+
+  return rels.join(', ')
 }
 
 /**
@@ -341,7 +390,7 @@ export async function userPinsGet (request, env) {
   const requestUrl = new URL(request.url)
   const { searchParams } = requestUrl
 
-  const { size, page, offset, before, after, sortBy, sortOrder } = pagination(searchParams)
+  const pageRequest = pagination(searchParams)
   const urlParams = new URLSearchParams(requestUrl.search)
   const params = Object.fromEntries(urlParams)
 
@@ -357,36 +406,39 @@ export async function userPinsGet (request, env) {
   try {
     pinRequests = await env.db.listPsaPinRequests(tokens, {
       ...psaParams.data,
-      limit: size,
-      offset,
-      before,
-      after,
-      sortBy,
-      sortOrder
+      limit: pageRequest.size,
+      offset: pageRequest.size * (pageRequest.page - 1)
     })
-  } catch (e) {
-    console.error(e)
-    throw new HTTPError('No pinning resources found for user', 404)
+  } catch (err) {
+    if (err.code === 'RANGE_NOT_SATISFIABLE_ERROR_DB') {
+      throw new RangeNotSatisfiableError()
+    }
+    throw err
   }
 
   const pins = pinRequests.results.map((pinRequest) => toPinStatusResponse(pinRequest))
 
-  let link = ''
-  // If there's more results to show...
-  if (page > 1) {
-    link += `<${requestUrl.pathname}?size=${size}&page=${page - 1}>; rel="previous"`
-  }
-
-  if (pins.length + offset < pinRequests.count) {
-    if (link !== '') link += ', '
-    link += `<${requestUrl.pathname}?size=${size}&page=${page + 1}>; rel="next"`
-  }
-
   const headers = {
-    Count: pinRequests.count || 0,
-    Size: size,
-    Page: page,
-    Link: link
+    Count: pinRequests.count
+  }
+
+  if (pageRequest.size != null) {
+    headers.Size = pageRequest.size // Deprecated, use Link header instead.
+  }
+
+  if (pageRequest.page != null) {
+    headers.Page = pageRequest.page // Deprecated, use Link header instead.
+  }
+
+  const link = getLinkHeader({
+    url: requestUrl.pathname,
+    pageRequest,
+    items: pinRequests.results,
+    count: pinRequests.count
+  })
+
+  if (link) {
+    headers.Link = link
   }
 
   return new JSONResponse({
