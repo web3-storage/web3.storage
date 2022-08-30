@@ -1,4 +1,5 @@
 import { parseLinkHeader } from '@web3-storage/parse-link-header';
+
 import { getMagic } from './magic';
 import constants from './constants';
 
