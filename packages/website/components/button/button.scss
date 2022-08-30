@@ -240,18 +240,19 @@
 
     &:before {
       @include gradient_BlurryDoubleBG_PinkBlue;
+      opacity: 0.6;
     }
 
     &:after {
       transition: all $transitionDuration ease-in;
-      border: 0.0625rem solid $alto;
-      background: $charade;
-      opacity: 0.6;
+      border: 0.0625rem solid $white;
+      background: $waterloo;
+      opacity: 0.5;
       @include shadow4;
     }
 
     .button-contents {
-      @include fontWeight_Regular;
+      @include fontWeight_Semibold;
       position: relative;
       z-index: 1;
     }
