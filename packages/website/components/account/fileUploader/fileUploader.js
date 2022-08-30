@@ -109,7 +109,6 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
             }}
             icon={<FolderIcon />}
             dragAreaText={content.drop_prompt}
-            maxFiles={3}
             multiple={true}
             filesInfo={filesInfo}
           />

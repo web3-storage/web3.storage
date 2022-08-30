@@ -3,6 +3,7 @@
 $base-row-width: 75.125rem;
 $file-select: calculateWidthPercentage(3.5rem, $base-row-width);
 $file-name: calculateWidthPercentage(23rem, $base-row-width);
+$file-requestid: calculateWidthPercentage(16rem, $base-row-width);
 $file-cid: calculateWidthPercentage(20rem, $base-row-width);
 $file-availability: calculateWidthPercentage(0rem, $base-row-width);
 $file-storage-providers: calculateWidthPercentage(14rem, $base-row-width);
@@ -208,13 +209,16 @@ $file-date: auto;
         width: 100%;
       }
     }
-    &-cid {
+    &-cid,
+    &-requestid {
       padding-right: 2rem;
       margin-top: -0.1rem;
       justify-content: flex-start;
       align-items: center;
       .cid-truncate,
-      .cid-full {
+      .cid-full,
+      .requestid-truncate,
+      .requestid-full {
         @include monospace_Text;
         word-break: break-all;
         margin-right: 0.625rem;
@@ -328,7 +332,8 @@ $file-date: auto;
       &-name {
         align-items: end;
       }
-      &-cid {
+      &-cid,
+      &-requestid {
         span {
           font-family: $font_Primary, sans-serif;
         }
@@ -343,6 +348,13 @@ $file-date: auto;
   }
   .highlight {
     @include gradient_Background_PinkBlue;
+  }
+}
+
+.pin-request-row {
+  grid-template-columns: $file-select $file-name $file-requestid $file-cid $file-date;
+  @include medium {
+    grid-template-columns: auto;
   }
 }
 

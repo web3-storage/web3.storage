@@ -24,7 +24,7 @@ All data stored using Web3.Storage is made available for retrieval via [IPFS](ht
 
 ## Using an IPFS HTTP gateway
 
-You can easily fetch any data stored using Web3.Storage using an IPFS HTTP gateway. Because IPFS is a peer-to-peer, decentralized network, you can use any public HTTP gateway to fetch your data. In this guide, we'll use the gateway at `w3s.link`, but you can see more worldwide gateways on the [IPFS Public Gateway Checker](https://ipfs.github.io/public-gateway-checker/).
+You can easily fetch any data stored using Web3.Storage using an IPFS HTTP gateway. Because IPFS is a peer-to-peer, decentralized network, you can use any public HTTP gateway to fetch your data. In this guide, we'll use the gateway at `w3s.link` (the public gateway [we run](https://web3.storage/products/w3link/) that can be up to 10x faster than other public gateways), but you can see more worldwide gateways on the [IPFS Public Gateway Checker](https://ipfs.github.io/public-gateway-checker/).
 
 When you [store data using the Web3.Storage client][howto-store], the `put` method returns an [IPFS content identifier (CID)][ipfs-docs-cid] string. That CID points to an IPFS directory that contains all the files you passed in using the `put` method.
 
@@ -75,7 +75,7 @@ If you have such a link, you can override the default filename by adding a query
 ## Using the client libraries
 
 <Callout>
-Please note: retrieval using the client libraries is currently not as reliable as we'd like. We're working on a permanent fix to greatly improve this situation. In the meantime, if you experience errors trying to fetch data using a client library, please try [using an HTTP gateway](#using-an-ipfs-http-gateway) or [the ipfs command line tool](#using-the-ipfs-command-line).
+Please note: retrieval using the client libraries is currently not as reliable as we'd like. We're working on a permanent fix to greatly improve this situation. In the meantime, if you experience errors trying to fetch data using a client library, please try [using an HTTP gateway](#using-an-ipfs-http-gateway) like [w3link](https://web3.storage/products/w3link/) or [the ipfs command line tool](#using-the-ipfs-command-line).
 </Callout>
 
 <Tabs groupId="lang">
