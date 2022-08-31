@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.6.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.7...cron-v1.6.0) (2022-08-31)
+
+
+### Features
+
+* drop name table & IPNS migration cron ([#1719](https://github.com/web3-storage/web3.storage/issues/1719)) ([0cdfad9](https://github.com/web3-storage/web3.storage/commit/0cdfad9f6baf4a1a356b8c6c8291e4bceb45aa17))
+
+
+### Bug Fixes
+
+* add retry to fetch during IPNS record migration ([#1759](https://github.com/web3-storage/web3.storage/issues/1759)) ([b7b9802](https://github.com/web3-storage/web3.storage/commit/b7b98024c3cc9fe95b29d475927341625651601b))
+* only log user IDs, not names or email addresses ([#1584](https://github.com/web3-storage/web3.storage/issues/1584)) ([d7d7f75](https://github.com/web3-storage/web3.storage/commit/d7d7f757d36bfcb6df777e357ab70245a2321a3b))
+* upload list pagination headers ([#1739](https://github.com/web3-storage/web3.storage/issues/1739)) ([2ffe6d7](https://github.com/web3-storage/web3.storage/commit/2ffe6d749628095a93d957836c6b4e8ad3b6acf9))
+
 ## [1.5.7](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.6...cron-v1.5.7) (2022-08-16)
 
 
