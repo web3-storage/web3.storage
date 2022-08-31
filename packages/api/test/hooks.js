@@ -8,6 +8,7 @@ import { webcrypto } from 'crypto'
 import * as workerGlobals from './scripts/worker-globals.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
 
+// @ts-ignore
 global.crypto = webcrypto
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
