@@ -25,7 +25,7 @@ deleted_classes = ["NameRoom0"]
 # Test!
 [env.test]
 workers_dev = true
-vars = { DEBUG = "false", ENV= "test" }
+vars = { DEBUG = "true", ENV= "test" }
 
 # PROD!
 [env.production]
