@@ -32,7 +32,7 @@ new_classes = ["NameRoom0"]
 # Test!
 [env.test]
 workers_dev = true
-vars = { DEBUG = "false", ENV= "test" }
+vars = { DEBUG = "true", ENV= "test" }
 
 [env.test.durable_objects]
 bindings = [{ name = "NAME_ROOM", class_name = "NameRoom0" }]
