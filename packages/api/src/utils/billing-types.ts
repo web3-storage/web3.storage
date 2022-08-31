@@ -1,4 +1,4 @@
-export type StripePaymentMethodId = `pm_{string}`;
+export type StripePaymentMethodId = `pm_${string}`;
 export type StripeCustomerId = string;
 
 export type StripePaymentMethod = {
