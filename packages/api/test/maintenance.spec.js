@@ -62,7 +62,7 @@ describe('maintenance middleware', () => {
     invalidModes.forEach((m) => {
       assert.throws(() => block(() => {}, {
         MODE: m
-      }, /invalid maintenance mode/))
+      }), /invalid maintenance mode/)
     })
   })
 

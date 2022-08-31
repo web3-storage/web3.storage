@@ -10,8 +10,13 @@ function createBearerAuthorization (bearerToken) {
   return `Bearer ${bearerToken}`
 }
 
-function createUserPaymentRequest (arg) {
-  const { path, baseUrl, authorization } = {
+/**
+ * @param {object} arg
+ * @param {string} [arg.method] - method of request
+ * @param {string} [arg.authorization] - authorization header value
+ */
+function createUserPaymentRequest (arg = {}) {
+  const { path, baseUrl, authorization, accept, method } = {
     authorization: undefined,
     path: '/user/payment',
     baseUrl: endpoint,
@@ -23,9 +28,10 @@ function createUserPaymentRequest (arg) {
     new URL(path, baseUrl),
     {
       headers: {
-        accept: 'application/json',
-        authorization
-      }
+        accept,
+        ...(authorization ? { authorization } : {})
+      },
+      method
     }
   )
 }
@@ -56,7 +62,8 @@ describe('GET /user/payment', () => {
 /**
  * Create a request to SaveUserPaymentSettings
  * @param {object} [arg]
- * @param {BodyInit|undefined|string} arg.body - body of request
+ * @param {BodyInit|undefined|string} [arg.body] - body of request
+ * @param {string} [arg.authorization] - authorization header value
  * @returns
  */
 function createSaveUserPaymentSettingsRequest (arg = {}) {
@@ -76,7 +83,7 @@ function createSaveUserPaymentSettingsRequest (arg = {}) {
       body,
       headers: {
         accept,
-        authorization
+        ...(authorization ? { authorization } : {})
       }
     }
   )
@@ -97,7 +104,7 @@ describe('PUT /user/payment', () => {
     const token = AuthorizationTestContext.use(this).createUserToken()
     const authorization = createBearerAuthorization(token)
     const desiredPaymentMethodId = `w3-test-${Math.random().toString().slice(2)}`
-    const res = await fetch(createSaveUserPaymentSettingsRequest({ authorization, body: { method: { id: desiredPaymentMethodId } } }))
+    const res = await fetch(createSaveUserPaymentSettingsRequest({ authorization, body: JSON.stringify({ method: { id: desiredPaymentMethodId } }) }))
     try {
       assert.equal(res.status, 202, 'response.status is 202')
     } catch (error) {
@@ -114,7 +121,7 @@ describe('PUT /user/payment', () => {
     assert.equal(typeof res.headers.get('location'), 'string', 'response.headers.location is a string')
 
     // see if we can then GET the response.headers.location url
-    const paymentSettingsUrl = new URL(res.headers.get('location'), res.url)
+    const paymentSettingsUrl = new URL(res.headers.get('location') ?? '', res.url)
     const paymentSettingsResponse = await fetch(paymentSettingsUrl, {
       headers: {
         authorization

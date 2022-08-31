@@ -54,7 +54,7 @@ describe('GET /user/info', () => {
     const db = getDBClient()
     const authorization = AuthorizationTestContext.use(this)
     const token = authorization.createUserToken()
-    const user = await db.getUser(authorization.bypass.defaults.issuer)
+    const user = await db.getUser(authorization.bypass.defaults.issuer, {})
     let res, userInfo
 
     // Set PSA access to true and check response
@@ -343,8 +343,8 @@ describe('GET /user/pins', () => {
   it('accepts the `size` and `page` options', async () => {
     const size = 1
     const opts = new URLSearchParams({
-      page: 1,
-      size,
+      page: (1).toString(),
+      size: size.toString(),
       status: 'queued,pinning,pinned,failed'
     })
     const token = await getTestJWT('test-pinning', 'test-pinning')
@@ -353,17 +353,17 @@ describe('GET /user/pins', () => {
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
     })
     assert(res.ok)
-    const body = await res.json()
-    assert(body.results.length, size)
-    assert(res.headers.get('size'), size)
+    const body = (await res.json())
+    assert.equal(body.results.length, size)
+    assert.equal(res.headers.get('size'), size)
     assert.strictEqual(res.headers.get('link'), '</user/pins?size=1&page=2>; rel="next", </user/pins?size=1&page=8>; rel="last", </user/pins?size=1&page=1>; rel="first"')
   })
   it('returns the correct headers for pagination', async () => {
     const size = 1
     const page = 2
     const opts = new URLSearchParams({
-      page,
-      size,
+      page: page.toString(),
+      size: size.toString(),
       status: 'queued,pinning,pinned,failed'
     })
     const token = await getTestJWT('test-pinning', 'test-pinning')
@@ -373,10 +373,10 @@ describe('GET /user/pins', () => {
     })
     assert(res.ok)
     const body = await res.json()
-    assert(body.results.length, size)
-    assert(res.headers.get('size'), size)
+    assert.equal(body.results.length, size)
+    assert.equal(res.headers.get('size'), size)
     assert(res.headers.get('count'))
-    assert(res.headers.get('page'), page)
+    assert.equal(res.headers.get('page'), page)
     assert.strictEqual(res.headers.get('link'), '</user/pins?size=1&page=3>; rel="next", </user/pins?size=1&page=8>; rel="last", </user/pins?size=1&page=1>; rel="first", </user/pins?size=1&page=1>; rel="previous"')
   })
   it('returns all pins regardless of the token used', async () => {
@@ -391,6 +391,6 @@ describe('GET /user/pins', () => {
 
     assert(res.ok)
     const body = await res.json()
-    assert([...new Set(body.results.map(x => x.pin.authKey))].length, 2)
+    assert.equal([...new Set(body.results.map(x => x.pin.authKey))].length, 2)
   })
 })
