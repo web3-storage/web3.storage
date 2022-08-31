@@ -100,14 +100,14 @@ async function loginOrRegister (request, env) {
 /**
  * @param {import('@magic-ext/oauth').OAuthRedirectResult} data
  * @param {import('@magic-sdk/admin').MagicUserMetadata} magicMetadata
- * @returns {Promise<User>}
+ * @returns {User}
  */
 function parseGitHub ({ oauth }, { issuer, email, publicAddress }) {
   return {
     // @ts-ignore
     name: oauth.userInfo.name || '',
     picture: oauth.userInfo.picture || '',
-    issuer,
+    issuer: issuer ?? '',
     email,
     github: oauth.userHandle,
     publicAddress
