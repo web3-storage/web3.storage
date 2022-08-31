@@ -20,8 +20,6 @@
     "noImplicitAny": false,
     "baseUrl": "./",
     "paths": {
-      "ZeroComponents/*": ["modules/zero/components/*"],
-      "ZeroHooks/*": ["modules/zero/hooks/*"],
       "web3.storage": ["../client"]
     },
     "incremental": true
