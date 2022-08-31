@@ -1,8 +1,5 @@
 /**
- * @typedef {object} BillingContext
- * @property {import('./billing-types').CustomersService} customers
- * @property {import('./billing-types').BillingService} billing
- * @property {{id: string }} user
+ * @typedef {import('./billing-types').BillingContext} BillingContext
  */
 
 /**

@@ -156,7 +156,7 @@ describe('savePaymentSettings', async function () {
       }
     }
     const method = { id: 'w3-test-1' }
-    await savePaymentSettings({ billingService }, method)
+    await savePaymentSettings(1, method)
     assert.equal(paymentMethodsSaved.length, 1, 'savePaymentMethod was called once')
     assert.equal(paymentMethodsSaved[0], method, 'savePaymentMethod was called with method')
   })

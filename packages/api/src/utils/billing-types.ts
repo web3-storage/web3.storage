@@ -12,6 +12,12 @@ export interface BillingService {
   ): Promise<void>;
 }
 
+export type BillingContext = {
+  customers: CustomersService
+  billing: BillingService
+  user: { id: string }
+}
+
 export interface Customer {
   id: string
 }
