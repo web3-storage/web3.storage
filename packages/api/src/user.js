@@ -78,7 +78,7 @@ async function loginOrRegister (request, env) {
 
   const parsed =
     data.type === 'github'
-      ? await parseGitHub(data.data, metadata)
+      ? parseGitHub(data.data, metadata)
       : parseMagic(metadata)
 
   let user
