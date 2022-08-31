@@ -157,18 +157,20 @@ describe('StripeBillingService', async function () {
 
 describe('savePaymentSettings', async function () {
   it('saves payment method using billingService', async () => {
-    const paymentMethodsSaved = []
+    const paymentMethodSaves = []
     const billing = {
-      async savePaymentMethod (customerId, paymentMethodId) {
-        paymentMethodsSaved.push(paymentMethodId)
+      async savePaymentMethod (customerId, methodId) {
+        paymentMethodSaves.push({ customerId, methodId })
       }
     }
     const method = { id: /** @type const */ ('pm_w3-test-1') }
     const customers = createMockCustomerService()
     const user = { id: randomString() }
     await savePaymentSettings({ billing, customers, user }, { method })
-    assert.equal(paymentMethodsSaved.length, 1, 'savePaymentMethod was called once')
-    assert.equal(paymentMethodsSaved[0], method.id, 'savePaymentMethod was called with method')
+
+    assert.equal(paymentMethodSaves.length, 1, 'savePaymentMethod was called once')
+    assert.deepEqual(paymentMethodSaves[0].methodId, method.id, 'savePaymentMethod was called with method')
+    assert.equal(typeof paymentMethodSaves[0].customerId, 'string', 'savePaymentMethod was called with method')
   })
 })
 
