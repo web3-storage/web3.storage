@@ -10,7 +10,6 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "noEmit": true,
-    "jsx": "preserve",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
