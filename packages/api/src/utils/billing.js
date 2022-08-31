@@ -1,10 +1,9 @@
 /**
- * @typedef {import('./billing-types').BillingContext} BillingContext
- */
-
-/**
  * Save a user's payment settings
- * @param {BillingContext} ctx
+ * @param {object} ctx
+ * @param {import('./billing-types').BillingService} ctx.billing
+ * @param {import('./billing-types').CustomersService} ctx.customers
+ * @param {import('./billing-types').BillingUser} ctx.user
  * @param {object} paymentSettings
  * @param {Pick<import('./billing-types').StripePaymentMethod, 'id'>} paymentSettings.method
  */

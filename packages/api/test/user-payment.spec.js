@@ -159,8 +159,8 @@ describe('savePaymentSettings', async function () {
   it('saves payment method using billingService', async () => {
     const paymentMethodsSaved = []
     const billing = {
-      async savePaymentMethod (method) {
-        paymentMethodsSaved.push(method)
+      async savePaymentMethod (customerId, paymentMethodId) {
+        paymentMethodsSaved.push(paymentMethodId)
       }
     }
     const method = { id: /** @type const */ ('pm_w3-test-1') }
@@ -168,7 +168,7 @@ describe('savePaymentSettings', async function () {
     const user = { id: randomString() }
     await savePaymentSettings({ billing, customers, user }, { method })
     assert.equal(paymentMethodsSaved.length, 1, 'savePaymentMethod was called once')
-    assert.equal(paymentMethodsSaved[0], method, 'savePaymentMethod was called with method')
+    assert.equal(paymentMethodsSaved[0], method.id, 'savePaymentMethod was called with method')
   })
 })
 

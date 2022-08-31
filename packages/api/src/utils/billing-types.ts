@@ -12,16 +12,14 @@ export interface BillingService {
   ): Promise<void>;
 }
 
-export type BillingContext = {
-  customers: CustomersService
-  billing: BillingService
-  user: { id: string }
-}
-
 export interface Customer {
   id: string
 }
 
 export interface CustomersService {
   getOrCreateForUser(user): Promise<Customer>
+}
+
+export interface BillingUser {
+  id: string
 }
