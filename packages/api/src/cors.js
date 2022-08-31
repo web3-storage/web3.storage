@@ -44,7 +44,7 @@ export function corsOptions (request) {
 export function withCorsHeaders (handler) {
   /**
    * @param {Request} request
-   * @returns {Response}
+   * @returns {Promise<Response>}
    */
   return async (request, ...rest) => {
     const response = await handler(request, ...rest)

@@ -25,7 +25,9 @@ export async function uploadPost (request, env, ctx) {
     )
     const files = form.getAll('file')
     input = files.map((f) => ({
+      // @ts-ignore
       path: f.name,
+      // @ts-ignore
       content: f.stream()
     }))
   } else if (contentType.includes('application/vnd.ipld.car') || contentType.includes('application/car')) {
