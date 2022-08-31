@@ -29,6 +29,7 @@ export const ButtonVariant = {
  * @prop {string} [className]
  * @prop {string} [href]
  * @prop {string} [tooltip]
+ * @prop {string} [tooltipPos]
  * @prop {TrackingProps} [tracking]
  * @prop {string} [variant]
  * @prop {React.ReactNode} [children]
@@ -40,7 +41,16 @@ export const ButtonVariant = {
  * @param {ButtonProps & Partial<Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children'>>} props
  * @returns
  */
-const Button = ({ className, tooltip, onClick, tracking, variant = ButtonVariant.DARK, children, ...props }) => {
+const Button = ({
+  className,
+  tooltip,
+  tooltipPos,
+  onClick,
+  tracking,
+  variant = ButtonVariant.DARK,
+  children,
+  ...props
+}) => {
   const onClickHandler = useCallback(
     event => {
       tracking &&
@@ -62,7 +72,13 @@ const Button = ({ className, tooltip, onClick, tracking, variant = ButtonVariant
     </ZeroButton>
   );
 
-  return tooltip ? <Tooltip content={tooltip}>{btn}</Tooltip> : btn;
+  return tooltip ? (
+    <Tooltip content={tooltip} position={tooltipPos}>
+      {btn}
+    </Tooltip>
+  ) : (
+    btn
+  );
 };
 
 export default Button;

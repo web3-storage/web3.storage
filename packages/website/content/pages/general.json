@@ -66,8 +66,8 @@
             "url": "/tokens/?create=true"
           },
           {
-            "text": "Request More Storage",
-            "url": "request-more-storage"
+            "text": "Plans & Payment",
+            "url": "/account/payment"
           },
           {
             "text": "Status",

@@ -43,6 +43,7 @@
 @import '../components/callout/callout.scss';
 @import '../components/w3link_form/w3link_form.scss';
 @import '../components/w3link_gateway/w3link_gateway.scss';
+@import '../components/customStorageForm/customStorageForm.scss';
 @import '../components/search/search.scss';
 @import '../components/account/accountBlockedModal/accountBlockedModal.scss';
 @import '../components/accountPlansModal/accountPlansModal.scss';
@@ -251,6 +252,21 @@ h5,
 .table-heading {
   padding: 0 2rem 2rem;
   font-size: 1.875rem;
+}
+
+.app-back-link {
+  font-size: 14px;
+  position: absolute;
+  left: 2rem;
+  top: 0;
+  color: rgba($color: #fff, $alpha: 0.5);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  &:before {
+    content: '←';
+    margin-top: -2px;
+  }
 }
 
 // Components

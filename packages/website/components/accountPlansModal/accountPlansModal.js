@@ -5,7 +5,7 @@ import CloseIcon from '../../assets/icons/close';
 import GradientBackground from '../gradientbackground/gradientbackground';
 import { plans } from '../contexts/plansContext';
 
-const AccountPlansModal = ({ isOpen, onClose }) => {
+const AccountPlansModal = ({ isOpen, onClose, currentPlan, setCurrentPlan }) => {
   // const [requesting, setRequesting] = useState(false);
   return (
     <div className="account-plans-modal">
@@ -18,7 +18,7 @@ const AccountPlansModal = ({ isOpen, onClose }) => {
         <div className="background-view-wrapper">
           <GradientBackground variant="" />
         </div>
-        <BillingPlanCards plans={plans} />
+        <BillingPlanCards plans={plans} currentPlan={currentPlan} setCurrentPlan={setCurrentPlan} />
       </Modal>
     </div>
   );

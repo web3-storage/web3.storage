@@ -72,7 +72,7 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods }) => {
         />
       </div>
       <div className="billing-validation">{paymentMethodError}</div>
-      <Button onClick={handlePaymentMethodAdd} disabled={!stripe}>
+      <Button onClick={handlePaymentMethodAdd} variant="outline-light" disabled={!stripe}>
         Add Card
       </Button>
     </form>
