@@ -1,3 +1,9 @@
+import Stripe from 'stripe'
+
+/**
+ * @typedef {import('stripe').Stripe} StripeInterface
+ */
+
 /**
  * @typedef {import("./billing-types").BillingService} BillingService
  */
@@ -39,17 +45,38 @@ export class StripeBillingService {
  */
 
 /**
+ * @typedef {import('stripe').Stripe['customers']} StripeComCustomers
+ */
+
+/**
+ * @typedef {object} StripeComCustomersForGetOrCreate
+ * @property {StripeComCustomers['create']} create
+ * @property {StripeComCustomers['search']} search
+ */
+
+/**
+ * @typedef {object} StripeComForCustomersService
+ * @property {StripeComCustomersForGetOrCreate} customers
+ */
+
+/**
  * A CustomersService that uses stripe.com for storage
  */
 export class StripeCustomersService {
-  static create () {
-    return new StripeCustomersService()
+  /**
+   * @param {StripeComForCustomersService} stripe
+   */
+  static create (stripe) {
+    return new StripeCustomersService(stripe)
   }
 
   /**
+   * @param {StripeComForCustomersService} stripe
    * @protected
    */
-  constructor () {
+  constructor (stripe) {
+    /** @type {StripeComForCustomersService} */
+    this.stripe = stripe
     /**
      * @type {CustomersService}
      */
@@ -57,10 +84,41 @@ export class StripeCustomersService {
   }
 
   /**
-   * @param {any} user
+   * @param {{id: string}} user
    * @returns {Promise<Customer>}
    */
   async getOrCreateForUser (user) {
-    return { id: `customer-${Math.random().toString().slice(2)}` }
+    const userIdMetadataProperty = 'web3StorageUserId'
+    // const searchQuery = `metadata["${userIdMetadataProperty}"]:"${user.id}"`
+    const searchQuery = `metadata["${userIdMetadataProperty}"]:"${user.id}"`
+    // console.log({ searchQuery })
+    const searchResponse = await this.stripe.customers.search({
+      query: searchQuery
+    })
+    // console.log({ searchResponse })
+    const existingCustomer = searchResponse.data[0]
+    const customerFromStripeCustomer = (customer) => {
+      return { id: customer.id }
+    }
+    if (existingCustomer) return customerFromStripeCustomer(existingCustomer)
+    const createdCustomer = await this.stripe.customers.create({
+      metadata: {
+        [userIdMetadataProperty]: user.id,
+        key: 'value'
+      }
+    })
+    // console.log({ createdCustomer })
+    return customerFromStripeCustomer(createdCustomer)
   }
+}
+
+/**
+ * @param {string} secretKey
+ * @returns {StripeInterface}
+ */
+export function createStripe (secretKey) {
+  return new Stripe(secretKey, {
+    apiVersion: '2022-08-01',
+    httpClient: Stripe.createFetchHttpClient()
+  })
 }

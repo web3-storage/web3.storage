@@ -10,6 +10,8 @@ import pkg from '../package.json'
 import { magicTestModeIsEnabledFromEnv } from './utils/env.js'
 import { defaultBypassMagicLinkVariableName } from './magic.link.js'
 import { StripeBillingService, StripeCustomersService } from './utils/stripe.js'
+import assert from 'assert'
+import Stripe from 'stripe'
 
 /**
  * @typedef {object} Env
@@ -36,6 +38,7 @@ import { StripeBillingService, StripeCustomersService } from './utils/stripe.js'
  * @property {string} [LOGTAIL_TOKEN]
  * @property {string} MAINTENANCE_MODE
  * @property {string} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
+ * @property {string} [STRIPE_SECRET_KEY]
  * // Derived values and class dependencies
  * @property {Cluster} cluster
  * @property {DBClient} db
@@ -49,6 +52,7 @@ import { StripeBillingService, StripeCustomersService } from './utils/stripe.js'
  * @property {import('./utils/billing-types').StripePaymentMethodId} mockStripePaymentMethodId
  * @property {import('./utils/billing-types').BillingService} billing
  * @property {import('./utils/billing-types').CustomersService} customers
+ * @property {string} stripeSecretKey
  */
 
 /**
@@ -176,18 +180,30 @@ export function envAll (req, env, ctx) {
   // after fulls tripe integration, this may not be needed on the env
   env.mockStripePaymentMethodId = 'pm_1LZnQ1IfErzTm2rETa7IGoVm'
 
-  Object.assign(env, createBillingContext(env))
+  Object.assign(env, createStripeBillingContext(env))
 }
 
 /**
- * @param {Env} env
- * @returns {import('./utils/billing-types').BillingEnv}
+ * @typedef {object} StripeDerrivedEnv
+ * @property {string} stripeSecretKey
  */
-function createBillingContext (env) {
+
+/**
+ * @param {Env} env
+ * @returns {import('./utils/billing-types').BillingEnv & StripeDerrivedEnv}
+ */
+function createStripeBillingContext (env) {
+  const stripeSecretKey = env.STRIPE_SECRET_KEY
+  assert.ok(stripeSecretKey, 'env STRIPE_SECRET_KEY is required')
+  const stripe = new Stripe(stripeSecretKey, {
+    apiVersion: '2022-08-01',
+    httpClient: Stripe.createFetchHttpClient()
+  })
   const billing = StripeBillingService.create()
-  const customers = StripeCustomersService.create()
+  const customers = StripeCustomersService.create(stripe)
   return {
     billing,
-    customers
+    customers,
+    stripeSecretKey
   }
 }
