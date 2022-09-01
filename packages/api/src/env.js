@@ -9,6 +9,7 @@ import { Logging } from './utils/logs.js'
 import pkg from '../package.json'
 import { magicTestModeIsEnabledFromEnv } from './utils/env.js'
 import { defaultBypassMagicLinkVariableName } from './magic.link.js'
+import { StripeBillingService, StripeCustomersService } from './utils/stripe.js'
 
 /**
  * @typedef {object} Env
@@ -174,4 +175,19 @@ export function envAll (req, env, ctx) {
   // this can be used to mock realistic values of a stripe.com paymentMethod id
   // after fulls tripe integration, this may not be needed on the env
   env.mockStripePaymentMethodId = 'pm_1LZnQ1IfErzTm2rETa7IGoVm'
+
+  Object.assign(env, createBillingContext(env))
+}
+
+/**
+ * @param {Env} env
+ * @returns {import('./utils/billing-types').BillingEnv}
+ */
+function createBillingContext (env) {
+  const billing = StripeBillingService.create()
+  const customers = StripeCustomersService.create()
+  return {
+    billing,
+    customers
+  }
 }

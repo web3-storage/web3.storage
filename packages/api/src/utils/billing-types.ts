@@ -23,3 +23,12 @@ export interface CustomersService {
 export interface BillingUser {
   id: string
 }
+
+/**
+ * interface of services related to billing.
+ * Used in cf-worker-style request handlers
+ */
+export interface BillingEnv {
+  billing: BillingService
+  customers: CustomersService
+}

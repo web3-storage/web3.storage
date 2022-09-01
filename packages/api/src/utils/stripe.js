@@ -29,3 +29,38 @@ export class StripeBillingService {
 
   }
 }
+
+/**
+ * @typedef {import("./billing-types").CustomersService} CustomersService
+ */
+
+/**
+ * @typedef {import("./billing-types").Customer} Customer
+ */
+
+/**
+ * A CustomersService that uses stripe.com for storage
+ */
+export class StripeCustomersService {
+  static create () {
+    return new StripeCustomersService()
+  }
+
+  /**
+   * @protected
+   */
+  constructor () {
+    /**
+     * @type {CustomersService}
+     */
+    const instance = this // eslint-disable-line
+  }
+
+  /**
+   * @param {any} user
+   * @returns {Promise<Customer>}
+   */
+  async getOrCreateForUser (user) {
+    return { id: `customer-${Math.random().toString().slice(2)}` }
+  }
+}
