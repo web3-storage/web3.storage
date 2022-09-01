@@ -109,6 +109,10 @@
       {
         "name": "HTTP API",
         "src": "reference/http-api"
+      },
+      {
+        "name": "Peering with Web3.Storage",
+        "src": "reference/peering"
       }
     ]
   },
