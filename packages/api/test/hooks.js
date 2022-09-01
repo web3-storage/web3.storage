@@ -7,9 +7,13 @@ import delay from 'delay'
 import { webcrypto } from 'crypto'
 import * as workerGlobals from './scripts/worker-globals.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
+import { Response } from '@web-std/fetch'
 
 // @ts-ignore
 global.crypto = webcrypto
+
+// @ts-ignore
+globalThis.Response = Response
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 dotenv.config({ path: path.join(__dirname, '..', '..', '..', '.env') })

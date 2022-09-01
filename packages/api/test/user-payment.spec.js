@@ -5,6 +5,7 @@ import { endpoint } from './scripts/constants.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
 import { StripeBillingService } from '../src/utils/stripe.js'
 import { savePaymentSettings } from '../src/utils/billing.js'
+import { userPaymentPut } from '../src/user.js'
 
 function createBearerAuthorization (bearerToken) {
   return `Bearer ${bearerToken}`
@@ -146,6 +147,32 @@ describe('PUT /user/payment', () => {
   })
 })
 
+describe('userPaymentPut', () => {
+  it('saves payment method', async function () {
+    const desiredPaymentMethodId = `pm_${randomString()}`
+    const paymentSettings = { method: { id: desiredPaymentMethodId } }
+    const authorization = createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken())
+    const user = { _id: randomString(), issuer: randomString() }
+    const request = Object.assign(
+      createSaveUserPaymentSettingsRequest({ authorization, body: JSON.stringify(paymentSettings) }),
+      { auth: { user } }
+    )
+    const billing = createMockBillingService()
+    const customers = createMockCustomerService()
+    const env = {
+      billing,
+      customers,
+      mockStripePaymentMethodId: /** @type const */ (`pm_${randomString()}`)
+    }
+    const response = await userPaymentPut(request, env)
+    assert.equal(response.status, 202, 'response.status is 202')
+    assert.equal(billing.paymentMethodSaves.length, 1, 'billing.paymentMethodSaves.length is 1')
+    assert.ok(
+      customers.mockCustomers.map(c => c.id).includes(billing.paymentMethodSaves[0].customerId),
+      'billing.paymentMethodSaves[0].customerId is in customers.mockCustomers')
+  })
+})
+
 describe('StripeBillingService', async function () {
   it('can savePaymentMethod', async function () {
     const customerId = `customer-${Math.random().toString().slice(2)}`
@@ -157,17 +184,12 @@ describe('StripeBillingService', async function () {
 
 describe('savePaymentSettings', async function () {
   it('saves payment method using billingService', async () => {
-    const paymentMethodSaves = []
-    const billing = {
-      async savePaymentMethod (customerId, methodId) {
-        paymentMethodSaves.push({ customerId, methodId })
-      }
-    }
+    const billing = createMockBillingService()
     const method = { id: /** @type const */ ('pm_w3-test-1') }
     const customers = createMockCustomerService()
     const user = { id: randomString() }
     await savePaymentSettings({ billing, customers, user }, { method })
-
+    const { paymentMethodSaves } = billing
     assert.equal(paymentMethodSaves.length, 1, 'savePaymentMethod was called once')
     assert.deepEqual(paymentMethodSaves[0].methodId, method.id, 'savePaymentMethod was called with method')
     assert.equal(typeof paymentMethodSaves[0].customerId, 'string', 'savePaymentMethod was called with method')
@@ -175,20 +197,35 @@ describe('savePaymentSettings', async function () {
 })
 
 /**
- * @returns {import('src/utils/billing-types.js').CustomersService}
+ * @returns {import('src/utils/billing-types.js').CustomersService & { mockCustomers: Array<{ id: string }> }}
  */
 function createMockCustomerService () {
+  const mockCustomers = []
   /**
    * @returns {Promise<{ id: string }>}
    */
   async function getOrCreateForUser () {
-    return { id: `customer-${Math.random().toString().slice(2)}` }
+    const created = { id: `customer-${Math.random().toString().slice(2)}` }
+    mockCustomers.push(created)
+    return created
   }
   return {
-    getOrCreateForUser
+    getOrCreateForUser,
+    mockCustomers
   }
 }
 
 function randomString () {
   return Math.random().toString().slice(2)
+}
+
+function createMockBillingService () {
+  const paymentMethodSaves = []
+  const billing = {
+    async savePaymentMethod (customerId, methodId) {
+      paymentMethodSaves.push({ customerId, methodId })
+    },
+    paymentMethodSaves
+  }
+  return billing
 }

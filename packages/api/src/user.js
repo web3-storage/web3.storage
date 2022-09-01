@@ -13,6 +13,7 @@ import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
 import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
+import { savePaymentSettings } from './utils/billing.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -555,7 +556,7 @@ export async function userPaymentGet (request, env) {
  * Save a user's payment settings.
  *
  * @param {AuthenticatedRequest} request
- * @param {import('./env').Env} env
+ * @param {Pick<import('./env').Env, 'billing'|'customers'|'mockStripePaymentMethodId'>} env
  */
 export async function userPaymentPut (request, env) {
   const requestBody = await request.json()
@@ -567,6 +568,16 @@ export async function userPaymentPut (request, env) {
         id: env.mockStripePaymentMethodId,
         warning: 'this method is a stub. The id here is different than anything you might have sent in the request.'
       }
+  await savePaymentSettings(
+    {
+      billing: env.billing,
+      customers: env.customers,
+      user: { id: request.auth.user._id }
+    },
+    {
+      method
+    }
+  )
   const savePaymentSettingsResponse = {
     method
   }

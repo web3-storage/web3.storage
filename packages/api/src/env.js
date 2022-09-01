@@ -45,7 +45,9 @@ import { defaultBypassMagicLinkVariableName } from './magic.link.js'
  * @property {S3Client} s3Client
  * @property {string} s3BucketName
  * @property {string} s3BucketRegion
- * @property {string} mockStripePaymentMethodId
+ * @property {import('./utils/billing-types').StripePaymentMethodId} mockStripePaymentMethodId
+ * @property {import('./utils/billing-types').BillingService} billing
+ * @property {import('./utils/billing-types').CustomersService} customers
  */
 
 /**
