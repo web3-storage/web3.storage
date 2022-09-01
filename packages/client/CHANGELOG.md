@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.4.1](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.4.0...web3.storage-v4.4.1) (2022-08-31)
+
+
+### Other Changes
+
+* add an e2e test for the w3name proxy module ([#1715](https://github.com/web3-storage/web3.storage/issues/1715)) ([c4633f6](https://github.com/web3-storage/web3.storage/commit/c4633f6f504ff52df0712fb1db725d6fa55f5d1c))
+
 ## [4.4.0](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.3.0...web3.storage-v4.4.0) (2022-08-22)
 
 
