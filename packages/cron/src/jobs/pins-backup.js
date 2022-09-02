@@ -181,7 +181,6 @@ export async function * getPinsNotBackedUp (db, options = {}) {
   }
 }
 
-// TODO: Cast id to string
 const GET_PINNED_PINS_QUERY = `
   SELECT *
   FROM psa_pin_request psa
