@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import assert from 'assert'
-import { createStripe, StripeBillingService, StripeCustomersService } from '../src/utils/stripe.js'
+import { StripeBillingService, StripeCustomersService } from '../src/utils/stripe.js'
 
 describe('StripeBillingService', async function () {
   it('can savePaymentMethod', async function () {
@@ -13,44 +13,43 @@ describe('StripeBillingService', async function () {
 
 describe('StripeCustomersService', async function () {
   it('can getOrCreateForUser', async function () {
-    const stripeSecretKey = process.env.STRIPE_SECRET_KEY
-    if (!stripeSecretKey) {
-      console.warn('skipping test that requires STRIPE_SECRET_KEY')
-      return
-    }
-    const userId = `user-${Math.random().toString().slice(2)}`
-    /** @type {import('../src/utils/stripe.js').StripeComForCustomersService} */
-    const mockStripe = {
-      customers: {
-        // @ts-ignore
-        create: async () => {
-          const customer = createMockStripeCustomer()
-          return customer
-        },
-        // @ts-ignore
-        search: (params, options) => {
-          const data = [createMockStripeCustomer()]
-          const response = { data }
-          const promise = Promise.resolve(response)
-          return promise
+    const userIdToCustomerId = new Map()
+    const userId1 = 'userId1'
+    const customerId1 = 'customerId1'
+    const customers1 = StripeCustomersService.create(
+      createMockStripe(),
+      async (userId) => {
+        const c = userIdToCustomerId.get(userId)
+        if (c) {
+          return { id: c }
         }
+        throw new Error('no customer found for user id')
       }
-    }
-    const stripe = createStripe(process.env.STRIPE_SECRET_KEY ?? '')
-    const customers = StripeCustomersService.create(stripe)
-    const user = { id: userId }
-    // console.log('about to getOrCreateForUser c1')
-    const c1 = await customers.getOrCreateForUser(user)
-    assert.ok(c1)
-    assert.ok(mockStripe)
-    // console.log('about to getOrCreateForUser c2')
-    // const c2 = await customers.getOrCreateForUser(user)
-    // assert.equal(c1, c2, 'returns same customer for same user')
+    )
+
+    // it should return the customer id if already set
+    userIdToCustomerId.set(userId1, customerId1)
+    const customerForUser1 = await customers1.getOrCreateForUser({ id: userId1 })
+    assert.equal(customerForUser1.id, customerId1, 'should have returned the customer id')
+    userIdToCustomerId.delete(userId1)
   })
 })
 
 function createMockStripeCustomer () {
   return {
     id: `customer-${Math.random().toString().slice(2)}`
+  }
+}
+
+/** @returns {import('../src/utils/stripe.js').StripeComForCustomersService} */
+function createMockStripe () {
+  return {
+    customers: {
+      // @ts-ignore
+      create: async () => {
+        const customer = createMockStripeCustomer()
+        return customer
+      }
+    }
   }
 }

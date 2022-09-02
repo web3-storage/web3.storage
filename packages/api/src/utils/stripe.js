@@ -51,7 +51,6 @@ export class StripeBillingService {
 /**
  * @typedef {object} StripeComCustomersForGetOrCreate
  * @property {StripeComCustomers['create']} create
- * @property {StripeComCustomers['search']} search
  */
 
 /**
@@ -60,21 +59,37 @@ export class StripeBillingService {
  */
 
 /**
+ * @typedef {import('@web3-storage/db').DBClient} DBClient
+ */
+
+/**
+ * @typedef {Pick<DBClient, 'getUserCustomer'>} DBClientForStripeCustomersService
+ */
+
+/**
+ * @typedef {(userId: string) => Promise<{ id: string }>} GetUserCustomer
+ */
+
+/**
  * A CustomersService that uses stripe.com for storage
  */
 export class StripeCustomersService {
   /**
    * @param {StripeComForCustomersService} stripe
+   * @param {GetUserCustomer} getUserCustomer
    */
-  static create (stripe) {
-    return new StripeCustomersService(stripe)
+  static create (stripe, getUserCustomer) {
+    return new StripeCustomersService(stripe, getUserCustomer)
   }
 
   /**
    * @param {StripeComForCustomersService} stripe
+   * @param {GetUserCustomer} getUserCustomer
    * @protected
    */
-  constructor (stripe) {
+  constructor (stripe, getUserCustomer) {
+    /** @type {GetUserCustomer} */
+    this.getUserCustomer = getUserCustomer
     /** @type {StripeComForCustomersService} */
     this.stripe = stripe
     /**
@@ -88,27 +103,15 @@ export class StripeCustomersService {
    * @returns {Promise<Customer>}
    */
   async getOrCreateForUser (user) {
-    const userIdMetadataProperty = 'web3StorageUserId'
-    // const searchQuery = `metadata["${userIdMetadataProperty}"]:"${user.id}"`
-    const searchQuery = `metadata["${userIdMetadataProperty}"]:"${user.id}"`
-    // console.log({ searchQuery })
-    const searchResponse = await this.stripe.customers.search({
-      query: searchQuery
-    })
-    // console.log({ searchResponse })
-    const existingCustomer = searchResponse.data[0]
-    const customerFromStripeCustomer = (customer) => {
-      return { id: customer.id }
-    }
-    if (existingCustomer) return customerFromStripeCustomer(existingCustomer)
+    const existingCustomer = await this.getUserCustomer(user.id)
+    console.log({ existingCustomer })
+    if (existingCustomer) return existingCustomer
     const createdCustomer = await this.stripe.customers.create({
       metadata: {
-        [userIdMetadataProperty]: user.id,
-        key: 'value'
+        'web3.storage/user.id': user.id
       }
     })
-    // console.log({ createdCustomer })
-    return customerFromStripeCustomer(createdCustomer)
+    return createdCustomer
   }
 }
 
