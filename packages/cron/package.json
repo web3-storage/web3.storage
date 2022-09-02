@@ -9,6 +9,7 @@
     "start": "run-s start:*",
     "start:metrics": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/metrics.js",
     "start:pins": "node src/bin/pins.js",
+    "start:pins:backup": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/pins-backup.js",
     "start:dagcargo:sizes": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/dagcargo-sizes.js",
     "start:storage": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/storage.js",
     "start:delete-remote-pins": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/delete-remote-pins.js",
@@ -19,7 +20,7 @@
   "author": "Alan Shaw",
   "license": "(Apache-2.0 OR MIT)",
   "dependencies": {
-    "@aws-sdk/lib-storage": "^3.154.0",
+    "@aws-sdk/lib-storage": "^3.161.0",
     "@nftstorage/ipfs-cluster": "^5.0.1",
     "@web-std/fetch": "^2.0.1",
     "@web3-storage/db": "^4.0.0",
