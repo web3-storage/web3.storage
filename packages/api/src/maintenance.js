@@ -46,7 +46,7 @@ export function withMode (mode) {
   /**
    * @param {Request} request
    * @param {import('./env').Env} env
-   * @returns {Response}
+   * @returns {Response|undefined}
    */
   return (request, env, ctx) => {
     const enabled = () => {

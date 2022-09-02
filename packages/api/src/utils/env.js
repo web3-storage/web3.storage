@@ -8,6 +8,7 @@ export function maybeJsonParseable (value) {
     // in case the value parses to something false e.g. 'false' or '0'
     parsedVal = JSON.parse(value)
   } catch (error) {
+    // @ts-ignore
     switch (error.name) {
       case 'SyntaxError':
         // it happens

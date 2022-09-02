@@ -17,7 +17,7 @@ import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
 /**
  * @typedef {{ _id: string, issuer: string }} User
  * @typedef {{ _id: string, name: string }} AuthToken
- * @typedef {{ user: User authToken?: AuthToken }} Auth
+ * @typedef {{ user: User, authToken?: AuthToken }} Auth
  * @typedef {Request & { auth: Auth }} AuthenticatedRequest
  * @typedef {import('@web3-storage/db').PageRequest} PageRequest
  */
@@ -25,7 +25,7 @@ import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
 /**
  * @param {Request} request
  * @param {import('./env').Env} env
- * @returns {Response}
+ * @returns {Promise<Response>}
  */
 export async function userLoginPost (request, env) {
   const user = await loginOrRegister(request, env)
@@ -34,7 +34,6 @@ export async function userLoginPost (request, env) {
 
 /**
  * Controller for logging in using a magic.link token
- * @param {Magic} magic - magic sdk instance
  */
 function createMagicLoginController (env, testModeBypass = magicLinkBypassForE2ETestingInTestmode) {
   const createTestmodeMetadata = (token) => {
@@ -87,9 +86,10 @@ async function loginOrRegister (request, env) {
   if (env.MODE === NO_READ_OR_WRITE) {
     return maintenanceHandler()
   } else if (env.MODE === READ_WRITE) {
+    // @ts-ignore
     user = await env.db.upsertUser(parsed)
   } else if (env.MODE === READ_ONLY) {
-    user = await env.db.getUser(parsed.issuer)
+    user = await env.db.getUser(parsed.issuer, {})
   } else {
     throw new Error('Unknown maintenance mode')
   }
@@ -100,13 +100,14 @@ async function loginOrRegister (request, env) {
 /**
  * @param {import('@magic-ext/oauth').OAuthRedirectResult} data
  * @param {import('@magic-sdk/admin').MagicUserMetadata} magicMetadata
- * @returns {Promise<User>}
+ * @returns {User}
  */
 function parseGitHub ({ oauth }, { issuer, email, publicAddress }) {
   return {
+    // @ts-ignore
     name: oauth.userInfo.name || '',
     picture: oauth.userInfo.picture || '',
-    issuer,
+    issuer: issuer ?? '',
     email,
     github: oauth.userHandle,
     publicAddress
@@ -114,8 +115,7 @@ function parseGitHub ({ oauth }, { issuer, email, publicAddress }) {
 }
 
 /**
- * @param {import('@magic-sdk/admin').MagicUserMetadata} magicMetadata
- * @returns {User}
+ * @param {import('@magic-sdk/admin').MagicUserMetadata & { email: string, issuer: string }} magicMetadata
  */
 function parseMagic ({ issuer, email, publicAddress }) {
   const name = email.split('@')[0]
@@ -133,7 +133,7 @@ function parseMagic ({ issuer, email, publicAddress }) {
  *
  * @param {AuthenticatedRequest} request
  * @param {import('./env').Env} env
- * @returns {Response}
+ * @returns {Promise<Response>}
  */
 export async function userTokensPost (request, env) {
   const { name } = await request.json()
@@ -147,6 +147,7 @@ export async function userTokensPost (request, env) {
   const secret = await JWT.sign({ sub, iss, iat: Date.now(), name }, env.SALT)
 
   const key = await env.db.createKey({
+    // @ts-ignore
     user: _id,
     name,
     secret
@@ -163,7 +164,9 @@ export async function userTokensPost (request, env) {
  */
 export async function userAccountGet (request, env) {
   const [usedStorage, storageLimitBytes] = await Promise.all([
+    // @ts-ignore
     env.db.getStorageUsed(request.auth.user._id),
+    // @ts-ignore
     env.db.getUserTagValue(request.auth.user._id, 'StorageLimitBytes')
   ])
   return new JSONResponse({
@@ -181,6 +184,7 @@ export async function userAccountGet (request, env) {
 export async function userInfoGet (request, env) {
   const user = await env.db.getUser(request.auth.user.issuer, {
     includeTags: true,
+    // @ts-ignore
     includeTagProposals: true
   })
 
@@ -214,6 +218,7 @@ export async function userInfoGet (request, env) {
 export async function userRequestPost (request, env) {
   const user = request.auth.user
   const { tagName, requestedTagValue, userProposalForm } = await request.json()
+  // @ts-ignore
   const res = await env.db.createUserRequest(
     user._id,
     tagName,
@@ -237,6 +242,7 @@ export async function userRequestPost (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userTokensGet (request, env) {
+  // @ts-ignore
   const tokens = await env.db.listKeys(request.auth.user._id)
 
   return new JSONResponse(tokens)
@@ -250,6 +256,7 @@ export async function userTokensGet (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userTokensDelete (request, env) {
+  // @ts-ignore
   const res = await env.db.deleteKey(request.auth.user._id, request.params.id)
   return new JSONResponse(res)
 }
@@ -268,8 +275,10 @@ export async function userUploadsGet (request, env) {
 
   let data
   try {
+    // @ts-ignore
     data = await env.db.listUploads(request.auth.user._id, pageRequest)
   } catch (err) {
+    // @ts-ignore
     if (err.code === 'RANGE_NOT_SATISFIABLE_ERROR_DB') {
       throw new RangeNotSatisfiableError()
     }
@@ -282,7 +291,9 @@ export async function userUploadsGet (request, env) {
     headers.Size = pageRequest.size // Deprecated, use Link header instead.
   }
 
+  // @ts-ignore
   if (pageRequest.page != null) {
+    // @ts-ignore
     headers.Page = pageRequest.page // Deprecated, use Link header instead.
   }
 
@@ -297,6 +308,7 @@ export async function userUploadsGet (request, env) {
     headers.Link = link
   }
 
+  // @ts-ignore
   return new JSONResponse(data.uploads, { headers })
 }
 
@@ -316,24 +328,30 @@ function getLinkHeader ({ url, pageRequest, items, count }) {
     const { size } = pageRequest
     if (items.length === size) {
       const oldest = items[items.length - 1]
+      // @ts-ignore
       const nextParams = new URLSearchParams({ size, before: oldest.created })
       rels.push(`<${url}?${nextParams}>; rel="next"`)
     }
   } else if ('page' in pageRequest) {
     const { size, page } = pageRequest
+    // @ts-ignore
     const pages = Math.ceil(count / size)
     if (page < pages) {
+      // @ts-ignore
       const nextParams = new URLSearchParams({ size, page: page + 1 })
       rels.push(`<${url}?${nextParams}>; rel="next"`)
     }
 
+    // @ts-ignore
     const lastParams = new URLSearchParams({ size, page: pages })
     rels.push(`<${url}?${lastParams}>; rel="last"`)
 
+    // @ts-ignore
     const firstParams = new URLSearchParams({ size, page: 1 })
     rels.push(`<${url}?${firstParams}>; rel="first"`)
 
     if (page > 1) {
+      // @ts-ignore
       const prevParams = new URLSearchParams({ size, page: page - 1 })
       rels.push(`<${url}?${prevParams}>; rel="previous"`)
     }
@@ -352,9 +370,11 @@ function getLinkHeader ({ url, pageRequest, items, count }) {
  * @param {import('./env').Env} env
  */
 export async function userUploadsDelete (request, env) {
+  // @ts-ignore
   const cid = request.params.cid
   const user = request.auth.user._id
 
+  // @ts-ignore
   const res = await env.db.deleteUpload(user, cid)
   if (res) {
     return new JSONResponse(res)
@@ -371,9 +391,11 @@ export async function userUploadsDelete (request, env) {
  */
 export async function userUploadsRename (request, env) {
   const user = request.auth.user._id
+  // @ts-ignore
   const { cid } = request.params
   const { name } = await request.json()
 
+  // @ts-ignore
   const res = await env.db.renameUpload(user, cid, name)
   return new JSONResponse(res)
 }
@@ -399,17 +421,21 @@ export async function userPinsGet (request, env) {
     throw psaParams.error
   }
 
+  // @ts-ignore
   const tokens = (await env.db.listKeys(request.auth.user._id)).map((key) => key._id)
 
   let pinRequests
 
   try {
+    // @ts-ignore
     pinRequests = await env.db.listPsaPinRequests(tokens, {
       ...psaParams.data,
       limit: pageRequest.size,
+      // @ts-ignore
       offset: pageRequest.size * (pageRequest.page - 1)
     })
   } catch (err) {
+    // @ts-ignore
     if (err.code === 'RANGE_NOT_SATISFIABLE_ERROR_DB') {
       throw new RangeNotSatisfiableError()
     }
@@ -426,7 +452,9 @@ export async function userPinsGet (request, env) {
     headers.Size = pageRequest.size // Deprecated, use Link header instead.
   }
 
+  // @ts-ignore
   if (pageRequest.page != null) {
+    // @ts-ignore
     headers.Page = pageRequest.page // Deprecated, use Link header instead.
   }
 
@@ -444,16 +472,14 @@ export async function userPinsGet (request, env) {
   return new JSONResponse({
     count: pinRequests.count,
     results: pins
+  // @ts-ignore
   }, { headers })
 }
 
 /**
- *
- * @param {number} userId
  * @param {string} userProposalForm
  * @param {string} tagName
  * @param {string} requestedTagValue
- * @param {DBClient} db
  */
 const notifySlack = async (
   user,
@@ -468,7 +494,6 @@ const notifySlack = async (
     return
   }
 
-  /** @type {import('../bindings').RequestForm} */
   let form
   try {
     form = JSON.parse(userProposalForm)

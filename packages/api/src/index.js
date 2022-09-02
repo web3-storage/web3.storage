@@ -160,6 +160,7 @@ export default {
       env = { ...env } // new env object for every request (it is shared otherwise)!
       response = await router.handle(request, env, ctx)
     } catch (error) {
+      // @ts-ignore
       response = serverError(error, request, env)
     }
     await env.log.end(response)

@@ -21,7 +21,7 @@ const sortableOrders = ['Asc', 'Desc']
 export function pagination (searchParams) {
   let size
   if (searchParams.has('size')) {
-    const parsedSize = parseInt(searchParams.get('size'))
+    const parsedSize = parseInt(searchParams.get('size') ?? '')
     if (isNaN(parsedSize) || parsedSize <= 0 || parsedSize > 1000) {
       throw Object.assign(new Error('invalid page size'), { status: 400 })
     }
@@ -31,7 +31,7 @@ export function pagination (searchParams) {
   if (!searchParams.has('page')) {
     let before = new Date()
     if (searchParams.has('before')) {
-      const parsedBefore = new Date(searchParams.get('before'))
+      const parsedBefore = new Date(searchParams.get('before') ?? '')
       if (isNaN(parsedBefore.getTime())) {
         throw Object.assign(new Error('invalid before date'), { status: 400 })
       }
@@ -40,7 +40,7 @@ export function pagination (searchParams) {
     return { before, size }
   }
 
-  const page = parseInt(searchParams.get('page'))
+  const page = parseInt(searchParams.get('page') ?? '')
   if (isNaN(page) || page <= 0) {
     throw Object.assign(new Error('invalid page number'), { status: 400 })
   }
@@ -48,6 +48,7 @@ export function pagination (searchParams) {
   let sortOrder
   if (searchParams.has('sortOrder')) {
     sortOrder = searchParams.get('sortOrder')
+    // @ts-ignore
     if (!sortableOrders.includes(sortOrder)) {
       throw Object.assign(new Error(`Sort ordering by '${sortOrder}' is not supported. Supported sort orders are: [${sortableOrders.toString()}]`), { status: 400 })
     }
@@ -55,11 +56,13 @@ export function pagination (searchParams) {
 
   let sortBy
   if (searchParams.has('sortBy')) {
-    sortBy = searchParams.get('sortBy')
+    sortBy = searchParams.get('sortBy') ?? undefined
+    // @ts-ignore
     if (!sortableValues.includes(sortBy)) {
       throw Object.assign(new Error(`Sorting by '${sortBy}' is not supported. Supported sort orders are: [${sortableValues.toString()}]`), { status: 400 })
     }
   }
 
+  // @ts-ignore
   return { page, size, sortBy, sortOrder }
 }

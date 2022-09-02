@@ -103,7 +103,7 @@ describe('POST /car', () => {
     const listRes = await s3.send(new ListObjectsV2Command({
       Bucket: S3_BUCKET_NAME
     }))
-    assert.strictEqual(listRes.Contents.length, 1, '1 item uploaded')
+    assert.strictEqual(listRes?.Contents?.length, 1, '1 item uploaded')
 
     const getRes = await s3.send(new GetObjectCommand({
       Bucket: S3_BUCKET_NAME,
@@ -111,6 +111,7 @@ describe('POST /car', () => {
     }))
 
     const chunks = []
+    // @ts-ignore
     for await (const chunk of getRes.Body) {
       chunks.push(chunk)
     }
