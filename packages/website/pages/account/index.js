@@ -51,7 +51,7 @@ const Account = () => {
           variant: cta.theme,
           tracking: { ui: countly.ui[cta.ui], action: cta.action },
           children: (
-            <a href={cta.link} target="_blank" rel="noreferrer">
+            <a href={cta.link} target="_blank" rel="noreferrer noopener">
               {cta.text}
             </a>
           ),
