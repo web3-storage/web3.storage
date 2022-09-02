@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.17.1](https://github.com/web3-storage/web3.storage/compare/website-v2.17.0...website-v2.17.1) (2022-09-02)
+
+
+### Bug Fixes
+
+* prevent tabnabbing and clickjacking ([#1826](https://github.com/web3-storage/web3.storage/issues/1826)) ([7c63d83](https://github.com/web3-storage/web3.storage/commit/7c63d83fdd161705389f8b011af162fbdc2f1351))
+* remove helix image that clashes with 'products' nav item ([#1825](https://github.com/web3-storage/web3.storage/issues/1825)) ([a90a264](https://github.com/web3-storage/web3.storage/commit/a90a264a8e0f23571261243bfb170134b10cd3d2))
+* update storage column header verbiage ([#1824](https://github.com/web3-storage/web3.storage/issues/1824)) ([5494d9d](https://github.com/web3-storage/web3.storage/commit/5494d9d0ecf0727adc5227d12286408971a76a31))
+
 ## [2.17.0](https://github.com/web3-storage/web3.storage/compare/website-v2.16.0...website-v2.17.0) (2022-08-31)
 
 
