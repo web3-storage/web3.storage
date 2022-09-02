@@ -19,3 +19,7 @@ export type PageProps = RestrictedRouteProps &
   MetadataProps & {
     authOnLoad?: boolean;
   };
+
+export type PageAccountProps = PageProps & {
+  stripeKey?: string;
+};

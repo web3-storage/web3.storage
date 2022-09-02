@@ -24,7 +24,7 @@ This guide will show you how to use Web3.Storage's [JavaScript client library][r
 
 In your JavaScript project, add the `web3.storage` package to your dependencies:
 
-```shell
+```bash
 npm install web3.storage
 ```
 
@@ -33,7 +33,7 @@ npm install web3.storage
 
 In your Go project, add the client package to your dependencies using `go get`:
 
-```shell
+```bash
 go get github.com/web3-storage/go-w3s-client
 ```
 
@@ -83,7 +83,7 @@ The client object's `status` method accepts a CID string and returns a JSON obje
 <CodeSnippet lang="js" src={howtoSource} region="query-status" />
 
 <Callout type="warning">
-##### IMPORTANT 
+##### IMPORTANT
 **Remember to check the return value!** If you ask for the status of a CID that Web3.Storage doesn't know about, the `status` method will return `undefined` instead of a status object. Make sure to check that a return value exists before trying to use it, as we're doing above with the `if (status)` conditional statement.
 </Callout>
 
@@ -188,14 +188,14 @@ If you haven't yet explored in depth how to store data using Web3.Storage, check
 
 To learn in greater detail how to fetch your data using the Web3.Storage client, or directly from IPFS using a gateway or the IPFS command line, see the [how-to guide on retrieval][howto-retrieve].
 
-[quickstart]: ../intro.md#quickstart
-[concepts-decentralized-storage]: ../concepts/decentralized-storage.md
-[howto-store]: ./store.md
-[howto-retrieve]: ./retrieve.md
-[reference-js-client]: ../reference/js-client-library.md
-[reference-js-constructor]: ../reference/js-client-library.md#constructor
-[reference-js-status]: ../reference/js-client-library.md#check-status
-[reference-go-client]: ../reference/go-client-library.md
+[quickstart]: /docs/intro/#quickstart
+[concepts-decentralized-storage]: /docs/concepts/decentralized-storage/
+[howto-store]: /docs/how-tos/store/
+[howto-retrieve]: /docs/how-tos/retrieve/
+[reference-js-client]: /docs/reference/js-client-library/
+[reference-js-constructor]: /docs/reference/js-client-library/#constructor
+[reference-js-status]: /docs/reference/js-client-library/#check-status
+[reference-go-client]: /docs/reference/go-client-library/
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing/
 [ipfs-docs-merkle-dag]: https://docs.ipfs.io/concepts/merkle-dag/
 [ipfs-docs-pinning]: https://docs.ipfs.io/concepts/persistence/

@@ -1,7 +1,6 @@
-import { useCallback, useState, useMemo } from 'react';
+import { useCallback, useState, useMemo, Fragment } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
-import Link from 'next/link';
 
 // @ts-ignore
 import { useAuthorization } from 'components/contexts/authorizationContext';
@@ -18,6 +17,7 @@ import GradientBackground from '../gradientbackground/gradientbackground.js';
 import GeneralPageData from '../../content/pages/general.json';
 import Search from 'components/search/search';
 import StorageLimitRequestModal from 'components/storageLimitRequestModal/storageLimitRequestModal';
+import Link from '../link/link';
 
 /**
  * Navbar Component
@@ -76,18 +76,15 @@ export default function Navigation({ isProductApp }) {
   const getAccountMenu = () => {
     if (account && account.links) {
       return (
-        <div className="nav-account-button">
-          <Link passHref href={account.url}>
-            <a
-              href="replace"
-              className={clsx('nav-item', account.url === router.route ? 'current-page' : '')}
-              onClick={onLinkClick}
-              onKeyPress={e => handleKeySelect(e, account.url)}
-            >
-              {account.text}
-            </a>
+        <div className="nav-dd-button">
+          <Link
+            href={account.url}
+            onClick={onLinkClick}
+            className={clsx('nav-item', account.url === router.route ? 'current-page' : '')}
+          >
+            {account.text}
           </Link>
-          <div className="nav-account-dropdown">
+          <div className="nav-dropdown">
             {account.links.map(link =>
               link.url === 'request-more-storage' ? (
                 <button
@@ -98,18 +95,16 @@ export default function Navigation({ isProductApp }) {
                   {link.text}
                 </button>
               ) : (
-                <Link passHref href={link.url} key={link.text}>
-                  <a
-                    href="replace"
-                    className={clsx(
-                      'nav-dropdown-link',
-                      link.url === router.asPath || link.url === router.route ? 'current-route' : ''
-                    )}
-                    onClick={onLinkClick}
-                    onKeyPress={e => handleKeySelect(e, link.url)}
-                  >
-                    {link.text}
-                  </a>
+                <Link
+                  href={link.url}
+                  key={link.text}
+                  className={clsx(
+                    'nav-dropdown-link',
+                    link.url === router.asPath || link.url === router.route ? 'current-route' : ''
+                  )}
+                  onClick={onLinkClick}
+                >
+                  {link.text}
                 </Link>
               )
             )}
@@ -180,34 +175,49 @@ export default function Navigation({ isProductApp }) {
               )}
             >
               <div className={clsx('site-logo-container', theme, isMenuOpen ? 'menu-open' : '')}>
-                <Link passHref href="/">
-                  <a
-                    href="replace"
-                    title={logoText}
-                    className="anchor-wrapper"
-                    onClick={onLinkClick}
-                    onKeyPress={e => handleKeySelect(e, '/')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <SiteLogo className="site-logo-image" />
-                    <div className={clsx('site-logo-text', theme, isMenuOpen ? 'menu-open' : '')}>{logoText}</div>
-                  </a>
+                <Link className="anchor-wrapper" href="/" onClick={onLinkClick}>
+                  <SiteLogo className="site-logo-image" />
+                  <div className={clsx('site-logo-text', theme, isMenuOpen ? 'menu-open' : '')}>{logoText}</div>
                 </Link>
               </div>
 
               <div className={clsx('nav-items-wrapper', theme)}>
-                {navItems.map(item => (
-                  <Link passHref key={item.text} href={item.url}>
-                    <a
-                      href="replace"
-                      className={clsx('nav-item', item.url === router.route ? 'current-page' : '')}
-                      onClick={onLinkClick}
-                      onKeyPress={e => handleKeySelect(e, item.url)}
-                    >
-                      {item.text}
-                    </a>
-                  </Link>
+                {navItems.map((item, i) => (
+                  <Fragment key={item.text}>
+                    {item.links ? (
+                      <div className="nav-dd-button">
+                        <Link
+                          key={item.text}
+                          href={item.url}
+                          className={clsx('nav-item', item.url === router.route ? 'current-page' : '')}
+                          onClick={onLinkClick}
+                        >
+                          {item.text}
+                        </Link>
+                        <div className="nav-dropdown">
+                          {item.links.map(link => (
+                            <Link
+                              key={link.text}
+                              href={link.url}
+                              className={clsx('nav-dropdown-link', link.url === router.route ? 'current-page' : '')}
+                              onClick={onLinkClick}
+                            >
+                              {link.text}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <Link
+                        key={item.text}
+                        href={item.url}
+                        className={clsx('nav-item', item.url === router.route ? 'current-page' : '')}
+                        onClick={onLinkClick}
+                      >
+                        {item.text}
+                      </Link>
+                    )}
+                  </Fragment>
                 ))}
 
                 {isLoggedIn && getAccountMenu()}
@@ -228,9 +238,7 @@ export default function Navigation({ isProductApp }) {
               </div>
             </div>
 
-            {router.route === '/' ? null : (
-              <Breadcrumbs variant={theme} click={onLinkClick} keyboard={handleKeySelect} />
-            )}
+            {router.route === '/' ? null : <Breadcrumbs variant={theme} click={onLinkClick} />}
 
             <div className={clsx('nav-mobile-panel grid', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
               <div className="mobile-nav-gradient-wrapper">
@@ -239,11 +247,38 @@ export default function Navigation({ isProductApp }) {
 
               <div className="mobile-items-wrapper">
                 {navItems.map((item, index) => (
-                  <Link passHref href={item.url} key={`mobile-${item.text}`}>
-                    <a href="replace" className="nav-item" onClick={onLinkClick} onKeyPress={onLinkClick}>
-                      {item.text}
-                    </a>
-                  </Link>
+                  <Fragment key={item.text}>
+                    {item.links ? (
+                      <ZeroAccordion multiple={false} toggleOnLoad={false} toggleAllOption={false}>
+                        <ZeroAccordionSection disabled={!Array.isArray(item.links)}>
+                          <ZeroAccordionSection.Header>
+                            <div className="nav-item-heading">{item.text}</div>
+                          </ZeroAccordionSection.Header>
+
+                          <ZeroAccordionSection.Content>
+                            {Array.isArray(item.links) && (
+                              <div className="nav-sublinks-wrapper">
+                                {item.links.map(link => (
+                                  <Link
+                                    href={link.url}
+                                    key={link.text}
+                                    onClick={onLinkClick}
+                                    className={clsx('nav-sublink', link.url === router.route ? 'current-page' : '')}
+                                  >
+                                    {link.text}
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
+                          </ZeroAccordionSection.Content>
+                        </ZeroAccordionSection>
+                      </ZeroAccordion>
+                    ) : (
+                      <Link href={item.url} key={`mobile-${item.text}`} className="nav-item" onClick={onLinkClick}>
+                        {item.text}
+                      </Link>
+                    )}
+                  </Fragment>
                 ))}
 
                 {isDocs && <Sidebar openMenu={setMenuOpen} />}
@@ -270,7 +305,7 @@ export default function Navigation({ isProductApp }) {
                               ) : (
                                 <Link passHref href={link.url} key={link.text}>
                                   <a
-                                    href="replace"
+                                    href={link.url}
                                     className="nav-sublink"
                                     onClick={onLinkClick}
                                     onKeyPress={e => handleKeySelect(e, link.url)}

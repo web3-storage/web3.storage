@@ -85,7 +85,7 @@ const Account = () => {
           <CTACard
             className="account-upload-cta"
             {...CTAConfigs[CTACardTypes.UPLOAD_FILES]}
-            background={<GradientBackground variant="upload-cta-gradient" />}
+            background={<GradientBackground variant="upload-cta-gradient-small" />}
           />
           <FilesManager
             content={AppData.page_content.file_manager}

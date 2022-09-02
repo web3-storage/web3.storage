@@ -3,6 +3,7 @@ import * as pb from '@ipld/dag-pb'
 import { CID } from 'multiformats/cid'
 import { PostgrestClient } from '@supabase/postgrest-js'
 import { normalizeCid } from '../../api/src/utils/cid.js'
+import { DBError } from '../errors.js'
 
 export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU'
 export const dbEndpoint = 'http://127.0.0.1:3000'
@@ -188,8 +189,8 @@ export async function createUserAuthKey (dbClient, user, options = {}) {
 /**
  * @param {import('../index').DBClient} dbClient
  * @param {number} user
- * @param {number} authKey
- * @param {string} cid
+ * @param {number} [authKey]
+ * @param {string} [cid]
  * @param {Object} [options]
  * @param {string} [options.type]
  * @param {number} [options.dagSize]
@@ -248,14 +249,12 @@ export async function getUpload (dbClient, cid, userId) {
 }
 
 /**
- *
  * @param {import('../index').DBClient} dbClient
  * @param {string} userId
- * @param {import('../db-client-types').ListUploadsOptions} [listUploadOptions]
- *
+ * @param {import('../index').PageRequest} pageRequest
  */
-export async function listUploads (dbClient, userId, listUploadOptions) {
-  return dbClient.listUploads(userId, listUploadOptions)
+export async function listUploads (dbClient, userId, pageRequest) {
+  return dbClient.listUploads(userId, pageRequest)
 }
 
 /**
@@ -277,15 +276,27 @@ export async function getPinSyncRequests (dbClient, size = 10) {
  * @param {Date} [data.entry_last_updated]
  *
  */
-export async function createCargoDag (dbClient, data = {}) {
+export async function createCargoDag (dbClient, dag = {}, source = {}) {
   const now = new Date()
+  const cidV1 = await randomCid()
+
   const dagData = {
-    cid_v1: await randomCid(),
+    cid_v1: cidV1,
     size_actual: Math.ceil(Math.random() * 100000),
     entry_created: now,
     entry_analyzed: now,
     entry_last_updated: now,
-    ...data
+    ...dag
+  }
+
+  const dagSourceData = {
+    cid_v1: cidV1,
+    source_key: cidV1,
+    size_claimed: Math.ceil(Math.random() * 100000),
+    entry_created: now,
+    entry_last_updated: now,
+    srcid: 1, // This assumes a cargo.sources has been initialised with a row.
+    ...source
   }
 
   // For analyzis_markers constraint on dags table
@@ -305,7 +316,31 @@ export async function createCargoDag (dbClient, data = {}) {
     .from('dags')
     .upsert(dagData)
 
+  const { error: errorSources } = await client
+    .from('dag_sources')
+    .upsert(dagSourceData)
+
   if (error) {
     console.error(error)
   }
+
+  if (errorSources) {
+    console.error(errorSources)
+  }
+}
+
+/**
+ * Get contents from cids
+ *
+ * @param {string[]} cids
+ */
+export async function getContents (dbClient, cids) {
+  const { data, error } = await dbClient._client
+    .from('content')
+    .select()
+    .in('cid', cids)
+  if (error) {
+    throw new DBError(error)
+  }
+  return data
 }

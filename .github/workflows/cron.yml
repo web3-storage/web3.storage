@@ -6,10 +6,14 @@ on:
     paths:
       - 'packages/cron/**'
       - '.github/workflows/cron*'
+      - 'packages/db/**'
+      - 'package-lock.json'
   pull_request:
     paths:
       - 'packages/cron/**'
       - '.github/workflows/cron*'
+      - 'packages/db/**'
+      - 'package-lock.json'
 jobs:
   test:
     runs-on: ubuntu-latest

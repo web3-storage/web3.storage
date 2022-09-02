@@ -159,7 +159,7 @@ export async function put (firstPath, opts) {
     }
   })
   spinner.stopAndPersist({ symbol: '⁂', text: `Stored ${files.length} file${files.length === 1 ? '' : 's'}` })
-  console.log(`⁂ https://dweb.link/ipfs/${root}`)
+  console.log(`⁂ https://w3s.link/ipfs/${root}`)
 }
 
 /**
@@ -211,7 +211,7 @@ export async function putCar (firstPath, opts) {
     }
   })
   spinner.stopAndPersist({ symbol: '⁂', text: `Stored ${filesize(totalSize)}` })
-  console.log(`⁂ https://dweb.link/ipfs/${root}`)
+  console.log(`⁂ https://w3s.link/ipfs/${root}`)
 }
 
 function filesize (bytes) {

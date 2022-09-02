@@ -8,7 +8,9 @@ import { getDBClient, getPg } from '../src/lib/utils.js'
 import { EMAIL_TYPE } from '@web3-storage/db'
 import { checkStorageUsed } from '../src/jobs/storage.js'
 import { EmailService, EMAIL_PROVIDERS } from '../src/lib/email/service.js'
+// import DummyEmailProvider from '../src/lib/email/providers/dummy.js'
 import sinon from 'sinon'
+import { EmailSendError } from '../src/lib/email/errors.js'
 
 const env = {
   ...process.env,
@@ -172,5 +174,16 @@ describe('cron - check user storage quotas', () => {
     assert.strictEqual(emailUsers75Calls[0].args[0].email, 'test2@email.com')
     assert.strictEqual(emailUsers75Calls[0].args[1], 'User75PercentStorage', 'user weekly check over 75')
     assert.strictEqual(emailUsers75Calls[0].args[2].secondsSinceLastSent, 60 * 60 * 24 * 7 - (60 * 60))
+  })
+
+  it('handles email send errors', async () => {
+    const providerSendEmailStub = sinon.stub(emailService.provider, 'sendEmail')
+    providerSendEmailStub.onFirstCall().throws(new EmailSendError())
+    providerSendEmailStub.returns('message ID 123')
+    await checkStorageUsed({ roPg, emailService })
+    assert.ok(
+      providerSendEmailStub.called,
+      'cron should have tried to send an email using its email provider'
+    )
   })
 })

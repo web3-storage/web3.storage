@@ -1,0 +1,1 @@
+CREATE INDEX CONCURRENTLY IF NOT EXISTS upload_source_cid_idx ON upload (source_cid);

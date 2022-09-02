@@ -47,7 +47,7 @@ NEXT_PUBLIC_MAGIC=<magic test mode publishable key>
 
 ```bash
 cd packages/website
-npm run dev
+npm run build
 ```
 
 #### Production
@@ -75,6 +75,7 @@ npm run storybook
 ## Deploy
 
 TBD
+
 
 ## Docs
 

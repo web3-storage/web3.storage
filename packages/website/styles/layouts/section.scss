@@ -6,3 +6,9 @@
   @include shadow2;
   @include border_Background_Waterloo_White;
 }
+
+.card-transparent {
+  padding: 1.25rem 1.5rem;
+  @include shadow2;
+  @include border_Background_Waterloo_White;
+}

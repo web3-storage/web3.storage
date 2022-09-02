@@ -1,8 +1,5 @@
 blank_issues_enabled: true
 contact_links:
-  - name: Account Limit Increase Request
-    url: https://mailxto.com/xy5ijb
-    about: Submit a request to increase the size limit on your Web3.Storage account!
-  - name: Pinning Service Access Request
-    url: https://mailxto.com/ta3m8b
-    about: Submit a request to access Web3.Storage's IPFS pinning service in your account!
+  - name: Need Help?
+    url: https://discord.com/invite/KKucsCpZmY
+    about: Chat with us in \#web3-storage on IPFS discord.

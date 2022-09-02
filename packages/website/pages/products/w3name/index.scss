@@ -1,0 +1,178 @@
+@use 'sass:math';
+
+.page-w3name {
+  position: relative;
+}
+
+#product_hero-header {
+  text-align: center;
+  padding: 6rem 0 3rem;
+
+  @include mini {
+    text-align: left;
+  }
+
+  .subheading {
+    @include fontWeight_Regular;
+    letter-spacing: $letterSpacing_None;
+  }
+}
+
+#product_hero-card {
+  position: relative;
+  margin-bottom: 10rem;
+  @include small {
+    margin-bottom: 6rem;
+  }
+  padding: 2.5rem;
+  z-index: 10;
+  .grid {
+    position: relative;
+    align-items: center;
+    grid-gap: 0rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    display: grid;
+    @media screen and (min-width: 768px) {
+      grid-gap: 4rem;
+      grid-template-columns: 1fr 1fr;
+      display: grid;
+    }
+  }
+  &:before {
+    z-index: 0;
+    content: '';
+    position: absolute;
+    width: calc($containerWidth + 9rem);
+    height: 100%;
+    top: 0;
+    border-radius: 0.375rem;
+    background-color: rgba(241, 241, 241, 0.6);
+    @include shadow1;
+    z-index: 0;
+    left: calc(50% - #{math.div($containerWidth, 2)} - 4.5rem);
+    @include medium {
+      left: 10px;
+      width: calc(100% - 20px);
+    }
+  }
+}
+
+#w3name-logo {
+  margin: 0 auto;
+  width: 200px;
+  @include mini {
+    margin: 0;
+  }
+}
+
+#w3name_quality {
+  .grid > div {
+    padding: 0;
+  }
+}
+
+#w3name_section_1 {
+  position: relative;
+
+  .heading {
+    @include h1;
+    line-height: leading(55, 45);
+    @include mini {
+      @include fontSize_Large;
+      line-height: leading(45, 35);
+    }
+  }
+
+  .gradient-background-component {
+    top: -10rem;
+    height: calc(100% + 20rem);
+    filter: blur(50px);
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -10.1rem;
+    left: 0;
+    width: 100%;
+    height: 14rem;
+    // transform: translateY(-100%);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: left 0 bottom 0;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='1365' height='172.072' viewBox='0 0 1365 172.072'%3e%3cpath id='Subtraction_1' data-name='Subtraction 1' d='M1365.5,1490.379H.5V1318.307c2.18,1.03,14.117,6.583,35.282,14.638,11.943,4.545,24.781,9.111,38.157,13.571,16.412,5.472,33.757,10.822,51.551,15.9,44.637,12.743,92.561,23.944,142.44,33.292,29.392,5.508,59.829,10.432,90.465,14.635,33.579,4.607,68.238,8.462,103.013,11.458,23.225,2,46.631,3.5,69.567,4.453,21.313.886,43.042,1.336,64.586,1.336,34.14,0,69.483-1.111,108.051-3.4,35.709-2.115,71.444-5.084,100.157-7.47l4.085-.339.018,0c31.282-2.6,63.629-5.288,95.834-7.255,17.318-1.057,33.294-1.833,48.84-2.372,17.419-.6,33.881-.9,50.327-.9,32.485,0,63.635,1.157,95.23,3.537,16.949,1.277,34.216,2.934,51.319,4.926,17.863,2.08,36.168,4.6,54.408,7.478,29.029,4.588,57.861,10.31,85.7,17.008,25.788,6.206,51.349,13.4,75.973,21.383v30.184h0Z' transform='translate(-0.5 -1318.307)' fill='%23000000'/%3e%3c/svg%3e ");
+    @include small {
+      display: block;
+      bottom: -6.1rem;
+    }
+  }
+}
+
+#w3name_section_2 {
+  position: relative;
+  z-index: 1;
+  @include background_Dark;
+  color: white;
+  padding-top: 0;
+
+  .grid {
+    grid-gap: 4rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    display: grid;
+    @media screen and (min-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+      display: grid;
+    }
+  }
+}
+
+#w3name_how {
+  padding-bottom: 2rem;
+}
+
+#w3name_section_3 {
+  position: relative;
+  z-index: 1;
+  @include background_Dark;
+  color: white;
+  padding-top: 0;
+
+  .image-block {
+    max-width: 40px;
+  }
+
+  .grid {
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: 40px auto;
+    padding: 2rem 3rem;
+    align-items: center;
+    border-radius: 0.5rem;
+    background-color: rgba($waterloo, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.024);
+    font-style: italic;
+    color: #c7c7c7;
+
+    .description {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    @include mini {
+      padding: 2rem;
+      grid-gap: 1rem;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      margin: 0 10px;
+      max-width: calc(100% - 20px);
+    }
+  }
+
+  .description:last-of-type,
+  p:last-of-type {
+    margin-bottom: 0;
+  }
+}

@@ -177,8 +177,6 @@ BEGIN
       'Unpinning',
       -- The IPFS daemon is not pinning the item.
       'Unpinned',
-      -- The IPFS daemon is not pinning the item but it is being tracked.
-      'Remote',
       -- The item has been queued for pinning on the IPFS daemon.
       'PinQueued',
       -- The item has been queued for unpinning on the IPFS daemon.
@@ -241,6 +239,7 @@ CREATE INDEX IF NOT EXISTS pin_location_id_idx ON pin (pin_location_id);
 CREATE INDEX IF NOT EXISTS pin_updated_at_idx ON pin (updated_at);
 CREATE INDEX IF NOT EXISTS pin_status_idx ON pin (status);
 CREATE INDEX IF NOT EXISTS pin_composite_updated_at_and_content_cid_idx ON pin (updated_at, content_cid);
+CREATE INDEX IF NOT EXISTS pin_content_cid_status_idx ON pin (content_cid, status);
 
 -- An upload created by a user.
 CREATE TABLE IF NOT EXISTS upload
@@ -269,21 +268,10 @@ CREATE TABLE IF NOT EXISTS upload
 CREATE INDEX IF NOT EXISTS upload_auth_key_id_idx ON upload (auth_key_id);
 CREATE INDEX IF NOT EXISTS upload_user_id_deleted_at_idx ON upload (user_id) WHERE deleted_at IS NULL;
 CREATE INDEX IF NOT EXISTS upload_content_cid_idx ON upload (content_cid);
+CREATE INDEX IF NOT EXISTS upload_name_idx ON upload (name);
+CREATE INDEX IF NOT EXISTS upload_inserted_at_idx ON upload (inserted_at);
 CREATE INDEX IF NOT EXISTS upload_updated_at_idx ON upload (updated_at);
-CREATE INDEX IF NOT EXISTS upload_user_id_idx ON upload (user_id);
-
--- Tracks requests to replicate content to more nodes.
-CREATE TABLE IF NOT EXISTS pin_request
-(
-  id              BIGSERIAL PRIMARY KEY,
-  -- Root CID of the Pin we want to replicate.
-  content_cid     TEXT                                                          NOT NULL UNIQUE REFERENCES content (cid),
-  attempts        INT DEFAULT 0,
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS pin_request_content_cid_idx ON pin_request (content_cid);
+CREATE INDEX IF NOT EXISTS upload_source_cid_idx ON upload (source_cid);
 
 -- A request to keep a Pin in sync with the nodes that are pinning it.
 CREATE TABLE IF NOT EXISTS pin_sync_request
@@ -323,21 +311,7 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
 );
 
 CREATE INDEX IF NOT EXISTS psa_pin_request_content_cid_idx ON psa_pin_request (content_cid);
-
-CREATE TABLE IF NOT EXISTS name
-(
-    -- base36 "libp2p-key" encoding of the public key
-    key         TEXT PRIMARY KEY,
-    -- the serialized IPNS record - base64 encoded
-    record      TEXT NOT NULL,
-    -- next 3 fields are derived from the record & used for newness comparisons
-    -- see: https://github.com/ipfs/go-ipns/blob/a8379aa25ef287ffab7c5b89bfaad622da7e976d/ipns.go#L325
-    has_v2_sig  BOOLEAN NOT NULL,
-    seqno       BIGINT NOT NULL,
-    validity    BIGINT NOT NULL, -- nanoseconds since 00:00, Jan 1 1970 UTC
-    inserted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-    updated_at  TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);
+CREATE INDEX IF NOT EXISTS psa_pin_request_deleted_at_idx ON psa_pin_request (deleted_at) INCLUDE (content_cid, auth_key_id);
 
 -- Metric contains the current values of collected metrics.
 CREATE TABLE IF NOT EXISTS metric

@@ -7,6 +7,8 @@ import Callout from 'components/callout/callout';
 import CodeSnippet from 'components/codesnippet/codesnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
 import exampleUpload from '!!raw-loader!../../../assets/code-snippets/how-to/example-listing-upload.json.txt'
+import Img from 'components/cloudflareImage';
+import ImgFilesListing from '../../../public/images/docs/files-listing.png';
 
 # How to list files uploaded to Web3.Storage
 
@@ -17,7 +19,7 @@ Once you've [stored some files][howto-store] using Web3.Storage, you'll want to 
 
 You can see a list of everything you've uploaded to Web3.Storage on the [Files page][site-files] on the Web3.Storage website. If you don't need to work with this list programmatically, using the website may be a simpler choice.
 
-![A screenshot of the file listing available at https://web3.storage/account when logged in to your account](/images/docs/files-listing.png)
+<Img src={ImgFilesListing} alt="A screenshot of the file listing available when logged in to your account" />
 
 This [Files page][site-files] provides a convenient overview of your stored data, including links to view your files in your browser via an [IPFS gateway][ipfs-docs-gateway] and information about how the data is being stored on the [decentralized storage networks][concepts-decentralized-storage] that Web3.Storage uses under the hood.
 
@@ -29,7 +31,7 @@ To easily integrate Web3.Storage programmatically in your apps or services, you 
 
 In your JavaScript project, add the `web3.storage` package to your dependencies:
 
-```shell
+```bash
 npm install web3.storage
 ```
 
@@ -81,14 +83,14 @@ Here's an example of fetching the first 10 uploads made on the previous day:
 
 <CodeSnippet lang="js" src={howtoSource} region="listWithLimits" />
 
-[howto-store]: ./store.md
-[howto-retrieve]: ./retrieve.md
-[howto-query]: ./query.md
-[howto-gen-token]: ./generate-api-token.md
-[concepts-decentralized-storage]: ../concepts/decentralized-storage.md
-[reference-js-client]: ../reference/js-client-library.md
-[reference-js-constructor]: ../reference/js-client-library.md#constructor
-[reference-js-list]: ../reference/js-client-library.md#list-uploads
+[howto-store]: /docs/how-tos/store/
+[howto-retrieve]: /docs/how-tos/retrieve/
+[howto-query]: /docs/how-tos/query/
+[howto-gen-token]: /docs/how-tos/generate-api-token/
+[concepts-decentralized-storage]: /docs/concepts/decentralized-storage/
+[reference-js-client]: /docs/reference/js-client-library/
+[reference-js-constructor]: /docs/reference/js-client-library/#constructor
+[reference-js-list]: /docs/reference/js-client-library/#list-uploads
 [site-files]: https://web3.storage/account
 [ipfs-docs-gateway]: https://docs.ipfs.io/concepts/ipfs-gateway/
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing/

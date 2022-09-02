@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import Link from '../../../components/link/link';
 import NavData from '../../../pages/docs/nav.json';
 
 export default function Sidebar({ openMenu }) {
@@ -13,14 +13,13 @@ export default function Sidebar({ openMenu }) {
           <div key={`primary-${idx}`} className={primary.name === '' ? 'no-heading' : ''}>
             {primary.name && <h3>{primary.name}</h3>}
             {primary.menu.map((secondary, idx) => (
-              <Link key={`secondary-${idx}`} href={`/docs/${secondary.src}`}>
-                <a
-                  href={`/docs/${secondary.src}`}
-                  className={router.pathname === `/docs/${secondary.src}` ? 'active' : ''}
-                  onClick={openMenu ? () => openMenu(false) : undefined}
-                >
-                  {secondary.name}
-                </a>
+              <Link
+                onClick={openMenu ? () => openMenu(false) : undefined}
+                className={router.pathname === `/docs/${secondary.src}` ? 'active' : ''}
+                key={`secondary-${idx}`}
+                href={`/docs/${secondary.src}`}
+              >
+                {secondary.name}
               </Link>
             ))}
           </div>

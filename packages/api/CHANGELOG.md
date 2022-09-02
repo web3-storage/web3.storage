@@ -1,5 +1,89 @@
 # Changelog
 
+## [7.4.0](https://github.com/web3-storage/web3.storage/compare/api-v7.3.0...api-v7.4.0) (2022-08-31)
+
+
+### Features
+
+* account payments UI start ([#1767](https://github.com/web3-storage/web3.storage/issues/1767)) ([38f0088](https://github.com/web3-storage/web3.storage/commit/38f00887df1e22ddef7c76c51e9c68883ad80895))
+* add tsc checking to packages/api ([#1813](https://github.com/web3-storage/web3.storage/issues/1813)) ([b7cc6f7](https://github.com/web3-storage/web3.storage/commit/b7cc6f7a6eb9a11c6d1fa856a97d15a8b89bf10e))
+* drop name table & IPNS migration cron ([#1719](https://github.com/web3-storage/web3.storage/issues/1719)) ([0cdfad9](https://github.com/web3-storage/web3.storage/commit/0cdfad9f6baf4a1a356b8c6c8291e4bceb45aa17))
+* e2e test website accountPayment loggedIn, includes magic.link testMode support in test-e2e job only ([#1754](https://github.com/web3-storage/web3.storage/issues/1754)) ([6d6f92c](https://github.com/web3-storage/web3.storage/commit/6d6f92cb10552c149ebd1fcaedb2295cb661192c))
+
+
+### Bug Fixes
+
+* Return correct issuer from magic token in `tryMagicToken`. ([#1806](https://github.com/web3-storage/web3.storage/issues/1806)) ([0a10f46](https://github.com/web3-storage/web3.storage/commit/0a10f46d8d04c9babd2e16c9c7c6876c9934085d))
+* upload list pagination headers ([#1739](https://github.com/web3-storage/web3.storage/issues/1739)) ([2ffe6d7](https://github.com/web3-storage/web3.storage/commit/2ffe6d749628095a93d957836c6b4e8ad3b6acf9))
+
+## [7.3.0](https://github.com/web3-storage/web3.storage/compare/api-v7.2.0...api-v7.3.0) (2022-08-22)
+
+
+### Features
+
+* add to api GET /user/payment, add AuthorizationTestContext to encapsulate magic.link test bypass ([#1769](https://github.com/web3-storage/web3.storage/issues/1769)) ([7722acc](https://github.com/web3-storage/web3.storage/commit/7722acc91a5c105f4865b47861000147fb227f26))
+
+
+### Other Changes
+
+* remove /name API endpoints and storage ([#1686](https://github.com/web3-storage/web3.storage/issues/1686)) ([ab93278](https://github.com/web3-storage/web3.storage/commit/ab93278ebe0a9fadc53171a72237bfe3d4a5e32a))
+
+## [7.2.0](https://github.com/web3-storage/web3.storage/compare/api-v7.1.1...api-v7.2.0) (2022-08-17)
+
+
+### Features
+
+* New Users Pins Endpoint ([#1718](https://github.com/web3-storage/web3.storage/issues/1718)) ([0d8eb86](https://github.com/web3-storage/web3.storage/commit/0d8eb86862783006bdeed131c5099e3ca3ecfb5b))
+
+
+### Bug Fixes
+
+* stracktraces with wrangler no bundle ([#1731](https://github.com/web3-storage/web3.storage/issues/1731)) ([763442c](https://github.com/web3-storage/web3.storage/commit/763442cb985f5297f04b25f4451605ab38431e44))
+
+## [7.1.1](https://github.com/web3-storage/web3.storage/compare/api-v7.1.0...api-v7.1.1) (2022-08-12)
+
+
+### Bug Fixes
+
+* add ipns migration cron job ([#1705](https://github.com/web3-storage/web3.storage/issues/1705)) ([4b6e67f](https://github.com/web3-storage/web3.storage/commit/4b6e67f07983b06e9bad9c27deb5d6c5b993258e))
+* Make PSA Errors compliant ([#1710](https://github.com/web3-storage/web3.storage/issues/1710)) ([4080363](https://github.com/web3-storage/web3.storage/commit/4080363193893f8ce72d4cf28d8153e2f4faee14))
+
+## [7.1.0](https://github.com/web3-storage/web3.storage/compare/api-v7.0.1...api-v7.1.0) (2022-07-07)
+
+
+### Features
+
+* stop tracking remote pins and remote them from db ([#1615](https://github.com/web3-storage/web3.storage/issues/1615)) ([faa9d6a](https://github.com/web3-storage/web3.storage/commit/faa9d6a546a095a24e9a36ab48bedc77ad7d4787))
+
+
+### Bug Fixes
+
+* add blog subscription stub ([#1617](https://github.com/web3-storage/web3.storage/issues/1617)) ([6bc6bfc](https://github.com/web3-storage/web3.storage/commit/6bc6bfc43a053389391d80b4d0cf3e06820c70c4))
+
+## [7.0.1](https://github.com/web3-storage/web3.storage/compare/api-v7.0.0...api-v7.0.1) (2022-06-29)
+
+
+### Bug Fixes
+
+* add pagination to user/uploads endpoint ([#1408](https://github.com/web3-storage/web3.storage/issues/1408)) ([3e0a14f](https://github.com/web3-storage/web3.storage/commit/3e0a14fc8407ae549d19ba8b48ddab23bd2a5141))
+
+
+### Other Changes
+
+* use `instanceof` for error type inference ([#1463](https://github.com/web3-storage/web3.storage/issues/1463)) ([a42e762](https://github.com/web3-storage/web3.storage/commit/a42e762e4935b4cbad864bd3b9edc0499b7c225c))
+
+## [7.0.0](https://github.com/web3-storage/web3.storage/compare/api-v6.4.1...api-v7.0.0) (2022-06-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* uploaded files are no longer _instantly_ available via gateways or on the DHT. They may take a few seconds to become indexed by Elastic Provider.
+
+### Features
+
+* switch to Elastic IPFS ([#1455](https://github.com/web3-storage/web3.storage/issues/1455)) ([9fac681](https://github.com/web3-storage/web3.storage/commit/9fac681b121f2902f0570c15e7e6b4bf16521d3c))
+* use direct connection to cargo to get claimed size ([#1535](https://github.com/web3-storage/web3.storage/issues/1535)) ([e4087a9](https://github.com/web3-storage/web3.storage/commit/e4087a9f4d4202d672938d339e121c19344866b4))
+
 ## [6.4.1](https://github.com/web3-storage/web3.storage/compare/api-v6.4.0...api-v6.4.1) (2022-06-22)
 
 

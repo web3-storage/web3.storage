@@ -6,7 +6,9 @@ import execa from 'execa'
 import delay from 'delay'
 import { webcrypto } from 'crypto'
 import * as workerGlobals from './scripts/worker-globals.js'
+import { AuthorizationTestContext } from './contexts/authorization.js'
 
+// @ts-ignore
 global.crypto = webcrypto
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -21,12 +23,15 @@ export const mochaHooks = () => {
   let projectDb
   /** @type {string} */
   let projectCluster
+  /** @type {string} */
+  let projectMinio
   /** @type {import('http').Server} */
   let srv
 
   return {
     async beforeAll () {
       this.timeout(120_000)
+      AuthorizationTestContext.install(this)
 
       console.log('⚡️ Starting Miniflare')
       srv = await new Miniflare({
@@ -40,6 +45,10 @@ export const mochaHooks = () => {
         bindings: workerGlobals
       }).startServer()
 
+      console.log('⚡️ Starting Minio')
+      projectMinio = `web3-storage-minio-${Date.now()}`
+      await execa(toolsCli, ['minio', 'server', 'start', '--project', projectMinio])
+
       console.log('⚡️ Starting IPFS Cluster')
       projectCluster = `web3-storage-cluster-${Date.now()}`
       await execa(toolsCli, ['cluster', '--start', '--project', projectCluster])
@@ -51,7 +60,7 @@ export const mochaHooks = () => {
       console.log('⚡️ Loading DB schema')
       await execa(dbCli, ['db-sql', '--cargo', '--testing', `--customSqlPath=${initScript}`])
 
-      await delay(2000)
+      await delay(1000)
     },
     async afterAll () {
       // Note: not awaiting promises here so we see the test results overview sooner.
@@ -59,6 +68,10 @@ export const mochaHooks = () => {
       if (srv) {
         console.log('🛑 Stopping Miniflare')
         srv.close()
+      }
+      if (projectMinio) {
+        console.log('🛑 Stopping Minio')
+        execa(toolsCli, ['minio', 'server', 'stop', '--clean', '--project', projectMinio])
       }
       if (projectCluster) {
         console.log('🛑 Stopping IPFS Cluster')
@@ -71,6 +84,8 @@ export const mochaHooks = () => {
     },
 
     async beforeEach () {
+      await execa(toolsCli, ['minio', 'bucket', 'remove', 'dotstorage-test-0'])
+      await execa(toolsCli, ['minio', 'bucket', 'create', 'dotstorage-test-0'])
       await execa(dbCli, ['db-sql', '--skipCreate', '--truncate', `--customSqlPath=${initScript}`])
     }
   }

@@ -22,6 +22,21 @@ export class HTTPError extends Error {
   }
 }
 
+export class PinningServiceApiError extends Error {
+  /**
+   *
+   * @param {string} [message]
+   * @param {number} [status]
+   * @param {string} code
+   */
+  constructor (message, status = 400, code = 'PSA_ERROR') {
+    super(message)
+    this.details = message
+    this.status = status
+    this.reason = code
+  }
+}
+
 export class UserNotFoundError extends HTTPError {
   constructor (msg = 'No user found for user token') {
     super(msg, 401)
@@ -31,11 +46,10 @@ export class UserNotFoundError extends HTTPError {
 }
 UserNotFoundError.CODE = 'ERROR_USER_NOT_FOUND'
 
-export class PinningUnauthorizedError extends HTTPError {
+export class PinningUnauthorizedError extends PinningServiceApiError {
   constructor (msg = 'Pinning not authorized for this user, email support@web3.storage to request authorization.') {
     super(msg, 403)
-    this.name = 'PinningUnauthorizedError'
-    this.code = PinningUnauthorizedError.CODE
+    this.reason = PinningUnauthorizedError.CODE
   }
 }
 PinningUnauthorizedError.CODE = 'ERROR_PINNING_UNAUTHORIZED'
@@ -142,24 +156,6 @@ export class MaintenanceError extends Error {
 }
 MaintenanceError.CODE = 'ERROR_MAINTENANCE'
 
-export class PinningServiceApiError extends Error {
-  /**
-   *
-   * @param {string} [message]
-   * @param {number} [status]
-   * @param {string} code
-   */
-  constructor (message, status = 400, code = 'PSA_ERROR') {
-    super(message)
-    this.details = message
-    this.status = status
-    this.reason = code
-    // TODO: improve error handler
-    // https://github.com/web3-storage/web3.storage/issues/976
-    this.IS_PSA_ERROR = true
-  }
-}
-
 export class PSAErrorInvalidData extends PinningServiceApiError {
   /**
    * @param {string} message
@@ -209,3 +205,12 @@ export class PSAErrorDB extends PinningServiceApiError {
   }
 }
 PSAErrorDB.CODE = 'PSA_DB_ERROR'
+
+export class RangeNotSatisfiableError extends HTTPError {
+  constructor (msg = 'Range Not Satisfiable') {
+    super(msg, 416)
+    this.name = 'RangeNotSatisfiableError'
+    this.code = RangeNotSatisfiableError.CODE
+  }
+}
+RangeNotSatisfiableError.CODE = 'ERROR_RANGE_NOT_SATISFIABLE'

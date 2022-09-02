@@ -6,13 +6,17 @@
   "main": "index.js",
   "type": "module",
   "devDependencies": {
+    "@types/minio": "^7.0.13",
     "dotenv": "^10.0.0",
     "execa": "^5.1.1",
     "got": "^12.0.1",
+    "minio": "^7.0.28",
+    "p-retry": "^5.1.1",
     "sade": "^1.7.4"
   },
   "scripts": {
     "cluster:start": "./scripts/cli.js cluster --start",
+    "docker:ps": "docker ps -a | grep 'web3\\|ipfs0\\|minio0\\|cluster0'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

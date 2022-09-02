@@ -69,7 +69,7 @@
         "uploaded": "Stored files",
         "pinned": "Pinned files"
       },
-      "prompt": "Need more free storage?",
+      "prompt": "Need more storage?",
       "buttons": {
         "search": "Search my files",
         "request": "Submit a request"
@@ -120,6 +120,10 @@
             "label": "CID",
             "tooltip": "The content identifier for a file or a piece of data. <a href='/docs/concepts/content-addressing/' target='_blank' rel='noreferrer'>Learn more</a>"
           },
+          "requestid": {
+            "label": "Request ID",
+            "tooltip": "The identifier for this pin request. <a href='https://ipfs.github.io/pinning-services-api-spec/#requestid' target='_blank' rel='noreferrer'>Learn more</a>"
+          },
           "status": {
             "label": "Status",
             "tooltip": {
@@ -157,41 +161,19 @@
           "options": [
             {
               "label": "Newest Upload",
-              "value": "newest",
-              "direction": "NEWEST",
-              "compareFn": "TIMEBASED"
+              "value": "Date,Desc"
             },
             {
               "label": "Oldest Upload",
-              "value": "oldest",
-              "direction": "OLDEST",
-              "compareFn": "TIMEBASED"
+              "value": "Date,Asc"
             },
             {
               "label": "Alphabetical A-Z",
-              "key": "name",
-              "value": "a-z",
-              "direction": "ASC",
-              "compareFn": "ALPHANUMERIC"
+              "value": "Name,Asc"
             },
             {
               "label": "Alphabetical Z-A",
-              "key": "name",
-              "value": "z-a",
-              "direction": "DESC",
-              "compareFn": "ALPHANUMERIC"
-            },
-            {
-              "label": "Largest size",
-              "value": "largest",
-              "direction": "LARGEST",
-              "compareFn": "SIZEBASED"
-            },
-            {
-              "label": "Smallest size",
-              "value": "smallest",
-              "direction": "SMALLEST",
-              "compareFn": "SIZEBASED"
+              "value": "Name,Desc"
             }
           ]
         },

@@ -17,6 +17,7 @@
 
 /** @type {Record<TrackerStatus, PinStatus>} */
 const PinStatusMap = {
+  // @ts-ignore
   undefined: 'Undefined',
   cluster_error: 'ClusterError',
   pin_error: 'PinError',
@@ -37,6 +38,12 @@ const PIN_STATUS_CHECK_INTERVAL = 5000
 
 // Max time in ms to spend polling for an OK status.
 const MAX_PIN_STATUS_CHECK_TIME = 30000
+
+/**
+ * List of statuses we don't want to track
+ * @type {PinStatus[]}
+ */
+const PIN_STATUSES_TO_IGNORE = ['Remote']
 
 // Pin statuses considered OK.
 export const PIN_OK_STATUS = ['Pinned', 'Pinning', 'PinQueued']
@@ -69,7 +76,10 @@ export async function getPins (cid, cluster, peerMap) {
     peerMap = (await cluster.status(cid)).peerMap
   }
 
-  const pins = toPins(peerMap)
+  let pins = toPins(peerMap)
+
+  // Ignore Remote Pins
+  pins = pins.filter(p => !PIN_STATUSES_TO_IGNORE.includes(p.status))
 
   if (!pins.length) {
     throw new Error('not pinning on any node')
@@ -100,6 +110,7 @@ function toPins (peerMap) {
   // Note: `peerId` is the ID of the Cluster node, and is only used for cluster
   // admin. The `ipfsPeerId` can be  used to connect to the underlying ipfs node
   // that stores a given pin, by passing it to `ipfs swarm connect <peerid>`.
+  // @ts-ignore
   return Object.entries(peerMap).map(([peerId, { peerName, ipfsPeerId, status }]) => ({
     status: toPinStatusEnum(status),
     location: { peerId, peerName, ipfsPeerId }
@@ -152,6 +163,7 @@ export async function waitAndUpdateOkPins (cid, cluster, db, waitTime = MAX_PIN_
       location: pin.location
     }
   })
+  // @ts-ignore
   await db.upsertPins(pins)
   return okPins
 }

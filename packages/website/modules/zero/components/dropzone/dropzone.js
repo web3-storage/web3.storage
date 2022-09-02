@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import { useCallback, Fragment, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import Tooltip from 'ZeroComponents/tooltip/tooltip';
+
 import UploadProgress from './uploadProgress';
 
 /**
@@ -18,6 +20,7 @@ import UploadProgress from './uploadProgress';
  *          name: string, uploadId:
  *          string,
  *          failed: boolean,
+ *          error: Error
  *        }[]} [filesInfo] external upload information of files
  * @prop {{loading: string, complete: string, failed: string}} [content]
  */
@@ -69,14 +72,16 @@ const Dropzone = ({
           <Fragment key={`file-${fileInfo.uploadId}`}>
             <div className="filename">{fileInfo.name}</div>
             <div className="status">
-              {!!fileInfo.failed
-                ? content.failed
-                : fileInfo.progress !== 100
-                ? <UploadProgress
-                    label={content.loading}
-                    progress={fileInfo.progress}
-                  />
-                : content.complete}
+              {!!fileInfo.failed ? (
+                <>
+                  {content.failed}{' '}
+                  {fileInfo?.error?.message && <Tooltip content={fileInfo.error.message} position="right" />}
+                </>
+              ) : fileInfo.progress !== 100 ? (
+                <UploadProgress label={content.loading} progress={fileInfo.progress} />
+              ) : (
+                content.complete
+              )}
             </div>
           </Fragment>
         ))}

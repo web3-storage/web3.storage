@@ -11,6 +11,7 @@ import { METRICS_CACHE_MAX_AGE, PIN_STATUSES, UPLOAD_TYPES } from './constants.j
  * @returns {Promise<string>}
  */
 export async function metricsGet (request, env, ctx) {
+  // @ts-ignore
   const cache = caches.default
   let res = await cache.match(request)
 

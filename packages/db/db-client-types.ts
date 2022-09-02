@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { definitions } from './postgres/pg-rest-api-types'
 
 // User
@@ -93,7 +94,7 @@ export type PinItem = PinUpsertInput & {
 export type PinsUpsertInput = {
   id: string
   status: definitions['pin']['status']
-  contentCid: definitions['pin_request']['content_cid']
+  contentCid: definitions['pin']['content_cid']
   location: Location
 }
 
@@ -105,12 +106,6 @@ export type PinItemOutput = {
   peerId: definitions['pin_location']['peer_id']
   peerName: definitions['pin_location']['peer_name']
   region: definitions['pin_location']['region']
-}
-
-export type PinRequestItemOutput = {
-  _id: string
-  cid: definitions['pin_request']['content_cid']
-  created: definitions['pin_request']['inserted_at']
 }
 
 export type PinSyncRequestItem = {
@@ -241,33 +236,14 @@ export type Location = {
   region?: definitions['pin_location']['region']
 }
 
-export type ListUploadsOptions = {
-  /**
-   * Uploads created before a given timestamp.
-   */
-  before?: string
-  /**
-   * Uploads created after a given timestamp.
-   */
-  after?: string
-  /**
-   * Max records (default: 10).
-   */
-  size?: number
-  /**
-   * Sort by given property.
-   */
-  sortBy?: 'Date' | 'Name'
-  /**
-   * Sort order.
-   */
-  sortOrder?: 'Asc' | 'Desc'
+export type ListUploadReturn = {
+  count: number,
+  uploads: UploadItemOutput[],
 }
 
+// Pinning
 
-// Pinninng
-
-// PinRequest
+// PsaPinRequest
 export type PsaPinRequestUpsertInput = {
   id?: string,
   name?: definitions['psa_pin_request']['name'],

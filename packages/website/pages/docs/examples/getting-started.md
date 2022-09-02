@@ -11,18 +11,18 @@ Here's a brief look at how to run the Node.js example:
 
 1. First, clone the Web3.Storage GitHub repo:
 
-    ```shell
+    ```bash
     git clone https://github.com/web3-storage/web3.storage
     ```
 
 1. Move into the NodeJS example folder and install the dependencies using NPM:
 
-    ```shell
-    cd web3.storage/packages/client/examples/node.js 
+    ```bash
+    cd web3.storage/packages/client/examples/node.js
     npm install
     ```
 
-    ```shell output
+    ```bash output
     added 232 packages, and audited 233 packages in 10s
 
     42 packages are looking for funding
@@ -33,7 +33,7 @@ Here's a brief look at how to run the Node.js example:
 
 1. Run the `put-files.js` script, along with the associated variables:
 
-    ```shell
+    ```bash
     node put-files.js --token="your-token" ~/file.txt
     ```
 

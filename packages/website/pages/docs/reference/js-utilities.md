@@ -43,9 +43,9 @@ The [carbites](https://github.com/nftstorage/carbites) package includes a comman
 
 See the how-to guide on [working with Content Archives][howto-car] for more information on using the carbites tool.
 
-[concepts-content-addressing]: ../concepts/content-addressing.md
-[reference-http-api]: ../http-api/
-[reference-http-post-car]: ../http-api/#operation/post-car
-[howto-car]: ../how-tos/work-with-car-files.md
+[concepts-content-addressing]: /docs/concepts/content-addressing/
+[reference-http-api]: /docs/reference/http-api/
+[reference-http-post-car]: /docs/reference/http-api/#operation/post-car
+[howto-car]: /docs/how-tos/work-with-car-files/
 [files-from-path]: https://github.com/web3-storage/files-from-path
 [ipfs-car]: https://github.com/web3-storage/ipfs-car

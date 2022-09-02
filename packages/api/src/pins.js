@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { PSAErrorDB, PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData, PinningServiceApiError } from './errors.js'
@@ -190,7 +191,7 @@ export async function pinsGet (request, env, ctx) {
  * @param { Object } pinRequest
  * @returns { PsaPinStatusResponse }
  */
-function toPinStatusResponse (pinRequest) {
+export function toPinStatusResponse (pinRequest) {
   return {
     requestid: pinRequest._id.toString(),
     status: getEffectivePinStatus(pinRequest.pins),

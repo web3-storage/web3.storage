@@ -12,6 +12,9 @@
     font-size: 1.125rem;
     text-transform: none;
     line-height: 1;
+    &:before {
+      margin-top: -0.325rem;
+    }
   }
   &.warning,
   &.info {
@@ -21,20 +24,20 @@
       vertical-align: middle;
       margin-right: 1.25rem;
       content: '';
-      background-size: cover;
+      background-size: contain;
     }
   }
   &.warning {
     h5:before {
-      height: 23.5px;
-      width: 25.5px;
+      height: 1rem;
+      width: 1rem;
       background-image: url('../../assets/icons/caution.png');
     }
   }
   &.info {
     h5:before {
-      height: 30px;
-      width: 24px;
+      height: 1.25rem;
+      width: 1rem;
       background-image: url('../../assets/icons/bulb.png');
     }
   }

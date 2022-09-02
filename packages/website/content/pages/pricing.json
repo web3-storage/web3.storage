@@ -48,8 +48,8 @@
             "heading": "Storage that grows with you",
             "description": [
               "Web3.Storage is designed to scale to meet your storage needs. The economics of Filecoin allow us to offer all storage for free today.",
-              "The 1 TiB storage tier is open to everyone with no strings attached. If you need more than 1TiB, that's still free today, but we need to know more about your project so we can scale the service to meet your needs.",
-              "In the future <small>(~Q2 '22)</small>, we'll move to a model where users can stake Filecoin to increase their storage limits. This will remain low-cost, and all limits already increased for free will continue to be respected!"
+              "The 1 TiB storage tier is open to everyone. If you need more than 1TiB, that's still free today, but we need to know more about your project so we can scale the service to meet your needs.",
+              "In the future, users will be able to pay to increase their storage capacity. This will remain low-cost, and all limits already increased for free will continue to be respected!"
             ]
           },
           {
