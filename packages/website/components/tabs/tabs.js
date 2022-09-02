@@ -119,6 +119,7 @@ export function Tabs(props) {
           cloneElement(tabItem, {
             key: i,
             hidden: tabItem.props.value !== selectedValue,
+            className: 'tab-panel',
           })
         )}
       </div>

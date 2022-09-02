@@ -146,6 +146,19 @@ describe('put', () => {
     })
     assert.ok(uploadedChunks >= 100)
   })
+
+  it('aborts', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const files = prepareFiles()
+    const controller = new AbortController()
+    controller.abort()
+    try {
+      await client.put(files, { signal: controller.signal })
+      assert.unreachable('request should not have succeeded')
+    } catch (err) {
+      assert.equal(err.name, 'AbortError')
+    }
+  })
 })
 
 describe('putCar', () => {
@@ -248,6 +261,33 @@ describe('putCar', () => {
       }
     })
     assert.equal(cid, expectedCid, 'returned cid matches the CAR')
+  })
+
+  it('throws network error', async () => {
+    const fetch = () => { throw new Error('network error') }
+    const client = new Web3Storage({ token, endpoint, fetch })
+    // creates special CAR with CID that causes the server to error:
+    // bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354
+    const carReader = await createCar('server error')
+    try {
+      await client.putCar(carReader, { maxRetries: 0 })
+      assert.unreachable('request should not have succeeded')
+    } catch (err) {
+      assert.match(err.message, /network error/)
+    }
+  })
+
+  it('aborts', async () => {
+    const client = new Web3Storage({ token, endpoint })
+    const carReader = await createCar('hello world')
+    const controller = new AbortController()
+    controller.abort()
+    try {
+      await client.putCar(carReader, { signal: controller.signal })
+      assert.unreachable('request should not have succeeded')
+    } catch (err) {
+      assert.equal(err.name, 'AbortError')
+    }
   })
 })
 

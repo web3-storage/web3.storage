@@ -1,28 +1,37 @@
-import Helix from '../assets/illustrations/helix';
-import Triangle from '../assets/illustrations/triangle';
-import Cross from '../assets/illustrations/cross';
-import Coil from '../assets/illustrations/coil';
-import Ring from '../assets/illustrations/ring';
 import Terms from '../content/terms-of-service.mdx';
+import Img from '../components/cloudflareImage.js';
+import ImageTriangle from '../public/images/illustrations/triangle.png';
+import ImageHelix from '../public/images/illustrations/helix.png';
+import ImageCross from '../public/images/illustrations/cross.png';
+import ImageRing from '../public/images/illustrations/ring.png';
+import ImageCoil from '../public/images/illustrations/coil.png';
 
 export default function Home() {
   return (
-    <>
-      <main className="page page-terms">
-        <div className="grid">
-          <div className="col-10_mi-12" data-push-left="off-1_mi-0">
-            <section id="terms_page-main-body" className="sectional">
-              <Helix id={'terms_page_helix'} />
-              <Triangle id={'terms_page_triangle'} />
-              <Cross id={'terms_page_cross'} />
-              <Ring id={'terms_page_ring'} />
-              <Coil id={'terms_page_coil'} />
-              <Terms />
-            </section>
-          </div>
+    <main className="page page-terms">
+      <div className="grid">
+        <div>
+          <section id="terms_page-main-body" className="sectional">
+            <div id={'terms_page_helix'}>
+              <Img alt="" src={ImageHelix} />
+            </div>
+            <div id={'terms_page_triangle'}>
+              <Img alt="" src={ImageTriangle} />
+            </div>
+            <div id={'terms_page_cross'}>
+              <Img alt="" src={ImageCross} />
+            </div>
+            <div id={'terms_page_ring'}>
+              <Img alt="" src={ImageRing} />
+            </div>
+            <div id={'terms_page_coil'}>
+              <Img alt="" src={ImageCoil} />
+            </div>
+            <Terms />
+          </section>
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 }
 

@@ -2,20 +2,26 @@
 
 import { updateDagSizes } from '../jobs/dagcargo.js'
 import { envConfig } from '../lib/env.js'
-import { getPg } from '../lib/utils.js'
+import { getCargoPgPool, getPg } from '../lib/utils.js'
 
-const oneMonthAgo = () => new Date().setMonth(new Date().getMonth() - 1)
+/**
+ *
+ * @param {number} seconds
+ * @returns
+ */
+const xSecondsAgo = (seconds) => new Date().setSeconds(new Date().getSeconds() - seconds)
 
 async function main () {
-  const rwPg = getPg(process.env, 'rw')
-  const roPg = getPg(process.env, 'ro')
+  const rwPg = await getPg(process.env, 'rw')
+  const cargoPool = getCargoPgPool(process.env)
 
   try {
-    const after = new Date(process.env.AFTER || oneMonthAgo())
-    await updateDagSizes({ rwPg, roPg, after })
+    const after = new Date(process.env.AFTER || xSecondsAgo(60 * 60 * 4))
+    const before = process.env.BEFORE ? new Date(process.env.BEFORE) : undefined
+    await updateDagSizes({ rwPg, cargoPool, after, before })
   } finally {
     await rwPg.end()
-    await roPg.end()
+    await cargoPool.end()
   }
 }
 

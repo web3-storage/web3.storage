@@ -43,8 +43,26 @@ export const STATUS = {
  */
 
 /**
+ * @typedef {Object} PinObject
+ * @property {string} cid
+ * @property {string} _id
+ * @property {string} sourceCid
+ * @property {string} contentCid
+ * @property {string} authKey
+ * @property {string} name
+ * @property {any} meta
+ * @property {boolean | null} deleted
+ * @property {string} created
+ * @property {string} updated
+ * @property {Pin[]} pins
+ * @property {string[]} delegates
+ */
+
+/**
  * @typedef {Object} UploadsContextProps
- * @property {Upload[]} uploads Uploads available in this account
+ * @property {Upload[]} uploads A Page of uploads
+ * @property {number} pages Total pages of uploads
+ * @property {number} count Total uploads
  * @property {(cid: string) => Promise<void>} deleteUpload Method to delete an existing upload
  * @property {(cid: string, name: string)=>Promise<void>} renameUpload Method to rename an existing upload
  * @property {(args?: UploadArgs) => Promise<Upload[]>} getUploads Method that refetches list of uploads based on certain params
@@ -78,6 +96,8 @@ export const UploadsProvider = ({ children }) => {
   } = useUser();
 
   const [uploads, setUploads] = useState(/** @type {Upload[]} */ ([]));
+  const [pages, setPages] = useState(0);
+  const [count, setCount] = useState(0);
   const [isFetchingUploads, setIsFetchingUploads] = useState(false);
   const [fetchDate, setFetchDate] = useState(/** @type {number|undefined} */ (undefined));
   const [filesToUpload, setFilesToUpload] = useState(/** @type {FileProgress[]} */ ([]));
@@ -143,21 +163,18 @@ export const UploadsProvider = ({ children }) => {
 
   const getUploadsCallback = useCallback(
     /** @type {(args?: UploadArgs) => Promise<Upload[]>}} */
-    async (
-      args = {
-        size: 1000,
-        before: new Date().toISOString(),
-      }
-    ) => {
+    async args => {
       setIsFetchingUploads(true);
-      const updatedUploads = await getUploads(args);
-      setUploads(updatedUploads);
+      const { uploads, pages, count } = await getUploads(args);
+      setUploads(uploads);
+      setPages(pages);
+      setCount(count);
       setFetchDate(Date.now());
       setIsFetchingUploads(false);
 
-      return updatedUploads;
+      return uploads;
     },
-    [setUploads, setIsFetchingUploads]
+    [setUploads, setPages, setCount, setIsFetchingUploads]
   );
 
   return (
@@ -170,6 +187,8 @@ export const UploadsProvider = ({ children }) => {
           renameUpload,
           getUploads: getUploadsCallback,
           uploads,
+          pages,
+          count,
           isFetchingUploads,
           fetchDate,
           uploadsProgress: progress,

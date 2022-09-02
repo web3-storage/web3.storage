@@ -8,7 +8,6 @@ $date-delete: auto;
   @include fontSize_Tiny;
   display: grid;
   position: relative;
-  padding: 0.375rem 1.75rem 0.375rem 0;
   grid-template-columns: $date-name $date-id $date-copy $date-delete;
   border-bottom: 0.078125rem solid rgba($white, 0.05);
 
@@ -38,7 +37,6 @@ $date-delete: auto;
 
   &.tokens-manager-row-header {
     padding-bottom: 0;
-    padding-left: 1.40625rem;
     @include fontWeight_Semibold;
     @include medium {
       display: none;

@@ -1,5 +1,6 @@
 import clsx from 'clsx';
-import InfoAIcon from 'assets/icons/infoA';
+import { BsFillInfoCircleFill } from 'react-icons/bs';
+
 
 /**
  * @typedef {Object} InfoProps
@@ -18,7 +19,7 @@ import InfoAIcon from 'assets/icons/infoA';
 const Tooltip = ({ children, content, icon = null, className, position }) => {
   return (
     <div role="tooltip" className={clsx(className, 'Tooltip', position)}>
-      {!children && (icon || <InfoAIcon />)}
+      {!children && (icon || <BsFillInfoCircleFill />)}
       {children}
       <span className="tooltip-content" dangerouslySetInnerHTML={{ __html: content }} />
     </div>

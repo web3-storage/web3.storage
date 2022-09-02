@@ -3,6 +3,9 @@
   z-index: 1;
   padding-top: 6.5rem;
   padding-bottom: 20rem;
+  @include tiny {
+    padding-bottom: 8rem;
+  }
   .accordion-block {
     a {
       color: #3c3cd6;

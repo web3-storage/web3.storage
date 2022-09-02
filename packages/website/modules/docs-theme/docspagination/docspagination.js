@@ -20,7 +20,7 @@ export default function DocsPagination() {
         {currentIndex > 0 && (
           <>
             <div className="sublabel">Previous</div>
-            <a href={`/docs/${flatNavData[currentIndex - 1].src}`}>« {flatNavData[currentIndex - 1].name}</a>
+            <a href={`/docs/${flatNavData[currentIndex - 1].src}`}>{flatNavData[currentIndex - 1].name}</a>
           </>
         )}
       </div>
@@ -28,7 +28,7 @@ export default function DocsPagination() {
         {currentIndex + 1 < flatNavData.length && (
           <>
             <div className="sublabel">Next</div>
-            <a href={`/docs/${flatNavData[currentIndex + 1].src}`}>{flatNavData[currentIndex + 1].name} »</a>
+            <a href={`/docs/${flatNavData[currentIndex + 1].src}`}>{flatNavData[currentIndex + 1].name}</a>
           </>
         )}
       </div>

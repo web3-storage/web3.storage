@@ -5,37 +5,37 @@ description: Learn Web3.Storage by example with sample applications and starter 
 
 # Getting started examples
 
-The [Web3.Storage GitHub repository][github-main-repo] contains some example projects to help you get started with the Web3.Storage JavaScript client library. The examples are stored in the [`packages/client/examples` directory][github-examples-dir] and include code for Node.js and several browser toolchains.  Each example directory has a `README.md` explaining how to install dependencies and run the code.
+The [Web3.Storage GitHub repository][github-main-repo] contains some example projects to help you get started with the Web3.Storage JavaScript client library. The examples are stored in the [`packages/client/examples` directory][github-examples-dir] and include code for Node.js and several browser toolchains. Each example directory has a `README.md` explaining how to install dependencies and run the code.
 
 Here's a brief look at how to run the Node.js example:
 
 1. First, clone the Web3.Storage GitHub repo:
 
-    ```shell
-    git clone https://github.com/web3-storage/web3.storage
-    ```
+   ```bash
+   git clone https://github.com/web3-storage/web3.storage
+   ```
 
 1. Move into the NodeJS example folder and install the dependencies using NPM:
 
-    ```shell
-    cd web3.storage/packages/client/examples/node.js 
-    npm install
-    ```
+   ```bash
+   cd web3.storage/packages/client/examples/node.js
+   npm install
+   ```
 
-    ```shell output
-    added 232 packages, and audited 233 packages in 10s
+   ```bash output
+   added 232 packages, and audited 233 packages in 10s
 
-    42 packages are looking for funding
-      run `npm fund` for details
+   42 packages are looking for funding
+     run `npm fund` for details
 
-    found 0 vulnerabilities
-    ```
+   found 0 vulnerabilities
+   ```
 
 1. Run the `put-files.js` script, along with the associated variables:
 
-    ```shell
-    node put-files.js --token="your-token" ~/file.txt
-    ```
+   ```bash
+   node put-files.js --token="your-token" ~/file.txt
+   ```
 
 1. That's it!
 

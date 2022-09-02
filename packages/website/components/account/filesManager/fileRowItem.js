@@ -1,20 +1,13 @@
 import clsx from 'clsx';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
+import { renderToString } from 'react-dom/server';
 
-import Tooltip from 'modules/zero/components/tooltip/tooltip';
-import CheckIcon from 'assets/icons/check';
-import InfoBIcon from 'assets/icons/infoB';
-import CopyIcon from 'assets/icons/copy';
-import PencilIcon from 'assets/icons/pencil';
-import { addTextToClipboard, truncateString } from 'lib/utils';
+import CheckIcon from '../../../assets/icons/check';
+import CopyIcon from '../../../assets/icons/copy';
+import PencilIcon from '../../../assets/icons/pencil';
+import { addTextToClipboard, formatTimestamp, formatTimestampFull, truncateString } from '../../../lib/utils';
+import Tooltip from '../../../modules/zero/components/tooltip/tooltip';
 import AppData from '../../../content/pages/app/account.json';
-
-export const PinStatus = {
-  PINNED: 'Pinned',
-  PINNING: 'Pinning',
-  PIN_QUEUED: 'PinQueued',
-  QUEUING: 'Queuing...',
-};
 
 /**
  * @typedef {Object} FileRowItemProps
@@ -22,9 +15,10 @@ export const PinStatus = {
  * @property {string} date
  * @property {string} name
  * @property {string} cid
- * @property {string} status
  * @property {string} size
- * @property {string | import('react').ReactNode[]} storageProviders
+ * @property {string} linkPrefix
+ * @property {string | import('react').ReactNode[] | null} storageProviders
+ * @property {(e: any)=>void} onSelect
  * @property {(e: any)=>void} onSelect
  * @property {number} [numberOfPins]
  * @property {boolean} [isHeader]
@@ -33,6 +27,7 @@ export const PinStatus = {
  * @property {()=>void} [onDelete]
  * @property {(newFileName?: string) => void} [onEditToggle]
  * @property {boolean} [isEditingName]
+ * @property {string?} tabType
  */
 
 /**
@@ -46,16 +41,16 @@ const FileRowItem = props => {
     date,
     name,
     cid,
-    status,
     storageProviders,
     size,
+    linkPrefix,
     onSelect,
-    numberOfPins,
     isHeader = false,
     isSelected,
     onDelete,
     onEditToggle,
     isEditingName,
+    tabType,
   } = useMemo(() => {
     const propsReturn = { ...props };
     const { target, text = '' } = props.highlight || {};
@@ -68,30 +63,21 @@ const FileRowItem = props => {
     return propsReturn;
   }, [props]);
 
-  const [showAll, setShowAll] = useState(false);
   const fileRowLabels = AppData.page_content.file_manager.table.file_row_labels;
-  const statusMessages = fileRowLabels.status.tooltip;
   /** @type {import('react').RefObject<HTMLTextAreaElement>} */
   const editingNameRef = useRef(null);
   const truncatedCID = useMemo(() => truncateString(cid, 5, '...', 'double'), [cid]);
-  const statusTooltip = useMemo(
-    () =>
-      ({
-        [PinStatus.QUEUING]: statusMessages.queuing,
-        [PinStatus.PIN_QUEUED]: statusMessages.pin_queued,
-        [PinStatus.PINNING]: statusMessages.pinning,
-        [PinStatus.PINNED]: statusMessages.pinned.replace('*numberOfPins*', `${numberOfPins}`),
-      }[status]),
-    [numberOfPins, status, statusMessages]
-  );
-
-  const showAllToggle = useCallback(() => {
-    setShowAll(v => !v);
-  }, []);
 
   return (
-    <div className={clsx('files-manager-row', className, isHeader && 'files-manager-row-header')}>
-      <span className="file-select-container">
+    <div
+      className={clsx(
+        'files-manager-row',
+        className,
+        isHeader && 'files-manager-row-header',
+        isSelected && 'files-manager-row-active'
+      )}
+    >
+      <span className={clsx('file-select-container', tabType)}>
         <span className="file-select">
           <input checked={isSelected} type="checkbox" id={`${name}-select`} onChange={onSelect} />
           <CheckIcon className="check" />
@@ -99,10 +85,6 @@ const FileRowItem = props => {
         <button onClick={onDelete} className="file-row-label delete medium-down-only">
           {fileRowLabels.delete.label}
         </button>
-      </span>
-      <span className="file-date">
-        <span className="file-row-label medium-down-only">{fileRowLabels.date.label}</span>
-        {date}
       </span>
       <span className={clsx(isEditingName && 'isEditingName', 'file-name')}>
         <span className="file-row-label medium-down-only">{fileRowLabels.name.label}</span>
@@ -114,24 +96,24 @@ const FileRowItem = props => {
           </span>
         )}
 
-        {!isHeader && (
+        {!isHeader && onEditToggle && (
           <PencilIcon
-            className="pencil-icon"
+            className={clsx('pencil-icon', tabType)}
             onClick={() => (isEditingName ? onEditToggle?.(editingNameRef.current?.value) : onEditToggle?.())}
           />
         )}
       </span>
       <span className="file-cid" title={cid}>
         <span className="file-row-label medium-down-only">
-          <Tooltip content={fileRowLabels.cid.tooltip} />
           {fileRowLabels.cid.label}
+          <Tooltip content={fileRowLabels.cid.tooltip} />
         </span>
         {isHeader ? (
           <span className="cid-full medium-up-only">{cid}</span>
         ) : (
           <a
             className="cid-truncate underline medium-up-only"
-            href={`https://dweb.link/ipfs/${cid}`}
+            href={`${linkPrefix}${cid}`}
             target="_blank"
             rel="noreferrer"
           >
@@ -154,62 +136,67 @@ const FileRowItem = props => {
         <span className="file-row-label medium-down-only">{fileRowLabels.available.label}</span>
         {isHeader ? 'Availability' : 'Available'}
       </span> */}
-      <span className="file-pin-status">
-        <span className="file-row-label medium-down-only">
-          <Tooltip content={statusMessages.header} />
-          {fileRowLabels.status.label}
-        </span>
-        {status}
-        {isHeader ? (
-          <Tooltip content={statusMessages.header} />
-        ) : (
-          statusTooltip && <Tooltip icon={<InfoBIcon />} content={statusTooltip} />
-        )}
-      </span>
-      <span className="file-storage-providers">
-        <span className="file-row-label medium-down-only">
-          <Tooltip content={fileRowLabels.storage_providers.tooltip.header} />
-          {fileRowLabels.storage_providers.label}
-        </span>
-        {isHeader ? (
-          <>
-            <span className="th-content">
-              <span>{storageProviders}</span>
+      {storageProviders && (
+        <span className="file-storage-providers">
+          <span className="file-row-label medium-down-only">
+            {fileRowLabels.storage_providers.label}
+            <Tooltip content={fileRowLabels.storage_providers.tooltip.header} />
+          </span>
+          {isHeader ? (
+            <>
+              <span className="th-content">
+                <span>{storageProviders}</span>
+                <Tooltip
+                  position="right"
+                  className="tooltip-sp"
+                  content={fileRowLabels.storage_providers.tooltip.header}
+                />
+              </span>
+            </>
+          ) : !storageProviders.length ? (
+            <>
+              Queuing...
               <Tooltip
-                position="right"
-                className="tooltip-sp"
-                content={fileRowLabels.storage_providers.tooltip.header}
+                className="medium-down-only"
+                position="left"
+                content={fileRowLabels.storage_providers.tooltip.queuing}
               />
-            </span>
-          </>
-        ) : !storageProviders.length ? (
-          <>
-            Queuing...
-            <Tooltip
-              className="medium-down-only"
-              position="left"
-              content={fileRowLabels.storage_providers.tooltip.queuing}
-            />
-            <Tooltip
-              className="medium-up-only"
-              position="right"
-              content={fileRowLabels.storage_providers.tooltip.queuing}
-            />
-          </>
-        ) : (
-          <div className={clsx('file-storage-providers-content', showAll ? '' : 'show-all')}>
-            <div className="content">{storageProviders}</div>
-            {storageProviders.length > 5 && (
-              <button className="medium-up-only" onClick={showAllToggle}>
-                {showAll ? 'View fewer' : 'View all'}
-              </button>
-            )}
-          </div>
-        )}
-      </span>
+              <Tooltip
+                className="medium-up-only"
+                position="right"
+                content={fileRowLabels.storage_providers.tooltip.queuing}
+              />
+            </>
+          ) : (
+            <>
+              Stored ({storageProviders.length})
+              <Tooltip
+                className="medium-down-only"
+                position="left"
+                content={renderToString(<p>{storageProviders}</p>)}
+              />
+              <Tooltip
+                className="medium-up-only"
+                position="right"
+                content={renderToString(<p>{storageProviders}</p>)}
+              />
+            </>
+          )}
+        </span>
+      )}
       <span className="file-size">
         <span className="file-row-label medium-down-only">{fileRowLabels.size.label}</span>
         {size}
+      </span>
+      <span className="file-date">
+        {isHeader ? (
+          <span>Date</span>
+        ) : (
+          <>
+            <span className="file-row-label medium-down-only">{fileRowLabels.date.label}</span>
+            <span title={formatTimestampFull(date)}>{formatTimestamp(date)}</span>
+          </>
+        )}
       </span>
     </div>
   );

@@ -5,7 +5,8 @@ import sade from 'sade'
 import { fileURLToPath } from 'url'
 import got from 'got'
 import execa from 'execa'
-import net from 'net'
+import { minioCmd } from './minio.js'
+import { isPortReachable } from './util.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const prog = sade('api')
@@ -26,6 +27,8 @@ prog
   .option('--token', 'Opsgenie Token')
   .option('--name', 'Heartbeat Name')
   .action(heartbeatCmd)
+
+minioCmd(prog)
 
 /**
  * @param {Object} opts
@@ -81,43 +84,6 @@ export async function clusterCmd ({ project, start, stop, clean }) {
 }
 
 prog.parse(process.argv)
-
-/**
- * @param {number} port
- */
-export default async function isPortReachable (
-  port,
-  { host = 'localhost', timeout = 1000 } = {}
-) {
-  if (typeof host !== 'string') {
-    throw new TypeError('Specify a `host`')
-  }
-
-  const promise = new Promise((resolve, reject) => {
-    const socket = new net.Socket()
-
-    const onError = (err) => {
-      socket.destroy()
-      reject(err)
-    }
-
-    socket.setTimeout(timeout)
-    socket.once('error', onError)
-    socket.once('timeout', onError)
-
-    socket.connect(port, host, () => {
-      socket.end()
-      resolve(undefined)
-    })
-  })
-
-  try {
-    await promise
-    return true
-  } catch {
-    return false
-  }
-}
 
 async function heartbeatCmd (opts) {
   try {

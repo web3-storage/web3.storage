@@ -1,7 +1,7 @@
 /* eslint-env mocha, browser */
 import assert from 'assert'
 import { DBClient } from '../index.js'
-import { token } from './utils.js'
+import { createUpload, initialPinsNotPinned, pinsError, randomCid, token } from './utils.js'
 
 describe('user operations', () => {
   const name = 'test-name'
@@ -166,15 +166,8 @@ describe('user operations', () => {
     // Create Upload 1
     const cid1 = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47fgf111'
     const dagSize1 = 10000
-    await client.createUpload({
-      user: user._id,
-      contentCid: cid1,
-      sourceCid: cid1,
-      authKey: authKey._id,
-      type: 'Upload',
-      dagSize: dagSize1,
-      pins: [],
-      backupUrls: []
+    await createUpload(client, user._id, authKey._id, cid1, {
+      dagSize: dagSize1
     })
 
     const firstUsedStorage = await client.getStorageUsed(user._id)
@@ -183,16 +176,27 @@ describe('user operations', () => {
     // Create Upload 2
     const cid2 = 'bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47fgf112'
     const dagSize2 = 30000
-    await client.createUpload({
-      user: user._id,
-      contentCid: cid2,
-      sourceCid: cid2,
-      authKey: authKey._id,
-      type: 'Upload',
-      dagSize: dagSize2,
-      pins: [],
-      backupUrls: []
+
+    await createUpload(client, user._id, authKey._id, cid2, {
+      dagSize: dagSize2
     })
+
+    // Create "Failed" Upload. It should not be counted.
+    const cid3 = await randomCid()
+    const dagSize3 = 100000
+    await createUpload(client, user._id, authKey._id, cid3, {
+      dagSize: dagSize3,
+      pins: pinsError
+    })
+
+    // Create Upload not pinned yet. It should not be counted yet.
+    await createUpload(client, user._id, authKey._id, await randomCid(), {
+      dagSize: 1000000,
+      pins: initialPinsNotPinned
+    })
+
+    const usedStorageWithFailed = await client.getStorageUsed(user._id)
+    assert.strictEqual(usedStorageWithFailed.uploaded, dagSize1 + dagSize2, 'used storage should not count unpinned')
 
     const secondUsedStorage = await client.getStorageUsed(user._id)
     assert.strictEqual(secondUsedStorage.uploaded, dagSize1 + dagSize2, 'used storage with second upload')

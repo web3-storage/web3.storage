@@ -68,6 +68,11 @@
   &.mb-reduced-fontsize {
     @include fontSize_Tiny;
   }
+
+  &.disabled {
+    pointer-events: none;
+    cursor: default;
+  }
 }
 
 .message-banner-close-button {

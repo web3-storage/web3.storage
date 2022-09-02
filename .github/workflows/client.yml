@@ -6,12 +6,14 @@ on:
     paths:
       - 'packages/client/**'
       - '.github/workflows/client.yml'
+      - 'package-lock.json'
   pull_request:
     branches:
       - main
     paths:
       - 'packages/client/**'
       - '.github/workflows/client.yml'
+      - 'package-lock.json'
 jobs:
   test:
     runs-on: ubuntu-latest

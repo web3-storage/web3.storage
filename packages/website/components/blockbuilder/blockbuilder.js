@@ -9,14 +9,17 @@ import CardListBlock from '../cardlistblock/cardlistblock';
 import SliderBlock from '../sliderblock/sliderblock';
 import AccordionBlock from '../accordionblock/accordionblock';
 import CodePreview from '../codepreview/codepreview';
-import Squiggle from '../../assets/illustrations/squiggle';
-import Helix from '../../assets/illustrations/helix';
-import Corkscrew from '../../assets/illustrations/corkscrew';
-import Coil from '../../assets/illustrations/coil';
-import Cross from '../../assets/illustrations/cross';
-import Triangle from '../../assets/illustrations/triangle';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import GradientBackground from '../gradientbackground/gradientbackground.js';
+import Img from '../cloudflareImage.js';
+import ImageTriangle from '../../public/images/illustrations/triangle.png';
+import ImageSquiggle from '../../public/images/illustrations/squiggle.png';
+import ImageHelix from '../../public/images/illustrations/helix.png';
+import ImageCross from '../../public/images/illustrations/cross.png';
+import ImageCoil from '../../public/images/illustrations/coil.png';
+import ImageCorkscrew from '../../public/images/illustrations/corkscrew.png';
+import W3linkGateway from 'components/w3link_gateway/w3link_gateway';
+import W3linkForm from 'components/w3link_form/w3link_form';
 
 // ====================================================================== Export
 class BlockBuilder extends React.Component {
@@ -81,17 +84,53 @@ class BlockBuilder extends React.Component {
       case 'sectional':
         return <BlockBuilder subsections={column.subsections} />;
       case 'squiggle':
-        return <Squiggle id={column.id} />;
+        return (
+          <div id={column.id}>
+            <Img alt="" src={ImageSquiggle} />
+          </div>
+        );
       case 'helix':
-        return <Helix id={column.id} />;
+        return (
+          <div id={column.id}>
+            <Img alt="" src={ImageHelix} />
+          </div>
+        );
       case 'corkscrew':
-        return <Corkscrew id={column.id} />;
+        return (
+          <div id={column.id}>
+            <Img alt="" src={ImageCorkscrew} />
+          </div>
+        );
       case 'coil':
-        return <Coil id={column.id} />;
+        return (
+          <div id={column.id}>
+            <Img alt="" src={ImageCoil} />
+          </div>
+        );
       case 'cross':
-        return <Cross id={column.id} />;
+        return (
+          <div id={column.id}>
+            <Img alt="" src={ImageCross} />
+          </div>
+        );
       case 'triangle':
-        return <Triangle id={column.id} />;
+        return (
+          <div id={column.id}>
+            <Img alt="" src={ImageTriangle} />
+          </div>
+        );
+      case 'w3link_gateway':
+        return (
+          <div id={column.id}>
+            <W3linkGateway />
+          </div>
+        );
+      case 'w3link_form':
+        return (
+          <div id={column.id}>
+            <W3linkForm />
+          </div>
+        );
       case 'site_logo':
         return <SiteLogo id={column.id} />;
       case 'custom':

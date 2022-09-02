@@ -4,9 +4,6 @@
   flex-direction: row;
   align-items: center;
   padding: 0 2.375rem;
-  @include small {
-    padding: 0 3.875rem;
-  }
 }
 
 .breadcrumb-wrapper {

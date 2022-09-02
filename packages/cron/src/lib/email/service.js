@@ -31,6 +31,8 @@ export class EmailService {
     this.providerStr = provider || process.env.EMAIL_PROVIDER || 'mailchimp'
     this.provider = new EMAIL_PROVIDERS_MAP[this.providerStr]()
 
+    log(`ℹ️ Using Email ${this.providerStr} provider`)
+
     this.fromAddr = EMAIL_FROM_ADDR
     this.fromName = EMAIL_FROM_NAME
   }
@@ -63,17 +65,17 @@ export class EmailService {
         emailType: emailType,
         secondsSinceLastSent
       })) {
-        log(`📧 NOT sending email ${emailType} to ${user.name} (${user.email}), as it's been sent too recently.`)
+        log(`📧 NOT sending email ${emailType} to user ${user._id}, as it's been sent too recently.`)
         return false
       }
     }
 
     // Send the email
-    log(`📧 Sending email '${emailType}' to ${user.name} (${user.email}).`)
+    log(`📧 Sending email '${emailType}' to user ${user._id}.`)
     try {
       messageId = await this.provider.sendEmail(emailType, user.email, user.name, this.fromAddr, this.fromName, formattedVars)
     } catch (error) {
-      console.error(`📧 🚨 Failed to send ${emailType} email to ${user.name} (${user.email}) using ${this.providerStr}.`)
+      console.error(`📧 🚨 Failed to send ${emailType} email to user ${user._id} using ${this.providerStr}.`)
       if (failSilently && error instanceof EmailSendError) {
         console.error(error)
         return

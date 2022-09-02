@@ -1,30 +1,16 @@
 import clsx from 'clsx';
-import filesize from 'filesize';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import FileRowItem, { PinStatus } from './fileRowItem';
-import SearchIcon from 'assets/icons/search';
-import RefreshIcon from 'assets/icons/refresh';
-import countly from 'lib/countly';
-import Loading from 'components/loading/loading';
-import Button, { ButtonVariant } from 'components/button/button';
-import Dropdown from 'ZeroComponents/dropdown/dropdown';
-import Filterable from 'ZeroComponents/filterable/filterable';
-import Sortable from 'ZeroComponents/sortable/sortable';
-import Pagination from 'ZeroComponents/pagination/pagination';
-import Modal from 'modules/zero/components/modal/modal';
-import GradientBackground from '../../gradientbackground/gradientbackground.js';
-import CloseIcon from 'assets/icons/close';
-import { formatTimestamp } from 'lib/utils';
-import { useUploads } from 'components/contexts/uploadsContext';
-import { useUser } from 'components/contexts/userContext';
 import CheckIcon from 'assets/icons/check';
-
-const defaultQueryOrder = 'newest';
+import { useUploads } from 'components/contexts/uploadsContext';
+import { usePinRequests } from 'components/contexts/pinRequestsContext';
+import UploadsTable from './uploadsTable';
+import PinRequestsTable from './pinRequestsTable';
 
 /**
  * @typedef {import('web3.storage').Upload} Upload
+ * @typedef {import('../../contexts/uploadsContext').PinObject} PinObject
  */
 
 /**
@@ -40,45 +26,38 @@ const defaultQueryOrder = 'newest';
  * @returns
  */
 const FilesManager = ({ className, content, onFileUpload }) => {
-  const { uploads: files, fetchDate, getUploads, isFetchingUploads, deleteUpload, renameUpload } = useUploads();
-  const {
-    query: { filter },
-    query,
-    replace,
-  } = useRouter();
-  const {
-    storageData: { refetch },
-    info,
-  } = useUser();
-  const [filteredFiles, setFilteredFiles] = useState(files);
-  const [sortedFiles, setSortedFiles] = useState(filteredFiles);
-  const [paginatedFiles, setPaginatedFiles] = useState(sortedFiles);
-  const [itemsPerPage, setItemsPerPage] = useState(null);
-  const [keyword, setKeyword] = useState(filter);
-  const [deleteSingleCid, setDeleteSingleCid] = useState('');
-  const [showCheckOverlay, setShowCheckOverlay] = useState(false);
-  const deleteModalState = useState(false);
-  const queryOrderRef = useRef(query.order);
+  const { count: uploadsCount } = useUploads();
+  const { count: pinRequestsCount } = usePinRequests();
+  const { query, replace } = useRouter();
 
-  const [selectedFiles, setSelectedFiles] = useState(/** @type {Upload[]} */ ([]));
+  const [currentTab, setCurrentTab] = useState('uploaded');
   const [isUpdating, setIsUpdating] = useState(false);
-  const [nameEditingId, setNameEditingId] = useState();
-  const fileRowLabels = content?.table.file_row_labels;
+  const [showCheckOverlay, setShowCheckOverlay] = useState(false);
 
-  // Initial fetch on component load
+  // Set current tab based on url param on load
   useEffect(() => {
-    if (!fetchDate && !isFetchingUploads) {
-      getUploads();
+    if (query.hasOwnProperty('table') && currentTab !== query?.table) {
+      if (typeof query.table === 'string') {
+        if (query.table === 'pinned' && pinRequestsCount === 0) {
+          delete query.table;
+          replace(
+            {
+              query,
+            },
+            undefined,
+            { shallow: true }
+          );
+          return;
+        }
+        setCurrentTab(query.table);
+      }
     }
-  }, [fetchDate, getUploads, isFetchingUploads]);
+  }, [query, currentTab, pinRequestsCount, replace]);
 
-  // Method to reset the pagination every time query order changes
-  useEffect(() => {
-    if (
-      (!queryOrderRef.current && !!query.order && query.order !== defaultQueryOrder) ||
-      (!!queryOrderRef.current && !!query.order && query.order !== queryOrderRef.current)
-    ) {
-      delete query.page;
+  const changeCurrentTab = useCallback(
+    /** @type {string} */ tab => {
+      setCurrentTab(tab);
+      query.table = tab;
 
       replace(
         {
@@ -87,93 +66,20 @@ const FilesManager = ({ className, content, onFileUpload }) => {
         undefined,
         { shallow: true }
       );
+    },
+    [setCurrentTab, query, replace]
+  );
 
-      const scrollToElement = document.querySelector('.account-files-manager');
-      scrollToElement?.scrollIntoView(true);
-
-      queryOrderRef.current = query.order;
+  const getFilesTotal = type => {
+    switch (type) {
+      case 'uploaded':
+        return uploadsCount;
+      case 'pinned':
+        return pinRequestsCount;
+      default:
+        return '';
     }
-  }, [query.order, query, replace]);
-
-  const onSelectAllToggle = useCallback(
-    e => {
-      const filesToSelect = paginatedFiles.filter(file => !selectedFiles.some(fileSelected => fileSelected === file));
-
-      if (!filesToSelect.length) {
-        return setSelectedFiles([]);
-      }
-
-      return setSelectedFiles(selectedFiles.concat(filesToSelect));
-    },
-    [selectedFiles, setSelectedFiles, paginatedFiles]
-  );
-
-  const onFileSelect = useCallback(
-    /** @type {Upload} */ file => {
-      const selectedIndex = selectedFiles.findIndex(fileSelected => fileSelected === file);
-      if (selectedIndex !== -1) {
-        selectedFiles.splice(selectedIndex, 1);
-        return setSelectedFiles([...selectedFiles]);
-      }
-
-      setSelectedFiles([...selectedFiles, file]);
-    },
-    [selectedFiles, setSelectedFiles]
-  );
-
-  const closeDeleteModal = useCallback(() => {
-    deleteModalState[1](false);
-    countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
-      ui: countly.ui.FILES,
-      totalDeleted: 0,
-    });
-  }, [deleteModalState]);
-
-  const onDeleteSelected = useCallback(async () => {
-    setIsUpdating(true);
-
-    if (deleteSingleCid !== '') {
-      await deleteUpload(deleteSingleCid);
-    } else {
-      await Promise.all(selectedFiles.map(({ cid }) => deleteUpload(cid)));
-    }
-
-    countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
-      ui: countly.ui.FILES,
-      totalDeleted: selectedFiles.length,
-    });
-
-    setIsUpdating(false);
-    setSelectedFiles([]);
-
-    getUploads();
-    setDeleteSingleCid('');
-    deleteModalState[1](false);
-    refetch();
-  }, [deleteSingleCid, selectedFiles, getUploads, deleteModalState, deleteUpload, refetch]);
-
-  const onDeleteSingle = useCallback(
-    async cid => {
-      deleteModalState[1](true);
-      setDeleteSingleCid(cid);
-    },
-    [deleteModalState]
-  );
-
-  const onEditToggle = useCallback(
-    targetCID => async (/** @type {string|undefined} */ newFileName) => {
-      setNameEditingId(targetCID !== nameEditingId ? targetCID : undefined);
-
-      const fileTarget = files.find(({ cid }) => cid === targetCID);
-      if (!!fileTarget && !!newFileName && newFileName !== fileTarget.name) {
-        setIsUpdating(true);
-        await renameUpload(targetCID, newFileName);
-        fileTarget.name = newFileName;
-        setIsUpdating(false);
-      }
-    },
-    [renameUpload, files, nameEditingId]
-  );
+  };
 
   const showCheckOverlayHandler = useCallback(() => {
     setShowCheckOverlay(true);
@@ -182,16 +88,41 @@ const FilesManager = ({ className, content, onFileUpload }) => {
     }, 500);
   }, [setShowCheckOverlay]);
 
-  const refreshHandler = useCallback(() => {
-    getUploads();
-    showCheckOverlayHandler();
-  }, [getUploads, showCheckOverlayHandler]);
-
   return (
     <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
+      {pinRequestsCount > 0 && (
+        <div className="upload-pinned-selector">
+          {content?.tabs.map(tab => (
+            <div key={tab.file_type} className="filetype-tab">
+              <button
+                disabled={tab.file_type === 'pinned' && pinRequestsCount === 0}
+                className={clsx('tab-button', currentTab === tab.file_type ? 'selected' : '')}
+                onClick={() => changeCurrentTab(tab.file_type)}
+              >
+                <span>{tab.button_text}</span>
+                <span>{` (${getFilesTotal(tab.file_type)})`}</span>
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+      <UploadsTable
+        content={content}
+        hidden={currentTab !== 'uploaded'}
+        onFileUpload={onFileUpload}
+        onUpdatingChange={setIsUpdating}
+        showCheckOverlay={showCheckOverlayHandler}
+      />
+      <PinRequestsTable
+        content={content}
+        hidden={currentTab !== 'pinned'}
+        onUpdatingChange={setIsUpdating}
+        showCheckOverlay={showCheckOverlayHandler}
+      />
+      {/*
       <div className="files-manager-header">
         <div className="files-manager-title has-upload-button">
-          <div className="title">{content?.heading}</div>
+          <div className="title">Files</div>
           <Button
             disabled={info?.tags?.['HasAccountRestriction']}
             onClick={onFileUpload}
@@ -229,24 +160,35 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           onChange={setSortedFiles}
           onSelectChange={showCheckOverlayHandler}
         />
+        <Dropdown
+          className="files-manager-gateway"
+          staticLabel="Gateway"
+          value={linkPrefix}
+          options={[
+            { value: 'https://w3s.link/ipfs/', label: 'w3link' },
+            { value: 'https://dweb.link/ipfs/', label: 'dweb' },
+          ]}
+          onChange={value => setLinkPrefix(value)}
+        />
       </div>
       <FileRowItem
         onSelect={onSelectAllToggle}
         date={fileRowLabels.date.label}
         name={fileRowLabels.name.label}
         cid={fileRowLabels.cid.label}
-        status={fileRowLabels.status.label}
-        storageProviders={fileRowLabels.storage_providers.label}
+        storageProviders={currentTab === 'uploaded' ? fileRowLabels.storage_providers.label : null}
         size={fileRowLabels.size.label}
+        linkPrefix={linkPrefix}
         isHeader
         isSelected={
           !!selectedFiles.length &&
           paginatedFiles.every(file => selectedFiles.find(fileSelected => file === fileSelected)) &&
           !!fetchDate
         }
+        tabType={currentTab}
       />
       <div className="files-manager-table-content">
-        {isFetchingUploads || !fetchDate ? (
+        {tableContentLoading(currentTab) ? (
           <Loading className={'files-loading-spinner'} />
         ) : !files.length ? (
           <span className="files-manager-upload-cta">
@@ -271,35 +213,38 @@ const FilesManager = ({ className, content, onFileUpload }) => {
             <FileRowItem
               key={item.cid}
               onSelect={() => onFileSelect(item)}
-              date={formatTimestamp(item.created)}
+              date={item.created}
               name={item.name}
               cid={item.cid}
-              status={
-                Object.values(PinStatus).find(status => item.pins.some(pin => status === pin.status)) ||
-                PinStatus.QUEUING
+              storageProviders={
+                Array.isArray(item.deals)
+                  ? item.deals
+                      .filter(deal => !!deal.storageProvider)
+                      .map((deal, indx, deals) => (
+                        <span key={deal.dealId}>
+                          <a
+                            className="underline"
+                            href={`https://filfox.info/en/deal/${deal.dealId}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {`${deal.storageProvider}`}
+                          </a>
+                          {indx !== deals.length - 1 && ', '}
+                        </span>
+                      ))
+                  : null
               }
-              storageProviders={item.deals
-                .filter(deal => !!deal.storageProvider)
-                .map((deal, indx, deals) => (
-                  <span key={deal.dealId}>
-                    <a
-                      className="underline"
-                      href={`https://filfox.info/en/deal/${deal.dealId}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {`${deal.storageProvider}`}
-                    </a>
-                    {indx !== deals.length - 1 && ', '}
-                  </span>
-                ))}
-              size={filesize(item.dagSize)}
+              size={
+                item.hasOwnProperty('dagSize') ? filesize(item.dagSize) : item.info?.dag_size ? item.info.dag_size : '-'
+              }
+              linkPrefix={linkPrefix}
               highlight={{ target: 'name', text: keyword?.toString() || '' }}
-              numberOfPins={item.pins.length}
               isSelected={!!selectedFiles.find(fileSelected => fileSelected === item)}
               onDelete={() => onDeleteSingle(item.cid)}
               isEditingName={item.cid === nameEditingId}
               onEditToggle={onEditToggle(item.cid)}
+              tabType={currentTab}
             />
           ))
         )}
@@ -351,10 +296,11 @@ const FilesManager = ({ className, content, onFileUpload }) => {
             {content?.ui.delete.cancel}
           </Button>
         </div>
-      </Modal>
+      </Modal> */}
+
       <div className={clsx('files-manager-overlay', showCheckOverlay ? 'show' : '')}>
         <div className="files-manager-overlay-check">
-          <CheckIcon></CheckIcon>
+          <CheckIcon />
         </div>
       </div>
     </div>

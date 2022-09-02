@@ -15,6 +15,10 @@ export type UpsertUserOutput = {
   issuer: string
 }
 
+export type GetUserOptions = {
+  includeTags?: boolean
+}
+
 export type User = definitions['user']
 
 export type UserOutput = {
@@ -22,10 +26,17 @@ export type UserOutput = {
   name: definitions['user']['name'],
   email: definitions['user']['email'],
   issuer: definitions['user']['issuer'],
-  github?: definitions['user']['github']
-  publicAddress: definitions['user']['public_address']
+  github?: definitions['user']['github'],
+  publicAddress: definitions['user']['public_address'],
   created: definitions['user']['inserted_at'],
-  updated: definitions['user']['updated_at']
+  updated: definitions['user']['updated_at'],
+  tags?: Array<UserTagInfo>
+}
+
+export type UserTagInfo = {
+  tag: definitions['user_tag']['tag']
+  value: definitions['user_tag']['value']
+  deleted_at?: definitions['user_tag']['deleted_at']
 }
 
 export type UserTagInput = {
@@ -82,7 +93,7 @@ export type PinItem = PinUpsertInput & {
 export type PinsUpsertInput = {
   id: string
   status: definitions['pin']['status']
-  contentCid: definitions['pin_request']['content_cid']
+  contentCid: definitions['pin']['content_cid']
   location: Location
 }
 
@@ -94,12 +105,6 @@ export type PinItemOutput = {
   peerId: definitions['pin_location']['peer_id']
   peerName: definitions['pin_location']['peer_name']
   region: definitions['pin_location']['region']
-}
-
-export type PinRequestItemOutput = {
-  _id: string
-  cid: definitions['pin_request']['content_cid']
-  created: definitions['pin_request']['inserted_at']
 }
 
 export type PinSyncRequestItem = {
@@ -230,33 +235,14 @@ export type Location = {
   region?: definitions['pin_location']['region']
 }
 
-export type ListUploadsOptions = {
-  /**
-   * Uploads created before a given timestamp.
-   */
-  before?: string
-  /**
-   * Uploads created after a given timestamp.
-   */
-  after?: string
-  /**
-   * Max records (default: 10).
-   */
-  size?: number
-  /**
-   * Sort by given property.
-   */
-  sortBy?: 'Date' | 'Name'
-  /**
-   * Sort order.
-   */
-  sortOrder?: 'Asc' | 'Desc'
+export type ListUploadReturn = {
+  count: number,
+  uploads: UploadItemOutput[],
 }
 
+// Pinning
 
-// Pinninng
-
-// PinRequest
+// PsaPinRequest
 export type PsaPinRequestUpsertInput = {
   id?: string,
   name?: definitions['psa_pin_request']['name'],

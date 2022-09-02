@@ -1,8 +1,69 @@
-import { normalizeCid } from '../../api/src/utils/cid.js'
-import { CID } from 'multiformats/cid'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
+import { CID } from 'multiformats/cid'
+import { PostgrestClient } from '@supabase/postgrest-js'
+import { normalizeCid } from '../../api/src/utils/cid.js'
+import { DBError } from '../errors.js'
+
 export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU'
+export const dbEndpoint = 'http://127.0.0.1:3000'
+
+export const initialPinsNotPinned = [{
+  status: 'Pinning',
+  location: {
+    peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
+    peerName: 'web3-storage-sv15',
+    ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE1',
+    region: 'region'
+  }
+}]
+
+export const pinsPinned = [
+  {
+    status: 'Pinning',
+    location: {
+      peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
+      peerName: 'web3-storage-sv15',
+      region: 'region'
+    }
+  },
+  {
+    status: 'Pinned',
+    location: {
+      peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
+      peerName: 'web3-storage-sv16',
+      region: 'region'
+    }
+  }
+]
+
+export const pinsError = [
+  {
+    status: 'PinError',
+    location: {
+      peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
+      peerName: 'web3-storage-sv15',
+      region: 'region'
+    }
+  },
+  {
+    status: 'PinError',
+    location: {
+      peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
+      peerName: 'web3-storage-sv16',
+      region: 'region'
+    }
+  }
+]
+
+/**
+ * @param {number} code
+ * @returns {Promise<string>}
+ */
+export async function randomCid (code = pb.code) {
+  const hash = await sha256.digest(Buffer.from(`${Math.random()}`))
+  return CID.create(1, code, hash).toString()
+}
 
 /**
  * @param {import('../index').DBClient} dbClient
@@ -25,27 +86,10 @@ export async function createUser (dbClient, options = {}) {
   return dbClient.getUser(issuer)
 }
 
-const defaultUserPinnedRequests = [
-  {
-    status: 'Pinning',
-    location: {
-      peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
-      peerName: 'web3-storage-sv15',
-      region: 'region'
-    }
-  },
-  {
-    status: 'Pinned',
-    location: {
-      peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
-      peerName: 'web3-storage-sv16',
-      region: 'region'
-    }
-  }
-]
-
 /**
- * Create a user and files with a specified storage quota used
+ * Create a user and files with a specified storage quota used.
+ *
+ * It creates some failed and yet to be pinned content.
  * @param {import('../index').DBClient} dbClient
  * @param {Object} [options]
  * @param {string} [options.email]
@@ -83,6 +127,18 @@ export async function createUserWithFiles (dbClient, options = {}) {
   const pinRequests = 3
   const dagSize = Math.ceil(((percentStorageUsed / 100) * storageQuota) / (uploads + pinRequests))
 
+  // Create a failed upload.
+  await createUpload(dbClient, Number(user._id), Number(authKey), await randomCid(), {
+    dagSize,
+    pins: pinsError
+  })
+
+  // Create a yet to be pinned upload.
+  await createUpload(dbClient, Number(user._id), Number(authKey), await randomCid(), {
+    dagSize,
+    pins: initialPinsNotPinned
+  })
+
   for (let i = 0; i < uploads; i++) {
     const cid = await randomCid()
     await createUpload(dbClient, Number(user._id), Number(authKey), cid, {
@@ -90,11 +146,23 @@ export async function createUserWithFiles (dbClient, options = {}) {
     })
   }
 
+  // Create a failed PinRequest.
+  await createPsaPinRequest(dbClient, authKey, await randomCid(), {
+    dagSize,
+    pins: pinsError
+  })
+
+  // Create a yet to be pinned PinRequest.
+  await createPsaPinRequest(dbClient, authKey, await randomCid(), {
+    dagSize,
+    pins: initialPinsNotPinned
+  })
+
   for (let i = 0; i < pinRequests; i++) {
     const cid = await randomCid()
     await createPsaPinRequest(dbClient, authKey, cid, {
       dagSize,
-      pins: pins || defaultUserPinnedRequests
+      pins: pins || pinsPinned
     })
   }
 
@@ -118,21 +186,11 @@ export async function createUserAuthKey (dbClient, user, options = {}) {
   return _id
 }
 
-export const defaultPinData = [{
-  status: 'Pinning',
-  location: {
-    peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
-    peerName: 'web3-storage-sv15',
-    ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE1',
-    region: 'region'
-  }
-}]
-
 /**
  * @param {import('../index').DBClient} dbClient
  * @param {number} user
- * @param {number} authKey
- * @param {string} cid
+ * @param {number} [authKey]
+ * @param {string} [cid]
  * @param {Object} [options]
  * @param {string} [options.type]
  * @param {number} [options.dagSize]
@@ -145,13 +203,13 @@ export async function createUpload (dbClient, user, authKey, cid, options = {}) 
 
   await dbClient.createUpload({
     user: user,
-    contentCid: cid,
-    sourceCid: cid,
+    contentCid: cid || await randomCid(),
+    sourceCid: cid || await randomCid(),
     authKey: authKey,
     type: options.type || 'Upload',
-    dagSize: options.dagSize || 1000,
+    dagSize: options.dagSize === undefined ? 1000 : options.dagSize,
     name: options.name || `Upload_${new Date().toISOString()}`,
-    pins: options.pins || defaultPinData,
+    pins: options.pins || pinsPinned,
     backupUrls: options.backupUrls || [initialBackupUrl]
   })
 
@@ -191,6 +249,15 @@ export async function getUpload (dbClient, cid, userId) {
 }
 
 /**
+ * @param {import('../index').DBClient} dbClient
+ * @param {string} userId
+ * @param {import('../index').PageRequest} pageRequest
+ */
+export async function listUploads (dbClient, userId, pageRequest) {
+  return dbClient.listUploads(userId, pageRequest)
+}
+
+/**
  *
  * @param {import('../index').DBClient} dbClient
  */
@@ -199,10 +266,81 @@ export async function getPinSyncRequests (dbClient, size = 10) {
 }
 
 /**
- * @param {number} code
- * @returns {Promise<string>}
+ *
+ * @param {import('../index').DBClient} dbClient
+ * @param {object} [data]
+ * @param {string} [data.cid_v1]
+ * @param {number} [data.size_actual]
+ * @param {Date} [data.entry_created]
+ * @param {Date?} [data.entry_analyzed]
+ * @param {Date} [data.entry_last_updated]
+ *
  */
-export async function randomCid (code = pb.code) {
-  const hash = await sha256.digest(Buffer.from(`${Math.random()}`))
-  return CID.create(1, code, hash).toString()
+export async function createCargoDag (dbClient, dag = {}, source = {}) {
+  const now = new Date()
+  const cidV1 = await randomCid()
+
+  const dagData = {
+    cid_v1: cidV1,
+    size_actual: Math.ceil(Math.random() * 100000),
+    entry_created: now,
+    entry_analyzed: now,
+    entry_last_updated: now,
+    ...dag
+  }
+
+  const dagSourceData = {
+    cid_v1: cidV1,
+    source_key: cidV1,
+    size_claimed: Math.ceil(Math.random() * 100000),
+    entry_created: now,
+    entry_last_updated: now,
+    srcid: 1, // This assumes a cargo.sources has been initialised with a row.
+    ...source
+  }
+
+  // For analyzis_markers constraint on dags table
+  if (dagData.size_actual === null || dagData.size_actual === undefined) {
+    dagData.entry_analyzed = null
+  }
+
+  const client = new PostgrestClient(dbEndpoint, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: '*/*'
+    },
+    schema: 'cargo'
+  })
+
+  const { error } = await client
+    .from('dags')
+    .upsert(dagData)
+
+  const { error: errorSources } = await client
+    .from('dag_sources')
+    .upsert(dagSourceData)
+
+  if (error) {
+    console.error(error)
+  }
+
+  if (errorSources) {
+    console.error(errorSources)
+  }
+}
+
+/**
+ * Get contents from cids
+ *
+ * @param {string[]} cids
+ */
+export async function getContents (dbClient, cids) {
+  const { data, error } = await dbClient._client
+    .from('content')
+    .select()
+    .in('cid', cids)
+  if (error) {
+    throw new DBError(error)
+  }
+  return data
 }

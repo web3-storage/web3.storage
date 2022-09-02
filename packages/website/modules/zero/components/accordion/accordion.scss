@@ -25,11 +25,12 @@
 // ///////////////////////////////////////////////////////// Accordion [Content]
 // -----------------------------------------------------------------------------
 .accordion-content {
-  position: relative;
-  transition: height 150ms ease-in-out;
-  &.measuring-content {
-    position: absolute;
-    visibility: hidden;
-    z-index: -1000px;
-  }
+  max-height: 0;
+  padding: 0;
+  transition: all 0.35s;
+}
+
+.accordion-section.open .accordion-content {
+  max-height: 100vh;
+  padding: 1em 0;
 }

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Link from 'next/link';
 import clsx from 'clsx';
 
@@ -22,11 +23,15 @@ const Button = ({ className, onClick, href, type, disabled, openInNewWindow, chi
     <div className={clsx(className, 'Button', disabled ? 'disabled' : undefined)}>
       {href && !disabled ? (
         openInNewWindow ? (
-          <a href={href} target="_blank">
+          <a href={href} onClick={onClick} target="_blank" rel="noreferrer">
             {children}
           </a>
         ) : (
-          <Link href={href}>{<span className="button-contents">{children}</span>}</Link>
+          <Link href={href} passHref>
+            <a href="replace" tabIndex={0} onClick={onClick} className="button-contents">
+              {children}
+            </a>
+          </Link>
         )
       ) : (
         <button className="button-contents" type={type} onClick={onClick} disabled={disabled}>

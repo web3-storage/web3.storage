@@ -7,9 +7,6 @@
     width: 100%;
   }
 
-  h3 {
-    padding: 0 2.1875rem 0.9375rem;
-  }
   .isDisabled {
     pointer-events: none;
     opacity: 0.5;
@@ -19,6 +16,13 @@
 .tokens-header {
   position: relative;
   z-index: 1;
+
+  @include medium {
+    margin-bottom: 2rem;
+    .table-heading {
+      display: none;
+    }
+  }
 }
 
 .tokens-header,
@@ -34,6 +38,7 @@
   @include fontSize_Tiny;
   @include fontWeight_Regular;
   margin-top: 0.9375rem;
+  padding: 0 2rem 0 0.75rem;
   @include medium {
     margin-top: 3rem;
     justify-content: center;
@@ -51,6 +56,9 @@
     margin-left: unset;
     order: 2;
     flex-basis: 100%;
+  }
+  .button-contents {
+    display: inline-block;
   }
   div {
     display: none;

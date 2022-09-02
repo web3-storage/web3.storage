@@ -18,7 +18,7 @@ export default function AccordionContent({ open, toggle, uid, toggleOnLoad, chil
   const updateContentHeight = val => {
     if (val) {
       setHeight('unset');
-      const newContentHeight = content.current.clientHeight + 'px';
+      const newContentHeight = content.current ? content.current.clientHeight + 'px' : '0px';
       setContentHeight(newContentHeight);
       setHeight(newContentHeight);
     } else {

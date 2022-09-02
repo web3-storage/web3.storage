@@ -1,14 +1,25 @@
 import * as JWT from './utils/jwt.js'
 import { JSONResponse } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
-import { HTTPError } from './errors.js'
-import { getTagValue, hasTag } from './utils/tags.js'
+import { HTTPError, RangeNotSatisfiableError } from './errors.js'
+import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
+import {
+  NO_READ_OR_WRITE,
+  READ_WRITE,
+  READ_ONLY,
+  maintenanceHandler
+} from './maintenance.js'
+import { pagination } from './utils/pagination.js'
+import { toPinStatusResponse } from './pins.js'
+import { validateSearchParams } from './utils/psa.js'
+import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
  * @typedef {{ _id: string, name: string }} AuthToken
  * @typedef {{ user: User authToken?: AuthToken }} Auth
  * @typedef {Request & { auth: Auth }} AuthenticatedRequest
+ * @typedef {import('@web3-storage/db').PageRequest} PageRequest
  */
 
 /**
@@ -22,6 +33,36 @@ export async function userLoginPost (request, env) {
 }
 
 /**
+ * Controller for logging in using a magic.link token
+ * @param {Magic} magic - magic sdk instance
+ */
+function createMagicLoginController (env, testModeBypass = magicLinkBypassForE2ETestingInTestmode) {
+  const createTestmodeMetadata = (token) => {
+    const { issuer } = testModeBypass.authenticateMagicToken(env, token)
+    return {
+      issuer,
+      email: 'testMode@magic.link',
+      publicAddress: issuer
+    }
+  }
+  /**
+   * authenticate an incoming request that has a magic.link token.
+   * throws error if token isnt valid
+   * @returns {Promise} metadata about the validated token
+   */
+  const authenticate = async ({ token }) => {
+    if (testModeBypass.isEnabledForToken(env, token)) {
+      return createTestmodeMetadata(token)
+    }
+    await env.magic.token.validate(token)
+    return env.magic.users.getMetadataByToken(token)
+  }
+  return {
+    authenticate
+  }
+}
+
+/**
  * @param {Request} request
  * @param {import('./env').Env} env
  */
@@ -30,19 +71,29 @@ async function loginOrRegister (request, env) {
   const auth = request.headers.get('Authorization') || ''
 
   const token = env.magic.utils.parseAuthorizationHeader(auth)
-  env.magic.token.validate(token)
-
-  const metadata = await env.magic.users.getMetadataByToken(token)
+  const metadata = await (createMagicLoginController(env).authenticate({ token }))
   const { issuer, email, publicAddress } = metadata
   if (!issuer || !email || !publicAddress) {
     throw new Error('missing required metadata')
   }
 
-  const parsed = data.type === 'github'
-    ? parseGitHub(data.data, metadata)
-    : parseMagic(metadata)
+  const parsed =
+    data.type === 'github'
+      ? parseGitHub(data.data, metadata)
+      : parseMagic(metadata)
 
-  const user = await env.db.upsertUser(parsed)
+  let user
+  // check if maintenance mode
+  if (env.MODE === NO_READ_OR_WRITE) {
+    return maintenanceHandler()
+  } else if (env.MODE === READ_WRITE) {
+    user = await env.db.upsertUser(parsed)
+  } else if (env.MODE === READ_ONLY) {
+    user = await env.db.getUser(parsed.issuer)
+  } else {
+    throw new Error('Unknown maintenance mode')
+  }
+
   return user
 }
 
@@ -128,19 +179,55 @@ export async function userAccountGet (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userInfoGet (request, env) {
-  const user = await env.db.getUser(request.auth.user.issuer, { includeTags: true })
+  const user = await env.db.getUser(request.auth.user.issuer, {
+    includeTags: true,
+    includeTagProposals: true
+  })
 
   return new JSONResponse({
     info: {
       ...user,
       tags: {
         HasAccountRestriction: hasTag(user, 'HasAccountRestriction', 'true'),
+        HasDeleteRestriction: hasTag(user, 'HasDeleteRestriction', 'true'),
         HasPsaAccess: hasTag(user, 'HasPsaAccess', 'true'),
         HasSuperHotAccess: hasTag(user, 'HasSuperHotAccess', 'true'),
         StorageLimitBytes: getTagValue(user, 'StorageLimitBytes', '')
+      },
+      tagProposals: {
+        HasAccountRestriction: hasPendingTagProposal(user, 'HasAccountRestriction'),
+        HasDeleteRestriction: hasPendingTagProposal(user, 'HasDeleteRestriction'),
+        HasPsaAccess: hasPendingTagProposal(user, 'HasPsaAccess'),
+        HasSuperHotAccess: hasPendingTagProposal(user, 'HasSuperHotAccess'),
+        StorageLimitBytes: hasPendingTagProposal(user, 'StorageLimitBytes')
       }
     }
   })
+}
+
+/**
+ * Post a new user request.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userRequestPost (request, env) {
+  const user = request.auth.user
+  const { tagName, requestedTagValue, userProposalForm } = await request.json()
+  const res = await env.db.createUserRequest(
+    user._id,
+    tagName,
+    requestedTagValue,
+    userProposalForm
+  )
+
+  try {
+    notifySlack(user, tagName, requestedTagValue, userProposalForm, env)
+  } catch (e) {
+    console.error('Failed to notify Slack: ', e)
+  }
+
+  return new JSONResponse(res)
 }
 
 /**
@@ -177,39 +264,84 @@ export async function userUploadsGet (request, env) {
   const requestUrl = new URL(request.url)
   const { searchParams } = requestUrl
 
-  let size = 25
-  if (searchParams.has('size')) {
-    const parsedSize = parseInt(searchParams.get('size'))
-    if (isNaN(parsedSize) || parsedSize <= 0 || parsedSize > 1000) {
-      throw Object.assign(new Error('invalid page size'), { status: 400 })
+  const pageRequest = pagination(searchParams)
+
+  let data
+  try {
+    data = await env.db.listUploads(request.auth.user._id, pageRequest)
+  } catch (err) {
+    if (err.code === 'RANGE_NOT_SATISFIABLE_ERROR_DB') {
+      throw new RangeNotSatisfiableError()
     }
-    size = parsedSize
+    throw err
   }
 
-  let before = new Date()
-  if (searchParams.has('before')) {
-    const parsedBefore = new Date(searchParams.get('before'))
-    if (isNaN(parsedBefore.getTime())) {
-      throw Object.assign(new Error('invalid before date'), { status: 400 })
-    }
-    before = parsedBefore
+  const headers = { Count: data.count }
+
+  if (pageRequest.size != null) {
+    headers.Size = pageRequest.size // Deprecated, use Link header instead.
   }
 
-  const sortBy = searchParams.get('sortBy') || 'Date'
-  const sortOrder = searchParams.get('sortOrder') || 'Desc'
+  if (pageRequest.page != null) {
+    headers.Page = pageRequest.page // Deprecated, use Link header instead.
+  }
 
-  const uploads = await env.db.listUploads(request.auth.user._id, {
-    size,
-    before: before.toISOString(),
-    sortBy,
-    sortOrder
+  const link = getLinkHeader({
+    url: requestUrl.pathname,
+    pageRequest,
+    items: data.uploads,
+    count: data.count
   })
 
-  const oldest = uploads[uploads.length - 1]
-  const headers = uploads.length === size
-    ? { Link: `<${requestUrl.pathname}?size=${size}&before=${encodeURIComponent(oldest.created)}>; rel="next"` }
-    : undefined
-  return new JSONResponse(uploads, { headers })
+  if (link) {
+    headers.Link = link
+  }
+
+  return new JSONResponse(data.uploads, { headers })
+}
+
+/**
+ * Generates a HTTP `Link` header for the given page request and data.
+ *
+ * @param {Object} args
+ * @param {string|URL} args.url Base URL
+ * @param {PageRequest} args.pageRequest Details for the current page of data
+ * @param {Array<{ created: string }>} args.items Page items
+ * @param {number} args.count Total items available
+ */
+function getLinkHeader ({ url, pageRequest, items, count }) {
+  const rels = []
+
+  if ('before' in pageRequest) {
+    const { size } = pageRequest
+    if (items.length === size) {
+      const oldest = items[items.length - 1]
+      const nextParams = new URLSearchParams({ size, before: oldest.created })
+      rels.push(`<${url}?${nextParams}>; rel="next"`)
+    }
+  } else if ('page' in pageRequest) {
+    const { size, page } = pageRequest
+    const pages = Math.ceil(count / size)
+    if (page < pages) {
+      const nextParams = new URLSearchParams({ size, page: page + 1 })
+      rels.push(`<${url}?${nextParams}>; rel="next"`)
+    }
+
+    const lastParams = new URLSearchParams({ size, page: pages })
+    rels.push(`<${url}?${lastParams}>; rel="last"`)
+
+    const firstParams = new URLSearchParams({ size, page: 1 })
+    rels.push(`<${url}?${firstParams}>; rel="first"`)
+
+    if (page > 1) {
+      const prevParams = new URLSearchParams({ size, page: page - 1 })
+      rels.push(`<${url}?${prevParams}>; rel="previous"`)
+    }
+  } else {
+    throw new Error('unknown page request type')
+  }
+
+  return rels.join(', ')
 }
 
 /**
@@ -244,4 +376,179 @@ export async function userUploadsRename (request, env) {
 
   const res = await env.db.renameUpload(user, cid, name)
   return new JSONResponse(res)
+}
+
+/**
+ * List a user's pins regardless of the token used.
+ * As we don't want to scope the Pinning Service API to users
+ * we need a new endpoint as an umbrella.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userPinsGet (request, env) {
+  const requestUrl = new URL(request.url)
+  const { searchParams } = requestUrl
+
+  const pageRequest = pagination(searchParams)
+  const urlParams = new URLSearchParams(requestUrl.search)
+  const params = Object.fromEntries(urlParams)
+
+  const psaParams = validateSearchParams(params)
+  if (psaParams.error) {
+    throw psaParams.error
+  }
+
+  const tokens = (await env.db.listKeys(request.auth.user._id)).map((key) => key._id)
+
+  let pinRequests
+
+  try {
+    pinRequests = await env.db.listPsaPinRequests(tokens, {
+      ...psaParams.data,
+      limit: pageRequest.size,
+      offset: pageRequest.size * (pageRequest.page - 1)
+    })
+  } catch (err) {
+    if (err.code === 'RANGE_NOT_SATISFIABLE_ERROR_DB') {
+      throw new RangeNotSatisfiableError()
+    }
+    throw err
+  }
+
+  const pins = pinRequests.results.map((pinRequest) => toPinStatusResponse(pinRequest))
+
+  const headers = {
+    Count: pinRequests.count
+  }
+
+  if (pageRequest.size != null) {
+    headers.Size = pageRequest.size // Deprecated, use Link header instead.
+  }
+
+  if (pageRequest.page != null) {
+    headers.Page = pageRequest.page // Deprecated, use Link header instead.
+  }
+
+  const link = getLinkHeader({
+    url: requestUrl.pathname,
+    pageRequest,
+    items: pinRequests.results,
+    count: pinRequests.count
+  })
+
+  if (link) {
+    headers.Link = link
+  }
+
+  return new JSONResponse({
+    count: pinRequests.count,
+    results: pins
+  }, { headers })
+}
+
+/**
+ *
+ * @param {number} userId
+ * @param {string} userProposalForm
+ * @param {string} tagName
+ * @param {string} requestedTagValue
+ * @param {DBClient} db
+ */
+const notifySlack = async (
+  user,
+  tagName,
+  requestedTagValue,
+  userProposalForm,
+  env
+) => {
+  const webhookUrl = env.SLACK_USER_REQUEST_WEBHOOK_URL
+
+  if (!webhookUrl) {
+    return
+  }
+
+  /** @type {import('../bindings').RequestForm} */
+  let form
+  try {
+    form = JSON.parse(userProposalForm)
+  } catch (e) {
+    console.error('Failed to parse user request form: ', e)
+    return
+  }
+
+  globalThis.fetch(webhookUrl, {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      text: `
+>*Username*
+>${user.name}
+>
+>*Email*
+>${user.email}
+>
+>*User Id*
+>${user._id}
+>
+>*Requested Tag Name*
+>${tagName}
+>
+>*Requested Tag Value*
+>${tagName === 'StorageLimitBytes' && requestedTagValue === '' ? '1TiB' : requestedTagValue}
+>${form
+        .map(
+          ({ label, value }) => `
+>*${label}*
+>${value}
+>`
+        )
+        .join('')}
+`
+    })
+  })
+}
+
+/**
+ * Get a user's payment settings.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userPaymentGet (request, env) {
+  const { searchParams } = new URL(request.url)
+  const paramMethodId = searchParams.get('method.id')
+  const userPaymentGetResponse = {
+    method: paramMethodId ? { id: paramMethodId } : null
+  }
+  return new JSONResponse(userPaymentGetResponse)
+}
+
+/**
+ * Save a user's payment settings.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userPaymentPut (request, env) {
+  const requestBody = await request.json()
+  const method = requestBody?.method?.id
+    ? { id: requestBody?.method?.id }
+    : {
+      // stubbing this for now with the value from the docs.
+      //   https://stripe.com/docs/api/payment_methods/object
+        id: env.mockStripePaymentMethodId,
+        warning: 'this method is a stub. The id here is different than anything you might have sent in the request.'
+      }
+  const savePaymentSettingsResponse = {
+    method
+  }
+  return new JSONResponse(savePaymentSettingsResponse, {
+    status: 202,
+    headers: {
+      location: `/user/payment?method.id=${method.id}`
+    }
+  })
 }

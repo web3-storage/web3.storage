@@ -190,7 +190,7 @@ export async function pinsGet (request, env, ctx) {
  * @param { Object } pinRequest
  * @returns { PsaPinStatusResponse }
  */
-function toPinStatusResponse (pinRequest) {
+export function toPinStatusResponse (pinRequest) {
   return {
     requestid: pinRequest._id.toString(),
     status: getEffectivePinStatus(pinRequest.pins),

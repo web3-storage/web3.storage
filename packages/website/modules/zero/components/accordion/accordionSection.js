@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import ZeroAccordionHeader from 'ZeroComponents/accordion/accordionHeader';
-import ZeroAccordionContent from 'ZeroComponents/accordion/accordionContent';
 
 /**
  * @param {any} props TODO: Define props
@@ -36,7 +35,6 @@ const generateUID = () => {
 function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disabled, children }) {
   const [uid, setUID] = useState(generateUID);
   const [openOnNavigate, setopenOnNavigate] = useState(false);
-  const firstUpdate = useRef(true);
   const router = useRouter();
   const header = children.find(child => child.type === Header);
   const content = children.find(child => child.type === Content);
@@ -71,10 +69,7 @@ function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disab
       >
         {header ? header.props.children : null}
       </ZeroAccordionHeader>
-
-      <ZeroAccordionContent uid={uid} toggle={toggle} open={open} toggleOnLoad={openOnNavigate || toggleOnLoad}>
-        {content ? content.props.children : null}
-      </ZeroAccordionContent>
+      <div className="accordion-content">{content ? content.props.children : null}</div>
     </div>
   );
 }

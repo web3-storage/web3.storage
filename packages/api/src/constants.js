@@ -7,5 +7,6 @@ export const UPLOAD_TYPES = ['Car', 'Blob', 'Multipart', 'Upload']
 export const PIN_STATUSES = ['PinQueued', 'Pinning', 'Pinned', 'PinError']
 export const USER_TAGS = {
   ACCOUNT_RESTRICTION: 'HasAccountRestriction',
+  DELETE_RESTRICTION: 'HasDeleteRestriction',
   PSA_ACCESS: 'HasPsaAccess'
 }

@@ -91,6 +91,7 @@ export class AdminStorageExceeded extends EmailType {
     for (const user of vars.users) {
       users.push({
         ...user,
+        lastUpdate: user.lastUpdate.toLocaleDateString('en-US'),
         storageQuota: this._bytesToTiBStr(user.storageQuota),
         storageUsed: this._bytesToTiBStr(user.storageUsed),
         percentStorageUsed: user.percentStorageUsed.toFixed(1)

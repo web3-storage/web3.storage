@@ -40,7 +40,7 @@ async function storeWithProgress (files) {
 
   const onStoredChunk = size => {
     uploaded += size
-    const pct = totalSize / uploaded
+    const pct = 100 * (uploaded / totalSize)
     console.log(`Uploading... ${pct.toFixed(2)}% complete`)
   }
 

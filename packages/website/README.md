@@ -47,7 +47,7 @@ NEXT_PUBLIC_MAGIC=<magic test mode publishable key>
 
 ```bash
 cd packages/website
-npm run dev
+npm run build
 ```
 
 #### Production
@@ -76,9 +76,10 @@ npm run storybook
 
 TBD
 
+
 ## Docs
 
-Docs are written in markdown and uses Nextra.
+Docs are written in markdown and uses [Nextra](https://nextra.vercel.app/).
 
 Notes
 - ensure that components (eg. `<Callout>... </Callout>`) are not indented

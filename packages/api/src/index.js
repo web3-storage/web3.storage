@@ -2,13 +2,28 @@
 import { Router } from 'itty-router'
 import { errorHandler } from './error-handler.js'
 import { addCorsHeaders, withCorsHeaders, corsOptions } from './cors.js'
-import { withAccountNotRestricted, withApiOrMagicToken, withMagicToken, withPinningAuthorized } from './auth.js'
+import { withAccountNotRestricted, withDeleteNotRestricted, withApiOrMagicToken, withMagicToken, withPinningAuthorized } from './auth.js'
 import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { uploadPost } from './upload.js'
-import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, userUploadsRename, userInfoGet } from './user.js'
+import {
+  userAccountGet,
+  userInfoGet,
+  userLoginPost,
+  userPaymentGet,
+  userPaymentPut,
+  userPinsGet,
+  userRequestPost,
+  userTokensDelete,
+  userTokensGet,
+  userTokensPost,
+  userUploadsDelete,
+  userUploadsGet,
+  userUploadsRename
+} from './user.js'
 import { pinDelete, pinGet, pinPost, pinsGet } from './pins.js'
+import { blogSubscriptionCreate } from './blog.js'
 import { metricsGet } from './metrics.js'
 import { versionGet } from './version.js'
 import {
@@ -17,17 +32,9 @@ import {
   READ_WRITE
 } from './maintenance.js'
 import { notFound } from './utils/json-response.js'
-import { nameGet, nameWatchGet, namePost } from './name.js'
 import { compose } from './utils/fn.js'
 
 const router = Router()
-router.all('*', envAll)
-router.options('*', corsOptions)
-
-router.get('*', withMode(READ_ONLY))
-router.head('*', withMode(READ_ONLY))
-router.post('*', withMode(READ_WRITE))
-router.delete('*', withMode(READ_WRITE))
 
 /**
  * It defines a list of "middlewares" that need to be applied for a given authentication mode.
@@ -48,15 +55,32 @@ const auth = {
   // must be a logged in user
   '👤': compose(withCorsHeaders, withMagicToken),
 
+  // must be a logged in user with no delete restriction
+  '👤🗑️': compose(withCorsHeaders, withMagicToken, withDeleteNotRestricted),
+
   // needs PSA & restricted users allowed
   '📌⚠️': compose(withCorsHeaders, withApiOrMagicToken, withPinningAuthorized),
+
+  // needs PSA & restricted users with no delete restriction allowed
+  '📌⚠️🗑️': compose(withCorsHeaders, withApiOrMagicToken, withDeleteNotRestricted, withPinningAuthorized),
 
   // needs PSA
   '📌': compose(withCorsHeaders, withApiOrMagicToken, withAccountNotRestricted, withPinningAuthorized) // needs PSA
 }
 
 /* eslint-disable no-multi-spaces */
+router.all('*', envAll)
+router.options('*', corsOptions)
+
+// Exception for login to not be handled by POST mode middleware
+// Needs to be added first
 router.post('/user/login',          auth['🌍'](userLoginPost))
+
+router.get('*', withMode(READ_ONLY))
+router.head('*', withMode(READ_ONLY))
+router.delete('*', withMode(READ_WRITE))
+router.post('*', withMode(READ_WRITE))
+
 router.get('/status/:cid',          auth['🌍'](statusGet))
 router.get('/car/:cid',             auth['🌍'](carGet))
 router.head('/car/:cid',            auth['🌍'](carHead))
@@ -70,19 +94,22 @@ router.post('/pins',                auth['📌'](pinPost))
 router.post('/pins/:requestId',     auth['📌'](pinPost))
 router.get('/pins/:requestId',      auth['📌⚠️'](pinGet))
 router.get('/pins',                 auth['📌⚠️'](pinsGet))
-router.delete('/pins/:requestId',   auth['📌⚠️'](pinDelete))
+router.delete('/pins/:requestId',   auth['📌⚠️🗑️'](pinDelete))
 
-router.get('/name/:key',            auth['🌍'](nameGet))
-router.get('/name/:key/watch',      auth['🌍'](nameWatchGet))
-router.post('/name/:key',           auth['🔑'](namePost))
+router.post('/blog/subscription',   auth['🌍'](blogSubscriptionCreate))
 
-router.delete('/user/uploads/:cid',      auth['👤'](userUploadsDelete))
+router.delete('/user/uploads/:cid',      auth['👤🗑️'](userUploadsDelete))
 router.post('/user/uploads/:cid/rename', auth['👤'](userUploadsRename))
 router.get('/user/tokens',               auth['👤'](userTokensGet))
 router.post('/user/tokens',              auth['👤'](userTokensPost))
-router.delete('/user/tokens/:id',        auth['👤'](userTokensDelete))
+router.post('/user/request',             auth['👤'](userRequestPost))
+router.delete('/user/tokens/:id',        auth['👤🗑️'](userTokensDelete))
 router.get('/user/account',              auth['👤'](userAccountGet))
 router.get('/user/info',                 auth['👤'](userInfoGet))
+router.get('/user/pins',                 auth['📌⚠️'](userPinsGet))
+router.get('/user/payment',              auth['👤'](userPaymentGet))
+router.put('/user/payment',              auth['👤'](userPaymentPut))
+
 /* eslint-enable no-multi-spaces */
 
 // Monitoring
@@ -120,7 +147,7 @@ router.all('*', auth['🌍'](() => notFound()))
  * @param {import('./env').Env} env
  */
 function serverError (error, request, env) {
-  return addCorsHeaders(request, errorHandler(error, env))
+  return addCorsHeaders(request, errorHandler(error, env, request))
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent
@@ -130,6 +157,7 @@ export default {
   async fetch (request, env, ctx) {
     let response
     try {
+      env = { ...env } // new env object for every request (it is shared otherwise)!
       response = await router.handle(request, env, ctx)
     } catch (error) {
       response = serverError(error, request, env)
@@ -138,5 +166,3 @@ export default {
     return response
   }
 }
-
-export { NameRoom as NameRoom0 } from './name.js'

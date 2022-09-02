@@ -22,8 +22,10 @@ export default function CodePreview({ block }) {
   const contentRef = useRef(/** @type {any} */ (null));
 
   const calculateContentHeight = () => {
-    const height = contentRef.current.offsetHeight + 24 + 'px';
-    setContentHeight(height);
+    if (contentRef.current) {
+      const height = contentRef.current.offsetHeight + 24 + 'px';
+      setContentHeight(height);
+    }
   };
 
   useEffect(() => {

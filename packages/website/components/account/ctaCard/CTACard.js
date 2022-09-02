@@ -27,7 +27,7 @@ const CTACard = ({ className = '', heading, description, ctas, theme = CTAThemeT
   return (
     <div className={clsx('section cta-card', className, `cta-card__${theme}`)}>
       <div className="cta-card__background">{background}</div>
-      <h4>{heading}</h4>
+      <h3 className="cta-card-heading">{heading}</h3>
       <span>{description}</span>
       {!!ctas?.length && (
         <div className="cta-buttons-container">

@@ -4,17 +4,12 @@
   > * {
     width: 100%;
   }
-  padding: 2.375rem 0 1.1875rem 3rem;
-  @include medium {
-    padding: 2.8125rem 1.71875rem 2.8125rem 1.25rem;
-  }
+  padding: 2rem;
 }
 
 .storage-manager-info,
 .storage-manager-space {
   display: flex;
-  padding-left: 0.6875rem;
-  padding-right: 3.9375rem;
   align-items: center;
 }
 
@@ -38,7 +33,7 @@
 .storage-manager-info {
   @include fontSize_Tiny;
   @include fontWeight_Regular;
-  a {
+  .storage-manager__storage-request-button {
     @include hoverTextLinkColor;
   }
   margin-top: 1.5625rem;
@@ -69,11 +64,12 @@
 
 .storage-manager-meter-container {
   display: flex;
+  justify-content: space-between;
   position: relative;
   color: $white;
   width: 100%;
   gap: 1.1875rem;
-  padding-right: 2.8125rem;
+  padding-right: 0;
 
   @include medium {
     gap: 0.78125rem;
@@ -92,7 +88,7 @@
       padding: 0;
       min-height: auto;
       width: auto;
-      a {
+      > span {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -119,7 +115,7 @@
   position: relative;
   height: 1.75rem;
   background: rgba($vulcan, 0.15);
-  border: 0.078125rem solid rgba($waterloo, 0.15);
+  // border: 0.078125rem solid rgba($waterloo, 0.15);
   flex: 1;
   overflow: hidden;
   z-index: 1;
@@ -148,8 +144,11 @@
 
 .storage-manager-used {
   margin-bottom: 0.625rem;
-  .storage-label {
+  .storage-heading {
+    display: inline;
     @include fontWeight_Semibold;
+    @include fontSize_Medium;
+    line-height: 35px;
   }
   .storage-number {
     font-style: italic;
@@ -161,7 +160,7 @@
   position: absolute;
   z-index: 10;
   @include borderRadius_UltraLarge;
-  height: 1.875rem;
+  height: 100%;
   top: 0;
   left: 0;
   transition: 250ms ease-out;

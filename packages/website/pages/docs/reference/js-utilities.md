@@ -5,7 +5,7 @@ description: Learn about some helpful utility libraries that make working with W
 
 # JavaScript utility libraries
 
-The Web3.Storage [JavaScript client library](./js-client-library.md) provides a simple interface for interacting with Web3.Storage. This page highlights some additional libraries that may be helpful when working with the client library, or when using the [HTTP API][reference-http-api] directly.
+The Web3.Storage [JavaScript client library](/docs/reference/js-client-library) provides a simple interface for interacting with Web3.Storage. This page highlights some additional libraries that may be helpful when working with the client library, or when using the [HTTP API][reference-http-api] directly.
 
 ## files-from-path
 
@@ -14,18 +14,18 @@ The [files-from-path package][files-from-path] provides a simple way for Node.js
 Here's a quick example:
 
 ```js
-import { getFilesFromPath } from 'web3.storage'
+import { getFilesFromPath } from 'web3.storage';
 
 async function storeFiles(path = 'path/to/somewhere') {
-  const files = await getFilesFromPath(path)
+  const files = await getFilesFromPath(path);
   for (const f of files) {
-    console.log(f)
+    console.log(f);
     // { name: '/path/to/me', stream: [Function: stream] }
   }
 
-  const web3Storage = getStorageClient()
-  const cid = await web3storage.put(files)
-  console.log(`stored ${files.length} files. cid: ${cid}`)
+  const web3Storage = getStorageClient();
+  const cid = await web3storage.put(files);
+  console.log(`stored ${files.length} files. cid: ${cid}`);
 }
 ```
 
@@ -43,10 +43,9 @@ The [carbites](https://github.com/nftstorage/carbites) package includes a comman
 
 See the how-to guide on [working with Content Archives][howto-car] for more information on using the carbites tool.
 
-[concepts-content-addressing]: ../concepts/content-addressing.md
-[reference-http-api]: ../reference/http-api/
-[reference-http-post-car]: ../reference/http-api/#operation/post-car
-[howto-car]: ../how-tos/work-with-car-files.md
-
+[concepts-content-addressing]: /docs/concepts/content-addressing/
+[reference-http-api]: /docs/reference/http-api/
+[reference-http-post-car]: /docs/reference/http-api/#operation/post-car
+[howto-car]: /docs/how-tos/work-with-car-files/
 [files-from-path]: https://github.com/web3-storage/files-from-path
 [ipfs-car]: https://github.com/web3-storage/ipfs-car

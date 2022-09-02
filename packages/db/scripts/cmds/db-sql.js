@@ -54,7 +54,6 @@ export async function dbSqlCmd ({ reset, cargo, testing, truncate, customSqlPath
   }
 
   if (!skipCreate) {
-    console.log('creating')
     await client.query(configSql)
     await client.query(tablesSql)
     // if testing or cargo fdw flag not set, you just get the schema, no fdw connection to dagcargo

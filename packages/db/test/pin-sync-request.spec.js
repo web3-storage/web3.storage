@@ -2,7 +2,7 @@
 import assert from 'assert'
 import { DBClient } from '../index.js'
 
-import { createUser, createUserAuthKey, createUpload, defaultPinData, token } from './utils.js'
+import { createUser, createUserAuthKey, createUpload, initialPinsNotPinned, token } from './utils.js'
 
 describe('pin-sync-request', () => {
   /** @type {DBClient} */
@@ -51,7 +51,7 @@ describe('pin-sync-request', () => {
     assert(pinSyncReqs, 'pin sync requests exist')
 
     // expect pin sync requests = added pins for each upload where status is not pinned
-    const expectedPinSyncReqs = defaultPinData.filter(pd => pd.status !== 'Pinned').length * 2
+    const expectedPinSyncReqs = initialPinsNotPinned.filter(pd => pd.status !== 'Pinned').length * 2
     assert.strictEqual(pinSyncReqs.length, expectedPinSyncReqs, 'created pin sync requests for non pinned entries')
   })
 
@@ -96,7 +96,7 @@ describe('pin-sync-request', () => {
     assert(pinSyncReqs, 'pin sync requests exist')
 
     // From the 2 setup uploads expected pins
-    const previousExpectedPinSyncReqs = defaultPinData.filter(pd => pd.status !== 'Pinned').length * 2
+    const previousExpectedPinSyncReqs = initialPinsNotPinned.filter(pd => pd.status !== 'Pinned').length * 2
     // Pins for the new upload
     const newPinSyncReqs = pins.filter(pd => pd.status !== 'Pinned').length
     assert.strictEqual(pinSyncReqs.length, newPinSyncReqs + previousExpectedPinSyncReqs, 'created pin sync requests for non pinned entries')

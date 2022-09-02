@@ -7,7 +7,6 @@ DROP FUNCTION IF EXISTS upsert_pins;
 DROP FUNCTION IF EXISTS user_used_storage;
 DROP FUNCTION IF EXISTS user_auth_keys_list;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
-DROP FUNCTION IF EXISTS publish_name_record;
 
 -- transform a JSON array property into an array of SQL text elements
 CREATE OR REPLACE FUNCTION json_arr_to_text_arr(_json json)
@@ -64,14 +63,6 @@ BEGIN
     ON CONFLICT ( cid ) DO NOTHING
   returning cid into inserted_cid;
 
-  -- Add to pin_request table if new
-  insert into pin_request (content_cid, attempts, updated_at, inserted_at)
-  values (data ->> 'content_cid',
-          0,
-          (data ->> 'updated_at')::timestamptz,
-          (data ->> 'inserted_at')::timestamptz)
-    ON CONFLICT ( content_cid ) DO NOTHING;
-
   -- Iterate over received pins
   foreach pin in array json_arr_to_json_element_array(data -> 'pins')
   loop
@@ -112,7 +103,7 @@ BEGIN
 END
 $$;
 
--- Creates an upload with relative content, pins, pin_requests and backups.
+-- Creates an upload with relative content, pins and backups.
 CREATE OR REPLACE FUNCTION create_upload(data json) RETURNS TEXT
     LANGUAGE plpgsql
     volatile
@@ -256,11 +247,20 @@ DECLARE
 BEGIN
   uploaded :=
     (
-      SELECT COALESCE(SUM(c.dag_size), 0)
-      FROM upload u
-      JOIN content c ON c.cid = u.content_cid
-      WHERE u.user_id = query_user_id::BIGINT
-      AND u.deleted_at is null
+      SELECT COALESCE((
+        SELECT SUM(dag_size)
+        FROM (
+          SELECT  c.cid,
+                  c.dag_size
+          FROM upload u
+          JOIN content c ON c.cid = u.content_cid
+          JOIN pin p ON p.content_cid = u.content_cid
+          WHERE u.user_id = query_user_id::BIGINT
+          AND u.deleted_at is null
+          AND p.status = 'Pinned'
+          GROUP BY c.cid,
+                  c.dag_size
+        ) AS uploaded_content), 0)
     );
 
   psa_pinned :=
@@ -295,7 +295,9 @@ $$;
 
 CREATE OR REPLACE FUNCTION users_by_storage_used(
   from_percent INTEGER,
-  to_percent INTEGER DEFAULT NULL
+  to_percent INTEGER DEFAULT NULL,
+  user_id_gt BIGINT DEFAULT 0,
+  user_id_lte BIGINT DEFAULT NULL
 )
   RETURNS TABLE
     (
@@ -331,6 +333,8 @@ BEGIN
         AND r.value ILIKE 'true'
         AND r.deleted_at IS NULL
       )
+      AND u.id > user_id_gt
+      AND u.id <= user_id_lte
     )
     SELECT *
     FROM user_account
@@ -418,32 +422,4 @@ FROM cargo.aggregate_entries ae
          LEFT JOIN cargo.deals de USING (aggregate_cid)
 WHERE ae.cid_v1 = ANY (cids)
 ORDER BY de.entry_last_updated
-$$;
-
-CREATE OR REPLACE FUNCTION publish_name_record(data json) RETURNS VOID
-    LANGUAGE plpgsql
-    volatile
-    PARALLEL UNSAFE
-AS
-$$
-BEGIN
-  INSERT INTO name (key, record, has_v2_sig, seqno, validity)
-  VALUES (data ->> 'key',
-          data ->> 'record',
-          (data ->> 'has_v2_sig')::BOOLEAN,
-          (data ->> 'seqno')::BIGINT,
-          (data ->> 'validity')::BIGINT)
-  ON CONFLICT (key) DO UPDATE
-    SET record = data ->> 'record',
-        has_v2_sig = (data ->> 'has_v2_sig')::BOOLEAN,
-        seqno = (data ->> 'seqno')::BIGINT,
-        validity = (data ->> 'validity')::BIGINT,
-        updated_at = TIMEZONE('utc'::TEXT, NOW())
-    WHERE
-        -- https://github.com/ipfs/go-ipns/blob/a8379aa25ef287ffab7c5b89bfaad622da7e976d/ipns.go#L325
-        ((data ->> 'has_v2_sig')::BOOLEAN = TRUE AND name.has_v2_sig = FALSE) OR
-        ((data ->> 'has_v2_sig')::BOOLEAN = name.has_v2_sig AND (data ->> 'seqno')::BIGINT > name.seqno) OR
-        ((data ->> 'has_v2_sig')::BOOLEAN = name.has_v2_sig AND (data ->> 'seqno')::BIGINT = name.seqno AND (data ->> 'validity')::BIGINT > name.validity) OR
-        ((data ->> 'has_v2_sig')::BOOLEAN = name.has_v2_sig AND (data ->> 'seqno')::BIGINT = name.seqno AND (data ->> 'validity')::BIGINT = name.validity AND DECODE(data ->> 'record', 'base64') > DECODE(name.record, 'base64'));
-END
 $$;

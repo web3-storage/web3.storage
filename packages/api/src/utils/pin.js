@@ -38,6 +38,12 @@ const PIN_STATUS_CHECK_INTERVAL = 5000
 // Max time in ms to spend polling for an OK status.
 const MAX_PIN_STATUS_CHECK_TIME = 30000
 
+/**
+ * List of statuses we don't want to track
+ * @type {PinStatus[]}
+ */
+const PIN_STATUSES_TO_IGNORE = ['Remote']
+
 // Pin statuses considered OK.
 export const PIN_OK_STATUS = ['Pinned', 'Pinning', 'PinQueued']
 
@@ -69,7 +75,10 @@ export async function getPins (cid, cluster, peerMap) {
     peerMap = (await cluster.status(cid)).peerMap
   }
 
-  const pins = toPins(peerMap)
+  let pins = toPins(peerMap)
+
+  // Ignore Remote Pins
+  pins = pins.filter(p => !PIN_STATUSES_TO_IGNORE.includes(p.status))
 
   if (!pins.length) {
     throw new Error('not pinning on any node')

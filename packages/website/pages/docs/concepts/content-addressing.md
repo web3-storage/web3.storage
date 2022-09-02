@@ -23,32 +23,32 @@ This type of key is called a _content identifier (CID)_. Once you know the CID o
 
 ```javascript
 // get uploaded files from a form
-const fileInput = document.querySelector('input[type="file"]')
+const fileInput = document.querySelector('input[type="file"]');
 
 // store files and obtain a CID
-const rootCid = await client.put(fileInput.files)
+const rootCid = await client.put(fileInput.files);
 
 // retrieve files using the CID
-const res = await client.get(rootCid)
-const files = await res.files()
+const res = await client.get(rootCid);
+const files = await res.files();
 for (const file of files) {
-  console.log(`${file.cid} ${file.name} ${file.size}`)
+  console.log(`${file.cid} ${file.name} ${file.size}`);
 }
 ```
 
 ## Web3.Storage CIDs under the hood
 
-Web3.Storage uses CIDs to make its free, decentralized file storage work, with help from [IPFS](https://ipfs.io) and [Filecoin](https://filecoin.io/) for locating files and making sure they're always available. 
+Web3.Storage uses CIDs to make its free, decentralized file storage work, with help from [IPFS](https://ipfs.io) and [Filecoin](https://filecoin.io/) for locating files and making sure they're always available.
 
 Content addressing is the basis of the peer-to-peer hypermedia protocol IPFS (the InterPlanetary File System), which Web3.Storage uses to locate files. When Web3.Storage stores your data on IPFS, it can be retrieved from any IPFS node that has a copy of that data. This can make data transfers more efficient and reduce the load on any single node. As each user fetches a piece of data, they keep a local copy around to help other users who might request it later.
 
-In addition to Web3.Storage making it easy to get your data onto the content-addressed IPFS network, it also provides long-term persistence for your files using the decentralized Filecoin storage network. The Filecoin network incentivizes participants to provide storage space for files on the network — for more details, see the [concept guide to decentralized storage](decentralized-storage.md). **By combining IPFS and Filecoin storage into one easy-to-use service, Web3.Storage makes it simple to store, locate, and retrieve your files on the decentralized web.**
+In addition to Web3.Storage making it easy to get your data onto the content-addressed IPFS network, it also provides long-term persistence for your files using the decentralized Filecoin storage network. The Filecoin network incentivizes participants to provide storage space for files on the network — for more details, see the [concept guide to decentralized storage](/docs/concepts/decentralized-storage/). **By combining IPFS and Filecoin storage into one easy-to-use service, Web3.Storage makes it simple to store, locate, and retrieve your files on the decentralized web.**
 
 ## Summary
 
 Using content addressing for locating files rather than the legacy web's method of location-dependent addressing responds to several critical weaknesses of the legacy web:
 
-- Content addressing solves for the problem behind link rot — the mutability of location-dependent storage systems — by using a hashing algorithm to generate a unique CID for each file that can be used as the lookup key for a file rather than a URL. 
+- Content addressing solves for the problem behind link rot — the mutability of location-dependent storage systems — by using a hashing algorithm to generate a unique CID for each file that can be used as the lookup key for a file rather than a URL.
 - In addition to making sure files don't get lost if they're moved, content addressing also ensures that users intending to retrieve a specific version of a file will be guaranteed to retrieve that version for as long as it exists anywhere on the network.
 
 ## Learn more
