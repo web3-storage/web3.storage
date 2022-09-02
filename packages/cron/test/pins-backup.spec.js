@@ -1,7 +1,14 @@
 /* eslint-env mocha */
 import { createPsaPinRequest, createUser, createUserAuthKey } from '@web3-storage/db/test-utils'
+import { S3Client, ListObjectsV2Command } from '@aws-sdk/client-s3'
 import { backupPins } from '../src/jobs/pins-backup.js'
 import { getCluster, getDBClient } from '../src/lib/utils.js'
+
+const S3_BUCKET_ENDPOINT = 'http://127.0.0.1:9000'
+const S3_BUCKET_NAME = 'dotstorage-test-0'
+const S3_BUCKET_REGION = 'us-east-1'
+const S3_ACCESS_KEY_ID = 'minioadmin'
+const S3_SECRET_ACCESS_KEY_ID = 'minioadmin'
 
 global.fetch = fetch
 
@@ -58,7 +65,7 @@ const createPin = (cid, status = 'pinned') => {
 }
 
 describe('cron - pins backup', () => {
-  let user, userId, authKey, dbClient, cluster
+  let user, userId, authKey, dbClient, cluster, s3
   const cids = ['bafy1', 'bafy3', 'bafy4']
 
   beforeEach(async () => {
@@ -69,15 +76,47 @@ describe('cron - pins backup', () => {
     userId = parseInt(user._id)
     authKey = parseInt(await createUserAuthKey(dbClient, userId))
 
-    // Create 3 uploads with 1 pin in status Pinning
+    // Create 3 uploads with status Pinned
     await createPsaPinRequest(dbClient, authKey, cids[0], { pins: uploadPins })
     await createPsaPinRequest(dbClient, authKey, cids[1], { pins: uploadPins })
     await createPsaPinRequest(dbClient, authKey, cids[2], { pins: uploadPins })
 
     dbClient.query('UPDATE pin SET (status) VALUES (\'Pinned\') WHERE content_cid IN ($1, $2, $3)', cids)
+
+    // TODO: Mock the S3 client
+    s3 = new S3Client({
+      endpoint: S3_BUCKET_ENDPOINT,
+      forcePathStyle: true,
+      region: S3_BUCKET_REGION,
+      credentials: {
+        accessKeyId: S3_ACCESS_KEY_ID,
+        secretAccessKey: S3_SECRET_ACCESS_KEY_ID
+      }
+    })
+
+    // TODO: Mock the cluster response for getting the car file
+
+    // TODO: Mock cluster resposne
+    // Override cluster statys to return pinned
+    cluster.status = async (cid) => {
+      return createPin(cid, 'pinned')
+    }
+
+    // Override cluster statusAll to return pinned
+    cluster.statusAll = async ({ cids }) => {
+      return cids.map(cid => createPin(cid, 'pinned'))
+    }
   })
 
   it('should attempt to backup pins to S3', async () => {
     await backupPins(env, dbClient, dbClient, cluster)
+
+    // TODO: Verify bucket has file in
+    const listRes = await s3.send(new ListObjectsV2Command({
+      Bucket: S3_BUCKET_NAME
+    }))
+    console.log(listRes)
+
+    // TODO: Verify that the psa_pin_request has a backup_url
   })
 })
