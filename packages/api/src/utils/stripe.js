@@ -48,7 +48,9 @@ export class StripeBillingService {
    * @returns {Promise<void>}
    */
   async savePaymentMethod (customer, method) {
-
+    await this.stripe.paymentMethods.attach(method, {
+      customer
+    })
   }
 }
 

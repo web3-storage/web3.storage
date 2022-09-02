@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import assert from 'assert'
-import { randomString } from 'src/utils/billing.js'
+import { randomString } from '../src/utils/billing.js'
 // eslint-disable-next-line no-unused-vars
 import Stripe from 'stripe'
 import { StripeBillingService, StripeCustomersService } from '../src/utils/stripe.js'
