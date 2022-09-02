@@ -9,17 +9,33 @@ import Stripe from 'stripe'
  */
 
 /**
+ * @typedef {Pick<StripeInterface['paymentMethods'], 'attach'>} StripePaymentMethodsForBillingService
+ */
+
+/**
+ * @typedef {object} StripeComForBillingService
+ * @property {StripePaymentMethodsForBillingService} paymentMethods
+ */
+
+/**
  * A BillingService that uses stripe.com
  */
 export class StripeBillingService {
-  static create () {
-    return new StripeBillingService()
+  /**
+   * @param {StripeComForBillingService} stripe
+   * @returns {BillingService}
+   */
+  static create (stripe) {
+    return new StripeBillingService(stripe)
   }
 
   /**
    * @protected
+   * @param {StripeComForBillingService} stripe
    */
-  constructor () {
+  constructor (stripe) {
+    /** @type {StripeComForBillingService}  */
+    this.stripe = stripe
     /**
      * @type {BillingService}
      */

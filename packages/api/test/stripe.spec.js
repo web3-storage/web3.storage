@@ -1,12 +1,15 @@
 /* eslint-env mocha */
 import assert from 'assert'
+import { randomString } from 'src/utils/billing.js'
+// eslint-disable-next-line no-unused-vars
+import Stripe from 'stripe'
 import { StripeBillingService, StripeCustomersService } from '../src/utils/stripe.js'
 
 describe('StripeBillingService', async function () {
   it('can savePaymentMethod', async function () {
     const customerId = `customer-${Math.random().toString().slice(2)}`
     const paymentMethodId = /** @type const */ (`pm_${Math.random().toString().slice(2)}`)
-    const billing = StripeBillingService.create()
+    const billing = StripeBillingService.create(createMockStripeForBilling())
     await billing.savePaymentMethod(customerId, paymentMethodId)
   })
 })
@@ -54,6 +57,72 @@ function createMockStripe () {
         const customer = createMockStripeCustomer()
         return customer
       }
+    }
+  }
+}
+
+/** @returns {import('../src/utils/stripe.js').StripeComForBillingService} */
+function createMockStripeForBilling () {
+  const paymentMethods = {
+    /**
+     * @param {string} paymentMethodId
+     * @param {Stripe.PaymentMethodAttachParams} customerId
+     * @returns {Promise<Stripe.Response<Stripe.PaymentMethod>>}
+     */
+    attach: async (paymentMethodId, params) => {
+      /** @type {Stripe.PaymentMethod} */
+      const method = {
+        ...createMockStripePaymentMethod(),
+        id: paymentMethodId
+      }
+      /** @type {Stripe.Response<Stripe.PaymentMethod>} */
+      const response = {
+        // @ts-ignore
+        lastResponse: undefined,
+        ...method
+      }
+      return response
+    }
+  }
+  return { paymentMethods }
+}
+
+/**
+ * @returns {Stripe.PaymentMethod}
+ */
+function createMockStripePaymentMethod () {
+  return {
+    id: `pm_${randomString()}`,
+    object: 'payment_method',
+    billing_details: {
+      name: [randomString(), randomString()].join(' '),
+      address: {
+        city: randomString(),
+        country: randomString(),
+        line1: randomString(),
+        line2: randomString(),
+        postal_code: randomString(),
+        state: 'KS'
+      },
+      email: `${randomString()}@example.com`,
+      phone: randomString()
+    },
+    created: Number(new Date()),
+    livemode: false,
+    type: 'card',
+    metadata: {},
+    customer: {
+      id: `customer-${randomString()}`,
+      object: 'customer',
+      balance: 0,
+      created: Number(new Date()),
+      email: `${randomString()}@example.com`,
+      default_source: null,
+      description: randomString(),
+      livemode: false,
+      metadata: {},
+      // @ts-ignore
+      invoice_settings: {}
     }
   }
 }
