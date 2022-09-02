@@ -190,7 +190,7 @@ export function envAll (req, env, ctx) {
  */
 
 /**
- * @param {Env} env
+ * @param {Pick<Env, 'STRIPE_SECRET_KEY'|'db'>} env
  * @returns {import('./utils/billing-types').BillingEnv & StripeDerrivedEnv}
  */
 function createStripeBillingContext (env) {
