@@ -200,7 +200,7 @@ function createStripeBillingContext (env) {
     httpClient: Stripe.createFetchHttpClient()
   })
   const billing = StripeBillingService.create()
-  const customers = StripeCustomersService.create(stripe, env.db.getUserCustomer)
+  const customers = StripeCustomersService.create(stripe, env.db)
   return {
     billing,
     customers,

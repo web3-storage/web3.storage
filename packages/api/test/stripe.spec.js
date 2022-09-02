@@ -13,25 +13,29 @@ describe('StripeBillingService', async function () {
 
 describe('StripeCustomersService', async function () {
   it('can getOrCreateForUser', async function () {
-    const userIdToCustomerId = new Map()
     const userId1 = 'userId1'
+    const userId2 = 'userId2'
     const customerId1 = 'customerId1'
+
+    const mockUserCustomerService = createMockUserCustomerService()
     const customers1 = StripeCustomersService.create(
       createMockStripe(),
-      async (userId) => {
-        const c = userIdToCustomerId.get(userId)
-        if (c) {
-          return { id: c }
-        }
-        throw new Error('no customer found for user id')
-      }
+      mockUserCustomerService
     )
 
     // it should return the customer id if already set
-    userIdToCustomerId.set(userId1, customerId1)
+    mockUserCustomerService.userIdToCustomerId.set(userId1, customerId1)
     const customerForUser1 = await customers1.getOrCreateForUser({ id: userId1 })
     assert.equal(customerForUser1.id, customerId1, 'should have returned the customer id')
-    userIdToCustomerId.delete(userId1)
+    mockUserCustomerService.userIdToCustomerId.delete(userId1)
+
+    // it should create the customer if needed
+    const customerForUser2 = await customers1.getOrCreateForUser({ id: userId2 })
+    assert.equal(typeof customerForUser2.id, 'string', 'should have returned a customer id')
+
+    // it should not create the customer if already set
+    const customer2ForUser2 = await customers1.getOrCreateForUser({ id: userId2 })
+    assert.equal(customer2ForUser2.id, customerForUser2.id, 'should return same customer for same userId2')
   })
 })
 
@@ -51,5 +55,24 @@ function createMockStripe () {
         return customer
       }
     }
+  }
+}
+
+function createMockUserCustomerService () {
+  const userIdToCustomerId = new Map()
+  const getUserCustomer = async (userId) => {
+    const c = userIdToCustomerId.get(userId)
+    if (c) {
+      return { id: c }
+    }
+    return null
+  }
+  const upsertUserCustomer = async (userId, customerId) => {
+    userIdToCustomerId.set(userId, customerId)
+  }
+  return {
+    userIdToCustomerId,
+    getUserCustomer,
+    upsertUserCustomer
   }
 }

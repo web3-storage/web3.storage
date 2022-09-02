@@ -67,7 +67,17 @@ export class StripeBillingService {
  */
 
 /**
- * @typedef {(userId: string) => Promise<{ id: string }>} GetUserCustomer
+ * @typedef {(userId: string) => Promise<null|{ id: string }>} GetUserCustomer
+ */
+
+/**
+ * @typedef {(userId: string, customerId: string) => Promise<any>} UpsertUserCustomer
+ */
+
+/**
+ * @typedef {object} UserCustomerService
+ * @property {GetUserCustomer} getUserCustomer
+ * @property {UpsertUserCustomer} upsertUserCustomer
  */
 
 /**
@@ -76,20 +86,20 @@ export class StripeBillingService {
 export class StripeCustomersService {
   /**
    * @param {StripeComForCustomersService} stripe
-   * @param {GetUserCustomer} getUserCustomer
+   * @param {UserCustomerService} userCustomerService
    */
-  static create (stripe, getUserCustomer) {
-    return new StripeCustomersService(stripe, getUserCustomer)
+  static create (stripe, userCustomerService) {
+    return new StripeCustomersService(stripe, userCustomerService)
   }
 
   /**
    * @param {StripeComForCustomersService} stripe
-   * @param {GetUserCustomer} getUserCustomer
+   * @param {UserCustomerService} userCustomerService
    * @protected
    */
-  constructor (stripe, getUserCustomer) {
-    /** @type {GetUserCustomer} */
-    this.getUserCustomer = getUserCustomer
+  constructor (stripe, userCustomerService) {
+    /** @type {UserCustomerService} */
+    this.userCustomerService = userCustomerService
     /** @type {StripeComForCustomersService} */
     this.stripe = stripe
     /**
@@ -103,14 +113,14 @@ export class StripeCustomersService {
    * @returns {Promise<Customer>}
    */
   async getOrCreateForUser (user) {
-    const existingCustomer = await this.getUserCustomer(user.id)
-    console.log({ existingCustomer })
+    const existingCustomer = await this.userCustomerService.getUserCustomer(user.id)
     if (existingCustomer) return existingCustomer
     const createdCustomer = await this.stripe.customers.create({
       metadata: {
         'web3.storage/user.id': user.id
       }
     })
+    await this.userCustomerService.upsertUserCustomer(user.id, createdCustomer.id)
     return createdCustomer
   }
 }
