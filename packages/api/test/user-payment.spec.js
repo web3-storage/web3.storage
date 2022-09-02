@@ -3,7 +3,7 @@ import assert from 'assert'
 import fetch, { Request } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
-import { savePaymentSettings } from '../src/utils/billing.js'
+import { createMockBillingService, createMockCustomerService, randomString, savePaymentSettings } from '../src/utils/billing.js'
 import { userPaymentPut } from '../src/user.js'
 
 function createBearerAuthorization (bearerToken) {
@@ -184,37 +184,3 @@ describe('savePaymentSettings', async function () {
     assert.equal(typeof paymentMethodSaves[0].customerId, 'string', 'savePaymentMethod was called with method')
   })
 })
-
-/**
- * @returns {import('src/utils/billing-types.js').CustomersService & { mockCustomers: Array<{ id: string }> }}
- */
-function createMockCustomerService () {
-  const mockCustomers = []
-  /**
-   * @returns {Promise<{ id: string }>}
-   */
-  async function getOrCreateForUser () {
-    const created = { id: `customer-${Math.random().toString().slice(2)}` }
-    mockCustomers.push(created)
-    return created
-  }
-  return {
-    getOrCreateForUser,
-    mockCustomers
-  }
-}
-
-function randomString () {
-  return Math.random().toString().slice(2)
-}
-
-function createMockBillingService () {
-  const paymentMethodSaves = []
-  const billing = {
-    async savePaymentMethod (customerId, methodId) {
-      paymentMethodSaves.push({ customerId, methodId })
-    },
-    paymentMethodSaves
-  }
-  return billing
-}

@@ -12,6 +12,7 @@ import { defaultBypassMagicLinkVariableName } from './magic.link.js'
 import { StripeBillingService, StripeCustomersService } from './utils/stripe.js'
 import assert from 'assert'
 import Stripe from 'stripe'
+import { createMockBillingService, createMockCustomerService } from './utils/billing.js'
 
 /**
  * @typedef {object} Env
@@ -180,7 +181,7 @@ export function envAll (req, env, ctx) {
   // after fulls tripe integration, this may not be needed on the env
   env.mockStripePaymentMethodId = 'pm_1LZnQ1IfErzTm2rETa7IGoVm'
 
-  Object.assign(env, createStripeBillingContext(env))
+  Object.assign(env, (env.ENV === 'test') ? createTestBillingContext(env) : createStripeBillingContext(env))
 }
 
 /**
@@ -205,5 +206,18 @@ function createStripeBillingContext (env) {
     billing,
     customers,
     stripeSecretKey
+  }
+}
+
+/**
+ * @param {Env} env
+ * @returns {import('./utils/billing-types').BillingEnv}
+ */
+function createTestBillingContext (env) {
+  const billing = createMockBillingService()
+  const customers = createMockCustomerService()
+  return {
+    billing,
+    customers
   }
 }

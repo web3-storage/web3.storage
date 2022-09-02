@@ -12,3 +12,37 @@ export async function savePaymentSettings (ctx, paymentSettings) {
   const customer = await customers.getOrCreateForUser(user)
   await billing.savePaymentMethod(customer.id, paymentSettings.method.id)
 }
+
+/**
+ * @returns {import('src/utils/billing-types.js').CustomersService & { mockCustomers: Array<{ id: string }> }}
+ */
+export function createMockCustomerService () {
+  const mockCustomers = []
+  /**
+   * @returns {Promise<{ id: string }>}
+   */
+  async function getOrCreateForUser () {
+    const created = { id: `customer-${Math.random().toString().slice(2)}` }
+    mockCustomers.push(created)
+    return created
+  }
+  return {
+    getOrCreateForUser,
+    mockCustomers
+  }
+}
+
+export function randomString () {
+  return Math.random().toString().slice(2)
+}
+
+export function createMockBillingService () {
+  const paymentMethodSaves = []
+  const billing = {
+    async savePaymentMethod (customerId, methodId) {
+      paymentMethodSaves.push({ customerId, methodId })
+    },
+    paymentMethodSaves
+  }
+  return billing
+}
