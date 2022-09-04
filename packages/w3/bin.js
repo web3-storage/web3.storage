@@ -69,6 +69,11 @@ cli.command('name resolve <keyId>')
   .example('name resolve k51qzi5uqu5dlcuzv5xhg1zqn48gobcvn2mx13uoig7zfj8rz6zvqdxsugka9z')
   .action(Name.resolve)
 
+cli.command('name get <keyId>')
+  .describe('Retrieve the signing key associated with the passed name.')
+  .example('name get k51qzi5uqu5dlcuzv5xhg1zqn48gobcvn2mx13uoig7zfj8rz6zvqdxsugka9z')
+  .action(Name.getKey)
+
 cli.command('name rm <keyId>')
   .describe('Remove an IPNS name managed by this utility. Note: this does NOT unpublish the IPNS name, it simply removes the IPNS name and signing key from local config.')
   .example('name rm k51qzi5uqu5dlcuzv5xhg1zqn48gobcvn2mx13uoig7zfj8rz6zvqdxsugka9z')

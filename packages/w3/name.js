@@ -48,6 +48,18 @@ export async function resolve (keyId) {
 }
 
 /**
+ * Retrieve the signing key associated with the given key.
+ * @param {string} keyId 
+ */
+ export function getKey (keyId) {
+  const signingKey = config.get(`name.${keyId}`)
+  if (!signingKey) {
+    throw new Error('missing signing key for the provided <keyId>')
+  }
+  console.log(signingKey)
+}
+
+/**
  * @param {string} keyId
  */
 export function rm (keyId) {
