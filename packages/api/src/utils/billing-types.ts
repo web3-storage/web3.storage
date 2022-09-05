@@ -5,7 +5,12 @@ export type StripePaymentMethod = {
   id: StripePaymentMethodId
 }
 
+export interface PaymentMethod {
+  id: string
+}
+
 export interface BillingService {
+  getPaymentMethod(customer: StripeCustomerId): Promise<PaymentMethod>
   savePaymentMethod(
     customer: StripeCustomerId,
     paymentMethodId: StripePaymentMethodId

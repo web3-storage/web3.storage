@@ -9,12 +9,10 @@ import Stripe from 'stripe'
  */
 
 /**
- * @typedef {Pick<StripeInterface['paymentMethods'], 'attach'>} StripePaymentMethodsForBillingService
- */
-
-/**
  * @typedef {object} StripeComForBillingService
- * @property {StripePaymentMethodsForBillingService} paymentMethods
+ * @property {Pick<StripeInterface['paymentMethods'], 'attach'>} paymentMethods
+ * @property {Pick<StripeInterface['setupIntents'], 'create'>} setupIntents
+ * @property {Pick<StripeInterface['customers'], 'retrieve'>} customers
  */
 
 /**
@@ -23,7 +21,6 @@ import Stripe from 'stripe'
 export class StripeBillingService {
   /**
    * @param {StripeComForBillingService} stripe
-   * @returns {BillingService}
    */
   static create (stripe) {
     return new StripeBillingService(stripe)
@@ -42,14 +39,19 @@ export class StripeBillingService {
     const instance = this // eslint-disable-line
   }
 
+  async getPaymentMethod (customerId) {
+    const response = await this.stripe.customers.retrieve(customerId)
+    const customer = { id: response.id }
+    return customer
+  }
+
   /**
    * @param {import('./billing-types').StripeCustomerId} customer
    * @param {import('./billing-types').StripePaymentMethodId} method
    * @returns {Promise<void>}
    */
   async savePaymentMethod (customer, method) {
-    await this.stripe.paymentMethods.attach(method, {
-      customer
+    await this.stripe.setupIntents.create({
     })
   }
 }

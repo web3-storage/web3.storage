@@ -36,13 +36,33 @@ export function randomString () {
   return Math.random().toString().slice(2)
 }
 
+/**
+ *
+ * @returns {import('src/utils/billing-types.js').BillingService & { paymentMethodSaves: Array<{ customerId: string, methodId: string }> }}
+ */
 export function createMockBillingService () {
   const paymentMethodSaves = []
   const billing = {
+    /**
+     * @returns {Promise<import('./billing-types').PaymentMethod>}
+     */
+    async getPaymentMethod () {
+      const paymentMethod = createMockPaymentMethod()
+      return paymentMethod
+    },
     async savePaymentMethod (customerId, methodId) {
       paymentMethodSaves.push({ customerId, methodId })
     },
     paymentMethodSaves
   }
   return billing
+}
+
+/**
+ * @returns {import('./billing-types').StripePaymentMethod}
+ */
+function createMockPaymentMethod () {
+  return {
+    id: `pm_${randomString()}`
+  }
 }

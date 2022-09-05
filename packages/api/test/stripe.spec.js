@@ -12,6 +12,11 @@ describe('StripeBillingService', async function () {
     const billing = StripeBillingService.create(createMockStripeForBilling())
     await billing.savePaymentMethod(customerId, paymentMethodId)
   })
+  it('can getPaymentMethod for a customer and it fetches from stripe', async function () {
+    const customerId = `customer-${Math.random().toString().slice(2)}`
+    const billing = StripeBillingService.create(createMockStripeForBilling())
+    await billing.getPaymentMethod(customerId)
+  })
 })
 
 describe('StripeCustomersService', async function () {
@@ -41,12 +46,6 @@ describe('StripeCustomersService', async function () {
     assert.equal(customer2ForUser2.id, customerForUser2.id, 'should return same customer for same userId2')
   })
 })
-
-function createMockStripeCustomer () {
-  return {
-    id: `customer-${Math.random().toString().slice(2)}`
-  }
-}
 
 /** @returns {import('../src/utils/stripe.js').StripeComForCustomersService} */
 function createMockStripe () {
@@ -84,7 +83,38 @@ function createMockStripeForBilling () {
       return response
     }
   }
-  return { paymentMethods }
+  /** @type {import('../src/utils/stripe.js').StripeComForBillingService['customers']} */
+  const customers = {
+    async retrieve (id, params) {
+      const customer = createMockStripeCustomer()
+      /** @type {Stripe.Response<Stripe.Customer>} */
+      const response = {
+        ...customer,
+        // @ts-ignore
+        lastResponse: undefined
+      }
+      return response
+    }
+  }
+  /** @type {import('../src/utils/stripe.js').StripeComForBillingService['setupIntents']} */
+  const setupIntents = {
+    async create () {
+      /** @type {Stripe.SetupIntent} */
+      // @ts-ignore
+      const setupIntent = {
+        object: 'setup_intent',
+        description: 'mock setup_intent'
+      }
+      /** @type {Stripe.Response<Stripe.SetupIntent>} */
+      const response = {
+        // @ts-ignore
+        lastResponse: {},
+        ...setupIntent
+      }
+      return response
+    }
+  }
+  return { paymentMethods, customers, setupIntents }
 }
 
 /**
@@ -111,19 +141,26 @@ function createMockStripePaymentMethod () {
     livemode: false,
     type: 'card',
     metadata: {},
-    customer: {
-      id: `customer-${randomString()}`,
-      object: 'customer',
-      balance: 0,
-      created: Number(new Date()),
-      email: `${randomString()}@example.com`,
-      default_source: null,
-      description: randomString(),
-      livemode: false,
-      metadata: {},
-      // @ts-ignore
-      invoice_settings: {}
-    }
+    customer: createMockStripeCustomer()
+  }
+}
+
+/**
+ * @returns {Stripe.Customer}
+ */
+function createMockStripeCustomer () {
+  return {
+    id: `customer-${randomString()}`,
+    object: 'customer',
+    balance: 0,
+    created: Number(new Date()),
+    email: `${randomString()}@example.com`,
+    default_source: null,
+    description: randomString(),
+    livemode: false,
+    metadata: {},
+    // @ts-ignore
+    invoice_settings: {}
   }
 }
 
