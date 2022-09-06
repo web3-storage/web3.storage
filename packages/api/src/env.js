@@ -87,8 +87,8 @@ export function envAll (req, env, ctx) {
     allowedSearchParams: /(.*)/,
     debug: env.DEBUG === 'true',
     rewriteFrames: {
-      // strip . from start of the filename ./worker.mjs as set by cloudflare, to make absolute path `/worker.mjs`
-      iteratee: (frame) => ({ ...frame, filename: frame.filename?.substring(1) })
+      // sourcemaps only work if stack filepath are absolute like `/worker.js`
+      root: '/'
     },
     environment: env.ENV,
     release: env.SENTRY_RELEASE,

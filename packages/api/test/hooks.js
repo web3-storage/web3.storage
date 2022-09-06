@@ -41,7 +41,7 @@ export const mochaHooks = () => {
       srv = await new Miniflare({
         // Autoload configuration from `.env`, `package.json` and `wrangler.toml`
         envPath: true,
-        scriptPath: 'dist/worker.mjs',
+        scriptPath: 'dist/worker.js',
         packagePath: true,
         wranglerConfigPath: true,
         wranglerConfigEnv: 'test',

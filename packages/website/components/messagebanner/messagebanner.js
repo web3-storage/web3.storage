@@ -112,7 +112,7 @@ export default function MessageBanner() {
                 dangerouslySetInnerHTML={{ __html: bannerContent.html }}
                 onClick={() => messageBannerClick(marketingPrompt)}
                 onKeyPress={() => messageBannerClick(marketingPrompt)}
-                rel="noreferrer"
+                rel="noreferrer noopener"
               ></a>
             </div>
           </div>
