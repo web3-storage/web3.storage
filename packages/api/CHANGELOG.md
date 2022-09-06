@@ -1,5 +1,43 @@
 # Changelog
 
+## [7.4.3](https://github.com/web3-storage/web3.storage/compare/api-v7.4.2...api-v7.4.3) (2022-09-06)
+
+
+### Bug Fixes
+
+* trigger release ([e4175a6](https://github.com/web3-storage/web3.storage/commit/e4175a667bc177eb807f5974d79381bf36a67aa5))
+
+## [7.4.2](https://github.com/web3-storage/web3.storage/compare/api-v7.4.1...api-v7.4.2) (2022-09-06)
+
+
+### Bug Fixes
+
+* always retry s3 upload ([#1846](https://github.com/web3-storage/web3.storage/issues/1846)) ([a5fa72c](https://github.com/web3-storage/web3.storage/commit/a5fa72c8c9c99ebb524cd21d7572fdbf178747af))
+
+## [7.4.1](https://github.com/web3-storage/web3.storage/compare/api-v7.4.0...api-v7.4.1) (2022-09-06)
+
+
+### Bug Fixes
+
+* sourcemap stacktraces in sentry ([#1838](https://github.com/web3-storage/web3.storage/issues/1838)) ([4de82b6](https://github.com/web3-storage/web3.storage/commit/4de82b6c721c87875cd11890979bd9deb211c746))
+* wrangler publish wildcard route with specified zone id ([#1843](https://github.com/web3-storage/web3.storage/issues/1843)) ([9ccacff](https://github.com/web3-storage/web3.storage/commit/9ccacff1183dee0eb8142d4bf65f224ac8a5b273))
+
+## [7.4.0](https://github.com/web3-storage/web3.storage/compare/api-v7.3.0...api-v7.4.0) (2022-08-31)
+
+
+### Features
+
+* account payments UI start ([#1767](https://github.com/web3-storage/web3.storage/issues/1767)) ([38f0088](https://github.com/web3-storage/web3.storage/commit/38f00887df1e22ddef7c76c51e9c68883ad80895))
+* add tsc checking to packages/api ([#1813](https://github.com/web3-storage/web3.storage/issues/1813)) ([b7cc6f7](https://github.com/web3-storage/web3.storage/commit/b7cc6f7a6eb9a11c6d1fa856a97d15a8b89bf10e))
+* drop name table & IPNS migration cron ([#1719](https://github.com/web3-storage/web3.storage/issues/1719)) ([0cdfad9](https://github.com/web3-storage/web3.storage/commit/0cdfad9f6baf4a1a356b8c6c8291e4bceb45aa17))
+* e2e test website accountPayment loggedIn, includes magic.link testMode support in test-e2e job only ([#1754](https://github.com/web3-storage/web3.storage/issues/1754)) ([6d6f92c](https://github.com/web3-storage/web3.storage/commit/6d6f92cb10552c149ebd1fcaedb2295cb661192c))
+
+
+### Bug Fixes
+
+* Return correct issuer from magic token in `tryMagicToken`. ([#1806](https://github.com/web3-storage/web3.storage/issues/1806)) ([0a10f46](https://github.com/web3-storage/web3.storage/commit/0a10f46d8d04c9babd2e16c9c7c6876c9934085d))
+* upload list pagination headers ([#1739](https://github.com/web3-storage/web3.storage/issues/1739)) ([2ffe6d7](https://github.com/web3-storage/web3.storage/commit/2ffe6d749628095a93d957836c6b4e8ad3b6acf9))
+
 ## [7.3.0](https://github.com/web3-storage/web3.storage/compare/api-v7.2.0...api-v7.3.0) (2022-08-22)
 
 
