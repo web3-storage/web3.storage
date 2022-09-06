@@ -54,6 +54,8 @@ function AccountPaymentTester() {
     await page.locator('.login-email').fill(email);
   }
   async function submitLoginForm(page: Page) {
+    const loginButton = page.locator('.login-content .section-email button');
+    await loginButton.isVisible();
     await Promise.all([
       page.waitForNavigation({ waitUntil: 'networkidle' }),
       page.locator('.login-content .section-email button').click(),
