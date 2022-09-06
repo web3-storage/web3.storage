@@ -12,7 +12,7 @@ import { defaultBypassMagicLinkVariableName } from './magic.link.js'
 import { StripeBillingService, StripeCustomersService } from './utils/stripe.js'
 import assert from 'assert'
 import Stripe from 'stripe'
-import { createMockBillingService, createMockCustomerService } from './utils/billing.js'
+import { createMockBillingService } from './utils/billing.js'
 
 /**
  * @typedef {object} Env
@@ -181,7 +181,7 @@ export function envAll (req, env, ctx) {
   // after fulls tripe integration, this may not be needed on the env
   env.mockStripePaymentMethodId = 'pm_1LZnQ1IfErzTm2rETa7IGoVm'
 
-  Object.assign(env, (env.ENV === 'test') ? createTestBillingContext(env) : createStripeBillingContext(env))
+  Object.assign(env, (env.ENV === 'test') ? createTestBillingEnv() : createStripeBillingContext(env))
 }
 
 /**
@@ -214,12 +214,26 @@ function createStripeBillingContext (env) {
 }
 
 /**
- * @param {Env} env
+ * Create a Customers Service for use in testing the app.
+ * @returns {import('./utils/billing-types').CustomersService}
+ */
+function createTestEnvCustomerService () {
+  return {
+    async getOrCreateForUser (user) {
+      // reuse user.id as customer.id
+      return { id: user.id }
+    }
+  }
+}
+
+/**
+ * Create BillingEnv to use when testing.
+ * Use stubs/mocks instead of real billing service (e.g. stripe.com and/or a networked db)
  * @returns {import('./utils/billing-types').BillingEnv}
  */
-function createTestBillingContext (env) {
+function createTestBillingEnv () {
   const billing = createMockBillingService()
-  const customers = createMockCustomerService()
+  const customers = createTestEnvCustomerService()
   return {
     billing,
     customers

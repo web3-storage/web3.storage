@@ -111,43 +111,12 @@ describe('PUT /user/payment', () => {
       console.log('response text is', await res.text())
       throw error
     }
-    const savePaymentSettingsResponse = await res.json()
-    assert.equal(typeof savePaymentSettingsResponse, 'object')
-    assert.ok('method' in savePaymentSettingsResponse, '"method" is in userPaymentSettings.method')
-    assert.equal(typeof savePaymentSettingsResponse.method, 'object', 'response.method is an object')
-    assert.equal(typeof savePaymentSettingsResponse.method?.id, 'string', 'response.method.id is a string')
-    assert.equal(savePaymentSettingsResponse.method?.id, desiredPaymentMethodId, `response.method.id is desiredPaymentMethodId=${desiredPaymentMethodId}`)
-    const savedMethodId = savePaymentSettingsResponse.method.id
     assert.equal(typeof res.headers.get('location'), 'string', 'response.headers.location is a string')
-
-    // see if we can then GET the response.headers.location url
-    const paymentSettingsUrl = new URL(res.headers.get('location') ?? '', res.url)
-    const paymentSettingsResponse = await fetch(paymentSettingsUrl, {
-      headers: {
-        authorization
-      }
-    })
-    assert.equal(paymentSettingsResponse.status, 200, 'paymentSettingsResponse.status is 200')
-    const paymentSettings = await paymentSettingsResponse.json()
-    assert.equal(paymentSettings.method.id, savedMethodId, 'paymentSettings.method.id from location header is same as response to PUT')
-  })
-
-  it('saves payment method which can then be retrieved via GET', async function () {
-    const token = AuthorizationTestContext.use(this).createUserToken()
-    const authorization = createBearerAuthorization(token)
-    const desiredPaymentMethodId = `w3-test-${Math.random().toString().slice(2)}`
-    const responseFromSaveSettings = await fetch(createSaveUserPaymentSettingsRequest({ authorization, body: JSON.stringify({ method: { id: desiredPaymentMethodId } }) }))
-    assert.equal(responseFromSaveSettings.status, 202, 'responseFromSaveSettings.status is 202')
-    const responseFromGetSettings = await fetch(createUserPaymentRequest({ authorization }))
-    assert.equal(responseFromGetSettings.status, 200, 'responseFromGetSettings.status is 200')
-    const payment1 = await responseFromGetSettings.json()
-    console.log({ payment1 })
-    // assert.equal(payment1.method?.id, desiredPaymentMethodId, 'payment1.method.id is desiredPaymentMethodId')
   })
 })
 
 describe('userPaymentPut', () => {
-  it('saves payment method', async function () {
+  it('saves payment method using billing service', async function () {
     const desiredPaymentMethodId = `pm_${randomString()}`
     const paymentSettings = { method: { id: desiredPaymentMethodId } }
     const authorization = createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken())
@@ -160,8 +129,7 @@ describe('userPaymentPut', () => {
     const customers = createMockCustomerService()
     const env = {
       billing,
-      customers,
-      mockStripePaymentMethodId: /** @type const */ (`pm_${randomString()}`)
+      customers
     }
     const response = await userPaymentPut(request, env)
     assert.equal(response.status, 202, 'response.status is 202')
@@ -172,8 +140,34 @@ describe('userPaymentPut', () => {
   })
 })
 
+describe('/user/payment', () => {
+  it('can userPaymentPut and then userPaymentGet', async function () {
+    const env = {
+      billing: createMockBillingService(),
+      customers: createMockCustomerService()
+    }
+    const desiredPaymentMethodId = `test_pm_${randomString()}`
+    const paymentSettings = { method: { id: desiredPaymentMethodId } }
+    const user = { _id: randomString(), issuer: randomString() }
+    // save settings
+    const savePaymentSettingsRequest = Object.assign(
+      createSaveUserPaymentSettingsRequest({ body: JSON.stringify(paymentSettings) }),
+      { auth: { user } }
+    )
+    const savePaymentSettingsResponse = await userPaymentPut(savePaymentSettingsRequest, env)
+    assert.equal(savePaymentSettingsResponse.status, 202, 'savePaymentSettingsResponse.status is 202')
+    // get settings
+    const getPaymentSettingsRequest = Object.assign(
+      createUserPaymentRequest(),
+      { auth: { user } }
+    )
+    const getPaymentSettingsResponse = await userPaymentGet(getPaymentSettingsRequest, env)
+    assert.equal(getPaymentSettingsResponse.status, 200, 'getPaymentSettingsResponse.status is 200')
+  })
+})
+
 describe('userPaymentGet', () => {
-  it('gets payment method using billingService', async function () {
+  it('gets payment method using billing service', async function () {
     const user = { _id: randomString(), issuer: randomString() }
     const authorization = createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken())
     const request = Object.assign(

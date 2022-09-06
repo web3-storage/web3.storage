@@ -25,6 +25,7 @@ export async function getPaymentSettings (ctx) {
   const { billing, customers, user } = ctx
   const customer = await customers.getOrCreateForUser(user)
   const paymentMethod = await billing.getPaymentMethod(customer.id)
+  /** @type {import('./billing-types').PaymentSettings} */
   const settings = { method: paymentMethod }
   return settings
 }
@@ -34,12 +35,22 @@ export async function getPaymentSettings (ctx) {
  */
 export function createMockCustomerService () {
   const mockCustomers = []
+  /** @type {Map<string,{ id: string }>} */
+  const userIdToCustomer = new Map()
   /**
+   * @param {{ id: string }} user
    * @returns {Promise<{ id: string }>}
    */
-  async function getOrCreateForUser () {
+  async function getOrCreateForUser (user) {
+    if (userIdToCustomer.has(user.id)) {
+      const customerForUserId = userIdToCustomer.get(user.id)
+      if (customerForUserId) {
+        return customerForUserId
+      }
+    }
     const created = { id: `customer-${Math.random().toString().slice(2)}` }
     mockCustomers.push(created)
+    userIdToCustomer.set(user.id, created)
     return created
   }
   return {
@@ -53,21 +64,22 @@ export function randomString () {
 }
 
 /**
- *
  * @returns {import('src/utils/billing-types.js').BillingService & { paymentMethodSaves: Array<{ customerId: string, methodId: string }> }}
  */
 export function createMockBillingService () {
   const paymentMethodSaves = []
+  const customerToPaymentMethod = new Map()
+  /** @type {import('src/utils/billing-types.js').BillingService & { paymentMethodSaves: Array<{ customerId: string, methodId: string }> }} */
   const billing = {
-    /**
-     * @returns {Promise<import('./billing-types').PaymentMethod>}
-     */
-    async getPaymentMethod () {
-      const paymentMethod = createMockPaymentMethod()
-      return paymentMethod
+    async getPaymentMethod (customerId) {
+      const pm = customerToPaymentMethod.get(customerId)
+      return pm
     },
     async savePaymentMethod (customerId, methodId) {
       paymentMethodSaves.push({ customerId, methodId })
+      customerToPaymentMethod.set(customerId, {
+        id: methodId
+      })
     },
     paymentMethodSaves
   }

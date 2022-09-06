@@ -549,15 +549,14 @@ export async function userPaymentGet (request, env) {
     customers: env.customers,
     user: { id: request.auth.user._id }
   })
-  const userPaymentGetResponse = userPaymentSettings
-  return new JSONResponse(userPaymentGetResponse)
+  return new JSONResponse(userPaymentSettings)
 }
 
 /**
  * Save a user's payment settings.
  *
  * @param {AuthenticatedRequest} request
- * @param {Pick<import('./env').Env, 'billing'|'customers'|'mockStripePaymentMethodId'>} env
+ * @param {Pick<import('./env').Env, 'billing'|'customers'>} env
  */
 export async function userPaymentPut (request, env) {
   const requestBody = await request.json()

@@ -8,7 +8,7 @@ export type StripePaymentMethod = {
 export type PaymentMethod = StripePaymentMethod
 
 export interface BillingService {
-  getPaymentMethod(customer: CustomerId): Promise<PaymentMethod>
+  getPaymentMethod(customer: CustomerId): Promise<PaymentMethod|null>
   savePaymentMethod(
     customer: CustomerId,
     paymentMethodId: StripePaymentMethodId
@@ -37,5 +37,5 @@ export interface BillingEnv {
 }
 
 export interface PaymentSettings {
-  method: PaymentMethod
+  method: null|PaymentMethod
 }
