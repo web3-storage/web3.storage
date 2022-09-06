@@ -2,7 +2,7 @@ export const plans = [
   {
     id: 'free',
     title: 'Free',
-    description: 'The service you already know and love',
+    description: 'You are currently on the free tier. You can use our service up to 5GB/mo without being charged.',
     price: '$0/mo',
     amount: '5GB per month',
     bandwidth: '10GB per month',

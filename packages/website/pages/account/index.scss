@@ -134,8 +134,11 @@
   grid-gap: 2rem;
 
   @include medium {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
+    display: flex;
+    flex-wrap: wrap;
+    > div {
+      width: 100%;
+    }
   }
 
   div:nth-child(1) {
@@ -158,6 +161,7 @@
 .billing-content-intro {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .billing-plans-table {
@@ -166,6 +170,10 @@
   grid-template-columns: 180px 1fr 1fr 1fr;
   overflow: hidden;
   // grid-template-rows: 100px 50px auto auto auto;
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
 
   .billing-play-key p {
     position: relative;
@@ -179,30 +187,45 @@
     }
   }
 
-  .billing-play-key {
-    padding: 2rem 0;
-  }
-
   .billing-play-key,
   .billing-plan {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 50px 80px auto 100px;
+    @media screen and (max-width: 768px) {
+      grid-template-rows: 32px 60px auto auto;
+      grid-gap: 1rem;
+    }
+  }
+
+  .billing-play-key {
+    padding: 2rem 0;
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
   }
 
   .billing-card {
-    padding: 0;
-    margin: 0;
-    background: none;
-    box-shadow: none;
-  }
-  .billing-card {
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 0;
     padding: 2rem;
+
+    @media screen and (min-width: 769px) {
+      background: none;
+      box-shadow: none;
+      border-radius: 0;
+      margin: 0;
+      border: 0;
+      border-left: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @media screen and (max-width: 768px) {
+      border: 0;
+    }
   }
   .billing-card.current {
     position: relative;
+    @media screen and (max-width: 768px) {
+      border: 1px solid #fff;
+    }
     &:after {
       content: '';
       position: absolute;
@@ -232,6 +255,28 @@
   font-size: 14px;
   margin: 0;
   // border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.billing-plan-details p {
+  @media screen and (max-width: 768px) {
+    margin-bottom: 0.5rem;
+    &:before {
+      display: block;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      line-height: 1;
+      font-size: 80%;
+    }
+    &:nth-child(1):before {
+      content: 'Storage Limit: ';
+    }
+    &:nth-child(2):before {
+      content: 'Bandwidth: ';
+    }
+    &:nth-child(3):before {
+      content: 'Overage Cost: ';
+    }
+  }
 }
 
 .billing-plan {
@@ -320,16 +365,25 @@
 }
 
 .billing-plan-limit {
-  font-size: 0.9rem;
-  display: inline-flex;
-  gap: 1.2rem;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5rem;
   margin-bottom: 1rem;
-  padding: 2px 18px;
+  line-height: 1.5;
+  // padding: 2px 18px;
+  margin: 1rem 0;
   border-radius: 8px;
-  background: $vulcan;
+  // background: $vulcan;
+
+  span > span {
+    display: block;
+  }
 
   strong {
     color: $moonRaker;
+    // display: block;
   }
 }
 
@@ -453,7 +507,9 @@
   border: 1px solid #fff;
   border-radius: 4px;
   font-size: 14px;
-  padding: 8px 12px;
+  padding: 2px 12px;
+  opacity: 0.5;
+  border-radius: 100px;
 }
 
 .add-billing-cta {
@@ -466,6 +522,7 @@
   font-size: 0.9rem;
   position: relative;
   text-align: center;
+  line-height: 1.5;
 }
 
 .add-payment-method-cta {

@@ -8,11 +8,22 @@ const CurrentBillingPlanCard = ({ plan }) => {
             <div className="billing-plan-amount">{plan.price}</div>
           </div>
 
-          {/* <p className="billing-plan-desc">{plan.description}</p> */}
+          <p className="billing-plan-desc">{plan.description}</p>
           <p className="billing-plan-limit">
-            <span>Limit: {plan.amount}</span>
-            <span>Overage: {plan.overage}</span>
+            {plan.id !== 'free' && (
+              <span>
+                <span>Base Cost:</span> <strong>{plan.amount}</strong> for <strong>{plan.price}</strong>
+              </span>
+            )}
+            <span>
+              <span>Overage Cost:</span> <strong>{plan.overage.split(' ')[0]} per GB</strong> after{' '}
+              {plan.amount.split(' ')[0]}
+            </span>
+            <span>
+              <span>Bandwidth Limit:</span> <strong>{plan.bandwidth}</strong>
+            </span>
           </p>
+
           <div className="billing-plan-usage-container">
             <small>Billing Cycle: Aug 18 - Sept 18</small>
 
@@ -21,7 +32,7 @@ const CurrentBillingPlanCard = ({ plan }) => {
               <div className="billing-plan-meter">
                 <span className="billing-plan-meter-used"></span>
               </div>
-              100GB
+              {plan.amount.split(' ')[0]}
             </div>
           </div>
         </div>

@@ -29,14 +29,29 @@ const PaymentSettingsPage = props => {
         <div className="page-container billing-container">
           <div className="">
             <h1 className="table-heading">Payment</h1>
-            <select onChange={e => setOnboardView(e.target.value)} className="state-changer" value={onboardView}>
+            <select
+              onChange={e => {
+                setOnboardView(e.target.value);
+                console.log(e.target.value);
+                if (e.target.value === 'free') {
+                  const freePlan = plans.find(p => p.id === 'free');
+                  setCurrentPlan(freePlan);
+                }
+                if (e.target.value === 'paid') {
+                  const paidPlan = plans.find(p => p.id === 'tier1');
+                  setCurrentPlan(paidPlan);
+                }
+              }}
+              className="state-changer"
+              value={onboardView}
+            >
               <option value="grandfathered">Grandfathered</option>
-              <option value="free-new">Free (New)</option>
+              <option value="free">Free (New)</option>
               <option value="paid">Paid</option>
             </select>
           </div>
           <div className="billing-content">
-            {onboardView !== 'paid' && (
+            {onboardView === 'grandfathered' && (
               <div className="add-billing-cta">
                 <p>
                   You don&apos;t have a payment method. Please add one to prevent storage issues beyond your plan limits
@@ -64,7 +79,7 @@ const PaymentSettingsPage = props => {
                     </Button>
                   )} */}
                 </div>
-                {onboardView === 'paid' ? (
+                {onboardView !== 'grandfathered' ? (
                   <CurrentBillingPlanCard plan={currentPlan} />
                 ) : (
                   <GrandfatheredBillingPlan onboardView={onboardView} />

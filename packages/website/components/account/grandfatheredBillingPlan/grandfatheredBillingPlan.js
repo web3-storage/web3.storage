@@ -11,12 +11,11 @@ const GrandfatheredBillingPlan = ({ onboardView }) => {
         'As an early adopter you have been grandfathered into the monthly storage you are already accustomed to using.';
       limit = '55GB';
       break;
-    case 'free-new':
-      title = 'Early Adopter';
+    case 'free':
+      title = 'Free';
       cost = '$0/mo';
-      desc =
-        'As an early adopter you have been grandfathered into the monthly storage you are already accustomed to using.';
-      limit = '55GB';
+      desc = 'You are currently on the free tier. You can use our service up to 5GB/mo without being charged.';
+      limit = '5GB';
       break;
     default:
       break;

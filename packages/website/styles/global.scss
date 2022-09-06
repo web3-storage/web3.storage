@@ -267,6 +267,10 @@ h5,
     content: '←';
     margin-top: -2px;
   }
+
+  @media screen and (max-width: 960px) {
+    position: relative;
+  }
 }
 
 // Components
