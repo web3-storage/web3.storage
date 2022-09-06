@@ -4,11 +4,12 @@ export type CustomerId = string;
 export type StripeCardPaymentMethod = {
   id: `pm_${string}`
   card: {
+    '@type': 'https://stripe.com/docs/api/cards/object'
     brand: string
-    country: string
+    country: string | null
     exp_month: number
     exp_year: number
-    funding: 'credit' | 'debit' | 'prepaid' | 'unknown'
+    funding: string
     last4: string
   }
 }

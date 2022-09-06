@@ -56,23 +56,12 @@ export class StripeBillingService {
     if (!defaultPaymentMethodId) {
       throw new Error('unable to determine defaultPaymentMethodId for customer')
     }
-    const stripeCard = ('card' in defaultPaymentMethodObject)
-      ? defaultPaymentMethodObject.card
-      : undefined
-    const paymentMethod = {
-      type: 'StripeCard',
-      id: defaultPaymentMethodId,
-      card: stripeCard
-        ? {
-            brand: stripeCard.brand,
-            country: stripeCard.country,
-            exp_month: stripeCard.exp_month,
-            exp_year: stripeCard.exp_year,
-            funding: stripeCard.funding,
-            last4: stripeCard.last4
-          }
-        : undefined
-    }
+    /** @type {import('./billing-types').PaymentMethod} */
+    const paymentMethod = ('card' in defaultPaymentMethodObject)
+      ? stripeToStripeCardPaymentMethod(defaultPaymentMethodObject)
+      : {
+          id: defaultPaymentMethodId
+        }
     return paymentMethod
   }
 
@@ -100,6 +89,32 @@ export class StripeBillingService {
         default_payment_method: desiredDefaultPaymentMethod.toString()
       }
     })
+  }
+}
+
+/**
+ * @param {Stripe.PaymentMethod} paymentMethod
+ * @returns {import('./billing-types').StripeCardPaymentMethod}
+ */
+export function stripeToStripeCardPaymentMethod (paymentMethod) {
+  const stripeCard = ('card' in paymentMethod)
+    ? paymentMethod.card
+    : undefined
+  if (!stripeCard) {
+    throw new Error('failed to get stripeCard from paymentMethod')
+  }
+  return {
+    // @ts-ignore
+    id: paymentMethod.id,
+    card: {
+      '@type': 'https://stripe.com/docs/api/cards/object',
+      brand: stripeCard.brand,
+      country: stripeCard.country,
+      exp_month: stripeCard.exp_month,
+      exp_year: stripeCard.exp_year,
+      funding: stripeCard.funding,
+      last4: stripeCard.last4
+    }
   }
 }
 
