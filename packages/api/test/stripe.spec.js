@@ -9,13 +9,27 @@ describe('StripeBillingService', async function () {
   it('can savePaymentMethod', async function () {
     const customerId = `customer-${Math.random().toString().slice(2)}`
     const paymentMethodId = /** @type const */ (`pm_${Math.random().toString().slice(2)}`)
-    const billing = StripeBillingService.create(createMockStripeForBilling())
+    let didCreateSetupIntent = false
+    const billing = StripeBillingService.create(createMockStripeForBilling({
+      retrieveCustomer: async () => createMockStripeCustomer(),
+      onCreateSetupintent: () => { didCreateSetupIntent = true }
+    }))
     await billing.savePaymentMethod(customerId, paymentMethodId)
+    assert.equal(didCreateSetupIntent, true, 'created setupIntent using stripe api')
   })
   it('can getPaymentMethod for a customer and it fetches from stripe', async function () {
+    const mockPaymentMethodId = `mock-paymentMethod-${randomString()}`
     const customerId = `customer-${Math.random().toString().slice(2)}`
-    const billing = StripeBillingService.create(createMockStripeForBilling())
-    await billing.getPaymentMethod(customerId)
+    const mockStripe = createMockStripeForBilling({
+      async retrieveCustomer () {
+        return createMockStripeCustomer({
+          defaultPaymentMethodId: mockPaymentMethodId
+        })
+      }
+    })
+    const billing = StripeBillingService.create(mockStripe)
+    const gotPaymentMethod = await billing.getPaymentMethod(customerId)
+    assert.equal(gotPaymentMethod.id, mockPaymentMethodId)
   })
 })
 
@@ -79,8 +93,16 @@ function createMockStripe () {
   }
 }
 
-/** @returns {import('../src/utils/stripe.js').StripeComForBillingService} */
-function createMockStripeForBilling () {
+/**
+ * @param {object} [options]
+ * @param {(id: string) => Promise<undefined|Stripe.Customer>} [options.retrieveCustomer]
+ * @param {() => void} [options.onCreateSetupintent]
+ * @returns {import('../src/utils/stripe.js').StripeComForBillingService}
+ */
+function createMockStripeForBilling (options = {}) {
+  const retrieveCustomer = options.retrieveCustomer || async function (id) {
+    throw new Error(`no customer found with id=${id}`)
+  }
   const paymentMethods = {
     /**
      * @param {string} paymentMethodId
@@ -105,7 +127,7 @@ function createMockStripeForBilling () {
   /** @type {import('../src/utils/stripe.js').StripeComForBillingService['customers']} */
   const customers = {
     async retrieve (id, params) {
-      const customer = createMockStripeCustomer()
+      const customer = await retrieveCustomer(id)
       /** @type {Stripe.Response<Stripe.Customer>} */
       const response = {
         ...customer,
@@ -127,13 +149,16 @@ function createMockStripeForBilling () {
   }
   /** @type {import('../src/utils/stripe.js').StripeComForBillingService['setupIntents']} */
   const setupIntents = {
-    async create () {
+    async create (params) {
       /** @type {Stripe.SetupIntent} */
       // @ts-ignore
       const setupIntent = {
         object: 'setup_intent',
-        description: 'mock setup_intent'
+        description: 'mock setup_intent',
+        status: 'succeeded',
+        payment_method: params.payment_method
       }
+      options?.onCreateSetupintent?.()
       /** @type {Stripe.Response<Stripe.SetupIntent>} */
       const response = {
         // @ts-ignore
@@ -175,9 +200,11 @@ function createMockStripePaymentMethod () {
 }
 
 /**
+ * @param {object} [options]
+ * @param {string} [options.defaultPaymentMethodId]
  * @returns {Stripe.Customer}
  */
-function createMockStripeCustomer () {
+function createMockStripeCustomer (options = {}) {
   return {
     id: `customer-${randomString()}`,
     object: 'customer',
@@ -189,7 +216,12 @@ function createMockStripeCustomer () {
     livemode: false,
     metadata: {},
     // @ts-ignore
-    invoice_settings: {}
+    invoice_settings: {
+      ...(options.defaultPaymentMethodId
+        ? { default_payment_method: options.defaultPaymentMethodId }
+        : {}
+      )
+    }
   }
 }
 
