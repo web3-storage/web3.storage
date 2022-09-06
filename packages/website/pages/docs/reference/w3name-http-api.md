@@ -1,5 +1,5 @@
 ---
-title: W3name API (1.0)
+title: w3name API (1.0)
 ---
 
 import Swagger from '../../../modules/docs-theme/swagger/swagger';
