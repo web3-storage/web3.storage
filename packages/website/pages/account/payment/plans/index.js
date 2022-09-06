@@ -23,7 +23,7 @@ const Plans = props => {
       <div className="billing-content">
         <p className="billing-content-intro">
           <p>
-            Your current plan is: <strong>Tier 1</strong>
+            Your current plan is: <strong>Lite</strong>
           </p>
           <small>Billing Cycle: Aug 18 - Sept 18</small>
         </p>

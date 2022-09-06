@@ -150,6 +150,14 @@
   div:nth-child(3) {
     grid-area: history;
   }
+
+  .files-loading-spinner {
+    width: 20px;
+    padding: 1rem 0;
+    svg {
+      height: 100%;
+    }
+  }
 }
 
 .billing-plans {
@@ -450,13 +458,29 @@
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  font-size: 14px;
-  margin: 0.5rem 0;
+  font-size: 16px;
+  margin: 0.5rem 0 1rem;
   line-height: 1;
-  span {
+  border: 0;
+
+  svg {
+    font-size: 2rem;
+  }
+
+  > div {
+    flex: 1;
+  }
+
+  .card-number {
     display: flex;
-    gap: 4px;
-    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .card-label {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    display: block;
+    margin-bottom: 0.5rem;
   }
 }
 

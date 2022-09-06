@@ -11,7 +11,7 @@ export const plans = [
   },
   {
     id: 'tier1',
-    title: 'Tier 1',
+    title: 'Lite',
     description: 'For those that want to take advantage of more storage',
     price: '$3/mo',
     amount: '15GB per month',
@@ -21,7 +21,7 @@ export const plans = [
   },
   {
     id: 'tier2',
-    title: 'Tier 2',
+    title: 'Pro',
     description: 'All the sauce, all the toppings.',
     price: '$10/mo',
     amount: '60GB per month',

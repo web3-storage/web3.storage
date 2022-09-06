@@ -298,3 +298,23 @@ export async function deletePinRequest(requestid) {
     throw new Error(`failed to delete pin request: ${await res.text()}`);
   }
 }
+
+/**
+ * Gets saved Stripe payment method.
+ */
+export async function getSavedPaymentMethod() {
+  const token = await getToken();
+  const res = await fetch(API + '/user/payment', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    },
+    body: null,
+  });
+  if (!res.ok) {
+    throw new Error(`failed to get card info: ${await res.text()}`);
+  }
+  const savedPayment = await res.json();
+  return savedPayment;
+}

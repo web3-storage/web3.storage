@@ -1,28 +1,31 @@
 import { faCcVisa } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const PaymentMethodCard = () => {
-  // // mock stripe api data
-  const card = {
-    brand: 'visa',
-    country: 'US',
-    exp_month: 12,
-    exp_year: 2023,
-    funding: 'credit',
-    last4: '4242',
-  };
+import Loading from 'components/loading/loading';
 
+const PaymentMethodCard = ({ savedPaymentMethod }) => {
   return (
     <>
-      <div className="saved-card card-transparent">
-        <span>
+      {savedPaymentMethod && savedPaymentMethod.card ? (
+        <div className="saved-card card-transparent">
           <FontAwesomeIcon icon={faCcVisa} />
-          .... .... .... {card.last4}
-        </span>
-        <span>
-          Exp: {card.exp_month}/{card.exp_year}
-        </span>
-      </div>
+          <div>
+            <span className="card-label">Card ending in:</span>
+            <div className="card-number">
+              <span>....</span>
+              <span>....</span>
+              <span>....</span>
+              <span>{savedPaymentMethod.card.last4}</span>
+            </div>
+          </div>
+          <span>
+            <span className="card-label">Expires:</span>
+            {savedPaymentMethod.card.exp_month}/{savedPaymentMethod.card.exp_year}
+          </span>
+        </div>
+      ) : (
+        <Loading className={'files-loading-spinner'} />
+      )}
     </>
   );
 };
