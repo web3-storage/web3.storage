@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.4.2](https://github.com/web3-storage/web3.storage/compare/api-v7.4.1...api-v7.4.2) (2022-09-06)
+
+
+### Bug Fixes
+
+* always retry s3 upload ([#1846](https://github.com/web3-storage/web3.storage/issues/1846)) ([a5fa72c](https://github.com/web3-storage/web3.storage/commit/a5fa72c8c9c99ebb524cd21d7572fdbf178747af))
+
 ## [7.4.1](https://github.com/web3-storage/web3.storage/compare/api-v7.4.0...api-v7.4.1) (2022-09-06)
 
 
