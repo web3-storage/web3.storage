@@ -3,6 +3,9 @@ import assert from 'assert'
 import fetch, { Request } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
+import { createMockBillingService, createMockCustomerService, createMockPaymentMethod, randomString, savePaymentSettings } from '../src/utils/billing.js'
+import { userPaymentGet, userPaymentPut } from '../src/user.js'
+import { createMockStripeCardPaymentMethod } from '../src/utils/stripe.js'
 
 function createBearerAuthorization (bearerToken) {
   return `Bearer ${bearerToken}`
@@ -109,24 +112,129 @@ describe('PUT /user/payment', () => {
       console.log('response text is', await res.text())
       throw error
     }
-    const savePaymentSettingsResponse = await res.json()
-    assert.equal(typeof savePaymentSettingsResponse, 'object')
-    assert.ok('method' in savePaymentSettingsResponse, '"method" is in userPaymentSettings.method')
-    assert.equal(typeof savePaymentSettingsResponse.method, 'object', 'response.method is an object')
-    assert.equal(typeof savePaymentSettingsResponse.method?.id, 'string', 'response.method.id is a string')
-    assert.equal(savePaymentSettingsResponse.method?.id, desiredPaymentMethodId, `response.method.id is desiredPaymentMethodId=${desiredPaymentMethodId}`)
-    const savedMethodId = savePaymentSettingsResponse.method.id
     assert.equal(typeof res.headers.get('location'), 'string', 'response.headers.location is a string')
+  })
+})
 
-    // see if we can then GET the response.headers.location url
-    const paymentSettingsUrl = new URL(res.headers.get('location') ?? '', res.url)
-    const paymentSettingsResponse = await fetch(paymentSettingsUrl, {
-      headers: {
-        authorization
+describe('userPaymentPut', () => {
+  it('saves payment method using billing service', async function () {
+    const desiredPaymentMethodId = `pm_${randomString()}`
+    const paymentSettings = { method: { id: desiredPaymentMethodId } }
+    const authorization = createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken())
+    const user = { _id: randomString(), issuer: randomString() }
+    const request = Object.assign(
+      createSaveUserPaymentSettingsRequest({ authorization, body: JSON.stringify(paymentSettings) }),
+      { auth: { user } }
+    )
+    const billing = createMockBillingService()
+    const customers = createMockCustomerService()
+    const env = {
+      billing,
+      customers
+    }
+    const response = await userPaymentPut(request, env)
+    assert.equal(response.status, 202, 'response.status is 202')
+    assert.equal(billing.paymentMethodSaves.length, 1, 'billing.paymentMethodSaves.length is 1')
+    assert.ok(
+      customers.mockCustomers.map(c => c.id).includes(billing.paymentMethodSaves[0].customerId),
+      'billing.paymentMethodSaves[0].customerId is in customers.mockCustomers')
+  })
+})
+
+describe('/user/payment', () => {
+  it('can userPaymentPut and then userPaymentGet', async function () {
+    const env = {
+      billing: createMockBillingService(),
+      customers: createMockCustomerService()
+    }
+    const desiredPaymentMethodId = `test_pm_${randomString()}`
+    const paymentSettings = { method: { id: desiredPaymentMethodId } }
+    const user = { _id: randomString(), issuer: randomString() }
+    // save settings
+    const savePaymentSettingsRequest = Object.assign(
+      createSaveUserPaymentSettingsRequest({ body: JSON.stringify(paymentSettings) }),
+      { auth: { user } }
+    )
+    const savePaymentSettingsResponse = await userPaymentPut(savePaymentSettingsRequest, env)
+    assert.equal(savePaymentSettingsResponse.status, 202, 'savePaymentSettingsResponse.status is 202')
+    // get settings
+    const getPaymentSettingsRequest = Object.assign(
+      createUserPaymentRequest(),
+      { auth: { user } }
+    )
+    const getPaymentSettingsResponse = await userPaymentGet(getPaymentSettingsRequest, env)
+    assert.equal(getPaymentSettingsResponse.status, 200, 'getPaymentSettingsResponse.status is 200')
+  })
+})
+
+describe('userPaymentGet', () => {
+  it('gets payment method using billing service', async function () {
+    const user = { _id: randomString(), issuer: randomString() }
+    const authorization = createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken())
+    const request = Object.assign(
+      createUserPaymentRequest({ authorization }),
+      { auth: { user } }
+    )
+    const paymentMethod1 = createMockPaymentMethod()
+    /** @type {import('src/utils/billing-types.js').BillingService} */
+    const billing = {
+      ...createMockBillingService(),
+      async getPaymentMethod (customer) {
+        return paymentMethod1
       }
+    }
+    const customers = createMockCustomerService()
+    const response = await userPaymentGet(request, {
+      billing,
+      customers
     })
-    assert.equal(paymentSettingsResponse.status, 200, 'paymentSettingsResponse.status is 200')
-    const paymentSettings = await paymentSettingsResponse.json()
-    assert.equal(paymentSettings.method.id, savedMethodId, 'paymentSettings.method.id from location header is same as response to PUT')
+    const gotPaymentSettings = await response.json()
+    assert.equal(gotPaymentSettings.method.id, paymentMethod1.id, 'gotPaymentSettings.method.id is paymentMethod1.id')
+  })
+  it('returns stripe card info if paymentMethod is a stripe card', async function () {
+    const env = {
+      customers: createMockCustomerService(),
+      billing: {
+        ...createMockBillingService(),
+        async getPaymentMethod (customer) {
+          return createMockStripeCardPaymentMethod()
+        }
+      }
+    }
+    const request = createAuthenticatedRequest(createUserPaymentRequest())
+    const response = await userPaymentGet(request, env)
+    assert.equal(response.ok, true, 'response is ok')
+    const gotPaymentSettings = await response.json()
+    assert.equal(typeof gotPaymentSettings.method.id, 'string', 'paymentSettings.method.id is a string')
+    assertIsStripeCard(assert, gotPaymentSettings.method.card)
+  })
+})
+
+function assertIsStripeCard (_assert, card) {
+  _assert.equal(card['@type'], 'https://stripe.com/docs/api/cards/object', 'card["@type"] is https://stripe.com/docs/api/cards/object')
+  _assert.equal(typeof card.brand, 'string', 'card.brand is a string')
+  _assert.equal(typeof card.last4, 'string', 'card.last4 is a string')
+  _assert.equal(typeof card.exp_month, 'number', 'card.expMonth is a number')
+  _assert.equal(typeof card.exp_year, 'number', 'card.expYear is a number')
+}
+
+function createAuthenticatedRequest (baseRequest, auth = { user: { _id: randomString(), issuer: randomString() } }) {
+  return {
+    ...baseRequest,
+    auth
+  }
+}
+
+describe('savePaymentSettings', async function () {
+  it('saves payment method using billingService', async () => {
+    const billing = createMockBillingService()
+    const method = { id: /** @type const */ ('pm_w3-test-1') }
+    const customers = createMockCustomerService()
+    const user = { id: randomString() }
+    await savePaymentSettings({ billing, customers, user }, { method })
+    const { paymentMethodSaves } = billing
+    assert.equal(paymentMethodSaves.length, 1, 'savePaymentMethod was called once')
+    assert.deepEqual(paymentMethodSaves[0].methodId, method.id, 'savePaymentMethod was called with method')
+    assert.equal(typeof paymentMethodSaves[0].customerId, 'string', 'savePaymentMethod was called with method')
   })
 })

@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/api",
-  "version": "7.4.3",
+  "version": "7.4.1",
   "private": true,
   "type": "module",
   "license": "(Apache-2.0 OR MIT)",
@@ -34,6 +34,7 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "devDependencies": {
+    "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@sentry/cli": "^1.72.1",
     "@types/mocha": "^9.0.0",
     "@web-std/fetch": "^3.0.2",
@@ -75,6 +76,7 @@
     "multiformats": "^9.5.8",
     "nanoid": "^3.1.30",
     "protobufjs": "^6.11.2",
+    "stripe": "^10.7.0",
     "tweetnacl": "^1.0.3",
     "uint8arrays": "^3.0.0"
   },
