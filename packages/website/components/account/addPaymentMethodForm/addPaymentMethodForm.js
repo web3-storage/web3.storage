@@ -42,7 +42,7 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods }) => {
           card: cardElement,
         });
         if (error) throw new Error(error.message);
-        await putPaymentMethod(paymentMethod.id);
+        await putPaymentMethod(paymentMethod?.id);
         setHasPaymentMethods(true);
         setPaymentMethodError('');
       } catch (error) {

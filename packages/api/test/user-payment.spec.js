@@ -63,8 +63,12 @@ describe('GET /user/payment', () => {
 /**
  * Create a request to SaveUserPaymentSettings
  * @param {object} [arg]
+<<<<<<< HEAD
  * @param {BodyInit|undefined|string} [arg.body] - body of request
  * @param {string} [arg.authorization] - authorization header value
+=======
+ * @param {BodyInit|undefined|string} arg.body - body of request
+>>>>>>> feat/account-payments-ui-e2e-1661280530
  * @returns
  */
 function createSaveUserPaymentSettingsRequest (arg = {}) {
