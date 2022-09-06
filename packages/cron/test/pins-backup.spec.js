@@ -4,6 +4,7 @@ import { S3Client, ListObjectsV2Command, GetObjectCommand } from '@aws-sdk/clien
 import * as backup from '../src/jobs/pins-backup.js'
 import { getCluster, getDBClient } from '../src/lib/utils.js'
 import sinon from 'sinon'
+import fetch from '@web-std/fetch'
 
 const S3_BUCKET_ENDPOINT = 'http://127.0.0.1:9000'
 const S3_BUCKET_NAME = 'dotstorage-test-0'
