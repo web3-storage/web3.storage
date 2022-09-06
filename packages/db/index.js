@@ -1305,18 +1305,21 @@ export class DBClient {
   /**
    * Get the Customer for a user
    * @param {string} userId
-   * @returns {{ id: string }} customer
+   * @returns {null|{ id: string }} customer
    */
   async getUserCustomer (userId) {
     const { data, error } = await this._client
       .from('user_customer')
       .select(['customer_id'].join(','))
       .eq('user_id', userId)
-      .single()
     if (error) {
+      console.error('getUserCustomer query error', error)
       throw new DBError(error)
     }
-    const customer = { id: data.customer_id }
+    if (Array.isArray(data) && data.length === 0) {
+      return null
+    }
+    const customer = { id: data[0].customer_id }
     return customer
   }
 }

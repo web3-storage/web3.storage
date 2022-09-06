@@ -561,14 +561,11 @@ export async function userPaymentGet (request, env) {
  */
 export async function userPaymentPut (request, env) {
   const requestBody = await request.json()
-  const method = requestBody?.method?.id
-    ? { id: requestBody?.method?.id }
-    : {
-      // stubbing this for now with the value from the docs.
-      //   https://stripe.com/docs/api/payment_methods/object
-        id: env.mockStripePaymentMethodId,
-        warning: 'this method is a stub. The id here is different than anything you might have sent in the request.'
-      }
+  const paymentMethodId = requestBody?.method?.id
+  if (typeof paymentMethodId !== 'string') {
+    throw Object.assign(new Error('Invalid payment method'), { status: 400 })
+  }
+  const method = { id: paymentMethodId }
   await savePaymentSettings(
     {
       billing: env.billing,
@@ -579,13 +576,14 @@ export async function userPaymentPut (request, env) {
       method
     }
   )
+  const userPaymentSettingsUrl = '/user/payment'
   const savePaymentSettingsResponse = {
-    method
+    location: userPaymentSettingsUrl
   }
   return new JSONResponse(savePaymentSettingsResponse, {
     status: 202,
     headers: {
-      location: `/user/payment?method.id=${method.id}`
+      location: userPaymentSettingsUrl
     }
   })
 }
