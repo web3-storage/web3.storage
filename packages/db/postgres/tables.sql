@@ -347,3 +347,13 @@ select
 from public.user u
 full outer join auth_key ak on ak.user_id = u.id
 full outer join (select * from auth_key_history where deleted_at is null) as akh on akh.auth_key_id = ak.id;
+
+-- billing entities
+
+-- users have 0..1 customers
+CREATE TABLE IF NOT EXISTS user_customer
+(
+  id               BIGSERIAL PRIMARY KEY,
+  user_id          BIGINT NOT NULL UNIQUE REFERENCES public.user (id),
+  customer_id      TEXT NOT NULL UNIQUE
+);
