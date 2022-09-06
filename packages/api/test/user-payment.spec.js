@@ -5,6 +5,7 @@ import { endpoint } from './scripts/constants.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
 import { createMockBillingService, createMockCustomerService, createMockPaymentMethod, randomString, savePaymentSettings } from '../src/utils/billing.js'
 import { userPaymentGet, userPaymentPut } from '../src/user.js'
+import { createMockStripeCardPaymentMethod } from '../src/utils/stripe.js'
 
 function createBearerAuthorization (bearerToken) {
   return `Bearer ${bearerToken}`
@@ -190,7 +191,39 @@ describe('userPaymentGet', () => {
     const gotPaymentSettings = await response.json()
     assert.equal(gotPaymentSettings.method.id, paymentMethod1.id, 'gotPaymentSettings.method.id is paymentMethod1.id')
   })
+  it('returns stripe card info if paymentMethod is a stripe card', async function () {
+    const env = {
+      customers: createMockCustomerService(),
+      billing: {
+        ...createMockBillingService(),
+        async getPaymentMethod (customer) {
+          return createMockStripeCardPaymentMethod()
+        }
+      }
+    }
+    const request = createAuthenticatedRequest(createUserPaymentRequest())
+    const response = await userPaymentGet(request, env)
+    assert.equal(response.ok, true, 'response is ok')
+    const gotPaymentSettings = await response.json()
+    assert.equal(typeof gotPaymentSettings.method.id, 'string', 'paymentSettings.method.id is a string')
+    assertIsStripeCard(assert, gotPaymentSettings.method.card)
+  })
 })
+
+function assertIsStripeCard (_assert, card) {
+  _assert.equal(card['@type'], 'https://stripe.com/docs/api/cards/object', 'card["@type"] is https://stripe.com/docs/api/cards/object')
+  _assert.equal(typeof card.brand, 'string', 'card.brand is a string')
+  _assert.equal(typeof card.last4, 'string', 'card.last4 is a string')
+  _assert.equal(typeof card.exp_month, 'number', 'card.expMonth is a number')
+  _assert.equal(typeof card.exp_year, 'number', 'card.expYear is a number')
+}
+
+function createAuthenticatedRequest (baseRequest, auth = { user: { _id: randomString(), issuer: randomString() } }) {
+  return {
+    ...baseRequest,
+    auth
+  }
+}
 
 describe('savePaymentSettings', async function () {
   it('saves payment method using billingService', async () => {

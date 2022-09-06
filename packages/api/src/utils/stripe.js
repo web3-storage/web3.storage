@@ -1,4 +1,5 @@
 import Stripe from 'stripe'
+import { randomString } from './billing.js'
 
 /**
  * @typedef {import('stripe').Stripe} StripeInterface
@@ -50,19 +51,34 @@ export class StripeBillingService {
       throw new Error('unexpected response.deleted')
     }
     const defaultPaymentMethod = response.invoice_settings.default_payment_method
+    const defaultPaymentMethodObject = (typeof defaultPaymentMethod === 'string') ? { id: defaultPaymentMethod } : defaultPaymentMethod ?? {}
     const defaultPaymentMethodId = (typeof defaultPaymentMethod === 'string') ? defaultPaymentMethod : defaultPaymentMethod?.id
     if (!defaultPaymentMethodId) {
       throw new Error('unable to determine defaultPaymentMethodId for customer')
     }
+    const stripeCard = ('card' in defaultPaymentMethodObject)
+      ? defaultPaymentMethodObject.card
+      : undefined
     const paymentMethod = {
-      id: defaultPaymentMethodId
+      type: 'StripeCard',
+      id: defaultPaymentMethodId,
+      card: stripeCard
+        ? {
+            brand: stripeCard.brand,
+            country: stripeCard.country,
+            exp_month: stripeCard.exp_month,
+            exp_year: stripeCard.exp_year,
+            funding: stripeCard.funding,
+            last4: stripeCard.last4
+          }
+        : undefined
     }
     return paymentMethod
   }
 
   /**
    * @param {import('./billing-types').CustomerId} customer
-   * @param {import('./billing-types').StripePaymentMethodId} method
+   * @param {import('./billing-types').PaymentMethod['id']} method
    * @returns {Promise<void>}
    */
   async savePaymentMethod (customer, method) {
@@ -185,4 +201,23 @@ export function createStripe (secretKey) {
     apiVersion: '2022-08-01',
     httpClient: Stripe.createFetchHttpClient()
   })
+}
+
+/**
+ * Create a mock StripeCard paymentMethod
+ * @returns
+ */
+export function createMockStripeCardPaymentMethod () {
+  return {
+    id: `pm_${randomString()}`,
+    card: {
+      '@type': 'https://stripe.com/docs/api/cards/object',
+      brand: 'visa',
+      country: 'US',
+      exp_month: 9,
+      exp_year: 2023,
+      funding: 'credit',
+      last4: '4242'
+    }
+  }
 }

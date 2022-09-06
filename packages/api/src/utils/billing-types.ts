@@ -1,11 +1,23 @@
 export type StripePaymentMethodId = string;
 export type CustomerId = string;
 
-export type StripePaymentMethod = {
-  id: StripePaymentMethodId
+export type StripeCardPaymentMethod = {
+  id: `pm_${string}`
+  card: {
+    brand: string
+    country: string
+    exp_month: number
+    exp_year: number
+    funding: 'credit' | 'debit' | 'prepaid' | 'unknown'
+    last4: string
+  }
 }
 
-export type PaymentMethod = StripePaymentMethod
+export type IdOnlyPaymentMethod = {
+  id: string
+}
+
+export type PaymentMethod = StripeCardPaymentMethod | IdOnlyPaymentMethod
 
 export interface BillingService {
   getPaymentMethod(customer: CustomerId): Promise<PaymentMethod|null>

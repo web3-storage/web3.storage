@@ -5,7 +5,7 @@
  * @param {import('./billing-types').CustomersService} ctx.customers
  * @param {import('./billing-types').BillingUser} ctx.user
  * @param {object} paymentSettings
- * @param {Pick<import('./billing-types').StripePaymentMethod, 'id'>} paymentSettings.method
+ * @param {Pick<import('./billing-types').PaymentMethod, 'id'>} paymentSettings.method
  */
 export async function savePaymentSettings (ctx, paymentSettings) {
   const { billing, customers, user } = ctx
@@ -87,10 +87,10 @@ export function createMockBillingService () {
 }
 
 /**
- * @returns {import('./billing-types').StripePaymentMethod}
+ * @returns {import('./billing-types').PaymentMethod}
  */
 export function createMockPaymentMethod () {
   return {
-    id: `pm_${randomString()}`
+    id: `mock_pm_${randomString()}`
   }
 }

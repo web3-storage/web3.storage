@@ -49,6 +49,15 @@ describe('StripeCustomersService + StripeBillingService', () => {
     await billing.savePaymentMethod(customer.id, desiredPaymentMethodId)
     const gotPaymentMethod = await billing.getPaymentMethod(customer.id)
     assert.ok(gotPaymentMethod.id.startsWith('pm_'), 'payment method id starts with pm_')
+    // it will have a 'card' property same as stripe
+    assert.ok('card' in gotPaymentMethod, 'payment method has card property')
+    const card = gotPaymentMethod.card
+    assert.ok(typeof card === 'object', 'card is an object')
+    assert.equal(card.brand, 'visa', 'card.brand is visa')
+    assert.equal(card.country, 'US', 'card.country is US')
+    assert.equal(typeof card.exp_month, 'number', 'card.exp_month is a number')
+    assert.equal(card.funding, 'credit', 'card.funding is credit')
+    assert.equal(card.last4, '4242', 'card.last4 is 4242')
   })
 })
 
