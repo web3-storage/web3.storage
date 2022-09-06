@@ -35,7 +35,7 @@ test.describe('/account/payment', () => {
         page.goto('/account/payment'),
       ]);
     await goToPayment(page);
-    await AccountPaymentTester().login(page, {
+    await LoginTester().login(page, {
       email: MAGIC_SUCCESS_EMAIL,
     });
     // @todo - this should redirect you back to where you wanted to go: /account/payment
@@ -47,9 +47,15 @@ test.describe('/account/payment', () => {
       path: await E2EScreenshotPath(testInfo, `accountPayment`),
     });
   });
+  test('can enter credit card deatils', async ({ page }) => {
+    await LoginTester().login(page, { email: MAGIC_SUCCESS_EMAIL });
+    await page.goto(AccountPaymentTester().url)
+    await AccountPaymentTester().fillCreditCardDetails(page)
+    await AccountPaymentTester().clickAddCardButton(page)
+  })
 });
 
-function AccountPaymentTester() {
+function LoginTester() {
   async function fillLoginForm(page: Page, email: string) {
     await page.locator('.login-email').fill(email);
   }
@@ -68,8 +74,26 @@ function AccountPaymentTester() {
       email: string;
     }
   ) {
+    if (new URL(page.url()).pathname !== url) {
+      await page.goto(url);
+    }
     await fillLoginForm(page, email);
     await submitLoginForm(page);
   }
   return { login, submitLoginForm };
+}
+
+function AccountPaymentTester() {
+  return {
+    url: '/account/payment',
+    async fillCreditCardDetails(page: Page) {
+      const stripeFrame = page.frameLocator('.billing-card iframe').first();
+      await stripeFrame.locator('[placeholder="Card number"]').fill('4242424242424242');
+      await stripeFrame.locator('[placeholder="MM / YY"]').fill('04/30');
+      await stripeFrame.locator('[placeholder="CVC"]').fill('242');
+    },
+    async clickAddCardButton(page: Page) {
+      await page.locator('button:has-text("Add Card")').click();
+    }
+  }
 }
