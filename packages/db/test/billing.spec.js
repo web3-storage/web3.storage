@@ -3,7 +3,7 @@ import assert from 'assert'
 import { DBClient } from '../index.js'
 import { token } from './utils.js'
 
-describe('stripe db entities', () => {
+describe('billing db', () => {
   it('can upsertUserCustomer to associate user with a stripe customer and then getUserCustomer to read', async () => {
     assert.ok(true)
     const client = createDB()
