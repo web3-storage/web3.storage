@@ -31,6 +31,28 @@ export async function getPaymentSettings (ctx) {
 }
 
 /**
+ * @returns {import('./stripe').UserCustomerService & { userIdToCustomerId: Map<string,string> }}
+ */
+export function createMockUserCustomerService () {
+  const userIdToCustomerId = new Map()
+  const getUserCustomer = async (userId) => {
+    const c = userIdToCustomerId.get(userId)
+    if (c) {
+      return { id: c }
+    }
+    return null
+  }
+  const upsertUserCustomer = async (userId, customerId) => {
+    userIdToCustomerId.set(userId, customerId)
+  }
+  return {
+    userIdToCustomerId,
+    getUserCustomer,
+    upsertUserCustomer
+  }
+}
+
+/**
  * @returns {import('src/utils/billing-types.js').CustomersService & { mockCustomers: Array<{ id: string }> }}
  */
 export function createMockCustomerService () {

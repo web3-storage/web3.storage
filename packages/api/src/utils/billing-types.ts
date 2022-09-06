@@ -52,3 +52,8 @@ export interface BillingEnv {
 export interface PaymentSettings {
   method: null|PaymentMethod
 }
+
+export interface UserCustomerService {
+  getUserCustomer: (userId: string) => Promise<null|{ id: string }>
+  upsertUserCustomer: (userId: string, customerId: string) => Promise<any>
+}
