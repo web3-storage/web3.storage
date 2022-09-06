@@ -1,8 +1,9 @@
 /* eslint-env mocha */
 import { createPsaPinRequest, createUser, createUserAuthKey } from '@web3-storage/db/test-utils'
-import { S3Client, ListObjectsV2Command } from '@aws-sdk/client-s3'
-import { backupPins } from '../src/jobs/pins-backup.js'
+import { S3Client, ListObjectsV2Command, GetObjectCommand } from '@aws-sdk/client-s3'
+import * as backup from '../src/jobs/pins-backup.js'
 import { getCluster, getDBClient } from '../src/lib/utils.js'
+import sinon from 'sinon'
 
 const S3_BUCKET_ENDPOINT = 'http://127.0.0.1:9000'
 const S3_BUCKET_NAME = 'dotstorage-test-0'
@@ -95,6 +96,17 @@ describe('cron - pins backup', () => {
     })
 
     // TODO: Mock the cluster response for getting the car file
+    // const { root, car: carBody } = await createCar('hello world! s3')
+
+    sinon.stub(backup, 'exportCar').returns({
+      content: Buffer.from({}),
+      contentCid: cids[0],
+      sourceCid: cids[0]
+    })
+
+    sinon.stub(backup, 'uploadCar').returns({
+      backupUrl: 'https://test.s3.eu-west-1.amazonaws.com/my-car'
+    })
 
     // TODO: Mock cluster resposne
     // Override cluster statys to return pinned
@@ -108,8 +120,8 @@ describe('cron - pins backup', () => {
     }
   })
 
-  it('should attempt to backup pins to S3', async () => {
-    await backupPins(env, dbClient, dbClient, cluster)
+  it.only('should attempt to backup pins to S3', async () => {
+    await backup.backupPins(env, dbClient, dbClient, cluster)
 
     // TODO: Verify bucket has file in
     const listRes = await s3.send(new ListObjectsV2Command({
