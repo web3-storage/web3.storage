@@ -3,8 +3,8 @@ import assert from 'assert'
 import fetch, { Request } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
-import { createMockBillingService, createMockCustomerService, randomString, savePaymentSettings } from '../src/utils/billing.js'
-import { userPaymentPut } from '../src/user.js'
+import { createMockBillingService, createMockCustomerService, createMockPaymentMethod, randomString, savePaymentSettings } from '../src/utils/billing.js'
+import { userPaymentGet, userPaymentPut } from '../src/user.js'
 
 function createBearerAuthorization (bearerToken) {
   return `Bearer ${bearerToken}`
@@ -140,7 +140,8 @@ describe('PUT /user/payment', () => {
     assert.equal(responseFromSaveSettings.status, 202, 'responseFromSaveSettings.status is 202')
     const responseFromGetSettings = await fetch(createUserPaymentRequest({ authorization }))
     assert.equal(responseFromGetSettings.status, 200, 'responseFromGetSettings.status is 200')
-    // const payment1 = await responseFromGetSettings.json()
+    const payment1 = await responseFromGetSettings.json()
+    console.log({ payment1 })
     // assert.equal(payment1.method?.id, desiredPaymentMethodId, 'payment1.method.id is desiredPaymentMethodId')
   })
 })
@@ -168,6 +169,32 @@ describe('userPaymentPut', () => {
     assert.ok(
       customers.mockCustomers.map(c => c.id).includes(billing.paymentMethodSaves[0].customerId),
       'billing.paymentMethodSaves[0].customerId is in customers.mockCustomers')
+  })
+})
+
+describe('userPaymentGet', () => {
+  it('gets payment method using billingService', async function () {
+    const user = { _id: randomString(), issuer: randomString() }
+    const authorization = createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken())
+    const request = Object.assign(
+      createUserPaymentRequest({ authorization }),
+      { auth: { user } }
+    )
+    const paymentMethod1 = createMockPaymentMethod()
+    /** @type {import('src/utils/billing-types.js').BillingService} */
+    const billing = {
+      ...createMockBillingService(),
+      async getPaymentMethod (customer) {
+        return paymentMethod1
+      }
+    }
+    const customers = createMockCustomerService()
+    const response = await userPaymentGet(request, {
+      billing,
+      customers
+    })
+    const gotPaymentSettings = await response.json()
+    assert.equal(gotPaymentSettings.method.id, paymentMethod1.id, 'gotPaymentSettings.method.id is paymentMethod1.id')
   })
 })
 

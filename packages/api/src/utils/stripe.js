@@ -12,7 +12,7 @@ import Stripe from 'stripe'
  * @typedef {object} StripeComForBillingService
  * @property {Pick<StripeInterface['paymentMethods'], 'attach'>} paymentMethods
  * @property {Pick<StripeInterface['setupIntents'], 'create'>} setupIntents
- * @property {Pick<StripeInterface['customers'], 'retrieve'>} customers
+ * @property {Pick<StripeInterface['customers'], 'retrieve'|'update'>} customers
  */
 
 /**
@@ -40,18 +40,49 @@ export class StripeBillingService {
   }
 
   async getPaymentMethod (customerId) {
-    const response = await this.stripe.customers.retrieve(customerId)
-    const customer = { id: response.id }
-    return customer
+    const response = await this.stripe.customers.retrieve(customerId, {
+      expand: ['invoice_settings.default_payment_method']
+    })
+    if (response.object !== 'customer') {
+      throw new Error('unable to get payment method')
+    }
+    if (response.deleted) {
+      throw new Error('unexpected response.deleted')
+    }
+    const defaultPaymentMethod = response.invoice_settings.default_payment_method
+    const defaultPaymentMethodId = (typeof defaultPaymentMethod === 'string') ? defaultPaymentMethod : defaultPaymentMethod?.id
+    if (!defaultPaymentMethodId) {
+      throw new Error('unable to determine defaultPaymentMethodId for customer')
+    }
+    const paymentMethod = {
+      id: defaultPaymentMethodId
+    }
+    return paymentMethod
   }
 
   /**
-   * @param {import('./billing-types').StripeCustomerId} customer
+   * @param {import('./billing-types').CustomerId} customer
    * @param {import('./billing-types').StripePaymentMethodId} method
    * @returns {Promise<void>}
    */
   async savePaymentMethod (customer, method) {
-    await this.stripe.setupIntents.create({
+    const setupIntent = await this.stripe.setupIntents.create({
+      payment_method: method,
+      confirm: true,
+      customer
+    })
+    if (setupIntent.status !== 'succeeded') {
+      console.warn('setupIntent created, but status is not yet succeeded', setupIntent)
+    }
+    const desiredDefaultPaymentMethod = setupIntent.payment_method
+    if (!desiredDefaultPaymentMethod) {
+      throw new Error('unable to determine desiredDefaultPaymentMethod')
+    }
+    // set default_payment_method to this method
+    await this.stripe.customers.update(customer, {
+      invoice_settings: {
+        default_payment_method: desiredDefaultPaymentMethod.toString()
+      }
     })
   }
 }

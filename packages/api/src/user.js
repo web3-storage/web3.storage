@@ -13,7 +13,7 @@ import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
 import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
-import { savePaymentSettings } from './utils/billing.js'
+import { getPaymentSettings, savePaymentSettings } from './utils/billing.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -541,14 +541,15 @@ const notifySlack = async (
  * Get a user's payment settings.
  *
  * @param {AuthenticatedRequest} request
- * @param {import('./env').Env} env
+ * @param {Pick<import('./env').Env, 'billing'|'customers'>} env
  */
 export async function userPaymentGet (request, env) {
-  const { searchParams } = new URL(request.url)
-  const paramMethodId = searchParams.get('method.id')
-  const userPaymentGetResponse = {
-    method: paramMethodId ? { id: paramMethodId } : null
-  }
+  const userPaymentSettings = await getPaymentSettings({
+    billing: env.billing,
+    customers: env.customers,
+    user: { id: request.auth.user._id }
+  })
+  const userPaymentGetResponse = userPaymentSettings
   return new JSONResponse(userPaymentGetResponse)
 }
 

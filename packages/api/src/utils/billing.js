@@ -14,6 +14,22 @@ export async function savePaymentSettings (ctx, paymentSettings) {
 }
 
 /**
+ * Get a user's payment settings
+ * @param {object} ctx
+ * @param {import('./billing-types').BillingService} ctx.billing
+ * @param {import('./billing-types').CustomersService} ctx.customers
+ * @param {import('./billing-types').BillingUser} ctx.user
+ * @returns {Promise<import('./billing-types').PaymentSettings>}
+ */
+export async function getPaymentSettings (ctx) {
+  const { billing, customers, user } = ctx
+  const customer = await customers.getOrCreateForUser(user)
+  const paymentMethod = await billing.getPaymentMethod(customer.id)
+  const settings = { method: paymentMethod }
+  return settings
+}
+
+/**
  * @returns {import('src/utils/billing-types.js').CustomersService & { mockCustomers: Array<{ id: string }> }}
  */
 export function createMockCustomerService () {
@@ -61,7 +77,7 @@ export function createMockBillingService () {
 /**
  * @returns {import('./billing-types').StripePaymentMethod}
  */
-function createMockPaymentMethod () {
+export function createMockPaymentMethod () {
   return {
     id: `pm_${randomString()}`
   }

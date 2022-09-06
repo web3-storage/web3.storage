@@ -3,7 +3,7 @@ import assert from 'assert'
 import { randomString } from '../src/utils/billing.js'
 // eslint-disable-next-line no-unused-vars
 import Stripe from 'stripe'
-import { StripeBillingService, StripeCustomersService } from '../src/utils/stripe.js'
+import { createStripe, StripeBillingService, StripeCustomersService } from '../src/utils/stripe.js'
 
 describe('StripeBillingService', async function () {
   it('can savePaymentMethod', async function () {
@@ -16,6 +16,25 @@ describe('StripeBillingService', async function () {
     const customerId = `customer-${Math.random().toString().slice(2)}`
     const billing = StripeBillingService.create(createMockStripeForBilling())
     await billing.getPaymentMethod(customerId)
+  })
+})
+
+describe('StripeCustomersService + StripeBillingService', () => {
+  it('can savePaymentMethod and getPaymentMethod against real stripe.com api', async function () {
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+    if (!stripeSecretKey) {
+      return this.skip()
+    }
+    assert.ok(stripeSecretKey, 'stripeSecretKey is required')
+    const userCustomerService = createMockUserCustomerService()
+    const customers = StripeCustomersService.create(createStripe(stripeSecretKey), userCustomerService)
+    const billing = StripeBillingService.create(createStripe(stripeSecretKey))
+    const user = { id: `user-${randomString()}` }
+    const customer = await customers.getOrCreateForUser(user)
+    const desiredPaymentMethodId = 'pm_card_visa'
+    await billing.savePaymentMethod(customer.id, desiredPaymentMethodId)
+    const gotPaymentMethod = await billing.getPaymentMethod(customer.id)
+    assert.ok(gotPaymentMethod.id.startsWith('pm_'), 'payment method id starts with pm_')
   })
 })
 
@@ -94,6 +113,16 @@ function createMockStripeForBilling () {
         lastResponse: undefined
       }
       return response
+    },
+    async update (id, params) {
+      /** @type {Stripe.Response<Stripe.Customer>} */
+      const updatedCustomer = {
+        // @ts-ignore
+        lastResponse: undefined,
+        ...createMockStripeCustomer(),
+        params
+      }
+      return updatedCustomer
     }
   }
   /** @type {import('../src/utils/stripe.js').StripeComForBillingService['setupIntents']} */
@@ -164,6 +193,9 @@ function createMockStripeCustomer () {
   }
 }
 
+/**
+ * @returns {import('../src/utils/stripe.js').UserCustomerService & { userIdToCustomerId: Map<string,string> }}
+ */
 function createMockUserCustomerService () {
   const userIdToCustomerId = new Map()
   const getUserCustomer = async (userId) => {

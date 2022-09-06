@@ -1,18 +1,16 @@
-export type StripePaymentMethodId = `pm_${string}`;
-export type StripeCustomerId = string;
+export type StripePaymentMethodId = string;
+export type CustomerId = string;
 
 export type StripePaymentMethod = {
   id: StripePaymentMethodId
 }
 
-export interface PaymentMethod {
-  id: string
-}
+export type PaymentMethod = StripePaymentMethod
 
 export interface BillingService {
-  getPaymentMethod(customer: StripeCustomerId): Promise<PaymentMethod>
+  getPaymentMethod(customer: CustomerId): Promise<PaymentMethod>
   savePaymentMethod(
-    customer: StripeCustomerId,
+    customer: CustomerId,
     paymentMethodId: StripePaymentMethodId
   ): Promise<void>;
 }
@@ -36,4 +34,8 @@ export interface BillingUser {
 export interface BillingEnv {
   billing: BillingService
   customers: CustomersService
+}
+
+export interface PaymentSettings {
+  method: PaymentMethod
 }
