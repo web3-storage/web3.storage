@@ -117,6 +117,7 @@ const config: PlaywrightTestConfig = {
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
   // outputDir: 'test-results/',
   globalSetup: require.resolve('tests/playwright/globalSetup.js'),
+  globalTeardown: require.resolve('tests/playwright/globalTeardown.js'),
 };
 
 export default config;
