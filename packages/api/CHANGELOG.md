@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.4.3](https://github.com/web3-storage/web3.storage/compare/api-v7.4.2...api-v7.4.3) (2022-09-06)
+
+
+### Bug Fixes
+
+* trigger release ([e4175a6](https://github.com/web3-storage/web3.storage/commit/e4175a667bc177eb807f5974d79381bf36a67aa5))
+
 ## [7.4.2](https://github.com/web3-storage/web3.storage/compare/api-v7.4.1...api-v7.4.2) (2022-09-06)
 
 
