@@ -29,13 +29,14 @@ export const mochaHooks = () => {
       await execa(dbCli, ['db-sql', '--cargo', '--testing', `--customSqlPath=${initScript}`])
 
       await delay(2000)
+      console.log('⚡️ DB ready')
     },
     async afterAll () {
-      // Note: not awaiting promises here so we see the test results overview sooner.
       this.timeout(60_000)
       if (projectDb) {
-        console.log('🛑 Stopping PostgreSQL and PostgREST')
-        execa(dbCli, ['db', '--stop', '--clean', '--project', projectDb])
+        console.log('🟡 Stopping PostgreSQL and PostgREST')
+        await execa(dbCli, ['db', '--stop', '--clean', '--project', projectDb])
+        console.log('🛑 Stopped PostgreSQL and PostgREST')
       }
     },
 

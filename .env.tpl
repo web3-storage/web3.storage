@@ -19,7 +19,7 @@ DAG_CARGO_DATABASE=postgres
 DAG_CARGO_USER=postgres
 DAG_CARGO_PASSWORD=postgres
 
-# this pk is for a test account
+# stripe.com publishable key - check 'stripe.com' in your team secret manager. this default value is for a test account
 NEXT_PUBLIC_STRIPE_TEST_PK=pk_test_51LW5iZIfErzTm2rEq2poZhHidav6vMKnpywbLgfM7YtRpWUO1QyQjyoG4h5nO0wzzoLyqOocDb6h8fFcqw4RItB700OjnutXXx
 
 ## ---- api -------------------------------------------------------------------
@@ -43,6 +43,9 @@ S3_BUCKET_NAME = 'dotstorage-dev-0'
 S3_BUCKET_REGION = 'us-east-1'
 S3_ACCESS_KEY_ID = 'minioadmin'
 S3_SECRET_ACCESS_KEY_ID = 'minioadmin'
+
+# stripe.com secret key - check 'stripe.com' in your team secret manager
+# STRIPE_SECRET_KEY='sk_'
 
 ## ---- website ---------------------------------------------------------------
 

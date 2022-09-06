@@ -149,17 +149,7 @@ export function stripeToStripeCardPaymentMethod (paymentMethod) {
  */
 
 /**
- * @typedef {(userId: string) => Promise<null|{ id: string }>} GetUserCustomer
- */
-
-/**
- * @typedef {(userId: string, customerId: string) => Promise<any>} UpsertUserCustomer
- */
-
-/**
- * @typedef {object} UserCustomerService
- * @property {GetUserCustomer} getUserCustomer
- * @property {UpsertUserCustomer} upsertUserCustomer
+ * @typedef {import('./billing-types').UserCustomerService} UserCustomerService
  */
 
 /**
@@ -233,6 +223,156 @@ export function createMockStripeCardPaymentMethod () {
       exp_year: 2023,
       funding: 'credit',
       last4: '4242'
+    }
+  }
+}
+
+/** @returns {StripeComForCustomersService} */
+export function createMockStripeForCustomersService () {
+  return {
+    customers: {
+      create: async () => {
+        const customer = createMockStripeCustomer()
+        /** @type {Stripe.Response<Stripe.Customer>} */
+        const response = {
+          // @ts-ignore
+          lastResponse: {},
+          ...customer
+        }
+        return response
+      }
+    }
+  }
+}
+
+/**
+ * @param {object} [options]
+ * @param {(id: string) => Promise<undefined|Stripe.Customer>} [options.retrieveCustomer]
+ * @param {() => void} [options.onCreateSetupintent]
+ * @returns {StripeComForBillingService}
+ */
+export function createMockStripeForBilling (options = {}) {
+  const retrieveCustomer = options.retrieveCustomer || async function (id) {
+    throw new Error(`no customer found with id=${id}`)
+  }
+  const paymentMethods = {
+    /**
+     * @param {string} paymentMethodId
+     * @param {Stripe.PaymentMethodAttachParams} customerId
+     * @returns {Promise<Stripe.Response<Stripe.PaymentMethod>>}
+     */
+    attach: async (paymentMethodId, params) => {
+      /** @type {Stripe.PaymentMethod} */
+      const method = {
+        ...createMockStripePaymentMethod(),
+        id: paymentMethodId
+      }
+      /** @type {Stripe.Response<Stripe.PaymentMethod>} */
+      const response = {
+        // @ts-ignore
+        lastResponse: undefined,
+        ...method
+      }
+      return response
+    }
+  }
+  /** @type {StripeComForBillingService['customers']} */
+  const customers = {
+    async retrieve (id, params) {
+      const customer = await retrieveCustomer(id)
+      /** @type {Stripe.Response<Stripe.Customer>} */
+      const response = {
+        ...customer,
+        // @ts-ignore
+        lastResponse: undefined
+      }
+      return response
+    },
+    async update (id, params) {
+      /** @type {Stripe.Response<Stripe.Customer>} */
+      const updatedCustomer = {
+        // @ts-ignore
+        lastResponse: undefined,
+        ...createMockStripeCustomer(),
+        params
+      }
+      return updatedCustomer
+    }
+  }
+  /** @type {StripeComForBillingService['setupIntents']} */
+  const setupIntents = {
+    async create (params) {
+      /** @type {Stripe.SetupIntent} */
+      // @ts-ignore
+      const setupIntent = {
+        object: 'setup_intent',
+        description: 'mock setup_intent',
+        status: 'succeeded',
+        payment_method: params.payment_method
+      }
+      options?.onCreateSetupintent?.()
+      /** @type {Stripe.Response<Stripe.SetupIntent>} */
+      const response = {
+        // @ts-ignore
+        lastResponse: {},
+        ...setupIntent
+      }
+      return response
+    }
+  }
+  return { paymentMethods, customers, setupIntents }
+}
+
+/**
+ * @returns {Stripe.PaymentMethod}
+ */
+function createMockStripePaymentMethod () {
+  return {
+    id: `pm_${randomString()}`,
+    object: 'payment_method',
+    billing_details: {
+      name: [randomString(), randomString()].join(' '),
+      address: {
+        city: randomString(),
+        country: randomString(),
+        line1: randomString(),
+        line2: randomString(),
+        postal_code: randomString(),
+        state: 'KS'
+      },
+      email: `${randomString()}@example.com`,
+      phone: randomString()
+    },
+    created: Number(new Date()),
+    livemode: false,
+    type: 'card',
+    metadata: {},
+    customer: createMockStripeCustomer()
+  }
+}
+
+/**
+ * @param {object} [options]
+ * @param {string} [options.defaultPaymentMethodId]
+ * @returns {Stripe.Customer}
+ */
+export function createMockStripeCustomer (options = {}) {
+  return {
+    id: `customer-${randomString()}`,
+    object: 'customer',
+    balance: 0,
+    created: Number(new Date()),
+    email: `${randomString()}@example.com`,
+    default_source: null,
+    description: randomString(),
+    livemode: false,
+    metadata: {},
+    // @ts-ignore
+    invoice_settings: {
+      ...(options.defaultPaymentMethodId
+        ? { default_payment_method: options.defaultPaymentMethodId }
+        : {}
+      )
     }
   }
 }
