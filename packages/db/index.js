@@ -1313,7 +1313,6 @@ export class DBClient {
       .select(['customer_id'].join(','))
       .eq('user_id', userId)
     if (error) {
-      console.error('getUserCustomer query error', error)
       throw new DBError(error)
     }
     if (Array.isArray(data) && data.length === 0) {
