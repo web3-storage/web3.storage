@@ -9,8 +9,7 @@ import { Logging } from './utils/logs.js'
 import pkg from '../package.json'
 import { magicTestModeIsEnabledFromEnv } from './utils/env.js'
 import { defaultBypassMagicLinkVariableName } from './magic.link.js'
-import { StripeBillingService, StripeCustomersService } from './utils/stripe.js'
-import Stripe from 'stripe'
+import { createStripeBillingContext } from './utils/stripe.js'
 import { createMockBillingService } from './utils/billing.js'
 
 /**
@@ -173,63 +172,14 @@ export function envAll (req, env, ctx) {
     )
   }
 
-  Object.assign(env, (env.ENV === 'test') ? createTestBillingEnv() : createStripeBillingContext(env))
-}
-
-/**
- * @typedef {object} StripeDerrivedEnv
- * @property {string} stripeSecretKey
- */
-
-/**
- * @param {Pick<Env, 'STRIPE_SECRET_KEY'|'db'>} env
- * @returns {import('./utils/billing-types').BillingEnv & StripeDerrivedEnv}
- */
-function createStripeBillingContext (env) {
+  // use mock BillingEnv as baseline
+  Object.assign(env, createMockBillingService())
+  // but if we have a stripe secret key, use stripe.com-powered BillingEnv services
   const stripeSecretKey = env.STRIPE_SECRET_KEY
-  if (!stripeSecretKey) {
-    throw new Error('Please set the required STRIPE_SECRET_KEY environment variable')
-  }
-  const stripe = new Stripe(stripeSecretKey, {
-    apiVersion: '2022-08-01',
-    httpClient: Stripe.createFetchHttpClient()
-  })
-  const billing = StripeBillingService.create(stripe)
-  const userCustomerService = {
-    upsertUserCustomer: env.db.upsertUserCustomer.bind(env.db),
-    getUserCustomer: env.db.getUserCustomer.bind(env.db)
-  }
-  const customers = StripeCustomersService.create(stripe, userCustomerService)
-  return {
-    billing,
-    customers,
-    stripeSecretKey
-  }
-}
-
-/**
- * Create a Customers Service for use in testing the app.
- * @returns {import('./utils/billing-types').CustomersService}
- */
-function createTestEnvCustomerService () {
-  return {
-    async getOrCreateForUser (user) {
-      // reuse user.id as customer.id
-      return { id: user.id }
-    }
-  }
-}
-
-/**
- * Create BillingEnv to use when testing.
- * Use stubs/mocks instead of real billing service (e.g. stripe.com and/or a networked db)
- * @returns {import('./utils/billing-types').BillingEnv}
- */
-function createTestBillingEnv () {
-  const billing = createMockBillingService()
-  const customers = createTestEnvCustomerService()
-  return {
-    billing,
-    customers
+  if (stripeSecretKey) {
+    Object.assign(env, createStripeBillingContext({
+      ...env,
+      STRIPE_SECRET_KEY: stripeSecretKey
+    }))
   }
 }
