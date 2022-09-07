@@ -1,5 +1,6 @@
+/* eslint-disable no-void */
 import Stripe from 'stripe'
-import { randomString } from './billing.js'
+import { CustomerNotFound, randomString } from './billing.js'
 
 /**
  * @typedef {import('stripe').Stripe} StripeInterface
@@ -37,15 +38,15 @@ export class StripeBillingService {
     void /** @type {BillingService} */ (this)
   }
 
+  /**
+   * @returns {Promise<import('./billing-types').CustomerNotFound|import('./billing-types').PaymentMethod>}
+   */
   async getPaymentMethod (customerId) {
     const response = await this.stripe.customers.retrieve(customerId, {
       expand: ['invoice_settings.default_payment_method']
     })
-    if (response.object !== 'customer') {
-      throw new Error('unable to get payment method')
-    }
     if (response.deleted) {
-      throw new Error('unexpected response.deleted')
+      return new CustomerNotFound('customer retrieved from stripe has been unexpectedly deleted')
     }
     const defaultPaymentMethod = response.invoice_settings.default_payment_method
     const defaultPaymentMethodObject = (typeof defaultPaymentMethod === 'string') ? { id: defaultPaymentMethod } : defaultPaymentMethod ?? {}
@@ -244,7 +245,7 @@ export function createMockStripeForCustomersService () {
 
 /**
  * @param {object} [options]
- * @param {(id: string) => Promise<undefined|Stripe.Customer>} [options.retrieveCustomer]
+ * @param {(id: string) => Promise<undefined|Stripe.Customer|Stripe.DeletedCustomer>} [options.retrieveCustomer]
  * @param {() => void} [options.onCreateSetupintent]
  * @returns {StripeComForBillingService}
  */
