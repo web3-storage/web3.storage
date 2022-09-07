@@ -47,7 +47,7 @@ import { getSavedPaymentMethod } from '../../lib/api';
 const PaymentSettingsPage = props => {
   const { dashboard } = AccountPageData.page_content;
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
-  const stripePromise = loadStripe(props.stripeKey);
+  const stripePromise = loadStripe(props.stripePublishableKey);
   const [hasPaymentMethods, setHasPaymentMethods] = useState(false);
   const [savedPaymentMethod, setSavedPaymentMethod] = useState(/** @type {PaymentMethod} */ ({}));
   const [editingPaymentMethod, setEditingPaymentMethod] = useState(false);
@@ -125,16 +125,16 @@ const PaymentSettingsPage = props => {
  * @returns {{ props: import('components/types').PageAccountProps}}
  */
 export function getStaticProps() {
-  const stripeKey = process.env.NEXT_PUBLIC_STRIPE_TEST_PK;
-  if (!stripeKey) {
-    console.warn(`account payment page missing required process.env.NEXT_PUBLIC_STRIPE_TEST_PK`);
+  const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+  if (!stripePublishableKey) {
+    console.warn(`account payment page missing required process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`);
   }
   return {
     props: {
       title: AccountPageData.seo.title,
       isRestricted: true,
       redirectTo: '/login/',
-      stripeKey: stripeKey ?? '',
+      stripePublishableKey: stripePublishableKey ?? '',
     },
   };
 }
