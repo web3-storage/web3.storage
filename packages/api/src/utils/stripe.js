@@ -376,3 +376,33 @@ export function createMockStripeCustomer (options = {}) {
     }
   }
 }
+
+/**
+ * Create some billing services based on the provided environment vars.
+ * If there is a stripe.com secret, the implementations will use the stripe.com APIs.
+ * Otherwise the mock implementations will be used.
+ * @param {object} env
+ * @param {string} env.STRIPE_SECRET_KEY
+ * @param {DBClient} env.db
+ * @returns {import('./billing-types').BillingEnv}
+ */
+export function createStripeBillingContext (env) {
+  const stripeSecretKey = env.STRIPE_SECRET_KEY
+  if (!stripeSecretKey) {
+    throw new Error('Please set the required STRIPE_SECRET_KEY environment variable')
+  }
+  const stripe = new Stripe(stripeSecretKey, {
+    apiVersion: '2022-08-01',
+    httpClient: Stripe.createFetchHttpClient()
+  })
+  const billing = StripeBillingService.create(stripe)
+  const userCustomerService = {
+    upsertUserCustomer: env.db.upsertUserCustomer.bind(env.db),
+    getUserCustomer: env.db.getUserCustomer.bind(env.db)
+  }
+  const customers = StripeCustomersService.create(stripe, userCustomerService)
+  return {
+    billing,
+    customers
+  }
+}

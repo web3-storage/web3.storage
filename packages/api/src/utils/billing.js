@@ -116,3 +116,30 @@ export function createMockPaymentMethod () {
     id: `mock_pm_${randomString()}`
   }
 }
+
+/**
+ * Create a Customers Service for use in testing the app.
+ * @returns {import('./billing-types').CustomersService}
+ */
+function createTestEnvCustomerService () {
+  return {
+    async getOrCreateForUser (user) {
+      // reuse user.id as customer.id
+      return { id: user.id }
+    }
+  }
+}
+
+/**
+ * Create BillingEnv to use when testing.
+ * Use stubs/mocks instead of real billing service (e.g. stripe.com and/or a networked db)
+ * @returns {import('./billing-types').BillingEnv}
+ */
+export function createMockBillingContext () {
+  const billing = createMockBillingService()
+  const customers = createTestEnvCustomerService()
+  return {
+    billing,
+    customers
+  }
+}
