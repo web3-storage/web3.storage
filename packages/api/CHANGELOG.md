@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.4.4](https://github.com/web3-storage/web3.storage/compare/api-v7.4.3...api-v7.4.4) (2022-09-07)
+
+
+### Bug Fixes
+
+* empty payload is client error ([#1854](https://github.com/web3-storage/web3.storage/issues/1854)) ([1613e4b](https://github.com/web3-storage/web3.storage/commit/1613e4b45cc59a4df36f52ebda8fe5930b035bbe))
+
 ## [7.4.3](https://github.com/web3-storage/web3.storage/compare/api-v7.4.2...api-v7.4.3) (2022-09-06)
 
 
