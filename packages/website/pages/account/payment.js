@@ -46,8 +46,7 @@ const PaymentSettingsPage = props => {
   const { dashboard } = AccountPageData.page_content;
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
   const stripePromise = loadStripe(props.stripeKey);
-  // const [savedPaymentMethods, setSavedPaymentMethods] = useState([]);
-  const savedPaymentMethods = [];
+  const [hasPaymentMethods, setHasPaymentMethods] = useState(false);
   return (
     <>
       <>
@@ -74,6 +73,7 @@ const PaymentSettingsPage = props => {
                         // @ts-ignore
                         stripe={stripe}
                         elements={elements}
+                        setHasPaymentMethods={setHasPaymentMethods}
                       />
                     )}
                   </ElementsConsumer>
@@ -81,14 +81,7 @@ const PaymentSettingsPage = props => {
               </div>
               <div>
                 <h4>Saved Payment Methods</h4>
-                {savedPaymentMethods.length ? (
-                  savedPaymentMethods.map((pm, i) => {
-                    // @ts-ignore
-                    return <PaymentMethodCard key={`card-${i}`} card={pm} />;
-                  })
-                ) : (
-                  <p>No payment methods saved</p>
-                )}
+                {hasPaymentMethods ? <PaymentMethodCard /> : <p className="payments-none">No payment methods saved</p>}
               </div>
             </div>
 
