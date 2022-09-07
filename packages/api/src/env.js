@@ -10,7 +10,7 @@ import pkg from '../package.json'
 import { magicTestModeIsEnabledFromEnv } from './utils/env.js'
 import { defaultBypassMagicLinkVariableName } from './magic.link.js'
 import { createStripeBillingContext } from './utils/stripe.js'
-import { createMockBillingService } from './utils/billing.js'
+import { createMockBillingContext } from './utils/billing.js'
 
 /**
  * @typedef {object} Env
@@ -184,6 +184,6 @@ export function envAll (req, env, ctx) {
     }))
   } else {
     // use mock BillingEnv as a placeholder for test/dev
-    Object.assign(env, createMockBillingService())
+    Object.assign(env, createMockBillingContext())
   }
 }
