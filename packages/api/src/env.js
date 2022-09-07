@@ -107,6 +107,7 @@ export function envAll (req, env, ctx) {
   })
 
   env.magic = new Magic(env.MAGIC_SECRET_KEY, {
+    // @ts-ignore
     testMode: magicTestModeIsEnabledFromEnv(env)
   })
 
