@@ -1,3 +1,5 @@
+/* eslint-disable no-void */
+
 /**
  * Save a user's payment settings
  * @param {object} ctx
@@ -25,6 +27,9 @@ export async function getPaymentSettings (ctx) {
   const { billing, customers, user } = ctx
   const customer = await customers.getOrCreateForUser(user)
   const paymentMethod = await billing.getPaymentMethod(customer.id)
+  if (paymentMethod instanceof Error) {
+    throw paymentMethod
+  }
   /** @type {import('./billing-types').PaymentSettings} */
   const settings = { method: paymentMethod }
   return settings
@@ -141,5 +146,20 @@ export function createMockBillingContext () {
   return {
     billing,
     customers
+  }
+}
+
+/**
+ * Indicates that a process was not able to find a specific Customer record.
+ */
+export class CustomerNotFound extends Error {
+  /**
+   * @param {string} [message]
+   * @param {...any} args
+   */
+  constructor (message = 'customer not found', ...args) {
+    super(...[message, ...args])
+    this.code = /** @type {const} */ ('ERROR_CUSTOMER_NOT_FOUND')
+    void /** @type {import('./billing-types').CustomerNotFound} */ (this)
   }
 }

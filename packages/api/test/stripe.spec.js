@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import assert from 'assert'
-import { createMockUserCustomerService, randomString } from '../src/utils/billing.js'
+import { createMockUserCustomerService, CustomerNotFound, randomString } from '../src/utils/billing.js'
 // eslint-disable-next-line no-unused-vars
 import Stripe from 'stripe'
 import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createStripe, StripeBillingService, StripeCustomersService } from '../src/utils/stripe.js'
@@ -29,7 +29,20 @@ describe('StripeBillingService', async function () {
     })
     const billing = StripeBillingService.create(mockStripe)
     const gotPaymentMethod = await billing.getPaymentMethod(customerId)
+    assert.ok(!(gotPaymentMethod instanceof Error), 'gotPaymentMethod did not return an error')
     assert.equal(gotPaymentMethod.id, mockPaymentMethodId)
+  })
+  it('getPaymentMethod results in CustomerNotFound error if customer is deleted', async function () {
+    const customerId = `customer-${Math.random().toString().slice(2)}`
+    const mockStripe = createMockStripeForBilling({
+      async retrieveCustomer (id) {
+        return { deleted: true, id, object: 'customer' }
+      }
+    })
+    const billing = StripeBillingService.create(mockStripe)
+    const gotPaymentMethod = await billing.getPaymentMethod(customerId)
+    assert.ok(gotPaymentMethod instanceof Error, 'getPaymentMethod returned an error')
+    assert.equal(gotPaymentMethod.code, (new CustomerNotFound()).code)
   })
 })
 
@@ -48,6 +61,7 @@ describe('StripeCustomersService + StripeBillingService', () => {
     const desiredPaymentMethodId = 'pm_card_visa'
     await billing.savePaymentMethod(customer.id, desiredPaymentMethodId)
     const gotPaymentMethod = await billing.getPaymentMethod(customer.id)
+    assert.ok(!(gotPaymentMethod instanceof Error), 'getPaymentMethod did not return an error')
     assert.ok(gotPaymentMethod.id.startsWith('pm_'), 'payment method id starts with pm_')
     // it will have a 'card' property same as stripe
     assert.ok('card' in gotPaymentMethod, 'payment method has card property')
