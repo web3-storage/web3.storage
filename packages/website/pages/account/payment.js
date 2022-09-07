@@ -15,7 +15,7 @@ import AccountPlansModal from '../../components/accountPlansModal/accountPlansMo
 // import PaymentHistoryTable from '../../components/account/paymentHistory.js/paymentHistory.js';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
 import Button from '../../components/button/button.js';
-import { plans } from '../../components/contexts/plansContext';
+import { plans, plansEarly } from '../../components/contexts/plansContext';
 import { getSavedPaymentMethod } from '../../lib/api';
 
 const PaymentSettingsPage = props => {
@@ -24,6 +24,7 @@ const PaymentSettingsPage = props => {
   const [hasPaymentMethods, setHasPaymentMethods] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(plans.find(p => p.current));
   const [planSelection, setPlanSelection] = useState('');
+  const [planList, setPlanList] = useState(plans);
   const [onboardView, setOnboardView] = useState('paid');
   const [savedPaymentMethod, setSavedPaymentMethod] = useState(/** @type {PaymentMethod} */ ({}));
   const [editingPaymentMethod, setEditingPaymentMethod] = useState(false);
@@ -62,6 +63,14 @@ const PaymentSettingsPage = props => {
     }
   }, [planSelection]);
 
+  useEffect(() => {
+    if (onboardView === 'early') {
+      setPlanList(plansEarly);
+    } else {
+      setPlanList(plans);
+    }
+  }, [onboardView]);
+
   return (
     <>
       <>
@@ -71,26 +80,17 @@ const PaymentSettingsPage = props => {
             <select
               onChange={e => {
                 setOnboardView(e.target.value);
-                console.log(e.target.value);
-                if (e.target.value === 'free') {
-                  // const freePlan = plans.find(p => p.id === 'free');
-                  // setCurrentPlan(freePlan);
-                }
-                if (e.target.value === 'paid') {
-                  // const paidPlan = plans.find(p => p.id === 'tier1');
-                  // setCurrentPlan(paidPlan);
-                }
               }}
               className="state-changer"
               value={onboardView}
             >
-              <option value="grandfathered">Grandfathered</option>
+              <option value="early">Early Adopter</option>
               <option value="free">Free (New)</option>
               <option value="paid">Paid</option>
             </select>
           </div>
           <div className="billing-content">
-            {onboardView === 'grandfathered' && (
+            {onboardView === 'early' && (
               <div className="add-billing-cta">
                 <p>
                   You don&apos;t have a payment method. Please add one to prevent storage issues beyond your plan limits
@@ -99,11 +99,7 @@ const PaymentSettingsPage = props => {
               </div>
             )}
 
-            <PaymentTable
-              setIsPaymentPlanModalOpen={setIsPaymentPlanModalOpen}
-              currentPlan={currentPlan}
-              setPlanSelection={setPlanSelection}
-            />
+            <PaymentTable plans={planList} currentPlan={currentPlan} setPlanSelection={setPlanSelection} />
 
             <div className="billing-settings-layout">
               <div>

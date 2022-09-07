@@ -1,7 +1,6 @@
 import Button from '../../button/button.js';
-import { plans } from '../../contexts/plansContext';
 
-const PaymentTable = ({ setIsPaymentPlanModalOpen, currentPlan, setPlanSelection }) => {
+const PaymentTable = ({ plans, currentPlan, setPlanSelection }) => {
   return (
     <>
       <p className="billing-content-intro">

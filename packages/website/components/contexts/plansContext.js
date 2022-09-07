@@ -1,14 +1,4 @@
-export const plans = [
-  {
-    id: 'free',
-    title: 'Free',
-    description: 'You are currently on the free tier. You can use our service up to 5GB/mo without being charged.',
-    price: '$0/mo',
-    amount: '5GB per month',
-    bandwidth: '10GB per month',
-    overage: '$0.25 / GB',
-    current: false,
-  },
+export const sharedPlans = [
   {
     id: 'lite',
     title: 'Lite',
@@ -29,14 +19,30 @@ export const plans = [
     overage: '$0.17 / GB',
     current: false,
   },
-  // {
-  //   id: 'tier3',
-  //   title: 'Enterprise',
-  //   description: 'All the sauce, all the toppings.',
-  //   price: 'Custom',
-  //   amount: '60GB',
-  //   bandwidth: '120GB',
-  //   overage: '$.17 per GB',
-  //   current: false,
-  // },
 ];
+
+export const freePlan = {
+  id: 'free',
+  title: 'Free',
+  description: 'You are currently on the free tier. You can use our service up to 5GB/mo without being charged.',
+  price: '$0/mo',
+  amount: '5GB per month',
+  bandwidth: '10GB per month',
+  overage: '$0.25 / GB',
+  current: false,
+};
+
+export const earlyAdopterPlan = {
+  id: 'free',
+  title: 'Early Adopter',
+  description:
+    'As an early adopter we appreciate your support and can continue to use the storage you are already accustomed to.',
+  price: '$0/mo',
+  amount: '25GB per month',
+  bandwidth: 'n/a',
+  overage: 'n/a',
+  current: false,
+};
+
+export const plans = [freePlan, ...sharedPlans];
+export const plansEarly = [earlyAdopterPlan, ...sharedPlans];

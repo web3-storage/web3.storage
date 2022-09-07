@@ -39,6 +39,7 @@
 
 .billing-card.current {
   position: relative;
+  border-left: 0;
   &:after {
     content: 'Current Plan';
     position: absolute;
@@ -56,6 +57,10 @@
     text-transform: uppercase;
     // transform: translateY(-100%);
     // display: block;
+  }
+
+  + .billing-card {
+    border-left: 0;
   }
 }
 // }

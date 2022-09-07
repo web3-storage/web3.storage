@@ -41,7 +41,7 @@ const AccountPlansModal = ({ isOpen, onClose, planSelection, setCurrentPlan, sav
           Confirm Your selection.
           <Button
             variant="light"
-            disabled={!savedPaymentMethod}
+            // disabled={!savedPaymentMethod}
             onClick={() => {
               setCurrentPlan(currentPlan);
               onClose();
