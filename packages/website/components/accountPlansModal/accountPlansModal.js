@@ -1,12 +1,16 @@
-import BillingPlanCards from '../account/billingPlanCards/billingPlanCards.js';
+import { Elements, ElementsConsumer } from '@stripe/react-stripe-js';
+
+import Button from '../../components/button/button.js';
+import CurrentBillingPlanCard from '../../components/account/currentBillingPlanCard/currentBillingPlanCard.js';
 import Modal from '../../modules/zero/components/modal/modal';
 import CloseIcon from '../../assets/icons/close';
-// import Button from '../button/button.js';
-import GradientBackground from '../gradientbackground/gradientbackground';
 import { plans } from '../contexts/plansContext';
+import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
 
-const AccountPlansModal = ({ isOpen, onClose, currentPlan, setCurrentPlan }) => {
+const AccountPlansModal = ({ isOpen, onClose, planSelection, setCurrentPlan, savedPaymentMethod, stripePromise }) => {
   // const [requesting, setRequesting] = useState(false);
+  savedPaymentMethod = false;
+  const currentPlan = plans.find(p => p.id === planSelection.id);
   return (
     <div className="account-plans-modal">
       <Modal
@@ -15,10 +19,37 @@ const AccountPlansModal = ({ isOpen, onClose, currentPlan, setCurrentPlan }) => 
         modalState={[isOpen, onClose]}
         showCloseButton
       >
-        <div className="background-view-wrapper">
-          <GradientBackground variant="" />
+        <CurrentBillingPlanCard plan={currentPlan} />
+        {!savedPaymentMethod && (
+          <div className="add-payment-method-cta">
+            Please add a payment method before confirming plan.
+            <Elements stripe={stripePromise}>
+              <ElementsConsumer>
+                {({ stripe, elements }) => (
+                  <AddPaymentMethodForm
+                    // @ts-ignore
+                    stripe={stripe}
+                    elements={elements}
+                  />
+                )}
+              </ElementsConsumer>
+            </Elements>
+          </div>
+        )}
+
+        <div className="account-plans-confirm">
+          Confirm Your selection.
+          <Button
+            variant="light"
+            disabled={!savedPaymentMethod}
+            onClick={() => {
+              setCurrentPlan(currentPlan);
+              onClose();
+            }}
+          >
+            Confirm
+          </Button>
         </div>
-        <BillingPlanCards plans={plans} currentPlan={currentPlan} setCurrentPlan={setCurrentPlan} />
       </Modal>
     </div>
   );

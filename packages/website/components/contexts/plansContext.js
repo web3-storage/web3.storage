@@ -10,7 +10,7 @@ export const plans = [
     current: false,
   },
   {
-    id: 'tier1',
+    id: 'lite',
     title: 'Lite',
     description: 'For those that want to take advantage of more storage',
     price: '$3/mo',
@@ -20,7 +20,7 @@ export const plans = [
     current: true,
   },
   {
-    id: 'tier2',
+    id: 'pro',
     title: 'Pro',
     description: 'All the sauce, all the toppings.',
     price: '$10/mo',

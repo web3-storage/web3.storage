@@ -126,12 +126,11 @@
 
 .billing-settings-layout {
   display: grid;
-  grid-template-columns: 3fr 2fr;
-  grid-template-rows: auto auto;
-  grid-template-areas:
-    'plans card'
-    'history history';
-  grid-gap: 2rem;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  margin-top: 4rem;
+  grid-template-areas: 'card history';
+  grid-gap: 4rem;
 
   @include medium {
     display: flex;
@@ -142,12 +141,9 @@
   }
 
   div:nth-child(1) {
-    grid-area: plans;
-  }
-  div:nth-child(2) {
     grid-area: card;
   }
-  div:nth-child(3) {
+  div:nth-child(2) {
     grid-area: history;
   }
 
@@ -238,13 +234,11 @@
       content: '';
       position: absolute;
       width: 100%;
-      height: calc(100% + 1px);
-      top: -1px;
-      left: 1px;
+      height: 100%;
+      top: 0px;
+      left: 0px;
       padding: 0;
       @include border_Background_Waterloo_White;
-      border-radius: 0;
-      border: 0;
     }
   }
 
@@ -395,10 +389,6 @@
   }
 }
 
-.payment-history-layout {
-  margin-top: 4rem;
-}
-
 .payment-history-table {
   width: 100%;
   font-size: 1rem;
@@ -407,10 +397,14 @@
 .payment-history-table-header,
 .payment-history-table-row {
   display: grid;
-  grid-template-columns: 20% auto 150px 150px;
+  grid-template-columns: 1fr 1fr 1fr;
   text-align: left;
   grid-gap: 1rem;
-  padding: 0.4rem 0;
+  padding: 0;
+  justify-content: space-between;
+  span:last-child {
+    text-align: right;
+  }
 }
 
 .payment-history-table-header {
@@ -451,7 +445,7 @@
 }
 
 .payment-history-table-row:not(:last-child) {
-  border-bottom: 1px solid $waterloo;
+  border-bottom: 1px solid $shark;
 }
 
 .saved-card {

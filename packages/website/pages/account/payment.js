@@ -6,24 +6,24 @@
 import { useState, useEffect } from 'react';
 import { Elements, ElementsConsumer } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { useRouter } from 'next/router.js';
 
+import PaymentTable from 'components/account/paymentTable.js/paymentTable.js';
+import PaymentHistoryTable from 'components/account/paymentHistory.js/paymentHistory.js';
+import PaymentCustomPlan from 'components/account/paymentCustomPlan.js/paymentCustomPlan.js';
 import PaymentMethodCard from '../../components/account/paymentMethodCard/paymentMethodCard.js';
 import AccountPlansModal from '../../components/accountPlansModal/accountPlansModal.js';
 // import PaymentHistoryTable from '../../components/account/paymentHistory.js/paymentHistory.js';
-import CurrentBillingPlanCard from '../../components/account/currentBillingPlanCard/currentBillingPlanCard.js';
-import GrandfatheredBillingPlan from '../../components/account/grandfatheredBillingPlan/grandfatheredBillingPlan.js';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
 import Button from '../../components/button/button.js';
 import { plans } from '../../components/contexts/plansContext';
 import { getSavedPaymentMethod } from '../../lib/api';
 
 const PaymentSettingsPage = props => {
-  const router = useRouter();
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
   const stripePromise = loadStripe(props.stripeKey);
   const [hasPaymentMethods, setHasPaymentMethods] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(plans.find(p => p.current));
+  const [planSelection, setPlanSelection] = useState('');
   const [onboardView, setOnboardView] = useState('paid');
   const [savedPaymentMethod, setSavedPaymentMethod] = useState(/** @type {PaymentMethod} */ ({}));
   const [editingPaymentMethod, setEditingPaymentMethod] = useState(false);
@@ -56,6 +56,12 @@ const PaymentSettingsPage = props => {
     getSavedCard();
   }, [hasPaymentMethods]);
 
+  useEffect(() => {
+    if (planSelection.id) {
+      setIsPaymentPlanModalOpen(true);
+    }
+  }, [planSelection]);
+
   return (
     <>
       <>
@@ -67,12 +73,12 @@ const PaymentSettingsPage = props => {
                 setOnboardView(e.target.value);
                 console.log(e.target.value);
                 if (e.target.value === 'free') {
-                  const freePlan = plans.find(p => p.id === 'free');
-                  setCurrentPlan(freePlan);
+                  // const freePlan = plans.find(p => p.id === 'free');
+                  // setCurrentPlan(freePlan);
                 }
                 if (e.target.value === 'paid') {
-                  const paidPlan = plans.find(p => p.id === 'tier1');
-                  setCurrentPlan(paidPlan);
+                  // const paidPlan = plans.find(p => p.id === 'tier1');
+                  // setCurrentPlan(paidPlan);
                 }
               }}
               className="state-changer"
@@ -93,48 +99,15 @@ const PaymentSettingsPage = props => {
               </div>
             )}
 
+            <PaymentTable
+              setIsPaymentPlanModalOpen={setIsPaymentPlanModalOpen}
+              currentPlan={currentPlan}
+              setPlanSelection={setPlanSelection}
+            />
+
             <div className="billing-settings-layout">
               <div>
-                <div className="billing-plan-header">
-                  <h4>Your Current Plan</h4>
-                  {/* {onboardView == 'paid' ? (
-                    <Button variant="dark" onClick={() => setIsPaymentPlanModalOpen(true)}>
-                      Change Plan
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="dark"
-                      disabled={true}
-                      tooltip={'You need to add a payment method to change your plan'}
-                      tooltipPos="left"
-                    >
-                      Upgrade Plan
-                    </Button>
-                  )} */}
-                </div>
-                {onboardView !== 'grandfathered' ? (
-                  <CurrentBillingPlanCard plan={currentPlan} />
-                ) : (
-                  <GrandfatheredBillingPlan onboardView={onboardView} />
-                )}
-
-                {onboardView === 'paid' ? (
-                  <Button variant="dark" onClick={() => router.push('/account/payment/plans')}>
-                    Change Plan
-                  </Button>
-                ) : (
-                  <Button
-                    variant="dark"
-                    disabled={true}
-                    tooltip={'You need to add a payment method to change your plan'}
-                  >
-                    Upgrade Plan
-                  </Button>
-                )}
-              </div>
-              <div>
                 <h4>Payment Methods</h4>
-
                 {savedPaymentMethod && !editingPaymentMethod ? (
                   <>
                     <PaymentMethodCard savedPaymentMethod={savedPaymentMethod} />
@@ -160,19 +133,23 @@ const PaymentSettingsPage = props => {
                   </div>
                 )}
               </div>
-            </div>
 
-            {/* <div className="payment-history-layout">
-              <h3>Payment History &amp; Invoices</h3>
-              <PaymentHistoryTable />
-            </div> */}
+              <div className="payment-history-layout">
+                <h4>Payment History &amp; Invoices</h4>
+                <PaymentHistoryTable />
+              </div>
+            </div>
           </div>
+
+          <PaymentCustomPlan />
         </div>
         <AccountPlansModal
           isOpen={isPaymentPlanModalOpen}
           onClose={() => setIsPaymentPlanModalOpen(false)}
-          currentPlan={currentPlan}
+          planSelection={planSelection}
           setCurrentPlan={setCurrentPlan}
+          savedPaymentMethod={savedPaymentMethod}
+          stripePromise={stripePromise}
         />
       </>
     </>

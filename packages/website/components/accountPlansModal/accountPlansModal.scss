@@ -1,8 +1,23 @@
-// .account-plans-modal {
 .modalContainer {
-  padding: 4px;
+  padding: 2rem;
   border-radius: 10px;
+  background-color: $shark;
 }
+
+.modalInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  gap: 8px;
+
+  .billing-card {
+    max-width: 100%;
+    width: 500px;
+  }
+}
+
 .background-view-wrapper {
   z-index: -1;
 }
@@ -44,3 +59,13 @@
   }
 }
 // }
+
+.account-plans-confirm {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.add-payment-method-cta + .account-plans-confirm {
+  opacity: 0.5;
+}

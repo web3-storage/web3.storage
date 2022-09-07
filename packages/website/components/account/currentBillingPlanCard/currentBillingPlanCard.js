@@ -23,18 +23,6 @@ const CurrentBillingPlanCard = ({ plan }) => {
               <span>Bandwidth Limit:</span> <strong>{plan.bandwidth}</strong>
             </span>
           </p>
-
-          <div className="billing-plan-usage-container">
-            <small>Billing Cycle: Aug 18 - Sept 18</small>
-
-            <p className="billing-label">Current Usage:</p>
-            <div className="billing-plan-usage">
-              <div className="billing-plan-meter">
-                <span className="billing-plan-meter-used"></span>
-              </div>
-              {plan.amount.split(' ')[0]}
-            </div>
-          </div>
         </div>
       )}
     </div>
