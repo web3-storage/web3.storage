@@ -173,14 +173,17 @@ export function envAll (req, env, ctx) {
     )
   }
 
-  // use mock BillingEnv as baseline
-  Object.assign(env, createMockBillingService())
-  // but if we have a stripe secret key, use stripe.com-powered BillingEnv services
   const stripeSecretKey = env.STRIPE_SECRET_KEY
-  if (stripeSecretKey) {
+  if (!stripeSecretKey && !['test', 'dev'].includes(env.ENV)) {
+    throw new Error(`Stripe secret key is required for env ${env.ENV}`)
+  } else if (stripeSecretKey) {
+    // if we have a stripeSecretKey, use stripe.com-powered BillingEnv services
     Object.assign(env, createStripeBillingContext({
       ...env,
       STRIPE_SECRET_KEY: stripeSecretKey
     }))
+  } else {
+    // use mock BillingEnv as a placeholder for test/dev
+    Object.assign(env, createMockBillingService())
   }
 }
