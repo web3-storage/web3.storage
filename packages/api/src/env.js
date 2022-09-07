@@ -10,7 +10,6 @@ import pkg from '../package.json'
 import { magicTestModeIsEnabledFromEnv } from './utils/env.js'
 import { defaultBypassMagicLinkVariableName } from './magic.link.js'
 import { StripeBillingService, StripeCustomersService } from './utils/stripe.js'
-import assert from 'assert'
 import Stripe from 'stripe'
 import { createMockBillingService } from './utils/billing.js'
 
@@ -188,7 +187,9 @@ export function envAll (req, env, ctx) {
  */
 function createStripeBillingContext (env) {
   const stripeSecretKey = env.STRIPE_SECRET_KEY
-  assert.ok(stripeSecretKey, 'env STRIPE_SECRET_KEY is required')
+  if ( ! stripeSecretKey) {
+    throw new Error('Please set the required STRIPE_SECRET_KEY environment variable')
+  }
   const stripe = new Stripe(stripeSecretKey, {
     apiVersion: '2022-08-01',
     httpClient: Stripe.createFetchHttpClient()
