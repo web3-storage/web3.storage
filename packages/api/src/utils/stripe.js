@@ -34,10 +34,7 @@ export class StripeBillingService {
   constructor (stripe) {
     /** @type {StripeComForBillingService}  */
     this.stripe = stripe
-    /**
-     * @type {BillingService}
-     */
-    const instance = this // eslint-disable-line
+    void /** @type {BillingService} */ (this)
   }
 
   async getPaymentMethod (customerId) {
