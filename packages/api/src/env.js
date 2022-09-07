@@ -188,7 +188,7 @@ export function envAll (req, env, ctx) {
  */
 function createStripeBillingContext (env) {
   const stripeSecretKey = env.STRIPE_SECRET_KEY
-  if ( ! stripeSecretKey) {
+  if (!stripeSecretKey) {
     throw new Error('Please set the required STRIPE_SECRET_KEY environment variable')
   }
   const stripe = new Stripe(stripeSecretKey, {
