@@ -1,4 +1,4 @@
-import * as magic from '../../src/magic.link.js'
+import { magicLinkBypassForUnitTestingWithTestToken } from '../../src/magic.link.js'
 
 const symbol = Symbol.for('AuthorizationTestContext')
 
@@ -16,7 +16,7 @@ export class AuthorizationTestContext {
   }
 
   constructor (
-    bypass = magic.magicLinkBypass
+    bypass = magicLinkBypassForUnitTestingWithTestToken
   ) {
     this.bypass = bypass
   }

@@ -31,3 +31,13 @@ export class ConstraintError extends Error {
 }
 
 ConstraintError.CODE = 'CONSTRAINT_ERROR_DB'
+
+export class RangeNotSatisfiableDBError extends Error {
+  constructor (message) {
+    super(message)
+    this.name = 'RangeNotSatisfiableError'
+    this.code = RangeNotSatisfiableDBError.CODE
+  }
+}
+
+RangeNotSatisfiableDBError.CODE = 'RANGE_NOT_SATISFIABLE_ERROR_DB'

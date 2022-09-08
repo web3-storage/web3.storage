@@ -16,6 +16,7 @@
   },
   "scripts": {
     "cluster:start": "./scripts/cli.js cluster --start",
+    "docker:ps": "docker ps -a | grep 'web3\\|ipfs0\\|minio0\\|cluster0'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

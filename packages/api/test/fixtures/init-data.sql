@@ -93,16 +93,6 @@ INSERT INTO cargo.deals (deal_id, aggregate_cid, client, provider, status, start
 (2424132, 'bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bme', 'f144zep4gitj73rrujd3jw6iprljicx6vl4wbeavi', 'f0678914', 'active', 1102102, 2570902, '2021-09-09 16:30:52.252233+00', '2021-09-10 00:45:50.408956+00', 'containing sector active as of 2021-09-10 00:36:30 at epoch 1097593', '2021-09-11 14:11:00+00', 1097593, '2021-09-10 00:36:30+00', '2023-02-03 14:11:00+00'),
 (2424133, 'bafybeiek5gau46j4dxoyty27qtirb3iuoq7aax4l3xt25mfk2igyt35bmf', 'f144zep4gitj73rrujd3jw6iprljicx6vl4wbeavi', 'f0678914', 'queued', 1102102, 2570902, '2021-09-09 16:30:52.252233+00', '2021-09-10 00:45:50.408956+00', 'containing sector active as of 2021-09-10 00:36:30 at epoch 1097593', '2021-09-11 14:11:00+00', 1097593, '2021-09-10 00:36:30+00', '2023-02-03 14:11:00+00');
 
--- /name route data testing
-INSERT INTO public.name (key, record, has_v2_sig, seqno, validity)
-VALUES (
-  'k51qzi5uqu5dl2hq2hm5m29sdq1lum0kb0lmyqsowicmrmxzxywwgxhy6ymrdv',
-  'CkEvaXBmcy9iYWZrcmVpZW00dHdrcXpzcTJhajRzaGJ5Y2Q0eXZvajJjeDcydmV6aWNsZXRsaGk3ZGlqamNpcXB1aRJAiThIzmqigDqiV4p4tJ31wiWuMy4gWAuZaPdGzXdIOm+SYfJ/JlDNUAXILZO7vh0mkHdFYLeHouHZFMQI2dqrARgAIh4yMDIxLTExLTE2VDIyOjQ2OjA4Ljg5NjAwMDAwMFooADCAoLCNvQpCQLiFTWU8F+O8R/V+ql5glmnaBEh8+bBKZ6o1s84+TGeVlzqRn/2XstFYV83ilEHseU4bvHfxwaxLoucJaMYeNQVKmAGlY1RUTBsAAABT0awQAGVWYWx1ZVhBL2lwZnMvYmFma3JlaWVtNHR3a3F6c3EyYWo0c2hieWNkNHl2b2oyY3g3MnZlemljbGV0bGhpN2RpampjaXFwdWloU2VxdWVuY2UAaFZhbGlkaXR5WB4yMDIxLTExLTE2VDIyOjQ2OjA4Ljg5NjAwMDAwMFpsVmFsaWRpdHlUeXBlAA==',
-  true,
-  1,
-  1669394359626000000
-);
-
 INSERT INTO user_tag (user_id, tag, value, reason, deleted_at)
 VALUES  (4, 'HasPsaAccess', true, 'test', null),
         (5, 'HasPsaAccess', true, 'test', null),

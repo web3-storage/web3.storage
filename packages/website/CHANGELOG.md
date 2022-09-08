@@ -1,5 +1,48 @@
 # Changelog
 
+## [2.18.1](https://github.com/web3-storage/web3.storage/compare/website-v2.18.0...website-v2.18.1) (2022-09-08)
+
+
+### Bug Fixes
+
+* add a `/user/uploads/:cid` endpoint. ([#1530](https://github.com/web3-storage/web3.storage/issues/1530)) ([99654bc](https://github.com/web3-storage/web3.storage/commit/99654bcc668db016710a91e07901cd40b9a9995a))
+
+## [2.18.0](https://github.com/web3-storage/web3.storage/compare/website-v2.17.1...website-v2.18.0) (2022-09-07)
+
+
+### Features
+
+* reusable and accessible table component ([#1700](https://github.com/web3-storage/web3.storage/issues/1700)) ([a4643a0](https://github.com/web3-storage/web3.storage/commit/a4643a09f15aef465bda50836c311e06de9f2471))
+
+## [2.17.1](https://github.com/web3-storage/web3.storage/compare/website-v2.17.0...website-v2.17.1) (2022-09-02)
+
+
+### Bug Fixes
+
+* prevent tabnabbing and clickjacking ([#1826](https://github.com/web3-storage/web3.storage/issues/1826)) ([7c63d83](https://github.com/web3-storage/web3.storage/commit/7c63d83fdd161705389f8b011af162fbdc2f1351))
+* remove helix image that clashes with 'products' nav item ([#1825](https://github.com/web3-storage/web3.storage/issues/1825)) ([a90a264](https://github.com/web3-storage/web3.storage/commit/a90a264a8e0f23571261243bfb170134b10cd3d2))
+* update storage column header verbiage ([#1824](https://github.com/web3-storage/web3.storage/issues/1824)) ([5494d9d](https://github.com/web3-storage/web3.storage/commit/5494d9d0ecf0727adc5227d12286408971a76a31))
+
+## [2.17.0](https://github.com/web3-storage/web3.storage/compare/website-v2.16.0...website-v2.17.0) (2022-08-31)
+
+
+### Features
+
+* account payments UI start ([#1767](https://github.com/web3-storage/web3.storage/issues/1767)) ([38f0088](https://github.com/web3-storage/web3.storage/commit/38f00887df1e22ddef7c76c51e9c68883ad80895))
+* e2e test website accountPayment loggedIn, includes magic.link testMode support in test-e2e job only ([#1754](https://github.com/web3-storage/web3.storage/issues/1754)) ([6d6f92c](https://github.com/web3-storage/web3.storage/commit/6d6f92cb10552c149ebd1fcaedb2295cb661192c))
+
+
+### Bug Fixes
+
+* upload list pagination headers ([#1739](https://github.com/web3-storage/web3.storage/issues/1739)) ([2ffe6d7](https://github.com/web3-storage/web3.storage/commit/2ffe6d749628095a93d957836c6b4e8ad3b6acf9))
+* website lint script now lints its 'lib' directory after it was previously eslintignored ([#1770](https://github.com/web3-storage/web3.storage/issues/1770)) ([78f0c71](https://github.com/web3-storage/web3.storage/commit/78f0c71f89b231f23e95e827caf7fce522df7f63))
+
+
+### Other Changes
+
+* add note about client.get reliability to retrieval doc ([#1812](https://github.com/web3-storage/web3.storage/issues/1812)) ([b23cee1](https://github.com/web3-storage/web3.storage/commit/b23cee1609abc631d2d1136a36d3e9e5e7e6a830))
+* point users to w3link ([#1814](https://github.com/web3-storage/web3.storage/issues/1814)) ([285b76e](https://github.com/web3-storage/web3.storage/commit/285b76e2b2b42625818700eba253489bd34e0e55))
+
 ## [2.16.0](https://github.com/web3-storage/web3.storage/compare/website-v2.15.0...website-v2.16.0) (2022-08-17)
 
 

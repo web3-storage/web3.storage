@@ -13,8 +13,8 @@ export function getMagic() {
   }
   magic = new Magic(constants.MAGIC_TOKEN, {
     extensions: [new OAuthExtension()],
+    testMode: constants.MAGIC_TESTMODE_ENABLED,
   });
-
   return magic;
 }
 

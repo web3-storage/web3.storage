@@ -25,7 +25,9 @@ export async function uploadPost (request, env, ctx) {
     )
     const files = form.getAll('file')
     input = files.map((f) => ({
+      // @ts-ignore
       path: f.name,
+      // @ts-ignore
       content: f.stream()
     }))
   } else if (contentType.includes('application/vnd.ipld.car') || contentType.includes('application/car')) {
@@ -33,7 +35,7 @@ export async function uploadPost (request, env, ctx) {
   } else {
     const blob = await request.blob()
     if (blob.size === 0) {
-      throw new Error('Empty payload')
+      throw new HTTPError('Empty payload', 400)
     }
     input = [blob]
   }

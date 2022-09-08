@@ -1,10 +1,10 @@
 {
   "name": "@web3-storage/api",
-  "version": "7.3.0",
+  "version": "7.4.5",
   "private": true,
   "type": "module",
   "license": "(Apache-2.0 OR MIT)",
-  "main": "./dist/worker.mjs",
+  "main": "./dist/worker.js",
   "scripts": {
     "lt": "npm-run-all -p lt:*",
     "lt:cluster": "npx localtunnel --port 9094 --subdomain \"$(whoami)-cluster-api-web3-storage\"",
@@ -14,10 +14,12 @@
     "stop": "npm-run-all -p minio:stop cluster:stop pg:stop",
     "wrangler-dev": "wrangler dev --env $(whoami)",
     "publish": "wrangler publish --env $(whoami)",
-    "build": "node scripts/cli.js build",
+    "build": "run-p build:cli typecheck",
+    "build:cli": "node scripts/cli.js build",
     "test": "run-s test:worker test:size",
     "test:worker": "mocha --require test/hooks.js --experimental-vm-modules --timeout 5000",
     "test:size": "bundlesize",
+    "typecheck": "tsc -b ./tsconfig.json",
     "cluster:start": "web3-storage-tools cluster --start",
     "cluster:stop": "web3-storage-tools cluster --stop",
     "cluster:reset": "web3-storage-tools cluster --clean",
@@ -27,7 +29,9 @@
     "minio:reset": "web3-storage-tools minio server clean",
     "pg:start": "cd ../db && npm start",
     "pg:stop": "cd ../db && npm run stop",
-    "miniflare": "miniflare dist/worker.mjs --modules --env ../../.env --watch"
+    "miniflare": "miniflare dist/worker.js --modules --env ../../.env $API_MINIFLARE_FLAGS --watch",
+    "lint": "standard --verbose",
+    "lint:fix": "npm run lint -- --fix"
   },
   "devDependencies": {
     "@sentry/cli": "^1.72.1",
@@ -77,7 +81,7 @@
   },
   "bundlesize": [
     {
-      "path": "./dist/worker.mjs",
+      "path": "./dist/worker.js",
       "maxSize": "1 MB"
     }
   ]

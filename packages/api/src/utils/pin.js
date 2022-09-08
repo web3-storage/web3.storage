@@ -17,6 +17,7 @@
 
 /** @type {Record<TrackerStatus, PinStatus>} */
 const PinStatusMap = {
+  // @ts-ignore
   undefined: 'Undefined',
   cluster_error: 'ClusterError',
   pin_error: 'PinError',
@@ -109,6 +110,7 @@ function toPins (peerMap) {
   // Note: `peerId` is the ID of the Cluster node, and is only used for cluster
   // admin. The `ipfsPeerId` can be  used to connect to the underlying ipfs node
   // that stores a given pin, by passing it to `ipfs swarm connect <peerid>`.
+  // @ts-ignore
   return Object.entries(peerMap).map(([peerId, { peerName, ipfsPeerId, status }]) => ({
     status: toPinStatusEnum(status),
     location: { peerId, peerName, ipfsPeerId }
@@ -161,6 +163,7 @@ export async function waitAndUpdateOkPins (cid, cluster, db, waitTime = MAX_PIN_
       location: pin.location
     }
   })
+  // @ts-ignore
   await db.upsertPins(pins)
   return okPins
 }

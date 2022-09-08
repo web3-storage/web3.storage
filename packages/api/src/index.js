@@ -12,12 +12,14 @@ import {
   userInfoGet,
   userLoginPost,
   userPaymentGet,
+  userPaymentPut,
   userPinsGet,
   userRequestPost,
   userTokensDelete,
   userTokensGet,
   userTokensPost,
   userUploadsDelete,
+  userUploadGet,
   userUploadsGet,
   userUploadsRename
 } from './user.js'
@@ -88,6 +90,7 @@ router.post('/car',                 auth['🔑'](carPost))
 router.put('/car/:cid',             auth['🔑'](carPut))
 router.post('/upload',              auth['🔑'](uploadPost))
 router.get('/user/uploads',         auth['🔑⚠️'](userUploadsGet))
+router.get('/user/uploads/:cid',    auth['🔑⚠️'](userUploadGet))
 
 router.post('/pins',                auth['📌'](pinPost))
 router.post('/pins/:requestId',     auth['📌'](pinPost))
@@ -107,6 +110,7 @@ router.get('/user/account',              auth['👤'](userAccountGet))
 router.get('/user/info',                 auth['👤'](userInfoGet))
 router.get('/user/pins',                 auth['📌⚠️'](userPinsGet))
 router.get('/user/payment',              auth['👤'](userPaymentGet))
+router.put('/user/payment',              auth['👤'](userPaymentPut))
 
 /* eslint-enable no-multi-spaces */
 
@@ -158,6 +162,7 @@ export default {
       env = { ...env } // new env object for every request (it is shared otherwise)!
       response = await router.handle(request, env, ctx)
     } catch (error) {
+      // @ts-ignore
       response = serverError(error, request, env)
     }
     await env.log.end(response)

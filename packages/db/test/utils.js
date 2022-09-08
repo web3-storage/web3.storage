@@ -249,14 +249,12 @@ export async function getUpload (dbClient, cid, userId) {
 }
 
 /**
- *
  * @param {import('../index').DBClient} dbClient
  * @param {string} userId
- * @param {import('../db-client-types').ListUploadsOptions} [listUploadOptions]
- *
+ * @param {import('../index').PageRequest} pageRequest
  */
-export async function listUploads (dbClient, userId, listUploadOptions) {
-  return dbClient.listUploads(userId, listUploadOptions)
+export async function listUploads (dbClient, userId, pageRequest) {
+  return dbClient.listUploads(userId, pageRequest)
 }
 
 /**

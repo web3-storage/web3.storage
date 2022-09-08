@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-env serviceworker */
 import { PutObjectCommand } from '@aws-sdk/client-s3/dist-es/commands/PutObjectCommand.js'
 import { CarBlockIterator } from '@ipld/car'
@@ -255,17 +256,14 @@ async function uploadToBucket (s3, bucketName, blob, sourceCid, userId, structur
   }
 
   try {
-    await s3.send(new PutObjectCommand(cmdParams))
-  } catch (err) {
-    if (err.name === 'BadDigest') {
-      // s3 returns a 400 Bad Request `BadDigest` error if the hash does not match their calculation.
-      // see: https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html#RESTErrorResponses
-      // see: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-s3/index.html#troubleshooting
-      console.log('BadDigest: sha256 of data recieved did not match what we sent. Maybe bits flipped in transit. Retrying once.')
+    try {
       await s3.send(new PutObjectCommand(cmdParams))
-    } else {
-      throw err
+    } catch (err) {
+      console.warn('Failed to upload CAR, retrying once...', err)
+      await s3.send(new PutObjectCommand(cmdParams))
     }
+  } catch (err) {
+    throw new Error('Failed to upload CAR', { cause: err })
   }
   return keyStr
 }

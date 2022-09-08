@@ -7,11 +7,13 @@ import { Cluster } from '@nftstorage/ipfs-cluster'
 import { DEFAULT_MODE } from './maintenance.js'
 import { Logging } from './utils/logs.js'
 import pkg from '../package.json'
+import { magicTestModeIsEnabledFromEnv } from './utils/env.js'
 import { defaultBypassMagicLinkVariableName } from './magic.link.js'
 
 /**
  * @typedef {object} Env
  * // Environment and global vars
+ * @property {string} DEBUG
  * @property {string} ENV
  * @property {string} BRANCH
  * @property {string} VERSION
@@ -45,6 +47,7 @@ import { defaultBypassMagicLinkVariableName } from './magic.link.js'
  * @property {S3Client} s3Client
  * @property {string} s3BucketName
  * @property {string} s3BucketRegion
+ * @property {string} mockStripePaymentMethodId
  */
 
 /**
@@ -60,11 +63,16 @@ export function envAll (req, env, ctx) {
     throw new Error('MISSING ENV. Please set PG_REST_URL')
   }
   // These values are replaced at build time by esbuild `define`
+  // @ts-ignore
   env.BRANCH = BRANCH
+  // @ts-ignore
   env.VERSION = VERSION
+  // @ts-ignore
   env.COMMITHASH = COMMITHASH
+  // @ts-ignore
   env.SENTRY_RELEASE = SENTRY_RELEASE
 
+  // @ts-ignore
   env.sentry = env.SENTRY_DSN && new Toucan({
     dsn: env.SENTRY_DSN,
     context: ctx,
@@ -73,8 +81,8 @@ export function envAll (req, env, ctx) {
     allowedSearchParams: /(.*)/,
     debug: env.DEBUG === 'true',
     rewriteFrames: {
-      // strip . from start of the filename ./worker.mjs as set by cloudflare, to make absolute path `/worker.mjs`
-      iteratee: (frame) => ({ ...frame, filename: frame.filename.substring(1) })
+      // sourcemaps only work if stack filepath are absolute like `/worker.js`
+      root: '/'
     },
     environment: env.ENV,
     release: env.SENTRY_RELEASE,
@@ -85,6 +93,7 @@ export function envAll (req, env, ctx) {
   // the logs to LogTail. This must be a new instance per request.
   // Note that we pass `ctx` as the `event` param here, because it's kind of both:
   // https://developers.cloudflare.com/workers/runtime-apis/fetch-event/#syntax-module-worker
+  // @ts-ignore
   env.log = new Logging(req, ctx, {
     token: env.LOGTAIL_TOKEN,
     debug: env.DEBUG === 'true',
@@ -94,7 +103,10 @@ export function envAll (req, env, ctx) {
     commithash: env.COMMITHASH
   })
 
-  env.magic = new Magic(env.MAGIC_SECRET_KEY)
+  env.magic = new Magic(env.MAGIC_SECRET_KEY, {
+    // @ts-ignore
+    testMode: magicTestModeIsEnabledFromEnv(env)
+  })
 
   // We can remove this when magic admin sdk supports test mode
   if (new URL(req.url).origin === 'http://testing.web3.storage' && env[defaultBypassMagicLinkVariableName] !== 'undefined') {
@@ -107,12 +119,14 @@ export function envAll (req, env, ctx) {
     token: env.PG_REST_JWT
   })
 
+  // @ts-ignore
   env.MODE = env.MAINTENANCE_MODE || DEFAULT_MODE
 
   env.ELASTIC_IPFS_PEER_ID = env.ELASTIC_IPFS_PEER_ID ?? 'bafzbeibhqavlasjc7dvbiopygwncnrtvjd2xmryk5laib7zyjor6kf3avm'
 
   const clusterAuthToken = env.CLUSTER_BASIC_AUTH_TOKEN
   const headers = clusterAuthToken ? { Authorization: `Basic ${clusterAuthToken}` } : {}
+  // @ts-ignore
   env.cluster = new Cluster(env.CLUSTER_API_URL, { headers })
 
   if (!env.S3_BUCKET_NAME) {
@@ -157,4 +171,9 @@ export function envAll (req, env, ctx) {
       }
     )
   }
+
+  // via https://stripe.com/docs/api/payment_methods/object
+  // this can be used to mock realistic values of a stripe.com paymentMethod id
+  // after fulls tripe integration, this may not be needed on the env
+  env.mockStripePaymentMethodId = 'pm_1LZnQ1IfErzTm2rETa7IGoVm'
 }

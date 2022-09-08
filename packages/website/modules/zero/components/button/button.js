@@ -23,7 +23,7 @@ const Button = ({ className, onClick, href, type, disabled, openInNewWindow, chi
     <div className={clsx(className, 'Button', disabled ? 'disabled' : undefined)}>
       {href && !disabled ? (
         openInNewWindow ? (
-          <a href={href} onClick={onClick} target="_blank" rel="noreferrer">
+          <a href={href} onClick={onClick} target="_blank" rel="noreferrer noopener">
             {children}
           </a>
         ) : (

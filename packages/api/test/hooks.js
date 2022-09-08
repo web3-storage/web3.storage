@@ -8,6 +8,7 @@ import { webcrypto } from 'crypto'
 import * as workerGlobals from './scripts/worker-globals.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
 
+// @ts-ignore
 global.crypto = webcrypto
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -36,7 +37,7 @@ export const mochaHooks = () => {
       srv = await new Miniflare({
         // Autoload configuration from `.env`, `package.json` and `wrangler.toml`
         envPath: true,
-        scriptPath: 'dist/worker.mjs',
+        scriptPath: 'dist/worker.js',
         packagePath: true,
         wranglerConfigPath: true,
         wranglerConfigEnv: 'test',
@@ -59,7 +60,7 @@ export const mochaHooks = () => {
       console.log('⚡️ Loading DB schema')
       await execa(dbCli, ['db-sql', '--cargo', '--testing', `--customSqlPath=${initScript}`])
 
-      await delay(2000)
+      await delay(1000)
     },
     async afterAll () {
       // Note: not awaiting promises here so we see the test results overview sooner.

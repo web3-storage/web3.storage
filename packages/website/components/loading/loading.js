@@ -16,7 +16,7 @@ export const SpinnerColor = {
 };
 
 /**
- * @param {Object} [props]
+ * @param {Object} props
  * @param {string} [props.className]
  * @param {string} [props.size]
  * @param {string} [props.color]
