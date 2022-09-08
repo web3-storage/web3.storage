@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS user_customer
   customer_id      TEXT NOT NULL UNIQUE
 );
 
-CREATE INDEX IF NOT EXISTS user_customer_user_id_idx ON public.user_customer (user_id);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS user_customer_user_id_idx ON public.user_customer (user_id);
