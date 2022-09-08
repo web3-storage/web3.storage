@@ -1,5 +1,33 @@
 # Changelog
 
+## [7.4.5](https://github.com/web3-storage/web3.storage/compare/api-v7.4.4...api-v7.4.5) (2022-09-08)
+
+
+### Bug Fixes
+
+* add a `/user/uploads/:cid` endpoint. ([#1530](https://github.com/web3-storage/web3.storage/issues/1530)) ([99654bc](https://github.com/web3-storage/web3.storage/commit/99654bcc668db016710a91e07901cd40b9a9995a))
+
+## [7.4.4](https://github.com/web3-storage/web3.storage/compare/api-v7.4.3...api-v7.4.4) (2022-09-07)
+
+
+### Bug Fixes
+
+* empty payload is client error ([#1854](https://github.com/web3-storage/web3.storage/issues/1854)) ([1613e4b](https://github.com/web3-storage/web3.storage/commit/1613e4b45cc59a4df36f52ebda8fe5930b035bbe))
+
+## [7.4.3](https://github.com/web3-storage/web3.storage/compare/api-v7.4.2...api-v7.4.3) (2022-09-06)
+
+
+### Bug Fixes
+
+* trigger release ([e4175a6](https://github.com/web3-storage/web3.storage/commit/e4175a667bc177eb807f5974d79381bf36a67aa5))
+
+## [7.4.2](https://github.com/web3-storage/web3.storage/compare/api-v7.4.1...api-v7.4.2) (2022-09-06)
+
+
+### Bug Fixes
+
+* always retry s3 upload ([#1846](https://github.com/web3-storage/web3.storage/issues/1846)) ([a5fa72c](https://github.com/web3-storage/web3.storage/commit/a5fa72c8c9c99ebb524cd21d7572fdbf178747af))
+
 ## [7.4.1](https://github.com/web3-storage/web3.storage/compare/api-v7.4.0...api-v7.4.1) (2022-09-06)
 
 

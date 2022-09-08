@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.18.1](https://github.com/web3-storage/web3.storage/compare/website-v2.18.0...website-v2.18.1) (2022-09-08)
+
+
+### Bug Fixes
+
+* add a `/user/uploads/:cid` endpoint. ([#1530](https://github.com/web3-storage/web3.storage/issues/1530)) ([99654bc](https://github.com/web3-storage/web3.storage/commit/99654bcc668db016710a91e07901cd40b9a9995a))
+
+## [2.18.0](https://github.com/web3-storage/web3.storage/compare/website-v2.17.1...website-v2.18.0) (2022-09-07)
+
+
+### Features
+
+* reusable and accessible table component ([#1700](https://github.com/web3-storage/web3.storage/issues/1700)) ([a4643a0](https://github.com/web3-storage/web3.storage/commit/a4643a09f15aef465bda50836c311e06de9f2471))
+
 ## [2.17.1](https://github.com/web3-storage/web3.storage/compare/website-v2.17.0...website-v2.17.1) (2022-09-02)
 
 

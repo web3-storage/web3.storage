@@ -19,6 +19,7 @@ import {
   userTokensGet,
   userTokensPost,
   userUploadsDelete,
+  userUploadGet,
   userUploadsGet,
   userUploadsRename
 } from './user.js'
@@ -89,6 +90,7 @@ router.post('/car',                 auth['🔑'](carPost))
 router.put('/car/:cid',             auth['🔑'](carPut))
 router.post('/upload',              auth['🔑'](uploadPost))
 router.get('/user/uploads',         auth['🔑⚠️'](userUploadsGet))
+router.get('/user/uploads/:cid',    auth['🔑⚠️'](userUploadGet))
 
 router.post('/pins',                auth['📌'](pinPost))
 router.post('/pins/:requestId',     auth['📌'](pinPost))
