@@ -81,7 +81,7 @@ jobs:
           npm run load-schema -w packages/db
           npm run stop -w packages/db
 
-      - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
         working-directory: packages/website
       
       # run e2e tests

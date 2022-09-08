@@ -9,6 +9,8 @@ import { Logging } from './utils/logs.js'
 import pkg from '../package.json'
 import { magicTestModeIsEnabledFromEnv } from './utils/env.js'
 import { defaultBypassMagicLinkVariableName } from './magic.link.js'
+import { createStripeBillingContext } from './utils/stripe.js'
+import { createMockBillingContext } from './utils/billing.js'
 
 /**
  * @typedef {object} Env
@@ -35,6 +37,7 @@ import { defaultBypassMagicLinkVariableName } from './magic.link.js'
  * @property {string} [LOGTAIL_TOKEN]
  * @property {string} MAINTENANCE_MODE
  * @property {string} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
+ * @property {string} [STRIPE_SECRET_KEY]
  * // Derived values and class dependencies
  * @property {Cluster} cluster
  * @property {DBClient} db
@@ -45,7 +48,9 @@ import { defaultBypassMagicLinkVariableName } from './magic.link.js'
  * @property {S3Client} s3Client
  * @property {string} s3BucketName
  * @property {string} s3BucketRegion
- * @property {string} mockStripePaymentMethodId
+ * @property {import('./utils/billing-types').BillingService} billing
+ * @property {import('./utils/billing-types').CustomersService} customers
+ * @property {string} stripeSecretKey
  */
 
 /**
@@ -168,8 +173,17 @@ export function envAll (req, env, ctx) {
     )
   }
 
-  // via https://stripe.com/docs/api/payment_methods/object
-  // this can be used to mock realistic values of a stripe.com paymentMethod id
-  // after fulls tripe integration, this may not be needed on the env
-  env.mockStripePaymentMethodId = 'pm_1LZnQ1IfErzTm2rETa7IGoVm'
+  const stripeSecretKey = env.STRIPE_SECRET_KEY
+  if (!stripeSecretKey && !['test', 'dev'].includes(env.ENV)) {
+    throw new Error(`Stripe secret key is required for env ${env.ENV}`)
+  } else if (stripeSecretKey) {
+    // if we have a stripeSecretKey, use stripe.com-powered BillingEnv services
+    Object.assign(env, createStripeBillingContext({
+      ...env,
+      STRIPE_SECRET_KEY: stripeSecretKey
+    }))
+  } else {
+    // use mock BillingEnv as a placeholder for test/dev
+    Object.assign(env, createMockBillingContext())
+  }
 }
