@@ -369,9 +369,11 @@ function getLinkHeader ({ url, pageRequest, items, count }) {
  * @param {import('./env').Env} env
  */
 export async function userUploadGet (request, env) {
+  // @ts-ignore
   const cid = request.params.cid
   let res
   try {
+    // @ts-ignore
     res = await env.db.getUpload(cid, request.auth.user._id)
   } catch (error) {
     return notFound()
