@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.4.5](https://github.com/web3-storage/web3.storage/compare/api-v7.4.4...api-v7.4.5) (2022-09-08)
+
+
+### Bug Fixes
+
+* add a `/user/uploads/:cid` endpoint. ([#1530](https://github.com/web3-storage/web3.storage/issues/1530)) ([99654bc](https://github.com/web3-storage/web3.storage/commit/99654bcc668db016710a91e07901cd40b9a9995a))
+
 ## [7.4.4](https://github.com/web3-storage/web3.storage/compare/api-v7.4.3...api-v7.4.4) (2022-09-07)
 
 
