@@ -8,7 +8,7 @@
  * - token: the token of the user these uploads will be authenticated with.
  * - uploads: The amount of uploads that need to be added, defaulting to 25.
  * - url: The URL of the API, defaulting to localhost.
- * - pin: Adds another request for each upload to pin that upload generating pin results, defaulting to false.
+ * - psa_pin_requests: If true, on top of uploading the file, a PSA pin request is created for the given CID.
  * Example usage.
  * From the API folder, run the following command using a generated token.
  * - node scripts/generate-upload-data.js token='yourApiToken'
@@ -23,7 +23,7 @@ const requiredArgs = [
 
 const optionalArgs = {
   uploads: '25',
-  pin: false,
+  psa_pin_requests: false,
   url: 'http://127.0.0.1:8787'
 }
 
@@ -82,7 +82,7 @@ async function generateData () {
       throw Error(error)
     }
 
-    if (config.pin) {
+    if (config.psa_pin_requests) {
       const body = {
         cid
       }
@@ -96,7 +96,7 @@ async function generateData () {
     }
     i++
   }
-  console.log(`Done, uploaded ${i} files ${config.pin ? 'pinning each of them' : ''}.`)
+  console.log(`Done, uploaded ${i} files ${config.psa_pin_requests ? 'pinning each of them' : ''}.`)
 }
 
 generateData()
