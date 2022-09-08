@@ -3,7 +3,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useUploads } from 'components/contexts/uploadsContext';
-import UploadsContainer from '../uploadsContainer/uploadsContainer';
+import { Tabs, TabItem } from 'components/tabs/tabs';
+
+// import UploadsContainer from '../uploadsContainer/uploadsContainer';
 
 /**
  * @typedef {import('web3.storage').Upload} Upload
@@ -27,42 +29,45 @@ const FilesManager = ({ className, content, onFileUpload, hasPSAEnabled }) => {
   const { uploads, pinned } = useUploads();
   const { query, replace } = useRouter();
 
-  const [currentTab, setCurrentTab] = useState('uploaded');
+  const upload_types = {
+    UPLOADED: 'uploaded',
+    PINNED: 'pinned',
+  };
+
+  const uploadedTypeContainerComponentMap = {};
+  uploadedTypeContainerComponentMap[upload_types.UPLOADED] = <span> uploads here</span>; // <UploadsContainer content={content} onFileUpload={onFileUpload} />,
+  uploadedTypeContainerComponentMap[upload_types.PINNED] = <span> pins here</span>; // <UploadsContainer content={content} onFileUpload={onFileUpload} />,
+
+  const [currentTab, setCurrentTab] = useState(upload_types.UPLOADED);
 
   // const [isUpdating, setIsUpdating] = useState(false);
 
   // Set current tab based on url param on load
   useEffect(() => {
-    if (query.hasOwnProperty('table') && currentTab !== query?.table) {
-      if (typeof query.table === 'string') {
-        if (query.table === 'pinned' && pinned.length === 0) {
-          delete query.table;
-          replace(
-            {
-              query,
-            },
-            undefined,
-            { shallow: true }
-          );
-          return;
-        }
-        setCurrentTab(query.table);
+    if (
+      query.hasOwnProperty('table') &&
+      typeof query.table === 'string' &&
+      // Object.values(upload_types).includes(query.table) &&
+      currentTab !== query.table
+    ) {
+      if (query.table === 'pinned' && !hasPSAEnabled) {
+        // Remove the pinned param if this is not enabled for the account.
+        delete query.table;
+        replace({ query }, undefined, { shallow: true });
+        return;
       }
+      setCurrentTab(query.table);
     }
-  }, [query, currentTab, pinned, replace]);
+  }, [replace, query, currentTab, hasPSAEnabled]);
 
   const changeCurrentTab = useCallback(
-    /** @type {string} */ tab => {
+    /** @type {string} */
+    tab => {
+      console.log('TAB', tab);
       setCurrentTab(tab);
       query.table = tab;
 
-      replace(
-        {
-          query,
-        },
-        undefined,
-        { shallow: true }
-      );
+      replace({ query }, undefined, { shallow: true });
     },
     [setCurrentTab, query, replace]
   );
@@ -78,39 +83,33 @@ const FilesManager = ({ className, content, onFileUpload, hasPSAEnabled }) => {
     }
   };
 
-  const renderTab = type => {
-    return type === 'uploaded' ? (
-      <UploadsContainer content={content} onFileUpload={onFileUpload} />
-    ) : (
-      <div>Pins tab</div>
-    );
-  };
-
   return (
-    <div
-      className={clsx(
-        'section files-manager-container',
-        className
-        // isUpdating && 'disabled'
-      )}
-    >
+    <div className={clsx('section files-manager-container', className)}>
       {hasPSAEnabled && (
         <div className="upload-pinned-selector">
-          {content?.tabs.map(tab => (
-            <div key={tab.file_type} className="filetype-tab">
-              <button
-                disabled={tab.file_type === 'pinned' && pinned.length === 0}
-                className={clsx('tab-button', currentTab === tab.file_type ? 'selected' : '')}
-                onClick={() => changeCurrentTab(tab.file_type)}
+          <Tabs onValueChange={changeCurrentTab}>
+            {content?.tabs.map(tab => (
+              <TabItem
+                key={tab.upload_type}
+                value={tab.upload_type}
+                label={`${tab.button_text} (${getFilesTotal(tab.upload_type)})`}
               >
-                <span>{tab.button_text}</span>
-                <span>{` (${getFilesTotal(tab.file_type)})`}</span>
-              </button>
-            </div>
-          ))}
+                {uploadedTypeContainerComponentMap[tab.upload_type]}
+              </TabItem>
+            ))}
+            {/* <div key={tab.upload_type} className="filetype-tab">
+                <button
+                  disabled={tab.upload_type === 'pinned' && pinned.length === 0}
+                  className={clsx('tab-button', currentTab === tab.upload_type ? 'selected' : '')}
+                  onClick={() => changeCurrentTab(tab.upload_type)}
+                >
+                  <span>{tab.button_text}</span>
+                  <span>{` (${getFilesTotal(tab.upload_type)})`}</span>
+                </button>
+              </div> */}
+          </Tabs>
         </div>
       )}
-      {renderTab(currentTab)}
     </div>
   );
 };

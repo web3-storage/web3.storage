@@ -292,14 +292,14 @@ const FilesManager = ({ className, content, onFileUpload }) => {
       {pinned.length > 0 && (
         <div className="upload-pinned-selector">
           {content?.tabs.map(tab => (
-            <div key={tab.file_type} className="filetype-tab">
+            <div key={tab.upload_type} className="filetype-tab">
               <button
-                disabled={tab.file_type === 'pinned' && pinned.length === 0}
-                className={clsx('tab-button', currentTab === tab.file_type ? 'selected' : '')}
-                onClick={() => changeCurrentTab(tab.file_type)}
+                disabled={tab.upload_type === 'pinned' && pinned.length === 0}
+                className={clsx('tab-button', currentTab === tab.upload_type ? 'selected' : '')}
+                onClick={() => changeCurrentTab(tab.upload_type)}
               >
                 <span>{tab.button_text}</span>
-                <span>{` (${getFilesTotal(tab.file_type)})`}</span>
+                <span>{` (${getFilesTotal(tab.upload_type)})`}</span>
               </button>
             </div>
           ))}

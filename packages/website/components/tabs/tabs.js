@@ -37,6 +37,7 @@ export function TabItem(props) {
  * @typedef {object} TabsProps
  * @property {React.ReactNode} children
  * @property {string} [className]
+ * @property {(value: string) => void} [onValueChange]
  */
 
 /**
@@ -83,6 +84,9 @@ export function Tabs(props) {
     const newValue = values[newTabIndex].value;
     if (newValue !== selectedValue) {
       setSelectedValue(newValue);
+      if (props.onValueChange) {
+        props.onValueChange(newValue);
+      }
     }
   };
 

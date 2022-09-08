@@ -81,13 +81,13 @@
     "file_manager": {
       "tabs": [
         {
-          "file_type": "uploaded",
+          "upload_type": "uploaded",
           "button_text": "Uploaded Directly",
           "heading": "All Uploaded Files",
           "searchHeading": "Showing %resultsNumber% uploaded results for %searchQuery%"
         },
         {
-          "file_type": "pinned",
+          "upload_type": "pinned",
           "button_text": "Uploaded via Pinning API",
           "heading": "All Pinned Files",
           "searchHeading": "Showing %resultsNumber% pinned results for %searchQuery%"
