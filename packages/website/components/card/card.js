@@ -126,13 +126,13 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
     }
     if (svg) {
       return (
-        <a href={obj.url} target="_blank" rel="noreferrer">
+        <a href={obj.url} target="_blank" rel="noreferrer noopener">
           {svg}
         </a>
       );
     }
     return (
-      <a href={obj.url} target="_blank" rel="noreferrer">
+      <a href={obj.url} target="_blank" rel="noreferrer noopener">
         {obj.text ? obj.text : ''}
       </a>
     );
@@ -148,6 +148,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
     <CustomTag
       href={card.action === 'link' ? card.url : undefined}
       target="_blank"
+      rel="noreferrer noopener"
       className={clsx('card', `type__${card.type}`, card.action ? `has-${card.action}` : '')}
       onClick={card.action === 'next-link' ? () => navigateOnCardClick(card) : undefined}
     >

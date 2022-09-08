@@ -1,10 +1,10 @@
 {
   "name": "@web3-storage/api",
-  "version": "7.4.0",
+  "version": "7.4.4",
   "private": true,
   "type": "module",
   "license": "(Apache-2.0 OR MIT)",
-  "main": "./dist/worker.mjs",
+  "main": "./dist/worker.js",
   "scripts": {
     "lt": "npm-run-all -p lt:*",
     "lt:cluster": "npx localtunnel --port 9094 --subdomain \"$(whoami)-cluster-api-web3-storage\"",
@@ -29,7 +29,7 @@
     "minio:reset": "web3-storage-tools minio server clean",
     "pg:start": "cd ../db && npm start",
     "pg:stop": "cd ../db && npm run stop",
-    "miniflare": "miniflare dist/worker.mjs --modules --env ../../.env $API_MINIFLARE_FLAGS --watch",
+    "miniflare": "miniflare dist/worker.js --modules --env ../../.env $API_MINIFLARE_FLAGS --watch",
     "lint": "standard --verbose",
     "lint:fix": "npm run lint -- --fix"
   },
@@ -80,7 +80,7 @@
   },
   "bundlesize": [
     {
-      "path": "./dist/worker.mjs",
+      "path": "./dist/worker.js",
       "maxSize": "1 MB"
     }
   ]

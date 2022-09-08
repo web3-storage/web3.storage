@@ -29,7 +29,7 @@ prog
       entryPoints: [path.join(__dirname, '..', 'src', 'index.js')],
       bundle: true,
       format: 'esm',
-      outfile: path.join(__dirname, '..', 'dist', 'worker.mjs'),
+      outfile: path.join(__dirname, '..', 'dist', 'worker.js'),
       legalComments: 'external',
       inject: [path.join(__dirname, 'node-globals.js')],
       plugins: [{
@@ -76,7 +76,7 @@ prog
       await cli.releases.uploadSourceMaps(sentryRelease, {
         // validate: true,
         include: [path.join(__dirname, '..', 'dist')],
-        ext: ['map', 'mjs']
+        ext: ['map', 'js']
       })
       await cli.releases.finalize(sentryRelease)
       await cli.releases.newDeploy(sentryRelease, { env: opts.env })

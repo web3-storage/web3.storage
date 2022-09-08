@@ -115,7 +115,7 @@ const FileRowItem = props => {
             className="cid-truncate underline medium-up-only"
             href={`${linkPrefix}${cid}`}
             target="_blank"
-            rel="noreferrer"
+            rel="noreferrer noopener"
           >
             {truncatedCID}
           </a>

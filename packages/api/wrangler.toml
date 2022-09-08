@@ -1,6 +1,6 @@
 # web3.storage wrangler config.
 name = "web3-storage"
-main = "./dist/worker.mjs"
+main = "./dist/worker.js"
 compatibility_date = "2022-06-14"
 no_bundle = true
 
@@ -31,13 +31,13 @@ vars = { DEBUG = "true", ENV= "test" }
 [env.production]
 # name = "web3-storage-production"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
-route = "https://api.web3.storage/*"
+route = { pattern = "https://api.web3.storage/*", zone_id = "7eee3323c1b35b6650568604c65f441e" }
 vars = { CLUSTER_API_URL = "https://web3.storage.ipfscluster.io/api/", ENV = "production", PG_REST_URL = "https://web3-storage-pgrest-prod.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
 
 [env.staging]
 # name = "web3-storage-staging"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
-route = "https://api-staging.web3.storage/*"
+route = { pattern = "https://api-staging.web3.storage/*", zone_id = "7eee3323c1b35b6650568604c65f441e" }
 # nft.storage.ipfscluster.io is the staging cluster
 vars = { CLUSTER_API_URL = "https://nft.storage.ipfscluster.io/api/", ENV = "staging", PG_REST_URL = "https://web3-storage-pgrest-staging.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
 

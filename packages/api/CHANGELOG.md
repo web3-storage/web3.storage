@@ -1,5 +1,34 @@
 # Changelog
 
+## [7.4.4](https://github.com/web3-storage/web3.storage/compare/api-v7.4.3...api-v7.4.4) (2022-09-07)
+
+
+### Bug Fixes
+
+* empty payload is client error ([#1854](https://github.com/web3-storage/web3.storage/issues/1854)) ([1613e4b](https://github.com/web3-storage/web3.storage/commit/1613e4b45cc59a4df36f52ebda8fe5930b035bbe))
+
+## [7.4.3](https://github.com/web3-storage/web3.storage/compare/api-v7.4.2...api-v7.4.3) (2022-09-06)
+
+
+### Bug Fixes
+
+* trigger release ([e4175a6](https://github.com/web3-storage/web3.storage/commit/e4175a667bc177eb807f5974d79381bf36a67aa5))
+
+## [7.4.2](https://github.com/web3-storage/web3.storage/compare/api-v7.4.1...api-v7.4.2) (2022-09-06)
+
+
+### Bug Fixes
+
+* always retry s3 upload ([#1846](https://github.com/web3-storage/web3.storage/issues/1846)) ([a5fa72c](https://github.com/web3-storage/web3.storage/commit/a5fa72c8c9c99ebb524cd21d7572fdbf178747af))
+
+## [7.4.1](https://github.com/web3-storage/web3.storage/compare/api-v7.4.0...api-v7.4.1) (2022-09-06)
+
+
+### Bug Fixes
+
+* sourcemap stacktraces in sentry ([#1838](https://github.com/web3-storage/web3.storage/issues/1838)) ([4de82b6](https://github.com/web3-storage/web3.storage/commit/4de82b6c721c87875cd11890979bd9deb211c746))
+* wrangler publish wildcard route with specified zone id ([#1843](https://github.com/web3-storage/web3.storage/issues/1843)) ([9ccacff](https://github.com/web3-storage/web3.storage/commit/9ccacff1183dee0eb8142d4bf65f224ac8a5b273))
+
 ## [7.4.0](https://github.com/web3-storage/web3.storage/compare/api-v7.3.0...api-v7.4.0) (2022-08-31)
 
 
