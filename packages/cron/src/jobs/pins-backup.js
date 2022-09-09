@@ -10,17 +10,18 @@ import * as raw from 'multiformats/codecs/raw'
 import { Readable } from 'stream'
 
 export default class Backup {
-  constructor () {
-    this.UPDATE_BACKUP_URL = 'UPDATE psa_pin_request SET (backup_urls) VALUES ($1) WHERE id = $2 AND content_cid = $3'
+  constructor (env) {
+    this.UPDATE_BACKUP_URL = 'UPDATE psa_pin_request SET backup_urls = $1 WHERE id = $2 AND content_cid = $3 RETURNING *'
     this.fmt = formatNumber()
     this.SIZE_TIMEOUT = 1000 * 10 // timeout if we can't figure out the size in 10s
     this.BLOCK_TIMEOUT = 1000 * 30 // timeout if we don't receive a block after 30s
     this.REPORT_INTERVAL = 1000 * 60 // log download progress every minute
     this.MAX_DAG_SIZE = 1024 * 1024 * 1024 * 32 // don't try to transfer a DAG that's bigger than 32GB
     this.log = debug('backup:pins')
-    this.LIMIT = process.env.QUERY_LIMIT ?? 10000
+    this.env = env
+    this.LIMIT = env.QUERY_LIMIT !== undefined ? env.QUERY_LIMIT : 10000
     this.GET_PINNED_PINS_QUERY = `
-      SELECT *
+      SELECT psa.id, psa.backup_urls, psa.source_cid, psa.content_cid, psa.name, psa.auth_key_id
       FROM psa_pin_request psa
         JOIN pin p ON p.content_cid = psa.content_cid
       WHERE p.status = 'Pinned'
@@ -28,20 +29,22 @@ export default class Backup {
       LIMIT $1
     `
     this.s3 = new AWS.S3({})
-    this.CONCURRENCY = 10
+    this.CONCURRENCY = env.CONCURRENCY !== undefined ? env.CONCURRENCY : 10
   }
 
   /**
    * @param {import('pg').Client} db
    */
-  registerBackup (db, contentCid, rowId) {
+  registerBackup (db, contentCid, pinRequestId) {
     /**
      * @param {AsyncIterable<import('./bindings').RemoteBackup} source
      */
-    return async function (source) {
+    return async (source) => {
       for await (const bak of source) {
-        await db.query(this.UPDATE_BACKUP_URL, [bak.backupUrl.toString(), rowId, contentCid])
-        this.log(`saved backup record for upload ${bak.uploadId}: ${bak.backupUrl}`)
+        this.log(`backing up ${JSON.stringify(bak)}`)
+        const res = await db.query(this.UPDATE_BACKUP_URL, [[bak.backupUrl.toString()], pinRequestId, contentCid])
+        this.log(`Result from updating pin request ${JSON.stringify(res)}`)
+        this.log(`saved backup record for upload ${bak.contentCid}: ${bak.backupUrl.toString()}, rowId: ${pinRequestId}`)
       }
     }
   }
@@ -70,11 +73,10 @@ export default class Backup {
    * @param {import('./bindings').BackupContent} bak
    */
   async s3Upload (s3, bucketName, bak) {
-    const log = debug(`backup:remote:${bak.sourceCid}`)
     const key = `complete/${bak.contentCid}.car`
     const region = await s3.config.region()
     const url = new URL(`https://${bucketName}.s3.${region}.amazonaws.com/${key}`)
-    log(`uploading to ${url}`)
+    this.log(`uploading to ${url}`)
     const upload = new Upload({
       client: s3,
       params: {
@@ -85,7 +87,7 @@ export default class Backup {
       }
     })
     await upload.done()
-    log('done')
+    this.log('done')
     return url
   }
 
@@ -115,15 +117,14 @@ export default class Backup {
    * @param {number} [options.maxDagSize]
    */
   async * ipfsDagExport (ipfs, cid, options) {
-    const log = debug(`backup:export:${cid}`)
     const maxDagSize = options.maxDagSize || this.MAX_DAG_SIZE
 
     let reportInterval
     try {
-      log('determining size...')
+      this.log('determining size...')
       let bytesReceived = 0
       const bytesTotal = await this.getSize(ipfs, cid)
-      log(bytesTotal == null ? 'unknown size' : `size: ${this.fmt(bytesTotal)} bytes`)
+      this.log(bytesTotal == null ? 'unknown size' : `size: ${this.fmt(bytesTotal)} bytes`)
 
       if (bytesTotal != null && bytesTotal > maxDagSize) {
         throw Object.assign(
@@ -134,7 +135,7 @@ export default class Backup {
 
       reportInterval = setInterval(() => {
         const formattedTotal = bytesTotal ? this.fmt(bytesTotal) : 'unknown'
-        log(`received ${this.fmt(bytesReceived)} of ${formattedTotal} bytes`)
+        this.log(`received ${this.fmt(bytesReceived)} of ${formattedTotal} bytes`)
       }, this.REPORT_INTERVAL)
 
       for await (const chunk of ipfs.dagExport(cid, { timeout: this.BLOCK_TIMEOUT })) {
@@ -142,7 +143,7 @@ export default class Backup {
         yield chunk
       }
 
-      log('done')
+      this.log('done')
     } finally {
       clearInterval(reportInterval)
     }
@@ -183,8 +184,8 @@ export default class Backup {
       const pin = {
         sourceCid,
         contentCid: CID.parse(upload.content_cid),
-        userId: String(upload.user_id),
-        uploadId: String(upload.id)
+        authKeyId: String(upload.auth_key_id),
+        pinRequestId: String(upload.id)
       }
       yield pin
     }
@@ -194,9 +195,9 @@ export default class Backup {
    * This job grabs 10,000 pins which do not have a backup URL and sends them to S3 and updates the record with the S3 URL
    * @param {{ env: NodeJS.ProcessEnv, rwPg: Client, roPg: Client, cluster: import('@nftstorage/ipfs-cluster').Cluster }} config
    */
-  async backupPins ({ env, roPg, rwPg, cluster, concurrency = this.CONCURRENCY }) {
+  async backupPins ({ roPg, rwPg, cluster, concurrency = this.CONCURRENCY }) {
     if (!this.log.enabled) {
-      console.log('ℹ️ Enable logging by setting DEBUG=pins:backupPins')
+      console.log('ℹ️ Enable logging by setting DEBUG=backup:pins')
     }
 
     let totalProcessed = 0
@@ -204,14 +205,15 @@ export default class Backup {
 
     await pipe(this.getPinsNotBackedUp(roPg), async (source) => {
       for await (const pins of batch(source, concurrency)) {
+        this.log(`Got pins: ${JSON.stringify(pins)}`)
         await Promise.all(pins.map(async pin => {
           this.log(`processing pin ${JSON.stringify(pin)}`)
           try {
             await pipe(
               [pin],
               this.exportCar(cluster),
-              this.uploadCar(this.s3, env.s3PickupBucketName),
-              this.registerBackup(rwPg, pin.content_cid, pin.id)
+              this.uploadCar(this.s3, this.env.s3PickupBucketName),
+              this.registerBackup(rwPg, pin.content_cid, pin.pinRequestId)
             )
             totalSuccessful++
           } catch (err) {
@@ -219,8 +221,8 @@ export default class Backup {
           }
         }))
         totalProcessed++
-        this.log(`processed ${totalSuccessful} of ${totalProcessed} CIDs successfully`)
       }
+      this.log(`processed ${totalSuccessful} of ${totalProcessed} CIDs successfully`)
     })
     this.log('backup complete 🎉')
   }
