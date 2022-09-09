@@ -19,7 +19,7 @@ export const mochaHooks = () => {
 
   return {
     async beforeAll () {
-      this.timeout(60_000)
+      this.timeout(2 * 60_000)
 
       console.log('⚡️ Starting PostgreSQL and PostgREST')
       projectDb = `web3-storage-db-${Date.now()}`

@@ -48,6 +48,7 @@ prog
             })
           }
         },
+        // required to build with 'stripe', which has imports (we dont use) on http, https, crypto
         NodeModulesPolyfillPlugin()
       ],
       define: {

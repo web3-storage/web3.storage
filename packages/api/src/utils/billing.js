@@ -1,3 +1,5 @@
+/* eslint-disable no-void */
+
 /**
  * Save a user's payment settings
  * @param {object} ctx
@@ -25,6 +27,9 @@ export async function getPaymentSettings (ctx) {
   const { billing, customers, user } = ctx
   const customer = await customers.getOrCreateForUser(user)
   const paymentMethod = await billing.getPaymentMethod(customer.id)
+  if (paymentMethod instanceof Error) {
+    throw paymentMethod
+  }
   /** @type {import('./billing-types').PaymentSettings} */
   const settings = { method: paymentMethod }
   return settings
@@ -114,5 +119,47 @@ export function createMockBillingService () {
 export function createMockPaymentMethod () {
   return {
     id: `mock_pm_${randomString()}`
+  }
+}
+
+/**
+ * Create a Customers Service for use in testing the app.
+ * @returns {import('./billing-types').CustomersService}
+ */
+function createTestEnvCustomerService () {
+  return {
+    async getOrCreateForUser (user) {
+      // reuse user.id as customer.id
+      return { id: user.id }
+    }
+  }
+}
+
+/**
+ * Create BillingEnv to use when testing.
+ * Use stubs/mocks instead of real billing service (e.g. stripe.com and/or a networked db)
+ * @returns {import('./billing-types').BillingEnv}
+ */
+export function createMockBillingContext () {
+  const billing = createMockBillingService()
+  const customers = createTestEnvCustomerService()
+  return {
+    billing,
+    customers
+  }
+}
+
+/**
+ * Indicates that a process was not able to find a specific Customer record.
+ */
+export class CustomerNotFound extends Error {
+  /**
+   * @param {string} [message]
+   * @param {...any} args
+   */
+  constructor (message = 'customer not found', ...args) {
+    super(...[message, ...args])
+    this.code = /** @type {const} */ ('ERROR_CUSTOMER_NOT_FOUND')
+    void /** @type {import('./billing-types').CustomerNotFound} */ (this)
   }
 }

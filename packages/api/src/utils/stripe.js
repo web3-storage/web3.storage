@@ -1,5 +1,6 @@
+/* eslint-disable no-void */
 import Stripe from 'stripe'
-import { randomString } from './billing.js'
+import { CustomerNotFound, randomString } from './billing.js'
 
 /**
  * @typedef {import('stripe').Stripe} StripeInterface
@@ -34,21 +35,18 @@ export class StripeBillingService {
   constructor (stripe) {
     /** @type {StripeComForBillingService}  */
     this.stripe = stripe
-    /**
-     * @type {BillingService}
-     */
-    const instance = this // eslint-disable-line
+    void /** @type {BillingService} */ (this)
   }
 
+  /**
+   * @returns {Promise<import('./billing-types').CustomerNotFound|import('./billing-types').PaymentMethod>}
+   */
   async getPaymentMethod (customerId) {
     const response = await this.stripe.customers.retrieve(customerId, {
       expand: ['invoice_settings.default_payment_method']
     })
-    if (response.object !== 'customer') {
-      throw new Error('unable to get payment method')
-    }
     if (response.deleted) {
-      throw new Error('unexpected response.deleted')
+      return new CustomerNotFound('customer retrieved from stripe has been unexpectedly deleted')
     }
     const defaultPaymentMethod = response.invoice_settings.default_payment_method
     const defaultPaymentMethodObject = (typeof defaultPaymentMethod === 'string') ? { id: defaultPaymentMethod } : defaultPaymentMethod ?? {}
@@ -247,7 +245,7 @@ export function createMockStripeForCustomersService () {
 
 /**
  * @param {object} [options]
- * @param {(id: string) => Promise<undefined|Stripe.Customer>} [options.retrieveCustomer]
+ * @param {(id: string) => Promise<undefined|Stripe.Customer|Stripe.DeletedCustomer>} [options.retrieveCustomer]
  * @param {() => void} [options.onCreateSetupintent]
  * @returns {StripeComForBillingService}
  */
@@ -374,5 +372,35 @@ export function createMockStripeCustomer (options = {}) {
         : {}
       )
     }
+  }
+}
+
+/**
+ * Create some billing services based on the provided environment vars.
+ * If there is a stripe.com secret, the implementations will use the stripe.com APIs.
+ * Otherwise the mock implementations will be used.
+ * @param {object} env
+ * @param {string} env.STRIPE_SECRET_KEY
+ * @param {DBClient} env.db
+ * @returns {import('./billing-types').BillingEnv}
+ */
+export function createStripeBillingContext (env) {
+  const stripeSecretKey = env.STRIPE_SECRET_KEY
+  if (!stripeSecretKey) {
+    throw new Error('Please set the required STRIPE_SECRET_KEY environment variable')
+  }
+  const stripe = new Stripe(stripeSecretKey, {
+    apiVersion: '2022-08-01',
+    httpClient: Stripe.createFetchHttpClient()
+  })
+  const billing = StripeBillingService.create(stripe)
+  const userCustomerService = {
+    upsertUserCustomer: env.db.upsertUserCustomer.bind(env.db),
+    getUserCustomer: env.db.getUserCustomer.bind(env.db)
+  }
+  const customers = StripeCustomersService.create(stripe, userCustomerService)
+  return {
+    billing,
+    customers
   }
 }

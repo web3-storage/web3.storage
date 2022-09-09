@@ -1,5 +1,5 @@
 import * as JWT from './utils/jwt.js'
-import { JSONResponse } from './utils/json-response.js'
+import { JSONResponse, notFound } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
 import { HTTPError, RangeNotSatisfiableError } from './errors.js'
 import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
@@ -361,6 +361,26 @@ function getLinkHeader ({ url, pageRequest, items, count }) {
   }
 
   return rels.join(', ')
+}
+
+/**
+ * Retrieve a single user upload.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userUploadGet (request, env) {
+  // @ts-ignore
+  const cid = request.params.cid
+  let res
+  try {
+    // @ts-ignore
+    res = await env.db.getUpload(cid, request.auth.user._id)
+  } catch (error) {
+    return notFound()
+  }
+
+  return new JSONResponse(res)
 }
 
 /**

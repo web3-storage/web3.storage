@@ -20,8 +20,15 @@ export type IdOnlyPaymentMethod = {
 
 export type PaymentMethod = StripeCardPaymentMethod | IdOnlyPaymentMethod
 
+/**
+ * Indicates that a process was not able to find a specific Customer record.
+ */
+export interface CustomerNotFound extends Error {
+  code: 'ERROR_CUSTOMER_NOT_FOUND'
+}
+
 export interface BillingService {
-  getPaymentMethod(customer: CustomerId): Promise<PaymentMethod|null>
+  getPaymentMethod(customer: CustomerId): Promise<PaymentMethod|null|CustomerNotFound>
   savePaymentMethod(
     customer: CustomerId,
     paymentMethodId: StripePaymentMethodId

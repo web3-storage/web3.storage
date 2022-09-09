@@ -81,7 +81,7 @@ jobs:
           npm run load-schema -w packages/db
           npm run stop -w packages/db
 
-      - run: npx playwright install --with-deps ${{ matrix.browser }} chromium
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
         working-directory: packages/website
       
       # run e2e tests
@@ -206,8 +206,8 @@ jobs:
         with:
           run: npx wrangler pages publish --project-name web3-storage-staging --branch "$GITHUB_REF_NAME" --commit-hash "$GITHUB_SHA" ./packages/website/out
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_PAGES_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
       - name: Find Cloudflare Pages preview URL
         uses: mathiasvr/command-output@v1.1.0
         id: cloudflare_url
@@ -291,5 +291,5 @@ jobs:
       - name: Deploy https://web3.storage to Cloudflare Pages
         run: npx wrangler pages publish --project-name web3-storage --branch "main" --commit-hash "$GITHUB_SHA" ./packages/website/out
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_PAGES_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_TOKEN}}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}

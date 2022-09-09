@@ -21,5 +21,5 @@ export type PageProps = RestrictedRouteProps &
   };
 
 export type PageAccountProps = PageProps & {
-  stripeKey?: string;
+  stripePublishableKey?: string;
 };

@@ -1,5 +1,26 @@
 # Changelog
 
+## [7.5.0](https://github.com/web3-storage/web3.storage/compare/api-v7.4.5...api-v7.5.0) (2022-09-09)
+
+
+### Features
+
+* issues/1779 - I can save my payment settings ([#1852](https://github.com/web3-storage/web3.storage/issues/1852)) ([a49e780](https://github.com/web3-storage/web3.storage/commit/a49e780a4c7c0a3680aa03239552b01f1fcf72ed))
+
+## [7.4.5](https://github.com/web3-storage/web3.storage/compare/api-v7.4.4...api-v7.4.5) (2022-09-08)
+
+
+### Bug Fixes
+
+* add a `/user/uploads/:cid` endpoint. ([#1530](https://github.com/web3-storage/web3.storage/issues/1530)) ([99654bc](https://github.com/web3-storage/web3.storage/commit/99654bcc668db016710a91e07901cd40b9a9995a))
+
+## [7.4.4](https://github.com/web3-storage/web3.storage/compare/api-v7.4.3...api-v7.4.4) (2022-09-07)
+
+
+### Bug Fixes
+
+* empty payload is client error ([#1854](https://github.com/web3-storage/web3.storage/issues/1854)) ([1613e4b](https://github.com/web3-storage/web3.storage/commit/1613e4b45cc59a4df36f52ebda8fe5930b035bbe))
+
 ## [7.4.3](https://github.com/web3-storage/web3.storage/compare/api-v7.4.2...api-v7.4.3) (2022-09-06)
 
 

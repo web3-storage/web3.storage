@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.19.0](https://github.com/web3-storage/web3.storage/compare/website-v2.18.1...website-v2.19.0) (2022-09-09)
+
+
+### Features
+
+* add w3name http api swagger doc page ([#1727](https://github.com/web3-storage/web3.storage/issues/1727)) ([2a03748](https://github.com/web3-storage/web3.storage/commit/2a03748d70e4e8aa0764fec0538c26dbf84ae6e6))
+* issues/1779 - I can save my payment settings ([#1852](https://github.com/web3-storage/web3.storage/issues/1852)) ([a49e780](https://github.com/web3-storage/web3.storage/commit/a49e780a4c7c0a3680aa03239552b01f1fcf72ed))
+
+## [2.18.1](https://github.com/web3-storage/web3.storage/compare/website-v2.18.0...website-v2.18.1) (2022-09-08)
+
+
+### Bug Fixes
+
+* add a `/user/uploads/:cid` endpoint. ([#1530](https://github.com/web3-storage/web3.storage/issues/1530)) ([99654bc](https://github.com/web3-storage/web3.storage/commit/99654bcc668db016710a91e07901cd40b9a9995a))
+
+## [2.18.0](https://github.com/web3-storage/web3.storage/compare/website-v2.17.1...website-v2.18.0) (2022-09-07)
+
+
+### Features
+
+* reusable and accessible table component ([#1700](https://github.com/web3-storage/web3.storage/issues/1700)) ([a4643a0](https://github.com/web3-storage/web3.storage/commit/a4643a09f15aef465bda50836c311e06de9f2471))
+
 ## [2.17.1](https://github.com/web3-storage/web3.storage/compare/website-v2.17.0...website-v2.17.1) (2022-09-02)
 
 
