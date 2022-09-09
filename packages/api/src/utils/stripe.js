@@ -8,6 +8,7 @@ import { CustomerNotFound, randomString } from './billing.js'
 
 /**
  * @typedef {import("./billing-types").BillingService} BillingService
+ * @typedef {import("./billing-types").PaymentMethod} PaymentMethod
  */
 
 /**
@@ -39,7 +40,8 @@ export class StripeBillingService {
   }
 
   /**
-   * @returns {Promise<import('./billing-types').CustomerNotFound|import('./billing-types').PaymentMethod>}
+   * @param {string} customerId
+   * @returns {Promise<null | CustomerNotFound | PaymentMethod>}
    */
   async getPaymentMethod (customerId) {
     const response = await this.stripe.customers.retrieve(customerId, {
@@ -52,7 +54,7 @@ export class StripeBillingService {
     const defaultPaymentMethodObject = (typeof defaultPaymentMethod === 'string') ? { id: defaultPaymentMethod } : defaultPaymentMethod ?? {}
     const defaultPaymentMethodId = (typeof defaultPaymentMethod === 'string') ? defaultPaymentMethod : defaultPaymentMethod?.id
     if (!defaultPaymentMethodId) {
-      throw new Error('unable to determine defaultPaymentMethodId for customer')
+      return null
     }
     /** @type {import('./billing-types').PaymentMethod} */
     const paymentMethod = ('card' in defaultPaymentMethodObject)

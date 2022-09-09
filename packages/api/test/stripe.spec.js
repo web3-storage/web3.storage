@@ -30,7 +30,7 @@ describe('StripeBillingService', async function () {
     const billing = StripeBillingService.create(mockStripe)
     const gotPaymentMethod = await billing.getPaymentMethod(customerId)
     assert.ok(!(gotPaymentMethod instanceof Error), 'gotPaymentMethod did not return an error')
-    assert.equal(gotPaymentMethod.id, mockPaymentMethodId)
+    assert.equal(gotPaymentMethod?.id, mockPaymentMethodId)
   })
   it('getPaymentMethod results in CustomerNotFound error if customer is deleted', async function () {
     const customerId = `customer-${Math.random().toString().slice(2)}`
@@ -62,7 +62,8 @@ describe('StripeCustomersService + StripeBillingService', () => {
     await billing.savePaymentMethod(customer.id, desiredPaymentMethodId)
     const gotPaymentMethod = await billing.getPaymentMethod(customer.id)
     assert.ok(!(gotPaymentMethod instanceof Error), 'getPaymentMethod did not return an error')
-    assert.ok(gotPaymentMethod.id.startsWith('pm_'), 'payment method id starts with pm_')
+    assert.ok(gotPaymentMethod, 'paymentMethod is truthy')
+    assert.ok(gotPaymentMethod?.id.startsWith('pm_'), 'payment method id starts with pm_')
     // it will have a 'card' property same as stripe
     assert.ok('card' in gotPaymentMethod, 'payment method has card property')
     const card = gotPaymentMethod.card
