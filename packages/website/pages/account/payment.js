@@ -162,7 +162,8 @@ export function getStaticProps() {
   const stripePublishableKey = process.env[STRIPE_PULISHABLE_KEY_ENVVAR_NAME];
   console.log('/account/payment getStaticProps', {
     stripePublishableKey,
-    'env.STRIPE_SECRET_KEY.slice(-10)': process.env.STRIPE_SECRET_KEY?.slice(-10),
+    'env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY': process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    'env.STRIPE_SECRET_KEY': process.env.STRIPE_SECRET_KEY,
   });
   if (!stripePublishableKey) {
     throw new Error(
