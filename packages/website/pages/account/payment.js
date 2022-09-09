@@ -7,9 +7,9 @@ import { useState, useEffect } from 'react';
 import { Elements, ElementsConsumer } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-import PaymentTable from 'components/account/paymentTable.js/paymentTable.js';
+import PaymentCustomPlan from '../../components/account/paymentCustomPlan.js/paymentCustomPlan.js';
+import PaymentTable from '../../components/account/paymentTable.js/paymentTable.js';
 // import PaymentHistoryTable from 'components/account/paymentHistory.js/paymentHistory.js';
-import PaymentCustomPlan from 'components/account/paymentCustomPlan.js/paymentCustomPlan.js';
 import PaymentMethodCard from '../../components/account/paymentMethodCard/paymentMethodCard.js';
 import AccountPlansModal from '../../components/accountPlansModal/accountPlansModal.js';
 // import PaymentHistoryTable from '../../components/account/paymentHistory.js/paymentHistory.js';
@@ -157,16 +157,16 @@ const PaymentSettingsPage = props => {
  * @returns {{ props: import('components/types').PageAccountProps}}
  */
 export function getStaticProps() {
-  const stripeKey = process.env.NEXT_PUBLIC_STRIPE_TEST_PK;
-  if (!stripeKey) {
-    console.warn(`account payment page missing required process.env.NEXT_PUBLIC_STRIPE_TEST_PK`);
+  const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+  if (!stripePublishableKey) {
+    console.warn(`account payment page missing required process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`);
   }
   return {
     props: {
       title: 'Payment',
       isRestricted: true,
       redirectTo: '/login/',
-      stripeKey: stripeKey ?? '',
+      stripePublishableKey: stripePublishableKey ?? '',
     },
   };
 }
