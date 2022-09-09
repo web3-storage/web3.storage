@@ -1,32 +1,30 @@
 import { useState } from 'react';
-import clsx from 'clsx';
 
 import Button from '../../button/button.js';
-import CustomStorageForm from '../../customStorageForm/customStorageForm';
+import AccountCustomPlanModal from '../accountCustomPlanModal/accountCustomPlanModal.js';
 
 const PaymentCustomPlan = props => {
   const [showContactForm, setShowContactForm] = useState(false);
 
   return (
-    <div className="custom-plan-cta">
-      <div>
-        <h4>Need more storage?</h4>
-        <p>We can put together a custom plan for you based on your specific needs</p>
-      </div>
-      <Button
-        variant="light"
-        className=""
-        onClick={() => {
-          setShowContactForm(true);
-        }}
-      >
-        Contact Us
-      </Button>
+    <>
+      <div className="custom-plan-cta">
+        <div>
+          <p>We can put together a custom plan for you based on your specific needs</p>
 
-      <div className={clsx('custom-plan-form', showContactForm ? 'show' : 'hide')}>
-        <CustomStorageForm />
+          <Button
+            variant="outline-light"
+            className=""
+            onClick={() => {
+              setShowContactForm(true);
+            }}
+          >
+            Contact Us
+          </Button>
+        </div>
       </div>
-    </div>
+      <AccountCustomPlanModal isOpen={showContactForm} onClose={() => setShowContactForm(false)} />
+    </>
   );
 };
 

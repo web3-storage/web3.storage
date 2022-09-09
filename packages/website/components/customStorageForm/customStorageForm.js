@@ -1,16 +1,25 @@
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import kwesforms from 'kwesforms';
 
-const CustomStorageForm = () => {
+const CustomStorageForm = ({ onClose }) => {
   useEffect(() => {
     kwesforms.init();
   }, []);
 
+  useLayoutEffect(() => {
+    const form = document.getElementById('kwesForm');
+    form?.addEventListener('kwSubmitted', function () {
+      // do we need to do any custom logic?
+    });
+  }, []);
+
   return (
     <form
+      id="kwesForm"
       className="kwes-form text-left max-w-lg text-lg mx-auto mt-12"
       action="https://kwesforms.com/api/foreign/forms/rJbS5DK02SKLzypcNzJ3"
     >
+      <h3>Enterprise user inquiry</h3>
       <div className="fields">
         <div className="input-wrapper">
           <label htmlFor="first-name">
@@ -44,7 +53,7 @@ const CustomStorageForm = () => {
 
         <div className="input-wrapper">
           <label htmlFor="email">
-            Email address associated with your NFT.Storage account
+            Email address associated with your web3.storage account
             <span className="text-red">*</span>
           </label>
           <input
@@ -59,12 +68,32 @@ const CustomStorageForm = () => {
           />
         </div>
         <div className="input-wrapper">
-          <label htmlFor="email">Estimated amount of storage</label>
+          <label htmlFor="size">Estimated amount of storage in GiB</label>
           <input
             id="size"
             name="size"
             type="text"
             placeholder="10,000"
+            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
+          />
+        </div>
+        <div className="input-wrapper">
+          <label htmlFor="company_name">Company Name (if applicable)</label>
+          <input
+            id="company_name"
+            name="company_name"
+            type="text"
+            placeholder=""
+            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
+          />
+        </div>
+        <div className="input-wrapper">
+          <label htmlFor="anything_else">Any other details we should know about</label>
+          <input
+            id="anything_else"
+            name="anything_else"
+            type="text"
+            placeholder=""
             className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
           />
         </div>

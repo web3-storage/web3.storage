@@ -8,7 +8,7 @@ import { Elements, ElementsConsumer } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
 import PaymentTable from 'components/account/paymentTable.js/paymentTable.js';
-import PaymentHistoryTable from 'components/account/paymentHistory.js/paymentHistory.js';
+// import PaymentHistoryTable from 'components/account/paymentHistory.js/paymentHistory.js';
 import PaymentCustomPlan from 'components/account/paymentCustomPlan.js/paymentCustomPlan.js';
 import PaymentMethodCard from '../../components/account/paymentMethodCard/paymentMethodCard.js';
 import AccountPlansModal from '../../components/accountPlansModal/accountPlansModal.js';
@@ -85,7 +85,7 @@ const PaymentSettingsPage = props => {
               value={onboardView}
             >
               <option value="early">Early Adopter</option>
-              <option value="free">Free (New)</option>
+              {/* <option value="free">Free (New)</option> */}
               <option value="paid">Paid</option>
             </select>
           </div>
@@ -107,9 +107,14 @@ const PaymentSettingsPage = props => {
                 {savedPaymentMethod && !editingPaymentMethod ? (
                   <>
                     <PaymentMethodCard savedPaymentMethod={savedPaymentMethod} />
-                    <Button variant="outline-light" onClick={() => setEditingPaymentMethod(true)}>
-                      Edit Payment Method
-                    </Button>
+                    <div className="payment-method-actions">
+                      <Button variant="outline-light" onClick={() => setEditingPaymentMethod(true)}>
+                        Edit Payment Method
+                      </Button>
+                      <Button variant="text" onClick={() => setEditingPaymentMethod(true)}>
+                        Remove Payment Method
+                      </Button>
+                    </div>
                   </>
                 ) : (
                   <div className="add-payment-method-cta">
@@ -131,17 +136,19 @@ const PaymentSettingsPage = props => {
               </div>
 
               <div className="payment-history-layout">
-                <h4>Payment History &amp; Invoices</h4>
-                <PaymentHistoryTable />
+                <h4>Enterprise user?</h4>
+                {/* <PaymentHistoryTable /> */}
+                <PaymentCustomPlan />
               </div>
             </div>
           </div>
 
-          <PaymentCustomPlan />
+          {/* <PaymentCustomPlan /> */}
         </div>
         <AccountPlansModal
           isOpen={isPaymentPlanModalOpen}
           onClose={() => setIsPaymentPlanModalOpen(false)}
+          planList={planList}
           planSelection={planSelection}
           setCurrentPlan={setCurrentPlan}
           savedPaymentMethod={savedPaymentMethod}

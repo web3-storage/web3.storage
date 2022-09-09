@@ -20,10 +20,18 @@ export const SpinnerColor = {
  * @param {string} [props.className]
  * @param {string} [props.size]
  * @param {string} [props.color]
+ * @param {string} [props.message]
  */
-const Loading = ({ className, size, color }) => (
-  <div className={clsx(className, styles.loading)}>
+const Loading = ({ className, size, color, message }) => (
+  <div
+    className={clsx({
+      className,
+      [styles.loading]: true,
+      [styles.message]: message,
+    })}
+  >
     <SpinnerIcon aria-label="Loading" className={clsx(styles[`spinner-${size}`], styles[`spinner-${color}`])} />
+    {message}
   </div>
 );
 

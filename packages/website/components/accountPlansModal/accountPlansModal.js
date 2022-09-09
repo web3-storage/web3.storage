@@ -1,16 +1,24 @@
+import { useState } from 'react';
 import { Elements, ElementsConsumer } from '@stripe/react-stripe-js';
 
+import Loading from '../../components/loading/loading.js';
 import Button from '../../components/button/button.js';
 import CurrentBillingPlanCard from '../../components/account/currentBillingPlanCard/currentBillingPlanCard.js';
 import Modal from '../../modules/zero/components/modal/modal';
 import CloseIcon from '../../assets/icons/close';
-import { plans } from '../contexts/plansContext';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
 
-const AccountPlansModal = ({ isOpen, onClose, planSelection, setCurrentPlan, savedPaymentMethod, stripePromise }) => {
-  // const [requesting, setRequesting] = useState(false);
-  savedPaymentMethod = false;
-  const currentPlan = plans.find(p => p.id === planSelection.id);
+const AccountPlansModal = ({
+  isOpen,
+  onClose,
+  planSelection,
+  planList,
+  setCurrentPlan,
+  savedPaymentMethod,
+  stripePromise,
+}) => {
+  const [isCreatingSub, setIsCreatingSub] = useState(false);
+  const currentPlan = planList.find(p => p.id === planSelection.id);
   return (
     <div className="account-plans-modal">
       <Modal
@@ -38,17 +46,21 @@ const AccountPlansModal = ({ isOpen, onClose, planSelection, setCurrentPlan, sav
         )}
 
         <div className="account-plans-confirm">
-          Confirm Your selection.
           <Button
             variant="light"
-            // disabled={!savedPaymentMethod}
+            disabled={!savedPaymentMethod || isCreatingSub}
             onClick={() => {
               setCurrentPlan(currentPlan);
-              onClose();
+              setIsCreatingSub(true);
+              setTimeout(() => {
+                onClose();
+                setIsCreatingSub(false);
+              }, 5000);
             }}
           >
             Confirm
           </Button>
+          {isCreatingSub && <Loading size="medium" message="Creating Subscription..." />}
         </div>
       </Modal>
     </div>

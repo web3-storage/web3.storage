@@ -24,7 +24,10 @@ const PaymentMethodCard = ({ savedPaymentMethod }) => {
           </span>
         </div>
       ) : (
-        <Loading className={'files-loading-spinner'} />
+        <>
+          <Loading size="medium" message="fetching saved payment method" />
+          <br />
+        </>
       )}
     </>
   );

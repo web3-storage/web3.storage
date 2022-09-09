@@ -140,19 +140,21 @@
     }
   }
 
-  div:nth-child(1) {
+  > div:nth-child(1) {
     grid-area: card;
   }
-  div:nth-child(2) {
+  > div:nth-child(2) {
     grid-area: history;
   }
+}
 
-  .files-loading-spinner {
-    width: 20px;
-    padding: 1rem 0;
-    svg {
-      height: 100%;
-    }
+.payment-method-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .button.text .button-contents {
+    padding: 0;
+    color: #aaa;
   }
 }
 
@@ -240,6 +242,9 @@
       left: 0px;
       padding: 0;
       @include border_Background_Waterloo_White;
+    }
+    .button.disabled {
+      opacity: 0.5;
     }
   }
 
@@ -485,35 +490,30 @@
 }
 
 .custom-plan-cta {
-  padding: 2.5rem 2.5rem 1.5rem;
-  margin: 4rem 0 2rem 0;
   font-size: 1rem;
   position: relative;
-  background-color: $vulcan;
+  // background-color: $vulcan;
   @include borderRadius_Large();
-  // @include gradient_Blurry_Background_PinkBlue;
-  // @include background_Light;
-  // background: $martinique;
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: 1fr auto;
   align-items: center;
-  // line-height: 1.35;
-  h4 {
-    font-size: 1.8rem;
+  line-height: 1.7;
+  padding: 1rem 0rem;
+  color: $alto;
+  .button {
+    margin-top: 1.5rem;
   }
-  .custom-plan-form {
-    grid-column: 1/3;
-    max-height: 0;
-    padding-top: 0;
-    opacity: 0;
-    transition: all 0.2s ease-in-out;
+}
 
-    &.show {
-      padding-top: 2rem;
-      opacity: 1;
-      max-height: 600px;
-    }
+.custom-plan-form {
+  grid-column: 1/3;
+  max-height: 0;
+  padding-top: 0;
+  opacity: 0;
+  transition: all 0.2s ease-in-out;
+
+  &.show {
+    padding-top: 2rem;
+    opacity: 1;
+    max-height: 600px;
   }
 }
 

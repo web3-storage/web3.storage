@@ -5,7 +5,7 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection }) => {
     <>
       <p className="billing-content-intro">
         <p>
-          Your current plan is: <strong>Lite</strong>
+          Your current plan is: <strong>{currentPlan.title}</strong>
         </p>
         <small>Billing Cycle: Aug 18 - Sept 18</small>
       </p>
@@ -17,9 +17,12 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection }) => {
               <div></div>
               <div></div>
               <div>
-                <p>Storage Limit</p>
+                <p>Base Storage Capacity</p>
+                <p>Additional Storage</p>
                 <p>Bandwidth</p>
-                <p>Overage Cost</p>
+                <p>Block Limits</p>
+                <p>CAR Size Limit</p>
+                <p>Pinning API</p>
               </div>
             </div>
             {plans.map(plan => (
@@ -37,9 +40,12 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection }) => {
 
                   {/* <p className="billing-plan-desc">{plan.description}</p> */}
                   <div className="billing-plan-details">
-                    <p>{plan.amount}</p>
+                    <p>{plan.base_storage}</p>
+                    <p>{plan.additional_storage}</p>
                     <p>{plan.bandwidth}</p>
-                    <p>{plan.overage}</p>
+                    <p>{plan.block_limit}</p>
+                    <p>{plan.car_size_limit}</p>
+                    <p>{plan.pinning_api ? 'Available' : 'NA'}</p>
                   </div>
 
                   {currentPlan?.id !== plan.id && (
@@ -56,15 +62,18 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection }) => {
                   )}
 
                   {currentPlan?.id === plan.id && (
-                    <div className="billing-plan-usage-container">
-                      <small className="billing-label">Current Usage:</small>
-                      <div className="billing-plan-usage">
-                        <div className="billing-plan-meter">
-                          <span className="billing-plan-meter-used"></span>
-                        </div>
-                        30GB
-                      </div>
-                    </div>
+                    <Button variant="light" disabled={true} className="">
+                      Current Plan
+                    </Button>
+                    // <div className="billing-plan-usage-container">
+                    //   <small className="billing-label">Current Usage:</small>
+                    //   <div className="billing-plan-usage">
+                    //     <div className="billing-plan-meter">
+                    //       <span className="billing-plan-meter-used"></span>
+                    //     </div>
+                    //     30GB
+                    //   </div>
+                    // </div>
                   )}
                 </div>
               </div>
