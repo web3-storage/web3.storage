@@ -4,14 +4,16 @@ import { PutObjectCommand } from '@aws-sdk/client-s3/dist-es/commands/PutObjectC
 import { CarBlockIterator } from '@ipld/car'
 import { toString, equals } from 'uint8arrays'
 import { sha256 } from 'multiformats/hashes/sha2'
+import { LinkIndexer } from 'linkdex'
+import { maybeDecode } from 'linkdex/decode'
 import * as raw from 'multiformats/codecs/raw'
 import * as pb from '@ipld/dag-pb'
+import pRetry from 'p-retry'
 import { InvalidCarError } from './errors.js'
 import { MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/cid.js'
-import { LinkIndexer, maybeDecode } from './utils/dag.js'
 
 /**
  * @typedef {import('multiformats/cid').CID} CID
@@ -119,6 +121,19 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   }
 
   const contentCid = normalizeCid(sourceCid)
+
+  // provide a pin object for elastic-ipfs.
+  const elasticPin = (structure) => ({
+    status: structure === 'Complete' ? 'Pinned' : 'Pinning',
+    contentCid,
+    location: {
+      peerName: 'elastic-ipfs',
+      // there isn't a seperate cluster peer for e-ipfs, so we reuse the ipfs peer.
+      peerId: env.ELASTIC_IPFS_PEER_ID,
+      ipfsPeerId: env.ELASTIC_IPFS_PEER_ID
+    }
+  })
+
   await env.db.createUpload({
     user: user._id,
     authKey: authToken?._id,
@@ -127,42 +142,54 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     name,
     type: uploadType,
     backupUrls: [`https://${env.s3BucketName}.s3.${env.s3BucketRegion}.amazonaws.com/${bucketKey}`],
-    pins: [{
-      status: structure === 'Complete' ? 'Pinned' : 'Pinning',
-      contentCid,
-      location: {
-        peerId: env.ELASTIC_IPFS_PEER_ID,
-        peerName: 'elastic-ipfs'
-      }
-    }],
+    pins: [elasticPin(structure)],
     dagSize
   })
 
   /** @type {(() => Promise<any>)[]} */
   const tasks = []
+
+  // ask linkdex for the dag structure across the set of CARs in S3 for this upload.
+  const checkDagStructureTask = async () => {
+    const res = await fetch(new URL(`?key=${bucketKey}`, env.LINKDEX_URL))
+    const report = await res.json()
+    if (report.structure === 'Complete') {
+      return env.db.upsertPin(elasticPin(report.structure))
+    }
+    // throw to let pRetry try again
+    throw new Error('DAG not complete yet. Try again.')
+  }
+
+  // pin and add the blocks to cluster. Has it's own internal retry logic.
+  const addToClusterTask = async () => {
+    try {
+      await pinToCluster(sourceCid, env)
+    } catch (err) {
+      console.warn('failed to pin to cluster', err)
+    }
+
+    const pins = await addToCluster(car, env)
+
+    await env.db.upsertPins(pins.map(p => ({
+      status: p.status,
+      contentCid,
+      location: p.location
+    })))
+
+    // Retrieve current pin status and info about the nodes pinning the content.
+    // Keep querying Cluster until one of the nodes reports something other than
+    // Unpinned i.e. PinQueued or Pinning or Pinned.
+    if (!pins.some(p => PIN_OK_STATUS.includes(p.status))) {
+      await waitAndUpdateOkPins(contentCid, env.cluster, env.db)
+    }
+  }
+
+  if (structure !== 'Complete' && env.LINKDEX_URL) {
+    tasks.push(pRetry(checkDagStructureTask, { retries: 5 }))
+  }
+
   if (env.ENABLE_ADD_TO_CLUSTER === 'true') {
-    tasks.push(async () => {
-      try {
-        await pinToCluster(sourceCid, env)
-      } catch (err) {
-        console.warn('failed to pin to cluster', err)
-      }
-
-      const pins = await addToCluster(car, env)
-
-      await env.db.upsertPins(pins.map(p => ({
-        status: p.status,
-        contentCid,
-        location: p.location
-      })))
-
-      // Retrieve current pin status and info about the nodes pinning the content.
-      // Keep querying Cluster until one of the nodes reports something other than
-      // Unpinned i.e. PinQueued or Pinning or Pinned.
-      if (!pins.some(p => PIN_OK_STATUS.includes(p.status))) {
-        await waitAndUpdateOkPins(contentCid, env.cluster, env.db)
-      }
-    })
+    tasks.push(addToClusterTask)
   }
 
   if (ctx.waitUntil) {

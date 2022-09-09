@@ -73,6 +73,7 @@
     "cborg": "^1.6.0",
     "ipfs-car": "^0.7.0",
     "itty-router": "^2.4.8",
+    "linkdex": "^2.0.0",
     "multiformats": "^9.5.8",
     "nanoid": "^3.1.30",
     "protobufjs": "^6.11.2",
