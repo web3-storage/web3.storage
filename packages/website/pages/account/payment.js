@@ -20,7 +20,7 @@ import { STRIPE_PUBLISHABLE_KEY } from '../../lib/constants';
 
 const PaymentSettingsPage = props => {
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
-  const stripePromise = loadStripe(props.stripeKey);
+  const stripePromise = loadStripe(props.stripePublishableKey);
   const [hasPaymentMethods, setHasPaymentMethods] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(plans.find(p => p.current));
   const [planSelection, setPlanSelection] = useState('');
