@@ -11,7 +11,13 @@ import { Readable } from 'stream'
 
 export default class Backup {
   constructor (env) {
-    this.UPDATE_BACKUP_URL = 'UPDATE psa_pin_request SET backup_urls = $1 WHERE id = $2 AND content_cid = $3 RETURNING *'
+    this.UPDATE_BACKUP_URL = `
+      UPDATE psa_pin_request 
+      SET backup_urls=$1
+      WHERE id = $2 AND
+      content_cid= $3
+      RETURNING *
+    `
     this.fmt = formatNumber()
     this.SIZE_TIMEOUT = 1000 * 10 // timeout if we can't figure out the size in 10s
     this.BLOCK_TIMEOUT = 1000 * 30 // timeout if we don't receive a block after 30s
@@ -42,7 +48,11 @@ export default class Backup {
     return async (source) => {
       for await (const bak of source) {
         this.log(`backing up ${JSON.stringify(bak)}`)
-        const res = await db.query(this.UPDATE_BACKUP_URL, [[bak.backupUrl.toString()], pinRequestId, contentCid])
+        const res = await db.query(this.UPDATE_BACKUP_URL, [
+          [bak.backupUrl.toString()],
+          pinRequestId,
+          contentCid.toString()
+        ])
         this.log(`Result from updating pin request ${JSON.stringify(res)}`)
         this.log(`saved backup record for upload ${bak.contentCid}: ${bak.backupUrl.toString()}, rowId: ${pinRequestId}`)
       }
@@ -213,7 +223,7 @@ export default class Backup {
               [pin],
               this.exportCar(cluster),
               this.uploadCar(this.s3, this.env.s3PickupBucketName),
-              this.registerBackup(rwPg, pin.content_cid, pin.pinRequestId)
+              this.registerBackup(rwPg, pin.contentCid, pin.pinRequestId)
             )
             totalSuccessful++
           } catch (err) {
