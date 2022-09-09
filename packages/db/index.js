@@ -1274,4 +1274,51 @@ export class DBClient {
       _id: data.id
     }
   }
+
+  /**
+   * Set the customerId that corresponds to a particular userId.
+   * The Customer ID may be a stripe.com customer id (not a foreign key within this db)
+   * @param {string} userId
+   * @param {string} customerId
+   */
+  async upsertUserCustomer (userId, customerId) {
+    const { data, error } = await this._client
+      .from('user_customer')
+      .upsert(
+        {
+          user_id: userId,
+          customer_id: customerId
+        },
+        {
+          onConflict: 'user_id'
+        }
+      )
+      .single()
+    if (error) {
+      throw new DBError(error)
+    }
+    return {
+      _id: data.id
+    }
+  }
+
+  /**
+   * Get the Customer for a user
+   * @param {string} userId
+   * @returns {null|{ id: string }} customer
+   */
+  async getUserCustomer (userId) {
+    const { data, error } = await this._client
+      .from('user_customer')
+      .select(['customer_id'].join(','))
+      .eq('user_id', userId)
+    if (error) {
+      throw new DBError(error)
+    }
+    if (Array.isArray(data) && data.length === 0) {
+      return null
+    }
+    const customer = { id: data[0].customer_id }
+    return customer
+  }
 }

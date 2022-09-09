@@ -13,6 +13,7 @@ import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
 import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
+import { getPaymentSettings, savePaymentSettings } from './utils/billing.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -560,40 +561,48 @@ const notifySlack = async (
  * Get a user's payment settings.
  *
  * @param {AuthenticatedRequest} request
- * @param {import('./env').Env} env
+ * @param {Pick<import('./env').Env, 'billing'|'customers'>} env
  */
 export async function userPaymentGet (request, env) {
-  const { searchParams } = new URL(request.url)
-  const paramMethodId = searchParams.get('method.id')
-  const userPaymentGetResponse = {
-    method: paramMethodId ? { id: paramMethodId } : null
-  }
-  return new JSONResponse(userPaymentGetResponse)
+  const userPaymentSettings = await getPaymentSettings({
+    billing: env.billing,
+    customers: env.customers,
+    user: { id: request.auth.user._id }
+  })
+  return new JSONResponse(userPaymentSettings)
 }
 
 /**
  * Save a user's payment settings.
  *
  * @param {AuthenticatedRequest} request
- * @param {import('./env').Env} env
+ * @param {Pick<import('./env').Env, 'billing'|'customers'>} env
  */
 export async function userPaymentPut (request, env) {
   const requestBody = await request.json()
-  const method = requestBody?.method?.id
-    ? { id: requestBody?.method?.id }
-    : {
-      // stubbing this for now with the value from the docs.
-      //   https://stripe.com/docs/api/payment_methods/object
-        id: env.mockStripePaymentMethodId,
-        warning: 'this method is a stub. The id here is different than anything you might have sent in the request.'
-      }
+  const paymentMethodId = requestBody?.method?.id
+  if (typeof paymentMethodId !== 'string') {
+    throw Object.assign(new Error('Invalid payment method'), { status: 400 })
+  }
+  const method = { id: paymentMethodId }
+  await savePaymentSettings(
+    {
+      billing: env.billing,
+      customers: env.customers,
+      user: { id: request.auth.user._id }
+    },
+    {
+      method
+    }
+  )
+  const userPaymentSettingsUrl = '/user/payment'
   const savePaymentSettingsResponse = {
-    method
+    location: userPaymentSettingsUrl
   }
   return new JSONResponse(savePaymentSettingsResponse, {
     status: 202,
     headers: {
-      location: `/user/payment?method.id=${method.id}`
+      location: userPaymentSettingsUrl
     }
   })
 }
