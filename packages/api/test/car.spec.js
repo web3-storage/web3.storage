@@ -26,7 +26,7 @@ import {
 Object.assign(global, { fetch })
 
 describe('POST /car', () => {
-  it.only('should eventually add posted CARs to Cluster', async function () {
+  it('should eventually add posted CARs to Cluster', async function () {
     this.timeout(10000)
     const name = 'car'
     // Create token
