@@ -26,7 +26,7 @@ import {
 Object.assign(global, { fetch })
 
 describe('POST /car', () => {
-  it('should eventually add posted CARs to Cluster', async function () {
+  it.only('should eventually add posted CARs to Cluster', async function () {
     this.timeout(10000)
     const name = 'car'
     // Create token
@@ -55,22 +55,23 @@ describe('POST /car', () => {
     assert(cid, 'Server response payload has `cid` property')
     assert.strictEqual(cid, expectedCid, 'Server responded with expected CID')
 
-    const pinInfo = await retry(async () => {
-      const statusRes = await fetch(new URL(`status/${cid}`, endpoint))
-      const status = await statusRes.json()
-      const pinInfo = status.pins.find(pin => PIN_OK_STATUS.includes(pin.status))
-      assert(pinInfo, `status is one of ${PIN_OK_STATUS}`)
-      return pinInfo
-    }, { retries: 3 })
-
     const cluster = new Cluster(clusterApi, {
       headers: {
         Authorization: clusterApiAuthHeader
       }
     })
+
     const clusterPeers = await cluster.peerList()
-    // assert that peerId from the status belongs to one of the cluster ipfs nodes.
-    assert(clusterPeers.some(peer => peer.ipfs.id === pinInfo.peerId))
+
+    await retry(async () => {
+      const statusRes = await fetch(new URL(`status/${cid}`, endpoint))
+      const status = await statusRes.json()
+      const pinInfo = status.pins.find(pin =>
+        PIN_OK_STATUS.includes(pin.status) &&
+        clusterPeers.some(peer => peer.ipfs.id === pin.peerId)
+      )
+      assert(pinInfo, `status is one of ${PIN_OK_STATUS}`)
+    }, { retries: 3 })
   })
 
   it('should add posted CARs to S3', async () => {
