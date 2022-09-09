@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.19.0](https://github.com/web3-storage/web3.storage/compare/website-v2.18.1...website-v2.19.0) (2022-09-09)
+
+
+### Features
+
+* add w3name http api swagger doc page ([#1727](https://github.com/web3-storage/web3.storage/issues/1727)) ([2a03748](https://github.com/web3-storage/web3.storage/commit/2a03748d70e4e8aa0764fec0538c26dbf84ae6e6))
+* issues/1779 - I can save my payment settings ([#1852](https://github.com/web3-storage/web3.storage/issues/1852)) ([a49e780](https://github.com/web3-storage/web3.storage/commit/a49e780a4c7c0a3680aa03239552b01f1fcf72ed))
+
 ## [2.18.1](https://github.com/web3-storage/web3.storage/compare/website-v2.18.0...website-v2.18.1) (2022-09-08)
 
 
