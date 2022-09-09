@@ -39,6 +39,7 @@ import { createMockBillingContext } from './utils/billing.js'
  * @property {string} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
  * @property {string} [ELASTIC_IPFS_PEER_ID]
  * @property {string} [ENABLE_ADD_TO_CLUSTER]
+ * @property {string} [LINKDEX_URL]
  * @property {string} [STRIPE_SECRET_KEY]
  * // Derived values and class dependencies
  * @property {Cluster} cluster
