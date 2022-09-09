@@ -158,7 +158,12 @@ const PaymentSettingsPage = props => {
  * @returns {{ props: import('components/types').PageAccountProps}}
  */
 export function getStaticProps() {
-  const stripePublishableKey = STRIPE_PUBLISHABLE_KEY;
+  const STRIPE_PULISHABLE_KEY_ENVVAR_NAME = 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY';
+  const stripePublishableKey = process.env[STRIPE_PULISHABLE_KEY_ENVVAR_NAME];
+  console.log('/account/payment getStaticProps', {
+    stripePublishableKey,
+    'env.STRIPE_SECRET_KEY.slice(-10)': process.env.STRIPE_SECRET_KEY?.slice(-10),
+  });
   if (!stripePublishableKey) {
     throw new Error(
       `account payment page missing requires truthy STRIPE_PUBLISHABLE_KEY, but got ${STRIPE_PUBLISHABLE_KEY}`
