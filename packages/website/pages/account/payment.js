@@ -16,6 +16,7 @@ import AccountPlansModal from '../../components/accountPlansModal/accountPlansMo
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
 import { plans, plansEarly } from '../../components/contexts/plansContext';
 import { getSavedPaymentMethod } from '../../lib/api';
+import { STRIPE_PUBLISHABLE_KEY } from '../../lib/constants';
 
 const PaymentSettingsPage = props => {
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
@@ -157,16 +158,18 @@ const PaymentSettingsPage = props => {
  * @returns {{ props: import('components/types').PageAccountProps}}
  */
 export function getStaticProps() {
-  const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+  const stripePublishableKey = STRIPE_PUBLISHABLE_KEY;
   if (!stripePublishableKey) {
-    console.warn(`account payment page missing required process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`);
+    throw new Error(
+      `account payment page missing requires truthy STRIPE_PUBLISHABLE_KEY, but got ${STRIPE_PUBLISHABLE_KEY}`
+    );
   }
   return {
     props: {
       title: 'Payment',
       isRestricted: true,
       redirectTo: '/login/',
-      stripePublishableKey: stripePublishableKey ?? '',
+      stripePublishableKey,
     },
   };
 }
