@@ -313,12 +313,12 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
   deleted_at      TIMESTAMP WITH TIME ZONE,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  backup_urls     TEXT[],
+  backup_urls     TEXT[]
 );
 
 CREATE INDEX IF NOT EXISTS psa_pin_request_content_cid_idx ON psa_pin_request (content_cid);
 CREATE INDEX IF NOT EXISTS psa_pin_request_deleted_at_idx ON psa_pin_request (deleted_at) INCLUDE (content_cid, auth_key_id);
-CREATE INDEX CONCURRENTLY IF NOT EXISTS psa_pin_request_backup_urls_idx ON psa_pin_request (backup_urls);
+CREATE INDEX IF NOT EXISTS psa_pin_request_backup_urls_idx ON psa_pin_request (backup_urls);
 
 -- Metric contains the current values of collected metrics.
 CREATE TABLE IF NOT EXISTS metric
