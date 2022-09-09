@@ -262,7 +262,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - test
-      - test-e2e
       - preview
       - changelog
     steps:
