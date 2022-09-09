@@ -107,14 +107,17 @@ const PaymentSettingsPage = props => {
                 {savedPaymentMethod && !editingPaymentMethod ? (
                   <>
                     <PaymentMethodCard savedPaymentMethod={savedPaymentMethod} />
-                    <div className="payment-method-actions">
-                      <Button variant="outline-light" onClick={() => setEditingPaymentMethod(true)}>
-                        Edit Payment Method
-                      </Button>
-                      <Button variant="text" onClick={() => setEditingPaymentMethod(true)}>
-                        Remove Payment Method
-                      </Button>
-                    </div>
+
+                    {!!savedPaymentMethod && (
+                      <div className="payment-method-actions">
+                        <Button variant="outline-light" onClick={() => setEditingPaymentMethod(true)}>
+                          Edit Payment Method
+                        </Button>
+                        <Button variant="text" onClick={() => setEditingPaymentMethod(true)}>
+                          Remove Payment Method
+                        </Button>
+                      </div>
+                    )}
                   </>
                 ) : (
                   <div className="add-payment-method-cta">
