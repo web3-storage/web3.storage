@@ -14,7 +14,6 @@ import PaymentMethodCard from '../../components/account/paymentMethodCard/paymen
 import AccountPlansModal from '../../components/accountPlansModal/accountPlansModal.js';
 // import PaymentHistoryTable from '../../components/account/paymentHistory.js/paymentHistory.js';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
-import Button from '../../components/button/button.js';
 import { plans, plansEarly } from '../../components/contexts/plansContext';
 import { getSavedPaymentMethod } from '../../lib/api';
 
@@ -106,18 +105,10 @@ const PaymentSettingsPage = props => {
                 <h4>Payment Methods</h4>
                 {savedPaymentMethod && !editingPaymentMethod ? (
                   <>
-                    <PaymentMethodCard savedPaymentMethod={savedPaymentMethod} />
-
-                    {!!savedPaymentMethod && (
-                      <div className="payment-method-actions">
-                        <Button variant="outline-light" onClick={() => setEditingPaymentMethod(true)}>
-                          Edit Payment Method
-                        </Button>
-                        <Button variant="text" onClick={() => setEditingPaymentMethod(true)}>
-                          Remove Payment Method
-                        </Button>
-                      </div>
-                    )}
+                    <PaymentMethodCard
+                      savedPaymentMethod={savedPaymentMethod}
+                      setEditingPaymentMethod={setEditingPaymentMethod}
+                    />
                   </>
                 ) : (
                   <div className="add-payment-method-cta">
