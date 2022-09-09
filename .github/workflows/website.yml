@@ -30,6 +30,11 @@ on:
         required: true
         type: boolean
         default: true
+      force_release:
+        description: Whether to run the release job no matter what
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   test:
@@ -186,7 +191,7 @@ jobs:
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           NEXT_PUBLIC_COUNTLY_URL: ${{ secrets.COUNTLY_URL }}
           NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
-          NEXT_PUBLIC_STRIPE_TEST_PK: ${{ secrets.TESTING_STRIPE_TEST_PK}}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.TESTING_STRIPE_PUBLISHABLE_KEY }}
       - name: Add to web3.storage
         uses: web3-storage/add-to-web3@v2
         id: ipfs
@@ -253,7 +258,7 @@ jobs:
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false}]'
 
   release:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created) || inputs.force_release
     name: Release
     runs-on: ubuntu-latest
     needs:
@@ -276,6 +281,7 @@ jobs:
           NEXT_PUBLIC_MAGIC: ${{ secrets.PROD_MAGIC_PUBLIC_KEY }}
           NEXT_PUBLIC_COUNTLY_URL: ${{ secrets.COUNTLY_URL }}
           NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.TESTING_STRIPE_PUBLISHABLE_KEY }}
       - name: Add to web3.storage
         uses: web3-storage/add-to-web3@v2
         id: ipfs

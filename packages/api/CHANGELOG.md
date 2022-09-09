@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.5.1](https://github.com/web3-storage/web3.storage/compare/api-v7.5.0...api-v7.5.1) (2022-09-09)
+
+
+### Bug Fixes
+
+* /account/payment tiny bugs - use env var on website, fix uncaught error when no default_payment_method in StripeBillingService ([#1871](https://github.com/web3-storage/web3.storage/issues/1871)) ([5965b82](https://github.com/web3-storage/web3.storage/commit/5965b8230c9d3310c700cc306bee8431c0102ab8))
+
 ## [7.5.0](https://github.com/web3-storage/web3.storage/compare/api-v7.4.5...api-v7.5.0) (2022-09-09)
 
 

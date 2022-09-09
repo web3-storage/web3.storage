@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.19.1](https://github.com/web3-storage/web3.storage/compare/website-v2.19.0...website-v2.19.1) (2022-09-09)
+
+
+### Bug Fixes
+
+* make website e2e tests more reliable on ci ([#1873](https://github.com/web3-storage/web3.storage/issues/1873)) ([a31ef04](https://github.com/web3-storage/web3.storage/commit/a31ef048575e944db2558e3ec26bfb3d28818e99))
+
 ## [2.19.0](https://github.com/web3-storage/web3.storage/compare/website-v2.18.1...website-v2.19.0) (2022-09-09)
 
 
