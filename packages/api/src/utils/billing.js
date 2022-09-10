@@ -91,12 +91,21 @@ export function randomString () {
 }
 
 /**
- * @returns {import('src/utils/billing-types.js').BillingService & { paymentMethodSaves: Array<{ customerId: string, methodId: string }> }}
+ * @typedef {object} MockBillingService
+ * @property {Array<{ customerId: string, methodId: string }>} paymentMethodSaves
+ * @property {Array<{ customerId: string, storageSubscription: any }>} storageSubscriptionSaves
+ * @property {import('./billing-types').BillingService['getPaymentMethod']} getPaymentMethod
+ * @property {import('./billing-types').BillingService['savePaymentMethod']} savePaymentMethod
+ */
+
+/**
+ * @returns {MockBillingService}
  */
 export function createMockBillingService () {
+  const storageSubscriptionSaves = []
   const paymentMethodSaves = []
   const customerToPaymentMethod = new Map()
-  /** @type {import('src/utils/billing-types.js').BillingService & { paymentMethodSaves: Array<{ customerId: string, methodId: string }> }} */
+  /** @type {MockBillingService} */
   const billing = {
     async getPaymentMethod (customerId) {
       const pm = customerToPaymentMethod.get(customerId)
@@ -108,7 +117,8 @@ export function createMockBillingService () {
         id: methodId
       })
     },
-    paymentMethodSaves
+    paymentMethodSaves,
+    storageSubscriptionSaves
   }
   return billing
 }
