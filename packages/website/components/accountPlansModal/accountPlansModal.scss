@@ -1,36 +1,76 @@
-.account-plans-modal {
-  .modalContainer {
-    padding: 4px;
-    border-radius: 10px;
-  }
-  .background-view-wrapper {
-    z-index: -1;
-  }
+.modalContainer {
+  padding: 2rem;
+  border-radius: 10px;
+  background-color: $shark;
+}
 
-  .billing-plans {
-    padding: 3rem;
-    background-color: $vulcan;
+.modalInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  gap: 8px;
+
+  .billing-card {
+    max-width: 100%;
+    width: 500px;
+  }
+}
+
+.background-view-wrapper {
+  z-index: -1;
+}
+
+.billing-plans {
+  // padding: 3rem;
+  // background-color: $vulcan;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.billing-card {
+  border: 2px solid transparent;
+}
+
+.billing-card.active {
+  border: 2px solid $malibu;
+}
+
+.billing-card.current {
+  position: relative;
+  border-left: 0;
+  &:after {
+    content: 'Current Plan';
+    position: absolute;
+    top: 8px;
+    left: -2px;
+    width: calc(100% + 4px);
+    background: $malibu;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
     color: #fff;
-    border-radius: 10px;
+    padding: 2px 2rem;
+    border-radius: 8px 8px 0 0;
+    text-align: left;
+    text-transform: uppercase;
+    // transform: translateY(-100%);
+    // display: block;
   }
 
-  .billing-card:not(.current) {
-    border: 2px solid transparent;
+  + .billing-card {
+    border-left: 0;
   }
+}
+// }
 
-  .billing-card.current {
-    border: 2px solid $malibu;
-    position: relative;
-    &:after {
-      content: 'Current Plan';
-      position: absolute;
-      top: 0;
-      right: 10px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      color: $malibu;
-      text-transform: uppercase;
-    }
-  }
+.account-plans-confirm {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.add-payment-method-cta + .account-plans-confirm {
+  opacity: 0.5;
 }

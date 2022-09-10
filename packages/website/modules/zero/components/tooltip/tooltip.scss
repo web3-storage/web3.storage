@@ -17,7 +17,7 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
     }
     // Bridging the gap to the tooltip to keep it hovered
     &:after {
-      content: "";
+      content: '';
       width: #{$info-tooltip-arrow-size + 0.75rem};
       position: absolute;
       left: 100%;
@@ -46,7 +46,7 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
     color: $white;
     z-index: 2;
     &:before {
-      content: "";
+      content: '';
       width: 0;
       height: 0;
       border-top: $info-tooltip-arrow-size solid transparent;
@@ -71,6 +71,27 @@ $info-tooltip-center: calc(50% - #{math.div($info-icon-size, 2)});
 
     .tooltip-content {
       right: calc(-100% + #{$info-tooltip-arrow-size + 1.5rem});
+      left: auto;
+      &:before {
+        right: -$info-tooltip-arrow-size;
+        left: auto;
+        border-top: $info-tooltip-arrow-size solid transparent;
+        border-bottom: $info-tooltip-arrow-size solid transparent;
+        border-left: $info-tooltip-arrow-size solid rgba($martinique, 0.95);
+        border-right: none;
+      }
+    }
+  }
+
+  &.left {
+    &:hover {
+      &:after {
+        left: -100%;
+      }
+    }
+
+    .tooltip-content {
+      right: calc(100% + #{$info-tooltip-arrow-size + 1.5rem});
       left: auto;
       &:before {
         right: -$info-tooltip-arrow-size;

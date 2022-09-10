@@ -21,7 +21,7 @@ export async function putPaymentMethod(pm_id) {
   return res.json();
 }
 
-const AddPaymentMethodForm = ({ setHasPaymentMethods }) => {
+const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [paymentMethodError, setPaymentMethodError] = useState('');
@@ -44,6 +44,7 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods }) => {
         if (error) throw new Error(error.message);
         await putPaymentMethod(paymentMethod?.id);
         setHasPaymentMethods(true);
+        setEditingPaymentMethod(false);
         setPaymentMethodError('');
       } catch (error) {
         let message;
@@ -72,7 +73,7 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods }) => {
         />
       </div>
       <div className="billing-validation">{paymentMethodError}</div>
-      <Button onClick={handlePaymentMethodAdd} disabled={!stripe}>
+      <Button onClick={handlePaymentMethodAdd} variant="outline-light" disabled={!stripe}>
         Add Card
       </Button>
     </form>

@@ -1,60 +1,36 @@
+// @ts-nocheck
 /**
  * @fileoverview Account Payment Settings
  */
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Elements, ElementsConsumer } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-import Button from '../../components/button/button.js';
+import PaymentCustomPlan from '../../components/account/paymentCustomPlan.js/paymentCustomPlan.js';
+import PaymentTable from '../../components/account/paymentTable.js/paymentTable.js';
+// import PaymentHistoryTable from 'components/account/paymentHistory.js/paymentHistory.js';
 import PaymentMethodCard from '../../components/account/paymentMethodCard/paymentMethodCard.js';
 import AccountPlansModal from '../../components/accountPlansModal/accountPlansModal.js';
-// import { plans } from '../../components/contexts/plansContext';
-import AccountPageData from '../../content/pages/app/account.json';
 // import PaymentHistoryTable from '../../components/account/paymentHistory.js/paymentHistory.js';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
+import { plans, plansEarly } from '../../components/contexts/plansContext';
 import { getSavedPaymentMethod } from '../../lib/api';
 
-// const currentPlan = plans.find(p => p.current);
-
-// const CurrentBillingPlanCard = props => {
-//   return (
-//     <div className="billing-card card-transparent">
-//       {currentPlan !== undefined && (
-//         <div key={currentPlan.title} className="billing-plan">
-//           <h4 className="billing-plan-title">{currentPlan.title}</h4>
-//           <p className="billing-plan-desc">{currentPlan.description}</p>
-//           <p className="billing-plan-limit">
-//             <span>Limit: {currentPlan.amount}</span>
-//             <span>Overage: {currentPlan.overage}</span>
-//           </p>
-//           <div className="billing-plan-amount">{currentPlan.price}</div>
-//           <div className="billing-plan-usage-container">
-//             <p className="billing-label">Current Usage:</p>
-//             <div className="billing-plan-usage">
-//               <div className="billing-plan-meter">
-//                 <span className="billing-plan-meter-used"></span>
-//               </div>
-//               100GB
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
 const PaymentSettingsPage = props => {
-  const { dashboard } = AccountPageData.page_content;
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
   const stripePromise = loadStripe(props.stripePublishableKey);
   const [hasPaymentMethods, setHasPaymentMethods] = useState(false);
+  const [currentPlan, setCurrentPlan] = useState(plans.find(p => p.current));
+  const [planSelection, setPlanSelection] = useState('');
+  const [planList, setPlanList] = useState(plans);
+  const [onboardView, setOnboardView] = useState('paid');
   const [savedPaymentMethod, setSavedPaymentMethod] = useState(/** @type {PaymentMethod} */ ({}));
   const [editingPaymentMethod, setEditingPaymentMethod] = useState(false);
 
   /**
    * @typedef {Object} PaymentMethodCard
-   * @property {string} type
+   * @property {string} @type
    * @property {string} brand
    * @property {string} country
    * @property {string} exp_month
@@ -80,43 +56,99 @@ const PaymentSettingsPage = props => {
     getSavedCard();
   }, [hasPaymentMethods]);
 
+  useEffect(() => {
+    if (planSelection.id) {
+      setIsPaymentPlanModalOpen(true);
+    }
+  }, [planSelection]);
+
+  useEffect(() => {
+    if (onboardView === 'early') {
+      setPlanList(plansEarly);
+    } else {
+      setPlanList(plans);
+    }
+  }, [onboardView]);
+
   return (
     <>
-      <div className="page-container billing-container">
-        <h1 className="table-heading">{dashboard.heading}</h1>
-        <div className="billing-content">
-          <div className="billing-settings-layout">
-            <div>
-              <h4>Payment Methods</h4>
-              {savedPaymentMethod && !editingPaymentMethod ? (
-                <>
-                  <PaymentMethodCard savedPaymentMethod={savedPaymentMethod} />
-                  <Button variant="outline-light" onClick={() => setEditingPaymentMethod(true)}>
-                    Edit Payment Method
-                  </Button>
-                </>
-              ) : (
-                <div className="add-payment-method-cta">
-                  <Elements stripe={stripePromise}>
-                    <ElementsConsumer>
-                      {({ stripe, elements }) => (
-                        <AddPaymentMethodForm
-                          // @ts-ignore
-                          stripe={stripe}
-                          elements={elements}
-                          setHasPaymentMethods={setHasPaymentMethods}
-                          setEditingPaymentMethod={setEditingPaymentMethod}
-                        />
-                      )}
-                    </ElementsConsumer>
-                  </Elements>
-                </div>
-              )}
+      <>
+        <div className="page-container billing-container">
+          <div className="">
+            <h1 className="table-heading">Payment</h1>
+            <select
+              onChange={e => {
+                setOnboardView(e.target.value);
+              }}
+              className="state-changer"
+              value={onboardView}
+            >
+              <option value="early">Early Adopter</option>
+              {/* <option value="free">Free (New)</option> */}
+              <option value="paid">Paid</option>
+            </select>
+          </div>
+          <div className="billing-content">
+            {onboardView === 'early' && (
+              <div className="add-billing-cta">
+                <p>
+                  You don&apos;t have a payment method. Please add one to prevent storage issues beyond your plan limits
+                  below.
+                </p>
+              </div>
+            )}
+
+            <PaymentTable plans={planList} currentPlan={currentPlan} setPlanSelection={setPlanSelection} />
+
+            <div className="billing-settings-layout">
+              <div>
+                <h4>Payment Methods</h4>
+                {savedPaymentMethod && !editingPaymentMethod ? (
+                  <>
+                    <PaymentMethodCard
+                      savedPaymentMethod={savedPaymentMethod}
+                      setEditingPaymentMethod={setEditingPaymentMethod}
+                    />
+                  </>
+                ) : (
+                  <div className="add-payment-method-cta">
+                    <Elements stripe={stripePromise}>
+                      <ElementsConsumer>
+                        {({ stripe, elements }) => (
+                          <AddPaymentMethodForm
+                            // @ts-ignore
+                            stripe={stripe}
+                            elements={elements}
+                            setHasPaymentMethods={setHasPaymentMethods}
+                            setEditingPaymentMethod={setEditingPaymentMethod}
+                          />
+                        )}
+                      </ElementsConsumer>
+                    </Elements>
+                  </div>
+                )}
+              </div>
+
+              <div className="payment-history-layout">
+                <h4>Enterprise user?</h4>
+                {/* <PaymentHistoryTable /> */}
+                <PaymentCustomPlan />
+              </div>
             </div>
           </div>
+
+          {/* <PaymentCustomPlan /> */}
         </div>
-        <AccountPlansModal isOpen={isPaymentPlanModalOpen} onClose={() => setIsPaymentPlanModalOpen(false)} />
-      </div>
+        <AccountPlansModal
+          isOpen={isPaymentPlanModalOpen}
+          onClose={() => setIsPaymentPlanModalOpen(false)}
+          planList={planList}
+          planSelection={planSelection}
+          setCurrentPlan={setCurrentPlan}
+          savedPaymentMethod={savedPaymentMethod}
+          stripePromise={stripePromise}
+        />
+      </>
     </>
   );
 };
@@ -125,16 +157,19 @@ const PaymentSettingsPage = props => {
  * @returns {{ props: import('components/types').PageAccountProps}}
  */
 export function getStaticProps() {
-  const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+  const STRIPE_PULISHABLE_KEY_ENVVAR_NAME = 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY';
+  const stripePublishableKey = process.env[STRIPE_PULISHABLE_KEY_ENVVAR_NAME];
   if (!stripePublishableKey) {
-    console.warn(`account payment page missing required process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`);
+    throw new Error(
+      `account payment page missing requires truthy stripePublishableKey, but got ${stripePublishableKey}. Did you set env.${STRIPE_PULISHABLE_KEY_ENVVAR_NAME}?`
+    );
   }
   return {
     props: {
-      title: AccountPageData.seo.title,
+      title: 'Payment',
       isRestricted: true,
       redirectTo: '/login/',
-      stripePublishableKey: stripePublishableKey ?? '',
+      stripePublishableKey,
     },
   };
 }
