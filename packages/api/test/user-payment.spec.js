@@ -121,11 +121,7 @@ describe('userPaymentPut', () => {
     const desiredPaymentMethodId = `pm_${randomString()}`
     const paymentSettings = { method: { id: desiredPaymentMethodId } }
     const authorization = createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken())
-    const user = { _id: randomString(), issuer: randomString() }
-    const request = Object.assign(
-      createSaveUserPaymentSettingsRequest({ authorization, body: JSON.stringify(paymentSettings) }),
-      { auth: { user } }
-    )
+    const request = createMockAuthenticatedRequest(createSaveUserPaymentSettingsRequest({ authorization, body: JSON.stringify(paymentSettings) }))
     const billing = createMockBillingService()
     const customers = createMockCustomerService()
     const env = {
@@ -139,7 +135,36 @@ describe('userPaymentPut', () => {
       customers.mockCustomers.map(c => c.id).includes(billing.paymentMethodSaves[0].customerId),
       'billing.paymentMethodSaves[0].customerId is in customers.mockCustomers')
   })
+  it('saves storage subscription price', async function () {
+    const desiredPaymentSettings = {
+      method: { id: `pm_${randomString()}` },
+      subscription: { storage: { price: `price_test_${randomString()}` } }
+    }
+    const request = (
+      createMockAuthenticatedRequest(
+        createSaveUserPaymentSettingsRequest({
+          authorization: createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken()),
+          body: JSON.stringify(desiredPaymentSettings)
+        })))
+    const env = {
+      billing: createMockBillingService(),
+      customers: createMockCustomerService()
+    }
+    const response = await userPaymentPut(request, env)
+    assert.equal(response.status, 202, 'response.status is 202')
+    // assert.equal(env.billing.storageSubscriptionSaves.length, 1, 'billing.storageSubscriptionSaves.length is 1')
+    // assert.ok(
+    //   env.customers.mockCustomers.map(c => c.id).includes(env.billing.storageSubscriptionSaves[0].customerId),
+    //   'billing.storageSubscriptionSaves[0].customerId is in customers.mockCustomers')
+  })
 })
+
+function createMockAuthenticatedRequest (_request) {
+  const request = Object.create(_request)
+  const user = { _id: randomString(), issuer: randomString() }
+  request.auth = { user }
+  return request
+}
 
 describe('/user/payment', () => {
   it('can userPaymentPut and then userPaymentGet', async function () {
