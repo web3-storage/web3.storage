@@ -15,6 +15,7 @@ function createBearerAuthorization (bearerToken) {
  * @param {object} arg
  * @param {string} [arg.method] - method of request
  * @param {string} [arg.authorization] - authorization header value
+ * @param {Record<string,string>} [arg.searchParams]
  */
 function createUserPaymentRequest (arg = {}) {
   const { path, baseUrl, authorization, accept, method } = {
@@ -25,8 +26,12 @@ function createUserPaymentRequest (arg = {}) {
     method: 'get',
     ...arg
   }
+  const url = new URL(path, baseUrl)
+  for (const [key, value] of Object.entries(arg.searchParams || {})) {
+    url.searchParams.set(key, value)
+  }
   return new Request(
-    new URL(path, baseUrl),
+    url,
     {
       headers: {
         accept,
@@ -57,6 +62,18 @@ describe('GET /user/payment', () => {
     const userPaymentSettings = await res.json()
     assert.equal(typeof userPaymentSettings, 'object')
     assert.ok(!userPaymentSettings.method, 'userPaymentSettings.method is falsy')
+  })
+  it('supports ?mockSubscription=true', async function () {
+    const request = createUserPaymentRequest({
+      authorization: createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken()),
+      searchParams: {
+        mockSubscription: 'true'
+      }
+    })
+    const response = await fetch(request)
+    assert.equal(response.status, 200, 'response.status is 200')
+    const paymentSettings = await response.json()
+    assert.equal(typeof paymentSettings?.subscription?.storage?.price, 'string', 'paymentSettings.subscription.storage.price is a string')
   })
 })
 

@@ -564,12 +564,21 @@ const notifySlack = async (
  * @param {Pick<import('./env').Env, 'billing'|'customers'>} env
  */
 export async function userPaymentGet (request, env) {
+  let subscription = null
+  const { searchParams } = new URL(request.url)
+  if (searchParams.get('mockSubscription')) {
+    subscription = {
+      storage: {
+        price: 'price_mock_userPaymentGet_mockSubscription'
+      }
+    }
+  }
   const userPaymentSettings = await getPaymentSettings({
     billing: env.billing,
     customers: env.customers,
     user: { id: request.auth.user._id }
   })
-  return new JSONResponse(userPaymentSettings)
+  return new JSONResponse({ ...userPaymentSettings, subscription })
 }
 
 /**
