@@ -176,10 +176,15 @@ describe('userPaymentPut', () => {
   })
 })
 
+/**
+ * @param {Request} _request
+ */
 function createMockAuthenticatedRequest (_request) {
+  /** @type {import('../src/user.js').AuthenticatedRequest} */
   const request = Object.create(_request)
   const user = { _id: randomString(), issuer: randomString() }
   request.auth = { user }
+  console.log('created request url', request.url)
   return request
 }
 
@@ -243,7 +248,7 @@ describe('userPaymentGet', () => {
         }
       }
     }
-    const request = createAuthenticatedRequest(createUserPaymentRequest())
+    const request = createMockAuthenticatedRequest(createUserPaymentRequest())
     const response = await userPaymentGet(request, env)
     assert.equal(response.ok, true, 'response is ok')
     const gotPaymentSettings = await response.json()
@@ -258,13 +263,6 @@ function assertIsStripeCard (_assert, card) {
   _assert.equal(typeof card.last4, 'string', 'card.last4 is a string')
   _assert.equal(typeof card.exp_month, 'number', 'card.expMonth is a number')
   _assert.equal(typeof card.exp_year, 'number', 'card.expYear is a number')
-}
-
-function createAuthenticatedRequest (baseRequest, auth = { user: { _id: randomString(), issuer: randomString() } }) {
-  return {
-    ...baseRequest,
-    auth
-  }
 }
 
 describe('savePaymentSettings', async function () {
