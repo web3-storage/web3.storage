@@ -83,20 +83,29 @@ export default class Backup {
    * @param {import('./bindings').BackupContent} bak
    */
   async s3Upload (s3, bucketName, bak) {
-    const key = `complete/${bak.contentCid}.car`
+    const key = `complete/${bak.contentCid}/${bak.sourceCid}.car`
     const region = await s3.config.region()
     const url = new URL(`https://${bucketName}.s3.${region}.amazonaws.com/${key}`)
     this.log(`uploading to ${url}`)
-    const upload = new Upload({
-      client: s3,
-      params: {
-        Bucket: bucketName,
-        Key: key,
-        Body: Readable.from(bak.content),
-        Metadata: { structure: 'Complete' }
+
+    try {
+      // Request the head object of the file we are about to backup
+      // If it throws a NotFound error then we know we need to upload it
+      await s3.headObject({ Bucket: bucketName, Key: key }).promise()
+    } catch (err) {
+      if (err.name === 'NotFound') {
+        const upload = new Upload({
+          client: s3,
+          params: {
+            Bucket: bucketName,
+            Key: key,
+            Body: Readable.from(bak.content),
+            Metadata: { structure: 'Complete' }
+          }
+        })
+        await upload.done()
       }
-    })
-    await upload.done()
+    }
     this.log('done')
     return url
   }
