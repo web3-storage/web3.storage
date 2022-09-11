@@ -92,17 +92,6 @@ describe('cron - pins backup', () => {
     await createPsaPinRequest(dbClient, authKey, cids[1], { pins: uploadPins })
     await createPsaPinRequest(dbClient, authKey, cids[2], { pins: uploadPins })
 
-    // const exportCar = (cidNumber) => {
-    //   return async function * () {
-    //     console.log('mocking response of IPFS return')
-    //     yield {
-    //       content: Buffer.from('test file'),
-    //       contentCid: cids[cidNumber],
-    //       sourceCid: cids[cidNumber]
-    //     }
-    //   }
-    // }
-
     const exportCarStub = sinon.stub(backup, 'exportCar')
 
     exportCarStub.onCall(0).returns(async function * () {
@@ -129,18 +118,6 @@ describe('cron - pins backup', () => {
         sourceCid: cids[2]
       }
     })
-
-    // const uploadCar = (cidNumber) => {
-    //   return async function * () {
-    //     console.log('mocking upload of car file')
-    //     yield {
-    //       content: Buffer.from('test file'),
-    //       contentCid: cids[cidNumber],
-    //       sourceCid: cids[cidNumber],
-    //       backupUrl: 'https://test.s3.eu-west-1.amazonaws.com/my-car'
-    //     }
-    //   }
-    // }
 
     const uploadCarStub = sinon.stub(backup, 'uploadCar')
 
@@ -172,7 +149,6 @@ describe('cron - pins backup', () => {
       }
     })
 
-    // TODO: Mock cluster resposne
     // Override cluster statys to return pinned
     cluster.status = async (cid) => {
       return createPin(cid, 'pinned')
