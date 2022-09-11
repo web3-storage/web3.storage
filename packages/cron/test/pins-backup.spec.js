@@ -189,8 +189,8 @@ describe('cron - pins backup', () => {
     await rwPg.end()
   })
 
-  it.only('should attempt to backup pins to S3', async () => {
-    await backup.backupPins({ env, roPg, rwPg, cluster })
+  it('should attempt to backup pins to S3', async () => {
+    await backup.backupPins({ roPg, rwPg, cluster })
     const res = await roPg.query('SELECT * FROM psa_pin_request')
     console.log(res.rows)
     assert.strictEqual(res.rows.every(row => row.backup_urls), true, 'Not all pin requests have a backup!')
