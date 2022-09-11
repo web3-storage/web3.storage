@@ -11,8 +11,8 @@ import { Readable } from 'stream'
 
 export default class Backup {
   constructor (env) {
-    this.UPDATE_BACKUP_URL = `
-      UPDATE psa_pin_request 
+    this.UPDATE_BACKUP_URL_QUERY = `
+      UPDATE psa_pin_request
       SET backup_urls=$1
       WHERE id = $2 AND
       content_cid= $3
@@ -48,7 +48,7 @@ export default class Backup {
     return async (source) => {
       for await (const bak of source) {
         this.log(`backing up ${JSON.stringify(bak)}`)
-        const res = await db.query(this.UPDATE_BACKUP_URL, [
+        const res = await db.query(this.UPDATE_BACKUP_URL_QUERY, [
           [bak.backupUrl.toString()],
           pinRequestId,
           contentCid.toString()
@@ -187,15 +187,15 @@ export default class Backup {
       this.LIMIT
     ])
     if (!rows.length) return
-    const uploads = rows.filter(r => !r.url)
+    const pinnedPins = rows.filter(r => !r.url)
 
-    for (const [, upload] of uploads.entries()) {
-      const sourceCid = CID.parse(upload.source_cid)
+    for (const [, pinnedPin] of pinnedPins.entries()) {
+      const sourceCid = CID.parse(pinnedPin.source_cid)
       const pin = {
         sourceCid,
-        contentCid: CID.parse(upload.content_cid),
-        authKeyId: String(upload.auth_key_id),
-        pinRequestId: String(upload.id)
+        contentCid: CID.parse(pinnedPin.content_cid),
+        authKeyId: String(pinnedPin.auth_key_id),
+        pinRequestId: String(pinnedPin.id)
       }
       yield pin
     }
