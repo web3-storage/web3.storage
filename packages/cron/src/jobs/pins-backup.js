@@ -203,7 +203,7 @@ export default class Backup {
 
   /**
    * This job grabs 10,000 pins which do not have a backup URL and sends them to S3 and updates the record with the S3 URL
-   * @param {{ env: NodeJS.ProcessEnv, rwPg: Client, roPg: Client, cluster: import('@nftstorage/ipfs-cluster').Cluster }} config
+   * @param {{ env: NodeJS.ProcessEnv, rwPg: {import('pg').Pool}, roPg: {import('pg').Pool}, cluster: import('@nftstorage/ipfs-cluster').Cluster }} config
    */
   async backupPins ({ roPg, rwPg, cluster, concurrency = this.CONCURRENCY }) {
     if (!this.log.enabled) {
