@@ -318,3 +318,24 @@ export async function getSavedPaymentMethod() {
   const savedPayment = await res.json();
   return savedPayment;
 }
+
+
+export async function getUserPaymentPlan() {
+  const token = await getToken();
+  // const paymentSettings = {
+  //   method: { id: pm_id }
+  // };
+  const res = await fetch(API + '/user/payment?mockSubscription=true', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    },
+    body: null,
+  });
+  if (!res.ok) {
+    throw new Error(`failed to get plan info: ${await res.text()}`);
+  }
+  const userPlan = await res.json();
+  return userPlan;
+}

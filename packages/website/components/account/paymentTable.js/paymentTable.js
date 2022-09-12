@@ -3,12 +3,14 @@ import Button from '../../button/button.js';
 const PaymentTable = ({ plans, currentPlan, setPlanSelection }) => {
   return (
     <>
-      <p className="billing-content-intro">
-        <p>
-          Your current plan is: <strong>{currentPlan.title}</strong>
+      {currentPlan && (
+        <p className="billing-content-intro">
+          <p>
+            Your current plan is: <strong>{currentPlan.title}</strong>
+          </p>
+          <small>Billing Cycle: Aug 18 - Sept 18</small>
         </p>
-        <small>Billing Cycle: Aug 18 - Sept 18</small>
-      </p>
+      )}
 
       <div className="">
         <div>
@@ -54,7 +56,6 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection }) => {
                       className=""
                       onClick={() => {
                         setPlanSelection(plans.find(p => p.id === plan.id));
-                        // setCurrentPlan(plans.find(p => p.id === plan.id));
                       }}
                     >
                       Select Plan
@@ -65,24 +66,10 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection }) => {
                     <Button variant="light" disabled={true} className="">
                       Current Plan
                     </Button>
-                    // <div className="billing-plan-usage-container">
-                    //   <small className="billing-label">Current Usage:</small>
-                    //   <div className="billing-plan-usage">
-                    //     <div className="billing-plan-meter">
-                    //       <span className="billing-plan-meter-used"></span>
-                    //     </div>
-                    //     30GB
-                    //   </div>
-                    // </div>
                   )}
                 </div>
               </div>
             ))}
-            {/* {tempCurrentPlan && (
-                <Button variant="outline-light" className="" onClick={() => setCurrentPlan(plans.find(p => p.id === tempCurrentPlan))}>
-                  Confirm Change
-                </Button>
-              )} */}
           </div>
         </div>
       </div>

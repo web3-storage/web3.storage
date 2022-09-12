@@ -10,10 +10,10 @@ export const sharedPlans = [
     block_limit: '10,000 / GiB',
     car_size_limit: '5MiB',
     pinning_api: true,
-    current: true,
   },
   {
-    id: 'pro',
+    // id: 'price_pro',
+    id: 'price_mock_userPaymentGet_mockSubscription',
     title: 'Pro',
     description: 'All the sauce, all the toppings.',
     price: '$10/mo',
@@ -23,7 +23,6 @@ export const sharedPlans = [
     block_limit: '10,000 / GiB',
     car_size_limit: '5MiB',
     pinning_api: true,
-    current: false,
   },
 ];
 
@@ -38,7 +37,6 @@ export const freePlan = {
   block_limit: '2,500 / GiB',
   car_size_limit: '5MiB',
   pinning_api: false,
-  current: false,
 };
 
 export const earlyAdopterPlan = {
@@ -53,7 +51,6 @@ export const earlyAdopterPlan = {
   block_limit: '2,500 / GiB',
   car_size_limit: '5MiB',
   pinning_api: false,
-  current: false,
 };
 
 export const plans = [freePlan, ...sharedPlans];

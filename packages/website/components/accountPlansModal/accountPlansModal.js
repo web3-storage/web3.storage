@@ -7,6 +7,28 @@ import CurrentBillingPlanCard from '../../components/account/currentBillingPlanC
 import Modal from '../../modules/zero/components/modal/modal';
 import CloseIcon from '../../assets/icons/close';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
+import { API, getToken } from '../../lib/api';
+
+export async function putUserPayment(pm_id) {
+  const paymentSettings = {
+    method: { id: pm_id },
+    subscription: { storage: { price: `price_pro` } },
+  };
+  console.log(paymentSettings);
+  const res = await fetch(API + '/user/payment', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + (await getToken()),
+    },
+    body: JSON.stringify(paymentSettings),
+  });
+  if (!res.ok) {
+    throw new Error(`failed to get storage info: ${await res.text()}`);
+  }
+
+  return res.json();
+}
 
 const AccountPlansModal = ({
   isOpen,
@@ -49,13 +71,12 @@ const AccountPlansModal = ({
           <Button
             variant="light"
             disabled={!savedPaymentMethod || isCreatingSub}
-            onClick={() => {
-              setCurrentPlan(currentPlan);
+            onClick={async () => {
               setIsCreatingSub(true);
-              setTimeout(() => {
-                onClose();
-                setIsCreatingSub(false);
-              }, 5000);
+              await putUserPayment(savedPaymentMethod.id);
+              await setCurrentPlan(currentPlan);
+              setIsCreatingSub(false);
+              onClose();
             }}
           >
             Confirm

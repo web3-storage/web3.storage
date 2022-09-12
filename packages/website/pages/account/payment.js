@@ -15,13 +15,13 @@ import AccountPlansModal from '../../components/accountPlansModal/accountPlansMo
 // import PaymentHistoryTable from '../../components/account/paymentHistory.js/paymentHistory.js';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
 import { plans, plansEarly } from '../../components/contexts/plansContext';
-import { getSavedPaymentMethod } from '../../lib/api';
+import { getSavedPaymentMethod, getUserPaymentPlan } from '../../lib/api';
 
 const PaymentSettingsPage = props => {
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
   const stripePromise = loadStripe(props.stripePublishableKey);
   const [hasPaymentMethods, setHasPaymentMethods] = useState(false);
-  const [currentPlan, setCurrentPlan] = useState(plans.find(p => p.current));
+  const [currentPlan, setCurrentPlan] = useState(null);
   const [planSelection, setPlanSelection] = useState('');
   const [planList, setPlanList] = useState(plans);
   const [onboardView, setOnboardView] = useState('paid');
@@ -69,6 +69,18 @@ const PaymentSettingsPage = props => {
       setPlanList(plans);
     }
   }, [onboardView]);
+
+  useEffect(() => {
+    const getPlan = async () => {
+      const userPlan = await getUserPaymentPlan();
+      if (userPlan) {
+        await setCurrentPlan(planList.find(plan => plan.id === userPlan.subscription.storage.price));
+      }
+      console.log(userPlan);
+      return userPlan;
+    };
+    getPlan();
+  }, [savedPaymentMethod, planList]);
 
   return (
     <>
