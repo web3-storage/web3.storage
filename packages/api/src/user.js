@@ -561,31 +561,39 @@ const notifySlack = async (
  * Get a user's payment settings.
  *
  * @param {AuthenticatedRequest} request
- * @param {Pick<import('./env').Env, 'billing'|'customers'>} env
+ * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'>} env
  */
 export async function userPaymentGet (request, env) {
-  let subscription = null
-  const { searchParams } = new URL(request.url)
-  if (searchParams.get('mockSubscription')) {
-    subscription = {
-      storage: {
-        price: 'price_mock_userPaymentGet_mockSubscription'
+  const requestUrl = new URL(request.url)
+  // @todo - remove this once frontend no longer uses it
+  const mockSubscription = requestUrl.searchParams.get('mockSubscription')
+    ? {
+        storage: {
+          price: 'price_mock_userPaymentGet_mockSubscription'
+        }
       }
-    }
-  }
+    : undefined
   const userPaymentSettings = await getPaymentSettings({
     billing: env.billing,
     customers: env.customers,
+    subscriptions: env.subscriptions,
     user: { id: request.auth.user._id }
   })
-  return new JSONResponse({ ...userPaymentSettings, subscription })
+  return new JSONResponse({
+    ...userPaymentSettings,
+    subscription: userPaymentSettings.subscription || mockSubscription
+  })
 }
+
+/**
+ * @typedef {import('./utils/billing-types.js').BillingEnv} BillingEnv
+ */
 
 /**
  * Save a user's payment settings.
  *
  * @param {AuthenticatedRequest} request
- * @param {Pick<import('./env').Env, 'billing'|'customers'>} env
+ * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'>} env
  */
 export async function userPaymentPut (request, env) {
   const requestBody = await request.json()
@@ -593,15 +601,33 @@ export async function userPaymentPut (request, env) {
   if (typeof paymentMethodId !== 'string') {
     throw Object.assign(new Error('Invalid payment method'), { status: 400 })
   }
+  const subscriptionInput = requestBody?.subscription
+  if (typeof subscriptionInput !== 'object') {
+    throw Object.assign(new Error('subscription must be an object'), { status: 400 })
+  }
+  const subscriptionStorageInput = subscriptionInput?.storage
+  if (!(typeof subscriptionStorageInput === 'object' || subscriptionStorageInput === null)) {
+    throw Object.assign(new Error('subscription.storage must be an object or null'), { status: 400 })
+  }
+  if (subscriptionStorageInput && typeof subscriptionStorageInput.price !== 'string') {
+    throw Object.assign(new Error('subscription.storage.price must be a string'), { status: 400 })
+  }
+  const subscriptionStorage = subscriptionStorageInput
+    ? { price: subscriptionStorageInput.price.toString() }
+    : null
   const method = { id: paymentMethodId }
   await savePaymentSettings(
     {
       billing: env.billing,
       customers: env.customers,
-      user: { id: request.auth.user._id }
+      user: { id: request.auth.user._id },
+      subscriptions: env.subscriptions
     },
     {
-      method
+      method,
+      subscription: {
+        storage: subscriptionStorage
+      }
     }
   )
   const userPaymentSettingsUrl = '/user/payment'

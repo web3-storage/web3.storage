@@ -43,6 +43,28 @@ export interface CustomersService {
   getOrCreateForUser(user): Promise<Customer>
 }
 
+export type StoragePriceId = string;
+
+/**
+ * A subscription to the web3.storage platform.
+ * This may be a composition of several product-specific subscriptions.
+ */
+export interface W3PlatformSubscription {
+  // details of subscription to storage functionality
+  storage: null | {
+    // the price that should be used to determine the subscription's periodic invoice/credit.
+    price: StoragePriceId
+  }
+}
+
+/**
+ * Keeps track of the subscription a customer has chosen to pay for web3.storage services
+ */
+export interface SubscriptionsService {
+  getSubscription(customer: CustomerId): Promise<W3PlatformSubscription>
+  saveSubscription(customer: CustomerId, subscription: W3PlatformSubscription): Promise<void>
+}
+
 export interface BillingUser {
   id: string
 }
@@ -54,10 +76,12 @@ export interface BillingUser {
 export interface BillingEnv {
   billing: BillingService
   customers: CustomersService
+  subscriptions: SubscriptionsService
 }
 
 export interface PaymentSettings {
-  method: null|PaymentMethod
+  method: null | PaymentMethod
+  subscription: W3PlatformSubscription
 }
 
 export interface UserCustomerService {

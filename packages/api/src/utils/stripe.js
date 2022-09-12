@@ -1,6 +1,6 @@
 /* eslint-disable no-void */
 import Stripe from 'stripe'
-import { CustomerNotFound, randomString } from './billing.js'
+import { createMockSubscriptionsService, CustomerNotFound, randomString } from './billing.js'
 
 /**
  * @typedef {import('stripe').Stripe} StripeInterface
@@ -403,6 +403,7 @@ export function createStripeBillingContext (env) {
   const customers = StripeCustomersService.create(stripe, userCustomerService)
   return {
     billing,
-    customers
+    customers,
+    subscriptions: createMockSubscriptionsService()
   }
 }

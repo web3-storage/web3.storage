@@ -5,14 +5,17 @@
  * @param {object} ctx
  * @param {import('./billing-types').BillingService} ctx.billing
  * @param {import('./billing-types').CustomersService} ctx.customers
+ * @param {import('./billing-types').SubscriptionsService} ctx.subscriptions
  * @param {import('./billing-types').BillingUser} ctx.user
  * @param {object} paymentSettings
  * @param {Pick<import('./billing-types').PaymentMethod, 'id'>} paymentSettings.method
+ * @param {import('./billing-types').W3PlatformSubscription} paymentSettings.subscription
  */
 export async function savePaymentSettings (ctx, paymentSettings) {
   const { billing, customers, user } = ctx
   const customer = await customers.getOrCreateForUser(user)
   await billing.savePaymentMethod(customer.id, paymentSettings.method.id)
+  await ctx.subscriptions.saveSubscription(customer.id, paymentSettings.subscription)
 }
 
 /**
@@ -20,6 +23,7 @@ export async function savePaymentSettings (ctx, paymentSettings) {
  * @param {object} ctx
  * @param {import('./billing-types').BillingService} ctx.billing
  * @param {import('./billing-types').CustomersService} ctx.customers
+ * @param {import('./billing-types').SubscriptionsService} ctx.subscriptions
  * @param {import('./billing-types').BillingUser} ctx.user
  * @returns {Promise<import('./billing-types').PaymentSettings>}
  */
@@ -30,8 +34,12 @@ export async function getPaymentSettings (ctx) {
   if (paymentMethod instanceof Error) {
     throw paymentMethod
   }
+  const subscription = await ctx.subscriptions.getSubscription(customer.id)
   /** @type {import('./billing-types').PaymentSettings} */
-  const settings = { method: paymentMethod }
+  const settings = {
+    method: paymentMethod,
+    subscription
+  }
   return settings
 }
 
@@ -156,7 +164,8 @@ export function createMockBillingContext () {
   const customers = createTestEnvCustomerService()
   return {
     billing,
-    customers
+    customers,
+    subscriptions: createMockSubscriptionsService()
   }
 }
 
@@ -172,5 +181,33 @@ export class CustomerNotFound extends Error {
     super(...[message, ...args])
     this.code = /** @type {const} */ ('ERROR_CUSTOMER_NOT_FOUND')
     void /** @type {import('./billing-types').CustomerNotFound} */ (this)
+  }
+}
+
+/**
+ * @typedef {Parameters<import('./billing-types').SubscriptionsService['saveSubscription']>} SaveSubscriptionCall
+ */
+
+/**
+ * @returns {import('./billing-types').SubscriptionsService & { saveSubscriptionCalls: SaveSubscriptionCall[] }}
+ */
+export function createMockSubscriptionsService () {
+  /** @type {Map<string, import('./billing-types').W3PlatformSubscription|undefined>} */
+  const customerIdToSubscription = new Map()
+  /** @type {Array<SaveSubscriptionCall>} */
+  const saveSubscriptionCalls = []
+  return {
+    saveSubscriptionCalls,
+    async getSubscription (customerId) {
+      const fromMap = customerIdToSubscription.get(customerId)
+      const subscription = fromMap ?? {
+        storage: null
+      }
+      return subscription
+    },
+    async saveSubscription (customerId, subscription) {
+      saveSubscriptionCalls.push([customerId, subscription])
+      customerIdToSubscription.set(customerId, subscription)
+    }
   }
 }

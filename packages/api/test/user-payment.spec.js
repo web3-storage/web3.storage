@@ -3,7 +3,7 @@ import assert from 'assert'
 import fetch, { Request } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
-import { createMockBillingService, createMockCustomerService, createMockPaymentMethod, randomString, savePaymentSettings } from '../src/utils/billing.js'
+import { createMockBillingContext, createMockBillingService, createMockCustomerService, createMockPaymentMethod, createMockSubscriptionsService, randomString, savePaymentSettings } from '../src/utils/billing.js'
 import { userPaymentGet, userPaymentPut } from '../src/user.js'
 import { createMockStripeCardPaymentMethod } from '../src/utils/stripe.js'
 
@@ -142,6 +142,7 @@ describe('userPaymentPut', () => {
     const billing = createMockBillingService()
     const customers = createMockCustomerService()
     const env = {
+      ...createMockBillingContext(),
       billing,
       customers
     }
@@ -164,6 +165,7 @@ describe('userPaymentPut', () => {
           body: JSON.stringify(desiredPaymentSettings)
         })))
     const env = {
+      ...createMockBillingContext(),
       billing: createMockBillingService(),
       customers: createMockCustomerService()
     }
@@ -181,7 +183,8 @@ describe('userPaymentPut', () => {
  * @returns
  */
 function createMockRequestUser () {
-  const user = { _id: randomString(), issuer: randomString() }
+  const userId = randomString()
+  const user = { id: userId, _id: userId, issuer: userId }
   return user
 }
 
@@ -198,6 +201,7 @@ function createMockAuthenticatedRequest (_request, user = createMockRequestUser(
 describe('/user/payment', () => {
   it('can userPaymentPut and then userPaymentGet the saved payment settings', async function () {
     const env = {
+      ...createMockBillingContext(),
       billing: createMockBillingService(),
       customers: createMockCustomerService()
     }
@@ -224,7 +228,7 @@ describe('/user/payment', () => {
     assert.equal(getPaymentSettingsResponse.status, 200, 'getPaymentSettingsResponse.status is 200')
     const gotPaymentSettings = await getPaymentSettingsResponse.json()
     assert.equal(gotPaymentSettings.method.id, desiredPaymentMethodId, 'gotPaymentSettings.method.id is desiredPaymentMethodId')
-    // assert.deepEqual(gotPaymentSettings, desiredPaymentSettings, 'gotPaymentSettings is desiredPaymentSettings')
+    assert.deepEqual(gotPaymentSettings, desiredPaymentSettings, 'gotPaymentSettings is desiredPaymentSettings')
   })
 })
 
@@ -246,6 +250,7 @@ describe('userPaymentGet', () => {
     }
     const customers = createMockCustomerService()
     const response = await userPaymentGet(request, {
+      ...createMockBillingContext(),
       billing,
       customers
     })
@@ -254,6 +259,7 @@ describe('userPaymentGet', () => {
   })
   it('returns stripe card info if paymentMethod is a stripe card', async function () {
     const env = {
+      ...createMockBillingContext(),
       customers: createMockCustomerService(),
       billing: {
         ...createMockBillingService(),
@@ -285,10 +291,26 @@ describe('savePaymentSettings', async function () {
     const method = { id: /** @type const */ ('pm_w3-test-1') }
     const customers = createMockCustomerService()
     const user = { id: randomString() }
-    await savePaymentSettings({ billing, customers, user }, { method })
+    const subscriptions = createMockSubscriptionsService()
+    const env = { billing, customers, user, subscriptions }
+    await savePaymentSettings(env, { method, subscription: { storage: null } })
     const { paymentMethodSaves } = billing
     assert.equal(paymentMethodSaves.length, 1, 'savePaymentMethod was called once')
     assert.deepEqual(paymentMethodSaves[0].methodId, method.id, 'savePaymentMethod was called with method')
     assert.equal(typeof paymentMethodSaves[0].customerId, 'string', 'savePaymentMethod was called with method')
+  })
+  it('saves subscription using billingService', async () => {
+    const desiredPaymentSettings = {
+      method: { id: `pm_mock_${randomString()}` },
+      subscription: { storage: { price: `price_storage_mock_${randomString()}` } }
+    }
+    const subscriptions = createMockSubscriptionsService()
+    const env = {
+      ...createMockBillingContext(),
+      subscriptions,
+      user: createMockRequestUser()
+    }
+    await savePaymentSettings(env, desiredPaymentSettings)
+    assert.equal(subscriptions.saveSubscriptionCalls.length, 1, 'saveSubscription was called once')
   })
 })
