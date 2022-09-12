@@ -27,10 +27,16 @@ export class Logging {
    * @param {string} opts.commithash
    * @param {import('toucan-js').default} opts.sentry
    * @param {boolean} [opts.debug]
+   * @param {boolean} [opts.sendToLogtail]
+   * @param {boolean} [opts.sendToSentry]
    */
-  constructor (request, ctx, opts) {
+  constructor (request, ctx,
+    { sendToLogtail = true, sendToSentry = true, ...opts }
+  ) {
     this.ctx = ctx
     this.opts = opts
+    this.sendToSentry = sendToSentry
+    this.sendToLogtail = sendToLogtail
     this._times = new Map()
     /**
      * @type {string[]}
@@ -84,7 +90,7 @@ export class Logging {
    */
   setUser (user) {
     this.metadata.user.id = user.id || 0
-    this.opts.sentry && this.opts.sentry.setUser({
+    this.sendToSentry && this.opts.sentry.setUser({
       id: `${user.id}`
     })
   }
@@ -177,7 +183,9 @@ export class Logging {
         }
       }
       this._add(log)
-      await this.postBatch()
+      if (this.sendToLogtail) {
+        await this.postBatch()
+      }
     }
     this.ctx.waitUntil(run())
     return response
@@ -210,7 +218,8 @@ export class Logging {
         stack: message.stack,
         message: message.message
       }
-      if (this.opts.sentry && !skipForSentry.some((cls) => message instanceof cls)) {
+
+      if (this.sendToSentry && !skipForSentry.some((cls) => message instanceof cls)) {
         this.opts.sentry.captureException(message)
       }
       if (this.opts?.debug) {
