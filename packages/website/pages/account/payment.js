@@ -73,7 +73,7 @@ const PaymentSettingsPage = props => {
   useEffect(() => {
     const getPlan = async () => {
       const userPlan = await getUserPaymentPlan();
-      if (userPlan) {
+      if (userPlan?.subscription?.storage) {
         await setCurrentPlan(planList.find(plan => plan.id === userPlan.subscription.storage.price));
       }
       console.log(userPlan);
