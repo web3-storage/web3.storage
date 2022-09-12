@@ -29,9 +29,9 @@ const PaymentMethodCard = ({ savedPaymentMethod, setEditingPaymentMethod }) => {
             <Button variant="outline-light" onClick={() => setEditingPaymentMethod(true)}>
               Edit Payment Method
             </Button>
-            <Button variant="text" onClick={() => setEditingPaymentMethod(true)}>
+            {/* <Button variant="text" onClick={() => setEditingPaymentMethod(true)}>
               Remove Payment Method
-            </Button>
+            </Button> */}
           </div>
         </>
       ) : (

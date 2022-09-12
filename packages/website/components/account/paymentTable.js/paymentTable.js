@@ -1,3 +1,5 @@
+import Tooltip from 'ZeroComponents/tooltip/tooltip.js';
+import InfoIcon from '../../../assets/icons/info';
 import Button from '../../button/button.js';
 
 const PaymentTable = ({ plans, currentPlan, setPlanSelection }) => {
@@ -18,11 +20,21 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection }) => {
               <div></div>
               <div>
                 <p>Base Storage Capacity</p>
-                <p>Additional Storage</p>
+                <p>
+                  Additional Storage{' '}
+                  <Tooltip content="This is a charge for storage use above your limit.">
+                    <InfoIcon />
+                  </Tooltip>
+                </p>
                 <p>Bandwidth</p>
                 <p>Block Limits</p>
                 <p>CAR Size Limit</p>
-                <p>Pinning API</p>
+                <p>
+                  Pinning API{' '}
+                  <Tooltip content="This is for data that is already on the IPFS network.">
+                    <InfoIcon />
+                  </Tooltip>
+                </p>
               </div>
             </div>
             {plans.map(plan => (
