@@ -144,6 +144,7 @@ const PaymentSettingsPage = props => {
           onClose={() => setIsPaymentPlanModalOpen(false)}
           planList={planList}
           planSelection={planSelection}
+          currentPlan={currentPlan}
           setCurrentPlan={setCurrentPlan}
           savedPaymentMethod={savedPaymentMethod}
           stripePromise={stripePromise}

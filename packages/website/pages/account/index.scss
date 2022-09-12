@@ -544,6 +544,11 @@
   line-height: 1.5;
 }
 
+.modalInner .add-billing-cta {
+  max-width: 500px;
+  margin: 0.4rem 0 0 0;
+}
+
 .add-payment-method-cta {
   position: relative;
   // @include gradient_Blurry_Background_PinkBlue;

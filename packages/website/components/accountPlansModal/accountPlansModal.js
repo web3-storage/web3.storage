@@ -13,12 +13,13 @@ const AccountPlansModal = ({
   onClose,
   planSelection,
   planList,
+  currentPlan,
   setCurrentPlan,
   savedPaymentMethod,
   stripePromise,
 }) => {
   const [isCreatingSub, setIsCreatingSub] = useState(false);
-  const currentPlan = planList.find(p => p.id === planSelection.id);
+  const chosenPlan = planList.find(p => p.id === planSelection.id);
   return (
     <div className="account-plans-modal">
       <Modal
@@ -27,7 +28,15 @@ const AccountPlansModal = ({
         modalState={[isOpen, onClose]}
         showCloseButton
       >
-        <CurrentBillingPlanCard plan={currentPlan} />
+        {currentPlan.id !== 'free' && chosenPlan.id === 'free' && (
+          <div className="add-billing-cta">
+            <p>
+              You are attempting to downgrade to a lower tier. Please be aware that this could reduce or eliminate
+              access to certain data services.
+            </p>
+          </div>
+        )}
+        <CurrentBillingPlanCard plan={chosenPlan} />
         {!savedPaymentMethod && (
           <div className="add-payment-method-cta">
             Please add a payment method before confirming plan.
@@ -50,7 +59,7 @@ const AccountPlansModal = ({
             variant="light"
             disabled={!savedPaymentMethod || isCreatingSub}
             onClick={() => {
-              setCurrentPlan(currentPlan);
+              setCurrentPlan(chosenPlan);
               setIsCreatingSub(true);
               setTimeout(() => {
                 onClose();
