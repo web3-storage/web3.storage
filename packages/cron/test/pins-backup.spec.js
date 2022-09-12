@@ -63,7 +63,7 @@ const createPin = (cid, status = 'pinned') => {
 }
 
 describe('cron - pins backup', () => {
-  let user, userId, authKey, dbClient, cluster, s3, backup, rwPg, roPg
+  let user, userId, authKey, dbClient, cluster, backup, rwPg, roPg
   const cids = []
 
   beforeEach(async () => {
@@ -75,14 +75,11 @@ describe('cron - pins backup', () => {
 
     user = await createUser(dbClient)
     userId = parseInt(user._id)
-    console.log(userId)
     authKey = parseInt(await createUserAuthKey(dbClient, userId))
 
     cids[0] = await randomCid()
     cids[1] = await randomCid()
     cids[2] = await randomCid()
-
-    console.log(cids)
 
     // Create 3 uploads with status Pinned
     await createUpload(dbClient, userId, authKey, cids[0], { pins: uploadPins })
@@ -95,7 +92,6 @@ describe('cron - pins backup', () => {
     const exportCarStub = sinon.stub(backup, 'exportCar')
 
     exportCarStub.onCall(0).returns(async function * () {
-      console.log('mocking response of IPFS return')
       yield {
         content: Buffer.from('test file'),
         contentCid: cids[0],
@@ -103,7 +99,6 @@ describe('cron - pins backup', () => {
       }
     })
     exportCarStub.onCall(1).returns(async function * () {
-      console.log('mocking response of IPFS return')
       yield {
         content: Buffer.from('test file'),
         contentCid: cids[1],
@@ -111,7 +106,6 @@ describe('cron - pins backup', () => {
       }
     })
     exportCarStub.onCall(2).returns(async function * () {
-      console.log('mocking response of IPFS return')
       yield {
         content: Buffer.from('test file'),
         contentCid: cids[2],
@@ -122,7 +116,6 @@ describe('cron - pins backup', () => {
     const uploadCarStub = sinon.stub(backup, 'uploadCar')
 
     uploadCarStub.onCall(0).returns(async function * () {
-      console.log('mocking upload of car file')
       yield {
         content: Buffer.from('test file'),
         contentCid: cids[0],
@@ -131,7 +124,6 @@ describe('cron - pins backup', () => {
       }
     })
     uploadCarStub.onCall(1).returns(async function * () {
-      console.log('mocking upload of car file')
       yield {
         content: Buffer.from('test file'),
         contentCid: cids[1],
@@ -140,7 +132,6 @@ describe('cron - pins backup', () => {
       }
     })
     uploadCarStub.onCall(2).returns(async function * () {
-      console.log('mocking upload of car file')
       yield {
         content: Buffer.from('test file'),
         contentCid: cids[2],
@@ -168,7 +159,6 @@ describe('cron - pins backup', () => {
   it('should attempt to backup pins to S3', async () => {
     await backup.backupPins({ roPg, rwPg, cluster })
     const res = await roPg.query('SELECT * FROM psa_pin_request')
-    console.log(res.rows)
     assert.strictEqual(res.rows.every(row => row.backup_urls), true, 'Not all pin requests have a backup!')
   })
 })
