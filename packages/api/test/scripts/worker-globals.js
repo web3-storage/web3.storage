@@ -14,6 +14,8 @@ export const PG_REST_URL = 'http://127.0.0.1:3000'
 export const PG_REST_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicG9zdGdyZXMifQ.oM0SXF31Vs1nfwCaDxjlczE237KcNKhTpKEYxMX-jEU'
 export const GATEWAY_URL = 'http://localhost:8080'
 export const ENABLE_ADD_TO_CLUSTER = 'true'
+export const LINKDEX_URL = 'https://fake.linkdex.net'
+export const DEBUG = true
 
 // Can be removed once we get a test mode for admin magic sdk.
 export const DANGEROUSLY_BYPASS_MAGIC_AUTH = true

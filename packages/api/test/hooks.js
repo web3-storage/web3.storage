@@ -2,6 +2,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
 import { Miniflare } from 'miniflare'
+import { createFetchMock } from '@miniflare/core'
 import execa from 'execa'
 import delay from 'delay'
 import { webcrypto } from 'crypto'
@@ -14,6 +15,9 @@ global.crypto = webcrypto
 
 // @ts-ignore
 globalThis.Response = Response
+
+const fetchMock = createFetchMock()
+globalThis.miniflareFetchMock = fetchMock
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 dotenv.config({ path: path.join(__dirname, '..', '..', '..', '.env') })
@@ -46,7 +50,8 @@ export const mochaHooks = () => {
         wranglerConfigPath: true,
         wranglerConfigEnv: 'test',
         modules: true,
-        bindings: workerGlobals
+        bindings: workerGlobals,
+        fetchMock: fetchMock
       }).startServer()
 
       console.log('⚡️ Starting Minio')

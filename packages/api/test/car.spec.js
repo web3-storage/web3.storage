@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 import assert from 'assert'
 import { CID } from 'multiformats/cid'
+import * as Block from 'multiformats/block'
 import { sha256, sha512 } from 'multiformats/hashes/sha2'
 import * as pb from '@ipld/dag-pb'
 import { CarWriter } from '@ipld/car'
@@ -19,13 +20,14 @@ import {
   S3_BUCKET_REGION,
   S3_BUCKET_NAME,
   S3_ACCESS_KEY_ID,
-  S3_SECRET_ACCESS_KEY_ID
+  S3_SECRET_ACCESS_KEY_ID,
+  LINKDEX_URL
 } from './scripts/worker-globals.js'
 
 // Cluster client needs global fetch
 Object.assign(global, { fetch })
 
-describe('POST /car', () => {
+describe.only('POST /car', () => {
   it('should eventually add posted CARs to Cluster', async function () {
     this.timeout(10000)
     const name = 'car'
@@ -123,6 +125,53 @@ describe('POST /car', () => {
       ),
       'stored CAR is the same as uploaded CAR'
     )
+  })
+
+  it('should ask linkdex for structure if DAG is not complete', async function () {
+    const token = await getTestJWT('test-upload', 'test-upload')
+    const leaf1 = await Block.encode({ value: pb.prepare({ Data: 'leaf1' }), codec: pb, hasher: sha256 })
+    const leaf2 = await Block.encode({ value: pb.prepare({ Data: 'leaf2' }), codec: pb, hasher: sha256 })
+    const parent = await Block.encode({ value: pb.prepare({ Links: [leaf1.cid, leaf2.cid] }), codec: pb, hasher: sha256 })
+    const { writer, out } = CarWriter.create(parent.cid)
+    writer.put(parent)
+    writer.put(leaf1)
+    // leave out leaf2 to make patial car
+    writer.close()
+
+    const carBytes = []
+    for await (const chunk of out) {
+      carBytes.push(chunk)
+    }
+
+    // Mock the linkdex api
+    // https://miniflare.dev/core/standards#mocking-outbound-fetch-requests
+    const fetchMock = globalThis.miniflareFetchMock
+    const linkdexMock = fetchMock.get(LINKDEX_URL)
+    linkdexMock
+      .intercept({ path: /^\/\?key=/, method: 'GET' })
+      .reply(200, { structure: 'Complete' }, { headers: { 'content-type': 'application/json' } })
+
+    const res = await fetch(new URL('car', endpoint), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/vnd.ipld.car'
+      },
+      body: new Blob(carBytes)
+    })
+
+    const { cid } = await res.json()
+    assert.strictEqual(cid, parent.cid.toString(), 'Server responded with expected CID')
+
+    // should evetually be marked as pinned on elastic-ipfs as lindex says it's complete
+    await retry(async () => {
+      const statusRes = await fetch(new URL(`status/${cid}`, endpoint))
+      const status = await statusRes.json()
+      const pinInfo = status.pins.find(pin => pin.peerName === 'elastic-ipfs')
+      assert(pinInfo?.status === 'Pinned', 'status is Pinned for elastic-ipfs')
+    }, { retries: 3 })
+
+    linkdexMock.destroy()
   })
 
   it('should throw for blocks bigger than the maximum permitted size', async () => {

@@ -14,6 +14,7 @@ import { MAX_BLOCK_SIZE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/cid.js'
+import assert from 'assert'
 
 /**
  * @typedef {import('multiformats/cid').CID} CID
@@ -150,15 +151,15 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   const tasks = []
 
   // ask linkdex for the dag structure across the set of CARs in S3 for this upload.
-  const checkDagStructureTask = async () => {
-    const res = await fetch(new URL(`?key=${bucketKey}`, env.LINKDEX_URL))
+  const checkDagStructureTask = () => pRetry(async () => {
+    const url = new URL(`/?key=${bucketKey}`, env.LINKDEX_URL)
+    const res = await fetch(url)
+    assert(res.ok)
     const report = await res.json()
     if (report.structure === 'Complete') {
-      return env.db.upsertPin(elasticPin(report.structure))
+      return env.db.upsertPins([elasticPin(report.structure)])
     }
-    // throw to let pRetry try again
-    throw new Error('DAG not complete yet. Try again.')
-  }
+  }, { retries: 3 })
 
   // pin and add the blocks to cluster. Has it's own internal retry logic.
   const addToClusterTask = async () => {
@@ -184,8 +185,9 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     }
   }
 
-  if (structure !== 'Complete' && env.LINKDEX_URL) {
-    tasks.push(pRetry(checkDagStructureTask, { retries: 5 }))
+  // no need to ask linkdex if it's Complete or Unknown
+  if (structure === 'Partial' && env.LINKDEX_URL) {
+    tasks.push(checkDagStructureTask)
   }
 
   if (env.ENABLE_ADD_TO_CLUSTER === 'true') {
