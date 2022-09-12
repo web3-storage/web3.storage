@@ -6,7 +6,7 @@ import { E2EScreenshotPath } from './screenshots';
 const MAGIC_SUCCESS_EMAIL = 'test+success@magic.link';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/', { waitUntil: 'commit' });
 });
 
 test.describe('/account/payment', () => {
@@ -47,12 +47,12 @@ test.describe('/account/payment', () => {
       path: await E2EScreenshotPath(testInfo, `accountPayment`),
     });
   });
-  test('can enter credit card deatils', async ({ page }) => {
+  test('can enter credit card details', async ({ page }) => {
     await LoginTester().login(page, { email: MAGIC_SUCCESS_EMAIL });
-    await page.goto(AccountPaymentTester().url)
-    await AccountPaymentTester().fillCreditCardDetails(page)
-    await AccountPaymentTester().clickAddCardButton(page)
-  })
+    await page.goto(AccountPaymentTester().url);
+    await AccountPaymentTester().fillCreditCardDetails(page);
+    await AccountPaymentTester().clickAddCardButton(page);
+  });
 });
 
 function LoginTester() {
@@ -93,7 +93,7 @@ function AccountPaymentTester() {
       await stripeFrame.locator('[placeholder="CVC"]').fill('242');
     },
     async clickAddCardButton(page: Page) {
-      await page.locator('button:has-text("Add Card")').click();
-    }
-  }
+      await page.locator('text=Payment MethodsAdd Card >> button').click();
+    },
+  };
 }

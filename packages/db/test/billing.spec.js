@@ -5,7 +5,6 @@ import { token } from './utils.js'
 
 describe('billing db', () => {
   it('can upsertUserCustomer to associate user with a stripe customer and then getUserCustomer to read', async () => {
-    assert.ok(true)
     const client = createDB()
     const customerId1 = 'cus_1'
     const customerId2 = 'cus_2'

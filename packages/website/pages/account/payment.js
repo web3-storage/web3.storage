@@ -7,9 +7,9 @@ import { useState, useEffect } from 'react';
 import { Elements, ElementsConsumer } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-import PaymentTable from 'components/account/paymentTable.js/paymentTable.js';
+import PaymentCustomPlan from '../../components/account/paymentCustomPlan.js/paymentCustomPlan.js';
+import PaymentTable from '../../components/account/paymentTable.js/paymentTable.js';
 // import PaymentHistoryTable from 'components/account/paymentHistory.js/paymentHistory.js';
-import PaymentCustomPlan from 'components/account/paymentCustomPlan.js/paymentCustomPlan.js';
 import PaymentMethodCard from '../../components/account/paymentMethodCard/paymentMethodCard.js';
 import AccountPlansModal from '../../components/accountPlansModal/accountPlansModal.js';
 // import PaymentHistoryTable from '../../components/account/paymentHistory.js/paymentHistory.js';
@@ -19,7 +19,7 @@ import { getSavedPaymentMethod } from '../../lib/api';
 
 const PaymentSettingsPage = props => {
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
-  const stripePromise = loadStripe(props.stripeKey);
+  const stripePromise = loadStripe(props.stripePublishableKey);
   const [hasPaymentMethods, setHasPaymentMethods] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(plans.find(p => p.current));
   const [planSelection, setPlanSelection] = useState('');
@@ -157,16 +157,19 @@ const PaymentSettingsPage = props => {
  * @returns {{ props: import('components/types').PageAccountProps}}
  */
 export function getStaticProps() {
-  const stripeKey = process.env.NEXT_PUBLIC_STRIPE_TEST_PK;
-  if (!stripeKey) {
-    console.warn(`account payment page missing required process.env.NEXT_PUBLIC_STRIPE_TEST_PK`);
+  const STRIPE_PULISHABLE_KEY_ENVVAR_NAME = 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY';
+  const stripePublishableKey = process.env[STRIPE_PULISHABLE_KEY_ENVVAR_NAME];
+  if (!stripePublishableKey) {
+    throw new Error(
+      `account payment page missing requires truthy stripePublishableKey, but got ${stripePublishableKey}. Did you set env.${STRIPE_PULISHABLE_KEY_ENVVAR_NAME}?`
+    );
   }
   return {
     props: {
       title: 'Payment',
       isRestricted: true,
       redirectTo: '/login/',
-      stripeKey: stripeKey ?? '',
+      stripePublishableKey,
     },
   };
 }

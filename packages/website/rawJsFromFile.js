@@ -6,6 +6,8 @@ var $buoop = {
   api: 2022.03,
 };
 function $buo_f() {
+  // dont load on localhost
+  if (document.location.origin.match(/\/\/localhost(\W|$)/)) { return }
   var e = document.createElement('script');
   e.src = '//browser-update.org/update.min.js';
   document.body.appendChild(e);
