@@ -8,19 +8,27 @@ import Modal from '../../modules/zero/components/modal/modal';
 import CloseIcon from '../../assets/icons/close';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
 
-const AccountPlansModal = ({
-  isOpen,
-  onClose,
-  planSelection,
-  planList,
-  currentPlan,
-  setCurrentPlan,
-  savedPaymentMethod,
-  stripePromise,
-}) => {
+/**
+ * @typedef {object} AccountPlansModalProps
+ * @property {boolean} isOpen
+ * @property {() => void} onClose
+ * @property {{ id: string }} planSelection
+ * @property {(value: {}) => void} setCurrentPlan
+ * @property {object} savedPaymentMethod
+ * @property {Promise} stripePromise
+ * @property {Array<{ id: string }>} planList
+ * @property {Object} currentPlan
+ */
+
+/**
+ * @param {AccountPlansModalProps} props
+ */
+const AccountPlansModal = props => {
+  const { isOpen, onClose, planSelection, planList, currentPlan, setCurrentPlan, savedPaymentMethod, stripePromise } =
+    props;
   const [isCreatingSub, setIsCreatingSub] = useState(false);
-  const chosenPlan = planList.find(p => p.id === planSelection.id);
-  return (
+  const chosenPlan = planList.find(plan => plan.id === planSelection.id);
+  return chosenPlan?.id ? (
     <div className="account-plans-modal">
       <Modal
         className=""
@@ -73,6 +81,8 @@ const AccountPlansModal = ({
         </div>
       </Modal>
     </div>
+  ) : (
+    <>chosenPlan is undefined</>
   );
 };
 

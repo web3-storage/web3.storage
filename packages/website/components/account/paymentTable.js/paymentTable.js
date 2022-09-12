@@ -1,4 +1,4 @@
-import Tooltip from 'ZeroComponents/tooltip/tooltip.js';
+import Tooltip from '../../../modules/zero/components/tooltip/tooltip.js';
 import InfoIcon from '../../../assets/icons/info';
 import Button from '../../button/button.js';
 
