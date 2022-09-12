@@ -1,6 +1,10 @@
 // browser update library
+// https://browser-update.org/#install (this file's naming convention from buoop)
+
 var $buoop = {
-  required: { e: -2, f: -2, o: -2, s: -1, c: -2 },
+  // sets which version of each browser acts as the threshold for the outdated
+  // browser message to be shown (e is IE/Edge, f is Firefox, o is Opera, etc.)
+  required: { e: 11, f: 95, o: 80, s: 10, c: 96 },
   insecure: true,
   unsupported: true,
   api: 2022.03,
