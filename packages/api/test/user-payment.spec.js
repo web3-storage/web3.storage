@@ -177,40 +177,54 @@ describe('userPaymentPut', () => {
 })
 
 /**
+ * Create a mock user that can go on an AuthenticatedRequest
+ * @returns
+ */
+function createMockRequestUser () {
+  const user = { _id: randomString(), issuer: randomString() }
+  return user
+}
+
+/**
  * @param {Request} _request
  */
-function createMockAuthenticatedRequest (_request) {
+function createMockAuthenticatedRequest (_request, user = createMockRequestUser()) {
   /** @type {import('../src/user.js').AuthenticatedRequest} */
   const request = Object.create(_request)
-  const user = { _id: randomString(), issuer: randomString() }
   request.auth = { user }
-  console.log('created request url', request.url)
   return request
 }
 
 describe('/user/payment', () => {
-  it('can userPaymentPut and then userPaymentGet', async function () {
+  it('can userPaymentPut and then userPaymentGet the saved payment settings', async function () {
     const env = {
       billing: createMockBillingService(),
       customers: createMockCustomerService()
     }
     const desiredPaymentMethodId = `test_pm_${randomString()}`
-    const paymentSettings = { method: { id: desiredPaymentMethodId } }
-    const user = { _id: randomString(), issuer: randomString() }
+    const desiredStorageSubscriptionPriceId = `price_storage_mock_${randomString()}`
+    const desiredPaymentSettings = {
+      method: { id: desiredPaymentMethodId },
+      subscription: { storage: { price: desiredStorageSubscriptionPriceId } }
+    }
+    const user = createMockRequestUser()
     // save settings
-    const savePaymentSettingsRequest = Object.assign(
-      createSaveUserPaymentSettingsRequest({ body: JSON.stringify(paymentSettings) }),
-      { auth: { user } }
+    const savePaymentSettingsRequest = createMockAuthenticatedRequest(
+      createSaveUserPaymentSettingsRequest({ body: JSON.stringify(desiredPaymentSettings) }),
+      user
     )
     const savePaymentSettingsResponse = await userPaymentPut(savePaymentSettingsRequest, env)
     assert.equal(savePaymentSettingsResponse.status, 202, 'savePaymentSettingsResponse.status is 202')
     // get settings
-    const getPaymentSettingsRequest = Object.assign(
+    const getPaymentSettingsRequest = createMockAuthenticatedRequest(
       createUserPaymentRequest(),
-      { auth: { user } }
+      user
     )
     const getPaymentSettingsResponse = await userPaymentGet(getPaymentSettingsRequest, env)
     assert.equal(getPaymentSettingsResponse.status, 200, 'getPaymentSettingsResponse.status is 200')
+    const gotPaymentSettings = await getPaymentSettingsResponse.json()
+    assert.equal(gotPaymentSettings.method.id, desiredPaymentMethodId, 'gotPaymentSettings.method.id is desiredPaymentMethodId')
+    // assert.deepEqual(gotPaymentSettings, desiredPaymentSettings, 'gotPaymentSettings is desiredPaymentSettings')
   })
 })
 

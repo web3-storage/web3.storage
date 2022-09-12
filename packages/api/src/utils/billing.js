@@ -104,12 +104,13 @@ export function randomString () {
 export function createMockBillingService () {
   const storageSubscriptionSaves = []
   const paymentMethodSaves = []
+  /** @type {Map<string,import('./billing-types').PaymentMethod|undefined>} */
   const customerToPaymentMethod = new Map()
   /** @type {MockBillingService} */
   const billing = {
     async getPaymentMethod (customerId) {
       const pm = customerToPaymentMethod.get(customerId)
-      return pm
+      return pm ?? null
     },
     async savePaymentMethod (customerId, methodId) {
       paymentMethodSaves.push({ customerId, methodId })
