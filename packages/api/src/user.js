@@ -581,7 +581,7 @@ export async function userPaymentGet (request, env) {
   })
   return new JSONResponse({
     ...userPaymentSettings,
-    subscription: userPaymentSettings.subscription || mockSubscription
+    subscription: mockSubscription || userPaymentSettings.subscription
   })
 }
 
