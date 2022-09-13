@@ -122,7 +122,14 @@ describe('PUT /user/payment', () => {
     const token = AuthorizationTestContext.use(this).createUserToken()
     const authorization = createBearerAuthorization(token)
     const desiredPaymentMethodId = `w3-test-${Math.random().toString().slice(2)}`
-    const res = await fetch(createSaveUserPaymentSettingsRequest({ authorization, body: JSON.stringify({ method: { id: desiredPaymentMethodId } }) }))
+    /** @type {import('src/utils/billing-types.js').PaymentSettings} */
+    const desiredPaymentSettings = {
+      method: { id: desiredPaymentMethodId },
+      subscription: {
+        storage: null
+      }
+    }
+    const res = await fetch(createSaveUserPaymentSettingsRequest({ authorization, body: JSON.stringify(desiredPaymentSettings) }))
     try {
       assert.equal(res.status, 202, 'response.status is 202')
     } catch (error) {

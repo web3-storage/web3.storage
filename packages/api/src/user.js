@@ -603,7 +603,7 @@ export async function userPaymentPut (request, env) {
   }
   const subscriptionInput = requestBody?.subscription
   if (typeof subscriptionInput !== 'object') {
-    throw Object.assign(new Error('subscription must be an object'), { status: 400 })
+    throw Object.assign(new Error(`subscription must be an object, but got ${typeof subscriptionInput}`), { status: 400 })
   }
   const subscriptionStorageInput = subscriptionInput?.storage
   if (!(typeof subscriptionStorageInput === 'object' || subscriptionStorageInput === null)) {
