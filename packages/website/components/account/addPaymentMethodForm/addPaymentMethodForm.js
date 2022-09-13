@@ -6,7 +6,7 @@ import Button from '../../../components/button/button';
 
 export async function putPaymentMethod(pm_id) {
   const putBody = { method: { id: pm_id } };
-  const res = await fetch(API + '/user/payment', {
+  const res = await fetch(API + '/user/payment?dangerouslyDefaultSubscription=true', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
