@@ -143,7 +143,8 @@ describe('PUT /user/payment', () => {
 describe('userPaymentPut', () => {
   it('saves payment method using billing service', async function () {
     const desiredPaymentMethodId = `pm_${randomString()}`
-    const paymentSettings = { method: { id: desiredPaymentMethodId } }
+    /** @type {import('src/utils/billing-types.js').PaymentSettings} */
+    const paymentSettings = { method: { id: desiredPaymentMethodId }, subscription: { storage: null } }
     const authorization = createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken())
     const request = createMockAuthenticatedRequest(createSaveUserPaymentSettingsRequest({ authorization, body: JSON.stringify(paymentSettings) }))
     const billing = createMockBillingService()
