@@ -57,12 +57,6 @@ const PaymentSettingsPage = props => {
   }, [hasPaymentMethods]);
 
   useEffect(() => {
-    if (planSelection.id) {
-      setIsPaymentPlanModalOpen(true);
-    }
-  }, [planSelection]);
-
-  useEffect(() => {
     if (onboardView === 'early') {
       setPlanList(plansEarly);
     } else {
@@ -76,7 +70,6 @@ const PaymentSettingsPage = props => {
       if (userPlan?.subscription?.storage) {
         await setCurrentPlan(planList.find(plan => plan.id === userPlan.subscription.storage.price));
       }
-      console.log(userPlan);
       return userPlan;
     };
     getPlan();
@@ -110,7 +103,12 @@ const PaymentSettingsPage = props => {
               </div>
             )}
 
-            <PaymentTable plans={planList} currentPlan={currentPlan} setPlanSelection={setPlanSelection} />
+            <PaymentTable
+              plans={planList}
+              currentPlan={currentPlan}
+              setPlanSelection={setPlanSelection}
+              setIsPaymentPlanModalOpen={setIsPaymentPlanModalOpen}
+            />
 
             <div className="billing-settings-layout">
               <div>
@@ -133,6 +131,7 @@ const PaymentSettingsPage = props => {
                             elements={elements}
                             setHasPaymentMethods={setHasPaymentMethods}
                             setEditingPaymentMethod={setEditingPaymentMethod}
+                            currentPlan={currentPlan}
                           />
                         )}
                       </ElementsConsumer>

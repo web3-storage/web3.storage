@@ -1,6 +1,6 @@
 import Button from '../../button/button.js';
 
-const PaymentTable = ({ plans, currentPlan, setPlanSelection }) => {
+const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanModalOpen }) => {
   return (
     <>
       {currentPlan && (
@@ -56,6 +56,7 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection }) => {
                       className=""
                       onClick={() => {
                         setPlanSelection(plans.find(p => p.id === plan.id));
+                        setIsPaymentPlanModalOpen(true);
                       }}
                     >
                       Select Plan

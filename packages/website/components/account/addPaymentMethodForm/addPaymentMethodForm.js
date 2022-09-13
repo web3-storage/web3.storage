@@ -4,8 +4,11 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { API, getToken } from '../../../lib/api';
 import Button from '../../../components/button/button';
 
-export async function putPaymentMethod(pm_id) {
-  const putBody = { method: { id: pm_id } };
+export async function putPaymentMethod(pm_id, currPricePlan) {
+  const putBody = {
+    method: { id: pm_id },
+    subscription: { storage: currPricePlan },
+  };
   const res = await fetch(API + '/user/payment?dangerouslyDefaultSubscription=true', {
     method: 'PUT',
     headers: {
@@ -21,7 +24,7 @@ export async function putPaymentMethod(pm_id) {
   return res.json();
 }
 
-const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod }) => {
+const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, currentPlan }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [paymentMethodError, setPaymentMethodError] = useState('');
@@ -42,7 +45,9 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod })
           card: cardElement,
         });
         if (error) throw new Error(error.message);
-        await putPaymentMethod(paymentMethod?.id);
+        if (!paymentMethod.id) return;
+        const currPricePlan = currentPlan ? { price: currentPlan.id } : null;
+        await putPaymentMethod(paymentMethod.id, currPricePlan);
         setHasPaymentMethods(true);
         setEditingPaymentMethod(false);
         setPaymentMethodError('');
