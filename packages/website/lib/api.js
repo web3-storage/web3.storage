@@ -319,7 +319,6 @@ export async function getSavedPaymentMethod() {
   return savedPayment;
 }
 
-
 export async function getUserPaymentPlan() {
   const token = await getToken();
   // const paymentSettings = {
