@@ -71,6 +71,7 @@ export class StripeBillingService {
    * @returns {Promise<void>}
    */
   async savePaymentMethod (customer, method) {
+    // @todo - this shouldn't create if one already exists :/
     const setupIntent = await this.stripe.setupIntents.create({
       payment_method: method,
       confirm: true,
@@ -406,4 +407,133 @@ export function createStripeBillingContext (env) {
     customers,
     subscriptions: createMockSubscriptionsService()
   }
+}
+
+/**
+ * @typedef {object} StripeApiForSubscriptionsService
+ * @property {Pick<Stripe['subscriptions'], 'create'>} subscriptions
+ * @property {Pick<Stripe['customers'], 'retrieve'>} customers
+ */
+
+/**
+ * A SubscriptionsService that uses stripe.com for storage
+ */
+export class StripeSubscriptionsService {
+  /**
+   * @param {StripeApiForSubscriptionsService} stripe
+   */
+  static create (stripe) {
+    return new StripeSubscriptionsService(stripe)
+  }
+
+  /**
+   * @param {StripeApiForSubscriptionsService} stripe
+   * @protected
+   */
+  constructor (stripe) {
+    /** @type {StripeApiForSubscriptionsService} */
+    this.stripe = stripe
+    /**
+     * @type {import('./billing-types').SubscriptionsService}
+     */
+    const instance = this // eslint-disable-line
+  }
+
+  /**
+   * @param {string} customerId
+   * @returns {Promise<import('./billing-types').W3PlatformSubscription|CustomerNotFound>}
+   */
+  async getSubscription (customerId) {
+    const customer = await this.stripe.customers.retrieve(customerId, {
+      expand: ['subscriptions']
+    })
+    if (customer.deleted) {
+      return new CustomerNotFound('customer retrieved from stripe has been unexpectedly deleted')
+    }
+    const { subscriptions: stripeSubscriptions } = customer
+    if (!stripeSubscriptions) {
+      // this is unexpected, since we requested expand=subscriptions above
+      throw new Error('expected subscriptions to be expanded, but got falsy value')
+    }
+    const storageStripeSubscription = selectStorageStripeSubscription(customerId, stripeSubscriptions)
+    /** @returns {import('./billing-types').W3PlatformSubscription} */
+    const subscription = {
+      storage: createW3StorageSubscription(storageStripeSubscription)
+    }
+    return subscription
+  }
+
+  /**
+   *
+   * @param {import('./billing-types').CustomerId} customerId
+   * @param {import('./billing-types').W3PlatformSubscription} subscription
+   */
+  async saveSubscription (customerId, subscription) {
+    await this.saveStorageSubscription(customerId, subscription.storage)
+  }
+
+  /**
+   * @param {import('./billing-types').CustomerId} customerId
+   * @param {import('./billing-types').W3PlatformSubscription['storage']} storageSubscription
+   * @returns {Promise<import('./billing-types').W3StorageStripeSubscription>}
+   */
+  async saveStorageSubscription (customerId, storageSubscription) {
+    /** @type {Stripe.SubscriptionCreateParams.Item | null} */
+    const storageMeteringSubscriptionItem = storageSubscription?.price
+      ? {
+          price: storageSubscription?.price
+        }
+      : null
+    const stripeSubscription = await this.stripe.subscriptions.create({
+      customer: customerId,
+      items: [
+        ...(storageMeteringSubscriptionItem ? [storageMeteringSubscriptionItem] : [])
+      ],
+      payment_behavior: 'error_if_incomplete'
+    })
+    /** @type {import('./billing-types').W3StorageStripeSubscription} */
+    const subscription = { id: stripeSubscription.id }
+    return subscription
+  }
+}
+
+// https://dashboard.stripe.com/test/prices/price_1LhdqgIfErzTm2rEqfl6EgnT
+export const testPriceForStorageLite = 'price_1LhdqgIfErzTm2rEqfl6EgnT'
+
+/**
+ * @param {string} customerId
+ * @param {Stripe.ApiList<Stripe.Subscription>} stripeSubscriptions
+ * @returns {Stripe.Subscription | null}
+ */
+function selectStorageStripeSubscription (customerId, stripeSubscriptions) {
+  if (stripeSubscriptions.data.length === 0) {
+    return null
+  }
+  if (stripeSubscriptions.data.length > 1) {
+    console.warn(`customer ${customerId} has ${stripeSubscriptions?.data?.length} subscriptions, but we only expect to ever see one.`)
+  }
+  // @todo - this isn't very clever. We should be more clever, or maybe throw when there are >1 subscriptions
+  const stripeSubscription = stripeSubscriptions.data[0]
+  return stripeSubscription
+}
+
+/**
+ * @param {null|Stripe.Subscription} stripeSubscription
+ * @returns {import('./billing-types').W3PlatformSubscription['storage']}
+ */
+function createW3StorageSubscription (stripeSubscription) {
+  if (!stripeSubscription) {
+    return null
+  }
+  if (stripeSubscription.items.data.length > 1) {
+    console.warn(`subscription ${stripeSubscription.id} has ${stripeSubscription.items.data?.length} items, but we only expect to ever see one.`)
+  }
+  // @todo - be more clever in ensuring this came from correct subscription item
+  // or consider throwing if there is more than one subscription item
+  const storagePrice = stripeSubscription.items.data[0].price.id
+  const storageSubscription = {
+    id: stripeSubscription.id,
+    price: storagePrice
+  }
+  return storageSubscription
 }

@@ -58,11 +58,18 @@ export interface W3PlatformSubscription {
 }
 
 /**
+ * storage subscription that is stored in stripe.com
+ */
+export interface W3StorageStripeSubscription {
+  id: string
+}
+
+/**
  * Keeps track of the subscription a customer has chosen to pay for web3.storage services
  */
 export interface SubscriptionsService {
-  getSubscription(customer: CustomerId): Promise<W3PlatformSubscription>
-  saveSubscription(customer: CustomerId, subscription: W3PlatformSubscription): Promise<void>
+  getSubscription(customer: CustomerId): Promise<W3PlatformSubscription|CustomerNotFound>
+  saveSubscription(customer: CustomerId, subscription: W3PlatformSubscription): Promise<void|CustomerNotFound>
 }
 
 export interface BillingUser {

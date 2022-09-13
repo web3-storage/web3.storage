@@ -3,7 +3,7 @@ import assert from 'assert'
 import { createMockUserCustomerService, CustomerNotFound, randomString } from '../src/utils/billing.js'
 // eslint-disable-next-line no-unused-vars
 import Stripe from 'stripe'
-import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createStripe, StripeBillingService, StripeCustomersService } from '../src/utils/stripe.js'
+import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createStripe, StripeBillingService, StripeCustomersService, StripeSubscriptionsService, testPriceForStorageLite } from '../src/utils/stripe.js'
 
 describe('StripeBillingService', async function () {
   it('can savePaymentMethod', async function () {
@@ -101,5 +101,40 @@ describe('StripeCustomersService', async function () {
     // it should not create the customer if already set
     const customer2ForUser2 = await customers1.getOrCreateForUser({ id: userId2 })
     assert.equal(customer2ForUser2.id, customerForUser2.id, 'should return same customer for same userId2')
+  })
+})
+
+describe('StripeSubscriptionsService', async function () {
+  it('can saveSubscription(a) twice then getSubscription against real stripe.com API', async function () {
+    // ensure stripeSecretKey and use it to construct stripe
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+    if (!stripeSecretKey) {
+      return this.skip()
+    }
+    assert.ok(stripeSecretKey, 'stripeSecretKey is required')
+    const stripe = createStripe(stripeSecretKey)
+    const customers = StripeCustomersService.create(stripe, createMockUserCustomerService())
+    const user = { id: `user-${randomString()}` }
+    const customer = await customers.getOrCreateForUser(user)
+    const subscriptions = StripeSubscriptionsService.create(stripe)
+
+    /** @type {import('src/utils/billing-types.js').W3PlatformSubscription} */
+    const desiredSubscription = {
+      storage: {
+        // https://dashboard.stripe.com/test/prices/price_1LhdqgIfErzTm2rEqfl6EgnT
+        price: testPriceForStorageLite
+      }
+    }
+    const timesToSave = 2
+    for (let i = timesToSave; i > 0; i--) {
+      await subscriptions.saveSubscription(customer.id, desiredSubscription)
+    }
+
+    // now get the saved subscription
+    const gotSavedSubscription = await subscriptions.getSubscription(customer.id)
+    assert.ok(!(gotSavedSubscription instanceof Error), 'getSubscription did not return an error')
+    console.log('gotSavedSubscription', JSON.stringify(gotSavedSubscription))
+    assert.equal(typeof gotSavedSubscription?.storage?.price, 'string', 'savedSubscription.storage.price is a string')
+    assert.equal(gotSavedSubscription.storage?.price, desiredSubscription.storage?.price, 'gotPaymentSettings.subscription.storage.price is same as desiredPaymentSettings.subscription.storage.price')
   })
 })

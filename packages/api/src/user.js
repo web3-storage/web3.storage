@@ -13,7 +13,7 @@ import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
 import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
-import { getPaymentSettings, savePaymentSettings } from './utils/billing.js'
+import { CustomerNotFound, getPaymentSettings, savePaymentSettings } from './utils/billing.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -579,6 +579,16 @@ export async function userPaymentGet (request, env) {
     subscriptions: env.subscriptions,
     user: { id: request.auth.user._id }
   })
+  if (userPaymentSettings instanceof Error) {
+    switch (userPaymentSettings.code) {
+      case (new CustomerNotFound().code):
+        return new JSONResponse({
+          message: `Unexpected error fetching payment settings: ${userPaymentSettings.code}`
+        }, { status: 500 })
+      default: // unexpected error
+        throw userPaymentSettings
+    }
+  }
   return new JSONResponse({
     ...userPaymentSettings,
     subscription: mockSubscription || userPaymentSettings.subscription

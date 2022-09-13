@@ -25,7 +25,7 @@ export async function savePaymentSettings (ctx, paymentSettings) {
  * @param {import('./billing-types').CustomersService} ctx.customers
  * @param {import('./billing-types').SubscriptionsService} ctx.subscriptions
  * @param {import('./billing-types').BillingUser} ctx.user
- * @returns {Promise<import('./billing-types').PaymentSettings>}
+ * @returns {Promise<import('./billing-types').PaymentSettings|CustomerNotFound>}
  */
 export async function getPaymentSettings (ctx) {
   const { billing, customers, user } = ctx
@@ -35,6 +35,9 @@ export async function getPaymentSettings (ctx) {
     throw paymentMethod
   }
   const subscription = await ctx.subscriptions.getSubscription(customer.id)
+  if (subscription instanceof Error) {
+    return subscription
+  }
   /** @type {import('./billing-types').PaymentSettings} */
   const settings = {
     method: paymentMethod,
@@ -209,5 +212,15 @@ export function createMockSubscriptionsService () {
       saveSubscriptionCalls.push([customerId, subscription])
       customerIdToSubscription.set(customerId, subscription)
     }
+  }
+}
+
+/**
+ * Create a W3PlatformSubscription that is 'empty' i.e. it has no product-specific subscriptions
+ * @returns {import('./billing-types').W3PlatformSubscription}
+ */
+export function createEmptyW3PlatformSubscription () {
+  return {
+    storage: null
   }
 }
