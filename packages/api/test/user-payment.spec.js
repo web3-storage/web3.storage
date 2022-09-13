@@ -82,6 +82,7 @@ describe('GET /user/payment', () => {
  * @param {object} [arg]
  * @param {BodyInit|undefined|string} [arg.body] - body of request
  * @param {string} [arg.authorization] - authorization header value
+ * @param {Record<string,any>} [arg.searchParams] - query string searchParams
  * @returns
  */
 function createSaveUserPaymentSettingsRequest (arg = {}) {
@@ -94,8 +95,12 @@ function createSaveUserPaymentSettingsRequest (arg = {}) {
     method: 'put',
     ...arg
   }
+  const requestUrl = new URL(path, baseUrl)
+  for (const [key, value] of Object.entries(arg.searchParams || {})) {
+    requestUrl.searchParams.set(key, value)
+  }
   return new Request(
-    new URL(path, baseUrl),
+    requestUrl,
     {
       method,
       body,
@@ -141,6 +146,26 @@ describe('PUT /user/payment', () => {
 })
 
 describe('userPaymentPut', () => {
+  it('if dangerouslyDefaultSubscription, can have missing subscription and its treated as a default nully one', async function () {
+    /** @type {Omit<import('src/utils/billing-types.js').PaymentSettings, 'subscription'>} */
+    const desiredPaymentSettings = { method: { id: `pm_${randomString()}` } }
+    const authorization = createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken())
+    const env = {
+      ...createMockBillingContext(),
+      subscriptions: createMockSubscriptionsService()
+    }
+    const request = createMockAuthenticatedRequest(
+      createSaveUserPaymentSettingsRequest({
+        authorization,
+        body: JSON.stringify(desiredPaymentSettings),
+        searchParams: {
+          dangerouslyDefaultSubscription: 'true'
+        }
+      })
+    )
+    const response = await userPaymentPut(request, env)
+    assert.equal(response.status, 202, 'response.status is 202')
+  })
   it('saves payment method using billing service', async function () {
     const desiredPaymentMethodId = `pm_${randomString()}`
     /** @type {import('src/utils/billing-types.js').PaymentSettings} */

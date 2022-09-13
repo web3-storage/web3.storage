@@ -596,12 +596,22 @@ export async function userPaymentGet (request, env) {
  * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'>} env
  */
 export async function userPaymentPut (request, env) {
+  const requestUrl = new URL(request.url)
   const requestBody = await request.json()
   const paymentMethodId = requestBody?.method?.id
   if (typeof paymentMethodId !== 'string') {
     throw Object.assign(new Error('Invalid payment method'), { status: 400 })
   }
-  const subscriptionInput = requestBody?.subscription
+  let subscriptionInput = requestBody?.subscription
+  // if no subscription is passed, and ?dangerouslyDefaultSubscription , use a default
+  // this only exists to aid frontend development, and will be removed
+  if (typeof subscriptionInput === 'undefined' && requestUrl.searchParams.get('dangerouslyDefaultSubscription')) {
+    /** @type {import('./utils/billing-types.js').W3PlatformSubscription} */
+    const defaultSubscription = {
+      storage: null
+    }
+    subscriptionInput = defaultSubscription
+  }
   if (typeof subscriptionInput !== 'object') {
     throw Object.assign(new Error(`subscription must be an object, but got ${typeof subscriptionInput}`), { status: 400 })
   }
