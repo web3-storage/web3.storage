@@ -1,9 +1,7 @@
 /* eslint-env mocha */
 import assert from 'assert'
 import { createMockUserCustomerService, CustomerNotFound, randomString } from '../src/utils/billing.js'
-// eslint-disable-next-line no-unused-vars
-import Stripe from 'stripe'
-import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createStripe, StripeBillingService, StripeCustomersService, StripeSubscriptionsService, testPriceForStorageLite } from '../src/utils/stripe.js'
+import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createStripe, StripeBillingService, StripeCustomersService, StripeSubscriptionsService, testPriceForStorageFree, testPriceForStorageLite, testPriceForStoragePro } from '../src/utils/stripe.js'
 
 describe('StripeBillingService', async function () {
   it('can savePaymentMethod', async function () {
@@ -118,23 +116,24 @@ describe('StripeSubscriptionsService', async function () {
     const customer = await customers.getOrCreateForUser(user)
     const subscriptions = StripeSubscriptionsService.create(stripe)
 
-    /** @type {import('src/utils/billing-types.js').W3PlatformSubscription} */
-    const desiredSubscription = {
-      storage: {
-        // https://dashboard.stripe.com/test/prices/price_1LhdqgIfErzTm2rEqfl6EgnT
-        price: testPriceForStorageLite
-      }
-    }
-    const timesToSave = 2
-    for (let i = timesToSave; i > 0; i--) {
-      await subscriptions.saveSubscription(customer.id, desiredSubscription)
+    // change between tiers
+    for (const price of [testPriceForStorageFree, testPriceForStorageFree, testPriceForStorageLite, testPriceForStoragePro]) {
+      await subscriptions.saveSubscription(customer.id, {
+        storage: {
+          price
+        }
+      })
+      const gotSavedSubscription2 = await subscriptions.getSubscription(customer.id)
+      assert.ok(!(gotSavedSubscription2 instanceof Error), 'getSubscription did not return an error')
+      assert.equal(gotSavedSubscription2.storage?.price, price, 'gotPaymentSettings.subscription.storage.price is same as desiredPaymentSettings.subscription.storage.price')
     }
 
-    // now get the saved subscription
-    const gotSavedSubscription = await subscriptions.getSubscription(customer.id)
-    assert.ok(!(gotSavedSubscription instanceof Error), 'getSubscription did not return an error')
-    console.log('gotSavedSubscription', JSON.stringify(gotSavedSubscription))
-    assert.equal(typeof gotSavedSubscription?.storage?.price, 'string', 'savedSubscription.storage.price is a string')
-    assert.equal(gotSavedSubscription.storage?.price, desiredSubscription.storage?.price, 'gotPaymentSettings.subscription.storage.price is same as desiredPaymentSettings.subscription.storage.price')
+    // unsubscribe to storage
+    await subscriptions.saveSubscription(customer.id, {
+      storage: null
+    })
+    const gotSavedSubscription3 = await subscriptions.getSubscription(customer.id)
+    assert.ok(!(gotSavedSubscription3 instanceof Error), 'getSubscription did not return an error')
+    assert.equal(gotSavedSubscription3.storage, null, 'gotPaymentSettings.subscription.storage.price is same as desiredPaymentSettings.subscription.storage.price')
   })
 })

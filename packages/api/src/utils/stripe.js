@@ -1,6 +1,6 @@
 /* eslint-disable no-void */
 import Stripe from 'stripe'
-import { createMockSubscriptionsService, CustomerNotFound, randomString } from './billing.js'
+import { CustomerNotFound, randomString } from './billing.js'
 
 /**
  * @typedef {import('stripe').Stripe} StripeInterface
@@ -402,16 +402,17 @@ export function createStripeBillingContext (env) {
     getUserCustomer: env.db.getUserCustomer.bind(env.db)
   }
   const customers = StripeCustomersService.create(stripe, userCustomerService)
+  const subscriptions = StripeSubscriptionsService.create(stripe)
   return {
     billing,
     customers,
-    subscriptions: createMockSubscriptionsService()
+    subscriptions
   }
 }
 
 /**
  * @typedef {object} StripeApiForSubscriptionsService
- * @property {Pick<Stripe['subscriptions'], 'create'>} subscriptions
+ * @property {Pick<Stripe['subscriptions'], 'cancel'|'create'>} subscriptions
  * @property {Pick<Stripe['subscriptionItems'], 'update'|'del'>} subscriptionItems
  * @property {Pick<Stripe['customers'], 'retrieve'>} customers
  */
@@ -479,17 +480,17 @@ export class StripeSubscriptionsService {
   async saveSubscription (customerId, subscription) {
     const storageStripeSubscription = await this.getStorageStripeSubscription(customerId)
     if (storageStripeSubscription instanceof Error) { return storageStripeSubscription }
-    const storageStripeSubscriptionItem = storageStripeSubscription && selectStorageStripeSubscriptionItem(storageStripeSubscription)
-    await this.saveStorageSubscription(customerId, subscription.storage, storageStripeSubscriptionItem?.id)
+    await this.saveStorageSubscription(customerId, subscription.storage, storageStripeSubscription ?? undefined)
   }
 
   /**
    * @param {import('./billing-types').CustomerId} customerId
    * @param {import('./billing-types').W3PlatformSubscription['storage']} storageSubscription
-   * @param {string} [existingStripeSubscriptionId]
+   * @param {Stripe.Subscription} [existingStripeSubscription]
    * @returns {Promise<import('./billing-types').W3StorageStripeSubscription|null>}
    */
-  async saveStorageSubscription (customerId, storageSubscription, existingStripeSubscriptionId = undefined) {
+  async saveStorageSubscription (customerId, storageSubscription, existingStripeSubscription = undefined) {
+    const existingStorageStripeSubscriptionItem = existingStripeSubscription && selectStorageStripeSubscriptionItem(existingStripeSubscription)
     /** @type {Stripe.SubscriptionCreateParams.Item | null} */
     const storageMeteringSubscriptionItem = storageSubscription?.price
       ? {
@@ -498,15 +499,15 @@ export class StripeSubscriptionsService {
       : null
     /** @type {string|undefined} */
     let subscriptionId
-    if (existingStripeSubscriptionId) {
+    if (existingStorageStripeSubscriptionItem && existingStripeSubscription) {
       if (!storageSubscription) {
         // delete
-        await this.stripe.subscriptionItems.del(existingStripeSubscriptionId)
+        await this.stripe.subscriptions.cancel(existingStripeSubscription.id)
         return null
       }
       // update
       const updatedSubItem = await this.stripe.subscriptionItems.update(
-        existingStripeSubscriptionId,
+        existingStorageStripeSubscriptionItem.id,
         {
           price: storageSubscription.price
         }
@@ -529,8 +530,12 @@ export class StripeSubscriptionsService {
   }
 }
 
+// https://dashboard.stripe.com/test/prices/price_1Li2ISIfErzTm2rEg4wD9BR2
+export const testPriceForStorageFree = 'price_1Li2ISIfErzTm2rEg4wD9BR2'
 // https://dashboard.stripe.com/test/prices/price_1LhdqgIfErzTm2rEqfl6EgnT
 export const testPriceForStorageLite = 'price_1LhdqgIfErzTm2rEqfl6EgnT'
+// https://dashboard.stripe.com/test/prices/price_1Li1upIfErzTm2rEIDcI6scF
+export const testPriceForStoragePro = 'price_1Li1upIfErzTm2rEIDcI6scF'
 
 /**
  * @param {string} customerId
