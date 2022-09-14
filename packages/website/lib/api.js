@@ -324,7 +324,7 @@ export async function getUserPaymentPlan() {
   // const paymentSettings = {
   //   method: { id: pm_id }
   // };
-  const res = await fetch(API + '/user/payment?mockSubscription=true', {
+  const res = await fetch(API + '/user/payment', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
