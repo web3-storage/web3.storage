@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.7.0](https://github.com/web3-storage/web3.storage/compare/w3-v2.6.1...w3-v2.7.0) (2022-09-14)
+
+
+### Features
+
+* `w3 open <cid>` to open cid on w3s.link in browser ([#1892](https://github.com/web3-storage/web3.storage/issues/1892)) ([5d3188d](https://github.com/web3-storage/web3.storage/commit/5d3188d18fc71faa8468b4b425637b4a67064aac))
+* `w3` command using w3s.link ([#1807](https://github.com/web3-storage/web3.storage/issues/1807)) ([6a3e7af](https://github.com/web3-storage/web3.storage/commit/6a3e7af61d1e5dcf789f4f3690732c1b17814b9d))
+
+
+### Bug Fixes
+
+* cjs support for w3name ([#1820](https://github.com/web3-storage/web3.storage/issues/1820)) ([49227b6](https://github.com/web3-storage/web3.storage/commit/49227b638f71dd5d33b82e520d83135eff0d0c37))
+
+
+### Other Changes
+
+* add an e2e test for the w3name proxy module ([#1715](https://github.com/web3-storage/web3.storage/issues/1715)) ([c4633f6](https://github.com/web3-storage/web3.storage/commit/c4633f6f504ff52df0712fb1db725d6fa55f5d1c))
+
 ## 2.6.1 (2022-08-24)
 
 
