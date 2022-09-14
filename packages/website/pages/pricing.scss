@@ -5,6 +5,9 @@
 .page-pricing {
   position: relative;
   .heading {
+    @include fontSize_Large;
+    line-height: leading(50, 35);
+    margin-bottom: 2.25rem;
     @include mini {
       @include fontSize_Large;
       line-height: leading(45, 35);
@@ -12,22 +15,67 @@
   }
 }
 
+.sectional {
+  padding: 6rem 0;
+}
+
 #pricing_section_1,
 #pricing_section_3 {
   position: relative;
-  @include background_Dark;
+  @include selection_Light;
 }
 
 #pricing_section_1 {
-  z-index: 5;
-  top: -1px;
+  z-index: 1;
+  padding-bottom: 5rem;
+
+  .gradient-background-component.light {
+    width: calc(100% + 2rem);
+    height: calc(100% + 17rem + 12rem);
+    top: -19.5rem;
+    left: -1rem;
+  }
+}
+
+#intro_1-hero-corkscrew {
+  position: absolute;
+  right: -1rem;
+  top: 9.16%;
+  transform: rotate(-60deg);
+  display: block;
+  width: 441px;
+  height: 441px;
+  z-index: -1;
+}
+
+#intro_1-coil {
+  @include small {
+    display: none;
+  }
+  position: absolute;
+  right: 21rem;
+  top: 2rem;
+  left: auto;
+  z-index: -1;
+  transform: rotate(322deg);
+}
+
+#intro_1-cross {
+  display: block;
+  position: relative;
+  right: 8rem;
+  top: -2rem;
+  left: auto;
+  bottom: auto;
+  width: 47px;
+  height: 47px;
 }
 
 #pricing_section_2 {
   position: relative;
   z-index: 2;
   padding: 10.25rem 0;
-  @include selection_Light;
+  @include background_Dark;
 
   &:before {
     content: '';
@@ -236,9 +284,8 @@
 }
 
 // ------------------------------------------------------------- Section [Tiers]
-#section_tiers {
-  padding-top: 4.25rem;
-  padding-bottom: 3rem;
+#section_pricing_header {
+  padding: 4.25rem 0 0 0;
   .text-block {
     .heading {
       @include fontSize_Large;
@@ -249,26 +296,27 @@
   }
 }
 
-#section_tiers-cards {
-  padding-top: 0;
-  padding-bottom: 1rem;
-  .column-content {
-    position: relative;
-  }
+#section_pricing_header .text-block.format__header h1 {
+  font-weight: 600;
+  font-size: 55px;
+  line-height: 68px;
 }
 
-#section_tiers-triangle {
-  position: absolute;
-  width: 4.875rem;
-  top: 8rem;
-  transform: scaleX(-1) rotate(-100deg);
-  right: calc(50% - #{math.div($containerWidth, 2)});
-  @include small {
-    right: -5rem;
-  }
-  @include mini {
-    display: none;
-  }
+#section_pricing_header .text-block.format__header .description {
+  padding-right: 9rem;
+}
+
+#section_trusted_by_header {
+  padding: 0;
+}
+
+#section_trusted_by_logos {
+  padding: 1rem 0;
+}
+
+#section_trusted_by_logos .image-block img {
+  width: auto !important;
+  height: auto !important;
 }
 
 // --------------------------------------------------------------- Section [FAQ]
