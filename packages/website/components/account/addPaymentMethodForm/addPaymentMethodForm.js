@@ -9,7 +9,7 @@ export async function putPaymentMethod(pm_id, currPricePlan) {
     method: { id: pm_id },
     subscription: { storage: currPricePlan },
   };
-  const res = await fetch(API + '/user/payment?dangerouslyDefaultSubscription=true', {
+  const res = await fetch(API + '/user/payment', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, c
           card: cardElement,
         });
         if (error) throw new Error(error.message);
-        if (!paymentMethod.id) return;
+        if (!paymentMethod?.id) return;
         const currPricePlan = currentPlan ? { price: currentPlan.id } : null;
         await putPaymentMethod(paymentMethod.id, currPricePlan);
         setHasPaymentMethods(true);
