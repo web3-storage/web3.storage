@@ -1,6 +1,6 @@
 export const sharedPlans = [
   {
-    id: 'lite',
+    id: 'price_1LhdqgIfErzTm2rEqfl6EgnT',
     title: 'Lite',
     description: 'For those that want to take advantage of more storage',
     price: '$3/mo',
@@ -13,7 +13,7 @@ export const sharedPlans = [
   },
   {
     // id: 'price_pro',
-    id: 'price_mock_userPaymentGet_mockSubscription',
+    id: 'price_1Li1upIfErzTm2rEIDcI6scF',
     title: 'Pro',
     description: 'All the sauce, all the toppings.',
     price: '$10/mo',
@@ -27,7 +27,7 @@ export const sharedPlans = [
 ];
 
 export const freePlan = {
-  id: 'free',
+  id: 'price_1Li2ISIfErzTm2rEg4wD9BR2',
   title: 'Free',
   description: 'You are currently on the free tier. You can use our service up to 5GiB/mo without being charged.',
   price: '$0/mo',
