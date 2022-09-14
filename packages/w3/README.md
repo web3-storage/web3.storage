@@ -36,6 +36,18 @@ Upload a [CAR](https://ipld.io/specs/transport/car/carv1/) file to web3.storage.
 - `-n, --name` Name to identify the upload
 - `--no-retry` Don't try the upload again if it fails
 
+### `w3 open <cid>`
+
+Open a CID on https://w3s.link in your browser. You can also pass a CID and a path.
+
+```bash
+# opens a browser to https://w3s.link/ipfs/bafybeidluj5ub7okodgg5v6l4x3nytpivvcouuxgzuioa6vodg3xt2uqle
+w3 open bafybeidluj5ub7okodgg5v6l4x3nytpivvcouuxgzuioa6vodg3xt2uqle
+
+# opens a browser to https://w3s.link/ipfs/bafybeidluj5ub7okodgg5v6l4x3nytpivvcouuxgzuioa6vodg3xt2uqle/olizilla.png
+w3 open bafybeidluj5ub7okodgg5v6l4x3nytpivvcouuxgzuioa6vodg3xt2uqle/olizilla.png
+```
+
 ### `w3 get <cid>`
 
 Fetch files by CID. They are verified on your machine to ensure you got the eact bytes for the given CID.

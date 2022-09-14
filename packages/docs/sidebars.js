@@ -43,7 +43,7 @@ module.exports = {
         'reference/go-client-library',
         {
           type: 'link',
-          label: 'HTTP API',
+          label: 'web3.storage HTTP API',
           href: '/reference/http-api/'
         }
       ]

@@ -64,6 +64,9 @@ export function init() {
     return;
   }
 
+  // dont load on localhost
+  if (document.location.origin.match(/\/\/localhost(\W|$)/)) { return }
+
   countly.init({ app_key: config.key, url: config.url, debug: false });
 
   countly.track_sessions();

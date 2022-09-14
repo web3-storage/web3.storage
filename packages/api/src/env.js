@@ -99,6 +99,8 @@ export function envAll (req, env, ctx) {
   // the logs to LogTail. This must be a new instance per request.
   // Note that we pass `ctx` as the `event` param here, because it's kind of both:
   // https://developers.cloudflare.com/workers/runtime-apis/fetch-event/#syntax-module-worker
+  const cloudLoggingEnabled = env.ENV === 'production' || env.ENV === 'staging'
+
   // @ts-ignore
   env.log = new Logging(req, ctx, {
     token: env.LOGTAIL_TOKEN,
@@ -106,7 +108,9 @@ export function envAll (req, env, ctx) {
     sentry: env.sentry,
     version: env.VERSION,
     branch: env.BRANCH,
-    commithash: env.COMMITHASH
+    commithash: env.COMMITHASH,
+    sendToLogtail: cloudLoggingEnabled,
+    sendToSentry: cloudLoggingEnabled
   })
 
   env.magic = new Magic(env.MAGIC_SECRET_KEY, {
