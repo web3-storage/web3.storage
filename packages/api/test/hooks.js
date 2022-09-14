@@ -51,7 +51,7 @@ export const mochaHooks = () => {
         wranglerConfigEnv: 'test',
         modules: true,
         bindings: workerGlobals,
-        fetchMock: fetchMock
+        fetchMock
       }).startServer()
 
       console.log('⚡️ Starting Minio')
