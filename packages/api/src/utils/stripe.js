@@ -384,7 +384,7 @@ export function createMockStripeCustomer (options = {}) {
  * Otherwise the mock implementations will be used.
  * @param {object} env
  * @param {string} env.STRIPE_SECRET_KEY
- * @param {DBClient} env.db
+ * @param {Pick<DBClient, 'upsertUserCustomer'|'getUserCustomer'>} env.db
  * @returns {import('./billing-types').BillingEnv}
  */
 export function createStripeBillingContext (env) {
@@ -397,6 +397,7 @@ export function createStripeBillingContext (env) {
     httpClient: Stripe.createFetchHttpClient()
   })
   const billing = StripeBillingService.create(stripe)
+  /** @type {UserCustomerService} */
   const userCustomerService = {
     upsertUserCustomer: env.db.upsertUserCustomer.bind(env.db),
     getUserCustomer: env.db.getUserCustomer.bind(env.db)

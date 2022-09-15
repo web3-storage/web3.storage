@@ -69,8 +69,8 @@ export class DBClient {
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
   createUserTag(userId: string, tag: UserTagInput): Promise<boolean>
   getUserTags(userId: string): Promise<UserTagInfo[]>
-  upsertUserCustomer(userId: string, customerId: string): Promise<{ _id: string }>
-  getUserCustomer(userId: string): Promise<{ id: string }>
+  upsertUserCustomer(userId: string, customerId: string): Promise<void>
+  getUserCustomer(userId: string): Promise<{ id: string }|null>
 }
 
 export function parseTextToNumber(n: string): number
