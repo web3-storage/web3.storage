@@ -9,12 +9,12 @@ import CloseIcon from '../../assets/icons/close';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
 import { API, getToken } from '../../lib/api';
 
-export async function putUserPayment(pm_id) {
+export async function putUserPayment(pm_id, plan_id) {
+  const storage = plan_id ? { price: plan_id } : null;
   const paymentSettings = {
     method: { id: pm_id },
-    subscription: { storage: { price: `price_pro` } },
+    subscription: { storage: storage },
   };
-  console.log(paymentSettings);
   const res = await fetch(API + '/user/payment', {
     method: 'PUT',
     headers: {
@@ -73,7 +73,7 @@ const AccountPlansModal = ({
             disabled={!savedPaymentMethod || isCreatingSub}
             onClick={async () => {
               setIsCreatingSub(true);
-              await putUserPayment(savedPaymentMethod.id);
+              await putUserPayment(savedPaymentMethod.id, currentPlan.id);
               await setCurrentPlan(currentPlan);
               setIsCreatingSub(false);
               onClose();

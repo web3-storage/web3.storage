@@ -24,7 +24,6 @@ const PaymentSettingsPage = props => {
   const [currentPlan, setCurrentPlan] = useState(null);
   const [planSelection, setPlanSelection] = useState('');
   const [planList, setPlanList] = useState(plans);
-  const [onboardView, setOnboardView] = useState('paid');
   const [savedPaymentMethod, setSavedPaymentMethod] = useState(/** @type {PaymentMethod} */ ({}));
   const [editingPaymentMethod, setEditingPaymentMethod] = useState(false);
 
@@ -57,22 +56,32 @@ const PaymentSettingsPage = props => {
   }, [hasPaymentMethods]);
 
   useEffect(() => {
-    if (onboardView === 'early') {
+    if (!currentPlan || currentPlan.id === null) {
       setPlanList(plansEarly);
     } else {
       setPlanList(plans);
     }
-  }, [onboardView]);
+  }, [currentPlan]);
 
   useEffect(() => {
-    const getPlan = async () => {
-      const userPlan = await getUserPaymentPlan();
-      if (userPlan?.subscription?.storage) {
-        await setCurrentPlan(planList.find(plan => plan.id === userPlan.subscription.storage.price));
-      }
-      return userPlan;
-    };
-    getPlan();
+    if (savedPaymentMethod) {
+      const getPlan = async () => {
+        const userPlan = await getUserPaymentPlan();
+        if (userPlan?.subscription?.storage) {
+          console.log(userPlan?.subscription?.storage);
+          try {
+            await setCurrentPlan(planList.find(plan => plan.id === userPlan.subscription.storage.price));
+          } catch {
+            throw new Error('MISSING PLAN');
+          }
+        } else {
+          setCurrentPlan(planList.find(plan => plan.id === null));
+        }
+        // console.log(userPlan);
+        return userPlan;
+      };
+      getPlan();
+    }
   }, [savedPaymentMethod, planList]);
 
   return (
@@ -81,20 +90,9 @@ const PaymentSettingsPage = props => {
         <div className="page-container billing-container">
           <div className="">
             <h1 className="table-heading">Payment</h1>
-            <select
-              onChange={e => {
-                setOnboardView(e.target.value);
-              }}
-              className="state-changer"
-              value={onboardView}
-            >
-              <option value="early">Early Adopter</option>
-              {/* <option value="free">Free (New)</option> */}
-              <option value="paid">Paid</option>
-            </select>
           </div>
           <div className="billing-content">
-            {onboardView === 'early' && (
+            {currentPlan?.id === null && (
               <div className="add-billing-cta">
                 <p>
                   You don&apos;t have a payment method. Please add one to prevent storage issues beyond your plan limits

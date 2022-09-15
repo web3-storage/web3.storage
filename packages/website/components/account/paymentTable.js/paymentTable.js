@@ -5,9 +5,9 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanMo
     <>
       {currentPlan && (
         <p className="billing-content-intro">
-          <p>
+          <span>
             Your current plan is: <strong>{currentPlan.title}</strong>
-          </p>
+          </span>
           <small>Billing Cycle: Aug 18 - Sept 18</small>
         </p>
       )}
