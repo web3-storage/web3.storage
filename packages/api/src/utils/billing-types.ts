@@ -93,5 +93,5 @@ export interface PaymentSettings {
 
 export interface UserCustomerService {
   getUserCustomer: (userId: string) => Promise<null|{ id: string }>
-  upsertUserCustomer: (userId: string, customerId: string) => Promise<any>
+  upsertUserCustomer: (userId: string, customerId: string) => Promise<void>
 }

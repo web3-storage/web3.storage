@@ -53,11 +53,14 @@ export function createMockUserCustomerService () {
   const userIdToCustomerId = new Map()
   const getUserCustomer = async (userId) => {
     const c = userIdToCustomerId.get(userId)
-    if (c) {
+    if (typeof c === 'string') {
       return { id: c }
     }
     return null
   }
+  /**
+   * @returns {Promise<void>}
+   */
   const upsertUserCustomer = async (userId, customerId) => {
     userIdToCustomerId.set(userId, customerId)
   }

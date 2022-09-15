@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import assert from 'assert'
 import { createMockUserCustomerService, CustomerNotFound, randomString } from '../src/utils/billing.js'
-import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createStripe, StripeBillingService, StripeCustomersService, StripeSubscriptionsService, testPriceForStorageFree, testPriceForStorageLite, testPriceForStoragePro } from '../src/utils/stripe.js'
+import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createStripe, createStripeBillingContext, StripeBillingService, StripeCustomersService, StripeSubscriptionsService, testPriceForStorageFree, testPriceForStorageLite, testPriceForStoragePro } from '../src/utils/stripe.js'
 
 describe('StripeBillingService', async function () {
   it('can savePaymentMethod', async function () {
@@ -135,5 +135,32 @@ describe('StripeSubscriptionsService', async function () {
     const gotSavedSubscription3 = await subscriptions.getSubscription(customer.id)
     assert.ok(!(gotSavedSubscription3 instanceof Error), 'getSubscription did not return an error')
     assert.equal(gotSavedSubscription3.storage, null, 'gotPaymentSettings.subscription.storage.price is same as desiredPaymentSettings.subscription.storage.price')
+  })
+})
+
+describe('createStripeBillingContext', function () {
+  it('subscriptions can only saveSubscription to known price ids', async function () {
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+    if (!stripeSecretKey) {
+      return this.skip()
+    }
+    const billingContext = createStripeBillingContext({
+      db: createMockUserCustomerService(),
+      STRIPE_SECRET_KEY: stripeSecretKey
+    })
+    const user = { id: `user-${randomString()}` }
+    const customer = await billingContext.customers.getOrCreateForUser(user)
+    let saveDidError = false
+    try {
+      await billingContext.subscriptions.saveSubscription(customer.id, {
+        storage: {
+          price: 'fake_bad_price'
+        }
+      })
+    } catch (error) {
+      saveDidError = true
+    } finally {
+      assert.equal(saveDidError, true, 'saveSubscription should have thrown an error')
+    }
   })
 })

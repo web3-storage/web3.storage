@@ -199,15 +199,16 @@ describe('userPaymentPut', () => {
         })))
     const env = {
       ...createMockBillingContext(),
+      subscriptions: createMockSubscriptionsService(),
       billing: createMockBillingService(),
       customers: createMockCustomerService()
     }
     const response = await userPaymentPut(request, env)
     assert.equal(response.status, 202, 'response.status is 202')
-    // assert.equal(env.billing.storageSubscriptionSaves.length, 1, 'billing.storageSubscriptionSaves.length is 1')
-    // assert.ok(
-    //   env.customers.mockCustomers.map(c => c.id).includes(env.billing.storageSubscriptionSaves[0].customerId),
-    //   'billing.storageSubscriptionSaves[0].customerId is in customers.mockCustomers')
+    assert.equal(env.subscriptions.saveSubscriptionCalls.length, 1, 'subscriptions.saveSubscriptionCalls.length is 1')
+    assert.ok(
+      env.customers.mockCustomers.map(c => c.id).includes(env.subscriptions.saveSubscriptionCalls[0][0]),
+      'saveSubscription was called with a valid customer id')
   })
 })
 

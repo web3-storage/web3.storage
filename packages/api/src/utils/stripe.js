@@ -384,7 +384,7 @@ export function createMockStripeCustomer (options = {}) {
  * Otherwise the mock implementations will be used.
  * @param {object} env
  * @param {string} env.STRIPE_SECRET_KEY
- * @param {DBClient} env.db
+ * @param {Pick<DBClient, 'upsertUserCustomer'|'getUserCustomer'>} env.db
  * @returns {import('./billing-types').BillingEnv}
  */
 export function createStripeBillingContext (env) {
@@ -397,6 +397,7 @@ export function createStripeBillingContext (env) {
     httpClient: Stripe.createFetchHttpClient()
   })
   const billing = StripeBillingService.create(stripe)
+  /** @type {UserCustomerService} */
   const userCustomerService = {
     upsertUserCustomer: env.db.upsertUserCustomer.bind(env.db),
     getUserCustomer: env.db.getUserCustomer.bind(env.db)
@@ -491,12 +492,12 @@ export class StripeSubscriptionsService {
    */
   async saveStorageSubscription (customerId, storageSubscription, existingStripeSubscription = undefined) {
     const existingStorageStripeSubscriptionItem = existingStripeSubscription && selectStorageStripeSubscriptionItem(existingStripeSubscription)
-    /** @type {Stripe.SubscriptionCreateParams.Item | null} */
-    const storageMeteringSubscriptionItem = storageSubscription?.price
-      ? {
-          price: storageSubscription?.price
-        }
-      : null
+    if (!storageSubscription) {
+      if (existingStorageStripeSubscriptionItem) {
+        await this.stripe.subscriptions.cancel(existingStripeSubscription.id)
+      }
+      return null
+    }
     /** @type {string|undefined} */
     let subscriptionId
     if (existingStorageStripeSubscriptionItem && existingStripeSubscription) {
@@ -518,7 +519,9 @@ export class StripeSubscriptionsService {
       const created = await this.stripe.subscriptions.create({
         customer: customerId,
         items: [
-          ...(storageMeteringSubscriptionItem ? [storageMeteringSubscriptionItem] : [])
+          {
+            price: storageSubscription?.price
+          }
         ],
         payment_behavior: 'error_if_incomplete'
       })
