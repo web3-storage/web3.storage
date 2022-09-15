@@ -491,12 +491,12 @@ export class StripeSubscriptionsService {
    */
   async saveStorageSubscription (customerId, storageSubscription, existingStripeSubscription = undefined) {
     const existingStorageStripeSubscriptionItem = existingStripeSubscription && selectStorageStripeSubscriptionItem(existingStripeSubscription)
-    /** @type {Stripe.SubscriptionCreateParams.Item | null} */
-    const storageMeteringSubscriptionItem = storageSubscription?.price
-      ? {
-          price: storageSubscription?.price
-        }
-      : null
+    if (!storageSubscription) {
+      if (existingStorageStripeSubscriptionItem) {
+        await this.stripe.subscriptions.cancel(existingStripeSubscription.id)
+      }
+      return null
+    }
     /** @type {string|undefined} */
     let subscriptionId
     if (existingStorageStripeSubscriptionItem && existingStripeSubscription) {
@@ -518,7 +518,9 @@ export class StripeSubscriptionsService {
       const created = await this.stripe.subscriptions.create({
         customer: customerId,
         items: [
-          ...(storageMeteringSubscriptionItem ? [storageMeteringSubscriptionItem] : [])
+          {
+            price: storageSubscription?.price
+          }
         ],
         payment_behavior: 'error_if_incomplete'
       })
