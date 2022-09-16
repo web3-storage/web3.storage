@@ -45,4 +45,4 @@ jobs:
 
       - name: Heartbeat
         if: ${{ success() }}
-        run: ./packages/tools/scripts/cli.js heartbeat --token ${{ secrets.OPSGENIE_KEY }} --name cron-web3storage-pins
+        run: ./packages/tools/scripts/cli.js heartbeat --token ${{ secrets.OPSGENIE_KEY }} --name cron-web3storage-pins-${{matrix.env}}
