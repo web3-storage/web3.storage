@@ -124,7 +124,6 @@ const PaymentSettingsPage = props => {
                       <ElementsConsumer>
                         {({ stripe, elements }) => (
                           <AddPaymentMethodForm
-                            // @ts-ignore
                             stripe={stripe}
                             elements={elements}
                             setHasPaymentMethods={setHasPaymentMethods}
@@ -156,6 +155,8 @@ const PaymentSettingsPage = props => {
           setCurrentPlan={setCurrentPlan}
           savedPaymentMethod={savedPaymentMethod}
           stripePromise={stripePromise}
+          setHasPaymentMethods={setHasPaymentMethods}
+          setEditingPaymentMethod={setEditingPaymentMethod}
         />
       </>
     </>

@@ -30,6 +30,18 @@ export async function putUserPayment(pm_id, plan_id) {
   return res.json();
 }
 
+/**
+ * @param {object} obj
+ * @param {any} obj.isOpen
+ * @param {any} obj.onClose
+ * @param {any} obj.planSelection
+ * @param {any} obj.planList
+ * @param {any} obj.stripePromise
+ * @param {any} obj.setCurrentPlan
+ * @param {any} obj.savedPaymentMethod
+ * @param {(v: boolean) => void} obj.setHasPaymentMethods
+ * @param {(v: boolean) => void} obj.setEditingPaymentMethod
+ */
 const AccountPlansModal = ({
   isOpen,
   onClose,
@@ -37,6 +49,8 @@ const AccountPlansModal = ({
   planList,
   setCurrentPlan,
   savedPaymentMethod,
+  setHasPaymentMethods,
+  setEditingPaymentMethod,
   stripePromise,
 }) => {
   const [isCreatingSub, setIsCreatingSub] = useState(false);
@@ -57,11 +71,8 @@ const AccountPlansModal = ({
               <ElementsConsumer>
                 {({ stripe, elements }) => (
                   <AddPaymentMethodForm
-                    // @ts-ignore
-                    stripe={stripe}
-                    elements={elements}
-                    setHasPaymentMethods={() => {}}
-                    setEditingPaymentMethod={() => {}}
+                    setHasPaymentMethods={setHasPaymentMethods}
+                    setEditingPaymentMethod={setEditingPaymentMethod}
                   />
                 )}
               </ElementsConsumer>

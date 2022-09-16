@@ -25,7 +25,6 @@ export async function putPaymentMethod(pm_id, currPricePlan) {
 }
 
 /**
- *
  * @param {object} obj
  * @param {(v: boolean) => void} [obj.setHasPaymentMethods]
  * @param {(v: boolean) => void} [obj.setEditingPaymentMethod]
