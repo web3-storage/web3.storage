@@ -218,7 +218,7 @@ describe('userPaymentPut', () => {
   it('errors 400 when using a disallowed subscription storage price', async function () {
     const desiredPaymentSettings = {
       method: { id: `pm_${randomString()}` },
-      subscription: { storage: { price: storagePriceNames.lite } }
+      subscription: { storage: { price: 'disallowed' } }
     }
     const request = (
       createMockAuthenticatedRequest(
