@@ -43,7 +43,7 @@ export interface CustomersService {
   getOrCreateForUser(user): Promise<Customer>
 }
 
-export type StoragePriceId = string;
+export type StoragePriceName = 'free' | 'lite' | 'pro'
 
 /**
  * A subscription to the web3.storage platform.
@@ -53,9 +53,11 @@ export interface W3PlatformSubscription {
   // details of subscription to storage functionality
   storage: null | {
     // the price that should be used to determine the subscription's periodic invoice/credit.
-    price: StoragePriceId
+    price: StoragePriceName
   }
 }
+
+export type StripePriceNamer = (price: string) => StoragePriceName | undefined
 
 /**
  * storage subscription that is stored in stripe.com

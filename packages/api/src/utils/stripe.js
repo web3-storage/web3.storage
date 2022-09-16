@@ -1,6 +1,10 @@
 /* eslint-disable no-void */
 import Stripe from 'stripe'
-import { CustomerNotFound, randomString } from './billing.js'
+import { CustomerNotFound, isStoragePriceName, randomString } from './billing.js'
+
+/**
+ * @typedef {import('./billing-types').StoragePriceName} StoragePriceName
+ */
 
 /**
  * @typedef {import('stripe').Stripe} StripeInterface
@@ -411,12 +415,106 @@ export function createStripeBillingContext (env) {
   }
 }
 
+export class StripePrices {
+  /**
+   * @param {Record<import('./billing-types').StoragePriceName, string>} namedPrices
+   */
+  constructor (namedPrices) {
+    this.namedPrices = namedPrices
+  }
+
+  /**
+   * @param {string} priceId
+   * @returns {StoragePriceName|undefined}
+   */
+  getPriceName (priceId) {
+    const priceName = Object.keys(this.namedPrices).find(name => this.namedPrices[name] === priceId)
+    if (isStoragePriceName(priceName)) {
+      return priceName
+    }
+  }
+}
+
+// https://dashboard.stripe.com/test/prices/price_1Li2ISIfErzTm2rEg4wD9BR2
+export const testPriceForStorageFree = 'price_1Li2ISIfErzTm2rEg4wD9BR2'
+// https://dashboard.stripe.com/test/prices/price_1LhdqgIfErzTm2rEqfl6EgnT
+export const testPriceForStorageLite = 'price_1LhdqgIfErzTm2rEqfl6EgnT'
+// https://dashboard.stripe.com/test/prices/price_1Li1upIfErzTm2rEIDcI6scF
+export const testPriceForStoragePro = 'price_1Li1upIfErzTm2rEIDcI6scF'
+
+const stagingStripePrices = new StripePrices({
+  free: testPriceForStorageFree,
+  lite: testPriceForStorageLite,
+  pro: testPriceForStoragePro
+})
+
 /**
  * @typedef {object} StripeApiForSubscriptionsService
  * @property {Pick<Stripe['subscriptions'], 'cancel'|'create'>} subscriptions
  * @property {Pick<Stripe['subscriptionItems'], 'update'|'del'>} subscriptionItems
  * @property {Pick<Stripe['customers'], 'retrieve'>} customers
  */
+
+/**
+ * @param {object} [options]
+ * @param {(...args: Parameters<Stripe['subscriptions']['create']>) => void} [options.onSubscriptionCreate]
+ * @returns {StripeApiForSubscriptionsService}
+ */
+export function createMockStripeForSubscriptions (options = {}) {
+  return {
+    ...createMockStripeForBilling(),
+    subscriptions: {
+      async cancel (id, params) {
+        return {
+          id,
+          object: 'subscription',
+          status: 'canceled',
+          cancel_at_period_end: false,
+          canceled_at: Number(new Date()),
+          ...params
+        }
+      },
+      async create (...args) {
+        options?.onSubscriptionCreate?.(...args)
+        /** @type {Stripe.Response<Stripe.Subscription>} */
+        const subscription = {
+          id: `sub_${randomString()}`,
+          object: 'subscription',
+          // @ts-ignore
+          lastResponse: undefined
+        }
+        return subscription
+      }
+    },
+    subscriptionItems: {
+      async del (id, options) {
+        /** @type {Stripe.Response<Stripe.DeletedSubscriptionItem>} */
+        const response = {
+          // @ts-ignore
+          lastResponse: undefined
+        }
+        return response
+      },
+      async update (id, params, options) {
+        /** @type {Stripe.SubscriptionItem} */
+        // @ts-ignore
+        const item = {
+          id,
+          object: 'subscription_item',
+          ...params,
+          created: Number(new Date())
+        }
+        /** @type {Stripe.Response<Stripe.SubscriptionItem>} */
+        const response = {
+          ...item,
+          // @ts-ignore
+          lastResponse: undefined
+        }
+        return response
+      }
+    }
+  }
+}
 
 /**
  * A SubscriptionsService that uses stripe.com for storage
@@ -426,16 +524,28 @@ export class StripeSubscriptionsService {
    * @param {StripeApiForSubscriptionsService} stripe
    */
   static create (stripe) {
-    return new StripeSubscriptionsService(stripe)
+    return new StripeSubscriptionsService(stripe, StripeSubscriptionsService.defaultPriceNamer)
+  }
+
+  /**
+   * @type {import('./billing-types').StripePriceNamer}
+   * @param {string} price
+   */
+  static defaultPriceNamer (price) {
+    const name = stagingStripePrices.getPriceName(price)
+    return name
   }
 
   /**
    * @param {StripeApiForSubscriptionsService} stripe
+   * @param {import('./billing-types').StripePriceNamer} getPriceName
    * @protected
    */
-  constructor (stripe) {
+  constructor (stripe, getPriceName) {
     /** @type {StripeApiForSubscriptionsService} */
     this.stripe = stripe
+    /** @type {import('./billing-types').StripePriceNamer} */
+    this.getPriceName = getPriceName
     /**
      * @type {import('./billing-types').SubscriptionsService}
      */
@@ -451,7 +561,7 @@ export class StripeSubscriptionsService {
     if (storageStripeSubscription instanceof CustomerNotFound) { return storageStripeSubscription }
     /** @returns {import('./billing-types').W3PlatformSubscription} */
     const subscription = {
-      storage: createW3StorageSubscription(storageStripeSubscription)
+      storage: createW3StorageSubscription(storageStripeSubscription, this.getPriceName)
     }
     return subscription
   }
@@ -533,13 +643,6 @@ export class StripeSubscriptionsService {
   }
 }
 
-// https://dashboard.stripe.com/test/prices/price_1Li2ISIfErzTm2rEg4wD9BR2
-export const testPriceForStorageFree = 'price_1Li2ISIfErzTm2rEg4wD9BR2'
-// https://dashboard.stripe.com/test/prices/price_1LhdqgIfErzTm2rEqfl6EgnT
-export const testPriceForStorageLite = 'price_1LhdqgIfErzTm2rEqfl6EgnT'
-// https://dashboard.stripe.com/test/prices/price_1Li1upIfErzTm2rEIDcI6scF
-export const testPriceForStoragePro = 'price_1Li1upIfErzTm2rEIDcI6scF'
-
 /**
  * @param {string} customerId
  * @param {Stripe.ApiList<Stripe.Subscription>} stripeSubscriptions
@@ -572,9 +675,10 @@ function selectStorageStripeSubscriptionItem (stripeSubscription) {
 
 /**
  * @param {null|Stripe.Subscription} stripeSubscription
+ * @param {import('./billing-types').StripePriceNamer} getPriceName
  * @returns {import('./billing-types').W3PlatformSubscription['storage']}
  */
-function createW3StorageSubscription (stripeSubscription) {
+function createW3StorageSubscription (stripeSubscription, getPriceName) {
   if (!stripeSubscription) {
     return null
   }
@@ -584,9 +688,13 @@ function createW3StorageSubscription (stripeSubscription) {
   // @todo - be more clever in ensuring this came from correct subscription item
   // or consider throwing if there is more than one subscription item
   const storagePrice = stripeSubscription.items.data[0].price.id
+  const storagePriceName = getPriceName(storagePrice)
+  if (!storagePriceName) {
+    throw new Error(`unable to determien price name for stripe price ${storagePrice}`)
+  }
   /** @type {import('./billing-types').W3PlatformSubscription['storage']} */
   const storageSubscription = {
-    price: storagePrice
+    price: storagePriceName
   }
   return storageSubscription
 }

@@ -1,6 +1,10 @@
 /* eslint-disable no-void */
 
 /**
+ * @typedef {import('./billing-types').StoragePriceName} StoragePriceName
+ */
+
+/**
  * Save a user's payment settings
  * @param {object} ctx
  * @param {import('./billing-types').BillingService} ctx.billing
@@ -226,4 +230,27 @@ export function createEmptyW3PlatformSubscription () {
   return {
     storage: null
   }
+}
+
+/**
+ * @type {Record<StoragePriceName, StoragePriceName>}
+ */
+export const storagePriceNames = {
+  free: /** @type {const} */ ('free'),
+  lite: /** @type {const} */ ('lite'),
+  pro: /** @type {const} */ ('pro')
+}
+
+/**
+ * @param {any} name
+ * @returns {name is StoragePriceName}
+ */
+export function isStoragePriceName (name) {
+  switch (name) {
+    case storagePriceNames.free:
+    case storagePriceNames.lite:
+    case storagePriceNames.pro:
+      return true
+  }
+  return false
 }

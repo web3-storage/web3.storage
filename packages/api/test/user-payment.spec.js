@@ -3,7 +3,7 @@ import assert from 'assert'
 import fetch, { Request } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
-import { createMockBillingContext, createMockBillingService, createMockCustomerService, createMockPaymentMethod, createMockSubscriptionsService, randomString, savePaymentSettings } from '../src/utils/billing.js'
+import { createMockBillingContext, createMockBillingService, createMockCustomerService, createMockPaymentMethod, createMockSubscriptionsService, randomString, savePaymentSettings, storagePriceNames } from '../src/utils/billing.js'
 import { userPaymentGet, userPaymentPut } from '../src/user.js'
 import { createMockStripeCardPaymentMethod } from '../src/utils/stripe.js'
 
@@ -210,6 +210,23 @@ describe('userPaymentPut', () => {
       env.customers.mockCustomers.map(c => c.id).includes(env.subscriptions.saveSubscriptionCalls[0][0]),
       'saveSubscription was called with a valid customer id')
   })
+  it('errors 400 when suing a disallowed subscription storage price', async function () {
+    const desiredPaymentSettings = {
+      method: { id: `pm_${randomString()}` },
+      subscription: { storage: { price: `price_test_${randomString()}` } }
+    }
+    const request = (
+      createMockAuthenticatedRequest(
+        createSaveUserPaymentSettingsRequest({
+          authorization: createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken()),
+          body: JSON.stringify(desiredPaymentSettings)
+        })))
+    const env = {
+      ...createMockBillingContext()
+    }
+    const response = await userPaymentPut(request, env)
+    assert.equal(response.status, 400, 'response.status is 400')
+  })
 })
 
 /**
@@ -336,7 +353,7 @@ describe('savePaymentSettings', async function () {
   it('saves subscription using billingService', async () => {
     const desiredPaymentSettings = {
       method: { id: `pm_mock_${randomString()}` },
-      subscription: { storage: { price: `price_storage_mock_${randomString()}` } }
+      subscription: { storage: { price: storagePriceNames.lite } }
     }
     const subscriptions = createMockSubscriptionsService()
     const env = {
