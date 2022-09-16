@@ -210,7 +210,7 @@ describe('userPaymentPut', () => {
       env.customers.mockCustomers.map(c => c.id).includes(env.subscriptions.saveSubscriptionCalls[0][0]),
       'saveSubscription was called with a valid customer id')
   })
-  it('errors 400 when suing a disallowed subscription storage price', async function () {
+  it('errors 400 when using a disallowed subscription storage price', async function () {
     const desiredPaymentSettings = {
       method: { id: `pm_${randomString()}` },
       subscription: { storage: { price: `price_test_${randomString()}` } }

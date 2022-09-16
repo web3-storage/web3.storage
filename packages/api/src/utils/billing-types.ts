@@ -1,3 +1,5 @@
+import { StripePriceId } from "./stripe";
+
 export type StripePaymentMethodId = string;
 export type CustomerId = string;
 
@@ -58,8 +60,8 @@ export interface W3PlatformSubscription {
 }
 
 export type NamedStripePrices = {
-  priceToName: (price: string) => StoragePriceName | undefined
-  nameToPrice: (name: StoragePriceName) => string | undefined
+  priceToName: (priceId: StripePriceId) => undefined | StoragePriceName
+  nameToPrice: (name: StoragePriceName) => undefined | StripePriceId
 }
 
 /**

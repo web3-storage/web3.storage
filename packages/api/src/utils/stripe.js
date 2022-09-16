@@ -432,13 +432,17 @@ export class NamedStripePrices {
 
   /**
    * @param {StoragePriceName} name
+   * @returns {StripePriceId|undefined}
    */
   nameToPrice (name) {
-    return this.namedPrices[name]
+    const priceId = this.namedPrices[name]
+    if (priceId) {
+      return /** @type {StripePriceId} */ (priceId)
+    }
   }
 
   /**
-   * @param {string} priceId
+   * @param {StripePriceId} priceId
    * @returns {StoragePriceName|undefined}
    */
   priceToName (priceId) {
@@ -534,17 +538,40 @@ export function createMockStripeForSubscriptions (options = {}) {
 }
 
 /**
+ * @param {object} [options]
+ * @param {Stripe.SubscriptionItem[]} [options.items]
+ * @returns
+ */
+export function createMockStripeSubscription (options = {}) {
+  /** @type {Stripe.Subscription} */
+  // @ts-ignore
+  const subscription = {
+    id: `sub_${randomString()}`,
+    object: 'subscription',
+    items: {
+      object: 'list',
+      has_more: false,
+      url: '',
+      data: [
+        ...options.items ?? []
+      ]
+    }
+  }
+  return subscription
+}
+
+/**
  * A SubscriptionsService that uses stripe.com for storage
  */
 export class StripeSubscriptionsService {
   /**
    * @param {StripeApiForSubscriptionsService} stripe
-   * @param {import('./billing-types').NamedStripePrices} priceNamer
+   * @param {import('./billing-types').NamedStripePrices} prices
    */
-  static create (stripe, priceNamer) {
+  static create (stripe, prices) {
     return new StripeSubscriptionsService(
       stripe,
-      priceNamer
+      prices
     )
   }
 
@@ -622,15 +649,15 @@ export class StripeSubscriptionsService {
     }
     const priceName = storageSubscription.price
     const desiredPriceId = this.priceNamer.nameToPrice(priceName)
-    console.log('called nameToPrice', { priceName, desiredPriceId })
     if (!desiredPriceId) {
       throw new Error(`invalid price name: ${priceName}`)
     }
     const desiredSubscriptionItem = {
-      price: this.priceNamer.nameToPrice(priceName)
+      price: desiredPriceId
     }
     /** @type {string|undefined} */
     let subscriptionId
+    // if there's an existing subscription, modify it
     if (existingStorageStripeSubscriptionItem && existingStripeSubscription) {
       if (!storageSubscription) {
         // delete
@@ -704,7 +731,7 @@ function createW3StorageSubscription (stripeSubscription, priceNamer) {
   }
   // @todo - be more clever in ensuring this came from correct subscription item
   // or consider throwing if there is more than one subscription item
-  const storagePrice = stripeSubscription.items.data[0].price.id
+  const storagePrice = /** @type {StripePriceId} */ (stripeSubscription.items.data[0].price.id)
   const storagePriceName = priceNamer.priceToName(storagePrice)
   if (!storagePriceName) {
     throw new Error(`unable to determien price name for stripe price ${storagePrice}`)
@@ -715,3 +742,7 @@ function createW3StorageSubscription (stripeSubscription, priceNamer) {
   }
   return storageSubscription
 }
+
+/**
+ * @typedef {`price_${string}`} StripePriceId
+ */

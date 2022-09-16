@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import assert from 'assert'
 import { createMockUserCustomerService, CustomerNotFound, randomString, storagePriceNames } from '../src/utils/billing.js'
-import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createMockStripeForSubscriptions, createStripe, createStripeBillingContext, stagingStripePrices, StripeBillingService, StripeCustomersService, StripeSubscriptionsService } from '../src/utils/stripe.js'
+import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createMockStripeForSubscriptions, createMockStripeSubscription, createStripe, createStripeBillingContext, stagingStripePrices, StripeBillingService, StripeCustomersService, StripeSubscriptionsService } from '../src/utils/stripe.js'
 
 /**
  * @typedef {import('../src/utils/billing-types').StoragePriceName} StoragePriceName
@@ -185,6 +185,49 @@ describe('StripeSubscriptionsService', async function () {
     assert.equal(createdCalls.length, 1, 'should have called createSubscription once')
     assert.notEqual(createdCalls[0].items[0].price, desiredPriceName, 'should not have invoked stripe.com api with StripePriceName, it should be a stripe.com price id')
     assert.equal(createdCalls[0].items[0].price, prices.nameToPrice(desiredPriceName), 'should not have invoked stripe.com api with StripePriceName, it should be a stripe.com price id')
+  })
+  it('getSubscription will convert stripe price.id to StoragePriceName', async function () {
+    const createdCalls = []
+    const prices = stagingStripePrices
+    const customerId = 'customer-id'
+    const simulatedStoragePriceName = storagePriceNames.lite
+    const subscriptions = StripeSubscriptionsService.create(
+      {
+        ...createMockStripeForSubscriptions({
+          onSubscriptionCreate (params) {
+            createdCalls.push(params)
+          },
+          async retrieveCustomer (customerId) {
+            return {
+              ...createMockStripeCustomer(),
+              subscriptions: {
+                data: [
+                  createMockStripeSubscription({
+                    items: [
+                      {
+                        // @ts-ignore
+                        price: {
+                          id: prices.nameToPrice(simulatedStoragePriceName) ?? '',
+                          object: 'price'
+                        }
+                      }
+                    ]
+                  })
+                ],
+                object: 'list',
+                has_more: false,
+                url: ''
+              },
+              id: customerId
+            }
+          }
+        })
+      },
+      prices
+    )
+    const gotSubscription = await subscriptions.getSubscription(customerId)
+    assert.ok(gotSubscription && !(gotSubscription instanceof Error), 'getSubscription did not return an error')
+    assert.equal(gotSubscription.storage?.price, simulatedStoragePriceName, '')
   })
 })
 
