@@ -564,15 +564,6 @@ const notifySlack = async (
  * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'>} env
  */
 export async function userPaymentGet (request, env) {
-  const requestUrl = new URL(request.url)
-  // @todo - remove this once frontend no longer uses it
-  const mockSubscription = requestUrl.searchParams.get('mockSubscription')
-    ? {
-        storage: {
-          price: 'price_mock_userPaymentGet_mockSubscription'
-        }
-      }
-    : undefined
   const userPaymentSettings = await getPaymentSettings({
     billing: env.billing,
     customers: env.customers,
@@ -591,7 +582,7 @@ export async function userPaymentGet (request, env) {
   }
   return new JSONResponse({
     ...userPaymentSettings,
-    subscription: mockSubscription || userPaymentSettings.subscription
+    subscription: userPaymentSettings.subscription
   })
 }
 

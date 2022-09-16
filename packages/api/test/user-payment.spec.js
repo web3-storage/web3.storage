@@ -63,18 +63,6 @@ describe('GET /user/payment', () => {
     assert.equal(typeof userPaymentSettings, 'object')
     assert.ok(!userPaymentSettings.method, 'userPaymentSettings.method is falsy')
   })
-  it('supports ?mockSubscription=true', async function () {
-    const request = createUserPaymentRequest({
-      authorization: createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken()),
-      searchParams: {
-        mockSubscription: 'true'
-      }
-    })
-    const response = await fetch(request)
-    assert.equal(response.status, 200, 'response.status is 200')
-    const paymentSettings = await response.json()
-    assert.equal(typeof paymentSettings?.subscription?.storage?.price, 'string', 'paymentSettings.subscription.storage.price is a string')
-  })
 })
 
 /**
