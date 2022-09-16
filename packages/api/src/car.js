@@ -120,7 +120,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   const sourceCid = rootCid.toString()
   const carCid = CID.createV1(0x202, await sha256.digest(carBytes))
   const s3Key = `raw/${sourceCid}/${user._id}/${toString(carCid.multihash.bytes, 'base32')}.car`
-  const r2Key = `${carCid.toString()}/${carCid.toString()}.car`
+  const r2Key = `${carCid}/${carCid}.car`
 
   await Promise.all([
     putToS3(env.s3Client, env.s3BucketName, s3Key, carBytes, carCid, structure),
