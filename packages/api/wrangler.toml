@@ -53,7 +53,7 @@ route = { pattern = "https://api-staging.web3.storage/*", zone_id = "7eee3323c1b
 # nft.storage.ipfscluster.io is the staging cluster
 vars = { CLUSTER_API_URL = "https://nft.storage.ipfscluster.io/api/", ENV = "staging", PG_REST_URL = "https://web3-storage-pgrest-staging.herokuapp.com", GATEWAY_URL = "https://ipfs.io" }
 
-[[env.production.r2_buckets]]
+[[env.staging.r2_buckets]]
 # what's it called in r2?
 bucket_name = "carpark-staging-0"
 # what's it called as a property of the env object
