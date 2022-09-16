@@ -27,9 +27,9 @@ import {
 // Cluster client needs global fetch
 Object.assign(global, { fetch })
 
-describe.only('POST /car', () => {
+describe('POST /car', () => {
   it('should eventually add posted CARs to Cluster', async function () {
-    this.timeout(10000)
+    this.timeout(60000)
     const name = 'car'
     // Create token
     const token = await getTestJWT('test-upload', 'test-upload')
@@ -76,10 +76,12 @@ describe.only('POST /car', () => {
     }, { retries: 3 })
   })
 
-  it('should add posted CARs to S3', async () => {
+  it('should add posted CARs to S3 and R2', async () => {
     const token = await getTestJWT('test-upload', 'test-upload')
-    const { root, car: carBody } = await createCar('hello world! s3')
+    const { root, car: carBody } = await createCar('hello world! s3 & r2')
+    const carBytes = new Uint8Array(await carBody.arrayBuffer())
     const expectedCid = root.toString()
+    const expectedCarCid = CID.createV1(0x202, await sha256.digest(carBytes)).toString()
 
     const res = await fetch(new URL('car', endpoint), {
       method: 'POST',
@@ -89,9 +91,37 @@ describe.only('POST /car', () => {
       },
       body: carBody
     })
-
-    const { cid } = await res.json()
+    const { cid, carCid } = await res.json()
     assert.strictEqual(cid, expectedCid, 'Server responded with expected CID')
+    assert.strictEqual(carCid, expectedCarCid, 'Server responded with expected CAR CID')
+
+    /**
+     * @param {AsyncIterable} stream
+     * @param {Uint8Array} carBytes
+     * */
+    const assertSameBytes = async (stream, carBytes) => {
+      const chunks = []
+      // @ts-ignore
+      for await (const chunk of stream) {
+        chunks.push(chunk)
+      }
+      assert.ok(
+        equals(
+          concat(chunks),
+          carBytes
+        ),
+        'stored CAR is the same as uploaded CAR'
+      )
+    }
+
+    /** @type {import('miniflare').Miniflare} */
+    const mf = globalThis.miniflare
+    const r2Bucket = await mf.getR2Bucket('carpark')
+    const r2Object = await r2Bucket.get(`${carCid}/${carCid}.car`)
+    assert.ok(r2Object?.body, 'repsonse stream must exist')
+    await assertSameBytes(r2Object?.body, carBytes)
+    assert.strictEqual(r2Object.customMetadata.rootCid, expectedCid, 'r2 object should have rootCid in metadata')
+    assert.strictEqual(r2Object.customMetadata.structure, 'Complete', 'r2 object should have structure in metadata')
 
     const s3 = new S3Client({
       endpoint: S3_BUCKET_ENDPOINT,
@@ -112,19 +142,9 @@ describe.only('POST /car', () => {
       Bucket: S3_BUCKET_NAME,
       Key: listRes.Contents[0].Key
     }))
-
-    const chunks = []
-    // @ts-ignore
-    for await (const chunk of getRes.Body) {
-      chunks.push(chunk)
-    }
-    assert.ok(
-      equals(
-        concat(chunks),
-        new Uint8Array(await carBody.arrayBuffer())
-      ),
-      'stored CAR is the same as uploaded CAR'
-    )
+    assert.ok(getRes.Body, 'repsonse stream must exist')
+    // @ts-expect-error
+    await assertSameBytes(getRes.Body, carBytes)
   })
 
   it('should ask linkdex for structure if DAG is not complete', async function () {

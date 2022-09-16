@@ -34,6 +34,7 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^3.16.0",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@miniflare/core": "^2.8.1",
     "@sentry/cli": "^1.72.1",
@@ -60,6 +61,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.53.1",
+    "@aws-sdk/md5-js": "^3.171.0",
     "@cfworker/json-schema": "^1.8.3",
     "@google-cloud/precise-date": "^2.0.4",
     "@ipld/car": "^3.1.4",

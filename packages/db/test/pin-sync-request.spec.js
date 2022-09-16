@@ -2,7 +2,7 @@
 import assert from 'assert'
 import { DBClient } from '../index.js'
 
-import { createUser, createUserAuthKey, createUpload, initialPinsNotPinned, token } from './utils.js'
+import { createUser, createUserAuthKey, createUpload, token } from './utils.js'
 
 describe('pin-sync-request', () => {
   /** @type {DBClient} */

@@ -48,6 +48,7 @@ import { createMockBillingContext } from './utils/billing.js'
  * @property {Magic} magic
  * @property {Toucan} sentry
  * @property {import('./maintenance').Mode} MODE
+ * @property {R2Bucket} carpark
  * @property {S3Client} s3Client
  * @property {string} s3BucketName
  * @property {string} s3BucketRegion
