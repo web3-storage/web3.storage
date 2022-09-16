@@ -124,7 +124,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
 
   await Promise.all([
     putToS3(env.s3Client, env.s3BucketName, s3Key, carBytes, carCid, structure),
-    putToR2(env.carpark, r2Key, carBytes, sourceCid, structure)
+    putToR2(env.CARPARK, r2Key, carBytes, sourceCid, structure)
   ])
 
   const xName = headers.get('x-name')
@@ -155,8 +155,8 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     name,
     type: uploadType,
     backupUrls: [
-      `https://${env.s3BucketName}.s3.${env.s3BucketRegion}.amazonaws.com/${s3Key}` //,
-      // `https://${env.r2BucketName}.${env.accountId}.r2.cloudflarestorage.com/${r2bucketKey}`
+      `https://${env.s3BucketName}.s3.${env.s3BucketRegion}.amazonaws.com/${s3Key}`,
+      new URL(r2Key, env.CARPARK_URL).toString()
     ],
     pins: [elasticPin(structure)],
     dagSize

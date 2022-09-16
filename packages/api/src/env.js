@@ -41,6 +41,8 @@ import { createMockBillingContext } from './utils/billing.js'
  * @property {string} [ENABLE_ADD_TO_CLUSTER]
  * @property {string} [LINKDEX_URL]
  * @property {string} [STRIPE_SECRET_KEY]
+ * @property {string} CARPARK_URL
+ * @property {R2Bucket} CARPARK
  * // Derived values and class dependencies
  * @property {Cluster} cluster
  * @property {DBClient} db
@@ -48,7 +50,6 @@ import { createMockBillingContext } from './utils/billing.js'
  * @property {Magic} magic
  * @property {Toucan} sentry
  * @property {import('./maintenance').Mode} MODE
- * @property {R2Bucket} carpark
  * @property {S3Client} s3Client
  * @property {string} s3BucketName
  * @property {string} s3BucketRegion

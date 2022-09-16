@@ -13,7 +13,7 @@ import { concat, equals } from 'uint8arrays'
 import { endpoint, clusterApi, clusterApiAuthHeader } from './scripts/constants.js'
 import { createCar } from './scripts/car.js'
 import { MAX_BLOCK_SIZE, CAR_CODE } from '../src/constants.js'
-import { getTestJWT } from './scripts/helpers.js'
+import { getTestJWT, getDBClient } from './scripts/helpers.js'
 import { PIN_OK_STATUS } from '../src/utils/pin.js'
 import {
   S3_BUCKET_ENDPOINT,
@@ -21,7 +21,8 @@ import {
   S3_BUCKET_NAME,
   S3_ACCESS_KEY_ID,
   S3_SECRET_ACCESS_KEY_ID,
-  LINKDEX_URL
+  LINKDEX_URL,
+  CARPARK_URL
 } from './scripts/worker-globals.js'
 
 // Cluster client needs global fetch
@@ -76,8 +77,9 @@ describe('POST /car', () => {
     }, { retries: 3 })
   })
 
-  it('should add posted CARs to S3 and R2', async () => {
-    const token = await getTestJWT('test-upload', 'test-upload')
+  it.only('should add posted CARs to S3 and R2', async () => {
+    const issuer = 'test-upload'
+    const token = await getTestJWT(issuer, issuer)
     const { root, car: carBody } = await createCar('hello world! s3 & r2')
     const carBytes = new Uint8Array(await carBody.arrayBuffer())
     const expectedCid = root.toString()
@@ -116,7 +118,7 @@ describe('POST /car', () => {
 
     /** @type {import('miniflare').Miniflare} */
     const mf = globalThis.miniflare
-    const r2Bucket = await mf.getR2Bucket('carpark')
+    const r2Bucket = await mf.getR2Bucket('CARPARK')
     const r2Object = await r2Bucket.get(`${carCid}/${carCid}.car`)
     assert.ok(r2Object?.body, 'repsonse stream must exist')
     await assertSameBytes(r2Object?.body, carBytes)
@@ -145,6 +147,17 @@ describe('POST /car', () => {
     assert.ok(getRes.Body, 'repsonse stream must exist')
     // @ts-expect-error
     await assertSameBytes(getRes.Body, carBytes)
+
+    const db = getDBClient()
+    const user = await db.getUser(issuer, {})
+    assert.ok(user)
+    const upload = await db.getUpload(expectedCid, Number(user._id))
+    assert.ok(upload)
+    const backups = await db.getBackups(Number(upload._id))
+    assert.ok(backups)
+    console.log(backups)
+    assert.equal(backups.length, 2, 'expect 2 backups')
+    assert.equal(backups[1], `${CARPARK_URL}/${expectedCarCid}/${expectedCarCid}.car`, 'r2 backup url')
   })
 
   it('should ask linkdex for structure if DAG is not complete', async function () {
