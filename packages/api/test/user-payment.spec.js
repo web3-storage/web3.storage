@@ -257,7 +257,7 @@ describe('/user/payment', () => {
       customers: createMockCustomerService()
     }
     const desiredPaymentMethodId = `test_pm_${randomString()}`
-    const desiredStorageSubscriptionPriceId = `price_storage_mock_${randomString()}`
+    const desiredStorageSubscriptionPriceId = 'lite'
     const desiredPaymentSettings = {
       method: { id: desiredPaymentMethodId },
       subscription: { storage: { price: desiredStorageSubscriptionPriceId } }
