@@ -75,7 +75,6 @@ export class StripeBillingService {
    * @returns {Promise<void>}
    */
   async savePaymentMethod (customer, method) {
-    // @todo - this shouldn't create if one already exists :/
     const setupIntent = await this.stripe.setupIntents.create({
       payment_method: method,
       confirm: true,
