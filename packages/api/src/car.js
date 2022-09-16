@@ -11,8 +11,7 @@ import { sha256 } from 'multiformats/hashes/sha2'
 import * as raw from 'multiformats/codecs/raw'
 import * as pb from '@ipld/dag-pb'
 import pRetry from 'p-retry'
-import assert from 'assert'
-import { InvalidCarError } from './errors.js'
+import { InvalidCarError, LinkdexError } from './errors.js'
 import { MAX_BLOCK_SIZE, CAR_CODE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
@@ -169,7 +168,9 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   const checkDagStructureTask = () => pRetry(async () => {
     const url = new URL(`/?key=${s3Key}`, env.LINKDEX_URL)
     const res = await fetch(url)
-    assert(res.ok)
+    if (!res.ok) {
+      throw new LinkdexError(res.status, res.statusText)
+    }
     const report = await res.json()
     if (report.structure === 'Complete') {
       return env.db.upsertPins([elasticPin(report.structure)])

@@ -77,7 +77,7 @@ describe('POST /car', () => {
     }, { retries: 3 })
   })
 
-  it.only('should add posted CARs to S3 and R2', async () => {
+  it('should add posted CARs to S3 and R2', async () => {
     const issuer = 'test-upload'
     const token = await getTestJWT(issuer, issuer)
     const { root, car: carBody } = await createCar('hello world! s3 & r2')
@@ -155,7 +155,6 @@ describe('POST /car', () => {
     assert.ok(upload)
     const backups = await db.getBackups(Number(upload._id))
     assert.ok(backups)
-    console.log(backups)
     assert.equal(backups.length, 2, 'expect 2 backups')
     assert.equal(backups[1], `${CARPARK_URL}/${expectedCarCid}/${expectedCarCid}.car`, 'r2 backup url')
   })
