@@ -134,26 +134,6 @@ describe('PUT /user/payment', () => {
 })
 
 describe('userPaymentPut', () => {
-  it('if dangerouslyDefaultSubscription, can have missing subscription and its treated as a default nully one', async function () {
-    /** @type {Omit<import('src/utils/billing-types.js').PaymentSettings, 'subscription'>} */
-    const desiredPaymentSettings = { method: { id: `pm_${randomString()}` } }
-    const authorization = createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken())
-    const env = {
-      ...createMockBillingContext(),
-      subscriptions: createMockSubscriptionsService()
-    }
-    const request = createMockAuthenticatedRequest(
-      createSaveUserPaymentSettingsRequest({
-        authorization,
-        body: JSON.stringify(desiredPaymentSettings),
-        searchParams: {
-          dangerouslyDefaultSubscription: 'true'
-        }
-      })
-    )
-    const response = await userPaymentPut(request, env)
-    assert.equal(response.status, 202, 'response.status is 202')
-  })
   it('saves payment method using billing service', async function () {
     const desiredPaymentMethodId = `pm_${randomString()}`
     /** @type {import('src/utils/billing-types.js').PaymentSettings} */
