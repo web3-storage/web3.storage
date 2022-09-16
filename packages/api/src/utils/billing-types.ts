@@ -57,7 +57,10 @@ export interface W3PlatformSubscription {
   }
 }
 
-export type StripePriceNamer = (price: string) => StoragePriceName | undefined
+export type NamedStripePrices = {
+  priceToName: (price: string) => StoragePriceName | undefined
+  nameToPrice: (name: StoragePriceName) => string | undefined
+}
 
 /**
  * storage subscription that is stored in stripe.com

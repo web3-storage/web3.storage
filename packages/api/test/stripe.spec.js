@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import assert from 'assert'
 import { createMockUserCustomerService, CustomerNotFound, randomString, storagePriceNames } from '../src/utils/billing.js'
-import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createMockStripeForSubscriptions, createStripe, createStripeBillingContext, StripeBillingService, StripeCustomersService, StripeSubscriptionsService } from '../src/utils/stripe.js'
+import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createMockStripeForSubscriptions, createStripe, createStripeBillingContext, stagingStripePrices, StripeBillingService, StripeCustomersService, StripeSubscriptionsService } from '../src/utils/stripe.js'
 
 /**
  * @typedef {import('../src/utils/billing-types').StoragePriceName} StoragePriceName
@@ -118,7 +118,8 @@ describe('StripeSubscriptionsService', async function () {
     const customers = StripeCustomersService.create(stripe, createMockUserCustomerService())
     const user = { id: `user-${randomString()}` }
     const customer = await customers.getOrCreateForUser(user)
-    const subscriptions = StripeSubscriptionsService.create(stripe)
+    const prices = stagingStripePrices
+    const subscriptions = StripeSubscriptionsService.create(stripe, prices)
 
     // change between tiers
     const priceSequence = [
@@ -147,16 +148,43 @@ describe('StripeSubscriptionsService', async function () {
     assert.ok(!(gotSavedSubscription3 instanceof Error), 'getSubscription did not return an error')
     assert.equal(gotSavedSubscription3.storage, null, 'gotPaymentSettings.subscription.storage.price is same as desiredPaymentSettings.subscription.storage.price')
   })
-  it('will convert StoragePriceName to appropriate stripe price id', async function () {
-    const mockStripe = createMockStripeForBilling()
+  it('saveSubscription will convert StoragePriceName to appropriate stripe price id', async function () {
     const createdCalls = []
-    const subscriptions = StripeSubscriptionsService.create({
-      ...createMockStripeForSubscriptions({
-        onSubscriptionCreate (params) {
-          createdCalls.push(params)
-        }
-      })
+    const prices = stagingStripePrices
+    const subscriptions = StripeSubscriptionsService.create(
+      {
+        ...createMockStripeForSubscriptions({
+          onSubscriptionCreate (params) {
+            createdCalls.push(params)
+          },
+          async retrieveCustomer (customerId) {
+            return {
+              ...createMockStripeCustomer(),
+              subscriptions: {
+                data: [],
+                object: 'list',
+                has_more: false,
+                url: ''
+              },
+              id: customerId
+            }
+          }
+        })
+      },
+      prices
+    )
+    const desiredPriceName = storagePriceNames.lite
+    // save a subscription using the StoragePriceName
+    const saved = await subscriptions.saveSubscription('customerId', {
+      storage: {
+        price: desiredPriceName
+      }
     })
+    assert.ok(!(saved instanceof Error), 'saveSubscription did not return an error')
+    // expect stripe to have been called with a stripe price id, not StoragePriceName
+    assert.equal(createdCalls.length, 1, 'should have called createSubscription once')
+    assert.notEqual(createdCalls[0].items[0].price, desiredPriceName, 'should not have invoked stripe.com api with StripePriceName, it should be a stripe.com price id')
+    assert.equal(createdCalls[0].items[0].price, prices.nameToPrice(desiredPriceName), 'should not have invoked stripe.com api with StripePriceName, it should be a stripe.com price id')
   })
 })
 
