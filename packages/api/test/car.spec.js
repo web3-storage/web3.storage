@@ -30,7 +30,7 @@ Object.assign(global, { fetch })
 
 describe('POST /car', () => {
   it('should eventually add posted CARs to Cluster', async function () {
-    this.timeout(60000)
+    this.timeout(10000)
     const name = 'car'
     // Create token
     const token = await getTestJWT('test-upload', 'test-upload')
