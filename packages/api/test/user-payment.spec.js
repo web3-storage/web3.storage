@@ -189,7 +189,7 @@ describe('userPaymentPut', () => {
   it('saves storage subscription price', async function () {
     const desiredPaymentSettings = {
       method: { id: `pm_${randomString()}` },
-      subscription: { storage: { price: `price_test_${randomString()}` } }
+      subscription: { storage: { price: storagePriceNames.lite } }
     }
     const request = (
       createMockAuthenticatedRequest(
@@ -204,7 +204,12 @@ describe('userPaymentPut', () => {
       customers: createMockCustomerService()
     }
     const response = await userPaymentPut(request, env)
-    assert.equal(response.status, 202, 'response.status is 202')
+    try {
+      assert.equal(response.status, 202, 'response.status is 202')
+    } catch (error) {
+      console.log('error with response w/ text: ', await response.text())
+      throw error
+    }
     assert.equal(env.subscriptions.saveSubscriptionCalls.length, 1, 'subscriptions.saveSubscriptionCalls.length is 1')
     assert.ok(
       env.customers.mockCustomers.map(c => c.id).includes(env.subscriptions.saveSubscriptionCalls[0][0]),
@@ -213,7 +218,7 @@ describe('userPaymentPut', () => {
   it('errors 400 when using a disallowed subscription storage price', async function () {
     const desiredPaymentSettings = {
       method: { id: `pm_${randomString()}` },
-      subscription: { storage: { price: `price_test_${randomString()}` } }
+      subscription: { storage: { price: storagePriceNames.lite } }
     }
     const request = (
       createMockAuthenticatedRequest(
@@ -257,7 +262,7 @@ describe('/user/payment', () => {
       customers: createMockCustomerService()
     }
     const desiredPaymentMethodId = `test_pm_${randomString()}`
-    const desiredStorageSubscriptionPriceId = 'lite'
+    const desiredStorageSubscriptionPriceId = storagePriceNames.lite
     const desiredPaymentSettings = {
       method: { id: desiredPaymentMethodId },
       subscription: { storage: { price: desiredStorageSubscriptionPriceId } }

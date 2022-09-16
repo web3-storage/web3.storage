@@ -60,6 +60,8 @@ const AccountPlansModal = ({
                     // @ts-ignore
                     stripe={stripe}
                     elements={elements}
+                    setHasPaymentMethods={() => {}}
+                    setEditingPaymentMethod={() => {}}
                   />
                 )}
               </ElementsConsumer>
