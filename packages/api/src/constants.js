@@ -10,3 +10,4 @@ export const USER_TAGS = {
   DELETE_RESTRICTION: 'HasDeleteRestriction',
   PSA_ACCESS: 'HasPsaAccess'
 }
+export const CAR_CODE = 0x202

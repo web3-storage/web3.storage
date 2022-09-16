@@ -12,7 +12,7 @@ import { S3Client, ListObjectsV2Command, GetObjectCommand } from '@aws-sdk/clien
 import { concat, equals } from 'uint8arrays'
 import { endpoint, clusterApi, clusterApiAuthHeader } from './scripts/constants.js'
 import { createCar } from './scripts/car.js'
-import { MAX_BLOCK_SIZE } from '../src/constants.js'
+import { MAX_BLOCK_SIZE, CAR_CODE } from '../src/constants.js'
 import { getTestJWT } from './scripts/helpers.js'
 import { PIN_OK_STATUS } from '../src/utils/pin.js'
 import {
@@ -81,7 +81,7 @@ describe('POST /car', () => {
     const { root, car: carBody } = await createCar('hello world! s3 & r2')
     const carBytes = new Uint8Array(await carBody.arrayBuffer())
     const expectedCid = root.toString()
-    const expectedCarCid = CID.createV1(0x202, await sha256.digest(carBytes)).toString()
+    const expectedCarCid = CID.createV1(CAR_CODE, await sha256.digest(carBytes)).toString()
 
     const res = await fetch(new URL('car', endpoint), {
       method: 'POST',

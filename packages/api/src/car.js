@@ -13,7 +13,7 @@ import * as pb from '@ipld/dag-pb'
 import pRetry from 'p-retry'
 import assert from 'assert'
 import { InvalidCarError } from './errors.js'
-import { MAX_BLOCK_SIZE } from './constants.js'
+import { MAX_BLOCK_SIZE, CAR_CODE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/cid.js'
@@ -118,7 +118,7 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   const { size: dagSize, rootCid, structure } = await carStat(carBytes)
 
   const sourceCid = rootCid.toString()
-  const carCid = CID.createV1(0x202, await sha256.digest(carBytes))
+  const carCid = CID.createV1(CAR_CODE, await sha256.digest(carBytes))
   const s3Key = `raw/${sourceCid}/${user._id}/${toString(carCid.multihash.bytes, 'base32')}.car`
   const r2Key = `${carCid}/${carCid}.car`
 
