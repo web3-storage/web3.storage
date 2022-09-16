@@ -179,10 +179,7 @@ export class StripeCustomersService {
     this.userCustomerService = userCustomerService
     /** @type {StripeComForCustomersService} */
     this.stripe = stripe
-    /**
-     * @type {CustomersService}
-     */
-    const instance = this // eslint-disable-line
+    void /** @type {CustomersService} */ (this)
   }
 
   /**
@@ -585,10 +582,7 @@ export class StripeSubscriptionsService {
     this.stripe = stripe
     /** @type {import('./billing-types').NamedStripePrices} */
     this.priceNamer = priceNamer
-    /**
-     * @type {import('./billing-types').SubscriptionsService}
-     */
-    const instance = this // eslint-disable-line
+    void /** @type {import('./billing-types').SubscriptionsService} */ (this)
   }
 
   /**
