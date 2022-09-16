@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/web3-storage/web3.storage/compare/cron-v1.6.0...cron-v1.6.1) (2022-09-16)
+
+
+### Bug Fixes
+
+* cron not counting pin statuses ([#1899](https://github.com/web3-storage/web3.storage/issues/1899)) ([2be52cd](https://github.com/web3-storage/web3.storage/commit/2be52cdd216805596540383df08e6122d7eb6e75))
+
 ## [1.6.0](https://github.com/web3-storage/web3.storage/compare/cron-v1.5.7...cron-v1.6.0) (2022-08-31)
 
 
