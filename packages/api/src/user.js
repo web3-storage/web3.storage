@@ -13,7 +13,7 @@ import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
 import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
-import { CustomerNotFound, getPaymentSettings, savePaymentSettings } from './utils/billing.js'
+import { CustomerNotFound, getPaymentSettings, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -632,8 +632,14 @@ export async function userPaymentPut (request, env) {
   if (subscriptionStorageInput && typeof subscriptionStorageInput.price !== 'string') {
     throw Object.assign(new Error('subscription.storage.price must be a string'), { status: 400 })
   }
-  const subscriptionStorage = subscriptionStorageInput
-    ? { price: subscriptionStorageInput.price.toString() }
+  const storagePrice = subscriptionStorageInput?.price
+  if (storagePrice && !isStoragePriceName(storagePrice)) {
+    return new JSONResponse(new Error('invalid .subscription.storage.price'), {
+      status: 400
+    })
+  }
+  const subscriptionStorage = storagePrice
+    ? { price: storagePrice }
     : null
   const method = { id: paymentMethodId }
   await savePaymentSettings(
