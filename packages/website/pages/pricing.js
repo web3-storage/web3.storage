@@ -4,6 +4,8 @@ import Scroll2Top from 'components/scroll2top/scroll2top.js';
 import ImageCross from 'public/images/illustrations/cross.png';
 import ImageCoil from 'public/images/illustrations/coil.png';
 import ImageCorkscrew from 'public/images/illustrations/corkscrew.png';
+import ImageTriangle from 'public/images/illustrations/triangle.png';
+import ImageTriangle1 from 'public/images/illustrations/triangle1.png';
 
 export default function Home() {
   return (
@@ -64,6 +66,15 @@ export default function Home() {
                   <div className="block image-block">
                     <Img src="/images/logos/filecoin.svg" alt="Filecoin" />
                     <div className="image-label"></div>
+                  </div>
+                  <div id="intro_1-triangle_left">
+                    <Img alt="" src={ImageTriangle1} />
+                  </div>
+                  <div id="intro_1-triangle_right">
+                    <Img alt="" src={ImageTriangle} />
+                  </div>
+                  <div id="intro_1-cross_right">
+                    <Img alt="" src={ImageCross} />
                   </div>
                 </div>
               </div>

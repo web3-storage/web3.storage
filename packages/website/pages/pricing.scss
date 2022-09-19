@@ -40,7 +40,7 @@
 #intro_1-hero-corkscrew {
   position: absolute;
   right: -1rem;
-  top: 9.16%;
+  top: 1rem;
   transform: rotate(-60deg);
   display: block;
   width: 441px;
@@ -69,6 +69,46 @@
   bottom: auto;
   width: 47px;
   height: 47px;
+}
+
+#section_trusted_by_logos .column-content {
+  position: relative;
+}
+
+#intro_1-triangle_left {
+  display: block;
+  position: absolute;
+  right: auto;
+  top: 5rem;
+  left: -8rem;
+  bottom: auto;
+  width: 50px;
+  height: 50px;
+  transform: rotate(320deg);
+}
+
+#intro_1-triangle_right {
+  display: block;
+  position: absolute;
+  right: -22rem;
+  top: -5rem;
+  left: auto;
+  bottom: auto;
+  width: 40px;
+  height: 40px;
+  transform: rotate(295deg);
+}
+
+#intro_1-cross_right {
+  display: block;
+  position: absolute;
+  right: -28rem;
+  top: 1rem;
+  left: auto;
+  bottom: auto;
+  width: 77px;
+  height: 77px;
+  transform: scaleX(-1);
 }
 
 #pricing_section_2 {
