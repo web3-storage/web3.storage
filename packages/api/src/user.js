@@ -598,7 +598,7 @@ export async function userPaymentGet (request, env) {
  */
 export async function userPaymentPut (request, env) {
   const requestBody = await request.json()
-  const paymentMethodId = requestBody?.method?.id
+  const paymentMethodId = requestBody?.paymentMethod?.id
   if (typeof paymentMethodId !== 'string') {
     throw Object.assign(new Error('Invalid payment method'), { status: 400 })
   }
@@ -622,7 +622,7 @@ export async function userPaymentPut (request, env) {
   const subscriptionStorage = storagePrice
     ? { price: storagePrice }
     : null
-  const method = { id: paymentMethodId }
+  const paymentMethod = { id: paymentMethodId }
   await savePaymentSettings(
     {
       billing: env.billing,
@@ -631,7 +631,7 @@ export async function userPaymentPut (request, env) {
       subscriptions: env.subscriptions
     },
     {
-      method,
+      paymentMethod,
       subscription: {
         storage: subscriptionStorage
       }

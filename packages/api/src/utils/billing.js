@@ -12,13 +12,13 @@
  * @param {import('./billing-types').SubscriptionsService} ctx.subscriptions
  * @param {import('./billing-types').BillingUser} ctx.user
  * @param {object} paymentSettings
- * @param {Pick<import('./billing-types').PaymentMethod, 'id'>} paymentSettings.method
+ * @param {Pick<import('./billing-types').PaymentMethod, 'id'>} paymentSettings.paymentMethod
  * @param {import('./billing-types').W3PlatformSubscription} paymentSettings.subscription
  */
 export async function savePaymentSettings (ctx, paymentSettings) {
   const { billing, customers, user } = ctx
   const customer = await customers.getOrCreateForUser(user)
-  await billing.savePaymentMethod(customer.id, paymentSettings.method.id)
+  await billing.savePaymentMethod(customer.id, paymentSettings.paymentMethod.id)
   await ctx.subscriptions.saveSubscription(customer.id, paymentSettings.subscription)
 }
 
@@ -44,7 +44,7 @@ export async function getPaymentSettings (ctx) {
   }
   /** @type {import('./billing-types').PaymentSettings} */
   const settings = {
-    method: paymentMethod,
+    paymentMethod,
     subscription
   }
   return settings

@@ -117,7 +117,7 @@ describe('PUT /user/payment', () => {
     const desiredPaymentMethodId = `w3-test-${Math.random().toString().slice(2)}`
     /** @type {import('src/utils/billing-types.js').PaymentSettings} */
     const desiredPaymentSettings = {
-      method: { id: desiredPaymentMethodId },
+      paymentMethod: { id: desiredPaymentMethodId },
       subscription: {
         storage: null
       }
@@ -137,7 +137,7 @@ describe('userPaymentPut', () => {
   it('saves payment method using billing service', async function () {
     const desiredPaymentMethodId = `pm_${randomString()}`
     /** @type {import('src/utils/billing-types.js').PaymentSettings} */
-    const paymentSettings = { method: { id: desiredPaymentMethodId }, subscription: { storage: null } }
+    const paymentSettings = { paymentMethod: { id: desiredPaymentMethodId }, subscription: { storage: null } }
     const authorization = createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken())
     const request = createMockAuthenticatedRequest(createSaveUserPaymentSettingsRequest({ authorization, body: JSON.stringify(paymentSettings) }))
     const billing = createMockBillingService()
@@ -312,20 +312,20 @@ function assertIsStripeCard (_assert, card) {
 describe('savePaymentSettings', async function () {
   it('saves payment method using billingService', async () => {
     const billing = createMockBillingService()
-    const method = { id: /** @type const */ ('pm_w3-test-1') }
+    const paymentMethod = { id: /** @type const */ ('pm_w3-test-1') }
     const customers = createMockCustomerService()
     const user = { id: randomString() }
     const subscriptions = createMockSubscriptionsService()
     const env = { billing, customers, user, subscriptions }
-    await savePaymentSettings(env, { method, subscription: { storage: null } })
+    await savePaymentSettings(env, { paymentMethod, subscription: { storage: null } })
     const { paymentMethodSaves } = billing
     assert.equal(paymentMethodSaves.length, 1, 'savePaymentMethod was called once')
-    assert.deepEqual(paymentMethodSaves[0].methodId, method.id, 'savePaymentMethod was called with method')
+    assert.deepEqual(paymentMethodSaves[0].methodId, paymentMethod.id, 'savePaymentMethod was called with method')
     assert.equal(typeof paymentMethodSaves[0].customerId, 'string', 'savePaymentMethod was called with method')
   })
   it('saves subscription using billingService', async () => {
     const desiredPaymentSettings = {
-      method: { id: `pm_mock_${randomString()}` },
+      paymentMethod: { id: `pm_mock_${randomString()}` },
       subscription: { storage: { price: storagePriceNames.lite } }
     }
     const subscriptions = createMockSubscriptionsService()

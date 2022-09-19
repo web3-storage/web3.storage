@@ -47,9 +47,8 @@ const PaymentSettingsPage = props => {
     const getSavedCard = async () => {
       const card = await getSavedPaymentMethod();
       if (card) {
-        setSavedPaymentMethod(card.method);
+        setSavedPaymentMethod(card.paymentMethod);
       }
-      console.log(card);
       return card;
     };
     getSavedCard();
@@ -68,7 +67,6 @@ const PaymentSettingsPage = props => {
       const getPlan = async () => {
         const userPlan = await getUserPaymentPlan();
         if (userPlan?.subscription?.storage) {
-          console.log(userPlan?.subscription?.storage);
           try {
             await setCurrentPlan(planList.find(plan => plan.id === userPlan.subscription.storage.price));
           } catch {
@@ -77,7 +75,6 @@ const PaymentSettingsPage = props => {
         } else {
           setCurrentPlan(planList.find(plan => plan.id === null));
         }
-        // console.log(userPlan);
         return userPlan;
       };
       getPlan();

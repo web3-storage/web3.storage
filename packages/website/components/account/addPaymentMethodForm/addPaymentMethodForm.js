@@ -6,7 +6,7 @@ import Button from '../../../components/button/button';
 
 export async function putPaymentMethod(pm_id, currPricePlan) {
   const putBody = {
-    method: { id: pm_id },
+    paymentMethod: { id: pm_id },
     subscription: { storage: currPricePlan },
   };
   const res = await fetch(API + '/user/payment', {

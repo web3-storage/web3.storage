@@ -94,7 +94,7 @@ export interface BillingEnv {
 }
 
 export interface PaymentSettings {
-  method: null | PaymentMethod
+  paymentMethod: null | PaymentMethod
   subscription: W3PlatformSubscription
 }
 

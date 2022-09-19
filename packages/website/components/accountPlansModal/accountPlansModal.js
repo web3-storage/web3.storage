@@ -12,7 +12,7 @@ import { API, getToken } from '../../lib/api';
 export async function putUserPayment(pm_id, plan_id) {
   const storage = plan_id ? { price: plan_id } : null;
   const paymentSettings = {
-    method: { id: pm_id },
+    paymentMethod: { id: pm_id },
     subscription: { storage: storage },
   };
   const res = await fetch(API + '/user/payment', {
