@@ -2,10 +2,6 @@ import { spawn } from 'child_process';
 import * as path from 'path';
 
 export default async function main() {
-  console.log('@web3-storage/website playwright globalSetup', {
-    'env.STRIPE_SECRET_KEY?.length': process.env.STRIPE_SECRET_KEY?.length,
-    'env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY': process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
-  });
   const w3storageProcess = spawn('npm', ['start'], {
     cwd: path.join(__dirname, '../../../../'),
   });
