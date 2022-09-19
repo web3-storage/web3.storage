@@ -3,13 +3,16 @@
 import { PutObjectCommand } from '@aws-sdk/client-s3/dist-es/commands/PutObjectCommand.js'
 import { CarBlockIterator } from '@ipld/car'
 import { toString, equals } from 'uint8arrays'
-import { Block } from 'multiformats/block'
+import { LinkIndexer } from 'linkdex'
+import { maybeDecode } from 'linkdex/decode'
+import { CID } from 'multiformats/cid'
+import { Md5 } from '@aws-sdk/md5-js'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as raw from 'multiformats/codecs/raw'
-import * as cbor from '@ipld/dag-cbor'
 import * as pb from '@ipld/dag-pb'
-import { InvalidCarError } from './errors.js'
-import { MAX_BLOCK_SIZE } from './constants.js'
+import pRetry from 'p-retry'
+import { InvalidCarError, LinkdexError } from './errors.js'
+import { MAX_BLOCK_SIZE, CAR_CODE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { normalizeCid } from './utils/cid.js'
@@ -17,8 +20,6 @@ import { normalizeCid } from './utils/cid.js'
 /**
  * @typedef {import('multiformats/cid').CID} CID
  */
-
-const decoders = [pb, raw, cbor]
 
 /**
  * TODO: ipfs should let us ask the size of a CAR file.
@@ -107,18 +108,23 @@ export async function carPost (request, env, ctx) {
 export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car') {
   const { user, authToken } = request.auth
   const { headers } = request
-  let structure = uploadType === 'Upload' ? 'Complete' : 'Unknown'
+
+  // load the car into memory just the once here
+  const carBytes = new Uint8Array(await car.arrayBuffer())
 
   // Throws if CAR is invalid by our standards.
   // Returns either the sum of the block sizes in the CAR, or the cumulative size of the DAG for a dag-pb root.
-  const { size: dagSize, rootCid } = await carStat(car)
+  const { size: dagSize, rootCid, structure } = await carStat(carBytes)
+
   const sourceCid = rootCid.toString()
+  const carCid = CID.createV1(CAR_CODE, await sha256.digest(carBytes))
+  const s3Key = `raw/${sourceCid}/${user._id}/${toString(carCid.multihash.bytes, 'base32')}.car`
+  const r2Key = `${carCid}/${carCid}.car`
 
-  if (structure === 'Unknown' && rootCid.code === raw.code) {
-    structure = 'Complete'
-  }
-
-  const bucketKey = await uploadToBucket(env.s3Client, env.s3BucketName, car, sourceCid, user._id, structure)
+  await Promise.all([
+    putToS3(env.s3Client, env.s3BucketName, s3Key, carBytes, carCid, structure),
+    putToR2(env.CARPARK, r2Key, carBytes, sourceCid, structure)
+  ])
 
   const xName = headers.get('x-name')
   let name = xName && decodeURIComponent(xName)
@@ -127,6 +133,19 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   }
 
   const contentCid = normalizeCid(sourceCid)
+
+  // provide a pin object for elastic-ipfs.
+  const elasticPin = (structure) => ({
+    status: structure === 'Complete' ? 'Pinned' : 'Pinning',
+    contentCid,
+    location: {
+      peerName: 'elastic-ipfs',
+      // there isn't a seperate cluster peer for e-ipfs, so we reuse the ipfs peer.
+      peerId: env.ELASTIC_IPFS_PEER_ID,
+      ipfsPeerId: env.ELASTIC_IPFS_PEER_ID
+    }
+  })
+
   await env.db.createUpload({
     user: user._id,
     authKey: authToken?._id,
@@ -134,13 +153,32 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     sourceCid,
     name,
     type: uploadType,
-    backupUrls: [`https://${env.s3BucketName}.s3.${env.s3BucketRegion}.amazonaws.com/${bucketKey}`],
-    pins: [],
+    backupUrls: [
+      `https://${env.s3BucketName}.s3.${env.s3BucketRegion}.amazonaws.com/${s3Key}`,
+      new URL(r2Key, env.CARPARK_URL).toString()
+    ],
+    pins: [elasticPin(structure)],
     dagSize
   })
 
   /** @type {(() => Promise<any>)[]} */
-  const tasks = [async () => {
+  const tasks = []
+
+  // ask linkdex for the dag structure across the set of CARs in S3 for this upload.
+  const checkDagStructureTask = () => pRetry(async () => {
+    const url = new URL(`/?key=${s3Key}`, env.LINKDEX_URL)
+    const res = await fetch(url)
+    if (!res.ok) {
+      throw new LinkdexError(res.status, res.statusText)
+    }
+    const report = await res.json()
+    if (report.structure === 'Complete') {
+      return env.db.upsertPins([elasticPin(report.structure)])
+    }
+  }, { retries: 3 })
+
+  // pin and add the blocks to cluster. Has it's own internal retry logic.
+  const addToClusterTask = async () => {
     try {
       await pinToCluster(sourceCid, env)
     } catch (err) {
@@ -161,13 +199,22 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
     if (!pins.some(p => PIN_OK_STATUS.includes(p.status))) {
       await waitAndUpdateOkPins(contentCid, env.cluster, env.db)
     }
-  }]
+  }
+
+  // no need to ask linkdex if it's Complete or Unknown
+  if (structure === 'Partial' && env.LINKDEX_URL) {
+    tasks.push(checkDagStructureTask)
+  }
+
+  if (env.ENABLE_ADD_TO_CLUSTER === 'true') {
+    tasks.push(addToClusterTask)
+  }
 
   if (ctx.waitUntil) {
     tasks.forEach(t => ctx.waitUntil(t()))
   }
 
-  return new JSONResponse({ cid: sourceCid })
+  return new JSONResponse({ cid: sourceCid, carCid: carCid.toString() })
 }
 
 export async function carPut (request, env, ctx) {
@@ -225,45 +272,77 @@ async function pinToCluster (cid, env) {
  */
 
 /**
- * Upload given CAR file keyed by /raw/${sourceCid}/${userId}/${carHash}.car
+ * Upload given CAR file to S3
  *
  * @param {import('@aws-sdk/client-s3').S3Client} s3
- * @param {string} bucketName
- * @param {Blob} blob
- * @param {string} sourceCid
- * @param {string} userId
- * @param {('Unknown' | 'Partial' | 'Complete')} structure The known structural completeness of a given DAG.
+ * @param {string} bucket
+ * @param {string} key
+ * @param {Uint8Array} carBytes
+ * @param {CID} carCid
+ * @param {import('linkdex').DagStructure} structure The known structural completeness of a given DAG.
  */
-async function uploadToBucket (s3, bucketName, blob, sourceCid, userId, structure = 'Unknown') {
-  const data = new Uint8Array(await blob.arrayBuffer())
-  const multihash = await sha256.digest(data)
-  const keyStr = `raw/${sourceCid}/${userId}/${toString(multihash.bytes, 'base32')}.car`
-  // strip the multihash varint prefix to get the raw sha256 digest for aws upload integrity check
-  const rawSha256 = multihash.bytes.subarray(2)
-  const awsChecksum = toString(rawSha256, 'base64pad')
+async function putToS3 (s3, bucket, key, carBytes, carCid, structure = 'Unknown') {
+  // aws doesn't understand multihashes yet, so we given them the unprefixed sha256 digest.
+  // aws will compute the sha256 of the bytes they receive, and the put fails if they don't match.
+  // see: https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html#AmazonS3-PutObject-request-header-ChecksumSHA256
+  const carSha256 = toString(carCid.multihash.digest, 'base64pad')
 
-  // see: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-s3/modules/putobjectrequest.html
+  /** @type import('@aws-sdk/client-s3').PutObjectCommandInput */
   const cmdParams = {
-    Bucket: bucketName,
-    Key: keyStr,
-    Body: data,
+    Bucket: bucket,
+    Key: key,
+    Body: carBytes,
     Metadata: { structure },
-    // ChecksumSHA256 specifies the base64-encoded, 256-bit SHA-256 digest of the object, used as a data integrity check to verify that the data received is the same data that was originally sent.
-    // see: https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html#AmazonS3-PutObject-request-header-ChecksumSHA256
-    ChecksumSHA256: awsChecksum
+    ChecksumSHA256: carSha256
   }
-
   try {
-    try {
-      await s3.send(new PutObjectCommand(cmdParams))
-    } catch (err) {
-      console.warn('Failed to upload CAR, retrying once...', err)
-      await s3.send(new PutObjectCommand(cmdParams))
-    }
-  } catch (err) {
-    throw new Error('Failed to upload CAR', { cause: err })
+    return await pRetry(() => s3.send(new PutObjectCommand(cmdParams)), { retries: 3 })
+  } catch (cause) {
+    throw new Error('Failed to upload CAR to S3', { cause })
   }
-  return keyStr
+}
+
+/**
+ * Upload a CAR to R2.
+ * Send the md5 along so Cloudflare can verify the integrity of the bytes.
+ * Only md5 supported at this time.
+ *
+ * see: https://developers.cloudflare.com/r2/platform/s3-compatibility/api/#implemented-object-level-operations
+ *
+ * @param {R2Bucket} bucket
+ * @param {string} key
+ * @param {Uint8Array} carBytes
+ * @param {string} rootCid
+ * @param {import('linkdex').DagStructure} structure
+ */
+export async function putToR2 (bucket, key, carBytes, rootCid, structure = 'Unknown') {
+  const md5 = toString(await md5Digest(carBytes), 'base16')
+  /** @type R2PutOptions */
+  const opts = {
+    md5, // put fails if not match
+    customMetadata: {
+      structure,
+      rootCid,
+      md5 // stash on metadata as well so we can find the value used to verify this CAR in the future
+    }
+  }
+  try {
+    // assuming mostly unique cars, but could check for existence here before writing.
+    return await pRetry(async () => bucket.put(key, carBytes, opts), { retries: 3 })
+  } catch (cause) {
+    throw new Error('Failed to upload CAR to R2', { cause })
+  }
+}
+
+/**
+ * Get the md5 of the bytes
+ * @param {Uint8Array} bytes
+ * @returns {Promise<Uint8Array>} the md5 hash of the input
+ */
+export async function md5Digest (bytes) {
+  const hasher = new Md5()
+  hasher.update(bytes)
+  return hasher.digest()
 }
 
 /**
@@ -277,11 +356,10 @@ async function uploadToBucket (s3, bucketName, blob, sourceCid, userId, structur
  * - Missing non-root blocks (when root block has links)
  *
  * @typedef {{ size: number, blocks: number, rootCid: CID }} CarStat
- * @param {Blob} carBlob
+ * @param {Uint8Array} carBytes
  * @returns {Promise<CarStat>}
  */
-async function carStat (carBlob) {
-  const carBytes = new Uint8Array(await carBlob.arrayBuffer())
+async function carStat (carBytes) {
   const blocksIterator = await CarBlockIterator.fromBytes(carBytes)
   const roots = await blocksIterator.getRoots()
   if (roots.length === 0) {
@@ -290,6 +368,7 @@ async function carStat (carBlob) {
   if (roots.length > 1) {
     throw new InvalidCarError('too many roots')
   }
+  const linkIndexer = new LinkIndexer()
   const rootCid = roots[0]
   let rawRootBlock
   let blocks = 0
@@ -307,6 +386,7 @@ async function carStat (carBlob) {
     if (!rawRootBlock && block.cid.equals(rootCid)) {
       rawRootBlock = block
     }
+    linkIndexer.decodeAndIndex(block)
     blocks++
   }
   if (blocks === 0) {
@@ -316,13 +396,12 @@ async function carStat (carBlob) {
     throw new InvalidCarError('missing root block')
   }
   let size
-  const decoder = decoders.find(d => d.code === rootCid.code)
-  if (decoder) {
-    // if there's only 1 block (the root block) and it's a raw node, we know the size.
-    if (blocks === 1 && rootCid.code === raw.code) {
-      size = rawRootBlock.bytes.byteLength
-    } else {
-      const rootBlock = new Block({ cid: rootCid, bytes: rawRootBlock.bytes, value: decoder.decode(rawRootBlock.bytes) })
+  // if there's only 1 block (the root block) and it's a raw node, we know the size.
+  if (blocks === 1 && rootCid.code === raw.code) {
+    size = rawRootBlock.bytes.byteLength
+  } else {
+    const rootBlock = maybeDecode(rawRootBlock)
+    if (rootBlock) {
       const hasLinks = !rootBlock.links()[Symbol.iterator]().next().done
       // if the root block has links, then we should have at least 2 blocks in the CAR
       if (hasLinks && blocks < 2) {
@@ -334,7 +413,8 @@ async function carStat (carBlob) {
       }
     }
   }
-  return { size, blocks, rootCid }
+  const structure = linkIndexer.getDagStructureLabel()
+  return { size, blocks, rootCid, structure }
 }
 
 /**

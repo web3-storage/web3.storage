@@ -59,7 +59,7 @@ const createPin = (cid, status = 'pinned') => {
   return pin
 }
 
-describe('cron - pins', () => {
+describe.skip('cron - pins', () => {
   let user, userId, authKey, dbClient, cluster
   const cids = ['bafy1', 'bafy3', 'bafy4']
 

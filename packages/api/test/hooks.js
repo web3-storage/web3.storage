@@ -2,6 +2,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
 import { Miniflare } from 'miniflare'
+import { createFetchMock } from '@miniflare/core'
 import execa from 'execa'
 import delay from 'delay'
 import { webcrypto } from 'crypto'
@@ -36,9 +37,8 @@ export const mochaHooks = () => {
     async beforeAll () {
       this.timeout(120_000)
       AuthorizationTestContext.install(this)
-
-      console.log('⚡️ Starting Miniflare')
-      srv = await new Miniflare({
+      const fetchMock = createFetchMock()
+      const mf = new Miniflare({
         // Autoload configuration from `.env`, `package.json` and `wrangler.toml`
         envPath: true,
         scriptPath: 'dist/worker.js',
@@ -46,8 +46,14 @@ export const mochaHooks = () => {
         wranglerConfigPath: true,
         wranglerConfigEnv: 'test',
         modules: true,
-        bindings: workerGlobals
-      }).startServer()
+        bindings: workerGlobals,
+        fetchMock
+      })
+      globalThis.miniflareFetchMock = fetchMock
+      globalThis.miniflare = mf
+
+      console.log('⚡️ Starting Miniflare')
+      srv = await mf.startServer()
 
       console.log('⚡️ Starting Minio')
       projectMinio = `web3-storage-minio-${Date.now()}`

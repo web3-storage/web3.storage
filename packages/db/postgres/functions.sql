@@ -89,14 +89,6 @@ BEGIN
         ON CONFLICT ( content_cid, pin_location_id ) DO UPDATE
           SET "updated_at" = (data ->> 'updated_at')::timestamptz
         returning id into pin_result_id;
-
-        -- Create a Pin Sync Request if not pinned
-        IF (pin ->> 'status')::pin_status_type != ('Pinned')::pin_status_type THEN
-          insert into pin_sync_request (pin_id, inserted_at)
-          values (pin_result_id,
-                  (data ->> 'inserted_at')::timestamptz)
-          ON CONFLICT ( pin_id ) DO NOTHING;
-        END IF;
   end loop;
 
   return (inserted_cid);

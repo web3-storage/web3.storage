@@ -2,7 +2,7 @@
 import assert from 'assert'
 import { DBClient } from '../index.js'
 
-import { createUser, createUserAuthKey, createUpload, initialPinsNotPinned, token } from './utils.js'
+import { createUser, createUserAuthKey, createUpload, token } from './utils.js'
 
 describe('pin-sync-request', () => {
   /** @type {DBClient} */
@@ -42,64 +42,6 @@ describe('pin-sync-request', () => {
 
     uploads.push(upload0)
     uploads.push(upload1)
-  })
-
-  it('created pin sync requests for the uploads', async () => {
-    const to = new Date().toISOString()
-
-    const { data: pinSyncReqs } = await client.getPinSyncRequests({ to })
-    assert(pinSyncReqs, 'pin sync requests exist')
-
-    // expect pin sync requests = added pins for each upload where status is not pinned
-    const expectedPinSyncReqs = initialPinsNotPinned.filter(pd => pd.status !== 'Pinned').length * 2
-    assert.strictEqual(pinSyncReqs.length, expectedPinSyncReqs, 'created pin sync requests for non pinned entries')
-  })
-
-  it('create multiple pin sync requests when upload has multiple pins', async () => {
-    const pins = [
-      {
-        status: 'Pinning',
-        location: {
-          id: 1,
-          peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK6',
-          peerName: 'web3-storage-sv15',
-          ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE2',
-          region: 'region'
-        }
-      },
-      {
-        status: 'Pinning',
-        location: {
-          id: 2,
-          peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK7',
-          peerName: 'web3-storage-sv16',
-          ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE3',
-          region: 'region'
-        }
-      },
-      {
-        status: 'Pinned',
-        location: {
-          id: 3,
-          peerId: '12D3KooWFe387JFDpgNEVCP5ARut7gRkX7YuJCXMStpkq714ziK8',
-          peerName: 'web3-storage-sv17',
-          ipfsPeerId: '12D3KooWR19qPPiZH4khepNjS3CLXiB7AbrbAD4ZcDjN1UjGUNE4',
-          region: 'region'
-        }
-      }
-    ]
-
-    await createUpload(client, user._id, authKey, cids[2], { pins })
-    const to = new Date().toISOString()
-
-    const { data: pinSyncReqs } = await client.getPinSyncRequests({ to })
-    assert(pinSyncReqs, 'pin sync requests exist')
-
-    // From the 2 setup uploads expected pins
-    const previousExpectedPinSyncReqs = initialPinsNotPinned.filter(pd => pd.status !== 'Pinned').length * 2
-    // Pins for the new upload
-    const newPinSyncReqs = pins.filter(pd => pd.status !== 'Pinned').length
-    assert.strictEqual(pinSyncReqs.length, newPinSyncReqs + previousExpectedPinSyncReqs, 'created pin sync requests for non pinned entries')
   })
 
   it('can update multiple pin status', async () => {

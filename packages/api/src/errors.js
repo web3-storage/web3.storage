@@ -214,3 +214,17 @@ export class RangeNotSatisfiableError extends HTTPError {
   }
 }
 RangeNotSatisfiableError.CODE = 'ERROR_RANGE_NOT_SATISFIABLE'
+
+export class LinkdexError extends Error {
+  /**
+   * @param {number} status
+   * @param {number} statusText
+   */
+  constructor (status, statusText) {
+    super(`linkdex-api not ok: ${status} ${statusText}`)
+    this.name = 'LinkdexError'
+    this.status = status
+    this.code = LinkdexError.CODE
+  }
+}
+LinkdexError.CODE = 'LINKDEX_NOT_OK'

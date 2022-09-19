@@ -37,7 +37,12 @@ import { createMockBillingContext } from './utils/billing.js'
  * @property {string} [LOGTAIL_TOKEN]
  * @property {string} MAINTENANCE_MODE
  * @property {string} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
+ * @property {string} [ELASTIC_IPFS_PEER_ID]
+ * @property {string} [ENABLE_ADD_TO_CLUSTER]
+ * @property {string} [LINKDEX_URL] dag completeness checking service for the S3 Bucket configured in `S3_BUCKET_NAME`
  * @property {string} [STRIPE_SECRET_KEY]
+ * @property {string} CARPARK_URL the public url prefix for CARs stored in R2
+ * @property {R2Bucket} CARPARK the bound R2 Bucket interface
  * // Derived values and class dependencies
  * @property {Cluster} cluster
  * @property {DBClient} db
@@ -129,8 +134,27 @@ export function envAll (req, env, ctx) {
   // @ts-ignore
   env.MODE = env.MAINTENANCE_MODE || DEFAULT_MODE
 
+  env.ELASTIC_IPFS_PEER_ID = env.ELASTIC_IPFS_PEER_ID ?? 'bafzbeibhqavlasjc7dvbiopygwncnrtvjd2xmryk5laib7zyjor6kf3avm'
+
+  if (!env.LINKDEX_URL && env.ENV !== 'dev') {
+    throw new Error('Missing ENV. Please set LINKDEX_URL')
+  }
+
+  if (!env.CARPARK_URL) {
+    if (env.ENV === 'dev') {
+      env.CARPARK_URL = 'https://carpark-dev.web3.storage'
+    } else {
+      throw new Error('Missing ENV. Please set CARPARK_URL')
+    }
+  }
+
+  if (!env.CARPARK) {
+    throw new Error('Missing ENV. R2 Bucket `CARPARK` not found. Update `r2_bucket` config in wrangler.toml or add `--r2 CARPARK` flag to miniflare cmd')
+  }
+
   const clusterAuthToken = env.CLUSTER_BASIC_AUTH_TOKEN
   const headers = clusterAuthToken ? { Authorization: `Basic ${clusterAuthToken}` } : {}
+
   // @ts-ignore
   env.cluster = new Cluster(env.CLUSTER_API_URL, { headers })
 
@@ -164,7 +188,7 @@ export function envAll (req, env, ctx) {
       secretAccessKey: env.S3_SECRET_ACCESS_KEY_ID
     }
   })
-  if (env.ENV === 'dev') {
+  if (env.ENV === 'dev' && env.DEBUG === 'true') {
     // show me what s3 sdk is up to.
     env.s3Client.middlewareStack.add(
       (next, context) => async (args) => {
