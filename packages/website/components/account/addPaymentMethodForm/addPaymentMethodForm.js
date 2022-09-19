@@ -1,39 +1,19 @@
 import { useState } from 'react';
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { CardElement } from '@stripe/react-stripe-js';
 
-import { API, getToken } from '../../../lib/api';
+import { userBillingSettings } from '../../../lib/api';
 import Button from '../../../components/button/button';
-
-export async function putPaymentMethod(pm_id, currPricePlan) {
-  const putBody = {
-    paymentMethod: { id: pm_id },
-    subscription: { storage: currPricePlan },
-  };
-  const res = await fetch(API + '/user/payment', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + (await getToken()),
-    },
-    body: JSON.stringify(putBody),
-  });
-  if (!res.ok) {
-    throw new Error(`failed to get storage info: ${await res.text()}`);
-  }
-
-  return res.json();
-}
 
 /**
  * @param {object} obj
+ * @param {import('@stripe/stripe-js').Stripe | null} [obj.stripe]
+ * @param {import('@stripe/stripe-js').StripeElements | null} [obj.elements]
  * @param {(v: boolean) => void} [obj.setHasPaymentMethods]
  * @param {(v: boolean) => void} [obj.setEditingPaymentMethod]
- * @param {{ id: string }} [obj.currentPlan]
+ * @param { string | null } [obj.currentPlan]
  * @returns
  */
-const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, currentPlan }) => {
-  const stripe = useStripe();
-  const elements = useElements();
+const AddPaymentMethodForm = ({ stripe, elements, setHasPaymentMethods, setEditingPaymentMethod, currentPlan }) => {
   const [paymentMethodError, setPaymentMethodError] = useState('');
 
   const handlePaymentMethodAdd = async event => {
@@ -53,8 +33,8 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, c
         });
         if (error) throw new Error(error.message);
         if (!paymentMethod?.id) return;
-        const currPricePlan = currentPlan ? { price: currentPlan.id } : null;
-        await putPaymentMethod(paymentMethod.id, currPricePlan);
+        const currPricePlan = currentPlan ? { price: currentPlan } : null;
+        await userBillingSettings(paymentMethod.id, currPricePlan);
         setHasPaymentMethods?.(true);
         setEditingPaymentMethod?.(false);
         setPaymentMethodError('');

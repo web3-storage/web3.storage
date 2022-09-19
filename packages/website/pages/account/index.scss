@@ -175,7 +175,6 @@
   display: grid;
   grid-template-columns: 180px 1fr 1fr 1fr;
   overflow: hidden;
-  // grid-template-rows: 100px 50px auto auto auto;
   @media screen and (max-width: 768px) {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
@@ -262,7 +261,6 @@
 .billing-plan-details p {
   font-size: 14px;
   margin: 0;
-  // border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .billing-plan-details p {
@@ -289,7 +287,6 @@
 
 .billing-plan {
   height: 100%;
-  // min-width: 320px;
 }
 
 .billing-plan-overview {
@@ -380,10 +377,8 @@
   gap: 0.5rem;
   margin-bottom: 1rem;
   line-height: 1.5;
-  // padding: 2px 18px;
   margin: 1rem 0;
   border-radius: 8px;
-  // background: $vulcan;
 
   span > span {
     display: block;
@@ -391,7 +386,6 @@
 
   strong {
     color: $moonRaker;
-    // display: block;
   }
 }
 
@@ -423,7 +417,6 @@
   color: $alto;
 
   @include small {
-    // justify-content: space-between;
     grid-gap: 0 1rem;
     grid-template-areas:
       'date  date  date'
@@ -492,7 +485,6 @@
 .custom-plan-cta {
   font-size: 1rem;
   position: relative;
-  // background-color: $vulcan;
   @include borderRadius_Large();
   align-items: center;
   line-height: 1.7;
@@ -546,13 +538,7 @@
 
 .add-payment-method-cta {
   position: relative;
-  // @include gradient_Blurry_Background_PinkBlue;
-  // @include background_Light;
-  // @include border_Background_Waterloo_White;
-
   @include borderRadius_Large();
-  // padding: 1rem;
-  // border: 2px solid $cerise;
   margin: 0.5rem 0 2rem 0;
   font-size: 1rem;
   position: relative;

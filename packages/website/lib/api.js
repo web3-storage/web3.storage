@@ -300,41 +300,30 @@ export async function deletePinRequest(requestid) {
 }
 
 /**
- * Gets saved Stripe payment method.
+ * Gets/Puts saved user plan and billing settings.
  */
-export async function getSavedPaymentMethod() {
+export async function userBillingSettings(pm_id, currPricePlan) {
+  const putBody =
+    !!pm_id && !!currPricePlan
+      ? JSON.stringify({
+          paymentMethod: { id: pm_id },
+          subscription: { storage: currPricePlan },
+        })
+      : null;
+  console.log(putBody);
+  const method = !!putBody ? 'PUT' : 'GET';
   const token = await getToken();
   const res = await fetch(API + '/user/payment', {
-    method: 'GET',
+    method: method,
     headers: {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     },
-    body: null,
+    body: putBody,
   });
   if (!res.ok) {
-    throw new Error(`failed to get card info: ${await res.text()}`);
+    throw new Error(`failed to get/put user billing info: ${await res.text()}`);
   }
   const savedPayment = await res.json();
   return savedPayment;
-}
-
-export async function getUserPaymentPlan() {
-  const token = await getToken();
-  // const paymentSettings = {
-  //   method: { id: pm_id }
-  // };
-  const res = await fetch(API + '/user/payment', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-    },
-    body: null,
-  });
-  if (!res.ok) {
-    throw new Error(`failed to get plan info: ${await res.text()}`);
-  }
-  const userPlan = await res.json();
-  return userPlan;
 }

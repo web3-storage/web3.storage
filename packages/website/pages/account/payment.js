@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * @fileoverview Account Payment Settings
  */
@@ -9,23 +8,37 @@ import { loadStripe } from '@stripe/stripe-js';
 
 import PaymentCustomPlan from '../../components/account/paymentCustomPlan.js/paymentCustomPlan.js';
 import PaymentTable from '../../components/account/paymentTable.js/paymentTable.js';
-// import PaymentHistoryTable from 'components/account/paymentHistory.js/paymentHistory.js';
 import PaymentMethodCard from '../../components/account/paymentMethodCard/paymentMethodCard.js';
 import AccountPlansModal from '../../components/accountPlansModal/accountPlansModal.js';
-// import PaymentHistoryTable from '../../components/account/paymentHistory.js/paymentHistory.js';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
 import { plans, plansEarly } from '../../components/contexts/plansContext';
-import { getSavedPaymentMethod, getUserPaymentPlan } from '../../lib/api';
+import { userBillingSettings } from '../../lib/api';
+import Loading from 'components/loading/loading.js';
 
 const PaymentSettingsPage = props => {
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
   const stripePromise = loadStripe(props.stripePublishableKey);
   const [hasPaymentMethods, setHasPaymentMethods] = useState(false);
-  const [currentPlan, setCurrentPlan] = useState(null);
+  const [currentPlan, setCurrentPlan] = useState(/** @type {Plan | null} */ (null));
   const [planSelection, setPlanSelection] = useState('');
-  const [planList, setPlanList] = useState(plans);
+  const [planList, setPlanList] = useState(/** @type {Plan[]}*/ (plans));
   const [savedPaymentMethod, setSavedPaymentMethod] = useState(/** @type {PaymentMethod} */ ({}));
   const [editingPaymentMethod, setEditingPaymentMethod] = useState(false);
+  const [loadingUserSettings, setLoadingUserSettings] = useState(true);
+
+  /**
+   * @typedef {Object} Plan
+   * @property {string | null} id
+   * @property {string} title
+   * @property {string} description
+   * @property {string} price
+   * @property {string} base_storage
+   * @property {string} additional_storage
+   * @property {string} bandwidth
+   * @property {string} block_limit
+   * @property {string} car_size_limit
+   * @property {boolean} pinning_api
+   */
 
   /**
    * @typedef {Object} PaymentMethodCard
@@ -45,7 +58,7 @@ const PaymentSettingsPage = props => {
 
   useEffect(() => {
     const getSavedCard = async () => {
-      const card = await getSavedPaymentMethod();
+      const card = await userBillingSettings();
       if (card) {
         setSavedPaymentMethod(card.paymentMethod);
       }
@@ -55,7 +68,7 @@ const PaymentSettingsPage = props => {
   }, [hasPaymentMethods]);
 
   useEffect(() => {
-    if (!currentPlan || currentPlan.id === null) {
+    if (!currentPlan || currentPlan === null) {
       setPlanList(plansEarly);
     } else {
       setPlanList(plans);
@@ -65,17 +78,13 @@ const PaymentSettingsPage = props => {
   useEffect(() => {
     if (savedPaymentMethod) {
       const getPlan = async () => {
-        const userPlan = await getUserPaymentPlan();
-        if (userPlan?.subscription?.storage) {
-          try {
-            await setCurrentPlan(planList.find(plan => plan.id === userPlan.subscription.storage.price));
-          } catch {
-            throw new Error('MISSING PLAN');
-          }
-        } else {
-          setCurrentPlan(planList.find(plan => plan.id === null));
-        }
-        return userPlan;
+        const userPlan = await userBillingSettings();
+        setLoadingUserSettings(false);
+        setCurrentPlan(
+          planList.find(plan => {
+            return plan.id === userPlan?.subscription?.storage?.price ?? null;
+          }) || null
+        );
       };
       getPlan();
     }
@@ -89,7 +98,7 @@ const PaymentSettingsPage = props => {
             <h1 className="table-heading">Payment</h1>
           </div>
           <div className="billing-content">
-            {currentPlan?.id === null && (
+            {!currentPlan && !loadingUserSettings && (
               <div className="add-billing-cta">
                 <p>
                   You don&apos;t have a payment method. Please add one to prevent storage issues beyond your plan limits
@@ -98,12 +107,16 @@ const PaymentSettingsPage = props => {
               </div>
             )}
 
-            <PaymentTable
-              plans={planList}
-              currentPlan={currentPlan}
-              setPlanSelection={setPlanSelection}
-              setIsPaymentPlanModalOpen={setIsPaymentPlanModalOpen}
-            />
+            {loadingUserSettings ? (
+              <Loading message="Fetching user info..." />
+            ) : (
+              <PaymentTable
+                plans={planList}
+                currentPlan={currentPlan}
+                setPlanSelection={setPlanSelection}
+                setIsPaymentPlanModalOpen={setIsPaymentPlanModalOpen}
+              />
+            )}
 
             <div className="billing-settings-layout">
               <div>
@@ -125,7 +138,7 @@ const PaymentSettingsPage = props => {
                             elements={elements}
                             setHasPaymentMethods={setHasPaymentMethods}
                             setEditingPaymentMethod={setEditingPaymentMethod}
-                            currentPlan={currentPlan}
+                            currentPlan={currentPlan?.id}
                           />
                         )}
                       </ElementsConsumer>
@@ -136,13 +149,10 @@ const PaymentSettingsPage = props => {
 
               <div className="payment-history-layout">
                 <h4>Enterprise user?</h4>
-                {/* <PaymentHistoryTable /> */}
                 <PaymentCustomPlan />
               </div>
             </div>
           </div>
-
-          {/* <PaymentCustomPlan /> */}
         </div>
         <AccountPlansModal
           isOpen={isPaymentPlanModalOpen}
