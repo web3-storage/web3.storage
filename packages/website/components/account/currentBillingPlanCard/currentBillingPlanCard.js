@@ -29,9 +29,6 @@ const CurrentBillingPlanCard = ({ plan }) => {
             <span>
               <span>CAR Size Limit:</span> <strong>{plan.car_size_limit}</strong>
             </span>
-            <span>
-              <span>Pinning API:</span> <strong>{plan.pinning_api ? 'Available' : 'NA'}</strong>
-            </span>
           </p>
         </div>
       )}

@@ -47,7 +47,6 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanMo
                     <p>{plan.bandwidth}</p>
                     <p>{plan.block_limit}</p>
                     <p>{plan.car_size_limit}</p>
-                    <p>{plan.pinning_api ? 'Available' : 'NA'}</p>
                   </div>
 
                   {currentPlan?.id !== plan.id && (
