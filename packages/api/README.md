@@ -126,7 +126,9 @@ When prompted for a value enter one of the following permission combinations:
 
 ## Linkdex
 
-Our linkdex service determines if we have all the blocks for a DAG. it Iterates over blocks in CARs in S3, and we query it with the S3 bucket key for each CAR upload after we put it to the bucket.
+Our linkdex service determines if a user has uploaded a "Complete" DAG where it was split over multiple patial CARs. During CAR uplaod we query it with the S3 key _after_ writing the CAR to the bucket.
+
+It iterates all the blocks in all the CARs for that users uploads only, and where every link is a CID for a block contained in the CARs, we say the DAG is "Complete". If not, it's "Patial". If we haven't checked or any of the blocks are undecodable with the set of codecs we have currently, then it's "Unknown".
 
 see: https://github.com/web3-storage/linkdex-api
 
