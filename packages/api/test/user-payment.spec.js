@@ -61,7 +61,7 @@ describe('GET /user/payment', () => {
     assert(res.ok, 'response status is ok')
     const userPaymentSettings = await res.json()
     assert.equal(typeof userPaymentSettings, 'object')
-    assert.ok(!userPaymentSettings.method, 'userPaymentSettings.method is falsy')
+    assert.ok(!userPaymentSettings.paymentMethod, 'userPaymentSettings.paymentMethod is falsy')
   })
 })
 
@@ -185,9 +185,15 @@ describe('userPaymentPut', () => {
       'saveSubscription was called with a valid customer id')
   })
   it('errors 400 when using a disallowed subscription storage price', async function () {
+    /** @type {import('src/utils/billing-types.js').PaymentSettings} */
     const desiredPaymentSettings = {
-      method: { id: `pm_${randomString()}` },
-      subscription: { storage: { price: 'disallowed' } }
+      paymentMethod: { id: `pm_${randomString()}` },
+      subscription: {
+        storage: {
+          // @ts-ignore
+          price: 'disallowed'
+        }
+      }
     }
     const request = (
       createMockAuthenticatedRequest(
@@ -232,8 +238,9 @@ describe('/user/payment', () => {
     }
     const desiredPaymentMethodId = `test_pm_${randomString()}`
     const desiredStorageSubscriptionPriceId = storagePriceNames.lite
+    /** @type {import('src/utils/billing-types.js').PaymentSettings} */
     const desiredPaymentSettings = {
-      method: { id: desiredPaymentMethodId },
+      paymentMethod: { id: desiredPaymentMethodId },
       subscription: { storage: { price: desiredStorageSubscriptionPriceId } }
     }
     const user = createMockRequestUser()
@@ -252,7 +259,7 @@ describe('/user/payment', () => {
     const getPaymentSettingsResponse = await userPaymentGet(getPaymentSettingsRequest, env)
     assert.equal(getPaymentSettingsResponse.status, 200, 'getPaymentSettingsResponse.status is 200')
     const gotPaymentSettings = await getPaymentSettingsResponse.json()
-    assert.equal(gotPaymentSettings.method.id, desiredPaymentMethodId, 'gotPaymentSettings.method.id is desiredPaymentMethodId')
+    assert.equal(gotPaymentSettings.paymentMethod.id, desiredPaymentMethodId, 'gotPaymentSettings.paymentMethod.id is desiredPaymentMethodId')
     assert.deepEqual(gotPaymentSettings, desiredPaymentSettings, 'gotPaymentSettings is desiredPaymentSettings')
   })
 })
@@ -280,7 +287,7 @@ describe('userPaymentGet', () => {
       customers
     })
     const gotPaymentSettings = await response.json()
-    assert.equal(gotPaymentSettings.method.id, paymentMethod1.id, 'gotPaymentSettings.method.id is paymentMethod1.id')
+    assert.equal(gotPaymentSettings.paymentMethod.id, paymentMethod1.id, 'gotPaymentSettings.paymentMethod.id is paymentMethod1.id')
   })
   it('returns stripe card info if paymentMethod is a stripe card', async function () {
     const env = {
@@ -297,8 +304,8 @@ describe('userPaymentGet', () => {
     const response = await userPaymentGet(request, env)
     assert.equal(response.ok, true, 'response is ok')
     const gotPaymentSettings = await response.json()
-    assert.equal(typeof gotPaymentSettings.method.id, 'string', 'paymentSettings.method.id is a string')
-    assertIsStripeCard(assert, gotPaymentSettings.method.card)
+    assert.equal(typeof gotPaymentSettings.paymentMethod.id, 'string', 'paymentSettings.paymentMethod.id is a string')
+    assertIsStripeCard(assert, gotPaymentSettings.paymentMethod.card)
   })
 })
 
