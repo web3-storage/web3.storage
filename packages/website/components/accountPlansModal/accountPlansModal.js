@@ -12,7 +12,7 @@ import { API, getToken } from '../../lib/api';
 export async function putUserPayment(pm_id, plan_id) {
   const storage = plan_id ? { price: plan_id } : null;
   const paymentSettings = {
-    method: { id: pm_id },
+    paymentMethod: { id: pm_id },
     subscription: { storage: storage },
   };
   const res = await fetch(API + '/user/payment', {
@@ -30,6 +30,18 @@ export async function putUserPayment(pm_id, plan_id) {
   return res.json();
 }
 
+/**
+ * @param {object} obj
+ * @param {any} obj.isOpen
+ * @param {any} obj.onClose
+ * @param {any} obj.planSelection
+ * @param {any} obj.planList
+ * @param {any} obj.stripePromise
+ * @param {any} obj.setCurrentPlan
+ * @param {any} obj.savedPaymentMethod
+ * @param {(v: boolean) => void} obj.setHasPaymentMethods
+ * @param {(v: boolean) => void} obj.setEditingPaymentMethod
+ */
 const AccountPlansModal = ({
   isOpen,
   onClose,
@@ -37,6 +49,8 @@ const AccountPlansModal = ({
   planList,
   setCurrentPlan,
   savedPaymentMethod,
+  setHasPaymentMethods,
+  setEditingPaymentMethod,
   stripePromise,
 }) => {
   const [isCreatingSub, setIsCreatingSub] = useState(false);
@@ -57,9 +71,8 @@ const AccountPlansModal = ({
               <ElementsConsumer>
                 {({ stripe, elements }) => (
                   <AddPaymentMethodForm
-                    // @ts-ignore
-                    stripe={stripe}
-                    elements={elements}
+                    setHasPaymentMethods={setHasPaymentMethods}
+                    setEditingPaymentMethod={setEditingPaymentMethod}
                   />
                 )}
               </ElementsConsumer>

@@ -47,9 +47,8 @@ const PaymentSettingsPage = props => {
     const getSavedCard = async () => {
       const card = await getSavedPaymentMethod();
       if (card) {
-        setSavedPaymentMethod(card.method);
+        setSavedPaymentMethod(card.paymentMethod);
       }
-      console.log(card);
       return card;
     };
     getSavedCard();
@@ -68,7 +67,6 @@ const PaymentSettingsPage = props => {
       const getPlan = async () => {
         const userPlan = await getUserPaymentPlan();
         if (userPlan?.subscription?.storage) {
-          console.log(userPlan?.subscription?.storage);
           try {
             await setCurrentPlan(planList.find(plan => plan.id === userPlan.subscription.storage.price));
           } catch {
@@ -77,7 +75,6 @@ const PaymentSettingsPage = props => {
         } else {
           setCurrentPlan(planList.find(plan => plan.id === null));
         }
-        // console.log(userPlan);
         return userPlan;
       };
       getPlan();
@@ -124,7 +121,6 @@ const PaymentSettingsPage = props => {
                       <ElementsConsumer>
                         {({ stripe, elements }) => (
                           <AddPaymentMethodForm
-                            // @ts-ignore
                             stripe={stripe}
                             elements={elements}
                             setHasPaymentMethods={setHasPaymentMethods}
@@ -156,6 +152,8 @@ const PaymentSettingsPage = props => {
           setCurrentPlan={setCurrentPlan}
           savedPaymentMethod={savedPaymentMethod}
           stripePromise={stripePromise}
+          setHasPaymentMethods={setHasPaymentMethods}
+          setEditingPaymentMethod={setEditingPaymentMethod}
         />
       </>
     </>
@@ -166,11 +164,11 @@ const PaymentSettingsPage = props => {
  * @returns {{ props: import('components/types').PageAccountProps}}
  */
 export function getStaticProps() {
-  const STRIPE_PULISHABLE_KEY_ENVVAR_NAME = 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY';
-  const stripePublishableKey = process.env[STRIPE_PULISHABLE_KEY_ENVVAR_NAME];
+  const STRIPE_PUBLISHABLE_KEY_ENVVAR_NAME = 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY';
+  const stripePublishableKey = process.env[STRIPE_PUBLISHABLE_KEY_ENVVAR_NAME];
   if (!stripePublishableKey) {
     throw new Error(
-      `account payment page missing requires truthy stripePublishableKey, but got ${stripePublishableKey}. Did you set env.${STRIPE_PULISHABLE_KEY_ENVVAR_NAME}?`
+      `account payment page missing requires truthy stripePublishableKey, but got ${stripePublishableKey}. Did you set env.${STRIPE_PUBLISHABLE_KEY_ENVVAR_NAME}?`
     );
   }
   return {

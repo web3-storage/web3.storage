@@ -13,7 +13,7 @@ import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
 import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
-import { CustomerNotFound, getPaymentSettings, savePaymentSettings } from './utils/billing.js'
+import { CustomerNotFound, getPaymentSettings, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -564,15 +564,6 @@ const notifySlack = async (
  * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'>} env
  */
 export async function userPaymentGet (request, env) {
-  const requestUrl = new URL(request.url)
-  // @todo - remove this once frontend no longer uses it
-  const mockSubscription = requestUrl.searchParams.get('mockSubscription')
-    ? {
-        storage: {
-          price: 'price_mock_userPaymentGet_mockSubscription'
-        }
-      }
-    : undefined
   const userPaymentSettings = await getPaymentSettings({
     billing: env.billing,
     customers: env.customers,
@@ -591,7 +582,7 @@ export async function userPaymentGet (request, env) {
   }
   return new JSONResponse({
     ...userPaymentSettings,
-    subscription: mockSubscription || userPaymentSettings.subscription
+    subscription: userPaymentSettings.subscription
   })
 }
 
@@ -606,22 +597,12 @@ export async function userPaymentGet (request, env) {
  * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'>} env
  */
 export async function userPaymentPut (request, env) {
-  const requestUrl = new URL(request.url)
   const requestBody = await request.json()
-  const paymentMethodId = requestBody?.method?.id
+  const paymentMethodId = requestBody?.paymentMethod?.id
   if (typeof paymentMethodId !== 'string') {
     throw Object.assign(new Error('Invalid payment method'), { status: 400 })
   }
-  let subscriptionInput = requestBody?.subscription
-  // if no subscription is passed, and ?dangerouslyDefaultSubscription , use a default
-  // this only exists to aid frontend development, and will be removed
-  if (typeof subscriptionInput === 'undefined' && requestUrl.searchParams.get('dangerouslyDefaultSubscription')) {
-    /** @type {import('./utils/billing-types.js').W3PlatformSubscription} */
-    const defaultSubscription = {
-      storage: null
-    }
-    subscriptionInput = defaultSubscription
-  }
+  const subscriptionInput = requestBody?.subscription
   if (typeof subscriptionInput !== 'object') {
     throw Object.assign(new Error(`subscription must be an object, but got ${typeof subscriptionInput}`), { status: 400 })
   }
@@ -632,10 +613,16 @@ export async function userPaymentPut (request, env) {
   if (subscriptionStorageInput && typeof subscriptionStorageInput.price !== 'string') {
     throw Object.assign(new Error('subscription.storage.price must be a string'), { status: 400 })
   }
-  const subscriptionStorage = subscriptionStorageInput
-    ? { price: subscriptionStorageInput.price.toString() }
+  const storagePrice = subscriptionStorageInput?.price
+  if (storagePrice && !isStoragePriceName(storagePrice)) {
+    return new JSONResponse(new Error('invalid .subscription.storage.price'), {
+      status: 400
+    })
+  }
+  const subscriptionStorage = storagePrice
+    ? { price: storagePrice }
     : null
-  const method = { id: paymentMethodId }
+  const paymentMethod = { id: paymentMethodId }
   await savePaymentSettings(
     {
       billing: env.billing,
@@ -644,7 +631,7 @@ export async function userPaymentPut (request, env) {
       subscriptions: env.subscriptions
     },
     {
-      method,
+      paymentMethod,
       subscription: {
         storage: subscriptionStorage
       }

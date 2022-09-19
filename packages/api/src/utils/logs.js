@@ -117,6 +117,10 @@ export class Logging {
   }
 
   async postBatch () {
+    if (process.env.NODE_ENV === 'development') {
+      return
+    }
+
     if (this.logEventsBatch.length > 0) {
       const batchInFlight = [...this.logEventsBatch]
       this.logEventsBatch = []

@@ -6,7 +6,7 @@ import Button from '../../../components/button/button';
 
 export async function putPaymentMethod(pm_id, currPricePlan) {
   const putBody = {
-    method: { id: pm_id },
+    paymentMethod: { id: pm_id },
     subscription: { storage: currPricePlan },
   };
   const res = await fetch(API + '/user/payment', {
@@ -24,6 +24,13 @@ export async function putPaymentMethod(pm_id, currPricePlan) {
   return res.json();
 }
 
+/**
+ * @param {object} obj
+ * @param {(v: boolean) => void} [obj.setHasPaymentMethods]
+ * @param {(v: boolean) => void} [obj.setEditingPaymentMethod]
+ * @param {{ id: string }} [obj.currentPlan]
+ * @returns
+ */
 const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, currentPlan }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -48,8 +55,8 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, c
         if (!paymentMethod?.id) return;
         const currPricePlan = currentPlan ? { price: currentPlan.id } : null;
         await putPaymentMethod(paymentMethod.id, currPricePlan);
-        setHasPaymentMethods(true);
-        setEditingPaymentMethod(false);
+        setHasPaymentMethods?.(true);
+        setEditingPaymentMethod?.(false);
         setPaymentMethodError('');
       } catch (error) {
         let message;
