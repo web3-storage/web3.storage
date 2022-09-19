@@ -93,7 +93,7 @@ export interface BillingEnv {
   subscriptions: SubscriptionsService
 }
 
-export interface PaymentSettings {
+export type PaymentSettings = {
   paymentMethod: null | PaymentMethod
   subscription: W3PlatformSubscription
 }
