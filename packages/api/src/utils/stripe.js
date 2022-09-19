@@ -1,6 +1,6 @@
 /* eslint-disable no-void */
 import Stripe from 'stripe'
-import { CustomerNotFound, isStoragePriceName, randomString } from './billing.js'
+import { CustomerNotFound, isStoragePriceName, randomString, storagePriceNames } from './billing.js'
 
 /**
  * @typedef {import('./billing-types').StoragePriceName} StoragePriceName
@@ -409,7 +409,20 @@ export function createStripeBillingContext (env) {
     getUserCustomer: env.db.getUserCustomer.bind(env.db)
   }
   const customers = StripeCustomersService.create(stripe, userCustomerService)
-  const subscriptions = StripeSubscriptionsService.create(stripe, stagingStripePrices)
+  // attempt to get stripe price IDs from env vars
+  let stripePrices
+  try {
+    stripePrices = createStripeStoragePricesFromEnv(env)
+  } catch (error) {
+    if (error instanceof EnvVarMissingError) {
+      console.error('env var missing, defaulting to stagingStripePrices', error)
+      // default prices to use staging values if we cannot set them from the env
+      stripePrices = stagingStripePrices
+    } else {
+      throw error
+    }
+  }
+  const subscriptions = StripeSubscriptionsService.create(stripe, stripePrices)
   return {
     billing,
     customers,
@@ -739,3 +752,40 @@ function createW3StorageSubscription (stripeSubscription, priceNamer) {
 /**
  * @typedef {`price_${string}`} StripePriceId
  */
+
+/**
+ * Get the environment variable that may hold the price id for a
+ * given storage price name
+ * @param {StoragePriceName} priceName
+ */
+export function createStripeStorageEnvVar (priceName) {
+  return `STRIPE_STORAGE_PRICE_${priceName.toUpperCase()}`
+}
+
+class EnvVarMissingError extends Error {}
+
+/**
+ * @param {Record<string,any>} env
+ */
+export function createStripeStoragePricesFromEnv (env) {
+  /**
+   * @param {StoragePriceName} priceName
+   * @returns {StripePriceId}
+   */
+  const readPriceNameVar = (priceName) => {
+    const varName = createStripeStorageEnvVar(priceName)
+    if (!(varName in env)) {
+      throw new EnvVarMissingError(`missing env var ${varName}`)
+    }
+    const priceId = /** @type {unknown} */ (env[varName])
+    if (typeof priceId !== 'string') {
+      throw new Error(`unable to read string value for env.${varName} for storage price name ${priceName}`)
+    }
+    return /** @type {StripePriceId} */ (priceId)
+  }
+  return new NamedStripePrices(/** @type {Record<StoragePriceName, string>} */ ({
+    [storagePriceNames.free]: readPriceNameVar(storagePriceNames.free),
+    [storagePriceNames.lite]: readPriceNameVar(storagePriceNames.lite),
+    [storagePriceNames.pro]: readPriceNameVar(storagePriceNames.pro)
+  }))
+}

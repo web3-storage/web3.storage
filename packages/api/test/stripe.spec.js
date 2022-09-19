@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import assert from 'assert'
 import { createMockUserCustomerService, CustomerNotFound, randomString, storagePriceNames } from '../src/utils/billing.js'
-import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createMockStripeForSubscriptions, createMockStripeSubscription, createStripe, createStripeBillingContext, stagingStripePrices, StripeBillingService, StripeCustomersService, StripeSubscriptionsService } from '../src/utils/stripe.js'
+import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createMockStripeForSubscriptions, createMockStripeSubscription, createStripe, createStripeBillingContext, createStripeStorageEnvVar, createStripeStoragePricesFromEnv, stagingStripePrices, StripeBillingService, StripeCustomersService, StripeSubscriptionsService } from '../src/utils/stripe.js'
 
 /**
  * @typedef {import('../src/utils/billing-types').StoragePriceName} StoragePriceName
@@ -256,5 +256,20 @@ describe('createStripeBillingContext', function () {
     } finally {
       assert.equal(saveDidError, true, 'saveSubscription should have thrown an error')
     }
+  })
+})
+
+describe('createStripeStoragePricesFromEnv', function () {
+  it('parses prices from env vars', function () {
+    const prefix = randomString()
+    /** @type {import('../src/utils/billing-types').NamedStripePrices} */
+    const prices = createStripeStoragePricesFromEnv({
+      [createStripeStorageEnvVar(storagePriceNames.free)]: `${prefix}_price_free`,
+      [createStripeStorageEnvVar(storagePriceNames.lite)]: `${prefix}_price_free`,
+      [createStripeStorageEnvVar(storagePriceNames.pro)]: `${prefix}_price_free`
+    })
+    assert.equal(prices.nameToPrice(storagePriceNames.free), `${prefix}_price_free`)
+    assert.equal(prices.nameToPrice(storagePriceNames.lite), `${prefix}_price_lite`)
+    assert.equal(prices.nameToPrice(storagePriceNames.pro), `${prefix}_price_pro`)
   })
 })
