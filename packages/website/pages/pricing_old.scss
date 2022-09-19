@@ -311,7 +311,17 @@
 }
 
 #section_trusted_by_logos {
+  position: relative;
+  z-index: 1;
   padding: 1rem 0;
+}
+
+#section_trusted_by_logos .image-block {
+  display: inline-block;
+}
+
+#section_trusted_by_logos .image-block:nth-of-type(2) {
+  padding: 0 5rem;
 }
 
 #section_trusted_by_logos .image-block img {
