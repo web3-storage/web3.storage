@@ -63,29 +63,36 @@ Open the browser, log into your account, and select Allow.
 ### 4. Configure your worker
 Update `wrangler.toml` with a new `env`. Set your env name to be the value of `whoami` on your system you can use `npm start` to run the worker in dev mode for you.
 
-    [**wrangler.toml**](./wrangler.toml)
+[**wrangler.toml**](./wrangler.toml)
 
-    ```toml
-    [env.bobbytables]
-    workers_dev = true
-    account_id = "<what does the `wrangler whoami` say>"
-    vars = { CLUSTER_API_URL = "https://USER-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://USER-postgres-api-web3-storage.loca.lt", ENV = "dev" }
-    ```
+```toml
+[env.bobbytables]
+workers_dev = true
+account_id = "<what does the `wrangler whoami` say>"
+vars = { LINKDEX_URL = "https://staging.linkdex.dag.haus", CARPARK_URL = "https://carpark-staging.web3.storage", CLUSTER_API_URL = "https://USER-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://USER-postgres-api-web3-storage.loca.lt", ENV = "dev" }
+
+[[env.bobbytables.r2_buckets]]
+# what's it called in r2?
+bucket_name = "carpark-staging-0"
+# what's it called as a property of the env object
+binding = "CARPARK"
+```
+
 Copy your Cloudflare account id from `wrangler whoami`.
 
 Add the required secrets:
 ```sh
-    wrangler secret put MAGIC_SECRET_KEY --env $(whoami) # Get from magic.link account
-    wrangler secret put SALT --env $(whoami) # open `https://csprng.xyz/v1/api` in the browser and use the value of `Data`
-    wrangler secret put CLUSTER_BASIC_AUTH_TOKEN --env $(whoami) # Get from web3.storage vault in 1password (not required for dev)
-    wrangler secret put SENTRY_DSN --env $(whoami) # Get from Sentry (not required for dev)
-    wrangler secret put S3_BUCKET_REGION --env $(whoami) # e.g us-east-2 (not required for dev)
-    wrangler secret put S3_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3 (not required for dev)
-    wrangler secret put S3_SECRET_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3 (not required for dev)
-    wrangler secret put S3_BUCKET_NAME --env $(whoami) # e.g web3.storage-staging-us-east-2 (not required for dev)
-    wrangler secret put PG_REST_JWT --env $(whoami) # Get from database postgrest
-    wrangler secret put LOGTAIL_TOKEN --env $(whoami) # Get from Logtail (not required for dev)
-    wrangler secret put STRIPE_SECRET_KEY --env $(whoami) # Get from web3.storage 1password (not required for dev)
+wrangler secret put MAGIC_SECRET_KEY --env $(whoami) # Get from magic.link account
+wrangler secret put SALT --env $(whoami) # open `https://csprng.xyz/v1/api` in the browser and use the value of `Data`
+wrangler secret put PG_REST_JWT --env $(whoami) # Get from database postgrest
+wrangler secret put CLUSTER_BASIC_AUTH_TOKEN --env $(whoami) # Get from web3.storage vault in 1password
+wrangler secret put S3_BUCKET_REGION --env $(whoami) # e.g us-east-2
+wrangler secret put S3_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3
+wrangler secret put S3_SECRET_ACCESS_KEY_ID --env $(whoami) # Get from Amazon S3
+wrangler secret put S3_BUCKET_NAME --env $(whoami) # e.g web3.storage-staging-us-east-2
+wrangler secret put LOGTAIL_TOKEN --env $(whoami) # Get from Logtail
+wrangler secret put SENTRY_DSN --env $(whoami) # Get from Sentry
+wrangler secret put STRIPE_SECRET_KEY --env $(whoami) # Get from web3.storage 1password
 ```
 Note this might not be up to date, please look to the [.env.tpl](../../.env.tpl) in the root directory for the up to date secrets required.
 
@@ -116,6 +123,18 @@ When prompted for a value enter one of the following permission combinations:
 - `--` = no reading or writing
 - `r-` = read only mode
 - `rw` = read and write (normal operation)
+
+## Linkdex
+
+Our linkdex service determines if we have all the blocks for a DAG. it Iterates over blocks in CARs in S3, and we query it with the S3 bucket key for each CAR upload after we put it to the bucket.
+
+see: https://github.com/web3-storage/linkdex-api
+
+## CARPARK
+
+We write Uploaded CARs to both S3 and R2 in parallel. The R2 Bucket is bound to the worker as `env.CARPARK`. The API docs for an R2Bucket instance are here: https://developers.cloudflare.com/r2/runtime-apis/#bucket-method-definitions
+
+We key our R2 uploads by CAR CID, and record them as an additional `upload.backupURL` entry in the db. The URL prefix for CARs in R2 is set by the `env.CARPARK_URL`. This is currently pointing to a subdomain on web3.storage which we could build out as a worker when we need direct http access to the bucket, but does not exist at time of writing.
 
 ## API
 

@@ -3,7 +3,7 @@
 # Copy me to `.env` and fill out the missing values.
 # This file is only for DEV. In prod, set the env vars a process needs as secrets.
 ENV=dev
-
+# DEBUG=true
 
 ## ---- common ---------------------------------------------------------------
 
@@ -33,6 +33,7 @@ SALT="Q6d8sTZa+wpIPrppPq6VdIKEbknjrsSCQklh/hVU4U0="
 # base64 test:test - the creds for the local cluster test container
 CLUSTER_BASIC_AUTH_TOKEN="dGVzdDp0ZXN0"
 CLUSTER_API_URL=http://127.0.0.1:9094
+# ENABLE_ADD_TO_CLUSTER=true
 
 # IPFS Gateway URL pointing to dockerised ipfs instance
 GATEWAY_URL=http://localhost:8080
@@ -46,6 +47,12 @@ S3_SECRET_ACCESS_KEY_ID = 'minioadmin'
 
 # stripe.com secret key - check 'stripe.com' in your team secret manager
 # STRIPE_SECRET_KEY='sk_'
+
+# URL prefix for CARs stored in R2
+# CARPARK_URL = "https://carpark.web3.storage"
+
+# URL prefix for the linkdex-api
+# LINKDEX_URL = "https://linkdex.web3.storage"
 
 ## ---- website ---------------------------------------------------------------
 
