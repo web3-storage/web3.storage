@@ -155,8 +155,9 @@ describe('userPaymentPut', () => {
       'billing.paymentMethodSaves[0].customerId is in customers.mockCustomers')
   })
   it('saves storage subscription price', async function () {
+    /** @type {import('src/utils/billing-types.js').PaymentSettings} */
     const desiredPaymentSettings = {
-      method: { id: `pm_${randomString()}` },
+      paymentMethod: { id: `pm_${randomString()}` },
       subscription: { storage: { price: storagePriceNames.lite } }
     }
     const request = (
