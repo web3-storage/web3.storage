@@ -42,7 +42,6 @@ const PaymentSettingsPage = props => {
 
   /**
    * @typedef {Object} PaymentMethodCard
-   * @property {string} @type
    * @property {string} brand
    * @property {string} country
    * @property {string} exp_month
