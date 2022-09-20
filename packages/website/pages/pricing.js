@@ -131,7 +131,9 @@ export default function Home() {
                     storageOverageRate="+ $0.20/mo per additional GiB"
                     callToAction="CHOOSE THIS PLAN"
                   >
-                    <li>Everything from the Free tier, plus...</li>
+                    <li>
+                      <i>Everything from the Free tier, plus...</i>
+                    </li>
                     <li>Additional storage for personal usage or projects requiring lower data volumes</li>
                     <li>Pinning Service API access to easily import content already available on the IPFS network</li>
                   </Card>
@@ -144,10 +146,22 @@ export default function Home() {
                     storageOverageRate="+ $0.17/mo per additional GiB"
                     callToAction="CHOOSE THIS PLAN"
                   >
-                    <li>Everything from the Free tier, plus...</li>
+                    <li>
+                      <i>Everything from the Lite tier, plus...</i>
+                    </li>
                     <li>Our lowest price per GB stored for use cases that require scale</li>
                     <li>Early access to additional products that make web3 production-ready</li>
                   </Card>
+                </div>
+              </div>
+            </div>
+            <div className="grid-middle">
+              <div className="col-12_sm-12_mi-12_ti-12 column-1">
+                <div className="column-content">
+                  <div className="pricing-enterprise-users">
+                    Looking for way more? Anticipate having a complex integration? Just tell us more about your company
+                    and what you&apos;re building using the form below, and we’ll get back to you shortly.
+                  </div>
                 </div>
               </div>
             </div>

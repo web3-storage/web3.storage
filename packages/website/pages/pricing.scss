@@ -123,7 +123,7 @@
   .pricing-card-body {
     display: flex;
     flex-flow: column nowrap;
-    width: 314px;
+    width: 304px;
     height: 571px;
     background: rgba(255, 255, 255, 0.35);
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.0562744);
@@ -216,7 +216,7 @@
 
 .plan-summary {
   justify-self: end;
-  padding: 0 2rem 2rem 2rem;
+  padding: 0 1.8rem 1.8rem 1.8rem;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -255,6 +255,15 @@
     letter-spacing: 0.39px;
     color: #fbfbfc;
   }
+}
+
+.pricing-enterprise-users {
+  display: flex;
+  flex-flow: column nowrap;
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.0562744);
+  border-radius: 10px;
+  padding: 1rem;
 }
 
 #pricing_section_2 {
