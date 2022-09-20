@@ -16,7 +16,7 @@ const Card = props => {
         <div className="pricing-title-row">
           <div className="pricing-title">{title}</div>
           <div className="pricing-price">
-            ${price}
+            {price}
             <div className="pricing-price-term">/month</div>
           </div>
         </div>
@@ -108,7 +108,13 @@ export default function Home() {
             <div className="grid-middle">
               <div className="col-12_sm-8_mi-10_ti-12 column-1" data-push-left="off-0_sm-2_mi-1_ti-0">
                 <div className="column-content">
-                  <Card title="Free" price="0" storageAllocation="5GiB storage" callToAction="GET STARTED">
+                  <Card
+                    title="Free"
+                    price="$0"
+                    storageAllocation="5GiB storage"
+                    storageOverageRate=""
+                    callToAction="GET STARTED"
+                  >
                     <li>Easily store your data and make it available on IPFS</li>
                     <li>
                       All data is replicated onto the Filecoin storage network for verifiability that your data is safe
@@ -120,7 +126,7 @@ export default function Home() {
 
                   <Card
                     title="Lite"
-                    price="3"
+                    price="$3"
                     storageAllocation="15GiB storage"
                     storageOverageRate="+ $0.20/mo per additional GiB"
                     callToAction="CHOOSE THIS PLAN"
@@ -132,7 +138,7 @@ export default function Home() {
 
                   <Card
                     title="Pro"
-                    price="10"
+                    price="$10"
                     isBestValue={true}
                     storageAllocation="60GiB storage"
                     storageOverageRate="+ $0.17/mo per additional GiB"
