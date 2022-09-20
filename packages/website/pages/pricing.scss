@@ -124,7 +124,7 @@
     display: flex;
     flex-flow: column nowrap;
     width: 314px;
-    height: 541px;
+    height: 571px;
     background: rgba(255, 255, 255, 0.35);
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.0562744);
     border-radius: 10px;
@@ -196,9 +196,21 @@
 
 .plan-details {
   flex: 1 1 auto;
+  padding: 0 0 0 calc(20px + 15px);
 
   li {
-    list-style-image: url('/images/pricing/circle-check.svg');
+    list-style: none;
+    line-height: 28px;
+    position: relative;
+    margin: 0 0 20px 0;
+  }
+  li::before {
+    content: url('/images/pricing/circle-check.svg');
+    display: inline-block;
+    line-height: 28px;
+    position: absolute;
+    left: calc(-20px - 15px);
+    top: 4px;
   }
 }
 

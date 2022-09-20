@@ -110,6 +110,12 @@ export default function Home() {
                 <div className="column-content">
                   <Card title="Free" price="0" storageAllocation="5GiB storage" callToAction="GET STARTED">
                     <li>Easily store your data and make it available on IPFS</li>
+                    <li>
+                      All data is replicated onto the Filecoin storage network for verifiability that your data is safe
+                    </li>
+                    <li>
+                      Use the platform’s other services like w3name and w3link to build the next generation of apps
+                    </li>
                   </Card>
 
                   <Card
@@ -118,7 +124,11 @@ export default function Home() {
                     storageAllocation="15GiB storage"
                     storageOverageRate="+ $0.20/mo per additional GiB"
                     callToAction="CHOOSE THIS PLAN"
-                  ></Card>
+                  >
+                    <li>Everything from the Free tier, plus...</li>
+                    <li>Additional storage for personal usage or projects requiring lower data volumes</li>
+                    <li>Pinning Service API access to easily import content already available on the IPFS network</li>
+                  </Card>
 
                   <Card
                     title="Pro"
@@ -127,7 +137,11 @@ export default function Home() {
                     storageAllocation="60GiB storage"
                     storageOverageRate="+ $0.17/mo per additional GiB"
                     callToAction="CHOOSE THIS PLAN"
-                  ></Card>
+                  >
+                    <li>Everything from the Free tier, plus...</li>
+                    <li>Our lowest price per GB stored for use cases that require scale</li>
+                    <li>Early access to additional products that make web3 production-ready</li>
+                  </Card>
                 </div>
               </div>
             </div>
