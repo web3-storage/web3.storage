@@ -319,6 +319,23 @@
     line-height: 175%;
     color: #000000;
   }
+
+  .enterprise-call-to-action {
+    margin: 2rem 0 0 0;
+    padding: 10px 20px;
+    background: transparent;
+    border: 2px solid #03040a;
+    border-radius: 20px;
+
+    display: inline-block;
+    font-family: $font_Primary;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0.39px;
+    color: #03040a;
+  }
 }
 
 #pricing_section_2 {
