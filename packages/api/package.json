@@ -61,7 +61,6 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.53.1",
-    "@aws-sdk/md5-js": "^3.171.0",
     "@cfworker/json-schema": "^1.8.3",
     "@google-cloud/precise-date": "^2.0.4",
     "@ipld/car": "^3.1.4",

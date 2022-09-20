@@ -6,7 +6,6 @@ import { toString, equals } from 'uint8arrays'
 import { LinkIndexer } from 'linkdex'
 import { maybeDecode } from 'linkdex/decode'
 import { CID } from 'multiformats/cid'
-import { Md5 } from '@aws-sdk/md5-js'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as raw from 'multiformats/codecs/raw'
 import * as pb from '@ipld/dag-pb'
@@ -122,8 +121,8 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
   const r2Key = `${carCid}/${carCid}.car`
 
   await Promise.all([
-    putToS3(env.s3Client, env.s3BucketName, s3Key, carBytes, carCid, structure),
-    putToR2(env.CARPARK, r2Key, carBytes, sourceCid, structure)
+    putToS3(env, s3Key, carBytes, carCid, sourceCid, structure),
+    putToR2(env, r2Key, carBytes, carCid, sourceCid, structure)
   ])
 
   const xName = headers.get('x-name')
@@ -274,14 +273,14 @@ async function pinToCluster (cid, env) {
 /**
  * Upload given CAR file to S3
  *
- * @param {import('@aws-sdk/client-s3').S3Client} s3
- * @param {string} bucket
+ * @param {import('./env').Env} env
  * @param {string} key
  * @param {Uint8Array} carBytes
  * @param {CID} carCid
+ * @param {string} rootCid
  * @param {import('linkdex').DagStructure} structure The known structural completeness of a given DAG.
  */
-async function putToS3 (s3, bucket, key, carBytes, carCid, structure = 'Unknown') {
+async function putToS3 (env, key, carBytes, carCid, rootCid, structure = 'Unknown') {
   // aws doesn't understand multihashes yet, so we given them the unprefixed sha256 digest.
   // aws will compute the sha256 of the bytes they receive, and the put fails if they don't match.
   // see: https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html#AmazonS3-PutObject-request-header-ChecksumSHA256
@@ -289,14 +288,18 @@ async function putToS3 (s3, bucket, key, carBytes, carCid, structure = 'Unknown'
 
   /** @type import('@aws-sdk/client-s3').PutObjectCommandInput */
   const cmdParams = {
-    Bucket: bucket,
+    Bucket: env.S3_BUCKET_NAME,
     Key: key,
     Body: carBytes,
-    Metadata: { structure },
+    Metadata: { 
+      structure,
+      rootCid,
+      carCid: carCid.toString()
+    },
     ChecksumSHA256: carSha256
   }
   try {
-    return await pRetry(() => s3.send(new PutObjectCommand(cmdParams)), { retries: 3 })
+    return await pRetry(() => env.s3Client.send(new PutObjectCommand(cmdParams)), { retries: 3 })
   } catch (cause) {
     throw new Error('Failed to upload CAR to S3', { cause })
   }
@@ -309,26 +312,26 @@ async function putToS3 (s3, bucket, key, carBytes, carCid, structure = 'Unknown'
  *
  * see: https://developers.cloudflare.com/r2/platform/s3-compatibility/api/#implemented-object-level-operations
  *
- * @param {R2Bucket} bucket
+ * @param {import('./env').Env} env
  * @param {string} key
  * @param {Uint8Array} carBytes
+ * @param {CID} carCid
  * @param {string} rootCid
  * @param {import('linkdex').DagStructure} structure
  */
-export async function putToR2 (bucket, key, carBytes, rootCid, structure = 'Unknown') {
-  const md5 = toString(await md5Digest(carBytes), 'base16')
+export async function putToR2 (env, key, carBytes, carCid, rootCid, structure = 'Unknown') {
   /** @type R2PutOptions */
   const opts = {
-    md5, // put fails if not match
+    sha256: toString(carCid.multihash.digest, 'base64pad'), // put fails if not match
     customMetadata: {
       structure,
       rootCid,
-      md5 // stash on metadata as well so we can find the value used to verify this CAR in the future
+      carCid: carCid.toString()
     }
   }
   try {
     // assuming mostly unique cars, but could check for existence here before writing.
-    return await pRetry(async () => bucket.put(key, carBytes, opts), { retries: 3 })
+    return await pRetry(async () => env.CARPARK.put(key, carBytes, opts), { retries: 3 })
   } catch (cause) {
     throw new Error('Failed to upload CAR to R2', { cause })
   }
