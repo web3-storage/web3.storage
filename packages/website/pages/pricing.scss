@@ -121,6 +121,8 @@
   box-sizing: border-box;
 
   .pricing-card-body {
+    display: flex;
+    flex-flow: column nowrap;
     width: 314px;
     height: 541px;
     background: rgba(255, 255, 255, 0.35);
@@ -189,6 +191,53 @@
     display: inline-block;
     color: #404040;
     font-weight: 300;
+  }
+}
+
+.plan-details {
+  flex: 1 1 auto;
+}
+
+.plan-summary {
+  justify-self: end;
+  padding: 2rem;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+
+  .plan-storage-allocation {
+    font-family: $font_Primary;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 95%;
+    letter-spacing: 0.48px;
+    color: #03040a;
+    padding-bottom: 0.5rem;
+  }
+  .plan-overage-rate {
+    font-family: $font_Primary;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 150%;
+    letter-spacing: 0.48px;
+    color: #03040a;
+    height: 2rem;
+    padding-bottom: 0.5rem;
+  }
+  .plan-call-to-action {
+    padding: 10px 20px;
+    background: #03040a;
+    border-radius: 20px;
+
+    font-family: $font_Primary;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 138%;
+    letter-spacing: 0.39px;
+    color: #fbfbfc;
   }
 }
 

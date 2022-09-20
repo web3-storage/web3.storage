@@ -8,20 +8,25 @@ import ImageTriangle from 'public/images/illustrations/triangle.png';
 import ImageTriangle1 from 'public/images/illustrations/triangle1.png';
 
 const Card = props => {
-  const { title, price, isBestValue, children } = props;
+  const { title, price, isBestValue, children, storageAllocation, storageOverageRate, callToAction } = props;
   return (
     <div className="pricing-card">
       {!!isBestValue && <div className="best-value-adornment">Best Value!</div>}
       <div className={`pricing-card-body${isBestValue ? ' adorned' : ''}`}>
         <div className="pricing-title-row">
-          <div className="pricing-title">{`${title}`}</div>
+          <div className="pricing-title">{title}</div>
           <div className="pricing-price">
-            ${`${price}`}
+            ${price}
             <div className="pricing-price-term">/month</div>
           </div>
         </div>
+        <ul className="plan-details">{children}</ul>
+        <div className="plan-summary">
+          <div className="plan-storage-allocation">{storageAllocation}</div>
+          <div className="plan-overage-rate">{storageOverageRate}</div>
+          <div className="plan-call-to-action">{callToAction}</div>
+        </div>
       </div>
-      {children}
     </div>
   );
 };
@@ -103,11 +108,24 @@ export default function Home() {
             <div className="grid-middle">
               <div className="col-12_sm-8_mi-10_ti-12 column-1" data-push-left="off-0_sm-2_mi-1_ti-0">
                 <div className="column-content">
-                  <Card title="Free" price="0"></Card>
+                  <Card title="Free" price="0" storageAllocation="5GiB storage" callToAction="GET STARTED"></Card>
 
-                  <Card title="Lite" price="3"></Card>
+                  <Card
+                    title="Lite"
+                    price="3"
+                    storageAllocation="15GiB storage"
+                    storageOverageRate="+ $0.20/mo per additional GiB"
+                    callToAction="CHOOSE THIS PLAN"
+                  ></Card>
 
-                  <Card title="Pro" price="10" isBestValue={true}></Card>
+                  <Card
+                    title="Pro"
+                    price="10"
+                    isBestValue={true}
+                    storageAllocation="60GiB storage"
+                    storageOverageRate="+ $0.17/mo per additional GiB"
+                    callToAction="CHOOSE THIS PLAN"
+                  ></Card>
                 </div>
               </div>
             </div>
