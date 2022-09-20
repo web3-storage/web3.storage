@@ -281,6 +281,7 @@ async function pinToCluster (cid, env) {
  * @param {import('linkdex').DagStructure} structure The known structural completeness of a given DAG.
  */
 async function putToS3 (env, key, carBytes, carCid, rootCid, structure = 'Unknown') {
+  env.log.time('putToS3')
   // aws doesn't understand multihashes yet, so we given them the unprefixed sha256 digest.
   // aws will compute the sha256 of the bytes they receive, and the put fails if they don't match.
   // see: https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html#AmazonS3-PutObject-request-header-ChecksumSHA256
@@ -302,6 +303,8 @@ async function putToS3 (env, key, carBytes, carCid, rootCid, structure = 'Unknow
     return await pRetry(() => env.s3Client.send(new PutObjectCommand(cmdParams)), { retries: 3 })
   } catch (cause) {
     throw new Error('Failed to upload CAR to S3', { cause })
+  } finally {
+    env.log.timeEnd('putToS3')
   }
 }
 
@@ -320,6 +323,7 @@ async function putToS3 (env, key, carBytes, carCid, rootCid, structure = 'Unknow
  * @param {import('linkdex').DagStructure} structure
  */
 export async function putToR2 (env, key, carBytes, carCid, rootCid, structure = 'Unknown') {
+  env.log.time('putToR2')
   /** @type R2PutOptions */
   const opts = {
     sha256: toString(carCid.multihash.digest, 'base64pad'), // put fails if not match
@@ -334,6 +338,8 @@ export async function putToR2 (env, key, carBytes, carCid, rootCid, structure = 
     return await pRetry(async () => env.CARPARK.put(key, carBytes, opts), { retries: 3 })
   } catch (cause) {
     throw new Error('Failed to upload CAR to R2', { cause })
+  } finally {
+    env.log.timeEnd('putToR2')
   }
 }
 
