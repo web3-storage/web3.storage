@@ -8,7 +8,6 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanMo
           <span>
             Your current plan is: <strong>{currentPlan.title}</strong>
           </span>
-          <small>Billing Cycle: Aug 18 - Sept 18</small>
         </p>
       )}
 
