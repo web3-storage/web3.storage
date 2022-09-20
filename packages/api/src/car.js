@@ -326,7 +326,7 @@ export async function putToR2 (env, key, carBytes, carCid, rootCid, structure = 
   env.log.time('putToR2')
   /** @type R2PutOptions */
   const opts = {
-    sha256: toString(carCid.multihash.digest, 'base64pad'), // put fails if not match
+    sha256: toString(carCid.multihash.digest, 'base16'), // put fails if hash not match
     customMetadata: {
       structure,
       rootCid,
