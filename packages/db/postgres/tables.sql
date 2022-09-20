@@ -313,7 +313,7 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
   deleted_at      TIMESTAMP WITH TIME ZONE,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  backup_urls     TEXT[]
+  backup_urls     TEXT[] NOT NULL DEFAULT []
 );
 
 CREATE INDEX IF NOT EXISTS psa_pin_request_content_cid_idx ON psa_pin_request (content_cid);
