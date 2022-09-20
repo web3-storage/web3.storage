@@ -176,7 +176,6 @@ function authenticateMagicToken (
   try {
     decodedToken = env.magic.token.decode(token)
   } catch (error) {
-    console.warn('error decoding magic token', error)
     return null
   }
   try {

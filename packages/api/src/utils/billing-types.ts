@@ -1,3 +1,5 @@
+import { StripePriceId } from "./stripe";
+
 export type StripePaymentMethodId = string;
 export type CustomerId = string;
 
@@ -43,6 +45,40 @@ export interface CustomersService {
   getOrCreateForUser(user): Promise<Customer>
 }
 
+export type StoragePriceName = 'free' | 'lite' | 'pro'
+
+/**
+ * A subscription to the web3.storage platform.
+ * This may be a composition of several product-specific subscriptions.
+ */
+export interface W3PlatformSubscription {
+  // details of subscription to storage functionality
+  storage: null | {
+    // the price that should be used to determine the subscription's periodic invoice/credit.
+    price: StoragePriceName
+  }
+}
+
+export type NamedStripePrices = {
+  priceToName: (priceId: StripePriceId) => undefined | StoragePriceName
+  nameToPrice: (name: StoragePriceName) => undefined | StripePriceId
+}
+
+/**
+ * storage subscription that is stored in stripe.com
+ */
+export interface W3StorageStripeSubscription {
+  id: string
+}
+
+/**
+ * Keeps track of the subscription a customer has chosen to pay for web3.storage services
+ */
+export interface SubscriptionsService {
+  getSubscription(customer: CustomerId): Promise<W3PlatformSubscription|CustomerNotFound>
+  saveSubscription(customer: CustomerId, subscription: W3PlatformSubscription): Promise<void|CustomerNotFound>
+}
+
 export interface BillingUser {
   id: string
 }
@@ -54,13 +90,15 @@ export interface BillingUser {
 export interface BillingEnv {
   billing: BillingService
   customers: CustomersService
+  subscriptions: SubscriptionsService
 }
 
-export interface PaymentSettings {
-  method: null|PaymentMethod
+export type PaymentSettings = {
+  paymentMethod: null | PaymentMethod
+  subscription: W3PlatformSubscription
 }
 
 export interface UserCustomerService {
   getUserCustomer: (userId: string) => Promise<null|{ id: string }>
-  upsertUserCustomer: (userId: string, customerId: string) => Promise<any>
+  upsertUserCustomer: (userId: string, customerId: string) => Promise<void>
 }

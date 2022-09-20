@@ -126,23 +126,183 @@
 
 .billing-settings-layout {
   display: grid;
-  grid-template-columns: 3fr 2fr;
-  grid-gap: 2rem;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  margin-top: 4rem;
+  grid-template-areas: 'card history';
+  grid-gap: 4rem;
 
   @include medium {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
+    display: flex;
+    flex-wrap: wrap;
+    > div {
+      width: 100%;
+    }
+  }
+
+  > div:nth-child(1) {
+    grid-area: card;
+  }
+  > div:nth-child(2) {
+    grid-area: history;
+  }
+}
+
+.payment-method-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .button.text .button-contents {
+    padding: 0;
+    color: #aaa;
   }
 }
 
 .billing-plans {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.billing-content-intro {
   display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.billing-plans-table {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: 180px 1fr 1fr 1fr;
+  overflow: hidden;
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .billing-play-key p {
+    position: relative;
+    &:after {
+      content: '';
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      width: 100vw;
+      bottom: -2px;
+      left: 0;
+      position: absolute;
+    }
+  }
+
+  .billing-play-key,
+  .billing-plan {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px 80px auto 100px;
+    @media screen and (max-width: 768px) {
+      grid-template-rows: 32px 60px auto auto;
+      grid-gap: 1rem;
+    }
+  }
+
+  .billing-play-key {
+    padding: 2rem 0;
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .billing-card {
+    padding: 2rem;
+
+    @media screen and (min-width: 769px) {
+      background: none;
+      box-shadow: none;
+      border-radius: 0;
+      margin: 0;
+      border: 0;
+      border-left: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @media screen and (max-width: 768px) {
+      border: 0;
+    }
+  }
+  .billing-card.current {
+    position: relative;
+    border: 0;
+    @media screen and (max-width: 768px) {
+      border: 1px solid #fff;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      left: 0px;
+      padding: 0;
+      @include border_Background_Waterloo_White;
+    }
+    .button.disabled {
+      opacity: 0.5;
+    }
+  }
+
+  .button,
+  .billing-plan-usage-container {
+    margin-top: auto;
+  }
+  .billing-plan-usage-container .billing-label {
+    font-size: 12px;
+    margin: 0;
+  }
+}
+
+.billing-play-key p,
+.billing-plan-details p {
+  font-size: 14px;
+  margin: 0;
+}
+
+.billing-plan-details p {
+  @media screen and (max-width: 768px) {
+    margin-bottom: 0.5rem;
+    &:before {
+      display: block;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      line-height: 1;
+      font-size: 80%;
+    }
+    &:nth-child(1):before {
+      content: 'Storage Limit: ';
+    }
+    &:nth-child(2):before {
+      content: 'Bandwidth: ';
+    }
+    &:nth-child(3):before {
+      content: 'Overage Cost: ';
+    }
+  }
+}
+
+.billing-plan {
+  height: 100%;
+}
+
+.billing-plan-overview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  > .billing-plan-title {
+    margin: 0;
+  }
 }
 
 .billing-card {
   margin: 0.5rem 0;
+  text-align: left;
+  flex: 1 0 auto;
 }
 
 .billing-validation {
@@ -159,20 +319,24 @@
 }
 
 .billing-plan-title {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   font-weight: bold;
-  margin: 0.5rem 0 0rem 0;
+  margin: 0.5rem 0 1rem;
 }
 
 .billing-plan-desc {
   font-size: 1rem;
+  line-height: 1.5;
+  margin: 1rem 0;
   color: $alto;
 }
 
 .billing-label {
-  font-size: 1rem;
+  font-size: 0.8rem;
   line-height: 1;
   margin-top: 1rem;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .billing-plan-usage {
@@ -206,14 +370,23 @@
 }
 
 .billing-plan-limit {
-  font-size: 0.9rem;
+  font-size: 1rem;
   display: flex;
-  gap: 1.2rem;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5rem;
   margin-bottom: 1rem;
-}
+  line-height: 1.5;
+  margin: 1rem 0;
+  border-radius: 8px;
 
-.payment-history-layout {
-  margin-top: 4rem;
+  span > span {
+    display: block;
+  }
+
+  strong {
+    color: $moonRaker;
+  }
 }
 
 .payment-history-table {
@@ -224,10 +397,14 @@
 .payment-history-table-header,
 .payment-history-table-row {
   display: grid;
-  grid-template-columns: 20% auto 150px 150px;
+  grid-template-columns: 1fr 1fr 1fr;
   text-align: left;
   grid-gap: 1rem;
-  padding: 0.4rem 0;
+  padding: 0;
+  justify-content: space-between;
+  span:last-child {
+    text-align: right;
+  }
 }
 
 .payment-history-table-header {
@@ -240,7 +417,6 @@
   color: $alto;
 
   @include small {
-    // justify-content: space-between;
     grid-gap: 0 1rem;
     grid-template-areas:
       'date  date  date'
@@ -268,10 +444,106 @@
 }
 
 .payment-history-table-row:not(:last-child) {
-  border-bottom: 1px solid $waterloo;
+  border-bottom: 1px solid $shark;
 }
 
 .saved-card {
   display: flex;
   justify-content: space-between;
+  gap: 1rem;
+  font-size: 16px;
+  margin: 0.5rem 0 1rem;
+  line-height: 1;
+  border: 0;
+
+  svg {
+    font-size: 2rem;
+  }
+
+  > div {
+    flex: 1;
+  }
+
+  .card-number {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .card-label {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.payments-none {
+  font-size: 14px;
+  margin: 1rem 0;
+}
+
+.custom-plan-cta {
+  font-size: 1rem;
+  position: relative;
+  @include borderRadius_Large();
+  align-items: center;
+  line-height: 1.7;
+  padding: 1rem 0rem;
+  color: $alto;
+  .button {
+    margin-top: 1.5rem;
+  }
+}
+
+.custom-plan-form {
+  grid-column: 1/3;
+  max-height: 0;
+  padding-top: 0;
+  opacity: 0;
+  transition: all 0.2s ease-in-out;
+
+  &.show {
+    padding-top: 2rem;
+    opacity: 1;
+    max-height: 600px;
+  }
+}
+
+.state-changer {
+  appearance: none;
+  position: absolute;
+  right: 2rem;
+  top: 1rem;
+  background: none;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 2px 12px;
+  opacity: 0.5;
+  border-radius: 100px;
+}
+
+.add-billing-cta {
+  background: $vulcan;
+  @include borderRadius_Large();
+  padding: 1rem 2rem;
+  color: $warning;
+  border: 2px solid $warning;
+  margin: 0 0 2rem 0;
+  font-size: 0.9rem;
+  position: relative;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.add-payment-method-cta {
+  position: relative;
+  @include borderRadius_Large();
+  margin: 0.5rem 0 2rem 0;
+  font-size: 1rem;
+  position: relative;
+
+  h5 {
+    font-size: 1rem;
+  }
 }

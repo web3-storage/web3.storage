@@ -13,7 +13,7 @@ import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
 import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
-import { getPaymentSettings, savePaymentSettings } from './utils/billing.js'
+import { CustomerNotFound, getPaymentSettings, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -561,38 +561,80 @@ const notifySlack = async (
  * Get a user's payment settings.
  *
  * @param {AuthenticatedRequest} request
- * @param {Pick<import('./env').Env, 'billing'|'customers'>} env
+ * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'>} env
  */
 export async function userPaymentGet (request, env) {
   const userPaymentSettings = await getPaymentSettings({
     billing: env.billing,
     customers: env.customers,
+    subscriptions: env.subscriptions,
     user: { id: request.auth.user._id }
   })
-  return new JSONResponse(userPaymentSettings)
+  if (userPaymentSettings instanceof Error) {
+    switch (userPaymentSettings.code) {
+      case (new CustomerNotFound().code):
+        return new JSONResponse({
+          message: `Unexpected error fetching payment settings: ${userPaymentSettings.code}`
+        }, { status: 500 })
+      default: // unexpected error
+        throw userPaymentSettings
+    }
+  }
+  return new JSONResponse({
+    ...userPaymentSettings,
+    subscription: userPaymentSettings.subscription
+  })
 }
+
+/**
+ * @typedef {import('./utils/billing-types.js').BillingEnv} BillingEnv
+ */
 
 /**
  * Save a user's payment settings.
  *
  * @param {AuthenticatedRequest} request
- * @param {Pick<import('./env').Env, 'billing'|'customers'>} env
+ * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'>} env
  */
 export async function userPaymentPut (request, env) {
   const requestBody = await request.json()
-  const paymentMethodId = requestBody?.method?.id
+  const paymentMethodId = requestBody?.paymentMethod?.id
   if (typeof paymentMethodId !== 'string') {
     throw Object.assign(new Error('Invalid payment method'), { status: 400 })
   }
-  const method = { id: paymentMethodId }
+  const subscriptionInput = requestBody?.subscription
+  if (typeof subscriptionInput !== 'object') {
+    throw Object.assign(new Error(`subscription must be an object, but got ${typeof subscriptionInput}`), { status: 400 })
+  }
+  const subscriptionStorageInput = subscriptionInput?.storage
+  if (!(typeof subscriptionStorageInput === 'object' || subscriptionStorageInput === null)) {
+    throw Object.assign(new Error('subscription.storage must be an object or null'), { status: 400 })
+  }
+  if (subscriptionStorageInput && typeof subscriptionStorageInput.price !== 'string') {
+    throw Object.assign(new Error('subscription.storage.price must be a string'), { status: 400 })
+  }
+  const storagePrice = subscriptionStorageInput?.price
+  if (storagePrice && !isStoragePriceName(storagePrice)) {
+    return new JSONResponse(new Error('invalid .subscription.storage.price'), {
+      status: 400
+    })
+  }
+  const subscriptionStorage = storagePrice
+    ? { price: storagePrice }
+    : null
+  const paymentMethod = { id: paymentMethodId }
   await savePaymentSettings(
     {
       billing: env.billing,
       customers: env.customers,
-      user: { id: request.auth.user._id }
+      user: { id: request.auth.user._id },
+      subscriptions: env.subscriptions
     },
     {
-      method
+      paymentMethod,
+      subscription: {
+        storage: subscriptionStorage
+      }
     }
   )
   const userPaymentSettingsUrl = '/user/payment'

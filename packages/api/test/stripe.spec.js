@@ -1,9 +1,11 @@
 /* eslint-env mocha */
 import assert from 'assert'
-import { createMockUserCustomerService, CustomerNotFound, randomString } from '../src/utils/billing.js'
-// eslint-disable-next-line no-unused-vars
-import Stripe from 'stripe'
-import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createStripe, StripeBillingService, StripeCustomersService } from '../src/utils/stripe.js'
+import { createMockUserCustomerService, CustomerNotFound, randomString, storagePriceNames } from '../src/utils/billing.js'
+import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createMockStripeForSubscriptions, createMockStripeSubscription, createStripe, createStripeBillingContext, createStripeStorageEnvVar, createStripeStoragePricesFromEnv, stagingStripePrices, StripeBillingService, StripeCustomersService, StripeSubscriptionsService } from '../src/utils/stripe.js'
+
+/**
+ * @typedef {import('../src/utils/billing-types').StoragePriceName} StoragePriceName
+ */
 
 describe('StripeBillingService', async function () {
   it('can savePaymentMethod', async function () {
@@ -101,5 +103,173 @@ describe('StripeCustomersService', async function () {
     // it should not create the customer if already set
     const customer2ForUser2 = await customers1.getOrCreateForUser({ id: userId2 })
     assert.equal(customer2ForUser2.id, customerForUser2.id, 'should return same customer for same userId2')
+  })
+})
+
+describe('StripeSubscriptionsService', async function () {
+  it('can saveSubscription between prices using real stripe.com API', async function () {
+    // ensure stripeSecretKey and use it to construct stripe
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+    if (!stripeSecretKey) {
+      return this.skip()
+    }
+    assert.ok(stripeSecretKey, 'stripeSecretKey is required')
+    const stripe = createStripe(stripeSecretKey)
+    const customers = StripeCustomersService.create(stripe, createMockUserCustomerService())
+    const user = { id: `user-${randomString()}` }
+    const customer = await customers.getOrCreateForUser(user)
+    const prices = stagingStripePrices
+    const subscriptions = StripeSubscriptionsService.create(stripe, prices)
+
+    // change between tiers
+    const priceSequence = [
+      storagePriceNames.free,
+      storagePriceNames.pro,
+      storagePriceNames.pro,
+      storagePriceNames.lite,
+      storagePriceNames.free
+    ]
+    for (const price of priceSequence) {
+      await subscriptions.saveSubscription(customer.id, {
+        storage: {
+          price
+        }
+      })
+      const gotSavedSubscription2 = await subscriptions.getSubscription(customer.id)
+      assert.ok(!(gotSavedSubscription2 instanceof Error), 'getSubscription did not return an error')
+      assert.equal(gotSavedSubscription2.storage?.price, price, 'gotPaymentSettings.subscription.storage.price is same as desiredPaymentSettings.subscription.storage.price')
+    }
+
+    // unsubscribe to storage
+    await subscriptions.saveSubscription(customer.id, {
+      storage: null
+    })
+    const gotSavedSubscription3 = await subscriptions.getSubscription(customer.id)
+    assert.ok(!(gotSavedSubscription3 instanceof Error), 'getSubscription did not return an error')
+    assert.equal(gotSavedSubscription3.storage, null, 'gotPaymentSettings.subscription.storage.price is same as desiredPaymentSettings.subscription.storage.price')
+  })
+  it('saveSubscription will convert StoragePriceName to appropriate stripe price id', async function () {
+    const createdCalls = []
+    const prices = stagingStripePrices
+    const subscriptions = StripeSubscriptionsService.create(
+      {
+        ...createMockStripeForSubscriptions({
+          onSubscriptionCreate (params) {
+            createdCalls.push(params)
+          },
+          async retrieveCustomer (customerId) {
+            return {
+              ...createMockStripeCustomer(),
+              subscriptions: {
+                data: [],
+                object: 'list',
+                has_more: false,
+                url: ''
+              },
+              id: customerId
+            }
+          }
+        })
+      },
+      prices
+    )
+    const desiredPriceName = storagePriceNames.lite
+    // save a subscription using the StoragePriceName
+    const saved = await subscriptions.saveSubscription('customerId', {
+      storage: {
+        price: desiredPriceName
+      }
+    })
+    assert.ok(!(saved instanceof Error), 'saveSubscription did not return an error')
+    // expect stripe to have been called with a stripe price id, not StoragePriceName
+    assert.equal(createdCalls.length, 1, 'should have called createSubscription once')
+    assert.notEqual(createdCalls[0].items[0].price, desiredPriceName, 'should not have invoked stripe.com api with StripePriceName, it should be a stripe.com price id')
+    assert.equal(createdCalls[0].items[0].price, prices.nameToPrice(desiredPriceName), 'should not have invoked stripe.com api with StripePriceName, it should be a stripe.com price id')
+  })
+  it('getSubscription will convert stripe price.id to StoragePriceName', async function () {
+    const createdCalls = []
+    const prices = stagingStripePrices
+    const customerId = 'customer-id'
+    const simulatedStoragePriceName = storagePriceNames.lite
+    const subscriptions = StripeSubscriptionsService.create(
+      {
+        ...createMockStripeForSubscriptions({
+          onSubscriptionCreate (params) {
+            createdCalls.push(params)
+          },
+          async retrieveCustomer (customerId) {
+            return {
+              ...createMockStripeCustomer(),
+              subscriptions: {
+                data: [
+                  createMockStripeSubscription({
+                    items: [
+                      {
+                        // @ts-ignore
+                        price: {
+                          id: prices.nameToPrice(simulatedStoragePriceName) ?? '',
+                          object: 'price'
+                        }
+                      }
+                    ]
+                  })
+                ],
+                object: 'list',
+                has_more: false,
+                url: ''
+              },
+              id: customerId
+            }
+          }
+        })
+      },
+      prices
+    )
+    const gotSubscription = await subscriptions.getSubscription(customerId)
+    assert.ok(gotSubscription && !(gotSubscription instanceof Error), 'getSubscription did not return an error')
+    assert.equal(gotSubscription.storage?.price, simulatedStoragePriceName, '')
+  })
+})
+
+describe('createStripeBillingContext', function () {
+  it('subscriptions can only saveSubscription to known price ids', async function () {
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+    if (!stripeSecretKey) {
+      return this.skip()
+    }
+    const billingContext = createStripeBillingContext({
+      db: createMockUserCustomerService(),
+      STRIPE_SECRET_KEY: stripeSecretKey
+    })
+    const user = { id: `user-${randomString()}` }
+    const customer = await billingContext.customers.getOrCreateForUser(user)
+    let saveDidError = false
+    try {
+      await billingContext.subscriptions.saveSubscription(customer.id, {
+        storage: {
+          // @ts-ignore
+          price: 'fake_bad_price'
+        }
+      })
+    } catch (error) {
+      saveDidError = true
+    } finally {
+      assert.equal(saveDidError, true, 'saveSubscription should have thrown an error')
+    }
+  })
+})
+
+describe('createStripeStoragePricesFromEnv', function () {
+  it('parses prices from env vars', function () {
+    const prefix = randomString()
+    /** @type {import('../src/utils/billing-types').NamedStripePrices} */
+    const prices = createStripeStoragePricesFromEnv({
+      [createStripeStorageEnvVar(storagePriceNames.free)]: `${prefix}_price_free`,
+      [createStripeStorageEnvVar(storagePriceNames.lite)]: `${prefix}_price_lite`,
+      [createStripeStorageEnvVar(storagePriceNames.pro)]: `${prefix}_price_pro`
+    })
+    assert.equal(prices.nameToPrice(storagePriceNames.free), `${prefix}_price_free`)
+    assert.equal(prices.nameToPrice(storagePriceNames.lite), `${prefix}_price_lite`)
+    assert.equal(prices.nameToPrice(storagePriceNames.pro), `${prefix}_price_pro`)
   })
 })

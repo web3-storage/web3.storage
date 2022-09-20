@@ -1,27 +1,57 @@
-// temporary placeholder for stripe API data
-export const plans = [
+export const sharedPlans = [
   {
-    title: 'Free',
-    description: 'The service you already know and love',
-    price: '$0/mo',
-    amount: '10GB',
-    overage: '',
-    current: false,
-  },
-  {
-    title: 'Starter',
+    id: 'lite',
+    title: 'Lite',
     description: 'For those that want to take advantage of more storage',
-    price: '$10/mo',
-    amount: '100GB',
-    overage: '$4/GB',
-    current: true,
+    price: '$3/mo',
+    base_storage: '15GiB',
+    additional_storage: '$0.20 / GiB',
+    bandwidth: '30GiB / month',
+    block_limit: '10,000 / GiB',
+    car_size_limit: '5MiB',
+    pinning_api: true,
   },
   {
-    title: 'Enterprise',
+    // id: 'price_pro',
+    id: 'pro',
+    title: 'Pro',
     description: 'All the sauce, all the toppings.',
-    price: '$50/mo',
-    amount: '500GB',
-    overage: '$2/GB',
-    current: false,
+    price: '$10/mo',
+    base_storage: '60GiB',
+    additional_storage: '$0.17 / GiB',
+    bandwidth: '120GiB / month',
+    block_limit: '10,000 / GiB',
+    car_size_limit: '5MiB',
+    pinning_api: true,
   },
 ];
+
+export const freePlan = {
+  id: 'free',
+  title: 'Free',
+  description: 'You are currently on the free tier. You can use our service up to 5GiB/mo without being charged.',
+  price: '$0/mo',
+  base_storage: '5GiB',
+  additional_storage: 'NA',
+  bandwidth: '10GiB / month',
+  block_limit: '2,500 / GiB',
+  car_size_limit: '5MiB',
+  pinning_api: false,
+};
+
+export const earlyAdopterPlan = {
+  id: null,
+  title: 'Early Adopter',
+  description:
+    'As an early adopter we appreciate your support and can continue to use the storage you are already accustomed to.',
+  price: '$0/mo',
+  base_storage: '25GiB',
+  additional_storage: 'NA',
+  bandwidth: '10Gib / month',
+  block_limit: '2,500 / GiB',
+  car_size_limit: '5MiB',
+  pinning_api: false,
+};
+
+export const plans = [freePlan, ...sharedPlans];
+export const plansEarly = [earlyAdopterPlan, ...sharedPlans];
