@@ -196,6 +196,10 @@
 
 .plan-details {
   flex: 1 1 auto;
+
+  li {
+    list-style-image: url('/images/pricing/circle-check.svg');
+  }
 }
 
 .plan-summary {

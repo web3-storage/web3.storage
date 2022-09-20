@@ -108,7 +108,9 @@ export default function Home() {
             <div className="grid-middle">
               <div className="col-12_sm-8_mi-10_ti-12 column-1" data-push-left="off-0_sm-2_mi-1_ti-0">
                 <div className="column-content">
-                  <Card title="Free" price="0" storageAllocation="5GiB storage" callToAction="GET STARTED"></Card>
+                  <Card title="Free" price="0" storageAllocation="5GiB storage" callToAction="GET STARTED">
+                    <li>Easily store your data and make it available on IPFS</li>
+                  </Card>
 
                   <Card
                     title="Lite"
