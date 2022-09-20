@@ -96,11 +96,27 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="pricing-card">
-                    <div className="pricing-card-body">stuff 2</div>
+                    <div className="pricing-card-body">
+                      <div className="pricing-title-row">
+                        <div className="pricing-title">Lite</div>
+                        <div className="pricing-price">
+                          $3
+                          <div className="pricing-price-term">/month</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div className="pricing-card">
                     <div className="best-value-adornment">Best Value!</div>
-                    <div className="pricing-card-body adorned">stuff 3</div>
+                    <div className="pricing-card-body adorned">
+                      <div className="pricing-title-row">
+                        <div className="pricing-title">Pro</div>
+                        <div className="pricing-price">
+                          $10
+                          <div className="pricing-price-term">/month</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
