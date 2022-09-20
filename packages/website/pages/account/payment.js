@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { Elements, ElementsConsumer } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
+import Loading from '../../components/loading/loading.js';
 import PaymentCustomPlan from '../../components/account/paymentCustomPlan.js/paymentCustomPlan.js';
 import PaymentTable from '../../components/account/paymentTable.js/paymentTable.js';
 import PaymentMethodCard from '../../components/account/paymentMethodCard/paymentMethodCard.js';
@@ -13,7 +14,6 @@ import AccountPlansModal from '../../components/accountPlansModal/accountPlansMo
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
 import { plans, plansEarly } from '../../components/contexts/plansContext';
 import { userBillingSettings } from '../../lib/api';
-import Loading from 'components/loading/loading.js';
 
 const PaymentSettingsPage = props => {
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
