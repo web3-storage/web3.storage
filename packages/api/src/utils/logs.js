@@ -37,6 +37,8 @@ export class Logging {
     this.opts = opts
     this.sendToSentry = sendToSentry
     this.sendToLogtail = sendToLogtail
+    /** @typedef {{ name: string, description?: string, start: number, end?: number, duration?: number, value?: number }} Timer */
+    /** @type {Map<string, Timer>} */
     this._times = new Map()
     /**
      * @type {string[]}
@@ -179,6 +181,7 @@ export class Logging {
         level: 'info',
         metadata: {
           ...this.metadata,
+          timers: this._timersMetadata(),
           response: {
             headers: buildMetadataFromHeaders(response.headers),
             status_code: response.status,
@@ -320,6 +323,7 @@ export class Logging {
   _timersString () {
     const result = []
     for (const key of this._timesOrder) {
+      // @ts-expect-error
       const { name, duration, description } = this._times.get(key)
       result.push(
         description
@@ -329,5 +333,16 @@ export class Logging {
     }
 
     return result.join(',')
+  }
+
+  _timersMetadata () {
+    /** @type {Record<string, number>} */
+    const result = {}
+    for (const val of this._times.values()) {
+      if (val.duration !== undefined) {
+        result[val.name] = val.duration
+      }
+    }
+    return result
   }
 }
