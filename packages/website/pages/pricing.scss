@@ -293,6 +293,8 @@
 
   .enterprise-content {
     flex: 1 1 auto;
+    display: flex;
+    flex-flow: column nowrap;
   }
 
   .enterprise-title {
@@ -320,8 +322,11 @@
     color: #000000;
   }
 
+  .enterprise-above-call-to-action {
+    flex: 1 1 auto;
+  }
+
   .enterprise-call-to-action {
-    margin: 2rem 0 0 0;
     padding: 10px 20px;
     background: transparent;
     border: 2px solid #03040a;
