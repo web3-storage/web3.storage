@@ -1,0 +1,20 @@
+{
+  "_meta": {
+    "template_version": 0
+  },
+  "fixtures": [
+    {
+      "name": "product_storage",
+      "path": "/v1/products",
+      "method": "post",
+      "params": {
+          "name": "web3.storage",
+          "description": "storage on https://web3.storage",
+          "metadata": {
+          },
+          "unit_label": "GiB * mo",
+          "url": "https://web3.storage"
+      }
+    }
+  ]
+}

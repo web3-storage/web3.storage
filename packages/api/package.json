@@ -31,7 +31,8 @@
     "pg:stop": "cd ../db && npm run stop",
     "miniflare": "miniflare dist/worker.js --modules --env ../../.env --r2 CARPARK $API_MINIFLARE_FLAGS --watch",
     "lint": "standard --verbose",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "stripe.com:fixtures": "stripe fixtures src/stripe.com/fixtures.json"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.16.0",
