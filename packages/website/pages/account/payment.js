@@ -178,7 +178,7 @@ export function getStaticProps() {
   const stripePublishableKey = process.env[STRIPE_PUBLISHABLE_KEY_ENVVAR_NAME];
   if (!stripePublishableKey) {
     throw new Error(
-      `account payment page missing requires truthy stripePublishableKey, but got ${stripePublishableKey}. Did you set env.${STRIPE_PUBLISHABLE_KEY_ENVVAR_NAME}?`
+      `account payment page requires truthy stripePublishableKey, but got ${stripePublishableKey}. Did you set env.${STRIPE_PUBLISHABLE_KEY_ENVVAR_NAME}?`
     );
   }
   return {
