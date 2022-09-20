@@ -292,7 +292,7 @@ async function putToS3 (env, key, carBytes, carCid, rootCid, structure = 'Unknow
     Bucket: env.S3_BUCKET_NAME,
     Key: key,
     Body: carBytes,
-    Metadata: { 
+    Metadata: {
       structure,
       rootCid,
       carCid: carCid.toString()
@@ -341,17 +341,6 @@ export async function putToR2 (env, key, carBytes, carCid, rootCid, structure = 
   } finally {
     env.log.timeEnd('putToR2')
   }
-}
-
-/**
- * Get the md5 of the bytes
- * @param {Uint8Array} bytes
- * @returns {Promise<Uint8Array>} the md5 hash of the input
- */
-export async function md5Digest (bytes) {
-  const hasher = new Md5()
-  hasher.update(bytes)
-  return hasher.digest()
 }
 
 /**
