@@ -7,6 +7,25 @@ import ImageCorkscrew from 'public/images/illustrations/corkscrew.png';
 import ImageTriangle from 'public/images/illustrations/triangle.png';
 import ImageTriangle1 from 'public/images/illustrations/triangle1.png';
 
+const Card = props => {
+  const { title, price, isBestValue, children } = props;
+  return (
+    <div className="pricing-card">
+      {!!isBestValue && <div className="best-value-adornment">Best Value!</div>}
+      <div className={`pricing-card-body${isBestValue ? ' adorned' : ''}`}>
+        <div className="pricing-title-row">
+          <div className="pricing-title">{`${title}`}</div>
+          <div className="pricing-price">
+            ${`${price}`}
+            <div className="pricing-price-term">/month</div>
+          </div>
+        </div>
+      </div>
+      {children}
+    </div>
+  );
+};
+
 export default function Home() {
   return (
     <>
@@ -84,40 +103,11 @@ export default function Home() {
             <div className="grid-middle">
               <div className="col-12_sm-8_mi-10_ti-12 column-1" data-push-left="off-0_sm-2_mi-1_ti-0">
                 <div className="column-content">
-                  <div className="pricing-card">
-                    <div className="pricing-card-body">
-                      <div className="pricing-title-row">
-                        <div className="pricing-title">Free</div>
-                        <div className="pricing-price">
-                          $0
-                          <div className="pricing-price-term">/month</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="pricing-card">
-                    <div className="pricing-card-body">
-                      <div className="pricing-title-row">
-                        <div className="pricing-title">Lite</div>
-                        <div className="pricing-price">
-                          $3
-                          <div className="pricing-price-term">/month</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="pricing-card">
-                    <div className="best-value-adornment">Best Value!</div>
-                    <div className="pricing-card-body adorned">
-                      <div className="pricing-title-row">
-                        <div className="pricing-title">Pro</div>
-                        <div className="pricing-price">
-                          $10
-                          <div className="pricing-price-term">/month</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <Card title="Free" price="0"></Card>
+
+                  <Card title="Lite" price="3"></Card>
+
+                  <Card title="Pro" price="10" isBestValue={true}></Card>
                 </div>
               </div>
             </div>
