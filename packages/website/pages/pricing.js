@@ -6,6 +6,7 @@ import ImageCoil from 'public/images/illustrations/coil.png';
 import ImageCorkscrew from 'public/images/illustrations/corkscrew.png';
 import ImageTriangle from 'public/images/illustrations/triangle.png';
 import ImageTriangle1 from 'public/images/illustrations/triangle1.png';
+import BlobCluster from 'public/images/illustrations/blob-cluster.png';
 
 const Card = props => {
   const { title, price, isBestValue, children, storageAllocation, storageOverageRate, callToAction } = props;
@@ -159,8 +160,18 @@ export default function Home() {
               <div className="col-12_sm-12_mi-12_ti-12 column-1">
                 <div className="column-content">
                   <div className="pricing-enterprise-users">
-                    Looking for way more? Anticipate having a complex integration? Just tell us more about your company
-                    and what you&apos;re building using the form below, and we’ll get back to you shortly.
+                    <div className="enterprise-blob">
+                      <Img alt="" src={BlobCluster} />
+                    </div>
+                    <div className="enterprise-content">
+                      <div className="enterprise-title">FOR ENTERPRISE USERS...</div>
+                      <div className="enterprise-heading">Custom</div>
+                      <div className="enterprise-description">
+                        Looking for way more? Anticipate having a complex integration? Just tell us more about your
+                        company and what you&apos;re building using the form below, and we&apos;ll get back to you
+                        shortly.
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

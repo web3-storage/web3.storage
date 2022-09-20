@@ -259,11 +259,66 @@
 
 .pricing-enterprise-users {
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: row nowrap;
   background: rgba(255, 255, 255, 0.35);
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.0562744);
   border-radius: 10px;
-  padding: 1rem;
+  padding: 2.5rem;
+  margin: 1rem 0 0 0;
+
+  .enterprise-blob {
+    position: relative;
+    flex: 0 0 auto;
+    width: 260px;
+    height: 260px;
+
+    & > span {
+      top: -8rem;
+      left: -9rem;
+    }
+
+    $blobSize: 460px;
+
+    & > span,
+    & > span > img {
+      position: absolute;
+      max-width: $blobSize !important;
+      max-height: $blobSize !important;
+      min-width: $blobSize !important;
+      min-height: $blobSize !important;
+      width: $blobSize !important;
+      height: $blobSize !important;
+    }
+  }
+
+  .enterprise-content {
+    flex: 1 1 auto;
+  }
+
+  .enterprise-title {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 131%;
+    letter-spacing: 0.48px;
+    color: #03040a;
+  }
+
+  .enterprise-heading {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 138%;
+    color: #03040a;
+  }
+
+  .enterprise-description {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 175%;
+    color: #000000;
+  }
 }
 
 #pricing_section_2 {
