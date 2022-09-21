@@ -66,10 +66,6 @@
             "url": "/tokens/?create=true"
           },
           {
-            "text": "Plans & Payment",
-            "url": "/account/payment"
-          },
-          {
             "text": "Status",
             "url": "https://status.web3.storage/"
           },
