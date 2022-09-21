@@ -99,6 +99,7 @@ jobs:
           workingDirectory: 'packages/api'
           environment: 'production'
       - name: put stripe.com fixtures
+        if: ${{ steps.tag-release.outputs.releases_created }}
         run: npm -w packages/api run stripe.com:fixtures
         env:
           STRIPE_API_KEY: ${{ secrets.PROD_STRIPE_SECRET_KEY }}
