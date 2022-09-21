@@ -9,6 +9,7 @@ import { createCar } from './scripts/car.js'
 const EMAIL_ERROR_MESSAGE = 'Error message does not contain support email address'
 const RESTRICTED_ERROR_CHECK = /This account is restricted./
 const SUPPORT_EMAIL_CHECK = /support@web3.storage/
+const SUPPORT_WEBSITE_CHECK = /pinning-services-api/
 
 describe('Pinning service API access', () => {
   const cid = 'bafybeibqmrg5e5bwhx2ny4kfcjx2mm3ohh2cd4i54wlygquwx7zbgwqs4e'
@@ -30,7 +31,7 @@ describe('Pinning service API access', () => {
 
       assert(!res.ok)
       const { error: { reason, details } } = await res.json()
-      assert.match(details, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
+      assert.match(details, SUPPORT_WEBSITE_CHECK, EMAIL_ERROR_MESSAGE)
       assert.strictEqual(reason, PinningUnauthorizedError.CODE)
     })
   })
@@ -48,7 +49,7 @@ describe('Pinning service API access', () => {
 
       assert(!res.ok)
       const { error: { reason, details } } = await res.json()
-      assert.match(details, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
+      assert.match(details, SUPPORT_WEBSITE_CHECK, EMAIL_ERROR_MESSAGE)
       assert.strictEqual(reason, PinningUnauthorizedError.CODE)
     })
   })
@@ -66,7 +67,7 @@ describe('Pinning service API access', () => {
 
       assert(!res.ok)
       const { error: { reason, details } } = await res.json()
-      assert.match(details, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
+      assert.match(details, SUPPORT_WEBSITE_CHECK, EMAIL_ERROR_MESSAGE)
       assert.strictEqual(reason, PinningUnauthorizedError.CODE)
     })
   })
@@ -83,7 +84,7 @@ describe('Pinning service API access', () => {
 
       assert(!res.ok)
       const { error: { reason, details } } = await res.json()
-      assert.match(details, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
+      assert.match(details, SUPPORT_WEBSITE_CHECK, EMAIL_ERROR_MESSAGE)
       assert.strictEqual(reason, PinningUnauthorizedError.CODE)
     })
   })
@@ -100,7 +101,7 @@ describe('Pinning service API access', () => {
 
       assert(!res.ok)
       const { error: { reason, details } } = await res.json()
-      assert.match(details, SUPPORT_EMAIL_CHECK, EMAIL_ERROR_MESSAGE)
+      assert.match(details, SUPPORT_WEBSITE_CHECK, EMAIL_ERROR_MESSAGE)
       assert.strictEqual(reason, PinningUnauthorizedError.CODE)
     })
   })
