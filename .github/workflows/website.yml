@@ -257,7 +257,7 @@ jobs:
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false}]'
 
   release:
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created) || inputs.force_release
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.pr) || inputs.force_release
     name: Release
     runs-on: ubuntu-latest
     needs:
