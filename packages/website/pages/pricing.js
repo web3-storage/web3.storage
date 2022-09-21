@@ -7,6 +7,7 @@ import ImageCorkscrew from 'public/images/illustrations/corkscrew.png';
 import ImageTriangle from 'public/images/illustrations/triangle.png';
 import ImageTriangle1 from 'public/images/illustrations/triangle1.png';
 import BlobCluster from 'public/images/illustrations/blob-cluster.png';
+import Cluster1 from 'public/images/index/cluster-1.png';
 
 const Card = props => {
   const { title, price, isBestValue, children, storageAllocation, storageOverageRate, callToAction } = props;
@@ -211,7 +212,7 @@ export default function Home() {
               <div className="col-5_sm-8_mi-10_ti-12 column-2" data-push-left="off-1_sm-2_mi-1_ti-0">
                 <div className="column-content">
                   <div className="block image-block">
-                    img?
+                    <Img alt="" src={Cluster1} />
                     <div className="image-label"></div>
                   </div>
                 </div>
