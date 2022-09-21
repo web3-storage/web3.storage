@@ -304,13 +304,12 @@ export async function deletePinRequest(requestid) {
  */
 export async function userBillingSettings(pm_id, currPricePlan) {
   const putBody =
-    !!pm_id && !!currPricePlan
+    pm_id || currPricePlan
       ? JSON.stringify({
-          paymentMethod: { id: pm_id },
-          subscription: { storage: currPricePlan },
+          paymentMethod: pm_id ? { id: pm_id } : null,
+          subscription: { storage: currPricePlan ?? null },
         })
       : null;
-  console.log(putBody);
   const method = !!putBody ? 'PUT' : 'GET';
   const token = await getToken();
   const res = await fetch(API + '/user/payment', {

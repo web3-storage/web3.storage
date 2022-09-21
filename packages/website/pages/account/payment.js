@@ -131,15 +131,15 @@ const PaymentSettingsPage = props => {
                   <div className="add-payment-method-cta">
                     <Elements stripe={stripePromise}>
                       <ElementsConsumer>
-                        {({ stripe, elements }) => (
-                          <AddPaymentMethodForm
-                            stripe={stripe}
-                            elements={elements}
-                            setHasPaymentMethods={setHasPaymentMethods}
-                            setEditingPaymentMethod={setEditingPaymentMethod}
-                            currentPlan={currentPlan?.id}
-                          />
-                        )}
+                        {({ stripe, elements }) => {
+                          return (
+                            <AddPaymentMethodForm
+                              setHasPaymentMethods={setHasPaymentMethods}
+                              setEditingPaymentMethod={setEditingPaymentMethod}
+                              currentPlan={currentPlan?.id}
+                            />
+                          );
+                        }}
                       </ElementsConsumer>
                     </Elements>
                   </div>

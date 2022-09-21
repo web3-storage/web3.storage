@@ -1,26 +1,26 @@
 import { useState } from 'react';
-import { CardElement } from '@stripe/react-stripe-js';
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
 import { userBillingSettings } from '../../../lib/api';
 import Button from '../../../components/button/button';
 
 /**
  * @param {object} obj
- * @param {import('@stripe/stripe-js').Stripe | null} [obj.stripe]
- * @param {import('@stripe/stripe-js').StripeElements | null} [obj.elements]
  * @param {(v: boolean) => void} [obj.setHasPaymentMethods]
  * @param {(v: boolean) => void} [obj.setEditingPaymentMethod]
  * @param { string | null } [obj.currentPlan]
  * @returns
  */
-const AddPaymentMethodForm = ({ stripe, elements, setHasPaymentMethods, setEditingPaymentMethod, currentPlan }) => {
-  const [paymentMethodError, setPaymentMethodError] = useState('');
+const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, currentPlan }) => {
+  const elements = useElements();
+  const stripe = useStripe();
 
+  const [paymentMethodError, setPaymentMethodError] = useState('');
   const handlePaymentMethodAdd = async event => {
     event.preventDefault();
 
     if (!stripe || !elements) {
-      // Stripe.js has not yet loaded.
+      console.warn('stripe or elements is not loaded, so handlePaymentMethodAdd cannot use it');
       return;
     }
 
