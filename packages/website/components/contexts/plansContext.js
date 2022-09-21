@@ -32,7 +32,7 @@ export const freePlan = {
   description: 'You are currently on the free tier. You can use our service up to 5GiB/mo without being charged.',
   price: '$0/mo',
   base_storage: '5GiB',
-  additional_storage: 'NA',
+  additional_storage: 'N/A',
   bandwidth: '10GiB / month',
   block_limit: '2,500 / GiB',
   car_size_limit: '5MiB',
@@ -40,7 +40,7 @@ export const freePlan = {
 };
 
 export const earlyAdopterPlan = {
-  id: null,
+  id: 'earlyAdopter',
   title: 'Early Adopter',
   description:
     'As an early adopter we appreciate your support and can continue to use the storage you are already accustomed to.',

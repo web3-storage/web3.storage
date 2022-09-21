@@ -257,6 +257,12 @@
   }
 }
 
+.billing-card-add-card-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .billing-play-key p,
 .billing-plan-details p {
   font-size: 14px;

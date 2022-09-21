@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Elements, ElementsConsumer } from '@stripe/react-stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 
 import Loading from '../../components/loading/loading.js';
 import Button from '../../components/button/button.js';
@@ -68,14 +68,10 @@ const AccountPlansModal = ({
           <div className="add-payment-method-cta">
             Please add a payment method before confirming plan.
             <Elements stripe={stripePromise}>
-              <ElementsConsumer>
-                {({ stripe, elements }) => (
-                  <AddPaymentMethodForm
-                    setHasPaymentMethods={setHasPaymentMethods}
-                    setEditingPaymentMethod={setEditingPaymentMethod}
-                  />
-                )}
-              </ElementsConsumer>
+              <AddPaymentMethodForm
+                setHasPaymentMethods={setHasPaymentMethods}
+                setEditingPaymentMethod={setEditingPaymentMethod}
+              />
             </Elements>
           </div>
         )}

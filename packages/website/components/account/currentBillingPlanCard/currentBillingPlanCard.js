@@ -17,7 +17,7 @@ const CurrentBillingPlanCard = ({ plan }) => {
               </span>
             )}
             <span>
-              <span>Additional Storage:</span> <strong>{plan.additional_storage.split(' ')[0]} per GB</strong> after{' '}
+              <span>Additional Storage:</span> <strong>{plan.additional_storage.split(' ')[0]} per GiB</strong> after{' '}
               {plan.base_storage.split(' ')[0]}
             </span>
             <span>
@@ -25,9 +25,6 @@ const CurrentBillingPlanCard = ({ plan }) => {
             </span>
             <span>
               <span>Block Limits:</span> <strong>{plan.block_limit}</strong>
-            </span>
-            <span>
-              <span>CAR Size Limit:</span> <strong>{plan.car_size_limit}</strong>
             </span>
           </p>
         </div>
