@@ -55,6 +55,7 @@ const AccountPlansModal = ({
 }) => {
   const [isCreatingSub, setIsCreatingSub] = useState(false);
   const currentPlan = planList.find(p => p.id === planSelection.id);
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
   return (
     <div className="account-plans-modal">
       <Modal
@@ -76,10 +77,23 @@ const AccountPlansModal = ({
           </div>
         )}
 
+        <div className="billing-card card-transparent">
+          <div className="billing-terms-toggle">
+            <input type="checkbox" id="agreeTerms" onChange={() => setHasAcceptedTerms(!hasAcceptedTerms)} />
+            <label htmlFor="agreeTerms">
+              I agree to the{' '}
+              <a href="#terms" target="_blank">
+                web3.storage
+              </a>{' '}
+              Terms of Service
+            </label>
+          </div>
+        </div>
+
         <div className="account-plans-confirm">
           <Button
             variant="light"
-            disabled={!savedPaymentMethod || isCreatingSub}
+            disabled={!savedPaymentMethod || isCreatingSub || !hasAcceptedTerms}
             onClick={async () => {
               setIsCreatingSub(true);
               await putUserPayment(savedPaymentMethod.id, currentPlan.id);
