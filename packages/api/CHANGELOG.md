@@ -1,5 +1,22 @@
 # Changelog
 
+## [7.6.0](https://github.com/web3-storage/web3.storage/compare/api-v7.5.1...api-v7.6.0) (2022-09-20)
+
+
+### Features
+
+* I can choose a storage pricing tier (issue 1869) ([#1878](https://github.com/web3-storage/web3.storage/issues/1878)) ([58de180](https://github.com/web3-storage/web3.storage/commit/58de180300e72f7a79193657a7d995f0799bae28))
+* put write to cluster behind a flag ([#1785](https://github.com/web3-storage/web3.storage/issues/1785)) ([eae75d2](https://github.com/web3-storage/web3.storage/commit/eae75d2366d59b0cf16143723a5af6513d891f9e))
+* send timing info to logtail. Time r2 & s3. ([#1908](https://github.com/web3-storage/web3.storage/issues/1908)) ([8dff635](https://github.com/web3-storage/web3.storage/commit/8dff6354b6f5bccbe953443c445e472085b1309d))
+* use sha256 checksum for r2.put ([#1910](https://github.com/web3-storage/web3.storage/issues/1910)) ([d277ba0](https://github.com/web3-storage/web3.storage/commit/d277ba02b5d6cbb3e4065d1ecb5c516cf35cf976))
+
+
+### Other Changes
+
+* add a script that generates many uploads ([#1790](https://github.com/web3-storage/web3.storage/issues/1790)) ([e38b7a0](https://github.com/web3-storage/web3.storage/commit/e38b7a0689ae160a30ea6edd54e52376e81ebec9))
+* encode sha256 hash as hex for r2 put ([#1911](https://github.com/web3-storage/web3.storage/issues/1911)) ([3d66fa9](https://github.com/web3-storage/web3.storage/commit/3d66fa91d51a15f2cde075a51b06fc614be1c108))
+* silence logging debug statements in test/dev ([#1870](https://github.com/web3-storage/web3.storage/issues/1870)) ([a576131](https://github.com/web3-storage/web3.storage/commit/a576131c7e0aaaf4851a5844e2c7778fa77a343b))
+
 ## [7.5.1](https://github.com/web3-storage/web3.storage/compare/api-v7.5.0...api-v7.5.1) (2022-09-09)
 
 
