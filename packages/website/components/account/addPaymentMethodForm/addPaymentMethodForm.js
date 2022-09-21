@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
+import Loading from '../../../components/loading/loading';
 import { userBillingSettings } from '../../../lib/api';
 import Button from '../../../components/button/button';
-import Loading from 'components/loading/loading';
 
 /**
  * @param {object} obj

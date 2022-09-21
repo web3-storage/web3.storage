@@ -22,8 +22,6 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
                 <p>Additional Storage</p>
                 <p>Bandwidth</p>
                 <p>Block Limits</p>
-                <p>CAR Size Limit</p>
-                <p>Pinning API</p>
               </div>
             </div>
             {plans.map(plan => (
@@ -47,7 +45,6 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
                     <p>{plan.additional_storage}</p>
                     <p>{plan.bandwidth}</p>
                     <p>{plan.block_limit}</p>
-                    <p>{plan.car_size_limit}</p>
                   </div>
 
                   {currentPlan?.id !== plan.id && plan.id !== 'earlyAdopter' && (

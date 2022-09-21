@@ -29,14 +29,15 @@ const PaymentMethodCard = ({ savedPaymentMethod, setEditingPaymentMethod }) => {
             <Button variant="outline-light" onClick={() => setEditingPaymentMethod(true)}>
               Edit Payment Method
             </Button>
-            <Button variant="text" onClick={() => setEditingPaymentMethod(true)}>
+            {/* uncomment this when we can make it functional (i.e. PUT /user/payment APIs with .paymentMethod=null) */
+            /* <Button variant="text" onClick={() => setEditingPaymentMethod(true)}>
               Remove Payment Method
-            </Button>
+            </Button> */}
           </div>
         </>
       ) : (
         <>
-          <Loading size="medium" message="fetching saved payment method..." />
+          <Loading size="medium" message="Fetching saved payment method&hellip;" />
           <br />
         </>
       )}
