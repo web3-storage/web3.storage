@@ -182,6 +182,9 @@ export default function Home() {
             </div>
           </section>
         </div>
+        <div className="sectionals" id="pricing_section_2">
+          hello world
+        </div>
       </main>
 
       <Scroll2Top />
