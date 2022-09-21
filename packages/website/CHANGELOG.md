@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.20.1](https://github.com/web3-storage/web3.storage/compare/website-v2.20.0...website-v2.20.1) (2022-09-21)
+
+
+### Bug Fixes
+
+* rm menu item from global account menu ([#1916](https://github.com/web3-storage/web3.storage/issues/1916)) ([29fef57](https://github.com/web3-storage/web3.storage/commit/29fef57896c0772d4b3457a3cdb70bf05dfda42a))
+
 ## [2.20.0](https://github.com/web3-storage/web3.storage/compare/website-v2.19.1...website-v2.20.0) (2022-09-21)
 
 
