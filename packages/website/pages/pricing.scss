@@ -19,13 +19,13 @@
   padding: 6rem 0;
 }
 
-#pricing_section_1,
-#pricing_section_3 {
+#tiered_pricing_section_1,
+#tiered_pricing_section_3 {
   position: relative;
   @include selection_Light;
 }
 
-#pricing_section_1 {
+#tiered_pricing_section_1 {
   z-index: 1;
   padding-bottom: 5rem;
 
@@ -357,14 +357,13 @@
   }
 }
 
-#pricing_section_2 {
+#tiered_pricing_section_2 {
   position: relative;
   z-index: 2;
-  padding: 10.25rem 0;
   @include background_Dark;
 }
 
-#pricing_section_3 {
+#tiered_pricing_section_3 {
   z-index: 2;
   padding-bottom: 12rem;
   &:before {
@@ -410,7 +409,7 @@
   }
 }
 
-#pricing_section_4 {
+#tiered_pricing_section_4 {
   position: relative;
   z-index: 6;
   background-color: $seaShell;
@@ -597,7 +596,7 @@
 }
 
 // --------------------------------------------------------------- Section [FAQ]
-#pricing_section_FAQ_info {
+#tiered_pricing_section_FAQ_info {
   position: relative;
   padding-bottom: 3rem;
   color: white;

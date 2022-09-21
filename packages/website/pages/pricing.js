@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <>
       <main className="page page-pricing">
-        <div className="sectionals" id="pricing_section_1">
+        <div className="sectionals" id="tiered_pricing_section_1">
           <GradientBackground variant="light" />
           <section id="section_pricing_header" className="sectional">
             <div className="grid-middle">
@@ -182,8 +182,86 @@ export default function Home() {
             </div>
           </section>
         </div>
-        <div className="sectionals" id="pricing_section_2">
-          hello world
+        <div className="sectionals" id="tiered_pricing_section_2">
+          <section id="tiered_pricing_section_FAQ_info" className="sectional">
+            <div className="grid-middle">
+              <div className="col-6_sm-8_mi-10_ti-12 column-1" data-push-left="off-0_sm-2_mi-1_ti-0">
+                <div className="column-content">
+                  <div className="block text-block format__medium">
+                    <h2 className="h2 heading">Frequently Asked Questions</h2>
+                    <div className="subheading">How is this free?</div>
+                    <div className="description">
+                      <p>
+                        Web3.Storage offers a simple interface that allows users and developers to take advantage of the
+                        vast array of decentralized storage provided by the Filecoin network.
+                      </p>
+                      <p>
+                        The unique economics of Filecoin allow Web3.Storage to be completely free to use, while still
+                        ensuring that storage providers have a strong incentive to preserve user data for the long term.
+                      </p>
+                    </div>
+                    <div className="button light cta Button">
+                      <button className="button-contents" type="button">
+                        MORE FAQs
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-5_sm-8_mi-10_ti-12 column-2" data-push-left="off-1_sm-2_mi-1_ti-0">
+                <div className="column-content">
+                  <div className="block image-block">
+                    img?
+                    <div className="image-label"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section id="section_FAQ_ctas" className="sectional">
+            <div className="grid">
+              <div className="col-12_sm-8_mi-10_ti-12 column-1" data-push-left="off-0_sm-2_mi-1_ti-0">
+                <div className="column-content">
+                  <div className="block card-list-block">
+                    <div className="card-row gap-3">
+                      <div className="card type__F">
+                        <div className="label">FAQ</div>
+                        <div className="feature-wrapper height-standard-target"></div>
+                        <div className="title">How is Web3.Storage different from NFT.Storage?</div>
+                        <div className="description height-standard-target" style={{ minHeight: '105px;' }}>
+                          <span>
+                            Both services are offered by the same group and share much of the same architecture, but as
+                            the name suggests, NFT.Storage is…
+                          </span>
+                        </div>
+                        <div className="button text-purple cta Button">
+                          <button className="button-contents" type="button">
+                            READ MORE
+                          </button>
+                        </div>
+                      </div>
+                      <div className="card type__F">
+                        <div className="label"> </div>
+                        <div className="feature-wrapper height-standard-target"></div>
+                        <div className="title">What happens if Web3.Storage is discontinued?</div>
+                        <div className="description height-standard-target" style={{ minHeight: '105px;' }}>
+                          <span>
+                            One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an
+                            alternative storage provider. All of your data…
+                          </span>
+                        </div>
+                        <div className="button text-purple cta Button">
+                          <button className="button-contents" type="button">
+                            READ MORE
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </main>
 
