@@ -3,6 +3,7 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
 import { userBillingSettings } from '../../../lib/api';
 import Button from '../../../components/button/button';
+import Loading from 'components/loading/loading';
 
 /**
  * @param {object} obj
@@ -14,6 +15,7 @@ import Button from '../../../components/button/button';
 const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, currentPlan }) => {
   const elements = useElements();
   const stripe = useStripe();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [paymentMethodError, setPaymentMethodError] = useState('');
   const handlePaymentMethodAdd = async event => {
@@ -27,6 +29,7 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, c
     const cardElement = elements.getElement(CardElement);
     if (cardElement) {
       try {
+        setIsLoading(true);
         const { paymentMethod, error } = await stripe.createPaymentMethod({
           type: 'card',
           card: cardElement,
@@ -43,6 +46,8 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, c
         if (error instanceof Error) message = error.message;
         else message = String(error);
         setPaymentMethodError(message);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -65,9 +70,12 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, c
         />
       </div>
       <div className="billing-validation">{paymentMethodError}</div>
-      <Button onClick={handlePaymentMethodAdd} variant="outline-light" disabled={!stripe}>
-        Add Card
-      </Button>
+      <div className="billing-card-add-card-wrapper">
+        <Button onClick={handlePaymentMethodAdd} variant="outline-light" disabled={!stripe}>
+          Add Card
+        </Button>
+        {isLoading && <Loading size="medium" message="Adding card info..." />}
+      </div>
     </form>
   );
 };

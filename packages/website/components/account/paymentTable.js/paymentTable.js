@@ -1,6 +1,6 @@
 import Button from '../../button/button.js';
 
-const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanModalOpen }) => {
+const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, setIsPaymentPlanModalOpen }) => {
   return (
     <>
       {currentPlan && (
@@ -29,7 +29,9 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanMo
             {plans.map(plan => (
               <div
                 key={plan.title}
-                className={`billing-card card-transparent ${currentPlan?.id === plan.id ? 'current' : ''}`}
+                className={`billing-card card-transparent ${
+                  currentPlan?.id === plan.id || (isEarlyAdopter && plan.id === 'earlyAdopter') ? 'current' : ''
+                }`}
               >
                 <div key={plan.title} className="billing-plan">
                   {/* <div className="billing-plan-overview"> */}
@@ -48,7 +50,7 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanMo
                     <p>{plan.car_size_limit}</p>
                   </div>
 
-                  {currentPlan?.id !== plan.id && (
+                  {currentPlan?.id !== plan.id && plan.id !== 'earlyAdopter' && (
                     <Button
                       variant="light"
                       className=""
@@ -61,11 +63,12 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanMo
                     </Button>
                   )}
 
-                  {currentPlan?.id === plan.id && (
-                    <Button variant="light" disabled={true} className="">
-                      Current Plan
-                    </Button>
-                  )}
+                  {currentPlan?.id === plan.id ||
+                    (isEarlyAdopter && plan.id === 'earlyAdopter' && (
+                      <Button variant="light" disabled={true} className="">
+                        Current Plan
+                      </Button>
+                    ))}
                 </div>
               </div>
             ))}

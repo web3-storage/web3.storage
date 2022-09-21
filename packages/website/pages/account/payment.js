@@ -20,6 +20,7 @@ const PaymentSettingsPage = props => {
   const stripePromise = loadStripe(props.stripePublishableKey);
   const [hasPaymentMethods, setHasPaymentMethods] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(/** @type {Plan | null} */ (null));
+  const [isEarlyAdopter, setIsEarlyAdopter] = useState(/** @type {boolean} */ (false));
   const [planSelection, setPlanSelection] = useState('');
   const [planList, setPlanList] = useState(/** @type {Plan[]}*/ (plans));
   const [savedPaymentMethod, setSavedPaymentMethod] = useState(/** @type {PaymentMethod} */ ({}));
@@ -69,6 +70,7 @@ const PaymentSettingsPage = props => {
   useEffect(() => {
     if (!currentPlan || currentPlan === null) {
       setPlanList(plansEarly);
+      setIsEarlyAdopter(true);
     } else {
       setPlanList(plans);
     }
@@ -100,8 +102,8 @@ const PaymentSettingsPage = props => {
             {!currentPlan && !loadingUserSettings && (
               <div className="add-billing-cta">
                 <p>
-                  You don&apos;t have a payment method. Please add one to prevent storage issues beyond your plan limits
-                  below.
+                  You don&apos;t have a paid plan. Please add a credit/debit card and select a plan to prevent storage
+                  issues beyond your plan limits below.
                 </p>
               </div>
             )}
@@ -112,6 +114,7 @@ const PaymentSettingsPage = props => {
               <PaymentTable
                 plans={planList}
                 currentPlan={currentPlan}
+                isEarlyAdopter={isEarlyAdopter}
                 setPlanSelection={setPlanSelection}
                 setIsPaymentPlanModalOpen={setIsPaymentPlanModalOpen}
               />

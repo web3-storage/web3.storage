@@ -40,7 +40,7 @@ export const freePlan = {
 };
 
 export const earlyAdopterPlan = {
-  id: null,
+  id: 'earlyAdopter',
   title: 'Early Adopter',
   description:
     'As an early adopter we appreciate your support and can continue to use the storage you are already accustomed to.',
