@@ -62,6 +62,7 @@ jobs:
         run: npm -w packages/api run stripe.com:fixtures
         env:
           STRIPE_API_KEY: ${{ secrets.TESTING_STRIPE_SECRET_KEY }}
+          DEVICE_NAME: "@web3-storage/api/.github/workflows/api.yml"
   release:
     name: Release
     runs-on: ubuntu-latest
@@ -101,3 +102,4 @@ jobs:
         run: npm -w packages/api run stripe.com:fixtures
         env:
           STRIPE_API_KEY: ${{ secrets.PROD_STRIPE_SECRET_KEY }}
+          DEVICE_NAME: "@web3-storage/api/.github/workflows/api.yml"

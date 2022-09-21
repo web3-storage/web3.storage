@@ -322,3 +322,13 @@ Production vars should be set in Github Actions secrets.
 We use [S3](https://aws.amazon.com/s3/) for backup and disaster recovery. For production an account on AWS needs to be created.
 
 Production vars should be set in Github Actions secrets.
+
+
+## stripe.com
+
+There are implementations of [billing-types](./src/utils/billing-types.ts) powered by [stripe.com](./src/utils/stripe.js), and these are used in staging and prod.
+They rely on certain resources existing in the stripe.com account configured by `STRIPE_SECRET_KEY` env var. If you have the stripe.com cli, you can use `stripe fixtures` to load the required fixtures from `packages/api/src/stripe.com/fixtures.json` into your stripe.com account. Indicate your desired stripe.com account by either first running `stripe login` or by providing env var `STRIPE_API_KEY` when invoking
+
+```
+npm -w packages/api run stripe.com:fixtures
+```
