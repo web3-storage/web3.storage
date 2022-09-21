@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.5.0](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.4.1...web3.storage-v4.5.0) (2022-09-20)
+
+
+### Features
+
+* issues/1779 - I can save my payment settings ([#1852](https://github.com/web3-storage/web3.storage/issues/1852)) ([a49e780](https://github.com/web3-storage/web3.storage/commit/a49e780a4c7c0a3680aa03239552b01f1fcf72ed))
+
 ## [4.4.1](https://github.com/web3-storage/web3.storage/compare/web3.storage-v4.4.0...web3.storage-v4.4.1) (2022-08-31)
 
 
