@@ -82,7 +82,8 @@ const PricingHeader = () => (
 );
 
 const Card = props => {
-  const { title, price, isBestValue, children, storageAllocation, storageOverageRate, callToAction } = props;
+  const { title, price, isBestValue, children, storageAllocation, storageOverageRate, callToAction, callToActionUrl } =
+    props;
   return (
     <div className="pricing-card">
       {!!isBestValue && <div className="best-value-adornment">Best Value!</div>}
@@ -98,7 +99,9 @@ const Card = props => {
         <div className="plan-summary">
           <div className="plan-storage-allocation">{storageAllocation}</div>
           <div className="plan-overage-rate">{storageOverageRate}</div>
-          <div className="plan-call-to-action">{callToAction}</div>
+          <a href={callToActionUrl}>
+            <div className="plan-call-to-action button dark Button">{callToAction}</div>
+          </a>
         </div>
       </div>
     </div>
@@ -117,6 +120,7 @@ const PricingTiers = () => (
               storageAllocation="5GiB storage"
               storageOverageRate=""
               callToAction="GET STARTED"
+              callToActionUrl="/account/payment?plan=free"
             >
               <li>Easily store your data and make it available on IPFS</li>
               <li>All data is replicated onto the Filecoin storage network for verifiability that your data is safe</li>
@@ -129,6 +133,7 @@ const PricingTiers = () => (
               storageAllocation="15GiB storage"
               storageOverageRate="+ $0.20/mo per additional GiB"
               callToAction="CHOOSE THIS PLAN"
+              callToActionUrl="/account/payment?plan=lite"
             >
               <li>
                 <i>Everything from the Free tier, plus...</i>
@@ -144,6 +149,7 @@ const PricingTiers = () => (
               storageAllocation="60GiB storage"
               storageOverageRate="+ $0.17/mo per additional GiB"
               callToAction="CHOOSE THIS PLAN"
+              callToActionUrl="/account/payment?plan=pro"
             >
               <li>
                 <i>Everything from the Lite tier, plus...</i>
