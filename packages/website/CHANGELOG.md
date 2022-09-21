@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.20.0](https://github.com/web3-storage/web3.storage/compare/website-v2.19.1...website-v2.20.0) (2022-09-21)
+
+
+### Features
+
+* I can choose a storage pricing tier (issue 1869) ([#1878](https://github.com/web3-storage/web3.storage/issues/1878)) ([58de180](https://github.com/web3-storage/web3.storage/commit/58de180300e72f7a79193657a7d995f0799bae28))
+
+
+### Bug Fixes
+
+* bugs saving credit card at /account/payment for the first time ([#1913](https://github.com/web3-storage/web3.storage/issues/1913)) ([724e3ab](https://github.com/web3-storage/web3.storage/commit/724e3abba4053dc18189942f84de81f0d6cdb083))
+* make browser update versions absolute ([#1887](https://github.com/web3-storage/web3.storage/issues/1887)) ([bca96fa](https://github.com/web3-storage/web3.storage/commit/bca96faaa2e9853d3e39ece54725edaed680139d))
+
+
+### Other Changes
+
+* **docs:** add curl CAR upload example to store howto ([#1735](https://github.com/web3-storage/web3.storage/issues/1735)) ([54e31d9](https://github.com/web3-storage/web3.storage/commit/54e31d9b76dcb85888a3a082384afe43c30f5159))
+
 ## [2.19.1](https://github.com/web3-storage/web3.storage/compare/website-v2.19.0...website-v2.19.1) (2022-09-09)
 
 
