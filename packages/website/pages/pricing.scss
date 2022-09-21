@@ -362,25 +362,6 @@
   z-index: 2;
   padding: 10.25rem 0;
   @include background_Dark;
-
-  &:before {
-    content: '';
-    position: absolute;
-    width: calc($containerWidth + 9rem);
-    height: calc(100% - 20rem);
-    top: 10rem;
-    border-radius: 0.5rem;
-    opacity: 0.15;
-    background-color: $waterloo;
-    pointer-events: none;
-    @include shadow1;
-    z-index: 0;
-    left: calc(50% - #{math.div($containerWidth, 2)} - 4.5rem);
-    @include medium {
-      left: 10px;
-      width: calc(100% - 20px);
-    }
-  }
 }
 
 #pricing_section_3 {
