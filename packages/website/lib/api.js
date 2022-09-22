@@ -104,9 +104,21 @@ export async function createUserRequest(tagName, requestedTagValue, userProposal
   }
 }
 
-export async function createUnlimitedStorageRequest(authMethod, links, dataVolume, dataReadTypeAndFrequency, additionalInfo) {
+export async function createUnlimitedStorageRequest(authMethod, links, dataVolume) {
   await createUserRequest(
     'StorageLimitBytes',
+    '',
+    JSON.stringify([
+      { label: 'Auth Method', value: authMethod },
+      { label: 'Links', value: links },
+      { label: 'Data Volume', value: dataVolume },
+    ])
+  );
+}
+
+export async function createEnterpriseTierRequest(authMethod, links, dataVolume, dataReadTypeAndFrequency, additionalInfo) {
+  await createUserRequest(
+    'StorageLimitBytes', // TODO: what should this be?
     '',
     JSON.stringify([
       { label: 'Auth Method', value: authMethod },
