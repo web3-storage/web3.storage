@@ -67,6 +67,9 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     needs: test
+    environment:
+      name: production
+      url: https://api.web3.storage
     steps:
       - uses: GoogleCloudPlatform/release-please-action@v3
         id: tag-release
@@ -102,5 +105,5 @@ jobs:
         if: ${{ steps.tag-release.outputs.releases_created }}
         run: npm -w packages/api run stripe.com:fixtures
         env:
-          STRIPE_API_KEY: ${{ secrets.PROD_STRIPE_SECRET_KEY }}
+          STRIPE_API_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           DEVICE_NAME: "@web3-storage/api/.github/workflows/api.yml"
