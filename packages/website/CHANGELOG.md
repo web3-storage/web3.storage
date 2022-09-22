@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.20.2](https://github.com/web3-storage/web3.storage/compare/website-v2.20.1...website-v2.20.2) (2022-09-22)
+
+
+### Other Changes
+
+* rm unnecessary comment in packages/website to trigger release-please … ([#1932](https://github.com/web3-storage/web3.storage/issues/1932)) ([39969c2](https://github.com/web3-storage/web3.storage/commit/39969c27d4ba7b4b47069623dba670fd9470c952))
+
 ## [2.20.1](https://github.com/web3-storage/web3.storage/compare/website-v2.20.0...website-v2.20.1) (2022-09-21)
 
 
