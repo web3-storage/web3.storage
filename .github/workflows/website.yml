@@ -260,6 +260,9 @@ jobs:
     if: (github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created) || inputs.force_release
     name: Release
     runs-on: ubuntu-latest
+    environment: 
+      name: production
+      url: https://web3.storage
     needs:
       - test
       - test-e2e
@@ -280,7 +283,7 @@ jobs:
           NEXT_PUBLIC_MAGIC: ${{ secrets.PROD_MAGIC_PUBLIC_KEY }}
           NEXT_PUBLIC_COUNTLY_URL: ${{ secrets.COUNTLY_URL }}
           NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
-          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.TESTING_STRIPE_PUBLISHABLE_KEY }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
       - name: Add to web3.storage
         uses: web3-storage/add-to-web3@v2
         id: ipfs
