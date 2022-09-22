@@ -22,6 +22,36 @@ const CustomStorageForm = ({ onClose }) => {
       <h3>Enterprise user inquiry</h3>
       <div className="fields">
         <div className="input-wrapper">
+          <label htmlFor="first-name">
+            First name<span className="text-red">*</span>
+          </label>
+          <input
+            type="text"
+            name="first-name"
+            id="first-name"
+            autoComplete="given-name"
+            // @ts-ignore
+            rules="required"
+            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
+          />
+        </div>
+
+        <div className="input-wrapper">
+          <label htmlFor="last-name">
+            Last name<span className="text-red">*</span>
+          </label>
+          <input
+            type="text"
+            name="last-name"
+            id="last-name"
+            // @ts-ignore
+            rules="required"
+            autoComplete="family-name"
+            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
+          />
+        </div>
+
+        <div className="input-wrapper">
           <label htmlFor="email">
             Email address associated with your web3.storage account
             <span className="text-red">*</span>
@@ -38,55 +68,27 @@ const CustomStorageForm = ({ onClose }) => {
           />
         </div>
         <div className="input-wrapper">
-          <label htmlFor="size">Please share links for what you’re building.</label>
-          <input
-            id="links"
-            name="links"
-            type="text"
-            placeholder="Github, website, etc"
-            // @ts-ignore
-            rules="required"
-            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
-          />
-        </div>
-        <div className="input-wrapper">
           <label htmlFor="size">Estimated amount of storage in GiB</label>
           <input
             id="size"
             name="size"
             type="text"
             placeholder="10,000"
-            // @ts-ignore
-            rules="required"
             className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
           />
         </div>
         <div className="input-wrapper">
-          <label htmlFor="company_name">How do you plan on reading data uploaded to web3.storage?</label>
+          <label htmlFor="company_name">Company Name (if applicable)</label>
           <input
-            id="how_read"
-            name="how_read"
+            id="company_name"
+            name="company_name"
             type="text"
-            placeholder="w3link gateway, other gateway, directly over bitswap, etc."
-            // @ts-ignore
-            rules="required"
+            placeholder=""
             className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
           />
         </div>
         <div className="input-wrapper">
-          <label htmlFor="anything_else">How frequently do you plan on reading data?</label>
-          <input
-            id="read_freq"
-            name="read_freq"
-            type="text"
-            placeholder="1 GiB / day"
-            // @ts-ignore
-            rules="required"
-            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
-          />
-        </div>
-        <div className="input-wrapper">
-          <label htmlFor="anything_else">Is there any additional usage information we should know about?</label>
+          <label htmlFor="anything_else">Any other details we should know about</label>
           <input
             id="anything_else"
             name="anything_else"
