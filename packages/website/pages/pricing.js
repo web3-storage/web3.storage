@@ -242,7 +242,7 @@ const FaqSection = () => (
                     </Button>
                   </div>
                   <div className="card type__F">
-                    <div className="label"> </div>
+                    <div className="label">FAQ</div>
                     <div className="feature-wrapper height-standard-target"></div>
                     <div className="title">What happens if Web3.Storage is discontinued?</div>
                     <div className="description height-standard-target" style={{ minHeight: '105px;' }}>
