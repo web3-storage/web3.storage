@@ -97,7 +97,6 @@ jobs:
   # just for devving this workflow
   stripe-fixtures-test:
     runs-on: ubuntu-latest
-    needs: deploy-staging
     environment:
       name: staging
     steps:
