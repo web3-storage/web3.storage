@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.7.0](https://github.com/web3-storage/web3.storage/compare/api-v7.6.0...api-v7.7.0) (2022-09-22)
+
+
+### Features
+
+* 1909 use stripe fixtures for website storage productprices ([#1920](https://github.com/web3-storage/web3.storage/issues/1920)) ([63d15ff](https://github.com/web3-storage/web3.storage/commit/63d15ff222ac39a59acf6380686fe0524e92a7b6))
+
 ## [7.6.0](https://github.com/web3-storage/web3.storage/compare/api-v7.5.1...api-v7.6.0) (2022-09-20)
 
 
