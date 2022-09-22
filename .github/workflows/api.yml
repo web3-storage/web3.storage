@@ -100,12 +100,9 @@ jobs:
     environment:
       name: staging
     steps:
-      - name: install stripe cli
-        run: |
-          docker run --rm stripe/stripe-cli version
       - name: put stripe.com fixtures
         if: ${{ steps.tag-release.outputs.releases_created }}
-        run: npm -w packages/api run stripe.com:fixtures
+        run: npm -w packages/api run stripe.com:fixtures:docker
         env:
           STRIPE_API_KEY: ${{ secrets.TESTING_STRIPE_SECRET_KEY }}
           DEVICE_NAME: "@web3-storage/api/.github/workflows/api.yml"  
@@ -117,7 +114,7 @@ jobs:
     steps:
       - name: put stripe.com fixtures
         if: ${{ steps.tag-release.outputs.releases_created }}
-        run: npm -w packages/api run stripe.com:fixtures
+        run: npm -w packages/api run stripe.com:fixtures:docker
         env:
           STRIPE_API_KEY: ${{ secrets.TESTING_STRIPE_SECRET_KEY }}
           DEVICE_NAME: "@web3-storage/api/.github/workflows/api.yml"
@@ -129,7 +126,7 @@ jobs:
     steps:
       - name: put stripe.com fixtures
         if: ${{ steps.tag-release.outputs.releases_created }}
-        run: npm -w packages/api run stripe.com:fixtures
+        run: npm -w packages/api run stripe.com:fixtures:docker
         env:
           STRIPE_API_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           DEVICE_NAME: "@web3-storage/api/.github/workflows/api.yml"

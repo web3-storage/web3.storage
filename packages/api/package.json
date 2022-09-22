@@ -32,7 +32,8 @@
     "miniflare": "miniflare dist/worker.js --modules --env ../../.env --r2 CARPARK $API_MINIFLARE_FLAGS --watch",
     "lint": "standard --verbose",
     "lint:fix": "npm run lint -- --fix",
-    "stripe.com:fixtures": "stripe fixtures src/stripe.com/fixtures.json"
+    "stripe.com:fixtures": "stripe fixtures src/stripe.com/fixtures.json",
+    "stripe.com:fixtures:docker": "docker run --rm -v $(pwd)/src/stripe.com:/stripe.com -e STRIPE_API_KEY -e DEVICE_NAME stripe/stripe-cli fixtures /stripe.com/fixtures.json"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.16.0",
