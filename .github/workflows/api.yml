@@ -102,7 +102,7 @@ jobs:
     steps:
       - name: install stripe cli
         run: |
-          docker run --rm -it stripe/stripe-cli version
+          docker run --rm stripe/stripe-cli version
       - name: put stripe.com fixtures
         if: ${{ steps.tag-release.outputs.releases_created }}
         run: npm -w packages/api run stripe.com:fixtures
