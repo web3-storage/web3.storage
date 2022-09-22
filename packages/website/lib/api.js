@@ -104,7 +104,7 @@ export async function createUserRequest(tagName, requestedTagValue, userProposal
   }
 }
 
-export async function createUnlimitedStorageRequest(authMethod, links, dataVolume) {
+export async function createUnlimitedStorageRequest(authMethod, links, dataVolume, dataReadTypeAndFrequency, additionalInfo) {
   await createUserRequest(
     'StorageLimitBytes',
     '',
@@ -112,6 +112,8 @@ export async function createUnlimitedStorageRequest(authMethod, links, dataVolum
       { label: 'Auth Method', value: authMethod },
       { label: 'Links', value: links },
       { label: 'Data Volume', value: dataVolume },
+      { label: 'Data Read Type And Frequency', value: dataReadTypeAndFrequency },
+      { label: 'Additional Info', value: additionalInfo },
     ])
   );
 }

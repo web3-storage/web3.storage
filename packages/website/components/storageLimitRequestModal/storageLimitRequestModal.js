@@ -16,11 +16,13 @@ const UserRequestModal = ({ isOpen, onClose }) => {
     const authMethod = data.get('auth-method');
     const links = data.get('links');
     const dataVolume = data.get('data-volume');
+    const dataReadTypeAndFrequency = data.get('data-read-type-and-frequency');
+    const additionalInfo = data.get('additional-info');
 
     if (authMethod && links && dataVolume) {
       setRequesting(true);
       try {
-        await createUnlimitedStorageRequest(authMethod, links, dataVolume);
+        await createUnlimitedStorageRequest(authMethod, links, dataVolume, dataReadTypeAndFrequency, additionalInfo);
       } finally {
         setRequesting(false);
         onClose();
@@ -55,11 +57,11 @@ const UserRequestModal = ({ isOpen, onClose }) => {
               <textarea id="data-volume" name="data-volume" required rows={2} />
             </div>
             <div className="input-container">
-              <label htmlFor="data-read-write">
+              <label htmlFor="data-read-type-and-frequency">
                 How do you plan on reading data uploaded to web3.storage (E.g., w3link gateway, other gateway, directly
                 over bitswap, etc.)? How frequently do you plan on reading data?{' '}
               </label>
-              <textarea id="data-read-write" name="data-read-write" required rows={2} />
+              <textarea id="data-read-type-and-frequency" name="data-read-type-and-frequency" required rows={2} />
             </div>
             <div className="input-container">
               <label htmlFor="additional-info">Is there any additional usage information we should know about? </label>
