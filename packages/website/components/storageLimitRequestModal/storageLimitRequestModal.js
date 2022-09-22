@@ -36,28 +36,34 @@ const UserRequestModal = ({ isOpen, onClose }) => {
         modalState={[isOpen, onClose]}
         showCloseButton
       >
-        <GradientBackground variant="saturated-variant" />
         <div className="user-request-modal__container">
-          <h1 className="user-request-modal__heading">Storage Limit Increase Request</h1>
+          <GradientBackground variant="saturated-variant" />
+          <h1 className="user-request-modal__heading">Enterprise Storage Inquiry</h1>
           <form onSubmit={handleCreateUserRequest}>
             <div className="input-container">
-              <label htmlFor="auth-method">
-                Please share the user authentication method (Github, Email) associated with your account{' '}
-              </label>
+              <label htmlFor="auth-method">Please share your email address. </label>
               <textarea id="auth-method" name="auth-method" required rows={1} />
             </div>
             <div className="input-container">
-              <label htmlFor="links">
-                Please share links (Github, website, etc) for what you&apos;re building. This is to help ensure the
-                service is not being used in violation of our terms of service.{' '}
-              </label>
+              <label htmlFor="links">Please share links (Github, website, etc) for what you&apos;re building. </label>
               <textarea id="links" name="links" required rows={4} />
             </div>
             <div className="input-container">
               <label htmlFor="data-volume">
-                Please provide a ballpark estimate for your data volume (both in aggregate and over a given week).
+                Please provide a ballpark estimate for your data volume (both in aggregate and over a given month).{' '}
               </label>
-              <textarea id="data-volume" name="data-volume" required rows={1} />
+              <textarea id="data-volume" name="data-volume" required rows={2} />
+            </div>
+            <div className="input-container">
+              <label htmlFor="data-read-write">
+                How do you plan on reading data uploaded to web3.storage (E.g., w3link gateway, other gateway, directly
+                over bitswap, etc.)? How frequently do you plan on reading data?{' '}
+              </label>
+              <textarea id="data-read-write" name="data-read-write" required rows={2} />
+            </div>
+            <div className="input-container">
+              <label htmlFor="additional-info">Is there any additional usage information we should know about? </label>
+              <textarea id="additional-info" name="additional-info" required rows={4} />
             </div>
 
             <div className="input-container">

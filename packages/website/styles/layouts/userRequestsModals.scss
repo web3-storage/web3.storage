@@ -49,6 +49,14 @@
     width: 100%;
   }
 
+  .gradient-background-component.saturated-variant {
+    top: -2rem;
+    left: -2rem;
+    width: calc(100% + 4rem);
+    height: calc(100% + 4rem);
+    transform: scale(1.1);
+  }
+
   > * {
     position: relative;
   }
