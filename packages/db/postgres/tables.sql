@@ -270,6 +270,10 @@ CREATE INDEX IF NOT EXISTS upload_user_id_deleted_at_idx ON upload (user_id) WHE
 CREATE INDEX IF NOT EXISTS upload_content_cid_idx ON upload (content_cid);
 CREATE INDEX IF NOT EXISTS upload_name_idx ON upload (name);
 CREATE INDEX IF NOT EXISTS upload_type_idx ON upload (type);
+CREATE INDEX IF NOT EXISTS upload_type_car_idx ON upload (type) WHERE type = 'Car';
+CREATE INDEX IF NOT EXISTS upload_type_upload_idx ON upload (type) WHERE type = 'Upload';
+CREATE INDEX IF NOT EXISTS upload_type_multipart_idx ON upload (type) WHERE type = 'Multipart';
+CREATE INDEX IF NOT EXISTS upload_type_blob_idx ON upload (type) WHERE type = 'Blob';
 CREATE INDEX IF NOT EXISTS upload_inserted_at_idx ON upload (inserted_at);
 CREATE INDEX IF NOT EXISTS upload_updated_at_idx ON upload (updated_at);
 CREATE INDEX IF NOT EXISTS upload_source_cid_idx ON upload (source_cid);
