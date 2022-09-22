@@ -26,6 +26,7 @@ const PaymentSettingsPage = props => {
   const [savedPaymentMethod, setSavedPaymentMethod] = useState(/** @type {PaymentMethod} */ ({}));
   const [editingPaymentMethod, setEditingPaymentMethod] = useState(false);
   const [loadingUserSettings, setLoadingUserSettings] = useState(true);
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
   /**
    * @typedef {Object} Plan
@@ -158,7 +159,10 @@ const PaymentSettingsPage = props => {
         </div>
         <AccountPlansModal
           isOpen={isPaymentPlanModalOpen}
-          onClose={() => setIsPaymentPlanModalOpen(false)}
+          onClose={() => {
+            setIsPaymentPlanModalOpen(false);
+            setHasAcceptedTerms(false);
+          }}
           planList={planList}
           planSelection={planSelection}
           setCurrentPlan={setCurrentPlan}
@@ -166,6 +170,8 @@ const PaymentSettingsPage = props => {
           stripePromise={stripePromise}
           setHasPaymentMethods={setHasPaymentMethods}
           setEditingPaymentMethod={setEditingPaymentMethod}
+          setHasAcceptedTerms={setHasAcceptedTerms}
+          hasAcceptedTerms={hasAcceptedTerms}
         />
       </>
     </>
