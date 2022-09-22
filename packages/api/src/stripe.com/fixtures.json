@@ -1,0 +1,131 @@
+{
+  "_meta": {
+    "template_version": 0
+  },
+  "fixtures": [
+    {
+      "name": "product_storage",
+      "path": "/v1/products",
+      "method": "post",
+      "params": {
+          "name": "web3.storage",
+          "description": "storage on https://web3.storage",
+          "metadata": {
+          },
+          "unit_label": "GiB * mo",
+          "url": "https://web3.storage"
+      }
+    },
+    {
+      "name": "price_storage_free",
+      "path": "/v1/prices",
+      "method": "post",
+      "params": {
+          "product": "${product_storage:id}",
+          "billing_scheme": "tiered",
+          "metadata": {
+            "Bandwidth": " 10GiB / month",
+            "Block Limits": " 2,500 / GiB",
+            "CAR Size Limit": "5MiB",
+            "Name": "Free"
+          },
+          "nickname": "Free",
+          "recurring": {
+            "aggregate_usage": "max",
+            "interval": "month",
+            "interval_count": 1,
+            "trial_period_days": null,
+            "usage_type": "metered"
+          },
+          "tiers_mode": "graduated",
+          "currency": "usd",
+          "tiers": [
+            {
+              "flat_amount": 0,
+              "unit_amount": 0,
+              "up_to": 5
+            },
+            {
+              "flat_amount": 0,
+              "unit_amount": 20,
+              "up_to": "inf"
+            }
+          ]
+      }
+    },
+    {
+      "name": "price_storage_lite",
+      "path": "/v1/prices",
+      "method": "post",
+      "params": {
+          "product": "${product_storage:id}",
+          "billing_scheme": "tiered",
+          "metadata": {
+            "Bandwidth": "120GiB / month",
+            "Block Limits": "10,000 / GiB",
+            "CAR Size Limit": "5MiB",
+            "Name": "Lite"
+          },
+          "nickname": "Lite",
+          "recurring": {
+            "aggregate_usage": "max",
+            "interval": "month",
+            "interval_count": 1,
+            "trial_period_days": null,
+            "usage_type": "metered"
+          },
+          "tiers_mode": "graduated",
+          "currency": "usd",
+          "tiers": [
+            {
+              "flat_amount": 300,
+              "unit_amount": 0,
+              "up_to": 15
+            },
+            {
+              "flat_amount": null,
+              "unit_amount": 20,
+              "up_to": "inf"
+            }
+          ]
+      }
+    },
+    {
+      "name": "price_storage_pro",
+      "path": "/v1/prices",
+      "method": "post",
+      "params": {
+          "product": "${product_storage:id}",
+          "billing_scheme": "tiered",
+          "metadata": {
+            "Bandwidth": "120GiB / month",
+            "Block Limits": "10,000 / GiB",
+            "CAR Size Limit": "5MiB",
+            "Name": "Pro"
+          },
+          "nickname": "Pro",
+          "recurring": {
+            "aggregate_usage": "max",
+            "interval": "month",
+            "interval_count": 1,
+            "trial_period_days": null,
+            "usage_type": "metered"
+          },
+          "tiers_mode": "graduated",
+          "currency": "usd",
+          "tiers": [
+            {
+              "flat_amount": 1000,
+              "unit_amount": 0,
+              "up_to": 60
+            },
+            {
+              "flat_amount": null,
+              "unit_amount": 20,
+              "up_to": "inf"
+            }
+          ]
+      }
+    }
+  ]
+}

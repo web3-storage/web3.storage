@@ -58,10 +58,18 @@ jobs:
           npm run build -w packages/client
           echo "$(date --utc --iso-8601=seconds) web3.storage upload test" > ./upload-test-small
           ./packages/w3/bin.js put ./upload-test-small --api https://api-staging.web3.storage --token ${{ secrets.STAGING_WEB3_TOKEN }}
+      - name: put stripe.com fixtures
+        run: npm -w packages/api run stripe.com:fixtures
+        env:
+          STRIPE_API_KEY: ${{ secrets.TESTING_STRIPE_SECRET_KEY }}
+          DEVICE_NAME: "@web3-storage/api/.github/workflows/api.yml"
   release:
     name: Release
     runs-on: ubuntu-latest
     needs: test
+    environment:
+      name: production
+      url: https://api.web3.storage
     steps:
       - uses: GoogleCloudPlatform/release-please-action@v3
         id: tag-release
@@ -93,3 +101,9 @@ jobs:
           apiToken: ${{ secrets.CF_TOKEN }}
           workingDirectory: 'packages/api'
           environment: 'production'
+      - name: put stripe.com fixtures
+        if: ${{ steps.tag-release.outputs.releases_created }}
+        run: npm -w packages/api run stripe.com:fixtures
+        env:
+          STRIPE_API_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          DEVICE_NAME: "@web3-storage/api/.github/workflows/api.yml"
