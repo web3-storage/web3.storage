@@ -101,7 +101,6 @@ jobs:
       name: staging
     steps:
       - name: put stripe.com fixtures
-        if: ${{ steps.tag-release.outputs.releases_created }}
         run: npm -w packages/api run stripe.com:fixtures:docker
         env:
           STRIPE_API_KEY: ${{ secrets.TESTING_STRIPE_SECRET_KEY }}
