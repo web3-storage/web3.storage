@@ -8,6 +8,7 @@ import ImageTriangle from 'public/images/illustrations/triangle.png';
 import ImageTriangle1 from 'public/images/illustrations/triangle1.png';
 import BlobCluster from 'public/images/illustrations/blob-cluster.png';
 import Cluster1 from 'public/images/index/cluster-1.png';
+import Button from 'ZeroComponents/button/button';
 
 const PricingHeader = () => (
   <>
@@ -207,11 +208,9 @@ const FaqSection = () => (
                     ensuring that storage providers have a strong incentive to preserve user data for the long term.
                   </p>
                 </div>
-                <div className="button light cta Button">
-                  <button className="button-contents" type="button">
-                    MORE FAQs
-                  </button>
-                </div>
+                <Button className="button light cta" href="/faq/?section=service">
+                  MORE FAQs
+                </Button>
               </div>
             </div>
           </div>
@@ -238,11 +237,9 @@ const FaqSection = () => (
                         name suggests, NFT.Storage is…
                       </span>
                     </div>
-                    <div className="button text-purple cta Button">
-                      <button className="button-contents" type="button">
-                        READ MORE
-                      </button>
-                    </div>
+                    <Button className="button text-purple cta" href="/faq/?section=service">
+                      READ MORE
+                    </Button>
                   </div>
                   <div className="card type__F">
                     <div className="label"> </div>
@@ -254,11 +251,9 @@ const FaqSection = () => (
                         alternative storage provider. All of your data…
                       </span>
                     </div>
-                    <div className="button text-purple cta Button">
-                      <button className="button-contents" type="button">
-                        READ MORE
-                      </button>
-                    </div>
+                    <Button className="button text-purple cta" href="/faq/?section=data-security">
+                      READ MORE
+                    </Button>
                   </div>
                 </div>
               </div>
