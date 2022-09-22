@@ -6,7 +6,7 @@ import { E2EScreenshotPath } from './screenshots';
 const MAGIC_SUCCESS_EMAIL = 'test+success@magic.link';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/', { waitUntil: 'commit' });
+  await page.goto('/', { waitUntil: 'load' });
 });
 
 test.describe('/account/payment', () => {

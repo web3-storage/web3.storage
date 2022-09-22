@@ -15,6 +15,10 @@ export function getStaticProps() {
 
 const Callback = () => {
   const router = useRouter();
+  console.log('callback router', {
+    router,
+    query: router.query,
+  });
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -33,7 +37,10 @@ const Callback = () => {
       try {
         await redirectMagic();
         await queryClient.invalidateQueries('magic-user');
-        router.push('/account');
+        const redirectUriQuery = router.query.redirect_uri;
+        const redirectUri =
+          redirectUriQuery && Array.isArray(redirectUriQuery) ? redirectUriQuery[0] : redirectUriQuery;
+        router.push(redirectUri ?? '/account');
       } catch (err) {
         console.error(err);
         await queryClient.invalidateQueries('magic-user');

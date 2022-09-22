@@ -14,12 +14,24 @@ const LoginType = {
   EMAIL: 'email',
 };
 
+/**
+ * Get the first thing
+ * @template T
+ * @param {T | T[] | undefined} thingOrThings
+ */
+function first(thingOrThings) {
+  if (Array.isArray(thingOrThings)) {
+    return thingOrThings[0];
+  }
+  return thingOrThings;
+}
+
 const Login = () => {
   // App query client
   const queryClient = useQueryClient();
 
   // App wide methods
-  const { push } = useRouter();
+  const { push, query } = useRouter();
 
   // Error states
   const [errors, setErrors] = useState(/** @type {{email?: string}} */ ({}));
@@ -37,7 +49,7 @@ const Login = () => {
     setErrors({ email: undefined });
     setIsLoggingIn(LoginType.EMAIL);
     try {
-      await loginEmail(email || '');
+      await loginEmail(email || '', first(query.redirect_uri));
       await queryClient.invalidateQueries('magic-user');
       push('/account');
     } catch (error) {
@@ -48,7 +60,7 @@ const Login = () => {
       // @ts-ignore Catch clause variable type annotation must be 'any' or 'unknown' if specified.ts(1196)
       setErrors({ email: error.message });
     }
-  }, [email, push, queryClient]);
+  }, [email, push, queryClient, query.redirect_uri]);
 
   // Callback for github login logic
   const onGithubLogin = useCallback(async () => {
