@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.7.1](https://github.com/web3-storage/web3.storage/compare/api-v7.7.0...api-v7.7.1) (2022-09-23)
+
+
+### Other Changes
+
+* report error cause to sentry ([#1925](https://github.com/web3-storage/web3.storage/issues/1925)) ([69653b7](https://github.com/web3-storage/web3.storage/commit/69653b7b691b586c0de70f2acc34abc0330eec90))
+
 ## [7.7.0](https://github.com/web3-storage/web3.storage/compare/api-v7.6.0...api-v7.7.0) (2022-09-22)
 
 
