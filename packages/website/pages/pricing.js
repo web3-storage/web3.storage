@@ -198,6 +198,7 @@ const FaqSection = () => (
               <div className="block text-block format__medium">
                 <h2 className="h2 heading">Frequently Asked Questions</h2>
                 <div className="subheading">How is this free?</div>
+                {/* TODO: Update wording to whatever the new copy is */}
                 <div className="description">
                   <p>
                     Web3.Storage offers a simple interface that allows users and developers to take advantage of the
@@ -214,7 +215,7 @@ const FaqSection = () => (
               </div>
             </div>
           </div>
-          <div className="col-5_sm-8_mi-10_ti-12 column-2" data-push-left="off-1_sm-2_mi-1_ti-0">
+          <div className="col-5_sm-8_mi-10_ti-12 column-2">
             <div className="column-content">
               <Img alt="" src={Cluster1} />
             </div>
@@ -260,9 +261,140 @@ const FaqSection = () => (
             </div>
           </div>
         </div>
+        <div className="grid">
+          <div className="col-6_sm-6_mi-6_ti-6 column-1">
+            <div className="column-content">
+              <div className="section_trusted_by_the_future">
+                <div className="tbtf_title">Trusted by the future</div>
+                <div className="tbtf_blurb">
+                  <p>
+                    Web3.Storage is the easiest way to build on the decentralized web from hackathon projects to
+                    production code at scale.
+                  </p>
+                  <p>See what people building the future of the web today have to say, and get started.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   </>
+);
+
+const LinkSection = () => (
+  <div className="sectionals" id="tiered_pricing_section_3">
+    <section id="section_explore-docs" className="sectional">
+      <div className="grid-noGutter">
+        <div className="col-3_md-7_ti-8 column-1" data-push-left="off-0_md-1_sm-0">
+          <div className="column-content">
+            <div className="block text-block format__medium">
+              <h2 className="h2 heading">Open product. Open book.</h2>
+              <div className="button dark cta Button">
+                <button className="button-contents" type="button">
+                  EXPLORE DOCS
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-8_md-10_sm-12_mi-10 column-2" data-push-left="off-1_md-1_sm-0_mi-1">
+          <div className="column-content">
+            <div className="block card-list-block">
+              <div className="card-row gap-2">
+                <div className="card type__D">
+                  <div className="feature-wrapper">
+                    <div className="category">
+                      <div className="category-heading">Welcome</div>
+                      <a className="category-link" tabIndex={0} href="/docs/#quickstart">
+                        Quickstart
+                      </a>
+                      <a className="category-link" tabIndex={0} href="/docs/#create-an-account">
+                        Create an Account
+                      </a>
+                      <a className="category-link" tabIndex={0} href="/docs/#get-an-api-token">
+                        Get an API token
+                      </a>
+                      <a className="category-link" tabIndex={0} href="/docs/#create-the-upload-script">
+                        Create the Upload Script
+                      </a>
+                      <a className="category-link" tabIndex={0} href="/docs/#run-the-script">
+                        Run the Script
+                      </a>
+                      <a className="category-link" tabIndex={0} href="/docs/#get-your-file">
+                        Get your file
+                      </a>
+                      <a className="category-link" tabIndex={0} href="/docs/#next-steps">
+                        Next Steps
+                      </a>
+                    </div>
+                    <div className="category">
+                      <div className="category-heading">Concepts</div>
+                      <a className="category-link" tabIndex={0} href="/docs/concepts/content-addressing/">
+                        Content Addressing
+                      </a>
+                      <a className="category-link" tabIndex={0} href="/docs/concepts/decentralized-storage/">
+                        Decentralized Storage
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="card type__D">
+                  <div className="feature-wrapper">
+                    <div className="category">
+                      <div className="category-heading">How-tos</div>
+                      <a className="category-link" tabIndex={0} href="/docs/how-tos/store/">
+                        Store
+                      </a>
+                      <a className="category-link" tabIndex={0} href="/docs/how-tos/retrieve/">
+                        Retrieve
+                      </a>
+                      <a className="category-link" tabIndex={0} href="/docs/how-tos/query/">
+                        Query
+                      </a>
+                      <a className="category-link" tabIndex={0} href="/docs/how-tos/list/">
+                        List
+                      </a>
+                      <a className="category-link" tabIndex={0} href="/docs/how-tos/work-with-car-files/">
+                        Work with Content
+                      </a>
+                      <a className="category-link" tabIndex={0} href="/docs/how-tos/generate-api-token/">
+                        Generate an API Token
+                      </a>
+                      <a className="category-link" tabIndex={0} href="/docs/how-tos/troubleshooting/">
+                        Troubleshooting
+                      </a>
+                    </div>
+                    <div className="category">
+                      <div className="category-heading">Reference</div>
+                      <a className="category-link" tabIndex={0} href="/docs/reference/http-api/">
+                        HTTP API Reference
+                      </a>
+                      <a className="category-link" tabIndex={0} href="/docs/reference/js-client-library/">
+                        Javascript Client Library
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-3 column-3">
+          <div className="column-content">
+            <div className="block text-block format__medium">
+              <h2 className="h2 heading">Open product. Open book.</h2>
+              <div className="button dark cta Button">
+                <button className="button-contents" type="button">
+                  EXPLORE DOCS
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 );
 
 export default function Home() {
@@ -275,6 +407,7 @@ export default function Home() {
           <PricingTiers />
         </div>
         <FaqSection />
+        <LinkSection />
       </main>
 
       <Scroll2Top />
