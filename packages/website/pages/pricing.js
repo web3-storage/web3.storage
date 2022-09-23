@@ -140,7 +140,9 @@ const PricingTiers = () => (
                 <i>Everything from the Free tier, plus...</i>
               </li>
               <li>Additional storage for personal usage or projects requiring lower data volumes</li>
-              <li>Pinning Service API access to easily import content already available on the IPFS network</li>
+              <li>
+                Use the platform&apos;s other services like w3name and w3link to build the next generation of apps
+              </li>
             </Card>
 
             <Card
