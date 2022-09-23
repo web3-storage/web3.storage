@@ -369,6 +369,10 @@ li.pricing-bullet-3 {
   }
 }
 
+#section_FAQ_ctas.sectional {
+  padding: 2rem 0 12rem 0;
+}
+
 .section_trusted_by_the_future {
   .tbtf_title {
     font-family: $font_Primary;
@@ -377,7 +381,7 @@ li.pricing-bullet-3 {
     font-size: 35px;
     line-height: 143%;
     color: #f2f2f2;
-    margin: 6rem 0 2rem 0;
+    margin: 0 0 2rem 0;
   }
 
   .tbtf_blurb {
@@ -590,6 +594,14 @@ li.pricing-bullet-3 {
     z-index: 1;
   }
 
+  .column-1 {
+    margin-right: 5rem;
+    padding-right: 2rem;
+  }
+  .column-2 {
+    align-self: flex-start;
+  }
+
   &:before {
     content: '';
     position: absolute;
@@ -597,7 +609,6 @@ li.pricing-bullet-3 {
     height: 200%;
     top: 0;
     left: -5rem;
-    background-image: url('/images/index/corkscrew-bg.png');
     background-repeat: no-repeat;
     background-size: 2112px;
     background-position: center;

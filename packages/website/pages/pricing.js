@@ -147,7 +147,7 @@ const PricingTiers = () => (
                 Additional storage for personal usage or projects requiring lower data volumes
               </li>
               <li className="pricing-bullet-3">
-                Use the platform&apos;s other services like w3name and w3link to build the next generation of apps
+                All data uploaded is available on public IPFS network and put into Filecoin deals
               </li>
             </Card>
 
@@ -205,16 +205,22 @@ const FaqSection = () => (
             <div className="column-content">
               <div className="block text-block format__medium">
                 <h2 className="h2 heading">Frequently Asked Questions</h2>
-                <div className="subheading">How is this free?</div>
-                {/* TODO: Update wording to whatever the new copy is */}
+                <div className="subheading">
+                  What advantages does web3.storage have over other IPFS hosted services?
+                </div>
                 <div className="description">
                   <p>
-                    Web3.Storage offers a simple interface that allows users and developers to take advantage of the
-                    vast array of decentralized storage provided by the Filecoin network.
+                    web3.storage runs on Elastic IPFS, an open-source, cloud-native, highly scalable implementation of
+                    IPFS. We wrote it as the solution to address increasing adoption of web3.storage, which previously
+                    used kubo and IPFS Cluster. As a result, web3.storage is designed to give strong performance and
+                    reliability regardless of how much data is being stored on it, meaning that you can rely on it as
+                    you and web3.storage grow. And all data is backed up in Filecoin storage deals, which gives
+                    cryptographic proof that your data is physically being stored without needing to trust web3.storage.
                   </p>
                   <p>
-                    The unique economics of Filecoin allow Web3.Storage to be completely free to use, while still
-                    ensuring that storage providers have a strong incentive to preserve user data for the long term.
+                    Further, the platform provides other best-in-class implementations of IPFS on performant
+                    infrastructure, from w3link, our IPFS HTTP gateway that can be up to 10x faster than other public
+                    gateways, to w3name, a hosted service for dynamic data use cases.
                   </p>
                 </div>
                 <Button className="button light cta" href="/faq/?section=service">
@@ -226,49 +232,27 @@ const FaqSection = () => (
           <div className="col-5_sm-8_mi-10_ti-12 column-2">
             <div className="column-content">
               <Img alt="" src={Cluster1} />
+              <div className="card type__F">
+                <div className="label">FAQ</div>
+                <div className="title">
+                  How do I store data on web3.storage that is already available over the IPFS network without having to
+                  download and reupload it myself?
+                </div>
+                <div className="description height-standard-target">
+                  <span>
+                    Paid web3.storage plans give users access to our implementation of the Pinning Service API, which
+                    allows you to store data on web3.storage that is already available over the IPFS network.
+                  </span>
+                </div>
+                <Button className="button text-purple cta" href="/faq/?section=service">
+                  READ MORE
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </section>
       <section id="section_FAQ_ctas" className="sectional">
-        <div className="grid">
-          <div className="col-12_sm-8_mi-10_ti-12 column-1" data-push-left="off-0_sm-2_mi-1_ti-0">
-            <div className="column-content">
-              <div className="block card-list-block">
-                <div className="card-row gap-3">
-                  <div className="card type__F">
-                    <div className="label">FAQ</div>
-                    <div className="feature-wrapper height-standard-target"></div>
-                    <div className="title">How is Web3.Storage different from NFT.Storage?</div>
-                    <div className="description height-standard-target" style={{ minHeight: '105px;' }}>
-                      <span>
-                        Both services are offered by the same group and share much of the same architecture, but as the
-                        name suggests, NFT.Storage is…
-                      </span>
-                    </div>
-                    <Button className="button text-purple cta" href="/faq/?section=service">
-                      READ MORE
-                    </Button>
-                  </div>
-                  <div className="card type__F">
-                    <div className="label">FAQ</div>
-                    <div className="feature-wrapper height-standard-target"></div>
-                    <div className="title">What happens if Web3.Storage is discontinued?</div>
-                    <div className="description height-standard-target" style={{ minHeight: '105px;' }}>
-                      <span>
-                        One major advantage of using Web3.Storage is its use of IPFS, making it easy to move to an
-                        alternative storage provider. All of your data…
-                      </span>
-                    </div>
-                    <Button className="button text-purple cta" href="/faq/?section=data-security">
-                      READ MORE
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div className="grid">
           <div className="col-6_sm-6_mi-6_ti-6 column-1">
             <div className="column-content">
