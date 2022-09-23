@@ -71,6 +71,7 @@
     "@nftstorage/ipfs-cluster": "^5.0.1",
     "@web3-storage/db": "^4.0.0",
     "@web3-storage/multipart-parser": "^1.0.0",
+    "@web3-storage/toucan-js": "^2.7.1",
     "cborg": "^1.6.0",
     "ipfs-car": "^0.7.0",
     "itty-router": "^2.4.8",
