@@ -123,9 +123,13 @@ const PricingTiers = () => (
               callToAction="GET STARTED"
               callToActionUrl="/account/payment?plan=free"
             >
-              <li>Easily store your data and make it available on IPFS</li>
-              <li>All data is replicated onto the Filecoin storage network for verifiability that your data is safe</li>
-              <li>Use the platform’s other services like w3name and w3link to build the next generation of apps</li>
+              <li className="pricing-bullet-1">Easily store your data and make it available on IPFS</li>
+              <li className="pricing-bullet-2">
+                All data is replicated onto the Filecoin storage network for verifiability that your data is safe
+              </li>
+              <li className="pricing-bullet-3">
+                Use the platform&apos;s other services like w3name and w3link to build the next generation of apps
+              </li>
             </Card>
 
             <Card
@@ -136,11 +140,13 @@ const PricingTiers = () => (
               callToAction="CHOOSE THIS PLAN"
               callToActionUrl="/account/payment?plan=lite"
             >
-              <li>
+              <li className="pricing-bullet-1">
                 <i>Everything from the Free tier, plus...</i>
               </li>
-              <li>Additional storage for personal usage or projects requiring lower data volumes</li>
-              <li>
+              <li className="pricing-bullet-2">
+                Additional storage for personal usage or projects requiring lower data volumes
+              </li>
+              <li className="pricing-bullet-3">
                 Use the platform&apos;s other services like w3name and w3link to build the next generation of apps
               </li>
             </Card>
@@ -154,11 +160,11 @@ const PricingTiers = () => (
               callToAction="CHOOSE THIS PLAN"
               callToActionUrl="/account/payment?plan=pro"
             >
-              <li>
+              <li className="pricing-bullet-1">
                 <i>Everything from the Lite tier, plus...</i>
               </li>
-              <li>Our lowest price per GB stored for use cases that require scale</li>
-              <li>Early access to additional products that make web3 production-ready</li>
+              <li className="pricing-bullet-2">Our lowest price per GB stored for use cases that require scale</li>
+              <li className="pricing-bullet-3">Early access to additional products that make web3 production-ready</li>
             </Card>
           </div>
         </div>
