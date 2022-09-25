@@ -1,14 +1,14 @@
-import Tooltip from 'ZeroComponents/tooltip/tooltip.js';
+import Tooltip from '../../../modules/zero/components/tooltip/tooltip.js';
 import InfoIcon from '../../../assets/icons/info';
 import Button from '../../button/button.js';
 
-const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, setIsPaymentPlanModalOpen }) => {
+const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanModalOpen }) => {
   return (
     <>
       {currentPlan && (
-        <p className="billing-content-intro">
+        <p className="billing-content-intro" data-testid="currentPlanIndicator">
           <span>
-            Your current plan is: <strong>{currentPlan.title}</strong>
+            Your current plan is: <strong data-testid="currentPlan.title">{currentPlan.title}</strong>
           </span>
         </p>
       )}
@@ -39,9 +39,7 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
             {plans.map(plan => (
               <div
                 key={plan.title}
-                className={`billing-card card-transparent ${
-                  currentPlan?.id === plan.id || (isEarlyAdopter && plan.id === 'earlyAdopter') ? 'current' : ''
-                }`}
+                className={`billing-card card-transparent ${currentPlan?.id === plan.id ? 'current' : ''}`}
               >
                 <div key={plan.title} className="billing-plan">
                   {/* <div className="billing-plan-overview"> */}
@@ -72,11 +70,12 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
                     </Button>
                   )}
 
-                  {(currentPlan?.id === plan.id || (isEarlyAdopter && plan.id === 'earlyAdopter')) && (
-                    <Button variant="light" disabled={true} className="">
-                      Current Plan
-                    </Button>
-                  )}
+                  {currentPlan?.id === plan.id ||
+                    (plan.id === 'earlyAdopter' && (
+                      <Button variant="light" disabled={true} className="">
+                        Current Plan
+                      </Button>
+                    ))}
                 </div>
               </div>
             ))}

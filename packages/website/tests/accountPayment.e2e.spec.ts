@@ -42,6 +42,9 @@ test.describe('/account/payment', () => {
     await expect(page).toHaveURL('/account/');
     await goToPayment(page);
     await expect(page).toHaveURL('/account/payment/');
+    await page.waitForTimeout(1000);
+    const currentPlanTitle = page.locator('[data-testid="currentPlan.title"]');
+    expect(await currentPlanTitle.innerText()).toBe('Free');
     await page.screenshot({
       fullPage: true,
       path: await E2EScreenshotPath(testInfo, `accountPayment`),
