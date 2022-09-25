@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 
-import Loading from 'components/loading/loading';
-import { redirectMagic, redirectSocial } from 'lib/magic.js';
+import { redirectMagic, redirectSocial } from '../../lib/magic.js';
+import Loading from '../../components/loading/loading';
 
 export function getStaticProps() {
   return {

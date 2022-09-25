@@ -23,6 +23,23 @@ export async function savePaymentSettings (ctx, paymentSettings) {
 }
 
 /**
+ * Initialize billing for a newly signed up user
+ * @param {object} ctx
+ * @param {import('./billing-types').CustomersService} ctx.customers
+ * @param {import('./billing-types').SubscriptionsService} ctx.subscriptions
+ * @param {import('./billing-types').BillingUser} ctx.user
+ */
+export async function initializeBillingForNewUser (ctx) {
+  const { customers, user } = ctx
+  const customer = await customers.getOrCreateForUser(user)
+  await ctx.subscriptions.saveSubscription(customer.id, {
+    storage: {
+      price: storagePriceNames.free
+    }
+  })
+}
+
+/**
  * Get a user's payment settings
  * @param {object} ctx
  * @param {import('./billing-types').BillingService} ctx.billing
@@ -83,7 +100,7 @@ export function createMockCustomerService () {
   /** @type {Map<string,{ id: string }>} */
   const userIdToCustomer = new Map()
   /**
-   * @param {{ id: string }} user
+   * @param {import('./billing-types').BillingUser} user
    * @returns {Promise<{ id: string }>}
    */
   async function getOrCreateForUser (user) {
@@ -159,7 +176,7 @@ function createTestEnvCustomerService () {
   return {
     async getOrCreateForUser (user) {
       // reuse user.id as customer.id
-      return { id: user.id }
+      return user
     }
   }
 }

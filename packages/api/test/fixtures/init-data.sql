@@ -14,11 +14,11 @@ VALUES ('test-pinning-user', 'test-pinning@user.com', 'test-pinning', 'test-pinn
 INSERT INTO public.user ( name, email, issuer, public_address)
 VALUES ('test-pinning-2-user', 'test-pinning2@user.com', 'test-pinning-2', 'test-pinning-2');
 
-INSERT INTO public.user (id, name, email, issuer, public_address)
-VALUES (6, 'test-pinning-and-restriction-user', 'test-pinning-and-restriction@user.com', 'test-pinning-and-restriction', 'test-pinning-and-restriction');
+INSERT INTO public.user (name, email, issuer, public_address)
+VALUES ('test-pinning-and-restriction-user', 'test-pinning-and-restriction@user.com', 'test-pinning-and-restriction', 'test-pinning-and-restriction');
 
-INSERT INTO public.user (id, name, email, issuer, public_address)
-VALUES (7, 'test-restricted-user', 'test-restriction@user.com', 'test-restriction', 'test-restriction');
+INSERT INTO public.user (name, email, issuer, public_address)
+VALUES ('test-restricted-user', 'test-restriction@user.com', 'test-restriction', 'test-restriction');
 
 INSERT INTO auth_key (id, name, secret, user_id)
 VALUES (1, 'test-key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LW1hZ2ljLWlzc3VlciIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtbWFnaWMtaXNzdWVyIn0.p2nD1Q4X4Z6DtJ0vxk35hhZOqSPVymhN5uyXrXth1zs', 1);

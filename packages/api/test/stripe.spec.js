@@ -241,7 +241,7 @@ describe('createStripeBillingContext', function () {
       db: createMockUserCustomerService(),
       STRIPE_SECRET_KEY: stripeSecretKey
     })
-    const user = { id: `user-${randomString()}` }
+    const user = { id: '1', issuer: `user-${randomString()}` }
     const customer = await billingContext.customers.getOrCreateForUser(user)
     let saveDidError = false
     try {
