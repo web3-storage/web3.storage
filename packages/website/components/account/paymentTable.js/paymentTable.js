@@ -1,3 +1,5 @@
+import Tooltip from 'ZeroComponents/tooltip/tooltip.js';
+import InfoIcon from '../../../assets/icons/info';
 import Button from '../../button/button.js';
 
 const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, setIsPaymentPlanModalOpen }) => {
@@ -19,9 +21,19 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
               <div></div>
               <div>
                 <p>Base Storage Capacity</p>
-                <p>Additional Storage</p>
+                <p>
+                  Additional Storage{' '}
+                  <Tooltip content="For Free users, this is a hard limit. For Lite and Pro users, this is a charge for storage use above your limit.">
+                    <InfoIcon />
+                  </Tooltip>
+                </p>
                 <p>Bandwidth</p>
-                <p>Block Limits</p>
+                <p>
+                  Block Limits{' '}
+                  <Tooltip content="For Free users, this is a hard limit. For Lite and Pro users, this is a soft limit with overage fees. Please refer to <a href='/terms'>Terms of Service</a> for exact amounts.">
+                    <InfoIcon />
+                  </Tooltip>
+                </p>
               </div>
             </div>
             {plans.map(plan => (
@@ -60,12 +72,11 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
                     </Button>
                   )}
 
-                  {currentPlan?.id === plan.id ||
-                    (isEarlyAdopter && plan.id === 'earlyAdopter' && (
-                      <Button variant="light" disabled={true} className="">
-                        Current Plan
-                      </Button>
-                    ))}
+                  {(currentPlan?.id === plan.id || (isEarlyAdopter && plan.id === 'earlyAdopter')) && (
+                    <Button variant="light" disabled={true} className="">
+                      Current Plan
+                    </Button>
+                  )}
                 </div>
               </div>
             ))}
