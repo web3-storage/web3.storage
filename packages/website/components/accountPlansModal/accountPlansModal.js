@@ -90,7 +90,7 @@ const AccountPlansModal = ({
             />
             <label htmlFor="agreeTerms">
               I agree to the{' '}
-              <a href="https://web3.storage/terms/" rel="noreferrer" target="_blank">
+              <a href="/terms/" rel="noreferrer" target="_blank">
                 web3.storage
               </a>{' '}
               Terms of Service
