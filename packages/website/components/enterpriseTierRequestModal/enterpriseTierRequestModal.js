@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import Modal from 'modules/zero/components/modal/modal';
 import CloseIcon from 'assets/icons/close';
@@ -6,33 +6,38 @@ import Button from 'components/button/button.js';
 import { createEnterpriseTierRequest } from 'lib/api';
 import GradientBackground from 'components/gradientbackground/gradientbackground';
 
+async function handleCreateUserRequest(e, setRequesting, onClose) {
+  e.preventDefault();
+  const data = new FormData(e.target);
+
+  const authMethod = data.get('auth-method');
+  const links = data.get('links');
+  const dataVolume = data.get('data-volume');
+  const dataReadTypeAndFrequency = data.get('data-read-type-and-frequency');
+  const additionalInfo = data.get('additional-info');
+
+  if (!(authMethod && links && dataVolume && dataReadTypeAndFrequency)) {
+    throw new Error(
+      `cannot build enterprise tier request because one of the required fields is falsy: ${!!authMethod} ${!!links} ${!!dataVolume} ${!!dataReadTypeAndFrequency}`
+    );
+  }
+
+  setRequesting(true);
+  try {
+    await createEnterpriseTierRequest(authMethod, links, dataVolume, dataReadTypeAndFrequency, additionalInfo);
+  } finally {
+    setRequesting(false);
+    onClose();
+  }
+}
+
 const UserRequestModal = ({ isOpen, onClose }) => {
   const [requesting, setRequesting] = useState(false);
 
-  async function handleCreateUserRequest(e) {
-    e.preventDefault();
-    const data = new FormData(e.target);
-
-    const authMethod = data.get('auth-method');
-    const links = data.get('links');
-    const dataVolume = data.get('data-volume');
-    const dataReadTypeAndFrequency = data.get('data-read-type-and-frequency');
-    const additionalInfo = data.get('additional-info');
-
-    if (!(authMethod && links && dataVolume && dataReadTypeAndFrequency)) {
-      throw new Error(
-        `cannot build enterprise tier request because one of the required fields is falsy: ${!!authMethod} ${!!links} ${!!dataVolume} ${!!dataReadTypeAndFrequency}`
-      );
-    }
-
-    setRequesting(true);
-    try {
-      await createEnterpriseTierRequest(authMethod, links, dataVolume, dataReadTypeAndFrequency, additionalInfo);
-    } finally {
-      setRequesting(false);
-      onClose();
-    }
-  }
+  const handleCreateUserRequestCallback = useCallback(
+    e => handleCreateUserRequest(e, setRequesting, onClose),
+    [setRequesting, onClose]
+  );
 
   return (
     <div className="user-request-modal">
@@ -45,7 +50,7 @@ const UserRequestModal = ({ isOpen, onClose }) => {
         <div className="user-request-modal__container enterprise-tier-inquiry">
           <GradientBackground variant="saturated-variant" />
           <h1 className="user-request-modal__heading">Enterprise Storage Inquiry</h1>
-          <form onSubmit={handleCreateUserRequest}>
+          <form onSubmit={handleCreateUserRequestCallback}>
             <div className="input-container">
               <label htmlFor="auth-method">Please share your email address. </label>
               <textarea id="auth-method" name="auth-method" required rows={1} />
