@@ -14,6 +14,7 @@ import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
 import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
 import { CustomerNotFound, getPaymentSettings, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
+import { EmailService } from '../../cron/src/lib/email/service.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -234,6 +235,41 @@ export async function userRequestPost (request, env) {
   }
 
   return new JSONResponse(res)
+}
+
+/**
+ * Post a new enterprise tier inquiry.
+ *
+ * @param {AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ */
+export async function userEnterpriseTierInquiry (request, env) {
+  const {
+    AuthMethod,
+    Links,
+    DataVolume,
+    DataReadTypeAndFrequency,
+    AdditionalInfo
+  } = await request.json()
+
+  const syntheticUser = {
+    _id: '0',
+    email: 'support@web3.storage',
+    name: 'Enterprise Tier Inquiry'
+  }
+
+  const emailService = new EmailService({ db: env.db })
+  emailService.sendEmail(syntheticUser, 'EnterpriseTierInquiry', {
+    templateVars: {
+      AuthMethod,
+      Links,
+      DataVolume,
+      DataReadTypeAndFrequency,
+      AdditionalInfo
+    }
+  })
+
+  return new JSONResponse({ ok: true })
 }
 
 /**

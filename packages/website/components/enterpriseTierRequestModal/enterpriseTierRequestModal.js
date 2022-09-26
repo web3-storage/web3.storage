@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import Modal from 'modules/zero/components/modal/modal';
 import CloseIcon from 'assets/icons/close';
 import Button from 'components/button/button.js';
-import { createEnterpriseTierRequest } from 'lib/api';
+import { createEnterpriseTierInquiry } from 'lib/api';
 import GradientBackground from 'components/gradientbackground/gradientbackground';
 
 async function handleCreateUserRequest(e, setRequesting, onClose) {
@@ -24,7 +24,7 @@ async function handleCreateUserRequest(e, setRequesting, onClose) {
 
   setRequesting(true);
   try {
-    await createEnterpriseTierRequest(authMethod, links, dataVolume, dataReadTypeAndFrequency, additionalInfo);
+    await createEnterpriseTierInquiry(authMethod, links, dataVolume, dataReadTypeAndFrequency, additionalInfo);
   } finally {
     setRequesting(false);
     onClose();

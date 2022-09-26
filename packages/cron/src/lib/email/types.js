@@ -75,6 +75,14 @@ export class User100PercentStorage extends EmailType {
   }
 }
 
+export class EnterpriseTierInquiry extends EmailType {
+  constructor () {
+    super()
+    this.subject = 'Enterprise Tier Inquiry'
+    this.requiredVars = []
+  }
+}
+
 export class AdminStorageExceeded extends EmailType {
   constructor () {
     super()

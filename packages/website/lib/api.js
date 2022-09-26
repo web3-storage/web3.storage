@@ -116,18 +116,25 @@ export async function createUnlimitedStorageRequest(authMethod, links, dataVolum
   );
 }
 
-export async function createEnterpriseTierRequest(authMethod, links, dataVolume, dataReadTypeAndFrequency, additionalInfo) {
-  await createUserRequest(
-    'EnterpriseTierRequested',
-    '',
-    JSON.stringify([
-      { label: 'Auth Method', value: authMethod },
-      { label: 'Links', value: links },
-      { label: 'Data Volume', value: dataVolume },
-      { label: 'Data Read Type And Frequency', value: dataReadTypeAndFrequency },
-      { label: 'Additional Info', value: additionalInfo },
-    ])
-  );
+export async function createEnterpriseTierInquiry(authMethod, links, dataVolume, dataReadTypeAndFrequency, additionalInfo) {
+  const res = await fetch(`${API}/user/enterprise-tier-inquiry`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + (await getToken()),
+    },
+    body: JSON.stringify({
+      AuthMethod: authMethod,
+      Links: links,
+      DataVolume: dataVolume,
+      DataReadTypeAndFrequency: dataReadTypeAndFrequency,
+      AdditionalInfo: additionalInfo,
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`failed to create user request: ${await res.text()}`);
+  }
 }
 
 export async function createPinningServiceRequest(reason, examples, profile) {

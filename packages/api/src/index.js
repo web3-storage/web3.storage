@@ -21,7 +21,8 @@ import {
   userUploadsDelete,
   userUploadGet,
   userUploadsGet,
-  userUploadsRename
+  userUploadsRename,
+  userEnterpriseTierInquiry
 } from './user.js'
 import { pinDelete, pinGet, pinPost, pinsGet } from './pins.js'
 import { blogSubscriptionCreate } from './blog.js'
@@ -100,11 +101,13 @@ router.delete('/pins/:requestId',   auth['📌⚠️🗑️'](pinDelete))
 
 router.post('/blog/subscription',   auth['🌍'](blogSubscriptionCreate))
 
-router.delete('/user/uploads/:cid',      auth['👤🗑️'](userUploadsDelete))
-router.post('/user/uploads/:cid/rename', auth['👤'](userUploadsRename))
-router.get('/user/tokens',               auth['👤'](userTokensGet))
-router.post('/user/tokens',              auth['👤'](userTokensPost))
-router.post('/user/request',             auth['👤'](userRequestPost))
+router.delete('/user/uploads/:cid',           auth['👤🗑️'](userUploadsDelete))
+router.post('/user/uploads/:cid/rename',      auth['👤'](userUploadsRename))
+router.get('/user/tokens',                    auth['👤'](userTokensGet))
+router.post('/user/tokens',                   auth['👤'](userTokensPost))
+router.post('/user/request',                  auth['👤'](userRequestPost))
+router.post('/user/enterprise-tier-inquiry',  auth['🌍'](userEnterpriseTierInquiry))
+
 router.delete('/user/tokens/:id',        auth['👤🗑️'](userTokensDelete))
 router.get('/user/account',              auth['👤'](userAccountGet))
 router.get('/user/info',                 auth['👤'](userInfoGet))
