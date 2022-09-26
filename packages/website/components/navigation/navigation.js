@@ -198,6 +198,7 @@ export default function Navigation({ isProductApp }) {
                         <div className="nav-dropdown">
                           {item.links.map(link => (
                             <Link
+                              // @ts-ignore
                               target={link.target ? link.target : '_self'}
                               key={link.text}
                               href={link.url}
