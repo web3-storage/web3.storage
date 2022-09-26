@@ -46,6 +46,11 @@
         "text": "FAQ"
       },
       {
+        "url": "https://blog.web3.storage",
+        "text": "Blog",
+        "target": "_blank"
+      },
+      {
         "url": "/docs",
         "text": "Docs"
       },
