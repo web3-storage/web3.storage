@@ -181,7 +181,7 @@ const PaymentSettingsPage = props => {
 /**
  * @returns {{ props: import('components/types').PageAccountProps}}
  */
-export function getStaticProps(arg) {
+export function getStaticProps() {
   const STRIPE_PUBLISHABLE_KEY_ENVVAR_NAME = 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY';
   const stripePublishableKey = process.env[STRIPE_PUBLISHABLE_KEY_ENVVAR_NAME];
   if (!stripePublishableKey) {

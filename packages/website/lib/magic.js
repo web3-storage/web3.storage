@@ -57,10 +57,6 @@ export async function loginEmail(email, finalRedirectHref) {
   if (finalRedirectHref) {
     redirectUri.searchParams.set('redirect_uri', finalRedirectHref);
   }
-  console.log('BEN', {
-    finalRedirectHref,
-    redirectUri: redirectUri.toString(),
-  });
   const didToken = await getMagic().auth.loginWithMagicLink({
     email: email,
     redirectURI: redirectUri.href,
