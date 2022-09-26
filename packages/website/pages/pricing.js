@@ -184,9 +184,9 @@ const PricingTiers = () => (
                   and what you&apos;re building using the form below, and we&apos;ll get back to you shortly.
                 </div>
                 <div className="enterprise-above-call-to-action"></div>
-                <div>
+                <a href="mailto:support@web3.storage?subject=Enterprise%20Tier%20Inquiry&body=-%20Please%20share%20your%20email%20address.%0D%0A%0D%0A%0D%0A-%20Please%20share%20links%20(Github%2C%20website%2C%20etc)%20for%20what%20you%E2%80%99re%20building.%0D%0A%0D%0A%0D%0A-%20Please%20provide%20a%20ballpark%20estimate%20for%20your%20data%20volume%20(both%20in%20aggregate%20and%20over%20a%20given%20month).%0D%0A%0D%0A%0D%0A-%20How%20do%20you%20plan%20on%20reading%20data%20uploaded%20to%20%5Bweb3.storage%5D(http%3A%2F%2Fweb3.storage)%20(E.g.%2C%20w3link%20gateway%2C%20other%20gateway%2C%20directly%20over%20bitswap%2C%20etc.)%3F%20How%20frequently%20do%20you%20plan%20on%20reading%20data%3F%0D%0A%0D%0A%0D%0A-%20Is%20there%20any%20additional%20usage%20information%20we%20should%20know%20about%3F%0D%0A%0D%0A">
                   <div className="enterprise-call-to-action">LET&apos;S CHAT</div>
-                </div>
+                </a>
               </div>
             </div>
           </div>
