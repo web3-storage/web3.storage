@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.21.0](https://github.com/web3-storage/web3.storage/compare/website-v2.20.2...website-v2.21.0) (2022-09-26)
+
+
+### Features
+
+* add blog link ([#1952](https://github.com/web3-storage/web3.storage/issues/1952)) ([1289ac1](https://github.com/web3-storage/web3.storage/commit/1289ac1921fe832b81d0dfa9e464b19ea8969481))
+* add TOS agree before confirm ([#1919](https://github.com/web3-storage/web3.storage/issues/1919)) ([aacde20](https://github.com/web3-storage/web3.storage/commit/aacde202439ff5102bd89fabbaf48711bbc2f50b))
+* remove nft.storage banner ([#1940](https://github.com/web3-storage/web3.storage/issues/1940)) ([edceaa3](https://github.com/web3-storage/web3.storage/commit/edceaa35f03c83a7aa1f4ee3d9ec8ef34a862be9))
+
 ## [2.20.2](https://github.com/web3-storage/web3.storage/compare/website-v2.20.1...website-v2.20.2) (2022-09-22)
 
 
