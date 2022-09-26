@@ -118,7 +118,7 @@ export async function createUnlimitedStorageRequest(authMethod, links, dataVolum
 
 export async function createEnterpriseTierRequest(authMethod, links, dataVolume, dataReadTypeAndFrequency, additionalInfo) {
   await createUserRequest(
-    'StorageLimitBytes', // TODO: what should this be?
+    'EnterpriseTierRequested',
     '',
     JSON.stringify([
       { label: 'Auth Method', value: authMethod },
