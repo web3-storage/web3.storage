@@ -48,10 +48,11 @@ const Login = () => {
   const onLoginWithEmail = useCallback(async () => {
     setErrors({ email: undefined });
     setIsLoggingIn(LoginType.EMAIL);
+    const finalRedirectUri = first(query.redirect_uri) ?? '/account';
     try {
-      await loginEmail(email || '', first(query.redirect_uri));
+      await loginEmail(email || '', finalRedirectUri);
       await queryClient.invalidateQueries('magic-user');
-      push('/account');
+      push(finalRedirectUri);
     } catch (error) {
       setIsLoggingIn('');
 
