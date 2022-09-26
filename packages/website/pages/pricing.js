@@ -163,7 +163,7 @@ const PricingTiers = () => (
               <li className="pricing-bullet-1">
                 <i>Everything from the Lite tier, plus...</i>
               </li>
-              <li className="pricing-bullet-2">Our lowest price per GB stored for use cases that require scale</li>
+              <li className="pricing-bullet-2">Our lowest price per GiB stored for use cases that require scale</li>
               <li className="pricing-bullet-3">Early access to additional products that make web3 production-ready</li>
             </Card>
           </div>
