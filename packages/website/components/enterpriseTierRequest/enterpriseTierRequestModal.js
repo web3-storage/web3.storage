@@ -19,14 +19,18 @@ const UserRequestModal = ({ isOpen, onClose }) => {
     const dataReadTypeAndFrequency = data.get('data-read-type-and-frequency');
     const additionalInfo = data.get('additional-info');
 
-    if (authMethod && links && dataVolume && dataReadTypeAndFrequency) {
-      setRequesting(true);
-      try {
-        await createEnterpriseTierRequest(authMethod, links, dataVolume, dataReadTypeAndFrequency, additionalInfo);
-      } finally {
-        setRequesting(false);
-        onClose();
-      }
+    if (!(authMethod && links && dataVolume && dataReadTypeAndFrequency)) {
+      throw new Error(
+        `cannot build enterprise tier request because one of the required fields is falsy: ${!!authMethod} ${!!links} ${!!dataVolume} ${!!dataReadTypeAndFrequency}`
+      );
+    }
+
+    setRequesting(true);
+    try {
+      await createEnterpriseTierRequest(authMethod, links, dataVolume, dataReadTypeAndFrequency, additionalInfo);
+    } finally {
+      setRequesting(false);
+      onClose();
     }
   }
 
