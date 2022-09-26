@@ -187,6 +187,7 @@ export default function Navigation({ isProductApp }) {
                     {item.links ? (
                       <div className="nav-dd-button">
                         <Link
+                          target={item.text === 'Blog' ? '_blank' : '_self'}
                           key={item.text}
                           href={item.url}
                           className={clsx('nav-item', item.url === router.route ? 'current-page' : '')}
@@ -197,6 +198,7 @@ export default function Navigation({ isProductApp }) {
                         <div className="nav-dropdown">
                           {item.links.map(link => (
                             <Link
+                              target={link.target ? link.target : '_self'}
                               key={link.text}
                               href={link.url}
                               className={clsx('nav-dropdown-link', link.url === router.route ? 'current-page' : '')}
@@ -209,6 +211,7 @@ export default function Navigation({ isProductApp }) {
                       </div>
                     ) : (
                       <Link
+                        target={item.text === 'Blog' ? '_blank' : '_self'}
                         key={item.text}
                         href={item.url}
                         className={clsx('nav-item', item.url === router.route ? 'current-page' : '')}
