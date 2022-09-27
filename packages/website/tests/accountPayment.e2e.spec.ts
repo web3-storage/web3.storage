@@ -41,7 +41,6 @@ test.describe('/account/payment', () => {
     });
     await page.goto('/account/payment/');
     await expect(page).toHaveURL('/account/payment/');
-    await page.locator('text=Your current plan is').waitFor();
     await page.screenshot({
       fullPage: true,
       path: await E2EScreenshotPath(testInfo, `accountPayment`),
