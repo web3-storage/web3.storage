@@ -34,21 +34,14 @@ test.describe('/account/payment', () => {
     page.on('pageerror', err => {
       console.error('pageerror', err);
     });
-    const goToPayment = (page: Page) =>
-      Promise.all([
-        page.waitForNavigation({
-          waitUntil: 'networkidle',
-        }),
-        page.goto('/account/payment'),
-      ]);
-    await goToPayment(page);
-    await LoginTester().login(page, {
+    const tester = LoginTester();
+    await page.goto(tester.loginHref);
+    await tester.login(page, {
       email: MAGIC_SUCCESS_EMAIL,
     });
-    // @todo - this should redirect you back to where you wanted to go: /account/payment
-    await expect(page).toHaveURL('/account/');
-    await goToPayment(page);
+    await page.goto('/account/payment/');
     await expect(page).toHaveURL('/account/payment/');
+    await page.locator('text=Your current plan is').waitFor();
     await page.screenshot({
       fullPage: true,
       path: await E2EScreenshotPath(testInfo, `accountPayment`),
