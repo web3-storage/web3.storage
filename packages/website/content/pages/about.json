@@ -27,8 +27,8 @@
               "push_left": "off-6_sm-5_mi-1_ti-0"
             },
             "format": "header",
-            "heading": "What is Web3.Storage?",
-            "subheading": "Web3.Storage is a service to make building on top of Filecoin as simple as possible - giving developers the power of distributed storage and content addressing via simple client libraries or an HTTP API."
+            "heading": "What is web3.storage?",
+            "subheading": "At the core of web3.storage is a storage service to safely secure and make your data available - giving developers the power of decentralized storage and content addressing via simple client libraries or an HTTP API."
           }
         ]
       }
@@ -166,10 +166,10 @@
               "push_left": "off-0_sm-1_ti-0"
             },
             "format": "medium",
-            "heading": "How Does Web3.Storage work?",
+            "heading": "How does web3.storage work?",
             "description": [
               "<a href='/docs/#quickstart' class='how-it-works-highlight' target='_blank'>Developers can start building in a matter of minutes</a> - allowing them to take advantage of all the power and openness of the decentralized web with none of the infrastructure complexity.",
-              "Behind the scenes, Web3.Storage is backed by Filecoin and makes content available via IPFS leveraging the unique properties of each network."
+              "Behind the scenes, web3.storage is backed by Filecoin and makes content available via IPFS leveraging the unique properties of each network."
             ]
           },
           {
