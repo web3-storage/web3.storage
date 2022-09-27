@@ -51,7 +51,7 @@
                 "type": "text_block",
                 "format": "small",
                 "description": [
-                  "Content uploaded to web3.storage is stored on our instance of <a href='https://github.com/ipfs-elastic-provider'>Elastic IPFS</a>, a cloud-native implementation of IPFS that our team wrote to stay reliable and performant with the scale of uploads we were seeing. Elastic IPFS ensures your data is continuously and quickly available over the IPFS network once your data is uploaded.",
+                  "Content uploaded to web3.storage is stored on our instance of <a href='https://github.com/elastic-ipfs/elastic-ipfs'>Elastic IPFS</a>, a cloud-native implementation of IPFS that our team wrote to stay reliable and performant with the scale of uploads we were seeing. Elastic IPFS ensures your data is continuously and quickly available over the IPFS network once your data is uploaded.",
                   "Generally, before data is uploaded, it is locally converted into a CAR file, which contains your data transformed into a format that IPFS can consume (a directed acyclic graph, or <a href='https://dag.ipfs.io/'>DAG</a>). This is very powerful - in this process, a <a href='https://docs.ipfs.tech/concepts/content-addressing/'>content address</a> is locally generated for your data, giving you a guarantee of your data’s fingerprint. Further, you can construct the DAG in useful ways, like making individual files within your folders or key-value pairs in your JSON have their own content addresses."
                 ]
               },
