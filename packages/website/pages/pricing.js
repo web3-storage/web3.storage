@@ -93,7 +93,7 @@ const Card = props => {
           <div className="pricing-title">{title}</div>
           <div className="pricing-price">
             {price}
-            <div className="pricing-price-term">/month</div>
+            <div className="pricing-price-term">/mo</div>
           </div>
         </div>
         <ul className="plan-details">{children}</ul>
@@ -152,7 +152,7 @@ const PricingTiers = () => (
             </Card>
 
             <Card
-              title="Pro"
+              title="Expert"
               price="$10"
               isBestValue={true}
               storageAllocation="60GiB storage"
@@ -163,7 +163,9 @@ const PricingTiers = () => (
               <li className="pricing-bullet-1">
                 <i>Everything from the Lite tier, plus...</i>
               </li>
-              <li className="pricing-bullet-2">Our lowest price per GiB stored for use cases that require scale</li>
+              <li className="pricing-bullet-2">
+                Our lowest tier price per GiB stored for use cases that require scale
+              </li>
               <li className="pricing-bullet-3">Early access to additional products that make web3 production-ready</li>
             </Card>
           </div>
@@ -263,7 +265,6 @@ const FaqSection = () => (
                     Web3.Storage is the easiest way to build on the decentralized web from hackathon projects to
                     production code at scale.
                   </p>
-                  <p>See what people building the future of the web today have to say, and get started.</p>
                 </div>
               </div>
             </div>

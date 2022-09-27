@@ -177,7 +177,7 @@
 
 .pricing-title-row {
   display: flex;
-  margin: 1rem;
+  margin: 1rem 0.5rem;
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: baseline;
@@ -186,7 +186,7 @@
   font-family: $font_Primary;
   font-style: normal;
   font-weight: 600;
-  font-size: 40px;
+  font-size: 36px;
   line-height: 138%;
   color: #03040a;
 }
