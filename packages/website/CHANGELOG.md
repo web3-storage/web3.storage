@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.21.1](https://github.com/web3-storage/web3.storage/compare/website-v2.21.0...website-v2.21.1) (2022-09-27)
+
+
+### Bug Fixes
+
+* change verbiage on file manager legend ([#1893](https://github.com/web3-storage/web3.storage/issues/1893)) ([ab85aa2](https://github.com/web3-storage/web3.storage/commit/ab85aa246ccb65afb76d1b0c25605aa890258451)), closes [#1768](https://github.com/web3-storage/web3.storage/issues/1768)
+* revert "feat: add blog link ([#1952](https://github.com/web3-storage/web3.storage/issues/1952))" ([#1956](https://github.com/web3-storage/web3.storage/issues/1956)) ([481dcf0](https://github.com/web3-storage/web3.storage/commit/481dcf04cecee1b226f9da4a9c18d7ff323c745d))
+
 ## [2.21.0](https://github.com/web3-storage/web3.storage/compare/website-v2.20.2...website-v2.21.0) (2022-09-26)
 
 
