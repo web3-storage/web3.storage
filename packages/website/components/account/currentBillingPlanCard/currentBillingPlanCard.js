@@ -23,9 +23,6 @@ const CurrentBillingPlanCard = ({ plan }) => {
             <span>
               <span>Bandwidth:</span> <strong>{plan.bandwidth}</strong>
             </span>
-            <span>
-              <span>Block Limits:</span> <strong>{plan.block_limit}</strong>
-            </span>
           </p>
         </div>
       )}

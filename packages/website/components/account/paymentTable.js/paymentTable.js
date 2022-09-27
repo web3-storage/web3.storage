@@ -40,12 +40,6 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
                   </Tooltip>
                 </p>
                 <p>Bandwidth</p>
-                <p>
-                  Block Limits{' '}
-                  <Tooltip content="For Free users, this is a hard limit. For Lite and Expert users, this is a soft limit with overage fees. Please refer to <a href='/terms' target='_blank'>Terms of Service</a> for associated prices. Users utilizing default settings will not go over the stated limits.">
-                    <InfoIcon />
-                  </Tooltip>
-                </p>
               </div>
             </div>
             {plans.map(plan => (
