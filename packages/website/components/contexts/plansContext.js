@@ -55,3 +55,4 @@ export const earlyAdopterPlan = {
 
 export const plans = [freePlan, ...sharedPlans];
 export const plansEarly = [earlyAdopterPlan, ...sharedPlans];
+export const plansAll = [freePlan, earlyAdopterPlan, ...sharedPlans];

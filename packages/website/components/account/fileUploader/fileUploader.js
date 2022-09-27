@@ -61,7 +61,7 @@ const uploadContentBlock = (heading, iconType, description) => {
 const FileUploader = ({ className = '', content, uploadModalState, background }) => {
   const [filesToUpload, setFilesToUpload] = useState(/** @type {File[]} */ ([]));
   const { getUploads, uploadFiles, uploadsProgress, clearUploadedFiles } = useUploads();
-  const { hasPaymentMethod, currentPlanId } = usePayment();
+  const { hasPaymentMethod, currentPlan } = usePayment();
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
   // Mapped out file progress info
@@ -114,7 +114,7 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
           <h5>{!!filesToUpload.length ? content.heading.option_1 : content.heading.option_2}</h5>
           <div className={'file-upload-subheading'} dangerouslySetInnerHTML={{ __html: content.subheading }}></div>
 
-          {!hasPaymentMethod && currentPlanId === 'free' && (
+          {!hasPaymentMethod && currentPlan?.id === 'free' && (
             <div className="billing-terms-toggle">
               <input type="checkbox" id="agreeTerms" checked={hasAcceptedTerms} onChange={e => acceptedTerms(e)} />
               <label htmlFor="agreeTerms">
@@ -128,7 +128,7 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
 
           <Dropzone
             className={`file-uploader-dropzone ${
-              !hasPaymentMethod && currentPlanId === 'free' && !hasAcceptedTerms && 'disabled'
+              !hasPaymentMethod && currentPlan?.id === 'free' && !hasAcceptedTerms && 'disabled'
             }`}
             onChange={useCallback(
               files => {
