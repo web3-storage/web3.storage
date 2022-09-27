@@ -32,7 +32,6 @@ const CustomStorageForm = ({ onClose }) => {
             autoComplete="given-name"
             // @ts-ignore
             rules="required"
-            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
           />
         </div>
 
@@ -47,7 +46,6 @@ const CustomStorageForm = ({ onClose }) => {
             // @ts-ignore
             rules="required"
             autoComplete="family-name"
-            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
           />
         </div>
 
@@ -64,38 +62,19 @@ const CustomStorageForm = ({ onClose }) => {
             placeholder="name@email.com"
             // @ts-ignore
             rules="required|email"
-            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
           />
         </div>
         <div className="input-wrapper">
           <label htmlFor="size">Estimated amount of storage in GiB</label>
-          <input
-            id="size"
-            name="size"
-            type="text"
-            placeholder="10,000"
-            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
-          />
+          <input id="size" name="size" type="text" placeholder="10,000" />
         </div>
         <div className="input-wrapper">
           <label htmlFor="company_name">Company Name (if applicable)</label>
-          <input
-            id="company_name"
-            name="company_name"
-            type="text"
-            placeholder=""
-            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
-          />
+          <input id="company_name" name="company_name" type="text" placeholder="" />
         </div>
         <div className="input-wrapper">
           <label htmlFor="anything_else">Any other details we should know about</label>
-          <input
-            id="anything_else"
-            name="anything_else"
-            type="text"
-            placeholder=""
-            className="px-2 py-1 focus:ring-indigo-500 focus:border-blue block w-full border-black border-2 rounded-md"
-          />
+          <input id="anything_else" name="anything_else" type="text" placeholder="" />
         </div>
         <div className="sm:col-span-6">
           <button type="submit" className="button outline-light cta Button">

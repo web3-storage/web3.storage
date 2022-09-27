@@ -1,8 +1,20 @@
+import { useMemo } from 'react';
+
 import Tooltip from 'ZeroComponents/tooltip/tooltip.js';
 import InfoIcon from '../../../assets/icons/info';
 import Button from '../../button/button.js';
+import { useUser } from '../../../components/contexts/userContext';
 
 const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, setIsPaymentPlanModalOpen }) => {
+  const {
+    storageData: { data },
+  } = useUser();
+
+  // Raw TiB number of bytes, to be used in calculations
+  const tebibyte = 1099511627776;
+  const defaultStorageLimit = tebibyte;
+  const limit = useMemo(() => data?.storageLimitBytes || defaultStorageLimit, [data, defaultStorageLimit]);
+
   return (
     <>
       {currentPlan && (
@@ -13,9 +25,9 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
         </p>
       )}
 
-      <div className="">
+      <div>
         <div>
-          <div className="billing-plans-table">
+          <div className={`billing-plans-table ${isEarlyAdopter && 'early-adopter'}`}>
             <div className="billing-play-key">
               <div></div>
               <div></div>
@@ -23,14 +35,14 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
                 <p>Base Storage Capacity</p>
                 <p>
                   Additional Storage{' '}
-                  <Tooltip content="For Free users, this is a hard limit. For Lite and Pro users, this is a charge for storage use above your limit.">
+                  <Tooltip content="This is a charge for storage use above your limit. Please refer to <a href='/terms' target='_blank'>Terms of Service</a> for more information.">
                     <InfoIcon />
                   </Tooltip>
                 </p>
                 <p>Bandwidth</p>
                 <p>
                   Block Limits{' '}
-                  <Tooltip content="For Free users, this is a hard limit. For Lite and Pro users, this is a soft limit with overage fees. Please refer to <a href='/terms'>Terms of Service</a> for exact amounts.">
+                  <Tooltip content="For Free users, this is a hard limit. For Lite and Expert users, this is a soft limit with overage fees. Please refer to <a href='/terms' target='_blank'>Terms of Service</a> for associated prices. Users utilizing default settings will not go over the stated limits.">
                     <InfoIcon />
                   </Tooltip>
                 </p>
@@ -44,24 +56,31 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
                 }`}
               >
                 <div key={plan.title} className="billing-plan">
-                  {/* <div className="billing-plan-overview"> */}
                   <h4 className="billing-plan-title">{plan.title}</h4>
                   <div>
                     <div className="billing-plan-amount">{plan.price}</div>
                   </div>
-                  {/* </div> */}
 
-                  {/* <p className="billing-plan-desc">{plan.description}</p> */}
-                  <div className="billing-plan-details">
-                    <p>{plan.base_storage}</p>
-                    <p>{plan.additional_storage}</p>
-                    <p>{plan.bandwidth}</p>
-                    <p>{plan.block_limit}</p>
-                  </div>
+                  {isEarlyAdopter && plan.id === 'earlyAdopter' ? (
+                    <div className="billing-plan-details">
+                      <p className="early-adopter-desc">
+                        As an Early Adopter, you already get our lowest storage rate. Your current limit is{' '}
+                        {`${Math.floor(limit / tebibyte)} TiB`}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="billing-plan-details">
+                      <p>{plan.base_storage}</p>
+                      <p>{plan.additional_storage}</p>
+                      <p>{plan.bandwidth}</p>
+                      <p>{plan.block_limit}</p>
+                    </div>
+                  )}
 
                   {currentPlan?.id !== plan.id && plan.id !== 'earlyAdopter' && (
                     <Button
                       variant="light"
+                      disabled={isEarlyAdopter}
                       className=""
                       onClick={() => {
                         setPlanSelection(plans.find(p => p.id === plan.id));
@@ -80,6 +99,15 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
                 </div>
               </div>
             ))}
+            {isEarlyAdopter && (
+              <p className="early-adopter-ui-block">
+                {/* As an Early Adopter, you already get our lowest storage rate.
+                <small>
+                  If you haven&apos;t already, please add a card to prevent storage issues beyond the amount you are
+                  getting for free.
+                </small> */}
+              </p>
+            )}
           </div>
         </div>
       </div>
