@@ -130,6 +130,20 @@
   gap: 24px;
 }
 
+@media only screen and (max-width: 733px) {
+  #section_plan_cards .column-content {
+    flex-flow: column nowrap;
+  }
+
+  #section_plan_cards .pricing-card-body {
+    margin: 0 0 1rem 0;
+
+    &.adorned {
+      margin: 41px 0 1rem 0;
+    }
+  }
+}
+
 .pricing-card {
   position: relative;
   box-sizing: border-box;
@@ -143,7 +157,7 @@
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.0562744);
     border-radius: 10px;
     padding: 1rem;
-    top: 41px;
+    margin: 41px 0 0 0;
 
     &.adorned {
       border-radius: 0 0 10px 10px;
@@ -152,8 +166,6 @@
 
   .best-value-adornment {
     border-radius: 0 0 10px 10px;
-    top: -41px;
-    left: 0;
     height: 41px;
     width: 100%;
     background-color: red;
