@@ -70,12 +70,12 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanMo
                     </Button>
                   )}
 
-                  {currentPlan?.id === plan.id ||
-                    (plan.id === 'earlyAdopter' && (
-                      <Button variant="light" disabled={true} className="">
-                        Current Plan
-                      </Button>
-                    ))}
+                  {(currentPlan?.id === plan.id ||
+                    (currentPlan?.id === 'earlyAdopter' && plan.id === 'earlyAdopter')) && (
+                    <Button variant="light" disabled={true} className="">
+                      Current Plan
+                    </Button>
+                  )}
                 </div>
               </div>
             ))}

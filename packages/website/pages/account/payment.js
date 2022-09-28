@@ -99,7 +99,7 @@ const PaymentSettingsPage = props => {
     return plans;
   }, [paymentSettings]);
 
-  // whenever the optimisticCurrentPlan is set, enqueue a fetch of acutal payment settings
+  // whenever the optimisticCurrentPlan is set, enqueue a fetch of actual payment settings
   useEffect(() => {
     if (optimisticCurrentPlan) {
       setNeedsFetchPaymentSettings(true);
