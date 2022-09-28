@@ -14,7 +14,7 @@ const PricingHeader = () => (
   <>
     <section id="section_pricing_header" className="sectional">
       <div className="grid-middle">
-        <div className="col-10_sm-8_mi-10_ti-12 column-1" data-push-left="off-0_sm-2_mi-1_ti-0">
+        <div className="col-10_sm-8_mi-10_ti-12 column-1">
           <div className="column-content">
             <div id="intro_1-hero-corkscrew">
               <Img alt="" src={ImageCorkscrew} />
@@ -41,7 +41,7 @@ const PricingHeader = () => (
     </section>
     <section id="section_trusted_by_header" className="sectional">
       <div className="grid-middle">
-        <div className="col-10_sm-8_mi-10_ti-12 column-1" data-push-left="off-0_sm-2_mi-1_ti-0">
+        <div className="col-10_sm-8_mi-10_ti-12 column-1">
           <div className="column-content">
             <div className="block text-block format__medium">
               <div className="subheading">TRUSTED BY</div>
@@ -52,29 +52,27 @@ const PricingHeader = () => (
     </section>
     <section id="section_trusted_by_logos" className="sectional">
       <div className="grid-middle">
-        <div className="col-10_sm-8_mi-10_ti-12 column-1" data-push-left="off-0_sm-2_mi-1_ti-0">
-          <div className="column-content">
-            <div className="block image-block">
-              <Img src="/images/logos/nft-storage.svg" alt="NFT Storage" />
-              <div className="image-label"></div>
-            </div>
-            <div className="block image-block">
-              <Img src="/images/logos/protocol-labs.svg" alt="Protocol Labs" />
-              <div className="image-label"></div>
-            </div>
-            <div className="block image-block">
-              <Img src="/images/logos/filecoin.svg" alt="Filecoin" />
-              <div className="image-label"></div>
-            </div>
-            <div id="intro_1-triangle_left">
-              <Img alt="" src={ImageTriangle1} />
-            </div>
-            <div id="intro_1-triangle_right">
-              <Img alt="" src={ImageTriangle} />
-            </div>
-            <div id="intro_1-cross_right">
-              <Img alt="" src={ImageCross} />
-            </div>
+        <div className="wrapping-logos">
+          <div className="block image-block">
+            <Img src="/images/logos/nft-storage.svg" alt="NFT Storage" />
+            <div className="image-label"></div>
+          </div>
+          <div className="block image-block">
+            <Img src="/images/logos/protocol-labs.svg" alt="Protocol Labs" />
+            <div className="image-label"></div>
+          </div>
+          <div className="block image-block">
+            <Img src="/images/logos/filecoin.svg" alt="Filecoin" />
+            <div className="image-label"></div>
+          </div>
+          <div id="intro_1-triangle_left">
+            <Img alt="" src={ImageTriangle1} />
+          </div>
+          <div id="intro_1-triangle_right">
+            <Img alt="" src={ImageTriangle} />
+          </div>
+          <div id="intro_1-cross_right">
+            <Img alt="" src={ImageCross} />
           </div>
         </div>
       </div>

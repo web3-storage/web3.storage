@@ -559,12 +559,16 @@ li.pricing-bullet-3 {
   padding: 1rem 0;
 }
 
-#section_trusted_by_logos .image-block {
-  display: inline-block;
+#section_trusted_by_logos .wrapping-logos {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0 5rem;
 }
 
-#section_trusted_by_logos .image-block:nth-of-type(2) {
-  padding: 0 5rem;
+@media only screen and (max-width: 733px) {
+  #section_trusted_by_logos .wrapping-logos {
+    gap: 1rem 50rem;
+  }
 }
 
 #section_trusted_by_logos .image-block img {
