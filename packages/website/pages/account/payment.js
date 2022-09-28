@@ -100,7 +100,7 @@ const PaymentSettingsPage = props => {
             <h1 className="table-heading">Payment</h1>
           </div>
           <div className="billing-content">
-            {!currentPlan && !loadingUserSettings && (
+            {currentPlan?.id === 'free' && !hasPaymentMethods && !loadingUserSettings && (
               <div className="add-billing-cta">
                 <p>
                   You don&apos;t have a paid plan. Please add a credit/debit card and select a plan to prevent storage
