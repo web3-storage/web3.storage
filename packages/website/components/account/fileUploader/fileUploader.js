@@ -85,7 +85,6 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
       localStorage.removeItem('acceptedTerms');
     }
   };
-
   useEffect(() => {
     const acceptedTermsLocalStorage = localStorage.getItem('acceptedTerms');
     console.log(acceptedTermsLocalStorage);
