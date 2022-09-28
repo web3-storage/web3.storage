@@ -10,6 +10,10 @@
   background-size: cover;
   word-break: break-word;
 
+  #navigation {
+    word-break: normal;
+  }
+
   #footer_squiggle {
     width: 25rem;
     left: -6.5rem;
