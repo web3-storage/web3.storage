@@ -1,20 +1,8 @@
-import { useMemo } from 'react';
-
 import Tooltip from 'ZeroComponents/tooltip/tooltip.js';
 import InfoIcon from '../../../assets/icons/info';
 import Button from '../../button/button.js';
-import { useUser } from '../../../components/contexts/userContext';
 
 const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, setIsPaymentPlanModalOpen }) => {
-  const {
-    storageData: { data },
-  } = useUser();
-
-  // Raw TiB number of bytes, to be used in calculations
-  const tebibyte = 1099511627776;
-  const defaultStorageLimit = tebibyte;
-  const limit = useMemo(() => data?.storageLimitBytes || defaultStorageLimit, [data, defaultStorageLimit]);
-
   return (
     <>
       {currentPlan && (
@@ -27,7 +15,11 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
 
       <div>
         <div>
-          <div className={`billing-plans-table ${isEarlyAdopter && 'early-adopter'}`}>
+          <div
+            className={`billing-plans-table ${
+              isEarlyAdopter && currentPlan?.id === 'early-adopter' && 'early-adopter'
+            }`}
+          >
             <div className="billing-play-key">
               <div></div>
               <div></div>
@@ -58,8 +50,7 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
                   {isEarlyAdopter && plan.id === 'earlyAdopter' ? (
                     <div className="billing-plan-details">
                       <p className="early-adopter-desc">
-                        As an Early Adopter, you already get our lowest storage rate. Your current limit is{' '}
-                        {`${Math.floor(limit / tebibyte)} TiB`}
+                        As an Early Adopter, you already get our lowest storage rate.
                       </p>
                     </div>
                   ) : (

@@ -22,34 +22,6 @@ const CustomStorageForm = ({ onClose }) => {
       <h3>Enterprise user inquiry</h3>
       <div className="fields">
         <div className="input-wrapper">
-          <label htmlFor="first-name">
-            First name<span className="text-red">*</span>
-          </label>
-          <input
-            type="text"
-            name="first-name"
-            id="first-name"
-            autoComplete="given-name"
-            // @ts-ignore
-            rules="required"
-          />
-        </div>
-
-        <div className="input-wrapper">
-          <label htmlFor="last-name">
-            Last name<span className="text-red">*</span>
-          </label>
-          <input
-            type="text"
-            name="last-name"
-            id="last-name"
-            // @ts-ignore
-            rules="required"
-            autoComplete="family-name"
-          />
-        </div>
-
-        <div className="input-wrapper">
           <label htmlFor="auth">
             Please share the user authentication method (Github, Email) associated with your account.
             <span className="text-red">*</span>

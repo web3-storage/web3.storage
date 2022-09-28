@@ -32,12 +32,13 @@ const StorageManager = ({ className = '', content }) => {
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
   const { currentPlan } = usePayment();
 
-  const { percentUploaded, percentPinned } = useMemo(
+  const { maxSpaceLabel, percentUploaded, percentPinned } = useMemo(
     () => ({
+      maxSpaceLabel: `${Math.floor(limit / tebibyte)} ${content.max_space_tib_label}`,
       percentUploaded: Math.min((uploaded / limit) * 100, 100),
       percentPinned: Math.min((psaPinned / limit) * 100, 100),
     }),
-    [uploaded, psaPinned, limit]
+    [uploaded, psaPinned, limit, content]
   );
 
   useEffect(() => {
@@ -99,7 +100,15 @@ const StorageManager = ({ className = '', content }) => {
                   standard: 'iec',
                 })}
               </span>
-              &nbsp;of <span className="storage-number">{currentPlan?.base_storage}</span> used
+              {currentPlan?.id === 'early-adopter' ? (
+                <>
+                  &nbsp;of <span className="storage-number">{maxSpaceLabel}</span> used
+                </>
+              ) : (
+                <>
+                  &nbsp;of <span className="storage-number">{currentPlan?.base_storage}</span> used
+                </>
+              )}
             </>
           )}
         </div>
