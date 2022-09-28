@@ -1,6 +1,8 @@
 import { Upload } from '@aws-sdk/lib-storage'
 import * as pb from '@ipld/dag-pb'
 import AWS from 'aws-sdk'
+import { Dagula } from 'dagula'
+import { getLibp2p } from 'dagula/p2p.js'
 import debug from 'debug'
 import formatNumber from 'format-number'
 import batch from 'it-batch'
@@ -8,8 +10,6 @@ import { pipe } from 'it-pipe'
 import { CID } from 'multiformats'
 import * as raw from 'multiformats/codecs/raw'
 import { Readable } from 'stream'
-import { Dagula } from 'dagula'
-import { getLibp2p } from 'dagula/p2p.js'
 
 export default class Backup {
   constructor (env) {
@@ -36,7 +36,7 @@ export default class Backup {
         psa.content_cid,
         psa.name,
         psa.auth_key_id,
-        pl.ipfs_peer_id
+        pl.peer_id
       FROM psa_pin_request psa
         JOIN pin p ON p.content_cid = psa.content_cid
         JOIN pin_location pl ON pl.id = p.pin_location_id
@@ -93,7 +93,7 @@ export default class Backup {
   /**
    * @param {import('@aws-sdk/client-s3').S3Client} s3
    * @param {string} bucketName
-   * @param {import('./bindings').BackupContent} bak
+   * @param {import('../types/pins-backup').BackupContent} bak
    */
   async s3Upload (s3, bucketName, bak) {
     const key = `complete/${bak.sourceCid}.car`
@@ -125,19 +125,24 @@ export default class Backup {
   }
 
   /**
-   * @param {() => Promise<import('ipfs-core').IPFS>} getIpfs
+   * @param {import('@nftstorage/ipfs-cluster').Cluster} ipfs
    * @param {Object} [options]
+   * @param {Array<string>} peersList
    * @param {number} [options.maxDagSize] Skip DAGs that are bigger than this.
    */
-  exportCar (ipfs, options = {}) {
+  exportCar (ipfs, peersList, options = {}) {
     /**
-     * @param {AsyncIterable<import('./bindings').BackupCandidate>} source // TODO: Doesn't exist
-     * @returns {AsyncIterableIterator<import('./bindings').BackupContent>} // TODO: Doesn't exist
+     * @param {AsyncIterable<import('../types/pins-backup').BackupCandidate>} source
+     * @returns {AsyncIterableIterator<import('../types/pins-backup').BackupContent>}
      */
     const _this = this
     return async function * (source) {
       for await (const pin of source) {
-        yield { ...pin, content: _this.ipfsDagExport(ipfs, pin.sourceCid, pin.peer, options) }
+        const peer = peersList.find((peer) => peer.id === pin.peer)
+        // TODO: I don't think this is yielding the chunk correctly because I don't get logs from the function
+        const content = await _this.ipfsDagExport(ipfs, pin.sourceCid, peer, options)
+        _this.log(`Content: ${JSON.stringify(content)}`)
+        yield { ...pin, content }
       }
     }
   }
@@ -147,17 +152,17 @@ export default class Backup {
    *
    * @param {import('@nftstorage/ipfs-cluster').Cluster} ipfs
    * @param {import('multiformats').CID} cid
-   * @param {string} peer
+   * @param {string} peer The IPFS peer that the CID is available on
    * @param {Object} [options]
    * @param {number} [options.maxDagSize]
    */
   async * ipfsDagExport (ipfs, cid, peer, options) {
     const maxDagSize = options.maxDagSize || this.MAX_DAG_SIZE
-    const libp2p = await getLibp2p()
-    const dagula = await Dagula.fromNetwork(libp2p, { peer })
 
     let reportInterval
     try {
+      const libp2p = await getLibp2p()
+      const dagula = await Dagula.fromNetwork(libp2p, { peer })
       this.log('determining size...')
       let bytesReceived = 0
       const bytesTotal = await this.getSize(ipfs, cid)
@@ -177,16 +182,22 @@ export default class Backup {
 
       for await (const chunk of dagula.get(cid, { timeout: this.BLOCK_TIMEOUT })) {
         bytesReceived += chunk.bytes.length
+        this.log(`chunk: ${JSON.stringify(chunk)}`)
         yield chunk
       }
 
       this.log('done')
+    } catch (err) {
+      this.log(`Error when fetching car file ${err.message}`)
+      this.log(`Error: ${JSON.stringify(err)}`)
     } finally {
       clearInterval(reportInterval)
     }
   }
 
   /**
+   * Get the size of an file on IPFS
+   * This is so we can limit the size of files we backup
    * @param {import('@nftstorage/ipfs-cluster').Cluster} ipfs
    * @param {import('multiformats').CID} cid
    * @returns {Promise<number | undefined>}
@@ -205,11 +216,8 @@ export default class Backup {
    * Fetch a list of CIDs that need to be backed up.
    *
    * @param {import('pg').DbClient} db Postgres client.
-   * @param {Object} [options]
-   * @param {Date} [options.startDate]
-   * @param {(cid: CID) => Promise<boolean>} [options.filter]
    */
-  async * getPinsNotBackedUp (db, options = {}) {
+  async * getPinsNotBackedUp (db) {
     const { rows } = await db.query(this.GET_PINNED_PINS_QUERY, [
       this.LIMIT
     ])
@@ -223,7 +231,7 @@ export default class Backup {
         contentCid: CID.parse(pinnedPin.content_cid),
         authKeyId: String(pinnedPin.auth_key_id),
         pinRequestId: String(pinnedPin.id),
-        peer: String(pinnedPin.ipfs_peer_id)
+        peer: String(pinnedPin.peer_id)
       }
       yield pin
     }
@@ -238,6 +246,8 @@ export default class Backup {
       console.log('ℹ️ Enable logging by setting DEBUG=backup:pins')
     }
 
+    const peersList = await cluster.peerList()
+
     let totalProcessed = 0
     let totalSuccessful = 0
 
@@ -249,7 +259,7 @@ export default class Backup {
           try {
             await pipe(
               [pin],
-              this.exportCar(cluster),
+              this.exportCar(cluster, peersList),
               this.uploadCar(this.s3, this.env.S3_BUCKET_NAME),
               this.registerBackup(rwPg, pin.contentCid, pin.pinRequestId)
             )
