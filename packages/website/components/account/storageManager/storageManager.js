@@ -100,7 +100,7 @@ const StorageManager = ({ className = '', content }) => {
                   standard: 'iec',
                 })}
               </span>
-              {currentPlan?.id === 'early-adopter' ? (
+              {currentPlan?.id === 'earlyAdopter' ? (
                 <>
                   &nbsp;of <span className="storage-number">{maxSpaceLabel}</span> used
                 </>
