@@ -119,9 +119,9 @@
                     }
                   },
                   {
-                    "thumb": "RETRIEVE",
+                    "thumb": "READ",
                     "lines": [
-                      "// retrive.mjs",
+                      "// retrieve.mjs",
                       "",
                       "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
                       "",
