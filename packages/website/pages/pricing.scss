@@ -130,13 +130,14 @@
   gap: 24px;
 }
 
-@media only screen and (max-width: 733px) {
+@media only screen and (max-width: 1000px) {
   #section_plan_cards .column-content {
     flex-flow: column nowrap;
   }
 
   #section_plan_cards .pricing-card-body {
     margin: 0 0 1rem 0;
+    width: unset;
 
     &.adorned {
       margin: 41px 0 1rem 0;
@@ -326,6 +327,12 @@ li.pricing-bullet-3 {
       min-height: $blobSize !important;
       width: $blobSize !important;
       height: $blobSize !important;
+    }
+  }
+
+  @media only screen and (max-width: 1000px) {
+    .enterprise-blob {
+      display: none;
     }
   }
 
@@ -577,7 +584,7 @@ li.pricing-bullet-3 {
   gap: 0 5rem;
 }
 
-@media only screen and (max-width: 733px) {
+@media only screen and (max-width: 1000px) {
   #section_trusted_by_logos .wrapping-logos {
     gap: 1rem 50rem;
   }
