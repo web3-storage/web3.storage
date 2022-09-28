@@ -369,22 +369,25 @@ li.pricing-bullet-3 {
 
   .enterprise-above-call-to-action {
     flex: 1 1 auto;
+    min-height: 1rem;
   }
 
-  .enterprise-call-to-action {
-    padding: 10px 20px;
-    background: transparent;
-    border: 2px solid #03040a;
-    border-radius: 20px;
-
-    display: inline-block;
-    font-family: $font_Primary;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 100%;
-    letter-spacing: 0.39px;
-    color: #03040a;
+  .enterprise-call-to-action.button.Button {
+    &::after {
+      border-color: #03040a;
+    }
+    &:hover {
+      &::after {
+        border-color: $white;
+      }
+    }
+    .button-contents {
+      color: #03040a;
+      padding: 10px 20px;
+      font-size: 16px;
+      line-height: 100%;
+      letter-spacing: 0.39px;
+    }
   }
 }
 
