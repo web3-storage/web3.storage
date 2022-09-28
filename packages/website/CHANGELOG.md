@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.21.2](https://github.com/web3-storage/web3.storage/compare/website-v2.21.1...website-v2.21.2) (2022-09-28)
+
+
+### Bug Fixes
+
+* add blog link with navigation fix ([#1960](https://github.com/web3-storage/web3.storage/issues/1960)) ([efaed67](https://github.com/web3-storage/web3.storage/commit/efaed6746b44cdbba4dbc0729f56a85858bfea70))
+
 ## [2.21.1](https://github.com/web3-storage/web3.storage/compare/website-v2.21.0...website-v2.21.1) (2022-09-27)
 
 

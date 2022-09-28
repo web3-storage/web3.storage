@@ -209,6 +209,7 @@ export default function Navigation({ isProductApp }) {
                       </div>
                     ) : (
                       <Link
+                        target={item.text === 'Blog' ? '_blank' : '_self'}
                         key={item.text}
                         href={item.url}
                         className={clsx('nav-item', item.url === router.route ? 'current-page' : '')}
