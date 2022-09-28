@@ -144,9 +144,6 @@ const PricingTiers = () => (
               <li className="pricing-bullet-2">
                 Additional storage for personal usage or projects requiring lower data volumes
               </li>
-              <li className="pricing-bullet-3">
-                All data uploaded is available on public IPFS network and put into Filecoin deals
-              </li>
             </Card>
 
             <Card
@@ -259,19 +256,7 @@ const FaqSection = () => (
       </section>
       <section id="section_FAQ_ctas" className="sectional">
         <div className="grid">
-          <div className="col-6_sm-6_mi-6_ti-6 column-1">
-            <div className="column-content">
-              <div className="section_trusted_by_the_future">
-                <div className="tbtf_title">Trusted by the future</div>
-                <div className="tbtf_blurb">
-                  <p>
-                    Web3.Storage is the easiest way to build on the decentralized web from hackathon projects to
-                    production code at scale.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div className="col-6_sm-6_mi-6_ti-6 column-1"></div>
         </div>
       </section>
     </div>

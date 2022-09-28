@@ -392,32 +392,7 @@ li.pricing-bullet-3 {
 }
 
 #section_FAQ_ctas.sectional {
-  padding: 2rem 0 12rem 0;
-}
-
-.section_trusted_by_the_future {
-  .tbtf_title {
-    font-family: $font_Primary;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 35px;
-    line-height: 143%;
-    color: #f2f2f2;
-    margin: 0 0 2rem 0;
-  }
-
-  .tbtf_blurb {
-    font-family: $font_Primary;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 189%;
-    color: #f2f2f2;
-
-    p:not(:first-child) {
-      margin: 2rem 0 0 0;
-    }
-  }
+  padding: 2rem 0 14rem 0;
 }
 
 #tiered_pricing_section_2 {
