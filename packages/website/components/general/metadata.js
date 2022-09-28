@@ -14,7 +14,7 @@ import Head from 'next/head';
  */
 const Metadata = ({
   title = 'Web3 Storage - The simple file storage service for IPFS & Filecoin.',
-  description = 'With Web3.Storage you get all the benefits of decentralized storage and content addressing with the frictionless experience you expect in a modern storage solution. It’s fast, open and it’s free.',
+  description = "With Web3.Storage you get all the benefits of decentralized storage and content addressing with the frictionless experience you expect in a modern storage solution. It’s fast and it's open.",
 }) => (
   <Head>
     <title>{title}</title>
