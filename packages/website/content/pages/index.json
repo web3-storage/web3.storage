@@ -177,7 +177,7 @@
               {
                 "type": "text_block",
                 "format": "medium",
-                "heading": "Web3.Storage is built for scale"
+                "heading": "web3.storage is built for scale"
               }
             ]
           },
@@ -235,7 +235,7 @@
               "push_left": "off-0_sm-1_ti-0"
             },
             "format": "medium",
-            "heading": "Why Web3.Storage?",
+            "heading": "Why web3.storage?",
             "description": "With web3.storage you get all the benefits of decentralized storage and other cutting-edge protocols with the frictionless experience you expect in a modern dev workflow. Check out our docs pages to learn more.",
             "cta": {
               "url": "/docs/",
@@ -385,7 +385,7 @@
               {
                 "type": "text_block",
                 "format": "medium",
-                "heading": "Get Started with Web3.Storage",
+                "heading": "Get Started with web3.storage",
                 "description": "Choose your own way to store and retrieve using web3.storage. Use your email address or GitHub to get 5 GiB storage for free, with paid plans starting at only $3.",
                 "cta": {
                   "url": "/login",
@@ -435,7 +435,7 @@
                 "type": "B",
                 "label": "JS Client Library",
                 "feature": "<span class='highlight'>npm install</span> web3.storage",
-                "description": "Import the lightweight Web3.Storage library into your project, and enjoy a simple and familiar way to store and retrieve.",
+                "description": "Import the lightweight web3.storage library into your project, and enjoy a simple and familiar way to store and retrieve.",
                 "icon_before": {
                   "url": "https://www.npmjs.com/package/web3.storage",
                   "svg": "npm_icon"
@@ -453,7 +453,7 @@
                 "type": "B",
                 "label": "HTTP API",
                 "feature": "<span class='highlight'>curl -X</span> POST <span class='highlight'>—data-binary</span> “@foo.gif” https://api.web3.storage/upload",
-                "description": "Test or build your project on any stack, using our easy-to-use HTTP API. Web3.Storage is as flexible as you need it to be.",
+                "description": "Test or build your project on any stack, using our easy-to-use HTTP API. web3.storage is as flexible as you need it to be.",
                 "icon_before": {
                   "url": "/docs/reference/http-api/",
                   "text": "{…}"
@@ -471,7 +471,7 @@
                 "type": "B",
                 "label": "Web App",
                 "feature": "Drop file to upload",
-                "description": "Upload your files directly through our Web UI to debug and validate Web3.Storage’s use case for your project.",
+                "description": "Upload your files directly through our Web UI to debug and validate web3.storage’s use case for your project.",
                 "icon_before": {
                   "url": "/login",
                   "svg": "windows_icon"
@@ -534,7 +534,7 @@
                 "image": "/images/index/testimonial-ryan-w.jpg",
                 "title": "Ryan W.",
                 "subtitle": "Capetown, South Africa",
-                "description": "I work pretty much exclusively on Web3 applications, and I'm really impressed with Web3.Storage. It's almost too easy - I didn't run into any stumbling blocks and had a basic implementation of my project in 30 minutes."
+                "description": "I work pretty much exclusively on Web3 applications, and I'm really impressed with web3.storage. It's almost too easy - I didn't run into any stumbling blocks and had a basic implementation of my project in 30 minutes."
               },
               {
                 "type": "C",
@@ -543,7 +543,7 @@
                 "image": "/images/index/testimonial-frank-j.jpg",
                 "title": "Frank J.",
                 "subtitle": "Toronto, Canada",
-                "description": "Web3.Storage was so simple to hook into, and does what you need it to do. We run the <span className='description-link'>Galactic Punks</span> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS."
+                "description": "web3.storage was so simple to hook into, and does what you need it to do. We run the <span className='description-link'>Galactic Punks</span> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS."
               }
             ]
           },
@@ -565,14 +565,14 @@
                 "image": "/images/index/testimonial-jacob-p.jpg",
                 "title": "Jacob P.",
                 "subtitle": "New York, USA",
-                "description": "Web3.Storage enables <span className='description-link'>Strangemood</span> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
+                "description": "web3.storage enables <span className='description-link'>Strangemood</span> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
               },
               {
                 "type": "C",
                 "image": "/images/index/testimonial-ryan-w.jpg",
                 "title": "Ryan W.",
                 "subtitle": "Capetown, South Africa",
-                "description": "I work pretty much exclusively on Web3 applications, and I'm really impressed with Web3.Storage. It's almost too easy - I didn't run into any stumbling blocks and had a basic implementation of my project in 30 minutes."
+                "description": "I work pretty much exclusively on Web3 applications, and I'm really impressed with web3.storage. It's almost too easy - I didn't run into any stumbling blocks and had a basic implementation of my project in 30 minutes."
               },
               {
                 "type": "C",
@@ -581,7 +581,7 @@
                 "image": "/images/index/testimonial-frank-j.jpg",
                 "title": "Frank J.",
                 "subtitle": "Toronto, Canada",
-                "description": "Web3.Storage was so simple to hook into, and does what you need it to do. We run the <span className='description-link'>Galactic Punks</span> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS."
+                "description": "web3.storage was so simple to hook into, and does what you need it to do. We run the <span className='description-link'>Galactic Punks</span> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS."
               }
             ]
           }
