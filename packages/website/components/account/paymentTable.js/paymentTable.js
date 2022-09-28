@@ -1,25 +1,21 @@
-import Tooltip from 'ZeroComponents/tooltip/tooltip.js';
+import Tooltip from '../../../modules/zero/components/tooltip/tooltip.js';
 import InfoIcon from '../../../assets/icons/info';
 import Button from '../../button/button.js';
 
-const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, setIsPaymentPlanModalOpen }) => {
+const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanModalOpen }) => {
   return (
     <>
       {currentPlan && (
-        <p className="billing-content-intro">
+        <p className="billing-content-intro" data-testid="currentPlanIndicator">
           <span>
-            Your current plan is: <strong>{currentPlan.title}</strong>
+            Your current plan is: <strong data-testid="currentPlan.title">{currentPlan.title}</strong>
           </span>
         </p>
       )}
 
       <div>
         <div>
-          <div
-            className={`billing-plans-table ${
-              isEarlyAdopter && currentPlan?.id === 'early-adopter' && 'early-adopter'
-            }`}
-          >
+          <div className={`billing-plans-table ${currentPlan?.id === 'earlyAdopter' && 'early-adopter'}`}>
             <div className="billing-play-key">
               <div></div>
               <div></div>
@@ -37,9 +33,7 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
             {plans.map(plan => (
               <div
                 key={plan.title}
-                className={`billing-card card-transparent ${
-                  currentPlan?.id === plan.id || (isEarlyAdopter && plan.id === 'earlyAdopter') ? 'current' : ''
-                }`}
+                className={`billing-card card-transparent ${currentPlan?.id === plan.id ? 'current' : ''}`}
               >
                 <div key={plan.title} className="billing-plan">
                   <h4 className="billing-plan-title">{plan.title}</h4>
@@ -47,7 +41,7 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
                     <div className="billing-plan-amount">{plan.price}</div>
                   </div>
 
-                  {isEarlyAdopter && plan.id === 'earlyAdopter' ? (
+                  {currentPlan?.id === 'earlyAdopter' && plan.id === 'earlyAdopter' ? (
                     <div className="billing-plan-details">
                       <p className="early-adopter-desc">
                         As an Early Adopter, you already get our lowest storage rate.
@@ -65,7 +59,7 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
                   {currentPlan?.id !== plan.id && plan.id !== 'earlyAdopter' && (
                     <Button
                       variant="light"
-                      disabled={isEarlyAdopter}
+                      disabled={currentPlan?.id === 'earlyAdopter'}
                       className=""
                       onClick={() => {
                         setPlanSelection(plans.find(p => p.id === plan.id));
@@ -76,7 +70,8 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
                     </Button>
                   )}
 
-                  {(currentPlan?.id === plan.id || (isEarlyAdopter && plan.id === 'earlyAdopter')) && (
+                  {(currentPlan?.id === plan.id ||
+                    (currentPlan?.id === 'earlyAdopter' && plan.id === 'earlyAdopter')) && (
                     <Button variant="light" disabled={true} className="">
                       Current Plan
                     </Button>
@@ -84,7 +79,7 @@ const PaymentTable = ({ plans, currentPlan, isEarlyAdopter, setPlanSelection, se
                 </div>
               </div>
             ))}
-            {isEarlyAdopter && (
+            {currentPlan?.id === 'earlyAdopter' && (
               <p className="early-adopter-ui-block">
                 {/* As an Early Adopter, you already get our lowest storage rate.
                 <small>

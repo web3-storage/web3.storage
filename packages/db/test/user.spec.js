@@ -27,6 +27,7 @@ describe('user operations', () => {
     })
 
     assert(upsertUser, 'user created')
+    assert.strictEqual(upsertUser.inserted, true, 'upsertUser.inserted is truthy, indicating a new row was inserted')
     assert.strictEqual(upsertUser.issuer, issuer, 'user has correct issuer')
 
     // Get previously created user
@@ -60,6 +61,7 @@ describe('user operations', () => {
       publicAddress
     })
     assert(upsertUser, 'user updated')
+    assert.strictEqual(upsertUser.inserted, false, 'upsertUser.inserted is falsy, indicating a row was updated')
   })
 
   it('can update previously created user', async () => {

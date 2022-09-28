@@ -109,7 +109,6 @@ export class DBClient {
       .from('user')
       .upsert(
         {
-          id: user.id,
           name: user.name,
           picture: user.picture,
           email: user.email,
@@ -118,16 +117,20 @@ export class DBClient {
           public_address: user.publicAddress
         },
         {
-          onConflict: 'issuer'
+          onConflict: 'issuer',
+          returning: 'representation'
         }
       )
+      .select('id,xmax,issuer')
       .single()
 
     if (error) {
       throw new DBError(error)
     }
-
+    const inserted = Boolean(data.xmax === '0')
     return {
+      id: data.id,
+      inserted,
       issuer: data.issuer
     }
   }
