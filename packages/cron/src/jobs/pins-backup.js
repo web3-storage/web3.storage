@@ -139,7 +139,6 @@ export default class Backup {
     return async function * (source) {
       for await (const pin of source) {
         const peer = peersList.find((peer) => peer.id === pin.peer)
-        // TODO: I don't think this is yielding the chunk correctly because I don't get logs from the function
         const content = await _this.ipfsDagExport(ipfs, pin.sourceCid, peer, options)
         _this.log(`Content: ${JSON.stringify(content)}`)
         yield { ...pin, content }
