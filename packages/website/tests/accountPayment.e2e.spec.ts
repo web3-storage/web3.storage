@@ -10,14 +10,21 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('/account/payment', () => {
-  test('redirects to /login/ when not authenticated', async ({ page }, testInfo) => {
-    await Promise.all([
-      page.waitForNavigation({
-        waitUntil: 'networkidle',
-      }),
-      page.goto('/account/payment'),
-    ]);
-    await expect(page).toHaveURL('/login/');
+  test('redirects through login and back when not initially authenticated', async ({ page }, testInfo) => {
+    const accountPaymentPathname = '/account/payment';
+    // try to go to page that requires authn
+    await page.goto(accountPaymentPathname, { waitUntil: 'networkidle' });
+    // wait for redirect to a Log in page
+    await page.locator('text=Log in').waitFor();
+    const pageUrl = new URL(page.url());
+    expect(pageUrl.pathname).toEqual('/login/');
+    expect(pageUrl.searchParams.get('redirect_uri')).toEqual(accountPaymentPathname);
+    // fill login
+    await LoginTester().login(page, {
+      email: MAGIC_SUCCESS_EMAIL,
+    });
+    // should be back at our initial target destination
+    expect(new URL(page.url()).pathname).toEqual(accountPaymentPathname + '/');
     await page.screenshot({
       fullPage: true,
       path: await E2EScreenshotPath(testInfo, `accountPayment-noauth`),
@@ -27,20 +34,12 @@ test.describe('/account/payment', () => {
     page.on('pageerror', err => {
       console.error('pageerror', err);
     });
-    const goToPayment = (page: Page) =>
-      Promise.all([
-        page.waitForNavigation({
-          waitUntil: 'networkidle',
-        }),
-        page.goto('/account/payment'),
-      ]);
-    await goToPayment(page);
-    await LoginTester().login(page, {
+    const tester = LoginTester();
+    await page.goto(tester.loginHref);
+    await tester.login(page, {
       email: MAGIC_SUCCESS_EMAIL,
     });
-    // @todo - this should redirect you back to where you wanted to go: /account/payment
-    await expect(page).toHaveURL('/account/');
-    await goToPayment(page);
+    await page.goto('/account/payment/');
     await expect(page).toHaveURL('/account/payment/');
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const currentPlanTitle = page.locator('[data-testid="currentPlan.title"]');
@@ -55,14 +54,20 @@ test.describe('/account/payment', () => {
     });
   });
   test('can enter credit card details', async ({ page }) => {
-    await LoginTester().login(page, { email: MAGIC_SUCCESS_EMAIL });
+    const tester = LoginTester();
+    await page.goto(tester.loginHref);
+    await tester.login(page, { email: MAGIC_SUCCESS_EMAIL });
     await page.goto(AccountPaymentTester().url);
     await AccountPaymentTester().fillCreditCardDetails(page);
     await AccountPaymentTester().clickAddCardButton(page);
   });
 });
 
-function LoginTester() {
+function LoginTester({
+  loginHref = '/login/',
+}: {
+  loginHref?: string;
+} = {}) {
   async function fillLoginForm(page: Page, email: string) {
     await page.locator('.login-email').fill(email);
   }
@@ -74,20 +79,15 @@ function LoginTester() {
   async function login(
     page: Page,
     {
-      url = '/login/',
       email,
     }: {
-      url?: string;
       email: string;
     }
   ) {
-    if (new URL(page.url()).pathname !== url) {
-      await page.goto(url);
-    }
     await fillLoginForm(page, email);
     await submitLoginForm(page);
   }
-  return { login, submitLoginForm };
+  return { login, loginHref, submitLoginForm };
 }
 
 function AccountPaymentTester() {

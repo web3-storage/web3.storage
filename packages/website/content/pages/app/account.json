@@ -66,8 +66,8 @@
     "storage_manager": {
       "heading": "Storage",
       "legend": {
-        "uploaded": "Stored files",
-        "pinned": "Pinned files"
+        "uploaded": "Direct uploads",
+        "pinned": "Via Pinning API"
       },
       "prompt": "Need more storage?",
       "buttons": {
