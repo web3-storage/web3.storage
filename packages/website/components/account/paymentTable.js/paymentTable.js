@@ -79,6 +79,7 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanMo
                 </div>
               </div>
             ))}
+            {currentPlan?.id === 'earlyAdopter' && <p className="early-adopter-ui-block"></p>}
           </div>
         </div>
       </div>
