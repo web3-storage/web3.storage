@@ -16,6 +16,7 @@ export type UpsertUserOutput = {
   id: number
   // whether the upsert inserted a new record (if falsy, it was updated)
   inserted: boolean
+  inserted_at: string
   issuer: string
 }
 
