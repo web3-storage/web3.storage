@@ -13,7 +13,7 @@ import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
 import { validateSearchParams } from './utils/psa.js'
 import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
-import { CustomerNotFound, getPaymentSettings, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
+import { CustomerNotFound, getPaymentSettings, initializeBillingForNewUser, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
 
 /**
  * @typedef {{ _id: string, issuer: string }} User
@@ -24,8 +24,35 @@ import { CustomerNotFound, getPaymentSettings, isStoragePriceName, savePaymentSe
  */
 
 /**
+ * @typedef {object} IssuedAuthentication
+ * @property {string} issuer
+ * @property {string} publicAddress
+ * @property {string} [email]
+ */
+
+/**
+ * @typedef {(req: Request) => Promise<null|IssuedAuthentication>} RequestAuthenticator
+ */
+
+/**
+ * Context needed to perform new user registration
+ * @typedef {object} UserRegistrationContext
+ * @property {object} magic
+ * @property {object} magic.utils
+ * @property {import('./env').Env['magic']['utils']['parseAuthorizationHeader']} magic.utils.parseAuthorizationHeader
+ * @property {import('./env').Env['MODE']} MODE
+ * @property {object} db
+ * @property {import('./env').Env['db']['upsertUser']} db.upsertUser
+ * @property {import('./env').Env['db']['getUser']} db.getUser
+ * @property {import('./env').Env['DANGEROUSLY_BYPASS_MAGIC_AUTH']} [DANGEROUSLY_BYPASS_MAGIC_AUTH]
+ * @property {RequestAuthenticator} authenticateRequest
+ * @property {import('../src/utils/billing-types').CustomersService} customers
+ * @property {import('../src/utils/billing-types').SubscriptionsService} subscriptions
+ */
+
+/**
  * @param {Request} request
- * @param {import('./env').Env} env
+ * @param {UserRegistrationContext} env
  * @returns {Promise<Response>}
  */
 export async function userLoginPost (request, env) {
@@ -63,15 +90,52 @@ function createMagicLoginController (env, testModeBypass = magicLinkBypassForE2E
 }
 
 /**
+ * @param {UserRegistrationContext} env
+ * @returns {RequestAuthenticator}
+ */
+const createMagicLinkRequestAuthenticator = (env) => async (request) => {
+  const auth = request.headers.get('Authorization') || ''
+  const token = env.magic.utils.parseAuthorizationHeader(auth)
+  const metadata = await (createMagicLoginController(env).authenticate({ token }))
+  /** @type {IssuedAuthentication} */
+  const authentication = {
+    ...metadata,
+    issuer: metadata.issuer,
+    publicAddress: metadata.publicAddress
+  }
+  return authentication
+}
+
+/**
+ * Initialize a new user that just registered.
+ * @param {object} ctx
+ * @param {object} user
+ * @param {string} user.id
+ * @param {string} user.issuer
+ */
+async function initializeNewUser (ctx, user) {
+  await initializeBillingForNewUser(
+    {
+      customers: ctx.customers,
+      subscriptions: ctx.subscriptions,
+      user: { ...user, id: user.id.toString() }
+    }
+  )
+}
+
+/**
  * @param {Request} request
- * @param {import('./env').Env} env
+ * @param {UserRegistrationContext} env
+ * @returns {Promise<{ issuer: string }>}
  */
 async function loginOrRegister (request, env) {
   const data = await request.json()
-  const auth = request.headers.get('Authorization') || ''
 
-  const token = env.magic.utils.parseAuthorizationHeader(auth)
-  const metadata = await (createMagicLoginController(env).authenticate({ token }))
+  const authenticateRequest = env.authenticateRequest || createMagicLinkRequestAuthenticator(env)
+  const metadata = await authenticateRequest(request)
+  if (!metadata) {
+    throw new Error('unable to authenticate request')
+  }
   const { issuer, email, publicAddress } = metadata
   if (!issuer || !email || !publicAddress) {
     throw new Error('missing required metadata')
@@ -87,8 +151,10 @@ async function loginOrRegister (request, env) {
   if (env.MODE === NO_READ_OR_WRITE) {
     return maintenanceHandler()
   } else if (env.MODE === READ_WRITE) {
-    // @ts-ignore
     user = await env.db.upsertUser(parsed)
+    if (user.inserted) {
+      await initializeNewUser(env, { ...user, id: user.id.toString() })
+    }
   } else if (env.MODE === READ_ONLY) {
     user = await env.db.getUser(parsed.issuer, {})
   } else {
@@ -100,31 +166,30 @@ async function loginOrRegister (request, env) {
 
 /**
  * @param {import('@magic-ext/oauth').OAuthRedirectResult} data
- * @param {import('@magic-sdk/admin').MagicUserMetadata} magicMetadata
- * @returns {User}
+ * @param {IssuedAuthentication} magicMetadata
+ * @returns {import('@web3-storage/db/db-client-types').UpsertUserInput}
  */
 function parseGitHub ({ oauth }, { issuer, email, publicAddress }) {
   return {
-    // @ts-ignore
     name: oauth.userInfo.name || '',
     picture: oauth.userInfo.picture || '',
     issuer: issuer ?? '',
-    email,
+    email: email ?? '',
     github: oauth.userHandle,
     publicAddress
   }
 }
 
 /**
- * @param {import('@magic-sdk/admin').MagicUserMetadata & { email: string, issuer: string }} magicMetadata
+ * @param {IssuedAuthentication} magicMetadata
+ * @returns {import('@web3-storage/db/db-client-types').UpsertUserInput}
  */
 function parseMagic ({ issuer, email, publicAddress }) {
-  const name = email.split('@')[0]
+  const name = email?.split('@')[0]
   return {
-    name,
-    picture: '',
+    name: name ?? '',
     issuer,
-    email,
+    email: email ?? '',
     publicAddress
   }
 }
@@ -568,7 +633,7 @@ export async function userPaymentGet (request, env) {
     billing: env.billing,
     customers: env.customers,
     subscriptions: env.subscriptions,
-    user: { id: request.auth.user._id }
+    user: { ...request.auth.user, id: request.auth.user._id }
   })
   if (userPaymentSettings instanceof Error) {
     switch (userPaymentSettings.code) {
@@ -627,7 +692,7 @@ export async function userPaymentPut (request, env) {
     {
       billing: env.billing,
       customers: env.customers,
-      user: { id: request.auth.user._id },
+      user: { ...request.auth.user, id: request.auth.user._id },
       subscriptions: env.subscriptions
     },
     {

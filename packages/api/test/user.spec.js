@@ -1,10 +1,13 @@
 /* eslint-env mocha */
 import assert from 'assert'
-import fetch from '@web-std/fetch'
+import fetch, { Request } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { getTestJWT, getDBClient } from './scripts/helpers.js'
 import userUploads from './fixtures/pgrest/get-user-uploads.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
+import { userLoginPost } from '../src/user.js'
+import { Magic } from '@magic-sdk/admin'
+import { createMockCustomerService, createMockSubscriptionsService, storagePriceNames } from '../src/utils/billing.js'
 
 describe('GET /user/account', () => {
   it('error if not authenticated with magic.link', async () => {
@@ -415,5 +418,40 @@ describe('GET /user/pins', () => {
     assert(res.ok)
     const body = await res.json()
     assert.equal([...new Set(body.results.map(x => x.pin.authKey))].length, 2)
+  })
+})
+
+describe('userLoginPost', function () {
+  it('brand new users have a storageSubscription with price=free', async function () {
+    const user1Authentication = {
+      issuer: `user1-${Math.random().toString().slice(2)}`,
+      publicAddress: `user1-${Math.random().toString().slice(2)}`,
+      email: 'user1@example.com'
+    }
+    const env = {
+      MODE: /** @type {const} */ ('rw'),
+      db: getDBClient(),
+      magic: new Magic(process.env.MAGIC_SECRET_KEY),
+      authenticateRequest: async () => user1Authentication,
+      customers: createMockCustomerService(),
+      subscriptions: createMockSubscriptionsService()
+    }
+    const request = new Request(new URL('/user/login', endpoint).toString(), {
+      method: 'post',
+      body: JSON.stringify({
+        data: {}
+      })
+    })
+    const response = await userLoginPost(request, env)
+    assert.equal(response.status, 200, 'response.status is as expected')
+
+    // now ensure it has desired subscription
+    const gotUser = await env.db.getUser(user1Authentication.issuer, {})
+    const gotSubscription = await env.subscriptions.getSubscription(
+      (await env.customers.getOrCreateForUser({ id: gotUser._id })).id
+    )
+    assert.ok(!(gotSubscription instanceof Error), 'gotSubscription is not an error')
+    assert.ok(gotSubscription, 'gotSubscription is truthy')
+    assert.equal(gotSubscription.storage?.price, storagePriceNames.free)
   })
 })

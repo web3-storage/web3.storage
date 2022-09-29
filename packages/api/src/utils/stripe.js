@@ -182,18 +182,18 @@ export class StripeCustomersService {
   }
 
   /**
-   * @param {{id: string}} user
+   * @param {import('./billing-types').BillingUser} user
    * @returns {Promise<Customer>}
    */
   async getOrCreateForUser (user) {
-    const existingCustomer = await this.userCustomerService.getUserCustomer(user.id)
+    const existingCustomer = await this.userCustomerService.getUserCustomer(user.id.toString())
     if (existingCustomer) return existingCustomer
     const createdCustomer = await this.stripe.customers.create({
       metadata: {
         'web3.storage/user.id': user.id
       }
     })
-    await this.userCustomerService.upsertUserCustomer(user.id, createdCustomer.id)
+    await this.userCustomerService.upsertUserCustomer(user.id.toString(), createdCustomer.id)
     return createdCustomer
   }
 }

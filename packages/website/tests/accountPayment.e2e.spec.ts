@@ -41,6 +41,13 @@ test.describe('/account/payment', () => {
     });
     await page.goto('/account/payment/');
     await expect(page).toHaveURL('/account/payment/');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const currentPlanTitle = page.locator('[data-testid="currentPlan.title"]');
+    // TODO - this won't work in CI because the env.subscriptions used is a mock that
+    // only persists in-memory, which doesn't work in our miniflare setup.
+    // This check does persist when tested locally using StripeSubscriptionsService.
+    // One way of making this work would be to have the mockSubscriptionsService read/write from disk
+    // expect(await currentPlanTitle.innerText()).toBe('Free');
     await page.screenshot({
       fullPage: true,
       path: await E2EScreenshotPath(testInfo, `accountPayment`),

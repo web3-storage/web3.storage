@@ -2,7 +2,7 @@
  * @fileoverview Account Payment Settings
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Elements, ElementsConsumer } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
@@ -12,85 +12,121 @@ import PaymentTable from '../../components/account/paymentTable.js/paymentTable.
 import PaymentMethodCard from '../../components/account/paymentMethodCard/paymentMethodCard.js';
 import AccountPlansModal from '../../components/accountPlansModal/accountPlansModal.js';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
-import { plans, plansEarly } from '../../components/contexts/plansContext';
+import { earlyAdopterPlan, plans, plansEarly } from '../../components/contexts/plansContext';
 import { userBillingSettings } from '../../lib/api';
+
+/**
+ * @typedef {object} storageSubscription
+ * @property {'free'|'lite'|'pro'} price
+ */
+
+/**
+ * @typedef {object} PaymentSettings
+ * @property {null|{id: string}} paymentMethod
+ * @property {object} subscription
+ * @property {storageSubscription|null} subscription.storage
+ */
+
+/**
+ * @typedef {Object} Plan
+ * @property {string | null} id
+ * @property {string} title
+ * @property {string} description
+ * @property {string} price
+ * @property {string} base_storage
+ * @property {string} additional_storage
+ * @property {string} bandwidth
+ * @property {string} block_limit
+ * @property {string} car_size_limit
+ * @property {boolean} pinning_api
+ */
+
+/**
+ * @typedef {Object} PaymentMethodCard
+ * @property {string} brand
+ * @property {string} country
+ * @property {string} exp_month
+ * @property {string} exp_year
+ * @property {string} last4
+ */
+
+/**
+ * @typedef {Object} PaymentMethod
+ * @property {string} id
+ * @property {PaymentMethodCard} card
+ */
 
 const PaymentSettingsPage = props => {
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
   const stripePromise = loadStripe(props.stripePublishableKey);
-  const [hasPaymentMethods, setHasPaymentMethods] = useState(false);
-  const [currentPlan, setCurrentPlan] = useState(/** @type {Plan | null} */ (null));
-  const [isEarlyAdopter, setIsEarlyAdopter] = useState(/** @type {boolean} */ (false));
+  const [needsFetchPaymentSettings, setNeedsFetchPaymentSettings] = useState(true);
+  const [, setIsFetchingPaymentSettings] = useState(false);
+  const [paymentSettings, setPaymentSettings] = useState(/** @type {undefined|PaymentSettings} */ (undefined));
   const [planSelection, setPlanSelection] = useState('');
-  const [planList, setPlanList] = useState(/** @type {Plan[]}*/ (plans));
-  const [savedPaymentMethod, setSavedPaymentMethod] = useState(/** @type {PaymentMethod} */ ({}));
   const [editingPaymentMethod, setEditingPaymentMethod] = useState(false);
-  const [loadingUserSettings, setLoadingUserSettings] = useState(true);
+  // subcomponents that save a new plan can set this, which will trigger a re-fetch but the
+  // ui can optimistically show the new value while the refetch happens.
+  const [optimisticCurrentPlan, setOptimisticCurrentPlan] = useState(/** @type {Plan|undefined} */ (undefined));
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
-  /**
-   * @typedef {Object} Plan
-   * @property {string | null} id
-   * @property {string} title
-   * @property {string} description
-   * @property {string} price
-   * @property {string} base_storage
-   * @property {string} additional_storage
-   * @property {string} bandwidth
-   * @property {string} block_limit
-   * @property {string} car_size_limit
-   * @property {boolean} pinning_api
-   */
-
-  /**
-   * @typedef {Object} PaymentMethodCard
-   * @property {string} brand
-   * @property {string} country
-   * @property {string} exp_month
-   * @property {string} exp_year
-   * @property {string} last4
-   */
-
-  /**
-   * @typedef {Object} PaymentMethod
-   * @property {string} id
-   * @property {PaymentMethodCard} card
-   */
-
+  // fetch payment settings whenever needed
   useEffect(() => {
-    const getSavedCard = async () => {
-      const card = await userBillingSettings();
-      if (card) {
-        setSavedPaymentMethod(card.paymentMethod);
+    async function loadPaymentSettings() {
+      if (!needsFetchPaymentSettings) {
+        return;
       }
-      return card;
-    };
-    getSavedCard();
-  }, [hasPaymentMethods]);
-
-  useEffect(() => {
-    if (!currentPlan || currentPlan === null) {
-      setPlanList(plansEarly);
-      setIsEarlyAdopter(true);
-    } else {
-      setPlanList(plans);
+      setIsFetchingPaymentSettings(true);
+      setNeedsFetchPaymentSettings(false);
+      try {
+        setPaymentSettings(await userBillingSettings());
+        setOptimisticCurrentPlan(undefined); // no longer use previous optimistic value
+      } finally {
+        setIsFetchingPaymentSettings(false);
+      }
     }
-  }, [currentPlan]);
+    loadPaymentSettings();
+  }, [needsFetchPaymentSettings]);
 
-  useEffect(() => {
-    if (savedPaymentMethod) {
-      const getPlan = async () => {
-        const userPlan = await userBillingSettings();
-        setLoadingUserSettings(false);
-        setCurrentPlan(
-          planList.find(plan => {
-            return plan.id === userPlan?.subscription?.storage?.price ?? null;
-          }) || null
-        );
-      };
-      getPlan();
+  // When storageSubscription is null, user sees a version of planList that contains 'Early Adopter' instead of 'free'
+  const planList = useMemo(() => {
+    if (typeof paymentSettings === 'undefined') {
+      return plans;
     }
-  }, [savedPaymentMethod, planList]);
+    const storageSubscription = paymentSettings.subscription.storage;
+    if (storageSubscription === null) {
+      return plansEarly;
+    }
+    return plans;
+  }, [paymentSettings]);
+
+  // whenever the optimisticCurrentPlan is set, enqueue a fetch of actual payment settings
+  useEffect(() => {
+    if (optimisticCurrentPlan) {
+      setNeedsFetchPaymentSettings(true);
+    }
+  }, [optimisticCurrentPlan]);
+
+  const currentPlan = useMemo(() => {
+    if (typeof optimisticCurrentPlan !== 'undefined') {
+      return optimisticCurrentPlan;
+    }
+    if (typeof paymentSettings === 'undefined') {
+      // haven't fetched paymentSettings yet.
+      return undefined;
+    }
+    const storageSubscription = paymentSettings.subscription.storage;
+    if (!storageSubscription) {
+      // user has no storage subscription, show early adopter plan
+      return earlyAdopterPlan;
+    }
+    return planList.find(plan => {
+      return plan.id === storageSubscription.price;
+    });
+  }, [planList, paymentSettings, optimisticCurrentPlan]);
+
+  const savedPaymentMethod = useMemo(() => {
+    return paymentSettings?.paymentMethod;
+  }, [paymentSettings]);
 
   return (
     <>
@@ -100,22 +136,12 @@ const PaymentSettingsPage = props => {
             <h1 className="table-heading">Payment</h1>
           </div>
           <div className="billing-content">
-            {!currentPlan && !loadingUserSettings && (
-              <div className="add-billing-cta">
-                <p>
-                  You don&apos;t have a paid plan. Please add a credit/debit card and select a plan to prevent storage
-                  issues beyond your plan limits below.
-                </p>
-              </div>
-            )}
-
-            {loadingUserSettings ? (
+            {typeof paymentSettings === 'undefined' ? (
               <Loading message="Fetching user info..." />
             ) : (
               <PaymentTable
                 plans={planList}
                 currentPlan={currentPlan}
-                isEarlyAdopter={isEarlyAdopter}
                 setPlanSelection={setPlanSelection}
                 setIsPaymentPlanModalOpen={setIsPaymentPlanModalOpen}
               />
@@ -138,7 +164,7 @@ const PaymentSettingsPage = props => {
                         {({ stripe, elements }) => {
                           return (
                             <AddPaymentMethodForm
-                              setHasPaymentMethods={setHasPaymentMethods}
+                              setHasPaymentMethods={() => setNeedsFetchPaymentSettings(true)}
                               setEditingPaymentMethod={setEditingPaymentMethod}
                               currentPlan={currentPlan?.id}
                             />
@@ -165,10 +191,10 @@ const PaymentSettingsPage = props => {
           }}
           planList={planList}
           planSelection={planSelection}
-          setCurrentPlan={setCurrentPlan}
+          setCurrentPlan={setOptimisticCurrentPlan}
           savedPaymentMethod={savedPaymentMethod}
           stripePromise={stripePromise}
-          setHasPaymentMethods={setHasPaymentMethods}
+          setHasPaymentMethods={() => setNeedsFetchPaymentSettings(true)}
           setEditingPaymentMethod={setEditingPaymentMethod}
           setHasAcceptedTerms={setHasAcceptedTerms}
           hasAcceptedTerms={hasAcceptedTerms}
