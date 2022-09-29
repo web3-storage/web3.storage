@@ -70,9 +70,6 @@ const nextConfig = {
     });
     return paths;
   },
-  env: {
-    rawJsFromFile: fs.readFileSync('./rawJsFromFile.js').toString(),
-  },
 };
 
 module.exports = withNextra({ ...nextConfig });
