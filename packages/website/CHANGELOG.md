@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.22.0](https://github.com/web3-storage/web3.storage/compare/website-v2.21.2...website-v2.22.0) (2022-09-29)
+
+
+### Features
+
+* /account/login?redirect_to=/final/url should redirect to /final/url after authn ([#1950](https://github.com/web3-storage/web3.storage/issues/1950)) ([2bbe6de](https://github.com/web3-storage/web3.storage/commit/2bbe6defaca22663437b9ce28ef8cd5529d5facb))
+* create page for service level agreement ([#1955](https://github.com/web3-storage/web3.storage/issues/1955)) ([6525845](https://github.com/web3-storage/web3.storage/commit/6525845bea1b79bb12870698b1f9f2c135f57109))
+* early adopter UI ([#1959](https://github.com/web3-storage/web3.storage/issues/1959)) ([1affae3](https://github.com/web3-storage/web3.storage/commit/1affae30271ba7a5bd6e2727922441680b9f291c))
+* homepage (index) copy for pricing changes ([#1942](https://github.com/web3-storage/web3.storage/issues/1942)) ([f2084a3](https://github.com/web3-storage/web3.storage/commit/f2084a375e7fc4034db7bd5fae194d3b597d89c8))
+* new users are initialized into free tier ([#1945](https://github.com/web3-storage/web3.storage/issues/1945)) ([ee67c35](https://github.com/web3-storage/web3.storage/commit/ee67c35c6b12a363140b79ea34835123ad76420c))
+* pricing page (for tiered pricing) ([#1894](https://github.com/web3-storage/web3.storage/issues/1894)) ([3f0db86](https://github.com/web3-storage/web3.storage/commit/3f0db86be270000f37c1d9b8ce49be70a90c8dfc))
+* revert "fix: rm menu item from global account menu" ([#1951](https://github.com/web3-storage/web3.storage/issues/1951)) ([2f84754](https://github.com/web3-storage/web3.storage/commit/2f84754a5e6deb72700f803eeae66aa079e4272a))
+* update preview summary metadata ([#1965](https://github.com/web3-storage/web3.storage/issues/1965)) ([a47949c](https://github.com/web3-storage/web3.storage/commit/a47949c10b4317902ed3cea3ad0cd177d33bdab0))
+* update terms of service ([#1964](https://github.com/web3-storage/web3.storage/issues/1964)) ([dd810b9](https://github.com/web3-storage/web3.storage/commit/dd810b93f752c987e3f1785ae0745e8154099bed))
+* update the web3storage product page (for tiered pricing) ([#1957](https://github.com/web3-storage/web3.storage/issues/1957)) ([03a6422](https://github.com/web3-storage/web3.storage/commit/03a642283d56e580436ff853bc2b3971a24875e1))
+
 ## [2.21.2](https://github.com/web3-storage/web3.storage/compare/website-v2.21.1...website-v2.21.2) (2022-09-28)
 
 
