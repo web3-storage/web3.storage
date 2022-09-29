@@ -24,8 +24,6 @@
   }
 
   .billing-plans {
-    // padding: 3rem;
-    // background-color: $vulcan;
     color: #fff;
     border-radius: 10px;
   }
@@ -56,15 +54,12 @@
       border-radius: 8px 8px 0 0;
       text-align: left;
       text-transform: uppercase;
-      // transform: translateY(-100%);
-      // display: block;
     }
 
     + .billing-card {
       border-left: 0;
     }
   }
-  // }
 
   .account-plans-confirm {
     display: flex;

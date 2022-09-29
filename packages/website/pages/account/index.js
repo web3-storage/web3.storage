@@ -81,7 +81,6 @@ const Account = () => {
       <div className="page-container account-container">
         <h1 className="table-heading">{dashboard.heading}</h1>
         <div className="account-content">
-          {/* ui block here */}
           <StorageManager content={AppData.page_content.storage_manager} className="account-storage-manager" />
           <CTACard
             className="account-upload-cta"

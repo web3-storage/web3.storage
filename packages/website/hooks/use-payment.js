@@ -1,48 +1,101 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 import { userBillingSettings } from '../lib/api';
-import { plansAll } from '../components/contexts/plansContext';
+import { earlyAdopterPlan, plans, plansEarly } from '../components/contexts/plansContext';
 
 export const usePayment = () => {
+  /**
+   * @typedef {object} storageSubscription
+   * @property {'free'|'lite'|'pro'} price
+   */
+
+  /**
+   * @typedef {object} PaymentSettings
+   * @property {null|{id: string}} paymentMethod
+   * @property {object} subscription
+   * @property {storageSubscription|null} subscription.storage
+   */
+
   /**
    * @typedef {Object} Plan
    * @property {string | null} id
    * @property {string} title
    * @property {string} description
    * @property {string} price
-   * @property {string} base_storage
-   * @property {string} additional_storage
+   * @property {string} baseStorage
+   * @property {string} additionalStorage
    * @property {string} bandwidth
-   * @property {string} block_limit
-   * @property {string} car_size_limit
-   * @property {boolean} pinning_api
+   * @property {string} blockLimit
    */
 
-  const [hasPaymentMethod, setHasPaymentMethod] = useState(false);
-  const [currentPlan, setCurrentPlan] = useState(/** @type {Plan | null} */ (null));
+  const [needsFetchPaymentSettings, setNeedsFetchPaymentSettings] = useState(true);
+  const [, setIsFetchingPaymentSettings] = useState(false);
+  const [paymentSettings, setPaymentSettings] = useState(/** @type {undefined|PaymentSettings} */ (undefined));
+  // subcomponents that save a new plan can set this, which will trigger a re-fetch but the
+  // ui can optimistically show the new value while the refetch happens.
+  const [optimisticCurrentPlan, setOptimisticCurrentPlan] = useState(/** @type {Plan|undefined} */ (undefined));
 
+  // fetch payment settings whenever needed
   useEffect(() => {
-    const getUserPaymentInfo = async () => {
-      const userPlan = await userBillingSettings();
-      console.log(userPlan);
-      if (userPlan.paymentMethod) {
-        await setHasPaymentMethod(true);
+    async function loadPaymentSettings() {
+      if (!needsFetchPaymentSettings) {
+        return;
       }
-      if (userPlan?.subscription?.storage?.price) {
-        setCurrentPlan(
-          plansAll.find(plan => {
-            return plan.id === userPlan?.subscription?.storage?.price ?? null;
-          }) || null
-        );
-      } else {
-        setCurrentPlan(plansAll.find(plan => plan.id === 'earlyAdopter') || null);
+      setIsFetchingPaymentSettings(true);
+      setNeedsFetchPaymentSettings(false);
+      try {
+        setPaymentSettings(await userBillingSettings());
+        setOptimisticCurrentPlan(undefined); // no longer use previous optimistic value
+      } finally {
+        setIsFetchingPaymentSettings(false);
       }
-    };
-    getUserPaymentInfo();
-  }, [currentPlan]);
+    }
+    loadPaymentSettings();
+  }, [needsFetchPaymentSettings]);
+
+  // When storageSubscription is null, user sees a version of planList that contains 'Early Adopter' instead of 'free'
+  const planList = useMemo(() => {
+    if (typeof paymentSettings === 'undefined') {
+      return plans;
+    }
+    const storageSubscription = paymentSettings.subscription.storage;
+    if (storageSubscription === null) {
+      return plansEarly;
+    }
+    return plans;
+  }, [paymentSettings]);
+
+  // whenever the optimisticCurrentPlan is set, enqueue a fetch of actual payment settings
+  useEffect(() => {
+    if (optimisticCurrentPlan) {
+      setNeedsFetchPaymentSettings(true);
+    }
+  }, [optimisticCurrentPlan]);
+
+  const currentPlan = useMemo(() => {
+    if (typeof optimisticCurrentPlan !== 'undefined') {
+      return optimisticCurrentPlan;
+    }
+    if (typeof paymentSettings === 'undefined') {
+      // haven't fetched paymentSettings yet.
+      return undefined;
+    }
+    const storageSubscription = paymentSettings.subscription.storage;
+    if (!storageSubscription) {
+      // user has no storage subscription, show early adopter plan
+      return earlyAdopterPlan;
+    }
+    return planList.find(plan => {
+      return plan.id === storageSubscription.price;
+    });
+  }, [planList, paymentSettings, optimisticCurrentPlan]);
+
+  const savedPaymentMethod = useMemo(() => {
+    return paymentSettings?.paymentMethod;
+  }, [paymentSettings]);
 
   return {
-    hasPaymentMethod: hasPaymentMethod,
+    savedPaymentMethod: savedPaymentMethod,
     currentPlan: currentPlan,
   };
 };

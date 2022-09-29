@@ -106,7 +106,7 @@ const StorageManager = ({ className = '', content }) => {
                 </>
               ) : (
                 <>
-                  &nbsp;of <span className="storage-number">{currentPlan?.base_storage}</span> used
+                  &nbsp;of <span className="storage-number">{currentPlan?.baseStorage}</span> used
                 </>
               )}
             </>

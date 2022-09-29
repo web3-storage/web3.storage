@@ -4,12 +4,10 @@ export const sharedPlans = [
     title: 'Lite',
     description: 'For those that want to take advantage of more storage',
     price: '$3/mo',
-    base_storage: '15GiB',
-    additional_storage: '$0.22 / GiB',
+    baseStorage: '15GiB',
+    additionalStorage: '$0.20 / GiB',
     bandwidth: '30GiB / month',
-    block_limit: '10,000 / GiB',
-    car_size_limit: '5MiB',
-    pinning_api: true,
+    blockLimit: '10,000 / GiB',
   },
   {
     // id: 'price_pro',
@@ -17,12 +15,10 @@ export const sharedPlans = [
     title: 'Expert',
     description: 'Our lowest price per GiB stored. For those with use cases that require scale.',
     price: '$10/mo',
-    base_storage: '60GiB',
-    additional_storage: '$0.17 / GiB',
+    baseStorage: '60GiB',
+    additionalStorage: '$0.17 / GiB',
     bandwidth: '120GiB / month',
-    block_limit: '10,000 / GiB',
-    car_size_limit: '5MiB',
-    pinning_api: true,
+    blockLimit: '10,000 / GiB',
   },
 ];
 
@@ -31,12 +27,10 @@ export const freePlan = {
   title: 'Free',
   description: 'You are currently on the free tier. You can use our service up to 5GiB/mo without being charged.',
   price: '$0/mo',
-  base_storage: '5GiB',
-  additional_storage: 'N/A',
+  baseStorage: '5GiB',
+  additionalStorage: 'N/A',
   bandwidth: '10GiB / month',
-  block_limit: '2,500 / GiB',
-  car_size_limit: '5MiB',
-  pinning_api: false,
+  blockLimit: '2,500 / GiB',
 };
 
 export const earlyAdopterPlan = {
@@ -45,12 +39,10 @@ export const earlyAdopterPlan = {
   description:
     'As an early adopter we appreciate your support and can continue to use the storage you are already accustomed to.',
   price: '$0/mo',
-  base_storage: '25GiB',
-  additional_storage: 'NA',
+  baseStorage: '25GiB',
+  additionalStorage: 'NA',
   bandwidth: '10Gib / month',
-  block_limit: '2,500 / GiB',
-  car_size_limit: '5MiB',
-  pinning_api: false,
+  blockLimit: '2,500 / GiB',
 };
 
 export const plans = [freePlan, ...sharedPlans];

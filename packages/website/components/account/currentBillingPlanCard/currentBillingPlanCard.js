@@ -12,13 +12,13 @@ const CurrentBillingPlanCard = ({ plan }) => {
           <p className="billing-plan-limit">
             {plan.id !== 'free' && (
               <span>
-                <span>Base Storage Capacity:</span> <strong>{plan.base_storage}</strong> for{' '}
+                <span>Base Storage Capacity:</span> <strong>{plan.baseStorage}</strong> for{' '}
                 <strong>{plan.price}</strong>
               </span>
             )}
             <span>
-              <span>Additional Storage:</span> <strong>{plan.additional_storage.split(' ')[0]} per GiB</strong> after{' '}
-              {plan.base_storage.split(' ')[0]}
+              <span>Additional Storage:</span> <strong>{plan.additionalStorage.split(' ')[0]} per GiB</strong> after{' '}
+              {plan.baseStorage.split(' ')[0]}
             </span>
             <span>
               <span>Bandwidth:</span> <strong>{plan.bandwidth}</strong>

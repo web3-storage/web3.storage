@@ -49,10 +49,10 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanMo
                     </div>
                   ) : (
                     <div className="billing-plan-details">
-                      <p>{plan.base_storage}</p>
-                      <p>{plan.additional_storage}</p>
+                      <p>{plan.baseStorage}</p>
+                      <p>{plan.additionalStorage}</p>
                       <p>{plan.bandwidth}</p>
-                      <p>{plan.block_limit}</p>
+                      <p>{plan.blockLimit}</p>
                     </div>
                   )}
 
@@ -79,15 +79,6 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanMo
                 </div>
               </div>
             ))}
-            {currentPlan?.id === 'earlyAdopter' && (
-              <p className="early-adopter-ui-block">
-                {/* As an Early Adopter, you already get our lowest storage rate.
-                <small>
-                  If you haven&apos;t already, please add a card to prevent storage issues beyond the amount you are
-                  getting for free.
-                </small> */}
-              </p>
-            )}
           </div>
         </div>
       </div>
