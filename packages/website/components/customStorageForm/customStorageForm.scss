@@ -8,13 +8,19 @@
     @media screen and (min-width: 768px) {
       grid-template-columns: 1fr 1fr;
       grid-template-rows: auto;
-      grid-gap: 1rem 3rem;
+      grid-gap: 2rem 3rem;
     }
   }
 
   .input-wrapper {
     display: flex;
     flex-direction: column;
+
+    &.full {
+      @media screen and (min-width: 768px) {
+        grid-column: span 2;
+      }
+    }
   }
 
   label {
@@ -30,7 +36,8 @@
     margin: 0px;
   }
 
-  input {
+  input,
+  textarea {
     padding: 10px 15px;
     border-radius: 4px;
     font-size: 1rem;
@@ -40,7 +47,7 @@
 
   button {
     min-width: 100px;
-    margin-top: 1rem;
+    margin-top: 2rem;
     font-size: 1rem;
     &:hover {
       color: #000;

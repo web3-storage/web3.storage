@@ -1,14 +1,14 @@
 import { useCallback, useMemo, useState } from 'react';
 
+import countly from 'lib/countly';
+import { useUploads } from 'components/contexts/uploadsContext';
+import { useUser } from 'hooks/use-user';
 import StorageManager from '../../components/account/storageManager/storageManager';
 import FilesManager from '../../components/account/filesManager/filesManager';
 import CTACard from '../../components/account/ctaCard/CTACard';
 import FileUploader from '../../components/account/fileUploader/fileUploader';
 import GradientBackground from '../../components/gradientbackground/gradientbackground.js';
-import countly from 'lib/countly';
 import AppData from '../../content/pages/app/account.json';
-import { useUploads } from 'components/contexts/uploadsContext';
-import { useUser } from 'hooks/use-user';
 
 export const CTACardTypes = {
   API_TOKENS: 'API_TOKENS',

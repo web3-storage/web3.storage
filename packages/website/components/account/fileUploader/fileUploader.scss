@@ -26,6 +26,50 @@
       width: 1000px !important;
     }
   }
+
+  .billing-terms-toggle {
+    width: 100%;
+    position: relative;
+    line-height: 1.5;
+    font-size: 13px;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: 1em auto;
+    gap: 0.75em;
+    margin-bottom: 2rem;
+    input {
+      display: grid;
+      place-content: center;
+      appearance: none;
+      font: inherit;
+      color: currentColor;
+      width: 1.15em;
+      height: 1.15em;
+      border: 0.15em solid currentColor;
+      border-radius: 0.15em;
+      transform: translateY(-0.075em);
+      cursor: pointer;
+    }
+    input[type='checkbox']::before {
+      content: '';
+      width: 0.6em;
+      height: 0.6em;
+      transform: scale(0);
+      transition: 120ms transform ease-in-out;
+      box-shadow: inset 1em 1em $cerise;
+      pointer-events: none;
+    }
+
+    input[type='checkbox']:checked::before {
+      transform: scale(1);
+    }
+
+    a {
+      color: $vulcan;
+      text-decoration: underline;
+    }
+  }
 }
 
 .file-upload-subheading {
@@ -46,6 +90,17 @@
     border: solid;
     border-image: url('/images/illustrations/dashed-border.png') 2 round;
     @include borderRadius_Large;
+  }
+
+  &.disabled {
+    .droparea {
+      opacity: 0.5;
+      pointer-events: none;
+
+      * {
+        pointer-events: none;
+      }
+    }
   }
 
   .filelist {

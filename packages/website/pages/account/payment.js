@@ -33,12 +33,10 @@ import { userBillingSettings } from '../../lib/api';
  * @property {string} title
  * @property {string} description
  * @property {string} price
- * @property {string} base_storage
- * @property {string} additional_storage
+ * @property {string} baseStorage
+ * @property {string} additionalStorage
  * @property {string} bandwidth
- * @property {string} block_limit
- * @property {string} car_size_limit
- * @property {boolean} pinning_api
+ * @property {string} blockLimit
  */
 
 /**
@@ -136,6 +134,15 @@ const PaymentSettingsPage = props => {
             <h1 className="table-heading">Payment</h1>
           </div>
           <div className="billing-content">
+            {currentPlan?.id === 'free' && !savedPaymentMethod && (
+              <div className="add-billing-cta">
+                <p>
+                  You don&apos;t have a paid plan. Please add a credit/debit card and select a plan to prevent storage
+                  issues beyond your plan limits below.
+                </p>
+              </div>
+            )}
+
             {typeof paymentSettings === 'undefined' ? (
               <Loading message="Fetching user info..." />
             ) : (
