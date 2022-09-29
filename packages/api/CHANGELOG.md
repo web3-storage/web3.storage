@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.8.0](https://github.com/web3-storage/web3.storage/compare/api-v7.7.1...api-v7.8.0) (2022-09-29)
+
+
+### Features
+
+* new users are initialized into free tier ([#1945](https://github.com/web3-storage/web3.storage/issues/1945)) ([ee67c35](https://github.com/web3-storage/web3.storage/commit/ee67c35c6b12a363140b79ea34835123ad76420c))
+
 ## [7.7.1](https://github.com/web3-storage/web3.storage/compare/api-v7.7.0...api-v7.7.1) (2022-09-23)
 
 
