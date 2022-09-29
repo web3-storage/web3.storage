@@ -26,11 +26,11 @@
               "num": "col-12"
             },
             "format": "header",
-            "heading": "The easiest way to store data on the decentralized web.",
-            "subheading": "Store your data using our simple API. It’s fast, open, and it’s free.",
+            "heading": "Say hello to the data layer",
+            "subheading": "Use decentralized protocols to liberate your data using our easy-to-use developer platform. We’ll take care of the rest.",
             "cta": {
               "url": "/login",
-              "text": "START STORING NOW",
+              "text": "START NOW",
               "event": "",
               "ui": "HOME_HERO",
               "action": "Get Started"
@@ -65,10 +65,10 @@
               {
                 "type": "text_block",
                 "format": "medium",
-                "heading": "Store and retrieve with ease",
+                "heading": "Connecting services with the data layer",
                 "description": [
-                  "Most decentralized storage services either need you to jump through hoops (like buying some cryptocurrency) or aren't truly decentralized.",
-                  "With web3.storage, things are both easy-to-use and trustless! Upload any data via our API or our web UI for free. The data will end up on a decentralized set of IPFS and Filecoin storage providers."
+                  "Eliminate silos with the web3.storage platform. Using IPFS and other decentralized protocols, create a true data layer that connects you, your users, and the Web, regardless of where content is stored - client-side, in the cloud, or elsewhere.",
+                  "Sounds hard? It isn’t. Our client libraries are super easy-to-use, abstracting the complexity of these decentralized protocols. And we provide services like data storage designed to natively support these protocols, so things just work without you ever being locked-in."
                 ],
                 "cta": {
                   "url": "/products/web3storage",
@@ -119,9 +119,9 @@
                     }
                   },
                   {
-                    "thumb": "RETRIEVE",
+                    "thumb": "READ",
                     "lines": [
-                      "// retrive.mjs",
+                      "// retrieve.mjs",
                       "",
                       "import { Web3Storage, getFilesFromPath } from 'web3.storage'",
                       "",
@@ -205,15 +205,15 @@
             "cards": [
               {
                 "type": "A",
-                "feature": "2500+",
-                "title": "Projects Worldwide",
-                "description": "Join a global community storing data on web3"
+                "feature": "20K+",
+                "title": "Users",
+                "description": "Join a global community<br/> storing data on web3"
               },
               {
                 "type": "A",
-                "feature": "15M+",
+                "feature": "40M+",
                 "title": "Stored Objects",
-                "description": "Store data for free with our easy to use API or our JS library"
+                "description": "Store data with our easy<br/> to use API or JS library"
               },
               {
                 "type": "A",
@@ -236,7 +236,7 @@
             },
             "format": "medium",
             "heading": "Why web3.storage?",
-            "description": "With web3.storage you get all the benefits of decentralized storage technologies with the frictionless experience you expect in a modern dev workflow.",
+            "description": "With web3.storage you get all the benefits of decentralized storage and other cutting-edge protocols with the frictionless experience you expect in a modern dev workflow. Check out our docs pages to learn more.",
             "cta": {
               "url": "/docs/",
               "text": "READ DOCS",
@@ -256,20 +256,20 @@
               {
                 "type": "text_block",
                 "format": "small",
-                "heading": "Simple",
-                "description": "With web3.storage, you get decentralized storage in minutes. Use our simple client library or the HTTP API directly - all you need is a free API token."
-              },
-              {
-                "type": "text_block",
-                "format": "small",
                 "heading": "Open",
-                "description": "All data stored is accessible on the public IPFS network via a content ID - interoperable with the tools and services building on the decentralized web."
+                "description": "All data is accessible via IPFS and backed by Filecoin storage, with service authentication using decentralized identity. Create user-centric applications, run verifiable workloads on data, and more - no servers needed, no lock-in, no trust necessary."
               },
               {
                 "type": "text_block",
                 "format": "small",
-                "heading": "Free",
-                "description": "Data is stored on the Filecoin network, which has a unique economic model and over 15 EiB of capacity, allowing us to offer web3.storage for free today. This storage is cryptographically provable by anyone!"
+                "heading": "Reliable",
+                "description": "We take the best of web2 and web3 to provide infra you can rely on to scale with you. Frustration with decentralized storage is a thing of the past."
+              },
+              {
+                "type": "text_block",
+                "format": "small",
+                "heading": "Simple",
+                "description": "Start storing in minutes using our simple client library to see how decentralized protocols can work together to unlock your data layer."
               }
             ]
           }
@@ -296,10 +296,10 @@
                 "type": "text_block",
                 "format": "medium",
                 "heading": "Frequently Asked Questions",
-                "subheading": "How is this free?",
+                "subheading": "What is meant by the “web3.storage platform”?",
                 "description": [
-                  "web3.storage offers a simple interface that allows users and developers to take advantage of the vast array of decentralized storage provided by the Filecoin network.",
-                  "The unique economics of Filecoin allow web3.storage to be completely free to use, while still ensuring that storage providers have a strong incentive to preserve user data for the long term."
+                  "web3.storage is a suite of APIs and services that make it easy for developers and other users to interact with data in a way that is not tied to where the data is actually physically stored. It natively uses decentralized data and identity protocols like <a href='https://ipfs.tech/'>IPFS</a>, <a href='https://filecoin.io/'>Filecoin</a>, and <a href='https://ucan.xyz/'>UCAN</a> that enable verifiable, data- and user-centric application architectures and workflows. ",
+                  "At the core of the platform includes a hosted storage service which can be used to upload and persist data to make it continuously available. The platform also contains additional services like <a href='/products/w3link/'>w3link</a> and <a href='/products/w3name/'>w3name</a> that make it easier to create seamless, delightful web experiences utilizing web3 protocols."
                 ],
                 "cta": {
                   "url": "/faq",
@@ -337,8 +337,8 @@
               {
                 "type": "F",
                 "label": "FAQ",
-                "title": "How is web3.storage different from NFT.Storage?",
-                "description": "Both services are offered by the same group and share much of the same architecture, but as the name suggests, NFT.Storage is…",
+                "title": "What advantages does web3.storage have over traditional hosted storage services?",
+                "description": "Because web3.storage uses decentralized data and identity protocols like <a href='https://ipfs.tech/'>IPFS</a> and <a href='https://ucan.xyz/'>UCAN</a>, data and identity are referenced in an open way. Data is referenced using <a href='https://docs.ipfs.tech/concepts/content-addressing/'>IPFS content identifiers</a> that are unique to the data, making your data...",
                 "cta": {
                   "url": "/faq/?section=service",
                   "text": "READ MORE",
@@ -351,8 +351,8 @@
               {
                 "type": "F",
                 "label": " ",
-                "title": "What happens if web3.storage is discontinued?",
-                "description": "One major advantage of using web3.storage is its use of IPFS, making it easy to move to an alternative storage provider. All of your data…",
+                "title": "What advantages does web3.storage have over other IPFS hosted services?",
+                "description": "web3.storage runs on <a href='https://github.com/elastic-ipfs/elastic-ipfs'>Elastic IPFS</a>, an open-source, cloud-native, highly scalable implementation of <a href='https://ipfs.tech/'>IPFS</a>. We wrote it as the solution to address increasing adoption of web3.storage, which previously used kubo...",
                 "cta": {
                   "url": "/faq/?section=data-security",
                   "text": "READ MORE",
@@ -386,7 +386,7 @@
                 "type": "text_block",
                 "format": "medium",
                 "heading": "Get Started with web3.storage",
-                "description": "Choose your own way to store and retrieve using web3.storage. You can sign up for free using your email address or GitHub.",
+                "description": "Choose your own way to store and retrieve using web3.storage. Use your email address or GitHub to get 5 GiB storage for free, with paid plans starting at only $3.",
                 "cta": {
                   "url": "/login",
                   "text": "CREATE AN ACCOUNT",
@@ -405,11 +405,6 @@
               "push_left": "off-0_sm-2_mi-1_ti-0"
             },
             "customizations": [
-              {
-                "type": "image_block",
-                "id": "get-started-image-storage",
-                "src": "/images/index/app-ui-screenshot-storage-manager.png"
-              },
               {
                 "type": "image_block",
                 "id": "get-started-image-files",
@@ -508,7 +503,7 @@
             "format": "medium",
             "heading": "Trusted by the future",
             "description": [
-              "web3.storage is the easiest way to build on the decentralized web from hackathon projects to production code at scale.",
+              "web3.storage is the easiest way to enable the decentralized web for anyone, from cutting-edge user-first apps, to traditional products at scale, to hackathon projects.",
               "See what people building the future of the web today have to say, and get started."
             ]
           }
@@ -532,7 +527,7 @@
                 "image": "/images/index/testimonial-jacob-p.jpg",
                 "title": "Jacob P.",
                 "subtitle": "New York, USA",
-                "description": "web3.storage enables <span className='description-link'>Strangemood</span> to provide game devs with fast, free, and censorship resistant storage. Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
+                "description": "Their simple SDK and responsive team makes decentralized storage on IPFS easier than even centralized alternatives."
               },
               {
                 "type": "C",
