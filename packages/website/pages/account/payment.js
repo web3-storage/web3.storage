@@ -228,7 +228,7 @@ export function getStaticProps() {
     props: {
       title: 'Payment',
       isRestricted: true,
-      redirectTo: '/login/',
+      redirectTo: '/login/?redirect_uri=/account/payment',
       stripePublishableKey,
     },
   };
