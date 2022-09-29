@@ -67,32 +67,38 @@ async function generateData () {
   let i = 0
   while (i < config.uploads) {
     const file = new Blob([`Automated file upload number ${i} id: ${Date.now()}`])
-    let cid
-    try {
-      const response = await fetch(
-        new URL('/upload', `${config.url}`).toString(),
-        {
-          ...options,
-          body: file
-        }
-      )
-      const responseData = await response.json()
-      cid = responseData.cid
-    } catch (error) {
-      throw Error(error)
+
+    const response = await fetch(
+      new URL('/upload', `${config.url}`).toString(),
+      {
+        ...options,
+        body: file
+      }
+    )
+    const responseData = await response.json()
+    const cid = responseData.cid
+
+    if (!response.ok) {
+      console.error(`HTTP error! Status: ${response.status}. Body: ${JSON.stringify(responseData)}`)
     }
 
     if (config.psa_pin_requests) {
       const body = {
         cid
       }
-      await fetch(
+      const pinResponse = await fetch(
         new URL('/pins', `${config.url}`).toString(),
         {
           ...options,
           body: JSON.stringify(body)
         }
       )
+
+      const pinResponseData = await pinResponse.json()
+
+      if (!pinResponse.ok) {
+        console.error(`HTTP error! Status: ${pinResponse.status}. Body: ${JSON.stringify(pinResponseData)}`)
+      }
     }
     i++
   }
