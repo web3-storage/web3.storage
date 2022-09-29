@@ -39,7 +39,7 @@ export default function Navigation({ isProductApp }) {
   const navItems = links.filter(item => item.text.toLowerCase() !== 'account');
   const auth = GeneralPageData.navigation.auth;
   const logoText = GeneralPageData.site_logo.text;
-  const theme = router.route === '/pricing' || isProductApp ? 'light' : 'dark';
+  const theme = isProductApp ? 'light' : 'dark';
   const buttonTheme = isProductApp ? 'pink-blue' : '';
   const isDocs = router.route.includes('docs');
 
@@ -209,6 +209,7 @@ export default function Navigation({ isProductApp }) {
                       </div>
                     ) : (
                       <Link
+                        target={item.text === 'Blog' ? '_blank' : '_self'}
                         key={item.text}
                         href={item.url}
                         className={clsx('nav-item', item.url === router.route ? 'current-page' : '')}

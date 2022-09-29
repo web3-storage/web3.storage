@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.21.2](https://github.com/web3-storage/web3.storage/compare/website-v2.21.1...website-v2.21.2) (2022-09-28)
+
+
+### Bug Fixes
+
+* add blog link with navigation fix ([#1960](https://github.com/web3-storage/web3.storage/issues/1960)) ([efaed67](https://github.com/web3-storage/web3.storage/commit/efaed6746b44cdbba4dbc0729f56a85858bfea70))
+
+## [2.21.1](https://github.com/web3-storage/web3.storage/compare/website-v2.21.0...website-v2.21.1) (2022-09-27)
+
+
+### Bug Fixes
+
+* change verbiage on file manager legend ([#1893](https://github.com/web3-storage/web3.storage/issues/1893)) ([ab85aa2](https://github.com/web3-storage/web3.storage/commit/ab85aa246ccb65afb76d1b0c25605aa890258451)), closes [#1768](https://github.com/web3-storage/web3.storage/issues/1768)
+* revert "feat: add blog link ([#1952](https://github.com/web3-storage/web3.storage/issues/1952))" ([#1956](https://github.com/web3-storage/web3.storage/issues/1956)) ([481dcf0](https://github.com/web3-storage/web3.storage/commit/481dcf04cecee1b226f9da4a9c18d7ff323c745d))
+
+## [2.21.0](https://github.com/web3-storage/web3.storage/compare/website-v2.20.2...website-v2.21.0) (2022-09-26)
+
+
+### Features
+
+* add blog link ([#1952](https://github.com/web3-storage/web3.storage/issues/1952)) ([1289ac1](https://github.com/web3-storage/web3.storage/commit/1289ac1921fe832b81d0dfa9e464b19ea8969481))
+* add TOS agree before confirm ([#1919](https://github.com/web3-storage/web3.storage/issues/1919)) ([aacde20](https://github.com/web3-storage/web3.storage/commit/aacde202439ff5102bd89fabbaf48711bbc2f50b))
+* remove nft.storage banner ([#1940](https://github.com/web3-storage/web3.storage/issues/1940)) ([edceaa3](https://github.com/web3-storage/web3.storage/commit/edceaa35f03c83a7aa1f4ee3d9ec8ef34a862be9))
+
 ## [2.20.2](https://github.com/web3-storage/web3.storage/compare/website-v2.20.1...website-v2.20.2) (2022-09-22)
 
 

@@ -41,6 +41,8 @@ export async function putUserPayment(pm_id, plan_id) {
  * @param {any} obj.savedPaymentMethod
  * @param {(v: boolean) => void} obj.setHasPaymentMethods
  * @param {(v: boolean) => void} obj.setEditingPaymentMethod
+ * @param {(v: boolean) => void} obj.setHasAcceptedTerms
+ * @param {boolean} obj.hasAcceptedTerms
  */
 const AccountPlansModal = ({
   isOpen,
@@ -51,6 +53,8 @@ const AccountPlansModal = ({
   savedPaymentMethod,
   setHasPaymentMethods,
   setEditingPaymentMethod,
+  setHasAcceptedTerms,
+  hasAcceptedTerms,
   stripePromise,
 }) => {
   const [isCreatingSub, setIsCreatingSub] = useState(false);
@@ -76,10 +80,27 @@ const AccountPlansModal = ({
           </div>
         )}
 
+        <div className="billing-card card-transparent">
+          <div className="billing-terms-toggle">
+            <input
+              type="checkbox"
+              id="agreeTerms"
+              checked={hasAcceptedTerms}
+              onChange={() => setHasAcceptedTerms(!hasAcceptedTerms)}
+            />
+            <label htmlFor="agreeTerms">
+              I have read and agree to the{' '}
+              <a href="/terms/" rel="noreferrer" target="_blank">
+                web3.storage Terms of Service
+              </a>
+            </label>
+          </div>
+        </div>
+
         <div className="account-plans-confirm">
           <Button
             variant="light"
-            disabled={!savedPaymentMethod || isCreatingSub}
+            disabled={!savedPaymentMethod || isCreatingSub || !hasAcceptedTerms}
             onClick={async () => {
               setIsCreatingSub(true);
               await putUserPayment(savedPaymentMethod.id, currentPlan.id);

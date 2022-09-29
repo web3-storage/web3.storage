@@ -322,7 +322,7 @@ describe('savePaymentSettings', async function () {
     const billing = createMockBillingService()
     const paymentMethod = { id: /** @type const */ ('pm_w3-test-1') }
     const customers = createMockCustomerService()
-    const user = { id: randomString() }
+    const user = { id: '1', issuer: randomString() }
     const subscriptions = createMockSubscriptionsService()
     const env = { billing, customers, user, subscriptions }
     await savePaymentSettings(env, { paymentMethod, subscription: { storage: null } })

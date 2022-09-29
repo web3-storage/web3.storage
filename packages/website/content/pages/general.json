@@ -13,8 +13,8 @@
     "text": "Web3.Storage"
   },
   "message_banner": {
-    "content": "Looking to store NFTs? Check out <span class='banner-gradient-text'>NFT.Storage</span>",
-    "url": "https://nft.storage/",
+    "content": "",
+    "url": "",
     "maintenceAlert": "The Web3.Storage API is currently undergoing maintenance..."
   },
   "navigation": {
@@ -46,6 +46,11 @@
         "text": "FAQ"
       },
       {
+        "url": "https://blog.web3.storage",
+        "text": "Blog",
+        "target": "_blank"
+      },
+      {
         "url": "/docs",
         "text": "Docs"
       },
@@ -64,6 +69,10 @@
           {
             "text": "Create an API Token",
             "url": "/tokens/?create=true"
+          },
+          {
+            "text": "Plans & Payment",
+            "url": "/account/payment"
           },
           {
             "text": "Status",
@@ -129,8 +138,12 @@
           "url": "/contact"
         },
         {
-          "text": "Terms of Use",
+          "text": "Terms of Service",
           "url": "/terms"
+        },
+        {
+          "text": "Service Level Agreement (SLA)",
+          "url": "/sla"
         },
         {
           "text": "Status",
