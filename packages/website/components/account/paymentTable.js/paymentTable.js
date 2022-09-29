@@ -52,7 +52,6 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanMo
                       <p>{plan.baseStorage}</p>
                       <p>{plan.additionalStorage}</p>
                       <p>{plan.bandwidth}</p>
-                      <p>{plan.blockLimit}</p>
                     </div>
                   )}
 
