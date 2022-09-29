@@ -9,6 +9,7 @@ import CTACard from '../../components/account/ctaCard/CTACard';
 import FileUploader from '../../components/account/fileUploader/fileUploader';
 import GradientBackground from '../../components/gradientbackground/gradientbackground.js';
 import AppData from '../../content/pages/app/account.json';
+import GeneralPageData from '../../content/pages/general.json';
 
 export const CTACardTypes = {
   API_TOKENS: 'API_TOKENS',
@@ -109,11 +110,13 @@ const Account = () => {
  * @returns {{ props: import('components/types').PageProps}}
  */
 export function getStaticProps() {
+  const crumbs = GeneralPageData.breadcrumbs;
   return {
     props: {
       title: AppData.seo.title,
       redirectTo: '/login/',
       isRestricted: true,
+      breadcrumbs: [crumbs.index, crumbs.account],
     },
   };
 }

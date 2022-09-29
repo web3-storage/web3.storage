@@ -96,17 +96,70 @@
     }
   },
   "breadcrumbs": {
-    "index": "Home",
-    "about": "About",
-    "pricing": "Pricing",
-    "faq": "FAQ",
-    "docs": "Docs",
-    "terms": "ToS",
-    "contact": "Contact",
-    "login": "Login",
-    "callback": "Authenticating",
-    "account": "Account",
-    "tokens": "API Tokens"
+    "index": {
+      "text": "Home",
+      "url": "/"
+    },
+    "pricing": {
+      "text": "Pricing",
+      "url": "/pricing"
+    },
+    "faq": {
+      "text": "FAQ",
+      "url": "/faq"
+    },
+    "docs": {
+      "text": "Docs",
+      "url": "/docs"
+    },
+    "terms": {
+      "text": "ToS",
+      "url": "/terms"
+    },
+    "contact": {
+      "text": "Contact",
+      "url": "/contact"
+    },
+    "login": {
+      "text": "Login",
+      "url": "/login"
+    },
+    "callback": {
+      "text": "Authenticating",
+      "url": "/callback"
+    },
+    "account": {
+      "text": "Account",
+      "url": "/account"
+    },
+    "tokens": {
+      "text": "API Tokens",
+      "url": "/tokens"
+    },
+    "products": {
+      "text": "Products",
+      "url": "/products"
+    },
+    "payment": {
+      "text": "Payment",
+      "url": "/account/payment"
+    },
+    "w3name": {
+      "text": "w3name",
+      "url": "/products/w3name"
+    },
+    "web3storage": {
+      "text": "Web3.Storage",
+      "url": "/products/web3storage"
+    },
+    "w3link": {
+      "text": "w3link",
+      "url": "/products/w3link"
+    },
+    "sla": {
+      "text": "SLA",
+      "url": "/sla"
+    }
   },
   "footer": {
     "contact": {

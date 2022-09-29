@@ -1,38 +1,23 @@
-import { useRouter } from 'next/router';
 import clsx from 'clsx';
 
 import Link from '../link/link';
-import GeneralPageData from '../../content/pages/general.json';
+
+/** @typedef {Object} Breadcrumb = {url: string, text: string} */
 
 /**
  * Breadcrumbs
  *
- * @param String props.variant
- * @callback props.click
+ * @param {Object} props
+ * @param {String} props.variant
+ * @param {Object} [props.items]
+ * @param {Function} props.click
  */
-export default function Breadcrumbs({ variant, click }) {
-  const router = useRouter();
-  const breadcrumbs = GeneralPageData.breadcrumbs;
-  const routeName = router.route.replace('/', '');
-  const links = [
-    {
-      url: '/',
-      text: breadcrumbs.index,
-    },
-  ];
-
-  if (routeName.includes('docs')) {
-    links.push({ url: '', text: breadcrumbs['docs'] });
-  }
-  if (breadcrumbs.hasOwnProperty(routeName)) {
-    links.push({ url: '', text: breadcrumbs[routeName] });
-  }
-
+export default function Breadcrumbs({ variant, click, items }) {
   return (
     <div className="breadcrumbs">
-      {links.map(item => (
+      {items.map((item, idx) => (
         <div key={item.text} className="breadcrumb-wrapper">
-          {item.url ? (
+          {idx !== items.length - 1 ? (
             <Link href={item.url} className={clsx('breadcrumb', 'breadcrumb-link', variant)} onClick={click}>
               {item.text}
             </Link>
@@ -40,7 +25,7 @@ export default function Breadcrumbs({ variant, click }) {
             <div className={clsx('breadcrumb', 'breadcrumb-text', variant)}>{item.text}</div>
           )}
 
-          <div className={clsx('breadcrumb-divider', variant)}>{item.url}</div>
+          {idx !== items.length - 1 && <div className={clsx('breadcrumb-divider', variant)}>/</div>}
         </div>
       ))}
     </div>

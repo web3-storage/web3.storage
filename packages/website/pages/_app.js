@@ -30,7 +30,7 @@ const App = ({ Component, pageProps }) => {
         <div id="master-container" className={clsx(pageClass)}>
           {productApp && <div className="corkscrew-background"></div>}
           <MessageBanner />
-          <Navigation isProductApp={productApp} />
+          <Navigation isProductApp={productApp} breadcrumbs={pageProps.breadcrumbs} />
           <Component {...pageProps} />
           <Footer isProductApp={productApp} />
         </div>

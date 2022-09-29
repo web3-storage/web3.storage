@@ -14,6 +14,7 @@ import AccountPlansModal from '../../components/accountPlansModal/accountPlansMo
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
 import { earlyAdopterPlan, plans, plansEarly } from '../../components/contexts/plansContext';
 import { userBillingSettings } from '../../lib/api';
+import GeneralPageData from '../../content/pages/general.json';
 
 /**
  * @typedef {object} storageSubscription
@@ -215,6 +216,7 @@ const PaymentSettingsPage = props => {
  * @returns {{ props: import('components/types').PageAccountProps}}
  */
 export function getStaticProps() {
+  const crumbs = GeneralPageData.breadcrumbs;
   const STRIPE_PUBLISHABLE_KEY_ENVVAR_NAME = 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY';
   const stripePublishableKey = process.env[STRIPE_PUBLISHABLE_KEY_ENVVAR_NAME];
   if (!stripePublishableKey) {
@@ -228,6 +230,7 @@ export function getStaticProps() {
       isRestricted: true,
       redirectTo: '/login/?redirect_uri=/account/payment',
       stripePublishableKey,
+      breadcrumbs: [crumbs.index, crumbs.payment],
     },
   };
 }
