@@ -142,6 +142,10 @@
           "url": "/terms"
         },
         {
+          "text": "Service Level Agreement (SLA)",
+          "url": "/sla"
+        },
+        {
           "text": "Status",
           "url": "https://status.web3.storage/"
         }
