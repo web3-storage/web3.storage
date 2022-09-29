@@ -49,11 +49,17 @@ export async function isLoggedIn() {
  * Login with email
  *
  * @param {string} email
+ * @param {string} [finalRedirectHref] - href of final url that end-user should
+ *  be redirected to after successful authentication
  */
-export async function loginEmail(email) {
+export async function loginEmail(email, finalRedirectHref) {
+  const redirectUri = new URL('/callback/', window.location.origin);
+  if (finalRedirectHref) {
+    redirectUri.searchParams.set('redirect_uri', finalRedirectHref);
+  }
   const didToken = await getMagic().auth.loginWithMagicLink({
     email: email,
-    redirectURI: new URL('/callback/', window.location.origin).href,
+    redirectURI: redirectUri.href,
   });
 
   if (didToken) {
