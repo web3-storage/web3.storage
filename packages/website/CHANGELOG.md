@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.22.1](https://github.com/web3-storage/web3.storage/compare/website-v2.22.0...website-v2.22.1) (2022-09-30)
+
+
+### Bug Fixes
+
+* remove storage economics page ([#1977](https://github.com/web3-storage/web3.storage/issues/1977)) ([50c5eb4](https://github.com/web3-storage/web3.storage/commit/50c5eb47bca55d3917f954650d61ee2bff459bb3))
+* yank out faulty browser detection script ([#1974](https://github.com/web3-storage/web3.storage/issues/1974)) ([38aefeb](https://github.com/web3-storage/web3.storage/commit/38aefebec8c3ea053a41af1f8dfdd0895ceb9260))
+
 ## [2.22.0](https://github.com/web3-storage/web3.storage/compare/website-v2.21.2...website-v2.22.0) (2022-09-29)
 
 
