@@ -7,6 +7,7 @@ DROP FUNCTION IF EXISTS upsert_pins;
 DROP FUNCTION IF EXISTS user_used_storage;
 DROP FUNCTION IF EXISTS user_auth_keys_list;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
+DROP FUNCTION IF EXISTS upsert_user;
 
 -- transform a JSON array property into an array of SQL text elements
 CREATE OR REPLACE FUNCTION json_arr_to_text_arr(_json json)
@@ -414,4 +415,38 @@ FROM cargo.aggregate_entries ae
          LEFT JOIN cargo.deals de USING (aggregate_cid)
 WHERE ae.cid_v1 = ANY (cids)
 ORDER BY de.entry_last_updated
+$$;
+
+
+-- a custom UPSERT operation for user account, so that we can distinguish between
+-- newly inserted users and updated ones.
+CREATE OR REPLACE FUNCTION upsert_user(_name TEXT, _picture TEXT, _email TEXT, _issuer TEXT, _github TEXT, _public_address TEXT)
+RETURNS TABLE (
+  "id" BIGINT,
+  "issuer" TEXT,
+  "inserted" BOOLEAN
+)
+LANGUAGE plpgsql
+AS
+$$
+#variable_conflict use_column
+DECLARE
+  inserted BOOLEAN;
+
+BEGIN
+  SELECT (COUNT(id) = 0) into inserted FROM public.user WHERE issuer = _issuer;
+
+  RETURN QUERY
+  INSERT INTO public.user AS u (name, picture, email, issuer, github, public_address) 
+  VALUES (_name, _picture, _email, _issuer, _github, _public_address)
+  ON CONFLICT (issuer) DO UPDATE
+  SET 
+    name = EXCLUDED.name,
+    picture = EXCLUDED.picture,
+    email = EXCLUDED.email,
+    github = EXCLUDED.github,
+    public_address = EXCLUDED.public_address
+  RETURNING u.id, u.issuer, inserted;
+
+END
 $$;

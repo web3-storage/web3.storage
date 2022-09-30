@@ -106,32 +106,24 @@ export class DBClient {
   async upsertUser (user) {
     /** @type {{ data: definitions['user'], error: PostgrestError }} */
     const { data, error } = await this._client
-      .from('user')
-      .upsert(
-        {
-          name: user.name,
-          picture: user.picture,
-          email: user.email,
-          issuer: user.issuer,
-          github: user.github,
-          public_address: user.publicAddress
-        },
-        {
-          onConflict: 'issuer',
-          returning: 'representation'
-        }
-      )
-      .select('id,xmax,issuer')
-      .single()
+      .rpc('upsert_user', {
+        _name: user.name,
+        _picture: user.picture ?? '',
+        _email: user.email,
+        _issuer: user.issuer,
+        _github: user.github ?? '',
+        _public_address: user.publicAddress
+      })
+
+    const userData = data[0]
 
     if (error) {
       throw new DBError(error)
     }
-    const inserted = Boolean(data.xmax === '0')
     return {
-      id: data.id,
-      inserted,
-      issuer: data.issuer
+      id: userData.id,
+      inserted: userData.inserted,
+      issuer: userData.issuer
     }
   }
 
