@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.8.1](https://github.com/web3-storage/web3.storage/compare/api-v7.8.0...api-v7.8.1) (2022-09-30)
+
+
+### Bug Fixes
+
+* trigger release to pick up fix from [#1976](https://github.com/web3-storage/web3.storage/issues/1976) ([#1982](https://github.com/web3-storage/web3.storage/issues/1982)) ([27f2542](https://github.com/web3-storage/web3.storage/commit/27f25422f1f1d385c2c8691a96d7ac5f1b14da6a))
+
 ## [7.8.0](https://github.com/web3-storage/web3.storage/compare/api-v7.7.1...api-v7.8.0) (2022-09-29)
 
 
