@@ -7,6 +7,7 @@ DROP FUNCTION IF EXISTS upsert_pins;
 DROP FUNCTION IF EXISTS user_used_storage;
 DROP FUNCTION IF EXISTS user_auth_keys_list;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
+DROP FUNCTION IF EXISTS upsert_user;
 
 -- transform a JSON array property into an array of SQL text elements
 CREATE OR REPLACE FUNCTION json_arr_to_text_arr(_json json)
