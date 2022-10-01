@@ -352,7 +352,7 @@ const LinkSection = () => (
                         HTTP API Reference
                       </a>
                       <a className="category-link" tabIndex={0} href="/docs/reference/js-client-library/">
-                        Javascript Client Library
+                        JavaScript Client Library
                       </a>
                     </div>
                   </div>
