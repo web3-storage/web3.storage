@@ -154,7 +154,7 @@ async function loginOrRegister (request, env) {
     user = await env.db.upsertUser(parsed)
     // initialize billing, etc, but only if the user was newly inserted
     if (user.inserted) {
-      await initializeNewUser(env, { ...user, id: user.id.toString() })
+      await initializeNewUser(env, { ...user, id: user.id })
     }
   } else if (env.MODE === READ_ONLY) {
     user = await env.db.getUser(parsed.issuer, {})
