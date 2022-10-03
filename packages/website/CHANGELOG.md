@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.22.2](https://github.com/web3-storage/web3.storage/compare/website-v2.22.1...website-v2.22.2) (2022-10-03)
+
+
+### Bug Fixes
+
+* fix bug when saving payment method while paymentSettings.storage.subscription=null ([#1988](https://github.com/web3-storage/web3.storage/issues/1988)) ([b389146](https://github.com/web3-storage/web3.storage/commit/b389146b3a96ba8b8e2b1a81ebc3cec1776583c2))
+
 ## [2.22.1](https://github.com/web3-storage/web3.storage/compare/website-v2.22.0...website-v2.22.1) (2022-09-30)
 
 
