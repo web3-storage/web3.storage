@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.8.2](https://github.com/web3-storage/web3.storage/compare/api-v7.8.1...api-v7.8.2) (2022-10-03)
+
+
+### Bug Fixes
+
+* migrate upsert_user function to return id text instead of id bigint ([#1990](https://github.com/web3-storage/web3.storage/issues/1990)) ([8253e8c](https://github.com/web3-storage/web3.storage/commit/8253e8c1e0295e09b10e9609f65c988b7fef80f5))
+
 ## [7.8.1](https://github.com/web3-storage/web3.storage/compare/api-v7.8.0...api-v7.8.1) (2022-09-30)
 
 
