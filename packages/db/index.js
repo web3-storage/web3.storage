@@ -114,12 +114,10 @@ export class DBClient {
         _github: user.github ?? '',
         _public_address: user.publicAddress
       })
-
-    const userData = data[0]
-
     if (error) {
       throw new DBError(error)
     }
+    const userData = data[0]
     return {
       id: userData.id,
       inserted: userData.inserted,
