@@ -422,7 +422,7 @@ $$;
 -- newly inserted users and updated ones.
 CREATE OR REPLACE FUNCTION upsert_user(_name TEXT, _picture TEXT, _email TEXT, _issuer TEXT, _github TEXT, _public_address TEXT)
 RETURNS TABLE (
-  "id" BIGINT,
+  "id" TEXT,
   "issuer" TEXT,
   "inserted" BOOLEAN
 )
@@ -446,7 +446,7 @@ BEGIN
     email = EXCLUDED.email,
     github = EXCLUDED.github,
     public_address = EXCLUDED.public_address
-  RETURNING u.id, u.issuer, inserted;
+  RETURNING u.id::TEXT, u.issuer, inserted;
 
 END
 $$;
