@@ -3,29 +3,17 @@ import { useState, useEffect, useMemo } from 'react';
 import { userBillingSettings } from '../lib/api';
 import { earlyAdopterPlan, plans, plansEarly } from '../components/contexts/plansContext';
 
-export const usePayment = () => {
-  /**
-   * @typedef {object} storageSubscription
-   * @property {'free'|'lite'|'pro'} price
-   */
+/**
+ * @typedef {import('../components/contexts/plansContext').Plan} Plan
+ * @typedef {import('../components/contexts/plansContext').StorageSubscription} StorageSubscription
+ */
 
+export const usePayment = () => {
   /**
    * @typedef {object} PaymentSettings
    * @property {null|{id: string}} paymentMethod
    * @property {object} subscription
-   * @property {storageSubscription|null} subscription.storage
-   */
-
-  /**
-   * @typedef {Object} Plan
-   * @property {string | null} id
-   * @property {string} title
-   * @property {string} description
-   * @property {string} price
-   * @property {string} baseStorage
-   * @property {string} additionalStorage
-   * @property {string} bandwidth
-   * @property {string} blockLimit
+   * @property {StorageSubscription|null} subscription.storage
    */
 
   const [needsFetchPaymentSettings, setNeedsFetchPaymentSettings] = useState(true);
@@ -54,6 +42,7 @@ export const usePayment = () => {
   }, [needsFetchPaymentSettings]);
 
   // When storageSubscription is null, user sees a version of planList that contains 'Early Adopter' instead of 'free'
+  /** @type {Array<Plan>} */
   const planList = useMemo(() => {
     if (typeof paymentSettings === 'undefined') {
       return plans;
