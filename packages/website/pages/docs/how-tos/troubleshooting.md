@@ -7,7 +7,7 @@ description: A collection of common issues for new developers, and solutions to 
 
 This page contains a collection of common issues for new developers, and solutions to those problems.
 
-## I'm getting import errors when importing the Javascript client library
+## I'm getting import errors when importing the JavaScript client library
 
 Some common situations where this might happen include:
 

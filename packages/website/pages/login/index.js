@@ -82,7 +82,7 @@ const Login = () => {
       <div className="login-content">
         <h3>{pageContent.heading}</h3>
         <button className="section section-github" onClick={onGithubLogin}>
-          <GithubSVG /> {isLoggingIn === LoginType.GITHUB ? 'Redirecting...' : 'Github'}
+          <GithubSVG /> {isLoggingIn === LoginType.GITHUB ? 'Redirecting...' : 'GitHub'}
         </button>
         <h3 className="login-type-divider">or</h3>
         <div className="section section-email">
