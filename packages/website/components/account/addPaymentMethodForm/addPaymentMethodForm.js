@@ -4,12 +4,17 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import Loading from '../../../components/loading/loading';
 import { userBillingSettings } from '../../../lib/api';
 import Button from '../../../components/button/button';
+import { planIdToStorageSubscription } from '../../contexts/plansContext';
+
+/**
+ * @typedef {import('../../contexts/plansContext').Plan} Plan
+ */
 
 /**
  * @param {object} obj
  * @param {(v: boolean) => void} [obj.setHasPaymentMethods]
  * @param {(v: boolean) => void} [obj.setEditingPaymentMethod]
- * @param { string | null } [obj.currentPlan]
+ * @param {Plan['id']} [obj.currentPlan]
  * @returns
  */
 const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, currentPlan }) => {
@@ -26,6 +31,13 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, c
       return;
     }
 
+    if (typeof currentPlan === 'undefined') {
+      console.warn(
+        'handlePaymentMethodAdd called when currentPlan is undefined, which should mean its still being fetched. This is unexpected, so the payment method will not be saved.'
+      );
+      return;
+    }
+
     const cardElement = elements.getElement(CardElement);
     if (cardElement) {
       try {
@@ -36,8 +48,8 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, c
         });
         if (error) throw new Error(error.message);
         if (!paymentMethod?.id) return;
-        const currPricePlan = currentPlan ? { price: currentPlan } : null;
-        await userBillingSettings(paymentMethod.id, currPricePlan);
+        const currStorageSubscription = planIdToStorageSubscription(currentPlan);
+        await userBillingSettings(paymentMethod.id, currStorageSubscription);
         setHasPaymentMethods?.(true);
         setEditingPaymentMethod?.(false);
         setPaymentMethodError('');

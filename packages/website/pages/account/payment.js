@@ -16,27 +16,17 @@ import { earlyAdopterPlan, plans, plansEarly } from '../../components/contexts/p
 import { userBillingSettings } from '../../lib/api';
 
 /**
- * @typedef {object} storageSubscription
- * @property {'free'|'lite'|'pro'} price
+ * @typedef {import('../../components/contexts/plansContext').Plan} Plan
+ * @typedef {import('../../components/contexts/plansContext').StorageSubscription} StorageSubscription
+ * @typedef {import('../../components/contexts/plansContext').StoragePrice} StoragePrice
+ * @typedef {import('../../components/contexts/plansContext').EarlyAdopterPlanId} EarlyAdopterPlanId
  */
 
 /**
  * @typedef {object} PaymentSettings
  * @property {null|{id: string}} paymentMethod
  * @property {object} subscription
- * @property {storageSubscription|null} subscription.storage
- */
-
-/**
- * @typedef {Object} Plan
- * @property {string | null} id
- * @property {string} title
- * @property {string} description
- * @property {string} price
- * @property {string} baseStorage
- * @property {string} additionalStorage
- * @property {string} bandwidth
- * @property {string} blockLimit
+ * @property {StorageSubscription} subscription.storage
  */
 
 /**
@@ -86,6 +76,7 @@ const PaymentSettingsPage = props => {
   }, [needsFetchPaymentSettings]);
 
   // When storageSubscription is null, user sees a version of planList that contains 'Early Adopter' instead of 'free'
+  /** @type {Array<Plan>} */
   const planList = useMemo(() => {
     if (typeof paymentSettings === 'undefined') {
       return plans;
