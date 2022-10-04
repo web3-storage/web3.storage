@@ -51,10 +51,6 @@
             },
             "customizations": [
               {
-                "type": "corkscrew",
-                "id": "intro_1-hero-corkscrew"
-              },
-              {
                 "type": "coil",
                 "id": "intro_1-coil"
               },
@@ -775,21 +771,6 @@
             "scale": 1.2,
             "x": 100,
             "y": 20
-          }
-        },
-        {
-          "id": "intro_1-hero-corkscrew",
-          "start": {
-            "rotate": 189,
-            "scale": 1,
-            "x": 1,
-            "y": 1
-          },
-          "end": {
-            "rotate": 200,
-            "scale": 1.2,
-            "x": 30,
-            "y": 80
           }
         },
         {
