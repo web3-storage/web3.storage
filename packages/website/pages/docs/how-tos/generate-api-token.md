@@ -8,6 +8,8 @@ import Img from 'components/cloudflareImage';
 import ImgNoToken from '../../../public/images/docs/account-page-no-tokens.png';
 import ImgNameToken from '../../../public/images/docs/account-page-name-token.png';
 import ImgToken from '../../../public/images/docs/tokens-page.png';
+import ImgAccountMenu from '../../../public/images/docs/account-menu-create-token-desktop.png';
+import ImgAccountMenuMobile from '../../../public/images/docs/account-menu-create-token-mobile.png';
 
 # How to generate an API token
 
@@ -17,8 +19,15 @@ You'll need a free Web3.Storage account in order to generate an API token. If yo
 
 ## Create a new token
 
-1. From the Web3.Storage navigation menu, click **Account** to go to your [account page](https://web3.storage/account).
-1. Scroll down to the **API tokens** section and click **Create an API token**. (If you've never created an API token on Web3.Storage before, you'll also see an invitation to do this from the **Getting started** section of your account page.)
+1. From the Web3.Storage navigation menu, open the **Account** menu by hovering over the **Account** menu item.
+
+<Img src={ImgAccountMenu} alt="Screenshot of the Account menu, with 'Create API Token' highlighted" />
+
+On a mobile device, open the menu by tapping the icon in the top-right corner, then tap on **Account** to expand the **Account** menu.
+
+<Img src={ImgAccountMenuMobile} alt="Screenshot of the Account menu on a mobile device" />
+
+2. In the **Account** menu, click **Create an API token**. (If you've never created an API token on Web3.Storage before, you'll also see an invitation to do this from the **Getting started** section of your account page.)
 
 <Img src={ImgNoToken} alt="Screenshot of a Web3.Storage account page" />
 
