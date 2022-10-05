@@ -1,12 +1,13 @@
 import clsx from 'clsx';
 import filesize from 'filesize';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import countly from 'lib/countly';
 import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
+import Table from 'components/table/table';
 // import Filterable from 'ZeroComponents/filterable/filterable';
 import { ServerPagination } from 'ZeroComponents/pagination/pagination';
 import Modal from 'modules/zero/components/modal/modal';
@@ -17,6 +18,8 @@ import { useUser } from 'components/contexts/userContext';
 import RefreshIcon from 'assets/icons/refresh';
 import FileRowItem from './fileRowItem';
 import GradientBackground from '../../gradientbackground/gradientbackground.js';
+import CopyIcon from 'assets/icons/copy';
+import { addTextToClipboard, formatTimestamp, formatTimestampFull, truncateString } from 'lib/utils';
 
 const defaultSortBy = 'Date';
 const defaultSortOrder = 'Desc';
@@ -208,6 +211,122 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     return null;
   }
 
+  // NEW TABLE DATA
+  // TODO: move to its own component
+  /**
+   * @type {import('react').FC}
+   * @param {object} props
+   * @param {string} props.cid
+   * @returns import('react').FC
+   */
+  function CidCellRenderer({ cid }) {
+    const truncatedCID = useMemo(() => truncateString(cid, 5, '...', 'double'), [cid]);
+    return (
+      <>
+        <a
+          className="cid-truncate underline medium-up-only"
+          href={`https://dweb.link/ipfs/${cid}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {truncatedCID}
+        </a>
+        <CopyIcon
+          className="copy-icon"
+          onClick={() => {
+            addTextToClipboard(cid);
+          }}
+        />
+      </>
+    );
+  }
+
+  /**
+   * @type {import('components/table/table').ColumnDefinition[]}
+   */
+  const columns = [
+    {
+      id: 'name',
+      headerContent: fileRowLabels.name.label,
+    },
+    {
+      id: 'cid',
+      headerContent: fileRowLabels.cid.label,
+      cellRenderer: CidCellRenderer,
+      getCellProps: cellData => ({
+        cid: cellData,
+      }),
+    },
+    {
+      id: 'status',
+      headerContent: fileRowLabels.status.label,
+    },
+    {
+      id: 'storageProviders',
+      headerContent: fileRowLabels.storage_providers.label,
+    },
+    {
+      id: 'size',
+      headerContent: fileRowLabels.size.label,
+    },
+    {
+      id: 'date',
+      headerContent: (
+        <span>
+          {fileRowLabels.date.label} <button onClick={() => alert('header')}> i</button>
+        </span>
+      ),
+      cellRenderer: ({ date }) => <span title={formatTimestampFull(date)}>{formatTimestamp(date)}</span>,
+      getCellProps: cellData => ({
+        date: cellData,
+      }),
+    },
+  ];
+
+  const PinStatus = {
+    PINNED: 'Pinned',
+    PINNING: 'Pinning',
+    PIN_QUEUED: 'PinQueued',
+    QUEUING: 'Queuing...',
+  };
+
+  /**
+   *
+   * @param {any} file
+   */
+  const fileToTableRow = file => {
+    return {
+      key: file.cid,
+      date: file.created,
+      name: file.name,
+      cid: file.cid,
+      status:
+        Object.values(PinStatus).find(status => file.pins.some(pin => status === pin.status)) || PinStatus.QUEUING,
+      storageProviders: Array.isArray(file.deals)
+        ? file.deals
+            .filter(deal => !!deal.storageProvider)
+            .map((deal, indx, deals) => (
+              <span key={deal.dealId}>
+                <a
+                  className="underline"
+                  href={`https://filfox.info/en/deal/${deal.dealId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {`${deal.storageProvider}`}
+                </a>
+                {indx !== deals.length - 1 && ', '}
+              </span>
+            ))
+        : null,
+      size: file.hasOwnProperty('dagSize') ? filesize(file.dagSize) : file.info?.dag_size ? file.info.dag_size : '-',
+    };
+  };
+
+  const ROWS_PER_PAGE_OPTIONS = [2, 4, 20, 50, 100, 500];
+
+  const totalUploads = 25;
+
   return (
     <>
       <div className="files-manager-header">
@@ -264,7 +383,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
           }}
         />
       </div>
-      <FileRowItem
+      {/* <FileRowItem
         onSelect={onSelectAllToggle}
         date={fileRowLabels.date.label}
         name={fileRowLabels.name.label}
@@ -279,7 +398,45 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
           !!fetchDate
         }
         tabType="uploaded"
+      /> */}
+
+      <Table
+        columns={columns}
+        rows={uploads.map(file => fileToTableRow(file))}
+        totalRowCount={totalUploads}
+        page={page}
+        rowsPerPage={size}
+        rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+        isEmpty={totalUploads === 0}
+        withRowSelection={true}
+        isLoading={isFetchingUploads || !fetchDate}
+        onPageSelect={setPage}
+        emptyState={<span>EMPTY</span>}
+        selectedRows={selectedUploads.map(upload => uploads.indexOf(upload))}
+        onRowSelectedChange={onUploadSelect}
+        onSelectAll={onSelectAllToggle}
+        // leftFooterSlot={
+        //   <button
+        //     className={clsx('delete', !selectedRows.length && 'disabled')}
+        //     onClick={() => setDeleteModalState(true)}
+        //   >
+        //     {content?.ui.delete.text}
+        //   </button>
+        // }
+        // onSetItemsPerPage={rpp => {
+        //   setRowsPerPage(rpp);
+        //   setCurrentPage(1);
+
+        //   // TODO: Do we need this now that the loader spins for the request happening?
+        //   setShowCheckOverlay(true);
+        //   setTimeout(() => {
+        //     setShowCheckOverlay(false);
+        //   }, 500);
+        // }}
+        scrollTarget={'.account-files-manager'}
       />
+
+      {/* OLD TABLE HERE! */}
       <div className="files-manager-table-content">
         {isFetchingUploads || !fetchDate ? (
           <Loading className={'files-loading-spinner'} />
@@ -341,6 +498,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
           ))
         )}
       </div>
+
       {!!uploads.length && (
         <div className="files-manager-footer">
           <button
