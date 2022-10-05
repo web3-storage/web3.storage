@@ -8,6 +8,7 @@ import { useTokens } from 'components/contexts/tokensContext';
 import TokensData from '../../content/pages/app/tokens.json';
 import { useUser } from 'hooks/use-user';
 import PinningRequestModal from 'components/pinningRequestModal/pinningRequestModal';
+import GeneralPageData from '../../content/pages/general.json';
 
 const Tokens = () => {
   const { tokens, fetchDate, isFetchingTokens, getTokens } = useTokens();
@@ -58,11 +59,13 @@ const Tokens = () => {
  * @returns {{ props: import('components/types').PageProps}}
  */
 export function getStaticProps() {
+  const crumbs = GeneralPageData.breadcrumbs;
   return {
     props: {
       title: TokensData.seo.title,
       redirectTo: '/login',
       isRestricted: true,
+      breadcrumbs: [crumbs.index, crumbs.tokens],
     },
   };
 }

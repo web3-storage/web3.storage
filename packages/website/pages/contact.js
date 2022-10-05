@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import ContactPageData from '../content/pages/contact.json';
 import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
 import { initFloaterAnimations } from '../lib/floater-animations.js';
+import GeneralPageData from '../content/pages/general.json';
 
 export default function Home() {
   const sections = ContactPageData.page_content;
@@ -36,10 +37,12 @@ export default function Home() {
 }
 
 export function getStaticProps() {
+  const crumbs = GeneralPageData.breadcrumbs;
   return {
     props: {
       title: 'Contact - Web3 Storage - Simple file storage with IPFS & Filecoin',
       description: '',
+      breadcrumbs: [crumbs.index, crumbs.contact],
     },
   };
 }

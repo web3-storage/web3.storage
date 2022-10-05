@@ -9,6 +9,7 @@ import ImageTriangle1 from 'public/images/illustrations/triangle1.png';
 import BlobCluster from 'public/images/illustrations/blob-cluster.png';
 import Cluster1 from 'public/images/index/cluster-1.png';
 import Button from 'ZeroComponents/button/button';
+import GeneralPageData from '../content/pages/general.json';
 
 const PricingHeader = () => (
   <>
@@ -397,11 +398,13 @@ export default function Home() {
 }
 
 export function getStaticProps() {
+  const crumbs = GeneralPageData.breadcrumbs;
   return {
     props: {
       title: 'Pricing - Web3 Storage - Simple file storage with IPFS & Filecoin',
       description:
         'web3.storage is a service that grows with your needs, and offers a significant free tier with no strings attached.',
+      breadcrumbs: [crumbs.index, crumbs.pricing],
     },
   };
 }

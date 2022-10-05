@@ -24,8 +24,9 @@ import Link from '../link/link';
  *
  * @param {Object} props
  * @param {Boolean} props.isProductApp
+ * @param {import('../breadcrumbs/breadcrumbs').Breadcrumb[]} [props.breadcrumbs]
  */
-export default function Navigation({ isProductApp }) {
+export default function Navigation({ breadcrumbs, isProductApp }) {
   const router = useRouter();
   const { isLoggedIn, isLoading, isFetching, logout } = useAuthorization();
   const isLoadingUser = useMemo(() => isLoading || isFetching, [isLoading, isFetching]);
@@ -239,7 +240,7 @@ export default function Navigation({ isProductApp }) {
               </div>
             </div>
 
-            {router.route === '/' ? null : <Breadcrumbs variant={theme} click={onLinkClick} />}
+            {breadcrumbs && <Breadcrumbs variant={theme} click={onLinkClick} items={breadcrumbs} />}
 
             <div className={clsx('nav-mobile-panel grid', isMenuOpen ? 'open' : '')} aria-hidden={isMenuOpen}>
               <div className="mobile-nav-gradient-wrapper">
