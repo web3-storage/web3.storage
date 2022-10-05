@@ -75,6 +75,7 @@ const AccountPlansModal = ({
               <AddPaymentMethodForm
                 setHasPaymentMethods={setHasPaymentMethods}
                 setEditingPaymentMethod={setEditingPaymentMethod}
+                currentPlan={currentPlan?.id}
               />
             </Elements>
           </div>
