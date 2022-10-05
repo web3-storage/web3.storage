@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.23.0](https://github.com/web3-storage/web3.storage/compare/website-v2.22.2...website-v2.23.0) (2022-10-05)
+
+
+### Features
+
+* **website:** update API token howto to match current design ([#2000](https://github.com/web3-storage/web3.storage/issues/2000)) ([0374ac5](https://github.com/web3-storage/web3.storage/commit/0374ac53131166f8ceec521ef6c50c75fafdaba7)), closes [#1999](https://github.com/web3-storage/web3.storage/issues/1999)
+
+
+### Bug Fixes
+
+* add 'Complete' column to uploads table ([#1958](https://github.com/web3-storage/web3.storage/issues/1958)) ([0d463fb](https://github.com/web3-storage/web3.storage/commit/0d463fbc15316fa7efe57378946be6eb4f15acdf)), closes [#1787](https://github.com/web3-storage/web3.storage/issues/1787)
+* display proper breadcrumbs for product pages ([#1973](https://github.com/web3-storage/web3.storage/issues/1973)) ([2d58763](https://github.com/web3-storage/web3.storage/commit/2d587630edbb22537fbb3a1ccd29968db7172f97)), closes [#1926](https://github.com/web3-storage/web3.storage/issues/1926)
+* fix social media preview image URLs ([#1993](https://github.com/web3-storage/web3.storage/issues/1993)) ([4d14c1e](https://github.com/web3-storage/web3.storage/commit/4d14c1eb997a4508fe29782630bf64133a74144c))
+
 ## [2.22.2](https://github.com/web3-storage/web3.storage/compare/website-v2.22.1...website-v2.22.2) (2022-10-03)
 
 
