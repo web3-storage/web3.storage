@@ -38,7 +38,7 @@ export function getStaticProps() {
     props: {
       title: 'FAQ - Web3 Storage - Simple file storage with IPFS & Filecoin',
       description:
-        'Frequently asked questions about Web3.Storage. Find out how the easiest way to store data on the decentralized web uses Filecoin and IPFS, or how it differs from other services.',
+        'Frequently asked questions about web3.storage. Find out how the easiest way to store data on the decentralized web uses Filecoin and IPFS, or how it differs from other services.',
       breadcrumbs: [crumbs.index, crumbs.faq],
     },
   };

@@ -1,22 +1,22 @@
 ---
-title: Web3.Storage API (1.0)
+title: web3.storage API (1.0)
 ---
 
 import Callout from 'components/callout/callout';
 import { Tabs, TabItem } from 'components/tabs/tabs';
 import AccordionSingle from 'components/accordionsingle/accordionsingle';
 
-# Web3.Storage API (1.0)
+# web3.storage API (1.0)
 
 [Download](https://web3.storage/docs/schema.yml) OpenAPI specification
 
-This documentation describes the HTTP API for [Web3.Storage](https://web3.storage), which allows you to quickly and easily build applications using decentralized data storage persisted by [Filecoin](https://filecoin.io/) and available over [IPFS](https://ipfs.io/).
+This documentation describes the HTTP API for [web3.storage](https://web3.storage), which allows you to quickly and easily build applications using decentralized data storage persisted by [Filecoin](https://filecoin.io/) and available over [IPFS](https://ipfs.io/).
 
-You can also interact with this API using client libraries. See [web3.storage/docs](https://web3.storage/docs) for more information on using a client library, as well as a variety of other guides and how-tos for Web3.Storage as a whole.
+You can also interact with this API using client libraries. See [web3.storage/docs](https://web3.storage/docs) for more information on using a client library, as well as a variety of other guides and how-tos for web3.storage as a whole.
 
 ## API endpoint URL
 
-The main public API endpoint URL for Web3.Storage is https://api.web3.storage. All endpoints described in this document should be made relative to this root URL. For example, to post to the /car endpoint, send your request to https://api.web3.storage/car.
+The main public API endpoint URL for web3.storage is https://api.web3.storage. All endpoints described in this document should be made relative to this root URL. For example, to post to the /car endpoint, send your request to https://api.web3.storage/car.
 
 ### Rate limits
 
@@ -26,7 +26,7 @@ This API imposes rate limits to ensure quality of service. You may receive a 429
 
 ### bearerAuth
 
-The Web3.Storage API uses bearer tokens to authenticate requests. You can view and manage these tokens on the [API Tokens page](https://web3.storage/tokens/) in your Web3.Storage account dashboard.
+The web3.storage API uses bearer tokens to authenticate requests. You can view and manage these tokens on the [API Tokens page](https://web3.storage/tokens/) in your web3.storage account dashboard.
 
 Your tokens carry many privileges, so be sure to keep them secure! Do not share your secret tokens in publicly accessible locations such as a GitHub repository, client-side code, and so forth.
 
@@ -41,7 +41,7 @@ Authorization: Bearer <token>
 | HTTP Authorization Scheme | bearer |
 | Bearer format             | "JWT"  |
 
-## Web3.Storage HTTP API
+## web3.storage HTTP API
 
 ## Upload a CAR
 
@@ -347,7 +347,7 @@ Retrieve metadata about a specific file by using `/status/{cid}`, supplying the 
 ##### POST&nbsp;&nbsp;&nbsp;`/upload`
 </Callout>
 
-Store files using Web3.Storage. You can upload either a single file or multiple files.
+Store files using web3.storage. You can upload either a single file or multiple files.
 
 Send the POST request with one of the following:
 

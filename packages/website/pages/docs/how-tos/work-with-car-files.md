@@ -11,11 +11,11 @@ import dagCborSource from '!!raw-loader!../../../assets/code-snippets/how-to/dag
 
 # Working with Content Archives
 
-When you upload files to Web3.Storage using the [client library][reference-client-library], your data is converted into a graph of data structures, which are then packed into a format called a Content Archive (CAR) before being sent to the Web3.Storage service.
+When you upload files to web3.storage using the [client library][reference-client-library], your data is converted into a graph of data structures, which are then packed into a format called a Content Archive (CAR) before being sent to the web3.storage service.
 
 For most use cases, you never need to know about this process, as the conversion happens behind the scenes when using the client library. However, if you're using the [HTTP API][reference-http-api], or if you want more control over the structure of the IPFS data graph, you may want to work with Content Archives directly.
 
-This how-to guide will explain [the basics of Content Archives](#what-is-a-content-archive) and [how they're used by the Web3.Storage API](#car-files-and-web3-storage).
+This how-to guide will explain [the basics of Content Archives](#what-is-a-content-archive) and [how they're used by the web3.storage API](#car-files-and-web3-storage).
 
 We'll also see several methods of creating and manipulating Content Archives using [command line tools](#command-line-tools) and an overview of the [libraries](#libraries-for-application-developers) you can use in your application's code.
 
@@ -27,17 +27,17 @@ The type of data stored in CARs is defined by [IPLD](https://ipld.io), or InterP
 
 IPFS files are one example of IPLD data, but IPLD can also be used to access data from Ethereum, Git, and other hash-addressed systems. You can also use IPLD as a general purpose format for your structured data, sort of like a Web3-flavored JSON. See [Advanced IPLD formats](#advanced-ipld-formats) below for more information.
 
-## CARs and Web3.Storage
+## CARs and web3.storage
 
-When the Web3.Storage client packs up regular files into a CAR to store on IPFS, the CAR contains data encoded in the same format used by IPFS when importing files using the command line or other IPFS APIs.
+When the web3.storage client packs up regular files into a CAR to store on IPFS, the CAR contains data encoded in the same format used by IPFS when importing files using the command line or other IPFS APIs.
 
 This format uses an IPLD "codec" called [`dag-pb`](https://ipld.io/docs/codecs/known/dag-pb/), which uses [Protocol Buffers](https://developers.google.com/protocol-buffers) to encode an object graph. Inside the graph are [UnixFS objects](https://docs.ipfs.io/concepts/file-systems/#unix-file-system-unixfs) that describe the files and their contents.
 
 Although the [HTTP API][reference-http-api] also allows you to upload regular files, the client prefers to send CARs for a few reasons.
 
-First, formatting everything on the client allows us to calculate the root Content Identifier for the data you're uploading before we send any data to the remote service. This means that you can compare the CID returned by the Web3.Storage service to the one you calculated locally, and you don't have to trust the service to do the right thing.
+First, formatting everything on the client allows us to calculate the root Content Identifier for the data you're uploading before we send any data to the remote service. This means that you can compare the CID returned by the web3.storage service to the one you calculated locally, and you don't have to trust the service to do the right thing.
 
-Another reason to use CARs is to support large files, which would otherwise hit size limits on the Web3.Storage backend platform. The data in a CAR is already chunked into small blocks, which makes CARs easy to split into small pieces that can be uploaded in batches.
+Another reason to use CARs is to support large files, which would otherwise hit size limits on the web3.storage backend platform. The data in a CAR is already chunked into small blocks, which makes CARs easy to split into small pieces that can be uploaded in batches.
 
 ## Command line tools
 
@@ -120,9 +120,9 @@ See the [ipfs-car README](https://github.com/web3-storage/ipfs-car#api) for API 
 
 The [`@ipld/car` package](https://github.com/ipld/js-car) contains the main JavaScript implementation of the CAR specification and is used by `ipfs-car` under the hood. If you want to store non-file data using [advanced IPLD formats](#advanced-ipld-formats), you should use `@ipld/car` directly.
 
-`@ipld/car` also provides the `CarReader` interface used by the Web3.Storage client's [`putCar` method][reference-client-putcar].
+`@ipld/car` also provides the `CarReader` interface used by the web3.storage client's [`putCar` method][reference-client-putcar].
 
-Here's a simple example of loading a CAR file from a Node.js stream and storing it with Web3.Storage:
+Here's a simple example of loading a CAR file from a Node.js stream and storing it with web3.storage:
 
 ```javascript
 import { createReadStream } from 'fs';
@@ -148,13 +148,13 @@ The [`go-car` module](https://github.com/ipld/go-car) provides the main Golang i
 
 See the [API reference documentation](https://pkg.go.dev/github.com/ipld/go-car/v2) for more information.
 
-## Splitting CARs for upload to Web3.Storage
+## Splitting CARs for upload to web3.storage
 
-The Web3.Storage [HTTP API][reference-http-api] accepts CAR uploads up to 100 MB in size, but the JavaScript client uses the HTTP API to upload files of _any_ size. The client manages to do this by splitting CARs into chunks of less than 100 MB each and uploading each chunk separately.
+The web3.storage [HTTP API][reference-http-api] accepts CAR uploads up to 100 MB in size, but the JavaScript client uses the HTTP API to upload files of _any_ size. The client manages to do this by splitting CARs into chunks of less than 100 MB each and uploading each chunk separately.
 
 The main tool available for splitting and joining CARs is called `carbites`, which has implementations in JavaScript and Go. The JavaScript implementation includes a command-line version that allows you to split and join CARs from your terminal or favorite scripting language.
 
-This section will demonstrate a few ways to split CARs in a way that's acceptable to the Web3.Storage service, using the command line tool, as well as programmatically using the `carbites` libraries in JavaScript and Go.
+This section will demonstrate a few ways to split CARs in a way that's acceptable to the web3.storage service, using the command line tool, as well as programmatically using the `carbites` libraries in JavaScript and Go.
 
 <Tabs>
 <TabItem default value="carbites-cli" label="Using the carbites-cli tool">
@@ -212,9 +212,9 @@ After that, you can use `npx carbites-cli` instead of `carbites` for any of the 
 
 The `carbites split` command takes a CAR file as input and splits it into multiple smaller CARs.
 
-The `--size` flag sets the maximum size of the output CAR files. For uploading to Web3.Storage, `--size` must be less than `100MB`.
+The `--size` flag sets the maximum size of the output CAR files. For uploading to web3.storage, `--size` must be less than `100MB`.
 
-The other important flag is `--strategy`, which determines how the CAR files are split. For Web3.Storage uploads, we need to use the `treewalk` strategy, so that all of our CARs share the same root CID. This will allow the Web3.Storage service to piece them all together again once they've all been uploaded.
+The other important flag is `--strategy`, which determines how the CAR files are split. For web3.storage uploads, we need to use the `treewalk` strategy, so that all of our CARs share the same root CID. This will allow the web3.storage service to piece them all together again once they've all been uploaded.
 
 Here's an example, using an input car file called `my-video.car` that weighs in at 455MB:
 
@@ -252,7 +252,7 @@ The [carbites library][github-carbites-js] provides an interface for splitting C
 
 <Callout type="info">
 ##### You probably don't need this!
-  If you're using JavaScript, you can [use the Web3.Storage client][howto-store] to upload your data and let the client take care of CAR splitting for you. If you're sure you want to split CARs from JavaScript yourself, read on!
+  If you're using JavaScript, you can [use the web3.storage client][howto-store] to upload your data and let the client take care of CAR splitting for you. If you're sure you want to split CARs from JavaScript yourself, read on!
 </Callout>
 
 To split CARs from your JavaScript code, install the `carbites` package:
@@ -279,7 +279,7 @@ async function splitCars() {
     // Each small car is an AsyncIterable<Uint8Array> of CAR data
     for await (const chunk of smallCar) {
       // Do something with the car data...
-      // For example, you could upload it to the Web3.storage HTTP API
+      // For example, you could upload it to the web3.storage HTTP API
       // https://web3.storage/docs/http-api.html#operation/post-car
     }
     // You can also get the root CID of each small CAR with the getRoots method:
@@ -302,7 +302,7 @@ Install the module with `go get`:
 go get github.com/alanshaw/go-carbites
 ```
 
-The [`carbites.Split` function](https://pkg.go.dev/github.com/alanshaw/go-carbites#Split) returns a [`carbites.Splitter`](https://pkg.go.dev/github.com/alanshaw/go-carbites#Splitter) that will make sure that the output CARs all have the same root CID, which is important when uploading to Web3.Storage.
+The [`carbites.Split` function](https://pkg.go.dev/github.com/alanshaw/go-carbites#Split) returns a [`carbites.Splitter`](https://pkg.go.dev/github.com/alanshaw/go-carbites#Splitter) that will make sure that the output CARs all have the same root CID, which is important when uploading to web3.storage.
 
 ```go
 package main
@@ -360,7 +360,7 @@ Although `dag-json` is familiar and easy to use, we recommend using the similar 
 
 ### Examples
 
-Below are some examples of working with `dag-cbor` data and sending it to Web3.Storage.
+Below are some examples of working with `dag-cbor` data and sending it to web3.storage.
 
 First, you'll need to import some things:
 
@@ -380,7 +380,7 @@ And a function to make a CAR from a collection of blocks and a root CID:
 
 #### Storing simple CBOR data
 
-Using the helpers above, you can make a CAR file with a single block of simple CBOR data and send it to Web3.Storage:
+Using the helpers above, you can make a CAR file with a single block of simple CBOR data and send it to web3.storage:
 
 <AccordionSingle heading="simpleCborExample()">
   <CodeSnippet lang="js" src={dagCborSource} region="simpleCborExample" />
@@ -438,7 +438,7 @@ ipfs dag get bafyreieq6bftbe3o46lrdbzj6vrvyee4njfschajxgmpxwbqex3czifhry/contact
 
 Our final example is a little more complex. We're going to store a file in the same UnixFS format that IPFS uses, and link to it from a CBOR object.
 
-First, we'll encode a file into UnixFS format. Normally, this is done by the client library, but we want to get the CID of the file object to use for our link before we send the file off to Web3.Storage, so we'll construct the UnixFS object ourselves.
+First, we'll encode a file into UnixFS format. Normally, this is done by the client library, but we want to get the CID of the file object to use for our link before we send the file off to web3.storage, so we'll construct the UnixFS object ourselves.
 
 Here's a helper function to make a UnixFS file and encode it to an IPLD block:
 
@@ -446,7 +446,7 @@ Here's a helper function to make a UnixFS file and encode it to an IPLD block:
   <CodeSnippet lang="js" src={dagCborSource} region="makeUnixFsFile" />
 </AccordionSingle>
 
-The helper returns a `root` block, which we can link to by CID, as well as a `blocks` array containing the encoded file data. When we create the CAR to send to Web3.Storage, it's important to include all the file blocks as well as the CBOR block.
+The helper returns a `root` block, which we can link to by CID, as well as a `blocks` array containing the encoded file data. When we create the CAR to send to web3.storage, it's important to include all the file blocks as well as the CBOR block.
 
 <AccordionSingle heading="cborLinkToFileExample()">
   <CodeSnippet lang="js" src={dagCborSource} region="cborLinkToFileExample" />
@@ -498,7 +498,7 @@ However, the gateway _can_ traverse the IPLD links inside our CBOR object, so yo
 
 <Callout type="warning">
 ##### Gateway support
-Although Web3.Storage supports storing CAR files with `dag-cbor` content by default and can accept other codecs with the `decoders` option, the IPFS HTTP gateway does not currently "speak" these formats and will not return such data over HTTP. Please follow [this issue](https://github.com/ipfs/go-ipfs/issues/8234) to track the development of this feature.
+Although web3.storage supports storing CAR files with `dag-cbor` content by default and can accept other codecs with the `decoders` option, the IPFS HTTP gateway does not currently "speak" these formats and will not return such data over HTTP. Please follow [this issue](https://github.com/ipfs/go-ipfs/issues/8234) to track the development of this feature.
 </Callout>
 
 ### Enabling IPLD codecs in the client library

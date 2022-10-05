@@ -7,11 +7,11 @@ import ImgPageFiles from '../../../public/images/docs/account-page-files.png';
 
 # Getting upload status
 
-The Web3.Storage service provides a few ways to check on the status of an upload.
+The web3.storage service provides a few ways to check on the status of an upload.
 
-On the [Account page](https://web3.storage/account) of the Web3.Storage site, you can see a list of files that you've uploaded to Web3.Storage.
+On the [Account page](https://web3.storage/account) of the web3.storage site, you can see a list of files that you've uploaded to web3.storage.
 
-<Img src={ImgPageFiles} alt="Screenshot of Web3.Storage account page, showing a table of uploaded files" />
+<Img src={ImgPageFiles} alt="Screenshot of web3.storage account page, showing a table of uploaded files" />
 
 The table on the account page has two columns related to the current status of the data storage process, [Status](#status) and [Storage Providers](#storage-providers).
 
@@ -19,7 +19,7 @@ The information in the account page file list is also available using the [JavaS
 
 ## Status
 
-When you upload data to Web3.Storage, it is ["pinned"][ipfs-docs-pinning] to several nodes in an [IPFS cluster][ipfs-cluster]. An IPFS cluster is a group of machines that coordinate to provide content-addressed data to the [IPFS](https://ipfs.io) peer-to-peer network.
+When you upload data to web3.storage, it is ["pinned"][ipfs-docs-pinning] to several nodes in an [IPFS cluster][ipfs-cluster]. An IPFS cluster is a group of machines that coordinate to provide content-addressed data to the [IPFS](https://ipfs.io) peer-to-peer network.
 
 The **Status** column shows the status of the pinning operation. There are three possible values for the Status column: `Queuing`, `Pinned`, and `Failed`.
 
@@ -37,11 +37,11 @@ There are several reasons why an upload may end up in the `Failed` state.
 
 If you are able to [retrieve the data from IPFS][howto-retrieve], the cluster is likely waiting to retry a previous attempt and will soon pin the data.
 
-If you uploaded your data directly to the Web3.Storage service using a [client library][client-js], [the HTTP API][client-http], or the [Upload files button on the website account page][upload-page], a `Failed` status may indicate that one or more chunks of data was not received by the service. This may happen when uploading large files or directories containing many files and may be resolved by retrying the upload.
+If you uploaded your data directly to the web3.storage service using a [client library][client-js], [the HTTP API][client-http], or the [Upload files button on the website account page][upload-page], a `Failed` status may indicate that one or more chunks of data was not received by the service. This may happen when uploading large files or directories containing many files and may be resolved by retrying the upload.
 
 If your data was pinned using the Pinning Service API, a `Failed` status usually means that the cluster wasn't able to fetch the complete content over the IPFS peer-to-peer network. These issues can be hard to diagnose due to the many variables involved, especially when the original source of the data may have an unreliable connection to the network or is behind a firewall. If the data is being provided by another pinning service such as Pinata, or if you've verified that the data is retrievable using IPFS (ideally from multiple distinct locations), please [file an issue][new-issue] so we can look into the cause.
 
-Please note that the status reported by the Web3.Storage service may not always be in sync with the actual status as reported by the IPFS cluster. The Web3.Storage service checks if `Failed` pins have been found and pinned by the cluster once per week for up to one month after the initial upload.
+Please note that the status reported by the web3.storage service may not always be in sync with the actual status as reported by the IPFS cluster. The web3.storage service checks if `Failed` pins have been found and pinned by the cluster once per week for up to one month after the initial upload.
 
 If you find that your file is retrievable but the pin status still says `Failed`, please [file an issue][new-issue] with the relevant CIDs and we'll take a look.
 
@@ -49,9 +49,9 @@ If you find that your file is retrievable but the pin status still says `Failed`
 
 The **Storage Providers** column on the file listing page shows information about the [Filecoin storage providers][fil-docs-storage-providers] that have committed to long-term storage deals for the uploaded data.
 
-When data is first uploaded, the Storage Providers column will show a status of `Queuing`. This indicates that the Web3.Storage service has the data and is aggregating it into a format that can be used to make a storage deal.
+When data is first uploaded, the Storage Providers column will show a status of `Queuing`. This indicates that the web3.storage service has the data and is aggregating it into a format that can be used to make a storage deal.
 
-Once enough data has been aggregated, the Web3.Storage service will propose several Filecoin [storage deals][fil-docs-deals] with different Filecoin storage providers. These will initially be shown in a `Pending` status, while the provider accepts the deal and posts its commitment to the Filecoin blockchain.
+Once enough data has been aggregated, the web3.storage service will propose several Filecoin [storage deals][fil-docs-deals] with different Filecoin storage providers. These will initially be shown in a `Pending` status, while the provider accepts the deal and posts its commitment to the Filecoin blockchain.
 
 When using the HTTP API or client library to check the upload status, information about Filecoin storage is provided in the `deals` array field within the status response object. The `deals` array will be empty while the upload is in the `Queuing` state.
 

@@ -41,7 +41,7 @@ export function getStaticProps() {
   return {
     props: {
       title: 'Terms - Web3 Storage - Simple file storage with IPFS & Filecoin',
-      description: 'Terms of service for using Web3.Storage.',
+      description: 'Terms of service for using web3.storage.',
       breadcrumbs: [crumbs.index, crumbs.terms],
     },
   };

@@ -182,7 +182,7 @@
           "alert": "Are you sure? Deleted files cannot be recovered!",
           "ok": "Delete Files",
           "cancel": "Cancel",
-          "heading": "Web3.Storage says"
+          "heading": "web3.storage says"
         },
         "results": {
           "options": [
@@ -205,12 +205,12 @@
         {
           "icon": "globe_icon",
           "heading": "Public Data",
-          "description": "All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. Do not store any private or sensitive information in an unencrypted form using Web3.Storage."
+          "description": "All data uploaded to web3.storage is available to anyone who requests it using the correct CID. Do not store any private or sensitive information in an unencrypted form using web3.storage."
         },
         {
           "icon": "infinity_icon",
           "heading": "Permanent Data",
-          "description": "Deleting files from the Web3.Storage site’s Files page will remove them from the file listing for your account, but that doesn’t prevent nodes on the decentralized storage network from retaining copies of the data indefinitely. Do not use Web3.Storage for data that may need to be permanently deleted in the future."
+          "description": "Deleting files from the web3.storage site’s Files page will remove them from the file listing for your account, but that doesn’t prevent nodes on the decentralized storage network from retaining copies of the data indefinitely. Do not use web3.storage for data that may need to be permanently deleted in the future."
         }
       ]
     }
