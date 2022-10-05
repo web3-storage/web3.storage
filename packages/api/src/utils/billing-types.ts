@@ -42,7 +42,7 @@ export interface Customer {
 }
 
 export interface CustomersService {
-  getOrCreateForUser(user): Promise<Customer>
+  getOrCreateForUser(user: BillingUser): Promise<Customer>
 }
 
 export type StoragePriceName = 'free' | 'lite' | 'pro'

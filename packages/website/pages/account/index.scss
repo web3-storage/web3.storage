@@ -171,11 +171,11 @@
 }
 
 .billing-plans-table {
-  margin-top: 4rem;
+  margin-top: 2rem;
   display: grid;
   grid-template-columns: 180px 1fr 1fr 1fr;
   overflow: hidden;
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 900px) {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
   }
@@ -197,7 +197,7 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 50px 80px auto 100px;
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 900px) {
       grid-template-rows: 32px 60px auto auto;
       grid-gap: 1rem;
     }
@@ -205,7 +205,9 @@
 
   .billing-play-key {
     padding: 2rem 0;
-    @media screen and (max-width: 768px) {
+    grid-row: 1;
+    grid-column: 1;
+    @media screen and (max-width: 900px) {
       display: none;
     }
   }
@@ -255,6 +257,69 @@
     font-size: 12px;
     margin: 0;
   }
+
+  &.early-adopter {
+    .billing-play-key {
+      display: none;
+    }
+    .billing-card:nth-child(2) {
+      grid-row: 1;
+      grid-column: 1;
+    }
+    .billing-card:nth-child(3) {
+      grid-row: 2;
+      grid-column: 1;
+    }
+    .billing-card:nth-child(4) {
+      grid-row: 3;
+      grid-column: 1;
+    }
+    @media screen and (min-width: 901px) {
+      grid-template-columns: 1fr 1fr 1fr;
+
+      .billing-card:nth-child(2) {
+        grid-row: 1;
+        grid-column: 1;
+      }
+      .billing-card:nth-child(3) {
+        grid-row: 1;
+        grid-column: 2;
+      }
+      .billing-card:nth-child(4) {
+        grid-row: 1;
+        grid-column: 3;
+      }
+    }
+    .billing-card:not(.current) {
+      opacity: 1;
+    }
+    .billing-card.current {
+      p {
+        line-height: 1.7;
+        margin-top: 0.3rem;
+      }
+    }
+  }
+
+  .early-adopter-ui-block {
+    grid-column: 1;
+    grid-row: 2/5;
+    @media screen and (min-width: 901px) {
+      grid-column: 2/4;
+      grid-row: 1/2;
+    }
+    padding: 5rem;
+    display: flex;
+    align-items: center;
+    background: #0f111ade;
+    z-index: 1;
+    border-radius: 10px 10px;
+    color: #fff;
+    line-height: 1.5;
+    flex-direction: column;
+    gap: 18px;
+    justify-content: center;
+  }
 }
 
 .billing-card-add-card-wrapper {
@@ -269,24 +334,36 @@
   margin: 0;
 }
 
-.billing-plan-details p {
-  @media screen and (max-width: 768px) {
-    margin-bottom: 0.5rem;
-    &:before {
-      display: block;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.4);
-      line-height: 1;
-      font-size: 80%;
-    }
-    &:nth-child(1):before {
-      content: 'Storage Limit: ';
-    }
-    &:nth-child(2):before {
-      content: 'Bandwidth: ';
-    }
-    &:nth-child(3):before {
-      content: 'Overage Cost: ';
+.billing-plan-details {
+  @media screen and (max-width: 900px) {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  p {
+    @media screen and (max-width: 900px) {
+      min-width: 150px;
+      width: 50%;
+      margin-bottom: 0.5rem;
+      &.early-adopter-desc {
+        width: 100%;
+      }
+      &:before {
+        display: block;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.4);
+        line-height: 1;
+        font-size: 80%;
+      }
+      &:nth-child(1):before {
+        content: 'Storage Limit: ';
+      }
+      &:nth-child(2):before {
+        content: 'Bandwidth: ';
+      }
+      &:nth-child(3):before {
+        content: 'Overage Cost: ';
+      }
     }
   }
 }

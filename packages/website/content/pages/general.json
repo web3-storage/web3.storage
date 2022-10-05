@@ -46,6 +46,11 @@
         "text": "FAQ"
       },
       {
+        "url": "https://blog.web3.storage",
+        "text": "Blog",
+        "target": "_blank"
+      },
+      {
         "url": "/docs",
         "text": "Docs"
       },
@@ -64,6 +69,10 @@
           {
             "text": "Create an API Token",
             "url": "/tokens/?create=true"
+          },
+          {
+            "text": "Plans & Payment",
+            "url": "/account/payment"
           },
           {
             "text": "Status",
@@ -129,8 +138,12 @@
           "url": "/contact"
         },
         {
-          "text": "Terms of Use",
+          "text": "Terms of Service",
           "url": "/terms"
+        },
+        {
+          "text": "Service Level Agreement (SLA)",
+          "url": "/sla"
         },
         {
           "text": "Status",
@@ -160,10 +173,6 @@
         {
           "text": "Web Apps",
           "url": "/terms"
-        },
-        {
-          "text": "Login",
-          "url": "/login"
         }
       ]
     },

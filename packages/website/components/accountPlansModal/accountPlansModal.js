@@ -89,11 +89,10 @@ const AccountPlansModal = ({
               onChange={() => setHasAcceptedTerms(!hasAcceptedTerms)}
             />
             <label htmlFor="agreeTerms">
-              I agree to the{' '}
+              I have read and agree to the{' '}
               <a href="/terms/" rel="noreferrer" target="_blank">
-                web3.storage
-              </a>{' '}
-              Terms of Service
+                web3.storage Terms of Service
+              </a>
             </label>
           </div>
         </div>

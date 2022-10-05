@@ -1,16 +1,22 @@
-import { faCcVisa } from '@fortawesome/free-brands-svg-icons';
+import { faCcVisa, faCcMastercard, faCcDiscover, faCcAmex } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Loading from '../../../components/loading/loading';
 import Button from '../../../components/button/button';
 
 const PaymentMethodCard = ({ savedPaymentMethod, setEditingPaymentMethod }) => {
+  const cardIcons = {
+    visa: faCcVisa,
+    mastercard: faCcMastercard,
+    discover: faCcDiscover,
+    amex: faCcAmex,
+  };
   return (
     <>
       {savedPaymentMethod && savedPaymentMethod.card ? (
         <>
           <div className="saved-card card-transparent">
-            <FontAwesomeIcon icon={faCcVisa} />
+            <FontAwesomeIcon icon={cardIcons[savedPaymentMethod.card.brand]} />
             <div>
               <span className="card-label">Card ending in:</span>
               <div className="card-number">

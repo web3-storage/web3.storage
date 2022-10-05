@@ -1,5 +1,26 @@
 # Changelog
 
+## [7.8.2](https://github.com/web3-storage/web3.storage/compare/api-v7.8.1...api-v7.8.2) (2022-10-03)
+
+
+### Bug Fixes
+
+* migrate upsert_user function to return id text instead of id bigint ([#1990](https://github.com/web3-storage/web3.storage/issues/1990)) ([8253e8c](https://github.com/web3-storage/web3.storage/commit/8253e8c1e0295e09b10e9609f65c988b7fef80f5))
+
+## [7.8.1](https://github.com/web3-storage/web3.storage/compare/api-v7.8.0...api-v7.8.1) (2022-09-30)
+
+
+### Bug Fixes
+
+* trigger release to pick up fix from [#1976](https://github.com/web3-storage/web3.storage/issues/1976) ([#1982](https://github.com/web3-storage/web3.storage/issues/1982)) ([27f2542](https://github.com/web3-storage/web3.storage/commit/27f25422f1f1d385c2c8691a96d7ac5f1b14da6a))
+
+## [7.8.0](https://github.com/web3-storage/web3.storage/compare/api-v7.7.1...api-v7.8.0) (2022-09-29)
+
+
+### Features
+
+* new users are initialized into free tier ([#1945](https://github.com/web3-storage/web3.storage/issues/1945)) ([ee67c35](https://github.com/web3-storage/web3.storage/commit/ee67c35c6b12a363140b79ea34835123ad76420c))
+
 ## [7.7.1](https://github.com/web3-storage/web3.storage/compare/api-v7.7.0...api-v7.7.1) (2022-09-23)
 
 

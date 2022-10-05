@@ -1,0 +1,143 @@
+@use 'sass:math';
+
+.sla_page_top_artwork,
+.sla_page_bottom_artwork {
+  position: relative;
+}
+
+#sla_page_helix,
+#sla_page_triangle,
+#sla_page_cross,
+#sla_page_ring,
+#sla_page_coil {
+  position: absolute;
+}
+
+#sla_page_helix {
+  width: 18rem;
+  left: 0;
+  top: -6rem;
+  left: -4rem;
+  transform: translateX(-100%) rotate(-79deg);
+  left: calc(50% - #{math.div($containerWidth, 2)} - 1rem);
+  @include containerMaxMQ {
+    left: 0;
+  }
+  @include mini {
+    left: 5rem;
+    width: 10rem;
+    top: -3rem;
+  }
+}
+
+#sla_page_triangle {
+  width: 4.75rem;
+  right: 7rem;
+  top: 17rem;
+  transform: scaleX(-1) rotate(-90deg);
+  right: calc(50% - #{math.div($containerWidth, 2)} - 4rem);
+  @include medium {
+    right: -8rem;
+  }
+  @include small {
+    right: -7rem;
+    top: 5rem;
+  }
+  @include mini {
+    right: -2rem;
+  }
+}
+
+#sla_page_cross {
+  width: 3rem;
+  transform: scaleX(-1);
+  top: 50%;
+  left: calc(50% - #{math.div($containerWidth, 2)} - 2.5rem);
+  @include medium {
+    left: -5rem;
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#sla_page_ring {
+  width: 36.5rem;
+  right: 0;
+  top: calc(50% + 4rem);
+  transform: translateY(-20%) rotate(-23deg);
+  right: calc(50% - #{math.div($containerWidth, 1)} - 4rem);
+  @include medium {
+    width: 16rem;
+    right: -18rem;
+  }
+  @include mini {
+    display: none;
+  }
+}
+
+#sla_page_coil {
+  width: 5rem;
+  right: 7rem;
+  bottom: 1rem;
+  transform: rotate(31deg);
+  right: calc(50% - #{math.div($containerWidth, 2)} - 5rem);
+  @include containerMaxMQ {
+    right: 0;
+  }
+}
+
+#sla_page-main-body {
+  position: relative;
+  padding: 10rem 0;
+
+  h1 {
+    @include fontSize_Huge;
+    @include fontWeight_Semibold;
+    line-height: leading(96, 67);
+    margin-bottom: 3rem;
+    @include mini {
+      @include fontSize_Large;
+      line-height: leading(45, 35);
+    }
+  }
+  h4 {
+    @include fontSize_MediumLarge;
+    @include fontWeight_Semibold;
+    line-height: leading(40, 25);
+    padding: 1.5rem 0;
+  }
+  p {
+    @include fontSize_Regular;
+    @include fontWeight_Regular;
+    line-height: leading(34, 18);
+    margin-bottom: 1.5rem;
+  }
+  ul {
+    margin-left: 3rem;
+  }
+  li {
+    list-style-type: none;
+    p {
+      position: relative;
+      &:before {
+        content: '⁂';
+        position: absolute;
+        top: -0.075rem;
+        left: -2.5rem;
+        line-height: leading(34, 18);
+        @include fontSize_Medium;
+      }
+    }
+  }
+  p > a {
+    cursor: pointer;
+    border-bottom: 4px solid #ccc;
+    transition: all 150ms linear;
+    border-image: linear-gradient(45deg, #d726d7 30%, #7e81ff 60%, #31e7ea) 1;
+  }
+
+  p > a:hover {
+    border-width: 2px;
+  }
+}

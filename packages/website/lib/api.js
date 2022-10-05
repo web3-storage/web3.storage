@@ -300,14 +300,22 @@ export async function deletePinRequest(requestid) {
 }
 
 /**
- * Gets/Puts saved user plan and billing settings.
+ * @typedef {import('../components/contexts/plansContext').StorageSubscription} StorageSubscription
+ * @typedef {import('../components/contexts/plansContext').EarlyAdopterStorageSubscription
+ *  } EarlyAdopterStorageSubscription
  */
-export async function userBillingSettings(pm_id, currPricePlan) {
+
+/**
+ * Gets/Puts saved user plan and billing settings.
+ * @param {string} [pmId] - payment method id
+ * @param {StorageSubscription|EarlyAdopterStorageSubscription} [storageSubscription]
+ */
+export async function userBillingSettings(pmId, storageSubscription) {
   const putBody =
-    pm_id || currPricePlan
+    pmId || storageSubscription
       ? JSON.stringify({
-          paymentMethod: pm_id ? { id: pm_id } : null,
-          subscription: { storage: currPricePlan ?? null },
+          paymentMethod: pmId ? { id: pmId } : null,
+          subscription: { storage: storageSubscription },
         })
       : null;
   const method = !!putBody ? 'PUT' : 'GET';
