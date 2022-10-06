@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.24.0](https://github.com/web3-storage/web3.storage/compare/website-v2.23.0...website-v2.24.0) (2022-10-06)
+
+
+### Features
+
+* consistent casing ([#1995](https://github.com/web3-storage/web3.storage/issues/1995)) ([48946b6](https://github.com/web3-storage/web3.storage/commit/48946b621200a974d36ed4e6a57acbb18284233d))
+
 ## [2.23.0](https://github.com/web3-storage/web3.storage/compare/website-v2.22.2...website-v2.23.0) (2022-10-05)
 
 
