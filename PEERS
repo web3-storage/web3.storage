@@ -1,4 +1,4 @@
-# A list of known IPFS peers that are hosting content uploaded to Web3.Storage.
+# A list of known IPFS peers that are hosting content uploaded to web3.storage.
 #
 # YOU DO NOT NEED THIS LIST. All peers that provide content on IPFS are
 # discoverable via the DHT. IPFS transfers content P2P from multiple sources

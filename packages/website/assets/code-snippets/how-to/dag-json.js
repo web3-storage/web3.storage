@@ -15,10 +15,10 @@ async function storeDagJSON (jsonObject) {
   writer.put(block)
   writer.close()
 
-  // create a new CarReader we can hand to Web3.Storage.putCar
+  // create a new CarReader we can hand to web3.storage.putCar
   const reader = await CarReader.fromIterable(out)
 
-  // upload to Web3.Storage using putCar
+  // upload to web3.storage using putCar
   console.log('uploading car.')
   const client = new Web3Storage({ token: process.env.WEB3STORAGE_TOKEN })
   const cid = await client.putCar(reader, {

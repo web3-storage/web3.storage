@@ -65,7 +65,7 @@
             "format": "small",
             "heading": "The best of both worlds",
             "description": [
-              "IPFS unlocks a ton of value at the data layer, but its peer-to-peer nature means reading data from the network isn’t always performant by today’s web standards. w3link marries IPFS content IDs with CDNs to provide a much more performant read experience - and is especially fast for content stored on the Web3.Storage platform - while still taking advantage of the benefits of IPFS.",
+              "IPFS unlocks a ton of value at the data layer, but its peer-to-peer nature means reading data from the network isn’t always performant by today’s web standards. w3link marries IPFS content IDs with CDNs to provide a much more performant read experience - and is especially fast for content stored on the web3.storage platform - while still taking advantage of the benefits of IPFS.",
               "In addition, like other IPFS HTTP gateways, w3link takes requests over HTTP, making it easy to integrate with today’s existing web infrastructure."
             ],
             "cta": {
@@ -127,7 +127,7 @@
             "heading": "No lock-in, just speed",
             "description": [
               "The most common way for users to read data available on the public IPFS network is via IPFS HTTP gateways like w3link, which are generally run as public services.",
-              "Since they use IPFS, you’re never locked into a single gateway and its infrastructure - just swap the domain name. In addition, you can always fetch data from Web3.Storage using your own IPFS nodes instead or as a backup."
+              "Since they use IPFS, you’re never locked into a single gateway and its infrastructure - just swap the domain name. In addition, you can always fetch data from web3.storage using your own IPFS nodes instead or as a backup."
             ]
           }
         ]
@@ -182,7 +182,7 @@
                 "type": "text_block",
                 "format": "small",
                 "heading": "Image Resizing",
-                "description": ["Image resizing in the Web3.Storage Gateway. Great for thumbnails, etc."]
+                "description": ["Image resizing in the web3.storage Gateway. Great for thumbnails, etc."]
               }
             ]
           },

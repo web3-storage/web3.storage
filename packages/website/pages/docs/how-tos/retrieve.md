@@ -1,6 +1,6 @@
 ---
-title: How to retrieve data from Web3.Storage
-description: Learn how to retrieve data stored using Web3.Storage in this quick how-to guide.
+title: How to retrieve data from web3.storage
+description: Learn how to retrieve data stored using web3.storage in this quick how-to guide.
 ---
 
 import { Tabs, TabItem } from 'components/tabs/tabs';
@@ -11,22 +11,22 @@ import golangRetrieve from '!!raw-loader!../../../assets/code-snippets/how-to/go
 import Img from 'components/cloudflareImage';
 import ImgGatewayDir from '../../../public/images/docs/gateway-directory-listing.png';
 
-# How to retrieve data from Web3.Storage
+# How to retrieve data from web3.storage
 
-In this how-to guide, **you'll learn several methods for retrieving data from Web3.Storage.**
+In this how-to guide, **you'll learn several methods for retrieving data from web3.storage.**
 
-All data stored using Web3.Storage is made available for retrieval via [IPFS](https://ipfs.io), the InterPlanetary File System. IPFS is a distributed, peer-to-peer network for storing and sharing [content-addressed data][concepts-content-addressing]. This guide shows you several ways to retrieve your data from IPFS:
+All data stored using web3.storage is made available for retrieval via [IPFS](https://ipfs.io), the InterPlanetary File System. IPFS is a distributed, peer-to-peer network for storing and sharing [content-addressed data][concepts-content-addressing]. This guide shows you several ways to retrieve your data from IPFS:
 
 - In your browser using an [HTTP gateway](#using-an-ipfs-http-gateway).
-- Programmatically using the [Web3.Storage client libraries](#using-the-client-libraries).
+- Programmatically using the [web3.storage client libraries](#using-the-client-libraries).
 - In your terminal using the [IPFS command-line tools](#using-the-ipfs-command-line).
 - In your terminal using [curl or Powershell](#using-curl-or-powershell).
 
 ## Using an IPFS HTTP gateway
 
-You can easily fetch any data stored using Web3.Storage using an IPFS HTTP gateway. Because IPFS is a peer-to-peer, decentralized network, you can use any public HTTP gateway to fetch your data. In this guide, we'll use the gateway at `w3s.link` (the public gateway [we run](https://web3.storage/products/w3link/) that can be up to 10x faster than other public gateways), but you can see more worldwide gateways on the [IPFS Public Gateway Checker](https://ipfs.github.io/public-gateway-checker/).
+You can easily fetch any data stored using web3.storage using an IPFS HTTP gateway. Because IPFS is a peer-to-peer, decentralized network, you can use any public HTTP gateway to fetch your data. In this guide, we'll use the gateway at `w3s.link` (the public gateway [we run](https://web3.storage/products/w3link/) that can be up to 10x faster than other public gateways), but you can see more worldwide gateways on the [IPFS Public Gateway Checker](https://ipfs.github.io/public-gateway-checker/).
 
-When you [store data using the Web3.Storage client][howto-store], the `put` method returns an [IPFS content identifier (CID)][ipfs-docs-cid] string. That CID points to an IPFS directory that contains all the files you passed in using the `put` method.
+When you [store data using the web3.storage client][howto-store], the `put` method returns an [IPFS content identifier (CID)][ipfs-docs-cid] string. That CID points to an IPFS directory that contains all the files you passed in using the `put` method.
 
 You can use an IPFS gateway to view a list of all the files in that directory from your browser. To do so, simply create a gateway URL. For example, if your CID is `bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu`, you can make a URL for the `w3s.link` gateway as follows: [bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.w3s.link](https://bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.w3s.link/). Follow that link, and you'll see a page similar to this:
 
@@ -34,9 +34,9 @@ You can use an IPFS gateway to view a list of all the files in that directory fr
 
 If you want to link directly to a file within that directory, just add the file path after the CID portion of the link. For example: [bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.w3s.link/not-distributed.jpg](https://bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.w3s.link/not-distributed.jpg) could be used as a shareable link for your new favorite wallpaper.
 
-You can easily fetch any data stored using Web3.Storage using an IPFS HTTP gateway. Because IPFS is a peer-to-peer, decentralized network, you can use any public HTTP gateway to fetch your data. In this guide, we'll use the gateway at `w3s.link`, but you can see more worldwide gateways on the [IPFS Public Gateway Checker](https://ipfs.github.io/public-gateway-checker/).
+You can easily fetch any data stored using web3.storage using an IPFS HTTP gateway. Because IPFS is a peer-to-peer, decentralized network, you can use any public HTTP gateway to fetch your data. In this guide, we'll use the gateway at `w3s.link`, but you can see more worldwide gateways on the [IPFS Public Gateway Checker](https://ipfs.github.io/public-gateway-checker/).
 
-When you [store data using the Web3.Storage client][howto-store], the `put` method returns an [IPFS content identifier (CID)][ipfs-docs-cid] string. That CID points to an IPFS directory that contains all the files you passed in using the `put` method.
+When you [store data using the web3.storage client][howto-store], the `put` method returns an [IPFS content identifier (CID)][ipfs-docs-cid] string. That CID points to an IPFS directory that contains all the files you passed in using the `put` method.
 
 You can use an IPFS gateway to view a list of all the files in that directory from your browser. To do so, simply create a gateway URL. For example, if your CID is `bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu`, you can make a URL for the `w3s.link` gateway as follows: [bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.w3s.link](https://bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu.ipfs.w3s.link/). Follow that link, and you'll see a page similar to this:
 
@@ -46,7 +46,7 @@ If you want to link directly to a file within that directory, just add the file 
 
 <Callout type="info">
 ##### Tip
-Your [Files page](https://web3.storage/account) on Web3.Storage includes IPFS gateway links to all the content you've uploaded, so if you're looking to link to one of your own files, you don't even have to create a gateway URL.
+Your [Files page](https://web3.storage/account) on web3.storage includes IPFS gateway links to all the content you've uploaded, so if you're looking to link to one of your own files, you don't even have to create a gateway URL.
 </Callout>
 
 ### Setting the filename for downloads via gateways
@@ -57,7 +57,7 @@ When downloading files from an HTTP gateway, web browsers will set the default f
 
 In the link above, the CID `bafybeicfnbaeigdtklwkrj35r4wtfppix732zromsadvgiu33mowah74yq` points to an IPFS directory listing, which maps from the filename `treehouse.jpeg` to the CID for the image itself.
 
-Since the Web3.Storage client [wraps your uploaded files in a directory by default](/docs/how-tos/store/#directory-wrapping), this is the most common kind of gateway link you're likely to need, and your users should get nice filenames when they download their content.
+Since the web3.storage client [wraps your uploaded files in a directory by default](/docs/how-tos/store/#directory-wrapping), this is the most common kind of gateway link you're likely to need, and your users should get nice filenames when they download their content.
 
 However, the behavior is a bit different if you make a gateway link directly to the image CID:
 
@@ -81,9 +81,9 @@ Please note: retrieval using the client libraries is currently not as reliable a
 <Tabs groupId="lang">
 
 <TabItem value="js" label="JavaScript">
-The Web3.Storage JavaScript client provides a `get` method that allows you to retrieve any IPFS content using that content's [content identifier (CID)][ipfs-docs-cid].
+The web3.storage JavaScript client provides a `get` method that allows you to retrieve any IPFS content using that content's [content identifier (CID)][ipfs-docs-cid].
 
-First, you'll need to create a Web3.Storage client using your API token. Getting an API token is free, but you'll need a free Web3.Storage account. If you already have an account and a token, read on. If not, have a look at the [quickstart guide][quickstart-guide] to get up and running in just a few minutes.
+First, you'll need to create a web3.storage client using your API token. Getting an API token is free, but you'll need a free web3.storage account. If you already have an account and a token, read on. If not, have a look at the [quickstart guide][quickstart-guide] to get up and running in just a few minutes.
 
 First you'll need to add the `web3.storage` package to your project's dependencies:
 
@@ -91,7 +91,7 @@ First you'll need to add the `web3.storage` package to your project's dependenci
 npm install web3.storage
 ```
 
-Use the following code to create a Web3.Storage client:
+Use the following code to create a web3.storage client:
 
 <CodeSnippet lang="js" src={howtoSource} region="makeStorageClient" />
 
@@ -178,7 +178,7 @@ Sometimes you may need to just download a specific file to your computer using t
         | Variable | Replace with | Example |
         | --- | --- | --- |
         | `<YOUR CID>` | The CID of the file you want to download. | `bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq` |
-        | `<FILE NAME>` | The _name_ of the file that you originally uploaded to Web3.Storage. | `example.txt` |
+        | `<FILE NAME>` | The _name_ of the file that you originally uploaded to web3.storage. | `example.txt` |
         | `<OUTPUT FILE>` | The path and filename that you want curl to save the file to. This can be different to `<FILE NAME>`. | `Desktop/output-file.txt` |
 
         Your complete command should look something like this:
@@ -202,7 +202,7 @@ Sometimes you may need to just download a specific file to your computer using t
         | Variable        | Replace with                                                                                                | Example                                                       |
         | --------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
         | `<YOUR CID>`    | The CID of the file you want to download.                                                                   | `bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq` |
-        | `<FILE NAME>`   | The _name_ of the file that you originally uploaded to Web3.Storage.                                        | `example.txt`                                                 |
+        | `<FILE NAME>`   | The _name_ of the file that you originally uploaded to web3.storage.                                        | `example.txt`                                                 |
         | `<OUTPUT FILE>` | The path and filename that you want Powershell to save the file to. This can be different to `<FILE NAME>`. | `Desktop/output-file.txt`                                     |
 
         Your complete command should look something like this:
@@ -226,7 +226,7 @@ Sometimes you may need to just download a specific file to your computer using t
     | Variable        | Replace with                                                                                                | Example                                                       |
     | --------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
     | `<YOUR CID>`    | The CID of the file you want to download.                                                                   | `bafybeie2bjap32zi2yqh5jmpve5njwulnkualcbiszvwfu36jzjyqskceq` |
-    | `<FILE NAME>`   | The _name_ of the file that you originally uploaded to Web3.Storage.                                        | `example.txt`                                                 |
+    | `<FILE NAME>`   | The _name_ of the file that you originally uploaded to web3.storage.                                        | `example.txt`                                                 |
     | `<USERNAME>`    | The username you use to log into Windows with.                                                              | `Laika`                                                       |
     | `<OUTPUT FILE>` | The path and filename that you want Powershell to save the file to. This can be different to `<FILE NAME>`. | `Desktop/output-file.txt`                                     |
 
@@ -241,7 +241,7 @@ Sometimes you may need to just download a specific file to your computer using t
 
 ## Next steps
 
-If you haven't yet explored in depth how to store data using Web3.Storage, check out the [storage how-to guide][howto-store] for a deep dive on how to upload files using the [JavaScript client library][reference-js].
+If you haven't yet explored in depth how to store data using web3.storage, check out the [storage how-to guide][howto-store] for a deep dive on how to upload files using the [JavaScript client library][reference-js].
 
 You can also use the client library to get more information about the status of your data. See the [query how-to guide][howto-query] to learn how to get more details about your data, including the status of any Filecoin storage deals.
 

@@ -22,7 +22,7 @@ func main() {
 	}
 	filename := os.Args[1]
 
-	// Create a new Web3.Storage client using the token
+	// Create a new web3.storage client using the token
 	client, err := w3s.NewClient(w3s.WithToken(token))
 	if err != nil {
 		panic(err)
@@ -35,7 +35,7 @@ func main() {
 	}
 
 	basename := path.Base(filename)
-	// Upload to Web3.Storage
+	// Upload to web3.storage
 	fmt.Printf("Storing %s ...\n", basename)
 	cid, err := client.Put(context.Background(), file)
 	if err != nil {
@@ -43,5 +43,5 @@ func main() {
 	}
 
 	gatewayURL := fmt.Sprintf("https://%s.ipfs.dweb.link/%s\n", cid.String(), basename)
-	fmt.Printf("Stored %s with Web3.Storage! View it at: %s\n", basename, gatewayURL)
+	fmt.Printf("Stored %s with web3.storage! View it at: %s\n", basename, gatewayURL)
 }

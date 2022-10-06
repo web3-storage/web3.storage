@@ -10,12 +10,12 @@
     "image": ""
   },
   "site_logo": {
-    "text": "Web3.Storage"
+    "text": "web3.storage"
   },
   "message_banner": {
     "content": "",
     "url": "",
-    "maintenceAlert": "The Web3.Storage API is currently undergoing maintenance..."
+    "maintenceAlert": "The web3.storage API is currently undergoing maintenance..."
   },
   "navigation": {
     "links": [
@@ -25,7 +25,7 @@
         "links": [
           {
             "url": "/products/web3storage",
-            "text": "Web3.Storage"
+            "text": "web3.storage"
           },
           {
             "url": "/products/w3name",
@@ -149,7 +149,7 @@
       "url": "/products/w3name"
     },
     "web3storage": {
-      "text": "Web3.Storage",
+      "text": "web3.storage",
       "url": "/products/web3storage"
     },
     "w3link": {
@@ -163,7 +163,7 @@
   },
   "footer": {
     "contact": {
-      "logo_text": "Web3.Storage",
+      "logo_text": "web3.storage",
       "prompt": "Sign up for free using your email address or GitHub.",
       "cta": {
         "url": "/login",
