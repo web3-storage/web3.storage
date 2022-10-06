@@ -22,9 +22,11 @@ export default function Home() {
 }
 
 export function getStaticProps() {
+  const crumbs = GeneralPageData.breadcrumbs;
   return {
     props: {
       title: '404 - Web3 Storage - Simple file storage with IPFS & Filecoin',
+      breadcrumbs: [crumbs.index],
     },
   };
 }

@@ -4,11 +4,14 @@ import { useQueryClient } from 'react-query';
 
 import { redirectMagic, redirectSocial } from '../../lib/magic.js';
 import Loading from '../../components/loading/loading.js';
+import GeneralPageData from '../../content/pages/general.json';
 
 export function getStaticProps() {
+  const crumbs = GeneralPageData.breadcrumbs;
   return {
     props: {
       title: 'Login Redirect - Web3 Storage',
+      breadcrumbs: [crumbs.index, crumbs.callback],
     },
   };
 }

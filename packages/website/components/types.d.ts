@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '../components/breadcrumbs/breadcrumbs';
 export interface RestrictedRouteProps {
   callback?: boolean; // TODO: Remove if unused
   isRestricted?: boolean;
@@ -17,6 +18,7 @@ export interface MetadataProps {
 
 export type PageProps = RestrictedRouteProps &
   MetadataProps & {
+    breadcrumbs?: Breadcrumbs[];
     authOnLoad?: boolean;
   };
 

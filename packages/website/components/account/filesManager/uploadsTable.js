@@ -16,7 +16,7 @@ import { useUploads } from 'components/contexts/uploadsContext';
 import { useUser } from 'components/contexts/userContext';
 // import SearchIcon from 'assets/icons/search';
 import RefreshIcon from 'assets/icons/refresh';
-import FileRowItem from './fileRowItem';
+import FileRowItem, { PinStatus } from './fileRowItem';
 import GradientBackground from '../../gradientbackground/gradientbackground.js';
 import CopyIcon from 'assets/icons/copy';
 import { addTextToClipboard, formatTimestamp, formatTimestampFull, truncateString } from 'lib/utils';
@@ -466,6 +466,10 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
               date={item.created}
               name={item.name}
               cid={item.cid}
+              status={
+                Object.values(PinStatus).find(status => item.pins.some(pin => status === pin.status)) ||
+                PinStatus.QUEUING
+              }
               storageProviders={
                 Array.isArray(item.deals)
                   ? item.deals

@@ -8,6 +8,7 @@ import Button from '../../components/button/button.js';
 import { loginEmail, loginSocial } from '../../lib/magic.js';
 import countly, { trackEvent } from '../../lib/countly.js';
 import LoginData from '../../content/pages/app/login.json';
+import GeneralPageData from '../../content/pages/general.json';
 
 const LoginType = {
   GITHUB: 'github',
@@ -115,12 +116,14 @@ const Login = () => {
  * @returns {{ props: import('components/types').PageProps}}
  */
 export function getStaticProps() {
+  const crumbs = GeneralPageData.breadcrumbs;
   return {
     props: {
       title: LoginData.seo.title,
       redirectTo: '/account',
       redirectIfFound: true,
       authOnLoad: false,
+      breadcrumbs: [crumbs.index, crumbs.login],
     },
   };
 }
