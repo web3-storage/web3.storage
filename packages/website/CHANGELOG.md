@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.24.2](https://github.com/web3-storage/web3.storage/compare/website-v2.24.1...website-v2.24.2) (2022-10-07)
+
+
+### Bug Fixes
+
+* "get started" only partially clickable ([#1996](https://github.com/web3-storage/web3.storage/issues/1996)) ([1416a97](https://github.com/web3-storage/web3.storage/commit/1416a9763dfdbcd5bcd1f48e03763a215d0ff514))
+* pointer-events: none the swoosh ([#2001](https://github.com/web3-storage/web3.storage/issues/2001)) ([6079070](https://github.com/web3-storage/web3.storage/commit/6079070d0ff68dc58b73ca7f81dc320b201c6aef))
+* remove background squiggle ([#1997](https://github.com/web3-storage/web3.storage/issues/1997)) ([e539ac8](https://github.com/web3-storage/web3.storage/commit/e539ac85fe27f84bbeba0639876c100cb0ec81b2))
+
 ## [2.24.1](https://github.com/web3-storage/web3.storage/compare/website-v2.24.0...website-v2.24.1) (2022-10-07)
 
 
