@@ -310,6 +310,7 @@ li.pricing-bullet-3 {
     flex: 0 0 auto;
     width: 260px;
     height: 260px;
+    pointer-events: none;
 
     & > span {
       top: -8rem;
