@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.24.1](https://github.com/web3-storage/web3.storage/compare/website-v2.24.0...website-v2.24.1) (2022-10-07)
+
+
+### Bug Fixes
+
+* add terms for w3link usage ([#2013](https://github.com/web3-storage/web3.storage/issues/2013)) ([d4df533](https://github.com/web3-storage/web3.storage/commit/d4df5335c49afaef5675e406a091a031f59417a3))
+
 ## [2.24.0](https://github.com/web3-storage/web3.storage/compare/website-v2.23.0...website-v2.24.0) (2022-10-06)
 
 
