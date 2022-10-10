@@ -53,7 +53,7 @@ export default class Backup {
    */
   registerBackup (db, contentCid, pinRequestId) {
     /**
-     * @param {AsyncIterable<import('./bindings').RemoteBackup} source
+     * @param {AsyncIterable<import('../types/pins-backup').RemoteBackup>} source
      */
     return async (source) => {
       for await (const bak of source) {
@@ -78,12 +78,12 @@ export default class Backup {
     const _this = this
 
     /**
-     * @param {AsyncIterable<import('./bindings').BackupContent} source
+     * @param {AsyncIterable<import('../types/pins-backup').BackupContent} source
      */
     return async function * (source) {
       for await (const bak of source) {
         const backupUrl = await _this.s3Upload(s3, bucketName, bak)
-        /** @type {import('./bindings').RemoteBackup} */
+        /** @type {import('../types/pins-backup').RemoteBackup} */
         const backup = { ...bak, backupUrl }
         yield backup
       }
@@ -126,8 +126,8 @@ export default class Backup {
 
   /**
    * @param {import('@nftstorage/ipfs-cluster').Cluster} ipfs
-   * @param {Object} [options]
    * @param {Array<string>} peersList
+   * @param {Object} [options]
    * @param {number} [options.maxDagSize] Skip DAGs that are bigger than this.
    */
   exportCar (ipfs, peersList, options = {}) {
@@ -156,7 +156,7 @@ export default class Backup {
    * @param {number} [options.maxDagSize]
    */
   async * ipfsDagExport (ipfs, cid, peer, options) {
-    const maxDagSize = options.maxDagSize || this.MAX_DAG_SIZE
+    const maxDagSize = options?.maxDagSize || this.MAX_DAG_SIZE
 
     let reportInterval
     try {
