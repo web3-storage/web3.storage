@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.25.0](https://github.com/web3-storage/web3.storage/compare/website-v2.24.2...website-v2.25.0) (2022-10-10)
+
+
+### Features
+
+* add link to blog post ([#1994](https://github.com/web3-storage/web3.storage/issues/1994)) ([2204ad5](https://github.com/web3-storage/web3.storage/commit/2204ad5fca06d92a7506524a5375df2210818cd6))
+
 ## [2.24.2](https://github.com/web3-storage/web3.storage/compare/website-v2.24.1...website-v2.24.2) (2022-10-07)
 
 
