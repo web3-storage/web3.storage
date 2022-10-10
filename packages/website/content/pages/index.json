@@ -34,6 +34,13 @@
               "event": "",
               "ui": "HOME_HERO",
               "action": "Get Started"
+            },
+            "cta2": {
+              "url": "https://blog.web3.storage/posts/say-hello-to-the-data-layer-1-3-intro-to-web3-storage",
+              "text": "WHAT'S THE DATA LAYER?",
+              "event": "",
+              "ui": "HOME_HERO",
+              "action": "Data Layer Blog Link"
             }
           }
         ]
