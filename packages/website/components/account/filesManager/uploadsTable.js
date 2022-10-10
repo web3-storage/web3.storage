@@ -2,9 +2,10 @@ import clsx from 'clsx';
 import filesize from 'filesize';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import { renderToString } from 'react-dom/server';
+import { BsFillInfoCircleFill } from 'react-icons/bs';
 
 import countly from 'lib/countly';
-import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
 import Table from 'components/table/table';
@@ -16,10 +17,11 @@ import { useUploads } from 'components/contexts/uploadsContext';
 import { useUser } from 'components/contexts/userContext';
 // import SearchIcon from 'assets/icons/search';
 import RefreshIcon from 'assets/icons/refresh';
-import FileRowItem, { PinStatus } from './fileRowItem';
 import GradientBackground from '../../gradientbackground/gradientbackground.js';
 import CopyIcon from 'assets/icons/copy';
 import { addTextToClipboard, formatTimestamp, formatTimestampFull, truncateString } from 'lib/utils';
+import Tooltip from 'ZeroComponents/tooltip/tooltip';
+// import PencilIcon from 'assets/icons/pencil';
 
 const defaultSortBy = 'Date';
 const defaultSortOrder = 'Desc';
@@ -43,9 +45,9 @@ const defaultQueryOrder = `${defaultSortBy},${defaultSortOrder}`;
  * @param {UploadsTableProps} props
  */
 const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showCheckOverlay }) => {
-  const { uploads, pages, fetchDate, getUploads, isFetchingUploads, deleteUpload, renameUpload } = useUploads();
+  const { uploads, pages, fetchDate, getUploads, isFetchingUploads, deleteUpload } = useUploads();
   const {
-    query: { filter },
+    // query: { filter },
     query,
     replace,
   } = useRouter();
@@ -59,13 +61,13 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [linkPrefix, setLinkPrefix] = useState('w3s.link/ipfs/');
-  const [keyword] = useState(filter);
+  // const [keyword] = useState(filter);
   const [deleteSingleCid, setDeleteSingleCid] = useState('');
   const deleteModalState = useState(false);
   const queryOrderRef = useRef(query.order);
 
   const [selectedUploads, setSelectedUploads] = useState(/** @type {Upload[]} */ ([]));
-  const [nameEditingId, setNameEditingId] = useState();
+  // const [nameEditingId, setNameEditingId] = useState();
   const fileRowLabels = content?.table.file_row_labels;
 
   // Re-fetch uploads when props change
@@ -168,28 +170,29 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     deleteUpload,
   ]);
 
-  const onDeleteSingle = useCallback(
-    async cid => {
-      deleteModalState[1](true);
-      setDeleteSingleCid(cid);
-    },
-    [deleteModalState]
-  );
+  // const onDeleteSingle = useCallback(
+  //   async cid => {
+  //     deleteModalState[1](true);
+  //     setDeleteSingleCid(cid);
+  //   },
+  //   [deleteModalState]
+  // );
 
-  const onEditToggle = useCallback(
-    targetCID => async (/** @type {string|undefined} */ newFileName) => {
-      setNameEditingId(targetCID !== nameEditingId ? targetCID : undefined);
+  // const onEditToggle = useCallback(
+  //   targetCID => async (/** @type {string|undefined} */ newFileName) => {
+  //     console.log('OET')
+  //     setNameEditingId(targetCID !== nameEditingId ? targetCID : undefined);
 
-      const fileTarget = uploads.find(({ cid }) => cid === targetCID);
-      if (!!fileTarget && !!newFileName && newFileName !== fileTarget.name) {
-        onUpdatingChange(true);
-        await renameUpload(targetCID, newFileName);
-        fileTarget.name = newFileName;
-        onUpdatingChange(false);
-      }
-    },
-    [nameEditingId, uploads, onUpdatingChange, renameUpload]
-  );
+  //     const fileTarget = uploads.find(({ cid }) => cid === targetCID);
+  //     if (!!fileTarget && !!newFileName && newFileName !== fileTarget.name) {
+  //       onUpdatingChange(true);
+  //       await renameUpload(targetCID, newFileName);
+  //       fileTarget.name = newFileName;
+  //       onUpdatingChange(false);
+  //     }
+  //   },
+  //   [nameEditingId, uploads, onUpdatingChange, renameUpload]
+  // );
 
   const refreshHandler = useCallback(() => {
     getUploads({ size, page, sortBy, sortOrder });
@@ -222,7 +225,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
   function CidCellRenderer({ cid }) {
     const truncatedCID = useMemo(() => truncateString(cid, 5, '...', 'double'), [cid]);
     return (
-      <>
+      <span className="cid-cell">
         <a
           className="cid-truncate underline medium-up-only"
           href={`https://dweb.link/ipfs/${cid}`}
@@ -231,15 +234,126 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
         >
           {truncatedCID}
         </a>
-        <CopyIcon
+        <button
           className="copy-icon"
           onClick={() => {
             addTextToClipboard(cid);
           }}
-        />
-      </>
+        >
+          <CopyIcon />
+        </button>
+      </span>
     );
   }
+
+  const PinStatus = {
+    PINNED: 'Pinned',
+    PINNING: 'Pinning',
+    PIN_QUEUED: 'PinQueued',
+    QUEUING: 'Queuing...',
+  };
+
+  const statusMessages = fileRowLabels.status.tooltip;
+  // const statusTooltip = useMemo(
+  //   () =>
+  //     ({
+  //       [PinStatus.QUEUING]: statusMessages.queuing,
+  //       [PinStatus.PIN_QUEUED]: statusMessages.pin_queued,
+  //       [PinStatus.PINNING]: statusMessages.pinning,
+  //       [PinStatus.PINNED]: statusMessages.pinned.replace('*numberOfPins*', `${numberOfPins}`),
+  //     }[status]),
+  //   [numberOfPins, status, statusMessages]
+  // );
+
+  const uploadStatusTableRenderer = ({ pins }) => {
+    if (!pins) {
+      return;
+    }
+
+    const status =
+      Object.values(PinStatus).find(status => pins.some(pin => status === pin.status)) || PinStatus.QUEUING;
+
+    const statusTooltips = {
+      [PinStatus.QUEUING]: statusMessages.queuing,
+      [PinStatus.PIN_QUEUED]: statusMessages.pin_queued,
+      [PinStatus.PINNING]: statusMessages.pinning,
+      [PinStatus.PINNED]: statusMessages.pinned.replace('*numberOfPins*', `${pins.length}`),
+    };
+
+    const statusTooltip = statusTooltips[status];
+
+    const tooltip = statusTooltip ? <Tooltip icon={<BsFillInfoCircleFill />} content={statusTooltip} /> : null;
+    return (
+      <span>
+        {status === PinStatus.PINNED ? 'Complete' : status} {tooltip}
+      </span>
+    );
+  };
+
+  const editUploadNameRenderer = ({ name }) => {
+    return name;
+    // const editingNameRef = useRef(null);
+    // return (
+    //   <span className={clsx(isEditingName && 'isEditingName', 'file-name')}>
+    //     <span className="file-row-label medium-down-only">{fileRowLabels.name.label}</span>
+    //     {!isEditingName ? (
+    //       <span dangerouslySetInnerHTML={{ __html: name }} />
+    //     ) : (
+    //       <span className="textarea-container">
+    //         <textarea ref={editingNameRef} defaultValue={name} />
+    //       </span>
+    //     )}
+    //     <PencilIcon
+    //       className={clsx('pencil-icon')}
+    //       onClick={() => { console.log('eed'); onEditToggleProp(editingNameRef.current?.value)}}
+    //     />
+    //   </span>
+    // )
+  };
+
+  const storageProvidersCellRenderer = ({ deals }) => {
+    const storageProviders = Array.isArray(deals)
+      ? deals
+          .filter(deal => !!deal.storageProvider)
+          .map((deal, indx, deals) => (
+            <span key={deal.dealId}>
+              <a
+                className="underline"
+                href={`https://filfox.info/en/deal/${deal.dealId}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {`${deal.storageProvider}`}
+              </a>
+              {indx !== deals.length - 1 && ', '}
+            </span>
+          ))
+      : null;
+
+    if (!storageProviders) {
+      return null;
+    }
+
+    return (
+      <span className="file-storage-providers">
+        <span className="file-row-label medium-down-only">
+          {fileRowLabels.storage_providers.label}
+          <Tooltip content={fileRowLabels.storage_providers.tooltip.header} />
+        </span>
+        {!storageProviders.length ? (
+          <>
+            Queuing...
+            <Tooltip position="right" content={fileRowLabels.storage_providers.tooltip.queuing} />
+          </>
+        ) : (
+          <>
+            Stored ({storageProviders.length})
+            <Tooltip position="right" content={renderToString(<p>{storageProviders}</p>)} />
+          </>
+        )}
+      </span>
+    );
+  };
 
   /**
    * @type {import('components/table/table').ColumnDefinition[]}
@@ -248,10 +362,19 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     {
       id: 'name',
       headerContent: fileRowLabels.name.label,
+      cellRenderer: editUploadNameRenderer,
+      getCellProps: cellData => ({
+        name: cellData,
+      }),
     },
     {
       id: 'cid',
-      headerContent: fileRowLabels.cid.label,
+      headerContent: (
+        <span>
+          {fileRowLabels.cid.label}
+          <Tooltip content={fileRowLabels.cid.tooltip} />
+        </span>
+      ),
       cellRenderer: CidCellRenderer,
       getCellProps: cellData => ({
         cid: cellData,
@@ -259,11 +382,29 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     },
     {
       id: 'status',
-      headerContent: fileRowLabels.status.label,
+      headerContent: (
+        <span>
+          {fileRowLabels.status.label}
+          <Tooltip content={statusMessages.header} />
+        </span>
+      ),
+      cellRenderer: uploadStatusTableRenderer,
+      getCellProps: cellData => ({
+        pins: cellData,
+      }),
     },
     {
       id: 'storageProviders',
-      headerContent: fileRowLabels.storage_providers.label,
+      headerContent: (
+        <span>
+          {fileRowLabels.storage_providers.label}
+          <Tooltip content={fileRowLabels.storage_providers.tooltip.header} />
+        </span>
+      ),
+      cellRenderer: storageProvidersCellRenderer,
+      getCellProps: cellData => ({
+        deals: cellData,
+      }),
     },
     {
       id: 'size',
@@ -271,24 +412,13 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     },
     {
       id: 'date',
-      headerContent: (
-        <span>
-          {fileRowLabels.date.label} <button onClick={() => alert('header')}> i</button>
-        </span>
-      ),
+      headerContent: fileRowLabels.date.label,
       cellRenderer: ({ date }) => <span title={formatTimestampFull(date)}>{formatTimestamp(date)}</span>,
       getCellProps: cellData => ({
         date: cellData,
       }),
     },
   ];
-
-  const PinStatus = {
-    PINNED: 'Pinned',
-    PINNING: 'Pinning',
-    PIN_QUEUED: 'PinQueued',
-    QUEUING: 'Queuing...',
-  };
 
   /**
    *
@@ -300,25 +430,8 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
       date: file.created,
       name: file.name,
       cid: file.cid,
-      status:
-        Object.values(PinStatus).find(status => file.pins.some(pin => status === pin.status)) || PinStatus.QUEUING,
-      storageProviders: Array.isArray(file.deals)
-        ? file.deals
-            .filter(deal => !!deal.storageProvider)
-            .map((deal, indx, deals) => (
-              <span key={deal.dealId}>
-                <a
-                  className="underline"
-                  href={`https://filfox.info/en/deal/${deal.dealId}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {`${deal.storageProvider}`}
-                </a>
-                {indx !== deals.length - 1 && ', '}
-              </span>
-            ))
-        : null,
+      status: file.pins,
+      storageProviders: file.deals,
       size: file.hasOwnProperty('dagSize') ? filesize(file.dagSize) : file.info?.dag_size ? file.info.dag_size : '-',
     };
   };
@@ -436,7 +549,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
         scrollTarget={'.account-files-manager'}
       />
 
-      {/* OLD TABLE HERE! */}
+      {/* OLD TABLE HERE!
       <div className="files-manager-table-content">
         {isFetchingUploads || !fetchDate ? (
           <Loading className={'files-loading-spinner'} />
@@ -466,10 +579,10 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
               date={item.created}
               name={item.name}
               cid={item.cid}
-              status={
+              status={`${
                 Object.values(PinStatus).find(status => item.pins.some(pin => status === pin.status)) ||
                 PinStatus.QUEUING
-              }
+              }`}
               storageProviders={
                 Array.isArray(item.deals)
                   ? item.deals
@@ -501,7 +614,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
             />
           ))
         )}
-      </div>
+      </div> */}
 
       {!!uploads.length && (
         <div className="files-manager-footer">

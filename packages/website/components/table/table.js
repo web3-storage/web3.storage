@@ -135,7 +135,7 @@ function Table({
     return (
       <div role="rowgroup" key={rowKey}>
         <div
-          className="storage-table-row"
+          className="storage-table__row"
           role="row"
           aria-rowindex={index}
           aria-selected={selectedRows?.includes(index) || false}
@@ -157,7 +157,7 @@ function Table({
   if (isEmpty && !isLoading && emptyState) {
     return (
       <div className="storage-table">
-        <div className="storage-table-table-content">{emptyState}</div>
+        <div className="storage-table__content--loading">{emptyState}</div>
       </div>
     );
   }
@@ -165,7 +165,7 @@ function Table({
   return (
     <div className="storage-table" role="table">
       <div role="rowgroup">
-        <div className="storage-table-row storage-table-header" role="row">
+        <div className="storage-table__row storage-table__header" role="row">
           {effectiveColumns.map(c => (
             <div key={c.id} role="columnheader">
               {c.headerContent}
@@ -173,15 +173,15 @@ function Table({
           ))}
         </div>
       </div>
-      <div className="storage-table-content">
+      <div className="storage-table__content">
         {isLoading ? <Loading className={'files-loading-spinner'} /> : rows.map((row, i) => renderRowComponent(row, i))}
 
         {!isEmpty && (
-          <div className="storage-table-footer">
+          <div className="storage-table__footer">
             <div>{!!leftFooterSlot && leftFooterSlot}</div>
 
             <Pagination
-              className="storage-table-pagination"
+              className="storage-table__pagination"
               page={page}
               totalRowCount={totalRowCount || rows.length}
               itemsPerPage={rowsPerPage}
@@ -191,7 +191,7 @@ function Table({
             />
             {rowsPerPageOptions && rowsPerPageOptions.length !== 0 && (
               <Dropdown
-                className="storage-table-result-dropdown"
+                className="storage-table__result-dropdown"
                 value={rowsPerPage}
                 options={rowsPerPageOptions.map(ipp => ({
                   label: `View ${ipp} results`,

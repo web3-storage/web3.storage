@@ -179,44 +179,15 @@ const FileRowItem = props => {
             {fileRowLabels.storage_providers.label}
             <Tooltip content={fileRowLabels.storage_providers.tooltip.header} />
           </span>
-          {isHeader ? (
-            <>
-              <span className="th-content">
-                <span>{storageProviders}</span>
-                <Tooltip
-                  position="right"
-                  className="tooltip-sp"
-                  content={fileRowLabels.storage_providers.tooltip.header}
-                />
-              </span>
-            </>
-          ) : !storageProviders.length ? (
+          {!storageProviders.length ? (
             <>
               Queuing...
-              <Tooltip
-                className="medium-down-only"
-                position="left"
-                content={fileRowLabels.storage_providers.tooltip.queuing}
-              />
-              <Tooltip
-                className="medium-up-only"
-                position="right"
-                content={fileRowLabels.storage_providers.tooltip.queuing}
-              />
+              <Tooltip position="right" content={fileRowLabels.storage_providers.tooltip.queuing} />
             </>
           ) : (
             <>
               Stored ({storageProviders.length})
-              <Tooltip
-                className="medium-down-only"
-                position="left"
-                content={renderToString(<p>{storageProviders}</p>)}
-              />
-              <Tooltip
-                className="medium-up-only"
-                position="right"
-                content={renderToString(<p>{storageProviders}</p>)}
-              />
+              <Tooltip position="right" content={renderToString(<p>{storageProviders}</p>)} />
             </>
           )}
         </span>
