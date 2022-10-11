@@ -566,7 +566,6 @@ li.pricing-bullet-3 {
 #section_trusted_by_logos .wrapping-logos.carousel {
   display: flex;
   flex-flow: row wrap;
-  // gap: 0 5rem;
   max-width: 100%;
 }
 
@@ -610,12 +609,6 @@ li.pricing-bullet-3 {
   }
   100% {
     transform: translateX(calc(var(--slide-width) * var(--no-of-slides) * -1));
-  }
-}
-
-@media only screen and (max-width: 1000px) {
-  #section_trusted_by_logos .wrapping-logos {
-    // gap: 1rem 50rem;
   }
 }
 
