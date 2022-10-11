@@ -219,7 +219,7 @@ export function getStaticProps() {
     props: {
       title: 'Payment',
       isRestricted: true,
-      redirectTo: '/login/?redirect_uri=/account/payment',
+      requiresAuth: true,
       stripePublishableKey,
       breadcrumbs: [crumbs.index, crumbs.payment],
     },
