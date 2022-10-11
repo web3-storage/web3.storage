@@ -218,7 +218,6 @@ export function getStaticProps() {
   return {
     props: {
       title: 'Payment',
-      isRestricted: true,
       requiresAuth: true,
       stripePublishableKey,
       breadcrumbs: [crumbs.index, crumbs.payment],

@@ -38,13 +38,13 @@ const RestrictedRoute = ({ isRestricted = false, children, redirectTo, redirectI
       // If redirectIfFound is also set, redirect if the user was found
       (redirectIfFound && isLoggedIn)
     ) {
-      push(redirectTo);
+      push(redirectTo ?? '');
     } else if (requiresAuth && !isLoggedIn) {
       push(`/login/?${stringify({ redirect_uri: asPath })}`);
     }
   }, [redirectTo, redirectIfFound, isFetching, isLoading, isLoggedIn, push, asPath, requiresAuth]);
 
-  const shouldWaitForLoggedIn = isRestricted && !isLoggedIn;
+  const shouldWaitForLoggedIn = (isRestricted || requiresAuth) && !isLoggedIn;
 
   return !shouldWaitForLoggedIn ? (
     children
