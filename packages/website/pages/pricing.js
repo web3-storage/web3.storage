@@ -53,18 +53,147 @@ const PricingHeader = () => (
     </section>
     <section id="section_trusted_by_logos" className="sectional">
       <div className="grid-middle">
-        <div className="wrapping-logos">
-          <div className="block image-block">
-            <Img src="/images/logos/nft-storage.svg" alt="NFT Storage" />
-            <div className="image-label"></div>
-          </div>
-          <div className="block image-block">
-            <Img src="/images/logos/protocol-labs.svg" alt="Protocol Labs" />
-            <div className="image-label"></div>
-          </div>
-          <div className="block image-block">
-            <Img src="/images/logos/filecoin.svg" alt="Filecoin" />
-            <div className="image-label"></div>
+        <div className="wrapping-logos carousel">
+          <div className="wrapping-logos-inner">
+            <div className="wrapping-logos-images">
+              <div className="block image-block">
+                <Img src="/images/logos/nft-storage.png" alt="NFT Storage" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/protocol-labs-logo-black.svg" alt="Protocol Labs" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/filecoin.png" alt="Filecoin" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/fileverse.png" alt="Fileverse" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/3sStudio.png" alt="3sStudio" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/glitter.png" alt="Glitter" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/fleek.png" alt="Fleek" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/pollinationsai.png" alt="Pollinations AI" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/opensea.png" alt="OpenSea" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/magic-eden.png" alt="magic eden" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/rarible.svg" alt="Rarible" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/NFTPort.png" alt="NFTPort" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/metaplex.png" alt="Metaplex" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/project-galaxy.png" alt="Project Galaxy" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/tatum.png" alt="Tatum" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/teia.png" alt="Teia" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/holaplex.svg" alt="Holaplex" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              {/* repeat the set for continous css scroll */}
+              <div className="block image-block">
+                <Img src="/images/logos/nft-storage.png" alt="NFT Storage" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/protocol-labs-logo-black.svg" alt="Protocol Labs" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/filecoin.png" alt="Filecoin" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/fileverse.png" alt="Fileverse" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/3sStudio.png" alt="3sStudio" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/glitter.png" alt="Glitter" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/fleek.png" alt="Fleek" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/pollinationsai.png" alt="Pollinations AI" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/opensea.png" alt="OpenSea" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/magic-eden.png" alt="magic eden" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/rarible.svg" alt="Rarible" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/NFTPort.png" alt="NFTPort" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/metaplex.png" alt="Metaplex" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/project-galaxy.png" alt="Project Galaxy" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/tatum.png" alt="Tatum" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/teia.png" alt="Teia" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+              <div className="block image-block">
+                <Img src="/images/logos/holaplex.svg" alt="Holaplex" layout="fill" />
+                <div className="image-label"></div>
+              </div>
+            </div>
           </div>
           <div id="intro_1-triangle_left">
             <Img alt="" src={ImageTriangle1} />
