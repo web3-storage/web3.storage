@@ -1,6 +1,7 @@
 import pg from 'pg'
 import { Cluster } from '@nftstorage/ipfs-cluster'
 import { DBClient } from '@web3-storage/db'
+import { S3Client } from '@aws-sdk/client-s3'
 
 export const MAX_CONCURRENT_QUERIES = 10
 
@@ -150,4 +151,50 @@ export function getCargoPgPool (env) {
     connectionString,
     max: MAX_CONCURRENT_QUERIES
   })
+}
+
+export function getS3Client (env) {
+  if (!env.S3_BUCKET_NAME) {
+    throw new Error('MISSING ENV. Please set S3_BUCKET_NAME')
+  } else if (!env.S3_BUCKET_REGION) {
+    throw new Error('MISSING ENV. Please set S3_BUCKET_REGION')
+  } else if (!env.S3_ACCESS_KEY_ID) {
+    throw new Error('MISSING ENV. Please set S3_ACCESS_KEY_ID')
+  } else if (!env.S3_SECRET_ACCESS_KEY_ID) {
+    throw new Error('MISSING ENV. Please set S3_SECRET_ACCESS_KEY_ID')
+  }
+
+  env.s3BucketName = env.S3_BUCKET_NAME
+  env.s3BucketRegion = env.S3_BUCKET_REGION
+
+  // https://github.com/aws/aws-sdk-js-v3/issues/1941
+  // let endpoint
+  // if (env.S3_BUCKET_ENDPOINT) {
+  //   const endpointUrl = new URL(env.S3_BUCKET_ENDPOINT)
+  //   endpoint = { protocol: endpointUrl.protocol, hostname: endpointUrl.host }
+  // }
+
+  const s3Client = new S3Client({
+    // logger: console, // use me to get some debug info on what the client is up to
+    endpoint: env.S3_BUCKET_ENDPOINT,
+    forcePathStyle: !!env.S3_BUCKET_ENDPOINT, // Force path if endpoint provided
+    region: env.S3_BUCKET_REGION,
+    credentials: {
+      accessKeyId: env.S3_ACCESS_KEY_ID,
+      secretAccessKey: env.S3_SECRET_ACCESS_KEY_ID
+    }
+  })
+  if (env.ENV === 'dev' && !!env.DEBUG) {
+    // show me what s3 sdk is up to.
+    s3Client.middlewareStack.add(
+      (next, context) => async (args) => {
+        console.log('s3 request headers', args.request.headers)
+        return next(args)
+      },
+      {
+        step: 'finalizeRequest'
+      }
+    )
+  }
+  return s3Client
 }
