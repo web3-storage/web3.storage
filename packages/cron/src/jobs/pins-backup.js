@@ -1,6 +1,5 @@
 import { Upload } from '@aws-sdk/lib-storage'
 import * as pb from '@ipld/dag-pb'
-import AWS from 'aws-sdk'
 import { Dagula } from 'dagula'
 import { getLibp2p } from 'dagula/p2p.js'
 import debug from 'debug'
@@ -10,6 +9,8 @@ import { pipe } from 'it-pipe'
 import { CID } from 'multiformats'
 import * as raw from 'multiformats/codecs/raw'
 import { Readable } from 'stream'
+import { getS3Client } from '../lib/utils.js'
+import { HeadObjectCommand } from '@aws-sdk/client-s3'
 
 export default class Backup {
   constructor (env) {
@@ -44,7 +45,10 @@ export default class Backup {
         AND psa.backup_urls = '{}'
       LIMIT $1
     `
-    this.s3 = new AWS.S3({})
+    this.s3 = getS3Client(env)
+    /**
+     * @type { number }
+     */
     this.CONCURRENCY = env.CONCURRENCY !== undefined ? env.CONCURRENCY : 10
   }
 
@@ -101,11 +105,12 @@ export default class Backup {
     const url = new URL(`https://${bucketName}.s3.${region}.amazonaws.com/${key}`)
     this.log(`uploading to ${url}`)
     this.log(`got bak ${JSON.stringify(bak)}`)
-
     try {
       // Request the head object of the file we are about to backup
       // If it throws a NotFound error then we know we need to upload it
-      await s3.headObject({ Bucket: bucketName, Key: key }).promise()
+      const command = new HeadObjectCommand({ Bucket: bucketName, Key: key })
+      const res = await this.s3.send(command)
+      this.log('It already exists', res)
     } catch (err) {
       if (err.name === 'NotFound') {
         const upload = new Upload({
@@ -139,9 +144,13 @@ export default class Backup {
     return async function * (source) {
       for await (const pin of source) {
         const peer = peersList.find((peer) => peer.id === pin.peer)
-        const content = await _this.ipfsDagExport(ipfs, pin.sourceCid, peer, options)
-        _this.log(`Content: ${JSON.stringify(content)}`)
-        yield { ...pin, content }
+        if (peer) {
+          const content = _this.ipfsDagExport(ipfs, pin.sourceCid, peer?.addresses[0], options)
+          _this.log(`Content: ${JSON.stringify(content)}`)
+          yield { ...pin, content }
+        } else {
+          this.log(`Warning: ${JSON.stringify(pin)} has not been found on cluster`)
+        }
       }
     }
   }
@@ -182,7 +191,7 @@ export default class Backup {
         this.log(`received ${this.fmt(bytesReceived)} of ${formattedTotal} bytes`)
       }, this.REPORT_INTERVAL)
 
-      for await (const chunk of dagula.get(cid, { timeout: this.BLOCK_TIMEOUT })) {
+      for await (const chunk of dagula.get(cid)) {
         bytesReceived += chunk.bytes.length
         this.log(`chunk: ${JSON.stringify(chunk)}`)
         yield chunk
