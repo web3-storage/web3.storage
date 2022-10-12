@@ -20,6 +20,8 @@ export const mochaHooks = () => {
   let projectDb
   /** @type {string} */
   let projectCluster
+  /** @type {string} */
+  let projectMinio
   /** @type {import('http').Server} */
   let srv
 
@@ -34,6 +36,10 @@ export const mochaHooks = () => {
       console.log('⚡️ Starting PostgreSQL and PostgREST')
       projectDb = `web3-storage-db-${Date.now()}`
       await execa(dbCli, ['db', '--start', '--project', projectDb])
+
+      console.log('⚡️ Starting Minio')
+      projectMinio = `web3-storage-minio-${Date.now()}`
+      await execa(toolsCli, ['minio', 'server', 'start', '--project', projectMinio])
 
       console.log('⚡️ Loading DB schema')
       await execa(dbCli, ['db-sql', '--cargo', '--testing', `--customSqlPath=${initScript}`])
@@ -51,12 +57,20 @@ export const mochaHooks = () => {
         console.log('🛑 Stopping IPFS Cluster')
         execa(toolsCli, ['cluster', '--stop', '--clean', '--project', projectCluster])
       }
+
+      if (projectMinio) {
+        console.log('🛑 Stopping Minio')
+        execa(toolsCli, ['minio', 'server', 'stop', '--clean', '--project', projectMinio])
+      }
+
       if (projectDb) {
         console.log('🛑 Stopping PostgreSQL and PostgREST')
         execa(dbCli, ['db', '--stop', '--clean', '--project', projectDb])
       }
     },
     async beforeEach () {
+      await execa(toolsCli, ['minio', 'bucket', 'remove', 'dotstorage-test-0'])
+      await execa(toolsCli, ['minio', 'bucket', 'create', 'dotstorage-test-0'])
       await execa(dbCli, ['db-sql', '--skipCreate', '--truncate', `--customSqlPath=${initScript}`])
     },
     async afterEach () {
