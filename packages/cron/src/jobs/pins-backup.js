@@ -164,15 +164,18 @@ export default class Backup {
       const dagula = await Dagula.fromNetwork(libp2p, { peer })
       this.log('determining size...')
       let bytesReceived = 0
-      const bytesTotal = await this.getSize(ipfs, cid)
-      this.log(bytesTotal == null ? 'unknown size' : `size: ${this.fmt(bytesTotal)} bytes`)
+      let bytesTotal
+      // Given for PIN requests we never limited by files size we should move all pins requests.
 
-      if (bytesTotal != null && bytesTotal > maxDagSize) {
-        throw Object.assign(
-          new Error(`DAG too big: ${this.fmt(bytesTotal)} > ${this.fmt(maxDagSize)}`),
-          { code: 'ERR_TOO_BIG' }
-        )
-      }
+      // const bytesTotal = await this.getSize(ipfs, cid)
+      // this.log(bytesTotal == null ? 'unknown size' : `size: ${this.fmt(bytesTotal)} bytes`)
+
+      // if (bytesTotal != null && bytesTotal > maxDagSize) {
+      //   throw Object.assign(
+      //     new Error(`DAG too big: ${this.fmt(bytesTotal)} > ${this.fmt(maxDagSize)}`),
+      //     { code: 'ERR_TOO_BIG' }
+      //   )
+      // }
 
       reportInterval = setInterval(() => {
         const formattedTotal = bytesTotal ? this.fmt(bytesTotal) : 'unknown'
@@ -197,19 +200,22 @@ export default class Backup {
   /**
    * Get the size of an file on IPFS
    * This is so we can limit the size of files we backup
+   *
    * @param {import('@nftstorage/ipfs-cluster').Cluster} ipfs
    * @param {import('multiformats').CID} cid
    * @returns {Promise<number | undefined>}
    */
-  async getSize (ipfs, cid) {
-    if (cid.code === raw.code) {
-      const block = await ipfs.blockGet(cid, { timeout: this.SIZE_TIMEOUT })
-      return block.byteLength
-    } else if (cid.code === pb.code) {
-      const stat = await ipfs.objectStat(cid, { timeout: this.SIZE_TIMEOUT })
-      return stat.CumulativeSize
-    }
-  }
+
+  // Given for PIN requests we never limited files size we shouldn't check this. ie.
+  // async getSize (ipfs, cid) {
+  //   if (cid.code === raw.code) {
+  //     const block = await ipfs.blockGet(cid, { timeout: this.SIZE_TIMEOUT })
+  //     return block.byteLength
+  //   } else if (cid.code === pb.code) {
+  //     const stat = await ipfs.objectStat(cid, { timeout: this.SIZE_TIMEOUT })
+  //     return stat.CumulativeSize
+  //   }
+  // }
 
   /**
    * Fetch a list of CIDs that need to be backed up.
