@@ -9,6 +9,7 @@ import { usePayment } from '../../../hooks/use-payment';
 
 // Raw TiB number of bytes, to be used in calculations
 const tebibyte = 1099511627776;
+const gibibyte = 1073741824;
 const defaultStorageLimit = tebibyte;
 
 /**
@@ -26,12 +27,19 @@ const StorageManager = ({ className = '', content }) => {
   const {
     storageData: { data, isLoading },
   } = useUser();
+  const { currentPlan } = usePayment();
   const uploaded = useMemo(() => data?.usedStorage?.uploaded || 0, [data]);
   const psaPinned = useMemo(() => data?.usedStorage?.psaPinned || 0, [data]);
-  const limit = useMemo(() => data?.storageLimitBytes || defaultStorageLimit, [data]);
+  const limit = useMemo(() => {
+    if (currentPlan?.id === 'earlyAdopter') {
+      return data?.storageLimitBytes || defaultStorageLimit;
+    } else {
+      const byteConversion = currentPlan ? gibibyte * parseInt(currentPlan.baseStorage) : defaultStorageLimit;
+      return byteConversion;
+    }
+  }, [data, currentPlan]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
-  const { currentPlan } = usePayment();
 
   const { maxSpaceLabel, percentUploaded, percentPinned } = useMemo(
     () => ({
