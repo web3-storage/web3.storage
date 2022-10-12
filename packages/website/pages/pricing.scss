@@ -572,7 +572,6 @@ li.pricing-bullet-3 {
 #section_trusted_by_logos .wrapping-logos-inner {
   overflow: hidden;
   position: relative;
-
   --no-of-slides: 17;
   --slides-in-view: 6;
   --slide-width: 250px;
@@ -587,6 +586,7 @@ li.pricing-bullet-3 {
 }
 
 #section_trusted_by_logos .wrapping-logos-inner .image-block {
+  will-change: transform;
   animation: translatestf var(--iteration-time) linear infinite forwards;
   min-width: var(--slide-width);
   max-width: var(--slide-width);
