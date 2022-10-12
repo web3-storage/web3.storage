@@ -108,6 +108,7 @@ const FileRowItem = props => {
           {fileRowLabels.delete.label}
         </button>
       </span>
+
       <span className={clsx(isEditingName && 'isEditingName', 'file-name')}>
         <span className="file-row-label medium-down-only">{fileRowLabels.name.label}</span>
         {!isEditingName ? (
@@ -125,6 +126,7 @@ const FileRowItem = props => {
           />
         )}
       </span>
+
       <span className="file-cid" title={cid}>
         <span className="file-row-label medium-down-only">
           {fileRowLabels.cid.label}
@@ -179,15 +181,44 @@ const FileRowItem = props => {
             {fileRowLabels.storage_providers.label}
             <Tooltip content={fileRowLabels.storage_providers.tooltip.header} />
           </span>
-          {!storageProviders.length ? (
+          {isHeader ? (
+            <>
+              <span className="th-content">
+                <span>{storageProviders}</span>
+                <Tooltip
+                  position="right"
+                  className="tooltip-sp"
+                  content={fileRowLabels.storage_providers.tooltip.header}
+                />
+              </span>
+            </>
+          ) : !storageProviders.length ? (
             <>
               Queuing...
-              <Tooltip position="right" content={fileRowLabels.storage_providers.tooltip.queuing} />
+              <Tooltip
+                className="medium-down-only"
+                position="left"
+                content={fileRowLabels.storage_providers.tooltip.queuing}
+              />
+              <Tooltip
+                className="medium-up-only"
+                position="right"
+                content={fileRowLabels.storage_providers.tooltip.queuing}
+              />
             </>
           ) : (
             <>
               Stored ({storageProviders.length})
-              <Tooltip position="right" content={renderToString(<p>{storageProviders}</p>)} />
+              <Tooltip
+                className="medium-down-only"
+                position="left"
+                content={renderToString(<p>{storageProviders}</p>)}
+              />
+              <Tooltip
+                className="medium-up-only"
+                position="right"
+                content={renderToString(<p>{storageProviders}</p>)}
+              />
             </>
           )}
         </span>
