@@ -49,7 +49,7 @@ export default class Backup {
   }
 
   /**
-   * @param {import('pg').Client} db
+   * @param {import('pg').Pool} db
    */
   registerBackup (db, contentCid, pinRequestId) {
     /**
@@ -126,7 +126,7 @@ export default class Backup {
 
   /**
    * @param {import('@nftstorage/ipfs-cluster').Cluster} ipfs
-   * @param {Array<string>} peersList
+   * @param {Array<import('@nftstorage/ipfs-cluster/src/interface.js').PeerInfo>} peersList
    * @param {Object} [options]
    * @param {number} [options.maxDagSize] Skip DAGs that are bigger than this.
    */
@@ -220,7 +220,7 @@ export default class Backup {
   /**
    * Fetch a list of CIDs that need to be backed up.
    *
-   * @param {import('pg').DbClient} db Postgres client.
+   * @param {import('pg').Pool} db Postgres client.
    */
   async * getPinsNotBackedUp (db) {
     const { rows } = await db.query(this.GET_PINNED_PINS_QUERY, [
@@ -244,7 +244,7 @@ export default class Backup {
 
   /**
    * This job grabs 10,000 pins which do not have a backup URL and sends them to S3 and updates the record with the S3 URL
-   * @param {{ env: NodeJS.ProcessEnv, rwPg: {import('pg').Pool}, roPg: {import('pg').Pool}, cluster: import('@nftstorage/ipfs-cluster').Cluster }} config
+   * @param {{ env: NodeJS.ProcessEnv, rwPg: import('pg').Pool, roPg: import('pg').Pool, cluster: import('@nftstorage/ipfs-cluster').Cluster, concurrency: number }} config
    */
   async backupPins ({ roPg, rwPg, cluster, concurrency = this.CONCURRENCY }) {
     if (!this.log.enabled) {
