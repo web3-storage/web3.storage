@@ -47,6 +47,14 @@ BEGIN
         'AdminStorageExceeded'
       );
   END IF;
+
+  -- Types for terms of service versions
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'agreement_type') THEN
+    CREATE TYPE agreement_type AS ENUM
+      (
+        'web3.storage-tos-v1'
+      );
+  END IF;
 END
 $$;
 
@@ -317,6 +325,16 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
 
 CREATE INDEX IF NOT EXISTS psa_pin_request_content_cid_idx ON psa_pin_request (content_cid);
 CREATE INDEX IF NOT EXISTS psa_pin_request_deleted_at_idx ON psa_pin_request (deleted_at) INCLUDE (content_cid, auth_key_id);
+
+CREATE TABLE IF NOT EXISTS terms_of_service (
+  id              BIGSERIAL PRIMARY KEY,
+  user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
+  agreement       agreement_type                                                NOT NULL,
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  UNIQUE (user_id, agreement)
+);
+
+CREATE INDEX IF NOT EXISTS terms_of_service_user_id_idx ON terms_of_service (user_id);
 
 -- Metric contains the current values of collected metrics.
 CREATE TABLE IF NOT EXISTS metric

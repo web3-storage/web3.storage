@@ -1064,6 +1064,102 @@ export interface paths {
       };
     };
   };
+  "/terms_of_service": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.terms_of_service.id"];
+          user_id?: parameters["rowFilter.terms_of_service.user_id"];
+          agreement?: parameters["rowFilter.terms_of_service.agreement"];
+          inserted_at?: parameters["rowFilter.terms_of_service.inserted_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["terms_of_service"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** terms_of_service */
+          terms_of_service?: definitions["terms_of_service"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.terms_of_service.id"];
+          user_id?: parameters["rowFilter.terms_of_service.user_id"];
+          agreement?: parameters["rowFilter.terms_of_service.agreement"];
+          inserted_at?: parameters["rowFilter.terms_of_service.inserted_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.terms_of_service.id"];
+          user_id?: parameters["rowFilter.terms_of_service.user_id"];
+          agreement?: parameters["rowFilter.terms_of_service.agreement"];
+          inserted_at?: parameters["rowFilter.terms_of_service.inserted_at"];
+        };
+        body: {
+          /** terms_of_service */
+          terms_of_service?: definitions["terms_of_service"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/upload": {
     get: {
       parameters: {
@@ -2244,6 +2340,27 @@ export interface definitions {
      */
     updated_at: string;
   };
+  terms_of_service: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
+     */
+    user_id: number;
+    /** Format: public.agreement_type */
+    agreement: "web3.storage-tos-v1";
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
+    inserted_at: string;
+  };
   upload: {
     /**
      * Format: bigint
@@ -2566,6 +2683,16 @@ export interface parameters {
   "rowFilter.psa_pin_request.inserted_at": string;
   /** Format: timestamp with time zone */
   "rowFilter.psa_pin_request.updated_at": string;
+  /** @description terms_of_service */
+  "body.terms_of_service": definitions["terms_of_service"];
+  /** Format: bigint */
+  "rowFilter.terms_of_service.id": string;
+  /** Format: bigint */
+  "rowFilter.terms_of_service.user_id": string;
+  /** Format: public.agreement_type */
+  "rowFilter.terms_of_service.agreement": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.terms_of_service.inserted_at": string;
   /** @description upload */
   "body.upload": definitions["upload"];
   /** Format: bigint */
