@@ -41,7 +41,9 @@ const ROWS_PER_PAGE_OPTIONS = [10, 20, 50, 100];
  * @param {UploadsTableProps} props
  */
 const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showCheckOverlay }) => {
-  const { uploads, pages, fetchDate, getUploads, isFetchingUploads, deleteUpload } = useUploads();
+  const { uploads, pages, count, fetchDate, getUploads, isFetchingUploads, deleteUpload } = useUploads();
+
+  const totalUploads = count;
 
   const {
     // query: { filter },
@@ -132,16 +134,22 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
 
   // Select a single upload.
   const onUploadSelect = useCallback(
-    /** @type {Upload} */ file => {
-      const selectedIndex = selectedUploads.findIndex(fileSelected => fileSelected === file);
+    value => {
+      const upload = uploads.filter(upload => {
+        return upload.cid === value.cid;
+      })[0];
+
+      const selectedIndex = selectedUploads.findIndex(fileSelected => fileSelected === upload);
+
+      // Remove the selected index
       if (selectedIndex !== -1) {
         selectedUploads.splice(selectedIndex, 1);
         return setSelectedUploads([...selectedUploads]);
       }
 
-      setSelectedUploads([...selectedUploads, file]);
+      setSelectedUploads([...selectedUploads, upload]);
     },
-    [selectedUploads, setSelectedUploads]
+    [selectedUploads, setSelectedUploads, uploads]
   );
 
   const closeDeleteModal = useCallback(() => {
@@ -326,8 +334,6 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     setPage(page);
   };
 
-  const totalUploads = 25;
-
   return (
     <>
       <div className="files-manager-header">
@@ -380,6 +386,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
         rows={uploads.map(file => fileToTableRow(file))}
         totalRowCount={totalUploads}
         page={page}
+        totalPages={pages}
         rowsPerPage={size}
         rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
         isEmpty={totalUploads === 0}
@@ -391,14 +398,14 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
         selectedRows={selectedUploads.map(upload => uploads.indexOf(upload))}
         onRowSelectedChange={onUploadSelect}
         onSelectAll={onSelectAllToggle}
-        // leftFooterSlot={
-        //   <button
-        //     className={clsx('delete', !selectedUploads.length && 'disabled')}
-        //     onClick={() => setDeleteModalState(true)}
-        //   >
-        //     {content?.ui.delete.text}
-        //   </button>
-        // }
+        leftFooterSlot={
+          <button
+            className={clsx('delete', !selectedUploads.length && 'disabled')}
+            onClick={() => deleteModalState[1](true)}
+          >
+            {content?.ui.delete.text}
+          </button>
+        }
         // onSetItemsPerPage={rpp => {
         //   setRowsPerPage(rpp);
         //   setCurrentPage(1);

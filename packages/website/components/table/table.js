@@ -2,8 +2,9 @@ import React, { useCallback } from 'react';
 
 import Loading from 'components/loading/loading';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
-import Pagination from 'components/table/pagination';
+// import Pagination from 'components/table/pagination';
 import SelectCell from 'components/table/selectCell';
+import { ServerPagination } from 'ZeroComponents/pagination/pagination';
 
 /**
  * @typedef {Object} ColumnDefinition
@@ -22,6 +23,7 @@ import SelectCell from 'components/table/selectCell';
  * @param {Array<object>} props.rows
  * @param {number} [props.totalRowCount]
  * @param {number} [props.page]
+ * @param {number} [props.totalPages]
  * @param {number} [props.rowsPerPage]
  * @param {number[]} [props.rowsPerPageOptions]
  * @param {boolean} [props.isEmpty]
@@ -42,6 +44,7 @@ function Table({
   rows,
   totalRowCount,
   page = 0,
+  totalPages = 0,
   rowsPerPage,
   rowsPerPageOptions,
   isEmpty = false,
@@ -110,7 +113,7 @@ function Table({
             rows.length !== 0 &&
             keysAllEqual(
               selectedRows,
-              rows.map(r => r.key)
+              rows.map(r => rows.indexOf(r))
             )
           }
           id={`table-storage-select-all`}
@@ -118,10 +121,12 @@ function Table({
         />
       ),
       cellRenderer: SelectCell,
-      getCellProps: (cell, index) => {
+      getCellProps: (cell, row) => {
+        const index = rows.indexOf(row);
+
         return {
           selected: selectedRows?.includes(index),
-          onSelectChange: selected => selectRowHandler(index, selected),
+          onSelectChange: selected => selectRowHandler(row, selected),
           id: `table-storage-row-${index}-select`,
         };
       },
@@ -143,7 +148,7 @@ function Table({
           {effectiveColumns.map(c => (
             <span key={`${c.id}-${rowKey}`} role="cell">
               {c.cellRenderer ? (
-                <c.cellRenderer {...(c.getCellProps ? c.getCellProps(row[c.id], rowKey) : {})}></c.cellRenderer>
+                <c.cellRenderer {...(c.getCellProps ? c.getCellProps(row[c.id], row) : {})}></c.cellRenderer>
               ) : (
                 row[c.id]
               )}
@@ -179,8 +184,16 @@ function Table({
         {!isEmpty && (
           <div className="storage-table__footer">
             <div>{!!leftFooterSlot && leftFooterSlot}</div>
-
-            <Pagination
+            <ServerPagination
+              className="files-manager-pagination"
+              itemsPerPage={rowsPerPage}
+              visiblePages={1}
+              pageCount={totalPages}
+              queryParam="page"
+              onChange={pageSelectHandler}
+              scrollTarget={'.account-files-manager'}
+            />
+            {/* <Pagination
               className="storage-table__pagination"
               page={page}
               totalRowCount={totalRowCount || rows.length}
@@ -188,7 +201,7 @@ function Table({
               visiblePages={1}
               onPageChange={pageSelectHandler}
               scrollTarget={scrollTarget}
-            />
+            /> */}
             {rowsPerPageOptions && rowsPerPageOptions.length !== 0 && (
               <Dropdown
                 className="storage-table__result-dropdown"
