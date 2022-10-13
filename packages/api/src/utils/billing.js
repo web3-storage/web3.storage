@@ -14,10 +14,11 @@
  * @param {object} paymentSettings
  * @param {Pick<import('./billing-types').PaymentMethod, 'id'>} paymentSettings.paymentMethod
  * @param {import('./billing-types').W3PlatformSubscription} paymentSettings.subscription
+ * @param {import('./billing-types').UserCreationOptions} [userCreationOptions]
  */
-export async function savePaymentSettings (ctx, paymentSettings) {
+export async function savePaymentSettings (ctx, paymentSettings, userCreationOptions) {
   const { billing, customers, user } = ctx
-  const customer = await customers.getOrCreateForUser(user)
+  const customer = await customers.getOrCreateForUser(user, userCreationOptions)
   await billing.savePaymentMethod(customer.id, paymentSettings.paymentMethod.id)
   await ctx.subscriptions.saveSubscription(customer.id, paymentSettings.subscription)
 }
@@ -28,10 +29,11 @@ export async function savePaymentSettings (ctx, paymentSettings) {
  * @param {import('./billing-types').CustomersService} ctx.customers
  * @param {import('./billing-types').SubscriptionsService} ctx.subscriptions
  * @param {import('./billing-types').BillingUser} ctx.user
+ * @param {import('./billing-types').UserCreationOptions} [ctx.userCreationOptions]
  */
 export async function initializeBillingForNewUser (ctx) {
-  const { customers, user } = ctx
-  const customer = await customers.getOrCreateForUser(user)
+  const { customers, user, userCreationOptions } = ctx
+  const customer = await customers.getOrCreateForUser(user, userCreationOptions)
   await ctx.subscriptions.saveSubscription(customer.id, {
     storage: {
       price: storagePriceNames.free
