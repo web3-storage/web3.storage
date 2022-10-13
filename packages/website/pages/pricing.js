@@ -268,32 +268,30 @@ const FaqSection = () => (
                     {
                       type: 'C',
                       action: 'link',
-                      url: '//www.unrealengine.com/marketplace/en-US/profile/3S+Game+Studio?count=20&sortBy=effectiveDate&sortDir=DESC&start=0',
-                      image: '/images/index/testimonial-adam-g.jpg',
-                      title: 'Adam G.',
-                      subtitle: 'CEO, 3S Game Studio',
+                      url: '//glitterprotocol.io/',
+                      image: '/images/index/testimonial-ted-l.jpg',
+                      title: 'Ted L.',
+                      subtitle: 'CEO, Glitter Protocol',
                       description:
-                        'web3.storage allows us to host Unreal Engine on IPFS. This unlocks a better future for gaming, with their reliable infrastructure enabling more efficient deduplication and delivery of assets and components, and more user-centric games.',
+                        'We’ve used web3.storage to store dozens of terabytes of data, make it available on IPFS, and back it up on Filecoin decentralized storage. We would not have been able to index and content address this level of data volume so easily without it.',
+                    },
+                    {
+                      type: 'C',
+                      image: '/images/index/testimonial-ryan-w.jpg',
+                      title: 'Ryan W.',
+                      subtitle: 'Capetown, South Africa',
+                      description:
+                        "I work pretty much exclusively on Web3 applications, and I'm really impressed with web3.storage. It's almost too easy - I didn't run into any stumbling blocks and had a basic implementation of my project in 30 minutes.",
                     },
                     {
                       type: 'C',
                       action: 'link',
-                      url: '//pollinations.ai',
-                      image: '/images/index/testimonial-caroline-b.jpg',
-                      title: 'Caroline B.',
-                      subtitle: 'Co-founder and CEO, Pollinations.AI',
+                      url: '//galacticpunks.io',
+                      image: '/images/index/testimonial-frank-j.jpg',
+                      title: 'Frank J.',
+                      subtitle: 'Toronto, Canada',
                       description:
-                        'We use web3.storage to store all of our AI-generated media, around 12k assets per day and growing 20x monthly! web3.storage’s reliability and scalability for content-addressed file storage makes caching very easy. Our users love the content addressing, which makes it easy to come back to previously generated files and know it hasn’t changed.',
-                    },
-                    {
-                      type: 'C',
-                      action: 'link',
-                      url: '//fileverse.io/',
-                      image: '/images/index/testimonial-vijay-k.jpg',
-                      title: 'Vijay K.',
-                      subtitle: 'Co-founder, Fileverse',
-                      description:
-                        'The web3.storage platform allows us to support a community-supported file sharing & collaboration dApp. Their vision with IPFS and UCANs to enable user-centric apps perfectly aligns with the on-chain future we are creating.',
+                        "web3.storage was so simple to hook into, and does what you need it to do. We run the <span className='description-link'>Galactic Punks</span> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS.",
                     },
                   ],
                 }}
