@@ -10,6 +10,7 @@ import BlobCluster from 'public/images/illustrations/blob-cluster.png';
 import Cluster1 from 'public/images/index/cluster-1.png';
 import Button from 'ZeroComponents/button/button';
 import GeneralPageData from '../content/pages/general.json';
+import CardListBlock from 'components/cardlistblock/cardlistblock';
 
 const PricingHeader = () => (
   <>
@@ -251,6 +252,52 @@ const FaqSection = () => (
                   READ MORE
                 </Button>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="section_testimonials" className="sectional">
+        <div className="grid">
+          <div className="col-12 column-1">
+            <div className="column-content">
+              <CardListBlock
+                block={{
+                  direction: 'row',
+                  gap: '1',
+                  cards: [
+                    {
+                      type: 'C',
+                      action: 'link',
+                      url: '//www.unrealengine.com/marketplace/en-US/profile/3S+Game+Studio?count=20&sortBy=effectiveDate&sortDir=DESC&start=0',
+                      image: '/images/index/testimonial-adam-g.jpg',
+                      title: 'Adam G.',
+                      subtitle: 'CEO, 3S Game Studio',
+                      description:
+                        'web3.storage allows us to host Unreal Engine on IPFS. This unlocks a better future for gaming, with their reliable infrastructure enabling more efficient deduplication and delivery of assets and components, and more user-centric games.',
+                    },
+                    {
+                      type: 'C',
+                      action: 'link',
+                      url: '//pollinations.ai',
+                      image: '/images/index/testimonial-caroline-b.jpg',
+                      title: 'Caroline B.',
+                      subtitle: 'Co-founder and CEO, Pollinations.AI',
+                      description:
+                        'We use web3.storage to store all of our AI-generated media, around 12k assets per day and growing 20x monthly! web3.storage’s reliability and scalability for content-addressed file storage makes caching very easy. Our users love the content addressing, which makes it easy to come back to previously generated files and know it hasn’t changed.',
+                    },
+                    {
+                      type: 'C',
+                      action: 'link',
+                      url: '//fileverse.io/',
+                      image: '/images/index/testimonial-vijay-k.jpg',
+                      title: 'Vijay K.',
+                      subtitle: 'Co-founder, Fileverse',
+                      description:
+                        'The web3.storage platform allows us to support a community-supported file sharing & collaboration dApp. Their vision with IPFS and UCANs to enable user-centric apps perfectly aligns with the on-chain future we are creating.',
+                    },
+                  ],
+                }}
+              />
             </div>
           </div>
         </div>
