@@ -57,7 +57,11 @@ const FilesManager = ({ className, content, onFileUpload }) => {
   const changeCurrentTab = useCallback(
     /** @type {string} */ tab => {
       setCurrentTab(tab);
-      query.table = tab;
+
+      // Using a brand new query object when switching table to avoid table query params to interfere with each other.
+      const query = {
+        table: tab,
+      };
 
       replace(
         {
@@ -67,7 +71,7 @@ const FilesManager = ({ className, content, onFileUpload }) => {
         { shallow: true }
       );
     },
-    [setCurrentTab, query, replace]
+    [setCurrentTab, replace]
   );
 
   const getFilesTotal = type => {
