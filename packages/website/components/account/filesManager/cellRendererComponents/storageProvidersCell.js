@@ -2,6 +2,13 @@ import { renderToString } from 'react-dom/server';
 
 import Tooltip from 'ZeroComponents/tooltip/tooltip';
 
+/**
+ * @type {import('react').ReactNode}
+ * @param {object} props
+ * @param {any[]} props.deals
+ * @param {object} props.fileRowLabels
+ * @returns {import('react').ReactNode}
+ */
 const storageProvidersCellRenderer = ({ deals, fileRowLabels }) => {
   const storageProviders = Array.isArray(deals)
     ? deals

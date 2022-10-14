@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import filesize from 'filesize';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 import CloseIcon from 'assets/icons/close';
@@ -9,7 +9,6 @@ import countly from 'lib/countly';
 import { formatTimestamp, formatTimestampFull } from 'lib/utils';
 import Modal from 'modules/zero/components/modal/modal';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
-import { ServerPagination } from 'ZeroComponents/pagination/pagination';
 import Tooltip from 'ZeroComponents/tooltip/tooltip';
 import { useUploads } from 'components/contexts/uploadsContext';
 import { useUser } from 'components/contexts/userContext';
@@ -44,49 +43,36 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
   const { uploads, pages, count, fetchDate, getUploads, isFetchingUploads, deleteUpload } = useUploads();
 
   const totalUploads = count;
-
-  const {
-    // query: { filter },
-    query,
-    // replace,
-  } = useRouter();
-
+  const { query, replace } = useRouter();
   const {
     storageData: { refetch },
     info,
   } = useUser();
 
-  // console.log(query.size)
-  // console.log(query.page)
-  // console.log(query.sortBy)
-  // console.log(query.sortOrder)
-  // console.log(query.order);
+  // Strings
+  const fileRowLabels = content?.table.file_row_labels;
+  const statusMessages = fileRowLabels.status.tooltip;
 
-  // const [sortBy, setSortBy] = useState(defaultSortBy);
-  // const [sortOrder, setSortOrder] = useState(query.sortOrder || defaultSortOrder);
+  // Constants
   const defaultLinkPrefix = 'w3s.link/ipfs/';
-
-  const defaultPage = Array.isArray(query.page) || query.page === undefined ? 1 : parseInt(query.page);
-
-  const defaultSize =
-    Array.isArray(query.size) || query.size === undefined ? ROWS_PER_PAGE_OPTIONS[0] : parseInt(query.size);
-
   const defaultSortBy = 'Date';
   const defaultSortOrder = 'Desc';
   const defaultQueryOrder = `${defaultSortBy},${defaultSortOrder}`;
+  const defaultSize = ROWS_PER_PAGE_OPTIONS[0];
+
+  // Query calculated defaults
+  const defaultPage = Array.isArray(query.page) || query.page === undefined ? 1 : parseInt(query.page);
+  const parsedSizeParam = Array.isArray(query.size) || query.size === undefined ? defaultSize : parseInt(query.size);
   const defaultOrder = Array.isArray(query.order) || query.order === undefined ? defaultQueryOrder : query.order;
 
   const [page, setPage] = useState(defaultPage || 1);
-  const [size, setSize] = useState(defaultSize || ROWS_PER_PAGE_OPTIONS[0]);
+  const [size, setSize] = useState(parsedSizeParam || defaultSize);
   const [order, setOrder] = useState(defaultOrder);
   const [linkPrefix, setLinkPrefix] = useState(defaultLinkPrefix);
   const [deleteSingleCid, setDeleteSingleCid] = useState('');
   const deleteModalState = useState(false);
   const [selectedUploads, setSelectedUploads] = useState(/** @type {Upload[]} */ ([]));
-  // const [keyword] = useState(filter);
-  // const [nameEditingId, setNameEditingId] = useState();
-
-  const fileRowLabels = content?.table.file_row_labels;
+  const queryOrderRef = useRef(query.order);
 
   // Re-fetch uploads when props change
   useEffect(() => {
@@ -95,53 +81,54 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     setSelectedUploads([]);
   }, [getUploads, size, page, order]);
 
-  // // Method to reset the pagination every time query order changes
-  // useEffect(() => {
-  //   if (
-  //     (!queryOrderRef.current && !!query.order && query.order !== defaultQueryOrder) ||
-  //     (!!queryOrderRef.current && !!query.order && query.order !== queryOrderRef.current)
-  //   ) {
-  //     delete query.page;
-  //     console.log('changin ')
-  //     replace(
-  //       {
-  //         query,
-  //       },
-  //       undefined,
-  //       { shallow: true }
-  //     );
+  /** Method to reset the pagination every time query "order" changes. */
+  useEffect(() => {
+    const orderParamHasChanged =
+      (!queryOrderRef.current && !!query.order && query.order !== defaultQueryOrder) ||
+      (!!queryOrderRef.current && !!query.order && query.order !== queryOrderRef.current);
 
-  //     const scrollToElement = document.querySelector('.account-files-manager');
-  //     scrollToElement?.scrollIntoView(true);
+    if (orderParamHasChanged) {
+      delete query.page;
 
-  //     queryOrderRef.current = query.order;
-  //   }
-  // }, [query.order, query, replace]);
+      replace(
+        {
+          query,
+        },
+        undefined,
+        { shallow: true }
+      );
 
-  // Selects all uploads on the page.
-  const onSelectAllToggle = useCallback(
-    e => {
-      const uploadsToSelect = uploads.filter(u => !selectedUploads.some(selected => selected === u));
+      const scrollToElement = document.querySelector('.account-files-manager');
+      scrollToElement?.scrollIntoView(true);
 
-      if (!uploadsToSelect.length) {
-        return setSelectedUploads([]);
-      }
+      queryOrderRef.current = query.order;
+    }
+  }, [query.order, query, replace, defaultQueryOrder]);
 
-      return setSelectedUploads(selectedUploads.concat(uploadsToSelect));
-    },
-    [selectedUploads, setSelectedUploads, uploads]
-  );
+  /** Selects all uploads on the page. */
+  const onSelectAllToggle = useCallback(() => {
+    const uploadsToSelect = uploads.filter(u => !selectedUploads.some(selected => selected === u));
 
-  // Select a single upload.
+    if (!uploadsToSelect.length) {
+      setSelectedUploads([]);
+      return;
+    }
+
+    setSelectedUploads(selectedUploads.concat(uploadsToSelect));
+  }, [selectedUploads, setSelectedUploads, uploads]);
+
+  /** Selects a single upload. */
   const onUploadSelect = useCallback(
     value => {
+      // Get the exact upload from the list of uploads.
+      /** @type {Upload} */
       const upload = uploads.filter(upload => {
         return upload.cid === value.cid;
       })[0];
 
       const selectedIndex = selectedUploads.findIndex(fileSelected => fileSelected === upload);
 
-      // Remove the selected index
+      // Remove the upload from the selected list if it has already been selected.
       if (selectedIndex !== -1) {
         selectedUploads.splice(selectedIndex, 1);
         return setSelectedUploads([...selectedUploads]);
@@ -152,6 +139,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     [selectedUploads, setSelectedUploads, uploads]
   );
 
+  /** Closes the delete dialog modal. */
   const closeDeleteModal = useCallback(() => {
     deleteModalState[1](false);
     countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
@@ -160,7 +148,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     });
   }, [deleteModalState]);
 
-  // Deletes all selected uploads
+  /** Deletes all selected uploads. */
   const onDeleteSelected = useCallback(async () => {
     onUpdatingChange(true);
 
@@ -197,30 +185,16 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     deleteUpload,
   ]);
 
-  // const onDeleteSingle = useCallback(
-  //   async cid => {
-  //     deleteModalState[1](true);
-  //     setDeleteSingleCid(cid);
-  //   },
-  //   [deleteModalState]
-  // );
+  /** Deletes a single uploads. */
+  const onDeleteSingle = useCallback(
+    async (/** @type {Upload} */ upload) => {
+      deleteModalState[1](true);
+      setDeleteSingleCid(upload.cid);
+    },
+    [deleteModalState]
+  );
 
-  // const onEditToggle = useCallback(
-  //   targetCID => async (/** @type {string|undefined} */ newFileName) => {
-  //     console.log('OET')
-  //     setNameEditingId(targetCID !== nameEditingId ? targetCID : undefined);
-
-  //     const fileTarget = uploads.find(({ cid }) => cid === targetCID);
-  //     if (!!fileTarget && !!newFileName && newFileName !== fileTarget.name) {
-  //       onUpdatingChange(true);
-  //       await renameUpload(targetCID, newFileName);
-  //       fileTarget.name = newFileName;
-  //       onUpdatingChange(false);
-  //     }
-  //   },
-  //   [nameEditingId, uploads, onUpdatingChange, renameUpload]
-  // );
-
+  /** Handles re-fetching upload date. */
   const refreshHandler = useCallback(() => {
     const [sortBy, sortOrder] = order.split(',');
     getUploads({ size, page, sortBy, sortOrder });
@@ -240,11 +214,6 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
   if (hidden) {
     return null;
   }
-
-  // NEW TABLE DATA
-  // TODO: move to its own component
-
-  const statusMessages = fileRowLabels.status.tooltip;
 
   /**
    * @type {import('components/table/table').ColumnDefinition[]}
@@ -302,6 +271,10 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     {
       id: 'size',
       headerContent: fileRowLabels.size.label,
+      cellRenderer: ({ size }) => <span>{size}</span>,
+      getCellProps: cellData => ({
+        size: cellData,
+      }),
     },
     {
       id: 'date',
@@ -332,6 +305,25 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
   const onPageSelect = page => {
     console.log(page);
     setPage(page);
+  };
+
+  const setSizeHandler = size => {
+    if (size !== query.size) {
+      // Remove the page param.
+      delete query.page;
+      replace(
+        {
+          query,
+        },
+        undefined,
+        { shallow: true }
+      );
+
+      // Reset to the first page.
+      setPage(1);
+    }
+
+    setSize(size);
   };
 
   return (
@@ -393,59 +385,22 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
         withRowSelection={true}
         isLoading={isFetchingUploads || !fetchDate}
         onPageSelect={onPageSelect}
-        onSetItemsPerPage={setSize}
+        onSetItemsPerPage={setSizeHandler}
         emptyState={<span>EMPTY</span>}
         selectedRows={selectedUploads.map(upload => uploads.indexOf(upload))}
         onRowSelectedChange={onUploadSelect}
         onSelectAll={onSelectAllToggle}
+        onDelete={onDeleteSingle}
         leftFooterSlot={
           <button
-            className={clsx('delete', !selectedUploads.length && 'disabled')}
+            className={clsx('delete-button', !selectedUploads.length && 'disabled')}
             onClick={() => deleteModalState[1](true)}
           >
             {content?.ui.delete.text}
           </button>
         }
-        // onSetItemsPerPage={rpp => {
-        //   setRowsPerPage(rpp);
-        //   setCurrentPage(1);
-
-        //   // TODO: Do we need this now that the loader spins for the request happening?
-        //   setShowCheckOverlay(true);
-        //   setTimeout(() => {
-        //     setShowCheckOverlay(false);
-        //   }, 500);
-        // }}
         scrollTarget={'.account-files-manager'}
       />
-
-      {!!uploads.length && (
-        <div className="files-manager-footer">
-          <button
-            className={clsx('delete', !selectedUploads.length && 'disabled')}
-            onClick={() => deleteModalState[1](true)}
-          >
-            {content?.ui.delete.text}
-          </button>
-          <ServerPagination
-            className="files-manager-pagination"
-            itemsPerPage={size}
-            visiblePages={1}
-            pageCount={pages}
-            queryParam="page"
-            onChange={setPage}
-            scrollTarget={'.account-files-manager'}
-          />
-          <Dropdown
-            className="files-manager-result-dropdown"
-            value={content?.ui.results.options[0].value}
-            options={content?.ui.results.options}
-            queryParam="items"
-            onChange={value => setSize(value)}
-            onSelectChange={showCheckOverlay}
-          />
-        </div>
-      )}
       <Modal
         className="delete-modal"
         animation="ken"

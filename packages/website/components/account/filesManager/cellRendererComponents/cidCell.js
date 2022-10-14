@@ -4,21 +4,16 @@ import CopyIcon from 'assets/icons/copy';
 import { addTextToClipboard, truncateString } from 'lib/utils';
 
 /**
- * @type {import('react').FC}
+ * @type {import('react').ReactNode}
  * @param {object} props
  * @param {string} props.cid
- * @returns import('react').FC
+ * @returns {import('react').ReactNode}
  */
 const CidCellRenderer = ({ cid }) => {
   const truncatedCID = useMemo(() => truncateString(cid, 5, '...', 'double'), [cid]);
   return (
     <span className="cid-cell">
-      <a
-        className="cid-truncate underline medium-up-only"
-        href={`https://dweb.link/ipfs/${cid}`}
-        target="_blank"
-        rel="noreferrer"
-      >
+      <a className="cid-truncate underline" href={`https://dweb.link/ipfs/${cid}`} target="_blank" rel="noreferrer">
         {truncatedCID}
       </a>
       <button

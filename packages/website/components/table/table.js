@@ -5,12 +5,15 @@ import Dropdown from 'ZeroComponents/dropdown/dropdown';
 // import Pagination from 'components/table/pagination';
 import SelectCell from 'components/table/selectCell';
 import { ServerPagination } from 'ZeroComponents/pagination/pagination';
+import AppData from 'content/pages/app/account.json';
+
+const fileRowLabels = AppData.page_content.file_manager.table.file_row_labels;
 
 /**
  * @typedef {Object} ColumnDefinition
  * @property {string | import('react').ReactComponentElement } headerContent
  * @property {string} id
- * @property {import('react').FC} [cellRenderer]
+ * @property {import('react').ReactNode} [cellRenderer]
  * @property {function} [getCellProps]
  *
  */
@@ -37,6 +40,7 @@ import { ServerPagination } from 'ZeroComponents/pagination/pagination';
  * @param {function} [props.onSetItemsPerPage]
  * @param {(key: number|string, value: boolean) => void} [props.onRowSelectedChange]
  * @param {(value: boolean) => void} [props.onSelectAll]
+ * @param {(value: any) => void} [props.onDelete]
  */
 
 function Table({
@@ -58,6 +62,7 @@ function Table({
   onPageSelect,
   onSetItemsPerPage,
   scrollTarget = '.storage-table',
+  onDelete,
 }) {
   /**
    * @type { ColumnDefinition[]}
@@ -76,6 +81,13 @@ function Table({
       onRowSelectedChange && onRowSelectedChange(rowKey, value);
     },
     [onRowSelectedChange]
+  );
+
+  const onDeleteHandler = useCallback(
+    value => {
+      onDelete && onDelete(value);
+    },
+    [onDelete]
   );
 
   const pageSelectHandler = useCallback(
@@ -98,6 +110,8 @@ function Table({
 
     return false;
   };
+
+  const isRowSelected = row => selectedRows?.includes(rows.indexOf(row));
 
   // If row selection is enabled add a column with checkboxes at the start.
   if (withRowSelection) {
@@ -140,20 +154,35 @@ function Table({
     return (
       <div role="rowgroup" key={rowKey}>
         <div
-          className="storage-table__row"
+          className={`storage-table__row ${isRowSelected(row) ? 'storage-table__row--active' : ''}`}
           role="row"
           aria-rowindex={index}
           aria-selected={selectedRows?.includes(index) || false}
         >
           {effectiveColumns.map(c => (
-            <span key={`${c.id}-${rowKey}`} role="cell">
+            <span key={`${c.id}-${rowKey}`} className="storage-table__cell" role="cell">
               {c.cellRenderer ? (
-                <c.cellRenderer {...(c.getCellProps ? c.getCellProps(row[c.id], row) : {})}></c.cellRenderer>
+                <>
+                  {c.id !== 'rowSelection' && (
+                    <span className="file-row-label medium-down-only">{c.headerContent}</span>
+                  )}
+                  <c.cellRenderer {...(c.getCellProps ? c.getCellProps(row[c.id], row) : {})}></c.cellRenderer>
+                </>
               ) : (
                 row[c.id]
               )}
             </span>
           ))}
+          <span className={'storage-table__mobile-actions medium-down-only'}>
+            <button
+              className="storage-table__mobile-delete delete-button"
+              onClick={() => {
+                onDeleteHandler(row);
+              }}
+            >
+              {fileRowLabels.delete.label}
+            </button>
+          </span>
         </div>
       </div>
     );
@@ -170,7 +199,7 @@ function Table({
   return (
     <div className="storage-table" role="table">
       <div role="rowgroup">
-        <div className="storage-table__row storage-table__header" role="row">
+        <div className="storage-table__row storage-table__header medium-up-only" role="row">
           {effectiveColumns.map(c => (
             <div key={c.id} role="columnheader">
               {c.headerContent}

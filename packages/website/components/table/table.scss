@@ -43,16 +43,6 @@ $file-date: auto;
       right: -0.9375rem;
     }
 
-    .delete {
-      @include label_5;
-      cursor: pointer;
-      color: $cyan;
-      transition: opacity $transitionDuration;
-      &.disabled {
-        color: $gray600;
-      }
-    }
-
     .storage-table__pagination {
       @include medium {
         flex-basis: 100%;
@@ -71,6 +61,50 @@ $file-date: auto;
       display: flex;
       flex-direction: column;
       min-height: 23.4375rem;
+    }
+  }
+  &__cell {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    word-break: break-word;
+    @include fontWeight_Regular;
+    @include medium {
+      padding: 0.5rem 1rem;
+      justify-content: flex-start;
+      border-bottom: 0.078125rem solid rgba(white, 0.05);
+      &.file-name {
+        padding-top: 1.75rem;
+      }
+      &:last-child {
+        padding-bottom: 1.75rem;
+      }
+
+      .file-row-label {
+        @include fontWeight_Semibold;
+        width: 8.5rem;
+        flex-shrink: 0;
+      }
+      .Tooltip {
+        padding-left: 0.625rem;
+      }
+    }
+    .Tooltip {
+      line-height: 1;
+
+      .tooltip-content {
+        font-size: inherit;
+        line-height: 1.5;
+      }
+
+      svg {
+        display: block;
+        vertical-align: middle;
+        width: 0.75rem;
+        height: 0.75rem;
+        color: #c4c4c7;
+        fill: currentColor;
+      }
     }
   }
 
@@ -98,7 +132,7 @@ $file-date: auto;
       margin-top: 1.5625rem;
       @include border_Background_Waterloo_White;
 
-      &-active {
+      &--active {
         border: 1px solid $pictonBlue;
       }
     }
@@ -107,57 +141,6 @@ $file-date: auto;
       padding-bottom: 1.5625rem;
       min-height: initial;
       border-bottom: 0.15625rem solid rgba(white, 0.15);
-    }
-
-    // Targeting all columns
-    > span {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      word-break: break-word;
-      @include fontWeight_Regular;
-      @include medium {
-        padding: 0.5rem 0.75rem 0.5rem 1.5rem;
-        justify-content: flex-start;
-        border-bottom: 0.078125rem solid rgba(white, 0.05);
-        &.file-name {
-          padding-top: 1.75rem;
-        }
-        &:last-child {
-          padding-bottom: 1.75rem;
-        }
-
-        .file-row-label {
-          @include fontWeight_Semibold;
-          width: 7.5rem;
-          flex-shrink: 0;
-          &.delete {
-            width: auto;
-            padding-right: 1.25rem;
-            color: $pictonBlue;
-          }
-        }
-        .Tooltip {
-          padding-left: 0.625rem;
-        }
-      }
-      .Tooltip {
-        line-height: 1;
-
-        .tooltip-content {
-          font-size: inherit;
-          line-height: 1.5;
-        }
-
-        svg {
-          display: block;
-          vertical-align: middle;
-          width: 0.75rem;
-          height: 0.75rem;
-          color: #c4c4c7;
-          fill: currentColor;
-        }
-      }
     }
     .th-content {
       display: flex;
@@ -508,6 +491,28 @@ $file-date: auto;
         padding-right: 1.25rem;
       }
     }
+  }
+
+  &__mobile-actions {
+    display: flex;
+    justify-content: right;
+    padding: 0.5rem 0.75rem 0.5rem 1.5rem;
+  }
+
+  &__mobile-delete {
+    padding-right: 1.25rem;
+    width: 7.5rem;
+    flex-shrink: 0;
+  }
+}
+
+.delete {
+  @include fontWeight_Semibold;
+  color: $cyan;
+  transition: opacity $transitionDuration;
+  @include label_5;
+  &.disabled {
+    color: $gray600;
   }
 }
 

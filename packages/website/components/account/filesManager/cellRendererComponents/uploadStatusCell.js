@@ -1,12 +1,24 @@
-import { PinStatus } from 'constants';
-
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 
 import Tooltip from 'ZeroComponents/tooltip/tooltip';
 
+export const PinStatus = {
+  PINNED: 'Pinned',
+  PINNING: 'Pinning',
+  PIN_QUEUED: 'PinQueued',
+  QUEUING: 'Queuing...',
+};
+
+/**
+ * @type {import('react').ReactNode}
+ * @param {object} props
+ * @param {any[]} props.pins
+ * @param {object} props.statusMessages
+ * @returns {import('react').ReactNode}
+ */
 const uploadStatusTableRenderer = ({ pins, statusMessages }) => {
   if (!pins) {
-    return;
+    return <span></span>;
   }
 
   const status = Object.values(PinStatus).find(status => pins.some(pin => status === pin.status)) || PinStatus.QUEUING;
