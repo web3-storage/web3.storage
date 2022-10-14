@@ -11,11 +11,11 @@ import { addTextToClipboard, truncateString } from 'lib/utils';
  * @param {Object} props
  * @returns
  */
-function CidCellRenderer({ cid }) {
+function CidCellRenderer({ cid, gateawayPrefix }) {
   const truncatedCID = useMemo(() => truncateString(cid, 5, '...', 'double'), [cid]);
   return (
     <span className="cid-cell">
-      <a className="cid-truncate underline" href={`https://dweb.link/ipfs/${cid}`} target="_blank" rel="noreferrer">
+      <a className="cid-truncate underline" href={`${gateawayPrefix}${cid}`} target="_blank" rel="noreferrer">
         {truncatedCID}
       </a>
       <button

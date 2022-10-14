@@ -256,6 +256,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
       cellRenderer: CidCellRenderer,
       getCellProps: cellData => ({
         cid: cellData,
+        gateawayPrefix: linkPrefix,
       }),
     },
     {
@@ -379,6 +380,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
           className="files-manager-gateway"
           staticLabel="Gateway"
           value={linkPrefix}
+          queryParam="gateaway"
           options={[
             { value: 'https://w3s.link/ipfs/', label: 'w3link' },
             { value: 'https://dweb.link/ipfs/', label: 'dweb' },
