@@ -1,43 +1,24 @@
-import { useCallback, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import kwesforms from 'kwesforms';
 
 import Modal from 'modules/zero/components/modal/modal';
 import CloseIcon from 'assets/icons/close';
 import Button from 'components/button/button.js';
 import GradientBackground from 'components/gradientbackground/gradientbackground';
 
-async function handleCreateUserRequest(e, setRequesting, onClose) {
-  e.preventDefault();
-  const data = new FormData(e.target);
-
-  const authMethod = data.get('auth-method');
-  const links = data.get('links');
-  const dataVolume = data.get('data-volume');
-  const dataReadTypeAndFrequency = data.get('data-read-type-and-frequency');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const additionalInfo = data.get('additional-info');
-
-  if (!(authMethod && links && dataVolume && dataReadTypeAndFrequency)) {
-    throw new Error(
-      `cannot build enterprise tier request because one of the required fields is falsy: ${!!authMethod} ${!!links} ${!!dataVolume} ${!!dataReadTypeAndFrequency}`
-    );
-  }
-
-  setRequesting(true);
-  try {
-    debugger;
-  } finally {
-    setRequesting(false);
-    onClose();
-  }
-}
-
 const UserRequestModal = ({ isOpen, onClose }) => {
   const [requesting, setRequesting] = useState(false);
 
-  const handleCreateUserRequestCallback = useCallback(
-    e => handleCreateUserRequest(e, setRequesting, onClose),
-    [setRequesting, onClose]
-  );
+  useEffect(() => {
+    kwesforms.init();
+  }, []);
+
+  useLayoutEffect(() => {
+    const form = document.getElementById('kwesForm');
+    form?.addEventListener('kwSubmitted', function () {
+      // do we need to do any custom logic?
+    });
+  }, []);
 
   return (
     <div className="user-request-modal">
@@ -50,7 +31,11 @@ const UserRequestModal = ({ isOpen, onClose }) => {
         <div className="user-request-modal__container enterprise-tier-inquiry">
           <GradientBackground variant="saturated-variant" />
           <h1 className="user-request-modal__heading">Enterprise Storage Inquiry</h1>
-          <form onSubmit={handleCreateUserRequestCallback}>
+          <form
+            id="kwesForm"
+            className="kwes-form text-left max-w-lg text-lg mx-auto mt-12"
+            action="https://kwesforms.com/api/foreign/forms/6M733IJbJvlIUBMRbSWB"
+          >
             <div className="input-container">
               <label htmlFor="auth-method">Please share your email address. </label>
               <textarea id="auth-method" name="auth-method" required rows={1} />
@@ -78,7 +63,13 @@ const UserRequestModal = ({ isOpen, onClose }) => {
             </div>
 
             <div className="input-container">
-              <Button className="bg-nslime" type="submit" disabled={requesting} id="create-new-key">
+              <Button
+                className="bg-nslime"
+                type="submit"
+                disabled={requesting}
+                id="create-new-key"
+                onClick={() => setRequesting(true)}
+              >
                 {requesting ? 'Requesting...' : 'Request'}
               </Button>
             </div>
