@@ -31,11 +31,7 @@ const UserRequestModal = ({ isOpen, onClose }) => {
         <div className="user-request-modal__container enterprise-tier-inquiry">
           <GradientBackground variant="saturated-variant" />
           <h1 className="user-request-modal__heading">Enterprise Storage Inquiry</h1>
-          <form
-            id="kwesForm"
-            className="kwes-form text-left max-w-lg text-lg mx-auto mt-12"
-            action="https://kwesforms.com/api/foreign/forms/6M733IJbJvlIUBMRbSWB"
-          >
+          <form id="kwesForm" action="https://kwesforms.com/api/foreign/forms/6M733IJbJvlIUBMRbSWB">
             <div className="input-container">
               <label htmlFor="auth-method">Please share your email address. </label>
               <textarea id="auth-method" name="auth-method" required rows={1} />
