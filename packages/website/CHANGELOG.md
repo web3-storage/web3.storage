@@ -1,5 +1,48 @@
 # Changelog
 
+## [2.26.0](https://github.com/web3-storage/web3.storage/compare/website-v2.25.0...website-v2.26.0) (2022-10-13)
+
+
+### Features
+
+* tie in currentPlan into storage useage meter ([#2015](https://github.com/web3-storage/web3.storage/issues/2015)) ([a4ad62e](https://github.com/web3-storage/web3.storage/commit/a4ad62eff437373b4113d7f1645fc4e762f71380))
+
+
+### Bug Fixes
+
+* login redirect should preserve query parameters ([#2012](https://github.com/web3-storage/web3.storage/issues/2012)) ([477cf73](https://github.com/web3-storage/web3.storage/commit/477cf73def3850c5ce7b38d63725b516497e10f4))
+* missing prop for cc form in confirm modal ([#2007](https://github.com/web3-storage/web3.storage/issues/2007)) ([6b6ee15](https://github.com/web3-storage/web3.storage/commit/6b6ee151601bf2e5743b68b6f18be38c9e5f075a))
+
+## [2.25.0](https://github.com/web3-storage/web3.storage/compare/website-v2.24.2...website-v2.25.0) (2022-10-10)
+
+
+### Features
+
+* add link to blog post ([#1994](https://github.com/web3-storage/web3.storage/issues/1994)) ([2204ad5](https://github.com/web3-storage/web3.storage/commit/2204ad5fca06d92a7506524a5375df2210818cd6))
+
+## [2.24.2](https://github.com/web3-storage/web3.storage/compare/website-v2.24.1...website-v2.24.2) (2022-10-07)
+
+
+### Bug Fixes
+
+* "get started" only partially clickable ([#1996](https://github.com/web3-storage/web3.storage/issues/1996)) ([1416a97](https://github.com/web3-storage/web3.storage/commit/1416a9763dfdbcd5bcd1f48e03763a215d0ff514))
+* pointer-events: none the swoosh ([#2001](https://github.com/web3-storage/web3.storage/issues/2001)) ([6079070](https://github.com/web3-storage/web3.storage/commit/6079070d0ff68dc58b73ca7f81dc320b201c6aef))
+* remove background squiggle ([#1997](https://github.com/web3-storage/web3.storage/issues/1997)) ([e539ac8](https://github.com/web3-storage/web3.storage/commit/e539ac85fe27f84bbeba0639876c100cb0ec81b2))
+
+## [2.24.1](https://github.com/web3-storage/web3.storage/compare/website-v2.24.0...website-v2.24.1) (2022-10-07)
+
+
+### Bug Fixes
+
+* add terms for w3link usage ([#2013](https://github.com/web3-storage/web3.storage/issues/2013)) ([d4df533](https://github.com/web3-storage/web3.storage/commit/d4df5335c49afaef5675e406a091a031f59417a3))
+
+## [2.24.0](https://github.com/web3-storage/web3.storage/compare/website-v2.23.0...website-v2.24.0) (2022-10-06)
+
+
+### Features
+
+* consistent casing ([#1995](https://github.com/web3-storage/web3.storage/issues/1995)) ([48946b6](https://github.com/web3-storage/web3.storage/commit/48946b621200a974d36ed4e6a57acbb18284233d))
+
 ## [2.23.0](https://github.com/web3-storage/web3.storage/compare/website-v2.22.2...website-v2.23.0) (2022-10-05)
 
 

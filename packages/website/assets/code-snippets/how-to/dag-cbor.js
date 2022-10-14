@@ -25,11 +25,11 @@ async function makeCar (rootCID, ipldBlocks) {
 
 // #region simpleCborExample
 async function simpleCborExample () {
-  // encode the value into an IPLD block and store with Web3.Storage
+  // encode the value into an IPLD block and store with web3.storage
   const block = await encodeCborBlock({ hello: 'world' })
   const car = await makeCar(block.cid, [block])
 
-  // upload to Web3.Storage using putCar
+  // upload to web3.storage using putCar
   const client = new Web3Storage({ token: process.env.WEB3STORAGE_TOKEN })
   console.log('🤖 Storing simple CBOR object...')
   const cid = await client.putCar(car)
@@ -53,7 +53,7 @@ async function cborLinkExample () {
   // pack everything into a CAR
   const car = await makeCar(personBlock.cid, [personBlock, addressBlock])
 
-  // upload to Web3.Storage using putCar
+  // upload to web3.storage using putCar
   const client = new Web3Storage({ token: process.env.WEB3STORAGE_TOKEN })
 
   console.log('🤖 Storing CBOR objects with CID links between them...')

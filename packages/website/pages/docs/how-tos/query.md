@@ -1,6 +1,6 @@
 ---
-title: How to query Web3.Storage
-description: Learn how to query Web3.Storage in this quick how-to guide.
+title: How to query web3.storage
+description: Learn how to query web3.storage in this quick how-to guide.
 ---
 
 import { Tabs, TabItem } from 'components/tabs/tabs';
@@ -9,13 +9,13 @@ import CodeSnippet from 'components/codesnippet/codesnippet';
 import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js';
 import golangStatus from '!!raw-loader!../../../assets/code-snippets/how-to/golang/status/status.go';
 
-# How to query Web3.Storage
+# How to query web3.storage
 
-In this how-to guide, you'll learn how to **query Web3.Storage for information about your files.**
+In this how-to guide, you'll learn how to **query web3.storage for information about your files.**
 
-When you [store a file][howto-store] with Web3.Storage, you receive a [content identifier (CID)][ipfs-docs-cid] that you can use to [retrieve the file][howto-retrieve]. However, this CID can also be used to query the service for more details about _how_ the data is stored on the [decentralized storage networks][concepts-decentralized-storage] that Web3.Storage uses under the hood.
+When you [store a file][howto-store] with web3.storage, you receive a [content identifier (CID)][ipfs-docs-cid] that you can use to [retrieve the file][howto-retrieve]. However, this CID can also be used to query the service for more details about _how_ the data is stored on the [decentralized storage networks][concepts-decentralized-storage] that web3.storage uses under the hood.
 
-This guide will show you how to use Web3.Storage's [JavaScript client library][reference-js-client] or [Go client library][reference-go-client] to get information about content stored on the network. To follow along, you'll need the API token from your Web3.Storage account. If you already have an account and a token, read on. If not, have a look at the [quickstart guide][quickstart] to get up and running in just a few minutes for free.
+This guide will show you how to use web3.storage's [JavaScript client library][reference-js-client] or [Go client library][reference-go-client] to get information about content stored on the network. To follow along, you'll need the API token from your web3.storage account. If you already have an account and a token, read on. If not, have a look at the [quickstart guide][quickstart] to get up and running in just a few minutes for free.
 
 ## Installing the client
 
@@ -51,7 +51,7 @@ To create a `Web3Storage` client object, we need to pass an access token into th
 
 <Callout type="info">
 ##### Tip
-Don't have an access token? Get your Web3.Storage API token in just a few minutes using the instructions in the [quickstart guide.][quickstart]
+Don't have an access token? Get your web3.storage API token in just a few minutes using the instructions in the [quickstart guide.][quickstart]
 </Callout>
 
 </TabItem>
@@ -84,10 +84,10 @@ The client object's `status` method accepts a CID string and returns a JSON obje
 
 <Callout type="warning">
 ##### IMPORTANT
-**Remember to check the return value!** If you ask for the status of a CID that Web3.Storage doesn't know about, the `status` method will return `undefined` instead of a status object. Make sure to check that a return value exists before trying to use it, as we're doing above with the `if (status)` conditional statement.
+**Remember to check the return value!** If you ask for the status of a CID that web3.storage doesn't know about, the `status` method will return `undefined` instead of a status object. Make sure to check that a return value exists before trying to use it, as we're doing above with the `if (status)` conditional statement.
 </Callout>
 
-If the given CID is valid and has been uploaded to Web3.Storage, the `status` method will return an object that looks similar to this:
+If the given CID is valid and has been uploaded to web3.storage, the `status` method will return an object that looks similar to this:
 
 ```json
 {
@@ -158,16 +158,16 @@ If the given CID is valid and has been uploaded to Web3.Storage, the `status` me
 What do all those fields mean? Here's a summary:
 
 - `cid` contains the same CID that was passed into the `status` method, so you don't have to keep track of which response goes with which request.
-- `created` contains an [ISO-8601 datetime string][iso-8601] indicating when the content was first uploaded to Web3.Storage.
-- `dagSize` contains the size in bytes of the [Directed Acyclic Graph (DAG)][ipfs-docs-merkle-dag] that contains all the uploaded content. This is the size of the data that is transferred over the network to Web3.Storage during upload, and is slightly larger than the total size of the files on disk.
+- `created` contains an [ISO-8601 datetime string][iso-8601] indicating when the content was first uploaded to web3.storage.
+- `dagSize` contains the size in bytes of the [Directed Acyclic Graph (DAG)][ipfs-docs-merkle-dag] that contains all the uploaded content. This is the size of the data that is transferred over the network to web3.storage during upload, and is slightly larger than the total size of the files on disk.
 - `pins` contains an array of objects describing the IPFS nodes that have [pinned][ipfs-docs-pinning] the data, making it available for fast retrieval using the IPFS network.
-- `deals` contains an array of objects describing the Filecoin storage providers that have made [storage deals][fil-docs-deals]. These storage providers have committed to storing the data for an agreed period of time. Note that it may take up to 48 hours after uploading data to Web3.Storage before Filecoin deals are activated.
+- `deals` contains an array of objects describing the Filecoin storage providers that have made [storage deals][fil-docs-deals]. These storage providers have committed to storing the data for an agreed period of time. Note that it may take up to 48 hours after uploading data to web3.storage before Filecoin deals are activated.
 
 For more details about the fields in this JSON response, including the format of the `pins` and `deals` objects, see the [JavaScript client library reference][reference-js-status].
 
 <Callout type="info">
 ##### Tip
-If you're looking for info on files you've uploaded, you can also use the [Files page](https://web3.storage/account) on Web3.Storage to see the values for some of the more commonly-used attributes returned by `query()`, namely `created`, `cid`, `dagSize`, and the `status` and `deals` objects of `pins`.
+If you're looking for info on files you've uploaded, you can also use the [Files page](https://web3.storage/account) on web3.storage to see the values for some of the more commonly-used attributes returned by `query()`, namely `created`, `cid`, `dagSize`, and the `status` and `deals` objects of `pins`.
 </Callout>
 
 </TabItem>
@@ -184,9 +184,9 @@ The example below accepts a CID string and converts it to a `Cid` using `cid.Par
 
 ## Next steps
 
-If you haven't yet explored in depth how to store data using Web3.Storage, check out the [storage how-to guide][howto-store] for a deep dive on how to upload files using the client libraries.
+If you haven't yet explored in depth how to store data using web3.storage, check out the [storage how-to guide][howto-store] for a deep dive on how to upload files using the client libraries.
 
-To learn in greater detail how to fetch your data using the Web3.Storage client, or directly from IPFS using a gateway or the IPFS command line, see the [how-to guide on retrieval][howto-retrieve].
+To learn in greater detail how to fetch your data using the web3.storage client, or directly from IPFS using a gateway or the IPFS command line, see the [how-to guide on retrieval][howto-retrieve].
 
 [quickstart]: /docs/intro/#quickstart
 [concepts-decentralized-storage]: /docs/concepts/decentralized-storage/

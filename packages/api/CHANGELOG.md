@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.8.3](https://github.com/web3-storage/web3.storage/compare/api-v7.8.2...api-v7.8.3) (2022-10-10)
+
+
+### Bug Fixes
+
+* PSA instructions ([#1914](https://github.com/web3-storage/web3.storage/issues/1914)) ([10f94e2](https://github.com/web3-storage/web3.storage/commit/10f94e2b92f1f7acc89998f892468a65508e5b00))
+
 ## [7.8.2](https://github.com/web3-storage/web3.storage/compare/api-v7.8.1...api-v7.8.2) (2022-10-03)
 
 

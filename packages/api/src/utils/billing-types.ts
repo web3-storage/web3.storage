@@ -42,7 +42,7 @@ export interface Customer {
 }
 
 export interface CustomersService {
-  getOrCreateForUser(user: BillingUser): Promise<Customer>
+  getOrCreateForUser(user: BillingUser, userCreationOptions?: UserCreationOptions): Promise<Customer>
 }
 
 export type StoragePriceName = 'free' | 'lite' | 'pro'
@@ -101,4 +101,9 @@ export type PaymentSettings = {
 export interface UserCustomerService {
   getUserCustomer: (userId: string) => Promise<null|{ id: string }>
   upsertUserCustomer: (userId: string, customerId: string) => Promise<void>
+}
+
+export interface UserCreationOptions {
+  email?: string
+  name?: string
 }

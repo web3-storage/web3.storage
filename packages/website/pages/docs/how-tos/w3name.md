@@ -8,7 +8,7 @@ import Callout from 'components/callout/callout';
 
 # Update your data with w3name
 
-All the data you [store on Web3.Storage](/docs/how-tos/store) is [content-addressed](/docs/concepts/content-addressing), which means that you always get location-independent, cryptographically verifiable links to your content.
+All the data you [store on web3.storage](/docs/how-tos/store) is [content-addressed](/docs/concepts/content-addressing), which means that you always get location-independent, cryptographically verifiable links to your content.
 
 Content addressing is a very powerful tool, but because the address is directly derived from the content, it is limited by definition to content that already exists, and any changes to the content will result in an entirely new address.
 
@@ -18,7 +18,7 @@ When you need to refer to something that might change over time, or that may not
 
 All records created and updated using w3name are signed locally with each user's private publishing key. This means that the w3name service never sees your keys, and it also doesn't require any authentication to use - no account or API keys required!
 
-In this guide, we'll discover how to use the JavaScript `w3name` package to create and manage name records for data stored with Web3.Storage.
+In this guide, we'll discover how to use the JavaScript `w3name` package to create and manage name records for data stored with web3.storage.
 
 ## What's in a name?
 

@@ -125,7 +125,7 @@
             "tooltip": "The identifier for this pin request. <a href='https://ipfs.github.io/pinning-services-api-spec/#requestid' target='_blank' rel='noreferrer'>Learn more</a>"
           },
           "status": {
-            "label": "Complete file",
+            "label": "Complete file?",
             "tooltip": {
               "header": "Indicates whether web3.storage received a complete graph of data (e.g., a full file). \"Complete\" indicates that web3.storage has successfully received your entire upload. If you intentionally uploaded an incomplete graph, ignore this column.",
               "queuing": "",
@@ -135,7 +135,7 @@
             }
           },
           "storage_providers": {
-            "label": "Filecoin Storage",
+            "label": "Storage Providers",
             "tooltip": {
               "header": "Filecoin storage providers provably storing redundant replicas of this data. <a href='https://filecoin.io/blog/posts/what-sets-us-apart-filecoin-s-proof-system/' alt='Filecoin proof system article' target='_blank' rel='noreferrer'>Learn more</a>",
               "queuing": "The content from this upload is being aggregated for redundant storage on Filecoin.<br> Filecoin deals will be active within 48 hours of upload.<br> While Queuing, data is still available on the IPFS network."
@@ -182,7 +182,7 @@
           "alert": "Are you sure? Deleted files cannot be recovered!",
           "ok": "Delete Files",
           "cancel": "Cancel",
-          "heading": "Web3.Storage says"
+          "heading": "web3.storage says"
         },
         "results": {
           "options": [
@@ -205,12 +205,12 @@
         {
           "icon": "globe_icon",
           "heading": "Public Data",
-          "description": "All data uploaded to Web3.Storage is available to anyone who requests it using the correct CID. Do not store any private or sensitive information in an unencrypted form using Web3.Storage."
+          "description": "All data uploaded to web3.storage is available to anyone who requests it using the correct CID. Do not store any private or sensitive information in an unencrypted form using web3.storage."
         },
         {
           "icon": "infinity_icon",
           "heading": "Permanent Data",
-          "description": "Deleting files from the Web3.Storage site’s Files page will remove them from the file listing for your account, but that doesn’t prevent nodes on the decentralized storage network from retaining copies of the data indefinitely. Do not use Web3.Storage for data that may need to be permanently deleted in the future."
+          "description": "Deleting files from the web3.storage site’s Files page will remove them from the file listing for your account, but that doesn’t prevent nodes on the decentralized storage network from retaining copies of the data indefinitely. Do not use web3.storage for data that may need to be permanently deleted in the future."
         }
       ]
     }

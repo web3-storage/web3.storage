@@ -41,7 +41,7 @@ export function getStaticProps() {
   return {
     props: {
       title: 'Service Level Agreement - Web3 Storage - Simple file storage with IPFS & Filecoin',
-      description: 'Service Level Agreement (SLA) for Web3.Storage.',
+      description: 'Service Level Agreement (SLA) for web3.storage.',
       breadcrumbs: [crumbs.index, crumbs.sla],
     },
   };
