@@ -279,7 +279,7 @@ const FaqSection = () => (
                       type: 'C',
                       image: '/images/index/testimonial-ryan-w.jpg',
                       title: 'Ryan W.',
-                      subtitle: 'Capetown, South Africa',
+                      subtitle: 'Developer, Cape Town',
                       description:
                         "I work pretty much exclusively on Web3 applications, and I'm really impressed with web3.storage. It's almost too easy - I didn't run into any stumbling blocks and had a basic implementation of my project in 30 minutes.",
                     },
@@ -289,7 +289,7 @@ const FaqSection = () => (
                       url: '//galacticpunks.io',
                       image: '/images/index/testimonial-frank-j.jpg',
                       title: 'Frank J.',
-                      subtitle: 'Toronto, Canada',
+                      subtitle: 'Developer, Toronto',
                       description:
                         "web3.storage was so simple to hook into, and does what you need it to do. We run the <span className='description-link'>Galactic Punks</span> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS.",
                     },
