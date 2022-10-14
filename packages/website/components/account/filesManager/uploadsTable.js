@@ -63,13 +63,18 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
   const pageQueryParam = 'uploads-page';
   const sizeQueryParam = 'uploads-size';
 
+  let pageParamValue = query[pageQueryParam];
+  // If multiple values use the first.
+  pageParamValue = Array.isArray(pageParamValue) ? pageParamValue[1] : pageParamValue;
+
+  let sizeParamValue = query[sizeQueryParam];
+  // If multiple values use the first.
+  sizeParamValue = Array.isArray(sizeParamValue) ? sizeParamValue[1] : sizeParamValue;
+
   // Query calculated defaults
-  const defaultPage =
-    Array.isArray(query[pageQueryParam]) || query[pageQueryParam] === undefined ? 1 : parseInt(query[pageQueryParam]);
-  const parsedSizeParam =
-    Array.isArray(query[sizeQueryParam]) || query[sizeQueryParam] === undefined
-      ? defaultSize
-      : parseInt(query[sizeQueryParam]);
+  const defaultPage = pageParamValue === undefined ? 1 : parseInt(pageParamValue);
+  const parsedSizeParam = sizeParamValue === undefined ? 1 : parseInt(sizeParamValue);
+
   const defaultOrder = Array.isArray(query.order) || query.order === undefined ? defaultQueryOrder : query.order;
 
   const [page, setPage] = useState(defaultPage || 1);
