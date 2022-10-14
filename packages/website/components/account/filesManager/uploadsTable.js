@@ -342,7 +342,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
       setPage(1);
     }
 
-    setSize(size);
+    setSize(sizeToSet);
   };
 
   return (
