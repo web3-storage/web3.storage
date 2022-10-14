@@ -60,10 +60,16 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
   const defaultSortOrder = 'Desc';
   const defaultQueryOrder = `${defaultSortBy},${defaultSortOrder}`;
   const defaultSize = ROWS_PER_PAGE_OPTIONS[0];
+  const pageQueryParam = 'uploads-page';
+  const sizeQueryParam = 'uploads-size';
 
   // Query calculated defaults
-  const defaultPage = Array.isArray(query.page) || query.page === undefined ? 1 : parseInt(query.page);
-  const parsedSizeParam = Array.isArray(query.size) || query.size === undefined ? defaultSize : parseInt(query.size);
+  const defaultPage =
+    Array.isArray(query[pageQueryParam]) || query[pageQueryParam] === undefined ? 1 : parseInt(query[pageQueryParam]);
+  const parsedSizeParam =
+    Array.isArray(query[sizeQueryParam]) || query[sizeQueryParam] === undefined
+      ? defaultSize
+      : parseInt(query[sizeQueryParam]);
   const defaultOrder = Array.isArray(query.order) || query.order === undefined ? defaultQueryOrder : query.order;
 
   const [page, setPage] = useState(defaultPage || 1);
@@ -89,7 +95,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
       (!!queryOrderRef.current && !!query.order && query.order !== queryOrderRef.current);
 
     if (orderParamHasChanged) {
-      delete query.page;
+      delete query[pageQueryParam];
 
       replace(
         {
@@ -267,6 +273,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
       cellRenderer: CidCellRenderer,
       getCellProps: cellData => ({
         cid: cellData,
+        gateawayPrefix: linkPrefix,
       }),
     },
     {
@@ -335,10 +342,11 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     setPage(page);
   };
 
-  const setSizeHandler = size => {
-    if (size !== query.size) {
+  const setSizeHandler = sizeToSet => {
+    if (sizeToSet !== size) {
       // Remove the page param.
-      delete query.page;
+      delete query[pageQueryParam];
+
       replace(
         {
           query,
@@ -351,7 +359,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
       setPage(1);
     }
 
-    setSize(size);
+    setSize(sizeToSet);
   };
 
   return (
@@ -389,6 +397,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
           className="files-manager-gateway"
           staticLabel="Gateway"
           value={linkPrefix}
+          queryParam="uploads-gateaway"
           options={[
             { value: 'https://w3s.link/ipfs/', label: 'w3link' },
             { value: 'https://dweb.link/ipfs/', label: 'dweb' },
@@ -411,6 +420,8 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
         rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
         isEmpty={totalUploads === 0}
         withRowSelection={true}
+        pageQueryParam={pageQueryParam}
+        sizeQueryParam={sizeQueryParam}
         isLoading={isFetchingUploads || !fetchDate}
         onPageSelect={onPageSelect}
         onSetItemsPerPage={setSizeHandler}
