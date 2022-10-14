@@ -234,6 +234,7 @@ function Table({
               <Dropdown
                 className="storage-table__result-dropdown"
                 value={rowsPerPage}
+                queryParam="size"
                 options={rowsPerPageOptions.map(ipp => ({
                   label: `View ${ipp} results`,
                   value: ipp.toString(),

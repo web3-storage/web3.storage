@@ -324,11 +324,11 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     setPage(page);
   };
 
-  const setSizeHandler = size => {
-    if (size !== query.size) {
+  const setSizeHandler = sizeToSet => {
+    if (sizeToSet !== size) {
       // Remove the page param.
       delete query.page;
-      query.size = size;
+
       replace(
         {
           query,
