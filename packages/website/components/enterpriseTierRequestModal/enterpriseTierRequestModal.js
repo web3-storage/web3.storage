@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import kwesforms from 'kwesforms';
 
 import Modal from 'modules/zero/components/modal/modal';
@@ -7,14 +7,12 @@ import Button from 'components/button/button.js';
 import GradientBackground from 'components/gradientbackground/gradientbackground';
 
 const UserRequestModal = ({ isOpen, onClose }) => {
-  const [requesting, setRequesting] = useState(false);
-
   useEffect(() => {
     kwesforms.init();
   }, []);
 
   useLayoutEffect(() => {
-    const form = document.getElementById('kwesForm');
+    const form = document.getElementById('enterpriseKwesForm');
     form?.addEventListener('kwSubmitted', function () {
       // do we need to do any custom logic?
     });
@@ -31,7 +29,12 @@ const UserRequestModal = ({ isOpen, onClose }) => {
         <div className="user-request-modal__container enterprise-tier-inquiry">
           <GradientBackground variant="saturated-variant" />
           <h1 className="user-request-modal__heading">Enterprise Storage Inquiry</h1>
-          <form id="kwesForm" action="https://kwesforms.com/api/foreign/forms/6M733IJbJvlIUBMRbSWB">
+          <form
+            method="POST"
+            id="enterpriseKwesForm"
+            className="kwes-form"
+            action="https://kwesforms.com/api/foreign/forms/6M733IJbJvlIUBMRbSWB"
+          >
             <div className="input-container">
               <label htmlFor="auth-method">Please share your email address. </label>
               <textarea id="auth-method" name="auth-method" required rows={1} />
@@ -59,14 +62,8 @@ const UserRequestModal = ({ isOpen, onClose }) => {
             </div>
 
             <div className="input-container">
-              <Button
-                className="bg-nslime"
-                type="submit"
-                disabled={requesting}
-                id="create-new-key"
-                onClick={() => setRequesting(true)}
-              >
-                {requesting ? 'Requesting...' : 'Request'}
+              <Button className="bg-nslime" type="submit" id="create-new-key">
+                Request
               </Button>
             </div>
           </form>
