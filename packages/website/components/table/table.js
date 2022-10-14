@@ -25,6 +25,14 @@ const fileRowLabels = AppData.page_content.file_manager.table.file_row_labels;
  * @param {Array<object>} props.rows
  * @param {number} [props.totalRowCount]
  * @param {number} [props.page]
+ * // The table is currently still using the old pagination, that sets and reads state
+ * // from the query params. While it'd be best to have the parent to do that, that's currently outside of scope.
+ * // Because of the above we want to make those parameters parameterisable.
+ * @param {string} [props.pageQueryParam]
+ * @param {string} [props.sizeQueryParam]
+ *
+ * @param {number} [props.totalRowCount]
+ * @param {number} [props.page]
  * @param {number} [props.totalPages]
  * @param {number} [props.rowsPerPage]
  * @param {number[]} [props.rowsPerPageOptions]
@@ -61,6 +69,8 @@ function Table({
   onPageSelect,
   onSetItemsPerPage,
   scrollTarget = '.storage-table',
+  pageQueryParam = 'page',
+  sizeQueryParam = 'size',
   onDelete,
 }) {
   /**
@@ -217,7 +227,7 @@ function Table({
               itemsPerPage={rowsPerPage}
               visiblePages={1}
               pageCount={totalPages}
-              queryParam="page"
+              queryParam={pageQueryParam}
               onChange={pageSelectHandler}
               scrollTarget={'.account-files-manager'}
             />
@@ -234,7 +244,7 @@ function Table({
               <Dropdown
                 className="storage-table__result-dropdown"
                 value={rowsPerPage}
-                queryParam="size"
+                queryParam={sizeQueryParam}
                 options={rowsPerPageOptions.map(ipp => ({
                   label: `View ${ipp} results`,
                   value: ipp.toString(),
