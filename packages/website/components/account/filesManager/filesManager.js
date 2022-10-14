@@ -106,7 +106,6 @@ const FilesManager = ({ className, content, onFileUpload }) => {
           ))}
         </div>
       )}
-      <span>{pinRequestsCount}</span>
       <UploadsTable
         content={content}
         hidden={currentTab !== 'uploaded'}
