@@ -328,6 +328,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     if (size !== query.size) {
       // Remove the page param.
       delete query.page;
+      query.size = size;
       replace(
         {
           query,
