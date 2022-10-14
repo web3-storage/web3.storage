@@ -12,8 +12,6 @@ export const PinStatus = {
 /**
  * @type {import('react').FC}
  * @param {object} props
- * @param {any[]} props.pins
- * @param {object} props.statusMessages
  * @returns
  */
 function uploadStatusTableRenderer({ pins, statusMessages }) {

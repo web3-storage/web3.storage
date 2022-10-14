@@ -5,8 +5,6 @@ import Tooltip from 'ZeroComponents/tooltip/tooltip';
 /**
  * @type {import('react').FC}
  * @param {object} props
- * @param {any[]} props.deals
- * @param {object} props.fileRowLabels
  * @returns
  */
 function storageProvidersCellRenderer({ deals, fileRowLabels }) {

@@ -216,6 +216,24 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
   }
 
   /**
+   * @type {import('react').FC}
+   * @param {Object} props
+   * @returns
+   */
+  function sizeRenderer({ size }) {
+    return <span>{size}</span>;
+  }
+
+  /**
+   * @type {import('react').FC}
+   * @param {Object} props
+   * @returns
+   */
+  function dateRenderer({ date }) {
+    return <span title={formatTimestampFull(date)}>{formatTimestamp(date)}</span>;
+  }
+
+  /**
    * @type {import('components/table/table').ColumnDefinition[]}
    */
   const columns = [
@@ -271,7 +289,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     {
       id: 'size',
       headerContent: fileRowLabels.size.label,
-      cellRenderer: ({ size }) => <span>{size}</span>,
+      cellRenderer: sizeRenderer,
       getCellProps: cellData => ({
         size: cellData,
       }),
@@ -279,7 +297,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     {
       id: 'date',
       headerContent: fileRowLabels.date.label,
-      cellRenderer: ({ date }) => <span title={formatTimestampFull(date)}>{formatTimestamp(date)}</span>,
+      cellRenderer: dateRenderer,
       getCellProps: cellData => ({
         date: cellData,
       }),
@@ -303,7 +321,6 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
   };
 
   const onPageSelect = page => {
-    console.log(page);
     setPage(page);
   };
 

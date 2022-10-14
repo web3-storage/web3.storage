@@ -5,8 +5,10 @@ import { addTextToClipboard, truncateString } from 'lib/utils';
 
 /**
  * @type {import('react').FC}
- * @param {object} props
- * @param {string} props.cid
+ *
+ * Used to render a checkbox cell within a table component.
+ *
+ * @param {Object} props
  * @returns
  */
 function CidCellRenderer({ cid }) {
