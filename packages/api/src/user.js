@@ -1,7 +1,7 @@
 import * as JWT from './utils/jwt.js'
 import { JSONResponse, notFound } from './utils/json-response.js'
 import { JWT_ISSUER } from './constants.js'
-import { HTTPError, RangeNotSatisfiableError } from './errors.js'
+import { HTTPError, PSAErrorInvalidData, PSAErrorRequiredData, PSAErrorResourceNotFound, RangeNotSatisfiableError } from './errors.js'
 import { getTagValue, hasPendingTagProposal, hasTag } from './utils/tags.js'
 import {
   NO_READ_OR_WRITE,
@@ -567,6 +567,45 @@ export async function userPinsGet (request, env) {
     results: pins
   // @ts-ignore
   }, { headers })
+}
+
+/**
+ *  List a user's pins regardless of the token used.
+ *  As we don't want to scope the Pinning Service API to users
+ *  we need a new endpoint as an umbrella.
+ *
+ * @param {import('./user').AuthenticatedRequest} request
+ * @param {import('./env').Env} env
+ * @param {import('./index').Ctx} ctx
+ * @return {Promise<JSONResponse>}
+ */
+export async function pinDelete (request, env, ctx) {
+  // @ts-ignore
+  const requestId = request.params.requestId
+
+  // Don't delete pin requests that don't belong to the user
+  const { authToken } = request.auth
+
+  if (!requestId) {
+    throw new PSAErrorRequiredData(REQUIRED_REQUEST_ID)
+  }
+
+  if (typeof requestId !== 'string') {
+    throw new PSAErrorInvalidData(INVALID_REQUEST_ID)
+  }
+
+  // TODO: Improve me, it is un-optimal to get the tokens in a separate request to the db.
+  const tokens = (await env.db.listKeys(request.auth.user._id)).map((key) => key._id)
+
+  try {
+    // Update deleted_at (and updated_at) timestamp for the pin request.
+    await env.db.deletePsaPinRequest(requestId, tokens)
+  } catch (e) {
+    console.error(e)
+    throw new PSAErrorResourceNotFound()
+  }
+
+  return new JSONResponse({}, { status: 202 })
 }
 
 /**

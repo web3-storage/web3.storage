@@ -1244,9 +1244,9 @@ export class DBClient {
    * Delete a user PA pin request.
    *
    * @param {number} requestId
-   * @param {string} authKey
+   * @param {string[]} authKeys
    */
-  async deletePsaPinRequest (requestId, authKey) {
+  async deletePsaPinRequest (requestId, authKeys) {
     const date = new Date().toISOString()
     /** @type {{ data: import('./db-client-types').PsaPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
@@ -1255,7 +1255,8 @@ export class DBClient {
         deleted_at: date,
         updated_at: date
       })
-      .match({ auth_key_id: authKey, id: requestId })
+      .match({ id: requestId })
+      .in('auth_key_id', authKeys)
       .filter('deleted_at', 'is', null)
       .single()
 

@@ -226,7 +226,7 @@ export async function pinDelete (request, env, ctx) {
 
   try {
     // Update deleted_at (and updated_at) timestamp for the pin request.
-    await env.db.deletePsaPinRequest(requestId, authToken._id)
+    await env.db.deletePsaPinRequest(requestId, [authToken._id])
   } catch (e) {
     console.error(e)
     throw new PSAErrorResourceNotFound()
@@ -265,7 +265,7 @@ async function replacePin (normalizedCid, newPinData, requestId, authTokenId, en
   }
 
   try {
-    await env.db.deletePsaPinRequest(requestId, authTokenId)
+    await env.db.deletePsaPinRequest(requestId, [authTokenId])
   } catch (e) {
     console.error(e)
     throw new PSAErrorDB()
