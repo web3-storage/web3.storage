@@ -403,11 +403,29 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
         isLoading={isFetchingUploads || !fetchDate}
         onPageSelect={onPageSelect}
         onSetItemsPerPage={setSizeHandler}
-        emptyState={<span>EMPTY</span>}
         selectedRows={selectedUploads.map(upload => uploads.indexOf(upload))}
         onRowSelectedChange={onUploadSelect}
         onSelectAll={onSelectAllToggle}
         onDelete={onDeleteSingle}
+        emptyState={
+          <span className="files-manager-upload-cta">
+            {content?.table.message}
+            {'\u00A0'}
+            <Button
+              onClick={onFileUpload}
+              variant={content?.table.cta.theme}
+              tracking={{
+                ui: countly.ui[content?.table.cta.ui],
+                action: content?.table.cta.action,
+                data: { isFirstFile: true },
+              }}
+              disabled={info?.tags?.['HasAccountRestriction']}
+              tooltip={info?.tags?.['HasAccountRestriction'] ? content?.table.cta.accountRestrictedText : ''}
+            >
+              {content?.table.cta.text}
+            </Button>
+          </span>
+        }
         leftFooterSlot={
           <button
             className={clsx('delete-button', !selectedUploads.length && 'disabled')}
