@@ -84,6 +84,7 @@ $file-date: auto;
         @include fontWeight_Semibold;
         width: 8.5rem;
         flex-shrink: 0;
+        margin-right: 0.5em;
       }
       .Tooltip {
         padding-left: 0.625rem;
@@ -226,7 +227,6 @@ $file-date: auto;
         }
         svg.pencil-icon {
           flex-shrink: 0;
-          margin: 4px 0px 0px 0.5rem;
           @include hoverSvg;
           @include medium {
             display: none;
@@ -245,15 +245,6 @@ $file-date: auto;
           svg.pencil-icon {
             color: $pictonBlue;
           }
-        }
-        textarea {
-          position: relative;
-          resize: none;
-          @include border_Background_Waterloo_White;
-          @include hoverInput;
-          padding: 0.8125rem 0 0.8125rem 0.8125rem;
-          height: calc(100% + 0.625rem);
-          width: 100%;
         }
       }
       &-cid {
@@ -554,4 +545,47 @@ $file-date: auto;
   // checked
   opacity: 1;
   transition: opacity $transitionDuration 0s ease-in;
+}
+
+.file-name {
+  width: 100%;
+  &__container {
+    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  &__action-button-container {
+    padding-left: 0.5em;
+  }
+  &__action-buttons {
+    padding: 0.5em;
+    margin: 0;
+    width: 100%;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    &--save {
+      color: $pictonBlue;
+    }
+    &--save,
+    &--cancel {
+      padding: 0.5em 0;
+    }
+  }
+  &__textarea {
+    position: relative;
+    resize: none;
+    @include border_Background_Waterloo_White;
+    @include hoverInput;
+    padding: 0.8125rem 0 0.8125rem 0.8125rem;
+    height: calc(100% + 0.625rem);
+    width: 100%;
+    &--error {
+      border-color: rgb(192, 111, 111);
+    }
+  }
+  &__textarea-hint-text--error {
+    color: rgb(192, 111, 111);
+  }
 }

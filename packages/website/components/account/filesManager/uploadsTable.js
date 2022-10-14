@@ -16,9 +16,10 @@ import Button, { ButtonVariant } from 'components/button/button';
 import Table from 'components/table/table';
 import GradientBackground from 'components/gradientbackground/gradientbackground.js';
 import CidCellRenderer from 'components/account/filesManager/cellRendererComponents/cidCell';
-import editUploadNameRenderer from 'components/account/filesManager/cellRendererComponents/editUploadNameCell';
-import uploadStatusTableRenderer from 'components/account/filesManager/cellRendererComponents/uploadStatusCell';
-import storageProvidersCellRenderer from 'components/account/filesManager/cellRendererComponents/storageProvidersCell';
+import EditUploadNameRenderer from 'components/account/filesManager/cellRendererComponents/editUploadNameCell';
+import UploadStatusTableRenderer from 'components/account/filesManager/cellRendererComponents/uploadStatusCell';
+import StorageProvidersCellRenderer from 'components/account/filesManager/cellRendererComponents/storageProvidersCell';
+// import { renameUpload } from 'lib/api';
 
 const ROWS_PER_PAGE_OPTIONS = [10, 20, 50, 100];
 
@@ -40,7 +41,7 @@ const ROWS_PER_PAGE_OPTIONS = [10, 20, 50, 100];
  * @param {UploadsTableProps} props
  */
 const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showCheckOverlay }) => {
-  const { uploads, pages, count, fetchDate, getUploads, isFetchingUploads, deleteUpload } = useUploads();
+  const { uploads, renameUpload, pages, count, fetchDate, getUploads, isFetchingUploads, deleteUpload } = useUploads();
 
   const totalUploads = count;
   const { query, replace } = useRouter();
@@ -210,6 +211,13 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     [showCheckOverlay, order]
   );
 
+  const onNameEdit = useCallback(
+    (name, cid) => {
+      showCheckOverlay();
+    },
+    [showCheckOverlay]
+  );
+
   // Do not render anything if this component is hidden.
   if (hidden) {
     return null;
@@ -220,7 +228,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
    * @param {Object} props
    * @returns
    */
-  function sizeRenderer({ size }) {
+  function SizeRenderer({ size }) {
     return <span>{size}</span>;
   }
 
@@ -229,7 +237,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
    * @param {Object} props
    * @returns
    */
-  function dateRenderer({ date }) {
+  function DateRenderer({ date }) {
     return <span title={formatTimestampFull(date)}>{formatTimestamp(date)}</span>;
   }
 
@@ -240,9 +248,12 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     {
       id: 'name',
       headerContent: fileRowLabels.name.label,
-      cellRenderer: editUploadNameRenderer,
+      cellRenderer: EditUploadNameRenderer,
       getCellProps: cellData => ({
         name: cellData,
+        cid: uploads.find(upload => upload.name === cellData)?.cid,
+        onNameEdit,
+        renameUploadAction: renameUpload,
       }),
     },
     {
@@ -266,7 +277,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
           <Tooltip content={statusMessages.header} />
         </span>
       ),
-      cellRenderer: uploadStatusTableRenderer,
+      cellRenderer: UploadStatusTableRenderer,
       getCellProps: cellData => ({
         pins: cellData,
         statusMessages,
@@ -280,7 +291,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
           <Tooltip content={fileRowLabels.storage_providers.tooltip.header} />
         </span>
       ),
-      cellRenderer: storageProvidersCellRenderer,
+      cellRenderer: StorageProvidersCellRenderer,
       getCellProps: cellData => ({
         deals: cellData,
         fileRowLabels,
@@ -289,7 +300,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     {
       id: 'size',
       headerContent: fileRowLabels.size.label,
-      cellRenderer: sizeRenderer,
+      cellRenderer: SizeRenderer,
       getCellProps: cellData => ({
         size: cellData,
       }),
@@ -297,7 +308,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     {
       id: 'date',
       headerContent: fileRowLabels.date.label,
-      cellRenderer: dateRenderer,
+      cellRenderer: DateRenderer,
       getCellProps: cellData => ({
         date: cellData,
       }),

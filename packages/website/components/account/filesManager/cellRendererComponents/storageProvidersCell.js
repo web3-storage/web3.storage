@@ -7,7 +7,7 @@ import Tooltip from 'ZeroComponents/tooltip/tooltip';
  * @param {object} props
  * @returns
  */
-function storageProvidersCellRenderer({ deals, fileRowLabels }) {
+function StorageProvidersCellRenderer({ deals, fileRowLabels }) {
   const storageProviders = Array.isArray(deals)
     ? deals
         .filter(deal => !!deal.storageProvider)
@@ -47,4 +47,4 @@ function storageProvidersCellRenderer({ deals, fileRowLabels }) {
   );
 }
 
-export default storageProvidersCellRenderer;
+export default StorageProvidersCellRenderer;

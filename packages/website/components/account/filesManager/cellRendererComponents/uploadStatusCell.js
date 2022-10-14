@@ -14,7 +14,7 @@ export const PinStatus = {
  * @param {object} props
  * @returns
  */
-function uploadStatusTableRenderer({ pins, statusMessages }) {
+function UploadStatusTableRenderer({ pins, statusMessages }) {
   if (!pins) {
     return <span></span>;
   }
@@ -38,4 +38,4 @@ function uploadStatusTableRenderer({ pins, statusMessages }) {
   );
 }
 
-export default uploadStatusTableRenderer;
+export default UploadStatusTableRenderer;

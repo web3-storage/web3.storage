@@ -180,7 +180,6 @@ $file-date: auto;
       }
       svg.pencil-icon {
         flex-shrink: 0;
-        margin: 4px 0px 0px 0.5rem;
         @include hoverSvg;
         @include medium {
           display: none;
