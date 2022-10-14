@@ -4,12 +4,12 @@ import CopyIcon from 'assets/icons/copy';
 import { addTextToClipboard, truncateString } from 'lib/utils';
 
 /**
- * @type {import('react').ReactNode}
+ * @type {import('react').FC}
  * @param {object} props
  * @param {string} props.cid
- * @returns {import('react').ReactNode}
+ * @returns
  */
-const CidCellRenderer = ({ cid }) => {
+function CidCellRenderer({ cid }) {
   const truncatedCID = useMemo(() => truncateString(cid, 5, '...', 'double'), [cid]);
   return (
     <span className="cid-cell">
@@ -26,6 +26,6 @@ const CidCellRenderer = ({ cid }) => {
       </button>
     </span>
   );
-};
+}
 
 export default CidCellRenderer;

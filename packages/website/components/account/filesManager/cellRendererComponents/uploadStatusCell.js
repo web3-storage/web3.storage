@@ -10,13 +10,13 @@ export const PinStatus = {
 };
 
 /**
- * @type {import('react').ReactNode}
+ * @type {import('react').FC}
  * @param {object} props
  * @param {any[]} props.pins
  * @param {object} props.statusMessages
- * @returns {import('react').ReactNode}
+ * @returns
  */
-const uploadStatusTableRenderer = ({ pins, statusMessages }) => {
+function uploadStatusTableRenderer({ pins, statusMessages }) {
   if (!pins) {
     return <span></span>;
   }
@@ -38,6 +38,6 @@ const uploadStatusTableRenderer = ({ pins, statusMessages }) => {
       {status === PinStatus.PINNED ? 'Complete' : status} {tooltip}
     </span>
   );
-};
+}
 
 export default uploadStatusTableRenderer;

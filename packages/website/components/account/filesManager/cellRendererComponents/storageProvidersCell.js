@@ -3,13 +3,13 @@ import { renderToString } from 'react-dom/server';
 import Tooltip from 'ZeroComponents/tooltip/tooltip';
 
 /**
- * @type {import('react').ReactNode}
+ * @type {import('react').FC}
  * @param {object} props
  * @param {any[]} props.deals
  * @param {object} props.fileRowLabels
- * @returns {import('react').ReactNode}
+ * @returns
  */
-const storageProvidersCellRenderer = ({ deals, fileRowLabels }) => {
+function storageProvidersCellRenderer({ deals, fileRowLabels }) {
   const storageProviders = Array.isArray(deals)
     ? deals
         .filter(deal => !!deal.storageProvider)
@@ -47,6 +47,6 @@ const storageProvidersCellRenderer = ({ deals, fileRowLabels }) => {
       )}
     </span>
   );
-};
+}
 
 export default storageProvidersCellRenderer;

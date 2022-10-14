@@ -13,9 +13,8 @@ const fileRowLabels = AppData.page_content.file_manager.table.file_row_labels;
  * @typedef {Object} ColumnDefinition
  * @property {string | import('react').ReactComponentElement } headerContent
  * @property {string} id
- * @property {import('react').ReactNode} [cellRenderer]
+ * @property {import('react').FC} [cellRenderer]
  * @property {function} [getCellProps]
- *
  */
 
 /**

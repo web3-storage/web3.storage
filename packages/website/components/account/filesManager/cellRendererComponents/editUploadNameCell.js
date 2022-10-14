@@ -1,4 +1,11 @@
-const editUploadNameRenderer = ({ name }) => {
+/**
+ * @type {import('react').FC}
+ * @param {object} props
+ * @param {any[]} props.name
+ * @returns
+ */
+
+function editUploadNameRenderer({ name }) {
   // const onEditToggle = useCallback(
   //   targetCID => async (/** @type {string|undefined} */ newFileName) => {
   //     console.log('OET')
@@ -33,6 +40,6 @@ const editUploadNameRenderer = ({ name }) => {
   //     />
   //   </span>
   // )
-};
+}
 
 export default editUploadNameRenderer;
