@@ -29,7 +29,7 @@
     "minio:reset": "web3-storage-tools minio server clean",
     "pg:start": "cd ../db && npm start",
     "pg:stop": "cd ../db && npm run stop",
-    "miniflare": "miniflare dist/worker.js --modules --env ../../.env --r2 CARPARK $API_MINIFLARE_FLAGS --watch",
+    "miniflare": "miniflare dist/worker.js --modules --env ../../.env --r2 CARPARK --r2 DUDEWHERE --r2 SATNAV $API_MINIFLARE_FLAGS --watch",
     "lint": "standard --verbose",
     "lint:fix": "npm run lint -- --fix",
     "stripe.com:fixtures": "stripe fixtures src/stripe.com/fixtures.json"
@@ -72,6 +72,7 @@
     "@web3-storage/db": "^4.0.0",
     "@web3-storage/multipart-parser": "^1.0.0",
     "@web3-storage/toucan-js": "^2.7.1",
+    "cardex": "^1.0.0",
     "cborg": "^1.6.0",
     "ipfs-car": "^0.7.0",
     "itty-router": "^2.4.8",
