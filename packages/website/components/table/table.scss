@@ -65,9 +65,10 @@ $file-date: auto;
   }
   &__cell {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     word-break: break-word;
+    height: 100%;
     @include fontWeight_Regular;
     @include medium {
       padding: 0.5rem 1rem;
@@ -550,7 +551,7 @@ $file-date: auto;
 .file-name {
   width: 100%;
   &__container {
-    align-items: flex-start;
+    align-items: center;
     display: flex;
     justify-content: space-between;
     width: 100%;
