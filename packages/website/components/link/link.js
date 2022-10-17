@@ -13,10 +13,11 @@ function isExternalLink(url, relativeTo) {
 }
 
 /**
- * @param {string} href - href attribute of an <a>
- * @returns {boolean} - whether the provided href is known to be external from the current document
+ * React hook that provides an isExternalHref function.
+ * @returns {(href: string) => boolean} - fn that determines whether the provided href
+ *  is known to be external from the current document
  */
-function useHrefExternality(href) {
+export function useIsExternalHref() {
   const [document, setDocument] = React.useState(/** @type {Document|undefined} */ (undefined));
   // useEffect because next ssr wont have a document
   React.useEffect(() => {
@@ -24,14 +25,22 @@ function useHrefExternality(href) {
       setDocument(globalThis.document);
     }
   }, []);
-  const isExternalHref = React.useMemo(() => {
-    if (!document) {
-      return false;
-    }
-    const documentURL = new URL(document.URL);
-    const isExternal = isExternalLink(new URL(href, documentURL), documentURL);
-    return isExternal;
-  }, [document, href]);
+  const isExternalHref = React.useCallback(
+    /**
+     *
+     * @param {string} href - href attribute of <a>
+     * @returns {boolean} whether the provided href is external to the current document
+     */
+    href => {
+      if (!document) {
+        return false;
+      }
+      const documentURL = new URL(document.URL);
+      const isExternal = isExternalLink(new URL(href, documentURL), documentURL);
+      return isExternal;
+    },
+    [document]
+  );
   return isExternalHref;
 }
 
@@ -46,12 +55,10 @@ function useHrefExternality(href) {
  * @param {React.MouseEventHandler<HTMLAnchorElement>} [props.onClick] - the onClick handler for the link
  */
 const WrappedLink = ({ tabIndex = 0, href, target, ...otherProps }) => {
-  const isExternalHref = useHrefExternality(href);
-  const derivedTarget = target ?? (isExternalHref ? '_blank' : '_self');
   return (
     <Link href={href} {...otherProps}>
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <a target={derivedTarget} {...otherProps} tabIndex={tabIndex} onClick={otherProps.onClick}>
+      <a target={target} {...otherProps} tabIndex={tabIndex} onClick={otherProps.onClick}>
         {otherProps.children}
       </a>
     </Link>
