@@ -354,7 +354,7 @@ export async function putToR2 (env, key, carBytes, carCid, rootCid, structure = 
  * @param {CID} carCid
  * @param {Uint8Array} carBytes
  */
- export async function writeSatNavIndex (env, carCid, carBytes) {
+export async function writeSatNavIndex (env, carCid, carBytes) {
   env.log.time('writeSatNavIndex')
   const indexer = await CarIndexer.fromBytes(carBytes)
   const { writer, out } = MultihashIndexSortedWriter.create()
@@ -391,7 +391,7 @@ export async function putToR2 (env, key, carBytes, carCid, rootCid, structure = 
  * @param {string} rootCid
  * @param {CID} carCid
  */
- export async function writeDudeWhereIndex (env, rootCid, carCid) {
+export async function writeDudeWhereIndex (env, rootCid, carCid) {
   env.log.time('writeDudeWhereIndex')
   const key = `${rootCid}/${carCid}`
   const data = new Uint8Array()
