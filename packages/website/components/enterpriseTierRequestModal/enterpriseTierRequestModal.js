@@ -19,14 +19,14 @@ const UserRequestModal = ({ isOpen, onClose }) => {
   }, []);
 
   return (
-    <div className="user-request-modal">
+    <div className="user-request-modal enterprise-tier-inquiry">
       <Modal
         className=""
         closeIcon={<CloseIcon className="file-uploader-close" />}
         modalState={[isOpen, onClose]}
         showCloseButton
       >
-        <div className="user-request-modal__container enterprise-tier-inquiry">
+        <div className="user-request-modal__container">
           <GradientBackground variant="saturated-variant" />
           <h1 className="user-request-modal__heading">Enterprise Storage Inquiry</h1>
           <form

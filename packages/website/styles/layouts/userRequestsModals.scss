@@ -1,4 +1,4 @@
-.user-request-modal {
+.user-request-modal.kwes-form-web3-defaults {
   .modalContainer {
     max-width: calc($containerWidth - 10%);
     background: white;
@@ -53,27 +53,17 @@
     position: relative;
   }
 
-  &.enterprise-tier-inquiry {
-    .gradient-background-component.saturated-variant {
-      top: -2rem;
-      left: -2rem;
-      width: calc(100% + 4rem);
-      height: calc(100% + 4rem);
-      transform: scale(1.1);
-    }
+  .user-request-modal__heading {
+    font-size: 1.5rem;
   }
-}
 
-.user-request-modal__heading {
-  font-size: 1.5rem;
-}
+  .user-request-modal__description {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 18px;
 
-.user-request-modal__description {
-  margin-top: 10px;
-  font-size: 14px;
-  line-height: 18px;
-
-  a {
-    text-decoration: underline;
+    a {
+      text-decoration: underline;
+    }
   }
 }

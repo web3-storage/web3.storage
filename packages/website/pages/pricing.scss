@@ -15,6 +15,144 @@
   }
 }
 
+.enterprise-tier-inquiry {
+  position: fixed;
+  z-index: 9999;
+
+  .gradient-background-component.saturated-variant {
+    top: -2rem;
+    left: -2rem;
+    width: calc(100% + 4rem);
+    height: calc(100% + 4rem);
+    transform: scale(1.1);
+  }
+
+  .modalContainer {
+    z-index: 51;
+    position: absolute;
+    z-index: 9999;
+    max-width: calc($containerWidth - 10%);
+    font-size: 1rem;
+    @include borderRadius_Large;
+    @include medium {
+      width: 90%;
+    }
+  }
+
+  .modalClose {
+    color: $ebony;
+    font-size: 2rem;
+  }
+
+  .input-container {
+    margin-top: 50px;
+  }
+
+  label {
+    display: block;
+    line-height: 1.4;
+    font-size: 0.9rem;
+  }
+
+  textarea {
+    display: block;
+    width: 100%;
+    line-height: 1.5;
+    padding: 0.5rem;
+    border-radius: 4px;
+  }
+
+  svg {
+    color: $ebony;
+  }
+
+  .user-request-modal__container {
+    position: relative;
+    color: $ebony;
+    padding: 3.125rem 8.5rem 3.125rem 8.125rem;
+
+    @include medium {
+      padding: 2.375rem 1.3125rem;
+      width: 100%;
+    }
+
+    .kwes-form {
+      .fields {
+        display: grid;
+        width: 100%;
+        grid-template-columns: 100%;
+        grid-gap: 1rem;
+
+        @media screen and (min-width: 768px) {
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: auto;
+          grid-gap: 2rem 3rem;
+        }
+      }
+
+      .input-wrapper {
+        display: flex;
+        flex-direction: column;
+
+        &.full {
+          @media screen and (min-width: 768px) {
+            grid-column: span 2;
+          }
+        }
+      }
+
+      label {
+        line-height: 1.6;
+        font-size: 14px;
+        font-family: inherit;
+        margin: 4px 0px;
+      }
+
+      small {
+        margin: 0px;
+      }
+
+      input,
+      textarea {
+        padding: 10px 15px;
+        border-radius: 4px;
+        font-size: 1rem;
+        // background-color: rgba(117, 122, 155, 0.15);
+        // border: 1px solid rgba(117, 122, 155, 0.35);
+      }
+
+      button {
+        min-width: 100px;
+        font-size: 1rem;
+        &:hover {
+          color: #000;
+        }
+      }
+
+      p {
+        max-width: 60ch;
+      }
+
+      .kw-alert {
+        background-color: transparent;
+        border: 1px solid;
+      }
+
+      .kw-alert-error {
+        border: 1px solid;
+        color: rgb(192, 111, 111);
+        background-color: transparent;
+        display: none;
+      }
+
+      .fields .kw-border-success,
+      .kw-alert-success {
+        border: 1px solid $malibu;
+      }
+    }
+  }
+}
+
 .sectional {
   padding: 6rem 0;
 }
