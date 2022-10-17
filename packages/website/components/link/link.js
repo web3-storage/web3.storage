@@ -47,11 +47,11 @@ function useHrefExternality(href) {
  */
 const WrappedLink = ({ tabIndex = 0, href, target, ...otherProps }) => {
   const isExternalHref = useHrefExternality(href);
-  const derrivedTarget = isExternalHref ? '_blank' : '_self';
+  const derivedTarget = target ?? (isExternalHref ? '_blank' : '_self');
   return (
     <Link href={href} {...otherProps}>
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <a target={derrivedTarget} {...otherProps} tabIndex={tabIndex} onClick={otherProps.onClick}>
+      <a target={derivedTarget} {...otherProps} tabIndex={tabIndex} onClick={otherProps.onClick}>
         {otherProps.children}
       </a>
     </Link>
