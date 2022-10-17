@@ -10,8 +10,14 @@ export const PinStatus = {
 };
 
 /**
+ * @typedef {import('web3.storage').Pin} Pin
+ */
+
+/**
  * @type {import('react').FC}
  * @param {object} props
+ * @param {Pin[]} props.pins All pin data for the upload.
+ * @param {object} props.statusMessages Status message strings for the status tooltip.
  * @returns
  */
 function UploadStatusTableRenderer({ pins, statusMessages }) {
