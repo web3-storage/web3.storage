@@ -62,7 +62,7 @@ export class Logging {
     }
     this.metadata = {
       user: {
-        id: 0
+        id: '0'
       },
       request: {
         url: request.url,
@@ -87,11 +87,11 @@ export class Logging {
   /**
    * Set user
    *
-   * @param {Object} user
-   * @param {number} [user.id]
+   * @param {object} user
+   * @param {string} user.id
    */
   setUser (user) {
-    this.metadata.user.id = user.id || 0
+    this.metadata.user.id = user.id
     this.sendToSentry && this.opts.sentry.setUser({
       id: `${user.id}`
     })
