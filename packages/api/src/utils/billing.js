@@ -1,8 +1,18 @@
 /* eslint-disable no-void */
 
+import { InvalidTosAgreementError, TosAgreementRequiredError } from '../../src/errors.js'
+
 /**
  * @typedef {import('./billing-types').StoragePriceName} StoragePriceName
  */
+
+/**
+ * @param {import('./billing-types').Agreement} agreement
+ * @returns {boolean}
+ */
+function isAgreement (agreement) {
+  return agreement === 'web3.storage-tos-v1'
+}
 
 /**
  * Save a user's payment settings
@@ -10,15 +20,21 @@
  * @param {import('./billing-types').BillingService} ctx.billing
  * @param {import('./billing-types').CustomersService} ctx.customers
  * @param {import('./billing-types').SubscriptionsService} ctx.subscriptions
+ * @param {import('./billing-types').TermsOfServiceService} ctx.termsOfService
  * @param {import('./billing-types').BillingUser} ctx.user
  * @param {object} paymentSettings
  * @param {Pick<import('./billing-types').PaymentMethod, 'id'>} paymentSettings.paymentMethod
  * @param {import('./billing-types').W3PlatformSubscription} paymentSettings.subscription
+ * @param {import('./billing-types').Agreement} paymentSettings.agreement
  * @param {import('./billing-types').UserCreationOptions} [userCreationOptions]
  */
 export async function savePaymentSettings (ctx, paymentSettings, userCreationOptions) {
-  const { billing, customers, user } = ctx
+  if (!paymentSettings.agreement) throw new TosAgreementRequiredError()
+  if (!isAgreement(paymentSettings.agreement)) throw new InvalidTosAgreementError()
+
+  const { billing, customers, user, termsOfService } = ctx
   const customer = await customers.getOrCreateForUser(user, userCreationOptions)
+  await termsOfService.createUserTosAgreement(user.id, paymentSettings.agreement)
   await billing.savePaymentMethod(customer.id, paymentSettings.paymentMethod.id)
   await ctx.subscriptions.saveSubscription(customer.id, paymentSettings.subscription)
 }
@@ -70,7 +86,7 @@ export async function getPaymentSettings (ctx) {
 }
 
 /**
- * @returns {import('./stripe').UserCustomerService & { userIdToCustomerId: Map<string,string> }}
+ * @returns {import('./stripe').UserCustomerService & import('./stripe').TermsOfServiceService & { userIdToCustomerId: Map<string,string> }}
  */
 export function createMockUserCustomerService () {
   const userIdToCustomerId = new Map()
@@ -87,10 +103,14 @@ export function createMockUserCustomerService () {
   const upsertUserCustomer = async (userId, customerId) => {
     userIdToCustomerId.set(userId, customerId)
   }
+
+  const createUserTosAgreement = async (userId, agreement) => {}
+
   return {
     userIdToCustomerId,
     getUserCustomer,
-    upsertUserCustomer
+    upsertUserCustomer,
+    createUserTosAgreement
   }
 }
 
@@ -184,6 +204,16 @@ function createTestEnvCustomerService () {
 }
 
 /**
+ * Create a TermsOfService Service for use in testing the app.
+ * @returns {import('./billing-types').TermsOfServiceService}
+ */
+export function createMockTermsOfServiceService () {
+  return {
+    async createUserTosAgreement (userId, agreement) {}
+  }
+}
+
+/**
  * Create BillingEnv to use when testing.
  * Use stubs/mocks instead of real billing service (e.g. stripe.com and/or a networked db)
  * @returns {import('./billing-types').BillingEnv}
@@ -191,10 +221,12 @@ function createTestEnvCustomerService () {
 export function createMockBillingContext () {
   const billing = createMockBillingService()
   const customers = createTestEnvCustomerService()
+  const termsOfService = createMockTermsOfServiceService()
   return {
     billing,
     customers,
-    subscriptions: createMockSubscriptionsService()
+    subscriptions: createMockSubscriptionsService(),
+    termsOfService
   }
 }
 

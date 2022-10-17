@@ -15,6 +15,7 @@ import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/
 import { earlyAdopterPlan, plans, plansEarly } from '../../components/contexts/plansContext';
 import { userBillingSettings } from '../../lib/api';
 import GeneralPageData from '../../content/pages/general.json';
+import constants from '../../lib/constants.js';
 
 /**
  * @typedef {import('../../components/contexts/plansContext').Plan} Plan
@@ -67,7 +68,7 @@ const PaymentSettingsPage = props => {
       setIsFetchingPaymentSettings(true);
       setNeedsFetchPaymentSettings(false);
       try {
-        setPaymentSettings(await userBillingSettings());
+        setPaymentSettings(await userBillingSettings(constants.TERMS_OF_SERVICE_VERSION));
         setOptimisticCurrentPlan(undefined); // no longer use previous optimistic value
       } finally {
         setIsFetchingPaymentSettings(false);

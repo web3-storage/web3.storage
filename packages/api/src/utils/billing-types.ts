@@ -91,11 +91,13 @@ export interface BillingEnv {
   billing: BillingService
   customers: CustomersService
   subscriptions: SubscriptionsService
+  termsOfService: TermsOfServiceService
 }
 
 export type PaymentSettings = {
   paymentMethod: null | PaymentMethod
   subscription: W3PlatformSubscription
+  agreement?: Agreement
 }
 
 export interface UserCustomerService {
@@ -103,7 +105,13 @@ export interface UserCustomerService {
   upsertUserCustomer: (userId: string, customerId: string) => Promise<void>
 }
 
+export interface TermsOfServiceService {
+  createUserTosAgreement: (userId: string, agreement: Agreement) => Promise<void>
+}
+
 export interface UserCreationOptions {
   email?: string
   name?: string
 }
+
+export type Agreement = 'web3.storage-tos-v1'

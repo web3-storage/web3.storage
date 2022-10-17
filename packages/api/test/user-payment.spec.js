@@ -3,7 +3,7 @@ import assert from 'assert'
 import fetch, { Request } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
-import { createMockBillingContext, createMockBillingService, createMockCustomerService, createMockPaymentMethod, createMockSubscriptionsService, randomString, savePaymentSettings, storagePriceNames } from '../src/utils/billing.js'
+import { createMockBillingContext, createMockBillingService, createMockCustomerService, createMockPaymentMethod, createMockSubscriptionsService, createMockTermsOfServiceService, randomString, savePaymentSettings, storagePriceNames } from '../src/utils/billing.js'
 import { userPaymentGet, userPaymentPut } from '../src/user.js'
 import { createMockStripeCardPaymentMethod } from '../src/utils/stripe.js'
 
@@ -120,7 +120,8 @@ describe('PUT /user/payment', () => {
       paymentMethod: { id: desiredPaymentMethodId },
       subscription: {
         storage: null
-      }
+      },
+      agreement: 'web3.storage-tos-v1'
     }
     const res = await fetch(createSaveUserPaymentSettingsRequest({ authorization, body: JSON.stringify(desiredPaymentSettings) }))
     try {
@@ -137,7 +138,7 @@ describe('userPaymentPut', () => {
   it('saves payment method using billing service', async function () {
     const desiredPaymentMethodId = `pm_${randomString()}`
     /** @type {import('src/utils/billing-types.js').PaymentSettings} */
-    const paymentSettings = { paymentMethod: { id: desiredPaymentMethodId }, subscription: { storage: null } }
+    const paymentSettings = { paymentMethod: { id: desiredPaymentMethodId }, subscription: { storage: null }, agreement: 'web3.storage-tos-v1' }
     const authorization = createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken())
     const request = createMockAuthenticatedRequest(createSaveUserPaymentSettingsRequest({ authorization, body: JSON.stringify(paymentSettings) }))
     const billing = createMockBillingService()
@@ -154,11 +155,46 @@ describe('userPaymentPut', () => {
       customers.mockCustomers.map(c => c.id).includes(billing.paymentMethodSaves[0].customerId),
       'billing.paymentMethodSaves[0].customerId is in customers.mockCustomers')
   })
+  it('throws an error if no agreement', async function () {
+    const desiredPaymentMethodId = `pm_${randomString()}`
+    const paymentSettings = { paymentMethod: { id: desiredPaymentMethodId }, subscription: { storage: null } }
+    const authorization = createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken())
+    const request = createMockAuthenticatedRequest(createSaveUserPaymentSettingsRequest({ authorization, body: JSON.stringify(paymentSettings) }))
+    const billing = createMockBillingService()
+    const customers = createMockCustomerService()
+    const env = {
+      ...createMockBillingContext(),
+      billing,
+      customers
+    }
+    assert.rejects(
+      async () => await userPaymentPut(request, env),
+      /Missing Terms of Service/
+    )
+  })
+  it('throws an error if bad agreement', async function () {
+    const desiredPaymentMethodId = `pm_${randomString()}`
+    const paymentSettings = { paymentMethod: { id: desiredPaymentMethodId }, subscription: { storage: null }, agreement: 'bad-agreement' }
+    const authorization = createBearerAuthorization(AuthorizationTestContext.use(this).createUserToken())
+    const request = createMockAuthenticatedRequest(createSaveUserPaymentSettingsRequest({ authorization, body: JSON.stringify(paymentSettings) }))
+    const billing = createMockBillingService()
+    const customers = createMockCustomerService()
+    const env = {
+      ...createMockBillingContext(),
+      billing,
+      customers
+    }
+    assert.rejects(
+      async () => await userPaymentPut(request, env),
+      /Invalid Terms of Service/
+    )
+  })
   it('saves storage subscription price', async function () {
     /** @type {import('src/utils/billing-types.js').PaymentSettings} */
     const desiredPaymentSettings = {
       paymentMethod: { id: `pm_${randomString()}` },
-      subscription: { storage: { price: storagePriceNames.lite } }
+      subscription: { storage: { price: storagePriceNames.lite } },
+      agreement: 'web3.storage-tos-v1'
     }
     const request = (
       createMockAuthenticatedRequest(
@@ -246,7 +282,7 @@ describe('/user/payment', () => {
     const user = createMockRequestUser()
     // save settings
     const savePaymentSettingsRequest = createMockAuthenticatedRequest(
-      createSaveUserPaymentSettingsRequest({ body: JSON.stringify(desiredPaymentSettings) }),
+      createSaveUserPaymentSettingsRequest({ body: JSON.stringify({ ...desiredPaymentSettings, agreement: 'web3.storage-tos-v1' }) }),
       user
     )
     const savePaymentSettingsResponse = await userPaymentPut(savePaymentSettingsRequest, env)
@@ -322,10 +358,11 @@ describe('savePaymentSettings', async function () {
     const billing = createMockBillingService()
     const paymentMethod = { id: /** @type const */ ('pm_w3-test-1') }
     const customers = createMockCustomerService()
+    const termsOfService = createMockTermsOfServiceService()
     const user = { id: '1', issuer: randomString() }
     const subscriptions = createMockSubscriptionsService()
-    const env = { billing, customers, user, subscriptions }
-    await savePaymentSettings(env, { paymentMethod, subscription: { storage: null } })
+    const env = { billing, customers, user, subscriptions, termsOfService }
+    await savePaymentSettings(env, { paymentMethod, subscription: { storage: null }, agreement: 'web3.storage-tos-v1' })
     const { paymentMethodSaves } = billing
     assert.equal(paymentMethodSaves.length, 1, 'savePaymentMethod was called once')
     assert.deepEqual(paymentMethodSaves[0].methodId, paymentMethod.id, 'savePaymentMethod was called with method')
@@ -334,7 +371,9 @@ describe('savePaymentSettings', async function () {
   it('saves subscription using billingService', async () => {
     const desiredPaymentSettings = {
       paymentMethod: { id: `pm_mock_${randomString()}` },
-      subscription: { storage: { price: storagePriceNames.lite } }
+      subscription: { storage: { price: storagePriceNames.lite } },
+      /** @type {import('src/utils/billing-types.js').Agreement} */
+      agreement: 'web3.storage-tos-v1'
     }
     const subscriptions = createMockSubscriptionsService()
     const env = {

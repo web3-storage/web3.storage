@@ -307,15 +307,17 @@ export async function deletePinRequest(requestid) {
 
 /**
  * Gets/Puts saved user plan and billing settings.
+ * @param {string} agreement
  * @param {string} [pmId] - payment method id
  * @param {StorageSubscription|EarlyAdopterStorageSubscription} [storageSubscription]
  */
-export async function userBillingSettings(pmId, storageSubscription) {
+export async function userBillingSettings(agreement, pmId, storageSubscription) {
   const putBody =
     pmId || storageSubscription
       ? JSON.stringify({
           paymentMethod: pmId ? { id: pmId } : null,
           subscription: { storage: storageSubscription },
+          agreement,
         })
       : null;
   const method = !!putBody ? 'PUT' : 'GET';

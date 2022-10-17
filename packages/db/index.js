@@ -1296,6 +1296,30 @@ export class DBClient {
   }
 
   /**
+   * @param {string} userId
+   * @param {string} agreement
+   */
+  async createUserTosAgreement (userId, agreement) {
+    const { data, error } = await this._client
+      .from('terms_of_service')
+      .upsert({
+        user_id: userId,
+        agreement
+      }, {
+        onConflict: 'user_id,agreement'
+      })
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return {
+      _id: data.id
+    }
+  }
+
+  /**
    * Get the Customer for a user
    * @param {string} userId
    * @returns {null|{ id: string }} customer

@@ -5,6 +5,7 @@ import Loading from '../../../components/loading/loading';
 import { userBillingSettings } from '../../../lib/api';
 import Button from '../../../components/button/button';
 import { planIdToStorageSubscription } from '../../contexts/plansContext';
+import constants from '../../../lib/constants';
 
 /**
  * @typedef {import('../../contexts/plansContext').Plan} Plan
@@ -49,7 +50,7 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, c
         if (error) throw new Error(error.message);
         if (!paymentMethod?.id) return;
         const currStorageSubscription = planIdToStorageSubscription(currentPlan);
-        await userBillingSettings(paymentMethod.id, currStorageSubscription);
+        await userBillingSettings(constants.TERMS_OF_SERVICE_VERSION, paymentMethod.id, currStorageSubscription);
         setHasPaymentMethods?.(true);
         setEditingPaymentMethod?.(false);
         setPaymentMethodError('');

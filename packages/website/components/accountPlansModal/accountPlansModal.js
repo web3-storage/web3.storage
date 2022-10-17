@@ -8,12 +8,14 @@ import Modal from '../../modules/zero/components/modal/modal';
 import CloseIcon from '../../assets/icons/close';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
 import { API, getToken } from '../../lib/api';
+import constants from '../../lib/constants.js';
 
-export async function putUserPayment(pm_id, plan_id) {
+export async function putUserPayment(agreement, pm_id, plan_id) {
   const storage = plan_id ? { price: plan_id } : null;
   const paymentSettings = {
     paymentMethod: { id: pm_id },
     subscription: { storage: storage },
+    agreement,
   };
   const res = await fetch(API + '/user/payment', {
     method: 'PUT',
@@ -104,7 +106,7 @@ const AccountPlansModal = ({
             disabled={!savedPaymentMethod || isCreatingSub || !hasAcceptedTerms}
             onClick={async () => {
               setIsCreatingSub(true);
-              await putUserPayment(savedPaymentMethod.id, currentPlan.id);
+              await putUserPayment(constants.TERMS_OF_SERVICE_VERSION, savedPaymentMethod.id, currentPlan.id);
               await setCurrentPlan(currentPlan);
               setIsCreatingSub(false);
               onClose();
