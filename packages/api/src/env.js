@@ -43,6 +43,8 @@ import { createMockBillingContext } from './utils/billing.js'
  * @property {string} [STRIPE_SECRET_KEY]
  * @property {string} CARPARK_URL the public url prefix for CARs stored in R2
  * @property {R2Bucket} CARPARK the bound R2 Bucket interface
+ * @property {R2Bucket} SATNAV
+ * @property {R2Bucket} DUDEWHERE
  * // Derived values and class dependencies
  * @property {Cluster} cluster
  * @property {DBClient} db
@@ -148,9 +150,11 @@ export function envAll (req, env, ctx) {
     }
   }
 
-  if (!env.CARPARK) {
-    throw new Error('Missing ENV. R2 Bucket `CARPARK` not found. Update `r2_bucket` config in wrangler.toml or add `--r2 CARPARK` flag to miniflare cmd')
-  }
+  ['CARPARK', 'SATNAV', 'DUDEWHERE'].forEach(bucketName => {
+    if (!env[bucketName]) {
+      throw new Error(`Missing ENV. R2 Bucket \`${bucketName}\` not found. Update \`r2_bucket\` config in wrangler.toml or add \`--r2 ${bucketName}\` flag to miniflare cmd`)
+    }
+  })
 
   const clusterAuthToken = env.CLUSTER_BASIC_AUTH_TOKEN
   const headers = clusterAuthToken ? { Authorization: `Basic ${clusterAuthToken}` } : {}

@@ -2,6 +2,7 @@
 /* eslint-env serviceworker */
 import { PutObjectCommand } from '@aws-sdk/client-s3/dist-es/commands/PutObjectCommand.js'
 import { CarBlockIterator } from '@ipld/car'
+import { CarIndexer } from '@ipld/car/indexer'
 import { toString, equals } from 'uint8arrays'
 import { LinkIndexer } from 'linkdex'
 import { maybeDecode } from 'linkdex/decode'
@@ -10,6 +11,7 @@ import { sha256 } from 'multiformats/hashes/sha2'
 import * as raw from 'multiformats/codecs/raw'
 import * as pb from '@ipld/dag-pb'
 import pRetry from 'p-retry'
+import { MultihashIndexSortedWriter } from 'cardex'
 import { InvalidCarError, LinkdexError } from './errors.js'
 import { MAX_BLOCK_SIZE, CAR_CODE } from './constants.js'
 import { JSONResponse } from './utils/json-response.js'
@@ -122,7 +124,9 @@ export async function handleCarUpload (request, env, ctx, car, uploadType = 'Car
 
   await Promise.all([
     putToS3(env, s3Key, carBytes, carCid, sourceCid, structure),
-    putToR2(env, r2Key, carBytes, carCid, sourceCid, structure)
+    putToR2(env, r2Key, carBytes, carCid, sourceCid, structure),
+    writeSatNavIndex(env, carCid, carBytes),
+    writeDudeWhereIndex(env, sourceCid, carCid)
   ])
 
   const xName = headers.get('x-name')
@@ -340,6 +344,64 @@ export async function putToR2 (env, key, carBytes, carCid, rootCid, structure = 
     throw new Error('Failed to upload CAR to R2', { cause })
   } finally {
     env.log.timeEnd('putToR2')
+  }
+}
+
+/**
+ * Write a CARv2 index for the passed CAR file to R2.
+ *
+ * @param {import('./env').Env} env
+ * @param {CID} carCid
+ * @param {Uint8Array} carBytes
+ */
+ export async function writeSatNavIndex (env, carCid, carBytes) {
+  env.log.time('writeSatNavIndex')
+  const indexer = await CarIndexer.fromBytes(carBytes)
+  const { writer, out } = MultihashIndexSortedWriter.create()
+
+  for await (const blockIndexData of indexer) {
+    writer.put(blockIndexData)
+  }
+  writer.close()
+
+  const chunks = []
+  for await (const chunk of out) {
+    chunks.push(chunk)
+  }
+  const indexBytes = new Uint8Array(await new Blob(chunks).arrayBuffer())
+  const digest = await sha256.encode(indexBytes)
+  const key = `${carCid}/${carCid}.car.idx`
+
+  /** @type R2PutOptions */
+  const opts = { sha256: toString(digest, 'base16') }
+  try {
+    // assuming mostly unique cars, but could check for existence here before writing.
+    return await pRetry(async () => env.SATNAV.put(key, indexBytes, opts), { retries: 3 })
+  } catch (cause) {
+    throw new Error('Failed to write satnav index to R2', { cause })
+  } finally {
+    env.log.timeEnd('writeSatNavIndex')
+  }
+}
+
+/**
+ * Write a mapping of root data CID => CAR CID to R2.
+ *
+ * @param {import('./env').Env} env
+ * @param {string} rootCid
+ * @param {CID} carCid
+ */
+ export async function writeDudeWhereIndex (env, rootCid, carCid) {
+  env.log.time('writeDudeWhereIndex')
+  const key = `${rootCid}/${carCid}`
+  const data = new Uint8Array()
+
+  try {
+    return await pRetry(async () => env.DUDEWHERE.put(key, data), { retries: 3 })
+  } catch (cause) {
+    throw new Error('Failed to write dudewhere index to R2', { cause })
+  } finally {
+    env.log.timeEnd('writeDudeWhereIndex')
   }
 }
 
