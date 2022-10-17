@@ -222,13 +222,6 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     [showCheckOverlay, order]
   );
 
-  const onNameEdit = useCallback(
-    (name, cid) => {
-      showCheckOverlay();
-    },
-    [showCheckOverlay]
-  );
-
   // Do not render anything if this component is hidden.
   if (hidden) {
     return null;
@@ -263,7 +256,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
       getCellProps: cellData => ({
         name: cellData,
         cid: uploads.find(upload => upload.name === cellData)?.cid,
-        onNameEdit,
+        onNameEdit: showCheckOverlay,
         renameUploadAction: renameUpload,
       }),
     },
@@ -278,7 +271,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
       cellRenderer: CidCellRenderer,
       getCellProps: cellData => ({
         cid: cellData,
-        gateawayPrefix: linkPrefix,
+        gatewayPrefix: linkPrefix,
       }),
     },
     {
@@ -306,7 +299,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
       cellRenderer: StorageProvidersCellRenderer,
       getCellProps: cellData => ({
         deals: cellData,
-        fileRowLabels,
+        tooltipText: fileRowLabels.storage_providers.tooltip.queuing,
       }),
     },
     {
@@ -402,7 +395,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
           className="files-manager-gateway"
           staticLabel="Gateway"
           value={linkPrefix}
-          queryParam="uploads-gateaway"
+          queryParam="uploads-gateway"
           options={[
             { value: 'https://w3s.link/ipfs/', label: 'w3link' },
             { value: 'https://dweb.link/ipfs/', label: 'dweb' },

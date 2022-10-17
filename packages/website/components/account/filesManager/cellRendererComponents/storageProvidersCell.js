@@ -3,11 +3,16 @@ import { renderToString } from 'react-dom/server';
 import Tooltip from 'ZeroComponents/tooltip/tooltip';
 
 /**
+ * @typedef {import('web3.storage').Deal} Deal
+ */
+/**
  * @type {import('react').FC}
  * @param {object} props
+ * @param {Deal[]} props.deals list of deals associated with an upload
+ * @param {string} props.tooltipText strings
  * @returns
  */
-function StorageProvidersCellRenderer({ deals, fileRowLabels }) {
+function StorageProvidersCellRenderer({ deals, tooltipText }) {
   const storageProviders = Array.isArray(deals)
     ? deals
         .filter(deal => !!deal.storageProvider)
@@ -35,7 +40,7 @@ function StorageProvidersCellRenderer({ deals, fileRowLabels }) {
       {!storageProviders.length ? (
         <>
           Queuing...
-          <Tooltip position="right" content={fileRowLabels.storage_providers.tooltip.queuing} />
+          <Tooltip position="right" content={tooltipText} />
         </>
       ) : (
         <>

@@ -16,6 +16,7 @@ export const PinStatus = {
  */
 function UploadStatusTableRenderer({ pins, statusMessages }) {
   if (!pins) {
+    // TODO: Ensure we return something to convey to the user no pins are on this upload.
     return <span></span>;
   }
 

@@ -13,12 +13,12 @@ const fileRowLabels = AppData.page_content.file_manager.table.file_row_labels;
  * @typedef {Object} ColumnDefinition
  * @property {string | import('react').ReactComponentElement } headerContent
  * @property {string} id
- * @property {import('react').FC} [cellRenderer]
+ * @property {import('react').FC<any>} [cellRenderer]
  * @property {function} [getCellProps]
  */
 
 /**
- * @type {import('react').FC}
+ * @type {import('react').FC<any>}
  *
  * @param {Object} props
  * @param {ColumnDefinition[]} props.columns
@@ -231,7 +231,9 @@ function Table({
               onChange={pageSelectHandler}
               scrollTarget={'.account-files-manager'}
             />
-            {/* <Pagination
+            {/*
+            TODO: Use new pagination component and handle query param manipulation in the parent component.
+            <Pagination
               className="storage-table__pagination"
               page={page}
               totalRowCount={totalRowCount || rows.length}

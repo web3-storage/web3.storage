@@ -6,18 +6,22 @@ import Loading from 'components/loading/loading';
 
 /**
  * @type {import('react').FC}
- * @param {object} props
+ * @param {Object} props
+ * @param {string} props.name Name of the upload.
+ * @param {string} props.cid CID of the upload.
+ * @param {function} props.onNameEdit On edit callback.
+ * @param {function} props.renameUploadAction Async method to call to rename the upload.
  * @returns
  */
 function EditUploadNameRenderer({ name, cid, onNameEdit, renameUploadAction }) {
   const [isEditingName, setIsEditingName] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [editError, setEditError] = useState('Must be longer than 10 characters.');
+  const [editError, setEditError] = useState('');
 
   /** @type {import('react').RefObject<HTMLTextAreaElement>} */
   const textAreaInput = useRef(null);
 
-  const toggleEdit = (name, cid) => {
+  const toggleEdit = () => {
     setIsEditingName(!isEditingName);
   };
 
@@ -38,7 +42,7 @@ function EditUploadNameRenderer({ name, cid, onNameEdit, renameUploadAction }) {
 
     setIsLoading(false);
     toggleEdit();
-    onNameEdit(newName, cid);
+    onNameEdit();
   };
 
   return (
@@ -46,7 +50,7 @@ function EditUploadNameRenderer({ name, cid, onNameEdit, renameUploadAction }) {
       <div className={clsx(isEditingName && 'editing', 'file-name__container')}>
         {/* <span className="file-row-label medium-down-only">{'fileRowLabels.name.label'}</span> */}
         {!isEditingName ? (
-          <span dangerouslySetInnerHTML={{ __html: name }} />
+          <span>{name}</span>
         ) : (
           <span className="textarea-container">
             <textarea
