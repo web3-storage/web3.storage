@@ -54,16 +54,14 @@ export function useIsExternalHref() {
  * @param {React.ReactNode} [props.children]
  * @param {React.MouseEventHandler<HTMLAnchorElement>} [props.onClick] - the onClick handler for the link
  */
-const WrappedLink = ({ tabIndex = 0, href, target, ...otherProps }) => {
-  return (
-    <Link href={href} {...otherProps}>
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <a target={target} {...otherProps} tabIndex={tabIndex} onClick={otherProps.onClick}>
-        {otherProps.children}
-      </a>
-    </Link>
-  );
-};
+const WrappedLink = ({ tabIndex = 0, href, target, ...otherProps }) => (
+  <Link href={href} {...otherProps}>
+    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+    <a target={target} {...otherProps} tabIndex={tabIndex} onClick={otherProps.onClick}>
+      {otherProps.children}
+    </a>
+  </Link>
+);
 
 WrappedLink.propTypes = {
   onClick: PropTypes.func,
