@@ -46,7 +46,6 @@ export function useIsExternalHref() {
 
 /**
  * A generic hyperlink component.
- * * by default, links to external sites will have target=_blank if they are an external link
  * @param {object} props
  * @param {string} props.href - the href attribute for the link
  * @param {number} [props.tabIndex] - the tabIndex attribute for the link
