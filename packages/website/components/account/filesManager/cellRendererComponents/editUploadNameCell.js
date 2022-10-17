@@ -77,7 +77,7 @@ function EditUploadNameRenderer({ name, cid, onNameEdit, renameUploadAction }) {
             className={clsx(isEditingName && 'file-name__action-buttons--cancel', 'file-name__action-buttons')}
             disabled={isLoading}
             onClick={() => {
-              toggleEdit(name, cid);
+              toggleEdit();
             }}
           >
             {isEditingName ? 'Cancel' : <PencilIcon className={clsx('pencil-icon')} />}
