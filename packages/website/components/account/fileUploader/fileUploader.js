@@ -87,7 +87,6 @@ const FileUploader = ({ className = '', content, uploadModalState, background })
   };
   useEffect(() => {
     const acceptedTermsLocalStorage = localStorage.getItem('acceptedTerms');
-    console.log(acceptedTermsLocalStorage);
     if (acceptedTermsLocalStorage) setHasAcceptedTerms(true);
   }, []);
 

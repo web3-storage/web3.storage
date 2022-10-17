@@ -208,7 +208,7 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
             itemsPerPage={size}
             visiblePages={1}
             pageCount={pages}
-            queryParam="page"
+            queryParam="pinned-page"
             onChange={setPage}
             scrollTarget={'.account-files-manager'}
           />
@@ -216,7 +216,7 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
             className="files-manager-result-dropdown"
             value={content?.ui.results.options[0].value}
             options={content?.ui.results.options}
-            queryParam="items"
+            queryParam="pinned-items"
             onChange={value => setSize(value)}
             onSelectChange={showCheckOverlay}
           />
