@@ -1,5 +1,18 @@
 # Changelog
 
+## [7.9.0](https://github.com/web3-storage/web3.storage/compare/api-v7.8.3...api-v7.9.0) (2022-10-17)
+
+
+### Features
+
+* add SATNAV and DUDEWHERE index buckets ([#2035](https://github.com/web3-storage/web3.storage/issues/2035)) ([20243bb](https://github.com/web3-storage/web3.storage/commit/20243bb3a132d274b1c3c275e41021f31d8392e6))
+* display name and email in stripe ([#2010](https://github.com/web3-storage/web3.storage/issues/2010)) ([41c385a](https://github.com/web3-storage/web3.storage/commit/41c385a6d4ecdee40e599b1821de2b197b11cde0))
+
+
+### Other Changes
+
+* improve error handling upload script ([#1968](https://github.com/web3-storage/web3.storage/issues/1968)) ([a5e2373](https://github.com/web3-storage/web3.storage/commit/a5e2373a111fd57be84b6c2bf4ccb12500de4b0c)), closes [#1922](https://github.com/web3-storage/web3.storage/issues/1922)
+
 ## [7.8.3](https://github.com/web3-storage/web3.storage/compare/api-v7.8.2...api-v7.8.3) (2022-10-10)
 
 
