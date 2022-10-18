@@ -41,6 +41,8 @@ const RATE_LIMIT_PERIOD = 10 * 1000
 /** @typedef { import('./lib/interface.js').API } API */
 /** @typedef { import('./lib/interface.js').Status} Status */
 /** @typedef { import('./lib/interface.js').Upload} Upload */
+/** @typedef { import('./lib/interface.js').Deal} Deal */
+/** @typedef { import('./lib/interface.js').Pin} Pin */
 /** @typedef { import('./lib/interface.js').Service } Service */
 /** @typedef { import('./lib/interface.js').Web3File} Web3File */
 /** @typedef { import('./lib/interface.js').Filelike } Filelike */

@@ -16,7 +16,7 @@ import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
 import { CustomerNotFound, getPaymentSettings, initializeBillingForNewUser, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
 
 /**
- * @typedef {{ _id: string, issuer: string }} User
+ * @typedef {{ _id: string, issuer: string, name?: string, email?: string }} User
  * @typedef {{ _id: string, name: string }} AuthToken
  * @typedef {{ user: User, authToken?: AuthToken }} Auth
  * @typedef {Request & { auth: Auth }} AuthenticatedRequest
@@ -112,13 +112,15 @@ const createMagicLinkRequestAuthenticator = (env) => async (request) => {
  * @param {object} user
  * @param {string} user.id
  * @param {string} user.issuer
+ * @param {import('../src/utils/billing-types').UserCreationOptions} [userCreationOptions]
  */
-async function initializeNewUser (ctx, user) {
+async function initializeNewUser (ctx, user, userCreationOptions) {
   await initializeBillingForNewUser(
     {
       customers: ctx.customers,
       subscriptions: ctx.subscriptions,
-      user: { ...user, id: user.id.toString() }
+      user: { ...user, id: user.id.toString() },
+      userCreationOptions
     }
   )
 }
@@ -154,7 +156,11 @@ async function loginOrRegister (request, env) {
     user = await env.db.upsertUser(parsed)
     // initialize billing, etc, but only if the user was newly inserted
     if (user.inserted) {
-      await initializeNewUser(env, { ...user, id: user.id })
+      await initializeNewUser(
+        env,
+        { ...user, id: user.id },
+        { name: parsed.name, email: parsed.email }
+      )
     }
   } else if (env.MODE === READ_ONLY) {
     user = await env.db.getUser(parsed.issuer, {})
@@ -701,6 +707,10 @@ export async function userPaymentPut (request, env) {
       subscription: {
         storage: subscriptionStorage
       }
+    },
+    {
+      name: request.auth.user.name,
+      email: request.auth.user.email
     }
   )
   const userPaymentSettingsUrl = '/user/payment'

@@ -4,6 +4,7 @@ export interface RestrictedRouteProps {
   isRestricted?: boolean;
   redirectTo?: string;
   redirectIfFound?: boolean;
+  requiresAuth?: boolean;
   pageBgColor?: string; // TODO: Remove if unused
   navBgColor?: string; // TODO: Remove if unused
   footerBgColor?: string; // TODO: Remove if unused
