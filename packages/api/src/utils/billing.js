@@ -8,7 +8,7 @@ import { InvalidTosAgreementError } from '../../src/errors.js'
 
 /**
  * @param {import('./billing-types').Agreement} agreement
- * @returns {boolean}
+ * @returns {agreement is import('./billing-types').Agreement}
  */
 function isAgreement (agreement) {
   return agreement === 'web3.storage-tos-v1'
