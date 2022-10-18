@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.29.0](https://github.com/web3-storage/web3.storage/compare/website-v2.28.0...website-v2.29.0) (2022-10-18)
+
+
+### Features
+
+* enterprise let's chat form ([#2034](https://github.com/web3-storage/web3.storage/issues/2034)) ([ec2bb57](https://github.com/web3-storage/web3.storage/commit/ec2bb5743644e93cc7b30c2b7c3a0d6ea3d0989f))
+* show tier modal on account page after logging in ([#2048](https://github.com/web3-storage/web3.storage/issues/2048)) ([1204561](https://github.com/web3-storage/web3.storage/commit/12045617cb021eb38ec855460592bc7791456cac))
+
 ## [2.28.0](https://github.com/web3-storage/web3.storage/compare/website-v2.27.0...website-v2.28.0) (2022-10-18)
 
 
