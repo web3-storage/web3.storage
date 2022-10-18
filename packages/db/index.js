@@ -1299,14 +1299,14 @@ export class DBClient {
    * @param {string} userId
    * @param {string} agreement
    */
-  async createUserTosAgreement (userId, agreement) {
+  async createUserAgreement (userId, agreement) {
     const { data, error } = await this._client
-      .from('terms_of_service')
+      .from('agreement')
       .upsert({
         user_id: userId,
         agreement
       }, {
-        onConflict: 'user_id,agreement'
+        onConflict: 'user_id,agreement_type'
       })
       .single()
 

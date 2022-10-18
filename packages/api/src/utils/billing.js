@@ -20,7 +20,7 @@ function isAgreement (agreement) {
  * @param {import('./billing-types').BillingService} ctx.billing
  * @param {import('./billing-types').CustomersService} ctx.customers
  * @param {import('./billing-types').SubscriptionsService} ctx.subscriptions
- * @param {import('./billing-types').TermsOfServiceService} ctx.termsOfService
+ * @param {import('./billing-types').AgreementService} ctx.agreements
  * @param {import('./billing-types').BillingUser} ctx.user
  * @param {object} paymentSettings
  * @param {Pick<import('./billing-types').PaymentMethod, 'id'>} paymentSettings.paymentMethod
@@ -31,9 +31,9 @@ function isAgreement (agreement) {
 export async function savePaymentSettings (ctx, paymentSettings, userCreationOptions) {
   if (paymentSettings.agreement && !isAgreement(paymentSettings.agreement)) throw new InvalidTosAgreementError()
 
-  const { billing, customers, user, termsOfService } = ctx
+  const { billing, customers, user, agreements } = ctx
   const customer = await customers.getOrCreateForUser(user, userCreationOptions)
-  await termsOfService.createUserTosAgreement(user.id, paymentSettings.agreement)
+  await agreements.createUserAgreement(user.id, paymentSettings.agreement)
   await billing.savePaymentMethod(customer.id, paymentSettings.paymentMethod.id)
   await ctx.subscriptions.saveSubscription(customer.id, paymentSettings.subscription)
 }
@@ -85,7 +85,7 @@ export async function getPaymentSettings (ctx) {
 }
 
 /**
- * @returns {import('./stripe').UserCustomerService & import('./stripe').TermsOfServiceService & { userIdToCustomerId: Map<string,string> }}
+ * @returns {import('./stripe').UserCustomerService & import('./stripe').AgreementService & { userIdToCustomerId: Map<string,string> }}
  */
 export function createMockUserCustomerService () {
   const userIdToCustomerId = new Map()
@@ -103,13 +103,13 @@ export function createMockUserCustomerService () {
     userIdToCustomerId.set(userId, customerId)
   }
 
-  const createUserTosAgreement = async (userId, agreement) => {}
+  const createUserAgreement = async (userId, agreement) => {}
 
   return {
     userIdToCustomerId,
     getUserCustomer,
     upsertUserCustomer,
-    createUserTosAgreement
+    createUserAgreement
   }
 }
 
@@ -203,12 +203,12 @@ function createTestEnvCustomerService () {
 }
 
 /**
- * Create a TermsOfService Service for use in testing the app.
- * @returns {import('./billing-types').TermsOfServiceService}
+ * Create a AgreementService for use in testing the app.
+ * @returns {import('./billing-types').AgreementService}
  */
-export function createMockTermsOfServiceService () {
+export function createMockAgreementService () {
   return {
-    async createUserTosAgreement (userId, agreement) {}
+    async createUserAgreement (userId, agreement) {}
   }
 }
 
@@ -220,12 +220,12 @@ export function createMockTermsOfServiceService () {
 export function createMockBillingContext () {
   const billing = createMockBillingService()
   const customers = createTestEnvCustomerService()
-  const termsOfService = createMockTermsOfServiceService()
+  const agreements = createMockAgreementService()
   return {
+    agreements,
     billing,
     customers,
     subscriptions: createMockSubscriptionsService(),
-    termsOfService
   }
 }
 

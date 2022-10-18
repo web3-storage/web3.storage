@@ -91,7 +91,7 @@ export interface BillingEnv {
   billing: BillingService
   customers: CustomersService
   subscriptions: SubscriptionsService
-  termsOfService: TermsOfServiceService
+  agreements: AgreementService
 }
 
 export type PaymentSettings = {
@@ -105,8 +105,8 @@ export interface UserCustomerService {
   upsertUserCustomer: (userId: string, customerId: string) => Promise<void>
 }
 
-export interface TermsOfServiceService {
-  createUserTosAgreement: (userId: string, agreement: Agreement) => Promise<void>
+export interface AgreementService {
+  createUserAgreement: (userId: string, agreement: Agreement) => Promise<void>
 }
 
 export interface UserCreationOptions {

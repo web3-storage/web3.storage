@@ -326,10 +326,10 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
 CREATE INDEX IF NOT EXISTS psa_pin_request_content_cid_idx ON psa_pin_request (content_cid);
 CREATE INDEX IF NOT EXISTS psa_pin_request_deleted_at_idx ON psa_pin_request (deleted_at) INCLUDE (content_cid, auth_key_id);
 
-CREATE TABLE IF NOT EXISTS terms_of_service (
+CREATE TABLE IF NOT EXISTS agreement (
   id              BIGSERIAL PRIMARY KEY,
   user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
-  agreement       agreement_type                                                NOT NULL,
+  agreement_type  agreement_type                                                NOT NULL,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   UNIQUE (user_id, agreement)
 );

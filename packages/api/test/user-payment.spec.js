@@ -3,7 +3,7 @@ import assert from 'assert'
 import fetch, { Request } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
-import { createMockBillingContext, createMockBillingService, createMockCustomerService, createMockPaymentMethod, createMockSubscriptionsService, createMockTermsOfServiceService, randomString, savePaymentSettings, storagePriceNames } from '../src/utils/billing.js'
+import { createMockAgreementService, createMockBillingContext, createMockBillingService, createMockCustomerService, createMockPaymentMethod, createMockSubscriptionsService, randomString, savePaymentSettings, storagePriceNames } from '../src/utils/billing.js'
 import { userPaymentGet, userPaymentPut } from '../src/user.js'
 import { createMockStripeCardPaymentMethod } from '../src/utils/stripe.js'
 
@@ -358,10 +358,10 @@ describe('savePaymentSettings', async function () {
     const billing = createMockBillingService()
     const paymentMethod = { id: /** @type const */ ('pm_w3-test-1') }
     const customers = createMockCustomerService()
-    const termsOfService = createMockTermsOfServiceService()
+    const agreements = createMockAgreementService()
     const user = { id: '1', issuer: randomString() }
     const subscriptions = createMockSubscriptionsService()
-    const env = { billing, customers, user, subscriptions, termsOfService }
+    const env = { billing, customers, user, subscriptions, agreements }
     await savePaymentSettings(env, { paymentMethod, subscription: { storage: null }, agreement: 'web3.storage-tos-v1' })
     const { paymentMethodSaves } = billing
     assert.equal(paymentMethodSaves.length, 1, 'savePaymentMethod was called once')

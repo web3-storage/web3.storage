@@ -666,7 +666,7 @@ export async function userPaymentGet (request, env) {
  * Save a user's payment settings.
  *
  * @param {AuthenticatedRequest} request
- * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'|'termsOfService'>} env
+ * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'|'agreements'>} env
  */
 export async function userPaymentPut (request, env) {
   const requestBody = await request.json()
@@ -701,7 +701,7 @@ export async function userPaymentPut (request, env) {
       customers: env.customers,
       user: { ...request.auth.user, id: request.auth.user._id },
       subscriptions: env.subscriptions,
-      termsOfService: env.termsOfService
+      agreements: env.agreements
     },
     {
       paymentMethod,
