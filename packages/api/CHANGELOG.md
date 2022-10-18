@@ -1,5 +1,18 @@
 # Changelog
 
+## [7.9.1](https://github.com/web3-storage/web3.storage/compare/api-v7.9.0...api-v7.9.1) (2022-10-18)
+
+
+### Bug Fixes
+
+* issue with logging user being set to different value than underlying user.id bigint::text ([#2042](https://github.com/web3-storage/web3.storage/issues/2042)) ([9659ab0](https://github.com/web3-storage/web3.storage/commit/9659ab08bb99dbb1b42f7591488263a7cb0aaf1c))
+* update toucan-js and move to deps ([#2045](https://github.com/web3-storage/web3.storage/issues/2045)) ([9de591d](https://github.com/web3-storage/web3.storage/commit/9de591dcb13c04a32626505c9c1152adbc003d61))
+
+
+### Other Changes
+
+* use db ids > JS MAX_SAFE_INTEGER in test ([#2020](https://github.com/web3-storage/web3.storage/issues/2020)) ([6103e99](https://github.com/web3-storage/web3.storage/commit/6103e9954c2fa0ffb75b0f53e7eaa21812c924c4))
+
 ## [7.9.0](https://github.com/web3-storage/web3.storage/compare/api-v7.8.3...api-v7.9.0) (2022-10-17)
 
 
