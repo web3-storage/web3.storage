@@ -30,7 +30,7 @@ const PinningRequestModal = ({ isOpen, onClose }) => {
   }
 
   return (
-    <div className="user-request-modal">
+    <div className="user-request-modal kwes-form-web3-defaults">
       <Modal
         className=""
         closeIcon={<CloseIcon className="file-uploader-close" />}

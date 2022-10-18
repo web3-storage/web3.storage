@@ -8,7 +8,7 @@ const W3linkForm = () => {
 
   return (
     <form
-      className="kwes-form text-left max-w-lg text-lg mx-auto mt-12"
+      className="kwes-form w3-link-form text-left max-w-lg text-lg mx-auto mt-12"
       action="https://kwesforms.com/api/foreign/forms/YKmGgxCJeFWb8c9zWtDk"
     >
       <p>

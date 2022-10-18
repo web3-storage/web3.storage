@@ -16,7 +16,7 @@ const CustomStorageForm = ({ onClose }) => {
   return (
     <form
       id="kwesForm"
-      className="kwes-form text-left max-w-lg text-lg mx-auto mt-12"
+      className="kwes-form custom-storage-form text-left max-w-lg text-lg mx-auto mt-12"
       action="https://kwesforms.com/api/foreign/forms/rJbS5DK02SKLzypcNzJ3"
     >
       <h3>Enterprise user inquiry</h3>
