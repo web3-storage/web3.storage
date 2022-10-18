@@ -6,8 +6,4 @@
 
 # github's syntax docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners#codeowners-syntax
 
-# by default dag.house owns repo
 * @web3-storage/dag-house
-
-# website has no owners
-/packages/website
