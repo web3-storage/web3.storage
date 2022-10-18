@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.27.0](https://github.com/web3-storage/web3.storage/compare/website-v2.26.0...website-v2.27.0) (2022-10-17)
+
+
+### Features
+
+* status docs ([#1937](https://github.com/web3-storage/web3.storage/issues/1937)) ([5fde787](https://github.com/web3-storage/web3.storage/commit/5fde78773c9696fe1e9140d9f967f491bb5d3158))
+
+
+### Bug Fixes
+
+* no more request storage in docs ([#2029](https://github.com/web3-storage/web3.storage/issues/2029)) ([59715d9](https://github.com/web3-storage/web3.storage/commit/59715d94b273921b2161c57e527aeddcd6622365))
+* upload and pin table refactor ([#2018](https://github.com/web3-storage/web3.storage/issues/2018)) ([cbfe9d7](https://github.com/web3-storage/web3.storage/commit/cbfe9d70dbd6ce4ac9e70692160feeec5d2713e2))
+
 ## [2.26.0](https://github.com/web3-storage/web3.storage/compare/website-v2.25.0...website-v2.26.0) (2022-10-13)
 
 

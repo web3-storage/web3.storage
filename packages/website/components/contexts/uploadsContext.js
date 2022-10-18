@@ -65,7 +65,7 @@ export const STATUS = {
  * @property {number} count Total uploads
  * @property {(cid: string) => Promise<void>} deleteUpload Method to delete an existing upload
  * @property {(cid: string, name: string)=>Promise<void>} renameUpload Method to rename an existing upload
- * @property {(args?: UploadArgs) => Promise<Upload[]>} getUploads Method that refetches list of uploads based on certain params
+ * @property {(args?: UploadArgs) => Promise<Upload[]>} getUploads Method that fetches list of uploads based on certain params
  * @property {(file:FileProgress) => Promise<void>} uploadFiles Method to upload a new file
  * @property {boolean} isFetchingUploads Whether or not new uploads are being fetched
  * @property {number|undefined} fetchDate The date in which the last uploads list fetch happened
@@ -177,6 +177,25 @@ export const UploadsProvider = ({ children }) => {
     [setUploads, setPages, setCount, setIsFetchingUploads]
   );
 
+  const renameUploadHandler = useCallback(
+    /** @type {(cid: string, name: string) => Promise<void>}} */
+    async (cid, name) => {
+      try {
+        renameUpload(cid, name);
+      } catch (error) {
+        if (error instanceof Error) {
+          throw error;
+        }
+        throw Error('Unknown error');
+      }
+      const renameUploadIndex = uploads.findIndex(upload => upload.cid === cid);
+      uploads[renameUploadIndex].name = name;
+      setUploads(uploads);
+      return;
+    },
+    [uploads]
+  );
+
   return (
     <UploadsContext.Provider
       value={
@@ -184,7 +203,7 @@ export const UploadsProvider = ({ children }) => {
         ({
           uploadFiles,
           deleteUpload,
-          renameUpload,
+          renameUpload: renameUploadHandler,
           getUploads: getUploadsCallback,
           uploads,
           pages,

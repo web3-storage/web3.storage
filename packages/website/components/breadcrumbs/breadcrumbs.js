@@ -10,7 +10,7 @@ import Link from '../link/link';
  * @param {Object} props
  * @param {String} props.variant
  * @param {Object} [props.items]
- * @param {Function} props.click
+ * @param {React.MouseEventHandler<HTMLAnchorElement>} props.click
  */
 export default function Breadcrumbs({ variant, click, items }) {
   return (

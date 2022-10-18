@@ -13,6 +13,27 @@ import Cluster1 from 'public/images/index/cluster-1.png';
 import Button from 'ZeroComponents/button/button';
 import GeneralPageData from '../content/pages/general.json';
 import EnterpriseTierRequestModal from 'components/enterpriseTierRequestModal/enterpriseTierRequestModal';
+import CardListBlock from 'components/cardlistblock/cardlistblock';
+
+const logos = [
+  { src: 'nft-storage.png', alt: 'NFT Storage' },
+  { src: 'protocol-labs-logo-black.svg', alt: 'Protocol Labs' },
+  { src: 'filecoin.png', alt: 'Filecoin' },
+  { src: 'fileverse.png', alt: 'Fileverse' },
+  { src: '3sStudio.png', alt: '3sStudio' },
+  { src: 'glitter.png', alt: 'Glitter' },
+  { src: 'fleek.png', alt: 'Fleek' },
+  { src: 'pollinationsai.png', alt: 'Pollinations AI' },
+  { src: 'opensea.png', alt: 'OpenSea' },
+  { src: 'magic-eden.png', alt: 'magic eden' },
+  { src: 'rarible.svg', alt: 'Rarible' },
+  { src: 'NFTPort.png', alt: 'NFTPort' },
+  { src: 'metaplex.png', alt: 'Metaplex' },
+  { src: 'project-galaxy.png', alt: 'Project Galaxy' },
+  { src: 'tatum.png', alt: 'Tatum' },
+  { src: 'teia.png', alt: 'Teia' },
+  { src: 'holaplex.svg', alt: 'Holaplex' },
+];
 
 const PricingHeader = () => (
   <>
@@ -56,18 +77,21 @@ const PricingHeader = () => (
     </section>
     <section id="section_trusted_by_logos" className="sectional">
       <div className="grid-middle">
-        <div className="wrapping-logos">
-          <div className="block image-block">
-            <Img src="/images/logos/nft-storage.svg" alt="NFT Storage" />
-            <div className="image-label"></div>
-          </div>
-          <div className="block image-block">
-            <Img src="/images/logos/protocol-labs.svg" alt="Protocol Labs" />
-            <div className="image-label"></div>
-          </div>
-          <div className="block image-block">
-            <Img src="/images/logos/filecoin.svg" alt="Filecoin" />
-            <div className="image-label"></div>
+        <div className="wrapping-logos carousel">
+          <div className="wrapping-logos-inner">
+            <div className="wrapping-logos-images">
+              {logos.map(logo => (
+                <div key={logo.alt} className="block image-block">
+                  <Img src={`/images/logos/${logo.src}`} alt={logo.alt} layout="fill" />
+                </div>
+              ))}
+              {/* repeat the set for continous css-only scroll */}
+              {logos.map(logo => (
+                <div key={logo.alt} className="block image-block">
+                  <Img src={`/images/logos/${logo.src}`} alt={logo.alt} layout="fill" />
+                </div>
+              ))}
+            </div>
           </div>
           <div id="intro_1-triangle_left">
             <Img alt="" src={ImageTriangle1} />
@@ -265,6 +289,50 @@ const FaqSection = () => (
                   READ MORE
                 </Button>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="section_testimonials" className="sectional">
+        <div className="grid">
+          <div className="col-12 column-1">
+            <div className="column-content">
+              <CardListBlock
+                block={{
+                  direction: 'row',
+                  gap: '1',
+                  cards: [
+                    {
+                      type: 'C',
+                      action: 'link',
+                      url: '//glitterprotocol.io/',
+                      image: '/images/index/testimonial-ted-l.jpg',
+                      title: 'Ted L.',
+                      subtitle: 'CEO, Glitter Protocol',
+                      description:
+                        'We’ve used web3.storage to store dozens of terabytes of data, make it available on IPFS, and back it up on Filecoin decentralized storage. We would not have been able to index and content address this level of data volume so easily without it.',
+                    },
+                    {
+                      type: 'C',
+                      image: '/images/index/testimonial-ryan-w.jpg',
+                      title: 'Ryan W.',
+                      subtitle: 'Developer, Cape Town',
+                      description:
+                        "I work pretty much exclusively on Web3 applications, and I'm really impressed with web3.storage. It's almost too easy - I didn't run into any stumbling blocks and had a basic implementation of my project in 30 minutes.",
+                    },
+                    {
+                      type: 'C',
+                      action: 'link',
+                      url: '//galacticpunks.io',
+                      image: '/images/index/testimonial-frank-j.jpg',
+                      title: 'Frank J.',
+                      subtitle: 'Developer, Toronto',
+                      description:
+                        "web3.storage was so simple to hook into, and does what you need it to do. We run the <span className='description-link'>Galactic Punks</span> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS.",
+                    },
+                  ],
+                }}
+              />
             </div>
           </div>
         </div>
