@@ -6,7 +6,7 @@ import CloseIcon from 'assets/icons/close';
 import Button from 'components/button/button.js';
 import GradientBackground from 'components/gradientbackground/gradientbackground';
 
-const UserRequestModal = ({ isOpen, onClose }) => {
+const EnterpriseTierRequestModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     kwesforms.init();
   }, []);
@@ -66,4 +66,4 @@ const UserRequestModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default UserRequestModal;
+export default EnterpriseTierRequestModal;
