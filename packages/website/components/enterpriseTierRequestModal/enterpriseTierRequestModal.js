@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import kwesforms from 'kwesforms';
 
 import Modal from 'modules/zero/components/modal/modal';
@@ -9,13 +9,6 @@ import GradientBackground from 'components/gradientbackground/gradientbackground
 const UserRequestModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     kwesforms.init();
-  }, []);
-
-  useLayoutEffect(() => {
-    const form = document.getElementById('enterpriseKwesForm');
-    form?.addEventListener('kwSubmitted', function () {
-      // do we need to do any custom logic?
-    });
   }, []);
 
   return (
