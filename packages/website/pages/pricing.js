@@ -11,6 +11,26 @@ import Cluster1 from 'public/images/index/cluster-1.png';
 import Button from 'ZeroComponents/button/button';
 import GeneralPageData from '../content/pages/general.json';
 
+const logos = [
+  { src: 'nft-storage.png', alt: 'NFT Storage' },
+  { src: 'protocol-labs-logo-black.svg', alt: 'Protocol Labs' },
+  { src: 'filecoin.png', alt: 'Filecoin' },
+  { src: 'fileverse.png', alt: 'Fileverse' },
+  { src: '3sStudio.png', alt: '3sStudio' },
+  { src: 'glitter.png', alt: 'Glitter' },
+  { src: 'fleek.png', alt: 'Fleek' },
+  { src: 'pollinationsai.png', alt: 'Pollinations AI' },
+  { src: 'opensea.png', alt: 'OpenSea' },
+  { src: 'magic-eden.png', alt: 'magic eden' },
+  { src: 'rarible.svg', alt: 'Rarible' },
+  { src: 'NFTPort.png', alt: 'NFTPort' },
+  { src: 'metaplex.png', alt: 'Metaplex' },
+  { src: 'project-galaxy.png', alt: 'Project Galaxy' },
+  { src: 'tatum.png', alt: 'Tatum' },
+  { src: 'teia.png', alt: 'Teia' },
+  { src: 'holaplex.svg', alt: 'Holaplex' },
+];
+
 const PricingHeader = () => (
   <>
     <section id="section_pricing_header" className="sectional">
@@ -53,18 +73,21 @@ const PricingHeader = () => (
     </section>
     <section id="section_trusted_by_logos" className="sectional">
       <div className="grid-middle">
-        <div className="wrapping-logos">
-          <div className="block image-block">
-            <Img src="/images/logos/nft-storage.svg" alt="NFT Storage" />
-            <div className="image-label"></div>
-          </div>
-          <div className="block image-block">
-            <Img src="/images/logos/protocol-labs.svg" alt="Protocol Labs" />
-            <div className="image-label"></div>
-          </div>
-          <div className="block image-block">
-            <Img src="/images/logos/filecoin.svg" alt="Filecoin" />
-            <div className="image-label"></div>
+        <div className="wrapping-logos carousel">
+          <div className="wrapping-logos-inner">
+            <div className="wrapping-logos-images">
+              {logos.map(logo => (
+                <div key={logo.alt} className="block image-block">
+                  <Img src={`/images/logos/${logo.src}`} alt={logo.alt} layout="fill" />
+                </div>
+              ))}
+              {/* repeat the set for continous css-only scroll */}
+              {logos.map(logo => (
+                <div key={logo.alt} className="block image-block">
+                  <Img src={`/images/logos/${logo.src}`} alt={logo.alt} layout="fill" />
+                </div>
+              ))}
+            </div>
           </div>
           <div id="intro_1-triangle_left">
             <Img alt="" src={ImageTriangle1} />
