@@ -10,6 +10,7 @@ import BlobCluster from 'public/images/illustrations/blob-cluster.png';
 import Cluster1 from 'public/images/index/cluster-1.png';
 import Button from 'ZeroComponents/button/button';
 import GeneralPageData from '../content/pages/general.json';
+import CardListBlock from 'components/cardlistblock/cardlistblock';
 
 const logos = [
   { src: 'nft-storage.png', alt: 'NFT Storage' },
@@ -274,6 +275,50 @@ const FaqSection = () => (
                   READ MORE
                 </Button>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="section_testimonials" className="sectional">
+        <div className="grid">
+          <div className="col-12 column-1">
+            <div className="column-content">
+              <CardListBlock
+                block={{
+                  direction: 'row',
+                  gap: '1',
+                  cards: [
+                    {
+                      type: 'C',
+                      action: 'link',
+                      url: '//glitterprotocol.io/',
+                      image: '/images/index/testimonial-ted-l.jpg',
+                      title: 'Ted L.',
+                      subtitle: 'CEO, Glitter Protocol',
+                      description:
+                        'We’ve used web3.storage to store dozens of terabytes of data, make it available on IPFS, and back it up on Filecoin decentralized storage. We would not have been able to index and content address this level of data volume so easily without it.',
+                    },
+                    {
+                      type: 'C',
+                      image: '/images/index/testimonial-ryan-w.jpg',
+                      title: 'Ryan W.',
+                      subtitle: 'Developer, Cape Town',
+                      description:
+                        "I work pretty much exclusively on Web3 applications, and I'm really impressed with web3.storage. It's almost too easy - I didn't run into any stumbling blocks and had a basic implementation of my project in 30 minutes.",
+                    },
+                    {
+                      type: 'C',
+                      action: 'link',
+                      url: '//galacticpunks.io',
+                      image: '/images/index/testimonial-frank-j.jpg',
+                      title: 'Frank J.',
+                      subtitle: 'Developer, Toronto',
+                      description:
+                        "web3.storage was so simple to hook into, and does what you need it to do. We run the <span className='description-link'>Galactic Punks</span> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS.",
+                    },
+                  ],
+                }}
+              />
             </div>
           </div>
         </div>
