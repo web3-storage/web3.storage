@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.28.0](https://github.com/web3-storage/web3.storage/compare/website-v2.27.0...website-v2.28.0) (2022-10-18)
+
+
+### Features
+
+* add css only logo carousel ([#2022](https://github.com/web3-storage/web3.storage/issues/2022)) ([5d96ddc](https://github.com/web3-storage/web3.storage/commit/5d96ddcdbabde80f0a1d56ef4db3d2ed1719d95b))
+* update testimonials ([#2032](https://github.com/web3-storage/web3.storage/issues/2032)) ([c8d9299](https://github.com/web3-storage/web3.storage/commit/c8d9299f8e47388cba0cdc033bb9c8a636716330))
+* website link component defaults target to _blank when the href is external ([#2038](https://github.com/web3-storage/web3.storage/issues/2038)) ([947e764](https://github.com/web3-storage/web3.storage/commit/947e764a21e4d845b6b606ee4f7a47429c056658))
+
 ## [2.27.0](https://github.com/web3-storage/web3.storage/compare/website-v2.26.0...website-v2.27.0) (2022-10-17)
 
 
