@@ -1,6 +1,6 @@
 /* eslint-disable no-void */
 
-import { InvalidTosAgreementError, TosAgreementRequiredError } from '../../src/errors.js'
+import { InvalidTosAgreementError } from '../../src/errors.js'
 
 /**
  * @typedef {import('./billing-types').StoragePriceName} StoragePriceName
@@ -29,8 +29,7 @@ function isAgreement (agreement) {
  * @param {import('./billing-types').UserCreationOptions} [userCreationOptions]
  */
 export async function savePaymentSettings (ctx, paymentSettings, userCreationOptions) {
-  if (!paymentSettings.agreement) throw new TosAgreementRequiredError()
-  if (!isAgreement(paymentSettings.agreement)) throw new InvalidTosAgreementError()
+  if (paymentSettings.agreement && !isAgreement(paymentSettings.agreement)) throw new InvalidTosAgreementError()
 
   const { billing, customers, user, termsOfService } = ctx
   const customer = await customers.getOrCreateForUser(user, userCreationOptions)

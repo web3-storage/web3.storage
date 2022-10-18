@@ -117,15 +117,6 @@ export class MagicTokenRequiredError extends HTTPError {
 }
 MagicTokenRequiredError.CODE = 'ERROR_MAGIC_TOKEN_REQUIRED'
 
-export class TosAgreementRequiredError extends HTTPError {
-  constructor (msg = 'Missing Terms of Service agreement') {
-    super(msg, 400)
-    this.name = 'TosAgreementRequired'
-    this.code = TosAgreementRequiredError.CODE
-  }
-}
-TosAgreementRequiredError.CODE = 'ERROR_TOS_AGREEMENT_REQUIRED'
-
 export class InvalidTosAgreementError extends HTTPError {
   constructor (msg = 'Invalid Terms of Service agreement') {
     super(msg, 400)
