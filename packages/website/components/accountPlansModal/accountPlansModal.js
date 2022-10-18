@@ -31,10 +31,15 @@ export async function putUserPayment(pm_id, plan_id) {
 }
 
 /**
+ *
+ * @typedef {import('../../components/contexts/plansContext').Plan} Plan
+ */
+
+/**
  * @param {object} obj
  * @param {any} obj.isOpen
  * @param {any} obj.onClose
- * @param {any} obj.planSelection
+ * @param {undefined|Plan} obj.planSelection
  * @param {any} obj.planList
  * @param {any} obj.stripePromise
  * @param {any} obj.setCurrentPlan
@@ -58,7 +63,7 @@ const AccountPlansModal = ({
   stripePromise,
 }) => {
   const [isCreatingSub, setIsCreatingSub] = useState(false);
-  const currentPlan = planList.find(p => p.id === planSelection.id);
+  const currentPlan = planList.find(p => p.id === planSelection?.id);
   return (
     <div className="account-plans-modal">
       <Modal
