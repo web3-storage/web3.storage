@@ -11,7 +11,7 @@ import {
 } from './maintenance.js'
 import { pagination } from './utils/pagination.js'
 import { toPinStatusResponse } from './pins.js'
-import { validateSearchParams } from './utils/psa.js'
+import { INVALID_REQUEST_ID, REQUIRED_REQUEST_ID, validateSearchParams } from './utils/psa.js'
 import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
 import { CustomerNotFound, getPaymentSettings, initializeBillingForNewUser, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
 
@@ -515,7 +515,7 @@ export async function userPinsGet (request, env) {
   }
 
   // @ts-ignore
-  const tokens = (await env.db.listKeys(request.auth.user._id)).map((key) => key._id)
+  const tokens = (await env.db.listKeys(request.auth.user._id, { includeDeleted: true })).map((key) => key._id)
 
   let pinRequests
 
@@ -595,7 +595,8 @@ export async function pinDelete (request, env, ctx) {
   }
 
   // TODO: Improve me, it is un-optimal to get the tokens in a separate request to the db.
-  const tokens = (await env.db.listKeys(request.auth.user._id)).map((key) => key._id)
+  // @ts-ignore
+  const tokens = (await env.db.listKeys(request.auth.user._id, { includeDeleted: true })).map((key) => key._id)
 
   try {
     // Update deleted_at (and updated_at) timestamp for the pin request.

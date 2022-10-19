@@ -70,8 +70,8 @@ VALUES  (6, 'test-pinning-and-restriction', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ
         (7, 'test-restriction', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXJlc3RyaWN0aW9uIiwiaXNzIjoid2ViMy1zdG9yYWdlIiwiaWF0IjoxNjMzOTU3Mzg5ODcyLCJuYW1lIjoidGVzdC1yZXN0cmljdGlvbiJ9.uAklG7dHOxRD85c564RBcBqeFGUGNBper7VLaXBGnFg', 10000000000000007);
 
 -- Used to test pinning from an existing user with a different token
-INSERT INTO auth_key (id, name, secret, user_id)
-VALUES (8, 'test-pinning-b', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmctYiIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtcGlubmluZy1iIn0.B2qeE5mHW93saJx-Nu8p8Io_z7_3VRaHoBAVxPbCP5c', 10000000000000004);
+INSERT INTO auth_key (id, name, secret, user_id, deleted_at)
+VALUES (8, 'test-pinning-b', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXBpbm5pbmctYiIsImlzcyI6IndlYjMtc3RvcmFnZSIsImlhdCI6MTYzMzk1NzM4OTg3MiwibmFtZSI6InRlc3QtcGlubmluZy1iIn0.B2qeE5mHW93saJx-Nu8p8Io_z7_3VRaHoBAVxPbCP5c', 10000000000000004, '2021-07-14T19:27:14.934572+00:00');
 
 -- Reset the primary key next value
 SELECT pg_catalog.setval(pg_get_serial_sequence('auth_key', 'id'), MAX(id)) FROM auth_key;

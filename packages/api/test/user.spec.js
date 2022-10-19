@@ -417,6 +417,8 @@ describe('GET /user/pins', () => {
 
     assert(res.ok)
     const body = await res.json()
+
+    // one of the auth tokens is deleted, but the request should still appear in the list.
     assert.equal([...new Set(body.results.map(x => x.pin.authKey))].length, 2)
   })
 })
