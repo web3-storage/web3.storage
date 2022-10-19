@@ -1,5 +1,48 @@
 # Changelog
 
+## [2.29.0](https://github.com/web3-storage/web3.storage/compare/website-v2.28.0...website-v2.29.0) (2022-10-18)
+
+
+### Features
+
+* enterprise let's chat form ([#2034](https://github.com/web3-storage/web3.storage/issues/2034)) ([ec2bb57](https://github.com/web3-storage/web3.storage/commit/ec2bb5743644e93cc7b30c2b7c3a0d6ea3d0989f))
+* show tier modal on account page after logging in ([#2048](https://github.com/web3-storage/web3.storage/issues/2048)) ([1204561](https://github.com/web3-storage/web3.storage/commit/12045617cb021eb38ec855460592bc7791456cac))
+
+## [2.28.0](https://github.com/web3-storage/web3.storage/compare/website-v2.27.0...website-v2.28.0) (2022-10-18)
+
+
+### Features
+
+* add css only logo carousel ([#2022](https://github.com/web3-storage/web3.storage/issues/2022)) ([5d96ddc](https://github.com/web3-storage/web3.storage/commit/5d96ddcdbabde80f0a1d56ef4db3d2ed1719d95b))
+* update testimonials ([#2032](https://github.com/web3-storage/web3.storage/issues/2032)) ([c8d9299](https://github.com/web3-storage/web3.storage/commit/c8d9299f8e47388cba0cdc033bb9c8a636716330))
+* website link component defaults target to _blank when the href is external ([#2038](https://github.com/web3-storage/web3.storage/issues/2038)) ([947e764](https://github.com/web3-storage/web3.storage/commit/947e764a21e4d845b6b606ee4f7a47429c056658))
+
+## [2.27.0](https://github.com/web3-storage/web3.storage/compare/website-v2.26.0...website-v2.27.0) (2022-10-17)
+
+
+### Features
+
+* status docs ([#1937](https://github.com/web3-storage/web3.storage/issues/1937)) ([5fde787](https://github.com/web3-storage/web3.storage/commit/5fde78773c9696fe1e9140d9f967f491bb5d3158))
+
+
+### Bug Fixes
+
+* no more request storage in docs ([#2029](https://github.com/web3-storage/web3.storage/issues/2029)) ([59715d9](https://github.com/web3-storage/web3.storage/commit/59715d94b273921b2161c57e527aeddcd6622365))
+* upload and pin table refactor ([#2018](https://github.com/web3-storage/web3.storage/issues/2018)) ([cbfe9d7](https://github.com/web3-storage/web3.storage/commit/cbfe9d70dbd6ce4ac9e70692160feeec5d2713e2))
+
+## [2.26.0](https://github.com/web3-storage/web3.storage/compare/website-v2.25.0...website-v2.26.0) (2022-10-13)
+
+
+### Features
+
+* tie in currentPlan into storage useage meter ([#2015](https://github.com/web3-storage/web3.storage/issues/2015)) ([a4ad62e](https://github.com/web3-storage/web3.storage/commit/a4ad62eff437373b4113d7f1645fc4e762f71380))
+
+
+### Bug Fixes
+
+* login redirect should preserve query parameters ([#2012](https://github.com/web3-storage/web3.storage/issues/2012)) ([477cf73](https://github.com/web3-storage/web3.storage/commit/477cf73def3850c5ce7b38d63725b516497e10f4))
+* missing prop for cc form in confirm modal ([#2007](https://github.com/web3-storage/web3.storage/issues/2007)) ([6b6ee15](https://github.com/web3-storage/web3.storage/commit/6b6ee151601bf2e5743b68b6f18be38c9e5f075a))
+
 ## [2.25.0](https://github.com/web3-storage/web3.storage/compare/website-v2.24.2...website-v2.25.0) (2022-10-10)
 
 

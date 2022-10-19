@@ -10,6 +10,7 @@ import { Cluster } from '@nftstorage/ipfs-cluster'
 import retry from 'p-retry'
 import { S3Client, ListObjectsV2Command, GetObjectCommand } from '@aws-sdk/client-s3'
 import { concat, equals } from 'uint8arrays'
+import { MultihashIndexSortedReader } from 'cardex'
 import { endpoint, clusterApi, clusterApiAuthHeader } from './scripts/constants.js'
 import { createCar } from './scripts/car.js'
 import { MAX_BLOCK_SIZE, CAR_CODE } from '../src/constants.js'
@@ -157,6 +158,71 @@ describe('POST /car', () => {
     assert.ok(backups)
     assert.equal(backups.length, 2, 'expect 2 backups')
     assert.equal(backups[1], `${CARPARK_URL}/${expectedCarCid}/${expectedCarCid}.car`, 'r2 backup url')
+  })
+
+  it('should write satnav index', async () => {
+    const issuer = 'test-upload'
+    const token = await getTestJWT(issuer, issuer)
+    const { root, car: carBody } = await createCar('satnav')
+    const carBytes = new Uint8Array(await carBody.arrayBuffer())
+    const expectedCid = root.toString()
+    const expectedCarCid = CID.createV1(CAR_CODE, await sha256.digest(carBytes)).toString()
+
+    const res = await fetch(new URL('car', endpoint), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/vnd.ipld.car'
+      },
+      body: carBody
+    })
+    const { cid, carCid } = await res.json()
+    assert.strictEqual(cid, expectedCid, 'Server responded with expected CID')
+    assert.strictEqual(carCid, expectedCarCid, 'Server responded with expected CAR CID')
+
+    /** @type {import('miniflare').Miniflare} */
+    const mf = globalThis.miniflare
+    const r2Bucket = await mf.getR2Bucket('SATNAV')
+    const r2Object = await r2Bucket.get(`${carCid}/${carCid}.car.idx`)
+    assert.ok(r2Object?.body, 'repsonse stream must exist')
+
+    const reader = MultihashIndexSortedReader.fromIterable(r2Object?.body)
+    const entries = []
+    for await (const entry of reader.entries()) {
+      entries.push(entry)
+    }
+
+    assert.equal(entries.length, 1, 'Index contains a single entry')
+    assert.ok(equals(entries[0].digest, root.multihash.digest), 'Index entry is for root data CID')
+  })
+
+  it('should write dudewhere index', async () => {
+    const issuer = 'test-upload'
+    const token = await getTestJWT(issuer, issuer)
+    const { root, car: carBody } = await createCar('dude where\'s my CAR')
+    const carBytes = new Uint8Array(await carBody.arrayBuffer())
+    const expectedCid = root.toString()
+    const expectedCarCid = CID.createV1(CAR_CODE, await sha256.digest(carBytes)).toString()
+
+    const res = await fetch(new URL('car', endpoint), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/vnd.ipld.car'
+      },
+      body: carBody
+    })
+    const { cid, carCid } = await res.json()
+    assert.strictEqual(cid, expectedCid, 'Server responded with expected CID')
+    assert.strictEqual(carCid, expectedCarCid, 'Server responded with expected CAR CID')
+
+    /** @type {import('miniflare').Miniflare} */
+    const mf = globalThis.miniflare
+    const r2Bucket = await mf.getR2Bucket('DUDEWHERE')
+    const r2Objects = await r2Bucket.list({ prefix: `${expectedCid}/` })
+
+    assert.equal(r2Objects.objects.length, 1)
+    assert.equal(r2Objects.objects[0].key, `${expectedCid}/${expectedCarCid}`)
   })
 
   it('should ask linkdex for structure if DAG is not complete', async function () {
