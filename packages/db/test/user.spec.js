@@ -176,7 +176,7 @@ describe('user operations', () => {
 
     const notDeletedKeys = [authKey1._id, authKey2._id]
 
-    await client.deleteKey(authKey3._id)
+    await client.deleteKey(user._id, authKey3._id)
 
     const keys = await client.listKeys(user._id)
 
@@ -207,7 +207,7 @@ describe('user operations', () => {
 
     const notDeletedKeys = [authKey1._id, authKey2._id, authKey3._id]
 
-    await client.deleteKey(authKey3._id)
+    await client.deleteKey(user._id, authKey3._id)
 
     const keys = await client.listKeys(user._id, { includeDeleted: true })
 
