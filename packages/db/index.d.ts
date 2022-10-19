@@ -66,7 +66,7 @@ export class DBClient {
   getPsaPinRequest (authKey: string, pinRequestId: string) : Promise<PsaPinRequestUpsertOutput>
   listPsaPinRequests (authKey: string, opts?: ListPsaPinRequestOptions ) : Promise<ListPsaPinRequestResults>
   deletePsaPinRequest (pinRequestId: string, authKey: Array<string>) : Promise<PsaPinRequestItem>
-  deleteKey (id: number): Promise<void>
+  deleteKey (userId: number, keyId: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
   createUserTag(userId: string, tag: UserTagInput): Promise<boolean>
   getUserTags(userId: string): Promise<UserTagInfo[]>
