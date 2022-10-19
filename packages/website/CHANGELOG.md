@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.30.0](https://github.com/web3-storage/web3.storage/compare/website-v2.29.0...website-v2.30.0) (2022-10-19)
+
+
+### Features
+
+* terms update ([#2052](https://github.com/web3-storage/web3.storage/issues/2052)) ([366f726](https://github.com/web3-storage/web3.storage/commit/366f72670c377c2ecc9c18fc865c3edce7014477))
+
+
+### Bug Fixes
+
+* update tier values ([#2026](https://github.com/web3-storage/web3.storage/issues/2026)) ([aacb1d7](https://github.com/web3-storage/web3.storage/commit/aacb1d75727f4a21eefa84f8a535c6d0a5578230))
+
 ## [2.29.0](https://github.com/web3-storage/web3.storage/compare/website-v2.28.0...website-v2.29.0) (2022-10-18)
 
 
