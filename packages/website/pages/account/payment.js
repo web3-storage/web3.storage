@@ -5,6 +5,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Elements, ElementsConsumer } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import { useRouter } from 'next/router';
 
 import Loading from '../../components/loading/loading.js';
 import PaymentCustomPlan from '../../components/account/paymentCustomPlan.js/paymentCustomPlan.js';
@@ -46,12 +47,13 @@ import GeneralPageData from '../../content/pages/general.json';
  */
 
 const PaymentSettingsPage = props => {
+  const { query } = useRouter();
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
   const stripePromise = loadStripe(props.stripePublishableKey);
   const [needsFetchPaymentSettings, setNeedsFetchPaymentSettings] = useState(true);
   const [, setIsFetchingPaymentSettings] = useState(false);
   const [paymentSettings, setPaymentSettings] = useState(/** @type {undefined|PaymentSettings} */ (undefined));
-  const [planSelection, setPlanSelection] = useState('');
+  const [planSelection, setPlanSelection] = useState(query.plan ?? '');
   const [editingPaymentMethod, setEditingPaymentMethod] = useState(false);
   // subcomponents that save a new plan can set this, which will trigger a re-fetch but the
   // ui can optimistically show the new value while the refetch happens.
