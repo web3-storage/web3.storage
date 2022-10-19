@@ -31,6 +31,7 @@ import type {
   EmailSentInput,
   LogEmailSentInput,
   GetUserOptions,
+  ListKeysOptions,
 } from './db-client-types'
 
 export class DBClient {
@@ -60,7 +61,7 @@ export class DBClient {
   getDealsForCids (cids: string[]): Promise<Record<string, Deal[]>>
   createKey (key: CreateAuthKeyInput): Promise<CreateAuthKeyOutput>
   getKey (issuer: string, secret: string): Promise<AuthKey>
-  listKeys (userId: number): Promise<Array<AuthKeyItemOutput>>
+  listKeys (userId: number, opts?: ListKeysOptions): Promise<Array<AuthKeyItemOutput>>
   createPsaPinRequest (pinRequest: PsaPinRequestUpsertInput): Promise<PsaPinRequestUpsertOutput>
   getPsaPinRequest (authKey: string, pinRequestId: string) : Promise<PsaPinRequestUpsertOutput>
   listPsaPinRequests (authKey: string, opts?: ListPsaPinRequestOptions ) : Promise<ListPsaPinRequestResults>

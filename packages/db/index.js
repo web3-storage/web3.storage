@@ -1005,12 +1005,14 @@ export class DBClient {
    * List auth keys of a given user.
    *
    * @param {number} userId
+   * @param {import('./db-client-types').ListKeysOptions} opts
    * @return {Promise<Array<import('./db-client-types').AuthKeyItemOutput>>}
    */
-  async listKeys (userId) {
+  async listKeys (userId, { includeDeleted } = { includeDeleted: false }) {
     /** @type {{ error: PostgrestError, data: Array<import('./db-client-types').AuthKeyItem> }} */
     const { data, error } = await this._client.rpc('user_auth_keys_list', {
-      query_user_id: userId
+      query_user_id: userId,
+      include_deleted: includeDeleted
     })
 
     if (error) {

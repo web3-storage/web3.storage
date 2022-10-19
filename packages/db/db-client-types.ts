@@ -353,3 +353,7 @@ export type LogEmailSentInput = {
   emailType: string,
   messageId: string
 }
+
+export type ListKeysOptions = {
+  includeDeleted: boolean
+}

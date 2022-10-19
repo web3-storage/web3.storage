@@ -153,6 +153,68 @@ describe('user operations', () => {
     assert(error, 'should fail to delete auth key again')
   })
 
+  it('does not list deleted keys by default', async () => {
+    const name = 'test-key-name-2'
+    const secret = 'test-secret'
+    const authKey1 = await client.createKey({
+      name,
+      secret,
+      user: user._id
+    })
+
+    const authKey2 = await client.createKey({
+      name,
+      secret,
+      user: user._id
+    })
+
+    const authKey3 = await client.createKey({
+      name,
+      secret,
+      user: user._id
+    })
+
+    const notDeletedKeys = [authKey1._id, authKey2._id]
+
+    await client.deleteKey(authKey3._id)
+
+    const keys = await client.listKeys(user._id)
+
+    assert.strictEqual(keys.length, 2, 'should list only not deleted by default')
+    assert(keys.every(item => notDeletedKeys.includes(item._id)))
+  })
+
+  it('lists also deleted keys if necessarely', async () => {
+    const name = 'test-key-name-2'
+    const secret = 'test-secret'
+    const authKey1 = await client.createKey({
+      name,
+      secret,
+      user: user._id
+    })
+
+    const authKey2 = await client.createKey({
+      name,
+      secret,
+      user: user._id
+    })
+
+    const authKey3 = await client.createKey({
+      name,
+      secret,
+      user: user._id
+    })
+
+    const notDeletedKeys = [authKey1._id, authKey2._id, authKey3._id]
+
+    await client.deleteKey(authKey3._id)
+
+    const keys = await client.listKeys(user._id, { includeDeleted: true })
+
+    assert.strictEqual(keys.length, 3, 'should list only not deleted by default')
+    assert(keys.every(item => notDeletedKeys.includes(item._id)))
+  })
+
   it('can track user used storage and has uploads', async () => {
     const authKey = await client.createKey({
       name: 'test-key-name-3',
