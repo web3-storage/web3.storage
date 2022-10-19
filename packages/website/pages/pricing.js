@@ -152,7 +152,7 @@ const PricingTiers = () => (
               price="$10"
               isBestValue={true}
               storageAllocation="120GiB storage"
-              storageOverageRate="+ $0.075/mo per additional GiB"
+              storageOverageRate="+ $0.08/mo per additional GiB"
               callToAction="CHOOSE THIS PLAN"
               callToActionUrl="/account/payment?plan=pro"
             >
