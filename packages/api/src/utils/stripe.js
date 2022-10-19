@@ -203,12 +203,13 @@ export class StripeCustomersService {
 
 /**
  * @param {string} secretKey
+ * @param {typeof globalThis.fetch} [fetch]
  * @returns {StripeInterface}
  */
-export function createStripe (secretKey) {
+export function createStripe (secretKey, fetch) {
   return new Stripe(secretKey, {
     apiVersion: '2022-08-01',
-    httpClient: Stripe.createFetchHttpClient()
+    httpClient: Stripe.createFetchHttpClient(fetch)
   })
 }
 
@@ -388,6 +389,18 @@ export function createMockStripeCustomer (options = {}) {
 }
 
 /**
+ * @param {Record<string,any>} env
+ * @param {typeof globalThis.fetch} [fetch]
+ */
+export function createStripeFromEnv (env, fetch) {
+  const stripeSecretKey = env.STRIPE_SECRET_KEY
+  if (!stripeSecretKey) {
+    throw new Error('Please set the required STRIPE_SECRET_KEY environment variable')
+  }
+  return createStripe(stripeSecretKey, fetch)
+}
+
+/**
  * Create some billing services based on the provided environment vars.
  * If there is a stripe.com secret, the implementations will use the stripe.com APIs.
  * Otherwise the mock implementations will be used.
@@ -397,14 +410,7 @@ export function createMockStripeCustomer (options = {}) {
  * @returns {import('./billing-types').BillingEnv}
  */
 export function createStripeBillingContext (env) {
-  const stripeSecretKey = env.STRIPE_SECRET_KEY
-  if (!stripeSecretKey) {
-    throw new Error('Please set the required STRIPE_SECRET_KEY environment variable')
-  }
-  const stripe = new Stripe(stripeSecretKey, {
-    apiVersion: '2022-08-01',
-    httpClient: Stripe.createFetchHttpClient()
-  })
+  const stripe = createStripeFromEnv(env);
   const billing = StripeBillingService.create(stripe)
   /** @type {UserCustomerService} */
   const userCustomerService = {
