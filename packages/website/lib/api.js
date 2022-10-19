@@ -282,17 +282,13 @@ export async function getPinRequests({ status, size, page }) {
  * @param {string} requestid
  */
 export async function deletePinRequest(requestid) {
-  const tokens = await getTokens();
-  if (!tokens[0]) {
-    throw new Error('missing API token');
-  }
-  const res = await fetch(`${API}/pins/${encodeURIComponent(requestid)}`, {
+  const res = await fetch(`${API}/user/pins/${encodeURIComponent(requestid)}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + tokens[0].secret,
+      Authorization: 'Bearer ' + (await getToken()),
     },
-  });
+  })
 
   if (!res.ok) {
     throw new Error(`failed to delete pin request: ${await res.text()}`);

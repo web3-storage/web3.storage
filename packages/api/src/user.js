@@ -579,7 +579,7 @@ export async function userPinsGet (request, env) {
  * @param {import('./index').Ctx} ctx
  * @return {Promise<JSONResponse>}
  */
-export async function pinDelete (request, env, ctx) {
+export async function userPinDelete (request, env, ctx) {
   // @ts-ignore
   const requestId = request.params.requestId
 
