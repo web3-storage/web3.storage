@@ -583,9 +583,6 @@ export async function userPinDelete (request, env, ctx) {
   // @ts-ignore
   const requestId = request.params.requestId
 
-  // Don't delete pin requests that don't belong to the user
-  const { authToken } = request.auth
-
   if (!requestId) {
     throw new PSAErrorRequiredData(REQUIRED_REQUEST_ID)
   }
