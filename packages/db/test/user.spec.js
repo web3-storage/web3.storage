@@ -215,17 +215,17 @@ describe('user operations', () => {
   })
 
   it('can createUserAgreement of web3.storage terms of service', async () => {
-    const agreement = /** @type {const} */ ('web3.storage-tos-v1');
+    const agreement = /** @type {const} */ ('web3.storage-tos-v1')
     await client.createUserAgreement(user._id, agreement)
     // can't create a second time. It's an immutable record of the agreement
-    let insertedSecond = false;
+    let insertedSecond = false
     try {
       await client.createUserAgreement(user._id, agreement)
-      insertedSecond = true;
+      insertedSecond = true
     } catch (error) {
       assert.match(error.message, /duplicate/gi, 'error mentions that this is a duplciate')
     } finally {
-      assert.ok(! insertedSecond, 'second agreement of same agreement_type threw an error')
+      assert.ok(!insertedSecond, 'second agreement of same agreement_type threw an error')
     }
   })
 })

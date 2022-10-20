@@ -225,7 +225,7 @@ export function createMockBillingContext () {
     agreements,
     billing,
     customers,
-    subscriptions: createMockSubscriptionsService(),
+    subscriptions: createMockSubscriptionsService()
   }
 }
 
