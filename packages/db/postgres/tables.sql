@@ -329,12 +329,12 @@ CREATE INDEX IF NOT EXISTS psa_pin_request_deleted_at_idx ON psa_pin_request (de
 CREATE TABLE IF NOT EXISTS agreement (
   id              BIGSERIAL PRIMARY KEY,
   user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
-  agreement_type  agreement_type                                                NOT NULL,
+  agreement  agreement_type                                                NOT NULL,
   inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   UNIQUE (user_id, agreement)
 );
 
-CREATE INDEX IF NOT EXISTS terms_of_service_user_id_idx ON terms_of_service (user_id);
+CREATE INDEX IF NOT EXISTS agreement_user_id_idx ON agreement (user_id);
 
 -- Metric contains the current values of collected metrics.
 CREATE TABLE IF NOT EXISTS metric

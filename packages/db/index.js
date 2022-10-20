@@ -1297,16 +1297,14 @@ export class DBClient {
 
   /**
    * @param {string} userId
-   * @param {string} agreement
+   * @param {import('./db-client-types').AgreementKind} agreement
    */
   async createUserAgreement (userId, agreement) {
     const { data, error } = await this._client
       .from('agreement')
-      .upsert({
+      .insert({
         user_id: userId,
         agreement
-      }, {
-        onConflict: 'user_id,agreement_type'
       })
       .single()
 

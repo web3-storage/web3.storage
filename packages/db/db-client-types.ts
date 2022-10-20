@@ -353,3 +353,5 @@ export type LogEmailSentInput = {
   emailType: string,
   messageId: string
 }
+
+export type AgreementKind = 'web3.storage-tos-v1'
