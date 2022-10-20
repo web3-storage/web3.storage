@@ -117,14 +117,18 @@ export class MagicTokenRequiredError extends HTTPError {
 }
 MagicTokenRequiredError.CODE = 'ERROR_MAGIC_TOKEN_REQUIRED'
 
-export class InvalidTosAgreementError extends HTTPError {
-  constructor (msg = 'Invalid Terms of Service agreement') {
-    super(msg, 400)
-    this.name = 'InvalidTosAgreement'
-    this.code = InvalidTosAgreementError.CODE
+export class AgreementsRequiredError extends HTTPError {
+  /**
+   * @param {import("./utils/billing-types").Agreement[]} agreements
+   * @param {string} message
+   */
+  constructor (agreements, message = `Missing required agreements ${agreements.join(', ')}`) {
+    super(message, 400)
+    this.name = 'AgreementRequired'
+    this.code = AgreementsRequiredError.CODE
   }
 }
-InvalidTosAgreementError.CODE = 'INVALID_TOS_AGREEMENT'
+AgreementsRequiredError.CODE = 'AGREEMENTS_REQUIRED'
 
 export class InvalidCidError extends Error {
   /**

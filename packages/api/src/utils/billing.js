@@ -1,17 +1,62 @@
 /* eslint-disable no-void */
 
-import { InvalidTosAgreementError } from '../../src/errors.js'
+import { AgreementsRequiredError } from '../../src/errors.js'
 
 /**
  * @typedef {import('./billing-types').StoragePriceName} StoragePriceName
  */
 
+/** @type {Record<string, import('./billing-types').Agreement>} */
+export const agreements = {
+  web3StorageTermsOfServiceVersion1: /** @type {const} */('web3.storage-tos-v1')
+}
+
 /**
- * @param {import('./billing-types').Agreement} agreement
+ * Type guard whether provided value is a valid Agreement kind
+ * @param {any} maybeAgreement
  * @returns {agreement is import('./billing-types').Agreement}
  */
-function isAgreement (agreement) {
-  return agreement === 'web3.storage-tos-v1'
+export function isAgreement (maybeAgreement) {
+  for (const agreement of Object.values(agreements)) {
+    if (maybeAgreement === agreement) {
+      return true
+    }
+  }
+  return false
+}
+
+/**
+ * Given a W3PlatformSubscription, return the agreements that are required to subscribe to it.
+ * e.g. a priced storage subscription requires signing a terms of service agreement
+ * @param {import('./billing-types').W3PlatformSubscription} subscription
+ * @returns {Set<import('./billing-types').Agreement>}
+ */
+function getRequiredAgreementsForSubscription (subscription) {
+  /** @type {Set<import('./billing-types').Agreement>} */
+  const requiredAgreements = new Set([])
+  if (subscription.storage !== null) {
+    requiredAgreements.add(agreements.web3StorageTermsOfServiceVersion1)
+  }
+  return requiredAgreements
+}
+
+/**
+ * @param {import('./billing-types').W3PlatformSubscription} subscription
+ * @param {Set<import('./billing-types').Agreement>} agreements
+ * @returns {Set<import('./billing-types').Agreement>}
+ */
+function getMissingRequiredSubscriptionAgreements (
+  subscription,
+  agreements
+) {
+  /** @type {Set<import('./billing-types').Agreement>} */
+  const missing = new Set()
+  for (const requiredAgreement of getRequiredAgreementsForSubscription(subscription)) {
+    if (!agreements.has(requiredAgreement)) {
+      missing.add(requiredAgreement)
+    }
+  }
+  return missing
 }
 
 /**
@@ -25,15 +70,21 @@ function isAgreement (agreement) {
  * @param {object} paymentSettings
  * @param {Pick<import('./billing-types').PaymentMethod, 'id'>} paymentSettings.paymentMethod
  * @param {import('./billing-types').W3PlatformSubscription} paymentSettings.subscription
- * @param {import('./billing-types').Agreement} paymentSettings.agreement
+ * @param {import('./billing-types').Agreement|undefined} paymentSettings.agreement
  * @param {import('./billing-types').UserCreationOptions} [userCreationOptions]
  */
 export async function savePaymentSettings (ctx, paymentSettings, userCreationOptions) {
-  if (paymentSettings.agreement && !isAgreement(paymentSettings.agreement)) throw new InvalidTosAgreementError()
-
+  const agreementsFromSettings = new Set()
+  if (paymentSettings.agreement) { agreementsFromSettings.add(paymentSettings.agreement) }
+  const missingAgreements = getMissingRequiredSubscriptionAgreements(paymentSettings.subscription, agreementsFromSettings)
+  if (missingAgreements.size > 0) {
+    throw new AgreementsRequiredError(Array.from(missingAgreements))
+  }
   const { billing, customers, user, agreements } = ctx
   const customer = await customers.getOrCreateForUser(user, userCreationOptions)
-  await agreements.createUserAgreement(user.id, paymentSettings.agreement)
+  if (paymentSettings.agreement) {
+    await agreements.createUserAgreement(user.id, paymentSettings.agreement)
+  }
   await billing.savePaymentMethod(customer.id, paymentSettings.paymentMethod.id)
   await ctx.subscriptions.saveSubscription(customer.id, paymentSettings.subscription)
 }
