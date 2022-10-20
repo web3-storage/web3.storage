@@ -306,6 +306,42 @@ export async function deletePinRequest(requestid) {
  */
 
 /**
+ * Try return the input parsed as JSON. If it's not possible, return the input.
+ * (This is useful for logging responses that may or may not be JSON.)
+ * @param {string} text
+ * @returns {unknown}
+ */
+function parseJsonOrReturn(text) {
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    return text;
+  }
+}
+
+export const apiIssueSupportEmail = 'support@web3.storage';
+export const defaultErrorMessageForEndUser = `An unexpected error has occurred. Please try again. If this error continues to happen, please contact us at ${apiIssueSupportEmail}.`;
+
+/**
+ * Error indicating that an unexpected error happened when invoking the API, but nothing more specific than that.
+ */
+export class APIError extends Error {}
+
+/**
+ * Error indicating that an unexpected API Response was encountered
+ */
+export class UnexpectedAPIResponseError extends APIError {
+  /**
+   * @param {Response} response
+   * @param {string} message
+   */
+  constructor(response, message) {
+    super(message);
+    this.response = response;
+  }
+}
+
+/**
  * Gets/Puts saved user plan and billing settings.
  * @param {string} [pmId] - payment method id
  * @param {StorageSubscription|EarlyAdopterStorageSubscription} [storageSubscription]
@@ -320,17 +356,28 @@ export async function userBillingSettings(pmId, storageSubscription) {
       : null;
   const method = !!putBody ? 'PUT' : 'GET';
   const token = await getToken();
-  const res = await fetch(API + '/user/payment', {
-    method: method,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-    },
-    body: putBody,
-  });
-  if (!res.ok) {
-    throw new Error(`failed to get/put user billing info: ${await res.text()}`);
+  const path = '/user/payment';
+  /** @type {Response} */
+  let response;
+  try {
+    response = await fetch(new URL(path, API).toString(), {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+      body: putBody,
+    });
+  } catch (error) {
+    const message = 'unexpected error fetching user payment settings';
+    console.warn(message, error);
+    throw new APIError(message);
   }
-  const savedPayment = await res.json();
+  if (!response.ok) {
+    const message = `Unexpected ${response.status} response requesting ${method} ${path}`;
+    console.warn(`${message}. Response:`, await response.text().then(parseJsonOrReturn));
+    throw new UnexpectedAPIResponseError(response, message);
+  }
+  const savedPayment = await response.json();
   return savedPayment;
 }

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
 import Loading from '../../../components/loading/loading';
-import { userBillingSettings } from '../../../lib/api';
+import { APIError, defaultErrorMessageForEndUser, userBillingSettings } from '../../../lib/api';
 import Button from '../../../components/button/button';
 import { planIdToStorageSubscription } from '../../contexts/plansContext';
 
@@ -22,7 +22,7 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, c
   const stripe = useStripe();
   const [isLoading, setIsLoading] = useState(false);
 
-  const [paymentMethodError, setPaymentMethodError] = useState('');
+  const [paymentMethodError, setPaymentMethodError] = useState(/** @type {Error|null} */ (null));
   const handlePaymentMethodAdd = async event => {
     event.preventDefault();
 
@@ -52,12 +52,12 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, c
         await userBillingSettings(paymentMethod.id, currStorageSubscription);
         setHasPaymentMethods?.(true);
         setEditingPaymentMethod?.(false);
-        setPaymentMethodError('');
+        setPaymentMethodError(null);
       } catch (error) {
-        let message;
-        if (error instanceof Error) message = error.message;
-        else message = String(error);
-        setPaymentMethodError(message);
+        if (!(error instanceof APIError)) {
+          console.warn('unexpected error adding payment method', error);
+        }
+        setPaymentMethodError(new Error(defaultErrorMessageForEndUser));
       } finally {
         setIsLoading(false);
       }
@@ -81,7 +81,7 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, c
           }}
         />
       </div>
-      <div className="billing-validation">{paymentMethodError}</div>
+      <div className="billing-validation">{paymentMethodError ? paymentMethodError.message : <></>}</div>
       <div className="billing-card-add-card-wrapper">
         <Button onClick={handlePaymentMethodAdd} variant="outline-light" disabled={!stripe}>
           Add Card
