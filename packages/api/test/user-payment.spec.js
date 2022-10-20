@@ -386,7 +386,33 @@ describe('savePaymentSettings', async function () {
     await savePaymentSettings(env, desiredPaymentSettings)
     assert.equal(subscriptions.saveSubscriptionCalls.length, 1, 'saveSubscription was called once')
   })
-  it('will not save subscription without tos agreement', async () => {
+  it('saves record of agreement using agreementService', async () => {
+    const desiredPaymentSettings = {
+      paymentMethod: { id: `pm_mock_${randomString()}` },
+      subscription: {
+        storage: null
+      },
+      agreement: agreements.web3StorageTermsOfServiceVersion1
+    }
+    const createUserAgreementCalls = []
+    /** @type {import('src/utils/billing-types.js').AgreementService} */
+    const stubbedAgreementsService = {
+      async createUserAgreement () {
+        createUserAgreementCalls.push(arguments)
+      }
+    }
+    const env = {
+      ...createMockBillingContext(),
+      agreements: stubbedAgreementsService,
+      subscriptions: createMockSubscriptionsService(),
+      user: createMockRequestUser()
+    }
+    await savePaymentSettings(env, desiredPaymentSettings)
+    assert.equal(createUserAgreementCalls.length, 1, 'createUserAgreement was called once')
+    assert.equal(createUserAgreementCalls[0][0], env.user.id)
+    assert.equal(createUserAgreementCalls[0][1], desiredPaymentSettings.agreement)
+  })
+  it('will not save storage subscription without tos agreement', async () => {
     const desiredPaymentSettings = {
       paymentMethod: { id: `pm_mock_${randomString()}` },
       subscription: { storage: { price: storagePriceNames.lite } },
@@ -410,4 +436,63 @@ describe('savePaymentSettings', async function () {
     assert.notEqual(saved, true, 'should not have been able to savePaymentSettings without tos agreement')
     assert.equal(subscriptions.saveSubscriptionCalls.length, 0, 'saveSubscription was not called')
   })
+  it('can save with subscription and tos agreement several times', async () => {
+    const desiredPaymentSettings = {
+      paymentMethod: { id: `pm_mock_${randomString()}` },
+      agreement: agreements.web3StorageTermsOfServiceVersion1
+    }
+    const db = getDBClient()
+    const user = await createDbUser(db)
+    const env = {
+      ...createMockBillingContext(),
+      // it's important to use the real db agreement table here
+      // because previously a uniqueness constraint
+      // here would prevent this test from passing
+      agreements: db,
+      subscriptions: createMockSubscriptionsService(),
+      user
+    }
+    const storagePriceProgression = [
+      storagePriceNames.free,
+      storagePriceNames.lite,
+      storagePriceNames.pro
+    ]
+    for (const storagePrice of storagePriceProgression) {
+      await savePaymentSettings(env, {
+        ...desiredPaymentSettings,
+        subscription: { storage: { price: storagePrice } }
+      })
+    }
+  })
+  it('can save paymentMethod alone without any agreements', async () => {
+    const desiredPaymentSettings = {
+      paymentMethod: { id: `pm_mock_${randomString()}` },
+      subscription: {
+        storage: null
+      },
+      agreement: undefined
+    }
+    const db = getDBClient()
+    const user = await createDbUser(db)
+    const env = {
+      ...createMockBillingContext(),
+      agreements: db,
+      subscriptions: createMockSubscriptionsService(),
+      user
+    }
+    await savePaymentSettings(env, desiredPaymentSettings)
+  })
 })
+
+/**
+ * Create a user in the db with random info
+ * @param {import('@web3-storage/db').DBClient} db
+ */
+async function createDbUser (db) {
+  return await db.upsertUser({
+    issuer: randomString(),
+    name: randomString(),
+    email: `${randomString()}@example.com`,
+    publicAddress: randomString()
+  })
+}

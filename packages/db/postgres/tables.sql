@@ -330,8 +330,7 @@ CREATE TABLE IF NOT EXISTS agreement (
   id              BIGSERIAL PRIMARY KEY,
   user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
   agreement  agreement_type                                                NOT NULL,
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  UNIQUE (user_id, agreement)
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 CREATE INDEX IF NOT EXISTS agreement_user_id_idx ON agreement (user_id);
