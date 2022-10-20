@@ -85,7 +85,7 @@ export async function getPaymentSettings (ctx) {
 }
 
 /**
- * @returns {import('./stripe').UserCustomerService & import('./stripe').AgreementService & { userIdToCustomerId: Map<string,string> }}
+ * @returns {import('./stripe').UserCustomerService & { userIdToCustomerId: Map<string,string> }}
  */
 export function createMockUserCustomerService () {
   const userIdToCustomerId = new Map()
@@ -103,13 +103,10 @@ export function createMockUserCustomerService () {
     userIdToCustomerId.set(userId, customerId)
   }
 
-  const createUserAgreement = async (userId, agreement) => {}
-
   return {
     userIdToCustomerId,
     getUserCustomer,
-    upsertUserCustomer,
-    createUserAgreement
+    upsertUserCustomer
   }
 }
 

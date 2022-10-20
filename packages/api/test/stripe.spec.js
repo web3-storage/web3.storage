@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import assert from 'assert'
-import { createMockUserCustomerService, CustomerNotFound, randomString, storagePriceNames } from '../src/utils/billing.js'
+import { createMockAgreementService, createMockUserCustomerService, CustomerNotFound, randomString, storagePriceNames } from '../src/utils/billing.js'
 import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createMockStripeForSubscriptions, createMockStripeSubscription, createStripe, createStripeBillingContext, createStripeStorageEnvVar, createStripeStoragePricesFromEnv, stagingStripePrices, StripeBillingService, StripeCustomersService, StripeSubscriptionsService } from '../src/utils/stripe.js'
 
 /**
@@ -238,7 +238,10 @@ describe('createStripeBillingContext', function () {
       return this.skip()
     }
     const billingContext = createStripeBillingContext({
-      db: createMockUserCustomerService(),
+      db: {
+        ...createMockUserCustomerService(),
+        ...createMockAgreementService()
+      },
       STRIPE_SECRET_KEY: stripeSecretKey
     })
     const user = { id: '1', issuer: `user-${randomString()}` }
