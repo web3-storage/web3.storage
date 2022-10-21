@@ -4,11 +4,6 @@ import Backup from '../jobs/pins-backup.js'
 import { envConfig } from '../lib/env.js'
 import { getCluster, getPgPool } from '../lib/utils.js'
 
-import fetch from '@web-std/fetch'
-
-/** @ts-ignore */
-global.fetch = fetch
-
 async function main () {
   const rwPg = getPgPool(process.env, 'rw')
   const roPg = getPgPool(process.env, 'ro')

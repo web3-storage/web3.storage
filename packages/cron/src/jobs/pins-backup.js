@@ -12,6 +12,12 @@ import { Readable } from 'stream'
 import { getS3Client } from '../lib/utils.js'
 import { HeadObjectCommand } from '@aws-sdk/client-s3'
 
+import fetch from '@web-std/fetch'
+import { FormData } from '@web-std/form-data'
+import { File, Blob } from '@web-std/file'
+
+Object.assign(global, { fetch, File, Blob, FormData })
+
 export default class Backup {
   constructor (env) {
     this.UPDATE_BACKUP_URL_QUERY = `
@@ -37,7 +43,7 @@ export default class Backup {
         psa.content_cid,
         psa.name,
         psa.auth_key_id,
-        pl.peer_id
+        pl.ipfs_peer_id
       FROM psa_pin_request psa
         JOIN pin p ON p.content_cid = psa.content_cid
         JOIN pin_location pl ON pl.id = p.pin_location_id
@@ -131,7 +137,7 @@ export default class Backup {
 
   /**
    * @param {import('@nftstorage/ipfs-cluster').Cluster} ipfs
-   * @param {Array<import('@nftstorage/ipfs-cluster/src/interface.js').PeerInfo>} peersList
+   * @param {Array<import('@nftstorage/ipfs-cluster/src/interface.js').ClusterInfo>} peersList
    * @param {Object} [options]
    * @param {number} [options.maxDagSize] Skip DAGs that are bigger than this.
    */
@@ -143,10 +149,9 @@ export default class Backup {
     const _this = this
     return async function * (source) {
       for await (const pin of source) {
-        const peer = peersList.find((peer) => peer.id === pin.peer)
+        const peer = peersList.find((peer) => peer.ipfs.id === pin.peer)
         if (peer) {
-          const content = _this.ipfsDagExport(ipfs, pin.sourceCid, peer?.addresses[0], options)
-          _this.log(`Content: ${JSON.stringify(content)}`)
+          const content = _this.ipfsDagExport(ipfs, pin.sourceCid, peer.ipfs.addresses[0], options)
           yield { ...pin, content }
         } else {
           this.log(`Warning: ${JSON.stringify(pin)} has not been found on cluster`)
@@ -193,7 +198,7 @@ export default class Backup {
 
       for await (const chunk of dagula.get(cid)) {
         bytesReceived += chunk.bytes.length
-        this.log(`chunk: ${JSON.stringify(chunk)}`)
+        this.log(`chunk: ${JSON.stringify(chunk.bytes)}`)
         yield chunk
       }
 
@@ -245,7 +250,7 @@ export default class Backup {
         contentCid: CID.parse(pinnedPin.content_cid),
         authKeyId: String(pinnedPin.auth_key_id),
         pinRequestId: String(pinnedPin.id),
-        peer: String(pinnedPin.peer_id)
+        peer: String(pinnedPin.ipfs_peer_id)
       }
       yield pin
     }
