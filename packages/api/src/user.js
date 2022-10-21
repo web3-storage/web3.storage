@@ -315,7 +315,6 @@ export async function userRequestPost (request, env) {
  * @param {import('./env').Env} env
  */
 export async function userTokensGet (request, env) {
-  // @ts-ignore
   const tokens = await env.db.listKeys(request.auth.user._id)
 
   return new JSONResponse(tokens)
@@ -514,7 +513,6 @@ export async function userPinsGet (request, env) {
     throw psaParams.error
   }
 
-  // @ts-ignore
   const tokens = (await env.db.listKeys(request.auth.user._id, { includeDeleted: true })).map((key) => key._id)
 
   let pinRequests
@@ -592,7 +590,6 @@ export async function userPinDelete (request, env, ctx) {
   }
 
   // TODO: Improve me, it is un-optimal to get the tokens in a separate request to the db.
-  // @ts-ignore
   const tokens = (await env.db.listKeys(request.auth.user._id, { includeDeleted: true })).map((key) => key._id)
 
   try {

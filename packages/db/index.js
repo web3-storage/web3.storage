@@ -1004,7 +1004,7 @@ export class DBClient {
   /**
    * List auth keys of a given user.
    *
-   * @param {number} userId
+   * @param {string} userId
    * @param {import('./db-client-types').ListKeysOptions} opts
    * @return {Promise<Array<import('./db-client-types').AuthKeyItemOutput>>}
    */
