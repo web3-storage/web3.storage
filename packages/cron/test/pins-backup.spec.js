@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import { createPsaPinRequest, createUser, createUpload, createUserAuthKey, randomCid } from '@web3-storage/db/test-utils'
+import { createPsaPinRequest, createUser, createUserAuthKey } from '@web3-storage/db/test-utils'
 import Backup from '../src/jobs/pins-backup.js'
 import assert from 'assert'
 import { getCluster, getDBClient, getPg, getS3Client } from '../src/lib/utils.js'
@@ -7,9 +7,8 @@ import fetch from '@web-std/fetch'
 import { GetObjectCommand } from '@aws-sdk/client-s3'
 
 import { packToBlob } from 'ipfs-car/pack/blob'
+import { unpackStream } from 'ipfs-car/unpack'
 import { getPins, waitOkPins } from './pins-utils.js'
-
-global.fetch = fetch
 
 const env = {
   ...process.env,
@@ -28,37 +27,6 @@ const env = {
   RO_PG_CONNECTION: 'postgres://postgres:postgres@127.0.0.1:5432/postgres',
   PG_CONNECTION: 'postgres://postgres:postgres@127.0.0.1:5432/postgres',
   PG_REST_JWT: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTYwMzk2ODgzNCwiZXhwIjoyNTUwNjUzNjM0LCJyb2xlIjoic2VydmljZV9yb2xlIn0.necIJaiP7X2T2QjGeV-FhpkizcNTX8HjDDBAxpgQTEI'
-}
-
-const peerId = '1'
-const peerName = '1'
-const ipfsPeerId = '1'
-const region = '1'
-
-/**
- *
- * @param {string} cid
- * @param {import('@nftstorage/ipfs-cluster/src/interface').TrackerStatus} status
- * @returns
- */
-const createPin = (cid, status = 'pinned') => {
-  /**
-   * @type {import('@nftstorage/ipfs-cluster/src/interface').StatusResponse}
-   */
-  const pin = {
-    cid,
-    name: peerName,
-    peerMap: {
-      [ipfsPeerId]: {
-        peerName,
-        ipfsPeerId,
-        status: status,
-        timestamp: new Date(),
-        error: null
-      }
-    }
-  }
-  return pin
 }
 
 /**
@@ -90,7 +58,7 @@ describe('cron - pins backup', () => {
     const cidsAdd = files.reduce(async (prev, file, i) => {
       await prev
 
-      const { root, car: carBody } = await createCar(file)
+      const { car: carBody } = await createCar(file.toString())
 
       const { cid } = await cluster.addCAR(carBody)
 
@@ -102,84 +70,6 @@ describe('cron - pins backup', () => {
       await createPsaPinRequest(dbClient, authKey, cid, { pins })
     }, Promise.resolve())
     await cidsAdd
-
-    // const uploadPins = [{
-    //   status: 'Pinned',
-    //   location: {
-    //     peerId,
-    //     peerName,
-    //     ipfsPeerId,
-    //     region
-    //   }
-    // }]
-
-    // // const pins = await getPins(cid, env.cluster)
-
-    // // Create 3 pins with status Pinned
-    // await createPsaPinRequest(dbClient, authKey, cids[0], { pins: uploadPins })
-    // await createPsaPinRequest(dbClient, authKey, cids[1], { pins: uploadPins })
-    // await createPsaPinRequest(dbClient, authKey, cids[2], { pins: uploadPins })
-
-    // // const exportCarStub = sinon.stub(backup, 'exportCar')
-
-    // exportCarStub.onCall(0).returns(async function * () {
-    //   yield {
-    //     content: Buffer.from('test file'),
-    //     contentCid: cids[0],
-    //     sourceCid: cids[0]
-    //   }
-    // })
-    // exportCarStub.onCall(1).returns(async function * () {
-    //   yield {
-    //     content: Buffer.from('test file'),
-    //     contentCid: cids[1],
-    //     sourceCid: cids[1]
-    //   }
-    // })
-    // exportCarStub.onCall(2).returns(async function * () {
-    //   yield {
-    //     content: Buffer.from('test file'),
-    //     contentCid: cids[2],
-    //     sourceCid: cids[2]
-    //   }
-    // })
-
-    // const uploadCarStub = sinon.stub(backup, 'uploadCar')
-
-    // uploadCarStub.onCall(0).returns(async function * () {
-    //   yield {
-    //     content: Buffer.from('test file'),
-    //     contentCid: cids[0],
-    //     sourceCid: cids[0],
-    //     backupUrl: `https://test.s3.eu-west-1.amazonaws.com/my-car/${cids[0]}`
-    //   }
-    // })
-    // uploadCarStub.onCall(1).returns(async function * () {
-    //   yield {
-    //     content: Buffer.from('test file'),
-    //     contentCid: cids[1],
-    //     sourceCid: cids[1],
-    //     backupUrl: `https://test.s3.eu-west-1.amazonaws.com/my-car/${cids[1]}`
-    //   }
-    // })
-    // uploadCarStub.onCall(2).returns(async function * () {
-    //   yield {
-    //     content: Buffer.from('test file'),
-    //     contentCid: cids[2],
-    //     sourceCid: cids[2],
-    //     backupUrl: `https://test.s3.eu-west-1.amazonaws.com/my-car/${cids[2]}`
-    //   }
-    // })
-
-    // // Override cluster status to return pinned
-    // cluster.status = async (cid) => {
-    //   return createPin(cid, 'pinned')
-    // }
-
-    // // Override cluster statusAll to return pinned
-    // cluster.statusAll = async ({ cids }) => {
-    //   return cids.map(cid => createPin(cid, 'pinned'))
-    // }
   })
 
   after(async () => {
