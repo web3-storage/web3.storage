@@ -374,8 +374,7 @@ describe('savePaymentSettings', async function () {
     const desiredPaymentSettings = {
       paymentMethod: { id: `pm_mock_${randomString()}` },
       subscription: { storage: { price: storagePriceNames.lite } },
-      /** @type {import('src/utils/billing-types.js').Agreement} */
-      agreement: 'web3.storage-tos-v1'
+      agreement: agreements.web3StorageTermsOfServiceVersion1
     }
     const subscriptions = createMockSubscriptionsService()
     const env = {
