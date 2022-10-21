@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         env: ['staging', 'production']
-    timeout-minutes: 30
+    concurrency: psa-pin-backup
     steps:
       - uses: actions/checkout@v2
         with:
