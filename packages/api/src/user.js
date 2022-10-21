@@ -579,7 +579,7 @@ export async function userPinsGet (request, env) {
  */
 export async function userPinDelete (request, env, ctx) {
   // @ts-ignore
-  const requestId = request.params.requestId
+  const requestId = request.params?.requestId
 
   if (!requestId) {
     throw new PSAErrorRequiredData(REQUIRED_REQUEST_ID)
