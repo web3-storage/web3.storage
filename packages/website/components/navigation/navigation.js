@@ -305,7 +305,7 @@ export default function Navigation({ breadcrumbs, isProductApp }) {
                                   {link.text}
                                 </button>
                               ) : (
-                                <Link passHref href={link.url} key={link.text}>
+                                <Link href={link.url} key={link.text}>
                                   <a
                                     href={link.url}
                                     className="nav-sublink"

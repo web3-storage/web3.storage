@@ -10,6 +10,11 @@ import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/
 import { isW3STermsOfServiceAgreement, tosAgreementVersions, userBillingSettings } from '../../lib/api';
 
 /**
+ *
+ * @typedef {import('../../components/contexts/plansContext').Plan} Plan
+ */
+
+/**
  * @param {object} obj
  * @param {any} obj.isOpen
  * @param {any} obj.onClose

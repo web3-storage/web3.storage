@@ -2,6 +2,8 @@
  * @fileoverview Account Payment Settings
  */
 
+import { parse as queryParse } from 'querystring';
+
 import { useState, useEffect, useMemo } from 'react';
 import { Elements, ElementsConsumer } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
@@ -46,7 +48,12 @@ import constants from '../../lib/constants.js';
  * @property {PaymentMethodCard} card
  */
 
+function removePlanQueryParam() {
+  window.history.pushState({}, '', window.location.href.replace(/plan=[^&]+&?/, ''));
+}
+
 const PaymentSettingsPage = props => {
+  const planQueryParam = queryParse(window.location.search.substring(1))?.plan;
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
   const stripePromise = loadStripe(props.stripePublishableKey);
   const [needsFetchPaymentSettings, setNeedsFetchPaymentSettings] = useState(true);
@@ -58,6 +65,18 @@ const PaymentSettingsPage = props => {
   // ui can optimistically show the new value while the refetch happens.
   const [optimisticCurrentPlan, setOptimisticCurrentPlan] = useState(/** @type {Plan|undefined} */ (undefined));
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
+
+  useEffect(() => {
+    if (planQueryParam) {
+      const desiredPlanFromQueryParam = plans.find(plan => plan.id === planQueryParam);
+      if (desiredPlanFromQueryParam) {
+        setPlanSelection(desiredPlanFromQueryParam);
+        setIsPaymentPlanModalOpen(true);
+      } else {
+        removePlanQueryParam();
+      }
+    }
+  }, [planQueryParam]);
 
   // fetch payment settings whenever needed
   useEffect(() => {
@@ -189,6 +208,9 @@ const PaymentSettingsPage = props => {
               onClose={() => {
                 setIsPaymentPlanModalOpen(false);
                 setHasAcceptedTerms(false);
+                if (planQueryParam) {
+                  removePlanQueryParam();
+                }
               }}
               planList={planList}
               planSelection={planSelection}
