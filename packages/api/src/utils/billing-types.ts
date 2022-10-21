@@ -115,3 +115,22 @@ export interface UserCreationOptions {
 }
 
 export type Agreement = 'web3.storage-tos-v1'
+
+/**
+ * Command instructing system to update the web3.storage subscription for a user
+ */
+export interface UpdateSubscriptionCommand {
+  agreement: Agreement
+  paymentMethod: Pick<PaymentMethod, 'id'>
+  subscription: W3PlatformSubscription
+}
+
+/**
+ * Command instructing system to update the default paymentMethod for a user.
+ * It will not update the payment method of old subscriptions.
+ */
+export interface UpdateDefaultPaymentMethodCommand {
+  paymentMethod: Pick<PaymentMethod, 'id'>
+}
+
+export type SavePaymentSettingsCommand = UpdateSubscriptionCommand | UpdateDefaultPaymentMethodCommand

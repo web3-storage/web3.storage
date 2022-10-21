@@ -15,5 +15,4 @@ export default {
   MAGIC_TESTMODE_ENABLED,
   MAGIC_TOKEN: MAGIC_TOKEN,
   MAGIC_TOKEN_LIFESPAN: 900_000, // 15 mins
-  TERMS_OF_SERVICE_VERSION: 'web3.storage-tos-v1',
 };

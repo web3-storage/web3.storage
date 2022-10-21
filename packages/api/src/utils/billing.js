@@ -67,26 +67,43 @@ function getMissingRequiredSubscriptionAgreements (
  * @param {import('./billing-types').SubscriptionsService} ctx.subscriptions
  * @param {import('./billing-types').AgreementService} ctx.agreements
  * @param {import('./billing-types').BillingUser} ctx.user
- * @param {object} paymentSettings
- * @param {Pick<import('./billing-types').PaymentMethod, 'id'>} paymentSettings.paymentMethod
- * @param {import('./billing-types').W3PlatformSubscription} paymentSettings.subscription
- * @param {import('./billing-types').Agreement|undefined} paymentSettings.agreement
+ * @param {import('./billing-types').SavePaymentSettingsCommand} command
  * @param {import('./billing-types').UserCreationOptions} [userCreationOptions]
  */
-export async function savePaymentSettings (ctx, paymentSettings, userCreationOptions) {
-  const agreementsFromSettings = new Set()
-  if (paymentSettings.agreement) { agreementsFromSettings.add(paymentSettings.agreement) }
-  const missingAgreements = getMissingRequiredSubscriptionAgreements(paymentSettings.subscription, agreementsFromSettings)
-  if (missingAgreements.size > 0) {
-    throw new AgreementsRequiredError(Array.from(missingAgreements))
-  }
+export async function savePaymentSettings (ctx, command, userCreationOptions) {
   const { billing, customers, user, agreements } = ctx
-  const customer = await customers.getOrCreateForUser(user, userCreationOptions)
-  if (paymentSettings.agreement) {
-    await agreements.createUserAgreement(user.id, paymentSettings.agreement)
+  const updatedSubscription = hasOwnProperty(command, 'subscription') ? command.subscription : undefined
+  const commandAgreement = hasOwnProperty(command, 'agreement') ? command.agreement : undefined
+  // if updating subscription, check for required agreements
+  if (updatedSubscription) {
+    const agreementsFromSettings = new Set()
+    if (commandAgreement) { agreementsFromSettings.add(commandAgreement) }
+    const missingAgreements = getMissingRequiredSubscriptionAgreements(updatedSubscription, agreementsFromSettings)
+    if (missingAgreements.size > 0) {
+      throw new AgreementsRequiredError(Array.from(missingAgreements))
+    }
   }
-  await billing.savePaymentMethod(customer.id, paymentSettings.paymentMethod.id)
-  await ctx.subscriptions.saveSubscription(customer.id, paymentSettings.subscription)
+  const customer = await customers.getOrCreateForUser(user, userCreationOptions)
+  if (commandAgreement) {
+    await agreements.createUserAgreement(user.id, commandAgreement)
+  }
+  await billing.savePaymentMethod(customer.id, command.paymentMethod.id)
+  if (updatedSubscription) {
+    await ctx.subscriptions.saveSubscription(customer.id, updatedSubscription)
+  }
+}
+
+/**
+ * Object.hasOwnProperty as typescript type guard
+ * @template {unknown} X
+ * @template {PropertyKey} Y
+ * @param {X} obj
+ * @param {Y} prop
+ * @returns {obj is X & Record<Y, unknown>}
+ * https://fettblog.eu/typescript-hasownproperty/
+ */
+export function hasOwnProperty (obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop)
 }
 
 /**

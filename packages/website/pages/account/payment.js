@@ -52,7 +52,7 @@ const PaymentSettingsPage = props => {
   const [needsFetchPaymentSettings, setNeedsFetchPaymentSettings] = useState(true);
   const [, setIsFetchingPaymentSettings] = useState(false);
   const [paymentSettings, setPaymentSettings] = useState(/** @type {undefined|PaymentSettings} */ (undefined));
-  const [planSelection, setPlanSelection] = useState('');
+  const [planSelection, setPlanSelection] = useState(/** @type {Plan|undefined} */ (undefined));
   const [editingPaymentMethod, setEditingPaymentMethod] = useState(false);
   // subcomponents that save a new plan can set this, which will trigger a re-fetch but the
   // ui can optimistically show the new value while the refetch happens.
@@ -114,7 +114,6 @@ const PaymentSettingsPage = props => {
       return plan.id === storageSubscription.price;
     });
   }, [planList, paymentSettings, optimisticCurrentPlan]);
-
   const savedPaymentMethod = useMemo(() => {
     return paymentSettings?.paymentMethod;
   }, [paymentSettings]);
@@ -183,22 +182,26 @@ const PaymentSettingsPage = props => {
             </div>
           </div>
         </div>
-        <AccountPlansModal
-          isOpen={isPaymentPlanModalOpen}
-          onClose={() => {
-            setIsPaymentPlanModalOpen(false);
-            setHasAcceptedTerms(false);
-          }}
-          planList={planList}
-          planSelection={planSelection}
-          setCurrentPlan={setOptimisticCurrentPlan}
-          savedPaymentMethod={savedPaymentMethod}
-          stripePromise={stripePromise}
-          setHasPaymentMethods={() => setNeedsFetchPaymentSettings(true)}
-          setEditingPaymentMethod={setEditingPaymentMethod}
-          setHasAcceptedTerms={setHasAcceptedTerms}
-          hasAcceptedTerms={hasAcceptedTerms}
-        />
+        {planSelection && (
+          <>
+            <AccountPlansModal
+              isOpen={isPaymentPlanModalOpen}
+              onClose={() => {
+                setIsPaymentPlanModalOpen(false);
+                setHasAcceptedTerms(false);
+              }}
+              planList={planList}
+              planSelection={planSelection}
+              setCurrentPlan={setOptimisticCurrentPlan}
+              savedPaymentMethod={savedPaymentMethod}
+              stripePromise={stripePromise}
+              setHasPaymentMethods={() => setNeedsFetchPaymentSettings(true)}
+              setEditingPaymentMethod={setEditingPaymentMethod}
+              setHasAcceptedTerms={setHasAcceptedTerms}
+              hasAcceptedTerms={hasAcceptedTerms}
+            />
+          </>
+        )}
       </>
     </>
   );

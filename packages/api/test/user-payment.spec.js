@@ -3,7 +3,7 @@ import assert from 'assert'
 import fetch, { Request } from '@web-std/fetch'
 import { endpoint } from './scripts/constants.js'
 import { AuthorizationTestContext } from './contexts/authorization.js'
-import { agreements, createMockAgreementService, createMockBillingContext, createMockBillingService, createMockCustomerService, createMockPaymentMethod, createMockSubscriptionsService, randomString, savePaymentSettings, storagePriceNames } from '../src/utils/billing.js'
+import { agreements, createMockAgreementService, createMockBillingContext, createMockBillingService, createMockCustomerService, createMockPaymentMethod, createMockSubscriptionsService, getPaymentSettings, randomString, savePaymentSettings, storagePriceNames } from '../src/utils/billing.js'
 import { userPaymentGet, userPaymentPut } from '../src/user.js'
 import { createMockStripeCardPaymentMethod } from '../src/utils/stripe.js'
 import { getDBClient } from './scripts/helpers.js'
@@ -481,6 +481,32 @@ describe('savePaymentSettings', async function () {
       user
     }
     await savePaymentSettings(env, desiredPaymentSettings)
+  })
+  it('can save storage subscription, then update only the default payment method', async () => {
+    const initialPaymentSettings = {
+      paymentMethod: { id: `pm_mock_${randomString()}` },
+      subscription: {
+        storage: { price: storagePriceNames.lite }
+      },
+      agreement: agreements.web3StorageTermsOfServiceVersion1
+    }
+    const paymentMethodUpdate = {
+      paymentMethod: { id: `pm_mock_${randomString()}` }
+    }
+    const db = getDBClient()
+    const user = await createDbUser(db)
+    const env = {
+      ...createMockBillingContext(),
+      agreements: db,
+      subscriptions: createMockSubscriptionsService(),
+      user
+    }
+    await savePaymentSettings(env, initialPaymentSettings)
+    await savePaymentSettings(env, paymentMethodUpdate)
+    const paymentSettingsAfterUpdate = await getPaymentSettings(env)
+    assert.ok(!(paymentSettingsAfterUpdate instanceof Error), 'should not have gotten an error')
+    assert.equal(paymentSettingsAfterUpdate.paymentMethod?.id, paymentMethodUpdate.paymentMethod.id)
+    assert.equal(paymentSettingsAfterUpdate.subscription.storage?.price, initialPaymentSettings.subscription.storage.price)
   })
 })
 
