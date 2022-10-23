@@ -666,7 +666,7 @@ export async function userPaymentGet (request, env) {
  * Save a user's payment settings.
  *
  * @param {AuthenticatedRequest} request
- * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'>} env
+ * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'|'agreements'>} env
  */
 export async function userPaymentPut (request, env) {
   const requestBody = await request.json()
@@ -675,11 +675,11 @@ export async function userPaymentPut (request, env) {
     throw Object.assign(new Error('Invalid payment method'), { status: 400 })
   }
   const subscriptionInput = requestBody?.subscription
-  if (typeof subscriptionInput !== 'object') {
-    throw Object.assign(new Error(`subscription must be an object, but got ${typeof subscriptionInput}`), { status: 400 })
+  if (!['object', 'undefined'].includes(typeof subscriptionInput)) {
+    throw Object.assign(new Error(`subscription must be of type object or undefined, but got ${typeof subscriptionInput}`), { status: 400 })
   }
   const subscriptionStorageInput = subscriptionInput?.storage
-  if (!(typeof subscriptionStorageInput === 'object' || subscriptionStorageInput === null)) {
+  if (subscriptionInput && !(typeof subscriptionStorageInput === 'object' || subscriptionStorageInput === null)) {
     throw Object.assign(new Error('subscription.storage must be an object or null'), { status: 400 })
   }
   if (subscriptionStorageInput && typeof subscriptionStorageInput.price !== 'string') {
@@ -691,22 +691,25 @@ export async function userPaymentPut (request, env) {
       status: 400
     })
   }
-  const subscriptionStorage = storagePrice
-    ? { price: storagePrice }
-    : null
+  /** @type {import('../src/utils/billing-types').W3PlatformSubscription|undefined} */
+  const subscription = (typeof subscriptionInput === 'undefined')
+    ? undefined
+    : {
+        storage: storagePrice ? { price: storagePrice } : null
+      }
   const paymentMethod = { id: paymentMethodId }
   await savePaymentSettings(
     {
       billing: env.billing,
       customers: env.customers,
       user: { ...request.auth.user, id: request.auth.user._id },
-      subscriptions: env.subscriptions
+      subscriptions: env.subscriptions,
+      agreements: env.agreements
     },
     {
       paymentMethod,
-      subscription: {
-        storage: subscriptionStorage
-      }
+      subscription,
+      agreement: requestBody.agreement
     },
     {
       name: request.auth.user.name,

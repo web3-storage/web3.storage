@@ -157,6 +157,10 @@ export function stripeToStripeCardPaymentMethod (paymentMethod) {
  */
 
 /**
+ * @typedef {import('./billing-types').AgreementService} AgreementService
+ */
+
+/**
  * A CustomersService that uses stripe.com for storage
  */
 export class StripeCustomersService {
@@ -393,7 +397,7 @@ export function createMockStripeCustomer (options = {}) {
  * Otherwise the mock implementations will be used.
  * @param {object} env
  * @param {string} env.STRIPE_SECRET_KEY
- * @param {Pick<DBClient, 'upsertUserCustomer'|'getUserCustomer'>} env.db
+ * @param {Pick<DBClient, 'upsertUserCustomer'|'getUserCustomer'|'createUserAgreement'>} env.db
  * @returns {import('./billing-types').BillingEnv}
  */
 export function createStripeBillingContext (env) {
@@ -412,6 +416,10 @@ export function createStripeBillingContext (env) {
     getUserCustomer: env.db.getUserCustomer.bind(env.db)
   }
   const customers = StripeCustomersService.create(stripe, userCustomerService)
+  /** @type {AgreementService} */
+  const agreements = {
+    createUserAgreement: env.db.createUserAgreement.bind(env.db)
+  }
   // attempt to get stripe price IDs from env vars
   let stripePrices
   try {
@@ -427,6 +435,7 @@ export function createStripeBillingContext (env) {
   }
   const subscriptions = StripeSubscriptionsService.create(stripe, stripePrices)
   return {
+    agreements,
     billing,
     customers,
     subscriptions

@@ -2,9 +2,8 @@ import { useState } from 'react';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
 import Loading from '../../../components/loading/loading';
-import { APIError, defaultErrorMessageForEndUser, userBillingSettings } from '../../../lib/api';
+import { APIError, defaultErrorMessageForEndUser, saveDefaultPaymentMethod } from '../../../lib/api';
 import Button from '../../../components/button/button';
-import { planIdToStorageSubscription } from '../../contexts/plansContext';
 
 /**
  * @typedef {import('../../contexts/plansContext').Plan} Plan
@@ -48,8 +47,7 @@ const AddPaymentMethodForm = ({ setHasPaymentMethods, setEditingPaymentMethod, c
         });
         if (error) throw new Error(error.message);
         if (!paymentMethod?.id) return;
-        const currStorageSubscription = planIdToStorageSubscription(currentPlan);
-        await userBillingSettings(paymentMethod.id, currStorageSubscription);
+        await saveDefaultPaymentMethod(paymentMethod.id);
         setHasPaymentMethods?.(true);
         setEditingPaymentMethod?.(false);
         setPaymentMethodError(null);

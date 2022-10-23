@@ -1,8 +1,63 @@
 /* eslint-disable no-void */
 
+import { AgreementsRequiredError } from '../../src/errors.js'
+
 /**
  * @typedef {import('./billing-types').StoragePriceName} StoragePriceName
  */
+
+/** @type {Record<string, import('./billing-types').Agreement>} */
+export const agreements = {
+  web3StorageTermsOfServiceVersion1: /** @type {const} */('web3.storage-tos-v1')
+}
+
+/**
+ * Type guard whether provided value is a valid Agreement kind
+ * @param {any} maybeAgreement
+ * @returns {agreement is import('./billing-types').Agreement}
+ */
+export function isAgreement (maybeAgreement) {
+  for (const agreement of Object.values(agreements)) {
+    if (maybeAgreement === agreement) {
+      return true
+    }
+  }
+  return false
+}
+
+/**
+ * Given a W3PlatformSubscription, return the agreements that are required to subscribe to it.
+ * e.g. a priced storage subscription requires signing a terms of service agreement
+ * @param {import('./billing-types').W3PlatformSubscription} subscription
+ * @returns {Set<import('./billing-types').Agreement>}
+ */
+function getRequiredAgreementsForSubscription (subscription) {
+  /** @type {Set<import('./billing-types').Agreement>} */
+  const requiredAgreements = new Set([])
+  if (subscription.storage !== null) {
+    requiredAgreements.add(agreements.web3StorageTermsOfServiceVersion1)
+  }
+  return requiredAgreements
+}
+
+/**
+ * @param {import('./billing-types').W3PlatformSubscription} subscription
+ * @param {Set<import('./billing-types').Agreement>} agreements
+ * @returns {Set<import('./billing-types').Agreement>}
+ */
+function getMissingRequiredSubscriptionAgreements (
+  subscription,
+  agreements
+) {
+  /** @type {Set<import('./billing-types').Agreement>} */
+  const missing = new Set()
+  for (const requiredAgreement of getRequiredAgreementsForSubscription(subscription)) {
+    if (!agreements.has(requiredAgreement)) {
+      missing.add(requiredAgreement)
+    }
+  }
+  return missing
+}
 
 /**
  * Save a user's payment settings
@@ -10,17 +65,45 @@
  * @param {import('./billing-types').BillingService} ctx.billing
  * @param {import('./billing-types').CustomersService} ctx.customers
  * @param {import('./billing-types').SubscriptionsService} ctx.subscriptions
+ * @param {import('./billing-types').AgreementService} ctx.agreements
  * @param {import('./billing-types').BillingUser} ctx.user
- * @param {object} paymentSettings
- * @param {Pick<import('./billing-types').PaymentMethod, 'id'>} paymentSettings.paymentMethod
- * @param {import('./billing-types').W3PlatformSubscription} paymentSettings.subscription
+ * @param {import('./billing-types').SavePaymentSettingsCommand} command
  * @param {import('./billing-types').UserCreationOptions} [userCreationOptions]
  */
-export async function savePaymentSettings (ctx, paymentSettings, userCreationOptions) {
-  const { billing, customers, user } = ctx
+export async function savePaymentSettings (ctx, command, userCreationOptions) {
+  const { billing, customers, user, agreements } = ctx
+  const updatedSubscription = hasOwnProperty(command, 'subscription') ? command.subscription : undefined
+  const commandAgreement = hasOwnProperty(command, 'agreement') ? command.agreement : undefined
+  // if updating subscription, check for required agreements
+  if (updatedSubscription) {
+    const agreementsFromSettings = new Set()
+    if (commandAgreement) { agreementsFromSettings.add(commandAgreement) }
+    const missingAgreements = getMissingRequiredSubscriptionAgreements(updatedSubscription, agreementsFromSettings)
+    if (missingAgreements.size > 0) {
+      throw new AgreementsRequiredError(Array.from(missingAgreements))
+    }
+  }
   const customer = await customers.getOrCreateForUser(user, userCreationOptions)
-  await billing.savePaymentMethod(customer.id, paymentSettings.paymentMethod.id)
-  await ctx.subscriptions.saveSubscription(customer.id, paymentSettings.subscription)
+  if (commandAgreement) {
+    await agreements.createUserAgreement(user.id, commandAgreement)
+  }
+  await billing.savePaymentMethod(customer.id, command.paymentMethod.id)
+  if (updatedSubscription) {
+    await ctx.subscriptions.saveSubscription(customer.id, updatedSubscription)
+  }
+}
+
+/**
+ * Object.hasOwnProperty as typescript type guard
+ * @template {unknown} X
+ * @template {PropertyKey} Y
+ * @param {X} obj
+ * @param {Y} prop
+ * @returns {obj is X & Record<Y, unknown>}
+ * https://fettblog.eu/typescript-hasownproperty/
+ */
+export function hasOwnProperty (obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop)
 }
 
 /**
@@ -87,6 +170,7 @@ export function createMockUserCustomerService () {
   const upsertUserCustomer = async (userId, customerId) => {
     userIdToCustomerId.set(userId, customerId)
   }
+
   return {
     userIdToCustomerId,
     getUserCustomer,
@@ -184,6 +268,16 @@ function createTestEnvCustomerService () {
 }
 
 /**
+ * Create a AgreementService for use in testing the app.
+ * @returns {import('./billing-types').AgreementService}
+ */
+export function createMockAgreementService () {
+  return {
+    async createUserAgreement (userId, agreement) {}
+  }
+}
+
+/**
  * Create BillingEnv to use when testing.
  * Use stubs/mocks instead of real billing service (e.g. stripe.com and/or a networked db)
  * @returns {import('./billing-types').BillingEnv}
@@ -191,7 +285,9 @@ function createTestEnvCustomerService () {
 export function createMockBillingContext () {
   const billing = createMockBillingService()
   const customers = createTestEnvCustomerService()
+  const agreements = createMockAgreementService()
   return {
+    agreements,
     billing,
     customers,
     subscriptions: createMockSubscriptionsService()

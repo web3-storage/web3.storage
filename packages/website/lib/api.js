@@ -299,13 +299,7 @@ export async function deletePinRequest(requestid) {
   }
 }
 
-/**
- * @typedef {import('../components/contexts/plansContext').StorageSubscription} StorageSubscription
- * @typedef {import('../components/contexts/plansContext').EarlyAdopterStorageSubscription
- *  } EarlyAdopterStorageSubscription
- */
-
-/**
+/*
  * Try return the input parsed as JSON. If it's not possible, return the input.
  * (This is useful for logging responses that may or may not be JSON.)
  * @param {string} text
@@ -342,16 +336,47 @@ export class UnexpectedAPIResponseError extends APIError {
 }
 
 /**
+ * @typedef {import('../components/contexts/plansContext').StorageSubscription} StorageSubscription
+ * @typedef {import('../components/contexts/plansContext').EarlyAdopterStorageSubscription
+ *  } EarlyAdopterStorageSubscription
+ */
+
+/**
+ * @typedef {'web3.storage-tos-v1'} W3STermsOfServiceAgreement
+ */
+
+/** @type {Record<number, W3STermsOfServiceAgreement>} */
+export const tosAgreementVersions = {
+  1: /** @type {const} */ ('web3.storage-tos-v1'),
+};
+
+/**
+ * Type guard to check whether a value is a valid terms of service agreement
+ * @param {any} value
+ * @returns {value is W3STermsOfServiceAgreement}
+ */
+export function isW3STermsOfServiceAgreement(value) {
+  for (const agreement of Object.values(tosAgreementVersions)) {
+    if (value === agreement) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Gets/Puts saved user plan and billing settings.
+ * @param {W3STermsOfServiceAgreement|undefined} agreement
  * @param {string} [pmId] - payment method id
  * @param {StorageSubscription|EarlyAdopterStorageSubscription} [storageSubscription]
  */
-export async function userBillingSettings(pmId, storageSubscription) {
+export async function userBillingSettings(agreement, pmId, storageSubscription) {
   const putBody =
     pmId || storageSubscription
       ? JSON.stringify({
           paymentMethod: pmId ? { id: pmId } : null,
-          subscription: { storage: storageSubscription },
+          subscription: typeof storageSubscription === 'undefined' ? undefined : { storage: storageSubscription },
+          agreement,
         })
       : null;
   const method = !!putBody ? 'PUT' : 'GET';
@@ -380,4 +405,12 @@ export async function userBillingSettings(pmId, storageSubscription) {
   }
   const savedPayment = await response.json();
   return savedPayment;
+}
+
+/**
+ * Saves the end-user's default payment method via http api
+ * @param {string} paymentMethodId - stripe.com payment method id
+ */
+export async function saveDefaultPaymentMethod(paymentMethodId) {
+  return await userBillingSettings(undefined, paymentMethodId);
 }
