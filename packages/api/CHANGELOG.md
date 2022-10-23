@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.10.0](https://github.com/web3-storage/web3.storage/compare/api-v7.9.1...api-v7.10.0) (2022-10-23)
+
+
+### Features
+
+* log terms of service acceptance ([#2028](https://github.com/web3-storage/web3.storage/issues/2028)) ([47c3540](https://github.com/web3-storage/web3.storage/commit/47c35400ae97e45d07d55e723355f139376233e6))
+
 ## [7.9.1](https://github.com/web3-storage/web3.storage/compare/api-v7.9.0...api-v7.9.1) (2022-10-18)
 
 
