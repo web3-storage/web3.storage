@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.31.0](https://github.com/web3-storage/web3.storage/compare/website-v2.30.0...website-v2.31.0) (2022-10-23)
+
+
+### Features
+
+* AddPaymentMethodForm shows a more end-user-friendly error message when it encounters an error ([#2058](https://github.com/web3-storage/web3.storage/issues/2058)) ([376e05b](https://github.com/web3-storage/web3.storage/commit/376e05ba48cf0cd626e189419ae981864be8e05d))
+* log terms of service acceptance ([#2028](https://github.com/web3-storage/web3.storage/issues/2028)) ([47c3540](https://github.com/web3-storage/web3.storage/commit/47c35400ae97e45d07d55e723355f139376233e6))
+
+
+### Bug Fixes
+
+* clarity on web3.storage PSA ([#2062](https://github.com/web3-storage/web3.storage/issues/2062)) ([62dadb1](https://github.com/web3-storage/web3.storage/commit/62dadb1fe181bb317c3dfc400084eb218d23273f))
+* properly center align the loading icon within login/logout button ([#2043](https://github.com/web3-storage/web3.storage/issues/2043)) ([4fa8ec3](https://github.com/web3-storage/web3.storage/commit/4fa8ec35ad44691aaf608406676f23b0aa9cacb1))
+
 ## [2.30.0](https://github.com/web3-storage/web3.storage/compare/website-v2.29.0...website-v2.30.0) (2022-10-19)
 
 
