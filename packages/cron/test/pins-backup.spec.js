@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import { createPsaPinRequest, createUser, createUserAuthKey } from '@web3-storage/db/test-utils'
+import { createPsaPinRequest, createUser, createUserAuthKey, pinsPinned } from '@web3-storage/db/test-utils'
 import Backup from '../src/jobs/pins-backup.js'
 import assert from 'assert'
 import { getCluster, getDBClient, getPg, getS3Client } from '../src/lib/utils.js'
@@ -8,6 +8,9 @@ import { GetObjectCommand } from '@aws-sdk/client-s3'
 import { packToBlob } from 'ipfs-car/pack/blob'
 import { unpackStream } from 'ipfs-car/unpack'
 import { getPins, waitOkPins } from './pins-utils.js'
+import { CID } from 'multiformats'
+import { sha256 } from 'multiformats/hashes/sha2'
+import * as pb from '@ipld/dag-pb'
 
 const env = {
   ...process.env,
@@ -106,5 +109,19 @@ describe('cron - pins backup', () => {
       }
     })
     await Promise.all(assertContents)
+  })
+
+  it.only('should log if cid is not to be found and not save a backup url', async () => {
+    const hash = await sha256.digest(Buffer.from(`${Math.random()}`))
+    const cid = CID.create(1, pb.code, hash).toString()
+    console.log(cid)
+
+    const pinRequest = await createPsaPinRequest(dbClient, authKey, cid, {
+      pins: pinsPinned
+    })
+    await backup.backupPins({ roPg, rwPg, cluster })
+    const res = await roPg.query('SELECT * FROM psa_pin_request WHERE id=$1', [pinRequest._id])
+    assert.strictEqual(res.rows.length, 1, 'Pin request was not created')
+    assert.strictEqual(res.rows[0].backup_urls.length, 0, 'Url added despite cid did not exists.')
   })
 })

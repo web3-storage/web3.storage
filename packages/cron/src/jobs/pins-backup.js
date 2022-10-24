@@ -31,7 +31,7 @@ export default class Backup {
     this.SIZE_TIMEOUT = 1000 * 10 // timeout if we can't figure out the size in 10s
     this.BLOCK_TIMEOUT = 1000 * 30 // timeout if we don't receive a block after 30s
     this.REPORT_INTERVAL = 1000 * 60 // log download progress every minute
-    this.MAX_DAG_SIZE = 1024 * 1024 * 1024 * 32 // don't try to transfer a DAG that's bigger than 32GB
+    this.MAX_UPLOAD_DAG_SIZE = 1024 * 1024 * 1024 * 32 // We don't limit in psa pin transfers in this case, but we still want to log if we have larger pin requests.
     this.log = debug('backup:pins')
     this.env = env
     this.LIMIT = env.QUERY_LIMIT !== undefined ? env.QUERY_LIMIT : 10000
@@ -67,14 +67,13 @@ export default class Backup {
      */
     return async (source) => {
       for await (const bak of source) {
-        this.log(`backing up ${JSON.stringify(bak)}`)
-        const res = await db.query(this.UPDATE_BACKUP_URL_QUERY, [
+        this.log(`⏳ Saving backup url to DB for ${contentCid}`)
+        await db.query(this.UPDATE_BACKUP_URL_QUERY, [
           [bak.backupUrl.toString()],
           pinRequestId,
           contentCid.toString()
         ])
-        this.log(`Result from updating pin request ${JSON.stringify(res)}`)
-        this.log(`saved backup record for upload ${bak.contentCid}: ${bak.backupUrl.toString()}, rowId: ${pinRequestId}`)
+        this.log(`✅ Saved backup record for upload ${bak.contentCid}: ${bak.backupUrl.toString()}, rowId: ${pinRequestId}`)
       }
     }
   }
@@ -109,16 +108,16 @@ export default class Backup {
     const key = `complete/${bak.sourceCid}.car`
     const region = this.env.S3_BUCKET_REGION
     const url = new URL(`https://${bucketName}.s3.${region}.amazonaws.com/${key}`)
-    this.log(`uploading to ${url}`)
-    this.log(`got bak ${JSON.stringify(bak)}`)
+
     try {
       // Request the head object of the file we are about to backup
       // If it throws a NotFound error then we know we need to upload it
       const command = new HeadObjectCommand({ Bucket: bucketName, Key: key })
       const res = await this.s3.send(command)
-      this.log('It already exists', res)
+      this.log('ℹ️ Car file already exists in S3. Skipping upload.', res)
     } catch (err) {
       if (err.name === 'NotFound') {
+        this.log(`⏳ Uploading to ${url}`)
         const upload = new Upload({
           client: s3,
           params: {
@@ -131,7 +130,7 @@ export default class Backup {
         await upload.done()
       }
     }
-    this.log('done')
+    this.log(`✅ Finished uploading ${bak.sourceCid}`)
     return url
   }
 
@@ -157,7 +156,8 @@ export default class Backup {
           _this.ipfsDagExport(writer, pin.sourceCid, peer.ipfs.addresses[0], options)
           yield { ...pin, content: out }
         } else {
-          this.log(`Warning: ${JSON.stringify(pin)} has not been found on cluster`)
+          _this.log(`🚨 Warning: ${pin.sourceCid} has not been found on cluster`)
+          throw (new Error('Not on cluster'))
         }
       }
     }
@@ -170,50 +170,40 @@ export default class Backup {
    * @param {import('multiformats').CID} cid
    * @param {string} peer The IPFS peer that the CID is available on
    * @param {Object} [options]
-   * @param {number} [options.maxDagSize]
    */
   async ipfsDagExport (writer, cid, peer, options) {
-    const maxDagSize = options?.maxDagSize || this.MAX_DAG_SIZE
     const abortController = new TimeoutController(10_000)
+    let bytesReceived = 0
 
     let reportInterval
     const libp2p = await getLibp2p()
     try {
       const dagula = await Dagula.fromNetwork(libp2p, { peer })
-      this.log('determining size...')
-      let bytesReceived = 0
       let bytesTotal
-      // Given for PIN requests we never limited by files size we should move all pins requests.
-
-      // const bytesTotal = await this.getSize(ipfs, cid)
-      // this.log(bytesTotal == null ? 'unknown size' : `size: ${this.fmt(bytesTotal)} bytes`)
-
-      // if (bytesTotal != null && bytesTotal > maxDagSize) {
-      //   throw Object.assign(
-      //     new Error(`DAG too big: ${this.fmt(bytesTotal)} > ${this.fmt(maxDagSize)}`),
-      //     { code: 'ERR_TOO_BIG' }
-      //   )
-      // }
 
       reportInterval = setInterval(() => {
         const formattedTotal = bytesTotal ? this.fmt(bytesTotal) : 'unknown'
-        this.log(`received ${this.fmt(bytesReceived)} of ${formattedTotal} bytes`)
+        this.log(`ℹ️ CID: ${cid}. Received ${this.fmt(bytesReceived)} of ${formattedTotal} bytes`)
       }, this.REPORT_INTERVAL)
+
+      this.log(`⏳ Started reading dag ${cid}`)
 
       for await (const chunk of dagula.get(cid, {
         signal: abortController.signal
       })) {
         abortController.reset()
         bytesReceived += chunk.bytes.length
-        this.log(`chunk: ${JSON.stringify(chunk.bytes)}`)
-        writer.put(chunk)
+        await writer.put(chunk)
       }
 
-      this.log('done')
+      this.log(`✅ Finished reading dag ${cid}`)
     } catch (err) {
-      this.log(`Error when fetching car file ${err.message}`)
-      this.log(`Error: ${JSON.stringify(err)}`)
+      this.log(`🚨 CID: ${cid} errored. Size of the dag is greater than ${bytesReceived}`)
+      throw (err)
     } finally {
+      if (bytesReceived > this.MAX_UPLOAD_DAG_SIZE) {
+        this.log(`⚠️ CID: ${cid} errored. Size of the dag is greater than ${bytesReceived}`)
+      }
       writer.close()
       libp2p.stop()
       clearInterval(reportInterval)
@@ -282,9 +272,9 @@ export default class Backup {
 
     await pipe(this.getPinsNotBackedUp(roPg), async (source) => {
       for await (const pins of batch(source, concurrency)) {
-        this.log(`Got ${pins.length} pins: ${JSON.stringify(pins)}`)
+        this.log(`ℹ️ Got ${pins.length} pins.`)
         await Promise.all(pins.map(async pin => {
-          this.log(`processing pin ${JSON.stringify(pin)}`)
+          this.log(`ℹ️ Processing pin id ${pin.pinRequestId} for cid ${pin.sourceCid}`)
           try {
             await pipe(
               [pin],
@@ -294,12 +284,12 @@ export default class Backup {
             )
             totalSuccessful++
           } catch (err) {
-            this.log(`failed to backup ${pin.sourceCid}`, err)
+            this.log(`🚨 Failed to backup ${pin.sourceCid}`, err)
           }
           totalProcessed++
         }))
       }
-      if (totalProcessed > 0) this.log(`processed ${totalSuccessful} of ${totalProcessed} CIDs successfully`)
+      if (totalProcessed > 0) this.log(`ℹ️ Processed ${totalSuccessful} of ${totalProcessed} CIDs successfully`)
     })
     this.log('backup complete 🎉')
   }

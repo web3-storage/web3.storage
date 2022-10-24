@@ -227,7 +227,7 @@ export async function createUpload (dbClient, user, authKey, cid, options = {}) 
  * @param {Array<Object>} [options.pins]
  */
 export async function createPsaPinRequest (dbClient, authKey, cid, options = {}) {
-  await dbClient.createPsaPinRequest({
+  return await dbClient.createPsaPinRequest({
     authKey,
     sourceCid: cid,
     contentCid: normalizeCid(cid),
