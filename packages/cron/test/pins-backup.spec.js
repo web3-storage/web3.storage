@@ -95,7 +95,7 @@ describe('cron - pins backup', () => {
     await rwPg.end()
   })
 
-  it.only('should backup pins to S3', async () => {
+  it('should backup pins to S3', async () => {
     // Create 3 files
     const files = [1, 2, 3]
     const fileContentMap = await createDagsAndRequests(files, authKey, cluster, dbClient)
