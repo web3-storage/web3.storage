@@ -1,5 +1,4 @@
 import { Upload } from '@aws-sdk/lib-storage'
-import * as pb from '@ipld/dag-pb'
 import { Dagula } from 'dagula'
 import { getLibp2p } from 'dagula/p2p.js'
 import debug from 'debug'
@@ -7,10 +6,10 @@ import formatNumber from 'format-number'
 import batch from 'it-batch'
 import { pipe } from 'it-pipe'
 import { CID } from 'multiformats'
-import * as raw from 'multiformats/codecs/raw'
 import { Readable } from 'stream'
 import { getS3Client } from '../lib/utils.js'
 import { HeadObjectCommand } from '@aws-sdk/client-s3'
+import { CarWriter } from '@ipld/car'
 
 import fetch from '@web-std/fetch'
 import { FormData } from '@web-std/form-data'
@@ -151,8 +150,11 @@ export default class Backup {
       for await (const pin of source) {
         const peer = peersList.find((peer) => peer.ipfs.id === pin.peer)
         if (peer) {
-          const content = _this.ipfsDagExport(ipfs, pin.sourceCid, peer.ipfs.addresses[0], options)
-          yield { ...pin, content }
+          const { writer, out } = await CarWriter.create([pin.sourceCid])
+
+          // @ts-ignore BlockWriter is not an exported type
+          _this.ipfsDagExport(writer, pin.sourceCid, peer.ipfs.addresses[0], options)
+          yield { ...pin, content: out }
         } else {
           this.log(`Warning: ${JSON.stringify(pin)} has not been found on cluster`)
         }
@@ -163,13 +165,13 @@ export default class Backup {
   /**
    * Export a CAR for the passed CID.
    *
-   * @param {import('@nftstorage/ipfs-cluster').Cluster} ipfs
+   * @param {import('@ipld/car').CarWriter} writer
    * @param {import('multiformats').CID} cid
    * @param {string} peer The IPFS peer that the CID is available on
    * @param {Object} [options]
    * @param {number} [options.maxDagSize]
    */
-  async * ipfsDagExport (ipfs, cid, peer, options) {
+  async ipfsDagExport (writer, cid, peer, options) {
     const maxDagSize = options?.maxDagSize || this.MAX_DAG_SIZE
 
     let reportInterval
@@ -199,7 +201,7 @@ export default class Backup {
       for await (const chunk of dagula.get(cid)) {
         bytesReceived += chunk.bytes.length
         this.log(`chunk: ${JSON.stringify(chunk.bytes)}`)
-        yield chunk
+        writer.put(chunk)
       }
 
       this.log('done')
@@ -207,6 +209,7 @@ export default class Backup {
       this.log(`Error when fetching car file ${err.message}`)
       this.log(`Error: ${JSON.stringify(err)}`)
     } finally {
+      writer.close()
       clearInterval(reportInterval)
     }
   }

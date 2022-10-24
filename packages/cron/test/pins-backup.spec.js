@@ -3,7 +3,6 @@ import { createPsaPinRequest, createUser, createUserAuthKey } from '@web3-storag
 import Backup from '../src/jobs/pins-backup.js'
 import assert from 'assert'
 import { getCluster, getDBClient, getPg, getS3Client } from '../src/lib/utils.js'
-import fetch from '@web-std/fetch'
 import { GetObjectCommand } from '@aws-sdk/client-s3'
 
 import { packToBlob } from 'ipfs-car/pack/blob'
@@ -42,6 +41,7 @@ export async function createCar (str) {
 describe('cron - pins backup', () => {
   let user, userId, authKey, dbClient, cluster, backup, rwPg, roPg
   const files = [1, 2, 3]
+  const fileContentMap = {}
   const cids = []
 
   beforeEach(async () => {
@@ -57,17 +57,18 @@ describe('cron - pins backup', () => {
 
     const cidsAdd = files.reduce(async (prev, file, i) => {
       await prev
-
-      const { car: carBody } = await createCar(file.toString())
+      const fileContent = file.toString().repeat(10 * 1024) // 10KiB
+      const { car: carBody } = await createCar(fileContent)
 
       const { cid } = await cluster.addCAR(carBody)
 
       cids.push(cid)
-
-      await waitOkPins(cid, cluster)
+      await waitOkPins(cid, cluster, 5000, 500)
       const peerMap = (await cluster.status(cid)).peerMap
       const pins = await getPins(cid, cluster, peerMap)
+
       await createPsaPinRequest(dbClient, authKey, cid, { pins })
+      fileContentMap[cid] = fileContent
     }, Promise.resolve())
     await cidsAdd
   })
@@ -79,7 +80,7 @@ describe('cron - pins backup', () => {
 
   it('should attempt to backup pins to S3', async () => {
     let res = await roPg.query('SELECT * FROM psa_pin_request')
-    assert.strictEqual(res.rows.every(row => row.backup_urls.length === 0), true, 'Not all pin requests have a backup!')
+    assert.strictEqual(res.rows.every(row => row.backup_urls.length === 0), true)
 
     await backup.backupPins({ roPg, rwPg, cluster })
     res = await roPg.query('SELECT * FROM psa_pin_request')
@@ -91,6 +92,19 @@ describe('cron - pins backup', () => {
         Key: `complete/${cid}.car`
       }))
     })
-    await Promise.all(objsGet)
+    const responses = await Promise.all(objsGet)
+
+    const assertContents = responses.map(async r => {
+      for await (const file of unpackStream(r.Body)) {
+        const chunks = []
+        for await (const chunk of file.content()) {
+          chunks.push(chunk)
+        }
+        const originalContent = fileContentMap[file.cid]
+        const content = Buffer.concat(chunks).toString()
+        assert.strictEqual(originalContent, content, 'Content does not match orginal one')
+      }
+    })
+    await Promise.all(assertContents)
   })
 })
