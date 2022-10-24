@@ -1,4 +1,5 @@
 import { CID } from 'multiformats'
+import { Readable } from 'stream'
 
 /**
  * Information about a user upload.
@@ -15,7 +16,7 @@ export interface BackupCandidate {
  * Information about a user upload paired with it's content.
  */
 export interface BackupContent extends BackupCandidate {
-  content: AsyncIterable<Uint8Array>
+  content: Readable,
 }
 
 /**

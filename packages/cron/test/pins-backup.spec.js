@@ -41,39 +41,53 @@ export async function createCar (str) {
   })
 }
 
+/**
+ * Create and add cars to cluster.
+ * @param {*} files
+ * @param {*} authKey
+ * @param {*} cluster
+ * @param {*} dbClient
+ * @param {*} param4
+ * @returns
+ */
+async function createDagsAndRequests (files, authKey, cluster, dbClient, {
+  fileSize
+} = { fileSize: 10 * 1024 }) {
+  const fileContentMap = {}
+  await files.reduce(async (prev, file, i) => {
+    await prev
+    const fileContent = file.toString().repeat(fileSize)
+    const { car: carBody } = await createCar(fileContent)
+
+    const { cid } = await cluster.addCAR(carBody)
+
+    await waitOkPins(cid, cluster, 5000, 500)
+    const peerMap = (await cluster.status(cid)).peerMap
+    const pins = await getPins(cid, cluster, peerMap)
+
+    await createPsaPinRequest(dbClient, authKey, cid, { pins })
+    fileContentMap[cid] = fileContent
+  }, Promise.resolve())
+
+  return fileContentMap
+}
+
 describe('cron - pins backup', () => {
   let user, userId, authKey, dbClient, cluster, backup, rwPg, roPg
-  const files = [1, 2, 3]
-  const fileContentMap = {}
-  const cids = []
 
-  beforeEach(async () => {
+  before(async () => {
     dbClient = getDBClient(env)
     roPg = await getPg(env, 'ro')
     rwPg = await getPg(env, 'rw')
+    cluster = await getCluster(env)
+  })
+
+  beforeEach(async () => {
     backup = new Backup(env)
 
     user = await createUser(dbClient)
     userId = parseInt(user._id)
     authKey = parseInt(await createUserAuthKey(dbClient, userId))
-    cluster = await getCluster(env)
-
-    const cidsAdd = files.reduce(async (prev, file, i) => {
-      await prev
-      const fileContent = file.toString().repeat(10 * 1024) // 10KiB
-      const { car: carBody } = await createCar(fileContent)
-
-      const { cid } = await cluster.addCAR(carBody)
-
-      cids.push(cid)
-      await waitOkPins(cid, cluster, 5000, 500)
-      const peerMap = (await cluster.status(cid)).peerMap
-      const pins = await getPins(cid, cluster, peerMap)
-
-      await createPsaPinRequest(dbClient, authKey, cid, { pins })
-      fileContentMap[cid] = fileContent
-    }, Promise.resolve())
-    await cidsAdd
   })
 
   after(async () => {
@@ -81,7 +95,11 @@ describe('cron - pins backup', () => {
     await rwPg.end()
   })
 
-  it('should attempt to backup pins to S3', async () => {
+  it.only('should backup pins to S3', async () => {
+    // Create 3 files
+    const files = [1, 2, 3]
+    const fileContentMap = await createDagsAndRequests(files, authKey, cluster, dbClient)
+
     let res = await roPg.query('SELECT * FROM psa_pin_request')
     assert.strictEqual(res.rows.every(row => row.backup_urls.length === 0), true)
 
@@ -89,7 +107,7 @@ describe('cron - pins backup', () => {
     res = await roPg.query('SELECT * FROM psa_pin_request')
     assert.strictEqual(res.rows.every(row => row.backup_urls.length), true, 'Not all pin requests have a backup!')
     const s3 = getS3Client(env)
-    const objsGet = cids.map(async (cid) => {
+    const objsGet = Object.keys(fileContentMap).map(async (cid) => {
       return await s3.send(new GetObjectCommand({
         Bucket: env.S3_BUCKET_NAME,
         Key: `complete/${cid}.car`
@@ -111,10 +129,9 @@ describe('cron - pins backup', () => {
     await Promise.all(assertContents)
   })
 
-  it.only('should log if cid is not to be found and not save a backup url', async () => {
+  it('should not not save a backup url if cid does not exists on cluster', async () => {
     const hash = await sha256.digest(Buffer.from(`${Math.random()}`))
     const cid = CID.create(1, pb.code, hash).toString()
-    console.log(cid)
 
     const pinRequest = await createPsaPinRequest(dbClient, authKey, cid, {
       pins: pinsPinned

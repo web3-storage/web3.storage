@@ -118,12 +118,13 @@ export default class Backup {
     } catch (err) {
       if (err.name === 'NotFound') {
         this.log(`⏳ Uploading to ${url}`)
+
         const upload = new Upload({
           client: s3,
           params: {
             Bucket: bucketName,
             Key: key,
-            Body: Readable.from(bak.content),
+            Body: bak.content,
             Metadata: { structure: 'Complete' }
           }
         })
@@ -150,11 +151,8 @@ export default class Backup {
       for await (const pin of source) {
         const peer = peersList.find((peer) => peer.ipfs.id === pin.peer)
         if (peer) {
-          const { writer, out } = await CarWriter.create([pin.sourceCid])
-
-          // @ts-ignore BlockWriter is not an exported type
-          _this.ipfsDagExport(writer, pin.sourceCid, peer.ipfs.addresses[0], options)
-          yield { ...pin, content: out }
+          const content = await _this.ipfsDagExport(pin.sourceCid, peer.ipfs.addresses[0], options)
+          yield { ...pin, content }
         } else {
           _this.log(`🚨 Warning: ${pin.sourceCid} has not been found on cluster`)
           throw (new Error('Not on cluster'))
@@ -166,49 +164,56 @@ export default class Backup {
   /**
    * Export a CAR for the passed CID.
    *
-   * @param {import('@ipld/car').CarWriter} writer
    * @param {import('multiformats').CID} cid
    * @param {string} peer The IPFS peer that the CID is available on
    * @param {Object} [options]
    */
-  async ipfsDagExport (writer, cid, peer, options) {
-    const abortController = new TimeoutController(10_000)
-    let bytesReceived = 0
+  async ipfsDagExport (cid, peer, options) {
+    const { writer, out } = await CarWriter.create([cid])
+    const readableStream = Readable.from(out)
 
-    let reportInterval
-    const libp2p = await getLibp2p()
-    try {
-      const dagula = await Dagula.fromNetwork(libp2p, { peer })
-      let bytesTotal
+    // Do not need to await this.
+    ;(async () => {
+      const abortController = new TimeoutController(20_000)
+      let bytesReceived = 0
 
-      reportInterval = setInterval(() => {
-        const formattedTotal = bytesTotal ? this.fmt(bytesTotal) : 'unknown'
-        this.log(`ℹ️ CID: ${cid}. Received ${this.fmt(bytesReceived)} of ${formattedTotal} bytes`)
-      }, this.REPORT_INTERVAL)
+      let reportInterval
+      const libp2p = await getLibp2p()
+      try {
+        const dagula = await Dagula.fromNetwork(libp2p, { peer })
+        let bytesTotal
 
-      this.log(`⏳ Started reading dag ${cid}`)
+        reportInterval = setInterval(() => {
+          const formattedTotal = bytesTotal ? this.fmt(bytesTotal) : 'unknown'
+          this.log(`ℹ️ CID: ${cid}. Received ${this.fmt(bytesReceived)} of ${formattedTotal} bytes`)
+        }, this.REPORT_INTERVAL)
 
-      for await (const chunk of dagula.get(cid, {
-        signal: abortController.signal
-      })) {
-        abortController.reset()
-        bytesReceived += chunk.bytes.length
-        await writer.put(chunk)
+        this.log(`⏳ Started reading dag ${cid}`)
+
+        for await (const chunk of dagula.get(cid, {
+          signal: abortController.signal
+        })) {
+          abortController.reset()
+          bytesReceived += chunk.bytes.length
+          await writer.put(chunk)
+        }
+
+        this.log(`✅ Finished reading dag ${cid}. In total ${this.fmt(bytesReceived)}`)
+      } catch (err) {
+        this.log(`🚨 CID: ${cid} errored. Size of the dag is greater than ${bytesReceived} Bytes`)
+        readableStream.destroy(new Error('Dagula errored while reading'))
+        throw (err)
+      } finally {
+        if (bytesReceived > this.MAX_UPLOAD_DAG_SIZE) {
+          this.log(`⚠️ CID: ${cid} dag is greater than ${this.fmt(this.MAX_UPLOAD_DAG_SIZE)}`)
+        }
+        writer.close()
+        libp2p.stop()
+        clearInterval(reportInterval)
+        abortController.clear()
       }
-
-      this.log(`✅ Finished reading dag ${cid}`)
-    } catch (err) {
-      this.log(`🚨 CID: ${cid} errored. Size of the dag is greater than ${bytesReceived}`)
-      throw (err)
-    } finally {
-      if (bytesReceived > this.MAX_UPLOAD_DAG_SIZE) {
-        this.log(`⚠️ CID: ${cid} errored. Size of the dag is greater than ${bytesReceived}`)
-      }
-      writer.close()
-      libp2p.stop()
-      clearInterval(reportInterval)
-      abortController.clear()
-    }
+    })()
+    return readableStream
   }
 
   /**

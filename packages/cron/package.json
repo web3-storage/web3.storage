@@ -15,7 +15,7 @@
     "start:delete-remote-pins": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/delete-remote-pins.js",
     "start:names": "NODE_TLS_REJECT_UNAUTHORIZED=0 node src/bin/names.js",
     "test": "npm-run-all -p -r test:e2e",
-    "test:e2e": "mocha --require ./test/hooks.js test/*.spec.js --timeout 5000"
+    "test:e2e": "mocha --require ./test/hooks.js test/*.spec.js --timeout 10000"
   },
   "author": "Alan Shaw",
   "license": "(Apache-2.0 OR MIT)",
