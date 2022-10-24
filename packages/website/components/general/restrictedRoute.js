@@ -1,3 +1,5 @@
+import { stringify } from 'querystring';
+
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
@@ -11,6 +13,8 @@ import { useAuthorization } from 'components/contexts/authorizationContext';
  * @property {boolean} [isRestricted] whether or not this route is restricted to auhtenticated users
  * @property {string} [redirectTo] If redirectTo is set, redirect if the user was not found
  * @property {boolean} [redirectIfFound] If redirectIfFound is also set, redirect if the user was found.
+ * @property {boolean} [requiresAuth] If requiresAuth is set and redirectTo isn't set then,
+ *                                    redirect to the login page setting the return uri to this page
  */
 
 /**
@@ -20,12 +24,12 @@ import { useAuthorization } from 'components/contexts/authorizationContext';
  *
  * @returns
  */
-const RestrictedRoute = ({ isRestricted = false, children, redirectTo, redirectIfFound = false }) => {
-  const { push } = useRouter();
+const RestrictedRoute = ({ isRestricted = false, children, redirectTo, redirectIfFound = false, requiresAuth }) => {
+  const { push, asPath } = useRouter();
   const { isLoading, isFetching, isLoggedIn } = useAuthorization();
 
   useEffect(() => {
-    if (!redirectTo || isLoading || isFetching) {
+    if (!(redirectTo || requiresAuth) || isLoading || isFetching) {
       return;
     }
     if (
@@ -34,11 +38,13 @@ const RestrictedRoute = ({ isRestricted = false, children, redirectTo, redirectI
       // If redirectIfFound is also set, redirect if the user was found
       (redirectIfFound && isLoggedIn)
     ) {
-      push(redirectTo);
+      push(redirectTo ?? '');
+    } else if (requiresAuth && !isLoggedIn) {
+      push(`/login/?${stringify({ redirect_uri: asPath })}`);
     }
-  }, [redirectTo, redirectIfFound, isFetching, isLoading, isLoggedIn, push]);
+  }, [redirectTo, redirectIfFound, isFetching, isLoading, isLoggedIn, push, asPath, requiresAuth]);
 
-  const shouldWaitForLoggedIn = isRestricted && !isLoggedIn;
+  const shouldWaitForLoggedIn = (isRestricted || requiresAuth) && !isLoggedIn;
 
   return !shouldWaitForLoggedIn ? (
     children

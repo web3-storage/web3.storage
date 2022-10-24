@@ -108,6 +108,16 @@
   }
 }
 
+.delete-button {
+  @include fontWeight_Semibold;
+  color: $cyan;
+  transition: opacity $transitionDuration;
+  @include label_5;
+  &.disabled {
+    color: $gray600;
+  }
+}
+
 .billing-container {
   max-width: 64rem;
   margin: auto;

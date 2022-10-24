@@ -11,20 +11,29 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('/account/payment', () => {
   test('redirects through login and back when not initially authenticated', async ({ page }, testInfo) => {
-    const accountPaymentPathname = '/account/payment';
+    const accountPaymentPathname = '/account/payment/';
+    const accountQuery = '?plan=lite'
+    const accountUrl = `${accountPaymentPathname}${accountQuery}`;
+
     // try to go to page that requires authn
-    await page.goto(accountPaymentPathname, { waitUntil: 'networkidle' });
+    await page.goto(accountUrl, { waitUntil: 'networkidle' });
     // wait for redirect to a Log in page
     await page.locator('text=Log in').waitFor();
     const pageUrl = new URL(page.url());
+
     expect(pageUrl.pathname).toEqual('/login/');
-    expect(pageUrl.searchParams.get('redirect_uri')).toEqual(accountPaymentPathname);
+    expect(pageUrl.searchParams.get('redirect_uri')).toEqual(accountUrl);
     // fill login
     await LoginTester().login(page, {
       email: MAGIC_SUCCESS_EMAIL,
     });
+
+    console.log(`pathname: ${new URL(page.url()).pathname}`);
+    console.log(`search: ${new URL(page.url()).search}`);
+
     // should be back at our initial target destination
-    expect(new URL(page.url()).pathname).toEqual(accountPaymentPathname + '/');
+    expect(new URL(page.url()).pathname).toEqual(accountPaymentPathname);
+    expect(new URL(page.url()).search).toEqual(accountQuery);
     await page.screenshot({
       fullPage: true,
       path: await E2EScreenshotPath(testInfo, `accountPayment-noauth`),

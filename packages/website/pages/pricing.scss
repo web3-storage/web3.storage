@@ -15,6 +15,142 @@
   }
 }
 
+.enterprise-tier-inquiry {
+  position: fixed;
+  z-index: 9999;
+
+  .gradient-background-component.saturated-variant {
+    top: -2rem;
+    left: -2rem;
+    width: calc(100% + 4rem);
+    height: calc(100% + 4rem);
+    transform: scale(1.1);
+  }
+
+  .modalContainer {
+    z-index: 51;
+    position: absolute;
+    z-index: 9999;
+    max-width: calc($containerWidth - 10%);
+    font-size: 1rem;
+    @include borderRadius_Large;
+    @include medium {
+      width: 90%;
+    }
+  }
+
+  .modalClose {
+    color: $ebony;
+    font-size: 2rem;
+  }
+
+  .input-container {
+    margin-top: 50px;
+  }
+
+  label {
+    display: block;
+    line-height: 1.4;
+    font-size: 0.9rem;
+  }
+
+  textarea {
+    display: block;
+    width: 100%;
+    line-height: 1.5;
+    padding: 0.5rem;
+    border-radius: 4px;
+  }
+
+  svg {
+    color: $ebony;
+  }
+
+  .user-request-modal__container {
+    position: relative;
+    color: $ebony;
+    padding: 3.125rem 8.5rem 3.125rem 8.125rem;
+
+    @include medium {
+      padding: 2.375rem 1.3125rem;
+      width: 100%;
+    }
+
+    .kwes-form {
+      .fields {
+        display: grid;
+        width: 100%;
+        grid-template-columns: 100%;
+        grid-gap: 1rem;
+
+        @media screen and (min-width: 768px) {
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: auto;
+          grid-gap: 2rem 3rem;
+        }
+      }
+
+      .input-wrapper {
+        display: flex;
+        flex-direction: column;
+
+        &.full {
+          @media screen and (min-width: 768px) {
+            grid-column: span 2;
+          }
+        }
+      }
+
+      label {
+        line-height: 1.6;
+        font-size: 14px;
+        font-family: inherit;
+        margin: 4px 0px;
+      }
+
+      small {
+        margin: 0px;
+      }
+
+      input,
+      textarea {
+        padding: 10px 15px;
+        border-radius: 4px;
+        font-size: 1rem;
+      }
+
+      button {
+        min-width: 100px;
+        font-size: 1rem;
+        &:hover {
+          color: #000;
+        }
+      }
+
+      p {
+        max-width: 60ch;
+      }
+
+      .kw-alert {
+        background-color: transparent;
+        border: 1px solid;
+      }
+
+      .kw-alert-error {
+        border: 1px solid;
+        color: rgb(192, 111, 111);
+        background-color: transparent;
+        display: none;
+      }
+
+      .fields .kw-border-success,
+      .kw-alert-success {
+        border: 1px solid $malibu;
+      }
+    }
+  }
+}
+
 .sectional {
   padding: 6rem 0;
 }
@@ -563,15 +699,64 @@ li.pricing-bullet-3 {
   gap: 0 5rem;
 }
 
-@media only screen and (max-width: 1000px) {
-  #section_trusted_by_logos .wrapping-logos {
-    gap: 1rem 50rem;
+#section_trusted_by_logos .wrapping-logos.carousel {
+  display: flex;
+  flex-flow: row wrap;
+  max-width: 100%;
+}
+
+#section_trusted_by_logos .wrapping-logos-inner {
+  overflow: hidden;
+  position: relative;
+  --no-of-slides: 17;
+  --slides-in-view: 6;
+  --slide-width: 250px;
+  --iteration-time: 30s;
+  width: calc(2 * var(--no-of-slides));
+}
+
+#section_trusted_by_logos .wrapping-logos-images {
+  display: flex;
+  align-items: center;
+  width: calc(var(--slides-in-view) * var(--slide-width));
+}
+
+#section_trusted_by_logos .wrapping-logos-inner .image-block {
+  will-change: transform;
+  animation: translatestf var(--iteration-time) linear infinite forwards;
+  min-width: var(--slide-width);
+  max-width: var(--slide-width);
+  width: var(--slide-width);
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 50px;
+  box-sizing: border-box;
+}
+
+#section_trusted_by_logos .wrapping-logos-inner .image-block img {
+  border-radius: 5px;
+}
+
+@keyframes translatestf {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(calc(var(--slide-width) * var(--no-of-slides) * -1));
   }
 }
 
 #section_trusted_by_logos .image-block img {
   width: auto !important;
   height: auto !important;
+}
+#section_trusted_by_logos .image-block img[src$='.svg'] {
+  min-width: var(--slide-width);
+  max-width: var(--slide-width);
+  padding: 0 50px;
+  box-sizing: border-box;
 }
 
 // --------------------------------------------------------------- Section [FAQ]
@@ -620,4 +805,8 @@ li.pricing-bullet-3 {
     transform: rotate(-165deg);
     pointer-events: none;
   }
+}
+
+#section_testimonials {
+  color: white;
 }

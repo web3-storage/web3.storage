@@ -117,6 +117,19 @@ export class MagicTokenRequiredError extends HTTPError {
 }
 MagicTokenRequiredError.CODE = 'ERROR_MAGIC_TOKEN_REQUIRED'
 
+export class AgreementsRequiredError extends HTTPError {
+  /**
+   * @param {import("./utils/billing-types").Agreement[]} agreements
+   * @param {string} message
+   */
+  constructor (agreements, message = `Missing required agreements ${agreements.join(', ')}`) {
+    super(message, 400)
+    this.name = 'AgreementRequired'
+    this.code = AgreementsRequiredError.CODE
+  }
+}
+AgreementsRequiredError.CODE = 'AGREEMENTS_REQUIRED'
+
 export class InvalidCidError extends Error {
   /**
    * @param {string} cid

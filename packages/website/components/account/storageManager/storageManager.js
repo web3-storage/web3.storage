@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import filesz from 'filesize';
 import { useMemo, useEffect, useState, useRef } from 'react';
+import Link from 'next/link';
 
 import { useUser } from 'components/contexts/userContext';
 import { elementIsInViewport } from 'lib/utils';
@@ -8,6 +9,7 @@ import { usePayment } from '../../../hooks/use-payment';
 
 // Raw TiB number of bytes, to be used in calculations
 const tebibyte = 1099511627776;
+const gibibyte = 1073741824;
 const defaultStorageLimit = tebibyte;
 
 /**
@@ -25,12 +27,19 @@ const StorageManager = ({ className = '', content }) => {
   const {
     storageData: { data, isLoading },
   } = useUser();
+  const { currentPlan } = usePayment();
   const uploaded = useMemo(() => data?.usedStorage?.uploaded || 0, [data]);
   const psaPinned = useMemo(() => data?.usedStorage?.psaPinned || 0, [data]);
-  const limit = useMemo(() => data?.storageLimitBytes || defaultStorageLimit, [data]);
+  const limit = useMemo(() => {
+    if (currentPlan?.id === 'earlyAdopter') {
+      return data?.storageLimitBytes || defaultStorageLimit;
+    } else {
+      const byteConversion = currentPlan ? gibibyte * parseInt(currentPlan.baseStorage) : defaultStorageLimit;
+      return byteConversion;
+    }
+  }, [data, currentPlan]);
   const [componentInViewport, setComponentInViewport] = useState(false);
   const storageManagerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
-  const { currentPlan } = usePayment();
 
   const { maxSpaceLabel, percentUploaded, percentPinned } = useMemo(
     () => ({
@@ -85,6 +94,11 @@ const StorageManager = ({ className = '', content }) => {
 
   return (
     <div ref={storageManagerRef} className={clsx('section storage-manager-container', className)}>
+      <Link href={'account/payment'} passHref>
+        <a href={'account/payment'} className="storage-manager-payment-link">
+          Want more storage? Upgrade your plan here!
+        </a>
+      </Link>
       <h6>Your Plan: {currentPlan?.title}</h6>
       <div className="storage-manager-space">
         <div className="storage-manager-used">
