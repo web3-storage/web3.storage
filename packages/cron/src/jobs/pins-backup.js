@@ -14,6 +14,7 @@ import { CarWriter } from '@ipld/car'
 import fetch from '@web-std/fetch'
 import { FormData } from '@web-std/form-data'
 import { File, Blob } from '@web-std/file'
+import { TimeoutController } from 'timeout-abort-controller'
 
 Object.assign(global, { fetch, File, Blob, FormData })
 
@@ -173,10 +174,11 @@ export default class Backup {
    */
   async ipfsDagExport (writer, cid, peer, options) {
     const maxDagSize = options?.maxDagSize || this.MAX_DAG_SIZE
+    const abortController = new TimeoutController(10_000)
 
     let reportInterval
+    const libp2p = await getLibp2p()
     try {
-      const libp2p = await getLibp2p()
       const dagula = await Dagula.fromNetwork(libp2p, { peer })
       this.log('determining size...')
       let bytesReceived = 0
@@ -198,7 +200,10 @@ export default class Backup {
         this.log(`received ${this.fmt(bytesReceived)} of ${formattedTotal} bytes`)
       }, this.REPORT_INTERVAL)
 
-      for await (const chunk of dagula.get(cid)) {
+      for await (const chunk of dagula.get(cid, {
+        signal: abortController.signal
+      })) {
+        abortController.reset()
         bytesReceived += chunk.bytes.length
         this.log(`chunk: ${JSON.stringify(chunk.bytes)}`)
         writer.put(chunk)
@@ -210,7 +215,9 @@ export default class Backup {
       this.log(`Error: ${JSON.stringify(err)}`)
     } finally {
       writer.close()
+      libp2p.stop()
       clearInterval(reportInterval)
+      abortController.clear()
     }
   }
 
