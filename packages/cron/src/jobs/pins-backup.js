@@ -154,7 +154,7 @@ export default class Backup {
           const content = await _this.ipfsDagExport(pin.sourceCid, peer.ipfs.addresses[0], options)
           yield { ...pin, content }
         } else {
-          _this.log(`🚨 Warning: ${pin.sourceCid} has not been found on cluster`)
+          _this.log(`🚨 ${pin.sourceCid} has not been found on cluster`)
           throw (new Error('Not on cluster'))
         }
       }
