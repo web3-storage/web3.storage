@@ -5,11 +5,11 @@ description: Learn how to get an API token for using web3.storage programmatical
 
 import Callout from 'components/callout/callout';
 import Img from 'components/cloudflareImage';
-import ImgNoToken from '../../../public/images/docs/account-page-no-tokens.png';
-import ImgNameToken from '../../../public/images/docs/account-page-name-token.png';
-import ImgToken from '../../../public/images/docs/tokens-page.png';
-import ImgAccountMenu from '../../../public/images/docs/account-menu-create-token-desktop.png';
-import ImgAccountMenuMobile from '../../../public/images/docs/account-menu-create-token-mobile.png';
+import ImgNoToken from '../../../../public/images/docs/account-page-no-tokens.png';
+import ImgNameToken from '../../../../public/images/docs/account-page-name-token.png';
+import ImgToken from '../../../../public/images/docs/tokens-page.png';
+import ImgAccountMenu from '../../../../public/images/docs/account-menu-create-token-desktop.png';
+import ImgAccountMenuMobile from '../../../../public/images/docs/account-menu-create-token-mobile.png';
 
 # How to generate an API token
 
