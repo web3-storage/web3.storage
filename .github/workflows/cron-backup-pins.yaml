@@ -18,14 +18,14 @@ jobs:
         env: ['staging', 'production']
     concurrency: psa-pin-backup
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Checkout latest cron release tag
         run: |
           LATEST_TAG=$(git describe --tags --abbrev=0 --match='cron-*')
           git checkout $LATEST_TAG
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
       - uses: bahmutov/npm-install@v1
