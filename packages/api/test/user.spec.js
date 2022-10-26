@@ -33,7 +33,7 @@ describe('GET /user/account', () => {
     assert(res.ok)
     const data = await res.json()
     assert.strictEqual(data.usedStorage.uploaded, 32000)
-    assert.strictEqual(data.usedStorage.psaPinned, 10000)
+    assert.strictEqual(data.usedStorage.psaPinned, 710000)
   })
 })
 

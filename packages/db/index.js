@@ -6,7 +6,8 @@ import {
   normalizePins,
   normalizeDeals,
   normalizePsaPinRequest,
-  parseTextToNumber
+  parseTextToNumber,
+  safeNumber
 } from './utils.js'
 import { ConstraintError, DBError, RangeNotSatisfiableDBError } from './errors.js'
 
@@ -316,19 +317,28 @@ export class DBClient {
    * @returns {Promise<import('./db-client-types').StorageUsedOutput>}
    */
   async getStorageUsed (userId) {
-    /** @type {{ data: { uploaded: string, psa_pinned: string, total: string }, error: PostgrestError }} */
-    const { data, error } = await this._client
-      .rpc('user_used_storage', { query_user_id: userId })
-      .single()
+    const [userUploadedResponse, psaPinnedResponse] = await Promise.all([
+      this._client
+        .rpc('user_uploaded_storage', { query_user_id: userId })
+        .single(),
+      this._client
+        .rpc('user_psa_storage', { query_user_id: userId })
+        .single()
+    ])
 
-    if (error) {
-      throw new DBError(error)
+    if (userUploadedResponse.error) {
+      throw new DBError(userUploadedResponse.error)
+    } else if (psaPinnedResponse.error) {
+      throw new DBError(psaPinnedResponse.error)
     }
 
+    const uploaded = parseTextToNumber(userUploadedResponse.data)
+    const psaPinned = parseTextToNumber(psaPinnedResponse.data)
+
     return {
-      uploaded: parseTextToNumber(data.uploaded),
-      psaPinned: parseTextToNumber(data.psa_pinned),
-      total: parseTextToNumber(data.total)
+      uploaded,
+      psaPinned,
+      total: safeNumber(uploaded + psaPinned)
     }
   }
 
