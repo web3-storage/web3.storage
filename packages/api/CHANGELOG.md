@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.11.0](https://github.com/web3-storage/web3.storage/compare/api-v7.10.0...api-v7.11.0) (2022-10-27)
+
+
+### Features
+
+* add metadata to upload error reports ([#2070](https://github.com/web3-storage/web3.storage/issues/2070)) ([6d240b7](https://github.com/web3-storage/web3.storage/commit/6d240b78f69a32f406c0da92c9d4f352576fc2cb))
+
+
+### Other Changes
+
+* rm LINKDEX_URL from wrangler.toml ([#2023](https://github.com/web3-storage/web3.storage/issues/2023)) ([1341283](https://github.com/web3-storage/web3.storage/commit/13412839bd061bdb96b1f93ddd43d77ec34cc83d))
+
 ## [7.10.0](https://github.com/web3-storage/web3.storage/compare/api-v7.9.1...api-v7.10.0) (2022-10-23)
 
 
