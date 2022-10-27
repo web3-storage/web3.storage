@@ -27,7 +27,7 @@ npm start -w packages/api
 If it's your first run you need to [create the database schema](../db/README.md).
 
 ```sh
-# init the db. Run me once after `npm start`, on first set up.
+# init the db. Run me once after `npm start`, on first set up:
 npm run load-schema -w packages/db
 ```
 
