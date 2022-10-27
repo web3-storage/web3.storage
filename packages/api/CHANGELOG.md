@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.11.2](https://github.com/web3-storage/web3.storage/compare/api-v7.11.1...api-v7.11.2) (2022-10-27)
+
+
+### Bug Fixes
+
+* dummy commit ([29f7751](https://github.com/web3-storage/web3.storage/commit/29f775105e65410be90c281517f4372c1e0ab45d))
+
 ## [7.11.1](https://github.com/web3-storage/web3.storage/compare/api-v7.11.0...api-v7.11.1) (2022-10-27)
 
 
