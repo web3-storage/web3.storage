@@ -1,5 +1,38 @@
 # Changelog
 
+## [7.10.0](https://github.com/web3-storage/web3.storage/compare/api-v7.9.1...api-v7.10.0) (2022-10-23)
+
+
+### Features
+
+* log terms of service acceptance ([#2028](https://github.com/web3-storage/web3.storage/issues/2028)) ([47c3540](https://github.com/web3-storage/web3.storage/commit/47c35400ae97e45d07d55e723355f139376233e6))
+
+## [7.9.1](https://github.com/web3-storage/web3.storage/compare/api-v7.9.0...api-v7.9.1) (2022-10-18)
+
+
+### Bug Fixes
+
+* issue with logging user being set to different value than underlying user.id bigint::text ([#2042](https://github.com/web3-storage/web3.storage/issues/2042)) ([9659ab0](https://github.com/web3-storage/web3.storage/commit/9659ab08bb99dbb1b42f7591488263a7cb0aaf1c))
+* update toucan-js and move to deps ([#2045](https://github.com/web3-storage/web3.storage/issues/2045)) ([9de591d](https://github.com/web3-storage/web3.storage/commit/9de591dcb13c04a32626505c9c1152adbc003d61))
+
+
+### Other Changes
+
+* use db ids > JS MAX_SAFE_INTEGER in test ([#2020](https://github.com/web3-storage/web3.storage/issues/2020)) ([6103e99](https://github.com/web3-storage/web3.storage/commit/6103e9954c2fa0ffb75b0f53e7eaa21812c924c4))
+
+## [7.9.0](https://github.com/web3-storage/web3.storage/compare/api-v7.8.3...api-v7.9.0) (2022-10-17)
+
+
+### Features
+
+* add SATNAV and DUDEWHERE index buckets ([#2035](https://github.com/web3-storage/web3.storage/issues/2035)) ([20243bb](https://github.com/web3-storage/web3.storage/commit/20243bb3a132d274b1c3c275e41021f31d8392e6))
+* display name and email in stripe ([#2010](https://github.com/web3-storage/web3.storage/issues/2010)) ([41c385a](https://github.com/web3-storage/web3.storage/commit/41c385a6d4ecdee40e599b1821de2b197b11cde0))
+
+
+### Other Changes
+
+* improve error handling upload script ([#1968](https://github.com/web3-storage/web3.storage/issues/1968)) ([a5e2373](https://github.com/web3-storage/web3.storage/commit/a5e2373a111fd57be84b6c2bf4ccb12500de4b0c)), closes [#1922](https://github.com/web3-storage/web3.storage/issues/1922)
+
 ## [7.8.3](https://github.com/web3-storage/web3.storage/compare/api-v7.8.2...api-v7.8.3) (2022-10-10)
 
 

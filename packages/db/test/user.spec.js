@@ -213,4 +213,11 @@ describe('user operations', () => {
     const thirdUsedStorage = await client.getStorageUsed(user._id)
     assert.strictEqual(thirdUsedStorage.uploaded, dagSize1, 'used storage with only first upload again')
   })
+
+  it('can createUserAgreement of web3.storage terms of service', async () => {
+    const agreement = /** @type {const} */ ('web3.storage-tos-v1')
+    await client.createUserAgreement(user._id, agreement)
+    // can create a second time. it will append another record of the second agreement with its own timestamp
+    await client.createUserAgreement(user._id, agreement)
+  })
 })

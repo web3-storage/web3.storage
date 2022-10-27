@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import Img from 'components/cloudflareImage.js';
 import GradientBackground from 'components/gradientbackground/gradientbackground.js';
 import Scroll2Top from 'components/scroll2top/scroll2top.js';
@@ -10,6 +12,28 @@ import BlobCluster from 'public/images/illustrations/blob-cluster.png';
 import Cluster1 from 'public/images/index/cluster-1.png';
 import Button from 'ZeroComponents/button/button';
 import GeneralPageData from '../content/pages/general.json';
+import EnterpriseTierRequestModal from 'components/enterpriseTierRequestModal/enterpriseTierRequestModal';
+import CardListBlock from 'components/cardlistblock/cardlistblock';
+
+const logos = [
+  { src: 'nft-storage.png', alt: 'NFT Storage' },
+  { src: 'protocol-labs-logo-black.svg', alt: 'Protocol Labs' },
+  { src: 'filecoin.png', alt: 'Filecoin' },
+  { src: 'fileverse.png', alt: 'Fileverse' },
+  { src: '3sStudio.png', alt: '3sStudio' },
+  { src: 'glitter.png', alt: 'Glitter' },
+  { src: 'fleek.png', alt: 'Fleek' },
+  { src: 'pollinationsai.png', alt: 'Pollinations AI' },
+  { src: 'opensea.png', alt: 'OpenSea' },
+  { src: 'magic-eden.png', alt: 'magic eden' },
+  { src: 'rarible.svg', alt: 'Rarible' },
+  { src: 'NFTPort.png', alt: 'NFTPort' },
+  { src: 'metaplex.png', alt: 'Metaplex' },
+  { src: 'project-galaxy.png', alt: 'Project Galaxy' },
+  { src: 'tatum.png', alt: 'Tatum' },
+  { src: 'teia.png', alt: 'Teia' },
+  { src: 'holaplex.svg', alt: 'Holaplex' },
+];
 
 const PricingHeader = () => (
   <>
@@ -53,18 +77,21 @@ const PricingHeader = () => (
     </section>
     <section id="section_trusted_by_logos" className="sectional">
       <div className="grid-middle">
-        <div className="wrapping-logos">
-          <div className="block image-block">
-            <Img src="/images/logos/nft-storage.svg" alt="NFT Storage" />
-            <div className="image-label"></div>
-          </div>
-          <div className="block image-block">
-            <Img src="/images/logos/protocol-labs.svg" alt="Protocol Labs" />
-            <div className="image-label"></div>
-          </div>
-          <div className="block image-block">
-            <Img src="/images/logos/filecoin.svg" alt="Filecoin" />
-            <div className="image-label"></div>
+        <div className="wrapping-logos carousel">
+          <div className="wrapping-logos-inner">
+            <div className="wrapping-logos-images">
+              {logos.map(logo => (
+                <div key={logo.alt} className="block image-block">
+                  <Img src={`/images/logos/${logo.src}`} alt={logo.alt} layout="fill" />
+                </div>
+              ))}
+              {/* repeat the set for continous css-only scroll */}
+              {logos.map(logo => (
+                <div key={logo.alt} className="block image-block">
+                  <Img src={`/images/logos/${logo.src}`} alt={logo.alt} layout="fill" />
+                </div>
+              ))}
+            </div>
           </div>
           <div id="intro_1-triangle_left">
             <Img alt="" src={ImageTriangle1} />
@@ -108,96 +135,107 @@ const Card = props => {
   );
 };
 
-const PricingTiers = () => (
-  <>
-    <section id="section_plan_cards" className="sectional">
-      <div className="grid-middle">
-        <div>
-          <div className="column-content">
-            <Card
-              title="Free"
-              price="$0"
-              storageAllocation="5GiB storage"
-              storageOverageRate=""
-              callToAction="GET STARTED"
-              callToActionUrl="/account/payment?plan=free"
-            >
-              <li className="pricing-bullet-1">Easily store your data and make it available on IPFS</li>
-              <li className="pricing-bullet-2">
-                All data is replicated onto the Filecoin storage network for verifiability that your data is safe
-              </li>
-              <li className="pricing-bullet-3">
-                Use the platform&apos;s other services like w3name and w3link to build the next generation of apps
-              </li>
-            </Card>
+const PricingTiers = () => {
+  const [isEnterpriseRequestModelOpen, setIsEnterpriseRequestModelOpen] = useState(false);
 
-            <Card
-              title="Lite"
-              price="$3"
-              storageAllocation="15GiB storage"
-              storageOverageRate="+ $0.20/mo per additional GiB"
-              callToAction="CHOOSE THIS PLAN"
-              callToActionUrl="/account/payment?plan=lite"
-            >
-              <li className="pricing-bullet-1">
-                <i>Everything from the Free tier, plus...</i>
-              </li>
-              <li className="pricing-bullet-2">
-                Additional storage for personal usage or projects requiring lower data volumes
-              </li>
-            </Card>
+  return (
+    <>
+      <section id="section_plan_cards" className="sectional">
+        <div className="grid-middle">
+          <div>
+            <div className="column-content">
+              <Card
+                title="Free"
+                price="$0"
+                storageAllocation="5GiB storage"
+                storageOverageRate=""
+                callToAction="GET STARTED"
+                callToActionUrl="/account/payment?plan=free"
+              >
+                <li className="pricing-bullet-1">Easily store your data and make it available on IPFS</li>
+                <li className="pricing-bullet-2">
+                  All data is replicated onto the Filecoin storage network for verifiability that your data is safe
+                </li>
+                <li className="pricing-bullet-3">
+                  Use the platform&apos;s other services like w3name and w3link to build the next generation of apps
+                </li>
+              </Card>
 
-            <Card
-              title="Expert"
-              price="$10"
-              isBestValue={true}
-              storageAllocation="60GiB storage"
-              storageOverageRate="+ $0.17/mo per additional GiB"
-              callToAction="CHOOSE THIS PLAN"
-              callToActionUrl="/account/payment?plan=pro"
-            >
-              <li className="pricing-bullet-1">
-                <i>Everything from the Lite tier, plus...</i>
-              </li>
-              <li className="pricing-bullet-2">
-                Our lowest tier price per GiB stored for use cases that require scale
-              </li>
-              <li className="pricing-bullet-3">Early access to additional products that make web3 production-ready</li>
-            </Card>
+              <Card
+                title="Lite"
+                price="$3"
+                storageAllocation="30GiB storage"
+                storageOverageRate="+ $0.10/mo per additional GiB"
+                callToAction="CHOOSE THIS PLAN"
+                callToActionUrl="/account/payment?plan=lite"
+              >
+                <li className="pricing-bullet-1">
+                  <i>Everything from the Free tier, plus...</i>
+                </li>
+                <li className="pricing-bullet-2">
+                  Additional storage for personal usage or projects requiring lower data volumes
+                </li>
+              </Card>
+
+              <Card
+                title="Expert"
+                price="$10"
+                isBestValue={true}
+                storageAllocation="120GiB storage"
+                storageOverageRate="+ $0.08/mo per additional GiB"
+                callToAction="CHOOSE THIS PLAN"
+                callToActionUrl="/account/payment?plan=pro"
+              >
+                <li className="pricing-bullet-1">
+                  <i>Everything from the Lite tier, plus...</i>
+                </li>
+                <li className="pricing-bullet-2">
+                  Our lowest tier price per GiB stored for use cases that require scale
+                </li>
+                <li className="pricing-bullet-3">
+                  Early access to additional products that make web3 production-ready
+                </li>
+              </Card>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="grid-middle">
-        <div className="col-12_sm-12_mi-12_ti-12 column-1">
-          <div className="column-content">
-            <div className="pricing-enterprise-users">
-              <div className="enterprise-blob">
-                <Img alt="" src={BlobCluster} />
-              </div>
-              <div className="enterprise-content">
-                <div className="enterprise-title">FOR ENTERPRISE USERS...</div>
-                <div className="enterprise-heading">Custom</div>
-                <div className="enterprise-description">
-                  Looking for way more? Anticipate having a complex integration? Just tell us more about your company
-                  and what you&apos;re building using the form below, and we&apos;ll get back to you shortly.
+        <div className="grid-middle">
+          <div className="col-12_sm-12_mi-12_ti-12 column-1">
+            <div className="column-content">
+              <div className="pricing-enterprise-users">
+                <div className="enterprise-blob">
+                  <Img alt="" src={BlobCluster} />
                 </div>
-                <div className="enterprise-above-call-to-action"></div>
-                <div>
-                  <Button
-                    className="button outline-light enterprise-call-to-action"
-                    href="mailto:support@web3.storage?subject=Enterprise%20Tier%20Inquiry&body=-%20Please%20share%20your%20email%20address.%0D%0A%0D%0A%0D%0A-%20Please%20share%20links%20(Github%2C%20website%2C%20etc)%20for%20what%20you%E2%80%99re%20building.%0D%0A%0D%0A%0D%0A-%20Please%20provide%20a%20ballpark%20estimate%20for%20your%20data%20volume%20(both%20in%20aggregate%20and%20over%20a%20given%20month).%0D%0A%0D%0A%0D%0A-%20How%20do%20you%20plan%20on%20reading%20data%20uploaded%20to%20%5Bweb3.storage%5D(http%3A%2F%2Fweb3.storage)%20(E.g.%2C%20w3link%20gateway%2C%20other%20gateway%2C%20directly%20over%20bitswap%2C%20etc.)%3F%20How%20frequently%20do%20you%20plan%20on%20reading%20data%3F%0D%0A%0D%0A%0D%0A-%20Is%20there%20any%20additional%20usage%20information%20we%20should%20know%20about%3F%0D%0A%0D%0A"
-                  >
-                    LET&apos;S CHAT
-                  </Button>
+                <div className="enterprise-content">
+                  <div className="enterprise-title">FOR ENTERPRISE USERS...</div>
+                  <div className="enterprise-heading">Custom</div>
+                  <div className="enterprise-description">
+                    Looking for way more? Anticipate having a complex integration? Just tell us more about your company
+                    and what you&apos;re building using the form below, and we&apos;ll get back to you shortly.
+                  </div>
+                  <div className="enterprise-above-call-to-action"></div>
+                  <div>
+                    <Button
+                      onClick={() => setIsEnterpriseRequestModelOpen(true)}
+                      className="button outline-light enterprise-call-to-action"
+                    >
+                      LET&apos;S CHAT
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  </>
-);
+
+        <EnterpriseTierRequestModal
+          isOpen={isEnterpriseRequestModelOpen}
+          onClose={() => setIsEnterpriseRequestModelOpen(false)}
+        />
+      </section>
+    </>
+  );
+};
 
 const FaqSection = () => (
   <>
@@ -251,6 +289,50 @@ const FaqSection = () => (
                   READ MORE
                 </Button>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="section_testimonials" className="sectional">
+        <div className="grid">
+          <div className="col-12 column-1">
+            <div className="column-content">
+              <CardListBlock
+                block={{
+                  direction: 'row',
+                  gap: '1',
+                  cards: [
+                    {
+                      type: 'C',
+                      action: 'link',
+                      url: '//glitterprotocol.io/',
+                      image: '/images/index/testimonial-ted-l.jpg',
+                      title: 'Ted L.',
+                      subtitle: 'CEO, Glitter Protocol',
+                      description:
+                        'We’ve used web3.storage to store dozens of terabytes of data, make it available on IPFS, and back it up on Filecoin decentralized storage. We would not have been able to index and content address this level of data volume so easily without it.',
+                    },
+                    {
+                      type: 'C',
+                      image: '/images/index/testimonial-ryan-w.jpg',
+                      title: 'Ryan W.',
+                      subtitle: 'Developer, Cape Town',
+                      description:
+                        "I work pretty much exclusively on Web3 applications, and I'm really impressed with web3.storage. It's almost too easy - I didn't run into any stumbling blocks and had a basic implementation of my project in 30 minutes.",
+                    },
+                    {
+                      type: 'C',
+                      action: 'link',
+                      url: '//galacticpunks.io',
+                      image: '/images/index/testimonial-frank-j.jpg',
+                      title: 'Frank J.',
+                      subtitle: 'Developer, Toronto',
+                      description:
+                        "web3.storage was so simple to hook into, and does what you need it to do. We run the <span className='description-link'>Galactic Punks</span> community on Terra, and it is great for storing off-chain data. It's like simplified S3 for IPFS.",
+                    },
+                  ],
+                }}
+              />
             </div>
           </div>
         </div>

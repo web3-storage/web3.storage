@@ -42,7 +42,7 @@ export interface Customer {
 }
 
 export interface CustomersService {
-  getOrCreateForUser(user: BillingUser): Promise<Customer>
+  getOrCreateForUser(user: BillingUser, userCreationOptions?: UserCreationOptions): Promise<Customer>
 }
 
 export type StoragePriceName = 'free' | 'lite' | 'pro'
@@ -91,14 +91,46 @@ export interface BillingEnv {
   billing: BillingService
   customers: CustomersService
   subscriptions: SubscriptionsService
+  agreements: AgreementService
 }
 
 export type PaymentSettings = {
   paymentMethod: null | PaymentMethod
   subscription: W3PlatformSubscription
+  agreement?: Agreement
 }
 
 export interface UserCustomerService {
   getUserCustomer: (userId: string) => Promise<null|{ id: string }>
   upsertUserCustomer: (userId: string, customerId: string) => Promise<void>
 }
+
+export interface AgreementService {
+  createUserAgreement: (userId: string, agreement: Agreement) => Promise<void>
+}
+
+export interface UserCreationOptions {
+  email?: string
+  name?: string
+}
+
+export type Agreement = 'web3.storage-tos-v1'
+
+/**
+ * Command instructing system to update the web3.storage subscription for a user
+ */
+export interface UpdateSubscriptionCommand {
+  agreement: Agreement
+  paymentMethod: Pick<PaymentMethod, 'id'>
+  subscription: W3PlatformSubscription
+}
+
+/**
+ * Command instructing system to update the default paymentMethod for a user.
+ * It will not update the payment method of old subscriptions.
+ */
+export interface UpdateDefaultPaymentMethodCommand {
+  paymentMethod: Pick<PaymentMethod, 'id'>
+}
+
+export type SavePaymentSettingsCommand = UpdateSubscriptionCommand | UpdateDefaultPaymentMethodCommand

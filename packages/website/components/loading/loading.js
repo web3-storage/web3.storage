@@ -24,8 +24,7 @@ export const SpinnerColor = {
  */
 const Loading = ({ className, size, color, message }) => (
   <div
-    className={clsx({
-      className,
+    className={clsx(className, {
       [styles.loading]: true,
       [styles.message]: message,
     })}

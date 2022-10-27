@@ -2,6 +2,8 @@
  * @fileoverview Account Payment Settings
  */
 
+import { parse as queryParse } from 'querystring';
+
 import { useState, useEffect, useMemo } from 'react';
 import { Elements, ElementsConsumer } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
@@ -15,6 +17,7 @@ import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/
 import { earlyAdopterPlan, plans, plansEarly } from '../../components/contexts/plansContext';
 import { userBillingSettings } from '../../lib/api';
 import GeneralPageData from '../../content/pages/general.json';
+import constants from '../../lib/constants.js';
 
 /**
  * @typedef {import('../../components/contexts/plansContext').Plan} Plan
@@ -45,18 +48,35 @@ import GeneralPageData from '../../content/pages/general.json';
  * @property {PaymentMethodCard} card
  */
 
+function removePlanQueryParam() {
+  window.history.pushState({}, '', window.location.href.replace(/plan=[^&]+&?/, ''));
+}
+
 const PaymentSettingsPage = props => {
+  const planQueryParam = queryParse(window.location.search.substring(1))?.plan;
   const [isPaymentPlanModalOpen, setIsPaymentPlanModalOpen] = useState(false);
   const stripePromise = loadStripe(props.stripePublishableKey);
   const [needsFetchPaymentSettings, setNeedsFetchPaymentSettings] = useState(true);
   const [, setIsFetchingPaymentSettings] = useState(false);
   const [paymentSettings, setPaymentSettings] = useState(/** @type {undefined|PaymentSettings} */ (undefined));
-  const [planSelection, setPlanSelection] = useState('');
+  const [planSelection, setPlanSelection] = useState(/** @type {Plan|undefined} */ (undefined));
   const [editingPaymentMethod, setEditingPaymentMethod] = useState(false);
   // subcomponents that save a new plan can set this, which will trigger a re-fetch but the
   // ui can optimistically show the new value while the refetch happens.
   const [optimisticCurrentPlan, setOptimisticCurrentPlan] = useState(/** @type {Plan|undefined} */ (undefined));
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
+
+  useEffect(() => {
+    if (planQueryParam) {
+      const desiredPlanFromQueryParam = plans.find(plan => plan.id === planQueryParam);
+      if (desiredPlanFromQueryParam) {
+        setPlanSelection(desiredPlanFromQueryParam);
+        setIsPaymentPlanModalOpen(true);
+      } else {
+        removePlanQueryParam();
+      }
+    }
+  }, [planQueryParam]);
 
   // fetch payment settings whenever needed
   useEffect(() => {
@@ -67,7 +87,7 @@ const PaymentSettingsPage = props => {
       setIsFetchingPaymentSettings(true);
       setNeedsFetchPaymentSettings(false);
       try {
-        setPaymentSettings(await userBillingSettings());
+        setPaymentSettings(await userBillingSettings(constants.TERMS_OF_SERVICE_VERSION));
         setOptimisticCurrentPlan(undefined); // no longer use previous optimistic value
       } finally {
         setIsFetchingPaymentSettings(false);
@@ -113,7 +133,6 @@ const PaymentSettingsPage = props => {
       return plan.id === storageSubscription.price;
     });
   }, [planList, paymentSettings, optimisticCurrentPlan]);
-
   const savedPaymentMethod = useMemo(() => {
     return paymentSettings?.paymentMethod;
   }, [paymentSettings]);
@@ -182,22 +201,29 @@ const PaymentSettingsPage = props => {
             </div>
           </div>
         </div>
-        <AccountPlansModal
-          isOpen={isPaymentPlanModalOpen}
-          onClose={() => {
-            setIsPaymentPlanModalOpen(false);
-            setHasAcceptedTerms(false);
-          }}
-          planList={planList}
-          planSelection={planSelection}
-          setCurrentPlan={setOptimisticCurrentPlan}
-          savedPaymentMethod={savedPaymentMethod}
-          stripePromise={stripePromise}
-          setHasPaymentMethods={() => setNeedsFetchPaymentSettings(true)}
-          setEditingPaymentMethod={setEditingPaymentMethod}
-          setHasAcceptedTerms={setHasAcceptedTerms}
-          hasAcceptedTerms={hasAcceptedTerms}
-        />
+        {planSelection && (
+          <>
+            <AccountPlansModal
+              isOpen={isPaymentPlanModalOpen}
+              onClose={() => {
+                setIsPaymentPlanModalOpen(false);
+                setHasAcceptedTerms(false);
+                if (planQueryParam) {
+                  removePlanQueryParam();
+                }
+              }}
+              planList={planList}
+              planSelection={planSelection}
+              setCurrentPlan={setOptimisticCurrentPlan}
+              savedPaymentMethod={savedPaymentMethod}
+              stripePromise={stripePromise}
+              setHasPaymentMethods={() => setNeedsFetchPaymentSettings(true)}
+              setEditingPaymentMethod={setEditingPaymentMethod}
+              setHasAcceptedTerms={setHasAcceptedTerms}
+              hasAcceptedTerms={hasAcceptedTerms}
+            />
+          </>
+        )}
       </>
     </>
   );
@@ -218,8 +244,7 @@ export function getStaticProps() {
   return {
     props: {
       title: 'Payment',
-      isRestricted: true,
-      redirectTo: '/login/?redirect_uri=/account/payment',
+      requiresAuth: true,
       stripePublishableKey,
       breadcrumbs: [crumbs.index, crumbs.payment],
     },

@@ -34,7 +34,7 @@ export function withMagicToken (handler) {
       // @ts-ignore
       request.auth = { user: magicUser, userTags }
       // If env.log is not set, then the middlewares may be being run in the wrong order
-      env.log.setUser({ id: parseInt(magicUser._id) })
+      env.log.setUser({ id: magicUser._id })
       return handler(request, env, ctx)
     }
 
@@ -66,7 +66,7 @@ export function withApiOrMagicToken (handler) {
         userTags
       }
       // If env.log is not set, then the middlewares may be being run in the wrong order
-      env.log.setUser({ id: parseInt(magicUser._id) })
+      env.log.setUser({ id: magicUser._id })
       return handler(request, env, ctx)
     }
 

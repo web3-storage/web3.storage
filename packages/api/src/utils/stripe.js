@@ -157,6 +157,10 @@ export function stripeToStripeCardPaymentMethod (paymentMethod) {
  */
 
 /**
+ * @typedef {import('./billing-types').AgreementService} AgreementService
+ */
+
+/**
  * A CustomersService that uses stripe.com for storage
  */
 export class StripeCustomersService {
@@ -183,15 +187,18 @@ export class StripeCustomersService {
 
   /**
    * @param {import('./billing-types').BillingUser} user
+   * @param {import('./billing-types').UserCreationOptions} [options]
    * @returns {Promise<Customer>}
    */
-  async getOrCreateForUser (user) {
+  async getOrCreateForUser (user, options) {
     const existingCustomer = await this.userCustomerService.getUserCustomer(user.id.toString())
     if (existingCustomer) return existingCustomer
     const createdCustomer = await this.stripe.customers.create({
       metadata: {
         'web3.storage/user.id': user.id
-      }
+      },
+      name: options?.name,
+      email: options?.email
     })
     await this.userCustomerService.upsertUserCustomer(user.id.toString(), createdCustomer.id)
     return createdCustomer
@@ -390,7 +397,7 @@ export function createMockStripeCustomer (options = {}) {
  * Otherwise the mock implementations will be used.
  * @param {object} env
  * @param {string} env.STRIPE_SECRET_KEY
- * @param {Pick<DBClient, 'upsertUserCustomer'|'getUserCustomer'>} env.db
+ * @param {Pick<DBClient, 'upsertUserCustomer'|'getUserCustomer'|'createUserAgreement'>} env.db
  * @returns {import('./billing-types').BillingEnv}
  */
 export function createStripeBillingContext (env) {
@@ -409,6 +416,10 @@ export function createStripeBillingContext (env) {
     getUserCustomer: env.db.getUserCustomer.bind(env.db)
   }
   const customers = StripeCustomersService.create(stripe, userCustomerService)
+  /** @type {AgreementService} */
+  const agreements = {
+    createUserAgreement: env.db.createUserAgreement.bind(env.db)
+  }
   // attempt to get stripe price IDs from env vars
   let stripePrices
   try {
@@ -424,6 +435,7 @@ export function createStripeBillingContext (env) {
   }
   const subscriptions = StripeSubscriptionsService.create(stripe, stripePrices)
   return {
+    agreements,
     billing,
     customers,
     subscriptions

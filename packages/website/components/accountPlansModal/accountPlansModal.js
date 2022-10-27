@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 
 import Loading from '../../components/loading/loading.js';
@@ -7,35 +7,19 @@ import CurrentBillingPlanCard from '../../components/account/currentBillingPlanC
 import Modal from '../../modules/zero/components/modal/modal';
 import CloseIcon from '../../assets/icons/close';
 import AddPaymentMethodForm from '../../components/account/addPaymentMethodForm/addPaymentMethodForm.js';
-import { API, getToken } from '../../lib/api';
+import { isW3STermsOfServiceAgreement, tosAgreementVersions, userBillingSettings } from '../../lib/api';
 
-export async function putUserPayment(pm_id, plan_id) {
-  const storage = plan_id ? { price: plan_id } : null;
-  const paymentSettings = {
-    paymentMethod: { id: pm_id },
-    subscription: { storage: storage },
-  };
-  const res = await fetch(API + '/user/payment', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + (await getToken()),
-    },
-    body: JSON.stringify(paymentSettings),
-  });
-  if (!res.ok) {
-    throw new Error(`failed to get storage info: ${await res.text()}`);
-  }
-
-  return res.json();
-}
+/**
+ *
+ * @typedef {import('../../components/contexts/plansContext').Plan} Plan
+ */
 
 /**
  * @param {object} obj
  * @param {any} obj.isOpen
  * @param {any} obj.onClose
- * @param {any} obj.planSelection
- * @param {any} obj.planList
+ * @param {import('components/contexts/plansContext.js').Plan} obj.planSelection
+ * @param {import('components/contexts/plansContext.js').Plan[]} obj.planList
  * @param {any} obj.stripePromise
  * @param {any} obj.setCurrentPlan
  * @param {any} obj.savedPaymentMethod
@@ -59,6 +43,31 @@ const AccountPlansModal = ({
 }) => {
   const [isCreatingSub, setIsCreatingSub] = useState(false);
   const currentPlan = planList.find(p => p.id === planSelection.id);
+  const [consentedTosAgreement, setConsentedTosAgreement] = useState(
+    /** @type {import('../../lib/api').W3STermsOfServiceAgreement|null} */ (null)
+  );
+  // onChange handler for checkbox for terms of service agreement
+  const onTosAgreementCheckboxChange = useCallback(
+    /**
+     * When user clicks the tos agreement checkbox, update state indicating which agreement they consented to.
+     * Checkbox specifies agreement in data-agreement attribute;
+     * @param {import('react').ChangeEvent<HTMLInputElement>} event
+     */
+    event => {
+      setHasAcceptedTerms(!hasAcceptedTerms);
+      const probablyTosAgreement = event.target.dataset.agreement;
+      if (event.target.checked) {
+        if (isW3STermsOfServiceAgreement(probablyTosAgreement)) {
+          setConsentedTosAgreement(probablyTosAgreement);
+        } else {
+          throw new Error(`unexpected agreement value for terms checkbox: ${probablyTosAgreement}`);
+        }
+      } else {
+        setConsentedTosAgreement(null);
+      }
+    },
+    [hasAcceptedTerms, setHasAcceptedTerms, setConsentedTosAgreement]
+  );
   return (
     <div className="account-plans-modal">
       <Modal
@@ -75,6 +84,7 @@ const AccountPlansModal = ({
               <AddPaymentMethodForm
                 setHasPaymentMethods={setHasPaymentMethods}
                 setEditingPaymentMethod={setEditingPaymentMethod}
+                currentPlan={currentPlan?.id}
               />
             </Elements>
           </div>
@@ -86,7 +96,9 @@ const AccountPlansModal = ({
               type="checkbox"
               id="agreeTerms"
               checked={hasAcceptedTerms}
-              onChange={() => setHasAcceptedTerms(!hasAcceptedTerms)}
+              // agreement that this checkbox indicates consenting to
+              data-agreement={tosAgreementVersions[1]}
+              onChange={onTosAgreementCheckboxChange}
             />
             <label htmlFor="agreeTerms">
               I have read and agree to the{' '}
@@ -103,7 +115,16 @@ const AccountPlansModal = ({
             disabled={!savedPaymentMethod || isCreatingSub || !hasAcceptedTerms}
             onClick={async () => {
               setIsCreatingSub(true);
-              await putUserPayment(savedPaymentMethod.id, currentPlan.id);
+              if (!isW3STermsOfServiceAgreement(consentedTosAgreement)) {
+                throw new Error('Change plan modal form submitted without required tos agreement');
+              }
+              if (typeof currentPlan === 'undefined') {
+                throw new Error('Change plan modal form submitted without selected plan');
+              }
+              if (currentPlan.id === 'earlyAdopter') {
+                throw new Error('Change plan modal form submitted with early adopter plan, but it must be a paid plan');
+              }
+              await userBillingSettings(consentedTosAgreement, savedPaymentMethod.id, { price: currentPlan.id });
               await setCurrentPlan(currentPlan);
               setIsCreatingSub(false);
               onClose();

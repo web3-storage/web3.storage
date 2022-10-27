@@ -1296,6 +1296,25 @@ export class DBClient {
   }
 
   /**
+   * @param {string} userId
+   * @param {import('./db-client-types').AgreementKind} agreement
+   * @returns {Promise<void>}
+   */
+  async createUserAgreement (userId, agreement) {
+    const { error } = await this._client
+      .from('agreement')
+      .insert({
+        user_id: userId,
+        agreement
+      })
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+  }
+
+  /**
    * Get the Customer for a user
    * @param {string} userId
    * @returns {null|{ id: string }} customer

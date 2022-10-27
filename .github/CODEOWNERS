@@ -1,0 +1,9 @@
+# Each line represents a rule, followed by a list of members.
+# These members are the default owners for all files that match the specified pattern.
+# The pattern generally follows the same syntax used for .gitignore files.
+# The last matching rule always wins; those that appear lower in the file take precedence over rules that appear higher up.
+# Specify owners by their github username, team name, or email
+
+# github's syntax docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners#codeowners-syntax
+
+* @web3-storage/dag-house
