@@ -88,15 +88,6 @@ jobs:
       name: production
       url: https://web3.storage
     steps:
-      - uses: GoogleCloudPlatform/release-please-action@v3
-        id: tag-release
-        with:
-          path: packages/api
-          token: ${{ secrets.GITHUB_TOKEN }}
-          release-type: node
-          monorepo-tags: true
-          package-name: api
-          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false}]'
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
