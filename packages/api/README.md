@@ -69,7 +69,7 @@ Update `wrangler.toml` with a new `env`. Set your env name to be the value of `w
 [env.bobbytables]
 workers_dev = true
 account_id = "<what does the `wrangler whoami` say>"
-vars = { LINKDEX_URL = "https://staging.linkdex.dag.haus", CARPARK_URL = "https://carpark-staging.web3.storage", CLUSTER_API_URL = "https://USER-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://USER-postgres-api-web3-storage.loca.lt", ENV = "dev" }
+vars = { CARPARK_URL = "https://carpark-staging.web3.storage", CLUSTER_API_URL = "https://USER-cluster-api-web3-storage.loca.lt", PG_REST_URL = "https://USER-postgres-api-web3-storage.loca.lt", ENV = "dev" }
 
 [[env.bobbytables.r2_buckets]]
 # what's it called in r2?
@@ -93,6 +93,7 @@ wrangler secret put S3_BUCKET_NAME --env $(whoami) # e.g web3.storage-staging-us
 wrangler secret put LOGTAIL_TOKEN --env $(whoami) # Get from Logtail
 wrangler secret put SENTRY_DSN --env $(whoami) # Get from Sentry
 wrangler secret put STRIPE_SECRET_KEY --env $(whoami) # Get from web3.storage 1password
+wrangler secret put LINKDEX_URL --env $(whoami) # Get from 1password. not required for dev
 ```
 Note this might not be up to date, please look to the [.env.tpl](../../.env.tpl) in the root directory for the up to date secrets required.
 
