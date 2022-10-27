@@ -11,6 +11,7 @@ export async function versionGet (request, env) {
     version: env.VERSION,
     commit: env.COMMITHASH,
     branch: env.BRANCH,
-    mode: env.MODE
+    mode: env.MODE,
+    test: 'hi'
   })
 }
