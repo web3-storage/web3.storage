@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.11.1](https://github.com/web3-storage/web3.storage/compare/api-v7.11.0...api-v7.11.1) (2022-10-27)
+
+
+### Bug Fixes
+
+* report carCid as string to sentry ([#2072](https://github.com/web3-storage/web3.storage/issues/2072)) ([5f55e32](https://github.com/web3-storage/web3.storage/commit/5f55e32d5e3c2943235157d91ddb5d143e711cf0))
+
 ## [7.11.0](https://github.com/web3-storage/web3.storage/compare/api-v7.10.0...api-v7.11.0) (2022-10-27)
 
 
