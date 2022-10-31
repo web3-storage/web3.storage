@@ -8,6 +8,9 @@ on:
       limit:
         description: 'The limit of records to backup'
         default: 10000
+      debug:
+        description: 'How verbose you want the logs to be. Use backupPins:debug for extra info'
+        default: 'backupPins:log'
 
 jobs:
   update:
@@ -31,7 +34,7 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - name: Run job
         env:
-          DEBUG: '*'
+          DEBUG: ${{ github.event.inputs.debug || 'backupPins:log' }}
           ENV: ${{ matrix.env }}
           STAGING_PG_CONNECTION: ${{ secrets.STAGING_PG_CONNECTION }}
           STAGING_RO_PG_CONNECTION: ${{ secrets.STAGING_PG_CONNECTION }} # no replica for staging
