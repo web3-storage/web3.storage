@@ -42,22 +42,22 @@ const assertCorrectPinResponse = (data) => {
   assert.ok(Date.parse(data.created), 'created should be valid date string')
   assert.ok(Array.isArray(data.delegates), 'delegates should be an array')
 
-  if (data.info) {
+  if (Object.hasOwn(data, 'info')) {
     assert.ok(typeof data.info === 'object', 'info should be an object')
   }
 
   assert.ok(typeof data.pin === 'object', 'pin should be an object')
   assert.ok(typeof data.pin.cid === 'string', 'pin.cid should be an string')
 
-  if (data.pin.name) {
+  if (Object.hasOwn(data.pin, 'name')) {
     assert.ok(typeof data.pin.name === 'string', 'pin.name should be an string')
   }
 
-  if (data.pin.origins) {
+  if (Object.hasOwn(data.pin, 'origins')) {
     assert.ok(Array.isArray(data.pin.origins), 'pin.origins should be an array')
   }
 
-  if (data.pin.meta) {
+  if (Object.hasOwn(data.pin, 'meta')) {
     assert.ok(typeof data.pin.meta === 'object', 'pin.meta should be an object')
   }
 }
