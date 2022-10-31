@@ -57,6 +57,11 @@ export default class Backup {
      * @type { number }
      */
     this.CONCURRENCY = env.CONCURRENCY !== undefined ? env.CONCURRENCY : 10
+
+    /**
+     * @type{Object.<string, Dagula>}
+     */
+    this.dagulaInstancesMap = {}
   }
 
   /**
@@ -179,9 +184,17 @@ export default class Backup {
       let error
 
       let reportInterval
-      const libp2p = await getLibp2p()
+      if (!this.libp2p) {
+        this.libp2p = await getLibp2p()
+      }
+
+      if (!this.dagulaInstancesMap[peer]) {
+        this.dagulaInstancesMap[peer] = await Dagula.fromNetwork(this.libp2p, { peer })
+        this.debug('ℹ️ Reusing existing instance of Dagula')
+      }
+
       try {
-        const dagula = await Dagula.fromNetwork(libp2p, { peer })
+        const dagula = this.dagulaInstancesMap[peer]
         let bytesTotal
 
         reportInterval = setInterval(() => {
@@ -212,7 +225,6 @@ export default class Backup {
           this.log(`⚠️ CID: ${cid} dag is greater 32Gib. Dag is ${this.fmt(bytesReceived)} bytes`)
         }
         writer.close()
-        libp2p.stop()
         clearInterval(reportInterval)
         abortController.clear()
       }
@@ -282,5 +294,6 @@ export default class Backup {
       if (totalProcessed > 0) this.log(`ℹ️ Processed ${totalSuccessful} of ${totalProcessed} CIDs successfully`)
     })
     this.log('backup complete 🎉')
+    this.libp2p?.stop()
   }
 }
