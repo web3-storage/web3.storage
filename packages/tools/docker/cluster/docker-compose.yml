@@ -42,8 +42,8 @@ services:
         - ipfs0:/data/ipfs
       ports:
         - "8080:8080" # ipfs gateway - expose if needed/wanted
-      #- "4001:4001" # ipfs swarm - expose if needed/wanted
-      #- "5001:5001" # ipfs api - expose if needed/wanted
+        - "4001:4001" # ipfs swarm - expose if needed/wanted
+        # - "5001:5001" # ipfs api - expose if needed/wanted
         
     cluster0:
       container_name: cluster0
