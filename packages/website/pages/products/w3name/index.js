@@ -23,9 +23,8 @@ export function getStaticProps() {
   const crumbs = GeneralPageData.breadcrumbs;
   return {
     props: {
-      title: 'About - Web3 Storage - Simple file storage with IPFS & Filecoin',
-      description:
-        'About web3.storage: the easiest way to store data on the decentralized web. Giving developers the power of Filecoin distributed storage and content addressing via a simple HTTP API and handy client libraries.',
+      title: 'Products - w3name - Mutable pointers to an immutable web',
+      description: 'Cryptographically signed mutable pointers using IPNS. Content addressing for a dynamic web.',
       breadcrumbs: [crumbs.index, crumbs.w3name],
     },
   };
