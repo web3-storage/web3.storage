@@ -226,7 +226,11 @@ export function validateSearchParams (queryString) {
   if (match) opts.match = match
   if (before) opts.before = before
   if (after) opts.after = after
-  if (status) opts.status = status.split(',')
+  if (status) {
+    opts.status = status.split(',')
+  } else {
+    opts.status = ['pinned']
+  }
 
   const result = listPinsValidator.validate(opts)
 
