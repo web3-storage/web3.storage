@@ -9,7 +9,7 @@ on:
         description: 'The limit of records to backup'
         default: 10000
       debug:
-        description: 'How verbose you want the logs to be. Use backupPins:debug for extra info'
+        description: 'How verbose you want the logs to be. Use backupPins:* for extra info'
         default: 'backupPins:log'
 
 jobs:
