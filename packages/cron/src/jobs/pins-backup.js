@@ -32,7 +32,8 @@ export default class Backup {
     this.BLOCK_TIMEOUT = 1000 * 30 // timeout if we don't receive a block after 30s
     this.REPORT_INTERVAL = 1000 * 60 // log download progress every minute
     this.MAX_UPLOAD_DAG_SIZE = 1024 * 1024 * 1024 * 32 // We don't limit in psa pin transfers in this case, but we still want to log if we have larger pin requests.
-    this.log = debug('backup:pins')
+    this.log = debug('backupPins:log')
+    this.debug = debug('backupPins:debug')
     this.env = env
     this.LIMIT = env.QUERY_LIMIT !== undefined ? env.QUERY_LIMIT : 10000
     this.GET_PINNED_PINS_QUERY = `
@@ -67,13 +68,13 @@ export default class Backup {
      */
     return async (source) => {
       for await (const bak of source) {
-        this.log(`⏳ Saving backup url to DB for ${contentCid}`)
+        this.debug(`⏳ Saving backup url to DB for ${contentCid}`)
         await db.query(this.UPDATE_BACKUP_URL_QUERY, [
           [bak.backupUrl.toString()],
           pinRequestId,
           contentCid.toString()
         ])
-        this.log(`✅ Saved backup record for upload ${bak.contentCid}: ${bak.backupUrl.toString()}, rowId: ${pinRequestId}`)
+        this.debug(`✅ Saved backup record for upload ${bak.contentCid}: ${bak.backupUrl.toString()}, rowId: ${pinRequestId}`)
       }
     }
   }
@@ -114,10 +115,10 @@ export default class Backup {
       // If it throws a NotFound error then we know we need to upload it
       const command = new HeadObjectCommand({ Bucket: bucketName, Key: key })
       const res = await this.s3.send(command)
-      this.log('ℹ️ Car file already exists in S3. Skipping upload.', res)
+      this.debug('ℹ️ Car file already exists in S3. Skipping upload.', res)
     } catch (err) {
       if (err.name === 'NotFound') {
-        this.log(`⏳ Uploading to ${url}`)
+        this.debug(`⏳ Uploading to ${url}`)
 
         const upload = new Upload({
           client: s3,
@@ -131,7 +132,7 @@ export default class Backup {
         await upload.done()
       }
     }
-    this.log(`✅ Finished uploading ${bak.sourceCid}`)
+    this.debug(`✅ Finished uploading ${bak.sourceCid}`)
     return url
   }
 
@@ -154,8 +155,7 @@ export default class Backup {
           const content = await _this.ipfsDagExport(pin.sourceCid, peer.ipfs.addresses[0], options)
           yield { ...pin, content }
         } else {
-          _this.log(`🚨 ${pin.sourceCid} has not been found on cluster`)
-          throw (new Error('Not on cluster'))
+          throw (new Error('Provided CID has not been found on cluster'))
         }
       }
     }
@@ -174,8 +174,9 @@ export default class Backup {
 
     // Do not need to await this.
     ;(async () => {
-      const abortController = new TimeoutController(20_000)
+      const abortController = new TimeoutController(200_000)
       let bytesReceived = 0
+      let error
 
       let reportInterval
       const libp2p = await getLibp2p()
@@ -185,10 +186,10 @@ export default class Backup {
 
         reportInterval = setInterval(() => {
           const formattedTotal = bytesTotal ? this.fmt(bytesTotal) : 'unknown'
-          this.log(`ℹ️ CID: ${cid}. Received ${this.fmt(bytesReceived)} of ${formattedTotal} bytes`)
+          this.debug(`ℹ️ CID: ${cid}. Received ${this.fmt(bytesReceived)} of ${formattedTotal} bytes`)
         }, this.REPORT_INTERVAL)
 
-        this.log(`⏳ Started reading dag ${cid}`)
+        this.debug(`⏳ Started reading dag ${cid}`)
 
         for await (const chunk of dagula.get(cid, {
           signal: abortController.signal
@@ -198,14 +199,17 @@ export default class Backup {
           await writer.put(chunk)
         }
 
-        this.log(`✅ Finished reading dag ${cid}. In total ${this.fmt(bytesReceived)}`)
+        this.debug(`✅ Finished reading dag ${cid}. In total ${this.fmt(bytesReceived)}`)
       } catch (err) {
-        this.log(`🚨 CID: ${cid} errored. Size of the dag is greater than ${bytesReceived} Bytes`)
-        readableStream.destroy(new Error('Dagula errored while reading'))
+        // @ts-ignore
+        error = new Error(`An error occured while reading dag from cluster. Size of the dag is greater than ${this.fmt(bytesReceived)} bytes`, {
+          cause: err
+        })
+        readableStream.destroy(error)
         throw (err)
       } finally {
-        if (bytesReceived > this.MAX_UPLOAD_DAG_SIZE) {
-          this.log(`⚠️ CID: ${cid} dag is greater than ${this.fmt(this.MAX_UPLOAD_DAG_SIZE)}`)
+        if (bytesReceived > this.MAX_UPLOAD_DAG_SIZE && !error) {
+          this.log(`⚠️ CID: ${cid} dag is greater 32Gib. Dag is ${this.fmt(bytesReceived)} bytes`)
         }
         writer.close()
         libp2p.stop()
@@ -215,26 +219,6 @@ export default class Backup {
     })()
     return readableStream
   }
-
-  /**
-   * Get the size of an file on IPFS
-   * This is so we can limit the size of files we backup
-   *
-   * @param {import('@nftstorage/ipfs-cluster').Cluster} ipfs
-   * @param {import('multiformats').CID} cid
-   * @returns {Promise<number | undefined>}
-   */
-
-  // Given for PIN requests we never limited files size we shouldn't check this. ie.
-  // async getSize (ipfs, cid) {
-  //   if (cid.code === raw.code) {
-  //     const block = await ipfs.blockGet(cid, { timeout: this.SIZE_TIMEOUT })
-  //     return block.byteLength
-  //   } else if (cid.code === pb.code) {
-  //     const stat = await ipfs.objectStat(cid, { timeout: this.SIZE_TIMEOUT })
-  //     return stat.CumulativeSize
-  //   }
-  // }
 
   /**
    * Fetch a list of CIDs that need to be backed up.
@@ -267,7 +251,7 @@ export default class Backup {
    */
   async backupPins ({ roPg, rwPg, cluster, concurrency = this.CONCURRENCY }) {
     if (!this.log.enabled) {
-      console.log('ℹ️ Enable logging by setting DEBUG=backup:pins')
+      console.log('ℹ️ Enable logging by setting DEBUG=backupPins:log. Enable debugging by setting DEBUG=backupPins:debug')
     }
 
     const peersList = await cluster.peerList()
@@ -279,7 +263,7 @@ export default class Backup {
       for await (const pins of batch(source, concurrency)) {
         this.log(`ℹ️ Got ${pins.length} pins.`)
         await Promise.all(pins.map(async pin => {
-          this.log(`ℹ️ Processing pin id ${pin.pinRequestId} for cid ${pin.sourceCid}`)
+          this.debug(`ℹ️ Processing pin id ${pin.pinRequestId} for cid ${pin.sourceCid}`)
           try {
             await pipe(
               [pin],
@@ -289,7 +273,8 @@ export default class Backup {
             )
             totalSuccessful++
           } catch (err) {
-            this.log(`🚨 Failed to backup ${pin.sourceCid}`, err)
+            this.log(`🚨 Failed to backup ${pin.sourceCid}. Details: ${err.message}`)
+            this.debug(err, err.cause)
           }
           totalProcessed++
         }))
