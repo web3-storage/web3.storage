@@ -59,7 +59,7 @@ export default class Backup {
     this.CONCURRENCY = env.CONCURRENCY !== undefined ? env.CONCURRENCY : 10
 
     /**
-     * @type{Object.<string, Dagula>}
+     * @type{Object.<string, Promise.<Dagula>>}
      */
     this.dagulaInstancesMap = {}
   }
@@ -177,6 +177,10 @@ export default class Backup {
     const { writer, out } = await CarWriter.create([cid])
     const readableStream = Readable.from(out)
 
+    if (!this.libp2p) {
+      throw new Error('libp2p should be defined')
+    }
+
     // Do not need to await this.
     ;(async () => {
       const abortController = new TimeoutController(200_000)
@@ -184,17 +188,14 @@ export default class Backup {
       let error
 
       let reportInterval
-      if (!this.libp2p) {
-        this.libp2p = await getLibp2p()
-      }
 
       if (!this.dagulaInstancesMap[peer]) {
-        this.dagulaInstancesMap[peer] = await Dagula.fromNetwork(this.libp2p, { peer })
+        this.dagulaInstancesMap[peer] = Dagula.fromNetwork(this.libp2p, { peer })
         this.debug('ℹ️ Reusing existing instance of Dagula')
       }
 
       try {
-        const dagula = this.dagulaInstancesMap[peer]
+        const dagula = await this.dagulaInstancesMap[peer]
         let bytesTotal
 
         reportInterval = setInterval(() => {
@@ -266,34 +267,40 @@ export default class Backup {
       console.log('ℹ️ Enable logging by setting DEBUG=backupPins:log. Enable debugging by setting DEBUG=backupPins:debug')
     }
 
-    const peersList = await cluster.peerList()
+    if (!this.libp2p) {
+      this.libp2p = await getLibp2p()
+    }
+    try {
+      const peersList = await cluster.peerList()
 
-    let totalProcessed = 0
-    let totalSuccessful = 0
+      let totalProcessed = 0
+      let totalSuccessful = 0
 
-    await pipe(this.getPinsNotBackedUp(roPg), async (source) => {
-      for await (const pins of batch(source, concurrency)) {
-        this.log(`ℹ️ Got ${pins.length} pins.`)
-        await Promise.all(pins.map(async pin => {
-          this.debug(`ℹ️ Processing pin id ${pin.pinRequestId} for cid ${pin.sourceCid}`)
-          try {
-            await pipe(
-              [pin],
-              this.exportCar(cluster, peersList),
-              this.uploadCar(this.s3, this.env.S3_BUCKET_NAME),
-              this.registerBackup(rwPg, pin.contentCid, pin.pinRequestId)
-            )
-            totalSuccessful++
-          } catch (err) {
-            this.log(`🚨 Failed to backup ${pin.sourceCid}. Details: ${err.message}`)
-            this.debug(err, err.cause)
-          }
-          totalProcessed++
-        }))
-      }
-      if (totalProcessed > 0) this.log(`ℹ️ Processed ${totalSuccessful} of ${totalProcessed} CIDs successfully`)
-    })
-    this.log('backup complete 🎉')
-    this.libp2p?.stop()
+      await pipe(this.getPinsNotBackedUp(roPg), async (source) => {
+        for await (const pins of batch(source, concurrency)) {
+          this.log(`ℹ️ Got ${pins.length} pins.`)
+          await Promise.all(pins.map(async pin => {
+            this.debug(`ℹ️ Processing pin id ${pin.pinRequestId} for cid ${pin.sourceCid}`)
+            try {
+              await pipe(
+                [pin],
+                this.exportCar(cluster, peersList),
+                this.uploadCar(this.s3, this.env.S3_BUCKET_NAME),
+                this.registerBackup(rwPg, pin.contentCid, pin.pinRequestId)
+              )
+              totalSuccessful++
+            } catch (err) {
+              this.log(`🚨 Failed to backup ${pin.sourceCid}. Details: ${err.message}`)
+              this.debug(err, err.cause)
+            }
+            totalProcessed++
+          }))
+        }
+        if (totalProcessed > 0) this.log(`ℹ️ Processed ${totalSuccessful} of ${totalProcessed} CIDs successfully`)
+      })
+      this.log('backup complete 🎉')
+    } finally {
+      await this.libp2p?.stop()
+    }
   }
 }
