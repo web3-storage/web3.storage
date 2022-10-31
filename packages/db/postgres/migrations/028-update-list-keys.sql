@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS user_auth_keys_list;
+
 CREATE OR REPLACE FUNCTION user_auth_keys_list(query_user_id BIGINT, include_deleted BOOLEAN default false)
   RETURNS TABLE
           (
