@@ -16,7 +16,7 @@ const AccountBlockedModal = ({ hasAccountRestriction }) => {
     }
   }, [hasAccountRestriction, modalState]);
 
-  return (
+  return modalState[0] ? (
     <div className="account-blocked-modal">
       <Modal
         className=""
@@ -40,7 +40,7 @@ const AccountBlockedModal = ({ hasAccountRestriction }) => {
         </div>
       </Modal>
     </div>
-  );
+  ) : null;
 };
 
 export default AccountBlockedModal;
