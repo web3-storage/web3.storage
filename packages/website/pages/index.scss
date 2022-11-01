@@ -274,12 +274,12 @@
 #hero_header {
   position: relative;
   .grid {
-      justify-content: center;
-      width: 420px;
-      max-width: calc(100% - 4rem);
-      @include medium {
-        padding: 0
-      }
+    justify-content: center;
+    width: 420px;
+    max-width: calc(100% - 4rem);
+    @include medium {
+      padding: 0;
+    }
   }
   .heading {
     @include h1;
@@ -295,6 +295,9 @@
     @include fontWeight_Regular;
     line-height: leading(34, 20);
     margin-bottom: 1.25rem;
+  }
+  .cta {
+    margin: 0 1rem 0.5rem 0;
   }
 }
 // ----------------------------------------------------------- Section [Intro 1]
@@ -428,7 +431,8 @@
 
 #intro_2-statistics {
   padding: 0;
-  .title, .description {
+  .title,
+  .description {
     max-width: none;
   }
   @include mini {
