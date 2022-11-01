@@ -222,10 +222,6 @@
         {
           "text": "HTTP API",
           "url": "/docs/reference/http-api/"
-        },
-        {
-          "text": "Web Apps",
-          "url": "/terms"
         }
       ]
     },
