@@ -237,7 +237,7 @@ export async function userTokensPost (request, env) {
  */
 export async function userAccountGet (request, env) {
   const [usedStorage, storageLimitBytes] = await Promise.all([
-    // @ts-ignore
+    // @ts-ignore user used storage object
     env.db.getStorageUsed(request.auth.user._id),
     // @ts-ignore
     env.db.getUserTagValue(request.auth.user._id, 'StorageLimitBytes')
