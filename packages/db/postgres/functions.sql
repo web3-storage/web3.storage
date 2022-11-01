@@ -4,6 +4,8 @@ DROP FUNCTION IF EXISTS create_key;
 DROP FUNCTION IF EXISTS create_upload;
 DROP FUNCTION IF EXISTS upsert_pin;
 DROP FUNCTION IF EXISTS upsert_pins;
+DROP FUNCTION IF EXISTS user_uploaded_storage;
+DROP FUNCTION IF EXISTS user_psa_storage;
 DROP FUNCTION IF EXISTS user_used_storage;
 DROP FUNCTION IF EXISTS user_auth_keys_list;
 DROP FUNCTION IF EXISTS find_deals_by_content_cids;
@@ -225,6 +227,61 @@ BEGIN
 END
 $$;
 
+CREATE OR REPLACE FUNCTION user_uploaded_storage(query_user_id BIGINT)
+  RETURNS text
+  LANGUAGE plpgsql
+AS
+$$
+DECLARE
+  total         BIGINT;
+BEGIN
+  total :=
+    (
+      SELECT COALESCE((
+        SELECT SUM(dag_size)
+        FROM (
+          SELECT  c.cid,
+                  c.dag_size
+          FROM upload u
+          JOIN content c ON c.cid = u.content_cid
+          WHERE u.user_id = query_user_id::BIGINT
+          AND u.deleted_at is null
+          GROUP BY c.cid,
+                  c.dag_size
+        ) AS uploaded_content), 0)
+    );
+  return (total)::TEXT;
+END
+$$;
+
+CREATE OR REPLACE FUNCTION user_psa_storage(query_user_id BIGINT)
+  RETURNS text
+  LANGUAGE plpgsql
+AS
+$$
+DECLARE
+  total         BIGINT;
+BEGIN
+  total :=
+    (
+      SELECT COALESCE((
+        SELECT SUM(dag_size)
+        FROM (
+          SELECT  psa_pr.content_cid,
+                  c.dag_size
+          FROM psa_pin_request psa_pr
+          JOIN content c ON c.cid = psa_pr.content_cid
+          JOIN auth_key a ON a.id = psa_pr.auth_key_id
+          WHERE a.user_id = query_user_id::BIGINT
+          AND psa_pr.deleted_at is null
+          GROUP BY psa_pr.content_cid,
+                  c.dag_size
+        ) AS pinned_content), 0)
+    );
+  return (total)::TEXT;
+END
+$$;
+
 CREATE TYPE stored_bytes AS (uploaded TEXT, psa_pinned TEXT, total TEXT);
 
 CREATE OR REPLACE FUNCTION user_used_storage(query_user_id BIGINT)
@@ -234,47 +291,10 @@ AS
 $$
 DECLARE
   used_storage  stored_bytes;
-  uploaded      BIGINT;
-  psa_pinned    BIGINT;
+  uploaded      BIGINT := (user_uploaded_storage(query_user_id))::BIGINT;
+  psa_pinned    BIGINT := (user_psa_storage(query_user_id))::BIGINT;
   total         BIGINT;
 BEGIN
-  uploaded :=
-    (
-      SELECT COALESCE((
-        SELECT SUM(dag_size)
-        FROM (
-          SELECT  c.cid,
-                  c.dag_size
-          FROM upload u
-          JOIN content c ON c.cid = u.content_cid
-          JOIN pin p ON p.content_cid = u.content_cid
-          WHERE u.user_id = query_user_id::BIGINT
-          AND u.deleted_at is null
-          AND p.status = 'Pinned'
-          GROUP BY c.cid,
-                  c.dag_size
-        ) AS uploaded_content), 0)
-    );
-
-  psa_pinned :=
-    (
-      SELECT COALESCE((
-        SELECT SUM(dag_size)
-        FROM (
-          SELECT  psa_pr.content_cid,
-                  c.dag_size
-          FROM psa_pin_request psa_pr
-          JOIN content c ON c.cid = psa_pr.content_cid
-          JOIN pin p ON p.content_cid = psa_pr.content_cid
-          JOIN auth_key a ON a.id = psa_pr.auth_key_id
-          WHERE a.user_id = query_user_id::BIGINT
-          AND psa_pr.deleted_at is null
-          AND p.status = 'Pinned'
-          GROUP BY psa_pr.content_cid,
-                  c.dag_size
-        ) AS pinned_content), 0)
-    );
-
   total := uploaded + psa_pinned;
 
   SELECT  uploaded::TEXT,

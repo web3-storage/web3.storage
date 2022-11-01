@@ -122,3 +122,13 @@ export function parseTextToNumber (numberText) {
   }
   return num
 }
+
+/**
+ * @param {Number} num
+ */
+export function safeNumber (num) {
+  if (!Number.isSafeInteger(num)) {
+    throw new Error('Invalid integer number.')
+  }
+  return num
+}

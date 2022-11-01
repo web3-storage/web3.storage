@@ -127,36 +127,12 @@ export async function createUserWithFiles (dbClient, options = {}) {
   const pinRequests = 3
   const dagSize = Math.ceil(((percentStorageUsed / 100) * storageQuota) / (uploads + pinRequests))
 
-  // Create a failed upload.
-  await createUpload(dbClient, Number(user._id), Number(authKey), await randomCid(), {
-    dagSize,
-    pins: pinsError
-  })
-
-  // Create a yet to be pinned upload.
-  await createUpload(dbClient, Number(user._id), Number(authKey), await randomCid(), {
-    dagSize,
-    pins: initialPinsNotPinned
-  })
-
   for (let i = 0; i < uploads; i++) {
     const cid = await randomCid()
     await createUpload(dbClient, Number(user._id), Number(authKey), cid, {
       dagSize
     })
   }
-
-  // Create a failed PinRequest.
-  await createPsaPinRequest(dbClient, authKey, await randomCid(), {
-    dagSize,
-    pins: pinsError
-  })
-
-  // Create a yet to be pinned PinRequest.
-  await createPsaPinRequest(dbClient, authKey, await randomCid(), {
-    dagSize,
-    pins: initialPinsNotPinned
-  })
 
   for (let i = 0; i < pinRequests; i++) {
     const cid = await randomCid()
