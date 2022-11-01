@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.11.3](https://github.com/web3-storage/web3.storage/compare/api-v7.11.2...api-v7.11.3) (2022-11-01)
+
+
+### Bug Fixes
+
+* add api comment to trigger release on db change ([88042dd](https://github.com/web3-storage/web3.storage/commit/88042ddf1576cd9e04868b579e513fb2d9558b6a))
+
 ## [7.11.2](https://github.com/web3-storage/web3.storage/compare/api-v7.11.1...api-v7.11.2) (2022-10-27)
 
 
