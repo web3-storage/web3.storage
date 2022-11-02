@@ -58,7 +58,8 @@ node --version && npm --version
   - Probably not though, because (as I understand it), we're planning to remove the `export-settings` to encourage each agent to keep its own keys.
 - Maybe the quickstart is a "choose your own adventure", where the branches are "use the w3up cli" and "fork this w3ui example app".
 - Or, just use the `register.js` script from the `simple-upload` example. The quickstart is then basically a walkthrough of setting up and using the `simple-upload` example.
-  </Callout>
+
+</Callout>
 
 ## Create the upload script
 
