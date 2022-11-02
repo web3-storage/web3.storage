@@ -3,21 +3,17 @@ title: Welcome
 description: 'Learn how to use web3.storage to decentralize your data storage without all the complicated details.'
 ---
 
-**TODO**: Audit & replace all code snippets
-
 import Callout from 'components/callout/callout';
 import { Tabs, TabItem } from 'components/tabs/tabs';
 import CodeSnippet from 'components/codesnippet/codesnippet';
-import PutFiles from '!!raw-loader!../../assets/code-snippets/quickstart/put-files.js';
-import PackageJson from '!!raw-loader!../../assets/code-snippets/quickstart/package.json.txt';
 import Img from 'components/cloudflareImage';
-import ImgFilesListing from '../../public/images/docs/files-listing.png';
+import ImgFilesListing from '../../../public/images/docs/files-listing.png';
 
 # Better storage.<br/>Better transfers.<br/>Better internet.
 
 > When you need file storage for your project, website, or application, web3.storage is here for you. All it takes to [get started](#quickstart) storing on the decentralized web is a free account — no need to wrestle with complicated details.
 
-**TODO**: new intro with less sniping at Amazon, et al.
+> **TODO**: new intro with less sniping at Amazon, et al.
 
 With web3.storage, you get all the benefits of decentralized storage technologies with the frictionless experience you expect in a modern dev workflow. **All you need to use web3.storage is an account and your data.** Under the hood, web3.storage is backed by the provable storage of [Filecoin](https://filecoin.io) and makes data accessible to your users over the public [IPFS](https://ipfs.io) network — but when it comes down to building your next application, service, or website, all you need to know is that web3.storage makes building on decentralized technologies simple.
 
@@ -25,7 +21,7 @@ With web3.storage, you get all the benefits of decentralized storage technologie
 
 **Ready to get started using web3.storage right now?** Get up and running in minutes by following this quickstart guide. In this guide, we'll walk through the following steps:
 
-**TODO**: replace first two steps with UCAN registration flow (and / or account signup via web gui)
+> **TODO**: replace first two steps with UCAN registration flow (and / or account signup via web gui)
 
 1. [Creating a web3.storage account.](#create-an-account)
 1. [Getting a free API token.](#get-an-api-token)
@@ -34,7 +30,7 @@ With web3.storage, you get all the benefits of decentralized storage technologie
 
 **This guide uses Node.js since it's the fastest way to get started using the web3.storage JavaScript client programmatically**, but don't worry if Node isn't your favorite runtime environment — or if you'd rather not do any coding at all. You can also use web3.storage in the following ways:
 
-**TODO**: Update link to JS reference docs, once new client docs have a stable URL
+> **TODO**: Update link to JS reference docs, once new client docs have a stable URL
 
 - Work with the API methods in the [JavaScript client library](/docs/reference/js-client-library) using the JS runtime of your choice.
 - Upload and retrieve files directly from your [Account page](https://web3.storage/account/) on the web3.storage website.
@@ -54,6 +50,7 @@ node --version && npm --version
 
 ## Create an account
 
+<Callout>
 **TODO**: figure out the simplest UCAN signup flow for quickstart purposes... Some details will depend on how functional the GUI console is when we ship the docs.
 
 - should we just use the `w3up` cli to register?
@@ -61,10 +58,11 @@ node --version && npm --version
   - Probably not though, because (as I understand it), we're planning to remove the `export-settings` to encourage each agent to keep its own keys.
 - Maybe the quickstart is a "choose your own adventure", where the branches are "use the w3up cli" and "fork this w3ui example app".
 - Or, just use the `register.js` script from the `simple-upload` example. The quickstart is then basically a walkthrough of setting up and using the `simple-upload` example.
+  </Callout>
 
 ## Create the upload script
 
-**TODO**: rewrite this to use the simple-upload example.
+> **TODO**: rewrite this to use the simple-upload example.
 
 You can use the web3.storage site to upload files, but it's also quick and easy to create and run a simple upload script — making it especially convenient to add large numbers of files. This script contains logic to upload a file to web3.storage and get a [_content identifier_ (CID)](/docs/concepts/content-addressing) back in return.
 
@@ -82,11 +80,11 @@ All data uploaded to web3.storage is available to anyone who requests it using t
 
 1. Create a file called `put-files.js` and paste in the following code:
 
-   <CodeSnippet lang="js" src={PutFiles}></CodeSnippet>
+   > **TODO**: new code snippet
 
 1. Create another file called `package.json` and paste in the following code:
 
-   <CodeSnippet lang="json" src={PackageJson}></CodeSnippet>
+   > **TODO**: new package json (if needed in new quickstart example...)
 
 1. Save both files, and then run `npm install` from your project folder:
 
@@ -111,7 +109,7 @@ Your script is good to go! Next, we'll [run the script to upload a file. ↓](#r
 
 Now that you've got your script ready to go, you just need to run it in your terminal window using `node`.
 
-**TODO**: instructions for using the script.
+> **TODO**: instructions for using the script.
 
 Next up, we'll go over two methods for you to [retrieve your data from web3.storage ↓](#get-your-file)
 
@@ -127,7 +125,7 @@ You've already done the most difficult work in this guide — getting your files
 
 If you ever need to find your files again, and you've forgotten the CID, head over to the [Files table](https://web3.storage/account/) in web3.storage:
 
-**TODO**: update screenshot (Assuming UI changes for v2 uploads)
+> **TODO**: update screenshot (Assuming UI changes for v2 uploads)
 
 <Img src={ImgFilesListing} alt="A listing of files in web3.storage" />
 
@@ -135,7 +133,7 @@ If you ever need to find your files again, and you've forgotten the CID, head ov
 
 Congratulations! You've just covered the basics of web3.storage. To learn more, take a look at these useful resources:
 
-**TODO**: make sure all links resolve to v2 material
+> **TODO**: make sure all links resolve to v2 material
 
 - Checkout some [example projects in the web3.storage GitHub repo](https://github.com/web3-storage/web3.storage/tree/main/packages/client/examples)
 - For a deep dive into storing files, visit the [Store how-to guide.](/docs/how-tos/store)

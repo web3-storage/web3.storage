@@ -3,17 +3,13 @@ title: How to store data using web3.storage
 description: Learn how to store your data on the decentralized web with web3.storage.
 ---
 
-**TODO**: audit and replace code snippets
-
 import { Tabs, TabItem } from 'components/tabs/tabs';
 import Callout from 'components/callout/callout';
 import CodeSnippet from 'components/codesnippet/codesnippet';
-import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
-import platformBrowserSource from '!!raw-loader!../../../assets/code-snippets/how-to/platform-browser.js'
-import platformNodeSource from '!!raw-loader!../../../assets/code-snippets/how-to/platform-node.js'
-import golangUpload from '!!raw-loader!../../../assets/code-snippets/how-to/golang/upload/upload.go'
 
 # How to store data using web3.storage
+
+> **TODO**: should this be "how to store data with w3up" instead?
 
 In this how-to guide, **you'll learn how to store data programmatically for your development projects using the web3.storage client libraries** in [JavaScript][reference-js]. This includes making your data available on the decentralized [IPFS](https://ipfs.io) network with persistent long-term storage provided by [Filecoin](https://filecoin.io).
 
@@ -21,7 +17,7 @@ In this how-to guide, **you'll learn how to store data programmatically for your
 
 For developers, web3.storage provides a simple interface for storing data using syntax inspired by familiar web APIs such as [`fetch`][mdn-fetch] and [`File`][mdn-file]. This guide focuses on [JavaScript client library][reference-js], which is the simplest way to use web3.storage programmatically.
 
-**TODO**: link to v1 docs for non-js users
+> **TODO**: link to v1 docs for non-js users
 
 Uploading data to web3.storage using a client library requires a UCAN identity key that's registered to a web3.storage account. If you already have an account and a UCAN identity, read on. If not, have a look at the [quickstart guide][quickstart-guide] to get up and running in just a few minutes.
 
@@ -40,11 +36,11 @@ npm install w3p-client
 
 ## Creating a client instance
 
-**TODO**: Client construction example, showing how to init client with your UCAN key. Maybe include JS registration flow also? Might be enough to have it in the quickstart guide and link to it.
+> **TODO**: Client construction example, showing how to init client with your UCAN key. Maybe include JS registration flow also? Might be enough to have it in the quickstart guide and link to it.
 
 ## Preparing files for upload
 
-**TODO**: figure out if this is still needed... the current w3up-client only uploads CARs, so we'd need to encode to CAR. Might change before publication tho.
+> **TODO**: figure out if this is still needed... the current w3up-client only uploads CARs, so we'd need to encode to CAR. Might change before publication tho.
 
 ## Uploading to web3.storage
 
@@ -55,16 +51,11 @@ Once your files are ready, uploading is a simple method call on the client objec
 Deleting files from the web3.storage site's [Files page][site-files] will remove them from the file listing for your account, but that doesn't prevent nodes on the [decentralized storage network][concepts-decentralized-storage] from retaining copies of the data indefinitely. Do not use web3.storage for data that may need to be permanently deleted in the future.
 </Callout>
 
-<Tabs groupId="lang">
-<TabItem value="js" label="JavaScript">
-
-Once you have an array of `File`s, you can upload them with the client's `put` method:
-
-<CodeSnippet lang="js" src={howtoSource} region="storeFiles" />
+> **TODO**: upload code snippet
 
 #### Showing progress to the user
 
-**TODO**: Do we have a method for this in v2 API?
+> **TODO**: Do we have a method for this in v2 API?
 
 ### Directory wrapping
 
@@ -80,7 +71,7 @@ To avoid having your files wrapped in a directory listing, set the [`wrapWithDir
 
 ## Storing IPFS Content Archives
 
-**TODO**: revise to use `upload` instead of `put`
+> **TODO**: revise to use `upload` instead of `put`
 
 So far we've focused on using the `put` method, which accepts regular files and packs them into an IPFS Content Archive (CAR) file before uploading to web3.storage. If you're already using IPFS in your application, or if you want more control over the [IPLD](https://ipld.io) graph used to structure your data, you can construct your own CAR files and upload them directly.
 
@@ -112,7 +103,7 @@ The [Working with CAR files][howto-car-files] guide has more information about t
 
 The client returns an IPFS [content identifier (CID)][ipfs-docs-cid] that can be used to fetch your files over IPFS. Once uploaded, your data is immediately available for retrieval via IPFS and will be stored with Filecoin storage providers within 48 hours. To learn how to fetch your data using the web3.storage client, or directly from IPFS using a gateway or the IPFS command line, see the [how-to guide on retrieval][howto-retrieve].
 
-**TODO**: make sure all links resolve to v2 content
+> **TODO**: make sure all links resolve to v2 content
 
 [reference-js]: /docs/reference/js-client-library/
 [reference-js-constructor]: /docs/reference/js-client-library/#constructor

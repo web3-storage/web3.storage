@@ -8,6 +8,7 @@ const dirName = path.resolve(__dirname);
 const nextra = require('nextra');
 
 const docsPages = require('./pages/docs/nav.json');
+const docsV2Pages = require('./pages/docs/v2/nav.json');
 
 const withNextra = nextra('./modules/docs-theme/index.js');
 
@@ -59,12 +60,21 @@ const nextConfig = {
     const paths = {
       '/ipfs-404.html': { page: '/404' },
       '/docs/': { page: '/docs/intro', statusCode: 301 },
+      '/docs/v2': { page: '/docs/v2/intro', statusCode: 301 }
     };
     // we have to specify the doc paths here to avoid 404 on reload
     docsPages.map(item => {
       item.menu.map(t => {
         paths[`/docs/${t.src}`] = {
           page: `/docs/${t.src}`,
+        };
+      });
+    });
+    // again for v2...
+    docsV2Pages.map(item => {
+      item.menu.map(t => {
+        paths[`/docs/v2/${t.src}`] = {
+          page: `/docs/v2/${t.src}`,
         };
       });
     });

@@ -5,10 +5,8 @@ description: Learn how to list the files you've uploaded to web3.storage in this
 
 import Callout from 'components/callout/callout';
 import CodeSnippet from 'components/codesnippet/codesnippet';
-import howtoSource from '!!raw-loader!../../../assets/code-snippets/how-to/index.js'
-import exampleUpload from '!!raw-loader!../../../assets/code-snippets/how-to/example-listing-upload.json.txt'
 import Img from 'components/cloudflareImage';
-import ImgFilesListing from '../../../public/images/docs/files-listing.png';
+import ImgFilesListing from '../../../../public/images/docs/files-listing.png';
 
 # How to list files uploaded to web3.storage
 
@@ -23,65 +21,37 @@ You can see a list of everything you've uploaded to web3.storage on the [Files p
 
 This [Files page][site-files] provides a convenient overview of your stored data, including links to view your files in your browser via an [IPFS gateway][ipfs-docs-gateway] and information about how the data is being stored on the [decentralized storage networks][concepts-decentralized-storage] that web3.storage uses under the hood.
 
-## Using the web3.storage client
+## Using the `w3up-client` library
 
-To easily integrate web3.storage programmatically in your apps or services, you can also access a listing of your uploads from your code using the web3.storage client. In the example below, this guide walks through how to use the [JavaScript client library][reference-js-client] to fetch a complete listing of all the data you've uploaded using web3.storage.
+To easily integrate web3.storage programmatically in your apps or services, you can also access a listing of your uploads from your code using the `w3up` client. In the example below, this guide walks through how to use the [JavaScript client library][reference-js-client] to fetch a complete listing of all the data you've uploaded using web3.storage.
 
 ### Installing the client
 
-In your JavaScript project, add the `web3.storage` package to your dependencies:
+In your JavaScript project, add the `w3up-client` package to your dependencies:
 
 ```bash
-npm install web3.storage
+npm install w3up-client
 ```
 
 ### Creating a client instance
 
-To create a `Web3Storage` client object, we need to pass an access token into the [constructor][reference-js-constructor]:
+To create a `w3up` client object, we need to pass some configuration settings into the [constructor][reference-js-constructor]:
 
-<CodeSnippet lang="js" src={howtoSource} region="makeStorageClient" />
-
-<Callout type="info">
-##### Tip
-You can use any API token associated with your account, not just the one you originally used to upload your files! See the [Generate API token page][howto-gen-token] for more about token management.
-</Callout>
+> **TODO**: snippet of client creation (or link to same)
 
 ### Listing your uploads
 
-The `Web3Storage` client object's [`list` method][reference-js-list] returns an [async iterable][js-async-iterable-explainer] that can be used with the [`for await` syntax][mdn-for-await-of] to read information about each upload as soon as it's received over the network.
+The `w3up` client object's [`list` method][reference-js-list] returns an [async iterable][js-async-iterable-explainer] that can be used with the [`for await` syntax][mdn-for-await-of] to read information about each upload as soon as it's received over the network.
 
 Here's an example that logs details about each upload to the console:
 
-<CodeSnippet lang="js" src={howtoSource} region="listUploads" />
+> **TODO**: new code snippet to list & print CIDs
 
-Each `Upload` object will look something like this:
+#### Pagination & filtering
 
-<CodeSnippet lang="json" src={exampleUpload} />
+> **TODO**: pagination details
 
-What do all those fields mean? Here's a summary:
-
-- `name` contains a descriptive name for the upload. If no name was provided at the time of upload, the `name` field will contain an automatically generated name that includes a creation timestamp.
-- `cid` contains the [IPFS Content Identifier (CID)][ipfs-docs-cid] that identifies the uploaded data. This CID can be used to [retrieve][howto-retrieve] the uploaded files or get more detailed [status information][howto-query].
-- `created` contains an [ISO-8601 datetime string][iso-8601] indicating when the content was first uploaded to web3.storage.
-- `dagSize` contains the size in bytes of the [Directed Acyclic Graph (DAG)][ipfs-docs-merkle-dag] that contains all the uploaded content. This is the size of the data that is transferred over the network to web3.storage during upload, and is slightly larger than the total size of the files on disk.
-- `pins` contains an array of objects describing the IPFS nodes that have [pinned][ipfs-docs-pinning] the data, making it available for fast retrieval using the IPFS network.
-- `deals` contains an array of objects describing the Filecoin storage providers that have made [storage deals][fil-docs-deals]. These storage providers have committed to storing the data for an agreed period of time.
-
-<Callout type="info">
-##### Want more details about storage?
-The `Upload` objects returned by the `list` method include some basic status information about how the data is stored on IPFS and Filecoin. For more details, including the identity of the storage providers hosting your data, you can [query an upload's status][howto-query] using the `cid`.
-</Callout>
-
-#### Listing a subset of uploads
-
-By default, the [`list` method][reference-js-list] returns information about all uploads made using your web3.storage account. You can optionally restrict the listing in two ways:
-
-- Only contain entries that were uploaded before a given timestamp.
-- Limit the total number of returned entries.
-
-Here's an example of fetching the first 10 uploads made on the previous day:
-
-<CodeSnippet lang="js" src={howtoSource} region="listWithLimits" />
+> **TODO**: audit link targets
 
 [howto-store]: /docs/how-tos/store/
 [howto-retrieve]: /docs/how-tos/retrieve/
