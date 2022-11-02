@@ -12,6 +12,9 @@ import {
 } from '../src/utils/psa.js'
 import { PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from '../src/errors.js'
 
+const REQUEST_EXPECTED_PROPERTIES = ['requestid', 'status', 'created', 'delegates', 'info', 'pin']
+const PIN_EXPECTED_PROPERTIES = ['cid', 'name', 'origins', 'meta']
+
 /**
  *
  * @param {import('../../db/postgres/pg-rest-api-types').definitions['pin']['status']} status
@@ -42,6 +45,7 @@ const assertCorrectPinResponse = (data) => {
   assert.ok(Date.parse(data.created), 'created should be valid date string')
   assert.ok(Array.isArray(data.delegates), 'delegates should be an array')
 
+  // @ts-ignore https://github.com/microsoft/TypeScript/issues/44253
   if (Object.hasOwn(data, 'info')) {
     assert.ok(typeof data.info === 'object', 'info should be an object')
   }
@@ -49,17 +53,33 @@ const assertCorrectPinResponse = (data) => {
   assert.ok(typeof data.pin === 'object', 'pin should be an object')
   assert.ok(typeof data.pin.cid === 'string', 'pin.cid should be an string')
 
+  // @ts-ignore https://github.com/microsoft/TypeScript/issues/44253
   if (Object.hasOwn(data.pin, 'name')) {
     assert.ok(typeof data.pin.name === 'string', 'pin.name should be an string')
   }
 
+  // @ts-ignore https://github.com/microsoft/TypeScript/issues/44253
   if (Object.hasOwn(data.pin, 'origins')) {
     assert.ok(Array.isArray(data.pin.origins), 'pin.origins should be an array')
   }
 
+  // @ts-ignore https://github.com/microsoft/TypeScript/issues/44253
   if (Object.hasOwn(data.pin, 'meta')) {
     assert.ok(typeof data.pin.meta === 'object', 'pin.meta should be an object')
   }
+
+  assert.ok(Object.keys(data).every(property => REQUEST_EXPECTED_PROPERTIES.includes(property)), 'request contains not valid properties')
+  assert.ok(Object.keys(data.pin).every(property => PIN_EXPECTED_PROPERTIES.includes(property)), 'request.pin contains not valid properties')
+}
+
+/**
+ *
+ * @param {object} data
+ */
+const assertCorretPinResponseList = (data) => {
+  assert.ok(typeof data.count === 'number', 'count should be a number')
+  data.results.forEach(r => assertCorrectPinResponse(r))
+  Object.keys(data).every(property => ['count', 'results'].includes(property))
 }
 
 /**
@@ -120,24 +140,6 @@ describe('Pinning APIs endpoints', () => {
       const { error } = await res.json()
       assert.strictEqual(error.reason, PSAErrorInvalidData.CODE)
       assert.strictEqual(error.details, '#/limit: Instance type "number" is invalid. Expected "integer".')
-    })
-
-    it('requires status', async () => {
-      const url = new URL(`${baseUrl}`).toString()
-      const res = await fetch(
-        url, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        })
-
-      assert(res, 'Server responded')
-      assert.strictEqual(res.status, ERROR_CODE)
-      const { error } = await res.json()
-      assert.strictEqual(error.reason, PSAErrorRequiredData.CODE)
-      assert.strictEqual(error.details, 'Instance does not have required property "status".')
     })
 
     it('validates meta filter is json object', async () => {
@@ -252,9 +254,7 @@ describe('Pinning APIs endpoints', () => {
     })
 
     it('returns only successful pins when no filter values are specified', async () => {
-      const opts = new URLSearchParams({
-        status: 'pinned'
-      })
+      const opts = new URLSearchParams({})
       const url = new URL(`${baseUrl}?${opts}`).toString()
       const res = await fetch(
         url, {
@@ -269,6 +269,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 1)
+      assertCorretPinResponseList(data)
     })
 
     it('filters pins on CID, for this user', async () => {
@@ -295,6 +296,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 2)
+      assertCorretPinResponseList(data)
     })
 
     it('filters case sensitive exact match on name', async () => {
@@ -316,6 +318,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 1)
+      assertCorretPinResponseList(data)
     })
 
     it('filters case insensitive partial match on name', async () => {
@@ -338,6 +341,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 4)
+      assertCorretPinResponseList(data)
     })
 
     it('filters pins by status', async () => {
@@ -360,6 +364,7 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(data.count, 1)
       assert.strictEqual(data.results.length, 1)
       assert.strictEqual(data.results[0].pin.name, 'FailedPinning.doc')
+      assertCorretPinResponseList(data)
     })
 
     it('filters pins by multiple statuses', async () => {
@@ -380,6 +385,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 5)
+      assertCorretPinResponseList(data)
     })
 
     it('filters pins by queued', async () => {
@@ -400,6 +406,7 @@ describe('Pinning APIs endpoints', () => {
       assert(res.ok, 'Server response is ok')
       const data = await res.json()
       assert.strictEqual(data.count, 1)
+      assertCorretPinResponseList(data)
     })
 
     it('filters pins created before a date', async () => {
@@ -422,6 +429,7 @@ describe('Pinning APIs endpoints', () => {
       const data = await res.json()
       assert.strictEqual(data.results.length, 1)
       assert.strictEqual(data.count, 1)
+      assertCorretPinResponseList(data)
     })
 
     it('filters pins created after a date', async () => {
@@ -444,6 +452,7 @@ describe('Pinning APIs endpoints', () => {
       const data = await res.json()
       assert.strictEqual(data.results.length, 2)
       assert.strictEqual(data.count, 2)
+      assertCorretPinResponseList(data)
     })
 
     it('limits the number of pins returned for this user and includes the total', async () => {
@@ -466,6 +475,7 @@ describe('Pinning APIs endpoints', () => {
       const data = await res.json()
       assert.strictEqual(data.count, 7)
       assert.strictEqual(data.results.length, 3)
+      assertCorretPinResponseList(data)
     })
 
     it('filters pins by meta', async () => {
@@ -488,6 +498,7 @@ describe('Pinning APIs endpoints', () => {
       const data = await res.json()
       assert.strictEqual(data.count, 1)
       assert.strictEqual(data.results[0].pin.name, 'Image.jpeg')
+      assertCorretPinResponseList(data)
     })
   })
 
@@ -510,10 +521,12 @@ describe('Pinning APIs endpoints', () => {
       assert(res, 'Server responded')
       assert(res.ok, 'Server response ok')
       const data = await res.json()
+      assertCorrectPinResponse(data)
       assert.strictEqual(data.pin.cid, cid)
-      assert.strictEqual(data.pin.name, null)
-      assert.strictEqual(data.pin.origins, null)
-      assert.strictEqual(data.pin.meta, null)
+      console.log(data.pin.cid, cid)
+      assert.strictEqual(data.pin.name, undefined)
+      assert.strictEqual(data.pin.origins, undefined)
+      assert.strictEqual(data.pin.meta, undefined)
     })
 
     it('requires cid', async () => {
@@ -575,6 +588,7 @@ describe('Pinning APIs endpoints', () => {
       const data = await res.json()
       assert(res, 'Server responded')
       assert(res.ok, 'Server response ok')
+      assertCorrectPinResponse(data)
       assert.strictEqual(data.pin.cid, cid)
       assert.deepStrictEqual(data.pin.name, name)
       assert.deepStrictEqual(data.pin.origins, origins)
@@ -972,6 +986,7 @@ describe('Pinning APIs endpoints', () => {
       assert(replaceResponse.ok, 'Replace request was not successful')
       assert.strictEqual(replaceResponse.status, 202)
       const data = await replaceResponse.json()
+      assertCorrectPinResponse(data)
       assert.strictEqual(data.pin.cid, newCid)
       assert.deepStrictEqual(data.pin.name, name)
       assert.deepStrictEqual(data.pin.origins, origins)

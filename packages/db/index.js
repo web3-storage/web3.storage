@@ -1180,10 +1180,6 @@ export class DBClient {
       query = query.range(rangeFrom, rangeTo - 1)
     }
 
-    if (!opts.cid && !opts.name && !opts.statuses) {
-      query = query.eq('content.pins.status', 'Pinned')
-    }
-
     if (opts.statuses) {
       query = query.in('content.pins.status', opts.statuses)
     }

@@ -188,7 +188,7 @@ export async function pinsGet (request, env, ctx) {
 /**
  * Transform a PinRequest into a PinStatus
  *
- * @param { PsaPinRequestUpsertOutput } pinRequest
+ * @param { import('../../db/db-client-types.js').PsaPinRequestUpsertOutput } pinRequest
  * @returns { PsaPinStatusResponse }
  */
 export function toPinStatusResponse (pinRequest) {
