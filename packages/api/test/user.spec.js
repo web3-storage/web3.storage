@@ -417,7 +417,7 @@ describe('GET /user/pins', () => {
 
     assert(res.ok)
     const body = await res.json()
-    assert.equal([...new Set(body.results.map(x => x.pin.authKey))].length, 2)
+    assert.equal(body.count, 8)
   })
 })
 
