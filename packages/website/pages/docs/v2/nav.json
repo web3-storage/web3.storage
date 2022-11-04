@@ -12,6 +12,14 @@
     "name": "How-tos",
     "menu": [
       {
+        "name": "Create and manage accounts",
+        "src": "how-tos/manage-accounts"
+      },
+      {
+        "name": "Integrate with user accounts",
+        "src": "how-tos/integrate-with-user-accounts"
+      },
+      {
         "name": "Store",
         "src": "how-tos/store"
       },
