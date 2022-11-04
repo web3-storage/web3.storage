@@ -53,6 +53,22 @@
         "src": "concepts/decentralized-storage"
       },
       {
+        "name": "Accounts and DIDs",
+        "src": "concepts/dids-and-accounts"
+      },
+      {
+        "name": "UCAN",
+        "src": "concepts/ucan"
+      },
+      {
+        "name": "Our infrastructure",
+        "src": "concepts/infrastructure"
+      },
+      {
+        "name": "Comparing our APIs",
+        "src": "concepts/api-comparison"
+      },
+      {
         "name": "IPFS Gateways",
         "src": "concepts/w3link"
       }
