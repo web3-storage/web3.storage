@@ -1187,7 +1187,7 @@ export class DBClient {
     // If not specified we default to pinned only if no other filters are provided.
     // While slightly inconsistent, that's the current expectation.
     // This is being discussed in https://github.com/ipfs-shipyard/pinning-service-compliance/issues/245
-    if (!opts.cid && !opts.name && !opts.statuses) {
+    if (!opts.cid && !opts.name && !opts.meta && !opts.statuses) {
       statuses = ['Pinned']
     } else {
       statuses = opts.statuses
