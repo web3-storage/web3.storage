@@ -62,12 +62,12 @@
     "name": "Examples",
     "menu": [
       {
-        "name": "Getting started",
-        "src": "examples/getting-started"
+        "name": "Simple upload",
+        "src": "examples/simple-upload"
       },
       {
-        "name": "Image gallery",
-        "src": "examples/image-gallery"
+        "name": "Forever Note",
+        "src": "examples/forever-note"
       }
     ]
   },
