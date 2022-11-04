@@ -97,20 +97,7 @@
   },
   {
     "name": "Reference",
-    "menu": [
-      {
-        "name": "JavaScript client library",
-        "src": "reference/js-client-library"
-      },
-      {
-        "name": "JavaScript utility libraries",
-        "src": "reference/js-utilities"
-      },
-      {
-        "name": "w3name HTTP API",
-        "src": "reference/w3name-http-api"
-      }
-    ]
+    "menu": []
   },
   {
     "name": "Community",
