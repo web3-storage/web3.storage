@@ -184,7 +184,7 @@ describe('user operations', () => {
     assert(keys.every(item => notDeletedKeys.includes(item._id)))
   })
 
-  it('lists also deleted keys if necessarely', async () => {
+  it('lists deleted keys if requested', async () => {
     const name = 'test-key-name-2'
     const secret = 'test-secret'
     const authKey1 = await client.createKey({
