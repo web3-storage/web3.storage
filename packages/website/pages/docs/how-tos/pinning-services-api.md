@@ -43,7 +43,7 @@ curl -X GET 'https://api.web3.storage/pins' \
 ### Delete a pin
 
 ```bash
-curl -X DELETE 'https://api-staging.web3.storage/pins/<REQUEST_ID>' \
+curl -X DELETE 'https://api.web3.storage/pins/<REQUEST_ID>' \
   --header 'Accept: */*' \
   --header 'Authorization: Bearer <YOUR_AUTH_KEY_JWT>'
 ```
