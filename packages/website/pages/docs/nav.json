@@ -65,10 +65,6 @@
         "src": "concepts/content-addressing"
       },
       {
-        "name": "Decentralized storage",
-        "src": "concepts/decentralized-storage"
-      },
-      {
         "name": "IPFS Gateways",
         "src": "concepts/w3link"
       }
