@@ -41,8 +41,19 @@ export interface Customer {
   id: string
 }
 
+export interface CustomerContact {
+  email: string | undefined
+  name: string | undefined
+}
+
 export interface CustomersService {
-  getOrCreateForUser(user: BillingUser, userCreationOptions?: UserCreationOptions): Promise<Customer>
+  /**
+   * Get contact info for the a customer.
+   * @param customerId - customer id to get contact info of
+   */
+  getContact(customerId: Customer['id']): Promise<CustomerContact|CustomerNotFound>
+  updateContact(customerId: Customer['id'], contact: CustomerContact): Promise<CustomerNotFound|void>
+  getOrCreateForUser(user: BillingUser, userCreationOptions?: UserCreationOptions): Promise<Pick<Customer, 'id'>>
 }
 
 export type StoragePriceName = 'free' | 'lite' | 'pro'
