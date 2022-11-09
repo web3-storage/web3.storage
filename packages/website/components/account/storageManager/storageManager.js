@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useUser } from 'components/contexts/userContext';
 import { elementIsInViewport } from 'lib/utils';
 import { usePayment } from '../../../hooks/use-payment';
+import Tooltip from 'ZeroComponents/tooltip/tooltip';
+import InfoIcon from 'assets/icons/info';
 
 // Raw TiB number of bytes, to be used in calculations
 const tebibyte = 1099511627776;
@@ -123,6 +125,9 @@ const StorageManager = ({ className = '', content }) => {
                   &nbsp;of <span className="storage-number">{currentPlan?.baseStorage}</span> used
                 </>
               )}
+              <Tooltip content={content.tooltip_total}>
+                <InfoIcon />
+              </Tooltip>
             </>
           )}
         </div>

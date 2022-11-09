@@ -76,7 +76,8 @@
       },
       "loading": "Loading...",
       "max_space_tib_label": "TiB",
-      "unlock_label": "1 TiB+"
+      "unlock_label": "1 TiB+",
+      "tooltip_total": "<div> This is the total of all your uploads, including the ones that never completed.</div> You can remove files and incomplete uploads at any point by using the table below, your preferred client library, the CLI or the HTTP APIs. <div>Please get in touch with <a href='mailto:support@web3.storage'>support@web3.storage</a> if you need help bulk deleting files.<div>"
     },
     "file_manager": {
       "tabs": [
@@ -186,10 +187,22 @@
         },
         "results": {
           "options": [
-            { "label": "View 10 Results", "value": "10" },
-            { "label": "View 20 Results", "value": "20" },
-            { "label": "View 50 Results", "value": "50" },
-            { "label": "View 100 Results", "value": "100" }
+            {
+              "label": "View 10 Results",
+              "value": "10"
+            },
+            {
+              "label": "View 20 Results",
+              "value": "20"
+            },
+            {
+              "label": "View 50 Results",
+              "value": "50"
+            },
+            {
+              "label": "View 100 Results",
+              "value": "100"
+            }
           ]
         }
       }
