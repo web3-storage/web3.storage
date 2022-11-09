@@ -21,7 +21,7 @@ You can see a list of everything you've uploaded to web3.storage on the [Files p
 
 <Img src={ImgFilesListing} alt="A screenshot of the file listing available when logged in to your account" />
 
-This [Files page][site-files] provides a convenient overview of your stored data, including links to view your files in your browser via an [IPFS gateway][ipfs-docs-gateway] and information about how the data is being stored on the [decentralized storage networks][concepts-decentralized-storage] that web3.storage uses under the hood.
+This [Files page][site-files] provides a convenient overview of your stored data, including links to view your files in your browser via an [IPFS gateway][ipfs-docs-gateway] and information about how the data is being stored on the decentralized storage networks that web3.storage uses under the hood.
 
 ## Using the web3.storage client
 
@@ -87,7 +87,6 @@ Here's an example of fetching the first 10 uploads made on the previous day:
 [howto-retrieve]: /docs/how-tos/retrieve/
 [howto-query]: /docs/how-tos/query/
 [howto-gen-token]: /docs/how-tos/generate-api-token/
-[concepts-decentralized-storage]: /docs/concepts/decentralized-storage/
 [reference-js-client]: /docs/reference/js-client-library/
 [reference-js-constructor]: /docs/reference/js-client-library/#constructor
 [reference-js-list]: /docs/reference/js-client-library/#list-uploads

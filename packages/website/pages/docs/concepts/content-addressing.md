@@ -42,7 +42,7 @@ web3.storage uses CIDs to make its free, decentralized file storage work, with h
 
 Content addressing is the basis of the peer-to-peer hypermedia protocol IPFS (the InterPlanetary File System), which web3.storage uses to locate files. When web3.storage stores your data on IPFS, it can be retrieved from any IPFS node that has a copy of that data. This can make data transfers more efficient and reduce the load on any single node. As each user fetches a piece of data, they keep a local copy around to help other users who might request it later.
 
-In addition to web3.storage making it easy to get your data onto the content-addressed IPFS network, it also provides long-term persistence for your files using the decentralized Filecoin storage network. The Filecoin network incentivizes participants to provide storage space for files on the network — for more details, see the [concept guide to decentralized storage](/docs/concepts/decentralized-storage/). **By combining IPFS and Filecoin storage into one easy-to-use service, web3.storage makes it simple to store, locate, and retrieve your files on the decentralized web.**
+In addition to web3.storage making it easy to get your data onto the content-addressed IPFS network, it also provides long-term persistence for your files using the decentralized Filecoin storage network. The Filecoin network incentivizes participants to provide storage space for files on the network. **By combining IPFS and Filecoin storage into one easy-to-use service, web3.storage makes it simple to store, locate, and retrieve your files on the decentralized web.**
 
 ## Summary
 
