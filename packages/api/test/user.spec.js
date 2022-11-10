@@ -587,12 +587,9 @@ describe('userLoginPost', function () {
     assert.ok(!(customer1 instanceof Error), 'no error finding customer for user after first login')
     assert.ok(customer1, 'user has a customer after first login')
     const contact1 = await env.customers.getContact(customer1.id)
-    assert.deepEqual(contact1, {
-      email: user1Authentication1.email
-    }, 'customer contact has email from authentication after first login')
-    assert.deepEqual(contact1, {
-      name: githubUserOauth1.userInfo.name
-    }, 'customer contact has name from userLoginPost request body after first login')
+    assert.ok(!(contact1 instanceof Error), 'no error finding contact for customer after first login')
+    assert.deepEqual(contact1.email, user1Authentication1.email, 'customer contact has email from authentication after first login')
+    assert.deepEqual(contact1.name, githubUserOauth1.userInfo.name, 'customer contact has name from userLoginPost request body after first login')
 
     // now we're going to make the same request again, logging in to that user, but with a new email and name
     const name2 = {
@@ -623,11 +620,8 @@ describe('userLoginPost', function () {
 
     // make sure the contact was updated after response2
     const contact2 = await env.customers.getContact(customer1.id)
-    assert.deepEqual(contact2, {
-      email: user1Authentication2.email
-    }, 'customer contact has email from authentication after second login')
-    assert.deepEqual(contact2, {
-      name: githubUserOauth2.userInfo.name
-    }, 'customer contact has name from userLoginPost request body after second login')
+    assert.ok(!(contact2 instanceof Error), 'no error getting contact')
+    assert.deepEqual(contact2.email, user1Authentication2.email, 'customer contact has email from authentication after second login')
+    assert.deepEqual(contact2.name, githubUserOauth2.userInfo.name, 'customer contact has name from userLoginPost request body after second login')
   })
 })

@@ -191,9 +191,7 @@ export function createMockCustomerService (
 ) {
   const mockCustomers = []
   /**
-   * @param {import('./billing-types').BillingUser} user
-   * @param {import('./billing-types').UserCreationOptions} creationOptions
-   * @returns {Promise<{ id: string }>}
+   * @type {import('src/utils/billing-types.js').CustomersService['getOrCreateForUser']}
    */
   async function getOrCreateForUser (user, creationOptions) {
     const existingCustomerForUser = await userCustomerService.getUserCustomer(user.id)
@@ -202,14 +200,14 @@ export function createMockCustomerService (
     }
     const createdCustomer = {
       id: `customer-${Math.random().toString().slice(2)}`,
-      email: creationOptions.email,
-      name: creationOptions.name
+      email: creationOptions?.email,
+      name: creationOptions?.name
     }
     mockCustomers.push(createdCustomer)
     customerIdMap.set(createdCustomer.id, {
       contact: {
-        email: creationOptions.email,
-        name: creationOptions.name
+        email: creationOptions?.email,
+        name: creationOptions?.name
       }
     })
     await userCustomerService.upsertUserCustomer(user.id, createdCustomer.id)
