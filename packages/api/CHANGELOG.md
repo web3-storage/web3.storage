@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.12.0](https://github.com/web3-storage/web3.storage/compare/api-v7.11.3...api-v7.12.0) (2022-11-11)
+
+
+### Features
+
+* logins of already-existing users result in the user's customer contact info being updated (e.g. in stripe.com dashboard) ([#2103](https://github.com/web3-storage/web3.storage/issues/2103)) ([a365b4c](https://github.com/web3-storage/web3.storage/commit/a365b4c732aea169f372276e40c8792e69bfde69))
+
 ## [7.11.3](https://github.com/web3-storage/web3.storage/compare/api-v7.11.2...api-v7.11.3) (2022-11-01)
 
 
