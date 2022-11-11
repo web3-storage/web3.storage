@@ -226,7 +226,7 @@ export class StripeCustomersService {
     try {
       await this.stripe.customers.update(customerId, {
         name: contact.name,
-        email: contact.email,
+        email: contact.email
       })
     } catch (error) {
       if (hasOwnProperty(error, 'code')) {
