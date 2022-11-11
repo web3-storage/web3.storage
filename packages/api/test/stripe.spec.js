@@ -176,7 +176,7 @@ describe('StripeCustomersService', async function () {
     await customers.updateContact(customer.id, contactUpdate2)
     assert.equal(stripeCustomersUpdateSpy.callCount, 1)
     assert.equal(stripeCustomersUpdateSpy.getCalls()[0]?.args[0], customer.id, 'stripe.customers.update was called with correct customer id')
-    assert.equal(stripeCustomersUpdateSpy.getCalls()[0]?.args[1], contactUpdate2, 'stripe.customers.update was called with correct contact info')
+    assert.deepEqual(stripeCustomersUpdateSpy.getCalls()[0]?.args[1], contactUpdate2, 'stripe.customers.update was called with correct contact info')
   })
 })
 
