@@ -1,6 +1,6 @@
 /* eslint-disable no-void */
 import Stripe from 'stripe'
-import { CustomerNotFound, isStoragePriceName, randomString, storagePriceNames } from './billing.js'
+import { CustomerNotFound, hasOwnProperty, isStoragePriceName, randomString, storagePriceNames } from './billing.js'
 
 /**
  * @typedef {import('./billing-types').StoragePriceName} StoragePriceName
@@ -193,7 +193,18 @@ export class StripeCustomersService {
    * @returns {Promise<import('./billing-types').CustomerContact | CustomerNotFound>}
    */
   async getContact (customerId) {
-    const stripeCustomer = await this.stripe.customers.retrieve(customerId)
+    let stripeCustomer
+    try {
+      stripeCustomer = await this.stripe.customers.retrieve(customerId)
+    } catch (error) {
+      if (hasOwnProperty(error, 'code')) {
+        switch (error.code) {
+          case 'resource_missing':
+            return new CustomerNotFound('customer not found')
+        }
+      }
+      throw error
+    }
     if (stripeCustomer.deleted) {
       return new CustomerNotFound('customer has been deleted')
     }
@@ -209,9 +220,20 @@ export class StripeCustomersService {
    * Update contact info for a customer
    * @param {Customer['id']} customerId
    * @param {import('./billing-types').CustomerContact} contact
+   * @returns {Promise<void|CustomerNotFound>}
    */
   async updateContact (customerId, contact) {
-    await this.stripe.customers.update(customerId, contact)
+    try {
+      await this.stripe.customers.update(customerId, contact)
+    } catch (error) {
+      if (hasOwnProperty(error, 'code')) {
+        switch (error.code) {
+          case 'resource_missing':
+            return new CustomerNotFound('customer not found')
+        }
+      }
+      throw error
+    }
   }
 
   /**
