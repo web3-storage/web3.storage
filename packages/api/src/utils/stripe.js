@@ -1,6 +1,6 @@
 /* eslint-disable no-void */
 import Stripe from 'stripe'
-import { CustomerNotFound, isStoragePriceName, randomString, storagePriceNames } from './billing.js'
+import { CustomerNotFound, hasOwnProperty, isStoragePriceName, randomString, storagePriceNames } from './billing.js'
 
 /**
  * @typedef {import('./billing-types').StoragePriceName} StoragePriceName
@@ -137,6 +137,8 @@ export function stripeToStripeCardPaymentMethod (paymentMethod) {
 /**
  * @typedef {object} StripeComCustomersForGetOrCreate
  * @property {StripeComCustomers['create']} create
+ * @property {StripeComCustomers['retrieve']} retrieve
+ * @property {StripeComCustomers['update']} update
  */
 
 /**
@@ -186,9 +188,61 @@ export class StripeCustomersService {
   }
 
   /**
+   * Get Contact info for a customer
+   * @param {Customer['id']} customerId
+   * @returns {Promise<import('./billing-types').CustomerContact | CustomerNotFound>}
+   */
+  async getContact (customerId) {
+    let stripeCustomer
+    try {
+      stripeCustomer = await this.stripe.customers.retrieve(customerId)
+    } catch (error) {
+      if (hasOwnProperty(error, 'code')) {
+        switch (error.code) {
+          case 'resource_missing':
+            return new CustomerNotFound('customer not found')
+        }
+      }
+      throw error
+    }
+    if (stripeCustomer.deleted) {
+      return new CustomerNotFound('customer has been deleted')
+    }
+    /** @type {import('./billing-types').CustomerContact} */
+    const contact = {
+      name: stripeCustomer.name ?? undefined,
+      email: stripeCustomer.email ?? undefined
+    }
+    return contact
+  }
+
+  /**
+   * Update contact info for a customer
+   * @param {Customer['id']} customerId
+   * @param {import('./billing-types').CustomerContact} contact
+   * @returns {Promise<void|CustomerNotFound>}
+   */
+  async updateContact (customerId, contact) {
+    try {
+      await this.stripe.customers.update(customerId, {
+        name: contact.name,
+        email: contact.email
+      })
+    } catch (error) {
+      if (hasOwnProperty(error, 'code')) {
+        switch (error.code) {
+          case 'resource_missing':
+            return new CustomerNotFound('customer not found')
+        }
+      }
+      throw error
+    }
+  }
+
+  /**
    * @param {import('./billing-types').BillingUser} user
    * @param {import('./billing-types').UserCreationOptions} [options]
-   * @returns {Promise<Customer>}
+   * @returns {Promise<import('./billing-types').Customer>}
    */
   async getOrCreateForUser (user, options) {
     const existingCustomer = await this.userCustomerService.getUserCustomer(user.id.toString())
@@ -201,7 +255,10 @@ export class StripeCustomersService {
       email: options?.email
     })
     await this.userCustomerService.upsertUserCustomer(user.id.toString(), createdCustomer.id)
-    return createdCustomer
+    const customer = {
+      id: createdCustomer.id
+    }
+    return customer
   }
 }
 
@@ -235,17 +292,53 @@ export function createMockStripeCardPaymentMethod () {
   }
 }
 
-/** @returns {StripeComForCustomersService} */
+/**
+ * Create a mock stripe sdk instance that can be used with the StripeCustomersService
+ * @returns {StripeComForCustomersService}
+ */
 export function createMockStripeForCustomersService () {
+  /** @type {Map<string, Stripe.Customer>} */
+  const idToCustomer = new Map()
   return {
     customers: {
       create: async () => {
         const customer = createMockStripeCustomer()
+        idToCustomer.set(customer.id, customer)
         /** @type {Stripe.Response<Stripe.Customer>} */
         const response = {
           // @ts-ignore
           lastResponse: {},
           ...customer
+        }
+        return response
+      },
+      retrieve: async (id) => {
+        const customer = idToCustomer.get(id)
+        if (!customer) {
+          throw new Error('customer not found')
+        }
+        /** @type {Stripe.Response<Stripe.Customer>} */
+        const response = {
+          // @ts-ignore
+          lastResponse: {},
+          ...customer
+        }
+        return response
+      },
+      update: async (id, params) => {
+        const customer = idToCustomer.get(id)
+        if (!customer) {
+          throw new Error('customer not found')
+        }
+        const updatedCustomer = {
+          ...customer,
+          ...params
+        }
+        /** @type {Stripe.Response<Stripe.Customer>} */
+        const response = {
+          // @ts-ignore
+          lastResponse: {},
+          ...updatedCustomer
         }
         return response
       }

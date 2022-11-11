@@ -16,7 +16,8 @@ import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
 import { CustomerNotFound, getPaymentSettings, initializeBillingForNewUser, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
 
 /**
- * @typedef {{ _id: string, issuer: string, name?: string, email?: string }} User
+ * @typedef {string} UserId
+ * @typedef {{ _id: UserId, issuer: string, name?: string, email?: string }} User
  * @typedef {{ _id: string, name: string }} AuthToken
  * @typedef {{ user: User, authToken?: AuthToken }} Auth
  * @typedef {Request & { auth: Auth }} AuthenticatedRequest
@@ -161,6 +162,9 @@ async function loginOrRegister (request, env) {
         { ...user, id: user.id },
         { name: parsed.name, email: parsed.email }
       )
+    } else {
+      // previously existing user. Update their customer record
+      await updateUserCustomerContact(env, user, parsed)
     }
   } else if (env.MODE === READ_ONLY) {
     user = await env.db.getUser(parsed.issuer, {})
@@ -169,6 +173,17 @@ async function loginOrRegister (request, env) {
   }
 
   return user
+}
+
+/**
+ * @param {object} context
+ * @param {import('../src/utils/billing-types').CustomersService} context.customers
+ * @param {Pick<import('../src/utils/billing-types').BillingUser, 'id'>} user
+ * @param {import('../src/utils/billing-types').CustomerContact} contact
+ */
+async function updateUserCustomerContact (context, user, contact) {
+  const customer = await context.customers.getOrCreateForUser(user)
+  await context.customers.updateContact(customer.id, contact)
 }
 
 /**

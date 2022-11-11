@@ -179,30 +179,58 @@ export function createMockUserCustomerService () {
 }
 
 /**
+ * @param {import('src/utils/billing-types.js').UserCustomerService} userCustomerService
+ * @param {Map<string,{
+ *  contact: import('src/utils/billing-types.js').CustomerContact,
+ * }>} customerIdMap
  * @returns {import('src/utils/billing-types.js').CustomersService & { mockCustomers: Array<{ id: string }> }}
  */
-export function createMockCustomerService () {
+export function createMockCustomerService (
+  userCustomerService = createMockUserCustomerService(),
+  customerIdMap = new Map()
+) {
   const mockCustomers = []
-  /** @type {Map<string,{ id: string }>} */
-  const userIdToCustomer = new Map()
   /**
-   * @param {import('./billing-types').BillingUser} user
-   * @returns {Promise<{ id: string }>}
+   * @type {import('src/utils/billing-types.js').CustomersService['getOrCreateForUser']}
    */
-  async function getOrCreateForUser (user) {
-    if (userIdToCustomer.has(user.id)) {
-      const customerForUserId = userIdToCustomer.get(user.id)
-      if (customerForUserId) {
-        return customerForUserId
-      }
+  async function getOrCreateForUser (user, creationOptions) {
+    const existingCustomerForUser = await userCustomerService.getUserCustomer(user.id)
+    if (existingCustomerForUser) {
+      return { id: existingCustomerForUser.id }
     }
-    const created = { id: `customer-${Math.random().toString().slice(2)}` }
-    mockCustomers.push(created)
-    userIdToCustomer.set(user.id, created)
-    return created
+    const createdCustomer = {
+      id: `customer-${Math.random().toString().slice(2)}`,
+      email: creationOptions?.email,
+      name: creationOptions?.name
+    }
+    mockCustomers.push(createdCustomer)
+    customerIdMap.set(createdCustomer.id, {
+      contact: {
+        email: creationOptions?.email,
+        name: creationOptions?.name
+      }
+    })
+    await userCustomerService.upsertUserCustomer(user.id, createdCustomer.id)
+    return createdCustomer
+  }
+  /** @type {import('./billing-types').CustomersService['getContact']} */
+  async function getContact (customerId) {
+    const customerFromMap = customerIdMap.get(customerId)
+    if (!customerFromMap) {
+      return new CustomerNotFound()
+    }
+    return customerFromMap.contact
+  }
+  /** @type {import('./billing-types').CustomersService['updateContact']} */
+  async function updateContact (customerId, contact) {
+    const prev = customerIdMap.get(customerId)
+    const next = { ...prev, contact }
+    customerIdMap.set(customerId, next)
   }
   return {
+    getContact,
     getOrCreateForUser,
+    updateContact,
     mockCustomers
   }
 }
@@ -259,12 +287,7 @@ export function createMockPaymentMethod () {
  * @returns {import('./billing-types').CustomersService}
  */
 function createTestEnvCustomerService () {
-  return {
-    async getOrCreateForUser (user) {
-      // reuse user.id as customer.id
-      return user
-    }
-  }
+  return createMockCustomerService()
 }
 
 /**
