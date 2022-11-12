@@ -1,6 +1,8 @@
-import { ReactComponent as Chevron } from '../../assets/icons/chevron.svg';
+import ReactMarkdown from 'react-markdown';
+
 import ZeroAccordion from 'ZeroComponents/accordion/accordion';
 import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
+import { ReactComponent as Chevron } from '../../assets/icons/chevron.svg';
 
 /**
  * @param {Object} props.block
@@ -18,7 +20,11 @@ export default function AccordionBlock({ block }) {
               <div className="accordion-header-text">{section.heading}</div>
             </ZeroAccordionSection.Header>
             <ZeroAccordionSection.Content>
-              <div className="accordion-content-text" dangerouslySetInnerHTML={{ __html: section.content }}></div>
+              {block.markdown.includes('content') ? (
+                <ReactMarkdown>{section.content}</ReactMarkdown>
+              ) : (
+                <div className="accordion-content-text" dangerouslySetInnerHTML={{ __html: section.content }}></div>
+              )}
             </ZeroAccordionSection.Content>
           </ZeroAccordionSection>
         ))}
