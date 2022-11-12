@@ -36,7 +36,6 @@ export default function Home() {
         setMarkdownProps(['content']);
       })
       .catch(e => {
-        // fallback
         // @ts-ignore
         setFaqSections([
           {
