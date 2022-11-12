@@ -1,6 +1,6 @@
 {
   "name": "@web3-storage/website",
-  "version": "2.25.0",
+  "version": "2.31.0",
   "description": "web3.storage website",
   "private": true,
   "scripts": {
@@ -41,7 +41,6 @@
     "kwesforms": "^2.1.22",
     "magic-sdk": "^4.2.1",
     "next": "^12.1.0",
-    "next-mdx-remote": "^4.0.0-rc.1",
     "next-optimized-images": "^2.6.2",
     "nextra": "^2.0.0-beta.5",
     "p-map": "^5.1.0",
@@ -56,7 +55,6 @@
     "react-redux": "7.2.6",
     "react-syntax-highlighter": "^15.4.5",
     "redux": "4.1.2",
-    "remark-gfm": "^3.0.1",
     "remark-slug": "6.1.0",
     "scrollmagic": "2.0.8",
     "scrollmagic-plugins": "1.0.8",
