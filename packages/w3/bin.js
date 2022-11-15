@@ -74,7 +74,7 @@ cli.command('name resolve <keyId>')
   .example('name resolve k51qzi5uqu5dlcuzv5xhg1zqn48gobcvn2mx13uoig7zfj8rz6zvqdxsugka9z')
   .action(Name.resolve)
 
-cli.command('name get <keyId>')
+cli.command('name get-key <keyId>')
   .describe('Retrieve the signing key associated with the passed name.')
   .example('name get k51qzi5uqu5dlcuzv5xhg1zqn48gobcvn2mx13uoig7zfj8rz6zvqdxsugka9z')
   .action(Name.getKey)

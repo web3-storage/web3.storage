@@ -1,9 +1,9 @@
 <h1 align="center">⁂<br/>web3.storage</h1>
 <p align="center">The CLI for web3.storage</p>
 
-## Getting started 
+## Getting started
 
-Install the CLI from npm 
+Install the CLI from npm
 
 ```console
 $ npm install -g @web3-storage/w3
@@ -99,7 +99,7 @@ Working with name records simply updates the Web3.Storage cache of data.
 
 Resolve the current IPNS record revision for the passed name.
 
-### `w3 name get <keyId>`
+### `w3 name get-key <keyId>`
 
 **❗️Experimental** this command may not work, may change, and may be removed.
 
