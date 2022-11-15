@@ -77,7 +77,7 @@
       "loading": "Loading...",
       "max_space_tib_label": "TiB",
       "unlock_label": "1 TiB+",
-      "tooltip_total": "<div> This is the total of all your uploads, including ones marked \"Failed\" (you can read more about what the status means <a href='https://web3.storage/docs/how-tos/get-status/'>here</a>). </div> You can remove uploads via the table below, through your preferred client library, the CLI or the HTTP APIs.<div>"
+      "tooltip_total": "<div> This is the total of all your uploads, including ones marked \"Failed\" (you can read more about what the status means <a href='https://web3.storage/docs/how-tos/get-status/'>here</a>). You can remove uploads via the table below, through your preferred client library, the CLI or the HTTP APIs.</div>"
     },
     "file_manager": {
       "tabs": [
