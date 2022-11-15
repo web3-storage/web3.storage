@@ -99,6 +99,12 @@ Working with name records simply updates the Web3.Storage cache of data.
 
 Resolve the current IPNS record revision for the passed name.
 
+### `w3 name get <keyId>`
+
+**❗️Experimental** this command may not work, may change, and may be removed.
+
+Retrieve the signing key associated with the passed name.
+
 ### `w3 name rm <keyId>`
 
 **❗️Experimental** this command may not work, may change, and may be removed.
