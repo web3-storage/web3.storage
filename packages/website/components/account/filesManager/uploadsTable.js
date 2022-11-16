@@ -154,7 +154,8 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
   /** Closes the delete dialog modal. */
   const closeDeleteModal = useCallback(() => {
     deleteModalState[1](false);
-    countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
+    // @ts-ignore
+    window?.sa_event(countly.events.FILE_DELETE_CLICK, {
       ui: countly.ui.FILES,
       totalDeleted: 0,
     });
@@ -172,7 +173,8 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
       }
     } catch (e) {}
 
-    countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
+    // @ts-ignore
+    window?.sa_event(countly.events.FILE_DELETE_CLICK, {
       ui: countly.ui.FILES,
       totalDeleted: selectedUploads.length,
     });

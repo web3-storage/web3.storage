@@ -44,7 +44,8 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
   }, [onCardLoad]);
 
   const onLinkClick = useCallback(e => {
-    countly.trackCustomLinkClick(countly.events.LINK_CLICK_EXPLORE_DOCS, e.currentTarget);
+    // @ts-ignore
+    window?.sa_event(countly.events.LINK_CLICK_EXPLORE_DOCS, { link_text: e.currentTarget });
   }, []);
 
   const handleButtonClick = useCallback(

@@ -45,6 +45,17 @@ function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disab
   }, [reportUID, uid]);
 
   useEffect(() => {
+    if (open && header) {
+      const headerLabel = header.props.children.find(child => {
+        return child.props.className === 'accordion-header-text';
+      });
+
+      // @ts-ignore
+      window?.sa_event('accordion_opened', { title: headerLabel.props.children });
+    }
+  }, [header, open]);
+
+  useEffect(() => {
     if (!!slug && !!router.query.section && router.query.section === slug) {
       const element = document.getElementById(`accordion-section_${slug}`);
       if (element) {

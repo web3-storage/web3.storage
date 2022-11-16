@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useCallback } from 'react';
 
 import ZeroButton from 'ZeroComponents/button/button';
-import { trackEvent, events } from 'lib/countly';
+import { events } from 'lib/countly';
 import Tooltip from 'ZeroComponents/tooltip/tooltip';
 
 export const ButtonVariant = {
@@ -54,7 +54,8 @@ const Button = ({
   const onClickHandler = useCallback(
     event => {
       tracking &&
-        trackEvent(tracking.event || events.CTA_LINK_CLICK, {
+        // @ts-ignore
+        window?.sa_event(tracking.event || events.CTA_LINK_CLICK, {
           ui: tracking.ui,
           action: tracking.action,
           link: props.href || '',

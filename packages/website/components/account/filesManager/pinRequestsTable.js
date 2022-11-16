@@ -10,9 +10,9 @@ import Modal from 'modules/zero/components/modal/modal';
 import CloseIcon from 'assets/icons/close';
 import { useUser } from 'components/contexts/userContext';
 import RefreshIcon from 'assets/icons/refresh';
+import { usePinRequests } from 'components/contexts/pinRequestsContext';
 import PinRequestRowItem from './pinRequestRowItem';
 import GradientBackground from '../../gradientbackground/gradientbackground.js';
-import { usePinRequests } from 'components/contexts/pinRequestsContext';
 
 /**
  * @typedef {Object} PinRequestsTableProps
@@ -76,7 +76,8 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
 
   const closeDeleteModal = useCallback(() => {
     deleteModalState[1](false);
-    countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
+    // @ts-ignore
+    window?.sa_event(countly.events.FILE_DELETE_CLICK, {
       ui: countly.ui.FILES,
       totalDeleted: 0,
     });
@@ -92,8 +93,8 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
         await Promise.all(selectedPinRequests.map(({ requestid }) => deletePinRequest(requestid)));
       }
     } catch (e) {}
-
-    countly.trackEvent(countly.events.FILE_DELETE_CLICK, {
+    // @ts-ignore
+    window?.sa_event(countly.events.FILE_DELETE_CLICK, {
       ui: countly.ui.FILES,
       totalDeleted: selectedPinRequests.length,
     });

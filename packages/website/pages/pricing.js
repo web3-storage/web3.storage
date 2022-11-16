@@ -126,7 +126,15 @@ const Card = props => {
         <div className="plan-summary">
           <div className="plan-storage-allocation">{storageAllocation}</div>
           <div className="plan-overage-rate">{storageOverageRate}</div>
-          <a href={callToActionUrl}>
+          <a
+            href={callToActionUrl}
+            onClick={() => {
+              // @ts-ignore
+              window?.sa_event('pricing_card_click', {
+                plan: title,
+              });
+            }}
+          >
             <div className="plan-call-to-action button dark Button">{callToAction}</div>
           </a>
         </div>
