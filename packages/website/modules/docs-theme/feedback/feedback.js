@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { trackEvent, events } from '../../../lib/analytics';
+import { events } from '../../../lib/analytics';
 
 function Feedback({ strings: { title, yes, no, thanks, helpUsImprove } }) {
   const router = useRouter();
@@ -23,7 +23,8 @@ function Feedback({ strings: { title, yes, no, thanks, helpUsImprove } }) {
   );
 
   const sendFeedback = (answer, answerText) => {
-    trackEvent(events.FEEDBACK_HELPFUL, {
+    // @ts-ignore
+    window?.sa_event(events.FEEDBACK_HELPFUL, {
       path: window.location.pathname,
       question: title,
       answer,
