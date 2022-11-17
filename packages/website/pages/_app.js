@@ -28,11 +28,7 @@ const App = ({ Component, pageProps }) => {
     <AppProviders authorizationProps={{ ...pageProps }}>
       <Metadata {...pageProps} />
       <RestrictedRoute {...pageProps}>
-        <Script
-          src="https://track.web3.storage/latest.dev.js"
-          data-hostname="web3.storage"
-          data-ignore-pages="/callback"
-        />
+        <Script src="https://track.web3.storage/latest.js" data-hostname="web3.storage" data-ignore-pages="/callback" />
         <Script src="https://track.web3.storage/auto-events.js" />
         <noscript>
           {/* eslint-disable @next/next/no-img-element */}
