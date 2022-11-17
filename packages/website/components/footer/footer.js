@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 
-import { trackCustomLinkClick, events } from '../../lib/countly';
+import { trackCustomLinkClick, events } from '../../lib/analytics';
 import Link, { useIsExternalHref } from '../link/link';
 import SiteLogo from '../../assets/icons/w3storage-logo.js';
 import Button from '../button/button';

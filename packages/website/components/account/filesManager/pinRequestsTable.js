@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import countly from 'lib/countly';
+import analytics from 'lib/analytics';
 import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
@@ -77,8 +77,8 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
   const closeDeleteModal = useCallback(() => {
     deleteModalState[1](false);
     // @ts-ignore
-    window?.sa_event(countly.events.FILE_DELETE_CLICK, {
-      ui: countly.ui.FILES,
+    window?.sa_event(analytics.events.FILE_DELETE_CLICK, {
+      ui: analytics.ui.FILES,
       totalDeleted: 0,
     });
   }, [deleteModalState]);
@@ -94,8 +94,8 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
       }
     } catch (e) {}
     // @ts-ignore
-    window?.sa_event(countly.events.FILE_DELETE_CLICK, {
-      ui: countly.ui.FILES,
+    window?.sa_event(analytics.events.FILE_DELETE_CLICK, {
+      ui: analytics.ui.FILES,
       totalDeleted: selectedPinRequests.length,
     });
 

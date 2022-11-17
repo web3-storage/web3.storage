@@ -6,7 +6,7 @@ import { useQueryClient } from 'react-query';
 import GithubSVG from '../../assets/icons/github.js';
 import Button from '../../components/button/button.js';
 import { loginEmail, loginSocial } from '../../lib/magic.js';
-import countly, { trackEvent } from '../../lib/countly.js';
+import analytics from '../../lib/analytics.js';
 import LoginData from '../../content/pages/app/login.json';
 import GeneralPageData from '../../content/pages/general.json';
 
@@ -67,8 +67,9 @@ const Login = () => {
   // Callback for github login logic
   const onGithubLogin = useCallback(async () => {
     // Tracking event
-    trackEvent(countly.events.LOGIN_CLICK, {
-      ui: countly.ui.LOGIN,
+    // @ts-ignore
+    window?.sa_event(analytics.events.LOGIN_CLICK, {
+      ui: analytics.ui.LOGIN,
       action: 'Github',
       link: '',
     });
@@ -96,8 +97,8 @@ const Login = () => {
             variant={pageContent.cta.theme}
             onClick={onLoginWithEmail}
             tracking={{
-              event: countly.events[pageContent.cta.event],
-              ui: countly.ui[pageContent.cta.ui],
+              event: analytics.events[pageContent.cta.event],
+              ui: analytics.ui[pageContent.cta.ui],
               action: pageContent.cta.action,
             }}
             disabled={isLoggingIn === LoginType.EMAIL}

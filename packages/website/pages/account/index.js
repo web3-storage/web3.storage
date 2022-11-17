@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import countly from 'lib/countly';
+import analytics from 'lib/analytics';
 import { useUploads } from 'components/contexts/uploadsContext';
 import { useUser } from 'hooks/use-user';
 import StorageManager from '../../components/account/storageManager/storageManager';
@@ -36,7 +36,7 @@ const Account = () => {
           disabled: user?.info?.tags?.['HasAccountRestriction'] && cta.accountRestrictedText,
           href: cta.link,
           variant: cta.theme,
-          tracking: { ui: countly.ui[cta.ui], action: cta.action },
+          tracking: { ui: analytics.ui[cta.ui], action: cta.action },
           children: cta.text,
           tooltip:
             user?.info?.tags?.['HasAccountRestriction'] && cta.accountRestrictedText
@@ -50,7 +50,7 @@ const Account = () => {
         ctas: dashboard.card_center.ctas.map(cta => ({
           href: cta.link,
           variant: cta.theme,
-          tracking: { ui: countly.ui[cta.ui], action: cta.action },
+          tracking: { ui: analytics.ui[cta.ui], action: cta.action },
           children: (
             <a href={cta.link} target="_blank" rel="noreferrer noopener">
               {cta.text}
@@ -65,7 +65,7 @@ const Account = () => {
           disabled: user?.info?.tags?.['HasAccountRestriction'] && cta.accountRestrictedText,
           onClick: onFileUpload,
           variant: cta.theme,
-          tracking: { ui: countly.ui[cta.ui], action: cta.action, isFirstFile: !uploads.length },
+          tracking: { ui: analytics.ui[cta.ui], action: cta.action, isFirstFile: !uploads.length },
           children: cta.text,
           tooltip:
             user?.info?.tags?.['HasAccountRestriction'] && cta.accountRestrictedText

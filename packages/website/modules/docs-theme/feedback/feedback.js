@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { trackEvent, events } from '../../../lib/countly';
+import { trackEvent, events } from '../../../lib/analytics';
 
 function Feedback({ strings: { title, yes, no, thanks, helpUsImprove } }) {
   const router = useRouter();

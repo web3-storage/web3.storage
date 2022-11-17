@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import CloseIcon from 'assets/icons/close';
 import RefreshIcon from 'assets/icons/refresh';
-import countly from 'lib/countly';
+import analytics from 'lib/analytics';
 import { formatTimestamp, formatTimestampFull } from 'lib/utils';
 import Modal from 'modules/zero/components/modal/modal';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
@@ -155,8 +155,8 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
   const closeDeleteModal = useCallback(() => {
     deleteModalState[1](false);
     // @ts-ignore
-    window?.sa_event(countly.events.FILE_DELETE_CLICK, {
-      ui: countly.ui.FILES,
+    window?.sa_event(analytics.events.FILE_DELETE_CLICK, {
+      ui: analytics.ui.FILES,
       totalDeleted: 0,
     });
   }, [deleteModalState]);
@@ -174,8 +174,8 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
     } catch (e) {}
 
     // @ts-ignore
-    window?.sa_event(countly.events.FILE_DELETE_CLICK, {
-      ui: countly.ui.FILES,
+    window?.sa_event(analytics.events.FILE_DELETE_CLICK, {
+      ui: analytics.ui.FILES,
       totalDeleted: selectedUploads.length,
     });
 
@@ -372,7 +372,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
             onClick={onFileUpload}
             variant={content?.upload.theme}
             tracking={{
-              ui: countly.ui[content?.upload.ui],
+              ui: analytics.ui[content?.upload.ui],
               action: content?.upload.action,
               data: { isFirstFile: false },
             }}
@@ -437,7 +437,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
               onClick={onFileUpload}
               variant={content?.table.cta.theme}
               tracking={{
-                ui: countly.ui[content?.table.cta.ui],
+                ui: analytics.ui[content?.table.cta.ui],
                 action: content?.table.cta.action,
                 data: { isFirstFile: true },
               }}

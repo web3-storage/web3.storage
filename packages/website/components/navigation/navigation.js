@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { useAuthorization } from 'components/contexts/authorizationContext';
 import ZeroAccordion from 'ZeroComponents/accordion/accordion';
 import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
-import { trackCustomLinkClick, events, ui } from 'lib/countly';
+import { trackCustomLinkClick, events, ui } from 'lib/analytics';
 import Loading from 'components/loading/loading';
 import Breadcrumbs from 'components/breadcrumbs/breadcrumbs';
 import Sidebar from 'modules/docs-theme/sidebar/sidebar';

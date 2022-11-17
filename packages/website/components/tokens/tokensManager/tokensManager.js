@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import Link from 'components/link/link';
 import TokenRowItem from './tokenRowItem';
-import countly from 'lib/countly';
+import analytics from 'lib/analytics';
 import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
 import { useTokens } from 'components/contexts/tokensContext';
@@ -74,8 +74,9 @@ const TokensManager = ({ content }) => {
     } finally {
       await queryClient.invalidateQueries('get-tokens');
 
-      countly.trackEvent(countly.events.TOKEN_DELETE, {
-        ui: countly.ui.TOKENS,
+      // @ts-ignore
+      window?.sa_event(analytics.events.TOKEN_DELETE, {
+        ui: analytics.ui.TOKENS,
       });
 
       await getTokens();
@@ -144,7 +145,7 @@ const TokensManager = ({ content }) => {
                 className={clsx(isCreating && 'isDisabled')}
                 href={content.table.cta.link}
                 variant={content.table.cta.theme}
-                tracking={{ ui: countly.ui[content.table.cta.ui], action: content.table.cta.action }}
+                tracking={{ ui: analytics.ui[content.table.cta.ui], action: content.table.cta.action }}
               >
                 <Link href={content.table.cta.link}>{content.table.cta.text}</Link>
               </Button>

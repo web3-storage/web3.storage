@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useCallback } from 'react';
 
 import ZeroButton from 'ZeroComponents/button/button';
-import { events } from 'lib/countly';
+import { events } from 'lib/analytics';
 import Tooltip from 'ZeroComponents/tooltip/tooltip';
 
 export const ButtonVariant = {
@@ -17,7 +17,7 @@ export const ButtonVariant = {
 };
 /**
  * @typedef {Object} TrackingProps
- * @prop {string} [ui] UI section id. One of countly.ui.
+ * @prop {string} [ui] UI section id. One of analytics.ui.
  * @prop {string} [action] Action id. used to uniquely identify an action within a ui section.
  * @prop {string} [event] Custom event name to be used instead of the default CTA_LINK_CLICK.
  * @prop {Record<string, any>} [data] The data attached to this tracking event

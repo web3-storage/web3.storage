@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import clsx from 'clsx';
 
 import Button from '../button/button';
-import countly from '../../lib/countly';
+import analytics from '../../lib/analytics';
 import { elementIsInViewport } from '../../lib/utils.js';
 
 // ====================================================================== Params
@@ -23,10 +23,10 @@ export default function Card({ card, cardsGroup = [], index = 0, onCardLoad }) {
   const tracking = {};
   if (typeof card.cta === 'object') {
     if (card.cta.event) {
-      tracking.event = countly.events[card.cta.event];
+      tracking.event = analytics.events[card.cta.event];
     }
     if (card.cta.ui) {
-      tracking.ui = countly.ui[card.cta.ui];
+      tracking.ui = analytics.ui[card.cta.ui];
     }
     if (card.cta.action) {
       tracking.action = card.cta.action;
