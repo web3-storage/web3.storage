@@ -4,11 +4,7 @@
     "allowJs": true,
     "checkJs": true,
     "target": "esnext",
-    "lib": [
-      "ESNext",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "strict": true,
     "moduleResolution": "node",
     "sourceMap": true,
@@ -24,15 +20,9 @@
     "noImplicitAny": false,
     "baseUrl": "./",
     "paths": {
-      "ZeroComponents/*": [
-        "modules/zero/components/*"
-      ],
-      "ZeroHooks/*": [
-        "modules/zero/hooks/*"
-      ],
-      "web3.storage": [
-        "../client"
-      ]
+      "ZeroComponents/*": ["modules/zero/components/*"],
+      "ZeroHooks/*": ["modules/zero/hooks/*"],
+      "web3.storage": ["../client"]
     },
     "incremental": true
   },
@@ -40,6 +30,7 @@
     "lib",
     "pages",
     "components",
+    "page-components",
     "content",
     "hooks",
     "modules",
@@ -54,7 +45,5 @@
       "path": "../client"
     }
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

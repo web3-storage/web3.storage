@@ -20,13 +20,13 @@
   padding: 6rem 0;
 }
 
-#section_1 {
+#hero_section {
   position: relative;
   z-index: 1;
   @include selection_Light;
 }
 
-#section_2 {
+#intro_section {
   position: relative;
   z-index: 1;
   @include background_Dark;
@@ -65,7 +65,7 @@
   }
 }
 
-#section_3 {
+#why_section {
   position: relative;
   padding: 9rem 0;
   z-index: 0;
@@ -89,7 +89,7 @@
   }
 }
 
-#section_4 {
+#faq_section {
   position: relative;
   z-index: 1;
   @include background_Dark;
@@ -140,7 +140,7 @@
   }
 }
 
-#section_5 {
+#getting_started_section {
   position: relative;
   z-index: 1;
 
@@ -158,7 +158,7 @@
   }
 }
 
-#section_6 {
+#testimonials_section {
   position: relative;
   z-index: 1;
   @include background_Dark;
@@ -223,7 +223,7 @@
   }
 }
 
-#section_7 {
+#explore_section {
   position: relative;
   z-index: 1;
   &:before {
@@ -301,7 +301,7 @@
   }
 }
 // ----------------------------------------------------------- Section [Intro 1]
-#intro_1 {
+#intro {
   position: relative;
   margin-top: 7rem;
   padding: 8.125rem 0;
@@ -326,7 +326,7 @@
   }
 }
 
-#intro_1-corkscrew {
+#intro-corkscrew {
   position: absolute;
   position: absolute;
   left: -9999px;
@@ -341,7 +341,7 @@
   filter: blur(40px);
 }
 
-#intro_1-hero-corkscrew {
+#intro-hero-corkscrew {
   position: absolute;
   display: none;
   width: 21.25rem;
@@ -353,7 +353,7 @@
   }
 }
 
-#intro_1-coil {
+#intro-coil {
   position: absolute;
   width: 7.1875rem;
   left: -3rem;
@@ -364,7 +364,7 @@
   }
 }
 
-#intro_1-helix {
+#intro-helix {
   position: absolute;
   width: 15rem;
   right: -7rem;
@@ -378,7 +378,7 @@
   }
 }
 
-#intro_1-cross {
+#intro-cross {
   position: absolute;
   display: none;
   top: -10rem;
@@ -390,18 +390,18 @@
 }
 
 // ----------------------------------------------------------- Section [Intro 2]
-#intro_2-heading,
-#intro_2-statistics,
-#intro_2-cta {
+#why_section-heading,
+#why_section-statistics,
+#why_section-cta {
   position: relative;
 }
 
-#intro_2-heading {
+#why_section-heading {
   padding-top: 4rem;
   padding-bottom: 0;
 }
 
-#intro_2-cross {
+#why_section-cross {
   position: absolute;
   width: 3rem;
   left: calc(50% - #{math.div($containerWidth, 2)} - 7rem);
@@ -415,7 +415,7 @@
   }
 }
 
-#intro_2-triangle {
+#why_section-triangle {
   position: absolute;
   width: 4.75rem;
   top: -2.5rem;
@@ -429,7 +429,7 @@
   }
 }
 
-#intro_2-statistics {
+#why_section-statistics {
   padding: 0;
   .title,
   .description {
@@ -442,7 +442,7 @@
   }
 }
 
-#intro_2-cta {
+#why_section-cta {
   padding-top: 1.5rem;
   padding-bottom: 4rem;
   .column-1 {
