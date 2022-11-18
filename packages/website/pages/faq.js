@@ -9,7 +9,7 @@ import AccordionBlock from '../components/accordionblock/accordionblock';
 export default function Home() {
   const [faqSections, setFaqSections] = useState();
   /** @type [any, null | any] */
-  const [markdownProps, setMarkdownProps] = useState([]);
+  const [propsToParseAsMarkdown, setPropsToParseAsMarkdown] = useState([]);
   const sections = FAQPageData.page_content;
   const animations = FAQPageData.floater_animations;
   const netlifyCMSHost = process.env.NEXT_PUBLIC_NETLIFY_CMS_ENDPOINT || 'https://blog.web3.storage';
@@ -18,22 +18,22 @@ export default function Home() {
       .then(async response => await response.text())
       .then(text => {
         const obj = JSON.parse(text);
-        const faqs = obj.props.partial.meta.faq.reduce((sections, faq) => {
+        const faqs = obj.props.partial.meta['faq-list'].reduce((sections, faq) => {
           sections.push({
             id:
               'faq-' +
-              faq.faqs.question
+              faq.question
                 .toLowerCase()
                 .replace(/[^\w ]+/g, '')
                 .replace(/ +/g, '-'),
-            heading: faq.faqs.question,
-            content: faq.faqs.answer,
+            heading: faq.question,
+            content: faq.answer,
           });
 
           return sections;
         }, []);
         setFaqSections(faqs);
-        setMarkdownProps(['content']);
+        setPropsToParseAsMarkdown(['content']);
       })
       .catch(e => {
         // @ts-ignore
@@ -116,7 +116,7 @@ export default function Home() {
         {sections.map((section, index) => (
           <BlockBuilder id={`faq_section_${index + 1}`} key={`faq_section_${index + 1}`} subsections={section} />
         ))}
-        {markdownProps && (
+        {propsToParseAsMarkdown && (
           <div className="sectionals">
             <section id="faq_section-main" className="sectional">
               <div className="grid">
@@ -128,7 +128,7 @@ export default function Home() {
                           multiple: true,
                           toggleOnLoad: false,
                           sections: faqSections,
-                          markdown: markdownProps || [],
+                          markdown: propsToParseAsMarkdown || [],
                         }}
                       ></AccordionBlock>
                     )}
