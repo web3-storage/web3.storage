@@ -6,7 +6,7 @@ import { useQueryClient } from 'react-query';
 import GithubSVG from '../../assets/icons/github.js';
 import Button from '../../components/button/button.js';
 import { loginEmail, loginSocial } from '../../lib/magic.js';
-import analytics from '../../lib/analytics.js';
+import analytics, { saEvent } from '../../lib/analytics.js';
 import LoginData from '../../content/pages/app/login.json';
 import GeneralPageData from '../../content/pages/general.json';
 
@@ -67,7 +67,7 @@ const Login = () => {
   // Callback for github login logic
   const onGithubLogin = useCallback(async () => {
     // Tracking event
-    window.sa_event(analytics.events.LOGIN_CLICK, {
+    saEvent(analytics.events.LOGIN_CLICK, {
       ui: analytics.ui.LOGIN,
       action: 'Github',
       link: '',

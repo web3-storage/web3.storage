@@ -6,7 +6,3 @@ declare module '*.svg' {
   const src: string;
   export default src;
 }
-
-interface Window {
-  sa_event: (...args: any[]) => void
-}

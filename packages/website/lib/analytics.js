@@ -40,3 +40,9 @@ export default {
   events,
   ui
 };
+
+export const saEvent = (eventName, metadata) => {
+
+  // @ts-ignore
+  if (window && window.saEvent) return window.saEvent(eventName, metadata);
+};

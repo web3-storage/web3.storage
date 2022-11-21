@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import CloseIcon from 'assets/icons/close';
 import RefreshIcon from 'assets/icons/refresh';
-import analytics from 'lib/analytics';
+import analytics, { saEvent } from 'lib/analytics';
 import { formatTimestamp, formatTimestampFull } from 'lib/utils';
 import Modal from 'modules/zero/components/modal/modal';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
@@ -154,7 +154,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
   /** Closes the delete dialog modal. */
   const closeDeleteModal = useCallback(() => {
     deleteModalState[1](false);
-    window.sa_event(analytics.events.FILE_DELETE_CLICK, {
+    saEvent(analytics.events.FILE_DELETE_CLICK, {
       ui: analytics.ui.FILES,
       totalDeleted: 0,
     });
@@ -172,7 +172,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
       }
     } catch (e) {}
 
-    window.sa_event(analytics.events.FILE_DELETE_CLICK, {
+    saEvent(analytics.events.FILE_DELETE_CLICK, {
       ui: analytics.ui.FILES,
       totalDeleted: selectedUploads.length,
     });

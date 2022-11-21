@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import Link from 'components/link/link';
 import TokenRowItem from './tokenRowItem';
-import analytics from 'lib/analytics';
+import analytics, { saEvent } from 'lib/analytics';
 import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
 import { useTokens } from 'components/contexts/tokensContext';
@@ -74,7 +74,7 @@ const TokensManager = ({ content }) => {
     } finally {
       await queryClient.invalidateQueries('get-tokens');
 
-      window.sa_event(analytics.events.TOKEN_DELETE, {
+      saEvent(analytics.events.TOKEN_DELETE, {
         ui: analytics.ui.TOKENS,
       });
 

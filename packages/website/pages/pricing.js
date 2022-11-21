@@ -14,6 +14,7 @@ import Button from 'ZeroComponents/button/button';
 import GeneralPageData from '../content/pages/general.json';
 import EnterpriseTierRequestModal from 'components/enterpriseTierRequestModal/enterpriseTierRequestModal';
 import CardListBlock from 'components/cardlistblock/cardlistblock';
+import { saEvent } from 'lib/analytics';
 
 const logos = [
   { src: 'nft-storage.png', alt: 'NFT Storage' },
@@ -129,7 +130,7 @@ const Card = props => {
           <a
             href={callToActionUrl}
             onClick={() => {
-              window.sa_event('pricing_card_click', {
+              saEvent('pricing_card_click', {
                 plan: title,
               });
             }}

@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import analytics from 'lib/analytics';
+import analytics, { saEvent } from 'lib/analytics';
 import Button, { ButtonVariant } from 'components/button/button';
 import { useTokens } from 'components/contexts/tokensContext';
 import { useUser } from 'hooks/use-user';
@@ -30,7 +30,7 @@ const TokenCreator = ({ content }) => {
   const onTokenCreate = useCallback(
     async e => {
       // Tracking
-      window.sa_event(
+      saEvent(
         analytics.events.TOKEN_CREATE,
         !tokens.length
           ? {

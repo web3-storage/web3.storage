@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { events } from '../../../lib/analytics';
+import { events, saEvent } from '../../../lib/analytics';
 
 function Feedback({ strings: { title, yes, no, thanks, helpUsImprove } }) {
   const router = useRouter();
@@ -21,9 +21,8 @@ function Feedback({ strings: { title, yes, no, thanks, helpUsImprove } }) {
       open an issue
     </a>
   );
-
   const sendFeedback = (answer, answerText) => {
-    window.sa_event(events.FEEDBACK_HELPFUL, {
+    saEvent(events.FEEDBACK_HELPFUL, {
       path: window.location.pathname,
       question: title,
       answer,

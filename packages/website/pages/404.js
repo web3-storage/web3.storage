@@ -1,14 +1,13 @@
 import { useEffect } from 'react';
 
-import analytics from '../lib/analytics';
+import analytics, { saEvent } from '../lib/analytics';
 import GeneralPageData from '../content/pages/general.json';
 import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
 
 export default function Home() {
   const blocks = GeneralPageData.error_404.sections;
-
   useEffect(() => {
-    window.sa_event(analytics.events.NOT_FOUND, {
+    saEvent(analytics.events.NOT_FOUND, {
       path: window.location?.pathname ?? 'unknown',
       referrer: typeof window !== 'undefined' ? document.referrer : null,
     });

@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { useAuthorization } from 'components/contexts/authorizationContext';
 import ZeroAccordion from 'ZeroComponents/accordion/accordion';
 import ZeroAccordionSection from 'ZeroComponents/accordion/accordionSection';
-import { events, ui } from 'lib/analytics';
+import { events, saEvent, ui } from 'lib/analytics';
 import Loading from 'components/loading/loading';
 import Breadcrumbs from 'components/breadcrumbs/breadcrumbs';
 import Sidebar from 'modules/docs-theme/sidebar/sidebar';
@@ -50,7 +50,7 @@ export default function Navigation({ breadcrumbs, isProductApp }) {
 
   const onLinkClick = useCallback(
     e => {
-      window.sa_event(events.LINK_CLICK_NAVBAR, { target: e.currentTarget });
+      saEvent(events.LINK_CLICK_NAVBAR, { target: e.currentTarget });
 
       if (isMenuOpen) {
         setMenuOpen(false);

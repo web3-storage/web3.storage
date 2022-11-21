@@ -9,7 +9,7 @@ import CardTier from './card-tier';
 import Button from '../button/button';
 import NpmIcon from '../../assets/icons/npmicon';
 import Windows from '../../assets/icons/windows';
-import analytics from '../../lib/analytics';
+import analytics, { saEvent } from '../../lib/analytics';
 
 // ====================================================================== Params
 /**
@@ -44,7 +44,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
   }, [onCardLoad]);
 
   const onLinkClick = useCallback(e => {
-    window.sa_event(analytics.events.LINK_CLICK_EXPLORE_DOCS, { link_text: e.currentTarget });
+    saEvent(analytics.events.LINK_CLICK_EXPLORE_DOCS, { link_text: e.currentTarget });
   }, []);
 
   const handleButtonClick = useCallback(

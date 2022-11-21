@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import analytics from 'lib/analytics';
+import analytics, { saEvent } from 'lib/analytics';
 import Loading from 'components/loading/loading';
 import Button, { ButtonVariant } from 'components/button/button';
 import Dropdown from 'ZeroComponents/dropdown/dropdown';
@@ -76,7 +76,7 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
 
   const closeDeleteModal = useCallback(() => {
     deleteModalState[1](false);
-    window.sa_event(analytics.events.FILE_DELETE_CLICK, {
+    saEvent(analytics.events.FILE_DELETE_CLICK, {
       ui: analytics.ui.FILES,
       totalDeleted: 0,
     });
@@ -92,7 +92,7 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
         await Promise.all(selectedPinRequests.map(({ requestid }) => deletePinRequest(requestid)));
       }
     } catch (e) {}
-    window.sa_event(analytics.events.FILE_DELETE_CLICK, {
+    saEvent(analytics.events.FILE_DELETE_CLICK, {
       ui: analytics.ui.FILES,
       totalDeleted: selectedPinRequests.length,
     });

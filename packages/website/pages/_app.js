@@ -28,15 +28,6 @@ const App = ({ Component, pageProps }) => {
     <AppProviders authorizationProps={{ ...pageProps }}>
       <Metadata {...pageProps} />
       <RestrictedRoute {...pageProps}>
-        <Script
-          type="text/javascript"
-          id="sa_event"
-          dangerouslySetInnerHTML={{
-            __html: `
-          window.sa_event=window.sa_event||function(){var a=[].slice.call(arguments);window.sa_event.q?window.sa_event.q.push(a):window.sa_event.q=[a]};
-          `,
-          }}
-        />
         <Script src="https://track.web3.storage/latest.js" data-hostname="web3.storage" data-ignore-pages="/callback" />
         <Script src="https://track.web3.storage/auto-events.js" />
         <noscript>

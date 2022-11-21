@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import ZeroAccordionHeader from 'ZeroComponents/accordion/accordionHeader';
+import { saEvent } from 'lib/analytics';
 
 /**
  * @param {any} props TODO: Define props
@@ -49,8 +50,7 @@ function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disab
       const headerLabel = header.props.children.find(child => {
         return child.props.className === 'accordion-header-text';
       });
-      window.sa_event('accordion_opened', { title: headerLabel.props.children });
-      // window.sa_event('accordion_opened', { title: headerLabel.props.children });
+      saEvent('accordion_opened', { title: headerLabel.props.children });
     }
   }, [header, open]);
 
