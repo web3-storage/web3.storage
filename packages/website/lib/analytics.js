@@ -44,5 +44,5 @@ export default {
 export const saEvent = (eventName, metadata) => {
 
   // @ts-ignore
-  if (window && window.saEvent) return window.saEvent(eventName, metadata);
+  if (window && window.sa_event) return window.sa_event(eventName, metadata);
 };
