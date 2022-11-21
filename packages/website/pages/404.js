@@ -8,8 +8,7 @@ export default function Home() {
   const blocks = GeneralPageData.error_404.sections;
 
   useEffect(() => {
-    // @ts-ignore
-    window?.sa_event(analytics.events.NOT_FOUND, {
+    window.sa_event(analytics.events.NOT_FOUND, {
       path: window.location?.pathname ?? 'unknown',
       referrer: typeof window !== 'undefined' ? document.referrer : null,
     });

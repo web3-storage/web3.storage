@@ -23,8 +23,7 @@ function Feedback({ strings: { title, yes, no, thanks, helpUsImprove } }) {
   );
 
   const sendFeedback = (answer, answerText) => {
-    // @ts-ignore
-    window?.sa_event(events.FEEDBACK_HELPFUL, {
+    window.sa_event(events.FEEDBACK_HELPFUL, {
       path: window.location.pathname,
       question: title,
       answer,

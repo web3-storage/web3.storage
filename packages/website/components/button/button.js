@@ -54,8 +54,7 @@ const Button = ({
   const onClickHandler = useCallback(
     event => {
       tracking &&
-        // @ts-ignore
-        window?.sa_event(tracking.event || events.CTA_LINK_CLICK, {
+        window.sa_event(tracking.event || events.CTA_LINK_CLICK, {
           ui: tracking.ui,
           action: tracking.action,
           link: props.href || '',

@@ -76,8 +76,7 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
 
   const closeDeleteModal = useCallback(() => {
     deleteModalState[1](false);
-    // @ts-ignore
-    window?.sa_event(analytics.events.FILE_DELETE_CLICK, {
+    window.sa_event(analytics.events.FILE_DELETE_CLICK, {
       ui: analytics.ui.FILES,
       totalDeleted: 0,
     });
@@ -93,8 +92,7 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
         await Promise.all(selectedPinRequests.map(({ requestid }) => deletePinRequest(requestid)));
       }
     } catch (e) {}
-    // @ts-ignore
-    window?.sa_event(analytics.events.FILE_DELETE_CLICK, {
+    window.sa_event(analytics.events.FILE_DELETE_CLICK, {
       ui: analytics.ui.FILES,
       totalDeleted: selectedPinRequests.length,
     });

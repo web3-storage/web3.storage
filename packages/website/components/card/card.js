@@ -44,8 +44,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
   }, [onCardLoad]);
 
   const onLinkClick = useCallback(e => {
-    // @ts-ignore
-    window?.sa_event(analytics.events.LINK_CLICK_EXPLORE_DOCS, { link_text: e.currentTarget });
+    window.sa_event(analytics.events.LINK_CLICK_EXPLORE_DOCS, { link_text: e.currentTarget });
   }, []);
 
   const handleButtonClick = useCallback(

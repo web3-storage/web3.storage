@@ -8,14 +8,14 @@ import ZeroAccordionHeader from 'ZeroComponents/accordion/accordionHeader';
  * @callback props.toggle
  * @param Boolean props.toggleOnLoad
  */
-function Header({}) {
+function Header({ }) {
   return null;
 }
 
 /**
  * @param {any} props TODO: Define props
  */
-function Content({}) {
+function Content({ }) {
   return null;
 }
 
@@ -49,9 +49,8 @@ function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disab
       const headerLabel = header.props.children.find(child => {
         return child.props.className === 'accordion-header-text';
       });
-
-      // @ts-ignore
-      window?.sa_event('accordion_opened', { title: headerLabel.props.children });
+      window.sa_event('accordion_opened', { title: headerLabel.props.children });
+      // window.sa_event('accordion_opened', { title: headerLabel.props.children });
     }
   }, [header, open]);
 
@@ -73,8 +72,8 @@ function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disab
         toggle={
           disabled
             ? () => {
-                return null;
-              }
+              return null;
+            }
             : toggle
         }
       >

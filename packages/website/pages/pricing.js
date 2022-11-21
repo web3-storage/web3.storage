@@ -129,8 +129,7 @@ const Card = props => {
           <a
             href={callToActionUrl}
             onClick={() => {
-              // @ts-ignore
-              window?.sa_event('pricing_card_click', {
+              window.sa_event('pricing_card_click', {
                 plan: title,
               });
             }}

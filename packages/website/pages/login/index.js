@@ -67,8 +67,7 @@ const Login = () => {
   // Callback for github login logic
   const onGithubLogin = useCallback(async () => {
     // Tracking event
-    // @ts-ignore
-    window?.sa_event(analytics.events.LOGIN_CLICK, {
+    window.sa_event(analytics.events.LOGIN_CLICK, {
       ui: analytics.ui.LOGIN,
       action: 'Github',
       link: '',

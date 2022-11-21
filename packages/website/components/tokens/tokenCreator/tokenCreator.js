@@ -30,8 +30,7 @@ const TokenCreator = ({ content }) => {
   const onTokenCreate = useCallback(
     async e => {
       // Tracking
-      // @ts-ignore
-      window?.sa_event(
+      window.sa_event(
         analytics.events.TOKEN_CREATE,
         !tokens.length
           ? {

@@ -30,8 +30,7 @@ export default function Footer({ isProductApp }) {
 
   // ================================================================= Functions
   const onLinkClick = useCallback(e => {
-    // @ts-ignore
-    window?.sa_event(events.LINK_CLICK_FOOTER, { target: e.currentTarget });
+    window.sa_event(events.LINK_CLICK_FOOTER, { target: e.currentTarget });
   }, []);
 
   const handleButtonClick = useCallback(

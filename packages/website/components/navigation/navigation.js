@@ -50,8 +50,7 @@ export default function Navigation({ breadcrumbs, isProductApp }) {
 
   const onLinkClick = useCallback(
     e => {
-      // @ts-ignore
-      window?.sa_event(events.LINK_CLICK_NAVBAR, { target: e.currentTarget });
+      window.sa_event(events.LINK_CLICK_NAVBAR, { target: e.currentTarget });
 
       if (isMenuOpen) {
         setMenuOpen(false);

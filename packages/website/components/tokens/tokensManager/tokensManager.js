@@ -74,8 +74,7 @@ const TokensManager = ({ content }) => {
     } finally {
       await queryClient.invalidateQueries('get-tokens');
 
-      // @ts-ignore
-      window?.sa_event(analytics.events.TOKEN_DELETE, {
+      window.sa_event(analytics.events.TOKEN_DELETE, {
         ui: analytics.ui.TOKENS,
       });
 
