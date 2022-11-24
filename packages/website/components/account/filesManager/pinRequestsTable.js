@@ -10,9 +10,9 @@ import Modal from 'modules/zero/components/modal/modal';
 import CloseIcon from 'assets/icons/close';
 import { useUser } from 'components/contexts/userContext';
 import RefreshIcon from 'assets/icons/refresh';
+import { usePinRequests } from 'components/contexts/pinRequestsContext';
 import PinRequestRowItem from './pinRequestRowItem';
 import GradientBackground from '../../gradientbackground/gradientbackground.js';
-import { usePinRequests } from 'components/contexts/pinRequestsContext';
 
 /**
  * @typedef {Object} PinRequestsTableProps
@@ -29,6 +29,7 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
   const { pinRequests, pages, fetchDate, getPinRequests, isFetching, deletePinRequest } = usePinRequests();
   const {
     storageData: { refetch },
+    info,
   } = useUser();
 
   const [status] = useState('queued,pinning,pinned,failed');
@@ -44,9 +45,11 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
   const fileRowLabels = content?.table.file_row_labels;
 
   useEffect(() => {
-    getPinRequests({ status, page, size });
-    setSelectedPinRequests([]);
-  }, [getPinRequests, status, page, size]);
+    if (info?.tags?.HasPsaAccess) {
+      getPinRequests({ status, page, size });
+      setSelectedPinRequests([]);
+    }
+  }, [info, getPinRequests, status, page, size]);
 
   const onSelectAllToggle = useCallback(
     e => {
@@ -131,7 +134,7 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
     showCheckOverlay();
   }, [getPinRequests, status, page, size, showCheckOverlay]);
 
-  if (hidden) {
+  if (hidden || !info?.tags?.HasPsaAccess) {
     return null;
   }
 
