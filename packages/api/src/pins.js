@@ -3,7 +3,6 @@ import { JSONResponse } from './utils/json-response.js'
 import { getPins, PIN_OK_STATUS, waitAndUpdateOkPins } from './utils/pin.js'
 import { PSAErrorDB, PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData, PinningServiceApiError } from './errors.js'
 import {
-  INVALID_REPLACE,
   INVALID_REQUEST_ID,
   PINNING_FAILED,
   REQUIRED_REQUEST_ID,
@@ -244,16 +243,10 @@ export async function pinDelete (request, env, ctx) {
  * @param {import('./index').Ctx} ctx
  */
 async function replacePin (normalizedCid, newPinData, requestId, authTokenId, env, ctx) {
-  let existingPinRequest
   try {
-    existingPinRequest = await env.db.getPsaPinRequest(authTokenId, requestId)
+    await env.db.getPsaPinRequest(authTokenId, requestId)
   } catch (e) {
     throw new PSAErrorResourceNotFound()
-  }
-
-  const existingCid = existingPinRequest.sourceCid
-  if (newPinData.cid === existingCid) {
-    throw new PSAErrorInvalidData(INVALID_REPLACE)
   }
 
   let pinStatus

@@ -7,7 +7,6 @@ import {
   DATA_NOT_FOUND,
   ERROR_CODE,
   INVALID_CID,
-  INVALID_REPLACE,
   getEffectivePinStatus
 } from '../src/utils/psa.js'
 import { PSAErrorResourceNotFound, PSAErrorInvalidData, PSAErrorRequiredData } from '../src/errors.js'
@@ -988,8 +987,9 @@ describe('Pinning APIs endpoints', () => {
       assert.strictEqual(getResponse.status, 404, 'Pin request was not deleted')
     })
 
-    it('should not replace the same pin request', async () => {
+    it('can update existing pin request (with same CID)', async () => {
       const cid = 'bafybeieppxukl4i4acnjcdj2fueoa5oppuaciseggv2cvplj2iu6d7kx2e'
+      const aNewName = 'aNewName'
       const pinRequest = await createPinRequest(cid, token)
       const res = await fetch(new URL(`pins/${pinRequest.requestid}`, endpoint).toString(), {
         method: 'POST',
@@ -997,15 +997,17 @@ describe('Pinning APIs endpoints', () => {
           Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          cid
+          cid,
+          name: aNewName
         })
       })
 
       assert(res, 'Server responded')
-      assert(!res.ok)
-      assert.equal(res.status, ERROR_CODE)
-      const { error } = await res.json()
-      assert.equal(error.details, INVALID_REPLACE)
+      assert(res.ok)
+      const data = await res.json()
+      assertCorrectPinResponse(data)
+      assert.strictEqual(data.pin.cid, cid)
+      assert.strictEqual(data.pin.name, aNewName)
     })
   })
 })
