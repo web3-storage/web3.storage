@@ -59,10 +59,11 @@ export async function carGet (request, env, ctx) {
   const {
     params: { cid }
   } = request
-  // gateway does not support `carversion` yet.
-  // using it now means we can skip the cache if it is supported in the future
-  const url = new URL(`/api/v0/dag/export?arg=${cid}&carversion=1`, env.GATEWAY_URL)
-  res = await fetch(url.toString(), { method: 'POST' })
+
+  for (const url of env.gatewayUrls) {
+    res = await fetch(new URL(`/ipfs/${encodeURIComponent(cid)}?format=car`, url))
+    if (res.ok) break
+  }
   if (!res.ok) {
     // bail early. dont cache errors.
     return res

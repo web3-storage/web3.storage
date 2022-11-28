@@ -26,7 +26,7 @@ import { createMockBillingContext } from './utils/billing.js'
  * @property {string} [CLUSTER_BASIC_AUTH_TOKEN]
  * @property {string} PG_REST_URL
  * @property {string} PG_REST_JWT
- * @property {string} GATEWAY_URL
+ * @property {string} GATEWAY_URL CSV IPFS gateway URL(s) WITH CAR support via `?format=car` query param.
  * @property {string} [S3_BUCKET_ENDPOINT]
  * @property {string} S3_BUCKET_NAME
  * @property {string} S3_BUCKET_REGION
@@ -58,6 +58,7 @@ import { createMockBillingContext } from './utils/billing.js'
  * @property {import('./utils/billing-types').BillingService} billing
  * @property {import('./utils/billing-types').CustomersService} customers
  * @property {string} stripeSecretKey
+ * @property {string[]} gatewayUrls
  */
 
 /**
@@ -217,5 +218,10 @@ export function envAll (req, env, ctx) {
   } else {
     // use mock BillingEnv as a placeholder for test/dev
     Object.assign(env, createMockBillingContext())
+  }
+
+  env.gatewayUrls = env.GATEWAY_URL ? env.GATEWAY_URL.split(',') : []
+  if (!env.gatewayUrls.length) {
+    throw new Error('MISSING ENV. Please set GATEWAY_URL')
   }
 }
