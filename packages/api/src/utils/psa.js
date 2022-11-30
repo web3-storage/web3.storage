@@ -74,7 +74,7 @@ export const MAX_PIN_LISTING_LIMIT = 1000
 // Validation schemas
 const listPinsValidator = new Validator({
   type: 'object',
-  required: ['status'],
+  required: [],
   properties: {
     name: { type: 'string', maxLength: 255 },
     after: { type: 'string', format: 'date-time' },
@@ -234,7 +234,7 @@ export function validateSearchParams (queryString) {
 
   if (result.valid) {
     // Map statuses for DB compatibility.
-    opts.statuses = psaStatusesToDBStatuses(opts.status)
+    opts.statuses = opts.status && psaStatusesToDBStatuses(opts.status)
     data = opts
   } else {
     error = parseValidatorErrors(result.errors)

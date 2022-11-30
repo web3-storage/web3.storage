@@ -1168,6 +1168,10 @@ export class DBClient {
   async listPsaPinRequests (authKey, opts = {}) {
     const match = opts?.match || 'exact'
     const limit = opts?.limit || 10
+    /**
+     * @type {Array.<string>|undefined}
+     */
+    let statuses
 
     let query = this._client
       .from(psaPinRequestTableName)
@@ -1190,12 +1194,17 @@ export class DBClient {
       query = query.range(rangeFrom, rangeTo - 1)
     }
 
-    if (!opts.cid && !opts.name && !opts.statuses) {
-      query = query.eq('content.pins.status', 'Pinned')
+    // If not specified we default to pinned only if no other filters are provided.
+    // While slightly inconsistent, that's the current expectation.
+    // This is being discussed in https://github.com/ipfs-shipyard/pinning-service-compliance/issues/245
+    if (!opts.cid && !opts.name && !opts.meta && !opts.statuses) {
+      statuses = ['Pinned']
+    } else {
+      statuses = opts.statuses
     }
 
-    if (opts.statuses) {
-      query = query.in('content.pins.status', opts.statuses)
+    if (statuses) {
+      query = query.in('content.pins.status', statuses)
     }
 
     if (opts.cid) {

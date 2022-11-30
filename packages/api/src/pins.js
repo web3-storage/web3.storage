@@ -187,7 +187,7 @@ export async function pinsGet (request, env, ctx) {
 /**
  * Transform a PinRequest into a PinStatus
  *
- * @param { Object } pinRequest
+ * @param { import('../../db/db-client-types.js').PsaPinRequestUpsertOutput } pinRequest
  * @returns { PsaPinStatusResponse }
  */
 export function toPinStatusResponse (pinRequest) {
@@ -197,9 +197,10 @@ export function toPinStatusResponse (pinRequest) {
     created: pinRequest.created,
     pin: {
       cid: pinRequest.sourceCid,
-      ...pinRequest
+      ...pinRequest.name && { name: pinRequest.name },
+      ...pinRequest.origins && { origins: pinRequest.origins },
+      ...pinRequest.meta && { meta: pinRequest.meta }
     },
-    // TODO(https://github.com/web3-storage/web3.storage/issues/792)
     delegates: []
   }
 }
