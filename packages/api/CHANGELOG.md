@@ -1,5 +1,18 @@
 # Changelog
 
+## [7.13.0](https://github.com/web3-storage/web3.storage/compare/api-v7.12.0...api-v7.13.0) (2022-11-30)
+
+
+### Features
+
+* list and ability to delete psa request created though deleted tokens ([#2054](https://github.com/web3-storage/web3.storage/issues/2054)) ([e150d1f](https://github.com/web3-storage/web3.storage/commit/e150d1fa86dc0e6600f159fa92ccb7c8e65900e3))
+
+
+### Bug Fixes
+
+* allow update PSA pin requests with same CID ([#2125](https://github.com/web3-storage/web3.storage/issues/2125)) ([0013efd](https://github.com/web3-storage/web3.storage/commit/0013efdeebaa5af7e4f88daa7bf6e53d706622a8)), closes [#1547](https://github.com/web3-storage/web3.storage/issues/1547)
+* PSA compliance fixes ([#2091](https://github.com/web3-storage/web3.storage/issues/2091)) ([8b1c1d3](https://github.com/web3-storage/web3.storage/commit/8b1c1d3eca4a7ae5a557cb29d3f43f9d6ca29b9d)), closes [#1579](https://github.com/web3-storage/web3.storage/issues/1579)
+
 ## [7.12.0](https://github.com/web3-storage/web3.storage/compare/api-v7.11.3...api-v7.12.0) (2022-11-11)
 
 
