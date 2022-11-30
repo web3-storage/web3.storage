@@ -1,5 +1,50 @@
 # Changelog
 
+## [2.32.0](https://github.com/web3-storage/web3.storage/compare/website-v2.31.0...website-v2.32.0) (2022-11-11)
+
+
+### Features
+
+* add twitter logo to contact page [#2068](https://github.com/web3-storage/web3.storage/issues/2068) ([#2078](https://github.com/web3-storage/web3.storage/issues/2078)) ([179a844](https://github.com/web3-storage/web3.storage/commit/179a8443663e6d9e23acccb0269ae8b454cd8888))
+* **docs:** remove decentralized storage concept doc ([#2102](https://github.com/web3-storage/web3.storage/issues/2102)) ([f65c82e](https://github.com/web3-storage/web3.storage/commit/f65c82e7dddec58c2ea35d171b8894f0dafe3cf4))
+
+
+### Bug Fixes
+
+* align links when stacking mobile ([#2088](https://github.com/web3-storage/web3.storage/issues/2088)) ([3bedf2d](https://github.com/web3-storage/web3.storage/commit/3bedf2d584195a90912574cbcde1b69ea5e50220))
+* do not render account blocked modal unless account restricted ([#2089](https://github.com/web3-storage/web3.storage/issues/2089)) ([1025a22](https://github.com/web3-storage/web3.storage/commit/1025a223c9c3605447329a57a9bd1bca90d2569e))
+* incorrect class use ([#2094](https://github.com/web3-storage/web3.storage/issues/2094)) ([6919cb0](https://github.com/web3-storage/web3.storage/commit/6919cb09b335c7f757034f79235453e76c58ae77))
+* remove web apps footer link ([#2087](https://github.com/web3-storage/web3.storage/issues/2087)) ([a8c16a8](https://github.com/web3-storage/web3.storage/commit/a8c16a8f694567832a08d13009d0c8c8aedf79fe))
+* rm staging url in PSA docs ([#2037](https://github.com/web3-storage/web3.storage/issues/2037)) ([2dcc4dc](https://github.com/web3-storage/web3.storage/commit/2dcc4dcb988b606c7a9d62a9a22ddb3b3b1dce7f))
+* typo in w3name product page ([#2098](https://github.com/web3-storage/web3.storage/issues/2098)) ([9b50cc9](https://github.com/web3-storage/web3.storage/commit/9b50cc98425f67f79a8edd857fde93a02c6a64dc))
+* update product pages to have appropriate descriptions and titles ([#2085](https://github.com/web3-storage/web3.storage/issues/2085)) ([ae6ed12](https://github.com/web3-storage/web3.storage/commit/ae6ed12ced91718d6c60aa6fef709b1dbe371b64))
+
+## [2.31.0](https://github.com/web3-storage/web3.storage/compare/website-v2.30.0...website-v2.31.0) (2022-10-23)
+
+
+### Features
+
+* AddPaymentMethodForm shows a more end-user-friendly error message when it encounters an error ([#2058](https://github.com/web3-storage/web3.storage/issues/2058)) ([376e05b](https://github.com/web3-storage/web3.storage/commit/376e05ba48cf0cd626e189419ae981864be8e05d))
+* log terms of service acceptance ([#2028](https://github.com/web3-storage/web3.storage/issues/2028)) ([47c3540](https://github.com/web3-storage/web3.storage/commit/47c35400ae97e45d07d55e723355f139376233e6))
+
+
+### Bug Fixes
+
+* clarity on web3.storage PSA ([#2062](https://github.com/web3-storage/web3.storage/issues/2062)) ([62dadb1](https://github.com/web3-storage/web3.storage/commit/62dadb1fe181bb317c3dfc400084eb218d23273f))
+* properly center align the loading icon within login/logout button ([#2043](https://github.com/web3-storage/web3.storage/issues/2043)) ([4fa8ec3](https://github.com/web3-storage/web3.storage/commit/4fa8ec35ad44691aaf608406676f23b0aa9cacb1))
+
+## [2.30.0](https://github.com/web3-storage/web3.storage/compare/website-v2.29.0...website-v2.30.0) (2022-10-19)
+
+
+### Features
+
+* terms update ([#2052](https://github.com/web3-storage/web3.storage/issues/2052)) ([366f726](https://github.com/web3-storage/web3.storage/commit/366f72670c377c2ecc9c18fc865c3edce7014477))
+
+
+### Bug Fixes
+
+* update tier values ([#2026](https://github.com/web3-storage/web3.storage/issues/2026)) ([aacb1d7](https://github.com/web3-storage/web3.storage/commit/aacb1d75727f4a21eefa84f8a535c6d0a5578230))
+
 ## [2.29.0](https://github.com/web3-storage/web3.storage/compare/website-v2.28.0...website-v2.29.0) (2022-10-18)
 
 

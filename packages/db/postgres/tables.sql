@@ -323,18 +323,16 @@ CREATE TABLE IF NOT EXISTS psa_pin_request
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
-CREATE INDEX IF NOT EXISTS psa_pin_request_content_cid_idx ON psa_pin_request (content_cid);
-CREATE INDEX IF NOT EXISTS psa_pin_request_deleted_at_idx ON psa_pin_request (deleted_at) INCLUDE (content_cid, auth_key_id);
+CREATE INDEX IF NOT EXISTS psa_pin_request_search_idx ON psa_pin_request (auth_key_id) INCLUDE (content_cid, deleted_at);
 
-CREATE TABLE IF NOT EXISTS terms_of_service (
+CREATE TABLE IF NOT EXISTS agreement (
   id              BIGSERIAL PRIMARY KEY,
   user_id         BIGINT                                                        NOT NULL REFERENCES public.user (id),
-  agreement       agreement_type                                                NOT NULL,
-  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-  UNIQUE (user_id, agreement)
+  agreement  agreement_type                                                NOT NULL,
+  inserted_at     TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
-CREATE INDEX IF NOT EXISTS terms_of_service_user_id_idx ON terms_of_service (user_id);
+CREATE INDEX IF NOT EXISTS agreement_user_id_idx ON agreement (user_id);
 
 -- Metric contains the current values of collected metrics.
 CREATE TABLE IF NOT EXISTS metric

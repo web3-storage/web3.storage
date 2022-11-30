@@ -16,7 +16,8 @@ import { magicLinkBypassForE2ETestingInTestmode } from './magic.link.js'
 import { CustomerNotFound, getPaymentSettings, initializeBillingForNewUser, isStoragePriceName, savePaymentSettings } from './utils/billing.js'
 
 /**
- * @typedef {{ _id: string, issuer: string, name?: string, email?: string }} User
+ * @typedef {string} UserId
+ * @typedef {{ _id: UserId, issuer: string, name?: string, email?: string }} User
  * @typedef {{ _id: string, name: string }} AuthToken
  * @typedef {{ user: User, authToken?: AuthToken }} Auth
  * @typedef {Request & { auth: Auth }} AuthenticatedRequest
@@ -161,6 +162,9 @@ async function loginOrRegister (request, env) {
         { ...user, id: user.id },
         { name: parsed.name, email: parsed.email }
       )
+    } else {
+      // previously existing user. Update their customer record
+      await updateUserCustomerContact(env, user, parsed)
     }
   } else if (env.MODE === READ_ONLY) {
     user = await env.db.getUser(parsed.issuer, {})
@@ -169,6 +173,17 @@ async function loginOrRegister (request, env) {
   }
 
   return user
+}
+
+/**
+ * @param {object} context
+ * @param {import('../src/utils/billing-types').CustomersService} context.customers
+ * @param {Pick<import('../src/utils/billing-types').BillingUser, 'id'>} user
+ * @param {import('../src/utils/billing-types').CustomerContact} contact
+ */
+async function updateUserCustomerContact (context, user, contact) {
+  const customer = await context.customers.getOrCreateForUser(user)
+  await context.customers.updateContact(customer.id, contact)
 }
 
 /**
@@ -237,7 +252,7 @@ export async function userTokensPost (request, env) {
  */
 export async function userAccountGet (request, env) {
   const [usedStorage, storageLimitBytes] = await Promise.all([
-    // @ts-ignore
+    // @ts-ignore user used storage object
     env.db.getStorageUsed(request.auth.user._id),
     // @ts-ignore
     env.db.getUserTagValue(request.auth.user._id, 'StorageLimitBytes')
@@ -700,7 +715,7 @@ export async function userPaymentGet (request, env) {
  * Save a user's payment settings.
  *
  * @param {AuthenticatedRequest} request
- * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'>} env
+ * @param {Pick<BillingEnv, 'billing'|'customers'|'subscriptions'|'agreements'>} env
  */
 export async function userPaymentPut (request, env) {
   const requestBody = await request.json()
@@ -709,11 +724,11 @@ export async function userPaymentPut (request, env) {
     throw Object.assign(new Error('Invalid payment method'), { status: 400 })
   }
   const subscriptionInput = requestBody?.subscription
-  if (typeof subscriptionInput !== 'object') {
-    throw Object.assign(new Error(`subscription must be an object, but got ${typeof subscriptionInput}`), { status: 400 })
+  if (!['object', 'undefined'].includes(typeof subscriptionInput)) {
+    throw Object.assign(new Error(`subscription must be of type object or undefined, but got ${typeof subscriptionInput}`), { status: 400 })
   }
   const subscriptionStorageInput = subscriptionInput?.storage
-  if (!(typeof subscriptionStorageInput === 'object' || subscriptionStorageInput === null)) {
+  if (subscriptionInput && !(typeof subscriptionStorageInput === 'object' || subscriptionStorageInput === null)) {
     throw Object.assign(new Error('subscription.storage must be an object or null'), { status: 400 })
   }
   if (subscriptionStorageInput && typeof subscriptionStorageInput.price !== 'string') {
@@ -725,22 +740,25 @@ export async function userPaymentPut (request, env) {
       status: 400
     })
   }
-  const subscriptionStorage = storagePrice
-    ? { price: storagePrice }
-    : null
+  /** @type {import('../src/utils/billing-types').W3PlatformSubscription|undefined} */
+  const subscription = (typeof subscriptionInput === 'undefined')
+    ? undefined
+    : {
+        storage: storagePrice ? { price: storagePrice } : null
+      }
   const paymentMethod = { id: paymentMethodId }
   await savePaymentSettings(
     {
       billing: env.billing,
       customers: env.customers,
       user: { ...request.auth.user, id: request.auth.user._id },
-      subscriptions: env.subscriptions
+      subscriptions: env.subscriptions,
+      agreements: env.agreements
     },
     {
       paymentMethod,
-      subscription: {
-        storage: subscriptionStorage
-      }
+      subscription,
+      agreement: requestBody.agreement
     },
     {
       name: request.auth.user.name,

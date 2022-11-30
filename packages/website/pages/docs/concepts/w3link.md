@@ -5,7 +5,7 @@ description: An overview of IPFS HTTP Gateways and w3link.
 
 # IPFS HTTP Gateways
 
-web3.storage uses the [InterPlanetary File System (IPFS)](https://ipfs.io) as a key part of its [storage and retrieval infrastructure][concepts-decentralized-storage].
+web3.storage uses the [InterPlanetary File System (IPFS)](https://ipfs.io) as a key part of its storage and retrieval infrastructure.
 
 The IPFS network is a peer-to-peer network of computers that share resources to efficiently provide content to anyone that requests it. Computers that join the IPFS network use a protocol called [Bitswap][ipfs-docs-bitswap] to request and supply blocks of data using a hash-based Content Identifier (CID) to uniquely identify each block.
 
@@ -19,7 +19,7 @@ For more information about fetching content from gateways, see our [guide to dat
 
 ## w3link
 
-Providing a great retrieval experience on the web is a key part of the web3.storage platform, as we work to make [decentralized data storage][concepts-decentralized-storage] the default choice for web3 developers.
+Providing a great retrieval experience on the web is a key part of the web3.storage platform, as we work to make content-addressed data storage the default choice for web3 developers.
 
 To further this goal, we created a new HTTP gateway that uses existing public IPFS infrastructure and cloud-native caching strategies to provide a high-performance, CID-based HTTP retrieval solution.
 
@@ -95,7 +95,6 @@ https://bafybeid4gwmvbza257a7rx52bheeplwlaogshu4rgse3eaudfkfm7tx2my.ipfs.w3s.lin
 
 This is the preferred style for serving web assets over HTTP gateways, because web browsers provide security isolation on a per-domain basis. Using the subdomain style, every CID gets its own "namespace" for things like cookies and local storage, which isolates things from other web content stored on IPFS.
 
-[concepts-decentralized-storage]: /docs/concepts/decentralized-storage/
 [brave-ipfs]: https://brave.com/ipfs-support/
 [opera-ipfs]: https://blogs.opera.com/tips-and-tricks/2021/02/opera-crypto-files-for-keeps-ipfs-unstoppable-domains/
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing

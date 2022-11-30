@@ -164,8 +164,8 @@ const PricingTiers = () => {
               <Card
                 title="Lite"
                 price="$3"
-                storageAllocation="15GiB storage"
-                storageOverageRate="+ $0.20/mo per additional GiB"
+                storageAllocation="30GiB storage"
+                storageOverageRate="+ $0.10/mo per additional GiB"
                 callToAction="CHOOSE THIS PLAN"
                 callToActionUrl="/account/payment?plan=lite"
               >
@@ -181,8 +181,8 @@ const PricingTiers = () => {
                 title="Expert"
                 price="$10"
                 isBestValue={true}
-                storageAllocation="60GiB storage"
-                storageOverageRate="+ $0.17/mo per additional GiB"
+                storageAllocation="120GiB storage"
+                storageOverageRate="+ $0.08/mo per additional GiB"
                 callToAction="CHOOSE THIS PLAN"
                 callToActionUrl="/account/payment?plan=pro"
               >

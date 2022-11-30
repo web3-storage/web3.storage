@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 
 import { userBillingSettings } from '../lib/api';
+import constants from '../lib/constants';
 import { earlyAdopterPlan, plans, plansEarly } from '../components/contexts/plansContext';
 
 /**
@@ -32,7 +33,7 @@ export const usePayment = () => {
       setIsFetchingPaymentSettings(true);
       setNeedsFetchPaymentSettings(false);
       try {
-        setPaymentSettings(await userBillingSettings());
+        setPaymentSettings(await userBillingSettings(constants.TERMS_OF_SERVICE_VERSION));
         setOptimisticCurrentPlan(undefined); // no longer use previous optimistic value
       } finally {
         setIsFetchingPaymentSettings(false);

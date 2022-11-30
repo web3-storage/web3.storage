@@ -13,7 +13,7 @@ import golangStatus from '!!raw-loader!../../../assets/code-snippets/how-to/gola
 
 In this how-to guide, you'll learn how to **query web3.storage for information about your files.**
 
-When you [store a file][howto-store] with web3.storage, you receive a [content identifier (CID)][ipfs-docs-cid] that you can use to [retrieve the file][howto-retrieve]. However, this CID can also be used to query the service for more details about _how_ the data is stored on the [decentralized storage networks][concepts-decentralized-storage] that web3.storage uses under the hood.
+When you [store a file][howto-store] with web3.storage, you receive a [content identifier (CID)][ipfs-docs-cid] that you can use to [retrieve the file][howto-retrieve]. However, this CID can also be used to query the service for more details about _how_ the data is stored on the decentralized storage networks that web3.storage uses under the hood.
 
 This guide will show you how to use web3.storage's [JavaScript client library][reference-js-client] or [Go client library][reference-go-client] to get information about content stored on the network. To follow along, you'll need the API token from your web3.storage account. If you already have an account and a token, read on. If not, have a look at the [quickstart guide][quickstart] to get up and running in just a few minutes for free.
 
@@ -189,7 +189,6 @@ If you haven't yet explored in depth how to store data using web3.storage, check
 To learn in greater detail how to fetch your data using the web3.storage client, or directly from IPFS using a gateway or the IPFS command line, see the [how-to guide on retrieval][howto-retrieve].
 
 [quickstart]: /docs/intro/#quickstart
-[concepts-decentralized-storage]: /docs/concepts/decentralized-storage/
 [howto-store]: /docs/how-tos/store/
 [howto-retrieve]: /docs/how-tos/retrieve/
 [reference-js-client]: /docs/reference/js-client-library/

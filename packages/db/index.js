@@ -6,7 +6,8 @@ import {
   normalizePins,
   normalizeDeals,
   normalizePsaPinRequest,
-  parseTextToNumber
+  parseTextToNumber,
+  safeNumber
 } from './utils.js'
 import { ConstraintError, DBError, RangeNotSatisfiableDBError } from './errors.js'
 
@@ -316,19 +317,28 @@ export class DBClient {
    * @returns {Promise<import('./db-client-types').StorageUsedOutput>}
    */
   async getStorageUsed (userId) {
-    /** @type {{ data: { uploaded: string, psa_pinned: string, total: string }, error: PostgrestError }} */
-    const { data, error } = await this._client
-      .rpc('user_used_storage', { query_user_id: userId })
-      .single()
+    const [userUploadedResponse, psaPinnedResponse] = await Promise.all([
+      this._client
+        .rpc('user_uploaded_storage', { query_user_id: userId })
+        .single(),
+      this._client
+        .rpc('user_psa_storage', { query_user_id: userId })
+        .single()
+    ])
 
-    if (error) {
-      throw new DBError(error)
+    if (userUploadedResponse.error) {
+      throw new DBError(userUploadedResponse.error)
+    } else if (psaPinnedResponse.error) {
+      throw new DBError(psaPinnedResponse.error)
     }
 
+    const uploaded = parseTextToNumber(userUploadedResponse.data)
+    const psaPinned = parseTextToNumber(psaPinnedResponse.data)
+
     return {
-      uploaded: parseTextToNumber(data.uploaded),
-      psaPinned: parseTextToNumber(data.psa_pinned),
-      total: parseTextToNumber(data.total)
+      uploaded,
+      psaPinned,
+      total: safeNumber(uploaded + psaPinned)
     }
   }
 
@@ -1160,6 +1170,10 @@ export class DBClient {
   async listPsaPinRequests (authKey, opts = {}) {
     const match = opts?.match || 'exact'
     const limit = opts?.limit || 10
+    /**
+     * @type {Array.<string>|undefined}
+     */
+    let statuses
 
     let query = this._client
       .from(psaPinRequestTableName)
@@ -1182,12 +1196,17 @@ export class DBClient {
       query = query.range(rangeFrom, rangeTo - 1)
     }
 
-    if (!opts.cid && !opts.name && !opts.statuses) {
-      query = query.eq('content.pins.status', 'Pinned')
+    // If not specified we default to pinned only if no other filters are provided.
+    // While slightly inconsistent, that's the current expectation.
+    // This is being discussed in https://github.com/ipfs-shipyard/pinning-service-compliance/issues/245
+    if (!opts.cid && !opts.name && !opts.meta && !opts.statuses) {
+      statuses = ['Pinned']
+    } else {
+      statuses = opts.statuses
     }
 
-    if (opts.statuses) {
-      query = query.in('content.pins.status', opts.statuses)
+    if (statuses) {
+      query = query.in('content.pins.status', statuses)
     }
 
     if (opts.cid) {
@@ -1295,6 +1314,25 @@ export class DBClient {
     }
     return {
       _id: data.id
+    }
+  }
+
+  /**
+   * @param {string} userId
+   * @param {import('./db-client-types').AgreementKind} agreement
+   * @returns {Promise<void>}
+   */
+  async createUserAgreement (userId, agreement) {
+    const { error } = await this._client
+      .from('agreement')
+      .insert({
+        user_id: userId,
+        agreement
+      })
+      .single()
+
+    if (error) {
+      throw new DBError(error)
     }
   }
 

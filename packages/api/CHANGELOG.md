@@ -1,5 +1,52 @@
 # Changelog
 
+## [7.12.0](https://github.com/web3-storage/web3.storage/compare/api-v7.11.3...api-v7.12.0) (2022-11-11)
+
+
+### Features
+
+* logins of already-existing users result in the user's customer contact info being updated (e.g. in stripe.com dashboard) ([#2103](https://github.com/web3-storage/web3.storage/issues/2103)) ([a365b4c](https://github.com/web3-storage/web3.storage/commit/a365b4c732aea169f372276e40c8792e69bfde69))
+
+## [7.11.3](https://github.com/web3-storage/web3.storage/compare/api-v7.11.2...api-v7.11.3) (2022-11-01)
+
+
+### Bug Fixes
+
+* add api comment to trigger release on db change ([88042dd](https://github.com/web3-storage/web3.storage/commit/88042ddf1576cd9e04868b579e513fb2d9558b6a))
+
+## [7.11.2](https://github.com/web3-storage/web3.storage/compare/api-v7.11.1...api-v7.11.2) (2022-10-27)
+
+
+### Bug Fixes
+
+* dummy commit ([29f7751](https://github.com/web3-storage/web3.storage/commit/29f775105e65410be90c281517f4372c1e0ab45d))
+
+## [7.11.1](https://github.com/web3-storage/web3.storage/compare/api-v7.11.0...api-v7.11.1) (2022-10-27)
+
+
+### Bug Fixes
+
+* report carCid as string to sentry ([#2072](https://github.com/web3-storage/web3.storage/issues/2072)) ([5f55e32](https://github.com/web3-storage/web3.storage/commit/5f55e32d5e3c2943235157d91ddb5d143e711cf0))
+
+## [7.11.0](https://github.com/web3-storage/web3.storage/compare/api-v7.10.0...api-v7.11.0) (2022-10-27)
+
+
+### Features
+
+* add metadata to upload error reports ([#2070](https://github.com/web3-storage/web3.storage/issues/2070)) ([6d240b7](https://github.com/web3-storage/web3.storage/commit/6d240b78f69a32f406c0da92c9d4f352576fc2cb))
+
+
+### Other Changes
+
+* rm LINKDEX_URL from wrangler.toml ([#2023](https://github.com/web3-storage/web3.storage/issues/2023)) ([1341283](https://github.com/web3-storage/web3.storage/commit/13412839bd061bdb96b1f93ddd43d77ec34cc83d))
+
+## [7.10.0](https://github.com/web3-storage/web3.storage/compare/api-v7.9.1...api-v7.10.0) (2022-10-23)
+
+
+### Features
+
+* log terms of service acceptance ([#2028](https://github.com/web3-storage/web3.storage/issues/2028)) ([47c3540](https://github.com/web3-storage/web3.storage/commit/47c35400ae97e45d07d55e723355f139376233e6))
+
 ## [7.9.1](https://github.com/web3-storage/web3.storage/compare/api-v7.9.0...api-v7.9.1) (2022-10-18)
 
 

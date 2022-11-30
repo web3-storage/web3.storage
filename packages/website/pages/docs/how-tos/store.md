@@ -174,7 +174,7 @@ Once your files are ready, uploading is a simple method call on the client objec
 
 <Callout type="warning">
 ##### IMPORTANT
-Deleting files from the web3.storage site's [Files page][site-files] will remove them from the file listing for your account, but that doesn't prevent nodes on the [decentralized storage network][concepts-decentralized-storage] from retaining copies of the data indefinitely. Do not use web3.storage for data that may need to be permanently deleted in the future.
+Deleting files from the web3.storage site's [Files page][site-files] will remove them from the file listing for your account, but that doesn't prevent nodes on the decentralized storage network from retaining copies of the data indefinitely. Do not use web3.storage for data that may need to be permanently deleted in the future.
 </Callout>
 
 <Tabs groupId="lang">
@@ -323,7 +323,6 @@ You can also get more information about the status of your data. See the [query 
 [howto-query]: /docs/how-tos/query/
 [howto-car-files]: /docs/how-tos/work-with-car-files/
 [howto-list-dir]: /docs/how-tos/list-directory-contents/
-[concepts-decentralized-storage]: /docs/concepts/decentralized-storage/
 [site-files]: https://web3.storage/account/
 [ipfs-docs-cid]: https://docs.ipfs.io/concepts/content-addressing/
 [ipfs-docs-cli-quickstart]: https://docs.ipfs.io/how-to/command-line-quick-start/

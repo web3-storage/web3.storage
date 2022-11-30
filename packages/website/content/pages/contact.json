@@ -95,7 +95,7 @@
                 "type": "text_block",
                 "format": "small",
                 "description": [
-                  "<a href='https://filecoin.io/slack' target='_blank'><img src='/images/contact/slack-big.svg'><a href='https://discord.gg/4zEkFVqwms' target='_blank'><img src='/images/contact/discord-big.svg'><a href='https://github.com/web3-storage/web3.storage/issues/new/choose' target='_blank'><img src='/images/contact/github-big.svg'>"
+                  "<a href='https://twitter.com/Web3Storage' target='_blank'><img src='/images/contact/twitter-big.svg'></a><a href='https://filecoin.io/slack' target='_blank'><img src='/images/contact/slack-big.svg'></a><a href='https://discord.gg/4zEkFVqwms' target='_blank'><img src='/images/contact/discord-big.svg'></a><a href='https://github.com/web3-storage/web3.storage/issues/new/choose' target='_blank'><img src='/images/contact/github-big.svg'></a>"
                 ]
               }
             ]

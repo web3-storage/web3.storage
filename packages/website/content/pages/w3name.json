@@ -124,7 +124,7 @@
                   "num": "col"
                 },
                 "format": "small",
-                "heading": "Why not just use IPNS Directly with IPFS?",
+                "heading": "Why not just use IPNS directly with IPFS?",
                 "description": [
                   "IPNS is baked into most IPFS implementations, but has trouble with performance, since updates are broadcasted to the network but not guaranteed to be resolved quickly or even correctly. This is an issue for production use cases, where users will want the data associated with the latest update at lightning speeds. Further, IPNS records generally have to be rebroadcast every 24 hours.",
                   "w3name is a service layer that handles this broadcasting and performant resolution for you."

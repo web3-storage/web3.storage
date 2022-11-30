@@ -168,6 +168,11 @@
   .storage-number {
     font-style: italic;
   }
+  .Tooltip {
+    margin-left: 5px;
+    font-size: 10px; // The size of the svg icon.
+    vertical-align: super;
+  }
 }
 
 .storage-manager-meter-uploaded,

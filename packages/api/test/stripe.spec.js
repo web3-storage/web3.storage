@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import assert from 'assert'
-import { createMockUserCustomerService, CustomerNotFound, randomString, storagePriceNames } from '../src/utils/billing.js'
+import { createMockAgreementService, createMockUserCustomerService, CustomerNotFound, randomString, storagePriceNames } from '../src/utils/billing.js'
 import { createMockStripeCustomer, createMockStripeForBilling, createMockStripeForCustomersService, createMockStripeForSubscriptions, createMockStripeSubscription, createStripe, createStripeBillingContext, createStripeStorageEnvVar, createStripeStoragePricesFromEnv, stagingStripePrices, StripeBillingService, StripeCustomersService, StripeSubscriptionsService } from '../src/utils/stripe.js'
+import sinon from 'sinon'
 
 /**
  * @typedef {import('../src/utils/billing-types').StoragePriceName} StoragePriceName
@@ -103,6 +104,79 @@ describe('StripeCustomersService', async function () {
     // it should not create the customer if already set
     const customer2ForUser2 = await customers1.getOrCreateForUser({ id: userId2 })
     assert.equal(customer2ForUser2.id, customerForUser2.id, 'should return same customer for same userId2')
+  })
+  it('getContact against bad customer id returns CustomerNotFound error', async function () {
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+    if (!stripeSecretKey) {
+      return this.skip()
+    }
+    assert.ok(stripeSecretKey, 'stripeSecretKey is required')
+    const customers = StripeCustomersService.create(
+      createStripe(stripeSecretKey),
+      createMockUserCustomerService()
+    )
+    const fakeCustomerId = 'fake-customer-id'
+    const contact = await customers.getContact(fakeCustomerId)
+    assert.ok(contact instanceof CustomerNotFound, 'getContact returns CustomerNotFound error')
+  })
+  it('updateContact against bad customer id returns CustomerNotFound error', async function () {
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+    if (!stripeSecretKey) {
+      return this.skip()
+    }
+    assert.ok(stripeSecretKey, 'stripeSecretKey is required')
+    const customers = StripeCustomersService.create(
+      createStripe(stripeSecretKey),
+      createMockUserCustomerService()
+    )
+    const fakeCustomerId = 'fake-customer-id'
+    const contact2 = {
+      name: 'contact 2',
+      email: 'contact2@example.com'
+    }
+    const contact = await customers.updateContact(fakeCustomerId, contact2)
+    assert.ok(contact instanceof CustomerNotFound, 'getContact returns CustomerNotFound error')
+  })
+  it('can updateContact then getContact', async function () {
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+    if (!stripeSecretKey) {
+      return this.skip()
+    }
+    assert.ok(stripeSecretKey, 'stripeSecretKey is required')
+    const customers = StripeCustomersService.create(
+      createStripe(stripeSecretKey),
+      createMockUserCustomerService()
+    )
+    const user = { id: `user-${randomString()}` }
+    const customer = await customers.getOrCreateForUser(user)
+
+    // update contact
+    const contactUpdate2 = {
+      name: 'contact 2',
+      email: 'contact2@example.com'
+    }
+    await customers.updateContact(customer.id, contactUpdate2)
+    const contact2 = await customers.getContact(customer.id)
+    assert.deepEqual(contact2, contactUpdate2, 'getContact returns same contact as the udpate')
+  })
+  it('updateContact calls stripe.customers.update', async function () {
+    const mockUserCustomerService = createMockUserCustomerService()
+    const mockStripe = createMockStripeForCustomersService()
+    const stripeCustomersUpdateSpy = sinon.spy(mockStripe.customers, 'update')
+    const customers = StripeCustomersService.create(
+      mockStripe,
+      mockUserCustomerService
+    )
+    const user = { id: `user-${randomString()}` }
+    const customer = await customers.getOrCreateForUser(user)
+    const contactUpdate2 = {
+      name: 'contact 2',
+      email: 'contact2@example.com'
+    }
+    await customers.updateContact(customer.id, contactUpdate2)
+    assert.equal(stripeCustomersUpdateSpy.callCount, 1)
+    assert.equal(stripeCustomersUpdateSpy.getCalls()[0]?.args[0], customer.id, 'stripe.customers.update was called with correct customer id')
+    assert.deepEqual(stripeCustomersUpdateSpy.getCalls()[0]?.args[1], contactUpdate2, 'stripe.customers.update was called with correct contact info')
   })
 })
 
@@ -238,7 +312,10 @@ describe('createStripeBillingContext', function () {
       return this.skip()
     }
     const billingContext = createStripeBillingContext({
-      db: createMockUserCustomerService(),
+      db: {
+        ...createMockUserCustomerService(),
+        ...createMockAgreementService()
+      },
       STRIPE_SECRET_KEY: stripeSecretKey
     })
     const user = { id: '1', issuer: `user-${randomString()}` }

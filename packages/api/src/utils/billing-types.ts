@@ -41,8 +41,19 @@ export interface Customer {
   id: string
 }
 
+export interface CustomerContact {
+  email: string | undefined
+  name: string | undefined
+}
+
 export interface CustomersService {
-  getOrCreateForUser(user: BillingUser, userCreationOptions?: UserCreationOptions): Promise<Customer>
+  /**
+   * Get contact info for the a customer.
+   * @param customerId - customer id to get contact info of
+   */
+  getContact(customerId: Customer['id']): Promise<CustomerContact|CustomerNotFound>
+  updateContact(customerId: Customer['id'], contact: CustomerContact): Promise<CustomerNotFound|void>
+  getOrCreateForUser(user: BillingUser, userCreationOptions?: UserCreationOptions): Promise<Pick<Customer, 'id'>>
 }
 
 export type StoragePriceName = 'free' | 'lite' | 'pro'
@@ -91,11 +102,13 @@ export interface BillingEnv {
   billing: BillingService
   customers: CustomersService
   subscriptions: SubscriptionsService
+  agreements: AgreementService
 }
 
 export type PaymentSettings = {
   paymentMethod: null | PaymentMethod
   subscription: W3PlatformSubscription
+  agreement?: Agreement
 }
 
 export interface UserCustomerService {
@@ -103,7 +116,32 @@ export interface UserCustomerService {
   upsertUserCustomer: (userId: string, customerId: string) => Promise<void>
 }
 
+export interface AgreementService {
+  createUserAgreement: (userId: string, agreement: Agreement) => Promise<void>
+}
+
 export interface UserCreationOptions {
   email?: string
   name?: string
 }
+
+export type Agreement = 'web3.storage-tos-v1'
+
+/**
+ * Command instructing system to update the web3.storage subscription for a user
+ */
+export interface UpdateSubscriptionCommand {
+  agreement: Agreement
+  paymentMethod: Pick<PaymentMethod, 'id'>
+  subscription: W3PlatformSubscription
+}
+
+/**
+ * Command instructing system to update the default paymentMethod for a user.
+ * It will not update the payment method of old subscriptions.
+ */
+export interface UpdateDefaultPaymentMethodCommand {
+  paymentMethod: Pick<PaymentMethod, 'id'>
+}
+
+export type SavePaymentSettingsCommand = UpdateSubscriptionCommand | UpdateDefaultPaymentMethodCommand
