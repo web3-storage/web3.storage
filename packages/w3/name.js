@@ -1,3 +1,4 @@
+import * as fs from 'fs'
 import * as Name from 'w3name'
 import * as uint8arrays from 'uint8arrays'
 import { config } from './lib.js'
@@ -48,15 +49,37 @@ export async function resolve (keyId) {
 }
 
 /**
- * Retrieve the signing key associated with the given key.
- * @param {string} keyId 
+ * Retrieve the signing key associated with the given key and print it to the console.
+ * @param {string} keyId
  */
- export function getKey (keyId) {
+export function exportKey (keyId) {
   const signingKey = config.get(`name.${keyId}`)
   if (!signingKey) {
     throw new Error('missing signing key for the provided <keyId>')
   }
   console.log(signingKey)
+}
+
+/**
+ * Import the signing key from the given key file and store it in the config under its assocated
+ * name.
+ * @param {string} keyFile
+ */
+export async function importKey (keyFile) {
+  let key
+  try {
+    key = fs.readFileSync(keyFile, 'utf8')
+  } catch (err) {
+    console.error(`Could not open specified key file: ${err}`)
+    return
+  }
+  const keyId = await Name.from(uint8arrays.fromString(key.trim(), 'base64pad'))
+  if (config.get(`name.${keyId}`)) {
+    console.log(`Already have key stored for name: '${keyId}'.`)
+    return
+  }
+  config.set(`name.${keyId}`, key)
+  console.log(`Stored key for name: '${keyId}'.`)
 }
 
 /**
