@@ -1014,13 +1014,15 @@ export class DBClient {
   /**
    * List auth keys of a given user.
    *
-   * @param {number} userId
+   * @param {string} userId
+   * @param {import('./db-client-types').ListKeysOptions} opts
    * @return {Promise<Array<import('./db-client-types').AuthKeyItemOutput>>}
    */
-  async listKeys (userId) {
+  async listKeys (userId, { includeDeleted } = { includeDeleted: false }) {
     /** @type {{ error: PostgrestError, data: Array<import('./db-client-types').AuthKeyItem> }} */
     const { data, error } = await this._client.rpc('user_auth_keys_list', {
-      query_user_id: userId
+      query_user_id: userId,
+      include_deleted: includeDeleted
     })
 
     if (error) {
@@ -1263,9 +1265,9 @@ export class DBClient {
    * Delete a user PA pin request.
    *
    * @param {number} requestId
-   * @param {string} authKey
+   * @param {string[]} authKeys
    */
-  async deletePsaPinRequest (requestId, authKey) {
+  async deletePsaPinRequest (requestId, authKeys) {
     const date = new Date().toISOString()
     /** @type {{ data: import('./db-client-types').PsaPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
@@ -1274,7 +1276,8 @@ export class DBClient {
         deleted_at: date,
         updated_at: date
       })
-      .match({ auth_key_id: authKey, id: requestId })
+      .match({ id: requestId })
+      .in('auth_key_id', authKeys)
       .filter('deleted_at', 'is', null)
       .single()
 

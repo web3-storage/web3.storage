@@ -21,7 +21,8 @@ import {
   userUploadsDelete,
   userUploadGet,
   userUploadsGet,
-  userUploadsRename
+  userUploadsRename,
+  userPinDelete
 } from './user.js'
 import { pinDelete, pinGet, pinPost, pinsGet } from './pins.js'
 import { blogSubscriptionCreate } from './blog.js'
@@ -109,6 +110,7 @@ router.delete('/user/tokens/:id',        auth['👤🗑️'](userTokensDelete))
 router.get('/user/account',              auth['👤'](userAccountGet))
 router.get('/user/info',                 auth['👤'](userInfoGet))
 router.get('/user/pins',                 auth['📌⚠️'](userPinsGet))
+router.delete('/user/pins/:requestId',   auth['👤🗑️'](userPinDelete))
 router.get('/user/payment',              auth['👤'](userPaymentGet))
 router.put('/user/payment',              auth['👤'](userPaymentPut))
 

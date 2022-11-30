@@ -31,6 +31,7 @@ import type {
   EmailSentInput,
   LogEmailSentInput,
   GetUserOptions,
+  ListKeysOptions,
   AgreementKind,
 } from './db-client-types'
 
@@ -61,12 +62,12 @@ export class DBClient {
   getDealsForCids (cids: string[]): Promise<Record<string, Deal[]>>
   createKey (key: CreateAuthKeyInput): Promise<CreateAuthKeyOutput>
   getKey (issuer: string, secret: string): Promise<AuthKey>
-  listKeys (userId: number): Promise<Array<AuthKeyItemOutput>>
+  listKeys (userId: string, opts?: ListKeysOptions): Promise<Array<AuthKeyItemOutput>>
   createPsaPinRequest (pinRequest: PsaPinRequestUpsertInput): Promise<PsaPinRequestUpsertOutput>
   getPsaPinRequest (authKey: string, pinRequestId: string) : Promise<PsaPinRequestUpsertOutput>
   listPsaPinRequests (authKey: string, opts?: ListPsaPinRequestOptions ) : Promise<ListPsaPinRequestResults>
-  deletePsaPinRequest (pinRequestId: string, authKey: string) : Promise<PsaPinRequestItem>
-  deleteKey (id: number): Promise<void>
+  deletePsaPinRequest (pinRequestId: string, authKey: Array<string>) : Promise<PsaPinRequestItem>
+  deleteKey (userId: number, keyId: number): Promise<void>
   query<T, V>(document: RequestDocument, variables: V): Promise<T>
   createUserTag(userId: string, tag: UserTagInput): Promise<boolean>
   getUserTags(userId: string): Promise<UserTagInfo[]>

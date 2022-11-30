@@ -354,4 +354,7 @@ export type LogEmailSentInput = {
   messageId: string
 }
 
+export type ListKeysOptions = {
+  includeDeleted: boolean
+}
 export type AgreementKind = 'web3.storage-tos-v1'
