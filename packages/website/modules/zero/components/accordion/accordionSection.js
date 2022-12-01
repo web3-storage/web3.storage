@@ -2,20 +2,21 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import ZeroAccordionHeader from 'ZeroComponents/accordion/accordionHeader';
+import { saEvent } from 'lib/analytics';
 
 /**
  * @param {any} props TODO: Define props
  * @callback props.toggle
  * @param Boolean props.toggleOnLoad
  */
-function Header({}) {
+function Header({ }) {
   return null;
 }
 
 /**
  * @param {any} props TODO: Define props
  */
-function Content({}) {
+function Content({ }) {
   return null;
 }
 
@@ -45,6 +46,15 @@ function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disab
   }, [reportUID, uid]);
 
   useEffect(() => {
+    if (open && header) {
+      const headerLabel = header.props.children.find(child => {
+        return child.props.className === 'accordion-header-text';
+      });
+      saEvent('accordion_opened', { title: headerLabel.props.children });
+    }
+  }, [header, open]);
+
+  useEffect(() => {
     if (!!slug && !!router.query.section && router.query.section === slug) {
       const element = document.getElementById(`accordion-section_${slug}`);
       if (element) {
@@ -62,8 +72,8 @@ function AccordionSection({ active, toggle, toggleOnLoad, reportUID, slug, disab
         toggle={
           disabled
             ? () => {
-                return null;
-              }
+              return null;
+            }
             : toggle
         }
       >
