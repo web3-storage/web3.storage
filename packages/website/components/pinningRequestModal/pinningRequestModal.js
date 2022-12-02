@@ -58,7 +58,7 @@ const PinningRequestModal = ({ isOpen, onClose }) => {
               <textarea id="examples" name="examples" required rows={5} />
             </div>
             <div className="input-container">
-              <label htmlFor="profile">Please provide a profile on a service (artist profile, collector, etc): </label>
+              <label htmlFor="profile">Please provide a description of your role (e.g., developer): </label>
               <textarea id="profile" name="profile" required rows={1} />
             </div>
 
