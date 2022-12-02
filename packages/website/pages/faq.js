@@ -12,7 +12,7 @@ export default function Home() {
   const [propsToParseAsMarkdown, setPropsToParseAsMarkdown] = useState([]);
   const sections = FAQPageData.page_content;
   const animations = FAQPageData.floater_animations;
-  const netlifyCMSHost = process.env.NEXT_PUBLIC_NETLIFY_CMS_ENDPOINT || 'https://blog.web3.storage';
+  const netlifyCMSHost = process.env.NEXT_PUBLIC_NETLIFY_CMS_ENDPOINT;
   useEffect(() => {
     fetch(`${netlifyCMSHost}/api/partials/faq/faq`)
       .then(async response => await response.text())
