@@ -83,8 +83,7 @@ describe('w3 name export', () => {
     config.set('name.test-name-1', 'test-key-1')
     try {
       subprocess = execa.sync('./bin.js', ['name', 'export', 'test-name-1'])
-    }
-    catch (err) {
+    } catch (err) {
       assert.fail(err)
     } finally {
       // Make sure we always delete the name, as the config is not isolated for tests
@@ -103,14 +102,13 @@ describe('w3 name export', () => {
   })
 })
 
-
 describe('w3 name import', () => {
   const keyFilePath = '.temp-test-w3-name.key'
 
   afterEach(() => {
     // Make sure we always delete our temporary test file
-    const promise = new Promise((done) => {
-      fs.unlink(keyFilePath, done)
+    const promise = new Promise((resolve) => {
+      fs.unlink(keyFilePath, resolve)
     })
     return promise
   })
@@ -121,7 +119,7 @@ describe('w3 name import', () => {
     fs.writeFileSync(keyFilePath, keyValue, 'utf8')
     try {
       const subprocess = execa.sync('./bin.js', ['name', 'import', keyFilePath])
-      assert.equal(subprocess.stdout, `Stored key for name: '${keyName }'.`)
+      assert.equal(subprocess.stdout, `Stored key for name: '${keyName}'.`)
       assert.equal(config.get(`name.${keyName}`), keyValue)
     } finally {
       config.delete(`name.${keyName}`)
@@ -133,8 +131,7 @@ describe('w3 name import', () => {
     try {
       subprocess = execa.sync('./bin.js', ['name', 'import', 'imaginary-file-path.key'])
       assert.fail('Should exit with error when specified key file does not exist.')
-    }
-    catch (err) {
+    } catch (err) {
       assert.match(subprocess.stderr, /Could not open specified key file/)
     }
   })
@@ -145,8 +142,7 @@ describe('w3 name import', () => {
     try {
       execa.sync('./bin.js', ['name', 'import', keyFilePath])
       assert.fail('Should exit with error when key file does not contain a valid key.')
-    }
-    catch (err) {
+    } catch (err) {
       assert.match(err.stderr, /SyntaxError: Unexpected end of data/)
     }
   })
