@@ -2,12 +2,13 @@ import React from 'react';
 import { useQuery } from 'react-query';
 
 import { getInfo, getStorage } from 'lib/api.js';
-import { useAuthorization } from './authorizationContext.js';
 import AccountBlockedModal from 'components/account/accountBlockedModal/accountBlockedModal.js';
+import { useAuthorization } from './authorizationContext.js';
 
 /**
  * @typedef Tags
  * @property {boolean} [HasAccountRestriction]
+ * @property {boolean} [HasPsaAccess]
  */
 
 /**

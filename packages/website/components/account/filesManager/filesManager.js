@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import CheckIcon from 'assets/icons/check';
 import { useUploads } from 'components/contexts/uploadsContext';
 import { usePinRequests } from 'components/contexts/pinRequestsContext';
+import { useUser } from 'components/contexts/userContext';
 import UploadsTable from './uploadsTable';
 import PinRequestsTable from './pinRequestsTable';
 
@@ -26,6 +27,7 @@ import PinRequestsTable from './pinRequestsTable';
  * @returns
  */
 const FilesManager = ({ className, content, onFileUpload }) => {
+  const { info: userInfo } = useUser();
   const { count: uploadsCount } = useUploads();
   const { count: pinRequestsCount } = usePinRequests();
   const { query, replace } = useRouter();
@@ -36,23 +38,27 @@ const FilesManager = ({ className, content, onFileUpload }) => {
 
   // Set current tab based on url param on load
   useEffect(() => {
-    if (query.hasOwnProperty('table') && currentTab !== query?.table) {
-      if (typeof query.table === 'string') {
-        if (query.table === 'pinned' && pinRequestsCount === 0) {
-          delete query.table;
-          replace(
-            {
-              query,
-            },
-            undefined,
-            { shallow: true }
-          );
-          return;
+    if (query.hasOwnProperty('table') && currentTab !== query?.table && typeof query.table === 'string') {
+      if (query.table === 'pinned') {
+        if (userInfo) {
+          if (!userInfo.tags?.HasPsaAccess) {
+            delete query.table;
+            replace(
+              {
+                query,
+              },
+              undefined,
+              { shallow: true }
+            );
+          } else {
+            setCurrentTab(query.table);
+          }
         }
+      } else {
         setCurrentTab(query.table);
       }
     }
-  }, [query, currentTab, pinRequestsCount, replace]);
+  }, [query, currentTab, userInfo, replace]);
 
   const changeCurrentTab = useCallback(
     /** @type {string} */ tab => {
@@ -90,12 +96,11 @@ const FilesManager = ({ className, content, onFileUpload }) => {
 
   return (
     <div className={clsx('section files-manager-container', className, isUpdating && 'disabled')}>
-      {pinRequestsCount > 0 && (
+      {userInfo?.tags?.HasPsaAccess && (
         <div className="upload-pinned-selector">
           {content?.tabs.map(tab => (
             <div key={tab.file_type} className="filetype-tab">
               <button
-                disabled={tab.file_type === 'pinned' && pinRequestsCount === 0}
                 className={clsx('tab-button', currentTab === tab.file_type ? 'selected' : '')}
                 onClick={() => changeCurrentTab(tab.file_type)}
               >
@@ -113,12 +118,14 @@ const FilesManager = ({ className, content, onFileUpload }) => {
         onUpdatingChange={setIsUpdating}
         showCheckOverlay={showCheckOverlayHandler}
       />
-      <PinRequestsTable
-        content={content}
-        hidden={currentTab !== 'pinned'}
-        onUpdatingChange={setIsUpdating}
-        showCheckOverlay={showCheckOverlayHandler}
-      />
+      {userInfo?.tags?.HasPsaAccess && (
+        <PinRequestsTable
+          content={content}
+          hidden={currentTab !== 'pinned'}
+          onUpdatingChange={setIsUpdating}
+          showCheckOverlay={showCheckOverlayHandler}
+        />
+      )}
       <div className={clsx('files-manager-overlay', showCheckOverlay ? 'show' : '')}>
         <div className="files-manager-overlay-check">
           <CheckIcon />

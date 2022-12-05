@@ -428,7 +428,7 @@ const UploadsTable = ({ content, hidden, onFileUpload, onUpdatingChange, showChe
         onSelectAll={onSelectAllToggle}
         onDelete={onDeleteSingle}
         emptyState={
-          <span className="files-manager-upload-cta">
+          <span className="files-manager-table-message">
             {content?.table.message}
             {'\u00A0'}
             <Button

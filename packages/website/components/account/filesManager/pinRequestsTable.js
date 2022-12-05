@@ -26,7 +26,7 @@ import GradientBackground from '../../gradientbackground/gradientbackground.js';
  * @param {PinRequestsTableProps} props
  */
 const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay }) => {
-  const { pinRequests, pages, fetchDate, getPinRequests, isFetching, deletePinRequest } = usePinRequests();
+  const { pinRequests, pages, fetchDate, getPinRequests, isFetching, deletePinRequest, count } = usePinRequests();
   const {
     storageData: { refetch },
   } = useUser();
@@ -159,42 +159,46 @@ const PinRequestsTable = ({ content, hidden, onUpdatingChange, showCheckOverlay 
           }}
         />
       </div>
-      <PinRequestRowItem
-        onSelect={onSelectAllToggle}
-        date={fileRowLabels.date.label}
-        name={fileRowLabels.name.label}
-        cid={fileRowLabels.cid.label}
-        requestid={fileRowLabels.requestid.label}
-        status={fileRowLabels.status.label}
-        linkPrefix={linkPrefix}
-        isHeader
-        isSelected={
-          !!selectedPinRequests.length &&
-          pinRequests.every(file => selectedPinRequests.find(fileSelected => file === fileSelected)) &&
-          !!fetchDate
-        }
-      />
       <div className="files-manager-table-content">
         {isFetching || !fetchDate ? (
           <Loading className={'files-loading-spinner'} />
+        ) : !count ? (
+          <span className="files-manager-table-message">{content?.table.pins_message}</span>
         ) : (
-          pinRequests.map(item => (
+          <>
             <PinRequestRowItem
-              key={item.requestid}
-              onSelect={() => onPinRequestSelect(item)}
-              date={item.created}
-              name={item.pin.name || 'No Name'}
-              cid={item.pin.cid}
-              requestid={item.requestid}
-              status={item.status}
+              onSelect={onSelectAllToggle}
+              date={fileRowLabels.date.label}
+              name={fileRowLabels.name.label}
+              cid={fileRowLabels.cid.label}
+              requestid={fileRowLabels.requestid.label}
+              status={fileRowLabels.status.label}
               linkPrefix={linkPrefix}
-              isSelected={!!selectedPinRequests.find(fileSelected => fileSelected === item)}
-              onDelete={() => onDeleteSingle(item.requestid)}
+              isHeader
+              isSelected={
+                !!selectedPinRequests.length &&
+                pinRequests.every(file => selectedPinRequests.find(fileSelected => file === fileSelected)) &&
+                !!fetchDate
+              }
             />
-          ))
+            {pinRequests.map(item => (
+              <PinRequestRowItem
+                key={item.requestid}
+                onSelect={() => onPinRequestSelect(item)}
+                date={item.created}
+                name={item.pin.name || 'No Name'}
+                cid={item.pin.cid}
+                requestid={item.requestid}
+                status={item.status}
+                linkPrefix={linkPrefix}
+                isSelected={!!selectedPinRequests.find(fileSelected => fileSelected === item)}
+                onDelete={() => onDeleteSingle(item.requestid)}
+              />
+            ))}
+          </>
         )}
       </div>
-      {!!pinRequests.length && (
+      {!!count && (
         <div className="files-manager-footer">
           <button
             className={clsx('delete', !selectedPinRequests.length && 'disabled')}
