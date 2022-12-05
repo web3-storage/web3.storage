@@ -91,6 +91,7 @@ const Login = () => {
             className={clsx('login-email', errors.email && 'error')}
             placeholder={pageContent.form_placeholder}
             onChange={useCallback(e => setFormData({ email: e.currentTarget.value }), [])}
+            onKeyDown={e => e.key === 'Enter' && onLoginWithEmail()}
           />
           <Button
             variant={pageContent.cta.theme}
