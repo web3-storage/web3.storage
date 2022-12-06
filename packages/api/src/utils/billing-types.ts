@@ -1,4 +1,5 @@
 import { StripePriceId } from "./stripe";
+import Stripe from 'stripe';
 
 export type StripePaymentMethodId = string;
 export type CustomerId = string;
@@ -58,6 +59,8 @@ export interface CustomersService {
 
 export type StoragePriceName = 'free' | 'lite' | 'pro'
 
+export type StoragePrice = StoragePriceName | Pick<Stripe.Response<Stripe.Price>, 'id'|'metadata'|'tiers'>
+
 /**
  * A subscription to the web3.storage platform.
  * This may be a composition of several product-specific subscriptions.
@@ -66,12 +69,12 @@ export interface W3PlatformSubscription {
   // details of subscription to storage functionality
   storage: null | {
     // the price that should be used to determine the subscription's periodic invoice/credit.
-    price: StoragePriceName
+    price: StoragePrice
   }
 }
 
 export type NamedStripePrices = {
-  priceToName: (priceId: StripePriceId) => undefined | StoragePriceName
+  priceToName: (priceId: string) => undefined | StoragePriceName
   nameToPrice: (name: StoragePriceName) => undefined | StripePriceId
 }
 

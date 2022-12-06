@@ -1,14 +1,32 @@
+import { useMemo } from 'react';
+
 import Tooltip from '../../../modules/zero/components/tooltip/tooltip.js';
 import InfoIcon from '../../../assets/icons/info';
 import Button from '../../button/button.js';
+import { formatAsStorageAmount, formatCurrency } from '../../../lib/utils.js';
 
-const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanModalOpen }) => {
+const getAdditionalStoragePrice = price => (typeof price === 'number' ? `${formatCurrency(price / 100)} / GiB` : 'N/A');
+
+const PaymentTable = ({ plans: plansProp, currentPlan, setPlanSelection, setIsPaymentPlanModalOpen }) => {
+  const plans = useMemo(() => {
+    const isCurrentPlanStandard = ['free', 'lite', 'pro'].includes(currentPlan?.id);
+
+    if (!isCurrentPlanStandard) {
+      return [currentPlan, ...plansProp.slice(1)];
+    }
+
+    return plansProp;
+  }, [plansProp, currentPlan]);
+
   return (
     <>
       {currentPlan && (
         <p className="billing-content-intro" data-testid="currentPlanIndicator">
           <span>
-            Your current plan is: <strong data-testid="currentPlan.title">{currentPlan.title}</strong>
+            Your current plan is:{' '}
+            <strong data-testid="currentPlan.metadata['UI Label']">
+              {currentPlan?.metadata['UI Label'] ?? 'Custom'}
+            </strong>
           </span>
         </p>
       )}
@@ -32,16 +50,18 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanMo
             </div>
             {plans.map(plan => (
               <div
-                key={plan.title}
-                className={`billing-card card-transparent ${currentPlan?.id === plan.id ? 'current' : ''}`}
+                key={plan.metadata['UI Label']}
+                className={`billing-card card-transparent ${currentPlan?.id === plan?.id ? 'current' : ''}`}
               >
-                <div key={plan.title} className="billing-plan">
-                  <h4 className="billing-plan-title">{plan.title}</h4>
+                <div key={plan.metadata['UI Label']} className="billing-plan">
+                  <h4 className="billing-plan-title">{plan.metadata['UI Label']}</h4>
                   <div>
-                    <div className="billing-plan-amount">{plan.price}</div>
+                    <div className="billing-plan-amount">
+                      {formatCurrency((plan?.tiers?.[0]?.flat_amount ?? 0) / 100, true)}/mo
+                    </div>
                   </div>
 
-                  {currentPlan?.id === 'earlyAdopter' && plan.id === 'earlyAdopter' ? (
+                  {currentPlan.id === 'earlyAdopter' && plan.id === 'earlyAdopter' ? (
                     <div className="billing-plan-details">
                       <p className="early-adopter-desc">
                         As an Early Adopter, you already get our lowest storage rate.
@@ -49,13 +69,17 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanMo
                     </div>
                   ) : (
                     <div className="billing-plan-details">
-                      <p>{plan.baseStorage}</p>
-                      <p>{plan.additionalStorage}</p>
-                      <p>{plan.bandwidth}</p>
+                      <p>{formatAsStorageAmount(plan.tiers?.[0]?.up_to)}</p>
+                      <p>{getAdditionalStoragePrice(plan.tiers?.[1]?.unit_amount)}</p>
+                      <p>
+                        {plan.metadata['Bandwidth']
+                          ? `${formatAsStorageAmount(plan.metadata['Bandwidth'])} / month`
+                          : 'N/A'}
+                      </p>
                     </div>
                   )}
 
-                  {currentPlan?.id !== plan.id && plan.id !== 'earlyAdopter' && (
+                  {currentPlan?.id !== plan?.id && plan?.id !== 'earlyAdopter' && (
                     <Button
                       variant="light"
                       disabled={currentPlan?.id === 'earlyAdopter'}
@@ -69,8 +93,8 @@ const PaymentTable = ({ plans, currentPlan, setPlanSelection, setIsPaymentPlanMo
                     </Button>
                   )}
 
-                  {(currentPlan?.id === plan.id ||
-                    (currentPlan?.id === 'earlyAdopter' && plan.id === 'earlyAdopter')) && (
+                  {(currentPlan.id === plan.id ||
+                    (currentPlan.id === 'earlyAdopter' && plan.id === 'earlyAdopter')) && (
                     <Button variant="light" disabled={true} className="">
                       Current Plan
                     </Button>

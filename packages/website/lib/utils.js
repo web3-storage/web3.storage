@@ -14,6 +14,31 @@ export const formatTimestamp = timestamp => {
   return formattedDate;
 };
 
+/**
+ * Returns the amount in TiBs if the amount is a multiple of 1024, otherwise returns the amount in GiBs
+ * @param {number} amountInGiB
+ * @returns {string}
+ */
+export const formatAsStorageAmount = amountInGiB =>
+  amountInGiB % 1024 === 0 ? `${amountInGiB / 1024} TiB` : `${amountInGiB} GiB`;
+
+/**
+ * Formats an amount (in dollars) as a currency
+ * @param {number} amount
+ * @param {boolean} shouldTruncateToDollar
+ * @returns {string}
+ */
+export const formatCurrency = (amount, shouldTruncateToDollar = false) => {
+  if (isNaN(amount)) return '';
+
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: shouldTruncateToDollar ? 0 : 2,
+  });
+  return formatter.format(amount);
+};
+
 export const formatTimestampFull = timestamp => {
   const formattedDate = new Date(timestamp).toLocaleDateString(undefined, {
     year: 'numeric',
