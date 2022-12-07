@@ -41,6 +41,11 @@ const nextConfig = {
       ZeroHooks: path.resolve(__dirname, 'modules/zero/hooks'),
     };
 
+    config.watchOptions.ignored = [
+      path.resolve(__dirname, 'test-results'),
+      path.resolve(__dirname, 'playwright-report')
+    ];
+
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack', 'url-loader'],
