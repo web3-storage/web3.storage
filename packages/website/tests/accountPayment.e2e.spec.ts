@@ -84,7 +84,7 @@ function LoginTester({
   async function submitLoginForm(page: Page) {
     const loginButton = page.locator('.login-content .section-email button');
     await loginButton.isVisible();
-    await Promise.all([page.waitForNavigation({ waitUntil: 'networkidle' }), loginButton.click()]);
+    await loginButton.click();
   }
   async function login(
     page: Page,
