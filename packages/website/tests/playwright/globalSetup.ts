@@ -12,6 +12,7 @@ export default async function main() {
     });
   }
   w3storageProcess.on('exit', code => {
+    console.log('EXIT PRINT', code);
     process.exit(code ?? undefined);
   });
 }
