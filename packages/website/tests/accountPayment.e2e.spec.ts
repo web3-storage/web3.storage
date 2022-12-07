@@ -6,7 +6,7 @@ import { E2EScreenshotPath } from './screenshots';
 const MAGIC_SUCCESS_EMAIL = 'test+success@magic.link';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/', { waitUntil: 'commit' });
 });
 
 test.describe('/account/payment', () => {
@@ -84,7 +84,7 @@ function LoginTester({
   async function submitLoginForm(page: Page) {
     const loginButton = page.locator('.login-content .section-email button');
     await loginButton.isVisible();
-    await loginButton.click();
+    await Promise.all([page.waitForNavigation({ waitUntil: 'networkidle' }), loginButton.click()]);
   }
   async function login(
     page: Page,
