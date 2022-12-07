@@ -11,6 +11,7 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('/account/payment', () => {
   test('redirects through login and back when not initially authenticated', async ({ page }, testInfo) => {
+    test.slow()
     const accountPaymentPathname = '/account/payment/';
     const accountQuery = '?plan=lite'
     const accountUrl = `${accountPaymentPathname}${accountQuery}`;
