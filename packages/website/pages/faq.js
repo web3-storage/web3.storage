@@ -5,6 +5,7 @@ import BlockBuilder from '../components/blockbuilder/blockbuilder.js';
 import { initFloaterAnimations } from '../lib/floater-animations.js';
 import GeneralPageData from '../content/pages/general.json';
 import AccordionBlock from '../components/accordionblock/accordionblock';
+import Loading from '../components/loading/loading';
 
 export default function Home() {
   const [faqSections, setFaqSections] = useState();
@@ -122,6 +123,7 @@ export default function Home() {
               <div className="grid">
                 <div className="col-12 column-1">
                   <div className="column-content">
+                    {!faqSections && <Loading size="large" message="Fetching Latest FAQs..." />}
                     {faqSections && (
                       <AccordionBlock
                         block={{
