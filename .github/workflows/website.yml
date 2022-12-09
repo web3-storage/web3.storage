@@ -116,7 +116,7 @@ jobs:
 
       # add playwright-report to web3.storage
       - name: add playwright-report to web3.storage
-        if: inputs.add_playwright_report_to_web3_storage && steps.check_website_playwright_report.outputs.files_exists == 'true'
+        if: ${{ inputs.add_playwright_report_to_web3_storage }} && steps.check_website_playwright_report.outputs.files_exists == 'true'
         uses: web3-storage/add-to-web3@v2
         id: add_playwright_report_to_web3_storage
         with:
