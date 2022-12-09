@@ -1,6 +1,18 @@
 import { Validator } from '@cfworker/json-schema'
-import { PSAErrorInvalidData, PSAErrorRequiredData } from '../errors.js'
+import { PSACodecNotSupported, PSAErrorInvalidData, PSAErrorRequiredData } from '../errors.js'
 import { normalizeCid } from '../utils/cid.js'
+import * as raw from 'multiformats/codecs/raw'
+import * as pb from '@ipld/dag-pb'
+import * as dagJson from '@ipld/dag-json'
+import * as dagCbor from '@ipld/dag-cbor'
+import { CID } from 'multiformats/cid'
+
+const SUPPORTED_CODECS = [
+  raw.code,
+  pb.code,
+  dagCbor.code,
+  dagJson.code
+]
 
 /**
  * @typedef {'queued' | 'pinning' | 'failed' | 'pinned'} apiPinStatus
@@ -132,11 +144,25 @@ export function transformAndValidate (payload) {
   // Validate CID.
   if (cid) {
     try {
-      normalizedCid = normalizeCid(cid)
-      opts.cid = cid
+      let c
+      try {
+        c = CID.parse(cid)
+        normalizedCid = c.toV1().toString()
+        opts.cid = cid
+      } catch (e) {
+        throw new PSAErrorInvalidData(INVALID_CID)
+      }
+      // @ts-ignore
+      if (!SUPPORTED_CODECS.includes(c.code)) {
+        let message = PSACodecNotSupported.MESSAGE
+        if (c.code === 72) {
+          message = `${message} If you're trying to pin using an IPNS record that isn't supported yet. Please +1 [this githib issue](https://github.com/web3-storage/web3.storage/issues/2155) if you want it to be.`
+        }
+        throw new PSACodecNotSupported(message)
+      }
     } catch (e) {
       return {
-        error: new PSAErrorInvalidData(INVALID_CID),
+        error: e,
         data: undefined,
         normalizeCid: undefined
       }
