@@ -7,6 +7,11 @@ import * as dagJson from '@ipld/dag-json'
 import * as dagCbor from '@ipld/dag-cbor'
 import { CID } from 'multiformats/cid'
 
+/**
+ * List of the PSA supported codecs codes.
+ *
+ * @type {number[]}
+ */
 const SUPPORTED_CODECS = [
   raw.code,
   pb.code,
@@ -152,7 +157,7 @@ export function transformAndValidate (payload) {
       } catch (e) {
         throw new PSAErrorInvalidData(INVALID_CID)
       }
-      // @ts-ignore
+
       if (!SUPPORTED_CODECS.includes(c.code)) {
         let message = PSACodecNotSupported.MESSAGE
         if (c.code === 72) {
