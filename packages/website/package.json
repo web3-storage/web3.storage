@@ -91,6 +91,7 @@
     "husky": "^8.0.0",
     "lint-staged": "^12.2.4",
     "next-sitemap": "1.6.173",
+    "node-fetch": "3.3.0",
     "prettier": "2.4.1",
     "react-query": "3.33.5",
     "sass": "1.43.4",
