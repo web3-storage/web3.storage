@@ -2,7 +2,8 @@ import { test } from '@playwright/test';
 
 import { E2EScreenshotPath } from './screenshots.js';
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, testInfo) => {
+  console.log(`Running ${testInfo.title}`);
   await page.goto('/');
 });
 

@@ -2,6 +2,7 @@ import { spawn } from 'child_process';
 import * as path from 'path';
 
 export default async function main() {
+  console.log('Starting w3 storage process for tests...');
   const w3storageProcess = spawn('npm', ['start'], {
     cwd: path.join(__dirname, '../../../../'),
   });
@@ -13,6 +14,7 @@ export default async function main() {
   }
   w3storageProcess.on('exit', code => {
     process.exit(code ?? undefined);
+    console.log('Stopped w3 storage process.');
   });
 }
 
