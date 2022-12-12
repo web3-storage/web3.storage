@@ -38,17 +38,30 @@ function prepender(prefix) {
 }
 
 async function waitForServer (url, name) {
-  let connected = false;
-  const maxAttempts = 5;
+  const maxAttempts = 50;
   let attempt = 0;
-  while (attempt < maxAttempts && !connected) {
-    attempt++;
+  while (attempt < maxAttempts) {
+    attempt ++
+    const start = Date.now()
     try {
       console.log('Seeing if the dev server is ready...')
       const response = await fetch(url);
-      connected = response.ok
+      if (response.ok) {
+        return
+      }
     } catch (error) {
       console.log(`Failed to connect to ${name} server (attempt ${attempt} of ${maxAttempts}`)
     }
+    // Wait *at least* 5 seconds per iteration.
+    const end = Date.now()
+    const timeTaken = end - start
+    await delay(Math.max(5000 - timeTaken, 0))
   }
+  throw Error(`Could not connected to ${name} server (${url}) after ${attempt} attempts.`)
+}
+
+async function delay (ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms)
+  })
 }
