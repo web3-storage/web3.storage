@@ -14,8 +14,8 @@ export default async function main(config) {
     });
   }
   w3storageProcess.on('exit', code => {
+    console.log(`w3 storage process stopped (code: ${code}).`);
     process.exit(code ?? undefined);
-    console.log('Stopped w3 storage process.');
   });
 
   // Wait for the dev server to get up and running before attempting to start the tests,
@@ -26,17 +26,12 @@ export default async function main(config) {
   await waitForServer(apiURL, 'API');
 }
 
-if (process.env.RUN) {
-  console.log('What is this for?')
-  // main();
-}
-
 function prepender(prefix) {
   return suffix => `${prefix}${suffix}`;
 }
 
 async function waitForServer (url, name) {
-  const maxAttempts = 50;
+  const maxAttempts = 30;
   let attempt = 0;
   while (attempt < maxAttempts) {
     attempt ++
@@ -51,10 +46,10 @@ async function waitForServer (url, name) {
     } catch (error) {
       console.log(`Failed to connect to ${name} server (attempt ${attempt} of ${maxAttempts}`)
     }
-    // Wait *at least* 5 seconds per iteration.
+    // Wait *at least* 2 seconds per iteration.
     const end = Date.now()
     const timeTaken = end - start
-    await delay(Math.max(5000 - timeTaken, 0))
+    await delay(Math.max(2000 - timeTaken, 0))
   }
   throw Error(`Could not connected to ${name} server (${url}) after ${attempt} attempts.`)
 }

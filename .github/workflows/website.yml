@@ -95,7 +95,7 @@ jobs:
         run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- node -r dotenv/config $(which npm) run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }} --reporter=html
         env:
           # Timeout is in milliseconds
-          PLAYWRIGHT_TIMEOUT: 360000
+          PLAYWRIGHT_TIMEOUT: 120000
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
           NEXT_PUBLIC_MAGIC_TESTMODE_ENABLED: "true"
