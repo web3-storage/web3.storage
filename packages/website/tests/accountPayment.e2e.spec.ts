@@ -38,6 +38,7 @@ test.describe('/account/payment', () => {
       fullPage: true,
       path: await E2EScreenshotPath(testInfo, `accountPayment-noauth`),
     });
+    await page.goto('/#1');
   });
   test('can access when authenticated', async ({ page }, testInfo) => {
     page.on('pageerror', err => {
@@ -61,6 +62,7 @@ test.describe('/account/payment', () => {
       fullPage: true,
       path: await E2EScreenshotPath(testInfo, `accountPayment`),
     });
+    await page.goto('/#2');
   });
   test('can enter credit card details', async ({ page }) => {
     const tester = LoginTester();
@@ -69,6 +71,7 @@ test.describe('/account/payment', () => {
     await page.goto(AccountPaymentTester().url);
     await AccountPaymentTester().fillCreditCardDetails(page);
     await AccountPaymentTester().clickAddCardButton(page);
+    await page.goto('/#3');
   });
 });
 

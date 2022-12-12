@@ -12,5 +12,6 @@ test.describe('homepage', () => {
       fullPage: true,
       path: await E2EScreenshotPath(testInfo, `homepage`),
     });
+    await page.goto('/#4');
   });
 });
