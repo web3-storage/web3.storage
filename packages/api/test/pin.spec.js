@@ -572,7 +572,7 @@ describe('Pinning APIs endpoints', () => {
       const hash = await sha256.digest(Buffer.from(Math.random().toString()))
       const cid = CID.create(1, 72, hash).toString()
 
-      const res = await fetch(new URL('pins', endpoint).toString(), {
+      const res = await fetch(new URL('pins', endpoint), {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`
@@ -600,7 +600,7 @@ describe('Pinning APIs endpoints', () => {
 
       SUPPORTED_CODECS.forEach(async (code) => {
         const cid = CID.create(1, code, hash).toString()
-        const res = await fetch(new URL('pins', endpoint).toString(), {
+        const res = await fetch(new URL('pins', endpoint), {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`
