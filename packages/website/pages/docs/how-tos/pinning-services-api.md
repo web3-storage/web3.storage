@@ -16,7 +16,7 @@ For a full list and documentation of all the available pinning service endpoints
 <Callout type="info">
 ### IPLD codecs
 Web3.storage Pinning APIs only support raw, dag-pb, dag-cbor and dag-json IPLD codecs.
-The APIs doesn't support pinning content by providing IPNS records pointing to it.
+The API doesn't support pinning content by providing IPNS records pointing to it.
 </Callout>
 
 ## Requesting access
