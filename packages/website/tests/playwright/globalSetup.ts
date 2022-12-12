@@ -7,15 +7,6 @@ export default async function main(config) {
   const w3storageProcess = spawn('npm', ['start'], {
     cwd: path.join(__dirname, '../../../../'),
   });
-
-  // Wait for the dev server to get up and running before attempting to start the tests,
-  // otherwise the first test will fail just trying to connect.
-  const { baseURL } = config.projects[0].use;
-  const apiURL = process.env.NEXT_PUBLIC_API;
-
-  await waitForServer(baseURL, 'web');
-  await waitForServer(apiURL, 'API');
-
   for (const fd of ['stdout', 'stderr']) {
     const prefix = process.env.PLAYWRIGHT_PREFIX_FD ? `[${fd}]: ` : '';
     w3storageProcess[fd].on('data', log => {
@@ -26,6 +17,13 @@ export default async function main(config) {
     process.exit(code ?? undefined);
     console.log('Stopped w3 storage process.');
   });
+
+  // Wait for the dev server to get up and running before attempting to start the tests,
+  // otherwise the first test will fail just trying to connect.
+  const { baseURL } = config.projects[0].use;
+  const apiURL = process.env.NEXT_PUBLIC_API;
+  await waitForServer(baseURL, 'web');
+  await waitForServer(apiURL, 'API');
 }
 
 if (process.env.RUN) {
@@ -44,9 +42,10 @@ async function waitForServer (url, name) {
     attempt ++
     const start = Date.now()
     try {
-      console.log('Seeing if the dev server is ready...')
+      console.log(`Checking if the ${name} server is ready (attempt ${attempt})...`)
       const response = await fetch(url);
       if (response.ok) {
+        console.log(`Successfully connected to ${name} server at ${url}. Ready.`)
         return
       }
     } catch (error) {
