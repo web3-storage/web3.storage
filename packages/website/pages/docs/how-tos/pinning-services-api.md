@@ -13,12 +13,6 @@ web3.storage provides a pinning service that complies with the [IPFS Pinning Ser
 
 For a full list and documentation of all the available pinning service endpoints, visit the [IPFS Pinning Service API endpoint documentation](https://ipfs.github.io/pinning-services-api-spec/#tag/pins).
 
-<Callout type="info">
-### IPLD codecs
-Web3.storage Pinning APIs only support raw, dag-pb, dag-cbor and dag-json IPLD codecs.
-The API doesn't support pinning content by providing IPNS records pointing to it.
-</Callout>
-
 ## Requesting access
 
 To request access to the pinning service for your web3.storage account, you will need to navigate to [your token management page](https://web3.storage/tokens) and click the button labeled "Request API Pinning Access". Fill out the form and then, once approved, you will be able to access the pinning service API endpoints using your [API token](/docs/how-tos/generate-api-token).
@@ -26,6 +20,12 @@ To request access to the pinning service for your web3.storage account, you will
 ## Using the HTTP API
 
 The web3.storage pinning service endpoint for all requests is [https://api.web3.storage/pins](https://api.web3.storage/pins).
+
+<Callout type="info">
+### IPLD codecs
+Web3.storage Pinning APIs only support raw, dag-pb, dag-cbor and dag-json IPLD codecs.
+The API doesn't support pinning content by providing IPNS records pointing to it.
+</Callout>
 
 ### Add a pin
 
