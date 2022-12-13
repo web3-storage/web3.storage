@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.33.0](https://github.com/web3-storage/web3.storage/compare/website-v2.32.0...website-v2.33.0) (2022-12-01)
+
+
+### Features
+
+* add tooltip to dashboard storage totals ([#2101](https://github.com/web3-storage/web3.storage/issues/2101)) ([2056ec6](https://github.com/web3-storage/web3.storage/commit/2056ec6fd692949f112b7b37d48d4da9d6a34523)), closes [#2081](https://github.com/web3-storage/web3.storage/issues/2081)
+* list and ability to delete psa request created though deleted tokens ([#2054](https://github.com/web3-storage/web3.storage/issues/2054)) ([e150d1f](https://github.com/web3-storage/web3.storage/commit/e150d1fa86dc0e6600f159fa92ccb7c8e65900e3))
+* simple analytics ([#2110](https://github.com/web3-storage/web3.storage/issues/2110)) ([4d5a1a0](https://github.com/web3-storage/web3.storage/commit/4d5a1a0e07db3c6749efed0072ab5b4c2fcb828e))
+
+
+### Bug Fixes
+
+* styles missing from custom storage form ([#2135](https://github.com/web3-storage/web3.storage/issues/2135)) ([04b66bc](https://github.com/web3-storage/web3.storage/commit/04b66bc27826aab4b10cc9c9b487126ccc7375b0))
+
 ## [2.32.0](https://github.com/web3-storage/web3.storage/compare/website-v2.31.0...website-v2.32.0) (2022-11-11)
 
 
