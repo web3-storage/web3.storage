@@ -29,6 +29,7 @@ on:
         description: Whether to add add_playwright_report_to_web3_storage to web3.storage (publicly)
         required: true
         type: boolean
+        # Note that this default does NOT set the value for when triggered by a push/pull request
         default: true
       force_release:
         description: Whether to run the release job no matter what
@@ -88,7 +89,7 @@ jobs:
 
       - run: npx playwright install --with-deps ${{ matrix.browser }}
         working-directory: packages/website
-      
+
       # run e2e tests
       - id: website_test_e2e
         continue-on-error: true # when this fails, we still want to do some cleanup
@@ -115,7 +116,8 @@ jobs:
 
       # add playwright-report to web3.storage
       - name: add playwright-report to web3.storage
-        if: ${{ inputs.add_playwright_report_to_web3_storage }} && steps.check_website_playwright_report.outputs.files_exists == 'true'
+        # If the job wasn't triggered manually by a workflow_dispatch then we default the option to true:
+        if: (github.event_name != 'workflow_dispatch' || inputs.add_playwright_report_to_web3_storage) && steps.check_website_playwright_report.outputs.files_exists == 'true'
         uses: web3-storage/add-to-web3@v2
         id: add_playwright_report_to_web3_storage
         with:
@@ -260,7 +262,7 @@ jobs:
     if: (github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created) || inputs.force_release
     name: Release
     runs-on: ubuntu-latest
-    environment: 
+    environment:
       name: production
       url: https://web3.storage
     needs:
