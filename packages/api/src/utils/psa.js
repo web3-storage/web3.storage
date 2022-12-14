@@ -165,7 +165,7 @@ export function transformAndValidate (payload) {
       if (!SUPPORTED_CODECS.includes(c.code)) {
         let message = PSACodecNotSupported.MESSAGE
         if (c.code === libp2pKeyCodec) {
-          message = `${message} If you're trying to pin using an IPNS record that isn't supported yet. Please +1 [this githib issue](https://github.com/web3-storage/web3.storage/issues/2155) if you want it to be.`
+          message = `${message} If you're trying to pin using an IPNS record that isn't supported yet. Please +1 [this github issue](https://github.com/web3-storage/web3.storage/issues/2155) if you want it to be.`
         }
         throw new PSACodecNotSupported(message)
       }
