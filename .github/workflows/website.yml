@@ -88,12 +88,13 @@ jobs:
 
       - run: npx playwright install --with-deps ${{ matrix.browser }}
         working-directory: packages/website
-      
+
       # run e2e tests
       - id: website_test_e2e
         continue-on-error: true # when this fails, we still want to do some cleanup
         run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- node -r dotenv/config $(which npm) run -w @web3-storage/website test:e2e -- --project=${{ matrix.browser }} --reporter=html
         env:
+          # Timeout is in milliseconds
           PLAYWRIGHT_TIMEOUT: 120000
           NEXT_PUBLIC_MAGIC: ${{ secrets.STAGING_MAGIC_PUBLIC_KEY }}
           MAGIC_SECRET_KEY: ${{ secrets.STAGING_MAGIC_SECRET_KEY }}
@@ -260,7 +261,7 @@ jobs:
     if: (github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created) || inputs.force_release
     name: Release
     runs-on: ubuntu-latest
-    environment: 
+    environment:
       name: production
       url: https://web3.storage
     needs:
