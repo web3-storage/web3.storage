@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.33.1](https://github.com/web3-storage/web3.storage/compare/website-v2.33.0...website-v2.33.1) (2022-12-14)
+
+
+### Bug Fixes
+
+* bump 'playwright' version & fix intermittent e2e test failure ([#2151](https://github.com/web3-storage/web3.storage/issues/2151)) ([dc529f5](https://github.com/web3-storage/web3.storage/commit/dc529f5035fdc525420d9dbdf28ee8d0ac7fee55))
+* update docs for PSA with IPLD codec info ([#2160](https://github.com/web3-storage/web3.storage/issues/2160)) ([e95e434](https://github.com/web3-storage/web3.storage/commit/e95e434264c4435fbb8f3640f042c76b71a123f1))
+
 ## [2.33.0](https://github.com/web3-storage/web3.storage/compare/website-v2.32.0...website-v2.33.0) (2022-12-01)
 
 
