@@ -3,6 +3,8 @@ title: Pinning Services API
 description: Learn how to pin a file to IPFS using the Pinning Services API
 ---
 
+import Callout from 'components/callout/callout';
+
 # Pinning Services API
 
 [IPFS](https://ipfs.io/) is a distributed storage network. Data is cached on IPFS nodes. All content uploaded to web3.storage's IPFS nodes are persisted until told otherwise, but some nodes might garbage collect to make room for new content. A remote pinning service allows users to save and persist data that is already available on the IPFS network on its set of IPFS nodes. For instance, if you uploaded a file to your local IPFS node but don't want to make sure your computer is always connected to IPFS and this file is always served, you can remote pin it to a pinning service.
@@ -18,6 +20,12 @@ To request access to the pinning service for your web3.storage account, you will
 ## Using the HTTP API
 
 The web3.storage pinning service endpoint for all requests is [https://api.web3.storage/pins](https://api.web3.storage/pins).
+
+<Callout type="info">
+### IPLD codecs
+Web3.storage Pinning APIs only support raw, dag-pb, dag-cbor and dag-json IPLD codecs.
+The API doesn't support pinning content by providing IPNS records pointing to it.
+</Callout>
 
 ### Add a pin
 
