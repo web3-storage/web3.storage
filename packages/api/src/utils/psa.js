@@ -137,6 +137,10 @@ const postPinValidator = new Validator({
 export function transformAndValidate (payload) {
   /** @type {*} */
   const opts = {}
+  /**
+   * Libp2pKey Codec, used for IPNS records. Codec table for reference [here](https://github.com/multiformats/multicodec/blob/master/table.csv)
+   */
+  const libp2pKeyCodec = 72
   const {
     cid,
     name,
@@ -160,7 +164,7 @@ export function transformAndValidate (payload) {
 
       if (!SUPPORTED_CODECS.includes(c.code)) {
         let message = PSACodecNotSupported.MESSAGE
-        if (c.code === 72) {
+        if (c.code === libp2pKeyCodec) {
           message = `${message} If you're trying to pin using an IPNS record that isn't supported yet. Please +1 [this githib issue](https://github.com/web3-storage/web3.storage/issues/2155) if you want it to be.`
         }
         throw new PSACodecNotSupported(message)
