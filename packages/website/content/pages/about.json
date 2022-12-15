@@ -171,13 +171,13 @@
               {
                 "type": "text_block",
                 "format": "small",
-                "heading": "About Filecoin",
+                "heading": "About IPFS",
                 "description": "IPFS offers content addressing - enabling developers to create immutable links to their content, and flexibility for developers in how they’d like to retrieve their data (whether it be running personal nodes, relying on public infrastructure, or paying for hosted options)."
               },
               {
                 "type": "text_block",
                 "format": "small",
-                "heading": "About IPFS",
+                "heading": "About Filecoin",
                 "description": "Filecoin offers persistent, decentralized storage - guaranteeing the integrity of the underlying data through a robust economic model while also providing cryptographic proofs for verifiability."
               }
             ]
