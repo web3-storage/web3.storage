@@ -6,9 +6,17 @@ export async function main() {
 
 main();
 
-function createDidDocument(env=process.env) {
+function createDidDocument(env = process.env) {
+  const id = env.DID_DOCUMENT_ID;
+  const context: Array<string | Record<string, string>> = ['https://www.w3.org/ns/did/v1'];
+  if (id) {
+    context.push({
+      '@base': id,
+    });
+  }
   return {
-    id: env.DID_DOCUMENT_ID,
-    alsoKnownAs: env.DID_DOCUMENT_ALSO_KNOWN_AS,
+    '@context': context,
+    id,
+    alsoKnownAs: env.DID_DOCUMENT_PRIMARY_DID_KEY,
   };
 }

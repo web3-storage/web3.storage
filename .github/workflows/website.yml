@@ -193,7 +193,7 @@ jobs:
           NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
           NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.TESTING_STRIPE_PUBLISHABLE_KEY }}
           DID_DOCUMENT_ID: ${{ secrets.STAGING_DID_DOCUMENT_ID }}
-          DID_DOCUMENT_ALSO_KNOWN_AS: ${{ secrets.STAGING_DID_DOCUMENT_ALSO_KNOWN_AS }}
+          DID_DOCUMENT_PRIMARY_DID_KEY: ${{ secrets.STAGING_DID_DOCUMENT_PRIMARY_DID_KEY }}
       - name: Add to web3.storage
         uses: web3-storage/add-to-web3@v2
         id: ipfs
@@ -288,7 +288,7 @@ jobs:
           NEXT_PUBLIC_COUNTLY_KEY: ${{ secrets.COUNTLY_KEY }}
           NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
           DID_DOCUMENT_ID: ${{ secrets.PRODUCTION_DID_DOCUMENT_ID }}
-          DID_DOCUMENT_ALSO_KNOWN_AS: ${{ secrets.PRODUCTION_DID_DOCUMENT_ALSO_KNOWN_AS }}
+          DID_DOCUMENT_PRIMARY_DID_KEY: ${{ secrets.PRODUCTION_DID_DOCUMENT_PRIMARY_DID_KEY }}
       - name: Add to web3.storage
         uses: web3-storage/add-to-web3@v2
         id: ipfs
