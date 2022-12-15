@@ -6,11 +6,9 @@
   "scripts": {
     "ci:envfile": "ts-node -O '{\"module\": \"commonjs\"}' scripts/envfile.ts ",
     "dev": "rm -rf .next && next dev -p 4000",
-    "did-document": "ts-node -O '{\"module\": \"commonjs\"}' scripts/did-document.ts",
     "start": "env-cmd -f ../../.env next dev -p 4000",
     "prebuild": "sh ./scripts/prebuild.sh",
-    "build": "next build && npm run build:did-document && next-sitemap && next export",
-    "build:did.json": "npm run -s did-document > public/.well-known/did.json",
+    "build": "next build && next-sitemap && next export",
     "postbuild": "sh ./scripts/postbuild.sh",
     "export": "next export",
     "test": "eslint './**/*.js' && tsc --build",
