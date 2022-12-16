@@ -9,7 +9,7 @@
     "did-document": "ts-node -O '{\"module\": \"commonjs\"}' scripts/did-document.ts",
     "start": "env-cmd -f ../../.env next dev -p 4000",
     "prebuild": "sh ./scripts/prebuild.sh",
-    "build": "next build && npm run build:did-document && next-sitemap && next export",
+    "build": "next build && npm run build:did.json && next-sitemap && next export",
     "build:did.json": "npm run -s did-document > public/.well-known/did.json",
     "postbuild": "sh ./scripts/postbuild.sh",
     "export": "next export",
