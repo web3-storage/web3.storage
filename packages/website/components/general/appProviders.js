@@ -6,6 +6,7 @@ import { UserProvider } from 'components/contexts/userContext';
 import { UploadsProvider } from 'components/contexts/uploadsContext';
 import { PinRequestsProvider } from 'components/contexts/pinRequestsContext';
 import { TokensProvider } from 'components/contexts/tokensContext';
+import { TabGroupChoiceProvider } from 'components/contexts/tabGroupChoiceContext';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,7 +30,9 @@ const AppProviders = ({ authorizationProps, children }) => {
         <UserProvider loadStorage={pathname.indexOf('/account') !== -1}>
           <UploadsProvider>
             <PinRequestsProvider>
-              <TokensProvider>{children}</TokensProvider>
+              <TokensProvider>
+                <TabGroupChoiceProvider>{children}</TabGroupChoiceProvider>
+              </TokensProvider>
             </PinRequestsProvider>
           </UploadsProvider>
         </UserProvider>
