@@ -238,8 +238,6 @@ You've already done the most difficult work in this guide — getting your files
 
 If you ever need to find your files again, and you've forgotten the CID, head over to the [Files table](https://web3.storage/account/) in web3.storage:
 
-{/_ TODO: update screenshot (Assuming UI changes for v2 uploads) _/}
-
 <Img src={ImgFilesListing} alt="A listing of files in web3.storage" />
 
 ## Next steps
