@@ -1,5 +1,9 @@
-import React, { useState, cloneElement, Children, isValidElement } from 'react';
+import React, { useState, cloneElement, Children, isValidElement, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
+import { useRouter } from 'next/router';
+
+import { useTabGroupChoices } from 'components/contexts/tabGroupChoiceContext';
+import { useEvent } from 'lib/utils';
 
 /**
  * @param {React.ReactElement} comp
@@ -7,6 +11,35 @@ import clsx from 'clsx';
  */
 function isTabItem(comp) {
   return typeof comp.props.value !== 'undefined';
+}
+
+/**
+ * @param {string|undefined} groupId
+ */
+function useTabQueryString(groupId) {
+  const router = useRouter();
+  const { query, pathname } = router;
+  const get = useCallback(() => (groupId ? query[groupId] : undefined), [groupId, query]);
+
+  const set = useCallback(
+    value => {
+      if (!groupId) {
+        return;
+      }
+      const newQuery = { ...query, [groupId]: encodeURIComponent(value) };
+      router.replace(
+        {
+          pathname,
+          query: newQuery,
+        },
+        undefined,
+        { shallow: true }
+      );
+    },
+    [groupId, router, pathname, query]
+  );
+
+  return { get, set };
 }
 
 /**
@@ -37,6 +70,7 @@ export function TabItem(props) {
  * @typedef {object} TabsProps
  * @property {React.ReactNode} children
  * @property {string} [className]
+ * @property {string} [groupId] if present, `<Tabs>` with the same groupId will synchronize their active tab.
  */
 
 /**
@@ -44,6 +78,7 @@ export function TabItem(props) {
  * @param {TabsProps} props
  */
 export function Tabs(props) {
+  const { groupId } = props;
   const children =
     Children.map(props.children, child => {
       if (isValidElement(child) && isTabItem(child)) {
@@ -64,6 +99,9 @@ export function Tabs(props) {
     throw new Error(`All <TabItem> children of a <Tabs> component must have a unique 'value' prop`);
   }
 
+  const { ready: tabChoicesReady, tabGroupChoices, setTabGroupChoice } = useTabGroupChoices();
+  const tabQueryString = useTabQueryString(groupId);
+
   const defaultValue = values.length > 0 ? values[0].value : null;
   const [selectedValue, setSelectedValue] = useState(defaultValue);
 
@@ -71,6 +109,27 @@ export function Tabs(props) {
    * @type Array<HTMLLIElement | null>
    */
   const tabRefs = [];
+
+  // Lazily restore the saved tab choices (if they exist)
+  // We can't use localStorage on first render, since it's not availble server side
+  // and would cause a hydration mismatch.
+  const restoreTabChoice = useEvent(() => {
+    if (!tabChoicesReady) {
+      return;
+    }
+    const toRestore = tabQueryString.get() ?? (groupId && tabGroupChoices[groupId]);
+    const isValid = toRestore && values.some(v => v.value === toRestore);
+    if (isValid) {
+      setSelectedValue(toRestore);
+    }
+  });
+
+  useEffect(() => {
+    // wait for localStorage values to be set
+    if (tabChoicesReady) {
+      restoreTabChoice();
+    }
+  }, [tabChoicesReady, restoreTabChoice]);
 
   /**
    * @param {React.FocusEvent<HTMLLIElement> | React.MouseEvent<HTMLLIElement>} e
@@ -83,6 +142,10 @@ export function Tabs(props) {
     const newValue = values[newTabIndex].value;
     if (newValue !== selectedValue) {
       setSelectedValue(newValue);
+      tabQueryString.set(newValue);
+      if (groupId) {
+        setTabGroupChoice(groupId, newValue);
+      }
     }
   };
 

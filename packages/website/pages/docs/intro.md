@@ -52,7 +52,7 @@ node --version && npm --version
 
 You need a web3.storage account to get your API token and manage your stored data. You can sign up **for free** using your email address or GitHub.
 
-<Tabs>
+<Tabs groupId='account-type'>
 <TabItem value="Email" label="Email">
 ##### Sign up using email
 1. Go to [web3.storage/login](https://web3.storage/login) to get started.
