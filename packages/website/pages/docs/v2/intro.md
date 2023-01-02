@@ -131,7 +131,36 @@ This command will wait for you to check your email and click the confirmation li
 </TabItem>
 
 <TabItem value='node' label='Node.js'>
-Coming soon!
+
+To create a space using `w3up-client`, use the [`createSpace` client method][reference-w3up-client#createspace]:
+
+```js
+const space = await client.createSpace('my-awesome-space');
+```
+
+The name parameter is optional. If provided, it will be stored in your client's local state store and can be used to provide a friendly name for user interfaces.
+
+After creating a `Space`, you'll need to register it with the w3up service before you can upload data.
+
+First, set the space as your "current" space using the [`setCurrentSpace` method][reference-w3up-client#setcurrentspace], passing in the DID of the `space` object you created above:
+
+```js
+await client.setCurrentSpace(space.did());
+```
+
+Next, call the [`registerSpace` method][reference-w3up-client#registerspace], passing in an email address to register as the primary contact for the space:
+
+```js
+try {
+  await client.registerSpace('zaphod@beeblebrox.galaxy');
+} catch (err) {
+  console.error('registration failed: ', err);
+}
+```
+
+Calling `registerSpace` will cause an email to be sent to the given address. Once a user clicks the confirmation link in the email, the `registerSpace` method will resolve. Make sure to check for errors, as `registerSpace` will fail if the email is not confirmed within the expiration timeout.
+
+Now that you've registered a space, you're ready to upload files!
 </TabItem>
 
 <TabItem value='web' label='Web'>
@@ -160,6 +189,37 @@ When uploading directories, files beginning with a `.` character are ignored by 
 </TabItem>
 
 <TabItem value='node' label='Node.js'>
+Once you've [created and registered a space](#create-and-register-a-space), you can upload files to the web3.storage platform.
+
+Call [`uploadFile`][reference-w3up-client#uploadfile] to upload a single file, or [`uploadDirectory`][reference-w3up-client#uploaddirectory] to upload multiple files.
+
+`uploadFile` expects a "Blob like" input, which can be a [`Blob`](https://developer.mozilla.org/en-US/docs/Web/API/Blob) or [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File) when running in a browser. On node.js, see the [`filesFromPath` library](https://github.com/web3-storage/files-from-path), which can load compatible objects from the local filesystem.
+
+`uploadDirectory` requires `File`-like objects instead of `Blob`s, as the file's `name` property is used to build the directory hierarchy.
+
+You can control the directory layout and create nested directory structures by using `/` delimited paths in your filenames:
+
+```js
+const files = [
+  new File(['some-file-content'], 'readme.md'),
+  new File(['import foo'], 'src/main.py'),
+  new File([someBinaryData], 'images/example.png'),
+];
+
+const directoryCid = await client.storeDirectory(files);
+```
+
+In the example above, `directoryCid` resolves to an IPFS directory with the following layout:
+
+```
+.
+├── images
+│   └── example.png
+├── readme.md
+└── src
+    └── main.py
+```
+
 </TabItem>
 
 <TabItem value='web' label='Web'>
@@ -178,7 +238,7 @@ You've already done the most difficult work in this guide — getting your files
 
 If you ever need to find your files again, and you've forgotten the CID, head over to the [Files table](https://web3.storage/account/) in web3.storage:
 
-{/_ **TODO**: update screenshot (Assuming UI changes for v2 uploads) _/}
+{/_ TODO: update screenshot (Assuming UI changes for v2 uploads) _/}
 
 <Img src={ImgFilesListing} alt="A listing of files in web3.storage" />
 
@@ -190,5 +250,10 @@ Congratulations! You've just covered the basics of web3.storage. To learn more, 
 - To learn more about the details of getting files, have a look at the [Retrieve how-to guide.](/docs/v2/how-tos/retrieve)
 
 [reference-w3up-client]: https://github.com/web3-storage/w3up-client#API
+[reference-w3up-client#createspace]: https://github.com/web3-storage/w3up-client#createSpace
+[reference-w3up-client#setcurrentspace]: https://github.com/web3-storage/w3up-client#setCurrentSpace
+[reference-w3up-client#registerspace]: https://github.com/web3-storage/w3up-client#registerSpace
+[reference-w3up-client#uploadfile]: https://github.com/web3-storage/w3up-client#uploadFile
+[reference-w3up-client#uploaddirectory]: https://github.com/web3-storage/w3up-client#uploadDirectory
 [w3ui-site]: https://beta.ui.web3.storage
 [concepts-did]: /docs/v2/concepts/accounts-and-dids
