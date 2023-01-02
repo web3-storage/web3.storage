@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.34.0](https://github.com/web3-storage/web3.storage/compare/website-v2.33.1...website-v2.34.0) (2023-01-02)
+
+
+### Features
+
+* add synchronized, persistent tab groups ([#2172](https://github.com/web3-storage/web3.storage/issues/2172)) ([3be2028](https://github.com/web3-storage/web3.storage/commit/3be2028b2e01dfcc1007babe3b4bda7bb454595a))
+* website has /.well-known/did.json so did:web can resolve in prod ([#2169](https://github.com/web3-storage/web3.storage/issues/2169)) ([3ed273d](https://github.com/web3-storage/web3.storage/commit/3ed273d75d6ebd7f733cbcb4c818d5775eca073f))
+
+
+### Bug Fixes
+
+* website typo on protocol descrptions ([#2166](https://github.com/web3-storage/web3.storage/issues/2166)) ([89ff4e1](https://github.com/web3-storage/web3.storage/commit/89ff4e1c2029563cbe855ffa814c0d110e844a10))
+
 ## [2.33.1](https://github.com/web3-storage/web3.storage/compare/website-v2.33.0...website-v2.33.1) (2022-12-14)
 
 
